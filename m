@@ -1,49 +1,30 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
+Message-ID: <4AF04D9C.1050600@tuffmail.co.uk>
+Date: Tue, 03 Nov 2009 15:34:52 +0000
+From: Alan Jenkins <alan-jenkins@tuffmail.co.uk>
 MIME-Version: 1.0
-In-Reply-To: <200909141730.40467.baeckham@gmx.net>
-References: <200909141730.40467.baeckham@gmx.net>
-Date: Mon, 14 Sep 2009 17:20:00 +0100
-Message-ID: <9b2b86520909140920y293a2a72lc369340a0f823970@mail.gmail.com>
-Subject: Re: parameter for module gspca_sn9c20x
-From: Alan Jenkins <sourcejedi.lkml@googlemail.com>
-To: baeckham@gmx.net
-Cc: linux-modules <linux-modules@vger.kernel.org>,
-	linux-media@vger.kernel.org,
-	linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=ISO-8859-1
+To: Thiago Farina <tfransosi@gmail.com>
+CC: Tim Abbott <tabbott@ksplice.com>,
+	Rusty Russell <rusty@rustcorp.com.au>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH 1/2] lib: Add generic binary search function to the kernel.
+References: <1253626718-18887-5-git-send-email-alan-jenkins@tuffmail.co.uk>	 <1253726926-5504-2-git-send-email-tabbott@ksplice.com>	 <200909240941.41479.rusty@rustcorp.com.au>	 <alpine.DEB.1.10.0909271303580.14151@dr-wily.mit.edu> <a4c8a6d00911030714w2e885066g9af086818a968b7b@mail.gmail.com>
+In-Reply-To: <a4c8a6d00911030714w2e885066g9af086818a968b7b@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-[CC linux-media]  The linux-modules list is for the program "modprobe"
-etc, not the actual kernel drivers.
+Thiago Farina wrote:
+> Hi, this patch was landed? It seems not to be in the tree
+> (git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux-2.6).
+>   
 
-On 9/14/09, baeckham@gmx.net <baeckham@gmx.net> wrote:
-> I have a built-in webcam in my laptop: 0c45:624f Microdia PC Camera
-> (SN9C201)
->
-> Till today I used the driver from [groups.google.de] to make it work.
-> But now I found the driver in the 2.6.31 kernel:
->
-> 	 gspca_sn9c20x
->
-> Unfortunately I have to flip the image vertically so it is displayed right,
-> otherwise it is upside-
-> down.
->
-> With the google-groups-driver I had to use the parameter vflip=1 to flip the
-> image. But with the
-> kernel module gspca_sn9c20x this is not working:
->
-> # modprobe gspca_sn9c20x vflip=1
-> FATAL: Error inserting gspca_sn9c20x
-> (/lib/modules/2.6.31/kernel/drivers/media/video/gspca/gspca_sn9c20x.ko):
-> Unknown symbol in module,
-> or unknown parameter (see dmesg)
->
-> Does anyone know how to flip the image?
+I guess I'm sitting on it at the moment, having folded it into a patch 
+series which I have yet to submit.
 
-All I can say is it doesn't appear to be a module parameter, because
-there aren't any module parameters in the mainline driver :-).
+There are apparently already a number of implementations scattered 
+around the kernel tree.  Perhaps you can add another copy of this 
+implementation, wherever it is you need it :-).
 
-Regards
 Alan
