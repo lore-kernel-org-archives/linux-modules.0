@@ -6,28 +6,43 @@ Cc: Kay Sievers <kay.sievers@vrfy.org>, linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Linus Torvalds <torvalds@linux-foundation.org>,
 	Kyle McMartin <kmcmartin@redhat.com>
-In-Reply-To: <1306802774.4987.18.camel@constitution.bos.jonmasters.org>
+In-Reply-To: <4DE3AF93.40405@suse.cz>
 References: <1306763923-11892-1-git-send-email-mmarek@suse.cz>
 	 <BANLkTinU9DoY4gUXK2kaoUiNvbG905-ngQ@mail.gmail.com>
 	 <4DE3AF93.40405@suse.cz>
-	 <1306802774.4987.18.camel@constitution.bos.jonmasters.org>
 Content-Type: text/plain; charset="UTF-8"
-Date: Tue, 31 May 2011 02:02:06 -0400
-Message-ID: <1306821726.4987.37.camel@constitution.bos.jonmasters.org>
+Date: Mon, 30 May 2011 20:46:14 -0400
+Message-ID: <1306802774.4987.18.camel@constitution.bos.jonmasters.org>
 Mime-Version: 1.0
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, 2011-05-30 at 20:46 -0400, Jon Masters wrote:
+On Mon, 2011-05-30 at 16:54 +0200, Michal Marek wrote:
+> On 30.5.2011 16:43, Kay Sievers wrote:
+> > On Mon, May 30, 2011 at 15:58, Michal Marek<mmarek@suse.cz>  wrote:
+> >> What a stupid check.
+> >
+> > Maybe get rid of the entire check?
 
-> Well, for tonight I'm just killing off the 3 number check and taking the
-> patch from Michal that matches on two numbers (thanks Kyle for sending
-> another version earlier in the day too but we don't need to be quite so
-> cleaver, just distinguish between a version and module path passed in).
-> I'll post a separate email announcing a new release with this fix.
+> Why not. It tries to distinguish between
+> depmod da.da.da (kernel version)
+> and
+> depmod /path/to/module.ko ... (only generate tables for listed modules)
+> 
+> Either we can check for slashes in the second use case, or just drop 
+> support for it.
 
-FYI, I pushed 3.13 up to hera earlier but it's not yet syncing. I'll
-have updates out for Fedora (rawhide) and F15 testing by the morning.
+Well, for tonight I'm just killing off the 3 number check and taking the
+patch from Michal that matches on two numbers (thanks Kyle for sending
+another version earlier in the day too but we don't need to be quite so
+cleaver, just distinguish between a version and module path passed in).
+I'll post a separate email announcing a new release with this fix.
+
+I know it's a silly check, but it's probably not the only silly check
+out there in the wild world yonder. Part of me thinks it'd be better to
+just keep it as 3.0.0 so that we don't have an ongoing series of script
+explosions. Another part of me is just so excited to finally see a 3.0
+release that I've forgotten about 2.6 entirely (that's /so/ last week).
 
 Jon.
 
