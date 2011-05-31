@@ -1,24 +1,34 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
-Message-ID: <4DE4AFD6.4000403@suse.cz>
-Date: Tue, 31 May 2011 11:07:34 +0200
-From: Michal Marek <mmarek@suse.cz>
-MIME-Version: 1.0
-To: Jon Masters <jcm@redhat.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>
 Subject: Re: [PATCH] depmod: Handle X.Y kernel versions
+From: Jon Masters <jcm@redhat.com>
+To: Michal Marek <mmarek@suse.cz>
+Cc: Kay Sievers <kay.sievers@vrfy.org>, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Kyle McMartin <kmcmartin@redhat.com>
+In-Reply-To: <1306802774.4987.18.camel@constitution.bos.jonmasters.org>
 References: <1306763923-11892-1-git-send-email-mmarek@suse.cz>
-In-Reply-To: <1306763923-11892-1-git-send-email-mmarek@suse.cz>
-Content-Type: text/plain; charset=ISO-8859-2; format=flowed
+	 <BANLkTinU9DoY4gUXK2kaoUiNvbG905-ngQ@mail.gmail.com>
+	 <4DE3AF93.40405@suse.cz>
+	 <1306802774.4987.18.camel@constitution.bos.jonmasters.org>
+Content-Type: text/plain; charset="UTF-8"
+Date: Tue, 31 May 2011 02:02:06 -0400
+Message-ID: <1306821726.4987.37.camel@constitution.bos.jonmasters.org>
+Mime-Version: 1.0
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On 30.5.2011 15:58, Michal Marek wrote:
-> Linus, I'm affraid this ruins the plan for Linux 3.0. Except if you want
-> to force users to upgrade module-init-tools, with the excuse that 3.0
-> is a huge step forward and breakage has to be expected ;-).
+On Mon, 2011-05-30 at 20:46 -0400, Jon Masters wrote:
 
-For reference, http://marc.info/?l=linux-kernel&m=130676710124446&w=2 
-has a workaround, so 3.0 should work even with older m-i-t.
+> Well, for tonight I'm just killing off the 3 number check and taking the
+> patch from Michal that matches on two numbers (thanks Kyle for sending
+> another version earlier in the day too but we don't need to be quite so
+> cleaver, just distinguish between a version and module path passed in).
+> I'll post a separate email announcing a new release with this fix.
 
-Michal
+FYI, I pushed 3.13 up to hera earlier but it's not yet syncing. I'll
+have updates out for Fedora (rawhide) and F15 testing by the morning.
+
+Jon.
+
+
