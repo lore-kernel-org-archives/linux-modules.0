@@ -1,45 +1,28 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
-From: Michal Marek <mmarek@suse.cz>
-To: Jon Masters <jcm@redhat.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH] depmod: Handle X.Y kernel versions
-Date: Mon, 30 May 2011 15:58:43 +0200
-Message-Id: <1306763923-11892-1-git-send-email-mmarek@suse.cz>
+Subject: Re: module-init-tools development repo
+From: Jon Masters <jcm@redhat.com>
+To: Shea Levy <shea@shealevy.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <4E9B98F2.9050407@shealevy.com>
+References: <4E9B98F2.9050407@shealevy.com>
+Content-Type: text/plain; charset="UTF-8"
+Date: Mon, 17 Oct 2011 23:39:11 -0400
+Message-ID: <1318909151.5538.160.camel@constitution.bos.jonmasters.org>
+Mime-Version: 1.0
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-What a stupid check.
+On Sun, 2011-10-16 at 22:54 -0400, Shea Levy wrote:
 
-Signed-off-by: Michal Marek <mmarek@suse.cz>
----
+> Where can I find the module-init-tools development repository? The url 
+> given in [0] gives a "No such project" from git.kernel.org
 
-Jon, could you please apply this patch and release a new
-module-init-tools?  Depmod otherwise fails when building a kernel with
-version 3.0 (without the third number).
+Yea. There was a security compromise on kernel.org recently. The
+releases of module-init-tools were actually some of the first to be put
+back because I had personally signed them (as opposed to allowing the
+kernel.org key to be used) but the git repo won't be up for another day
+or two. I've been talking to the admin involved, so it'll be rsn.
 
-Linus, I'm affraid this ruins the plan for Linux 3.0. Except if you want
-to force users to upgrade module-init-tools, with the excuse that 3.0
-is a huge step forward and breakage has to be expected ;-).
+Jon.
 
-Michal
----
- depmod.c |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/depmod.c b/depmod.c
-index abfb11e..98a5efa 100644
---- a/depmod.c
-+++ b/depmod.c
-@@ -247,7 +247,7 @@ static int is_version_number(const char *version)
- {
- 	unsigned int dummy;
- 
--	return (sscanf(version, "%u.%u.%u", &dummy, &dummy, &dummy) == 3);
-+	return (sscanf(version, "%u.%u", &dummy, &dummy) == 2);
- }
- 
- static int old_module_version(const char *version)
--- 
-1.7.4.1
 
