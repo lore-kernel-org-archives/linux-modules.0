@@ -1,152 +1,78 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <CAMOw1v5r8CqO3zWdw9YzhjJVcU7QntwLEeJECbgcU-f3ATWUSQ@mail.gmail.com>
-References: <CAMOw1v5r8CqO3zWdw9YzhjJVcU7QntwLEeJECbgcU-f3ATWUSQ@mail.gmail.com>
 From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Date: Wed, 21 Dec 2011 00:35:12 -0200
-Message-ID: <CAMOw1v6_19WNnRw-vZdypfoJQT0wTjDVDLAfiWL=cnaNhTffAw@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 2
-To: linux-modules <linux-modules@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=ISO-8859-1
+To: Michal Marek <mmarek@suse.cz>, Sam Ravnborg <sam@ravnborg.org>
+Cc: linux-modules@vger.kernel.org,
+	Lucas De Marchi <lucas.demarchi@profusion.mobi>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] kbuild: add target to install xz modules
+Date: Thu, 29 Dec 2011 13:50:19 -0200
+Message-Id: <1325173819-26274-2-git-send-email-lucas.demarchi@profusion.mobi>
+In-Reply-To: <1325173819-26274-1-git-send-email-lucas.demarchi@profusion.mobi>
+References: <1325173819-26274-1-git-send-email-lucas.demarchi@profusion.mobi>
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi all,
+Add target in Makefile to compress the module with XZ  after it's
+installed. kmod can handle modules compressed with xz and it's replacing
+module-init-tools.
 
-http://packages.profusion.mobi/kmod/kmod-2.tar.xz
+Signed-off-by: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+---
+ Makefile                 |    6 +++++-
+ scripts/Makefile.modinst |    7 +++++++
+ 2 files changed, 12 insertions(+), 1 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index baddcfe..f06f886 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1104,9 +1104,10 @@ PHONY += modules_prepare
+ modules_prepare: prepare scripts
+ 
+ # Target to install modules
+-PHONY += modules_install modules_install_gz
++PHONY += modules_install modules_install_gz modules_install_xz
+ modules_install: _modinst_bare _modinst_post
+ modules_install_gz: _modinst_gz _modinst_post
++modules_install_xz: _modinst_xz _modinst_post
+ 
+ PHONY += _modinst_
+ _modinst_:
+@@ -1127,6 +1128,9 @@ _modinst_bare: _modinst_
+ _modinst_gz: _modinst_
+ 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modinst compression=gz
+ 
++_modinst_xz: _modinst_
++	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modinst compression=xz
++
+ # This depmod is only for convenience to give the initial
+ # boot a modules.dep even before / is mounted read-write.  However the
+ # boot script depmod is the master version.
+diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+index 442f953..297c546 100644
+--- a/scripts/Makefile.modinst
++++ b/scripts/Makefile.modinst
+@@ -24,6 +24,9 @@ quiet_cmd_modules_install = INSTALL $@
+ quiet_cmd_modules_compress_gz = GZ      $@.gz
+       cmd_modules_compress_gz = gzip $(2)/$(notdir $@)
+ 
++quiet_cmd_modules_compress_xz = XZ      $@.xz
++      cmd_modules_compress_xz = xz $(2)/$(notdir $@)
++
+ # Modules built outside the kernel source tree go into extra by default
+ INSTALL_MOD_DIR ?= extra
+ ext-mod-dir = $(INSTALL_MOD_DIR)$(subst $(patsubst %/,%,$(KBUILD_EXTMOD)),,$(@D))
+@@ -34,6 +37,10 @@ $(modules):
+ 	$(call cmd,modules_install,$(MODLIB)/$(modinst_dir))
+ ifeq ($(compression),gz)
+ 	$(call cmd,modules_compress_gz,$(MODLIB)/$(modinst_dir))
++else
++ifeq ($(compression),xz)
++	$(call cmd,modules_compress_xz,$(MODLIB)/$(modinst_dir))
++endif
+ endif
+ 
+ 
+-- 
+1.7.8.1
 
-I'm glad to announce the second version of kmod. I'm sorry for not
-sending the announcement on this mailing list for the first version.
-For those who didn't see the first announcement can check at
-http://lwn.net/Articles/472354/.
-
-I thank very much the feedback received for the first version and that
-now Jon Masters, the maintainer of module-init-tools, is helping us
-with kmod and already announced that kmod will replace
-module-init-tools in future
-(http://www.jonmasters.org/blog/2011/12/20/libkmod-replaces-module-init-tools/).
-
-I'd like to especially thank Tom Gundersen, Dave Reisner, Marco
-d'Itri, Jon Masters, Luis Felipe, Jan Engelhardt and Kay Sievers who
-have been extensively testing kmod and helping with compatibility with
-previous tools. Right now kmod is tested in i686, x86_64, sparcv9,
-powepc64, s390 and ARM. More testers are greatly appreciated,
-especially for architectures not mentioned here.
-
-News for this version are (copying from NEWS file):
-
-Some bugs fixed: the worst of them was with an infinite loop when an alias
-matched more than one module.
-
-- New APIs in libkmod to:
-� � � �- Get soft dependencies
-� � � �- Get info from module files parsing ELF
-� � � �- Get modversions from files parsing ELF
-- Support to load gzipped kernel modules: kmod can be compiled with support to
-�gzipped modules by giving the --enable-zlib flag
-- Support to forcefully load modules, both vermagic and modversion
-- Support to force and nowait removal flags
-- Configuration files are parsed in the same order as modprobe: files are
-�sorted alphabetically (independently of their dir) and files with the same
-�name obey a precedence order
-- New tool: kmod-modinfo
-- kmod-modprobe gained several features to be a 1:1 replacement for modprobe.
-�The only missing things are the options '--showconfig' and '-t / -l'. These
-�last ones have been deprecated long ago and they will be removed from
-�modprobe. A lot of effort has been put on kmod-modprobe to ensure it
-�maintains compabitility with modprobe.
-- linux-modules@vger.kernel.org became the official mailing list for kmod
-
-For the next version, we plan to migrate our git repository to
-kernel.org. Meanwhile, git repository can be found at
-http://git.profusion.mobi/cgit.cgi/kmod.git/ and packages at
-http://packages.profusion.mobi/kmod/
-
-Shortlog for kmod 2 is below.
-
-Cristian Rodr�guez (2):
-� � �Library must use O_CLOEXEC whenever it opens file descriptors
-� � �Open more file descriptors with O_CLOEXEC
-
-Gustavo Sverzut Barbieri (22):
-� � �implement zlib module loading.
-� � �fix error handling path.
-� � �implement softdeps.
-� � �fix kmod_list_prev().
-� � �introduce kmod_list_last()
-� � �introduce kmod_list_foreach_reverse().
-� � �kmod-modprobe: implement softdeps.
-� � �compatibility: match commands using fnmatch() instead of strcmp().
-� � �TODO: add idea about single file with all compressed modules.
-� � �ELF: initial support for modinfo and strip of modversions and vermagic.
-� � �kmod-modprobe: implement --dump-modversions
-� � �kmod-modprobe: improve --help output.
-� � �elf: fix minimum file size calculation.
-� � �Introduce kmod-modinfo.
-� � �kmod-modinfo: add missing short options.
-� � �kmod-modinfo: fix typo and output format.
-� � �elf: do not output empty strings.
-� � �kmod-modinfo: -p (-F parm) shows also parmtype in Debian
-expected formatting.
-� � �elf: fix typo that resulted in invalid uint reads for big-endian
-platforms.
-� � �elf: skip leading symbol dot in modversion.
-� � �kmod_module_new_*: improve debugging.
-� � �configure: disable static zlib build.
-
-Jan Engelhardt (3):
-� � �libkmod: use C99 __func__ over GNU-specific __FUNCTION__
-� � �gitignore: only ignore build system files in the top directory
-� � �build: use dist-xz
-
-Kay Sievers (1):
-� � �introduce --with-rootprefix=DIR
-
-Lucas De Marchi (33):
-� � �TODO: add new tasks and notes to future development
-� � �tools: fix kmod-modprobe -R trying to insert module
-� � �Add address of mailing list
-� � �kmod_module: do not find more than the first command
-� � �Lookup for commands in kmod_module_new_from_lookup()
-� � �Use tab instead of spaces
-� � �Fix leak of kmod_module
-� � �Fix wrong name len when converting path to modname
-� � �kmod_modprobe: fix handling of remove commands
-� � �kmod_modprobe: properly handle install/remove commands
-� � �Fix debug message formatting
-� � �build-sys: remove unneeded _SOURCES vars
-� � �Reduce ident by continuing early
-� � �Terminate strv with NULL
-� � �Put blank lines where it's due
-� � �Remove unneeded reference to last string
-� � �Optimize kmod_elf_get_strings() by reducing calls to memcpy
-� � �Make section size constant since it's always the same
-� � �Cache the offset of crc
-� � �elf: fix regression with empty strings
-� � �Fix check for opened indexes
-� � �kmod_modprobe: Fix regression when inserting module
-� � �kmod_config: fix kcmd line parser with dots after =
-� � �Use sorted configuration files in precedence order
-� � �kmod_modprobe: fix description of -C flag
-� � �build-sys: default to "" as rootprefix
-� � �build-sys: remove remaining _SOURCES var
-� � �Move symbols introduced in libkmod2 to the right place
-� � �Removing comments saying flags are not implemented
-� � �build-sys: do not use some compile flags by default
-� � �Update doc to reflect function behavior
-� � �Change error message to reflect reality
-� � �kmod 2
-
-Luis Felipe Strano Moraes (2):
-� � �Removing warnings when compiling on i686 platform.
-� � �Testing for return of alias_normalize.
-
-Ulisses Furquim (1):
-� � �trivial: fix typo causing an infinite loop
-
-
-
-
-Lucas De Marchi
