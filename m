@@ -1,42 +1,35 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
-Date: Fri, 30 Dec 2011 10:37:41 -0500
-From: Dave Jones <davej@redhat.com>
-To: Michal Marek <mmarek@suse.cz>
-Cc: Lucas De Marchi <lucas.demarchi@profusion.mobi>,
-	Sam Ravnborg <sam@ravnborg.org>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] kbuild: add target to install gzipped modules
-Message-ID: <20111230153741.GA2167@redhat.com>
-References: <1325173819-26274-1-git-send-email-lucas.demarchi@profusion.mobi>
- <20111229172101.GB4101@redhat.com>
- <4EFD913E.7010707@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-In-Reply-To: <4EFD913E.7010707@suse.cz>
+In-Reply-To: <4EFD92AF.7000402@suse.cz>
+References: <1325173819-26274-1-git-send-email-lucas.demarchi@profusion.mobi>
+ <4EFC9872.7000708@suse.cz> <CAMOw1v6GhA+B2oXcVK4YZULb6kq=-NFTv-=-4eYB0ukZ9acP-w@mail.gmail.com>
+ <4EFD92AF.7000402@suse.cz>
+From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+Date: Fri, 30 Dec 2011 12:07:14 -0200
+Message-ID: <CAMOw1v4SCpOXuGmFXGfk01gRdzgvV0G0QR-wmJHRbd3XHpVFMg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kbuild: add target to install gzipped modules
+To: Michal Marek <mmarek@suse.cz>
+Cc: Sam Ravnborg <sam@ravnborg.org>, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=ISO-8859-1
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Dec 30, 2011 at 11:23:58AM +0100, Michal Marek wrote:
- > On 29.12.2011 18:21, Dave Jones wrote:
- > > On Thu, Dec 29, 2011 at 01:50:18PM -0200, Lucas De Marchi wrote:
- > >  > Add target in Makefile to compress the module after it's installed.
- > >  > Module-init-tools and libkmod can handle gzipped modules.
- > >  > 
- > >  > This is not much useful for distributions because the package will gzip
- > >  > the modules and call depmod in a install rule. 
- > > 
- > > It might actually be a worthwhile thing for distributions.
- > > 
- > > For a Fedora kernel, gzipping modules saves around 80MB of diskspace per
- > > installed kernel.  That the RPM is compressed is irrelevant, the on-disk
- > > footprint is more interesting, given that the bulk of the modules installed
- > > will never even be loaded.
- > 
- > But it kills performance of the tools.
+On Fri, Dec 30, 2011 at 8:30 AM, Michal Marek <mmarek@suse.cz> wrote:
+> On 29.12.2011 18:35, Lucas De Marchi wrote:
+>> The operation that is used most of the time is to load modules. The
+>> reason for having modules gzipped is the same one as for kernel image:
+>
+> The reason for having the kernel compressed is that the x86 bootloader
+> reads the kernel (and initrd) using bios calls. That's not the case for
+> modules.
 
-How often do you run depmod ?
+It could be when it was added, but it's not anymore.
 
-If modprobe is a bottleneck, you have other problems.
 
-	Dave
+Really, I wouldn't like the discussion to be whether having compressed
+modules is good or not, but rather if it's good to have a install rule
+that does all the things the right way and only once, given people
+*are using* compressed modules.
 
+Lucas De Marchi
