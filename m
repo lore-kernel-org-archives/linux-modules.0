@@ -1,78 +1,54 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
-From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-To: Michal Marek <mmarek@suse.cz>, Sam Ravnborg <sam@ravnborg.org>
-Cc: linux-modules@vger.kernel.org,
-	Lucas De Marchi <lucas.demarchi@profusion.mobi>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] kbuild: add target to install xz modules
-Date: Thu, 29 Dec 2011 13:50:19 -0200
-Message-Id: <1325173819-26274-2-git-send-email-lucas.demarchi@profusion.mobi>
-In-Reply-To: <1325173819-26274-1-git-send-email-lucas.demarchi@profusion.mobi>
+MIME-Version: 1.0
+In-Reply-To: <20111230153741.GA2167@redhat.com>
 References: <1325173819-26274-1-git-send-email-lucas.demarchi@profusion.mobi>
+ <20111229172101.GB4101@redhat.com> <4EFD913E.7010707@suse.cz> <20111230153741.GA2167@redhat.com>
+From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+Date: Fri, 30 Dec 2011 14:40:29 -0200
+Message-ID: <CAMOw1v6U+pTHbR=qZQyeQ0_oUOwKudxc=fyhLgcVCT=B_-2_kQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kbuild: add target to install gzipped modules
+To: Dave Jones <davej@redhat.com>, Michal Marek <mmarek@suse.cz>,
+	Lucas De Marchi <lucas.demarchi@profusion.mobi>,
+	Sam Ravnborg <sam@ravnborg.org>, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Jan Engelhardt <jengelh@medozas.de>,
+	Kay Sievers <kay.sievers@vrfy.org>
+Content-Type: text/plain; charset=ISO-8859-1
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Add target in Makefile to compress the module with XZ  after it's
-installed. kmod can handle modules compressed with xz and it's replacing
-module-init-tools.
+On Fri, Dec 30, 2011 at 1:37 PM, Dave Jones <davej@redhat.com> wrote:
+> On Fri, Dec 30, 2011 at 11:23:58AM +0100, Michal Marek wrote:
+> �> On 29.12.2011 18:21, Dave Jones wrote:
+> �> > On Thu, Dec 29, 2011 at 01:50:18PM -0200, Lucas De Marchi wrote:
+> �> > �> Add target in Makefile to compress the module after it's installed.
+> �> > �> Module-init-tools and libkmod can handle gzipped modules.
+> �> > �>
+> �> > �> This is not much useful for distributions because the package will gzip
+> �> > �> the modules and call depmod in a install rule.
+> �> >
+> �> > It might actually be a worthwhile thing for distributions.
+> �> >
+> �> > For a Fedora kernel, gzipping modules saves around 80MB of diskspace per
+> �> > installed kernel. �That the RPM is compressed is irrelevant, the on-disk
+> �> > footprint is more interesting, given that the bulk of the modules installed
+> �> > will never even be loaded.
+> �>
+> �> But it kills performance of the tools.
+>
+> How often do you run depmod ?
+>
+> If modprobe is a bottleneck, you have other problems.
 
-Signed-off-by: Lucas De Marchi <lucas.demarchi@profusion.mobi>
----
- Makefile                 |    6 +++++-
- scripts/Makefile.modinst |    7 +++++++
- 2 files changed, 12 insertions(+), 1 deletions(-)
+modprobe is not a problem because it needs to read the entire blob to
+insert regardless. The only affected tools would be depmod and
+modinfo, but if this is really a problem, we could change the loader
+of gz and xz files to stop when the ".modinfo" section was read for
+the modinfo command.
 
-diff --git a/Makefile b/Makefile
-index baddcfe..f06f886 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1104,9 +1104,10 @@ PHONY += modules_prepare
- modules_prepare: prepare scripts
- 
- # Target to install modules
--PHONY += modules_install modules_install_gz
-+PHONY += modules_install modules_install_gz modules_install_xz
- modules_install: _modinst_bare _modinst_post
- modules_install_gz: _modinst_gz _modinst_post
-+modules_install_xz: _modinst_xz _modinst_post
- 
- PHONY += _modinst_
- _modinst_:
-@@ -1127,6 +1128,9 @@ _modinst_bare: _modinst_
- _modinst_gz: _modinst_
- 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modinst compression=gz
- 
-+_modinst_xz: _modinst_
-+	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modinst compression=xz
-+
- # This depmod is only for convenience to give the initial
- # boot a modules.dep even before / is mounted read-write.  However the
- # boot script depmod is the master version.
-diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-index 442f953..297c546 100644
---- a/scripts/Makefile.modinst
-+++ b/scripts/Makefile.modinst
-@@ -24,6 +24,9 @@ quiet_cmd_modules_install = INSTALL $@
- quiet_cmd_modules_compress_gz = GZ      $@.gz
-       cmd_modules_compress_gz = gzip $(2)/$(notdir $@)
- 
-+quiet_cmd_modules_compress_xz = XZ      $@.xz
-+      cmd_modules_compress_xz = xz $(2)/$(notdir $@)
-+
- # Modules built outside the kernel source tree go into extra by default
- INSTALL_MOD_DIR ?= extra
- ext-mod-dir = $(INSTALL_MOD_DIR)$(subst $(patsubst %/,%,$(KBUILD_EXTMOD)),,$(@D))
-@@ -34,6 +37,10 @@ $(modules):
- 	$(call cmd,modules_install,$(MODLIB)/$(modinst_dir))
- ifeq ($(compression),gz)
- 	$(call cmd,modules_compress_gz,$(MODLIB)/$(modinst_dir))
-+else
-+ifeq ($(compression),xz)
-+	$(call cmd,modules_compress_xz,$(MODLIB)/$(modinst_dir))
-+endif
- endif
- 
- 
--- 
-1.7.8.1
+As I said, I don't want to debate here whether it's good or not to
+have compressed modules. It would be nice though to cook up some
+numbers on different setups with the different compression methods
+(none, gz, xz).
 
+Lucas De Marchi
