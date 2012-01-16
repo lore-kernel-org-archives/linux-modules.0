@@ -1,96 +1,138 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
-Message-ID: <1324556423.15180.9.camel@constitution.bos.jonmasters.org>
-From: Jon Masters <jonathan@jonmasters.org>
-To: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Cc: linux-modules <linux-modules@vger.kernel.org>,
+MIME-Version: 1.0
+From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+Date: Mon, 16 Jan 2012 17:19:49 -0200
+Message-ID: <CAMOw1v4SQ6FpKgy+t+e3YrpR2bP41VBouU5Dcj_vBH8pirZ0cA@mail.gmail.com>
+Subject: [ANNOUNCE] kmod 4
+To: linux-modules <linux-modules@vger.kernel.org>,
 	LKML <linux-kernel@vger.kernel.org>,
-	Martin Sivak <msivak@redhat.com>
-Date: Thu, 22 Dec 2011 07:20:23 -0500
-In-Reply-To: <CAMOw1v6_19WNnRw-vZdypfoJQT0wTjDVDLAfiWL=cnaNhTffAw@mail.gmail.com>
-References: <CAMOw1v5r8CqO3zWdw9YzhjJVcU7QntwLEeJECbgcU-f3ATWUSQ@mail.gmail.com>
-	 <CAMOw1v6_19WNnRw-vZdypfoJQT0wTjDVDLAfiWL=cnaNhTffAw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Subject: Fedora package for kmod [WAS: Re: [ANNOUNCE] kmod 2]
+	linux-hotplug@vger.kernel.org
+Content-Type: text/plain; charset=ISO-8859-1
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, 2011-12-21 at 00:35 -0200, Lucas De Marchi wrote:
+Hey!!
 
-> http://packages.profusion.mobi/kmod/kmod-2.tar.xz
+I'm glad to announce kmod 4! Signed tarball is available at
 
-> I'm glad to announce the second version of kmod. I'm sorry for not
-> sending the announcement on this mailing list for the first version.
-> For those who didn't see the first announcement can check at
-> http://lwn.net/Articles/472354/.
+http://packages.profusion.mobi/kmod/kmod-4.tar.xz
+http://packages.profusion.mobi/kmod/kmod-4.tar.sign
 
-Hello everyone,
+With this version we are now feature-complete. All tools and features
+from module-init-tools are implemented. Man pages and API doc were
+added as well.
 
-I have taken the liberty of packaging kmod for use with Fedora. I have
-not yet done a lot of testing, so the usual disclaimers apply, etc. If
-you don't want to read the below and just want to try it, consider
-placing the following content into /etc/yum.repos.d/kmod.repo:
+Thanks a lot to people from Archlinux, especially Dave Reisner, who
+helped with bug reports and ironing them out.
 
-[kmod]
-name=kmod test packages
-failovermethod=priority
-baseurl=http://jcm.fedorapeople.org/kmod/packages/$releasever/
-enabled=1
-gpgcheck=0
-
-(currently works for F16 and rawhide on x86_64, more coming)
-
-Then you just need to do:
-
-$ yum install kmod
-
-After that, you will find new binaries with kmod- prefixes:
-
-$ kmod-lsmod
-$ kmod-modprobe
-$ ...
-
-That's enough if you just want to try it out. I'll keep these packages
-up to date in collaboration with Martin when new kmod releases are done,
-so you can leave that repo installed and get updates if you like, etc. 
-
-More detailed stuff
--------------------
-
-I have tried to generally follow the latest and greatest Fedora
-packaging guidelines, but this is not ready for official review, there
-are things I need to fix, and I need to test the pkgconfig and make sure
-the devel package actually works (did not get there yet tonight - but
-that stuff is next on the list). If you want to help with that, an
-interim repo for the SPEC used to stash this packaging stuff is in the
-following location just for the moment, and fixes are very welcome:
-
-$ git clone git://fedorapeople.org/~jcm/kmod/kmod-rpm.git
-
-(look for "TODO" lines in the SPEC to see things that need poking at)
-
-The goal with this packaging is to work with Martin Sivak and a few
-others on the Fedora end to get the kmod package into a shape and tested
-to a level in which it can relatively soon and transparently replace the
-existing module-init-tools package. Initially, the binaries have the
-kmod- prefix for easy parallel testing (just link or copy the files,
-etc.) but we will of course rename them later. At that time, the old
-package can be obsoleted and replaced with three new (sub)packages.
-
-As far as testing goes, I'm going to be poking further at x86_64 and
-ARM, and I will also kick off some RHEL6 builds for ppc64 and s390x for
-fun, because I don't yet have an up-to-date Fedora install on my POWER
-box at home. I will ping other secondary arch folks and ask them to also
-take a look because I am keen that some good Big Endian testing be done
-to offset all that x86. Obviously, the weirder the setup, the better.
-
-NOTE: For now, I have caused the binaries to be installed into /sbin,
-and the library into /lib(64) in the spirit of the existing locations. I
-am aware of the general intentions in Fedora around changing filesystem
-layouts but just in the first cut, I'm keeping life simple(ish).
-
-Thanks everyone! (and Happy Holidays!)
-
-Jon.
+We also received report from one more architecture being tested: hppa.
 
 
+Please check NEWS file that we ship with kmod for more information.
+
+
+With this version we postponed the API break that was planned and
+decided to only add a few missing API, solve the bugs people reported
+and make docs and man pages. Shortlog is below.
+
+
+Lucas De Marchi
+
+---
+Dave Reisner (4):
+      tools/modinfo: exit non-zero on module not found
+      tools/modprobe: exit non-zero on module not found with --all
+      modprobe: check for EPERM on insertion
+      rmmod: behavior more like m-i-t's rmmod
+
+Gustavo Sverzut Barbieri (1):
+      modprobe: show is independent from verbose level.
+
+Jan Alexander Steffens (heftig) (1):
+      depmod: Postpone creation of module array
+
+Lucas De Marchi (70):
+      Revert "tools/kmod-depmod: fix aliasing warning"
+      config: check if opening /proc/cmdline succeeded
+      Replace NAME_MAX with PATH_MAX for module aliases
+      modprobe: fix error path when loading dependencies
+      Update copyright
+      doc: fix comments format
+      Match param names on header and source code
+      doc: fix order of param descriptions
+      doc: fix broken links to other functions
+      doc: add gtk-doc to generate documentation
+      doc: organize sections
+      build-sys: do not run configure in autogen.sh
+      README: add more information
+      build-sys: give recommended configure options for hacking
+      doc: fix out of tree build
+      TODO: add tasks to modprobe
+      config: be reliable againt syntax errors in configs
+      build-sys: allow building without having gtk-doc installed
+      build-sys: create symlinks instead of building separate tools
+      build-sys: build tests as part of check phase
+      build-sys: workaround libtool issue with argv[0]
+      TODO: add task to modprobe
+      build-sys: fix build with zlib/xz after private lib
+      Fix error code returned on module removal
+      config: deprecate 'include' and 'config' commands
+      modprobe: adhere do coding style
+      autogen.sh: configure with 3-clicks + paste
+      modprobe: break dependency loop by checking if module is loaded
+      test: add check of module's state
+      modprobe: show if module is in kernel
+      rename doc dir to man
+      build-sys: fix clean rule removing tracked files
+      man: convert depmod.d.sgml to xml and update it
+      build-sys: build man pages
+      man: build modprobe.d man page
+      man: build modules.dep{,.bin} man pages
+      man: build depmod man page
+      man: build insmod man page
+      man: build lsmod man page
+      man: build rmmod man page
+      man: build modprobe man page
+      man: build modinfo man page
+      modprobe: rework module insertion without tree traversing
+      TODO: update differences with m-i-t
+      modprobe: rework module removal without tree traversing
+      TODO: update tasks
+      modprobe: fix leak on error path
+      modprobe: abort on dependency loop that cannot be broken
+      TODO: add code unification to list of tasks
+      build-sys: rename autogen.sh to bootstrap and keep a symlink
+      build-sys: add script to bootstrap and configure
+      libkmod-private: allow to get aliases from config
+      config: add exported iterator functions
+      config: let softdeps dump their data
+      modprobe: dump configuration
+      depmod: adhere to coding style
+      Reduce scope of counter variable
+      depmod: fix idx calculation after postponed array creation
+      kmod_new(): deal with relative paths for dirname
+      depmod: deal with relative root dir
+      Update documentation with recent changes
+      libkmod: store prefix of each index
+      libkmod: export enum kmod_index and rename members
+      libkmod-util: adhere to coding style
+      libkmod-util: add helper function to write to fd
+      libkmod: dump index files
+      modprobe: dump indexes as well
+      Add doc to kmod_dump_index
+      build-sys: add release helpers
+      kmod 4
+
+Robby Workman (6):
+      doc: Import sgml manpages from module-init-tools repo
+      doc/modprobe.d.sgml: Various touchups
+      doc/depmod.d.sgml: Various touchups; mostly s/depmod.conf/depmod.d/g
+      doc/depmod.sgml: Remove refs to depmod.conf
+      doc/depmod.sgml: Remove references to legacy map files
+      doc/modprobe.sgml: Various updates wrt inclusion with kmod
+
+Rolf Eike Beer (1):
+      tools/kmod-depmod: fix aliasing warning
+
+root (1):
+      tools/kmod-depmod: fix aliasing warning
