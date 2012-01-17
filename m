@@ -1,34 +1,48 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
-Message-ID: <1326861219.490.4.camel@cr0>
-Subject: Re: [PATCH] kbuild: do not check for ancient modutils tools
-From: Cong Wang <amwang@redhat.com>
-To: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Cc: linux-kernel@vger.kernel.org, Kay Sievers <kay.sievers@vrfy.org>,
-	Michal Marek <mmarek@suse.cz>, linux-modules@vger.kernel.org
-Date: Wed, 18 Jan 2012 12:33:39 +0800
-In-Reply-To: <1326819051-25712-1-git-send-email-lucas.demarchi@profusion.mobi>
-References: <1326819051-25712-1-git-send-email-lucas.demarchi@profusion.mobi>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
+From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+To: linux-kernel@vger.kernel.org
+Cc: Kay Sievers <kay.sievers@vrfy.org>, Michal Marek <mmarek@suse.cz>,
+	linux-modules@vger.kernel.org,
+	Lucas De Marchi <lucas.demarchi@profusion.mobi>
+Subject: [PATCH] kbuild: do not check for ancient modutils tools
+Date: Tue, 17 Jan 2012 14:50:51 -0200
+Message-Id: <1326819051-25712-1-git-send-email-lucas.demarchi@profusion.mobi>
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, 2012-01-17 at 14:50 -0200, Lucas De Marchi wrote:
-> scripts/depmod.sh checks for the output of '-V' expecting that it has
-> module-init-tools in it. It's a hack to prevent users from using
-> modutils instead of module-init-tools, that only works with 2.4.x
-> kernels. This however prints an annoying warning for kmod tool, that is
-> currently replacing module-init-tools.
-> 
-> Rather than putting another check for kmod's version, just remove it
-> since users of 2.4.x kernel are unlikely to upgrade to 3.x, and if they
-> do, let depmod fail in that case because they should know what they are
-> doing.
-> 
-> Signed-off-by: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+scripts/depmod.sh checks for the output of '-V' expecting that it has
+module-init-tools in it. It's a hack to prevent users from using
+modutils instead of module-init-tools, that only works with 2.4.x
+kernels. This however prints an annoying warning for kmod tool, that is
+currently replacing module-init-tools.
 
-Acked-by: WANG Cong <amwang@redhat.com>
+Rather than putting another check for kmod's version, just remove it
+since users of 2.4.x kernel are unlikely to upgrade to 3.x, and if they
+do, let depmod fail in that case because they should know what they are
+doing.
 
-Thanks.
+Signed-off-by: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+---
+ scripts/depmod.sh |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
 
+diff --git a/scripts/depmod.sh b/scripts/depmod.sh
+index a272356..2ae4817 100755
+--- a/scripts/depmod.sh
++++ b/scripts/depmod.sh
+@@ -9,12 +9,6 @@ fi
+ DEPMOD=$1
+ KERNELRELEASE=$2
+ 
+-if ! "$DEPMOD" -V 2>/dev/null | grep -q module-init-tools; then
+-	echo "Warning: you may need to install module-init-tools" >&2
+-	echo "See http://www.codemonkey.org.uk/docs/post-halloween-2.6.txt" >&2
+-	sleep 1
+-fi
+-
+ if ! test -r System.map -a -x "$DEPMOD"; then
+ 	exit 0
+ fi
+-- 
+1.7.8.3
 
