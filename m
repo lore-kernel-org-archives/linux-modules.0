@@ -1,138 +1,52 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20120123141710.GA26809@sepie.suse.cz>
+References: <1326819051-25712-1-git-send-email-lucas.demarchi@profusion.mobi>
+ <1326861219.490.4.camel@cr0> <CAPXgP12vChg=820uamRa6dTekEQD_xa6mg-nroOm1br+7-JCqw@mail.gmail.com>
+ <20120123141710.GA26809@sepie.suse.cz>
 From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Date: Mon, 16 Jan 2012 17:19:49 -0200
-Message-ID: <CAMOw1v4SQ6FpKgy+t+e3YrpR2bP41VBouU5Dcj_vBH8pirZ0cA@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 4
-To: linux-modules <linux-modules@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-hotplug@vger.kernel.org
+Date: Mon, 23 Jan 2012 12:32:22 -0200
+Message-ID: <CAMOw1v7+Hb8RgBdA3ZPzEFM0Mt5y=_6=RF12CodciOw0Yq2vmg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: do not check for ancient modutils tools
+To: Michal Marek <mmarek@suse.cz>
+Cc: Kay Sievers <kay.sievers@vrfy.org>, Cong Wang <amwang@redhat.com>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
 Content-Type: text/plain; charset=ISO-8859-1
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Hey!!
+On Mon, Jan 23, 2012 at 12:17 PM, Michal Marek <mmarek@suse.cz> wrote:
+> On Fri, Jan 20, 2012 at 05:40:58PM +0100, Kay Sievers wrote:
+>> On Wed, Jan 18, 2012 at 05:33, Cong Wang <amwang@redhat.com> wrote:
+>> > On Tue, 2012-01-17 at 14:50 -0200, Lucas De Marchi wrote:
+>> >> scripts/depmod.sh checks for the output of '-V' expecting that it has
+>> >> module-init-tools in it. It's a hack to prevent users from using
+>> >> modutils instead of module-init-tools, that only works with 2.4.x
+>> >> kernels. This however prints an annoying warning for kmod tool, that is
+>> >> currently replacing module-init-tools.
+>
+> You could call kmod "module-init-tools 3.13 (compatible; kmod 3)" ;)
+>
+> Just kidding.
 
-I'm glad to announce kmod 4! Signed tarball is available at
-
-http://packages.profusion.mobi/kmod/kmod-4.tar.xz
-http://packages.profusion.mobi/kmod/kmod-4.tar.sign
-
-With this version we are now feature-complete. All tools and features
-from module-init-tools are implemented. Man pages and API doc were
-added as well.
-
-Thanks a lot to people from Archlinux, especially Dave Reisner, who
-helped with bug reports and ironing them out.
-
-We also received report from one more architecture being tested: hppa.
-
-
-Please check NEWS file that we ship with kmod for more information.
+I even wrote a patch to fake kmod as module-init-tools 4.0. Not worth
+applying though  :-)
 
 
-With this version we postponed the API break that was planned and
-decided to only add a few missing API, solve the bugs people reported
-and make docs and man pages. Shortlog is below.
+>
+>> >> Rather than putting another check for kmod's version, just remove it
+>> >> since users of 2.4.x kernel are unlikely to upgrade to 3.x, and if they
+>> >> do, let depmod fail in that case because they should know what they are
+>> >> doing.
+>> >>
+>> >> Signed-off-by: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+>> >
+>> > Acked-by: WANG Cong <amwang@redhat.com>
+>>
+>> Michal, mind picking this up? The warning it produces with kmod is
+>> really misleading, and the check seems unnecessary these days.
+>
+> I applied it to kbuild.git#rc-fixes and will send it to Linus for 3.3.
 
-
+Thanks
 Lucas De Marchi
-
----
-Dave Reisner (4):
-      tools/modinfo: exit non-zero on module not found
-      tools/modprobe: exit non-zero on module not found with --all
-      modprobe: check for EPERM on insertion
-      rmmod: behavior more like m-i-t's rmmod
-
-Gustavo Sverzut Barbieri (1):
-      modprobe: show is independent from verbose level.
-
-Jan Alexander Steffens (heftig) (1):
-      depmod: Postpone creation of module array
-
-Lucas De Marchi (70):
-      Revert "tools/kmod-depmod: fix aliasing warning"
-      config: check if opening /proc/cmdline succeeded
-      Replace NAME_MAX with PATH_MAX for module aliases
-      modprobe: fix error path when loading dependencies
-      Update copyright
-      doc: fix comments format
-      Match param names on header and source code
-      doc: fix order of param descriptions
-      doc: fix broken links to other functions
-      doc: add gtk-doc to generate documentation
-      doc: organize sections
-      build-sys: do not run configure in autogen.sh
-      README: add more information
-      build-sys: give recommended configure options for hacking
-      doc: fix out of tree build
-      TODO: add tasks to modprobe
-      config: be reliable againt syntax errors in configs
-      build-sys: allow building without having gtk-doc installed
-      build-sys: create symlinks instead of building separate tools
-      build-sys: build tests as part of check phase
-      build-sys: workaround libtool issue with argv[0]
-      TODO: add task to modprobe
-      build-sys: fix build with zlib/xz after private lib
-      Fix error code returned on module removal
-      config: deprecate 'include' and 'config' commands
-      modprobe: adhere do coding style
-      autogen.sh: configure with 3-clicks + paste
-      modprobe: break dependency loop by checking if module is loaded
-      test: add check of module's state
-      modprobe: show if module is in kernel
-      rename doc dir to man
-      build-sys: fix clean rule removing tracked files
-      man: convert depmod.d.sgml to xml and update it
-      build-sys: build man pages
-      man: build modprobe.d man page
-      man: build modules.dep{,.bin} man pages
-      man: build depmod man page
-      man: build insmod man page
-      man: build lsmod man page
-      man: build rmmod man page
-      man: build modprobe man page
-      man: build modinfo man page
-      modprobe: rework module insertion without tree traversing
-      TODO: update differences with m-i-t
-      modprobe: rework module removal without tree traversing
-      TODO: update tasks
-      modprobe: fix leak on error path
-      modprobe: abort on dependency loop that cannot be broken
-      TODO: add code unification to list of tasks
-      build-sys: rename autogen.sh to bootstrap and keep a symlink
-      build-sys: add script to bootstrap and configure
-      libkmod-private: allow to get aliases from config
-      config: add exported iterator functions
-      config: let softdeps dump their data
-      modprobe: dump configuration
-      depmod: adhere to coding style
-      Reduce scope of counter variable
-      depmod: fix idx calculation after postponed array creation
-      kmod_new(): deal with relative paths for dirname
-      depmod: deal with relative root dir
-      Update documentation with recent changes
-      libkmod: store prefix of each index
-      libkmod: export enum kmod_index and rename members
-      libkmod-util: adhere to coding style
-      libkmod-util: add helper function to write to fd
-      libkmod: dump index files
-      modprobe: dump indexes as well
-      Add doc to kmod_dump_index
-      build-sys: add release helpers
-      kmod 4
-
-Robby Workman (6):
-      doc: Import sgml manpages from module-init-tools repo
-      doc/modprobe.d.sgml: Various touchups
-      doc/depmod.d.sgml: Various touchups; mostly s/depmod.conf/depmod.d/g
-      doc/depmod.sgml: Remove refs to depmod.conf
-      doc/depmod.sgml: Remove references to legacy map files
-      doc/modprobe.sgml: Various updates wrt inclusion with kmod
-
-Rolf Eike Beer (1):
-      tools/kmod-depmod: fix aliasing warning
-
-root (1):
-      tools/kmod-depmod: fix aliasing warning
