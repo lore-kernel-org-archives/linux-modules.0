@@ -1,177 +1,150 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
-MIME-Version: 1.0
+Date: Mon, 6 Feb 2012 20:58:56 -0200
 From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Date: Thu, 5 Jan 2012 10:27:44 -0200
-Message-ID: <CAMOw1v5dPKLJjekMpCzDTNd2W3AGrfb12hmjcGap1DCttnWuRw@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 3
 To: linux-modules <linux-modules@vger.kernel.org>,
 	LKML <linux-kernel@vger.kernel.org>,
 	linux-hotplug@vger.kernel.org
-Content-Type: text/plain; charset=ISO-8859-1
+Subject: [ANNOUNCE] kmod 5
+Message-ID: <20120206225856.GA20161@vader>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi,
+Hey!!
 
-I'm glad to announce kmod 3! Signed tarball is available at
+I'm glad to announce kmod 5! Signed tarball is available at
 
-http://packages.profusion.mobi/kmod/kmod-3.tar.xz
+http://packages.profusion.mobi/kmod/kmod-5.tar.xz
+http://packages.profusion.mobi/kmod/kmod-5.tar.sign
 
-In this version we added a new implementation of depmod, the only missing tool
-to completely replace module-init-tools. We have only a couple of options
-missing yet and need more testing, so I'd not say distros could start shipping
-kmod instead of module-init-tools yet. This will probably be possible with the
-next version.
+This version included several bug fixes and we needed to break the API
+in order to be able to share code between the lib and modprobe. Now the
+API udev should use is the same as used by modprobe. This way we can
+more easily reproduce the bug reports.
 
-We removed the several kmod-* tools that mimic the module-init-tools ones. Now
-there's only one tool called 'kmod' that does the right thing when symlinks are
-used with the previous names.
+We added a testsuite, too. Now it's possible to automate tests and check
+for regressions. People out there reporting bugs (I'm looking at package
+maintainers) could give a look in testsuite/README if they can add a
+test case there to reproduce their problems. Most of the time will be a
+copy and paste from other tests + some set up of configs.
 
-I'd like to thank again Dave Reisner and Tom Gundersen for the really good work
-at testing, reporting bugs and helping on solving them. Right now we received
-feedback from them and other people that are testing on the following
-architectures: i686, x86_64, sparcv9, sparc64, powerpc64, s390, ARM and sh4.
-Any architecture missing here? With this version we also fixed a major bug on
-architectures that do not support unaligned accesses.
+This is the last version to be hosted at ProFUSION's servers. We are
+finishing to set up stuff on kernel.org and repository and tarballs will
+be available there soon.
 
-It's also worth noting that now udev is already using kmod for loading
-modules.For more information about new things, please check the NEWS file that
-we ship with kmod.
-
-For the next version we plan to review some APIs, extract documentation from
-source code and generate the missing man pages. Hopefully we will already be
-hosted on kernel.org, too.
-
-Shortlog for kmod 3 is below.
-
-Cristian Rodr�guez (2):
-      Fix leak on error path
-      index_file_open: fix another fd leak on error path.
-
-Dave Reisner (7):
-      libkmod-config: remove warning for skipped config files
-      modprobe: remove --list option
-      modprobe: use lighter access call instead of stat
-      kmodprobe: post-remove module deps with 0 refcnt
-      tools: unify error verbiage and casing
-      libkmod: Fix casing in error output
-      libkmod/hash: check for NULL before freeing hash
-
-Gustavo Sverzut Barbieri (33):
-      Fix unaligned memory access
-      kmod-modprobe: fix leak in command line option processing.
-      file: speed up loading non-gzipped modules when zlib is enabled.
-      elf: minimum size is enough.
-      elf: add get_symbols()
-      add test/test-elf
-      elf: add bind type to kmod_modversion.
-      elf: implement kmod_module_get_dependency_symbols()
-      kmod-depmod: initial code (no files generated, untested)
-      kmod-depmod: dump devname
-      kmod-depmod: dump modules.symbols
-      kmod-depmod: dump softdeps.
-      kmod-depmod: dump aliases
-      kmod-depmod: dump deps.
-      kmod-depmod: copy code from module-init-tools/index.c
-      kmod-depmod: add utility functions to be used by binary dumps.
-      kmod-depmod: dump modules.builtin.bin
-      kmod-depmod: dump modules.symbols.bin
-      kmod-depmod: dump modules.alias.bin
-      kmod-depmod: dump modules.dep.bin
-      update TODO
-      kmod-depmod: implement -F and -E options.
-      kmod-depmod: implement -A (--quick)
-      kmod-depmod: refactor extension matching array, support XZ.
-      utils/read_str_safe(): fix wrong behavior and bugs.
-      libkmod-file: refactor code to avoid ifdef mess.
-      elf: zero *array when count is zero.
-      kmod-depmod: add missing trailing \n to log messages.
-      kmod-depmod: document --config/-C in help output.
-      kmod-depmod: fix incorrect math finding out end of dirname.
-      utils/array: add array_remove_at()
-      kmod-depmod: fix comparison of module priority.
-      kmod-depmod: fix replacement of existing modules.
-
-Jan Engelhardt (4):
-      build: use pkgconfig to detect zlib
-      build: use AC_ARG_WITH for zlib
-      Support for loading Xz-compressed modules
-      libkmod: remove external cflags from .pc file
-
-Kay Sievers (2):
-      do not (mis-)use the config file generator for non-autobuild stuff
-      introduce --with-rootlibdir=DIR
-
-Leandro Pereira (3):
-      kmod tool: don't keep iterating when command has been executed
-      Do not forget parenthesis around if (streq(A, B)).
-      libkmod-util: getline_wrapped: return NULL when buffer allocation fails
-
-Lucas De Marchi (63):
-      gitignore: ignore dist files
-      Remove useless warning causing trouble in sparc64
-      Initialize line number with 0
-      kmod_modprobe: use basename(argv[0]) in help message
-      build-sys: use MKDIR_P
-      tools: add skeleton of kmod tool
-      tools: kmod: Add global options
-      tools: kmod: check progname for handling compat commands
-      tools: kmod: Add handling of compat lsmod
-      tools: kmod: Add handling of compat rmmod
-      tools: kmod: Add handling of compat insmod
-      tools: kmod: Add handling of compat modinfo
-      tools: kmod: Add handling of compat modprobe
-      tools: kmod: add list command
-      tools: kmod: print help message when no commands given
-      tools: kmod: show wrong command in err message
-      build-sys: use AS_IF
-      Fix version script with v3 symbols
-      TODO: add task in modprobe's compatibility
-      Reverse order of dependency list
-      Fix kmod_list_remove_n_latest()
-      Add functions to get ctx blacklists
-      build-sys: remove unneeded _SOURCES var
-      Allow to internally get dependencies without copying list
-      Do not cache softdeps list
-      Add implementation of modprobe's insertion
-      Add test for probe insert
-      kmod-depmod: Fix leak of dependency vector
-      TODO: format and add task
-      Log paths if kmod_module_new_from_path() failed
-      Remove kmod_ prefix from hash implementation
-      Copy missing hash functions from kmod-depmod to libkmod
-      build-sys: create libkmod-util.la convenience lib
-      hash: add iterator
-      kmod-depmod: use hash implementation from util lib
-      Move util functions to libkmod-util.c
-      Fix header guard
-      tools: kmod: bundle depmod together with the others
-      Move array implementation from depmode to libkmod-util
-      Move libkmod-util.c to convenience util lib
-      Use errno instead of return value of init_module()
-      Ignore "already loaded" error in module_probe_insert_module()
-      Move function to the right place
-      Do not call exported function for mod->name
-      Use last enum value instead of ARRAY_SIZE
-      TODO: add list of things that are different on kmod
-      Fix leak of kmod_module and fix code style
-      kmod-modprobe: mimic modprobe when removing deps with usecount=0
-      util: add helper function to compare timestamps
-      config: save list of config paths with their timestamps
-      index: save timestamp of each loaded index
-      Add call to check if resources are valid
-      Add test to check kmod_validate_resources
-      TODO: add task for providing man page
-      Add missing static const
-      config: take a weakref to ctx
-      file: take a weakref to ctx
-      file: use log facilities
-      build-sys: do not install kmod-* tools
-      kmod-depmod: demote messages to WRN when non-critical files are missing
-      Add missing doc for function argument
-      tools: use basename in help message
-      kmod 3
-
---
+Please check NEWS file that we ship with kmod for more information.
+Shortlog is below.
 
 Lucas De Marchi
+
+
+---
+Ambroz Bizjak (1):
+      Fix unaligned memory access in hash function
+
+Dan McGee (6):
+      Fix simple grammar issue
+      Update .gitignore files
+      test-conversion: remove test/test-loaded
+      test-conversion: remove test/test-init
+      test-conversion: remove test/test-{insmod,rmmod,rmmod2}
+      modinfo: handle arguments more carefully
+
+Dave Reisner (9):
+      modprobe: remove code referring to -t, --type
+      build-sys: declare rootfs.tar.xz as dep of rootfs/
+      modprobe: post-remove module deps with 0 refcnt
+      testsuite: allow for expected failure of tests
+      modprobe: properly handle errors from init_module
+      whitespace fix -- no logical code changes
+      lib/module: check initstate before inserting module
+      modprobe: avoid breaking on insertion failure
+      fix building and cleaning of manpages
+
+Gustavo Sverzut Barbieri (3):
+      improve log when debugging.
+      improve logging to mention context.
+      fix manpage build and install.
+
+Khem Raj (1):
+      depmod: Dont use errno unconditionally
+
+Lucas De Marchi (67):
+      Fix common misspelling with codespell
+      modprobe: flush stdout before dumping indexes
+      Check if struct stat has mtim member
+      build-sys: create symlinks if we are installing tools
+      libkmod-list: allow to append an empty list
+      Add program to calculate the shortest relative path for symlinks
+      build-sys: move modprobe to sbindir
+      build-sys: forcefully create links
+      TODO: system() should not be used inside a library
+      modprobe: kill operations depending on path
+      build-sys: do not create symlinks by default
+      README: add link to packages place
+      modprobe: fix build 'cause of excessive number of arguments
+      testsuite: add skeleton
+      testsuite: test libkmod initialization
+      testsuite: trap calls to uname
+      testsuite: move oneshot to inside the test struct
+      testsuite: export environment with flags and LD_PRELOAD
+      testsuite: fake kernel 4.0.20-kmod is out
+      testsuite: add trap to fopen() including tests
+      testsuite: add trap to open() including tests
+      testsuite: add trap to stat() and friends including tests
+      testsuite: add trap to opendir() including tests
+      testsuite: allow to run tests outside of top_buildir
+      testsuite: separate child from parent
+      testsuite: match outputs of test with a known correct one
+      testsuite: add simple test for list of loaded modules
+      testsuite: add colors to test output
+      testsuite: remind users to build tools
+      testsuite: add test for modinfo
+      elf: privately export kmod_elf_get_section()
+      testsuite: add trap to init_module() including simple test
+      build-sys: autotoolify build of check libraries
+      testsuite: trap calls to delete_module() including simple test
+      testsuite: add GPL license
+      build-sys: extract rootfs for make check
+      modprobe: print end of configuration files
+      testsuite: remove unneeded call to memset()
+      Use %zu for size_t
+      testsuite: let stat.h take care of stat64
+      build-sys: fix make dist
+      libkmod-module: add visited field
+      libkmod-module: probe: change insertion to cover more use cases
+      libkmod-module: probe: add flag to ignore commands
+      Partially fix parsing of alias with dots
+      libkmod-module: split creation of new modules to share code
+      testsuite: add test for kmod_module_new_from_name()
+      testsuite: check if dots are allowed in aliases
+      libkmod-module: probe: add flag to stop loading on already loaded
+      libkmod-module: probe: remove useless flag to stop on failure
+      libkmod-module: probe: ignore-command flag can't be used in return
+      libkmod-module: probe: add room in flags for future extension
+      libkmod-module: probe: add print_action callback
+      libkmod-module: probe: add flag to ignore loaded modules
+      libkmod-module: probe: add flag to dry-run
+      kmod-modprobe: migrate to kmod_module_probe_insert_module()
+      libkmod-module: probe: return -EEXIST if told to stop on already loaded
+      libkmod-module: probe: remove useless KMOD_PROBE_STOP_ON_COMMAND
+      Prepare for API bump
+      libkmod: organize public header
+      man: insmod: we don't handle modules from stdin
+      TODO: add task to write testsuite/README
+      libkmod-module: probe: rename flag to be more meaningful
+      libkmod-module: probe: return -EEXIST if told to do so
+      testsuite: add README
+      Add WARNING file for test dir and improve testsuite README
+      kmod 5
+
+Miklos Vajna (1):
+      man: spelling fixes
+
+Pedro Pedruzzi (2):
+      testsuite: add test for function alias_normalize
+      libkmod: Fix handling of square brackets expressions in function alias_normalize
+
+Thierry Vignaud (1):
+      WEXITSTATUS is defined in sys/wait.h
