@@ -1,9 +1,9 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 MIME-Version: 1.0
 From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Date: Mon, 19 Mar 2012 08:46:01 -0300
-Message-ID: <CAMOw1v6N4xpwnB7yRCUtw=AdyjYk9DYwh07HdtOaWU0smRX1Cw@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 7
+Date: Thu, 19 Apr 2012 11:34:05 -0300
+Message-ID: <CAMOw1v6Q6_6g-4UKvixDLNkRvv0C_LdkHjYJynQUhJ6_sraf6A@mail.gmail.com>
+Subject: kmod 8
 To: linux-modules <linux-modules@vger.kernel.org>,
 	LKML <linux-kernel@vger.kernel.org>,
 	linux-hotplug <linux-hotplug@vger.kernel.org>
@@ -11,34 +11,35 @@ Content-Type: text/plain; charset=ISO-8859-1
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-kmod 7 is out:
+kmod 8 is out:
 
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-7.tar.xz
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-7.tar.sign
+ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-8.tar.xz
+ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-8.tar.sign
 
-Just a bug-fix release with some bugs found mainly by Debian guys.
-Check the NEWS file for more information.
+Very small, bug-fix release, nothing new. Last release I changed my
+laptop, which caused a wrong setup and kmod 7 got out with docs
+disabled. kmod 8 fixes as well.
 
-Thanks a lot for all of you helping with debugging, testing and patches.
+Check NEWS file for more information.
 
 Shortlog is below.
+
 
 Lucas De Marchi
 
 --
 
 Dave Reisner (1):
-      modprobe: fix error path in removing modules
+      modprobe: handle -ENOENT return from init_module
 
-Lucas De Marchi (7):
-      modprobe: don't check if module builtin to decide if it's builtin
-      modprobe: always try to remove all modules in command line
-      modprobe: set log prio to 0 if user passed -q arg
-      config: use order /etc, /run, /lib
-      build-sys: re-organize configure.ac
-      build-sys: don't set CFLAGS and LDFLAGS
-      kmod 7
+Elan Ruusam�e (1):
+      modprobe: fix typo in config dump: option->options
 
-Randy Witt (2):
-      Add CC_CHECK_LDFLAGS_APPEND m4 macro.
-      configure.ac: Move link only flags out of CFLAGS and into LDFLAGS.
+Kay Sievers (1):
+      doc: silent man page generation and fix gtk-doc warnings
+
+Lucas De Marchi (4):
+      README: note that there are more files to read
+      TODO: add item to implement actions in kmod
+      doc: remove links to NULL going nowhere
+      kmod 8
