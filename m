@@ -1,94 +1,86 @@
-Return-Path: <linux-kernel-owner@vger.kernel.org>
 MIME-Version: 1.0
-From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Date: Tue, 19 Jun 2012 19:57:32 -0300
-Message-ID: <CAMOw1v5=TRPgk0PyW3sS=+ak4O28mqU6ujO8yf-WZYaKSutc5Q@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 9
-To: linux-modules <linux-modules@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	linux-hotplug <linux-hotplug@vger.kernel.org>
-Content-Type: text/plain; charset=ISO-8859-1
-Sender: linux-kernel-owner@vger.kernel.org
+In-Reply-To: <20120622015341.GA3414@kroah.com>
+References: <8762blyedn.fsf@rustcorp.com.au>
+	<87obpfxdpr.fsf@rustcorp.com.au>
+	<20120522230218.24007.3556.stgit@warthog.procyon.org.uk>
+	<7474.1337782847@redhat.com>
+	<5107.1337868051@redhat.com>
+	<87r4u6w58c.fsf@rustcorp.com.au>
+	<20120622015341.GA3414@kroah.com>
+Date: Fri, 22 Jun 2012 00:29:46 -0300
+Message-ID: <CAKi4VA+ntfH=ezAU77T3WFr6kqgXMb9npJ_msSQyCwps75yuEA@mail.gmail.com>
+Subject: Re: [PATCH 00/23] Crypto keys and module signing
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Rusty Russell <rusty@rustcorp.com.au>, David Howells <dhowells@redhat.com>, kyle@mcmartin.ca,
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
+	keyrings@linux-nfs.org, linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-Hey!
+Hi,
 
-kmod 9 is out:
+Sorry to jump into this discussion only now, but
+linux-modules@vger.kernel.org was not CC'ed and I was not following
+LKML last month.
 
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-9.tar.xz
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-9.tar.sign
+On Thu, Jun 21, 2012 at 10:53 PM, Greg KH <gregkh@linuxfoundation.org> wrot=
+e:
+> On Sun, May 27, 2012 at 03:11:23PM +0930, Rusty Russell wrote:
+>> > > > Why would you want multiple signatures? =C2=A0That just complicate=
+s things.
+>> > >
+>> > > The code above stays pretty simple; if the signature fails, you set =
+size
+>> > > to i, and loop again. =C2=A0As I said, if you know exactly how you'r=
+e going
+>> > > to strip the modules, you can avoid storing the stripped module and
+>> > > simply append both signatures.
+>> >
+>> > You still haven't justified it. =C2=A0One of your arguments about reje=
+cting the ELF
+>> > parsing version was that it was too big for no useful extra value that=
+ I could
+>> > justify. =C2=A0Supporting multiple signatures adds extra size and comp=
+lexity for no
+>> > obvious value.
+>>
+>> One loop is a lot easier to justify that the ELF-parsing mess. =C2=A0And=
+ it
+>> can be done in a backwards compatible way tomorrow: old kernels will
+>> only check the last signature.
+>>
+>> I had assumed you'd rather maintain a stable strip util which you can
+>> use on kernel modules than rework your module builds. =C2=A0I guess not.
+>
+> To dig an old thread up, but what really is wrong with the original ELF
+> section stuff? =C2=A0Why encode "magic" values on the end of the kernel
+> module that then require all userspace tools to be modified in order to
+> properly handle this?
+>
+> When I first did this so many many years ago an elf section made it so
+> easy to handle. =C2=A0Userspace didn't need to be modified, and everyone
+> knows how to handle elf sections, even the kernel does :)
 
-Mainly improvements to the testsuite but users will mostly notice the
-bugfixes and that now depmod checks for errors while writing the
-indexes. Also some small fixes to libkmod while dealing with
-compressed modules. Check the NEWS file fora additional information.
+Indeed. What's wrong with creating an ELF section for this and let
+kernel deal with it? I fail to see the need for init_module2()
 
-Shortlog is below
+I need to catch up with this discussion though since I was not aware of tha=
+t.
+
 
 Lucas De Marchi
 
----
+>
+> And I think we really want the ability to have multiple signatures, the
+> whole "chain of trust" thing that is needed will work out much better if
+> multiple signatures are allowed. =C2=A0Putting it in an elf section allow=
+s
+> this to work out easier, right?
+>
+> confused,
 
-Dan McGee (3):
-      testsuite: ship testsuite/rootfs unzipped
-      test-conversion: convert test-blacklist to new infrastructure
-      test-conversion: convert test-get-dependencies to new infrastructure
+me too.
 
-Dave Reisner (4):
-      libkmod-file: gracefully handle errors from zlib
-      depmod: report failures in loading symbols
-      bootstrap-configure: quote command line arg expansion
-      bootstrap: remove unnecessary echo
 
-Josh Boyer (1):
-      doc: Don't reference /etc/modprobe.conf
-
-Lucas De Marchi (44):
-      Remove dead assignment
-      Return error instead of always 0
-      Remove dead increment
-      Revert "libkmod: make sure to export kmod_log"
-      build: remove private symbol from linker script
-      build-sys: distribute testsuite
-      build-sys: copy rootfs to another directory
-      libkmod-util: copy macros for unaligned access from BlueZ
-      libkmod-hash: use generic function for unaligned access
-      libkmod-index: use generic function for unaligned access
-      Don't use __ for attribute defines
-      Silence clang warnings with __unused__ attribute
-      testsuite: fix find_module() finding wrong module
-      build-sys: provide --sysconfdir to make distcheck flags
-      testsuite: rename rootfs dir
-      libkmod-util: add missing stdbool.h include
-      testsuite: separate insert and delete rootfs from modinfo
-      testsuite: check if rootfs dir is dirty before running
-      testsuite: trap calls to mkdir
-      testsuite: add mkdir_p implementation
-      testsuite: create initstate file upon fake init_module()
-      testsuite: set default init_module behavior to mimic kernel's
-      testsuite: check if module is in kernel for return code
-      testsuite: add test for softdep loops
-      libkmod-util: split function for usec conversion
-      testsuite: create additional pipe to monitor child
-      testsuite: add timeout for each test
-      testsuite: allow to export custom env vars
-      testsuite: add test for install-commands loop
-      libkmod-index: protect ourselves from corrupted indexes
-      testsuite: Fix test description
-      TODO: update tasks
-      libkmod-config: refactor functions to get config
-      tools: rename source files
-      build-sys: add missing header to fix distcheck
-      Remove ifdef for building tools not bundled
-      depmod: don't return error if modules.builtin don't exist
-      depmod: fail if any index could not be created
-      depmod: fix coding-style issue in array declaration
-      depmod: return error when index is truncated due to ENOSPC
-      depmod: use ferror and fclose to check for error
-      build-sys: Make dirs writable on rootfs creation
-      build-sys: allow compressed modules in testsuite
-      kmod 9
-
-Mike Frysinger (2):
-      libkmod: make sure to export kmod_log
-      libkmod: move function to the only file using it
+Lucas De Marchi
