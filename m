@@ -1,86 +1,71 @@
+Return-Path: <linux-kernel-owner@vger.kernel.org>
+Message-ID: <505695E3.7040603@gmail.com>
+Date: Sun, 16 Sep 2012 22:15:47 -0500
+From: Bruce Dubbs <bruce.dubbs@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20120622015341.GA3414@kroah.com>
-References: <8762blyedn.fsf@rustcorp.com.au>
-	<87obpfxdpr.fsf@rustcorp.com.au>
-	<20120522230218.24007.3556.stgit@warthog.procyon.org.uk>
-	<7474.1337782847@redhat.com>
-	<5107.1337868051@redhat.com>
-	<87r4u6w58c.fsf@rustcorp.com.au>
-	<20120622015341.GA3414@kroah.com>
-Date: Fri, 22 Jun 2012 00:29:46 -0300
-Message-ID: <CAKi4VA+ntfH=ezAU77T3WFr6kqgXMb9npJ_msSQyCwps75yuEA@mail.gmail.com>
-Subject: Re: [PATCH 00/23] Crypto keys and module signing
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Rusty Russell <rusty@rustcorp.com.au>, David Howells <dhowells@redhat.com>, kyle@mcmartin.ca,
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
-	keyrings@linux-nfs.org, linux-modules <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To: Jan Engelhardt <jengelh@inai.de>
+CC: Lucas De Marchi <lucas.demarchi@profusion.mobi>,
+	linux-modules <linux-modules@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linux-hotplug <linux-hotplug@vger.kernel.org>
+Subject: Re: [ANNOUNCE] kmod 10
+References: <CAMOw1v6MYW6O2f4AR9yRvh200j5R6mFTRqDT3TFbG-TjknmUmw@mail.gmail.com> <alpine.LNX.2.01.1209170427220.6182@nerf07.vanv.qr>
+In-Reply-To: <alpine.LNX.2.01.1209170427220.6182@nerf07.vanv.qr>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi,
-
-Sorry to jump into this discussion only now, but
-linux-modules@vger.kernel.org was not CC'ed and I was not following
-LKML last month.
-
-On Thu, Jun 21, 2012 at 10:53 PM, Greg KH <gregkh@linuxfoundation.org> wrot=
-e:
-> On Sun, May 27, 2012 at 03:11:23PM +0930, Rusty Russell wrote:
->> > > > Why would you want multiple signatures? =C2=A0That just complicate=
-s things.
->> > >
->> > > The code above stays pretty simple; if the signature fails, you set =
-size
->> > > to i, and loop again. =C2=A0As I said, if you know exactly how you'r=
-e going
->> > > to strip the modules, you can avoid storing the stripped module and
->> > > simply append both signatures.
->> >
->> > You still haven't justified it. =C2=A0One of your arguments about reje=
-cting the ELF
->> > parsing version was that it was too big for no useful extra value that=
- I could
->> > justify. =C2=A0Supporting multiple signatures adds extra size and comp=
-lexity for no
->> > obvious value.
+Jan Engelhardt wrote:
+>
+> On Thursday 2012-09-06 21:37, Lucas De Marchi wrote:
 >>
->> One loop is a lot easier to justify that the ELF-parsing mess. =C2=A0And=
- it
->> can be done in a backwards compatible way tomorrow: old kernels will
->> only check the last signature.
+>> kmod 10 is out:
 >>
->> I had assumed you'd rather maintain a stable strip util which you can
->> use on kernel modules than rework your module builds. =C2=A0I guess not.
+>> ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-10.tar.xz
+>> ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-10.tar.sign
 >
-> To dig an old thread up, but what really is wrong with the original ELF
-> section stuff? =C2=A0Why encode "magic" values on the end of the kernel
-> module that then require all userspace tools to be modified in order to
-> properly handle this?
->
-> When I first did this so many many years ago an elf section made it so
-> easy to handle. =C2=A0Userspace didn't need to be modified, and everyone
-> knows how to handle elf sections, even the kernel does :)
+> make check fails here with glibc-2.15, gcc-4.7, x86_64,
+> due to what seems to be duplicated symbols(?)
 
-Indeed. What's wrong with creating an ELF section for this and let
-kernel deal with it? I fail to see the need for init_module2()
+On my LFS system, glibc-2.16, gcc-4.7.1, x86_64, I do not see these errors:
 
-I need to catch up with this discussion though since I was not aware of tha=
-t.
+./configure --prefix=/usr --bindir=/bin --libdir=/lib \
+             --sysconfdir=/etc --with-xz --with-zlib
+make
+make check
 
+==================
+All 9 tests passed
+==================
 
-Lucas De Marchi
+What is interesting is that if I run the checks again:
 
->
-> And I think we really want the ability to have multiple signatures, the
-> whole "chain of trust" thing that is needed will work out much better if
-> multiple signatures are allowed. =C2=A0Putting it in an elf section allow=
-s
-> this to work out easier, right?
->
-> confused,
+make check
 
-me too.
+I get:
 
+TESTSUITE: running modprobe_softdep_loop, in forked context
+TESTSUITE: ERR: rootfs 
+/usr/src/kmod/kmod-10/testsuite/rootfs/test-modprobe/softdep-loop is 
+dirty, please run 'make rootfs' before runnning this test
+TESTSUITE: ERR: 'modprobe_softdep_loop' [16407] exited with return code 1
+TESTSUITE: ERR: FAILED: modprobe_softdep_loop
+FAIL: testsuite/test-modprobe
 
-Lucas De Marchi
+TESTSUITE: running test_insert, in forked context
+TESTSUITE: ERR: rootfs /usr/src/kmod/kmod-10/testsuite/rootfs/test-init/ 
+is dirty, please run 'make rootfs' before runnning this test
+TESTSUITE: ERR: 'test_insert' [16373] exited with return code 1
+TESTSUITE: ERR: FAILED: test_insert
+FAIL: testsuite/test-init
+
+==============================================
+2 of 9 tests failed
+Please report to linux-modules@vger.kernel.org
+==============================================
+
+'make rootfs' does not do anything but make distclean && configure && 
+make && make check is clean for me.
+
+   -- Bruce
+
