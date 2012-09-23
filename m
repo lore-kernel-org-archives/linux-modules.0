@@ -1,65 +1,28 @@
-Return-Path: <linux-kernel-owner@vger.kernel.org>
+Return-Path: <jengelh@inai.de>
+Date: Sun, 23 Sep 2012 15:28:46 +0200 (CEST)
+From: Jan Engelhardt <jengelh@inai.de>
+To: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+cc: LKML <linux-kernel@vger.kernel.org>,
+    linux-modules <linux-modules@vger.kernel.org>,
+    Lucas De Marchi <lucas.de.marchi@gmail.com>,
+    Kay Sievers <kay.sievers@vrfy.org>, Dave Reisner <d@falconindy.com>
+Subject: Re: Drop support to compressed modules?
+In-Reply-To: <CAMOw1v7ihLgrrtgak2s9hDDsUrSnD7wO8FJTrZvsrJzarH6ZRg@mail.gmail.com>
+Message-ID: <alpine.LNX.2.01.1209231528350.15692@nerf07.vanv.qr>
+References: <CAMOw1v7ihLgrrtgak2s9hDDsUrSnD7wO8FJTrZvsrJzarH6ZRg@mail.gmail.com>
 MIME-Version: 1.0
-From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Date: Thu, 6 Sep 2012 16:37:55 -0300
-Message-ID: <CAMOw1v6MYW6O2f4AR9yRvh200j5R6mFTRqDT3TFbG-TjknmUmw@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 10
-To: linux-modules <linux-modules@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	linux-hotplug <linux-hotplug@vger.kernel.org>
-Content-Type: text/plain; charset=ISO-8859-1
-Sender: linux-kernel-owner@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 List-ID: <linux-modules.vger.kernel.org>
 
-Hey!
 
-kmod 10 is out:
+On Friday 2012-09-21 23:41, Lucas De Marchi wrote:
+>
+>While fixing a bug in kmod related to using compressed modules (that
+>already existed in module-init-tools) we stopped to think about these
+>questions. Dave made a couple of benchmarks and performance wise it's
+>better to use uncompressed modules than modules with gz or xz
+>compression. However the benchmark was done in only 1 computer. I do
+>expect people with slow storage to have different numbers though. Does
+>anyone have these numbers?
 
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-10.tar.xz
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-10.tar.sign
-
-The major change was the addition of a flag in
-kmod_module_probe_insert() to keep the previous behavior of
-module-init-tools regarding blacklisted modules.
-
-Other than that, improvements to testsuite and man pages. I also
-re-licensed the testsuite as LGPL. If anyone wants to use in his own
-project and LGPL doesn't fit your needs, let me know.
-
-Shortlog is below
-
-Cheers!
-Lucas De Marchi
-
----
-
-Colin Walters (1):
-      build-sys: Add --disable-manpages option
-
-Dave Reisner (10):
-      Implicitly run 'make rootfs' with 'make check'
-      module: support reading coresize from /sys if supported
-      build-sys: disable jobserver for rootfs target
-      man/modprobe: clarify --dirname option
-      man/modinfo: document --basedir option
-      man/modinfo: document longopts for field shortcuts
-      man/modinfo: specify each option in separate <term> tag
-      man/modprobe: specify each option in separate <term> tag
-      man/depmod: specify each option in separate <term> tag
-      man/rmmod: specify each option in separate <term> tag
-
-Lucas De Marchi (10):
-      testsuite: use right offset for module name
-      testsuite: re-license under LGPL
-      Use #pragma once instead of #ifndef
-      build-sys: add 'man' entry in summary
-      README: let people know they don't need to subscribe
-      libkmod-module: Add KMOD_PROBE_APPLY_BLACKLIST_ALIAS_ONLY flag
-      modprobe: Unconditionally use KMOD_PROBE_APPLY_BLACKLIST_ALIAS_ONLY
-      TODO: deprecate use of rmmod -w
-      Remove test directory
-      kmod 10
-
-Martin Pitt (2):
-      testsuite: path wrapper: Fix open() with 3 arguments
-      testsuite preload: Factorize into macros, add more stat and open variants
+What benchmark should be run?
