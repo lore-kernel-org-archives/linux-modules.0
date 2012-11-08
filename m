@@ -1,151 +1,111 @@
+Return-Path: <linux-kernel-owner@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LNX.2.01.1209170427220.6182@nerf07.vanv.qr>
-References: <CAMOw1v6MYW6O2f4AR9yRvh200j5R6mFTRqDT3TFbG-TjknmUmw@mail.gmail.com>
-	<alpine.LNX.2.01.1209170427220.6182@nerf07.vanv.qr>
-Date: Mon, 8 Oct 2012 10:38:53 -0300
-Message-ID: <CAKi4VAKj0C7-Ug4M=s7wSFGZeP5Tr0Tt1vyg41tKhf01mA+vcQ@mail.gmail.com>
-Subject: Re: [ANNOUNCE] kmod 10
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Jan Engelhardt <jengelh@inai.de>
-Cc: Lucas De Marchi <lucas.demarchi@profusion.mobi>,
-	linux-modules <linux-modules@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	linux-hotplug <linux-hotplug@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+Date: Thu, 8 Nov 2012 03:02:00 -0200
+Message-ID: <CAMOw1v6ngskF4mM_oRUA+TpgAAF3U0Gjp-4vC+eJHkKmBBx1KQ@mail.gmail.com>
+Subject: [ANNOUNCE] kmod 11
+To: linux-modules <linux-modules@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	linux-hotplug <linux-hotplug@vger.kernel.org>,
+	Rusty Russell <rusty@rustcorp.com.au>
+Content-Type: text/plain; charset=ISO-8859-1
+Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, Sep 16, 2012 at 11:34 PM, Jan Engelhardt <jengelh@inai.de> wrote:
->
-> On Thursday 2012-09-06 21:37, Lucas De Marchi wrote:
->>
->>kmod 10 is out:
->>
->>ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-10.tar.xz
->>ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-10.tar.sign
->
-> make check fails here with glibc-2.15, gcc-4.7, x86_64,
-> due to what seems to be duplicated symbols(?):
->
->
-> + make check V=3D1
-> Making check in .
-> make --no-print-directory testsuite/uname.la testsuite/path.la testsuite/=
-init_module.la testsuite/delete_module.la testsuite/libtestsuite.la testsui=
-te/test-init testsuite/test-testsuite testsuite/test-loaded testsuite/test-=
-modinfo testsuite/test-alias testsuite/test-new-module testsuite/test-modpr=
-obe testsuite/test-blacklist testsuite/test-dependencies
-> depbase=3D`echo testsuite/uname.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
-> /bin/sh ./libtool  --tag=3DCC   --mode=3Dcompile gcc -std=3Dgnu99 -std=3D=
-gnu99 -DHAVE_CONFIG_H -I.  -include ./config.h -I./libkmod -DROOTPREFIX=3D\=
-"""\" -DSYSCONFDIR=3D\""/etc"\" -DLIBEXECDIR=3D\""/usr/lib"\" -I/usr/local/=
-include    -pipe -DANOTHER_BRICK_IN_THE -Wall -W -Wextra -Wno-inline -Wvla =
--Wundef -Wformat=3D2 -Wlogical-op -Wsign-compare -Wformat-security -Wmissin=
-g-include-dirs -Wformat-nonliteral -Wold-style-definition -Wpointer-arith -=
-Winit-self -Wdeclaration-after-statement -Wfloat-equal -Wmissing-prototypes=
- -Wstrict-prototypes -Wredundant-decls -Wmissing-declarations -Wmissing-nor=
-eturn -Wshadow -Wendif-labels -Wstrict-aliasing=3D2 -Wwrite-strings -Wno-lo=
-ng-long -Wno-overlength-strings -Wno-unused-parameter -Wno-missing-field-in=
-itializers -Wno-unused-result -Wnested-externs -Wchar-subscripts -Wtype-lim=
-its -Wuninitialized -fno-common -fdiagnostics-show-option -fvisibility=3Dhi=
-dden -ffunction-sections -fdata-sections -fomit-frame-pointer -fmessage-len=
-gth=3D0 -O2 -Wall -D_FORTIFY_SOURCE=3D2 -
->  fstack-protector -funwind-tables -fasynchronous-unwind-tables -g -MT tes=
-tsuite/uname.lo -MD -MP -MF $depbase.Tpo -c -o testsuite/uname.lo testsuite=
-/uname.c &&\
-> mv -f $depbase.Tpo $depbase.Plo
-> libtool: compile:  gcc -std=3Dgnu99 -std=3Dgnu99 -DHAVE_CONFIG_H -I. -inc=
-lude ./config.h -I./libkmod -DROOTPREFIX=3D\"\" -DSYSCONFDIR=3D\"/etc\" -DL=
-IBEXECDIR=3D\"/usr/lib\" -I/usr/local/include -pipe -DANOTHER_BRICK_IN_THE =
--Wall -W -Wextra -Wno-inline -Wvla -Wundef -Wformat=3D2 -Wlogical-op -Wsign=
--compare -Wformat-security -Wmissing-include-dirs -Wformat-nonliteral -Wold=
--style-definition -Wpointer-arith -Winit-self -Wdeclaration-after-statement=
- -Wfloat-equal -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -=
-Wmissing-declarations -Wmissing-noreturn -Wshadow -Wendif-labels -Wstrict-a=
-liasing=3D2 -Wwrite-strings -Wno-long-long -Wno-overlength-strings -Wno-unu=
-sed-parameter -Wno-missing-field-initializers -Wno-unused-result -Wnested-e=
-xterns -Wchar-subscripts -Wtype-limits -Wuninitialized -fno-common -fdiagno=
-stics-show-option -fvisibility=3Dhidden -ffunction-sections -fdata-sections=
- -fomit-frame-pointer -fmessage-length=3D0 -O2 -Wall -D_FORTIFY_SOURCE=3D2 =
--fstack-protector -funwind-tables -fa
->  synchronous-unwind-tables -g -MT testsuite/uname.lo -MD -MP -MF testsuit=
-e/.deps/uname.Tpo -c testsuite/uname.c  -fPIC -DPIC -o testsuite/.libs/unam=
-e.o
-> cc1: warning: /usr/local/include: No such file or directory [enabled by d=
-efault]
-> /bin/sh ./libtool  --tag=3DCC   --mode=3Dlink gcc -std=3Dgnu99 -std=3Dgnu=
-99 -pipe -DANOTHER_BRICK_IN_THE -Wall -W -Wextra -Wno-inline -Wvla -Wundef =
--Wformat=3D2 -Wlogical-op -Wsign-compare -Wformat-security -Wmissing-includ=
-e-dirs -Wformat-nonliteral -Wold-style-definition -Wpointer-arith -Winit-se=
-lf -Wdeclaration-after-statement -Wfloat-equal -Wmissing-prototypes -Wstric=
-t-prototypes -Wredundant-decls -Wmissing-declarations -Wmissing-noreturn -W=
-shadow -Wendif-labels -Wstrict-aliasing=3D2 -Wwrite-strings -Wno-long-long =
--Wno-overlength-strings -Wno-unused-parameter -Wno-missing-field-initialize=
-rs -Wno-unused-result -Wnested-externs -Wchar-subscripts -Wtype-limits -Wun=
-initialized -fno-common -fdiagnostics-show-option -fvisibility=3Dhidden -ff=
-unction-sections -fdata-sections -fomit-frame-pointer -fmessage-length=3D0 =
--O2 -Wall -D_FORTIFY_SOURCE=3D2 -fstack-protector -funwind-tables -fasynchr=
-onous-unwind-tables -g avoid-version -module -shared -export-dynamic -rpath=
- /nowhere -ldl  -o testsuite/uname.
->  la  testsuite/uname.lo
-> libtool: link: gcc -std=3Dgnu99 -shared  -fPIC -DPIC  testsuite/.libs/una=
-me.o   -ldl  -O2   -Wl,-soname -Wl,uname.so.0 -o testsuite/.libs/uname.so.0=
-.0.0
-> libtool: link: (cd "testsuite/.libs" && rm -f "uname.so.0" && ln -s "unam=
-e.so.0.0.0" "uname.so.0")
-> libtool: link: (cd "testsuite/.libs" && rm -f "uname.so" && ln -s "uname.=
-so.0.0.0" "uname.so")
-> libtool: link: ( cd "testsuite/.libs" && rm -f "uname.la" && ln -s "../un=
-ame.la" "uname.la" )
-> depbase=3D`echo testsuite/path.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
-> /bin/sh ./libtool  --tag=3DCC   --mode=3Dcompile gcc -std=3Dgnu99 -std=3D=
-gnu99 -DHAVE_CONFIG_H -I.  -include ./config.h -I./libkmod -DROOTPREFIX=3D\=
-"""\" -DSYSCONFDIR=3D\""/etc"\" -DLIBEXECDIR=3D\""/usr/lib"\" -I/usr/local/=
-include    -pipe -DANOTHER_BRICK_IN_THE -Wall -W -Wextra -Wno-inline -Wvla =
--Wundef -Wformat=3D2 -Wlogical-op -Wsign-compare -Wformat-security -Wmissin=
-g-include-dirs -Wformat-nonliteral -Wold-style-definition -Wpointer-arith -=
-Winit-self -Wdeclaration-after-statement -Wfloat-equal -Wmissing-prototypes=
- -Wstrict-prototypes -Wredundant-decls -Wmissing-declarations -Wmissing-nor=
-eturn -Wshadow -Wendif-labels -Wstrict-aliasing=3D2 -Wwrite-strings -Wno-lo=
-ng-long -Wno-overlength-strings -Wno-unused-parameter -Wno-missing-field-in=
-itializers -Wno-unused-result -Wnested-externs -Wchar-subscripts -Wtype-lim=
-its -Wuninitialized -fno-common -fdiagnostics-show-option -fvisibility=3Dhi=
-dden -ffunction-sections -fdata-sections -fomit-frame-pointer -fmessage-len=
-gth=3D0 -O2 -Wall -D_FORTIFY_SOURCE=3D2 -
->  fstack-protector -funwind-tables -fasynchronous-unwind-tables -g -MT tes=
-tsuite/path.lo -MD -MP -MF $depbase.Tpo -c -o testsuite/path.lo testsuite/p=
-ath.c &&\
-> mv -f $depbase.Tpo $depbase.Plo
-> libtool: compile:  gcc -std=3Dgnu99 -std=3Dgnu99 -DHAVE_CONFIG_H -I. -inc=
-lude ./config.h -I./libkmod -DROOTPREFIX=3D\"\" -DSYSCONFDIR=3D\"/etc\" -DL=
-IBEXECDIR=3D\"/usr/lib\" -I/usr/local/include -pipe -DANOTHER_BRICK_IN_THE =
--Wall -W -Wextra -Wno-inline -Wvla -Wundef -Wformat=3D2 -Wlogical-op -Wsign=
--compare -Wformat-security -Wmissing-include-dirs -Wformat-nonliteral -Wold=
--style-definition -Wpointer-arith -Winit-self -Wdeclaration-after-statement=
- -Wfloat-equal -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -=
-Wmissing-declarations -Wmissing-noreturn -Wshadow -Wendif-labels -Wstrict-a=
-liasing=3D2 -Wwrite-strings -Wno-long-long -Wno-overlength-strings -Wno-unu=
-sed-parameter -Wno-missing-field-initializers -Wno-unused-result -Wnested-e=
-xterns -Wchar-subscripts -Wtype-limits -Wuninitialized -fno-common -fdiagno=
-stics-show-option -fvisibility=3Dhidden -ffunction-sections -fdata-sections=
- -fomit-frame-pointer -fmessage-length=3D0 -O2 -Wall -D_FORTIFY_SOURCE=3D2 =
--fstack-protector -funwind-tables -fa
->  synchronous-unwind-tables -g -MT testsuite/path.lo -MD -MP -MF testsuite=
-/.deps/path.Tpo -c testsuite/path.c  -fPIC -DPIC -o testsuite/.libs/path.o
-> cc1: warning: /usr/local/include: No such file or directory [enabled by d=
-efault]
-> {standard input}: Assembler messages:
-> {standard input}:418: Error: symbol `open64' is already defined
-> {standard input}:678: Error: symbol `stat64' is already defined
-> {standard input}:758: Error: symbol `lstat64' is already defined
-> {standard input}:1234: Error: symbol `__xstat64' is already defined
-> {standard input}:1396: Error: symbol `__lxstat64' is already defined
-> make[2]: *** [testsuite/path.lo] Error 1
-> make[1]: *** [check-am] Error 2
-> make: *** [check-recursive] Error 1
-> error: Bad exit status from /var/tmp/rpm-tmp.Eq2Axz (%check)
+kmod 11 is out:
 
-For completeness of ML archives: it's fixed on git:
-http://git.kernel.org/?p=3Dutils/kernel/kmod/kmod.git;a=3Dcommit;h=3Dd64234=
-17778d049b07a3091c3972160be99c9173
+ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-11.tar.xz
+ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-11.tar.sign
 
+This is the greatest release ever for those using compressed modules
+(I'd like to rather remove it, but some distros are using it so it's
+unlikely to happen soon). When using compressed modules there was a
+bug regarding modules.order since forever. Now distros don't have to
+tweak this file anymore and user can freely mix compressed and
+non-compressed modules.
 
+The time needed for running depmod has been greatly reduced with this
+release. And this is not exclusive to those using compressed modules.
+For non-compressed modules there were reports of a speedup of 3x in
+depmod. Check http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=commit;h=1eff942e37adda55bd8c506d4e2a7970fdbf7a74
+for details... the timings got improved even more after that commit.
+
+Testsuite also got bug fixes and is now capable of comparing output
+files to decide if a test succeeded. Other projects using our
+testsuite should upgrade to this new version.
+
+Due to the major refactor in depmod needed to accomplish the speedup
+mentioned above, I thought about releasing a -rc1 but then decided to
+go straight with a release since it would probably not help a lot.
+Please give it more time than usual in your distro testing repository.
+If a major bug is found I'll just release another version sooner than
+usual.
+
+Last but not least, "--wait" option to rmmod is gone. Or at least it's
+now hidden and causing a sleep of 10s if user decides to use it. The
+reason is that this feature is being deprecated on kernel side since
+it doesn't have any good reason to exist and causes some pain to
+maintain.
+
+Take a look in NEWS file for more details on changes. Shortlog is below.
+
+Cheers!
 Lucas De Marchi
+
+---
+
+Dave Reisner (5):
+      Revert "build-sys: disable jobserver for rootfs target"
+      Define rootfs as dependency of check-am
+      Makefile: remove redundant flags to $(RM)
+      modinfo: clarify verbiage for field shortcuts
+      build-sys: Remove --with-rootprefix option
+
+Jan Engelhardt (1):
+      NEWS: language corrections
+
+Leandro Pereira (1):
+      libkmod-hash: Plug possible memory leak when free_value is defined
+
+Lucas De Marchi (38):
+      testsuite: Fix double definition of 64-bits variant
+      build-sys: Append -Werror when testing flags
+      depmod: fix parsing of modules.order with compressed modules
+      testsuite: allow to check generated files
+      testsuite: add depmod test for modules.alias
+      libkmod: Add support for '.' in module parameter on kcmdline
+      rmmod: Deprecate --wait option
+      libkmod: cache open file for later access
+      build-sys: use AS_IF autoconf macro
+      depmod: do not create a hole in struct depmod
+      depmod: cache info_list in struct mod
+      depmod: cache dependency_symbol list in struct mod
+      depmod: use our copy of modname instead of calling libkmod
+      depmod: unref kmod_module once we don't need it anymore
+      modprobe: exit in one place
+      modprobe: use prio_to_str() helper
+      modprobe: prefix libkmod messages to stderr with modprobe:
+      modprobe: move log function
+      modprobe: prefix log messages to stderr with modprobe
+      modprobe: use ERR() instead of fprintf(stderr, ...)
+      depmod: prefer ERR and WRN over plain fprintf
+      TODO: update file with tasks
+      depmod: remove inline from _log
+      depmod: add depmod prefix to log messages
+      insmod: prefer ERR over plain fprintf
+      modinfo: prefer ERR over plain fprintf
+      rmmod: prefer ERR over plain fprintf
+      rmmod: route all messages to syslog if told to
+      tools: share getting program name from argv for all tools
+      tools: share function to convert prio to string
+      tools: make usage() messages go to stdout rather than stderr
+      tools: use a single function for logging libkmod output
+      tools: share setting up libkmod log
+      tools: share function for logging
+      tools: staticize functions that are now only used in log.c
+      tools: use program_invocation_short_name provided by libc
+      TODO: remove completed action
+      kmod 11
+
+Sami Kerola (1):
+      build-sys: require xsltproc when manpages are enabled
