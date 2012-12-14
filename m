@@ -1,111 +1,243 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
+Subject: [PATCH 01/12] tools/testing/modules: introduce test which
+ loads/unloads random modules
+To: linux-kernel@vger.kernel.org
+From: Konstantin Khlebnikov <khlebnikov@openvz.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-modules@vger.kernel.org, Jon Masters <jcm@redhat.com>
+Date: Fri, 14 Dec 2012 15:02:29 +0400
+Message-ID: <20121214110229.11019.63713.stgit@zurg>
 MIME-Version: 1.0
-From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Date: Thu, 8 Nov 2012 03:02:00 -0200
-Message-ID: <CAMOw1v6ngskF4mM_oRUA+TpgAAF3U0Gjp-4vC+eJHkKmBBx1KQ@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 11
-To: linux-modules <linux-modules@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	linux-hotplug <linux-hotplug@vger.kernel.org>,
-	Rusty Russell <rusty@rustcorp.com.au>
-Content-Type: text/plain; charset=ISO-8859-1
+Content-Type: text/plain; charset="utf-8"
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-kmod 11 is out:
+This test tries to expose bugs and races in modules' init/exit code blocks.
 
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-11.tar.xz
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-11.tar.sign
+Loading and unloading random modules shouldn't lead to the kernel crash.
+Kernel cannot load all modules at once due to limitations in per-cpu allocator.
+By default this script runs 4 iterations of two-phased test: on first phase it
+loads/unloads all modules one by one in random order. On the second phase it
+loads modules until it got 10 fail in a row, after that it unloads all modules
+and goes on. Script excludes from test all modules which are already loaded.
 
-This is the greatest release ever for those using compressed modules
-(I'd like to rather remove it, but some distros are using it so it's
-unlikely to happen soon). When using compressed modules there was a
-bug regarding modules.order since forever. Now distros don't have to
-tweak this file anymore and user can freely mix compressed and
-non-compressed modules.
+usage sample:
 
-The time needed for running depmod has been greatly reduced with this
-release. And this is not exclusive to those using compressed modules.
-For non-compressed modules there were reports of a speedup of 3x in
-depmod. Check http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=commit;h=1eff942e37adda55bd8c506d4e2a7970fdbf7a74
-for details... the timings got improved even more after that commit.
+ make -C tools/testing/modules/ test_all test_normal test_staging
 
-Testsuite also got bug fixes and is now capable of comparing output
-files to decide if a test succeeded. Other projects using our
-testsuite should upgrade to this new version.
+script modprobe-remove-test.sh takes configuration from the environment:
 
-Due to the major refactor in depmod needed to accomplish the speedup
-mentioned above, I thought about releasing a -rc1 but then decided to
-go straight with a release since it would probably not help a lot.
-Please give it more time than usual in your distro testing repository.
-If a major bug is found I'll just release another version sooner than
-usual.
+#  environment var      example         default
+#
+#  MODULES              "foo bar"       all, except loaded and excluded
+#  INCLUDE_MODULES      "foo bar"       ""
+#  EXCLUDE_MODULES      "foo bar"       ""
+#  INCLUDE_DIRS         "net/ sound/"   ""
+#  EXCLUDE_DIRS         "drivers/ foo/" ""
+#  ITERATIONS           "0"             "4"
+#  MAX_FAILS            "0"             "10"
+#  MODULES_ROOT         "/foo"          ""
+#  MODULES_DIR          "/foo/bar"      "$MODULES_ROOT/lib/modules/`uname -r`/kernel"
+#  MODPROBE_ARGS        ""              "--verbose --ignore-remove --ignore-install"
+#
+#  overriding priority: MODULES > EXCLUDE_* = LOADED > INCLUDE_*
 
-Last but not least, "--wait" option to rmmod is gone. Or at least it's
-now hidden and causing a sleep of 10s if user decides to use it. The
-reason is that this feature is being deprecated on kernel side since
-it doesn't have any good reason to exist and causes some pain to
-maintain.
-
-Take a look in NEWS file for more details on changes. Shortlog is below.
-
-Cheers!
-Lucas De Marchi
-
+Signed-off-by: Konstantin Khlebnikov <khlebnikov@openvz.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jon Masters <jcm@redhat.com>
+Cc: linux-modules@vger.kernel.org
 ---
+ tools/testing/modules/Makefile                |    8 +
+ tools/testing/modules/modprobe-remove-test.sh |  167 +++++++++++++++++++++++++
+ 2 files changed, 175 insertions(+)
+ create mode 100644 tools/testing/modules/Makefile
+ create mode 100755 tools/testing/modules/modprobe-remove-test.sh
 
-Dave Reisner (5):
-      Revert "build-sys: disable jobserver for rootfs target"
-      Define rootfs as dependency of check-am
-      Makefile: remove redundant flags to $(RM)
-      modinfo: clarify verbiage for field shortcuts
-      build-sys: Remove --with-rootprefix option
+diff --git a/tools/testing/modules/Makefile b/tools/testing/modules/Makefile
+new file mode 100644
+index 0000000..7adc4b5
+--- /dev/null
++++ b/tools/testing/modules/Makefile
+@@ -0,0 +1,8 @@
++test_all:
++	./modprobe-remove-test.sh
++
++test_normal:
++	EXCLUDE_DIRS="drivers/staging/" ./modprobe-remove-test.sh
++
++test_staging:
++	INCLUDE_DIRS="drivers/staging/" ./modprobe-remove-test.sh
+diff --git a/tools/testing/modules/modprobe-remove-test.sh b/tools/testing/modules/modprobe-remove-test.sh
+new file mode 100755
+index 0000000..1d30f64
+--- /dev/null
++++ b/tools/testing/modules/modprobe-remove-test.sh
+@@ -0,0 +1,167 @@
++#!/bin/bash
++#
++#  modprobe-remove-test.sh - load/unload modules in random order
++#
++#   - first phase  : load/unload all possible modules one by one
++#   - second phase : load multiple modules, remove all after $MAX_FAILS in a row
++#
++#  environment var	example		default
++#
++#  MODULES		"foo bar"	all, except loaded and excluded
++#  INCLUDE_MODULES	"foo bar"	""
++#  EXCLUDE_MODULES	"foo bar"	""
++#  INCLUDE_DIRS		"net/ sound/"	""
++#  EXCLUDE_DIRS		"drivers/ foo/"	""
++#  ITERATIONS		"0"		"4"
++#  MAX_FAILS		"100"		"10"
++#  MODULES_ROOT		"/foo"		""
++#  MODULES_DIR		"/foo/bar"	"$MODULES_ROOT/lib/modules/`uname -r`/kernel"
++#  MODPROBE_ARGS	""		"--verbose --ignore-remove --ignore-install"
++#
++#  overriding priority: MODULES > EXCLUDE_* = LOADED > INCLUDE_*
++#
++
++: ${MAX_FAILS=10}
++: ${ITERATIONS=4}
++
++: ${MODULES_ROOT=}
++: ${MODULES_DIR=$MODULES_ROOT/lib/modules/`uname -r`/kernel}
++
++: ${MODPROBE_ARGS=--verbose --ignore-remove --ignore-install}
++[ -n "$MODULES_ROOT" ] && MODULES_ARGS="--dirname=$MODULES_ROOT $MODULES_ARGS"
++
++set -o pipefail
++
++line_modules() {
++	for M in $@ ; do echo $M ; done
++}
++
++subtract_modules() {
++	comm -2 -3 <(echo "$1" | sort -u) <(echo "$2" | sort -u)
++}
++
++loaded_modules() {
++	lsmod | awk 'FNR != 1 { print $1 }' | sort -u
++}
++
++list_modules() {
++	(
++		cd "$MODULES_DIR" &&
++		find $@ -type f -name '*.ko' -printf '%f\n' |
++		sed 's/.ko$//;s/-/_/g'
++	)
++}
++
++load_module() {
++	modprobe ${MODPROBE_ARGS} "$1"
++}
++
++unload_module() {
++	modprobe ${MODPROBE_ARGS} --remove "$1"
++}
++
++topological_sort() {
++	local M
++	for M in $@ ; do
++		echo `modprobe ${MODPROBE_ARGS} --show-depends $M | wc -l` $M
++	done | sort -n -r | cut -d ' ' -f 2
++}
++
++unload_all_modules() {
++	local M
++
++	# try to unload in random order
++	LOADED_MODULES=`loaded_modules`
++	UNLOAD_MODULES=`subtract_modules "$LOADED_MODULES" "$EXCLUDE_MODULES"`
++	UNLOAD_MODULES=`echo "$UNLOAD_MODULES" | sort -R`
++	for M in $UNLOAD_MODULES ; do
++		unload_module $M
++	done
++
++	# unload the rest in topological order
++	LOADED_MODULES=`loaded_modules`
++	UNLOAD_MODULES=`subtract_modules "$LOADED_MODULES" "$EXCLUDE_MODULES"`
++	UNLOAD_MODULES=`topological_sort $UNLOAD_MODULES`
++	for M in $UNLOAD_MODULES ; do
++		unload_module $M
++	done
++}
++
++do_exit() {
++	unload_all_modules
++	echo "--- interrupted "
++	exit 2
++}
++
++trap do_exit INT TERM
++
++INITIAL_MODULES=`loaded_modules` || exit
++
++if [ -n "$EXCLUDE_DIRS" ] ; then
++	EXCLUDE_MODULES="$EXCLUDE_MODULES `list_modules $EXCLUDE_DIRS`" || exit
++fi
++
++EXCLUDE_MODULES=`line_modules $EXCLUDE_MODULES $INITIAL_MODULES`
++
++MODULES=`line_modules $MODULES`
++EXCLUDE_MODULES=`subtract_modules "$EXCLUDE_MODULES" "$MODULES"`
++
++if [ -n "$INCLUDE_DIRS" ] ; then
++	MODULES="$MODULES `list_modules $INCLUDE_DIRS`" || exit
++fi
++
++MODULES=`line_modules $MODULES $INCLUDE_MODULES`
++
++if [ -z "$MODULES" ] ; then
++	MODULES=`list_modules "."` || exit
++fi
++
++POSSIBLE_MODULES="$MODULES"
++
++MODULES=`subtract_modules "$MODULES" "$EXCLUDE_MODULES"`
++
++EXCLUDED_MODULES=`subtract_modules "$POSSIBLE_MODULES" "$MODULES"`
++
++echo "--- loaded modules:" $INITIAL_MODULES
++
++echo "--- modules under test:" $MODULES
++
++echo "--- excluded modules:" $EXCLUDED_MODULES
++
++for (( I=1 ; I <= $ITERATIONS ; I++ )) ; do
++	echo "--- iteration $I in $ITERATIONS"
++
++	echo "--- load/unload modules one by one"
++	for M in `echo "$MODULES" | sort -R` ; do
++		load_module "$M"
++		unload_module "$M"
++		unload_all_modules
++	done
++
++	echo "--- load multiple modules at once"
++	FAILS=0
++	for M in `echo "$MODULES" | sort -R` ; do
++		if load_module "$M" ; then
++			FAILS=0
++			continue
++		fi
++		if ((++FAILS >= MAX_FAILS)) ; then
++			echo "--- $FAILS fails in a row: unload all modules"
++			unload_all_modules
++			FAILS=0
++		fi
++	done
++	unload_all_modules
++	unload_all_modules
++done
++
++LOADED_MODULES=`loaded_modules`
++STUCK_MODULES=`subtract_modules "$LOADED_MODULES" "$INITIAL_MODULES"`
++MISSING_MODULES=`subtract_modules "$INITIAL_MODULES" "$LOADED_MODULES"`
++
++echo "--- stuck modules:" $STUCK_MODULES
++
++echo "--- missing modules:" $MISSING_MODULES
++
++echo "--- done"
++exit 0
 
-Jan Engelhardt (1):
-      NEWS: language corrections
-
-Leandro Pereira (1):
-      libkmod-hash: Plug possible memory leak when free_value is defined
-
-Lucas De Marchi (38):
-      testsuite: Fix double definition of 64-bits variant
-      build-sys: Append -Werror when testing flags
-      depmod: fix parsing of modules.order with compressed modules
-      testsuite: allow to check generated files
-      testsuite: add depmod test for modules.alias
-      libkmod: Add support for '.' in module parameter on kcmdline
-      rmmod: Deprecate --wait option
-      libkmod: cache open file for later access
-      build-sys: use AS_IF autoconf macro
-      depmod: do not create a hole in struct depmod
-      depmod: cache info_list in struct mod
-      depmod: cache dependency_symbol list in struct mod
-      depmod: use our copy of modname instead of calling libkmod
-      depmod: unref kmod_module once we don't need it anymore
-      modprobe: exit in one place
-      modprobe: use prio_to_str() helper
-      modprobe: prefix libkmod messages to stderr with modprobe:
-      modprobe: move log function
-      modprobe: prefix log messages to stderr with modprobe
-      modprobe: use ERR() instead of fprintf(stderr, ...)
-      depmod: prefer ERR and WRN over plain fprintf
-      TODO: update file with tasks
-      depmod: remove inline from _log
-      depmod: add depmod prefix to log messages
-      insmod: prefer ERR over plain fprintf
-      modinfo: prefer ERR over plain fprintf
-      rmmod: prefer ERR over plain fprintf
-      rmmod: route all messages to syslog if told to
-      tools: share getting program name from argv for all tools
-      tools: share function to convert prio to string
-      tools: make usage() messages go to stdout rather than stderr
-      tools: use a single function for logging libkmod output
-      tools: share setting up libkmod log
-      tools: share function for logging
-      tools: staticize functions that are now only used in log.c
-      tools: use program_invocation_short_name provided by libc
-      TODO: remove completed action
-      kmod 11
-
-Sami Kerola (1):
-      build-sys: require xsltproc when manpages are enabled
