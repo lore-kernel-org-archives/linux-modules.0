@@ -1,51 +1,47 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 MIME-Version: 1.0
-From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Date: Wed, 5 Dec 2012 01:52:57 -0200
-Message-ID: <CAMOw1v6gc-NV8M8cHX9novwDv57zWMtoLHn6P22GGJ0QW2wFww@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 12
-To: linux-modules <linux-modules@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	linux-hotplug <linux-hotplug@vger.kernel.org>,
-	Rusty Russell <rusty@rustcorp.com.au>
+In-Reply-To: <CAMOw1v4aHTOr_a9FBFuQXfLGq1SVNWiWnYn-xn-mG+gQWEeiNQ@mail.gmail.com>
+References: <CAGbaURnvzRm3N7++3p6G4U9eb_US6hBYCYQrEHs=FeZ+Gk9qEw@mail.gmail.com>
+	<CAMOw1v4aHTOr_a9FBFuQXfLGq1SVNWiWnYn-xn-mG+gQWEeiNQ@mail.gmail.com>
+Date: Fri, 5 Apr 2013 20:41:13 +0200
+Message-ID: <CAGbaURk3gm2+w2zs+K45ptGefAeTDyBUGTz1B9CoEBGXpgB7Ww@mail.gmail.com>
+Subject: Re: control on cpu/core
+From: christophe malvasio <arsdmthe@gmail.com>
+To: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+Cc: linux-modules <linux-modules@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset=ISO-8859-1
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-kmod 12 is out:
-
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-12.tar.xz
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-12.tar.sign
-
-
-Bug fix release only. Copying the NEWS section here for brevity:
-
-       - Fix removing vermagic from module when told to force load a module
-       - Fix removing __versions section when told to force load a module: we
-         need to mangle the section header, not the section.
-       - modinfo no longer fails while loading a module from file when path
-         contains ".ko" substring
-
-Interesting that there was no previous bug report of "modprobe -f"
-failing, yet before this release it was not working properly. Maybe
-people are not tainting their kernel as frequently as I imagined.
-
-Shortlog is below.
+ok thanks lucas ;)
+i'm not on writing functions loading yet but it will come
+(i don't have a more efficient format than elf in good shape in my mind ...)
 
 
-Cheers
-Lucas De Marchi
-
----
-
-Aleksey Makarov (1):
-      fix is_module_filename()
-
-Lucas De Marchi (7):
-      depmod: fix hash lookup by relpath instead of uncrelpath
-      depmod: fix asserting mod->kmod == NULL
-      libkmod-module: Remove key+value vermagic from .modinfo section
-      libkmod-module: mangle the section header, not the section
-      Use bool instead of int
-      depmod: fix checking file extension
-      kmod 12
+2013/4/5 Lucas De Marchi <lucas.demarchi@profusion.mobi>:
+> On Fri, Apr 5, 2013 at 1:30 PM, christophe malvasio <arsdmthe@gmail.com> wrote:
+>> hi all
+>> i want to give the control of one core to a module
+>> that is the kernel have to not schedule/interrupt execution on this
+>> core and also my module have to be the only thing to send execution on
+>> this core
+>> i'm not sure if i can make it only from my module or if i must hack
+>> the kernel too ?
+>> fake core unplug or more coding ?
+>> give me your opinion ;)
+>
+> You can isolate a core during boot so no process is scheduled to that
+> core. See "isolcpus=" in Documentation/kernel-parameters.txt.
+>
+> I don't know what your module is doing so it might not be possible in
+> all scenarios. The only way I see is if your module created a kernel
+> thread. Then it can be moved to the isolated core by setting the cpu
+> mask. See for example how kworker, watchdog, migration do.
+>
+> I'm CCing LKML to broaden your audience. linux-modules@vger.kernel.org
+> is really low traffic and mostly intended for the module
+> loading/removal process, not really about writing modules.
+>
+>
+> Lucas De Marchi
