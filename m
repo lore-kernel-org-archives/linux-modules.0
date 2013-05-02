@@ -1,87 +1,65 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from metis.ext.pengutronix.de ([92.198.50.35]:59736 "EHLO
-	metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S933031Ab3EBTlU (ORCPT
+Received: from mail-vc0-f177.google.com ([209.85.220.177]:44430 "EHLO
+	mail-vc0-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1759006Ab3EBQVa (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Thu, 2 May 2013 15:41:20 -0400
-Date: Thu, 2 May 2013 21:41:19 +0200
-From: Jan Luebbe <jlu@pengutronix.de>
-To: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Cc: linux-modules <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH] libkmod: Avoid calling syscall() with -1
-Message-ID: <20130502194119.GA18636@pengutronix.de>
-References: <1367506032-17290-1-git-send-email-jlu@pengutronix.de>
- <CAMOw1v64418ddfM4v3OW7sEYGq+d7FKmHUsizAsDbNRQnSy10w@mail.gmail.com>
+	Thu, 2 May 2013 12:21:30 -0400
+Received: by mail-vc0-f177.google.com with SMTP id ha12so643523vcb.8
+        for <linux-modules@vger.kernel.org>; Thu, 02 May 2013 09:21:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-In-Reply-To: <CAMOw1v64418ddfM4v3OW7sEYGq+d7FKmHUsizAsDbNRQnSy10w@mail.gmail.com>
+In-Reply-To: <1367506032-17290-1-git-send-email-jlu@pengutronix.de>
+References: <1367506032-17290-1-git-send-email-jlu@pengutronix.de>
+From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+Date: Thu, 2 May 2013 13:21:08 -0300
+Message-ID: <CAMOw1v64418ddfM4v3OW7sEYGq+d7FKmHUsizAsDbNRQnSy10w@mail.gmail.com>
+Subject: Re: [PATCH] libkmod: Avoid calling syscall() with -1
+To: Jan Luebbe <jlu@pengutronix.de>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=ISO-8859-1
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, May 02, 2013 at 01:21:08PM -0300, Lucas De Marchi wrote:
-> Indeed. But I had already a patch for that, just waiting the bug
-> reporter to test it:
-> 
-> http://bugs.funtoo.org/browse/FL-534
-> 
-> And the patch:
-> http://bugs.funtoo.org/secure/attachment/11098/dont-call-libc.diff
+Hi Jan,
 
-In that patch, the new #ifndef is never used, as __NR_finit_module is
-defined a few lines up.
+On Thu, May 2, 2013 at 11:47 AM, Jan Luebbe <jlu@pengutronix.de> wrote:
+> At least in qemu 1.4.1 for vexpress/arm-cortexa9, this resulted in an
+> illegal instruction error. Solve that by returning an error when
+> __NR_finit_module is -1.
+> ---
+>  libkmod/missing.h |    9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/libkmod/missing.h b/libkmod/missing.h
+> index edb88b9..ac24a35 100644
+> --- a/libkmod/missing.h
+> +++ b/libkmod/missing.h
+> @@ -20,8 +20,15 @@
+>  #endif
+>
+>  #ifndef HAVE_FINIT_MODULE
+> +#include <errno.h>
+> +
+>  static inline int finit_module(int fd, const char *uargs, int flags)
+>  {
+> -       return syscall(__NR_finit_module, fd, uargs, flags);
+> +       if (__NR_finit_module == -1) {
+> +               errno = ENOSYS;
+> +               return -1;
+> +       } else {
+> +               return syscall(__NR_finit_module, fd, uargs, flags);
+> +       }
+>  }
+>  #endif
+> --
 
-This one looks better, but failes to compile:
-http://bugs.funtoo.org/secure/attachment/11099/0001-missing-Don-t-call-syscall-with-syscallno-1.patch
-libkmod/missing.h:27:17: error: '__NR_finit_module' undeclared (first use in this function)
+Indeed. But I had already a patch for that, just waiting the bug
+reporter to test it:
 
-I've changed your patch a little (put the real call into the #else branch).
-With this version, I don't see the problem any more.
+http://bugs.funtoo.org/browse/FL-534
 
-----
+And the patch:
+http://bugs.funtoo.org/secure/attachment/11098/dont-call-libc.diff
 
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date: Thu, 2 May 2013 13:22:57 -0300
-Subject: [PATCH] missing: Don't call syscall() with syscallno == -1
+I prefer doing it at compile time rather than runtime.
 
-Reported-by: Jean-Francis Roy <jeanfrancis@funtoo.org>
-Reported-by: Jan Luebbe <jlu@pengutronix.de>
----
- libkmod/missing.h |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/libkmod/missing.h b/libkmod/missing.h
-index edb88b9..b31af84 100644
---- a/libkmod/missing.h
-+++ b/libkmod/missing.h
-@@ -1,5 +1,6 @@
- #pragma once
- 
-+#include <errno.h>
- #include <unistd.h>
- #include <sys/syscall.h>
- 
-@@ -15,13 +16,14 @@
- # define MODULE_INIT_IGNORE_VERMAGIC 2
- #endif
- 
--#ifndef __NR_finit_module
--# define __NR_finit_module -1
--#endif
--
- #ifndef HAVE_FINIT_MODULE
- static inline int finit_module(int fd, const char *uargs, int flags)
- {
-+#ifndef __NR_finit_module
-+	errno = ENOSYS;
-+	return -1;
-+#else
- 	return syscall(__NR_finit_module, fd, uargs, flags);
-+#endif
- }
- #endif
-
--- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Lucas De Marchi
