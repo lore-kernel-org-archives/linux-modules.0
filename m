@@ -1,120 +1,121 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mout.web.de ([212.227.15.4]:52851 "EHLO mout.web.de"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1751726Ab3EEOzE (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Sun, 5 May 2013 10:55:04 -0400
-Received: from [192.168.0.7] ([94.218.198.212]) by smtp.web.de (mrweb102) with
- ESMTPSA (Nemesis) id 0MNcIg-1Uf2ku24ba-007erb for
- <linux-modules@vger.kernel.org>; Sun, 05 May 2013 16:55:02 +0200
-Subject: depmod difference between module-init-tools and kmod
-From: Stefan Achatz <stefan_achatz@web.de>
-To: linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Date: Sun, 05 May 2013 16:55:01 +0200
-Message-ID: <1367765701.2383.11.camel@neuromancer.tessier-ashpool>
-Mime-Version: 1.0
-Sender: linux-modules-owner@vger.kernel.org
+Return-Path: <chengwei.yang@intel.com>
+Date: Wed, 8 May 2013 09:05:41 +0800
+From: Yang Chengwei <chengwei.yang@intel.com>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: kmod <linux-modules@vger.kernel.org>,
+	Yang Chengwei <chengwei.yang@intel.com>
+Subject: Re: [RFC] Fix the kmod internal list behavior?
+Message-ID: <20130508010541.GB4432@chengwei-workstation.bj.intel.com>
+References: <20130507135453.GA25275@chengwei-workstation.bj.intel.com>
+ <CAKi4VAJkZpo-=XxJ9Tnwdt6E9YdHsoQu1s7nU7m5ZUNQmNcp5Q@mail.gmail.com>
+ <20130508001530.GA4432@chengwei-workstation.bj.intel.com>
+ <CAKi4VAKsHwG1SqTN4oVO_3ysngEO4M0xC--jbZWyY6aedPxb5Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="GID0FwUMdk1T2AWN"
+In-Reply-To: <CAKi4VAKsHwG1SqTN4oVO_3ysngEO4M0xC--jbZWyY6aedPxb5Q@mail.gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello,
 
-I'm writing kernel modules for usb peripheries that are in mainline kernel and
-also available as external compileable package[1].
+--GID0FwUMdk1T2AWN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The external modules have the newest code before it gets into the next kernel,
-also backported for older kernels. To distinguish between outdated kernel
-included and newer external modules they have different names. The device
-specific kernel internal modules are called hid-roccat-* whereas the external
-ones are called just *. This way a blacklist can prohibit loading the internal
-modules when the external are installed.
+On Tue, May 07, 2013 at 09:50:56PM -0300, Lucas De Marchi wrote:
+> On Tue, May 7, 2013 at 9:15 PM, Yang Chengwei <chengwei.yang@intel.com> w=
+rote:
+> > On Tue, May 07, 2013 at 12:14:59PM -0300, Lucas De Marchi wrote:
+> >> On Tue, May 7, 2013 at 10:54 AM, Yang Chengwei <chengwei.yang@intel.co=
+m> wrote:
+> >> > Hi List,
+> >> >
+> >> > I just found that there are some minor issues in kmod iternal list
+> >> > implementation implemented by libkmod-list.c.
+> >> >
+> >> > Say
+> >> >         1. list_node_append() is identical with list_node_insert_bef=
+ore(),
+> >> >         so somehow the list_node_append() in fact does "prepend" ope=
+ration.
+> >>
+> >> To append to a circular list, you insert it *before* the first node.
+> >> So what's wrong here?
+> >
+> > Yeap, it's definitely right. I was misunderstanding. :-(
+> >
+> >>
+> >> >
+> >> >         2. just the same as list_node_append(), kmod_list_append() w=
+hich
+> >> >         invokes the former just do "prepend" operation rather than "=
+append".
+> >>
+> >> like I said, it's expected, since it's circular. kmod_list_append()
+> >> expect you to pass the head of the list, so to append to the list you
+> >> prepend to the first node, but you don't return it as the new head
+> >> unless it's the first one - check the return code.
+> >>
+> >> >
+> >> > I'd like to fix these internal APIs to do the operation suggested by=
+ its
+> >> > name like
+> >> >         1. drop list_node_append()
+> >> >         2. call list_node_insert_after() to do "append" operation
+> >> >         3. call list_mode_insert_before() to do "prepend" operation
+> >> >
+> >> > Since the list here is circular linked, so I think these changes sho=
+uld
+> >> > not break things except the test cases.
+> >> >
+> >> > Any comments are appreciated.
+> >>
+> >> Are you analyzing the source code or are you seeing a real problem?
+> >
+> > Relax, no real issue found.
+>=20
+> Good to know :-)
+>=20
+> >
+> >> It'd be nice to write a small test showing the problem - you can use
+> >
+> > So I think it's not necessary to add a dedicate test for list, the
+> > others somehow use the list, like modinfo test.
+>=20
+> On a side note about the current list implementation: one interesting
+> thing to investigate is how much memory we waste on list nodes and how
+> we could improve that. One possible answer is by using inlined nodes
+> like kernel's.
+>=20
+> In some places we use kmod_list very heavily like in depmod. Last time
+> I checked I remember a great portion of the memory used just to store
+> the list nodes. If you would like to improve this part, or at least
+> profile it, it would be very nice :)
 
-Nevertheless, having both, internal and external, modules installed leads to
-double symbols. depmod from module-init-tools has no problem with that (some
-of the last versions tested), where the variant from kmod has its problem (v5
-up to v12 tested). I observed this using Fedora 18, which seems to be the first
-distro that uses kmods depmod.
+Add to my TODO list, but I'm not sure what the ETA is. :-)
 
-Some outputs of both depmods for comparison are further down this text.
+--
+Thanks,
+Chengwei
 
-My question: Should this behaviour be fixed in kmods depmod, or is there a
-intended, perhaps more intelligent, way for me to do what I intend?
+>=20
+>=20
+> Lucas De Marchi
 
-Thanks and have a nice day
-Stefan
+--GID0FwUMdk1T2AWN
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-**** depmod from module-init-tools
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
 
-$ grep roccat /lib/modules/$(uname -r)/modules.dep
+iQEcBAEBAgAGBQJRiaTlAAoJEG8F0Pe1SMenmGsH/AuJlAgaterAYyI57445n/Zu
+kfyNuD8YyQyceozy9B9g8yIVshC0rQIYXnIG/tYzxEUYy/2HIx04kxNpE16LfCRL
+/JWDkDa5In+lhTDorHD1jev0/XmXPhY+NgggnaUq1DsuNeumEhGEqO7Zwi9iq4SR
+gef0m6b7qHbV6XoxHNMTKdm53okokAAdCDkHQ/oM/qcqU9a7TyJThoVAliRuZ5Vc
+LfR5Cl1JPRpmvoUiM82m+HKvmF/ObY6oMrpGh8r9/aR1q9lOszfla9AylOa1BiOe
+TqztxGCYWvtslIgzCJBbArg0vYK7JKWQl+bhMxN8eHjnxY3dGdpZEmf7uhbro1g=
+=oI+1
+-----END PGP SIGNATURE-----
 
-kernel/drivers/hid/hid-roccat.ko:
-kernel/drivers/hid/hid-roccat-common.ko:
-kernel/drivers/hid/hid-roccat-arvo.ko: extra/roccat-common.ko extra/roccat.ko
-kernel/drivers/hid/hid-roccat-isku.ko: extra/roccat-common.ko extra/roccat.ko
-kernel/drivers/hid/hid-roccat-kone.ko: extra/roccat.ko
-kernel/drivers/hid/hid-roccat-koneplus.ko: extra/roccat-common.ko extra/roccat.ko
-kernel/drivers/hid/hid-roccat-kovaplus.ko: extra/roccat-common.ko extra/roccat.ko
-kernel/drivers/hid/hid-roccat-lua.ko: extra/roccat-common.ko
-kernel/drivers/hid/hid-roccat-pyra.ko: extra/roccat-common.ko extra/roccat.ko
-kernel/drivers/hid/hid-roccat-savu.ko: extra/roccat-common.ko extra/roccat.ko
-extra/koneplus.ko: extra/roccat-common.ko extra/roccat.ko
-extra/roccat.ko:
-extra/kone.ko: extra/roccat.ko
-extra/pyra.ko: extra/roccat-common.ko extra/roccat.ko
-extra/arvo.ko: extra/roccat-common.ko extra/roccat.ko
-extra/kovaplus.ko: extra/roccat-common.ko extra/roccat.ko
-extra/savu.ko: extra/roccat-common.ko extra/roccat.ko
-extra/konepure.ko: extra/roccat-common.ko extra/roccat.ko
-extra/isku.ko: extra/roccat-common.ko extra/roccat.ko
-extra/roccat-common.ko:
-extra/lua.ko: extra/roccat-common.ko
-
-$ grep roccat /lib/modules/$(uname -r)/modules.symbols
-
-alias symbol:roccat_connect roccat
-alias symbol:roccat_connect hid_roccat
-alias symbol:roccat_disconnect roccat
-alias symbol:roccat_disconnect hid_roccat
-alias symbol:roccat_common2_send roccat_common
-alias symbol:roccat_common2_send hid_roccat_common
-alias symbol:roccat_common2_receive roccat_common
-alias symbol:roccat_common2_receive hid_roccat_common
-alias symbol:roccat_common2_send_with_status roccat_common
-alias symbol:roccat_common2_send_with_status hid_roccat_common
-alias symbol:roccat_report_event roccat
-alias symbol:roccat_report_event hid_roccat
-
-
-
-* depmod from kmod
-
-$ grep roccat /lib/modules/$(uname -r)/modules.dep
-
-kernel/drivers/hid/hid-roccat.ko:
-kernel/drivers/hid/hid-roccat-common.ko:
-kernel/drivers/hid/hid-roccat-arvo.ko:
-kernel/drivers/hid/hid-roccat-isku.ko:
-kernel/drivers/hid/hid-roccat-kone.ko:
-kernel/drivers/hid/hid-roccat-koneplus.ko:
-kernel/drivers/hid/hid-roccat-kovaplus.ko:
-kernel/drivers/hid/hid-roccat-lua.ko:
-kernel/drivers/hid/hid-roccat-pyra.ko:
-kernel/drivers/hid/hid-roccat-savu.ko:
-extra/roccat.ko:
-extra/roccat-common.ko:
-
-$ grep roccat /lib/modules/$(uname -r)/modules.symbols
-
-alias symbol:roccat_disconnect roccat
-alias symbol:roccat_common2_receive roccat_common
-alias symbol:roccat_report_event roccat
-alias symbol:roccat_connect roccat
-alias symbol:roccat_common2_send roccat_common
-alias symbol:roccat_common2_send_with_status roccat_common
-
-
-
-[1] http://sourceforge.net/projects/roccat/files/linux/kmod-roccat/kmod-roccat-0.8.2.tar.bz2/download
-
-
-
-
+--GID0FwUMdk1T2AWN--
