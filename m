@@ -1,90 +1,91 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mga02.intel.com ([134.134.136.20]:51432 "EHLO mga02.intel.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1751283Ab3EDJHN (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Sat, 4 May 2013 05:07:13 -0400
-From: Chengwei Yang <chengwei.yang@intel.com>
-To: linux-modules@vger.kernel.org
-Cc: Chengwei Yang <chengwei.yang@intel.com>
-Subject: [V2, 1/2] Several minor fixes for documentation
-Date: Sat,  4 May 2013 17:07:02 +0800
-Message-Id: <1367658423-25937-1-git-send-email-chengwei.yang@intel.com>
-Sender: linux-modules-owner@vger.kernel.org
+MIME-Version: 1.0
+In-Reply-To: <519F5064.8000908@canonical.com>
+References: <519E5423.3020902@canonical.com>
+	<CAKi4VAKZ-QzUgpohYjp4nSwfT4g3XSm-dt4Z67g3ADePw5K5_Q@mail.gmail.com>
+	<519F5064.8000908@canonical.com>
+Date: Sun, 2 Jun 2013 14:13:53 -0300
+Message-ID: <CAKi4VA+A9a-dDC64b6kYy387eXb5UettgQoe-ooW_rHenRYrRw@mail.gmail.com>
+Subject: Re: modprobe: Cannot load blacklisted module by symbol
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: David Henningsson <david.henningsson@canonical.com>
+Cc: Wang Xingchao <xingchao.wang@intel.com>, Takashi Iwai <tiwai@suse.de>,
+	linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
----
- libkmod/libkmod-module.c |   12 +++++-------
- libkmod/libkmod.c        |    6 ++++--
- 2 files changed, 9 insertions(+), 9 deletions(-)
+On Fri, May 24, 2013 at 8:35 AM, David Henningsson
+<david.henningsson@canonical.com> wrote:
+> On 05/23/2013 08:13 PM, Lucas De Marchi wrote:
+>>
+>> Hi David,
+>>
+>> On Thu, May 23, 2013 at 2:38 PM, David Henningsson
+>> <david.henningsson@canonical.com> wrote:
+>>>
+>>> Hi Lucas,
+>>>
+>>> I'm not sure if you're the right person to contact, if not, feel free to
+>>> redirect me.
+>>
+>>
+>> Yes, but make sure to CC the mailing list (done now).
+>
+>
+> Ok, thanks. I tried to find references to a mailing list in the code (README
+> etc) but didn't find any.
+>
+>
+>>> While debugging and testing some other code, we were trying to use the
+>>> kernel symbol_request() call. This does not work if the module to be
+>>> loaded
+>>> is blacklisted, whereas module_request() for the same module succeeds.
+>>> E g, when "i915" is blacklisted, loading "i915" still succeeds, but not
+>>> "symbol:i915_gpu_busy".
+>>>
+>>> I think I've traced this down to this commit [1]. Is this expected
+>>> behaviour? We certainly did not expect it.
+>>
+>>
+>> Yes, that's because blacklist doesn't apply to the module names,
+>> unless "-b" is given (which I would expect to be the normal behavior,
+>> but this inherited from module-init-tools).
+>>
+>> Since symbol:i915_gpu_busy is treated as an alias, the blacklist
+>> applies for this one though.
+>>
+>> Why do you want to load i915 by symbol if it's blacklisted?
+>
+>
+> The example is a bit contrived, but it was to test our module loading code:
+> without blacklisting, i915 would always load before the module that was
+> supposed to load it (snd-hda-intel), and so blacklisting was our way of
+> making sure snd-hda-intel was loaded first, so we could test that the module
+> loading worked.
+>
+> What bothers me is the inconsistency though: either blacklisting applies,
+> and then it should apply to both names, aliases, symbols etc.
 
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 47d12ad..b6fcc3b 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -570,8 +570,7 @@ fail:
-  * Drop a reference of each kmod module in @list and releases the resources
-  * taken by the list itself.
-  *
-- * Returns: NULL if @mod is NULL or if the module was released. Otherwise it
-- * returns the passed @mod with its refcount decremented.
-+ * Returns: 0
-  */
- KMOD_EXPORT int kmod_module_unref_list(struct kmod_list *list)
- {
-@@ -629,9 +628,8 @@ static const struct kmod_list *module_get_dependencies_noref(const struct kmod_m
-  * The result is cached in @mod, so subsequent calls to this function will
-  * return the already searched list of modules.
-  *
-- * Returns: NULL on failure or if there are any dependencies. Otherwise it
-- * returns a list of kmod modules that can be released by calling
-- * kmod_module_unref_list().
-+ * Returns: NULL on failure. Otherwise it returns a list of kmod modules
-+ * that can be released by calling kmod_module_unref_list().
-  */
- KMOD_EXPORT struct kmod_list *kmod_module_get_dependencies(const struct kmod_module *mod)
- {
-@@ -1564,7 +1562,7 @@ void kmod_module_set_remove_commands(struct kmod_module *mod, const char *cmd)
-  * Create a new list of kmod modules with all modules currently loaded in
-  * kernel. It uses /proc/modules to get the names of loaded modules and to
-  * create kmod modules by calling kmod_module_new_from_name() in each of them.
-- * They are put are put in @list in no particular order.
-+ * They are put in @list in no particular order.
-  *
-  * The initial refcount is 1, and needs to be decremented to release the
-  * resources of the kmod_module. The returned @list must be released by
-@@ -2380,7 +2378,7 @@ list_error:
- }
- 
- /**
-- * kmod_module_versions_get_symbol:
-+ * kmod_module_version_get_symbol:
-  * @entry: a list entry representing a kmod module versions
-  *
-  * Get the symbol of a kmod module versions.
-diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
-index 66d4859..e8e3ea0 100644
---- a/libkmod/libkmod.c
-+++ b/libkmod/libkmod.c
-@@ -219,8 +219,8 @@ static char *get_kernel_release(const char *dirname)
-  * kmod_new:
-  * @dirname: what to consider as linux module's directory, if NULL
-  *           defaults to /lib/modules/`uname -r`. If it's relative,
-- *           it's treated as relative to current the current working
-- *           directory. Otherwise, give an absolute dirname.
-+ *           it's treated as relative to the current working directory.
-+ *           Otherwise, give an absolute dirname.
-  * @config_paths: ordered array of paths (directories or files) where
-  *                to load from user-defined configuration parameters such as
-  *                alias, blacklists, commands (install, remove). If
-@@ -307,6 +307,8 @@ KMOD_EXPORT struct kmod_ctx *kmod_ref(struct kmod_ctx *ctx)
-  *
-  * Drop a reference of the kmod library context. If the refcount
-  * reaches zero, the resources of the context will be released.
-+ *
-+ * Returns: the passed kmod library context or NULL if it's freed
-  */
- KMOD_EXPORT struct kmod_ctx *kmod_unref(struct kmod_ctx *ctx)
- {
--- 
-1.7.9.5
+This is the case when calling modprobe with -b option. For example,
+udev uses it.
 
+> Or blacklisting does not apply, and then it should not apply to either
+> names, aliases nor symbols.
+
+I agree.
+
+>
+> Is this inconsistency also inherited from module-init-tools?
+
+Yes, it's like this only because modprobe from module-init-tools had
+this behavior. I don't think we can change this without breaking
+others.
+
+What we could do is to create a "more modern" tool and put the options
+and behaviors we are expecting now. This is what I am doing for "kmod
+load" but this depends on the effort to allow the kernel to call
+another tool instead of modprobe [1]. However in this front we also
+have incompatibilities with previous behavior :-(
+
+Lucas De Marchi
+
+[1] https://lkml.org/lkml/2013/5/10/3
