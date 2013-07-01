@@ -1,68 +1,48 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-yh0-f51.google.com ([209.85.213.51]:61861 "EHLO
-	mail-yh0-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753235Ab3GOFSv (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 15 Jul 2013 01:18:51 -0400
-Received: by mail-yh0-f51.google.com with SMTP id l109so4477865yhq.24
-        for <linux-modules@vger.kernel.org>; Sun, 14 Jul 2013 22:18:50 -0700 (PDT)
-Received: from localhost.localdomain ([201.53.216.53])
-        by mx.google.com with ESMTPSA id s29sm81191597yhf.6.2013.07.14.22.12.56
-        for <linux-modules@vger.kernel.org>
-        (version=TLSv1.2 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
-        Sun, 14 Jul 2013 22:12:57 -0700 (PDT)
-From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-To: linux-modules@vger.kernel.org
-Subject: [PATCH 5/6] util: Add mkdir_parents()
-Date: Mon, 15 Jul 2013 02:12:58 -0300
-Message-Id: <1373865179-18366-5-git-send-email-lucas.demarchi@profusion.mobi>
-In-Reply-To: <1373865179-18366-1-git-send-email-lucas.demarchi@profusion.mobi>
-References: <1373865179-18366-1-git-send-email-lucas.demarchi@profusion.mobi>
-Sender: linux-modules-owner@vger.kernel.org
+Return-Path: <rusty@ozlabs.org>
+From: Rusty Russell <rusty@rustcorp.com.au>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>, lkml <linux-kernel@vger.kernel.org>, linux-modules <linux-modules@vger.kernel.org>
+Cc: "Kent Overstreet" <koverstreet@google.com>
+Cc: Rafael J. Wysocki <rjw@sisk.pl>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: cpufreq@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Subject: Re: module refcnt underflow
+In-Reply-To: <CAKi4VA+RBToB3fO21N-QWdPZeqGpg1ASHzn3vwB9t64ApdwrsA@mail.gmail.com>
+References: <CAKi4VA+RBToB3fO21N-QWdPZeqGpg1ASHzn3vwB9t64ApdwrsA@mail.gmail.com>
+Date: Mon, 01 Jul 2013 12:08:36 +0930
+Message-ID: <8738rzt36b.fsf@rustcorp.com.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Lucas De Marchi <lucas.demarchi@intel.com>
+Lucas De Marchi <lucas.de.marchi@gmail.com> writes:
+> Hi,
+>
+> While checking somethings for a next release of kmod I noticed this
+> strange thing:
+>
+> cat /sys/module/acpi_cpufreq/refcnt
+> 18446744073709551614
+>
+> We outputs this as "-1" in lsmod because we treat the value as signed.
+> I was just going to change it to unsigned to make it compatible with
+> what module-init-tools does but... For me it looks like a bug in the
+> kernel since in this file we just have the output of
+> kernel/module.c:module_refcount()
+>
+> I have this behavior on 3.9.2 but judging by the missing commits in
+> kernel/module.c, this would also happen in latest head. I've never
+> seen such a value so I guess it might be difficult to reproduce it
+> again.
+>
+> Any hints on what could cause decs to be greater than incs in module_refcount()?
 
-Like mkdir_p, but discard the leaf and create all parent directories.
----
- libkmod/libkmod-util.c | 11 +++++++++++
- libkmod/libkmod-util.h |  1 +
- 2 files changed, 12 insertions(+)
+That points to a bug in the cpufreq code.
 
-diff --git a/libkmod/libkmod-util.c b/libkmod/libkmod-util.c
-index 45ca11a..764c551 100644
---- a/libkmod/libkmod-util.c
-+++ b/libkmod/libkmod-util.c
-@@ -373,6 +373,17 @@ int mkdir_p(const char *path, int len, mode_t mode)
- 	return 0;
- }
- 
-+int mkdir_parents(const char *path, mode_t mode)
-+{
-+	char *end = strrchr(path, '/');
-+
-+	/* no parent directories */
-+	if (end == NULL)
-+		return 0;
-+
-+	return mkdir_p(path, end - path, mode);
-+}
-+
- const struct kmod_ext kmod_exts[] = {
- 	{".ko", sizeof(".ko") - 1},
- #ifdef ENABLE_ZLIB
-diff --git a/libkmod/libkmod-util.h b/libkmod/libkmod-util.h
-index 4c45416..f7f3e90 100644
---- a/libkmod/libkmod-util.h
-+++ b/libkmod/libkmod-util.h
-@@ -21,6 +21,7 @@ char *strchr_replace(char *s, int c, char r);
- bool path_is_absolute(const char *p) _must_check_ __attribute__((nonnull(1)));
- char *path_make_absolute_cwd(const char *p) _must_check_ __attribute__((nonnull(1)));
- int mkdir_p(const char *path, int len, mode_t mode);
-+int mkdir_parents(const char *path, mode_t mode);
- int alias_normalize(const char *alias, char buf[PATH_MAX], size_t *len) _must_check_ __attribute__((nonnull(1,2)));
- char *modname_normalize(const char *modname, char buf[PATH_MAX], size_t *len) __attribute__((nonnull(1, 2)));
- char *path_to_modname(const char *path, char buf[PATH_MAX], size_t *len) __attribute__((nonnull(2)));
--- 
-1.8.3.2
+At a glance, there's nothing obvious, but there are quite a few
+reference counts in that code.
 
+Informed people cc'd...
+
+Thanks,
+Rusty.
