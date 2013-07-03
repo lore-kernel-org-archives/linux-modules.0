@@ -1,95 +1,68 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-ye0-f181.google.com ([209.85.213.181]:52758 "EHLO
-	mail-ye0-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1757560Ab3G3GsL (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Tue, 30 Jul 2013 02:48:11 -0400
-Received: by mail-ye0-f181.google.com with SMTP id q2so1755085yen.12
-        for <linux-modules@vger.kernel.org>; Mon, 29 Jul 2013 23:48:10 -0700 (PDT)
-Received: from localhost.localdomain ([201.53.216.53])
-        by mx.google.com with ESMTPSA id b50sm89541063yhl.1.2013.07.29.23.48.09
-        for <linux-modules@vger.kernel.org>
-        (version=TLSv1.2 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
-        Mon, 29 Jul 2013 23:48:10 -0700 (PDT)
-From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-To: linux-modules@vger.kernel.org
-Subject: [PATCH 3/3] build: Install bash completion data
-Date: Tue, 30 Jul 2013 03:48:15 -0300
-Message-Id: <1375166895-20350-3-git-send-email-lucas.demarchi@profusion.mobi>
-In-Reply-To: <1375166895-20350-1-git-send-email-lucas.demarchi@profusion.mobi>
-References: <1375166895-20350-1-git-send-email-lucas.demarchi@profusion.mobi>
-Sender: linux-modules-owner@vger.kernel.org
+MIME-Version: 1.0
+Date: Wed, 3 Jul 2013 13:05:18 -0300
+Message-ID: <CAKi4VALqpeXW4xygys1Lvr03wrVD8ms59u-dwopkvda=GagrMA@mail.gmail.com>
+Subject: [ANNOUNCE] kmod 14
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules <linux-modules@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Rusty Russell <rusty@rustcorp.com.au>,
+	"systemd-devel@lists.freedesktop.org" <systemd-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Lucas De Marchi <lucas.demarchi@intel.com>
+ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-14.tar.xz
+ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-14.tar.sign
+
+kmod 14 is out.
+
+Some bug fixes and a new "static-nodes" command to parse
+modules.devname. It was a very calm release cycle.
+
+For the reasoning behind removing "--enable-static": this caused
+problems in real world with people linking to libkmod and since it's
+not recommended it has been disabled.  I wrote to linux-modules and
+systemd-devel mailing lists a while back on how to fix it if anybody
+cares. Otherwise it stays disabled.
+
+Thanks to everyone involved in this release. Shortlog is below.
+
+
+Cheers
+Lucas De Marchi
 
 ---
- Makefile.am  |  7 ++++++-
- configure.ac | 12 +++++++++++-
- 2 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile.am b/Makefile.am
-index 57b7372..91a766a 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -89,6 +89,10 @@ pkgconfig_DATA = libkmod/libkmod.pc
- EXTRA_DIST += libkmod/libkmod.pc.in
- CLEANFILES += libkmod/libkmod.pc
- 
-+bashcompletiondir=@bashcompletiondir@
-+dist_bashcompletion_DATA = \
-+	shell-completion/bash/kmod
-+
- install-exec-hook:
- 	if test "$(libdir)" != "$(rootlibdir)"; then \
- 		$(MKDIR_P) $(DESTDIR)$(rootlibdir) && \
-@@ -207,7 +211,8 @@ testsuite-distclean:
- DISTCLEAN_LOCAL_HOOKS += testsuite-distclean
- EXTRA_DIST += testsuite/rootfs-pristine
- 
--DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc --sysconfdir=/etc --with-zlib
-+DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc --sysconfdir=/etc --with-zlib \
-+	--with-bashcompletiondir=$$dc_install_base/$(bashcompletiondir)
- 
- distclean-local: $(DISTCLEAN_LOCAL_HOOKS)
- 
-diff --git a/configure.ac b/configure.ac
-index 194dfab..15c69d4 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -82,6 +82,15 @@ AS_IF([test "x$with_zlib" != "xno"], [
- 	AC_MSG_NOTICE([zlib support not requested])
- ])
- 
-+AC_ARG_WITH([bashcompletiondir],
-+	AS_HELP_STRING([--with-bashcompletiondir=DIR], [Bash completions directory]),
-+	[],
-+	[AS_IF([$($PKG_CONFIG --exists bash-completion)], [
-+		with_bashcompletiondir=$($PKG_CONFIG --variable=completionsdir bash-completion)
-+	] , [
-+		with_bashcompletiondir=${datadir}/bash-completion/completions
-+	])])
-+AC_SUBST([bashcompletiondir], [$with_bashcompletiondir])
- 
- #####################################################################
- # --enable-
-@@ -194,7 +203,7 @@ AC_CONFIG_FILES([
- AC_OUTPUT
- AC_MSG_RESULT([
- 	$PACKAGE $VERSION
--	======
-+	=======
- 
- 	prefix:			${prefix}
- 	sysconfdir:		${sysconfdir}
-@@ -202,6 +211,7 @@ AC_MSG_RESULT([
- 	rootlibdir:		${rootlibdir}
- 	includedir:		${includedir}
- 	bindir:			${bindir}
-+	Bash completions dir:   ${with_bashcompletiondir}
- 
- 	compiler:		${CC}
- 	cflags:			${with_cflags} ${CFLAGS}
--- 
-1.8.3.4
+Chengwei Yang (2):
+      Several minor fixes for documentation
+      Add document for exported enums
 
+Jan Luebbe (1):
+      libkmod: Avoid calling syscall() with -1
+
+Johannes Berg (1):
+      modprobe: don't check refcount with remove command
+
+Lucas De Marchi (20):
+      TODO: update and reorder
+      testsuite: errno is a positive number
+      Use _Static_assert
+      Use static assertions for sizeof checks
+      kmod: It's an error not to have modules.devname
+      static-nodes: Fix indentation
+      Add format attribute and fix issues
+      build-sys: Add AM_V_XSLT to rule creating man pages
+      libkmod-module: Don't pass NULL pointer to memcpy
+      libkmod-module: Don't pass NULL ctx to kmod_log
+      libkmod-index: Return early if readroot failed
+      TODO: Add some entries
+      Fix coding style
+      missing: Don't call syscall() with syscallno == -1
+      Revert "missing: Don't call syscall() with syscallno == -1"
+      Add travis-ci config file
+      build-sys: do not allow --enable static
+      static-nodes: Better -f option description
+      tools: Use test/kmod instead of kmod-nolib
+      kmod 14
+
+Tom Gundersen (2):
+      tools: add static-nodes tool
+      static-nodes: tmpfiles - also create parents directories of device nodes
