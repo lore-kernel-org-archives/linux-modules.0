@@ -1,32 +1,29 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-wg0-f47.google.com ([74.125.82.47]:43777 "EHLO
-	mail-wg0-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752246Ab3GNNNz (ORCPT
+Received: from mail-wi0-f180.google.com ([209.85.212.180]:54044 "EHLO
+	mail-wi0-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751069Ab3GNL4u (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Sun, 14 Jul 2013 09:13:55 -0400
-Received: by mail-wg0-f47.google.com with SMTP id l18so9510063wgh.14
-        for <linux-modules@vger.kernel.org>; Sun, 14 Jul 2013 06:13:53 -0700 (PDT)
+	Sun, 14 Jul 2013 07:56:50 -0400
+Received: by mail-wi0-f180.google.com with SMTP id c10so1994211wiw.1
+        for <linux-modules@vger.kernel.org>; Sun, 14 Jul 2013 04:56:49 -0700 (PDT)
 From: Tom Gundersen <teg@jklm.no>
 To: linux-modules@vger.kernel.org
 Cc: Tom Gundersen <teg@jklm.no>
-Subject: [PATCHv2 2/2] static-nodes: create parent directories of output file
-Date: Sun, 14 Jul 2013 15:13:34 +0200
-Message-Id: <1373807614-17493-2-git-send-email-teg@jklm.no>
-In-Reply-To: <1373807614-17493-1-git-send-email-teg@jklm.no>
-References: <1373807614-17493-1-git-send-email-teg@jklm.no>
+Subject: [PATCH 2/2] static-nodes: create parent directories of output file
+Date: Sun, 14 Jul 2013 13:56:18 +0200
+Message-Id: <1373802978-12456-2-git-send-email-teg@jklm.no>
+In-Reply-To: <1373802978-12456-1-git-send-email-teg@jklm.no>
+References: <1373802978-12456-1-git-send-email-teg@jklm.no>
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
 Allows us to drop call to "mkdir -p" from the systemd service file.
 ---
-
-v2: rebase
-
  Makefile.am          |  3 +-
  tools/mkdir.c        | 81 ++++++++++++++++++++++++++++++++++++++++++++++++++++
  tools/mkdir.h        | 25 ++++++++++++++++
- tools/static-nodes.c | 14 +++++++--
- 4 files changed, 119 insertions(+), 4 deletions(-)
+ tools/static-nodes.c | 14 ++++++++-
+ 4 files changed, 121 insertions(+), 2 deletions(-)
  create mode 100644 tools/mkdir.c
  create mode 100644 tools/mkdir.h
 
@@ -163,7 +160,7 @@ index 0000000..5327fbe
 +
 +int mkdir_parents(const char *path, mode_t mode);
 diff --git a/tools/static-nodes.c b/tools/static-nodes.c
-index 351c02b..faccefc 100644
+index b4a3c08..fb2d633 100644
 --- a/tools/static-nodes.c
 +++ b/tools/static-nodes.c
 @@ -32,6 +32,8 @@
@@ -175,35 +172,27 @@ index 351c02b..faccefc 100644
  #include "kmod.h"
  
  struct static_nodes_format {
-@@ -154,12 +156,11 @@ static void help(void)
- static int do_static_nodes(int argc, char *argv[])
- {
- 	struct utsname kernel;
--	char modules[PATH_MAX];
-+	char modules[PATH_MAX], buf[4096];
- 	const char *output = "/dev/stdout";
- 	FILE *in = NULL, *out = NULL;
- 	const struct static_nodes_format *format = &static_nodes_format_human;
--	char buf[4096];
--	int ret = EXIT_SUCCESS;
-+	int r, ret = EXIT_SUCCESS;
- 
- 	for (;;) {
- 		int c, idx = 0, valid;
-@@ -227,6 +228,13 @@ static int do_static_nodes(int argc, char *argv[])
- 		goto finish;
+@@ -230,9 +232,19 @@ static int do_static_nodes(int argc, char *argv[])
  	}
  
-+	r = mkdir_parents(output, 0755);
-+	if (r < 0) {
-+		fprintf(stderr, "Error: could not create parent directory for %s - %m.\n", output);
-+		ret = EXIT_FAILURE;
-+		goto finish;
-+	}
-+
- 	out = fopen(output, "we");
  	if (out == NULL) {
- 		fprintf(stderr, "Error: could not create %s - %m\n", output);
++		int r;
++
++		r = mkdir_parents(output, 0755);
++		if (r < 0) {
++			fprintf(stderr, "Error: could not create parent directory for %s - %m.\n",
++				output);
++			ret = EXIT_FAILURE;
++			goto finish;
++		}
++
+ 		out = fopen(output, "we");
+ 		if (out == NULL) {
+-			fprintf(stderr, "Error: could not create %s!\n",
++			fprintf(stderr, "Error: could not create %s - %m\n",
+ 				output);
+ 			ret = EXIT_FAILURE;
+ 			goto finish;
 -- 
 1.8.3.2
 
