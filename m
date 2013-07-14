@@ -1,48 +1,225 @@
-Return-Path: <rusty@ozlabs.org>
-From: Rusty Russell <rusty@rustcorp.com.au>
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>, lkml <linux-kernel@vger.kernel.org>, linux-modules <linux-modules@vger.kernel.org>
-Cc: "Kent Overstreet" <koverstreet@google.com>
-Cc: Rafael J. Wysocki <rjw@sisk.pl>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: cpufreq@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Subject: Re: module refcnt underflow
-In-Reply-To: <CAKi4VA+RBToB3fO21N-QWdPZeqGpg1ASHzn3vwB9t64ApdwrsA@mail.gmail.com>
-References: <CAKi4VA+RBToB3fO21N-QWdPZeqGpg1ASHzn3vwB9t64ApdwrsA@mail.gmail.com>
-Date: Mon, 01 Jul 2013 12:08:36 +0930
-Message-ID: <8738rzt36b.fsf@rustcorp.com.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <1373807614-17493-2-git-send-email-teg@jklm.no>
+References: <1373807614-17493-1-git-send-email-teg@jklm.no>
+	<1373807614-17493-2-git-send-email-teg@jklm.no>
+Date: Sun, 14 Jul 2013 11:57:37 -0300
+Message-ID: <CAKi4VAJFA+LQSOrrthQXvqyzipVXBs0vfiUOLMD9paJ8uhUVyQ@mail.gmail.com>
+Subject: Re: [PATCHv2 2/2] static-nodes: create parent directories of output file
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Tom Gundersen <teg@jklm.no>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-Lucas De Marchi <lucas.de.marchi@gmail.com> writes:
-> Hi,
+On Sun, Jul 14, 2013 at 10:13 AM, Tom Gundersen <teg@jklm.no> wrote:
+> Allows us to drop call to "mkdir -p" from the systemd service file.
+> ---
 >
-> While checking somethings for a next release of kmod I noticed this
-> strange thing:
+> v2: rebase
 >
-> cat /sys/module/acpi_cpufreq/refcnt
-> 18446744073709551614
+>  Makefile.am          |  3 +-
+>  tools/mkdir.c        | 81 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  tools/mkdir.h        | 25 ++++++++++++++++
+>  tools/static-nodes.c | 14 +++++++--
+>  4 files changed, 119 insertions(+), 4 deletions(-)
+>  create mode 100644 tools/mkdir.c
+>  create mode 100644 tools/mkdir.h
 >
-> We outputs this as "-1" in lsmod because we treat the value as signed.
-> I was just going to change it to unsigned to make it compatible with
-> what module-init-tools does but... For me it looks like a bug in the
-> kernel since in this file we just have the output of
-> kernel/module.c:module_refcount()
+> diff --git a/Makefile.am b/Makefile.am
+> index 0ed944c..ab49dfd 100644
+> --- a/Makefile.am
+> +++ b/Makefile.am
+> @@ -111,7 +111,8 @@ tools_kmod_SOURCES = tools/kmod.c tools/kmod.h tools/lsmod.c \
+>                      tools/rmmod.c tools/insmod.c \
+>                      tools/modinfo.c tools/modprobe.c \
+>                      tools/depmod.c tools/log.h tools/log.c \
+> -                    tools/static-nodes.c
+> +                    tools/static-nodes.c tools/mkdir.c \
+> +                    tools/mkdir.h
+>  tools_kmod_LDADD = libkmod/libkmod-util.la \
+>                    libkmod/libkmod-internal.la
 >
-> I have this behavior on 3.9.2 but judging by the missing commits in
-> kernel/module.c, this would also happen in latest head. I've never
-> seen such a value so I guess it might be difficult to reproduce it
-> again.
->
-> Any hints on what could cause decs to be greater than incs in module_refcount()?
+> diff --git a/tools/mkdir.c b/tools/mkdir.c
+> new file mode 100644
+> index 0000000..9935366
+> --- /dev/null
+> +++ b/tools/mkdir.c
+> @@ -0,0 +1,81 @@
+> +/*
+> + * Copyright (C) 2012  Lucas De Marchi <lucas.de.marchi@gmail.com
+> + * Copyright (C) 2013  Tom Gundersen <teg@jklm.no>
+> + *
+> + * This program is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU Lesser General Public
+> + * License as published by the Free Software Foundation; either
+> + * version 2.1 of the License, or (at your option) any later version.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> + * Lesser General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU Lesser General Public
+> + * License along with this library; if not, write to the Free Software
+> + * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+> + */
+> +
+> +#include <errno.h>
+> +#include <string.h>
+> +#include <sys/stat.h>
+> +#include <sys/types.h>
+> +
+> +#include "mkdir.h"
+> +
+> +static int mkdir_p(char *path, mode_t mode)
+> +{
+> +       char *end = path + strlen(path);
+> +       struct stat st;
+> +       int r;
+> +
+> +       /*
+> +        * don't try to overwrite existing file, succeed if it is a directory,
+> +        * fail otherwise
+> +        */
+> +       if (stat(path, &st) >= 0) {
+> +               if (S_ISDIR(st.st_mode)) {
+> +                       return 0;
+> +               } else
+> +                       return -ENOTDIR;
+> +       }
+> +
+> +       /* Find the last '/' */
+> +       while (end > path && *end != '/')
+> +               end--;
+> +
+> +       /* discard extra '/' */
+> +       while (end > path && *(end - 1) == '/')
+> +               end--;
+> +
+> +       /* if a parent directory was found, create it recursively */
+> +       if (end != path) {
+> +               *end = '\0';
+> +               r = mkdir_p(path, mode);
+> +               *end = '/';
+> +
+> +               if (r < 0)
+> +                       return -errno;
+> +       }
+> +
+> +       /* create the desired directory */
+> +       return mkdir(path, mode);
+> +}
 
-That points to a bug in the cpufreq code.
 
-At a glance, there's nothing obvious, but there are quite a few
-reference counts in that code.
+We already have mkdir_p in kmod. You can move it to libkmod-utils and
+adapt it as you please if you want to use it outside of testsuite. The
+difference I see is that it's not a recursive implementation, but
+rather  uses an inner loop.
 
-Informed people cc'd...
+> +
+> +int mkdir_parents(const char *path, mode_t mode) {
+> +       char *dirname = strdupa(path);
+> +       char *offset = strrchr(dirname, '/');
+> +
+> +       /* no parent directories */
+> +       if (!offset) {
+> +               return 0;
+> +       }
+> +
+> +       /* compute the dirname */
+> +       while (*(offset - 1) == '/')
+> +               offset--;
+> +       *offset = '\0';
+> +
+> +       return mkdir_p(dirname, mode);
+> +}
 
-Thanks,
-Rusty.
+You can add this function to libkmod-util, too.
+
+
+> diff --git a/tools/mkdir.h b/tools/mkdir.h
+> new file mode 100644
+> index 0000000..5327fbe
+> --- /dev/null
+> +++ b/tools/mkdir.h
+> @@ -0,0 +1,25 @@
+> +/*
+> + * Copyright (C) 2012  Lucas De Marchi <lucas.de.marchi@gmail.com>
+> + * Copyright (C) 2013  Tom Gundersen <teg@jklm.no>
+> + *
+> + * This program is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU Lesser General Public
+> + * License as published by the Free Software Foundation; either
+> + * version 2.1 of the License, or (at your option) any later version.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> + * Lesser General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU Lesser General Public
+> + * License along with this library; if not, write to the Free Software
+> + * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+> + */
+> +
+> +#pragma once
+> +
+> +#include <sys/stat.h>
+> +#include <sys/types.h>
+> +
+> +int mkdir_parents(const char *path, mode_t mode);
+> diff --git a/tools/static-nodes.c b/tools/static-nodes.c
+> index 351c02b..faccefc 100644
+> --- a/tools/static-nodes.c
+> +++ b/tools/static-nodes.c
+> @@ -32,6 +32,8 @@
+>  #include <sys/types.h>
+>  #include "libkmod-util.h"
+>
+> +#include "mkdir.h"
+> +
+>  #include "kmod.h"
+>
+>  struct static_nodes_format {
+> @@ -154,12 +156,11 @@ static void help(void)
+>  static int do_static_nodes(int argc, char *argv[])
+>  {
+>         struct utsname kernel;
+> -       char modules[PATH_MAX];
+> +       char modules[PATH_MAX], buf[4096];
+>         const char *output = "/dev/stdout";
+>         FILE *in = NULL, *out = NULL;
+>         const struct static_nodes_format *format = &static_nodes_format_human;
+> -       char buf[4096];
+> -       int ret = EXIT_SUCCESS;
+> +       int r, ret = EXIT_SUCCESS;
+>
+>         for (;;) {
+>                 int c, idx = 0, valid;
+> @@ -227,6 +228,13 @@ static int do_static_nodes(int argc, char *argv[])
+>                 goto finish;
+>         }
+>
+> +       r = mkdir_parents(output, 0755);
+> +       if (r < 0) {
+> +               fprintf(stderr, "Error: could not create parent directory for %s - %m.\n", output);
+> +               ret = EXIT_FAILURE;
+> +               goto finish;
+> +       }
+> +
+>         out = fopen(output, "we");
+>         if (out == NULL) {
+>                 fprintf(stderr, "Error: could not create %s - %m\n", output);
+> --
+> 1.8.3.2
+>
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+
+
+--
+
+Lucas De Marchi
