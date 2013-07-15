@@ -1,95 +1,68 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-gg0-f170.google.com ([209.85.161.170]:55462 "EHLO
-	mail-gg0-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752853Ab3GOFMz (ORCPT
+Received: from mail-yh0-f51.google.com ([209.85.213.51]:61861 "EHLO
+	mail-yh0-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753235Ab3GOFSv (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 15 Jul 2013 01:12:55 -0400
-Received: by mail-gg0-f170.google.com with SMTP id s5so3819259ggc.15
-        for <linux-modules@vger.kernel.org>; Sun, 14 Jul 2013 22:12:55 -0700 (PDT)
+	Mon, 15 Jul 2013 01:18:51 -0400
+Received: by mail-yh0-f51.google.com with SMTP id l109so4477865yhq.24
+        for <linux-modules@vger.kernel.org>; Sun, 14 Jul 2013 22:18:50 -0700 (PDT)
 Received: from localhost.localdomain ([201.53.216.53])
-        by mx.google.com with ESMTPSA id s29sm81191597yhf.6.2013.07.14.22.12.53
+        by mx.google.com with ESMTPSA id s29sm81191597yhf.6.2013.07.14.22.12.56
         for <linux-modules@vger.kernel.org>
         (version=TLSv1.2 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
-        Sun, 14 Jul 2013 22:12:54 -0700 (PDT)
+        Sun, 14 Jul 2013 22:12:57 -0700 (PDT)
 From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
 To: linux-modules@vger.kernel.org
-Subject: [PATCH 3/6] static-nodes: don't fail if modules.devname not found
-Date: Mon, 15 Jul 2013 02:12:56 -0300
-Message-Id: <1373865179-18366-3-git-send-email-lucas.demarchi@profusion.mobi>
+Subject: [PATCH 5/6] util: Add mkdir_parents()
+Date: Mon, 15 Jul 2013 02:12:58 -0300
+Message-Id: <1373865179-18366-5-git-send-email-lucas.demarchi@profusion.mobi>
 In-Reply-To: <1373865179-18366-1-git-send-email-lucas.demarchi@profusion.mobi>
 References: <1373865179-18366-1-git-send-email-lucas.demarchi@profusion.mobi>
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Tom Gundersen <teg@jklm.no>
+From: Lucas De Marchi <lucas.demarchi@intel.com>
 
-In containers/VM's/initrd one might not have installed any modules and
-accompanying modules.devname Don't fail if this is the case, just warn.
-
-When used in systemd this means we don't get a failing unit on booting
-containers.
+Like mkdir_p, but discard the leaf and create all parent directories.
 ---
- tools/static-nodes.c | 31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
+ libkmod/libkmod-util.c | 11 +++++++++++
+ libkmod/libkmod-util.h |  1 +
+ 2 files changed, 12 insertions(+)
 
-diff --git a/tools/static-nodes.c b/tools/static-nodes.c
-index 96bb71e..351c02b 100644
---- a/tools/static-nodes.c
-+++ b/tools/static-nodes.c
-@@ -155,7 +155,8 @@ static int do_static_nodes(int argc, char *argv[])
- {
- 	struct utsname kernel;
- 	char modules[PATH_MAX];
--	FILE *in = NULL, *out = stdout;
-+	const char *output = "/dev/stdout";
-+	FILE *in = NULL, *out = NULL;
- 	const struct static_nodes_format *format = &static_nodes_format_human;
- 	char buf[4096];
- 	int ret = EXIT_SUCCESS;
-@@ -170,13 +171,7 @@ static int do_static_nodes(int argc, char *argv[])
- 		}
- 		switch (c) {
- 		case 'o':
--			out = fopen(optarg, "we");
--			if (out == NULL) {
--				fprintf(stderr, "Error: could not create %s!\n",
--					optarg);
--				ret = EXIT_FAILURE;
--				goto finish;
--			}
-+			output = optarg;
- 			break;
- 		case 'f':
- 			valid = 0;
-@@ -217,12 +212,24 @@ static int do_static_nodes(int argc, char *argv[])
- 		goto finish;
- 	}
+diff --git a/libkmod/libkmod-util.c b/libkmod/libkmod-util.c
+index 45ca11a..764c551 100644
+--- a/libkmod/libkmod-util.c
++++ b/libkmod/libkmod-util.c
+@@ -373,6 +373,17 @@ int mkdir_p(const char *path, int len, mode_t mode)
+ 	return 0;
+ }
  
--	snprintf(modules, sizeof(modules), "/lib/modules/%s/modules.devname",
--		 kernel.release);
-+	snprintf(modules, sizeof(modules), "/lib/modules/%s/modules.devname", kernel.release);
- 	in = fopen(modules, "re");
- 	if (in == NULL) {
--		fprintf(stderr, "Error: could not open /lib/modules/%s/modules.devname - %m\n",
--			kernel.release);
-+		if (errno == ENOENT) {
-+			fprintf(stderr, "Warning: /lib/modules/%s/modules.devname not found - ignoring\n",
-+				kernel.release);
-+			ret = EXIT_SUCCESS;
-+		} else {
-+			fprintf(stderr, "Error: could not open /lib/modules/%s/modules.devname - %m\n",
-+				kernel.release);
-+			ret = EXIT_FAILURE;
-+		}
-+		goto finish;
-+	}
++int mkdir_parents(const char *path, mode_t mode)
++{
++	char *end = strrchr(path, '/');
 +
-+	out = fopen(output, "we");
-+	if (out == NULL) {
-+		fprintf(stderr, "Error: could not create %s - %m\n", output);
- 		ret = EXIT_FAILURE;
- 		goto finish;
- 	}
++	/* no parent directories */
++	if (end == NULL)
++		return 0;
++
++	return mkdir_p(path, end - path, mode);
++}
++
+ const struct kmod_ext kmod_exts[] = {
+ 	{".ko", sizeof(".ko") - 1},
+ #ifdef ENABLE_ZLIB
+diff --git a/libkmod/libkmod-util.h b/libkmod/libkmod-util.h
+index 4c45416..f7f3e90 100644
+--- a/libkmod/libkmod-util.h
++++ b/libkmod/libkmod-util.h
+@@ -21,6 +21,7 @@ char *strchr_replace(char *s, int c, char r);
+ bool path_is_absolute(const char *p) _must_check_ __attribute__((nonnull(1)));
+ char *path_make_absolute_cwd(const char *p) _must_check_ __attribute__((nonnull(1)));
+ int mkdir_p(const char *path, int len, mode_t mode);
++int mkdir_parents(const char *path, mode_t mode);
+ int alias_normalize(const char *alias, char buf[PATH_MAX], size_t *len) _must_check_ __attribute__((nonnull(1,2)));
+ char *modname_normalize(const char *modname, char buf[PATH_MAX], size_t *len) __attribute__((nonnull(1, 2)));
+ char *path_to_modname(const char *path, char buf[PATH_MAX], size_t *len) __attribute__((nonnull(2)));
 -- 
 1.8.3.2
 
