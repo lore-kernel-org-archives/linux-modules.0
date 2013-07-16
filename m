@@ -1,64 +1,90 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-vb0-f43.google.com ([209.85.212.43]:35627 "EHLO
-	mail-vb0-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1757862Ab3FCNdL (ORCPT
+Received: from mail-ve0-f173.google.com ([209.85.128.173]:33413 "EHLO
+	mail-ve0-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752072Ab3GPGmz (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 3 Jun 2013 09:33:11 -0400
-Received: by mail-vb0-f43.google.com with SMTP id e15so1105373vbg.30
-        for <linux-modules@vger.kernel.org>; Mon, 03 Jun 2013 06:33:10 -0700 (PDT)
+	Tue, 16 Jul 2013 02:42:55 -0400
+Received: by mail-ve0-f173.google.com with SMTP id jw11so210677veb.18
+        for <linux-modules@vger.kernel.org>; Mon, 15 Jul 2013 23:42:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <51ABCCBC.8010807@openelec.tv>
-References: <51AB5F72.6020307@openelec.tv> <51AB7941.2060505@opensuse.org>
- <51AB80D9.6090409@openelec.tv> <20130602173642.GA1138@kroah.com> <51ABCCBC.8010807@openelec.tv>
+In-Reply-To: <87ppujysbk.fsf@rustcorp.com.au>
+References: <20130715182010.GA4853@pmhahn.de> <87ppujysbk.fsf@rustcorp.com.au>
 From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Date: Mon, 3 Jun 2013 10:32:50 -0300
-Message-ID: <CAMOw1v4WuH2GZXVR1+vsWf-EGiCJN3=v9WfmqTD_cEhPbh3z+g@mail.gmail.com>
-Subject: Re: [systemd-devel] systemd fails to build with static kmod library
-To: Stephan Raue <mailinglists@openelec.tv>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	systemd-devel@lists.freedesktop.org,
+Date: Tue, 16 Jul 2013 03:42:35 -0300
+Message-ID: <CAMOw1v7AHC3=dFh8vQWTf7dhu1zMbbPwNtJXAtnoqR48YWjtcQ@mail.gmail.com>
+Subject: Re: [BUG] 3.10.[01] modprobe snd-... hangs
+To: Rusty Russell <rusty@rustcorp.com.au>
+Cc: Philipp Matthias Hahn <pmhahn@pmhahn.de>,
+	alsa-devel@alsa-project.org,
+	Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	linux-modules <linux-modules@vger.kernel.org>
 Content-Type: text/plain; charset=ISO-8859-1
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, Jun 2, 2013 at 7:52 PM, Stephan Raue <mailinglists@openelec.tv> wrote:
-> Am 02.06.2013 19:36, schrieb Greg KH:
+On Tue, Jul 16, 2013 at 2:41 AM, Rusty Russell <rusty@rustcorp.com.au> wrote:
+> Philipp Matthias Hahn <pmhahn@pmhahn.de> writes:
+>> Hello,
 >>
->> On Sun, Jun 02, 2013 at 07:28:57PM +0200, Stephan Raue wrote:
->>
->>> i dont agree, i some cases it makes sense. since udev is included in
->>> systemd and udev has now its own buildins for the modprobe stuff it
->>> should be possible to use kmod statically linked, esp. if no other
->>> installed program uses kmod (and for our usage the kmod userspace
->>> binarys are not neccessary)
->>
->>
->> If you are so worried about other programs / users calling kmod, then
->> just build your needed kernel modules into the kernel and don't use any
->> kernel modules at all.
->>
-> i am not much worried about this, but more about the comment "Do not use
-> static linking, with systemd, ever, in fact do not use with any other
-> component.". Statically linking works for so many programs and even kmod
-> supports the "--enable-static" configure option. So basically i tried to
-> report this broken behavior, because i never seen a statement like "dont
-> link anything statically against systemd"
+>> My x86_64 systems has some trouble loading some ALSA snd-* modules since
+>> the upgrade to 3.10.[01]: Several automatic modprobe calls hang, but
+>> loading snd-intel-hda and snd-audio-usb by hand still works.
+>
+> Not a known problem to me, at least.  Perhaps it's a dep loop somehow.
 
-It's not advised to do it, so it's up to you to fix it in your custom
-build. Basically what you could do either of these in libkmod.a:
+First thing to check is the /etc/modprobe.d/*.conf file that contains
+these install commands. Did they change besides the kernel upgrade?
 
-1) Rename the clashing symbols with objcopy (use --redefine-sym option)
-2) Localize symbols with objcopy (--localize-hidden)
-3) Extract the .o objects (ar -x) and relink them into a single .o (ld
--r). Then turn it into a .a using libtool --static
+[
+   Not really related to this, but... people/distros should stop using
+install commands for things like this. By using softdeps kmod is smart
+enough to detect and (possibly) break loops. With  install commands it
+can't because it has no idea what the install command will do.
+]
 
-If you integrate (2) or (3) nicely in the build system I think it
-could be acceptable upstream.
+>
+>> ...
+>>  1071 ?        S      0:00 sh -c /sbin/modprobe --ignore-install snd && { /sbin/modprobe --quiet snd
+>>  1080 ?        D      0:00  \_ /sbin/modprobe --quiet snd-seq
+>
+> This was first, and it's waiting.  Which means it must be doing
+> something weird, because snd_seq_oss is loading now:
+>
+>> snd_seq_oss 33717 1 - Loading 0xffffffffa041b000
 
-Another option is... while building systemd, you could achieve
-something similar to (2) above without the trouble of modifying
-libkmod.a by passing "-Wl,--exclude-libs,ALL" in LDFLAGS (untested).
+Searching kmod's log, I guess Debian still has:
+
+ install snd_seq modprobe --ignore-install snd-seq $CMDLINE_OPTS && {
+modprobe --quiet snd-seq-midi ; modprobe --quiet snd-seq-oss ; : ; }
+
+>
+> Perhaps in the tangle of modprobe install commands somewhere this gets
+> invoked?
+>
+>> # ps axf
+>>   460 ?        S      0:00  \_ [kworker/u8:3]
+>>  1087 ?        S      0:00  |   \_ [kworker/u8:3]
+>>  1092 ?        S      0:00  |       \_ /sbin/modprobe -q -- snd-seq-client-14
+
+Weird... this is coming from a request_module(). Greping... this
+should only be coming from
+
+git grep request_module | grep snd-seq-client
+sound/core/seq/seq_clientmgr.c: request_module("snd-seq-client-%i",
+
+Philipp, which kernel are you upgrading from?  I don't see anything to
+blame in the changes for the past releases. Any chance a bad entry in
+your .conf was added too? You may want to paste the output of modprobe
+-c, at least until "# End of configuration files. Dumping indexes
+now:"
+
+>
+> On my systems, that's snd-seq-dummy, which depends on snd_seq.  Which,
+> in fact, is already loaded.
+>
+> Lucas, any clues?
+
+I don't think I could help, but we need more data, like the ones above.
 
 
 Lucas De Marchi
