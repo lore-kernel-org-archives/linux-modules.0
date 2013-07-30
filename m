@@ -1,66 +1,95 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-yh0-f46.google.com ([209.85.213.46]:63898 "EHLO
-	mail-yh0-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752853Ab3GOFM7 (ORCPT
+Received: from mail-ye0-f181.google.com ([209.85.213.181]:52758 "EHLO
+	mail-ye0-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1757560Ab3G3GsL (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 15 Jul 2013 01:12:59 -0400
-Received: by mail-yh0-f46.google.com with SMTP id i57so4424243yha.33
-        for <linux-modules@vger.kernel.org>; Sun, 14 Jul 2013 22:12:58 -0700 (PDT)
+	Tue, 30 Jul 2013 02:48:11 -0400
+Received: by mail-ye0-f181.google.com with SMTP id q2so1755085yen.12
+        for <linux-modules@vger.kernel.org>; Mon, 29 Jul 2013 23:48:10 -0700 (PDT)
 Received: from localhost.localdomain ([201.53.216.53])
-        by mx.google.com with ESMTPSA id s29sm81191597yhf.6.2013.07.14.22.12.57
+        by mx.google.com with ESMTPSA id b50sm89541063yhl.1.2013.07.29.23.48.09
         for <linux-modules@vger.kernel.org>
         (version=TLSv1.2 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
-        Sun, 14 Jul 2013 22:12:58 -0700 (PDT)
+        Mon, 29 Jul 2013 23:48:10 -0700 (PDT)
 From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
 To: linux-modules@vger.kernel.org
-Subject: [PATCH 6/6] static-nodes: create parent directories of output file
-Date: Mon, 15 Jul 2013 02:12:59 -0300
-Message-Id: <1373865179-18366-6-git-send-email-lucas.demarchi@profusion.mobi>
-In-Reply-To: <1373865179-18366-1-git-send-email-lucas.demarchi@profusion.mobi>
-References: <1373865179-18366-1-git-send-email-lucas.demarchi@profusion.mobi>
+Subject: [PATCH 3/3] build: Install bash completion data
+Date: Tue, 30 Jul 2013 03:48:15 -0300
+Message-Id: <1375166895-20350-3-git-send-email-lucas.demarchi@profusion.mobi>
+In-Reply-To: <1375166895-20350-1-git-send-email-lucas.demarchi@profusion.mobi>
+References: <1375166895-20350-1-git-send-email-lucas.demarchi@profusion.mobi>
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Tom Gundersen <teg@jklm.no>
+From: Lucas De Marchi <lucas.demarchi@intel.com>
 
-Allows us to drop call to "mkdir -p" from the systemd service file.
 ---
- tools/static-nodes.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ Makefile.am  |  7 ++++++-
+ configure.ac | 12 +++++++++++-
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/tools/static-nodes.c b/tools/static-nodes.c
-index 351c02b..0195390 100644
---- a/tools/static-nodes.c
-+++ b/tools/static-nodes.c
-@@ -154,12 +154,11 @@ static void help(void)
- static int do_static_nodes(int argc, char *argv[])
- {
- 	struct utsname kernel;
--	char modules[PATH_MAX];
-+	char modules[PATH_MAX], buf[4096];
- 	const char *output = "/dev/stdout";
- 	FILE *in = NULL, *out = NULL;
- 	const struct static_nodes_format *format = &static_nodes_format_human;
--	char buf[4096];
--	int ret = EXIT_SUCCESS;
-+	int r, ret = EXIT_SUCCESS;
+diff --git a/Makefile.am b/Makefile.am
+index 57b7372..91a766a 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -89,6 +89,10 @@ pkgconfig_DATA = libkmod/libkmod.pc
+ EXTRA_DIST += libkmod/libkmod.pc.in
+ CLEANFILES += libkmod/libkmod.pc
  
- 	for (;;) {
- 		int c, idx = 0, valid;
-@@ -227,6 +226,13 @@ static int do_static_nodes(int argc, char *argv[])
- 		goto finish;
- 	}
- 
-+	r = mkdir_parents(output, 0755);
-+	if (r < 0) {
-+		fprintf(stderr, "Error: could not create parent directory for %s - %m.\n", output);
-+		ret = EXIT_FAILURE;
-+		goto finish;
-+	}
++bashcompletiondir=@bashcompletiondir@
++dist_bashcompletion_DATA = \
++	shell-completion/bash/kmod
 +
- 	out = fopen(output, "we");
- 	if (out == NULL) {
- 		fprintf(stderr, "Error: could not create %s - %m\n", output);
+ install-exec-hook:
+ 	if test "$(libdir)" != "$(rootlibdir)"; then \
+ 		$(MKDIR_P) $(DESTDIR)$(rootlibdir) && \
+@@ -207,7 +211,8 @@ testsuite-distclean:
+ DISTCLEAN_LOCAL_HOOKS += testsuite-distclean
+ EXTRA_DIST += testsuite/rootfs-pristine
+ 
+-DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc --sysconfdir=/etc --with-zlib
++DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc --sysconfdir=/etc --with-zlib \
++	--with-bashcompletiondir=$$dc_install_base/$(bashcompletiondir)
+ 
+ distclean-local: $(DISTCLEAN_LOCAL_HOOKS)
+ 
+diff --git a/configure.ac b/configure.ac
+index 194dfab..15c69d4 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -82,6 +82,15 @@ AS_IF([test "x$with_zlib" != "xno"], [
+ 	AC_MSG_NOTICE([zlib support not requested])
+ ])
+ 
++AC_ARG_WITH([bashcompletiondir],
++	AS_HELP_STRING([--with-bashcompletiondir=DIR], [Bash completions directory]),
++	[],
++	[AS_IF([$($PKG_CONFIG --exists bash-completion)], [
++		with_bashcompletiondir=$($PKG_CONFIG --variable=completionsdir bash-completion)
++	] , [
++		with_bashcompletiondir=${datadir}/bash-completion/completions
++	])])
++AC_SUBST([bashcompletiondir], [$with_bashcompletiondir])
+ 
+ #####################################################################
+ # --enable-
+@@ -194,7 +203,7 @@ AC_CONFIG_FILES([
+ AC_OUTPUT
+ AC_MSG_RESULT([
+ 	$PACKAGE $VERSION
+-	======
++	=======
+ 
+ 	prefix:			${prefix}
+ 	sysconfdir:		${sysconfdir}
+@@ -202,6 +211,7 @@ AC_MSG_RESULT([
+ 	rootlibdir:		${rootlibdir}
+ 	includedir:		${includedir}
+ 	bindir:			${bindir}
++	Bash completions dir:   ${with_bashcompletiondir}
+ 
+ 	compiler:		${CC}
+ 	cflags:			${with_cflags} ${CFLAGS}
 -- 
-1.8.3.2
+1.8.3.4
 
