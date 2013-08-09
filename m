@@ -1,65 +1,72 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from top.free-electrons.com ([176.31.233.9]:43470 "EHLO
-	mail.free-electrons.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-	with ESMTP id S1752334Ab3H1Pdx (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Wed, 28 Aug 2013 11:33:53 -0400
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-To: linux-modules@vger.kernel.org
-Cc: thomas.petazzoni@free-electrons.com
-Subject: [PATCH] Add configure check for _Static_assert()
-Date: Wed, 28 Aug 2013 17:33:51 +0200
-Message-Id: <1377704031-12501-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Sender: linux-modules-owner@vger.kernel.org
+Return-Path: <hpa@zytor.com>
+Message-ID: <52053485.7070902@zytor.com>
+Date: Fri, 09 Aug 2013 11:27:17 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+MIME-Version: 1.0
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+CC: Jan Engelhardt <jengelh@inai.de>,
+        Lucas De Marchi <lucas.demarchi@profusion.mobi>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-modules <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] depmod: add missing "else" clause
+References: <1375912738-25114-1-git-send-email-jengelh@inai.de> <1375912738-25114-2-git-send-email-jengelh@inai.de> <CAKi4VA+-NnohHc5cMirN=B5uizLQBDnaZ5Aiq24AFe=puFDNJg@mail.gmail.com>
+In-Reply-To: <CAKi4VA+-NnohHc5cMirN=B5uizLQBDnaZ5Aiq24AFe=puFDNJg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-Commit 8efede20ef ("Use _Static_assert") introduced the usage of
-_Static_assert(). However, _Static_assert() is a fairly new thing,
-since it was introduced only in gcc 4.6. In order to support older
-compilers, this patch adds a configure.in test that checks whether
-_Static_assert() is usable or not, and adjust the behavior of the
-assert_cc() macro accordingly.
+On 08/09/2013 08:03 AM, Lucas De Marchi wrote:
+> Hi Jan,
+> 
+> 
+> On Wed, Aug 7, 2013 at 6:58 PM, Jan Engelhardt <jengelh@inai.de> wrote:
+>>
+>> It occurred to an openSUSE user that our mkinitrd would throw a
+>> warning when used with kmod:
+>>
+>> libkmod: conf_files_list: unsupported file mode /dev/null: 0x21b6
+>>
+>> Grepping for the error message revealed that there might be a missing
+>> "else" keyword here, since it is unusual to put an "if" directly after
+>> closing brace.
+>> ---
+>>  libkmod/libkmod-config.c | 2 +-
+>>  tools/depmod.c           | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
+>> index 201c349..cb4cf61 100644
+>> --- a/libkmod/libkmod-config.c
+>> +++ b/libkmod/libkmod-config.c
+>> @@ -833,7 +833,7 @@ static int conf_files_list(struct kmod_ctx *ctx, struct kmod_list **list,
+>>         if (S_ISREG(st.st_mode)) {
+>>                 conf_files_insert_sorted(ctx, list, path, NULL);
+>>                 return 0;
+>> -       } if (!S_ISDIR(st.st_mode)) {
+>> +       } else if (!S_ISDIR(st.st_mode)) {
+>>                 ERR(ctx, "unsupported file mode %s: %#x\n",
+>>                                                         path, st.st_mode);
+>>                 return -EINVAL;
+>> diff --git a/tools/depmod.c b/tools/depmod.c
+>> index 4a02631..985cf3a 100644
+>> --- a/tools/depmod.c
+>> +++ b/tools/depmod.c
+>> @@ -848,7 +848,7 @@ static int cfg_files_list(struct cfg_file ***p_files, size_t *p_n_files,
+>>         if (S_ISREG(st.st_mode)) {
+>>                 cfg_files_insert_sorted(p_files, p_n_files, path, NULL);
+>>                 return 0;
+>> -       } if (!S_ISDIR(st.st_mode)) {
+>> +       } else if (!S_ISDIR(st.st_mode)) {
+>>                 ERR("unsupported file mode %s: %#x\n", path, st.st_mode);
+>>                 return -EINVAL;
+>>         }
+>> --
+> 
+> Applied, thanks.
+> 
+> Please make sure to CC linux-modules@vger.kernel.org
+> 
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configure.ac    | 6 ++++++
- libkmod/macro.h | 4 ++++
- 2 files changed, 10 insertions(+)
+Also please note that this is a stylistic change only, since the
+previous if clause ends with a return.
 
-diff --git a/configure.ac b/configure.ac
-index 40e54cf..cbe12f3 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -52,6 +52,12 @@ AC_CHECK_MEMBERS([struct stat.st_mtim], [], [], [#include <sys/stat.h>])
- # Check kernel headers
- AC_CHECK_HEADERS_ONCE([linux/module.h])
- 
-+AC_MSG_CHECKING([whether _Static_assert() is supported])
-+AC_COMPILE_IFELSE(
-+	[AC_LANG_SOURCE([[_Static_assert(1, "Test");]])],
-+        [AC_DEFINE([HAVE_STATIC_ASSERT], [1], [Define is _Static_assert() is available])
-+	 AC_MSG_RESULT([yes])],
-+	[AC_MSG_RESULT([no])])
- 
- #####################################################################
- # --with-
-diff --git a/libkmod/macro.h b/libkmod/macro.h
-index c6ba855..5992026 100644
---- a/libkmod/macro.h
-+++ b/libkmod/macro.h
-@@ -21,8 +21,12 @@
- 
- #include <stddef.h>
- 
-+#if defined(HAVE_STATIC_ASSERT)
- #define assert_cc(expr) \
- 	_Static_assert((expr), #expr)
-+#else
-+#define assert_cc(expr)
-+#endif
- 
- #if HAVE_TYPEOF
- #define check_types_match(expr1, expr2)		\
--- 
-1.8.1.2
-
+	-hpa
