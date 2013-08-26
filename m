@@ -1,61 +1,34 @@
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from mail-wg0-f54.google.com ([74.125.82.54]:41645 "EHLO
+	mail-wg0-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752351Ab3HZUnH (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Mon, 26 Aug 2013 16:43:07 -0400
+Received: by mail-wg0-f54.google.com with SMTP id e11so367026wgh.21
+        for <linux-modules@vger.kernel.org>; Mon, 26 Aug 2013 13:43:06 -0700 (PDT)
 MIME-Version: 1.0
 In-Reply-To: <1377541250-10193-1-git-send-email-maillist-kmod@barfooze.de>
 References: <1377541250-10193-1-git-send-email-maillist-kmod@barfooze.de>
-Date: Mon, 26 Aug 2013 20:46:46 -0300
-Message-ID: <CAKi4VAJJScguBb_mMaFwieTcq0VpRXLVpKaXKx0_4M+6DuU3Xg@mail.gmail.com>
+From: Kay Sievers <kay@vrfy.org>
+Date: Mon, 26 Aug 2013 22:42:46 +0200
+Message-ID: <CAPXgP12fHT79L47dRo3WbSCjBtc6Fkx5DNkH+ovhjojKH5iVSw@mail.gmail.com>
 Subject: Re: [PATCH 1/3] remove non-portable usage of strndupa
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
 To: John Spencer <maillist-kmod@barfooze.de>
-Cc: linux-modules <linux-modules@vger.kernel.org>
+Cc: linux-modules@vger.kernel.org
 Content-Type: text/plain; charset=UTF-8
+Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Aug 26, 2013 at 3:20 PM, John Spencer <maillist-kmod@barfooze.de> wrote:
+On Mon, Aug 26, 2013 at 8:20 PM, John Spencer <maillist-kmod@barfooze.de> wrote:
 > usage of strndupa is neither C99 nor POSIX,
 > so musl libc does not implement it.
 > it's a glibc invention, and a dangerous one since
 > usage of alloca() is considered bad practice.
 
-If the input is already sanitized and checked for length, this is
-isn't really dangerous. Particularly on recursive functions this also
-avoids growing the stack much more than needed.
+It's as dangerous as variable sized arrays, and surely much less "bad
+practice" than your introduced PATH_MAX. :)
 
->
-> fixes build with musl libc.
+If kmod declares posix-only interfaces as the goal, then it's fine,
+but your reasons do not make much sense in 2013.
 
-for me it seems more like an excuse to not implement it in musl.
-Particularly because there are other places in which we call alloca(),
-that you didn't complain. What does musl do there? If musl has
-alloca(), doing strndupa in missing.h would be doable.
-
->
-> Signed-off-by: John Spencer <maillist-kmod@barfooze.de>
->
-> ---
->  libkmod/libkmod-util.c |    8 ++++++--
->  1 files changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/libkmod/libkmod-util.c b/libkmod/libkmod-util.c
-> index d686250..9615d0f 100644
-> --- a/libkmod/libkmod-util.c
-> +++ b/libkmod/libkmod-util.c
-> @@ -28,6 +28,7 @@
->  #include <unistd.h>
->  #include <errno.h>
->  #include <string.h>
-> +#include <limits.h>
->  #include <ctype.h>
->
->  #include "libkmod.h"
-> @@ -323,8 +324,11 @@ static inline int is_dir(const char *path)
->  int mkdir_p(const char *path, int len, mode_t mode)
->  {
->         char *start, *end;
-> -
-> -       start = strndupa(path, len);
-> +       char buf[PATH_MAX+1];
-> +       snprintf(buf, sizeof buf, "%s", path);
-
-snprintf to dup a string? You already know the len. memcpy would be way simpler
-
-Lucas De Marchi
+Kay
