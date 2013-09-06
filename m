@@ -1,56 +1,44 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from furnace.wzff.de ([176.9.216.40]:48808 "EHLO furnace.wzff.de"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1752336Ab3HZTCt (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Mon, 26 Aug 2013 15:02:49 -0400
-From: John Spencer <maillist-kmod@barfooze.de>
-To: linux-modules@vger.kernel.org
-Cc: John Spencer <maillist-kmod@barfooze.de>
-Subject: [PATCH 1/3] remove non-portable usage of strndupa
-Date: Mon, 26 Aug 2013 20:20:48 +0200
-Message-Id: <1377541250-10193-1-git-send-email-maillist-kmod@barfooze.de>
+Received: from mail.windriver.com ([147.11.1.11]:46268 "EHLO
+	mail.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751009Ab3IFF7G (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Fri, 6 Sep 2013 01:59:06 -0400
+Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com [147.11.189.41])
+	by mail.windriver.com (8.14.5/8.14.3) with ESMTP id r865x5wI027633
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
+	for <linux-modules@vger.kernel.org>; Thu, 5 Sep 2013 22:59:05 -0700 (PDT)
+From: Randy MacLeod <Randy.MacLeod@windriver.com>
+To: <linux-modules@vger.kernel.org>
+CC: <randy.macleod@windriver.com>
+Subject: [PATCH] kmod: be32toh for older boxen
+Date: Fri, 6 Sep 2013 01:59:00 -0400
+Message-ID: <1378447141-11568-1-git-send-email-Randy.MacLeod@windriver.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-usage of strndupa is neither C99 nor POSIX,
-so musl libc does not implement it.
-it's a glibc invention, and a dangerous one since
-usage of alloca() is considered bad practice.
+The attached patch fixes kmod when built on RHEL-5.9.
+I need to do this for a yocto cross-compile.
+I've also built on Ubuntu-12.04.
 
-fixes build with musl libc.
+No run-time testing as the change seems simple enough.
 
-Signed-off-by: John Spencer <maillist-kmod@barfooze.de>
+Let me now if any changes are needed since this is my first
+patch to kmod.
 
----
- libkmod/libkmod-util.c |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+Thanks,
 
-diff --git a/libkmod/libkmod-util.c b/libkmod/libkmod-util.c
-index d686250..9615d0f 100644
---- a/libkmod/libkmod-util.c
-+++ b/libkmod/libkmod-util.c
-@@ -28,6 +28,7 @@
- #include <unistd.h>
- #include <errno.h>
- #include <string.h>
-+#include <limits.h>
- #include <ctype.h>
- 
- #include "libkmod.h"
-@@ -323,8 +324,11 @@ static inline int is_dir(const char *path)
- int mkdir_p(const char *path, int len, mode_t mode)
- {
- 	char *start, *end;
--
--	start = strndupa(path, len);
-+	char buf[PATH_MAX+1];
-+	snprintf(buf, sizeof buf, "%s", path);
-+	assert(len < sizeof(buf));
-+	buf[len] = 0;
-+	start = buf;
- 	end = start + len;
- 
- 	/*
+// Randy
+
+Randy MacLeod (1):
+  kmod-native: Add back-up implementation of be32toh().
+
+ configure.ac                |  1 +
+ libkmod/libkmod-signature.c | 14 +++++++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
 -- 
-1.7.3.4
+1.8.2.1
 
