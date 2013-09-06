@@ -1,81 +1,50 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from gerolde.archlinux.org ([66.211.214.132]:36988 "EHLO
-	gerolde.archlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751902Ab3ISO4L (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Thu, 19 Sep 2013 10:56:11 -0400
-From: Dave Reisner <dreisner@archlinux.org>
-To: linux-modules@vger.kernel.org
-Cc: Dave Reisner <dreisner@archlinux.org>
-Subject: [PATCH] static-nodes: add shell consumable format
-Date: Thu, 19 Sep 2013 10:48:56 -0400
-Message-Id: <1379602136-3937-1-git-send-email-dreisner@archlinux.org>
-Sender: linux-modules-owner@vger.kernel.org
+MIME-Version: 1.0
+In-Reply-To: <1378474024-5391-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1378474024-5391-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Sep 2013 11:34:00 -0300
+Message-ID: <CAKi4VAKW2Dq9Eau69Optn+uSwRQXwpcPY_knsKp+0qohTKhymA@mail.gmail.com>
+Subject: Re: [PATCHv2] Add configure check for _Static_assert()
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-This adds an additional format to kmod static-nodes, which writes
-output as shell commands, e.g.:
+Hi Thomas,
 
-  mknod '/dev/btrfs-control' c 10 234
-  mknod '/dev/loop-control' c 10 237
-  mkdir -m 755 -p '/dev/net'
-  mknod '/dev/net/tun' c 10 200
+On Fri, Sep 6, 2013 at 10:27 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Commit 8efede20ef ("Use _Static_assert") introduced the usage of
+> _Static_assert(). However, _Static_assert() is a fairly new thing,
+> since it was introduced only in gcc 4.6. In order to support older
+> compilers, this patch adds a configure.in test that checks whether
+> _Static_assert() is usable or not, and adjust the behavior of the
+> assert_cc() macro accordingly.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> Changes since v1:
+>  * When _Static_assert() is not available, rely on the previously used
+>    sizeof() trick, as suggested by Lucas de Marchi.
+> ---
+>  configure.ac    | 6 ++++++
+>  libkmod/macro.h | 5 +++++
+>  2 files changed, 11 insertions(+)
+>
+> diff --git a/configure.ac b/configure.ac
+> index 40e54cf..cbe12f3 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -52,6 +52,12 @@ AC_CHECK_MEMBERS([struct stat.st_mtim], [], [], [#include <sys/stat.h>])
+>  # Check kernel headers
+>  AC_CHECK_HEADERS_ONCE([linux/module.h])
+>
+> +AC_MSG_CHECKING([whether _Static_assert() is supported])
+> +AC_COMPILE_IFELSE(
+> +       [AC_LANG_SOURCE([[_Static_assert(1, "Test");]])],
+> +        [AC_DEFINE([HAVE_STATIC_ASSERT], [1], [Define is _Static_assert() is available])
 
-Consumers of this format can simply pipe the output to a shell,
-creating the necessary static nodes. This could be useful for an
-initramfs which doesn't have systemd-tmpfiles but which still relies on
-static node creation which recent udev will no longer handle.
----
- tools/static-nodes.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+I've fixed the typo s/is/if/ and pushed.
 
-diff --git a/tools/static-nodes.c b/tools/static-nodes.c
-index 0195390..2d68537 100644
---- a/tools/static-nodes.c
-+++ b/tools/static-nodes.c
-@@ -43,11 +43,13 @@ struct static_nodes_format {
- static const struct static_nodes_format static_nodes_format_human;
- static const struct static_nodes_format static_nodes_format_tmpfiles;
- static const struct static_nodes_format static_nodes_format_devname;
-+static const struct static_nodes_format static_nodes_format_shell;
- 
- static const struct static_nodes_format *static_nodes_formats[] = {
- 	&static_nodes_format_human,
- 	&static_nodes_format_tmpfiles,
- 	&static_nodes_format_devname,
-+	&static_nodes_format_shell,
- };
- 
- static const char cmdopts_s[] = "o:f:h";
-@@ -126,6 +128,28 @@ static const struct static_nodes_format static_nodes_format_devname = {
- 	.description = "the modules.devname format.",
- };
- 
-+static int write_shell(FILE *out, char modname[], char devname[], char type, unsigned int maj, unsigned int min)
-+{
-+	const char *dir = strrchr(devname, '/');
-+
-+	if (dir) {
-+		if (fprintf(out, "mkdir -m 755 -p '/dev/%.*s'\n",
-+					(int)(dir - devname), devname) < 0)
-+			return EXIT_FAILURE;
-+	}
-+
-+	if (fprintf(out, "mknod '/dev/%s' %c %u %u\n", devname, type, maj, min) < 0)
-+		return EXIT_FAILURE;
-+
-+	return EXIT_SUCCESS;
-+}
-+
-+static const struct static_nodes_format static_nodes_format_shell = {
-+	.name = "shell",
-+	.write = write_shell,
-+	.description = "mknod commands for consumption by a shell.",
-+};
-+
- static void help(void)
- {
- 	size_t i;
--- 
-1.8.4
-
+Thanks
+Lucas De Marchi
