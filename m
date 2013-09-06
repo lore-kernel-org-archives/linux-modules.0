@@ -1,57 +1,57 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-ee0-f42.google.com ([74.125.83.42]:65172 "EHLO
-	mail-ee0-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751671Ab3IJOUe (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Tue, 10 Sep 2013 10:20:34 -0400
-Received: by mail-ee0-f42.google.com with SMTP id b45so4010590eek.1
-        for <linux-modules@vger.kernel.org>; Tue, 10 Sep 2013 07:20:33 -0700 (PDT)
-From: Tom Gundersen <teg@jklm.no>
-To: linux-modules@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Tom Gundersen <teg@jklm.no>
-Subject: [PATCH] config: also parse softdeps from modules
-Date: Tue, 10 Sep 2013 16:21:45 +0200
-Message-Id: <1378822905-27687-1-git-send-email-teg@jklm.no>
-Sender: linux-modules-owner@vger.kernel.org
+Return-Path: <lucas.demarchi@profusion.mobi>
+MIME-Version: 1.0
+In-Reply-To: <20130829094932.20c35e84@skate>
+References: <1377704031-12501-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAKi4VALsZAMwKyT8U-Jcg+E_Hm_CyiwKJf+Kr3Y-JP_7Ze5D6w@mail.gmail.com> <20130829094932.20c35e84@skate>
+From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+Date: Fri, 6 Sep 2013 09:58:28 -0300
+Message-ID: <CAMOw1v6a87d36c4x7hihJs8xm-Xd+_gLwgQZCjSUnmVz0YE2xA@mail.gmail.com>
+Subject: Re: [PATCH] Add configure check for _Static_assert()
+To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>,
+	linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=ISO-8859-1
 List-ID: <linux-modules.vger.kernel.org>
 
-This information can be found in /lib/modules/`uname -r`/modules.softdep, and
-has only recently been exported by the kernel.
+On Thu, Aug 29, 2013 at 4:49 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Lucas De Marchi,
+>
+> On Thu, 29 Aug 2013 00:55:04 -0300, Lucas De Marchi wrote:
+>> Hi Thomas,
+>>
+>> On Wed, Aug 28, 2013 at 12:33 PM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>> > Commit 8efede20ef ("Use _Static_assert") introduced the usage of
+>> > _Static_assert(). However, _Static_assert() is a fairly new thing,
+>> > since it was introduced only in gcc 4.6. In order to support older
+>>
+>> What distro is still in gcc 4.6? Is it a LTS one?
+>
+> It's not a distro. As you know, I work on the Buildroot project, a tool
+> that builds rootfs for embedded Linux systems using cross-compilation.
+> One of the package we have is obviously kmod, but since we support a
+> wide range of architectures, not all of them are necessarily fully
+> up-to-date in terms of compiler version. The specific example that
+> raised the problem is a gcc 4.5.x toolchain for PowerPC provided by
+> Mentor Graphics Sourcery CodeBench (formerly known as CodeSourcery).
+>
+>> > +#if defined(HAVE_STATIC_ASSERT)
+>> >  #define assert_cc(expr) \
+>> >         _Static_assert((expr), #expr)
+>> > +#else
+>> > +#define assert_cc(expr)
+>>
+>> could you then define it similarly to what it was before then in this #else?
+>>
+>> I think this would do it (totally untested) with the downside of an
+>> ugly build error.
+>>
+>> #define assert_cc(expr) \
+>>        do { (void) sizeof(char [1 - 2*!(expr)]); } while(0)
+>
+> Sure, will fix this and resend.
 
-Also remove the advice about copying modules.softdep to /lib/modules as it is
-not clear how to do this correctly with several kernels installed with
-potentially conflicting soft dependencies.
----
- libkmod/libkmod-config.c | 2 ++
- tools/depmod.c           | 2 --
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Ping.
 
-diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
-index 24978c1..809815a 100644
---- a/libkmod/libkmod-config.c
-+++ b/libkmod/libkmod-config.c
-@@ -879,6 +879,8 @@ int kmod_config_new(struct kmod_ctx *ctx, struct kmod_config **p_config,
- 	struct kmod_list *path_list = NULL;
- 	size_t i;
- 
-+	conf_files_insert_sorted(ctx, &list, kmod_get_dirname(ctx), "modules.softdep");
-+
- 	for (i = 0; config_paths[i] != NULL; i++) {
- 		const char *path = config_paths[i];
- 		unsigned long long path_stamp = 0;
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 5855b2a..3d45c83 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -1963,8 +1963,6 @@ static int output_softdeps(struct depmod *depmod, FILE *out)
- 	size_t i;
- 
- 	fputs("# Soft dependencies extracted from modules themselves.\n", out);
--	fputs("# Copy, with a .conf extension, to /etc/modprobe.d to use "
--	      "it with modprobe.\n", out);
- 
- 	for (i = 0; i < depmod->modules.count; i++) {
- 		const struct mod *mod = depmod->modules.array[i];
--- 
-1.8.4
-
+Lucas De Marchi
