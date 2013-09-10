@@ -1,63 +1,57 @@
-MIME-Version: 1.0
-In-Reply-To: <20130725020329.GA14625@gondor.apana.org.au>
-References: <20130724071757.GA30970@gondor.apana.org.au>
-	<87siz38q2t.fsf@rustcorp.com.au>
-	<20130725020329.GA14625@gondor.apana.org.au>
-Date: Tue, 10 Sep 2013 11:01:38 -0300
-Message-ID: <CAKi4VA+=1vOOt0BqdQHQaeF1hP3DrRtCL_ObXY0cPeO7S_MtYw@mail.gmail.com>
-Subject: Re: [PATCH] modules: add support for soft module dependencies
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Rusty Russell <rusty@rustcorp.com.au>, Andreas Robinson <andr345@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Zhao Hongjiang <zhaohongjiang@huawei.com>,
-	David Miller <davem@davemloft.net>, tim.c.chen@linux.intel.com,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, linux-crypto@vger.kernel.org,
-	linux-modules <linux-modules@vger.kernel.org>, Tom Gundersen <teg@jklm.no>
-Content-Type: text/plain; charset=UTF-8
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from mail-ee0-f42.google.com ([74.125.83.42]:65172 "EHLO
+	mail-ee0-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751671Ab3IJOUe (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Tue, 10 Sep 2013 10:20:34 -0400
+Received: by mail-ee0-f42.google.com with SMTP id b45so4010590eek.1
+        for <linux-modules@vger.kernel.org>; Tue, 10 Sep 2013 07:20:33 -0700 (PDT)
+From: Tom Gundersen <teg@jklm.no>
+To: linux-modules@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Tom Gundersen <teg@jklm.no>
+Subject: [PATCH] config: also parse softdeps from modules
+Date: Tue, 10 Sep 2013 16:21:45 +0200
+Message-Id: <1378822905-27687-1-git-send-email-teg@jklm.no>
+Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jul 24, 2013 at 11:03 PM, Herbert Xu
-<herbert@gondor.apana.org.au> wrote:
-> On Thu, Jul 25, 2013 at 09:32:02AM +0930, Rusty Russell wrote:
->> Herbert Xu <herbert@gondor.apana.org.au> writes:
->> > Hi Rusty:
->> >
->> > I don't know why this patch never went into the kernel, even
->> > though the corresponding features have been added to modprobe
->> > in most if not all distros.
->>
->> Because Andreas never sent me the patch?  This is the first I've *heard*
->> of this feature.  Looks like it didn't hit lkml either.  And what was
->> 2/2?
->
-> 2/2 was the patch to actually use this in crc32c.
->
->> It's not how I would have done this: post-deps are more flexibly done at
->> runtime, because the module may have to do work to figure out what to
->> pull in.  But since it already exists, I'll apply this patch: it doesn't
->> cost the kernel anything.
+This information can be found in /lib/modules/`uname -r`/modules.softdep, and
+has only recently been exported by the kernel.
 
-But it did cause boot failures. The file modules.softdep file was
-supposed to be informational until now. That's why depmod put a
-comment saying to "copy on user's discretion to /etc/modules.d"
-instead of parsing it directly.
+Also remove the advice about copying modules.softdep to /lib/modules as it is
+not clear how to do this correctly with several kernels installed with
+potentially conflicting soft dependencies.
+---
+ libkmod/libkmod-config.c | 2 ++
+ tools/depmod.c           | 2 --
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-If dependencies expressed with softdeps can be required dependencies
-now, depmod needs to be updated to work it out otherwise we will get
-missing dependencies as happened with the crypto stuff after this
-patch. I'm CC'ing Tom who had the boot failure; it looks like the same
-boot failure that caused this feature to get reverted the first time
-(the deps being required by sd_mod).
+diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
+index 24978c1..809815a 100644
+--- a/libkmod/libkmod-config.c
++++ b/libkmod/libkmod-config.c
+@@ -879,6 +879,8 @@ int kmod_config_new(struct kmod_ctx *ctx, struct kmod_config **p_config,
+ 	struct kmod_list *path_list = NULL;
+ 	size_t i;
+ 
++	conf_files_insert_sorted(ctx, &list, kmod_get_dirname(ctx), "modules.softdep");
++
+ 	for (i = 0; config_paths[i] != NULL; i++) {
+ 		const char *path = config_paths[i];
+ 		unsigned long long path_stamp = 0;
+diff --git a/tools/depmod.c b/tools/depmod.c
+index 5855b2a..3d45c83 100644
+--- a/tools/depmod.c
++++ b/tools/depmod.c
+@@ -1963,8 +1963,6 @@ static int output_softdeps(struct depmod *depmod, FILE *out)
+ 	size_t i;
+ 
+ 	fputs("# Soft dependencies extracted from modules themselves.\n", out);
+-	fputs("# Copy, with a .conf extension, to /etc/modprobe.d to use "
+-	      "it with modprobe.\n", out);
+ 
+ 	for (i = 0; i < depmod->modules.count; i++) {
+ 		const struct mod *mod = depmod->modules.array[i];
+-- 
+1.8.4
 
-Even if it is an optional module, it would be great to have depmod
-updated so it parses the file directly now that we are exporting this
-info. I can do that once we agree what we want to do with softdeps
-coming directly from kernel itself.
-
-However looking at the only user right now, crct10dif: couldn't we
-detect at runtime if this module can be used instead of just trying to
-load it as a pre softdep and possibly failing?
-
-
-Lucas De Marchi
