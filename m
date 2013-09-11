@@ -1,44 +1,81 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail.windriver.com ([147.11.1.11]:46268 "EHLO
-	mail.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751009Ab3IFF7G (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Fri, 6 Sep 2013 01:59:06 -0400
-Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com [147.11.189.41])
-	by mail.windriver.com (8.14.5/8.14.3) with ESMTP id r865x5wI027633
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
-	for <linux-modules@vger.kernel.org>; Thu, 5 Sep 2013 22:59:05 -0700 (PDT)
-From: Randy MacLeod <Randy.MacLeod@windriver.com>
-To: <linux-modules@vger.kernel.org>
-CC: <randy.macleod@windriver.com>
-Subject: [PATCH] kmod: be32toh for older boxen
-Date: Fri, 6 Sep 2013 01:59:00 -0400
-Message-ID: <1378447141-11568-1-git-send-email-Randy.MacLeod@windriver.com>
+Return-Path: <stern+52301582@rowland.harvard.edu>
+Date: Wed, 11 Sep 2013 10:29:09 -0400 (EDT)
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+cc: Tom Gundersen <teg@jklm.no>,  <linux-usb@vger.kernel.org>,
+    LKML <linux-kernel@vger.kernel.org>,
+    "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] usb: ohci/uhci - add soft dependencies on ehci_hcd
+In-Reply-To: <CAKi4VAJeXoBu=kr8nhMJFneNwGFP8TFiDNNzdwQC4imyefe_jQ@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1309111015000.1352-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-Sender: linux-modules-owner@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 List-ID: <linux-modules.vger.kernel.org>
 
-The attached patch fixes kmod when built on RHEL-5.9.
-I need to do this for a yocto cross-compile.
-I've also built on Ubuntu-12.04.
+On Tue, 10 Sep 2013, Lucas De Marchi wrote:
 
-No run-time testing as the change seems simple enough.
+> >>> > The ordering is more of a recommendation than a necessity.  Systems
+> >>> > should work oksy if the modules are loaded in the wrong order.
+> >>> >
+> >>> > The only issue if the drivers are loaded in the wrong order is that
+> >>> > full- and low-speed devices will end up being detected and enumerated
+> >>> > twice, with a disconnection in between.  This can result in
+> >>> > disconcerting messages appearing in the system log.
+> >>> >
+> >>> > In theory, it is possible for a problem to arise.  For example, suppose
+> >>> > a full-speed flash drive is plugged in when the system starts up.
+> >>> > When uhci-hcd or ohci-hcd gets loaded, the drive will be detected and
+> >>> > it may even be mounted.  Then when ehci-hcd loads, the drive will get
+> >>> > disconnected and reconnected.  Any open file references to the original
+> >>> > mount will be orphaned.
+> 
+> Then IMO it should not only be advised to have this dependency, but
+> also require it.
 
-Let me now if any changes are needed since this is my first
-patch to kmod.
+Requiring the ordering won't fix all the possible problems.  For
+example, ehci-pci might be compiled into the kernel while ohci-pci is
+built as a module (although this probably could be prevented by
+tweaking the Kconfig file).
 
-Thanks,
+> >> So this means that before installing ohci-hcd, modprobe would attempt
+> >> to install ehci-hcd?  And if the attempt failed, it would go ahead and
+> >> load ohci-hcd anyway?
+> >
+> > Exactly.
+> 
+> Not really. If we try to load the module, but then fail we fail the
+> operation altogether. Whereas if the module simply doesn't exist, then
+> we carry on. In reality what we do is to assume the indexes and
+> softdeps in configuration are correct)
 
-// Randy
+What if somebody really does want to load ohci-pci without loading 
+ehci-pci?  That is a perfectly valid thing to do (and I often want to 
+do it for testing).
 
-Randy MacLeod (1):
-  kmod-native: Add back-up implementation of be32toh().
+It sounds like the only way to accomplish this would be to load both 
+and then unload ehci-pci.  Yes?  Or would that unload ohci-pci as well?
 
- configure.ac                |  1 +
- libkmod/libkmod-signature.c | 14 +++++++++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+> >> What about during unloading?  Would this mean that rmmod ohci-hcd would
+> >> automatically cause ehci-hcd to be unloaded also?  Or would unloading
+> >> ehci-hcd cause ohci-hcd to be unloaded?
+> >
+> > No, unloading does not care about dependencies.
+> 
+> modprobe -r will remove then as well, in the opposite order, i.e. post
+> softdep, module, pre softdep.  However this applies only to modprobe,
+> not to the related function in libkmod since it would be weird to
+> other programs using this library function.
 
--- 
-1.8.2.1
+Aside from testing, people hardly ever unload drivers.  So this is a 
+relatively minor concern.
 
+> Try playing with this in /etc/modprobe.d/bla.conf (and replace echo
+> with whatever unknown command to test a failure scenario):
+> install bla echo install bla
+> remove bla echo remove bla
+> softdep sr_mod pre: bla
+
+Good recommendation.
+
+Alan Stern
