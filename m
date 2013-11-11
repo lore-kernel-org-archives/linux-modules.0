@@ -1,53 +1,37 @@
-Return-Path: <lucas.de.marchi@gmail.com>
-Received: from localhost.localdomain (ip-64-134-188-214.public.wayport.net. [64.134.188.214])
-        by mx.google.com with ESMTPSA id u52sm27473992yhg.5.2013.11.18.06.04.59
-        for <linux-modules@vger.kernel.org>
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Nov 2013 06:05:01 -0800 (PST)
+MIME-Version: 1.0
+In-Reply-To: <A612847CFE53224C91B23E3A5B48BAC7A40ECEF7D1@xmail3.se.axis.com>
+References: <A612847CFE53224C91B23E3A5B48BAC7A40ECEF7D1@xmail3.se.axis.com>
+Date: Sun, 10 Nov 2013 23:43:33 -0200
+Message-ID: <CAKi4VA+PpeN=9csRHWOE32RfhQ7VJqTyiHJvhSy954U8m72JqA@mail.gmail.com>
+Subject: Re: Patch to allow disabling maintainer mode
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: linux-modules@vger.kernel.org
-Subject: [PATCH 2/9] util: Add cleanup attribute
-Date: Mon, 18 Nov 2013 12:04:20 -0200
-Message-Id: <1384783467-23476-3-git-send-email-lucas.demarchi@intel.com>
-In-Reply-To: <1384783467-23476-1-git-send-email-lucas.demarchi@intel.com>
-References: <1384783467-23476-1-git-send-email-lucas.demarchi@intel.com>
+To: Anders Olofsson <anders.olofsson@axis.com>
+Cc: "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
----
- libkmod/libkmod-util.h | 7 +++++++
- libkmod/macro.h        | 1 +
- 2 files changed, 8 insertions(+)
+Hi Anders,
 
-diff --git a/libkmod/libkmod-util.h b/libkmod/libkmod-util.h
-index 8a70aeb..bc1ed4d 100644
---- a/libkmod/libkmod-util.h
-+++ b/libkmod/libkmod-util.h
-@@ -3,6 +3,7 @@
- 
- #include <limits.h>
- #include <stdbool.h>
-+#include <stdlib.h>
- #include <stdio.h>
- #include <sys/types.h>
- #include <sys/stat.h>
-@@ -56,3 +57,9 @@ static _always_inline_ unsigned int ALIGN_POWER2(unsigned int u)
- {
- 	return 1 << ((sizeof(u) * 8) - __builtin_clz(u - 1));
- }
-+
-+static inline void freep(void *p) {
-+        free(*(void**) p);
-+}
-+
-+#define _cleanup_free_ _cleanup_(freep)
-diff --git a/libkmod/macro.h b/libkmod/macro.h
-index 7969072..5396598 100644
---- a/libkmod/macro.h
-+++ b/libkmod/macro.h
-@@ -57,3 +57,4 @@
- #define _printf_format_(a,b) __attribute__((format (printf, a, b)))
- #define _unused_ __attribute__((unused))
- #define _always_inline_ __inline__ __attribute__((always_inline))
-+#define _cleanup_(x) __attribute__((cleanup(x)))
--- 
-1.8.4.2
+On Sat, Nov 9, 2013 at 7:57 PM, Anders Olofsson
+<anders.olofsson@axis.com> wrote:
+> The attached patch will allow make rules for generated build files (i.e. =
+configure, Makefile.in, ... ) to be skipped.
+> This is useful when the source is stored without timestamps (for example =
+in CVS or GIT).
+>
+> When the build rules trigger to regenerate the build files, it tries to u=
+se the same autotools version (currently 1.14) as was originally used for t=
+he release. Since many of our build machines run Debian Squeeze, they only =
+have autotools 1.11 available and the build fails.
+>
+> Currently, we have to work around this by touching all the generated file=
+s before building to avoid triggering the make rule. With this patch, we wo=
+uld be able to just run configure with --disable-maintainer-mode instead.
+> The patch sets the default to enable to not change the default behavior.
+
+The patch has been applied. Please next time send a properly
+git-formatted patch so I don't have to hand edit it.
+
+Thanks
+
+Lucas De Marchi
