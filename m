@@ -1,93 +1,53 @@
 Return-Path: <lucas.de.marchi@gmail.com>
 Received: from localhost.localdomain (ip-64-134-188-214.public.wayport.net. [64.134.188.214])
-        by mx.google.com with ESMTPSA id u52sm27473992yhg.5.2013.11.18.06.05.15
+        by mx.google.com with ESMTPSA id u52sm27473992yhg.5.2013.11.18.06.05.18
         for <linux-modules@vger.kernel.org>
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Nov 2013 06:05:17 -0800 (PST)
+        Mon, 18 Nov 2013 06:05:20 -0800 (PST)
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
 To: linux-modules@vger.kernel.org
-Subject: [PATCH 7/9] array: avoid duplicate code to reallocate
-Date: Mon, 18 Nov 2013 12:04:25 -0200
-Message-Id: <1384783467-23476-8-git-send-email-lucas.demarchi@intel.com>
+Subject: [PATCH 8/9] file: use _cleanup_free_
+Date: Mon, 18 Nov 2013 12:04:26 -0200
+Message-Id: <1384783467-23476-9-git-send-email-lucas.demarchi@intel.com>
 In-Reply-To: <1384783467-23476-1-git-send-email-lucas.demarchi@intel.com>
 References: <1384783467-23476-1-git-send-email-lucas.demarchi@intel.com>
 List-ID: <linux-modules.vger.kernel.org>
 
 ---
- libkmod/libkmod-array.c | 38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ libkmod/libkmod-file.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/libkmod/libkmod-array.c b/libkmod/libkmod-array.c
-index 8417f9a..1082deb 100644
---- a/libkmod/libkmod-array.c
-+++ b/libkmod/libkmod-array.c
-@@ -28,6 +28,17 @@
- 
- /* basic pointer array growing in steps */
- 
-+
-+static int array_realloc(struct array *array, size_t new_total)
-+{
-+	void *tmp = realloc(array->array, sizeof(void *) * new_total);
-+	if (tmp == NULL)
-+		return -ENOMEM;
-+	array->array = tmp;
-+	array->total = new_total;
-+	return 0;
-+}
-+
- void array_init(struct array *array, size_t step)
+diff --git a/libkmod/libkmod-file.c b/libkmod/libkmod-file.c
+index 390f018..feb4a15 100644
+--- a/libkmod/libkmod-file.c
++++ b/libkmod/libkmod-file.c
+@@ -175,13 +175,12 @@ static int load_zlib(struct kmod_file *file)
  {
- 	assert(step > 0);
-@@ -42,13 +53,9 @@ int array_append(struct array *array, const void *element)
- 	size_t idx;
+ 	int err = 0;
+ 	off_t did = 0, total = 0;
+-	unsigned char *p = NULL;
++	_cleanup_free_ unsigned char *p = NULL;
  
- 	if (array->count + 1 >= array->total) {
--		size_t new_total = array->total + array->step;
--		void *tmp = realloc(array->array, sizeof(void *) * new_total);
--		assert(array->step > 0);
--		if (tmp == NULL)
--			return -ENOMEM;
--		array->array = tmp;
--		array->total = new_total;
-+		int r = array_realloc(array, array->total + array->step);
-+		if (r < 0)
-+			return r;
- 	}
- 	idx = array->count;
- 	array->array[idx] = (void *)element;
-@@ -69,13 +76,9 @@ int array_append_unique(struct array *array, const void *element)
- void array_pop(struct array *array) {
- 	array->count--;
- 	if (array->count + array->step < array->total) {
--		size_t new_total = array->total - array->step;
--		void *tmp = realloc(array->array, sizeof(void *) * new_total);
--		assert(array->step > 0);
--		if (tmp == NULL)
-+		int r = array_realloc(array, array->total - array->step);
-+		if (r < 0)
- 			return;
--		array->array = tmp;
--		array->total = new_total;
- 	}
- }
+ 	errno = 0;
+ 	file->gzf = gzdopen(file->fd, "rb");
+-	if (file->gzf == NULL) {
++	if (file->gzf == NULL)
+ 		return -errno;
+-	}
+ 	file->fd = -1; /* now owned by gzf due gzdopen() */
  
-@@ -102,13 +105,10 @@ int array_remove_at(struct array *array, unsigned int pos)
- 			sizeof(void *) * (array->count - pos));
+ 	for (;;) {
+@@ -215,9 +214,10 @@ static int load_zlib(struct kmod_file *file)
  
- 	if (array->count + array->step < array->total) {
--		size_t new_total = array->total - array->step;
--		void *tmp = realloc(array->array, sizeof(void *) * new_total);
--		assert(array->step > 0);
--		if (tmp == NULL)
-+		int r = array_realloc(array, array->total - array->step);
-+		/* ignore error */
-+		if (r < 0)
- 			return 0;
--		array->array = tmp;
--		array->total = new_total;
- 	}
- 
+ 	file->memory = p;
+ 	file->size = did;
++	p = NULL;
  	return 0;
++
+ error:
+-	free(p);
+ 	gzclose(file->gzf);
+ 	return err;
+ }
 -- 
 1.8.4.2
