@@ -1,69 +1,93 @@
 Return-Path: <lucas.de.marchi@gmail.com>
 Received: from localhost.localdomain (ip-64-134-188-214.public.wayport.net. [64.134.188.214])
-        by mx.google.com with ESMTPSA id u52sm27473992yhg.5.2013.11.18.06.05.21
+        by mx.google.com with ESMTPSA id u52sm27473992yhg.5.2013.11.18.06.05.15
         for <linux-modules@vger.kernel.org>
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Nov 2013 06:05:24 -0800 (PST)
+        Mon, 18 Nov 2013 06:05:17 -0800 (PST)
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
 To: linux-modules@vger.kernel.org
-Subject: [PATCH 9/9] module: use _cleanup_free and remove useless call to free()
-Date: Mon, 18 Nov 2013 12:04:27 -0200
-Message-Id: <1384783467-23476-10-git-send-email-lucas.demarchi@intel.com>
+Subject: [PATCH 7/9] array: avoid duplicate code to reallocate
+Date: Mon, 18 Nov 2013 12:04:25 -0200
+Message-Id: <1384783467-23476-8-git-send-email-lucas.demarchi@intel.com>
 In-Reply-To: <1384783467-23476-1-git-send-email-lucas.demarchi@intel.com>
 References: <1384783467-23476-1-git-send-email-lucas.demarchi@intel.com>
 List-ID: <linux-modules.vger.kernel.org>
 
 ---
- libkmod/libkmod-module.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ libkmod/libkmod-array.c | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 3adbb69..2f92e16 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -252,10 +252,8 @@ static int kmod_module_new(struct kmod_ctx *ctx, const char *key,
- 		keylen = namelen + aliaslen + 1;
+diff --git a/libkmod/libkmod-array.c b/libkmod/libkmod-array.c
+index 8417f9a..1082deb 100644
+--- a/libkmod/libkmod-array.c
++++ b/libkmod/libkmod-array.c
+@@ -28,6 +28,17 @@
  
- 	m = malloc(sizeof(*m) + (alias == NULL ? 1 : 2) * (keylen + 1));
--	if (m == NULL) {
--		free(m);
-+	if (m == NULL)
- 		return -ENOMEM;
--	}
+ /* basic pointer array growing in steps */
  
- 	memset(m, 0, sizeof(*m));
- 
-@@ -971,7 +969,8 @@ static int module_do_install_commands(struct kmod_module *mod,
- 					struct probe_insert_cb *cb)
- {
- 	const char *command = kmod_module_get_install_commands(mod);
--	char *p, *cmd;
-+	char *p;
-+	_cleanup_free_ char *cmd;
- 	int err;
- 	size_t cmdlen, options_len, varlen;
- 
-@@ -994,10 +993,9 @@ static int module_do_install_commands(struct kmod_module *mod,
- 		size_t slen = cmdlen - varlen + options_len;
- 		char *suffix = p + varlen;
- 		char *s = malloc(slen + 1);
--		if (s == NULL) {
--			free(cmd);
-+		if (!s)
- 			return -ENOMEM;
--		}
 +
- 		memcpy(s, cmd, p - cmd);
- 		memcpy(s + prefixlen, options, options_len);
- 		memcpy(s + prefixlen + options_len, suffix, suffixlen);
-@@ -1013,8 +1011,6 @@ static int module_do_install_commands(struct kmod_module *mod,
- 	else
- 		err = command_do(mod, "install", cmd);
++static int array_realloc(struct array *array, size_t new_total)
++{
++	void *tmp = realloc(array->array, sizeof(void *) * new_total);
++	if (tmp == NULL)
++		return -ENOMEM;
++	array->array = tmp;
++	array->total = new_total;
++	return 0;
++}
++
+ void array_init(struct array *array, size_t step)
+ {
+ 	assert(step > 0);
+@@ -42,13 +53,9 @@ int array_append(struct array *array, const void *element)
+ 	size_t idx;
  
--	free(cmd);
--
- 	return err;
+ 	if (array->count + 1 >= array->total) {
+-		size_t new_total = array->total + array->step;
+-		void *tmp = realloc(array->array, sizeof(void *) * new_total);
+-		assert(array->step > 0);
+-		if (tmp == NULL)
+-			return -ENOMEM;
+-		array->array = tmp;
+-		array->total = new_total;
++		int r = array_realloc(array, array->total + array->step);
++		if (r < 0)
++			return r;
+ 	}
+ 	idx = array->count;
+ 	array->array[idx] = (void *)element;
+@@ -69,13 +76,9 @@ int array_append_unique(struct array *array, const void *element)
+ void array_pop(struct array *array) {
+ 	array->count--;
+ 	if (array->count + array->step < array->total) {
+-		size_t new_total = array->total - array->step;
+-		void *tmp = realloc(array->array, sizeof(void *) * new_total);
+-		assert(array->step > 0);
+-		if (tmp == NULL)
++		int r = array_realloc(array, array->total - array->step);
++		if (r < 0)
+ 			return;
+-		array->array = tmp;
+-		array->total = new_total;
+ 	}
  }
  
+@@ -102,13 +105,10 @@ int array_remove_at(struct array *array, unsigned int pos)
+ 			sizeof(void *) * (array->count - pos));
+ 
+ 	if (array->count + array->step < array->total) {
+-		size_t new_total = array->total - array->step;
+-		void *tmp = realloc(array->array, sizeof(void *) * new_total);
+-		assert(array->step > 0);
+-		if (tmp == NULL)
++		int r = array_realloc(array, array->total - array->step);
++		/* ignore error */
++		if (r < 0)
+ 			return 0;
+-		array->array = tmp;
+-		array->total = new_total;
+ 	}
+ 
+ 	return 0;
 -- 
 1.8.4.2
