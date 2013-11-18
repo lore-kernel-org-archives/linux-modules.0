@@ -1,51 +1,54 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-vb0-f48.google.com ([209.85.212.48]:44121 "EHLO
-	mail-vb0-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753803Ab3KKT2l (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 11 Nov 2013 14:28:41 -0500
-Received: by mail-vb0-f48.google.com with SMTP id m10so1118675vbh.7
-        for <linux-modules@vger.kernel.org>; Mon, 11 Nov 2013 11:28:40 -0800 (PST)
-MIME-Version: 1.0
-In-Reply-To: <509C4944.3040907@redhat.com>
-References: <509C4944.3040907@redhat.com>
-From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-Date: Mon, 11 Nov 2013 17:28:20 -0200
-Message-ID: <CAMOw1v6xtqE4yTt4CBJ0fZP_wan2EOuPD8052L6Y_RU4g62agg@mail.gmail.com>
-Subject: Re: [announce] python-kmod 0.9
-To: Andy Grover <agrover@redhat.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>, wking@tremily.us
-Content-Type: text/plain; charset=ISO-8859-1
-Sender: linux-modules-owner@vger.kernel.org
+Return-Path: <lucas.de.marchi@gmail.com>
+Received: from localhost.localdomain (ip-64-134-188-214.public.wayport.net. [64.134.188.214])
+        by mx.google.com with ESMTPSA id u52sm27473992yhg.5.2013.11.18.06.04.50
+        for <linux-modules@vger.kernel.org>
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 18 Nov 2013 06:04:53 -0800 (PST)
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules@vger.kernel.org
+Subject: [PATCH 0/9] use cleanup attribute + misc patches
+Date: Mon, 18 Nov 2013 12:04:18 -0200
+Message-Id: <1384783467-23476-1-git-send-email-lucas.demarchi@intel.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Nov 8, 2012 at 10:07 PM, Andy Grover <agrover@redhat.com> wrote:
-> Hi all,
->
-> I'd like to announce python-kmod 0.9. It is available here:
->
-> https://github.com/agrover/python-kmod
-> git://github.com/agrover/python-kmod.git
-> https://github.com/downloads/agrover/python-kmod/python-kmod-0.9.tar.gz
->
-> A gentleman named W. Trevor King basically rewrote it from the ground up
-> using Cython, a language that bridges the gap between C and Python.
-> These changes make python-kmod Python 3 compatible, as well as enabling
-> the Python API to fully express libkmod's featureset.
->
-> Anyways, this was a big change, so I wanted to announce it. :)
->
-> Regards -- Andy
->
-> p.s. btw I've worked on some other libs where core devs wanted to pull
-> in Python bindings to their tree. Not asking for this, but not opposed,
-> if desired. :) -a
+With this patch set libkmod is now using attribute cleanup. It's working here
+for me, but please give it a look.
 
-Hey. I think I replied once that this could be better left off in its
-own repository. However I'm reconsidering this now... if you are still
-interested in merging into kmod, I think it would be good.
+There are also some minor improvements, such as adding OOM checks.
 
+Lucas De Marchi (9):
+  testsuite: Move test-alias to test-util
+  util: Add cleanup attribute
+  config: Use _cleanup_free_
+  util: use _cleanup_free_ on path_make_absolute_cwd()
+  testsuite: add basic test for getline_wrapped
+  util: Be OOM-safe and use _cleanup_free_
+  array: avoid duplicate code to reallocate
+  file: use _cleanup_free_
+  module: use _cleanup_free and remove useless call to free()
 
-Regards,
+ Makefile.am                                        |   6 +-
+ libkmod/libkmod-array.c                            |  38 ++++----
+ libkmod/libkmod-config.c                           |  62 +++++-------
+ libkmod/libkmod-file.c                             |   8 +-
+ libkmod/libkmod-module.c                           |  14 +--
+ libkmod/libkmod-util.c                             |  52 ++++++----
+ libkmod/libkmod-util.h                             |   7 ++
+ libkmod/macro.h                                    |   1 +
+ testsuite/.gitignore                               |   6 +-
+ testsuite/rootfs-pristine/test-alias/correct.txt   |  25 -----
+ .../rootfs-pristine/test-util/alias-correct.txt    |  25 +++++
+ .../test-util/getline_wrapped-correct.txt          |   6 ++
+ .../test-util/getline_wrapped-input.txt            |   6 ++
+ testsuite/test-alias.c                             |  75 ---------------
+ testsuite/test-util.c                              | 106 +++++++++++++++++++++
+ 15 files changed, 238 insertions(+), 199 deletions(-)
+ delete mode 100644 testsuite/rootfs-pristine/test-alias/correct.txt
+ create mode 100644 testsuite/rootfs-pristine/test-util/alias-correct.txt
+ create mode 100644 testsuite/rootfs-pristine/test-util/getline_wrapped-correct.txt
+ create mode 100644 testsuite/rootfs-pristine/test-util/getline_wrapped-input.txt
+ delete mode 100644 testsuite/test-alias.c
+ create mode 100644 testsuite/test-util.c
 
-Lucas De Marchi
+-- 
+1.8.4.2
