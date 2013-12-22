@@ -1,80 +1,69 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from server102.greatnet.de ([83.133.97.2]:47095 "EHLO
-	server102.greatnet.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1755875Ab3LSShz (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Thu, 19 Dec 2013 13:37:55 -0500
-Received: from [0.0.0.0] (linux.hrz.fh-zwickau.de [141.32.208.202])
-	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by server102.greatnet.de (Postfix) with ESMTPSA id BD42998553F
-	for <linux-modules@vger.kernel.org>; Thu, 19 Dec 2013 19:31:53 +0100 (CET)
-Message-ID: <52B33B88.2090306@mageta.org>
-Date: Thu, 19 Dec 2013 19:31:36 +0100
-From: Benjamin Block <bebl@mageta.org>
-Reply-To: bebl@mageta.org
 MIME-Version: 1.0
-To: linux-modules@vger.kernel.org
-Subject: Can't load modules with parameters given
-Content-Type: multipart/signed; micalg=pgp-sha1;
- protocol="application/pgp-signature";
- boundary="9UOMIv22dn20vBlpR73DuB63fqJ5moAPv"
-Sender: linux-modules-owner@vger.kernel.org
+Date: Sun, 22 Dec 2013 19:50:00 -0200
+Message-ID: <CAKi4VAKfaMwe6kiP0mqcRwZ5Y_sL858q0ue85VAbcsNAEx=VYA@mail.gmail.com>
+Subject: [ANNOUNCE] kmod 16
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules <linux-modules@vger.kernel.org>
+Cc: Rusty Russell <rusty@rustcorp.com.au>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---9UOMIv22dn20vBlpR73DuB63fqJ5moAPv
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+kmod 16 is out:
 
-Hi,
+ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-16.tar.xz
+ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-16.tar.sign
 
-I have a rather strange problem currently. I am trying to load a module
-with some parameters (bnx2x with disable_tpa=3D1) and it fails because
-this parameter is unknown according to dmesg. But modinfo lists this
-exact paramter and it is also included in the source. And while this is
-not an in-tree driver, I could also replicate the same behavior with
-in-tree device drivers (like bonding with the parameter tx_queues):
+Most important change besides the bug fixes are:
 
-$ modprobe bonding # works fine
-$ rmmod bonding
-$ modprobe bonding tx_queues=3D32
-modprobe: ERROR: could not insert 'bonding': Unknown symbol in module,
-or unknown parameter (see dmesg)
+ * we don't have an option in rmmod to wait module removal anymore.
+This is gone from kernel and now is gone from kmod too. The constant
+KMOD_REMOVE_NOWAIT in libkmod is still there for backward
+compatibility but it's always enforced, passing O_NONBLOCK to
+delete_module(2).
 
-and dmesg tells me:
-	bonding: Unknown parameter `tx_queues'
-and nothing else (as with bnx2x, this parameter is listed by modinfo).
+ * warn on wrong devname specification in depmod to help kernel
+developers catch the bug earlier.
 
-Is there some obvious kernel-config-option I could have messed up or
-something else like this?
-
-I am using a Gentoo-Userspace kmod (v15) with a Ubuntu-Kernel (3.8.13.13
-- this is a version with some ubuntu-patches applied) - I know, the
-combination is rather strange. Any ideas?
-
-best regards,
-- Benjamin
+Shortlog is below.
 
 
---9UOMIv22dn20vBlpR73DuB63fqJ5moAPv
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+Lucas De Marchi
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.22 (GNU/Linux)
+---
 
-iQGcBAEBAgAGBQJSszuYAAoJEEbgTgVnoy6eAhYL/2ffxnqGorcQglgf/qoy+PSR
-q9UhnO00v4eazh1nVlFnmXYzPCUtjRuknx7DuhMytQmjQZDNR7bkPjBu1Mv2nnE5
-r6Vcl+Q2LaqX1qhH8zp5HBcyheE0RWbmDmqMzoQZA5EGDYQBSJwRprlLcZ6eqfXd
-VbfMhbXhT7eaibBGCfv/nzBhovSwLZ1fmM0h1rhqhD0PPS9CkfFZ5cBbc4qTsIUs
-e3WUlpa3iGo30GkCE4CXZOf4Gs0H8h54Y1I5GCWP2Hg6BVWsxYjwj74U0Mlgs+IU
-iXQoIz1askMMsYmOcZUXOaBnMy5e2J5aqR+iq7olPdsGc5o8qbcbT9yWQMfgStjA
-Xt4WwlboGzcyfnFMYWtegjBBXT5LTcA7Tot+cjETJ0uPiwgP3ELFzmOzeJQImRwo
-syCSOUD6AXc2B+ObKxPfI1j7Yi2Ddo3TcblmSiOo9zreDIEC+Sx7i/4iW1vsO6Ah
-vfgGvqqRkoN8mlRX7k66sidBBPZ8oUQkZVetlKlc+g==
-=XEQQ
------END PGP SIGNATURE-----
+Anders Olofsson (1):
+      build: Allow disabling maintainer mode
 
---9UOMIv22dn20vBlpR73DuB63fqJ5moAPv--
+John Spencer (1):
+      testsuite: fix usage of reserved names
+
+Lucas De Marchi (19):
+      Fix usage of readdir_r()
+      build: remove check for typeof
+      util: Add ALIGN_POWER2
+      libkmod-hash: always align n_buckets to power of 2
+      libkmod: always pass O_NONBLOCK to kernel
+      rmmod: remove --wait option
+      NEWS: add entries
+      build-sys: enable colored diagnostics if available
+      testsuite: Move test-alias to test-util
+      util: Add cleanup attribute
+      config: Use _cleanup_free_
+      util: use _cleanup_free_ on path_make_absolute_cwd()
+      testsuite: add basic test for getline_wrapped
+      util: Be OOM-safe and use _cleanup_free_
+      array: avoid duplicate code to reallocate
+      file: use _cleanup_free_
+      module: use _cleanup_free and remove useless call to free()
+      Use C11's noreturn
+      kmod 16
+
+Saul Wold (2):
+      Makefile.am: Add target to all cross-compilation of testsuite
+      Makefile.am: add mkdir testsuite
+
+Thomas Petazzoni (1):
+      Add configure check for _Static_assert()
+
+Tom Gundersen (1):
+      depmod: warn on invalid devname specification
