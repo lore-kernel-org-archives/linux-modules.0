@@ -1,53 +1,59 @@
-Return-Path: <lucas.de.marchi@gmail.com>
-Received: from localhost.localdomain (ip-64-134-188-214.public.wayport.net. [64.134.188.214])
-        by mx.google.com with ESMTPSA id u52sm27473992yhg.5.2013.11.18.06.05.18
-        for <linux-modules@vger.kernel.org>
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Nov 2013 06:05:20 -0800 (PST)
+MIME-Version: 1.0
+In-Reply-To: <52B249D9.9020805@redhat.com>
+References: <509C4944.3040907@redhat.com>
+	<CAMOw1v6xtqE4yTt4CBJ0fZP_wan2EOuPD8052L6Y_RU4g62agg@mail.gmail.com>
+	<528132C5.9000908@redhat.com>
+	<CAKi4VALDxMP9YmomHhi5CPaTxG1cjdX1Ab+XoNE4=v=4p_HFaw@mail.gmail.com>
+	<52B249D9.9020805@redhat.com>
+Date: Sun, 22 Dec 2013 19:52:59 -0200
+Message-ID: <CAKi4VAJe_ObudsdKJ5H=bWuA9Oa90FyxVBgWkJ-qOWmSQ6kApA@mail.gmail.com>
+Subject: Re: [announce] python-kmod 0.9
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: linux-modules@vger.kernel.org
-Subject: [PATCH 8/9] file: use _cleanup_free_
-Date: Mon, 18 Nov 2013 12:04:26 -0200
-Message-Id: <1384783467-23476-9-git-send-email-lucas.demarchi@intel.com>
-In-Reply-To: <1384783467-23476-1-git-send-email-lucas.demarchi@intel.com>
-References: <1384783467-23476-1-git-send-email-lucas.demarchi@intel.com>
+To: Andy Grover <agrover@redhat.com>
+Cc: Lucas De Marchi <lucas.demarchi@profusion.mobi>,
+	linux-modules <linux-modules@vger.kernel.org>, wking@tremily.us
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
----
- libkmod/libkmod-file.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Hi Andy,
 
-diff --git a/libkmod/libkmod-file.c b/libkmod/libkmod-file.c
-index 390f018..feb4a15 100644
---- a/libkmod/libkmod-file.c
-+++ b/libkmod/libkmod-file.c
-@@ -175,13 +175,12 @@ static int load_zlib(struct kmod_file *file)
- {
- 	int err = 0;
- 	off_t did = 0, total = 0;
--	unsigned char *p = NULL;
-+	_cleanup_free_ unsigned char *p = NULL;
- 
- 	errno = 0;
- 	file->gzf = gzdopen(file->fd, "rb");
--	if (file->gzf == NULL) {
-+	if (file->gzf == NULL)
- 		return -errno;
--	}
- 	file->fd = -1; /* now owned by gzf due gzdopen() */
- 
- 	for (;;) {
-@@ -215,9 +214,10 @@ static int load_zlib(struct kmod_file *file)
- 
- 	file->memory = p;
- 	file->size = did;
-+	p = NULL;
- 	return 0;
-+
- error:
--	free(p);
- 	gzclose(file->gzf);
- 	return err;
- }
--- 
-1.8.4.2
+On Wed, Dec 18, 2013 at 11:20 PM, Andy Grover <agrover@redhat.com> wrote:
+> On 12/18/2013 11:38 AM, Lucas De Marchi wrote:
+>>>>
+>>>> Hey. I think I replied once that this could be better left off in its
+>>>> own repository. However I'm reconsidering this now... if you are still
+>>>> interested in merging into kmod, I think it would be good.
+>>>
+>>>
+>>>
+>>> You bet. I'll start work on a patch.
+>>
+>>
+>> Ping.
+>
+>
+> Hi Lucas,
+>
+> Sorry for the delay. Here's what I have so far:
+>
+> https://github.com/agrover/kmod.git
+>
+> Copied source in, modified configure.ac. But I'm pretty weak on automake.
+> Basically the Python bindings need "python setup.py build" and "python
+> setup.py install" for the relevant make targets, but that still needs to be
+> hooked up :-/
+>
+> Would you or some other kind soul that knows automake be willing to advise,
+> or even fix this up the rest of the way?
+
+Sure  I'll do the missing glue to the build system.
+
+>
+> Thanks -- Regards -- Andy
+
+I decided to let this out of kmod 16 so we have more time to play with
+the python bindings...
+
+
+regards,
+Lucas De Marchi
