@@ -1,101 +1,79 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:34370 "EHLO mx1.redhat.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1753295AbaAWTT2 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Thu, 23 Jan 2014 14:19:28 -0500
-Received: from int-mx10.intmail.prod.int.phx2.redhat.com (int-mx10.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id s0NJJSVk028204
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)
-	for <linux-modules@vger.kernel.org>; Thu, 23 Jan 2014 14:19:28 -0500
-Received: from redhat.com ([10.15.16.226])
-	by int-mx10.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id s0NJJQb6011927
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NO)
-	for <linux-modules@vger.kernel.org>; Thu, 23 Jan 2014 14:19:27 -0500
-Date: Thu, 23 Jan 2014 14:19:25 -0500
-From: Lukas Berk <lberk@redhat.com>
-To: linux-modules@vger.kernel.org
-Subject: [PATCH] man: insmod documentation fix
-Message-ID: <20140123191925.GA11585@redhat.com>
-Reply-To: Lukas Berk <lberk@redhat.com>
+Received: from mail-ee0-f52.google.com ([74.125.83.52]:64304 "EHLO
+	mail-ee0-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751406AbaABTTU (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Thu, 2 Jan 2014 14:19:20 -0500
+Received: by mail-ee0-f52.google.com with SMTP id d17so6426620eek.11
+        for <linux-modules@vger.kernel.org>; Thu, 02 Jan 2014 11:19:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="i9LlY+UWpKt15+FH"
+In-Reply-To: <20140102030708.GA2731@bongo.bofh.it>
+References: <20140102030708.GA2731@bongo.bofh.it>
+From: Lucas De Marchi <lucas.demarchi@profusion.mobi>
+Date: Thu, 2 Jan 2014 17:18:59 -0200
+Message-ID: <CAMOw1v7itnBqZzDvZMHfh0JQ6Ug_76fKEPBoeFyhJY7aqQX5Jw@mail.gmail.com>
+Subject: Re: Bug#687435: kmod: Minor documentation discrepancy
+To: "Marco d'Itri" <md@linux.it>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=ISO-8859-1
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
+Hi Marco,
 
---i9LlY+UWpKt15+FH
-Content-Type: multipart/mixed; boundary="sdtB3X0nJg68CQEu"
-Content-Disposition: inline
+On Thu, Jan 2, 2014 at 1:07 AM, Marco d'Itri <md@linux.it> wrote:
+> I can provide a patch if needed, but which option(s) should actually be
+> documented?
 
-
---sdtB3X0nJg68CQEu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hey,
-
-Just a quick documentation spacing fix.
-
-Cheers,
-
-Lukas
-
---sdtB3X0nJg68CQEu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="0001-man-insmod-documentation-fix.patch"
-Content-Transfer-Encoding: quoted-printable
-
-=46rom 0efbedbb0f1250e2810943aa19364451d9111c8f Mon Sep 17 00:00:00 2001
-=46rom: Lukas Berk <lberk@redhat.com>
-Date: Thu, 23 Jan 2014 14:08:58 -0500
-Subject: [PATCH] man: insmod documentation fix
-
-Add comma between lsmod(8) and modinfo(8)
-
-Signed-off-by: Lukas Berk <lberk@redhat.com>
----
- man/insmod.xml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/man/insmod.xml b/man/insmod.xml
-index db0672c..8ff4e20 100644
---- a/man/insmod.xml
-+++ b/man/insmod.xml
-@@ -75,7 +75,7 @@
-       </citerefentry>,
-       <citerefentry>
-         <refentrytitle>lsmod</refentrytitle><manvolnum>8</manvolnum>
--      </citerefentry>
-+      </citerefentry>,
-       <citerefentry>
-         <refentrytitle>modinfo</refentrytitle><manvolnum>8</manvolnum>
-       </citerefentry>
---=20
-1.8.3.1
+Just like in modprobe (see --help there)... we have both of them since
+they were supported in module-init-tools.
 
 
---sdtB3X0nJg68CQEu--
+Lucas De Marchi
 
---i9LlY+UWpKt15+FH
-Content-Type: application/pgp-signature
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIcBAEBAgAGBQJS4Ws9AAoJEAaRCclx+kwJwG0QAJCtc6k9S5DmyQbtJ8ZPn9+P
-NJiCOr6WXdal4SI80l2RkgEtQYDndUoMtJXMhwA957LqtamlvnLcE1H6NQoamPFv
-YjZK0wJe2sjXnGZStsMSb5RuGGUYtSAnMmRKgys8BcUMEruZbCWRMMQ3JgGBBwjr
-+ShvEHKbDFDaQcgn4Ia58pXx8G3UNTKaX0hiDx1brB+YV1fP+ZVXEVuPZhRjrlIk
-Y3QyDPy3zVRuDsoy6F6MRohnpsvfIcoh655CkZ+8u3CyWHKMcgTOQAqw3hK1kX50
-UWZsvf6giGE4I1pX4nwpqCYOIXnmsFR0Pq1j5fOoiGbt6gpSZtdlceS7V9P0V5nt
-CuePsAcsTTpjXpAs1eRZEJ4ZQzuwyR69wScLkwep4hxV5HHvn52BlEBfv9Dw7XPH
-ROBG0XDLXOfq6E59cM3ZUIYD/O5pn9RPs8bY8YbJ0eL841XXyuTDmdOpblIqH6gl
-nTdHY8tJQQMAo0nW81YUtK8MDnRm6CpVSubjo4Ec2MRJ1nn58vwyeyth/xJL5sSQ
-uSHZDs+KH1iUH2pEwpDK+tyI7iBV6SxozMLzRV+sK5pCILNNBhnBqOD+t43S41vV
-9mPBwn2fYlkZZM/h8ZZdtA4+BWAbW1aR7IrGq6Yavwo3GKk/DViWMnnsn8nwPl7R
-poiyLevksihFJo3SVdxk
-=eLbv
------END PGP SIGNATURE-----
-
---i9LlY+UWpKt15+FH--
+>
+> ----- Forwarded message from "Marc F. Clemente" <marc@mclemente.net> -----
+>
+> From: "Marc F. Clemente" <marc@mclemente.net>
+> To: Debian Bug Tracking System <submit@bugs.debian.org>
+> Subject: Bug#687435: kmod: Minor documentation discrepancy
+>
+> Package: kmod
+> Version: 9-2
+> Severity: minor
+>
+> When I get help from the program with "depmod --help" I get:
+>   -n, --show           Write the dependency file on stdout only
+>
+> But the documentation "man depmod" says:
+>   -n --dry-run
+>
+> All three options work fine and do the same thing, so it's really no big deal.
+>
+> -- System Information:
+> Debian Release: wheezy/sid
+>   APT prefers unstable
+>   APT policy: (500, 'unstable'), (1, 'experimental')
+> Architecture: amd64 (x86_64)
+>
+> Kernel: Linux 3.2.0-3-amd64 (SMP w/8 CPU cores)
+> Locale: LANG=en_US.UTF-8, LC_CTYPE=en_US.UTF-8 (charmap=UTF-8)
+> Shell: /bin/sh linked to /bin/dash
+>
+> Versions of packages kmod depends on:
+> ii  libc6     2.13-35
+> ii  libkmod2  9-2
+> ii  lsb-base  4.1+Debian7
+>
+> kmod recommends no packages.
+>
+> kmod suggests no packages.
+>
+> -- no debconf information
+>
+> ----- End forwarded message -----
+>
+> --
+> ciao,
+> Marco
