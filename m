@@ -1,69 +1,58 @@
+Return-Path: <steve@sk2.org>
+Date: Sun, 26 Jan 2014 22:58:47 +0100
+From: Stephen Kitt <steve@sk2.org>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] Remove "rmmod -w" documentation and getopt entry
+Message-ID: <20140126225847.2fd55eb3@heffalump.sk2.org>
+In-Reply-To: <CAKi4VAJxLNdgm_VMuzdGQK8q2ZL2kORNzqYd0GOfWPV5cvUtLQ@mail.gmail.com>
+References: <20140126144607.07463138@heffalump.sk2.org>
+	<CAKi4VAJxLNdgm_VMuzdGQK8q2ZL2kORNzqYd0GOfWPV5cvUtLQ@mail.gmail.com>
 MIME-Version: 1.0
-Date: Sun, 22 Dec 2013 19:50:00 -0200
-Message-ID: <CAKi4VAKfaMwe6kiP0mqcRwZ5Y_sL858q0ue85VAbcsNAEx=VYA@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 16
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: linux-modules <linux-modules@vger.kernel.org>
-Cc: Rusty Russell <rusty@rustcorp.com.au>, lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ boundary="Sig_/h/bnHUJu5FmuS5=W+m8hAJG"; protocol="application/pgp-signature"
 List-ID: <linux-modules.vger.kernel.org>
 
-kmod 16 is out:
+--Sig_/h/bnHUJu5FmuS5=W+m8hAJG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-16.tar.xz
-ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-16.tar.sign
+Hi Lucas,
 
-Most important change besides the bug fixes are:
+On Sun, 26 Jan 2014 18:05:58 -0200, Lucas De Marchi
+<lucas.de.marchi@gmail.com> wrote:
+> I rebased this patch on git and applied. Note that we are already on
+> kmod 16... version 11 is old.
 
- * we don't have an option in rmmod to wait module removal anymore.
-This is gone from kernel and now is gone from kmod too. The constant
-KMOD_REMOVE_NOWAIT in libkmod is still there for backward
-compatibility but it's always enforced, passing O_NONBLOCK to
-delete_module(2).
+Thanks! I know kmod 16 is the current version, in fact my patch was based on
+a git clone of git://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git made
+this afternoon (3d51a2f). I mentioned kmod 11 because that's when the
+changelog mentioned the change to rmmod.
 
- * warn on wrong devname specification in depmod to help kernel
-developers catch the bug earlier.
+Regards,
 
-Shortlog is below.
+Stephen
 
+--Sig_/h/bnHUJu5FmuS5=W+m8hAJG
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Disposition: attachment; filename=signature.asc
 
-Lucas De Marchi
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.22 (GNU/Linux)
 
----
+iQIcBAEBCgAGBQJS5YUdAAoJEHWXeKmja0lPUEYP/2wYZ2AmHTWv2Yz5w7DUdgv1
+S8k/jvmpI3unOdOoVxhTKpl+kcoTIbtstryI2lpT6XHMdTpyZZJ0joDZ2ZSgRPUT
++K2jdFSuzw24Yh8NkETu6RAbkq4nVWVC0hcCurl6h4RYto17gj4D+TuZvIr2h2S4
+ENWoLtwKiSNsd/QgQQlM9+e66Aa2Wu6grFVtKM++xPCCSO4swEP6xbQHMyNxDzzm
+yORcMr8GfZjpTY+DcrEkf8prT/FJfgAUaZlRrN/qF9datPDPhyaDNjPTdTUF22tI
+Uj/vAyq2fpN8g5vhzAeo3sXo+Acnd1uUYbmhxJDM4GFLI6cBvod5zJ57S49LmqDM
+7sL5P5ELZ0g/rAu7EpHjUeJ0APXRNHE5QzAuoUlk1mxX9EdRFUISnvvtc2N+Q8sx
+ifotKowC94HT2D+5V3A9k7p/d7SgY+MZMYbB5rIPu8EW1kzrlkfxoeWXZaBHZd+k
+T3JlixSVYEPP7p1HO7BZT3pHdNTWme54UXOENG++YoY4BxaST2HtUhrcoRTHi4KI
+n3M4EEPSyxVIzoQfTo1+10sXPUv0NCgGaiDaWhuKn5keiUSep5PVLIrhRQHkUHo5
+2aKkgGl1TZYkPrQ0VYay8Qd63PtYRdq55Fr5JI+DJwf7kdj5yG9pVgO0rdPJv0Bq
+rUYvYVoQMAeCtQTsMYxk
+=Mi+v
+-----END PGP SIGNATURE-----
 
-Anders Olofsson (1):
-      build: Allow disabling maintainer mode
-
-John Spencer (1):
-      testsuite: fix usage of reserved names
-
-Lucas De Marchi (19):
-      Fix usage of readdir_r()
-      build: remove check for typeof
-      util: Add ALIGN_POWER2
-      libkmod-hash: always align n_buckets to power of 2
-      libkmod: always pass O_NONBLOCK to kernel
-      rmmod: remove --wait option
-      NEWS: add entries
-      build-sys: enable colored diagnostics if available
-      testsuite: Move test-alias to test-util
-      util: Add cleanup attribute
-      config: Use _cleanup_free_
-      util: use _cleanup_free_ on path_make_absolute_cwd()
-      testsuite: add basic test for getline_wrapped
-      util: Be OOM-safe and use _cleanup_free_
-      array: avoid duplicate code to reallocate
-      file: use _cleanup_free_
-      module: use _cleanup_free and remove useless call to free()
-      Use C11's noreturn
-      kmod 16
-
-Saul Wold (2):
-      Makefile.am: Add target to all cross-compilation of testsuite
-      Makefile.am: add mkdir testsuite
-
-Thomas Petazzoni (1):
-      Add configure check for _Static_assert()
-
-Tom Gundersen (1):
-      depmod: warn on invalid devname specification
+--Sig_/h/bnHUJu5FmuS5=W+m8hAJG--
