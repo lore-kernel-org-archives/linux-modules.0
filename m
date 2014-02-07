@@ -1,84 +1,44 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from wp260.webpack.hosteurope.de ([80.237.133.29]:49879 "EHLO
-	wp260.webpack.hosteurope.de" rhost-flags-OK-OK-OK-OK)
-	by vger.kernel.org with ESMTP id S1753736AbaBPVmG (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Sun, 16 Feb 2014 16:42:06 -0500
-Received: from gentp.lnet (gentp.lnet [IPv6:::1])
-	by gentp.lnet (Postfix) with ESMTP id 2B496260243
-	for <linux-modules@vger.kernel.org>; Sun, 16 Feb 2014 22:23:43 +0100 (CET)
-Date: Sun, 16 Feb 2014 22:23:40 +0100
-From: Luis Ressel <aranea@aixah.de>
-To: linux-modules@vger.kernel.org
-Subject: Proposal: Add a depmod wrapper for kmod to aid SELinux
-Message-ID: <20140216222340.153307f5@gentp.lnet>
+Return-Path: <psusi@ubuntu.com>
+Return-Path: <psusi@ubuntu.com>
+Message-ID: <52F54EBA.4060803@ubuntu.com>
+Date: Fri, 07 Feb 2014 16:23:06 -0500
+From: Phillip Susi <psusi@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
- boundary="Sig_/x3tSdLoDz5uvy65Qbmh+_FJ"; protocol="application/pgp-signature"
-Sender: linux-modules-owner@vger.kernel.org
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+CC: linux-modules <linux-modules@vger.kernel.org>
+Subject: Re: kmod has no man page
+References: <52F539D1.3010204@ubuntu.com> <CAKi4VA+aqzFZ=AJyiXV3sF+K705ssT_sC0DwY1=Fd6-e3=-9uA@mail.gmail.com>
+In-Reply-To: <CAKi4VA+aqzFZ=AJyiXV3sF+K705ssT_sC0DwY1=Fd6-e3=-9uA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
---Sig_/x3tSdLoDz5uvy65Qbmh+_FJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Hello,
+On 2/7/2014 3:13 PM, Lucas De Marchi wrote:
+> It's only *apparently* useless. If you use a more recent version of
+> kmod you will see there's at least static-nodes command, that is
+> not available otherwise.
+> 
+> The plan has always been to create sane commands in the kmod tool 
+> (like kmod insert, kmod info, kmod remove, etc) and let the
+> symlinks for when the compat behavior is expected.
+> 
+> Right now this is only half done, but removing it like you suggest
+> is not an option.
 
+Ahh, in that case then it just needs a man page ;)
 
-I've got a small proposal for kmod which would be helpful for SELinux
-users. First of all, I'll give some background (if you're not
-interested in that, you can skip the next two paragraphs):
-
-As you may know, SELinux is is an optional kernel subsystem which gives
-finer control over permissions than the standard Unix DAC
-(Discretionary Access Controls - the normal read/write/execute bits).
-Basically, it attaches labels ("contexts") to files and processes and
-bases the decision whether to allow or not to allow a specific action
-upon these contexts.
-
-For multi-call binaries like kmod, this labeling is problematic: The
-kmod tool "depmod" requires a different set of permissions than the
-rest of the kmod tools, and should therefore get a different label.
-However, all of the kmod tools are only symlinks to /bin/kmod - and due
-to technical limitations, we can only attach labels to files, but not to
-symlinks.
-
-Thus, it would be useful if you could add wrapper binary to the kmod
-distribution, basically just an
-"execl("/bin/kmod", "/sbin/depmod", NULL);" call. This would behave
-exactly the same as a symlink, but would allow SELinux policies to
-label that binary differently. Of course, this doesn't have to be
-done for every user; it could be optional on a ./configure option
-"--enable-depmod-wrapper".
-
-What do you think? Would you accept such a patch?
-
-
-Regards,
-Luis Ressel
-
---Sig_/x3tSdLoDz5uvy65Qbmh+_FJ
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Disposition: attachment; filename=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.22 (GNU/Linux)
+Version: GnuPG v2.0.17 (MingW32)
+Comment: Using GnuPG with Thunderbird - http://www.enigmail.net/
 
-iQJ8BAEBCgBmBQJTASxcXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRBMjU3MDBFQTc5QkYzMkY4NEQzMTFGNDlD
-NzE4OTFBNkEwRUZCN0U5AAoJEMcYkaag77fp61QP/iHTH9ViLe+ALt2z+/AXncB3
-WIQUMc7VqqItwh1p1ktvywU+SLuSwnKKFKnsD0rMZue288R2biVMnWhkeh/ZzGpc
-6pkmFRUn0/kMFW4y02ICerZ6Mjg/iYiUhCV9d2Y6x3QmAavgCTU1PpsMo1XKYBDL
-/Ka3/Zsuw62agQ0qizM/FmjWuR253msQrn7xrSUgvdtZXweZhDocpc+HvFJ7PLen
-sMp2QWzy0TfcDJh86Nbn0FcITzs3eLQk56CG00i26mqh+V/4zSNDfT3+0SC77KxU
-IReeL2bTXyf0p6sRfsD7wN+QGiFcka+Iz1qAWBS1/wctG/IwmeXEoyY1FAivOG4c
-m4S07GZv7V1VZM/nBQFPNMRSPaQkCtNezj5bgqaRrjywev1+mlnmRb20nhJJuVJY
-+hMG0wfWOuhyhhReMfmRSgJbV+5+boEKJ5cQsK9Rs80PbcjlzdjPSWw5rT2wYqsI
-6MNxGFu3M6V8EUVhCb1/r3v2fTmE7+eyWPaJTtxx+L9vN6wQ6jd19zbL9z3qULJV
-Z7gDE0Wd7meLyuP8hKOoTiqG36pF9taHZALDrM1q5FC/lTkWvBGDYySNZb9RQA61
-zoOyqx9iXwZtiHe9rTjERrEeWp+GHH6lxYQusB9RLDs2tqvVNR9/bVJsM8+NSYG+
-oPPXZeR304n3xfTwL4VS
-=uHT6
+iQEcBAEBAgAGBQJS9U66AAoJEI5FoCIzSKrwX6QH/jtfGo0A9kdoYVMZXR0NEzPJ
+6lC6LQOUX69gqbR1nkG4TqOYwcQnfvC9eUxYt1ANoXXrr7KUqtgT2Ds+bHzzs9t2
+ZqMh4cZG1B3PUdJSZShXioHs0JHaZQIMca+IgACexeGVEYu01QSU+DuqQLcVwh6v
+3fePhQ1Z4p6rdNFZkwwoiO83tvonA0gCBbXv7Db1gQAc2hBP4+cSFda1rzJbhZPc
+GLmV9TtDfYVZkkk4w2+dsXNAyWqWokrU478+Ud3juyllgp9pEaC3CkLVXQP1KQsh
+BKh69ItTgC4ka6gRQm2K2hdiHUZk/qb6xeJ9NTJOu4zapAV11VgxWLTRs3MAqNU=
+=AlFN
 -----END PGP SIGNATURE-----
-
---Sig_/x3tSdLoDz5uvy65Qbmh+_FJ--
