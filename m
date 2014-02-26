@@ -1,36 +1,48 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from cdptpa-omtalb.mail.rr.com ([75.180.132.120]:55419 "EHLO
-	cdptpa-omtalb.mail.rr.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752413AbaBGTxz (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Fri, 7 Feb 2014 14:53:55 -0500
-Message-ID: <52F539D1.3010204@ubuntu.com>
-Date: Fri, 07 Feb 2014 14:53:53 -0500
-From: Phillip Susi <psusi@ubuntu.com>
 MIME-Version: 1.0
-To: linux-modules@vger.kernel.org
-Subject: kmod has no man page
-Content-Type: text/plain; charset=ISO-8859-1
-Sender: linux-modules-owner@vger.kernel.org
+In-Reply-To: <4873416.CU5HjpvjRz@kru>
+References: <1627264.ihO3vEG55s@kru>
+	<4873416.CU5HjpvjRz@kru>
+Date: Wed, 26 Feb 2014 17:06:47 -0300
+Message-ID: <CAKi4VAJzSVnFT9gUGu-2kg5Zpbj7+EPxRkzc9FjSLdjQT6m2og@mail.gmail.com>
+Subject: Re: [PATCH] Re: modprobe documentation discrepancy (modules.dep support)
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Andrej Krutak <andrej.krutak@sysgo.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+On Wed, Feb 26, 2014 at 1:19 PM, Andrej Krutak <andrej.krutak@sysgo.com> wrote:
+> Hi again,
+>
+> below is a patch to (re-)add support for modules.dep (in addition to
+> modules.dep.bin), in a very dirty way. Basically I just took parts of the
+> original code from module-init-tools...
+>
+> Also, it fixes the CHECK_ERR_AND_FINISH macro.
+>
+>
+> However, this doesn't fix the whole "problem" - 'modprobe nonexistingmodule'
+> is called, no error is printed, because of the faulty processing of subsequent
+> non-existent files (like modules.builtin.bin etc. - which depmod.pl doesn't
+> generate).
+>
+> To fully fix this, one would have to also add support for the other
+> legacy files. Well, at least a support to handle the missing files gracefully.
+>
+> Fixing this is important for when you want to cross-compile the kernel in a
+> non-linux environment. I didn't find find any other tool than depmod.pl that
+> could generate all the files required by modprobe (but depmod.pl, as mentioned
+> before, doesn't generate other .bin files) - and kmod/module-init-tools can't
+> be cross-compiled for cygwin/mingw32...
 
-There is no man page for kmod.  Rather than add one, I would suggest
-simply eliminating this apparently useless binary ( the only thing it
-seems to let you do is lsmod ) and replace the symlinks of the actual
-commands with hard links.
+I think it's better to just remove the reference in the man page. We
+don't support other tools poking /lib/modules/* files. They are
+private to kmod and we can break them in a future version.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.17 (MingW32)
-Comment: Using GnuPG with Thunderbird - http://www.enigmail.net/
+I'd rather advise you to fix your setup so you don't need to
+cross-compile depmod. If you want to cross-compile... well, you need
+to provide the patches to at least adding the stubs for things that
+doesn't exist there... But this patch would probably never be accepted
+upstream since it's such a weird thing to do, sorry.
 
-iQEcBAEBAgAGBQJS9TnRAAoJEI5FoCIzSKrwD+MH/18DIXXlpGg0XyQICB6hfP79
-Ru64/THjd2UxRLEC6WzdF69riCVALixS76vO8FzFvdpMm5xJXCWKYMJEiTfRLIwp
-9ANVjM3xKEwmrMsezRMb0jWjgrYuXfoLW41v4duf8rgap8VVFGfluP0Y7UALSy+u
-NsBhlwfEi91Hh6+sPK6gUyYUmiHc8xRD1UjS+0jYk7R4vW3DP/0ZZb/fOap6S8aI
-omgfPGkH36w/GXgC6ue2gmUVJpOTmz5qfZdY2LGQR6ek1Mbw3tJk/ugxMo/A9UaB
-MloxBAj72qmf9CNG2W9GejzmyR3t/LEAp5h6nOLOBX2kzXsx/jKJnEL3Pefa+m8=
-=MUXW
------END PGP SIGNATURE-----
+Lucas De Marchi
