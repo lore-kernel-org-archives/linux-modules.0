@@ -1,53 +1,42 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from smtp03.stone-is.org ([87.238.162.6]:49143 "EHLO
-	smtpgw.stone-is.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1750738AbaCVMzb (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Sat, 22 Mar 2014 08:55:31 -0400
-Received: from localhost (unknown [127.0.0.1])
-	by smtpgw.stone-is.be (Postfix) with ESMTP id C54C8334BD7
-	for <linux-modules@vger.kernel.org>; Sat, 22 Mar 2014 12:26:34 +0000 (UTC)
-Received: from smtpgw.stone-is.be ([127.0.0.1])
-	by localhost (smtpgw.stone-is.be [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wAXKCg6Hvj-n for <linux-modules@vger.kernel.org>;
-	Sat, 22 Mar 2014 13:26:33 +0100 (CET)
-Received: from vz19.stone-is.net (vz19.stone-is.net [87.238.162.57])
-	by smtpgw.stone-is.be (Postfix) with ESMTP id 1C613334BF5
-	for <linux-modules@vger.kernel.org>; Sat, 22 Mar 2014 13:26:32 +0100 (CET)
-Received: from [192.168.1.117] (178-119-65-67.access.telenet.be [178.119.65.67])
-	by vz19.stone-is.net (Postfix) with ESMTPSA id B5EF0891FD
-	for <linux-modules@vger.kernel.org>; Sat, 22 Mar 2014 13:26:32 +0100 (CET)
-Message-ID: <532D8178.1030201@acm.org>
-Date: Sat, 22 Mar 2014 13:26:32 +0100
-From: Bart Van Assche <bvanassche@acm.org>
+Received: from mga01.intel.com ([192.55.52.88]:43797 "EHLO mga01.intel.com"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S1752232AbaCFOFl (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+	Thu, 6 Mar 2014 09:05:41 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: <linux-modules@vger.kernel.org>
+CC: Michal Marek <mmarek@suse.cz>
+Subject: [PATCH 2/8] testsuite: give a more suitable description to test
+Date: Thu, 6 Mar 2014 11:06:43 -0300
+Message-ID: <1394114809-2737-2-git-send-email-lucas.demarchi@intel.com>
+In-Reply-To: <1394114809-2737-1-git-send-email-lucas.demarchi@intel.com>
+References: <1394114809-2737-1-git-send-email-lucas.demarchi@intel.com>
 MIME-Version: 1.0
-To: linux-modules@vger.kernel.org
-Subject: [PATCH] Fix a test in the configure script
-Content-Type: text/plain; charset=ISO-8859-1
+Content-Type: text/plain
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Avoid that the configure script prints the following error message:
-./configure: line 14049: xyes: command not found
-
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+We are not only checking if those options are correctly parsed from
+kcmdline, but if in fact they are being passed to the final
+(f)init_module call. This is why we use 'modprobe --show-depends'
+instead of the simpler 'modprobe -c'.
 ---
- configure.ac | 2 +-
+ testsuite/test-modprobe.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configure.ac b/configure.ac
-index 54a52ea..7ef151e 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -112,7 +112,7 @@ AC_ARG_ENABLE([manpages],
-         AS_HELP_STRING([--disable-manpages], [disable manpages @<:@default=enabled@:>@]),
- 	[], enable_manpages=yes)
- AM_CONDITIONAL([BUILD_MANPAGES], [test "x$enable_manpages" = "xyes"])
--AS_IF(["x$enable_manpages" != "xno"], ["have_manpages=yes"])
-+AS_IF([test "x$enable_manpages" != "xno"], ["have_manpages=yes"])
- 
- AC_ARG_ENABLE([logging],
- 	AS_HELP_STRING([--disable-logging], [disable system logging @<:@default=enabled@:>@]),
+diff --git a/testsuite/test-modprobe.c b/testsuite/test-modprobe.c
+index 492b4d8..b5eaba3 100644
+--- a/testsuite/test-modprobe.c
++++ b/testsuite/test-modprobe.c
+@@ -176,7 +176,7 @@ static noreturn int modprobe_param_kcmdline(const struct test *t)
+ 	exit(EXIT_FAILURE);
+ }
+ static DEFINE_TEST(modprobe_param_kcmdline,
+-	.description = "check if params are parsed correctly from kcmdline",
++	.description = "check if params from kcmdline are passed in fact passed to (f)init_module call",
+ 	.config = {
+ 		[TC_UNAME_R] = "4.4.4",
+ 		[TC_ROOTFS] = TESTSUITE_ROOTFS "test-modprobe/module-param-kcmdline",
 -- 
-1.8.4.5
+1.9.0
 
