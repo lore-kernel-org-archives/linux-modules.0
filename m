@@ -1,105 +1,130 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from cantor2.suse.de ([195.135.220.15]:58973 "EHLO mx2.suse.de"
+Received: from mga02.intel.com ([134.134.136.20]:21955 "EHLO mga02.intel.com"
 	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1750829AbaCFRDw (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Thu, 6 Mar 2014 12:03:52 -0500
-Received: from relay1.suse.de (charybdis-ext.suse.de [195.135.220.254])
-	by mx2.suse.de (Postfix) with ESMTP id C4193ACB0
-	for <linux-modules@vger.kernel.org>; Thu,  6 Mar 2014 17:03:51 +0000 (UTC)
-From: Michal Marek <mmarek@suse.cz>
-To: linux-modules@vger.kernel.org
-Subject: [PATCH] testsuite: Fix uname() during glibc startup
-Date: Thu,  6 Mar 2014 18:03:46 +0100
-Message-Id: <1394125426-31945-1-git-send-email-mmarek@suse.cz>
+	id S1752305AbaCFOF4 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+	Thu, 6 Mar 2014 09:05:56 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: <linux-modules@vger.kernel.org>
+CC: Michal Marek <mmarek@suse.cz>
+Subject: [PATCH 5/8] build-sys: add small redirecting Makefiles
+Date: Thu, 6 Mar 2014 11:06:46 -0300
+Message-ID: <1394114809-2737-5-git-send-email-lucas.demarchi@intel.com>
+In-Reply-To: <1394114809-2737-1-git-send-email-lucas.demarchi@intel.com>
+References: <1394114809-2737-1-git-send-email-lucas.demarchi@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-In a specific configuration (chroot with the linux32 personality), the
-modprobe_install_cmd_loop test failed, because the bash process handling
-the install command segfaulted. The backtrace showed a uname() call
-during libpthread initialization, at which point the environ pointer
-hadn't been initialized yet:
-
-	Program terminated with signal SIGSEGV, Segmentation fault.
-	#0  0x080c1591 in getenv (name=<optimized out>,
-	    name@entry=0xf775f850 "TESTSUITE_UNAME_R") at getenv.c:81
-	81	      for (i = 0, len = strlen (name); environ[i]; i++)
-	(gdb) bt
-	#0  0x080c1591 in getenv (name=<optimized out>,
-	    name@entry=0xf775f850 "TESTSUITE_UNAME_R") at getenv.c:81
-	#1  0xf775f754 in uname (u=u@entry=0xff946350) at testsuite/uname.c:32
-	#2  0xf74ffc6c in is_smp_system ()
-	    at ../nptl/sysdeps/unix/sysv/linux/i386/smp.h:39
-	#3  __pthread_initialize_minimal_internal () at nptl-init.c:460
-	#4  0xf74fe32c in _init () at ../sysdeps/i386/crti.S:74
-	#5  0x00000000 in ?? ()
-	(gdb) p environ
-	$1 = (char **) 0x0
-
-I don't know why it only happend in the chroot, but glibc can call its
-own functions and impose any restrictions before main() is started, so
-we have to adapt.
-
-Also, do not return error if there is an environment, but the
-environment variable is not found. If uname() is called by kmod, then
-the respective test will simply fail later. If it's something else
-calling uname(), then we do not want to disturb the program.
+These redirecting makefiles simplifies compiling from some editors and
+when CWD is not the root of the source tree. This is similar to what was
+introduced in systemd in 340d89e ("build-sys: add small redirecting
+Makefiles to simplify compilation from within emacs")
 ---
- testsuite/uname.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ .gitignore              |  4 ++--
+ libkmod/Makefile        | 13 +++++++++++++
+ libkmod/docs/.gitignore |  2 ++
+ man/.gitignore          |  2 ++
+ testsuite/Makefile      | 15 +++++++++++++++
+ tools/Makefile          | 13 +++++++++++++
+ 6 files changed, 47 insertions(+), 2 deletions(-)
+ create mode 100644 libkmod/Makefile
+ create mode 100644 testsuite/Makefile
+ create mode 100644 tools/Makefile
 
-diff --git a/testsuite/uname.c b/testsuite/uname.c
-index 2ada200..f55c435 100644
---- a/testsuite/uname.c
-+++ b/testsuite/uname.c
-@@ -22,6 +22,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <stdio.h>
-+#include <unistd.h>
+diff --git a/.gitignore b/.gitignore
+index 5bfab9a..88c8149 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -3,8 +3,8 @@
+ /*.md5sum
+ .deps/
+ .libs/
+-Makefile
+-Makefile.in
++/Makefile
++/Makefile.in
  
- #include "testsuite.h"
- 
-@@ -29,17 +30,10 @@ TS_EXPORT int uname(struct utsname *u)
- {
- 	static void *nextlib = NULL;
- 	static int (*nextlib_uname)(struct utsname *u);
--	const char *release = getenv(S_TC_UNAME_R);
-+	const char *release;
- 	int err;
- 	size_t sz;
- 
--	if (release == NULL) {
--		fprintf(stderr, "TRAP uname(): missing export %s?\n",
--							S_TC_UNAME_R);
--		errno = EFAULT;
--		return -1;
--	}
--
- 	if (nextlib == NULL) {
- #ifdef RTLD_NEXT
- 		nextlib = RTLD_NEXT;
-@@ -53,6 +47,20 @@ TS_EXPORT int uname(struct utsname *u)
- 	if (err < 0)
- 		return err;
- 
-+	if (!environ)
-+		/*
-+		 * probably called from within glibc before main(); unsafe
-+		 * to call getenv()
-+		 */
-+		return 0;
+ /aclocal.m4
+ /autom4te.cache/
+diff --git a/libkmod/Makefile b/libkmod/Makefile
+new file mode 100644
+index 0000000..223bec2
+--- /dev/null
++++ b/libkmod/Makefile
+@@ -0,0 +1,13 @@
++#  Copyright 2010 Lennart Poettering
++#
++# This file has been copied from systemd. It is a dirty trick to simplify
++# compilation when CWD is not the root of the source tree. This file is not
++# intended to be distributed.  So, don't touch it, even better ignore it!
 +
-+	release = getenv(S_TC_UNAME_R);
-+	if (release == NULL) {
-+		fprintf(stderr, "TRAP uname(): missing export %s?\n",
-+							S_TC_UNAME_R);
-+		return 0;
-+	}
++all:
++	$(MAKE) -C ..
 +
- 	sz = strlen(release) + 1;
- 	if (sz > sizeof(u->release)) {
- 		fprintf(stderr, "uname(): sizeof release (%s) "
++clean:
++	$(MAKE) -C .. clean
++
++.PHONY: all clean
+diff --git a/libkmod/docs/.gitignore b/libkmod/docs/.gitignore
+index 21e2279..7514b08 100644
+--- a/libkmod/docs/.gitignore
++++ b/libkmod/docs/.gitignore
+@@ -10,3 +10,5 @@ version.xml
+ xml
+ html
+ gtk-doc.make
++Makefile
++Makefile.in
+diff --git a/man/.gitignore b/man/.gitignore
+index bc0cce8..a229b2f 100644
+--- a/man/.gitignore
++++ b/man/.gitignore
+@@ -1,2 +1,4 @@
+ *.5
+ *.8
++Makefile
++Makefile.in
+diff --git a/testsuite/Makefile b/testsuite/Makefile
+new file mode 100644
+index 0000000..38ba552
+--- /dev/null
++++ b/testsuite/Makefile
+@@ -0,0 +1,15 @@
++#  Copyright 2010 Lennart Poettering
++#
++# This file has been copied from systemd. It is a dirty trick to simplify
++# compilation when CWD is not the root of the source tree. This file is not
++# intended to be distributed.  So, don't touch it, even better ignore it!
++
++all:
++	$(MAKE) -C .. check
++check:
++	$(MAKE) -C .. check
++
++clean:
++	$(MAKE) -C .. clean
++
++.PHONY: all clean check
+diff --git a/tools/Makefile b/tools/Makefile
+new file mode 100644
+index 0000000..223bec2
+--- /dev/null
++++ b/tools/Makefile
+@@ -0,0 +1,13 @@
++#  Copyright 2010 Lennart Poettering
++#
++# This file has been copied from systemd. It is a dirty trick to simplify
++# compilation when CWD is not the root of the source tree. This file is not
++# intended to be distributed.  So, don't touch it, even better ignore it!
++
++all:
++	$(MAKE) -C ..
++
++clean:
++	$(MAKE) -C .. clean
++
++.PHONY: all clean
 -- 
-1.8.4.5
+1.9.0
 
