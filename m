@@ -1,72 +1,49 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from cantor2.suse.de ([195.135.220.15]:58781 "EHLO mx2.suse.de"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1753844AbaCEM20 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Wed, 5 Mar 2014 07:28:26 -0500
-Received: from relay1.suse.de (charybdis-ext.suse.de [195.135.220.254])
-	by mx2.suse.de (Postfix) with ESMTP id 75BE6ACC8
-	for <linux-modules@vger.kernel.org>; Wed,  5 Mar 2014 12:28:25 +0000 (UTC)
-From: Michal Marek <mmarek@suse.cz>
+Received: from sirokuusama.dnainternet.net ([83.102.40.133]:42812 "EHLO
+	sirokuusama.dnainternet.net" rhost-flags-OK-OK-OK-OK)
+	by vger.kernel.org with ESMTP id S1757290AbaCSCL3 (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Tue, 18 Mar 2014 22:11:29 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by sirokuusama.dnainternet.net (Postfix) with ESMTP id B766C41314
+	for <linux-modules@vger.kernel.org>; Wed, 19 Mar 2014 04:05:01 +0200 (EET)
+Received: from sirokuusama.dnainternet.net ([83.102.40.133])
+	by localhost (sirokuusama.dnainternet.net [127.0.0.1]) (DNA Postiturva, port 10041)
+	with ESMTP id 1KSGKo1bBtBp for <linux-modules@vger.kernel.org>;
+	Wed, 19 Mar 2014 04:05:01 +0200 (EET)
+Received: from oliivipuu.dnainternet.net (oliivipuu.dnainternet.net [83.102.40.215])
+	by sirokuusama.dnainternet.net (Postfix) with ESMTP id 1373F410A3
+	for <linux-modules@vger.kernel.org>; Wed, 19 Mar 2014 04:05:00 +0200 (EET)
+Received: from mail.onse.fi (unknown [109.204.245.192])
+	by oliivipuu.dnainternet.net (Postfix) with ESMTP id A0CB15FD8B
+	for <linux-modules@vger.kernel.org>; Wed, 19 Mar 2014 01:26:13 +0200 (EET)
+From: Anssi Hannula <anssi@mageia.org>
 To: linux-modules@vger.kernel.org
-Subject: [PATCH] libkmod-config: Only match dot before '=' in /proc/cmdline
-Date: Wed,  5 Mar 2014 13:27:41 +0100
-Message-Id: <1394022461-1657-1-git-send-email-mmarek@suse.cz>
+Subject: [PATCH 2/2] depmod: fix debug print parameter order
+Date: Wed, 19 Mar 2014 01:26:01 +0200
+Message-Id: <1395185161-13687-2-git-send-email-anssi@mageia.org>
+In-Reply-To: <1395185161-13687-1-git-send-email-anssi@mageia.org>
+References: <1395185161-13687-1-git-send-email-anssi@mageia.org>
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Otherwise, we also parse strings like
-
-  BOOT_IMAGE=/boot/vmlinuz-3.12.12-57.g5f654cf-default
-
-In practice, this is not a problem, because there is no module named
-BOOT_IMAGE=/boot/vmlinuz-3. It just disturbs in modprobe -c output.
 ---
- libkmod/libkmod-config.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ tools/depmod.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
-index 4417871..9905d5e 100644
---- a/libkmod/libkmod-config.c
-+++ b/libkmod/libkmod-config.c
-@@ -523,7 +523,7 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
- {
- 	char buf[KCMD_LINE_SIZE];
- 	int fd, err;
--	char *p, *modname,  *param = NULL, *value = NULL;
-+	char *p, *modname,  *param = NULL, *value = NULL, is_module = 1;
+diff --git a/tools/depmod.c b/tools/depmod.c
+index 328e578..37e6afd 100644
+--- a/tools/depmod.c
++++ b/tools/depmod.c
+@@ -1167,7 +1167,7 @@ static int depmod_module_is_higher_priority(const struct depmod *depmod, const s
+ 		oldprio = bprio;
  
- 	fd = open("/proc/cmdline", O_RDONLY|O_CLOEXEC);
- 	if (fd < 0) {
-@@ -544,9 +544,11 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
- 		switch (*p) {
- 		case ' ':
- 			*p = '\0';
--			kcmdline_parse_result(config, modname, param, value);
-+			if (is_module)
-+				kcmdline_parse_result(config, modname, param, value);
- 			param = value = NULL;
- 			modname = p + 1;
-+			is_module = 1;
- 			break;
- 		case '.':
- 			if (param == NULL) {
-@@ -557,12 +559,15 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
- 		case '=':
- 			if (param != NULL)
- 				value = p + 1;
-+			else
-+				is_module = 0;
- 			break;
- 		}
- 	}
+ 	DBG("priorities: built-in: %d, old: %d, new: %d\n",
+-	    bprio, newprio, oldprio);
++	    bprio, oldprio, newprio);
  
- 	*p = '\0';
--	kcmdline_parse_result(config, modname, param, value);
-+	if (is_module)
-+		kcmdline_parse_result(config, modname, param, value);
- 
- 	return 0;
+ 	return newprio <= oldprio;
  }
 -- 
-1.8.4.5
+1.8.1.5
 
