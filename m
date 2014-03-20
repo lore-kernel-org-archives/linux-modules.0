@@ -1,58 +1,135 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from cantor2.suse.de ([195.135.220.15]:48416 "EHLO mx2.suse.de"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1752027AbaCaNTE (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Mon, 31 Mar 2014 09:19:04 -0400
-From: Michal Marek <mmarek@suse.cz>
-To: linux-modules@vger.kernel.org
-Cc: Tom Gundersen <teg@jklm.no>
-Subject: [PATCH 2/2] config: also parse softdeps from modules
-Date: Mon, 31 Mar 2014 15:18:51 +0200
-Message-Id: <1396271931-7431-2-git-send-email-mmarek@suse.cz>
-In-Reply-To: <1396271931-7431-1-git-send-email-mmarek@suse.cz>
-References: <1396271931-7431-1-git-send-email-mmarek@suse.cz>
-Sender: linux-modules-owner@vger.kernel.org
+MIME-Version: 1.0
+In-Reply-To: <532A1123.50604@mageia.org>
+References: <1395185161-13687-1-git-send-email-anssi@mageia.org>
+	<CAKi4VAL_4owLJvML7H9kXwnsD586P0iXtOnaVBTgJOM+aqeV=w@mail.gmail.com>
+	<532A0840.4080101@mageia.org>
+	<CAKi4VAKAV4_Od9-Zm+JQXeuByAzgYXc0-4AtxHYzWtQ5z9jHuQ@mail.gmail.com>
+	<532A1123.50604@mageia.org>
+Date: Wed, 19 Mar 2014 23:47:22 -0300
+Message-ID: <CAKi4VAJPogAymdc=A9sswdhVMqjd=fmOZFO3uMipVCsJ8p2ENA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] depmod: do not allow partial matches with "search" directive
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Anssi Hannula <anssi@mageia.org>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Tom Gundersen <teg@jklm.no>
+On Wed, Mar 19, 2014 at 6:50 PM, Anssi Hannula <anssi@mageia.org> wrote:
+> 19.03.2014 23:22, Lucas De Marchi kirjoitti:
+>> On Wed, Mar 19, 2014 at 6:12 PM, Anssi Hannula <anssi@mageia.org> wrote:
+>>> 19.03.2014 14:24, Lucas De Marchi kirjoitti:
+>>>> Hi Anssi,
+>>>
+>>> Hi,
+>>>
+>>>> On Tue, Mar 18, 2014 at 8:26 PM, Anssi Hannula <anssi@mageia.org> wrote:
+>>>>> Currently e.g. "search foo foobar built-in" will cause unpredictable
+>>>>> results if baz.ko is in both foo/ and foobar/, since "foo" in search may
+>>>>> match both of those directories and the preferred module therefore
+>>>>> depends on processing order.
+>>>>>
+>>>>> Fix the code to ensure that the match is performed on full pathname
+>>>>> components only.
+>>>>> ---
+>>>>>  tools/depmod.c | 4 ++--
+>>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/depmod.c b/tools/depmod.c
+>>>>> index 9f83ee8..328e578 100644
+>>>>> --- a/tools/depmod.c
+>>>>> +++ b/tools/depmod.c
+>>>>> @@ -1153,10 +1153,10 @@ static int depmod_module_is_higher_priority(const struct depmod *depmod, const s
+>>>>>                 DBG("search %s\n", se->builtin ? "built-in" : se->path);
+>>>>>                 if (se->builtin)
+>>>>>                         bprio = i;
+>>>>> -               else if (newlen >= se->len &&
+>>>>> +               else if (newlen > se->len && newpath[se->len] == '/' &&
+>>>>>                          memcmp(se->path, newpath, se->len) == 0)
+>>>>>                         newprio = i;
+>>>>> -               else if (oldlen >= se->len &&
+>>>>> +               else if (oldlen > se->len && oldpath[se->len] == '/' &&
+>>>>>                          memcmp(se->path, oldpath, se->len) == 0)
+>>>>>                         oldprio = i;
+>>>>>         }
+>>>>> --
+>>>>
+>>>>
+>>>> Both patches have been applied. Thanks a lot.
+>>>>
+>>>> I added some test cases for depmod. Could you take a look if they are ok?
+>>>
+>>> Well, just reversing the "search" directive does not ensure the bug is
+>>> caught by the test (and indeed it is not on my testing, i.e. tests still
+>>> pass after reverting my fix locally), since it does not alter the
+>>> initial order the modules are found.
+>>
+>> hum... assuming the traverse order is stable, one of them should hit
+>> it. In fact. Reverting your commit does reproduce the bug for me 100%
+>> of the time.
+>>
+>>>
+>>> To hit the bug, the code needs to hit the short-directory module first,
+>>> so that the short path is in "oldpath" and the long path is in "newpath".
+>>
+>> But it really depends if the short is the right one as opposed to the
+>> long one.  Otherwise it would be correct to replace the module, even
+>> if by accident.
+>
+> I don't think so. Let me try to show what I mean with an example with
+> all the 4 combinations with unfixed code:
+>
+> Let's have foo/module.ko and foobar/module.ko.
+>
+> Traverse order foo,foobar:
+> oldpath = foo/module.ko
+> newpath = foobar/module.ko
+>
+> "search foo(2) foobar(1) built-in(0)"
+> iteration 0: bprio = 0
+> iteration 1: newprio = 1
+> iteration 2: newprio = 2
+> oldprio fallback: oldprio = 0
+> => oldprio 0, newprio 2
+> => WRONG
+>
+> "search foobar(2) foo(1) built-in(0)"
+> iteration 0: bprio = 0
+> iteration 1: newprio = 1
+> iteration 2: newprio = 2
+> oldprio fallback: oldprio = 0
+> => oldprio 0, newprio 2
+> => OK
+>
+>
+> Traverse order foobar,foo:
+> oldpath = foobar/module.ko
+> newpath = foo/module.ko
+>
+> "search foo(2) foobar(1) built-in(0)"
+> iteration 0: bprio = 0
+> iteration 1: oldprio = 1
+> iteration 2: newprio = 2
+> => oldprio 1, newprio 2
+> => OK
+>
+> "search foobar(2) foo(1) built-in(0)"
+> iteration 0: bprio = 0
+> iteration 1: newprio = 1
+> iteration 2: oldprio = 2
+> => oldprio 2, newprio 1
+> => OK
+>
+>
+> So the bug is triggered only if the shorter name is higher-prio _and_
+> shorter name is traversed first. If the long name is traversed first,
+> the bug don't trigger with either "search" directive order (and on my
+> "make check" runs this is the case).
 
-This information can be found in /lib/modules/`uname -r`/modules.softdep, and
-has only recently been exported by the kernel.
+Yep, you are right. And I'm not sure there's a way to trigger the bug
+to always reproduce :(
+If I don't figure out a way to do this I think I'll just revert the
+test, or at least remove the double test.
 
-Also remove the advice about copying modules.softdep to /lib/modules as it is
-not clear how to do this correctly with several kernels installed with
-potentially conflicting soft dependencies.
----
- libkmod/libkmod-config.c | 2 ++
- tools/depmod.c           | 2 --
- 2 files changed, 2 insertions(+), 2 deletions(-)
+thanks
 
-diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
-index 9905d5e..0953924 100644
---- a/libkmod/libkmod-config.c
-+++ b/libkmod/libkmod-config.c
-@@ -848,6 +848,8 @@ int kmod_config_new(struct kmod_ctx *ctx, struct kmod_config **p_config,
- 	struct kmod_list *path_list = NULL;
- 	size_t i;
- 
-+	conf_files_insert_sorted(ctx, &list, kmod_get_dirname(ctx), "modules.softdep");
-+
- 	for (i = 0; config_paths[i] != NULL; i++) {
- 		const char *path = config_paths[i];
- 		unsigned long long path_stamp = 0;
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 37e6afd..1aedaaf 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -1952,8 +1952,6 @@ static int output_softdeps(struct depmod *depmod, FILE *out)
- 	size_t i;
- 
- 	fputs("# Soft dependencies extracted from modules themselves.\n", out);
--	fputs("# Copy, with a .conf extension, to /etc/modprobe.d to use "
--	      "it with modprobe.\n", out);
- 
- 	for (i = 0; i < depmod->modules.count; i++) {
- 		const struct mod *mod = depmod->modules.array[i];
--- 
-1.8.4.5
-
+Lucas De Marchi.
