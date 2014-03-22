@@ -1,83 +1,53 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mga09.intel.com ([134.134.136.24]:39006 "EHLO mga09.intel.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1750749AbaCWVon (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Sun, 23 Mar 2014 17:44:43 -0400
-Date: Sun, 23 Mar 2014 18:45:45 -0300
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-CC: <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH] Fix a test in the configure script
-Message-ID: <20140323214542.GA959@intel.com>
-References: <532D8178.1030201@acm.org>
+Received: from smtp03.stone-is.org ([87.238.162.6]:49143 "EHLO
+	smtpgw.stone-is.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1750738AbaCVMzb (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Sat, 22 Mar 2014 08:55:31 -0400
+Received: from localhost (unknown [127.0.0.1])
+	by smtpgw.stone-is.be (Postfix) with ESMTP id C54C8334BD7
+	for <linux-modules@vger.kernel.org>; Sat, 22 Mar 2014 12:26:34 +0000 (UTC)
+Received: from smtpgw.stone-is.be ([127.0.0.1])
+	by localhost (smtpgw.stone-is.be [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wAXKCg6Hvj-n for <linux-modules@vger.kernel.org>;
+	Sat, 22 Mar 2014 13:26:33 +0100 (CET)
+Received: from vz19.stone-is.net (vz19.stone-is.net [87.238.162.57])
+	by smtpgw.stone-is.be (Postfix) with ESMTP id 1C613334BF5
+	for <linux-modules@vger.kernel.org>; Sat, 22 Mar 2014 13:26:32 +0100 (CET)
+Received: from [192.168.1.117] (178-119-65-67.access.telenet.be [178.119.65.67])
+	by vz19.stone-is.net (Postfix) with ESMTPSA id B5EF0891FD
+	for <linux-modules@vger.kernel.org>; Sat, 22 Mar 2014 13:26:32 +0100 (CET)
+Message-ID: <532D8178.1030201@acm.org>
+Date: Sat, 22 Mar 2014 13:26:32 +0100
+From: Bart Van Assche <bvanassche@acm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-In-Reply-To: <532D8178.1030201@acm.org>
+To: linux-modules@vger.kernel.org
+Subject: [PATCH] Fix a test in the configure script
+Content-Type: text/plain; charset=ISO-8859-1
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi Bart,
+Avoid that the configure script prints the following error message:
+./configure: line 14049: xyes: command not found
 
-On Sat, Mar 22, 2014 at 01:26:32PM +0100, Bart Van Assche wrote:
-> Avoid that the configure script prints the following error message:
-> ./configure: line 14049: xyes: command not found
-> 
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  configure.ac | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/configure.ac b/configure.ac
-> index 54a52ea..7ef151e 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -112,7 +112,7 @@ AC_ARG_ENABLE([manpages],
->          AS_HELP_STRING([--disable-manpages], [disable manpages @<:@default=enabled@:>@]),
->  	[], enable_manpages=yes)
->  AM_CONDITIONAL([BUILD_MANPAGES], [test "x$enable_manpages" = "xyes"])
-> -AS_IF(["x$enable_manpages" != "xno"], ["have_manpages=yes"])
-> +AS_IF([test "x$enable_manpages" != "xno"], ["have_manpages=yes"])
->  
->  AC_ARG_ENABLE([logging],
->  	AS_HELP_STRING([--disable-logging], [disable system logging @<:@default=enabled@:>@]),
-> -- 
-
-I had another patch applied but not yet pushed:
-
-
->From 092d9448e0d46df135db0f6a6c48719e030e6477 Mon Sep 17 00:00:00 2001
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-Date: Thu, 20 Mar 2014 09:50:12 -0300
-Subject: [PATCH] build-sys: Remove bogus line causing warning
-
-./configure: line 14316: xyes: command not found
-
-We are not using have_manpages, so remove it.
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- configure.ac | 1 -
- 1 file changed, 1 deletion(-)
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configure.ac b/configure.ac
-index 54a52ea..e95942a 100644
+index 54a52ea..7ef151e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -112,7 +112,6 @@ AC_ARG_ENABLE([manpages],
+@@ -112,7 +112,7 @@ AC_ARG_ENABLE([manpages],
          AS_HELP_STRING([--disable-manpages], [disable manpages @<:@default=enabled@:>@]),
  	[], enable_manpages=yes)
  AM_CONDITIONAL([BUILD_MANPAGES], [test "x$enable_manpages" = "xyes"])
 -AS_IF(["x$enable_manpages" != "xno"], ["have_manpages=yes"])
++AS_IF([test "x$enable_manpages" != "xno"], ["have_manpages=yes"])
  
  AC_ARG_ENABLE([logging],
  	AS_HELP_STRING([--disable-logging], [disable system logging @<:@default=enabled@:>@]),
 -- 
-1.9.0
+1.8.4.5
 
-
-The difference is that we can completely remove this line since we are
-not using it anymore. It was wrongly introduced in 
-bccb4b2 ("build-sys: Do not require xsltproc for installation of man pages")
-
-
-
--- 
-Lucas De Marchi
