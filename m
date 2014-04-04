@@ -1,22 +1,25 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from cantor2.suse.de ([195.135.220.15]:57608 "EHLO mx2.suse.de"
+Received: from cantor2.suse.de ([195.135.220.15]:56121 "EHLO mx2.suse.de"
 	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1752537AbaDDLS5 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Fri, 4 Apr 2014 07:18:57 -0400
+	id S1752047AbaDDJjb (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+	Fri, 4 Apr 2014 05:39:31 -0400
 Received: from relay2.suse.de (charybdis-ext.suse.de [195.135.220.254])
-	by mx2.suse.de (Postfix) with ESMTP id 01E4CACDA
-	for <linux-modules@vger.kernel.org>; Fri,  4 Apr 2014 11:18:56 +0000 (UTC)
+	by mx2.suse.de (Postfix) with ESMTP id 71A60ACD3
+	for <linux-modules@vger.kernel.org>; Fri,  4 Apr 2014 09:39:30 +0000 (UTC)
 From: Michal Marek <mmarek@suse.cz>
 To: linux-modules@vger.kernel.org
-Subject: [PATCH v3 3/3] testsuite: Warn if sysconfdir is not /etc
-Date: Fri,  4 Apr 2014 13:18:50 +0200
-Message-Id: <1396610330-16034-4-git-send-email-mmarek@suse.cz>
-In-Reply-To: <1396610330-16034-1-git-send-email-mmarek@suse.cz>
-References: <1396610330-16034-1-git-send-email-mmarek@suse.cz>
+Subject: [PATCH v2 3/3] testsuite: Warn if sysconfdir is not /etc
+Date: Fri,  4 Apr 2014 11:39:25 +0200
+Message-Id: <1396604365-17235-1-git-send-email-mmarek@suse.cz>
+In-Reply-To: <1396603936-13045-3-git-send-email-mmarek@suse.cz>
+References: <1396603936-13045-3-git-send-email-mmarek@suse.cz>
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
 ---
+v2: Marked the target as PHONY
+Question remains if we shouldn't default to /etc in configure.ac
+
  Makefile.am | 9 ++++++++-
  1 file changed, 8 insertions(+), 1 deletion(-)
 
