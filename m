@@ -1,70 +1,56 @@
-MIME-Version: 1.0
-In-Reply-To: <1396603936-13045-1-git-send-email-mmarek@suse.cz>
-References: <1396603936-13045-1-git-send-email-mmarek@suse.cz>
-Date: Fri, 4 Apr 2014 06:47:26 -0300
-Message-ID: <CAKi4VAKqM9sC26=qkWJ6Mw=u9YrbyBa4JGSN=pK5T8NZzQUSdA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] testsuite: Do not run tests with *.ko.gz if zlib is
- not enabled
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Michal Marek <mmarek@suse.cz>
-Cc: linux-modules <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from cantor2.suse.de ([195.135.220.15]:55996 "EHLO mx2.suse.de"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S1752101AbaDDJc3 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+	Fri, 4 Apr 2014 05:32:29 -0400
+Received: from relay2.suse.de (charybdis-ext.suse.de [195.135.220.254])
+	by mx2.suse.de (Postfix) with ESMTP id 2237BAB0E
+	for <linux-modules@vger.kernel.org>; Fri,  4 Apr 2014 09:32:26 +0000 (UTC)
+From: Michal Marek <mmarek@suse.cz>
+To: linux-modules@vger.kernel.org
+Subject: [PATCH 1/3] testsuite: Do not run tests with *.ko.gz if zlib is not enabled
+Date: Fri,  4 Apr 2014 11:32:14 +0200
+Message-Id: <1396603936-13045-1-git-send-email-mmarek@suse.cz>
+Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Apr 4, 2014 at 6:32 AM, Michal Marek <mmarek@suse.cz> wrote:
-> Unfortunately, all the depmod tests depend on zlib.
+Unfortunately, all the depmod tests depend on zlib.
+---
+ testsuite/test-depmod.c   | 2 ++
+ testsuite/test-modprobe.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
-wouldn't it be better to decompress these files so we remove the dependencies?
-
-
-> ---
->  testsuite/test-depmod.c   | 2 ++
->  testsuite/test-modprobe.c | 2 ++
->  2 files changed, 4 insertions(+)
->
-> diff --git a/testsuite/test-depmod.c b/testsuite/test-depmod.c
-> index b6023f1..86e89a4 100644
-> --- a/testsuite/test-depmod.c
-> +++ b/testsuite/test-depmod.c
-> @@ -135,10 +135,12 @@ static DEFINE_TEST(depmod_search_order_same_prefix2,
->
->
->  static const struct test *tests[] = {
-> +#ifdef ENABLE_ZLIB
->         &sdepmod_modules_order_for_compressed,
->         &sdepmod_search_order_simple,
->         &sdepmod_search_order_same_prefix,
->         &sdepmod_search_order_same_prefix2,
-> +#endif
-
-if you do this, then there will be no feedback if and why a test is
-skipped.  Maybe defining some "global"  struct for skipped tests that
-we call when a test must be skipped? Example:
-
-#ifdef ENABLE_ZLIB
-         &sdepmod_search_order_same_prefix2,
-...
-#else
-        &sskip_due_missing_zlib,
-...
-#endif
-
-
-const struct test sskip_due_missing_zlib = {
-        .name = "skip_due_missing_zlib",
-        .description = "test skipped due to missing zlib", /* Abusing
-the description here to use in our test function */
-        .func = skip_test,
-};
-
-static int skip_test(const struct test *t)
-{
-        printf("%s", t->description);
-        return 0;
-}
-
-I don't really like the amount of ifdefs we can have... but maybe it
-can be improved. What do you think?
-
+diff --git a/testsuite/test-depmod.c b/testsuite/test-depmod.c
+index b6023f1..86e89a4 100644
+--- a/testsuite/test-depmod.c
++++ b/testsuite/test-depmod.c
+@@ -135,10 +135,12 @@ static DEFINE_TEST(depmod_search_order_same_prefix2,
+ 
+ 
+ static const struct test *tests[] = {
++#ifdef ENABLE_ZLIB
+ 	&sdepmod_modules_order_for_compressed,
+ 	&sdepmod_search_order_simple,
+ 	&sdepmod_search_order_same_prefix,
+ 	&sdepmod_search_order_same_prefix2,
++#endif
+ 	NULL,
+ };
+ 
+diff --git a/testsuite/test-modprobe.c b/testsuite/test-modprobe.c
+index d7663e6..c49e75b 100644
+--- a/testsuite/test-modprobe.c
++++ b/testsuite/test-modprobe.c
+@@ -332,7 +332,9 @@ static const struct test *tests[] = {
+ 	&smodprobe_show_alias_to_none,
+ 	&smodprobe_builtin,
+ 	&smodprobe_softdep_loop,
++#ifdef ENABLE_ZLIB
+ 	&smodprobe_install_cmd_loop,
++#endif
+ 	&smodprobe_param_kcmdline,
+ 	&smodprobe_param_kcmdline2,
+ 	&smodprobe_param_kcmdline3,
 -- 
-Lucas De Marchi
+1.8.4.5
+
