@@ -1,40 +1,45 @@
-Return-Path: <luto@amacapital.net>
 MIME-Version: 1.0
-In-Reply-To: <CALCETrWrT1MniF=EHSfKw2QU5FOqQfXsSF4CxA5N=XcLOFd0Hg@mail.gmail.com>
-References: <CALCETrXs6o0t5hJutE-uz4a7q8eGqRuhCXwJwbog4B606P0+pw@mail.gmail.com>
- <2dfe2833a247d602a0038d28a3636a6d74bd1845.1393620082.git.luto@amacapital.net> <CALCETrWrT1MniF=EHSfKw2QU5FOqQfXsSF4CxA5N=XcLOFd0Hg@mail.gmail.com>
-From: Andy Lutomirski <luto@amacapital.net>
-Date: Tue, 8 Apr 2014 12:37:23 -0700
-Message-ID: <CALCETrXL3Lq_2-tQq3nBQfWqcMwLhi_zqNEnKA3EgSFVqu20QQ@mail.gmail.com>
-Subject: Re: [PATCH] Add --moddir to depmod and modprobe to override the
- target directory
-To: linux-modules <linux-modules@vger.kernel.org>,
-	Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc: Andy Lutomirski <luto@amacapital.net>
-Content-Type: text/plain; charset=ISO-8859-1
+In-Reply-To: <CAGZFCEGVxMzsihhWRZPZPDRrxUhJxULj79wu0uQ5CXHgkThA+A@mail.gmail.com>
+References: <CAGZFCEGVxMzsihhWRZPZPDRrxUhJxULj79wu0uQ5CXHgkThA+A@mail.gmail.com>
+Date: Fri, 25 Apr 2014 00:16:00 -0300
+Message-ID: <CAKi4VA+c0g3rr5FiCf3zcHeqnKcgbqjg30q1DjSQbZ80EXdMWQ@mail.gmail.com>
+Subject: Re: rmmod resource busy
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: ratheesh kannoth <ratheesh.ksz@gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Mar 8, 2014 at 11:47 AM, Andy Lutomirski <luto@amacapital.net> wrote:
-> On Fri, Feb 28, 2014 at 12:43 PM, Andy Lutomirski <luto@amacapital.net> wrote:
->> Currently, depmod and modprobe can only use directories of the form
->> ROOT/lib/modules/VERSION, where ROOT and VERSION can be specified on
->> the command line.  Additionally, when used with explicitly-listed
->> modules depmod requires absolute paths, making it difficult to
->> generate a nonstandard module layout without symlink hacks and
->> absolute paths.
->>
->> This lifts both restrictions with a new --moddir option.  --moddir
->> specifies an exact directory name and, when --moddir is used, depmod
->> will accept relative module paths on the command line.
+Hi,
+
+On Tue, Apr 8, 2014 at 1:44 AM, ratheesh kannoth <ratheesh.ksz@gmail.com> w=
+rote:
+> When i tried to unload a module, i get following message
 >
-> Will an approach like this be okay (possibly with further changes) or
-> do I need to find some hack to get existing depmod and modprobe
-> binaries to work?
+> " Error: could not remove module tun_module: Resource temporarily unavail=
+able "
 >
+> 1. How to find  which process is using it ?
 
-Hi-
+Kernel reports which module is using it.
 
-A quick ping on this, now that kmod 17 is out :)
+For processes... it's not as easy. If there's a device node, you could
+search for the processes with that node opened. Example:
 
-Thanks,
-Andy
+=E2=94=94 ~ =E2=9E=A4 lsmod | grep drm
+drm_kms_helper         35710  1 i915
+drm                   239102  5 i915,drm_kms_helper
+i2c_core               24760  6
+drm,i915,i2c_i801,drm_kms_helper,i2c_algo_bit,videodev
+
+=E2=94=94 ~ =E2=9E=A4 lsof /dev/dri/card0
+COMMAND     PID  USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+gnome-she   589 lucas  mem    CHR  226,0          8096 /dev/dri/card0
+gnome-she   589 lucas    9u   CHR  226,0      0t0 8096 /dev/dri/card0
+chromium  22801 lucas  mem    CHR  226,0          8096 /dev/dri/card0
+chromium  22801 lucas   11u   CHR  226,0      0t0 8096 /dev/dri/card0
+chromium  22805 lucas   11u   CHR  226,0      0t0 8096 /dev/dri/card0
+
+
+--
+Lucas De Marchi
