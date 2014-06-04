@@ -1,41 +1,24 @@
-Return-Path: <gael.cadic@free.fr>
-Date: Wed, 4 Jun 2014 21:31:45 +0200 (CEST)
-From: gael.cadic@free.fr
-To: Dave Reisner <d@falconindy.com>
+Return-Path: <d@falconindy.com>
+Return-Path: <d@falconindy.com>
+Date: Wed, 4 Jun 2014 11:44:42 -0400
+From: Dave Reisner <d@falconindy.com>
+To: gael.cadic@free.fr
 Cc: linux-modules@vger.kernel.org, jcm@jonmasters.org,
-	lucas de marchi <lucas.de.marchi@gmail.com>
-Message-ID: <1440260372.30795006.1401910305918.JavaMail.root@zimbra44-e7.priv.proxad.net>
-In-Reply-To: <20140604154442.GC27354@rampage>
+	lucas.de.marchi@gmail.com
 Subject: Re: graph of modules
+Message-ID: <20140604154442.GC27354@rampage>
+References: <1783256707.30188000.1401895018142.JavaMail.root@zimbra44-e7.priv.proxad.net>
+ <205248495.30240674.1401896344047.JavaMail.root@zimbra44-e7.priv.proxad.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <205248495.30240674.1401896344047.JavaMail.root@zimbra44-e7.priv.proxad.net>
 List-ID: <linux-modules.vger.kernel.org>
-
-Hello,
-
-Interpret lsmod is hard without graphing
-I can give you a use for this : data acc=C3=A8s tuning
-You can follow data path from fiber card to lvm and so, tune every module t=
-imout, retry and so on
-every colleague said me automatic graphing is great because it takes time t=
-o draw it by hand=20
-
-Best regards
-
------ Mail original -----
-De: "Dave Reisner" <d@falconindy.com>
-=C3=80: "gael cadic" <gael.cadic@free.fr>
-Cc: linux-modules@vger.kernel.org, jcm@jonmasters.org, "lucas de marchi" <l=
-ucas.de.marchi@gmail.com>
-Envoy=C3=A9: Mercredi 4 Juin 2014 17:44:42
-Objet: Re: graph of modules
 
 On Wed, Jun 04, 2014 at 05:39:04PM +0200, gael.cadic@free.fr wrote:
 > Hello,
->=20
-> I wrote a bit of Perl to build dynamically the graph of modules' dependen=
-ces
->=20
+> 
+> I wrote a bit of Perl to build dynamically the graph of modules' dependences
+> 
 > As sysadmin, I think it would be nice to have it on every Linux
 
 I cobbled together something similar a few years ago:
