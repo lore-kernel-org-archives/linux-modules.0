@@ -1,32 +1,165 @@
-Return-Path: <d@falconindy.com>
-Return-Path: <d@falconindy.com>
-Date: Wed, 4 Jun 2014 11:44:42 -0400
-From: Dave Reisner <d@falconindy.com>
-To: gael.cadic@free.fr
-Cc: linux-modules@vger.kernel.org, jcm@jonmasters.org,
-	lucas.de.marchi@gmail.com
-Subject: Re: graph of modules
-Message-ID: <20140604154442.GC27354@rampage>
-References: <1783256707.30188000.1401895018142.JavaMail.root@zimbra44-e7.priv.proxad.net>
- <205248495.30240674.1401896344047.JavaMail.root@zimbra44-e7.priv.proxad.net>
+Return-Path: <gael.cadic@free.fr>
+Date: Wed, 4 Jun 2014 17:39:04 +0200 (CEST)
+From: gael.cadic@free.fr
+To: linux-modules@vger.kernel.org
+Cc: jcm@jonmasters.org, lucas.de.marchi@gmail.com
+Message-ID: <205248495.30240674.1401896344047.JavaMail.root@zimbra44-e7.priv.proxad.net>
+In-Reply-To: <1783256707.30188000.1401895018142.JavaMail.root@zimbra44-e7.priv.proxad.net>
+Subject: graph of modules
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-In-Reply-To: <205248495.30240674.1401896344047.JavaMail.root@zimbra44-e7.priv.proxad.net>
+Content-Type: text/plain; charset=utf-8
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jun 04, 2014 at 05:39:04PM +0200, gael.cadic@free.fr wrote:
-> Hello,
-> 
-> I wrote a bit of Perl to build dynamically the graph of modules' dependences
-> 
-> As sysadmin, I think it would be nice to have it on every Linux
+Hello,
 
-I cobbled together something similar a few years ago:
+I wrote a bit of Perl to build dynamically the graph of modules' dependence=
+s
 
-https://github.com/falconindy/modtree
+As sysadmin, I think it would be nice to have it on every Linux
 
-Since writing it, I can count the number of times I've used such a tool
-on one hand. It's neat, but I'm really not sure it provides much value.
+Bellow an example of result and the code
 
-Cheers,
-d
+Best regards
+
+Ga=C3=ABl
+
+                           +-------------------+     +-------------------+
+                           |     backlight     | --> |       video       |
+                           +-------------------+     +-------------------+
+
+                                                       +-------------------=
+-----------------------------+
+                                                       |                   =
+                             v
+                           +-------------------+     +-------------------+ =
+    +----------------+     +---------+     +-----+     +------+
+                           |     configfs      | --> | ocfs2_nodemanager | =
+--> |   ocfs2_dlm    | --> |  ocfs2  | <-- | jbd | --> | ext3 |
+                           +-------------------+     +-------------------+ =
+    +----------------+     +---------+     +-----+     +------+
+                                                       |                   =
+      |
+                                                       |                   =
+      |
+                                                       v                   =
+      |
+                           +-------------------+     +-------------------+ =
+      |
+                           |    crypto_api     |     |    ocfs2_dlmfs    | =
+<-----+
+                           +-------------------+     +-------------------+
+                             |
+                             |
+                             v
+                           +-------------------+     +-------------------+
+                           |    xfrm_nalgo     | --> |       ipv6        |
+                           +-------------------+     +-------------------+
+
+  +--------------------------+
+  |                          |
+  |  +---------------+     +-------------------+     +-------------------+ =
+    +----------------+
+  |  |  dm_snapshot  | <-- |      dm_mod       | --> |   dm_multipath    | =
+--> | dm_round_robin |
+  |  +---------------+     +-------------------+     +-------------------+ =
+    +----------------+
+  |                          |
+  |                          |
+  |                          v
+  |                        +-------------------+
+  |                        |     dm_mirror     |
+  |                        +-------------------+
+  |                        +-------------------+
+  +----------------------> |      dm_zero      |
+                           +-------------------+
+                           +-------------------+     +-------------------+ =
+    +----------------+
+                           |     i2c_core      | --> |      i2c_ec       | =
+--> |      sbs       |
+                           +-------------------+     +-------------------+ =
+    +----------------+
+     +---------------+     +-------------------+     +-------------------+ =
+    +----------------+
+     |    sd_mod     | <-- |                   | --> |      libata       | =
+--> |    ata_piix    |
+     +---------------+     |                   |     +-------------------+ =
+    +----------------+
+                           |                   |
+  +----------------------- |     scsi_mod      |
+  |                        |                   |
+  |  +---------------+     |                   |     +-------------------+
+  |  |      sg       | <-- |                   | --> |       cciss       |
+  |  +---------------+     +-------------------+     +-------------------+
+  |                          |
+  |                          +-------------------------+
+  |                                                    v
+  |                        +-------------------+     +-------------------+
+  +----------------------> | scsi_transport_fc | --> |      qla2xxx      |
+                           +-------------------+     +-------------------+
+     +---------------+     +-------------------+     +-------------------+ =
+    +----------------+     +---------+
+     |    nfs_acl    | <-- |      sunrpc       | --> |       lockd       | =
+--> |                | <-- | fscache |
+     +---------------+     +-------------------+     +-------------------+ =
+    |                |     +---------+
+       |                     |                                             =
+    |                |
+       |                     +---------------------------------------------=
+--> |      nfs       |
+       |                                                                   =
+    |                |
+       |                                                                   =
+    |                |
+       +-------------------------------------------------------------------=
+--> |                |
+                                                                           =
+    +----------------+
+                           +-------------------+     +-------------------+
+                           |       cdrom       | --> |      ide_cd       |
+                           +-------------------+     +-------------------+
+                           +-------------------+     +-------------------+
+                           |      edac_mc      | --> |    i5000_edac     |
+                           +-------------------+     +-------------------+
+     +---------------+     +-------------------+     +-------------------+
+     | ipmi_watchdog | <-- |  ipmi_msghandler  | --> |   ipmi_devintf    |
+     +---------------+     +-------------------+     +-------------------+
+                             |
+                             |
+                             v
+                           +-------------------+
+                           |      ipmi_si      |
+                           +-------------------+
+                           +-------------------+     +-------------------+
+                           |      parport      | --> |        lp         |
+                           +-------------------+     +-------------------+
+                             |
+                             |
+                             v
+                           +-------------------+
+                           |    parport_pc     |
+                           +-------------------+
+
+#!/usr/bin/perl
+
+use strict;
+use Graph::Easy;
+
+my @usedby;
+my $g =3D Graph::Easy->new();
+
+my $commande=3D"lsmod";
+open SORTIE, "$commande |" or die "impossible to duplicate the process : $!=
+";
+my $head =3D <SORTIE>;
+while (my $ligne =3D <SORTIE>){
+  my ($module,$size,$numused,$user) =3D split /\n| [ ]*/,$ligne;
+  if ($user ne "") {
+    my @users =3D split /,/,$user;
+    my $use;
+    foreach $use ( @users ){
+        $g->add_edge($module,$use);
+    }
+  }
+}
+
+print $g->as_ascii();
