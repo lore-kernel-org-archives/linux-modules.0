@@ -1,387 +1,565 @@
-Return-Path: <lucas.de.marchi@gmail.com>
-Date: Fri, 2 May 2014 14:13:59 +0000
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
-Cc: Gustavo Sverzut Barbieri <barbieri@gmail.com>,
-	linux-modules <linux-modules@vger.kernel.org>,
-	Rusty Russell <rusty@rustcorp.com.au>
-Subject: Re: [PATCH] Fix recursion loop in mod_count_all_dependencies()
-Message-ID: <20140502141357.GA24741@politreco>
-References: <53484327.5Nr2aWdyWz5+36kD%matwey.kornilov@gmail.com>
- <CAKi4VALtbKS=wj1KncN+kt+5hRPLDYxzkuDDg-3Cm+wr2mK5JQ@mail.gmail.com>
- <CANkykrBdJ-u-OWWgBZj_Jsghd8oqhC6AtRK7dvs=EGFt7EozMQ@mail.gmail.com>
- <CAJs94EZbVaS=N0xpAQbAySBzX_e6JR1o8FJkrJ0f4buCWvsZSA@mail.gmail.com>
+Return-Path: <gael.cadic@free.fr>
+Date: Fri, 6 Jun 2014 14:25:03 +0200 (CEST)
+From: gael.cadic@free.fr
+To: Dave Reisner <d@falconindy.com>
+Cc: linux-modules@vger.kernel.org, jcm@jonmasters.org,
+	lucas de marchi <lucas.de.marchi@gmail.com>
+Message-ID: <864159657.35260335.1402057503344.JavaMail.root@zimbra44-e7.priv.proxad.net>
+In-Reply-To: <20140604154442.GC27354@rampage>
+Subject: Re: graph of modules
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-In-Reply-To: <CAJs94EZbVaS=N0xpAQbAySBzX_e6JR1o8FJkrJ0f4buCWvsZSA@mail.gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-[ CC'ing Rusty ]
-
-Rusty, when facing module loops, shouldn't we let depmod fail? kmod and
-module-init-tools since always just warned about them, but it's really a
-bug in the module if they exist. See below.
-
-On Sun, Apr 27, 2014 at 11:44:54PM +0400, Matwey V. Kornilov wrote:
-> Can't answer the question. Looking the code, mod_count_all_dependencies has
-> to be fixed in that way. The code, running before and after, is
-> loop-tolerant.
-> 
-> However, I am not sure whether loops make sense. Can we load whole the loop
-> at once?
-
-nops, this is not possible.
-
-
-The difference from the code before is that with your approach it would
-output the partial dependencies of a module that depends on a loop. So
-if we have a module A with these dependencies:
-
-A -> B -> C -> B
-
-modules.dep would contain:
-
-A: B C
-
-Which is wrong and shouldn't be there.
-
-We could fix your patch so we don't output anything until the
-dependencies are counted, however we would need to do the same thing
-while outputting modules.dep.bin. IMO fixing it in these functions is
-already too late... they should only be executed if we are in fact
-writing out the index.
-
-So if there are loops, I think we should either (1) fail depmod entirely
-or (2) add proper support to depmod_calculate_dependencies() to mark the
-loop's dependents.
-
-(1) would be very straightforward
-(2) would be like below.
-
----------8<--------------------
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH] depmod: Fix not marking dependencies of a loop
-
-Currently we are marking as modules with dep_loop only the modules that
-are part of a loop. However we also need to skip the modules that depend
-on any module that is part of a loop.
-
-So, before this patch this loop we got right:
-
-	A -> B -> C -
-	^           |
-	'------------
-
-A, B and C will be ignored due to dependency loops. But this loop we got
-wrong:
-
-	A -> B -> C -
-	     ^      |
-	     '-------
-
-B and C will be ignored due to dependency loops, since they are part of
-it, but we will try to output the A's dependencies, leading to an
-infinite recursion loop in mod_count_all_dependencies() as pointed out
-by Matwey V. Kornilov <matwey.kornilov@gmail.com> in the mailing list.
-This is based on his patch, but instead of fixing it by detecting the
-loop dependency while outputing A's dependency, this adds the proper
-support to depmod_calculate_dependencies() to do the right thing.
----
- tools/depmod.c | 105 ++++++++++++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 85 insertions(+), 20 deletions(-)
-
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 1aedaaf..5eea498 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -927,6 +927,7 @@ struct mod {
- 	int dep_sort_idx; /* topological sort index */
- 	uint16_t idx; /* index in depmod->modules.array */
- 	uint16_t users; /* how many modules depend on this one */
-+	bool visited; /* helper field to search for loops */
- 	uint8_t dep_loop : 1;
- 	char modname[];
- };
-@@ -1587,6 +1588,86 @@ static void depmod_sort_dependencies(struct depmod *depmod)
- 	}
- }
- 
-+static inline const char *mod_get_compressed_path(const struct mod *mod)
-+{
-+	if (mod->relpath != NULL)
-+		return mod->relpath;
-+	return mod->path;
-+}
-+
-+/*
-+ * Traverse the tree marking with dep_loop = 1 any module which depends
-+ * directly or indirectly in a module with dep_loop = 1. The loops must have
-+ * alread been marked.
-+ *
-+ * We use a depth-first search using @stack to backtrack and @edges to
-+ * mark the current visiting modules
-+ */
-+static void depmod_mark_loop_dependencies(struct depmod *depmod,
-+					  uint16_t *stack, uint16_t *edges)
-+{
-+	const struct mod **itrm;
-+	unsigned int i, n_mods = depmod->modules.count;
-+	int j, k;
-+
-+	itrm = (const struct mod **)depmod->modules.array;
-+	for (i = 0; i < n_mods; i++, itrm++) {
-+		const struct mod *root = *itrm;
-+		if (root->visited || root->dep_loop == 1)
-+			continue;
-+
-+		DBG("root = %s\n", mod_get_compressed_path(root));
-+
-+		/* new DFS with i as root */
-+		stack[0] = i;
-+		j = 0;
-+		k = -1;
-+		while (j >= 0) {
-+			uint16_t idx = stack[j--];
-+			struct mod *m = depmod->modules.array[idx];
-+			struct mod **itr_child, **itr_child_end;
-+			bool leaf = true;
-+
-+			DBG("node = %s loop=%d visited=%d\n",
-+			    mod_get_compressed_path(m), m->dep_loop,
-+			    m->visited);
-+
-+			if (m->dep_loop == 1) {
-+				m->visited = true;
-+				while (k >= 0) {
-+					struct mod *parent =
-+						depmod->modules.array[edges[k--]];
-+					parent->dep_loop = 1;
-+					parent->dep_sort_idx = INT32_MAX;
-+				}
-+				break;
-+			}
-+
-+			if (m->visited)
-+				continue;
-+
-+			m->visited = true;
-+			edges[++k] = idx;
-+
-+			itr_child = (struct mod **) m->deps.array;
-+			itr_child_end = itr_child + m->deps.count;
-+			for (; itr_child < itr_child_end; itr_child++) {
-+				struct mod *child = *itr_child;
-+
-+				if (child->dep_loop == 0 && child->visited)
-+					continue;
-+
-+				stack[++j] = child->idx;
-+				leaf = false;
-+			}
-+
-+			if (leaf)
-+				k--;
-+		}
-+	}
-+
-+}
-+
- static int depmod_calculate_dependencies(struct depmod *depmod)
- {
- 	const struct mod **itrm;
-@@ -1652,6 +1733,9 @@ static int depmod_calculate_dependencies(struct depmod *depmod)
- 			m->dep_sort_idx = INT32_MAX;
- 			depmod->dep_loops++;
- 		}
-+
-+		/* Re-purpose our buffers for tree traversal */
-+		depmod_mark_loop_dependencies(depmod, users, roots);
- 	}
- 
- 	depmod_sort_dependencies(depmod);
-@@ -1745,13 +1829,6 @@ static const struct mod **mod_get_all_sorted_dependencies(const struct mod *mod,
- 	return deps;
- }
- 
--static inline const char *mod_get_compressed_path(const struct mod *mod)
--{
--	if (mod->relpath != NULL)
--		return mod->relpath;
--	return mod->path;
--}
--
- static int output_deps(struct depmod *depmod, FILE *out)
- {
- 	size_t i;
-@@ -1762,7 +1839,7 @@ static int output_deps(struct depmod *depmod, FILE *out)
- 		size_t j, n_deps;
- 
- 		if (mod->dep_loop) {
--			DBG("Ignored %s due dependency loops\n", p);
-+			WRN("Ignored %s due dependency loops\n", p);
- 			continue;
- 		}
- 
-@@ -1779,12 +1856,6 @@ static int output_deps(struct depmod *depmod, FILE *out)
- 
- 		for (j = 0; j < n_deps; j++) {
- 			const struct mod *d = deps[j];
--			if (d->dep_loop) {
--				DBG("Ignored %s (dependency of %s) "
--				    "due dependency loops\n",
--				    mod_get_compressed_path(d), p);
--				continue;
--			}
- 			fprintf(out, " %s", mod_get_compressed_path(d));
- 		}
- 		free(deps);
-@@ -1828,12 +1899,6 @@ static int output_deps_bin(struct depmod *depmod, FILE *out)
- 		linelen = strlen(p) + 1;
- 		for (j = 0; j < n_deps; j++) {
- 			const struct mod *d = deps[j];
--			if (d->dep_loop) {
--				DBG("Ignored %s (dependency of %s) "
--				    "due dependency loops\n",
--				    mod_get_compressed_path(d), p);
--				continue;
--			}
- 			linelen += 1 + strlen(mod_get_compressed_path(d));
- 		}
- 
--- 
-1.9.2
-------------------->8---------------------------
-
-I'm letting the rest of the thread below since it never reached the mailing
-list.
-
-
-Lucas De Marchi
-
-
-> 27.04.2014 19:30 пользователь "Gustavo Sverzut Barbieri" <barbieri@gmail.com>
-> написал:
-> 
-> > patch itself is okay, (one minor syntax issue with lack of space
-> > between "if" and "(").
-> >
-> > But I wonder why just fail if we find loops, are those valid? If not,
-> > couldn't we fail earlier and ask people to fix it?
-> >
-> > On Fri, Apr 25, 2014 at 12:46 AM, Lucas De Marchi
-> > <lucas.de.marchi@gmail.com> wrote:
-> > > Hi
-> > >
-> > > On Fri, Apr 11, 2014 at 4:31 PM,  <matwey.kornilov@gmail.com> wrote:
-> > >> From 48d4d7ba1acbb5c0955f75c6bdda9cf0935240fd Mon Sep 17 00:00:00 2001
-> > >> From: "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
-> > >> Date: Fri, 11 Apr 2014 19:43:18 +0400
-> > >> Subject: [PATCH] Fix recursion loop in mod_count_all_dependencies() when
-> > >>  subgraph has a cycle.
-> > >>
-> > >> When cycle is detected in mod_count_all_dependencies, use total count of
-> > >> modules as an upper bound of needed memory. Correct number of nodes is
-> > determined by
-> > >> subsequent call of mod_fill_all_unique_dependencies().
-> > >
-> > > We should deal with this already in depmod_calculate_dependencies(),
-> > > otherwise I'd say it would be a bug there. How did you reproduce it?
-> > >
-> > >
-> > > Gustavo, could you take a look on the patch below?
-> > >
-> > > --
-> > > Lucas De Marchi
-> > >
-> > >> ---
-> > >>  tools/depmod.c | 20 ++++++++++++++------
-> > >>  1 file changed, 14 insertions(+), 6 deletions(-)
-> > >>
-> > >> diff --git a/tools/depmod.c b/tools/depmod.c
-> > >> index 1aedaaf..c83dee1 100644
-> > >> --- a/tools/depmod.c
-> > >> +++ b/tools/depmod.c
-> > >> @@ -1682,12 +1682,20 @@ static int depmod_load(struct depmod *depmod)
-> > >>         return 0;
-> > >>  }
-> > >>
-> > >> -static size_t mod_count_all_dependencies(const struct mod *mod)
-> > >> +static size_t mod_count_all_dependencies(const struct mod *mod, size_t
-> > upper_bound)
-> > >>  {
-> > >>         size_t i, count = 0;
-> > >> +       /* cycle is detected */
-> > >> +       if (mod->dep_loop)
-> > >> +               return upper_bound;
-> > >> +
-> > >>         for (i = 0; i < mod->deps.count; i++) {
-> > >>                 const struct mod *d = mod->deps.array[i];
-> > >> -               count += 1 + mod_count_all_dependencies(d);
-> > >> +               const size_t child = mod_count_all_dependencies(d,
-> > upper_bound);
-> > >> +               if(child == upper_bound)
-> > >> +                       return child;
-> > >> +
-> > >> +               count += 1 + child;
-> > >>         }
-> > >>         return count;
-> > >>  }
-> > >> @@ -1722,12 +1730,12 @@ static int
-> > mod_fill_all_unique_dependencies(const struct mod *mod, const struct
-> > >>         return err;
-> > >>  }
-> > >>
-> > >> -static const struct mod **mod_get_all_sorted_dependencies(const struct
-> > mod *mod, size_t *n_deps)
-> > >> +static const struct mod **mod_get_all_sorted_dependencies(const struct
-> > mod *mod, size_t *n_deps, size_t count)
-> > >>  {
-> > >>         const struct mod **deps;
-> > >>         size_t last = 0;
-> > >>
-> > >> -       *n_deps = mod_count_all_dependencies(mod);
-> > >> +       *n_deps = mod_count_all_dependencies(mod, count);
-> > >>         if (*n_deps == 0)
-> > >>                 return NULL;
-> > >>
-> > >> @@ -1771,7 +1779,7 @@ static int output_deps(struct depmod *depmod,
-> > FILE *out)
-> > >>                 if (mod->deps.count == 0)
-> > >>                         goto end;
-> > >>
-> > >> -               deps = mod_get_all_sorted_dependencies(mod, &n_deps);
-> > >> +               deps = mod_get_all_sorted_dependencies(mod, &n_deps,
-> > depmod->modules.count);
-> > >>                 if (deps == NULL) {
-> > >>                         ERR("could not get all sorted dependencies of
-> > %s\n", p);
-> > >>                         goto end;
-> > >> @@ -1819,7 +1827,7 @@ static int output_deps_bin(struct depmod *depmod,
-> > FILE *out)
-> > >>                         continue;
-> > >>                 }
-> > >>
-> > >> -               deps = mod_get_all_sorted_dependencies(mod, &n_deps);
-> > >> +               deps = mod_get_all_sorted_dependencies(mod, &n_deps,
-> > depmod->modules.count);
-> > >>                 if (deps == NULL && n_deps > 0) {
-> > >>                         ERR("could not get all sorted dependencies of
-> > %s\n", p);
-> > >>                         continue;
-> > >> --
-> > >> 1.8.1.4
-> > >>
-> > >> --
-> > >> To unsubscribe from this list: send the line "unsubscribe
-> > linux-modules" in
-> > >> the body of a message to majordomo@vger.kernel.org
-> > >> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> >
-> >
-> >
-> > --
-> > Gustavo Sverzut Barbieri
-> > --------------------------------------
-> > Mobile: +55 (19) 99225-2202
-> > Contact: http://www.gustavobarbieri.com.br/contact
-> >
+SGVsbG8sCgpXaXRoIHNvbWUgdHVuaW5nLCBJIGdvdCB0aGlzIChzaGFycGVyIGJ1dCB3aWRlciBh
+cHBhcmVudGx5KSA6CgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSM4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQCiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKUggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICDilIzi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilJAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUkCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDi
+lIIgIOKUgiAgICAgICAgY2Ryb20gICAgICAgIOKUgiDilIDilIA+IOKUgiAgICAgIHNyX21vZCAg
+ICAgICDilIIgICAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICAgICAgICAgICAg
+ICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgIOKUlOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUmCAgICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSYICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAg
+ICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDi
+lIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAg
+ICDilIIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgIOKUggogICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4oioICAg
+ICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDi
+lIIgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUkCAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICDilIzilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAgICAgIOKUjOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUkCAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICDilIzilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAgIOKUggogICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAg4pSCICDilIIgICAgICBzb3VuZGNvcmUgICAgICDilIIg
+4pSA4pSAPiDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIg
+ICAgIOKUgiBzbmRfcGFnZV9hbGxvYyDilIIg4pSA4pSAPiDilIIgICAgICAgICDilIIg4pSA4pSA
+PiDilIIgICAgICAgICAgICAgICDilIIg4pSA4pSAPiDilIIgc25kX2hkYV9jb2RlY19yZWFsdGVr
+IOKUgiAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgIOKUlOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+mCAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAg
+ICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJgg
+ICAgIOKUgiAgICAgICAgIOKUgiAgICAg4pSCICAgICAgICAgICAgICAg4pSCICAgICDilJTilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilJggIOKUggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgIOKU
+giAgICAg4pSCICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICDilIIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IOKUgiDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIA+IOKUgiBzbmRfcGNtIOKUgiAgICAg4pSCIHNuZF9oZGFf
+Y29kZWMg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIKICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICDilIIgICAgICAgICDilIIgICAgIOKUgiAgICAgICAgICAgICAgIOKUgiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICDilIIgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkCAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAg
+ICAgIOKUgiAgICAg4pSCICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICDilIIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAg4pSCICAgc25k
+X3NlcV9kZXZpY2UgICAg4pSCIDzilIDilIAg4pSCICAgICAgICAgICAgICAgICAgIHNuZCAgICAg
+ICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAg
+IOKUgiAgICAg4pSCICAgICAgICAgICAgICAg4pSCIDzilJAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIOKUggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICDilJTilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lJggICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lJggICAgIOKUlOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+mCAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIKICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKUgiAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAg4oinICAgICAgICAgICAgICAg4oinICAgICAgICAgICAgICAgIOKUgiAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICDilIIgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IOKUgiAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKUggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgIOKI
+qCAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAg
+ICAgICAgICDilIIgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICDilIIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAg4pSM4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAg
+ICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAg
+ICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIKICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKUlD4g4pSCICAgICAgIHNuZF9zZXEgICAgICAg4pSCIDzilIDilIAg4pSC
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCIOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUvOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUmCAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIOKUggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSU4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAg
+ICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilJggICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgIOKUgiAgICDilIIgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDi
+lIIgICAgICAgICAgICAgICAgICAgIOKUgiAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKU
+giAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDiiKggICAgICAgICAgICAg
+ICAgICAgIOKUgiAgICDiiKggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIzi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilJAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUkCAg4pSCICDilIzilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilJAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgZG1f
+bW9kICAgICAgICDilIIg4pSA4pSQICDilIIgICAgICAgICAgICAgICAgICAg4pSCICDilIIgIOKU
+giAgIHNuZF9od2RlcCAgICDilIIg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pS84pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICDilIIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUlOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUmCAg4pSCICDilIIgICAgICAgICAgICAgICAgICAg4pSCICDilIIgIOKUlOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICDilIIgIOKUgiAgICAgICAgICAgICAgICAgICDi
+lIIgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICDilIIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAg
+ICAgICAgICAgICAgICAgIOKUgiAg4pSCICAgc25kX2hkYV9pbnRlbCAgIOKUgiAg4pSCICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUggog
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDiiKggICAgICAgICAgICAgICAgICAg
+ICAg4pSCICDilIIgICAgICAgICAgICAgICAgICAg4pSCICDilIIgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICDilIzilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAgIOKUgiAg4pSCICAgICAgICAgICAgICAg
+ICAgIOKUgiAg4pSCICDilIzilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilJAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUggogICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSM4pSAIOKUgiAgICAgICBkbV9sb2cgICAgICAg
+IOKUgiAg4pSCICDilIIgICAgICAgICAgICAgICAgICAg4pSCICDilJQ+IOKUgiAgIHNuZF90aW1l
+ciAgICDilIIg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIKICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICDilIIgIOKUlOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAg
+ICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSY
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICDilIIgICAg4pSCICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIOKUggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSC
+ICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICDilJTilIDilIDilIDilIDilJAgICAgICAgICAg
+ICAgICAgICAgICAgICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSYCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAg4oioICAgICAgICAgICAg
+ICAgICAgICAgICAgICAg4oioCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgIOKU
+jOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUkCAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSQCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIg
+IOKUgiAgIGRtX3JlZ2lvbl9oYXNoICAgIOKUgiDilIDilIA+IOKUgiAgICAgZG1fbWlycm9yICAg
+ICDilIIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAg4pSU4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAg
+ICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilJgKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAg4oinCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilJTi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJgKCgogICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSM4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQCiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDiiKgKICAgICAgICAgICAgICAgICDilIzi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkCAgICAg4pSM
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSQICAgICDilIzilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilJAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkAog
+ICAgICAgICAgICAgICAgIOKUgiBpMmNfaTgwMSDilIIgPOKUgOKUgCDilIIgICAgICAgICAgICAg
+ICAgICAgICDilIIg4pSA4pSAPiDilIIgICAgICAgIGRybSAgICAgICAg4pSCIOKUgOKUgD4g4pSC
+IGRybV9rbXNfaGVscGVyIOKUgiDilIDilIA+IOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAg4pSCCiAgICAgICAgICAgICAgICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSYICAgICDilIIgICAgICAgICAgICAgICAgICAgICDilIIgICAgIOKUlOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAgICAg4pSU
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAgICDi
+lIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUggogICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAg4oinICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIOKUggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+4pSCICAgICAgaTJjX2NvcmUgICAgICAg4pSCIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUmCAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICBpOTE1ICAg
+ICAgICAgICAgICDilIIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAg
+ICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICDi
+lIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDi
+lIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUggogICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAg4pSCIOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgD4g4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICDilIIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUlOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUlOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmAogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4oinICAgICAgICAgICAg
+ICAgICDiiKcKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKIqCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgIOKU
+ggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAg
+ICAgICAgICAgIOKUggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgIGky
+Y19hbGdvX2JpdCAgICAg4pSCIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUmCAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilJggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUggogICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICDilIzilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIKICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICBvdXRwdXQgICAgICAgIOKUgiDilIDilIA+IOKU
+giAgICAgICB2aWRlbyAgICAgICDilIIg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYCiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilJTilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJggICAgIOKUlOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmAoK
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUkCAgICAgICAgICAgICAgICAgICAgICAgICDilIzilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilJAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIK4pSM
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICAgICAgICAgICAgICAgIOKUgiAg
+4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSQICAgICDilIzilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilJAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkCAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICAgICAgICAgICAgICAgICAgICDilIIK4pSC
+IHh0X3N0YXRlIOKUgiA84pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pS84pSAIOKUgiAgICAgICAgICAgICAgICAgICAgIOKUgiDilIDilIA+IOKUgiBu
+Zl9jb25udHJhY2tfaXB2NCDilIIg4pSA4pSAPiDilIIgICAgIG5mX25hdCAgICAg4pSCIOKUgOKU
+gD4g4pSCIGlwdF9NQVNRVUVSQURFIOKUgiAgICAgICAgICAgICAgICAgICAgICAg4pSCCuKUlOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAgICAgICAgICAgICAgICAgICDilIIgIOKU
+giAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAgICDilJTilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJggICAgIOKUlOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAgICAgICAgICAgICAgICAg
+ICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgIOKUgiAgICAgICAg
+ICAgICAgICAgICAgIOKUgiAgICAgICDiiKcgICAgICAgICAgICAgICAgICAgICAgICAg4oinICAg
+ICAgICAgICAgICAgICAgICAgIOKIpyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAg4pSCCiAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pS84pSAIOKUgiAgICBuZl9j
+b25udHJhY2sgICAgIOKUgiAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAg
+ICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAg4pSM4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pS84pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQCiAg4pSCICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIOKUgiAg4pSCICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAg
+IOKUgiAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAg4pSC
+ICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAg
+ICDilIIKICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICDilIIgICAgICAgICAg
+ICAgICAgICAgICDilIIgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkCAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAg
+4pSCICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAg
+ICAgICDilIIKICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICDilIIgICAgICAg
+ICAgICAgICAgICAgICDilIIg4pSA4pSQICDilIIgIG5mX2RlZnJhZ19pcHY0ICAg4pSCICAgICAg
+IOKUlOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUvOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUmCAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgIOKUggog
+IOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgIOKUlOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAg4pSCICDi
+lJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilJggICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICDilIIKICDilIIgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAg4pSCICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICDilIIgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgIOKUggog
+IOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAg4pSCICAgICAgICAgICAgICAg
+ICAgICAgIOKUlOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+mCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAg
+IOKUggogIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAg4oioICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAg
+ICAgICAgICAgICDilIIKICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICDilIzi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilJAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAg
+ICAgICAgICDilIIKICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSUPiDilIIgICAg
+ICAgICAgICAgICAgICAgICDilIIgICAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSQICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAg
+ICAgICAg4pSCCiAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAg
+ICAgICAgICAgICAgIOKUgiAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICDiiKggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IOKUgiAgICAgICAgICAgICAgICDilIIKICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAg4pSCICAgICAgICAgICAgICAgICAgICAg4pSCICAgICDilIzilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAgICAgIOKUjOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkCAgICAg4pSM4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICAgICAgICAg
+ICAgICAgICAgICDilIIgICAgICAgICAgICAgICAg4pSCCiAg4pSCICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKUgiAgICAgaXB0YWJsZV9uYXQgICAgIOKUgiA84pSA4pSAIOKUgiAgICAg
+aXBfdGFibGVzICAgICDilIIg4pSA4pSAPiDilIIgaXB0YWJsZV9maWx0ZXIg4pSCICAgICDilIIg
+aXB0YWJsZV9tYW5nbGUg4pSCICAgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAg
+ICAg4pSCCiAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAg
+ICAgICAgICAgIOKUgiAgICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAgICDilJTilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilJggICAgIOKUlOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAgICAgICAgICAgICAgICAgICAgICAg4pSCICAg
+ICAgICAgICAgICAgIOKUggogIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIg
+ICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIOKUgiAgICAgICAgICAgICAgICDilIIKICDilIIgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAg4pSCIDzilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJggICAgICAgICAgICAgICAg4pSCCiAg4pSC
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUlOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIKICDilIIgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAg4pSCICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAg4pSCICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICDiiKggICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIK
+ICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICDilIzi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lJAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUkCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIOKUggogIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgICAg
+ICAgICBsbGMgICAgICAgICDilIIg4pSA4pSAPiDilIIgICAgICAgIHN0cCAgICAgICAg4pSCIOKU
+gOKUgD4g4pSCICAgICBicmlkZ2UgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUggogIOKUgiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilJggICAgIOKUlOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAgICAg4pSU4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAg4pSC
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUggog
+IOKUgiAgICAgICAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAg4pSCICAg
+ICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIK
+ICDilIIgICAgICAgICAgIOKUgiAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQ
+ICAgICDilIzilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilJAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkCAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICDilIzilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilJAgICAgICAgICAgICAgICAgICAgICAgICDilIIKICDilIIg
+ICAgICAgICAgIOKUgiAg4pSCICBsb2NrZCAgIOKUgiA84pSA4pSAIOKUgiAgICAgICBzdW5ycGMg
+ICAgICAgIOKUgiDilIDilIA+IOKUgiAgICBhdXRoX3JwY2dzcyAgICDilIIg4pSA4pSAPiDilIIg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIgPOKUgOKUgCDilIIgZnNj
+YWNoZSDilIIgICAgICAgICAgICAgICAgICAgICAgICDilIIKICDilIIgICAgICAgICAgIOKUgiAg
+4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAgICDilJTilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJggICAg
+IOKUlOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUmCAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSC
+ICAgICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilJggICAgICAgICAgICAgICAgICAg
+ICAgICDilIIKICDilIIgICAgICAgICAgIOKUgiAgICDilIIgICAgICAgICAgICAgICAg4pSCICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIOKUggogIOKUgiAgICAgICAgICAg4pSCICAgIOKUgiAgICAgICAg
+ICAgICAgICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIA+IOKUgiAgICAgICAg
+ICAgICAgICAgIG5mcyAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICDilIIKICDilIIgICAgICAgICAgIOKUgiAgICDilIIgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIKICDilIIgICAgICAgICAgIOKUgiAgICDi
+lIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKU
+giAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIKICDilIIgICAgICAg
+ICAgIOKUgiAgICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIA+IOKUgiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICDilIIKICDilIIgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilJTi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilJggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAg4pSCICAg
+ICAgICAgICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICDiiKcgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIK
+ICDilIIgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIOKUggogIOKUgiAgICAgICAgICAg4pSCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAg4pSCCiAg4pSCICAgICAgICAgICDilIIgICAgICAgICAgICAgICAgICAg4pSM
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSQICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAg4pSCCiAg4pSCICAgICAgICAgICDilJTilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIA+IOKUgiAgICAgICBuZnNfYWNsICAgICAgIOKUgiDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJggICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICDilIIKICDilIIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSU4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSY
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKU
+ggogIOKUgiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICDilIIKICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJgK
+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIzilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAgICAgIOKUjOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+kAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICBjcmNfdDEwZGlmICAg
+ICAg4pSCIOKUgOKUgD4g4pSCICAgICAgc2RfbW9kICAgICAgIOKUggogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAgICDilJTilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJgKICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkCAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQCiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICDilIIgICAgICBlYnRhYmxlcyAgICAgICDilIIg4pSA4pSAPiDi
+lIIgICAgZWJ0YWJsZV9uYXQgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilJggICAgIOKUlOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSQICAgICDilIzilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilJAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIOKUgiAgICAgZnJlcV90YWJsZSAgICAgIOKUgiDilIDilIA+IOKUgiAgIGFjcGlfY3B1ZnJl
+cSAgICDilIIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUlOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCAg
+ICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSYCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUggogICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIIKICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAg4oioCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIzilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilJAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiAgY3B1ZnJlcV9vbmRl
+bWFuZCAgIOKUggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSU4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSY
+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIzilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAgICAgIOKUjOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+kAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCIGlUQ09fdmVuZG9yX3N1cHBv
+cnQg4pSCIOKUgOKUgD4g4pSCICAgICBpVENPX3dkdCAgICAgIOKUggogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAgICDilJTilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJgKICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkCAgICAg4pSM4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQICAgICDilIzilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAKICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIOKUgiAgICAgICAgIGpiZCAgICAgICAgIOKUgiDilIDilIA+
+IOKUgiAgICAgICBleHQzICAgICAgICDilIIgPOKUgOKUgCDilIIgICAgbWJjYWNoZSAgICAg4pSC
+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilJTilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJggICAgIOKUlOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+mCAgICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSYCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDilIzilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJAgICAgIOKU
+jOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUkAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCICAgICAgIHBhcnBvcnQg
+ICAgICAg4pSCIOKUgOKUgD4g4pSCICAgIHBhcnBvcnRfcGMgICAgIOKUggogICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAg4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA
+4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYICAgICDilJTilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJgKICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAg4pSCCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIOKUggogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICDiiKgKICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUjOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKU
+gOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkAogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAg4pSCICAgICAgICBwcGRldiAgICAgICAg4pSCCiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDi
+lIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJgKCgotLS0tLSBNYWlsIG9yaWdpbmFs
+IC0tLS0tCkRlOiAiRGF2ZSBSZWlzbmVyIiA8ZEBmYWxjb25pbmR5LmNvbT4Kw4A6ICJnYWVsIGNh
+ZGljIiA8Z2FlbC5jYWRpY0BmcmVlLmZyPgpDYzogbGludXgtbW9kdWxlc0B2Z2VyLmtlcm5lbC5v
+cmcsIGpjbUBqb25tYXN0ZXJzLm9yZywgImx1Y2FzIGRlIG1hcmNoaSIgPGx1Y2FzLmRlLm1hcmNo
+aUBnbWFpbC5jb20+CkVudm95w6k6IE1lcmNyZWRpIDQgSnVpbiAyMDE0IDE3OjQ0OjQyCk9iamV0
+OiBSZTogZ3JhcGggb2YgbW9kdWxlcwoKT24gV2VkLCBKdW4gMDQsIDIwMTQgYXQgMDU6Mzk6MDRQ
+TSArMDIwMCwgZ2FlbC5jYWRpY0BmcmVlLmZyIHdyb3RlOgo+IEhlbGxvLAo+IAo+IEkgd3JvdGUg
+YSBiaXQgb2YgUGVybCB0byBidWlsZCBkeW5hbWljYWxseSB0aGUgZ3JhcGggb2YgbW9kdWxlcycg
+ZGVwZW5kZW5jZXMKPiAKPiBBcyBzeXNhZG1pbiwgSSB0aGluayBpdCB3b3VsZCBiZSBuaWNlIHRv
+IGhhdmUgaXQgb24gZXZlcnkgTGludXgKCkkgY29iYmxlZCB0b2dldGhlciBzb21ldGhpbmcgc2lt
+aWxhciBhIGZldyB5ZWFycyBhZ286CgpodHRwczovL2dpdGh1Yi5jb20vZmFsY29uaW5keS9tb2R0
+cmVlCgpTaW5jZSB3cml0aW5nIGl0LCBJIGNhbiBjb3VudCB0aGUgbnVtYmVyIG9mIHRpbWVzIEkn
+dmUgdXNlZCBzdWNoIGEgdG9vbApvbiBvbmUgaGFuZC4gSXQncyBuZWF0LCBidXQgSSdtIHJlYWxs
+eSBub3Qgc3VyZSBpdCBwcm92aWRlcyBtdWNoIHZhbHVlLgoKQ2hlZXJzLApkCg==
