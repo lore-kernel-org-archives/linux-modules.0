@@ -1,212 +1,87 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mga03.intel.com ([143.182.124.21]:45760 "EHLO mga03.intel.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1750804AbaHZF1S (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Tue, 26 Aug 2014 01:27:18 -0400
-Date: Tue, 26 Aug 2014 02:30:06 -0300
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
-Cc: Rusty Russell <rusty@rustcorp.com.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	linux-modules@vger.kernel.org
-Subject: Re: [RFC PATCH 4/5] module: Lock up a module when loading with a
- LOCLUP flag
-Message-ID: <20140826053004.GG1409@intel.com>
-References: <20140825105520.21089.26870.stgit@kbuild-fedora.novalocal>
- <20140825105548.21089.42883.stgit@kbuild-fedora.novalocal>
+Received: from mail9.hitachi.co.jp ([133.145.228.44]:40697 "EHLO
+	mail9.hitachi.co.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1757803AbaHZMFG (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Tue, 26 Aug 2014 08:05:06 -0400
+Subject: [RFC PATCH 2/2] modprobe: Add --lockup option to make module
+ unremovable
+From: Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
+To: Rusty Russell <rusty@rustcorp.com.au>,
+	Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-modules@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Date: Tue, 26 Aug 2014 12:04:56 +0000
+Message-ID: <20140826120456.8223.20476.stgit@kbuild-fedora.novalocal>
+In-Reply-To: <20140826120442.8223.80618.stgit@kbuild-fedora.novalocal>
+References: <20140826120442.8223.80618.stgit@kbuild-fedora.novalocal>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-In-Reply-To: <20140825105548.21089.42883.stgit@kbuild-fedora.novalocal>
+Content-Type: text/plain; charset="utf-8"
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Aug 25, 2014 at 10:55:48AM +0000, Masami Hiramatsu wrote:
-> Lock-up a module in kernel so that it is not removed unless
-> forcibly unload. This is done by loading a module with
-> MODULE_INIT_LOCKUP_MODULE flag (via finit_module).
-> This speeds up try_module_get by skipping refcount inc/dec for
-> the locked modules.
-> 
-> Note that this flag requires to update libkmod to support it.
+From: Masami Hiramatsu <masami.hiramatsu@gmail.com>
 
-Patches to kmod go to linux-modules@vger.kernel.org
+Add --lockup option for loading to make the module unremovable.
 
-However I'm skeptical with the use case of this flag. Is this only so
-that try_module_get() is a little bit faster? How much?
+Signed-off-by: Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
+---
+ tools/modprobe.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Then this would depend on a flag the user passed to modprobe which means
-only a few modules will use the flag. If you change the default
-behavior in kmod to pass this flag always, then any module the user
-wants to remove will need to be forcibly removed.
+diff --git a/tools/modprobe.c b/tools/modprobe.c
+index 6b34658..768a5bb 100644
+--- a/tools/modprobe.c
++++ b/tools/modprobe.c
+@@ -51,12 +51,13 @@ static int first_time = 0;
+ static int ignore_commands = 0;
+ static int use_blacklist = 0;
+ static int force = 0;
++static int lockup = 0;
+ static int strip_modversion = 0;
+ static int strip_vermagic = 0;
+ static int remove_dependencies = 0;
+ static int quiet_inuse = 0;
+ 
+-static const char cmdopts_s[] = "arRibfDcnC:d:S:sqvVh";
++static const char cmdopts_s[] = "arRibflDcnC:d:S:sqvVh";
+ static const struct option cmdopts[] = {
+ 	{"all", no_argument, 0, 'a'},
+ 	{"remove", no_argument, 0, 'r'},
+@@ -69,6 +70,7 @@ static const struct option cmdopts[] = {
+ 	{"force", no_argument, 0, 'f'},
+ 	{"force-modversion", no_argument, 0, 2},
+ 	{"force-vermagic", no_argument, 0, 1},
++	{"lockup", no_argument, 0, 'l'},
+ 
+ 	{"show-depends", no_argument, 0, 'D'},
+ 	{"showconfig", no_argument, 0, 'c'},
+@@ -116,6 +118,7 @@ static void help(void)
+ 		"\t                            --force-vermagic\n"
+ 		"\t    --force-modversion      Ignore module's version\n"
+ 		"\t    --force-vermagic        Ignore module's version magic\n"
++		"\t-l, --lockup                Make module to unremovable.\n"
+ 		"\n"
+ 		"Query Options:\n"
+ 		"\t-D, --show-depends          Only print module dependencies and exit\n"
+@@ -526,6 +529,8 @@ static int insmod(struct kmod_ctx *ctx, const char *alias,
+ 		flags |= KMOD_PROBE_FORCE_MODVERSION;
+ 	if (strip_vermagic || force)
+ 		flags |= KMOD_PROBE_FORCE_VERMAGIC;
++	if (lockup)
++		flags |= KMOD_PROBE_LOCKUP_MODULE;
+ 	if (ignore_commands)
+ 		flags |= KMOD_PROBE_IGNORE_COMMAND;
+ 	if (ignore_loaded)
+@@ -798,6 +803,9 @@ static int do_modprobe(int argc, char **orig_argv)
+ 		case 1:
+ 			strip_vermagic = 1;
+ 			break;
++		case 'l':
++			lockup = 1;
++			break;
+ 		case 'D':
+ 			ignore_loaded = 1;
+ 			dry_run = 1;
 
-I'm leaving the rest of the patch here since I'm CC'ing linux-modules.
 
--- 
-Lucas De Marchi
-
-
-> 
-> Signed-off-by: Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
-> ---
->  include/linux/module.h      |    6 ++++++
->  include/uapi/linux/module.h |    1 +
->  kernel/module.c             |   28 ++++++++++++++++++++--------
->  3 files changed, 27 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 71f282a..670cb2e 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -205,6 +205,7 @@ struct module_use {
->  
->  enum module_state {
->  	MODULE_STATE_LIVE,	/* Normal state. */
-> +	MODULE_STATE_LOCKUP,	/* Module is never removed except forced */
->  	MODULE_STATE_COMING,	/* Full formed, running module_init. */
->  	MODULE_STATE_GOING,	/* Going away. */
->  	MODULE_STATE_UNFORMED,	/* Still setting it up. */
-> @@ -390,6 +391,11 @@ static inline int module_is_live(struct module *mod)
->  	return mod->state != MODULE_STATE_GOING;
->  }
->  
-> +static inline int module_is_locked(struct module *mod)
-> +{
-> +	return mod->state == MODULE_STATE_LOCKUP;
-> +}
-> +
->  struct module *__module_text_address(unsigned long addr);
->  struct module *__module_address(unsigned long addr);
->  bool is_module_address(unsigned long addr);
-> diff --git a/include/uapi/linux/module.h b/include/uapi/linux/module.h
-> index 38da425..8195603 100644
-> --- a/include/uapi/linux/module.h
-> +++ b/include/uapi/linux/module.h
-> @@ -4,5 +4,6 @@
->  /* Flags for sys_finit_module: */
->  #define MODULE_INIT_IGNORE_MODVERSIONS	1
->  #define MODULE_INIT_IGNORE_VERMAGIC	2
-> +#define MODULE_INIT_LOCKUP_MODULE	4
->  
->  #endif /* _UAPI_LINUX_MODULE_H */
-> diff --git a/kernel/module.c b/kernel/module.c
-> index 3bd0dc9..85ffc1d 100644
-> --- a/kernel/module.c
-> +++ b/kernel/module.c
-> @@ -753,7 +753,7 @@ static int __try_stop_module(void *_sref)
->  	struct stopref *sref = _sref;
->  
->  	/* If it's not unused, quit unless we're forcing. */
-> -	if (module_refcount(sref->mod) != 0) {
-> +	if (module_is_locked(sref->mod) || module_refcount(sref->mod) != 0) {
->  		if (!(*sref->forced = try_force_unload(sref->flags)))
->  			return -EWOULDBLOCK;
->  	}
-> @@ -830,7 +830,8 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
->  	}
->  
->  	/* Doing init or already dying? */
-> -	if (mod->state != MODULE_STATE_LIVE) {
-> +	if (mod->state != MODULE_STATE_LIVE &&
-> +	    mod->state != MODULE_STATE_LOCKUP) {
->  		/* FIXME: if (force), slam module count damn the torpedoes */
->  		pr_debug("%s already dying\n", mod->name);
->  		ret = -EBUSY;
-> @@ -947,6 +948,9 @@ bool try_module_get(struct module *module)
->  	bool ret = true;
->  
->  	if (module) {
-> +		if (module_is_locked(module))
-> +			goto end;
-> +
->  		preempt_disable();
->  
->  		if (likely(module_is_live(module))) {
-> @@ -957,13 +961,14 @@ bool try_module_get(struct module *module)
->  
->  		preempt_enable();
->  	}
-> +end:
->  	return ret;
->  }
->  EXPORT_SYMBOL(try_module_get);
->  
->  void module_put(struct module *module)
->  {
-> -	if (module) {
-> +	if (module && !module_is_locked(module)) {
->  		preempt_disable();
->  		smp_wmb(); /* see comment in module_refcount */
->  		__this_cpu_inc(module->refptr->decs);
-> @@ -1026,6 +1031,7 @@ static ssize_t show_initstate(struct module_attribute *mattr,
->  
->  	switch (mk->mod->state) {
->  	case MODULE_STATE_LIVE:
-> +	case MODULE_STATE_LOCKUP:
->  		state = "live";
->  		break;
->  	case MODULE_STATE_COMING:
-> @@ -2981,6 +2987,7 @@ static bool finished_loading(const char *name)
->  	mutex_lock(&module_mutex);
->  	mod = find_module_all(name, strlen(name), true);
->  	ret = !mod || mod->state == MODULE_STATE_LIVE
-> +		|| mod->state == MODULE_STATE_LOCKUP
->  		|| mod->state == MODULE_STATE_GOING;
->  	mutex_unlock(&module_mutex);
->  
-> @@ -2999,7 +3006,7 @@ static void do_mod_ctors(struct module *mod)
->  }
->  
->  /* This is where the real work happens */
-> -static int do_init_module(struct module *mod)
-> +static int do_init_module(struct module *mod, bool locked)
->  {
->  	int ret = 0;
->  
-> @@ -3034,7 +3041,7 @@ static int do_init_module(struct module *mod)
->  	}
->  
->  	/* Now it's a first class citizen! */
-> -	mod->state = MODULE_STATE_LIVE;
-> +	mod->state = locked ? MODULE_STATE_LOCKUP : MODULE_STATE_LIVE;
->  	blocking_notifier_call_chain(&module_notify_list,
->  				     MODULE_STATE_LIVE, mod);
->  
-> @@ -3290,7 +3297,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  	/* Done! */
->  	trace_module_load(mod);
->  
-> -	return do_init_module(mod);
-> +	return do_init_module(mod, flags & MODULE_INIT_LOCKUP_MODULE);
->  
->   bug_cleanup:
->  	/* module_bug_cleanup needs module_mutex protection */
-> @@ -3358,8 +3365,9 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
->  
->  	pr_debug("finit_module: fd=%d, uargs=%p, flags=%i\n", fd, uargs, flags);
->  
-> -	if (flags & ~(MODULE_INIT_IGNORE_MODVERSIONS
-> -		      |MODULE_INIT_IGNORE_VERMAGIC))
-> +	if (flags & ~(MODULE_INIT_IGNORE_MODVERSIONS |
-> +		      MODULE_INIT_IGNORE_VERMAGIC |
-> +		      MODULE_INIT_LOCKUP_MODULE))
->  		return -EINVAL;
->  
->  	err = copy_module_from_fd(fd, &info);
-> @@ -3602,10 +3610,14 @@ static char *module_flags(struct module *mod, char *buf)
->  
->  	BUG_ON(mod->state == MODULE_STATE_UNFORMED);
->  	if (mod->taints ||
-> +	    mod->state == MODULE_STATE_LOCKUP ||
->  	    mod->state == MODULE_STATE_GOING ||
->  	    mod->state == MODULE_STATE_COMING) {
->  		buf[bx++] = '(';
->  		bx += module_flags_taint(mod, buf + bx);
-> +		/* Show a - for module-is-locked */
-> +		if (mod->state == MODULE_STATE_LOCKUP)
-> +			buf[bx++] = '*';
->  		/* Show a - for module-is-being-unloaded */
->  		if (mod->state == MODULE_STATE_GOING)
->  			buf[bx++] = '-';
-> 
-> 
