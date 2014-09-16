@@ -1,79 +1,77 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-wi0-f174.google.com ([209.85.212.174]:57413 "EHLO
-	mail-wi0-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1754499AbaI2TSP (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 29 Sep 2014 15:18:15 -0400
-Received: by mail-wi0-f174.google.com with SMTP id cc10so795415wib.7
-        for <linux-modules@vger.kernel.org>; Mon, 29 Sep 2014 12:18:14 -0700 (PDT)
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-To: linux-modules@vger.kernel.org
-Cc: Randy MacLeod <Randy.MacLeod@windriver.com>
-Subject: [PATCH] Add back-up implementation of be32toh()
-Date: Mon, 29 Sep 2014 21:18:04 +0200
-Message-Id: <1412018284-3411-1-git-send-email-patrickdepinguin@gmail.com>
-Sender: linux-modules-owner@vger.kernel.org
+MIME-Version: 1.0
+In-Reply-To: <20140914185631.GB18506@kroah.com>
+References: <20140914100545.3745.23394.stgit@localhost>
+	<20140914153832.GC4064@kroah.com>
+	<5415D10E.90809@yandex.ru>
+	<20140914173919.GA10059@kroah.com>
+	<5415D8FA.8040305@yandex.ru>
+	<20140914181353.GA12497@kroah.com>
+	<5415E00E.1000706@yandex.ru>
+	<20140914185631.GB18506@kroah.com>
+Date: Tue, 16 Sep 2014 12:40:16 -0300
+Message-ID: <CAKi4VAL5q=ptxeOE0OjG69EdjAXohPSN1ipVUipK+9JPahEE0g@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Implement /proc/built-in file similar to /proc/modules
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Kirill Tkhai <tkhai@yandex.ru>, Greg KH <gregkh@linuxfoundation.org>
+Cc: Michal Marek <mmarek@suse.cz>, arnd@arndb.de, linux-kbuild@vger.kernel.org,
+	lkml <linux-kernel@vger.kernel.org>, oleg <oleg@redhat.com>,
+	grant.likely@secretlab.ca, ebiederm@xmission.com,
+	Andrew Morton <akpm@linux-foundation.org>, ktkhai@parallels.com, sam@ravnborg.org,
+	linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Randy MacLeod <Randy.MacLeod@windriver.com>
+On Sun, Sep 14, 2014 at 3:56 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
+> On Sun, Sep 14, 2014 at 10:35:58PM +0400, Kirill Tkhai wrote:
+>>
+>> It's just an unification with /proc/modules. Why should we do any
+>> difference between external and built-in modules? It's the same,
+>> it's similar, it's better to parse when they can be shown similar.
+>
+> /proc/modules is for loaded modules, and it includes lots of information
+> that tools rely on.  It is also a very old file, no new
+> non-process-related proc/ files should be created anymore.  It's been
+> that way since sysfs was created (and one of the reasons for sysfs.)
 
-Older systems may not have the be32toh function defined. Check for this
-and fall back to checking the endianness and calling bswap_32 directly
-if needed.  This works on both old and new systems.
 
-[Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>:
-address comments raised by Lucas De Marchi [1], update commit message]
-[1] http://www.spinics.net/lists/linux-modules/msg01129.html
----
- configure.ac                |    3 +++
- libkmod/libkmod-signature.c |    1 +
- libkmod/missing.h           |   10 ++++++++++
- 3 files changed, 14 insertions(+), 0 deletions(-)
+Yeah. And let me add that kmod treats /proc/modules as deprecated.
+It's way nicer to get the information from sysfs. See
+https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/tree/README#n116
 
-diff --git a/configure.ac b/configure.ac
-index 7781ce1..cd676bc 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -53,6 +53,9 @@ AC_CHECK_MEMBERS([struct stat.st_mtim], [], [], [#include <sys/stat.h>])
- # musl 1.0 and bionic 4.4 don't have strndupa
- AC_CHECK_DECLS_ONCE([strndupa])
- 
-+# RHEL 5 and older do not have be32toh
-+AC_CHECK_DECLS_ONCE([be32toh])
-+
- # Check kernel headers
- AC_CHECK_HEADERS_ONCE([linux/module.h])
- 
-diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
-index a3ac15e..28f993e 100644
---- a/libkmod/libkmod-signature.c
-+++ b/libkmod/libkmod-signature.c
-@@ -25,6 +25,7 @@
- #include <stdio.h>
- 
- #include "libkmod-internal.h"
-+#include "missing.h"
- 
- /* These types and tables were copied from the 3.7 kernel sources.
-  * As this is just description of the signature format, it should not be
-diff --git a/libkmod/missing.h b/libkmod/missing.h
-index 8d47af8..4c0d136 100644
---- a/libkmod/missing.h
-+++ b/libkmod/missing.h
-@@ -43,3 +43,13 @@ static inline int finit_module(int fd, const char *uargs, int flags)
- 		memcpy(__new, __old, __len);				\
- 	 })
- #endif
-+
-+#if !HAVE_DECL_BE32TOH
-+#include <endian.h>
-+#include <byteswap.h>
-+#if __BYTE_ORDER == __LITTLE_ENDIAN
-+#define be32toh(x) bswap_32 (x)
-+#else
-+#define be32toh(x) (x)
-+#endif
-+#endif
+>> > No, they want the functionality that a module provides, not the module
+>> > name, or some random configuation option.
+>> >
+>> > It seems like you are trying to solve a problem that isn't there.  What
+>> > program is broken right now that this new proc file (or sysfs directory)
+>> > would fix?
+>>
+>> The initial reason was I'm building custom kernels for more than 10
+>> years (not so long, I agree), and every boot I see a big list of modules
+>> from distribution /etc/module, which can't be autoloaded. I prefer to
+>> build drivers in kernel. I tried to find is there a way for userspace to
+>> understand that a module are present, but there is no a way. So this is
+>> a reason.
+
+you're probably using ancient userspace. kmod checks the
+modules.builtin file generated by the kernel buildsys so "modprobe
+buitin-module" doesn't return an error.
+
+> Again, focus on kernel functionality, not module names or config
+> options, and you should be fine.
+
+Yeah... and if you do this way you may not even bother about the
+module itself. See the output of "kmod static-nodes". These nodes are
+created by init even if the module itself is not loaded. The right
+module will be loaded when the node is first accessed. And that
+includes the "loop" module you mention.
+
+$ kmod static-nodes | grep -A3 loop
+Module: loop
+        Device node: /dev/loop-control
+                Type: character device
+                Major: 10
+                Minor: 237
+
 -- 
-1.7.1
 
+Lucas De Marchi
