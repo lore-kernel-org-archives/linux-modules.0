@@ -1,35 +1,30 @@
-MIME-Version: 1.0
-In-Reply-To: <20140917031328.003016619@bongo.bofh.it>
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from attila.bofh.it ([85.94.204.146]:53068 "EHLO attila.bofh.it"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S1754081AbaIQDWh (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+	Tue, 16 Sep 2014 23:22:37 -0400
+Message-Id: <20140917031328.003016619@bongo.bofh.it>
+Date: Wed, 17 Sep 2014 05:12:26 +0200
+To: linux-modules@vger.kernel.org
+Subject: [patch 1/2] Document depmod --show in depmod(8)
 References: <20140917031225.559902121@bongo.bofh.it>
-	<20140917031328.003016619@bongo.bofh.it>
-Date: Sat, 20 Sep 2014 11:21:33 -0300
-Message-ID: <CAKi4VA+E5KskC9pHiQaLvOAASkQC-x+ThnLrJOrB-z=G2X0wSQ@mail.gmail.com>
-Subject: Re: [patch 1/2] Document depmod --show in depmod(8)
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: "Marco d'Itri" <md@linux.it>
-Cc: linux-modules <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-15
+From: md@Linux.IT (Marco d'Itri)
+Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Sep 17, 2014 at 12:12 AM, Marco d'Itri <md@linux.it> wrote:
-> --- a/man/depmod.xml
-> +++ b/man/depmod.xml
-> @@ -236,6 +236,9 @@
->            <option>-n</option>
->          </term>
->          <term>
-> +          <option>--show</option>
-> +        </term>
-> +        <term>
->            <option>--dry-run</option>
->          </term>
->          <listitem>
->
->
-> --
+--- a/man/depmod.xml
++++ b/man/depmod.xml
+@@ -236,6 +236,9 @@
+           <option>-n</option>
+         </term>
+         <term>
++          <option>--show</option>
++        </term>
++        <term>
+           <option>--dry-run</option>
+         </term>
+         <listitem>
 
-Applied.
 
--- 
-
-Lucas De Marchi
