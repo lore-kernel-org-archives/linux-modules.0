@@ -1,35 +1,33 @@
 Return-Path: <md@linux.it>
-Date: Sat, 20 Sep 2014 21:12:36 +0200
+Date: Sat, 20 Sep 2014 21:10:52 +0200
 From: Marco d'Itri <md@linux.it>
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	linux-modules <linux-modules@vger.kernel.org>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
 Subject: Re: [patch 2/2] Add the man page for kmod(8)
-Message-ID: <20140920191236.GA8530@bongo.bofh.it>
+Message-ID: <20140920191052.GA8101@bongo.bofh.it>
 References: <20140917031225.559902121@bongo.bofh.it>
  <20140917031328.089606663@bongo.bofh.it>
  <CAKi4VAJ5oS2xpfYN-h0OcoVqv2Qs_5Scef7VP=ygzZx7xtVBYg@mail.gmail.com>
- <20140920191052.GA8101@bongo.bofh.it>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="yrj/dFKFPuw6o+aM"
-In-Reply-To: <20140920191052.GA8101@bongo.bofh.it>
+Content-Type: multipart/mixed; boundary="oyUTqETQ0mS9luUI"
+In-Reply-To: <CAKi4VAJ5oS2xpfYN-h0OcoVqv2Qs_5Scef7VP=ygzZx7xtVBYg@mail.gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
 
---yrj/dFKFPuw6o+aM
+--oyUTqETQ0mS9luUI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Sep 20, Marco d'Itri <md@linux.it> wrote:
+On Sep 20, Lucas De Marchi <lucas.de.marchi@gmail.com> wrote:
 
-> > I can't see how he could be an author of the kmod tool.
-> Better?
-No, let's try again.
+> I can't see how he could be an author of the kmod tool.
+Better?
 
 -- 
 ciao,
 Marco
 
---yrj/dFKFPuw6o+aM
+--oyUTqETQ0mS9luUI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=add_kmod_man
 
@@ -37,7 +35,7 @@ Add the man page for kmod(8)
 
 --- /dev/null
 +++ b/man/kmod.xml
-@@ -0,0 +1,120 @@
+@@ -0,0 +1,126 @@
 +<?xml version='1.0'?>
 +<!--*-nxml-*-->
 +<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
@@ -48,6 +46,12 @@ Add the man page for kmod(8)
 +    <productname>kmod</productname>
 +
 +    <authorgroup>
++      <author>
++        <contrib>Developer</contrib>
++        <firstname>Lucas</firstname>
++        <surname>De Marchi</surname>
++        <email>lucas.de.marchi@gmail.com</email>
++      </author>
 +      <author>
 +        <contrib>Developer</contrib>
 +        <firstname>Lucas</firstname>
@@ -168,4 +172,4 @@ Add the man page for kmod(8)
  
  AM_V_XSLT = $(AM_V_XSLT_$(V))
 
---yrj/dFKFPuw6o+aM--
+--oyUTqETQ0mS9luUI--
