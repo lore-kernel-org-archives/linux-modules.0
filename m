@@ -1,57 +1,53 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail4.hitachi.co.jp ([133.145.228.5]:58490 "EHLO
-	mail4.hitachi.co.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1754718AbaHZMEv (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Tue, 26 Aug 2014 08:04:51 -0400
-Subject: [RFC PATCH 0/2] kmod: Support lockup option to make module
- un-removable
-From: Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
-To: Rusty Russell <rusty@rustcorp.com.au>,
-	Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	linux-modules@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>
-Date: Tue, 26 Aug 2014 12:04:42 +0000
-Message-ID: <20140826120442.8223.80618.stgit@kbuild-fedora.novalocal>
-In-Reply-To: <53FC52DA.9000303@hitachi.com>
-References: <53FC52DA.9000303@hitachi.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Sender: linux-modules-owner@vger.kernel.org
+In-Reply-To: <1411345254-239686-1-git-send-email-crrodriguez@opensuse.org>
+References: <1411345254-239686-1-git-send-email-crrodriguez@opensuse.org>
+Date: Mon, 22 Sep 2014 08:39:52 -0300
+Message-ID: <CAKi4VAJs5OoU9wouvgw6Q-UXYKEHeCofZM=znR=Q388UWc1THA@mail.gmail.com>
+Subject: Re: [PATCH] depmod: always initialize "deps" in mod_get_all_sorted_dependencies()
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: =?UTF-8?Q?Cristian_Rodr=C3=ADguez?= <crrodriguez@opensuse.org>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi,
+On Sun, Sep 21, 2014 at 9:20 PM, Cristian Rodr=C3=ADguez
+<crrodriguez@opensuse.org> wrote:
+> Fixed Coverity CID #48861
+> ---
 
-Here is a pair of patches which adds --lockup option to
-modprobe and libkmod.
+Is there anything being really fixed here?
 
-As I sent a series of patches which removes stop_machine()
-from module removal: https://lkml.org/lkml/2014/8/25/142
-it also adds lockup option which lock up the module in
-the kernel and makes it un-removable.
+>  tools/depmod.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/depmod.c b/tools/depmod.c
+> index e90ff83..bcefa09 100644
+> --- a/tools/depmod.c
+> +++ b/tools/depmod.c
+> @@ -1798,14 +1798,14 @@ static int mod_fill_all_unique_dependencies(const=
+ struct mod *mod, const struct
+>
+>  static const struct mod **mod_get_all_sorted_dependencies(const struct m=
+od *mod, size_t *n_deps)
+>  {
+> -       const struct mod **deps;
+> +       const struct mod **deps =3D NULL;
 
-These patches enables us to use that option when loading
-modules. Module lockup may be good for BIG SMP machines
-since the kernel skips module refcounting if the module
-is locked up :)
+you are assigning deps to the return of malloc below.
 
-Anyway, this is not needed if the lockup option is dropped
-from the series. I send this for testing.
+>         size_t last =3D 0;
+>
+>         *n_deps =3D mod_count_all_dependencies(mod);
+>         if (*n_deps =3D=3D 0)
+>                 return NULL;
+>
+> -       deps =3D malloc(sizeof(struct mod *) * (*n_deps));
+> +       deps =3D calloc(1, sizeof(struct mod *) * (*n_deps));
 
-Thank you,
+and we are supposed to fill n_deps in
+mod_fill_all_unique_dependencies() so there's no point in initializing
+them to 0 here.
 
----
+--=20
 
-Masami Hiramatsu (2):
-      libkmod: support lockup module option
-      modprobe: Add --lockup option to make module unremovable
-
-
- libkmod/libkmod-module.c |    3 +++
- libkmod/libkmod.h        |    4 +++-
- libkmod/missing.h        |    4 ++++
- tools/modprobe.c         |   10 +++++++++-
- 4 files changed, 19 insertions(+), 2 deletions(-)
-
---
-
+Lucas De Marchi
