@@ -1,53 +1,46 @@
-MIME-Version: 1.0
-In-Reply-To: <1411345254-239686-1-git-send-email-crrodriguez@opensuse.org>
-References: <1411345254-239686-1-git-send-email-crrodriguez@opensuse.org>
-Date: Mon, 22 Sep 2014 08:39:52 -0300
-Message-ID: <CAKi4VAJs5OoU9wouvgw6Q-UXYKEHeCofZM=znR=Q388UWc1THA@mail.gmail.com>
-Subject: Re: [PATCH] depmod: always initialize "deps" in mod_get_all_sorted_dependencies()
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: =?UTF-8?Q?Cristian_Rodr=C3=ADguez?= <crrodriguez@opensuse.org>
-Cc: linux-modules <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from mail-qc0-f169.google.com ([209.85.216.169]:36611 "EHLO
+	mail-qc0-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751681AbaIVAVE (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Sun, 21 Sep 2014 20:21:04 -0400
+Received: by mail-qc0-f169.google.com with SMTP id r5so5470416qcx.0
+        for <linux-modules@vger.kernel.org>; Sun, 21 Sep 2014 17:21:02 -0700 (PDT)
+From: =?UTF-8?q?Cristian=20Rodr=C3=ADguez?= <crrodriguez@opensuse.org>
+To: linux-modules@vger.kernel.org
+Cc: =?UTF-8?q?Cristian=20Rodr=C3=ADguez?= <crrodriguez@opensuse.org>
+Subject: [PATCH] depmod: always initialize "deps" in mod_get_all_sorted_dependencies()
+Date: Sun, 21 Sep 2014 21:20:54 -0300
+Message-Id: <1411345254-239686-1-git-send-email-crrodriguez@opensuse.org>
+Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, Sep 21, 2014 at 9:20 PM, Cristian Rodr=C3=ADguez
-<crrodriguez@opensuse.org> wrote:
-> Fixed Coverity CID #48861
-> ---
+Fixed Coverity CID #48861
+---
+ tools/depmod.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Is there anything being really fixed here?
+diff --git a/tools/depmod.c b/tools/depmod.c
+index e90ff83..bcefa09 100644
+--- a/tools/depmod.c
++++ b/tools/depmod.c
+@@ -1798,14 +1798,14 @@ static int mod_fill_all_unique_dependencies(const struct mod *mod, const struct
+ 
+ static const struct mod **mod_get_all_sorted_dependencies(const struct mod *mod, size_t *n_deps)
+ {
+-	const struct mod **deps;
++	const struct mod **deps = NULL;
+ 	size_t last = 0;
+ 
+ 	*n_deps = mod_count_all_dependencies(mod);
+ 	if (*n_deps == 0)
+ 		return NULL;
+ 
+-	deps = malloc(sizeof(struct mod *) * (*n_deps));
++	deps = calloc(1, sizeof(struct mod *) * (*n_deps));
+ 	if (deps == NULL)
+ 		return NULL;
+ 
+-- 
+2.1.0
 
->  tools/depmod.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/depmod.c b/tools/depmod.c
-> index e90ff83..bcefa09 100644
-> --- a/tools/depmod.c
-> +++ b/tools/depmod.c
-> @@ -1798,14 +1798,14 @@ static int mod_fill_all_unique_dependencies(const=
- struct mod *mod, const struct
->
->  static const struct mod **mod_get_all_sorted_dependencies(const struct m=
-od *mod, size_t *n_deps)
->  {
-> -       const struct mod **deps;
-> +       const struct mod **deps =3D NULL;
-
-you are assigning deps to the return of malloc below.
-
->         size_t last =3D 0;
->
->         *n_deps =3D mod_count_all_dependencies(mod);
->         if (*n_deps =3D=3D 0)
->                 return NULL;
->
-> -       deps =3D malloc(sizeof(struct mod *) * (*n_deps));
-> +       deps =3D calloc(1, sizeof(struct mod *) * (*n_deps));
-
-and we are supposed to fill n_deps in
-mod_fill_all_unique_dependencies() so there's no point in initializing
-them to 0 here.
-
---=20
-
-Lucas De Marchi
