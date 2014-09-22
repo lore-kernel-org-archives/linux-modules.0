@@ -1,43 +1,27 @@
 MIME-Version: 1.0
-In-Reply-To: <20140826120442.8223.80618.stgit@kbuild-fedora.novalocal>
-References: <53FC52DA.9000303@hitachi.com>
-	<20140826120442.8223.80618.stgit@kbuild-fedora.novalocal>
-Date: Mon, 1 Sep 2014 19:17:48 -0300
-Message-ID: <CAKi4VAJH-oYuDrW1nvNrQ409D0ZQHxexuVwWq8arGRQwbU+ycA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] kmod: Support lockup option to make module un-removable
+In-Reply-To: <20140920191236.GA8530@bongo.bofh.it>
+References: <20140917031225.559902121@bongo.bofh.it>
+	<20140917031328.089606663@bongo.bofh.it>
+	<CAKi4VAJ5oS2xpfYN-h0OcoVqv2Qs_5Scef7VP=ygzZx7xtVBYg@mail.gmail.com>
+	<20140920191052.GA8101@bongo.bofh.it>
+	<20140920191236.GA8530@bongo.bofh.it>
+Date: Mon, 22 Sep 2014 09:06:01 -0300
+Message-ID: <CAKi4VAL0mvNcr0Kig+6fO6zMS1P1h_UxeV38mRZMMWdsZ7rQ4A@mail.gmail.com>
+Subject: Re: [patch 2/2] Add the man page for kmod(8)
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
-Cc: Rusty Russell <rusty@rustcorp.com.au>, Lucas De Marchi <lucas.demarchi@intel.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	linux-modules <linux-modules@vger.kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>,
+	linux-modules <linux-modules@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Aug 26, 2014 at 9:04 AM, Masami Hiramatsu
-<masami.hiramatsu.pt@hitachi.com> wrote:
-> Hi,
+On Sat, Sep 20, 2014 at 4:12 PM, Marco d'Itri <md@linux.it> wrote:
+> On Sep 20, Marco d'Itri <md@linux.it> wrote:
 >
-> Here is a pair of patches which adds --lockup option to
-> modprobe and libkmod.
->
-> As I sent a series of patches which removes stop_machine()
-> from module removal: https://lkml.org/lkml/2014/8/25/142
-> it also adds lockup option which lock up the module in
-> the kernel and makes it un-removable.
->
-> These patches enables us to use that option when loading
-> modules. Module lockup may be good for BIG SMP machines
-> since the kernel skips module refcounting if the module
-> is locked up :)
->
-> Anyway, this is not needed if the lockup option is dropped
-> from the series. I send this for testing.
+>> > I can't see how he could be an author of the kmod tool.
+>> Better?
+> No, let's try again.
 
-Ok. I'm not sure it's clear... I'm waiting for feedback on the kernel
-patches in order to proceed with any review here. I'm not really
-convinced we want this option when loading a module.
-
-Rusty, what do you think?
+Applied, fixing line endings and properly formatting the patch.
 
 -- 
 Lucas De Marchi
