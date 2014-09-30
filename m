@@ -1,46 +1,52 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-qc0-f169.google.com ([209.85.216.169]:36611 "EHLO
-	mail-qc0-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751681AbaIVAVE (ORCPT
+Received: from mail-wi0-f172.google.com ([209.85.212.172]:49020 "EHLO
+	mail-wi0-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751056AbaI3HmD (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Sun, 21 Sep 2014 20:21:04 -0400
-Received: by mail-qc0-f169.google.com with SMTP id r5so5470416qcx.0
-        for <linux-modules@vger.kernel.org>; Sun, 21 Sep 2014 17:21:02 -0700 (PDT)
-From: =?UTF-8?q?Cristian=20Rodr=C3=ADguez?= <crrodriguez@opensuse.org>
+	Tue, 30 Sep 2014 03:42:03 -0400
+Received: by mail-wi0-f172.google.com with SMTP id ex7so3245678wid.17
+        for <linux-modules@vger.kernel.org>; Tue, 30 Sep 2014 00:42:01 -0700 (PDT)
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 To: linux-modules@vger.kernel.org
-Cc: =?UTF-8?q?Cristian=20Rodr=C3=ADguez?= <crrodriguez@opensuse.org>
-Subject: [PATCH] depmod: always initialize "deps" in mod_get_all_sorted_dependencies()
-Date: Sun, 21 Sep 2014 21:20:54 -0300
-Message-Id: <1411345254-239686-1-git-send-email-crrodriguez@opensuse.org>
+Cc: Robert Yang <liezhi.yang@windriver.com>
+Subject: [PATCH] Add dummy definition of O_CLOEXEC
+Date: Tue, 30 Sep 2014 09:41:46 +0200
+Message-Id: <1412062906-27378-1-git-send-email-patrickdepinguin@gmail.com>
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Fixed Coverity CID #48861
----
- tools/depmod.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+From: Robert Yang <liezhi.yang@windriver.com>
 
-diff --git a/tools/depmod.c b/tools/depmod.c
-index e90ff83..bcefa09 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -1798,14 +1798,14 @@ static int mod_fill_all_unique_dependencies(const struct mod *mod, const struct
+O_CLOEXEC is introduced from Linux 2.6.23, so old kernel doesn't have
+it, we need check before use.
+
+This patch is much more like a workaround, since it may need fcntl() use
+FD_CLOEXEC to replace.
+
+This problem was reported by "Ting Liu <b28495@freescale.com>"
+
+[Thomas De Schampheleire <thomas.de.schampheleire@gmail.com:
+ - move dummy definition from libkmod-internal.h to missing.h
+ - update commit title]
+---
+ libkmod/missing.h |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/libkmod/missing.h b/libkmod/missing.h
+index 4c0d136..e123e98 100644
+--- a/libkmod/missing.h
++++ b/libkmod/missing.h
+@@ -19,6 +19,10 @@
+ # define __NR_finit_module -1
+ #endif
  
- static const struct mod **mod_get_all_sorted_dependencies(const struct mod *mod, size_t *n_deps)
- {
--	const struct mod **deps;
-+	const struct mod **deps = NULL;
- 	size_t last = 0;
- 
- 	*n_deps = mod_count_all_dependencies(mod);
- 	if (*n_deps == 0)
- 		return NULL;
- 
--	deps = malloc(sizeof(struct mod *) * (*n_deps));
-+	deps = calloc(1, sizeof(struct mod *) * (*n_deps));
- 	if (deps == NULL)
- 		return NULL;
++#ifndef O_CLOEXEC
++#define O_CLOEXEC 0
++#endif
++
+ #ifndef HAVE_FINIT_MODULE
+ #include <errno.h>
  
 -- 
-2.1.0
+1.7.1
 
