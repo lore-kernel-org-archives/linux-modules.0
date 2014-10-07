@@ -1,156 +1,79 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from attila.bofh.it ([85.94.204.146]:53070 "EHLO attila.bofh.it"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1754251AbaIQDWh (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Tue, 16 Sep 2014 23:22:37 -0400
-Message-Id: <20140917031328.089606663@bongo.bofh.it>
-Date: Wed, 17 Sep 2014 05:12:27 +0200
-To: linux-modules@vger.kernel.org
-Subject: [patch 2/2] Add the man page for kmod(8)
-References: <20140917031225.559902121@bongo.bofh.it>
+Return-Path: <patrickdepinguin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-15
-From: md@Linux.IT (Marco d'Itri)
-Sender: linux-modules-owner@vger.kernel.org
+In-Reply-To: <CAKi4VALmguvjHkx+fZzxLHA0oKrOdexUhmRFO+8=rk8xw65rRw@mail.gmail.com>
+References: <1412062906-27378-1-git-send-email-patrickdepinguin@gmail.com>
+ <CAKi4VAKVL7oxZ6dvHbixeihtiOD2GDkHLknht_jSg3-+hWWGBQ@mail.gmail.com>
+ <060ab96a-8175-4b77-94a6-6bb843129087@email.android.com> <CAKi4VAKpGe7q0Q3HhVCr+0-iGgBBMC5TGcSOckHBed56zs5TNg@mail.gmail.com>
+ <CAAXf6LX90woPh+2tm6yCa8EGgGrvYx8D8v+q0tJS1DY5=dM+Rw@mail.gmail.com>
+ <CAKi4VAK=FcaCGDbzVwKvYWtLEqF-0uu0WEmbjQHtP5VmoKABdQ@mail.gmail.com>
+ <CAAXf6LVjWD+08NPqtwJWFVhTz4KE8nnEQNRU+cyNzQz4HQYBKg@mail.gmail.com> <CAKi4VALmguvjHkx+fZzxLHA0oKrOdexUhmRFO+8=rk8xw65rRw@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 7 Oct 2014 09:09:18 +0200
+Message-ID: <CAAXf6LXJwefsgWV-sRhEeuWOTBUUhQuZVupwACmNipA92ktkHw@mail.gmail.com>
+Subject: Re: [PATCH] Add dummy definition of O_CLOEXEC
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>, Robert Yang <liezhi.yang@windriver.com>,
+	buildroot <buildroot@busybox.net>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
---- /dev/null
-+++ b/man/kmod.xml
-@@ -0,0 +1,126 @@
-+<?xml version='1.0'?>
-+<!--*-nxml-*-->
-+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-+        "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
-+<refentry id="kmod">
-+  <refentryinfo>
-+    <title>kmod</title>
-+    <productname>kmod</productname>
-+
-+    <authorgroup>
-+      <author>
-+        <contrib>Developer</contrib>
-+        <firstname>Jon</firstname>
-+        <surname>Masters</surname>
-+        <email>jcm@jonmasters.org</email>
-+      </author>
-+      <author>
-+        <contrib>Developer</contrib>
-+        <firstname>Lucas</firstname>
-+        <surname>De Marchi</surname>
-+        <email>lucas.de.marchi@gmail.com</email>
-+      </author>
-+    </authorgroup>
-+  </refentryinfo>
-+
-+  <refmeta>
-+    <refentrytitle>kmod</refentrytitle>
-+    <manvolnum>8</manvolnum>
-+  </refmeta>
-+
-+  <refnamediv>
-+    <refname>kmod</refname>
-+    <refpurpose>Program to manage Linux Kernel modules</refpurpose>
-+  </refnamediv>
-+
-+  <refsynopsisdiv>
-+    <cmdsynopsis>
-+      <command>kmod</command>
-+      <arg rep='repeat'><option>OPTIONS</option></arg>
-+      <arg><replaceable>COMMAND</replaceable></arg>
-+      <arg rep='repeat'><option>COMMAND_OPTIONS</option></arg>
-+    </cmdsynopsis>
-+  </refsynopsisdiv>
-+
-+  <refsect1><title>DESCRIPTION</title>
-+    <para>
-+      <command>kmod</command> is a multi-call binary which implements the
-+      programs used to control Linux Kernel modules.  Most users will only
-+      run it using its other names.
-+    </para>
-+  </refsect1>
-+
-+  <refsect1><title>OPTIONS</title>
-+    <variablelist>
-+      <varlistentry>
-+        <term><option>-V</option> <option>--version</option>
-+        </term>
-+        <listitem>
-+          <para>Show the program version and exit.</para>
-+        </listitem>
-+      </varlistentry>
-+      <varlistentry>
-+        <term><option>-h</option> <option>--help</option>
-+        </term>
-+        <listitem>
-+          <para>Show the help message.</para>
-+        </listitem>
-+      </varlistentry>
-+    </variablelist>
-+  </refsect1>
-+
-+  <refsect1><title>COMMANDS</title>
-+    <variablelist>
-+      <varlistentry>
-+        <term><command>help</command></term>
-+        <listitem>
-+          <para>Show the help message.</para>
-+        </listitem>
-+      </varlistentry>
-+      <varlistentry>
-+        <term><command>list</command></term>
-+        <listitem>
-+          <para>List the currently loaded modules.</para>
-+        </listitem>
-+      </varlistentry>
-+      <varlistentry>
-+        <term><command>static-nodes</command></term>
-+        <listitem>
-+          <para>Output the static device nodes information provided by
-+           the modules of the currently running kernel version.</para>
-+        </listitem>
-+      </varlistentry>
-+    </variablelist>
-+  </refsect1>
-+
-+  <refsect1>
-+    <title>COPYRIGHT</title>
-+    <para>
-+      This manual page originally Copyright 2014, Marco d'Itri.
-+      Maintained by Jon Masters and others.
-+    </para>
-+  </refsect1>
-+
-+  <refsect1><title>SEE ALSO</title>
-+    <para>
-+      <citerefentry>
-+        <refentrytitle>lsmod</refentrytitle><manvolnum>8</manvolnum>
-+      </citerefentry>,
-+      <citerefentry>
-+        <refentrytitle>rmmod</refentrytitle><manvolnum>8</manvolnum>
-+      </citerefentry>,
-+      <citerefentry>
-+        <refentrytitle>insmod</refentrytitle><manvolnum>8</manvolnum>
-+      </citerefentry>,
-+      <citerefentry>
-+        <refentrytitle>modinfo</refentrytitle><manvolnum>8</manvolnum>
-+      </citerefentry>,
-+      <citerefentry>
-+        <refentrytitle>modprobe</refentrytitle><manvolnum>8</manvolnum>
-+      </citerefentry>,
-+      <citerefentry>
-+        <refentrytitle>depmod</refentrytitle><manvolnum>8</manvolnum>
-+      </citerefentry>
-+    </para>
-+  </refsect1>
-+</refentry>
---- a/man/Makefile.am
-+++ b/man/Makefile.am
-@@ -1,5 +1,5 @@
- MAN5 = depmod.d.5 modprobe.d.5 modules.dep.5
--MAN8 = depmod.8 insmod.8 lsmod.8 rmmod.8 modprobe.8 modinfo.8
-+MAN8 = kmod.8 depmod.8 insmod.8 lsmod.8 rmmod.8 modprobe.8 modinfo.8
- MAN_STUB = modules.dep.bin.5
- 
- AM_V_XSLT = $(AM_V_XSLT_$(V))
+Hi Lucas,
 
+On Tue, Oct 7, 2014 at 12:42 AM, Lucas De Marchi
+<lucas.de.marchi@gmail.com> wrote:
+>>
+>> I'm trying to understand the reason you object to this patch.
+>>
+>> We both agree that the dummy implementation of O_CLOEXEC will only
+>> take effect when building kmod using kernel headers < 2.6.23, correct?
+>
+> yes. But I don't want to pretend that kmod works fine there. It doesn't.
+>
+>> In such a case, there are three paths:
+>>
+>> 1. Don't make any change (the current situation). In this case, kmod
+>> cannot be compiled due to the missing O_CLOEXEC definition and thus
+>> cannot be used at all.
+>>
+>> 2. Add a dummy definition (as proposed by the patch) to allow
+>> compilation of kmod. In this case, the O_CLOEXEC flag will not take
+>> effect, indeed with the leaking file descriptors into child processes,
+>> but only in this exceptional case where kmod is built for older
+>> kernels.
+>
+> The problem here is that you are silently accepting the misbehave.
+>
+>>
+>> 3. Use explicit fcntl(..., FD_CLOEXEC...) calls after the open's.
+>> However, this is not easily done without impact on the standard case
+>> with modern headers. I assume you will like this even less.
+>>
+>> To me, case 2 seems a valid solution to an otherwise unusable kmod on
+>> systems with old kernels / kernel headers. The impact of the leaked
+>> file descriptors is to be accepted in this case.
+>
+> I'm all for accepting the leaked file descriptors *in this case*. Not
+> in the general case in which one takes kmod and realizes it works fine
+> in < 2.6.23. Because it doesn't and pretending it does is just asking
+> for invalid bug reports.
+>
+> So as I said, I don't think this is material for upstream.
+>
+> What we could do is to hide the definition of O_CLOEXEC behind a
+> configure flag... but then the amount of ifdef, the benefits from it
+> and having to maintain that on build sys don't pay off IMO.
+>
+>> However, if you still feel this is not upstreamable, then I will back
+>> off and hope that Peter will accept the patch in Buildroot :)
+>
+> I do think this could be accepted there. AFAICS he already acked on
+> it. Just make sure this is a patch that gets applied on host-kmod
+> only, not the one running on target. Let's try this approach and come
+> back to what I suggested above if it becomes too troublesome to
+> downstream?
 
+Thanks for your further explanation.
+I will push the patch to buildroot, as suggested.
+
+Best regards,
+Thomas
