@@ -1,47 +1,46 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-wg0-f47.google.com ([74.125.82.47]:42588 "EHLO
-	mail-wg0-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751386AbaJ0QzM (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 27 Oct 2014 12:55:12 -0400
-Received: by mail-wg0-f47.google.com with SMTP id a1so2436829wgh.18
-        for <linux-modules@vger.kernel.org>; Mon, 27 Oct 2014 09:55:10 -0700 (PDT)
-From: Tom Gundersen <teg@jklm.no>
-To: linux-modules@vger.kernel.org
-Cc: Tom Gundersen <teg@jklm.no>
-Subject: [PATCH] static-nodes: indicate that creation of static nodes should only happen at boot
-Date: Mon, 27 Oct 2014 17:55:03 +0100
-Message-Id: <1414428903-2381-1-git-send-email-teg@jklm.no>
-Sender: linux-modules-owner@vger.kernel.org
+Return-Path: <rusty@ozlabs.org>
+From: Rusty Russell <rusty@rustcorp.com.au>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>, Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-modules <linux-modules@vger.kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [RFC PATCH 0/2] kmod: Support lockup option to make module un-removable
+In-Reply-To: <CAKi4VAJH-oYuDrW1nvNrQ409D0ZQHxexuVwWq8arGRQwbU+ycA@mail.gmail.com>
+References: <53FC52DA.9000303@hitachi.com> <20140826120442.8223.80618.stgit@kbuild-fedora.novalocal> <CAKi4VAJH-oYuDrW1nvNrQ409D0ZQHxexuVwWq8arGRQwbU+ycA@mail.gmail.com>
+Date: Mon, 13 Oct 2014 15:11:31 +1030
+Message-ID: <87mw90eg3o.fsf@rustcorp.com.au>
+MIME-Version: 1.0
+Content-Type: text/plain
 List-ID: <linux-modules.vger.kernel.org>
 
-udev will only manage static nodes that exist at the time udev is started, so
-creating static nodes later on will likely not behave as expected. In
-particular, recreating the static nodes at run-time will reset any permissions
-udev may have applied to the nodes at boot.
+Lucas De Marchi <lucas.de.marchi@gmail.com> writes:
+> On Tue, Aug 26, 2014 at 9:04 AM, Masami Hiramatsu
+> <masami.hiramatsu.pt@hitachi.com> wrote:
+>> Hi,
+>>
+>> Here is a pair of patches which adds --lockup option to
+>> modprobe and libkmod.
+>>
+>> As I sent a series of patches which removes stop_machine()
+>> from module removal: https://lkml.org/lkml/2014/8/25/142
+>> it also adds lockup option which lock up the module in
+>> the kernel and makes it un-removable.
+>>
+>> These patches enables us to use that option when loading
+>> modules. Module lockup may be good for BIG SMP machines
+>> since the kernel skips module refcounting if the module
+>> is locked up :)
+>>
+>> Anyway, this is not needed if the lockup option is dropped
+>> from the series. I send this for testing.
+>
+> Ok. I'm not sure it's clear... I'm waiting for feedback on the kernel
+> patches in order to proceed with any review here. I'm not really
+> convinced we want this option when loading a module.
+>
+> Rusty, what do you think?
 
-See <https://bugzilla.redhat.com/show_bug.cgi?id=1147248> and the discussion
-following <http://permalink.gmane.org/gmane.comp.sysutils.systemd.devel/23795>.
+I'm not convinced, I asked him to drop that patch.  If we have
+significant performance issues, we'll have to do something smarter I
+think anyway.
 
-Note that this requires (the yet to be released) systemd v217 or a backport
-of systemd patch 8c94052ee543c3598a3c7b0c46688150aa2c6168.
----
- tools/static-nodes.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/static-nodes.c b/tools/static-nodes.c
-index 0195390..4bdacc8 100644
---- a/tools/static-nodes.c
-+++ b/tools/static-nodes.c
-@@ -95,7 +95,7 @@ static int write_tmpfiles(FILE *out, char modname[], char devname[], char type,
- 			return EXIT_FAILURE;
- 	}
- 
--	ret = fprintf(out, "%c /dev/%s 0600 - - - %u:%u\n",
-+	ret = fprintf(out, "%c! /dev/%s 0600 - - - %u:%u\n",
- 		      type, devname, maj, min);
- 	if (ret < 0)
- 		return EXIT_FAILURE;
--- 
-2.1.0
-
+Cheers,
+Rusty.
