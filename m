@@ -1,90 +1,196 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:60207 "EHLO mx1.redhat.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1759077AbaJ3ShX (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Thu, 30 Oct 2014 14:37:23 -0400
-Message-ID: <54528539.4000600@redhat.com>
-Date: Thu, 30 Oct 2014 11:36:41 -0700
-From: Andy Grover <agrover@redhat.com>
+Received: from mout.kundenserver.de ([212.227.17.13]:63273 "EHLO
+	mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1756214AbaJXMoz (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Fri, 24 Oct 2014 08:44:55 -0400
+Date: Fri, 24 Oct 2014 14:44:43 +0200
+From: Holger Eitzenberger <holger@eitzenberger.org>
+To: jcm@jonmasters.org, linux-modules@vger.kernel.org
+Cc: gregkh@linuxfoundation.org, sebastian.poehn@sohpos.com
+Subject: Regression using module-init-tools on Kernel v3.12.y
+Message-ID: <20141024124443.GB9396@imap.eitzenberger.org>
 MIME-Version: 1.0
-To: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-CC: targetcli-fb-devel@lists.fedorahosted.org,
-	linux-modules <linux-modules@vger.kernel.org>
-Subject: Re: Debugging AttributeError: 'module' object has no attribute 'kmod'
-References: <20141030160932.15107fde@PAL-U515208D001>	<54526645.2010008@redhat.com> <20141030173744.681f77df@PAL-U515208D001>
-In-Reply-To: <20141030173744.681f77df@PAL-U515208D001>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Type: multipart/mixed; boundary="FCuugMFkClbJLl1L"
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On 10/30/2014 09:37 AM, Christophe Vu-Brugier wrote:
-> Hi Andy,
->
-> On Thu, 30 Oct 2014 09:24:37 -0700, Andy Grover wrote :
->> On 10/30/2014 08:09 AM, Christophe Vu-Brugier wrote:
->>> Hi Andy,
->>>
->>> I am working on better integrating targetcli in Buildroot. Buildroot
->>> is an easy to configure build system that uses cross compilation to
->>> generate tiny root file systems for embedded platforms.
->>>
->>> Buildroot supports systemd so I built a root file system with
->>> targetcli and systemd. When systemd is selected as the init system in
->>> Buildroot, the python-kmod module is also built by Buildroot (because
->>> kmod is a dependency of systemd). And since python-kmod is present,
->>> targetcli tries to use it. But it fails with the following error:
->>>
->>>     # targetcli
->>>     Traceback (most recent call last):
->>>       File "/usr/bin/targetcli", line 100, in <module>
->>>         main()
->>>       File "/usr/bin/targetcli", line 63, in main
->>>         root_node = UIRoot(shell, as_root=is_root)
->>>       File "home/cvubrugier/repos/buildroot/output/x86-targetcli-systemd/target/usr/lib/python3.4/site-packages/targetcli/ui_root.py", line 44, in __init__
->>>       File "home/cvubrugier/repos/buildroot/output/x86-targetcli-systemd/target/usr/lib/python3.4/site-packages/rtslib/root.py", line 66, in __init__
->>>       File "home/cvubrugier/repos/buildroot/output/x86-targetcli-systemd/target/usr/lib/python3.4/site-packages/rtslib/utils.py", line 364, in modprobe
->>>     AttributeError: 'module' object has no attribute 'Kmod'
->>>
->>> Trying to use python-kmod by hand also fails on the system.
->>>
->>>     Python 3.4.1 (default, Oct 29 2014, 13:37:35)
->>>     [GCC 4.9.1] on linux
->>>     Type "help", "copyright", "credits" or "license" for more information.
->>>     >>> import kmod
->>>     >>> km = kmod.kmod()
->>>     Traceback (most recent call last):
->>>       File "<stdin>", line 1, in <module>
->>>     AttributeError: 'module' object has no attribute 'kmod'
->>>
->>> Maybe python-kmod is not properly built. Do you have some advises of
->>> what I should look at to debug this issue.
->>
->> Can you supply the kmod/python-kmod version information?
->
-> This is the latest version of kmod:
->
->    # kmod --version
->    kmod version 18
 
-(CCing kmod dev list too)
+--FCuugMFkClbJLl1L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Starting in kmod v17 the Python library was merged into the main kmod 
-repo, and the version indicates that you are using the Python wrapper 
-built from that (as opposed to the now-defunct separate project called 
-python-kmod, whose versions never exceeded 0.9.)
+(now with patch)
 
-Lucas De Marchi did the build integration because my autotools knowledge 
-was not sufficient -- I suspect building kmod with --enable-python only 
-enables Python 2. I'd need to know more about what distro you're on and 
-look at the packaging scripts, but I think upstream support for building 
-the library for Python 3 is needed (this might be extremely simple but 
-it still probably requires a separate --enable-python3 configure 
-option). Did the packager think they could just take the Py2 binaries 
-and they'd work for Python 3???
+Hi all,
 
-So I'd open an issue with the kmod packager for whatever distro because 
-something is broken, and maybe the CC'd upstream developers might also 
-be able to help us have explicit support for building for Python 3?
+we are still using module-init-tools for module handling.  And so does
+SuSE SLES11.
 
-Thanks -- Regards -- Andy
+However, after upgrading from kernel v3.8.y to v3.12.y we noticed
+that modules.pcimap was empty, which is due to the fact that the
+DEFINE_PCI_DEVICE_TABLE() has been modified to encode the name of
+the device table.  Which in turn has been done to avoid issues with
+multiple tables in a driver (see [1]).
 
+I understand why this patch went it, and fixing this issue in the PNP
+driver is worth fixing, I agree.
+
+However, there is quite some userbase of module-init-tools out there,
+eventually upgrading as well.  And as a consequence I think it makes
+sense to patch module-init-tools as well to support both format.
+
+I know that module-init-tools are deprecated by libkmod, and therefore
+they seem to be unmaintained since 2011 (at least when looking at
+git.kernel.org).
+
+Still, does the attached patch makes sense to apply to git GIT repo?
+It modifies elfops to support old and new format of the table name.
+
+I think most people will check kernel.org GIT for a patch, so I think
+it makes sense to apply this patch.
+
+Thanks.
+
+ /Holger
+
+
+[1] http://marc.info/?l=linux-input&m=139091653012772&w=2
+
+--FCuugMFkClbJLl1L
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: inline; filename="support-newer-elf-section.diff"
+
+depmod: check both old and new __mod_pci_device_tab_section
+
+New format has name of table included, e. g. for e100 driver:
+
+  __mod_pci__e100_id_table_device_table
+
+Signed-off-by: Holger Eitzenberger <holger@eitzenberger.org>
+
+Index: module-init-tools/elfops_core.c
+===================================================================
+--- module-init-tools.orig/elfops_core.c
++++ module-init-tools/elfops_core.c
+@@ -348,49 +348,51 @@ static void PERBIT(fetch_tables)(struct
+ 	for (i = 0; i < size / sizeof(syms[0]); i++) {
+ 		char *name = strings + END(syms[i].st_name, conv);
+ 
+-		if (!tables->pci_table && streq(name, "__mod_pci_device_table")) {
++		if (!tables->pci_table && mod_device_table("pci", name)) {
+ 			tables->pci_size = PERBIT(PCI_DEVICE_SIZE);
+ 			tables->pci_table = PERBIT(deref_sym)(hdr, sechdrs, &syms[i],
+ 							      NULL, conv);
+ 		}
+-		else if (!tables->usb_table && streq(name, "__mod_usb_device_table")) {
++		else if (!tables->usb_table && mod_device_table("usb", name)) {
+ 			tables->usb_size = PERBIT(USB_DEVICE_SIZE);
+ 			tables->usb_table = PERBIT(deref_sym)(hdr, sechdrs, &syms[i],
+ 							      NULL, conv);
+ 		}
+-		else if (!tables->ccw_table && streq(name, "__mod_ccw_device_table")) {
++		else if (!tables->ccw_table && mod_device_table("ccw", name)) {
+ 			tables->ccw_size = PERBIT(CCW_DEVICE_SIZE);
+ 			tables->ccw_table = PERBIT(deref_sym)(hdr, sechdrs, &syms[i],
+ 							      NULL, conv);
+ 		}
+-		else if (!tables->ieee1394_table && streq(name, "__mod_ieee1394_device_table")) {
++		else if (!tables->ieee1394_table &&
++				 mod_device_table("ieee1394", name)) {
+ 			tables->ieee1394_size = PERBIT(IEEE1394_DEVICE_SIZE);
+ 			tables->ieee1394_table = PERBIT(deref_sym)(hdr, sechdrs, &syms[i],
+ 								   NULL, conv);
+ 		}
+-		else if (!tables->pnp_table && streq(name, "__mod_pnp_device_table")) {
++		else if (!tables->pnp_table && mod_device_table("pnp", name)) {
+ 			tables->pnp_size = PERBIT(PNP_DEVICE_SIZE);
+ 			tables->pnp_table = PERBIT(deref_sym)(hdr, sechdrs, &syms[i],
+ 							      NULL, conv);
+ 		}
+-		else if (!tables->pnp_card_table && streq(name, "__mod_pnp_card_device_table")) {
++		else if (!tables->pnp_card_table &&
++				 mod_device_table("pnp_card", name)) {
+ 			tables->pnp_card_size = PERBIT(PNP_CARD_DEVICE_SIZE);
+ 			tables->pnp_card_table = PERBIT(deref_sym)(hdr, sechdrs, &syms[i],
+ 								   NULL, conv);
+ 			tables->pnp_card_offset = PERBIT(PNP_CARD_DEVICE_OFFSET);
+ 		}
+-		else if (!tables->input_table && streq(name, "__mod_input_device_table")) {
++		else if (!tables->input_table && mod_device_table("input", name)) {
+ 			tables->input_size = PERBIT(INPUT_DEVICE_SIZE);
+ 			tables->input_table = PERBIT(deref_sym)(hdr, sechdrs, &syms[i],
+ 							        &tables->input_table_size,
+ 							        conv);
+ 		}
+-		else if (!tables->serio_table && streq(name, "__mod_serio_device_table")) {
++		else if (!tables->serio_table && mod_device_table("serio", name)) {
+ 			tables->serio_size = PERBIT(SERIO_DEVICE_SIZE);
+ 			tables->serio_table = PERBIT(deref_sym)(hdr, sechdrs, &syms[i],
+ 								NULL, conv);
+ 		}
+-		else if (!tables->of_table && streq(name, "__mod_of_device_table")) {
++		else if (!tables->of_table && mod_device_table("of", name)) {
+ 			tables->of_size = PERBIT(OF_DEVICE_SIZE);
+ 			tables->of_table = PERBIT(deref_sym)(hdr, sechdrs, &syms[i],
+ 							     NULL, conv);
+Index: module-init-tools/elfops.c
+===================================================================
+--- module-init-tools.orig/elfops.c
++++ module-init-tools/elfops.c
+@@ -15,6 +15,8 @@
+ 
+ #include "testing.h"
+ 
++#define SLEN(str)		(sizeof(str) - 1)
++
+ /* Symbol types, returned by load_dep_syms */
+ static const char *weak_sym = "W";
+ static const char *undef_sym = "U";
+@@ -28,6 +30,44 @@ static const char *skip_dot(const char *
+        return str;
+ }
+ 
++/*
++ * mod_device_table - check for name of module device table
++ * @type: section type (e. g. "pci")
++ * @name: section name
++ *
++ * Both old and new format supported.
++ *
++ * Returns non-zero value if so.
++ */
++static int
++mod_device_table(const char *type, const char *name)
++{
++	size_t len;
++
++	if (strncmp(name, "__mod_", SLEN("__mod_")) != 0)
++		return 0;
++	name += SLEN("__mod_");
++
++
++	len = strlen(type);
++	if (strncmp(name, type, len) != 0)
++		return 0;
++	name += len;
++
++	if (name[0] != '_')
++		return 0;
++
++	name++;
++	if (name[0] != '_')
++		return strcmp(name, "device_table") == 0;
++
++	/* new format */
++	len = strlen(name);
++
++	return len > SLEN("device_table") &&
++		strcmp(name + len - SLEN("device_table"), "device_table") == 0;
++}
++
+ #define ELF32BIT
+ #include "elfops_core.c"
+ #undef ELF32BIT
+
+--FCuugMFkClbJLl1L--
