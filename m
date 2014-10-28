@@ -1,51 +1,38 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mout.kundenserver.de ([212.227.17.24]:59772 "EHLO
-	mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1756586AbaJXMnP (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Fri, 24 Oct 2014 08:43:15 -0400
-Date: Fri, 24 Oct 2014 14:43:01 +0200
+Return-Path: <holger@eitzenberger.org>
+Date: Tue, 28 Oct 2014 14:53:49 +0100
 From: Holger Eitzenberger <holger@eitzenberger.org>
-To: jcm@jonmasters.org, linux-modules@vger.kernel.org
-Cc: gregkh@linuxfoundation.org, sebastian.poehn@sohpos.com
-Subject: Regression using module-init-tools on Kernel v3.12.y
-Message-ID: <20141024124301.GA9396@imap.eitzenberger.org>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: jcm@jonmasters.org, linux-modules <linux-modules@vger.kernel.org>,
+	Greg KH <gregkh@linuxfoundation.org>, sebastian.poehn@sophos.com
+Subject: Re: [RESEND] Regression using module-init-tools on Kernel v3.12.y
+Message-ID: <20141028135349.GA7646@imap.eitzenberger.org>
+References: <20141027122742.GD9396@imap.eitzenberger.org>
+ <CAKi4VAJPseEvxWG4x-vQp9_=pp44xR2t7F3_LQGJeU2zKmmfkA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Sender: linux-modules-owner@vger.kernel.org
+In-Reply-To: <CAKi4VAJPseEvxWG4x-vQp9_=pp44xR2t7F3_LQGJeU2zKmmfkA@mail.gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi all,
 
-we are still using module-init-tools for module handling.  And so does
-SuSE SLES11.
+> > Still, does the attached patch makes sense to apply to git GIT repo?
+> > It modifies elfops to support old and new format of the table name.
+> 
+> I don't think so... even more because I don't agree with "there is
+> quite some userbase of module-init-tools out there" particularly
+> because all major distros in newer versions changed to kmod (and for
+> the majority of them this happened back in 2012).
 
-However, after upgrading from kernel v3.8.y to v3.12.y we noticed
-that modules.pcimap was empty, which is due to the fact that the
-DEFINE_PCI_DEVICE_TABLE() has been modified to encode the name of
-the device table.  Which in turn has been done to avoid issues with
-multiple tables in a driver (see [1]).
+True if you compare just number of users of libkmod against number
+of users of module-init-tools.  However, in absolute terms
+this may still be huge number not using libkmod already.
 
-I understand why this patch went it, and fixing this issue in the PNP
-driver is worth fixing, I agree.
+The main intention was to have this applied in order to avoid work for
+others -- and to get rich and famous.
 
-However, there is quite some userbase of module-init-tools out there,
-eventually upgrading as well.  And as a consequence I think it makes
-sense to patch module-init-tools as well to support both format.
+> So... you could either convince Jon Masters to apply your patch or
+> send the patch to the distro in question.
 
-I know that module-init-tools are deprecated by libkmod, and therefore
-they seem to be unmaintained since 2011 (at least when looking at
-git.kernel.org).
-
-Still, does the attached patch makes sense to apply to git GIT repo?
-It modifies elfops to support old and new format of the table name.
-
-I think most people will check kernel.org GIT for a patch, so I think
-it makes sense to apply this patch.
-
-Thanks.
+That was the main intention of the initial email :).  And (2): I *am*
+the distro ;).
 
  /Holger
-
-
-[1] http://marc.info/?l=linux-input&m=139091653012772&w=2
