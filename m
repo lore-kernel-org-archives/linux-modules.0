@@ -1,102 +1,103 @@
 MIME-Version: 1.0
-In-Reply-To: <54528539.4000600@redhat.com>
-References: <20141030160932.15107fde@PAL-U515208D001>
-	<54526645.2010008@redhat.com>
-	<20141030173744.681f77df@PAL-U515208D001>
-	<54528539.4000600@redhat.com>
-Date: Sat, 15 Nov 2014 11:34:56 -0200
-Message-ID: <CAKi4VAKboFTst4_Th19aVpu0GrYtqbw-t=-1MCzn-ScJCAaGEQ@mail.gmail.com>
-Subject: Re: Debugging AttributeError: 'module' object has no attribute 'kmod'
+Date: Sun, 16 Nov 2014 10:39:17 -0200
+Message-ID: <CAKi4VA+awT3PRzyb_c9dx0i2+1=ud1boH_nNVBZJAMCrDKkFWg@mail.gmail.com>
+Subject: [ANNOUNCE] kmod 19
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Andy Grover <agrover@redhat.com>
-Cc: Christophe Vu-Brugier <cvubrugier@fastmail.fm>, targetcli-fb-devel@lists.fedorahosted.org,
-	linux-modules <linux-modules@vger.kernel.org>
+To: linux-modules <linux-modules@vger.kernel.org>
+Cc: Rusty Russell <rusty@rustcorp.com.au>, lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi, sorry for the delay
+kmod 19 is out:
 
-On Thu, Oct 30, 2014 at 4:36 PM, Andy Grover <agrover@redhat.com> wrote:
-> On 10/30/2014 09:37 AM, Christophe Vu-Brugier wrote:
->>
->> Hi Andy,
->>
->> On Thu, 30 Oct 2014 09:24:37 -0700, Andy Grover wrote :
->>>
->>> On 10/30/2014 08:09 AM, Christophe Vu-Brugier wrote:
->>>>
->>>> Hi Andy,
->>>>
->>>> I am working on better integrating targetcli in Buildroot. Buildroot
->>>> is an easy to configure build system that uses cross compilation to
->>>> generate tiny root file systems for embedded platforms.
->>>>
->>>> Buildroot supports systemd so I built a root file system with
->>>> targetcli and systemd. When systemd is selected as the init system in
->>>> Buildroot, the python-kmod module is also built by Buildroot (because
->>>> kmod is a dependency of systemd). And since python-kmod is present,
->>>> targetcli tries to use it. But it fails with the following error:
->>>>
->>>>     # targetcli
->>>>     Traceback (most recent call last):
->>>>       File "/usr/bin/targetcli", line 100, in <module>
->>>>         main()
->>>>       File "/usr/bin/targetcli", line 63, in main
->>>>         root_node = UIRoot(shell, as_root=is_root)
->>>>       File
->>>> "home/cvubrugier/repos/buildroot/output/x86-targetcli-systemd/target/usr/lib/python3.4/site-packages/targetcli/ui_root.py",
->>>> line 44, in __init__
->>>>       File
->>>> "home/cvubrugier/repos/buildroot/output/x86-targetcli-systemd/target/usr/lib/python3.4/site-packages/rtslib/root.py",
->>>> line 66, in __init__
->>>>       File
->>>> "home/cvubrugier/repos/buildroot/output/x86-targetcli-systemd/target/usr/lib/python3.4/site-packages/rtslib/utils.py",
->>>> line 364, in modprobe
->>>>     AttributeError: 'module' object has no attribute 'Kmod'
->>>>
->>>> Trying to use python-kmod by hand also fails on the system.
->>>>
->>>>     Python 3.4.1 (default, Oct 29 2014, 13:37:35)
->>>>     [GCC 4.9.1] on linux
->>>>     Type "help", "copyright", "credits" or "license" for more
->>>> information.
->>>>     >>> import kmod
->>>>     >>> km = kmod.kmod()
+        ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-19.tar.xz
+        ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-19.tar.sign
 
-it should be kmod.Kmod()
+This release includes small fixes and moving code to make it more
+reliable and smaller. It's particularly important for use with systemd
+217 since it adds a feature to static-nodes that is required by this
+version of systemd.
 
-Note the capital K.
+- Bug fixes:
+        - Fix missing CLOEXEC in library
+        - Fix error message while opening kmod's index
 
-> (CCing kmod dev list too)
->
-> Starting in kmod v17 the Python library was merged into the main kmod repo,
-> and the version indicates that you are using the Python wrapper built from
-> that (as opposed to the now-defunct separate project called python-kmod,
-> whose versions never exceeded 0.9.)
->
-> Lucas De Marchi did the build integration because my autotools knowledge was
-> not sufficient -- I suspect building kmod with --enable-python only enables
-> Python 2. I'd need to know more about what distro you're on and look at the
-> packaging scripts, but I think upstream support for building the library for
-> Python 3 is needed (this might be extremely simple but it still probably
-> requires a separate --enable-python3 configure option). Did the packager
-> think they could just take the Py2 binaries and they'd work for Python 3???
->
-> So I'd open an issue with the kmod packager for whatever distro because
-> something is broken, and maybe the CC'd upstream developers might also be
-> able to help us have explicit support for building for Python 3?
+- New features:
+        - Add kmod(8) man page
+        - Allow to build with libc's without be32toh()
+        - Move code around separating common code and data structures into =
+a
+          shared directory. This allows to share more code between library =
+and
+          tools, making the binary size of tools smaller.
+        - Clarify tools vs library licenses
+        - static-nodes: when writing in tmpfiles format, indicate that
+          creation of static nodes should only happen at boot. This is used=
+ and
+          required by systemd-217+.
 
-It should work fine with python3 as well. Just tested here:
+- Improvements to testsuite:
+        - Add tests for newly created shared/ code
+        - Improve how tests are declared so there's less boilerplate code f=
+or
+          each test.
 
-$ make install DESTDIR=/tmp/inst
-$ PYTHONPATH=/tmp/inst/usr/lib/python3.4/site-packages python3
-Python 3.4.2 (default, Oct  8 2014, 13:44:52)
-[GCC 4.9.1 20140903 (prerelease)] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import kmod
->>> km = kmod.Kmod()
->>> km.loaded()
-<generator object at 0x7fbf9f807cc8>
 
--- 
+Shortlog is below:
+
+Cristian Rodr=C3=ADguez (1):
+      Add missing O_CLOEXEC in kmod_module_get_size()
+
+Holger Obermaier (1):
+      libkmod-index.c: Fix error message
+
+Lucas De Marchi (35):
+      Update TODO
+      Move macro.h to shared directory
+      Move missing.h to shared directory
+      Move generic util functions to shared directory
+      build-sys: normalize line breaks
+      Move array implementation to shared directory
+      Move hash implementation to shared directory
+      Reorder and reorganize header files
+      Prefer inttypes.h over stdint.h
+      Rename getline_wrapped() to freadline_wrapped()
+      Clarify what licences apply where
+      testsuite: add tests for array implementation
+      Do not export array of kmod extensions
+      Do not rely on prio_to_str() being always inline
+      Move alias_normalize() to shared
+      depmod: use alias_normalize() from shared
+      Move remaining functions from libkmod-util to shared
+      build-sys: rename libkmod-util convenience library
+      Log error on failed underscores(), moving it to shared/
+      Change parameter from int to char
+      libkmod: remove unused inline functions
+      Move static keyword to DEFINE_TEST macro
+      testsuite: use a section to put tests in instead of array
+      testsuite: remove now unused array of tests
+      Move strbuf implementation to shared/
+      shared: rename prefixes of strbuf functions
+      testsuite: add tests for strbuf
+      strbuf: reduce default buffer size
+      strbuf: do not calculate next step in size on all calls
+      strbuf: make strbuf_pushchars() a little less dumb
+      libkmod-index: keep index and comments in .c
+      depmod: point to documentation in libkmod
+      libkmod-index: remove invalid comment
+      libkmod-index: move comment to include the includes
+      kmod 19
+
+Marco d'Itri (2):
+      Document depmod --show in depmod(8)
+      Add the man page for kmod(8)
+
+Randy MacLeod (1):
+      Add back-up implementation of be32toh()
+
+Tom Gundersen (1):
+      static-nodes: indicate that creation of static nodes should only
+happen at boot
+
+--=20
 Lucas De Marchi
