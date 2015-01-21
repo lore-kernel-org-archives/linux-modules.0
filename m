@@ -1,48 +1,42 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mga03.intel.com ([134.134.136.65]:63715 "EHLO mga03.intel.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1752119AbbAULhp convert rfc822-to-8bit (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Wed, 21 Jan 2015 06:37:45 -0500
-From: Caio Marcelo de Oliveira Filho <caio.oliveira@intel.com>
-To: <linux-modules@vger.kernel.org>
-Subject: [PATCH 3/4] testsuite: add more input cases to freadline_wrapped test
-Date: Wed, 21 Jan 2015 09:37:22 -0200
-Message-ID: <1421840243-26082-3-git-send-email-caio.oliveira@intel.com>
+MIME-Version: 1.0
 In-Reply-To: <1421840243-26082-1-git-send-email-caio.oliveira@intel.com>
 References: <1421840243-26082-1-git-send-email-caio.oliveira@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Sender: linux-modules-owner@vger.kernel.org
+Date: Wed, 21 Jan 2015 10:17:05 -0200
+Message-ID: <CAKi4VALAiP_j=J+5TjZ0ALt4zkXcUpyUozy2Wi6y9D70obn7+A@mail.gmail.com>
+Subject: Re: [PATCH 1/4] testsuite: add test for hash_add_unique
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Caio Marcelo de Oliveira Filho <caio.oliveira@intel.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
----
- testsuite/rootfs-pristine/test-util/freadline_wrapped-correct.txt | 4 ++++
- testsuite/rootfs-pristine/test-util/freadline_wrapped-input.txt   | 2 ++
- 2 files changed, 6 insertions(+)
+On Wed, Jan 21, 2015 at 9:37 AM, Caio Marcelo de Oliveira Filho
+<caio.oliveira@intel.com> wrote:
+> ---
+>  testsuite/test-hash.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>
+> diff --git a/testsuite/test-hash.c b/testsuite/test-hash.c
+> index 3cf5ba7..ea39b80 100644
+> --- a/testsuite/test-hash.c
+> +++ b/testsuite/test-hash.c
+> @@ -220,4 +220,30 @@ static int test_hash_free(const struct test *t)
+>  DEFINE_TEST(test_hash_free,
+>                 .description = "test hash_free calling free function for all values");
+>
+> +
+> +static int test_hash_add_unique(const struct test *t)
+> +{
+> +       const char *k[] = { "k1", "k2", "k3", "k4", "k5" };
+> +       const char *v[] = { "v1", "v2", "v3", "v4", "v5" };
+> +       unsigned int i, j, N;
+> +
+> +       N = ARRAY_SIZE(k);
+> +       for (i = 0; i < N; i++) {
+> +               /* With 4 buckets, there'll be a bucket with more than one key. */
+> +               struct hash *h = hash_new(4, NULL);
 
-diff --git a/testsuite/rootfs-pristine/test-util/freadline_wrapped-correct.txt b/testsuite/rootfs-pristine/test-util/freadline_wrapped-correct.txt
-index 87344ab..80c671b 100644
---- a/testsuite/rootfs-pristine/test-util/freadline_wrapped-correct.txt
-+++ b/testsuite/rootfs-pristine/test-util/freadline_wrapped-correct.txt
-@@ -4,3 +4,7 @@ this is a single line
- 1
- three line lines in a row
- 3
-+this line has exactly 256 chars to make fun with the implementation, so it must have word after word after word after word after word after word after word after word after word after word after word after word after word after word until it hits 256 chars
-+1
-+this line is very large because it has word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word until it hits 2015 chars
-+1
-diff --git a/testsuite/rootfs-pristine/test-util/freadline_wrapped-input.txt b/testsuite/rootfs-pristine/test-util/freadline_wrapped-input.txt
-index f84a852..1c81f91 100644
---- a/testsuite/rootfs-pristine/test-util/freadline_wrapped-input.txt
-+++ b/testsuite/rootfs-pristine/test-util/freadline_wrapped-input.txt
-@@ -4,3 +4,5 @@ this is a single line
- three line \
- lines \
- in a row
-+this line has exactly 256 chars to make fun with the implementation, so it must have word after word after word after word after word after word after word after word after word after word after word after word after word after word until it hits 256 chars
-+this line is very large because it has word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word after word until it hits 2015 chars
+Applied with  's/4/N - 1/' here
+
 -- 
-2.2.2
-
+Lucas De Marchi
