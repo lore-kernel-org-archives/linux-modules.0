@@ -1,63 +1,64 @@
 MIME-Version: 1.0
-Date: Mon, 23 Feb 2015 11:30:58 -0300
-Message-ID: <CAKi4VA+1krn9rdBWE69DkhNZSrxJoeYzyPgvn-SUk8U0=CxFkw@mail.gmail.com>
-Subject: Differences between builtins and modules
+In-Reply-To: <20150211204703.GA12794@localhost>
+References: <20150211204703.GA12794@localhost>
+Date: Tue, 17 Feb 2015 14:58:17 -0200
+Message-ID: <CAKi4VALhLxQHpaAUqProwAsfBYBevNAxRN864t1=2kgyM9n3Jg@mail.gmail.com>
+Subject: Re: [PATCH] libkmod: check size in elf_get_mem (Take 2)
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Rusty Russell <rusty@rustcorp.com.au>
-Cc: Harish Jenny K N <harish_kandiga@mentor.com>,
-	linux-modules <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-	greg KH <gregkh@linuxfoundation.org>, Michal Marek <mmarek@suse.cz>
+To: Tobias Stoeckmann <tobias@stoeckmann.org>
+Cc: linux-modules <linux-modules@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-Changing the subject because this is unrelated to the patch to kmod. It was:
-[PATCH] libkmod-module: Remove directory existence check for KMOD_MODULE_BUILTIN
+On Wed, Feb 11, 2015 at 6:47 PM, Tobias Stoeckmann
+<tobias@stoeckmann.org> wrote:
+> Revision 2 of this patch, fixes wrong boundary checks of previous attempt.
+> Can definitely need some review here. :)
 
-CC'ing Michael Marek who created the modules.builtin file a while ago.
+Since this message is going directly to the commit, please put
+sentences like above after the "---" in your email. This way "git am"
+works and I don't have to manually edit the commit message. Also
+there's no need to "sign" the email.
 
-On Thu, Feb 19, 2015 at 12:25 AM, Rusty Russell <rusty@rustcorp.com.au> wrote:
->> Rusty, thinking again if we fallback to "coming" instead of "builtin"
->> everything should be fine, no? Because the decision about builtin has
->> already been taken by looking at the modules.builtin index. If we
->> return "coming" here the second call to modprobe would call
->> init_module() again which would wait for the first one to complete (or
->> return EEXIST if it's already live) since we only shortcut the
->> init_module() call if the module is live or builtin
+
+> The function elf_get_mem properly checks if offset is smaller than elf->size,
+> but does not perform further memory size validations.
 >
-> It's weird that your code should care about this at all.  Ideally,
-> userspace would see builtin modules as simply unremovable ones.
-> Historically, it hasn't; it was only module parameters for builtins
-> which caused us to expose built modules.
+> Supply desired size as third argument to elf_get_mem, which is in sync
+> with elf_get_uint/elf_set_uint then.
+>
+> As you can see, further unbounded string operations like strlen are still
+> prone to lead to out-of-bounds access, which will be covered in another patch.
+> ---
+>  libkmod/libkmod-elf.c | 54 +++++++++++++++++++++++++++++++++------------------
+>  1 file changed, 35 insertions(+), 19 deletions(-)
+>
+> diff --git a/libkmod/libkmod-elf.c b/libkmod/libkmod-elf.c
+> index 2f50ad2..ebd3dea 100644
+> --- a/libkmod/libkmod-elf.c
+> +++ b/libkmod/libkmod-elf.c
+> @@ -197,12 +197,15 @@ static inline int elf_set_uint(struct kmod_elf *elf, uint64_t offset, uint64_t s
+>         return 0;
+>  }
+>
+> -static inline const void *elf_get_mem(const struct kmod_elf *elf, uint64_t offset)
+> +static inline const void *elf_get_mem(const struct kmod_elf *elf, uint64_t offset, uint64_t size)
+>  {
+> -       assert(offset < elf->size);
+> -       if (offset >= elf->size) {
+> -               ELFDBG(elf, "out-of-bounds: %"PRIu64" >= %"PRIu64" (ELF size)\n",
+> -                      offset, elf->size);
+> +       uint64_t end;
+> +
+> +       assert(!addu64_overflow(offset, size, &end));
 
-While integrating the patch above in kmod I noticed there are more differences.
+assert may be defined to nothing if "NDEBUG" is define at compile
+time. So don't put this check with side-effects inside the assert().
+If the check would be always on (which is what we want here) we need
+to replace the assert with proper "if (!addu64...() || end >
+elf->size)"
 
-/sys/module/<modname>/ may exist and modname not be present in
-modules.builtin index. Looking in the kernel tree, this is because
-Makefile.modbuiltin adds only those that can be tristate and not those
-that can be only boolean. It may make sense because since a "module"
-can never be compiled as a "module", there would be no reason to put
-it in the index.
-
-right now in kmod if we do this:
-
-"modprobe --show-depends vt" it reports as "builtin" since there is a
-directory in /sys/module
-
-However if vt had no arguments, it would have been reported as "not found".
-
-This could be particularly bad if in a kernel version an option was
-tristate and in a new version it changed to boolean. I'm not sure if
-this is common to happen in kernel. Any code that did "modprobe
-<module>" would start to fail.
-
-My questions are:
-1) should we put *all* the "modules" in the builtin index?
-2) should we actually check /sys/module/<modulename> to report a
-module as builtin or just stop doing that and rely solely in the
-index? Initially I'd like to do the opposite, but given the race in
-deciding this I'm favoring the index.
-
-thanks
+the rest looks good.
 
 -- 
 Lucas De Marchi
