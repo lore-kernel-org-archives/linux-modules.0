@@ -1,57 +1,59 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mga03.intel.com ([134.134.136.65]:63715 "EHLO mga03.intel.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1751145AbbAULhi (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Wed, 21 Jan 2015 06:37:38 -0500
-From: Caio Marcelo de Oliveira Filho <caio.oliveira@intel.com>
-To: <linux-modules@vger.kernel.org>
-Subject: [PATCH 1/4] testsuite: add test for hash_add_unique
-Date: Wed, 21 Jan 2015 09:37:20 -0200
-Message-ID: <1421840243-26082-1-git-send-email-caio.oliveira@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Sender: linux-modules-owner@vger.kernel.org
+In-Reply-To: <20150214233452.GA7778@localhost>
+References: <20150214233452.GA7778@localhost>
+Date: Wed, 18 Feb 2015 16:22:29 -0200
+Message-ID: <CAKi4VAJuu+kQ2Xb-xrAJWuanCQFcpozvkaGQmWtbgZdZkp9Suw@mail.gmail.com>
+Subject: Re: [PATCH] Fix segmentation fault on empty signature key
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Tobias Stoeckmann <tobias@stoeckmann.org>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
----
- testsuite/test-hash.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+On Sat, Feb 14, 2015 at 9:34 PM, Tobias Stoeckmann
+<tobias@stoeckmann.org> wrote:
+> Hi,
+>
+> a segmentation fault occurs if a module has an empty key attached to
+> its signature.
+>
+> This happens because it's assumed that at least one key byte is
+> available, subtracting it in libkmod-module line 2249.  This -1 value
+> is casted to an unsigned data type later on, resulting in illegal
+> memory access.
+>
+> Attached please find a proof of concept module, tested on amd64:
+>
+> tobias:~$ modinfo 0sig.ko
+> filename:       /home/tobias/0sig.ko
+> Segmentation fault
+>
+> Tobias
+> ---
+>  libkmod/libkmod-module.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+> index 30f15ca..ca703a7 100644
+> --- a/libkmod/libkmod-module.c
+> +++ b/libkmod/libkmod-module.c
+> @@ -2246,7 +2246,8 @@ KMOD_EXPORT int kmod_module_get_info(const struct kmod_module *mod, struct kmod_
+>                                 key_hex[i * 3 + 2] = ':';
+>                 }
+>                 n = kmod_module_info_append(list, "sig_key", strlen("sig_key"),
+> -                               key_hex, sig_info.key_id_len * 3 - 1);
+> +                               key_hex, sig_info.key_id_len == 0 ? 0 :
+> +                               sig_info.key_id_len * 3 - 1);
 
-diff --git a/testsuite/test-hash.c b/testsuite/test-hash.c
-index 3cf5ba7..ea39b80 100644
---- a/testsuite/test-hash.c
-+++ b/testsuite/test-hash.c
-@@ -220,4 +220,30 @@ static int test_hash_free(const struct test *t)
- DEFINE_TEST(test_hash_free,
- 		.description = "test hash_free calling free function for all values");
- 
-+
-+static int test_hash_add_unique(const struct test *t)
-+{
-+	const char *k[] = { "k1", "k2", "k3", "k4", "k5" };
-+	const char *v[] = { "v1", "v2", "v3", "v4", "v5" };
-+	unsigned int i, j, N;
-+
-+	N = ARRAY_SIZE(k);
-+	for (i = 0; i < N; i++) {
-+		/* With 4 buckets, there'll be a bucket with more than one key. */
-+		struct hash *h = hash_new(4, NULL);
-+
-+		/* Add the keys in different orders. */
-+		for (j = 0; j < N; j++) {
-+			unsigned int idx = (j + i) % N;
-+			hash_add_unique(h, k[idx], v[idx]);
-+		}
-+
-+		assert_return(hash_get_count(h) == N, EXIT_FAILURE);
-+		hash_free(h);
-+	}
-+	return 0;
-+}
-+DEFINE_TEST(test_hash_add_unique,
-+		.description = "test hash_add_unique with different key orders")
-+
- TESTSUITE_MAIN();
+This one I prefer changing kmod_module_signature_info() to do the
+right thing. This is because a 0 len signature is not a valid
+signature and I prefer outputting nothing in modinfo rather than a
+bogus signature.
+
+Just pushed a commit changing kmod_module_signature_info(). Please
+take a look if it fixes your issue.
+
+thanks
+
 -- 
-2.2.2
-
+Lucas De Marchi
