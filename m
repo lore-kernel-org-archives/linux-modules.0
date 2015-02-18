@@ -1,77 +1,78 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mout.kundenserver.de ([212.227.126.131]:56407 "EHLO
-	mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1754286AbbBNXet (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Sat, 14 Feb 2015 18:34:49 -0500
-Received: from localhost ([79.227.30.210]) by mrelayeu.kundenserver.de
- (mreue002) with ESMTPSA (Nemesis) id 0M48SR-1XUwh21Sp1-00rrGa for
- <linux-modules@vger.kernel.org>; Sun, 15 Feb 2015 00:34:47 +0100
-Date: Sun, 15 Feb 2015 00:34:53 +0100
-From: Tobias Stoeckmann <tobias@stoeckmann.org>
-To: linux-modules@vger.kernel.org
-Subject: [PATCH] Fix segmentation fault on empty signature key
-Message-ID: <20150214233452.GA7778@localhost>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="Dxnq1zWXvFF0Q93v"
-Sender: linux-modules-owner@vger.kernel.org
+In-Reply-To: <1638446242.528951.1424008374804.JavaMail.open-xchange@oxbaltgw01.schlund.de>
+References: <20150214233547.GB7778@localhost>
+	<CAKi4VAKoA0TNXOj_C9+4fdsc-X6oee2EOB3Piu5PtDE7FSxRmQ@mail.gmail.com>
+	<1638446242.528951.1424008374804.JavaMail.open-xchange@oxbaltgw01.schlund.de>
+Date: Wed, 18 Feb 2015 15:55:37 -0200
+Message-ID: <CAKi4VA+RFrQwrWys+VRNMBPOp3KA=dk9yi442sxoWiiL5jRKEQ@mail.gmail.com>
+Subject: Re: [PATCH] Out of bounds signature access with 32 bit off_t
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: =?UTF-8?Q?Tobias_St=C3=B6ckmann?= <tobias@stoeckmann.org>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
+On Sun, Feb 15, 2015 at 11:52 AM, Tobias St=C3=B6ckmann
+<tobias@stoeckmann.org> wrote:
+> Hi,
+>
+>> On February 15, 2015 at 12:43 PM Lucas De Marchi <lucas.de.marchi@gmail.=
+com>
+>> wrote:
+>> There's no "validation check" in kmod. This is done by the kernel, no
+>> the userspace tools. The fix looks correct, but not the assumption
+>> this is a security risk. modinfo is only used to get information  from
+>> the module and the only bad thing that can happen is it crashing.
+>
+> It's definitely not a security risk to the kernel. What I mean is that mo=
+dinfo
+> (which of course does not interact with the kernel) can be directed to ot=
+her
+> parts of the memory, which an attacker _might_ use to trigger other effec=
+ts --
+> with the user permission of modinfo caller.
+>
+> Crashing is the best thing to happen, but I haven't investigated this fur=
+ther.
+> After all the range check (in modinfo) should be corrected and the issue =
+is
+> gone. Also, a 32 bit off_t is too unlikely to encounter to further invest=
+igate
+> here.
+>
+>> > Due to the unlikeliness of people using --disable-largefile, this is
+>> > a mere validation fix. With an explicit signed 64 bit cast, there is
+>> > no binary change for 99.9% of Linux systems out there. ;)
+>> >
+>> > Attached please find a proof of concept, which will most likely result=
+ in
+>> > a segmentation fault (works fine with 64 bit off_t builds):
+>>
+>> Is it "most likely" or is it certain to get a segfault?
+>
+> As written before, if the memory layout of the system is known, it doesn'=
+t have
+> to segfault. In most cases, it will. On my system with the supplied modul=
+e, it
+> does.
 
---Dxnq1zWXvFF0Q93v
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ok. I reworded the commit message a little bit and applied.
 
-Hi,
+>> Could you send the source code of this module so I can add it to the
+>> testsuite? I realize you had to poke the module after it was compiled
+>> in order to corrupt it to produce segfaults, then send the command you
+>> use, too.
+>
+> There is no source code for these files, because I wrote them with hexedi=
+t. As I
+> wrote them, you are free to take them for the test suite.
 
-a segmentation fault occurs if a module has an empty key attached to
-its signature.
+I agree with you. Unfortunately not everybody (or every distribution)
+agrees. If you take a look on recent commits to testsuite, I'm
+removing all the pre-compiled modules from there. When I finish the
+remaining modules I'll figure out a way to add a test for it.
 
-This happens because it's assumed that at least one key byte is
-available, subtracting it in libkmod-module line 2249.  This -1 value
-is casted to an unsigned data type later on, resulting in illegal
-memory access.
+thanks
 
-Attached please find a proof of concept module, tested on amd64:
-
-tobias:~$ modinfo 0sig.ko
-filename:       /home/tobias/0sig.ko
-Segmentation fault
-
-Tobias
----
- libkmod/libkmod-module.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 30f15ca..ca703a7 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -2246,7 +2246,8 @@ KMOD_EXPORT int kmod_module_get_info(const struct kmod_module *mod, struct kmod_
- 				key_hex[i * 3 + 2] = ':';
- 		}
- 		n = kmod_module_info_append(list, "sig_key", strlen("sig_key"),
--				key_hex, sig_info.key_id_len * 3 - 1);
-+				key_hex, sig_info.key_id_len == 0 ? 0 :
-+				sig_info.key_id_len * 3 - 1);
- 		free(key_hex);
- 		if (n == NULL)
- 			goto list_error;
--- 
-2.3.0
-
-
---Dxnq1zWXvFF0Q93v
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename="0sig.ko"
-Content-Transfer-Encoding: base64
-
-f0VMRgIBAAAAAAAAAAAAAAAubW9kaW5mbwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAEAAAwABAAAAAAAiIiIiMzMzMzMzMzNERERERERERBAAAAAAAAAADwAAAAAAAAB3d3d3
-iIiIiJmZmZmZmZmZqqqqqqqqqqoBAAAAIiIiIjMzMzMzMzMzRERERERERETAAAAAAAAAAA0A
-AAAAAAAAd3d3d4iIiIiZmZmZmZmZmaqqqqqqqqqqdmVybWFnaWM9aGVsbG8AAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB+TW9kdWxlIHNpZ25hdHVy
-ZSBhcHBlbmRlZH4K
-
---Dxnq1zWXvFF0Q93v--
+--=20
+Lucas De Marchi
