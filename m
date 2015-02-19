@@ -1,6 +1,6 @@
 Return-Path: <Harish_Kandiga@mentor.com>
-Message-ID: <54E5D832.6040505@mentor.com>
-Date: Thu, 19 Feb 2015 18:03:54 +0530
+Message-ID: <54E5D7F1.2090804@mentor.com>
+Date: Thu, 19 Feb 2015 18:02:49 +0530
 From: Harish Jenny Kandiga Nagaraj <harish_kandiga@mentor.com>
 MIME-Version: 1.0
 To: Lucas De Marchi <lucas.de.marchi@gmail.com>
@@ -37,6 +37,7 @@ On Thursday 19 February 2015 04:00 PM, Lucas De Marchi wrote:
 > kmod_module_new_from_name(ctx, "vt", &mod);
 > kmod_module_get_initstate(mod, &state);
 >
+
 
 
 something like this ?
@@ -87,8 +88,6 @@ index 3af16c7..43288b6 100644
                         err = kmod_module_probe_insert_module(mod, flags,
                                         extra_options, NULL, NULL, show);
                 }
-
-
 
 
 
