@@ -1,71 +1,63 @@
-Return-Path: <mmarek@suse.cz>
-Message-ID: <54EB4C83.2000500@suse.cz>
-Date: Mon, 23 Feb 2015 16:51:31 +0100
-From: Michal Marek <mmarek@suse.cz>
 MIME-Version: 1.0
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>,
- Rusty Russell <rusty@rustcorp.com.au>
-CC: Harish Jenny K N <harish_kandiga@mentor.com>,
- linux-modules <linux-modules@vger.kernel.org>,
- lkml <linux-kernel@vger.kernel.org>,
- greg KH <gregkh@linuxfoundation.org>
-Subject: Re: Differences between builtins and modules
-References: <CAKi4VA+1krn9rdBWE69DkhNZSrxJoeYzyPgvn-SUk8U0=CxFkw@mail.gmail.com>
-In-Reply-To: <CAKi4VA+1krn9rdBWE69DkhNZSrxJoeYzyPgvn-SUk8U0=CxFkw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+Date: Mon, 23 Feb 2015 11:30:58 -0300
+Message-ID: <CAKi4VA+1krn9rdBWE69DkhNZSrxJoeYzyPgvn-SUk8U0=CxFkw@mail.gmail.com>
+Subject: Differences between builtins and modules
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Rusty Russell <rusty@rustcorp.com.au>
+Cc: Harish Jenny K N <harish_kandiga@mentor.com>,
+	linux-modules <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+	greg KH <gregkh@linuxfoundation.org>, Michal Marek <mmarek@suse.cz>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-On 2015-02-23 15:30, Lucas De Marchi wrote:
-> This could be particularly bad if in a kernel version an option was
-> tristate and in a new version it changed to boolean. I'm not sure if
-> this is common to happen in kernel. Any code that did "modprobe
-> <module>" would start to fail.
+Changing the subject because this is unrelated to the patch to kmod. It was:
+[PATCH] libkmod-module: Remove directory existence check for KMOD_MODULE_BUILTIN
 
-I think it's quite uncommon (*) and also the use case for loading
-builtin modules is not that common. I can think of:
-1) building the initramfs, to determine which *.ko files need to be
-   copied to it. Since such tools are often updated for other reasons,
-   it's not a big deal.
-2) Hardcoded module names in things like softdep -- hopefully not that
-   common either, plus the kernel-provided soft dependencies can be
-   fixed together with the change.
+CC'ing Michael Marek who created the modules.builtin file a while ago.
 
-Until not so long ago, the kernel would return EINVAL if passed a
-non-existent (renamed, removed) module option to init_module, yet there
-were no attempts at preserving the module options for compatibility reasons.
+On Thu, Feb 19, 2015 at 12:25 AM, Rusty Russell <rusty@rustcorp.com.au> wrote:
+>> Rusty, thinking again if we fallback to "coming" instead of "builtin"
+>> everything should be fine, no? Because the decision about builtin has
+>> already been taken by looking at the modules.builtin index. If we
+>> return "coming" here the second call to modprobe would call
+>> init_module() again which would wait for the first one to complete (or
+>> return EEXIST if it's already live) since we only shortcut the
+>> init_module() call if the module is live or builtin
+>
+> It's weird that your code should care about this at all.  Ideally,
+> userspace would see builtin modules as simply unremovable ones.
+> Historically, it hasn't; it was only module parameters for builtins
+> which caused us to expose built modules.
 
-(*) I now did a quick search:
-$ git log -p origin/master --no-merges -- '*/Kconfig*' | grep -C3 '^-
-*tristate' | grep '^+ *bool'
-+       bool "Intel P state control"
-+       bool "Intel microcode patch loading support"
-+       bool "AMD microcode patch loading support"
-+        bool "STI text console"
-+       bool "Enable DDC2 Support"
-+       bool "Enable Console Acceleration"
+While integrating the patch above in kmod I noticed there are more differences.
 
-That's only 6 cases in the whole git history. Maybe there are a few more
-hidden outside the three-line context as part of larger edits, but I'm
-sure more modules have been *removed* entirely from the kernel over this
-period.
+/sys/module/<modname>/ may exist and modname not be present in
+modules.builtin index. Looking in the kernel tree, this is because
+Makefile.modbuiltin adds only those that can be tristate and not those
+that can be only boolean. It may make sense because since a "module"
+can never be compiled as a "module", there would be no reason to put
+it in the index.
 
+right now in kmod if we do this:
 
-> My questions are:
-> 1) should we put *all* the "modules" in the builtin index?
+"modprobe --show-depends vt" it reports as "builtin" since there is a
+directory in /sys/module
 
-You mean all *.o files that do not end up in some *.ko? That won't work,
-because unlike module names, the names of object files are not global.
-Plus, there was IIRC an idea to teach lsmod to print builtin modules --
-listing all *.o would make it rather useless.
+However if vt had no arguments, it would have been reported as "not found".
 
+This could be particularly bad if in a kernel version an option was
+tristate and in a new version it changed to boolean. I'm not sure if
+this is common to happen in kernel. Any code that did "modprobe
+<module>" would start to fail.
 
-> 2) should we actually check /sys/module/<modulename> to report a
-> module as builtin or just stop doing that and rely solely in the
-> index? Initially I'd like to do the opposite, but given the race in
-> deciding this I'm favoring the index.
+My questions are:
+1) should we put *all* the "modules" in the builtin index?
+2) should we actually check /sys/module/<modulename> to report a
+module as builtin or just stop doing that and rely solely in the
+index? Initially I'd like to do the opposite, but given the race in
+deciding this I'm favoring the index.
 
-If the race between the creation of /sys/module/<modulename> and
-/sys/module/<modulename>/initstate is inevitable, then I'm afraid we
-have to rely on the index.
+thanks
 
-Michal
+-- 
+Lucas De Marchi
