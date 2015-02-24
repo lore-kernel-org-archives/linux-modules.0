@@ -1,25 +1,25 @@
+Return-Path: <Harish_Kandiga@mentor.com>
+Message-ID: <54EC638E.1060007@mentor.com>
+Date: Tue, 24 Feb 2015 17:12:06 +0530
+From: Harish Jenny Kandiga Nagaraj <harish_kandiga@mentor.com>
 MIME-Version: 1.0
-In-Reply-To: <54EB4C83.2000500@suse.cz>
-References: <CAKi4VA+1krn9rdBWE69DkhNZSrxJoeYzyPgvn-SUk8U0=CxFkw@mail.gmail.com>
-	<54EB4C83.2000500@suse.cz>
-Date: Tue, 24 Feb 2015 22:02:55 -0300
-Message-ID: <CAKi4VAJwvtLaF1GTw1dg__CXHGjwOwJqUS=g5B0rbPNp1w8dDg@mail.gmail.com>
+To: Michal Marek <mmarek@suse.cz>, Lucas De Marchi
+	<lucas.de.marchi@gmail.com>, Rusty Russell <rusty@rustcorp.com.au>
+CC: linux-modules <linux-modules@vger.kernel.org>, lkml
+	<linux-kernel@vger.kernel.org>, greg KH <gregkh@linuxfoundation.org>
 Subject: Re: Differences between builtins and modules
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Michal Marek <mmarek@suse.cz>
-Cc: Rusty Russell <rusty@rustcorp.com.au>, Harish Jenny K N <harish_kandiga@mentor.com>,
-	linux-modules <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-	greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
+References: <CAKi4VA+1krn9rdBWE69DkhNZSrxJoeYzyPgvn-SUk8U0=CxFkw@mail.gmail.com> <54EB4C83.2000500@suse.cz>
+In-Reply-To: <54EB4C83.2000500@suse.cz>
+Content-Type: text/plain; charset="utf-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Feb 23, 2015 at 12:51 PM, Michal Marek <mmarek@suse.cz> wrote:
+
+On Monday 23 February 2015 09:21 PM, Michal Marek wrote:
 > On 2015-02-23 15:30, Lucas De Marchi wrote:
 >> This could be particularly bad if in a kernel version an option was
 >> tristate and in a new version it changed to boolean. I'm not sure if
 >> this is common to happen in kernel. Any code that did "modprobe
 >> <module>" would start to fail.
->
 > I think it's quite uncommon (*) and also the use case for loading
 > builtin modules is not that common. I can think of:
 > 1) building the initramfs, to determine which *.ko files need to be
@@ -47,42 +47,31 @@ On Mon, Feb 23, 2015 at 12:51 PM, Michal Marek <mmarek@suse.cz> wrote:
 > hidden outside the three-line context as part of larger edits, but I'm
 > sure more modules have been *removed* entirely from the kernel over this
 > period.
-
-thanks for looking in detail into this.
-
 >
 >
 >> My questions are:
 >> 1) should we put *all* the "modules" in the builtin index?
->
 > You mean all *.o files that do not end up in some *.ko? That won't work,
 > because unlike module names, the names of object files are not global.
-
-I was actually meaning anything that can have a directory under
-/sys/module/. I figure we can't easily know this.
-
 > Plus, there was IIRC an idea to teach lsmod to print builtin modules --
 > listing all *.o would make it rather useless.
-
-This was one of my ideas... to traverse /sys/module and give more
-information than we actually output right now, including builtin
-modules. However, given the fact that builtin modules only have an
-entry in /sys/module if they have params and now that I'm aware of the
-race between the creation of the directory and the initstate file, I'm
-giving up on this idea for now.
-
+>
+>
 >> 2) should we actually check /sys/module/<modulename> to report a
 >> module as builtin or just stop doing that and rely solely in the
 >> index? Initially I'd like to do the opposite, but given the race in
 >> deciding this I'm favoring the index.
->
 > If the race between the creation of /sys/module/<modulename> and
 > /sys/module/<modulename>/initstate is inevitable, then I'm afraid we
 > have to rely on the index.
+>
+> Michal
 
-So my current plan is to rely solely on modules.builtin to output to
-modprobe that a module is builtin. So things like "modprobe vt" will
-start to fail saying there's no vt module. Any objections here?
+Can we add some flag like
+KMOD_PROBE_FORCE_DIRECTORY_CHECK = 0x00040,
+and pass it to kmod_module_get_initstate to make
+"modprobe --show-depends vt" to report as "builtin" ?
 
--- 
-Lucas De Marchi
+Also if the use case for loading builtin modules is not that common
+( Also don’t know if 'modprobe vt' command does the loading if not loaded)
+can we have the same flags be used after checking if it is  .ko file or from .o file if required?
