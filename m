@@ -1,63 +1,50 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-pa0-f46.google.com ([209.85.220.46]:46993 "EHLO
-	mail-pa0-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1751188AbbCJPii (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Tue, 10 Mar 2015 11:38:38 -0400
-Received: by pabli10 with SMTP id li10so3106181pab.13
-        for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2015 08:38:37 -0700 (PDT)
-Received: from ubuntu (ppp121-44-1-212.lns20.syd4.internode.on.net. [121.44.1.212])
-        by mx.google.com with ESMTPSA id z2sm1466250pde.94.2015.03.10.08.38.34
-        for <linux-modules@vger.kernel.org>
-        (version=TLSv1.2 cipher=RC4-SHA bits=128/128);
-        Tue, 10 Mar 2015 08:38:36 -0700 (PDT)
-Date: Fri, 6 Mar 2015 08:05:47 +1100
-From: Jeff Waugh <jdub@bethesignal.org>
-To: linux-modules@vger.kernel.org
-Subject: [PATCH] build: generate libkmod.pc during autoconf
-Message-ID: <20150305210547.GA24297@ubuntu>
+Received: from mga02.intel.com ([134.134.136.20]:20797 "EHLO mga02.intel.com"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S964784AbbCEQIn (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+	Thu, 5 Mar 2015 11:08:43 -0500
+From: Caio Marcelo de Oliveira Filho <caio.oliveira@intel.com>
+To: <linux-modules@vger.kernel.org>
+Subject: [PATCH 2/3] testsuite: update README
+Date: Thu, 5 Mar 2015 13:06:38 -0300
+Message-ID: <1425571599-26032-2-git-send-email-caio.oliveira@intel.com>
+In-Reply-To: <1425571599-26032-1-git-send-email-caio.oliveira@intel.com>
+References: <1425571599-26032-1-git-send-email-caio.oliveira@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain
 Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-The pkgconfig file is generated at make-time, leading to absolute /usr/include
-& /usr/lib search paths. The patch lets autoconf handle pkgconfig file subst,
-like other packages do. (Patch from OpenWrt's contributed packages project.)
-
-Signed-off-by: Nicolas Thill <nico@openwrt.org>
-Signed-off-by: Jeff Waugh <jdub@bethesignal.org>
 ---
- Makefile.am  | 3 ---
- configure.ac | 1 +
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ testsuite/README | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile.am b/Makefile.am
-index caf18b6..32aea73 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -36,9 +36,6 @@ SED_PROCESS = \
- 	-e 's,@zlib_LIBS\@,${zlib_LIBS},g' \
- 	< $< > $@ || rm $@
+diff --git a/testsuite/README b/testsuite/README
+index d5843bf..6efc61e 100644
+--- a/testsuite/README
++++ b/testsuite/README
+@@ -33,7 +33,7 @@ pay attention when writing a test:
  
--%.pc: %.pc.in Makefile
--	$(SED_PROCESS)
--
- LIBKMOD_CURRENT=4
- LIBKMOD_REVISION=10
- LIBKMOD_AGE=2
-diff --git a/configure.ac b/configure.ac
-index be597b4..8500cad 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -250,6 +250,7 @@ AC_SUBST([OUR_LDFLAGS], $with_ldflags)
- AC_CONFIG_FILES([
- 	Makefile
- 	man/Makefile
-+	libkmod/libkmod.pc
- 	libkmod/docs/Makefile
- 	libkmod/docs/version.xml
- ])
+ 3 - If you want testsuite to compare the stdout/stderr of your tests in order
+     to check if it worked or not, fill in output.{stderr,stdout} the file with
+-    the expected output. Bare in mind the same file is used for all
++    the expected output. Bear in mind the same file is used for all
+     architectures, so don't print arch-dependent content if you are comparing
+     the output.
+ 
+@@ -49,8 +49,10 @@ pay attention when writing a test:
+ 6 - expected_fail: if that test is expected to fail, i.e. the return code is
+     expected not to be 0.
+ 
+-7 - If you added files to the rootfs, be sure to compact it back to
+-    rootfs.tar.xz before sending patches: use 'make testsuite-pack-rootfs'
++7 - The rootfs is populated by copying the entire contents of rootfs-pristine
++    then running populate-modules.sh to copy generated modules from
++    module-playground. Update the latter script to include any modules your
++    test need.
+ 
+ 8 - Tests can be run individually, outside of 'make check'. strace and gdb work
+     too, as long as you tell them to operate on child process.
 -- 
-1.9.1
+2.3.0
 
