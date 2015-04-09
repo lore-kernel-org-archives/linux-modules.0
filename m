@@ -1,63 +1,46 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from attila.bofh.it ([85.94.204.146]:54206 "EHLO attila.bofh.it"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1753851AbbDPLhh (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Thu, 16 Apr 2015 07:37:37 -0400
-Date: Thu, 16 Apr 2015 12:56:12 +0200
-To: linux-modules@vger.kernel.org
-Subject: Bug#782692: kmod: spurious spaces in lsmod output
-Message-ID: <20150416105612.GA3204@bongo.bofh.it>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-From: md@Linux.IT (Marco d'Itri)
-Sender: linux-modules-owner@vger.kernel.org
+In-Reply-To: <BLU436-SMTP20649D5EE75F0236F19D334ACFD0@phx.gbl>
+References: <BLU436-SMTP20649D5EE75F0236F19D334ACFD0@phx.gbl>
+Date: Thu, 9 Apr 2015 11:09:15 -0300
+Message-ID: <CAKi4VAJH9q5ma+6T+znqHhPzPxC5k9gdj0JS_FNpnDfdDL7MvA@mail.gmail.com>
+Subject: Re: How to get instance for kallsyms_address or kallsyms_num_syms?
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Buddy <Buddy.D.Zhang@outlook.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
------ Forwarded message from Santiago Vila <sanvila@unex.es> -----
+Hi Buddy,
 
-From: Santiago Vila <sanvila@unex.es>
-To: submit@bugs.debian.org
-Subject: Bug#782692: kmod: spurious spaces in lsmod output
-
-Package: kmod
-Version: 18-3
-Severity: minor
-
-While using "localyesconfig" to build a custom kernel I noticed that lsmod
-output now has trailing spaces when the list of "Used by" modules is empty.
-
-The following (untested but trivial) patch should fix it. It just delays
-the space to the point where we are sure that there are more things to print.
-
-Thanks.
-
-diff --git a/tools/lsmod.c b/tools/lsmod.c
-index e953c7e..c1bab7f 100644
---- a/tools/lsmod.c
-+++ b/tools/lsmod.c
-@@ -64,15 +64,17 @@ static int do_lsmod(int argc, char *argv[])
- 		struct kmod_list *holders, *hitr;
- 		int first = 1;
- 
--		printf("%-19s %8ld  %d ", name, size, use_count);
-+		printf("%-19s %8ld  %d", name, size, use_count);
- 		holders = kmod_module_get_holders(mod);
- 		kmod_list_foreach(hitr, holders) {
- 			struct kmod_module *hm = kmod_module_get_module(hitr);
- 
- 			if (!first)
- 				putchar(',');
--			else
-+			else {
-+				putchar(' ');
- 				first = 0;
-+			}
- 
- 			fputs(kmod_module_get_name(hm), stdout);
- 			kmod_module_unref(hm);
-
------ End forwarded message -----
+This question is more for lkml than linux-modules. I'm CC'ing it.
 
 -- 
-ciao,
-Marco
+Lucas De Marchi
+
+
+On Tue, Apr 7, 2015 at 6:48 AM, Buddy <Buddy.D.Zhang@outlook.com> wrote:
+> HI:
+> I want to get information for kernel symbol,so I use array of
+> kallsyms_address
+> and value of kallsyms_num_syms.But when I use them,I can't find definition
+> or instance
+> for kallsyms_address.So I try to use virtual address for kallsyms_address in
+> my machine,
+> and I can't get it.
+> So would you please tell me how to get instance for kallsyms_address or
+> kallsyms_num_syms.
+>
+>
+>                                                               Thanks for the
+> help!
+>                                                                 Best regards
+> Buddy.D.Zhang
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+
+
+-- 
+Lucas De Marchi
