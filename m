@@ -1,36 +1,49 @@
-Return-Path: <alexander.haenel-baas@sieb-meyer.de>
-From: =?utf-8?B?SMOkbmVsLUJhYXMsIEFsZXhhbmRlcg==?=
-	<alexander.haenel-baas@sieb-meyer.de>
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>
-CC: "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
-Subject: AW: modules out of tree issue
-Date: Thu, 16 Apr 2015 12:27:21 +0000
-Message-ID: <9BA84827B30CBE4996725F98F7DC912342963030@SMExchange01.siebmeyer.org>
-References: <9BA84827B30CBE4996725F98F7DC912342962FC2@SMExchange01.siebmeyer.org>
- <CAKi4VA++ym4Ry84hRUCf6MpLoxwo59V910Y5DKbWKavW1SS0_g@mail.gmail.com>
-In-Reply-To: <CAKi4VA++ym4Ry84hRUCf6MpLoxwo59V910Y5DKbWKavW1SS0_g@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
+In-Reply-To: <9BA84827B30CBE4996725F98F7DC912342962FC2@SMExchange01.siebmeyer.org>
+References: <9BA84827B30CBE4996725F98F7DC912342962FC2@SMExchange01.siebmeyer.org>
+Date: Thu, 16 Apr 2015 08:25:18 -0300
+Message-ID: <CAKi4VA++ym4Ry84hRUCf6MpLoxwo59V910Y5DKbWKavW1SS0_g@mail.gmail.com>
+Subject: Re: modules out of tree issue
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: =?UTF-8?Q?H=C3=A4nel=2DBaas=2C_Alexander?= <alexander.haenel-baas@sieb-meyer.de>
+Cc: "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-SGkgTHVjYXMsDQoNCnRoYW5rIHlvdSBmb3IgeW91ciBhbnN3ZXIuDQoNCmhlcmUgbXkgbWFrZSBm
-aWxlOg0KKG9yZSBpcyBhbiBhdHRhY2htZW50IGJldHRlciBoZXJlPykNCg0KI015IGVudmlyb25t
-ZW50IHZhcmlhYmxlcyANCkczX0tFUk5FTF9OQU1FPTMuMTQuMTcgIzwtLSB3b3Jrcw0KRzNfS0VS
-TkVMX05BTUU9My4xOC4xICAjPC0tIHdvcmtzIG5vdA0KDQpHM19BQ1RfQlNQX1BBVEg9L29wdC9n
-M0RldmVsQmFzZS9nM1Rvb2xjaGFpbi9nM0JzcC9zZDNYZW5vQXJtSW14LkJzcC5WMg0KRzNfUExB
-VEZPUk1fTkFNRT1zbS1hcm0NCkczX1RBUkdFVF9TWVM9JHtHM19BQ1RfQlNQX1BBVEh9L3NlbGVj
-dGVkX3Rvb2xjaGFpbi9hcm0tdjdhLWxpbnV4LWdudWVhYmkNCg0KT1VUUFVUX0RJUiA9IG91dA0K
-I1NvdXJjZQ0KU09VUkNFX0RJUiA9IGludGVybmFsL3NyYw0KU09VUkNFUyA9ICR7U09VUkNFX0RJ
-Un0vc20zNjUwMl91aW8ubyANCg0KI0tlcm5lbHZlcnNpb24NClRBUkdFVF9LRVJORUxfVkVSU0lP
-Tj0ke0czX0tFUk5FTF9OQU1FfQ0KDQojS2VybmVsIE1vZHVsIE5hbWUgDQpLTU9EVUxfT0JKPWcz
-a18zNjUwMg0KDQojS2VybmVsU1JDDQpUQVJHRVRfS0VSTkVMX1NSQz0ke0czX0FDVF9CU1BfUEFU
-SH0vcGxhdGZvcm0tJHtHM19QTEFURk9STV9OQU1FfS9idWlsZC10YXJnZXQvbGludXgtJHtHM19L
-RVJORUxfTkFNRX0NCg0Kb2JqLW0gOj0gICR7T1VUUFVUX0RJUn0vJHtLTU9EVUxfT0JKfS5vDQok
-e09VVFBVVF9ESVJ9LyR7S01PRFVMX09CSn0tb2JqcyA6PSAke1NPVVJDRVN9DQogDQphbGw6DQoJ
-bWFrZSAgQVJDSD1hcm0gQ1JPU1NfQ09NUElMRT0ke0czX1RBUkdFVF9TWVN9LSAtQyAke1RBUkdF
-VF9LRVJORUxfU1JDfSBNPSQkUFdEICBtb2R1bGVzDQogICANCmNsZWFuOg0KCW1ha2UgLUMgJHtU
-QVJHRVRfS0VSTkVMX1NSQ30gTT0kKFBXRCkgY2xlYW4NCgkNCg0KSSBjaGFuZ2Ugb25seSB0aGUg
-a2VybmVsIHRyZWUgZnJvbSAzLjE0IHRvIDMuMTguIEJvdGhlIGFyZSBpbnN0YWxsZWQgdW5kZXIg
-bXkgVEFSR0VUX0tFUk5FTF9TUkMuDQpVbmRlciAzLjE0IHdhcyBvbmx5IHRoZSBsaW5rZXIgYWN0
-aXZlIGFuZCBzYXk6IG5vIGlucHV0ZmlsZXMuDQpJIG1pc3MgdGhlIGNvbXBpbGUgc3RhZ2UuDQoz
-LjE4IHdvcmtzIGZpbmUuDQoNCi0tLQ0KQWxleA0KDQo=
+Hi,
+
+On Thu, Apr 16, 2015 at 6:41 AM, H=C3=A4nel-Baas, Alexander
+<alexander.haenel-baas@sieb-meyer.de> wrote:
+> Hi,
+>
+> I cross compile my own kernelmodule out of tree.
+> Now I changed the kernel to 3.18.1 and when I compile my own module I get=
+ the error:
+> -ld: no input files
+
+could you share your makefile? otherwise it's difficult to say what's happe=
+ning.
+
+
+> The first call is the ld and not the compiler. This is the problem.
+>
+> With kernel 3.14 and older always compiled good.
+>
+> Is there any changes in the kernel makefile to build the kernel out of tr=
+ee?
+
+Not that I'm aware of.  I compile out-of-tree modules just fine. See
+https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/tree/testsuite/modul=
+e-playground/Makefile
+for an example.
+
+
+> Any ideas?
+>
+> I'm not sure is this the right group, sorry.
+
+You probably should CC lkml as well. Doing it now.
+
+
+--=20
+Lucas De Marchi
