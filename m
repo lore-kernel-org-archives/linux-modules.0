@@ -1,41 +1,33 @@
-Return-Path: <alexander.haenel-baas@sieb-meyer.de>
-From: =?iso-8859-1?Q?H=E4nel-Baas=2C_Alexander?=
-	<alexander.haenel-baas@sieb-meyer.de>
-To: "Lucas De Marchi (lucas.de.marchi@gmail.com)" <lucas.de.marchi@gmail.com>
-CC: "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
-Subject: modules out of tree issue
-Date: Mon, 20 Apr 2015 09:09:36 +0000
-Message-ID: <9BA84827B30CBE4996725F98F7DC912342963543@SMExchange01.siebmeyer.org>
-Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
+In-Reply-To: <20150416105612.GA3204@bongo.bofh.it>
+References: <20150416105612.GA3204@bongo.bofh.it>
+Date: Thu, 16 Apr 2015 08:48:55 -0300
+Message-ID: <CAKi4VALsr1+JZ9tY_3-VDWX-G6x++2i_hwJQ6ovje10DS5zHGA@mail.gmail.com>
+Subject: Re: Bug#782692: kmod: spurious spaces in lsmod output
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi,
-no idea what is going wrong, when i include the output path in obj-m variab=
-le?=20
+On Thu, Apr 16, 2015 at 7:56 AM, Marco d'Itri <md@linux.it> wrote:
+> ----- Forwarded message from Santiago Vila <sanvila@unex.es> -----
+>
+> From: Santiago Vila <sanvila@unex.es>
+> To: submit@bugs.debian.org
+> Subject: Bug#782692: kmod: spurious spaces in lsmod output
+>
+> Package: kmod
+> Version: 18-3
+> Severity: minor
+>
+> While using "localyesconfig" to build a custom kernel I noticed that lsmod
+> output now has trailing spaces when the list of "Used by" modules is empty.
+>
+> The following (untested but trivial) patch should fix it. It just delays
+> the space to the point where we are sure that there are more things to print.
 
-obj-m :=3D out/alex.o                                              <-- work=
-s not under 3.18 but in older versions
-out/alex-y :=3D internal/src/sm36502_uio.o=20
 
-obj-m :=3D alex.o                                                       <--=
- works
-alex-y :=3D internal/src/sm36502_uio.o
+Applied, thanks.
 
-I found a diff in /scripts/Makefile.build=20
-
-$(multi-used-m): FORCE                                             <- kerne=
-l 3.18
-$(multi-used-m) : %.o: $(multi-objs-m) FORCE <- kernel 3.17.8
-
-I'm not sure but the dependencies are lost???=20
-
-When I set $(multi-used-m): FORCE  to  $(multi-used-m) : %.o: $(multi-objs-=
-m) FORCE in the 3.18/scripts/makefile.build, all my external modules make f=
-iles are lucky.
-
-I hope that helps to find out what is going wrong and we find a solution ho=
-w I can use a outputdir in the obj-m variable.
-
----
-Alexander=20
+-- 
+Lucas De Marchi
