@@ -1,33 +1,36 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from blu004-omc1s38.hotmail.com ([65.55.116.49]:57320 "EHLO
-	BLU004-OMC1S38.hotmail.com" rhost-flags-OK-OK-OK-OK)
-	by vger.kernel.org with ESMTP id S1751995AbbDGJyD (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Tue, 7 Apr 2015 05:54:03 -0400
-Message-ID: <BLU436-SMTP20649D5EE75F0236F19D334ACFD0@phx.gbl>
-Date: Tue, 7 Apr 2015 17:48:57 +0800
-From: Buddy <Buddy.D.Zhang@outlook.com>
+Return-Path: <alexander.haenel-baas@sieb-meyer.de>
+From: =?utf-8?B?SMOkbmVsLUJhYXMsIEFsZXhhbmRlcg==?=
+	<alexander.haenel-baas@sieb-meyer.de>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+CC: "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+Subject: AW: modules out of tree issue
+Date: Thu, 16 Apr 2015 12:27:21 +0000
+Message-ID: <9BA84827B30CBE4996725F98F7DC912342963030@SMExchange01.siebmeyer.org>
+References: <9BA84827B30CBE4996725F98F7DC912342962FC2@SMExchange01.siebmeyer.org>
+ <CAKi4VA++ym4Ry84hRUCf6MpLoxwo59V910Y5DKbWKavW1SS0_g@mail.gmail.com>
+In-Reply-To: <CAKi4VA++ym4Ry84hRUCf6MpLoxwo59V910Y5DKbWKavW1SS0_g@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-To: linux-modules@vger.kernel.org
-Subject: How to get  instance for kallsyms_address or kallsyms_num_syms?
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-HI:
-I want to get information for kernel symbol,so I use array of 
-kallsyms_address
-and value of kallsyms_num_syms.But when I use them,I can't find 
-definition or instance
-for kallsyms_address.So I try to use virtual address for 
-kallsyms_address in my machine,
-and I can't get it.
-So would you please tell me how to get instance for kallsyms_address or 
-kallsyms_num_syms.
-
-
-                                                               Thanks 
-for the help!
-                                                                 Best 
-regards
-Buddy.D.Zhang
+SGkgTHVjYXMsDQoNCnRoYW5rIHlvdSBmb3IgeW91ciBhbnN3ZXIuDQoNCmhlcmUgbXkgbWFrZSBm
+aWxlOg0KKG9yZSBpcyBhbiBhdHRhY2htZW50IGJldHRlciBoZXJlPykNCg0KI015IGVudmlyb25t
+ZW50IHZhcmlhYmxlcyANCkczX0tFUk5FTF9OQU1FPTMuMTQuMTcgIzwtLSB3b3Jrcw0KRzNfS0VS
+TkVMX05BTUU9My4xOC4xICAjPC0tIHdvcmtzIG5vdA0KDQpHM19BQ1RfQlNQX1BBVEg9L29wdC9n
+M0RldmVsQmFzZS9nM1Rvb2xjaGFpbi9nM0JzcC9zZDNYZW5vQXJtSW14LkJzcC5WMg0KRzNfUExB
+VEZPUk1fTkFNRT1zbS1hcm0NCkczX1RBUkdFVF9TWVM9JHtHM19BQ1RfQlNQX1BBVEh9L3NlbGVj
+dGVkX3Rvb2xjaGFpbi9hcm0tdjdhLWxpbnV4LWdudWVhYmkNCg0KT1VUUFVUX0RJUiA9IG91dA0K
+I1NvdXJjZQ0KU09VUkNFX0RJUiA9IGludGVybmFsL3NyYw0KU09VUkNFUyA9ICR7U09VUkNFX0RJ
+Un0vc20zNjUwMl91aW8ubyANCg0KI0tlcm5lbHZlcnNpb24NClRBUkdFVF9LRVJORUxfVkVSU0lP
+Tj0ke0czX0tFUk5FTF9OQU1FfQ0KDQojS2VybmVsIE1vZHVsIE5hbWUgDQpLTU9EVUxfT0JKPWcz
+a18zNjUwMg0KDQojS2VybmVsU1JDDQpUQVJHRVRfS0VSTkVMX1NSQz0ke0czX0FDVF9CU1BfUEFU
+SH0vcGxhdGZvcm0tJHtHM19QTEFURk9STV9OQU1FfS9idWlsZC10YXJnZXQvbGludXgtJHtHM19L
+RVJORUxfTkFNRX0NCg0Kb2JqLW0gOj0gICR7T1VUUFVUX0RJUn0vJHtLTU9EVUxfT0JKfS5vDQok
+e09VVFBVVF9ESVJ9LyR7S01PRFVMX09CSn0tb2JqcyA6PSAke1NPVVJDRVN9DQogDQphbGw6DQoJ
+bWFrZSAgQVJDSD1hcm0gQ1JPU1NfQ09NUElMRT0ke0czX1RBUkdFVF9TWVN9LSAtQyAke1RBUkdF
+VF9LRVJORUxfU1JDfSBNPSQkUFdEICBtb2R1bGVzDQogICANCmNsZWFuOg0KCW1ha2UgLUMgJHtU
+QVJHRVRfS0VSTkVMX1NSQ30gTT0kKFBXRCkgY2xlYW4NCgkNCg0KSSBjaGFuZ2Ugb25seSB0aGUg
+a2VybmVsIHRyZWUgZnJvbSAzLjE0IHRvIDMuMTguIEJvdGhlIGFyZSBpbnN0YWxsZWQgdW5kZXIg
+bXkgVEFSR0VUX0tFUk5FTF9TUkMuDQpVbmRlciAzLjE0IHdhcyBvbmx5IHRoZSBsaW5rZXIgYWN0
+aXZlIGFuZCBzYXk6IG5vIGlucHV0ZmlsZXMuDQpJIG1pc3MgdGhlIGNvbXBpbGUgc3RhZ2UuDQoz
+LjE4IHdvcmtzIGZpbmUuDQoNCi0tLQ0KQWxleA0KDQo=
