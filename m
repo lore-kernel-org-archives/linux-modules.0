@@ -1,21 +1,26 @@
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from cantor2.suse.de ([195.135.220.15]:40983 "EHLO mx2.suse.de"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S1754079AbbFCME1 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+	Wed, 3 Jun 2015 08:04:27 -0400
+Message-ID: <556EED48.6010804@suse.cz>
+Date: Wed, 03 Jun 2015 14:04:24 +0200
+From: Michal Marek <mmarek@suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <87r3pwgd0b.fsf@rustcorp.com.au>
-References: <20150531152932.GA16337@rhlx01.hs-esslingen.de>
-	<87r3pwgd0b.fsf@rustcorp.com.au>
-Date: Wed, 3 Jun 2015 14:30:32 -0300
-Message-ID: <CAKi4VAJfhM0UMOmFkQ40RW5gJGKch8AH8QEvuiYtj93O+YTNwA@mail.gmail.com>
+To: Rusty Russell <rusty@rustcorp.com.au>, Andreas Mohr <andi@lisas.de>
+CC: Andrew Morton <akpm@linux-foundation.org>,
+	Bertrand Jacquin <beber@meleeweb.net>,
+	Marco d'Itri <md@linux.it>, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jon Masters <jcm@redhat.com>
 Subject: Re: [PATCH] modules: CONFIG_MODULE_COMPRESS: add hint that userspace
  support may easily be missing.
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Rusty Russell <rusty@rustcorp.com.au>
-Cc: Andreas Mohr <andi@lisas.de>, Andrew Morton <akpm@linux-foundation.org>,
-	Bertrand Jacquin <beber@meleeweb.net>, "Marco d'Itri" <md@linux.it>,
-	linux-modules <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-	Jon Masters <jcm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+References: <20150531152932.GA16337@rhlx01.hs-esslingen.de> <87r3pwgd0b.fsf@rustcorp.com.au>
+In-Reply-To: <87r3pwgd0b.fsf@rustcorp.com.au>
+Content-Type: text/plain; charset=windows-1252
+Sender: linux-modules-owner@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Jun 1, 2015 at 3:26 AM, Rusty Russell <rusty@rustcorp.com.au> wrote:
+On 2015-06-01 08:26, Rusty Russell wrote:
 > Andreas Mohr <andi@lisas.de> writes:
 >> Hi,
 >>
@@ -27,16 +32,11 @@ On Mon, Jun 1, 2015 at 3:26 AM, Rusty Russell <rusty@rustcorp.com.au> wrote:
 >> (at least on Debian 8pre, vs. encountering it enabled on FC21)
 >> since it does not seem to be
 >> the default build configuration of kmod (yet?).
->
+> 
 > Sure.  Let's get the maintainers to insert the actual version required
 > in the help text though.
 
-kmod supports gz since the first version and xz since version 3.  So both
-of them can be safely fall into "it's supported since the beginning of
-kmod IMO".
+I'm not a maintainer of kmod, but the text should probably end with "If
+unsure, say N."
 
-Regarding the "default configuration", there's no such thing. Each distribution
-uses a different one.
-
--- 
-Lucas De Marchi
+Michal
