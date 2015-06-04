@@ -1,84 +1,79 @@
 Return-Path: <andi@rhlx01.hs-esslingen.de>
-Date: Thu, 4 Jun 2015 22:09:27 +0200
+Date: Thu, 4 Jun 2015 21:53:34 +0200
 From: Andreas Mohr <andi@lisas.de>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Rusty Russell <rusty@rustcorp.com.au>,
-	Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	Andreas Mohr <andi@lisas.de>,
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: Rusty Russell <rusty@rustcorp.com.au>, Andreas Mohr <andi@lisas.de>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Bertrand Jacquin <beber@meleeweb.net>, Marco d'Itri <md@linux.it>,
 	linux-modules <linux-modules@vger.kernel.org>,
 	lkml <linux-kernel@vger.kernel.org>, Jon Masters <jcm@redhat.com>
 Subject: Re: [PATCH] modules: CONFIG_MODULE_COMPRESS: add hint that userspace
  support may easily be missing.
-Message-ID: <20150604200927.GB15890@rhlx01.hs-esslingen.de>
+Message-ID: <20150604195334.GA15890@rhlx01.hs-esslingen.de>
 References: <20150531152932.GA16337@rhlx01.hs-esslingen.de>
  <87r3pwgd0b.fsf@rustcorp.com.au>
  <CAKi4VAJfhM0UMOmFkQ40RW5gJGKch8AH8QEvuiYtj93O+YTNwA@mail.gmail.com>
  <87h9qouuny.fsf@rustcorp.com.au>
- <20150604131946.6441b568@canb.auug.org.au>
+ <CAKi4VA+4mFsg7VCqr+3wd4dCqUtCW02YP7KYmVYF0prH5bet0g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-In-Reply-To: <20150604131946.6441b568@canb.auug.org.au>
+In-Reply-To: <CAKi4VA+4mFsg7VCqr+3wd4dCqUtCW02YP7KYmVYF0prH5bet0g@mail.gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi,
+On Wed, Jun 03, 2015 at 11:31:20PM -0300, Lucas De Marchi wrote:
+> On Wed, Jun 3, 2015 at 10:30 PM, Rusty Russell <rusty@rustcorp.com.au> wrote:
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index 968a001790af..5422c44be5f0 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -1948,26 +1948,22 @@ config MODULE_COMPRESS
+> >         bool "Compress modules on installation"
+> >         depends on MODULES
+> >         help
+> > -         This option compresses the kernel modules when 'make
+> > -         modules_install' is run.
+> >
+> > -         The modules will be compressed either using gzip or xz depend on the
+> > -         choice made in "Compression algorithm".
+> > +         Compresses kernel modules when 'make modules_install' is run; gzip or
+> > +         xz depending on "Compression algorithm" below.
+> >
+> > -         module-init-tools has support for gzip format while kmod handle gzip
+> > -         and xz compressed modules.
+> > +         module-init-tools supports gzip, and kmod can be configured to handle
+> > +         gzip and xz (but doesn't by default, at least as of version 18!).
+> 
+> This is pretty much misleading. There's no such a default option. It's
+> like saying kernel doesn't support feature X, Y or Z by default
+> because make defconfig doesn't turn them on.
+> 
+> The option is there since the beginning for the distros to adapt to their needs.
 
-On Thu, Jun 04, 2015 at 01:19:46PM +1000, Stephen Rothwell wrote:
-> Hi Rusty,
-> > But disappointing that Debian doesn't configure with it, and there's no
-> > easy way to check it.  Looks like Ubuntu vivid is the same.
->=20
-> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D772628
+Hmm? Perhaps I'm misunderstanding something in this discussion,
+but Debian kmod-20 (kmod_20.orig.tar.xz - BTW side note:
+noted the .xz file rather than .gz? ;))
+configure.ac contains:
 
-Crap, that URL now is an implicit strong suggestion
-that I didn't do my homework ;)
-(it already described large parts
-prior to me regurgitating this issue
-due to being unaware of this history here).
+AC_ARG_WITH([xz],
+        AS_HELP_STRING([--with-xz], [handle Xz-compressed modules
+@<:@default=disabled@:>@]),
+        [], [with_xz=no])
+AS_IF([test "x$with_xz" != "xno"], [
+        PKG_CHECK_MODULES([liblzma], [liblzma >= 4.99])
+        AC_DEFINE([ENABLE_XZ], [1], [Enable Xz for modules.])
+], [
+        AC_MSG_NOTICE([Xz support not requested])
+])
 
+AC_ARG_WITH([zlib],
+        AS_HELP_STRING([--with-zlib], [handle gzipped modules
+@<:@default=disabled@:>@]),
+        [], [with_zlib=no])
 
-Thanks to R.Russell for a very nice shortening
-and extension of the help text!
-
-
-Since the issue of .gz vs. .xz redundancy came up
-(with people "threatening" to support only one alternative),
-I want to mention that
-when having to choose one
-I'd tend to activating the .xz library dependency:
-- while it has higher compression demands,
-  hardware is getting beefier all the time,
-  thus it should not matter
-  (especially vs. the dominantly many decompression runs)
-- it's simply the "more modern" and future-proof option,
-  thus it should be favoured slightly
-  since the system as a whole
-  would want to make reasonably quick
-  development/evolution "forward progress"
-  rather than sticking to less favourable mechanisms
-- .xz has been available for some time already
-  i.e. the time window of "distro support maturity" is a given
-[a counter-point might be that module-init-tools supports .gz only,
-but then modern binary setups which chose .xz
-would already have been shipped with kmod only]
-
-OK, having said that,
-I'm unsure what to think of the Debian package's decision
-to not support compression so far
-(and that even in times
-where kmod does not provide a runtime option yet
-to query the actual set of support flags).
-=46rom a library dependency POV it may be attractive to skip compression,
-and since Debian usually has a fixed setup
-where non-compressed files are a given,
-this seems like a valid choice.
-It's just that for e.g. these situations:
-- people with many custom kernels installed
-- space-constrained systems
-this is quite a nuisance that is a wee bit too unexpected (/show-stopper) -
-took me roughly > 30 minutes to get it researched / resolved.
-
-Thanks,
+So it clearly seems there *is* a specific
+(hard-coded, as opposed to system introspection) default
+(i.e., the usual way of getting defaults, namely to simply not specify
+--with-something configure options),
+and that is (drumroll...) "disabled".
 
 Andreas
