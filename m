@@ -1,52 +1,84 @@
 Return-Path: <lucas.de.marchi@gmail.com>
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+From: lucas.de.marchi@gmail.com
 To: linux-modules@vger.kernel.org
-Cc: Daniel Mack <daniel@zonque.org>,
-	David Herrmann <dh.herrmann@googlemail.com>,
-	Lennart Poettering <lennart@poettering.net>,
+Cc: Rusty Russell <rusty@rustcorp.com.au>,
+	Andreas Mohr <andi@lisas.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bertrand Jacquin <beber@meleeweb.net>,
+	Marco d'Itri <md@linux.it>,
+	lkml <linux-kernel@vger.kernel.org>,
 	Kay Sievers <kay@vrfy.org>,
 	Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH] libkmod-module: fix return code in error path
-Date: Sat, 13 Jun 2015 18:45:12 -0300
-Message-Id: <1434231912-20614-1-git-send-email-lucas.de.marchi@gmail.com>
+Subject: [PATCH kmod 1/3] build: add function to build string of features
+Date: Sun,  7 Jun 2015 03:27:27 -0300
+Message-Id: <1433658449-3931-2-git-send-email-lucas.de.marchi@gmail.com>
+In-Reply-To: <1433658449-3931-1-git-send-email-lucas.de.marchi@gmail.com>
+References: <1433658449-3931-1-git-send-email-lucas.de.marchi@gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
 From: Lucas De Marchi <lucas.demarchi@intel.com>
 
-ENOSYS is the wrong errno to return when we don't find a module in
-kmod_module_insert_module(). Why is it there in the first place?  This
-goes back to kmod v1 when we couldn't load modules by names, but we
-should give a path instead.
-
-708624a ("ELF: initial support for modinfo and strip of modversions and
-vermagic.") changed that so we do a lazy-search by the module path in
-this function. Later  f304afe ("Change error message to reflect
-reality") fixed the log message but the return coded remained the same.
+Add a CC_FEATURE_APPEND function that we can use to append the features
+that are enabled/disabled. This will generate a single string in the
+form "+FEATURE1 +FEATURE2 -FEATURE3".
 ---
+ m4/features.m4 | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 m4/features.m4
 
-CC'ing here people from systemd who were bitten by this bug in kmod:
-https://github.com/systemd/systemd/pull/166
-
-I'm not sure about changing the return code since it was returning ENOSYS since
-v1 :-/.  However maybe the best thing to do is just treat it as a bug and let
-the patch to be backported by distros that want it.  Thoughts?
-
-
- libkmod/libkmod-module.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 366308f..50b2ff9 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -830,7 +830,7 @@ KMOD_EXPORT int kmod_module_insert_module(struct kmod_module *mod,
- 	path = kmod_module_get_path(mod);
- 	if (path == NULL) {
- 		ERR(mod->ctx, "could not find module by name='%s'\n", mod->name);
--		return -ENOSYS;
-+		return -ENOENT;
- 	}
- 
- 	mod->file = kmod_file_open(mod->ctx, path);
+diff --git a/m4/features.m4 b/m4/features.m4
+new file mode 100644
+index 0000000..82a244f
+--- /dev/null
++++ b/m4/features.m4
+@@ -0,0 +1,48 @@
++#  Copyright (c) 2015 Lucas De Marchi <lucas.de.marchi@gmail.com>
++#
++#  This program is free software: you can redistribute it and/or modify it
++#  under the terms of the GNU General Public License as published by the
++#  Free Software Foundation, either version 2 of the License, or (at your
++#  option) any later version.
++#
++#  This program is distributed in the hope that it will be useful, but
++#  WITHOUT ANY WARRANTY; without even the implied warranty of
++#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
++#  Public License for more details.
++#
++#  You should have received a copy of the GNU General Public License along
++#  with this program. If not, see <http://www.gnu.org/licenses/>.
++#
++#  As a special exception, the respective Autoconf Macro's copyright owner
++#  gives unlimited permission to copy, distribute and modify the configure
++#  scripts that are the output of Autoconf when processing the Macro. You
++#  need not follow the terms of the GNU General Public License when using
++#  or distributing such scripts, even though portions of the text of the
++#  Macro appear in them. The GNU General Public License (GPL) does govern
++#  all other use of the material that constitutes the Autoconf Macro.
++#
++#  This special exception to the GPL applies to versions of the Autoconf
++#  Macro released by the Autoconf Archive. When you make and distribute a
++#  modified version of the Autoconf Macro, you may extend this special
++#  exception to the GPL to apply to your modified version as well.
++#
++# CC_FEATURE_APPEND([FLAGS], [ENV-TO-CHECK], [FLAG-NAME])
++AC_DEFUN([CC_FEATURE_APPEND], [
++  AS_VAR_PUSHDEF([FLAGS], [$1])dnl
++  AS_VAR_PUSHDEF([ENV_CHECK], [$2])dnl
++  AS_VAR_PUSHDEF([FLAG_NAME], [$3])dnl
++
++  AS_CASE([" AS_VAR_GET(FLAGS) " ],
++          [*" FLAG_NAME "*], [AC_RUN_LOG([: FLAGS already contains FLAG_NAME])],
++          [
++	    AS_IF([test "x$FLAGS" != "x"], [AS_VAR_APPEND(FLAGS, " ")])
++            AS_IF([test "x$ENV_CHECK" = "xyes"],
++                  [AS_VAR_APPEND(FLAGS, "+FLAG_NAME")],
++                  [AS_VAR_APPEND(FLAGS, "-FLAG_NAME")])
++          ]
++  )
++
++  AS_VAR_POPDEF([FLAG_NAME])dnl
++  AS_VAR_POPDEF([ENV_CHECK])dnl
++  AS_VAR_POPDEF([FLAGS])dnl
++])
 -- 
-2.4.3
+2.4.2
