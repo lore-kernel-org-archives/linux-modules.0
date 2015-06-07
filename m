@@ -1,84 +1,59 @@
-Return-Path: <lucas.de.marchi@gmail.com>
-From: lucas.de.marchi@gmail.com
-To: linux-modules@vger.kernel.org
-Cc: Rusty Russell <rusty@rustcorp.com.au>,
-	Andreas Mohr <andi@lisas.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Bertrand Jacquin <beber@meleeweb.net>,
-	Marco d'Itri <md@linux.it>,
-	lkml <linux-kernel@vger.kernel.org>,
-	Kay Sievers <kay@vrfy.org>,
-	Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH kmod 1/3] build: add function to build string of features
-Date: Sun,  7 Jun 2015 03:27:27 -0300
-Message-Id: <1433658449-3931-2-git-send-email-lucas.de.marchi@gmail.com>
-In-Reply-To: <1433658449-3931-1-git-send-email-lucas.de.marchi@gmail.com>
-References: <1433658449-3931-1-git-send-email-lucas.de.marchi@gmail.com>
+MIME-Version: 1.0
+In-Reply-To: <87zj4fte9r.fsf@rustcorp.com.au>
+References: <20150531152932.GA16337@rhlx01.hs-esslingen.de>
+	<87r3pwgd0b.fsf@rustcorp.com.au>
+	<CAKi4VAJfhM0UMOmFkQ40RW5gJGKch8AH8QEvuiYtj93O+YTNwA@mail.gmail.com>
+	<87h9qouuny.fsf@rustcorp.com.au>
+	<CAKi4VA+4mFsg7VCqr+3wd4dCqUtCW02YP7KYmVYF0prH5bet0g@mail.gmail.com>
+	<87zj4fte9r.fsf@rustcorp.com.au>
+Date: Sun, 7 Jun 2015 03:18:53 -0300
+Message-ID: <CAKi4VAJpRGiTdOouP8M1eZtw5eZwRE6tLRqSLApRixEsVJv+OA@mail.gmail.com>
+Subject: Re: [PATCH] modules: CONFIG_MODULE_COMPRESS: add hint that userspace
+ support may easily be missing.
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Rusty Russell <rusty@rustcorp.com.au>
+Cc: Andreas Mohr <andi@lisas.de>, Andrew Morton <akpm@linux-foundation.org>,
+	Bertrand Jacquin <beber@meleeweb.net>, "Marco d'Itri" <md@linux.it>,
+	linux-modules <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+	Jon Masters <jcm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Lucas De Marchi <lucas.demarchi@intel.com>
+On Thu, Jun 4, 2015 at 5:22 PM, Rusty Russell <rusty@rustcorp.com.au> wrote:
+> Lucas De Marchi <lucas.de.marchi@gmail.com> writes:
+>>> +         gzip and xz (but doesn't by default, at least as of version 18!).
+>>
+>> This is pretty much misleading. There's no such a default option. It's
+>> like saying kernel doesn't support feature X, Y or Z by default
+>> because make defconfig doesn't turn them on.
+>
+> Nobody except Linus expects a defconfig to boot.
+>
+> I expect ./configure to give me a working tool; these *are* defaults,
+> and setting them *is* your responsibility as author.  When it became an
+> in-kernel option rather than some weird distro thing, the old default
+> was wrong.
+>
+> ... Though I hadn't realized that Marco had deliberately decided to
+> leave support off.  Surprising, since liblzma and libz seem required on
+> Debian anyway.
 
-Add a CC_FEATURE_APPEND function that we can use to append the features
-that are enabled/disabled. This will generate a single string in the
-form "+FEATURE1 +FEATURE2 -FEATURE3".
----
- m4/features.m4 | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 m4/features.m4
+As you can see, no default to something else will make distros adopt that.
+I long ago decided not to provide a default for compression because it's
+clearly not agreed upon.  Instead it's everything disabled and the
+distro chooses what it wants to support.
 
-diff --git a/m4/features.m4 b/m4/features.m4
-new file mode 100644
-index 0000000..82a244f
---- /dev/null
-+++ b/m4/features.m4
-@@ -0,0 +1,48 @@
-+#  Copyright (c) 2015 Lucas De Marchi <lucas.de.marchi@gmail.com>
-+#
-+#  This program is free software: you can redistribute it and/or modify it
-+#  under the terms of the GNU General Public License as published by the
-+#  Free Software Foundation, either version 2 of the License, or (at your
-+#  option) any later version.
-+#
-+#  This program is distributed in the hope that it will be useful, but
-+#  WITHOUT ANY WARRANTY; without even the implied warranty of
-+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-+#  Public License for more details.
-+#
-+#  You should have received a copy of the GNU General Public License along
-+#  with this program. If not, see <http://www.gnu.org/licenses/>.
-+#
-+#  As a special exception, the respective Autoconf Macro's copyright owner
-+#  gives unlimited permission to copy, distribute and modify the configure
-+#  scripts that are the output of Autoconf when processing the Macro. You
-+#  need not follow the terms of the GNU General Public License when using
-+#  or distributing such scripts, even though portions of the text of the
-+#  Macro appear in them. The GNU General Public License (GPL) does govern
-+#  all other use of the material that constitutes the Autoconf Macro.
-+#
-+#  This special exception to the GPL applies to versions of the Autoconf
-+#  Macro released by the Autoconf Archive. When you make and distribute a
-+#  modified version of the Autoconf Macro, you may extend this special
-+#  exception to the GPL to apply to your modified version as well.
-+#
-+# CC_FEATURE_APPEND([FLAGS], [ENV-TO-CHECK], [FLAG-NAME])
-+AC_DEFUN([CC_FEATURE_APPEND], [
-+  AS_VAR_PUSHDEF([FLAGS], [$1])dnl
-+  AS_VAR_PUSHDEF([ENV_CHECK], [$2])dnl
-+  AS_VAR_PUSHDEF([FLAG_NAME], [$3])dnl
-+
-+  AS_CASE([" AS_VAR_GET(FLAGS) " ],
-+          [*" FLAG_NAME "*], [AC_RUN_LOG([: FLAGS already contains FLAG_NAME])],
-+          [
-+	    AS_IF([test "x$FLAGS" != "x"], [AS_VAR_APPEND(FLAGS, " ")])
-+            AS_IF([test "x$ENV_CHECK" = "xyes"],
-+                  [AS_VAR_APPEND(FLAGS, "+FLAG_NAME")],
-+                  [AS_VAR_APPEND(FLAGS, "-FLAG_NAME")])
-+          ]
-+  )
-+
-+  AS_VAR_POPDEF([FLAG_NAME])dnl
-+  AS_VAR_POPDEF([ENV_CHECK])dnl
-+  AS_VAR_POPDEF([FLAGS])dnl
-+])
+So if you think the configuration for your distro should be something else,
+convince the maintainer to change it showing why it's important.
+
+FYI I'm adding in kmod the ability to query the flags used during build. So
+now we have:
+
+$ ./tools/kmod --version
+kmod version 20
++XZ +ZLIB -EXPERIMENTAL
+
+This will be present in kmod 21
+
 -- 
-2.4.2
+Lucas De Marchi
