@@ -1,59 +1,62 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from attila.bofh.it ([85.94.204.146]:51808 "EHLO attila.bofh.it"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1752791AbbFIHvx (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Tue, 9 Jun 2015 03:51:53 -0400
-Date: Tue, 9 Jun 2015 09:34:29 +0200
-To: linux-modules <linux-modules@vger.kernel.org>
-Subject: Re: [ANNOUNCE] kmod 21
-Message-ID: <20150609073429.GA9053@bongo.bofh.it>
-References: <CAKi4VAKaZPtGvT9gwTOmoTG8mpnn05ybSSeNde8VPOcczLuChg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="FCuugMFkClbJLl1L"
-In-Reply-To: <CAKi4VAKaZPtGvT9gwTOmoTG8mpnn05ybSSeNde8VPOcczLuChg@mail.gmail.com>
-From: md@Linux.IT (Marco d'Itri)
-Sender: linux-modules-owner@vger.kernel.org
+Date: Tue, 9 Jun 2015 02:49:21 -0300
+Message-ID: <CAKi4VAKaZPtGvT9gwTOmoTG8mpnn05ybSSeNde8VPOcczLuChg@mail.gmail.com>
+Subject: [ANNOUNCE] kmod 21
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules <linux-modules@vger.kernel.org>
+Cc: Rusty Russell <rusty@rustcorp.com.au>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
+kmod 21 is out:
 
---FCuugMFkClbJLl1L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+        ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-21.tar.xz
+        ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-21.tar.sign
 
-On Jun 09, Lucas De Marchi <lucas.de.marchi@gmail.com> wrote:
+Small release with just 3 changes worth mentioning. From the NEWS file:
 
->         - kmod tool started to learn the "insert" and "remove" commands t=
-hat
->           are the simplified versions of the older modprobe tool.  These
->           commands are still work in progress so they are hidden behind a
->           --enable-experimental flag during build.  It should not be enab=
-led
->           unless you know what you're doing.
-Should I enable it in Debian testing/unstable or do you see this as=20
-strictly developers-only?
+- New features:
+        - kmod tool started to learn the "insert" and "remove" commands that
+          are the simplified versions of the older modprobe tool.  These
+          commands are still work in progress so they are hidden behind a
+          --enable-experimental flag during build.  It should not be enabled
+          unless you know what you're doing.
+        - kmod tool now prints the relevant configuration options it was built
+          with when the "--version" argument is passed. This helps to mitigate
+          problems for example when the user is trying to load a compressed
+          module but kmod was built without support for the compression method.
 
---=20
-ciao,
-Marco
+- Improvements to testsuite:
+        - Cache built modules so it is easier to run "make check" on build
+          servers by distro maintainers. If kmod is configured with
+          --disable-test-modules the modules from cache will be used by
+          "make check". No changes to the tests are needed and all of them
+          can run fine.
 
---FCuugMFkClbJLl1L
-Content-Type: application/pgp-signature
+Shortlog:
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
+Lucas De Marchi <lucas.demarchi@intel.com> (12):
+      build: use dolt
+      build: sync dolt with upstream
+      util: use UINT64_MAX
+      build: cache modules from playground
+      tools: Hide new commands behind experimental flag
+      tools: add PACKAGE definition in message
+      build: add function to build string of features
+      build: add relevant features to KMOD_FEATURES in config.h
+      tools: display features in --version
+      build: silence stderr on coverity rules
+      build: add cache to distributed files
+      kmod 21
 
-iQGcBAABCAAGBQJVdpcFAAoJECv1pcEixPek++UL/RIGIvHzW+XYliVJCGIUObrc
-v3v90uSd/1aT3Dj8h6pxXqJYOWqhszhNeqQ/X+z4fSfqAaDyqPDUZK4/1MbLbJJp
-rZtTqiUqEaZ1NM6ARWLdBSBq26f3oUX0Rk44KBz+2iC/Vx0i2K2nSCt2JTcKsSo2
-wcvtDD8QvV8CVAvOFFkeRxuksKR/STrhr1xxsLStCga6126KdCJ/lnySNDx4gVWw
-4B8ajEeyUkREu65GqotdJd9qVbLCOKWf0T9AvjYpEZPdWz2z+4HDMvCkOAKrmkmg
-JzdJThWQLvjC/GKapN3VsZoU8VEtKhF5BM0k6uT89HOnS/ARFffalECf36AtiZS7
-KN/5o0dLY10/zh4lGiD9zA0e35Kw+FFLETCs4j/L41p1qE/1NxtBqMDTosSoIc5+
-rz1DBzvSt0YDdJuuyoMV5D5oNmiEn5FOHAGKm7VcAvUtmHf+4f1RqOHrba2+nOwe
-CrIj/l0qEUpYlqhszPHYUeUg+X+UAwhQGpBeNwM0eQ==
-=04l3
------END PGP SIGNATURE-----
+Caio Marcelo de Oliveira Filho <caio.oliveira@intel.com> (3):
+      testsuite: remove .gitignore files when populating rootfs
+      testsuite: update README
+      tools: add basic versions of insert and remove
 
---FCuugMFkClbJLl1L--
+Santiago Vila <sanvila@unex.es> (2):
+      Fix spurious spaces in lsmod output
+      kmod: fix small typo in rmmod(8)
+
+-- 
+Lucas De Marchi
