@@ -1,41 +1,40 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from 79.160.13.133.static.lyse.net ([79.160.13.133]:47844 "EHLO
-	tanael.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-	id S1754364AbbFVMPV (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Mon, 22 Jun 2015 08:15:21 -0400
-From: Natanael Copa <ncopa@alpinelinux.org>
-To: linux-modules@vger.kernel.org
-Cc: Natanael Copa <ncopa@alpinelinux.org>
-Subject: [PATCH] build: let sed use posix ERE instead of GNU extension
-Date: Mon, 22 Jun 2015 14:09:17 +0200
-Message-Id: <1434974957-2995-1-git-send-email-ncopa@alpinelinux.org>
-Sender: owner-linux-modules@vger.kernel.org
+MIME-Version: 1.0
+In-Reply-To: <20150607092506.GA14394@rhlx01.hs-esslingen.de>
+References: <1433658449-3931-1-git-send-email-lucas.de.marchi@gmail.com>
+	<20150607092506.GA14394@rhlx01.hs-esslingen.de>
+Date: Mon, 8 Jun 2015 22:41:11 -0300
+Message-ID: <CAKi4VAJEPQ9bx72kpjpWVAcq+uUA0r7FyPRpJh2UL=nY2QaLKQ@mail.gmail.com>
+Subject: Re: [PATCH kmod 0/3] Add feature list together with version
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Andreas Mohr <andi@lisas.de>
+Cc: linux-modules <linux-modules@vger.kernel.org>, Rusty Russell <rusty@rustcorp.com.au>,
+	Andrew Morton <akpm@linux-foundation.org>, Bertrand Jacquin <beber@meleeweb.net>,
+	"Marco d'Itri" <md@linux.it>, lkml <linux-kernel@vger.kernel.org>, Kay Sievers <kay@vrfy.org>,
+	Lucas De Marchi <lucas.demarchi@intel.com>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-Use POSIX Extended Regular Expression (ERE) instead of the GNU extension
-\| in the install-exec-hook. This makes it create the symlink properly
-with busybox sed built with musl libc. It will silently create a broken
-symlink otherwise.
----
- Makefile.am | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Sun, Jun 7, 2015 at 6:25 AM, Andreas Mohr <andi@lisas.de> wrote:
+> Hi,
+>
+> On Sun, Jun 07, 2015 at 03:27:26AM -0300, lucas.de.marchi@gmail.com wrote:
+>> From: Lucas De Marchi <lucas.demarchi@intel.com>
+>>
+>> Sample output:
+>>
+>> $ ./tools/kmod --version
+>> kmod version 20
+>> +XZ +ZLIB -EXPERIMENTAL
+>
+> Thank you for this important feature!
+> (which follows systemd format
+> as proposed by Kay Sievers)
+>
+> While we're quite firmly on the non-kernel side here,
+> I'll still scribble my
+> Reviewed-by: Andreas Mohr <andim2@users.sf.net>
 
-diff --git a/Makefile.am b/Makefile.am
-index 6679deb..4978b26 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -107,7 +107,8 @@ install-exec-hook:
- 	if test "$(libdir)" != "$(rootlibdir)"; then \
- 		$(MKDIR_P) $(DESTDIR)$(rootlibdir) && \
- 		so_img_name=$$(readlink $(DESTDIR)$(libdir)/libkmod.so) && \
--		so_img_rel_target_prefix=$$(echo $(libdir) | sed 's,\(^/\|\)[^/][^/]*,..,g') && \
-+		so_img_rel_target_prefix=$$(echo $(libdir) | sed -E 's,(^/|)[^/][^/]*,..,g') && \
-+
- 		ln -sf $$so_img_rel_target_prefix$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/libkmod.so && \
- 		mv $(DESTDIR)$(libdir)/libkmod.so.* $(DESTDIR)$(rootlibdir); \
- 	fi
+Thanks, I now pushed it to master branch.
+
 -- 
-2.4.4
-
---
-To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+Lucas De Marchi
