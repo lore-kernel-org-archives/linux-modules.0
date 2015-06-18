@@ -1,103 +1,51 @@
-Return-Path: <lucas.de.marchi@gmail.com>
-From: lucas.de.marchi@gmail.com
-To: linux-modules@vger.kernel.org
-Cc: Rusty Russell <rusty@rustcorp.com.au>,
-	Andreas Mohr <andi@lisas.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Bertrand Jacquin <beber@meleeweb.net>,
-	Marco d'Itri <md@linux.it>,
-	lkml <linux-kernel@vger.kernel.org>,
-	Kay Sievers <kay@vrfy.org>,
-	Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH kmod 3/3] tools: display features together with version information
-Date: Sun,  7 Jun 2015 03:27:29 -0300
-Message-Id: <1433658449-3931-4-git-send-email-lucas.de.marchi@gmail.com>
-In-Reply-To: <1433658449-3931-1-git-send-email-lucas.de.marchi@gmail.com>
-References: <1433658449-3931-1-git-send-email-lucas.de.marchi@gmail.com>
+MIME-Version: 1.0
+In-Reply-To: <CANq1E4R_4jG1BN03SYuQjjHOQa+6_hozmV+ZayfZPRYs5exUMQ@mail.gmail.com>
+References: <1434231912-20614-1-git-send-email-lucas.de.marchi@gmail.com>
+	<CANq1E4R_4jG1BN03SYuQjjHOQa+6_hozmV+ZayfZPRYs5exUMQ@mail.gmail.com>
+Date: Thu, 18 Jun 2015 01:36:30 -0300
+Message-ID: <CAKi4VAKst7_R0JZkXjziiOtgT4n6RRCSedyxZ9Fb3Z4bi7=K0g@mail.gmail.com>
+Subject: Re: [PATCH] libkmod-module: fix return code in error path
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: David Herrmann <dh.herrmann@gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>, Daniel Mack <daniel@zonque.org>,
+	David Herrmann <dh.herrmann@googlemail.com>, Lennart Poettering <lennart@poettering.net>,
+	Kay Sievers <kay@vrfy.org>, Lucas De Marchi <lucas.demarchi@intel.com>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Lucas De Marchi <lucas.demarchi@intel.com>
+On Sun, Jun 14, 2015 at 7:55 AM, David Herrmann <dh.herrmann@gmail.com> wrote:
+> Hi
+>
+> On Sat, Jun 13, 2015 at 11:45 PM, Lucas De Marchi
+> <lucas.de.marchi@gmail.com> wrote:
+>> From: Lucas De Marchi <lucas.demarchi@intel.com>
+>>
+>> ENOSYS is the wrong errno to return when we don't find a module in
+>> kmod_module_insert_module(). Why is it there in the first place?  This
+>> goes back to kmod v1 when we couldn't load modules by names, but we
+>> should give a path instead.
+>>
+>> 708624a ("ELF: initial support for modinfo and strip of modversions and
+>> vermagic.") changed that so we do a lazy-search by the module path in
+>> this function. Later  f304afe ("Change error message to reflect
+>> reality") fixed the log message but the return coded remained the same.
+>> ---
+>>
+>> CC'ing here people from systemd who were bitten by this bug in kmod:
+>> https://github.com/systemd/systemd/pull/166
+>>
+>> I'm not sure about changing the return code since it was returning ENOSYS since
+>> v1 :-/.  However maybe the best thing to do is just treat it as a bug and let
+>> the patch to be backported by distros that want it.  Thoughts?
+>
+> Looks all good to me. Treating this as a bugfix is probably the best
+> thing to do. I'll revert the systemd patch once this is pushed.
 
----
- tools/depmod.c   | 1 +
- tools/insmod.c   | 1 +
- tools/kmod.c     | 1 +
- tools/modinfo.c  | 1 +
- tools/modprobe.c | 1 +
- tools/rmmod.c    | 1 +
- 6 files changed, 6 insertions(+)
+Applied.  The next release will take a while but I do recommend all
+distros to cherry-pick this patch.
 
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 231b9ab..2a08b6e 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -2466,6 +2466,7 @@ static int do_depmod(int argc, char *argv[])
- 			return EXIT_SUCCESS;
- 		case 'V':
- 			puts(PACKAGE " version " VERSION);
-+			puts(KMOD_FEATURES);
- 			return EXIT_SUCCESS;
- 		case '?':
- 			goto cmdline_failed;
-diff --git a/tools/insmod.c b/tools/insmod.c
-index 2a0accb..8e72e11 100644
---- a/tools/insmod.c
-+++ b/tools/insmod.c
-@@ -88,6 +88,7 @@ static int do_insmod(int argc, char *argv[])
- 			return EXIT_SUCCESS;
- 		case 'V':
- 			puts(PACKAGE " version " VERSION);
-+			puts(KMOD_FEATURES);
- 			return EXIT_SUCCESS;
- 		case '?':
- 			return EXIT_FAILURE;
-diff --git a/tools/kmod.c b/tools/kmod.c
-index c9d2cc8..28217df 100644
---- a/tools/kmod.c
-+++ b/tools/kmod.c
-@@ -114,6 +114,7 @@ static int handle_kmod_commands(int argc, char *argv[])
- 			return EXIT_SUCCESS;
- 		case 'V':
- 			puts("kmod version " VERSION);
-+			puts(KMOD_FEATURES);
- 			return EXIT_SUCCESS;
- 		case '?':
- 			return EXIT_FAILURE;
-diff --git a/tools/modinfo.c b/tools/modinfo.c
-index 94d55c9..86ac04b 100644
---- a/tools/modinfo.c
-+++ b/tools/modinfo.c
-@@ -405,6 +405,7 @@ static int do_modinfo(int argc, char *argv[])
- 			return EXIT_SUCCESS;
- 		case 'V':
- 			puts(PACKAGE " version " VERSION);
-+			puts(KMOD_FEATURES);
- 			return EXIT_SUCCESS;
- 		case '?':
- 			return EXIT_FAILURE;
-diff --git a/tools/modprobe.c b/tools/modprobe.c
-index 8af4922..3ba8f52 100644
---- a/tools/modprobe.c
-+++ b/tools/modprobe.c
-@@ -824,6 +824,7 @@ static int do_modprobe(int argc, char **orig_argv)
- 			break;
- 		case 'V':
- 			puts(PACKAGE " version " VERSION);
-+			puts(KMOD_FEATURES);
- 			err = 0;
- 			goto done;
- 		case 'h':
-diff --git a/tools/rmmod.c b/tools/rmmod.c
-index 75fc7b5..bcdea4c 100644
---- a/tools/rmmod.c
-+++ b/tools/rmmod.c
-@@ -128,6 +128,7 @@ static int do_rmmod(int argc, char *argv[])
- 			return EXIT_SUCCESS;
- 		case 'V':
- 			puts(PACKAGE " version " VERSION);
-+			puts(KMOD_FEATURES);
- 			return EXIT_SUCCESS;
- 		case '?':
- 			return EXIT_FAILURE;
+
+thanks.
+
 -- 
-2.4.2
+Lucas De Marchi
