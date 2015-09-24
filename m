@@ -1,83 +1,139 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:51031 "EHLO mx1.redhat.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1753930AbbI1WjS (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Mon, 28 Sep 2015 18:39:18 -0400
-From: Laura Abbott <labbott@fedoraproject.org>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: Laura Abbott <labbott@fedoraproject.org>,
-	linux-modules@vger.kernel.org
-Subject: [PATCHv2 2/5] modprobe: Update error message when path is missing
-Date: Mon, 28 Sep 2015 15:39:11 -0700
-Message-Id: <1443479954-31484-2-git-send-email-labbott@fedoraproject.org>
-In-Reply-To: <1443479954-31484-1-git-send-email-labbott@fedoraproject.org>
-References: <1443479954-31484-1-git-send-email-labbott@fedoraproject.org>
-Sender: owner-linux-modules@vger.kernel.org
+Return-Path: <holler@ahsoftware.de>
+Subject: Re: depmod (kmod 21 and older) fails for allmodconfig on ARM
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+References: <560282C6.6050702@ahsoftware.de>
+ <CAKi4VAJAmCP7jEoVYzjm4yQLsEZPC6+GGLDtm7pM-2i=-CnXPQ@mail.gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org
+From: Alexander Holler <holler@ahsoftware.de>
+Message-ID: <5603BD1E.5030003@ahsoftware.de>
+Date: Thu, 24 Sep 2015 11:06:38 +0200
+MIME-Version: 1.0
+In-Reply-To: <CAKi4VAJAmCP7jEoVYzjm4yQLsEZPC6+GGLDtm7pM-2i=-CnXPQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 List-ID: <linux-modules.vger.kernel.org>
 
+Am 24.09.2015 um 03:24 schrieb Lucas De Marchi:
+> On Wed, Sep 23, 2015 at 7:45 AM, Alexander Holler <holler@ahsoftware.de> wrote:
+>> Hello,
+>>
+>> make allmodconfig
+>> make -j4 zImage modules && make modules_install
+>>
+>> fails here on an ARM system with a malloc bug in depmod (after finding some
+>> circles).
+>
+> The bug in kmod should be fixed indeed, but if you have dep cycles you
+> have other things to fix too.  What tree are you building? Do you have
 
-Currently, modprobe fails with no output by default if the
-search paths it tries are missing:
+Currently I don't intend to fix these cycles. Sorry, but I'm unable to 
+fix the world and instead I try to fix stuff (including writing bug 
+reports) according to my very limited resources. Maybe I will try to 
+debug kmod/depmod with some memory checkers, but I thought it makes 
+sense to ask people with more knowledge about depmod before wasting time.
 
-$ modprobe -S notakernel dm-crypt
-$
-$ modprobe -S notakernel lkjjweiojo
-$
+> any changes on top? malloc bug... looks like corrupted memory, but
+> very difficult to debug any further without more info.
 
-This is fairly cryptic and not at all obvious there is a problem
-unless the error code is checked or verbose flags are used.
-Update the error message to indicate a problem and print out the
-directory that failed.
----
- libkmod/libkmod-internal.h | 2 --
- libkmod/libkmod.h          | 1 +
- tools/modprobe.c           | 7 +++----
- 3 files changed, 4 insertions(+), 6 deletions(-)
+I've used it on 4.2.1. It fails on an ARM box as well as on a x86_64 
+Fedora 21 system using a cross-compiler.
 
-diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
-index 3e9839d..4d9db6b 100644
---- a/libkmod/libkmod-internal.h
-+++ b/libkmod/libkmod-internal.h
-@@ -85,8 +85,6 @@ struct kmod_list *kmod_list_append_list(struct kmod_list *list1, struct kmod_lis
- 		container_of(list_entry->node.prev, struct kmod_list, node)))
- 
- /* libkmod.c */
--const char *kmod_get_dirname(const struct kmod_ctx *ctx) __attribute__((nonnull(1)));
--
- int kmod_lookup_alias_from_config(struct kmod_ctx *ctx, const char *name, struct kmod_list **list) __attribute__((nonnull(1, 2, 3)));
- int kmod_lookup_alias_from_symbols_file(struct kmod_ctx *ctx, const char *name, struct kmod_list **list) __attribute__((nonnull(1, 2, 3)));
- int kmod_lookup_alias_from_aliases_file(struct kmod_ctx *ctx, const char *name, struct kmod_list **list) __attribute__((nonnull(1, 2, 3)));
-diff --git a/libkmod/libkmod.h b/libkmod/libkmod.h
-index fe53a59..f9e33c6 100644
---- a/libkmod/libkmod.h
-+++ b/libkmod/libkmod.h
-@@ -51,6 +51,7 @@ void kmod_set_log_priority(struct kmod_ctx *ctx, int priority);
- void *kmod_get_userdata(const struct kmod_ctx *ctx);
- void kmod_set_userdata(struct kmod_ctx *ctx, const void *userdata);
- 
-+const char *kmod_get_dirname(const struct kmod_ctx *ctx);
- 
- /*
-  * Management of libkmod's resources
-diff --git a/tools/modprobe.c b/tools/modprobe.c
-index 3ba8f52..43605cc 100644
---- a/tools/modprobe.c
-+++ b/tools/modprobe.c
-@@ -489,11 +489,10 @@ static int insmod(struct kmod_ctx *ctx, const char *alias,
- 						const char *options) = NULL;
- 
- 	err = kmod_module_new_from_lookup(ctx, alias, &list);
--	if (err < 0)
--		return err;
- 
--	if (list == NULL) {
--		LOG("Module %s not found.\n", alias);
-+	if (list == NULL || err < 0) {
-+		LOG("Module %s not found in directory %s\n", alias,
-+			ctx ? kmod_get_dirname(ctx) : "(missing)");
- 		return -ENOENT;
- 	}
- 
--- 
-2.4.3
+Here are the steps to reproduce on a x86 system:
 
+cp -ar linux.git /tmp
+cd /tmp/linux.git
+make clean
+git checkout -b depmod_bug v4.2.1
+ARCH=arm CROSS_COMPILE=arm-linux-gnu- make multi_v7_defconfig
+ARCH=arm CROSS_COMPILE=arm-linux-gnu- make allmodconfig
+# the following two steps will need quiet some time
+ARCH=arm CROSS_COMPILE=arm-linux-gnu- make -j4 zImage modules
+ARCH=arm INSTALL_MOD_PATH=/tmp CROSS_COMPILE=arm-linux-gnu- make -j4 
+modules_install
+(...)
+   DEPMOD  4.2.1
+depmod: ERROR: Found 10 modules in dependency cycles!
+depmod: ERROR: Cycle detected: drm_kms_helper -> syscopyarea
+*** Error in `/sbin/depmod': free(): invalid next size (fast): 
+0x0000000003e0c370 ***
+======= Backtrace: =========
+/lib64/libc.so.6(+0x77d9e)[0x7f3ec21c1d9e]
+/lib64/libc.so.6(cfree+0x5b5)[0x7f3ec21cd9f5]
+/sbin/depmod[0x409805]
+/lib64/libc.so.6(__libc_start_main+0xf0)[0x7f3ec2169fe0]
+/sbin/depmod[0x40262c]
+======= Memory map: ========
+00400000-00423000 r-xp 00000000 00:0f 1633727 
+  /usr/bin/kmod
+00622000-00623000 r--p 00022000 00:0f 1633727 
+  /usr/bin/kmod
+00623000-00624000 rw-p 00023000 00:0f 1633727 
+  /usr/bin/kmod
+01c9e000-03e21000 rw-p 00000000 00:00 0 
+  [heap]
+7f3ec1f2a000-7f3ec1f41000 r-xp 00000000 00:0f 2706024 
+  /usr/lib64/libpthread-2.20.so
+7f3ec1f41000-7f3ec2140000 ---p 00017000 00:0f 2706024 
+  /usr/lib64/libpthread-2.20.so
+7f3ec2140000-7f3ec2141000 r--p 00016000 00:0f 2706024 
+  /usr/lib64/libpthread-2.20.so
+7f3ec2141000-7f3ec2142000 rw-p 00017000 00:0f 2706024 
+  /usr/lib64/libpthread-2.20.so
+7f3ec2142000-7f3ec2146000 rw-p 00000000 00:00 0
+7f3ec214a000-7f3ec22fd000 r-xp 00000000 00:0f 2705998 
+  /usr/lib64/libc-2.20.so
+7f3ec22fd000-7f3ec24fd000 ---p 001b3000 00:0f 2705998 
+  /usr/lib64/libc-2.20.so
+7f3ec24fd000-7f3ec2501000 r--p 001b3000 00:0f 2705998 
+  /usr/lib64/libc-2.20.so
+7f3ec2501000-7f3ec2503000 rw-p 001b7000 00:0f 2705998 
+  /usr/lib64/libc-2.20.so
+7f3ec2503000-7f3ec2507000 rw-p 00000000 00:00 0
+7f3ec250a000-7f3ec2520000 r-xp 00000000 00:0f 2570841 
+  /usr/lib64/libgcc_s-4.9.2-20150212.so.1
+7f3ec2520000-7f3ec271f000 ---p 00016000 00:0f 2570841 
+  /usr/lib64/libgcc_s-4.9.2-20150212.so.1
+7f3ec271f000-7f3ec2720000 r--p 00015000 00:0f 2570841 
+  /usr/lib64/libgcc_s-4.9.2-20150212.so.1
+7f3ec2720000-7f3ec2721000 rw-p 00016000 00:0f 2570841 
+  /usr/lib64/libgcc_s-4.9.2-20150212.so.1
+7f3ec2722000-7f3ec2737000 r-xp 00000000 00:0f 1510512 
+  /usr/lib64/libz.so.1.2.8
+7f3ec2737000-7f3ec2936000 ---p 00015000 00:0f 1510512 
+  /usr/lib64/libz.so.1.2.8
+7f3ec2936000-7f3ec2937000 r--p 00014000 00:0f 1510512 
+  /usr/lib64/libz.so.1.2.8
+7f3ec2937000-7f3ec2938000 rw-p 00015000 00:0f 1510512 
+  /usr/lib64/libz.so.1.2.8
+7f3ec293a000-7f3ec295e000 r-xp 00000000 00:0f 1510471 
+  /usr/lib64/liblzma.so.5.0.99
+7f3ec295e000-7f3ec2b5d000 ---p 00024000 00:0f 1510471 
+  /usr/lib64/liblzma.so.5.0.99
+7f3ec2b5d000-7f3ec2b5e000 r--p 00023000 00:0f 1510471 
+  /usr/lib64/liblzma.so.5.0.99
+7f3ec2b5e000-7f3ec2b5f000 rw-p 00024000 00:0f 1510471 
+  /usr/lib64/liblzma.so.5.0.99
+7f3ec2b62000-7f3ec2b83000 r-xp 00000000 00:0f 2705991 
+  /usr/lib64/ld-2.20.so
+7f3ec2d83000-7f3ec2d84000 r--p 00021000 00:0f 2705991 
+  /usr/lib64/ld-2.20.so
+7f3ec2d84000-7f3ec2d85000 rw-p 00022000 00:0f 2705991 
+  /usr/lib64/ld-2.20.so
+7f3ec2d85000-7f3ec2d86000 rw-p 00000000 00:00 0
+7f3ec2d87000-7f3ec2d8d000 rw-p 00000000 00:00 0
+7fffa72ea000-7fffa730d000 rw-p 00000000 00:00 0 
+  [stack]
+7fffa7342000-7fffa7344000 r--p 00000000 00:00 0 
+  [vvar]
+7fffa7344000-7fffa7346000 r-xp 00000000 00:00 0 
+  [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0 
+  [vsyscall]
+./scripts/depmod.sh: Zeile 57: 30419 Abgebrochen 
+(Speicherabzug geschrieben) "$DEPMOD" "$@" "$KERNELRELEASE" $SYMBOL_PREFIX
+Makefile:1142: recipe for target '_modinst_post' failed
+make: *** [_modinst_post] Error 134
+
+Regards,
+
+Alexander Holler
