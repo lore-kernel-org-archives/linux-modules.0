@@ -1,56 +1,43 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:36209 "EHLO mx1.redhat.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1753895AbbIKUz7 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Fri, 11 Sep 2015 16:55:59 -0400
-From: Laura Abbott <labbott@fedoraproject.org>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: Laura Abbott <labbott@fedoraproject.org>,
-	linux-modules@vger.kernel.org
-Subject: [PATCH 1/4] build: Properly check for Cython
-Date: Fri, 11 Sep 2015 13:55:53 -0700
-Message-Id: <1442004956-3868-2-git-send-email-labbott@fedoraproject.org>
-In-Reply-To: <1442004956-3868-1-git-send-email-labbott@fedoraproject.org>
+MIME-Version: 1.0
+In-Reply-To: <55FC5841.1080501@redhat.com>
 References: <1442004956-3868-1-git-send-email-labbott@fedoraproject.org>
-Sender: owner-linux-modules@vger.kernel.org
+	<1442004956-3868-5-git-send-email-labbott@fedoraproject.org>
+	<CAKi4VAJiG3con6bcK5OkaBuFaeh19eyfUszE34Nt5e_Z2dYs5g@mail.gmail.com>
+	<55FC5841.1080501@redhat.com>
+Date: Wed, 23 Sep 2015 22:17:12 -0300
+Message-ID: <CAKi4VAL1bEBZbMC3B-+ge4LTnw0ymttFO-UPwFNGF5F4feZOHw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] depmod: Add error message for bad version
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Laura Abbott <labbott@redhat.com>
+Cc: Laura Abbott <labbott@fedoraproject.org>, Lucas De Marchi <lucas.demarchi@intel.com>,
+	linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
+On Fri, Sep 18, 2015 at 3:30 PM, Laura Abbott <labbott@redhat.com> wrote:
+> On 09/12/2015 12:00 PM, Lucas De Marchi wrote:
+>>
+>> On Fri, Sep 11, 2015 at 5:55 PM, Laura Abbott <labbott@fedoraproject.org>
+>> wrote:
+>>>
+>>>
+>>> Currently, if a value that doesn't match a kernel version
+>>> ("%u.%u") is passed in, depmod silently falls back to
+>>> using uname. Make it clear to the user that this is happening
+>>> by giving a message to the user.
+>>> ---
+>>
+>>
+>> Actually I think we should not fallback. If the user passed a wrong
+>> number, fallbacking to the currently running kernel is plain wrong.
+>> This was done mostly due to compatibility with module-init-tools but I
+>> prefer breaking it rather than silently (or verbose as per your patch)
+>> doing the wrong thing.
+>>
+>
+> Sounds fine to me if you are okay with the breakage.
 
-Cython is necessary to compile if --enable-python is used.
-Currently, the configuration just sets Cython to ':' if
-it isn't found. ':' is a valid command which results in
-confusing build errors:
+yep
 
-  CCLD     libkmod/libkmod.la
-  CCLD     libkmod/libkmod-internal.la
-ar: `u' modifier ignored since `D' is the default (see `U')
-  CYTHON  libkmod/python/kmod/kmod.c
-  CC       libkmod/python/kmod/libkmod_python_kmod_kmod_la-kmod.lo
-gcc: error: ./libkmod/python/kmod/kmod.c: No such file or directory
-gcc: fatal error: no input files
-
-Explicitly check if cython is available and then error out
-if it isn't found.
----
- configure.ac | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/configure.ac b/configure.ac
-index d4f84bd..1648a17 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -162,7 +162,10 @@ AC_ARG_ENABLE([python],
- 	[], [enable_python=no])
- AS_IF([test "x$enable_python" = "xyes"], [
- 	AM_PATH_PYTHON(,,[:])
--	AC_PATH_PROG([CYTHON], [cython], [:])
-+	AC_PATH_PROG([CYTHON], [cython], [no])
-+	if test x"$CYTHON" == x"no"; then
-+		AC_MSG_ERROR([Please install Cython before building])
-+	fi
- 
- 	PKG_CHECK_MODULES([PYTHON], [python-${PYTHON_VERSION}],
- 			  [have_python=yes],
--- 
-2.4.3
-
+thanks
+Lucas De Marchi
