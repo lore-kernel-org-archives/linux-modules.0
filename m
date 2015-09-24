@@ -1,50 +1,61 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-wi0-f175.google.com ([209.85.212.175]:32804 "EHLO
-	mail-wi0-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1750699AbbHGJb6 (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Fri, 7 Aug 2015 05:31:58 -0400
-Received: by wijp15 with SMTP id p15so53109837wij.0
-        for <linux-modules@vger.kernel.org>; Fri, 07 Aug 2015 02:31:57 -0700 (PDT)
 MIME-Version: 1.0
-Date: Fri, 7 Aug 2015 05:31:57 -0400
-Message-ID: <CANULwrQY+_Bv1r9V2FsVP=+ODSDVLsDicD+sBwcJYrZz60vCFQ@mail.gmail.com>
-Subject: fnmatch for modprobe.d "options" commands?
-From: Ari Entlich <atrigent@gmail.com>
-To: linux-modules@vger.kernel.org
+In-Reply-To: <55FC4C03.4040101@redhat.com>
+References: <1442004956-3868-1-git-send-email-labbott@fedoraproject.org>
+	<1442004956-3868-2-git-send-email-labbott@fedoraproject.org>
+	<CAKi4VAKzR+=Gnk1EGwe6a_Rmg5vA1dgLvZ9mwVcBrzjd+Ag-Pg@mail.gmail.com>
+	<55FC4C03.4040101@redhat.com>
+Date: Wed, 23 Sep 2015 22:11:03 -0300
+Message-ID: <CAKi4VA++sfnC=yS-6q40jyoCOdOBTz+atFkBiia+NtuDYP6sYg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] build: Properly check for Cython
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Laura Abbott <labbott@redhat.com>
+Cc: Laura Abbott <labbott@fedoraproject.org>, Lucas De Marchi <lucas.demarchi@intel.com>,
+	linux-modules <linux-modules@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-I am trying to do some debugging of a sound issue, and in the process
-I am having to use the "dynamic debug" feature of the kernel. I would
-like to enable all debug messages for all of the sound modules on my
-system. Once all of the modules are loaded, I can do this:
+On Fri, Sep 18, 2015 at 2:38 PM, Laura Abbott <labbott@redhat.com> wrote:
+> On 09/12/2015 11:27 AM, Lucas De Marchi wrote:
+>>
+>> On Fri, Sep 11, 2015 at 5:55 PM, Laura Abbott <labbott@fedoraproject.org>
+>> wrote:
+>>>
+>>>
+>>> Cython is necessary to compile if --enable-python is used.
+>>> Currently, the configuration just sets Cython to ':' if
+>>> it isn't found. ':' is a valid command which results in
+>>> confusing build errors:
+>>>
+>>>    CCLD     libkmod/libkmod.la
+>>>    CCLD     libkmod/libkmod-internal.la
+>>> ar: `u' modifier ignored since `D' is the default (see `U')
+>>>    CYTHON  libkmod/python/kmod/kmod.c
+>>>    CC       libkmod/python/kmod/libkmod_python_kmod_kmod_la-kmod.lo
+>>> gcc: error: ./libkmod/python/kmod/kmod.c: No such file or directory
+>>> gcc: fatal error: no input files
+>>>
+>>> Explicitly check if cython is available and then error out
+>>> if it isn't found.
+>>> ---
+>>
+>>
+>> Since we distribute the  generated python files, cython is only needed
+>> on "building from git tree" cases, not for packages.
+>>
+>>
+>> Lucas De Marchi
+>>
+>
+> I don't think I have a clear answer about whether or not you want to take
+> this patch even after Kay's response. If you don't want to add the
+> autoconf check I'll update the README and put a note under hacking to make
+> sure cython is installed if the intention is to ship the generated files.
 
-echo 'module snd* +p' > /sys/kernel/debug/dynamic_debug/control
+Either update the README or remove everything from the build system
+that makes the dependencies different for building from git and
+building from package. Also make sure we don't ship prebuilt stuff
+anymore.  I'll accept any of those approaches.
 
-However, by the time I do this, most of the messages that would have
-happened have already happened. There is a module argument "dyndbg"
-which can be used to set dynamic debug flags for a module, which will
-obviously take effect immediately once the module has loaded. However,
-in order to do the same thing that I am doing with the control file
-above, I'd have to add options commands to my modprobe.d files for
-each sound module on my system, or at least for each one which I know
-will be loaded. Ideally, I'd like to be able to do this:
+thanks
 
-options snd* dyndbg="+p"
-
->From my reading of the kmod source code, it looks like enabling this
-sort of thing would be a very trivial patch to the
-kmod_module_get_options function in libkmod-module.c. Furthermore, it
-looks like other modprobe.d commands (install, softdep, and remove)
-are already using fnmatch for the module name. Would it be possible to
-add the options command to that list?
-
-Whether this change is made or not, it might be a good idea to update
-the documentation to reflect the fact that fnmatch is being used for
-some of the commands.
-
-Thanks!
-
-Ari
+Lucas De Marchi
