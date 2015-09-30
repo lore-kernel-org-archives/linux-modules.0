@@ -1,45 +1,53 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:38251 "EHLO mx1.redhat.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1753796AbbIKU4A (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Fri, 11 Sep 2015 16:56:00 -0400
-From: Laura Abbott <labbott@fedoraproject.org>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: Laura Abbott <labbott@fedoraproject.org>,
-	linux-modules@vger.kernel.org
-Subject: [PATCH 4/4] depmod: Add error message for bad version
-Date: Fri, 11 Sep 2015 13:55:56 -0700
-Message-Id: <1442004956-3868-5-git-send-email-labbott@fedoraproject.org>
-In-Reply-To: <1442004956-3868-1-git-send-email-labbott@fedoraproject.org>
-References: <1442004956-3868-1-git-send-email-labbott@fedoraproject.org>
-Sender: owner-linux-modules@vger.kernel.org
+MIME-Version: 1.0
+In-Reply-To: <1443479954-31484-1-git-send-email-labbott@fedoraproject.org>
+References: <1443479954-31484-1-git-send-email-labbott@fedoraproject.org>
+Date: Wed, 30 Sep 2015 15:30:26 -0300
+Message-ID: <CAKi4VA+bQTH=gv3bA3VU-iDNL1ae37qBQDocCoT5SV_CR4KHYQ@mail.gmail.com>
+Subject: Re: [PATCHv2 1/5] README: Indicate cython requirements
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Laura Abbott <labbott@fedoraproject.org>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>, linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
+Hi Laura,
 
-Currently, if a value that doesn't match a kernel version
-("%u.%u") is passed in, depmod silently falls back to
-using uname. Make it clear to the user that this is happening
-by giving a message to the user.
----
- tools/depmod.c | 5 +++++
- 1 file changed, 5 insertions(+)
+thank you for the patches, they are all applied.
 
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 30f6191..f491542 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -2480,6 +2480,11 @@ static int do_depmod(int argc, char *argv[])
- 		cfg.kversion = argv[optind];
- 		optind++;
- 	} else {
-+		if (optind < argc) {
-+			ERR("Bad version passed %s\n", argv[optind]);
-+			ERR("Falling back to uname\n");
-+		}
-+
- 		if (uname(&un) < 0) {
- 			CRIT("uname() failed: %s\n", strerror(errno));
- 			goto cmdline_failed;
+
+Lucas De Marchi
+
+On Mon, Sep 28, 2015 at 7:39 PM, Laura Abbott <labbott@fedoraproject.org> wrote:
+>
+> The recommended flags require cython be installed to compile
+> successfully. Note this in the documentation.
+> ---
+>  README | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/README b/README
+> index b977e1f..4933268 100644
+> --- a/README
+> +++ b/README
+> @@ -63,7 +63,8 @@ Hacking
+>  =======
+>
+>  Run 'bootstrap' script before configure. If you want to accept the recommended
+> -flags, you just need to run 'bootstrap-configure'.
+> +flags, you just need to run 'bootstrap-configure'. Note that the recommended
+> +flags require cython be installed to compile successfully.
+>
+>  Make sure to read the CODING-STYLE file and the other READMEs: libkmod/README
+>  and testsuite/README.
+> --
+> 2.4.3
+>
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+
+
 -- 
-2.4.3
-
+Lucas De Marchi
