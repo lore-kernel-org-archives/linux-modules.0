@@ -1,35 +1,30 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:38248 "EHLO mx1.redhat.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1753796AbbIKUz6 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Fri, 11 Sep 2015 16:55:58 -0400
-From: Laura Abbott <labbott@fedoraproject.org>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: Laura Abbott <labbott@fedoraproject.org>,
-	linux-modules@vger.kernel.org
-Subject: [PATCH 0/4] depmod and modprobe error message fixups
-Date: Fri, 11 Sep 2015 13:55:52 -0700
-Message-Id: <1442004956-3868-1-git-send-email-labbott@fedoraproject.org>
-Sender: owner-linux-modules@vger.kernel.org
+Return-Path: <philippedeswert@gmail.com>
+Return-Path: <philippedeswert@gmail.com>
+Message-ID: <562E004B.9010209@gmail.com>
+Date: Mon, 26 Oct 2015 12:28:27 +0200
+From: Philippe De Swert <philippedeswert@gmail.com>
+MIME-Version: 1.0
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+CC: linux-modules <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] insmod: do support -f
+References: <1444232218-22150-1-git-send-email-philippedeswert@gmail.com> <CAKi4VAKvhn53jSHju9_wbXtt_Unhpxayf3ayKq5endOG4LzxDw@mail.gmail.com> <5620E7CA.3020509@gmail.com> <CAKi4VAL44GkoXOAxsikVwKyUjPH0_6ix9Nd52tGoFnLv1WXN_g@mail.gmail.com>
+In-Reply-To: <CAKi4VAL44GkoXOAxsikVwKyUjPH0_6ix9Nd52tGoFnLv1WXN_g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 List-ID: <linux-modules.vger.kernel.org>
 
+Hi Lucas,
 
-While doing some experimental work with kernel packaging,
-I found a few places where a lack of error messages made
-it difficult to figure out what was going on. This cleans
-up the error messages to be a bit more useful.
+On 25/10/15 17:58, Lucas De Marchi wrote:
+>
+> I have mixed feelings here because this is disabled in insmod since
+> forever (it's already on the first git commit from module-init-tools).
+> If anyone knows the reason it would be nice... at least to include in
+> the commit message.
 
-Laura Abbott (4):
-  build: Properly check for Cython
-  modprobe: Add appropriate error message when path is missing
-  depmod: Fix message printing before log_setup_kmod_log
-  depmod: Add error message for bad version
+Well that is still something I would like to know too ;)
+> Agreed.  I applied this patch. If things go bad we can rollback.
+>
+>
+Thanks!
 
- configure.ac     |  5 ++++-
- tools/depmod.c   | 15 +++++++++------
- tools/modprobe.c |  5 ++++-
- 3 files changed, 17 insertions(+), 8 deletions(-)
-
--- 
-2.4.3
-
+Philippe
