@@ -1,13 +1,13 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from e28smtp03.in.ibm.com ([125.16.236.3]:53947 "EHLO
-	e28smtp03.in.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1754939AbcARPbN (ORCPT
+Received: from e23smtp02.au.ibm.com ([202.81.31.144]:47216 "EHLO
+	e23smtp02.au.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1755630AbcAHTXe (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 18 Jan 2016 10:31:13 -0500
+	Fri, 8 Jan 2016 14:23:34 -0500
 Received: from localhost
-	by e28smtp03.in.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+	by e23smtp02.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
 	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
-	Mon, 18 Jan 2016 20:52:21 +0530
+	Sat, 9 Jan 2016 05:23:32 +1000
 From: Mimi Zohar <zohar@linux.vnet.ibm.com>
 To: linux-security-module@vger.kernel.org
 Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>,
@@ -16,118 +16,174 @@ Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>,
 	David Howells <dhowells@redhat.com>,
 	David Woodhouse <dwmw2@infradead.org>,
 	Kees Cook <keescook@chromium.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Subject: [RFC PATCH v2 10/11] ima: measure and appraise the IMA policy itself
-Date: Mon, 18 Jan 2016 10:11:25 -0500
-Message-Id: <1453129886-20192-11-git-send-email-zohar@linux.vnet.ibm.com>
-In-Reply-To: <1453129886-20192-1-git-send-email-zohar@linux.vnet.ibm.com>
-References: <1453129886-20192-1-git-send-email-zohar@linux.vnet.ibm.com>
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [RFC PATCH 3/5] kexec: replace call to copy_file_from_fd() with kernel version
+Date: Fri,  8 Jan 2016 14:22:02 -0500
+Message-Id: <1452280924-28774-4-git-send-email-zohar@linux.vnet.ibm.com>
+In-Reply-To: <1452280924-28774-1-git-send-email-zohar@linux.vnet.ibm.com>
+References: <1452280924-28774-1-git-send-email-zohar@linux.vnet.ibm.com>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-This patch adds support for measuring and appraising the IMA policy
-itself.
+This patch defines kernel_read_file_from_fd(), a wrapper for the VFS
+common kernel_read_file(), and replaces the kexec copy_file_from_fd()
+calls with the kernel_read_file_from_fd() wrapper.
 
 Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
 ---
- security/integrity/ima/ima.h        |  1 +
- security/integrity/ima/ima_fs.c     |  9 ++++++++-
- security/integrity/ima/ima_policy.c | 14 ++++++++++++--
- 3 files changed, 21 insertions(+), 3 deletions(-)
+ fs/exec.c           | 15 +++++++++++
+ include/linux/fs.h  |  1 +
+ kernel/kexec_file.c | 76 +++++------------------------------------------------
+ 3 files changed, 23 insertions(+), 69 deletions(-)
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index fc31ba2..e8f111b 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -185,6 +185,7 @@ int ima_policy_show(struct seq_file *m, void *v);
- #define IMA_APPRAISE_LOG	0x04
- #define IMA_APPRAISE_MODULES	0x08
- #define IMA_APPRAISE_FIRMWARE	0x10
-+#define IMA_APPRAISE_POLICY	0x20
+diff --git a/fs/exec.c b/fs/exec.c
+index 3c48a19..4ad2fca 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -887,6 +887,21 @@ out:
+ }
+ EXPORT_SYMBOL_GPL(kernel_read_file);
  
- #ifdef CONFIG_IMA_APPRAISE
- int ima_appraise_measurement(int func, struct integrity_iint_cache *iint,
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index fe8b16b..57c6b2e 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -325,7 +325,14 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
++int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
++			     int policy_id)
++{
++	struct fd f = fdget(fd);
++	int ret = -ENOEXEC;
++
++	if (!f.file)
++		goto out;
++
++	ret = kernel_read_file(f.file, buf, size, max_size, policy_id);
++out:
++	fdput(f);
++	return ret;
++}
++
+ ssize_t read_code(struct file *file, unsigned long addr, loff_t pos, size_t len)
+ {
+ 	ssize_t res = vfs_read(file, (void __user *)addr, len, &pos);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 9b1468c..9642623 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2528,6 +2528,7 @@ extern int do_pipe_flags(int *, int);
  
- 	if (data[0] == '/')
- 		result = ima_read_policy(data);
--	else
-+	else if (ima_appraise & IMA_APPRAISE_POLICY) {
-+		pr_err("IMA: signed policy required\n");
-+		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
-+				    "policy_update", "signed policy required",
-+				    1, 0);
-+		if (ima_appraise & IMA_APPRAISE_ENFORCE)
-+			result = -EACCES;
-+	} else
- 		result = ima_parse_add_rule(data);
- 	mutex_unlock(&ima_write_mutex);
- out_free:
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index dbfd26b..7a63760 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -118,6 +118,7 @@ static struct ima_rule_entry default_measurement_rules[] = {
- 	{.action = MEASURE, .hooks.func = MODULE_CHECK, .flags = IMA_FUNC},
- 	{.action = MEASURE, .hooks.policy_id = FIRMWARE_CHECK,
- 	 .flags = IMA_FUNC},
-+	{.action = MEASURE, .hooks.policy_id = POLICY_CHECK, .flags = IMA_FUNC},
- };
+ extern int kernel_read(struct file *, loff_t, char *, unsigned long);
+ extern int kernel_read_file(struct file *, void **, loff_t *, loff_t, int);
++extern int kernel_read_file_from_fd(int, void **, loff_t *, loff_t, int);
+ extern ssize_t kernel_write(struct file *, const char *, size_t, loff_t);
+ extern ssize_t __kernel_write(struct file *, const char *, size_t, loff_t *);
+ extern struct file * open_exec(const char *);
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 81d20e8..f7c3ce4 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -34,69 +34,6 @@ size_t __weak kexec_purgatory_size = 0;
  
- static struct ima_rule_entry default_appraise_rules[] = {
-@@ -618,6 +619,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 				entry->hooks.policy_id = FIRMWARE_CHECK;
- 			else if (strcmp(args[0].from, "MODULE_CHECK") == 0)
- 				entry->hooks.policy_id = MODULE_CHECK;
-+			else if (strcmp(args[0].from, "POLICY_CHECK") == 0)
-+				entry->hooks.policy_id = POLICY_CHECK;
- 			else
- 				result = -EINVAL;
- 			if (!result)
-@@ -776,6 +779,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 		temp_ima_appraise |= IMA_APPRAISE_MODULES;
- 	else if (entry->hooks.policy_id == FIRMWARE_CHECK)
- 		temp_ima_appraise |= IMA_APPRAISE_FIRMWARE;
-+	else if (entry->hooks.policy_id == POLICY_CHECK)
-+		temp_ima_appraise |= IMA_APPRAISE_POLICY;
- 	audit_log_format(ab, "res=%d", !result);
- 	audit_log_end(ab);
- 	return result;
-@@ -862,7 +867,8 @@ static char *mask_tokens[] = {
- enum {
- 	func_file = 0, func_mmap, func_bprm,
- 	func_module, func_post,
--	func_kexec, func_initramfs, func_firmware
-+	func_kexec, func_initramfs, func_firmware,
-+	func_policy
- };
+ static int kexec_calculate_store_digests(struct kimage *image);
  
- static char *func_tokens[] = {
-@@ -873,7 +879,8 @@ static char *func_tokens[] = {
- 	"POST_SETATTR",
- 	"KEXEC_CHECK",
- 	"INITRAMFS_CHECK",
--	"FIRMWARE_CHECK"
-+	"FIRMWARE_CHECK",
-+	"POLICY_CHECK"
- };
+-static int copy_file_from_fd(int fd, void **buf, unsigned long *buf_len,
+-			     enum ima_policy_id policy_id)
+-{
+-	struct fd f = fdget(fd);
+-	int ret;
+-	struct kstat stat;
+-	loff_t pos;
+-	ssize_t bytes = 0;
+-
+-	if (!f.file)
+-		return -EBADF;
+-
+-	ret = vfs_getattr(&f.file->f_path, &stat);
+-	if (ret)
+-		goto out;
+-
+-	if (stat.size > INT_MAX) {
+-		ret = -EFBIG;
+-		goto out;
+-	}
+-
+-	/* Don't hand 0 to vmalloc, it whines. */
+-	if (stat.size == 0) {
+-		ret = -EINVAL;
+-		goto out;
+-	}
+-
+-	*buf = vmalloc(stat.size);
+-	if (!*buf) {
+-		ret = -ENOMEM;
+-		goto out;
+-	}
+-
+-	pos = 0;
+-	while (pos < stat.size) {
+-		bytes = kernel_read(f.file, pos, (char *)(*buf) + pos,
+-				    stat.size - pos);
+-		if (bytes < 0) {
+-			ret = bytes;
+-			goto out_free;
+-		}
+-
+-		if (bytes == 0)
+-			break;
+-		pos += bytes;
+-	}
+-
+-	if (pos != stat.size)
+-		ret = -EBADF;
+-
+-	ret = ima_hash_and_process_file(f.file, *buf, stat.size, policy_id);
+-	if (!ret)
+-		*buf_len = pos;
+-out_free:
+-	if (ret < 0) {
+-		vfree(*buf);
+-		*buf = NULL;
+-	}
+-out:
+-	fdput(f);
+-	return ret;
+-}
+-
+ /* Architectures can provide this probe function */
+ int __weak arch_kexec_kernel_image_probe(struct kimage *image, void *buf,
+ 					 unsigned long buf_len)
+@@ -185,16 +122,17 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+ {
+ 	int ret = 0;
+ 	void *ldata;
++	loff_t size;
  
- void *ima_policy_start(struct seq_file *m, loff_t *pos)
-@@ -961,6 +968,9 @@ int ima_policy_show(struct seq_file *m, void *v)
- 			case MODULE_CHECK:
- 				seq_printf(m, pt(Opt_func), ft(func_module));
- 				break;
-+			case POLICY_CHECK:
-+				seq_printf(m, pt(Opt_func), ft(func_policy));
-+				break;
- 			default:
- 				snprintf(tbuf, sizeof(tbuf), "%d",
- 					 entry->hooks.func);
+-	ret = copy_file_from_fd(kernel_fd, &image->kernel_buf,
+-				&image->kernel_buf_len, KEXEC_CHECK);
++	ret = kernel_read_file_from_fd(kernel_fd, &image->kernel_buf,
++				       &size, INT_MAX, KEXEC_CHECK);
+ 	if (ret)
+ 		return ret;
++	image->kernel_buf_len = size;
+ 
+ 	/* Call arch image probe handlers */
+ 	ret = arch_kexec_kernel_image_probe(image, image->kernel_buf,
+ 					    image->kernel_buf_len);
+-
+ 	if (ret)
+ 		goto out;
+ 
+@@ -209,11 +147,11 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+ #endif
+ 	/* It is possible that there no initramfs is being loaded */
+ 	if (!(flags & KEXEC_FILE_NO_INITRAMFS)) {
+-		ret = copy_file_from_fd(initrd_fd, &image->initrd_buf,
+-					&image->initrd_buf_len,
+-					INITRAMFS_CHECK);
++		ret = kernel_read_file_from_fd(initrd_fd, &image->initrd_buf,
++					       &size, INT_MAX, INITRAMFS_CHECK);
+ 		if (ret)
+ 			goto out;
++		image->initrd_buf_len = size;
+ 	}
+ 
+ 	if (cmdline_len) {
 -- 
 2.1.0
 
