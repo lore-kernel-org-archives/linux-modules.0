@@ -1,103 +1,117 @@
-Return-Path: <rusty@ozlabs.org>
-From: Rusty Russell <rusty@rustcorp.com.au>
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>, Samson Yeung <samson.yeung@oracle.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org, David Airlie <airlied@linux.ie>, Tomi Valkeinen <tomi.valkeinen@ti.com>, Kyungmin Park <kyungmin.park@samsung.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
-Subject: Duplicated module names
-In-Reply-To: <CAKi4VAKF-Ywm=VK4wzDdr-O0Fi8Gv8X--CQcJ4FFia0Gu1Xaeg@mail.gmail.com>
-References: <56A91B6A.2060205@oracle.com> <CAKi4VA+MC=hXMQ2kHi4_Xv2w7qQcG443zj9+rKo_JKoSzgDvYQ@mail.gmail.com> <56AA98D6.7020305@oracle.com> <CAKi4VAKF-Ywm=VK4wzDdr-O0Fi8Gv8X--CQcJ4FFia0Gu1Xaeg@mail.gmail.com>
-Date: Fri, 29 Jan 2016 16:24:15 +1030
-Message-ID: <87h9hxrkvs.fsf@rustcorp.com.au>
-MIME-Version: 1.0
-Content-Type: text/plain
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from e23smtp02.au.ibm.com ([202.81.31.144]:34168 "EHLO
+	e23smtp02.au.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S932702AbcAHUhm (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Fri, 8 Jan 2016 15:37:42 -0500
+Received: from localhost
+	by e23smtp02.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
+	Sat, 9 Jan 2016 06:37:40 +1000
+Message-ID: <1452285405.2651.23.camel@linux.vnet.ibm.com>
+Subject: Re: [RFC PATCH 2/5] firmware: replace call to
+ fw_read_file_contents() with kernel version
+From: Mimi Zohar <zohar@linux.vnet.ibm.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: linux-security-module <linux-security-module@vger.kernel.org>,
+	"Luis R. Rodriguez" <mcgrof@suse.com>,
+	Kexec Mailing List <kexec@lists.infradead.org>,
+	linux-modules@vger.kernel.org,
+	"linux-fsdevel@vger.kernel.org" <fsdevel@vger.kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Date: Fri, 08 Jan 2016 15:36:45 -0500
+In-Reply-To: <CAGXu5jKhjgqvSKiERuGojVX2AK8pubtUHJgR2S=rvbUOgdad3g@mail.gmail.com>
+References: <1452280924-28774-1-git-send-email-zohar@linux.vnet.ibm.com>
+	 <1452280924-28774-3-git-send-email-zohar@linux.vnet.ibm.com>
+	 <CAGXu5jKhjgqvSKiERuGojVX2AK8pubtUHJgR2S=rvbUOgdad3g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Lucas De Marchi <lucas.de.marchi@gmail.com> writes:
-> Hi!
->
-> CC'ing Rusty and mailing lists
+On Fri, 2016-01-08 at 12:26 -0800, Kees Cook wrote:
+> On Fri, Jan 8, 2016 at 11:22 AM, Mimi Zohar <zohar@linux.vnet.ibm.com> wrote:
+> > Replace fw_read_file_contents() for reading a file with the common VFS
+> > kernel_read_file() function.  Call the existing firmware security hook
+> > from security_kernel_post_read_file() until the LSMs have been converted.
+> >
+> > This patch retains the kernel_fw_from_file() hook, but removes the
+> > security_kernel_fw_from_file() function.
+> >
+> > Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
+> > ---
+> >  drivers/base/firmware_class.c     | 51 +++++++++------------------------------
+> >  include/linux/ima.h               |  6 -----
+> >  include/linux/security.h          |  8 +-----
+> >  security/integrity/ima/ima_main.c | 18 ++++++--------
+> >  security/security.c               | 24 ++++++++----------
+> >  5 files changed, 30 insertions(+), 77 deletions(-)
+> >
+> > diff --git a/drivers/base/firmware_class.c b/drivers/base/firmware_class.c
+> > index 3ca96a6..4e4e860 100644
+> > --- a/drivers/base/firmware_class.c
+> > +++ b/drivers/base/firmware_class.c
+> > @@ -292,44 +292,10 @@ static const char * const fw_path[] = {
+> >  module_param_string(path, fw_path_para, sizeof(fw_path_para), 0644);
+> >  MODULE_PARM_DESC(path, "customized firmware image search path with a higher priority than default path");
+> >
+> > -static int fw_read_file_contents(struct file *file, struct firmware_buf *fw_buf)
+> > -{
+> > -       int size;
+> > -       char *buf;
+> > -       int rc;
+> > -
+> > -       if (!S_ISREG(file_inode(file)->i_mode))
+> > -               return -EINVAL;
+> > -       size = i_size_read(file_inode(file));
+> > -       if (size <= 0)
+> > -               return -EINVAL;
+> > -       buf = vmalloc(size);
+> > -       if (!buf)
+> > -               return -ENOMEM;
+> > -       rc = kernel_read(file, 0, buf, size);
+> > -       if (rc != size) {
+> > -               if (rc > 0)
+> > -                       rc = -EIO;
+> > -               goto fail;
+> > -       }
+> > -       rc = ima_hash_and_process_file(file, buf, size, FIRMWARE_CHECK);
+> > -       if (rc)
+> > -               goto fail;
+> > -
+> > -       rc = security_kernel_fw_from_file(file, buf, size);
+> > -       if (rc)
+> > -               goto fail;
+> > -       fw_buf->data = buf;
+> > -       fw_buf->size = size;
+> > -       return 0;
+> > -fail:
+> > -       vfree(buf);
+> > -       return rc;
+> > -}
+> > -
+> >  static int fw_get_filesystem_firmware(struct device *device,
+> >                                        struct firmware_buf *buf)
+> >  {
+> > +       loff_t size;
+> >         int i, len;
+> >         int rc = -ENOENT;
+> >         char *path;
+> > @@ -355,13 +321,18 @@ static int fw_get_filesystem_firmware(struct device *device,
+> >                 file = filp_open(path, O_RDONLY, 0);
+> >                 if (IS_ERR(file))
+> >                         continue;
+> > -               rc = fw_read_file_contents(file, buf);
+> > +
+> > +               buf->size = 0;
+> > +               rc = kernel_read_file(file, &buf->data, &size, UINT_MAX,
+> 
+> Strictly speaking, the originally code would max at INT_MAX, no UINT_MAX.
 
-Thanks.
+hm, I must have taken it from firmware_buf->size, which is defined as
+size_t (unsigned).  Thanks for the correction.
 
-> Rusty and ohers: it looks like both CONFIG_CRC32 and
-> CONFIG_CRYPTO_CRC32 can be compiled as module, and they generate
-> modules with the same name, crc32.  Could that be fixed?
+Mimi  
 
-Gah.  Looks like it's been that way since at least 2014, too.
-
-I think we could rename it to crypto_crc32, but I don't think it's the
-only one.  Marco, I think depmod should probably FAIL if two modules
-have the same name, which would at least find such problems.
-
-(BTW is there a nice way to figure out if a config var is a tristate?  These
-are only problematic if both CONFIG_ are tristate.)
-
-Here's a hacky attempt to look for problems:
-
-rusty@rusty-Lemur:~/devel/kernel/linux (master)$ KCONFIGS=`find * -name 'Kconfig*'`; for m in `find [b-z]* -name 'Makefile*'`; do sed -n 's,obj-\$(CONFIG.*+= \([a-z0-9_-]\+\.o\)$,'$m' \1,p' <$m | sort -u; done | sort -k 2 | uniq -D -f 1 | while read m obj; do fgrep -w $obj $m /dev/null; done | while read LINE; do conf=`echo $LINE | sed 's/.*\$(CONFIG_\([A-Z0-9_]*\).*/\1/'`; if grep -C2 "^config $conf\$" $KCONFIGS | fgrep -q tristate; then echo $LINE; fi; done
-
-Here are the results (mildly filtered by me):
-
-drivers/gpu/drm/i2c/Makefile:obj-$(CONFIG_DRM_I2C_ADV7511) += adv7511.o
-drivers/media/i2c/Makefile:obj-$(CONFIG_VIDEO_ADV7511) += adv7511.o
-
-drivers/media/platform/coda/Makefile:obj-$(CONFIG_VIDEO_CODA) += coda.o
-fs/coda/Makefile:obj-$(CONFIG_CODA_FS) += coda.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_CONNECTOR_ANALOG_TV) += connector-analog-tv.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_CONNECTOR_ANALOG_TV) += connector-analog-tv.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_CONNECTOR_DVI) += connector-dvi.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_CONNECTOR_DVI) += connector-dvi.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_CONNECTOR_HDMI) += connector-hdmi.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_CONNECTOR_HDMI) += connector-hdmi.o
-
-crypto/Makefile:obj-$(CONFIG_CRYPTO_CRC32) += crc32.o
-lib/Makefile:obj-$(CONFIG_CRC32) += crc32.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_ENCODER_OPA362) += encoder-opa362.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_ENCODER_OPA362) += encoder-opa362.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_ENCODER_TFP410) += encoder-tfp410.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_ENCODER_TFP410) += encoder-tfp410.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_ENCODER_TPD12S015) += encoder-tpd12s015.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_ENCODER_TPD12S015) += encoder-tpd12s015.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_PANEL_DPI) += panel-dpi.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_PANEL_DPI) += panel-dpi.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_PANEL_DSI_CM) += panel-dsi-cm.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_PANEL_DSI_CM) += panel-dsi-cm.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_PANEL_LGPHILIPS_LB035Q02) += panel-lgphilips-lb035q02.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_PANEL_LGPHILIPS_LB035Q02) += panel-lgphilips-lb035q02.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_PANEL_NEC_NL8048HL11) += panel-nec-nl8048hl11.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_PANEL_NEC_NL8048HL11) += panel-nec-nl8048hl11.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_PANEL_SHARP_LS037V7DW01) += panel-sharp-ls037v7dw01.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_PANEL_SHARP_LS037V7DW01) += panel-sharp-ls037v7dw01.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_PANEL_TPO_TD028TTEC1) += panel-tpo-td028ttec1.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_PANEL_TPO_TD028TTEC1) += panel-tpo-td028ttec1.o
-
-drivers/gpu/drm/omapdrm/displays/Makefile:obj-$(CONFIG_DISPLAY_PANEL_TPO_TD043MTEA1) += panel-tpo-td043mtea1.o
-drivers/video/fbdev/omap2/omapfb/displays/Makefile:obj-$(CONFIG_FB_OMAP2_PANEL_TPO_TD043MTEA1) += panel-tpo-td043mtea1.o
-
-drivers/mtd/onenand/Makefile:obj-$(CONFIG_MTD_ONENAND_SAMSUNG) += samsung.o
-drivers/tty/serial/Makefile:obj-$(CONFIG_SERIAL_SAMSUNG) += samsung.o
-
-sound/soc/codecs/Makefile:obj-$(CONFIG_SND_SOC_AC97_CODEC) += snd-soc-ac97.o
-sound/soc/samsung/Makefile:obj-$(CONFIG_SND_SAMSUNG_AC97) += snd-soc-ac97.o
-
-drivers/hwmon/Makefile:obj-$(CONFIG_SENSORS_VEXPRESS) += vexpress.o
-drivers/regulator/Makefile:obj-$(CONFIG_REGULATOR_VEXPRESS) += vexpress.o
-
-Can maintainers please tell me which of these are harmless?
-
-Thanks!
-Rusty.
