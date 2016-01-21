@@ -1,266 +1,113 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from e23smtp06.au.ibm.com ([202.81.31.148]:46455 "EHLO
-	e23smtp06.au.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1755355AbcAHTXa (ORCPT
+Received: from mail-yk0-f193.google.com ([209.85.160.193]:36108 "EHLO
+	mail-yk0-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752245AbcAUQt6 (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Fri, 8 Jan 2016 14:23:30 -0500
-Received: from localhost
-	by e23smtp06.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
-	Sat, 9 Jan 2016 05:23:28 +1000
-From: Mimi Zohar <zohar@linux.vnet.ibm.com>
-To: linux-security-module@vger.kernel.org
-Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>,
-	"Luis R. Rodriguez" <mcgrof@suse.com>, kexec@lists.infradead.org,
-	linux-modules@vger.kernel.org, fsdevel@vger.kernel.org,
-	David Howells <dhowells@redhat.com>,
+	Thu, 21 Jan 2016 11:49:58 -0500
+MIME-Version: 1.0
+In-Reply-To: <1453377959.9549.84.camel@linux.vnet.ibm.com>
+References: <1453129886-20192-1-git-send-email-zohar@linux.vnet.ibm.com>
+ <1453129886-20192-8-git-send-email-zohar@linux.vnet.ibm.com>
+ <20160120233919.GM11277@wotan.suse.de> <CAB=NE6Wbx4hY6q2skNp4JQVvfP-eCHxr3rT3h1bq6zuSsoN9+w@mail.gmail.com>
+ <1453377959.9549.84.camel@linux.vnet.ibm.com>
+From: "Luis R. Rodriguez" <mcgrof@suse.com>
+Date: Thu, 21 Jan 2016 08:49:38 -0800
+Message-ID: <CAB=NE6X7ykN2f3YctOuPRO=BGaV1J4j0yHe75RdbYQAeQJgsAQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 07/11] firmware: replace call to
+ fw_read_file_contents() with kernel version
+To: Mimi Zohar <zohar@linux.vnet.ibm.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>,
+	linux-security-module <linux-security-module@vger.kernel.org>,
+	kexec@lists.infradead.org, linux-modules@vger.kernel.org,
+	fsdevel@vger.kernel.org, David Howells <dhowells@redhat.com>,
 	David Woodhouse <dwmw2@infradead.org>,
 	Kees Cook <keescook@chromium.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [RFC PATCH 2/5] firmware: replace call to fw_read_file_contents() with kernel version
-Date: Fri,  8 Jan 2016 14:22:01 -0500
-Message-Id: <1452280924-28774-3-git-send-email-zohar@linux.vnet.ibm.com>
-In-Reply-To: <1452280924-28774-1-git-send-email-zohar@linux.vnet.ibm.com>
-References: <1452280924-28774-1-git-send-email-zohar@linux.vnet.ibm.com>
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Replace fw_read_file_contents() for reading a file with the common VFS
-kernel_read_file() function.  Call the existing firmware security hook
-from security_kernel_post_read_file() until the LSMs have been converted.
+On Thu, Jan 21, 2016 at 4:05 AM, Mimi Zohar <zohar@linux.vnet.ibm.com> wrote:
+> On Wed, 2016-01-20 at 15:56 -0800, Luis R. Rodriguez wrote:
+>> On Wed, Jan 20, 2016 at 3:39 PM, Luis R. Rodriguez <mcgrof@suse.com> wrote:
+>
+>> >> @@ -350,13 +321,18 @@ static int fw_get_filesystem_firmware(struct device *device,
+>> >>               file = filp_open(path, O_RDONLY, 0);
+>> >>               if (IS_ERR(file))
+>> >>                       continue;
+>> >> -             rc = fw_read_file_contents(file, buf);
+>> >> +
+>> >> +             buf->size = 0;
+>> >> +             rc = kernel_read_file(file, &buf->data, &size, INT_MAX,
+>> >> +                                   FIRMWARE_CHECK);
+>> >
+>> > The way kernel firmware signing was implemented was that we'd first read the
+>> > foo.sig (or whatever extension we use).
+>
+> Was there a reason for using a detached signature and not using the same
+> method as kernel modules?
 
-This patch retains the kernel_fw_from_file() hook, but removes the
-security_kernel_fw_from_file() function.
+Yes, the firmware might have different license. Its also easier for
+users to use standard mechanisms to verify.
 
-Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
----
- drivers/base/firmware_class.c     | 51 +++++++++------------------------------
- include/linux/ima.h               |  6 -----
- include/linux/security.h          |  8 +-----
- security/integrity/ima/ima_main.c | 18 ++++++--------
- security/security.c               | 24 ++++++++----------
- 5 files changed, 30 insertions(+), 77 deletions(-)
+>> The same kernel_read_file() would be
+>> > used if this gets applied so this would still works well with that. Of course
+>> > folks using IMA and their own security policy would just disable the kernel
+>> > fw signing facility.
+>
+> Right, support for not measuring/appraising the firmware and sig would
+> be supported in the policy.
 
-diff --git a/drivers/base/firmware_class.c b/drivers/base/firmware_class.c
-index 3ca96a6..4e4e860 100644
---- a/drivers/base/firmware_class.c
-+++ b/drivers/base/firmware_class.c
-@@ -292,44 +292,10 @@ static const char * const fw_path[] = {
- module_param_string(path, fw_path_para, sizeof(fw_path_para), 0644);
- MODULE_PARM_DESC(path, "customized firmware image search path with a higher priority than default path");
- 
--static int fw_read_file_contents(struct file *file, struct firmware_buf *fw_buf)
--{
--	int size;
--	char *buf;
--	int rc;
--
--	if (!S_ISREG(file_inode(file)->i_mode))
--		return -EINVAL;
--	size = i_size_read(file_inode(file));
--	if (size <= 0)
--		return -EINVAL;
--	buf = vmalloc(size);
--	if (!buf)
--		return -ENOMEM;
--	rc = kernel_read(file, 0, buf, size);
--	if (rc != size) {
--		if (rc > 0)
--			rc = -EIO;
--		goto fail;
--	}
--	rc = ima_hash_and_process_file(file, buf, size, FIRMWARE_CHECK);
--	if (rc)
--		goto fail;
--
--	rc = security_kernel_fw_from_file(file, buf, size);
--	if (rc)
--		goto fail;
--	fw_buf->data = buf;
--	fw_buf->size = size;
--	return 0;
--fail:
--	vfree(buf);
--	return rc;
--}
--
- static int fw_get_filesystem_firmware(struct device *device,
- 				       struct firmware_buf *buf)
- {
-+	loff_t size;
- 	int i, len;
- 	int rc = -ENOENT;
- 	char *path;
-@@ -355,13 +321,18 @@ static int fw_get_filesystem_firmware(struct device *device,
- 		file = filp_open(path, O_RDONLY, 0);
- 		if (IS_ERR(file))
- 			continue;
--		rc = fw_read_file_contents(file, buf);
-+
-+		buf->size = 0;
-+		rc = kernel_read_file(file, &buf->data, &size, UINT_MAX,
-+				      FIRMWARE_CHECK);
- 		fput(file);
- 		if (rc)
- 			dev_warn(device, "firmware, attempted to load %s, but failed with error %d\n",
- 				path, rc);
--		else
-+		else {
-+			buf->size = (size_t) size;
- 			break;
-+		}
- 	}
- 	__putname(path);
- 
-@@ -690,8 +661,10 @@ static ssize_t firmware_loading_store(struct device *dev,
- 				dev_err(dev, "%s: map pages failed\n",
- 					__func__);
- 			else
--				rc = security_kernel_fw_from_file(NULL,
--						fw_buf->data, fw_buf->size);
-+				rc = security_kernel_post_read_file(NULL,
-+							       fw_buf->data,
-+							       fw_buf->size,
-+							       FIRMWARE_CHECK);
- 
- 			/*
- 			 * Same logic as fw_load_abort, only the DONE bit
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 3790af0..7cad2e7 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -27,7 +27,6 @@ extern int ima_file_check(struct file *file, int mask, int opened);
- extern void ima_file_free(struct file *file);
- extern int ima_file_mmap(struct file *file, unsigned long prot);
- extern int ima_module_check(struct file *file);
--extern int ima_fw_from_file(struct file *file, char *buf, size_t size);
- extern int ima_hash_and_process_file(struct file *file,
- 				     void *buf, loff_t size,
- 				     enum ima_policy_id policy_id);
-@@ -58,11 +57,6 @@ static inline int ima_module_check(struct file *file)
- 	return 0;
- }
- 
--static inline int ima_fw_from_file(struct file *file, char *buf, size_t size)
--{
--	return 0;
--}
--
- static inline int ima_hash_and_process_file(struct file *file,
- 					    void *buf, loff_t size,
- 					    enum ima_policy_id policy_id)
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 44d8832..51f3bc6 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -28,6 +28,7 @@
- #include <linux/err.h>
- #include <linux/string.h>
- #include <linux/mm.h>
-+#include <linux/ima.h>
- 
- struct linux_binprm;
- struct cred;
-@@ -298,7 +299,6 @@ int security_prepare_creds(struct cred *new, const struct cred *old, gfp_t gfp);
- void security_transfer_creds(struct cred *new, const struct cred *old);
- int security_kernel_act_as(struct cred *new, u32 secid);
- int security_kernel_create_files_as(struct cred *new, struct inode *inode);
--int security_kernel_fw_from_file(struct file *file, char *buf, size_t size);
- int security_kernel_module_request(char *kmod_name);
- int security_kernel_module_from_file(struct file *file);
- int security_kernel_post_read_file(struct file *file, char *buf, loff_t size,
-@@ -852,12 +852,6 @@ static inline int security_kernel_create_files_as(struct cred *cred,
- 	return 0;
- }
- 
--static inline int security_kernel_fw_from_file(struct file *file,
--					       char *buf, size_t size)
--{
--	return 0;
--}
--
- static inline int security_kernel_module_request(char *kmod_name)
- {
- 	return 0;
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index bfe1cc3..62d609d 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -337,17 +337,6 @@ int ima_module_check(struct file *file)
- 	return process_measurement(file, NULL, 0, MAY_EXEC, MODULE_CHECK, 0);
- }
- 
--int ima_fw_from_file(struct file *file, char *buf, size_t size)
--{
--	if (!file) {
--		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
--		    (ima_appraise & IMA_APPRAISE_ENFORCE))
--			return -EACCES;	/* INTEGRITY_UNKNOWN */
--		return 0;
--	}
--	return 0;
--}
--
- /**
-  * ima_hash_and_process_file - in memory collect/appraise/audit measurement
-  * @file: pointer to the file to be measured/appraised/audit
-@@ -362,6 +351,13 @@ int ima_fw_from_file(struct file *file, char *buf, size_t size)
- int ima_hash_and_process_file(struct file *file, void *buf, loff_t size,
- 			      enum ima_policy_id policy_id)
- {
-+	if (!file && policy_id == FIRMWARE_CHECK) {
-+		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
-+		    (ima_appraise & IMA_APPRAISE_ENFORCE))
-+			return -EACCES;	/* INTEGRITY_UNKNOWN */
-+		return 0;
-+	}
-+
- 	if (!file || !buf || size == 0) { /* should never happen */
- 		if (ima_appraise & IMA_APPRAISE_ENFORCE)
- 			return -EACCES;
-diff --git a/security/security.c b/security/security.c
-index e979c2d..a391ce4 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -884,17 +884,6 @@ int security_kernel_create_files_as(struct cred *new, struct inode *inode)
- 	return call_int_hook(kernel_create_files_as, 0, new, inode);
- }
- 
--int security_kernel_fw_from_file(struct file *file, char *buf, size_t size)
--{
--	int ret;
--
--	ret = call_int_hook(kernel_fw_from_file, 0, file, buf, size);
--	if (ret)
--		return ret;
--	return ima_fw_from_file(file, buf, size);
--}
--EXPORT_SYMBOL_GPL(security_kernel_fw_from_file);
--
- int security_kernel_module_request(char *kmod_name)
- {
- 	return call_int_hook(kernel_module_request, 0, kmod_name);
-@@ -913,10 +902,17 @@ int security_kernel_module_from_file(struct file *file)
- int security_kernel_post_read_file(struct file *file, char *buf, loff_t size,
- 				   int policy_id)
- {
--	int ret;
-+	int ret = 0;
- 
--	ret = call_int_hook(kernel_post_read_file, 0, file, buf, size,
--			    policy_id);
-+	switch (policy_id) {
-+	case FIRMWARE_CHECK:
-+		ret = call_int_hook(kernel_fw_from_file, 0, file, buf, size);
-+		break;
-+	default:
-+		ret = call_int_hook(kernel_post_read_file, 0, file, buf, size,
-+				    policy_id);
-+		break;
-+	}
- 	if (ret)
- 		return ret;
- 
--- 
-2.1.0
+OK!
 
+>> >> diff --git a/include/linux/ima.h b/include/linux/ima.h
+>> >> index ae91938..0a7f039 100644
+>> >> --- a/include/linux/ima.h
+>> >> +++ b/include/linux/ima.h
+>> >> @@ -16,6 +16,7 @@ struct linux_binprm;
+>> >>  enum ima_policy_id {
+>> >>       KEXEC_CHECK = 1,
+>> >>       INITRAMFS_CHECK,
+>> >> +     FIRMWARE_CHECK,
+>> >>       IMA_MAX_READ_CHECK
+>> >>  };
+>> >
+>> > The only thing that is worth questioning here in light of kernel fw signing is
+>> > what int policy_id do we use? Would we be OK to add FIRMWARE_SIG_CHECK later
+>> > While at it, perhaps kernel_read_file() last argument should be enum
+>> > ima_policy_id then. If the policy_id is going to be used elsewhere outside of
+>> > IMA then perhaps ima.h is not the best place for it ? Would fs.h for type of
+>> > file be OK ? Then we'd have a list of known file types the kernel reads.
+>
+> I would definitely prefer the enumeration be defined at the VFS layer.
+> For example,
+>
+> enum kernel_read_file_id {
+>         READING_KEXEC_IMAGE,
+>         READING_KEXEC_INITRAMFS,
+>         READING_FIRMWARE,
+>         READING_FIRMWARE_SIG,
+>         READING_MAX_ID
+> };
+
+Looks good to me. Please add a kdoc section to force us to have to
+document each one.
+
+> Agreed, the last field of kernel_read_file() and the wrappers should be
+> the enumeration.
+
+Great.
+
+>> Actually your patch #9 "ima: load policy using path" defines
+>> kernel_read_file_from_path and since the firmware code uses a path
+>> this code would be much cleaner if instead you used that. It'd mean
+>> more code sharing and would make firmware code cleaner. Could you
+>> re-order that to go first and then later this as its first user?
+>> Perhaps add the helper for the firmware patch.
+>
+> Thanks, I missed that.  I'll include this change in the next version.
+
+Great.
+
+  Luis
