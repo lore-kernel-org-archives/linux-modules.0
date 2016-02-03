@@ -1,338 +1,311 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from e28smtp05.in.ibm.com ([125.16.236.5]:48565 "EHLO
-	e28smtp05.in.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752644AbcBLSb6 (ORCPT
+Received: from e23smtp08.au.ibm.com ([202.81.31.141]:50035 "EHLO
+	e23smtp08.au.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S965452AbcBCTHj (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Fri, 12 Feb 2016 13:31:58 -0500
+	Wed, 3 Feb 2016 14:07:39 -0500
 Received: from localhost
-	by e28smtp05.in.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+	by e23smtp08.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
 	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
-	Sat, 13 Feb 2016 00:01:55 +0530
+	Thu, 4 Feb 2016 05:07:36 +1000
 From: Mimi Zohar <zohar@linux.vnet.ibm.com>
-To: linux-security-module <linux-security-module@vger.kernel.org>
-Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>,
+To: linux-security-module@vger.kernel.org,
 	"Luis R. Rodriguez" <mcgrof@suse.com>, kexec@lists.infradead.org,
-	linux-modules@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-modules@vger.kernel.org, fsdevel@vger.kernel.org,
+	David Howells <dhowells@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>,
 	Kees Cook <keescook@chromium.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
 	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Biederman <ebiederm@xmission.com>,
 	Rusty Russell <rusty@rustcorp.com.au>
-Subject: [PATCH v4 13/19] module: replace copy_module_from_fd with kernel version
-Date: Fri, 12 Feb 2016 13:29:25 -0500
-Message-Id: <1455301771-7703-14-git-send-email-zohar@linux.vnet.ibm.com>
-In-Reply-To: <1455301771-7703-1-git-send-email-zohar@linux.vnet.ibm.com>
-References: <1455301771-7703-1-git-send-email-zohar@linux.vnet.ibm.com>
+Cc: Dmitry Kasatkin <d.kasatkin@samsung.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+	Mimi Zohar <zohar@linux.vnet.ibm.com>
+Subject: [PATCH v3 01/22] ima: separate 'security.ima' reading functionality from collect
+Date: Wed,  3 Feb 2016 14:06:09 -0500
+Message-Id: <1454526390-19792-2-git-send-email-zohar@linux.vnet.ibm.com>
+In-Reply-To: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
+References: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Replace copy_module_from_fd() with kernel_read_file_from_fd().
+From: Dmitry Kasatkin <d.kasatkin@samsung.com>
 
-Although none of the upstreamed LSMs define a kernel_module_from_file
-hook, IMA is called, based on policy, to prevent unsigned kernel modules
-from being loaded by the original kernel module syscall and to
-measure/appraise signed kernel modules.
+Instead of passing pointers to pointers to ima_collect_measurent() to
+read and return the 'security.ima' xattr value, this patch moves the
+functionality to the calling process_measurement() to directly read
+the xattr and pass only the hash algo to the ima_collect_measurement().
 
-The security function security_kernel_module_from_file() was called prior
-to reading a kernel module.  Preventing unsigned kernel modules from being
-loaded by the original kernel module syscall remains on the pre-read
-kernel_read_file() security hook.  Instead of reading the kernel module
-twice, once for measuring/appraising and again for loading the kernel
-module, the signature validation is moved to the kernel_post_read_file()
-security hook.
-
-This patch removes the security_kernel_module_from_file() hook and security
-call.
-
+Signed-off-by: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
 Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
-Acked-by: Kees Cook <keescook@chromium.org>
-Acked-by: Luis R. Rodriguez <mcgrof@kernel.org>
-Cc: Rusty Russell <rusty@rustcorp.com.au>
 ---
- include/linux/fs.h                |  1 +
- include/linux/ima.h               |  6 ----
- include/linux/lsm_hooks.h         |  7 ----
- include/linux/security.h          |  5 ---
- kernel/module.c                   | 68 +++++----------------------------------
- security/integrity/ima/ima_main.c | 35 ++++++++------------
- security/security.c               | 12 -------
- 7 files changed, 22 insertions(+), 112 deletions(-)
+ security/integrity/ima/ima.h              | 15 +++++++--------
+ security/integrity/ima/ima_api.c          | 15 +++------------
+ security/integrity/ima/ima_appraise.c     | 25 ++++++++++++++-----------
+ security/integrity/ima/ima_crypto.c       |  2 +-
+ security/integrity/ima/ima_init.c         |  2 +-
+ security/integrity/ima/ima_main.c         | 11 +++++++----
+ security/integrity/ima/ima_template.c     |  2 --
+ security/integrity/ima/ima_template_lib.c |  1 -
+ 8 files changed, 33 insertions(+), 40 deletions(-)
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 9c85dea..fb08b66 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2578,6 +2578,7 @@ extern int do_pipe_flags(int *, int);
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index 585af61..fb8da36 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -23,6 +23,7 @@
+ #include <linux/hash.h>
+ #include <linux/tpm.h>
+ #include <linux/audit.h>
++#include <crypto/hash_info.h>
  
- enum kernel_read_file_id {
- 	READING_FIRMWARE = 1,
-+	READING_MODULE,
- 	READING_MAX_ID
- };
+ #include "../integrity.h"
  
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 6adcaea..e6516cb 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -18,7 +18,6 @@ extern int ima_bprm_check(struct linux_binprm *bprm);
- extern int ima_file_check(struct file *file, int mask, int opened);
- extern void ima_file_free(struct file *file);
- extern int ima_file_mmap(struct file *file, unsigned long prot);
--extern int ima_module_check(struct file *file);
- extern int ima_read_file(struct file *file, enum kernel_read_file_id id);
- extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
- 			      enum kernel_read_file_id id);
-@@ -44,11 +43,6 @@ static inline int ima_file_mmap(struct file *file, unsigned long prot)
- 	return 0;
+@@ -140,9 +141,7 @@ static inline unsigned long ima_hash_key(u8 *digest)
+ int ima_get_action(struct inode *inode, int mask, int function);
+ int ima_must_measure(struct inode *inode, int mask, int function);
+ int ima_collect_measurement(struct integrity_iint_cache *iint,
+-			    struct file *file,
+-			    struct evm_ima_xattr_data **xattr_value,
+-			    int *xattr_len);
++			    struct file *file, enum hash_algo algo);
+ void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
+ 			   const unsigned char *filename,
+ 			   struct evm_ima_xattr_data *xattr_value,
+@@ -188,8 +187,8 @@ int ima_must_appraise(struct inode *inode, int mask, enum ima_hooks func);
+ void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file);
+ enum integrity_status ima_get_cache_status(struct integrity_iint_cache *iint,
+ 					   int func);
+-void ima_get_hash_algo(struct evm_ima_xattr_data *xattr_value, int xattr_len,
+-		       struct ima_digest_data *hash);
++enum hash_algo ima_get_hash_algo(struct evm_ima_xattr_data *xattr_value,
++				 int xattr_len);
+ int ima_read_xattr(struct dentry *dentry,
+ 		   struct evm_ima_xattr_data **xattr_value);
+ 
+@@ -221,10 +220,10 @@ static inline enum integrity_status ima_get_cache_status(struct integrity_iint_c
+ 	return INTEGRITY_UNKNOWN;
  }
  
--static inline int ima_module_check(struct file *file)
--{
--	return 0;
--}
--
- static inline int ima_read_file(struct file *file, enum kernel_read_file_id id)
+-static inline void ima_get_hash_algo(struct evm_ima_xattr_data *xattr_value,
+-				     int xattr_len,
+-				     struct ima_digest_data *hash)
++static inline enum hash_algo
++ima_get_hash_algo(struct evm_ima_xattr_data *xattr_value, int xattr_len)
  {
- 	return 0;
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index d32b7bd..cdee11c 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -546,12 +546,6 @@
-  *	userspace to load a kernel module with the given name.
-  *	@kmod_name name of the module requested by the kernel
-  *	Return 0 if successful.
-- * @kernel_module_from_file:
-- *	Load a kernel module from userspace.
-- *	@file contains the file structure pointing to the file containing
-- *	the kernel module to load. If the module is being loaded from a blob,
-- *	this argument will be NULL.
-- *	Return 0 if permission is granted.
-  * @kernel_read_file:
-  *	Read a file specified by userspace.
-  *	@file contains the file structure pointing to the file being read
-@@ -1725,7 +1719,6 @@ struct security_hook_heads {
- 	struct list_head kernel_read_file;
- 	struct list_head kernel_post_read_file;
- 	struct list_head kernel_module_request;
--	struct list_head kernel_module_from_file;
- 	struct list_head task_fix_setuid;
- 	struct list_head task_setpgid;
- 	struct list_head task_getpgid;
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 071fb74..157f0cb 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -859,11 +859,6 @@ static inline int security_kernel_module_request(char *kmod_name)
- 	return 0;
++	return ima_hash_algo;
  }
  
--static inline int security_kernel_module_from_file(struct file *file)
--{
--	return 0;
--}
--
- static inline int security_kernel_read_file(struct file *file,
- 					    enum kernel_read_file_id id)
+ static inline int ima_read_xattr(struct dentry *dentry,
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index 1d950fb..e7c7a5d 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -18,7 +18,7 @@
+ #include <linux/fs.h>
+ #include <linux/xattr.h>
+ #include <linux/evm.h>
+-#include <crypto/hash_info.h>
++
+ #include "ima.h"
+ 
+ /*
+@@ -188,9 +188,7 @@ int ima_get_action(struct inode *inode, int mask, int function)
+  * Return 0 on success, error code otherwise
+  */
+ int ima_collect_measurement(struct integrity_iint_cache *iint,
+-			    struct file *file,
+-			    struct evm_ima_xattr_data **xattr_value,
+-			    int *xattr_len)
++			    struct file *file, enum hash_algo algo)
  {
-diff --git a/kernel/module.c b/kernel/module.c
-index 8358f46..9554109 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -2654,7 +2654,7 @@ static int copy_module_from_user(const void __user *umod, unsigned long len,
- 	if (info->len < sizeof(*(info->hdr)))
- 		return -ENOEXEC;
+ 	const char *audit_cause = "failed";
+ 	struct inode *inode = file_inode(file);
+@@ -201,9 +199,6 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+ 		char digest[IMA_MAX_DIGEST_SIZE];
+ 	} hash;
  
--	err = security_kernel_module_from_file(NULL);
-+	err = security_kernel_read_file(NULL, READING_MODULE);
- 	if (err)
- 		return err;
+-	if (xattr_value)
+-		*xattr_len = ima_read_xattr(file->f_path.dentry, xattr_value);
+-
+ 	if (!(iint->flags & IMA_COLLECTED)) {
+ 		u64 i_version = file_inode(file)->i_version;
  
-@@ -2672,63 +2672,6 @@ static int copy_module_from_user(const void __user *umod, unsigned long len,
- 	return 0;
+@@ -213,11 +208,7 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+ 			goto out;
+ 		}
+ 
+-		/* use default hash algorithm */
+-		hash.hdr.algo = ima_hash_algo;
+-
+-		if (xattr_value)
+-			ima_get_hash_algo(*xattr_value, *xattr_len, &hash.hdr);
++		hash.hdr.algo = algo;
+ 
+ 		result = ima_calc_file_hash(file, &hash.hdr);
+ 		if (!result) {
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index 1873b55..9c2b46b 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -15,7 +15,6 @@
+ #include <linux/magic.h>
+ #include <linux/ima.h>
+ #include <linux/evm.h>
+-#include <crypto/hash_info.h>
+ 
+ #include "ima.h"
+ 
+@@ -130,36 +129,40 @@ static void ima_cache_flags(struct integrity_iint_cache *iint, int func)
+ 	}
  }
  
--/* Sets info->hdr and info->len. */
--static int copy_module_from_fd(int fd, struct load_info *info)
--{
--	struct fd f = fdget(fd);
--	int err;
--	struct kstat stat;
--	loff_t pos;
--	ssize_t bytes = 0;
--
--	if (!f.file)
--		return -ENOEXEC;
--
--	err = security_kernel_module_from_file(f.file);
--	if (err)
--		goto out;
--
--	err = vfs_getattr(&f.file->f_path, &stat);
--	if (err)
--		goto out;
--
--	if (stat.size > INT_MAX) {
--		err = -EFBIG;
--		goto out;
--	}
--
--	/* Don't hand 0 to vmalloc, it whines. */
--	if (stat.size == 0) {
--		err = -EINVAL;
--		goto out;
--	}
--
--	info->hdr = vmalloc(stat.size);
--	if (!info->hdr) {
--		err = -ENOMEM;
--		goto out;
--	}
--
--	pos = 0;
--	while (pos < stat.size) {
--		bytes = kernel_read(f.file, pos, (char *)(info->hdr) + pos,
--				    stat.size - pos);
--		if (bytes < 0) {
--			vfree(info->hdr);
--			err = bytes;
--			goto out;
--		}
--		if (bytes == 0)
--			break;
--		pos += bytes;
--	}
--	info->len = pos;
--
--out:
--	fdput(f);
--	return err;
--}
--
- static void free_copy(struct load_info *info)
+-void ima_get_hash_algo(struct evm_ima_xattr_data *xattr_value, int xattr_len,
+-		       struct ima_digest_data *hash)
++enum hash_algo ima_get_hash_algo(struct evm_ima_xattr_data *xattr_value,
++				 int xattr_len)
  {
- 	vfree(info->hdr);
-@@ -3589,8 +3532,10 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
+ 	struct signature_v2_hdr *sig;
  
- SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
- {
--	int err;
- 	struct load_info info = { };
-+	loff_t size;
-+	void *hdr;
-+	int err;
+ 	if (!xattr_value || xattr_len < 2)
+-		return;
++		/* return default hash algo */
++		return ima_hash_algo;
  
- 	err = may_init_module();
- 	if (err)
-@@ -3602,9 +3547,12 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
- 		      |MODULE_INIT_IGNORE_VERMAGIC))
- 		return -EINVAL;
- 
--	err = copy_module_from_fd(fd, &info);
-+	err = kernel_read_file_from_fd(fd, &hdr, &size, INT_MAX,
-+				       READING_MODULE);
- 	if (err)
- 		return err;
-+	info.hdr = hdr;
-+	info.len = size;
- 
- 	return load_module(&info, uargs, flags);
+ 	switch (xattr_value->type) {
+ 	case EVM_IMA_XATTR_DIGSIG:
+ 		sig = (typeof(sig))xattr_value;
+ 		if (sig->version != 2 || xattr_len <= sizeof(*sig))
+-			return;
+-		hash->algo = sig->hash_algo;
++			return ima_hash_algo;
++		return sig->hash_algo;
+ 		break;
+ 	case IMA_XATTR_DIGEST_NG:
+-		hash->algo = xattr_value->digest[0];
++		return xattr_value->digest[0];
+ 		break;
+ 	case IMA_XATTR_DIGEST:
+ 		/* this is for backward compatibility */
+ 		if (xattr_len == 21) {
+ 			unsigned int zero = 0;
+ 			if (!memcmp(&xattr_value->digest[16], &zero, 4))
+-				hash->algo = HASH_ALGO_MD5;
++				return HASH_ALGO_MD5;
+ 			else
+-				hash->algo = HASH_ALGO_SHA1;
++				return HASH_ALGO_SHA1;
+ 		} else if (xattr_len == 17)
+-			hash->algo = HASH_ALGO_MD5;
++			return HASH_ALGO_MD5;
+ 		break;
+ 	}
++
++	/* return default hash algo */
++	return ima_hash_algo;
  }
+ 
+ int ima_read_xattr(struct dentry *dentry,
+@@ -296,7 +299,7 @@ void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file)
+ 	if (iint->flags & IMA_DIGSIG)
+ 		return;
+ 
+-	rc = ima_collect_measurement(iint, file, NULL, NULL);
++	rc = ima_collect_measurement(iint, file, ima_hash_algo);
+ 	if (rc < 0)
+ 		return;
+ 
+diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
+index 6eb6293..fb30ce4 100644
+--- a/security/integrity/ima/ima_crypto.c
++++ b/security/integrity/ima/ima_crypto.c
+@@ -24,7 +24,7 @@
+ #include <linux/err.h>
+ #include <linux/slab.h>
+ #include <crypto/hash.h>
+-#include <crypto/hash_info.h>
++
+ #include "ima.h"
+ 
+ struct ahash_completion {
+diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+index bd79f25..5d679a6 100644
+--- a/security/integrity/ima/ima_init.c
++++ b/security/integrity/ima/ima_init.c
+@@ -21,7 +21,7 @@
+ #include <linux/scatterlist.h>
+ #include <linux/slab.h>
+ #include <linux/err.h>
+-#include <crypto/hash_info.h>
++
+ #include "ima.h"
+ 
+ /* name for boot aggregate entry */
 diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 80c24aa..f6039f5 100644
+index c21f09b..d9fc463 100644
 --- a/security/integrity/ima/ima_main.c
 +++ b/security/integrity/ima/ima_main.c
-@@ -316,28 +316,6 @@ int ima_file_check(struct file *file, int mask, int opened)
- EXPORT_SYMBOL_GPL(ima_file_check);
+@@ -24,7 +24,6 @@
+ #include <linux/slab.h>
+ #include <linux/xattr.h>
+ #include <linux/ima.h>
+-#include <crypto/hash_info.h>
  
- /**
-- * ima_module_check - based on policy, collect/store/appraise measurement.
-- * @file: pointer to the file to be measured/appraised
-- *
-- * Measure/appraise kernel modules based on policy.
-- *
-- * On success return 0.  On integrity appraisal error, assuming the file
-- * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
-- */
--int ima_module_check(struct file *file)
--{
--	if (!file) {
--#ifndef CONFIG_MODULE_SIG_FORCE
--		if ((ima_appraise & IMA_APPRAISE_MODULES) &&
--		    (ima_appraise & IMA_APPRAISE_ENFORCE))
--			return -EACCES;	/* INTEGRITY_UNKNOWN */
--#endif
--		return 0;	/* We rely on module signature checking */
--	}
--	return process_measurement(file, NULL, 0, MAY_EXEC, MODULE_CHECK, 0);
--}
--
--/**
-  * ima_read_file - pre-measure/appraise hook decision based on policy
-  * @file: pointer to the file to be measured/appraised/audit
-  * @read_id: caller identifier
-@@ -350,6 +328,14 @@ int ima_module_check(struct file *file)
-  */
- int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
- {
-+	if (!file && read_id == READING_MODULE) {
-+#ifndef CONFIG_MODULE_SIG_FORCE
-+		if ((ima_appraise & IMA_APPRAISE_MODULES) &&
-+		    (ima_appraise & IMA_APPRAISE_ENFORCE))
-+			return -EACCES;	/* INTEGRITY_UNKNOWN */
-+#endif
-+		return 0;	/* We rely on module signature checking */
-+	}
- 	return 0;
- }
+ #include "ima.h"
  
-@@ -378,6 +364,9 @@ int ima_post_read_file(struct file *file, void *buf, loff_t size,
+@@ -163,9 +162,10 @@ static int process_measurement(struct file *file, int mask, int function,
+ 	char *pathbuf = NULL;
+ 	const char *pathname = NULL;
+ 	int rc = -ENOMEM, action, must_appraise;
+-	struct evm_ima_xattr_data *xattr_value = NULL, **xattr_ptr = NULL;
++	struct evm_ima_xattr_data *xattr_value = NULL;
+ 	int xattr_len = 0;
+ 	bool violation_check;
++	enum hash_algo hash_algo;
+ 
+ 	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
  		return 0;
- 	}
+@@ -221,9 +221,12 @@ static int process_measurement(struct file *file, int mask, int function,
+ 	template_desc = ima_template_desc_current();
+ 	if ((action & IMA_APPRAISE_SUBMASK) ||
+ 		    strcmp(template_desc->name, IMA_TEMPLATE_IMA_NAME) != 0)
+-		xattr_ptr = &xattr_value;
++		/* read 'security.ima' */
++		xattr_len = ima_read_xattr(file->f_path.dentry, &xattr_value);
  
-+	if (!file && read_id == READING_MODULE) /* MODULE_SIG_FORCE enabled */
-+		return 0;
+-	rc = ima_collect_measurement(iint, file, xattr_ptr, &xattr_len);
++	hash_algo = ima_get_hash_algo(xattr_value, xattr_len);
 +
- 	if (!file && (!buf || size == 0)) { /* should never happen */
- 		if (ima_appraise & IMA_APPRAISE_ENFORCE)
- 			return -EACCES;
-@@ -386,6 +375,8 @@ int ima_post_read_file(struct file *file, void *buf, loff_t size,
++	rc = ima_collect_measurement(iint, file, hash_algo);
+ 	if (rc != 0) {
+ 		if (file->f_flags & O_DIRECT)
+ 			rc = (iint->flags & IMA_PERMIT_DIRECTIO) ? 0 : -EACCES;
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index 0b7404e..febd12e 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -15,8 +15,6 @@
  
- 	if (read_id == READING_FIRMWARE)
- 		func = FIRMWARE_CHECK;
-+	else if (read_id == READING_MODULE)
-+		func = MODULE_CHECK;
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
- 	return process_measurement(file, buf, size, MAY_READ, func, 0);
- }
-diff --git a/security/security.c b/security/security.c
-index 1728fe2..3573c82 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -889,16 +889,6 @@ int security_kernel_module_request(char *kmod_name)
- 	return call_int_hook(kernel_module_request, 0, kmod_name);
- }
- 
--int security_kernel_module_from_file(struct file *file)
--{
--	int ret;
+-#include <crypto/hash_info.h>
 -
--	ret = call_int_hook(kernel_module_from_file, 0, file);
--	if (ret)
--		return ret;
--	return ima_module_check(file);
--}
--
- int security_kernel_read_file(struct file *file, enum kernel_read_file_id id)
- {
- 	int ret;
-@@ -1703,8 +1693,6 @@ struct security_hook_heads security_hook_heads = {
- 		LIST_HEAD_INIT(security_hook_heads.kernel_create_files_as),
- 	.kernel_module_request =
- 		LIST_HEAD_INIT(security_hook_heads.kernel_module_request),
--	.kernel_module_from_file =
--		LIST_HEAD_INIT(security_hook_heads.kernel_module_from_file),
- 	.kernel_read_file =
- 		LIST_HEAD_INIT(security_hook_heads.kernel_read_file),
- 	.kernel_post_read_file =
+ #include "ima.h"
+ #include "ima_template_lib.h"
+ 
+diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+index 2934e3d..f9bae04 100644
+--- a/security/integrity/ima/ima_template_lib.c
++++ b/security/integrity/ima/ima_template_lib.c
+@@ -12,7 +12,6 @@
+  * File: ima_template_lib.c
+  *      Library of supported template fields.
+  */
+-#include <crypto/hash_info.h>
+ 
+ #include "ima_template_lib.h"
+ 
 -- 
 2.1.0
 
