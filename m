@@ -1,193 +1,133 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from e23smtp08.au.ibm.com ([202.81.31.141]:50311 "EHLO
-	e23smtp08.au.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S966018AbcBCTIu (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Wed, 3 Feb 2016 14:08:50 -0500
-Received: from localhost
-	by e23smtp08.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
-	Thu, 4 Feb 2016 05:08:48 +1000
-From: Mimi Zohar <zohar@linux.vnet.ibm.com>
-To: linux-security-module@vger.kernel.org,
-	"Luis R. Rodriguez" <mcgrof@suse.com>, kexec@lists.infradead.org,
-	linux-modules@vger.kernel.org, fsdevel@vger.kernel.org,
+Received: from mx2.suse.de ([195.135.220.15]:47061 "EHLO mx2.suse.de"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S1752495AbcBDU0Z (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+	Thu, 4 Feb 2016 15:26:25 -0500
+Date: Thu, 4 Feb 2016 21:26:22 +0100
+From: "Luis R. Rodriguez" <mcgrof@suse.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>,
+	linux-security-module <linux-security-module@vger.kernel.org>,
+	Kexec Mailing List <kexec@lists.infradead.org>,
+	linux-modules@vger.kernel.org,
+	"linux-fsdevel@vger.kernel.org" <fsdevel@vger.kernel.org>,
 	David Howells <dhowells@redhat.com>,
 	David Woodhouse <dwmw2@infradead.org>,
-	Kees Cook <keescook@chromium.org>,
 	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
 	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
 	Eric Biederman <ebiederm@xmission.com>,
-	Rusty Russell <rusty@rustcorp.com.au>
-Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>
-Subject: [PATCH v3 18/22] kexec: replace call to copy_file_from_fd() with kernel version
-Date: Wed,  3 Feb 2016 14:06:26 -0500
-Message-Id: <1454526390-19792-19-git-send-email-zohar@linux.vnet.ibm.com>
-In-Reply-To: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
+	Rusty Russell <rusty@rustcorp.com.au>,
+	"Luis R. Rodriguez" <mcgrof@kernel.org>
+Subject: Re: [PATCH v3 06/22] firmware: fold successful fw read early
+Message-ID: <20160204202622.GH12481@wotan.suse.de>
 References: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
+ <1454526390-19792-7-git-send-email-zohar@linux.vnet.ibm.com>
+ <CAGXu5j+=4gWSuQHX-iBVGZTsL3UFsLFp74+QeVNcSJHyK+4v8w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <CAGXu5j+=4gWSuQHX-iBVGZTsL3UFsLFp74+QeVNcSJHyK+4v8w@mail.gmail.com>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Replace copy_file_from_fd() with kernel_read_file_from_fd().
+On Thu, Feb 04, 2016 at 09:36:50AM -0800, Kees Cook wrote:
+> On Wed, Feb 3, 2016 at 11:06 AM, Mimi Zohar <zohar@linux.vnet.ibm.com> wrote:
+> > From: David Howells <dhowells@redhat.com>
+> >
+> > We'll be folding in some more checks on fw_read_file_contents(),
+> > this will make the success case easier to follow.
+> >
+> > Reviewed-by: Josh Boyer <jwboyer@fedoraproject.org>
+> > Signed-off-by: David Howells <dhowells@redhat.com>
+> > Signed-off-by: Luis R. Rodriguez <mcgrof@kernel.org>
+> > Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
+> > ---
+> >  drivers/base/firmware_class.c | 16 +++++++---------
+> >  1 file changed, 7 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/drivers/base/firmware_class.c b/drivers/base/firmware_class.c
+> > index fb64814..c658cec 100644
+> > --- a/drivers/base/firmware_class.c
+> > +++ b/drivers/base/firmware_class.c
+> > @@ -361,20 +361,18 @@ static int fw_get_filesystem_firmware(struct device *device,
+> >                         continue;
+> >                 rc = fw_read_file_contents(file, buf);
+> >                 fput(file);
+> > -               if (rc)
+> > +               if (rc == 0) {
+> > +                       dev_dbg(device, "direct-loading %s\n",
+> > +                               buf->fw_id);
+> > +                       fw_finish_direct_load(device, buf);
+> > +                       goto out;
+> > +               } else
+> >                         dev_warn(device, "loading %s failed with error %d\n",
+> >                                  path, rc);
+> > -               else
+> > -                       break;
+> >         }
+> > +out:
+> >         __putname(path);
+> >
+> > -       if (!rc) {
+> > -               dev_dbg(device, "direct-loading %s\n",
+> > -                       buf->fw_id);
+> > -               fw_finish_direct_load(device, buf);
+> > -       }
+> > -
+> >         return rc;
+> >  }
+> 
+> Looking at this code, why does this use "break":
+> 
+>                 len = snprintf(path, PATH_MAX, "%s/%s",
+>                                fw_path[i], buf->fw_id);
+>                 if (len >= PATH_MAX) {
+>                         rc = -ENAMETOOLONG;
+>                         break;
+>                 }
+> 
+> Shouldn't that emit a warning, set rc, and continue?
 
-Two new identifiers named READING_KEXEC_IMAGE and READING_KEXEC_INITRAMFS
-are defined for measuring, appraising or auditing the kexec image and
-initramfs.
+Yes but this is a separate piece of code, and that's a functional change but I
+welcome the change for sure.  This could be done separately.
 
-Changelog v3:
-- return -EBADF, not -ENOEXEC
-- identifier change
-- moved copy_file_from_fd() to a separate patch
-- defer support for IMA
-v1:
-- re-order and squash the kexec patches
-v0: ima: measure and appraise kexec image and initramfs (squashed)
-- rename ima_read_hooks enumeration to ima_policy_id
-- use kstat file size type loff_t, not size_t
-- add union name "hooks" to fix sparse warning
-- Calculate the file hash from the in memory buffer
-(suggested by Dave Young)
-- Rename ima_read_and_process_file() to ima_hash_and_process_file()
-- replace individual case statements with range:
-        KEXEC_CHECK ... IMA_MAX_READ_CHECK - 1
-- Instead of ima_read_and_process_file() allocating memory, the caller
-allocates and frees the memory.
-- Moved the kexec measurement/appraisal call to copy_file_from_fd(). The
-same call now measures and appraises both the kexec image and initramfs.
+> Regardless, I think this is more readable. Adding an "out" target at
+> the end of a for loop seems weird, given "break" existing. :)
 
-Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
----
- include/linux/fs.h  |  2 ++
- kernel/kexec_file.c | 73 +++++++----------------------------------------------
- 2 files changed, 11 insertions(+), 64 deletions(-)
+Good call, goto mixed with while loops can be get iffy.  I'm fine with this
+change as a replacement. To be fair we should also note both patches (the one
+submitted and yours below) also make a small functional change so that the loop
+continues over all other possible directories in the fw_path in case of failure
+with the first directory used as a base. If we wanted to be pedantic and careful
+we could split the functional change to not enable to continue in case of failure
+onto the next directory, and instead require that as a separate patch. I'll leave
+it to Mimi to decide.
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 9e1f1e3..d4d556e 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2529,6 +2529,8 @@ extern int do_pipe_flags(int *, int);
- enum kernel_read_file_id {
- 	READING_FIRMWARE = 1,
- 	READING_MODULE,
-+	READING_KEXEC_IMAGE,
-+	READING_KEXEC_INITRAMFS,
- 	READING_MAX_ID
- };
- 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index b70ada0..1443f93 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -18,6 +18,7 @@
- #include <linux/kexec.h>
- #include <linux/mutex.h>
- #include <linux/list.h>
-+#include <linux/fs.h>
- #include <crypto/hash.h>
- #include <crypto/sha.h>
- #include <linux/syscalls.h>
-@@ -33,65 +34,6 @@ size_t __weak kexec_purgatory_size = 0;
- 
- static int kexec_calculate_store_digests(struct kimage *image);
- 
--static int copy_file_from_fd(int fd, void **buf, unsigned long *buf_len)
--{
--	struct fd f = fdget(fd);
--	int ret;
--	struct kstat stat;
--	loff_t pos;
--	ssize_t bytes = 0;
--
--	if (!f.file)
--		return -EBADF;
--
--	ret = vfs_getattr(&f.file->f_path, &stat);
--	if (ret)
--		goto out;
--
--	if (stat.size > INT_MAX) {
--		ret = -EFBIG;
--		goto out;
--	}
--
--	/* Don't hand 0 to vmalloc, it whines. */
--	if (stat.size == 0) {
--		ret = -EINVAL;
--		goto out;
--	}
--
--	*buf = vmalloc(stat.size);
--	if (!*buf) {
--		ret = -ENOMEM;
--		goto out;
--	}
--
--	pos = 0;
--	while (pos < stat.size) {
--		bytes = kernel_read(f.file, pos, (char *)(*buf) + pos,
--				    stat.size - pos);
--		if (bytes < 0) {
--			vfree(*buf);
--			ret = bytes;
--			goto out;
--		}
--
--		if (bytes == 0)
--			break;
--		pos += bytes;
--	}
--
--	if (pos != stat.size) {
--		ret = -EBADF;
--		vfree(*buf);
--		goto out;
--	}
--
--	*buf_len = pos;
--out:
--	fdput(f);
--	return ret;
--}
--
- /* Architectures can provide this probe function */
- int __weak arch_kexec_kernel_image_probe(struct kimage *image, void *buf,
- 					 unsigned long buf_len)
-@@ -180,16 +122,17 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- {
- 	int ret = 0;
- 	void *ldata;
-+	loff_t size;
- 
--	ret = copy_file_from_fd(kernel_fd, &image->kernel_buf,
--				&image->kernel_buf_len);
-+	ret = kernel_read_file_from_fd(kernel_fd, &image->kernel_buf,
-+				       &size, INT_MAX, READING_KEXEC_IMAGE);
- 	if (ret)
- 		return ret;
-+	image->kernel_buf_len = size;
- 
- 	/* Call arch image probe handlers */
- 	ret = arch_kexec_kernel_image_probe(image, image->kernel_buf,
- 					    image->kernel_buf_len);
--
- 	if (ret)
- 		goto out;
- 
-@@ -204,10 +147,12 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- #endif
- 	/* It is possible that there no initramfs is being loaded */
- 	if (!(flags & KEXEC_FILE_NO_INITRAMFS)) {
--		ret = copy_file_from_fd(initrd_fd, &image->initrd_buf,
--					&image->initrd_buf_len);
-+		ret = kernel_read_file_from_fd(initrd_fd, &image->initrd_buf,
-+					       &size, INT_MAX,
-+					       READING_KEXEC_INITRAMFS);
- 		if (ret)
- 			goto out;
-+		image->initrd_buf_len = size;
- 	}
- 
- 	if (cmdline_len) {
--- 
-2.1.0
+> 
+>                 rc = fw_read_file_contents(file, buf);
+>                 fput(file);
+> -               if (rc)
+> +               if (rc) {
+>                         dev_warn(device, "loading %s failed with error %d\n",
+>                                  path, rc);
+> +                       continue;
+> +               }
+> +               dev_dbg(device, "direct-loading %s\n", buf->fw_id);
+> +               fw_finish_direct_load(device, buf);
+> -               else
+> -                       break;
+> +               break;
+>         }
+>         __putname(path);
+> -
+> -       if (!rc) {
+> -               dev_dbg(device, "direct-loading %s\n",
+> -                       buf->fw_id);
+> -               fw_finish_direct_load(device, buf);
+> -       }
+> -
+>         return rc;
+>  }
 
+Can you provided a Signed-offy-by? If so consider my Acked-by.
+
+  Luis
