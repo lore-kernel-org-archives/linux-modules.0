@@ -1,77 +1,57 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from e23smtp05.au.ibm.com ([202.81.31.147]:49473 "EHLO
-	e23smtp05.au.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S966054AbcBCTHx (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Wed, 3 Feb 2016 14:07:53 -0500
-Received: from localhost
-	by e23smtp05.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
-	Thu, 4 Feb 2016 05:07:52 +1000
-From: Mimi Zohar <zohar@linux.vnet.ibm.com>
-To: linux-security-module@vger.kernel.org,
-	"Luis R. Rodriguez" <mcgrof@suse.com>, kexec@lists.infradead.org,
-	linux-modules@vger.kernel.org, fsdevel@vger.kernel.org,
-	David Howells <dhowells@redhat.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Kees Cook <keescook@chromium.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Rusty Russell <rusty@rustcorp.com.au>
-Cc: "Luis R. Rodriguez" <mcgrof@kernel.org>,
-	Mimi Zohar <zohar@linux.vnet.ibm.com>
-Subject: [PATCH v3 05/22] firmware: move completing fw into a helper
-Date: Wed,  3 Feb 2016 14:06:13 -0500
-Message-Id: <1454526390-19792-6-git-send-email-zohar@linux.vnet.ibm.com>
-In-Reply-To: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
-References: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
-Sender: owner-linux-modules@vger.kernel.org
+Return-Path: <mmarek@suse.cz>
+Subject: Re: Support for PKCS#7 module signing.
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+References: <CAC0jrpN5e3bmS0EO+poA7cx0eLjH59BkWwAFuOmDX-qE6WGs-w@mail.gmail.com>
+ <CAKi4VA+ZsmP_xfQgD9XpoXidB=-JaMcpsAfG7v4-M2my3khVkg@mail.gmail.com>
+Cc: Wouter van Kesteren <woutershep@gmail.com>,
+ linux-modules <linux-modules@vger.kernel.org>,
+ David Howells <dhowells@redhat.com>
+From: Michal Marek <mmarek@suse.cz>
+Message-ID: <56B34FF1.30305@suse.cz>
+Date: Thu, 4 Feb 2016 14:19:45 +0100
+MIME-Version: 1.0
+In-Reply-To: <CAKi4VA+ZsmP_xfQgD9XpoXidB=-JaMcpsAfG7v4-M2my3khVkg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 List-ID: <linux-modules.vger.kernel.org>
 
-From: "Luis R. Rodriguez" <mcgrof@kernel.org>
+On 2016-01-14 20:43, Lucas De Marchi wrote:
+> Hi Wouter,
+> 
+> 
+> Sorry for the delay.
 
-This will be re-used later through a new extensible interface.
+Hi,
 
-Reviewed-by: Josh Boyer <jwboyer@fedoraproject.org>
-Signed-off-by: Luis R. Rodriguez <mcgrof@kernel.org>
-Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
----
- drivers/base/firmware_class.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+sorry for the even longer delay.
 
-diff --git a/drivers/base/firmware_class.c b/drivers/base/firmware_class.c
-index 3358f5d..fb64814 100644
---- a/drivers/base/firmware_class.c
-+++ b/drivers/base/firmware_class.c
-@@ -322,6 +322,15 @@ fail:
- 	return rc;
- }
- 
-+static void fw_finish_direct_load(struct device *device,
-+				  struct firmware_buf *buf)
-+{
-+	mutex_lock(&fw_lock);
-+	set_bit(FW_STATUS_DONE, &buf->status);
-+	complete_all(&buf->completion);
-+	mutex_unlock(&fw_lock);
-+}
-+
- static int fw_get_filesystem_firmware(struct device *device,
- 				       struct firmware_buf *buf)
- {
-@@ -363,10 +372,7 @@ static int fw_get_filesystem_firmware(struct device *device,
- 	if (!rc) {
- 		dev_dbg(device, "direct-loading %s\n",
- 			buf->fw_id);
--		mutex_lock(&fw_lock);
--		set_bit(FW_STATUS_DONE, &buf->status);
--		complete_all(&buf->completion);
--		mutex_unlock(&fw_lock);
-+		fw_finish_direct_load(device, buf);
- 	}
- 
- 	return rc;
--- 
-2.1.0
 
+> On Sun, Jan 10, 2016 at 10:15 PM, Wouter van Kesteren
+> <woutershep@gmail.com> wrote:
+>> Hello,
+>>
+>> I asked the following on irc, where it was suggested that i take it to
+>> this mailing list instead.
+>>
+>> Commit https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=bc1c373dd2a5113800360f7152be729c9da996cc
+>> introduced a new method of signing modules.
+>>
+>> I attempted to make a patch to support this new method of signing. But
+>> whilst doing so i came to the conclusion that a lot of things that are
+>> in the appended struct are now set to zero.
+>> Infact, everything except id_type (which is 2) and sig_len is set to
+>> zero. Instead this information seems to be embedded in the signature
+>> blob instead.
+> 
+> That struct should be filled by the tool signing the module:
+[...]
+> I'm not sure why it was decided to omit this information in the commit
+> you mentioned and embed it inside the signature blob.
+
+The kernel now retrieves the hash and algorithm from the PKCS#7 message.
+
+> Ideally kmod would not link to any crypto library.
+
+Right. What we can do easily is to print signature: PKCS#7 to at least
+let the user know that the module has a signature appended.
+
+Michal
