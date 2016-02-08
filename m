@@ -1,12 +1,13 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from lhrrgout.huawei.com ([194.213.3.17]:44382 "EHLO
-	lhrrgout.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752619AbcBHKqQ convert rfc822-to-8bit (ORCPT
+Received: from lan.nucleusys.com ([92.247.61.126]:58740 "EHLO
+	zztop.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+	with ESMTP id S1751786AbcBHKfz (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 8 Feb 2016 05:46:16 -0500
-From: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
-To: Petko Manolov <petkan@mip-labs.com>
-CC: Mimi Zohar <zohar@linux.vnet.ibm.com>,
+	Mon, 8 Feb 2016 05:35:55 -0500
+Date: Mon, 8 Feb 2016 12:35:05 +0200
+From: Petko Manolov <petkan@mip-labs.com>
+To: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
+Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>,
 	"linux-security-module@vger.kernel.org"
 	<linux-security-module@vger.kernel.org>,
 	"Luis R. Rodriguez" <mcgrof@suse.com>,
@@ -20,37 +21,28 @@ CC: Mimi Zohar <zohar@linux.vnet.ibm.com>,
 	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
 	Eric Biederman <ebiederm@xmission.com>,
 	Rusty Russell <rusty@rustcorp.com.au>,
-	"Dmitry Kasatkin" <d.kasatkin@samsung.com>
-Subject: RE: [PATCH v3 20/22] ima: load policy using path
-Date: Mon, 8 Feb 2016 10:45:00 +0000
-Message-ID: <C2D7A727C393B644B70DF4B4DCFB60B9C8A882@lhreml507-mbx.china.huawei.com>
+	Dmitry Kasatkin <d.kasatkin@samsung.com>
+Subject: Re: [PATCH v3 20/22] ima: load policy using path
+Message-ID: <20160208103505.GA7931@bender.nucleusys.com>
 References: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
  <1454526390-19792-21-git-send-email-zohar@linux.vnet.ibm.com>
  <20160207195945.GG17321@localhost>
- <C2D7A727C393B644B70DF4B4DCFB60B9C8A843@lhreml507-mbx.china.huawei.com>,<20160208103505.GA7931@bender.nucleusys.com>
-In-Reply-To: <20160208103505.GA7931@bender.nucleusys.com>
-Content-Type: text/plain; charset="us-ascii"
+ <C2D7A727C393B644B70DF4B4DCFB60B9C8A843@lhreml507-mbx.china.huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <C2D7A727C393B644B70DF4B4DCFB60B9C8A843@lhreml507-mbx.china.huawei.com>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-
-________________________________________
-From: Petko Manolov [petkan@mip-labs.com]
-Sent: Monday, February 08, 2016 12:35 PM
-To: Dmitry Kasatkin
-Cc: Mimi Zohar; linux-security-module@vger.kernel.org; Luis R. Rodriguez; kexec@lists.infradead.org; linux-modules@vger.kernel.org; fsdevel@vger.kernel.org; David Howells; David Woodhouse; Kees Cook; Dmitry Torokhov; Dmitry Kasatkin; Eric Biederman; Rusty Russell; Dmitry Kasatkin
-Subject: Re: [PATCH v3 20/22] ima: load policy using path
-
 On 16-02-08 09:58:16, Dmitry Kasatkin wrote:
->
+> 
 > ________________________________________
 > From: Petko Manolov [petkan@mip-labs.com]
 > Sent: Sunday, February 07, 2016 9:59 PM
 > To: Mimi Zohar
 > Cc: linux-security-module@vger.kernel.org; Luis R. Rodriguez; kexec@lists.infradead.org; linux-modules@vger.kernel.org; fsdevel@vger.kernel.org; David Howells; David Woodhouse; Kees Cook; Dmitry Torokhov; Dmitry Kasatkin; Eric Biederman; Rusty Russell; Dmitry Kasatkin; Dmitry Kasatkin
 > Subject: Re: [PATCH v3 20/22] ima: load policy using path
->
+> 
 > On 16-02-03 14:06:28, Mimi Zohar wrote:
 > > From: Dmitry Kasatkin <d.kasatkin@samsung.com>
 > >
@@ -155,14 +147,12 @@ On 16-02-08 09:58:16, Dmitry Kasatkin wrote:
 > > -     mutex_unlock(&ima_write_mutex);
 > >
 > > +     if (data[0] == '/')
->
+> 
 > >It seems that if we feed relative path to ima_policy the update will fail...
->
+> 
 > Yes, i think it is always a good idea to pass absolute path.
 
 What if we at least emit a warning so people know what's wrong?
 
 
-                Petko
-
-DK: May be a good idea to print that loading policy by path or not.
+		Petko
