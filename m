@@ -1,18 +1,12 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from e28smtp07.in.ibm.com ([125.16.236.7]:46524 "EHLO
-	e28smtp07.in.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753464AbcBHVMf (ORCPT
+Received: from lhrrgout.huawei.com ([194.213.3.17]:44382 "EHLO
+	lhrrgout.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752619AbcBHKqQ convert rfc822-to-8bit (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 8 Feb 2016 16:12:35 -0500
-Received: from localhost
-	by e28smtp07.in.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
-	Tue, 9 Feb 2016 02:42:32 +0530
-Message-ID: <1454965936.3037.34.camel@linux.vnet.ibm.com>
-Subject: Re: [PATCH v3 20/22] ima: load policy using path
-From: Mimi Zohar <zohar@linux.vnet.ibm.com>
-To: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
-Cc: Petko Manolov <petkan@mip-labs.com>,
+	Mon, 8 Feb 2016 05:46:16 -0500
+From: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
+To: Petko Manolov <petkan@mip-labs.com>
+CC: Mimi Zohar <zohar@linux.vnet.ibm.com>,
 	"linux-security-module@vger.kernel.org"
 	<linux-security-module@vger.kernel.org>,
 	"Luis R. Rodriguez" <mcgrof@suse.com>,
@@ -26,58 +20,149 @@ Cc: Petko Manolov <petkan@mip-labs.com>,
 	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
 	Eric Biederman <ebiederm@xmission.com>,
 	Rusty Russell <rusty@rustcorp.com.au>,
-	Dmitry Kasatkin <d.kasatkin@samsung.com>
-Date: Mon, 08 Feb 2016 16:12:16 -0500
-In-Reply-To: <C2D7A727C393B644B70DF4B4DCFB60B9C8A882@lhreml507-mbx.china.huawei.com>
+	"Dmitry Kasatkin" <d.kasatkin@samsung.com>
+Subject: RE: [PATCH v3 20/22] ima: load policy using path
+Date: Mon, 8 Feb 2016 10:45:00 +0000
+Message-ID: <C2D7A727C393B644B70DF4B4DCFB60B9C8A882@lhreml507-mbx.china.huawei.com>
 References: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
-	 <1454526390-19792-21-git-send-email-zohar@linux.vnet.ibm.com>
-	 <20160207195945.GG17321@localhost>
-	 <C2D7A727C393B644B70DF4B4DCFB60B9C8A843@lhreml507-mbx.china.huawei.com>
-	,<20160208103505.GA7931@bender.nucleusys.com>
-	 <C2D7A727C393B644B70DF4B4DCFB60B9C8A882@lhreml507-mbx.china.huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
+ <1454526390-19792-21-git-send-email-zohar@linux.vnet.ibm.com>
+ <20160207195945.GG17321@localhost>
+ <C2D7A727C393B644B70DF4B4DCFB60B9C8A843@lhreml507-mbx.china.huawei.com>,<20160208103505.GA7931@bender.nucleusys.com>
+In-Reply-To: <20160208103505.GA7931@bender.nucleusys.com>
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, 2016-02-08 at 10:45 +0000, Dmitry Kasatkin wrote:
 
-> > > @@ -286,9 +322,12 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
-> > >       result = mutex_lock_interruptible(&ima_write_mutex);
-> > >       if (result < 0)
-> > >               goto out_free;
-> > > -     result = ima_parse_add_rule(data);
-> > > -     mutex_unlock(&ima_write_mutex);
-> > >
-> > > +     if (data[0] == '/')
+________________________________________
+From: Petko Manolov [petkan@mip-labs.com]
+Sent: Monday, February 08, 2016 12:35 PM
+To: Dmitry Kasatkin
+Cc: Mimi Zohar; linux-security-module@vger.kernel.org; Luis R. Rodriguez; kexec@lists.infradead.org; linux-modules@vger.kernel.org; fsdevel@vger.kernel.org; David Howells; David Woodhouse; Kees Cook; Dmitry Torokhov; Dmitry Kasatkin; Eric Biederman; Rusty Russell; Dmitry Kasatkin
+Subject: Re: [PATCH v3 20/22] ima: load policy using path
+
+On 16-02-08 09:58:16, Dmitry Kasatkin wrote:
+>
+> ________________________________________
+> From: Petko Manolov [petkan@mip-labs.com]
+> Sent: Sunday, February 07, 2016 9:59 PM
+> To: Mimi Zohar
+> Cc: linux-security-module@vger.kernel.org; Luis R. Rodriguez; kexec@lists.infradead.org; linux-modules@vger.kernel.org; fsdevel@vger.kernel.org; David Howells; David Woodhouse; Kees Cook; Dmitry Torokhov; Dmitry Kasatkin; Eric Biederman; Rusty Russell; Dmitry Kasatkin; Dmitry Kasatkin
+> Subject: Re: [PATCH v3 20/22] ima: load policy using path
+>
+> On 16-02-03 14:06:28, Mimi Zohar wrote:
+> > From: Dmitry Kasatkin <d.kasatkin@samsung.com>
 > >
-> > >It seems that if we feed relative path to ima_policy the update will fail...
+> > We currently cannot do appraisal or signature vetting of IMA policies
+> > since we currently can only load IMA policies by writing the contents
+> > of the policy directly in, as follows:
 > >
-> > Yes, i think it is always a good idea to pass absolute path.
-> 
-> What if we at least emit a warning so people know what's wrong?
+> > cat policy-file > <securityfs>/ima/policy
+> >
+> > If we provide the kernel the path to the IMA policy so it can load
+> > the policy itself it'd be able to later appraise or vet the file
+> > signature if it has one.  This patch adds support to load the IMA
+> > policy with a given path as follows:
+> >
+> > echo /etc/ima/ima_policy > /sys/kernel/security/ima/policy
+> >
+> > Changelog v3:
+> > - moved kernel_read_file_from_path() to a separate patch
+> > v2:
+> > - after re-ordering the patches, replace calling integrity_kernel_read()
+> >   to read the file with kernel_read_file_from_path() (Mimi)
+> > - Patch description re-written by Luis R. Rodriguez
+> >
+> > Signed-off-by: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
+> > Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
+> > ---
+> >  include/linux/fs.h              |  1 +
+> >  security/integrity/ima/ima_fs.c | 43 +++++++++++++++++++++++++++++++++++++++--
+> >  2 files changed, 42 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/fs.h b/include/linux/fs.h
+> > index d4d556e..b648e6d 100644
+> > --- a/include/linux/fs.h
+> > +++ b/include/linux/fs.h
+> > @@ -2531,6 +2531,7 @@ enum kernel_read_file_id {
+> >       READING_MODULE,
+> >       READING_KEXEC_IMAGE,
+> >       READING_KEXEC_INITRAMFS,
+> > +     READING_POLICY,
+> >       READING_MAX_ID
+> >  };
+> >
+> > diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+> > index f355231..00ccd67 100644
+> > --- a/security/integrity/ima/ima_fs.c
+> > +++ b/security/integrity/ima/ima_fs.c
+> > @@ -22,6 +22,7 @@
+> >  #include <linux/rculist.h>
+> >  #include <linux/rcupdate.h>
+> >  #include <linux/parser.h>
+> > +#include <linux/vmalloc.h>
+> >
+> >  #include "ima.h"
+> >
+> > @@ -258,6 +259,41 @@ static const struct file_operations ima_ascii_measurements_ops = {
+> >       .release = seq_release,
+> >  };
+> >
+> > +static ssize_t ima_read_policy(char *path)
+> > +{
+> > +     void *data;
+> > +     char *datap;
+> > +     loff_t size;
+> > +     int rc, pathlen = strlen(path);
+> > +
+> > +     char *p;
+> > +
+> > +     /* remove \n */
+> > +     datap = path;
+> > +     strsep(&datap, "\n");
+> > +
+> > +     rc = kernel_read_file_from_path(path, &data, &size, 0, READING_POLICY);
+> > +     if (rc < 0)
+> > +             return rc;
+> > +
+> > +     datap = data;
+> > +     while (size > 0 && (p = strsep(&datap, "\n"))) {
+> > +             pr_debug("rule: %s\n", p);
+> > +             rc = ima_parse_add_rule(p);
+> > +             if (rc < 0)
+> > +                     break;
+> > +             size -= rc;
+> > +     }
+> > +
+> > +     vfree(data);
+> > +     if (rc < 0)
+> > +             return rc;
+> > +     else if (size)
+> > +             return -EINVAL;
+> > +     else
+> > +             return pathlen;
+> > +}
+> > +
+> >  static ssize_t ima_write_policy(struct file *file, const char __user *buf,
+> >                               size_t datalen, loff_t *ppos)
+> >  {
+> > @@ -286,9 +322,12 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
+> >       result = mutex_lock_interruptible(&ima_write_mutex);
+> >       if (result < 0)
+> >               goto out_free;
+> > -     result = ima_parse_add_rule(data);
+> > -     mutex_unlock(&ima_write_mutex);
+> >
+> > +     if (data[0] == '/')
+>
+> >It seems that if we feed relative path to ima_policy the update will fail...
+>
+> Yes, i think it is always a good idea to pass absolute path.
 
-The next patch "ima: measure and appraise the IMA policy itself" adds
-the following.  Is a failure message enough?
+What if we at least emit a warning so people know what's wrong?
 
-+       else if (ima_appraise & IMA_APPRAISE_POLICY) {
-+               pr_err("IMA: signed policy required\n");
-+               integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
-+                                   "policy_update", "signed policy
-required",
-+                                   1, 0);
-+               if (ima_appraise & IMA_APPRAISE_ENFORCE)
-+                       result = -EACCES;
-+       } else
-                result = ima_parse_add_rule(data);
 
-> 
->                 Petko
-> 
-> DK: May be a good idea to print that loading policy by path or not.
+                Petko
 
-Are we including the pathname?  Are you suggesting a log or audit
-message?
-
-Mimi
-
+DK: May be a good idea to print that loading policy by path or not.
