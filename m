@@ -1,90 +1,130 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from e28smtp08.in.ibm.com ([125.16.236.8]:47855 "EHLO
-	e28smtp08.in.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752271AbcBLSbd (ORCPT
+Received: from mail-lb0-f196.google.com ([209.85.217.196]:35969 "EHLO
+	mail-lb0-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1753386AbcBJTdF (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Fri, 12 Feb 2016 13:31:33 -0500
-Received: from localhost
-	by e28smtp08.in.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
-	Sat, 13 Feb 2016 00:01:31 +0530
-From: Mimi Zohar <zohar@linux.vnet.ibm.com>
-To: linux-security-module <linux-security-module@vger.kernel.org>
-Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>,
+	Wed, 10 Feb 2016 14:33:05 -0500
+MIME-Version: 1.0
+In-Reply-To: <1454526390-19792-3-git-send-email-zohar@linux.vnet.ibm.com>
+References: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
+	<1454526390-19792-3-git-send-email-zohar@linux.vnet.ibm.com>
+Date: Wed, 10 Feb 2016 21:33:03 +0200
+Message-ID: <CACE9dm_knTPnEfw8RXzFux50gJqaECFfGeTDaeLxWuc5KNqvxQ@mail.gmail.com>
+Subject: Re: [PATCH v3 02/22] ima: refactor ima_policy_show() to display
+ "ima_hooks" rules
+From: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+To: Mimi Zohar <zohar@linux.vnet.ibm.com>
+Cc: linux-security-module <linux-security-module@vger.kernel.org>,
 	"Luis R. Rodriguez" <mcgrof@suse.com>, kexec@lists.infradead.org,
-	linux-modules@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-modules@vger.kernel.org, fsdevel@vger.kernel.org,
+	David Howells <dhowells@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>,
 	Kees Cook <keescook@chromium.org>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH v4 09/19] vfs: define kernel_read_file_from_path
-Date: Fri, 12 Feb 2016 13:29:21 -0500
-Message-Id: <1455301771-7703-10-git-send-email-zohar@linux.vnet.ibm.com>
-In-Reply-To: <1455301771-7703-1-git-send-email-zohar@linux.vnet.ibm.com>
-References: <1455301771-7703-1-git-send-email-zohar@linux.vnet.ibm.com>
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Rusty Russell <rusty@rustcorp.com.au>
+Content-Type: text/plain; charset=UTF-8
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-This patch defines kernel_read_file_from_path(), a wrapper for the VFS
-common kernel_read_file().
+On Wed, Feb 3, 2016 at 9:06 PM, Mimi Zohar <zohar@linux.vnet.ibm.com> wrote:
+> Define and call a function to display the "ima_hooks" rules.
+>
+> Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
 
-Changelog:
-- Separated from the IMA patch
+Acked-by: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
 
-Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
-Acked-by: Kees Cook <keescook@chromium.org>
-Acked-by: Luis R. Rodriguez <mcgrof@kernel.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
----
- fs/exec.c          | 22 ++++++++++++++++++++++
- include/linux/fs.h |  2 ++
- 2 files changed, 24 insertions(+)
+> ---
+>  security/integrity/ima/ima_policy.c | 63 +++++++++++++++++++++----------------
+>  1 file changed, 36 insertions(+), 27 deletions(-)
+>
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index e0e18cc..43b6425 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -903,6 +903,40 @@ void ima_policy_stop(struct seq_file *m, void *v)
+>  #define mt(token)      mask_tokens[token]
+>  #define ft(token)      func_tokens[token]
+>
+> +/*
+> + * policy_func_show - display the ima_hooks policy rule
+> + */
+> +static void policy_func_show(struct seq_file *m, enum ima_hooks func)
+> +{
+> +       char tbuf[64] = {0,};
+> +
+> +       switch (func) {
+> +       case FILE_CHECK:
+> +               seq_printf(m, pt(Opt_func), ft(func_file));
+> +               break;
+> +       case MMAP_CHECK:
+> +               seq_printf(m, pt(Opt_func), ft(func_mmap));
+> +               break;
+> +       case BPRM_CHECK:
+> +               seq_printf(m, pt(Opt_func), ft(func_bprm));
+> +               break;
+> +       case MODULE_CHECK:
+> +               seq_printf(m, pt(Opt_func), ft(func_module));
+> +               break;
+> +       case FIRMWARE_CHECK:
+> +               seq_printf(m, pt(Opt_func), ft(func_firmware));
+> +               break;
+> +       case POST_SETATTR:
+> +               seq_printf(m, pt(Opt_func), ft(func_post));
+> +               break;
+> +       default:
+> +               snprintf(tbuf, sizeof(tbuf), "%d", func);
+> +               seq_printf(m, pt(Opt_func), tbuf);
+> +               break;
+> +       }
+> +       seq_puts(m, " ");
+> +}
+> +
+>  int ima_policy_show(struct seq_file *m, void *v)
+>  {
+>         struct ima_rule_entry *entry = v;
+> @@ -924,33 +958,8 @@ int ima_policy_show(struct seq_file *m, void *v)
+>
+>         seq_puts(m, " ");
+>
+> -       if (entry->flags & IMA_FUNC) {
+> -               switch (entry->func) {
+> -               case FILE_CHECK:
+> -                       seq_printf(m, pt(Opt_func), ft(func_file));
+> -                       break;
+> -               case MMAP_CHECK:
+> -                       seq_printf(m, pt(Opt_func), ft(func_mmap));
+> -                       break;
+> -               case BPRM_CHECK:
+> -                       seq_printf(m, pt(Opt_func), ft(func_bprm));
+> -                       break;
+> -               case MODULE_CHECK:
+> -                       seq_printf(m, pt(Opt_func), ft(func_module));
+> -                       break;
+> -               case FIRMWARE_CHECK:
+> -                       seq_printf(m, pt(Opt_func), ft(func_firmware));
+> -                       break;
+> -               case POST_SETATTR:
+> -                       seq_printf(m, pt(Opt_func), ft(func_post));
+> -                       break;
+> -               default:
+> -                       snprintf(tbuf, sizeof(tbuf), "%d", entry->func);
+> -                       seq_printf(m, pt(Opt_func), tbuf);
+> -                       break;
+> -               }
+> -               seq_puts(m, " ");
+> -       }
+> +       if (entry->flags & IMA_FUNC)
+> +               policy_func_show(m, entry->func);
+>
+>         if (entry->flags & IMA_MASK) {
+>                 if (entry->mask & MAY_EXEC)
+> --
+> 2.1.0
+>
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 1138dc5..67816a0 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -884,6 +884,28 @@ out:
- }
- EXPORT_SYMBOL_GPL(kernel_read_file);
- 
-+int kernel_read_file_from_path(char *path, void **buf, loff_t *size,
-+			       loff_t max_size, enum kernel_read_file_id id)
-+{
-+	struct file *file;
-+	int ret;
-+
-+	if (!path || !*path)
-+		return -EINVAL;
-+
-+	file = filp_open(path, O_RDONLY, 0);
-+	if (IS_ERR(file)) {
-+		ret = PTR_ERR(file);
-+		pr_err("Unable to open file: %s (%d)", path, ret);
-+		return ret;
-+	}
-+
-+	ret = kernel_read_file(file, buf, size, max_size, id);
-+	fput(file);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
-+
- ssize_t read_code(struct file *file, unsigned long addr, loff_t pos, size_t len)
- {
- 	ssize_t res = vfs_read(file, (void __user *)addr, len, &pos);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index aa84bcb..00fa5c4 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2583,6 +2583,8 @@ enum kernel_read_file_id {
- extern int kernel_read(struct file *, loff_t, char *, unsigned long);
- extern int kernel_read_file(struct file *, void **, loff_t *, loff_t,
- 			    enum kernel_read_file_id);
-+extern int kernel_read_file_from_path(char *, void **, loff_t *, loff_t,
-+				      enum kernel_read_file_id);
- extern ssize_t kernel_write(struct file *, const char *, size_t, loff_t);
- extern ssize_t __kernel_write(struct file *, const char *, size_t, loff_t *);
- extern struct file * open_exec(const char *);
+
+
 -- 
-2.1.0
-
+Thanks,
+Dmitry
