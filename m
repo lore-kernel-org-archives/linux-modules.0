@@ -1,52 +1,55 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:44596 "EHLO mx1.redhat.com"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1752343AbcBLMxp (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Fri, 12 Feb 2016 07:53:45 -0500
-Date: Fri, 12 Feb 2016 20:53:33 +0800
-From: Dave Young <dyoung@redhat.com>
-To: Mimi Zohar <zohar@linux.vnet.ibm.com>
-Cc: linux-security-module@vger.kernel.org,
-	"Luis R. Rodriguez" <mcgrof@suse.com>, kexec@lists.infradead.org,
-	linux-modules@vger.kernel.org, fsdevel@vger.kernel.org,
-	David Howells <dhowells@redhat.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Kees Cook <keescook@chromium.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Rusty Russell <rusty@rustcorp.com.au>
+Received: from e23smtp01.au.ibm.com ([202.81.31.143]:38738 "EHLO
+	e23smtp01.au.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1751210AbcBKMRv (ORCPT
+	<rfc822;linux-modules@vger.kernel.org>);
+	Thu, 11 Feb 2016 07:17:51 -0500
+Received: from localhost
+	by e23smtp01.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
+	Thu, 11 Feb 2016 22:17:49 +1000
+Message-ID: <1455193012.2538.318.camel@linux.vnet.ibm.com>
 Subject: Re: [PATCH v3 19/22] ima: support for kexec image and initramfs
-Message-ID: <20160212125333.GC7051@dhcp-128-65.nay.redhat.com>
+From: Mimi Zohar <zohar@linux.vnet.ibm.com>
+To: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: linux-security-module <linux-security-module@vger.kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Kees Cook <keescook@chromium.org>, kexec@lists.infradead.org,
+	linux-modules@vger.kernel.org,
+	Rusty Russell <rusty@rustcorp.com.au>,
+	David Howells <dhowells@redhat.com>, fsdevel@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	"Luis R. Rodriguez" <mcgrof@suse.com>
+Date: Thu, 11 Feb 2016 07:16:52 -0500
+In-Reply-To: <CACE9dm-VTDNaEJPGamhMY239LQAPCRYp9rvnwbmZijyo7Vh43g@mail.gmail.com>
 References: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
- <1454526390-19792-20-git-send-email-zohar@linux.vnet.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-In-Reply-To: <1454526390-19792-20-git-send-email-zohar@linux.vnet.ibm.com>
+	 <1454526390-19792-20-git-send-email-zohar@linux.vnet.ibm.com>
+	 <CACE9dm9cqE5cu=0+LujHOGP9XyhGNxYfy52Ds6z+pz+fPwF+pw@mail.gmail.com>
+	 <1455146516.2538.237.camel@linux.vnet.ibm.com>
+	 <CACE9dm8OJ1cgbKszUG-pCiEMVarUFLLWi_jewVV-JEMGAJsA-g@mail.gmail.com>
+	 <1455156500.2538.268.camel@linux.vnet.ibm.com>
+	 <CACE9dm-VTDNaEJPGamhMY239LQAPCRYp9rvnwbmZijyo7Vh43g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi, Mimi
+On Thu, 2016-02-11 at 10:47 +0200, Dmitry Kasatkin wrote:
+> On Thu, Feb 11, 2016 at 4:08 AM, Mimi Zohar <zohar@linux.vnet.ibm.com> wrote:
 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index a5d2592..832e62a 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -147,6 +147,8 @@ enum ima_hooks {
->  	POST_SETATTR,
->  	MODULE_CHECK,
->  	FIRMWARE_CHECK,
-> +	KEXEC_CHECK,
-> +	INITRAMFS_CHECK,
+> static int idmap[] = {
+>          [READING_FIRMWARE] = FIRMWARE_CHECK,
+>          [READING_MODULE] = MODULE_CHECK,
+>          ...
+> };
 
-KEXEC_CHECK is actually kexec kernel image check, INITRAMFS_CHECK is for
-kexec initramfs check, they are both for checking kexec loaded files.
+That works nicely, even with non-sequential ordering or missing entries.
+The switch case be replaced with a single line:
 
-Do you mind a longer id like KEXEC_KERNEL_CHECK and KEXEC_INITRAMFS_CHECK?
+func = read_idmap[read_id] == 0 ? FILE_CHECK : read_idmap[read_id]; 
 
->  	MAX_CHECK
->  };
->  
+Thank you!
 
-Thanks
-Dave
+Mimi
+
