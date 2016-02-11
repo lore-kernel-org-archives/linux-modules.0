@@ -1,15 +1,18 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from e23smtp03.au.ibm.com ([202.81.31.145]:58872 "EHLO
-	e23smtp03.au.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S966132AbcBCTIg (ORCPT
+Received: from e28smtp01.in.ibm.com ([125.16.236.1]:43648 "EHLO
+	e28smtp01.in.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1750957AbcBKTgL (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Wed, 3 Feb 2016 14:08:36 -0500
+	Thu, 11 Feb 2016 14:36:11 -0500
 Received: from localhost
-	by e23smtp03.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+	by e28smtp01.in.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
 	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
-	Thu, 4 Feb 2016 05:08:35 +1000
+	Fri, 12 Feb 2016 01:06:07 +0530
+Message-ID: <1455219355.2826.1.camel@linux.vnet.ibm.com>
+Subject: Re: [PATCH v3 14/22] security: define kernel_read_file hook
 From: Mimi Zohar <zohar@linux.vnet.ibm.com>
-To: linux-security-module@vger.kernel.org,
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: linux-security-module@vger.kernel.org,
 	"Luis R. Rodriguez" <mcgrof@suse.com>, kexec@lists.infradead.org,
 	linux-modules@vger.kernel.org, fsdevel@vger.kernel.org,
 	David Howells <dhowells@redhat.com>,
@@ -19,67 +22,29 @@ To: linux-security-module@vger.kernel.org,
 	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
 	Eric Biederman <ebiederm@xmission.com>,
 	Rusty Russell <rusty@rustcorp.com.au>
-Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>
-Subject: [PATCH v3 15/22] vfs: define kernel_copy_file_from_fd()
-Date: Wed,  3 Feb 2016 14:06:23 -0500
-Message-Id: <1454526390-19792-16-git-send-email-zohar@linux.vnet.ibm.com>
-In-Reply-To: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
+Date: Thu, 11 Feb 2016 14:35:55 -0500
+In-Reply-To: <56BCBCA9.3040102@schaufler-ca.com>
 References: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
+	 <1454526390-19792-15-git-send-email-zohar@linux.vnet.ibm.com>
+	 <56BCBCA9.3040102@schaufler-ca.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-This patch defines kernel_read_file_from_fd(), a wrapper for the VFS
-common kernel_read_file().
+On Thu, 2016-02-11 at 08:54 -0800, Casey Schaufler wrote:
+> On 2/3/2016 11:06 AM, Mimi Zohar wrote:
+> > The kernel_read_file security hook is called prior to reading the file
+> > into memory.
+> >
+> > Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
+> 
+> Acked-by: Casey Schaufler <casey@schaufler-ca.com>
+> 
+> Being able to deny the read prior to performing any
+> real work makes a lot of sense.
 
-Changelog:
-- Separated from the kernel modules patch
+Thanks, Casey!
 
-Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
----
- fs/exec.c          | 16 ++++++++++++++++
- include/linux/fs.h |  2 ++
- 2 files changed, 18 insertions(+)
-
-diff --git a/fs/exec.c b/fs/exec.c
-index 1d39c4e..f3a0ce2 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -910,6 +910,22 @@ int kernel_read_file_from_path(char *path, void **buf, loff_t *size,
- }
- EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
- 
-+int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
-+			     enum kernel_read_file_id id)
-+{
-+	struct fd f = fdget(fd);
-+	int ret = -EBADF;
-+
-+	if (!f.file)
-+		goto out;
-+
-+	ret = kernel_read_file(f.file, buf, size, max_size, id);
-+out:
-+	fdput(f);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(kernel_read_file_from_fd);
-+
- ssize_t read_code(struct file *file, unsigned long addr, loff_t pos, size_t len)
- {
- 	ssize_t res = vfs_read(file, (void __user *)addr, len, &pos);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 2a9670a..5ba806b 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2536,6 +2536,8 @@ extern int kernel_read_file(struct file *, void **, loff_t *, loff_t,
- 			    enum kernel_read_file_id);
- extern int kernel_read_file_from_path(char *, void **, loff_t *, loff_t,
- 				      enum kernel_read_file_id);
-+extern int kernel_read_file_from_fd(int, void **, loff_t *, loff_t,
-+				    enum kernel_read_file_id);
- extern ssize_t kernel_write(struct file *, const char *, size_t, loff_t);
- extern ssize_t __kernel_write(struct file *, const char *, size_t, loff_t *);
- extern struct file * open_exec(const char *);
--- 
-2.1.0
+Mimi
 
