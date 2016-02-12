@@ -1,79 +1,90 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from e23smtp04.au.ibm.com ([202.81.31.146]:38010 "EHLO
-	e23smtp04.au.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S966066AbcBCTH6 (ORCPT
+Received: from e28smtp08.in.ibm.com ([125.16.236.8]:47855 "EHLO
+	e28smtp08.in.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752271AbcBLSbd (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Wed, 3 Feb 2016 14:07:58 -0500
+	Fri, 12 Feb 2016 13:31:33 -0500
 Received: from localhost
-	by e23smtp04.au.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+	by e28smtp08.in.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
 	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
-	Thu, 4 Feb 2016 05:07:56 +1000
+	Sat, 13 Feb 2016 00:01:31 +0530
 From: Mimi Zohar <zohar@linux.vnet.ibm.com>
-To: linux-security-module@vger.kernel.org,
+To: linux-security-module <linux-security-module@vger.kernel.org>
+Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>,
 	"Luis R. Rodriguez" <mcgrof@suse.com>, kexec@lists.infradead.org,
-	linux-modules@vger.kernel.org, fsdevel@vger.kernel.org,
-	David Howells <dhowells@redhat.com>,
-	David Woodhouse <dwmw2@infradead.org>,
+	linux-modules@vger.kernel.org, linux-fsdevel@vger.kernel.org,
 	Kees Cook <keescook@chromium.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
 	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Rusty Russell <rusty@rustcorp.com.au>
-Cc: "Luis R. Rodriguez" <mcgrof@kernel.org>,
-	Mimi Zohar <zohar@linux.vnet.ibm.com>
-Subject: [PATCH v3 06/22] firmware: fold successful fw read early
-Date: Wed,  3 Feb 2016 14:06:14 -0500
-Message-Id: <1454526390-19792-7-git-send-email-zohar@linux.vnet.ibm.com>
-In-Reply-To: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
-References: <1454526390-19792-1-git-send-email-zohar@linux.vnet.ibm.com>
+	Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 09/19] vfs: define kernel_read_file_from_path
+Date: Fri, 12 Feb 2016 13:29:21 -0500
+Message-Id: <1455301771-7703-10-git-send-email-zohar@linux.vnet.ibm.com>
+In-Reply-To: <1455301771-7703-1-git-send-email-zohar@linux.vnet.ibm.com>
+References: <1455301771-7703-1-git-send-email-zohar@linux.vnet.ibm.com>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-From: David Howells <dhowells@redhat.com>
+This patch defines kernel_read_file_from_path(), a wrapper for the VFS
+common kernel_read_file().
 
-We'll be folding in some more checks on fw_read_file_contents(),
-this will make the success case easier to follow.
+Changelog:
+- Separated from the IMA patch
 
-Reviewed-by: Josh Boyer <jwboyer@fedoraproject.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Luis R. Rodriguez <mcgrof@kernel.org>
 Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
+Acked-by: Kees Cook <keescook@chromium.org>
+Acked-by: Luis R. Rodriguez <mcgrof@kernel.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
 ---
- drivers/base/firmware_class.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ fs/exec.c          | 22 ++++++++++++++++++++++
+ include/linux/fs.h |  2 ++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/drivers/base/firmware_class.c b/drivers/base/firmware_class.c
-index fb64814..c658cec 100644
---- a/drivers/base/firmware_class.c
-+++ b/drivers/base/firmware_class.c
-@@ -361,20 +361,18 @@ static int fw_get_filesystem_firmware(struct device *device,
- 			continue;
- 		rc = fw_read_file_contents(file, buf);
- 		fput(file);
--		if (rc)
-+		if (rc == 0) {
-+			dev_dbg(device, "direct-loading %s\n",
-+				buf->fw_id);
-+			fw_finish_direct_load(device, buf);
-+			goto out;
-+		} else
- 			dev_warn(device, "loading %s failed with error %d\n",
- 				 path, rc);
--		else
--			break;
- 	}
-+out:
- 	__putname(path);
- 
--	if (!rc) {
--		dev_dbg(device, "direct-loading %s\n",
--			buf->fw_id);
--		fw_finish_direct_load(device, buf);
--	}
--
- 	return rc;
+diff --git a/fs/exec.c b/fs/exec.c
+index 1138dc5..67816a0 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -884,6 +884,28 @@ out:
  }
+ EXPORT_SYMBOL_GPL(kernel_read_file);
  
++int kernel_read_file_from_path(char *path, void **buf, loff_t *size,
++			       loff_t max_size, enum kernel_read_file_id id)
++{
++	struct file *file;
++	int ret;
++
++	if (!path || !*path)
++		return -EINVAL;
++
++	file = filp_open(path, O_RDONLY, 0);
++	if (IS_ERR(file)) {
++		ret = PTR_ERR(file);
++		pr_err("Unable to open file: %s (%d)", path, ret);
++		return ret;
++	}
++
++	ret = kernel_read_file(file, buf, size, max_size, id);
++	fput(file);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
++
+ ssize_t read_code(struct file *file, unsigned long addr, loff_t pos, size_t len)
+ {
+ 	ssize_t res = vfs_read(file, (void __user *)addr, len, &pos);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index aa84bcb..00fa5c4 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2583,6 +2583,8 @@ enum kernel_read_file_id {
+ extern int kernel_read(struct file *, loff_t, char *, unsigned long);
+ extern int kernel_read_file(struct file *, void **, loff_t *, loff_t,
+ 			    enum kernel_read_file_id);
++extern int kernel_read_file_from_path(char *, void **, loff_t *, loff_t,
++				      enum kernel_read_file_id);
+ extern ssize_t kernel_write(struct file *, const char *, size_t, loff_t);
+ extern ssize_t __kernel_write(struct file *, const char *, size_t, loff_t *);
+ extern struct file * open_exec(const char *);
 -- 
 2.1.0
 
