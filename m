@@ -1,152 +1,338 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from e28smtp06.in.ibm.com ([125.16.236.6]:45015 "EHLO
-	e28smtp06.in.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1752652AbcBLSiZ (ORCPT
+Received: from e28smtp05.in.ibm.com ([125.16.236.5]:48565 "EHLO
+	e28smtp05.in.ibm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752644AbcBLSb6 (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Fri, 12 Feb 2016 13:38:25 -0500
+	Fri, 12 Feb 2016 13:31:58 -0500
 Received: from localhost
-	by e28smtp06.in.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+	by e28smtp05.in.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
 	for <linux-modules@vger.kernel.org> from <zohar@linux.vnet.ibm.com>;
-	Sat, 13 Feb 2016 00:08:21 +0530
+	Sat, 13 Feb 2016 00:01:55 +0530
 From: Mimi Zohar <zohar@linux.vnet.ibm.com>
 To: linux-security-module <linux-security-module@vger.kernel.org>
 Cc: Mimi Zohar <zohar@linux.vnet.ibm.com>,
 	"Luis R. Rodriguez" <mcgrof@suse.com>, kexec@lists.infradead.org,
 	linux-modules@vger.kernel.org, linux-fsdevel@vger.kernel.org,
 	Kees Cook <keescook@chromium.org>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Subject: [PATCH v4 18/19] ima: measure and appraise the IMA policy itself
-Date: Fri, 12 Feb 2016 13:29:30 -0500
-Message-Id: <1455301771-7703-19-git-send-email-zohar@linux.vnet.ibm.com>
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Rusty Russell <rusty@rustcorp.com.au>
+Subject: [PATCH v4 13/19] module: replace copy_module_from_fd with kernel version
+Date: Fri, 12 Feb 2016 13:29:25 -0500
+Message-Id: <1455301771-7703-14-git-send-email-zohar@linux.vnet.ibm.com>
 In-Reply-To: <1455301771-7703-1-git-send-email-zohar@linux.vnet.ibm.com>
 References: <1455301771-7703-1-git-send-email-zohar@linux.vnet.ibm.com>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Add support for measuring and appraising the IMA policy itself.
+Replace copy_module_from_fd() with kernel_read_file_from_fd().
 
-Changelog v4:
-- use braces on both if/else branches, even if single line on one of the
-branches - Dmitry
-- Use the id mapping - Dmitry
+Although none of the upstreamed LSMs define a kernel_module_from_file
+hook, IMA is called, based on policy, to prevent unsigned kernel modules
+from being loaded by the original kernel module syscall and to
+measure/appraise signed kernel modules.
+
+The security function security_kernel_module_from_file() was called prior
+to reading a kernel module.  Preventing unsigned kernel modules from being
+loaded by the original kernel module syscall remains on the pre-read
+kernel_read_file() security hook.  Instead of reading the kernel module
+twice, once for measuring/appraising and again for loading the kernel
+module, the signature validation is moved to the kernel_post_read_file()
+security hook.
+
+This patch removes the security_kernel_module_from_file() hook and security
+call.
 
 Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
-Acked-by: Petko Manolov <petkan@mip-labs.com>
-Acked-by: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
+Acked-by: Kees Cook <keescook@chromium.org>
+Acked-by: Luis R. Rodriguez <mcgrof@kernel.org>
+Cc: Rusty Russell <rusty@rustcorp.com.au>
 ---
- security/integrity/ima/ima.h        |  2 ++
- security/integrity/ima/ima_fs.c     | 12 ++++++++++--
- security/integrity/ima/ima_main.c   |  1 +
- security/integrity/ima/ima_policy.c | 11 ++++++++++-
- 4 files changed, 23 insertions(+), 3 deletions(-)
+ include/linux/fs.h                |  1 +
+ include/linux/ima.h               |  6 ----
+ include/linux/lsm_hooks.h         |  7 ----
+ include/linux/security.h          |  5 ---
+ kernel/module.c                   | 68 +++++----------------------------------
+ security/integrity/ima/ima_main.c | 35 ++++++++------------
+ security/security.c               | 12 -------
+ 7 files changed, 22 insertions(+), 112 deletions(-)
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index bd97e0d..5d0f611 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -149,6 +149,7 @@ enum ima_hooks {
- 	FIRMWARE_CHECK,
- 	KEXEC_KERNEL_CHECK,
- 	KEXEC_INITRAMFS_CHECK,
-+	POLICY_CHECK,
- 	MAX_CHECK
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 9c85dea..fb08b66 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2578,6 +2578,7 @@ extern int do_pipe_flags(int *, int);
+ 
+ enum kernel_read_file_id {
+ 	READING_FIRMWARE = 1,
++	READING_MODULE,
+ 	READING_MAX_ID
  };
  
-@@ -191,6 +192,7 @@ int ima_policy_show(struct seq_file *m, void *v);
- #define IMA_APPRAISE_LOG	0x04
- #define IMA_APPRAISE_MODULES	0x08
- #define IMA_APPRAISE_FIRMWARE	0x10
-+#define IMA_APPRAISE_POLICY	0x20
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 6adcaea..e6516cb 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -18,7 +18,6 @@ extern int ima_bprm_check(struct linux_binprm *bprm);
+ extern int ima_file_check(struct file *file, int mask, int opened);
+ extern void ima_file_free(struct file *file);
+ extern int ima_file_mmap(struct file *file, unsigned long prot);
+-extern int ima_module_check(struct file *file);
+ extern int ima_read_file(struct file *file, enum kernel_read_file_id id);
+ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
+ 			      enum kernel_read_file_id id);
+@@ -44,11 +43,6 @@ static inline int ima_file_mmap(struct file *file, unsigned long prot)
+ 	return 0;
+ }
  
- #ifdef CONFIG_IMA_APPRAISE
- int ima_appraise_measurement(enum ima_hooks func,
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 57989a4..9f8cb10 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -323,10 +323,18 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
- 	if (result < 0)
- 		goto out_free;
+-static inline int ima_module_check(struct file *file)
+-{
+-	return 0;
+-}
+-
+ static inline int ima_read_file(struct file *file, enum kernel_read_file_id id)
+ {
+ 	return 0;
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index d32b7bd..cdee11c 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -546,12 +546,6 @@
+  *	userspace to load a kernel module with the given name.
+  *	@kmod_name name of the module requested by the kernel
+  *	Return 0 if successful.
+- * @kernel_module_from_file:
+- *	Load a kernel module from userspace.
+- *	@file contains the file structure pointing to the file containing
+- *	the kernel module to load. If the module is being loaded from a blob,
+- *	this argument will be NULL.
+- *	Return 0 if permission is granted.
+  * @kernel_read_file:
+  *	Read a file specified by userspace.
+  *	@file contains the file structure pointing to the file being read
+@@ -1725,7 +1719,6 @@ struct security_hook_heads {
+ 	struct list_head kernel_read_file;
+ 	struct list_head kernel_post_read_file;
+ 	struct list_head kernel_module_request;
+-	struct list_head kernel_module_from_file;
+ 	struct list_head task_fix_setuid;
+ 	struct list_head task_setpgid;
+ 	struct list_head task_getpgid;
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 071fb74..157f0cb 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -859,11 +859,6 @@ static inline int security_kernel_module_request(char *kmod_name)
+ 	return 0;
+ }
  
--	if (data[0] == '/')
-+	if (data[0] == '/') {
- 		result = ima_read_policy(data);
--	else 
-+	} else if (ima_appraise & IMA_APPRAISE_POLICY) {
-+		pr_err("IMA: signed policy file (specified as an absolute pathname) required\n");
-+		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
-+				    "policy_update", "signed policy required",
-+				    1, 0);
-+		if (ima_appraise & IMA_APPRAISE_ENFORCE)
-+			result = -EACCES;
-+	} else {
- 		result = ima_parse_add_rule(data);
-+	}
- 	mutex_unlock(&ima_write_mutex);
- out_free:
- 	kfree(data);
+-static inline int security_kernel_module_from_file(struct file *file)
+-{
+-	return 0;
+-}
+-
+ static inline int security_kernel_read_file(struct file *file,
+ 					    enum kernel_read_file_id id)
+ {
+diff --git a/kernel/module.c b/kernel/module.c
+index 8358f46..9554109 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -2654,7 +2654,7 @@ static int copy_module_from_user(const void __user *umod, unsigned long len,
+ 	if (info->len < sizeof(*(info->hdr)))
+ 		return -ENOEXEC;
+ 
+-	err = security_kernel_module_from_file(NULL);
++	err = security_kernel_read_file(NULL, READING_MODULE);
+ 	if (err)
+ 		return err;
+ 
+@@ -2672,63 +2672,6 @@ static int copy_module_from_user(const void __user *umod, unsigned long len,
+ 	return 0;
+ }
+ 
+-/* Sets info->hdr and info->len. */
+-static int copy_module_from_fd(int fd, struct load_info *info)
+-{
+-	struct fd f = fdget(fd);
+-	int err;
+-	struct kstat stat;
+-	loff_t pos;
+-	ssize_t bytes = 0;
+-
+-	if (!f.file)
+-		return -ENOEXEC;
+-
+-	err = security_kernel_module_from_file(f.file);
+-	if (err)
+-		goto out;
+-
+-	err = vfs_getattr(&f.file->f_path, &stat);
+-	if (err)
+-		goto out;
+-
+-	if (stat.size > INT_MAX) {
+-		err = -EFBIG;
+-		goto out;
+-	}
+-
+-	/* Don't hand 0 to vmalloc, it whines. */
+-	if (stat.size == 0) {
+-		err = -EINVAL;
+-		goto out;
+-	}
+-
+-	info->hdr = vmalloc(stat.size);
+-	if (!info->hdr) {
+-		err = -ENOMEM;
+-		goto out;
+-	}
+-
+-	pos = 0;
+-	while (pos < stat.size) {
+-		bytes = kernel_read(f.file, pos, (char *)(info->hdr) + pos,
+-				    stat.size - pos);
+-		if (bytes < 0) {
+-			vfree(info->hdr);
+-			err = bytes;
+-			goto out;
+-		}
+-		if (bytes == 0)
+-			break;
+-		pos += bytes;
+-	}
+-	info->len = pos;
+-
+-out:
+-	fdput(f);
+-	return err;
+-}
+-
+ static void free_copy(struct load_info *info)
+ {
+ 	vfree(info->hdr);
+@@ -3589,8 +3532,10 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
+ 
+ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+ {
+-	int err;
+ 	struct load_info info = { };
++	loff_t size;
++	void *hdr;
++	int err;
+ 
+ 	err = may_init_module();
+ 	if (err)
+@@ -3602,9 +3547,12 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+ 		      |MODULE_INIT_IGNORE_VERMAGIC))
+ 		return -EINVAL;
+ 
+-	err = copy_module_from_fd(fd, &info);
++	err = kernel_read_file_from_fd(fd, &hdr, &size, INT_MAX,
++				       READING_MODULE);
+ 	if (err)
+ 		return err;
++	info.hdr = hdr;
++	info.len = size;
+ 
+ 	return load_module(&info, uargs, flags);
+ }
 diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 4d0bdf1..b14c1c1 100644
+index 80c24aa..f6039f5 100644
 --- a/security/integrity/ima/ima_main.c
 +++ b/security/integrity/ima/ima_main.c
-@@ -344,6 +344,7 @@ static int read_idmap[READING_MAX_ID] = {
- 	[READING_MODULE] = MODULE_CHECK,
- 	[READING_KEXEC_IMAGE] = KEXEC_KERNEL_CHECK,
- 	[READING_KEXEC_INITRAMFS] = KEXEC_INITRAMFS_CHECK,
-+	[READING_POLICY] = POLICY_CHECK
- };
+@@ -316,28 +316,6 @@ int ima_file_check(struct file *file, int mask, int opened)
+ EXPORT_SYMBOL_GPL(ima_file_check);
  
  /**
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 5ccd3f5..77a9fee 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -114,6 +114,7 @@ static struct ima_rule_entry default_measurement_rules[] = {
- 	 .uid = GLOBAL_ROOT_UID, .flags = IMA_FUNC | IMA_INMASK | IMA_UID},
- 	{.action = MEASURE, .func = MODULE_CHECK, .flags = IMA_FUNC},
- 	{.action = MEASURE, .func = FIRMWARE_CHECK, .flags = IMA_FUNC},
-+	{.action = MEASURE, .func = POLICY_CHECK, .flags = IMA_FUNC},
- };
+- * ima_module_check - based on policy, collect/store/appraise measurement.
+- * @file: pointer to the file to be measured/appraised
+- *
+- * Measure/appraise kernel modules based on policy.
+- *
+- * On success return 0.  On integrity appraisal error, assuming the file
+- * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
+- */
+-int ima_module_check(struct file *file)
+-{
+-	if (!file) {
+-#ifndef CONFIG_MODULE_SIG_FORCE
+-		if ((ima_appraise & IMA_APPRAISE_MODULES) &&
+-		    (ima_appraise & IMA_APPRAISE_ENFORCE))
+-			return -EACCES;	/* INTEGRITY_UNKNOWN */
+-#endif
+-		return 0;	/* We rely on module signature checking */
+-	}
+-	return process_measurement(file, NULL, 0, MAY_EXEC, MODULE_CHECK, 0);
+-}
+-
+-/**
+  * ima_read_file - pre-measure/appraise hook decision based on policy
+  * @file: pointer to the file to be measured/appraised/audit
+  * @read_id: caller identifier
+@@ -350,6 +328,14 @@ int ima_module_check(struct file *file)
+  */
+ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
+ {
++	if (!file && read_id == READING_MODULE) {
++#ifndef CONFIG_MODULE_SIG_FORCE
++		if ((ima_appraise & IMA_APPRAISE_MODULES) &&
++		    (ima_appraise & IMA_APPRAISE_ENFORCE))
++			return -EACCES;	/* INTEGRITY_UNKNOWN */
++#endif
++		return 0;	/* We rely on module signature checking */
++	}
+ 	return 0;
+ }
  
- static struct ima_rule_entry default_appraise_rules[] = {
-@@ -618,6 +619,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 			else if (strcmp(args[0].from, "KEXEC_INITRAMFS_CHECK")
- 				 == 0)
- 				entry->func = KEXEC_INITRAMFS_CHECK;
-+			else if (strcmp(args[0].from, "POLICY_CHECK") == 0)
-+				entry->func = POLICY_CHECK;
- 			else
- 				result = -EINVAL;
- 			if (!result)
-@@ -776,6 +779,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 		temp_ima_appraise |= IMA_APPRAISE_MODULES;
- 	else if (entry->func == FIRMWARE_CHECK)
- 		temp_ima_appraise |= IMA_APPRAISE_FIRMWARE;
-+	else if (entry->func == POLICY_CHECK)
-+		temp_ima_appraise |= IMA_APPRAISE_POLICY;
- 	audit_log_format(ab, "res=%d", !result);
- 	audit_log_end(ab);
- 	return result;
-@@ -862,7 +867,8 @@ static char *mask_tokens[] = {
- enum {
- 	func_file = 0, func_mmap, func_bprm,
- 	func_module, func_firmware, func_post,
--	func_kexec_kernel, func_kexec_initramfs
-+	func_kexec_kernel, func_kexec_initramfs,
-+	func_policy
- };
+@@ -378,6 +364,9 @@ int ima_post_read_file(struct file *file, void *buf, loff_t size,
+ 		return 0;
+ 	}
  
- static char *func_tokens[] = {
-@@ -942,6 +948,9 @@ static void policy_func_show(struct seq_file *m, enum ima_hooks func)
- 	case KEXEC_INITRAMFS_CHECK:
- 		seq_printf(m, pt(Opt_func), ft(func_kexec_initramfs));
- 		break;
-+	case POLICY_CHECK:
-+		seq_printf(m, pt(Opt_func), ft(func_policy));
-+		break;
- 	default:
- 		snprintf(tbuf, sizeof(tbuf), "%d", func);
- 		seq_printf(m, pt(Opt_func), tbuf);
++	if (!file && read_id == READING_MODULE) /* MODULE_SIG_FORCE enabled */
++		return 0;
++
+ 	if (!file && (!buf || size == 0)) { /* should never happen */
+ 		if (ima_appraise & IMA_APPRAISE_ENFORCE)
+ 			return -EACCES;
+@@ -386,6 +375,8 @@ int ima_post_read_file(struct file *file, void *buf, loff_t size,
+ 
+ 	if (read_id == READING_FIRMWARE)
+ 		func = FIRMWARE_CHECK;
++	else if (read_id == READING_MODULE)
++		func = MODULE_CHECK;
+ 
+ 	return process_measurement(file, buf, size, MAY_READ, func, 0);
+ }
+diff --git a/security/security.c b/security/security.c
+index 1728fe2..3573c82 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -889,16 +889,6 @@ int security_kernel_module_request(char *kmod_name)
+ 	return call_int_hook(kernel_module_request, 0, kmod_name);
+ }
+ 
+-int security_kernel_module_from_file(struct file *file)
+-{
+-	int ret;
+-
+-	ret = call_int_hook(kernel_module_from_file, 0, file);
+-	if (ret)
+-		return ret;
+-	return ima_module_check(file);
+-}
+-
+ int security_kernel_read_file(struct file *file, enum kernel_read_file_id id)
+ {
+ 	int ret;
+@@ -1703,8 +1693,6 @@ struct security_hook_heads security_hook_heads = {
+ 		LIST_HEAD_INIT(security_hook_heads.kernel_create_files_as),
+ 	.kernel_module_request =
+ 		LIST_HEAD_INIT(security_hook_heads.kernel_module_request),
+-	.kernel_module_from_file =
+-		LIST_HEAD_INIT(security_hook_heads.kernel_module_from_file),
+ 	.kernel_read_file =
+ 		LIST_HEAD_INIT(security_hook_heads.kernel_read_file),
+ 	.kernel_post_read_file =
 -- 
 2.1.0
 
