@@ -1,24 +1,23 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from shadbolt.e.decadent.org.uk ([88.96.1.126]:44084 "EHLO
+Received: from shadbolt.e.decadent.org.uk ([88.96.1.126]:44040 "EHLO
 	shadbolt.e.decadent.org.uk" rhost-flags-OK-OK-OK-OK)
-	by vger.kernel.org with ESMTP id S1751579AbcDEAcm (ORCPT
+	by vger.kernel.org with ESMTP id S1751264AbcDEAQN (ORCPT
 	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 4 Apr 2016 20:32:42 -0400
-Date: Tue, 5 Apr 2016 01:32:38 +0100
+	Mon, 4 Apr 2016 20:16:13 -0400
+Date: Tue, 5 Apr 2016 01:16:11 +0100
 From: Ben Hutchings <ben@decadent.org.uk>
 To: linux-modules@vger.kernel.org
 Cc: 820010@bugs.debian.org
-Message-ID: <20160405003237.GK21187@decadent.org.uk>
+Message-ID: <20160405001611.GJ21187@decadent.org.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FK65GREB+Evh/hTL"
-In-Reply-To: <20160405001611.GJ21187@decadent.org.uk>
-Subject: [PATCH v2] libkmod: Add support for detached module signatures
+	protocol="application/pgp-signature"; boundary="7SAgGoIHugoKhRwh"
+Subject: [PATCH] libkmod: Add support for detached module signatures
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
 
---FK65GREB+Evh/hTL
+--7SAgGoIHugoKhRwh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -37,10 +36,8 @@ detached signatures (files with the '.sig' extension) at load time.
 
 Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
 ---
-v2: Fix syntax error in the xz case
-
-Missed this because I didn't realise the Debian package disables gzip
-and xz support.
+I should note that I have *not* tested this with gzip or xz
+compressed modules.
 
 Ben.
 
@@ -49,7 +46,7 @@ Ben.
  1 file changed, 103 insertions(+), 7 deletions(-)
 
 diff --git a/libkmod/libkmod-file.c b/libkmod/libkmod-file.c
-index 5eeba6a912a2..cb1da3c9e2ae 100644
+index 5eeba6a912a2..c30a9b92a3ac 100644
 --- a/libkmod/libkmod-file.c
 +++ b/libkmod/libkmod-file.c
 @@ -52,6 +52,7 @@ struct kmod_file {
@@ -110,7 +107,7 @@ index 5eeba6a912a2..cb1da3c9e2ae 100644
  		return -EINVAL;
  	}
  	ret =3D xz_uncompress(&strm, file);
-+	buf_size =3D file->size + strm.avail_out;
++	buf_size =3D file->size + strm->avail_out;
  	lzma_end(&strm);
 +
 +	if (!ret) {
@@ -249,26 +246,26 @@ x *ctx,
  		close(file->fd);
  	free(file);
 
---FK65GREB+Evh/hTL
+--7SAgGoIHugoKhRwh
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQIVAwUBVwMHpee/yOyVhhEJAQobug/9FlAGQxJB7kvgXQhaOsOvhDL63BIc5okM
-/uC8/Z68A6zlCpvUvYljclHhiGzZaCnOKVjI2u6XkFzkS5/RVnrfCcezlCTiHTI5
-Q57Fgzy/lqm7flETTLnfh/go7iHFWLkI29GCS6SbEFAF0xBw93Tk52lC8XR74sEa
-vqtPC1VGDGZirt75QTd7DLc8QqjW52klqAhcrNQUt46yd1iG3pxrnla55GwZLkqO
-6etU7ZJ6IB3KJSczgU4BhBSl5yPpApw4zZ+v34xL+EraloGQoccmVZ8gmr2kDOkG
-mGt07NcVxCQr5wPem//NaWi7icejn/nINB4j9G9AB39NpUo7YCvoztghSTVACB1P
-WGwvN6dRF7/6xbjgs+DOPHDXWi59dM/0vN5vxGhz9KaqmKxZCgZ4QvdLgSnzJmuZ
-+DwxTUZe46V6/XGQ8Wndn1Qspy3An4OwDPutZL9csG+1d7m3MXhoBb68NwThyzZB
-g+gV4sgmlZGobAaI01+fY1viCaZwuTJZKR0xwztfYi2pHoPihymFgsrXOv3vmwan
-ElpB9fTor37tSaAxaqgTKmFWszy00sfatMvyidgNHC8oG1nnhO2CGb/puOWuy/gK
-OUeAb8P2qH2Ye/5JVlAbXB2IGin6li6iV0QXQ3qQco8FVhEKWYNMmtSuhX6FMjpQ
-qfwwURPzPv0=
-=7LxB
+iQIVAwUBVwMDy+e/yOyVhhEJAQpndRAAn6oUEmdS6h+xEVZJM9Z97lL8sB7Yqy1o
+UhtlCT0kSrI1Pue/JCaXMcE4HN0OO/BdYXuvv8J2vTIhgZUYz3K7SqBJ2EeMQ4mv
+cXs7nH85amy+Yc+N6XM5ZvEIyBpvJylyahpMoBzeyGhCOV6h05T72JRPnaXcy3M6
+vvTA7CNXkn8PNYl5+XEPZep47JbfDsUSPaKaoBGPmWvNn0DiUcUF2wPlE6QKIbQn
+wiIw8kX8HMA8j60rn/VKKVRk4AaKkcvNGknLefx+WlmI9bzczwQkhQmvB08g0mrA
+32F6PNmoobXgyNTQMutJNJDYMFMBIMnn0iMWi6WIJOnkGdQrjWyu2cwp5M/SKppK
+4ndv5d5lpDf9FtUC9pmS1xFg1QSs1w4eQ6EFbbjQ7v0W3GXUFRUwGfT5CKYvHIH2
+u0gkPiUoYtM+SHSFSlLq91XJ4MV8z2nROux5a6FMcZXy0t/stz/ZubcyuJ81+I+q
+oLLT4F1OXPuVEmN5kGNA5OBlMEE6iByxh4EeIF/LWPDk6w+GlfCagxAH/J7M2Wkr
+tcIgoxp8wNcm5LSyJuFII52YFv+yL/k7QMNnspB2Mw3oKM0zD+Uxry6/7p+qvNGl
+2GFSJCSKP+UhrG8iBCEQeoQbJSluTFkEcyPZvWgk28PGIjgDECnRYP7W4MFp7VFd
+5lca80K+I2A=
+=A+pe
 -----END PGP SIGNATURE-----
 
---FK65GREB+Evh/hTL--
+--7SAgGoIHugoKhRwh--
