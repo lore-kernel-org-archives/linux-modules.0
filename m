@@ -1,103 +1,129 @@
-MIME-Version: 1.0
-In-Reply-To: <1459247226.25498.30.camel@v3.sk>
-References: <1456931893-13545-1-git-send-email-lkundrak@v3.sk>
-	<20160302155551.GA31679@bongo.bofh.it>
-	<1456934860.3200.4.camel@intel.com>
-	<1456936094.32064.40.camel@v3.sk>
-	<CAKi4VA+B7YOpVV5ogUqx4HuL2re=C7D+1aaB_VRjP0F9tUNF6g@mail.gmail.com>
-	<1459247226.25498.30.camel@v3.sk>
-Date: Wed, 13 Apr 2016 01:11:47 -0300
-Message-ID: <CAKi4VA+VAYZ8zPGG=0qR1yMQGLfwZD5qMO8kW4kHYoqJes6KVA@mail.gmail.com>
-Subject: Re: [PATCH] modprobe: install default configuration
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Lubomir Rintel <lkundrak@v3.sk>
-Cc: "De Marchi, Lucas" <lucas.demarchi@intel.com>, "md@Linux.IT" <md@linux.it>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Return-Path: <ben@decadent.org.uk>
+Message-ID: <1460541612.2705.32.camel@decadent.org.uk>
+Subject: Re: [PATCH v2] libkmod: Add support for detached module signatures
+From: Ben Hutchings <ben@decadent.org.uk>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>, 820010@bugs.debian.org,
+	Rusty Russell <rusty@rustcorp.com.au>
+Date: Wed, 13 Apr 2016 11:00:12 +0100
+In-Reply-To: <CAKi4VAK64gR8U2n6=fO8o9Y1m7bTJsmeDLQcpegjF+57=_e8VA@mail.gmail.com>
+References: <20160405001611.GJ21187@decadent.org.uk>
+	 <20160405003237.GK21187@decadent.org.uk>
+	 <CAKi4VAK64gR8U2n6=fO8o9Y1m7bTJsmeDLQcpegjF+57=_e8VA@mail.gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-V+gzpQYMN9VdXaJsCtJS"
+Mime-Version: 1.0
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Mar 29, 2016 at 7:27 AM, Lubomir Rintel <lkundrak@v3.sk> wrote:
-> On Fri, 2016-03-04 at 02:02 -0300, Lucas De Marchi wrote:
->> On Wed, Mar 2, 2016 at 1:28 PM, Lubomir Rintel <lkundrak@v3.sk>
->> wrote:
->> >
->> > On Wed, 2016-03-02 at 16:07 +0000, De Marchi, Lucas wrote:
->> > >
->> > > On Wed, 2016-03-02 at 16:55 +0100, Marco d'Itri wrote:
->> > > >
->> > > >
->> > > > On Mar 02, Lubomir Rintel <lkundrak@v3.sk> wrote:
->> > > >
->> > > > >
->> > > > >
->> > > > >
->> > > > > The kernel maintainers seem opposed to fixing this in kernel
->> > > > > (despite a similar
->> > > > > thing has been done with loop block devices) [1]. Let's fix
->> > > > > this
->> > > > > my
->> > > > > overriding the
->> > > > > defaults from userspace.
->> > > > Because, guess what? This breaks userspace.
->> > > > Feel free to configure your system this way if it is what you
->> > > > want.
->> > > More context: https://github.com/systemd/systemd/pull/2778
->> > >
->> > > Marco, could you be more specific on how this breaks userspace?
->> > > It
->> > > seems already pretty much broken to me. We can even argue if
->> > > people
->> > > wants the broken system back they can equally well configure
->> > > their
->> > > system to do that (even putting on /etc to override what was set
->> > > on
->> > > /usr/lib).
->> > >
->> > > The commit message doesn't reflect the feedback from kernel
->> > > maintainers
->> > > very well IMO.  Main argument there was the compile-time option
->> > > rather
->> > > than allowing it to be in runtime like this one.
->> > I thought that this part of feedback was a bit uninformed or there
->> > has
->> > been some misunderstanding (perhaps on my side). There already are
->> > options; the kernel patch just changed defaults for the options --
->> > not
->> > hardcoding the values or anything like that; just allowing to
->> > choose
->> > different defaults at compile time.
->> >
->> > The point was that if the user merely does "make oldconfig" to
->> > update
->> > his kernel configuration the behavior wouldn't change. Thus it
->> > would be
->> > safe for anyone to install an new kernel on an old distro even if
->> > they're relying on the ancient behavior.
->> >
->> > On the other hand, it would still allow for behavior change on
->> > distro
->> > upgrades. I'm assuming it's okay to do that -- far bigger changes
->> > regularly occur and users of exotic interfaces often end up
->> > adjusting
->> > their tooling on major upgrades.
->> I would say the better patch to the kernel would be to bite the
->> bullet
->> and change the default.
->> The default is bad as shown by your example and people complaining
->> about the behavior. With a patch to kmod we are acknowledging the
->> default is bad and changing it, just like we would be if the patch to
->> the kernel was applied (i.e. people wanting the old behavior back
->> would have to change the option in kernel cmdline or /etc/modprobe.d)
->>
->> Anyway, I don't oppose to applying it here, but I'll wait some more
->> days for people to chime in.
+
+--=-V+gzpQYMN9VdXaJsCtJS
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, 2016-04-13 at 01:05 -0300, Lucas De Marchi wrote:
+> Hi,
+>=20
+> CC'ing Rusty
+>=20
+> On Mon, Apr 4, 2016 at 9:32 PM, Ben Hutchings <ben@decadent.org.uk> wrote=
+:
+> >=20
+> > Debian will not sign modules during the kernel package build, as this
+> > conflicts with the goal of reproducible builds.=C2=A0=C2=A0Instead, we =
+will
+> > generate detached signatures offline and include them in a second
+> > package.
+> Is this a decision already? It doesn't look as a good reason - you
+> would already need to provide a signing key (CONFIG_MODULE_SIG_KEY)
+> anyway for this to work. How is leaving the module signature in
+> another package be any better than just signing the module?=C2=A0=C2=A0If=
+ you
+> have the signature, the build is just as reproducible as before.
+
+I think we may have different ideas about what reproducibility means.
+When I say reproducible I mean *anyone* with the right tools installed
+can reproduce the binary packages (.deb) from the source package (.dsc
+and tarballs).
+
+The signing key obviously isn't available to everyone, so the source
+package has to include detached signatures prepared outside of the
+package build process. =C2=A0But we can't put them in the linux source
+package, because that results in a dependency loop.
+
+> >=20
+> > We could attach the signatures when building this second package or at
+> > installation time, but that leads to duplication of all modules,
+> > either in the archive or on users' systems.
+> >=20
+> > To avoid this, add support to libkmod for concatenating modules with
+> > detached signatures (files with the '.sig' extension) at load time.
+> this has the drawback that finit_module() can't be used.
+
+So does module compression, but it's still a supported option.
+
+[...]
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Try to open a detached si=
+gnature.=C2=A0=C2=A0If it's missing, that's OK. */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (asprintf(&sig_filename, =
+"%s.sig", filename) < 0) {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0err =3D -errno;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0goto error;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0file->sig_fd =3D open(sig_fi=
+lename, O_RDONLY|O_CLOEXEC);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (file->sig_fd < 0 && errn=
+o !=3D ENOENT) {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0err =3D -errno;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0goto error;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> This can't really work if the module is being loaded uncompressed (I
+> think nowadays we can even add support for compressed modules...
+> Rusty, any input here?).
 >
-> Hi, I'm wondering if this could be moved forwards or needs some more
-> discussion/work?
+> When the module is being directly loaded, the direct flag gets set so
+> kmod_module_insert_module() knows it can try to use finit_module().
+> Since you have an external signature what would happen is that we
+> would load the signature, but try to load the module in the kernel
+> without it.
 
-Maybe getting an ack from kernel people involved since we still got no
-feedback. Unfortunately our archives vanished and would be hard to
-point them to the whole thread. Do you want to CC them here?
+It does work. =C2=A0I changed load_reg() to disable direct loading.when
+there's a detached signature.
 
+Ben.
 
-Lucas De Marchi
+> I'm still not convinced the split module + signature is actually a good t=
+hing.
+>=20
+>=20
+> Lucas De Marchi
+--=20
+Ben Hutchings
+It is easier to change the specification to fit the program than vice versa=
+.
+--=-V+gzpQYMN9VdXaJsCtJS
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAABCgAGBQJXDhisAAoJEOe/yOyVhhEJbjwQALsp1KxDdOYHq0kvNSfiDrVH
+VuzMtyvGd3N/4nSf57oBrjs7ympLJx04jXc8fguAJCoXm2eUQutnkWPbXwdsJhSp
+hJt/mFpfE2TD7mlJ60n1w5vpREAoBm299OW6CdSQoiIfcUeqp0cfqnk4MxDrtZPC
+JQXSV8Ler/pSVMtarhBKWzuLBDnquD2lodDOSHOa3nxNWLkjx0KujxhhaFgmAwDT
+Nayi+W3/YxgTIU4lAmXbDgcL53yeXfE0YUH/PEBzfQunNqv/ydimdzSAriTLMm5H
+mL3zYMvJEBK0ZiBo6DOgicfsFFw6g+P6ME8S4UFZKWUzNwZn0P7VIPr16cOnNplK
+xnBMdXTzdosgwstjC1bwWzM9BV/uYfnK+QrToBfM08Op0cWe7mAWwZAHfr+EkSHW
+dCGI3+9t6a2LHvt/mHox9WjXU5Ckcl7SHlSxXKu4ZSKaXY3drxqOtDiLBkFlBwpI
+lfd/30Pqp/LHFNlKXBhVhVDdGjci8L6ONp0CAi+C8AoCwF3W0bXwPzGTF0Xns65z
+WtfKhG0eflBAdBEijaFcZd3AvSdz0K1miQ8VXK2m/OJajJX/nD+Xu/txL108OBIv
+MxbnK/M6Cgy4j0Yvpao/Ki+vUPZtJB3u9mOLAa7eMeXIN5y6KgPTk9vQnwSPIXvv
+tyPsFvvNIeNuhidCg1Oo
+=U55H
+-----END PGP SIGNATURE-----
+
+--=-V+gzpQYMN9VdXaJsCtJS--
