@@ -1,81 +1,134 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from shell.v3.sk ([92.60.52.57]:51896 "EHLO shell.v3.sk"
-	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1753360AbcCBPZ5 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Wed, 2 Mar 2016 10:25:57 -0500
+Return-Path: <lkundrak@v3.sk>
+Message-ID: <1461435512.8450.29.camel@v3.sk>
+Subject: Re: [PATCH] modprobe: install default configuration
 From: Lubomir Rintel <lkundrak@v3.sk>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: linux-modules@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH] modprobe: install default configuration
-Date: Wed,  2 Mar 2016 16:18:13 +0100
-Message-Id: <1456931893-13545-1-git-send-email-lkundrak@v3.sk>
-Sender: owner-linux-modules@vger.kernel.org
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: "De Marchi, Lucas" <lucas.demarchi@intel.com>, "md@Linux.IT"
+ <md@linux.it>,  "linux-modules@vger.kernel.org"
+ <linux-modules@vger.kernel.org>
+Date: Sat, 23 Apr 2016 20:18:32 +0200
+In-Reply-To: <CAKi4VA+VAYZ8zPGG=0qR1yMQGLfwZD5qMO8kW4kHYoqJes6KVA@mail.gmail.com>
+References: <1456931893-13545-1-git-send-email-lkundrak@v3.sk>
+	 <20160302155551.GA31679@bongo.bofh.it> <1456934860.3200.4.camel@intel.com>
+	 <1456936094.32064.40.camel@v3.sk>
+	 <CAKi4VA+B7YOpVV5ogUqx4HuL2re=C7D+1aaB_VRjP0F9tUNF6g@mail.gmail.com>
+	 <1459247226.25498.30.camel@v3.sk>
+	 <CAKi4VA+VAYZ8zPGG=0qR1yMQGLfwZD5qMO8kW4kHYoqJes6KVA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 List-ID: <linux-modules.vger.kernel.org>
 
-Some network devices have an awful habit of creating interfaces when loaded,
-despite not asked for. Worse even, they do so while being autoloaded due to an
-attempt to create a device via netlink:
+On Wed, 2016-04-13 at 01:11 -0300, Lucas De Marchi wrote:
+> On Tue, Mar 29, 2016 at 7:27 AM, Lubomir Rintel <lkundrak@v3.sk>
+> wrote:
+> >=20
+> > On Fri, 2016-03-04 at 02:02 -0300, Lucas De Marchi wrote:
+> > >=20
+> > > On Wed, Mar 2, 2016 at 1:28 PM, Lubomir Rintel <lkundrak@v3.sk>
+> > > wrote:
+> > > >=20
+> > > >=20
+> > > > On Wed, 2016-03-02 at 16:07 +0000, De Marchi, Lucas wrote:
+> > > > >=20
+> > > > >=20
+> > > > > On Wed, 2016-03-02 at 16:55 +0100, Marco d'Itri wrote:
+> > > > > >=20
+> > > > > >=20
+> > > > > >=20
+> > > > > > On Mar 02, Lubomir Rintel <lkundrak@v3.sk> wrote:
+> > > > > >=20
+> > > > > > >=20
+> > > > > > >=20
+> > > > > > >=20
+> > > > > > >=20
+> > > > > > > The kernel maintainers seem opposed to fixing this in
+> > > > > > > kernel
+> > > > > > > (despite a similar
+> > > > > > > thing has been done with loop block devices) [1]. Let's
+> > > > > > > fix
+> > > > > > > this
+> > > > > > > my
+> > > > > > > overriding the
+> > > > > > > defaults from userspace.
+> > > > > > Because, guess what? This breaks userspace.
+> > > > > > Feel free to configure your system this way if it is what
+> > > > > > you
+> > > > > > want.
+> > > > > More context: https://github.com/systemd/systemd/pull/2778
+> > > > >=20
+> > > > > Marco, could you be more specific on how this breaks
+> > > > > userspace?
+> > > > > It
+> > > > > seems already pretty much broken to me. We can even argue if
+> > > > > people
+> > > > > wants the broken system back they can equally well configure
+> > > > > their
+> > > > > system to do that (even putting on /etc to override what was
+> > > > > set
+> > > > > on
+> > > > > /usr/lib).
+> > > > >=20
+> > > > > The commit message doesn't reflect the feedback from kernel
+> > > > > maintainers
+> > > > > very well IMO.=C2=A0=C2=A0Main argument there was the compile-t=
+ime
+> > > > > option
+> > > > > rather
+> > > > > than allowing it to be in runtime like this one.
+> > > > I thought that this part of feedback was a bit uninformed or
+> > > > there
+> > > > has
+> > > > been some misunderstanding (perhaps on my side). There already
+> > > > are
+> > > > options; the kernel patch just changed defaults for the options
+> > > > --
+> > > > not
+> > > > hardcoding the values or anything like that; just allowing to
+> > > > choose
+> > > > different defaults at compile time.
+> > > >=20
+> > > > The point was that if the user merely does "make oldconfig" to
+> > > > update
+> > > > his kernel configuration the behavior wouldn't change. Thus it
+> > > > would be
+> > > > safe for anyone to install an new kernel on an old distro even
+> > > > if
+> > > > they're relying on the ancient behavior.
+> > > >=20
+> > > > On the other hand, it would still allow for behavior change on
+> > > > distro
+> > > > upgrades. I'm assuming it's okay to do that -- far bigger
+> > > > changes
+> > > > regularly occur and users of exotic interfaces often end up
+> > > > adjusting
+> > > > their tooling on major upgrades.
+> > > I would say the better patch to the kernel would be to bite the
+> > > bullet
+> > > and change the default.
+> > > The default is bad as shown by your example and people
+> > > complaining
+> > > about the behavior. With a patch to kmod we are acknowledging the
+> > > default is bad and changing it, just like we would be if the
+> > > patch to
+> > > the kernel was applied (i.e. people wanting the old behavior back
+> > > would have to change the option in kernel cmdline or
+> > > /etc/modprobe.d)
+> > >=20
+> > > Anyway, I don't oppose to applying it here, but I'll wait some
+> > > more
+> > > days for people to chime in.
+> > Hi, I'm wondering if this could be moved forwards or needs some
+> > more
+> > discussion/work?
+> Maybe getting an ack from kernel people involved since we still got
+> no
+> feedback. Unfortunately our archives vanished and would be hard to
+> point them to the whole thread. Do you want to CC them here?
 
-  # rmmod dummy
-  # ip link add dummy0 type dummy
-  RTNETLINK answers: File exists
+Sorry for the late reply; I'm not sure whom to include; you probably
+have a better idea. Please feel free to CC whoever might be interested
+in providing feedback to this.
 
-The kernel maintainers seem opposed to fixing this in kernel (despite a similar
-thing has been done with loop block devices) [1]. Let's fix this my overriding the
-defaults from userspace.
+> Lucas De Marchi
 
-[1] http://comments.gmane.org/gmane.linux.kernel/2124714
----
- Makefile.am                |  4 ++++
- modprobe.d/50-default.conf | 24 ++++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
- create mode 100644 modprobe.d/50-default.conf
-
-diff --git a/Makefile.am b/Makefile.am
-index 2d9f2cf..9f89485 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -103,6 +103,10 @@ bashcompletiondir=@bashcompletiondir@
- dist_bashcompletion_DATA = \
- 	shell-completion/bash/kmod
- 
-+modprobeddir=$(prefix)/lib/modprobe.d
-+dist_modprobed_DATA = \
-+	modprobe.d/50-default.conf
-+
- install-exec-hook:
- 	if test "$(libdir)" != "$(rootlibdir)"; then \
- 		$(MKDIR_P) $(DESTDIR)$(rootlibdir) && \
-diff --git a/modprobe.d/50-default.conf b/modprobe.d/50-default.conf
-new file mode 100644
-index 0000000..70d21f2
---- /dev/null
-+++ b/modprobe.d/50-default.conf
-@@ -0,0 +1,24 @@
-+# default module parameters
-+#
-+# This file is part of kmod.
-+#
-+# Copyright 2016 Lubomir Rintel
-+#
-+# This program is free software; you can redistribute it and/or modify it
-+# under the terms of the GNU Lesser General Public License as published by
-+# the Free Software Foundation; either version 2.1 of the License, or
-+# (at your option) any later version.
-+#
-+# This program is distributed in the hope that it will be useful, but
-+# WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+# General Public License for more details.
-+#
-+# You should have received a copy of the GNU Lesser General Public License
-+# along with this program; if not, see <http://www.gnu.org/licenses/>.
-+
-+# See modprobe.d(5) for the description of the files in this directory,
-+
-+options bonding max_bonds=0
-+options dummy numdummies=0
-+options ifb numifbs=0
--- 
-2.5.0
-
+Lubo
