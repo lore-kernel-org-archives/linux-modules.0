@@ -1,271 +1,35 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from shadbolt.e.decadent.org.uk ([88.96.1.126]:44040 "EHLO
-	shadbolt.e.decadent.org.uk" rhost-flags-OK-OK-OK-OK)
-	by vger.kernel.org with ESMTP id S1751264AbcDEAQN (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 4 Apr 2016 20:16:13 -0400
-Date: Tue, 5 Apr 2016 01:16:11 +0100
-From: Ben Hutchings <ben@decadent.org.uk>
-To: linux-modules@vger.kernel.org
-Cc: 820010@bugs.debian.org
-Message-ID: <20160405001611.GJ21187@decadent.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7SAgGoIHugoKhRwh"
-Subject: [PATCH] libkmod: Add support for detached module signatures
-Sender: owner-linux-modules@vger.kernel.org
+In-Reply-To: <1463829319-1668-1-git-send-email-peter@lekensteyn.nl>
+References: <1463829319-1668-1-git-send-email-peter@lekensteyn.nl>
+Date: Sat, 21 May 2016 14:28:49 -0300
+Message-ID: <CAKi4VA+CtjX-hY_2LPwh4A8y1pFU2mnk3ziRvD25HSaXVJF35w@mail.gmail.com>
+Subject: Re: [PATCH] kmod_module_get_refcnt: fix documentation
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Peter Wu <peter@lekensteyn.nl>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
+On Sat, May 21, 2016 at 8:15 AM, Peter Wu <peter@lekensteyn.nl> wrote:
+> ---
+>  libkmod/libkmod-module.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+> index 50b2ff9..1460c67 100644
+> --- a/libkmod/libkmod-module.c
+> +++ b/libkmod/libkmod-module.c
+> @@ -1863,7 +1863,7 @@ done:
+>   * Get the ref count of this @mod, as returned by Linux Kernel, by reading
+>   * /sys filesystem.
+>   *
+> - * Returns: 0 on success or < 0 on failure.
+> + * Returns: the reference count on success or < 0 on failure.
+>   */
+>  KMOD_EXPORT int kmod_module_get_refcnt(const struct kmod_module *mod)
+>  {
+> --
 
---7SAgGoIHugoKhRwh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks.
 
-Debian will not sign modules during the kernel package build, as this
-conflicts with the goal of reproducible builds.  Instead, we will
-generate detached signatures offline and include them in a second
-package.
-
-We could attach the signatures when building this second package or at
-installation time, but that leads to duplication of all modules,
-either in the archive or on users' systems.
-
-To avoid this, add support to libkmod for concatenating modules with
-detached signatures (files with the '.sig' extension) at load time.
-
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
----
-I should note that I have *not* tested this with gzip or xz
-compressed modules.
-
-Ben.
-
- libkmod/libkmod-file.c | 110 +++++++++++++++++++++++++++++++++++++++++++++=
-----
- 1 file changed, 103 insertions(+), 7 deletions(-)
-
-diff --git a/libkmod/libkmod-file.c b/libkmod/libkmod-file.c
-index 5eeba6a912a2..c30a9b92a3ac 100644
---- a/libkmod/libkmod-file.c
-+++ b/libkmod/libkmod-file.c
-@@ -52,6 +52,7 @@ struct kmod_file {
- 	gzFile gzf;
- #endif
- 	int fd;
-+	int sig_fd;
- 	bool direct;
- 	off_t size;
- 	void *memory;
-@@ -60,6 +61,37 @@ struct kmod_file {
- 	struct kmod_elf *elf;
- };
-=20
-+static int append_detached_sig(struct kmod_file *file, size_t buf_size)
-+{
-+	struct stat st;
-+	ssize_t read_size;
-+
-+	if (file->sig_fd < 0)
-+		return 0;
-+
-+	if (fstat(file->sig_fd, &st) < 0)
-+		return -errno;
-+
-+	/* Grow the buffer if necessary */
-+	if ((size_t)st.st_size > buf_size - file->size) {
-+		void *tmp =3D realloc(file->memory, file->size + st.st_size);
-+		if (tmp =3D=3D NULL)
-+			return -errno;
-+		file->memory =3D tmp;
-+	}
-+
-+	read_size =3D read(file->sig_fd, (char *)file->memory + file->size,
-+			 st.st_size);
-+	if (read_size < 0)
-+		return -errno;
-+	if (read_size !=3D st.st_size)
-+		return -EINVAL;
-+
-+	file->size +=3D read_size;
-+
-+	return 0;
-+}
-+
- #ifdef ENABLE_XZ
- static void xz_uncompress_belch(struct kmod_file *file, lzma_ret ret)
- {
-@@ -144,6 +176,7 @@ static int load_xz(struct kmod_file *file)
- {
- 	lzma_stream strm =3D LZMA_STREAM_INIT;
- 	lzma_ret lzret;
-+	size_t buf_size;
- 	int ret;
-=20
- 	lzret =3D lzma_stream_decoder(&strm, UINT64_MAX, LZMA_CONCATENATED);
-@@ -155,7 +188,14 @@ static int load_xz(struct kmod_file *file)
- 		return -EINVAL;
- 	}
- 	ret =3D xz_uncompress(&strm, file);
-+	buf_size =3D file->size + strm->avail_out;
- 	lzma_end(&strm);
-+
-+	if (!ret) {
-+		ret =3D append_detached_sig(file, buf_size);
-+		if (ret)
-+			free(file->memory);
-+	}
- 	return ret;
- }
-=20
-@@ -214,6 +254,11 @@ static int load_zlib(struct kmod_file *file)
-=20
- 	file->memory =3D p;
- 	file->size =3D did;
-+
-+	err =3D append_detached_sig(file, total);
-+	if (err)
-+		goto error;
-+
- 	p =3D NULL;
- 	return 0;
-=20
-@@ -254,18 +299,50 @@ static int load_reg(struct kmod_file *file)
- 	if (fstat(file->fd, &st) < 0)
- 		return -errno;
-=20
--	file->size =3D st.st_size;
--	file->memory =3D mmap(NULL, file->size, PROT_READ, MAP_PRIVATE,
--			    file->fd, 0);
--	if (file->memory =3D=3D MAP_FAILED)
--		return -errno;
--	file->direct =3D true;
-+	if (file->sig_fd < 0) {
-+		file->size =3D st.st_size;
-+		file->memory =3D mmap(NULL, file->size, PROT_READ, MAP_PRIVATE,
-+				    file->fd, 0);
-+		if (file->memory =3D=3D MAP_FAILED)
-+			return -errno;
-+		file->direct =3D true;
-+	} else {
-+		size_t plain_size =3D st.st_size, sig_size;
-+		_cleanup_free_ unsigned char *p =3D NULL;
-+		ssize_t ret;
-+
-+		if (fstat(file->sig_fd, &st) < 0)
-+			return -errno;
-+		sig_size =3D st.st_size;
-+
-+		p =3D malloc(plain_size + sig_size);
-+		if (!p)
-+			return -errno;
-+
-+		ret =3D read(file->fd, p, plain_size);
-+		if (ret < 0)
-+			return -errno;
-+		if ((size_t)ret !=3D plain_size)
-+			return -EINVAL;
-+		file->memory =3D p;
-+		file->size =3D plain_size;
-+
-+		ret =3D append_detached_sig(file, plain_size + sig_size);
-+		if (ret)
-+			return ret;
-+
-+		p =3D NULL;
-+	}
-+
- 	return 0;
- }
-=20
- static void unload_reg(struct kmod_file *file)
- {
--	munmap(file->memory, file->size);
-+	if (file->direct)
-+		munmap(file->memory, file->size);
-+	else
-+		free(file->memory);
- }
-=20
- static const struct file_ops reg_ops =3D {
-@@ -285,6 +362,7 @@ struct kmod_file *kmod_file_open(const struct kmod_ctx =
-*ctx,
- 						const char *filename)
- {
- 	struct kmod_file *file =3D calloc(1, sizeof(struct kmod_file));
-+	char *sig_filename =3D NULL;
- 	const struct comp_type *itr;
- 	size_t magic_size_max =3D 0;
- 	int err;
-@@ -292,12 +370,25 @@ struct kmod_file *kmod_file_open(const struct kmod_ct=
-x *ctx,
- 	if (file =3D=3D NULL)
- 		return NULL;
-=20
-+	file->sig_fd =3D -1;
-+
- 	file->fd =3D open(filename, O_RDONLY|O_CLOEXEC);
- 	if (file->fd < 0) {
- 		err =3D -errno;
- 		goto error;
- 	}
-=20
-+	/* Try to open a detached signature.  If it's missing, that's OK. */
-+	if (asprintf(&sig_filename, "%s.sig", filename) < 0) {
-+		err =3D -errno;
-+		goto error;
-+	}
-+	file->sig_fd =3D open(sig_filename, O_RDONLY|O_CLOEXEC);
-+	if (file->sig_fd < 0 && errno !=3D ENOENT) {
-+		err =3D -errno;
-+		goto error;
-+	}
-+
- 	for (itr =3D comp_types; itr->ops.load !=3D NULL; itr++) {
- 		if (magic_size_max < itr->magic_size)
- 			magic_size_max =3D itr->magic_size;
-@@ -336,7 +427,10 @@ struct kmod_file *kmod_file_open(const struct kmod_ctx=
- *ctx,
- 	err =3D file->ops->load(file);
- 	file->ctx =3D ctx;
- error:
-+	free(sig_filename);
- 	if (err < 0) {
-+		if (file->sig_fd >=3D 0)
-+			close(file->sig_fd);
- 		if (file->fd >=3D 0)
- 			close(file->fd);
- 		free(file);
-@@ -373,6 +467,8 @@ void kmod_file_unref(struct kmod_file *file)
- 		kmod_elf_unref(file->elf);
-=20
- 	file->ops->unload(file);
-+	if (file->sig_fd >=3D 0)
-+		close(file->sig_fd);
- 	if (file->fd >=3D 0)
- 		close(file->fd);
- 	free(file);
-
---7SAgGoIHugoKhRwh
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIVAwUBVwMDy+e/yOyVhhEJAQpndRAAn6oUEmdS6h+xEVZJM9Z97lL8sB7Yqy1o
-UhtlCT0kSrI1Pue/JCaXMcE4HN0OO/BdYXuvv8J2vTIhgZUYz3K7SqBJ2EeMQ4mv
-cXs7nH85amy+Yc+N6XM5ZvEIyBpvJylyahpMoBzeyGhCOV6h05T72JRPnaXcy3M6
-vvTA7CNXkn8PNYl5+XEPZep47JbfDsUSPaKaoBGPmWvNn0DiUcUF2wPlE6QKIbQn
-wiIw8kX8HMA8j60rn/VKKVRk4AaKkcvNGknLefx+WlmI9bzczwQkhQmvB08g0mrA
-32F6PNmoobXgyNTQMutJNJDYMFMBIMnn0iMWi6WIJOnkGdQrjWyu2cwp5M/SKppK
-4ndv5d5lpDf9FtUC9pmS1xFg1QSs1w4eQ6EFbbjQ7v0W3GXUFRUwGfT5CKYvHIH2
-u0gkPiUoYtM+SHSFSlLq91XJ4MV8z2nROux5a6FMcZXy0t/stz/ZubcyuJ81+I+q
-oLLT4F1OXPuVEmN5kGNA5OBlMEE6iByxh4EeIF/LWPDk6w+GlfCagxAH/J7M2Wkr
-tcIgoxp8wNcm5LSyJuFII52YFv+yL/k7QMNnspB2Mw3oKM0zD+Uxry6/7p+qvNGl
-2GFSJCSKP+UhrG8iBCEQeoQbJSluTFkEcyPZvWgk28PGIjgDECnRYP7W4MFp7VFd
-5lca80K+I2A=
-=A+pe
------END PGP SIGNATURE-----
-
---7SAgGoIHugoKhRwh--
+Lucas De Marchi
