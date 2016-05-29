@@ -1,46 +1,59 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57982 "EHLO
-	bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-	with ESMTP id S1753292AbcEBOjI (ORCPT
-	<rfc822;linux-modules@vger.kernel.org>);
-	Mon, 2 May 2016 10:39:08 -0400
-From: hector.oron@gmail.com
-To: linux-modules@vger.kernel.org
-Cc: =?UTF-8?q?H=C3=A9ctor=20Or=C3=B3n=20Mart=C3=ADnez?=
-	<hector.oron@gmail.com>
-Subject: [PATCH] kmod: compiling with old sed version (!ERE support)
-Date: Mon,  2 May 2016 16:38:24 +0200
-Message-Id: <1462199904-797-1-git-send-email-hector.oron@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Sender: owner-linux-modules@vger.kernel.org
+Return-Path: <ben@decadent.org.uk>
+Message-ID: <1464526136.2762.84.camel@decadent.org.uk>
+Subject: Re: [PATCH v2] libkmod: Add support for detached module signatures
+From: Ben Hutchings <ben@decadent.org.uk>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>,
+	820010-done@bugs.debian.org, Rusty Russell <rusty@rustcorp.com.au>
+Date: Sun, 29 May 2016 13:48:56 +0100
+In-Reply-To: <1463857278.2613.7.camel@decadent.org.uk>
+References: <20160405001611.GJ21187@decadent.org.uk>	
+	 <20160405003237.GK21187@decadent.org.uk>	
+	 <CAKi4VAK64gR8U2n6=fO8o9Y1m7bTJsmeDLQcpegjF+57=_e8VA@mail.gmail.com>	
+	 <1460541612.2705.32.camel@decadent.org.uk>	
+	 <CAKi4VAKQecNsdVUXV0dR8_0GTKBirZq8NR7b32xMY+ar3Dn4Uw@mail.gmail.com>
+	 <1463857278.2613.7.camel@decadent.org.uk>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-G/6zEjbSxIZnSpRqYlyQ"
+Mime-Version: 1.0
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Héctor Orón Martínez <hector.oron@gmail.com>
 
-  Makefile.am uses `sed -E', which it is found on BSD sed; however a
-  replacement on GNU sed would be `sed -r'. Both intend to use extended
-  regular expressions (ERE). However I have a system that does not support
-  those, in benefit for portability could you consider replacing ERE by BRE.
+--=-G/6zEjbSxIZnSpRqYlyQ
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Héctor Orón Martínez <hector.oron@gmail.com>
----
- Makefile.am | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm withdrawing this patch for reasons explained in
+http://lists.debian.org/1464525520.2762.80.camel@decadent.org.uk
 
-diff --git a/Makefile.am b/Makefile.am
-index 2d9f2cf..8813475 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -107,7 +107,7 @@ install-exec-hook:
- 	if test "$(libdir)" != "$(rootlibdir)"; then \
- 		$(MKDIR_P) $(DESTDIR)$(rootlibdir) && \
- 		so_img_name=$$(readlink $(DESTDIR)$(libdir)/libkmod.so) && \
--		so_img_rel_target_prefix=$$(echo $(libdir) | sed -E 's,(^/|)[^/][^/]*,..,g') && \
-+		so_img_rel_target_prefix=$$(echo $(libdir) | sed 's,\(^/\|\)[^/][^/]*,..,g') && \
- 		ln -sf $$so_img_rel_target_prefix$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/libkmod.so && \
- 		mv $(DESTDIR)$(libdir)/libkmod.so.* $(DESTDIR)$(rootlibdir); \
- 	fi
--- 
-2.8.0.rc3
+Ben.
 
+--
+Ben Hutchings
+Editing code like this is akin to sticking plasters on the bleeding
+stump
+of a severed limb. - me, 29 June 1999
+
+--=-G/6zEjbSxIZnSpRqYlyQ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAABCgAGBQJXSuU4AAoJEOe/yOyVhhEJVukP+wZZLJB9oc03LDBGyFPy6oXW
+iQmkoQxnKbrnpMW7orZeUJ1qPKJfd+h5kL1VmuuaVQIE3yyW/OeC533jw8AniWL9
+xxQw2f5gXLbC0bk4G+tIdGv2HLp57eww4Ea1/vTLylWHy/GUQrwkzvGVWYe/O0KJ
+KguJsz32nVxnpOj7MsY5ytHQ74H12fSnGo0kFPWID7ALDZuMkTqXDhmonybhWiJG
+xxhyXo5dgP+cUg2mv4bCKj+cx9+uwIqnYM4RAosAZxPu/TsXffUrUJmfdSoNwtet
+SmZMGib3GdK6MUE/jrB1NcWakGCcG94IYuPdI1NfhE1MGv7FFMbTzq8pLkYhTjmD
+sPIy5HM1cvWTYqcGAveYoly639Pv2YA46lOrn/Hx+hVlEGRzz3rHFkwF0CpZoyb7
++cZXvkNTv3umqT0teafHYqgARURnkddFCZGOUpYCBz588nuq5ulUKmU9rSj+J03e
+FvL5jiOCSpOELVsKnd+x/XX2HovEg/QpHOa6wm2UthUsONUZd+DOVdAgPH6Et1sa
+ELuFhOdiPftZDDXchBfpUSVMJy8icdVrAtr4qK1L3fXn+S9olQ31c20H89eOyqH3
+Wt//iqrtCTFf2+EI7ixNumAgxIjFCCr1QaAw8eu6G2M5ECsG/9+VfZt8sJe8pqD4
+Io4WZwsJ4BwtRsOSu+2/
+=cCF+
+-----END PGP SIGNATURE-----
+
+--=-G/6zEjbSxIZnSpRqYlyQ--
