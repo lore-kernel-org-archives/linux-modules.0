@@ -1,51 +1,69 @@
-MIME-Version: 1.0
-In-Reply-To: <1464526136.2762.84.camel@decadent.org.uk>
-References: <20160405001611.GJ21187@decadent.org.uk>
-	<20160405003237.GK21187@decadent.org.uk>
-	<CAKi4VAK64gR8U2n6=fO8o9Y1m7bTJsmeDLQcpegjF+57=_e8VA@mail.gmail.com>
-	<1460541612.2705.32.camel@decadent.org.uk>
-	<CAKi4VAKQecNsdVUXV0dR8_0GTKBirZq8NR7b32xMY+ar3Dn4Uw@mail.gmail.com>
-	<1463857278.2613.7.camel@decadent.org.uk>
-	<1464526136.2762.84.camel@decadent.org.uk>
-Date: Sat, 4 Jun 2016 11:13:04 -0300
-Message-ID: <CAKi4VAK-qtLHxwRd8gp78FNU9D9V2crfzxT+8-nGD20_ir8NSA@mail.gmail.com>
-Subject: Re: [PATCH v2] libkmod: Add support for detached module signatures
+Return-Path: <lucas.de.marchi@gmail.com>
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Ben Hutchings <ben@decadent.org.uk>
-Cc: linux-modules <linux-modules@vger.kernel.org>, 820010-done@bugs.debian.org,
-	Rusty Russell <rusty@rustcorp.com.au>
-Content-Type: text/plain; charset=UTF-8
+To: linux-modules@vger.kernel.org
+Cc: Michal Marek <mmarek@suse.cz>,
+	Wouter van Kesteren <woutershep@gmail.com>,
+	Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: [PATCH 1/3] libkmod-module: do not crash modinfo on 0 key id len
+Date: Sun,  5 Jun 2016 00:13:47 -0300
+Message-Id: <1465096429-14024-1-git-send-email-lucas.de.marchi@gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, May 29, 2016 at 9:48 AM, Ben Hutchings <ben@decadent.org.uk> wrote:
-> I'm withdrawing this patch for reasons explained in
-> http://lists.debian.org/1464525520.2762.80.camel@decadent.org.uk
+From: Lucas De Marchi <lucas.demarchi@intel.com>
 
-quoting some parts:
+---
+ libkmod/libkmod-module.c | 38 +++++++++++++++++++++++---------------
+ 1 file changed, 23 insertions(+), 15 deletions(-)
 
-> This is blocked on upstream acceptance in kmod, and it's not clear
-> whether that's ever going to happen."
-
-I'm more against the impact of how this is implemented, not against
-the idea of reproducible builds you are pursuing. From the points you
-raised there:
-
-
-> 1. Attach module signatures at installation time, in a subdirectory.
->    Change kmod to prefer this subdirectory (this is purely a
->    configuration change).  It would also be possible to check during
->    installation that signatures match the installed unsigned modules,
->    and if not then abort and leave any older signed modules in place.
-
-Yep, this is a mere change to depmod.d config files.
-
-> 2. Attach module signatures at package build time, making the
->    linux-image-signed packages provide/conflict/replace the
->    corresponding linux-image packages.  For architectures with
->    signed modules, udebs would be built from linux-signed and not
->    from linux.
-
-very reasonable, too.
-
-
-Lucas De Marchi
+diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+index 1460c67..a19e8bc 100644
+--- a/libkmod/libkmod-module.c
++++ b/libkmod/libkmod-module.c
+@@ -2253,22 +2253,30 @@ KMOD_EXPORT int kmod_module_get_info(const struct kmod_module *mod, struct kmod_
+ 			goto list_error;
+ 		count++;
+ 
+-		/* Display the key id as 01:12:DE:AD:BE:EF:... */
+-		key_hex = malloc(sig_info.key_id_len * 3);
+-		if (key_hex == NULL)
+-			goto list_error;
+-		for (i = 0; i < (int)sig_info.key_id_len; i++) {
+-			sprintf(key_hex + i * 3, "%02X",
+-					(unsigned char)sig_info.key_id[i]);
+-			if (i < (int)sig_info.key_id_len - 1)
+-				key_hex[i * 3 + 2] = ':';
++		if (sig_info.key_id_len) {
++			/* Display the key id as 01:12:DE:AD:BE:EF:... */
++			key_hex = malloc(sig_info.key_id_len * 3);
++			if (key_hex == NULL)
++				goto list_error;
++			for (i = 0; i < (int)sig_info.key_id_len; i++) {
++				sprintf(key_hex + i * 3, "%02X",
++						(unsigned char)sig_info.key_id[i]);
++				if (i < (int)sig_info.key_id_len - 1)
++					key_hex[i * 3 + 2] = ':';
++			}
++			n = kmod_module_info_append(list, "sig_key", strlen("sig_key"),
++					key_hex, sig_info.key_id_len * 3 - 1);
++			free(key_hex);
++			if (n == NULL)
++				goto list_error;
++			count++;
++		} else {
++			n = kmod_module_info_append(list, "sig_key", strlen("sig_key"),
++					NULL, 0);
++			if (n == NULL)
++				goto list_error;
++			count++;
+ 		}
+-		n = kmod_module_info_append(list, "sig_key", strlen("sig_key"),
+-				key_hex, sig_info.key_id_len * 3 - 1);
+-		free(key_hex);
+-		if (n == NULL)
+-			goto list_error;
+-		count++;
+ 
+ 		n = kmod_module_info_append(list,
+ 				"sig_hashalgo", strlen("sig_hashalgo"),
+-- 
+2.5.5
