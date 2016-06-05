@@ -1,36 +1,40 @@
-Return-Path: <mpe@ellerman.id.au>
-Message-ID: <1465536270.26682.11.camel@ellerman.id.au>
-Subject: [RESEND RESEND PATCH] depmod: Ignore PowerPC64 ABIv2 .TOC. symbol
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: lucas.de.marchi@gmail.com
-Cc: Anton Blanchard <anton@samba.org>, linux-modules@vger.kernel.org
-Date: Fri, 10 Jun 2016 15:24:30 +1000
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
+Return-Path: <lucas.de.marchi@gmail.com>
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules@vger.kernel.org
+Cc: Michal Marek <mmarek@suse.cz>,
+	Wouter van Kesteren <woutershep@gmail.com>,
+	Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: [PATCH 2/3] libkmod-signature: handle PKCS#7
+Date: Sun,  5 Jun 2016 00:13:48 -0300
+Message-Id: <1465096429-14024-2-git-send-email-lucas.de.marchi@gmail.com>
+In-Reply-To: <1465096429-14024-1-git-send-email-lucas.de.marchi@gmail.com>
+References: <1465096429-14024-1-git-send-email-lucas.de.marchi@gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Anton Blanchard <anton@samba.org>
-
-The .TOC. symbol on the PowerPC64 ABIv2 identifies the GOT
-pointer, similar to how other architectures use _GLOBAL_OFFSET_TABLE_.
-
-This is not a symbol that needs relocation, and should be ignored
-by depmod.
+From: Lucas De Marchi <lucas.demarchi@intel.com>
 
 ---
- tools/depmod.c | 2 ++
+ libkmod/libkmod-signature.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 6e9bb4d..a2e07c1 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -2153,6 +2153,8 @@ static void depmod_add_fake_syms(struct depmod *depmod)
- 	depmod_symbol_add(depmod, "__this_module", true, 0, NULL);
- 	/* On S390, this is faked up too */
- 	depmod_symbol_add(depmod, "_GLOBAL_OFFSET_TABLE_", true, 0, NULL);
-+	/* On PowerPC64 ABIv2, .TOC. is more or less _GLOBAL_OFFSET_TABLE_ */
-+	depmod_symbol_add(depmod, "TOC.", true, 0, NULL);
- }
+diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+index 6fc06fc..ef5fe6e 100644
+--- a/libkmod/libkmod-signature.c
++++ b/libkmod/libkmod-signature.c
+@@ -69,12 +69,14 @@ const char *const pkey_hash_algo[PKEY_HASH__LAST] = {
+ enum pkey_id_type {
+ 	PKEY_ID_PGP,		/* OpenPGP generated key ID */
+ 	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
++	PKEY_ID_PKCS7,		/* Signature in PKCS#7 message */
+ 	PKEY_ID_TYPE__LAST
+ };
  
- static int depmod_load_symvers(struct depmod *depmod, const char *filename)
+ const char *const pkey_id_type[PKEY_ID_TYPE__LAST] = {
+ 	[PKEY_ID_PGP]		= "PGP",
+ 	[PKEY_ID_X509]		= "X509",
++	[PKEY_ID_PKCS7]		= "PKCS#7",
+ };
+ 
+ /*
+-- 
+2.5.5
