@@ -1,69 +1,38 @@
-Return-Path: <lucas.de.marchi@gmail.com>
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: linux-modules@vger.kernel.org
-Cc: Michal Marek <mmarek@suse.cz>,
-	Wouter van Kesteren <woutershep@gmail.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH 1/3] libkmod-module: do not crash modinfo on 0 key id len
-Date: Sun,  5 Jun 2016 00:13:47 -0300
-Message-Id: <1465096429-14024-1-git-send-email-lucas.de.marchi@gmail.com>
+Return-Path: <honli@redhat.com>
+Date: Mon, 6 Jun 2016 11:06:27 +0800
+From: Honggang LI <honli@redhat.com>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Subject: Re: kmod documentation issue -- module parameters must after
+ modulename
+Message-ID: <20160606030627.GA23984@dhcp-13-42.nay.redhat.com>
+References: <20160601111207.GB28228@dhcp-13-42.nay.redhat.com>
+ <CAKi4VALSHSvvXRGSsAL-34SRn9Nh0rqW7xFHpGJL1Kn88_1YCw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <CAKi4VALSHSvvXRGSsAL-34SRn9Nh0rqW7xFHpGJL1Kn88_1YCw@mail.gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Lucas De Marchi <lucas.demarchi@intel.com>
+On Sat, Jun 04, 2016 at 11:07:14AM -0300, Lucas De Marchi wrote:
+> On Wed, Jun 1, 2016 at 8:12 AM, Honggang LI <honli@redhat.com> wrote:
+> > upstream-git]$ git clone https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
+> > upstream-git]$ cd kmod
+> > kmod]$ grep -w -n fred -r .
+> > ./man/modprobe.d.xml:144:            This can be useful because users expect "modprobe fred opt=1" to
+> >                                                                               ^^^^^^^^^^^^^^^^^^^
+> > ./man/modprobe.d.xml:148:            --ignore-install fred $CMDLINE_OPTS"
+> >                                                       ^^^^^^^^^^^^^^^^^^
+> >
+> > "modprobe fred opt=1" should be "modprobe opt=1 fred"
+> > "fred $CMDLINE_OPTS" should be "$CMDLINE_OPTS fred"
+> 
+> Have you tried that? The doc is actually correct that the options
 
----
- libkmod/libkmod-module.c | 38 +++++++++++++++++++++++---------------
- 1 file changed, 23 insertions(+), 15 deletions(-)
+Sorry, it is my bad.
 
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 1460c67..a19e8bc 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -2253,22 +2253,30 @@ KMOD_EXPORT int kmod_module_get_info(const struct kmod_module *mod, struct kmod_
- 			goto list_error;
- 		count++;
- 
--		/* Display the key id as 01:12:DE:AD:BE:EF:... */
--		key_hex = malloc(sig_info.key_id_len * 3);
--		if (key_hex == NULL)
--			goto list_error;
--		for (i = 0; i < (int)sig_info.key_id_len; i++) {
--			sprintf(key_hex + i * 3, "%02X",
--					(unsigned char)sig_info.key_id[i]);
--			if (i < (int)sig_info.key_id_len - 1)
--				key_hex[i * 3 + 2] = ':';
-+		if (sig_info.key_id_len) {
-+			/* Display the key id as 01:12:DE:AD:BE:EF:... */
-+			key_hex = malloc(sig_info.key_id_len * 3);
-+			if (key_hex == NULL)
-+				goto list_error;
-+			for (i = 0; i < (int)sig_info.key_id_len; i++) {
-+				sprintf(key_hex + i * 3, "%02X",
-+						(unsigned char)sig_info.key_id[i]);
-+				if (i < (int)sig_info.key_id_len - 1)
-+					key_hex[i * 3 + 2] = ':';
-+			}
-+			n = kmod_module_info_append(list, "sig_key", strlen("sig_key"),
-+					key_hex, sig_info.key_id_len * 3 - 1);
-+			free(key_hex);
-+			if (n == NULL)
-+				goto list_error;
-+			count++;
-+		} else {
-+			n = kmod_module_info_append(list, "sig_key", strlen("sig_key"),
-+					NULL, 0);
-+			if (n == NULL)
-+				goto list_error;
-+			count++;
- 		}
--		n = kmod_module_info_append(list, "sig_key", strlen("sig_key"),
--				key_hex, sig_info.key_id_len * 3 - 1);
--		free(key_hex);
--		if (n == NULL)
--			goto list_error;
--		count++;
- 
- 		n = kmod_module_info_append(list,
- 				"sig_hashalgo", strlen("sig_hashalgo"),
--- 
-2.5.5
+> should be after the module name, not before. And it *is* the modprobe
+> behavior: https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/tree/tools/modprobe.c#n591
+> 
+> 
+> 
+> Lucas De Marchi
