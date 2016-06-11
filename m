@@ -1,62 +1,43 @@
-Return-Path: <md@linux.it>
-Date: Sat, 21 May 2016 20:40:04 +0200
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>, 820010@bugs.debian.org
-Cc: Ben Hutchings <ben@decadent.org.uk>,
-	linux-modules <linux-modules@vger.kernel.org>,
-	Rusty Russell <rusty@rustcorp.com.au>
-Subject: Re: Bug#820010: [PATCH v2] libkmod: Add support for detached module
- signatures
-Message-ID: <20160521184004.GA32133@bongo.bofh.it>
-References: <20160405001611.GJ21187@decadent.org.uk>
- <20160405003237.GK21187@decadent.org.uk>
- <CAKi4VAK64gR8U2n6=fO8o9Y1m7bTJsmeDLQcpegjF+57=_e8VA@mail.gmail.com>
- <1460541612.2705.32.camel@decadent.org.uk>
- <CAKi4VAKQecNsdVUXV0dR8_0GTKBirZq8NR7b32xMY+ar3Dn4Uw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="9amGYk9869ThD9tj"
-In-Reply-To: <CAKi4VAKQecNsdVUXV0dR8_0GTKBirZq8NR7b32xMY+ar3Dn4Uw@mail.gmail.com>
-From: md@Linux.IT (Marco d'Itri)
+In-Reply-To: <1465536270.26682.11.camel@ellerman.id.au>
+References: <1465536270.26682.11.camel@ellerman.id.au>
+Date: Sat, 11 Jun 2016 00:27:16 -0300
+Message-ID: <CAKi4VA+7WZy_Pm7Am7PaSjQAp+jb6RAhXjZRMcjPxmy3o3joEQ@mail.gmail.com>
+Subject: Re: [RESEND RESEND PATCH] depmod: Ignore PowerPC64 ABIv2 .TOC. symbol
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Anton Blanchard <anton@samba.org>, linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
+On Fri, Jun 10, 2016 at 2:24 AM, Michael Ellerman <mpe@ellerman.id.au> wrote:
+> From: Anton Blanchard <anton@samba.org>
+>
+> The .TOC. symbol on the PowerPC64 ABIv2 identifies the GOT
+> pointer, similar to how other architectures use _GLOBAL_OFFSET_TABLE_.
+>
+> This is not a symbol that needs relocation, and should be ignored
+> by depmod.
+>
+> ---
+>  tools/depmod.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/depmod.c b/tools/depmod.c
+> index 6e9bb4d..a2e07c1 100644
+> --- a/tools/depmod.c
+> +++ b/tools/depmod.c
+> @@ -2153,6 +2153,8 @@ static void depmod_add_fake_syms(struct depmod *depmod)
+>         depmod_symbol_add(depmod, "__this_module", true, 0, NULL);
+>         /* On S390, this is faked up too */
+>         depmod_symbol_add(depmod, "_GLOBAL_OFFSET_TABLE_", true, 0, NULL);
+> +       /* On PowerPC64 ABIv2, .TOC. is more or less _GLOBAL_OFFSET_TABLE_ */
+> +       depmod_symbol_add(depmod, "TOC.", true, 0, NULL);
+>  }
+>
+>  static int depmod_load_symvers(struct depmod *depmod, const char *filename)
 
---9amGYk9869ThD9tj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On May 21, Lucas De Marchi <lucas.de.marchi@gmail.com> wrote:
+Applied, thanks
 
-> And how is this signature prepared?  Since it needs the compiled
-> module it would be a matter of changing the compiler, even minor
-> version, to invalidate the argument of reproducible build. It seems
-> very fragile to me.
-But this is the whole point of reproducible builds: knowing that if you=20
-start from the same sources and build enviroment, and distributions do,=20
-then you will get the same results.
-Building gcc is reproducibile as well...
-Reproducibility with a different compiler has never been a goal.
-
---=20
-ciao,
-Marco
-
---9amGYk9869ThD9tj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQGcBAABCAAGBQJXQKuDAAoJECv1pcEixPekcPEL/A3V/R4p01gKl0ajMocvHRfd
-eDxyRgqWjFXE56a1duj0VgsUIfG0PRAAN84b5enljUyTY+eunpGLdALxa7L1DDnN
-zpnB5ZGPgrRV1GnMc7XJTlHTdHmF4wR9m0lmCMOZOIf7O6hsvmLr5bvwk3XHXYJw
-7s1afC46zsTbvPzEKqJT4GYz233cin4K0mISqsYbgXJTMIQjlV53iqGhAxHGxO61
-8eJMWZlmJHAUfRT+5hm8CvwN4tY0q7Mn5S5I2TdpJ0wcnI8J+9XzTQTN2VcYGbo0
-viQlCcPYPFnk/47xsltY7MS2NNx+HumiMV4Czx/7+WyKnsf7A18dGNEm7m1I5wJ+
-GtKhHnvuNFGFH+dUlY86r37eH6Q2jPaALrjciNTBtUYti/lrkVxDHY3nh8qe9GoO
-6ZoJ7fdjvYHW7PMnvDA/Pn0t6YQxN6VIqiUWhp90fuC7EXpN+PXcniZr/HVgKMDs
-M9YHyVbGOQpyiiWX+N34BSig7des3erPla+JO02SYg==
-=/q0y
------END PGP SIGNATURE-----
-
---9amGYk9869ThD9tj--
+Lucas De Marchi
