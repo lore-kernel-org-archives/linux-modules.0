@@ -1,18 +1,19 @@
+Return-Path: <danielhilst@gmail.com>
 MIME-Version: 1.0
 In-Reply-To: <CAKi4VAJo1yVe5ZrnDVKV_2dCxyVfrufhWq=D7ChguiRq35AQ6Q@mail.gmail.com>
-References: <f3e2ee06-8fc2-aa6c-d72f-324277004c06@manjaro.org>
-	<CAKi4VAJo1yVe5ZrnDVKV_2dCxyVfrufhWq=D7ChguiRq35AQ6Q@mail.gmail.com>
-Date: Tue, 28 Jun 2016 12:26:53 -0300
-Message-ID: <CAKi4VA+W73JZwJpnwB=TQ_KYgSSSXSLi+bi9V9YXZBsOMaU4Ow@mail.gmail.com>
+References: <f3e2ee06-8fc2-aa6c-d72f-324277004c06@manjaro.org> <CAKi4VAJo1yVe5ZrnDVKV_2dCxyVfrufhWq=D7ChguiRq35AQ6Q@mail.gmail.com>
+From: "Daniel." <danielhilst@gmail.com>
+Date: Tue, 28 Jun 2016 11:19:50 -0300
+Message-ID: <CAF3SDA5UGz5fWzWiWdsuW=iS_9tqo_YxgUkU3VO4m1uKD5NqTQ@mail.gmail.com>
 Subject: Re: error: EXTRA_DIST must be set with '=' before using '+='
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Bernhard Landauer <oberon@manjaro.org>
-Cc: linux-modules <linux-modules@vger.kernel.org>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: Bernhard Landauer <oberon@manjaro.org>, linux-modules <linux-modules@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jun 28, 2016 at 12:08 AM, Lucas De Marchi
-<lucas.de.marchi@gmail.com> wrote:
+What is Manjaro? G_G
+
+2016-06-28 0:08 GMT-03:00 Lucas De Marchi <lucas.de.marchi@gmail.com>:
 > On Mon, Jun 27, 2016 at 8:05 PM, Bernhard Landauer <oberon@manjaro.org> wrote:
 >> Hi!
 >>
@@ -35,10 +36,15 @@ On Tue, Jun 28, 2016 at 12:08 AM, Lucas De Marchi
 > anymore... just went to check it in order to reproduce your issue.
 >
 > For now you may want to pass --disable-gtk-doc to see if it works
+>
+> Lucas De Marchi
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-And it's now fixed in master branch, thanks for reporting.
-
-kmod 23 is coming very soon.
 
 
-Lucas De Marchi
+-- 
+"Do or do not. There is no try"
+  Yoda Master
