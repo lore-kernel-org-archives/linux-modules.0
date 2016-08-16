@@ -1,76 +1,72 @@
-MIME-Version: 1.0
-Date: Wed, 20 Jul 2016 02:19:55 -0300
-Message-ID: <CAKi4VAL9QDTH64gbLRiVOhwqoucpjzwO1SRwb=MvKhgpPWF2Pw@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 23
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: linux-modules <linux-modules@vger.kernel.org>
-Cc: Rusty Russell <rusty@rustcorp.com.au>, lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from fmap.me ([91.92.66.84]:33940 "EHLO smtp.fmap.me"
+	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+	id S1752365AbcHPA6O (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+	Mon, 15 Aug 2016 20:58:14 -0400
+From: Nikolay Amiantov <ab@fmap.me>
+To: linux-modules@vger.kernel.org
+Cc: Shea Levy <shea@shealevy.com>, Nikolay Amiantov <ab@fmap.me>
+Subject: [PATCH 4/4] libkmod: add --with-modulesdirs configure option
+Date: Tue, 16 Aug 2016 03:50:32 +0300
+Message-Id: <20160816005032.28881-5-ab@fmap.me>
+In-Reply-To: <20160816005032.28881-1-ab@fmap.me>
+References: <20160816005032.28881-1-ab@fmap.me>
+Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-kmod 23 is out:
+Let the user override default /lib/modules path. One can also
+define several directories to be looked in order by specifying them
+separated with a colon, like this:
 
-        ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-23.tar.xz
-        ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-23.tar.sign
+./configure --with-modulesdirs=/lib/modules:/usr/local/lib/modules
+---
+ Makefile.am       | 1 +
+ configure.ac      | 6 ++++++
+ libkmod/libkmod.c | 2 +-
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
-- Improvements:
-        - Don't add comment to modules.devname if it would otherwise be emp=
-ty
-          to play nice with tools detecting empty files
+diff --git a/Makefile.am b/Makefile.am
+index d4eeb7e..5c9f603 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -19,6 +19,7 @@ AM_CPPFLAGS = \
+ 	-include $(top_builddir)/config.h \
+ 	-I$(top_srcdir) \
+ 	-DSYSCONFDIR=\""$(sysconfdir)"\" \
++	-DMODULESDIRS=\""$(shell echo $(modulesdirs) | $(SED) 's|:|\\",\\"|g')"\" \
+ 	${zlib_CFLAGS}
+ 
+ AM_CFLAGS = $(OUR_CFLAGS)
+diff --git a/configure.ac b/configure.ac
+index 23510c8..66490cf 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -202,6 +202,12 @@ GTK_DOC_CHECK([1.14],[--flavour no-tmpl-flat])
+ ], [
+ AM_CONDITIONAL([ENABLE_GTK_DOC], false)])
+ 
++AC_ARG_WITH([modulesdirs],
++	AS_HELP_STRING([--with-modulesdirs=DIRS], [Kernel modules directories, separated by :]),
++	[],
++	[with_modulesdirs=/lib/modules])
++AC_SUBST([modulesdirs], [$with_modulesdirs])
++
+ 
+ #####################################################################
+ # Default CFLAGS and LDFLAGS
+diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
+index be9358d..291c08d 100644
+--- a/libkmod/libkmod.c
++++ b/libkmod/libkmod.c
+@@ -207,7 +207,7 @@ static int log_priority(const char *priority)
+ }
+ 
+ static const char *dirname_default_prefixes[] = {
+-	"/lib/modules",
++	MODULESDIRS,
+ 	NULL
+ };
+ 
+-- 
+2.9.2
 
-        - Allow building with BSD sed, that doesn't have -E flag
-
-        - Ignore .TOC. symbols in depmod parsing as it's for PPC64 the
-          equivalent of _GLOBAL_OFFSET_TABLE_
-
-        - Teach modinfo about PKCS#7 module signatures: it doesn't add any
-          other info besides telling the user the module is signed since
-          kernel doesn't add other info on the module section
-
-- Bug fixes
-
-        - Fix -s and -p compat options to insmod triggering force flag
-
-        - Fix long lines from /proc/modules not being handled correctly by
-          kmod_module_new_from_loaded() and kmod_module_get_size() and seve=
-ral
-          other library functions that use them
-
-        - Fix crash on modinfo while checking for available signature of
-          unknown type
-
-        - Fix documentation generation with gtk-doc
-
-
-Shortlog is below
-
-Anton Blanchard (1):
-      depmod: Ignore PowerPC64 ABIv2 .TOC. symbol
-
-H=C3=A9ctor Or=C3=B3n Mart=C3=ADnez (1):
-      kmod: compiling with old sed version (!ERE support)
-
-Josh Triplett (1):
-      depmod: Don't insert comment in modules.devname if otherwise empty
-
-Lucas De Marchi (8):
-      travis: workaround bug in environment setup
-      README: add link to patchwork
-      libkmod-module: do not crash modinfo on 0 key id len
-      libkmod-signature: handle PKCS#7
-      libkmod-module: modinfo: print signature id
-      libkmod: fix integration with gtk-doc
-      NEWS: add items for kmod 23
-      kmod 23
-
-Marc-Antoine Perennou (1):
-      insmod: fix wron fallthrough of -f
-
-Michal Marek (1):
-      libkmod: Handle long lines in /proc/modules
-
-Peter Wu (1):
-      kmod_module_get_refcnt: fix documentation
-
-
-Lucas De Marchi
