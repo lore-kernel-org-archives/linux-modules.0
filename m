@@ -1,89 +1,67 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from fmap.me ([91.92.66.84]:33942 "EHLO smtp.fmap.me"
+Received: from fmap.me ([91.92.66.84]:33936 "EHLO smtp.fmap.me"
 	rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-	id S1752409AbcHPA6O (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-	Mon, 15 Aug 2016 20:58:14 -0400
+	id S1752472AbcHPA6P (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+	Mon, 15 Aug 2016 20:58:15 -0400
 From: Nikolay Amiantov <ab@fmap.me>
 To: linux-modules@vger.kernel.org
-Cc: Shea Levy <shea@shealevy.com>, Nikolay Amiantov <ab@fmap.me>
-Subject: [PATCH 3/4] static-nodes: use kmod to get modules directory
-Date: Tue, 16 Aug 2016 03:50:31 +0300
-Message-Id: <20160816005032.28881-4-ab@fmap.me>
-In-Reply-To: <20160816005032.28881-1-ab@fmap.me>
-References: <20160816005032.28881-1-ab@fmap.me>
+Cc: Shea Levy <shea@shealevy.com>
+Subject: Improvements in search of kernel modules directory
+Date: Tue, 16 Aug 2016 03:50:28 +0300
+Message-Id: <20160816005032.28881-1-ab@fmap.me>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-static-nodes has just used /lib/modules/`uname -r` before with no way to
-specify another directory. Instead, make it get the path via kmod, which has a
-more sophisticated algorithm for searching the modules directory.
+These series of patches add more control over how kernel modules directory is
+found:
 
-As a side effect, cleanup error messages printing a little.
----
- tools/static-nodes.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+* Add an environment variable which allows to override kernel modules
+  directory;
+* Allow to hardcode several paths which are searched in order for `uname -r`
+  subdirectory;
+* Add a configure option to set those paths, instead of hardcoding
+  /lib/modules.
 
-diff --git a/tools/static-nodes.c b/tools/static-nodes.c
-index 8d2356d..2ed306d 100644
---- a/tools/static-nodes.c
-+++ b/tools/static-nodes.c
-@@ -29,10 +29,11 @@
- #include <unistd.h>
- #include <sys/stat.h>
- #include <sys/types.h>
--#include <sys/utsname.h>
- 
- #include <shared/util.h>
- 
-+#include <libkmod/libkmod.h>
-+
- #include "kmod.h"
- 
- struct static_nodes_format {
-@@ -154,8 +155,8 @@ static void help(void)
- 
- static int do_static_nodes(int argc, char *argv[])
- {
--	struct utsname kernel;
- 	char modules[PATH_MAX], buf[4096];
-+	struct kmod_ctx *ctx;
- 	const char *output = "/dev/stdout";
- 	FILE *in = NULL, *out = NULL;
- 	const struct static_nodes_format *format = &static_nodes_format_human;
-@@ -206,22 +207,25 @@ static int do_static_nodes(int argc, char *argv[])
- 		}
- 	}
- 
--	if (uname(&kernel) < 0) {
--		fputs("Error: uname failed!\n", stderr);
-+	ctx = kmod_new(NULL, NULL);
-+	if (ctx == NULL) {
-+		fprintf(stderr, "Error: failed to create kmod context\n");
- 		ret = EXIT_FAILURE;
- 		goto finish;
- 	}
--
--	snprintf(modules, sizeof(modules), "/lib/modules/%s/modules.devname", kernel.release);
-+	if (snprintf(modules, sizeof(modules), "%s/modules.devname", kmod_get_dirname(ctx)) < 0) {
-+		fprintf(stderr, "Error: path to modules.devname is too long\n");
-+		ret = EXIT_FAILURE;
-+		goto finish;
-+	}
-+	kmod_unref(ctx);
- 	in = fopen(modules, "re");
- 	if (in == NULL) {
- 		if (errno == ENOENT) {
--			fprintf(stderr, "Warning: /lib/modules/%s/modules.devname not found - ignoring\n",
--				kernel.release);
-+			fprintf(stderr, "Warning: %s not found - ignoring\n", modules);
- 			ret = EXIT_SUCCESS;
- 		} else {
--			fprintf(stderr, "Error: could not open /lib/modules/%s/modules.devname - %m\n",
--				kernel.release);
-+			fprintf(stderr, "Error: could not open %s - %m\n", modules);
- 			ret = EXIT_FAILURE;
- 		}
- 		goto finish;
--- 
-2.9.2
+We have used the first patch in NixOS[1] for a long time to point kmod to
+kernel modules. While an environment variable is handy and has been solving our
+problems, it doesn't cover all our cases. We have two directories:
+
+* /run/current-system/kernel-modules/lib/modules
+* /run/booted-system/kernel-modules/lib/modules
+
+, which are symlinked to modules for current system configuration (i.e. after
+an update) and the one which the system was booted with. It allows us to both
+give users ability to install new modules and have their old kernel modules
+accessible until a reboot (which is useful in case of kernel upgrade).
+
+Before those patches the necessary logic (see if kernel modules for current
+kernel version are available in current-system, if not then fall back to
+booted-system) was implemented as a shell wrapper around kmod, which was
+unwieldy and didn't work for applications that use kmod directly. It was
+considered better to move this logic to kmod itself. Also, NixOS uses nixpkgs,
+a set of distribution-agnostic packages (which run on e.g. Ubuntu and even Mac
+OS X where applicable), so it was necessary to preserve /lib/modules as a
+fallback directory in kmod for it to work on FHS distributions.
+
+As a result a set of generic patches was written that implement necessary
+behaviour while being potentially useful for upstream. Environment variable is
+still used in several places (e.g. in automatic generation and running of
+virtual machines) and is useful for us even with the rest of those patches.
+
+A home of those patches can be found on GitHub[2] along with some
+discussion, as can be related NixOS patches and discussion[3].
+
+Big thanks to Shea Levy for the original patch, extensive code review and
+useful advices.
+
+Additionally, while working on those it was discovered that kmod makes use of
+PATH_MAX. This constant is considered harmful[4] because it doesn't correspond
+to real possible length of filesystem paths. This can be considered a bug, but
+in those patches it was decided to follow upstream design decisions wherever
+possible and so we also use it here.
+
+[1]: http://nixos.org/
+[2]: https://github.com/abbradar/kmod/
+[3]: https://github.com/NixOS/nixpkgs/pull/17738/
+[4]: http://insanecoding.blogspot.ru/2007/11/pathmax-simply-isnt.html
 
