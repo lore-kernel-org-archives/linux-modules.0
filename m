@@ -1,90 +1,49 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:56990 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S935350AbcKWPWo (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 23 Nov 2016 10:22:44 -0500
-From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-To: linux-modules@vger.kernel.org
-Cc: aris@redhat.com, Lucas De Marchi <lucas.demarchi@intel.com>,
-        yauheni.kaliuta@redhat.com
-Subject: [PATCH RFC 1/3] depmod: create depmod dir independent search function
-Date: Wed, 23 Nov 2016 17:23:37 +0200
-Message-Id: <20161123152339.27531-2-yauheni.kaliuta@redhat.com>
-In-Reply-To: <20161123152339.27531-1-yauheni.kaliuta@redhat.com>
-References: <20161123152339.27531-1-yauheni.kaliuta@redhat.com>
-Sender: owner-linux-modules@vger.kernel.org
+MIME-Version: 1.0
+In-Reply-To: <1478623550-18716-1-git-send-email-yousaf.kaukab@suse.com>
+References: <1478623550-18716-1-git-send-email-yousaf.kaukab@suse.com>
+Date: Tue, 8 Nov 2016 22:29:31 -0200
+Message-ID: <CAKi4VAJxFd8KpJ3DsGYOxuayyEj60oa3_vsLC_oz+DOWLnr6FA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] testsuite: depmod: add module dependency outside
+ cyclic chain
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Mian Yousaf Kaukab <yousaf.kaukab@suse.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>,
+	Lucas De Marchi <lucas.demarchi@intel.com>, bjorn.andersson@linaro.org, afaerber@suse.de
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-Prepare to implement external directories support.
+On Tue, Nov 8, 2016 at 2:45 PM, Mian Yousaf Kaukab
+<yousaf.kaukab@suse.com> wrote:
+> Check that depmod do not report modules outside cyclic chain
+>
+> Two modules f and g are added which do not have any dependency.
+> modules a and b are made dependent on f and g.
+>
+> Signed-off-by: Mian Yousaf Kaukab <yousaf.kaukab@suse.com>
+> ---
+> Here is the output of loop dependency check test after adding this
+> patch:
+>
+> ESTSUITE: ERR: wrong:
+> depmod: ERROR: Found 7 modules in dependency cycles!
+> depmod: ERROR: Cycle detected: mod_loop_d -> mod_loop_e -> mod_loop_d
+> depmod: ERROR: Cycle detected: mod_loop_b -> mod_loop_c -> mod_loop_a -> mod_loop_b
+> depmod: ERROR: Cycle detected: mod_loop_b -> mod_loop_c -> mod_loop_a -> mod_loop_g
+> depmod: ERROR: Cycle detected: mod_loop_b -> mod_loop_c -> mod_loop_a -> mod_loop_f
+>
+> Buffer overflow occurs in the loop when last two lines are printed.
+> 43 bytes buffer is allocated and 53 bytes are used.
 
-The patch splits depmod_modules_search() function to two
-functions: depmod_modules_search(), called by the high level with
-intention to search all possible modules, and
-depmod_module_search_path(), which takes path as a parameter and
-scans modules under the path only. Initially it is used to scan
-the same depmod->cfg->dirname path only.
 
-Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
----
- tools/depmod.c | 31 ++++++++++++++++++++++---------
- 1 file changed, 22 insertions(+), 9 deletions(-)
+Great!
 
-diff --git a/tools/depmod.c b/tools/depmod.c
-index f2b370f146bb..a96501d1cbfb 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -1186,29 +1186,42 @@ static int depmod_modules_search_dir(struct depmod *depmod, DIR *d, size_t basel
- 	return err;
- }
- 
--static int depmod_modules_search(struct depmod *depmod)
-+static int depmod_modules_search_path(struct depmod *depmod,
-+				      const char *path)
- {
--	char path[PATH_MAX];
--	DIR *d = opendir(depmod->cfg->dirname);
-+	char path_buf[PATH_MAX];
-+	DIR *d;
- 	size_t baselen;
- 	int err;
-+
-+	d = opendir(path);
- 	if (d == NULL) {
- 		err = -errno;
--		ERR("could not open directory %s: %m\n", depmod->cfg->dirname);
-+		ERR("could not open directory %s: %m\n", path);
- 		return err;
- 	}
- 
--	baselen = depmod->cfg->dirnamelen;
--	memcpy(path, depmod->cfg->dirname, baselen);
--	path[baselen] = '/';
-+	baselen = strlen(path);
-+	memcpy(path_buf, path, baselen);
-+	path_buf[baselen] = '/';
- 	baselen++;
--	path[baselen] = '\0';
-+	path_buf[baselen] = '\0';
- 
--	err = depmod_modules_search_dir(depmod, d, baselen, path);
-+	err = depmod_modules_search_dir(depmod, d, baselen, path_buf);
- 	closedir(d);
- 	return err;
- }
- 
-+static int depmod_modules_search(struct depmod *depmod)
-+{
-+	int err;
-+
-+	err = depmod_modules_search_path(depmod, depmod->cfg->dirname);
-+	if (err < 0)
-+		return err;
-+	return 0;
-+}
-+
- static int mod_cmp(const void *pa, const void *pb) {
- 	const struct mod *a = *(const struct mod **)pa;
- 	const struct mod *b = *(const struct mod **)pb;
+I found this last part of the message very useful to be in the commit
+message, so I moved it there.
+
+Thanks,
+Applied
+
+Lucas De Marchi
+
 -- 
-2.9.3
-
+Lucas De Marchi
