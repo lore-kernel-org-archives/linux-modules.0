@@ -1,27 +1,43 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mga14.intel.com ([192.55.52.115]:61355 "EHLO mga14.intel.com"
+Received: from mx1.redhat.com ([209.132.183.28]:38886 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S935019AbcKKAPA (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 10 Nov 2016 19:15:00 -0500
-From: "De Marchi, Lucas" <lucas.demarchi@intel.com>
-To: "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "yauheni.kaliuta@redhat.com" <yauheni.kaliuta@redhat.com>
-CC: "jeyu@redhat.com" <jeyu@redhat.com>
-Subject: Re: [PATCH] shared: make scratchbuf_str static
-Date: Fri, 11 Nov 2016 00:14:58 +0000
-Message-ID: <1478823295.15075.5.camel@intel.com>
-References: <1478674346-29996-1-git-send-email-yauheni.kaliuta@redhat.com>
-In-Reply-To: <1478674346-29996-1-git-send-email-yauheni.kaliuta@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        id S1751297AbcKIGvc (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Wed, 9 Nov 2016 01:51:32 -0500
+From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To: linux-modules@vger.kernel.org
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
+        Jessica Yu <jeyu@redhat.com>
+Subject: [PATCH] shared: make scratchbuf_str static
+Date: Wed,  9 Nov 2016 08:52:26 +0200
+Message-Id: <1478674346-29996-1-git-send-email-yauheni.kaliuta@redhat.com>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-T24gV2VkLCAyMDE2LTExLTA5IGF0IDA4OjUyICswMjAwLCBZYXVoZW5pIEthbGl1dGEgd3JvdGU6
-DQo+IEl0IGZpeGVzIGxpbmtpbmcgcHJvYmxlbQ0KPiANCj4gdG9vbHMvZGVwbW9kLm86IEluIGZ1
-bmN0aW9uIGBvdXRwdXRfc3ltYm9sc19iaW4nOg0KPiBkZXBtb2QuYzooLnRleHQub3V0cHV0X3N5
-bWJvbHNfYmluKzB4MTM1KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0bw0KPiBgc2NyYXRjaGJ1Zl9z
-dHInDQo+IA0KPiBmb3IgLU8wIGJ1aWxkLCB3aGVyZSBnY2MgZG9lc24ndCBhY3R1YWxseSBpbmxp
-bmUgaXQuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBZYXVoZW5pIEthbGl1dGEgPHlhdWhlbmkua2Fs
-aXV0YUByZWRoYXQuY29tPg0KPiAtLS0NCg0KQXBwbGllZCwgdGhhbmtzDQoNCkx1Y2FzIERlIE1h
-cmNoaQ==
+It fixes linking problem
+
+tools/depmod.o: In function `output_symbols_bin':
+depmod.c:(.text.output_symbols_bin+0x135): undefined reference to `scratchbuf_str'
+
+for -O0 build, where gcc doesn't actually inline it.
+
+Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+---
+ shared/scratchbuf.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/shared/scratchbuf.h b/shared/scratchbuf.h
+index c12e4902528f..27ea9d9f6008 100644
+--- a/shared/scratchbuf.h
++++ b/shared/scratchbuf.h
+@@ -19,7 +19,7 @@ int scratchbuf_alloc(struct scratchbuf *buf, size_t sz);
+ void scratchbuf_release(struct scratchbuf *buf);
+ 
+ /* Return a C string */
+-inline char *scratchbuf_str(struct scratchbuf *buf)
++static inline char *scratchbuf_str(struct scratchbuf *buf)
+ {
+ 	return buf->bytes;
+ }
+-- 
+2.7.4
+
