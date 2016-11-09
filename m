@@ -1,40 +1,36 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:54880 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S935350AbcKWPWn (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 23 Nov 2016 10:22:43 -0500
+Return-Path: <yauheni.kaliuta@redhat.com>
 From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-To: linux-modules@vger.kernel.org
-Cc: aris@redhat.com, Lucas De Marchi <lucas.demarchi@intel.com>,
-        yauheni.kaliuta@redhat.com
-Subject: [PATCH RFC 0/3] depmod: implement external directories support
-Date: Wed, 23 Nov 2016 17:23:36 +0200
-Message-Id: <20161123152339.27531-1-yauheni.kaliuta@redhat.com>
-Sender: owner-linux-modules@vger.kernel.org
+To: Mian Yousaf Kaukab <yousaf.kaukab@suse.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>, bjorn.andersson@linaro.org,
+        afaerber@suse.de, lucas.de.marchi@gmail.com
+Subject: Re: [PATCH v1 2/2] depmod: ignore related modules in depmod_report_cycles
+References: <1478623550-18716-1-git-send-email-yousaf.kaukab@suse.com>
+	<1478623550-18716-2-git-send-email-yousaf.kaukab@suse.com>
+	<CAKi4VAKh0R-RN1j=Eum3wKtQ434D_7uBj1EGwzGCBrEB0qFkTg@mail.gmail.com>
+	<xunyk2cdiciy.fsf@redhat.com> <1478683053.4155.8.camel@suse.com>
+Date: Wed, 09 Nov 2016 13:23:40 +0200
+In-Reply-To: <1478683053.4155.8.camel@suse.com> (Mian Yousaf Kaukab's message
+	of "Wed, 09 Nov 2016 10:17:33 +0100")
+Message-ID: <xuny7f8cj3r7.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 List-ID: <linux-modules.vger.kernel.org>
 
-Would it be possible to implement something like external
-directories support in depmod (see PATCH 3 description).
+Hi, Mian!
 
-I'll copy here the part:
+>>>>> On Wed, 09 Nov 2016 10:17:33 +0100, Mian Yousaf Kaukab  wrote:
+ > On Wed, 2016-11-09 at 04:59 +0200, Yauheni Kaliuta wrote:
 
-This is a pretty simple extention of existing logic, since now
-depmod already is able to:
+[...]
 
-a) scan modules with full path from command line without -a
-switch;
-b) detects broken symbol dependencies and broken modversions,
-what assumes, that modules are already are not built for the
-existing kernel.
+ >> The problem is that the path is recorded "globally", not per vertex,
+ >> and "wrong" mod6 is compared in "loop == m".
 
-Yauheni Kaliuta (3):
-  depmod: create depmod dir independent search function
-  depmod: search key: move builtin detection under the add function
-  depmod: implement external directories support
+ > I agree and in the other thread Bjorn is mentioning kind of the same.
 
- tools/depmod.c | 209 +++++++++++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 175 insertions(+), 34 deletions(-)
+Ah, sorry, my bad: I just subscribed to the actual mailing list and Gmane
+has the latest message from July.
 
 -- 
-2.9.3
-
+WBR,
+Yauheni Kaliuta
