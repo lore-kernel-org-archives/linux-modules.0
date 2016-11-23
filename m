@@ -1,377 +1,347 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:52344 "EHLO mx1.redhat.com"
+Received: from mx1.redhat.com ([209.132.183.28]:55056 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1756201AbcKKLmp (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 11 Nov 2016 06:42:45 -0500
+        id S938747AbcKWPWr (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Wed, 23 Nov 2016 10:22:47 -0500
 From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 To: linux-modules@vger.kernel.org
-Cc: Mian Yousaf Kaukab <yousaf.kaukab@suse.com>,
-        bjorn.andersson@linaro.org, Jessica Yu <jeyu@redhat.com>
-Subject: [PATCH RFC 3/3] depmod: handle nested loops
-Date: Fri, 11 Nov 2016 13:43:21 +0200
-Message-Id: <1478864601-3259-4-git-send-email-yauheni.kaliuta@redhat.com>
-In-Reply-To: <1478864601-3259-1-git-send-email-yauheni.kaliuta@redhat.com>
-References: <1478683053.4155.8.camel@suse.com>
- <1478864601-3259-1-git-send-email-yauheni.kaliuta@redhat.com>
+Cc: aris@redhat.com, Lucas De Marchi <lucas.demarchi@intel.com>,
+        yauheni.kaliuta@redhat.com
+Subject: [PATCH RFC 3/3] depmod: implement external directories support
+Date: Wed, 23 Nov 2016 17:23:39 +0200
+Message-Id: <20161123152339.27531-4-yauheni.kaliuta@redhat.com>
+In-Reply-To: <20161123152339.27531-1-yauheni.kaliuta@redhat.com>
+References: <20161123152339.27531-1-yauheni.kaliuta@redhat.com>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-This is a rework of depmod report cycles logic to make it
-tolerant to more complex loops.
+The idea is to add a configuration keyword, external, which
+will list directories for scanning for particular kernel version
+mask:
 
-The patch tries to remember own path for vertexes which makes it
-possible to handle configurations with common edges and
-non-cyclic modules.
+external 4.10 /the/modules/dir /second/modules/dir
 
-It assumes that the previous dependency calculations can not give
-as input something like
+And extend "search" keyword to set it's priority with pseudo dir
+"external" (as it's done for built-in):
 
-mod_a -> mod_b -> <loop>, but
+search subdir external subdir2 built-in subdir3
 
-<loop> -> mod_a -> mod_b should be fine.
+(actually, the version is the same as for override keyword: * or
+posix regexp, so example above is a bit incorrect).
+
+All other logic left the same: if there are duplicates, only one
+is under consideration and it is unloadable if it is bad.
+
+The resulting modules.dep will contain entries a-la:
+
+/the/modules/dir/module1.ko:
+kernel/module2.ko: /the/modules/dir/module1.ko
+
+(here /lib/modules/$(uname -r)/kernel/module2.ko depends of
+symbols, provided by /the/modules/dir/module1.ko and external has
+higher priority).
+
+modprobe and modinfo understand it out of box.
+
+This is a pretty simple extention of existing logic, since now
+depmod already is able to:
+
+a) scan modules with full path from command line without -a
+switch;
+b) detects broken symbol dependencies and broken modversions,
+what assumes, that modules are already are not built for the
+existing kernel.
 
 Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 ---
- tools/depmod.c | 287 ++++++++++++++++++++++++++++++++++++++++-----------------
- 1 file changed, 204 insertions(+), 83 deletions(-)
+ tools/depmod.c | 172 +++++++++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 150 insertions(+), 22 deletions(-)
 
 diff --git a/tools/depmod.c b/tools/depmod.c
-index f2b370f146bb..c110635ff517 100644
+index 81360a651811..5eb22032ead7 100644
 --- a/tools/depmod.c
 +++ b/tools/depmod.c
-@@ -785,6 +785,7 @@ static void cfg_free(struct cfg *cfg)
+@@ -45,6 +45,7 @@
+ static int verbose = DEFAULT_VERBOSE;
  
- 
- /* depmod calculations ***********************************************/
-+struct vertex;
- struct mod {
- 	struct kmod_module *kmod;
- 	char *path;
-@@ -800,6 +801,7 @@ struct mod {
- 	uint16_t idx; /* index in depmod->modules.array */
- 	uint16_t users; /* how many modules depend on this one */
- 	bool visited; /* helper field to report cycles */
-+	struct vertex *vertex; /* helper field to report cycles */
- 	char modname[];
+ static const char CFG_BUILTIN_KEY[] = "built-in";
++static const char CFG_EXTERNAL_KEY[] = "external";
+ static const char *default_cfg_paths[] = {
+ 	"/run/depmod.d",
+ 	SYSCONFDIR "/depmod.d",
+@@ -433,9 +434,21 @@ struct cfg_override {
+ 	char path[];
  };
  
-@@ -1450,105 +1452,225 @@ static void depmod_sort_dependencies(struct depmod *depmod)
- 	}
- }
- 
--static void depmod_report_cycles(struct depmod *depmod, uint16_t n_mods,
--				 uint16_t n_roots, uint16_t *users,
--				 uint16_t *stack, uint16_t *edges)
-+struct vertex {
-+	struct vertex *parent;
-+	struct mod *mod;
++enum search_type {
++	SEARCH_PATH,
++	SEARCH_BUILTIN,
++	SEARCH_EXTERNAL
 +};
 +
-+static struct vertex *vertex_new(struct mod *mod, struct vertex *parent)
+ struct cfg_search {
+ 	struct cfg_search *next;
+-	uint8_t builtin;
++	enum search_type type;
++	size_t len;
++	char path[];
++};
++
++struct cfg_external {
++	struct cfg_external *next;
+ 	size_t len;
+ 	char path[];
+ };
+@@ -450,15 +463,27 @@ struct cfg {
+ 	uint8_t warn_dups;
+ 	struct cfg_override *overrides;
+ 	struct cfg_search *searches;
++	struct cfg_external *externals;
+ };
+ 
++static enum search_type cfg_define_search_type(const char *path)
 +{
-+	struct vertex *v;
-+
-+	v = malloc(sizeof(*v));
-+	if (v == NULL)
-+		return NULL;
-+
-+	v->parent = parent;
-+	v->mod = mod;
-+	return v;
++	if (streq(path, CFG_BUILTIN_KEY))
++		return SEARCH_BUILTIN;
++	if (streq(path, CFG_EXTERNAL_KEY))
++		return SEARCH_EXTERNAL;
++	return SEARCH_PATH;
 +}
 +
-+static void depmod_list_remove_data(struct kmod_list **list, void *data)
-+{
-+	struct kmod_list *l;
-+
-+	l = kmod_list_remove_data(*list, data);
-+	*list = l;
-+}
-+
-+static void depmod_report_one_cycle(struct depmod *depmod,
-+				    struct vertex *vertex,
-+				    struct kmod_list **roots,
-+				    struct hash *loop_set)
+ static int cfg_search_add(struct cfg *cfg, const char *path)
  {
- 	const char sep[] = " -> ";
--	int ir = 0;
--	int num_cyclic = 0;
-+	size_t sz;
-+	char *buf;
-+	struct array reverse;
-+	int i;
-+	int n;
-+	struct vertex *v;
+ 	struct cfg_search *s;
+ 	size_t len;
+-	uint8_t builtin = streq(path, CFG_BUILTIN_KEY);
++	enum search_type type;
++
++	type = cfg_define_search_type(path);
  
--	while (n_roots > 0) {
--		int is, ie;
-+	array_init(&reverse, 2);
- 
--		for (; ir < n_mods; ir++) {
--			if (users[ir] > 0) {
--				break;
--			}
-+	sz = 0;
-+	for (v = vertex->parent, n = 0;
-+	     v != NULL;
-+	     v = v->parent, n++) {
-+
-+		sz += v->mod->modnamesz - 1;
-+		array_append(&reverse, v);
-+		hash_add(loop_set, v->mod->modname, NULL);
-+	}
-+	sz += vertex->mod->modnamesz - 1;
-+
-+	buf = malloc(sz + n * strlen(sep) + 1);
-+
-+	sz = 0;
-+	for (i = reverse.count - 1; i >= 0; i--) {
-+		v = reverse.array[i];
-+
-+		strcpy(buf + sz, v->mod->modname);
-+		sz += v->mod->modnamesz - 1;
-+		strcpy(buf + sz, sep);
-+		sz += strlen(sep);
-+
-+		depmod_list_remove_data(roots, v->mod);
-+	}
-+	strcpy(buf + sz, vertex->mod->modname);
-+	ERR("Cycle detected: %s\n", buf);
-+
-+	free(buf);
-+	array_free_array(&reverse);
-+}
-+
-+static int depmod_report_cycles_from_root(struct depmod *depmod,
-+					  struct mod *root_mod,
-+					  struct kmod_list **roots,
-+					  void **stack,
-+					  size_t stack_size,
-+					  struct hash *loop_set)
-+{
-+	struct kmod_list *free_list = NULL; /* struct vertex */
-+	struct kmod_list *l;
-+	struct vertex *root;
-+	struct vertex *vertex;
-+	struct vertex *v;
-+	struct mod *m;
-+	struct mod **itr, **itr_end;
-+	size_t is;
-+
-+	root = vertex_new(root_mod, NULL);
-+	if (root == NULL) {
-+		ERR("No memory to report cycles\n");
-+		return -ENOMEM;
-+	}
-+
-+	l = kmod_list_append(free_list, root);
-+	if (l == NULL) {
-+		ERR("No memory to report cycles\n");
-+		return -ENOMEM;
-+	}
-+	free_list = l;
-+
-+	is = 0;
-+	stack[is++] = (void *)root;
-+
-+	while (is > 0) {
-+		vertex = stack[--is];
-+		m = vertex->mod;
-+		/*
-+		 * because of the topological sort we can start only
-+		 * from part of a loop or from a branch after a loop
-+		 */
-+		if (m->visited && m == root->mod) {
-+			depmod_report_one_cycle(depmod, vertex,
-+						roots, loop_set);
-+			continue;
- 		}
- 
--		if (ir >= n_mods)
--			break;
-+		m->visited = true;
-+		if (m->deps.count == 0) {
-+			/*
-+			 * boundary condition: if there is more than one
-+			 * single node branch (not a loop), it is
-+			 * recognized as a loop by the code above:
-+			 * m->visited because more then one,
-+			 * m == root->mod because it is a single node.
-+			 * So, prevent deeping into the branch second
-+			 * time.
-+			 */
-+			depmod_list_remove_data(roots, m);
- 
--		/* New DFS with ir as root, no edges */
--		stack[0] = ir;
--		ie = 0;
--
--		/* at least one root less */
--		n_roots--;
--
--		/* skip this root on next iteration */
--		ir++;
--
--		for (is = 1; is > 0;) {
--			uint16_t idx = stack[--is];
--			struct mod *m = depmod->modules.array[idx];
--			const struct mod **itr, **itr_end;
--
--			DBG("Cycle report: Trying %s visited=%d users=%d\n",
--			    m->modname, m->visited, users[idx]);
--
--			if (m->visited) {
--				int i, n = 0, sz = 0;
--				char *buf;
--				bool is_cyclic = false;
--
--				for (i = ie - 1; i >= 0; i--) {
--					struct mod *loop = depmod->modules.array[edges[i]];
--					sz += loop->modnamesz - 1;
--					n++;
--					if (loop == m) {
--						sz += loop->modnamesz - 1;
--						is_cyclic = true;
--						break;
--					}
--				}
--				/* Current module not found in dependency list.
--				 * Must be a related module. Ignore it.
--				 */
--				if (!is_cyclic)
--					continue;
--
--				num_cyclic += n;
--
--				buf = malloc(sz + n * strlen(sep) + 1);
--				sz = 0;
--				for (i = ie - n; i < ie; i++) {
--					struct mod *loop =
--						depmod->modules.array[edges[i]];
--					memcpy(buf + sz, loop->modname,
--					       loop->modnamesz - 1);
--					sz += loop->modnamesz - 1;
--					memcpy(buf + sz, sep, strlen(sep));
--					sz += strlen(sep);
--				}
--				memcpy(buf + sz, m->modname, m->modnamesz);
-+			continue;
-+		}
- 
--				ERR("Cycle detected: %s\n", buf);
-+		itr = (struct mod **) m->deps.array;
-+		itr_end = itr + m->deps.count;
-+		for (; itr < itr_end; itr++) {
-+			struct mod *dep = *itr;
-+			v = vertex_new(dep, vertex);
-+			if (v == NULL) {
-+				ERR("No memory to report cycles\n");
-+				return -ENOMEM;
-+			}
-+			assert(is < stack_size);
-+			stack[is++] = v;
- 
--				free(buf);
--				continue;
-+			l = kmod_list_append(free_list, v);
-+			if (l == NULL) {
-+				ERR("No memory to report cycles\n");
-+				return -ENOMEM;
- 			}
-+			free_list = l;
- 
--			m->visited = true;
-+		}
-+	}
-+	while (free_list) {
-+		v = kmod_list_data(free_list);
-+		l = kmod_list_remove(free_list);
-+		free_list = l;
-+		free(v);
-+	}
- 
--			if (m->deps.count == 0) {
--				continue;
--			}
-+	return 0;
-+}
- 
--			edges[ie++] = idx;
-+static void depmod_report_cycles(struct depmod *depmod, uint16_t n_mods,
-+				 uint16_t *users)
-+{
-+	int num_cyclic = 0;
-+	struct kmod_list *roots = NULL; /* struct mod */
-+	struct kmod_list *l;
-+	size_t n_r; /* local n_roots */
-+	int i;
-+	int err;
-+	void **stack;
-+	struct mod *m;
-+	struct mod *root;
-+	struct hash *loop_set;
- 
--			itr = (const struct mod **) m->deps.array;
--			itr_end = itr + m->deps.count;
--			for (; itr < itr_end; itr++) {
--				const struct mod *dep = *itr;
--				stack[is++] = dep->idx;
--				users[dep->idx]--;
--			}
-+	for (i = 0, n_r = 0; i < n_mods; i++) {
-+		if (users[i] <= 0)
-+			continue;
-+		m = depmod->modules.array[i];
-+		l = kmod_list_append(roots, m);
-+		if (l == NULL) {
-+			ERR("No memory to report cycles\n");
-+			return;
- 		}
-+		roots = l;
-+		n_r++;
-+	}
-+
-+	stack = malloc(n_r * sizeof(void *));
-+	if (stack == NULL) {
-+		ERR("No memory to report cycles\n");
-+		return;
-+	}
-+
-+	loop_set = hash_new(16, NULL);
-+	if (loop_set == NULL) {
-+		ERR("No memory to report cycles\n");
-+		return;
-+	}
-+
-+	while (roots != NULL) {
-+		root = kmod_list_data(roots);
-+		l = kmod_list_remove(roots);
-+		roots = l;
-+		err = depmod_report_cycles_from_root(depmod,
-+						     root,
-+						     &roots,
-+						     stack, n_r, loop_set);
-+		if (err < 0)
-+			goto err;
+-	if (builtin)
++	if (type != SEARCH_PATH)
+ 		len = 0;
+ 	else
+ 		len = strlen(path) + 1;
+@@ -468,15 +493,15 @@ static int cfg_search_add(struct cfg *cfg, const char *path)
+ 		ERR("search add: out of memory\n");
+ 		return -ENOMEM;
+ 	}
+-	s->builtin = builtin;
+-	if (builtin)
++	s->type = type;
++	if (type != SEARCH_PATH)
+ 		s->len = 0;
+ 	else {
+ 		s->len = len - 1;
+ 		memcpy(s->path, path, len);
  	}
  
-+	num_cyclic = hash_get_count(loop_set);
- 	ERR("Found %d modules in dependency cycles!\n", num_cyclic);
-+err:
-+	hash_free(loop_set);
+-	DBG("search add: %s, builtin=%hhu\n", path, builtin);
++	DBG("search add: %s, search type=%hhu\n", path, type);
+ 
+ 	s->next = cfg->searches;
+ 	cfg->searches = s;
+@@ -524,6 +549,32 @@ static void cfg_override_free(struct cfg_override *o)
+ 	free(o);
  }
  
- static int depmod_calculate_dependencies(struct depmod *depmod)
-@@ -1605,8 +1727,7 @@ static int depmod_calculate_dependencies(struct depmod *depmod)
++static int cfg_external_add(struct cfg *cfg, const char *path)
++{
++	struct cfg_external *ext;
++	size_t len = strlen(path);
++
++	ext = malloc(sizeof(struct cfg_external) + len + 1);
++	if (ext == NULL) {
++		ERR("external add: out of memory\n");
++		return -ENOMEM;
++	}
++
++	strcpy(ext->path, path);
++	ext->len = len;
++
++	DBG("external add: %s\n", ext->path);
++
++	ext->next = cfg->externals;
++	cfg->externals = ext;
++	return 0;
++}
++
++static void cfg_external_free(struct cfg_external *ext)
++{
++	free(ext);
++}
++
+ static int cfg_kernel_matches(const struct cfg *cfg, const char *pattern)
+ {
+ 	regex_t re;
+@@ -587,6 +638,20 @@ static int cfg_file_parse(struct cfg *cfg, const char *filename)
+ 			}
+ 
+ 			cfg_override_add(cfg, modname, subdir);
++		} else if (streq(cmd, "external")) {
++			const char *version = strtok_r(NULL, "\t ", &saveptr);
++			const char *dir = strtok_r(NULL, "\t ", &saveptr);
++
++			if (version == NULL || dir == NULL)
++				goto syntax_error;
++
++			if (!cfg_kernel_matches(cfg, version)) {
++				INF("%s:%u: external directory did not match %s\n",
++				    filename, linenum, version);
++				goto done_next;
++			}
++
++			cfg_external_add(cfg, dir);
+ 		} else if (streq(cmd, "include")
+ 				|| streq(cmd, "make_map_files")) {
+ 			INF("%s:%u: command %s not implemented yet\n",
+@@ -781,6 +846,12 @@ static void cfg_free(struct cfg *cfg)
+ 		cfg->searches = cfg->searches->next;
+ 		cfg_search_free(tmp);
+ 	}
++
++	while (cfg->externals) {
++		struct cfg_external *tmp = cfg->externals;
++		cfg->externals = cfg->externals->next;
++		cfg_external_free(tmp);
++	}
+ }
+ 
+ 
+@@ -988,6 +1059,33 @@ static int depmod_module_del(struct depmod *depmod, struct mod *mod)
+ 	return 0;
+ }
+ 
++static const char *search_to_string(const struct cfg_search *s)
++{
++	switch(s->type) {
++	case SEARCH_EXTERNAL:
++		return "external";
++	case SEARCH_BUILTIN:
++		return "built-in";
++	default:
++		return s->path;
++	}
++}
++
++static bool depmod_is_path_starts_with(const char *path,
++				       size_t pathlen,
++				       const char *prefix,
++				       size_t prefix_len)
++{
++	if (pathlen <= prefix_len)
++		return false;
++	if (path[prefix_len] != '/')
++		return false;
++	if (memcmp(path, prefix, prefix_len) != 0)
++		return false;
++
++	return true;
++}
++
+ /* returns if existing module @mod is higher priority than newpath.
+  * note this is the inverse of module-init-tools is_higher_priority()
+  */
+@@ -996,6 +1094,7 @@ static int depmod_module_is_higher_priority(const struct depmod *depmod, const s
+ 	const struct cfg *cfg = depmod->cfg;
+ 	const struct cfg_override *ov;
+ 	const struct cfg_search *se;
++	const struct cfg_external *ext;
+ 
+ 	/* baselen includes the last '/' and mod->baselen doesn't. So it's
+ 	 * actually correct to use modnamelen in the first and modnamesz in
+@@ -1004,35 +1103,55 @@ static int depmod_module_is_higher_priority(const struct depmod *depmod, const s
+ 	size_t oldlen = mod->baselen + mod->modnamesz;
+ 	const char *oldpath = mod->path;
+ 	int i, bprio = -1, oldprio = -1, newprio = -1;
+-
+-	assert(strncmp(newpath, cfg->dirname, cfg->dirnamelen) == 0);
+-	assert(strncmp(oldpath, cfg->dirname, cfg->dirnamelen) == 0);
+-
+-	newpath += cfg->dirnamelen + 1;
+-	newlen -= cfg->dirnamelen + 1;
+-	oldpath += cfg->dirnamelen + 1;
+-	oldlen -= cfg->dirnamelen + 1;
++	size_t relnewlen = 0;
++	size_t reloldlen = 0;
++	const char *relnewpath = NULL;
++	const char *reloldpath = NULL;
+ 
+ 	DBG("comparing priorities of %s and %s\n",
+ 	    oldpath, newpath);
+ 
++	if (strncmp(newpath, cfg->dirname, cfg->dirnamelen) == 0) {
++		relnewpath = newpath + cfg->dirnamelen + 1;
++		relnewlen = newlen - cfg->dirnamelen + 1;
++	}
++	if (strncmp(oldpath, cfg->dirname, cfg->dirnamelen) == 0) {
++		reloldpath = oldpath + cfg->dirnamelen + 1;
++		reloldlen = oldlen - cfg->dirnamelen + 1;
++	}
++
+ 	for (ov = cfg->overrides; ov != NULL; ov = ov->next) {
+ 		DBG("override %s\n", ov->path);
+-		if (newlen == ov->len && memcmp(ov->path, newpath, newlen) == 0)
++		if (relnewlen == ov->len &&
++		    memcmp(ov->path, relnewpath, relnewlen) == 0)
+ 			return 0;
+-		if (oldlen == ov->len && memcmp(ov->path, oldpath, oldlen) == 0)
++		if (reloldlen == ov->len &&
++		    memcmp(ov->path, reloldpath, reloldlen) == 0)
+ 			return 1;
  	}
  
- 	if (n_sorted < n_mods) {
--		depmod_report_cycles(depmod, n_mods, n_mods - n_sorted,
--				     users, roots, sorted);
-+		depmod_report_cycles(depmod, n_mods, users);
- 		ret = -EINVAL;
- 		goto exit;
+ 	for (i = 0, se = cfg->searches; se != NULL; se = se->next, i++) {
+-		DBG("search %s\n", se->builtin ? "built-in" : se->path);
+-		if (se->builtin)
++		DBG("search %s\n", search_to_string(se));
++		if (se->type == SEARCH_BUILTIN)
+ 			bprio = i;
+-		else if (newlen > se->len && newpath[se->len] == '/' &&
+-			 memcmp(se->path, newpath, se->len) == 0)
++		else if (se->type == SEARCH_EXTERNAL) {
++			for (ext = cfg->externals; ext != NULL; ext = ext->next, i++) {
++				if (depmod_is_path_starts_with(newpath,
++							       newlen,
++							       ext->path,
++							       ext->len))
++					newprio = i;
++				if (depmod_is_path_starts_with(oldpath,
++							       oldlen,
++							       ext->path,
++							       ext->len))
++					oldprio = i;
++			}
++		} else if (relnewlen > se->len && relnewpath[se->len] == '/' &&
++			 memcmp(se->path, relnewpath, se->len) == 0)
+ 			newprio = i;
+-		else if (oldlen > se->len && oldpath[se->len] == '/' &&
+-			 memcmp(se->path, oldpath, se->len) == 0)
++		else if (reloldlen > se->len && reloldpath[se->len] == '/' &&
++			 memcmp(se->path, reloldpath, se->len) == 0)
+ 			oldprio = i;
  	}
+ 
+@@ -1215,10 +1334,19 @@ static int depmod_modules_search_path(struct depmod *depmod,
+ static int depmod_modules_search(struct depmod *depmod)
+ {
+ 	int err;
++	struct cfg_external *ext;
+ 
+ 	err = depmod_modules_search_path(depmod, depmod->cfg->dirname);
+ 	if (err < 0)
+ 		return err;
++
++	for (ext = depmod->cfg->externals; ext != NULL; ext = ext->next) {
++		err = depmod_modules_search_path(depmod, ext->path);
++		if (err < 0 && err == -ENOENT)
++			/* ignore external dir absense */
++			continue;
++	}
++
+ 	return 0;
+ }
+ 
 -- 
-2.7.4
+2.9.3
 
