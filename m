@@ -1,62 +1,48 @@
-Return-Path: <shea@shealevy.com>
-From: Shea Levy <shea@shealevy.com>
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>, Nikolay Amiantov <ab@fmap.me>
-Cc: linux-modules <linux-modules@vger.kernel.org>
-Subject: Re: Improvements in search of kernel modules directory
-In-Reply-To: <CAKi4VA+3z3dqN89yazY2UJ40KmTAHzgW0UfiGfY3odbngqmj7A@mail.gmail.com>
-References: <20160816005032.28881-1-ab@fmap.me> <CAKi4VA+3z3dqN89yazY2UJ40KmTAHzgW0UfiGfY3odbngqmj7A@mail.gmail.com>
-Date: Mon, 05 Dec 2016 07:35:51 -0500
-Message-ID: <8737i25za0.fsf@shlevy-laptop.i-did-not-set--mail-host-address--so-tickle-me>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-	micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <20160816005032.28881-1-ab@fmap.me>
+References: <20160816005032.28881-1-ab@fmap.me>
+Date: Sun, 4 Dec 2016 19:24:43 -0800
+Message-ID: <CAKi4VA+3z3dqN89yazY2UJ40KmTAHzgW0UfiGfY3odbngqmj7A@mail.gmail.com>
+Subject: Re: Improvements in search of kernel modules directory
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Nikolay Amiantov <ab@fmap.me>
+Cc: linux-modules <linux-modules@vger.kernel.org>, Shea Levy <shea@shealevy.com>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
---=-=-=
-Content-Type: text/plain
+Hi,
 
-Hi Lucas,
-
-Lucas De Marchi <lucas.de.marchi@gmail.com> writes:
+On Mon, Aug 15, 2016 at 5:50 PM, Nikolay Amiantov <ab@fmap.me> wrote:
+> These series of patches add more control over how kernel modules directory is
+> found:
 >
-> An environment variable for the library IMO is not a good option. If
-> you take a look on how we separate the responsibility of each
-> component you will see that we parse environment vars on the tools
-> (e.g. modprobe) not on the library.
+> * Add an environment variable which allows to override kernel modules
+>   directory;
+> * Allow to hardcode several paths which are searched in order for `uname -r`
+>   subdirectory;
+> * Add a configure option to set those paths, instead of hardcoding
+>   /lib/modules.
 >
+> We have used the first patch in NixOS[1] for a long time to point kmod to
+> kernel modules. While an environment variable is handy and has been solving our
+> problems, it doesn't cover all our cases. We have two directories:
 
-Can you explain a bit why an environment variable is not OK here? The
-code path using get_kernel_release is shared by many tools, and as
-things currently stand there is already a global setting fixed in this
-file. If we were to move this out to the tools, we would have to
-duplicate this code in several places and any external tools linked
-against kmod (e.g. systemd) will need to be updated as well. By default
-users of this interface will not know that they need to check the env
-var, because as things stand the code will just work, so it's likely
-that new uses, in and out of kmod, will start out not respecting
-MODULE_DIR and only after someone notices things aren't working for a
-case relying on it will they be changed.
+An environment variable for the library IMO is not a good option. If
+you take a look on how we separate the responsibility of each
+component you will see that we parse environment vars on the tools
+(e.g. modprobe) not on the library.
 
-Thanks,
-Shea
+> Additionally, while working on those it was discovered that kmod makes use of
+> PATH_MAX. This constant is considered harmful[4] because it doesn't correspond
+> to real possible length of filesystem paths. This can be considered a bug, but
+> in those patches it was decided to follow upstream design decisions wherever
+> possible and so we also use it here.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+PATH_MAX is just used as a large enough buffer to hold some filenames,
+module paths, etc.  Recently we introduced a new helper APIs
+(scratchbuffer) to cover the cases in which we don't know the maximum
+size of the buffer... Some places were converted to this new API. Few
+free to submit patches using it in places it makes sense (i.e. it's
+buggy to use PATH_MAX).
 
------BEGIN PGP SIGNATURE-----
-
-iQIcBAEBCAAGBQJYRV8nAAoJEFwL1pV9hv4n1SUP/ignsBJmhgqr1jaF6mzWBlRn
-vAlOyXpRrZ104Zd/5Ak6XUeL2KeknvWZtxgvgSTOX59aKsZr4vcpspCVv/eZnCgI
-eHkl0v6Fl74WhPcwx6/le05RUTtOwK/sLw5ICMFnJ8YYfqlMDLYMPkYItlD9Wdwm
-l0VKRGKrmUiUc9gGj6HstUq+W7QmP9Rk0/Ibt01+vPAmDYbFPcR003aHMK86hWG3
-g6MNFtdK8vtg/xEptfAiiFnXJ6U6mUL4d2TJum5QCBnURZbcb7AhOhoPkfjxbR5A
-s2D5BwNQo0hcrvO2UvxZlnNj3N3jWDqOsrwtwvTI6U5JkSq+ZyrweXpX+03OUPKP
-JmCpkXWOGh1xyK8azAlmVUZAuMGoplwDhhsCIrwPcIxT985EyHfsVQ+LLjsc3k68
-l3fe5frAWE+to3IXoc+pCJl7QcxbIS44wiAOWcn/9U/B1ZufNa96c0NeBTrOxv9d
-1DNk0D+YSql/rhX/qXeoLaiU7SsXuYlAB62Jw9hf06wl1yMptA8HP1JIJF8QrjDD
-eP/hSJfGhwcwbGwL0xr8umMhV2qd8Ww8oEVf80cOqqRAQQz62nBz1R4dhPWO0lSI
-rbS0kOY1k71lJh63TyhDw7/92IKMAkYZ/VsuWrxhOl+/r9O/wPmyhlRs7hdbDJBT
-xovx6fEV8YCqgaPxXkAr
-=zF9l
------END PGP SIGNATURE-----
---=-=-=--
+Lucas De Marchi
