@@ -1,207 +1,75 @@
-MIME-Version: 1.0
-In-Reply-To: <20160816005032.28881-1-ab@fmap.me>
-References: <20160816005032.28881-1-ab@fmap.me>
-Date: Fri, 11 Nov 2016 00:13:28 -0200
-Message-ID: <CAKi4VAL4907RvRJFkUiyVEK3Qjd8EqvBus7T7J2pQLaRVm4prg@mail.gmail.com>
+Return-Path: <yauheni.kaliuta@redhat.com>
+From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To: Shea Levy <shea@shealevy.com>
+Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>, Nikolay Amiantov <ab@fmap.me>,
+        linux-modules <linux-modules@vger.kernel.org>
 Subject: Re: Improvements in search of kernel modules directory
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Nikolay Amiantov <ab@fmap.me>
-Cc: linux-modules <linux-modules@vger.kernel.org>, Shea Levy <shea@shealevy.com>
-Content-Type: multipart/alternative; boundary=001a1148962a2940890540fd09ac
+References: <20160816005032.28881-1-ab@fmap.me>
+	<CAKi4VA+3z3dqN89yazY2UJ40KmTAHzgW0UfiGfY3odbngqmj7A@mail.gmail.com>
+	<8737i25za0.fsf@shlevy-laptop.i-did-not-set--mail-host-address--so-tickle-me>
+Date: Wed, 07 Dec 2016 09:06:35 +0200
+In-Reply-To: <8737i25za0.fsf@shlevy-laptop.i-did-not-set--mail-host-address--so-tickle-me>
+	(Shea Levy's message of "Mon, 05 Dec 2016 07:35:51 -0500")
+Message-ID: <xunylgvs2p6s.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 List-ID: <linux-modules.vger.kernel.org>
 
---001a1148962a2940890540fd09ac
-Content-Type: text/plain; charset=UTF-8
+Hi, Shea!
 
-Hi Nikolay,
+>>>>> On Mon, 05 Dec 2016 07:35:51 -0500, Shea Levy  wrote:
+ > Lucas De Marchi <lucas.de.marchi@gmail.com> writes:
+ >> 
+ >> An environment variable for the library IMO is not a good option. If
+ >> you take a look on how we separate the responsibility of each
+ >> component you will see that we parse environment vars on the tools
+ >> (e.g. modprobe) not on the library.
+ >> 
 
-I'm very sorry to miss these patches and not give an answer soon...
-I totally forgot about them. I'll take a look this week.
+ > Can you explain a bit why an environment variable is not OK here? The
+ > code path using get_kernel_release is shared by many tools, and as
+ > things currently stand there is already a global setting fixed in this
+ > file. If we were to move this out to the tools, we would have to
+ > duplicate this code in several places and any external tools linked
+ > against kmod (e.g. systemd) will need to be updated as well. By default
+ > users of this interface will not know that they need to check the env
+ > var, because as things stand the code will just work, so it's likely
+ > that new uses, in and out of kmod, will start out not respecting
+ > MODULE_DIR and only after someone notices things aren't working for a
+ > case relying on it will they be changed.
 
-Lucas De Marchi
+What worries me with the approach is increasing ambiguity and number of
+points of syncronization.
 
-On Mon, Aug 15, 2016 at 9:50 PM, Nikolay Amiantov <ab@fmap.me> wrote:
+I see kernel modules directory location as a part of shared state of
+several parties, at least "make modules_install" of kbuild, module builders
+like dkms, binary module packages, the kmod tools themself (this is
+significant different to variables like LS_COLORS, which affect only the
+current program run). Since the possible modules directories are mutually
+exclusive (only one is taken in use), they must be somehow in sync, or I
+expect some surprises for users, a-la:
 
-> These series of patches add more control over how kernel modules directory
-> is
-> found:
->
-> * Add an environment variable which allows to override kernel modules
->   directory;
-> * Allow to hardcode several paths which are searched in order for `uname
-> -r`
->   subdirectory;
-> * Add a configure option to set those paths, instead of hardcoding
->   /lib/modules.
->
-> We have used the first patch in NixOS[1] for a long time to point kmod to
-> kernel modules. While an environment variable is handy and has been
-> solving our
-> problems, it doesn't cover all our cases. We have two directories:
->
-> * /run/current-system/kernel-modules/lib/modules
-> * /run/booted-system/kernel-modules/lib/modules
->
-> , which are symlinked to modules for current system configuration (i.e.
-> after
-> an update) and the one which the system was booted with. It allows us to
-> both
-> give users ability to install new modules and have their old kernel modules
-> accessible until a reboot (which is useful in case of kernel upgrade).
->
-> Before those patches the necessary logic (see if kernel modules for current
-> kernel version are available in current-system, if not then fall back to
-> booted-system) was implemented as a shell wrapper around kmod, which was
-> unwieldy and didn't work for applications that use kmod directly. It was
-> considered better to move this logic to kmod itself. Also, NixOS uses
-> nixpkgs,
-> a set of distribution-agnostic packages (which run on e.g. Ubuntu and even
-> Mac
-> OS X where applicable), so it was necessary to preserve /lib/modules as a
-> fallback directory in kmod for it to work on FHS distributions.
->
-> As a result a set of generic patches was written that implement necessary
-> behaviour while being potentially useful for upstream. Environment
-> variable is
-> still used in several places (e.g. in automatic generation and running of
-> virtual machines) and is useful for us even with the rest of those patches.
->
-> A home of those patches can be found on GitHub[2] along with some
-> discussion, as can be related NixOS patches and discussion[3].
->
-> Big thanks to Shea Levy for the original patch, extensive code review and
-> useful advices.
->
-> Additionally, while working on those it was discovered that kmod makes use
-> of
-> PATH_MAX. This constant is considered harmful[4] because it doesn't
-> correspond
-> to real possible length of filesystem paths. This can be considered a bug,
-> but
-> in those patches it was decided to follow upstream design decisions
-> wherever
-> possible and so we also use it here.
->
-> [1]: http://nixos.org/
-> [2]: https://github.com/abbradar/kmod/
-> [3]: https://github.com/NixOS/nixpkgs/pull/17738/
-> [4]: http://insanecoding.blogspot.ru/2007/11/pathmax-simply-isnt.html
->
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+- you install a module package, it has it's own idea about the directory
+  (most probably hardcoded), but depmod from postinstall script doesn't
+  generate working configuration (but doesn't fail as well most probably,
+  since it's just working on a different directory);
+- in general, result of an operation like "dpkg -i module.deb" depends of
+  which user (with what environment) performs it;
+...
 
+Something similar about several directories. If we install some package
+which installs modules (and creates the dir) into a directory which did not
+exist and is checked earlier, then the old modules stop working without
+very obvious (as for me) connection with the installed one.
 
+The modules installation tools should be aware somehow about directory,
+which is going to be used.
+
+Since, as I mentioned, they are exclusive, there is no analogy with
+variables like PATH, where all of the dirs are part of the configuration.
+
+I'm not sure if the concerns are important in the real life.
 
 -- 
-Lucas De Marchi
-
---001a1148962a2940890540fd09ac
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi Nikolay,<div><br></div><div>I&#39;m very sorry to miss =
-these patches and not give an answer soon...=C2=A0</div><div>I totally forg=
-ot about them. I&#39;ll take a look this week.</div><div><br></div><div>Luc=
-as De Marchi</div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote"=
->On Mon, Aug 15, 2016 at 9:50 PM, Nikolay Amiantov <span dir=3D"ltr">&lt;<a=
- href=3D"mailto:ab@fmap.me" target=3D"_blank">ab@fmap.me</a>&gt;</span> wro=
-te:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-=
-left:1px #ccc solid;padding-left:1ex">These series of patches add more cont=
-rol over how kernel modules directory is<br>
-found:<br>
-<br>
-* Add an environment variable which allows to override kernel modules<br>
-=C2=A0 directory;<br>
-* Allow to hardcode several paths which are searched in order for `uname -r=
-`<br>
-=C2=A0 subdirectory;<br>
-* Add a configure option to set those paths, instead of hardcoding<br>
-=C2=A0 /lib/modules.<br>
-<br>
-We have used the first patch in NixOS[1] for a long time to point kmod to<b=
-r>
-kernel modules. While an environment variable is handy and has been solving=
- our<br>
-problems, it doesn&#39;t cover all our cases. We have two directories:<br>
-<br>
-* /run/current-system/kernel-<wbr>modules/lib/modules<br>
-* /run/booted-system/kernel-<wbr>modules/lib/modules<br>
-<br>
-, which are symlinked to modules for current system configuration (i.e. aft=
-er<br>
-an update) and the one which the system was booted with. It allows us to bo=
-th<br>
-give users ability to install new modules and have their old kernel modules=
-<br>
-accessible until a reboot (which is useful in case of kernel upgrade).<br>
-<br>
-Before those patches the necessary logic (see if kernel modules for current=
-<br>
-kernel version are available in current-system, if not then fall back to<br=
->
-booted-system) was implemented as a shell wrapper around kmod, which was<br=
->
-unwieldy and didn&#39;t work for applications that use kmod directly. It wa=
-s<br>
-considered better to move this logic to kmod itself. Also, NixOS uses nixpk=
-gs,<br>
-a set of distribution-agnostic packages (which run on e.g. Ubuntu and even =
-Mac<br>
-OS X where applicable), so it was necessary to preserve /lib/modules as a<b=
-r>
-fallback directory in kmod for it to work on FHS distributions.<br>
-<br>
-As a result a set of generic patches was written that implement necessary<b=
-r>
-behaviour while being potentially useful for upstream. Environment variable=
- is<br>
-still used in several places (e.g. in automatic generation and running of<b=
-r>
-virtual machines) and is useful for us even with the rest of those patches.=
-<br>
-<br>
-A home of those patches can be found on GitHub[2] along with some<br>
-discussion, as can be related NixOS patches and discussion[3].<br>
-<br>
-Big thanks to Shea Levy for the original patch, extensive code review and<b=
-r>
-useful advices.<br>
-<br>
-Additionally, while working on those it was discovered that kmod makes use =
-of<br>
-PATH_MAX. This constant is considered harmful[4] because it doesn&#39;t cor=
-respond<br>
-to real possible length of filesystem paths. This can be considered a bug, =
-but<br>
-in those patches it was decided to follow upstream design decisions whereve=
-r<br>
-possible and so we also use it here.<br>
-<br>
-[1]: <a href=3D"http://nixos.org/" rel=3D"noreferrer" target=3D"_blank">htt=
-p://nixos.org/</a><br>
-[2]: <a href=3D"https://github.com/abbradar/kmod/" rel=3D"noreferrer" targe=
-t=3D"_blank">https://github.com/abbradar/<wbr>kmod/</a><br>
-[3]: <a href=3D"https://github.com/NixOS/nixpkgs/pull/17738/" rel=3D"norefe=
-rrer" target=3D"_blank">https://github.com/NixOS/<wbr>nixpkgs/pull/17738/</=
-a><br>
-[4]: <a href=3D"http://insanecoding.blogspot.ru/2007/11/pathmax-simply-isnt=
-.html" rel=3D"noreferrer" target=3D"_blank">http://insanecoding.blogspot.<w=
-br>ru/2007/11/pathmax-simply-<wbr>isnt.html</a><br>
-<br>
---<br>
-To unsubscribe from this list: send the line &quot;unsubscribe linux-module=
-s&quot; in<br>
-the body of a message to <a href=3D"mailto:majordomo@vger.kernel.org">major=
-domo@vger.kernel.org</a><br>
-More majordomo info at=C2=A0 <a href=3D"http://vger.kernel.org/majordomo-in=
-fo.html" rel=3D"noreferrer" target=3D"_blank">http://vger.kernel.org/<wbr>m=
-ajordomo-info.html</a><br>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><div class=
-=3D"gmail_signature" data-smartmail=3D"gmail_signature">Lucas De Marchi</di=
-v>
-</div></div>
-
---001a1148962a2940890540fd09ac--
+WBR,
+Yauheni Kaliuta
