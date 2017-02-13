@@ -2,8 +2,8 @@ MIME-Version: 1.0
 In-Reply-To: <1478864601-3259-1-git-send-email-yauheni.kaliuta@redhat.com>
 References: <1478683053.4155.8.camel@suse.com>
 	<1478864601-3259-1-git-send-email-yauheni.kaliuta@redhat.com>
-Date: Mon, 13 Feb 2017 00:32:29 -0800
-Message-ID: <CAKi4VA+dTLSTqk2T4jY8T=BgsGzzzGJ6P2zQfGpcXT=MtquXYg@mail.gmail.com>
+Date: Mon, 13 Feb 2017 00:16:44 -0800
+Message-ID: <CAKi4VA+pA2AoUMn-cinWr0b7c4v1O_ka+aRF5TbraZAcT0W_AA@mail.gmail.com>
 Subject: Re: [PATCH RFC 0/3] Proposal for cycles handling
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
 To: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
@@ -21,12 +21,8 @@ On Fri, Nov 11, 2016 at 3:43 AM, Yauheni Kaliuta
 >
 > Yauheni Kaliuta (3):
 >   testsuite: depmod: check netsted loops reporting
->   libkmod: list: export list handling functions
->   depmod: handle nested loops
 
-I added some comments. It's looking good and I'd like to get this in
-to do a release this week.
-
-thanks for fixing this.
+This patch didn't arrive to the mailing list probably due to its size.
+Do you have a git repo I can pull it from?
 
 Lucas De Marchi
