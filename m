@@ -1,42 +1,32 @@
-Return-Path: <yauheni.kaliuta@redhat.com>
-From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>,
-        Mian Yousaf Kaukab <yousaf.kaukab@suse.com>,
-        bjorn.andersson@linaro.org, Jessica Yu <jeyu@redhat.com>
-Subject: Re: [PATCH RFC 0/3] Proposal for cycles handling
+MIME-Version: 1.0
+In-Reply-To: <1478864601-3259-1-git-send-email-yauheni.kaliuta@redhat.com>
 References: <1478683053.4155.8.camel@suse.com>
 	<1478864601-3259-1-git-send-email-yauheni.kaliuta@redhat.com>
-	<CAKi4VA+pA2AoUMn-cinWr0b7c4v1O_ka+aRF5TbraZAcT0W_AA@mail.gmail.com>
-Date: Mon, 13 Feb 2017 11:56:34 +0200
-In-Reply-To: <CAKi4VA+pA2AoUMn-cinWr0b7c4v1O_ka+aRF5TbraZAcT0W_AA@mail.gmail.com>
-	(Lucas De Marchi's message of "Mon, 13 Feb 2017 00:16:44 -0800")
-Message-ID: <xunyshniwh0t.fsf@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+Date: Mon, 13 Feb 2017 00:32:29 -0800
+Message-ID: <CAKi4VA+dTLSTqk2T4jY8T=BgsGzzzGJ6P2zQfGpcXT=MtquXYg@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/3] Proposal for cycles handling
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>,
+	Mian Yousaf Kaukab <yousaf.kaukab@suse.com>, bjorn.andersson@linaro.org,
+	Jessica Yu <jeyu@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi, Lucas!
+On Fri, Nov 11, 2016 at 3:43 AM, Yauheni Kaliuta
+<yauheni.kaliuta@redhat.com> wrote:
+> Back to the discussion, does it make any sense?
+>
+> This is an RFC proposal of dependency loops reporting.
+>
+> Yauheni Kaliuta (3):
+>   testsuite: depmod: check netsted loops reporting
+>   libkmod: list: export list handling functions
+>   depmod: handle nested loops
 
->>>>> On Mon, 13 Feb 2017 00:16:44 -0800, Lucas De Marchi  wrote:
+I added some comments. It's looking good and I'd like to get this in
+to do a release this week.
 
- > On Fri, Nov 11, 2016 at 3:43 AM, Yauheni Kaliuta
- > <yauheni.kaliuta@redhat.com> wrote:
- >> Back to the discussion, does it make any sense?
- >> 
- >> This is an RFC proposal of dependency loops reporting.
- >> 
- >> Yauheni Kaliuta (3):
- >> testsuite: depmod: check netsted loops reporting
+thanks for fixing this.
 
- > This patch didn't arrive to the mailing list probably due to its size.
- > Do you have a git repo I can pull it from?
-
-I've put it to github (the sent version),
-https://github.com/ykaliuta/kmod/commit/96c987e287262c63a9e268f0e3b48aea98700a0f
-
-Thank you a lot for the review!
-
--- 
-WBR,
-Yauheni Kaliuta
+Lucas De Marchi
