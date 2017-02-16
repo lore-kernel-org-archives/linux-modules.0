@@ -1,58 +1,55 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from skprod3.natinst.com ([130.164.80.24]:55558 "EHLO ni.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1751201AbdATXQN (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 20 Jan 2017 18:16:13 -0500
-Received: from us-aus-exhub2.ni.corp.natinst.com (us-aus-exhub2.ni.corp.natinst.com [130.164.68.32])
-        by us-aus-skprod3.natinst.com (8.15.0.59/8.15.0.59) with ESMTPS id v0KNG7k6027483
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-modules@vger.kernel.org>; Fri, 20 Jan 2017 17:16:07 -0600
-From: James Minor <james.minor@ni.com>
-To: <linux-modules@vger.kernel.org>
-CC: <julia.cartwright@ni.com>, <zach.brown@ni.com>, <ken.sharp@ni.com>,
-        James Minor <james.minor@ni.com>
-Subject: [RFC v1] libkmod: Fix handling of quotes in kernel command line
-Date: Fri, 20 Jan 2017 17:15:50 -0600
-Message-ID: <1484954150-12831-1-git-send-email-james.minor@ni.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+Received: from mga06.intel.com ([134.134.136.31]:32024 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S932769AbdBPR2c (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 16 Feb 2017 12:28:32 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: linux-modules@vger.kernel.org
+Cc: James Minor <james.minor@ni.com>, julia.cartwright@ni.com,
+        zach.brown@ni.com, ken.sharp@ni.com
+Subject: [PATCH 1/2] libkmod-config: replace 0/1 with bool
+Date: Thu, 16 Feb 2017 09:28:30 -0800
+Message-Id: <20170216172831.3019-1-lucas.demarchi@intel.com>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-If a module parameter on the command line contains quotes, any
-spaces inside those quotes should be included as part of the
-parameter.
-
-Signed-off-by: James Minor <james.minor@ni.com>
 ---
- libkmod/libkmod-config.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ libkmod/libkmod-config.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
-index 19f56a7..0596025 100644
+index 0596025..18f300a 100644
 --- a/libkmod/libkmod-config.c
 +++ b/libkmod/libkmod-config.c
-@@ -497,6 +497,7 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
+@@ -496,8 +496,8 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
+ {
  	char buf[KCMD_LINE_SIZE];
  	int fd, err;
- 	char *p, *modname,  *param = NULL, *value = NULL, is_module = 1;
-+	bool is_quoted = false;
+-	char *p, *modname,  *param = NULL, *value = NULL, is_module = 1;
+-	bool is_quoted = false;
++	char *p, *modname,  *param = NULL, *value = NULL;
++	bool is_quoted = false, is_module = true;
  
  	fd = open("/proc/cmdline", O_RDONLY|O_CLOEXEC);
  	if (fd < 0) {
-@@ -514,6 +515,12 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
+@@ -528,7 +528,7 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
+ 				kcmdline_parse_result(config, modname, param, value);
+ 			param = value = NULL;
+ 			modname = p + 1;
+-			is_module = 1;
++			is_module = true;
+ 			break;
+ 		case '.':
+ 			if (param == NULL) {
+@@ -540,7 +540,7 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
+ 			if (param != NULL)
+ 				value = p + 1;
+ 			else
+-				is_module = 0;
++				is_module = false;
+ 			break;
+ 		}
  	}
- 
- 	for (p = buf, modname = buf; *p != '\0' && *p != '\n'; p++) {
-+		if (*p == '"') {
-+			is_quoted = !is_quoted;
-+			continue;
-+		}
-+		if (is_quoted)
-+			continue;
- 		switch (*p) {
- 		case ' ':
- 			*p = '\0';
 -- 
-1.9.1
+2.9.3
 
