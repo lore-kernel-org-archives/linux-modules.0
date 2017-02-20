@@ -1,44 +1,52 @@
-MIME-Version: 1.0
-In-Reply-To: <1478864601-3259-3-git-send-email-yauheni.kaliuta@redhat.com>
-References: <1478683053.4155.8.camel@suse.com>
-	<1478864601-3259-1-git-send-email-yauheni.kaliuta@redhat.com>
-	<1478864601-3259-3-git-send-email-yauheni.kaliuta@redhat.com>
-Date: Mon, 13 Feb 2017 00:05:07 -0800
-Message-ID: <CAKi4VAJ4kQucKsj3SYZzzRJU9KfEQoDwgQfnWYDki3Gfn5UG1Q@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/3] libkmod: list: export list handling functions
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>,
-	Mian Yousaf Kaukab <yousaf.kaukab@suse.com>, bjorn.andersson@linaro.org,
-	Jessica Yu <jeyu@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+Return-Path: <yauheni.kaliuta@redhat.com>
+From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To: linux-modules <linux-modules@vger.kernel.org>
+Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Mian Yousaf Kaukab <yousaf.kaukab@suse.com>,
+        bjorn.andersson@linaro.org
+Subject: [PATCH RFC v2 0/2] Proposal for cycles handling
+Date: Mon, 20 Feb 2017 16:18:58 +0200
+Message-Id: <20170220141900.8705-1-yauheni.kaliuta@redhat.com>
+In-Reply-To: <CAKi4VA+dTLSTqk2T4jY8T=BgsGzzzGJ6P2zQfGpcXT=MtquXYg@mail.gmail.com>
+References: <CAKi4VA+dTLSTqk2T4jY8T=BgsGzzzGJ6P2zQfGpcXT=MtquXYg@mail.gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Nov 11, 2016 at 3:43 AM, Yauheni Kaliuta
-<yauheni.kaliuta@redhat.com> wrote:
-> The library uses list functions to create lists internally and
-> provides to the clients immutable lists and only functions to
-> traverse them.
->
-> It may be useful to create own lists in the kmod utilities, so
-> export functions for lists creation as well (as it's done for
-> arrays). The following functions affected (needed for the
-> following depmod modifications):
->
-> kmod_list_append()
-> kmod_list_remove()
-> kmod_list_remove_data()
->
-> The patch also adds kmod_list_data() accessor to keep the
-> struct kmod_list opaque.
+This is an RFC proposal of dependency loops reporting.
 
-I don't see a use for these functions outside of the tools we provide.
-We don't need to export them (to external users) in order to use for
-our tools.  You can just make the tools include libkmod-internal.h and
-use that.
+V1->V2:
 
-In fact since you didn't update the .sym file what will happen is that
-external users will see a function in the header but won't be able to
-use it since it will not be part of the .so.
+- use libkmod-internal.h and access list value directly;
+- initially create reverse array with 3 elements;
+- use memcpy() instead of strcpy() in depmod_report_one_cycle();
+- replace "because" with "since" in comment about single branch.
 
-Lucas De Marchi
+Yauheni Kaliuta (2):
+  testsuite: depmod: check netsted loops reporting
+  depmod: handle nested loops
+
+ Makefile.am                                        |   4 +
+ testsuite/module-playground/Makefile               |   7 +
+ testsuite/module-playground/cache/mod-loop-h.ko    | Bin 0 -> 197808 bytes
+ testsuite/module-playground/cache/mod-loop-i.ko    | Bin 0 -> 197808 bytes
+ testsuite/module-playground/cache/mod-loop-j.ko    | Bin 0 -> 197968 bytes
+ testsuite/module-playground/cache/mod-loop-k.ko    | Bin 0 -> 197808 bytes
+ testsuite/module-playground/mod-loop-h.c           |  25 ++
+ testsuite/module-playground/mod-loop-i.c           |  25 ++
+ testsuite/module-playground/mod-loop-j.c           |  26 ++
+ testsuite/module-playground/mod-loop-k.c           |  25 ++
+ testsuite/module-playground/mod-loop.h             |   4 +
+ testsuite/populate-modules.sh                      |   4 +
+ .../test-depmod/detect-loop/correct.txt            |   6 +-
+ tools/depmod.c                                     | 292 +++++++++++++++------
+ 14 files changed, 332 insertions(+), 86 deletions(-)
+ create mode 100644 testsuite/module-playground/cache/mod-loop-h.ko
+ create mode 100644 testsuite/module-playground/cache/mod-loop-i.ko
+ create mode 100644 testsuite/module-playground/cache/mod-loop-j.ko
+ create mode 100644 testsuite/module-playground/cache/mod-loop-k.ko
+ create mode 100644 testsuite/module-playground/mod-loop-h.c
+ create mode 100644 testsuite/module-playground/mod-loop-i.c
+ create mode 100644 testsuite/module-playground/mod-loop-j.c
+ create mode 100644 testsuite/module-playground/mod-loop-k.c
+
+-- 
+2.9.2.368.g08bb350
