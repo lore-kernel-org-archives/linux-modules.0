@@ -4,384 +4,52 @@ To: linux-modules <linux-modules@vger.kernel.org>
 Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>,
         Mian Yousaf Kaukab <yousaf.kaukab@suse.com>,
         bjorn.andersson@linaro.org
-Subject: [PATCH v3 2/2] depmod: handle nested loops
-Date: Wed, 22 Feb 2017 11:41:59 +0200
-Message-Id: <20170222094159.3187-3-yauheni.kaliuta@redhat.com>
-In-Reply-To: <20170222094159.3187-1-yauheni.kaliuta@redhat.com>
+Subject: [PATCH v3 0/2] Proposal for cycles handling
+Date: Wed, 22 Feb 2017 11:41:57 +0200
+Message-Id: <20170222094159.3187-1-yauheni.kaliuta@redhat.com>
+In-Reply-To: <CAKi4VA+4KsvtNje0TVBfp2PtPtyLOBVvYfC5uMJZHBnynWfP=g@mail.gmail.com>
 References: <CAKi4VA+4KsvtNje0TVBfp2PtPtyLOBVvYfC5uMJZHBnynWfP=g@mail.gmail.com>
- <20170222094159.3187-1-yauheni.kaliuta@redhat.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-This is a rework of depmod report cycles logic to make it
-tolerant to more complex loops.
+V3->V2:
 
-The patch tries to remember own path for vertexes which makes it
-possible to handle configurations with common edges and
-non-cyclic modules.
+- depmod.c: undefine ERR and DBG macros, included by libkmod-internal.h
 
-It assumes that the previous dependency calculations can not give
-as input something like
+V1->V2:
 
-mod_a -> mod_b -> <loop>, but
+- use libkmod-internal.h and access list value directly;
+- initially create reverse array with 3 elements;
+- use memcpy() instead of strcpy() in depmod_report_one_cycle();
+- replace "because" with "since" in comment about single branch.
 
-<loop> -> mod_a -> mod_b should be fine.
 
-Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
----
- tools/depmod.c | 295 +++++++++++++++++++++++++++++++++++++++++----------------
- 1 file changed, 211 insertions(+), 84 deletions(-)
+Yauheni Kaliuta (2):
+  testsuite: depmod: check netsted loops reporting
+  depmod: handle nested loops
 
-diff --git a/tools/depmod.c b/tools/depmod.c
-index f2b370f146bb..dea60eaff8ef 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -37,7 +37,10 @@
- #include <shared/util.h>
- #include <shared/scratchbuf.h>
- 
--#include <libkmod/libkmod.h>
-+#include <libkmod/libkmod-internal.h>
-+
-+#undef ERR
-+#undef DBG
- 
- #include "kmod.h"
- 
-@@ -785,6 +788,7 @@ static void cfg_free(struct cfg *cfg)
- 
- 
- /* depmod calculations ***********************************************/
-+struct vertex;
- struct mod {
- 	struct kmod_module *kmod;
- 	char *path;
-@@ -800,6 +804,7 @@ struct mod {
- 	uint16_t idx; /* index in depmod->modules.array */
- 	uint16_t users; /* how many modules depend on this one */
- 	bool visited; /* helper field to report cycles */
-+	struct vertex *vertex; /* helper field to report cycles */
- 	char modname[];
- };
- 
-@@ -1450,105 +1455,228 @@ static void depmod_sort_dependencies(struct depmod *depmod)
- 	}
- }
- 
--static void depmod_report_cycles(struct depmod *depmod, uint16_t n_mods,
--				 uint16_t n_roots, uint16_t *users,
--				 uint16_t *stack, uint16_t *edges)
-+struct vertex {
-+	struct vertex *parent;
-+	struct mod *mod;
-+};
-+
-+static struct vertex *vertex_new(struct mod *mod, struct vertex *parent)
-+{
-+	struct vertex *v;
-+
-+	v = malloc(sizeof(*v));
-+	if (v == NULL)
-+		return NULL;
-+
-+	v->parent = parent;
-+	v->mod = mod;
-+	return v;
-+}
-+
-+static void depmod_list_remove_data(struct kmod_list **list, void *data)
-+{
-+	struct kmod_list *l;
-+
-+	l = kmod_list_remove_data(*list, data);
-+	*list = l;
-+}
-+
-+static void depmod_report_one_cycle(struct depmod *depmod,
-+				    struct vertex *vertex,
-+				    struct kmod_list **roots,
-+				    struct hash *loop_set)
- {
- 	const char sep[] = " -> ";
--	int ir = 0;
--	int num_cyclic = 0;
-+	size_t sz;
-+	char *buf;
-+	struct array reverse;
-+	int i;
-+	int n;
-+	struct vertex *v;
- 
--	while (n_roots > 0) {
--		int is, ie;
-+	array_init(&reverse, 3);
- 
--		for (; ir < n_mods; ir++) {
--			if (users[ir] > 0) {
--				break;
--			}
-+	sz = 0;
-+	for (v = vertex->parent, n = 0;
-+	     v != NULL;
-+	     v = v->parent, n++) {
-+
-+		sz += v->mod->modnamesz - 1;
-+		array_append(&reverse, v);
-+		hash_add(loop_set, v->mod->modname, NULL);
-+	}
-+	sz += vertex->mod->modnamesz - 1;
-+
-+	buf = malloc(sz + n * strlen(sep) + 1);
-+
-+	sz = 0;
-+	for (i = reverse.count - 1; i >= 0; i--) {
-+		size_t len;
-+
-+		v = reverse.array[i];
-+
-+		len = v->mod->modnamesz - 1;
-+		memcpy(buf + sz, v->mod->modname, len);
-+		sz += len;
-+		strcpy(buf + sz, sep);
-+		sz += strlen(sep);
-+
-+		depmod_list_remove_data(roots, v->mod);
-+	}
-+	strcpy(buf + sz, vertex->mod->modname);
-+	ERR("Cycle detected: %s\n", buf);
-+
-+	free(buf);
-+	array_free_array(&reverse);
-+}
-+
-+static int depmod_report_cycles_from_root(struct depmod *depmod,
-+					  struct mod *root_mod,
-+					  struct kmod_list **roots,
-+					  void **stack,
-+					  size_t stack_size,
-+					  struct hash *loop_set)
-+{
-+	struct kmod_list *free_list = NULL; /* struct vertex */
-+	struct kmod_list *l;
-+	struct vertex *root;
-+	struct vertex *vertex;
-+	struct vertex *v;
-+	struct mod *m;
-+	struct mod **itr, **itr_end;
-+	size_t is;
-+
-+	root = vertex_new(root_mod, NULL);
-+	if (root == NULL) {
-+		ERR("No memory to report cycles\n");
-+		return -ENOMEM;
-+	}
-+
-+	l = kmod_list_append(free_list, root);
-+	if (l == NULL) {
-+		ERR("No memory to report cycles\n");
-+		return -ENOMEM;
-+	}
-+	free_list = l;
-+
-+	is = 0;
-+	stack[is++] = (void *)root;
-+
-+	while (is > 0) {
-+		vertex = stack[--is];
-+		m = vertex->mod;
-+		/*
-+		 * because of the topological sort we can start only
-+		 * from part of a loop or from a branch after a loop
-+		 */
-+		if (m->visited && m == root->mod) {
-+			depmod_report_one_cycle(depmod, vertex,
-+						roots, loop_set);
-+			continue;
- 		}
- 
--		if (ir >= n_mods)
--			break;
-+		m->visited = true;
-+		if (m->deps.count == 0) {
-+			/*
-+			 * boundary condition: if there is more than one
-+			 * single node branch (not a loop), it is
-+			 * recognized as a loop by the code above:
-+			 * m->visited because more then one,
-+			 * m == root->mod since it is a single node.
-+			 * So, prevent deeping into the branch second
-+			 * time.
-+			 */
-+			depmod_list_remove_data(roots, m);
- 
--		/* New DFS with ir as root, no edges */
--		stack[0] = ir;
--		ie = 0;
--
--		/* at least one root less */
--		n_roots--;
--
--		/* skip this root on next iteration */
--		ir++;
--
--		for (is = 1; is > 0;) {
--			uint16_t idx = stack[--is];
--			struct mod *m = depmod->modules.array[idx];
--			const struct mod **itr, **itr_end;
--
--			DBG("Cycle report: Trying %s visited=%d users=%d\n",
--			    m->modname, m->visited, users[idx]);
--
--			if (m->visited) {
--				int i, n = 0, sz = 0;
--				char *buf;
--				bool is_cyclic = false;
--
--				for (i = ie - 1; i >= 0; i--) {
--					struct mod *loop = depmod->modules.array[edges[i]];
--					sz += loop->modnamesz - 1;
--					n++;
--					if (loop == m) {
--						sz += loop->modnamesz - 1;
--						is_cyclic = true;
--						break;
--					}
--				}
--				/* Current module not found in dependency list.
--				 * Must be a related module. Ignore it.
--				 */
--				if (!is_cyclic)
--					continue;
--
--				num_cyclic += n;
--
--				buf = malloc(sz + n * strlen(sep) + 1);
--				sz = 0;
--				for (i = ie - n; i < ie; i++) {
--					struct mod *loop =
--						depmod->modules.array[edges[i]];
--					memcpy(buf + sz, loop->modname,
--					       loop->modnamesz - 1);
--					sz += loop->modnamesz - 1;
--					memcpy(buf + sz, sep, strlen(sep));
--					sz += strlen(sep);
--				}
--				memcpy(buf + sz, m->modname, m->modnamesz);
-+			continue;
-+		}
- 
--				ERR("Cycle detected: %s\n", buf);
-+		itr = (struct mod **) m->deps.array;
-+		itr_end = itr + m->deps.count;
-+		for (; itr < itr_end; itr++) {
-+			struct mod *dep = *itr;
-+			v = vertex_new(dep, vertex);
-+			if (v == NULL) {
-+				ERR("No memory to report cycles\n");
-+				return -ENOMEM;
-+			}
-+			assert(is < stack_size);
-+			stack[is++] = v;
- 
--				free(buf);
--				continue;
-+			l = kmod_list_append(free_list, v);
-+			if (l == NULL) {
-+				ERR("No memory to report cycles\n");
-+				return -ENOMEM;
- 			}
-+			free_list = l;
- 
--			m->visited = true;
-+		}
-+	}
-+	while (free_list) {
-+		v = free_list->data;
-+		l = kmod_list_remove(free_list);
-+		free_list = l;
-+		free(v);
-+	}
- 
--			if (m->deps.count == 0) {
--				continue;
--			}
-+	return 0;
-+}
- 
--			edges[ie++] = idx;
-+static void depmod_report_cycles(struct depmod *depmod, uint16_t n_mods,
-+				 uint16_t *users)
-+{
-+	int num_cyclic = 0;
-+	struct kmod_list *roots = NULL; /* struct mod */
-+	struct kmod_list *l;
-+	size_t n_r; /* local n_roots */
-+	int i;
-+	int err;
-+	void **stack;
-+	struct mod *m;
-+	struct mod *root;
-+	struct hash *loop_set;
- 
--			itr = (const struct mod **) m->deps.array;
--			itr_end = itr + m->deps.count;
--			for (; itr < itr_end; itr++) {
--				const struct mod *dep = *itr;
--				stack[is++] = dep->idx;
--				users[dep->idx]--;
--			}
-+	for (i = 0, n_r = 0; i < n_mods; i++) {
-+		if (users[i] <= 0)
-+			continue;
-+		m = depmod->modules.array[i];
-+		l = kmod_list_append(roots, m);
-+		if (l == NULL) {
-+			ERR("No memory to report cycles\n");
-+			return;
- 		}
-+		roots = l;
-+		n_r++;
-+	}
-+
-+	stack = malloc(n_r * sizeof(void *));
-+	if (stack == NULL) {
-+		ERR("No memory to report cycles\n");
-+		return;
-+	}
-+
-+	loop_set = hash_new(16, NULL);
-+	if (loop_set == NULL) {
-+		ERR("No memory to report cycles\n");
-+		return;
-+	}
-+
-+	while (roots != NULL) {
-+		root = roots->data;
-+		l = kmod_list_remove(roots);
-+		roots = l;
-+		err = depmod_report_cycles_from_root(depmod,
-+						     root,
-+						     &roots,
-+						     stack, n_r, loop_set);
-+		if (err < 0)
-+			goto err;
- 	}
- 
-+	num_cyclic = hash_get_count(loop_set);
- 	ERR("Found %d modules in dependency cycles!\n", num_cyclic);
-+err:
-+	hash_free(loop_set);
- }
- 
- static int depmod_calculate_dependencies(struct depmod *depmod)
-@@ -1605,8 +1733,7 @@ static int depmod_calculate_dependencies(struct depmod *depmod)
- 	}
- 
- 	if (n_sorted < n_mods) {
--		depmod_report_cycles(depmod, n_mods, n_mods - n_sorted,
--				     users, roots, sorted);
-+		depmod_report_cycles(depmod, n_mods, users);
- 		ret = -EINVAL;
- 		goto exit;
- 	}
+ Makefile.am                                        |   4 +
+ testsuite/module-playground/Makefile               |   7 +
+ testsuite/module-playground/cache/mod-loop-h.ko    | Bin 0 -> 197808 bytes
+ testsuite/module-playground/cache/mod-loop-i.ko    | Bin 0 -> 197808 bytes
+ testsuite/module-playground/cache/mod-loop-j.ko    | Bin 0 -> 197968 bytes
+ testsuite/module-playground/cache/mod-loop-k.ko    | Bin 0 -> 197808 bytes
+ testsuite/module-playground/mod-loop-h.c           |  25 ++
+ testsuite/module-playground/mod-loop-i.c           |  25 ++
+ testsuite/module-playground/mod-loop-j.c           |  26 ++
+ testsuite/module-playground/mod-loop-k.c           |  25 ++
+ testsuite/module-playground/mod-loop.h             |   4 +
+ testsuite/populate-modules.sh                      |   4 +
+ .../test-depmod/detect-loop/correct.txt            |   6 +-
+ tools/depmod.c                                     | 295 +++++++++++++++------
+ 14 files changed, 335 insertions(+), 86 deletions(-)
+ create mode 100644 testsuite/module-playground/cache/mod-loop-h.ko
+ create mode 100644 testsuite/module-playground/cache/mod-loop-i.ko
+ create mode 100644 testsuite/module-playground/cache/mod-loop-j.ko
+ create mode 100644 testsuite/module-playground/cache/mod-loop-k.ko
+ create mode 100644 testsuite/module-playground/mod-loop-h.c
+ create mode 100644 testsuite/module-playground/mod-loop-i.c
+ create mode 100644 testsuite/module-playground/mod-loop-j.c
+ create mode 100644 testsuite/module-playground/mod-loop-k.c
+
 -- 
 2.9.2.368.g08bb350
