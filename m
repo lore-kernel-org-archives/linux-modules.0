@@ -1,207 +1,63 @@
 MIME-Version: 1.0
-In-Reply-To: <1478864601-3259-4-git-send-email-yauheni.kaliuta@redhat.com>
-References: <1478683053.4155.8.camel@suse.com>
-	<1478864601-3259-1-git-send-email-yauheni.kaliuta@redhat.com>
-	<1478864601-3259-4-git-send-email-yauheni.kaliuta@redhat.com>
-Date: Mon, 13 Feb 2017 00:30:53 -0800
-Message-ID: <CAKi4VAKJUzXptH0AQARsP=H2dxQfuQOHaR1ERCHsE87_ewMx=g@mail.gmail.com>
-Subject: Re: [PATCH RFC 3/3] depmod: handle nested loops
+In-Reply-To: <20170216172831.3019-2-lucas.demarchi@intel.com>
+References: <20170216172831.3019-1-lucas.demarchi@intel.com>
+	<20170216172831.3019-2-lucas.demarchi@intel.com>
+Date: Thu, 23 Feb 2017 14:14:24 -0800
+Message-ID: <CAKi4VA+xDWz=L_FozH8mG61R65VPAU6Esm0KYtZO_SSFPmAx-Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] libkmod-config: fix parsing quoted kernel cmdline on params
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>,
-	Mian Yousaf Kaukab <yousaf.kaukab@suse.com>, bjorn.andersson@linaro.org,
-	Jessica Yu <jeyu@redhat.com>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>, James Minor <james.minor@ni.com>,
+	julia.cartwright@ni.com, zach.brown@ni.com, ken.sharp@ni.com
 Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Nov 11, 2016 at 3:43 AM, Yauheni Kaliuta
-<yauheni.kaliuta@redhat.com> wrote:
-> This is a rework of depmod report cycles logic to make it
-> tolerant to more complex loops.
->
-> The patch tries to remember own path for vertexes which makes it
-> possible to handle configurations with common edges and
-> non-cyclic modules.
->
-> It assumes that the previous dependency calculations can not give
-> as input something like
->
-> mod_a -> mod_b -> <loop>, but
->
-> <loop> -> mod_a -> mod_b should be fine.
->
-> Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+On Thu, Feb 16, 2017 at 9:28 AM, Lucas De Marchi
+<lucas.demarchi@intel.com> wrote:
+> We can only accept quoted values, not module names or parameter names.
 > ---
->  tools/depmod.c | 287 ++++++++++++++++++++++++++++++++++++++++-----------------
->  1 file changed, 204 insertions(+), 83 deletions(-)
+>  libkmod/libkmod-config.c                                   | 14 ++++++++++++++
+>  .../test-modprobe/module-param-kcmdline5/proc/cmdline      |  2 +-
+>  2 files changed, 15 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/depmod.c b/tools/depmod.c
-> index f2b370f146bb..c110635ff517 100644
-> --- a/tools/depmod.c
-> +++ b/tools/depmod.c
-> @@ -785,6 +785,7 @@ static void cfg_free(struct cfg *cfg)
->
->
->  /* depmod calculations ***********************************************/
-> +struct vertex;
->  struct mod {
->         struct kmod_module *kmod;
->         char *path;
-> @@ -800,6 +801,7 @@ struct mod {
->         uint16_t idx; /* index in depmod->modules.array */
->         uint16_t users; /* how many modules depend on this one */
->         bool visited; /* helper field to report cycles */
-> +       struct vertex *vertex; /* helper field to report cycles */
->         char modname[];
->  };
->
-> @@ -1450,105 +1452,225 @@ static void depmod_sort_dependencies(struct depmod *depmod)
->         }
->  }
->
-> -static void depmod_report_cycles(struct depmod *depmod, uint16_t n_mods,
-> -                                uint16_t n_roots, uint16_t *users,
-> -                                uint16_t *stack, uint16_t *edges)
-> +struct vertex {
-> +       struct vertex *parent;
-> +       struct mod *mod;
-> +};
+> diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
+> index 18f300a..aaac0a1 100644
+> --- a/libkmod/libkmod-config.c
+> +++ b/libkmod/libkmod-config.c
+> @@ -517,10 +517,24 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
+>         for (p = buf, modname = buf; *p != '\0' && *p != '\n'; p++) {
+>                 if (*p == '"') {
+>                         is_quoted = !is_quoted;
 > +
-> +static struct vertex *vertex_new(struct mod *mod, struct vertex *parent)
-> +{
-> +       struct vertex *v;
+> +                       if (is_quoted) {
+> +                               /* don't consider a module until closing quotes */
+> +                               is_module = false;
+> +                       } else if (param != NULL && value != NULL) {
+> +                               /*
+> +                                * If we are indeed expecting a value and
+> +                                * closing quotes, then this can be considered
+> +                                * a valid option for a module
+> +                                */
+> +                               is_module = true;
+> +                       }
 > +
-> +       v = malloc(sizeof(*v));
-> +       if (v == NULL)
-> +               return NULL;
-> +
-> +       v->parent = parent;
-> +       v->mod = mod;
-> +       return v;
-> +}
-> +
-> +static void depmod_list_remove_data(struct kmod_list **list, void *data)
-> +{
-> +       struct kmod_list *l;
-> +
-> +       l = kmod_list_remove_data(*list, data);
-> +       *list = l;
-> +}
-> +
-> +static void depmod_report_one_cycle(struct depmod *depmod,
-> +                                   struct vertex *vertex,
-> +                                   struct kmod_list **roots,
-> +                                   struct hash *loop_set)
->  {
->         const char sep[] = " -> ";
-> -       int ir = 0;
-> -       int num_cyclic = 0;
-> +       size_t sz;
-> +       char *buf;
-> +       struct array reverse;
-> +       int i;
-> +       int n;
-> +       struct vertex *v;
->
-> -       while (n_roots > 0) {
-> -               int is, ie;
-> +       array_init(&reverse, 2);
-
-In a loop we will usually have more than 2 modules involved so this should be 3.
-
-
->
-> -               for (; ir < n_mods; ir++) {
-> -                       if (users[ir] > 0) {
-> -                               break;
-> -                       }
-> +       sz = 0;
-> +       for (v = vertex->parent, n = 0;
-> +            v != NULL;
-> +            v = v->parent, n++) {
-> +
-> +               sz += v->mod->modnamesz - 1;
-> +               array_append(&reverse, v);
-> +               hash_add(loop_set, v->mod->modname, NULL);
-> +       }
-> +       sz += vertex->mod->modnamesz - 1;
-> +
-> +       buf = malloc(sz + n * strlen(sep) + 1);
-> +
-> +       sz = 0;
-> +       for (i = reverse.count - 1; i >= 0; i--) {
-> +               v = reverse.array[i];
-> +
-> +               strcpy(buf + sz, v->mod->modname);
-
-memcpy() here suffices since we have the str len on modnamesz.
-
-size_t len = v->mod->modnamesz - 1;
-memcpy(buf + sz, v->mod->modname, len);
-sz + = len;
-
-
-> +static int depmod_report_cycles_from_root(struct depmod *depmod,
-> +                                         struct mod *root_mod,
-> +                                         struct kmod_list **roots,
-> +                                         void **stack,
-> +                                         size_t stack_size,
-> +                                         struct hash *loop_set)
-> +{
-> +       struct kmod_list *free_list = NULL; /* struct vertex */
-> +       struct kmod_list *l;
-> +       struct vertex *root;
-> +       struct vertex *vertex;
-> +       struct vertex *v;
-> +       struct mod *m;
-> +       struct mod **itr, **itr_end;
-> +       size_t is;
-> +
-> +       root = vertex_new(root_mod, NULL);
-> +       if (root == NULL) {
-> +               ERR("No memory to report cycles\n");
-> +               return -ENOMEM;
-> +       }
-> +
-> +       l = kmod_list_append(free_list, root);
-> +       if (l == NULL) {
-> +               ERR("No memory to report cycles\n");
-> +               return -ENOMEM;
-> +       }
-> +       free_list = l;
-> +
-> +       is = 0;
-> +       stack[is++] = (void *)root;
-> +
-> +       while (is > 0) {
-> +               vertex = stack[--is];
-> +               m = vertex->mod;
-> +               /*
-> +                * because of the topological sort we can start only
-> +                * from part of a loop or from a branch after a loop
-> +                */
-> +               if (m->visited && m == root->mod) {
-> +                       depmod_report_one_cycle(depmod, vertex,
-> +                                               roots, loop_set);
-> +                       continue;
+>                         continue;
 >                 }
->
-> -               if (ir >= n_mods)
-> -                       break;
-> +               m->visited = true;
-> +               if (m->deps.count == 0) {
-> +                       /*
-> +                        * boundary condition: if there is more than one
-> +                        * single node branch (not a loop), it is
-> +                        * recognized as a loop by the code above:
-> +                        * m->visited because more then one,
-> +                        * m == root->mod because it is a single node.
-
-This needs to be rephrased removing the 2 because.
-
+>                 if (is_quoted)
+>                         continue;
+> +
+>                 switch (*p) {
+>                 case ' ':
+>                         *p = '\0';
+> diff --git a/testsuite/rootfs-pristine/test-modprobe/module-param-kcmdline5/proc/cmdline b/testsuite/rootfs-pristine/test-modprobe/module-param-kcmdline5/proc/cmdline
+> index 0c796b3..84e0168 100644
+> --- a/testsuite/rootfs-pristine/test-modprobe/module-param-kcmdline5/proc/cmdline
+> +++ b/testsuite/rootfs-pristine/test-modprobe/module-param-kcmdline5/proc/cmdline
+> @@ -1 +1 @@
+> -psmouse.foo psmouse.bar=1 psmouse.foobar="test 1" " notamodule" "noteamodule2 " notamodule3 " quiet rw
+> +psmouse.foo psmouse.bar=1 psmouse.foobar="test 1" psmouse."invalid option" " notamodule" "noteamodule2 " notamodule3 quiet rw
 > --
 
-Rest looks good.
+Both patches applied.
 
-thanks
 Lucas De Marchi
