@@ -1,55 +1,68 @@
-Return-Path: <yauheni.kaliuta@redhat.com>
-From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-To: linux-modules <linux-modules@vger.kernel.org>
-Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Mian Yousaf Kaukab <yousaf.kaukab@suse.com>,
-        bjorn.andersson@linaro.org
-Subject: [PATCH v3 0/2] Proposal for cycles handling
-Date: Wed, 22 Feb 2017 11:41:57 +0200
-Message-Id: <20170222094159.3187-1-yauheni.kaliuta@redhat.com>
-In-Reply-To: <CAKi4VA+4KsvtNje0TVBfp2PtPtyLOBVvYfC5uMJZHBnynWfP=g@mail.gmail.com>
-References: <CAKi4VA+4KsvtNje0TVBfp2PtPtyLOBVvYfC5uMJZHBnynWfP=g@mail.gmail.com>
+MIME-Version: 1.0
+Date: Thu, 23 Feb 2017 23:46:01 -0800
+Message-ID: <CAKi4VAJkWdvPf_q=mKVKvh2i10zMtgBU5_vH8hW=uEZ425pq7g@mail.gmail.com>
+Subject: [ANNOUNCE] kmod 24
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+	Jessica Yu <jeyu@redhat.com>, Rusty Russell <rusty@rustcorp.com.au>
+Content-Type: text/plain; charset=UTF-8
 List-ID: <linux-modules.vger.kernel.org>
 
-V3->V2:
+kmod 24 is out:
 
-- depmod.c: undefine ERR and DBG macros, included by libkmod-internal.h
+        ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-24.tar.xz
+        ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-24.tar.sign
 
-V1->V2:
+- Improvements:
+        - Add more information on dependency loop
 
-- use libkmod-internal.h and access list value directly;
-- initially create reverse array with 3 elements;
-- use memcpy() instead of strcpy() in depmod_report_one_cycle();
-- replace "because" with "since" in comment about single branch.
+        - Sanitize use of strcpy and allow to grow from small strings on stack
+          (common case) to bigger strings on heap when needed
+
+- Bug fixes
+        - Fix wrong dependency loops being reported by depmod
+
+        - Fix crashes when reporting dependency loops
+
+        - Fix parsing kernel command line containing quotes
+
+        - Fix leaks on error paths
+
+Shortlog is below
+
+Bartosz Golaszewski (1):
+      module: fix a memory leak
+
+James Minor (1):
+      libkmod: Fix handling of quotes in kernel command line
+
+Lucas De Marchi (15):
+      libkmod: fix use of strcpy
+      util: fix warning of equal values on logical OR
+      testsuite: include stdio.h
+      Add scratchbuf implementation
+      depmod: fix string overflow
+      build: fix build with disabled test modules
+      testsuite: fix typo in description
+      testsuite: add test for kernel cmdline with quotes
+      libkmod-config: replace 0/1 with bool
+      libkmod-config: fix parsing quoted kernel cmdline on params
+      build: add missing header
+      man: make error message clearer for missing xstlproc
+      depmod: fix leak on error path
+      build: update autogen
+      kmod 24
+
+Mian Yousaf Kaukab (2):
+      testsuite: depmod: add module dependency outside cyclic chain
+      depmod: ignore related modules in depmod_report_cycles
+
+Yauheni Kaliuta (4):
+      testsuite: fix test_array_sort pointers inderection
+      shared: make scratchbuf_str static
+      testsuite: depmod: check netsted loops reporting
+      depmod: handle nested loops
 
 
-Yauheni Kaliuta (2):
-  testsuite: depmod: check netsted loops reporting
-  depmod: handle nested loops
 
- Makefile.am                                        |   4 +
- testsuite/module-playground/Makefile               |   7 +
- testsuite/module-playground/cache/mod-loop-h.ko    | Bin 0 -> 197808 bytes
- testsuite/module-playground/cache/mod-loop-i.ko    | Bin 0 -> 197808 bytes
- testsuite/module-playground/cache/mod-loop-j.ko    | Bin 0 -> 197968 bytes
- testsuite/module-playground/cache/mod-loop-k.ko    | Bin 0 -> 197808 bytes
- testsuite/module-playground/mod-loop-h.c           |  25 ++
- testsuite/module-playground/mod-loop-i.c           |  25 ++
- testsuite/module-playground/mod-loop-j.c           |  26 ++
- testsuite/module-playground/mod-loop-k.c           |  25 ++
- testsuite/module-playground/mod-loop.h             |   4 +
- testsuite/populate-modules.sh                      |   4 +
- .../test-depmod/detect-loop/correct.txt            |   6 +-
- tools/depmod.c                                     | 295 +++++++++++++++------
- 14 files changed, 335 insertions(+), 86 deletions(-)
- create mode 100644 testsuite/module-playground/cache/mod-loop-h.ko
- create mode 100644 testsuite/module-playground/cache/mod-loop-i.ko
- create mode 100644 testsuite/module-playground/cache/mod-loop-j.ko
- create mode 100644 testsuite/module-playground/cache/mod-loop-k.ko
- create mode 100644 testsuite/module-playground/mod-loop-h.c
- create mode 100644 testsuite/module-playground/mod-loop-i.c
- create mode 100644 testsuite/module-playground/mod-loop-j.c
- create mode 100644 testsuite/module-playground/mod-loop-k.c
-
--- 
-2.9.2.368.g08bb350
+Lucas De Marchi
