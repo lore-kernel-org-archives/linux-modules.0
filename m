@@ -1,31 +1,54 @@
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from mx1.redhat.com ([209.132.183.28]:53604 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1751251AbdCRVpg (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Sat, 18 Mar 2017 17:45:36 -0400
+From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-modules@vger.kernel.org
+Subject: Re: [PATCH RFC 0/3] depmod: implement external directories support
+References: <20161123152339.27531-1-yauheni.kaliuta@redhat.com>
+Date: Sat, 18 Mar 2017 23:46:38 +0200
+In-Reply-To: <20161123152339.27531-1-yauheni.kaliuta@redhat.com> (Yauheni
+        Kaliuta's message of "Wed, 23 Nov 2016 17:23:36 +0200")
+Message-ID: <xunyshmagsw1.fsf@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <52857.bryanh@giraffe-data.com>
-References: <52857.bryanh@giraffe-data.com>
-Date: Thu, 23 Feb 2017 14:16:57 -0800
-Message-ID: <CAKi4VAKo=LP783aZcCuwmq3ubzaJL7S9FdmCOrv8UPr+vgAGPw@mail.gmail.com>
-Subject: Re: Build fails when Xsltproc not present
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Bryan Henderson <bryanh@giraffe-data.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain
+Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Dec 19, 2016 at 4:50 PM, Bryan Henderson
-<bryanh@giraffe-data.com> wrote:
->
-> I believe in that case, it should just skip building the man pages.
+Hi, Lucas!
 
-We don't do auto-enabling/disabling.
+Any feedback on that?
 
-> Or make 'configure' fail and suggest --disable-manpages.
->
-> Or make the make fail gracefully, telling you you don't have the tools
-> necessary to create man pages and suggesting --disable-manpages.
+>>>>> On Wed, 23 Nov 2016 17:23:36 +0200, Yauheni Kaliuta  wrote:
 
-Failing on configure phase would be the desired solution. I'll take a
-look on this for next release, but if  you have a patch ready it would
-be appreciated.
+ > Would it be possible to implement something like external
+ > directories support in depmod (see PATCH 3 description).
+
+ > I'll copy here the part:
+
+ > This is a pretty simple extention of existing logic, since now
+ > depmod already is able to:
+
+ > a) scan modules with full path from command line without -a
+ > switch;
+ > b) detects broken symbol dependencies and broken modversions,
+ > what assumes, that modules are already are not built for the
+ > existing kernel.
+
+ > Yauheni Kaliuta (3):
+ >   depmod: create depmod dir independent search function
+ >   depmod: search key: move builtin detection under the add function
+ >   depmod: implement external directories support
+
+ >  tools/depmod.c | 209 +++++++++++++++++++++++++++++++++++++++++++++++----------
+ >  1 file changed, 175 insertions(+), 34 deletions(-)
+
+ > -- 
+ > 2.9.3
 
 
-thanks
-Lucas De Marchi
+-- 
+WBR,
+Yauheni Kaliuta
