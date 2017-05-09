@@ -1,96 +1,42 @@
 Return-Path: <yauheni.kaliuta@redhat.com>
 From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 To: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>
-Subject: [PATCHv2 0/4] depmod: implement external directories support
-Date: Tue,  9 May 2017 22:09:20 +0300
-Message-Id: <20170509190924.9087-1-yauheni.kaliuta@redhat.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>,  linux-modules <linux-modules@vger.kernel.org>,
+    Stanislav Kozina <skozina@redhat.com>
+Subject: Re: [PATCH RFC 0/3] depmod: implement external directories support
+References: <20161123152339.27531-1-yauheni.kaliuta@redhat.com>
+	<xunyshmagsw1.fsf@redhat.com>
+	<CAKi4VALJgW=RbpCT4kfix9sACzzz68=LZ-FhUUORXxHMcTA__g@mail.gmail.com>
+Date: Tue, 09 May 2017 11:50:12 +0300
 In-Reply-To: <CAKi4VALJgW=RbpCT4kfix9sACzzz68=LZ-FhUUORXxHMcTA__g@mail.gmail.com>
-References: <CAKi4VALJgW=RbpCT4kfix9sACzzz68=LZ-FhUUORXxHMcTA__g@mail.gmail.com>
+	(Lucas De Marchi's message of "Tue, 9 May 2017 00:51:43 -0700")
+Message-ID: <xunyo9v2ct2z.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 List-ID: <linux-modules.vger.kernel.org>
 
+Hi, Lucas!
 
-This is a pretty simple extention of existing logic, since now
-depmod already is able to:
+>>>>> On Tue, 9 May 2017 00:51:43 -0700, Lucas De Marchi  wrote:
 
-a) scan modules with full path from command line without -a
-switch;
-b) detects broken symbol dependencies and broken modversions,
-what assumes, that modules are already are not built for the
-existing kernel.
+ > On Sat, Mar 18, 2017 at 2:46 PM, Yauheni Kaliuta
+ > <yauheni.kaliuta@redhat.com> wrote:
+ >> Hi, Lucas!
+ >> 
+ >> Any feedback on that?
 
-See PATCH3 description.
+ > I gave it a quick look and it looks good to me. I applied the second patch.
 
+ > For first patch would be good to use scratchbuf
 
-V1->V2:
+Ok.
 
-- rewrite directory scanning code to use scratchbuf;
-- add tests.
+ > For this one... I miss some tests in the testsuite to be confident
+ > this a) is working as expected
+ > and b) isn't break the current behavior.
 
-Yauheni Kaliuta (4):
-  depmod: create depmod dir independent search function
-  depmod: rewrite depmod modules search with scratchbuf
-  depmod: implement external directories support
-  testsuite: add tests for external directory support
-
- testsuite/populate-modules.sh                      |   8 +
- .../etc/depmod.d/external.conf                     |   1 +
- .../etc/depmod.d/search.conf                       |   1 +
- .../lib/modules/4.4.4/correct-modules.dep          |   1 +
- .../etc/depmod.d/external.conf                     |   1 +
- .../etc/depmod.d/search.conf                       |   1 +
- .../lib/modules/4.4.4/correct-modules.dep          |   1 +
- .../test-modinfo/correct-external.txt              |   1 +
- .../external/lib/modules/4.4.4/modules.alias       |   1 +
- .../external/lib/modules/4.4.4/modules.alias.bin   | Bin 0 -> 12 bytes
- .../external/lib/modules/4.4.4/modules.builtin.bin |   0
- .../external/lib/modules/4.4.4/modules.dep         |   1 +
- .../external/lib/modules/4.4.4/modules.dep.bin     | Bin 0 -> 73 bytes
- .../external/lib/modules/4.4.4/modules.devname     |   0
- .../external/lib/modules/4.4.4/modules.softdep     |   1 +
- .../external/lib/modules/4.4.4/modules.symbols     |   1 +
- .../external/lib/modules/4.4.4/modules.symbols.bin | Bin 0 -> 12 bytes
- .../external/lib/modules/4.4.4/modules.alias       |   1 +
- .../external/lib/modules/4.4.4/modules.alias.bin   | Bin 0 -> 12 bytes
- .../external/lib/modules/4.4.4/modules.builtin.bin |   0
- .../external/lib/modules/4.4.4/modules.dep         |   1 +
- .../external/lib/modules/4.4.4/modules.dep.bin     | Bin 0 -> 73 bytes
- .../external/lib/modules/4.4.4/modules.devname     |   0
- .../external/lib/modules/4.4.4/modules.softdep     |   1 +
- .../external/lib/modules/4.4.4/modules.symbols     |   1 +
- .../external/lib/modules/4.4.4/modules.symbols.bin | Bin 0 -> 12 bytes
- .../test-modprobe/external/proc/modules            |   0
- testsuite/test-depmod.c                            |  52 +++++
- testsuite/test-modinfo.c                           |  21 ++
- testsuite/test-modprobe.c                          |  22 ++
- tools/depmod.c                                     | 232 +++++++++++++++++----
- 31 files changed, 309 insertions(+), 41 deletions(-)
- create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-external-first/etc/depmod.d/external.conf
- create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-external-first/etc/depmod.d/search.conf
- create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-external-first/lib/modules/4.4.4/correct-modules.dep
- create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-external-last/etc/depmod.d/external.conf
- create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-external-last/etc/depmod.d/search.conf
- create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-external-last/lib/modules/4.4.4/correct-modules.dep
- create mode 100644 testsuite/rootfs-pristine/test-modinfo/correct-external.txt
- create mode 100644 testsuite/rootfs-pristine/test-modinfo/external/lib/modules/4.4.4/modules.alias
- create mode 100644 testsuite/rootfs-pristine/test-modinfo/external/lib/modules/4.4.4/modules.alias.bin
- create mode 100644 testsuite/rootfs-pristine/test-modinfo/external/lib/modules/4.4.4/modules.builtin.bin
- create mode 100644 testsuite/rootfs-pristine/test-modinfo/external/lib/modules/4.4.4/modules.dep
- create mode 100644 testsuite/rootfs-pristine/test-modinfo/external/lib/modules/4.4.4/modules.dep.bin
- create mode 100644 testsuite/rootfs-pristine/test-modinfo/external/lib/modules/4.4.4/modules.devname
- create mode 100644 testsuite/rootfs-pristine/test-modinfo/external/lib/modules/4.4.4/modules.softdep
- create mode 100644 testsuite/rootfs-pristine/test-modinfo/external/lib/modules/4.4.4/modules.symbols
- create mode 100644 testsuite/rootfs-pristine/test-modinfo/external/lib/modules/4.4.4/modules.symbols.bin
- create mode 100644 testsuite/rootfs-pristine/test-modprobe/external/lib/modules/4.4.4/modules.alias
- create mode 100644 testsuite/rootfs-pristine/test-modprobe/external/lib/modules/4.4.4/modules.alias.bin
- create mode 100644 testsuite/rootfs-pristine/test-modprobe/external/lib/modules/4.4.4/modules.builtin.bin
- create mode 100644 testsuite/rootfs-pristine/test-modprobe/external/lib/modules/4.4.4/modules.dep
- create mode 100644 testsuite/rootfs-pristine/test-modprobe/external/lib/modules/4.4.4/modules.dep.bin
- create mode 100644 testsuite/rootfs-pristine/test-modprobe/external/lib/modules/4.4.4/modules.devname
- create mode 100644 testsuite/rootfs-pristine/test-modprobe/external/lib/modules/4.4.4/modules.softdep
- create mode 100644 testsuite/rootfs-pristine/test-modprobe/external/lib/modules/4.4.4/modules.symbols
- create mode 100644 testsuite/rootfs-pristine/test-modprobe/external/lib/modules/4.4.4/modules.symbols.bin
- create mode 100644 testsuite/rootfs-pristine/test-modprobe/external/proc/modules
+Thanks a lot! I'll think about the testsuite.
 
 -- 
-2.12.2.639.g584f8975d2d9
+WBR,
+Yauheni Kaliuta
