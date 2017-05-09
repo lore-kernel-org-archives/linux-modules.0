@@ -1,42 +1,26 @@
-Return-Path: <osandov@osandov.com>
-Return-Path: <osandov@osandov.com>
-Date: Fri, 12 May 2017 15:23:07 -0700
-From: Omar Sandoval <osandov@osandov.com>
-To: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	Olof Johansson <olof@lixom.net>, Heiko Stuebner <heiko@sntech.de>
-Subject: depmod gets stuck in symlink cycle in arch/arm/boot/dts/include
-Message-ID: <20170512222307.GA9634@vader.DHCP.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <xunyk27kgs3j.fsf@redhat.com>
+References: <20170320100951.20884-1-yauheni.kaliuta@redhat.com>
+	<xunyk27kgs3j.fsf@redhat.com>
+Date: Mon, 8 May 2017 23:48:55 -0700
+Message-ID: <CAKi4VA+yFRHxENG0s6SF1REcf+5k6Q2G4Rp0g+iaJPStejjQ2Q@mail.gmail.com>
+Subject: Re: [PATCH] depmod: fix errorpath memleaks in report cycles logic
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi,
+On Mon, Mar 20, 2017 at 3:28 AM, Yauheni Kaliuta
+<yauheni.kaliuta@redhat.com> wrote:
+> Hi!
+>
+>>>>>> On Mon, 20 Mar 2017 12:09:51 +0200, Yauheni Kaliuta  wrote:
+>
+>  > From: Yauheni Kaliuta <y.kaliuta@gmail.com>
+>
+> Ooops. Could you please remove the line? ;)
 
-Linux kernel commit 4027494ae6e3 ("ARM: dts: add arm/arm64 include
-symlinks") introduced a couple of symlink cycles:
+Yep. Applied, thanks.
 
-$ ls -al arch/arm{,64}/boot/dts/include
-arch/arm64/boot/dts/include:
-total 12
-drwxr-xr-x 1 osandov users  38 May 11 14:01 .
-drwxr-xr-x 1 osandov users 320 Jan 25 20:44 ..
-lrwxrwxrwx 1 osandov users  24 May 11 14:01 arm -> ../../../../arm/boot/dts
-lrwxrwxrwx 1 osandov users   2 May 11 14:01 arm64 -> ..
-lrwxrwxrwx 1 osandov users  34 Nov 23 12:07 dt-bindings -> ../../../../../include/dt-bindings
-
-arch/arm/boot/dts/include:
-total 12
-drwxr-xr-x 1 osandov users    38 May 11 14:01 .
-drwxr-xr-x 1 osandov users 63102 May 11 14:01 ..
-lrwxrwxrwx 1 osandov users     2 May 11 14:01 arm -> ..
-lrwxrwxrwx 1 osandov users    26 May 11 14:01 arm64 -> ../../../../arm64/boot/dts
-lrwxrwxrwx 1 osandov users    34 Nov 23 12:07 dt-bindings -> ../../../../../include/dt-bindings
-
-On my system, /lib/modules/$(uname -r)/kernel is a symlink to
-/lib/modules/$(uname -r)/build, which is my built linux.git. depmod
-doesn't like these symlink cycles and ends up in an infinite loop.
-
-Maybe I shouldn't be symlinking kernel to build like this, but depmod
-shouldn't be getting stuck like this either. I wonder if anything else
-is going to barf on these symlink cycles, too.
+Lucas De Marchi
