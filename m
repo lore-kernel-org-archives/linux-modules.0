@@ -1,66 +1,31 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail.free-electrons.com ([62.4.15.54]:33284 "EHLO
-        mail.free-electrons.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750775AbdFCPDw (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 3 Jun 2017 11:03:52 -0400
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-To: linux-modules@vger.kernel.org
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Subject: [PATCH kmod] shared/util.c: assert_cc() can only be used inside functions
-Date: Sat,  3 Jun 2017 17:03:22 +0200
-Message-Id: <1496502202-9832-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Sender: owner-linux-modules@vger.kernel.org
+MIME-Version: 1.0
+In-Reply-To: <20170509190924.9087-2-yauheni.kaliuta@redhat.com>
+References: <CAKi4VALJgW=RbpCT4kfix9sACzzz68=LZ-FhUUORXxHMcTA__g@mail.gmail.com>
+	<20170509190924.9087-1-yauheni.kaliuta@redhat.com>
+	<20170509190924.9087-2-yauheni.kaliuta@redhat.com>
+Date: Thu, 1 Jun 2017 19:18:07 -0700
+Message-ID: <CAKi4VAKb1WA-qVkN2cbKZ4dpecj=qTCELWpPCg2L_82PZOQy-w@mail.gmail.com>
+Subject: Re: [PATCHv2 1/4] depmod: create depmod dir independent search function
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-shared/macro.h has two versions of assert_cc, one that uses gcc
-_Static_assert(), which requires recent enough gcc versions, and one
-that uses a fake array to trigger a build error. The latter can only
-work inside functions, so assert_cc() should only be used inside
-functions.
+On Tue, May 9, 2017 at 12:09 PM, Yauheni Kaliuta
+<yauheni.kaliuta@redhat.com> wrote:
+> Prepare to implement external directories support.
+>
+> The patch splits depmod_modules_search() function to two
+> functions: depmod_modules_search(), called by the high level with
+> intention to search all possible modules, and
+> depmod_module_search_path(), which takes path as a parameter and
+> scans modules under the path only. Initially it is used to scan
+> the same depmod->cfg->dirname path only.
+>
+> Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+> ---
 
-Fixes the following build failure when building kmod with old gcc
-versions such as gcc 4.3.x:
+Applied, thanks.
 
-shared/util.c:52: error: expected identifier or '(' before 'do'
-shared/util.c:52: error: expected identifier or '(' before 'while'
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- shared/util.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/shared/util.c b/shared/util.c
-index 9de080a..fd2028d 100644
---- a/shared/util.c
-+++ b/shared/util.c
-@@ -49,8 +49,6 @@ static const struct kmod_ext {
- 	{ }
- };
- 
--assert_cc(EAGAIN == EWOULDBLOCK);
--
- /* string handling functions and memory allocations                         */
- /* ************************************************************************ */
- 
-@@ -201,6 +199,8 @@ ssize_t read_str_safe(int fd, char *buf, size_t buflen)
- 	size_t todo = buflen - 1;
- 	size_t done = 0;
- 
-+	assert_cc(EAGAIN == EWOULDBLOCK);
-+
- 	do {
- 		ssize_t r = read(fd, buf + done, todo);
- 
-@@ -226,6 +226,8 @@ ssize_t write_str_safe(int fd, const char *buf, size_t buflen)
- 	size_t todo = buflen;
- 	size_t done = 0;
- 
-+	assert_cc(EAGAIN == EWOULDBLOCK);
-+
- 	do {
- 		ssize_t r = write(fd, buf + done, todo);
- 
--- 
-2.7.4
-
+Lucas De Marchi
