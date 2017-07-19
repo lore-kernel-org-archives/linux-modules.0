@@ -1,81 +1,65 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mail-pf0-f194.google.com ([209.85.192.194]:36429 "EHLO
-        mail-pf0-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1750730AbdFGGSV (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 7 Jun 2017 02:18:21 -0400
-Received: by mail-pf0-f194.google.com with SMTP id y7so592758pfd.3
-        for <linux-modules@vger.kernel.org>; Tue, 06 Jun 2017 23:18:21 -0700 (PDT)
-From: Joel Stanley <joel@jms.id.au>
-To: linux-modules@vger.kernel.org
-Cc: Stewart Smith <stewart@linux.vnet.ibm.com>
-Subject: [PATCH kmod] util: fix non-static assert_cc use
-Date: Wed,  7 Jun 2017 15:48:11 +0930
-Message-Id: <20170607061811.4016-1-joel@jms.id.au>
-Sender: owner-linux-modules@vger.kernel.org
+Return-Path: <yauheni.kaliuta@redhat.com>
+From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>,  linux-modules <linux-modules@vger.kernel.org>,  lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] libkmod-elf: resolve CRC if module is built with MODULE_REL_CRCS
+References: <20170719145649.20334-1-yauheni.kaliuta@redhat.com>
+	<CAKi4VA+oMMXajB7_xF2qraye9h7k-JqG5h9Fk7fv9xenW_nvcA@mail.gmail.com>
+	<xunyh8y8qmdo.fsf@redhat.com>
+	<CAKv+Gu-Mvk_VPT1L8NUvJNrAcoyA5RMX8FjkV4VYJTfHKTtyZQ@mail.gmail.com>
+Date: Wed, 19 Jul 2017 22:33:23 +0300
+In-Reply-To: <CAKv+Gu-Mvk_VPT1L8NUvJNrAcoyA5RMX8FjkV4VYJTfHKTtyZQ@mail.gmail.com>
+	(Ard Biesheuvel's message of "Wed, 19 Jul 2017 20:10:17 +0100")
+Message-ID: <xuny7ez4ql18.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 List-ID: <linux-modules.vger.kernel.org>
 
-In commit a6ede6c7ad46 (util: fix warning of equal values on logical OR)
-the runtime check for EAGAIN and EWOULDBLOCK being equal was converted
-into an assert.
+Hi, Ard!
 
-For the case where the compiler supports _Static_assert, this is can be
-called staticly. However the fallback for older compilers uses a
-non-static test that needs to be called from a function context.
+>>>>> On Wed, 19 Jul 2017 20:10:17 +0100, Ard Biesheuvel  wrote:
 
-Move the assert into the functions that used to have the runtime check.
-The test does not add any runtime overhead, so it is fine to duplicate
-it.
+ > On 19 July 2017 at 20:04, Yauheni Kaliuta <yauheni.kaliuta@redhat.com> wrote:
+ >> Hi, Lucas!
+ >> 
+ >>>>>>> On Wed, 19 Jul 2017 10:51:44 -0700, Lucas De Marchi  wrote:
+ >> > On Wed, Jul 19, 2017 at 7:56 AM, Yauheni Kaliuta
+ >> > <yauheni.kaliuta@redhat.com> wrote:
+ >> >> Normally exported symbol's crc is stored as absolute (SHN_ABS)
+ >> >> value of special named symbol __crc_<symbol name>.
+ >> >>
+ >> >> When the kernel and modules are built with the config option
+ >> >> CONFIG_MODULE_REL_CRCS, all the CRCs are put in a special section
+ >> >> and the __crc_<symbol name> symbols values are offsets in the
+ >> >> section. See patch description of the commit:
+ >> >>
+ >> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=56067812d5b0e737ac2063e94a50f76b810d6ca3
+ >> >>
+ >> >> Add kmod support of this configuration.
+ >> 
+ >> [...]
+ >> 
+ >> > LGTM. I'll give this a try and apply.
+ >> 
+ >> Thanks! I would also like to get some feedback from the kernel feature
+ >> author, Ard Biesheuvel, that this does not miss other usecases.
+ >> 
 
-Tested with and without HAVE_STATIC_ASSERT defined using GCC 6.3.
+ > The patch looks correct to me. My only comment is that
+ > kmod_elf_resolve_crc() should probably return a uint32_t instead,
+ > given the size of a CRC32.
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- shared/util.c              | 4 ++--
- testsuite/test-testsuite.c | 1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Well, it's a specific of the internal libkmod implementation. Both
+struct kmod_modversion::crc and return value of elf_get_uint()
+are uint64_t, but in the patch elf_get_uint() reads correct
+sizeof(uint32_t) value from the ELF.
 
-diff --git a/shared/util.c b/shared/util.c
-index 9de080aabb18..c402953b4699 100644
---- a/shared/util.c
-+++ b/shared/util.c
-@@ -49,8 +49,6 @@ static const struct kmod_ext {
- 	{ }
- };
- 
--assert_cc(EAGAIN == EWOULDBLOCK);
--
- /* string handling functions and memory allocations                         */
- /* ************************************************************************ */
- 
-@@ -200,6 +198,7 @@ ssize_t read_str_safe(int fd, char *buf, size_t buflen)
- {
- 	size_t todo = buflen - 1;
- 	size_t done = 0;
-+	assert_cc(EAGAIN == EWOULDBLOCK);
- 
- 	do {
- 		ssize_t r = read(fd, buf + done, todo);
-@@ -225,6 +224,7 @@ ssize_t write_str_safe(int fd, const char *buf, size_t buflen)
- {
- 	size_t todo = buflen;
- 	size_t done = 0;
-+	assert_cc(EAGAIN == EWOULDBLOCK);
- 
- 	do {
- 		ssize_t r = write(fd, buf + done, todo);
-diff --git a/testsuite/test-testsuite.c b/testsuite/test-testsuite.c
-index 56e73609f204..5bafc6551a23 100644
---- a/testsuite/test-testsuite.c
-+++ b/testsuite/test-testsuite.c
-@@ -88,6 +88,7 @@ static int testsuite_rootfs_open(const struct test *t)
- {
- 	char buf[100];
- 	int fd, done;
-+	assert_cc(EAGAIN == EWOULDBLOCK);
- 
- 	fd = open("/lib/modules/a", O_RDONLY);
- 	if (fd < 0)
+ > In any case,
+
+ > Reviewed-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+
+Thanks a lot!
+
 -- 
-2.11.0
-
+WBR,
+Yauheni Kaliuta
