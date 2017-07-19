@@ -1,97 +1,78 @@
 Return-Path: <yauheni.kaliuta@redhat.com>
 From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 To: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>,
-	Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] libkmod-elf: resolve CRC if module is built with MODULE_REL_CRCS
-Date: Wed, 19 Jul 2017 17:56:49 +0300
-Message-Id: <20170719145649.20334-1-yauheni.kaliuta@redhat.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Subject: Re: [PATCHv2 0/4] depmod: implement external directories support
+References: <CAKi4VALJgW=RbpCT4kfix9sACzzz68=LZ-FhUUORXxHMcTA__g@mail.gmail.com>
+	<20170509190924.9087-1-yauheni.kaliuta@redhat.com>
+	<xunyzid3f2g9.fsf@redhat.com>
+	<CAKi4VA+PMniY-4W2J5pQkcZ=6ZRCLWQAWLJHwX8642S8025nSQ@mail.gmail.com>
+Date: Wed, 19 Jul 2017 21:57:49 +0300
+In-Reply-To: <CAKi4VA+PMniY-4W2J5pQkcZ=6ZRCLWQAWLJHwX8642S8025nSQ@mail.gmail.com>
+	(Lucas De Marchi's message of "Wed, 19 Jul 2017 11:07:11 -0700")
+Message-ID: <xunyo9sgqmoi.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 List-ID: <linux-modules.vger.kernel.org>
 
-Normally exported symbol's crc is stored as absolute (SHN_ABS)
-value of special named symbol __crc_<symbol name>.
+Hi, Lucas!
 
-When the kernel and modules are built with the config option
-CONFIG_MODULE_REL_CRCS, all the CRCs are put in a special section
-and the __crc_<symbol name> symbols values are offsets in the
-section. See patch description of the commit:
+>>>>> On Wed, 19 Jul 2017 11:07:11 -0700, Lucas De Marchi  wrote:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=56067812d5b0e737ac2063e94a50f76b810d6ca3
+ > On Tue, Jun 20, 2017 at 2:11 AM, Yauheni Kaliuta
+ > <yauheni.kaliuta@redhat.com> wrote:
+ >> Hi!
+ >> 
+ >>>>>>> On Tue,  9 May 2017 22:09:20 +0300, Yauheni Kaliuta  wrote:
+ >> 
+ >> > This is a pretty simple extention of existing logic, since now
+ >> > depmod already is able to:
+ >> 
+ >> > a) scan modules with full path from command line without -a
+ >> > switch;
+ >> > b) detects broken symbol dependencies and broken modversions,
+ >> > what assumes, that modules are already are not built for the
+ >> > existing kernel.
+ >> 
+ >> [...]
+ >> 
+ >> 
+ >> I've heared a concern about the feature, that it may make sense to limit
+ >> the possible external directories to some subdirectory(s). The idea is that
+ >> 3rd party vendor packages can pollute filesystem with its modules and a
+ >> system administrator may like to be sure that they are in a more defined
+ >> place.
+ >> 
+ >> What do you think?
 
-Add kmod support of this configuration.
+ > Humn... doesn't that completely defeats the purpose of using it for
+ > development?
 
-Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
----
- libkmod/libkmod-elf.c | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+ > That just reminded me we missed the changes to the man page. Could you
+ > take care of that?
 
-diff --git a/libkmod/libkmod-elf.c b/libkmod/libkmod-elf.c
-index 90da89aebbaf..ef4a8a3142a1 100644
---- a/libkmod/libkmod-elf.c
-+++ b/libkmod/libkmod-elf.c
-@@ -747,6 +747,31 @@ static inline uint8_t kmod_symbol_bind_from_elf(uint8_t elf_value)
- 	}
- }
- 
-+static uint64_t kmod_elf_resolve_crc(const struct kmod_elf *elf, uint64_t crc, uint16_t shndx)
-+{
-+	int err;
-+	uint64_t off, size;
-+	uint32_t nameoff;
-+
-+	if (shndx == SHN_ABS || shndx == SHN_UNDEF)
-+		return crc;
-+
-+	err = elf_get_section_info(elf, shndx, &off, &size, &nameoff);
-+	if (err < 0) {
-+		ELFDBG("Cound not find section index %"PRIu16" for crc", shndx);
-+		return (uint64_t)-1;
-+	}
-+
-+	if (crc > (size - sizeof(uint32_t))) {
-+		ELFDBG("CRC offset %"PRIu64" is too big, section %"PRIu16" size is %"PRIu64"\n",
-+		       crc, shndx, size);
-+		return (uint64_t)-1;
-+	}
-+
-+	crc = elf_get_uint(elf, off + crc, sizeof(uint32_t));
-+	return crc;
-+}
-+
- /* array will be allocated with strings in a single malloc, just free *array */
- int kmod_elf_get_symbols(const struct kmod_elf *elf, struct kmod_modversion **array)
- {
-@@ -830,6 +855,7 @@ int kmod_elf_get_symbols(const struct kmod_elf *elf, struct kmod_modversion **ar
- 		uint32_t name_off;
- 		uint64_t crc;
- 		uint8_t info, bind;
-+		uint16_t shndx;
- 
- #define READV(field)							\
- 		elf_get_uint(elf, sym_off + offsetof(typeof(*s), field),\
-@@ -839,11 +865,13 @@ int kmod_elf_get_symbols(const struct kmod_elf *elf, struct kmod_modversion **ar
- 			name_off = READV(st_name);
- 			crc = READV(st_value);
- 			info = READV(st_info);
-+			shndx = READV(st_shndx);
- 		} else {
- 			Elf64_Sym *s;
- 			name_off = READV(st_name);
- 			crc = READV(st_value);
- 			info = READV(st_info);
-+			shndx = READV(st_shndx);
- 		}
- #undef READV
- 		name = elf_get_mem(elf, str_off + name_off);
-@@ -856,7 +884,7 @@ int kmod_elf_get_symbols(const struct kmod_elf *elf, struct kmod_modversion **ar
- 		else
- 			bind = ELF64_ST_BIND(info);
- 
--		a[count].crc = crc;
-+		a[count].crc = kmod_elf_resolve_crc(elf, crc, shndx);
- 		a[count].bind = kmod_symbol_bind_from_elf(bind);
- 		a[count].symbol = itr;
- 		slen = strlen(name);
+Oh yes, sure. Just may be after vacations (next two weeks).
+
+ >> Of course, it is not security concern, just about unintentional
+ >> pollution. If there is the intention, in most cases from the package
+ >> maintainer scipts it's possible to install symbolic link under the
+ >> permitted directory, for example, with the file anywere.
+
+ > Not sure if kmod is the right place to restrict the directories.
+ > Maybe it's a distro policy thing?
+
+I think the same. But it is about 3rd party modules.
+
+ > What would you restrict it to?
+
+I was thinking about that a bit.
+
+What if I implement some configuration keyword, "restrict_external" for
+example, with a directory prefix (up to the distribution, /lib/modules or
+whatever) which is impossible then to override (by the additional configs
+from the 3rd party module package) and if depmod finds such external
+configuration, it ignores it with a warning?
+
 -- 
-2.14.0.rc0
+WBR,
+Yauheni Kaliuta
