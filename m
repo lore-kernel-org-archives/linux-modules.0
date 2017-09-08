@@ -1,79 +1,72 @@
+Return-Path: <md@linux.it>
+Date: Fri, 8 Sep 2017 23:30:48 +0200
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: Lubomir Rintel <lkundrak@v3.sk>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	linux-modules <linux-modules@vger.kernel.org>, jeyu@kernel.org
+Subject: Re: [RESEND PATCH] modprobe: install default configuration
+Message-ID: <20170908213048.d4lwkemko53sqagb@bongo.bofh.it>
+References: <20170901112801.11703-1-lkundrak@v3.sk>
+ <CAKi4VAKS7Vo6WoEJGjY6cRMZxmSsv4mj=eRhhHCnYno0DoP5Ag@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20170809000942.GV27873@wotan.suse.de>
-References: <1500645920-28490-1-git-send-email-matt.redfearn@imgtec.com>
-	<20170802001200.GD18884@wotan.suse.de>
-	<20170809000942.GV27873@wotan.suse.de>
-Date: Fri, 8 Sep 2017 14:23:23 -0700
-Message-ID: <CAKi4VA+11OV=28_uFa+JLY64oQ11+V8pF8eM5Y_Nx1UfCnAhCg@mail.gmail.com>
-Subject: Re: [RFC PATCH] exec: Avoid recursive modprobe for binary format handlers
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: "Luis R. Rodriguez" <mcgrof@kernel.org>
-Cc: linux-modules <linux-modules@vger.kernel.org>,
-	Mian Yousaf Kaukab <yousaf.kaukab@suse.com>, Matt Redfearn <matt.redfearn@imgtec.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>,
-	David Howells <dhowells@redhat.com>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Dan Carpenter <dan.carpenter@oracle.com>, Kees Cook <keescook@chromium.org>,
-	Jessica Yu <jeyu@redhat.com>, Michal Marek <mmarek@suse.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mips@linux-mips.org,
-	Petr Mladek <pmladek@suse.com>, linux-fsdevel@vger.kernel.org,
-	lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="i7occb6o45oxe4jg"
+In-Reply-To: <CAKi4VAKS7Vo6WoEJGjY6cRMZxmSsv4mj=eRhhHCnYno0DoP5Ag@mail.gmail.com>
+From: md@Linux.IT (Marco d'Itri)
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi,
 
-On Tue, Aug 8, 2017 at 5:09 PM, Luis R. Rodriguez <mcgrof@kernel.org> wrote:
-> On Wed, Aug 02, 2017 at 02:12:00AM +0200, Luis R. Rodriguez wrote:
->> On Fri, Jul 21, 2017 at 03:05:20PM +0100, Matt Redfearn wrote:
->> > diff --git a/fs/exec.c b/fs/exec.c
->> > index 62175cbcc801..004bb50a01fe 100644
->> > --- a/fs/exec.c
->> > +++ b/fs/exec.c
->> > @@ -1644,6 +1644,9 @@ int search_binary_handler(struct linux_binprm *bprm)
->> >             if (printable(bprm->buf[0]) && printable(bprm->buf[1]) &&
->> >                 printable(bprm->buf[2]) && printable(bprm->buf[3]))
->> >                     return retval;
->> > +           /* Game over if we need to load a module to execute modprobe */
->> > +           if (strcmp(bprm->filename, modprobe_path) == 0)
->> > +                   return retval;
->>
->> Wouldn't this just break having a binfmt used for modprobe always?
->
-> The place where you put the check is when a system has CONFIG_MODULES
-> and a first search for built-in handlers yielded no results so it would
-> not break that for built-in.
->
-> Thinking about this a little further, having an binfmd handler not built-in
-> seems to really be the issue in this particular case and indeed having one as
-> modular really just makes no sense as modprobe would be needed.
->
-> Although the alternative patch I suggested still makes sense for a *generic
-> loop detection complaint/error fix, putting this check in place and bailing
-> still makes sense as well, but this sort of thing seems to be the type of
-> system build error userspace could try to pick up on pro-actively, ie you
-> should not get to the point you boot into this, the build system should somehow
-> complain about it.
->
-> Cc'ing linux-modules folks to see if perhaps kmod could do something about this
-> more proactively.
+--i7occb6o45oxe4jg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tracking at runtime with modprobe/libkmod would be really difficult as
-a module can be loaded
-from different sources. I don't see a reliable way to do that. One
-thing often forgotten
-is that due to install rules the user can even add anything as a
-dependency with kmod not
-even knowing about (softdep is related, but at least kmod knows what
-the user is trying to do
-and use it to handle dependencies).
+On Sep 08, Lucas De Marchi <lucas.de.marchi@gmail.com> wrote:
 
-For this particular case, not going through the modprobe helper would
-be a way to accomplish that since
-you wouldn't need the corresponding binfmt module to run modprobe.
-Udev handles module
-loading via libkmod , but the only way to trigger it is via the rules
-rather than via a request from kernel.
+> On Fri, Sep 1, 2017 at 4:28 AM, Lubomir Rintel <lkundrak@v3.sk> wrote:
+> > Some network devices have an awful habit of creating interfaces when lo=
+aded,
+> > despite not asked for. Worse even, they do so while being autoloaded du=
+e to an
+> > attempt to create a device via netlink:
+I agree that this behaviour by dummy, bonding, etc is unfortunate
+and annoying; however, I do not believe that user space tools
+maintainers overriding the decisions of kernel maintainers will help
+creating an healty environment.
 
+As the Debian kmod maintainer I would also be seriously concerned about
+carrying this change since it would break existing configurations on
+upgrades.
 
-Lucas De Marchi
+> It seems you forgot to follow up on the feedback I gave last time and
+> asked for opinions.
+>=20
+> https://lkml.org/lkml/2016/6/14/336
+I think that this would create excessive complexity and force everybody=20
+to learn the semantics of this new directive.
+If you really believe that copying the whole file would be bad then just=20
+split the directives in multiple files.
+
+--=20
+ciao,
+Marco
+
+--i7occb6o45oxe4jg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCAAdFiEEGBsIcS5ipP0URKfyK/WlwSLE96QFAlmzDAgACgkQK/WlwSLE
+96Q7hQv/d0eAlwS6wCgzCJWewgtg6Vpqe9p3EZX/9sZfqFQoK00CXCOIF4062Rw9
+mQ8//AiuV5blKzJm/k9lOIaiLNWsvvFVnxgRs2syidOYnvnoe/bpoJTOPBV/307q
+QPYaLEdDzNuuAJKz120d+aUvAD8HDQbBmeLKytuwgc7BEEW7154zi7Ct0ZWyAHmM
+zTt04ghc7YU4+JI3RMf4/pcrHaizOalQl2m67del1Th0j4FqEmX9I8IPfnfn0h1m
+mFZFAt7xZ1vF3QSUjEMkn1bwb6O/+f9km9wVFihw1gzYYJ5NC//xN0IFICXtYSnj
+KzIqtSSdOT7Ud8Lv/T6wp0Hmqq49m4Roo1KvKHdSUIpqjuQHdDjoMWl/Vfke7peE
+K5fO5THrzPWDr3uEoZ/+2e8wynTXk/sznNiGYCT3CcGQv5foM/8lw/mNZHCIi9o7
+XFn0P2mUhzgl63EKdM8C3mS4WDZjymVrrYg03+NxF/MJLWnyvItXQKhlIyVuGtvN
+7C4xyqvW
+=M6U/
+-----END PGP SIGNATURE-----
+
+--i7occb6o45oxe4jg--
