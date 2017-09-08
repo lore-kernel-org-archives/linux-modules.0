@@ -1,72 +1,97 @@
-Return-Path: <md@linux.it>
-Date: Fri, 8 Sep 2017 23:30:48 +0200
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc: Lubomir Rintel <lkundrak@v3.sk>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	linux-modules <linux-modules@vger.kernel.org>, jeyu@kernel.org
-Subject: Re: [RESEND PATCH] modprobe: install default configuration
-Message-ID: <20170908213048.d4lwkemko53sqagb@bongo.bofh.it>
-References: <20170901112801.11703-1-lkundrak@v3.sk>
- <CAKi4VAKS7Vo6WoEJGjY6cRMZxmSsv4mj=eRhhHCnYno0DoP5Ag@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="i7occb6o45oxe4jg"
-In-Reply-To: <CAKi4VAKS7Vo6WoEJGjY6cRMZxmSsv4mj=eRhhHCnYno0DoP5Ag@mail.gmail.com>
-From: md@Linux.IT (Marco d'Itri)
+In-Reply-To: <20170901112801.11703-1-lkundrak@v3.sk>
+References: <20170901112801.11703-1-lkundrak@v3.sk>
+Date: Fri, 8 Sep 2017 14:03:59 -0700
+Message-ID: <CAKi4VAKS7Vo6WoEJGjY6cRMZxmSsv4mj=eRhhHCnYno0DoP5Ag@mail.gmail.com>
+Subject: Re: [RESEND PATCH] modprobe: install default configuration
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Lubomir Rintel <lkundrak@v3.sk>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>, linux-modules <linux-modules@vger.kernel.org>,
+	jeyu@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
+On Fri, Sep 1, 2017 at 4:28 AM, Lubomir Rintel <lkundrak@v3.sk> wrote:
+> Some network devices have an awful habit of creating interfaces when loaded,
+> despite not asked for. Worse even, they do so while being autoloaded due to an
+> attempt to create a device via netlink:
+>
+>   # rmmod dummy
+>   # ip link add dummy0 type dummy
+>   RTNETLINK answers: File exists
+>
+> The kernel maintainers seem opposed to fixing this in kernel (despite a similar
+> thing has been done with loop block devices) [1]. Let's fix this my overriding the
+> defaults from userspace.
+>
+> [1] http://comments.gmane.org/gmane.linux.kernel/2124714
+> ---
+> This seems to have slipped through the cracks.
+>
+>  Makefile.am                |  4 ++++
+>  modprobe.d/50-default.conf | 24 ++++++++++++++++++++++++
+>  2 files changed, 28 insertions(+)
+>  create mode 100644 modprobe.d/50-default.conf
+>
+> diff --git a/Makefile.am b/Makefile.am
+> index 2a1eb50..b114db8 100644
+> --- a/Makefile.am
+> +++ b/Makefile.am
+> @@ -105,6 +105,10 @@ bashcompletiondir=@bashcompletiondir@
+>  dist_bashcompletion_DATA = \
+>         shell-completion/bash/kmod
+>
+> +modprobeddir=$(prefix)/lib/modprobe.d
+> +dist_modprobed_DATA = \
+> +       modprobe.d/50-default.conf
+> +
+>  install-exec-hook:
+>         if test "$(libdir)" != "$(rootlibdir)"; then \
+>                 $(MKDIR_P) $(DESTDIR)$(rootlibdir) && \
+> diff --git a/modprobe.d/50-default.conf b/modprobe.d/50-default.conf
+> new file mode 100644
+> index 0000000..70d21f2
+> --- /dev/null
+> +++ b/modprobe.d/50-default.conf
+> @@ -0,0 +1,24 @@
+> +# default module parameters
+> +#
+> +# This file is part of kmod.
+> +#
+> +# Copyright 2016 Lubomir Rintel
+> +#
+> +# This program is free software; you can redistribute it and/or modify it
+> +# under the terms of the GNU Lesser General Public License as published by
+> +# the Free Software Foundation; either version 2.1 of the License, or
+> +# (at your option) any later version.
+> +#
+> +# This program is distributed in the hope that it will be useful, but
+> +# WITHOUT ANY WARRANTY; without even the implied warranty of
+> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+> +# General Public License for more details.
+> +#
+> +# You should have received a copy of the GNU Lesser General Public License
+> +# along with this program; if not, see <http://www.gnu.org/licenses/>.
+> +
+> +# See modprobe.d(5) for the description of the files in this directory,
+> +
+> +options bonding max_bonds=0
+> +options dummy numdummies=0
+> +options ifb numifbs=0
+> --
+> 2.13.5
+>
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
---i7occb6o45oxe4jg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sep 08, Lucas De Marchi <lucas.de.marchi@gmail.com> wrote:
+It seems you forgot to follow up on the feedback I gave last time and
+asked for opinions.
 
-> On Fri, Sep 1, 2017 at 4:28 AM, Lubomir Rintel <lkundrak@v3.sk> wrote:
-> > Some network devices have an awful habit of creating interfaces when lo=
-aded,
-> > despite not asked for. Worse even, they do so while being autoloaded du=
-e to an
-> > attempt to create a device via netlink:
-I agree that this behaviour by dummy, bonding, etc is unfortunate
-and annoying; however, I do not believe that user space tools
-maintainers overriding the decisions of kernel maintainers will help
-creating an healty environment.
+https://lkml.org/lkml/2016/6/14/336
 
-As the Debian kmod maintainer I would also be seriously concerned about
-carrying this change since it would break existing configurations on
-upgrades.
+CC'ing Jessica as well for opinions who is maintaining the kernel part.
 
-> It seems you forgot to follow up on the feedback I gave last time and
-> asked for opinions.
->=20
-> https://lkml.org/lkml/2016/6/14/336
-I think that this would create excessive complexity and force everybody=20
-to learn the semantics of this new directive.
-If you really believe that copying the whole file would be bad then just=20
-split the directives in multiple files.
-
---=20
-ciao,
-Marco
-
---i7occb6o45oxe4jg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCAAdFiEEGBsIcS5ipP0URKfyK/WlwSLE96QFAlmzDAgACgkQK/WlwSLE
-96Q7hQv/d0eAlwS6wCgzCJWewgtg6Vpqe9p3EZX/9sZfqFQoK00CXCOIF4062Rw9
-mQ8//AiuV5blKzJm/k9lOIaiLNWsvvFVnxgRs2syidOYnvnoe/bpoJTOPBV/307q
-QPYaLEdDzNuuAJKz120d+aUvAD8HDQbBmeLKytuwgc7BEEW7154zi7Ct0ZWyAHmM
-zTt04ghc7YU4+JI3RMf4/pcrHaizOalQl2m67del1Th0j4FqEmX9I8IPfnfn0h1m
-mFZFAt7xZ1vF3QSUjEMkn1bwb6O/+f9km9wVFihw1gzYYJ5NC//xN0IFICXtYSnj
-KzIqtSSdOT7Ud8Lv/T6wp0Hmqq49m4Roo1KvKHdSUIpqjuQHdDjoMWl/Vfke7peE
-K5fO5THrzPWDr3uEoZ/+2e8wynTXk/sznNiGYCT3CcGQv5foM/8lw/mNZHCIi9o7
-XFn0P2mUhzgl63EKdM8C3mS4WDZjymVrrYg03+NxF/MJLWnyvItXQKhlIyVuGtvN
-7C4xyqvW
-=M6U/
------END PGP SIGNATURE-----
-
---i7occb6o45oxe4jg--
+Lucas De Marchi
