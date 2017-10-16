@@ -1,27 +1,39 @@
-Return-Path: <chrisadr@gentoo.org>
-Date: Mon, 16 Oct 2017 22:00:25 +0000
-From: Christopher =?iso-8859-1?Q?D=EDaz?= Riveros <chrisadr@gentoo.org>
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>,
-	christopher.diaz.riv@gmail.com
-Subject: Re: [PATCH] man/depmod: Add references in other man pages
-Message-ID: <20171016220025.GA736@woodpecker.gentoo.org>
-References: <20171016154842.11104-1-chrisadr@gentoo.org>
- <CAKi4VALe-BDOnjYd2K3qAd7S4XG8c0khBmHpBm2KCVZtZg7FRw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-In-Reply-To: <CAKi4VALe-BDOnjYd2K3qAd7S4XG8c0khBmHpBm2KCVZtZg7FRw@mail.gmail.com>
+In-Reply-To: <20171016154842.11104-1-chrisadr@gentoo.org>
+References: <20171016154842.11104-1-chrisadr@gentoo.org>
+Date: Mon, 16 Oct 2017 14:43:38 -0700
+Message-ID: <CAKi4VALe-BDOnjYd2K3qAd7S4XG8c0khBmHpBm2KCVZtZg7FRw@mail.gmail.com>
+Subject: Re: [PATCH] man/depmod: Add references in other man pages
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: =?UTF-8?Q?Christopher_D=C3=ADaz_Riveros?= <chrisadr@gentoo.org>
+Cc: linux-modules <linux-modules@vger.kernel.org>, christopher.diaz.riv@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Oct 16, 2017 at 02:43:38PM -0700, Lucas De Marchi wrote:
-> 
-> LGTM the way you did. Thanks, applied.
+Hi,
 
-Thank you very much, that's awesome, I didn't thought it was going to be
-accepted in the first try, hehe.
+On Mon, Oct 16, 2017 at 8:48 AM, Christopher D=C3=ADaz Riveros
+<chrisadr@gentoo.org> wrote:
+> Depmod man page is not referenced in some man pages. This makes it
+> harder to find through reading documentation.
+>
+> References added to:
+>
+>         -man/insmod.xml
+>         -man/lsmod.xml
+>         -man/modprobe.xml
+>         -man/rmmod.xml
+>
+> Signed-off-by: Christopher D=C3=ADaz Riveros <chrisadr@gentoo.org>
+> ---
+>
+> Hi, this is the first patch that I submit, I know that the changes should
+> be as atomic as posible, but I'm leaving the four changes as a single
+> commig since it represents a whole change by itself. If you need me to
+> split in four different commits please let me know.
+>
 
-I'll try to find more things to do, I read that kernel janitors is a good place
-to start.
+LGTM the way you did. Thanks, applied.
 
-Christopher D�az Riveros
-Gentoo Developer
+
+Lucas De Marchi
