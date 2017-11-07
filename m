@@ -1,102 +1,99 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from smtp.gentoo.org ([140.211.166.183]:37260 "EHLO smtp.gentoo.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1753208AbdJPPuL (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 16 Oct 2017 11:50:11 -0400
-From: =?UTF-8?q?Christopher=20D=C3=ADaz=20Riveros?= <chrisadr@gentoo.org>
-To: linux-modules@vger.kernel.org
-Cc: christopher.diaz.riv@gmail.com,
-        =?UTF-8?q?Christopher=20D=C3=ADaz=20Riveros?= <chrisadr@gentoo.org>
-Subject: [PATCH] man/depmod: Add references in other man pages
-Date: Mon, 16 Oct 2017 10:48:42 -0500
-Message-Id: <20171016154842.11104-1-chrisadr@gentoo.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Sender: owner-linux-modules@vger.kernel.org
+In-Reply-To: <20171107115938.GA19236@asgard.redhat.com>
+References: <20171106215703.GA24781@asgard.redhat.com>
+	<CAKi4VA+Q_WRsSyA-7uffSXRf+N7rz1_VSuMmqpQXMrT+bxgOBw@mail.gmail.com>
+	<20171107115938.GA19236@asgard.redhat.com>
+Date: Tue, 7 Nov 2017 08:45:56 -0800
+Message-ID: <CAKi4VA+8-a1s3comKHUqq1kRdX+4ri3j+kb6xbwgCtXed90wPg@mail.gmail.com>
+Subject: Re: [PATCH] libkmod: fix uninitialized variable usage warnings
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Eugene Syromiatnikov <esyr@redhat.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>,
+	Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-Depmod man page is not referenced in some man pages. This makes it
-harder to find through reading documentation.
+On Tue, Nov 7, 2017 at 3:59 AM, Eugene Syromiatnikov <esyr@redhat.com> wrote:
+> On Mon, Nov 06, 2017 at 07:24:55PM -0800, Lucas De Marchi wrote:
+>> On Mon, Nov 6, 2017 at 1:57 PM, Eugene Syromiatnikov <esyr@redhat.com> wrote:
+>> > There are two places where _cleanup_free_ variables are not initialised
+>> > by the time function exits that have been caught by gcc:
+>> >
+>> >         In file included from libkmod/libkmod.c:35:0:
+>> >         libkmod/libkmod.c: In function 'kmod_lookup_alias_is_builtin':
+>> >         ./shared/util.h:73:13: warning: 'line' may be used uninitialized in this function [-Wmaybe-uninitialized]
+>> >                  free(*(void**) p);
+>> >                      ^
+>> >         libkmod/libkmod.c:551:23: note: 'line' was declared here
+>> >           _cleanup_free_ char *line;
+>> >                                ^
+>> >         In file included from libkmod/libkmod-module.c:42:0:
+>> >         libkmod/libkmod-module.c: In function 'kmod_module_probe_insert_module':
+>> >         ./shared/util.h:73:13: warning: 'cmd' may be used uninitialized in this function [-Wmaybe-uninitialized]
+>> >                  free(*(void**) p);
+>> >                      ^
+>> >         libkmod/libkmod-module.c:996:23: note: 'cmd' was declared here
+>> >           _cleanup_free_ char *cmd;
+>> >                        ^
+>> >
+>> > This patch initializes them to NULL so free become no-op in these cases.
+>> > ---
+>> >  libkmod/libkmod-module.c | 2 +-
+>> >  libkmod/libkmod.c        | 2 +-
+>> >  2 files changed, 2 insertions(+), 2 deletions(-)
+>> >
+>> > diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+>> > index 0a3ef11..6f23c1a 100644
+>> > --- a/libkmod/libkmod-module.c
+>> > +++ b/libkmod/libkmod-module.c
+>> > @@ -995,7 +995,7 @@ static int module_do_install_commands(struct kmod_module *mod,
+>> >  {
+>> >         const char *command = kmod_module_get_install_commands(mod);
+>> >         char *p;
+>> > -       _cleanup_free_ char *cmd;
+>> > +       _cleanup_free_ char *cmd = NULL;
+>> >         int err;
+>> >         size_t cmdlen, options_len, varlen;
+>> >
+>> > diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
+>> > index 69fe431..964772d 100644
+>> > --- a/libkmod/libkmod.c
+>> > +++ b/libkmod/libkmod.c
+>> > @@ -556,7 +556,7 @@ finish:
+>> >
+>> >  bool kmod_lookup_alias_is_builtin(struct kmod_ctx *ctx, const char *name)
+>> >  {
+>> > -       _cleanup_free_ char *line;
+>> > +       _cleanup_free_ char *line = NULL;
+>>
+>> This seems to be a bogus warning. See the line just below... there's
+>> no way to exit this function without first  assigning 'line'.
+>
+> In this instance, I initially thought that gcc is smart and derives
+> "uninitialised variable" from the lookup_builtin_file call, but nope, it
+> was happy only after line was initialised on declaration. On the other
+> hand, documentation[1] mentions that cleanup function is also called
+> during stack unwinding in case -fexceptions is enabled, and RHEL's RPM
+> package indeed has this flag, at least, so this GCC's complaint still
+> seems relevant.
 
-References added to:
+This is likely to trigger "double assignment" warnings on other compilers.
+A good question would be.... why is -fexceptions being used in a C-only library?
+If it was a binary or a library that links to a C++-library, I would
+understand, but in
+this case it seems nonsense. /me lost
 
-	-man/insmod.xml
-	-man/lsmod.xml
-	-man/modprobe.xml
-	-man/rmmod.xml
+An acceptable solution would be to just merge the 2 lines so we
+initialize line on
+declaration.
 
-Signed-off-by: Christopher Díaz Riveros <chrisadr@gentoo.org>
----
+I added -fexceptions here to reproduce the issue, but it didn't
+reproduce using gcc 7.2.1
+on Fedora 27.  I also remember not having the issue with gcc 6. So I
+still think it's
+a compiler bug, although I don't mind if the solution proposed above
+is applied (but mention
+on commit message the exact compiler version).
 
-Hi, this is the first patch that I submit, I know that the changes should
-be as atomic as posible, but I'm leaving the four changes as a single
-commig since it represents a whole change by itself. If you need me to 
-split in four different commits please let me know.
 
-Regards
-
- man/insmod.xml   | 3 +++
- man/lsmod.xml    | 3 +++
- man/modprobe.xml | 3 +++
- man/rmmod.xml    | 3 +++
- 4 files changed, 12 insertions(+)
-
-diff --git a/man/insmod.xml b/man/insmod.xml
-index 8ff4e20..3ebdccd 100644
---- a/man/insmod.xml
-+++ b/man/insmod.xml
-@@ -79,6 +79,9 @@
-       <citerefentry>
-         <refentrytitle>modinfo</refentrytitle><manvolnum>8</manvolnum>
-       </citerefentry>
-+      <citerefentry>
-+        <refentrytitle>depmod</refentrytitle><manvolnum>8</manvolnum>
-+      </citerefentry>
-     </para>
-   </refsect1>
- </refentry>
-diff --git a/man/lsmod.xml b/man/lsmod.xml
-index 8815a7e..588f228 100644
---- a/man/lsmod.xml
-+++ b/man/lsmod.xml
-@@ -65,6 +65,9 @@
-       <citerefentry>
-         <refentrytitle>modinfo</refentrytitle><manvolnum>8</manvolnum>
-       </citerefentry>
-+      <citerefentry>
-+        <refentrytitle>depmod</refentrytitle><manvolnum>8</manvolnum>
-+      </citerefentry>
-     </para>
-   </refsect1>
- </refentry>
-diff --git a/man/modprobe.xml b/man/modprobe.xml
-index 9cb4476..12d49f2 100644
---- a/man/modprobe.xml
-+++ b/man/modprobe.xml
-@@ -512,6 +512,9 @@
-       <citerefentry>
-         <refentrytitle>modinfo</refentrytitle><manvolnum>8</manvolnum>
-       </citerefentry>
-+      <citerefentry>
-+        <refentrytitle>depmod</refentrytitle><manvolnum>8</manvolnum>
-+      </citerefentry>
-     </para>
-   </refsect1>
- </refentry>
-diff --git a/man/rmmod.xml b/man/rmmod.xml
-index 4b9fad7..e7c7e5f 100644
---- a/man/rmmod.xml
-+++ b/man/rmmod.xml
-@@ -139,6 +139,9 @@
-       <citerefentry>
-         <refentrytitle>modinfo</refentrytitle><manvolnum>8</manvolnum>
-       </citerefentry>
-+      <citerefentry>
-+        <refentrytitle>depmod</refentrytitle><manvolnum>8</manvolnum>
-+      </citerefentry>
-     </para>
-   </refsect1>
- </refentry>
--- 
-2.15.0.rc1.dirty
-
+Lucas De Marchi
