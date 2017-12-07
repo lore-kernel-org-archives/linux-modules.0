@@ -1,76 +1,102 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mx1.redhat.com ([209.132.183.28]:52458 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1753452AbdKFV4P (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 6 Nov 2017 16:56:15 -0500
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 6CFF382106
-        for <linux-modules@vger.kernel.org>; Mon,  6 Nov 2017 21:56:15 +0000 (UTC)
-Date: Mon, 6 Nov 2017 22:57:03 +0100
-From: Eugene Syromiatnikov <esyr@redhat.com>
-To: linux-modules@vger.kernel.org
-Cc: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Subject: [PATCH] libkmod: fix uninitialized variable usage warnings
-Message-ID: <20171106215703.GA24781@asgard.redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Sender: owner-linux-modules@vger.kernel.org
+Return-Path: <yauheni.kaliuta@redhat.com>
+From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Subject: [PATCH 1/2] testsuite: depmod: add override test
+Date: Thu,  7 Dec 2017 21:16:07 +0200
+Message-Id: <20171207191608.14293-2-yauheni.kaliuta@redhat.com>
+In-Reply-To: <20171207191608.14293-1-yauheni.kaliuta@redhat.com>
+References: <20171207191608.14293-1-yauheni.kaliuta@redhat.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-There are two places where _cleanup_free_ variables are not initialised
-by the time function exits that have been caught by gcc:
+Simple test to check if depmod honors override keyword. Uses
+mod-simple.ko for foo/ and override/ directories, search.conf to
+search in foo and built-in and simple override configuration:
 
-	In file included from libkmod/libkmod.c:35:0:
-	libkmod/libkmod.c: In function 'kmod_lookup_alias_is_builtin':
-	./shared/util.h:73:13: warning: 'line' may be used uninitialized in this function [-Wmaybe-uninitialized]
-		 free(*(void**) p);
-		     ^
-	libkmod/libkmod.c:551:23: note: 'line' was declared here
-	  _cleanup_free_ char *line;
-			       ^
-	In file included from libkmod/libkmod-module.c:42:0:
-	libkmod/libkmod-module.c: In function 'kmod_module_probe_insert_module':
-	./shared/util.h:73:13: warning: 'cmd' may be used uninitialized in this function [-Wmaybe-uninitialized]
-		 free(*(void**) p);
-		     ^
-	libkmod/libkmod-module.c:996:23: note: 'cmd' was declared here
-	  _cleanup_free_ char *cmd;
-                       ^
+override mod-simple 4.4.4 override
 
-This patch initializes them to NULL so free become no-op in these cases.
+The resulting modules.dep should point to the override directory.
+
+Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 ---
- libkmod/libkmod-module.c | 2 +-
- libkmod/libkmod.c        | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ testsuite/populate-modules.sh                      |  2 ++
+ .../etc/depmod.d/override.conf                     |  1 +
+ .../search-order-override/etc/depmod.d/search.conf |  1 +
+ .../lib/modules/4.4.4/correct-modules.dep          |  1 +
+ testsuite/test-depmod.c                            | 26 ++++++++++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/override.conf
+ create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/search.conf
+ create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-override/lib/modules/4.4.4/correct-modules.dep
 
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 0a3ef11..6f23c1a 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -995,7 +995,7 @@ static int module_do_install_commands(struct kmod_module *mod,
- {
- 	const char *command = kmod_module_get_install_commands(mod);
- 	char *p;
--	_cleanup_free_ char *cmd;
-+	_cleanup_free_ char *cmd = NULL;
- 	int err;
- 	size_t cmdlen, options_len, varlen;
+diff --git a/testsuite/populate-modules.sh b/testsuite/populate-modules.sh
+index 3ac92ee8030d..b77e71edf0a4 100755
+--- a/testsuite/populate-modules.sh
++++ b/testsuite/populate-modules.sh
+@@ -28,6 +28,8 @@ map=(
+     ["test-depmod/search-order-external-last/lib/modules/4.4.4/foo/"]="mod-simple.ko"
+     ["test-depmod/search-order-external-last/lib/modules/4.4.4/foobar/"]="mod-simple.ko"
+     ["test-depmod/search-order-external-last/lib/modules/external/"]="mod-simple.ko"
++    ["test-depmod/search-order-override/lib/modules/4.4.4/foo/"]="mod-simple.ko"
++    ["test-depmod/search-order-override/lib/modules/4.4.4/override/"]="mod-simple.ko"
+     ["test-dependencies/lib/modules/4.0.20-kmod/kernel/fs/foo/"]="mod-foo-b.ko"
+     ["test-dependencies/lib/modules/4.0.20-kmod/kernel/"]="mod-foo-c.ko"
+     ["test-dependencies/lib/modules/4.0.20-kmod/kernel/lib/"]="mod-foo-a.ko"
+diff --git a/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/override.conf b/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/override.conf
+new file mode 100644
+index 000000000000..fadf8112c26a
+--- /dev/null
++++ b/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/override.conf
+@@ -0,0 +1 @@
++override mod-simple 4.4.4 override
+diff --git a/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/search.conf b/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/search.conf
+new file mode 100644
+index 000000000000..289ddcdd4152
+--- /dev/null
++++ b/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/search.conf
+@@ -0,0 +1 @@
++search foo built-in
+diff --git a/testsuite/rootfs-pristine/test-depmod/search-order-override/lib/modules/4.4.4/correct-modules.dep b/testsuite/rootfs-pristine/test-depmod/search-order-override/lib/modules/4.4.4/correct-modules.dep
+new file mode 100644
+index 000000000000..4c7ea8e08c8e
+--- /dev/null
++++ b/testsuite/rootfs-pristine/test-depmod/search-order-override/lib/modules/4.4.4/correct-modules.dep
+@@ -0,0 +1 @@
++override/mod-simple.ko:
+diff --git a/testsuite/test-depmod.c b/testsuite/test-depmod.c
+index e249c61515dc..47dafb4dd618 100644
+--- a/testsuite/test-depmod.c
++++ b/testsuite/test-depmod.c
+@@ -183,4 +183,30 @@ DEFINE_TEST(depmod_search_order_external_last,
+ 		},
+ 	});
  
-diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
-index 69fe431..964772d 100644
---- a/libkmod/libkmod.c
-+++ b/libkmod/libkmod.c
-@@ -556,7 +556,7 @@ finish:
- 
- bool kmod_lookup_alias_is_builtin(struct kmod_ctx *ctx, const char *name)
- {
--	_cleanup_free_ char *line;
-+	_cleanup_free_ char *line = NULL;
- 
- 	line = lookup_builtin_file(ctx, name);
- 
++#define SEARCH_ORDER_OVERRIDE_ROOTFS TESTSUITE_ROOTFS "test-depmod/search-order-override"
++static noreturn int depmod_search_order_override(const struct test *t)
++{
++	const char *progname = ABS_TOP_BUILDDIR "/tools/depmod";
++	const char *const args[] = {
++		progname,
++		NULL,
++	};
++
++	test_spawn_prog(progname, args);
++	exit(EXIT_FAILURE);
++}
++DEFINE_TEST(depmod_search_order_override,
++	.description = "check if depmod honor override keyword",
++	.config = {
++		[TC_UNAME_R] = "4.4.4",
++		[TC_ROOTFS] = SEARCH_ORDER_OVERRIDE_ROOTFS,
++	},
++	.output = {
++		.files = (const struct keyval[]) {
++			{ SEARCH_ORDER_OVERRIDE_ROOTFS "/lib/modules/4.4.4/correct-modules.dep",
++			  SEARCH_ORDER_OVERRIDE_ROOTFS "/lib/modules/4.4.4/modules.dep" },
++			{ }
++		},
++	});
++
+ TESTSUITE_MAIN();
 -- 
-2.1.4
-
+2.15.1
