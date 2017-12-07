@@ -1,102 +1,44 @@
-Return-Path: <yauheni.kaliuta@redhat.com>
-From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+MIME-Version: 1.0
+In-Reply-To: <20171207143119.7046-1-msuchanek@suse.de>
+References: <20171207143119.7046-1-msuchanek@suse.de>
+Date: Thu, 7 Dec 2017 11:07:59 -0800
+Message-ID: <CAKi4VAK9QNE6F+7EX1t2fNx2zooxtV7qToED41j=vS-LZ0K6Nw@mail.gmail.com>
+Subject: Re: [PATCH] depmod: Don't add .TOC. when it's in the kernel.
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Michal Suchanek <msuchanek@suse.de>
 Cc: linux-modules <linux-modules@vger.kernel.org>
-Subject: [PATCH 1/2] testsuite: depmod: add override test
-Date: Thu,  7 Dec 2017 21:16:07 +0200
-Message-Id: <20171207191608.14293-2-yauheni.kaliuta@redhat.com>
-In-Reply-To: <20171207191608.14293-1-yauheni.kaliuta@redhat.com>
-References: <20171207191608.14293-1-yauheni.kaliuta@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-Simple test to check if depmod honors override keyword. Uses
-mod-simple.ko for foo/ and override/ directories, search.conf to
-search in foo and built-in and simple override configuration:
+On Thu, Dec 7, 2017 at 6:31 AM, Michal Suchanek <msuchanek@suse.de> wrote:
+> d46136bb59c4 ("depmod: Ignore PowerPC64 ABIv2 .TOC. symbol") adds fake
+> .TOC. unconditionally but when there is .TOC. in the kernel adding the
+> fake one breaks resolving .TOC.
+>
+> Fixes: d46136bb59c4 ("depmod: Ignore PowerPC64 ABIv2 .TOC. symbol")
+>
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> ---
+>  tools/depmod.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/depmod.c b/tools/depmod.c
+> index 7ff3e9ed191e..9db602d76ee4 100644
+> --- a/tools/depmod.c
+> +++ b/tools/depmod.c
+> @@ -2480,7 +2480,8 @@ static void depmod_add_fake_syms(struct depmod *depmod)
+>         /* On S390, this is faked up too */
+>         depmod_symbol_add(depmod, "_GLOBAL_OFFSET_TABLE_", true, 0, NULL);
+>         /* On PowerPC64 ABIv2, .TOC. is more or less _GLOBAL_OFFSET_TABLE_ */
+> -       depmod_symbol_add(depmod, "TOC.", true, 0, NULL);
+> +       if (!depmod_symbol_find(depmod, "TOC."))
+> +               depmod_symbol_add(depmod, "TOC.", true, 0, NULL);
+>  }
+>
+>  static int depmod_load_symvers(struct depmod *depmod, const char *filename)
+> --
 
-override mod-simple 4.4.4 override
+Applied, thanks.
 
-The resulting modules.dep should point to the override directory.
 
-Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
----
- testsuite/populate-modules.sh                      |  2 ++
- .../etc/depmod.d/override.conf                     |  1 +
- .../search-order-override/etc/depmod.d/search.conf |  1 +
- .../lib/modules/4.4.4/correct-modules.dep          |  1 +
- testsuite/test-depmod.c                            | 26 ++++++++++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/override.conf
- create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/search.conf
- create mode 100644 testsuite/rootfs-pristine/test-depmod/search-order-override/lib/modules/4.4.4/correct-modules.dep
-
-diff --git a/testsuite/populate-modules.sh b/testsuite/populate-modules.sh
-index 3ac92ee8030d..b77e71edf0a4 100755
---- a/testsuite/populate-modules.sh
-+++ b/testsuite/populate-modules.sh
-@@ -28,6 +28,8 @@ map=(
-     ["test-depmod/search-order-external-last/lib/modules/4.4.4/foo/"]="mod-simple.ko"
-     ["test-depmod/search-order-external-last/lib/modules/4.4.4/foobar/"]="mod-simple.ko"
-     ["test-depmod/search-order-external-last/lib/modules/external/"]="mod-simple.ko"
-+    ["test-depmod/search-order-override/lib/modules/4.4.4/foo/"]="mod-simple.ko"
-+    ["test-depmod/search-order-override/lib/modules/4.4.4/override/"]="mod-simple.ko"
-     ["test-dependencies/lib/modules/4.0.20-kmod/kernel/fs/foo/"]="mod-foo-b.ko"
-     ["test-dependencies/lib/modules/4.0.20-kmod/kernel/"]="mod-foo-c.ko"
-     ["test-dependencies/lib/modules/4.0.20-kmod/kernel/lib/"]="mod-foo-a.ko"
-diff --git a/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/override.conf b/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/override.conf
-new file mode 100644
-index 000000000000..fadf8112c26a
---- /dev/null
-+++ b/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/override.conf
-@@ -0,0 +1 @@
-+override mod-simple 4.4.4 override
-diff --git a/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/search.conf b/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/search.conf
-new file mode 100644
-index 000000000000..289ddcdd4152
---- /dev/null
-+++ b/testsuite/rootfs-pristine/test-depmod/search-order-override/etc/depmod.d/search.conf
-@@ -0,0 +1 @@
-+search foo built-in
-diff --git a/testsuite/rootfs-pristine/test-depmod/search-order-override/lib/modules/4.4.4/correct-modules.dep b/testsuite/rootfs-pristine/test-depmod/search-order-override/lib/modules/4.4.4/correct-modules.dep
-new file mode 100644
-index 000000000000..4c7ea8e08c8e
---- /dev/null
-+++ b/testsuite/rootfs-pristine/test-depmod/search-order-override/lib/modules/4.4.4/correct-modules.dep
-@@ -0,0 +1 @@
-+override/mod-simple.ko:
-diff --git a/testsuite/test-depmod.c b/testsuite/test-depmod.c
-index e249c61515dc..47dafb4dd618 100644
---- a/testsuite/test-depmod.c
-+++ b/testsuite/test-depmod.c
-@@ -183,4 +183,30 @@ DEFINE_TEST(depmod_search_order_external_last,
- 		},
- 	});
- 
-+#define SEARCH_ORDER_OVERRIDE_ROOTFS TESTSUITE_ROOTFS "test-depmod/search-order-override"
-+static noreturn int depmod_search_order_override(const struct test *t)
-+{
-+	const char *progname = ABS_TOP_BUILDDIR "/tools/depmod";
-+	const char *const args[] = {
-+		progname,
-+		NULL,
-+	};
-+
-+	test_spawn_prog(progname, args);
-+	exit(EXIT_FAILURE);
-+}
-+DEFINE_TEST(depmod_search_order_override,
-+	.description = "check if depmod honor override keyword",
-+	.config = {
-+		[TC_UNAME_R] = "4.4.4",
-+		[TC_ROOTFS] = SEARCH_ORDER_OVERRIDE_ROOTFS,
-+	},
-+	.output = {
-+		.files = (const struct keyval[]) {
-+			{ SEARCH_ORDER_OVERRIDE_ROOTFS "/lib/modules/4.4.4/correct-modules.dep",
-+			  SEARCH_ORDER_OVERRIDE_ROOTFS "/lib/modules/4.4.4/modules.dep" },
-+			{ }
-+		},
-+	});
-+
- TESTSUITE_MAIN();
--- 
-2.15.1
+Lucas De Marchi
