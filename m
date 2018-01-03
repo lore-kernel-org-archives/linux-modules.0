@@ -1,88 +1,50 @@
-MIME-Version: 1.0
-In-Reply-To: <093e06b77d7e44af8b9597f1a3701fa7@citrus.nl>
-References: <093e06b77d7e44af8b9597f1a3701fa7@citrus.nl>
-Date: Wed, 31 Jan 2018 09:39:39 -0800
-Message-ID: <CAKi4VAKF5YCa8e2a1kEJU5MgecKWOdcPK94vWTgEzRM2j6CqYA@mail.gmail.com>
-Subject: Re: modinfo shows md4 signature instead of sha256
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: Ferry van Steen <Ferry.van.Steen@citrus.nl>
-Cc: "jcm@jonmasters.org" <jcm@jonmasters.org>, David Howells <dhowells@redhat.com>,
-	linux-modules <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from mga06.intel.com ([134.134.136.31]:63082 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1750913AbeACW3e (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Wed, 3 Jan 2018 17:29:34 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: linux-modules@vger.kernel.org
+Cc: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Subject: [PATCH 2/6] build: use tool from configure
+Date: Wed,  3 Jan 2018 14:29:20 -0800
+Message-Id: <20180103222924.26347-3-lucas.demarchi@intel.com>
+In-Reply-To: <20180103222924.26347-1-lucas.demarchi@intel.com>
+References: <20180103222924.26347-1-lucas.demarchi@intel.com>
+Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi Ferry,
+This way we make sure the tool will be the one we actually configured
+before going through sudo.
+---
+ Makefile.am  | 4 ++--
+ configure.ac | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-CC'ing mailing list and Yauheni who worked on fixing modinfo output in
-the last release.
+diff --git a/Makefile.am b/Makefile.am
+index b7ee6b1..3ea4274 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -504,5 +504,5 @@ tar-sync: kmod-$(VERSION).tar.xz kmod-$(VERSION).tar.sign
+ # ------------------------------------------------------------------------------
+ 
+ mkosi:
+-	-mkdir $(top_srcdir)/testsuite/mkosi/mkosi.cache
+-	mkosi -C $(top_srcdir)/testsuite/mkosi --build-sources ../../ -fi
++	-$(MKDIR_P) $(top_srcdir)/testsuite/mkosi/mkosi.cache
++	$(MKOSI) -C $(top_srcdir)/testsuite/mkosi --build-sources ../../ -fi
+diff --git a/configure.ac b/configure.ac
+index ca94bf8..932e87d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -31,6 +31,7 @@ AC_PROG_MKDIR_P
+ AC_PROG_LN_S
+ PKG_PROG_PKG_CONFIG
+ AC_PATH_PROG([XSLTPROC], [xsltproc])
++AC_PATH_PROG([MKOSI], [mkosi])
+ 
+ AC_PROG_CC_C99
+ 
+-- 
+2.14.3
 
-
-On Wed, Jan 31, 2018 at 1:23 AM, Ferry van Steen
-<Ferry.van.Steen@citrus.nl> wrote:
-> Hi,
->
->
-> sorry, not sure where to file this. There seems to be a bug in either the
-> kernel signing modules with a wrong signature algorithm, or modinfo is
-> reporting it incorrectly. I presume it's the latter.
->
->
-> More details are here: https://bugzilla.redhat.com/show_bug.cgi?id=3D1490=
-975
-
-Not showing the output on older versions is a known issue: support for
-PKCS#7 sig type was
-only added to kmod in v23.
-
-Now for the incorrect info, the problem appears to be in the kernel
-implementation:
-it appends a PKCS#7, but doens't fill out the struct module_signature
-correctly. So in F27 I get this from, e.g.
-soundcore.ko:
-
-$ xxd -c 8 -g 1 mod.ko | tail -n6
-00004d80: b9 d5 04 00 00 02 00 00  ........   <<<<<<
-00004d88: 00 00 00 00 00 02 d3 7e  .......~
-00004d90: 4d 6f 64 75 6c 65 20 73  Module s
-00004d98: 69 67 6e 61 74 75 72 65  ignature
-00004da0: 20 61 70 70 65 6e 64 65   appende
-00004da8: 64 7e 0a                 d~.
-
-See line marked above. It should match a struct module_signature. So:
-id_type =3D=3D 0x2 // PKCS7
-hash =3D=3D 0 // md4
-algo =3D=3D 0 // dsa
-
-Looking at scripts/sign-file.c, indeed id_type is the only field that
-is filled out.
-CC'ing  David Howells as well. Any input here?
-
-Lucas De Marchi
-
->
->
-> Thanks in advance and kind regards,
->
->
-> Ferry van Steen
-> Linux Developer
-> Ferry.van.Steen@Citrus.nl
->
-> Citrus Software
-> =E2=97=8F  Almystraat 10A
-> =E2=97=8F  5061 PA Oisterwijk
-> =E2=97=8F  +31 (0)13 - 529 91 55
-> =E2=97=8F  www.citrus.nl
-> ______________________________________________________
->
-> This message may contain confidential or privileged information. If you a=
-re
-> not the addressee, please notify the sender and delete it from your files=
-.
-> Please consider the environmental impact before printing this e-mail.
->
-
-
-
---=20
-Lucas De Marchi
