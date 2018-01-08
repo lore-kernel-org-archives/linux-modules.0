@@ -1,47 +1,59 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mga06.intel.com ([134.134.136.31]:63082 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1750913AbeACW3d (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 3 Jan 2018 17:29:33 -0500
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: linux-modules@vger.kernel.org
-Cc: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Subject: [PATCH 0/6] prepare for release
-Date: Wed,  3 Jan 2018 14:29:18 -0800
-Message-Id: <20180103222924.26347-1-lucas.demarchi@intel.com>
-Sender: owner-linux-modules@vger.kernel.org
+MIME-Version: 1.0
+In-Reply-To: <20180108213146.GA8638@cmdeoliv-mobl2.jf.intel.com>
+References: <20180108162708.16662-1-lucas.demarchi@intel.com>
+	<20180108212829.14484-1-lucas.demarchi@intel.com>
+	<20180108213146.GA8638@cmdeoliv-mobl2.jf.intel.com>
+Date: Mon, 8 Jan 2018 13:55:39 -0800
+Message-ID: <CAKi4VAKDwn6Nq8TmaH+jvfFosH5R+u719yqSExibseMNv2bjSg@mail.gmail.com>
+Subject: Re: [PATCH v2] testsuite: also wrap gettid in syscall()
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Caio Marcelo de Oliveira Filho <caio.oliveira@intel.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>, linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-I already applied the first patch since I was thinking about just
-quickly testing in a pristine environment before releasing.
-However I went ahead and 1) added support for more than one distro
-using mkosi and 2) debugged why the testsuite was failing for me.
+On Mon, Jan 8, 2018 at 1:31 PM, Caio Marcelo de Oliveira Filho
+<caio.oliveira@intel.com> wrote:
+> +1
+>
+> On Mon, Jan 08, 2018 at 01:28:29PM -0800, Lucas De Marchi wrote:
+>> Not a perfect solution for overriding syscall(), but at least
+>> it makes the testsuite to pass in a modified nsswitch.conf (one that has
+>> a module which calls syscall() to get the thread id).
+>> ---
+>>
+>> v2:
+>>       - Check nextlib_syscall rather than nextlib to avoid races in
+>>         multithreaded programs
+>>       - Add error message in case we fail to get symbol
+>>
+>>  testsuite/init_module.c | 20 ++++++++++++++++++++
+>>  1 file changed, 20 insertions(+)
+>>
+>> diff --git a/testsuite/init_module.c b/testsuite/init_module.c
+>> index 199186b..c70147e 100644
+>> --- a/testsuite/init_module.c
+>> +++ b/testsuite/init_module.c
+>> @@ -355,6 +355,26 @@ TS_EXPORT long int syscall(long int __sysno, ...)
+>>               return ret;
+>>       }
+>>
+>> +     if (__sysno == __NR_gettid) {
+>> +             static void *nextlib = NULL;
+>> +             static long (*nextlib_syscall)(long number, ...);
+>> +
+>> +             if (nextlib_syscall == NULL) {
+>> +#ifdef RTLD_NEXT
+>> +                     nextlib = RTLD_NEXT;
+>> +#else
+>> +                     nextlib = dlopen("libc.so.6", RTLD_LAZY);
+>> +#endif
+>> +                     nextlib_syscall = dlsym(nextlib, "syscall");
+>> +                     if (nextlib_syscall == NULL) {
+>> +                             fprintf(stderr, "FIXME FIXME FIXME: libc is missing syscall symbol\n");
 
-After this I think we are safe to do a new release.
+I added a call to dlerror() here and applied.
 
+thanks for reviewing.
 
-Lucas De Marchi (6):
-  build: add mkosi hooks
-  build: use tool from configure
-  testsuite: generalize mkosi support for other distros
-  testsuite: add Fedora's mkosi configuration
-  testsuite: add missing error handling
-  testsuite: explain why overriding function may fail
-
- Makefile.am                  | 10 ++++++++++
- configure.ac                 |  1 +
- testsuite/init_module.c      |  9 +++++++--
- testsuite/mkosi/.gitignore   |  3 +++
- testsuite/mkosi/mkosi.arch   | 25 +++++++++++++++++++++++++
- testsuite/mkosi/mkosi.build  | 38 ++++++++++++++++++++++++++++++++++++++
- testsuite/mkosi/mkosi.fedora | 26 ++++++++++++++++++++++++++
- testsuite/testsuite.h        |  2 ++
- 8 files changed, 112 insertions(+), 2 deletions(-)
- create mode 100644 testsuite/mkosi/.gitignore
- create mode 100644 testsuite/mkosi/mkosi.arch
- create mode 100755 testsuite/mkosi/mkosi.build
- create mode 100644 testsuite/mkosi/mkosi.fedora
-
--- 
-2.14.3
-
+Lucas De Marchi
