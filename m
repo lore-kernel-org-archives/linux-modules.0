@@ -1,60 +1,62 @@
-Return-Path: <yauheni.kaliuta@redhat.com>
-From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>
-Subject: [PATCH 2/2] depmod: module_is_higher_priority: fix modname length calculation
-Date: Thu,  7 Dec 2017 21:16:08 +0200
-Message-Id: <20171207191608.14293-3-yauheni.kaliuta@redhat.com>
-In-Reply-To: <20171207191608.14293-1-yauheni.kaliuta@redhat.com>
-References: <20171207191608.14293-1-yauheni.kaliuta@redhat.com>
+MIME-Version: 1.0
+In-Reply-To: <20180103222924.26347-1-lucas.demarchi@intel.com>
+References: <20180103222924.26347-1-lucas.demarchi@intel.com>
+Date: Mon, 8 Jan 2018 13:33:48 -0800
+Message-ID: <CAKi4VALczk_wgayysXRJSzk4SWwzP7hDgsoO7_21Geybo83b4A@mail.gmail.com>
+Subject: Re: [PATCH 0/6] prepare for release
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>,
+	Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-depmod_module_is_higher_priority checks module's path if it is under
-module root directory and if so uses relative to the root path to
-lookup the module in override and search lists.
+On Wed, Jan 3, 2018 at 2:29 PM, Lucas De Marchi
+<lucas.demarchi@intel.com> wrote:
+> I already applied the first patch since I was thinking about just
+> quickly testing in a pristine environment before releasing.
+> However I went ahead and 1) added support for more than one distro
+> using mkosi and 2) debugged why the testsuite was failing for me.
+>
+> After this I think we are safe to do a new release.
+>
+>
+> Lucas De Marchi (6):
+>   build: add mkosi hooks
+>   build: use tool from configure
+>   testsuite: generalize mkosi support for other distros
+>   testsuite: add Fedora's mkosi configuration
+>   testsuite: add missing error handling
+>   testsuite: explain why overriding function may fail
 
-Originally only relative path was used in the function, so the
-variables with full path and and path length were changed:
+All patches applied.
 
-       newpath += cfg->dirnamelen + 1;
-       newlen -= cfg->dirnamelen + 1;
-       oldpath += cfg->dirnamelen + 1;
-       oldlen -= cfg->dirnamelen + 1;
+Lucas De Marchi
 
-Commit 7da6884e7357ac05772e90f6d7e63b1948103fc4 (depmod: implement
-external directories support) changed the logic since it need the
-full path to the module for comparations as well.
+>
+>  Makefile.am                  | 10 ++++++++++
+>  configure.ac                 |  1 +
+>  testsuite/init_module.c      |  9 +++++++--
+>  testsuite/mkosi/.gitignore   |  3 +++
+>  testsuite/mkosi/mkosi.arch   | 25 +++++++++++++++++++++++++
+>  testsuite/mkosi/mkosi.build  | 38 ++++++++++++++++++++++++++++++++++++++
+>  testsuite/mkosi/mkosi.fedora | 26 ++++++++++++++++++++++++++
+>  testsuite/testsuite.h        |  2 ++
+>  8 files changed, 112 insertions(+), 2 deletions(-)
+>  create mode 100644 testsuite/mkosi/.gitignore
+>  create mode 100644 testsuite/mkosi/mkosi.arch
+>  create mode 100755 testsuite/mkosi/mkosi.build
+>  create mode 100644 testsuite/mkosi/mkosi.fedora
+>
+> --
+> 2.14.3
+>
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-Unfortunately, it introduce a mistake in calculation of the relative
-paths replacing '-=' with assignment to a new variable -- the
-'cfg->dirnamelen + 1' value must be substracted all together. It
-breaks, for example, overrides lookup.
 
-Fix the calculation by putting braces around the value in the
-subsctuction expression.
 
-Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
----
- tools/depmod.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 7ff3e9ed191e..921dc5cc93eb 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -1118,11 +1118,11 @@ static int depmod_module_is_higher_priority(const struct depmod *depmod, const s
- 
- 	if (strncmp(newpath, cfg->dirname, cfg->dirnamelen) == 0) {
- 		relnewpath = newpath + cfg->dirnamelen + 1;
--		relnewlen = newlen - cfg->dirnamelen + 1;
-+		relnewlen = newlen - (cfg->dirnamelen + 1);
- 	}
- 	if (strncmp(oldpath, cfg->dirname, cfg->dirnamelen) == 0) {
- 		reloldpath = oldpath + cfg->dirnamelen + 1;
--		reloldlen = oldlen - cfg->dirnamelen + 1;
-+		reloldlen = oldlen - (cfg->dirnamelen + 1);
- 	}
- 
- 	for (ov = cfg->overrides; ov != NULL; ov = ov->next) {
 -- 
-2.15.1
+Lucas De Marchi
