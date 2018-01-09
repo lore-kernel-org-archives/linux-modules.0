@@ -1,51 +1,80 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mga03.intel.com ([134.134.136.65]:53057 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S932330AbeAHQ1T (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 8 Jan 2018 11:27:19 -0500
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: linux-modules@vger.kernel.org
-Cc: caio.oliveira@intel.com
-Subject: [PATCH] testsuite: also wrap gettid in syscall()
-Date: Mon,  8 Jan 2018 08:27:08 -0800
-Message-Id: <20180108162708.16662-1-lucas.demarchi@intel.com>
-Sender: owner-linux-modules@vger.kernel.org
+MIME-Version: 1.0
+Date: Mon, 8 Jan 2018 17:54:42 -0800
+Message-ID: <CAKi4VAKLMDhxZYq8mskO_EQWTHQKX+ikWHBK39DEDtM=R+H=QQ@mail.gmail.com>
+Subject: [ANNOUNCE] kmod 25
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules <linux-modules@vger.kernel.org>
+Cc: Jessica Yu <jeyu@kernel.org>, Rusty Russell <rusty@rustcorp.com.au>,
+	lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-Not a perfect solution for overriding syscall(), but at least
-it makes the testsuite to pass in a modified nsswitch.conf (one that has
-a module which calls syscall() to get the thread id).
----
- testsuite/init_module.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+kmod 25 is out:
 
-diff --git a/testsuite/init_module.c b/testsuite/init_module.c
-index 199186b..130dd32 100644
---- a/testsuite/init_module.c
-+++ b/testsuite/init_module.c
-@@ -355,6 +355,22 @@ TS_EXPORT long int syscall(long int __sysno, ...)
- 		return ret;
- 	}
- 
-+	if (__sysno == __NR_gettid) {
-+		static void *nextlib = NULL;
-+		static long (*nextlib_syscall)(long number, ...);
-+
-+		if (nextlib == NULL) {
-+#ifdef RTLD_NEXT
-+			nextlib = RTLD_NEXT;
-+#else
-+			nextlib = dlopen("libc.so.6", RTLD_LAZY);
-+#endif
-+			nextlib_syscall = dlsym(nextlib, "syscall");
-+		}
-+
-+		return nextlib_syscall(__NR_gettid);
-+	}
-+
- 	/*
- 	 * FIXME: no way to call the libc function due since this is a
- 	 * variadic argument function and we don't have a vsyscall() variant
--- 
-2.14.3
+        https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-25.tar.xz
+        https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-25.tar.sign
 
+- Improvements
+        - Add module signature to modinfo output
+
+        - Add support for external directories in depmod: now there's a new
+          "external" keyword parsed by depmod when calculating the dependen=
+cies.
+          It allows to add modules to other directories which are not relat=
+ive
+          to where the modules are commonly installed.  This results in
+          modules.dep and friends now understanding absolute paths rather t=
+han
+          relative paths only. For more information see depmod.d(1).
+
+        - Add support for CONFIG_MODULE_REL_CRCS
+
+        - Add missing documentation references in man pages
+
+        - Handle the case in which module has a .TOC symbol already while
+          calculating dependencies
+
+        - Improve testsuite and allow to use mkosi to run testsuite in diff=
+erent
+          distros
+
+Shortlog is below:
+
+Yauheni Kaliuta (14):
+      libkmod: modinfo: fix sig_id output
+      libkmod: modinfo: use own function for sig_key hex output
+      libkmod: modinfo: implement line splitting in hex_to_str
+      libkmod: modinfo: implement signature output
+      depmod: fix errorpath memleaks in report cycles logic
+      depmod: search key: move builtin detection under the add function
+      depmod: create depmod dir independent search function
+      depmod: rewrite depmod modules search with scratchbuf
+      depmod: implement external directories support
+      testsuite: add tests for external directory support
+      man/depmod.d: add external keyword description
+      libkmod-elf: resolve CRC if module is built with MODULE_REL_CRCS
+      testsuite: depmod: add override test
+      depmod: module_is_higher_priority: fix modname length calculation
+
+Lucas De Marchi (9):
+      test-depmod: avoid warning when we don't have zlib
+      build: add mkosi hooks
+      build: use tool from configure
+      testsuite: generalize mkosi support for other distros
+      testsuite: add Fedora's mkosi configuration
+      testsuite: add missing error handling
+      testsuite: explain why overriding function may fail
+      testsuite: also wrap gettid in syscall()
+      kmod 25
+
+Christopher D=C3=ADaz Riveros (1):
+      man/depmod: Add references in other man pages
+
+Michal Suchanek (1):
+      depmod: Don't add .TOC. when it's in the kernel.
+
+Thomas Petazzoni (1):
+      shared/util.c: assert_cc() can only be used inside functions
+
+
+Lucas De Marchi
