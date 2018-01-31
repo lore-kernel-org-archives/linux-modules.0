@@ -1,80 +1,124 @@
+Return-Path: <yauheni.kaliuta@redhat.com>
+From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: Ferry van Steen <Ferry.van.Steen@citrus.nl>,  "jcm\@jonmasters.org" <jcm@jonmasters.org>,  David Howells <dhowells@redhat.com>,  linux-modules <linux-modules@vger.kernel.org>
+Subject: Re: modinfo shows md4 signature instead of sha256
+References: <093e06b77d7e44af8b9597f1a3701fa7@citrus.nl>
+	<CAKi4VAKF5YCa8e2a1kEJU5MgecKWOdcPK94vWTgEzRM2j6CqYA@mail.gmail.com>
+	<CAKi4VALzjGadjp1nHNUme65KsOcOpr=Xm5PzvWyZSaeK4cFbJw@mail.gmail.com>
+	<xuny4ln1iwz5.fsf@redhat.com>
+Date: Wed, 31 Jan 2018 23:06:19 +0200
+In-Reply-To: <xuny4ln1iwz5.fsf@redhat.com> (Yauheni Kaliuta's message of "Wed,
+	31 Jan 2018 22:39:42 +0200")
+Message-ID: <xunyzi4thh6c.fsf@redhat.com>
 MIME-Version: 1.0
-Date: Mon, 8 Jan 2018 17:54:42 -0800
-Message-ID: <CAKi4VAKLMDhxZYq8mskO_EQWTHQKX+ikWHBK39DEDtM=R+H=QQ@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 25
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: linux-modules <linux-modules@vger.kernel.org>
-Cc: Jessica Yu <jeyu@kernel.org>, Rusty Russell <rusty@rustcorp.com.au>,
-	lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 List-ID: <linux-modules.vger.kernel.org>
 
-kmod 25 is out:
 
-        https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-25.tar.xz
-        https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-25.tar.sign
+>>>>> On Wed, 31 Jan 2018 22:39:42 +0200, Yauheni Kaliuta  wrote:
 
-- Improvements
-        - Add module signature to modinfo output
+ > Hi, Lucas!
+ > This is a better bugreport
+ > https://bugzilla.redhat.com/show_bug.cgi?id=1320921 
 
-        - Add support for external directories in depmod: now there's a new
-          "external" keyword parsed by depmod when calculating the dependen=
-cies.
-          It allows to add modules to other directories which are not relat=
-ive
-          to where the modules are commonly installed.  This results in
-          modules.dep and friends now understanding absolute paths rather t=
-han
-          relative paths only. For more information see depmod.d(1).
+ > I have a proof of concept realization of PKCS#7 parser based on the kernel
 
-        - Add support for CONFIG_MODULE_REL_CRCS
+"implementation" of course :)
 
-        - Add missing documentation references in man pages
+ > code, but haven't synced the further work with David yet.
 
-        - Handle the case in which module has a .TOC symbol already while
-          calculating dependencies
+>>>>> On Wed, 31 Jan 2018 09:40:47 -0800, Lucas De Marchi  wrote:
 
-        - Improve testsuite and allow to use mkosi to run testsuite in diff=
-erent
-          distros
+ >> Now really CC Yauheni.
+ >> On Wed, Jan 31, 2018 at 9:39 AM, Lucas De Marchi
+ >> <lucas.de.marchi@gmail.com> wrote:
+ >>> Hi Ferry,
+ >>> 
+ >>> CC'ing mailing list and Yauheni who worked on fixing modinfo output in
+ >>> the last release.
+ >>> 
+ >>> 
+ >>> On Wed, Jan 31, 2018 at 1:23 AM, Ferry van Steen
+ >>> <Ferry.van.Steen@citrus.nl> wrote:
+ >>>> Hi,
+ >>>> 
+ >>>> 
+ >>>> sorry, not sure where to file this. There seems to be a bug in either the
+ >>>> kernel signing modules with a wrong signature algorithm, or modinfo is
+ >>>> reporting it incorrectly. I presume it's the latter.
+ >>>> 
+ >>>> 
+ >>>> More details are here: https://bugzilla.redhat.com/show_bug.cgi?id=1490975
+ >>> 
+ >>> Not showing the output on older versions is a known issue: support for
+ >>> PKCS#7 sig type was
+ >>> only added to kmod in v23.
+ >>> 
+ >>> Now for the incorrect info, the problem appears to be in the kernel
+ >>> implementation:
+ >>> it appends a PKCS#7, but doens't fill out the struct module_signature
+ >>> correctly. So in F27 I get this from, e.g.
+ >>> soundcore.ko:
+ >>> 
+ >>> $ xxd -c 8 -g 1 mod.ko | tail -n6
+ >>> 00004d80: b9 d5 04 00 00 02 00 00  ........   <<<<<<
+ >>> 00004d88: 00 00 00 00 00 02 d3 7e  .......~
+ >>> 00004d90: 4d 6f 64 75 6c 65 20 73  Module s
+ >>> 00004d98: 69 67 6e 61 74 75 72 65  ignature
+ >>> 00004da0: 20 61 70 70 65 6e 64 65   appende
+ >>> 00004da8: 64 7e 0a                 d~.
+ >>> 
+ >>> See line marked above. It should match a struct module_signature. So:
+ >>> id_type == 0x2 // PKCS7
+ >>> hash == 0 // md4
+ >>> algo == 0 // dsa
+ >>> 
+ >>> Looking at scripts/sign-file.c, indeed id_type is the only field that
+ >>> is filled out.
+ >>> CC'ing  David Howells as well. Any input here?
+ >>> 
+ >>> Lucas De Marchi
+ >>> 
+ >>>> 
+ >>>> 
+ >>>> Thanks in advance and kind regards,
+ >>>> 
+ >>>> 
+ >>>> Ferry van Steen
+ >>>> Linux Developer
+ >>>> Ferry.van.Steen@Citrus.nl
+ >>>> 
+ >>>> Citrus Software
+ >>>> ●  Almystraat 10A
+ >>>> ●  5061 PA Oisterwijk
+ >>>> ●  +31 (0)13 - 529 91 55
+ >>>> ●  www.citrus.nl
+ >>>> ______________________________________________________
+ >>>> 
+ >>>> This message may contain confidential or privileged information. If you are
+ >>>> not the addressee, please notify the sender and delete it from your files.
+ >>>> Please consider the environmental impact before printing this e-mail.
+ >>>> 
+ >>> 
+ >>> 
+ >>> 
+ >>> --
+ >>> Lucas De Marchi
 
-Shortlog is below:
-
-Yauheni Kaliuta (14):
-      libkmod: modinfo: fix sig_id output
-      libkmod: modinfo: use own function for sig_key hex output
-      libkmod: modinfo: implement line splitting in hex_to_str
-      libkmod: modinfo: implement signature output
-      depmod: fix errorpath memleaks in report cycles logic
-      depmod: search key: move builtin detection under the add function
-      depmod: create depmod dir independent search function
-      depmod: rewrite depmod modules search with scratchbuf
-      depmod: implement external directories support
-      testsuite: add tests for external directory support
-      man/depmod.d: add external keyword description
-      libkmod-elf: resolve CRC if module is built with MODULE_REL_CRCS
-      testsuite: depmod: add override test
-      depmod: module_is_higher_priority: fix modname length calculation
-
-Lucas De Marchi (9):
-      test-depmod: avoid warning when we don't have zlib
-      build: add mkosi hooks
-      build: use tool from configure
-      testsuite: generalize mkosi support for other distros
-      testsuite: add Fedora's mkosi configuration
-      testsuite: add missing error handling
-      testsuite: explain why overriding function may fail
-      testsuite: also wrap gettid in syscall()
-      kmod 25
-
-Christopher D=C3=ADaz Riveros (1):
-      man/depmod: Add references in other man pages
-
-Michal Suchanek (1):
-      depmod: Don't add .TOC. when it's in the kernel.
-
-Thomas Petazzoni (1):
-      shared/util.c: assert_cc() can only be used inside functions
 
 
-Lucas De Marchi
+ >> -- 
+ >> Lucas De Marchi
+
+ > -- 
+ > WBR,
+ > Yauheni Kaliuta
+ > --
+ > To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+ > the body of a message to majordomo@vger.kernel.org
+ > More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+-- 
+WBR,
+Yauheni Kaliuta
