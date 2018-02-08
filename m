@@ -1,123 +1,74 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from mga06.intel.com ([134.134.136.31]:63082 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1751078AbeACW3e (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 3 Jan 2018 17:29:34 -0500
-From: Lucas De Marchi <lucas.demarchi@intel.com>
+Received: from mail-it0-f66.google.com ([209.85.214.66]:36756 "EHLO
+        mail-it0-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751544AbeBHXId (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 8 Feb 2018 18:08:33 -0500
+Received: by mail-it0-f66.google.com with SMTP id n206so8471078itg.1
+        for <linux-modules@vger.kernel.org>; Thu, 08 Feb 2018 15:08:33 -0800 (PST)
+From: Caio Marcelo de Oliveira Filho <cmarcelo@gmail.com>
 To: linux-modules@vger.kernel.org
-Cc: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Subject: [PATCH 1/6] build: add mkosi hooks
-Date: Wed,  3 Jan 2018 14:29:19 -0800
-Message-Id: <20180103222924.26347-2-lucas.demarchi@intel.com>
-In-Reply-To: <20180103222924.26347-1-lucas.demarchi@intel.com>
-References: <20180103222924.26347-1-lucas.demarchi@intel.com>
+Cc: Caio Marcelo de Oliveira Filho <caio.oliveira@intel.com>
+Subject: [PATCH] testsuite: add Clear's mkosi configuration
+Date: Thu,  8 Feb 2018 15:08:22 -0800
+Message-Id: <20180208230822.10475-1-caio.oliveira@intel.com>
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Right now there's support for building on Archlinux only.
+Adapted the mkosi.build script to account for not building
+test-modules in Clear. It doesn't have the headers available yet.
 ---
- Makefile.am                   |  8 ++++++++
- testsuite/mkosi/.gitignore    |  4 ++++
- testsuite/mkosi/mkosi.arch    | 22 ++++++++++++++++++++++
- testsuite/mkosi/mkosi.build   | 23 +++++++++++++++++++++++
- testsuite/mkosi/mkosi.default |  1 +
- 5 files changed, 58 insertions(+)
- create mode 100644 testsuite/mkosi/.gitignore
- create mode 100644 testsuite/mkosi/mkosi.arch
- create mode 100755 testsuite/mkosi/mkosi.build
- create mode 120000 testsuite/mkosi/mkosi.default
+ testsuite/mkosi/mkosi.build |  9 +++++++--
+ testsuite/mkosi/mkosi.clear | 19 +++++++++++++++++++
+ 2 files changed, 26 insertions(+), 2 deletions(-)
+ create mode 100644 testsuite/mkosi/mkosi.clear
 
-diff --git a/Makefile.am b/Makefile.am
-index 2a1eb50..b7ee6b1 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -498,3 +498,11 @@ tar: kmod-$(VERSION).tar.xz kmod-$(VERSION).tar.sign
+diff --git a/testsuite/mkosi/mkosi.build b/testsuite/mkosi/mkosi.build
+index 53fc797..8ed54bb 100755
+--- a/testsuite/mkosi/mkosi.build
++++ b/testsuite/mkosi/mkosi.build
+@@ -29,8 +29,13 @@ rm -rf build
+ mkdir build
+ cd build
  
- tar-sync: kmod-$(VERSION).tar.xz kmod-$(VERSION).tar.sign
- 	kup put kmod-$(VERSION).tar.xz  kmod-$(VERSION).tar.sign /pub/linux/utils/kernel/kmod/
-+
-+# ------------------------------------------------------------------------------
-+# mkosi
-+# ------------------------------------------------------------------------------
-+
-+mkosi:
-+	-mkdir $(top_srcdir)/testsuite/mkosi/mkosi.cache
-+	mkosi -C $(top_srcdir)/testsuite/mkosi --build-sources ../../ -fi
-diff --git a/testsuite/mkosi/.gitignore b/testsuite/mkosi/.gitignore
+-kdir=$(find_kdir)
+-IFS=/ read _ _ _ kver _ <<<"$kdir"
++if grep clear-linux-os /usr/lib/os-release; then
++    # Clear Linux doesn't have the dependencies for those yet.
++    echo "--disable-test-modules" > ../../.config.args
++else
++    kdir=$(find_kdir)
++    IFS=/ read _ _ _ kver _ <<<"$kdir"
++fi
+ 
+ ../autogen.sh c
+ make -j
+diff --git a/testsuite/mkosi/mkosi.clear b/testsuite/mkosi/mkosi.clear
 new file mode 100644
-index 0000000..024d05b
+index 0000000..6d87514
 --- /dev/null
-+++ b/testsuite/mkosi/.gitignore
-@@ -0,0 +1,4 @@
-+/image.raw*
-+/.mkosi-*
-+/mkosi.cache
-+/rootfs
-diff --git a/testsuite/mkosi/mkosi.arch b/testsuite/mkosi/mkosi.arch
-new file mode 100644
-index 0000000..308dcdb
---- /dev/null
-+++ b/testsuite/mkosi/mkosi.arch
-@@ -0,0 +1,22 @@
++++ b/testsuite/mkosi/mkosi.clear
+@@ -0,0 +1,19 @@
 +[Distribution]
-+Distribution=arch
-+Release=(rolling)
++Distribution=clear
++Release=latest
++
++[Output]
++Output = clear-image.raw
 +
 +[Packages]
-+Packages = valgrind
-+BuildPackages =
-+	automake
-+	gcc
-+	git
-+	make
-+	pkg-config
-+	python2
-+	python2-future
-+	autoconf
-+	gtk-doc
-+	docbook-xml
-+	docbook-xsl
-+	linux-headers
++Packages=
++	os-core-update
++BuildPackages=
++	os-core-dev
 +
 +[Partitions]
-+RootSize = 4G
-diff --git a/testsuite/mkosi/mkosi.build b/testsuite/mkosi/mkosi.build
-new file mode 100755
-index 0000000..a6b325f
---- /dev/null
-+++ b/testsuite/mkosi/mkosi.build
-@@ -0,0 +1,23 @@
-+#!/bin/bash -ex
++RootSize = 5G
 +
-+if [ -f configure ]; then
-+    make distclean
-+fi
-+
-+rm -rf build
-+mkdir build
-+cd build
-+
-+kdirs=(/usr/lib/modules/*/build/Makefile)
-+if [[ ! -f ${kdirs[0]} ]]; then
-+  printf '==> Unable to find kernel headers to build modules for tests\n' >&2
-+  return 1
-+fi
-+
-+kdir=${kdirs[0]%/Makefile}
-+IFS=/ read _ _ _ kver _ <<<"$kdir"
-+
-+../autogen.sh c
-+make -j
-+make check KDIR="$kdir" KVER="$kver"
-+make install
-diff --git a/testsuite/mkosi/mkosi.default b/testsuite/mkosi/mkosi.default
-new file mode 120000
-index 0000000..695b71a
---- /dev/null
-+++ b/testsuite/mkosi/mkosi.default
-@@ -0,0 +1 @@
-+mkosi.arch
++[Host]
++# This is where swupd-extract is usually installed.
++ExtraSearchPaths=$SUDO_HOME/go/bin
 \ No newline at end of file
 -- 
-2.14.3
+2.16.1
 
