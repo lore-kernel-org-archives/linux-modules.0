@@ -1,29 +1,41 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from sessmg22.ericsson.net ([193.180.251.58]:55974 "EHLO
-        sessmg22.ericsson.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1752188AbeEOId1 (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 15 May 2018 04:33:27 -0400
-From: Jakov Simunic <jakov.simunic@ericsson.com>
-To: "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
-Subject: kmod-25 bootstrap typo
-Date: Tue, 15 May 2018 08:33:24 +0000
-Message-ID: <HE1PR0702MB380494D3270EE7E7626C844898930@HE1PR0702MB3804.eurprd07.prod.outlook.com>
-References: <HE1PR0702MB3804B2EA7AE44D23D39C946698930@HE1PR0702MB3804.eurprd07.prod.outlook.com>
-In-Reply-To: <HE1PR0702MB3804B2EA7AE44D23D39C946698930@HE1PR0702MB3804.eurprd07.prod.outlook.com>
-Content-Type: text/plain; charset="iso-8859-2"
+Return-Path: <jason.vas.dias@gmail.com>
 MIME-Version: 1.0
-Sender: owner-linux-modules@vger.kernel.org
+In-Reply-To: <4502a7e5-930f-15b6-fbef-929df29d5ef0@infradead.org>
+References: <CAKi4VA+1krn9rdBWE69DkhNZSrxJoeYzyPgvn-SUk8U0=CxFkw@mail.gmail.com>
+ <54EB4C83.2000500@suse.cz> <CAKi4VAJwvtLaF1GTw1dg__CXHGjwOwJqUS=g5B0rbPNp1w8dDg@mail.gmail.com>
+ <4502a7e5-930f-15b6-fbef-929df29d5ef0@infradead.org>
+From: Jason Vas Dias <jason.vas.dias@gmail.com>
+Date: Thu, 10 May 2018 12:03:01 +0000
+Message-ID: <CALyZvKzDYUFxbkZW=zVP6Z5KV3QQGJaZb6uW35qkZRV2xYUzJg@mail.gmail.com>
+Subject: Re: Differences between builtins and modules
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>, Harish Jenny K N <harish_kandiga@mentor.com>,
+	linux-modules <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+	greg KH <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello,
-I've noticed a typo in the kmod bootstrap, line 63:
-=A0=A0=A0=A0=A0=A0=A0echo "$topdir/configure CFLAGS=3D"-g -O2" $args $hacka=
-rgs"
-should be:=20
-=A0=A0=A0=A0=A0=A0=A0=A0echo "$topdir/configure CFLAGS=3D'-g -O2' $args $ha=
-ckargs"
---
-Lijep pozdrav / Best regards
-Jakov =A9imuni=E6
+Sorry I didn't see this mail until now - RE:
 
+Randy Dunlap <rdunlap@infradead.org> wrote:
+> Would someone please answer/reply to this (related) kernel bugzilla entry:
+> https://bugzilla.kernel.org/show_bug.cgi?id=118661
+
+Yes, I raised this bug because I think modinfo should return 0 exit status
+if a requested module is built-in, not just when it has been loaded, like
+this modified version does:
+$ modinfo snd
+modinfo: ERROR: Module snd not found.
+built-in: snd
+$ echo $?
+0
+
+What was the query about the Bug 118661 that needs to be answered ?
+I don't see any query on the bug report - just a comment from someone
+who also agrees modinfo should return OK for a built-in module .
+
+Glad to hear someone is finally considering fixing modinfo to report
+status of built-in modules - with only a 2 year response time.
+
+Thanks & Best Regards,
+Jason
