@@ -1,26 +1,28 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from w2.tutanota.de ([81.3.6.163]:49018 "EHLO w2.tutanota.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1755318AbeDTPsT (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 20 Apr 2018 11:48:19 -0400
-Received: from w1.tutanota.de (unknown [192.168.1.162])
-        by w2.tutanota.de (Postfix) with ESMTP id B054BC63874
-        for <linux-modules@vger.kernel.org>; Fri, 20 Apr 2018 15:48:17 +0000 (UTC)
-Date: Fri, 20 Apr 2018 17:48:17 +0200 (CEST)
-From: <stack@tutamail.com>
-To: Linux Modules <linux-modules@vger.kernel.org>
-Message-ID: <LAYjT_a--3-0@tutamail.com>
-Subject: modprobe man page
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Sender: owner-linux-modules@vger.kernel.org
+In-Reply-To: <HE1PR0702MB380494D3270EE7E7626C844898930@HE1PR0702MB3804.eurprd07.prod.outlook.com>
+References: <HE1PR0702MB3804B2EA7AE44D23D39C946698930@HE1PR0702MB3804.eurprd07.prod.outlook.com>
+	<HE1PR0702MB380494D3270EE7E7626C844898930@HE1PR0702MB3804.eurprd07.prod.outlook.com>
+Date: Wed, 16 May 2018 10:31:06 -0700
+Message-ID: <CAKi4VALqbaW-9iLP_fG_s8tqAEeJqOGXsbF=EWk0r7+4YXXVhA@mail.gmail.com>
+Subject: Re: kmod-25 bootstrap typo
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Jakov Simunic <jakov.simunic@ericsson.com>
+Cc: "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-Greetings,
-I would like to report a correction for the modprobe man page:
-https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/tree/man/modprobe.xml <https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/tree/man/modprobe.xml>
+On Tue, May 15, 2018 at 1:33 AM, Jakov Simunic
+<jakov.simunic@ericsson.com> wrote:
+> Hello,
+> I've noticed a typo in the kmod bootstrap, line 63:
+>        echo "$topdir/configure CFLAGS="-g -O2" $args $hackargs"
+> should be:
+>         echo "$topdir/configure CFLAGS='-g -O2' $args $hackargs"
 
-Under the "force-vermagic" option it says "so this using option is dangerous". I believe that should read "so using this option is dangerous". Especially as the corrected phrasing is used several times elsewhere in the document.
+The right way would actually to send the patch with your change.
+Anyway, this is a small enough change that I can just replicate.
 
-Thanks!
-~Stack~
+Applied, thanks
+
+
+Lucas De Marchi
