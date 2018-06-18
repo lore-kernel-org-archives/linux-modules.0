@@ -1,41 +1,65 @@
-Return-Path: <jason.vas.dias@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <4502a7e5-930f-15b6-fbef-929df29d5ef0@infradead.org>
-References: <CAKi4VA+1krn9rdBWE69DkhNZSrxJoeYzyPgvn-SUk8U0=CxFkw@mail.gmail.com>
- <54EB4C83.2000500@suse.cz> <CAKi4VAJwvtLaF1GTw1dg__CXHGjwOwJqUS=g5B0rbPNp1w8dDg@mail.gmail.com>
- <4502a7e5-930f-15b6-fbef-929df29d5ef0@infradead.org>
-From: Jason Vas Dias <jason.vas.dias@gmail.com>
-Date: Thu, 10 May 2018 12:03:01 +0000
-Message-ID: <CALyZvKzDYUFxbkZW=zVP6Z5KV3QQGJaZb6uW35qkZRV2xYUzJg@mail.gmail.com>
-Subject: Re: Differences between builtins and modules
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>, Harish Jenny K N <harish_kandiga@mentor.com>,
-	linux-modules <linux-modules@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-	greg KH <gregkh@linuxfoundation.org>
+Date: Mon, 18 Jun 2018 09:49:16 -0700
+References: <20180616064520.6426-1-jengelh@inai.de>
+In-Reply-To: <20180616064520.6426-1-jengelh@inai.de>
+Message-ID: <CAKi4VAKN5eCFFZd+A6PzZFf+5PmS-YYAFb5DH86CXPkrpgvjBw@mail.gmail.com>
+Subject: Re: [PATCH] kmod: build: cure compiler warnings showing up externally
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: Jan Engelhardt <jengelh@inai.de>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>, Jan Engelhardt <jengelh@inai.de>,
+	linux-modules <linux-modules@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-Sorry I didn't see this mail until now - RE:
+On Fri, Jun 15, 2018 at 11:53 PM Jan Engelhardt <jengelh@inai.de> wrote:
+>
+> When building a C source file with gcc-7 -Wshift-overflow=2, this warning
+> springs up:
+>
+> libkmod.h: warning: result of "1 << 31" requires 33 bits to
+> represent, but "int" only has 32 bits [-Wshift-overflow=]
+>
+> Change the two _KMOD_* identifiers to fit into 32 bits.
+> ---
+>  libkmod/libkmod.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Randy Dunlap <rdunlap@infradead.org> wrote:
-> Would someone please answer/reply to this (related) kernel bugzilla entry:
-> https://bugzilla.kernel.org/show_bug.cgi?id=118661
+Applied, thanks.
 
-Yes, I raised this bug because I think modinfo should return 0 exit status
-if a requested module is built-in, not just when it has been loaded, like
-this modified version does:
-$ modinfo snd
-modinfo: ERROR: Module snd not found.
-built-in: snd
-$ echo $?
-0
+Lucas De Marchi
 
-What was the query about the Bug 118661 that needs to be answered ?
-I don't see any query on the bug report - just a comment from someone
-who also agrees modinfo should return OK for a built-in module .
+>
+> diff --git a/libkmod/libkmod.h b/libkmod/libkmod.h
+> index f9e33c6..352627e 100644
+> --- a/libkmod/libkmod.h
+> +++ b/libkmod/libkmod.h
+> @@ -72,7 +72,7 @@ enum kmod_index {
+>         KMOD_INDEX_MODULES_SYMBOL,
+>         KMOD_INDEX_MODULES_BUILTIN,
+>         /* Padding to make sure enum is not mapped to char */
+> -       _KMOD_INDEX_PAD = (1 << 31),
+> +       _KMOD_INDEX_PAD = 1U << 31,
+>  };
+>  int kmod_dump_index(struct kmod_ctx *ctx, enum kmod_index type, int fd);
+>
+> @@ -211,7 +211,7 @@ enum kmod_module_initstate {
+>         KMOD_MODULE_COMING,
+>         KMOD_MODULE_GOING,
+>         /* Padding to make sure enum is not mapped to char */
+> -       _KMOD_MODULE_PAD = (1 << 31),
+> +       _KMOD_MODULE_PAD = 1U << 31,
+>  };
+>  const char *kmod_module_initstate_str(enum kmod_module_initstate state);
+>  int kmod_module_get_initstate(const struct kmod_module *mod);
+> --
+> 2.17.1
+>
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-Glad to hear someone is finally considering fixing modinfo to report
-status of built-in modules - with only a 2 year response time.
 
-Thanks & Best Regards,
-Jason
+
+-- 
+Lucas De Marchi
