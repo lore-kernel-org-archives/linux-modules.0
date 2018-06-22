@@ -1,36 +1,36 @@
-Return-Path: <msuchanek@suse.de>
-From: Michal Suchanek <msuchanek@suse.de>
-To: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-	Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	linux-modules <linux-modules@vger.kernel.org>,
-	Ferry van Steen <Ferry.van.Steen@citrus.nl>,
-	David Howells <dhowells@redhat.com>,
-	Michal Suchanek <msuchanek@suse.de>
-Subject: [PATCH] libkmod-signature: pkcs#7: fix crash when signer info is not present.
-Date: Fri,  8 Jun 2018 19:10:15 +0200
-Message-Id: <20180608171015.2211-1-msuchanek@suse.de>
-In-Reply-To: <xunyy3iw47ih.fsf@redhat.com>
-References: <xunyy3iw47ih.fsf@redhat.com>
+Return-Path: <linux-modules-owner@vger.kernel.org>
+Received: from biz186.inmotionhosting.com ([74.124.202.216]:58841 "EHLO
+        biz186.inmotionhosting.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S933878AbeFVS0r (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Fri, 22 Jun 2018 14:26:47 -0400
+Received: from static-70-98-52-58.br1.atm.al.frontiernet.net ([70.98.52.58]:60596 helo=[192.168.1.122])
+        by biz186.inmotionhosting.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.89_1)
+        (envelope-from <hwj@BridgeportContractor.com>)
+        id 1fWQDa-004Omb-GQ
+        for linux-modules@vger.kernel.org; Fri, 22 Jun 2018 10:51:42 -0700
+Subject: Fwd: Re: missing -m option description in
+ http://man7.org/linux/man-pages/man8/depmod.8.html
+References: <ce206330-a9a5-41fa-8218-6530c1f6663c@gmail.com>
+To: linux-modules@vger.kernel.org
+From: Howard Johnson <hwj@BridgeportContractor.com>
+Message-ID: <b414e895-d509-534c-9c6c-dc4ca9158a61@BridgeportContractor.com>
+Date: Fri, 22 Jun 2018 10:51:30 -0700
+MIME-Version: 1.0
+In-Reply-To: <ce206330-a9a5-41fa-8218-6530c1f6663c@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
-Reported-by: Kazuya Saito <saito.kazuya@jp.fujitsu.com>
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
----
- libkmod/libkmod-signature.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > In http://man7.org/linux/man-pages/man8/depmod.8.html the 2nd SYNOPSIS
 
-diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
-index fae074e6dd1d..782e96f69fef 100644
---- a/libkmod/libkmod-signature.c
-+++ b/libkmod/libkmod-signature.c
-@@ -166,7 +166,7 @@ kmod_module_signature_info_pkcs7(const char *mem,
- 	sig_info->key_id_len = cert->key_id_size;
- 
- 	sig_info->signer = cert->signer;
--	sig_info->signer_len = strlen(cert->signer);
-+	sig_info->signer_len = cert->signer ? strlen(cert->signer) : 0;
- 
- 	sig_info->algo = NULL;
- 	sig_info->hash_algo = cert->hash_algo;
--- 
-2.13.6
+> line mentions -m, but there is no description for -m under OPTIONS.
+> 
+> -h
+> 
+> 
+> 
+>         *depmod *[*-e*] [*-E */Module.symvers/] [*-F */System.map/] [*-m*] [*-n*] [*-v*]
+>                [*-P */prefix/] [*-w*] [/version/] [/filename/...]
+
