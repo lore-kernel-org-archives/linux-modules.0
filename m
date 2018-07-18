@@ -1,30 +1,65 @@
 MIME-Version: 1.0
-Date: Fri, 20 Jul 2018 13:30:05 -0700
-References: <ce206330-a9a5-41fa-8218-6530c1f6663c@gmail.com>
-	<b414e895-d509-534c-9c6c-dc4ca9158a61@BridgeportContractor.com>
-In-Reply-To: <b414e895-d509-534c-9c6c-dc4ca9158a61@BridgeportContractor.com>
-Message-ID: <CAKi4VA+GsZHHK-4xW=6W0LV8JPuAEzo_BFAPrPR3S27Cuq0O_A@mail.gmail.com>
-Subject: Re: Re: missing -m option description in http://man7.org/linux/man-pages/man8/depmod.8.html
+Date: Wed, 18 Jul 2018 11:46:16 -0700
+References: <20180718084340.4305-1-jengelh@inai.de>
+In-Reply-To: <20180718084340.4305-1-jengelh@inai.de>
+Message-ID: <CAKi4VAJebEif94k6Zf9NR043HgkaqaEnD74ybXm5JFTu7uFSfA@mail.gmail.com>
+Subject: Re: [PATCH] libkmod: drop _PAD enum constants
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: hwj@bridgeportcontractor.com
-Cc: linux-modules <linux-modules@vger.kernel.org>
+To: Jan Engelhardt <jengelh@inai.de>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>, linux-modules <linux-modules@vger.kernel.org>,
+	Jan Engelhardt <jengelh@inai.de>
 Content-Type: text/plain; charset="UTF-8"
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jun 22, 2018 at 11:27 AM Howard Johnson
-<hwj@bridgeportcontractor.com> wrote:
+On Wed, Jul 18, 2018 at 1:44 AM Jan Engelhardt <jengelh@inai.de> wrote:
 >
->  > In http://man7.org/linux/man-pages/man8/depmod.8.html the 2nd SYNOPSIS
+> When are enums ever mapped to something smaller than int, other than
+> willful packing into a bitfield?
+
+When users do bad things like passing a flag to the compiler
+instructing it to do so: -fshort-enums.
+That was the reason to add it back several years ago and I'd rather
+not break that user now whoever it was,
+although I don't think I would care adding it now if it was requested.
+
+
+Lucas De Marchi
+
+> ---
+>  libkmod/libkmod.h | 4 ----
+>  1 file changed, 4 deletions(-)
 >
-> > line mentions -m, but there is no description for -m under OPTIONS.
-> >
-> > -h
-> >
-> >
-> >
-> >         *depmod *[*-e*] [*-E */Module.symvers/] [*-F */System.map/] [*-m*] [*-n*] [*-v*]
-> >                [*-P */prefix/] [*-w*] [/version/] [/filename/...]
+> diff --git a/libkmod/libkmod.h b/libkmod/libkmod.h
+> index 352627e..4fb5ba8 100644
+> --- a/libkmod/libkmod.h
+> +++ b/libkmod/libkmod.h
+> @@ -71,8 +71,6 @@ enum kmod_index {
+>         KMOD_INDEX_MODULES_ALIAS,
+>         KMOD_INDEX_MODULES_SYMBOL,
+>         KMOD_INDEX_MODULES_BUILTIN,
+> -       /* Padding to make sure enum is not mapped to char */
+> -       _KMOD_INDEX_PAD = 1U << 31,
+>  };
+>  int kmod_dump_index(struct kmod_ctx *ctx, enum kmod_index type, int fd);
+>
+> @@ -210,8 +208,6 @@ enum kmod_module_initstate {
+>         KMOD_MODULE_LIVE,
+>         KMOD_MODULE_COMING,
+>         KMOD_MODULE_GOING,
+> -       /* Padding to make sure enum is not mapped to char */
+> -       _KMOD_MODULE_PAD = 1U << 31,
+>  };
+>  const char *kmod_module_initstate_str(enum kmod_module_initstate state);
+>  int kmod_module_get_initstate(const struct kmod_module *mod);
+> --
+> 2.18.0
+>
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-Fixed, thanks.
 
+
+-- 
 Lucas De Marchi
