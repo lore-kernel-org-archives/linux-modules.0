@@ -1,36 +1,47 @@
 Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from biz186.inmotionhosting.com ([74.124.202.216]:58841 "EHLO
-        biz186.inmotionhosting.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S933878AbeFVS0r (ORCPT
+Received: from mout.kundenserver.de ([212.227.126.130]:35508 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729561AbeG3UiL (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 22 Jun 2018 14:26:47 -0400
-Received: from static-70-98-52-58.br1.atm.al.frontiernet.net ([70.98.52.58]:60596 helo=[192.168.1.122])
-        by biz186.inmotionhosting.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.89_1)
-        (envelope-from <hwj@BridgeportContractor.com>)
-        id 1fWQDa-004Omb-GQ
-        for linux-modules@vger.kernel.org; Fri, 22 Jun 2018 10:51:42 -0700
-Subject: Fwd: Re: missing -m option description in
- http://man7.org/linux/man-pages/man8/depmod.8.html
-References: <ce206330-a9a5-41fa-8218-6530c1f6663c@gmail.com>
+        Mon, 30 Jul 2018 16:38:11 -0400
+Received: from localhost ([217.87.206.98]) by mrelayeu.kundenserver.de
+ (mreue004 [212.227.15.129]) with ESMTPSA (Nemesis) id
+ 0MQJuC-1fY1hY0y68-00Tkym for <linux-modules@vger.kernel.org>; Mon, 30 Jul
+ 2018 21:01:48 +0200
+Date: Mon, 30 Jul 2018 21:01:46 +0200
+From: Tobias Stoeckmann <tobias@stoeckmann.org>
 To: linux-modules@vger.kernel.org
-From: Howard Johnson <hwj@BridgeportContractor.com>
-Message-ID: <b414e895-d509-534c-9c6c-dc4ca9158a61@BridgeportContractor.com>
-Date: Fri, 22 Jun 2018 10:51:30 -0700
+Subject: [PATCH] Verify memory sizes on 32 bit systems.
+Message-ID: <20180730190146.GA8535@localhost>
 MIME-Version: 1.0
-In-Reply-To: <ce206330-a9a5-41fa-8218-6530c1f6663c@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Sender: owner-linux-modules@vger.kernel.org
 List-ID: <linux-modules.vger.kernel.org>
 
- > In http://man7.org/linux/man-pages/man8/depmod.8.html the 2nd SYNOPSIS
+Large file system support is activated by default, which means that
+on 32 bit systems, off_t is 64 bit in size.
 
-> line mentions -m, but there is no description for -m under OPTIONS.
-> 
-> -h
-> 
-> 
-> 
->         *depmod *[*-e*] [*-E */Module.symvers/] [*-F */System.map/] [*-m*] [*-n*] [*-v*]
->                [*-P */prefix/] [*-w*] [/version/] [/filename/...]
+Using st.st_size or any other 64 bit variable with mmap can lead to
+integer truncation and therefore insufficient memory mapping.
+
+Signed-off-by: Tobias Stoeckmann <tobias@stoeckmann.org>
+---
+ libkmod/libkmod-file.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libkmod/libkmod-file.c b/libkmod/libkmod-file.c
+index 5eeba6a..86f34c6 100644
+--- a/libkmod/libkmod-file.c
++++ b/libkmod/libkmod-file.c
+@@ -255,6 +255,8 @@ static int load_reg(struct kmod_file *file)
+ 		return -errno;
+ 
+ 	file->size = st.st_size;
++	if ((uintmax_t)st.st_size > (uintmax_t)SIZE_MAX)
++		return -EFBIG;
+ 	file->memory = mmap(NULL, file->size, PROT_READ, MAP_PRIVATE,
+ 			    file->fd, 0);
+ 	if (file->memory == MAP_FAILED)
+-- 
+2.13.2
 
