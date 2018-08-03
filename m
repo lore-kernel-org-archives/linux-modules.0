@@ -1,45 +1,33 @@
-Return-Path: <linux-modules-owner@vger.kernel.org>
-Received: from a3.inai.de ([88.198.85.195]:49038 "EHLO a3.inai.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726985AbeGRJUb (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 18 Jul 2018 05:20:31 -0400
-From: Jan Engelhardt <jengelh@inai.de>
-To: lucas.demarchi@intel.com
-Cc: linux-modules@vger.kernel.org, jengelh@inai.de
-Subject: [PATCH] libkmod: drop _PAD enum constants
-Date: Wed, 18 Jul 2018 10:43:40 +0200
-Message-Id: <20180718084340.4305-1-jengelh@inai.de>
-Sender: owner-linux-modules@vger.kernel.org
+Return-Path: <tobias@stoeckmann.org>
+Date: Fri, 3 Aug 2018 23:51:35 +0200
+From: Tobias Stoeckmann <tobias@stoeckmann.org>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: linux-modules <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] Verify memory sizes on 32 bit systems.
+Message-ID: <20180803215135.GA55860@pepper.home.stoeckmann.org>
+References: <20180730190146.GA8535@localhost>
+ <CAKi4VALpRspPNWTGsZbpHhH=UKECUF+=wYa0aLZnxZ0=USLxRg@mail.gmail.com>
+ <20180803211007.GA97622@pepper.home.stoeckmann.org>
+ <CAKi4VAKK5MSODC-VbFWG2d0p-eUXqrPbpNiomJb6+BEhfWjBVQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <CAKi4VAKK5MSODC-VbFWG2d0p-eUXqrPbpNiomJb6+BEhfWjBVQ@mail.gmail.com>
 List-ID: <linux-modules.vger.kernel.org>
 
-When are enums ever mapped to something smaller than int, other than
-willful packing into a bitfield?
----
- libkmod/libkmod.h | 4 ----
- 1 file changed, 4 deletions(-)
+On Fri, Aug 03, 2018 at 02:33:51PM -0700, Lucas De Marchi wrote:
+> so you are casting the *sign* away, ok. But casting only st.st_size
+> should suffice.
 
-diff --git a/libkmod/libkmod.h b/libkmod/libkmod.h
-index 352627e..4fb5ba8 100644
---- a/libkmod/libkmod.h
-+++ b/libkmod/libkmod.h
-@@ -71,8 +71,6 @@ enum kmod_index {
- 	KMOD_INDEX_MODULES_ALIAS,
- 	KMOD_INDEX_MODULES_SYMBOL,
- 	KMOD_INDEX_MODULES_BUILTIN,
--	/* Padding to make sure enum is not mapped to char */
--	_KMOD_INDEX_PAD = 1U << 31,
- };
- int kmod_dump_index(struct kmod_ctx *ctx, enum kmod_index type, int fd);
- 
-@@ -210,8 +208,6 @@ enum kmod_module_initstate {
- 	KMOD_MODULE_LIVE,
- 	KMOD_MODULE_COMING,
- 	KMOD_MODULE_GOING,
--	/* Padding to make sure enum is not mapped to char */
--	_KMOD_MODULE_PAD = 1U << 31,
- };
- const char *kmod_module_initstate_str(enum kmod_module_initstate state);
- int kmod_module_get_initstate(const struct kmod_module *mod);
--- 
-2.18.0
+I've just tried with some examples and I couldn't trigger the
+warning which I have seen in other situations like this, i.e.
+"always false due to limited range of data type".
 
+If I cast the off_t to size_t, the compiler knows that it is not
+possible that it could ever be larger than SIZE_MAX, optimizing
+the block away. So I took uintmax_t.
+
+But as long as there's no annoying warning, I am fine with just
+casting st_size.
+
+
+Tobias
