@@ -1,302 +1,63 @@
-Return-Path: <SRS0=g1YY=N3=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=JIew=N5=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 707D7C43441
-	for <linux-modules@archiver.kernel.org>; Fri, 16 Nov 2018 18:35:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07961C43441
+	for <linux-modules@archiver.kernel.org>; Sun, 18 Nov 2018 07:54:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0BC6A2086C
-	for <linux-modules@archiver.kernel.org>; Fri, 16 Nov 2018 18:35:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0BC6A2086C
+	by mail.kernel.org (Postfix) with ESMTP id C327B2080F
+	for <linux-modules@archiver.kernel.org>; Sun, 18 Nov 2018 07:54:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C327B2080F
 Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=redhat.com
 Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-modules-owner@vger.kernel.org
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727710AbeKQEs3 (ORCPT
+        id S1726077AbeKRSO3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 16 Nov 2018 23:48:29 -0500
-Received: from mx1.redhat.com ([209.132.183.28]:36318 "EHLO mx1.redhat.com"
+        Sun, 18 Nov 2018 13:14:29 -0500
+Received: from mx1.redhat.com ([209.132.183.28]:32776 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729236AbeKQEs3 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 16 Nov 2018 23:48:29 -0500
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        id S1726071AbeKRSO3 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Sun, 18 Nov 2018 13:14:29 -0500
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id DD1403082DDB;
-        Fri, 16 Nov 2018 18:34:58 +0000 (UTC)
-Received: from astarta.redhat.com (ovpn-117-20.ams2.redhat.com [10.36.117.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B1DA19C7D;
-        Fri, 16 Nov 2018 18:34:57 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 12C1E4E90E;
+        Sun, 18 Nov 2018 07:54:57 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-116-62.ams2.redhat.com [10.36.116.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 327E05D75D;
+        Sun, 18 Nov 2018 07:54:55 +0000 (UTC)
 From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 To:     linux-modules@vger.kernel.org
 Cc:     ykaliuta@redhat.com, Lucas De Marchi <lucas.demarchi@intel.com>
 Subject: Re: [PATCH] libkmod-signature: implement pkcs7 parsing with openssl
-References: <20181116183228.32080-1-yauheni.kaliuta@redhat.com>
-Date:   Fri, 16 Nov 2018 20:34:55 +0200
 In-Reply-To: <20181116183228.32080-1-yauheni.kaliuta@redhat.com> (Yauheni
         Kaliuta's message of "Fri, 16 Nov 2018 20:32:28 +0200")
-Message-ID: <xuny5zwwkh0w.fsf@redhat.com>
+References: <20181116183228.32080-1-yauheni.kaliuta@redhat.com>
+Date:   Sun, 18 Nov 2018 09:54:55 +0200
+Message-ID: <xunyzhu6izw0.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Fri, 16 Nov 2018 18:34:58 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.38]); Sun, 18 Nov 2018 07:54:57 +0000 (UTC)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+Hi!
 
 >>>>> On Fri, 16 Nov 2018 20:32:28 +0200, Yauheni Kaliuta  wrote:
 
- > The patch adds data fetching from the PKCS#7 certificate using
- > openssl library (which is used by scripts/sign-file.c in the linux
- > kernel to sign modules).
 
- > In general the certificate can contain many signatures, but since
- > kmod (modinfo) supports only one signature at the moment,
+[...]
 
-Did not finish the paragraph:
+Yeah, cleanup on error for the values allocated below.
 
-In general the certificate can contain many signatures, but since
-kmod (modinfo) supports only one signature at the moment, only first
-one is taken.
+But the main question is in general if the way of linking is
+possible.
 
- > With the current sign-file.c certificate doesn't contain signer
- > key's fingerprint, so "serial number" is used for the key id.
-
- > Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
- > ---
- >  Makefile.am                 |   4 +-
- >  configure.ac                |  11 ++
- >  libkmod/libkmod-internal.h  |   3 +
- >  libkmod/libkmod-module.c    |   3 +
- >  libkmod/libkmod-signature.c | 195 +++++++++++++++++++++++++++++++++++-
- >  5 files changed, 211 insertions(+), 5 deletions(-)
-
- > diff --git a/Makefile.am b/Makefile.am
- > index 194e1115ae70..5ab7fc0b4750 100644
- > --- a/Makefile.am
- > +++ b/Makefile.am
- > @@ -35,6 +35,8 @@ SED_PROCESS = \
- >  	-e 's,@liblzma_LIBS\@,${liblzma_LIBS},g' \
- >  	-e 's,@zlib_CFLAGS\@,${zlib_CFLAGS},g' \
- >  	-e 's,@zlib_LIBS\@,${zlib_LIBS},g' \
- > +	-e 's,@openssl_CFLAGS\@,${openssl_CFLAGS},g' \
- > +	-e 's,@openssl_LIBS\@,${openssl_LIBS},g' \
- >  	< $< > $@ || rm $@
- 
- >  %.pc: %.pc.in Makefile
- > @@ -87,7 +89,7 @@ libkmod_libkmod_la_DEPENDENCIES = \
- >  	${top_srcdir}/libkmod/libkmod.sym
- >  libkmod_libkmod_la_LIBADD = \
- >  	shared/libshared.la \
- > -	${liblzma_LIBS} ${zlib_LIBS}
- > +	${liblzma_LIBS} ${zlib_LIBS} ${openssl_LIBS}
- 
- >  noinst_LTLIBRARIES += libkmod/libkmod-internal.la
- >  libkmod_libkmod_internal_la_SOURCES = $(libkmod_libkmod_la_SOURCES)
- > diff --git a/configure.ac b/configure.ac
- > index fbc7391b2d1b..2e33380a0cc2 100644
- > --- a/configure.ac
- > +++ b/configure.ac
- > @@ -106,6 +106,17 @@ AS_IF([test "x$with_zlib" != "xno"], [
- >  ])
- >  CC_FEATURE_APPEND([with_features], [with_zlib], [ZLIB])
- 
- > +AC_ARG_WITH([openssl],
- > +	AS_HELP_STRING([--with-openssl], [handle PKCS7 signatures @<:@default=disabled@:>@]),
- > +	[], [with_openssl=no])
- > +AS_IF([test "x$with_openssl" != "xno"], [
- > +	PKG_CHECK_MODULES([openssl], [openssl])
- > +	AC_DEFINE([ENABLE_OPENSSL], [1], [Enable openssl for modinfo.])
- > +], [
- > +	AC_MSG_NOTICE([openssl support not requested])
- > +])
- > +CC_FEATURE_APPEND([with_features], [with_openssl], [OPENSSL])
- > +
- >  AC_ARG_WITH([bashcompletiondir],
- >  	AS_HELP_STRING([--with-bashcompletiondir=DIR], [Bash completions directory]),
- >  	[],
- > diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
- > index 346579c71aab..a65ddd156f18 100644
- > --- a/libkmod/libkmod-internal.h
- > +++ b/libkmod/libkmod-internal.h
- > @@ -188,5 +188,8 @@ struct kmod_signature_info {
- >  	const char *algo, *hash_algo, *id_type;
- >  	const char *sig;
- >  	size_t sig_len;
- > +	void (*free)(void *);
- > +	void *private;
- >  };
- >  bool kmod_module_signature_info(const struct kmod_file *file, struct kmod_signature_info *sig_info) _must_check_ __attribute__((nonnull(1, 2)));
- > +void kmod_module_signature_info_free(struct kmod_signature_info *sig_info) __attribute__((nonnull));
- > diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
- > index 889f26479a98..bffe715cdef4 100644
- > --- a/libkmod/libkmod-module.c
- > +++ b/libkmod/libkmod-module.c
- > @@ -2357,6 +2357,9 @@ KMOD_EXPORT int kmod_module_get_info(const struct kmod_module *mod, struct kmod_
- >  	ret = count;
- 
- >  list_error:
- > +	/* aux structures freed in normal case also */
- > +	kmod_module_signature_info_free(&sig_info);
- > +
- >  	if (ret < 0) {
- >  		kmod_module_info_free_list(*list);
- >  		*list = NULL;
- > diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
- > index 429ffbd8a957..4b44c3701d28 100644
- > --- a/libkmod/libkmod-signature.c
- > +++ b/libkmod/libkmod-signature.c
- > @@ -19,6 +19,10 @@
- 
- >  #include <endian.h>
- >  #include <inttypes.h>
- > +#ifdef ENABLE_OPENSSL
- > +#include <openssl/cms.h>
- > +#include <openssl/ssl.h>
- > +#endif
- >  #include <stdio.h>
- >  #include <stdlib.h>
- >  #include <string.h>
- > @@ -115,15 +119,192 @@ static bool fill_default(const char *mem, off_t size,
- >  	return true;
- >  }
- 
- > -static bool fill_unknown(const char *mem, off_t size,
- > -			 const struct module_signature *modsig, size_t sig_len,
- > -			 struct kmod_signature_info *sig_info)
- > +#ifdef ENABLE_OPENSSL
- > +
- > +struct pkcs7_private {
- > +	CMS_ContentInfo *cms;
- > +	unsigned char *key_id;
- > +	BIGNUM *sno;
- > +};
- > +
- > +static void pkcs7_free(void *s)
- > +{
- > +	struct kmod_signature_info *si = s;
- > +	struct pkcs7_private *pvt = si->private;
- > +
- > +	CMS_ContentInfo_free(pvt->cms);
- > +	BN_free(pvt->sno);
- > +	free(pvt->key_id);
- > +	free(pvt);
- > +	si->private = NULL;
- > +}
- > +
- > +static int obj_to_hash_algo(const ASN1_OBJECT *o)
- > +{
- > +	int nid;
- > +
- > +	nid = OBJ_obj2nid(o);
- > +	switch (nid) {
- > +	case NID_md4:
- > +		return PKEY_HASH_MD4;
- > +	case NID_md5:
- > +		return PKEY_HASH_MD5;
- > +	case NID_sha1:
- > +		return PKEY_HASH_SHA1;
- > +	case NID_ripemd160:
- > +		return PKEY_HASH_RIPE_MD_160;
- > +	case NID_sha256:
- > +		return PKEY_HASH_SHA256;
- > +	case NID_sha384:
- > +		return PKEY_HASH_SHA384;
- > +	case NID_sha512:
- > +		return PKEY_HASH_SHA512;
- > +	case NID_sha224:
- > +		return PKEY_HASH_SHA224;
- > +	default:
- > +		return -1;
- > +	}
- > +	return -1;
- > +}
- > +
- > +static const char *x509_name_to_str(X509_NAME *name)
- > +{
- > +	int i;
- > +	X509_NAME_ENTRY *e;
- > +	ASN1_STRING *d;
- > +	ASN1_OBJECT *o;
- > +	int nid = -1;
- > +	const char *str;
- > +
- > +	for (i = 0; i < X509_NAME_entry_count(name); i++) {
- > +		e = X509_NAME_get_entry(name, i);
- > +		o = X509_NAME_ENTRY_get_object(e);
- > +		nid = OBJ_obj2nid(o);
- > +		if (nid == NID_commonName)
- > +			break;
- > +	}
- > +	if (nid == -1)
- > +		return NULL;
- > +
- > +	d = X509_NAME_ENTRY_get_data(e);
- > +	str = (const char *)ASN1_STRING_get0_data(d);
- > +
- > +	return str;
- > +}
- > +
- > +static bool fill_pkcs7(const char *mem, off_t size,
- > +		       const struct module_signature *modsig, size_t sig_len,
- > +		       struct kmod_signature_info *sig_info)
- > +{
- > +	const char *pkcs7_raw;
- > +	CMS_ContentInfo *cms;
- > +	STACK_OF(CMS_SignerInfo) *sis;
- > +	CMS_SignerInfo *si;
- > +	int rc;
- > +	ASN1_OCTET_STRING *key_id;
- > +	X509_NAME *issuer;
- > +	ASN1_INTEGER *sno;
- > +	ASN1_OCTET_STRING *sig;
- > +	BIGNUM *sno_bn;
- > +	X509_ALGOR *dig_alg;
- > +	X509_ALGOR *sig_alg;
- > +	const ASN1_OBJECT *o;
- > +	BIO *in;
- > +	int len;
- > +	unsigned char *key_id_str;
- > +	struct pkcs7_private *pvt;
- > +	const char *issuer_str;
- > +
- > +	size -= sig_len;
- > +	pkcs7_raw = mem + size;
- > +
- > +	in = BIO_new_mem_buf(pkcs7_raw, sig_len);
- > +
- > +	cms = d2i_CMS_bio(in, NULL);
- > +	if (cms == NULL) {
- > +		BIO_free(in);
- > +		return false;
- > +	}
- > +
- > +	BIO_free(in);
- > +
- > +	sis = CMS_get0_SignerInfos(cms);
- > +	if (sis == NULL)
- > +		goto err;
- > +
- > +	si = sk_CMS_SignerInfo_value(sis, 0);
- > +	if (si == NULL)
- > +		goto err;
- > +
- > +	rc = CMS_SignerInfo_get0_signer_id(si, &key_id, &issuer, &sno);
- > +	if (rc == 0)
- > +		goto err;
- > +
- > +	sig = CMS_SignerInfo_get0_signature(si);
- > +	if (sig == NULL)
- > +		goto err;
- > +
- > +	CMS_SignerInfo_get0_algs(si, NULL, NULL, &dig_alg, &sig_alg);
- > +
- > +	sig_info->sig = (const char *)ASN1_STRING_get0_data(sig);
- > +	sig_info->sig_len = ASN1_STRING_length(sig);
  > +
  > +
  > +	sno_bn = ASN1_INTEGER_to_BN(sno, NULL);
@@ -341,40 +102,6 @@ one is taken.
  > +	return false;
  > +}
  > +
- > +#else /* ENABLE OPENSSL */
- > +
- > +static bool fill_pkcs7(const char *mem, off_t size,
- > +		       const struct module_signature *modsig, size_t sig_len,
- > +		       struct kmod_signature_info *sig_info)
- >  {
- sig_info-> hash_algo = "unknown";
- sig_info-> id_type = pkey_id_type[modsig->id_type];
- >  	return true;
- >  }
- 
- > +#endif /* ENABLE OPENSSL */
- > +
- >  #define SIG_MAGIC "~Module signature appended~\n"
- 
- >  /*
- > @@ -167,8 +348,14 @@ bool kmod_module_signature_info(const struct kmod_file *file, struct kmod_signat
- 
- >  	switch (modsig->id_type) {
- >  	case PKEY_ID_PKCS7:
- > -		return fill_unknown(mem, size, modsig, sig_len, sig_info);
- > +		return fill_pkcs7(mem, size, modsig, sig_len, sig_info);
- >  	default:
- >  		return fill_default(mem, size, modsig, sig_len, sig_info);
- >  	}
- >  }
- > +
- > +void kmod_module_signature_info_free(struct kmod_signature_info *sig_info)
- > +{
- > +	if (sig_info->free)
- > +		sig_info->free(sig_info);
- > +}
- > -- 
- > 2.19.1
 
 
 -- 
