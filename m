@@ -2,587 +2,377 @@ Return-Path: <SRS0=e041=O5=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34676C43387
-	for <linux-modules@archiver.kernel.org>; Thu, 20 Dec 2018 10:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1A65C43387
+	for <linux-modules@archiver.kernel.org>; Thu, 20 Dec 2018 11:08:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E557B2176F
-	for <linux-modules@archiver.kernel.org>; Thu, 20 Dec 2018 10:44:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8962821741
+	for <linux-modules@archiver.kernel.org>; Thu, 20 Dec 2018 11:08:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731047AbeLTKoM (ORCPT
+        id S1729834AbeLTLIh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 20 Dec 2018 05:44:12 -0500
-Received: from mx1.redhat.com ([209.132.183.28]:41020 "EHLO mx1.redhat.com"
+        Thu, 20 Dec 2018 06:08:37 -0500
+Received: from mx1.redhat.com ([209.132.183.28]:49486 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725730AbeLTKoM (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 20 Dec 2018 05:44:12 -0500
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        id S1725792AbeLTLIh (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 20 Dec 2018 06:08:37 -0500
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 335EF356C4;
-        Thu, 20 Dec 2018 10:44:11 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 2A17588E55;
+        Thu, 20 Dec 2018 11:08:36 +0000 (UTC)
 Received: from astarta.redhat.com (ovpn-117-136.ams2.redhat.com [10.36.117.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EB2EE68D27;
-        Thu, 20 Dec 2018 10:44:09 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B867E5D793;
+        Thu, 20 Dec 2018 11:08:34 +0000 (UTC)
 From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/3] testsuite: add support for testing output against regex
-References: <20181219000229.10793-1-lucas.demarchi@intel.com>
-        <20181219000229.10793-2-lucas.demarchi@intel.com>
-Date:   Thu, 20 Dec 2018 12:44:09 +0200
-In-Reply-To: <20181219000229.10793-2-lucas.demarchi@intel.com> (Lucas De
-        Marchi's message of "Tue, 18 Dec 2018 16:02:28 -0800")
-Message-ID: <xunytvj8jx52.fsf@redhat.com>
+Cc:     linux-modules@vger.kernel.org, ykaliuta@redhat.com
+Subject: Re: [RFC PATCH 1/2] libkmod: module: introduce common symbol API.
+References: <20181123215322.5438-1-yauheni.kaliuta@redhat.com>
+        <20181123215322.5438-2-yauheni.kaliuta@redhat.com>
+        <20181219184930.GD6410@ldmartin-desk.jf.intel.com>
+Date:   Thu, 20 Dec 2018 13:08:34 +0200
+In-Reply-To: <20181219184930.GD6410@ldmartin-desk.jf.intel.com> (Lucas De
+        Marchi's message of "Wed, 19 Dec 2018 10:49:30 -0800")
+Message-ID: <xunypntwjw0d.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.30]); Thu, 20 Dec 2018 10:44:11 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Thu, 20 Dec 2018 11:08:36 +0000 (UTC)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
 Hi, Lucas!
 
->>>>> On Tue, 18 Dec 2018 16:02:28 -0800, Lucas De Marchi  wrote:
+>>>>> On Wed, 19 Dec 2018 10:49:30 -0800, Lucas De Marchi  wrote:
 
- > Allow to test outputs when they don't match exactly, but should follow
- > some regex patterns. This can be used when the info we are printing is
- > randomized or depends on kernel configuration.
- > ---
+ > On Fri, Nov 23, 2018 at 11:53:21PM +0200, Yauheni Kaliuta wrote:
+ >> Introduce one family of functions to replace the duplicated:
+ >> 
+ >> - kmod_module_version_get_symbol()
+ >> - kmod_module_version_get_crc()
+ >> - kmod_module_symbol_get_symbol()
+ >> - kmod_module_symbol_get_crc()
+ >> - kmod_module_dependency_symbol_get_symbol()
+ >> - kmod_module_dependency_symbol_get_crc()
+ >> - kmod_module_versions_free_list()
+ >> - kmod_module_symbols_free_list()
+ >> - kmod_module_dependency_symbols_free_list()
+ >> 
+ >> It reuses kmod_module_symbol structure but extends it with the
+ >> "bind" field, keeping the API still the same.
+ >> 
+ >> Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+ >> ---
+ >> libkmod/libkmod-module.c | 196 ++++++++++++++++++++++++++++++++++++++-
+ >> libkmod/libkmod.h        |  12 +++
+ >> 2 files changed, 203 insertions(+), 5 deletions(-)
+ >> 
+ >> diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+ >> index 889f26479a98..f595f40032e0 100644
+ >> --- a/libkmod/libkmod-module.c
+ >> +++ b/libkmod/libkmod-module.c
+ >> @@ -2419,6 +2419,197 @@ KMOD_EXPORT void kmod_module_info_free_list(struct kmod_list *list)
+ >> }
+ >> }
+ >> 
+ >> +struct kmod_module_symbol {
+ >> +	uint64_t crc;
+ >> +	uint8_t bind;
 
-[...]
+ > I think this can be enum kmod_symbol_bind.  Or just use "unsigned
+ > int"... we would have a whole here nonetheless.
 
- >  struct buffer {
- >  	char buf[BUFSZ];
- > +	unsigned int head;
- >  };
- 
-[...]
+Ok. As with the parts below, it's a copy of the existing code.
 
-I'm wondering, since you are now keeping some context, would it
-make sence to group all of it in one place?
+ >> +	char symbol[];
+ >> +};
+ >> +
+ >> +static struct kmod_module_symbol
+ >> *kmod_module_typed_symbol_new(uint64_t crc, uint8_t bind, const char
+ >> *symbol)
+ >> +{
+ >> +	struct kmod_module_symbol *ms;
+ >> +	size_t symbollen = strlen(symbol) + 1;
 
-Something like:
+ > I know this comes from the other functions, but the naming is not ideal:
+ > use len for the string len, use sz when including the '\0'. So
 
-diff --git a/testsuite/testsuite.c b/testsuite/testsuite.c
-index db36324cfda3..e8b26d6bf60f 100644
---- a/testsuite/testsuite.c
-+++ b/testsuite/testsuite.c
-@@ -273,32 +273,165 @@ static inline int test_run_child(const struct test *t, int fdout[2],
- 		return test_run_spawned(t);
- }
- 
--static int check_activity(int fd, bool activity,  const char *path,
--			  const char *stream)
-+#define BUFSZ 4096
-+
-+enum fd_cmp_type {
-+	FD_CMP_MONITOR,
-+	FD_CMP_OUT,
-+	FD_CMP_ERR,
-+	FD_CMP_MAX = FD_CMP_ERR,
-+};
-+
-+struct fd_cmp {
-+	enum fd_cmp_type type;
-+	int fd;
-+	int fd_match;
-+	bool activity;
-+	const char *path;
-+	const char *prefix;
-+	const char *stream_name;
-+	char buf[BUFSZ];
-+	char buf_match[BUFSZ];
-+	unsigned int head;
-+	unsigned int head_match;
-+};
-+
-+static int fd_cmp_check_activity(struct fd_cmp *fd_cmp)
- {
- 	struct stat st;
- 
- 	/* not monitoring or monitoring and it has activity */
--	if (fd < 0 || activity)
-+	if (fd_cmp == NULL || fd_cmp->fd < 0 || fd_cmp->activity)
- 		return 0;
- 
- 	/* monitoring, there was no activity and size matches */
--	if (stat(path, &st) == 0 && st.st_size == 0)
-+	if (stat(fd_cmp->path, &st) == 0 && st.st_size == 0)
- 		return 0;
- 
--	ERR("Expecting output on %s, but test didn't produce any\n", stream);
-+	ERR("Expecting output on %s, but test didn't produce any\n",
-+	    fd_cmp->stream_name);
- 
- 	return -1;
- }
- 
--#define BUFSZ 4096
--struct buffer {
--	char buf[BUFSZ];
--	unsigned int head;
--};
-+static bool fd_cmp_is_active(struct fd_cmp *fd_cmp)
-+{
-+	return fd_cmp->fd != -1;
-+}
-+
-+static int fd_cmp_open_monitor(struct fd_cmp *fd_cmp, int fd, int fd_ep)
-+{
-+	struct epoll_event ep = {};
-+
-+	ep.events = EPOLLHUP;
-+	ep.data.ptr = fd_cmp;
-+	if (epoll_ctl(fd_ep, EPOLL_CTL_ADD, fd, &ep) < 0) {
-+		ERR("could not add monitor fd to epoll: %m\n");
-+		return -errno;
-+	}
-+
-+	return 0;
-+}
-+
-+static int fd_cmp_open_std(struct fd_cmp *fd_cmp,
-+			   const char *fn, int fd, int fd_ep)
-+{
-+	struct epoll_event ep = {};
-+	int fd_match;
-+
-+	fd_match = open(fn, O_RDONLY);
-+	if (fd_match < 0) {
-+		ERR("could not open %s for read: %m\n", fn);
-+		return -errno;
-+	}
-+	ep.events = EPOLLIN;
-+	ep.data.ptr = fd_cmp;
-+	if (epoll_ctl(fd_ep, EPOLL_CTL_ADD, fd, &ep) < 0) {
-+		ERR("could not add fd to epoll: %m\n");
-+		close(fd_match);
-+		return -errno;
-+	}
-+
-+	return fd_match;
-+}
-+
-+/* opens output file AND adds descriptor to epoll */
-+static int fd_cmp_open(struct fd_cmp **fd_cmp_out,
-+		       enum fd_cmp_type type, const char *fn, int fd,
-+		       int fd_ep)
-+{
-+	int err = 0;
-+	struct fd_cmp *fd_cmp;
-+
-+	fd_cmp = calloc(1, sizeof(*fd_cmp));
-+	if (fd_cmp == NULL) {
-+		ERR("could not allocate fd_cmp\n");
-+		return -ENOMEM;
-+	}
-+
-+	switch (type) {
-+	case FD_CMP_MONITOR:
-+		err = fd_cmp_open_monitor(fd_cmp, fd, fd_ep);
-+		break;
-+	case FD_CMP_OUT:
-+		fd_cmp->prefix = "STDOUT";
-+		fd_cmp->stream_name = "stdout";
-+		err = fd_cmp_open_std(fd_cmp, fn, fd, fd_ep);
-+		break;
-+	case FD_CMP_ERR:
-+		fd_cmp->prefix = "STDERR";
-+		fd_cmp->stream_name = "stderr";
-+		err = fd_cmp_open_std(fd_cmp, fn, fd, fd_ep);
-+		break;
-+	default:
-+		ERR("unknown fd type %d\n", type);
-+		err = -1;
-+	}
- 
-+	if (err < 0) {
-+		free(fd_cmp);
-+		return err;
-+	}
-+
-+	fd_cmp->fd_match = err;
-+	fd_cmp->fd = fd;
-+	fd_cmp->type = type;
-+	fd_cmp->path = fn;
-+
-+	*fd_cmp_out = fd_cmp;
-+	return 0;
-+}
-+
-+static int fd_cmp_check_ev_in(struct fd_cmp *fd_cmp)
-+{
-+	if (fd_cmp->type == FD_CMP_MONITOR) {
-+		ERR("Unexpected activity on monitor pipe\n");
-+		return -EINVAL;
-+	}
-+	fd_cmp->activity = true;
-+
-+	return 0;
-+}
-+
-+static void fd_cmp_delete_ep(struct fd_cmp *fd_cmp, int fd_ep)
-+{
-+	if (epoll_ctl(fd_ep, EPOLL_CTL_DEL, fd_cmp->fd, NULL) < 0) {
-+		ERR("could not remove fd %d from epoll: %m\n", fd_cmp->fd);
-+	}
-+	fd_cmp->fd = -1;
-+}
-+
-+static void fd_cmp_close(struct fd_cmp *fd_cmp)
-+{
-+	if (fd_cmp == NULL)
-+		return;
-+
-+	if (fd_cmp->fd >= 0)
-+		close(fd_cmp->fd);
-+	free(fd_cmp);
-+}
- 
--static bool cmpbuf_regex_one(const char *pattern, const char *s)
-+static bool fd_cmp_regex_one(const char *pattern, const char *s)
- {
- 	_cleanup_(regfree) regex_t re = { };
- 
-@@ -310,18 +443,17 @@ static bool cmpbuf_regex_one(const char *pattern, const char *s)
-  * read fd and fd_match, checking the first matches the regex of the second,
-  * line by line
-  */
--static bool cmpbuf_regex(const struct test *t, const char *prefix,
--			 int fd, int fd_match, struct buffer *buf,
--			 struct buffer *buf_match)
-+static bool fd_cmp_regex(struct fd_cmp *fd_cmp, const struct test *t)
- {
- 	char *p, *p_match;
- 	int done = 0, done_match = 0, r;
- 
--	r = read(fd, buf->buf + buf->head, sizeof(buf->buf) - buf->head - 1);
-+	r = read(fd_cmp->fd, fd_cmp->buf + fd_cmp->head,
-+		 sizeof(fd_cmp->buf) - fd_cmp->head - 1);
- 	if (r <= 0)
- 		return true;
- 
--	buf->head += r;
-+	fd_cmp->head += r;
- 
- 	/*
- 	 * Process as many lines as read from fd and that fits in the buffer -
-@@ -329,40 +461,40 @@ static bool cmpbuf_regex(const struct test *t, const char *prefix,
- 	 * get the same amount from fd_match
- 	 */
- 	for (;;) {
--		p = memchr(buf->buf + done, '\n', buf->head - done);
-+		p = memchr(fd_cmp->buf + done, '\n', fd_cmp->head - done);
- 		if (!p)
- 			break;
- 		*p = 0;
- 
--		p_match = memchr(buf_match->buf + done_match, '\n',
--				 buf_match->head - done_match);
-+		p_match = memchr(fd_cmp->buf_match + done_match, '\n',
-+				 fd_cmp->head_match - done_match);
- 		if (!p_match) {
- 			/* pump more data from file */
--			r = read(fd_match, buf_match->buf + buf_match->head,
--				 sizeof(buf_match->buf) - buf_match->head - 1);
-+			r = read(fd_cmp->fd_match, fd_cmp->buf_match + fd_cmp->head_match,
-+				 sizeof(fd_cmp->buf_match) - fd_cmp->head_match - 1);
- 			if (r <= 0) {
--				ERR("could not read match fd %d\n", fd_match);
-+				ERR("could not read match fd %d\n", fd_cmp->fd_match);
- 				return false;
- 			}
--			buf_match->head += r;
--			p_match = memchr(buf_match->buf + done_match, '\n',
--					 buf_match->head - done_match);
-+			fd_cmp->head_match += r;
-+			p_match = memchr(fd_cmp->buf_match + done_match, '\n',
-+					 fd_cmp->head_match - done_match);
- 			if (!p_match) {
--				ERR("could not find match line from fd %d\n", fd_match);
-+				ERR("could not find match line from fd %d\n", fd_cmp->fd_match);
- 				return false;
- 			}
- 		}
- 		*p_match = 0;
- 
--		if (!cmpbuf_regex_one(buf_match->buf + done_match, buf->buf + done)) {
--			ERR("Output does not match pattern on %s:\n", prefix);
--			ERR("pattern: %s\n", buf_match->buf + done_match);
--			ERR("output : %s\n", buf->buf + done);
-+		if (!fd_cmp_regex_one(fd_cmp->buf_match + done_match, fd_cmp->buf + done)) {
-+			ERR("Output does not match pattern on %s:\n", fd_cmp->prefix);
-+			ERR("pattern: %s\n", fd_cmp->buf_match + done_match);
-+			ERR("output : %s\n", fd_cmp->buf + done);
- 			return false;
- 		}
- 
--		done = p - buf->buf + 1;
--		done_match = p_match - buf_match->buf + 1;
-+		done = p - fd_cmp->buf + 1;
-+		done_match = p_match - fd_cmp->buf_match + 1;
- 	}
- 
- 	/*
-@@ -371,59 +503,57 @@ static bool cmpbuf_regex(const struct test *t, const char *prefix,
- 	 */
- 
- 	if (done) {
--		if (buf->head - done)
--			memmove(buf->buf, buf->buf + done, buf->head - done);
--		buf->head -= done;
-+		if (fd_cmp->head - done)
-+			memmove(fd_cmp->buf, fd_cmp->buf + done, fd_cmp->head - done);
-+		fd_cmp->head -= done;
- 	}
- 
- 	if (done_match) {
--		if (buf_match->head - done_match)
--			memmove(buf_match->buf, buf_match->buf + done_match,
--				buf_match->head - done_match);
--		buf_match->head -= done_match;
-+		if (fd_cmp->head_match - done_match)
-+			memmove(fd_cmp->buf_match, fd_cmp->buf_match + done_match,
-+				fd_cmp->head_match - done_match);
-+		fd_cmp->head_match -= done_match;
- 	}
- 
- 	return true;
- }
- 
- /* read fd and fd_match, checking they match exactly */
--static bool cmpbuf_exact(const struct test *t, const char *prefix,
--			 int fd, int fd_match, struct buffer *buf,
--			 struct buffer *buf_match)
-+static bool fd_cmp_exact(struct fd_cmp *fd_cmp, const struct test *t)
- {
- 	int r, rmatch, done = 0;
- 
--	r = read(fd, buf, sizeof(buf->buf) - 1);
-+	r = read(fd_cmp->fd, fd_cmp->buf, sizeof(fd_cmp->buf) - 1);
- 	if (r <= 0)
- 		/* try again later */
- 		return true;
- 
- 	/* read as much data from fd_match as we read from fd */
- 	for (;;) {
--		rmatch = read(fd_match, buf_match->buf + done, r - done);
-+		rmatch = read(fd_cmp->fd_match, fd_cmp->buf_match + done, r - done);
- 		if (rmatch == 0)
- 			break;
- 
- 		if (rmatch < 0) {
- 			if (errno == EINTR)
- 				continue;
--			ERR("could not read match fd %d\n", fd_match);
-+			ERR("could not read match fd %d\n", fd_cmp->fd_match);
- 			return false;
- 		}
- 
- 		done += rmatch;
- 	}
- 
--	buf->buf[r] = '\0';
--	buf_match->buf[r] = '\0';
-+	fd_cmp->buf[r] = '\0';
-+	fd_cmp->buf_match[r] = '\0';
- 
- 	if (t->print_outputs)
--		printf("%s: %s\n", prefix, buf->buf);
-+		printf("%s: %s\n", fd_cmp->prefix, fd_cmp->buf);
- 
--	if (!streq(buf->buf, buf_match->buf)) {
--		ERR("Outputs do not match on %s:\n", prefix);
--		ERR("correct:\n%s\n", buf_match->buf);
--		ERR("wrong:\n%s\n", buf->buf);
-+	if (!streq(fd_cmp->buf, fd_cmp->buf_match)) {
-+		ERR("Outputs do not match on %s:\n", fd_cmp->prefix);
-+		ERR("correct:\n%s\n", fd_cmp->buf_match);
-+		ERR("wrong:\n%s\n", fd_cmp->buf);
- 		return false;
- 	}
- 
-@@ -434,11 +564,12 @@ static bool test_run_parent_check_outputs(const struct test *t,
- 					  int fdout, int fderr, int fdmonitor,
- 					  pid_t child)
- {
--	struct epoll_event ep_outpipe, ep_errpipe, ep_monitor;
--	int err, fd_ep, fd_matchout = -1, fd_matcherr = -1;
--	bool fd_activityout = false, fd_activityerr = false;
-+	int err, fd_ep;
- 	unsigned long long end_usec, start_usec;
--	_cleanup_free_ struct buffer *buf_out = NULL, *buf_err = NULL;
-+	struct fd_cmp *fd_cmp_out = NULL;
-+	struct fd_cmp *fd_cmp_err = NULL;
-+	struct fd_cmp *fd_cmp_monitor = NULL;
-+	int n_fd = 0;
- 
- 	fd_ep = epoll_create1(EPOLL_CLOEXEC);
- 	if (fd_ep < 0) {
-@@ -447,59 +578,30 @@ static bool test_run_parent_check_outputs(const struct test *t,
- 	}
- 
- 	if (t->output.out != NULL) {
--		fd_matchout = open(t->output.out, O_RDONLY);
--		if (fd_matchout < 0) {
--			err = -errno;
--			ERR("could not open %s for read: %m\n",
--							t->output.out);
--			goto out;
--		}
--		memset(&ep_outpipe, 0, sizeof(struct epoll_event));
--		ep_outpipe.events = EPOLLIN;
--		ep_outpipe.data.ptr = &fdout;
--		if (epoll_ctl(fd_ep, EPOLL_CTL_ADD, fdout, &ep_outpipe) < 0) {
--			err = -errno;
--			ERR("could not add fd to epoll: %m\n");
-+		err = fd_cmp_open(&fd_cmp_out,
-+				  FD_CMP_OUT, t->output.out, fdout, fd_ep);
-+		if (err < 0)
- 			goto out;
--		}
--		buf_out = calloc(2, sizeof(*buf_out));
--	} else
--		fdout = -1;
-+		n_fd++;
-+	}
- 
- 	if (t->output.err != NULL) {
--		fd_matcherr = open(t->output.err, O_RDONLY);
--		if (fd_matcherr < 0) {
--			err = -errno;
--			ERR("could not open %s for read: %m\n",
--					t->output.err);
-+		err = fd_cmp_open(&fd_cmp_err,
-+				  FD_CMP_ERR, t->output.err, fderr, fd_ep);
-+		if (err < 0)
- 			goto out;
-+		n_fd++;
-+	}
- 
--		}
--		memset(&ep_errpipe, 0, sizeof(struct epoll_event));
--		ep_errpipe.events = EPOLLIN;
--		ep_errpipe.data.ptr = &fderr;
--		if (epoll_ctl(fd_ep, EPOLL_CTL_ADD, fderr, &ep_errpipe) < 0) {
--			err = -errno;
--			ERR("could not add fd to epoll: %m\n");
--			goto out;
--		}
--		buf_err = calloc(2, sizeof(*buf_err));
--	} else
--		fderr = -1;
--
--	memset(&ep_monitor, 0, sizeof(struct epoll_event));
--	ep_monitor.events = EPOLLHUP;
--	ep_monitor.data.ptr = &fdmonitor;
--	if (epoll_ctl(fd_ep, EPOLL_CTL_ADD, fdmonitor, &ep_monitor) < 0) {
--		err = -errno;
--		ERR("could not add monitor fd to epoll: %m\n");
-+	err = fd_cmp_open(&fd_cmp_monitor, FD_CMP_MONITOR, NULL, fdmonitor, fd_ep);
-+	if (err < 0)
- 		goto out;
--	}
-+	n_fd++;
- 
- 	start_usec = now_usec();
- 	end_usec = start_usec + TEST_TIMEOUT_USEC;
- 
--	for (err = 0; fdmonitor >= 0 || fdout >= 0 || fderr >= 0;) {
-+	for (err = 0; n_fd > 0;) {
- 		int fdcount, i, timeout;
- 		struct epoll_event ev[4];
- 		unsigned long long curr_usec = now_usec();
-@@ -518,68 +620,45 @@ static bool test_run_parent_check_outputs(const struct test *t,
- 		}
- 
- 		for (i = 0;  i < fdcount; i++) {
--			int fd = *(int *)ev[i].data.ptr;
-+			struct fd_cmp *fd_cmp = ev[i].data.ptr;
- 			bool ret;
- 
- 			if (ev[i].events & EPOLLIN) {
--				int fd_match;
--				struct buffer *buf, *buf_match;
--				const char *prefix;
--
--				if (fd == fdout) {
--					fd_match = fd_matchout;
--					buf = buf_out;
--					fd_activityout = true;
--					prefix = "STDOUT";
--				} else if (fd == fderr) {
--					fd_match = fd_matcherr;
--					buf = buf_err;
--					fd_activityerr = true;
--					prefix = "STDERR";
--				} else {
--					ERR("Unexpected activity on monitor pipe\n");
--					err = -EINVAL;
-+				err = fd_cmp_check_ev_in(fd_cmp);
-+				if (err < 0)
- 					goto out;
--				}
--
--				buf_match = buf + 1;
- 
- 				if (t->output.regex)
--					ret = cmpbuf_regex(t, prefix, fd, fd_match,
--							   buf, buf_match);
-+					ret = fd_cmp_regex(fd_cmp, t);
- 				else
--					ret = cmpbuf_exact(t, prefix,  fd, fd_match,
--							   buf, buf_match);
-+					ret = fd_cmp_exact(fd_cmp, t);
- 
- 				if (!ret) {
- 					err = -1;
- 					goto out;
- 				}
- 			} else if (ev[i].events & EPOLLHUP) {
--				if (epoll_ctl(fd_ep, EPOLL_CTL_DEL, fd, NULL) < 0) {
--					ERR("could not remove fd %d from epoll: %m\n", fd);
--				}
--				*(int *)ev[i].data.ptr = -1;
-+				fd_cmp_delete_ep(fd_cmp, fd_ep);
-+				n_fd--;
- 			}
- 		}
- 	}
- 
--	err = check_activity(fd_matchout, fd_activityout, t->output.out, "stdout");
--	err |= check_activity(fd_matcherr, fd_activityerr, t->output.err, "stderr");
-+	err = fd_cmp_check_activity(fd_cmp_out);
-+	err |= fd_cmp_check_activity(fd_cmp_err);
- 
--	if (err == 0 && fdmonitor >= 0) {
-+	if (err == 0 && fd_cmp_is_active(fd_cmp_monitor)) {
- 		err = -EINVAL;
- 		ERR("Test '%s' timed out, killing %d\n", t->name, child);
- 		kill(child, SIGKILL);
- 	}
- 
- out:
--	if (fd_matchout >= 0)
--		close(fd_matchout);
--	if (fd_matcherr >= 0)
--		close(fd_matcherr);
--	if (fd_ep >= 0)
--		close(fd_ep);
-+	fd_cmp_close(fd_cmp_out);
-+	fd_cmp_close(fd_cmp_err);
-+	fd_cmp_close(fd_cmp_monitor);
-+	close(fd_ep);
-+
- 	return err == 0;
- }
- 
+ > 	size_t symbolsz = strlen(symbol) + 1;
 
+ >> +
+ >> +	ms = malloc(sizeof(struct kmod_module_symbol) + symbollen);
 
+ > 	ms = malloc(sizeof(*ms) + symbolsz);
+
+Sure, I prefer it myself.
+
+ >> +	if (ms == NULL)
+ >> +		return NULL;
+ >> +
+ >> +	ms->crc = crc;
+ >> +	ms->bind = bind;
+ >> +	memcpy(ms->symbol, symbol, symbollen);
+
+ > blank line
+
+ >> +	return ms;
+ >> +}
+ >> +
+ >> +static void kmod_module_typed_symbol_free(struct kmod_module_symbol *ms)
+ >> +{
+ >> +	free(ms);
+ >> +}
+ >> +
+ >> +typedef int (*kmod_symbols_getter)(const struct kmod_elf *elf,
+ >> struct kmod_modversion **array);
+ >> +
+ >> +static kmod_symbols_getter kmod_module_getter_lookup(const struct
+ >> kmod_module *mod,
+ >> +						     enum kmod_symbol_type type)
+ >> +{
+ >> +	switch (type) {
+ >> +	case KMOD_SYMBOL_VERSIONS:
+ >> +		return kmod_elf_get_modversions;
+ >> +	case KMOD_SYMBOL_CRC:
+ >> +		return kmod_elf_get_symbols;
+ >> +	case KMOD_SYMBOL_DEPENDENCY:
+ >> +		return kmod_elf_get_dependency_symbols;
+ >> +	default:
+ >> +		ERR(mod->ctx, "Wrong symbol type requested: %d\n", type);
+ >> +	}
+
+ > I think we can get away without this indirection and just embed the
+ > switch inside kmod_module_get_typed_symbols().
+
+If you insist.
+
+ >> +
+ >> +	return NULL;
+ >> +}
+ >> +
+ >> +/**
+ >> + * kmod_module_get_typed_symbols:
+ >> + * @mod: kmod module
+ >> + * @type: type of symbols to get:
+ >> + *        KMOD_SYMBOL_VERSIONS
+ >> + *        KMOD_SYMBOL_CRC
+ >> + *        KMDO_SYMBOL_DEPENDENCY
+ >> + * @list: where to return list of module symbols. Use
+ >> + *        kmod_module_typed_symbol_get_symbol(),
+ >> + *        kmod_module_typed_symbol_get_crc() and
+ >> + *        kmod_module_typed_symbol_get_bind() to access the data.
+
+ > humn... bind() only makes sense for KMDO_SYMBOL_DEPENDENCY, but I think
+ > it's fine since we won't return garbage.
+
+ >> + *
+ >> + *        After use, free the @list by calling
+ >> + *        kmod_module_typed_symbols_free_list().
+ >> + *
+ >> + * Returns: 0 on success or < 0 otherwise.
+ >> + */
+ >> +KMOD_EXPORT int kmod_module_get_typed_symbols(const struct
+ >> kmod_module *mod, enum kmod_symbol_type type, struct kmod_list
+ >> **list)
+ >> +{
+ >> +	struct kmod_elf *elf;
+ >> +	struct kmod_modversion *symbols;
+ >> +	int i, count, ret = 0;
+ >> +	kmod_symbols_getter getter;
+ >> +
+ >> +	if (mod == NULL || list == NULL)
+ >> +		return -ENOENT;
+ >> +
+ >> +	assert(*list == NULL);
+ >> +
+ >> +	elf = kmod_module_get_elf(mod);
+ >> +	if (elf == NULL)
+ >> +		return -errno;
+ >> +
+ >> +	getter = kmod_module_getter_lookup(mod, type);
+ >> +	if (getter == NULL)
+ >> +		return -ENOENT;
+ >> +
+ >> +	count = getter(elf, &symbols);
+ >> +	if (count < 0)
+ >> +		return count;
+ >> +
+ >> +	for (i = 0; i < count; i++) {
+ >> +		struct kmod_module_symbol *ms;
+ >> +		struct kmod_list *n;
+ >> +
+ >> +		ms = kmod_module_typed_symbol_new(symbols[i].crc,
+ >> +						  symbols[i].bind,
+ >> +						  symbols[i].symbol);
+ >> +		if (ms == NULL) {
+ >> +			ret = -errno;
+ >> +			kmod_module_typed_symbols_free_list(*list);
+ >> +			*list = NULL;
+ >> +			goto list_error;
+ >> +		}
+ >> +
+ >> +		n = kmod_list_append(*list, ms);
+ >> +		if (n != NULL)
+ >> +			*list = n;
+ >> +		else {
+ >> +			kmod_module_typed_symbol_free(ms);
+ >> +			kmod_module_typed_symbols_free_list(*list);
+ >> +			*list = NULL;
+ >> +			ret = -ENOMEM;
+ >> +			goto list_error;
+ >> +		}
+ >> +	}
+ >> +	ret = count;
+ >> +
+ >> +list_error:
+ >> +	free(symbols);
+ >> +	return ret;
+ >> +}
+ >> +
+ >> +/**
+ >> + * kmod_module_typed_symbol_get_symbol:
+ >> + * @entry: a list entry representing a kmod module typed symbol
+ >> + *
+ >> + * Get the symbol's name of the entry.
+ >> + *
+ >> + * Returns: the symbol's name of this kmod module symbols on success or NULL
+ >> + * on failure. The string is owned by the list, do not free it.
+ >> + */
+ >> +KMOD_EXPORT const char *kmod_module_typed_symbol_get_symbol(const
+ >> struct kmod_list *entry)
+ >> +{
+ >> +	struct kmod_module_symbol *ms;
+ >> +
+ >> +	if (entry == NULL || entry->data == NULL)
+ >> +		return NULL;
+ >> +
+ >> +	ms = entry->data;
+ >> +	return ms->symbol;
+
+ > we can make this smaller with
+
+ > return ((struct kmod_module_symbol *)entry->data)->symbol
+
+I ususally declare temporary variables (optimizer gets rid of
+them anyway) to make the types obvious for readers, but here with
+the casting it's fine. Ok.
+
+ >> +}
+ >> +
+ >> +/**
+ >> + * kmod_module_typed_symbol_get_crc:
+ >> + * @entry: a list entry representing a kmod module symbol
+ >> + *
+ >> + * Get the crc of the symbol.
+ >> + *
+ >> + * Returns: the crc of this kmod module symbol if available,
+ >> otherwise default to 0.
+ >> + */
+ >> +KMOD_EXPORT uint64_t kmod_module_typed_symbol_get_crc(const struct
+ >> kmod_list *entry)
+ >> +{
+ >> +	struct kmod_module_symbol *ms;
+ >> +
+ >> +	if (entry == NULL || entry->data == NULL)
+ >> +		return 0;
+ >> +
+ >> +	ms = entry->data;
+ >> +	return ms->crc;
+
+ > ditto
+
+ >> +}
+ >> +
+ >> +/**
+ >> + * kmod_module_dependency_symbol_get_bind:
+ >> + * @entry: a list entry representing a kmod module symbol
+ >> + *
+ >> + * Get the bind type of the symbol.
+ >> + *
+ >> + * Returns: the bind of this kmod module symbol on success
+ >> + * or < 0 on failure.
+ >> + */
+ >> +KMOD_EXPORT int kmod_module_typed_symbol_get_bind(const struct kmod_list *entry)
+ >> +{
+ >> +	struct kmod_module_symbol *ms;
+ >> +
+ >> +	if (entry == NULL || entry->data == NULL)
+ >> +		return 0;
+ >> +
+ >> +	ms = entry->data;
+ >> +	return ms->bind;
+ >> +}
+ >> +
+ >> +/**
+ >> + * kmod_module_typed_symbols_free_list:
+ >> + * @list: kmod module typed symbols list
+ >> + *
+ >> + * Release the resources taken by @list
+ >> + */
+ >> +KMOD_EXPORT void kmod_module_typed_symbols_free_list(struct kmod_list *list)
+ >> +{
+ >> +	while (list) {
+ >> +		kmod_module_typed_symbol_free(list->data);
+ >> +		list = kmod_list_remove(list);
+ >> +	}
+ >> +}
+ >> +
+ >> struct kmod_module_version {
+ >> uint64_t crc;
+ >> char symbol[];
+ >> @@ -2559,11 +2750,6 @@ KMOD_EXPORT void kmod_module_versions_free_list(struct kmod_list *list)
+ >> }
+ >> }
+ >> 
+ >> -struct kmod_module_symbol {
+ >> -	uint64_t crc;
+ >> -	char symbol[];
+ >> -};
+ >> -
+ >> static struct kmod_module_symbol *kmod_module_symbols_new(uint64_t crc, const char *symbol)
+ >> {
+ >> struct kmod_module_symbol *mv;
+ >> diff --git a/libkmod/libkmod.h b/libkmod/libkmod.h
+ >> index 352627e5d018..9c10e8a54f54 100644
+ >> --- a/libkmod/libkmod.h
+ >> +++ b/libkmod/libkmod.h
+ >> @@ -258,6 +258,18 @@ int kmod_module_dependency_symbol_get_bind(const struct kmod_list *entry);
+ >> uint64_t kmod_module_dependency_symbol_get_crc(const struct kmod_list *entry);
+ >> void kmod_module_dependency_symbols_free_list(struct kmod_list *list);
+ >> 
+ >> +enum kmod_symbol_type {
+ >> +	KMOD_SYMBOL_VERSIONS = 1,
+
+ > why 1? we usually start counting from 0.
+
+Well, 0 is too special in my mind and easy to mix with default
+initialized value. Not a big deal, will change.
+
+ > thanks
+ > Lucas De Marchi
+
+ >> +	KMOD_SYMBOL_CRC,
+ >> +	KMOD_SYMBOL_DEPENDENCY,
+ >> +};
+ >> +
+ >> +int kmod_module_get_typed_symbols(const struct kmod_module *mod,
+ >> enum kmod_symbol_type type, struct kmod_list **list);
+ >> +const char *kmod_module_typed_symbol_get_symbol(const struct kmod_list *entry);
+ >> +int kmod_module_typed_symbol_get_bind(const struct kmod_list *entry);
+ >> +uint64_t kmod_module_typed_symbol_get_crc(const struct kmod_list *entry);
+ >> +void kmod_module_typed_symbols_free_list(struct kmod_list *list);
+ >> +
+ >> #ifdef __cplusplus
+ >> } /* extern "C" */
+ >> #endif
+ >> -- 
+ >> 2.19.1
+ >> 
 
 -- 
 WBR,
