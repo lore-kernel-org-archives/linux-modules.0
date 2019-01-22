@@ -2,94 +2,98 @@ Return-Path: <SRS0=+TOZ=P6=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=FROM_EXCESS_BASE64,
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1807C282C3
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Jan 2019 22:07:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB668C282C3
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Jan 2019 22:12:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A48FE21850
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Jan 2019 22:07:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 87ABF21726
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Jan 2019 22:12:26 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jYxc76JW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbfAVWHH convert rfc822-to-8bit (ORCPT
+        id S1726630AbfAVWM0 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Jan 2019 17:07:07 -0500
-Received: from mx2.suse.de ([195.135.220.15]:40336 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725925AbfAVWHG (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Jan 2019 17:07:06 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 8CB22AE6B;
-        Tue, 22 Jan 2019 22:07:05 +0000 (UTC)
-Date:   Tue, 22 Jan 2019 23:07:03 +0100
-From:   Michal =?UTF-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>
-To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        Ferry van Steen <Ferry.van.Steen@citrus.nl>,
-        David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH RFC PKCS7 asn1c 0/2] asn1c version of PKCS#7 parser
-Message-ID: <20190122230703.1635f8ca@naga>
-In-Reply-To: <CAKi4VALJcbwq2SKpb3fBw022gBO1kBe0qL9=Vszg2OOBps+dtA@mail.gmail.com>
-References: <20180308135810.4309-1-yauheni.kaliuta@redhat.com>
-        <xunyva2gfon3.fsf@redhat.com>
-        <20190122210351.4484098d@kitsune.suse.cz>
-        <CAKi4VALJcbwq2SKpb3fBw022gBO1kBe0qL9=Vszg2OOBps+dtA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Tue, 22 Jan 2019 17:12:26 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:45127 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726783AbfAVWMZ (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Tue, 22 Jan 2019 17:12:25 -0500
+Received: by mail-wr1-f48.google.com with SMTP id t6so103746wrr.12
+        for <linux-modules@vger.kernel.org>; Tue, 22 Jan 2019 14:12:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IW/EcbZ9FnQMBrJgvUknB9tPUpbsThYwAuwKWNvyejs=;
+        b=jYxc76JWPH6fzhERNRPOoegJas5zR5ToQtEWo4lzWJ39wND57RxbNSl/C7RD/L95mW
+         3hpwg1gjgk26Yq87w1ATTyE3rbU7YohEOR60AUsT9B89h0r4dfcCLMEhVVra2PdCyXZ+
+         EnDKEUGtb+wTg7vAUKMuEzg5djb6Oa2fExvOPLRiROzKaOv08Sb5TL1VUHXYmd7aQngo
+         HrwVBhkMOywUrd/YSAIig7LqTdxLikYaV20X8HYneihmsNbxMw02+rDHWIbknsXJC1f9
+         9gyHsk3KjWlELQWw7cjXbH01l42trbNkAUptif6mDRQLAezFJa6KQwmZUTXw58ebog3Z
+         yi2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IW/EcbZ9FnQMBrJgvUknB9tPUpbsThYwAuwKWNvyejs=;
+        b=NsCrBXThlB74WyFSBm/hIiL22mt/XRN/3oKVXhshWuYUKOkJt0c/woiSYBpiEHEajl
+         TaNgwqyQ8Bs6tY5rjseTcszh62HeHhtDqs23UQyqMdlwcCVXXmLJCDGGZomPqOiyLx7X
+         QMOtbJOCfv+auQOkX4mYRM1M64x+6k1sor6h+a6qUMzSRNdkwUouq1x9qu/0ZxNvOQFm
+         0ZOZ2Rrx4HxymzukxdHTBESlgE96/szm3yjQW4OaM1GEYMlkves/dvCK03zm1k5R4oM8
+         Q2wxgRJeysAk/3AMr0JDYVSEZ300QVcGYe8/ozFxspSQ6Cnpr5gdSZdNMqNs1LpuBetm
+         Bnlg==
+X-Gm-Message-State: AJcUukc/Bpywjbn4Y++JvY4XBGYWY6e5/cgrgdXxdMPdy5HfiQ/xvBvF
+        Eil6RClxL73iccQalPW2u/RPrcRRzobabBGTR3jT4A==
+X-Google-Smtp-Source: ALg8bN7rA57iCSxxW46Q3jMyYSLbz3BSK/Xfgl6mpxMMHgeXebGvvyKKmjKfCh4/qmYhfDajtn1KA4uwAOeanCY+qZw=
+X-Received: by 2002:adf:80a9:: with SMTP id 38mr32577023wrl.137.1548195143913;
+ Tue, 22 Jan 2019 14:12:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20190112172219.13152-1-dkg@fifthhorseman.net> <alpine.LNX.2.02.1901121358590.612@connie.slackware.com>
+ <87imyrhuxp.fsf@fifthhorseman.net>
+In-Reply-To: <87imyrhuxp.fsf@fifthhorseman.net>
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date:   Tue, 22 Jan 2019 14:12:12 -0800
+Message-ID: <CAKi4VAJQ_XjwcoAFCwT0x9aZMWAvNQ4OuMcEax8OALP4fqS6dA@mail.gmail.com>
+Subject: Re: [kmod] Fix typo
+To:     Daniel Kahn Gillmor <dkg@fifthhorseman.net>
+Cc:     linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, 22 Jan 2019 12:43:45 -0800
-Lucas De Marchi <lucas.de.marchi@gmail.com> wrote:
+On Mon, Jan 14, 2019 at 12:32 PM Daniel Kahn Gillmor
+<dkg@fifthhorseman.net> wrote:
+>
+> On Sat 2019-01-12 13:59:47 -0800, Robby Workman wrote:
+> > I *think* that was supposed to be "of any files" when it was originally
+> > typed, but either works, I suppose :-)
+>
+> I'm fine however it gets resolved -- just please don't leave it with the
+> broken text.
 
-> On Tue, Jan 22, 2019 at 12:03 PM Michal Suchánek <msuchanek@suse.de> wrote:
-> >
-> > On Tue, 22 Jan 2019 22:01:04 +0200
-> > Yauheni Kaliuta <yauheni.kaliuta@redhat.com> wrote:
-> >  
-> > > Hi!
-> > >
-> > > Looks like OpenSUSE took the RFC patch.
-> > >
-> > > The diverging doesn't sound nice, frankly speaking.  
-> >
-> > Is there an upstream solution?
-> >
-> > The diverging is caused by lack of support upstream.  
-> 
-> Mea culpa for not deciding with which implementation to go for the
-> next release. We actually have 3 possible implementations: one with
-> openssl, one with gnutls and
-> this one lifting the implementation from the kernel to be used in userspace.
+a little bit of archaeology:
 
-This is not really about lifting the kernel implementation. It is more
-about using a parser generator to generate code that parses the
-signature. asn1c is specialized on asn1 encoded data such as the PKCS#7
-signature.
+this line originally came from the module-init-tools' man page written
+in "doc/modprobe.conf.sgml".
+Grepping that repo shows that it probably was a copy of
+doc/depmod.conf.sgml that
+had phrase "The format of <filename>depmod.conf</filename> and files
+under <filename>depmod.d</filename> is simple"
 
-> 
-> It would be good to know from downstream their preference to weigh in
-> the decision.
+So, whoever copied it over forgot to remove the "and". Not that any of
+this matter... your version or the
+other are perfectly fine today :)
 
-I think with the size of initrd currently in openSUSE nobody will
-notice a crypto library or two added. For other distributions 0.5M size
-increase in ramdisk may be more noticeable.
 
- 15M /boot/initrd-4.19.4-1-default
-1.7M /usr/lib64/libgnutls.so.30.22.0
-437K /usr/lib64/libssl.so.1.1
 
-Between gnutls and openssl my impression is that openssl is more likely
-to be included with other tools anyway in more featureful ramdisks (ie.
-kdump over ssh or live system over https will need SSL). openssl is
-is also smaller of the two.
+applied,
+thanks
 
-Thanks
 
-Michal
+Lucas De Marchi
