@@ -2,332 +2,355 @@ Return-Path: <SRS0=+TOZ=P6=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=FROM_EXCESS_BASE64,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF81DC282C3
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Jan 2019 20:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E624C282C3
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Jan 2019 20:34:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E1A721726
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Jan 2019 20:03:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20C6020870
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Jan 2019 20:34:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbfAVUDz (ORCPT
+        id S1726035AbfAVUem (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Jan 2019 15:03:55 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49362 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726009AbfAVUDz (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Jan 2019 15:03:55 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 95CC1AD29;
-        Tue, 22 Jan 2019 20:03:52 +0000 (UTC)
-Date:   Tue, 22 Jan 2019 21:03:51 +0100
-From:   Michal =?UTF-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>
-To:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+        Tue, 22 Jan 2019 15:34:42 -0500
+Received: from mx1.redhat.com ([209.132.183.28]:50014 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726225AbfAVUem (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Tue, 22 Jan 2019 15:34:42 -0500
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 803FECAA8C;
+        Tue, 22 Jan 2019 20:34:41 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-116-196.ams2.redhat.com [10.36.116.196])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A92BE450C;
+        Tue, 22 Jan 2019 20:34:39 +0000 (UTC)
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To:     Michal =?utf-8?Q?Such=C3=A1nek?= <msuchanek@suse.de>
 Cc:     "Lucas De Marchi" <lucas.de.marchi@gmail.com>,
         linux-modules <linux-modules@vger.kernel.org>,
         "Ferry van Steen" <Ferry.van.Steen@citrus.nl>,
         "David Howells" <dhowells@redhat.com>
 Subject: Re: [PATCH RFC PKCS7 asn1c 0/2] asn1c version of PKCS#7 parser
-Message-ID: <20190122210351.4484098d@kitsune.suse.cz>
-In-Reply-To: <xunyva2gfon3.fsf@redhat.com>
 References: <20180308135810.4309-1-yauheni.kaliuta@redhat.com>
         <xunyva2gfon3.fsf@redhat.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
+        <20190122210351.4484098d@kitsune.suse.cz>
+Date:   Tue, 22 Jan 2019 22:34:41 +0200
+In-Reply-To: <20190122210351.4484098d@kitsune.suse.cz> ("Michal
+ \=\?utf-8\?Q\?Such\=C3\=A1nek\=22's\?\=
+        message of "Tue, 22 Jan 2019 21:03:51 +0100")
+Message-ID: <xunyr2d4fn32.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.38]); Tue, 22 Jan 2019 20:34:41 +0000 (UTC)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, 22 Jan 2019 22:01:04 +0200
-Yauheni Kaliuta <yauheni.kaliuta@redhat.com> wrote:
+Hi, Michal!
 
-> Hi!
-> 
-> Looks like OpenSUSE took the RFC patch.
-> 
-> The diverging doesn't sound nice, frankly speaking.
+>>>>> On Tue, 22 Jan 2019 21:03:51 +0100, Michal Suchánek  wrote:
 
-Is there an upstream solution?
+ > On Tue, 22 Jan 2019 22:01:04 +0200
+ > Yauheni Kaliuta <yauheni.kaliuta@redhat.com> wrote:
 
-The diverging is caused by lack of support upstream.
+ >> Hi!
+ >> 
+ >> Looks like OpenSUSE took the RFC patch.
+ >> 
+ >> The diverging doesn't sound nice, frankly speaking.
 
-Thanks
+ > Is there an upstream solution?
 
-Michal
+I'm not blaming you, but about the situation in general.
 
-> 
-> >>>>> On Thu, 08 Mar 2018 06:58:08 -0700, Yauheni Kaliuta  wrote:  
-> 
->  > Draft implementation of possible PKCS7 signature parser for
->  > modinfo.  I'm pretty bad in autotools, so would be fine if
->  > somebody integrate it inside properly.  
-> 
->  > What bothers me is that asn1c files are generated under BSD
->  > license.  
-> 
->  > Yauheni Kaliuta (2):
->  >   libkmod-signature: implement pkcs7 parsing with asn1c compiler
->  >   libkmod, pkcs7: commit asn1c autogenerated files  
-> 
->  >  Makefile.am                                        |   22 +-
->  >  configure.ac                                       |    1 +
->  >  libkmod/libkmod-internal.h                         |    3 +
->  >  libkmod/libkmod-module.c                           |    3 +
->  >  libkmod/libkmod-signature.c                        |  105 +-
->  >  libkmod/pkcs7/asn1c-gen/ANY.c                      |  158 ++
->  >  libkmod/pkcs7/asn1c-gen/ANY.h                      |   48 +
->  >  libkmod/pkcs7/asn1c-gen/AttributeValueAssertion.c  |   68 +
->  >  libkmod/pkcs7/asn1c-gen/AttributeValueAssertion.h  |   40 +
->  >  libkmod/pkcs7/asn1c-gen/AuthenticatedAttribute.c   |   69 +
->  >  libkmod/pkcs7/asn1c-gen/AuthenticatedAttribute.h   |   40 +
->  >  libkmod/pkcs7/asn1c-gen/BIT_STRING.c               |  189 ++
->  >  libkmod/pkcs7/asn1c-gen/BIT_STRING.h               |   33 +
->  >  libkmod/pkcs7/asn1c-gen/CRLSequence.c              |   52 +
->  >  libkmod/pkcs7/asn1c-gen/CRLSequence.h              |   44 +
->  >  libkmod/pkcs7/asn1c-gen/Certificate.c              |  104 ++
->  >  libkmod/pkcs7/asn1c-gen/Certificate.h              |   39 +
->  >  libkmod/pkcs7/asn1c-gen/CertificateList.c          |   52 +
->  >  libkmod/pkcs7/asn1c-gen/CertificateList.h          |   39 +
->  >  .../pkcs7/asn1c-gen/CertificateRevocationLists.c   |   52 +
->  >  .../pkcs7/asn1c-gen/CertificateRevocationLists.h   |   44 +
->  >  libkmod/pkcs7/asn1c-gen/CertificateSerialNumber.c  |  109 ++
->  >  libkmod/pkcs7/asn1c-gen/CertificateSerialNumber.h  |   39 +
->  >  libkmod/pkcs7/asn1c-gen/Certificates.c             |   52 +
->  >  libkmod/pkcs7/asn1c-gen/Certificates.h             |   39 +
->  >  libkmod/pkcs7/asn1c-gen/ContentInfo.c              |   69 +
->  >  libkmod/pkcs7/asn1c-gen/ContentInfo.h              |   40 +
->  >  libkmod/pkcs7/asn1c-gen/ContentType.c              |  109 ++
->  >  libkmod/pkcs7/asn1c-gen/ContentType.h              |   39 +
->  >  libkmod/pkcs7/asn1c-gen/Data.c                     |  104 ++
->  >  libkmod/pkcs7/asn1c-gen/Data.h                     |   39 +
->  >  .../pkcs7/asn1c-gen/DigestAlgorithmIdentifier.c    |   68 +
->  >  .../pkcs7/asn1c-gen/DigestAlgorithmIdentifier.h    |   40 +
->  >  .../pkcs7/asn1c-gen/DigestAlgorithmIdentifiers.c   |  153 ++
->  >  .../pkcs7/asn1c-gen/DigestAlgorithmIdentifiers.h   |   68 +
->  >  .../DigestEncryptionAlgorithmIdentifier.c          |   68 +
->  >  .../DigestEncryptionAlgorithmIdentifier.h          |   40 +
->  >  libkmod/pkcs7/asn1c-gen/EncryptedDigest.c          |  109 ++
->  >  libkmod/pkcs7/asn1c-gen/EncryptedDigest.h          |   39 +
->  >  .../ExtendedCertificatesAndCertificates.c          |   52 +
->  >  .../ExtendedCertificatesAndCertificates.h          |   39 +
->  >  libkmod/pkcs7/asn1c-gen/INTEGER.c                  | 1025 +++++++++++
->  >  libkmod/pkcs7/asn1c-gen/INTEGER.h                  |   82 +
->  >  libkmod/pkcs7/asn1c-gen/IssuerAndSerialNumber.c    |   65 +
->  >  libkmod/pkcs7/asn1c-gen/IssuerAndSerialNumber.h    |   39 +
->  >  libkmod/pkcs7/asn1c-gen/Makefile.am                |  131 ++
->  >  libkmod/pkcs7/asn1c-gen/Makefile.am.sample         |  150 ++
->  >  libkmod/pkcs7/asn1c-gen/Name.c                     |   52 +
->  >  libkmod/pkcs7/asn1c-gen/Name.h                     |   44 +
->  >  libkmod/pkcs7/asn1c-gen/NativeEnumerated.c         |  207 +++
->  >  libkmod/pkcs7/asn1c-gen/NativeEnumerated.h         |   32 +
->  >  libkmod/pkcs7/asn1c-gen/NativeInteger.c            |  332 ++++
->  >  libkmod/pkcs7/asn1c-gen/NativeInteger.h            |   37 +
->  >  libkmod/pkcs7/asn1c-gen/OBJECT_IDENTIFIER.c        |  764 +++++++++
->  >  libkmod/pkcs7/asn1c-gen/OBJECT_IDENTIFIER.h        |  139 ++
->  >  libkmod/pkcs7/asn1c-gen/OCTET_STRING.c             | 1807 ++++++++++++++++++++
->  >  libkmod/pkcs7/asn1c-gen/OCTET_STRING.h             |   86 +
->  >  libkmod/pkcs7/asn1c-gen/PKCS7ContentInfo.c         |   69 +
->  >  libkmod/pkcs7/asn1c-gen/PKCS7ContentInfo.h         |   45 +
->  >  .../pkcs7/asn1c-gen/RelativeDistinguishedName.c    |   52 +
->  >  .../pkcs7/asn1c-gen/RelativeDistinguishedName.h    |   44 +
->  >  .../pkcs7/asn1c-gen/SetOfAuthenticatedAttribute.c  |   52 +
->  >  .../pkcs7/asn1c-gen/SetOfAuthenticatedAttribute.h  |   44 +
->  >  libkmod/pkcs7/asn1c-gen/SignedData.c               |  227 +++
->  >  libkmod/pkcs7/asn1c-gen/SignedData.h               |   81 +
->  >  libkmod/pkcs7/asn1c-gen/SignerIdentifier.c         |   65 +
->  >  libkmod/pkcs7/asn1c-gen/SignerIdentifier.h         |   50 +
->  >  libkmod/pkcs7/asn1c-gen/SignerInfo.c               |  371 ++++
->  >  libkmod/pkcs7/asn1c-gen/SignerInfo.h               |  107 ++
->  >  libkmod/pkcs7/asn1c-gen/SignerInfos.c              |  153 ++
->  >  libkmod/pkcs7/asn1c-gen/SignerInfos.h              |   68 +
->  >  libkmod/pkcs7/asn1c-gen/SubjectKeyIdentifier.c     |  109 ++
->  >  libkmod/pkcs7/asn1c-gen/SubjectKeyIdentifier.h     |   39 +
->  >  libkmod/pkcs7/asn1c-gen/UnauthenticatedAttribute.c |   69 +
->  >  libkmod/pkcs7/asn1c-gen/UnauthenticatedAttribute.h |   40 +
->  >  libkmod/pkcs7/asn1c-gen/Values.c                   |   52 +
->  >  libkmod/pkcs7/asn1c-gen/Values.h                   |   39 +
->  >  libkmod/pkcs7/asn1c-gen/asn_SEQUENCE_OF.c          |   41 +
->  >  libkmod/pkcs7/asn1c-gen/asn_SEQUENCE_OF.h          |   52 +
->  >  libkmod/pkcs7/asn1c-gen/asn_SET_OF.c               |   88 +
->  >  libkmod/pkcs7/asn1c-gen/asn_SET_OF.h               |   62 +
->  >  libkmod/pkcs7/asn1c-gen/asn_application.h          |   47 +
->  >  libkmod/pkcs7/asn1c-gen/asn_codecs.h               |  109 ++
->  >  libkmod/pkcs7/asn1c-gen/asn_codecs_prim.c          |  312 ++++
->  >  libkmod/pkcs7/asn1c-gen/asn_codecs_prim.h          |   53 +
->  >  libkmod/pkcs7/asn1c-gen/asn_internal.h             |  128 ++
->  >  libkmod/pkcs7/asn1c-gen/asn_system.h               |  137 ++
->  >  libkmod/pkcs7/asn1c-gen/ber_decoder.c              |  283 +++
->  >  libkmod/pkcs7/asn1c-gen/ber_decoder.h              |   64 +
->  >  libkmod/pkcs7/asn1c-gen/ber_tlv_length.c           |  178 ++
->  >  libkmod/pkcs7/asn1c-gen/ber_tlv_length.h           |   50 +
->  >  libkmod/pkcs7/asn1c-gen/ber_tlv_tag.c              |  144 ++
->  >  libkmod/pkcs7/asn1c-gen/ber_tlv_tag.h              |   60 +
->  >  libkmod/pkcs7/asn1c-gen/constr_CHOICE.c            | 1114 ++++++++++++
->  >  libkmod/pkcs7/asn1c-gen/constr_CHOICE.h            |   57 +
->  >  libkmod/pkcs7/asn1c-gen/constr_SEQUENCE.c          | 1425 +++++++++++++++
->  >  libkmod/pkcs7/asn1c-gen/constr_SEQUENCE.h          |   60 +
->  >  libkmod/pkcs7/asn1c-gen/constr_SEQUENCE_OF.c       |  208 +++
->  >  libkmod/pkcs7/asn1c-gen/constr_SEQUENCE_OF.h       |   33 +
->  >  libkmod/pkcs7/asn1c-gen/constr_SET_OF.c            |  954 +++++++++++
->  >  libkmod/pkcs7/asn1c-gen/constr_SET_OF.h            |   42 +
->  >  libkmod/pkcs7/asn1c-gen/constr_TYPE.c              |   77 +
->  >  libkmod/pkcs7/asn1c-gen/constr_TYPE.h              |  180 ++
->  >  libkmod/pkcs7/asn1c-gen/constraints.c              |   93 +
->  >  libkmod/pkcs7/asn1c-gen/constraints.h              |   63 +
->  >  libkmod/pkcs7/asn1c-gen/converter-sample.c         |  834 +++++++++
->  >  libkmod/pkcs7/asn1c-gen/der_encoder.c              |  201 +++
->  >  libkmod/pkcs7/asn1c-gen/der_encoder.h              |   68 +
->  >  libkmod/pkcs7/asn1c-gen/per_decoder.c              |   93 +
->  >  libkmod/pkcs7/asn1c-gen/per_decoder.h              |   56 +
->  >  libkmod/pkcs7/asn1c-gen/per_encoder.c              |  151 ++
->  >  libkmod/pkcs7/asn1c-gen/per_encoder.h              |   69 +
->  >  libkmod/pkcs7/asn1c-gen/per_opentype.c             |  378 ++++
->  >  libkmod/pkcs7/asn1c-gen/per_opentype.h             |   22 +
->  >  libkmod/pkcs7/asn1c-gen/per_support.c              |  483 ++++++
->  >  libkmod/pkcs7/asn1c-gen/per_support.h              |  135 ++
->  >  libkmod/pkcs7/asn1c-gen/xer_decoder.c              |  368 ++++
->  >  libkmod/pkcs7/asn1c-gen/xer_decoder.h              |  106 ++
->  >  libkmod/pkcs7/asn1c-gen/xer_encoder.c              |   67 +
->  >  libkmod/pkcs7/asn1c-gen/xer_encoder.h              |   59 +
->  >  libkmod/pkcs7/asn1c-gen/xer_support.c              |  227 +++
->  >  libkmod/pkcs7/asn1c-gen/xer_support.h              |   55 +
->  >  libkmod/pkcs7/pkcs7.asn1                           |  135 ++
->  >  libkmod/pkcs7/pkcs7_parser.c                       |  297 ++++
->  >  libkmod/pkcs7/pkcs7_parser.h                       |   42 +
->  >  125 files changed, 19228 insertions(+), 20 deletions(-)
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ANY.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ANY.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/AttributeValueAssertion.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/AttributeValueAssertion.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/AuthenticatedAttribute.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/AuthenticatedAttribute.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/BIT_STRING.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/BIT_STRING.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/CRLSequence.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/CRLSequence.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Certificate.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Certificate.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateList.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateList.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateRevocationLists.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateRevocationLists.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateSerialNumber.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateSerialNumber.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Certificates.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Certificates.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ContentInfo.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ContentInfo.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ContentType.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ContentType.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Data.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Data.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/DigestAlgorithmIdentifier.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/DigestAlgorithmIdentifier.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/DigestAlgorithmIdentifiers.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/DigestAlgorithmIdentifiers.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/DigestEncryptionAlgorithmIdentifier.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/DigestEncryptionAlgorithmIdentifier.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/EncryptedDigest.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/EncryptedDigest.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ExtendedCertificatesAndCertificates.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ExtendedCertificatesAndCertificates.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/INTEGER.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/INTEGER.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/IssuerAndSerialNumber.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/IssuerAndSerialNumber.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Makefile.am
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Makefile.am.sample
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Name.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Name.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/NativeEnumerated.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/NativeEnumerated.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/NativeInteger.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/NativeInteger.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/OBJECT_IDENTIFIER.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/OBJECT_IDENTIFIER.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/OCTET_STRING.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/OCTET_STRING.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/PKCS7ContentInfo.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/PKCS7ContentInfo.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/RelativeDistinguishedName.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/RelativeDistinguishedName.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SetOfAuthenticatedAttribute.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SetOfAuthenticatedAttribute.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignedData.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignedData.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerIdentifier.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerIdentifier.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerInfo.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerInfo.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerInfos.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerInfos.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SubjectKeyIdentifier.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/SubjectKeyIdentifier.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/UnauthenticatedAttribute.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/UnauthenticatedAttribute.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Values.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/Values.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_SEQUENCE_OF.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_SEQUENCE_OF.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_SET_OF.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_SET_OF.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_application.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_codecs.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_codecs_prim.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_codecs_prim.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_internal.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_system.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_decoder.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_decoder.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_tlv_length.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_tlv_length.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_tlv_tag.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_tlv_tag.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_CHOICE.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_CHOICE.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SEQUENCE.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SEQUENCE.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SEQUENCE_OF.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SEQUENCE_OF.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SET_OF.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SET_OF.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_TYPE.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_TYPE.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constraints.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/constraints.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/converter-sample.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/der_encoder.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/der_encoder.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_decoder.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_decoder.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_encoder.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_encoder.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_opentype.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_opentype.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_support.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_support.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_decoder.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_decoder.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_encoder.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_encoder.h
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_support.c
->  >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_support.h
->  >  create mode 100644 libkmod/pkcs7/pkcs7.asn1
->  >  create mode 100644 libkmod/pkcs7/pkcs7_parser.c
->  >  create mode 100644 libkmod/pkcs7/pkcs7_parser.h  
-> 
->  > -- 
->  > 2.16.2  
-> 
->  > --
->  > To unsubscribe from this list: send the line "unsubscribe linux-modules" in
->  > the body of a message to majordomo@vger.kernel.org
->  > More majordomo info at  http://vger.kernel.org/majordomo-info.html  
-> 
+ > The diverging is caused by lack of support upstream.
 
+I understand.
+
+ > Thanks
+
+ > Michal
+
+ >> 
+ >> >>>>> On Thu, 08 Mar 2018 06:58:08 -0700, Yauheni Kaliuta  wrote:  
+ >> 
+ >> > Draft implementation of possible PKCS7 signature parser for
+ >> > modinfo.  I'm pretty bad in autotools, so would be fine if
+ >> > somebody integrate it inside properly.  
+ >> 
+ >> > What bothers me is that asn1c files are generated under BSD
+ >> > license.  
+ >> 
+ >> > Yauheni Kaliuta (2):
+ >> >   libkmod-signature: implement pkcs7 parsing with asn1c compiler
+ >> >   libkmod, pkcs7: commit asn1c autogenerated files  
+ >> 
+ >> >  Makefile.am                                        |   22 +-
+ >> >  configure.ac                                       |    1 +
+ >> >  libkmod/libkmod-internal.h                         |    3 +
+ >> >  libkmod/libkmod-module.c                           |    3 +
+ >> >  libkmod/libkmod-signature.c                        |  105 +-
+ >> >  libkmod/pkcs7/asn1c-gen/ANY.c                      |  158 ++
+ >> >  libkmod/pkcs7/asn1c-gen/ANY.h                      |   48 +
+ >> >  libkmod/pkcs7/asn1c-gen/AttributeValueAssertion.c  |   68 +
+ >> >  libkmod/pkcs7/asn1c-gen/AttributeValueAssertion.h  |   40 +
+ >> >  libkmod/pkcs7/asn1c-gen/AuthenticatedAttribute.c   |   69 +
+ >> >  libkmod/pkcs7/asn1c-gen/AuthenticatedAttribute.h   |   40 +
+ >> >  libkmod/pkcs7/asn1c-gen/BIT_STRING.c               |  189 ++
+ >> >  libkmod/pkcs7/asn1c-gen/BIT_STRING.h               |   33 +
+ >> >  libkmod/pkcs7/asn1c-gen/CRLSequence.c              |   52 +
+ >> >  libkmod/pkcs7/asn1c-gen/CRLSequence.h              |   44 +
+ >> >  libkmod/pkcs7/asn1c-gen/Certificate.c              |  104 ++
+ >> >  libkmod/pkcs7/asn1c-gen/Certificate.h              |   39 +
+ >> >  libkmod/pkcs7/asn1c-gen/CertificateList.c          |   52 +
+ >> >  libkmod/pkcs7/asn1c-gen/CertificateList.h          |   39 +
+ >> >  .../pkcs7/asn1c-gen/CertificateRevocationLists.c   |   52 +
+ >> >  .../pkcs7/asn1c-gen/CertificateRevocationLists.h   |   44 +
+ >> >  libkmod/pkcs7/asn1c-gen/CertificateSerialNumber.c  |  109 ++
+ >> >  libkmod/pkcs7/asn1c-gen/CertificateSerialNumber.h  |   39 +
+ >> >  libkmod/pkcs7/asn1c-gen/Certificates.c             |   52 +
+ >> >  libkmod/pkcs7/asn1c-gen/Certificates.h             |   39 +
+ >> >  libkmod/pkcs7/asn1c-gen/ContentInfo.c              |   69 +
+ >> >  libkmod/pkcs7/asn1c-gen/ContentInfo.h              |   40 +
+ >> >  libkmod/pkcs7/asn1c-gen/ContentType.c              |  109 ++
+ >> >  libkmod/pkcs7/asn1c-gen/ContentType.h              |   39 +
+ >> >  libkmod/pkcs7/asn1c-gen/Data.c                     |  104 ++
+ >> >  libkmod/pkcs7/asn1c-gen/Data.h                     |   39 +
+ >> >  .../pkcs7/asn1c-gen/DigestAlgorithmIdentifier.c    |   68 +
+ >> >  .../pkcs7/asn1c-gen/DigestAlgorithmIdentifier.h    |   40 +
+ >> >  .../pkcs7/asn1c-gen/DigestAlgorithmIdentifiers.c   |  153 ++
+ >> >  .../pkcs7/asn1c-gen/DigestAlgorithmIdentifiers.h   |   68 +
+ >> >  .../DigestEncryptionAlgorithmIdentifier.c          |   68 +
+ >> >  .../DigestEncryptionAlgorithmIdentifier.h          |   40 +
+ >> >  libkmod/pkcs7/asn1c-gen/EncryptedDigest.c          |  109 ++
+ >> >  libkmod/pkcs7/asn1c-gen/EncryptedDigest.h          |   39 +
+ >> >  .../ExtendedCertificatesAndCertificates.c          |   52 +
+ >> >  .../ExtendedCertificatesAndCertificates.h          |   39 +
+ >> >  libkmod/pkcs7/asn1c-gen/INTEGER.c                  | 1025 +++++++++++
+ >> >  libkmod/pkcs7/asn1c-gen/INTEGER.h                  |   82 +
+ >> >  libkmod/pkcs7/asn1c-gen/IssuerAndSerialNumber.c    |   65 +
+ >> >  libkmod/pkcs7/asn1c-gen/IssuerAndSerialNumber.h    |   39 +
+ >> >  libkmod/pkcs7/asn1c-gen/Makefile.am                |  131 ++
+ >> >  libkmod/pkcs7/asn1c-gen/Makefile.am.sample         |  150 ++
+ >> >  libkmod/pkcs7/asn1c-gen/Name.c                     |   52 +
+ >> >  libkmod/pkcs7/asn1c-gen/Name.h                     |   44 +
+ >> >  libkmod/pkcs7/asn1c-gen/NativeEnumerated.c         |  207 +++
+ >> >  libkmod/pkcs7/asn1c-gen/NativeEnumerated.h         |   32 +
+ >> >  libkmod/pkcs7/asn1c-gen/NativeInteger.c            |  332 ++++
+ >> >  libkmod/pkcs7/asn1c-gen/NativeInteger.h            |   37 +
+ >> >  libkmod/pkcs7/asn1c-gen/OBJECT_IDENTIFIER.c        |  764 +++++++++
+ >> >  libkmod/pkcs7/asn1c-gen/OBJECT_IDENTIFIER.h        |  139 ++
+ >> >  libkmod/pkcs7/asn1c-gen/OCTET_STRING.c             | 1807 ++++++++++++++++++++
+ >> >  libkmod/pkcs7/asn1c-gen/OCTET_STRING.h             |   86 +
+ >> >  libkmod/pkcs7/asn1c-gen/PKCS7ContentInfo.c         |   69 +
+ >> >  libkmod/pkcs7/asn1c-gen/PKCS7ContentInfo.h         |   45 +
+ >> >  .../pkcs7/asn1c-gen/RelativeDistinguishedName.c    |   52 +
+ >> >  .../pkcs7/asn1c-gen/RelativeDistinguishedName.h    |   44 +
+ >> >  .../pkcs7/asn1c-gen/SetOfAuthenticatedAttribute.c  |   52 +
+ >> >  .../pkcs7/asn1c-gen/SetOfAuthenticatedAttribute.h  |   44 +
+ >> >  libkmod/pkcs7/asn1c-gen/SignedData.c               |  227 +++
+ >> >  libkmod/pkcs7/asn1c-gen/SignedData.h               |   81 +
+ >> >  libkmod/pkcs7/asn1c-gen/SignerIdentifier.c         |   65 +
+ >> >  libkmod/pkcs7/asn1c-gen/SignerIdentifier.h         |   50 +
+ >> >  libkmod/pkcs7/asn1c-gen/SignerInfo.c               |  371 ++++
+ >> >  libkmod/pkcs7/asn1c-gen/SignerInfo.h               |  107 ++
+ >> >  libkmod/pkcs7/asn1c-gen/SignerInfos.c              |  153 ++
+ >> >  libkmod/pkcs7/asn1c-gen/SignerInfos.h              |   68 +
+ >> >  libkmod/pkcs7/asn1c-gen/SubjectKeyIdentifier.c     |  109 ++
+ >> >  libkmod/pkcs7/asn1c-gen/SubjectKeyIdentifier.h     |   39 +
+ >> >  libkmod/pkcs7/asn1c-gen/UnauthenticatedAttribute.c |   69 +
+ >> >  libkmod/pkcs7/asn1c-gen/UnauthenticatedAttribute.h |   40 +
+ >> >  libkmod/pkcs7/asn1c-gen/Values.c                   |   52 +
+ >> >  libkmod/pkcs7/asn1c-gen/Values.h                   |   39 +
+ >> >  libkmod/pkcs7/asn1c-gen/asn_SEQUENCE_OF.c          |   41 +
+ >> >  libkmod/pkcs7/asn1c-gen/asn_SEQUENCE_OF.h          |   52 +
+ >> >  libkmod/pkcs7/asn1c-gen/asn_SET_OF.c               |   88 +
+ >> >  libkmod/pkcs7/asn1c-gen/asn_SET_OF.h               |   62 +
+ >> >  libkmod/pkcs7/asn1c-gen/asn_application.h          |   47 +
+ >> >  libkmod/pkcs7/asn1c-gen/asn_codecs.h               |  109 ++
+ >> >  libkmod/pkcs7/asn1c-gen/asn_codecs_prim.c          |  312 ++++
+ >> >  libkmod/pkcs7/asn1c-gen/asn_codecs_prim.h          |   53 +
+ >> >  libkmod/pkcs7/asn1c-gen/asn_internal.h             |  128 ++
+ >> >  libkmod/pkcs7/asn1c-gen/asn_system.h               |  137 ++
+ >> >  libkmod/pkcs7/asn1c-gen/ber_decoder.c              |  283 +++
+ >> >  libkmod/pkcs7/asn1c-gen/ber_decoder.h              |   64 +
+ >> >  libkmod/pkcs7/asn1c-gen/ber_tlv_length.c           |  178 ++
+ >> >  libkmod/pkcs7/asn1c-gen/ber_tlv_length.h           |   50 +
+ >> >  libkmod/pkcs7/asn1c-gen/ber_tlv_tag.c              |  144 ++
+ >> >  libkmod/pkcs7/asn1c-gen/ber_tlv_tag.h              |   60 +
+ >> >  libkmod/pkcs7/asn1c-gen/constr_CHOICE.c            | 1114 ++++++++++++
+ >> >  libkmod/pkcs7/asn1c-gen/constr_CHOICE.h            |   57 +
+ >> >  libkmod/pkcs7/asn1c-gen/constr_SEQUENCE.c          | 1425 +++++++++++++++
+ >> >  libkmod/pkcs7/asn1c-gen/constr_SEQUENCE.h          |   60 +
+ >> >  libkmod/pkcs7/asn1c-gen/constr_SEQUENCE_OF.c       |  208 +++
+ >> >  libkmod/pkcs7/asn1c-gen/constr_SEQUENCE_OF.h       |   33 +
+ >> >  libkmod/pkcs7/asn1c-gen/constr_SET_OF.c            |  954 +++++++++++
+ >> >  libkmod/pkcs7/asn1c-gen/constr_SET_OF.h            |   42 +
+ >> >  libkmod/pkcs7/asn1c-gen/constr_TYPE.c              |   77 +
+ >> >  libkmod/pkcs7/asn1c-gen/constr_TYPE.h              |  180 ++
+ >> >  libkmod/pkcs7/asn1c-gen/constraints.c              |   93 +
+ >> >  libkmod/pkcs7/asn1c-gen/constraints.h              |   63 +
+ >> >  libkmod/pkcs7/asn1c-gen/converter-sample.c         |  834 +++++++++
+ >> >  libkmod/pkcs7/asn1c-gen/der_encoder.c              |  201 +++
+ >> >  libkmod/pkcs7/asn1c-gen/der_encoder.h              |   68 +
+ >> >  libkmod/pkcs7/asn1c-gen/per_decoder.c              |   93 +
+ >> >  libkmod/pkcs7/asn1c-gen/per_decoder.h              |   56 +
+ >> >  libkmod/pkcs7/asn1c-gen/per_encoder.c              |  151 ++
+ >> >  libkmod/pkcs7/asn1c-gen/per_encoder.h              |   69 +
+ >> >  libkmod/pkcs7/asn1c-gen/per_opentype.c             |  378 ++++
+ >> >  libkmod/pkcs7/asn1c-gen/per_opentype.h             |   22 +
+ >> >  libkmod/pkcs7/asn1c-gen/per_support.c              |  483 ++++++
+ >> >  libkmod/pkcs7/asn1c-gen/per_support.h              |  135 ++
+ >> >  libkmod/pkcs7/asn1c-gen/xer_decoder.c              |  368 ++++
+ >> >  libkmod/pkcs7/asn1c-gen/xer_decoder.h              |  106 ++
+ >> >  libkmod/pkcs7/asn1c-gen/xer_encoder.c              |   67 +
+ >> >  libkmod/pkcs7/asn1c-gen/xer_encoder.h              |   59 +
+ >> >  libkmod/pkcs7/asn1c-gen/xer_support.c              |  227 +++
+ >> >  libkmod/pkcs7/asn1c-gen/xer_support.h              |   55 +
+ >> >  libkmod/pkcs7/pkcs7.asn1                           |  135 ++
+ >> >  libkmod/pkcs7/pkcs7_parser.c                       |  297 ++++
+ >> >  libkmod/pkcs7/pkcs7_parser.h                       |   42 +
+ >> >  125 files changed, 19228 insertions(+), 20 deletions(-)
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ANY.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ANY.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/AttributeValueAssertion.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/AttributeValueAssertion.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/AuthenticatedAttribute.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/AuthenticatedAttribute.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/BIT_STRING.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/BIT_STRING.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/CRLSequence.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/CRLSequence.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Certificate.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Certificate.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateList.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateList.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateRevocationLists.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateRevocationLists.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateSerialNumber.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/CertificateSerialNumber.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Certificates.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Certificates.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ContentInfo.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ContentInfo.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ContentType.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ContentType.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Data.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Data.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/DigestAlgorithmIdentifier.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/DigestAlgorithmIdentifier.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/DigestAlgorithmIdentifiers.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/DigestAlgorithmIdentifiers.h
+ >> >  create mode 100644
+ >> > libkmod/pkcs7/asn1c-gen/DigestEncryptionAlgorithmIdentifier.c
+ >> >  create mode 100644
+ >> > libkmod/pkcs7/asn1c-gen/DigestEncryptionAlgorithmIdentifier.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/EncryptedDigest.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/EncryptedDigest.h
+ >> >  create mode 100644
+ >> > libkmod/pkcs7/asn1c-gen/ExtendedCertificatesAndCertificates.c
+ >> >  create mode 100644
+ >> > libkmod/pkcs7/asn1c-gen/ExtendedCertificatesAndCertificates.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/INTEGER.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/INTEGER.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/IssuerAndSerialNumber.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/IssuerAndSerialNumber.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Makefile.am
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Makefile.am.sample
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Name.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Name.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/NativeEnumerated.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/NativeEnumerated.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/NativeInteger.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/NativeInteger.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/OBJECT_IDENTIFIER.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/OBJECT_IDENTIFIER.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/OCTET_STRING.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/OCTET_STRING.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/PKCS7ContentInfo.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/PKCS7ContentInfo.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/RelativeDistinguishedName.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/RelativeDistinguishedName.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SetOfAuthenticatedAttribute.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SetOfAuthenticatedAttribute.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignedData.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignedData.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerIdentifier.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerIdentifier.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerInfo.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerInfo.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerInfos.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SignerInfos.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SubjectKeyIdentifier.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/SubjectKeyIdentifier.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/UnauthenticatedAttribute.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/UnauthenticatedAttribute.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Values.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/Values.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_SEQUENCE_OF.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_SEQUENCE_OF.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_SET_OF.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_SET_OF.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_application.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_codecs.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_codecs_prim.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_codecs_prim.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_internal.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/asn_system.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_decoder.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_decoder.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_tlv_length.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_tlv_length.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_tlv_tag.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/ber_tlv_tag.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_CHOICE.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_CHOICE.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SEQUENCE.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SEQUENCE.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SEQUENCE_OF.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SEQUENCE_OF.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SET_OF.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_SET_OF.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_TYPE.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constr_TYPE.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constraints.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/constraints.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/converter-sample.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/der_encoder.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/der_encoder.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_decoder.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_decoder.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_encoder.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_encoder.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_opentype.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_opentype.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_support.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/per_support.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_decoder.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_decoder.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_encoder.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_encoder.h
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_support.c
+ >> >  create mode 100644 libkmod/pkcs7/asn1c-gen/xer_support.h
+ >> >  create mode 100644 libkmod/pkcs7/pkcs7.asn1
+ >> >  create mode 100644 libkmod/pkcs7/pkcs7_parser.c
+ >> >  create mode 100644 libkmod/pkcs7/pkcs7_parser.h  
+ >> 
+ >> > -- 
+ >> > 2.16.2  
+ >> 
+ >> > --
+ >> > To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+ >> > the body of a message to majordomo@vger.kernel.org
+ >> > More majordomo info at  http://vger.kernel.org/majordomo-info.html  
+ >> 
+
+
+-- 
+WBR,
+Yauheni Kaliuta
