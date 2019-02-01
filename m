@@ -2,73 +2,165 @@ Return-Path: <SRS0=/hZG=QI=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D886FC282D8
-	for <linux-modules@archiver.kernel.org>; Fri,  1 Feb 2019 20:20:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0479C282DA
+	for <linux-modules@archiver.kernel.org>; Fri,  1 Feb 2019 20:20:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A8DC420863
-	for <linux-modules@archiver.kernel.org>; Fri,  1 Feb 2019 20:20:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7963218F0
+	for <linux-modules@archiver.kernel.org>; Fri,  1 Feb 2019 20:20:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729979AbfBAUUC (ORCPT
+        id S1730109AbfBAUUI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 1 Feb 2019 15:20:02 -0500
-Received: from mx1.redhat.com ([209.132.183.28]:54022 "EHLO mx1.redhat.com"
+        Fri, 1 Feb 2019 15:20:08 -0500
+Received: from mx1.redhat.com ([209.132.183.28]:39428 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728326AbfBAUUC (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 1 Feb 2019 15:20:02 -0500
+        id S1728326AbfBAUUI (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Fri, 1 Feb 2019 15:20:08 -0500
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 6445F42BC0;
-        Fri,  1 Feb 2019 20:20:02 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id CE93229A75;
+        Fri,  1 Feb 2019 20:20:07 +0000 (UTC)
 Received: from astarta.redhat.com (ovpn-117-34.ams2.redhat.com [10.36.117.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4F8F05C72B;
-        Fri,  1 Feb 2019 20:20:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B51A15C6DC;
+        Fri,  1 Feb 2019 20:20:02 +0000 (UTC)
 From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 To:     linux-modules@vger.kernel.org
 Cc:     ykaliuta@redhat.com, Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH kmod v3 0/2] read pkcs7 signature with openssl
-Date:   Fri,  1 Feb 2019 22:20:00 +0200
-Message-Id: <20190201202002.5508-1-yauheni.kaliuta@redhat.com>
+Subject: [PATCH kmod v3 1/2] testsuite: add modinfo pkcs7 signature test
+Date:   Fri,  1 Feb 2019 22:20:01 +0200
+Message-Id: <20190201202002.5508-2-yauheni.kaliuta@redhat.com>
+In-Reply-To: <20190201202002.5508-1-yauheni.kaliuta@redhat.com>
+References: <20190201202002.5508-1-yauheni.kaliuta@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.30]); Fri, 01 Feb 2019 20:20:02 +0000 (UTC)
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Fri, 01 Feb 2019 20:20:07 +0000 (UTC)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The same as before but with the test.
+Use the same approach to generate the signed module, like in the
+old signature test: just append the pregenerated binary signature
+to the module (the signature check will fail).
 
-I found, that using _cleanup_() is more inconvenient, since it will
-require wrappers for the types as for _cleanup_free().
+In case of need of generating correct signature, from the linux
+kernel makefiles (certs/Makefile) it could be like:
 
-Changelog:
+$ openssl req -new -nodes -utf8  -sha256 -days 36500 -batch -x509
+-config  ./x509.genkey -outform PEM -out signing_key.pem -keyout signing_key.pem
+$ /lib/modules/$(uname -r)/build/scripts/extract-cert signing_key.pem signing_key.x509
+$ /lib/modules/$(uname -r)/build/scripts/sign-file sha256 signing_key.pem signing_key.x509 module.ko
 
-v1->v2 no changes, just non-rfc
-v2->v3 test added
-
-Yauheni Kaliuta (2):
-  testsuite: add modinfo pkcs7 signature test
-  libkmod-signature: implement pkcs7 parsing with openssl
-
- Makefile.am                                   |   4 +-
- configure.ac                                  |  11 +
- libkmod/libkmod-internal.h                    |   3 +
- libkmod/libkmod-module.c                      |   3 +
- libkmod/libkmod-signature.c                   | 197 +++++++++++++++++-
- testsuite/module-playground/dummy.pkcs7       | Bin 0 -> 721 bytes
- testsuite/populate-modules.sh                 |   9 +
- .../test-modinfo/correct-sig_hashalgo.txt     |   2 +-
- .../test-modinfo/correct-sig_key.txt          |   2 +-
- .../test-modinfo/correct-signer.txt           |   2 +-
- testsuite/test-modinfo.c                      |   3 +-
- 11 files changed, 227 insertions(+), 9 deletions(-)
+Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+---
+ testsuite/module-playground/dummy.pkcs7           | Bin 0 -> 721 bytes
+ testsuite/populate-modules.sh                     |   9 +++++++++
+ .../test-modinfo/correct-sig_hashalgo.txt         |   2 +-
+ .../test-modinfo/correct-sig_key.txt              |   2 +-
+ .../test-modinfo/correct-signer.txt               |   2 +-
+ testsuite/test-modinfo.c                          |   3 ++-
+ 6 files changed, 14 insertions(+), 4 deletions(-)
  create mode 100644 testsuite/module-playground/dummy.pkcs7
 
+diff --git a/testsuite/module-playground/dummy.pkcs7 b/testsuite/module-playground/dummy.pkcs7
+new file mode 100644
+index 0000000000000000000000000000000000000000..bcdb902919dfb61b9be36af8c228dd65f1fddd93
+GIT binary patch
+literal 721
+zcmXqLVp__^snzDu_MMlJooPW6(=>x7rb$eUjE1}h+-#f)Z61uN%q&cdAP!6!qhS+M
+zK2TXUP?>?7fu5m`ffgHcC<`->vQuehPKrWFW^SrNVrfZ!dTL&3QDRAIib8g3QC?~e
+zkg8-7QM+~cH9xOZ*rFSogg;ylc9-S#$UwD>7j79NBP#<-6B9$ihB~n?-%sDqVA2Y`
+zW8-08emS}G@Xd3d7Rs=x&t=w4ymn`^6#rJnBG!+AXA(cnvP#)LN&bV{>idQDlKcKt
+z^$LB8&AXKTYLX>)nt$#xqY9o);$O5sylwXhXqi0yyu^pRNuR$h-oM2(BsEUH`hl)l
+z;Z`s1GU3_H_5Z_ebs9PSU)`}c%&kMKUDNG>+S5MHMZf25*t(9R&~HJ<!&l2bv1Z2f
+zde5Ag!uR~-UEzOPZ)Rv~g-tzOu{r$Z{zx9<FOyzy8hkb83cfJ)BA=a*z|OT?rEXF2
+zGAFn_QyKrP_&MQw=f)D_i3ZmXw|)NW@O6@K<?GO$?)DxV)K&;4EmB;Y|NURhuea|X
+z)NEx@j(p9b*ZEfb`-JNYtEcL)FkZQ}ZsMFYiPRZic(;FgByBm<OuOltTBYsDipQQW
+zT8niKxk+al{r}83{eYK?k;t#qy<hfP@8O-dPpRFE=NglO@xPC<DOIPXm+#%D8SY$i
+z#=!IDNqN3ceu;O*PHODayOXt$SFmF1gC#i!{c@PnjyzsGUreHV)>5Aw1(7*B4R<EL
+zfBMJ4MVIlV*Q~n>)z1s7aq&0El^lDUd{vLPdZLtI?8#K7Bf`Qf1E<*CeImSh>G`Wq
+z4)fp1E&FhKeoM=x^^C!Puf^ARFHu#pX89yCby?%>&AyfuA6=dl#4q1_r;71;+{RC$
+vlOkFt^2)AdU|?c^0H&37zWFJoIjIW8ndy0nC8b5cv{q1%nwOHAQpW`VoP;y#
+
+literal 0
+HcmV?d00001
+
+diff --git a/testsuite/populate-modules.sh b/testsuite/populate-modules.sh
+index ba68a697ce61..5140f7aadf43 100755
+--- a/testsuite/populate-modules.sh
++++ b/testsuite/populate-modules.sh
+@@ -58,6 +58,7 @@ map=(
+     ["test-modinfo/mod-simple-sparc64.ko"]="mod-simple-sparc64.ko"
+     ["test-modinfo/mod-simple-sha1.ko"]="mod-simple.ko"
+     ["test-modinfo/mod-simple-sha256.ko"]="mod-simple.ko"
++    ["test-modinfo/mod-simple-pkcs7.ko"]="mod-simple.ko"
+     ["test-modinfo/external/lib/modules/external/mod-simple.ko"]="mod-simple.ko"
+     ["test-tools/insert/lib/modules/4.4.4/kernel/"]="mod-simple.ko"
+     ["test-tools/remove/lib/modules/4.4.4/kernel/"]="mod-simple.ko"
+@@ -77,6 +78,10 @@ attach_sha1_array=(
+     "test-modinfo/mod-simple-sha1.ko"
+     )
+ 
++attach_pkcs7_array=(
++    "test-modinfo/mod-simple-pkcs7.ko"
++    )
++
+ for k in ${!map[@]}; do
+     dst=${ROOTFS}/$k
+     src=${MODULE_PLAYGROUND}/${map[$k]}
+@@ -103,3 +108,7 @@ done
+ for m in "${attach_sha256_array[@]}"; do
+     cat ${MODULE_PLAYGROUND}/dummy.sha256 >> ${ROOTFS}/$m
+ done
++
++for m in "${attach_pkcs7_array[@]}"; do
++    cat ${MODULE_PLAYGROUND}/dummy.pkcs7 >> ${ROOTFS}/$m
++done
+diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt b/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt
+index 6d0223efe93e..f97c4faf6ab2 100644
+--- a/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt
++++ b/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt
+@@ -1,3 +1,3 @@
+ sha1
+ sha256
+-
++sha256
+diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt b/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt
+index 7dc4c6aa1373..25a75a8cb68f 100644
+--- a/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt
++++ b/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt
+@@ -1,3 +1,3 @@
+ E3:C8:FC:A7:3F:B3:1D:DE:84:81:EF:38:E3:4C:DE:4B:0C:FD:1B:F9
+ E3:C8:FC:A7:3F:B3:1D:DE:84:81:EF:38:E3:4C:DE:4B:0C:FD:1B:F9
+-
++26:DA:C3:EB:0F:0D:1A:56:A2:D8:B2:13:F0:D7:53:47:1D:0D:48:68
+diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt b/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt
+index afe83df76df1..2b979f98ef64 100644
+--- a/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt
++++ b/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt
+@@ -1,3 +1,3 @@
+ Magrathea: Glacier signing key
+ Magrathea: Glacier signing key
+-
++Build time autogenerated kernel key
+diff --git a/testsuite/test-modinfo.c b/testsuite/test-modinfo.c
+index 8fdfe35ef4e6..504d9dd24b96 100644
+--- a/testsuite/test-modinfo.c
++++ b/testsuite/test-modinfo.c
+@@ -56,7 +56,8 @@ DEFINE_TEST(test_modinfo_##_field, \
+ #define DEFINE_MODINFO_SIGN_TEST(_field) \
+ 	DEFINE_MODINFO_TEST(_field, \
+ 			    "/mod-simple-sha1.ko", \
+-			    "/mod-simple-sha256.ko")
++			    "/mod-simple-sha256.ko",	\
++			    "/mod-simple-pkcs7.ko")
+ 
+ DEFINE_MODINFO_GENERIC_TEST(filename);
+ DEFINE_MODINFO_GENERIC_TEST(author);
 -- 
 2.20.1
 
