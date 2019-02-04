@@ -3,21 +3,21 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E59C4C282C4
-	for <linux-modules@archiver.kernel.org>; Mon,  4 Feb 2019 22:32:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34488C282CC
+	for <linux-modules@archiver.kernel.org>; Mon,  4 Feb 2019 22:32:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BC3AE2081B
-	for <linux-modules@archiver.kernel.org>; Mon,  4 Feb 2019 22:32:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 061372081B
+	for <linux-modules@archiver.kernel.org>; Mon,  4 Feb 2019 22:32:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbfBDWc4 (ORCPT
+        id S1725900AbfBDWc4 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
         Mon, 4 Feb 2019 17:32:56 -0500
 Received: from mga03.intel.com ([134.134.136.65]:13773 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725900AbfBDWc4 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        id S1726083AbfBDWc4 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
         Mon, 4 Feb 2019 17:32:56 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
@@ -25,42 +25,135 @@ Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Feb 2019 14:32:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.56,560,1539673200"; 
-   d="scan'208";a="297254668"
+   d="scan'208";a="297254667"
 Received: from ldmartin-desk.jf.intel.com ([10.7.200.78])
   by orsmga005.jf.intel.com with ESMTP; 04 Feb 2019 14:32:55 -0800
 From:   Lucas De Marchi <lucas.demarchi@intel.com>
 To:     linux-modules@vger.kernel.org
 Cc:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Subject: [PATCH 2/2] build: enable openssl by default
-Date:   Mon,  4 Feb 2019 14:32:49 -0800
-Message-Id: <20190204223249.27531-2-lucas.demarchi@intel.com>
+Subject: [PATCH 1/2] testsuite: fix modinfo test without openssl
+Date:   Mon,  4 Feb 2019 14:32:48 -0800
+Message-Id: <20190204223249.27531-1-lucas.demarchi@intel.com>
 X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20190204223249.27531-1-lucas.demarchi@intel.com>
-References: <20190204223249.27531-1-lucas.demarchi@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Like with other features, let's enable it for developers.
 ---
- autogen.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../correct-sig_hashalgo-openssl.txt             |  3 +++
+ .../test-modinfo/correct-sig_hashalgo.txt        |  3 ++-
+ .../test-modinfo/correct-sig_key-openssl.txt     |  3 +++
+ .../test-modinfo/correct-sig_key.txt             |  2 +-
+ .../test-modinfo/correct-signer-openssl.txt      |  3 +++
+ .../test-modinfo/correct-signer.txt              |  2 +-
+ testsuite/test-modinfo.c                         | 16 ++++++++++++----
+ 7 files changed, 25 insertions(+), 7 deletions(-)
+ create mode 100644 testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo-openssl.txt
+ create mode 100644 testsuite/rootfs-pristine/test-modinfo/correct-sig_key-openssl.txt
+ create mode 100644 testsuite/rootfs-pristine/test-modinfo/correct-signer-openssl.txt
 
-diff --git a/autogen.sh b/autogen.sh
-index e003f78..67b119f 100755
---- a/autogen.sh
-+++ b/autogen.sh
-@@ -32,7 +32,7 @@ fi
+diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo-openssl.txt b/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo-openssl.txt
+new file mode 100644
+index 0000000..f97c4fa
+--- /dev/null
++++ b/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo-openssl.txt
+@@ -0,0 +1,3 @@
++sha1
++sha256
++sha256
+diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt b/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt
+index f97c4fa..23cb933 100644
+--- a/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt
++++ b/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt
+@@ -1,3 +1,4 @@
+ sha1
+ sha256
+-sha256
++unknown
++
+diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-sig_key-openssl.txt b/testsuite/rootfs-pristine/test-modinfo/correct-sig_key-openssl.txt
+new file mode 100644
+index 0000000..25a75a8
+--- /dev/null
++++ b/testsuite/rootfs-pristine/test-modinfo/correct-sig_key-openssl.txt
+@@ -0,0 +1,3 @@
++E3:C8:FC:A7:3F:B3:1D:DE:84:81:EF:38:E3:4C:DE:4B:0C:FD:1B:F9
++E3:C8:FC:A7:3F:B3:1D:DE:84:81:EF:38:E3:4C:DE:4B:0C:FD:1B:F9
++26:DA:C3:EB:0F:0D:1A:56:A2:D8:B2:13:F0:D7:53:47:1D:0D:48:68
+diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt b/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt
+index 25a75a8..7dc4c6a 100644
+--- a/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt
++++ b/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt
+@@ -1,3 +1,3 @@
+ E3:C8:FC:A7:3F:B3:1D:DE:84:81:EF:38:E3:4C:DE:4B:0C:FD:1B:F9
+ E3:C8:FC:A7:3F:B3:1D:DE:84:81:EF:38:E3:4C:DE:4B:0C:FD:1B:F9
+-26:DA:C3:EB:0F:0D:1A:56:A2:D8:B2:13:F0:D7:53:47:1D:0D:48:68
++
+diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-signer-openssl.txt b/testsuite/rootfs-pristine/test-modinfo/correct-signer-openssl.txt
+new file mode 100644
+index 0000000..2b979f9
+--- /dev/null
++++ b/testsuite/rootfs-pristine/test-modinfo/correct-signer-openssl.txt
+@@ -0,0 +1,3 @@
++Magrathea: Glacier signing key
++Magrathea: Glacier signing key
++Build time autogenerated kernel key
+diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt b/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt
+index 2b979f9..afe83df 100644
+--- a/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt
++++ b/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt
+@@ -1,3 +1,3 @@
+ Magrathea: Glacier signing key
+ Magrathea: Glacier signing key
+-Build time autogenerated kernel key
++
+diff --git a/testsuite/test-modinfo.c b/testsuite/test-modinfo.c
+index 504d9dd..373dc95 100644
+--- a/testsuite/test-modinfo.c
++++ b/testsuite/test-modinfo.c
+@@ -27,7 +27,7 @@
  
- cd $oldpwd
+ static const char *progname = ABS_TOP_BUILDDIR "/tools/modinfo";
  
--hackargs="--enable-debug --enable-python --with-xz --with-zlib"
-+hackargs="--enable-debug --enable-python --with-xz --with-zlib --with-openssl"
+-#define DEFINE_MODINFO_TEST(_field, ...) \
++#define DEFINE_MODINFO_TEST(_field, _flavor, ...) \
+ static noreturn int test_modinfo_##_field(const struct test *t) \
+ { \
+ 	const char *const args[] = { \
+@@ -44,20 +44,28 @@ DEFINE_TEST(test_modinfo_##_field, \
+ 		[TC_ROOTFS] = TESTSUITE_ROOTFS "test-modinfo/", \
+ 	}, \
+ 	.output = { \
+-		.out = TESTSUITE_ROOTFS "test-modinfo/correct-" #_field ".txt", \
++		.out = TESTSUITE_ROOTFS "test-modinfo/correct-" #_field #_flavor ".txt", \
+ 	})
  
- if [ "x$1" = "xc" ]; then
-         shift
+ #define DEFINE_MODINFO_GENERIC_TEST(_field) \
+-	DEFINE_MODINFO_TEST(_field, \
++	DEFINE_MODINFO_TEST(_field, , \
+ 			    "/mod-simple-i386.ko", \
+ 			    "/mod-simple-x86_64.ko", \
+ 			    "/mod-simple-sparc64.ko")
+ 
++#ifdef ENABLE_OPENSSL
+ #define DEFINE_MODINFO_SIGN_TEST(_field) \
+-	DEFINE_MODINFO_TEST(_field, \
++	DEFINE_MODINFO_TEST(_field, -openssl, \
+ 			    "/mod-simple-sha1.ko", \
+ 			    "/mod-simple-sha256.ko",	\
+ 			    "/mod-simple-pkcs7.ko")
++#else
++#define DEFINE_MODINFO_SIGN_TEST(_field) \
++	DEFINE_MODINFO_TEST(_field, , \
++			    "/mod-simple-sha1.ko", \
++			    "/mod-simple-sha256.ko",	\
++			    "/mod-simple-pkcs7.ko")
++#endif
+ 
+ DEFINE_MODINFO_GENERIC_TEST(filename);
+ DEFINE_MODINFO_GENERIC_TEST(author);
 -- 
 2.20.0
 
