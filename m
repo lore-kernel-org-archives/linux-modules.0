@@ -2,209 +2,109 @@ Return-Path: <SRS0=QLNy=QM=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D93DC282CB
-	for <linux-modules@archiver.kernel.org>; Tue,  5 Feb 2019 21:02:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28111C282CB
+	for <linux-modules@archiver.kernel.org>; Tue,  5 Feb 2019 21:02:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EBF4420818
-	for <linux-modules@archiver.kernel.org>; Tue,  5 Feb 2019 21:02:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7CA520818
+	for <linux-modules@archiver.kernel.org>; Tue,  5 Feb 2019 21:02:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uwif+Wqo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xqk8AGJG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbfBEVCD (ORCPT
+        id S1726962AbfBEVC3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 5 Feb 2019 16:02:03 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52651 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727039AbfBEVCD (ORCPT
+        Tue, 5 Feb 2019 16:02:29 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:44477 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726196AbfBEVC3 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 5 Feb 2019 16:02:03 -0500
-Received: by mail-wm1-f68.google.com with SMTP id m1so392161wml.2
-        for <linux-modules@vger.kernel.org>; Tue, 05 Feb 2019 13:02:01 -0800 (PST)
+        Tue, 5 Feb 2019 16:02:29 -0500
+Received: by mail-wr1-f67.google.com with SMTP id v16so3387821wrn.11
+        for <linux-modules@vger.kernel.org>; Tue, 05 Feb 2019 13:02:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=f7tuTfwXGBlT4j+boSeeEzQGPNgBSjwzfYsuVwQxPKY=;
-        b=uwif+Wqoqkkp4U1hXR/tc1RBYdCeox2TIfXFd9oRSN60DDT+brXz5KH4QNI3Wbtx+L
-         n3Viq2vm6QWtv4BpG13aPVQApRHx/Hh3Bz9gg61k/jlDDUP4Q860MxE7fJsygtJjAOBi
-         aocjbmijJecC/G+lXUEDpFhfkC3UFiuIaCFpbqjSRcTPoUp2lu2X9ikZ5NSOFtcVIi0q
-         N/3ka6yMSA4ggN0GuIIG82aN3SRSJzs6LtNNUxPIhG1lRStVzz/bBY2w/wGkqXX5gOV+
-         +afpkfhtlS0lWdy2sUd5Nj06v60Ey+Jj344fwIBxiyoWqRHc+CltWvOCEszcl2elk5YP
-         rTQw==
+        bh=SH9ubVtDziYJRecUF6er2wWhDpuwg78XldlJvDyGeTM=;
+        b=Xqk8AGJG+nxDU+w9eFXRst3EtkGrCc7cx4V2qKuIsAGgomBS/PLM4T7DX7uUjDOMuE
+         UW2lsCBkVgb0fKlo9hUv8yiZkQWen5z2AW9s1bAoBr2iiB4sKCKc9QbYuqK+qLA6EITu
+         Htq910d81RbHuzApe6THxfpE/clsaSfL84qsss+q4ngCUXTrEDf71ZOA5Canj8M3Tzbw
+         WF8vTyd3rtJchBf8CEdaD5mTfB4UaMhaYx2FTtvEjWIOvVuYol+7uUD54WYBm6dh+Frz
+         8bMg4MDBMUM3QHPdHQlzX78tk2M2zVd3Wo554DwPaVXsaR+YB+toRC3uUZ8FWuL3GElg
+         J/tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=f7tuTfwXGBlT4j+boSeeEzQGPNgBSjwzfYsuVwQxPKY=;
-        b=RBuoBmPTf5fkODiCwAhE/z9CKsrRfbOvfhgIFuLzHRtBuBOn4XDOn5yaEQd7g3Kff2
-         8wLmTDFTYzVhNXpTBiomsMJqHWZxRDSXkLYKCiO97BfDQaW+Q/1MHtvbJNzDO5zAo1WX
-         Wd3V3aefzxVoDtHInnkqcDWmfe5su+k/npYJoggEbSet2RmUTHbnxOFlKQbWF51mGpRr
-         I1MbbElHVQMfZes9FEYgdaKmA1koImuhrUAmnGC/p1+mLotJHZMTBzqZsIja3wm+H9CM
-         COXUicXARwXl8+1BcR8/fnLG/gKcAHM5evfG/kObnjLtRAwKZ3coKhQe9lybhSMny1+5
-         CB0Q==
-X-Gm-Message-State: AHQUAuYlqYuhFe13Eapk9zW+KRiasR6yIKLZVUw2ouadMfQjtP5uZGmY
-        iThgMApPRRRu17wYWNen/wKc8J5xhtv3eZTm0hM=
-X-Google-Smtp-Source: AHgI3IYlRgB+ATruiQkMwGN6PCNYyIjlx2zH2rkwq0xbbddzA0TV7tLleCgcROXH+PkUDM/9gFAW8b3M2prBo5zJ60M=
-X-Received: by 2002:a1c:ac42:: with SMTP id v63mr409840wme.119.1549400521001;
- Tue, 05 Feb 2019 13:02:01 -0800 (PST)
+        bh=SH9ubVtDziYJRecUF6er2wWhDpuwg78XldlJvDyGeTM=;
+        b=uD76PaJjOkRzueYvsxyJ/4YYrkA2vYk+FvXVf0tXGlZsB/j4y/RvtICVyR6u82QFcr
+         R84pjE67IzVvD74dlAZRqcPxVEokpNGnwyMd/eI+rd1WH/2zxELn4yFmPqZduCLT8TTO
+         eLR07IGwtOjac7eliLYSrEcei2MR5yqhhLY7zSlJ6fSDRcueFS7zKoIy+IUSN1Sb4Pfs
+         qciqTFB373R/oxqlH9CujMZoQjtQ5p2hF2siESUlEAgVka/RKVl8z70rs1zL4pqcRKGz
+         efBr6lghEegS2gDm01e1y9H9ZuCOvFw5YkDmSo9pDRKD1Gmayu2S2eySzDJL9+u1RRkM
+         vXGA==
+X-Gm-Message-State: AHQUAuYyLiED5x0N49HnCBp9an3edfXfx26fqHCJpGne93/d1+wTRJx1
+        9Vp6ik+IqTDqS0kPlO06ZaCnxMrdgbbDwnyUiTZkIBAB
+X-Google-Smtp-Source: AHgI3IakiS3fJ0DAaJZuLtV7r0unQsXnf1U9smIl2a4ZByf0uQGgQCH8Rp/GEPYgAAXO9zN5pzEdn2nPd5lKjM8noKc=
+X-Received: by 2002:adf:e34b:: with SMTP id n11mr4857374wrj.91.1549400547645;
+ Tue, 05 Feb 2019 13:02:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20190204223249.27531-1-lucas.demarchi@intel.com> <xunymunb6usy.fsf@redhat.com>
-In-Reply-To: <xunymunb6usy.fsf@redhat.com>
+References: <20190201202002.5508-1-yauheni.kaliuta@redhat.com>
+In-Reply-To: <20190201202002.5508-1-yauheni.kaliuta@redhat.com>
 From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Tue, 5 Feb 2019 13:01:49 -0800
-Message-ID: <CAKi4VAKr=OvnHuEFM54qPR-NULT-NeZVV_LbeYarOe7U1-HFCQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] testsuite: fix modinfo test without openssl
+Date:   Tue, 5 Feb 2019 13:02:16 -0800
+Message-ID: <CAKi4VA+3oL7+CiEKNdHgauEtBG-+Y89uTQn3jT6Z9Q=N0mf9eA@mail.gmail.com>
+Subject: Re: [PATCH kmod v3 0/2] read pkcs7 signature with openssl
 To:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-modules <linux-modules@vger.kernel.org>
+Cc:     linux-modules <linux-modules@vger.kernel.org>, ykaliuta@redhat.com,
+        Lucas De Marchi <lucas.demarchi@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Feb 4, 2019 at 3:18 PM Yauheni Kaliuta
+On Fri, Feb 1, 2019 at 12:55 PM Yauheni Kaliuta
 <yauheni.kaliuta@redhat.com> wrote:
 >
-> Hi, Lucas!
+> The same as before but with the test.
 >
-> Oops :)
+> I found, that using _cleanup_() is more inconvenient, since it will
+> require wrappers for the types as for _cleanup_free().
 >
-> Thanks for fixing that!
+> Changelog:
+>
+> v1->v2 no changes, just non-rfc
+> v2->v3 test added
 
-These are pushed, together with your patches and other 2 to enable
-tests on CI/mkosi
-
+Applied, thanks!
 Lucas De Marchi
 
 >
-> >>>>> On Mon,  4 Feb 2019 14:32:48 -0800, Lucas De Marchi  wrote:
+> Yauheni Kaliuta (2):
+>   testsuite: add modinfo pkcs7 signature test
+>   libkmod-signature: implement pkcs7 parsing with openssl
 >
->  > ---
->  >  .../correct-sig_hashalgo-openssl.txt             |  3 +++
->  >  .../test-modinfo/correct-sig_hashalgo.txt        |  3 ++-
->  >  .../test-modinfo/correct-sig_key-openssl.txt     |  3 +++
->  >  .../test-modinfo/correct-sig_key.txt             |  2 +-
->  >  .../test-modinfo/correct-signer-openssl.txt      |  3 +++
->  >  .../test-modinfo/correct-signer.txt              |  2 +-
->  >  testsuite/test-modinfo.c                         | 16 ++++++++++++----
->  >  7 files changed, 25 insertions(+), 7 deletions(-)
->  >  create mode 100644 testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo-openssl.txt
->  >  create mode 100644 testsuite/rootfs-pristine/test-modinfo/correct-sig_key-openssl.txt
->  >  create mode 100644 testsuite/rootfs-pristine/test-modinfo/correct-signer-openssl.txt
->
->  > diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo-openssl.txt b/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo-openssl.txt
->  > new file mode 100644
->  > index 0000000..f97c4fa
->  > --- /dev/null
->  > +++ b/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo-openssl.txt
->  > @@ -0,0 +1,3 @@
->  > +sha1
->  > +sha256
->  > +sha256
->  > diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt b/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt
->  > index f97c4fa..23cb933 100644
->  > --- a/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt
->  > +++ b/testsuite/rootfs-pristine/test-modinfo/correct-sig_hashalgo.txt
->  > @@ -1,3 +1,4 @@
->  >  sha1
->  >  sha256
->  > -sha256
->  > +unknown
->  > +
->  > diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-sig_key-openssl.txt b/testsuite/rootfs-pristine/test-modinfo/correct-sig_key-openssl.txt
->  > new file mode 100644
->  > index 0000000..25a75a8
->  > --- /dev/null
->  > +++ b/testsuite/rootfs-pristine/test-modinfo/correct-sig_key-openssl.txt
->  > @@ -0,0 +1,3 @@
->  > +E3:C8:FC:A7:3F:B3:1D:DE:84:81:EF:38:E3:4C:DE:4B:0C:FD:1B:F9
->  > +E3:C8:FC:A7:3F:B3:1D:DE:84:81:EF:38:E3:4C:DE:4B:0C:FD:1B:F9
->  > +26:DA:C3:EB:0F:0D:1A:56:A2:D8:B2:13:F0:D7:53:47:1D:0D:48:68
->  > diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt b/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt
->  > index 25a75a8..7dc4c6a 100644
->  > --- a/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt
->  > +++ b/testsuite/rootfs-pristine/test-modinfo/correct-sig_key.txt
->  > @@ -1,3 +1,3 @@
->  >  E3:C8:FC:A7:3F:B3:1D:DE:84:81:EF:38:E3:4C:DE:4B:0C:FD:1B:F9
->  >  E3:C8:FC:A7:3F:B3:1D:DE:84:81:EF:38:E3:4C:DE:4B:0C:FD:1B:F9
->  > -26:DA:C3:EB:0F:0D:1A:56:A2:D8:B2:13:F0:D7:53:47:1D:0D:48:68
->  > +
->  > diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-signer-openssl.txt b/testsuite/rootfs-pristine/test-modinfo/correct-signer-openssl.txt
->  > new file mode 100644
->  > index 0000000..2b979f9
->  > --- /dev/null
->  > +++ b/testsuite/rootfs-pristine/test-modinfo/correct-signer-openssl.txt
->  > @@ -0,0 +1,3 @@
->  > +Magrathea: Glacier signing key
->  > +Magrathea: Glacier signing key
->  > +Build time autogenerated kernel key
->  > diff --git a/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt b/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt
->  > index 2b979f9..afe83df 100644
->  > --- a/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt
->  > +++ b/testsuite/rootfs-pristine/test-modinfo/correct-signer.txt
->  > @@ -1,3 +1,3 @@
->  >  Magrathea: Glacier signing key
->  >  Magrathea: Glacier signing key
->  > -Build time autogenerated kernel key
->  > +
->  > diff --git a/testsuite/test-modinfo.c b/testsuite/test-modinfo.c
->  > index 504d9dd..373dc95 100644
->  > --- a/testsuite/test-modinfo.c
->  > +++ b/testsuite/test-modinfo.c
->  > @@ -27,7 +27,7 @@
->
->  >  static const char *progname = ABS_TOP_BUILDDIR "/tools/modinfo";
->
->  > -#define DEFINE_MODINFO_TEST(_field, ...) \
->  > +#define DEFINE_MODINFO_TEST(_field, _flavor, ...) \
->  >  static noreturn int test_modinfo_##_field(const struct test *t) \
->  >  { \
->  >      const char *const args[] = { \
->  > @@ -44,20 +44,28 @@ DEFINE_TEST(test_modinfo_##_field, \
->  >              [TC_ROOTFS] = TESTSUITE_ROOTFS "test-modinfo/", \
->  >      }, \
->  >      .output = { \
->  > -            .out = TESTSUITE_ROOTFS "test-modinfo/correct-" #_field ".txt", \
->  > +            .out = TESTSUITE_ROOTFS "test-modinfo/correct-" #_field #_flavor ".txt", \
->  >      })
->
->  >  #define DEFINE_MODINFO_GENERIC_TEST(_field) \
->  > -    DEFINE_MODINFO_TEST(_field, \
->  > +    DEFINE_MODINFO_TEST(_field, , \
->  >                          "/mod-simple-i386.ko", \
->  >                          "/mod-simple-x86_64.ko", \
->  >                          "/mod-simple-sparc64.ko")
->
->  > +#ifdef ENABLE_OPENSSL
->  >  #define DEFINE_MODINFO_SIGN_TEST(_field) \
->  > -    DEFINE_MODINFO_TEST(_field, \
->  > +    DEFINE_MODINFO_TEST(_field, -openssl, \
->  >                          "/mod-simple-sha1.ko", \
->  >                          "/mod-simple-sha256.ko",    \
->  >                          "/mod-simple-pkcs7.ko")
->  > +#else
->  > +#define DEFINE_MODINFO_SIGN_TEST(_field) \
->  > +    DEFINE_MODINFO_TEST(_field, , \
->  > +                        "/mod-simple-sha1.ko", \
->  > +                        "/mod-simple-sha256.ko",    \
->  > +                        "/mod-simple-pkcs7.ko")
->  > +#endif
->
->  >  DEFINE_MODINFO_GENERIC_TEST(filename);
->  >  DEFINE_MODINFO_GENERIC_TEST(author);
->  > --
->  > 2.20.0
->
+>  Makefile.am                                   |   4 +-
+>  configure.ac                                  |  11 +
+>  libkmod/libkmod-internal.h                    |   3 +
+>  libkmod/libkmod-module.c                      |   3 +
+>  libkmod/libkmod-signature.c                   | 197 +++++++++++++++++-
+>  testsuite/module-playground/dummy.pkcs7       | Bin 0 -> 721 bytes
+>  testsuite/populate-modules.sh                 |   9 +
+>  .../test-modinfo/correct-sig_hashalgo.txt     |   2 +-
+>  .../test-modinfo/correct-sig_key.txt          |   2 +-
+>  .../test-modinfo/correct-signer.txt           |   2 +-
+>  testsuite/test-modinfo.c                      |   3 +-
+>  11 files changed, 227 insertions(+), 9 deletions(-)
+>  create mode 100644 testsuite/module-playground/dummy.pkcs7
 >
 > --
-> WBR,
-> Yauheni Kaliuta
-
+> 2.20.1
+>
 
 
 -- 
