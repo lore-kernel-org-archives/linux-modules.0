@@ -2,238 +2,153 @@ Return-Path: <SRS0=E4eM=QW=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91968C43381
-	for <linux-modules@archiver.kernel.org>; Fri, 15 Feb 2019 08:04:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD70CC43381
+	for <linux-modules@archiver.kernel.org>; Fri, 15 Feb 2019 13:30:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 66F9F206BB
-	for <linux-modules@archiver.kernel.org>; Fri, 15 Feb 2019 08:04:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A35721925
+	for <linux-modules@archiver.kernel.org>; Fri, 15 Feb 2019 13:30:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gQ+NsNfr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732579AbfBOIEY (ORCPT
+        id S2388468AbfBONa6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 15 Feb 2019 03:04:24 -0500
-Received: from mga12.intel.com ([192.55.52.136]:11656 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726008AbfBOIEY (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 15 Feb 2019 03:04:24 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Feb 2019 00:04:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.58,372,1544515200"; 
-   d="scan'208";a="134516831"
-Received: from adlam-mobl7.amr.corp.intel.com (HELO ldmartin-desk.jf.intel.com) ([10.255.231.171])
-  by orsmga002.jf.intel.com with ESMTP; 15 Feb 2019 00:04:22 -0800
-Date:   Fri, 15 Feb 2019 00:04:22 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Stefan Strogin <stefan.strogin@gmail.com>
+        Fri, 15 Feb 2019 08:30:58 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:40459 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726026AbfBONa5 (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Fri, 15 Feb 2019 08:30:57 -0500
+Received: by mail-wr1-f65.google.com with SMTP id q1so10347272wrp.7
+        for <linux-modules@vger.kernel.org>; Fri, 15 Feb 2019 05:30:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:references:from:openpgp:autocrypt:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ptSmIOJDoJx5KsUBy5eRUnfdkBEKk6vWL2vw8s+WHSs=;
+        b=gQ+NsNfrSVgmA4xLrJU4SgmjRDkWrcYvHJL+0MS12e74Lau5w35BeuTC9lJcDKxMTV
+         ZZ9UJZnkjdlP+PfLiSsUMT5Wx6exz0fyd/uQsMSc2aK8bjbQ8QbUIlLZoXYUmTAGhPpo
+         xbkmyo+BPjU7zLYJh6xb6mVXQDsfpDMeseWdAKeJ0r3XFKPqF0q1z4KnokfSmmOeKO8Z
+         vh+Zt6Xi7VuZQgclt4mxiHH2R2NFNAF9s19B7hbz9qdjg5UIUycklE6jLDPkJdA7OZQ7
+         Jm0dFOVPDKz0FhuEIEeIC8EQ6E4cMSTm2cIrkTF2EAuIW2iKB7NyGsV04F1USA8GuCqO
+         2Zsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:openpgp:autocrypt:subject
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ptSmIOJDoJx5KsUBy5eRUnfdkBEKk6vWL2vw8s+WHSs=;
+        b=WHvlvVI8EeShAZTCd/pE85dPilWqZvxAHiCTRhspA9ysVWiSwRrsgxTimnPIA3uLLg
+         7fZuCVknEcTWuaP/fBgqJYOlkG6lB5M/4+KdyYnNc2QdO1wp1Aw+4c3DXr/ERCJLidoo
+         +j9trN8B4CyfT778kC8dUwEK8ahpwB4ky6CGIxRR3cyfBvwGOrJvU+xkIOyh1YXvCKWl
+         7AB43gSrgWzpfUKuWzCtF+E5fJxMimiNBhZodCcU6TaUuXxldmLV++Hd9cG7D3GooRkA
+         lS1QXG0q46xacj0opSGEghD0OJU6P7KZZcie7VFc07ChELgSud7FOmRysOlETBZIhSut
+         WHAg==
+X-Gm-Message-State: AHQUAuYxdyCs9Ob1aW7gb4CmtkXIH2Rf+VW/BgXLdSAdLlXBJtvf2VnN
+        a/zRPMGvllwJDRkN2r8w7Q==
+X-Google-Smtp-Source: AHgI3IZCza4zPAI9MhYvsohtiOA/wNb21b8pay0aP2Eni0GqGd7xPjMN+y+Ogz2d9z2S8hJV/a4yBQ==
+X-Received: by 2002:a5d:6288:: with SMTP id k8mr7334984wru.173.1550237455069;
+        Fri, 15 Feb 2019 05:30:55 -0800 (PST)
+Received: from [10.42.0.10] (pripet.hukot.net. [46.36.39.187])
+        by smtp.googlemail.com with ESMTPSA id 126sm7918178wmd.1.2019.02.15.05.30.53
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 Feb 2019 05:30:54 -0800 (PST)
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
 Cc:     linux-modules@vger.kernel.org, ykaliuta@redhat.com
+References: <20190215041340.29258-1-stefan.strogin@gmail.com>
+ <20190215080422.hjl356xb7hui44iv@ldmartin-desk.jf.intel.com>
+From:   Stefan Strogin <stefan.strogin@gmail.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=stefan.strogin@gmail.com; prefer-encrypt=mutual; keydata=
+ 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
+ 5D+adN5fqA==
 Subject: Re: [PATCH] libkmod-signature: use PKCS7 for LibreSSL or older
  OpenSSL
-Message-ID: <20190215080422.hjl356xb7hui44iv@ldmartin-desk.jf.intel.com>
-References: <20190215041340.29258-1-stefan.strogin@gmail.com>
+Message-ID: <6633f8d3-c9d6-02d4-6226-204038df1f81@gmail.com>
+Date:   Fri, 15 Feb 2019 15:30:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190215041340.29258-1-stefan.strogin@gmail.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190215080422.hjl356xb7hui44iv@ldmartin-desk.jf.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Feb 15, 2019 at 06:13:40AM +0200, Stefan Strogin wrote:
->Linux kernel uses either PKCS #7 or CMS signing modules (scripts/sign-file.c).
->CMS is not supported by LibreSSL, PKCS #7 is used instead.
->For now modinfo used CMS with no altenative requiring >=openssl-1.1.0
->built with CMS support.
->
->Use PKCS #7 for parsing module signature information when CMS is not available.
->
->Signed-off-by: Stefan Strogin <stefan.strogin@gmail.com>
+On 15/02/2019 10:04, Lucas De Marchi wrote:
+> 
+> ooh, this ifdef is messy. Why do we want both libressl and openssl? What
+> distro is requiring that?
 
-ooh, this ifdef is messy. Why do we want both libressl and openssl? What
-distro is requiring that?
+Well, in the kernel in scripts/sign-file.c the same ifdefs are used.
 
-if in the end we end up with ifdefs for N different libs I'd rather just
-add the implementation in kmod itself or convince kernel guys to just
-fill out the struct they are supposed to fill.
+Every distro that tries to support LibreSSL requires that. I know at least
+Gentoo [1], Alpine and Void.
 
-Lucas De Marchi
+> if in the end we end up with ifdefs for N different libs I'd rather just
+> add the implementation in kmod itself or convince kernel guys to just
+> fill out the struct they are supposed to fill.
 
->---
-> libkmod/libkmod-signature.c | 78 +++++++++++++++++++++++++++++++++++--
-> 1 file changed, 75 insertions(+), 3 deletions(-)
->
->diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
->index 48d0145..aa2a60e 100644
->--- a/libkmod/libkmod-signature.c
->+++ b/libkmod/libkmod-signature.c
->@@ -20,9 +20,16 @@
-> #include <endian.h>
-> #include <inttypes.h>
-> #ifdef ENABLE_OPENSSL
->-#include <openssl/cms.h>
->-#include <openssl/ssl.h>
->-#endif
->+# include <openssl/ssl.h>
->+# if defined(LIBRESSL_VERSION_NUMBER) || \
->+	OPENSSL_VERSION_NUMBER < 0x10100000L || \
->+	defined(OPENSSL_NO_CMS)
->+#  define USE_PKCS7
->+#  include <openssl/pkcs7.h>
->+# else
->+#  include <openssl/cms.h>
->+# endif /* LIBRESSL_VERSION_NUMBER */
->+#endif /* ENABLE_OPENSSL */
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <string.h>
->@@ -122,7 +129,11 @@ static bool fill_default(const char *mem, off_t size,
-> #ifdef ENABLE_OPENSSL
->
-> struct pkcs7_private {
->+#ifndef USE_PKCS7
-> 	CMS_ContentInfo *cms;
->+#else
->+	PKCS7 *pkcs7;
->+#endif
-> 	unsigned char *key_id;
-> 	BIGNUM *sno;
-> };
->@@ -132,7 +143,11 @@ static void pkcs7_free(void *s)
-> 	struct kmod_signature_info *si = s;
-> 	struct pkcs7_private *pvt = si->private;
->
->+#ifndef USE_PKCS7
-> 	CMS_ContentInfo_free(pvt->cms);
->+#else
->+	PKCS7_free(pvt->pkcs7);
->+#endif
-> 	BN_free(pvt->sno);
-> 	free(pvt->key_id);
-> 	free(pvt);
->@@ -187,7 +202,13 @@ static const char *x509_name_to_str(X509_NAME *name)
-> 		return NULL;
->
-> 	d = X509_NAME_ENTRY_get_data(e);
->+#if (defined(LIBRESSL_VERSION_NUMBER) && \
->+		LIBRESSL_VERSION_NUMBER < 0x20700000L) || \
->+	OPENSSL_VERSION_NUMBER < 0x10100000L
->+	str = (const char *)ASN1_STRING_data(d);
->+#else
-> 	str = (const char *)ASN1_STRING_get0_data(d);
->+#endif
->
-> 	return str;
-> }
->@@ -197,11 +218,18 @@ static bool fill_pkcs7(const char *mem, off_t size,
-> 		       struct kmod_signature_info *sig_info)
-> {
-> 	const char *pkcs7_raw;
->+#ifndef USE_PKCS7
-> 	CMS_ContentInfo *cms;
-> 	STACK_OF(CMS_SignerInfo) *sis;
-> 	CMS_SignerInfo *si;
-> 	int rc;
-> 	ASN1_OCTET_STRING *key_id;
->+#else
->+	PKCS7 *pkcs7;
->+	STACK_OF(PKCS7_SIGNER_INFO) *sis;
->+	PKCS7_SIGNER_INFO *si;
->+	PKCS7_ISSUER_AND_SERIAL *is;
->+#endif
-> 	X509_NAME *issuer;
-> 	ASN1_INTEGER *sno;
-> 	ASN1_OCTET_STRING *sig;
->@@ -220,14 +248,23 @@ static bool fill_pkcs7(const char *mem, off_t size,
->
-> 	in = BIO_new_mem_buf(pkcs7_raw, sig_len);
->
->+#ifndef USE_PKCS7
-> 	cms = d2i_CMS_bio(in, NULL);
-> 	if (cms == NULL) {
-> 		BIO_free(in);
-> 		return false;
-> 	}
->+#else
->+	pkcs7 = d2i_PKCS7_bio(in, NULL);
->+	if (pkcs7 == NULL) {
->+		BIO_free(in);
->+		return false;
->+	}
->+#endif
->
-> 	BIO_free(in);
->
->+#ifndef USE_PKCS7
-> 	sis = CMS_get0_SignerInfos(cms);
-> 	if (sis == NULL)
-> 		goto err;
->@@ -245,8 +282,35 @@ static bool fill_pkcs7(const char *mem, off_t size,
-> 		goto err;
->
-> 	CMS_SignerInfo_get0_algs(si, NULL, NULL, &dig_alg, &sig_alg);
->+#else
->+	sis = PKCS7_get_signer_info(pkcs7);
->+	if (sis == NULL)
->+		goto err;
->+
->+	si = sk_PKCS7_SIGNER_INFO_value(sis, 0);
->+	if (si == NULL)
->+		goto err;
->+
->+	is = si->issuer_and_serial;
->+	if (is == NULL)
->+		goto err;
->+	issuer = is->issuer;
->+	sno = is->serial;
->+
->+	sig = si->enc_digest;
->+	if (sig == NULL)
->+		goto err;
->+
->+	PKCS7_SIGNER_INFO_get0_algs(si, NULL, &dig_alg, &sig_alg);
->+#endif
->
->+#if (defined(LIBRESSL_VERSION_NUMBER) && \
->+		LIBRESSL_VERSION_NUMBER < 0x20700000L) || \
->+	OPENSSL_VERSION_NUMBER < 0x10100000L
->+	sig_info->sig = (const char *)ASN1_STRING_data(sig);
->+#else
-> 	sig_info->sig = (const char *)ASN1_STRING_get0_data(sig);
->+#endif
-> 	sig_info->sig_len = ASN1_STRING_length(sig);
->
-> 	sno_bn = ASN1_INTEGER_to_BN(sno, NULL);
->@@ -277,7 +341,11 @@ static bool fill_pkcs7(const char *mem, off_t size,
-> 	if (pvt == NULL)
-> 		goto err3;
->
->+#ifndef USE_PKCS7
-> 	pvt->cms = cms;
->+#else
->+	pvt->pkcs7 = pkcs7;
->+#endif
-> 	pvt->key_id = key_id_str;
-> 	pvt->sno = sno_bn;
-> 	sig_info->private = pvt;
->@@ -290,7 +358,11 @@ err3:
-> err2:
-> 	BN_free(sno_bn);
-> err:
->+#ifndef USE_PKCS7
-> 	CMS_ContentInfo_free(cms);
->+#else
->+	PKCS7_free(pkcs7);
->+#endif
-> 	return false;
-> }
->
->-- 
->2.20.1
->
+If you don't like ifdefs at all I would say that CMS is not needed. CMS and
+PKCS#7 formats are very similar. CMS is newer but is as much as possible
+backward compatible [2], but PKCS#7 is better supported. PKCS#7 has all the same
+fields that are used when a kernel module is signed using CMS (and otherwise).
+For example I can sign a module using OpenSSL-1.1.1 and CMS (even with hashes
+other than sha1) and read its signing information with modinfo and PKCS#7 on a
+system with LibreSSL, and otherwise.
+
+So we can just replace CMS with PKCS#7 in fill_pkcs7().
+
+[1] https://bugs.gentoo.org/677960
+[2] https://tools.ietf.org/html/rfc5652#section-1.1
+
+--
+Stefan
