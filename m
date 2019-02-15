@@ -1,152 +1,252 @@
-Return-Path: <SRS0=iAAw=QU=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=E4eM=QW=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D9CFC282CE
-	for <linux-modules@archiver.kernel.org>; Wed, 13 Feb 2019 17:53:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91C92C43381
+	for <linux-modules@archiver.kernel.org>; Fri, 15 Feb 2019 04:13:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D4A32086C
-	for <linux-modules@archiver.kernel.org>; Wed, 13 Feb 2019 17:53:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5011E20836
+	for <linux-modules@archiver.kernel.org>; Fri, 15 Feb 2019 04:13:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EQ+FeJSd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qVNn7tw4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391415AbfBMRxj (ORCPT
+        id S1726604AbfBOENu (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 13 Feb 2019 12:53:39 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:50947 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391376AbfBMRxj (ORCPT
+        Thu, 14 Feb 2019 23:13:50 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:33182 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726403AbfBOENu (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 13 Feb 2019 12:53:39 -0500
-Received: by mail-wm1-f66.google.com with SMTP id x7so3495217wmj.0
-        for <linux-modules@vger.kernel.org>; Wed, 13 Feb 2019 09:53:38 -0800 (PST)
+        Thu, 14 Feb 2019 23:13:50 -0500
+Received: by mail-wr1-f66.google.com with SMTP id i12so8890502wrw.0
+        for <linux-modules@vger.kernel.org>; Thu, 14 Feb 2019 20:13:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0pYe0Cx/lQkULIk+a1kyMLus6deM++xihuy58GtfwkM=;
-        b=EQ+FeJSdpS25BbOP9iO3A4RUyS0em869yYWdd44mltwvua0eIafdnZD5p1a71y6uFS
-         Pyr0b+At5DlcF8HYta0YxbvMPUApoflVj6YdzUGYgq7EbTtqfDJBawWgFRa2y8jZwypw
-         yBsShCv/FpP2ow2ylgWio0e1n+BoWXxEJ/Km03vMJgOX0dvxD/goTb6IKEwZS1jgkNhY
-         staMzL1qOGxmcjHxU1HGAK6ER1wDp6DnynHQJFPikJ6HGODfYt2EpJPjDFzFhHvn9LOF
-         6e9n5FXHj478Vk1qwIDo5/Z47p6XaU271/RrOVQiAOHfQhTRbwuPPEVLibOWR5IEZ+JT
-         nS4A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3+f52+D5qlzttYIYZV4F9ifb0CZTtvQaWjM2svphsd0=;
+        b=qVNn7tw40AGpJJAEHjYdT9hVIucvdGxerYwESAXL1eYudWlYj+E19GQGwvYEuRGG9z
+         UoIR4wb/BOPdrlQNVWlrM4FlHrl+AGkavQevsOFDZOd77Y0E76K1swrQrltBT+Kzmlce
+         /4pN8bH0XStSTg4TCoDFlqbbe2yTUN5R+rpkZISwliMeAKNaM7rP+UQ9VrjcPMb8QSpb
+         sUdYF8W8ZrmpwI2YxMbUNxaCKg6udzlMUfCWmK6Fr/XZzqmLbiL/xrYhzTrXC/cW+LJT
+         eoySU/mSoqm33sWFpto90/VdDzsv0hncGJJ9/ikg0Pvy8px1QDTnQHcXWDyBUF2Q5gBy
+         VRwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0pYe0Cx/lQkULIk+a1kyMLus6deM++xihuy58GtfwkM=;
-        b=jRff6JcwGH7EygbeFMgIbZPwdL4bwIR45LNdbCPezb91wHrtmQbxxZ8kDLr4J6zYSL
-         tXtoHLddPrpW+lMGrnC+885EvuthHihy4xeP3j6s4sT89MzFwbjIF/tKbA/0uqsSEZC5
-         zFKoRVRDz4S6VNnlsTLGF6B4Oux9reMlfZLa86y8Z4eKoaw4XhmWGLRpIOmWLP2MI3gj
-         ZFfcjHzgLwP/vcfEQemtgL2p7cD7qCIC9DMWOSbq72FzixAgQkuwQzdK5T+rEwQzYER7
-         FJMGvFhijjq39DKZ4cfXFuGa1fuzJecq962LylBUvzvvMlJsDlcNK1J/Xy77pvi+MM7c
-         541g==
-X-Gm-Message-State: AHQUAua1PVu/EMlB/oPmMmTQQ1xnCi/kw//A4Eh+ulOWfyO3kLQ5nm7K
-        D++fEeBKtwu7Gc6HaPMm3++CMPX3TdXci6MiWjECxuG4
-X-Google-Smtp-Source: AHgI3IZquMNyQpRAI1w1eHy50jOZHqk2BDvrUrhw39RJY6ZPicCmfsyapE9OKLmiqw6MDUIVCSPhZA1ec3MfC6i89b4=
-X-Received: by 2002:a1c:ac42:: with SMTP id v63mr1198461wme.119.1550080417149;
- Wed, 13 Feb 2019 09:53:37 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3+f52+D5qlzttYIYZV4F9ifb0CZTtvQaWjM2svphsd0=;
+        b=JIuoHmzO7A5vPgCPgLIQ2woMUhvOwO2X9hGL5tOhOuuwjtqkgwtfF2amtij9t786il
+         M1+Bj/Q6oj0igeVNhSJLP7vGqfX6OGtNWq5t/daYcAAdA/9cbXxdQXc98ARyLDxCJD6K
+         HOBASXl04JFjeX0fjGYA9cFrkZy0F/o+Me4n8/KT1BhEuIFemYNIHd/XKCBxOEyU9QTe
+         RBkR0c2oGuCOKIs4PSdTw3JITWsH4I6wAjCNAx95Z1khkCujULj0u899Zeju1Mw38VC/
+         q9i599zaCa0A9aMRAvKepZpeeybxUaMGalnC68U7mDRFJMYMnZTbQ78Rqkyq/dTJxDYE
+         2nAQ==
+X-Gm-Message-State: AHQUAuYx/MS9LeL75VuNjxeM+a8Rpwv63ng6MVbXxT41nTcan5BwZJtQ
+        mbW505wpt+lH5yJPEn9WFzYwbKJvcsKv
+X-Google-Smtp-Source: AHgI3IaQ//rXUMEzeasiOe8YmtAUL6QT7u8FLErdsZyCrcO+QfcnSPYNOSAlmJNhV1UDvJEoXgsVZQ==
+X-Received: by 2002:a5d:550f:: with SMTP id b15mr5431783wrv.251.1550204027784;
+        Thu, 14 Feb 2019 20:13:47 -0800 (PST)
+Received: from localhost.localdomain (pripet.hukot.net. [46.36.39.187])
+        by smtp.gmail.com with ESMTPSA id e17sm2266719wrs.79.2019.02.14.20.13.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 14 Feb 2019 20:13:47 -0800 (PST)
+From:   Stefan Strogin <stefan.strogin@gmail.com>
+To:     linux-modules@vger.kernel.org
+Cc:     stefan.strogin@gmail.com, ykaliuta@redhat.com,
+        lucas.demarchi@intel.com
+Subject: [PATCH] libkmod-signature: use PKCS7 for LibreSSL or older OpenSSL
+Date:   Fri, 15 Feb 2019 06:13:40 +0200
+Message-Id: <20190215041340.29258-1-stefan.strogin@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20190213152751.9138-1-dreisner@archlinux.org>
-In-Reply-To: <20190213152751.9138-1-dreisner@archlinux.org>
-From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Wed, 13 Feb 2019 09:53:25 -0800
-Message-ID: <CAKi4VAJeM2yiMbkxqMs8DQ1gzpiVfdF8GYpEmFog=nTMEgvHUw@mail.gmail.com>
-Subject: Re: [PATCH] Link against libcrypto, not all of openssl
-To:     Dave Reisner <dreisner@archlinux.org>
-Cc:     linux-modules <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Feb 13, 2019 at 8:02 AM Dave Reisner <dreisner@archlinux.org> wrote:
->
-> In the previous build setup, libkmod.so would link to not just
-> libcrypto.so, but also libssl.so:
->
-> $ readelf -d /lib/libkmod.so | grep NEEDED
->  0x0000000000000001 (NEEDED)             Shared library: [liblzma.so.5]
->  0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libssl.so.1.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
->
-> We don't need any symbols from libssl, though. This patch ensures that
-> we pass 'libcrypto' to pkgconfig rather than 'openssl', getting only the
-> library that we need:
->
-> $ readelf -d tools/kmod | grep NEEDED
+Linux kernel uses either PKCS #7 or CMS signing modules (scripts/sign-file.c).
+CMS is not supported by LibreSSL, PKCS #7 is used instead.
+For now modinfo used CMS with no altenative requiring >=openssl-1.1.0
+built with CMS support.
 
-as per chat on irc, I updated the commit message to point to libkmod
-rather than kmod.
+Use PKCS #7 for parsing module signature information when CMS is not available.
 
-Patch applied, thanks.
+Signed-off-by: Stefan Strogin <stefan.strogin@gmail.com>
+---
+ libkmod/libkmod-signature.c | 78 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 75 insertions(+), 3 deletions(-)
 
-Lucas De Marchi
-
->  0x0000000000000001 (NEEDED)             Shared library: [liblzma.so.5]
->  0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
-> ---
->  Makefile.am  | 6 +++---
->  configure.ac | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/Makefile.am b/Makefile.am
-> index ddb25f0..758f4f0 100644
-> --- a/Makefile.am
-> +++ b/Makefile.am
-> @@ -35,8 +35,8 @@ SED_PROCESS = \
->         -e 's,@liblzma_LIBS\@,${liblzma_LIBS},g' \
->         -e 's,@zlib_CFLAGS\@,${zlib_CFLAGS},g' \
->         -e 's,@zlib_LIBS\@,${zlib_LIBS},g' \
-> -       -e 's,@openssl_CFLAGS\@,${openssl_CFLAGS},g' \
-> -       -e 's,@openssl_LIBS\@,${openssl_LIBS},g' \
-> +       -e 's,@libcrypto_CFLAGS\@,${libcrypto_CFLAGS},g' \
-> +       -e 's,@libcrypto_LIBS\@,${libcrypto_LIBS},g' \
->         < $< > $@ || rm $@
->
->  %.pc: %.pc.in Makefile
-> @@ -89,7 +89,7 @@ libkmod_libkmod_la_DEPENDENCIES = \
->         ${top_srcdir}/libkmod/libkmod.sym
->  libkmod_libkmod_la_LIBADD = \
->         shared/libshared.la \
-> -       ${liblzma_LIBS} ${zlib_LIBS} ${openssl_LIBS}
-> +       ${liblzma_LIBS} ${zlib_LIBS} ${libcrypto_LIBS}
->
->  noinst_LTLIBRARIES += libkmod/libkmod-internal.la
->  libkmod_libkmod_internal_la_SOURCES = $(libkmod_libkmod_la_SOURCES)
-> diff --git a/configure.ac b/configure.ac
-> index ee72283..dffe278 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -110,12 +110,12 @@ AC_ARG_WITH([openssl],
->         AS_HELP_STRING([--with-openssl], [handle PKCS7 signatures @<:@default=disabled@:>@]),
->         [], [with_openssl=no])
->  AS_IF([test "x$with_openssl" != "xno"], [
-> -       PKG_CHECK_MODULES([openssl], [openssl >= 1.1.0])
-> +       PKG_CHECK_MODULES([libcrypto], [libcrypto >= 1.1.0])
->         AC_DEFINE([ENABLE_OPENSSL], [1], [Enable openssl for modinfo.])
->  ], [
->         AC_MSG_NOTICE([openssl support not requested])
->  ])
-> -CC_FEATURE_APPEND([with_features], [with_openssl], [OPENSSL])
-> +CC_FEATURE_APPEND([with_features], [with_openssl], [LIBCRYPTO])
->
->  AC_ARG_WITH([bashcompletiondir],
->         AS_HELP_STRING([--with-bashcompletiondir=DIR], [Bash completions directory]),
-> --
-> 2.20.1
-
-
-
+diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+index 48d0145..aa2a60e 100644
+--- a/libkmod/libkmod-signature.c
++++ b/libkmod/libkmod-signature.c
+@@ -20,9 +20,16 @@
+ #include <endian.h>
+ #include <inttypes.h>
+ #ifdef ENABLE_OPENSSL
+-#include <openssl/cms.h>
+-#include <openssl/ssl.h>
+-#endif
++# include <openssl/ssl.h>
++# if defined(LIBRESSL_VERSION_NUMBER) || \
++	OPENSSL_VERSION_NUMBER < 0x10100000L || \
++	defined(OPENSSL_NO_CMS)
++#  define USE_PKCS7
++#  include <openssl/pkcs7.h>
++# else
++#  include <openssl/cms.h>
++# endif /* LIBRESSL_VERSION_NUMBER */
++#endif /* ENABLE_OPENSSL */
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -122,7 +129,11 @@ static bool fill_default(const char *mem, off_t size,
+ #ifdef ENABLE_OPENSSL
+ 
+ struct pkcs7_private {
++#ifndef USE_PKCS7
+ 	CMS_ContentInfo *cms;
++#else
++	PKCS7 *pkcs7;
++#endif
+ 	unsigned char *key_id;
+ 	BIGNUM *sno;
+ };
+@@ -132,7 +143,11 @@ static void pkcs7_free(void *s)
+ 	struct kmod_signature_info *si = s;
+ 	struct pkcs7_private *pvt = si->private;
+ 
++#ifndef USE_PKCS7
+ 	CMS_ContentInfo_free(pvt->cms);
++#else
++	PKCS7_free(pvt->pkcs7);
++#endif
+ 	BN_free(pvt->sno);
+ 	free(pvt->key_id);
+ 	free(pvt);
+@@ -187,7 +202,13 @@ static const char *x509_name_to_str(X509_NAME *name)
+ 		return NULL;
+ 
+ 	d = X509_NAME_ENTRY_get_data(e);
++#if (defined(LIBRESSL_VERSION_NUMBER) && \
++		LIBRESSL_VERSION_NUMBER < 0x20700000L) || \
++	OPENSSL_VERSION_NUMBER < 0x10100000L
++	str = (const char *)ASN1_STRING_data(d);
++#else
+ 	str = (const char *)ASN1_STRING_get0_data(d);
++#endif
+ 
+ 	return str;
+ }
+@@ -197,11 +218,18 @@ static bool fill_pkcs7(const char *mem, off_t size,
+ 		       struct kmod_signature_info *sig_info)
+ {
+ 	const char *pkcs7_raw;
++#ifndef USE_PKCS7
+ 	CMS_ContentInfo *cms;
+ 	STACK_OF(CMS_SignerInfo) *sis;
+ 	CMS_SignerInfo *si;
+ 	int rc;
+ 	ASN1_OCTET_STRING *key_id;
++#else
++	PKCS7 *pkcs7;
++	STACK_OF(PKCS7_SIGNER_INFO) *sis;
++	PKCS7_SIGNER_INFO *si;
++	PKCS7_ISSUER_AND_SERIAL *is;
++#endif
+ 	X509_NAME *issuer;
+ 	ASN1_INTEGER *sno;
+ 	ASN1_OCTET_STRING *sig;
+@@ -220,14 +248,23 @@ static bool fill_pkcs7(const char *mem, off_t size,
+ 
+ 	in = BIO_new_mem_buf(pkcs7_raw, sig_len);
+ 
++#ifndef USE_PKCS7
+ 	cms = d2i_CMS_bio(in, NULL);
+ 	if (cms == NULL) {
+ 		BIO_free(in);
+ 		return false;
+ 	}
++#else
++	pkcs7 = d2i_PKCS7_bio(in, NULL);
++	if (pkcs7 == NULL) {
++		BIO_free(in);
++		return false;
++	}
++#endif
+ 
+ 	BIO_free(in);
+ 
++#ifndef USE_PKCS7
+ 	sis = CMS_get0_SignerInfos(cms);
+ 	if (sis == NULL)
+ 		goto err;
+@@ -245,8 +282,35 @@ static bool fill_pkcs7(const char *mem, off_t size,
+ 		goto err;
+ 
+ 	CMS_SignerInfo_get0_algs(si, NULL, NULL, &dig_alg, &sig_alg);
++#else
++	sis = PKCS7_get_signer_info(pkcs7);
++	if (sis == NULL)
++		goto err;
++
++	si = sk_PKCS7_SIGNER_INFO_value(sis, 0);
++	if (si == NULL)
++		goto err;
++
++	is = si->issuer_and_serial;
++	if (is == NULL)
++		goto err;
++	issuer = is->issuer;
++	sno = is->serial;
++
++	sig = si->enc_digest;
++	if (sig == NULL)
++		goto err;
++
++	PKCS7_SIGNER_INFO_get0_algs(si, NULL, &dig_alg, &sig_alg);
++#endif
+ 
++#if (defined(LIBRESSL_VERSION_NUMBER) && \
++		LIBRESSL_VERSION_NUMBER < 0x20700000L) || \
++	OPENSSL_VERSION_NUMBER < 0x10100000L
++	sig_info->sig = (const char *)ASN1_STRING_data(sig);
++#else
+ 	sig_info->sig = (const char *)ASN1_STRING_get0_data(sig);
++#endif
+ 	sig_info->sig_len = ASN1_STRING_length(sig);
+ 
+ 	sno_bn = ASN1_INTEGER_to_BN(sno, NULL);
+@@ -277,7 +341,11 @@ static bool fill_pkcs7(const char *mem, off_t size,
+ 	if (pvt == NULL)
+ 		goto err3;
+ 
++#ifndef USE_PKCS7
+ 	pvt->cms = cms;
++#else
++	pvt->pkcs7 = pkcs7;
++#endif
+ 	pvt->key_id = key_id_str;
+ 	pvt->sno = sno_bn;
+ 	sig_info->private = pvt;
+@@ -290,7 +358,11 @@ err3:
+ err2:
+ 	BN_free(sno_bn);
+ err:
++#ifndef USE_PKCS7
+ 	CMS_ContentInfo_free(cms);
++#else
++	PKCS7_free(pkcs7);
++#endif
+ 	return false;
+ }
+ 
 -- 
-Lucas De Marchi
+2.20.1
+
