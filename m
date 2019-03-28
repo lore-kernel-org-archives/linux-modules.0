@@ -1,128 +1,96 @@
-Return-Path: <SRS0=VdMu=RL=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=efU9=R7=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DE06C43381
-	for <linux-modules@archiver.kernel.org>; Fri,  8 Mar 2019 21:09:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D33AC43381
+	for <linux-modules@archiver.kernel.org>; Thu, 28 Mar 2019 17:42:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 535F220851
-	for <linux-modules@archiver.kernel.org>; Fri,  8 Mar 2019 21:09:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1AC220823
+	for <linux-modules@archiver.kernel.org>; Thu, 28 Mar 2019 17:42:16 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="by03zao+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726279AbfCHVJX (ORCPT
+        id S1726227AbfC1RmM (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 8 Mar 2019 16:09:23 -0500
-Received: from mga14.intel.com ([192.55.52.115]:36456 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726258AbfCHVJX (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 8 Mar 2019 16:09:23 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Mar 2019 13:09:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.58,456,1544515200"; 
-   d="scan'208";a="281041922"
-Received: from sflabarb-mobl.amr.corp.intel.com (HELO ldmartin-desk.amr.corp.intel.com) ([10.251.140.19])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2019 13:09:22 -0800
-Date:   Fri, 8 Mar 2019 13:09:22 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     linux-modules@vger.kernel.org
-Subject: Re: [PATCH] tools: Print a message if refcnt attribute is missing
-Message-ID: <20190308210922.3apss26mnedktu34@ldmartin-desk.amr.corp.intel.com>
-References: <20190308203907.17030-1-ezequiel@collabora.com>
+        Thu, 28 Mar 2019 13:42:12 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46964 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726224AbfC1RmM (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 28 Mar 2019 13:42:12 -0400
+Received: by mail-wr1-f65.google.com with SMTP id t17so3244568wrw.13;
+        Thu, 28 Mar 2019 10:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7Mr1gDTF1rFGSHTeB5TYFuVHt5sbfmlprOnMBT4r3oc=;
+        b=by03zao+NKexwhTus4FVKlegqNELcobCS08towfRQZ868qX8Ac4Nin/DklDAhy7u5V
+         cFO8AWN/nDAhow0kD7JUsWqhNj4VNrC6G2R3n7MHkl4GfkOT29UN7/cPWdcCEqcTETYz
+         pCBp7Ohrsmx35iNFaf6yDVOzNLfih7nMmPl1UbYXLmfnTOdYPWuyB4vSjReRZr6RW6k2
+         eXDWpWhxVco+SVUf1NzyXuNgwQEeIlvMPswvWFhHcJp1dz2hYZV5y+4WLHia/jEmmawF
+         Kz3/rJTmlhIxvNZ1FGEkuU6PbgBlCCrTZwsYh6m38xIhNO62FaoRWCtn710e2qoKeWmU
+         TfnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Mr1gDTF1rFGSHTeB5TYFuVHt5sbfmlprOnMBT4r3oc=;
+        b=d9w4Ac/bqz76Yp2UP/CoCCom3Hk+pKUEqz3RPOOa/k92mmNDV4e7xLeLxAaDwnsSRA
+         /okwjZ74kYjwrrdk+TUlDwO3SxmvpaEtXggRZH48meO3dzzmd2h3+PCdKqlXUcYtxJQI
+         y+w+WcHpn/s8HxrNKxcPDbtQGTja/j24lRiPpWtZMx8eUWbawLRXigrpsMmldpcGLx5t
+         oXsBaqgB3r59wr4jDS8Hy5H4Ym+EEu4uhjaKYumQPKAyds1E2GznjeXwbVunjF/ifbWs
+         3PtS3GkcWMG0zlrz/rssQKtp07P8ITA3xynN/Pc4zDCIz88VYD3d8c2Sa3k0h9VvosMR
+         X7Lw==
+X-Gm-Message-State: APjAAAUtN08Q+xbrAwT/ALTZrXKBUHLlLNytO8Z3OzEJfUCfRL6OPeHO
+        tzgs1I5q40YgTkXZQMVLh0cPQIwgLlhb2Vglz60=
+X-Google-Smtp-Source: APXvYqz5Mq9hZxh5rsiNOSgBCrXmIx+0ScyAyLZvgUCXBgs46ZB4vd+jCeXlvOThB59ahS3qDB+kSXkqysn93864T7Q=
+X-Received: by 2002:a5d:6681:: with SMTP id l1mr6825990wru.186.1553794930258;
+ Thu, 28 Mar 2019 10:42:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190308203907.17030-1-ezequiel@collabora.com>
-User-Agent: NeoMutt/20180716
+References: <20190315101013.GN8455@Legion-PC.fortress> <CAK7LNATsm23e_CuyfFw7_CR8xZQ3HnwNHCXhEm_zQZU2PUGK5A@mail.gmail.com>
+ <20190326172411.GA15936@Legion-PC.fortress> <20190327154025.GB23293@linux-8ccs>
+In-Reply-To: <20190327154025.GB23293@linux-8ccs>
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date:   Thu, 28 Mar 2019 10:41:59 -0700
+Message-ID: <CAKi4VA+14kihzGFbMT623BwMbZEzgYU6+jz8MpR9jqoC059oog@mail.gmail.com>
+Subject: Re: [RESEND PATCH v1] moduleparam: Save information about built-in
+ modules in separate file
+To:     Jessica Yu <jeyu@kernel.org>
+Cc:     Alexey Gladkov <gladkov.alexey@gmail.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-api@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rusty Russell <rusty@rustcorp.com.au>,
+        linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Mar 08, 2019 at 05:39:07PM -0300, Ezequiel Garcia wrote:
->Currently, check_module_inuse returns a wrong user message
->if the kernel is built without module unloading support.
+On Wed, Mar 27, 2019 at 8:40 AM Jessica Yu <jeyu@kernel.org> wrote:
+> >No. There are definitely not all modules. I have a builtin sha256_generic,
+> >but I can't find him in the /sys/module.
 >
->Fix it by returning a more specific error, in case 'refcnt'
->attribute is missing.
+> Yeah, you'll only find builtin modules under /sys/module/ if it has any module
+> parameters, otherwise you won't find it there. As Masahiro already mentioned,
+> if a builtin module has any parameters, they would be accessible under /sys/module/.
 
-Applied, thanks.
+Could we please change that and add the sysfs entry regardless of
+what's being discussed
+here? Not having the entry there simply because we don't have
+parameters for that module
+always annoyed me.
 
 Lucas De Marchi
-
->---
-> tools/remove.c | 9 ++++++---
-> tools/rmmod.c  | 9 ++++++---
-> 2 files changed, 12 insertions(+), 6 deletions(-)
->
->diff --git a/tools/remove.c b/tools/remove.c
->index 07e2cc0c83cd..387ef0ed17ce 100644
->--- a/tools/remove.c
->+++ b/tools/remove.c
->@@ -44,7 +44,7 @@ static void help(void)
->
-> static int check_module_inuse(struct kmod_module *mod) {
-> 	struct kmod_list *holders;
->-	int state;
->+	int state, ret;
->
-> 	state = kmod_module_get_initstate(mod);
->
->@@ -74,12 +74,15 @@ static int check_module_inuse(struct kmod_module *mod) {
-> 		return -EBUSY;
-> 	}
->
->-	if (kmod_module_get_refcnt(mod) != 0) {
->+	ret = kmod_module_get_refcnt(mod);
->+	if (ret > 0) {
-> 		ERR("Module %s is in use\n", kmod_module_get_name(mod));
-> 		return -EBUSY;
->+	} else if (ret == -ENOENT) {
->+		ERR("Module unloading is not supported\n");
-> 	}
->
->-	return 0;
->+	return ret;
-> }
->
-> static int do_remove(int argc, char *argv[])
->diff --git a/tools/rmmod.c b/tools/rmmod.c
->index bcdea4c57262..3942e7b439bd 100644
->--- a/tools/rmmod.c
->+++ b/tools/rmmod.c
->@@ -63,7 +63,7 @@ static void help(void)
->
-> static int check_module_inuse(struct kmod_module *mod) {
-> 	struct kmod_list *holders;
->-	int state;
->+	int state, ret;
->
-> 	state = kmod_module_get_initstate(mod);
->
->@@ -93,12 +93,15 @@ static int check_module_inuse(struct kmod_module *mod) {
-> 		return -EBUSY;
-> 	}
->
->-	if (kmod_module_get_refcnt(mod) != 0) {
->+	ret = kmod_module_get_refcnt(mod);
->+	if (ret > 0) {
-> 		ERR("Module %s is in use\n", kmod_module_get_name(mod));
-> 		return -EBUSY;
->+	} else if (ret == -ENOENT) {
->+		ERR("Module unloading is not supported\n");
-> 	}
->
->-	return 0;
->+	return ret;
-> }
->
-> static int do_rmmod(int argc, char *argv[])
->-- 
->2.20.1
->
