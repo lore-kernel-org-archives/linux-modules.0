@@ -2,84 +2,77 @@ Return-Path: <SRS0=wpZ5=SU=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FE2FC10F0E
-	for <linux-modules@archiver.kernel.org>; Thu, 18 Apr 2019 14:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A53A6C10F0E
+	for <linux-modules@archiver.kernel.org>; Thu, 18 Apr 2019 15:27:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 118EC21479
-	for <linux-modules@archiver.kernel.org>; Thu, 18 Apr 2019 14:36:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74D12217D7
+	for <linux-modules@archiver.kernel.org>; Thu, 18 Apr 2019 15:27:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CyOlkmdI"
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="RcGv2MsV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389355AbfDROgp (ORCPT
+        id S2388302AbfDRP1a (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 18 Apr 2019 10:36:45 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:51919 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388907AbfDROgo (ORCPT
+        Thu, 18 Apr 2019 11:27:30 -0400
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:28274 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731317AbfDRP1a (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 18 Apr 2019 10:36:44 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 4so3040185wmf.1;
-        Thu, 18 Apr 2019 07:36:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kZebXCDZh23oSVAps9/qDaV/3OsIk6+l4osGFKchiqk=;
-        b=CyOlkmdIy7KxwPiBuHtn3v4aJgge89+1g38yBJ0r+jNLyNMUiSthGM+OBocfMsB3Ew
-         Y/uqmjoxAHH3XqmufrGHCNii7qiIRInlV7Q17nQSXLUtqpjdFV/Jb21ZCLdxg14vPjU3
-         ZROAisMMcZgB13ty3o0OSD4zDK6dQadZ3RWSKVdl1WlHKpaGADm2kRGApuIHIYkb37xd
-         qd9reVuVFjoFMmxfvXx2bUymNplsgdm1sYGi17vnXrF8vEynj3scJ0W50ie1AEeyFABj
-         ZgeM/Av97qyV1p28qF22G68VAUoIax071wpvB4gbOpWjsPzSlf/+n6awJQgzY84m3PZ7
-         D6cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kZebXCDZh23oSVAps9/qDaV/3OsIk6+l4osGFKchiqk=;
-        b=oybjx0vMMcTuk4WxQf1wrfR/1wdhnX8h9iQevDqt2UXUagd3iZVqqTDFiLYbJ7V3Av
-         0NGgogMjIo1bl1c8mAY9L3dXawPdQLWOxQcF7p0FvonaeaMhqvx8Y3pIeCJNJGLpxlb7
-         H1Xxk+j+ivx6In32RJcKgGIy7uUsS8DZLpW+fkC0o/JeDBpoC+JrBK60xsLxPTdWjBnB
-         N2JmCnGM21wq2JJBl4mV0UOlyRHk7mp+ghb7NowCqAYjSVCYXueGZtNRnqV7NWi2lfTz
-         0qvaMhVevqqZtlp7lVHUsbv3bpv1iSGuoT5e+Gq8bgjVkdR0WkmzbBatWAORAo0zNz2+
-         GNNQ==
-X-Gm-Message-State: APjAAAUxQbKajZXMTEEHfe2Wa+uJYQN7WbsYqdklzP21fsO6n7NQmoP4
-        MIfu5U9LM0i8VI+5h8EbbIRw7DZgFU0jtR9kb+w=
-X-Google-Smtp-Source: APXvYqyZWfqQaXOwhO2itLxhPTgfbRwbepDsGhDTKm8lUxIfAq557JRAejIC4vtDC4Bp+t2Hm+hFZt35Br1Dzwl0d8E=
-X-Received: by 2002:a1c:dc84:: with SMTP id t126mr3252812wmg.143.1555598202270;
- Thu, 18 Apr 2019 07:36:42 -0700 (PDT)
+        Thu, 18 Apr 2019 11:27:30 -0400
+X-Greylist: delayed 15376 seconds by postgrey-1.27 at vger.kernel.org; Thu, 18 Apr 2019 11:27:28 EDT
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id x3IFRAI1000644;
+        Fri, 19 Apr 2019 00:27:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x3IFRAI1000644
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1555601231;
+        bh=IZhFShJ6jDiysCuABWEkQgQvv5e4ZaTURElBN4UyQy8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RcGv2MsVY9871J747cWMrMvVAJrvKtzcous8CoBAOH4ZTw1RFFdKfWrhFUSZs+BTA
+         MmmKd26RRXLeHHXpiDeemnE4mXrz4jf4EQvts5p1S0lp76qkgMZA8erHdGzvlgF9/o
+         MZgWYw8eqvoYsU05enUbPD283kbMm0+pZvw3f7UQrlkGIRkHJieJv6Dw+lN5dpQxPz
+         wXpWFp7pL9wgqFK7XByS8mB7wNG3JNfv/d2U5C+QruqfoNzzIK5A9STYxsAQhXa1/3
+         7+7DTGLksLJPOGX/4NXJbh1Bm2/wdrayx77fWLzS0eSnlduC5HR60LTCzcQLKq2K4j
+         N2YyM0n/VDP7w==
+X-Nifty-SrcIP: [209.85.217.49]
+Received: by mail-vs1-f49.google.com with SMTP id g127so1372552vsd.6;
+        Thu, 18 Apr 2019 08:27:10 -0700 (PDT)
+X-Gm-Message-State: APjAAAVcEdLFwvv0T5BDNutyiKtQ5wpSc7y1nZCJNMrW6gN5e0cZZvzb
+        J61Gj8W+MeccAEdtO8uWdSeWDspZ2Hq51snpcjc=
+X-Google-Smtp-Source: APXvYqyOpBWWg2uYNK0qf3CyHiNJr6VMFSUPz8vF9tVsbcHZpS8rkp9GWstvnRugAXFQPG1W7QOPifC4D5msTLBFX6w=
+X-Received: by 2002:a67:f948:: with SMTP id u8mr9436544vsq.179.1555601229490;
+ Thu, 18 Apr 2019 08:27:09 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190406121447.GB4047@localhost.localdomain> <CAK7LNATfo0K6kzwobkAZ_u2KnWL3XycJzbr3KPtPF=ePziCuDg@mail.gmail.com>
  <20190418135238.GA5626@linux-8ccs>
 In-Reply-To: <20190418135238.GA5626@linux-8ccs>
-From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Thu, 18 Apr 2019 07:36:25 -0700
-Message-ID: <CAKi4VALprR0+p-pk9h4Jt1+v2nxGqs_aO7p6bM_2oVsutsTsyQ@mail.gmail.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Fri, 19 Apr 2019 00:26:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARKHXLgniczKXY01JhxhBpL2p-X_hWg70AcsrXRaLyDSg@mail.gmail.com>
+Message-ID: <CAK7LNARKHXLgniczKXY01JhxhBpL2p-X_hWg70AcsrXRaLyDSg@mail.gmail.com>
 Subject: Re: [PATCH v2] moduleparam: Save information about built-in modules
  in separate file
 To:     Jessica Yu <jeyu@kernel.org>
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>,
+Cc:     Alexey Gladkov <gladkov.alexey@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-api@vger.kernel.org,
-        linux-modules <linux-modules@vger.kernel.org>,
+        linux-api@vger.kernel.org, linux-modules@vger.kernel.org,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
         "Dmitry V. Levin" <ldv@altlinux.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rusty Russell <rusty@rustcorp.com.au>
+        Rusty Russell <rusty@rustcorp.com.au>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Apr 18, 2019 at 6:52 AM Jessica Yu <jeyu@kernel.org> wrote:
+On Thu, Apr 18, 2019 at 10:52 PM Jessica Yu <jeyu@kernel.org> wrote:
 >
 > +++ Masahiro Yamada [18/04/19 20:10 +0900]:
 > >On Sat, Apr 6, 2019 at 9:15 PM Alexey Gladkov <gladkov.alexey@gmail.com> wrote:
@@ -154,33 +147,44 @@ On Thu, Apr 18, 2019 at 6:52 AM Jessica Yu <jeyu@kernel.org> wrote:
 >
 > Since kbuild already produces "modules.order" and "modules.builtin"
 > files, why not just name it "modules.builtin.modinfo" to keep the
+> names consistent with what is already there?
 
-I agree with modules.builtin.modinfo
 
-> names consistent with what is already there? It clearly conveys that
+Is it consistent?
+
+If we had "modules.order" and "modules.builtin.order" there,
+I would agree with "modules.builtin.modinfo",
+and also "modules.alias" vs "modules.builtin.alias".
+
+
+We already have "modules.builtin", and probably impossible
+to rename it, so we cannot keep consistency in any way.
+
+
+"modules.builtin" is a weird name since
+it actually contains "order", but its extension
+does not express what kind of information is in it.
+Hence, I doubt "modules.builtin" is a good precedent.
+
+IMHO, "modules" and "builtin" are opposite
+to each other. "modules.builtin" sounds iffy to me.
+
+
+
+
+
+> It clearly conveys that
 > this file contains modinfo for builtin modules.
 >
 > I'll leave it up to Lucas to decide if the file format is OK for kmod.
 > With the modinfo dump, kmod could then decide what to do with the
 > information, append to modules.alias{,.bin}, etc.
-
-I think it's ok with the current format. It's simple enough. I would
-delay merging it until
-the userspace counterpart is implemented though. So to make sure we
-have everything we need.
-I can work on that in ~1 or 2 weeks.
-
-thanks
-Lucas De Marchi
-
 >
 > Also, I think this file needs to be documented in Documentation/kbuild/kbuild.txt.
 >
 > Thanks,
 >
 > Jessica
-
-
-
--- 
-Lucas De Marchi
+--
+Best Regards
+Masahiro Yamada
