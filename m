@@ -1,111 +1,127 @@
-Return-Path: <SRS0=0d5+=TU=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=f3mb=T2=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 939CCC04AAC
-	for <linux-modules@archiver.kernel.org>; Mon, 20 May 2019 15:53:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28153C282E3
+	for <linux-modules@archiver.kernel.org>; Sun, 26 May 2019 09:25:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 694712171F
-	for <linux-modules@archiver.kernel.org>; Mon, 20 May 2019 15:53:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D83BD2085A
+	for <linux-modules@archiver.kernel.org>; Sun, 26 May 2019 09:25:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NvYHTfKN"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="HpZSmkBG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388246AbfETPx5 (ORCPT
+        id S1727640AbfEZJZX (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 20 May 2019 11:53:57 -0400
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:36951 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387645AbfETPx4 (ORCPT
+        Sun, 26 May 2019 05:25:23 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:41665 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727498AbfEZJZX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 20 May 2019 11:53:56 -0400
-Received: by mail-yb1-f196.google.com with SMTP id z12so337152ybr.4
-        for <linux-modules@vger.kernel.org>; Mon, 20 May 2019 08:53:56 -0700 (PDT)
+        Sun, 26 May 2019 05:25:23 -0400
+Received: by mail-wr1-f67.google.com with SMTP id u16so9993959wrn.8
+        for <linux-modules@vger.kernel.org>; Sun, 26 May 2019 02:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:from:subject:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=lmIaqHe3kJEae4ZT8Ci6rQjATn9jbGR5o+lwM4qbbGc=;
-        b=NvYHTfKN8omqOXAtZ9o1Eo+ASQtzotGsym1ksb1PAhjmGrgyQXErFZycVpIci2INtK
-         B1vr8GI1anaMJr6vvF7ctlc14ju/xWL1+7lC75u5GHcxw/GA8F4oogEnPeWvRgX1D4zB
-         8j4CbZ/U4BPjcV0WyyHf4wZn+RMXMGkZZ668pbM0IXDgRAxxxmI+bTGbvPWJGnSQMqzg
-         3nEbZkhmokw4sVJANhUtwrEi9u7ed+KXhHbAFl5WyXihu51IzHBg8UMtn5tKVGw7bejq
-         gxYoQZW7PLeNlN+JqSeTaiQ8/cQ4RvZCrKaJzjAFMrwRTgZfcutBUkIlbBxp72B4+9qw
-         e1Yw==
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MaesAHV7XbucgNbiX6OEnJaTvbcp9LTAjcsWKT9apy8=;
+        b=HpZSmkBG5yyJgVVoofGsSRQfmey+l43gl9PUqNRclL6w8CVkPCcFOuqsSlc91v9JIc
+         Yz/ILGMJiB+Br8Mufv1bWwHiCA607k2r5A9o16WZNXzi1NXZmukoZrE4amEZMKDBvNo3
+         BHhzv05eJWB++qV43IXe8CDAa0pBPaWHIi+OBaU71FqooX+XxzutFyD330Z9aqXuck1y
+         jMmHW9PspEA25HW15U16nSp8UpLyRYyB0IVStjhBZF0v/OyK+n6NbGFnLK4J3kUQIuv+
+         V5GMOoObewmbq+MObJoNxACGmkNYRstcCXJMVQ4JkmnzJxaw/8lyGcwnXLlWl5BKhLLH
+         J6bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=lmIaqHe3kJEae4ZT8Ci6rQjATn9jbGR5o+lwM4qbbGc=;
-        b=sjhDApkLrNurnj4hrNcIDSeblZtkwa04Y/LfFOuR0mpY0Mxg5b89kyEXf7ZQtN2B91
-         OQkC22IwrB1+huIfrjJnaaiVSz+IhR5h5oWUWdXr6uMLWsWt0GDxnXJtzya1HHxsVhzQ
-         rIW0IyvgGhorYKBo7pg8QI4Pc0l7rp1Sh7Q53SpjRvV9k0wi1RXya72tHi8PckfnGs7A
-         tKHOCZGTTUSH5cXHXC9X2Em2NPS6Fusn8lSV5SkgFMf9uCWX33bdkrQu2xst5g0iAQtL
-         pW+4K/W2v8f/8Az+nWaYj437JyJMcoXWvenf6pHRrKsH2a5dgee6st2QhFsKxBnZwGlc
-         P7jQ==
-X-Gm-Message-State: APjAAAW9e35A0mCRAD+4im1jUhxa6cUPRoz1nfIgtXbPh98ZVnmWXUce
-        0RR8UmLD6vRtsC86tuB9/HnnY/np
-X-Google-Smtp-Source: APXvYqwBE6IMFv1Ux/1uuGXUAti/W6cWBTIc3KrP/HqYwG4CzOEIemVA5Fkjq0bZJffg+Tpq8wEApQ==
-X-Received: by 2002:a25:76d4:: with SMTP id r203mr35271349ybc.83.1558367635987;
-        Mon, 20 May 2019 08:53:55 -0700 (PDT)
-Received: from [172.26.16.3] ([76.229.134.243])
-        by smtp.googlemail.com with ESMTPSA id f206sm5283520ywf.77.2019.05.20.08.53.54
-        for <linux-modules@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 May 2019 08:53:55 -0700 (PDT)
-To:     linux-modules@vger.kernel.org
-From:   Brian Mason <brianmason386@gmail.com>
-Subject: Documentation error in depmod.d.5
-Message-ID: <aee4bc92-d34c-ff9f-2a86-f7b0c41c3d2f@gmail.com>
-Date:   Mon, 20 May 2019 11:53:37 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MaesAHV7XbucgNbiX6OEnJaTvbcp9LTAjcsWKT9apy8=;
+        b=QjqK8FHEZWa4HiA6zhW8oBzZ+OFFn1U50M3+PS+WQLPn4bEUJYP4jYv+CZfhQR4HW1
+         1hsRb7BuzLqFJLnum5QHtubO4TjbOKFsZW0Y2xnyCZiGQ6d5yU5YFI2k/3+9NyWHzWOd
+         AwyUiS/JK1yg3K8g6j1U8ETs8R6mtDTCQ4fOUot9QqyNUY5v9zrQ0I8GeHX3AUmBBbZI
+         IbI+vD6NDodQBzz4zdyaIpO/R7/zw0r33W5eM/xra0Glx9AXF+CmosNs4ekQYhozjOnA
+         xJ347ghIbKJnkRtKD/PRFjM8jPCaafNS+UOb9rgM+bW2Kzz6bAQpzXa3aQ+z4p0cIPxY
+         saHA==
+X-Gm-Message-State: APjAAAUc1J8ypp3aLRxflAoK29SZhU3xNXCu9yF2ufW1up5N9t8rEssB
+        gap3yA4wru5f4SXMWgpBnEf46ILG8yA=
+X-Google-Smtp-Source: APXvYqyXhB9Fp4BreffTcI4MFuMN8qCp3lquVgXTuMHyrWCrJ3Vn6T79xNKuEO2OCeBzSZMPGKIpgA==
+X-Received: by 2002:a5d:68cd:: with SMTP id p13mr4891186wrw.0.1558862721287;
+        Sun, 26 May 2019 02:25:21 -0700 (PDT)
+Received: from debian-brgl.home ([2a01:cb1d:af:5b00:6d6c:8493:1ab5:dad7])
+        by smtp.gmail.com with ESMTPSA id 88sm22042444wrc.33.2019.05.26.02.25.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 26 May 2019 02:25:20 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [kmod][PATCH] module: fix error path in kmod_module_probe_insert_module()
+Date:   Sun, 26 May 2019 11:25:12 +0200
+Message-Id: <20190526092512.993-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello list,
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
+The documentation says that kmod_module_probe_insert_module() will
+return >0 if "stopped by a reason given in @flags" but it returns a
+negative value if KMOD_PROBE_FAIL_ON_LOADED flag is passed and the
+relevant module is already loaded. Fix the error path by using a
+positive error value where required.
 
-I wasn't sure how to report this but I figured the mailing list was a
-good bet.
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ libkmod/libkmod-module.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-
-In man/depmod.d.xml it says "/usr/lib/depmod.d" is one of the
-directories depmod will check for configuration files, but
-tools/depmod.c says "/lib/depmod.d" instead. I believe the sources are
-correct and the documentation is in error because modprobe uses a
-similar layout and its source and doc are consistent about
-"/lib/modprobe.d".
-
-
-Trivial fix but I'm sending a patch anyway!
-
-
-Thanks,
-
-Brian
-
-
-diff --git a/man/depmod.d.xml b/man/depmod.d.xml
-index 4341a56..602f72d 100644
---- a/man/depmod.d.xml
-+++ b/man/depmod.d.xml
-@@ -39,7 +39,7 @@
-   </refnamediv>
- 
-   <refsynopsisdiv>
--    <para><filename>/usr/lib/depmod.d/*.conf</filename></para>
-+    <para><filename>/lib/depmod.d/*.conf</filename></para>
-     <para><filename>/etc/depmod.d/*.conf</filename></para>
-     <para><filename>/run/depmod.d/*.conf</filename></para>
-   </refsynopsisdiv>
+diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+index bffe715..a3afaba 100644
+--- a/libkmod/libkmod-module.c
++++ b/libkmod/libkmod-module.c
+@@ -1253,7 +1253,7 @@ KMOD_EXPORT int kmod_module_probe_insert_module(struct kmod_module *mod,
+ 	if (!(flags & KMOD_PROBE_IGNORE_LOADED)
+ 					&& module_is_inkernel(mod)) {
+ 		if (flags & KMOD_PROBE_FAIL_ON_LOADED)
+-			return -EEXIST;
++			return EEXIST;
+ 		else
+ 			return 0;
+ 	}
+@@ -1304,7 +1304,7 @@ KMOD_EXPORT int kmod_module_probe_insert_module(struct kmod_module *mod,
+ 						&& module_is_inkernel(m)) {
+ 			DBG(mod->ctx, "Ignoring module '%s': already loaded\n",
+ 								m->name);
+-			err = -EEXIST;
++			err = EEXIST;
+ 			goto finish_module;
+ 		}
+ 
+@@ -1340,14 +1340,14 @@ finish_module:
+ 		 * been loaded between the check and the moment we try to
+ 		 * insert it.
+ 		 */
+-		if (err == -EEXIST && m == mod &&
++		if (err == EEXIST && m == mod &&
+ 				(flags & KMOD_PROBE_FAIL_ON_LOADED))
+ 			break;
+ 
+ 		/*
+ 		 * Ignore errors from softdeps
+ 		 */
+-		if (err == -EEXIST || !m->required)
++		if (err == EEXIST || !m->required)
+ 			err = 0;
+ 
+ 		else if (err < 0)
+-- 
+2.21.0
 
