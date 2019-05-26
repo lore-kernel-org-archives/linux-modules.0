@@ -2,126 +2,194 @@ Return-Path: <SRS0=f3mb=T2=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28153C282E3
-	for <linux-modules@archiver.kernel.org>; Sun, 26 May 2019 09:25:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58D03C282E3
+	for <linux-modules@archiver.kernel.org>; Sun, 26 May 2019 10:07:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D83BD2085A
-	for <linux-modules@archiver.kernel.org>; Sun, 26 May 2019 09:25:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="HpZSmkBG"
+	by mail.kernel.org (Postfix) with ESMTP id 2D13F20815
+	for <linux-modules@archiver.kernel.org>; Sun, 26 May 2019 10:07:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727640AbfEZJZX (ORCPT
+        id S1727681AbfEZKHM (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 26 May 2019 05:25:23 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:41665 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727498AbfEZJZX (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 26 May 2019 05:25:23 -0400
-Received: by mail-wr1-f67.google.com with SMTP id u16so9993959wrn.8
-        for <linux-modules@vger.kernel.org>; Sun, 26 May 2019 02:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MaesAHV7XbucgNbiX6OEnJaTvbcp9LTAjcsWKT9apy8=;
-        b=HpZSmkBG5yyJgVVoofGsSRQfmey+l43gl9PUqNRclL6w8CVkPCcFOuqsSlc91v9JIc
-         Yz/ILGMJiB+Br8Mufv1bWwHiCA607k2r5A9o16WZNXzi1NXZmukoZrE4amEZMKDBvNo3
-         BHhzv05eJWB++qV43IXe8CDAa0pBPaWHIi+OBaU71FqooX+XxzutFyD330Z9aqXuck1y
-         jMmHW9PspEA25HW15U16nSp8UpLyRYyB0IVStjhBZF0v/OyK+n6NbGFnLK4J3kUQIuv+
-         V5GMOoObewmbq+MObJoNxACGmkNYRstcCXJMVQ4JkmnzJxaw/8lyGcwnXLlWl5BKhLLH
-         J6bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MaesAHV7XbucgNbiX6OEnJaTvbcp9LTAjcsWKT9apy8=;
-        b=QjqK8FHEZWa4HiA6zhW8oBzZ+OFFn1U50M3+PS+WQLPn4bEUJYP4jYv+CZfhQR4HW1
-         1hsRb7BuzLqFJLnum5QHtubO4TjbOKFsZW0Y2xnyCZiGQ6d5yU5YFI2k/3+9NyWHzWOd
-         AwyUiS/JK1yg3K8g6j1U8ETs8R6mtDTCQ4fOUot9QqyNUY5v9zrQ0I8GeHX3AUmBBbZI
-         IbI+vD6NDodQBzz4zdyaIpO/R7/zw0r33W5eM/xra0Glx9AXF+CmosNs4ekQYhozjOnA
-         xJ347ghIbKJnkRtKD/PRFjM8jPCaafNS+UOb9rgM+bW2Kzz6bAQpzXa3aQ+z4p0cIPxY
-         saHA==
-X-Gm-Message-State: APjAAAUc1J8ypp3aLRxflAoK29SZhU3xNXCu9yF2ufW1up5N9t8rEssB
-        gap3yA4wru5f4SXMWgpBnEf46ILG8yA=
-X-Google-Smtp-Source: APXvYqyXhB9Fp4BreffTcI4MFuMN8qCp3lquVgXTuMHyrWCrJ3Vn6T79xNKuEO2OCeBzSZMPGKIpgA==
-X-Received: by 2002:a5d:68cd:: with SMTP id p13mr4891186wrw.0.1558862721287;
-        Sun, 26 May 2019 02:25:21 -0700 (PDT)
-Received: from debian-brgl.home ([2a01:cb1d:af:5b00:6d6c:8493:1ab5:dad7])
-        by smtp.gmail.com with ESMTPSA id 88sm22042444wrc.33.2019.05.26.02.25.20
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 26 May 2019 02:25:20 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [kmod][PATCH] module: fix error path in kmod_module_probe_insert_module()
-Date:   Sun, 26 May 2019 11:25:12 +0200
-Message-Id: <20190526092512.993-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.21.0
+        Sun, 26 May 2019 06:07:12 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:37936 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727640AbfEZKHM (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Sun, 26 May 2019 06:07:12 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 79C0A307D914;
+        Sun, 26 May 2019 10:07:11 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-116-38.ams2.redhat.com [10.36.116.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 095195D720;
+        Sun, 26 May 2019 10:07:09 +0000 (UTC)
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To:     Stefan Strogin <steils@gentoo.org>
+Cc:     linux-modules@vger.kernel.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Bauman <bman@gentoo.org>
+Subject: Re: [PATCH v2] libkmod-signature: use PKCS#7 instead of CMS
+In-Reply-To: <20190519004201.7032-1-steils@gentoo.org> (Stefan Strogin's
+        message of "Sun, 19 May 2019 03:42:01 +0300")
+References: <20190519004201.7032-1-steils@gentoo.org>
+Date:   Sun, 26 May 2019 13:11:06 +0300
+Message-ID: <xunyd0k51q6d.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.48]); Sun, 26 May 2019 10:07:11 +0000 (UTC)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Hi, Stefan!
 
-The documentation says that kmod_module_probe_insert_module() will
-return >0 if "stopped by a reason given in @flags" but it returns a
-negative value if KMOD_PROBE_FAIL_ON_LOADED flag is passed and the
-relevant module is already loaded. Fix the error path by using a
-positive error value where required.
+Just in case, I have no objections.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- libkmod/libkmod-module.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>> On Sun, 19 May 2019 03:42:01 +0300, Stefan Strogin  wrote:
 
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index bffe715..a3afaba 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -1253,7 +1253,7 @@ KMOD_EXPORT int kmod_module_probe_insert_module(struct kmod_module *mod,
- 	if (!(flags & KMOD_PROBE_IGNORE_LOADED)
- 					&& module_is_inkernel(mod)) {
- 		if (flags & KMOD_PROBE_FAIL_ON_LOADED)
--			return -EEXIST;
-+			return EEXIST;
- 		else
- 			return 0;
- 	}
-@@ -1304,7 +1304,7 @@ KMOD_EXPORT int kmod_module_probe_insert_module(struct kmod_module *mod,
- 						&& module_is_inkernel(m)) {
- 			DBG(mod->ctx, "Ignoring module '%s': already loaded\n",
- 								m->name);
--			err = -EEXIST;
-+			err = EEXIST;
- 			goto finish_module;
- 		}
+ > Linux uses either PKCS #7 or CMS for signing modules (see
+ > scripts/sign-file.c). CMS is not supported by LibreSSL or older OpenSSL,
+ > so PKCS #7 is used on systems with these libcrypto providers.
+
+ > CMS and PKCS #7 formats are very similar. CMS is newer but is
+ > as much as possible backward compatible with PKCS #7 [1]. PKCS
+ > #7 is supported in the latest OpenSSL as well as CMS. The
+ > fields used for signing kernel modules are supported both in
+ > PKCS #7 and CMS.
+
+ > For now modinfo uses CMS with no alternative requiring OpenSSL
+ > 1.1.0 or newer.
+
+ > Use PKCS #7 for parsing module signature information, so that
+ > modinfo could be used both with OpenSSL and LibreSSL.
+
+ > [1] https://tools.ietf.org/html/rfc5652#section-1.1
+
+ > Changes v1->v2:
+ > - Don't use ifdefs for keeping redundant CMS code, just use PKCS #7 both
+ > with OpenSSL and LibreSSL.
+
+ > Signed-off-by: Stefan Strogin <steils@gentoo.org>
+ > ---
+ >  libkmod/libkmod-signature.c | 37 +++++++++++++++++++------------------
+ >  1 file changed, 19 insertions(+), 18 deletions(-)
+
+ > diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+ > index 48d0145..4e8748c 100644
+ > --- a/libkmod/libkmod-signature.c
+ > +++ b/libkmod/libkmod-signature.c
+ > @@ -20,7 +20,7 @@
+ >  #include <endian.h>
+ >  #include <inttypes.h>
+ >  #ifdef ENABLE_OPENSSL
+ > -#include <openssl/cms.h>
+ > +#include <openssl/pkcs7.h>
+ >  #include <openssl/ssl.h>
+ >  #endif
+ >  #include <stdio.h>
+ > @@ -122,7 +122,7 @@ static bool fill_default(const char *mem, off_t size,
+ >  #ifdef ENABLE_OPENSSL
  
-@@ -1340,14 +1340,14 @@ finish_module:
- 		 * been loaded between the check and the moment we try to
- 		 * insert it.
- 		 */
--		if (err == -EEXIST && m == mod &&
-+		if (err == EEXIST && m == mod &&
- 				(flags & KMOD_PROBE_FAIL_ON_LOADED))
- 			break;
+ >  struct pkcs7_private {
+ > -	CMS_ContentInfo *cms;
+ > +	PKCS7 *pkcs7;
+ >  	unsigned char *key_id;
+ >  	BIGNUM *sno;
+ >  };
+ > @@ -132,7 +132,7 @@ static void pkcs7_free(void *s)
+ >  	struct kmod_signature_info *si = s;
+ >  	struct pkcs7_private *pvt = si->private;
  
- 		/*
- 		 * Ignore errors from softdeps
- 		 */
--		if (err == -EEXIST || !m->required)
-+		if (err == EEXIST || !m->required)
- 			err = 0;
+ > -	CMS_ContentInfo_free(pvt->cms);
+ > +	PKCS7_free(pvt->pkcs7);
+ >  	BN_free(pvt->sno);
+ >  	free(pvt->key_id);
+ >  	free(pvt);
+ > @@ -197,11 +197,10 @@ static bool fill_pkcs7(const char *mem, off_t size,
+ >  		       struct kmod_signature_info *sig_info)
+ >  {
+ >  	const char *pkcs7_raw;
+ > -	CMS_ContentInfo *cms;
+ > -	STACK_OF(CMS_SignerInfo) *sis;
+ > -	CMS_SignerInfo *si;
+ > -	int rc;
+ > -	ASN1_OCTET_STRING *key_id;
+ > +	PKCS7 *pkcs7;
+ > +	STACK_OF(PKCS7_SIGNER_INFO) *sis;
+ > +	PKCS7_SIGNER_INFO *si;
+ > +	PKCS7_ISSUER_AND_SERIAL *is;
+ >  	X509_NAME *issuer;
+ >  	ASN1_INTEGER *sno;
+ >  	ASN1_OCTET_STRING *sig;
+ > @@ -220,31 +219,33 @@ static bool fill_pkcs7(const char *mem, off_t size,
  
- 		else if (err < 0)
+ >  	in = BIO_new_mem_buf(pkcs7_raw, sig_len);
+ 
+ > -	cms = d2i_CMS_bio(in, NULL);
+ > -	if (cms == NULL) {
+ > +	pkcs7 = d2i_PKCS7_bio(in, NULL);
+ > +	if (pkcs7 == NULL) {
+ >  		BIO_free(in);
+ >  		return false;
+ >  	}
+ 
+ >  	BIO_free(in);
+ 
+ > -	sis = CMS_get0_SignerInfos(cms);
+ > +	sis = PKCS7_get_signer_info(pkcs7);
+ >  	if (sis == NULL)
+ >  		goto err;
+ 
+ > -	si = sk_CMS_SignerInfo_value(sis, 0);
+ > +	si = sk_PKCS7_SIGNER_INFO_value(sis, 0);
+ >  	if (si == NULL)
+ >  		goto err;
+ 
+ > -	rc = CMS_SignerInfo_get0_signer_id(si, &key_id, &issuer, &sno);
+ > -	if (rc == 0)
+ > +	is = si->issuer_and_serial;
+ > +	if (is == NULL)
+ >  		goto err;
+ > +	issuer = is->issuer;
+ > +	sno = is->serial;
+ 
+ > -	sig = CMS_SignerInfo_get0_signature(si);
+ > +	sig = si->enc_digest;
+ >  	if (sig == NULL)
+ >  		goto err;
+ 
+ > -	CMS_SignerInfo_get0_algs(si, NULL, NULL, &dig_alg, &sig_alg);
+ > +	PKCS7_SIGNER_INFO_get0_algs(si, NULL, &dig_alg, &sig_alg);
+ 
+ sig_info-> sig = (const char *)ASN1_STRING_get0_data(sig);
+ sig_info-> sig_len = ASN1_STRING_length(sig);
+ > @@ -277,7 +278,7 @@ static bool fill_pkcs7(const char *mem, off_t size,
+ >  	if (pvt == NULL)
+ >  		goto err3;
+ 
+ > -	pvt->cms = cms;
+ > +	pvt->pkcs7 = pkcs7;
+ pvt-> key_id = key_id_str;
+ pvt-> sno = sno_bn;
+ sig_info-> private = pvt;
+ > @@ -290,7 +291,7 @@ err3:
+ >  err2:
+ >  	BN_free(sno_bn);
+ >  err:
+ > -	CMS_ContentInfo_free(cms);
+ > +	PKCS7_free(pkcs7);
+ >  	return false;
+ >  }
+ 
+ > -- 
+ > 2.21.0
+
+
 -- 
-2.21.0
-
+WBR,
+Yauheni Kaliuta
