@@ -4,130 +4,189 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64CDDC04AB6
-	for <linux-modules@archiver.kernel.org>; Tue, 28 May 2019 22:21:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1C11C04AB6
+	for <linux-modules@archiver.kernel.org>; Tue, 28 May 2019 22:25:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 36D3A20883
-	for <linux-modules@archiver.kernel.org>; Tue, 28 May 2019 22:21:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 89D77208CB
+	for <linux-modules@archiver.kernel.org>; Tue, 28 May 2019 22:25:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbfE1WVX (ORCPT
+        id S1726576AbfE1WZa (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 May 2019 18:21:23 -0400
-Received: from mga04.intel.com ([192.55.52.120]:32254 "EHLO mga04.intel.com"
+        Tue, 28 May 2019 18:25:30 -0400
+Received: from mga12.intel.com ([192.55.52.136]:54154 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726492AbfE1WVX (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 May 2019 18:21:23 -0400
+        id S1726481AbfE1WZa (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Tue, 28 May 2019 18:25:30 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 May 2019 15:21:23 -0700
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 May 2019 15:25:29 -0700
 X-ExtLoop1: 1
 Received: from ldmartin-desk.jf.intel.com (HELO ldmartin-desk.amr.corp.intel.com) ([10.24.8.221])
-  by orsmga006.jf.intel.com with ESMTP; 28 May 2019 15:21:22 -0700
-Date:   Tue, 28 May 2019 15:21:22 -0700
+  by orsmga004.jf.intel.com with ESMTP; 28 May 2019 15:25:28 -0700
+Date:   Tue, 28 May 2019 15:25:28 -0700
 From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [kmod][PATCH] module: fix error path in
- kmod_module_probe_insert_module()
-Message-ID: <20190528222122.f4xswlay47smbvhk@ldmartin-desk.amr.corp.intel.com>
-References: <20190526092512.993-1-brgl@bgdev.pl>
+To:     Stefan Strogin <steils@gentoo.org>
+Cc:     linux-modules@vger.kernel.org,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        Aaron Bauman <bman@gentoo.org>
+Subject: Re: [PATCH v2] libkmod-signature: use PKCS#7 instead of CMS
+Message-ID: <20190528222528.62qhkfeqoraabhv2@ldmartin-desk.amr.corp.intel.com>
+References: <20190519004201.7032-1-steils@gentoo.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20190526092512.993-1-brgl@bgdev.pl>
+In-Reply-To: <20190519004201.7032-1-steils@gentoo.org>
 X-Patchwork-Hint: ignore
 User-Agent: NeoMutt/20180716
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, May 26, 2019 at 11:25:12AM +0200, Bartosz Golaszewski wrote:
->From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+On Sun, May 19, 2019 at 03:42:01AM +0300, Stefan Strogin wrote:
+>Linux uses either PKCS #7 or CMS for signing modules (see
+>scripts/sign-file.c). CMS is not supported by LibreSSL or older OpenSSL,
+>so PKCS #7 is used on systems with these libcrypto providers.
 >
->The documentation says that kmod_module_probe_insert_module() will
->return >0 if "stopped by a reason given in @flags" but it returns a
->negative value if KMOD_PROBE_FAIL_ON_LOADED flag is passed and the
->relevant module is already loaded. Fix the error path by using a
->positive error value where required.
+>CMS and PKCS #7 formats are very similar. CMS is newer but is as much as
+>possible backward compatible with PKCS #7 [1]. PKCS #7 is supported in
+>the latest OpenSSL as well as CMS. The fields used for signing kernel
+>modules are supported both in PKCS #7 and CMS.
 >
->Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
->---
-> libkmod/libkmod-module.c | 8 ++++----
-> 1 file changed, 4 insertions(+), 4 deletions(-)
+>For now modinfo uses CMS with no alternative requiring OpenSSL 1.1.0 or
+>newer.
 >
->diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
->index bffe715..a3afaba 100644
->--- a/libkmod/libkmod-module.c
->+++ b/libkmod/libkmod-module.c
->@@ -1253,7 +1253,7 @@ KMOD_EXPORT int kmod_module_probe_insert_module(struct kmod_module *mod,
-> 	if (!(flags & KMOD_PROBE_IGNORE_LOADED)
-> 					&& module_is_inkernel(mod)) {
-> 		if (flags & KMOD_PROBE_FAIL_ON_LOADED)
->-			return -EEXIST;
->+			return EEXIST;
-> 		else
-> 			return 0;
-> 	}
->@@ -1304,7 +1304,7 @@ KMOD_EXPORT int kmod_module_probe_insert_module(struct kmod_module *mod,
-> 						&& module_is_inkernel(m)) {
-> 			DBG(mod->ctx, "Ignoring module '%s': already loaded\n",
-> 								m->name);
->-			err = -EEXIST;
->+			err = EEXIST;
+>Use PKCS #7 for parsing module signature information, so that modinfo
+>could be used both with OpenSSL and LibreSSL.
+>
+>[1] https://tools.ietf.org/html/rfc5652#section-1.1
+>
+>Changes v1->v2:
+>- Don't use ifdefs for keeping redundant CMS code, just use PKCS #7 both
+>with OpenSSL and LibreSSL.
 
-this would break the ABI. modprobe for instance, that is in the same
-repository would be broken by it:
+Much better now, thanks!
 
-kmod_list_foreach() {
-	...
-	if (err >= 0)
-		/* ignore flag return values such as a mod being blacklisted */
-		err = 0;
-	else {
-		switch (err) {
-		case -EEXIST:
-	...
-}
+Applied.
 
-I think we need to say the bug is actually in the bad documentation - my
-bad actually, on commit b1a51256a9ed ("libkmod-module: probe: change
-insertion to cover more use cases").
-
-If you look at the definition of 'enum kmod_probe' you will see that
-not all flags are returned as positive values - the only values that
-have this behavior are the ones related to blacklist.
-
-Could you rather patch the documentation?
-
-thanks
 Lucas De Marchi
 
-> 			goto finish_module;
-> 		}
 >
->@@ -1340,14 +1340,14 @@ finish_module:
-> 		 * been loaded between the check and the moment we try to
-> 		 * insert it.
-> 		 */
->-		if (err == -EEXIST && m == mod &&
->+		if (err == EEXIST && m == mod &&
-> 				(flags & KMOD_PROBE_FAIL_ON_LOADED))
-> 			break;
+>Signed-off-by: Stefan Strogin <steils@gentoo.org>
+>---
+> libkmod/libkmod-signature.c | 37 +++++++++++++++++++------------------
+> 1 file changed, 19 insertions(+), 18 deletions(-)
 >
-> 		/*
-> 		 * Ignore errors from softdeps
-> 		 */
->-		if (err == -EEXIST || !m->required)
->+		if (err == EEXIST || !m->required)
-> 			err = 0;
+>diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+>index 48d0145..4e8748c 100644
+>--- a/libkmod/libkmod-signature.c
+>+++ b/libkmod/libkmod-signature.c
+>@@ -20,7 +20,7 @@
+> #include <endian.h>
+> #include <inttypes.h>
+> #ifdef ENABLE_OPENSSL
+>-#include <openssl/cms.h>
+>+#include <openssl/pkcs7.h>
+> #include <openssl/ssl.h>
+> #endif
+> #include <stdio.h>
+>@@ -122,7 +122,7 @@ static bool fill_default(const char *mem, off_t size,
+> #ifdef ENABLE_OPENSSL
 >
-> 		else if (err < 0)
+> struct pkcs7_private {
+>-	CMS_ContentInfo *cms;
+>+	PKCS7 *pkcs7;
+> 	unsigned char *key_id;
+> 	BIGNUM *sno;
+> };
+>@@ -132,7 +132,7 @@ static void pkcs7_free(void *s)
+> 	struct kmod_signature_info *si = s;
+> 	struct pkcs7_private *pvt = si->private;
+>
+>-	CMS_ContentInfo_free(pvt->cms);
+>+	PKCS7_free(pvt->pkcs7);
+> 	BN_free(pvt->sno);
+> 	free(pvt->key_id);
+> 	free(pvt);
+>@@ -197,11 +197,10 @@ static bool fill_pkcs7(const char *mem, off_t size,
+> 		       struct kmod_signature_info *sig_info)
+> {
+> 	const char *pkcs7_raw;
+>-	CMS_ContentInfo *cms;
+>-	STACK_OF(CMS_SignerInfo) *sis;
+>-	CMS_SignerInfo *si;
+>-	int rc;
+>-	ASN1_OCTET_STRING *key_id;
+>+	PKCS7 *pkcs7;
+>+	STACK_OF(PKCS7_SIGNER_INFO) *sis;
+>+	PKCS7_SIGNER_INFO *si;
+>+	PKCS7_ISSUER_AND_SERIAL *is;
+> 	X509_NAME *issuer;
+> 	ASN1_INTEGER *sno;
+> 	ASN1_OCTET_STRING *sig;
+>@@ -220,31 +219,33 @@ static bool fill_pkcs7(const char *mem, off_t size,
+>
+> 	in = BIO_new_mem_buf(pkcs7_raw, sig_len);
+>
+>-	cms = d2i_CMS_bio(in, NULL);
+>-	if (cms == NULL) {
+>+	pkcs7 = d2i_PKCS7_bio(in, NULL);
+>+	if (pkcs7 == NULL) {
+> 		BIO_free(in);
+> 		return false;
+> 	}
+>
+> 	BIO_free(in);
+>
+>-	sis = CMS_get0_SignerInfos(cms);
+>+	sis = PKCS7_get_signer_info(pkcs7);
+> 	if (sis == NULL)
+> 		goto err;
+>
+>-	si = sk_CMS_SignerInfo_value(sis, 0);
+>+	si = sk_PKCS7_SIGNER_INFO_value(sis, 0);
+> 	if (si == NULL)
+> 		goto err;
+>
+>-	rc = CMS_SignerInfo_get0_signer_id(si, &key_id, &issuer, &sno);
+>-	if (rc == 0)
+>+	is = si->issuer_and_serial;
+>+	if (is == NULL)
+> 		goto err;
+>+	issuer = is->issuer;
+>+	sno = is->serial;
+>
+>-	sig = CMS_SignerInfo_get0_signature(si);
+>+	sig = si->enc_digest;
+> 	if (sig == NULL)
+> 		goto err;
+>
+>-	CMS_SignerInfo_get0_algs(si, NULL, NULL, &dig_alg, &sig_alg);
+>+	PKCS7_SIGNER_INFO_get0_algs(si, NULL, &dig_alg, &sig_alg);
+>
+> 	sig_info->sig = (const char *)ASN1_STRING_get0_data(sig);
+> 	sig_info->sig_len = ASN1_STRING_length(sig);
+>@@ -277,7 +278,7 @@ static bool fill_pkcs7(const char *mem, off_t size,
+> 	if (pvt == NULL)
+> 		goto err3;
+>
+>-	pvt->cms = cms;
+>+	pvt->pkcs7 = pkcs7;
+> 	pvt->key_id = key_id_str;
+> 	pvt->sno = sno_bn;
+> 	sig_info->private = pvt;
+>@@ -290,7 +291,7 @@ err3:
+> err2:
+> 	BN_free(sno_bn);
+> err:
+>-	CMS_ContentInfo_free(cms);
+>+	PKCS7_free(pkcs7);
+> 	return false;
+> }
+>
 >-- 
 >2.21.0
 >
