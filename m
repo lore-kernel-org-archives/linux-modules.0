@@ -1,234 +1,127 @@
-Return-Path: <SRS0=cUEP=U5=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=Urcm=U6=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C76BBC4646D
-	for <linux-modules@archiver.kernel.org>; Sun, 30 Jun 2019 05:57:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3119FC06511
+	for <linux-modules@archiver.kernel.org>; Mon,  1 Jul 2019 17:44:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9F4ED208E3
-	for <linux-modules@archiver.kernel.org>; Sun, 30 Jun 2019 05:57:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 101EC21721
+	for <linux-modules@archiver.kernel.org>; Mon,  1 Jul 2019 17:44:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d0C7JLbk"
+	dkim=pass (2048-bit key) header.d=paulo.ac header.i=@paulo.ac header.b="DRZWdgho"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726406AbfF3F5V (ORCPT
+        id S1727379AbfGARoB (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 30 Jun 2019 01:57:21 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:34505 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbfF3F5V (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 30 Jun 2019 01:57:21 -0400
-Received: by mail-pl1-f195.google.com with SMTP id i2so5561364plt.1;
-        Sat, 29 Jun 2019 22:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CJMuCA0EhV/mvHTwVRSbN1lPdDktR70rNVXxaF5/mO0=;
-        b=d0C7JLbki+XansfYq2FeEvbs2/32ldpUkObnbwqnTuVmRZkO61kBgDEFU+HJgjDM7P
-         FtGNsE7btJ+QaVP4fq1unV47sreu35yznADDfLbOojzkvEoiKriWmr+OXnQufRVhWaqH
-         BZXB6whTZIVBdahp+jjmd2H2qXpwjNN9b2pBnhmVn2iFWa/syE+fQ4ZEKX/y7o+iCEN5
-         TsxNWWyYIg38D1pIqS+bO8gI3PElouUB6zRpQH3kYUDG3i6KN3TZm8oH6NrVhAZagvKZ
-         kOptWbXWWKmLCZOWjJXxZzzTVcCnbsGSd3gVVTk1CH23VfGtUC1ZnVaVljK5ASYPt/G8
-         Vxtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CJMuCA0EhV/mvHTwVRSbN1lPdDktR70rNVXxaF5/mO0=;
-        b=kPj0J9eg/nMmkfiWMVVjfqN9uipqbmBCAUOK6j8MLn/qaGKYlQxQ7vz/z2pJR5HCp/
-         el6W3c8SstSnQtYRw/sFZn7ydA9I7PS6oKJObvvofonnkJnPM4c/jsUWwQeaF9tULANF
-         ehtSIh+l+n3x9gjl9lcGh4/eWryuRzHVrDS0YRZXaA01HJ8z9p1X6BTgOcs1GE8iLncD
-         o1k0kDQFdHKrjROT/1l94r3yfE4JetB3H25eQYvK4UAxigDlnd8Qix/J3GRNtA/A9fTH
-         A83WGAtBlEqsrpiG91RLMMfnl6IXAHB9LpUuohVCREhds7EMbR4rVFIJCLquR/BRGMOf
-         kxwQ==
-X-Gm-Message-State: APjAAAV5jSRsXP6jWdvPCfI3JJ3D0yuVPFtYkGhuPEOla2OD86wmM03z
-        ZkFdCvxFh5qOgCS9hbiBRbGixgKoRAL3JM3EK31xst8J4YQ=
-X-Google-Smtp-Source: APXvYqwTX5LMlSn1eaGEU7sYKBpjtpW9FflScEQphWxSjSJVB6JlB5MbnENGhja72HflhW/T0Y+oqu2QgtiwzHyo8ik=
-X-Received: by 2002:a17:902:2a68:: with SMTP id i95mr21837414plb.167.1561874240641;
- Sat, 29 Jun 2019 22:57:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <0bfb6f60-0042-f6be-24ed-7803b6ac759c@redhat.com>
- <20190628162517.GA24484@ldmartin-desk1> <20190629113018.22c9c95c@endymion>
-In-Reply-To: <20190629113018.22c9c95c@endymion>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 30 Jun 2019 00:57:09 -0500
-Message-ID: <CAH2r5ms=ZkpedmsBGLUwzE7tVvEw7wAr_kLm3PpVntX8_U9UCQ@mail.gmail.com>
-Subject: Re: multiple softdeps
-To:     Jean Delvare <jdelvare@suse.de>
+        Mon, 1 Jul 2019 13:44:01 -0400
+Received: from mx.paulo.ac ([212.47.230.6]:53182 "EHLO mx.paulo.ac"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727130AbfGARoB (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Mon, 1 Jul 2019 13:44:01 -0400
+X-Greylist: delayed 583 seconds by postgrey-1.27 at vger.kernel.org; Mon, 01 Jul 2019 13:43:59 EDT
+From:   Paulo Alcantara <paulo@paulo.ac>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=paulo.ac; s=dkim;
+        t=1562002455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LNEJnCkdtdvcie7bCJV/gCuExcx0qKL98nUFotNhX30=;
+        b=DRZWdghoR5tWtzItznR7KWxRBHHsaHSTcIUSbGUzj/uMgxYIQ2tKwCWPFNReH+kLt5K/OL
+        x6BYOfSZI9rdmxMFf6DkdVUNueBGJsZU32X+fWiMihVjINWci73IQAClhk+6L0jnkTIQLv
+        ujEHFHYqThDUJBTfSEFQtZo51z92EpkCA0qUt1xq5DEcolZmaYGPMxEuZGRAUvIteXPQXg
+        rtyx537O8zYOLs4iwt7rS0uB4Cy0c/XoiI0FsCjzzxXaUEi4LJ/Vv6UFOkeErSELZnjiOz
+        WZLHO4P//SSOyvcmBXO+8iOXZKTYoiDyTjdIGe1OuVSdiRW7pKJlVMklH2oxpw==
+To:     Steve French <smfrench@gmail.com>, Jean Delvare <jdelvare@suse.de>
 Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>,
         Harald Hoyer <harald@redhat.com>,
         linux-modules@vger.kernel.org,
         Pavel Shilovsky <pshilov@microsoft.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Paulo Alcantara <paulo@paulo.ac>
-Content-Type: text/plain; charset="UTF-8"
+        CIFS <linux-cifs@vger.kernel.org>
+Subject: Re: multiple softdeps
+In-Reply-To: <CAH2r5ms=ZkpedmsBGLUwzE7tVvEw7wAr_kLm3PpVntX8_U9UCQ@mail.gmail.com>
+References: <0bfb6f60-0042-f6be-24ed-7803b6ac759c@redhat.com> <20190628162517.GA24484@ldmartin-desk1> <20190629113018.22c9c95c@endymion> <CAH2r5ms=ZkpedmsBGLUwzE7tVvEw7wAr_kLm3PpVntX8_U9UCQ@mail.gmail.com>
+Date:   Mon, 01 Jul 2019 14:33:36 -0300
+Message-ID: <87v9wl8xsf.fsf@paulo.ac>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=paulo.ac;
+        s=dkim; t=1562002455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LNEJnCkdtdvcie7bCJV/gCuExcx0qKL98nUFotNhX30=;
+        b=Vz/y2SmID+SbZj1fgLJ906xihpinlLeMb3YENUvBMXoDZsl+JBqyiyeZb/fhUxRJgT8p+t
+        DjTxi6h43MR7ROgzO8DNBE8qKJClgYya3mBSU7iQmvpcmY6wSogA6DNH1snb3iBRHuMcsx
+        TBiCvg3KryELAQ8P3wSOtr2em85CPRhNUNWgfY5SKVv83TrwZYLMibOWKNn2Ly6gWVDovC
+        hAQN1wKowrKOsJ/CiWpzbAvcgrP1ziUv5gPTOfBSNwUwCZmt24cMNq/YYBfBsbVC49l94r
+        JjOezaez0KNSnazkzUFnkJzyt2BtajbNTxfduMincjewqfKUDS+Xwf3w/wB+sQ==
+ARC-Seal: i=1; s=dkim; d=paulo.ac; t=1562002455; a=rsa-sha256; cv=none;
+        b=DBT9ZKj+F9s3vZzil7tCOOx1V+wyg5a+IqJdGHgpFYFPG9bh5xQLkXOmVqZ2oltH402VCs
+        b6RdWg824/2euzUMLELN1vAzQRYzGMOCq99hGhUSjOuTaKrVcZ1KcK/daYmsuKBGaD3CN9
+        zRhn1B/9A2izPntW3jGINauPFxc2/xV9HVvmvclFaobfB+gaSr/AMCGko2cu6o/vQje8lu
+        agRkPdPQeOxuLuoCLXdwUa/yMy3m5bTBO4G7lSDkhhWV6CHD07CN2AwkRnhkk7k8N3zhLv
+        rQ9k9mXGOWD4sz0nxokeLPS4BZyPuqpafLj1DL4tnn2f6NcvYUCEZ+QspWWQdQ==
+ARC-Authentication-Results: i=1;
+        mx.paulo.ac;
+        auth=pass smtp.auth=paulo smtp.mailfrom=paulo@paulo.ac
+Authentication-Results: mx.paulo.ac;
+        auth=pass smtp.auth=paulo smtp.mailfrom=paulo@paulo.ac
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-> Or we could decide that cifs in initrd is not supported?
+--=-=-=
+Content-Type: text/plain
 
-Paulo had been experimenting with booting from cifs.ko (over SMB3.11
-mounts to Samba).
+Steve French <smfrench@gmail.com> writes:
 
-Presumably since SMB3/SMB3.11 family of protocols is the most common
-network file system across a pretty broad variety of operating systems
-it is easier to imagine it being extended for special cases like
-booting the OS (it is already very feature rich compared to most
-network/cluster file system protocols and has exhaustive detailed
-documentation).
+>> Or we could decide that cifs in initrd is not supported?
+>
+> Paulo had been experimenting with booting from cifs.ko (over SMB3.11
+> mounts to Samba).
+>
+> Presumably since SMB3/SMB3.11 family of protocols is the most common
+> network file system across a pretty broad variety of operating systems
+> it is easier to imagine it being extended for special cases like
+> booting the OS (it is already very feature rich compared to most
+> network/cluster file system protocols and has exhaustive detailed
+> documentation).
+>
+> My gut reaction is that if cifs.ko (SMB3.11 mounts) don't work with
+> initrd ... we need to fix that even if it means minor protocol
+> extensions, but Paulo might have more data.
 
-My gut reaction is that if cifs.ko (SMB3.11 mounts) don't work with
-initrd ... we need to fix that even if it means minor protocol
-extensions, but Paulo might have more data.
+I was able to boot a Leap 15 system from cifs.ko with changes in [1], so
+IMHO, it would probably make sense to support cifs in initrd as well --
+though I haven't tested it myself.
 
-
-On Sat, Jun 29, 2019 at 4:31 AM Jean Delvare <jdelvare@suse.de> wrote:
->
-> Hi Lucas, Harald,
->
-> On Fri, 28 Jun 2019 09:25:17 -0700, Lucas De Marchi wrote:
-> > +cifs, +Jean, +Pavel
-> >
-> > On Fri, Jun 28, 2019 at 03:16:35PM +0200, Harald Hoyer wrote:
-> > >Hi,
-> > >
-> > >could you please enlighten me about kernel module softdeps?
-> > >
-> > >$ modinfo cifs | grep soft
-> > >softdep:        pre: ccm
-> > >softdep:        pre: aead2
-> > >softdep:        pre: sha512
-> > >softdep:        pre: sha256
-> > >softdep:        pre: cmac
-> > >softdep:        pre: aes
-> > >softdep:        pre: nls
-> > >softdep:        pre: md5
-> > >softdep:        pre: md4
-> > >softdep:        pre: hmac
-> > >softdep:        pre: ecb
-> > >softdep:        pre: des
-> > >softdep:        pre: arc4
-> > >
-> > >$ grep cifs /lib/modules/$(uname -r)/modules.softdep
-> > >softdep cifs pre: ccm
-> > >softdep cifs pre: aead2
-> > >softdep cifs pre: sha512
-> > >softdep cifs pre: sha256
-> > >softdep cifs pre: cmac
-> > >softdep cifs pre: aes
-> > >softdep cifs pre: nls
-> > >softdep cifs pre: md5
-> > >softdep cifs pre: md4
-> > >softdep cifs pre: hmac
-> > >softdep cifs pre: ecb
-> > >softdep cifs pre: des
-> > >softdep cifs pre: arc4
-> >
-> > this is your bug. Multiple softdeps are not additive to the previous
-> > configuration, we never supported that. Commit b9be76d585d4 ("cifs: Add
->
-> That's my fault then, sorry about that. At the time I submitted the
-> patch, there was no occurrence of module having multiple softdeps, so I
-> didn't know how it should be done. It was some time ago and I don't
-> remember the details though, and I have no trace of why I worked on
-> this in the first place.
->
-> Apparently I'm not the only one confused as I see driver
-> pcengines-apuv2 has exactly the same problem. I'll send a patch for
-> that one.
->
-> If multiple softdep statements are not supported then shouldn't we
-> prevent them from happening, either with a link-time check, or with a
-> checkpatch test? I have no idea how to implement such a check though.
->
-> > soft dependencies") added it for the wrong reasons actually. A sotfdep
-> > means kmod will actually load those dependencies before loading the
-> > module (or fail to load it if those dependencies don't exist).
->
-> That's my definition of a regular (not soft) dependency. If failing
-> soft pre dependencies are fatal, how do they differ from regular
-> dependencies? Only because they are listed explicitly instead of being
-> determined from symbol use?
->
-> FWIW modprobe.d(5) mentions "optional modules" and insists that the
-> main module is still usable without them, so my understanding was that
-> a modprobe would be attempted on soft deps but a failure would be
-> ignored.
->
-> > Besides the wrong commit message, if that is indeed what is desired, the
-> > fix would be:
->
-> The commit message may sound wrong to you but the (fixed version of the
-> patch) still solves the problem (including all potentially needed
-> modules in initrd even when there are no hard dependencies) at least as
-> a side effect. If you think that softdeps are not how the problem
-> should be solved, then how do you think it should be solved? I
-> understand that pre-loading all cipher and hash modules is not
-> efficient, but we still need to ensure that they all make it to the
-> initrd in case they are needed.
->
-> Or we could decide that cifs in initrd is not supported? To be honest
-> I'm not sure why people would do that. Samba mounts do not seem
-> appropriate for system or home partitions anyway... So maybe I tried to
-> solve a problem which nobody had in the first place. Can the CIFS
-> people please share their views on that? That's also a question for
-> Harald: Harald, what were you doing with the cifs driver which led you
-> to discovering this bug?
->
-> > --------8<--------------
-> > diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-> > index 65d9771e49f9..4f1f744ea3cd 100644
-> > --- a/fs/cifs/cifsfs.c
-> > +++ b/fs/cifs/cifsfs.c
-> > @@ -1591,18 +1591,6 @@ MODULE_DESCRIPTION
-> >       ("VFS to access SMB3 servers e.g. Samba, Macs, Azure and Windows (and "
-> >       "also older servers complying with the SNIA CIFS Specification)");
-> >  MODULE_VERSION(CIFS_VERSION);
-> > -MODULE_SOFTDEP("pre: arc4");
-> > -MODULE_SOFTDEP("pre: des");
-> > -MODULE_SOFTDEP("pre: ecb");
-> > -MODULE_SOFTDEP("pre: hmac");
-> > -MODULE_SOFTDEP("pre: md4");
-> > -MODULE_SOFTDEP("pre: md5");
-> > -MODULE_SOFTDEP("pre: nls");
-> > -MODULE_SOFTDEP("pre: aes");
-> > -MODULE_SOFTDEP("pre: cmac");
-> > -MODULE_SOFTDEP("pre: sha256");
-> > -MODULE_SOFTDEP("pre: sha512");
-> > -MODULE_SOFTDEP("pre: aead2");
-> > -MODULE_SOFTDEP("pre: ccm");
-> > +MODULE_SOFTDEP("pre: arc4 des ecb hmac md4 md5 nls aes cmac sha256 sha512 aead2 ccm");
-> >  module_init(init_cifs)
-> >  module_exit(exit_cifs)
-> > --------8<--------------
-> >
-> > I guess we could actually implement additive deps, e.g. by using
-> > "pre+:" or something else. But I think the right thing to do for now is
-> > to apply something like above to cifs and propagate it to stable.
->
-> Patch looks sane, thanks.
->
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
->
-> Are you going to submit it or should I?
->
-> Alternatively the initial patch could be reverted, depending on the
-> answer to my question above.
->
-> --
-> Jean Delvare
-> SUSE L3 Support
-
-
-
--- 
 Thanks,
+Paulo
 
-Steve
+[1] https://git.paulo.ac/linux.git/commit/?h=smb-boot
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEERoXdH1qkUp3jTzChVeljQjyMrg0FAl0aQ/AACgkQVeljQjyM
+rg13sg//QJfH9J6LGeWWJJft2D5zUZI0wfy6KAedi58tSNxUBbQHnASdL7R7WGGx
+E2ulj7i0TOHylOl7MIDdKPaN7tqfckQvlIVEp6HFcuI9S7+cPC1Z/PxxGJrMZ4uS
+YLgiC0s+dO2il99C4uZQuPU2wD6LR4C7kr17HIqJNtAMYnguZtFoovviGeX+k40U
+pytGy2haQcsAy546KU43nGx1/Xv1mIaZ1vhSs8EZ2qfx/Fm5fBfj4SeuhC5sjUqt
+FuZomJ5jisyrhHb8ovGO8rPUMkHaW8k5LuTF8lAzD3ihg2jo33EXpaGvs+Jfl+qT
+DoR0c/J4QL7NzMXft652dWP0V7w9UcIUUjGH5VUAbs0TRNoEowKCCO22rtWkiKxi
+J5Pv8ML55s82NNX7RrWCH6vmwZdK7bYNjHbqG6NrS6ADwTf3IdxpYi2Ns6wK8dmT
+ER3Myy27KUjQPi864gbV4E8xy8iQzn0aSp+P2eI0MzayFW+T+Iki87ze0+tUbehG
+pOMXbh2cTWbx0CBi0Mvf5QpZc+Vxe6+S9IJgR3Eas0gCA2Ndt5K2hbAwul49jAF8
+NSNliUKtPDB23x0lRwUlSe7Js/vgCmdGF19SNPIDzrnGCTmSKXON7CkYj71UjZH7
+OOETNgBBbDWKsGNtp4JPpge/V/6gmex5eH+Mk20JLD6U55ASzic=
+=bw5E
+-----END PGP SIGNATURE-----
+--=-=-=--
