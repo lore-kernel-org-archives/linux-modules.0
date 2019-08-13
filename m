@@ -1,98 +1,177 @@
-Return-Path: <SRS0=ZrDV=WE=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=HvYu=WJ=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D236C433FF
-	for <linux-modules@archiver.kernel.org>; Thu,  8 Aug 2019 13:25:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66D44C433FF
+	for <linux-modules@archiver.kernel.org>; Tue, 13 Aug 2019 12:19:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3156F2171F
-	for <linux-modules@archiver.kernel.org>; Thu,  8 Aug 2019 13:25:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565270703;
-	bh=uLmBQhpPROBoG2c+9dw9qZ9m+9TvUAsO1qu3HlU0Xgk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=BFsOKD/tebd8Fq4+w1P1orQCavETDSuZVV2kfbXIyS7McTusORqWo6+VMZy3vMP9D
-	 OV9wI/mUgKyyw/8FnGLiVApZOS6M1HwKZuBgabMqmcTWOtOmvWCMxCOg+aSXMHOLrc
-	 kLx6NSB+Josn1e/xabvLNhktxBDd8mrBf61Ov+X8=
+	by mail.kernel.org (Postfix) with ESMTP id 31CD720840
+	for <linux-modules@archiver.kernel.org>; Tue, 13 Aug 2019 12:19:16 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X/pgFG/T"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732886AbfHHNZC (ORCPT
+        id S1727850AbfHMMTP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 8 Aug 2019 09:25:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60280 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732643AbfHHNZC (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 8 Aug 2019 09:25:02 -0400
-Received: from linux-8ccs (charybdis-ext.suse.de [195.135.221.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA2F42171F;
-        Thu,  8 Aug 2019 13:25:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565270701;
-        bh=uLmBQhpPROBoG2c+9dw9qZ9m+9TvUAsO1qu3HlU0Xgk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U/iK4Dsi3CRsJuYRH/lT4r9ycPqFY295yEYsfDuN4W5ex5YHIFXifz9TbYc39ntBl
-         IGY9UzuXVxQo+Aki4HRf3LAVi5pMiyWnzhECG0qR1qwB9diDL0JgXP5PmUDMUH3/8P
-         ByFfOM7d5bH2FZRPzBmr+vkTKvUjI4tJc5PJZyt8=
-Date:   Thu, 8 Aug 2019 15:24:57 +0200
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc:     Jack Rosenthal <jrosenth@chromium.org>,
-        linux-modules <linux-modules@vger.kernel.org>
-Subject: Re: Module compression & loadpin
-Message-ID: <20190808132457.GB29211@linux-8ccs>
-References: <20190731222209.GA101140@chromium.org>
- <20190802183243.GA246294@chromium.org>
- <CAKi4VA+5YBaKHoEy819MBDoCTPY9Wsu=DzXPFaibAjL91GjhzA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAKi4VA+5YBaKHoEy819MBDoCTPY9Wsu=DzXPFaibAjL91GjhzA@mail.gmail.com>
-X-OS:   Linux linux-8ccs 4.12.14-lp150.12.28-default x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Tue, 13 Aug 2019 08:19:15 -0400
+Received: from mail-qt1-f201.google.com ([209.85.160.201]:35778 "EHLO
+        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727763AbfHMMTP (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Tue, 13 Aug 2019 08:19:15 -0400
+Received: by mail-qt1-f201.google.com with SMTP id f28so99759317qtg.2
+        for <linux-modules@vger.kernel.org>; Tue, 13 Aug 2019 05:19:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=52i5W7bwo5L4NKPi/t621ZC4mfXuxf76PQ3XmRwW6HM=;
+        b=X/pgFG/TYnO3wKM8nw/G0c4v0tOMmQdSnN8sjbDmuSgMHWrl6X+89yGWfc1zRmqGBm
+         2psEodSKm+/2j3izZcJSwh+do0lxOJ4IdJ919zTrnssGXYKHj74o5LYYGq9C8uPDHY5q
+         g2LiVJBFkP/CGURRmfNZIany5JG8mi2TMrG0Bd6uXJ7oNOJoL/pnInv0Qzjz7lymxdtT
+         GJKYSZXUWMP5I8obvV1nxyk8xIUK02USI2/gUQVi95NnK73bsBva9KSzKlQ5r01eUJZC
+         vFkcc1Qu8HnPfg8KB//WUh0W5FcntqIdFm+4BfszHkaidZELeMy4MwnDiZUvpNyAafnm
+         niNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=52i5W7bwo5L4NKPi/t621ZC4mfXuxf76PQ3XmRwW6HM=;
+        b=EPK6h2wKvZUAW1rZee++c7OSzZHXBq2AQIy2Fe+7w4FUWYt1MtnSd6gbw9cmcBctiL
+         wJCht0hSayH2JsPxxpwTAQhg7wVt8kNYw6xSVAD2RJTdOY1ObLlt1GyLq7rI/KZm+/q8
+         ByPSAjhRBGgfCfsI7MCaoEIDcj6R8fGoG0wVc8rMn4GLgxRSqJufdIg7Mg3MGqQoFl/Z
+         EcJJHkbj7fqRjmM3+Ghvy75rv746ZBqgSykEEIR99jZ1BTbfLy49RCjwheIPxRV+6ZrU
+         4b7gU0FtqdWEw1hwPMHSBregkvbIqoyI+UH4dX0yB6sav5Af5x9k5lVQpGkKVNRXiPnT
+         iUmg==
+X-Gm-Message-State: APjAAAUhAPshbPIklBzYR1PdeQzUy4gZs2h0odGC36i25Ten52b+XxgS
+        cXbT/Te5Wr8qNVveZQt18lOPZscIB55swg==
+X-Google-Smtp-Source: APXvYqx4tXl8kJyrgPk73kSdFDxtYVeFJ3ZKPrk2o0B9NEEoRmlA/4IcV5D6ufbujg8Fb+w0iwWYKEEibfHjFw==
+X-Received: by 2002:a37:e306:: with SMTP id y6mr9040041qki.174.1565698753802;
+ Tue, 13 Aug 2019 05:19:13 -0700 (PDT)
+Date:   Tue, 13 Aug 2019 13:16:59 +0100
+In-Reply-To: <20190813121733.52480-1-maennich@google.com>
+Message-Id: <20190813121733.52480-3-maennich@google.com>
+Mime-Version: 1.0
+References: <20180716122125.175792-1-maco@android.com> <20190813121733.52480-1-maennich@google.com>
+X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
+Subject: [PATCH v2 02/10] export: explicitly align struct kernel_symbol
+From:   Matthias Maennich <maennich@google.com>
+To:     linux-kernel@vger.kernel.org, maco@android.com
+Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
+        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
+        jeyu@kernel.org, joel@joelfernandes.org,
+        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
+        maco@google.com, michal.lkml@markovi.net, mingo@redhat.com,
+        oneukum@suse.com, pombredanne@nexb.com, sam@ravnborg.org,
+        sboyd@codeaurora.org, sspatil@google.com,
+        stern@rowland.harvard.edu, tglx@linutronix.de,
+        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
+        yamada.masahiro@socionext.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-+++ Lucas De Marchi [06/08/19 15:53 -0700]:
->+Jessica
->
->On Sat, Aug 3, 2019 at 9:50 AM Jack Rosenthal <jrosenth@chromium.org> wrote:
->>
->> Has anyone looked into what it may take to support both module
->> compression and loadpin (ensures modules come from trusted filesystem)?
->>
->> From my understanding, this is not supported as kmod currently does the
->> decompression of modules, and loadpin prefers fload_module as it can
->> tell where the module came from. (https://crbug.com/777204)
->>
->> In a gist, I am thinking supporting this scenario would require the
->> module decompression to happen on the kernel side. Wondering if anyone
->> has looked into this before I go making a solution...
->
->That's my thought as well. In order to use finit_module() with
->compressed modules we need to teach the kernel how to open it. It
->should not be difficult since kernel already has the decompression
->libraries. This also gives us access to another
->compression/decompression algorithms - but would be nice to have a
->correspondent implementation for modinfo.
->
->I planned to do that some years ago, but never implemented it. Nobody
->that I know of is currently working on that. It would be a very
->welcome contribution.
+This change allows growing struct kernel_symbol without wasting bytes to
+alignment. It also concretized the alignment of ksymtab entries if
+relative references are used for ksymtab entries.
 
-Indeed, I don't know of anyone currently working on that. I do not
-think it should be that difficult, since as Lucas already mentioned we
-already have multiple decompression libraries in the kernel to extract
-the compressed kernel image on boot (see: lib/decompress.c and
-friends), so at first glance, I don't think it would be too hard to
-extend this functionality to the module loader. I'd welcome a patchset :)
+struct kernel_symbol was already implicitly being aligned to the word
+size, except on x86_64 and m68k, where it is aligned to 16 and 2 bytes,
+respectively.
 
-Thanks,
+As far as I can tell there is no requirement for aligning struct
+kernel_symbol to 16 bytes on x86_64, but gcc aligns structs to their
+size, and the linker aligns the custom __ksymtab sections to the largest
+data type contained within, so setting KSYM_ALIGN to 16 was necessary to
+stay consistent with the code generated for non-ASM EXPORT_SYMBOL(). Now
+that non-ASM EXPORT_SYMBOL() explicitly aligns to word size (8),
+KSYM_ALIGN is no longer necessary.
 
-Jessica
+In case of relative references, the alignment has been changed
+accordingly to not waste space when adding new struct members.
+
+As for m68k, struct kernel_symbol is aligned to 2 bytes even though the
+structure itself is 8 bytes; using a 4-byte alignment shouldn't hurt.
+
+I manually verified the output of the __ksymtab sections didn't change
+on x86, x86_64, arm, arm64 and m68k. As expected, the section contents
+didn't change, and the ELF section alignment only changed on x86_64 and
+m68k. Feedback from other archs more than welcome.
+
+Co-developed-by: Martijn Coenen <maco@android.com>
+Signed-off-by: Martijn Coenen <maco@android.com>
+Signed-off-by: Matthias Maennich <maennich@google.com>
+---
+ arch/m68k/include/asm/export.h | 1 -
+ include/asm-generic/export.h   | 8 +++-----
+ include/linux/export.h         | 3 ++-
+ 3 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/arch/m68k/include/asm/export.h b/arch/m68k/include/asm/export.h
+index 0af20f48bd07..b53008b67ce1 100644
+--- a/arch/m68k/include/asm/export.h
++++ b/arch/m68k/include/asm/export.h
+@@ -1,3 +1,2 @@
+-#define KSYM_ALIGN 2
+ #define KCRC_ALIGN 2
+ #include <asm-generic/export.h>
+diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
+index 294d6ae785d4..63f54907317b 100644
+--- a/include/asm-generic/export.h
++++ b/include/asm-generic/export.h
+@@ -4,15 +4,13 @@
+ #ifndef KSYM_FUNC
+ #define KSYM_FUNC(x) x
+ #endif
+-#ifdef CONFIG_64BIT
+-#ifndef KSYM_ALIGN
++#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
++#define KSYM_ALIGN 4
++#elif defined(CONFIG_64BIT)
+ #define KSYM_ALIGN 8
+-#endif
+ #else
+-#ifndef KSYM_ALIGN
+ #define KSYM_ALIGN 4
+ #endif
+-#endif
+ #ifndef KCRC_ALIGN
+ #define KCRC_ALIGN 4
+ #endif
+diff --git a/include/linux/export.h b/include/linux/export.h
+index fd8711ed9ac4..28a4d2150689 100644
+--- a/include/linux/export.h
++++ b/include/linux/export.h
+@@ -52,7 +52,7 @@ extern struct module __this_module;
+ #define __KSYMTAB_ENTRY(sym, sec)					\
+ 	__ADDRESSABLE(sym)						\
+ 	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
+-	    "	.balign	8					\n"	\
++	    "	.balign 4					\n"	\
+ 	    "__ksymtab_" #sym ":				\n"	\
+ 	    "	.long	" #sym "- .				\n"	\
+ 	    "	.long	__kstrtab_" #sym "- .			\n"	\
+@@ -66,6 +66,7 @@ struct kernel_symbol {
+ #define __KSYMTAB_ENTRY(sym, sec)					\
+ 	static const struct kernel_symbol __ksymtab_##sym		\
+ 	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
++	__aligned(sizeof(void *))					\
+ 	= { (unsigned long)&sym, __kstrtab_##sym }
+ 
+ struct kernel_symbol {
+-- 
+2.23.0.rc1.153.gdeed80330f-goog
 
