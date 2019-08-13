@@ -2,63 +2,46 @@ Return-Path: <SRS0=HvYu=WJ=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1,
-	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A412C433FF
-	for <linux-modules@archiver.kernel.org>; Tue, 13 Aug 2019 15:02:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37909C433FF
+	for <linux-modules@archiver.kernel.org>; Tue, 13 Aug 2019 15:26:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2AF09205F4
-	for <linux-modules@archiver.kernel.org>; Tue, 13 Aug 2019 15:02:35 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t2CeC6mt"
+	by mail.kernel.org (Postfix) with ESMTP id 0CD86208C2
+	for <linux-modules@archiver.kernel.org>; Tue, 13 Aug 2019 15:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1565709992;
+	bh=CrAz1yCfo6+iN/BmxOQbHCwrHnLhxx45xOC9Q0XW81k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=TRaqOVIwdt9K9BFkDSstYu16A9Dc3wEe3DJ2PSWe+c/Oh+Cg7/1sHa3JbYqxBJaAu
+	 uCiBBz0CEieCSFy+tF7kPYnvDKm7QZpnM4DwROylLn9eXJgTPfx3ZWCcHDWCbTHE1a
+	 Bm0SQpiNiuoHkaEou7GWhuXrAp1c97m2aibZFP/8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729895AbfHMPCe (ORCPT
+        id S1727420AbfHMP02 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 13 Aug 2019 11:02:34 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:46283 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729815AbfHMPC3 (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 13 Aug 2019 11:02:29 -0400
-Received: by mail-wr1-f67.google.com with SMTP id z1so108068988wru.13
-        for <linux-modules@vger.kernel.org>; Tue, 13 Aug 2019 08:02:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Z7Dmwu3NvM4EVDKo63p/xdtZ+TtWJUXj2RkugIVOSr4=;
-        b=t2CeC6mtNnAdAq/OptzTNdCWbbeZeKOfLFYM6RAyQrZ+0HjWV7exL8BKTMrkb0IRDM
-         w1Li2BGhGTUgB9ErTS9tgo1Yz6QM8ou/fnQvFN6GD0Mq7HXZ87yNGkmCJUWLXt6rKs6k
-         PvKCClFv1ahlbnQuGeqpjbwvAm2MCWcT62/V8Td+35/tG+7ESPRSxLHC2rzBwxnuGt+N
-         JimGsJMRY0GhBQWRwIO0JxQxJdHd67iGC8UwP5rCsyfQz/WRr5Bsj314c7Az6UMjqbaN
-         eTmFEZ3FqInxcxhQiSqHVgIkIWsh+eMXoow+ZwoSg2w2a+BAHbQJr2ibqD7HnpeGDhzo
-         kvPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Z7Dmwu3NvM4EVDKo63p/xdtZ+TtWJUXj2RkugIVOSr4=;
-        b=F4f8TIwn2NVwducr79MmDQUqXvxXtPidy6fJuI2f/4x63Z+jf2PDbP0Veb7LkoxW9I
-         yM1Ui2jWdCDWvz+zI8fRiFt0CrTJKbOvjWKEE7QurIUKjGufG56jdJ+2y3EdStSg+B+J
-         jYyOYajhgGgrgIsAlWwYCGFoNYtK2uPmJMSv/DBVKUtKaXarh1BkJitLuPALIS2LxcAG
-         u9r7sOvcB4PH5udDBnl6GaqokIy0p9Nm9MPcrG3Bo8a2yAj4JQv96pPxp0QUdC3vemQn
-         U3G4SzY6INOKxMz+J5Xx90Gx7OxyMBxP5O3ER2+dsEhUcoyLhxGF1ktw7YwlX92tdXiP
-         lODg==
-X-Gm-Message-State: APjAAAXv5ZVsYtiTfDjcSkwRuApIyAPszAnuHVBr2rIbntr+sCj6nP8P
-        BhESfd7n0TkeWra1b6EbbGMj7Q==
-X-Google-Smtp-Source: APXvYqzczT++Iinfypzj8ZDHy/UBigh5SKekIk8qmEwWyiX/x1k1vy+Nz2A/tkdRk+Iew06bsxv+eA==
-X-Received: by 2002:a5d:670d:: with SMTP id o13mr36840270wru.289.1565708546723;
-        Tue, 13 Aug 2019 08:02:26 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
-        by smtp.gmail.com with ESMTPSA id p13sm42846847wrw.90.2019.08.13.08.02.25
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 13 Aug 2019 08:02:26 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 16:02:21 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
+        Tue, 13 Aug 2019 11:26:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38008 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726705AbfHMP01 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Tue, 13 Aug 2019 11:26:27 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D402420663;
+        Tue, 13 Aug 2019 15:26:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565709986;
+        bh=CrAz1yCfo6+iN/BmxOQbHCwrHnLhxx45xOC9Q0XW81k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gi/sr8eKHUIdY0KORo3OqENJ9nHWlSzy+hIt2NL7mc1mwejIYNU+9CxxhxGs3XzBy
+         zrLxEXbf1MLrCEinxCSs8WDmf42Dd0q2H5jvauxI+/7SCsVSCuEd9Pks3bBg4eg1Ji
+         lHSGNIcWrEoerh5cgMx/WeA5auWMaoaaYuuy9qR8=
+Date:   Tue, 13 Aug 2019 17:26:24 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Matthias Maennich <maennich@google.com>
 Cc:     linux-kernel@vger.kernel.org, maco@android.com,
         kernel-team@android.com, arnd@arndb.de, geert@linux-m68k.org,
         hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
@@ -71,47 +54,58 @@ Cc:     linux-kernel@vger.kernel.org, maco@android.com,
         sboyd@codeaurora.org, sspatil@google.com,
         stern@rowland.harvard.edu, tglx@linutronix.de,
         usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
-        yamada.masahiro@socionext.com
-Subject: Re: [PATCH v2 10/10] RFC: usb-storage: export symbols in USB_STORAGE
- namespace
-Message-ID: <20190813150221.GA107461@google.com>
+        yamada.masahiro@socionext.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Subject: Re: [PATCH v2 03/10] module: add support for symbol namespaces.
+Message-ID: <20190813152624.GB26138@kroah.com>
 References: <20180716122125.175792-1-maco@android.com>
  <20190813121733.52480-1-maennich@google.com>
- <20190813121733.52480-11-maennich@google.com>
- <20190813124708.GC12475@kroah.com>
+ <20190813121733.52480-4-maennich@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190813124708.GC12475@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190813121733.52480-4-maennich@google.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Aug 13, 2019 at 02:47:08PM +0200, Greg KH wrote:
->On Tue, Aug 13, 2019 at 01:17:07PM +0100, Matthias Maennich wrote:
->> Modules using these symbols are required to explicitly import the
->> namespace. This patch was generated with the following steps and serves
->> as a reference to use the symbol namespace feature:
->>
->>  1) Define DDEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
->>  2) make  (see warnings during modpost about missing imports)
->>  3) make nsdeps
->>
->> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
->> variants can be used to explicitly specify the namespace. The advantage
->> of the method used here is that newly added symbols are automatically
->> exported and existing ones are exported without touching their
->> respective EXPORT_SYMBOL macro expansion.
->
->Ok, I can't read text, this answers my previous question.
->
->But, as an example, shouldn't we also have some code here that uses the
->EXPORT_SYMBOL_NS() macro to ensure that it actually works?
->
-I will create another patch for a different subsystem where the use of
-the macros is more appropriate. Then we have both use cases covered.
+On Tue, Aug 13, 2019 at 01:17:00PM +0100, Matthias Maennich wrote:
+> The EXPORT_SYMBOL_NS() and EXPORT_SYMBOL_NS_GPL() macros can be used to
+> export a symbol to a specific namespace.  There are no _GPL_FUTURE and
+> _UNUSED variants because these are currently unused, and I'm not sure
+> they are necessary.
+> 
+> I didn't add EXPORT_SYMBOL_NS() for ASM exports; this patch sets the
+> namespace of ASM exports to NULL by default. In case of relative
+> references, it will be relocatable to NULL. If there's a need, this
+> should be pretty easy to add.
+> 
+> A module that wants to use a symbol exported to a namespace must add a
+> MODULE_IMPORT_NS() statement to their module code; otherwise, modpost
+> will complain when building the module, and the kernel module loader
+> will emit an error and fail when loading the module.
+> 
+> MODULE_IMPORT_NS() adds a modinfo tag 'import_ns' to the module. That
+> tag can be observed by the modinfo command, modpost and kernel/module.c
+> at the time of loading the module.
+> 
+> The ELF symbols are renamed to include the namespace with an asm label;
+> for example, symbol 'usb_stor_suspend' in namespace USB_STORAGE becomes
+> 'usb_stor_suspend.USB_STORAGE'.  This allows modpost to do namespace
+> checking, without having to go through all the effort of parsing ELF and
+> relocation records just to get to the struct kernel_symbols.
+> 
+> On x86_64 I saw no difference in binary size (compression), but at
+> runtime this will require a word of memory per export to hold the
+> namespace. An alternative could be to store namespaced symbols in their
+> own section and use a separate 'struct namespaced_kernel_symbol' for
+> that section, at the cost of making the module loader more complex.
+> 
+> Co-developed-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Matthias Maennich <maennich@google.com>
 
-Cheers,
-Matthias
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
