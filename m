@@ -1,139 +1,144 @@
-Return-Path: <SRS0=HvYu=WJ=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=BrcW=WK=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 277A9C32750
-	for <linux-modules@archiver.kernel.org>; Tue, 13 Aug 2019 20:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2E1CC0650F
+	for <linux-modules@archiver.kernel.org>; Wed, 14 Aug 2019 06:36:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F04A42067D
-	for <linux-modules@archiver.kernel.org>; Tue, 13 Aug 2019 20:16:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB7272067D
+	for <linux-modules@archiver.kernel.org>; Wed, 14 Aug 2019 06:36:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u5tsb3tT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gr/yUIA7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726718AbfHMUQ0 (ORCPT
+        id S1727260AbfHNGga (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 13 Aug 2019 16:16:26 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:44017 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726704AbfHMUQV (ORCPT
+        Wed, 14 Aug 2019 02:36:30 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33540 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726940AbfHNGga (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 13 Aug 2019 16:16:21 -0400
-Received: by mail-ot1-f66.google.com with SMTP id e12so32792285otp.10
-        for <linux-modules@vger.kernel.org>; Tue, 13 Aug 2019 13:16:21 -0700 (PDT)
+        Wed, 14 Aug 2019 02:36:30 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n190so11760227pgn.0;
+        Tue, 13 Aug 2019 23:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UyUp+OqYNvHr6I8YI09IZ2rFvtcmnaGq+Mw13M6jPN8=;
-        b=u5tsb3tTi1RR6zNjTfgZWL+OogXrZrPnWysy+aD045WOTKrJEAOdQ+FoeVDVShnWk8
-         IUxR3CHP9QJCeKRIEu5zkDXbg533UBtKeFFvrT8aMs0H8udcayRxrdT1wNT0Q7DjM+sS
-         mL7ptgRQR3Kx12kZaazSW3SAHUtuo7vVw4TkoT1AK64nHSlBLuaf+7EcyAJ5T6S5QZmR
-         0bWGzUszfX/bI6keMRxfU+uUjHdXdUU/QzjKrIiA2xQ6qfej0kl/VN72xIxD8Mf/EjLz
-         uehsPbPSUzPQEmNN3NMCxmwK4vIeJV4HWNcOe7l2n4qpKPfucbJ/Yfslg6NugGmdwR+m
-         R1aw==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=V2ZJmMM7eBUrb1Y12nRIIaugrWodscFeaE9AP4JG/Zg=;
+        b=Gr/yUIA7h/3eBDYc9/YH3PmK0TnssS6CO/9hFNunLAWWczG3OiVHN4WIIgL3E9ZCpt
+         lxw0s7tI4ERoXSIwh3JMsdgc8zNzPjnA6BXgqeWAmqEyh+LbCMXm65+O4nT6k1c31e4G
+         72a+RzjyGS+EkSW5x52rptXOtidXTsKAuxWhyJ3b6xCpOT6ucihhvpEg52ywhW82gF/O
+         HmWN/pIGHF5t5B5reCnO/nsCfzeJAwUmX5rfj3UfluGG3M6/UTPt0Rx+R75a3hwPVGGS
+         CEB7dg3ncNyljnIstqsOyQ3HSCSlywswvj4u3icgmk4pUqxyXQc3S7rYfldNhw5/Vge5
+         lm7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UyUp+OqYNvHr6I8YI09IZ2rFvtcmnaGq+Mw13M6jPN8=;
-        b=eg4SnKRLqujsdoMsqC+ZUADoRxp9jhHekTP5Yxxw4Qq+RmK4lI/NL27b91wPG9GZ2t
-         gWlUqEzjstMcgHmnlmb9ctfOfMvtPJWmwOrVNTHvs76KGniIjQXNDc9Kl/77I3TVmDZu
-         dYTb0lIlgyLjXPxd0Wx8LbHv/UkZsNELDkCdtMuRjxVwlICfhVf7vosP5uFDU/8ia7iT
-         0xxa3sMXA4t/dmHb/rXO+c2pN9hKgPmvu//f4eNYbirmy04aroFqL7M6Ib9EzwDvbkq7
-         JzDobndnKrll7N+/KcQpw5/mDrhn0Uv5aFipapfQxLPDwbef0AzHE05/PWRqYaZWK6id
-         cjZg==
-X-Gm-Message-State: APjAAAVv2WuthnhnCit0ivSgpKhpRXn7lQVLGYRFjLf3ki5q5p1lID4H
-        /jncaF0kHkK60FG8f7pgO6DpuD+PhMRaLbjD3gKHfg==
-X-Google-Smtp-Source: APXvYqxxUtipoa1TnsBRCdHhtVbEni2JlDRwTgOYshKzIg8CEAX1O3Wj3b+RVL1fyBLVuGOUQHsFmCMdCl21V4krJY8=
-X-Received: by 2002:a9d:6d06:: with SMTP id o6mr33264410otp.225.1565727380422;
- Tue, 13 Aug 2019 13:16:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20180716122125.175792-1-maco@android.com> <20190813121733.52480-1-maennich@google.com>
- <20190813121733.52480-6-maennich@google.com>
-In-Reply-To: <20190813121733.52480-6-maennich@google.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 13 Aug 2019 13:15:44 -0700
-Message-ID: <CAGETcx_LQDdnaU+3JVGw+6=DJ8tRoQ00+3rD2gOiHHkWomt8jg@mail.gmail.com>
-Subject: Re: [PATCH v2 05/10] module: add config option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=V2ZJmMM7eBUrb1Y12nRIIaugrWodscFeaE9AP4JG/Zg=;
+        b=VfatWZi2jk7Da/3tWd0auYKCJzuJ73Eomf0Rg677KQTiokULd0hOD1t1WPIULL7+Ur
+         lDUCIJBzyKz0R1pex0yauixfhb42Bawzo8Iw98YK2Uu+TcAWn5/kr+7/oHTEZ1vixfHC
+         CzMQf0d4r0xBuuCKc5bAsgNiEr9sYqC9Fj5xKyTO8oNyII2y0fgD8PAzO5Y18BR6rQej
+         otuuqy5J2anmqabhuhamJqThvBZIFjZSHu95nLHmNqK8P+MCbpTNC5GNfvrN03dqPOle
+         nuLxSSz+22KYDAi9rvwNqe7sEOmzv59aBjnBSUH5fbisihdM7FIaOUfSGzmzvdxsbacF
+         yVKA==
+X-Gm-Message-State: APjAAAWC77hMiweIYiz8Dz6e1XlrzLJTIFlC62+4O6kJMAFj5mHIW1VO
+        TZ/MeaJIAlK7ag24t4NnmqA=
+X-Google-Smtp-Source: APXvYqw/2y0dZHWefWOjTwta+m4FUhziJYRwexQISdGldO7ge/xr1KdLXo0S4VRw57w8u++ZXvSuxA==
+X-Received: by 2002:a63:89c2:: with SMTP id v185mr37393202pgd.241.1565764588977;
+        Tue, 13 Aug 2019 23:36:28 -0700 (PDT)
+Received: from himanshu-Vostro-3559 ([103.77.43.147])
+        by smtp.gmail.com with ESMTPSA id j15sm109471223pfr.146.2019.08.13.23.36.15
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 13 Aug 2019 23:36:27 -0700 (PDT)
+Date:   Wed, 14 Aug 2019 12:06:11 +0530
+From:   Himanshu Jha <himanshujha199640@gmail.com>
 To:     Matthias Maennich <maennich@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, maco@android.com,
-        Android Kernel Team <kernel-team@android.com>, arnd@arndb.de,
-        geert@linux-m68k.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, hpa@zytor.com,
-        jeyu@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@google.com, michal.lkml@markovi.net, mingo@redhat.com,
-        oneukum@suse.com, pombredanne@nexb.com, sam@ravnborg.org,
-        sboyd@codeaurora.org, Sandeep Patil <sspatil@google.com>,
-        stern@rowland.harvard.edu, tglx@linutronix.de,
-        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
-        yamada.masahiro@socionext.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+Cc:     linux-kernel@vger.kernel.org, maco@android.com,
+        kstewart@linuxfoundation.org, linux-m68k@vger.kernel.org,
+        oneukum@suse.com,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Patrick Bellasi <patrick.bellasi@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Adrian Reber <adrian@lisas.de>,
-        Richard Guy Briggs <rgb@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        usb-storage@lists.one-eyed-alien.net, hpa@zytor.com,
+        joel@joelfernandes.org, sam@ravnborg.org, cocci@systeme.lip6.fr,
+        linux-arch@vger.kernel.org, linux-scsi@vger.kernel.org,
+        x86@kernel.org, lucas.de.marchi@gmail.com, mingo@redhat.com,
+        geert@linux-m68k.org, stern@rowland.harvard.edu,
+        kernel-team@android.com, sspatil@google.com, arnd@arndb.de,
+        linux-kbuild@vger.kernel.org,
+        Nicolas Palix <nicolas.palix@imag.fr>, jeyu@kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        tglx@linutronix.de, michal.lkml@markovi.net,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        sboyd@codeaurora.org, Nicolas Ferre <nicolas.ferre@microchip.com>,
+        maco@google.com, pombredanne@nexb.com,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-modules@vger.kernel.org
+Subject: Re: [Cocci] [PATCH v2 08/10] scripts: Coccinelle script for
+ namespace dependencies.
+Message-ID: <20190814063611.GA22387@himanshu-Vostro-3559>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190813121733.52480-1-maennich@google.com>
+ <20190813121733.52480-9-maennich@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190813121733.52480-9-maennich@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Aug 13, 2019 at 5:19 AM 'Matthias Maennich' via kernel-team
-<kernel-team@android.com> wrote:
->
-> If MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS is enabled (default=n), the
-> requirement for modules to import all namespaces that are used by
-> the module is relaxed.
->
-> Enabling this option effectively allows (invalid) modules to be loaded
-> while only a warning is emitted.
->
-> Disabling this option keeps the enforcement at module loading time and
-> loading is denied if the module's imports are not satisfactory.
->
-> Reviewed-by: Martijn Coenen <maco@android.com>
+On Tue, Aug 13, 2019 at 01:17:05PM +0100, Matthias Maennich wrote:
+> A script that uses the '<module>.ns_deps' file generated by modpost to
+> automatically add the required symbol namespace dependencies to each
+> module.
+> 
+> Usage:
+> 1) Move some symbols to a namespace with EXPORT_SYMBOL_NS() or define
+>    DEFAULT_SYMBOL_NAMESPACE
+> 2) Run 'make' (or 'make modules') and get warnings about modules not
+>    importing that namespace.
+> 3) Run 'make nsdeps' to automatically add required import statements
+>    to said modules.
+> 
+> This makes it easer for subsystem maintainers to introduce and maintain
+> symbol namespaces into their codebase.
+> 
+> Co-developed-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Martijn Coenen <maco@android.com>
 > Signed-off-by: Matthias Maennich <maennich@google.com>
 > ---
->  init/Kconfig    | 14 ++++++++++++++
->  kernel/module.c | 11 +++++++++--
->  2 files changed, 23 insertions(+), 2 deletions(-)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index bd7d650d4a99..b3373334cdf1 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -2119,6 +2119,20 @@ config MODULE_COMPRESS_XZ
->
->  endchoice
->
-> +config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-> +       bool "Allow loading of modules with missing namespace imports"
-> +       default n
-> +       help
-> +         Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
-> +         a namespace. A module that makes use of a symbol exported with such a
-> +         namespace is required to import the namespace via MODULE_IMPORT_NS().
-> +         This option relaxes this requirement when loading a module.
 
-> While
-> +         technically there is no reason to enforce correct namespace imports,
-> +         it creates consistency between symbols defining namespaces and users
-> +         importing namespaces they make use of.
+[]
 
-I'm confused by this sentence. It sounds like it's the opposite of
-what the config is doing? Can you please reword it for clarify?
+>  MAINTAINERS                                 |  5 ++
+>  Makefile                                    | 12 +++++
+>  scripts/Makefile.modpost                    |  4 +-
+>  scripts/coccinelle/misc/add_namespace.cocci | 23 +++++++++
+>  scripts/nsdeps                              | 54 +++++++++++++++++++++
+>  5 files changed, 97 insertions(+), 1 deletion(-)
+>  create mode 100644 scripts/coccinelle/misc/add_namespace.cocci
+>  create mode 100644 scripts/nsdeps
 
--Saravana
+[]
+
+> +if [ "$SPATCH_VERSION_NUM" -lt "$SPATCH_REQ_VERSION_NUM" ] ; then
+> +    echo 'spatch needs to be version 1.06 or higher'
+
+Nitpick: 1.0.6
+
+> +    exit 1
+> +fi
+
+
+-- 
+Himanshu Jha
+Undergraduate Student
+Department of Electronics & Communication
+Guru Tegh Bahadur Institute of Technology
