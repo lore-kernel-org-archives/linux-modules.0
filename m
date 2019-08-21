@@ -2,105 +2,86 @@ Return-Path: <SRS0=rFgV=WR=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1FFEC3A59E
-	for <linux-modules@archiver.kernel.org>; Wed, 21 Aug 2019 14:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA2AC3A59E
+	for <linux-modules@archiver.kernel.org>; Wed, 21 Aug 2019 23:13:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 88312233FC
-	for <linux-modules@archiver.kernel.org>; Wed, 21 Aug 2019 14:37:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566398231;
-	bh=LLHM3HLNnSTk9CIZqdIrW76ESIQASTQvj9y7JVMhEwU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=z/tUNZJTd4yk2fbXod6fL+ddo/UkiPpyRrf+hkcPrZ/G9XY4sLm/uFqggjmDQJHrr
-	 MhyLIABJPuCmeOutjzijTXNSfh6IfEL1vcvY0zymzOMXzQaQF+Fzd2dOM7+kX1Y/Gr
-	 Ym0NMN/XCCiTsCVPX5ebyPPl8Lyc4I2gRnSRbWvc=
+	by mail.kernel.org (Postfix) with ESMTP id A1BBF2339F
+	for <linux-modules@archiver.kernel.org>; Wed, 21 Aug 2019 23:13:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LGr1j52G"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729122AbfHUOhG (ORCPT
+        id S1730076AbfHUXNg (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 21 Aug 2019 10:37:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37004 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728724AbfHUOhG (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 21 Aug 2019 10:37:06 -0400
-Received: from linux-8ccs (ip5f5ade6e.dynamic.kabel-deutschland.de [95.90.222.110])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B6C2C206BA;
-        Wed, 21 Aug 2019 14:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566398225;
-        bh=LLHM3HLNnSTk9CIZqdIrW76ESIQASTQvj9y7JVMhEwU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tX0ldqZERDP4xQ8nTag6pfFnc82CxILalGtaetxbHG8xXXzAIW0JIHVE3CJGb/4E/
-         EMjrjUGonCrYNoOy6eDoS609WwM0Ddr/MJYcXij1vlsZAS6fj2xJ0YB3fwrJmrZor9
-         QEX8ufh6sVHXovTET4evmeAPBDKEozvv0a7cSA5A=
-Date:   Wed, 21 Aug 2019 16:36:55 +0200
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Matthias Maennich <maennich@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, hpa@zytor.com,
-        joel@joelfernandes.org, kstewart@linuxfoundation.org,
-        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        lucas.de.marchi@gmail.com, maco@android.com, maco@google.com,
-        michal.lkml@markovi.net, mingo@redhat.com, oneukum@suse.com,
-        pombredanne@nexb.com, sam@ravnborg.org, sspatil@google.com,
-        stern@rowland.harvard.edu, tglx@linutronix.de,
-        usb-storage@lists.one-eyed-alien.net, x86@kernel.org,
-        yamada.masahiro@socionext.com
+        Wed, 21 Aug 2019 19:13:36 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:54474 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729763AbfHUXNf (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Wed, 21 Aug 2019 19:13:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=WM7SZ88kyqemBkIYTm2NML5mscgb3zmbfZeZ+GXNIXY=; b=LGr1j52GyKOw/HBHTEYaEj8Hb
+        uA7xSFH9W6skRCtnvb26k+BfEDOTMOQLZ5pwCWM8HwOXugtz2pCIoK6rLI6lixhEVzv4Z8m5yNnJz
+        Qx8xlXi5+HXyevRlwQE5FIV8mAWh+oXFTCQc8E8E9WmokfjsL7VKctjLPqGdsHTxW8ITHyfc3YTe8
+        b7Ai//7E3J9wDTuVpUe6vP3AQdrCPGkrkWfEIMECAmG0AVR4ecNuJUlt8XcUiFs9LkTVxX3TcFJ+I
+        p6RKEpo3+dmRQwHaD5q0tvwK50Ysnd7WrYD3oAvjPpTw9FoeKaVXP9N4ol7y0xXLVVwIDzISdxKDJ
+        wcG1XLSsg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1i0ZnF-00059G-IV; Wed, 21 Aug 2019 23:13:29 +0000
+Date:   Wed, 21 Aug 2019 16:13:29 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
+        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
+        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
+        maco@android.com, maco@google.com, michal.lkml@markovi.net,
+        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
+        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
+        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
+        x86@kernel.org, yamada.masahiro@socionext.com
 Subject: Re: [PATCH v3 10/11] RFC: usb-storage: export symbols in USB_STORAGE
  namespace
-Message-ID: <20190821143655.GA13637@linux-8ccs>
+Message-ID: <20190821231329.GA369@infradead.org>
 References: <20190813121733.52480-1-maennich@google.com>
  <20190821114955.12788-1-maennich@google.com>
  <20190821114955.12788-11-maennich@google.com>
- <20190821123827.GB4059@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190821123827.GB4059@kroah.com>
-X-OS:   Linux linux-8ccs 4.12.14-lp150.12.28-default x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190821114955.12788-11-maennich@google.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-+++ Greg KH [21/08/19 05:38 -0700]:
->On Wed, Aug 21, 2019 at 12:49:25PM +0100, Matthias Maennich wrote:
->> Modules using these symbols are required to explicitly import the
->> namespace. This patch was generated with the following steps and serves
->> as a reference to use the symbol namespace feature:
->>
->>  1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
->>  2) make  (see warnings during modpost about missing imports)
->>  3) make nsdeps
->>
->> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
->> variants can be used to explicitly specify the namespace. The advantage
->> of the method used here is that newly added symbols are automatically
->> exported and existing ones are exported without touching their
->> respective EXPORT_SYMBOL macro expansion.
->>
->> Signed-off-by: Matthias Maennich <maennich@google.com>
->
->This looks good to me.  This can be included with the rest of this
->series when/if it goes through the kbuild or module tree:
->
->Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->
->Actually, which tree will this be going through?
+On Wed, Aug 21, 2019 at 12:49:25PM +0100, Matthias Maennich wrote:
+> Modules using these symbols are required to explicitly import the
+> namespace. This patch was generated with the following steps and serves
+> as a reference to use the symbol namespace feature:
+> 
+>  1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
+>  2) make  (see warnings during modpost about missing imports)
+>  3) make nsdeps
+> 
+> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
+> variants can be used to explicitly specify the namespace. The advantage
+> of the method used here is that newly added symbols are automatically
+> exported and existing ones are exported without touching their
+> respective EXPORT_SYMBOL macro expansion.
 
-I would be happy to take the patchset through the modules tree once it
-collects the appropriate ack/reviewed-by's and once I get a chance to
-sit down and review/test it next week :)
-
-Thanks!
-
-Jessica
+So what is USB_STORAGE here?  It isn't a C string, so where does it
+come from?  To me using a C string would seem like the nicer interface
+vs a random cpp symbol that gets injected somewhere.
