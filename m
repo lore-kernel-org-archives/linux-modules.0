@@ -5,61 +5,61 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C79FC3A5A1
-	for <linux-modules@archiver.kernel.org>; Wed, 21 Aug 2019 11:54:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C4F1C3A59E
+	for <linux-modules@archiver.kernel.org>; Wed, 21 Aug 2019 11:54:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 52A03233A0
-	for <linux-modules@archiver.kernel.org>; Wed, 21 Aug 2019 11:54:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72DC92339E
+	for <linux-modules@archiver.kernel.org>; Wed, 21 Aug 2019 11:54:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DOxh31Nr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="abTPfEJh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727464AbfHULyP (ORCPT
+        id S1727882AbfHULy2 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 21 Aug 2019 07:54:15 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:36827 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727216AbfHULyP (ORCPT
+        Wed, 21 Aug 2019 07:54:28 -0400
+Received: from mail-yb1-f201.google.com ([209.85.219.201]:44960 "EHLO
+        mail-yb1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727814AbfHULy1 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 21 Aug 2019 07:54:15 -0400
-Received: by mail-qk1-f202.google.com with SMTP id q62so1861730qkd.3
-        for <linux-modules@vger.kernel.org>; Wed, 21 Aug 2019 04:54:14 -0700 (PDT)
+        Wed, 21 Aug 2019 07:54:27 -0400
+Received: by mail-yb1-f201.google.com with SMTP id e69so1335006ybc.11
+        for <linux-modules@vger.kernel.org>; Wed, 21 Aug 2019 04:54:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=nD4+pr26g4cM7Abylq2YdggXawupPAle/yWOlQ9vc8k=;
-        b=DOxh31Nrb03sM8H1oUNc/SVF2V7y/0vFExiRJJgdMdiN30mVr3RC1MfCEE5URJx/9s
-         euViN+wOAdb0uefuOXo9aYhuz/0O0gqn2n/SzMBUj7jjtfaltSeTgZ15HJ38di+aUGIM
-         F8G/nRzSIa6PixIYTJkKut2j1UFjHglXvCaD3m1y8DrfYqq35gH/EVssCG3oAKyJQnF+
-         Z2f5Y9uk0m6LWa5KklhJ5t8mL2OICsjEgE1tllDIGBrt1fJDcUr7C6MrDSVo2amKr9ke
-         67mL5njYhSCUr8mP3KYNAULfpX2oTqsXrN1gwY6Z3xLlDZjbSZtrbZTV9Hc3B1DaLq8S
-         rXRw==
+        bh=PMfgpvV4p29AlBNiXlEti/BQa916MI0li39A4AvOT8o=;
+        b=abTPfEJhVwI/gTUYBSiD3/lNZoCFClIsVlF/S1LUw2hkn62URKuAwYcGeZTiMgflCE
+         RH0FW4rwVygHz/irYwGK+2B8izibJphUwGkIg3MYKMiB94z2GaNprg8wrKbnbJxDAh7w
+         LTTCqXeFZuXpWKiLLsFInxfjxXoQv05Woq/GeUH88OP6wdtiNh03LDNHrPVh/UmzbhTD
+         D8DEHJnTdvf2WWeNotbNP3DawUqMAATGqe8bVNhGnamyNxb6t+fbpbmbuQWHhl09D6yh
+         OyOPUn6H0uBx7epA7HzZ5sWn4sT8XEHjpqM1tqCiVYjla+4Wbs8sCnh0+SDMTc1QpD71
+         uuyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=nD4+pr26g4cM7Abylq2YdggXawupPAle/yWOlQ9vc8k=;
-        b=oLW8GLmZJF5XQGYSozTWCCRnIMMb6ck9vvx822IFJZLKY0yer+txN8TAP/Yf44W5eI
-         ViXupIN28rfcjK6rvPvVPuEFy2bu+4dcYiElXzBoYUURn9azlntdpt8LpNaeOL6iBKur
-         BbnbhF42vzw3P5TbRkPlOUMkScQfnM51q1HdT78SdTk6Kyz6rEgNttxUpPkwcfjwuQ70
-         A+0pKvGPtDqmO5W9mxwnGTwOgCOKjFRqfyxdO1jitQ5W8bdXMSfzfTJJ0g7HtdbjYGH/
-         3S0gMC4D8MDC1JgXwPNqazxfhAulR4h9HFGUTfVJiAaMQtMIgGa8Ns6Hy5jQwt7U0vmG
-         kB4A==
-X-Gm-Message-State: APjAAAVJxXaAwqUcZ0gexpcD4sXq7+x5rkzG1hbiVSVBzF85xwGRU/Zl
-        FZelBvzr5mUFf6+8zsrGRDBT5F29vOxG5g==
-X-Google-Smtp-Source: APXvYqwWVNmxSD/0c8yyOghSaNHjxd0C3N899CBfY/SVjrqJdhabkiQKrjyEST/xgvzfWrXzm6+qJGpMb3iBpw==
-X-Received: by 2002:ae9:e714:: with SMTP id m20mr29443807qka.72.1566388453855;
- Wed, 21 Aug 2019 04:54:13 -0700 (PDT)
-Date:   Wed, 21 Aug 2019 12:49:17 +0100
+        bh=PMfgpvV4p29AlBNiXlEti/BQa916MI0li39A4AvOT8o=;
+        b=Ci2Xo6oeFcY/7R42/KTID48hlanpbrLx7PINUyF/XAm+REvjp0q6g4jMZVuNqZxEQy
+         N1dggSKvg4YVw6gNpE2I612mCSiLh/uvIPw3IBKnJEeLSJOW0WrLl20z1wDYOZgF56Nl
+         LbGNiRe6UtjhxOyGfwlWwly+DxUaUQ7gI1Xys2Zj9aXq/HJ9nzedWpqrTGsh+12JletK
+         9vv5/5Axg+OmoCXXhlUj2V4ZCW95e3OaLiX5W7OauQ2XEyO2KKaVgleNeDvwLHbCqdfo
+         ANzT9EgtcUQgqaUQS5n12ldQYabUO04k0Ieip8ymZsliXf8tF5pli3MYGDjrlmRm8aTc
+         7uKw==
+X-Gm-Message-State: APjAAAXC7cSC5uR3dFF/3qss5NTRXvBUfp0X7NOerHZ75YE9xl2ceV+Y
+        9368LwfE5ADE5LJIvuxUBeznELtMtkL4sg==
+X-Google-Smtp-Source: APXvYqxGjPF+kvZobt3ndd57e0J8cIy5FA7wdFldKnvqADf0nQHm5Fy15Hii56pIWC3eVZOoy4fG6NGLJXG+CQ==
+X-Received: by 2002:a0d:e14d:: with SMTP id k74mr23507585ywe.364.1566388466112;
+ Wed, 21 Aug 2019 04:54:26 -0700 (PDT)
+Date:   Wed, 21 Aug 2019 12:49:20 +0100
 In-Reply-To: <20190821114955.12788-1-maennich@google.com>
-Message-Id: <20190821114955.12788-3-maennich@google.com>
+Message-Id: <20190821114955.12788-6-maennich@google.com>
 Mime-Version: 1.0
 References: <20190813121733.52480-1-maennich@google.com> <20190821114955.12788-1-maennich@google.com>
 X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH v3 02/11] export: explicitly align struct kernel_symbol
+Subject: [PATCH v3 05/11] module: add config option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
 From:   Matthias Maennich <maennich@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
@@ -74,103 +74,84 @@ Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
         sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
         tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
         x86@kernel.org, yamada.masahiro@socionext.com,
-        Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Patrick Bellasi <patrick.bellasi@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Adrian Reber <adrian@lisas.de>,
+        Richard Guy Briggs <rgb@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This change allows growing struct kernel_symbol without wasting bytes to
-alignment. It also concretized the alignment of ksymtab entries if
-relative references are used for ksymtab entries.
+If MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS is enabled (default=n), the
+requirement for modules to import all namespaces that are used by
+the module is relaxed.
 
-struct kernel_symbol was already implicitly being aligned to the word
-size, except on x86_64 and m68k, where it is aligned to 16 and 2 bytes,
-respectively.
+Enabling this option effectively allows (invalid) modules to be loaded
+while only a warning is emitted.
 
-As far as I can tell there is no requirement for aligning struct
-kernel_symbol to 16 bytes on x86_64, but gcc aligns structs to their
-size, and the linker aligns the custom __ksymtab sections to the largest
-data type contained within, so setting KSYM_ALIGN to 16 was necessary to
-stay consistent with the code generated for non-ASM EXPORT_SYMBOL(). Now
-that non-ASM EXPORT_SYMBOL() explicitly aligns to word size (8),
-KSYM_ALIGN is no longer necessary.
+Disabling this option keeps the enforcement at module loading time and
+loading is denied if the module's imports are not satisfactory.
 
-In case of relative references, the alignment has been changed
-accordingly to not waste space when adding new struct members.
-
-As for m68k, struct kernel_symbol is aligned to 2 bytes even though the
-structure itself is 8 bytes; using a 4-byte alignment shouldn't hurt.
-
-I manually verified the output of the __ksymtab sections didn't change
-on x86, x86_64, arm, arm64 and m68k. As expected, the section contents
-didn't change, and the ELF section alignment only changed on x86_64 and
-m68k. Feedback from other archs more than welcome.
-
-Co-developed-by: Martijn Coenen <maco@android.com>
-Signed-off-by: Martijn Coenen <maco@android.com>
+Reviewed-by: Martijn Coenen <maco@android.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Matthias Maennich <maennich@google.com>
 ---
- arch/m68k/include/asm/export.h | 1 -
- include/asm-generic/export.h   | 8 +++-----
- include/linux/export.h         | 3 ++-
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ init/Kconfig    | 13 +++++++++++++
+ kernel/module.c | 11 +++++++++--
+ 2 files changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/arch/m68k/include/asm/export.h b/arch/m68k/include/asm/export.h
-index 0af20f48bd07..b53008b67ce1 100644
---- a/arch/m68k/include/asm/export.h
-+++ b/arch/m68k/include/asm/export.h
-@@ -1,3 +1,2 @@
--#define KSYM_ALIGN 2
- #define KCRC_ALIGN 2
- #include <asm-generic/export.h>
-diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
-index 294d6ae785d4..63f54907317b 100644
---- a/include/asm-generic/export.h
-+++ b/include/asm-generic/export.h
-@@ -4,15 +4,13 @@
- #ifndef KSYM_FUNC
- #define KSYM_FUNC(x) x
- #endif
--#ifdef CONFIG_64BIT
--#ifndef KSYM_ALIGN
-+#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
-+#define KSYM_ALIGN 4
-+#elif defined(CONFIG_64BIT)
- #define KSYM_ALIGN 8
--#endif
- #else
--#ifndef KSYM_ALIGN
- #define KSYM_ALIGN 4
- #endif
--#endif
- #ifndef KCRC_ALIGN
- #define KCRC_ALIGN 4
- #endif
-diff --git a/include/linux/export.h b/include/linux/export.h
-index fd8711ed9ac4..28a4d2150689 100644
---- a/include/linux/export.h
-+++ b/include/linux/export.h
-@@ -52,7 +52,7 @@ extern struct module __this_module;
- #define __KSYMTAB_ENTRY(sym, sec)					\
- 	__ADDRESSABLE(sym)						\
- 	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
--	    "	.balign	8					\n"	\
-+	    "	.balign 4					\n"	\
- 	    "__ksymtab_" #sym ":				\n"	\
- 	    "	.long	" #sym "- .				\n"	\
- 	    "	.long	__kstrtab_" #sym "- .			\n"	\
-@@ -66,6 +66,7 @@ struct kernel_symbol {
- #define __KSYMTAB_ENTRY(sym, sec)					\
- 	static const struct kernel_symbol __ksymtab_##sym		\
- 	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
-+	__aligned(sizeof(void *))					\
- 	= { (unsigned long)&sym, __kstrtab_##sym }
+diff --git a/init/Kconfig b/init/Kconfig
+index bd7d650d4a99..cc28561288a7 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2119,6 +2119,19 @@ config MODULE_COMPRESS_XZ
  
- struct kernel_symbol {
+ endchoice
+ 
++config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
++	bool "Allow loading of modules with missing namespace imports"
++	help
++	  Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
++	  a namespace. A module that makes use of a symbol exported with such a
++	  namespace is required to import the namespace via MODULE_IMPORT_NS().
++	  There is no technical reason to enforce correct namespace imports,
++	  but it creates consistency between symbols defining namespaces and
++	  users importing namespaces they make use of. This option relaxes this
++	  requirement and lifts the enforcement when loading a module.
++
++	  If unsure, say N.
++
+ config TRIM_UNUSED_KSYMS
+ 	bool "Trim unused exported kernel symbols"
+ 	depends on MODULES && !UNUSED_SYMBOLS
+diff --git a/kernel/module.c b/kernel/module.c
+index 57e8253f2251..7c934aaae2d3 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -1408,9 +1408,16 @@ static int verify_namespace_is_imported(const struct load_info *info,
+ 			imported_namespace = get_next_modinfo(
+ 				info, "import_ns", imported_namespace);
+ 		}
+-		pr_err("%s: module uses symbol (%s) from namespace %s, but does not import it.\n",
+-		       mod->name, kernel_symbol_name(sym), namespace);
++#ifdef CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
++		pr_warn(
++#else
++		pr_err(
++#endif
++			"%s: module uses symbol (%s) from namespace %s, but does not import it.\n",
++			mod->name, kernel_symbol_name(sym), namespace);
++#ifndef CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
+ 		return -EINVAL;
++#endif
+ 	}
+ 	return 0;
+ }
 -- 
 2.23.0.rc1.153.gdeed80330f-goog
 
