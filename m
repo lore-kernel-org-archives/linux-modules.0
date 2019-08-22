@@ -7,135 +7,143 @@ X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1,
 	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AA29C3A5A2
-	for <linux-modules@archiver.kernel.org>; Thu, 22 Aug 2019 08:32:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C77AC3A59D
+	for <linux-modules@archiver.kernel.org>; Thu, 22 Aug 2019 09:19:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 201792343A
-	for <linux-modules@archiver.kernel.org>; Thu, 22 Aug 2019 08:32:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 115B0233A2
+	for <linux-modules@archiver.kernel.org>; Thu, 22 Aug 2019 09:19:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E8c1BVe7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T2pMI6y+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731114AbfHVIcc (ORCPT
+        id S1733162AbfHVJTH (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 22 Aug 2019 04:32:32 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:37866 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730897AbfHVIcb (ORCPT
+        Thu, 22 Aug 2019 05:19:07 -0400
+Received: from mail-wr1-f41.google.com ([209.85.221.41]:35006 "EHLO
+        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731634AbfHVJTF (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 22 Aug 2019 04:32:31 -0400
-Received: by mail-wr1-f65.google.com with SMTP id z11so4561051wrt.4
-        for <linux-modules@vger.kernel.org>; Thu, 22 Aug 2019 01:32:29 -0700 (PDT)
+        Thu, 22 Aug 2019 05:19:05 -0400
+Received: by mail-wr1-f41.google.com with SMTP id k2so4703874wrq.2
+        for <linux-modules@vger.kernel.org>; Thu, 22 Aug 2019 02:19:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4b70yh01yux8LseDePSC/DiDISC+4IVFYV73p/rz2+o=;
-        b=E8c1BVe7EBu6yhtFK7db335Fb1S6eHZXaT/G0r9s6o7yCfITCEzNdfIuD0wirYp7vb
-         MjBwnsVUgiHDSiSTUkyjG1wIB9iwROJpD58qta21td0tKHQDUmwhpZdduxFB2zp6sebi
-         jvUrA8A2D58nA2kFTgHoHam8Ya25z0Z5isgC5uLEVljRxOWdTmXYFCNu7V4jDwDYcxXO
-         Tn/AhSkcu56p/oJC8gZNa9b0VNYEfc0WGmMiTJsmx6lTnUJ/u4ugOnZ+1Lqv9VyOuAkr
-         NNngborlwcNM9CtXvqO9XoNQpVYvf7o4NuBeerxAGsY42aYL3eOxwqRmbKc320uBtg6u
-         wCNA==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=8fMTG6N2j/TMUB2P1ujx2DtHjddT/TmmdRfnCuZ9XY0=;
+        b=T2pMI6y+G8IKrsK8J/v9Hw6Ze7VNU1QAegTQBtAa7YoAqIMV7jl4rsOxqLr2uKv+7E
+         qU8OpzWDLx9aa2GeALCMNY10DH8xUmpEvSQpL0ayo6EJseiHy6wUP019c/nCCacrOqhB
+         QB+3d2H2f0vEl7LtOw9XPlAwhFizRTqjD3JcaH9+n+VKUvYDS9r4fRpDwq0+iXaszL13
+         J3sknRZdTSR9IJXI8txUWEFdl9+uB5tH3eqzTb0H6t3MUJTXPo1J+pZxj4+FMYBI1PHv
+         B9TvUD/P3C3CaL5RpMtkMMjLBIWW2hdg5F7iwFp/hNbtITgX9r32GojgJ+PW0XbAEkM3
+         Pdcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4b70yh01yux8LseDePSC/DiDISC+4IVFYV73p/rz2+o=;
-        b=jbZZ2Phl+YRM7A3b7I1IcANeWIlxXvqfNsWMSU8vVUVd1OoGdDakTl0G276GAcs5Xx
-         FQyz4mUXfOvGYTpGfb9oRcvDI9NAmGX+a6onpEyxXn1pjHUnWdjS+8S71lVzG97G/pag
-         b371tLBkQJWbGD0NXC9zQgTzpqyQoK7x4WfVV2DFdaHaOs1HSLa4oak/EbqDXXNsQrsB
-         9ldsOWS9A78q0IGhrDdWnQk3FS/OTBYQ33YACsgMnlArwk55/0LbCxrv8ti0alNeUI4P
-         hcvZPvAQR/4OgBANbPn38t92RCu3Fw2yDQNzyBI3XLXotNR1gQIyjblUW5LNzJ33MnkD
-         vzKw==
-X-Gm-Message-State: APjAAAUGVHbJ4pYWzWiisjVztKN6dHqsCR1kvBSOP/zj9VKZIDZ/Mo5O
-        T4DIMpBoDqfBv9YYeWsjmChEwA==
-X-Google-Smtp-Source: APXvYqzhncQ2sLyFAXkyHMIdbyY5WIElP1PH9XUf0yABxgLd2l6QYEsJKT4aB0mYksaQ3+iKPSinPA==
-X-Received: by 2002:a5d:4ec6:: with SMTP id s6mr7356600wrv.327.1566462748883;
-        Thu, 22 Aug 2019 01:32:28 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=8fMTG6N2j/TMUB2P1ujx2DtHjddT/TmmdRfnCuZ9XY0=;
+        b=jfxueybup/ndXKhWkv626WhFIuSKdaKqwR6sHCeM2SrU0TudII8qvfMetXHCwszVRs
+         65mXp/B+HUBX3NowDvJIkZvm3DpfCMCz0Jcal1agqJD/4MnyKP2Va3OERnzWpQY24lLg
+         jqbxakvu0JEhA/u7yMAquVQFRZ5WSRNArvS5sm9whJThcvF6oT1DNLk9+77yypWxcy3e
+         RZnL/M7BA5vGYl45Fj9nwRBYk9SM63Y3Yuychi6b3LhzzyPPzxYS7ga0rtW4QOFy+V0F
+         iwiQt+RsU5Do1vHiw1MBbfs/3HHSz2drXEiuEqZI7OEFH9ZAtbhtGI72Uua7VrAZwE/2
+         kxVw==
+X-Gm-Message-State: APjAAAUzz1ME5Qz1zkyYaqwPdQFlrhDZQ7VO1RWN3Pr6zzL2RwA0Ket3
+        iKKYZh5FPCb91ZToiZp7yA2JIQ==
+X-Google-Smtp-Source: APXvYqzPaTB9as2RdUevNC/gvIlaqvXJBR28ZGeYWGl/cnFEEuvQi+58LrWHZHhwnpFu/CiJ7AkAEg==
+X-Received: by 2002:a5d:4101:: with SMTP id l1mr4986587wrp.202.1566465543440;
+        Thu, 22 Aug 2019 02:19:03 -0700 (PDT)
 Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
-        by smtp.gmail.com with ESMTPSA id p4sm22917436wrs.6.2019.08.22.01.32.26
+        by smtp.gmail.com with ESMTPSA id 4sm46118162wro.78.2019.08.22.02.19.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 01:32:27 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 09:32:23 +0100
+        Thu, 22 Aug 2019 02:19:02 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 10:18:58 +0100
 From:   Matthias Maennich <maennich@google.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com
-Subject: Re: [PATCH v3 10/11] RFC: usb-storage: export symbols in USB_STORAGE
- namespace
-Message-ID: <20190822083223.GA15709@google.com>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-11-maennich@google.com>
- <20190821231329.GA369@infradead.org>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Julia Lawall <Julia.Lawall@lip6.fr>,
+        Martijn Coenen <maco@android.com>, cocci@systeme.lip6.fr,
+        kernel-janitors@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-modules@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        kernel-team@android.com, usb-storage@lists.one-eyed-alien.net,
+        x86@kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Gilles Muller <Gilles.Muller@lip6.fr>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Martijn Coenen <maco@google.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Oliver Neukum <oneukum@suse.com>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sandeep Patil <sspatil@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [v2 08/10] scripts: Coccinelle script for namespace dependencies
+Message-ID: <20190822091858.GA60652@google.com>
+References: <20190813121733.52480-9-maennich@google.com>
+ <1c4420f4-361c-7358-49d9-87d8a51f7920@web.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20190821231329.GA369@infradead.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1c4420f4-361c-7358-49d9-87d8a51f7920@web.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Aug 21, 2019 at 04:13:29PM -0700, Christoph Hellwig wrote:
->On Wed, Aug 21, 2019 at 12:49:25PM +0100, Matthias Maennich wrote:
->> Modules using these symbols are required to explicitly import the
->> namespace. This patch was generated with the following steps and serves
->> as a reference to use the symbol namespace feature:
->>
->>  1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
->>  2) make  (see warnings during modpost about missing imports)
->>  3) make nsdeps
->>
->> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
->> variants can be used to explicitly specify the namespace. The advantage
->> of the method used here is that newly added symbols are automatically
->> exported and existing ones are exported without touching their
->> respective EXPORT_SYMBOL macro expansion.
+On Thu, Aug 15, 2019 at 03:50:38PM +0200, Markus Elfring wrote:
+>> +generate_deps_for_ns() {
+>> +    $SPATCH --very-quiet --in-place --sp-file \
+>> +	    $srctree/scripts/coccinelle/misc/add_namespace.cocci -D ns=$1 $2
+>> +}
 >
->So what is USB_STORAGE here?  It isn't a C string, so where does it
->come from?  To me using a C string would seem like the nicer interface
->vs a random cpp symbol that gets injected somewhere.
+>* Where will the variable “srctree” be set for the file “scripts/nsdeps”?
+>
 
-To be honest, I would also prefer an interface that uses C strings or
-literals for the new EXPORT_SYMBOLS* macros:
+$srctree is defined by kbuild in the toplevel Makefile.
 
-  EXPORT_SYMBOL_NS(mysym, "USB_STORAGE");
+>* Would you like to support a separate build directory for desired adjustments?
+>
 
-  or
+No, as the purpose of this script is to directly patch the kernel
+sources where applicable.
 
-  const char USB_STORAGE_NS[] = "USB_STORAGE";
-  EXPORT_SYMBOL_NS(mysym, USB_STORAGE_NS);
+>* How do you think about to check error handling around such commands?
+>
+>
 
-The DEFAULT_SYMBOL_NAMESPACE define within Makefiles would get a bit
-more verbose in that case to express the literal:
-  ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE="\"USB_STORAGE\""
+spatch emits a descriptive message on error. I will add a 'set
+-e' to the script so that it aborts on errors.
 
+>> +generate_deps() {
+>…
+>> +        for source_file in $mod_source_files; do
+>> +            sed '/MODULE_IMPORT_NS/Q' $source_file > ${source_file}.tmp
+>…
+>
+>I suggest to assign the name for the temporary file to a variable
+>which should be used by subsequent commands.
 
-The main reason against that, is, that in the expansion of
-EXPORT_SYMBOL_NS, we define the ksymtab entry, which name is
-constructed partly by the name of the namespace:
-
-   static const struct kernel_symbol __ksymtab_##sym##__##ns  ...
-                                                        ^^^^
-
-For that we depend on a cpp symbol to construct the name. I am not sure
-there is a reasonable way of getting rid of that without ending up
-constructing the ksymtab entries completely in asm as it is already done
-in case of PREL32_RELOCATIONS. But I am happy to be corrected.
-
-For reference that is done in patch 03/11 of this series:
-https://lore.kernel.org/lkml/20190821114955.12788-4-maennich@google.com/
+I somehow don't agree that this is an improvement to the code as the
+variable would likely be something like ${source_file_tmp}. Sticking to
+${source_file}.tmp does express the intent of a temporary file next to
+the original source file and the reader of the code does not need to
+reason about the value of ${source_file_tmp}.
 
 Cheers,
 Matthias
