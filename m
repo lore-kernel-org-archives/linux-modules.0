@@ -2,63 +2,64 @@ Return-Path: <SRS0=OwIU=W6=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49C92C3A5A8
-	for <linux-modules@archiver.kernel.org>; Tue,  3 Sep 2019 15:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 847A4C3A5A5
+	for <linux-modules@archiver.kernel.org>; Tue,  3 Sep 2019 15:07:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 231E6215EA
-	for <linux-modules@archiver.kernel.org>; Tue,  3 Sep 2019 15:07:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4ACEE20882
+	for <linux-modules@archiver.kernel.org>; Tue,  3 Sep 2019 15:07:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W1kHB/tZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DjpPoCow"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729577AbfICPHK (ORCPT
+        id S1729811AbfICPHg (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 3 Sep 2019 11:07:10 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:54700 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727941AbfICPHK (ORCPT
+        Tue, 3 Sep 2019 11:07:36 -0400
+Received: from mail-yw1-f74.google.com ([209.85.161.74]:52360 "EHLO
+        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729807AbfICPHg (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 3 Sep 2019 11:07:10 -0400
-Received: by mail-qk1-f202.google.com with SMTP id v143so5120592qka.21
-        for <linux-modules@vger.kernel.org>; Tue, 03 Sep 2019 08:07:09 -0700 (PDT)
+        Tue, 3 Sep 2019 11:07:36 -0400
+Received: by mail-yw1-f74.google.com with SMTP id d18so13594511ywb.19
+        for <linux-modules@vger.kernel.org>; Tue, 03 Sep 2019 08:07:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=hNr8T/9gNzuEDlnpxznbVrBSAUbvdXRiy1rCWsF0n2E=;
-        b=W1kHB/tZ7YClRTpT8BdeFzp8+giupK7HNS98ECGbb2bo1vSoTUXrJnGWXWyzJTqMjB
-         G+OgNYTIYC2yvdCSeYIAa5phAgPlBe1atBEhABcLCty4uZh1ost3f8hngjLxCmoQvBhP
-         c/7v0vfL2JJlPXgOwDWELXQF35on5j65XIwSL4vdXMeXknMcZMJ5QEOAHJSDyGfAB+S7
-         GB8enhAmcWjzKmbAbBLTOzcvZtAHCk4aOD1hHzRofSlj1FcQbu7vF9SXtIndwgFgvbz1
-         7qu5KhebJ1BDFLihWzzHXKpMZSdnkqm+3Fu9fUJS7x5O1xDD9HSIgyK9ymyP0CdNLvAH
-         9aRQ==
+        bh=TomRv8WBRCsnjt12ZHD1+VdCr+4pjb/fkJlpjNFFLG4=;
+        b=DjpPoCowYoYMtqq6HChqsAFuCxySsXs6nnis1S6OjRSfR5h5o60lx6prLWk2IFp2SB
+         ZL/iH4uSQoA87fOY1SCt0JtauSbUEx9o01Cw6SePQ2YK4+oEDisY472VSZN5nIZvfvbz
+         tVMjf1T/FJN/3X6ktlKarr3AKfRelcnCr8tDvp87Ha9hBen3ifVU1gQR5ccBVcsgUIZK
+         gC4SqEWp++ijD8pUY4RQdXZx+pdOYK4onjRmTH0sTgRBTOvy06mKNBGZBSsvkFC5UZTV
+         I436Nils03M3qCKFxh2B+xkDNq4uJfvNaH29KloUvqo8TVZgUK3gCEWzNe47LlkGywPr
+         /3lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=hNr8T/9gNzuEDlnpxznbVrBSAUbvdXRiy1rCWsF0n2E=;
-        b=fAw/9cJiDrQQJBP+kgnlVfX4V0C6pSXzspv5nNv/ori3F3FAuAcxMTTnFsWQaq9ZXj
-         pMtnOJwxGZ1toq6tyK6QYi6JGD2DEHeukaX1u/qdzPhqqYD+8BCXb2GdVRhWt3ecFsNy
-         eDxzeZgrt2+FfW6RYdM9FfGr+HX97HXTG3ZjZkMdA/ppZa610kUPk078MzARtmEbQkFv
-         lxPu8asL6Qg88xbp2wcJ0ZPO50rizwgMJahm50CrHtqqhtwbppi6dqSYfrXQvd6md5Pw
-         dNwFLdek7M00cL7CpDyW0UPUgykxl8Spi+FSV+rxOipXL/Oqo58xmKsL8VniZhQ0sHkt
-         oksA==
-X-Gm-Message-State: APjAAAUtVChhhULIdC3E9WHgoax/zeQbms2FYTSMzC3S3wDuVPzMXK3l
-        2X2bl7l4JcjD06aBbWWP16KeC4Fqs6LGWg==
-X-Google-Smtp-Source: APXvYqxywyK88KqR9EH6QS9ukdJLXV/QzWjnqDtKLmWl890k2IzTxT5xZZxMP2O6UERMtA0+We+LtTKs7PCxWQ==
-X-Received: by 2002:a05:6214:1369:: with SMTP id c9mr13911042qvw.3.1567523228617;
- Tue, 03 Sep 2019 08:07:08 -0700 (PDT)
-Date:   Tue,  3 Sep 2019 16:06:26 +0100
-In-Reply-To: <20180716122125.175792-1-maco@android.com>
-Message-Id: <20190903150638.242049-1-maennich@google.com>
+        bh=TomRv8WBRCsnjt12ZHD1+VdCr+4pjb/fkJlpjNFFLG4=;
+        b=XJ9IXket4qLicMmyKjb+h/Bol4qBTVHeAqIjjTrcSKh/yqOtBF0uTnT3ughBc5hzlR
+         dPO+zd3FG09neXZpFurZCVMEs1YlyzabHG4SOyLLsw0f/BuLdenrOw2MV+zlOVY1Qy01
+         ++9btc8CpsoMUMeKG8pzKKy2+czRQQSZq4kfIvr1/wTU31dEUf9UnXJl7WpY+g515tgw
+         hckyFOCGbb/0MWC3zBKBUZ4Ib4hUBpI1R6JwthdXCRiEB4CsJKfu9fk3ThB+4tgHFifh
+         fzQU40wzzsHdsqYudLJJWQFxXGv0J/7zbvp8SBIin6btFFRYQsKG8M0FiSQUPhuxEVtu
+         jQbA==
+X-Gm-Message-State: APjAAAVpomDuZyGS/0Incwht7+6DJYy1tUfz09+5sXG/IfmoHfrNprD5
+        haqzgi6HwFCbs4HKDYp4Dmv7Q9xSQKt7Wg==
+X-Google-Smtp-Source: APXvYqxEBrg7gJojzVUw3GwcZ9otAyXaBVd2jFNcrR6p4Ed9JS8wISKsWDTTwpk0FQ8t1mXJbWEJPSJ83QnbiA==
+X-Received: by 2002:a25:2e4e:: with SMTP id b14mr24713314ybn.242.1567523255286;
+ Tue, 03 Sep 2019 08:07:35 -0700 (PDT)
+Date:   Tue,  3 Sep 2019 16:06:30 +0100
+In-Reply-To: <20190903150638.242049-1-maennich@google.com>
+Message-Id: <20190903150638.242049-5-maennich@google.com>
 Mime-Version: 1.0
-References: <20180716122125.175792-1-maco@android.com>
+References: <20180716122125.175792-1-maco@android.com> <20190903150638.242049-1-maennich@google.com>
 X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
-Subject: [PATCH v4 00/12] Symbol Namespaces
+Subject: [PATCH v4 04/12] modpost: add support for symbol namespaces
 From:   Matthias Maennich <maennich@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
@@ -74,253 +75,295 @@ Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-As of Linux 5.3-rc7, there are 31207 [1] exported symbols in the kernel.
-That is a growth of roughly 1000 symbols since 4.17 (30206 [2]). There
-seems to be some consensus amongst kernel devs that the export surface
-is too large, and hard to reason about.
+Add support for symbols that are exported into namespaces. For that,
+extract any namespace suffix from the symbol name. In addition, emit a
+warning whenever a module refers to an exported symbol without
+explicitly importing the namespace that it is defined in. This patch
+consistently adds the namespace suffix to symbol names exported into
+Module.symvers.
 
-Generally, these symbols fall in one of these categories:
-1) Symbols actually meant for drivers
-2) Symbols that are only exported because functionality is split over
-   multiple modules, yet they really shouldn't be used by modules outside
-   of their own subsystem
-3) Symbols really only meant for in-tree use
+Example warning emitted by modpost in case of the above violation:
 
-When module developers try to upstream their code, it regularly turns
-out that they are using exported symbols that they really shouldn't be
-using. This problem is even bigger for drivers that are currently
-out-of-tree, which may be using many symbols that they shouldn't be
-using, and that break when those symbols are removed or modified.
+ WARNING: module ums-usbat uses symbol usb_stor_resume from namespace
+ USB_STORAGE, but does not import it.
 
-This patch allows subsystem maintainers to partition their exported
-symbols into separate namespaces, and module authors to import such
-namespaces only when needed.
+Co-developed-by: Martijn Coenen <maco@android.com>
+Signed-off-by: Martijn Coenen <maco@android.com>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Matthias Maennich <maennich@google.com>
+---
+ Documentation/kbuild/modules.rst |   7 ++-
+ scripts/export_report.pl         |   2 +-
+ scripts/mod/modpost.c            | 104 ++++++++++++++++++++++++++-----
+ scripts/mod/modpost.h            |   7 +++
+ 4 files changed, 101 insertions(+), 19 deletions(-)
 
-This allows subsystem maintainers to more easily limit availability of
-these namespaced symbols to other parts of the kernel. It can also be
-used to partition the set of exported symbols for documentation
-purposes; for example, a set of symbols that is really only used for
-debugging could be in a "SUBSYSTEM_DEBUG" namespace.
-
-The series contains two RFC patches that do not need to be merged along
-with the rest of the series, but they serve as a reference for using the
-symbol namespaces. Especially, the watchdog subsystem might not be
-affected by the issues addressed by Symbol Namespaces. I left the patch
-in for reference anyway for demonstration purposes.
-
-I continued the work mainly done by Martijn Coenen.
-
-Changes in v2:
-- Rather than adding and evaluating separate sections __knsimport_NS,
-  use modinfo tags to declare the namespaces a module introduces.
-  Adjust modpost and the module loader accordingly.
-- Also add support for reading multiple modinfo values for the same tag
-  to allow list-like access to modinfo tags.
-- The macros in export.h have been cleaned up to avoid redundancy in the
-  macro parameters (ns, nspost, nspost2).
-- The introduction of relative references in the ksymtab entries caused
-  a rework of the macros to accommodate that configuration as well.
-- Alignment of kernel_symbol in the ksymtab needed to be fixed to allow
-  growing the kernel_symbol struct.
-- Modpost does now also append the namespace suffix to the symbol
-  entries in Module.symvers.
-- The configuration option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS allows
-  relaxing the enforcement of properly declared namespace imports at
-  module loading time.
-- Symbols can be collectively exported into a namespace by defining
-  DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile.
-- The requirement for a very recent coccinelle spatch has been lifted by
-  simplifying the script.
-- nsdeps does now ensures MODULE_IMPORT_NS statements are sorted when
-  patching the module source files.
-- Some minor bugs have been addressed in nsdeps to allow it to work with
-  modules that have more than one source file.
-- The RFC for the usb-storage symbols has been simplified by using
-  DEFAULT_SYMBOL_NAMESPACE=USB_STORAGE rather than explicitly exporting
-  each and every symbol into that new namespace.
-
-Changes in v3:
-- Reword the documentation for the
-  MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS option for clarification.
-- Fix printed required version of spatch in coccinelle script.
-- Adopt kbuild changes for modpost: .mod files are no longer generated
-  in .tmp_versions. Similarely, generate the .ns_deps files in the tree
-  along with the .mod files. Also, nsdeps now uses modules.order as
-  source for the list modules to consider.
-- Add an RFC patch to introduce the namespace WATCHDOG_CORE for symbols
-  exported in watchdog_core.c.
-
-Changes in v4:
-- scripts/nsdeps:
-  - exit on first error
-  - support out-of-tree builds O=...
-- scripts/mod/modpost: make the namespace a separate field when
-  exporting to Module.symvers (rather than symbol.NS)
-- scripts/export_report.pl: update for new Module.symvers format
-- include/linux/export.h: fixed style nits
-- kernel/module.c: ensure namespaces are imported before taking a
-  reference to the owner module
-- Documentation: document the Symbol Namespace feature and update
-  references to Module.symvers and EXPORT_SYMBOL*
-
-This patch series was developed against v5.3-rc7.
-
-[1] git grep "^EXPORT_SYMBOL\w*(" v5.3-rc7 | wc -l
-[2] git grep "^EXPORT_SYMBOL\w*(" v4.17    | wc -l
-
-Cc: arnd@arndb.de
-Cc: gregkh@linuxfoundation.org
-Cc: jeyu@kernel.org
-Cc: joel@joelfernandes.org
-Cc: lucas.de.marchi@gmail.com
-Cc: maco@android.com
-Cc: sspatil@google.com
-Cc: will@kernel.org
-Cc: yamada.masahiro@socionext.com
-Cc: linux-kbuild@vger.kernel.org
-Cc: linux-modules@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Cc: usb-storage@lists.one-eyed-alien.net
-Cc: linux-watchdog@vger.kernel.org
-
-
-Matthias Maennich (12):
-  module: support reading multiple values per modinfo tag
-  export: explicitly align struct kernel_symbol
-  module: add support for symbol namespaces.
-  modpost: add support for symbol namespaces
-  module: add config option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-  export: allow definition default namespaces in Makefiles or sources
-  modpost: add support for generating namespace dependencies
-  scripts: Coccinelle script for namespace dependencies.
-  docs: Add documentation for Symbol Namespaces
-  usb-storage: remove single-use define for debugging
-  RFC: usb-storage: export symbols in USB_STORAGE namespace
-  RFC: watchdog: export core symbols in WATCHDOG_CORE namespace
-
- .gitignore                                  |   1 +
- Documentation/kbuild/modules.rst            |   7 +-
- Documentation/kbuild/namespaces.rst         | 154 ++++++++++++++++++++
- Documentation/kernel-hacking/hacking.rst    |  18 +++
- MAINTAINERS                                 |   5 +
- Makefile                                    |  14 +-
- arch/m68k/include/asm/export.h              |   1 -
- drivers/hwmon/ftsteutates.c                 |   1 +
- drivers/hwmon/sch56xx-common.c              |   1 +
- drivers/rtc/rtc-abx80x.c                    |   1 +
- drivers/usb/storage/Makefile                |   2 +
- drivers/usb/storage/alauda.c                |   1 +
- drivers/usb/storage/cypress_atacb.c         |   1 +
- drivers/usb/storage/datafab.c               |   1 +
- drivers/usb/storage/debug.h                 |   2 -
- drivers/usb/storage/ene_ub6250.c            |   1 +
- drivers/usb/storage/freecom.c               |   1 +
- drivers/usb/storage/isd200.c                |   1 +
- drivers/usb/storage/jumpshot.c              |   1 +
- drivers/usb/storage/karma.c                 |   1 +
- drivers/usb/storage/onetouch.c              |   1 +
- drivers/usb/storage/realtek_cr.c            |   1 +
- drivers/usb/storage/scsiglue.c              |   2 +-
- drivers/usb/storage/sddr09.c                |   1 +
- drivers/usb/storage/sddr55.c                |   1 +
- drivers/usb/storage/shuttle_usbat.c         |   1 +
- drivers/usb/storage/uas.c                   |   1 +
- drivers/watchdog/armada_37xx_wdt.c          |   1 +
- drivers/watchdog/asm9260_wdt.c              |   1 +
- drivers/watchdog/aspeed_wdt.c               |   1 +
- drivers/watchdog/at91sam9_wdt.c             |   1 +
- drivers/watchdog/atlas7_wdt.c               |   1 +
- drivers/watchdog/bcm2835_wdt.c              |   1 +
- drivers/watchdog/bcm47xx_wdt.c              |   1 +
- drivers/watchdog/bcm7038_wdt.c              |   1 +
- drivers/watchdog/bcm_kona_wdt.c             |   1 +
- drivers/watchdog/bd70528_wdt.c              |   1 +
- drivers/watchdog/cadence_wdt.c              |   1 +
- drivers/watchdog/da9052_wdt.c               |   1 +
- drivers/watchdog/da9055_wdt.c               |   1 +
- drivers/watchdog/da9062_wdt.c               |   1 +
- drivers/watchdog/da9063_wdt.c               |   1 +
- drivers/watchdog/davinci_wdt.c              |   1 +
- drivers/watchdog/digicolor_wdt.c            |   1 +
- drivers/watchdog/dw_wdt.c                   |   1 +
- drivers/watchdog/ebc-c384_wdt.c             |   1 +
- drivers/watchdog/ep93xx_wdt.c               |   1 +
- drivers/watchdog/ftwdt010_wdt.c             |   1 +
- drivers/watchdog/gpio_wdt.c                 |   1 +
- drivers/watchdog/hpwdt.c                    |   1 +
- drivers/watchdog/i6300esb.c                 |   1 +
- drivers/watchdog/iTCO_wdt.c                 |   1 +
- drivers/watchdog/ie6xx_wdt.c                |   1 +
- drivers/watchdog/imgpdc_wdt.c               |   1 +
- drivers/watchdog/imx2_wdt.c                 |   1 +
- drivers/watchdog/intel-mid_wdt.c            |   1 +
- drivers/watchdog/it87_wdt.c                 |   1 +
- drivers/watchdog/kempld_wdt.c               |   1 +
- drivers/watchdog/lpc18xx_wdt.c              |   1 +
- drivers/watchdog/max63xx_wdt.c              |   1 +
- drivers/watchdog/max77620_wdt.c             |   1 +
- drivers/watchdog/mei_wdt.c                  |   1 +
- drivers/watchdog/mena21_wdt.c               |   1 +
- drivers/watchdog/menf21bmc_wdt.c            |   1 +
- drivers/watchdog/menz69_wdt.c               |   1 +
- drivers/watchdog/meson_gxbb_wdt.c           |   1 +
- drivers/watchdog/meson_wdt.c                |   1 +
- drivers/watchdog/mlx_wdt.c                  |   1 +
- drivers/watchdog/moxart_wdt.c               |   1 +
- drivers/watchdog/mtk_wdt.c                  |   1 +
- drivers/watchdog/ni903x_wdt.c               |   1 +
- drivers/watchdog/nic7018_wdt.c              |   1 +
- drivers/watchdog/npcm_wdt.c                 |   1 +
- drivers/watchdog/of_xilinx_wdt.c            |   1 +
- drivers/watchdog/omap_wdt.c                 |   1 +
- drivers/watchdog/pm8916_wdt.c               |   1 +
- drivers/watchdog/qcom-wdt.c                 |   1 +
- drivers/watchdog/rave-sp-wdt.c              |   1 +
- drivers/watchdog/renesas_wdt.c              |   1 +
- drivers/watchdog/retu_wdt.c                 |   1 +
- drivers/watchdog/rn5t618_wdt.c              |   1 +
- drivers/watchdog/rza_wdt.c                  |   1 +
- drivers/watchdog/s3c2410_wdt.c              |   1 +
- drivers/watchdog/sama5d4_wdt.c              |   1 +
- drivers/watchdog/sirfsoc_wdt.c              |   1 +
- drivers/watchdog/softdog.c                  |   1 +
- drivers/watchdog/sp5100_tco.c               |   1 +
- drivers/watchdog/sprd_wdt.c                 |   1 +
- drivers/watchdog/st_lpc_wdt.c               |   1 +
- drivers/watchdog/stmp3xxx_rtc_wdt.c         |   1 +
- drivers/watchdog/stpmic1_wdt.c              |   1 +
- drivers/watchdog/sunxi_wdt.c                |   1 +
- drivers/watchdog/tangox_wdt.c               |   1 +
- drivers/watchdog/tegra_wdt.c                |   1 +
- drivers/watchdog/tqmx86_wdt.c               |   1 +
- drivers/watchdog/ts4800_wdt.c               |   1 +
- drivers/watchdog/ts72xx_wdt.c               |   1 +
- drivers/watchdog/twl4030_wdt.c              |   1 +
- drivers/watchdog/uniphier_wdt.c             |   1 +
- drivers/watchdog/via_wdt.c                  |   1 +
- drivers/watchdog/w83627hf_wdt.c             |   1 +
- drivers/watchdog/watchdog_core.c            |  10 +-
- drivers/watchdog/wdat_wdt.c                 |   1 +
- drivers/watchdog/wm831x_wdt.c               |   1 +
- drivers/watchdog/wm8350_wdt.c               |   1 +
- drivers/watchdog/xen_wdt.c                  |   1 +
- drivers/watchdog/ziirave_wdt.c              |   1 +
- include/asm-generic/export.h                |  14 +-
- include/linux/export.h                      |  98 +++++++++++--
- include/linux/module.h                      |   2 +
- init/Kconfig                                |  13 ++
- kernel/module.c                             |  67 ++++++++-
- scripts/Makefile.modpost                    |   4 +-
- scripts/coccinelle/misc/add_namespace.cocci |  23 +++
- scripts/export_report.pl                    |   2 +-
- scripts/mod/modpost.c                       | 150 ++++++++++++++++---
- scripts/mod/modpost.h                       |   9 ++
- scripts/nsdeps                              |  60 ++++++++
- 118 files changed, 697 insertions(+), 57 deletions(-)
- create mode 100644 Documentation/kbuild/namespaces.rst
- create mode 100644 scripts/coccinelle/misc/add_namespace.cocci
- create mode 100644 scripts/nsdeps
-
+diff --git a/Documentation/kbuild/modules.rst b/Documentation/kbuild/modules.rst
+index 24e763482650..d2ae799237fd 100644
+--- a/Documentation/kbuild/modules.rst
++++ b/Documentation/kbuild/modules.rst
+@@ -470,9 +470,12 @@ build.
+ 
+ 	The syntax of the Module.symvers file is::
+ 
+-		<CRC>	    <Symbol>	       <module>
++	<CRC>       <Symbol>          <Namespace>  <Module>                         <Export Type>
+ 
+-		0x2d036834  scsi_remove_host   drivers/scsi/scsi_mod
++	0xe1cc2a05  usb_stor_suspend  USB_STORAGE  drivers/usb/storage/usb-storage  EXPORT_SYMBOL_GPL
++
++	The fields are separated by tabs and values may be empty (e.g.
++	if no namespace is defined for an exported symbol).
+ 
+ 	For a kernel build without CONFIG_MODVERSIONS enabled, the CRC
+ 	would read 0x00000000.
+diff --git a/scripts/export_report.pl b/scripts/export_report.pl
+index 7d3030d03a25..548330e8c4e7 100755
+--- a/scripts/export_report.pl
++++ b/scripts/export_report.pl
+@@ -94,7 +94,7 @@ if (defined $opt{'o'}) {
+ #
+ while ( <$module_symvers> ) {
+ 	chomp;
+-	my (undef, $symbol, $module, $gpl) = split;
++	my (undef, $symbol, $namespace, $module, $gpl) = split('\t');
+ 	$SYMBOL { $symbol } =  [ $module , "0" , $symbol, $gpl];
+ }
+ close($module_symvers);
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index f277e116e0eb..c2d49afaea1c 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -164,6 +164,7 @@ struct symbol {
+ 	struct module *module;
+ 	unsigned int crc;
+ 	int crc_valid;
++	const char *namespace;
+ 	unsigned int weak:1;
+ 	unsigned int vmlinux:1;    /* 1 if symbol is defined in vmlinux */
+ 	unsigned int kernel:1;     /* 1 if symbol is from kernel
+@@ -233,6 +234,37 @@ static struct symbol *find_symbol(const char *name)
+ 	return NULL;
+ }
+ 
++static bool contains_namespace(struct namespace_list *list,
++			       const char *namespace)
++{
++	struct namespace_list *ns_entry;
++
++	for (ns_entry = list; ns_entry != NULL; ns_entry = ns_entry->next)
++		if (strcmp(ns_entry->namespace, namespace) == 0)
++			return true;
++
++	return false;
++}
++
++static void add_namespace(struct namespace_list **list, const char *namespace)
++{
++	struct namespace_list *ns_entry;
++
++	if (!contains_namespace(*list, namespace)) {
++		ns_entry = NOFAIL(malloc(sizeof(struct namespace_list) +
++					 strlen(namespace) + 1));
++		strcpy(ns_entry->namespace, namespace);
++		ns_entry->next = *list;
++		*list = ns_entry;
++	}
++}
++
++static bool module_imports_namespace(struct module *module,
++				     const char *namespace)
++{
++	return contains_namespace(module->imported_namespaces, namespace);
++}
++
+ static const struct {
+ 	const char *str;
+ 	enum export export;
+@@ -312,23 +344,39 @@ static enum export export_from_sec(struct elf_info *elf, unsigned int sec)
+ 		return export_unknown;
+ }
+ 
++static const char *sym_extract_namespace(const char **symname)
++{
++	size_t n;
++	char *dupsymname;
++
++	n = strcspn(*symname, ".");
++	if (n < strlen(*symname) - 1) {
++		dupsymname = NOFAIL(strdup(*symname));
++		dupsymname[n] = '\0';
++		*symname = dupsymname;
++		return dupsymname + n + 1;
++	}
++
++	return NULL;
++}
++
+ /**
+  * Add an exported symbol - it may have already been added without a
+  * CRC, in this case just update the CRC
+  **/
+-static struct symbol *sym_add_exported(const char *name, struct module *mod,
+-				       enum export export)
++static struct symbol *sym_add_exported(const char *name, const char *namespace,
++				       struct module *mod, enum export export)
+ {
+ 	struct symbol *s = find_symbol(name);
+ 
+ 	if (!s) {
+ 		s = new_symbol(name, mod, export);
++		s->namespace = namespace;
+ 	} else {
+ 		if (!s->preloaded) {
+-			warn("%s: '%s' exported twice. Previous export "
+-			     "was in %s%s\n", mod->name, name,
+-			     s->module->name,
+-			     is_vmlinux(s->module->name) ?"":".ko");
++			warn("%s: '%s' exported twice. Previous export was in %s%s\n",
++			     mod->name, name, s->module->name,
++			     is_vmlinux(s->module->name) ? "" : ".ko");
+ 		} else {
+ 			/* In case Module.symvers was out of date */
+ 			s->module = mod;
+@@ -620,6 +668,7 @@ static void handle_modversions(struct module *mod, struct elf_info *info,
+ 	unsigned int crc;
+ 	enum export export;
+ 	bool is_crc = false;
++	const char *name, *namespace;
+ 
+ 	if ((!is_vmlinux(mod->name) || mod->is_dot_o) &&
+ 	    strstarts(symname, "__ksymtab"))
+@@ -691,8 +740,9 @@ static void handle_modversions(struct module *mod, struct elf_info *info,
+ 	default:
+ 		/* All exported symbols */
+ 		if (strstarts(symname, "__ksymtab_")) {
+-			sym_add_exported(symname + strlen("__ksymtab_"), mod,
+-					export);
++			name = symname + strlen("__ksymtab_");
++			namespace = sym_extract_namespace(&name);
++			sym_add_exported(name, namespace, mod, export);
+ 		}
+ 		if (strcmp(symname, "init_module") == 0)
+ 			mod->has_init = 1;
+@@ -1943,6 +1993,7 @@ static void read_symbols(const char *modname)
+ 	const char *symname;
+ 	char *version;
+ 	char *license;
++	char *namespace;
+ 	struct module *mod;
+ 	struct elf_info info = { };
+ 	Elf_Sym *sym;
+@@ -1974,6 +2025,12 @@ static void read_symbols(const char *modname)
+ 		license = get_next_modinfo(&info, "license", license);
+ 	}
+ 
++	namespace = get_modinfo(&info, "import_ns");
++	while (namespace) {
++		add_namespace(&mod->imported_namespaces, namespace);
++		namespace = get_next_modinfo(&info, "import_ns", namespace);
++	}
++
+ 	for (sym = info.symtab_start; sym < info.symtab_stop; sym++) {
+ 		symname = remove_dot(info.strtab + sym->st_name);
+ 
+@@ -2118,6 +2175,13 @@ static int check_exports(struct module *mod)
+ 			basename++;
+ 		else
+ 			basename = mod->name;
++
++		if (exp->namespace &&
++		    !module_imports_namespace(mod, exp->namespace)) {
++			warn("module %s uses symbol %s from namespace %s, but does not import it.\n",
++			     basename, exp->name, exp->namespace);
++		}
++
+ 		if (!mod->gpl_compatible)
+ 			check_for_gpl_usage(exp->export, basename, exp->name);
+ 		check_for_unused(exp->export, basename, exp->name);
+@@ -2341,7 +2405,7 @@ static void read_dump(const char *fname, unsigned int kernel)
+ 		return;
+ 
+ 	while ((line = get_next_line(&pos, file, size))) {
+-		char *symname, *modname, *d, *export, *end;
++		char *symname, *namespace, *modname, *d, *export, *end;
+ 		unsigned int crc;
+ 		struct module *mod;
+ 		struct symbol *s;
+@@ -2349,7 +2413,10 @@ static void read_dump(const char *fname, unsigned int kernel)
+ 		if (!(symname = strchr(line, '\t')))
+ 			goto fail;
+ 		*symname++ = '\0';
+-		if (!(modname = strchr(symname, '\t')))
++		if (!(namespace = strchr(symname, '\t')))
++			goto fail;
++		*namespace++ = '\0';
++		if (!(modname = strchr(namespace, '\t')))
+ 			goto fail;
+ 		*modname++ = '\0';
+ 		if ((export = strchr(modname, '\t')) != NULL)
+@@ -2366,7 +2433,8 @@ static void read_dump(const char *fname, unsigned int kernel)
+ 			mod = new_module(modname);
+ 			mod->skip = 1;
+ 		}
+-		s = sym_add_exported(symname, mod, export_no(export));
++		s = sym_add_exported(symname, namespace, mod,
++				     export_no(export));
+ 		s->kernel    = kernel;
+ 		s->preloaded = 1;
+ 		sym_update_crc(symname, mod, crc, export_no(export));
+@@ -2395,16 +2463,20 @@ static void write_dump(const char *fname)
+ {
+ 	struct buffer buf = { };
+ 	struct symbol *symbol;
++	const char *namespace;
+ 	int n;
+ 
+ 	for (n = 0; n < SYMBOL_HASH_SIZE ; n++) {
+ 		symbol = symbolhash[n];
+ 		while (symbol) {
+-			if (dump_sym(symbol))
+-				buf_printf(&buf, "0x%08x\t%s\t%s\t%s\n",
+-					symbol->crc, symbol->name,
+-					symbol->module->name,
+-					export_str(symbol->export));
++			if (dump_sym(symbol)) {
++				namespace = symbol->namespace;
++				buf_printf(&buf, "0x%08x\t%s\t%s\t%s\t%s\n",
++					   symbol->crc, symbol->name,
++					   namespace ? namespace : "",
++					   symbol->module->name,
++					   export_str(symbol->export));
++			}
+ 			symbol = symbol->next;
+ 		}
+ 	}
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index 8453d6ac2f77..9626bf3e7424 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -109,6 +109,11 @@ buf_printf(struct buffer *buf, const char *fmt, ...);
+ void
+ buf_write(struct buffer *buf, const char *s, int len);
+ 
++struct namespace_list {
++	struct namespace_list *next;
++	char namespace[0];
++};
++
+ struct module {
+ 	struct module *next;
+ 	const char *name;
+@@ -121,6 +126,8 @@ struct module {
+ 	struct buffer dev_table_buf;
+ 	char	     srcversion[25];
+ 	int is_dot_o;
++	// Actual imported namespaces
++	struct namespace_list *imported_namespaces;
+ };
+ 
+ struct elf_info {
 -- 
 2.23.0.187.g17f5b7556c-goog
 
