@@ -1,284 +1,326 @@
-Return-Path: <SRS0=L9RC=WZ=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=OwIU=W6=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABC7FC3A59F
-	for <linux-modules@archiver.kernel.org>; Thu, 29 Aug 2019 12:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49C92C3A5A8
+	for <linux-modules@archiver.kernel.org>; Tue,  3 Sep 2019 15:07:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7A6CA22CF5
-	for <linux-modules@archiver.kernel.org>; Thu, 29 Aug 2019 12:13:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567080814;
-	bh=AFQuEm5j/88hnPHuIBzauyUThuB0LpyoGrOwRmqq/UM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=SCbAcoOrKoMz4i/o9zGjJu7RwjdLxKZO5x8jtNk0RnE2KXE+LQoipzzEjHBJuZi+y
-	 mYj57Bu9ps/VdvqvgERtcwc2HYZO0GYK0yo/5K3wnxffkiawdsMQpg7A6y4dmh3T0z
-	 mceXrO7/2v+5VuLlRpOAgmvTfPqBcKNKFC1VP0MU=
+	by mail.kernel.org (Postfix) with ESMTP id 231E6215EA
+	for <linux-modules@archiver.kernel.org>; Tue,  3 Sep 2019 15:07:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W1kHB/tZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbfH2MN2 (ORCPT
+        id S1729577AbfICPHK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 29 Aug 2019 08:13:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57268 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726416AbfH2MN2 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 29 Aug 2019 08:13:28 -0400
-Received: from linux-8ccs (charybdis-ext.suse.de [195.135.221.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CCF5B2080F;
-        Thu, 29 Aug 2019 12:13:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567080806;
-        bh=AFQuEm5j/88hnPHuIBzauyUThuB0LpyoGrOwRmqq/UM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gNTXG/edNoXU8t/0AGmHHS/MbwWXy/p733THVI1wX6vUc2g4V91b9UU+NWDZrM3G5
-         FUdElaGJ1/1w0yYJrYmtE5P3LcdmFJ7arOcsXQrzrO+Q10hzB2GGJJ56QXm+ftbV0s
-         hRsXe40WnRTZtF0yu4v5kCaAlk/mv5zrBCHPw+M4=
-Date:   Thu, 29 Aug 2019 14:13:17 +0200
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        hpa@zytor.com, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Gilles Muller <Gilles.Muller@lip6.fr>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        cocci@systeme.lip6.fr
-Subject: Re: [PATCH v3 08/11] scripts: Coccinelle script for namespace
- dependencies.
-Message-ID: <20190829121317.GA22914@linux-8ccs>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-9-maennich@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190821114955.12788-9-maennich@google.com>
-X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Tue, 3 Sep 2019 11:07:10 -0400
+Received: from mail-qk1-f202.google.com ([209.85.222.202]:54700 "EHLO
+        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727941AbfICPHK (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Tue, 3 Sep 2019 11:07:10 -0400
+Received: by mail-qk1-f202.google.com with SMTP id v143so5120592qka.21
+        for <linux-modules@vger.kernel.org>; Tue, 03 Sep 2019 08:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=hNr8T/9gNzuEDlnpxznbVrBSAUbvdXRiy1rCWsF0n2E=;
+        b=W1kHB/tZ7YClRTpT8BdeFzp8+giupK7HNS98ECGbb2bo1vSoTUXrJnGWXWyzJTqMjB
+         G+OgNYTIYC2yvdCSeYIAa5phAgPlBe1atBEhABcLCty4uZh1ost3f8hngjLxCmoQvBhP
+         c/7v0vfL2JJlPXgOwDWELXQF35on5j65XIwSL4vdXMeXknMcZMJ5QEOAHJSDyGfAB+S7
+         GB8enhAmcWjzKmbAbBLTOzcvZtAHCk4aOD1hHzRofSlj1FcQbu7vF9SXtIndwgFgvbz1
+         7qu5KhebJ1BDFLihWzzHXKpMZSdnkqm+3Fu9fUJS7x5O1xDD9HSIgyK9ymyP0CdNLvAH
+         9aRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=hNr8T/9gNzuEDlnpxznbVrBSAUbvdXRiy1rCWsF0n2E=;
+        b=fAw/9cJiDrQQJBP+kgnlVfX4V0C6pSXzspv5nNv/ori3F3FAuAcxMTTnFsWQaq9ZXj
+         pMtnOJwxGZ1toq6tyK6QYi6JGD2DEHeukaX1u/qdzPhqqYD+8BCXb2GdVRhWt3ecFsNy
+         eDxzeZgrt2+FfW6RYdM9FfGr+HX97HXTG3ZjZkMdA/ppZa610kUPk078MzARtmEbQkFv
+         lxPu8asL6Qg88xbp2wcJ0ZPO50rizwgMJahm50CrHtqqhtwbppi6dqSYfrXQvd6md5Pw
+         dNwFLdek7M00cL7CpDyW0UPUgykxl8Spi+FSV+rxOipXL/Oqo58xmKsL8VniZhQ0sHkt
+         oksA==
+X-Gm-Message-State: APjAAAUtVChhhULIdC3E9WHgoax/zeQbms2FYTSMzC3S3wDuVPzMXK3l
+        2X2bl7l4JcjD06aBbWWP16KeC4Fqs6LGWg==
+X-Google-Smtp-Source: APXvYqxywyK88KqR9EH6QS9ukdJLXV/QzWjnqDtKLmWl890k2IzTxT5xZZxMP2O6UERMtA0+We+LtTKs7PCxWQ==
+X-Received: by 2002:a05:6214:1369:: with SMTP id c9mr13911042qvw.3.1567523228617;
+ Tue, 03 Sep 2019 08:07:08 -0700 (PDT)
+Date:   Tue,  3 Sep 2019 16:06:26 +0100
+In-Reply-To: <20180716122125.175792-1-maco@android.com>
+Message-Id: <20190903150638.242049-1-maennich@google.com>
+Mime-Version: 1.0
+References: <20180716122125.175792-1-maco@android.com>
+X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
+Subject: [PATCH v4 00/12] Symbol Namespaces
+From:   Matthias Maennich <maennich@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, jeyu@kernel.org,
+        joel@joelfernandes.org, lucas.de.marchi@gmail.com,
+        maco@android.com, sspatil@google.com, will@kernel.org,
+        yamada.masahiro@socionext.com, linux-kbuild@vger.kernel.org,
+        linux-modules@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-+++ Matthias Maennich [21/08/19 12:49 +0100]:
->A script that uses the '<module>.ns_deps' files generated by modpost to
->automatically add the required symbol namespace dependencies to each
->module.
->
->Usage:
->1) Move some symbols to a namespace with EXPORT_SYMBOL_NS() or define
->   DEFAULT_SYMBOL_NAMESPACE
->2) Run 'make' (or 'make modules') and get warnings about modules not
->   importing that namespace.
->3) Run 'make nsdeps' to automatically add required import statements
->   to said modules.
->
->This makes it easer for subsystem maintainers to introduce and maintain
->symbol namespaces into their codebase.
->
->Co-developed-by: Martijn Coenen <maco@android.com>
->Signed-off-by: Martijn Coenen <maco@android.com>
->Acked-by: Julia Lawall <julia.lawall@lip6.fr>
->Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->Signed-off-by: Matthias Maennich <maennich@google.com>
->---
-> MAINTAINERS                                 |  5 ++
-> Makefile                                    | 12 +++++
-> scripts/Makefile.modpost                    |  4 +-
-> scripts/coccinelle/misc/add_namespace.cocci | 23 +++++++++
-> scripts/nsdeps                              | 56 +++++++++++++++++++++
-> 5 files changed, 99 insertions(+), 1 deletion(-)
-> create mode 100644 scripts/coccinelle/misc/add_namespace.cocci
-> create mode 100644 scripts/nsdeps
->
->diff --git a/MAINTAINERS b/MAINTAINERS
->index 08176d64eed5..dd5b37b49a07 100644
->--- a/MAINTAINERS
->+++ b/MAINTAINERS
->@@ -11428,6 +11428,11 @@ S:	Maintained
-> T:	git git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-> F:	tools/include/nolibc/
->
->+NSDEPS
->+M:	Matthias Maennich <maennich@google.com>
->+S:	Maintained
->+F:	scripts/nsdeps
->+
-> NTB AMD DRIVER
-> M:	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-> L:	linux-ntb@googlegroups.com
->diff --git a/Makefile b/Makefile
->index a89870188c09..40311f583ee1 100644
->--- a/Makefile
->+++ b/Makefile
->@@ -1500,6 +1500,9 @@ help:
-> 	@echo  '  headerdep       - Detect inclusion cycles in headers'
-> 	@echo  '  coccicheck      - Check with Coccinelle'
-> 	@echo  ''
->+	@echo  'Tools:'
->+	@echo  '  nsdeps          - Generate missing symbol namespace dependencies'
->+	@echo  ''
-> 	@echo  'Kernel selftest:'
-> 	@echo  '  kselftest       - Build and run kernel selftest (run as root)'
-> 	@echo  '                    Build, install, and boot kernel before'
->@@ -1687,6 +1690,15 @@ quiet_cmd_tags = GEN     $@
-> tags TAGS cscope gtags: FORCE
-> 	$(call cmd,tags)
->
->+# Script to generate missing namespace dependencies
->+# ---------------------------------------------------------------------------
->+
->+PHONY += nsdeps
->+
->+nsdeps:
->+	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost nsdeps
->+	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/$@
->+
-> # Scripts to check various things for consistency
-> # ---------------------------------------------------------------------------
->
->diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
->index 26e6574ecd08..743fe3a2e885 100644
->--- a/scripts/Makefile.modpost
->+++ b/scripts/Makefile.modpost
->@@ -56,7 +56,8 @@ MODPOST = scripts/mod/modpost						\
-> 	$(if $(KBUILD_EXTMOD),$(addprefix -e ,$(KBUILD_EXTRA_SYMBOLS)))	\
-> 	$(if $(KBUILD_EXTMOD),-o $(modulesymfile))			\
-> 	$(if $(CONFIG_SECTION_MISMATCH_WARN_ONLY),,-E)			\
->-	$(if $(KBUILD_MODPOST_WARN),-w)
->+	$(if $(KBUILD_MODPOST_WARN),-w)					\
->+	$(if $(filter nsdeps,$(MAKECMDGOALS)),-d)
->
-> ifdef MODPOST_VMLINUX
->
->@@ -134,6 +135,7 @@ $(modules): %.ko :%.o %.mod.o FORCE
->
-> targets += $(modules)
->
->+nsdeps: __modpost
->
-> # Add FORCE to the prequisites of a target to force it to be always rebuilt.
-> # ---------------------------------------------------------------------------
->diff --git a/scripts/coccinelle/misc/add_namespace.cocci b/scripts/coccinelle/misc/add_namespace.cocci
->new file mode 100644
->index 000000000000..c832bb6445a8
->--- /dev/null
->+++ b/scripts/coccinelle/misc/add_namespace.cocci
->@@ -0,0 +1,23 @@
->+// SPDX-License-Identifier: GPL-2.0-only
->+//
->+/// Adds missing MODULE_IMPORT_NS statements to source files
->+///
->+/// This script is usually called from scripts/nsdeps with -D ns=<namespace> to
->+/// add a missing namespace tag to a module source file.
->+///
->+
->+@has_ns_import@
->+declarer name MODULE_IMPORT_NS;
->+identifier virtual.ns;
->+@@
->+MODULE_IMPORT_NS(ns);
->+
->+// Add missing imports, but only adjacent to a MODULE_LICENSE statement.
->+// That ensures we are adding it only to the main module source file.
->+@do_import depends on !has_ns_import@
->+declarer name MODULE_LICENSE;
->+expression license;
->+identifier virtual.ns;
->+@@
->+MODULE_LICENSE(license);
->++ MODULE_IMPORT_NS(ns);
->diff --git a/scripts/nsdeps b/scripts/nsdeps
->new file mode 100644
->index 000000000000..3b5995a61e65
->--- /dev/null
->+++ b/scripts/nsdeps
->@@ -0,0 +1,56 @@
->+#!/bin/bash
->+# SPDX-License-Identifier: GPL-2.0
->+# Linux kernel symbol namespace import generator
->+#
->+# This script requires a minimum spatch version.
->+SPATCH_REQ_VERSION="1.0.4"
->+
->+DIR="$(dirname $(readlink -f $0))/.."
->+SPATCH="`which ${SPATCH:=spatch}`"
->+if [ ! -x "$SPATCH" ]; then
->+	echo 'spatch is part of the Coccinelle project and is available at http://coccinelle.lip6.fr/'
->+	exit 1
->+fi
->+
->+SPATCH_REQ_VERSION_NUM=$(echo $SPATCH_REQ_VERSION | ${DIR}/scripts/ld-version.sh)
->+SPATCH_VERSION=$($SPATCH --version | head -1 | awk '{print $3}')
->+SPATCH_VERSION_NUM=$(echo $SPATCH_VERSION | ${DIR}/scripts/ld-version.sh)
->+
->+if [ "$SPATCH_VERSION_NUM" -lt "$SPATCH_REQ_VERSION_NUM" ] ; then
->+	echo "spatch needs to be version $SPATCH_REQ_VERSION or higher"
->+	exit 1
->+fi
->+
->+generate_deps_for_ns() {
->+	$SPATCH --very-quiet --in-place --sp-file \
->+		$srctree/scripts/coccinelle/misc/add_namespace.cocci -D ns=$1 $2
->+}
->+
->+generate_deps() {
->+	local mod_name=`basename $@ .ko`
->+	local mod_file=`echo $@ | sed -e 's/\.ko/\.mod/'`
->+	local ns_deps_file=`echo $@ | sed -e 's/\.ko/\.ns_deps/'`
->+	if [ ! -f "$ns_deps_file" ]; then return; fi
->+	local mod_source_files=`cat $mod_file | sed -n 1p | sed -e 's/\.o/\.c/g'`
->+	for ns in `cat $ns_deps_file`; do
->+		echo "Adding namespace $ns to module $mod_name (if needed)."
->+		generate_deps_for_ns $ns $mod_source_files
->+		# sort the imports
->+		for source_file in $mod_source_files; do
->+			sed '/MODULE_IMPORT_NS/Q' $source_file > ${source_file}.tmp
->+			offset=$(wc -l ${source_file}.tmp | awk '{print $1;}')
->+			cat $source_file | grep MODULE_IMPORT_NS | sort -u >> ${source_file}.tmp
->+			tail -n +$((offset +1)) ${source_file} | grep -v MODULE_IMPORT_NS >> ${source_file}.tmp
->+			if ! diff -q ${source_file} ${source_file}.tmp; then
->+				mv ${source_file}.tmp ${source_file}
->+			else
->+				rm ${source_file}.tmp
->+			fi
->+		done
->+	done
->+}
->+
->+for f in `cat $srctree/modules.order`; do
->+	generate_deps $f
->+done
+As of Linux 5.3-rc7, there are 31207 [1] exported symbols in the kernel.
+That is a growth of roughly 1000 symbols since 4.17 (30206 [2]). There
+seems to be some consensus amongst kernel devs that the export surface
+is too large, and hard to reason about.
 
-Hi Matthias!
+Generally, these symbols fall in one of these categories:
+1) Symbols actually meant for drivers
+2) Symbols that are only exported because functionality is split over
+   multiple modules, yet they really shouldn't be used by modules outside
+   of their own subsystem
+3) Symbols really only meant for in-tree use
 
-I normally build outside of the source tree (make O=..) and I think
-that choked up the nsdeps script a bit. For example when I run
-'make nsdeps O=/tmp/linux' I get:
+When module developers try to upstream their code, it regularly turns
+out that they are using exported symbols that they really shouldn't be
+using. This problem is even bigger for drivers that are currently
+out-of-tree, which may be using many symbols that they shouldn't be
+using, and that break when those symbols are removed or modified.
 
-   cat: /home/jeyu/linux/modules.order: No such file or directory
+This patch allows subsystem maintainers to partition their exported
+symbols into separate namespaces, and module authors to import such
+namespaces only when needed.
 
-I just changed $srctree/modules.order to $objtree/modules.order and
-that fixed it for me. Also, I had to prefix $source_file in the script
-with $srctree so that it'd find the right file to modify.
+This allows subsystem maintainers to more easily limit availability of
+these namespaced symbols to other parts of the kernel. It can also be
+used to partition the set of exported symbols for documentation
+purposes; for example, a set of symbols that is really only used for
+debugging could be in a "SUBSYSTEM_DEBUG" namespace.
 
-Thanks!
+The series contains two RFC patches that do not need to be merged along
+with the rest of the series, but they serve as a reference for using the
+symbol namespaces. Especially, the watchdog subsystem might not be
+affected by the issues addressed by Symbol Namespaces. I left the patch
+in for reference anyway for demonstration purposes.
 
-Jessica
+I continued the work mainly done by Martijn Coenen.
+
+Changes in v2:
+- Rather than adding and evaluating separate sections __knsimport_NS,
+  use modinfo tags to declare the namespaces a module introduces.
+  Adjust modpost and the module loader accordingly.
+- Also add support for reading multiple modinfo values for the same tag
+  to allow list-like access to modinfo tags.
+- The macros in export.h have been cleaned up to avoid redundancy in the
+  macro parameters (ns, nspost, nspost2).
+- The introduction of relative references in the ksymtab entries caused
+  a rework of the macros to accommodate that configuration as well.
+- Alignment of kernel_symbol in the ksymtab needed to be fixed to allow
+  growing the kernel_symbol struct.
+- Modpost does now also append the namespace suffix to the symbol
+  entries in Module.symvers.
+- The configuration option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS allows
+  relaxing the enforcement of properly declared namespace imports at
+  module loading time.
+- Symbols can be collectively exported into a namespace by defining
+  DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile.
+- The requirement for a very recent coccinelle spatch has been lifted by
+  simplifying the script.
+- nsdeps does now ensures MODULE_IMPORT_NS statements are sorted when
+  patching the module source files.
+- Some minor bugs have been addressed in nsdeps to allow it to work with
+  modules that have more than one source file.
+- The RFC for the usb-storage symbols has been simplified by using
+  DEFAULT_SYMBOL_NAMESPACE=USB_STORAGE rather than explicitly exporting
+  each and every symbol into that new namespace.
+
+Changes in v3:
+- Reword the documentation for the
+  MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS option for clarification.
+- Fix printed required version of spatch in coccinelle script.
+- Adopt kbuild changes for modpost: .mod files are no longer generated
+  in .tmp_versions. Similarely, generate the .ns_deps files in the tree
+  along with the .mod files. Also, nsdeps now uses modules.order as
+  source for the list modules to consider.
+- Add an RFC patch to introduce the namespace WATCHDOG_CORE for symbols
+  exported in watchdog_core.c.
+
+Changes in v4:
+- scripts/nsdeps:
+  - exit on first error
+  - support out-of-tree builds O=...
+- scripts/mod/modpost: make the namespace a separate field when
+  exporting to Module.symvers (rather than symbol.NS)
+- scripts/export_report.pl: update for new Module.symvers format
+- include/linux/export.h: fixed style nits
+- kernel/module.c: ensure namespaces are imported before taking a
+  reference to the owner module
+- Documentation: document the Symbol Namespace feature and update
+  references to Module.symvers and EXPORT_SYMBOL*
+
+This patch series was developed against v5.3-rc7.
+
+[1] git grep "^EXPORT_SYMBOL\w*(" v5.3-rc7 | wc -l
+[2] git grep "^EXPORT_SYMBOL\w*(" v4.17    | wc -l
+
+Cc: arnd@arndb.de
+Cc: gregkh@linuxfoundation.org
+Cc: jeyu@kernel.org
+Cc: joel@joelfernandes.org
+Cc: lucas.de.marchi@gmail.com
+Cc: maco@android.com
+Cc: sspatil@google.com
+Cc: will@kernel.org
+Cc: yamada.masahiro@socionext.com
+Cc: linux-kbuild@vger.kernel.org
+Cc: linux-modules@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: usb-storage@lists.one-eyed-alien.net
+Cc: linux-watchdog@vger.kernel.org
+
+
+Matthias Maennich (12):
+  module: support reading multiple values per modinfo tag
+  export: explicitly align struct kernel_symbol
+  module: add support for symbol namespaces.
+  modpost: add support for symbol namespaces
+  module: add config option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
+  export: allow definition default namespaces in Makefiles or sources
+  modpost: add support for generating namespace dependencies
+  scripts: Coccinelle script for namespace dependencies.
+  docs: Add documentation for Symbol Namespaces
+  usb-storage: remove single-use define for debugging
+  RFC: usb-storage: export symbols in USB_STORAGE namespace
+  RFC: watchdog: export core symbols in WATCHDOG_CORE namespace
+
+ .gitignore                                  |   1 +
+ Documentation/kbuild/modules.rst            |   7 +-
+ Documentation/kbuild/namespaces.rst         | 154 ++++++++++++++++++++
+ Documentation/kernel-hacking/hacking.rst    |  18 +++
+ MAINTAINERS                                 |   5 +
+ Makefile                                    |  14 +-
+ arch/m68k/include/asm/export.h              |   1 -
+ drivers/hwmon/ftsteutates.c                 |   1 +
+ drivers/hwmon/sch56xx-common.c              |   1 +
+ drivers/rtc/rtc-abx80x.c                    |   1 +
+ drivers/usb/storage/Makefile                |   2 +
+ drivers/usb/storage/alauda.c                |   1 +
+ drivers/usb/storage/cypress_atacb.c         |   1 +
+ drivers/usb/storage/datafab.c               |   1 +
+ drivers/usb/storage/debug.h                 |   2 -
+ drivers/usb/storage/ene_ub6250.c            |   1 +
+ drivers/usb/storage/freecom.c               |   1 +
+ drivers/usb/storage/isd200.c                |   1 +
+ drivers/usb/storage/jumpshot.c              |   1 +
+ drivers/usb/storage/karma.c                 |   1 +
+ drivers/usb/storage/onetouch.c              |   1 +
+ drivers/usb/storage/realtek_cr.c            |   1 +
+ drivers/usb/storage/scsiglue.c              |   2 +-
+ drivers/usb/storage/sddr09.c                |   1 +
+ drivers/usb/storage/sddr55.c                |   1 +
+ drivers/usb/storage/shuttle_usbat.c         |   1 +
+ drivers/usb/storage/uas.c                   |   1 +
+ drivers/watchdog/armada_37xx_wdt.c          |   1 +
+ drivers/watchdog/asm9260_wdt.c              |   1 +
+ drivers/watchdog/aspeed_wdt.c               |   1 +
+ drivers/watchdog/at91sam9_wdt.c             |   1 +
+ drivers/watchdog/atlas7_wdt.c               |   1 +
+ drivers/watchdog/bcm2835_wdt.c              |   1 +
+ drivers/watchdog/bcm47xx_wdt.c              |   1 +
+ drivers/watchdog/bcm7038_wdt.c              |   1 +
+ drivers/watchdog/bcm_kona_wdt.c             |   1 +
+ drivers/watchdog/bd70528_wdt.c              |   1 +
+ drivers/watchdog/cadence_wdt.c              |   1 +
+ drivers/watchdog/da9052_wdt.c               |   1 +
+ drivers/watchdog/da9055_wdt.c               |   1 +
+ drivers/watchdog/da9062_wdt.c               |   1 +
+ drivers/watchdog/da9063_wdt.c               |   1 +
+ drivers/watchdog/davinci_wdt.c              |   1 +
+ drivers/watchdog/digicolor_wdt.c            |   1 +
+ drivers/watchdog/dw_wdt.c                   |   1 +
+ drivers/watchdog/ebc-c384_wdt.c             |   1 +
+ drivers/watchdog/ep93xx_wdt.c               |   1 +
+ drivers/watchdog/ftwdt010_wdt.c             |   1 +
+ drivers/watchdog/gpio_wdt.c                 |   1 +
+ drivers/watchdog/hpwdt.c                    |   1 +
+ drivers/watchdog/i6300esb.c                 |   1 +
+ drivers/watchdog/iTCO_wdt.c                 |   1 +
+ drivers/watchdog/ie6xx_wdt.c                |   1 +
+ drivers/watchdog/imgpdc_wdt.c               |   1 +
+ drivers/watchdog/imx2_wdt.c                 |   1 +
+ drivers/watchdog/intel-mid_wdt.c            |   1 +
+ drivers/watchdog/it87_wdt.c                 |   1 +
+ drivers/watchdog/kempld_wdt.c               |   1 +
+ drivers/watchdog/lpc18xx_wdt.c              |   1 +
+ drivers/watchdog/max63xx_wdt.c              |   1 +
+ drivers/watchdog/max77620_wdt.c             |   1 +
+ drivers/watchdog/mei_wdt.c                  |   1 +
+ drivers/watchdog/mena21_wdt.c               |   1 +
+ drivers/watchdog/menf21bmc_wdt.c            |   1 +
+ drivers/watchdog/menz69_wdt.c               |   1 +
+ drivers/watchdog/meson_gxbb_wdt.c           |   1 +
+ drivers/watchdog/meson_wdt.c                |   1 +
+ drivers/watchdog/mlx_wdt.c                  |   1 +
+ drivers/watchdog/moxart_wdt.c               |   1 +
+ drivers/watchdog/mtk_wdt.c                  |   1 +
+ drivers/watchdog/ni903x_wdt.c               |   1 +
+ drivers/watchdog/nic7018_wdt.c              |   1 +
+ drivers/watchdog/npcm_wdt.c                 |   1 +
+ drivers/watchdog/of_xilinx_wdt.c            |   1 +
+ drivers/watchdog/omap_wdt.c                 |   1 +
+ drivers/watchdog/pm8916_wdt.c               |   1 +
+ drivers/watchdog/qcom-wdt.c                 |   1 +
+ drivers/watchdog/rave-sp-wdt.c              |   1 +
+ drivers/watchdog/renesas_wdt.c              |   1 +
+ drivers/watchdog/retu_wdt.c                 |   1 +
+ drivers/watchdog/rn5t618_wdt.c              |   1 +
+ drivers/watchdog/rza_wdt.c                  |   1 +
+ drivers/watchdog/s3c2410_wdt.c              |   1 +
+ drivers/watchdog/sama5d4_wdt.c              |   1 +
+ drivers/watchdog/sirfsoc_wdt.c              |   1 +
+ drivers/watchdog/softdog.c                  |   1 +
+ drivers/watchdog/sp5100_tco.c               |   1 +
+ drivers/watchdog/sprd_wdt.c                 |   1 +
+ drivers/watchdog/st_lpc_wdt.c               |   1 +
+ drivers/watchdog/stmp3xxx_rtc_wdt.c         |   1 +
+ drivers/watchdog/stpmic1_wdt.c              |   1 +
+ drivers/watchdog/sunxi_wdt.c                |   1 +
+ drivers/watchdog/tangox_wdt.c               |   1 +
+ drivers/watchdog/tegra_wdt.c                |   1 +
+ drivers/watchdog/tqmx86_wdt.c               |   1 +
+ drivers/watchdog/ts4800_wdt.c               |   1 +
+ drivers/watchdog/ts72xx_wdt.c               |   1 +
+ drivers/watchdog/twl4030_wdt.c              |   1 +
+ drivers/watchdog/uniphier_wdt.c             |   1 +
+ drivers/watchdog/via_wdt.c                  |   1 +
+ drivers/watchdog/w83627hf_wdt.c             |   1 +
+ drivers/watchdog/watchdog_core.c            |  10 +-
+ drivers/watchdog/wdat_wdt.c                 |   1 +
+ drivers/watchdog/wm831x_wdt.c               |   1 +
+ drivers/watchdog/wm8350_wdt.c               |   1 +
+ drivers/watchdog/xen_wdt.c                  |   1 +
+ drivers/watchdog/ziirave_wdt.c              |   1 +
+ include/asm-generic/export.h                |  14 +-
+ include/linux/export.h                      |  98 +++++++++++--
+ include/linux/module.h                      |   2 +
+ init/Kconfig                                |  13 ++
+ kernel/module.c                             |  67 ++++++++-
+ scripts/Makefile.modpost                    |   4 +-
+ scripts/coccinelle/misc/add_namespace.cocci |  23 +++
+ scripts/export_report.pl                    |   2 +-
+ scripts/mod/modpost.c                       | 150 ++++++++++++++++---
+ scripts/mod/modpost.h                       |   9 ++
+ scripts/nsdeps                              |  60 ++++++++
+ 118 files changed, 697 insertions(+), 57 deletions(-)
+ create mode 100644 Documentation/kbuild/namespaces.rst
+ create mode 100644 scripts/coccinelle/misc/add_namespace.cocci
+ create mode 100644 scripts/nsdeps
+
+-- 
+2.23.0.187.g17f5b7556c-goog
+
