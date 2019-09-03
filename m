@@ -4,62 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BADCC3A5A2
-	for <linux-modules@archiver.kernel.org>; Tue,  3 Sep 2019 15:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7667C3A5A7
+	for <linux-modules@archiver.kernel.org>; Tue,  3 Sep 2019 15:08:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D90F420674
-	for <linux-modules@archiver.kernel.org>; Tue,  3 Sep 2019 15:08:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FACC215EA
+	for <linux-modules@archiver.kernel.org>; Tue,  3 Sep 2019 15:08:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H2wObk8o"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OehgC/Qp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729937AbfICPH5 (ORCPT
+        id S1729911AbfICPHv (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 3 Sep 2019 11:07:57 -0400
-Received: from mail-yw1-f74.google.com ([209.85.161.74]:36108 "EHLO
-        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729930AbfICPH4 (ORCPT
+        Tue, 3 Sep 2019 11:07:51 -0400
+Received: from mail-yw1-f73.google.com ([209.85.161.73]:43250 "EHLO
+        mail-yw1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729876AbfICPHv (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 3 Sep 2019 11:07:56 -0400
-Received: by mail-yw1-f74.google.com with SMTP id i11so5540404ywc.3
-        for <linux-modules@vger.kernel.org>; Tue, 03 Sep 2019 08:07:56 -0700 (PDT)
+        Tue, 3 Sep 2019 11:07:51 -0400
+Received: by mail-yw1-f73.google.com with SMTP id a12so13552831ywm.10
+        for <linux-modules@vger.kernel.org>; Tue, 03 Sep 2019 08:07:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=u5uO9nHL9grY4Qf1Kv34RIYuP69k6hUWKvOump+fF1c=;
-        b=H2wObk8oBmJaRvXI7+P7eSG1NaG2LXqvmczSJPOAEv8LMU+IasDj2jHJwpZjxZyEVv
-         D7AhVPj1qNPL/7u4OE1FNAqo3oVC3msvs4wK2zC7vPwoqC6A52vi7DfMCmNWMycyG93g
-         9PyLi2vhOIZVFChWzS2inK364xh8MGTaYJ2F5yiiIUw09JuK7s/MxlNdCwg/FlzYXPj/
-         GivmeYvfGeLAFX/Pqh8GMiLAgOWZ1BFn88Stp3ojobvlyFC/9dQYxpi3BRe6UbfpxXUj
-         XGkgaWavEXuqQV2+WlECC0L5XQtPiZg7A6+k3n8MhjCqEH7Effel3sblCD5YayDzAo1X
-         dCOw==
+         :cc;
+        bh=PXDMDCBfc2xecCOj15IRjy6gG7tFhf1boblcojHoIqc=;
+        b=OehgC/QpGVW5WHRtYYFEBPQjfIK+N42Odb/gz465atQlpSIk1lvdVNY2fEt5bT5y/i
+         ncnP5Uzjks7oK05vFxfW7R4g/0AHAm6ZfhdpT9wXG6QB9n3Z0n3y2ZjV4jnYLOuSPB+V
+         X3WZHM6Z6AEL0iTYXZ2q8rc3cx61dR3VH7hA6VsD64SSclKjEvBcfHz00aeGDU4u9Wg0
+         kO46LRoLWUpD93faDcaTwE3uYYBlaEGBRH9xLFbyVy1nOz7+8Ec5oTMVlw5Xr2i9V05w
+         0afYMRX4Wu/UypBQBMVOR/dlbL/g92c6Fkmc05h9ztxwfejrJ3k5dAKR3nVZAllXy1E2
+         4rlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=u5uO9nHL9grY4Qf1Kv34RIYuP69k6hUWKvOump+fF1c=;
-        b=r9H5pkv31EvUZ5yoUy+tInWtCj+lCPVll3T4EQoaaSOlNpTePAe8DtdW976L5Mjv75
-         ctqVU45IgHgw224U4w61XsHjWsNOFZThtHkgvA0ERXuptjl8op8Kji9R1tgyAc1+9hOI
-         E4yjy2j81kmKiXOuyEO4r3RHDiujd++hzwGJzGXABZn7xbFaxLeju1h5t8YtIB4ToFGY
-         ou3lRQXlSSknqAYAY1PhCfcj9kn+ghf4CvwOKavijU4Xki973X5I3zfH+lcR2gVQtkHE
-         BoxTDDYdvYvXAaNmOSOIy9fcHK4wRfnsmBBbKVlDPlMT50SyRmtDyR1dQVQU+s033PFs
-         xCyQ==
-X-Gm-Message-State: APjAAAW1wNsc7qE6rfPPtBxfiLSrrtXhB8S93QwgeADnjzZXL5BuNfjp
-        WtwOJryd+hM+STuJCcbZlS+tY0feXw3BwQ==
-X-Google-Smtp-Source: APXvYqzglXq4SLdx+lV+20thl0smFmPEO+aA+qQdN7RCTsXFKV8KqbPEh3bekauJjJjekw+jWCau9LoscvM6Tw==
-X-Received: by 2002:a81:310e:: with SMTP id x14mr15409228ywx.430.1567523275811;
- Tue, 03 Sep 2019 08:07:55 -0700 (PDT)
-Date:   Tue,  3 Sep 2019 16:06:37 +0100
+         :references:subject:from:to:cc;
+        bh=PXDMDCBfc2xecCOj15IRjy6gG7tFhf1boblcojHoIqc=;
+        b=PbnnUl1M7u5GD9jZv56sXX/Yyys8N11fYqHRhCy/zKwIoo6m7T7LEi7C533xcXxJcA
+         FsLPz3Zxr0L7j1WVyYmqXRJer3+PERIcLKSM2p1Tvbjo0H43mohUztyy48E5pyPI6dZz
+         i1shY9002cAHQ9vXBeXqzvVkAQqA+CIgNuLRFLM8Oueo5WdvkTY7SVtV2MfT4venfzlA
+         AoJjXQkS/vGursZjaRMRNURZ0ZHDBNoQQoPlirq4ZtwK0ZCtCi4axvEk5LtgecczBSiG
+         vYTWvtDScfLprCiTPhU1vR9LYpw17JQout56v3+obT0Arb15VS4Vp3cG2m4PBIwA8T87
+         tsEA==
+X-Gm-Message-State: APjAAAWNlspVu1GSAeyG9NuPvDRSS084TlS0TKB+lnzhK1uQP7cLKlkQ
+        UkobE+dr9nElFM6uta9rkq8wfXqoFIT14g==
+X-Google-Smtp-Source: APXvYqylPWFHf2hpNQhFQu2/5vQMLUmJtcBW5//m7WkaHo/DcTGkmE7DrAleumJF4actayeB+yWtnVWCxpa+8g==
+X-Received: by 2002:a25:6191:: with SMTP id v139mr25130367ybb.396.1567523270130;
+ Tue, 03 Sep 2019 08:07:50 -0700 (PDT)
+Date:   Tue,  3 Sep 2019 16:06:35 +0100
 In-Reply-To: <20190903150638.242049-1-maennich@google.com>
-Message-Id: <20190903150638.242049-12-maennich@google.com>
+Message-Id: <20190903150638.242049-10-maennich@google.com>
 Mime-Version: 1.0
 References: <20180716122125.175792-1-maco@android.com> <20190903150638.242049-1-maennich@google.com>
 X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
-Subject: [PATCH v4 11/12] RFC: usb-storage: export symbols in USB_STORAGE namespace
+Subject: [PATCH v4 09/12] docs: Add documentation for Symbol Namespaces
 From:   Matthias Maennich <maennich@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
@@ -71,235 +70,209 @@ Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
         usb-storage@lists.one-eyed-alien.net,
         linux-watchdog@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Modules using these symbols are required to explicitly import the
-namespace. This patch was generated with the following steps and serves
-as a reference to use the symbol namespace feature:
+Describe using Symbol Namespaces from a perspective of a user. I.e.
+module authors or subsystem maintainers.
 
- 1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
- 2) make  (see warnings during modpost about missing imports)
- 3) make nsdeps
-
-Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
-variants can be used to explicitly specify the namespace. The advantage
-of the method used here is that newly added symbols are automatically
-exported and existing ones are exported without touching their
-respective EXPORT_SYMBOL macro expansion.
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Matthias Maennich <maennich@google.com>
 ---
- drivers/usb/storage/Makefile        | 2 ++
- drivers/usb/storage/alauda.c        | 1 +
- drivers/usb/storage/cypress_atacb.c | 1 +
- drivers/usb/storage/datafab.c       | 1 +
- drivers/usb/storage/ene_ub6250.c    | 1 +
- drivers/usb/storage/freecom.c       | 1 +
- drivers/usb/storage/isd200.c        | 1 +
- drivers/usb/storage/jumpshot.c      | 1 +
- drivers/usb/storage/karma.c         | 1 +
- drivers/usb/storage/onetouch.c      | 1 +
- drivers/usb/storage/realtek_cr.c    | 1 +
- drivers/usb/storage/sddr09.c        | 1 +
- drivers/usb/storage/sddr55.c        | 1 +
- drivers/usb/storage/shuttle_usbat.c | 1 +
- drivers/usb/storage/uas.c           | 1 +
- 15 files changed, 16 insertions(+)
+ Documentation/kbuild/namespaces.rst      | 154 +++++++++++++++++++++++
+ Documentation/kernel-hacking/hacking.rst |  18 +++
+ 2 files changed, 172 insertions(+)
+ create mode 100644 Documentation/kbuild/namespaces.rst
 
-diff --git a/drivers/usb/storage/Makefile b/drivers/usb/storage/Makefile
-index a67ddcbb4e24..46635fa4a340 100644
---- a/drivers/usb/storage/Makefile
-+++ b/drivers/usb/storage/Makefile
-@@ -8,6 +8,8 @@
-=20
- ccflags-y :=3D -I $(srctree)/drivers/scsi
-=20
-+ccflags-y +=3D -DDEFAULT_SYMBOL_NAMESPACE=3DUSB_STORAGE
+diff --git a/Documentation/kbuild/namespaces.rst b/Documentation/kbuild/namespaces.rst
+new file mode 100644
+index 000000000000..982ed7b568ac
+--- /dev/null
++++ b/Documentation/kbuild/namespaces.rst
+@@ -0,0 +1,154 @@
++=================
++Symbol Namespaces
++=================
 +
- obj-$(CONFIG_USB_UAS)		+=3D uas.o
- obj-$(CONFIG_USB_STORAGE)	+=3D usb-storage.o
-=20
-diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
-index 6b8edf6178df..ddab2cd3d2e7 100644
---- a/drivers/usb/storage/alauda.c
-+++ b/drivers/usb/storage/alauda.c
-@@ -36,6 +36,7 @@
- MODULE_DESCRIPTION("Driver for Alauda-based card readers");
- MODULE_AUTHOR("Daniel Drake <dsd@gentoo.org>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- /*
-  * Status bytes
-diff --git a/drivers/usb/storage/cypress_atacb.c b/drivers/usb/storage/cypr=
-ess_atacb.c
-index 4825902377eb..a6f3267bbef6 100644
---- a/drivers/usb/storage/cypress_atacb.c
-+++ b/drivers/usb/storage/cypress_atacb.c
-@@ -22,6 +22,7 @@
- MODULE_DESCRIPTION("SAT support for Cypress USB/ATA bridges with ATACB");
- MODULE_AUTHOR("Matthieu Castet <castet.matthieu@free.fr>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- /*
-  * The table of devices
-diff --git a/drivers/usb/storage/datafab.c b/drivers/usb/storage/datafab.c
-index 09353be199be..588818483f4b 100644
---- a/drivers/usb/storage/datafab.c
-+++ b/drivers/usb/storage/datafab.c
-@@ -54,6 +54,7 @@
- MODULE_DESCRIPTION("Driver for Datafab USB Compact Flash reader");
- MODULE_AUTHOR("Jimmie Mayfield <mayfield+datafab@sackheads.org>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- struct datafab_info {
- 	unsigned long   sectors;	/* total sector count */
-diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6=
-250.c
-index c26129d5b943..8b1b73065421 100644
---- a/drivers/usb/storage/ene_ub6250.c
-+++ b/drivers/usb/storage/ene_ub6250.c
-@@ -26,6 +26,7 @@
-=20
- MODULE_DESCRIPTION("Driver for ENE UB6250 reader");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
- MODULE_FIRMWARE(SD_INIT1_FIRMWARE);
- MODULE_FIRMWARE(SD_INIT2_FIRMWARE);
- MODULE_FIRMWARE(SD_RW_FIRMWARE);
-diff --git a/drivers/usb/storage/freecom.c b/drivers/usb/storage/freecom.c
-index 4f542df37a44..34e7eaff1174 100644
---- a/drivers/usb/storage/freecom.c
-+++ b/drivers/usb/storage/freecom.c
-@@ -29,6 +29,7 @@
- MODULE_DESCRIPTION("Driver for Freecom USB/IDE adaptor");
- MODULE_AUTHOR("David Brown <usb-storage@davidb.org>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- #ifdef CONFIG_USB_STORAGE_DEBUG
- static void pdump(struct us_data *us, void *ibuffer, int length);
-diff --git a/drivers/usb/storage/isd200.c b/drivers/usb/storage/isd200.c
-index 2b474d60b4db..c4da3fd6eff9 100644
---- a/drivers/usb/storage/isd200.c
-+++ b/drivers/usb/storage/isd200.c
-@@ -53,6 +53,7 @@
- MODULE_DESCRIPTION("Driver for In-System Design, Inc. ISD200 ASIC");
- MODULE_AUTHOR("Bj=C3=B6rn Stenberg <bjorn@haxx.se>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- static int isd200_Initialization(struct us_data *us);
-=20
-diff --git a/drivers/usb/storage/jumpshot.c b/drivers/usb/storage/jumpshot.=
-c
-index 917f170c4124..229bf0c1afc9 100644
---- a/drivers/usb/storage/jumpshot.c
-+++ b/drivers/usb/storage/jumpshot.c
-@@ -51,6 +51,7 @@
- MODULE_DESCRIPTION("Driver for Lexar \"Jumpshot\" Compact Flash reader");
- MODULE_AUTHOR("Jimmie Mayfield <mayfield+usb@sackheads.org>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- /*
-  * The table of devices
-diff --git a/drivers/usb/storage/karma.c b/drivers/usb/storage/karma.c
-index 395cf8fb5870..05cec81dcd3f 100644
---- a/drivers/usb/storage/karma.c
-+++ b/drivers/usb/storage/karma.c
-@@ -23,6 +23,7 @@
- MODULE_DESCRIPTION("Driver for Rio Karma");
- MODULE_AUTHOR("Bob Copeland <me@bobcopeland.com>, Keith Bennett <keith@mcs=
-.st-and.ac.uk>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- #define RIO_PREFIX "RIOP\x00"
- #define RIO_PREFIX_LEN 5
-diff --git a/drivers/usb/storage/onetouch.c b/drivers/usb/storage/onetouch.=
-c
-index 39a5009a41a6..a989fe930e21 100644
---- a/drivers/usb/storage/onetouch.c
-+++ b/drivers/usb/storage/onetouch.c
-@@ -25,6 +25,7 @@
- MODULE_DESCRIPTION("Maxtor USB OneTouch hard drive button driver");
- MODULE_AUTHOR("Nick Sillik <n.sillik@temple.edu>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- #define ONETOUCH_PKT_LEN        0x02
- #define ONETOUCH_BUTTON         KEY_PROG1
-diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek=
-_cr.c
-index 1d9ce9cbc831..3789698d9d3c 100644
---- a/drivers/usb/storage/realtek_cr.c
-+++ b/drivers/usb/storage/realtek_cr.c
-@@ -35,6 +35,7 @@
- MODULE_DESCRIPTION("Driver for Realtek USB Card Reader");
- MODULE_AUTHOR("wwang <wei_wang@realsil.com.cn>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- static int auto_delink_en =3D 1;
- module_param(auto_delink_en, int, S_IRUGO | S_IWUSR);
-diff --git a/drivers/usb/storage/sddr09.c b/drivers/usb/storage/sddr09.c
-index bc9da736bdfc..51bcd4a43690 100644
---- a/drivers/usb/storage/sddr09.c
-+++ b/drivers/usb/storage/sddr09.c
-@@ -47,6 +47,7 @@
- MODULE_DESCRIPTION("Driver for SanDisk SDDR-09 SmartMedia reader");
- MODULE_AUTHOR("Andries Brouwer <aeb@cwi.nl>, Robert Baruch <autophile@star=
-band.net>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- static int usb_stor_sddr09_dpcm_init(struct us_data *us);
- static int sddr09_transport(struct scsi_cmnd *srb, struct us_data *us);
-diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
-index b8527c55335b..ba955d65eb0e 100644
---- a/drivers/usb/storage/sddr55.c
-+++ b/drivers/usb/storage/sddr55.c
-@@ -29,6 +29,7 @@
- MODULE_DESCRIPTION("Driver for SanDisk SDDR-55 SmartMedia reader");
- MODULE_AUTHOR("Simon Munton");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- /*
-  * The table of devices
-diff --git a/drivers/usb/storage/shuttle_usbat.c b/drivers/usb/storage/shut=
-tle_usbat.c
-index 854498e1012c..54aa1392c9ca 100644
---- a/drivers/usb/storage/shuttle_usbat.c
-+++ b/drivers/usb/storage/shuttle_usbat.c
-@@ -48,6 +48,7 @@
- MODULE_DESCRIPTION("Driver for SCM Microsystems (a.k.a. Shuttle) USB-ATAPI=
- cable");
- MODULE_AUTHOR("Daniel Drake <dsd@gentoo.org>, Robert Baruch <autophile@sta=
-rband.net>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
-=20
- /* Supported device types */
- #define USBAT_DEV_HP8200	0x01
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index 047c5922618f..bf80d6f81f58 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -1219,5 +1219,6 @@ static struct usb_driver uas_driver =3D {
- module_usb_driver(uas_driver);
-=20
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(USB_STORAGE);
- MODULE_AUTHOR(
- 	"Hans de Goede <hdegoede@redhat.com>, Matthew Wilcox and Sarah Sharp");
---=20
++The following document describes how to use Symbol Namespaces to structure the
++export surface of in-kernel symbols exported through the family of
++EXPORT_SYMBOL() macros.
++
++.. Table of Contents
++
++	=== 1 Introduction
++	=== 2 How to define Symbol Namespaces
++	   --- 2.1 Using the EXPORT_SYMBOL macros
++	   --- 2.2 Using the DEFAULT_SYMBOL_NAMESPACE define
++	=== 3 How to use Symbols exported in Namespaces
++	=== 4 Loading Modules that use namespaced Symbols
++	=== 5 Automatically creating MODULE_IMPORT_NS statements
++
++1. Introduction
++===============
++
++Symbol Namespaces have been introduced as a means to structure the export
++surface of the in-kernel API. It allows subsystem maintainers to partition
++their exported symbols into separate namespaces. That is useful for
++documentation purposes (think of the SUBSYSTEM_DEBUG namespace) as well as for
++limiting the availability of a set of symbols for use in other parts of the
++kernel. As of today, modules that make use of symbols exported into namespaces,
++are required to import the namespace. Otherwise the kernel will, depending on
++its configuration, reject loading the module or warn about a missing import.
++
++2. How to define Symbol Namespaces
++==================================
++
++Symbols can be exported into namespace using different methods. All of them are
++changing the way EXPORT_SYMBOL and friends are instrumented to create ksymtab
++entries.
++
++2.1 Using the EXPORT_SYMBOL macros
++==================================
++
++In addition to the macros EXPORT_SYMBOL() and EXPORT_SYMBOL_GPL(), that allow
++exporting of kernel symbols to the kernel symbol table, variants of these are
++available to export symbols into a certain namespace: EXPORT_SYMBOL_NS() and
++EXPORT_SYMBOL_NS_GPL(). They take one additional argument: the namespace.
++Please note that due to macro expansion that argument needs to be a
++preprocessor symbol. E.g. to export the symbol `usb_stor_suspend` into the
++namespace `USB_STORAGE`, use::
++
++	EXPORT_SYMBOL_NS(usb_stor_suspend, USB_STORAGE);
++
++The corresponding ksymtab entry struct `kernel_symbol` will have the member
++`namespace` set accordingly. A symbol that is exported without a namespace will
++refer to `NULL`. There is no default namespace if none is defined. `modpost`
++and kernel/module.c make use the namespace at build time or module load time,
++respectively.
++
++2.2 Using the DEFAULT_SYMBOL_NAMESPACE define
++=============================================
++
++Defining namespaces for all symbols of a subsystem can be very verbose and may
++become hard to maintain. Therefore a default define (DEFAULT_SYMBOL_NAMESPACE)
++is been provided, that, if set, will become the default for all EXPORT_SYMBOL()
++and EXPORT_SYMBOL_GPL() macro expansions that do not specify a namespace.
++
++There are multiple ways of specifying this define and it depends on the
++subsystem and the maintainer's preference, which one to use. The first option
++is to define the default namespace in the `Makefile` of the subsystem. E.g. to
++export all symbols defined in usb-common into the namespace USB_COMMON, add a
++line like this to drivers/usb/common/Makefile::
++
++	ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE=USB_COMMON
++
++That will affect all EXPORT_SYMBOL() and EXPORT_SYMBOL_GPL() statements. A
++symbol exported with EXPORT_SYMBOL_NS() while this definition is present, will
++still be exported into the namespace that is passed as the namespace argument
++as this argument has preference over a default symbol namespace.
++
++A second option to define the default namespace is directly in the compilation
++unit as preprocessor statement. The above example would then read::
++
++	#undef  DEFAULT_SYMBOL_NAMESPACE
++	#define DEFAULT_SYMBOL_NAMESPACE USB_COMMON
++
++within the corresponding compilation unit before any EXPORT_SYMBOL macro is
++used.
++
++3. How to use Symbols exported in Namespaces
++============================================
++
++In order to use symbols that are exported into namespaces, kernel modules need
++to explicitly import these namespaces. Otherwise the kernel might reject to
++load the module. The module code is required to use the macro MODULE_IMPORT_NS
++for the namespaces it uses symbols from. E.g. a module using the
++usb_stor_suspend symbol from above, needs to import the namespace USB_STORAGE
++using a statement like::
++
++	MODULE_IMPORT_NS(USB_STORAGE);
++
++This will create a `modinfo` tag in the module for each imported namespace.
++This has the side effect, that the imported namespaces of a module can be
++inspected with modinfo::
++
++	$ modinfo drivers/usb/storage/ums-karma.ko
++	[...]
++	import_ns:      USB_STORAGE
++	[...]
++
++
++It is advisable to add the MODULE_IMPORT_NS() statement close to other module
++metadata definitions like MODULE_AUTHOR() or MODULE_LICENSE(). Refer to section
++5. for a way to create missing import statements automatically.
++
++4. Loading Modules that use namespaced Symbols
++==============================================
++
++At module loading time (e.g. `insmod`), the kernel will check each symbol
++referenced from the module for its availability and whether the namespace it
++might be exported to has been imported by the module. The default behaviour of
++the kernel is to reject loading modules that don't specify sufficient imports.
++An error will be logged and loading will be failed with EINVAL. In order to
++allow loading of modules that don't satisfy this precondition, a configuration
++option is available: Setting MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS=y will
++enable loading regardless, but will emit a warning.
++
++5. Automatically creating MODULE_IMPORT_NS statements
++=====================================================
++
++Missing namespaces imports can easily be detected at build time. In fact,
++modpost will emit a warning if a module uses a symbol from a namespace
++without importing it.
++MODULE_IMPORT_NS() statements will usually be added at a definite location
++(along with other module meta data). To make the life of module authors (and
++subsystem maintainers) easier, a script and make target is available to fixup
++missing imports. Fixing missing imports can be done with::
++
++	$ make nsdeps
++
++A typical scenario for module authors would be::
++
++	- write code that depends on a symbol from a not imported namespace
++	- `make`
++	- notice the warning of modpost telling about a missing import
++	- run `make nsdeps` to add the import to the correct code location
++
++For subsystem maintainers introducing a namespace, the steps are very similar.
++Again, `make nsdeps` will eventually add the missing namespace imports for
++in-tree modules::
++
++	- move or add symbols to a namespace (e.g. with EXPORT_SYMBOL_NS())
++	- `make` (preferably with an allmodconfig to cover all in-kernel
++	  modules)
++	- notice the warning of modpost telling about a missing import
++	- run `make nsdeps` to add the import to the correct code location
++
+diff --git a/Documentation/kernel-hacking/hacking.rst b/Documentation/kernel-hacking/hacking.rst
+index 5891a701a159..a3ddb213a5e1 100644
+--- a/Documentation/kernel-hacking/hacking.rst
++++ b/Documentation/kernel-hacking/hacking.rst
+@@ -594,6 +594,24 @@ internal implementation issue, and not really an interface. Some
+ maintainers and developers may however require EXPORT_SYMBOL_GPL()
+ when adding any new APIs or functionality.
+ 
++:c:func:`EXPORT_SYMBOL_NS()`
++----------------------------
++
++Defined in ``include/linux/export.h``
++
++This is the variant of `EXPORT_SYMBOL()` that allows specifying a symbol
++namespace. Symbol Namespaces are documented in
++``Documentation/kbuild/namespaces.rst``.
++
++:c:func:`EXPORT_SYMBOL_NS_GPL()`
++--------------------------------
++
++Defined in ``include/linux/export.h``
++
++This is the variant of `EXPORT_SYMBOL_GPL()` that allows specifying a symbol
++namespace. Symbol Namespaces are documented in
++``Documentation/kbuild/namespaces.rst``.
++
+ Routines and Conventions
+ ========================
+ 
+-- 
 2.23.0.187.g17f5b7556c-goog
 
