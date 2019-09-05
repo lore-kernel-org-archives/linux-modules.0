@@ -1,71 +1,53 @@
-Return-Path: <SRS0=I6ZE=W7=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=Bdg0=XA=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 313C9C3A5A8
-	for <linux-modules@archiver.kernel.org>; Wed,  4 Sep 2019 16:17:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4778C3A5A5
+	for <linux-modules@archiver.kernel.org>; Thu,  5 Sep 2019 10:41:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 08C2B22CED
-	for <linux-modules@archiver.kernel.org>; Wed,  4 Sep 2019 16:17:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=one-eyed-alien.net header.i=@one-eyed-alien.net header.b="TUlK0rc1"
+	by mail.kernel.org (Postfix) with ESMTP id 9EFA022CF6
+	for <linux-modules@archiver.kernel.org>; Thu,  5 Sep 2019 10:41:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1567680115;
+	bh=f3g6+GkFfq7dsW3Hcfdj3HneqZPXcFMZ8t3cgR3qUcw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=xZM1l4ujCLUBEMQgJSc9fcmybiXSzXVcscuWBbGQVQ2LPu//jK+RE20C8/POz2Iv9
+	 yuBFd1+BmyiHGplN/yImPNE+dg7rxrVki79jwEbpR3kLbmrOtRO7R9natLTOLOUIAJ
+	 NIodTiOeYQOECxePCwHSzBJ/Ne3F8l9vR4GtT6Kk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731673AbfIDQRU (ORCPT
+        id S2387799AbfIEKlz (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 4 Sep 2019 12:17:20 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:42576 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387610AbfIDQQU (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 4 Sep 2019 12:16:20 -0400
-Received: by mail-lj1-f193.google.com with SMTP id y23so9121606lje.9
-        for <linux-modules@vger.kernel.org>; Wed, 04 Sep 2019 09:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=one-eyed-alien.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3OkOI3j0Oo0CjA3trKCkMR2MwBR7d8kErbi/HKpfcyM=;
-        b=TUlK0rc196VsjDYABXU7yCCcQ4sTNOl47V6TQt/Z6Y4FZj6TevmCuFWT9dKCaAnTkd
-         ii+pt9kyT4tMSieTNWDBUkxJWxisf3YEfmljgf/j7puwe7joaJGEU4O2426wowD5IuNU
-         CQLeaZs18KcpY8ipXZwRFzvDYcdReO/oyNEP4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3OkOI3j0Oo0CjA3trKCkMR2MwBR7d8kErbi/HKpfcyM=;
-        b=RCex6N1kv87sQ12zytIAGvVs9UrBGCHT+I5npmbhSswbpvVNPROgs/vHqaATzvgh91
-         AW4er/zeo/2DKOXwPepfseVkwmgazPJ26lYEGthRYi6IO4/uqrJgMmlsY1QwmCbOOwcU
-         60FjiV+GbYUDzEsB+ZKXhBSDVq7ojpxtvs0REZ6Z0WQJcvrkBB0SDOB7Kk7d8izdUzIZ
-         9o0/aEmpPojX+mnh1hxjxhF45QogteikVIzZBRdteiQlJXwcMwOSEnUyEaskA0PzQEgh
-         ADKB6Uz84Go26li9x1I4x7I8s5xz/Oh5kKc/BnVL5vk/FW+FgmAZvyXxh6LnzZFAZgsJ
-         SGQA==
-X-Gm-Message-State: APjAAAWCZQ8khI0hYmHfpDHTpvMaotvMwFtJRHD5c8nXZmC73cQTmJmZ
-        He2d8ps0148VNLBVShzz/KoeEmvEVZCdJsb6wbtO+w==
-X-Google-Smtp-Source: APXvYqwjBs0W5/qIegdlz+i6Wn/+JSt4M3u1OfLNwPhUCj4In1akz/3V+ycUi8EU6qZzBMs2ICtcju1RZEnxtZQrP/k=
-X-Received: by 2002:a2e:9ad4:: with SMTP id p20mr24178237ljj.49.1567613778648;
- Wed, 04 Sep 2019 09:16:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20180716122125.175792-1-maco@android.com> <20190903150638.242049-1-maennich@google.com>
- <20190903150638.242049-13-maennich@google.com> <20190903161045.GA22754@roeck-us.net>
- <CAK7LNARYqqCSCc0G4FL7_bj80iMoLLJrUJ7B3+huD25EUkrttA@mail.gmail.com> <c6ac941c-06a4-e5dc-5cb9-fca7b40d7e9a@roeck-us.net>
-In-Reply-To: <c6ac941c-06a4-e5dc-5cb9-fca7b40d7e9a@roeck-us.net>
-From:   Matthew Dharm <mdharm-usb@one-eyed-alien.net>
-Date:   Wed, 4 Sep 2019 09:16:07 -0700
-Message-ID: <CAA6KcBBeP9xYbVws4=RMFNA4kyrodE-R3mifhbkee-Q+jFRcoQ@mail.gmail.com>
-Subject: Re: [usb-storage] Re: [PATCH v4 12/12] RFC: watchdog: export core
- symbols in WATCHDOG_CORE namespace
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Thu, 5 Sep 2019 06:41:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39376 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731215AbfIEKlz (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 5 Sep 2019 06:41:55 -0400
+Received: from linux-8ccs (nat.nue.novell.com [195.135.221.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8503A206BB;
+        Thu,  5 Sep 2019 10:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567680113;
+        bh=f3g6+GkFfq7dsW3Hcfdj3HneqZPXcFMZ8t3cgR3qUcw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cxyT0NCRQWEW0CzJzXAKo/7ZeMnS91FwRcZR6V2djERXI2dpN9lo6kUNOwDCKqSN9
+         +cwK/irArqaUooaX6It16R2kiGAZeIOM5GO2r0wJjuyVPaiYm5PqRdPBDrAgecqkEB
+         o4pc6bNQO33ZjIl7KaHnCnv5U5WRXIE9dnMY9p/Q=
+Date:   Thu, 5 Sep 2019 12:41:47 +0200
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Matthew Dharm <mdharm-usb@one-eyed-alien.net>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
         Matthias Maennich <maennich@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "Cc: Android Kernel" <kernel-team@android.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jessica Yu <jeyu@kernel.org>,
         "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         Lucas De Marchi <lucas.de.marchi@gmail.com>,
         maco@android.com, sspatil@google.com,
@@ -76,42 +58,62 @@ Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
         USB Mass Storage on Linux 
         <usb-storage@lists.one-eyed-alien.net>,
         linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [usb-storage] Re: [PATCH v4 12/12] RFC: watchdog: export core
+ symbols in WATCHDOG_CORE namespace
+Message-ID: <20190905104147.GA27788@linux-8ccs>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190903150638.242049-1-maennich@google.com>
+ <20190903150638.242049-13-maennich@google.com>
+ <20190903161045.GA22754@roeck-us.net>
+ <CAK7LNARYqqCSCc0G4FL7_bj80iMoLLJrUJ7B3+huD25EUkrttA@mail.gmail.com>
+ <c6ac941c-06a4-e5dc-5cb9-fca7b40d7e9a@roeck-us.net>
+ <CAA6KcBBeP9xYbVws4=RMFNA4kyrodE-R3mifhbkee-Q+jFRcoQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAA6KcBBeP9xYbVws4=RMFNA4kyrodE-R3mifhbkee-Q+jFRcoQ@mail.gmail.com>
+X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Sep 4, 2019 at 5:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
++++ Matthew Dharm [04/09/19 09:16 -0700]:
+>On Wed, Sep 4, 2019 at 5:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> Note that I don't object to the patch set in general. There may be symbols
+>> which only need be exported in the context of a single subsystem or even
+>> driver (if a driver consists of more than one module). For example, a mfd
+>> driver may export symbols which should only be called by its client drivers.
+>> In such a situation, it may well be beneficial to limit the use of exported
+>> symbols.
 >
-> Note that I don't object to the patch set in general. There may be symbols
-> which only need be exported in the context of a single subsystem or even
-> driver (if a driver consists of more than one module). For example, a mfd
-> driver may export symbols which should only be called by its client drivers.
-> In such a situation, it may well be beneficial to limit the use of exported
-> symbols.
+>I can appreciate this benefit.
+>
+>> I am not sure what good that does in practice (if I understand correctly,
+>> a driver only has to declare that it wants to use a restricted use symbol
+>> if it wants to use it), but that is a different question.
+>
+>I think this question implies that you are coming from the perspective
+>of "security" or wanting to restrict access to the underlying
+>functions, rather than wanting to clean-up the way symbols are handled
+>for manageability / maintainability purposes (which is the goal, as I
+>understand it).
+>
+>HOWEVER, I have one question:  If these patches are included, and
+>someone wants to introduce a bit of code which needs to use two
+>symbols from different namespaces but with the same name, can that be
+>done?  That is, if driver A has symbol 'foo' and driver B has symbol
+>'foo' (both in their respective namespaces), and driver C wants to use
+>A.foo and B.foo, can that be supported?
 
-I can appreciate this benefit.
+As of now, we currently don't support this - modpost will warn if a
+symbol is exported more than once (across modules + vmlinux), and the
+module loader currently assumes exported symbol names are unique.  Do
+you have a concrete use case? If there is a strong need for this, I
+don't think it'd be too hard to implement.
 
-> I am not sure what good that does in practice (if I understand correctly,
-> a driver only has to declare that it wants to use a restricted use symbol
-> if it wants to use it), but that is a different question.
+Thanks,
 
-I think this question implies that you are coming from the perspective
-of "security" or wanting to restrict access to the underlying
-functions, rather than wanting to clean-up the way symbols are handled
-for manageability / maintainability purposes (which is the goal, as I
-understand it).
+Jessica
 
-HOWEVER, I have one question:  If these patches are included, and
-someone wants to introduce a bit of code which needs to use two
-symbols from different namespaces but with the same name, can that be
-done?  That is, if driver A has symbol 'foo' and driver B has symbol
-'foo' (both in their respective namespaces), and driver C wants to use
-A.foo and B.foo, can that be supported?
-
-Matt
-
-
--- 
-Matthew Dharm
-Former Maintainer, USB Mass Storage driver for Linux
