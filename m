@@ -2,64 +2,64 @@ Return-Path: <SRS0=554M=XB=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-22.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71EFFC00307
-	for <linux-modules@archiver.kernel.org>; Fri,  6 Sep 2019 10:33:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA8AC00307
+	for <linux-modules@archiver.kernel.org>; Fri,  6 Sep 2019 10:33:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4D043206CD
-	for <linux-modules@archiver.kernel.org>; Fri,  6 Sep 2019 10:33:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 853F72173E
+	for <linux-modules@archiver.kernel.org>; Fri,  6 Sep 2019 10:33:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e7pIkQN5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZKx0qdxN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393100AbfIFKdN (ORCPT
+        id S2393087AbfIFKdK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 6 Sep 2019 06:33:13 -0400
-Received: from mail-vk1-f202.google.com ([209.85.221.202]:35787 "EHLO
-        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393091AbfIFKdM (ORCPT
+        Fri, 6 Sep 2019 06:33:10 -0400
+Received: from mail-qt1-f201.google.com ([209.85.160.201]:47470 "EHLO
+        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393069AbfIFKdG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 6 Sep 2019 06:33:12 -0400
-Received: by mail-vk1-f202.google.com with SMTP id y187so2234275vkf.2
-        for <linux-modules@vger.kernel.org>; Fri, 06 Sep 2019 03:33:11 -0700 (PDT)
+        Fri, 6 Sep 2019 06:33:06 -0400
+Received: by mail-qt1-f201.google.com with SMTP id v16so5781731qtp.14
+        for <linux-modules@vger.kernel.org>; Fri, 06 Sep 2019 03:33:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=zRWSVeb5W05ehvG18tGL2ilvhm06WavygbArZEKUTQI=;
-        b=e7pIkQN5je/XEVAJp1MoyRIDbt8/QAUq8a0aCp2pl+5BXg7BlR/aBq3w90T2MHY/96
-         or9LnLVsfQAUZ6WcUXquecLQbq7AfQsWuMOElN7QBSRip+pGen/0vei+ytkC3CNJZinh
-         vjvxUb6OWztEm92a3kBKvDf11CljmbJB3v2KxZNkV/VYozO1TmGlmm23I9IpoQOrTVuU
-         KIrchOfMYT8stFrHrJp1DKfwriVUxW14bM78ShdIhs0tjJTy+dDmHaIW84oKORn8v0ZX
-         4yC+x8xCIbGrLZoNnDzQC0F1BaeVA5yf5HkHqFcHYHEfK+Lz+gk7RCeZkYQ0vZD44EvN
-         fPHQ==
+        bh=jYdCAZcv6rUUG7KW+wn6gKBF+UzymWMvqv0zOHj9hbE=;
+        b=ZKx0qdxNQMJawIXCeiY8Nkpljkp7KQhcaQObQ4SWu2QmQNURGLfmfWzZSvaUmQ7Xss
+         PD2fCrhFozVh3dIE5w7Wry0AwCaAR3TGuPLkHNdACd3nfRAFQBpQsdVJ/NhTn6/vLQLN
+         Ru7OyMARdWduTJdEV9XXz4m05U5fOnchED0XJTkUnnf0tMOoylRFP+JDasglNs/6kW+6
+         xSQNHPcXH1rvF5qPd/MRBVUwTtZRs6rHa8jniJQywcaSlPFT/AwaWUCaHqZRobin2CJG
+         1XgoNK705v7ORTEVCliCLW6vz9Xqdci5W17fWuRehJTxPyZ2zuQzgbV3vHCjpkT3qfrh
+         dbQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=zRWSVeb5W05ehvG18tGL2ilvhm06WavygbArZEKUTQI=;
-        b=b1T9sHaMdbWfU+O9auus1HJnmVTXN26qgaNbhlvw5Popc0ZHmKlw/6wwWIq96T8BhH
-         Dh4UuaohrdNGssD+0cNHpGd69Onzba9kujgHbeZB4nUoX6nYPMPgfhTVeR7mjJIBj1za
-         6zdpAMg2qlI2pFazblhsLctU7LdJC9judRnjXhUlcCSpm528zXLMxTSTQKIde2Bay1tu
-         MTVEAcWD4hze6UAbSKXv1DYwYmcJY8ETeAF+2pqgLnzI4TjGx5+f142RReXwrHEy+hOD
-         ymwMefpDvBnIcK2HxP9/iUW7T+nIqbDq7O1tqnuoTlDGf9ct9kupludc8KQjf+MM9opT
-         vA1Q==
-X-Gm-Message-State: APjAAAW4/zSLvHYnqF07yp/aJFHhPUQL6E+O3bHvg5RFltjNRARdhsFe
-        IVVTJimkno/prxBHe6pvDCW/F/GRH4pFpA==
-X-Google-Smtp-Source: APXvYqyJHDiCm82bWxKF42Am556t+80bDMIgVxh1wUlEMnXyARvko3CTErt5o23JS8NG+EzPGeJPZGvD+nkliA==
-X-Received: by 2002:a1f:db43:: with SMTP id s64mr3568270vkg.67.1567765990854;
- Fri, 06 Sep 2019 03:33:10 -0700 (PDT)
-Date:   Fri,  6 Sep 2019 11:32:34 +0100
+        bh=jYdCAZcv6rUUG7KW+wn6gKBF+UzymWMvqv0zOHj9hbE=;
+        b=WN7YkexTuKpbkbFwsNTcjj2PDOtyaCameoCTI9PMpb86cGFLxsLQ1DlZ6nUvTd4TD7
+         w3C/lj6fGBWomhh2MBz1zRiZpyb+kjpn7cM3uYnOpqebo9+nJYWNUPVhOB0dYhElv0r2
+         39ngu4cunV0fNTPmJal2aKap8cWgqh3LxMkQCWDcMClWWrwRL/4eL1O0zGEaRQBKfExw
+         WQcYW/2pD43KRNZvYG876xWTcaVmjClwaMC9Hg9+ZOXCyRgmx07zwQM3BuJzQV11XjMa
+         wqGruitAjf2iSqugApYbqJMoEkiZvHehXCVbEHPcFc2yfN46l2BwqcX9ZsKhWYc25v0f
+         T06Q==
+X-Gm-Message-State: APjAAAXGHIUjy9COsbHq+1f3SsR71Z/sIg0GfP5Y+QJuHjE4zZ5OmiqX
+        bIfW3m9YTlQW254EeKLJSWSJS9iLdBl+Fg==
+X-Google-Smtp-Source: APXvYqzygfHWzXU1h9L+MfCrBdRx+fEDw8GAiroiyYdFXEH21sWnVmK3pkwPB3iqxBNhqzFTrxfdHrhG6YBUTA==
+X-Received: by 2002:ae9:e212:: with SMTP id c18mr8084551qkc.254.1567765985166;
+ Fri, 06 Sep 2019 03:33:05 -0700 (PDT)
+Date:   Fri,  6 Sep 2019 11:32:32 +0100
 In-Reply-To: <20190906103235.197072-1-maennich@google.com>
-Message-Id: <20190906103235.197072-11-maennich@google.com>
+Message-Id: <20190906103235.197072-9-maennich@google.com>
 Mime-Version: 1.0
 References: <20180716122125.175792-1-maco@android.com> <20190906103235.197072-1-maennich@google.com>
 X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
-Subject: [PATCH v5 10/11] usb-storage: remove single-use define for debugging
+Subject: [PATCH v5 08/11] scripts: Coccinelle script for namespace dependencies.
 From:   Matthias Maennich <maennich@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
@@ -68,50 +68,204 @@ Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
         maco@android.com, sspatil@google.com, will@kernel.org,
         yamada.masahiro@socionext.com, linux-kbuild@vger.kernel.org,
         linux-modules@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
+        usb-storage@lists.one-eyed-alien.net,
+        Julia Lawall <julia.lawall@lip6.fr>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-USB_STORAGE was defined as "usb-storage: " and used in a single location
-as argument to printk. In order to be able to use the name
-'USB_STORAGE', drop the definition and use the string directly for the
-printk call.
+A script that uses the '<module>.ns_deps' files generated by modpost to
+automatically add the required symbol namespace dependencies to each
+module.
 
+Usage:
+1) Move some symbols to a namespace with EXPORT_SYMBOL_NS() or define
+   DEFAULT_SYMBOL_NAMESPACE
+2) Run 'make' (or 'make modules') and get warnings about modules not
+   importing that namespace.
+3) Run 'make nsdeps' to automatically add required import statements
+   to said modules.
+
+This makes it easer for subsystem maintainers to introduce and maintain
+symbol namespaces into their codebase.
+
+Co-developed-by: Martijn Coenen <maco@android.com>
+Signed-off-by: Martijn Coenen <maco@android.com>
+Acked-by: Julia Lawall <julia.lawall@lip6.fr>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Matthias Maennich <maennich@google.com>
 ---
- drivers/usb/storage/debug.h    | 2 --
- drivers/usb/storage/scsiglue.c | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ MAINTAINERS                                 |  5 ++
+ Makefile                                    | 12 +++++
+ scripts/Makefile.modpost                    |  4 +-
+ scripts/coccinelle/misc/add_namespace.cocci | 23 ++++++++
+ scripts/nsdeps                              | 58 +++++++++++++++++++++
+ 5 files changed, 101 insertions(+), 1 deletion(-)
+ create mode 100644 scripts/coccinelle/misc/add_namespace.cocci
+ create mode 100644 scripts/nsdeps
 
-diff --git a/drivers/usb/storage/debug.h b/drivers/usb/storage/debug.h
-index 6d64f342f587..16ce06039a4d 100644
---- a/drivers/usb/storage/debug.h
-+++ b/drivers/usb/storage/debug.h
-@@ -29,8 +29,6 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e7a47b5210fd..3b170c11a0e6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11436,6 +11436,11 @@ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
+ F:	tools/include/nolibc/
  
- #include <linux/kernel.h>
++NSDEPS
++M:	Matthias Maennich <maennich@google.com>
++S:	Maintained
++F:	scripts/nsdeps
++
+ NTB AMD DRIVER
+ M:	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+ L:	linux-ntb@googlegroups.com
+diff --git a/Makefile b/Makefile
+index 0cdb957ae2c3..014d55b400ca 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1500,6 +1500,9 @@ help:
+ 	@echo  '  headerdep       - Detect inclusion cycles in headers'
+ 	@echo  '  coccicheck      - Check with Coccinelle'
+ 	@echo  ''
++	@echo  'Tools:'
++	@echo  '  nsdeps          - Generate missing symbol namespace dependencies'
++	@echo  ''
+ 	@echo  'Kernel selftest:'
+ 	@echo  '  kselftest       - Build and run kernel selftest (run as root)'
+ 	@echo  '                    Build, install, and boot kernel before'
+@@ -1687,6 +1690,15 @@ quiet_cmd_tags = GEN     $@
+ tags TAGS cscope gtags: FORCE
+ 	$(call cmd,tags)
  
--#define USB_STORAGE "usb-storage: "
--
- #ifdef CONFIG_USB_STORAGE_DEBUG
- void usb_stor_show_command(const struct us_data *us, struct scsi_cmnd *srb);
- void usb_stor_show_sense(const struct us_data *us, unsigned char key,
-diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-index 05b80211290d..df4de8323eff 100644
---- a/drivers/usb/storage/scsiglue.c
-+++ b/drivers/usb/storage/scsiglue.c
-@@ -379,7 +379,7 @@ static int queuecommand_lck(struct scsi_cmnd *srb,
++# Script to generate missing namespace dependencies
++# ---------------------------------------------------------------------------
++
++PHONY += nsdeps
++
++nsdeps: modules
++	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost nsdeps
++	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/$@
++
+ # Scripts to check various things for consistency
+ # ---------------------------------------------------------------------------
  
- 	/* check for state-transition errors */
- 	if (us->srb != NULL) {
--		printk(KERN_ERR USB_STORAGE "Error in %s: us->srb = %p\n",
-+		printk(KERN_ERR "usb-storage: Error in %s: us->srb = %p\n",
- 			__func__, us->srb);
- 		return SCSI_MLQUEUE_HOST_BUSY;
- 	}
+diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+index 26e6574ecd08..743fe3a2e885 100644
+--- a/scripts/Makefile.modpost
++++ b/scripts/Makefile.modpost
+@@ -56,7 +56,8 @@ MODPOST = scripts/mod/modpost						\
+ 	$(if $(KBUILD_EXTMOD),$(addprefix -e ,$(KBUILD_EXTRA_SYMBOLS)))	\
+ 	$(if $(KBUILD_EXTMOD),-o $(modulesymfile))			\
+ 	$(if $(CONFIG_SECTION_MISMATCH_WARN_ONLY),,-E)			\
+-	$(if $(KBUILD_MODPOST_WARN),-w)
++	$(if $(KBUILD_MODPOST_WARN),-w)					\
++	$(if $(filter nsdeps,$(MAKECMDGOALS)),-d)
+ 
+ ifdef MODPOST_VMLINUX
+ 
+@@ -134,6 +135,7 @@ $(modules): %.ko :%.o %.mod.o FORCE
+ 
+ targets += $(modules)
+ 
++nsdeps: __modpost
+ 
+ # Add FORCE to the prequisites of a target to force it to be always rebuilt.
+ # ---------------------------------------------------------------------------
+diff --git a/scripts/coccinelle/misc/add_namespace.cocci b/scripts/coccinelle/misc/add_namespace.cocci
+new file mode 100644
+index 000000000000..c832bb6445a8
+--- /dev/null
++++ b/scripts/coccinelle/misc/add_namespace.cocci
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//
++/// Adds missing MODULE_IMPORT_NS statements to source files
++///
++/// This script is usually called from scripts/nsdeps with -D ns=<namespace> to
++/// add a missing namespace tag to a module source file.
++///
++
++@has_ns_import@
++declarer name MODULE_IMPORT_NS;
++identifier virtual.ns;
++@@
++MODULE_IMPORT_NS(ns);
++
++// Add missing imports, but only adjacent to a MODULE_LICENSE statement.
++// That ensures we are adding it only to the main module source file.
++@do_import depends on !has_ns_import@
++declarer name MODULE_LICENSE;
++expression license;
++identifier virtual.ns;
++@@
++MODULE_LICENSE(license);
+++ MODULE_IMPORT_NS(ns);
+diff --git a/scripts/nsdeps b/scripts/nsdeps
+new file mode 100644
+index 000000000000..ac2b6031dd13
+--- /dev/null
++++ b/scripts/nsdeps
+@@ -0,0 +1,58 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Linux kernel symbol namespace import generator
++#
++# This script requires a minimum spatch version.
++SPATCH_REQ_VERSION="1.0.4"
++
++DIR="$(dirname $(readlink -f $0))/.."
++SPATCH="`which ${SPATCH:=spatch}`"
++if [ ! -x "$SPATCH" ]; then
++	echo 'spatch is part of the Coccinelle project and is available at http://coccinelle.lip6.fr/'
++	exit 1
++fi
++
++SPATCH_REQ_VERSION_NUM=$(echo $SPATCH_REQ_VERSION | ${DIR}/scripts/ld-version.sh)
++SPATCH_VERSION=$($SPATCH --version | head -1 | awk '{print $3}')
++SPATCH_VERSION_NUM=$(echo $SPATCH_VERSION | ${DIR}/scripts/ld-version.sh)
++
++if [ "$SPATCH_VERSION_NUM" -lt "$SPATCH_REQ_VERSION_NUM" ] ; then
++	echo "spatch needs to be version $SPATCH_REQ_VERSION or higher"
++	exit 1
++fi
++
++generate_deps_for_ns() {
++	$SPATCH --very-quiet --in-place --sp-file \
++		$srctree/scripts/coccinelle/misc/add_namespace.cocci -D ns=$1 $2
++}
++
++generate_deps() {
++	local mod_name=`basename $@ .ko`
++	local mod_file=`echo $@ | sed -e 's/\.ko/\.mod/'`
++	local ns_deps_file=`echo $@ | sed -e 's/\.ko/\.ns_deps/'`
++	if [ ! -f "$ns_deps_file" ]; then return; fi
++	local mod_source_files=`cat $mod_file | sed -n 1p                      \
++					      | sed -e 's/\.o/\.c/g'           \
++					      | sed "s/[^ ]* */${srctree}\/&/g"`
++	for ns in `cat $ns_deps_file`; do
++		echo "Adding namespace $ns to module $mod_name (if needed)."
++		generate_deps_for_ns $ns $mod_source_files
++		# sort the imports
++		for source_file in $mod_source_files; do
++			sed '/MODULE_IMPORT_NS/Q' $source_file > ${source_file}.tmp
++			offset=$(wc -l ${source_file}.tmp | awk '{print $1;}')
++			cat $source_file | grep MODULE_IMPORT_NS | sort -u >> ${source_file}.tmp
++			tail -n +$((offset +1)) ${source_file} | grep -v MODULE_IMPORT_NS >> ${source_file}.tmp
++			if ! diff -q ${source_file} ${source_file}.tmp; then
++				mv ${source_file}.tmp ${source_file}
++			else
++				rm ${source_file}.tmp
++			fi
++		done
++	done
++}
++
++for f in `cat $objtree/modules.order`; do
++	generate_deps $f
++done
++
 -- 
 2.23.0.187.g17f5b7556c-goog
 
