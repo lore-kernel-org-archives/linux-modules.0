@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11D35C43331
-	for <linux-modules@archiver.kernel.org>; Fri,  6 Sep 2019 10:33:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ADF5C00307
+	for <linux-modules@archiver.kernel.org>; Fri,  6 Sep 2019 10:33:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D40442084F
-	for <linux-modules@archiver.kernel.org>; Fri,  6 Sep 2019 10:33:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 120182084F
+	for <linux-modules@archiver.kernel.org>; Fri,  6 Sep 2019 10:33:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I9PXGQZo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I1ZteSFA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393056AbfIFKdF (ORCPT
+        id S2393021AbfIFKcz (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 6 Sep 2019 06:33:05 -0400
-Received: from mail-qt1-f201.google.com ([209.85.160.201]:41620 "EHLO
-        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393057AbfIFKdD (ORCPT
+        Fri, 6 Sep 2019 06:32:55 -0400
+Received: from mail-qk1-f202.google.com ([209.85.222.202]:49958 "EHLO
+        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392055AbfIFKcz (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 6 Sep 2019 06:33:03 -0400
-Received: by mail-qt1-f201.google.com with SMTP id n59so5778802qtd.8
-        for <linux-modules@vger.kernel.org>; Fri, 06 Sep 2019 03:33:02 -0700 (PDT)
+        Fri, 6 Sep 2019 06:32:55 -0400
+Received: by mail-qk1-f202.google.com with SMTP id n125so5856875qkc.16
+        for <linux-modules@vger.kernel.org>; Fri, 06 Sep 2019 03:32:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=RSyx3V/T3+Fb/fBnjK85DcZdNsViLHAQqUGk4FWkZsU=;
-        b=I9PXGQZof7MywX5pNz/TswRnQbwCl4MRemtmB301MfQQWr8aq2bwX3QwB4ZRJ/Sxyz
-         csifElsn94ZgSkW5c2pPzyCsUEqlKSk7fSyDelm7JO6MQtKPqTRxkU+dwif/m7kknjbe
-         KPhhz50ROCs5AFFtcJb+01sZdAnQdXy2FQsim6sGgp1JmreqXP0ORtk97Hk1YhO2CF7q
-         Hn353Z3VGR3JaqNV86U9BNGyT0G0zIu12mkvbhvFZ5g9oUwuywZhzYmAk/Z4GFBitgEE
-         7bIeyjVD7qVQhpX86A1FtDJc0qtxl7qypHzvvzJhsb3+dUJS8Q8sjWEixuqnaog/7/SS
-         qIUA==
+        bh=TomRv8WBRCsnjt12ZHD1+VdCr+4pjb/fkJlpjNFFLG4=;
+        b=I1ZteSFABV4IgRgiFXzn73P+TR6Qe+ghmv/Z1G0/keBf3DnJ39fu4n4dD1h/bm6r9s
+         5Y4mZF+oSUWiMSPpiDD6zFUm1wFhpuAXzzGXFHpuLF92oRlwY1X3Jh+9vUH8UKLyz6IF
+         6kLvXmvkqxENPkwfuUAzQ3TDX4twk9kc86fUYYSsNXhunrBsqa44OC0gjVgg0+AmJZIT
+         zGtp9H7TbZonJKgeAKch1exKk83+bq0vm6+BZbdWh2/caUlQOP/CPaTL5VR6FUxJ/O3S
+         AnFLAfIsgVervsSMS6xLcpKxUrIlNAVQBB/Bpx5FW2KpP29eACj4j3TyGM0iqCXUx2U+
+         ASBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=RSyx3V/T3+Fb/fBnjK85DcZdNsViLHAQqUGk4FWkZsU=;
-        b=FaFN8cVXGeXB8A8FRxH+Fwi2MxtB+lHgsGmnxQM8RzrUJQUoy7rBvY+hgqxBBYqzEI
-         gAFtvpCJ3tIjKxsJP2a6d3mnLPVd9qnkNehUvmlc/OzdtaqOjxUNlDtyjBQjliu8QVas
-         OmtuAosbzEMRNd9aHS4AjCUfycZJQnYelj1yapiaIkea1ypC5nYUHDht3/aLxv1NP98D
-         3YEodGX1DBpBzs90Tzgbl/TnaSM6AB7kQ70vAxqdf77X1DXtPZuo9rF0iyjNX+g1JiqC
-         3pQd21XBp642yvp82UzY9HkApIxxKiKGKiZstfKFxtzesacO0hva5iAMJztRiSMKoMXm
-         hs2w==
-X-Gm-Message-State: APjAAAWQJnGKWPToEe2iTEmItpVROZOUiilEINsmdvw+IDByTqPXi3AE
-        /XSCflUGzXuAw5GlR/NlwnDOQTcmVlit0A==
-X-Google-Smtp-Source: APXvYqxGo+cyOXvSYBQKLZexTuCj0WVDifScmh7j3DTkyvPu/M1nmWvyrbXdK58ETdBSPYoWpzvNcto3fKODzw==
-X-Received: by 2002:ac8:1116:: with SMTP id c22mr8369140qtj.179.1567765982297;
- Fri, 06 Sep 2019 03:33:02 -0700 (PDT)
-Date:   Fri,  6 Sep 2019 11:32:31 +0100
+        bh=TomRv8WBRCsnjt12ZHD1+VdCr+4pjb/fkJlpjNFFLG4=;
+        b=N/7iWKIuWIjRI0CxYthb4dDFqAj3pRvYtfC5VeM4+g5cc1l49IiZY1g2xDx52EUK78
+         dqRm3fImAb1ffZn4cTHkgpW2sR8GB+0Dbm3ouYE7lh92+lrVFLlkQ9CUNCcs9mfSbQwJ
+         Fwy6wsyrvfWNVMhs9Mmo8iGe2DoJSuwKxqi9VQ5aD2vU/o0JSVEx7kl8EKSd/nt4jV8z
+         7TAZX27kNNKaB6v1K7MPa17kHZgPJ0wj7wypR1Rr1RxWJIc0MDRp0cIIUMTlOmkP2adw
+         +MGohjHNemABHp3kGVZhFHOo7LwqEboXJNnOnZ8GQ8kj59s4bRvw74O4pJ2clB9Nl554
+         hBqA==
+X-Gm-Message-State: APjAAAWHYFEAsUDabCC5ImTfO8qvVAn/pK73JighbU6ckf+043K8EwR5
+        /suzGIOquo3DRqOJ2uMWc88o8ev0F2Ff3g==
+X-Google-Smtp-Source: APXvYqyDn+T0Z+Hqc052d9zJPG/ISkUYZLbXQ7SccsDvJt+1GEC1G3Hbsr6G6SxcYf4p7gYgcRKBvnoI0ZZ0Jw==
+X-Received: by 2002:a37:7e84:: with SMTP id z126mr7276344qkc.448.1567765973885;
+ Fri, 06 Sep 2019 03:32:53 -0700 (PDT)
+Date:   Fri,  6 Sep 2019 11:32:28 +0100
 In-Reply-To: <20190906103235.197072-1-maennich@google.com>
-Message-Id: <20190906103235.197072-8-maennich@google.com>
+Message-Id: <20190906103235.197072-5-maennich@google.com>
 Mime-Version: 1.0
 References: <20180716122125.175792-1-maco@android.com> <20190906103235.197072-1-maennich@google.com>
 X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
-Subject: [PATCH v5 07/11] modpost: add support for generating namespace dependencies
+Subject: [PATCH v5 04/11] modpost: add support for symbol namespaces
 From:   Matthias Maennich <maennich@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
@@ -74,177 +74,295 @@ Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This patch adds an option to modpost to generate a <module>.ns_deps file
-per module, containing the namespace dependencies for that module.
+Add support for symbols that are exported into namespaces. For that,
+extract any namespace suffix from the symbol name. In addition, emit a
+warning whenever a module refers to an exported symbol without
+explicitly importing the namespace that it is defined in. This patch
+consistently adds the namespace suffix to symbol names exported into
+Module.symvers.
 
-E.g. if the linked module my-module.ko would depend on the symbol
-myfunc.MY_NS in the namespace MY_NS, the my-module.ns_deps file created
-by modpost would contain the entry MY_NS to express the namespace
-dependency of my-module imposed by using the symbol myfunc.
+Example warning emitted by modpost in case of the above violation:
 
-These files can subsequently be used by static analysis tools (like
-coccinelle scripts) to address issues with missing namespace imports. A
-later patch of this series will introduce such a script 'nsdeps' and a
-corresponding make target to automatically add missing
-MODULE_IMPORT_NS() definitions to the module's sources. For that it uses
-the information provided in the generated .ns_deps files.
+ WARNING: module ums-usbat uses symbol usb_stor_resume from namespace
+ USB_STORAGE, but does not import it.
 
 Co-developed-by: Martijn Coenen <maco@android.com>
 Signed-off-by: Martijn Coenen <maco@android.com>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Matthias Maennich <maennich@google.com>
 ---
- .gitignore            |  1 +
- Makefile              |  2 +-
- scripts/mod/modpost.c | 54 +++++++++++++++++++++++++++++++++++++++----
- scripts/mod/modpost.h |  2 ++
- 4 files changed, 53 insertions(+), 6 deletions(-)
+ Documentation/kbuild/modules.rst |   7 ++-
+ scripts/export_report.pl         |   2 +-
+ scripts/mod/modpost.c            | 104 ++++++++++++++++++++++++++-----
+ scripts/mod/modpost.h            |   7 +++
+ 4 files changed, 101 insertions(+), 19 deletions(-)
 
-diff --git a/.gitignore b/.gitignore
-index 2030c7a4d2f8..9ee63aa2a3fb 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -32,6 +32,7 @@
- *.lzo
- *.mod
- *.mod.c
-+*.ns_deps
- *.o
- *.o.*
- *.order
-diff --git a/Makefile b/Makefile
-index 0cbe8717bdb3..0cdb957ae2c3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1669,7 +1669,7 @@ clean: $(clean-dirs)
- 		-o -name '*.ko.*' \
- 		-o -name '*.dtb' -o -name '*.dtb.S' -o -name '*.dt.yaml' \
- 		-o -name '*.dwo' -o -name '*.lst' \
--		-o -name '*.su' -o -name '*.mod' \
-+		-o -name '*.su' -o -name '*.mod' -o -name '*.ns_deps' \
- 		-o -name '.*.d' -o -name '.*.tmp' -o -name '*.mod.c' \
- 		-o -name '*.lex.c' -o -name '*.tab.[ch]' \
- 		-o -name '*.asn1.[ch]' \
+diff --git a/Documentation/kbuild/modules.rst b/Documentation/kbuild/modules.rst
+index 24e763482650..d2ae799237fd 100644
+--- a/Documentation/kbuild/modules.rst
++++ b/Documentation/kbuild/modules.rst
+@@ -470,9 +470,12 @@ build.
+ 
+ 	The syntax of the Module.symvers file is::
+ 
+-		<CRC>	    <Symbol>	       <module>
++	<CRC>       <Symbol>          <Namespace>  <Module>                         <Export Type>
+ 
+-		0x2d036834  scsi_remove_host   drivers/scsi/scsi_mod
++	0xe1cc2a05  usb_stor_suspend  USB_STORAGE  drivers/usb/storage/usb-storage  EXPORT_SYMBOL_GPL
++
++	The fields are separated by tabs and values may be empty (e.g.
++	if no namespace is defined for an exported symbol).
+ 
+ 	For a kernel build without CONFIG_MODVERSIONS enabled, the CRC
+ 	would read 0x00000000.
+diff --git a/scripts/export_report.pl b/scripts/export_report.pl
+index 7d3030d03a25..548330e8c4e7 100755
+--- a/scripts/export_report.pl
++++ b/scripts/export_report.pl
+@@ -94,7 +94,7 @@ if (defined $opt{'o'}) {
+ #
+ while ( <$module_symvers> ) {
+ 	chomp;
+-	my (undef, $symbol, $module, $gpl) = split;
++	my (undef, $symbol, $namespace, $module, $gpl) = split('\t');
+ 	$SYMBOL { $symbol } =  [ $module , "0" , $symbol, $gpl];
+ }
+ close($module_symvers);
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index c2d49afaea1c..be72da25fe7c 100644
+index f277e116e0eb..c2d49afaea1c 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -38,6 +38,8 @@ static int sec_mismatch_count = 0;
- static int sec_mismatch_fatal = 0;
- /* ignore missing files */
- static int ignore_missing_files;
-+/* write namespace dependencies */
-+static int write_namespace_deps;
- 
- enum export {
- 	export_plain,      export_unused,     export_gpl,
-@@ -2176,10 +2178,15 @@ static int check_exports(struct module *mod)
- 		else
- 			basename = mod->name;
- 
--		if (exp->namespace &&
--		    !module_imports_namespace(mod, exp->namespace)) {
--			warn("module %s uses symbol %s from namespace %s, but does not import it.\n",
--			     basename, exp->name, exp->namespace);
-+		if (exp->namespace) {
-+			add_namespace(&mod->required_namespaces,
-+				      exp->namespace);
-+
-+			if (!write_namespace_deps &&
-+			    !module_imports_namespace(mod, exp->namespace)) {
-+				warn("module %s uses symbol %s from namespace %s, but does not import it.\n",
-+				     basename, exp->name, exp->namespace);
-+			}
- 		}
- 
- 		if (!mod->gpl_compatible)
-@@ -2484,6 +2491,31 @@ static void write_dump(const char *fname)
- 	free(buf.p);
+@@ -164,6 +164,7 @@ struct symbol {
+ 	struct module *module;
+ 	unsigned int crc;
+ 	int crc_valid;
++	const char *namespace;
+ 	unsigned int weak:1;
+ 	unsigned int vmlinux:1;    /* 1 if symbol is defined in vmlinux */
+ 	unsigned int kernel:1;     /* 1 if symbol is from kernel
+@@ -233,6 +234,37 @@ static struct symbol *find_symbol(const char *name)
+ 	return NULL;
  }
  
-+static void write_namespace_deps_files(void)
++static bool contains_namespace(struct namespace_list *list,
++			       const char *namespace)
 +{
-+	struct module *mod;
-+	struct namespace_list *ns;
-+	struct buffer ns_deps_buf = {};
++	struct namespace_list *ns_entry;
 +
-+	for (mod = modules; mod; mod = mod->next) {
-+		char fname[PATH_MAX];
++	for (ns_entry = list; ns_entry != NULL; ns_entry = ns_entry->next)
++		if (strcmp(ns_entry->namespace, namespace) == 0)
++			return true;
 +
-+		if (mod->skip)
-+			continue;
++	return false;
++}
 +
-+		ns_deps_buf.pos = 0;
++static void add_namespace(struct namespace_list **list, const char *namespace)
++{
++	struct namespace_list *ns_entry;
 +
-+		for (ns = mod->required_namespaces; ns; ns = ns->next)
-+			buf_printf(&ns_deps_buf, "%s\n", ns->namespace);
-+
-+		if (ns_deps_buf.pos == 0)
-+			continue;
-+
-+		sprintf(fname, "%s.ns_deps", mod->name);
-+		write_if_changed(&ns_deps_buf, fname);
++	if (!contains_namespace(*list, namespace)) {
++		ns_entry = NOFAIL(malloc(sizeof(struct namespace_list) +
++					 strlen(namespace) + 1));
++		strcpy(ns_entry->namespace, namespace);
++		ns_entry->next = *list;
++		*list = ns_entry;
 +	}
 +}
 +
- struct ext_sym_list {
- 	struct ext_sym_list *next;
- 	const char *file;
-@@ -2500,7 +2532,7 @@ int main(int argc, char **argv)
- 	struct ext_sym_list *extsym_iter;
- 	struct ext_sym_list *extsym_start = NULL;
- 
--	while ((opt = getopt(argc, argv, "i:I:e:mnsT:o:awE")) != -1) {
-+	while ((opt = getopt(argc, argv, "i:I:e:mnsT:o:awEd")) != -1) {
- 		switch (opt) {
- 		case 'i':
- 			kernel_read = optarg;
-@@ -2541,6 +2573,9 @@ int main(int argc, char **argv)
- 		case 'E':
- 			sec_mismatch_fatal = 1;
- 			break;
-+		case 'd':
-+			write_namespace_deps = 1;
-+			break;
- 		default:
- 			exit(1);
- 		}
-@@ -2575,6 +2610,9 @@ int main(int argc, char **argv)
- 
- 		err |= check_modname_len(mod);
- 		err |= check_exports(mod);
-+		if (write_namespace_deps)
-+			continue;
++static bool module_imports_namespace(struct module *module,
++				     const char *namespace)
++{
++	return contains_namespace(module->imported_namespaces, namespace);
++}
 +
- 		add_header(&buf, mod);
- 		add_intree_flag(&buf, !external_module);
- 		add_retpoline(&buf);
-@@ -2587,6 +2625,12 @@ int main(int argc, char **argv)
- 		sprintf(fname, "%s.mod.c", mod->name);
- 		write_if_changed(&buf, fname);
- 	}
+ static const struct {
+ 	const char *str;
+ 	enum export export;
+@@ -312,23 +344,39 @@ static enum export export_from_sec(struct elf_info *elf, unsigned int sec)
+ 		return export_unknown;
+ }
+ 
++static const char *sym_extract_namespace(const char **symname)
++{
++	size_t n;
++	char *dupsymname;
 +
-+	if (write_namespace_deps) {
-+		write_namespace_deps_files();
-+		return 0;
++	n = strcspn(*symname, ".");
++	if (n < strlen(*symname) - 1) {
++		dupsymname = NOFAIL(strdup(*symname));
++		dupsymname[n] = '\0';
++		*symname = dupsymname;
++		return dupsymname + n + 1;
 +	}
 +
- 	if (dump_write)
- 		write_dump(dump_write);
- 	if (sec_mismatch_count && sec_mismatch_fatal)
++	return NULL;
++}
++
+ /**
+  * Add an exported symbol - it may have already been added without a
+  * CRC, in this case just update the CRC
+  **/
+-static struct symbol *sym_add_exported(const char *name, struct module *mod,
+-				       enum export export)
++static struct symbol *sym_add_exported(const char *name, const char *namespace,
++				       struct module *mod, enum export export)
+ {
+ 	struct symbol *s = find_symbol(name);
+ 
+ 	if (!s) {
+ 		s = new_symbol(name, mod, export);
++		s->namespace = namespace;
+ 	} else {
+ 		if (!s->preloaded) {
+-			warn("%s: '%s' exported twice. Previous export "
+-			     "was in %s%s\n", mod->name, name,
+-			     s->module->name,
+-			     is_vmlinux(s->module->name) ?"":".ko");
++			warn("%s: '%s' exported twice. Previous export was in %s%s\n",
++			     mod->name, name, s->module->name,
++			     is_vmlinux(s->module->name) ? "" : ".ko");
+ 		} else {
+ 			/* In case Module.symvers was out of date */
+ 			s->module = mod;
+@@ -620,6 +668,7 @@ static void handle_modversions(struct module *mod, struct elf_info *info,
+ 	unsigned int crc;
+ 	enum export export;
+ 	bool is_crc = false;
++	const char *name, *namespace;
+ 
+ 	if ((!is_vmlinux(mod->name) || mod->is_dot_o) &&
+ 	    strstarts(symname, "__ksymtab"))
+@@ -691,8 +740,9 @@ static void handle_modversions(struct module *mod, struct elf_info *info,
+ 	default:
+ 		/* All exported symbols */
+ 		if (strstarts(symname, "__ksymtab_")) {
+-			sym_add_exported(symname + strlen("__ksymtab_"), mod,
+-					export);
++			name = symname + strlen("__ksymtab_");
++			namespace = sym_extract_namespace(&name);
++			sym_add_exported(name, namespace, mod, export);
+ 		}
+ 		if (strcmp(symname, "init_module") == 0)
+ 			mod->has_init = 1;
+@@ -1943,6 +1993,7 @@ static void read_symbols(const char *modname)
+ 	const char *symname;
+ 	char *version;
+ 	char *license;
++	char *namespace;
+ 	struct module *mod;
+ 	struct elf_info info = { };
+ 	Elf_Sym *sym;
+@@ -1974,6 +2025,12 @@ static void read_symbols(const char *modname)
+ 		license = get_next_modinfo(&info, "license", license);
+ 	}
+ 
++	namespace = get_modinfo(&info, "import_ns");
++	while (namespace) {
++		add_namespace(&mod->imported_namespaces, namespace);
++		namespace = get_next_modinfo(&info, "import_ns", namespace);
++	}
++
+ 	for (sym = info.symtab_start; sym < info.symtab_stop; sym++) {
+ 		symname = remove_dot(info.strtab + sym->st_name);
+ 
+@@ -2118,6 +2175,13 @@ static int check_exports(struct module *mod)
+ 			basename++;
+ 		else
+ 			basename = mod->name;
++
++		if (exp->namespace &&
++		    !module_imports_namespace(mod, exp->namespace)) {
++			warn("module %s uses symbol %s from namespace %s, but does not import it.\n",
++			     basename, exp->name, exp->namespace);
++		}
++
+ 		if (!mod->gpl_compatible)
+ 			check_for_gpl_usage(exp->export, basename, exp->name);
+ 		check_for_unused(exp->export, basename, exp->name);
+@@ -2341,7 +2405,7 @@ static void read_dump(const char *fname, unsigned int kernel)
+ 		return;
+ 
+ 	while ((line = get_next_line(&pos, file, size))) {
+-		char *symname, *modname, *d, *export, *end;
++		char *symname, *namespace, *modname, *d, *export, *end;
+ 		unsigned int crc;
+ 		struct module *mod;
+ 		struct symbol *s;
+@@ -2349,7 +2413,10 @@ static void read_dump(const char *fname, unsigned int kernel)
+ 		if (!(symname = strchr(line, '\t')))
+ 			goto fail;
+ 		*symname++ = '\0';
+-		if (!(modname = strchr(symname, '\t')))
++		if (!(namespace = strchr(symname, '\t')))
++			goto fail;
++		*namespace++ = '\0';
++		if (!(modname = strchr(namespace, '\t')))
+ 			goto fail;
+ 		*modname++ = '\0';
+ 		if ((export = strchr(modname, '\t')) != NULL)
+@@ -2366,7 +2433,8 @@ static void read_dump(const char *fname, unsigned int kernel)
+ 			mod = new_module(modname);
+ 			mod->skip = 1;
+ 		}
+-		s = sym_add_exported(symname, mod, export_no(export));
++		s = sym_add_exported(symname, namespace, mod,
++				     export_no(export));
+ 		s->kernel    = kernel;
+ 		s->preloaded = 1;
+ 		sym_update_crc(symname, mod, crc, export_no(export));
+@@ -2395,16 +2463,20 @@ static void write_dump(const char *fname)
+ {
+ 	struct buffer buf = { };
+ 	struct symbol *symbol;
++	const char *namespace;
+ 	int n;
+ 
+ 	for (n = 0; n < SYMBOL_HASH_SIZE ; n++) {
+ 		symbol = symbolhash[n];
+ 		while (symbol) {
+-			if (dump_sym(symbol))
+-				buf_printf(&buf, "0x%08x\t%s\t%s\t%s\n",
+-					symbol->crc, symbol->name,
+-					symbol->module->name,
+-					export_str(symbol->export));
++			if (dump_sym(symbol)) {
++				namespace = symbol->namespace;
++				buf_printf(&buf, "0x%08x\t%s\t%s\t%s\t%s\n",
++					   symbol->crc, symbol->name,
++					   namespace ? namespace : "",
++					   symbol->module->name,
++					   export_str(symbol->export));
++			}
+ 			symbol = symbol->next;
+ 		}
+ 	}
 diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 9626bf3e7424..92a926d375d2 100644
+index 8453d6ac2f77..9626bf3e7424 100644
 --- a/scripts/mod/modpost.h
 +++ b/scripts/mod/modpost.h
-@@ -126,6 +126,8 @@ struct module {
+@@ -109,6 +109,11 @@ buf_printf(struct buffer *buf, const char *fmt, ...);
+ void
+ buf_write(struct buffer *buf, const char *s, int len);
+ 
++struct namespace_list {
++	struct namespace_list *next;
++	char namespace[0];
++};
++
+ struct module {
+ 	struct module *next;
+ 	const char *name;
+@@ -121,6 +126,8 @@ struct module {
  	struct buffer dev_table_buf;
  	char	     srcversion[25];
  	int is_dot_o;
-+	// Required namespace dependencies
-+	struct namespace_list *required_namespaces;
- 	// Actual imported namespaces
- 	struct namespace_list *imported_namespaces;
++	// Actual imported namespaces
++	struct namespace_list *imported_namespaces;
  };
+ 
+ struct elf_info {
 -- 
 2.23.0.187.g17f5b7556c-goog
 
