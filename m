@@ -1,68 +1,65 @@
-Return-Path: <SRS0=UVK8=X5=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=0/eF=X6=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 723D5C47404
-	for <linux-modules@archiver.kernel.org>; Fri,  4 Oct 2019 18:25:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ED39C3E8AB
+	for <linux-modules@archiver.kernel.org>; Sat,  5 Oct 2019 07:59:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4D7332084D
-	for <linux-modules@archiver.kernel.org>; Fri,  4 Oct 2019 18:25:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B159222C0
+	for <linux-modules@archiver.kernel.org>; Sat,  5 Oct 2019 07:59:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lR58Eu0k"
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="gYqhjfCq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730587AbfJDSZs (ORCPT
+        id S1727274AbfJEH7L (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 4 Oct 2019 14:25:48 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:51086 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730090AbfJDSZs (ORCPT
+        Sat, 5 Oct 2019 03:59:11 -0400
+Received: from condef-05.nifty.com ([202.248.20.70]:26779 "EHLO
+        condef-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725862AbfJEH7K (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 4 Oct 2019 14:25:48 -0400
-Received: by mail-wm1-f67.google.com with SMTP id 5so6784613wmg.0;
-        Fri, 04 Oct 2019 11:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EG4uhXwG5jrCbKoCifB7aoh41j2vEgUP8k3d/Yoz+3Y=;
-        b=lR58Eu0k+JCfeIPEyEs/Ht4+UJtMI73bNG8K4mnf3RvCQUUmORvgI1pKfa/CtHvFfn
-         Of9B+zQV5JIn3I+Ebz89qa5I0gdhExzuuBKrMcdHmPyHcG/IP/7W9ckKZZ7iJGeNiwLg
-         aXlJ9moTioW6My3A+l6QVfHGbOozq44HdiKLGMyPc3+xl3m8mpLPahJ2n5i4uF74nlNT
-         CO/NMcJXFuynhCpQB7D0sqJU4zFJE07iMQrHhiYJVQ8N5gbsMlrQBQSrjd3P4qdsEOxP
-         z//WZ6fg/XMPh2IwF50R7ahW9Z4Z/GQtwJguQ0/AQJUypt9z5LnLlkgh9srpV6sWZa8H
-         iaEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EG4uhXwG5jrCbKoCifB7aoh41j2vEgUP8k3d/Yoz+3Y=;
-        b=ElMgSrZsM1ocoEm4urTWxBU62gp2UwXLg+r8OhpHszv7GYv85ZHZD36x16g0JNZT7P
-         OVaXTt6+J+ICMSRnKxkJnKUeGhP7nwqKHNLNYAHvFsRGGug7mgqf7VSBB4BxHS5hi9pq
-         3q+MIMIXRIn7jJyNZp/wMEMPfsboE0+Gixvn50O6BvBjgvYh6XA2UNZICG1Mt9OEG14K
-         U11CBhkMcfXaz/hpDe31hXVkVoMLmv1g9kQspxGG9RQJM1PGHLFJQ8LSz5Qhm5N/YETK
-         LZ3xnO9q7sd0+bmuwdticNDwNdHLgKQnd/RReuG1COfLY72oNkyhx5/HVhOhG5ZpOi8g
-         1/ow==
-X-Gm-Message-State: APjAAAWiIXlUS01H3cTIvenNt1MIXpzxoyaCd77nIknBI8tNp4+8wvOE
-        ldtPErJrOnNJQzdH0h0yU5BKIvtAthT5khGuX4E=
-X-Google-Smtp-Source: APXvYqxPlTrfehCiFQd0k6mYGWobjxKW9B0GB8xUGkXN2ywGoTh0b2nz2WPHjHh+kXLT0dye9OuFq8FsQ/plZtQBNr8=
-X-Received: by 2002:a05:600c:10cc:: with SMTP id l12mr11624477wmd.165.1570213545580;
- Fri, 04 Oct 2019 11:25:45 -0700 (PDT)
+        Sat, 5 Oct 2019 03:59:10 -0400
+Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-05.nifty.com with ESMTP id x957smaY011535
+        for <linux-modules@vger.kernel.org>; Sat, 5 Oct 2019 16:54:48 +0900
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id x957sXmH016806;
+        Sat, 5 Oct 2019 16:54:34 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com x957sXmH016806
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1570262074;
+        bh=p9yHPmji7rhXxbD1ueOLfyVRDRN+WWX9cUEoagUBsPo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gYqhjfCqvHItsTpdrBo64s26DGk+jMGl1G5HlzdZGM0ZXovjrsAoOi5a+5oQx6BQG
+         xKKbciHExcILv3ZFipkp9bbNdOhF6VTrnbMzVFvxzwJnzvAS51a30hiSlmmaKG12ev
+         G0ZfsCE65zadJbg0Md9Wwocj6Zl6f3v04MjppagFM6JAvmbXWmFeQ5pmEahHPHgk+e
+         M4wNnD3X1u7wIgHH9WuxnBQrevnCAgt/optHmEl+oBluf2oPIu2Ug7PpShIxTOuchL
+         dc7jlB0bI7K/eoNpQvBDPr1mMa/ig5VQKPoAFmGtFuZGwXNKkVCcvzDvK2DtcEnirI
+         UDWLB8pm5yzSQ==
+X-Nifty-SrcIP: [209.85.221.171]
+Received: by mail-vk1-f171.google.com with SMTP id w3so1980215vkm.3;
+        Sat, 05 Oct 2019 00:54:34 -0700 (PDT)
+X-Gm-Message-State: APjAAAXbhwX1dd1f3VTiTrj9b2sFPuEhnxnUxyGhYTZezTAXiWMMHxAt
+        HeIw+vqfakshMoeKUGiBLWeO+8uoNXwV1XwZanc=
+X-Google-Smtp-Source: APXvYqzDurXQq2dsaaJqF1yLKd5J5UZj/D5REygO26wC83Bq3c7adyD3TqS2rt1AYxtM25e98I5dwg/MlwdK3tiwXjk=
+X-Received: by 2002:a1f:6d84:: with SMTP id i126mr9857322vkc.73.1570262072838;
+ Sat, 05 Oct 2019 00:54:32 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190917231031.81341-1-maennich@google.com> <20191004095748.223119-1-maennich@google.com>
-In-Reply-To: <20191004095748.223119-1-maennich@google.com>
-From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Fri, 4 Oct 2019 11:25:33 -0700
-Message-ID: <CAKi4VALPF7r25SJ+9jazeRz612pv_4MmhjOsJ8aumW_JO29VvA@mail.gmail.com>
+ <CAKi4VALPF7r25SJ+9jazeRz612pv_4MmhjOsJ8aumW_JO29VvA@mail.gmail.com>
+In-Reply-To: <CAKi4VALPF7r25SJ+9jazeRz612pv_4MmhjOsJ8aumW_JO29VvA@mail.gmail.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Sat, 5 Oct 2019 16:53:56 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ10xCm52PrgUvE=Z+d4BabuATSRpw+kL9Xm=O-ik_Duw@mail.gmail.com>
+Message-ID: <CAK7LNAQ10xCm52PrgUvE=Z+d4BabuATSRpw+kL9Xm=O-ik_Duw@mail.gmail.com>
 Subject: Re: [PATCH] depmod: create and use System.map.no_namespaces
-To:     Matthias Maennich <maennich@google.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>, kernel-team@android.com,
+To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     Matthias Maennich <maennich@google.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
         Stefan Wahren <stefan.wahren@i2se.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
         Jessica Yu <jeyu@kernel.org>,
         Martijn Coenen <maco@android.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -72,95 +69,137 @@ Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Oct 4, 2019 at 2:57 AM Matthias Maennich <maennich@google.com> wrote:
+On Sat, Oct 5, 2019 at 3:25 AM Lucas De Marchi
+<lucas.de.marchi@gmail.com> wrote:
 >
-> depmod in its current version is not aware of symbol namespace in
-> ksymtab entries introduced with 8651ec01daed ("module: add support for
-> symbol namespaces."). They have the form
+> On Fri, Oct 4, 2019 at 2:57 AM Matthias Maennich <maennich@google.com> wrote:
+> >
+> > depmod in its current version is not aware of symbol namespace in
+> > ksymtab entries introduced with 8651ec01daed ("module: add support for
+> > symbol namespaces."). They have the form
+> >
+> >   __ksymtab_NAMESPACE.symbol_name
+> >
+> > A fix for kmod's depmod has been proposed [1]. In order to support older
+> > versions of depmod as well, create a System.map.no_namespaces during
+> > scripts/depmod.sh that has the pre-namespaces format. That way users do
+> > not immediately upgrade the userspace tool.
+> >
+> > [1] https://lore.kernel.org/linux-modules/20191004094136.166621-1-maennich@google.com/
+> >
+> > Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+> > Fixes: 8651ec01daed ("module: add support for symbol namespaces.")
+> > Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> > Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
+> > Cc: Jessica Yu <jeyu@kernel.org>
+> > Cc: Martijn Coenen <maco@android.com>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: linux-modules@vger.kernel.org
+> > Signed-off-by: Matthias Maennich <maennich@google.com>
+> > ---
+> >
+> > Please note this depends on the new ksymtab entry format proposed in
+> > https://lore.kernel.org/lkml/20191003075826.7478-2-yamada.masahiro@socionext.com/
 >
->   __ksymtab_NAMESPACE.symbol_name
+> I don't really agree with that thought, more below.
 >
-> A fix for kmod's depmod has been proposed [1]. In order to support older
-> versions of depmod as well, create a System.map.no_namespaces during
-> scripts/depmod.sh that has the pre-namespaces format. That way users do
-> not immediately upgrade the userspace tool.
+> >
+> > That is likely to be merged soon as well as it fixes problems in 5.4-rc*, hence
+> > this patch depends on it.
+> >
+> > Cheers,
+> > Matthias
+> >
+> >  .gitignore        | 1 +
+> >  scripts/depmod.sh | 8 +++++++-
+> >  2 files changed, 8 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/.gitignore b/.gitignore
+> > index 70580bdd352c..5ed58a7cb433 100644
+> > --- a/.gitignore
+> > +++ b/.gitignore
+> > @@ -59,6 +59,7 @@ modules.order
+> >  /vmlinux-gdb.py
+> >  /vmlinuz
+> >  /System.map
+> > +/System.map.no_namespaces
+> >  /Module.markers
+> >  /modules.builtin.modinfo
+> >
+> > diff --git a/scripts/depmod.sh b/scripts/depmod.sh
+> > index e083bcae343f..602e1af072c7 100755
+> > --- a/scripts/depmod.sh
+> > +++ b/scripts/depmod.sh
+> > @@ -39,7 +39,13 @@ if $depmod_hack_needed; then
+> >         KERNELRELEASE=99.98.$KERNELRELEASE
+> >  fi
+> >
+> > -set -- -ae -F System.map
+> > +# Older versions of depmod do not support symbol namespaces in ksymtab entries,
+> > +# hence create an alternative System.map with namespace patched out to use for
+> > +# depmod. I.e. transform entries as follows:
+> > +#    __ksymtab_NAMESPACE.symbol_name -> __ksymtab_symbol_name
+> > +sed 's/__ksymtab_.*\./__ksymtab_/' System.map > System.map.no_namespaces
 >
-> [1] https://lore.kernel.org/linux-modules/20191004094136.166621-1-maennich@google.com/
+> So people with old kmod will have to know they need to pass
+> System.map.no_namespaces rather than the usual
+> System.map. Also, distros will need to be update to also copy the new
+> file to the kernel package (or upgrade/patch kmod).
 >
-> Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-> Fixes: 8651ec01daed ("module: add support for symbol namespaces.")
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
-> Cc: Jessica Yu <jeyu@kernel.org>
-> Cc: Martijn Coenen <maco@android.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-modules@vger.kernel.org
-> Signed-off-by: Matthias Maennich <maennich@google.com>
-> ---
->
-> Please note this depends on the new ksymtab entry format proposed in
-> https://lore.kernel.org/lkml/20191003075826.7478-2-yamada.masahiro@socionext.com/
+> I'd rather maintain the current format and fix the bug that patch is
+> fixing. The namespace
+> in the end IMO is just a small annoyance with a reason to  exist.
 
-I don't really agree with that thought, more below.
+I agree, this fix is bad.
+We should not bother kmod or any tools.
+And System.map.no_namespaces is a cheesy workaround.
 
->
-> That is likely to be merged soon as well as it fixes problems in 5.4-rc*, hence
-> this patch depends on it.
->
-> Cheers,
-> Matthias
->
->  .gitignore        | 1 +
->  scripts/depmod.sh | 8 +++++++-
->  2 files changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/.gitignore b/.gitignore
-> index 70580bdd352c..5ed58a7cb433 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -59,6 +59,7 @@ modules.order
->  /vmlinux-gdb.py
->  /vmlinuz
->  /System.map
-> +/System.map.no_namespaces
->  /Module.markers
->  /modules.builtin.modinfo
->
-> diff --git a/scripts/depmod.sh b/scripts/depmod.sh
-> index e083bcae343f..602e1af072c7 100755
-> --- a/scripts/depmod.sh
-> +++ b/scripts/depmod.sh
-> @@ -39,7 +39,13 @@ if $depmod_hack_needed; then
->         KERNELRELEASE=99.98.$KERNELRELEASE
->  fi
->
-> -set -- -ae -F System.map
-> +# Older versions of depmod do not support symbol namespaces in ksymtab entries,
-> +# hence create an alternative System.map with namespace patched out to use for
-> +# depmod. I.e. transform entries as follows:
-> +#    __ksymtab_NAMESPACE.symbol_name -> __ksymtab_symbol_name
-> +sed 's/__ksymtab_.*\./__ksymtab_/' System.map > System.map.no_namespaces
 
-So people with old kmod will have to know they need to pass
-System.map.no_namespaces rather than the usual
-System.map. Also, distros will need to be update to also copy the new
-file to the kernel package (or upgrade/patch kmod).
+BTW, I expressed my negative opinion in the review process
+for the patch set. I am still not convinced with the
+namespace feature, but anyway it was merged
+(with poor review and test).
 
-I'd rather maintain the current format and fix the bug that patch is
-fixing. The namespace
-in the end IMO is just a small annoyance with a reason to  exist.
 
-Lucas De Marchi
 
-> +
-> +set -- -ae -F System.map.no_namespaces
->  if test -n "$INSTALL_MOD_PATH"; then
->         set -- "$@" -b "$INSTALL_MOD_PATH"
->  fi
+Get back on track, probably the right fix would be to
+stop using __ksymtab_<namespace>.<symbol>.
+
+It is not used for any purposes but passing
+<namespace> / <symbol> pairs to modpost.
+
+
+For example, __kstrtabns_##sym points to
+the namespace string, so it would be possible
+to parse it from modpost?
+
+Then, asm("__ksymtab_" #ns NS_SEPARATOR #sym)
+will go away.
+
+
+
+Masahiro
+
+
+
+
+> Lucas De Marchi
+>
+> > +
+> > +set -- -ae -F System.map.no_namespaces
+> >  if test -n "$INSTALL_MOD_PATH"; then
+> >         set -- "$@" -b "$INSTALL_MOD_PATH"
+> >  fi
+> > --
+> > 2.23.0.581.g78d2f28ef7-goog
+> >
+>
+>
 > --
-> 2.23.0.581.g78d2f28ef7-goog
->
+> Lucas De Marchi
+
 
 
 -- 
-Lucas De Marchi
+Best Regards
+Masahiro Yamada
