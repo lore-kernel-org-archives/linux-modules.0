@@ -2,189 +2,114 @@ Return-Path: <SRS0=2Kvf=YE=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF58FECE599
-	for <linux-modules@archiver.kernel.org>; Fri, 11 Oct 2019 08:20:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 303B6ECE58C
+	for <linux-modules@archiver.kernel.org>; Fri, 11 Oct 2019 14:24:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B8CCC21D80
-	for <linux-modules@archiver.kernel.org>; Fri, 11 Oct 2019 08:20:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07AA621A4A
+	for <linux-modules@archiver.kernel.org>; Fri, 11 Oct 2019 14:24:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1570803874;
+	bh=QAb4bxoTz2iQy8IO0iLYwBX2ij2Bqz40OXibaGp0LAE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=KtuHL22eMed2bkNgAZnN07n2FYw9vJvkFgt3x0IDKOp5kkBTNNAFkdWoPrwA4111C
+	 9ngd9YK+Ivh9/oYqBDknMtxlHPCAI5vlrTSMWOjWnKYKLvZ3ddcH5hp95vALLI8baQ
+	 5iPplKisWFc1zapelVwsA1RYQ4B2p/RwY2Z73rjw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727470AbfJKIUL (ORCPT
+        id S1728179AbfJKOYd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 11 Oct 2019 04:20:11 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:45620 "EHLO mx1.redhat.com"
+        Fri, 11 Oct 2019 10:24:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36378 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727440AbfJKIUL (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 11 Oct 2019 04:20:11 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1728068AbfJKOYd (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Fri, 11 Oct 2019 10:24:33 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id DA4073097032;
-        Fri, 11 Oct 2019 08:20:10 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.43.2.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 372D060623;
-        Fri, 11 Oct 2019 08:20:10 +0000 (UTC)
-From:   Alexey Gladkov <gladkov.alexey@gmail.com>
-To:     linux-modules@vger.kernel.org
-Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH v1 4/4] modinfo: Show information about built-in modules
-Date:   Fri, 11 Oct 2019 10:19:56 +0200
-Message-Id: <20191011081956.4127892-5-gladkov.alexey@gmail.com>
-In-Reply-To: <20191011081956.4127892-1-gladkov.alexey@gmail.com>
-References: <20191011081956.4127892-1-gladkov.alexey@gmail.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id 97B4F206A1;
+        Fri, 11 Oct 2019 14:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570803872;
+        bh=QAb4bxoTz2iQy8IO0iLYwBX2ij2Bqz40OXibaGp0LAE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uiM7sMCFSjxUZ8NgAbCBCUdtgurhfH0Ka5EmsYcs/zeD7OGnInylw6oUN60nffJ1n
+         0FqG46kIjiBOagecYOUMvejBlvompnZuw6xAu4X+92OWzdCnyhWPNa29+nFj5+MbeD
+         2AaDOlzJArudhaSe7jQZKduYIke8HXwRBQrp4ET8=
+Date:   Fri, 11 Oct 2019 15:24:27 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Jessica Yu <jeyu@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Martijn Coenen <maco@android.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Shaun Ruffell <sruffell@sruffell.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH 1/4] modpost: delegate updating namespaces to separate
+ function
+Message-ID: <20191011142426.vwfhw4dtyy4nfzkv@willie-the-truck>
+References: <20191010151443.7399-1-maennich@google.com>
+ <20191010151443.7399-2-maennich@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Fri, 11 Oct 2019 08:20:10 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191010151443.7399-2-maennich@google.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Signed-off-by: Alexey Gladkov <gladkov.alexey@gmail.com>
----
- libkmod/libkmod-builtin.c |  2 +-
- libkmod/libkmod-module.c  | 23 ++++++++++++++++-------
- tools/modinfo.c           | 39 +++++++++++++++++++++------------------
- 3 files changed, 38 insertions(+), 26 deletions(-)
+On Thu, Oct 10, 2019 at 04:14:40PM +0100, Matthias Maennich wrote:
+> Let the function 'sym_update_namespace' take care of updating the
+> namespace for a symbol. While this currently only replaces one single
+> location where namespaces are updated, in a following patch, this
+> function will get more call sites.
+> 
+> The function signature is intentionally close to sym_update_crc and
+> taking the name by char* seems like unnecessary work as the symbol has
+> to be looked up again. In a later patch of this series, this concern
+> will be addressed.
+> 
+> This function ensures that symbol::namespace is either NULL or has a
+> valid non-empty value. Previously, the empty string was considered 'no
+> namespace' as well and this lead to confusion.
+> 
+> Signed-off-by: Matthias Maennich <maennich@google.com>
+> ---
+>  scripts/mod/modpost.c | 21 ++++++++++++++++++---
+>  1 file changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 4d2cdb4d71e3..9f5dcdff4d2f 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -362,6 +362,22 @@ static char *sym_extract_namespace(const char **symname)
+>  	return namespace;
+>  }
+>  
+> +static void sym_update_namespace(const char *symname, const char *namespace)
+> +{
+> +       struct symbol *s = find_symbol(symname);
+> +       /* That symbol should have been created earlier and thus this is
+> +        * actually an assertion. */
+> +       if (!s) {
+> +               merror("Could not update namespace(%s) for symbol %s\n",
+> +                      namespace, symname);
+> +               return;
+> +       }
+> +
+> +       free(s->namespace);
+> +       s->namespace =
+> +	       namespace && namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
+> +}
 
-diff --git a/libkmod/libkmod-builtin.c b/libkmod/libkmod-builtin.c
-index 9da0010..1c16275 100644
---- a/libkmod/libkmod-builtin.c
-+++ b/libkmod/libkmod-builtin.c
-@@ -162,7 +162,7 @@ int kmod_builtin_get_modinfo(struct kmod_ctx *ctx, const char *modname,
- 	iter = kmod_builtin_iter_new(ctx);
- 
- 	if (!iter)
--		return -1;
-+		return -errno;
- 
- 	modlen = strlen(modname);
- 
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 0754ad5..ed82dcb 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -2286,13 +2286,22 @@ KMOD_EXPORT int kmod_module_get_info(const struct kmod_module *mod, struct kmod_
- 
- 	assert(*list == NULL);
- 
--	elf = kmod_module_get_elf(mod);
--	if (elf == NULL)
--		return -errno;
-+	/* remove const: this can only change internal state */
-+	if (kmod_module_is_builtin((struct kmod_module *)mod)) {
-+		count = kmod_builtin_get_modinfo(mod->ctx,
-+						kmod_module_get_name(mod),
-+						&strings);
-+		if (count < 0)
-+			return count;
-+	} else {
-+		elf = kmod_module_get_elf(mod);
-+		if (elf == NULL)
-+			return -errno;
- 
--	count = kmod_elf_get_strings(elf, ".modinfo", &strings);
--	if (count < 0)
--		return count;
-+		count = kmod_elf_get_strings(elf, ".modinfo", &strings);
-+		if (count < 0)
-+			return count;
-+	}
- 
- 	for (i = 0; i < count; i++) {
- 		struct kmod_list *n;
-@@ -2316,7 +2325,7 @@ KMOD_EXPORT int kmod_module_get_info(const struct kmod_module *mod, struct kmod_
- 			goto list_error;
- 	}
- 
--	if (kmod_module_signature_info(mod->file, &sig_info)) {
-+	if (mod->file && kmod_module_signature_info(mod->file, &sig_info)) {
- 		struct kmod_list *n;
- 
- 		n = kmod_module_info_append(list, "sig_id", strlen("sig_id"),
-diff --git a/tools/modinfo.c b/tools/modinfo.c
-index 86ac04b..0231bb0 100644
---- a/tools/modinfo.c
-+++ b/tools/modinfo.c
-@@ -172,18 +172,33 @@ static int modinfo_do(struct kmod_module *mod)
- {
- 	struct kmod_list *l, *list = NULL;
- 	struct param *params = NULL;
--	int err;
-+	int err, is_builtin;
-+	const char *filename = kmod_module_get_path(mod);
-+
-+	is_builtin = (filename == NULL);
-+
-+	if (is_builtin) {
-+		printf("%-16s%s%c", "name:", kmod_module_get_name(mod), separator);
-+		filename = "(builtin)";
-+	}
- 
- 	if (field != NULL && streq(field, "filename")) {
--		printf("%s%c", kmod_module_get_path(mod), separator);
-+		printf("%s%c", filename, separator);
- 		return 0;
- 	} else if (field == NULL) {
- 		printf("%-16s%s%c", "filename:",
--		       kmod_module_get_path(mod), separator);
-+		       filename, separator);
- 	}
- 
- 	err = kmod_module_get_info(mod, &list);
- 	if (err < 0) {
-+		if (is_builtin && err == -ENOENT) {
-+			/*
-+			 * This is an old kernel that does not have a file
-+			 * with information about built-in modules.
-+			 */
-+			return 0;
-+		}
- 		ERR("could not get modinfo from '%s': %s\n",
- 			kmod_module_get_name(mod), strerror(-err));
- 		return err;
-@@ -276,7 +291,7 @@ static int modinfo_path_do(struct kmod_ctx *ctx, const char *path)
- 
- static int modinfo_alias_do(struct kmod_ctx *ctx, const char *alias)
- {
--	struct kmod_list *l, *filtered, *list = NULL;
-+	struct kmod_list *l, *list = NULL;
- 	int err = kmod_module_new_from_lookup(ctx, alias, &list);
- 	if (err < 0) {
- 		ERR("Module alias %s not found.\n", alias);
-@@ -288,26 +303,14 @@ static int modinfo_alias_do(struct kmod_ctx *ctx, const char *alias)
- 		return -ENOENT;
- 	}
- 
--	err = kmod_module_apply_filter(ctx, KMOD_FILTER_BUILTIN, list, &filtered);
--	kmod_module_unref_list(list);
--	if (err < 0) {
--		ERR("Failed to filter list: %m\n");
--		return err;
--	}
--
--	if (filtered == NULL) {
--		ERR("Module %s not found.\n", alias);
--		return -ENOENT;
--	}
--
--	kmod_list_foreach(l, filtered) {
-+	kmod_list_foreach(l, list) {
- 		struct kmod_module *mod = kmod_module_get_module(l);
- 		int r = modinfo_do(mod);
- 		kmod_module_unref(mod);
- 		if (r < 0)
- 			err = r;
- 	}
--	kmod_module_unref_list(filtered);
-+	kmod_module_unref_list(list);
- 	return err;
- }
- 
--- 
-2.21.0
+You made me look up C operator precedence again, but it's fine so:
 
+Acked-by: Will Deacon <will@kernel.org>
+
+Will
