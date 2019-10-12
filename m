@@ -2,68 +2,64 @@ Return-Path: <SRS0=9Eg2=YF=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EC33C47404
-	for <linux-modules@archiver.kernel.org>; Sat, 12 Oct 2019 03:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1775C4360C
+	for <linux-modules@archiver.kernel.org>; Sat, 12 Oct 2019 03:36:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75EB521850
-	for <linux-modules@archiver.kernel.org>; Sat, 12 Oct 2019 03:24:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9141821835
+	for <linux-modules@archiver.kernel.org>; Sat, 12 Oct 2019 03:36:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="jBGzyU5M"
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="ErnqTykz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726751AbfJLDYf (ORCPT
+        id S1727115AbfJLDgw (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 11 Oct 2019 23:24:35 -0400
-Received: from condef-02.nifty.com ([202.248.20.67]:22788 "EHLO
-        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726269AbfJLDYf (ORCPT
+        Fri, 11 Oct 2019 23:36:52 -0400
+Received: from conssluserg-03.nifty.com ([210.131.2.82]:25066 "EHLO
+        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726839AbfJLDgv (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 11 Oct 2019 23:24:35 -0400
-Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-02.nifty.com with ESMTP id x9C3Konj010649
-        for <linux-modules@vger.kernel.org>; Sat, 12 Oct 2019 12:20:50 +0900
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id x9C3KZvC029353;
-        Sat, 12 Oct 2019 12:20:35 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com x9C3KZvC029353
+        Fri, 11 Oct 2019 23:36:51 -0400
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id x9C3aOfV007471;
+        Sat, 12 Oct 2019 12:36:24 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com x9C3aOfV007471
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1570850436;
-        bh=fVr6myVWeNkwM1bzUYkAV3KR6w6/G/BTVwiRy1YKeFE=;
+        s=dec2015msa; t=1570851385;
+        bh=WHihSG+Qg/s4+X69FAzzLRuZct3/u+AWzgWTVo2ivT0=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jBGzyU5Mq7JX//jH7mWGJu9NdKguZyZXnVGNj3iCJS5PRSD3xLkJRY0TGS4Dk2k0G
-         PJQ7rHVBvJb3mZkIbGIpgatVzi0UNBGZW3Oa2TAi1tVvoegSiHlWCBzOUQtFg/wGSW
-         9t9f3+QGAgRYXfE3wrIe0ip/p3bytfQVfw/nQvT4u3bYR4T8Vk6zvfIXG7KTzYmZfD
-         3QERovRA/lXLHDqYZCmp4F2raHSRboVWEeLWepwohRaE56ray+aQB3i17uJAu9wpXj
-         wiWyYHDDm4LRjw50yOhTz56hoox7MNupUsWV4924Ir95zuqk9ECeRDvXtUz0+XBKNc
-         FVtnRymLipdlg==
-X-Nifty-SrcIP: [209.85.217.42]
-Received: by mail-vs1-f42.google.com with SMTP id z14so7481125vsz.13;
-        Fri, 11 Oct 2019 20:20:35 -0700 (PDT)
-X-Gm-Message-State: APjAAAW1xwzad01EzQvNacNbHmX0+XbtwRiUi9FQqHD8/aksLmU/mbFD
-        epPPHsweGjzTP0pJT6Z3vEiwTkxpHfuWt2qS3yk=
-X-Google-Smtp-Source: APXvYqxNrd3wl6DgsTBqbsxBQYF+1gG7D7r2FAwVB2ThW11Jz8W/5aeuJmNk7KKiWAHe87RF9lJgtuaoBtTuQKOpfXE=
-X-Received: by 2002:a67:e354:: with SMTP id s20mr11109571vsm.54.1570850434646;
- Fri, 11 Oct 2019 20:20:34 -0700 (PDT)
+        b=ErnqTykzKfuCwIT+Wdxq5pAE7l5mvAS6+OB6vHyix1pHlxH4gT/rAqjtjU4Kl2hNQ
+         F/3JkvxXfq+b+Ad0vbBqN+hQCuFRL8TWLN4uwo5uR6a5HiPTPUYspZ9rEOWnh2NSWF
+         RfSK+mmqfZxS6oD7UCTiBWfbfocvDOeCHCTsUxrAeM2/uQTtg1Pb+4MdYyOgLPqBEa
+         WiCUUFiDl1kVJp5xXLc3bGy9C9x2q2sXhEOi76Q8bbLVr60AtrXptiHqLrLWbAe7y+
+         hOXCuZrx/TBLpdbaKWfW6moeoEz0AiUU4hrlBxSvMbSTwAdyo5nwHhjgKs+ADi5BAD
+         Zl/nMR+rBDq5w==
+X-Nifty-SrcIP: [209.85.217.44]
+Received: by mail-vs1-f44.google.com with SMTP id b1so7501644vsr.10;
+        Fri, 11 Oct 2019 20:36:24 -0700 (PDT)
+X-Gm-Message-State: APjAAAXFhH8oVcJ+9nSulKsLtt5AiYpP+d/Y3az16Fy2/2S2e/vzltv7
+        tOVhd92nMhQealOHv0I1cxq3mdC6PC2SrQCVxDw=
+X-Google-Smtp-Source: APXvYqztUPVN8tx/H7lHgyHEW08Jj11zV50ycIafHCCCTjr6xDT5/okgNPkigN96OHkslfQeGmQ2988j4adX/uvCMHQ=
+X-Received: by 2002:a67:ff86:: with SMTP id v6mr11018051vsq.181.1570851383515;
+ Fri, 11 Oct 2019 20:36:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191010151443.7399-1-maennich@google.com> <20191010151443.7399-2-maennich@google.com>
- <20191011153253.GB1283883@kroah.com>
-In-Reply-To: <20191011153253.GB1283883@kroah.com>
+References: <20191010151443.7399-1-maennich@google.com> <20191010151443.7399-4-maennich@google.com>
+In-Reply-To: <20191010151443.7399-4-maennich@google.com>
 From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Sat, 12 Oct 2019 12:19:58 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQbgtnP_P6aZEO7bHNL+w641ED+19TXCXKkU=dE+gyBGQ@mail.gmail.com>
-Message-ID: <CAK7LNAQbgtnP_P6aZEO7bHNL+w641ED+19TXCXKkU=dE+gyBGQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] modpost: delegate updating namespaces to separate function
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Matthias Maennich <maennich@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Date:   Sat, 12 Oct 2019 12:35:47 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASMn9GY2dzVvouDW5MfqR3M1pEkWM73quh1HKb_XW1L4g@mail.gmail.com>
+Message-ID: <CAK7LNASMn9GY2dzVvouDW5MfqR3M1pEkWM73quh1HKb_XW1L4g@mail.gmail.com>
+Subject: Re: [PATCH 3/4] symbol namespaces: revert to previous __ksymtab name scheme
+To:     Matthias Maennich <maennich@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "Cc: Android Kernel" <kernel-team@android.com>,
         Jessica Yu <jeyu@kernel.org>,
         Martijn Coenen <maco@android.com>,
         Lucas De Marchi <lucas.de.marchi@gmail.com>,
         Shaun Ruffell <sruffell@sruffell.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Will Deacon <will@kernel.org>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         linux-modules <linux-modules@vger.kernel.org>
@@ -72,71 +68,57 @@ Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Oct 12, 2019 at 12:33 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Fri, Oct 11, 2019 at 12:16 AM Matthias Maennich <maennich@google.com> wrote:
 >
-> On Thu, Oct 10, 2019 at 04:14:40PM +0100, Matthias Maennich wrote:
-> > Let the function 'sym_update_namespace' take care of updating the
-> > namespace for a symbol. While this currently only replaces one single
-> > location where namespaces are updated, in a following patch, this
-> > function will get more call sites.
-> >
-> > The function signature is intentionally close to sym_update_crc and
-> > taking the name by char* seems like unnecessary work as the symbol has
-> > to be looked up again. In a later patch of this series, this concern
-> > will be addressed.
-> >
-> > This function ensures that symbol::namespace is either NULL or has a
-> > valid non-empty value. Previously, the empty string was considered 'no
-> > namespace' as well and this lead to confusion.
-> >
-> > Signed-off-by: Matthias Maennich <maennich@google.com>
-> > ---
-> >  scripts/mod/modpost.c | 21 ++++++++++++++++++---
-> >  1 file changed, 18 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index 4d2cdb4d71e3..9f5dcdff4d2f 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -362,6 +362,22 @@ static char *sym_extract_namespace(const char **symname)
-> >       return namespace;
-> >  }
-> >
-> > +static void sym_update_namespace(const char *symname, const char *namespace)
-> > +{
-> > +       struct symbol *s = find_symbol(symname);
-> > +       /* That symbol should have been created earlier and thus this is
-> > +        * actually an assertion. */
+> The introduction Symbol Namespaces changed the naming schema of the
+> __ksymtab entries from __kysmtab__symbol to __ksymtab_NAMESPACE.symbol.
 >
-> Do we care about checkpatch issues in tools?
-
-Personally, I do.
-
-
+> That caused some breakages in tools that depend on the name layout in
+> either the binaries(vmlinux,*.ko) or in System.map. E.g. kmod's depmod
+> would not be able to read System.map without a patch to support symbol
+> namespaces. A warning reported by depmod for namespaced symbols would
+> look like
 >
-> If so, you need a blank line before the comment :)
+>   depmod: WARNING: [...]/uas.ko needs unknown symbol usb_stor_adjust_quirks
+>
+> In order to address this issue, revert to the original naming scheme and
+> rather read the __kstrtabns_<symbol> entries and their corresponding
+> values from __ksymtab_strings to update the namespace values for
+> symbols. After having read all symbols and handled them in
+> handle_modversions(), the symbols are created. In a second pass, read
+> the __kstrtabns_ entries and update the namespaces accordingly.
+>
+> Suggested-by: Jessica Yu <jeyu@kernel.org>
+> Fixes: 8651ec01daed ("module: add support for symbol namespaces.")
+> Signed-off-by: Matthias Maennich <maennich@google.com>
 
-One more minor issue, the block comment style is not correct.
-Please do like this:
 
-/*
- * Blah Blah ...
- * Blah Blha ...
- */
+According to https://lore.kernel.org/patchwork/patch/1135222/
+was this problem reported by Stefan?
+Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-With those addressed,
+
+BTW, I initially suggested this way of fixing.
+Suggested-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+
+
+
+> @@ -74,9 +72,8 @@ struct kernel_symbol {
+>         int namespace_offset;
+>  };
+>  #else
+> -#define __KSYMTAB_ENTRY_NS(sym, sec, ns)                               \
+> -       static const struct kernel_symbol __ksymtab_##sym##__##ns       \
+> -       asm("__ksymtab_" #ns NS_SEPARATOR #sym)                         \
+
+
+For consistency, you could also delete   asm("__ksymtab_" #sym)
+by this patch instead of by 4/4.
+
+Not a big deal, though.
+
 
 Reviewed-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-
-
-
->
-> Anyway, not a big deal
->
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-
 
 
 
