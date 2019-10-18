@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9CEDCA9EA1
-	for <linux-modules@archiver.kernel.org>; Fri, 18 Oct 2019 09:32:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 486E1CA9EA1
+	for <linux-modules@archiver.kernel.org>; Fri, 18 Oct 2019 09:32:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B30F0222C6
-	for <linux-modules@archiver.kernel.org>; Fri, 18 Oct 2019 09:32:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1834C222C5
+	for <linux-modules@archiver.kernel.org>; Fri, 18 Oct 2019 09:32:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ua0IlvQY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UuMXbS1V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395294AbfJRJcC (ORCPT
+        id S2409782AbfJRJcJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 18 Oct 2019 05:32:02 -0400
-Received: from mail-wr1-f74.google.com ([209.85.221.74]:35241 "EHLO
-        mail-wr1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392017AbfJRJcB (ORCPT
+        Fri, 18 Oct 2019 05:32:09 -0400
+Received: from mail-vs1-f73.google.com ([209.85.217.73]:43770 "EHLO
+        mail-vs1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2409752AbfJRJcJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 18 Oct 2019 05:32:01 -0400
-Received: by mail-wr1-f74.google.com with SMTP id 7so2351741wrl.2
-        for <linux-modules@vger.kernel.org>; Fri, 18 Oct 2019 02:32:00 -0700 (PDT)
+        Fri, 18 Oct 2019 05:32:09 -0400
+Received: by mail-vs1-f73.google.com with SMTP id x2so1211535vse.10
+        for <linux-modules@vger.kernel.org>; Fri, 18 Oct 2019 02:32:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=VWGgVtR20by6j5rWakK1xLjIPHuT7TbYDPbUDce3jrs=;
-        b=Ua0IlvQYhxOOW8wlwRn+1w0mDAE59j1sHlig/IMGI74mwajHhYIjQ9GKXDeOOyTgSZ
-         ZGl7isYwxCBZtNDYo1vf+29g/OCYPgiD98wV9UE0KnFfyXsQoX6Zbt8Ak9nnFy+/X4AH
-         CPZMiK3s2JYPYvDDU5WrDeu0S0G2hho5YKlZC9/vN9X50jfxqM+EmkZ9Erfzz1GjuVWg
-         59KXAHzuI2yp1hSPgTO6MZGoZjfN2N48kYPenYgZr1Thv0lsOfs372ZBQKuLTpc9NyDl
-         wajPxgxdjn1brnWwhIHvTcQyQxzG6fYrKMqKr7i0VfHVi3NfZXaxG8Xi3IFY+uG3O6Qn
-         ADIQ==
+        bh=w96IBFa+LbhPv1tMNCO5lO3g8Rc4+dCAyv83kBM1KbQ=;
+        b=UuMXbS1VDXSrzg400/ZlVcUiZJtpa/YrjX2duCZgzlqBt37ATXDNGUA5Lomr2S98Zo
+         gb89rsts8JNDeagiZNGwvA4LAFHapDI3AgZZAmjI9iKlB6pyzsvupyZySFMKdsIS/NPn
+         QUflCT1aK2m7QD1JrVHDnJu5vafPXa78Qpt3/l9vgnkMPBXRGxIjOpJGiUV7JuUvGyiL
+         1AwhI97fb6ohGuPxupLhHuFdjSYojeD1VNYTT5qZ/MJoy8TBwDXPWhS4UGC9lqjgq7Qa
+         XVNJBhA9udIzTffkcorFGOIqcVKYHZwE4RWpMf9l8oEfVW8wczIZ0outmdoG9aU8++NR
+         HduA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=VWGgVtR20by6j5rWakK1xLjIPHuT7TbYDPbUDce3jrs=;
-        b=ODB6S9/wGGcIw9GAHAThUQwLYdpyGvlWKbf8oTy+k9q0X1p/xIZ50DMKrnakdUU6c8
-         3PDZxK/e4j1PdgOa6Au9XamoD5MXMDMjJP9+T+DFyPjuDuv5LQZ5hpQn12KkJH/R7v/E
-         94pQoqBBO9ynPNNcamMKw6LxVSfmZtP7Np/3SA7PeY/4/5PjldKWdS16LkSHlAskn0D+
-         kKnuC6YDmDDxKW/x3UvnZeWBxcMLqpTvwSHieytpVb61KGseGuonDCG3cg1IiDOTeH04
-         cKEZG2eYdwVy+sKhyNHqfkwwZqp8dqGmVtOV0NtTls8A2hsSa6QyKMRQxlguk/YptLoJ
-         Wf0A==
-X-Gm-Message-State: APjAAAVaEaIk35MfzvJWwSZeQlEZw+xqDRJ/kiF8WNy6kwYYBwEVPTgu
-        eAb8llIHyfd3KIvbQMwTrhJa1Z9adHUwng==
-X-Google-Smtp-Source: APXvYqys3kM1GQPDID5IamEIJmq2t+9rGBLKuJ1Nxz6Q9/oGyOyyywzsfxCxcMrStAkX4m3Nn3FWNdhhUwceLA==
-X-Received: by 2002:adf:e2cc:: with SMTP id d12mr7076584wrj.345.1571391119582;
- Fri, 18 Oct 2019 02:31:59 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 10:31:40 +0100
+        bh=w96IBFa+LbhPv1tMNCO5lO3g8Rc4+dCAyv83kBM1KbQ=;
+        b=i9DNIGjzqQ/2ibjLEPpjwGp0NVHWoZT/wmYnh4tH3EP9LlikvGR5E0/n4WD+nCXb+B
+         Zn1yPRDxOw37sN0umj835GZ6aJX/OAfd2jve4l4zUIIadWCexECLkW5IRywFi1Isb6rk
+         f9jMA18prbsnm3muZGgcADSzWUJVJrE90PqnTUp5LYArxW+x9ls6V+N/pyMiRL/xVDIN
+         Lj+061PvQxJtcjG7amZr6t5IOLPXf2+5uGoxQDZ7YprcsJJGthym2lTEgwDnxQmEfGT5
+         YAViSeqUz25FrgVGF8/SwhkDitnMkt5DJ1jWfW4aVZJwcp09h8J5yfLM3WyTW/G9drLJ
+         qC/A==
+X-Gm-Message-State: APjAAAUwZ/lvVo7S3syZk2VbDq1Hn5GdIIqmnmaQT+C8Uf1UY92va6kL
+        qVFLN6YfVzQ2rQITPQmgiyK5CHs0pedcMA==
+X-Google-Smtp-Source: APXvYqx0I59HdbOYdXZ8mLY4td8zpIb3GxCjwY5MOrKW1sOkSQ0BwBPKSyMC8VAXMcnGQ4CsxgRvSBIki69F7A==
+X-Received: by 2002:a67:c50d:: with SMTP id e13mr4853730vsk.88.1571391125373;
+ Fri, 18 Oct 2019 02:32:05 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 10:31:42 +0100
 In-Reply-To: <20191018093143.15997-1-maennich@google.com>
-Message-Id: <20191018093143.15997-2-maennich@google.com>
+Message-Id: <20191018093143.15997-4-maennich@google.com>
 Mime-Version: 1.0
 References: <20191010151443.7399-1-maennich@google.com> <20191018093143.15997-1-maennich@google.com>
 X-Mailer: git-send-email 2.23.0.866.gb869b98d4c-goog
-Subject: [PATCH v2 1/4] modpost: delegate updating namespaces to separate function
+Subject: [PATCH v2 3/4] symbol namespaces: revert to previous __ksymtab name scheme
 From:   Matthias Maennich <maennich@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     kernel-team@android.com, maennich@google.com,
@@ -70,83 +70,185 @@ Cc:     kernel-team@android.com, maennich@google.com,
         Shaun Ruffell <sruffell@sruffell.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Will Deacon <will@kernel.org>, linux-kbuild@vger.kernel.org,
-        linux-modules@vger.kernel.org
+        linux-modules@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Let the function 'sym_update_namespace' take care of updating the
-namespace for a symbol. While this currently only replaces one single
-location where namespaces are updated, in a following patch, this
-function will get more call sites.
+The introduction of Symbol Namespaces changed the naming schema of the
+__ksymtab entries from __kysmtab__symbol to __ksymtab_NAMESPACE.symbol.
 
-The function signature is intentionally close to sym_update_crc and
-taking the name by char* seems like unnecessary work as the symbol has
-to be looked up again. In a later patch of this series, this concern
-will be addressed.
+That caused some breakages in tools that depend on the name layout in
+either the binaries(vmlinux,*.ko) or in System.map. E.g. kmod's depmod
+would not be able to read System.map without a patch to support symbol
+namespaces. A warning reported by depmod for namespaced symbols would
+look like
 
-This function ensures that symbol::namespace is either NULL or has a
-valid non-empty value. Previously, the empty string was considered 'no
-namespace' as well and this lead to confusion.
+  depmod: WARNING: [...]/uas.ko needs unknown symbol usb_stor_adjust_quirks
 
+In order to address this issue, revert to the original naming scheme and
+rather read the __kstrtabns_<symbol> entries and their corresponding
+values from __ksymtab_strings to update the namespace values for
+symbols. After having read all symbols and handled them in
+handle_modversions(), the symbols are created. In a second pass, read
+the __kstrtabns_ entries and update the namespaces accordingly.
+
+Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+Suggested-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Fixes: 8651ec01daed ("module: add support for symbol namespaces.")
 Acked-by: Will Deacon <will@kernel.org>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 Signed-off-by: Matthias Maennich <maennich@google.com>
 ---
- scripts/mod/modpost.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ include/linux/export.h | 14 +++++---------
+ scripts/mod/modpost.c  | 33 ++++++++++++++++++---------------
+ scripts/mod/modpost.h  |  1 +
+ 3 files changed, 24 insertions(+), 24 deletions(-)
 
+diff --git a/include/linux/export.h b/include/linux/export.h
+index 621158ecd2e2..941d075f03d6 100644
+--- a/include/linux/export.h
++++ b/include/linux/export.h
+@@ -18,8 +18,6 @@ extern struct module __this_module;
+ #define THIS_MODULE ((struct module *)0)
+ #endif
+ 
+-#define NS_SEPARATOR "."
+-
+ #ifdef CONFIG_MODVERSIONS
+ /* Mark the CRC weak since genksyms apparently decides not to
+  * generate a checksums for some symbols */
+@@ -48,11 +46,11 @@ extern struct module __this_module;
+  * absolute relocations that require runtime processing on relocatable
+  * kernels.
+  */
+-#define __KSYMTAB_ENTRY_NS(sym, sec, ns)				\
++#define __KSYMTAB_ENTRY_NS(sym, sec)					\
+ 	__ADDRESSABLE(sym)						\
+ 	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
+ 	    "	.balign	4					\n"	\
+-	    "__ksymtab_" #ns NS_SEPARATOR #sym ":		\n"	\
++	    "__ksymtab_" #sym ":				\n"	\
+ 	    "	.long	" #sym "- .				\n"	\
+ 	    "	.long	__kstrtab_" #sym "- .			\n"	\
+ 	    "	.long	__kstrtabns_" #sym "- .			\n"	\
+@@ -74,16 +72,14 @@ struct kernel_symbol {
+ 	int namespace_offset;
+ };
+ #else
+-#define __KSYMTAB_ENTRY_NS(sym, sec, ns)				\
+-	static const struct kernel_symbol __ksymtab_##sym##__##ns	\
+-	asm("__ksymtab_" #ns NS_SEPARATOR #sym)				\
++#define __KSYMTAB_ENTRY_NS(sym, sec)					\
++	static const struct kernel_symbol __ksymtab_##sym		\
+ 	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
+ 	__aligned(sizeof(void *))					\
+ 	= { (unsigned long)&sym, __kstrtab_##sym, __kstrtabns_##sym }
+ 
+ #define __KSYMTAB_ENTRY(sym, sec)					\
+ 	static const struct kernel_symbol __ksymtab_##sym		\
+-	asm("__ksymtab_" #sym)						\
+ 	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
+ 	__aligned(sizeof(void *))					\
+ 	= { (unsigned long)&sym, __kstrtab_##sym, NULL }
+@@ -115,7 +111,7 @@ struct kernel_symbol {
+ 	static const char __kstrtabns_##sym[]				\
+ 	__attribute__((section("__ksymtab_strings"), used, aligned(1)))	\
+ 	= #ns;								\
+-	__KSYMTAB_ENTRY_NS(sym, sec, ns)
++	__KSYMTAB_ENTRY_NS(sym, sec)
+ 
+ #define ___EXPORT_SYMBOL(sym, sec)					\
+ 	___export_symbol_common(sym, sec);				\
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 4d2cdb4d71e3..dbfa3997136b 100644
+index 95b1eac656aa..0bf7eab80d9f 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -362,6 +362,25 @@ static char *sym_extract_namespace(const char **symname)
- 	return namespace;
+@@ -348,18 +348,11 @@ static enum export export_from_sec(struct elf_info *elf, unsigned int sec)
+ 		return export_unknown;
  }
  
-+static void sym_update_namespace(const char *symname, const char *namespace)
-+{
-+	struct symbol *s = find_symbol(symname);
+-static char *sym_extract_namespace(const char **symname)
++static const char *namespace_from_kstrtabns(struct elf_info *info,
++					    Elf_Sym *kstrtabns)
+ {
+-	char *namespace = NULL;
+-	char *ns_separator;
+-
+-	ns_separator = strchr(*symname, '.');
+-	if (ns_separator) {
+-		namespace = NOFAIL(strndup(*symname, ns_separator - *symname));
+-		*symname = ns_separator + 1;
+-	}
+-
+-	return namespace;
++	char *value = info->ksymtab_strings + kstrtabns->st_value;
++	return value[0] ? value : NULL;
+ }
+ 
+ static void sym_update_namespace(const char *symname, const char *namespace)
+@@ -600,6 +593,10 @@ static int parse_elf(struct elf_info *info, const char *filename)
+ 			info->export_unused_gpl_sec = i;
+ 		else if (strcmp(secname, "__ksymtab_gpl_future") == 0)
+ 			info->export_gpl_future_sec = i;
++		else if (strcmp(secname, "__ksymtab_strings") == 0)
++			info->ksymtab_strings = (void *)hdr +
++						sechdrs[i].sh_offset -
++						sechdrs[i].sh_addr;
+ 
+ 		if (sechdrs[i].sh_type == SHT_SYMTAB) {
+ 			unsigned int sh_link_idx;
+@@ -689,7 +686,6 @@ static void handle_modversions(struct module *mod, struct elf_info *info,
+ 	enum export export;
+ 	bool is_crc = false;
+ 	const char *name;
+-	char *namespace;
+ 
+ 	if ((!is_vmlinux(mod->name) || mod->is_dot_o) &&
+ 	    strstarts(symname, "__ksymtab"))
+@@ -762,10 +758,7 @@ static void handle_modversions(struct module *mod, struct elf_info *info,
+ 		/* All exported symbols */
+ 		if (strstarts(symname, "__ksymtab_")) {
+ 			name = symname + strlen("__ksymtab_");
+-			namespace = sym_extract_namespace(&name);
+ 			sym_add_exported(name, mod, export);
+-			sym_update_namespace(name, namespace);
+-			free(namespace);
+ 		}
+ 		if (strcmp(symname, "init_module") == 0)
+ 			mod->has_init = 1;
+@@ -2061,6 +2054,16 @@ static void read_symbols(const char *modname)
+ 		handle_moddevtable(mod, &info, sym, symname);
+ 	}
+ 
++	/* Apply symbol namespaces from __kstrtabns_<symbol> entries. */
++	for (sym = info.symtab_start; sym < info.symtab_stop; sym++) {
++		symname = remove_dot(info.strtab + sym->st_name);
 +
-+	/*
-+	 * That symbol should have been created earlier and thus this is
-+	 * actually an assertion.
-+	 */
-+	if (!s) {
-+		merror("Could not update namespace(%s) for symbol %s\n",
-+		       namespace, symname);
-+		return;
++		if (strstarts(symname, "__kstrtabns_"))
++			sym_update_namespace(symname + strlen("__kstrtabns_"),
++					     namespace_from_kstrtabns(&info,
++								      sym));
 +	}
 +
-+	free(s->namespace);
-+	s->namespace =
-+		namespace && namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
-+}
-+
- /**
-  * Add an exported symbol - it may have already been added without a
-  * CRC, in this case just update the CRC
-@@ -383,8 +402,7 @@ static struct symbol *sym_add_exported(const char *name, const char *namespace,
- 			s->module = mod;
- 		}
- 	}
--	free(s->namespace);
--	s->namespace = namespace ? strdup(namespace) : NULL;
-+	sym_update_namespace(name, namespace);
- 	s->preloaded = 0;
- 	s->vmlinux   = is_vmlinux(mod->name);
- 	s->kernel    = 0;
-@@ -2196,7 +2214,7 @@ static int check_exports(struct module *mod)
- 		else
- 			basename = mod->name;
- 
--		if (exp->namespace && exp->namespace[0]) {
-+		if (exp->namespace) {
- 			add_namespace(&mod->required_namespaces,
- 				      exp->namespace);
- 
+ 	// check for static EXPORT_SYMBOL_* functions && global vars
+ 	for (sym = info.symtab_start; sym < info.symtab_stop; sym++) {
+ 		unsigned char bind = ELF_ST_BIND(sym->st_info);
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index 92a926d375d2..ad271bc6c313 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -143,6 +143,7 @@ struct elf_info {
+ 	Elf_Section  export_gpl_sec;
+ 	Elf_Section  export_unused_gpl_sec;
+ 	Elf_Section  export_gpl_future_sec;
++	char	     *ksymtab_strings;
+ 	char         *strtab;
+ 	char	     *modinfo;
+ 	unsigned int modinfo_len;
 -- 
 2.23.0.866.gb869b98d4c-goog
 
