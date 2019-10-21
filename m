@@ -1,69 +1,48 @@
-Return-Path: <SRS0=u9gr=YL=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=qOan=YO=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9247DCA9EA0
-	for <linux-modules@archiver.kernel.org>; Fri, 18 Oct 2019 09:32:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5945ACA9EAF
+	for <linux-modules@archiver.kernel.org>; Mon, 21 Oct 2019 13:32:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 608FA222CD
-	for <linux-modules@archiver.kernel.org>; Fri, 18 Oct 2019 09:32:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Hp4pTQtB"
+	by mail.kernel.org (Postfix) with ESMTP id 2C84621783
+	for <linux-modules@archiver.kernel.org>; Mon, 21 Oct 2019 13:32:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1571664726;
+	bh=s2MUd+aoyjl0YqHLgnKz/F+K2JCRuYEwU71SYc90uQo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=LkPcfr4NxeMmAN5ajeefTimq5Mu6ZynFd8rZdOZCwOKdBTK0oLX7OgBZhaiq/MU4U
+	 js7aTZpz5rQ7QpKnnaPGdCzWneN6zwrANtNVxdzt/Tl8FuIoVTYm+RP5SFcPFAuE1/
+	 W0X6S+yVtzeethbXmVruQw0bdZ98Cp9J42RN8uzs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409766AbfJRJcF (ORCPT
+        id S1728911AbfJUNcF (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 18 Oct 2019 05:32:05 -0400
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:40428 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2409764AbfJRJcF (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 18 Oct 2019 05:32:05 -0400
-Received: by mail-vk1-f201.google.com with SMTP id 70so2137256vkc.7
-        for <linux-modules@vger.kernel.org>; Fri, 18 Oct 2019 02:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=EbDe35gaiTVD4DdjxfTK6/lBi6D37axpnOTT3faN+u8=;
-        b=Hp4pTQtB9H4RzTPhCrvqp4ZAYKpXP3AD+MX8LyGiDmbLYtie3H71Obdi2ZdPk48O/9
-         IzeOd8HzVA4+00CRvw1BKb+mEycLjYcfYT332AX/eM0g0+XWru9uSvTAg9qSk941PoBM
-         jXlrd9JWLr4741yiIyNqAPJleZLYvOJ0VkiNTOWL6Lrkm70aCX5m2NeQhVWWY2YTiBLB
-         QDfv9miNQSAuoU2jJSHcnv/10QlUf0PZCLoNrwTIfUQJOb0wpebDe4utZhurY7lcrgXI
-         Qlt+/Ef2izmFl5KH2zJqpcTxDf07SNQgsLeqpZ7AZ1QMb7ZnD04agTHs/5oJxFY1Z3D8
-         u1gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=EbDe35gaiTVD4DdjxfTK6/lBi6D37axpnOTT3faN+u8=;
-        b=L0WWHzmYyUR7mwMel9oXuq+uSRuMj4EEawQOvLDsEGuqgPhr3XI9vXQYwVkVoLooDl
-         IvUF/hmnfQIj1ORVTgOEvTtbWZ1Imc5D0Zc8/pBU4zbcR/WL1yhEL2bzBnFgba3Niiiz
-         5VoZXz52d7Pb75BpPYSseGdm8Jd+etwPmpllhESa74oCv6xAghnxElgw2cBssNgelnyJ
-         pUU0Vz12DBE0RBGAsXaRVrV4kW1Ny7kNJb2UxJJjNqiT72vfK5xT4nOvXHi2ogxLKQU4
-         7RXkKDYYSW5ps9cv6dE/RivKPYMNiNg91ME3YC2lFntLptz0Vtf6WiuzMkJljkJDxUyi
-         Xkfg==
-X-Gm-Message-State: APjAAAV9c9wwgVupsS7R8zxiCCv8VSyN84l7xQQL/jCLg1rRaiOp6l7V
-        eOsFT/IumgZvv0P5topna1xJ7Ev++oChOg==
-X-Google-Smtp-Source: APXvYqwm3JAaNGrRLhYAGqlufSc7y18VjyaCGOOtM/NFeuOAcMJCuEDGObXhxBPuIsiRjCfS+atlYIa8HihUPg==
-X-Received: by 2002:a05:6122:2bb:: with SMTP id 27mr4754455vkq.66.1571391122450;
- Fri, 18 Oct 2019 02:32:02 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 10:31:41 +0100
-In-Reply-To: <20191018093143.15997-1-maennich@google.com>
-Message-Id: <20191018093143.15997-3-maennich@google.com>
-Mime-Version: 1.0
-References: <20191010151443.7399-1-maennich@google.com> <20191018093143.15997-1-maennich@google.com>
-X-Mailer: git-send-email 2.23.0.866.gb869b98d4c-goog
-Subject: [PATCH v2 2/4] modpost: make updating the symbol namespace explicit
-From:   Matthias Maennich <maennich@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, maennich@google.com,
-        Jessica Yu <jeyu@kernel.org>,
+        Mon, 21 Oct 2019 09:32:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37892 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727322AbfJUNcF (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Mon, 21 Oct 2019 09:32:05 -0400
+Received: from linux-8ccs (ip5f5ade6e.dynamic.kabel-deutschland.de [95.90.222.110])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 58FCA20873;
+        Mon, 21 Oct 2019 13:32:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571664723;
+        bh=s2MUd+aoyjl0YqHLgnKz/F+K2JCRuYEwU71SYc90uQo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fuR0L3DL0hxl0OMguM+cHtAJRljCFNC0Te2vzLkSxdMVcJE5SG5e2nFeFjmsnuq2J
+         m737UxHqdGJTwDdH4HuwO/VZV0xP657x6LTwN3OaxvHtFzH4Bzf4rB1/jLfjGADko1
+         zGP2b549iUmHE1cAxmNNck8Wg48s58PBgUYkkQIU=
+Date:   Mon, 21 Oct 2019 15:31:57 +0200
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         Martijn Coenen <maco@android.com>,
         Lucas De Marchi <lucas.de.marchi@gmail.com>,
@@ -71,72 +50,128 @@ Cc:     kernel-team@android.com, maennich@google.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Will Deacon <will@kernel.org>, linux-kbuild@vger.kernel.org,
         linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2 0/4] export/modpost: avoid renaming __ksymtab entries
+ for symbol namespaces
+Message-ID: <20191021133157.GA21112@linux-8ccs>
+References: <20191010151443.7399-1-maennich@google.com>
+ <20191018093143.15997-1-maennich@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20191018093143.15997-1-maennich@google.com>
+X-OS:   Linux linux-8ccs 4.12.14-lp150.12.28-default x86_64
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Setting the symbol namespace of a symbol within sym_add_exported feels
-displaced and lead to issues in the current implementation of symbol
-namespaces. This patch makes updating the namespace an explicit call to
-decouple it from adding a symbol to the export list.
++++ Matthias Maennich [18/10/19 10:31 +0100]:
+>The introduction of the symbol namespace patches changed the way symbols are
+>named in the ksymtab entries. That caused userland tools to fail (such as
+>kmod's depmod). As depmod is used as part of the kernel build it was worth
+>having another look whether this name change can be avoided.
+>
+>The main purpose of this series is to restore the original ksymtab entry names.
+>For that to happen and to remove some rough edges around that, the relevant
+>parts in modpost got a small refactoring as to when and how namespaces are
+>evaluated and set in the symbol struct.
+>
+>Eventually, the namespace values can be read from __kstrtabns_ entries and
+>their corresponding __ksymtab_strings values. That removes the need to carry
+>the namespace names within the (anyway unique) symbol name entries.
+>
+>The last patch of this series is adopted from Masahiro [1]. By allowing 'no
+>namespace' to be represented as empty string, large chunks of
+>include/linux/export.h could be consolidated. Technically, this last patch is
+>not absolutely necessary to fix functionality. It addresses concerns about
+>maintainability and readability. While I strongly suggest sending all of the
+>patches for 5.4, the last one could possible deferred to the next merge window.
+>
+>This patch applies to the modules-linus [2] branch.
 
-Acked-by: Will Deacon <will@kernel.org>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-Signed-off-by: Matthias Maennich <maennich@google.com>
----
- scripts/mod/modpost.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Hi!
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index dbfa3997136b..95b1eac656aa 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -385,8 +385,8 @@ static void sym_update_namespace(const char *symname, const char *namespace)
-  * Add an exported symbol - it may have already been added without a
-  * CRC, in this case just update the CRC
-  **/
--static struct symbol *sym_add_exported(const char *name, const char *namespace,
--				       struct module *mod, enum export export)
-+static struct symbol *sym_add_exported(const char *name, struct module *mod,
-+				       enum export export)
- {
- 	struct symbol *s = find_symbol(name);
- 
-@@ -402,7 +402,6 @@ static struct symbol *sym_add_exported(const char *name, const char *namespace,
- 			s->module = mod;
- 		}
- 	}
--	sym_update_namespace(name, namespace);
- 	s->preloaded = 0;
- 	s->vmlinux   = is_vmlinux(mod->name);
- 	s->kernel    = 0;
-@@ -764,7 +763,8 @@ static void handle_modversions(struct module *mod, struct elf_info *info,
- 		if (strstarts(symname, "__ksymtab_")) {
- 			name = symname + strlen("__ksymtab_");
- 			namespace = sym_extract_namespace(&name);
--			sym_add_exported(name, namespace, mod, export);
-+			sym_add_exported(name, mod, export);
-+			sym_update_namespace(name, namespace);
- 			free(namespace);
- 		}
- 		if (strcmp(symname, "init_module") == 0)
-@@ -2472,12 +2472,12 @@ static void read_dump(const char *fname, unsigned int kernel)
- 			mod = new_module(modname);
- 			mod->skip = 1;
- 		}
--		s = sym_add_exported(symname, namespace, mod,
--				     export_no(export));
-+		s = sym_add_exported(symname, mod, export_no(export));
- 		s->kernel    = kernel;
- 		s->preloaded = 1;
- 		s->is_static = 0;
- 		sym_update_crc(symname, mod, crc, export_no(export));
-+		sym_update_namespace(symname, namespace);
- 	}
- 	release_file(file, size);
- 	return;
--- 
-2.23.0.866.gb869b98d4c-goog
+I've applied the first three patches to modules-linus, inbound for -rc5.
 
+Patch 4/4 was agreed to be for 5.5, and will be applied to
+modules-next once I rebase that branch against -rc5.
+
+Thanks!
+
+Jessica
+
+>Changes since v2:
+> - restored correct authorship for [4/4]
+> - add missing contributor tags
+> - fixed typos and code style (spaces/tabs)
+>
+>[1] https://lore.kernel.org/lkml/20190927093603.9140-5-yamada.masahiro@socionext.com/
+>[2] https://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git/log/?h=modules-linus
+>
+>Cc: Jessica Yu <jeyu@kernel.org>
+>Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+>Cc: Martijn Coenen <maco@android.com>
+>Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
+>Cc: Shaun Ruffell <sruffell@sruffell.net>
+>Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>Cc: Will Deacon <will@kernel.org>
+>Cc: linux-kbuild@vger.kernel.org
+>Cc: linux-modules@vger.kernel.org
+>
+>
+>Masahiro Yamada (1):
+>  export: avoid code duplication in include/linux/export.h
+>
+>Matthias Maennich (3):
+>  modpost: delegate updating namespaces to separate function
+>  modpost: make updating the symbol namespace explicit
+>  symbol namespaces: revert to previous __ksymtab name scheme
+>
+> include/linux/export.h | 97 +++++++++++++-----------------------------
+> kernel/module.c        |  2 +-
+> scripts/mod/modpost.c  | 59 ++++++++++++++++---------
+> scripts/mod/modpost.h  |  1 +
+> 4 files changed, 71 insertions(+), 88 deletions(-)
+>
+>Interdiff against v1:
+>diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+>index 7cf0065ac95f..0bf7eab80d9f 100644
+>--- a/scripts/mod/modpost.c
+>+++ b/scripts/mod/modpost.c
+>@@ -357,18 +357,21 @@ static const char *namespace_from_kstrtabns(struct elf_info *info,
+>
+> static void sym_update_namespace(const char *symname, const char *namespace)
+> {
+>-       struct symbol *s = find_symbol(symname);
+>-       /* That symbol should have been created earlier and thus this is
+>-        * actually an assertion. */
+>-       if (!s) {
+>-               merror("Could not update namespace(%s) for symbol %s\n",
+>-                      namespace, symname);
+>-               return;
+>-       }
+>-
+>-       free(s->namespace);
+>-       s->namespace =
+>-	       namespace && namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
+>+	struct symbol *s = find_symbol(symname);
+>+
+>+	/*
+>+	 * That symbol should have been created earlier and thus this is
+>+	 * actually an assertion.
+>+	 */
+>+	if (!s) {
+>+		merror("Could not update namespace(%s) for symbol %s\n",
+>+		       namespace, symname);
+>+		return;
+>+	}
+>+
+>+	free(s->namespace);
+>+	s->namespace =
+>+		namespace && namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
+> }
+>
+> /**
+>-- 
+>2.23.0.866.gb869b98d4c-goog
+>
