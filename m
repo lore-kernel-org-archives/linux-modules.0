@@ -2,128 +2,107 @@ Return-Path: <SRS0=Q6Ms=YR=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4CACCA9EAF
-	for <linux-modules@archiver.kernel.org>; Thu, 24 Oct 2019 10:24:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27709CA9EAF
+	for <linux-modules@archiver.kernel.org>; Thu, 24 Oct 2019 15:02:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 78ABA21925
-	for <linux-modules@archiver.kernel.org>; Thu, 24 Oct 2019 10:24:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1571912668;
-	bh=osUITaokagi0GaIVYUe6pigtxua6Y4GJShC8n+9O4Z8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=loqFkeVLHzUSCY/kzAUjlLpeu2z8Ii0iAMGBWpFG7tNu0N5OY6X656gqX9nBuqiq+
-	 UHqAq3bSjVm3vFKsfgUNPaSYGd+s1GTv6KshPdeWNJcM1VrYavdtRaTGahsR6xEcd5
-	 hLqheZm2n2RCNOroDbamUDwws4my6yoMwJwNiy+I=
+	by mail.kernel.org (Postfix) with ESMTP id EBA482070B
+	for <linux-modules@archiver.kernel.org>; Thu, 24 Oct 2019 15:02:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407681AbfJXKY2 (ORCPT
+        id S2502981AbfJXPCC (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 24 Oct 2019 06:24:28 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:35476 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407344AbfJXKY1 (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 24 Oct 2019 06:24:27 -0400
-Received: by mail-qt1-f193.google.com with SMTP id m15so37165751qtq.2;
-        Thu, 24 Oct 2019 03:24:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fvdFMXu4f/m9PNa/Dm+FLyMw/J1lwnGj00apTLD33aE=;
-        b=jj17DnwxtQSTsS8Aqm6J87x8ZMQKgyoe+PPlvInJPDc/in657kBaLmylCZPcltooLI
-         m3o+Ja4jNmS5Zah7ao/RcStG80ckiJvrLHPmEPG3vZdEYEmPWb/e0f048g/9fD+1K6jp
-         57m6U4LcwqKjrMy8vkHir+v/+ns0OoXNRksMpUsddvVRbWyqp4VKJXIQFQujaIyo6S2o
-         5IeOIN3AyesFfUGmLWCgEuMGIYXN/3agvs8FtsuaQqoJmaPSeCJ8Wlwm+nHAXXozalO3
-         11YfG3G+qUvZniJal/N0ln31Nsb1nBlam5p+IIfO3Yuch9HGfKd+lBGvARRg1h464ejO
-         KsQQ==
-X-Gm-Message-State: APjAAAV/zVcPd7ot4Y2NKAkmcA19n4G3NRIFcTtzSTJSefNL58zulKh+
-        LYXvhZHH+Corslv15Q6enrI=
-X-Google-Smtp-Source: APXvYqzKoWrUiSADuSEdAg9zu1c7XQk5ezth585fij3Jr03nhQ482j5PevCmM6xYiLnjLI6ua4Vphg==
-X-Received: by 2002:a05:6214:10e3:: with SMTP id q3mr11486283qvt.63.1571912666564;
-        Thu, 24 Oct 2019 03:24:26 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id m186sm12257080qkd.119.2019.10.24.03.24.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2019 03:24:25 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 60DBD40244; Thu, 24 Oct 2019 10:24:24 +0000 (UTC)
-Date:   Thu, 24 Oct 2019 10:24:24 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
+        Thu, 24 Oct 2019 11:02:02 -0400
+Received: from mga07.intel.com ([134.134.136.100]:40609 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2502980AbfJXPCC (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 24 Oct 2019 11:02:02 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 08:02:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,225,1569308400"; 
+   d="scan'208";a="223584784"
+Received: from lkebler-mobl.amr.corp.intel.com (HELO ldmartin-desk1) ([10.255.64.149])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Oct 2019 08:02:01 -0700
+Date:   Thu, 24 Oct 2019 08:02:01 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
 To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Jessica Yu <jeyu@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Martijn Coenen <maco@android.com>,
+Cc:     linux-modules@vger.kernel.org, kernel-team@android.com,
+        Stefan Wahren <stefan.wahren@i2se.com>,
         Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Shaun Ruffell <sruffell@sruffell.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>, linux-kbuild@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] export/modpost: avoid renaming __ksymtab entries
- for symbol namespaces
-Message-ID: <20191024102424.GL11244@42.do-not-panic.com>
-References: <20191010151443.7399-1-maennich@google.com>
- <20191018093143.15997-1-maennich@google.com>
- <20191023122222.GA27861@42.do-not-panic.com>
- <20191024093546.GB199239@google.com>
+        Martijn Coenen <maco@android.com>
+Subject: Re: [PATCH] depmod: add support for symbol namespaces
+Message-ID: <20191024150201.4lad7shwhtvgwowx@ldmartin-desk1>
+References: <20191004094136.166621-1-maennich@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20191024093546.GB199239@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191004094136.166621-1-maennich@google.com>
+User-Agent: NeoMutt/20180716
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Oct 24, 2019 at 10:35:46AM +0100, Matthias Maennich wrote:
-> On Wed, Oct 23, 2019 at 12:22:22PM +0000, Luis Chamberlain wrote:
-> > On Fri, Oct 18, 2019 at 10:31:39AM +0100, Matthias Maennich wrote:
-> > > The introduction of the symbol namespace patches changed the way symbols are
-> > > named in the ksymtab entries. That caused userland tools to fail (such as
-> > > kmod's depmod). As depmod is used as part of the kernel build it was worth
-> > > having another look whether this name change can be avoided.
-> > 
-> > Why have this as a default feature? What about having an option to
-> > disable this feature? The benefit being that without a full swing of
-> > tests to avoid regressions its not clear what other issues may creep
-> > up. With this as optional, those wanting the mechanism can enable it
-> > and happilly find the issues for those more conservative.
-> 
-> The strongest argument against that is, that the 'conservative' people
-> would constantly break things for the more 'adventurous' ones. They
-> would introduce namespace requirements by just using symbols without
-> correctly adjusting the imports.
-> 
-> Second, vmlinux and modules would have to be compiled in the same
-> configuration. Otherwise they are incompatible and we would likely have
-> to maintain code in the module loader to catch issues caused by that.
-> In general, I think for the adoption of this feature and one of its
-> purposes - making unexpected use of symbols across the tree visible
-> already at review time - we should not make this an optional one.
-> Enforcing the imports at module load time is optional (there is an
-> option).
-> 
-> And finally, having that code configurable for both options introduces
-> quite some complexity in kernel/module.c, modpost and
-> include/linux/export.h that would make the code hard to maintain and
-> complex to test. Hence that would likely introduce more issues.
-> 
-> I know the feature came with some rough edges. Sorry about that. I
-> think, we got most of them worked out pretty well (big thanks to
-> Masahiro and Jessica and others helping with that). Now the actual
-> change to the surface exposed to userland tools is much smaller and the
-> feature itself less intrusive.
+On Fri, Oct 04, 2019 at 10:41:36AM +0100, Matthias Maennich wrote:
+>Linux v5.4 introduces symbol namespaces [1], [2].
+>They appear in the ksymtab as entries with the scheme
+>
+>   __ksymtab_NAMESPACE.symbol_name
+>
+>In order to support these at depmod time, strip out namespaces when
+>loading the System.map.
+>
+>[1] https://lore.kernel.org/lkml/20190906103235.197072-1-maennich@google.com/
+>[2] https://lore.kernel.org/lkml/20191003075826.7478-1-yamada.masahiro@socionext.com/
+>
+>Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
+>Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
+>Cc: Martijn Coenen <maco@android.com>
+>Cc: linux-modules@vger.kernel.org
+>Signed-off-by: Matthias Maennich <maennich@google.com>
 
-This logic makes sense, the complexity over module loading is already
-high and supporting yet another division would be a burden for review
-and maintenace.
+with the new change merged in the kernel to remove the namespace from
+the middle, my understanding is that we don't need this right?
 
-However I'd feel much more inclined to support such decisions when and if
-we had a series of test cases to prevent possible regressions. Since
-effort with testing will move forward, I'm happy with the status quo.
+Lucas De Marchi
 
-  Luis
+>---
+> tools/depmod.c | 10 ++++++++--
+> 1 file changed, 8 insertions(+), 2 deletions(-)
+>
+>diff --git a/tools/depmod.c b/tools/depmod.c
+>index 391afe9fe0a0..723f4c7be88c 100644
+>--- a/tools/depmod.c
+>+++ b/tools/depmod.c
+>@@ -2576,7 +2576,7 @@ static int depmod_load_system_map(struct depmod *depmod, const char *filename)
+>
+> 	/* eg. c0294200 R __ksymtab_devfs_alloc_devnum */
+> 	while (fgets(line, sizeof(line), fp) != NULL) {
+>-		char *p, *end;
+>+		char *p, *end, *delim;
+>
+> 		linenum++;
+>
+>@@ -2601,7 +2601,13 @@ static int depmod_load_system_map(struct depmod *depmod, const char *filename)
+> 		if (end != NULL)
+> 			*end = '\0';
+>
+>-		depmod_symbol_add(depmod, p + ksymstr_len, true, 0, NULL);
+>+		/* Support for namespaced symbols: __ksymtab_NAMESPACE.symbol */
+>+		delim = strrchr(p + ksymstr_len, '.');
+>+		if (delim != NULL)
+>+			depmod_symbol_add(depmod, delim + 1, true, 0, NULL);
+>+		else
+>+			depmod_symbol_add(depmod, p + ksymstr_len, true, 0, NULL);
+>+
+> 		continue;
+>
+> 	invalid_syntax:
+>-- 
+>2.23.0.581.g78d2f28ef7-goog
+>
