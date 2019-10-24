@@ -1,59 +1,64 @@
-Return-Path: <SRS0=reEQ=YQ=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=Q6Ms=YR=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1,
+	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B98DBCA9EB6
-	for <linux-modules@archiver.kernel.org>; Wed, 23 Oct 2019 12:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10CF8CA9EAF
+	for <linux-modules@archiver.kernel.org>; Thu, 24 Oct 2019 09:35:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9027221872
-	for <linux-modules@archiver.kernel.org>; Wed, 23 Oct 2019 12:22:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1571833348;
-	bh=FNIPVrq2LQ8gefsurgILCb/DLkZroCyJOYJn/s1YYw4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=JGHy0yfiilbFrBhsPfF72LL5k4R6DaZN2BcozaSjM76vswDhRMSnEhaxveNOkfXEL
-	 ZyIKH8BHkiRokc3F3YGf9jGXkKKBNHH/Zncwj1YSUB67W5CniulecCY+xWwajONwKR
-	 qdSW8mEKNCC+hlIDaP7p/evVZNZr/andyDgndcW8=
+	by mail.kernel.org (Postfix) with ESMTP id D6D3D21929
+	for <linux-modules@archiver.kernel.org>; Thu, 24 Oct 2019 09:35:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S1mM97qM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405299AbfJWMWZ (ORCPT
+        id S1729081AbfJXJfu (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 23 Oct 2019 08:22:25 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:35835 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726636AbfJWMWZ (ORCPT
+        Thu, 24 Oct 2019 05:35:50 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:45121 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732606AbfJXJfu (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 23 Oct 2019 08:22:25 -0400
-Received: by mail-pl1-f194.google.com with SMTP id c3so10023886plo.2;
-        Wed, 23 Oct 2019 05:22:24 -0700 (PDT)
+        Thu, 24 Oct 2019 05:35:50 -0400
+Received: by mail-wr1-f68.google.com with SMTP id q13so20292294wrs.12
+        for <linux-modules@vger.kernel.org>; Thu, 24 Oct 2019 02:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kmED9H3HhgwVVQ86s12b9wU01cqR0QgzFhbCOFHeClU=;
+        b=S1mM97qME0Ixk73g4LGqcCagCBx33p9xYc6nmNo95xpmoy4pywt5jOn1AOzctxPT0N
+         nB8+li9SpYltwU9/B58VVKFmqClfis9qWSOprXtc6VB6a9Puf83HLXQkNBet/h33yqAR
+         WVArAD+EZt2+aaggCpxWLw+3LbCroUBv86+xfu3mB6539VfCotaYfsEgnnCDrmW5n5+E
+         XHbqIRWbvT+T7Np7UUuoTXPX8BPuLV6v0uHCj35eGdrCSPzSfzUz9Eo49WkDWFFsqcgS
+         vLpKsOhAAQstb+gTrd/fpMaJDfK81gR6ltUBmaTVsSQ0P+GSWyVj3T4N0+tHa5V2Pqnh
+         9SFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XGOd+RlzHcqaTlF1JPWEkVlZmBukFEwJbzB8xB2wblk=;
-        b=FjvfOW/5TY+zYLAFTUHJbU0pTTKuSep6aCaPc28Y3VOTm49UI/K5PeDskMioNLD3nz
-         frc4EMqi4x1F1qfj8uBAnjhudU/75GfUDoA8ZfalPl0CUdEXqSQORIbzHzHuW+Qhujyj
-         jshcvNzsyK61XB4M09gGOPEG2dWEHyrCI9WB/66aHXrqwD56QSohsiLcgRUpgETm08Tt
-         SeszwR0v89nMEhf9yioMjg7rHj4IqKX6I6LAYTM7zUR0iRLQ4z6lasOVlMwjokplFKp7
-         b2+u0dtHpUGTmUdtTM9EQ7Q7oPSPL3ywOInGAIBxkuk7jolRZG/I5IoMF9uOHr6qaRQz
-         xsMw==
-X-Gm-Message-State: APjAAAVF8NsNbNMqJeAOXdC+EDjpa414O8XmWra2EKUADPnUcNQT4Hfh
-        OJ1XgnKFA5LAGhhqpAMV0Oo=
-X-Google-Smtp-Source: APXvYqy5diu3PtRJ2JIKX1AdFDxYHzyNkjfxebBm29xPVpKyTPe11U6ji3IiHAbkpA1Iok43Zy9PYA==
-X-Received: by 2002:a17:902:6bc1:: with SMTP id m1mr9355798plt.67.1571833344011;
-        Wed, 23 Oct 2019 05:22:24 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id m5sm23643604pgt.15.2019.10.23.05.22.22
+        bh=kmED9H3HhgwVVQ86s12b9wU01cqR0QgzFhbCOFHeClU=;
+        b=Unn2lT/8J2KvxVuPxyUX6s7W+MtWnoUq94QQ75ZeXJNVvWsquO90k9vBoUyRwR1fMO
+         r0L7GJASixwwxDuc/xVhwxQdDHYMYUoCBdakl4iri/xuPB2ZtNOH4giNTeEyJgbTt+PV
+         zMtpF7XgSK8902pVu00B0q16CBaRRhDlKez8jnPrGmfX/pDDSUgjSN6vi8FMewdN2bpc
+         LxRNqYSDfgfKraqGBT1PDAqKEDNdCQL2Gcnr0uYTwbiz1G35FaJnDsjx4aeH7f6RGyK4
+         QHZGmSaTnRO9Gl5Jip38VVcYAooM0jsvug6Zdv61UD8qo1caAKkmaiFt9uySkKwEKvdI
+         YgaQ==
+X-Gm-Message-State: APjAAAUHk0GCJVR26G1vAKxoIgB63dVsyI128kR9WR2jMYmhVZBYEmDN
+        UzlbeAUueui3APKcMG0emWL++Q==
+X-Google-Smtp-Source: APXvYqwxrDmy4CJmsq3rBjQJVIc2QqLxi0MkLafXCzaC4bsC3/cOsLzto1cuoPgY1rOynnJee1G1RA==
+X-Received: by 2002:a5d:630f:: with SMTP id i15mr2972442wru.226.1571909747667;
+        Thu, 24 Oct 2019 02:35:47 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
+        by smtp.gmail.com with ESMTPSA id i18sm22647040wrx.14.2019.10.24.02.35.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 05:22:23 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 76BEF40244; Wed, 23 Oct 2019 12:22:22 +0000 (UTC)
-Date:   Wed, 23 Oct 2019 12:22:22 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Matthias Maennich <maennich@google.com>
+        Thu, 24 Oct 2019 02:35:47 -0700 (PDT)
+Date:   Thu, 24 Oct 2019 10:35:46 +0100
+From:   Matthias Maennich <maennich@google.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
         Jessica Yu <jeyu@kernel.org>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
@@ -65,28 +70,59 @@ Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
         linux-modules@vger.kernel.org
 Subject: Re: [PATCH v2 0/4] export/modpost: avoid renaming __ksymtab entries
  for symbol namespaces
-Message-ID: <20191023122222.GA27861@42.do-not-panic.com>
+Message-ID: <20191024093546.GB199239@google.com>
 References: <20191010151443.7399-1-maennich@google.com>
  <20191018093143.15997-1-maennich@google.com>
+ <20191023122222.GA27861@42.do-not-panic.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20191018093143.15997-1-maennich@google.com>
+In-Reply-To: <20191023122222.GA27861@42.do-not-panic.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Oct 18, 2019 at 10:31:39AM +0100, Matthias Maennich wrote:
-> The introduction of the symbol namespace patches changed the way symbols are
-> named in the ksymtab entries. That caused userland tools to fail (such as
-> kmod's depmod). As depmod is used as part of the kernel build it was worth
-> having another look whether this name change can be avoided.
+On Wed, Oct 23, 2019 at 12:22:22PM +0000, Luis Chamberlain wrote:
+>On Fri, Oct 18, 2019 at 10:31:39AM +0100, Matthias Maennich wrote:
+>> The introduction of the symbol namespace patches changed the way symbols are
+>> named in the ksymtab entries. That caused userland tools to fail (such as
+>> kmod's depmod). As depmod is used as part of the kernel build it was worth
+>> having another look whether this name change can be avoided.
+>
+>Why have this as a default feature? What about having an option to
+>disable this feature? The benefit being that without a full swing of
+>tests to avoid regressions its not clear what other issues may creep
+>up. With this as optional, those wanting the mechanism can enable it
+>and happilly find the issues for those more conservative.
 
-Why have this as a default feature? What about having an option to
-disable this feature? The benefit being that without a full swing of
-tests to avoid regressions its not clear what other issues may creep
-up. With this as optional, those wanting the mechanism can enable it
-and happilly find the issues for those more conservative.
+The strongest argument against that is, that the 'conservative' people
+would constantly break things for the more 'adventurous' ones. They
+would introduce namespace requirements by just using symbols without
+correctly adjusting the imports.
 
-  Luis
+Second, vmlinux and modules would have to be compiled in the same
+configuration. Otherwise they are incompatible and we would likely have
+to maintain code in the module loader to catch issues caused by that.
+In general, I think for the adoption of this feature and one of its
+purposes - making unexpected use of symbols across the tree visible
+already at review time - we should not make this an optional one.
+Enforcing the imports at module load time is optional (there is an
+option).
+
+And finally, having that code configurable for both options introduces
+quite some complexity in kernel/module.c, modpost and
+include/linux/export.h that would make the code hard to maintain and
+complex to test. Hence that would likely introduce more issues.
+
+I know the feature came with some rough edges. Sorry about that. I
+think, we got most of them worked out pretty well (big thanks to
+Masahiro and Jessica and others helping with that). Now the actual
+change to the surface exposed to userland tools is much smaller and the
+feature itself less intrusive.
+
+Cheers,
+Matthias
+
+>
+>  Luis
