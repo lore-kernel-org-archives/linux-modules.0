@@ -7,190 +7,375 @@ X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0C7FFC6195
-	for <linux-modules@archiver.kernel.org>; Fri,  8 Nov 2019 17:25:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23A25FA372C
+	for <linux-modules@archiver.kernel.org>; Fri,  8 Nov 2019 17:31:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AEDD3207FA
-	for <linux-modules@archiver.kernel.org>; Fri,  8 Nov 2019 17:25:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E880F2084D
+	for <linux-modules@archiver.kernel.org>; Fri,  8 Nov 2019 17:31:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728714AbfKHRZq convert rfc822-to-8bit (ORCPT
+        id S1728206AbfKHRbS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 8 Nov 2019 12:25:46 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:23947 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728769AbfKHRZq (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 8 Nov 2019 12:25:46 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-265-jD6sSU1TOqK9EHjXQNjYmA-1; Fri, 08 Nov 2019 12:25:41 -0500
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 8 Nov 2019 12:31:18 -0500
+Received: from monster.unsafe.ru ([5.9.28.80]:34884 "EHLO mail.unsafe.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726200AbfKHRbS (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Fri, 8 Nov 2019 12:31:18 -0500
+Received: from Legion-PC.fortress (nat-pool-brq-t.redhat.com [213.175.37.10])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3509B2A3;
-        Fri,  8 Nov 2019 17:25:40 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.43.2.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8AC6C1001281;
-        Fri,  8 Nov 2019 17:25:39 +0000 (UTC)
+        by mail.unsafe.ru (Postfix) with ESMTPSA id 8F7F0C61ACE;
+        Fri,  8 Nov 2019 17:31:14 +0000 (UTC)
+Date:   Fri, 8 Nov 2019 18:31:12 +0100
 From:   Alexey Gladkov <gladkov.alexey@gmail.com>
-To:     linux-modules@vger.kernel.org
-Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH v2 4/4] modinfo: Show information about built-in modules
-Date:   Fri,  8 Nov 2019 18:25:23 +0100
-Message-Id: <20191108172524.468494-5-gladkov.alexey@gmail.com>
-In-Reply-To: <20191108172524.468494-1-gladkov.alexey@gmail.com>
-References: <20191108172524.468494-1-gladkov.alexey@gmail.com>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] libkmod: Add parser for modules.builtin.modinfo
+Message-ID: <20191108173112.7aknksgqtb4akdus@Legion-PC.fortress>
+Mail-Followup-To: Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-modules@vger.kernel.org
+References: <20191011081956.4127892-1-gladkov.alexey@gmail.com>
+ <20191011081956.4127892-2-gladkov.alexey@gmail.com>
+ <20191107082310.as5zrubafgaaeb4e@ldmartin-desk1>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-MC-Unique: jD6sSU1TOqK9EHjXQNjYmA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191107082310.as5zrubafgaaeb4e@ldmartin-desk1>
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Signed-off-by: Alexey Gladkov <gladkov.alexey@gmail.com>
----
- libkmod/libkmod-builtin.c |  2 +-
- libkmod/libkmod-module.c  | 23 ++++++++++++++++-------
- tools/modinfo.c           | 39 +++++++++++++++++++++------------------
- 3 files changed, 38 insertions(+), 26 deletions(-)
+On Thu, Nov 07, 2019 at 12:23:10AM -0800, Lucas De Marchi wrote:
+> On Fri, Oct 11, 2019 at 10:19:53AM +0200, Alexey Gladkov wrote:
+> > The kernel since version v5.2-rc1 exports information about built-in
+> > modules in the modules.builtin.modinfo. Information is stored in
+> > the same format as in the separate modules (null-terminated string
+> > array). The module name is a prefix for each line.
+> > 
+> > $ tr '\0' '\n' < modules.builtin.modinfo
+> > ext4.softdep=pre: crc32c
+> > ext4.license=GPL
+> > ext4.description=Fourth Extended Filesystem
+> > ext4.author=Remy Card, Stephen Tweedie, Andrew Morton, Andreas Dilger, Theodore Ts'o and others
+> > ext4.alias=fs-ext4
+> > ext4.alias=ext3
+> > ext4.alias=fs-ext3
+> > ext4.alias=ext2
+> > ext4.alias=fs-ext2
+> > md_mod.alias=block-major-9-*
+> > md_mod.alias=md
+> > md_mod.description=MD RAID framework
+> > md_mod.license=GPL
+> > md_mod.parmtype=create_on_open:bool
+> > md_mod.parmtype=start_dirty_degraded:int
+> 
+> 
+> Apologies, I thought I had replied to this already. Having this
+> functionality is very welcome, thanks. I have some comments about the
+> implementation. See below.
+> 
+> 
+> > ...
+> > 
+> > Signed-off-by: Alexey Gladkov <gladkov.alexey@gmail.com>
+> > ---
+> > Makefile.am                |   1 +
+> > libkmod/libkmod-builtin.c  | 231 +++++++++++++++++++++++++++++++++++++
+> > libkmod/libkmod-internal.h |   8 ++
+> > 3 files changed, 240 insertions(+)
+> > create mode 100644 libkmod/libkmod-builtin.c
+> > 
+> > diff --git a/Makefile.am b/Makefile.am
+> > index c5c2f06..176dcfc 100644
+> > --- a/Makefile.am
+> > +++ b/Makefile.am
+> > @@ -68,6 +68,7 @@ libkmod_libkmod_la_SOURCES = \
+> > 	libkmod/libkmod.h \
+> > 	libkmod/libkmod-internal.h \
+> > 	libkmod/libkmod.c \
+> > +	libkmod/libkmod-builtin.c \
+> > 	libkmod/libkmod-list.c \
+> > 	libkmod/libkmod-config.c \
+> > 	libkmod/libkmod-index.c \
+> > diff --git a/libkmod/libkmod-builtin.c b/libkmod/libkmod-builtin.c
+> > new file mode 100644
+> > index 0000000..9da0010
+> > --- /dev/null
+> > +++ b/libkmod/libkmod-builtin.c
+> > @@ -0,0 +1,231 @@
+> > +/*
+> > + * libkmod - interface to kernel built-in modules
+> > + *
+> > + * Copyright (C) 2019  Alexey Gladkov <gladkov.alexey@gmail.com>
+> > + *
+> > + * This library is free software; you can redistribute it and/or
+> > + * modify it under the terms of the GNU Lesser General Public
+> > + * License as published by the Free Software Foundation; either
+> > + * version 2.1 of the License, or (at your option) any later version.
+> > + *
+> > + * This library is distributed in the hope that it will be useful,
+> > + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> > + * Lesser General Public License for more details.
+> > + *
+> > + * You should have received a copy of the GNU Lesser General Public
+> > + * License along with this library; if not, see <http://www.gnu.org/licenses/>.
+> > + */
+> 
+> this remembers me we should convert these headers to spdx
+> 
+> > +
+> > +#include <stdio.h>
+> > +#include <stdlib.h>
+> > +#include <string.h>
+> > +#include <errno.h>
+> > +
+> > +#include "libkmod.h"
+> > +#include "libkmod-internal.h"
+> > +
+> > +#define MODULES_BUILTIN_MODINFO "modules.builtin.modinfo"
+> > +
+> > +struct kmod_builtin_iter {
+> > +	struct kmod_ctx *ctx;
+> > +	struct kmod_file *file;
+> > +	off_t pos;
+> > +	off_t next;
+> > +};
+> > +
+> > +struct kmod_builtin_iter *kmod_builtin_iter_new(struct kmod_ctx *ctx)
+> > +{
+> > +	char path[PATH_MAX];
+> > +	struct kmod_file *file;
+> > +	struct kmod_builtin_iter *iter;
+> > +	const char *dirname = kmod_get_dirname(ctx);
+> > +	size_t len = strlen(dirname);
+> > +
+> > +	if ((len + 1 + strlen(MODULES_BUILTIN_MODINFO) + 1) >= PATH_MAX) {
+> > +		errno = ENAMETOOLONG;
+> > +		return NULL;
+> > +	}
+> > +
+> > +	snprintf(path, PATH_MAX, "%s/%s", dirname, MODULES_BUILTIN_MODINFO);
+> > +
+> > +	file = kmod_file_open(ctx, path);
+> > +	if (!file)
+> > +		return NULL;
+> > +
+> > +	iter = malloc(sizeof(*iter));
+> > +	if (!iter) {
+> > +		kmod_file_unref(file);
+> > +		errno = ENOMEM;
+> > +		return NULL;
+> > +	}
+> > +
+> > +	iter->ctx = ctx;
+> > +	iter->file = file;
+> > +	iter->pos = 0;
+> > +	iter->next = 0;
+> > +
+> > +	return iter;
+> > +}
+> > +
+> > +bool kmod_builtin_iter_next(struct kmod_builtin_iter *iter)
+> > +{
+> > +	char *mm, *s, *dot;
+> > +	off_t offset, mmsize;
+> > +	size_t len, modlen;
+> > +	char *modname = NULL;
+> > +
+> > +	mm = kmod_file_get_contents(iter->file);
+> > +	mmsize = kmod_file_get_size(iter->file);
+> 
+> humn... kmod_file is more target for handling modules. This is only
+> < 100k  and we would access it sequentially. I think we are fine just
+> using stdio.
 
-diff --git a/libkmod/libkmod-builtin.c b/libkmod/libkmod-builtin.c
-index c7b888a..6b4651c 100644
---- a/libkmod/libkmod-builtin.c
-+++ b/libkmod/libkmod-builtin.c
-@@ -275,7 +275,7 @@ ssize_t kmod_builtin_get_modinfo(struct kmod_ctx *ctx, const char *modname,
- 	struct kmod_builtin_iter *iter = kmod_builtin_iter_new(ctx);
- 
- 	if (!iter)
--		return -1;
-+		return -errno;
- 
- 	while (!name && kmod_builtin_iter_next(iter)) {
- 		if (!kmod_builtin_iter_get_modname(iter, buf)) {
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index ee7e6bd..8044a8f 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -2286,13 +2286,22 @@ KMOD_EXPORT int kmod_module_get_info(const struct kmod_module *mod, struct kmod_
- 
- 	assert(*list == NULL);
- 
--	elf = kmod_module_get_elf(mod);
--	if (elf == NULL)
--		return -errno;
-+	/* remove const: this can only change internal state */
-+	if (kmod_module_is_builtin((struct kmod_module *)mod)) {
-+		count = kmod_builtin_get_modinfo(mod->ctx,
-+						kmod_module_get_name(mod),
-+						&strings);
-+		if (count < 0)
-+			return count;
-+	} else {
-+		elf = kmod_module_get_elf(mod);
-+		if (elf == NULL)
-+			return -errno;
- 
--	count = kmod_elf_get_strings(elf, ".modinfo", &strings);
--	if (count < 0)
--		return count;
-+		count = kmod_elf_get_strings(elf, ".modinfo", &strings);
-+		if (count < 0)
-+			return count;
-+	}
- 
- 	for (i = 0; i < count; i++) {
- 		struct kmod_list *n;
-@@ -2316,7 +2325,7 @@ KMOD_EXPORT int kmod_module_get_info(const struct kmod_module *mod, struct kmod_
- 			goto list_error;
- 	}
- 
--	if (kmod_module_signature_info(mod->file, &sig_info)) {
-+	if (mod->file && kmod_module_signature_info(mod->file, &sig_info)) {
- 		struct kmod_list *n;
- 
- 		n = kmod_module_info_append(list, "sig_id", strlen("sig_id"),
-diff --git a/tools/modinfo.c b/tools/modinfo.c
-index 86ac04b..0231bb0 100644
---- a/tools/modinfo.c
-+++ b/tools/modinfo.c
-@@ -172,18 +172,33 @@ static int modinfo_do(struct kmod_module *mod)
- {
- 	struct kmod_list *l, *list = NULL;
- 	struct param *params = NULL;
--	int err;
-+	int err, is_builtin;
-+	const char *filename = kmod_module_get_path(mod);
-+
-+	is_builtin = (filename == NULL);
-+
-+	if (is_builtin) {
-+		printf("%-16s%s%c", "name:", kmod_module_get_name(mod), separator);
-+		filename = "(builtin)";
-+	}
- 
- 	if (field != NULL && streq(field, "filename")) {
--		printf("%s%c", kmod_module_get_path(mod), separator);
-+		printf("%s%c", filename, separator);
- 		return 0;
- 	} else if (field == NULL) {
- 		printf("%-16s%s%c", "filename:",
--		       kmod_module_get_path(mod), separator);
-+		       filename, separator);
- 	}
- 
- 	err = kmod_module_get_info(mod, &list);
- 	if (err < 0) {
-+		if (is_builtin && err == -ENOENT) {
-+			/*
-+			 * This is an old kernel that does not have a file
-+			 * with information about built-in modules.
-+			 */
-+			return 0;
-+		}
- 		ERR("could not get modinfo from '%s': %s\n",
- 			kmod_module_get_name(mod), strerror(-err));
- 		return err;
-@@ -276,7 +291,7 @@ static int modinfo_path_do(struct kmod_ctx *ctx, const char *path)
- 
- static int modinfo_alias_do(struct kmod_ctx *ctx, const char *alias)
- {
--	struct kmod_list *l, *filtered, *list = NULL;
-+	struct kmod_list *l, *list = NULL;
- 	int err = kmod_module_new_from_lookup(ctx, alias, &list);
- 	if (err < 0) {
- 		ERR("Module alias %s not found.\n", alias);
-@@ -288,26 +303,14 @@ static int modinfo_alias_do(struct kmod_ctx *ctx, const char *alias)
- 		return -ENOENT;
- 	}
- 
--	err = kmod_module_apply_filter(ctx, KMOD_FILTER_BUILTIN, list, &filtered);
--	kmod_module_unref_list(list);
--	if (err < 0) {
--		ERR("Failed to filter list: %m\n");
--		return err;
--	}
--
--	if (filtered == NULL) {
--		ERR("Module %s not found.\n", alias);
--		return -ENOENT;
--	}
--
--	kmod_list_foreach(l, filtered) {
-+	kmod_list_foreach(l, list) {
- 		struct kmod_module *mod = kmod_module_get_module(l);
- 		int r = modinfo_do(mod);
- 		kmod_module_unref(mod);
- 		if (r < 0)
- 			err = r;
- 	}
--	kmod_module_unref_list(filtered);
-+	kmod_module_unref_list(list);
- 	return err;
- }
- 
+Make sense.
+
+> > +
+> > +	offset = iter->next;
+> > +
+> > +	while (offset < mmsize) {
+> > +		s = mm + offset;
+> > +
+> > +		dot = strchr(s, '.');
+> > +		if (!dot)
+> > +			return false;
+> 
+> wouldn't this fail if in the description of a module/param we have a dot?
+
+No. All fields have a module name as a prefix.
+
+> I think a more correct approach is to search for \0 and then try to
+> match the prefix.
+> 
+> Actually, maybe even better to memmem() "\0<module-name>.", first being
+> an exception.
+> 
+> 
+> > +
+> > +		len = dot - s;
+> > +
+> > +		if (!modname) {
+> > +			modname = s;
+> > +			modlen = len;
+> > +		} else if (modlen != len || strncmp(modname, s, len)) {
+> > +			break;
+> > +		}
+> > +
+> > +		offset += strlen(s) + 1;
+> > +	}
+> > +
+> > +	if (!modname)
+> > +		return false;
+> > +
+> > +	iter->next = offset;
+> > +
+> > +	return true;
+> > +}
+> > +
+> > +void kmod_builtin_iter_free(struct kmod_builtin_iter *iter)
+> > +{
+> > +	kmod_file_unref(iter->file);
+> > +	free(iter);
+> > +}
+> > +
+> > +int kmod_builtin_iter_get_strings(struct kmod_builtin_iter *iter,
+> > +					const char **strings)
+> > +{
+> > +	char *mm = kmod_file_get_contents(iter->file);
+> > +	off_t pos = iter->pos;
+> > +
+> > +	char *start = NULL;
+> > +	size_t count = 0;
+> > +	size_t modlen = 0;
+> > +
+> > +	while (pos < iter->next) {
+> > +		char *dot = strchr(mm + pos, '.');
+> > +		size_t len;
+> > +
+> > +		if (!dot)
+> > +			return -1;
+> > +
+> > +		len = dot - (mm + pos);
+> > +
+> > +		if (!start) {
+> > +			start = mm + pos;
+> > +			modlen = len;
+> > +		} else if (modlen != len || strncmp(start, mm + pos, len)) {
+> > +			break;
+> > +		}
+> > +
+> > +		pos += strlen(mm + pos) + 1;
+> > +		count++;
+> > +	}
+> > +
+> > +	*strings = start;
+> > +	iter->pos = iter->next;
+> > +
+> > +	return count;
+> > +}
+> > +
+> > +/* array will be allocated with strings in a single malloc, just free *array */
+> > +int kmod_builtin_get_modinfo(struct kmod_ctx *ctx, const char *modname,
+> > +				char ***modinfo)
+> > +{
+> > +	char *mm, *s, *section, *dot;
+> > +	off_t n, size, offset, mmoffset, mmsize;
+> > +	size_t modlen, len;
+> > +	struct kmod_builtin_iter *iter;
+> > +	int count = 0;
+> > +
+> > +	iter = kmod_builtin_iter_new(ctx);
+> > +
+> > +	if (!iter)
+> > +		return -1;
+> > +
+> > +	modlen = strlen(modname);
+> > +
+> > +	mmsize = kmod_file_get_size(iter->file);
+> > +	mm = kmod_file_get_contents(iter->file);
+> > +
+> > +	section = NULL;
+> > +	size = 0;
+> > +
+> > +	for (mmoffset = 0; mmoffset < mmsize;) {
+> > +		s = mm + mmoffset;
+> > +		dot = strchr(s, '.');
+> > +
+> > +		if (!dot) {
+> > +			count = -ENODATA;
+> > +			goto fail;
+> > +		}
+> > +
+> > +		len = dot - s;
+> > +
+> > +		if (modlen != len || strncmp(modname, s, len)) {
+> > +			if (count)
+> > +				break;
+> > +			mmoffset += strlen(s) + 1;
+> > +			continue;
+> > +		} else if (!count) {
+> > +			section = s;
+> > +		}
+> > +
+> > +		len = strlen(dot + 1) + 1;
+> > +		mmoffset += modlen + 1 + len;
+> > +		size += len;
+> > +
+> > +		count++;
+> > +	}
+> > +
+> > +	if (!count) {
+> > +		count = -ENOSYS;
+> > +		goto fail;
+> > +	}
+> > +
+> > +	*modinfo = malloc(size + sizeof(char *) * (count + 1));
+> > +	if (!*modinfo) {
+> > +		count = -errno;
+> > +		goto fail;
+> > +	}
+> > +
+> > +	s = (char *)(*modinfo + count + 1);
+> > +
+> > +	n = 0;
+> > +	mmoffset = 0;
+> > +
+> > +	for (offset = 0; offset < size;) {
+> > +		len = strlen(section + mmoffset + modlen + 1) + 1;
+> > +
+> > +		strncpy(s + offset, section + mmoffset + modlen + 1, len);
+> > +		(*modinfo)[n++] = s + offset;
+> > +
+> > +		mmoffset += modlen + 1 + len;
+> > +		offset += len;
+> > +	}
+> > +
+> > +fail:
+> > +	kmod_builtin_iter_free(iter);
+> > +	return count;
+> > +}
+> > diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
+> > index a65ddd1..17ae541 100644
+> > --- a/libkmod/libkmod-internal.h
+> > +++ b/libkmod/libkmod-internal.h
+> > @@ -193,3 +193,11 @@ struct kmod_signature_info {
+> > };
+> > bool kmod_module_signature_info(const struct kmod_file *file, struct kmod_signature_info *sig_info) _must_check_ __attribute__((nonnull(1, 2)));
+> > void kmod_module_signature_info_free(struct kmod_signature_info *sig_info) __attribute__((nonnull));
+> > +
+> > +/* libkmod-builtin.c */
+> > +struct kmod_builtin_iter;
+> > +struct kmod_builtin_iter *kmod_builtin_iter_new(struct kmod_ctx *ctx) __attribute__((nonnull(1)));
+> > +void kmod_builtin_iter_free(struct kmod_builtin_iter *iter) __attribute__((nonnull(1)));
+> > +bool kmod_builtin_iter_next(struct kmod_builtin_iter *iter) __attribute__((nonnull(1)));
+> > +int kmod_builtin_iter_get_strings(struct kmod_builtin_iter *iter, const char **modinfo) __attribute__((nonnull(1, 2)));
+> > +int kmod_builtin_get_modinfo(struct kmod_ctx *ctx, const char *modname, char ***modinfo) __attribute__((nonnull(1, 2, 3)));
+> > -- 
+> > 2.21.0
+> > 
+> 
+
 -- 
-2.21.0
+Rgrds, legion
 
