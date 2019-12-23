@@ -1,135 +1,160 @@
-Return-Path: <SRS0=VqPb=2K=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=DpRu=2N=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D1DAC43603
-	for <linux-modules@archiver.kernel.org>; Fri, 20 Dec 2019 18:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B46FC2D0C0
+	for <linux-modules@archiver.kernel.org>; Mon, 23 Dec 2019 17:06:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 32A3021655
-	for <linux-modules@archiver.kernel.org>; Fri, 20 Dec 2019 18:45:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 524C620663
+	for <linux-modules@archiver.kernel.org>; Mon, 23 Dec 2019 17:06:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vFgr38gC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="umVz1CeG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727390AbfLTSp3 (ORCPT
+        id S1726832AbfLWRGm (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 20 Dec 2019 13:45:29 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:46645 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727406AbfLTSp3 (ORCPT
+        Mon, 23 Dec 2019 12:06:42 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37957 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726718AbfLWRGm (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 20 Dec 2019 13:45:29 -0500
-Received: by mail-wr1-f65.google.com with SMTP id z7so10329460wrl.13
-        for <linux-modules@vger.kernel.org>; Fri, 20 Dec 2019 10:45:27 -0800 (PST)
+        Mon, 23 Dec 2019 12:06:42 -0500
+Received: by mail-lj1-f195.google.com with SMTP id k8so18375961ljh.5
+        for <linux-modules@vger.kernel.org>; Mon, 23 Dec 2019 09:06:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=eKJcDgvh7oFinozlgc0xm7rHfiW32G41hm5ruyUjTxw=;
-        b=vFgr38gCGO3HXUPU4T93Lx71SJm4sAVseJbgJD4454/64mjEHmE6OBszPE2hVRILlx
-         yPTlw3yaArh7wbciG0r5MahQztcgTRFvHoQw+V+JwJIskizaOB02j5wnAmIh47TvbaNN
-         chPeXXQ0Gcyp/jfO7Hc9Sqpzdz7AxxA9p2GVSRyPt8i+NlYkazRU5N/sEwKA4/8Z+8zr
-         BPBR1XB5FpFGCk8+sCEvSJPDnUo+qdPBJ+FNjUN7HsbUDRJNoUbU1H3bFLS/a70eYVCQ
-         G3urf8PBzDXRzbcXeR+vejCCcpdILs4dvEghZs0al7Jm3iJqRrAb2FPKFN52QWt49RzY
-         M6Hw==
+        h=to:from:subject:message-id:date:user-agent:mime-version;
+        bh=9cGh+SWuAnnWASzFOqwCBuq5K6JveZ+I7YskJwrK7q0=;
+        b=umVz1CeGCfH9AnmAqVoM5/vzGQMSXCXOZeCTYsi1QuNSpGFZoPzOsG1nIepD60sgnF
+         nOaIju2MTnz2JEFzkHznHoG/Q3vBZyrb5VTsnrzXs92KkMPSTTsPpibks+iSiMVHtdMW
+         AGC8wAp9hjNyBi4EODxu2SW8ZDhH6OooMP1fxgD1zAa2wXpNvIhQku6gevuYyv2I2hHK
+         +JIGEjRSLQ2R+Ah6TPFtQ/2Rh2vo8pVabRdTdfDNf0n/dA51Bw/81y1kceSw9Zb2xdEw
+         uUrHbUjA6AIoDSiaj9dfLkQW6Rv2iy+masatZ1lnN1yuV0AMGF5218KBnCDabgf91Oi/
+         92jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=eKJcDgvh7oFinozlgc0xm7rHfiW32G41hm5ruyUjTxw=;
-        b=TbgaQt0Nm75Hr+EOuenz9xiKI3bxYgx2unTAO9QJ4YjIU9UfohOBWilZm1CbzNhoeD
-         Kh61p9+6MA/pkzMUCGzox0jXhsJUW7QMRNbVk/F0lezUc15YzVDj4m20Eh3u6xGQ9K7p
-         NQzz/d+NaHiSNHzjaON4n+4/zGL54jyZPgPmKEshoC7scpsyEVMqzu7p+94+XNDps1Jr
-         s5sxtHPN9HkcNdN61IzeueBArKDyyR+QAxxoIOHVsxVcrs2Cbt1w8hz7X+eUGjrsT7I8
-         a8UNnhVtE6rCWPdnVBrW7svqmax8pdayRiIxe1yJgpmQuX9QA5VKPNSp2ub0o87XsQos
-         cEAQ==
-X-Gm-Message-State: APjAAAU1iA5pXWyCa6IkTi8rCTYrgIzHXk25zojPfHEZ/gMJKhISRMr9
-        ZSHIjKV5UNtwku++5o56+wQkwkiwPzQBKPXZtqwVMwRv
-X-Google-Smtp-Source: APXvYqxdl7lEBSgJ3aqV+HqHzuF0v8KovRz0iiJBiqvDnG9HAz+wBiT0mwAcbe6quzuPNaUoOePJPBsKhB6MHmsrdSM=
-X-Received: by 2002:a5d:4481:: with SMTP id j1mr17387791wrq.348.1576867526625;
- Fri, 20 Dec 2019 10:45:26 -0800 (PST)
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version;
+        bh=9cGh+SWuAnnWASzFOqwCBuq5K6JveZ+I7YskJwrK7q0=;
+        b=Qqnm3DVkCt7GakYQi9pIq8C0UOaBubpkJpQWDKb7fGESCF8CWqHaZh620c0EuE1oEi
+         kebytx9NntGatNztpplnSD2yuqcRD5h80NMG4xAPUVaa4Z75mhIJSetFR53vguR9uYQd
+         FtiOkkzGTzBL9KukkApPqzC6KvJEfbkjv75sJ9BYGKgVK6R4QNxvMYJ9ZKcCUupHG37A
+         NYQgY/Ge8+ZDyR92XGx2dQaLJykPcxDMwXkcK5WjUG2qEzuuweUotFJzWDIFM8TVQ/PM
+         yaYSEioHpq+U3f7GMg54XhjY1UK2dFXXV9KwNuZ3rotfQe7KD2IV6UeN23Bt8GhokcZ4
+         zQTQ==
+X-Gm-Message-State: APjAAAVg9L0McQH3NWynQ6FjSKyqT0tn8v2kd14xkQkmn1+rUHuuUd/s
+        KC5ZSuS7aWk+K+haMHi4n1UgUxm1
+X-Google-Smtp-Source: APXvYqwJPuljMP53Eox4VElED5fW5XhJcFucKPTEStjVCdG3z5mY6pcFclLGNPX5sU1Dr4KPSiKspA==
+X-Received: by 2002:a05:651c:327:: with SMTP id b7mr17969114ljp.22.1577120800177;
+        Mon, 23 Dec 2019 09:06:40 -0800 (PST)
+Received: from [192.168.1.36] (88-114-211-119.elisa-laajakaista.fi. [88.114.211.119])
+        by smtp.gmail.com with ESMTPSA id t81sm8617110lff.25.2019.12.23.09.06.39
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Dec 2019 09:06:39 -0800 (PST)
+To:     linux-modules@vger.kernel.org
+From:   Topi Miettinen <toiwoton@gmail.com>
+Subject: [PATCH] libkmod-module: convert return value from system() to errno
+Message-ID: <f8c64aed-b4a1-e43f-ed4b-f99236932477@gmail.com>
+Date:   Mon, 23 Dec 2019 19:06:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20191108172524.468494-1-gladkov.alexey@gmail.com> <20191204152723.nnmumapusw5zeacl@comp-core-i7-2640m-0182e6>
-In-Reply-To: <20191204152723.nnmumapusw5zeacl@comp-core-i7-2640m-0182e6>
-From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Fri, 20 Dec 2019 10:45:09 -0800
-Message-ID: <CAKi4VA+QrgGNWSKwZx5NFQWtFdF_M=6_V4_LrV7dEhqvncePdw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Add modules.builtin.modinfo support
-To:     linux-modules <linux-modules@vger.kernel.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed;
+ boundary="------------621963F65A72DD7056967A32"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Dec 4, 2019 at 7:27 AM Alexey Gladkov <gladkov.alexey@gmail.com> wrote:
->
-> On Fri, Nov 08, 2019 at 06:25:19PM +0100, Alexey Gladkov wrote:
-> > The kernel since version v5.2-rc1 exports information about built-in
-> > modules in the modules.builtin.modinfo. Now, kmod can show complete information
-> > about the built-in modules as well as about external modules. Also kmod can
-> > understand aliases of built-in modules.
-> >
-> > Before:
-> >
-> > $ modinfo block-major-9-1
-> > modinfo: ERROR: Module block-major-9-1 not found.
-> >
-> > After:
-> >
-> > $ modinfo block-major-9-1
-> > name:           md_mod
-> > filename:       (builtin)
-> > alias:          block-major-9-*
-> > alias:          md
-> > description:    MD RAID framework
-> > license:        GPL
-> > parm:           start_dirty_degraded:int
-> > parm:           create_on_open:bool
-> >
-> > v2:
-> >
-> > * Don't use kmod_file() to parse modules.builtin.modinfo. Instead, parser reads
-> > the file into the buffer by chunks, which reduces the amount of memory.
-> >
-> > Alexey Gladkov (4):
-> >   libkmod: Add parser for modules.builtin.modinfo
-> >   libkmod: Add function to get list of built-in modules
-> >   Lookup aliases in the modules.builtin.modinfo
-> >   modinfo: Show information about built-in modules
->
-> ping.
+This is a multi-part message in MIME format.
+--------------621963F65A72DD7056967A32
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-sorry for the delay, it took me some time to go through it and review.
+Don't use exit status of a command directly as errno code, callers
+will be confused.
 
-Applied,
-thanks
+Signed-off-by: Topi Miettinen <toiwoton@gmail.com>
+---
+  libkmod/libkmod-module.c | 8 +++++---
+  1 file changed, 5 insertions(+), 3 deletions(-)
 
-Lucas De Marchi
+diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+index 8044a8f..6031d80 100644
+--- a/libkmod/libkmod-module.c
++++ b/libkmod/libkmod-module.c
+@@ -983,11 +983,13 @@ static int command_do(struct kmod_module *mod, 
+const char *type,
+         if (err == -1 || WEXITSTATUS(err)) {
+                 ERR(mod->ctx, "Error running %s command for %s\n",
+                                                                 type, 
+modname);
+-               if (err != -1)
+-                       err = -WEXITSTATUS(err);
++               if (err != -1) /* nonzero exit status: something bad 
+happened */
++                       return -EINVAL;
++               else /* child process could not be created */
++                       return -errno;
+         }
 
->
-> >  Makefile.am                |   1 +
-> >  libkmod/libkmod-builtin.c  | 329 +++++++++++++++++++++++++++++++++++++
-> >  libkmod/libkmod-internal.h |  10 ++
-> >  libkmod/libkmod-module.c   |  73 +++++++-
-> >  libkmod/libkmod.c          |  25 +++
-> >  libkmod/libkmod.h          |   1 +
-> >  tools/depmod.c             |  63 +++++++
-> >  tools/modinfo.c            |  39 +++--
-> >  8 files changed, 514 insertions(+), 27 deletions(-)
-> >  create mode 100644 libkmod/libkmod-builtin.c
-> >
-> > --
-> > 2.21.0
-> >
->
-> --
-> Rgrds, legion
->
+-       return err;
++       return 0;
+  }
 
-
+  struct probe_insert_cb {
 -- 
-Lucas De Marchi
+2.24.0
+
+--------------621963F65A72DD7056967A32
+Content-Type: text/x-diff;
+ name="0001-libkmod-module-convert-return-value-from-system-to-e.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename*0="0001-libkmod-module-convert-return-value-from-system-to-e.pa";
+ filename*1="tch"
+
+From f560864a4a8fd61c2881cfefb970db27c2418690 Mon Sep 17 00:00:00 2001
+From: Topi Miettinen <toiwoton@gmail.com>
+Date: Mon, 23 Dec 2019 18:58:13 +0200
+Subject: [PATCH] libkmod-module: convert return value from system() to errno
+
+Don't use exit status of a command directly as errno code, callers
+will be confused.
+
+Signed-off-by: Topi Miettinen <toiwoton@gmail.com>
+---
+ libkmod/libkmod-module.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+index 8044a8f..6031d80 100644
+--- a/libkmod/libkmod-module.c
++++ b/libkmod/libkmod-module.c
+@@ -983,11 +983,13 @@ static int command_do(struct kmod_module *mod, const char *type,
+ 	if (err == -1 || WEXITSTATUS(err)) {
+ 		ERR(mod->ctx, "Error running %s command for %s\n",
+ 								type, modname);
+-		if (err != -1)
+-			err = -WEXITSTATUS(err);
++		if (err != -1) /* nonzero exit status: something bad happened */
++			return -EINVAL;
++		else /* child process could not be created */
++			return -errno;
+ 	}
+ 
+-	return err;
++	return 0;
+ }
+ 
+ struct probe_insert_cb {
+-- 
+2.24.0
+
+
+--------------621963F65A72DD7056967A32--
