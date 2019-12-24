@@ -2,114 +2,110 @@ Return-Path: <SRS0=ZSrg=2O=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7703FC2D0C0
-	for <linux-modules@archiver.kernel.org>; Tue, 24 Dec 2019 02:55:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62EA8C2D0CF
+	for <linux-modules@archiver.kernel.org>; Tue, 24 Dec 2019 09:55:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F53720709
-	for <linux-modules@archiver.kernel.org>; Tue, 24 Dec 2019 02:55:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F27A206B7
+	for <linux-modules@archiver.kernel.org>; Tue, 24 Dec 2019 09:55:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ly0q5hTO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mwym5Dz9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726853AbfLXCzI (ORCPT
+        id S1726124AbfLXJzJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 23 Dec 2019 21:55:08 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:46538 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726832AbfLXCzH (ORCPT
+        Tue, 24 Dec 2019 04:55:09 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:36481 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726084AbfLXJzJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 23 Dec 2019 21:55:07 -0500
-Received: by mail-wr1-f65.google.com with SMTP id z7so18599810wrl.13
-        for <linux-modules@vger.kernel.org>; Mon, 23 Dec 2019 18:55:06 -0800 (PST)
+        Tue, 24 Dec 2019 04:55:09 -0500
+Received: by mail-lj1-f196.google.com with SMTP id r19so20356817ljg.3
+        for <linux-modules@vger.kernel.org>; Tue, 24 Dec 2019 01:55:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BZFlmbYP8bFwL8ZcM2eQXX/A+swTQ8X86mEytK+mqwI=;
-        b=ly0q5hTOA3A/Dm4WUEA7wSQTIumef8KhIV59vI3xoY/3IDCN1hOaJlr7BrTdSicuEA
-         s28t5gMec8AJMCMXNfWAJKnkA4t1YGnoq3NOAGF+0KyjNBakizdIY0fGdmywXlcYJIpH
-         VxwShvW/kdYmUcbtPv0m811i5g1NACXObzz3q8YRSFAioIiVbyfD0QOpHF1WvORVpXy8
-         nwfok4U6f5mVOKGUTpNNiODhEEYaUAlf9tw9/P8dubB9Yan31iv/vaQfNeI+Gr8MDwY9
-         Dc9Jmq4PeEaRJneviDSYxUoa3uCxfU6XSUNWriSjv7XBBR/rBiU/4nwx2tf5ere2ck/C
-         8xUQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=VVoRwkc53RWAIdvceBsZvyVLaj+pNW7Lgc15okUyeEI=;
+        b=Mwym5Dz96twUKsN+TU2duJfxmIIkur0wrlqa6NpBpOYlI8Iy7/D1Wiz1tGLBl+4VWv
+         ftWTkO8z5YnbHJ0ozBTFTFqZWnYejSrgGOmzZMU0Qiiv6EEpn7IasxlNWvukKhinX3YR
+         NRZoRuM5IyBv314VoTlLZrNFjB2eQKaLxUN7pSTsj4Jxf6haM/QebCWjol1ruqOvJ5qm
+         hiyzVu1znhfq/nEcjApRgk04Rx4GQL5n68JiY4GA6glnVu68uT+VGDHnqXHFOXJmtSpp
+         Cp8wq4OTwfyNB2ffDoV51RvSpQ9HWXIEkmZ+a8HcobagDMjkmzmhNMDQ2WwSp3xQTqFh
+         oYCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BZFlmbYP8bFwL8ZcM2eQXX/A+swTQ8X86mEytK+mqwI=;
-        b=CizuGMRK3lJ3rzjWK5//ZhG930Vd+5z+QsQBKhAbPsrG7qQHbXhthKi+OAwaEpADWL
-         R4AI/IxOFt8UIuDt/bibkvY6H2J1iNXiGl0DAIKuiihjdpuxIxNHrUpmCOVO03q1qFn8
-         rpGPsvFc8w8LBrnQeHhf3kL62OQwyr7cE/0dvtTcbBjftPf1HcphlYpNUotz4O6ziCFw
-         TcQSAXuHPaNO23iHh0tXrrPri9w5r6u6DJMSePhJaJc8W4mVUyAflXtGiFUkNBlvbixT
-         vv25NDGRpG7ipapKL6YdZBYN6o+86pEYRfVmfNSKacg0ge22xJfzfLQd6QC0S1D3Lu8k
-         5FdA==
-X-Gm-Message-State: APjAAAV/RD6eqF0VRMf2GebOMA3++/zeWL9L5GkTEhqg6hMlQdTj27Ag
-        e4YNfzqZLB86399o8xObgHIZdm8akteE9vqSUJ8=
-X-Google-Smtp-Source: APXvYqwTfCV7kQVZZ6sSC9x/fhsMzukev9S1guJ4yVC7GDH7bYhbH2/BGGDwp5WRfsDmPS3IvA66RXYQCHu/dZFVZ04=
-X-Received: by 2002:adf:fc08:: with SMTP id i8mr34507077wrr.82.1577156105704;
- Mon, 23 Dec 2019 18:55:05 -0800 (PST)
-MIME-Version: 1.0
-References: <f8c64aed-b4a1-e43f-ed4b-f99236932477@gmail.com>
-In-Reply-To: <f8c64aed-b4a1-e43f-ed4b-f99236932477@gmail.com>
-From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Mon, 23 Dec 2019 18:54:53 -0800
-Message-ID: <CAKi4VAK3pGJt8qA6CVrkwJOa5JLGtc63hWM0UZngp_qJb40jcw@mail.gmail.com>
-Subject: Re: [PATCH] libkmod-module: convert return value from system() to errno
-To:     Topi Miettinen <toiwoton@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=VVoRwkc53RWAIdvceBsZvyVLaj+pNW7Lgc15okUyeEI=;
+        b=IkwVt9j3XCY0isKedjxcqO2Hv07YfaTmXYvWPZP3Mowpm6SF4lUgoTlXFCntezmgyZ
+         jAuTGG9Cago2uEzfWROKjokbCXvBdbygcV44oARcRJj2S8JsCSt/Xyknriv5fOsvULrf
+         qPnAOA9bWGcIxfDdmMkRMdjDLep7Xk0XpgN7ZztAWkog1iR+jrciiOm0Rzyz1AMh8Oy5
+         mlNgXyTLznm/8762qhvPr03yskWX4VgpRdfyclKCuEb3ZFNlSpgX4xamJ1bQ7ZF7wVba
+         dG7yzxv/nTfhBvkG+rxT9hBobJPnoN2JdMl/GrgjfLqJQX7WpC8F8oHSn8Mll3YNzlQK
+         UtJQ==
+X-Gm-Message-State: APjAAAVafScrC1LqLES8br0fhdfB2IoEKZOsH4yGZuOs3W4UuZZsE2Rb
+        rL5kiOWt9s6mYIoZu9/JxgxDk4XZ
+X-Google-Smtp-Source: APXvYqxYUBUhlSVtIPTR8ow07PIomawLrU/FgtH9p5w3iHBCnHDpuPQpBXEW+9vEWLZKjarqaeRb0A==
+X-Received: by 2002:a2e:9843:: with SMTP id e3mr20622895ljj.45.1577181307423;
+        Tue, 24 Dec 2019 01:55:07 -0800 (PST)
+Received: from [192.168.1.36] (88-114-211-119.elisa-laajakaista.fi. [88.114.211.119])
+        by smtp.gmail.com with ESMTPSA id k25sm9606587lji.42.2019.12.24.01.55.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Dec 2019 01:55:06 -0800 (PST)
+Subject: Re: [PATCH] libkmod-module: convert return value from system() to
+ errno
+To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
 Cc:     linux-modules <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <f8c64aed-b4a1-e43f-ed4b-f99236932477@gmail.com>
+ <CAKi4VAK3pGJt8qA6CVrkwJOa5JLGtc63hWM0UZngp_qJb40jcw@mail.gmail.com>
+From:   Topi Miettinen <toiwoton@gmail.com>
+Message-ID: <8b27685f-138f-2a5e-3247-2ed2a855b7db@gmail.com>
+Date:   Tue, 24 Dec 2019 11:54:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAKi4VAK3pGJt8qA6CVrkwJOa5JLGtc63hWM0UZngp_qJb40jcw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Dec 23, 2019 at 9:07 AM Topi Miettinen <toiwoton@gmail.com> wrote:
->
-> Don't use exit status of a command directly as errno code, callers
-> will be confused.
->
-> Signed-off-by: Topi Miettinen <toiwoton@gmail.com>
-> ---
->   libkmod/libkmod-module.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-> index 8044a8f..6031d80 100644
-> --- a/libkmod/libkmod-module.c
-> +++ b/libkmod/libkmod-module.c
-> @@ -983,11 +983,13 @@ static int command_do(struct kmod_module *mod,
-> const char *type,
->          if (err == -1 || WEXITSTATUS(err)) {
->                  ERR(mod->ctx, "Error running %s command for %s\n",
->                                                                  type,
-> modname);
-> -               if (err != -1)
-> -                       err = -WEXITSTATUS(err);
+On 24.12.2019 4.54, Lucas De Marchi wrote:
+> On Mon, Dec 23, 2019 at 9:07 AM Topi Miettinen <toiwoton@gmail.com> wrote:
+>>
+>> Don't use exit status of a command directly as errno code, callers
+>> will be confused.
+>>
+>> Signed-off-by: Topi Miettinen <toiwoton@gmail.com>
+>> ---
+>>    libkmod/libkmod-module.c | 8 +++++---
+>>    1 file changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+>> index 8044a8f..6031d80 100644
+>> --- a/libkmod/libkmod-module.c
+>> +++ b/libkmod/libkmod-module.c
+>> @@ -983,11 +983,13 @@ static int command_do(struct kmod_module *mod,
+>> const char *type,
+>>           if (err == -1 || WEXITSTATUS(err)) {
+>>                   ERR(mod->ctx, "Error running %s command for %s\n",
+>>                                                                   type,
+>> modname);
+>> -               if (err != -1)
+>> -                       err = -WEXITSTATUS(err);
+> 
+> I don't think we actually care about differentiating them. So just a plain
+> return -EINVAL;  here would suffice, makes sense?
 
-I don't think we actually care about differentiating them. So just a plain
-return -EINVAL;  here would suffice, makes sense?
+I think it would lose potentially valuable information. For example 
+EPERM could tell the system administrator of a problem with MAC 
+configuration preventing execution of the shell, ENOENT could show that 
+the shell or shared libraries are missing and so forth.
 
-Lucas De Marchi
-
-> +               if (err != -1) /* nonzero exit status: something bad
-> happened */
-> +                       return -EINVAL;
-> +               else /* child process could not be created */
-> +                       return -errno;
->          }
->
-> -       return err;
-> +       return 0;
->   }
->
->   struct probe_insert_cb {
-> --
-> 2.24.0
-
-
-
--- 
-Lucas De Marchi
+-Topi
