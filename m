@@ -2,163 +2,109 @@ Return-Path: <SRS0=c+VG=4H=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBBDCC34031
-	for <linux-modules@archiver.kernel.org>; Wed, 19 Feb 2020 00:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93E47C34022
+	for <linux-modules@archiver.kernel.org>; Wed, 19 Feb 2020 09:02:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9B990208E4
-	for <linux-modules@archiver.kernel.org>; Wed, 19 Feb 2020 00:31:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D64D2464E
+	for <linux-modules@archiver.kernel.org>; Wed, 19 Feb 2020 09:02:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FBPLYa8q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W+MvosDD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727285AbgBSAbf (ORCPT
+        id S1726480AbgBSJCf (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 18 Feb 2020 19:31:35 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:40783 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726595AbgBSAbe (ORCPT
+        Wed, 19 Feb 2020 04:02:35 -0500
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:41403 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726260AbgBSJCf (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 18 Feb 2020 19:31:34 -0500
-Received: by mail-wr1-f65.google.com with SMTP id t3so26141477wru.7;
-        Tue, 18 Feb 2020 16:31:31 -0800 (PST)
+        Wed, 19 Feb 2020 04:02:35 -0500
+Received: by mail-vs1-f67.google.com with SMTP id k188so14600110vsc.8;
+        Wed, 19 Feb 2020 01:02:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=UHaPN0DZu1fxS+M0vlQ6OnOtCLQym/jYIkBeP1Ud8+E=;
-        b=FBPLYa8qSF1TjjZnYfw2tJppeOUpIbGdtVRiliBaQqmiNjFxJfyZeJ1KneAeVH1wuz
-         71e0KkTvuJrusRMQ5QrXvQksiw6/ATDZERsiLbN/mHyZDv4a2g8gKls7DIFvIsO9hUQf
-         4ilBuNvzR8XxGn6evl3VgjvRtWusjJwZsgKboCwEDOR8HOWf25XL8pzgbxmzYW4vkGqP
-         R2N1IatXyA1hGzuf5VQMrw1T2Qs73e4jMsCWbY2+Sf7Vgt/aDryxhlBJ+cKNGN/kvy6q
-         dDsVLY3dlWS4JqXXpam1QJkmvNuovzaLo6Cso1Ni/MzDyWo1iKsLVMuhxcS33e1UjrMZ
-         eYew==
+        bh=TSVyOEZZlUXcItl/vOCqMLuW1ofkxTSLhKQ7okp+WUw=;
+        b=W+MvosDDNezGY0Xz11wcWD5F1iPFX3ljmRkbHSfE1anrFuYDdb5UEvX8Fd8FSEH9fK
+         g8XNmermebanajz8wUzJv6E7+Lpo9m7pUKQ8ZjMH8YxkLRrPGILV6HWQ4eHw5XDZ53IT
+         JtSiHbAegJIwYSLSM1i75JFwskZoZYZmkoHBZr3guFZvzpisQLR5P/3OZjhatToz49LT
+         W008XH5uN98RYQ5w1FVVPIiAj2mk8Kqji8aeT4695uKAsTwWkkJCOIw992VqU97Pyepv
+         JZaJ0Dnq2IVvJ2db4U3xYnlHdTyVasQ1eT9IhbblNbuRuTspOSdoXH7PKohvp1PxIh0S
+         FggA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=UHaPN0DZu1fxS+M0vlQ6OnOtCLQym/jYIkBeP1Ud8+E=;
-        b=pRSwvV9n9CHrhd4C7d0T5kuQSqDe6GJKWBOh3K8qrdKwRg+Wn59IuoqyAL6QCN0mTn
-         UiqoqjhS+hHosgz73KZnRogXW79Fuo097zFcouwVyGlB2aruoO/MnPUJBaoKbEbA5NWz
-         Ro0U+7o2QRzo/aEusLgmQgfuIPv3WdusHDGPGOsboOBufz8rZ1YJNwlj+2F7jUChAfri
-         ahna6salKjCYiEV97vanPCSS28clNa44j/6Fh0VrhGaKjAwyoIbu7HQL/mAjNfu2N1OL
-         Zqz9SgkvnPyU72uUVXS54p8SEbbTzer74WAHoVyE2AEhsNMeZDDPIQO8z2D1/iabjUag
-         nzUQ==
-X-Gm-Message-State: APjAAAULuttJEJ7rIDq8+3dFnpJdBCRbq2Ee5pxH0zIDl067OSm1Gpv+
-        jzh1SXFudFbwi+nPVXAI1+jy4n9ORgm6MP4g7/AFdDtVfDs=
-X-Google-Smtp-Source: APXvYqzJ4OM4IWZg/0jbA8gz1iT9obfQTHotphWhtXWd7kYWI9cCCgmPh/uIJq2MCjgG9qtTheImBfFIzN206KXAblo=
-X-Received: by 2002:a5d:68cf:: with SMTP id p15mr30780329wrw.31.1582072290537;
- Tue, 18 Feb 2020 16:31:30 -0800 (PST)
+        bh=TSVyOEZZlUXcItl/vOCqMLuW1ofkxTSLhKQ7okp+WUw=;
+        b=TlmEhK8ARvxQkU8jlX5bg7aNkDbWxL8i/WnNwIFGPnh9Ib+TD7y4dsaKre2HRsHSkV
+         V7+V+exlO+8l9wXqaKTpWC2HaXLWnqUSJ99gI/lnMcGsd4esdyX7qhE6w+LG06Llh7Pa
+         xJ/C3rmCgEACwpdDS8K1bLfDCCOIO8psOn8Z9NdbQFzhyS3BnTlfvmFES2exo44yb6+x
+         cHH0KxP57XLuJLiW77fcwPCv3UcXXXUXTooMN3pbPL+39NZoQkfcj91BGbXina/FpZ38
+         iavDo8OMjhh/+rJdxK6zJNAqUm1C1HFAILdpfVQyJ24S3H6t+DFjlURbjKHdmeyf1vom
+         GukA==
+X-Gm-Message-State: APjAAAUP+NucwGvTHrsMpGC4Ubmc6J8JFKXDwmB30EyRVrvESFjVeuK+
+        zcGUmP/J4ON01HMxKQmF42nYF4rQ4lFstlbf3uk=
+X-Google-Smtp-Source: APXvYqyYPlXGS2nEIB0nWEpd2b1ixbT/+c7Z/cOCKib+7XtifVu0NFO4zmvfJR/Et/9/RC0y/ZQ/vXXzv9FEqzt3KWQ=
+X-Received: by 2002:a67:eac5:: with SMTP id s5mr13315040vso.148.1582102954243;
+ Wed, 19 Feb 2020 01:02:34 -0800 (PST)
 MIME-Version: 1.0
-From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Tue, 18 Feb 2020 16:31:17 -0800
-Message-ID: <CAKi4VAL0R+rzTirDQmFGVTRYLL6ACYN3oXVegfPgovvN5ibR6A@mail.gmail.com>
-Subject: [ANNOUNCE] kmod 27
-To:     linux-modules <linux-modules@vger.kernel.org>
-Cc:     Jessica Yu <jeyu@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+From:   Martin Haass <vvvrrooomm@gmail.com>
+Date:   Wed, 19 Feb 2020 10:02:17 +0100
+Message-ID: <CAH3oDPzeu_bzYa3fOUpcjQk4HJ5K2Rx+Qf+qbqxSrmTdrWHm5g@mail.gmail.com>
+Subject: [PATCH] module support: during lockdown, log name of unsigned module
+To:     Jessica Yu <jeyu@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-modules@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-kmod 27 is out:
+during lockdown loading of unsigned modules is restricted to signed
+modules only. The old error message does not show which module misses
+the signature, making it very difficult for a user to determine which
+module is at fault.
+This patch adds a line to the logs which additionally contains the
+module name that caused the error message. The old message cannot
+be replaced as it is generated by lockdown_is_locked_down
+---
+ kernel/module.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-        https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-27.tar.xz
-        https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-27.tar.sign
+diff --git a/kernel/module.c b/kernel/module.c
+index 33569a01d6e..6dcb28139a0 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -2807,7 +2807,8 @@ static int module_sig_check(struct load_info *info,
+int flags)
+  const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+  const char *reason;
+  const void *mod = info->hdr;
+-
++ int is_locked = -EPERM;
++
+  /*
+  * Require flags == 0, as a module with version information
+  * removed is no longer the module that was signed
+@@ -2843,7 +2844,12 @@ static int module_sig_check(struct load_info *info,
+int flags)
+  return -EKEYREJECTED;
+  }
 
-- Improvements
-        - Link to libcrypto rather than requiring openssl
+- return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
++ is_locked = security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
++ if (is_locked == -EPERM) {
++ pr_notice("Lockdown: %s: rejected module '%s' cause: %s",
++ current->comm, info->name, reason);
++ }
++ return is_locked;
 
-        - Print a better error message when kernel doesn't support module unload
-
-        - Use PKCS#7 instead of CMS for parsing module signature to be
-          compatible with LibreSSL and OpenSSL < 1.1.0
-
-        - Teach modinfo to parse modules.builtin.modinfo. When using
-Linux kernel
-          >= v5.2-rc1 it's possible to get module information from
-this new file. Now
-          modinfo is able to show it instead of an error message that
-the module is
-          built-in:
-
-          Before:
-          $ modinfo ext4
-          modinfo: ERROR: Module ext4 not found.
-
-          After:
-          $ modinfo ext4
-          name:           ext4
-          filename:       (builtin)
-          softdep:        pre: crc32c
-          license:        GPL
-          description:    Fourth Extended Filesystem
-          author:         Remy Card, Stephen Tweedie, Andrew Morton,
-Andreas Dilger, Theodore Ts'o and others
-          alias:          fs-ext4
-          alias:          ext3
-          alias:          fs-ext3
-          alias:          ext2
-          alias:          fs-ext2
-
-- Bug fixes
-        - Do not link python bindings with libpython to be compatible with
-          python3.8
-
-        - Fix module removal with `modprobe -r` when a dependency is built-in.
-          Now it properly ignores them and proceed with removal of other
-          dependencies
-
-        - Fix propagation of return code from install/remove commands to the
-          the probe function. The return values of
-kmod_module_probe_insert_module()
-          have very specific meanings, do not confuse the caller by return codes
-          from system()
-
-        - Fix softdep config parsing leading to buffer overflow
-
-Shortlog is below:
-
-Lucas De Marchi (5):
-      testsuite: update gitignore
-      travis: remove old compiler failing to build kernel module
-      modprobe: use flags rather than bool args
-      libkmod: reset was_space on second pass
-      kmod 27
-
-Alexey Gladkov (4):
-      libkmod: Add parser for modules.builtin.modinfo
-      libkmod: Add function to get list of built-in modules
-      Lookup aliases in the modules.builtin.modinfo
-      modinfo: Show information about built-in modules
-
-Adrian Bunk (1):
-      build: Stop using dolt
-
-Dave Reisner (1):
-      Link against libcrypto, not all of openssl
-
-Ezequiel Garcia (1):
-      tools: Print a message if refcnt attribute is missing
-
-Fabrice Fontaine (1):
-      Makefile.am: filter -Wl,--no-undefined
-
-Stefan Strogin (1):
-      libkmod-signature: use PKCS#7 instead of CMS
-
-Thomas Petazzoni (1):
-      Do not check for undefined symbols when building the Python modules
-
-Topi Miettinen (1):
-      libkmod-module: convert return value from system() to errno
-
-Yauheni Kaliuta (1):
-      modprobe: ignore builtin module on recursive removing
-
-
-Thank you all for the contributions.
-
-
-Lucas De Marchi
+  /* All other errors are fatal, including nomem, unparseable
+  * signatures and signature check failures - even if signatures
+-- 
+2.25.0
