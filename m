@@ -2,128 +2,135 @@ Return-Path: <SRS0=C6ur=4O=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 831F2C4BA18
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 17:58:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3F7BC4BA1E
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 18:31:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 549CE24656
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 17:58:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582739937;
-	bh=gbiYIrb9qVJDfgN91Du8k34UKtZT8nALXnHYvkQ4qVg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=oMak73zB6Hzu8tDVoInNUgQoAqHjnHf/0TVOkc6oF43Lx8/YVaF9XaBZ47laBRj1x
-	 yEUjlU5x7K6/Bloq/FT6rpiM4Az0q0RdeVDVsc4BLbSbEYjQC/oCwO6Ze/1noeFlFl
-	 lZWBcd9gumrmJvEBqsA+trjv18nYu1KnkviE0Rs8=
+	by mail.kernel.org (Postfix) with ESMTP id A138B24653
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 18:31:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726920AbgBZR65 (ORCPT
+        id S1727169AbgBZSb6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 26 Feb 2020 12:58:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53356 "EHLO mail.kernel.org"
+        Wed, 26 Feb 2020 13:31:58 -0500
+Received: from monster.unsafe.ru ([5.9.28.80]:37662 "EHLO mail.unsafe.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726688AbgBZR64 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 26 Feb 2020 12:58:56 -0500
-Received: from linux-8ccs (p5B2812F9.dip0.t-ipconnect.de [91.40.18.249])
+        id S1726789AbgBZSb6 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Wed, 26 Feb 2020 13:31:58 -0500
+Received: from comp-core-i7-2640m-0182e6 (ip-89-102-33-211.net.upcbroadband.cz [89.102.33.211])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4BDE424656;
-        Wed, 26 Feb 2020 17:58:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582739935;
-        bh=gbiYIrb9qVJDfgN91Du8k34UKtZT8nALXnHYvkQ4qVg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0+USs4nsndDOEuS3FrNtmAiAf2QOIxp7rGqG+oY2bFJf7s66F3pWPMTDlAVEIVXsj
-         3PFrgFaCqncjZBZ86ohNePitPVwoctQ9BSRsV+s8M7I0FjYwg3VYmLpCjIyMWjcJS5
-         zDWPYjRaxaA0reJpysRQrth6JOSCbNyRCanyxNcU=
-Date:   Wed, 26 Feb 2020 18:58:50 +0100
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Martin Haass <vvvrrooomm@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH] module support: during lockdown, log name of unsigned
- module
-Message-ID: <20200226175849.GB20449@linux-8ccs>
-References: <CAH3oDPzeu_bzYa3fOUpcjQk4HJ5K2Rx+Qf+qbqxSrmTdrWHm5g@mail.gmail.com>
+        by mail.unsafe.ru (Postfix) with ESMTPSA id 8C8FAC61AB0;
+        Wed, 26 Feb 2020 18:31:54 +0000 (UTC)
+Date:   Wed, 26 Feb 2020 19:31:53 +0100
+From:   Alexey Gladkov <gladkov.alexey@gmail.com>
+To:     mahatma@eu.by
+Cc:     linux-modules@vger.kernel.org
+Subject: Re: modinfo must show real module info, not context if filename set
+Message-ID: <20200226183153.35qmuu57svmx62ab@comp-core-i7-2640m-0182e6>
+References: <dda23def071a8d087cca3538289de1e0@bspu.by>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAH3oDPzeu_bzYa3fOUpcjQk4HJ5K2Rx+Qf+qbqxSrmTdrWHm5g@mail.gmail.com>
-X-OS:   Linux linux-8ccs 5.5.0-lp150.12.61-default x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <dda23def071a8d087cca3538289de1e0@bspu.by>
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-+++ Martin Haass [19/02/20 10:02 +0100]:
->during lockdown loading of unsigned modules is restricted to signed
->modules only. The old error message does not show which module misses
->the signature, making it very difficult for a user to determine which
->module is at fault.
->This patch adds a line to the logs which additionally contains the
->module name that caused the error message. The old message cannot
->be replaced as it is generated by lockdown_is_locked_down
->---
-> kernel/module.c | 10 ++++++++--
-> 1 file changed, 8 insertions(+), 2 deletions(-)
->
->diff --git a/kernel/module.c b/kernel/module.c
->index 33569a01d6e..6dcb28139a0 100644
->--- a/kernel/module.c
->+++ b/kernel/module.c
->@@ -2807,7 +2807,8 @@ static int module_sig_check(struct load_info *info,
->int flags)
->  const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
->  const char *reason;
->  const void *mod = info->hdr;
->-
->+ int is_locked = -EPERM;
->+
->  /*
->  * Require flags == 0, as a module with version information
->  * removed is no longer the module that was signed
->@@ -2843,7 +2844,12 @@ static int module_sig_check(struct load_info *info,
->int flags)
->  return -EKEYREJECTED;
+On Wed, Feb 26, 2020 at 04:53:45AM +0200, Denis Kaganovich wrote:
+> After commit e7e2cb61fa9f1db3429d91ef6accff549500d268, even if real filename
+> passed - modinfo show info from context (so, I got built-in info from
+> running
+> kernel, but asking for new kernel's external module). This behaviour
+> unobvious
+> and incompatible with pre-v27. Simple use fake context for filename - IMHO
+> much less ugly then current results.
+
+Can you give an example of this misbehavior ?
+
+I have a two kernel directories (generic and current) with
+modules.builtin.modinfo:
+
+$ ls -1 /lib/modules/{5.2.0-generic,`uname -r`}/modules.builtin.modinfo 
+/lib/modules/5.2.0-generic/modules.builtin.modinfo
+/lib/modules/5.2.0-current/modules.builtin.modinfo
+
+The ext4 module is built into both:
+
+$ tr '\0' '\n' < /lib/modules/`uname -r`/modules.builtin.modinfo |grep ^ext4.description
+ext4.description=Fourth Extended Filesystem
+
+$ tr '\0' '\n' < /lib/modules/5.2.0-generic/modules.builtin.modinfo |grep ^ext4.description
+ext4.description=Fourth Extended Filesystem
+
+Now I have build this module separately and put it into the tree:
+
+$ find /lib/modules/{5.2.0-generic,`uname -r`} -name 'ext4.*'
+/lib/modules/5.2.0-generic/kernel/fs/ext4/ext4.ko.gz
+
+For current kernel:
+
+$ tools/modinfo ext4 |grep filename
+filename: (builtin)
+
+For the other kernel:
+
+$ tools/modinfo -k 5.2.0-generic ext4 |grep filename
+filename: /lib/modules/5.2.0-generic/kernel/fs/ext4/ext4.ko.gz
+
+Only the external module is displayed, even if there is a module with the
+same name in the modules.builtin.modinfo.
+
+I also have a very old kernel without modules.builtin.modinfo:
+
+$ tools/modinfo -k 4.14.96-generic ext4 |grep filename
+filename: /lib/modules/4.14.96-generic/kernel/fs/ext4/ext4.ko.gz
+
+> Signed-off-by: Dzianis Kahanovich <mahatma@eu.by>
+> 
+> --- a/tools/modinfo.c	2020-02-25 13:46:38.181693570 +0300
+> +++ b/tools/modinfo.c	2020-02-26 05:18:39.393790919 +0300
+> @@ -359,7 +359,7 @@ static bool is_module_filename(const cha
+> 
+>  static int do_modinfo(int argc, char *argv[])
+>  {
+> -	struct kmod_ctx *ctx;
+> +	struct kmod_ctx *ctx, *ctx0;
+>  	char dirname_buf[PATH_MAX];
+>  	const char *dirname = NULL;
+>  	const char *kversion = NULL;
+> @@ -437,7 +437,8 @@ static int do_modinfo(int argc, char *ar
+>  	}
+> 
+>  	ctx = kmod_new(dirname, &null_config);
+> -	if (!ctx) {
+> +	ctx0 = kmod_new("/dev/null", &null_config);
+> +	if (!ctx || !ctx0) {
+>  		ERR("kmod_new() failed!\n");
+>  		return EXIT_FAILURE;
+>  	}
+> @@ -448,7 +449,7 @@ static int do_modinfo(int argc, char *ar
+>  		int r;
+> 
+>  		if (is_module_filename(name))
+> -			r = modinfo_path_do(ctx, name);
+> +			r = modinfo_path_do(ctx0, name);
+>  		else
+>  			r = modinfo_alias_do(ctx, name);
+> 
+> @@ -456,6 +457,7 @@ static int do_modinfo(int argc, char *ar
+>  			err = r;
+>  	}
+> 
+> +	kmod_unref(ctx0);
+>  	kmod_unref(ctx);
+>  	return err >= 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 >  }
->
->- return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
->+ is_locked = security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
->+ if (is_locked == -EPERM) {
->+ pr_notice("Lockdown: %s: rejected module '%s' cause: %s",
->+ current->comm, info->name, reason);
->+ }
->+ return is_locked;
+> 
 
-Hi!
+-- 
+Rgrds, legion
 
-Actually, I think we can just reuse the pr_notice() from the previous if
-(is_module_sig_enforced()) block. It already logs the module name as well as
-the reason. And we'd better leave the lockdown-specific messages to the LSM.
-Something like this perhaps?
-
-diff --git a/kernel/module.c b/kernel/module.c
-index b88ec9cd2a7f..2c881e3b9d92 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -2838,12 +2838,13 @@ static int module_sig_check(struct load_info *info, int flags)
-        case -ENOKEY:
-                reason = "Loading of module with unavailable key";
-        decide:
--               if (is_module_sig_enforced()) {
-+               err = is_module_sig_enforced() ? \
-+                     -EKEYREJECTED : security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
-+
-+               if (err)
-                        pr_notice("%s: %s is rejected\n", info->name, reason);
--                       return -EKEYREJECTED;
--               }
- 
--               return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
-+               return err;
- 
-                /* All other errors are fatal, including nomem, unparseable
-                 * signatures and signature check failures - even if signatures
