@@ -2,106 +2,159 @@ Return-Path: <SRS0=C6ur=4O=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 295C0C4BA0A
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 03:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8B68C4BA0B
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 08:04:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9DD53222C2
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 03:10:39 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=bspu.by header.i=@bspu.by header.b="eJC+R9sK"
+	by mail.kernel.org (Postfix) with ESMTP id 9672821556
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 08:04:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728989AbgBZDKj (ORCPT
+        id S1727335AbgBZIEs (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 25 Feb 2020 22:10:39 -0500
-Received: from mail.bspu.by ([82.209.244.151]:52260 "EHLO mail.bspu.by"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729420AbgBZDKj (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 25 Feb 2020 22:10:39 -0500
-X-Greylist: delayed 1005 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Feb 2020 22:10:38 EST
-Received: from bspu.by (www.bspu.by [82.209.244.150])
-        (authenticated bits=0)
-        by mail.bspu.by (8.15.2/8.15.2) with ESMTPSA id 01Q2rjTF012107
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT)
-        for <linux-modules@vger.kernel.org>; Wed, 26 Feb 2020 05:53:50 +0300
-Authentication-Results: mail.bspu.by; dmarc=fail (p=reject dis=none) header.from=bspu.by
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bspu.by; s=default;
-        t=1582685630; bh=HceND1pa30ctSJOZbw+NjQjzhXg8s7/aP9SLRYltXrM=;
-        h=Date:From:To:Subject:Reply-To;
-        b=eJC+R9sKonLUqqTKCs4aQE/TmVXEMJMSfSqpkpcI+oUJxYGDW4ymvr39JtAszdkV5
-         0bqzI6RQRbBLPNIzVyu7q1638s8pO2IUsZe9ydiu8sRlfMs4WIqUW9O+9Bk67HS5Yr
-         4od2PzgUCK1uDK78f1/4thZ/8q3xZFVlKeelu1Ac=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 26 Feb 2020 04:53:45 +0200
-From:   Denis Kaganovich <mahatma@bspu.by>
+        Wed, 26 Feb 2020 03:04:48 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:49324 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727223AbgBZIEs (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Wed, 26 Feb 2020 03:04:48 -0500
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id CEAA772CCEF
+        for <linux-modules@vger.kernel.org>; Wed, 26 Feb 2020 11:04:45 +0300 (MSK)
+Received: from x230.localdomain (109-252-52-89.nat.spd-mgts.ru [109.252.52.89])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 9762C4A4AFB;
+        Wed, 26 Feb 2020 11:04:45 +0300 (MSK)
+Date:   Wed, 26 Feb 2020 11:04:49 +0300
+From:   "Anton V. Boyarshinov" <boyarsh@altlinux.org>
 To:     linux-modules@vger.kernel.org
-Subject: modinfo must show real module info, not context if filename set
-Reply-To: mahatma@eu.by
-Mail-Reply-To: mahatma@eu.by
-Message-ID: <dda23def071a8d087cca3538289de1e0@bspu.by>
-X-Sender: mahatma@bspu.by
-User-Agent: Roundcube Webmail/1.2.6
-X-Remote-Browser: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:52.0)
- Gecko/20100101 Firefox/52.0 SeaMonkey/2.49.5
-X-Originating-IP: 46.216.160.19
-X-RoundCube-Server: bspu.by
+Cc:     legion@altlinux.org
+Subject: [PATCH] Add kernel-version dependent configuration directory
+Message-ID: <20200226080449.6c997cfd@x230.localdomain>
+Organization: ALT Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-alt-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-After commit e7e2cb61fa9f1db3429d91ef6accff549500d268, even if real 
-filename
-passed - modinfo show info from context (so, I got built-in info from 
-running
-kernel, but asking for new kernel's external module). This behaviour 
-unobvious
-and incompatible with pre-v27. Simple use fake context for filename - 
-IMHO
-much less ugly then current results.
+In some cases it looks reasonable to have kernel-version dependent
+modules configuration: blacklists, options and so on. This commit
+introduces additional configuration directories:
+* /lib/modprobe.d/`uname -r`
+* /etc/modprobe.d/`uname -r`
 
-Signed-off-by: Dzianis Kahanovich <mahatma@eu.by>
+Signed-off-by: Anton V. Boyarshinov <boyarsh@altlinux.org>
+---
+ libkmod/libkmod-config.c |  5 +----
+ libkmod/libkmod.c        | 44 ++++++++++++++++++++++++++++++++++++----
+ man/modprobe.d.xml       |  2 ++
+ 3 files changed, 43 insertions(+), 8 deletions(-)
 
---- a/tools/modinfo.c	2020-02-25 13:46:38.181693570 +0300
-+++ b/tools/modinfo.c	2020-02-26 05:18:39.393790919 +0300
-@@ -359,7 +359,7 @@ static bool is_module_filename(const cha
+diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
+index aaac0a1..5cc348a 100644
+--- a/libkmod/libkmod-config.c
++++ b/libkmod/libkmod-config.c
+@@ -711,11 +711,8 @@ static bool conf_files_filter_out(struct kmod_ctx *ctx, DIR *d,
+ 
+ 	fstatat(dirfd(d), fn, &st, 0);
+ 
+-	if (S_ISDIR(st.st_mode)) {
+-		ERR(ctx, "Directories inside directories are not supported: "
+-							"%s/%s\n", path, fn);
++	if (S_ISDIR(st.st_mode))
+ 		return true;
+-	}
+ 
+ 	return false;
+ }
+diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
+index 69fe431..1ebdeb4 100644
+--- a/libkmod/libkmod.c
++++ b/libkmod/libkmod.c
+@@ -225,6 +225,21 @@ static char *get_kernel_release(const char *dirname)
+ 	return p;
+ }
+ 
++static char *get_ver_config_path(const char * dir)
++{
++	struct utsname u;
++	char *ver_conf;
++	static const char appendix[] = "modprobe.d";
++
++	if (uname(&u) < 0)
++		return NULL;
++
++	if (asprintf(&ver_conf, "%s/%s/%s", dir, appendix, u.release) < 0)
++		return NULL;
++
++	return ver_conf;
++}
++
+ /**
+  * kmod_new:
+  * @dirname: what to consider as linux module's directory, if NULL
+@@ -251,7 +266,7 @@ KMOD_EXPORT struct kmod_ctx *kmod_new(const char *dirname,
+ {
+ 	const char *env;
+ 	struct kmod_ctx *ctx;
+-	int err;
++	int err, configs_count;
+ 
+ 	ctx = calloc(1, sizeof(struct kmod_ctx));
+ 	if (!ctx)
+@@ -269,9 +284,30 @@ KMOD_EXPORT struct kmod_ctx *kmod_new(const char *dirname,
+ 	if (env != NULL)
+ 		kmod_set_log_priority(ctx, log_priority(env));
+ 
+-	if (config_paths == NULL)
+-		config_paths = default_config_paths;
+-	err = kmod_config_new(ctx, &ctx->config, config_paths);
++	if (config_paths == NULL) {
++		char **tmp_config_paths = malloc(sizeof(default_config_paths) +
++				sizeof(char *) * 2);
++		if(tmp_config_paths == NULL) {
++			ERR(ctx, "could not create versioned config.\n");
++			goto fail;
++		}
++
++		memcpy(tmp_config_paths, default_config_paths, sizeof(default_config_paths));
++
++		configs_count = sizeof(default_config_paths) / sizeof(char *);
++		tmp_config_paths[configs_count-1] = get_ver_config_path("/lib");
++		tmp_config_paths[configs_count] = get_ver_config_path("/etc");
++		tmp_config_paths[configs_count+1] = NULL;
++
++		err = kmod_config_new(ctx, &ctx->config, (const char * const*) tmp_config_paths);
++
++		free(tmp_config_paths[configs_count-1]);
++		free(tmp_config_paths[configs_count]);
++		free(tmp_config_paths);
++	}
++	else
++		err = kmod_config_new(ctx, &ctx->config, config_paths);
++
+ 	if (err < 0) {
+ 		ERR(ctx, "could not create config\n");
+ 		goto fail;
+diff --git a/man/modprobe.d.xml b/man/modprobe.d.xml
+index 211af84..d1e254a 100644
+--- a/man/modprobe.d.xml
++++ b/man/modprobe.d.xml
+@@ -41,7 +41,9 @@
+ 
+   <refsynopsisdiv>
+     <para><filename>/lib/modprobe.d/*.conf</filename></para>
++    <para><filename>/lib/modprobe.d/`uname -r`/*.conf</filename></para>
+     <para><filename>/etc/modprobe.d/*.conf</filename></para>
++    <para><filename>/etc/modprobe.d/`uname -r`/*.conf</filename></para>
+     <para><filename>/run/modprobe.d/*.conf</filename></para>
+   </refsynopsisdiv>
+ 
+-- 
+2.21.0
 
-  static int do_modinfo(int argc, char *argv[])
-  {
--	struct kmod_ctx *ctx;
-+	struct kmod_ctx *ctx, *ctx0;
-  	char dirname_buf[PATH_MAX];
-  	const char *dirname = NULL;
-  	const char *kversion = NULL;
-@@ -437,7 +437,8 @@ static int do_modinfo(int argc, char *ar
-  	}
 
-  	ctx = kmod_new(dirname, &null_config);
--	if (!ctx) {
-+	ctx0 = kmod_new("/dev/null", &null_config);
-+	if (!ctx || !ctx0) {
-  		ERR("kmod_new() failed!\n");
-  		return EXIT_FAILURE;
-  	}
-@@ -448,7 +449,7 @@ static int do_modinfo(int argc, char *ar
-  		int r;
-
-  		if (is_module_filename(name))
--			r = modinfo_path_do(ctx, name);
-+			r = modinfo_path_do(ctx0, name);
-  		else
-  			r = modinfo_alias_do(ctx, name);
-
-@@ -456,6 +457,7 @@ static int do_modinfo(int argc, char *ar
-  			err = r;
-  	}
-
-+	kmod_unref(ctx0);
-  	kmod_unref(ctx);
-  	return err >= 0 ? EXIT_SUCCESS : EXIT_FAILURE;
-  }
