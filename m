@@ -2,161 +2,128 @@ Return-Path: <SRS0=C6ur=4O=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11326C4BA10
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 13:32:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 831F2C4BA18
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 17:58:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E632A24683
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 13:32:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 549CE24656
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 17:58:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1582739937;
+	bh=gbiYIrb9qVJDfgN91Du8k34UKtZT8nALXnHYvkQ4qVg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=oMak73zB6Hzu8tDVoInNUgQoAqHjnHf/0TVOkc6oF43Lx8/YVaF9XaBZ47laBRj1x
+	 yEUjlU5x7K6/Bloq/FT6rpiM4Az0q0RdeVDVsc4BLbSbEYjQC/oCwO6Ze/1noeFlFl
+	 lZWBcd9gumrmJvEBqsA+trjv18nYu1KnkviE0Rs8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbgBZNcX (ORCPT
+        id S1726920AbgBZR65 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 26 Feb 2020 08:32:23 -0500
-Received: from vmicros1.altlinux.org ([194.107.17.57]:52626 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727118AbgBZNcX (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 26 Feb 2020 08:32:23 -0500
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 120A072CCEF
-        for <linux-modules@vger.kernel.org>; Wed, 26 Feb 2020 16:32:22 +0300 (MSK)
-Received: from table.localdomain (109-252-52-89.nat.spd-mgts.ru [109.252.52.89])
-        by imap.altlinux.org (Postfix) with ESMTPSA id DE9294A4A16;
-        Wed, 26 Feb 2020 16:32:21 +0300 (MSK)
-Date:   Wed, 26 Feb 2020 16:32:21 +0300
-From:   "Anton V. Boyarshinov" <boyarsh@altlinux.org>
-To:     linux-modules@vger.kernel.org
-Cc:     legion@altlinux.org
-Subject: [PATCH v2] Add kernel-version dependent configuration directory
-Message-ID: <20200226133221.44342a57@table.localdomain>
-Organization: ALT Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-alt-linux-gnu)
+        Wed, 26 Feb 2020 12:58:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53356 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726688AbgBZR64 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Wed, 26 Feb 2020 12:58:56 -0500
+Received: from linux-8ccs (p5B2812F9.dip0.t-ipconnect.de [91.40.18.249])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4BDE424656;
+        Wed, 26 Feb 2020 17:58:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582739935;
+        bh=gbiYIrb9qVJDfgN91Du8k34UKtZT8nALXnHYvkQ4qVg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0+USs4nsndDOEuS3FrNtmAiAf2QOIxp7rGqG+oY2bFJf7s66F3pWPMTDlAVEIVXsj
+         3PFrgFaCqncjZBZ86ohNePitPVwoctQ9BSRsV+s8M7I0FjYwg3VYmLpCjIyMWjcJS5
+         zDWPYjRaxaA0reJpysRQrth6JOSCbNyRCanyxNcU=
+Date:   Wed, 26 Feb 2020 18:58:50 +0100
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Martin Haass <vvvrrooomm@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH] module support: during lockdown, log name of unsigned
+ module
+Message-ID: <20200226175849.GB20449@linux-8ccs>
+References: <CAH3oDPzeu_bzYa3fOUpcjQk4HJ5K2Rx+Qf+qbqxSrmTdrWHm5g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAH3oDPzeu_bzYa3fOUpcjQk4HJ5K2Rx+Qf+qbqxSrmTdrWHm5g@mail.gmail.com>
+X-OS:   Linux linux-8ccs 5.5.0-lp150.12.61-default x86_64
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-In some cases it looks reasonable to have kernel-version dependent
-modules configuration: blacklists, options and so on. This commit
-introduces additional configuration directories:
-* /lib/modprobe.d/`uname -r`
-* /etc/modprobe.d/`uname -r`
++++ Martin Haass [19/02/20 10:02 +0100]:
+>during lockdown loading of unsigned modules is restricted to signed
+>modules only. The old error message does not show which module misses
+>the signature, making it very difficult for a user to determine which
+>module is at fault.
+>This patch adds a line to the logs which additionally contains the
+>module name that caused the error message. The old message cannot
+>be replaced as it is generated by lockdown_is_locked_down
+>---
+> kernel/module.c | 10 ++++++++--
+> 1 file changed, 8 insertions(+), 2 deletions(-)
+>
+>diff --git a/kernel/module.c b/kernel/module.c
+>index 33569a01d6e..6dcb28139a0 100644
+>--- a/kernel/module.c
+>+++ b/kernel/module.c
+>@@ -2807,7 +2807,8 @@ static int module_sig_check(struct load_info *info,
+>int flags)
+>  const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+>  const char *reason;
+>  const void *mod = info->hdr;
+>-
+>+ int is_locked = -EPERM;
+>+
+>  /*
+>  * Require flags == 0, as a module with version information
+>  * removed is no longer the module that was signed
+>@@ -2843,7 +2844,12 @@ static int module_sig_check(struct load_info *info,
+>int flags)
+>  return -EKEYREJECTED;
+>  }
+>
+>- return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
+>+ is_locked = security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
+>+ if (is_locked == -EPERM) {
+>+ pr_notice("Lockdown: %s: rejected module '%s' cause: %s",
+>+ current->comm, info->name, reason);
+>+ }
+>+ return is_locked;
 
-Signed-off-by: Anton V. Boyarshinov <boyarsh@altlinux.org>
----
-Changes from v1: ARRAY_SIZE and SYSCONFDIR macros are used
+Hi!
 
- libkmod/libkmod-config.c |  5 +----
- libkmod/libkmod.c        | 44 ++++++++++++++++++++++++++++++++++++----
- man/modprobe.d.xml       |  2 ++
- 3 files changed, 43 insertions(+), 8 deletions(-)
+Actually, I think we can just reuse the pr_notice() from the previous if
+(is_module_sig_enforced()) block. It already logs the module name as well as
+the reason. And we'd better leave the lockdown-specific messages to the LSM.
+Something like this perhaps?
 
-diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
-index aaac0a1..5cc348a 100644
---- a/libkmod/libkmod-config.c
-+++ b/libkmod/libkmod-config.c
-@@ -711,11 +711,8 @@ static bool conf_files_filter_out(struct kmod_ctx *ctx, DIR *d,
+diff --git a/kernel/module.c b/kernel/module.c
+index b88ec9cd2a7f..2c881e3b9d92 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -2838,12 +2838,13 @@ static int module_sig_check(struct load_info *info, int flags)
+        case -ENOKEY:
+                reason = "Loading of module with unavailable key";
+        decide:
+-               if (is_module_sig_enforced()) {
++               err = is_module_sig_enforced() ? \
++                     -EKEYREJECTED : security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
++
++               if (err)
+                        pr_notice("%s: %s is rejected\n", info->name, reason);
+-                       return -EKEYREJECTED;
+-               }
  
- 	fstatat(dirfd(d), fn, &st, 0);
+-               return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
++               return err;
  
--	if (S_ISDIR(st.st_mode)) {
--		ERR(ctx, "Directories inside directories are not supported: "
--							"%s/%s\n", path, fn);
-+	if (S_ISDIR(st.st_mode))
- 		return true;
--	}
- 
- 	return false;
- }
-diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
-index 69fe431..b718da0 100644
---- a/libkmod/libkmod.c
-+++ b/libkmod/libkmod.c
-@@ -225,6 +225,21 @@ static char *get_kernel_release(const char *dirname)
- 	return p;
- }
- 
-+static char *get_ver_config_path(const char * dir)
-+{
-+	struct utsname u;
-+	char *ver_conf;
-+	static const char appendix[] = "modprobe.d";
-+
-+	if (uname(&u) < 0)
-+		return NULL;
-+
-+	if (asprintf(&ver_conf, "%s/%s/%s", dir, appendix, u.release) < 0)
-+		return NULL;
-+
-+	return ver_conf;
-+}
-+
- /**
-  * kmod_new:
-  * @dirname: what to consider as linux module's directory, if NULL
-@@ -251,7 +266,7 @@ KMOD_EXPORT struct kmod_ctx *kmod_new(const char *dirname,
- {
- 	const char *env;
- 	struct kmod_ctx *ctx;
--	int err;
-+	int err, configs_count;
- 
- 	ctx = calloc(1, sizeof(struct kmod_ctx));
- 	if (!ctx)
-@@ -269,9 +284,30 @@ KMOD_EXPORT struct kmod_ctx *kmod_new(const char *dirname,
- 	if (env != NULL)
- 		kmod_set_log_priority(ctx, log_priority(env));
- 
--	if (config_paths == NULL)
--		config_paths = default_config_paths;
--	err = kmod_config_new(ctx, &ctx->config, config_paths);
-+	if (config_paths == NULL) {
-+		char **tmp_config_paths = malloc(sizeof(default_config_paths) +
-+				sizeof(char *) * 2);
-+		if(tmp_config_paths == NULL) {
-+			ERR(ctx, "could not create versioned config.\n");
-+			goto fail;
-+		}
-+
-+		memcpy(tmp_config_paths, default_config_paths, sizeof(default_config_paths));
-+
-+		configs_count = ARRAY_SIZE(default_config_paths);
-+		tmp_config_paths[configs_count-1] = get_ver_config_path("/lib");
-+		tmp_config_paths[configs_count] = get_ver_config_path(SYSCONFDIR);
-+		tmp_config_paths[configs_count+1] = NULL;
-+
-+		err = kmod_config_new(ctx, &ctx->config, (const char * const*) tmp_config_paths);
-+
-+		free(tmp_config_paths[configs_count-1]);
-+		free(tmp_config_paths[configs_count]);
-+		free(tmp_config_paths);
-+	}
-+	else
-+		err = kmod_config_new(ctx, &ctx->config, config_paths);
-+
- 	if (err < 0) {
- 		ERR(ctx, "could not create config\n");
- 		goto fail;
-diff --git a/man/modprobe.d.xml b/man/modprobe.d.xml
-index 211af84..d1e254a 100644
---- a/man/modprobe.d.xml
-+++ b/man/modprobe.d.xml
-@@ -41,7 +41,9 @@
- 
-   <refsynopsisdiv>
-     <para><filename>/lib/modprobe.d/*.conf</filename></para>
-+    <para><filename>/lib/modprobe.d/`uname -r`/*.conf</filename></para>
-     <para><filename>/etc/modprobe.d/*.conf</filename></para>
-+    <para><filename>/etc/modprobe.d/`uname -r`/*.conf</filename></para>
-     <para><filename>/run/modprobe.d/*.conf</filename></para>
-   </refsynopsisdiv>
- 
--- 
-2.21.0
-
-
+                /* All other errors are fatal, including nomem, unparseable
+                 * signatures and signature check failures - even if signatures
