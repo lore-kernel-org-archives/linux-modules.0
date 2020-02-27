@@ -1,111 +1,226 @@
-Return-Path: <SRS0=C6ur=4O=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=uawh=4P=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DB25C4BA24
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 22:36:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8745C4BA3C
+	for <linux-modules@archiver.kernel.org>; Thu, 27 Feb 2020 08:44:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6194D24656
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Feb 2020 22:36:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 975E82467B
+	for <linux-modules@archiver.kernel.org>; Thu, 27 Feb 2020 08:44:03 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QJ4byFzn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727763AbgBZWgd (ORCPT
+        id S1728440AbgB0IoC (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 26 Feb 2020 17:36:33 -0500
-Received: from monster.unsafe.ru ([5.9.28.80]:59688 "EHLO mail.unsafe.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727709AbgBZWgd (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 26 Feb 2020 17:36:33 -0500
-Received: from comp-core-i7-2640m-0182e6 (ip-89-102-33-211.net.upcbroadband.cz [89.102.33.211])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.unsafe.ru (Postfix) with ESMTPSA id C720AC61832;
-        Wed, 26 Feb 2020 22:36:29 +0000 (UTC)
-Date:   Wed, 26 Feb 2020 23:36:28 +0100
-From:   Alexey Gladkov <gladkov.alexey@gmail.com>
-To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc:     mahatma@eu.by, linux-modules <linux-modules@vger.kernel.org>
-Subject: Re: modinfo must show real module info, not context if filename set
-Message-ID: <20200226223628.ncpovmhd6kpyph2l@comp-core-i7-2640m-0182e6>
-References: <dda23def071a8d087cca3538289de1e0@bspu.by>
- <20200226183153.35qmuu57svmx62ab@comp-core-i7-2640m-0182e6>
- <CAKi4VAJFM0oM5r0oUtgT0oChH2q6+5YNq_46e01ih4j5qXsCxQ@mail.gmail.com>
+        Thu, 27 Feb 2020 03:44:02 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:46354 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728482AbgB0IoC (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 27 Feb 2020 03:44:02 -0500
+Received: by mail-wr1-f68.google.com with SMTP id j7so2170429wrp.13
+        for <linux-modules@vger.kernel.org>; Thu, 27 Feb 2020 00:44:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mLUOzi+75LC+LpoTw1P0vq9GAVyNQdTNfnYIoamCwiI=;
+        b=QJ4byFzneM2HNtD2ZPh+4ytuXQKSh6kNZz20CdKv4r23brJM/XZwlm6VEy7gUIjPfN
+         2cmD1NZ9ubJEYO7mcopsS+FTeqEmw0lY/Zs0+FZ6AMe8U17G6jiTwH4+QJpiinY+1553
+         fVobtz58xOUJVHp7uDr+TDbyBtTKbKJvg+ste1/BDsuvuQnJ0A+cjfzMDXAlae/YI8QV
+         yCVhmwudlg3oNCiFn0S0XXCax+68v2F/Gw8L01S7qYgx3gx+8x2JPJf5surN2CWpFLiI
+         1sAhvhnLnTxOLkEDszd6S7649KyimlCVSNkjrsyiuLMAInh37sIq/s3QsEqzWalCJpiT
+         jD/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mLUOzi+75LC+LpoTw1P0vq9GAVyNQdTNfnYIoamCwiI=;
+        b=ccUlJOW+mgTPSY2D+xq8Tmc99/W2ViRPgVsRDqes71EJjidC4V4GvSKbYTXfHzUDFX
+         z6jzN/WSu5x27Zisid1Mnnaf1qq6nizPgqEH5e0Uf7oQ63I2vvg6Zamoe00HvitMYrUx
+         fM/xRC0w+DdCCEnyH1KDzv4C2P48eGy4nPuNvIqBzwpHDtI8UcJ9XavTQfZJ5rv1c2a3
+         yfQ8X55YbvZtiSFFIYkaDda8URoIdOENt7fkt31XXfC9AFbhVTCjYS7+2eB4H+67TuzI
+         01LFsdqscooEsISflI98li/d87IvuLcLMze5oVtvPKyt2iL4bAPZBNQVk3vHFcYFmwwh
+         zx9g==
+X-Gm-Message-State: APjAAAVFISbQKKPGz6W1jeBd8qVZPyrYaXx6HDsHMGlX2ip4I0qPGP72
+        gRuos9JvJZNe4J1vraramAI8q6UXA90CetWjaJrO5avyNl0=
+X-Google-Smtp-Source: APXvYqxFMhwK7xef1nfX+SPPgpYJPVgyTV9DyW2W3NkihozPY3OXoaa7FKpfdzsBUbNMnRqSVv3cxLm2FYXBNlPVvzk=
+X-Received: by 2002:adf:94a3:: with SMTP id 32mr3831449wrr.276.1582793039616;
+ Thu, 27 Feb 2020 00:43:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKi4VAJFM0oM5r0oUtgT0oChH2q6+5YNq_46e01ih4j5qXsCxQ@mail.gmail.com>
+References: <20200226133221.44342a57@table.localdomain>
+In-Reply-To: <20200226133221.44342a57@table.localdomain>
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date:   Thu, 27 Feb 2020 00:43:47 -0800
+Message-ID: <CAKi4VA+8o=3HASrtuFNwts35q09xR_bUAY8Bd8_tc0ebj4DZ=g@mail.gmail.com>
+Subject: Re: [PATCH v2] Add kernel-version dependent configuration directory
+To:     "Anton V. Boyarshinov" <boyarsh@altlinux.org>
+Cc:     linux-modules <linux-modules@vger.kernel.org>, legion@altlinux.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Feb 26, 2020 at 11:36:00AM -0800, Lucas De Marchi wrote:
-> On Wed, Feb 26, 2020 at 10:33 AM Alexey Gladkov
-> <gladkov.alexey@gmail.com> wrote:
-> >
-> > On Wed, Feb 26, 2020 at 04:53:45AM +0200, Denis Kaganovich wrote:
-> > > After commit e7e2cb61fa9f1db3429d91ef6accff549500d268, even if real filename
-> > > passed - modinfo show info from context (so, I got built-in info from
-> > > running
-> > > kernel, but asking for new kernel's external module). This behaviour
-> > > unobvious
-> > > and incompatible with pre-v27. Simple use fake context for filename - IMHO
-> > > much less ugly then current results.
-> >
-> > Can you give an example of this misbehavior ?
-> >
-> > I have a two kernel directories (generic and current) with
-> > modules.builtin.modinfo:
-> >
-> > $ ls -1 /lib/modules/{5.2.0-generic,`uname -r`}/modules.builtin.modinfo
-> > /lib/modules/5.2.0-generic/modules.builtin.modinfo
-> > /lib/modules/5.2.0-current/modules.builtin.modinfo
-> >
-> > The ext4 module is built into both:
-> >
-> > $ tr '\0' '\n' < /lib/modules/`uname -r`/modules.builtin.modinfo |grep ^ext4.description
-> > ext4.description=Fourth Extended Filesystem
-> >
-> > $ tr '\0' '\n' < /lib/modules/5.2.0-generic/modules.builtin.modinfo |grep ^ext4.description
-> > ext4.description=Fourth Extended Filesystem
-> >
-> > Now I have build this module separately and put it into the tree:
-> 
-> that's why you don't have this problem. If you just build a new
-> ext4.ko module and give it
-> in the command line without putting it into the tree, then this
-> problem would be triggered.
+On Wed, Feb 26, 2020 at 5:32 AM Anton V. Boyarshinov
+<boyarsh@altlinux.org> wrote:
+>
+> In some cases it looks reasonable to have kernel-version dependent
+> modules configuration: blacklists, options and so on. This commit
+> introduces additional configuration directories:
+> * /lib/modprobe.d/`uname -r`
+> * /etc/modprobe.d/`uname -r`
 
-Ouch, I see. The phrase "new kernel's external module" confused me because
-usually the modules for the new kernel are in the tree. My bad.
+Thanks for the patch, I really like the idea of supporting this. I
+have some suggestions below.
 
-> $ ~/p/kmod/tools/modinfo fs/ext4/ext4.ko
-> filename:       /home/ldmartin/p/gfx-internal/drm-intel-internal/fs/ext4/ext4.ko
-> modinfo: ERROR: could not get modinfo from 'ext4': No such file or directory
-> 
-> $ modinfo fs/ext4/ext4.ko
-> filename:       /home/ldmartin/p/gfx-internal/drm-intel-internal/fs/ext4/ext4.ko
-> softdep:        pre: crc32c
-> license:        GPL
-> description:    Fourth Extended Filesystem
-> author:         Remy Card, Stephen Tweedie, Andrew Morton, Andreas
-> Dilger, Theodore Ts'o and others
-> alias:          fs-ext4
-> alias:          ext3
-> alias:          fs-ext3
-> alias:          ext2
-> alias:          fs-ext2
-> depends:        mbcache,jbd2
-> retpoline:      Y
-> intree:         Y
-> name:           ext4
-> vermagic:       5.4.17+ SMP preempt mod_unload
-> 
-> Lucas De Marchi
+>
+> Signed-off-by: Anton V. Boyarshinov <boyarsh@altlinux.org>
+> ---
+> Changes from v1: ARRAY_SIZE and SYSCONFDIR macros are used
+>
+>  libkmod/libkmod-config.c |  5 +----
+>  libkmod/libkmod.c        | 44 ++++++++++++++++++++++++++++++++++++----
+>  man/modprobe.d.xml       |  2 ++
+>  3 files changed, 43 insertions(+), 8 deletions(-)
+>
+> diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
+> index aaac0a1..5cc348a 100644
+> --- a/libkmod/libkmod-config.c
+> +++ b/libkmod/libkmod-config.c
+> @@ -711,11 +711,8 @@ static bool conf_files_filter_out(struct kmod_ctx *ctx, DIR *d,
+>
+>         fstatat(dirfd(d), fn, &st, 0);
+>
+> -       if (S_ISDIR(st.st_mode)) {
+> -               ERR(ctx, "Directories inside directories are not supported: "
+> -                                                       "%s/%s\n", path, fn);
+> +       if (S_ISDIR(st.st_mode))
+>                 return true;
+> -       }
+>
+>         return false;
+>  }
+> diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
+> index 69fe431..b718da0 100644
+> --- a/libkmod/libkmod.c
+> +++ b/libkmod/libkmod.c
+> @@ -225,6 +225,21 @@ static char *get_kernel_release(const char *dirname)
+>         return p;
+>  }
+>
+> +static char *get_ver_config_path(const char * dir)
+> +{
+> +       struct utsname u;
+> +       char *ver_conf;
+> +       static const char appendix[] = "modprobe.d";
+> +
+> +       if (uname(&u) < 0)
+> +               return NULL;
+> +
+> +       if (asprintf(&ver_conf, "%s/%s/%s", dir, appendix, u.release) < 0)
+> +               return NULL;
+> +
+> +       return ver_conf;
+> +}
+> +
+>  /**
+>   * kmod_new:
+>   * @dirname: what to consider as linux module's directory, if NULL
+> @@ -251,7 +266,7 @@ KMOD_EXPORT struct kmod_ctx *kmod_new(const char *dirname,
+>  {
+>         const char *env;
+>         struct kmod_ctx *ctx;
+> -       int err;
+> +       int err, configs_count;
+>
+>         ctx = calloc(1, sizeof(struct kmod_ctx));
+>         if (!ctx)
+> @@ -269,9 +284,30 @@ KMOD_EXPORT struct kmod_ctx *kmod_new(const char *dirname,
+>         if (env != NULL)
+>                 kmod_set_log_priority(ctx, log_priority(env));
+>
+> -       if (config_paths == NULL)
+> -               config_paths = default_config_paths;
+> -       err = kmod_config_new(ctx, &ctx->config, config_paths);
+> +       if (config_paths == NULL) {
+> +               char **tmp_config_paths = malloc(sizeof(default_config_paths) +
+> +                               sizeof(char *) * 2);
+
+See documentation above this function. This breaks the case in which
+the supplied array is empty,
+i.e. a single NULL element.
+
+I wonder if for implementing this it wouldn't be better to leave this
+function alone and implement it
+in kmod_config_new():
+
+1) we create ctx->kver that points to the end of ctx->dirname. If
+dirname is NULL in kmod_new(), then
+it's assumed we are actually not running for the current kernel, so we
+might leave this logic alone.
+
+2) conf_files_list(): after "opendir(path)" we try a opendirat(d,
+ctx->kver...) and just ignore if it doesn't exist.
+
+then we run the rest of the logic as usual.
+
+This should ensure that a) we don't break the API, b) we honor dirname
+== NULL meaning "don't treat this ctx as
+one for the currently running kernel" and also c) we allow
+kernel-version subdirs for a user-provided list.
+What do you think?
+
+
+Lucas De Marchi
+
+> +               if(tmp_config_paths == NULL) {
+> +                       ERR(ctx, "could not create versioned config.\n");
+> +                       goto fail;
+> +               }
+> +
+> +               memcpy(tmp_config_paths, default_config_paths, sizeof(default_config_paths));
+> +
+> +               configs_count = ARRAY_SIZE(default_config_paths);
+> +               tmp_config_paths[configs_count-1] = get_ver_config_path("/lib");
+> +               tmp_config_paths[configs_count] = get_ver_config_path(SYSCONFDIR);
+> +               tmp_config_paths[configs_count+1] = NULL;
+> +
+> +               err = kmod_config_new(ctx, &ctx->config, (const char * const*) tmp_config_paths);
+> +
+> +               free(tmp_config_paths[configs_count-1]);
+> +               free(tmp_config_paths[configs_count]);
+> +               free(tmp_config_paths);
+> +       }
+> +       else
+> +               err = kmod_config_new(ctx, &ctx->config, config_paths);
+> +
+>         if (err < 0) {
+>                 ERR(ctx, "could not create config\n");
+>                 goto fail;
+> diff --git a/man/modprobe.d.xml b/man/modprobe.d.xml
+> index 211af84..d1e254a 100644
+> --- a/man/modprobe.d.xml
+> +++ b/man/modprobe.d.xml
+> @@ -41,7 +41,9 @@
+>
+>    <refsynopsisdiv>
+>      <para><filename>/lib/modprobe.d/*.conf</filename></para>
+> +    <para><filename>/lib/modprobe.d/`uname -r`/*.conf</filename></para>
+>      <para><filename>/etc/modprobe.d/*.conf</filename></para>
+> +    <para><filename>/etc/modprobe.d/`uname -r`/*.conf</filename></para>
+>      <para><filename>/run/modprobe.d/*.conf</filename></para>
+>    </refsynopsisdiv>
+>
+> --
+> 2.21.0
+>
+>
+
 
 -- 
-Rgrds, legion
-
+Lucas De Marchi
