@@ -6,32 +6,32 @@ X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B615C11D3D
-	for <linux-modules@archiver.kernel.org>; Thu, 27 Feb 2020 14:46:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08DFFC11D3D
+	for <linux-modules@archiver.kernel.org>; Thu, 27 Feb 2020 14:47:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DA6924656
-	for <linux-modules@archiver.kernel.org>; Thu, 27 Feb 2020 14:46:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA25524691
+	for <linux-modules@archiver.kernel.org>; Thu, 27 Feb 2020 14:47:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729471AbgB0Oqi (ORCPT
+        id S1730269AbgB0Nou (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 27 Feb 2020 09:46:38 -0500
-Received: from vmicros1.altlinux.org ([194.107.17.57]:59060 "EHLO
+        Thu, 27 Feb 2020 08:44:50 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:55366 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731828AbgB0Oqh (ORCPT
+        with ESMTP id S1730262AbgB0Not (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 27 Feb 2020 09:46:37 -0500
+        Thu, 27 Feb 2020 08:44:49 -0500
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 98A5172CCF1;
-        Thu, 27 Feb 2020 17:46:35 +0300 (MSK)
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 00A9272CCF1;
+        Thu, 27 Feb 2020 16:44:47 +0300 (MSK)
 Received: from boyarsh.office.basealt.ru (unknown [83.220.44.62])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 7A0314A4A16;
-        Thu, 27 Feb 2020 17:46:35 +0300 (MSK)
-Date:   Thu, 27 Feb 2020 17:46:35 +0300
+        by imap.altlinux.org (Postfix) with ESMTPSA id DFEAA4A4A16;
+        Thu, 27 Feb 2020 16:44:46 +0300 (MSK)
+Date:   Thu, 27 Feb 2020 16:44:46 +0300
 From:   "Anton V. Boyarshinov" <boyarsh@altlinux.org>
 To:     linux-modules@vger.kernel.org
-Cc:     lucas.de.marchi@gmail.com
+Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>
 Subject: [PATCH v3] Add kernel-version dependent configuration directory
-Message-ID: <20200227174635.5a2b13c9@boyarsh.office.basealt.ru>
+Message-ID: <20200227164446.001173a6@boyarsh.office.basealt.ru>
 Organization: BaseALT
 X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-alt-linux-gnu)
 MIME-Version: 1.0
