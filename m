@@ -2,86 +2,91 @@ Return-Path: <SRS0=p+Rv=4X=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 073ECC3F2D2
-	for <linux-modules@archiver.kernel.org>; Fri,  6 Mar 2020 00:10:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 985DCC10F00
+	for <linux-modules@archiver.kernel.org>; Fri,  6 Mar 2020 08:00:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D4C4520801
-	for <linux-modules@archiver.kernel.org>; Fri,  6 Mar 2020 00:10:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76A3D20848
+	for <linux-modules@archiver.kernel.org>; Fri,  6 Mar 2020 08:00:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbgCFAKz (ORCPT
+        id S1725873AbgCFIAB (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 5 Mar 2020 19:10:55 -0500
-Received: from mga07.intel.com ([134.134.136.100]:60656 "EHLO mga07.intel.com"
+        Fri, 6 Mar 2020 03:00:01 -0500
+Received: from mga17.intel.com ([192.55.52.151]:16832 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726128AbgCFAKy (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 5 Mar 2020 19:10:54 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1725853AbgCFIAA (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Fri, 6 Mar 2020 03:00:00 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Mar 2020 16:10:54 -0800
-X-IronPort-AV: E=Sophos;i="5.70,520,1574150400"; 
-   d="scan'208";a="234606811"
-Received: from ldmartin-desk1.jf.intel.com (HELO ldmartin-desk1) ([10.24.14.222])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Mar 2020 16:10:54 -0800
-Date:   Thu, 5 Mar 2020 16:10:54 -0800
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 00:00:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,521,1574150400"; 
+   d="scan'208";a="287909496"
+Received: from ldmartin1-desk.jf.intel.com ([10.165.21.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Mar 2020 23:59:59 -0800
 From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Matthias Maennich <maennich@google.com>,
-        linux-modules <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH] depmod: account for new namespace field in
- Module.symvers (for kernel versions >= 5.4)
-Message-ID: <20200306001054.j4q5l4bsdotrgjbt@ldmartin-desk1>
-References: <20200221165243.25100-1-jeyu@kernel.org>
- <CAKi4VA+uO-mdZ=gKpWdU6vq2_VJjhDkHS3KVZb3_6N2YGVhgiA@mail.gmail.com>
- <20200304091833.GA14910@linux-8ccs>
+To:     linux-modules@vger.kernel.org
+Cc:     Yanko Kaneti <yaneti@declera.com>, gladkov.alexey@gmail.com,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: [PATCH 1/2] depmod: do not output .bin to stdout
+Date:   Thu,  5 Mar 2020 23:59:33 -0800
+Message-Id: <20200306075934.3104-1-lucas.demarchi@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200304091833.GA14910@linux-8ccs>
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Mar 04, 2020 at 10:18:33AM +0100, Jessica Yu wrote:
->+++ Lucas De Marchi [03/03/20 22:28 -0800]:
->>On Fri, Feb 21, 2020 at 8:53 AM Jessica Yu <jeyu@kernel.org> wrote:
->>>
->>>depmod -e -E is broken for kernel versions >= 5.4, because a new
->>>namespace field was added to Module.symvers. Each line is tab delimited
->>>with 5 fields in total. E.g.,
->>>
->>>        0xb352177e\tfind_first_bit\tnamespace\tvmlinux\tEXPORT_SYMBOL
->>>
->>>When a symbol doesn't have a namespace, then the namespace field is empty:
->>>
->>>        0xb352177e\tfind_first_bit\t\tvmlinux\tEXPORT_SYMBOL
->>
->>Why is namespace added in the *middle*? We remember we specifically
->>talked about compatibility back when this was added. Why is it not at
->>the end so tools that don't know about namespace don't stop working?
->>
->>Lucas De Marchi
->
->Sigh, I do remember we had a short discussion upstream back in August
->[1] when we were tossing around Module.symvers format preferences. It
->is my fault for not having pushed the backwards compatibility option
->more instead of thinking it could be patched up in kmod tools. I think
->maybe the best course of option is to revert this upstream instead and
->Cc:stable.
+index_write() relies on fseek/ftell to manage the position to which we
+are write and thus needs the file stream to support it.
 
-Yeah I didn't follow that series thoroughly as I should. I agree that
-the best course of action now is to update the format and CC stable.
+Right now when trying to write the index to stdout we fail with:
 
-Lucas De Marchi
+	depmod: tools/depmod.c:416: index_write: Assertion `initial_offset >= 0' failed.
+	Aborted (core dumped)
 
->
->Sorry about this. :-/
->
->[1] https://lore.kernel.org/r/20190828094325.GA25048@linux-8ccs
->
+We have no interest in outputting our index to stdout, so just skip it
+like is done with other indexes.
+
+While at it, add/remove some newlines to improve readability.
+
+Reported-by: Yanko Kaneti <yaneti@declera.com>
+Fix: b866b2165ae6 ("Lookup aliases in the modules.builtin.modinfo")
+---
+ tools/depmod.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tools/depmod.c b/tools/depmod.c
+index fbbce10..875e314 100644
+--- a/tools/depmod.c
++++ b/tools/depmod.c
+@@ -2408,8 +2408,10 @@ static int output_builtin_alias_bin(struct depmod *depmod, FILE *out)
+ 	struct index_node *idx;
+ 	struct kmod_list *l, *builtin = NULL;
+ 
+-	idx = index_create();
++	if (out == stdout)
++		return 0;
+ 
++	idx = index_create();
+ 	if (idx == NULL) {
+ 		ret = -ENOMEM;
+ 		goto fail;
+@@ -2456,7 +2458,9 @@ static int output_builtin_alias_bin(struct depmod *depmod, FILE *out)
+ 
+ 	if (count)
+ 		index_write(idx, out);
++
+ 	index_destroy(idx);
++
+ fail:
+ 	if (builtin)
+ 		kmod_module_unref_list(builtin);
+-- 
+2.25.1
+
