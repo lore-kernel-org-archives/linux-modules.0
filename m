@@ -2,103 +2,123 @@ Return-Path: <SRS0=7Hwi=5B=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 988BBC18E5B
-	for <linux-modules@archiver.kernel.org>; Mon, 16 Mar 2020 08:49:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8B96C0044D
+	for <linux-modules@archiver.kernel.org>; Mon, 16 Mar 2020 17:34:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7670C20719
-	for <linux-modules@archiver.kernel.org>; Mon, 16 Mar 2020 08:49:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCE2620679
+	for <linux-modules@archiver.kernel.org>; Mon, 16 Mar 2020 17:34:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1584380054;
+	bh=d0dyqr+WPlsBEneLL+p3TFD21XBLfy5yd1BTLM2pOqk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=QqkSR6GbrS7L8ha5pv4p+yHLVqBFpskGfcZrcHkqHZlvG3xsoudJuxT2ztUchB+IZ
+	 Sip5mpuiiTfpZCpAtuR+eT/+fn/akjSFyIEY0Sx6+5Arw3rRkOd+FujokJwRK7B0IS
+	 VBQFpsdMzcU36vg/NcsJ7+iEJTpbqown77gi3YXw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730016AbgCPItM (ORCPT
+        id S1731465AbgCPReO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 16 Mar 2020 04:49:12 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:38187 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730138AbgCPItJ (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 16 Mar 2020 04:49:09 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-186-3a3Ce-0kOCCYN2lWxNo_HQ-1; Mon, 16 Mar 2020 08:49:05 +0000
-X-MC-Unique: 3a3Ce-0kOCCYN2lWxNo_HQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Mon, 16 Mar 2020 08:49:04 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Mon, 16 Mar 2020 08:49:04 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Lucas De Marchi' <lucas.de.marchi@gmail.com>,
-        Konstantin Kharlamov <hi-angel@yandex.ru>
-CC:     linux-modules <linux-modules@vger.kernel.org>,
-        Jessica Yu <jeyu@kernel.org>,
+        Mon, 16 Mar 2020 13:34:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37786 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730437AbgCPReO (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Mon, 16 Mar 2020 13:34:14 -0400
+Received: from linux-8ccs (p5B2812F9.dip0.t-ipconnect.de [91.40.18.249])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 74552205ED;
+        Mon, 16 Mar 2020 17:34:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584380053;
+        bh=d0dyqr+WPlsBEneLL+p3TFD21XBLfy5yd1BTLM2pOqk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rhADrUyBNJ9VsmcG8CWy4JLDr8n4UU6MCERPUNwVIncQoHdMNwcglKAgMWdvaCMt5
+         51YYhzTYTmkKIhf4BF/9eDxVEfAcFs2HAFiR7R7ehrlIb0ktINZr7sl6Gl6BEiU3uP
+         xjvbPlFjW1gKsb42WQ8zwZTUASeasyUesRfzel3M=
+Date:   Mon, 16 Mar 2020 18:34:09 +0100
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     Konstantin Kharlamov <hi-angel@yandex.ru>,
+        linux-modules <linux-modules@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>
-Subject: RE: [RFE] Who's using a module?
-Thread-Topic: [RFE] Who's using a module?
-Thread-Index: AQHV+VOnAOlVXZqszUW9PaAssUBmW6hK61LA
-Date:   Mon, 16 Mar 2020 08:49:04 +0000
-Message-ID: <33933b3a4d4743d0a772a26cee565dfb@AcuMS.aculab.com>
+Subject: Re: [RFE] Who's using a module?
+Message-ID: <20200316173408.GA6841@linux-8ccs>
 References: <b623f4a2-8b9b-edd9-3546-281155d90d4a@yandex.ru>
  <CAKi4VAK6_vNdh3JYV11TwCDAFCBozaHhUQ-vVWj-hr63B=80HQ@mail.gmail.com>
-In-Reply-To: <CAKi4VAK6_vNdh3JYV11TwCDAFCBozaHhUQ-vVWj-hr63B=80HQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKi4VAK6_vNdh3JYV11TwCDAFCBozaHhUQ-vVWj-hr63B=80HQ@mail.gmail.com>
+X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-RnJvbTogTHVjYXMgRGUgTWFyY2hpDQo+IFNlbnQ6IDEzIE1hcmNoIDIwMjAgMTY6MjMNCj4gT24g
-V2VkLCBNYXIgMTEsIDIwMjAgYXQgNjozMyBBTSBLb25zdGFudGluIEtoYXJsYW1vdiA8aGktYW5n
-ZWxAeWFuZGV4LnJ1PiB3cm90ZToNCj4gPg0KPiA+IE9uY2UgaW4gYSB3aGlsZSB0aGVyZSdzIGEg
-bmVlZCB0byByZW1vdmUgYSBtb2R1bGUgKGZvciBleGFtcGxlIGJlY2F1c2UgeW91IHJlYnVpbHQg
-aXQsIG9yIHRvIHJlbG9hZA0KPiBpdCB3aXRoIGRpZmZlcmVudCBwYXJhbWV0ZXJzLCBvciB3aGF0
-ZXZlcuKApikuIEFuZCB0aGVuIGRvaW5nIGBybW1vZCBtb2R1bGVuYW1lYCBhbmQgYG1vZHByb2Jl
-IC1yDQo+IG1vZHVsZW5hbWVgIGdpdmVzOg0KPiA+DQo+ID4gICAgICAgICBybW1vZDogRVJST1I6
-IE1vZHVsZSBtb2R1bGVuYW1lIGlzIGluIHVzZQ0KPiA+DQo+ID4gSWYgeW91J3JlIGx1Y2t5LCBm
-aXJpbmcgdXAgYGxzbW9kIHwgZ3JlcCBtb2R1bGVuYW1lYCB3aWxsIGdldCB5b3Ugb2ZmZW5kZXJz
-IGluc2lkZSAidXNlZCBieSIgY29sdW1uLg0KPiBCdXQgb2Z0ZW4gdGhlcmUncyBub3RoaW5nIGV4
-Y2VwdCB0aGUgY291bnQgYWJvdmUgemVyby4gSXQgaXMgdmVyeSBlYXN5IHRvIHJlcHJvZHVjZSBp
-ZiB5b3UgY2hlY2sNCj4gYGxzbW9kYCBvdXRwdXQgZm9yIHlvdXIgZ3JhcGhpY3MgZHJpdmVyLiBJ
-IGNoZWNrZWQgaXQgb24gYGk5MTVgIGFuZCBgYW1kZ3B1YDogd2hlbiBncmFwaGljcyBzZXNzaW9u
-IGlzDQo+IG9wZW5lZCB5b3UgY2FuJ3QgcmVtb3ZlIGl0IGFuZCBgbHNtb2RgIGRvZXNuJ3Qgc2hv
-dyB3aG8ncyB1c2luZyBpdC4NCj4gPg0KPiA+IFRoZXJlJ3MgdmVyeSBwb3B1bGFyIGFuZCBvbGQg
-cXVlc3Rpb24gb24gU0/CuSB0aGF0IGF0IHRoZSBtb21lbnQgaGFzIG92ZXIgNTVrIHZpZXdzLCBh
-bmQgdGhlIG9ubHkNCj4gYW5zd2VyIHRoYXQgc2VlbSB0byB3b3JrIGZvciBwZW9wbGUgaXMgaW5z
-YW5lbHkgYmlnIGFuZCBjb252b2x1dGVkOyBpdCBpcyB1c2luZyBhIGN1c3RvbSBrZXJuZWwgZHJp
-dmVyDQo+IGFuZCBrZXJuZWwgdHJhY2luZyBjYXBhYmlsaXRpZXMuIEkgZ3Vlc3MgdGhpcyBhbW91
-bnQgb2YgcmVzZWFyY2ggbWVhbnM6IG5vLCBjdXJyZW50bHkgdGhlcmUncyBubyBlYXN5DQo+IHdh
-eSB0byBnZXQgd2hvJ3MgdXNpbmcgYSBtb2R1bGUuDQo+ID4NCj4gPiBJdCB3b3VsZCBiZSBhbWF6
-aW5nIGlmIGtlcm5lbCBoYXMgY2FwYWJpbGl0eSB0byBmaWd1cmUgb3V0IHdobydzIHVzaW5nIGEg
-bW9kdWxlLg0KPiANCj4gWWVhaCwgcmlnaHQgbm93IHRoaXMgd291bGQgbmVlZCBzb21lIHdvcmsg
-b24gdGhlIGtlcm5lbCBzaWRlIHRvIHJlY29yZA0KPiB0aGUgY2FsbGVycyBvZiB0cnlfbW9kdWxl
-X2dldCgpL19fbW9kdWxlX2dldCgpLi4uIHVzdWFsbHkgZG9uZSBlLmcgb24NCj4gZm9wcy1saWtl
-IHN0cnVjdHMgaW4gYSBvd25lciBmaWVsZC4NCj4gVGhlIG9ubHkgdGhpbmcgd2UgaGF2ZSB0aGVy
-ZSByaWdodCBub3cgaXMgdGhlIHRyYWNlLiBUaGUgdHJhY2UgaXMgbm90DQo+IHNvIGJhZCBzaW5j
-ZSBpdCBjYW4gYmUgYWRkZWQgaW4gdGhlIGtlcm5lbCBjb21tYW5kIGxpbmUsIGJ1dCB3b3VsZA0K
-PiB1c3VhbGx5IG9ubHkgYmUgZW5hYmxlZCB3aGlsZSBkZWJ1Z2dpbmcuDQo+IA0KPiBGb3IgaW1w
-bGVtZW50aW5nIHN1Y2ggYSBmZWF0dXJlIEkgdGhpbmsgd2Ugd291bGQgbmVlZCB0byBhZGQvcmVt
-b3ZlDQo+IG1vZHVsZSBvd25lciBpbnRvIHRoZSBtb2Qgc3RydWN0IHdoZW5ldmVyIHdlIGhhdmUg
-YSBfZ2V0KCkvX3B1dCgpLg0KPiBNYXliZSBpdCdzIHdvcnRoIGl0LCBidXQgaXQgZG9lc24ndA0K
-PiBjb21lIHdpdGhvdXQgb3ZlcmhlYWQuIEknZCBsaWtlIHRvIGhlYXIgd2hhdCBvdGhlciBwZW9w
-bGUgdGhpbmsuDQoNClJlbGF0ZWQgd291bGQgYmUgYSBzdGFuZGFyZCBlbnRyeSBwb2ludCBpbnRv
-IGEgbW9kdWxlIHRoYXQgaW5kaWNhdGVzDQp0aGF0IHNvbWVvbmUgd291bGQgbGlrZSB0byB1bmxv
-YWQgaXQuDQpUaGlzIHdvdWxkIGxldCB0aGUgbW9kdWxlIGNvZGUgZWl0aGVyIGVycm9yIHRoZSBy
-ZXF1ZXN0IChFQlVTWSkNCm9yIHN0YXJ0IGEgdGlkeSB1cCBzZXF1ZW5jZSB0aGF0IHNob3VsZCBt
-YWtlIGl0IHBvc3NpYmxlIHRvIHVubG9hZA0KdGhlIG1vZHVsZSBzb21ldGltZSBsYXRlci4NCg0K
-CURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBN
-b3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAx
-Mzk3Mzg2IChXYWxlcykNCg==
++++ Lucas De Marchi [13/03/20 09:22 -0700]:
+>+Jessica +Steve +lkml
+>
+>On Wed, Mar 11, 2020 at 6:33 AM Konstantin Kharlamov <hi-angel@yandex.ru> wrote:
+>>
+>> Once in a while there's a need to remove a module (for example because you rebuilt it, or to reload it with different parameters, or whatever…). And then doing `rmmod modulename` and `modprobe -r modulename` gives:
+>>
+>>         rmmod: ERROR: Module modulename is in use
+>>
+>> If you're lucky, firing up `lsmod | grep modulename` will get you offenders inside "used by" column. But often there's nothing except the count above zero. It is very easy to reproduce if you check `lsmod` output for your graphics driver. I checked it on `i915` and `amdgpu`: when graphics session is opened you can't remove it and `lsmod` doesn't show who's using it.
+>>
+>> There's very popular and old question on SO¹ that at the moment has over 55k views, and the only answer that seem to work for people is insanely big and convoluted; it is using a custom kernel driver and kernel tracing capabilities. I guess this amount of research means: no, currently there's no easy way to get who's using a module.
+>>
+>> It would be amazing if kernel has capability to figure out who's using a module.
+>
+>Yeah, right now this would need some work on the kernel side to record
+>the callers of try_module_get()/__module_get()... usually done e.g on
+>fops-like structs in a owner field.
+>The only thing we have there right now is the trace. The trace is not
+>so bad since it can be added in the kernel command line, but would
+>usually only be enabled while debugging.
+>
+>For implementing such a feature I think we would need to add/remove
+>module owner into the mod struct whenever we have a _get()/_put().
+>Maybe it's worth it, but it doesn't
+>come without overhead. I'd like to hear what other people think.
 
+Hmm, we technically have mod->source_list and mod->target_list
+already, which keeps track of modules that depend on THIS_MODULE and
+modules that THIS_MODULE depends on, respectively. However, this is
+limited to symbol dependencies only, which is what is shown in lsmod
+in the Used By field. In other words, we currently only keep track of
+module dependencies when a module uses a symbol from another module.
+
+Indeed, it could be nice to keep track of try_module_get() callers,
+but I'm afraid this is not as trivial as simply adding owner to
+mod->source_list when try_module_get() is called. try_module_get() and
+module_put() are designed to be quick and callable from interrupt and
+process context, and mod->{source,target}_list are protected by the
+module_mutex. Even if we could use module_mutex, it may increase lock
+contention considerably. So the locking scheme would have to be
+reworked to make this happen. I suppose this could be introduced as a
+DEBUG option, and I'd welcome a patch if there's someone out there
+interested in picking up the legwork. But I don't get the feeling
+that the demand for this is that high (perhaps I'm totally wrong?),
+especially for something that ftrace could report on much better. I
+could for example trace all module_get's and put's from boot and see
+which processes and even the call sites where these calls stem from.
+E.g., if I enable tracing in /sys/kernel/debug/tracing/events/module/module_{get,put}
+(and filter name == "i915"), you'd see output like:
+
+               X-2404  [000] ....  2334.643888: module_put: i915 call_site=dma_buf_release refcnt=33
+               X-2404  [000] ....  2334.643990: module_put: i915 call_site=dma_buf_release refcnt=32
+        kwin_x11-2877  [007] ....  2334.645605: module_get: i915 call_site=dma_buf_export refcnt=33
+        kwin_x11-2877  [007] ....  2334.650827: module_get: i915 call_site=dma_buf_export refcnt=34
+
+Of course, you'd have to know to enable tracing before the problem
+occurs..
+
+Hope that helps clarify things a bit,
+
+Jessica
