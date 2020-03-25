@@ -1,108 +1,93 @@
-Return-Path: <SRS0=Fs8F=5I=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=mdKN=5K=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06250C10DCE
-	for <linux-modules@archiver.kernel.org>; Mon, 23 Mar 2020 19:41:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60D20C1975A
+	for <linux-modules@archiver.kernel.org>; Wed, 25 Mar 2020 17:03:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DA00D2073C
-	for <linux-modules@archiver.kernel.org>; Mon, 23 Mar 2020 19:41:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 102FC20777
+	for <linux-modules@archiver.kernel.org>; Wed, 25 Mar 2020 17:03:21 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xu+qr+XA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725877AbgCWTlh (ORCPT
+        id S1727129AbgCYRDU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 23 Mar 2020 15:41:37 -0400
-Received: from mga11.intel.com ([192.55.52.93]:64875 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725839AbgCWTlh (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 23 Mar 2020 15:41:37 -0400
-IronPort-SDR: xjxzVe93ikLEIXcZE1LiS9ADQPMGZ6Fb6OFxBqfK111GlmeHu1nnJhFd/t03IvNfdRKAph7Xgm
- HdPw79/AKfGQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2020 12:41:34 -0700
-IronPort-SDR: clZcuc2wIc/l/fy79YtuyE7E57W7O2HWkNLIvKvC4jmnhNnDjPfUPGCxqnN8cn+6dU7MGiDdKU
- lLAlObAuLXxQ==
-X-IronPort-AV: E=Sophos;i="5.72,297,1580803200"; 
-   d="scan'208";a="235319579"
-Received: from sganes3-mobl1.amr.corp.intel.com (HELO ldmartin-desk1) ([10.134.73.79])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2020 12:41:34 -0700
-Date:   Mon, 23 Mar 2020 12:41:32 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     linux-modules@vger.kernel.org
-Cc:     Yanko Kaneti <yaneti@declera.com>, gladkov.alexey@gmail.com,
-        auke-jan.h.kok@intel.com
-Subject: Re: [PATCH 0/6] Fix modules.builtin.alias handling
-Message-ID: <20200323194132.tlcbkyvfb7k3vgnm@ldmartin-desk1>
-X-Patchwork-Hint: ignore
-References: <20200310050029.27678-1-lucas.demarchi@intel.com>
+        Wed, 25 Mar 2020 13:03:20 -0400
+Received: from mail-wm1-f54.google.com ([209.85.128.54]:54014 "EHLO
+        mail-wm1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726820AbgCYRDU (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Wed, 25 Mar 2020 13:03:20 -0400
+Received: by mail-wm1-f54.google.com with SMTP id b12so3294190wmj.3
+        for <linux-modules@vger.kernel.org>; Wed, 25 Mar 2020 10:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l3qN6eq5+0WDy4LEzpixEh8FzCrEHzJHHU4i993u6Do=;
+        b=Xu+qr+XA66qmFmndPNdkDCOE9G6YYEMoxnLJUKl3IoFfCalIHXJJFcY+cfX4LwN2jt
+         iKNisuT6DSvIDAiEyEAOxLCzjGyQ3QPGce4UwoUhw0WcEMyxMa36IC1gtmxtO2fglAfg
+         hp0z9bqV1PXZ3bn2k04x9nnZU7VDFrMpjyXCWCCHpiDUOIUpBZStg8I+GXIzv5h4VvXW
+         d3U8FqFdgjxA0r/Zim3IC4IGfpkV6yVo8vPDzOVIptC3esloiAR8EGr7hoAXnSGixUTK
+         JGMyEZlvygtyrP5mcqZklmwth2LHje5HekH84unR1UvOiy7XPjvGd7LaOVmRsmEb8Wjd
+         1hOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l3qN6eq5+0WDy4LEzpixEh8FzCrEHzJHHU4i993u6Do=;
+        b=O8yDczWGvBwqX/QiN2iibqX1sA/amK4aXaM8pjE1E2g1+/iiRqqj5bq9UXVY9U1Mcu
+         T3mL0e2EAcTkGQh1LXAoK5hTJ85CoGkgWVvzp/WmUqxMrEI+ckiPMGzbrLHlqdiaCTkc
+         uhuK2mwEw2aj+PSj942WQbdB2Y1nslcQ2wCTBOY9IUPdSCbn6o8p54FD34jMvnjAUrrw
+         Mg1w7ObvNg1wTL7zXCSunirvZ0BFlua63/FAwe9rh8JhbMrTtIUo9vYWCOfP3Ed7Kj0w
+         cmC/Jq8BsKeHOJJ2o1G8bvi980SgLc6DWDRnuMDfmrWgTntt8HscSnC6IQqi6EbeudJZ
+         K8qg==
+X-Gm-Message-State: ANhLgQ2J6SbuRe84HH92U1zy3lyEJyUM+5PUuRzT5aDhNbZHzLSHT4RW
+        Wqbq+ww4gDgHAas/cc1jRDw+t7Wj1lCQGCpWPPQ=
+X-Google-Smtp-Source: ADFU+vtBLadh4ZQDcXJnxicDvwhY80nnv00ul2eAA73ApHhUM5jNGhZqy5LSxL/QTrXqMYQnxuaeaAAWTvvUcaCNUEA=
+X-Received: by 2002:a1c:196:: with SMTP id 144mr4466941wmb.100.1585155798339;
+ Wed, 25 Mar 2020 10:03:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200310050029.27678-1-lucas.demarchi@intel.com>
+References: <CAFhXUqrBQp9Fy=RYMW4JBdJdgzjbvF20fXjze39iXi-3EG9TBg@mail.gmail.com>
+In-Reply-To: <CAFhXUqrBQp9Fy=RYMW4JBdJdgzjbvF20fXjze39iXi-3EG9TBg@mail.gmail.com>
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date:   Wed, 25 Mar 2020 10:03:05 -0700
+Message-ID: <CAKi4VAKv=J5_=BrLgu5Qm2UgMLJUG-2Xrt8iGx3v=u2zyOjF7Q@mail.gmail.com>
+Subject: Re: question - where to file bug report for modprobe
+To:     Philip Stephens <phil.stphns@gmail.com>
+Cc:     jcm@jonmasters.org, rworkman@slackware.com,
+        linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-All patches here applied.
+It's on kmod's mailing list linux-modules
+<linux-modules@vger.kernel.org>, already CC'ed here.
 
+thanks
 Lucas De Marchi
 
-On Mon, Mar 09, 2020 at 10:00:23PM -0700, Lucas De Marchi wrote:
->This should fix 2 bugs reported last week:
+On Wed, Mar 25, 2020 at 8:54 AM Philip Stephens <phil.stphns@gmail.com> wrote:
 >
->- `depmod -n` failing. Like for other binary indexes we just
->  skip now
+> Hi!
 >
->- programs like lspci failing since they don't ignore errors from
->  kmod_load_resources() - the new modules.builtin.alias.bin may not
->  exist if depmod from kmod 27 wasn't executed for that kernel version.
->  Also modules.builtin.modinfo (from where the former is extracted) is
->  only available on recent kernel versions. So make this index optional
->  for kmod_load_resources() - other parts of the code already assume
->  it's optional
+> I've run into an issue I think is a bug, and I'm having a problem targeting the correct group. As you all were listed in the modprobe manpage, I thought I'd give you a try.
 >
->Lucas De Marchi (6):
->  gitignore: ignore .cache.mk when building modules
->  depmod: do not output .bin to stdout
->  libkmod: simplify lookup when builtin.modinfo.bin file is missing
->  libkmod: fix return error when opening index
->  libkmod: allow modules.alias.builtin to be optional
->  testsuite: add check for kmod_load_resources
+> https://bugs.launchpad.net/ubuntu-manpage-repository/+bug/1868622
 >
-> libkmod/libkmod-index.c                       |  31 ++++++-----
-> libkmod/libkmod-index.h                       |   4 +-
-> libkmod/libkmod-module.c                      |   8 +--
-> libkmod/libkmod.c                             |  50 ++++++++++--------
-> testsuite/module-playground/.gitignore        |   1 +
-> .../lib/modules/5.6.0/modules.alias           |   1 +
-> .../lib/modules/5.6.0/modules.alias.bin       | Bin 0 -> 12 bytes
-> .../lib/modules/5.6.0/modules.builtin         |   1 +
-> .../lib/modules/5.6.0/modules.builtin.bin     | Bin 0 -> 39 bytes
-> .../lib/modules/5.6.0/modules.dep             |   0
-> .../lib/modules/5.6.0/modules.dep.bin         | Bin 0 -> 12 bytes
-> .../lib/modules/5.6.0/modules.devname         |   1 +
-> .../lib/modules/5.6.0/modules.softdep         |   1 +
-> .../lib/modules/5.6.0/modules.symbols         |   1 +
-> .../lib/modules/5.6.0/modules.symbols.bin     | Bin 0 -> 12 bytes
-> testsuite/test-init.c                         |  31 +++++++++++
-> tools/depmod.c                                |   6 ++-
-> 17 files changed, 95 insertions(+), 41 deletions(-)
-> create mode 100644 testsuite/rootfs-pristine/test-init-load-resources/lib/modules/5.6.0/modules.alias
-> create mode 100644 testsuite/rootfs-pristine/test-init-load-resources/lib/modules/5.6.0/modules.alias.bin
-> create mode 100644 testsuite/rootfs-pristine/test-init-load-resources/lib/modules/5.6.0/modules.builtin
-> create mode 100644 testsuite/rootfs-pristine/test-init-load-resources/lib/modules/5.6.0/modules.builtin.bin
-> create mode 100644 testsuite/rootfs-pristine/test-init-load-resources/lib/modules/5.6.0/modules.dep
-> create mode 100644 testsuite/rootfs-pristine/test-init-load-resources/lib/modules/5.6.0/modules.dep.bin
-> create mode 100644 testsuite/rootfs-pristine/test-init-load-resources/lib/modules/5.6.0/modules.devname
-> create mode 100644 testsuite/rootfs-pristine/test-init-load-resources/lib/modules/5.6.0/modules.softdep
-> create mode 100644 testsuite/rootfs-pristine/test-init-load-resources/lib/modules/5.6.0/modules.symbols
-> create mode 100644 testsuite/rootfs-pristine/test-init-load-resources/lib/modules/5.6.0/modules.symbols.bin
+> That's the bug (possibly), can you tell me which project to file it with?
 >
->-- 
->2.25.1
+> Thanks,
+> Philip
 >
+
+
+
+-- 
+Lucas De Marchi
