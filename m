@@ -1,138 +1,82 @@
-Return-Path: <SRS0=g55N=57=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=AHvm=6L=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86EB1C3815B
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Apr 2020 09:16:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AC44C54FD0
+	for <linux-modules@archiver.kernel.org>; Mon, 27 Apr 2020 12:30:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61D5620775
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Apr 2020 09:16:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586942213;
-	bh=DBJHhwh9ZnxQg604Oc+Qnu5YCCqtx3fTWag+7vPzb68=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=BXOkvfiiOsRMHN1XY0THaDV7/TRrBzptof8ifPanm7yu53eoZYeYMn/ccjmwhP6rV
-	 K3WXaqspETn1OI6sVgECDU4nl4CPwHZGo4HTDr2wKmQD5Fm5Vb+DgDx6s1t+Ym0+k1
-	 YwW7MCSVvd1dn1rNelwUNZkpAtobuWTsgyNC5KkY=
+	by mail.kernel.org (Postfix) with ESMTP id 0E1D120575
+	for <linux-modules@archiver.kernel.org>; Mon, 27 Apr 2020 12:30:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SMrwgtzY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895182AbgDOJQT (ORCPT
+        id S1726998AbgD0MaY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Apr 2020 05:16:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35508 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2895121AbgDOJQS (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Apr 2020 05:16:18 -0400
-Received: from linux-8ccs (p3EE2C7AC.dip0.t-ipconnect.de [62.226.199.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 27 Apr 2020 08:30:24 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:28013 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726831AbgD0MaY (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Mon, 27 Apr 2020 08:30:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587990623;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=InAWjvLSkWXBvdwLwFZbUuaPrGSgIbIKeKiGCkwHwjY=;
+        b=SMrwgtzY7LzEUwQEkK/4fP6MNkKG9OK7FUdIPeSs9RT31qhIHAaZeomu9Ro2kiU3jjf7za
+        5Y7eZ6/6XX/RzVccWfajUSZGE3b7W/mtaNo071aQ3G+bQcYtTaF9i6zRRugkLj8psPDIQi
+        rakWQcCTDi0pbUAqUhLU4WsJb/cXKYs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-41-5c54TiNYM1CH6Lnd9ZooUg-1; Mon, 27 Apr 2020 08:30:20 -0400
+X-MC-Unique: 5c54TiNYM1CH6Lnd9ZooUg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C6D2020771;
-        Wed, 15 Apr 2020 09:16:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586942177;
-        bh=DBJHhwh9ZnxQg604Oc+Qnu5YCCqtx3fTWag+7vPzb68=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pXy1eVlDbhoKyEdUrIJ/LQLiotIxm6446XQm4JqZly0sKcPmuMLMABoQs85L0RCI3
-         rk1rj8jIoawXHdpTUaBUy0Fww/ytK8HhuCyop9PfluY6bIShlw0gMafXkHkxlntpR6
-         KlPsAw96jkZifAIwMD1/zeXkwW15mFd7+MES5yOM=
-Date:   Wed, 15 Apr 2020 11:16:12 +0200
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        live-patching@vger.kernel.org
-Subject: Re: RFC: Handle hard module dependencies that are not symbol-based
- (r8169 + realtek)
-Message-ID: <20200415091612.GA384@linux-8ccs>
-References: <f8e3f271-82df-165f-63f1-6df73ba3d59c@gmail.com>
- <20200409000200.2qsqcbrzcztk6gmu@ldmartin-desk1>
- <6ed6259b-888d-605a-9a6f-526c18e7bb14@gmail.com>
- <20200414160930.GA20229@linux-8ccs>
- <e38f3115-1e77-ebce-423b-8ea445be9e0d@gmail.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8B581107ACF2;
+        Mon, 27 Apr 2020 12:30:19 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-112-223.ams2.redhat.com [10.36.112.223])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 01AF327CDC;
+        Mon, 27 Apr 2020 12:30:17 +0000 (UTC)
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules <linux-modules@vger.kernel.org>
+Subject: exit from log_printf()
+Date:   Mon, 27 Apr 2020 15:30:11 +0300
+Message-ID: <xuny7dy1glgs.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e38f3115-1e77-ebce-423b-8ea445be9e0d@gmail.com>
-X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-+++ Heiner Kallweit [14/04/20 18:20 +0200]:
->On 14.04.2020 18:09, Jessica Yu wrote:
->> +++ Heiner Kallweit [10/04/20 00:25 +0200]:
->>> On 09.04.2020 02:02, Lucas De Marchi wrote:
->>>> On Wed, Apr 01, 2020 at 11:20:20PM +0200, Heiner Kallweit wrote:
->>>>> Currently we have no way to express a hard dependency that is not
->>>>> a symbol-based dependency (symbol defined in module A is used in
->>>>> module B). Use case:
->>>>> Network driver ND uses callbacks in the dedicated PHY driver DP
->>>>> for the integrated PHY (namely read_page() and write_page() in
->>>>> struct phy_driver). If DP can't be loaded (e.g. because ND is in
->>>>> initramfs but DP is not), then phylib will use the generic
->>>>> PHY driver GP. GP doesn't implement certain callbacks that are
->>>>> needed by ND, therefore ND's probe has to bail out with an error
->>>>> once it detects that DP is not loaded.
->>>>> We have this problem with driver r8169 having such a dependency
->>>>> on PHY driver realtek. Some distributions have tools for
->>>>> configuring initramfs that consider hard dependencies based on
->>>>> depmod output. Means so far somebody can add r8169.ko to initramfs,
->>>>> and neither human being nor machine will have an idea that
->>>>> realtek.ko needs to be added too.
->>>>
->>>> Could you expand on why softdep doesn't solve this problem
->>>> with MODULE_SOFTDEP()
->>>>
->>>> initramfs tools can already read it and modules can already expose them
->>>> (they end up in /lib/modules/$(uname -r)/modules.softdep and modprobe
->>>> makes use of them)
->>>>
->>> Thanks for the feedback. I was under the impression that initramfs-tools
->>> is affected, but you're right, it considers softdeps.
->>> Therefore I checked the error reports again, and indeed they are about
->>> Gentoo's "genkernel" tool only. See here:
->>> https://bugzilla.kernel.org/show_bug.cgi?id=204343#c15
->>>
->>> If most kernel/initramfs tools consider softdeps, then I don't see
->>> a need for the proposed change. But well, everything is good for
->>> something, and I learnt something about the structure of kmod.
->>> Sorry for the noise.
->>
->> Well, I wouldn't really call it noise :) I think there *could* be
->> cases out there where a establishing a non-symbol-based hard
->> dependency would be beneficial.
->>
->Thanks for the encouraging words ;)
->
->> In the bug you linked, I think one could hypothetically run into the
->> same oops if the realtek module fails to load for whatever reason, no?
->
->Basically yes. Just that it wouldn't be an oops any longer, r8169
->would detect the missing dedicated PHY driver and bail out in probe().
->
->> Since realtek is only a soft dependency of r8169, modprobe would
->> consider realtek optional and would still try to load r8169 even if
->> realtek had failed to load previously. Then wouldn't the same problem
->> (described in the bugzilla) arise?  Maybe a hard dependency could
->> possibly come in handy in this case, because a softdep unfortunately
->> implies that r8169 can work without realtek loaded.
->>
->Right. Even though kmod treats a softdep more or less like a harddep
->with regard to module loading, it's called "soft" for a reason.
->Relying on a softdep to satisfy a hard dependency doesn't seem
->to be the ideal solution.
+Hi, Lucas!
 
-Hm, I wonder how many other drivers do this. It may be worth auditing
-all current MODULE_SOFTDEP() users to see if there are others also
-using it to mean harddep (i.e., it's actually a non-optional
-dependency) rather than softdep. Something to add on my todo list.
+I have a question about exit call from tools/log.c:log_printf()
+(https://github.com/lucasdemarchi/kmod/blob/master/tools/log.c#L140)
 
-Jessica
+What is the reasoning behind that?
+
+At the first glance it looks a bit incorrect (pretty surprising
+to have exit in print()).
+
+Discovered while trying to remove several modules when one of
+them cannod be removed:
+
+$ modprobe -r libata pcspkr       
+modprobe: FATAL: Module libata is in use.
+
+$ lsmod | grep pcsp
+pcspkr                 16384  0
+
+
+-- 
+WBR,
+Yauheni Kaliuta
+
