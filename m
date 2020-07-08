@@ -1,123 +1,134 @@
-Return-Path: <SRS0=e/mN=AS=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=Cmtv=AT=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52F7AC433DF
-	for <linux-modules@archiver.kernel.org>; Tue,  7 Jul 2020 06:34:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBAC9C433E0
+	for <linux-modules@archiver.kernel.org>; Wed,  8 Jul 2020 18:16:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 33639206CD
-	for <linux-modules@archiver.kernel.org>; Tue,  7 Jul 2020 06:34:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C149520760
+	for <linux-modules@archiver.kernel.org>; Wed,  8 Jul 2020 18:16:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B5RQ+CfA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mgJii4Wx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728133AbgGGGee (ORCPT
+        id S1726338AbgGHSQZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 7 Jul 2020 02:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        Wed, 8 Jul 2020 14:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728127AbgGGGee (ORCPT
+        with ESMTP id S1726343AbgGHSQS (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 7 Jul 2020 02:34:34 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D371C061755
-        for <linux-modules@vger.kernel.org>; Mon,  6 Jul 2020 23:34:34 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id k6so43897625wrn.3
-        for <linux-modules@vger.kernel.org>; Mon, 06 Jul 2020 23:34:34 -0700 (PDT)
+        Wed, 8 Jul 2020 14:16:18 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162CCC061A0B
+        for <linux-modules@vger.kernel.org>; Wed,  8 Jul 2020 11:16:18 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id q15so4236045wmj.2
+        for <linux-modules@vger.kernel.org>; Wed, 08 Jul 2020 11:16:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wWeWw2Ma4ea+LhtH/rY0LV34HVqdO1KbjOSRtOWkyxs=;
-        b=B5RQ+CfAlcaWketPDiaSjUmE5yflsXZilqxAjO5eGSuGJPyJlt/S2Hzb7QfktALXRT
-         KwSGAW2mka2NHJN1XxAiZyjb2UP/jgZZ2LAwtJOke9+QPmarMgVVwRlZctAppyAu6LHS
-         TM2BXw4tTRoHtaNlgBJ04gkc7I9uq+rTYaxEOQ5V/vB62jfu0Zu0lKMv+IXEMcqWcSOk
-         If+t89n52fqX62dnvB9OrIMApCb9Au8X/mD+dFjwk4tEdDu/tc+Gyu097RjLCt+VcH8d
-         nEPNFeSKFZjOTV2nU0sVYcyjxg50glMuCuRxPBWkBl2PWrPlFH/Pnm0nfaa3vfX3Bes7
-         BWHw==
+        bh=HtlZdASO3n4rHB6ThxIs8yKoPqbZH1OwqGHnBVEgNqY=;
+        b=mgJii4WxBITR1YuYPeb0fKbhnE6X3jGg5pRP6daoThN908JbUBSXQYj6dSRzlCGtm+
+         NKHOxdPyp7LlYvsZqxIsinzattZj+0SMHquJ+dxFxx9n+9cOaxmRFllSyENlqaZLczop
+         dT5FA/yUFBEMoN91XMuW92iKKsF1e+Duxk9+0jzp0FQa/4cWwYsa3JFKPb723KEYX1nZ
+         Imn9g5IIrZKscYoQOQfSByeGac4vu8Gbx0GBVRfaIHP+OsQ/KEvNDzSKaA/pWpkddrY2
+         4WVFVkPLd8d/IZRoLERTJGujo7RdpnGQoYMLzOY+V+Gqhw2cJPDvDtElDGRUkpfqOz9s
+         JEeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wWeWw2Ma4ea+LhtH/rY0LV34HVqdO1KbjOSRtOWkyxs=;
-        b=hsQkcm6dlpfR/QICOeIyZ46gqsMk8qn/Mp8E6U/Qnnmnq75/hQrFENnf73Iqb8hSYk
-         ckFWfmU5wdWrEhoDeNeJaWS8v68ikaqQWYReyEqmGFUT/dyyjLObyhrAV5RQYSTvSJEF
-         zpkdMRGbB43cOmkXClpQubT/VOoNoIqZ7i51DN/PvSknhq6ivgF6I64S/K49l9umJF9E
-         iJMmKhHuM51ZnHHRGOJlrwWcOaiEJYx7kZatg+baqhtexTm0UAN06w1aerqAd6kTrwYK
-         E1YOw+izp9Rn8Po5OEwSL9zTiKtFiYCesYrtoBTXN0wqCE5djuSGnhy68+OHN7ukZf7D
-         yrxw==
-X-Gm-Message-State: AOAM531+HZ0uxH0NqgHMDyjja5BGj9r5F5fntmYFxcvG6yjS1wwyzRnB
-        scj2SnWKNDLW68V9/qmmoPA1XkWnrMRF/nrHeI1ffoj+
-X-Google-Smtp-Source: ABdhPJz1tWaE+l9cB+fouQ2eY5ecSZsfIbuCVcKnbAjRma1Ln4Hye4LT7WShXnYVNn6q7KR7yJVTokTs1fOoujr0IXU=
-X-Received: by 2002:adf:f751:: with SMTP id z17mr54657234wrp.114.1594103673022;
- Mon, 06 Jul 2020 23:34:33 -0700 (PDT)
+        bh=HtlZdASO3n4rHB6ThxIs8yKoPqbZH1OwqGHnBVEgNqY=;
+        b=PNV5QIIB8NeRu2N0a3h6HfT/UY0kTq+pAdxjsPINBw6HtKvxf3fgQEr865VrHg7Rus
+         wfOUWMxaU7nDlfqelaME2WcXP4oYESOWluVU6k5iAaQRcUeP8txlcGk6YPPRo583f1ha
+         3MZe2WfRKlDPM3ZCiZU+e6bHT+cd8ovHcw8Cb1IqsgQL61/lf9dC4TRCLkEXxZ5iRJIk
+         XdMUq8E+bm3vD55fmPCxfJEA9+GYrVI4QDRQ1WwgzBnkuJcdXAQVs2aHIxqnBsN9oeBB
+         c434qqfdvbvFdpd48h5LekphkPCsESz3SPE008XiA3xxCnDbtn6LFZN1HDBC0gJJgq+V
+         NXHw==
+X-Gm-Message-State: AOAM532qLZuYnGZYRQAKgI48Kyo60dhPgmEtlrqSH4vNjriy/N/VLoUf
+        hRMTAdbvzcQi9WiTuNVMRkjUf8hAcqOAQZ9mkRZRKA==
+X-Google-Smtp-Source: ABdhPJwwRoKB+HUXQcJ9NBrk8/qwANS+Y38UIDhPOSQvoc5BLkuhXwyMi0ioloa0PSyHE/Nwp9YHZAdmF3GRjw8N9Xw=
+X-Received: by 2002:a7b:c38c:: with SMTP id s12mr10426881wmj.136.1594232176796;
+ Wed, 08 Jul 2020 11:16:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <b0894a8dd06ccee4326bcd7ff14e1f871bd45080.camel@gmail.com>
-In-Reply-To: <b0894a8dd06ccee4326bcd7ff14e1f871bd45080.camel@gmail.com>
+References: <20200516125412.12366-1-marius@devup.no>
+In-Reply-To: <20200516125412.12366-1-marius@devup.no>
 From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Mon, 6 Jul 2020 23:34:20 -0700
-Message-ID: <CAKi4VAJjjpziyNYNAs5rDivAxt-b=L3ucCUN+P=0Aou7GwsJnA@mail.gmail.com>
-Subject: Re: Support for /usr/local/lib/modprobe.d
-To:     Jan Tojnar <jtojnar@gmail.com>
+Date:   Wed, 8 Jul 2020 11:16:05 -0700
+Message-ID: <CAKi4VALpxWdmFfvSxKd9apSWisrKK3zK7pO-QaPiW_c=bby4bg@mail.gmail.com>
+Subject: Re: [PATCH] testsuite: Add facility to skip tests.
+To:     Marius Bakke <marius@devup.no>
 Cc:     linux-modules <linux-modules@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jul 1, 2020 at 6:21 PM Jan Tojnar <jtojnar@gmail.com> wrote:
+On Sat, May 16, 2020 at 6:04 AM Marius Bakke <marius@devup.no> wrote:
 >
-> Hello.
->
-> We are working with a project that ships a blacklist file [1] that is
-> supposed to be installed to modprobe.d directory but it is not clear
-> what the default installation path should be.
->
-> Distros will typically install modprobe config files to
-> /lib/modprobe.d but it is common to use /usr/local as the default
-> prefix [2] for manual `make` invocations. The manual page [3] does not
-> list /usr/local/lib/modprobe.d as a supported location though.
->
-> In the past module-init-tools added [4] support for that path but that
-> repo appears to be abandoned and it does not look like kmod supports
-> it [5].
->
-> 1. Am I missing something, or was this an omission when porting
-> modprobe to kmod?
-> 2. Could the support be added?
+> The Makefile helpfully warns that some tests will fail when
+> --sysconfdir != /etc, but there are no provisions to easily disable
+> those.  This commit provides an escape hatch.
 
-That is probably because we don't default prefix to /usr/local so people never
-actually needed it. Yes, I think we could add. Could you prepare a
-patch for that?
+nice... but are we missing a patch to actually make it skip?
 
-> 3. Should we default to /lib or /etc for manual `make` invocations for
-> now?
-
-/lib is where packages should install and /etc is up to the system
-admin to set up.
-if we add /usr/local, then override order would be /etc, /usr/local/lib, /lib.
-
-Lucas De Marchi
-
+> ---
+>  testsuite/testsuite.c | 9 +++++++++
+>  testsuite/testsuite.h | 1 +
+>  2 files changed, 10 insertions(+)
 >
-> [1]:
-> https://github.com/medusalix/xow/blob/4aa49f27cb6fcb3da995da9e8d51167bed40f520/Makefile#L22
-> [2]:
-> https://www.gnu.org/prep/standards/html_node/Directory-Variables.html#index-prefix
-> [3]: https://man7.org/linux/man-pages/man5/modprobe.d.5.html
-> [4]:
-> https://git.kernel.org/pub/scm/utils/kernel/module-init-tools/module-init-tools.git/commit/?id=9454d710137be3799f343cc9d0f833f0802e2111
-> [5]:
-> https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/tree/libkmod/libkmod.c?id=f5434cf5fc5b567359e1b9207bbab24c6782cfbd#n65
+> diff --git a/testsuite/testsuite.c b/testsuite/testsuite.c
+> index e46f3d8..ff41057 100644
+> --- a/testsuite/testsuite.c
+> +++ b/testsuite/testsuite.c
+> @@ -37,6 +37,7 @@
+>  #include "testsuite.h"
 >
-> Cheers,
+>  static const char *ANSI_HIGHLIGHT_GREEN_ON = "\x1B[1;32m";
+> +static const char *ANSI_HIGHLIGHT_YELLOW_ON = "\x1B[1;33m";
+>  static const char *ANSI_HIGHLIGHT_RED_ON =  "\x1B[1;31m";
+>  static const char *ANSI_HIGHLIGHT_OFF = "\x1B[0m";
 >
-> Jan
+> @@ -948,6 +949,14 @@ static inline int test_run_parent(const struct test *t, int fdout[2],
+>         int err;
+>         bool matchout, match_modules;
+>
+> +       if (t->skip == true) {
+
+only if (t->skip)  would be less verbose and preferred I think.
+
+thanks
+Lucas de Marchi
+
+> +               LOG("%sSKIPPED%s: %s\n",
+> +                       ANSI_HIGHLIGHT_YELLOW_ON, ANSI_HIGHLIGHT_OFF,
+> +                       t->name);
+> +               err = EXIT_SUCCESS;
+> +               goto exit;
+> +       }
+> +
+>         /* Close write-fds */
+>         if (t->output.out != NULL)
+>                 close(fdout[1]);
+> diff --git a/testsuite/testsuite.h b/testsuite/testsuite.h
+> index 7ed96bf..8029c64 100644
+> --- a/testsuite/testsuite.h
+> +++ b/testsuite/testsuite.h
+> @@ -109,6 +109,7 @@ struct test {
+>         const struct keyval *env_vars;
+>         bool need_spawn;
+>         bool expected_fail;
+> +       bool skip;
+>         bool print_outputs;
+>  } __attribute__((aligned(8)));
+>
+> --
+> 2.26.2
 >
 
 
