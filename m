@@ -1,136 +1,98 @@
-Return-Path: <SRS0=Cmtv=AT=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=VPp+=AY=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Level: *
+X-Spam-Status: No, score=1.4 required=3.0 tests=BAYES_20,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	RCVD_HELO_IP_MISMATCH,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBAC9C433E0
-	for <linux-modules@archiver.kernel.org>; Wed,  8 Jul 2020 18:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C0A5C433E2
+	for <linux-modules@archiver.kernel.org>; Mon, 13 Jul 2020 13:09:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C149520760
-	for <linux-modules@archiver.kernel.org>; Wed,  8 Jul 2020 18:16:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F07520738
+	for <linux-modules@archiver.kernel.org>; Mon, 13 Jul 2020 13:09:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mgJii4Wx"
+	dkim=pass (2048-bit key) header.d=linksbuildingcompany-com.20150623.gappssmtp.com header.i=@linksbuildingcompany-com.20150623.gappssmtp.com header.b="Iv/EWpvD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726338AbgGHSQZ (ORCPT
+        id S1729578AbgGMNJQ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 8 Jul 2020 14:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
+        Mon, 13 Jul 2020 09:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726343AbgGHSQS (ORCPT
+        with ESMTP id S1729523AbgGMNJP (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 8 Jul 2020 14:16:18 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162CCC061A0B
-        for <linux-modules@vger.kernel.org>; Wed,  8 Jul 2020 11:16:18 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id q15so4236045wmj.2
-        for <linux-modules@vger.kernel.org>; Wed, 08 Jul 2020 11:16:18 -0700 (PDT)
+        Mon, 13 Jul 2020 09:09:15 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCD4C061755
+        for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2020 06:09:15 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id o2so13110633wmh.2
+        for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2020 06:09:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HtlZdASO3n4rHB6ThxIs8yKoPqbZH1OwqGHnBVEgNqY=;
-        b=mgJii4WxBITR1YuYPeb0fKbhnE6X3jGg5pRP6daoThN908JbUBSXQYj6dSRzlCGtm+
-         NKHOxdPyp7LlYvsZqxIsinzattZj+0SMHquJ+dxFxx9n+9cOaxmRFllSyENlqaZLczop
-         dT5FA/yUFBEMoN91XMuW92iKKsF1e+Duxk9+0jzp0FQa/4cWwYsa3JFKPb723KEYX1nZ
-         Imn9g5IIrZKscYoQOQfSByeGac4vu8Gbx0GBVRfaIHP+OsQ/KEvNDzSKaA/pWpkddrY2
-         4WVFVkPLd8d/IZRoLERTJGujo7RdpnGQoYMLzOY+V+Gqhw2cJPDvDtElDGRUkpfqOz9s
-         JEeQ==
+        d=linksbuildingcompany-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:reply-to:to:subject:content-transfer-encoding
+         :date:message-id;
+        bh=E3CW8TZhR9fK3nKSDpyW8cnZyWM6QFjrGmrSwMcIieI=;
+        b=Iv/EWpvDbyNFVmomoXg3GMI1dYHMgp3ro6UNrCkUVgqis0g1B6Gz5NMLRlDHioV9Ao
+         ythCKWO4ox+V9QVOXikanDmT+yIOLhgXAoiadLvEV1xG4VrSY+zKv0jtUTozFcuXxTH3
+         GdAixQXBT4yioPQYEfTfdD3C46iiB5hHMGWXbHrjbYNa6UatuqmGsyDVtlQNLGhNI6tY
+         MdPs8LoV5koblT/enkiCx3nFwILTiyDfZ74GaQdTu4tVx461u5Zrlq+IKsYwJ78lIVCS
+         v0J53omlkLj60aHRVJmY2jU4bWFpaLEx2BhagAJKhJltBl9/t0rsEBTyCKQ1QopMvz/M
+         ka5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HtlZdASO3n4rHB6ThxIs8yKoPqbZH1OwqGHnBVEgNqY=;
-        b=PNV5QIIB8NeRu2N0a3h6HfT/UY0kTq+pAdxjsPINBw6HtKvxf3fgQEr865VrHg7Rus
-         wfOUWMxaU7nDlfqelaME2WcXP4oYESOWluVU6k5iAaQRcUeP8txlcGk6YPPRo583f1ha
-         3MZe2WfRKlDPM3ZCiZU+e6bHT+cd8ovHcw8Cb1IqsgQL61/lf9dC4TRCLkEXxZ5iRJIk
-         XdMUq8E+bm3vD55fmPCxfJEA9+GYrVI4QDRQ1WwgzBnkuJcdXAQVs2aHIxqnBsN9oeBB
-         c434qqfdvbvFdpd48h5LekphkPCsESz3SPE008XiA3xxCnDbtn6LFZN1HDBC0gJJgq+V
-         NXHw==
-X-Gm-Message-State: AOAM532qLZuYnGZYRQAKgI48Kyo60dhPgmEtlrqSH4vNjriy/N/VLoUf
-        hRMTAdbvzcQi9WiTuNVMRkjUf8hAcqOAQZ9mkRZRKA==
-X-Google-Smtp-Source: ABdhPJwwRoKB+HUXQcJ9NBrk8/qwANS+Y38UIDhPOSQvoc5BLkuhXwyMi0ioloa0PSyHE/Nwp9YHZAdmF3GRjw8N9Xw=
-X-Received: by 2002:a7b:c38c:: with SMTP id s12mr10426881wmj.136.1594232176796;
- Wed, 08 Jul 2020 11:16:16 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:reply-to:to:subject
+         :content-transfer-encoding:date:message-id;
+        bh=E3CW8TZhR9fK3nKSDpyW8cnZyWM6QFjrGmrSwMcIieI=;
+        b=HubJPkcZXIgBrPa0s8TNFd1/aSGTPsgzLuLeepiKog9ujYBoPBeLJk/et0Q8SV3QrN
+         MvXw+s3mRrm6fBSyEFdS7sPXy/DJUqGUukDySFcf6G5RrAKPIcB29YXfS5q9erzQNPIA
+         3pk9tbmgrHQ5KuI22rq2NwboVToext1Ju1WSK9yP7HcIQQJ9ftbYWOIBE7bqXHsXZeTA
+         33sM4erhVzTvacNJ4ry/fdIp2zBZY+XSvti+z82RT1ZW5EEIcneCsHFrso5lSLwu7Ty7
+         yOSBfIReUCSl81Ln167mQ9yqSAmIbr8cUsWzRKSWQ8mtijSx4xUdr3uzECflse/z1/WR
+         lUEg==
+X-Gm-Message-State: AOAM532dgyiPJdezlGXvl7u2omTqT1GReVCJuD3THNGJ0+Ahy26VPISB
+        BX0AjJBjjUBHuj3sZrhmS6f9SUAk8RbqbQ==
+X-Google-Smtp-Source: ABdhPJz61ihWJufURhvC08zKjtwPSGpzjktJ6FDbU9POsXX7p7EvZ2CiJyg238RZPi6QWfphxAXCDQ==
+X-Received: by 2002:a1c:1f09:: with SMTP id f9mr19765126wmf.137.1594645752705;
+        Mon, 13 Jul 2020 06:09:12 -0700 (PDT)
+Received: from 172.69.244.145 ([72.255.37.183])
+        by smtp.gmail.com with ESMTPSA id x185sm23115296wmg.41.2020.07.13.06.09.11
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Mon, 13 Jul 2020 06:09:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200516125412.12366-1-marius@devup.no>
-In-Reply-To: <20200516125412.12366-1-marius@devup.no>
-From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Wed, 8 Jul 2020 11:16:05 -0700
-Message-ID: <CAKi4VALpxWdmFfvSxKd9apSWisrKK3zK7pO-QaPiW_c=bby4bg@mail.gmail.com>
-Subject: Re: [PATCH] testsuite: Add facility to skip tests.
-To:     Marius Bakke <marius@devup.no>
-Cc:     linux-modules <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+From:   "Seth" <seth@linksbuildingcompany.com>
+Reply-To: seth@linksbuildingcompany.com
+To:     linux-modules@vger.kernel.org
+Subject: Guest Post Submission - Paid Task
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Smart_Send_3_1_6
+Date:   Mon, 13 Jul 2020 18:09:08 +0500
+Message-ID: <911642335314455718545@DESKTOP-OM6H6T2>
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, May 16, 2020 at 6:04 AM Marius Bakke <marius@devup.no> wrote:
->
-> The Makefile helpfully warns that some tests will fail when
-> --sysconfdir != /etc, but there are no provisions to easily disable
-> those.  This commit provides an escape hatch.
+Hello,
 
-nice... but are we missing a patch to actually make it skip?
+Hopefully you are fine.
 
-> ---
->  testsuite/testsuite.c | 9 +++++++++
->  testsuite/testsuite.h | 1 +
->  2 files changed, 10 insertions(+)
->
-> diff --git a/testsuite/testsuite.c b/testsuite/testsuite.c
-> index e46f3d8..ff41057 100644
-> --- a/testsuite/testsuite.c
-> +++ b/testsuite/testsuite.c
-> @@ -37,6 +37,7 @@
->  #include "testsuite.h"
->
->  static const char *ANSI_HIGHLIGHT_GREEN_ON = "\x1B[1;32m";
-> +static const char *ANSI_HIGHLIGHT_YELLOW_ON = "\x1B[1;33m";
->  static const char *ANSI_HIGHLIGHT_RED_ON =  "\x1B[1;31m";
->  static const char *ANSI_HIGHLIGHT_OFF = "\x1B[0m";
->
-> @@ -948,6 +949,14 @@ static inline int test_run_parent(const struct test *t, int fdout[2],
->         int err;
->         bool matchout, match_modules;
->
-> +       if (t->skip == true) {
+We are a professional Outreach company looking for blogs forblog posting. I=
+ came across your blog on Google, and I=92m writing to express myinterest i=
+n posting content on your site.
 
-only if (t->skip)  would be less verbose and preferred I think.
+We also have a writing agency, where all our writers arenative speakers and=
+ will ensure that whatever that is posted on your site willbe of high quali=
+ty and relevant to your site.
 
-thanks
-Lucas de Marchi
+All payments will be made via PayPal or Pioneer. Whichevermethod you prefer=
+ for the do =96 follow back link. Please notify me of the priceper post.
 
-> +               LOG("%sSKIPPED%s: %s\n",
-> +                       ANSI_HIGHLIGHT_YELLOW_ON, ANSI_HIGHLIGHT_OFF,
-> +                       t->name);
-> +               err = EXIT_SUCCESS;
-> +               goto exit;
-> +       }
-> +
->         /* Close write-fds */
->         if (t->output.out != NULL)
->                 close(fdout[1]);
-> diff --git a/testsuite/testsuite.h b/testsuite/testsuite.h
-> index 7ed96bf..8029c64 100644
-> --- a/testsuite/testsuite.h
-> +++ b/testsuite/testsuite.h
-> @@ -109,6 +109,7 @@ struct test {
->         const struct keyval *env_vars;
->         bool need_spawn;
->         bool expected_fail;
-> +       bool skip;
->         bool print_outputs;
->  } __attribute__((aligned(8)));
->
-> --
-> 2.26.2
->
+Let me know if you are interested.
 
+I look forward to hearing from you,
 
--- 
-Lucas De Marchi
+Best Regards,
+
+Seth johann
