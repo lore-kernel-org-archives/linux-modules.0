@@ -1,98 +1,102 @@
-Return-Path: <SRS0=VPp+=AY=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=lTjl=BL=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: *
-X-Spam-Status: No, score=1.4 required=3.0 tests=BAYES_20,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	RCVD_HELO_IP_MISMATCH,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C0A5C433E2
-	for <linux-modules@archiver.kernel.org>; Mon, 13 Jul 2020 13:09:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D290C433DF
+	for <linux-modules@archiver.kernel.org>; Sat,  1 Aug 2020 15:58:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F07520738
-	for <linux-modules@archiver.kernel.org>; Mon, 13 Jul 2020 13:09:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1684E207BC
+	for <linux-modules@archiver.kernel.org>; Sat,  1 Aug 2020 15:58:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linksbuildingcompany-com.20150623.gappssmtp.com header.i=@linksbuildingcompany-com.20150623.gappssmtp.com header.b="Iv/EWpvD"
+	dkim=pass (1024-bit key) header.d=devup.no header.i=@devup.no header.b="PDEUsnyo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729578AbgGMNJQ (ORCPT
+        id S1726534AbgHAP6n (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 13 Jul 2020 09:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729523AbgGMNJP (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 13 Jul 2020 09:09:15 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCD4C061755
-        for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2020 06:09:15 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id o2so13110633wmh.2
-        for <linux-modules@vger.kernel.org>; Mon, 13 Jul 2020 06:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linksbuildingcompany-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:from:reply-to:to:subject:content-transfer-encoding
-         :date:message-id;
-        bh=E3CW8TZhR9fK3nKSDpyW8cnZyWM6QFjrGmrSwMcIieI=;
-        b=Iv/EWpvDbyNFVmomoXg3GMI1dYHMgp3ro6UNrCkUVgqis0g1B6Gz5NMLRlDHioV9Ao
-         ythCKWO4ox+V9QVOXikanDmT+yIOLhgXAoiadLvEV1xG4VrSY+zKv0jtUTozFcuXxTH3
-         GdAixQXBT4yioPQYEfTfdD3C46iiB5hHMGWXbHrjbYNa6UatuqmGsyDVtlQNLGhNI6tY
-         MdPs8LoV5koblT/enkiCx3nFwILTiyDfZ74GaQdTu4tVx461u5Zrlq+IKsYwJ78lIVCS
-         v0J53omlkLj60aHRVJmY2jU4bWFpaLEx2BhagAJKhJltBl9/t0rsEBTyCKQ1QopMvz/M
-         ka5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:reply-to:to:subject
-         :content-transfer-encoding:date:message-id;
-        bh=E3CW8TZhR9fK3nKSDpyW8cnZyWM6QFjrGmrSwMcIieI=;
-        b=HubJPkcZXIgBrPa0s8TNFd1/aSGTPsgzLuLeepiKog9ujYBoPBeLJk/et0Q8SV3QrN
-         MvXw+s3mRrm6fBSyEFdS7sPXy/DJUqGUukDySFcf6G5RrAKPIcB29YXfS5q9erzQNPIA
-         3pk9tbmgrHQ5KuI22rq2NwboVToext1Ju1WSK9yP7HcIQQJ9ftbYWOIBE7bqXHsXZeTA
-         33sM4erhVzTvacNJ4ry/fdIp2zBZY+XSvti+z82RT1ZW5EEIcneCsHFrso5lSLwu7Ty7
-         yOSBfIReUCSl81Ln167mQ9yqSAmIbr8cUsWzRKSWQ8mtijSx4xUdr3uzECflse/z1/WR
-         lUEg==
-X-Gm-Message-State: AOAM532dgyiPJdezlGXvl7u2omTqT1GReVCJuD3THNGJ0+Ahy26VPISB
-        BX0AjJBjjUBHuj3sZrhmS6f9SUAk8RbqbQ==
-X-Google-Smtp-Source: ABdhPJz61ihWJufURhvC08zKjtwPSGpzjktJ6FDbU9POsXX7p7EvZ2CiJyg238RZPi6QWfphxAXCDQ==
-X-Received: by 2002:a1c:1f09:: with SMTP id f9mr19765126wmf.137.1594645752705;
-        Mon, 13 Jul 2020 06:09:12 -0700 (PDT)
-Received: from 172.69.244.145 ([72.255.37.183])
-        by smtp.gmail.com with ESMTPSA id x185sm23115296wmg.41.2020.07.13.06.09.11
-        for <linux-modules@vger.kernel.org>
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Mon, 13 Jul 2020 06:09:12 -0700 (PDT)
+        Sat, 1 Aug 2020 11:58:43 -0400
+Received: from out1.migadu.com ([91.121.223.63]:26358 "EHLO out1.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726309AbgHAP6n (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Sat, 1 Aug 2020 11:58:43 -0400
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devup.no; s=default;
+        t=1596297519;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0JGC3e1LXeeQdIbpDAmBVT0z2sUC50flD3YBBN24SY0=;
+        b=PDEUsnyoVjbgsplGqJmf+knUwe2JntLW9FU1ToLCc4gu1CBoxURxkX7DZAym6X/l/76GRe
+        FF6bdwoIxvmmXIvKOt26GnEFID8d2Oy75SRIMMjzDFbZRWx3/N0MviganHvruYhGjQhcT7
+        7wgIHtQ1eZjoqvGgDjKKpFw7vQqO/WI=
+From:   Marius Bakke <marius@devup.no>
+To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     linux-modules <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] testsuite: Add facility to skip tests.
+In-Reply-To: <CAKi4VALpxWdmFfvSxKd9apSWisrKK3zK7pO-QaPiW_c=bby4bg@mail.gmail.com>
+References: <20200516125412.12366-1-marius@devup.no> <CAKi4VALpxWdmFfvSxKd9apSWisrKK3zK7pO-QaPiW_c=bby4bg@mail.gmail.com>
+Date:   Sat, 01 Aug 2020 17:58:12 +0200
+Message-ID: <87k0yipdd7.fsf@gnu.org>
 MIME-Version: 1.0
-From:   "Seth" <seth@linksbuildingcompany.com>
-Reply-To: seth@linksbuildingcompany.com
-To:     linux-modules@vger.kernel.org
-Subject: Guest Post Submission - Paid Task
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Smart_Send_3_1_6
-Date:   Mon, 13 Jul 2020 18:09:08 +0500
-Message-ID: <911642335314455718545@DESKTOP-OM6H6T2>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello,
+--=-=-=
+Content-Type: text/plain
 
-Hopefully you are fine.
+Lucas De Marchi <lucas.de.marchi@gmail.com> writes:
 
-We are a professional Outreach company looking for blogs forblog posting. I=
- came across your blog on Google, and I=92m writing to express myinterest i=
-n posting content on your site.
+> On Sat, May 16, 2020 at 6:04 AM Marius Bakke <marius@devup.no> wrote:
+>>
+>> The Makefile helpfully warns that some tests will fail when
+>> --sysconfdir != /etc, but there are no provisions to easily disable
+>> those.  This commit provides an escape hatch.
+>
+> nice... but are we missing a patch to actually make it skip?
 
-We also have a writing agency, where all our writers arenative speakers and=
- will ensure that whatever that is posted on your site willbe of high quali=
-ty and relevant to your site.
+Uh...  That makes sense.  (I maintained a list down-stream, derp.)
 
-All payments will be made via PayPal or Pioneer. Whichevermethod you prefer=
- for the do =96 follow back link. Please notify me of the priceper post.
+>> @@ -948,6 +949,14 @@ static inline int test_run_parent(const struct test *t, int fdout[2],
+>>         int err;
+>>         bool matchout, match_modules;
+>>
+>> +       if (t->skip == true) {
+>
+> only if (t->skip)  would be less verbose and preferred I think.
 
-Let me know if you are interested.
+Fixed in v2, thanks!
 
-I look forward to hearing from you,
+Marius Bakke (2):
+  testsuite: Add facility to skip tests.
+  testsuite: Automatically skip tests that fail when sysconfdir != /etc.
 
-Best Regards,
+ Makefile.am                | 12 +++++-------
+ configure.ac               |  2 ++
+ testsuite/test-blacklist.c |  3 +++
+ testsuite/test-depmod.c    | 12 ++++++++++++
+ testsuite/test-modprobe.c  |  6 ++++++
+ testsuite/testsuite.c      |  9 +++++++++
+ testsuite/testsuite.h      |  1 +
+ 7 files changed, 38 insertions(+), 7 deletions(-)
 
-Seth johann
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCgAdFiEEu7At3yzq9qgNHeZDoqBt8qM6VPoFAl8lkRQACgkQoqBt8qM6
+VPqumgf4zXUq7jQHvlqPkJx1Ccm7d+6VxROJ+CgBt6HHEx4HO3a95LXh9sms5WV3
+r70c6Na78UGMzmdgBittepmTb8Wkl6+YeeaiXkqoXr5s4tl0ig4fziUNfH61aKty
+cGA9mO/R1DcfS3cTCSpv7c75v8nr8A7nuN5FTbjAR9PWAeP8ZGCZSKIvil7NDHVT
+MnH4QUUizsJhk65MVh0JwFI4jier0yn3f11SGflfRXhTOAFwDrbFyhGwpabJE8D+
+L5qSxVJCyzifrw/kpAWA6ER7809SRC9v7p9i0qYbe3uln6kcW4/7877l3ORYBiKW
+m9gSbLQZv68quBf3Ej3Gkd9qZYv3
+=5K+q
+-----END PGP SIGNATURE-----
+--=-=-=--
