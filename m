@@ -2,135 +2,164 @@ Return-Path: <SRS0=Sldx=CE=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0144BC433E1
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Aug 2020 09:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F8A6C433E1
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Aug 2020 10:12:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE3C420897
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Aug 2020 09:36:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 373FA206EB
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Aug 2020 10:12:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="esuGwPNU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CJqcyqc6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728419AbgHZJgb (ORCPT
+        id S1728183AbgHZKM1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 26 Aug 2020 05:36:31 -0400
-Received: from mout.gmx.net ([212.227.15.15]:49369 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728140AbgHZJga (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 26 Aug 2020 05:36:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1598434587;
-        bh=2SqX2oADNvp2+XbIN5gWqGmAQvR/fh7OjGlyEB6jGxo=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=esuGwPNUXlhlw2EZqdzQabyDw8/VHAp/keqAHCWEYvSFKQTvTR+wxbsFkcoiTQFdP
-         TxYPWiFFo3jjcAS/iGOEG6ZbWnWaNT1mwqkZX6dONG7JL10rwXcWOLeQCTkexK8enU
-         cOpN6eq5TKTbwKnu1azSnDlopAjwO5tSPawhGBd0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from blumerang ([95.118.16.46]) by mail.gmx.com (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MI5UD-1kMfhE2Ivn-00F8G4; Wed, 26
- Aug 2020 11:36:27 +0200
-Date:   Wed, 26 Aug 2020 11:36:27 +0200
-From:   Xaver =?utf-8?B?SMO2cmw=?= <hoe.dom@gmx.de>
-To:     linux-modules@vger.kernel.org
-Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH] modinfo: dont print module name when --field is given
-Message-ID: <20200826093627.ukw4hwff2wxb6ykh@blumerang>
-References: <20200823215433.j5gc5rnsmahpf43v@blumerang>
- <CAKi4VALERCR92nf+D00knka4NOrUM+P2TY7Rs+zoLOvi_8iQtQ@mail.gmail.com>
+        Wed, 26 Aug 2020 06:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728129AbgHZKM1 (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Wed, 26 Aug 2020 06:12:27 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C01C061574
+        for <linux-modules@vger.kernel.org>; Wed, 26 Aug 2020 03:12:27 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id d10so292497wrw.2
+        for <linux-modules@vger.kernel.org>; Wed, 26 Aug 2020 03:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+pZ7xiUKLgQ1svLeV8q6vPSSRm35giyv1QTtLks5t74=;
+        b=CJqcyqc6Sw4CltpKy4utN1VlQbIQBY2/wiAEro4r1K/N3KIGExmtCmkl96JV+dq/sE
+         kX6tQGjXsaMGfH1wzOEPM8fFli0Y7W7ZDlAWwmu8OjZE3SOib6KKKzjrOOhOCtPdz4yr
+         1zbHyty/AFP6IHC5J1viWBjqWfO3C1Sc/4xurN9GtsAv6fTX27B02Ly6M6bXMyfr4QjC
+         Pfse8ufjqb/nMdP1DLbgzWpBQJq5b+W76/39c0s9FX+3s4iczz7FjQzcUdFoGNERxqVK
+         o/nWx7sn1f+J/PVkKpxt+1FfjTC/+qlQESgE9oj7BCcdfdvkywztf6tcBNge+Ve2yQYs
+         mLZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+pZ7xiUKLgQ1svLeV8q6vPSSRm35giyv1QTtLks5t74=;
+        b=CxCTeVcWZfY8Hu1dsaKdgEugXvucjR24wo8H2iKuQyLl+jjUfmhneMzBRhzcmuJBN3
+         bV2ScIrY85qMrfjQ5zIt5onOLowPVWplK0IyUsG1VEO95OE38163yZly1NBtjODwycon
+         iUupOVE/0wIDcbleT0Q5z1c6ronQ96ZlkgVPAfnrUtSW39DMnm4hXPq7rzE2ytHyf6kx
+         Ild+nBwPNHvzk1Gvzn6+EQw9Owl7QfGfHeTIRo2XjCgfujMIrWAeMI0cnLU4jTRN+dPf
+         te2WcjE0pms0nzvYxZyVLFNBIFkBl+zQoFCoVD6Pl2I5pR/DH++xC3ivzfXhO1V2I3IO
+         Rp4Q==
+X-Gm-Message-State: AOAM5328/5In6AfJ/N0CWZ2hwKy4SR28MEekhoukAHWM3rDbphmlUkfN
+        HEU8H+lIz43R6bd7sO1Q0JlV3vX0s0oqBaAgCC4kIz3Ez+U=
+X-Google-Smtp-Source: ABdhPJywVkNvPZk55IrGblioIjpY+e/z5AxHVF4AvYP3nuaYMLgsGWCT08CZkxnoSVGFFg5j5qZDySoRzsmprnXtOjA=
+X-Received: by 2002:a5d:4e02:: with SMTP id p2mr10773598wrt.276.1598436745430;
+ Wed, 26 Aug 2020 03:12:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20200823215433.j5gc5rnsmahpf43v@blumerang> <CAKi4VALERCR92nf+D00knka4NOrUM+P2TY7Rs+zoLOvi_8iQtQ@mail.gmail.com>
+ <20200826093627.ukw4hwff2wxb6ykh@blumerang>
+In-Reply-To: <20200826093627.ukw4hwff2wxb6ykh@blumerang>
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date:   Wed, 26 Aug 2020 03:12:13 -0700
+Message-ID: <CAKi4VALaCE2U_e5aovDmRgQq1k_GTSANFtVaX_Phz7b5U2bwqQ@mail.gmail.com>
+Subject: Re: [PATCH] modinfo: dont print module name when --field is given
+To:     =?UTF-8?Q?Xaver_H=C3=B6rl?= <hoe.dom@gmx.de>
+Cc:     linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAKi4VALERCR92nf+D00knka4NOrUM+P2TY7Rs+zoLOvi_8iQtQ@mail.gmail.com>
-X-Provags-ID: V03:K1:kJmRIWBrSS0RypapiipynWp99NaDVuS8gjTxCxp7F/WWeFEEmoP
- KNCOvRhzG4od0pGMchbIqY/zM0liYieNXJq6jiTpd6pr9ork9jQkaIPAj2m2nWdgGlrdGxX
- tvpR+YFIaylupRh4bQtotYAyaI4QJ9Iu6Gq4ls0qMuLXvl+FtFQoVAdNGbayGnbS8TDPAzO
- PRlIqnezvNoCU/IYZbP6w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dJBDG1voZEI=:LN2TiqUMx4pf5/0bbjlm6u
- CuJ1xeZvbKo3ApjWWVMahXSZIvRLNy5qx7NObykf2EkSqI499bD37ggdKMe1wHrd642hWtF/x
- 0jd3VEBCSsnNKzHd8dvgiUpQMXIZ3Ynllf1L125zba0s3xIyZ64bk3sYUGhuB8bPth2ye7zVh
- bF9JX/DrGiR8pQJj4kQ5aXzcLIyfWGwJfpv4JIzURyaoakP9t/FGZ4HM+nMQBOjwApbTVgWBo
- jWa4Qjtnije4v+eRMaLABYtbMvoE1Luri5jWXQ8GHN+MX5cemjvlJX5LJuipyh3TuKNaeDu2H
- tWXdz6Zliipj2dv4gIiiBDs+8KLBXynux8+iOwViIwjkxJzCKqtzSq04vekPd4RuCVSd34X4J
- tnrf7I1/Kpcn45VtRXQGP7tg4lCtqPQpgy+naw23A7oelSO0Ww3SFV5JuJPgYlEmDp1zFb0Sj
- VsqhlAWABGF0uM13Jp1wEjZog7JsQLCQw8+ovDNpqsF32W8lDnLN1kFpJTj4Z4nOoUWGUjvFp
- XnJ+fxIIzKdyHSi/Pl3lSPo680nC/Mi8LRTWgAkvAAc9etBgBqYKDoi1r4A4LGIBdCkvx5V0u
- V/IW1Rd8IgHTVpJMPkr65CuECH9lmTDj6w9fuJaFst94/Gd2gpLwTCQSZ1jDShDpq2ZJOhMub
- mWXAZDqWPrHuR4BuxpNn4UM8xE3sIwfvaelhDqTr+TqOT6gpEWgKlCotW9OfILbyutTkO+cZN
- GBQjvMKQkaX0VjzF16uzG59Y2kQCgPCSCz8Rhesh2oQriV6kaAj5RAP5PAM84PKut1/GJoNwr
- FjkkvBVirXdog01Zb4lls4sMmoZc9ov2nQ+bDxOpe3x9iyBdo3UjO8cyAyzqnIuKmqnp7LBBK
- sFOvSX+5aT/NuDsp6qUWhMgrejEI0uE/9AL3GXp3pMB0t7IYZqTF42zFmwqXJpSqQdFVWuLXN
- Ayq3eD65XBact+sy4lBfhLp8FyjQLaSDxGgS9CRM5YqyqnhaD+zCUcF8ScR6jgqqHy0msfdRg
- L/E4QCkY1OcKcx1J3Ll93HKIaxCLtVtTChDVwxGYP//JaVJ8N0CrSC6aNKSWHe7CNzpi3dCzM
- RyCt9jBwS5SZ+d/5VaRMEamd44nx+bYqn/AWdU89JC4+iqATcfBaaX17ewJDpvfQFfTQ6BZ9f
- 7Q1OiMF8C6CgEBiwOoGZcVGEwmihPrcLDVFe+noCH65tlp1lQDN1gwagigSnmYSh4vUmx3JFG
- apNUcMxKJMQH3B+Tt
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Aug 25, 2020 at 10:27:46AM -0700, Lucas De Marchi wrote:
-> the name would be handled by the next if/else branch. Unconditionally pr=
-inting
-> the name at the beginning for built-in modules doesn't seem something im=
-portant
-> to retain. I'd rather handle it in the `if (is_builtin && err =3D=3D
-> -ENOENT) {` below just
-> not to exit without printing anything. In that case, printing both
-> name and filename
-> would be preferred, so the user knows why there isn't additional informa=
-tion
+On Wed, Aug 26, 2020 at 2:36 AM Xaver H=C3=B6rl <hoe.dom@gmx.de> wrote:
+>
+> On Tue, Aug 25, 2020 at 10:27:46AM -0700, Lucas De Marchi wrote:
+> > the name would be handled by the next if/else branch. Unconditionally p=
+rinting
+> > the name at the beginning for built-in modules doesn't seem something i=
+mportant
+> > to retain. I'd rather handle it in the `if (is_builtin && err =3D=3D
+> > -ENOENT) {` below just
+> > not to exit without printing anything. In that case, printing both
+> > name and filename
+> > would be preferred, so the user knows why there isn't additional inform=
+ation
+>
+> Dropping the "name:" part with --field seems the right thing (updated
+> patch below implements this). But I don't know what exactly to do about
+> the error case, not sure if I get your intention right there.
+>
+> If --field is not given, the name and filename (i.e. "(builtin)" in
+> this case) will be there anyway, on the other hand if --field
 
-Dropping the "name:" part with --field seems the right thing (updated
-patch below implements this). But I don't know what exactly to do about
-the error case, not sure if I get your intention right there.
+I was thinking about this specific error condition:
+                if (is_builtin && err =3D=3D -ENOENT) {
+                        /*
+                         * This is an old kernel that does not have a file
+                         * with information about built-in modules.
+                         */
+                        return 0;
+                }
 
-If --field is not given, the name and filename (i.e. "(builtin)" in
-this case) will be there anyway, on the other hand if --field
-_is_ given it seems a bit inconsistent to give additional output.
-Unless you consider this case an error condition of sorts, but the
-return value being 0 suggests otherwise.
+I.e. if --field is not given and the kernel is old enough not to contain
+/lib/modules/$(uname -r)/modules.builtin.modinfo, then we print
+name + filename (builtin).
+
+$ modinfo unix
+name:           unix
+filename:       (builtin)
+alias:          net-pf-1
+license:        GPL
+file:           net/unix/unix
+$ sudo mv ll
+$ modinfo unix
+name:           unix
+filename:       (builtin)
 
 
-Thanks for having a look at this!
-Xaver H=C3=B6rl
+Lucas De Marchi
 
-=2D--
- tools/modinfo.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/tools/modinfo.c b/tools/modinfo.c
-index 0231bb0..b49f622 100644
-=2D-- a/tools/modinfo.c
-+++ b/tools/modinfo.c
-@@ -178,14 +178,21 @@ static int modinfo_do(struct kmod_module *mod)
- 	is_builtin =3D (filename =3D=3D NULL);
-
- 	if (is_builtin) {
--		printf("%-16s%s%c", "name:", kmod_module_get_name(mod), separator);
- 		filename =3D "(builtin)";
- 	}
-
--	if (field !=3D NULL && streq(field, "filename")) {
-+	if (field !=3D NULL && streq(field, "name")) {
-+		printf("%s%c", kmod_module_get_name(mod),
-+			       separator);
-+		return 0;
-+	} else if (field !=3D NULL && streq(field, "filename")) {
- 		printf("%s%c", filename, separator);
- 		return 0;
- 	} else if (field =3D=3D NULL) {
-+		if (is_builtin) {
-+			printf("%-16s%s%c", "name:",
-+			       kmod_module_get_name(mod), separator);
-+		}
- 		printf("%-16s%s%c", "filename:",
- 		       filename, separator);
- 	}
-=2D-
-2.28.0
-
+> _is_ given it seems a bit inconsistent to give additional output.
+> Unless you consider this case an error condition of sorts, but the
+> return value being 0 suggests otherwise.
+>
+>
+> Thanks for having a look at this!
+> Xaver H=C3=B6rl
+>
+> ---
+>  tools/modinfo.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/modinfo.c b/tools/modinfo.c
+> index 0231bb0..b49f622 100644
+> --- a/tools/modinfo.c
+> +++ b/tools/modinfo.c
+> @@ -178,14 +178,21 @@ static int modinfo_do(struct kmod_module *mod)
+>         is_builtin =3D (filename =3D=3D NULL);
+>
+>         if (is_builtin) {
+> -               printf("%-16s%s%c", "name:", kmod_module_get_name(mod), s=
+eparator);
+>                 filename =3D "(builtin)";
+>         }
+>
+> -       if (field !=3D NULL && streq(field, "filename")) {
+> +       if (field !=3D NULL && streq(field, "name")) {
+> +               printf("%s%c", kmod_module_get_name(mod),
+> +                              separator);
+> +               return 0;
+> +       } else if (field !=3D NULL && streq(field, "filename")) {
+>                 printf("%s%c", filename, separator);
+>                 return 0;
+>         } else if (field =3D=3D NULL) {
+> +               if (is_builtin) {
+> +                       printf("%-16s%s%c", "name:",
+> +                              kmod_module_get_name(mod), separator);
+> +               }
+>                 printf("%-16s%s%c", "filename:",
+>                        filename, separator);
+>         }
+> --
+> 2.28.0
+>
