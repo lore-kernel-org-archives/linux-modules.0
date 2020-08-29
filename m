@@ -7,37 +7,38 @@ X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F115C433E6
-	for <linux-modules@archiver.kernel.org>; Sat, 29 Aug 2020 07:49:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD199C433E6
+	for <linux-modules@archiver.kernel.org>; Sat, 29 Aug 2020 07:57:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3710720838
-	for <linux-modules@archiver.kernel.org>; Sat, 29 Aug 2020 07:49:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFB5020757
+	for <linux-modules@archiver.kernel.org>; Sat, 29 Aug 2020 07:57:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="fAinSf8G"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="IDo/yWiU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbgH2Ht6 (ORCPT
+        id S1726280AbgH2H5e (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 29 Aug 2020 03:49:58 -0400
-Received: from mout.gmx.net ([212.227.15.19]:33697 "EHLO mout.gmx.net"
+        Sat, 29 Aug 2020 03:57:34 -0400
+Received: from mout.gmx.net ([212.227.15.15]:57397 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726056AbgH2Ht5 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 29 Aug 2020 03:49:57 -0400
+        id S1726105AbgH2H5a (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Sat, 29 Aug 2020 03:57:30 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1598687382;
-        bh=CRN7gxrHWKY8PuddBKnZbfdaUK2X4VSJCXmTTwPU/Ps=;
+        s=badeba3b8450; t=1598687833;
+        bh=CuxZR102rouEbn/N5VOyo6/7AEaK1X2WX8GFK9IR57w=;
         h=X-UI-Sender-Class:Subject:From:To:References:Date:In-Reply-To;
-        b=fAinSf8Gj+dQ5l+UjUnlXo93Mw4jIfh0ZU9PcSgbPjiXqiXT/dNYhqyNDAvj1BbQi
-         WREdx/sVK7CTzVzyW+8j9AtPOxoYVE+t70YiPdrE0hq6OR8pJtdz2y67LdfowxTA/a
-         hNO0satJ67BSupgteuwIljsBRhkrmRPSEceRRUfE=
+        b=IDo/yWiUtEZ3o7q4NtHJeurysVyzgf9L+9gGHKn4iS2tZPn1xPTA/TvfBPweFsQuH
+         2I/04Dw/eBp+kilcYRto9b1s0tquThqoHysJMcCg4/rx5kjNA0XKNFzBvPQR0CK8oG
+         n2PDb1SX9Vv57tEY8AHFULQ9QDPnfom22dQ1pBnw=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.com (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MhD6W-1kp8FT3u7O-00ePnx; Sat, 29
- Aug 2020 09:49:42 +0200
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1MbRfv-1kjKkI3qJt-00bug2; Sat, 29
+ Aug 2020 09:57:13 +0200
 Subject: Re: [ARM64][GCC10] Kernel can't load any module due to RWX check
 From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
 To:     linux-modules@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, peterz@infradead.org
 References: <b3158cec-b722-cbe8-5a82-47890a227da4@gmx.com>
+ <2d00ffc3-1176-1b80-20a5-e7f6babf924a@gmx.com>
 Autocrypt: addr=quwenruo.btrfs@gmx.com; prefer-encrypt=mutual; keydata=
  mQENBFnVga8BCACyhFP3ExcTIuB73jDIBA/vSoYcTyysFQzPvez64TUSCv1SgXEByR7fju3o
  8RfaWuHCnkkea5luuTZMqfgTXrun2dqNVYDNOV6RIVrc4YuG20yhC1epnV55fJCThqij0MRL
@@ -62,99 +63,105 @@ Autocrypt: addr=quwenruo.btrfs@gmx.com; prefer-encrypt=mutual; keydata=
  72byGeSovfq/4AWGNPBG1L61Exl+gbqfvbECP3ziXnob009+z9I4qXodHSYINfAkZkA523JG
  ap12LndJeLk3gfWNZfXEWyGnuciRGbqESkhIRav8ootsCIops/SqXm0/k+Kcl4gGUO/iD/T5
  oagaDh0QtOd8RWSMwLxwn8uIhpH84Q4X1LadJ5NCgGa6xPP5qqRuiC+9gZqbq4Nj
-Message-ID: <2d00ffc3-1176-1b80-20a5-e7f6babf924a@gmx.com>
-Date:   Sat, 29 Aug 2020 15:49:36 +0800
+Message-ID: <5390e084-1b0f-9508-204c-6fae39a7ae96@gmx.com>
+Date:   Sat, 29 Aug 2020 15:57:06 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <b3158cec-b722-cbe8-5a82-47890a227da4@gmx.com>
+In-Reply-To: <2d00ffc3-1176-1b80-20a5-e7f6babf924a@gmx.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="LrxD5NFIiGmv2PyffUTm0g4Tuo9YRoo6F"
-X-Provags-ID: V03:K1:Bs94OsUul5z1P97cy+vLU/XrcbVKuzy6orjhbjMQJAYXoJN6zGl
- HDqK3jokS21eMaoezV2fHop8N0o25+/9Lk4bOUzeDziw5pQ0IWUQbve32r1S8b6YBsSvbL6
- aUdnx1yEvJSZc0ecXqZbINdCXOTyhIQyVnFOct/SdUUSljJIs3FN2l21ssPpIJkd/ES+Bwe
- hTw5/X03S4VQE0FFUbg7g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1TYFiDu1Wfk=:K01qq/UKCxmZVNBricYOKp
- JcWQkKJlLAFa4sEvr7ri3/o8ZPZfYi4LKiAdxziP0kwRPDr9AH7EV9Kf4LoJLVcRwf9n0jPmr
- iNM6HE9OytoeHtdXIt6AIYVPxMQ+J3Tlu1f0nm9BNYHiVcf6BfYetYhM94OWpVo9C/BsqQcv6
- f9bcVFy0tGXZBcRb58dP8AaNk2g6tTH6M2elleqqFRV0fGE6RQ61SKBiIgyuYxfIhe5YBP27X
- 06mCKqMWREKyn5ZhDu8W+qcuAiMnnihc4b0IoBcCFlXE0fx08yyRkCwGRRIatMZmItEpm44ky
- BlMzNPg2w547OhD0Iz3nR4gNrMJV5rhGq1KQDEGgDDOXIg73M0EB1yp3gh0Pn3umcy/1y+l9c
- 9iyUu4mmfK4Eq+PBhYeN4DFos2EyVLEXUO26UjU9iHXqNnYKoL5TqMC1gt1jo2kgBDaF8vJaQ
- syhWDUuDoFvPTsxUBTxhTxqcETuqEGDcNWga0fL+UI1NA/bEDdlOtKikzooxtJR686bgi4i5c
- snQYUlBufGX62rTq/B/E5I3++SGEGTT0GdNTHynSP9HkPMcPW/ubW0+99j5sk2id4EeZCoGOE
- Em9tJ80T8p9/s8wE/UUS9kNSainED3ixhArRReaiGnLF7RVJOl53KDzfzm0JkA7XoIOp647A4
- DTGm1j47JWL23A0WJWbjSyRBd5tr6JJ6pDjS+RRTHX2MSy8iUgDLG5XgVOh2Bh3ARArOs0auT
- 6N6jQLCj0KzZj/sPNfC72NqYuciCkYij0rsMK8fv+K2RBQzsCtqofFe1A1A1Vf+iwe5p7dBAd
- 7YKITwIBpdeIzBvRvx3Q2uOa2Am4h5qQLh9SMYOCXm+WT9QrGbZhB4JeYdUZclGtrFpDwOaIf
- 2oC2mk4pvsURq9ZkHwfwctNKh2p4CjOCv4uBKfDuz2tjZpx+pdsgwfk80l2DEx8ASWA6D9RNv
- xCu8vsMqzRewgRRCtlXrE6LncKnmeOSykC2wg7BIL2bsWxnKrf9Pem+KThh38NZUTGxD+CKBM
- drYlF8f1LgdZC39lU516s7VnMNUlL+i5sFKGq6qPiqUPt7URzA/UT6b4tArlhvjBuCLtooicH
- rZ9IQ87W0k1w0CBj+snHHefT/sQPH2flH3Jvb11h03jxSBtteLCFztzeGgi4Z4w9phygefSCi
- mLWQieYfISoLVq9itYVwNZ3x1pMYa0ZSZbvtrSAqz8nmld+qGEdREYWkwY9LXC9DH869s/8Z2
- sDV4LqeWFF7Y+UwTVXqyx7wpmRjcW+jkm+gNWzQ==
+ boundary="TVEla8TlWZXg4DbWQoDDyitEWy01Ku6r3"
+X-Provags-ID: V03:K1:eZeJj9dhYwgRqSSoITUv9k6HGOmxsWZL2Y8piAMQIE9wBJTZSfk
+ 7cd/cHTTU0Vq/jgHzg4e1FWE1+ERgCjo2CtWkPG8sTqTNyvCJRFKXN/kGRNniVXZ2OrVQhx
+ Bz5FLKo60RdJFvi4kpSM2id7Dx1hNpoAuNa7pw5CooM2OYowiTVZj7gArFvhrUTAdtSfeiI
+ 0//sZtS/P++fESR76OVjQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eDAQSodC1y4=:tXGhUvuGQwbujQGtXxmwz3
+ 9GVILF0QI2ugrkWI9nQI2FT29rmtBl5NoBHh8tXS/QqKCB2jpImLbRydumslzvay7+mtH/IPV
+ glytFBHkviXEeSPhKa2L8mfcxnMHEDNnz6dVk+GaiNIkWTSOoQRap2mgZ5jehfrAsO/gWtZaU
+ 0NTx0rFKg32rtiL1No5BTwFO2zJQUovMD9ZrsfhCHPy3o/2B65Yh3OM+N01FKy3YVJEhPUT4k
+ 0Um1y+NnZW0A0yaIYZQsr3xYLtUXGDV1eeROvR5Xl5k6mNXK6EPH8qJsZ2hSzqmE2mi8NZQAP
+ a6oPw+/A0iP+dfEywlQwey/lQAUYkt/ciZt8B+y1iRdtrvDCdNtNxcELNTuaoUvVobcnSZk7t
+ YoFje82GT0UYN8McKZ146cldMMnEqu4TeID/tWyq9qGpJPV91ULsgEIBIF3LsOP+G2SS3/3Eq
+ 2PENGHqzadTSHyjkuAVe9bZn3+FEDAumlBx5YpxEgOXwZPZvpGKawHq5i5XS4FcHwivMpO8pK
+ u27H0Zkt+QsZ2mba1Tytgagcpc5fBiwrEP613uu3YooeCqAANQV2ui0V2mMACKdg3nkdb5c4b
+ 8OGi7pTbTZAb7qkIc6q1yGdXCmfptnaABvUR0UJU2nTCUGxiQ9zplM/jfJfpEZ44sDJ5z84HM
+ 2sKqhYO8kX3sTk4yRwoq5kalkVdVtN9Bg9C1jio6+0dzZ76tV+xZ/nynsP9RG0fjA84DjMJ17
+ nAWLIXrBRcN6rXjRkPi+dYRgs6HV8+wURiuJ5fs7T/L595SI5LF1/zoSUoXbJdBgP2Z/TDcOx
+ W1cbUVslxRL7Vp1B3slRUa2mriKk4AgAK+a5EJR3d3z9vzjQsvFPoCw50P+8OwemJPTprO5wO
+ eazR4onGSZ+bUncreMeajvd/r2vX6C79L5Z3167vFqQT1NJ2ScOZ1lDMpSzU21IpzbtF3kKEO
+ ev5k9kAgwDv+7EI3M9atRzkEh2L2/JLyP6GaOfdNnsJo3an41myzMJE7c/UQ2leA7zpKlhVp3
+ bskMLFZ6dsdbE6eTpBsBG+5/UPAEb+W7mgNa5IPvjCSqcmF1WUcvAHJ5xhpqC1eoFZ4RfrFpx
+ RVkbWv5VlczvlQagiG9vjB0McYe2Zekjs9yIz5M8ihQzRxsJBoOvIu7EQ7bIV+lVve6ThoVPW
+ PXDKx6MeQj34pqTy661Yzfi7yvI5n8b7gw/I33GNipoVzXA+Bxe1pOdXsMf+Xs2UbIgby/LTP
+ w3F7TRBIkNgYCPfXo7mqtkn5pY97iihw/Ntd+4w==
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---LrxD5NFIiGmv2PyffUTm0g4Tuo9YRoo6F
-Content-Type: multipart/mixed; boundary="rlFm2pJH6rwrEIdebavTa8tLQTszTJn8z"
+--TVEla8TlWZXg4DbWQoDDyitEWy01Ku6r3
+Content-Type: multipart/mixed; boundary="bXZ1IWHlQt0CDLxf6caHLlw6e0y21LA6O"
 
---rlFm2pJH6rwrEIdebavTa8tLQTszTJn8z
+--bXZ1IWHlQt0CDLxf6caHLlw6e0y21LA6O
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
 
 
-On 2020/8/29 =E4=B8=8B=E5=8D=883:44, Qu Wenruo wrote:
-> Hi,
+On 2020/8/29 =E4=B8=8B=E5=8D=883:49, Qu Wenruo wrote:
 >=20
-> Recently built a v5.9-rc2 kernel, it boots fine, but unable to load any=
+>=20
+> On 2020/8/29 =E4=B8=8B=E5=8D=883:44, Qu Wenruo wrote:
+>> Hi,
+>>
+>> Recently built a v5.9-rc2 kernel, it boots fine, but unable to load an=
+y
+>> kernel module.
+>>
+>> After some debugging, it shows that it's due to RWX check failure:
+>>
+>>   load_module: start
+>>   module_enforce_rwx_sections: index=3D22 sh_flags=3D0x7 shf_wx=3D0x5
+>>   layout_and_allocate: module enforce rwx sections
+>>   load_module: failed to alloc layout and allocate
+>>   load_module: end
+>>
+>> Futhermore, it's unable to disable the RWX check through "make
+>> menuconfig", since the ARCH_OPTIONAL_KERNEL_RWX is no for arm64.
+>>
+>> The offending section 22 looks like this: (the kernel reports 38
+>> sectors, while we only have 37, thus near-by sections are also shown h=
+ere).
+>>
+>>  20 .data         00000aa0  0000000000000000  0000000000000000  00086d=
+08
+>>  2**3
+>>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+>>  21 __bug_table   000000cc  0000000000000000  0000000000000000  000877=
+a8
+>>  2**2
+>>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+>>  22 __dyndbg      0000b9b8  0000000000000000  0000000000000000  000878=
+78
+>>  2**3
+>>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+>>  23 .data.unlikely 00000012  0000000000000000  0000000000000000
+>> 00093230  2**0
+>>                   CONTENTS, ALLOC, LOAD, DATA
+>>
+>> I'm using GCC 10.2.0, could this be the cause?
+>=20
+> I should check the git log, the module_enforce_rwx_sections() is just
+> recently added by commit 5c3a7db0c7ec ("module: Harden STRICT_MODULE_RW=
+X").
+>=20
+> Hi Peter, any idea how could this commit causing a regression on arm64
+> but not on x86_64?
 
-> kernel module.
->=20
-> After some debugging, it shows that it's due to RWX check failure:
->=20
->   load_module: start
->   module_enforce_rwx_sections: index=3D22 sh_flags=3D0x7 shf_wx=3D0x5
->   layout_and_allocate: module enforce rwx sections
->   load_module: failed to alloc layout and allocate
->   load_module: end
->=20
-> Futhermore, it's unable to disable the RWX check through "make
-> menuconfig", since the ARCH_OPTIONAL_KERNEL_RWX is no for arm64.
->=20
-> The offending section 22 looks like this: (the kernel reports 38
-> sectors, while we only have 37, thus near-by sections are also shown he=
-re).
->=20
->  20 .data         00000aa0  0000000000000000  0000000000000000  00086d0=
-8
->  2**3
->                   CONTENTS, ALLOC, LOAD, RELOC, DATA
->  21 __bug_table   000000cc  0000000000000000  0000000000000000  000877a=
-8
->  2**2
->                   CONTENTS, ALLOC, LOAD, RELOC, DATA
->  22 __dyndbg      0000b9b8  0000000000000000  0000000000000000  0008787=
-8
->  2**3
->                   CONTENTS, ALLOC, LOAD, RELOC, DATA
->  23 .data.unlikely 00000012  0000000000000000  0000000000000000
-> 00093230  2**0
->                   CONTENTS, ALLOC, LOAD, DATA
->=20
-> I'm using GCC 10.2.0, could this be the cause?
-
-I should check the git log, the module_enforce_rwx_sections() is just
-recently added by commit 5c3a7db0c7ec ("module: Harden STRICT_MODULE_RWX"=
-).
-
-Hi Peter, any idea how could this commit causing a regression on arm64
-but not on x86_64?
+And obviously, reverting it solves the problem of mine.
+(Now happy working 4K sector size btrfs support on 64K page size system)
 
 Thanks,
 Qu
@@ -163,27 +170,32 @@ Qu
 > Thanks,
 > Qu
 >=20
+>>
+>> Thanks,
+>> Qu
+>>
+>>
+>>
 >=20
->=20
 
 
---rlFm2pJH6rwrEIdebavTa8tLQTszTJn8z--
+--bXZ1IWHlQt0CDLxf6caHLlw6e0y21LA6O--
 
---LrxD5NFIiGmv2PyffUTm0g4Tuo9YRoo6F
+--TVEla8TlWZXg4DbWQoDDyitEWy01Ku6r3
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEELd9y5aWlW6idqkLhwj2R86El/qgFAl9KCJAACgkQwj2R86El
-/qhL9gf/WpdLn2XUpSd4T5qN6nf2VzX2a2mbb7f2toVvhfqRx4s36dJ4QUBfih0N
-oH71xcamNneLDZ3YkvEDSjow3Gu64Ug+WNT0KavG/xIRD8ThmydtUHvkEeR22hSy
-bTAYpOQs/MeNxzBM9f6u0aupO7fkhqPFDXMBVWC8BjlthrT1F3AuB9x/nVrDSYlq
-S474SsdFja5jOejlHMntA7hvIkXzazd14tlen3iqDwUzgzZ4zrPHgPivT4+zJAPs
-E1ZGP13OVUt8MyFheF8cR/dJB8K4thk2N+VjSbXHTJzZU3SNJ0C6rgZiHjqhpPwg
-M8zmzdTVnsDCsqFHf4XGosCwSY7nwg==
-=0wz7
+iQEzBAEBCAAdFiEELd9y5aWlW6idqkLhwj2R86El/qgFAl9KClIACgkQwj2R86El
+/qhCggf/Uub/oMRfLkHbu1GzbWTjhJ+s1qPBYFIyMyGaVgrcDEDHC7q9h/48CSp3
+QqkmtuVRNlKLBZlTia+3ECdlvlTfeuSxQKAM6dGqE84vZS8eSTNb8ZnPprfr8Qzc
+i/BtP4zJ+DzJv3QiKpkBKbzhLgrNl2NSr90/A48W8E/y+hc5Q2jNG+de9uBQ0YpP
+32yboyVXriQKwYP16v3VX+4cC2owJbkIyx0FHZEoiE3TdCg33ImgaD3RX3TEMMro
+r9QQNevpcFH370YNocmzevbEuqAFE+ePPvZn3B+LWI6ijswW0hVg8MCvVaNvQyHH
+Y1kbKRy1vJ0ibz48gbDjI1jL3Q7f+g==
+=UfcU
 -----END PGP SIGNATURE-----
 
---LrxD5NFIiGmv2PyffUTm0g4Tuo9YRoo6F--
+--TVEla8TlWZXg4DbWQoDDyitEWy01Ku6r3--
