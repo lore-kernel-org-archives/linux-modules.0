@@ -2,74 +2,104 @@ Return-Path: <SRS0=hxAR=CH=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA4D4C433E6
-	for <linux-modules@archiver.kernel.org>; Sat, 29 Aug 2020 10:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2189DC433E2
+	for <linux-modules@archiver.kernel.org>; Sat, 29 Aug 2020 11:14:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 87A1B20825
-	for <linux-modules@archiver.kernel.org>; Sat, 29 Aug 2020 10:03:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="RMH6rBsY"
+	by mail.kernel.org (Postfix) with ESMTP id 04267207DF
+	for <linux-modules@archiver.kernel.org>; Sat, 29 Aug 2020 11:14:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727056AbgH2KDm (ORCPT
+        id S1727048AbgH2LOr (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 29 Aug 2020 06:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726464AbgH2KDm (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 29 Aug 2020 06:03:42 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07D2C061236
-        for <linux-modules@vger.kernel.org>; Sat, 29 Aug 2020 03:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vI8CU+ZCGkwpW90YRbazkFoX2T1xZaJj8xp3Ts/U+dw=; b=RMH6rBsYoNDC7ympp6+i6W/s5l
-        BFHjlpGtO8YaAlc5Lcv1+SV0Zzx7n5OjvaDaijw+bTt9PIFziTZ9sowDnmcOviMfFzk+Feu4uV9At
-        93T1YDQBxLivJgarUvPkrQ8/ZQs+juEHvUE96r5UmOtp2+ZfU9p8oZGti352fLXbFA4ZMBP/4qQQ/
-        yc7Duz6WFdXrKlkQcCERotJrn/FaiOlfsf7fgS0NdBgFxdqTx9qjq147GuPiPh43gZwOGlv0V4/2V
-        jdUTWEQhzuWPu7nKz3kJcIJXxWOaOW8dhMaYvORM2awDoyrna6phemlqvQd1DUFD/ef+/mgUupBy/
-        zb+w1OEA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kBxhy-0002xJ-Eo; Sat, 29 Aug 2020 10:03:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 29D0B3011F0;
-        Sat, 29 Aug 2020 12:03:34 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 82D6222B8F163; Sat, 29 Aug 2020 12:03:34 +0200 (CEST)
-Date:   Sat, 29 Aug 2020 12:03:34 +0200
-From:   peterz@infradead.org
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     linux-modules@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, will@kernel.org,
-        ardb@kernel.org, jeyu@kernel.org, masahiroy@kernel.org
-Subject: Re: [ARM64][GCC10] Kernel can't load any module due to RWX check
-Message-ID: <20200829100334.GK1362448@hirez.programming.kicks-ass.net>
-References: <b3158cec-b722-cbe8-5a82-47890a227da4@gmx.com>
- <2d00ffc3-1176-1b80-20a5-e7f6babf924a@gmx.com>
+        Sat, 29 Aug 2020 07:14:47 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49538 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726876AbgH2LOr (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Sat, 29 Aug 2020 07:14:47 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 36306B167;
+        Sat, 29 Aug 2020 11:15:19 +0000 (UTC)
+From:   Qu Wenruo <wqu@suse.com>
+To:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: [PATCH] module: Add more error message for failed kernel module loading
+Date:   Sat, 29 Aug 2020 19:14:37 +0800
+Message-Id: <20200829111437.96334-1-wqu@suse.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2d00ffc3-1176-1b80-20a5-e7f6babf924a@gmx.com>
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Aug 29, 2020 at 03:49:36PM +0800, Qu Wenruo wrote:
+When kernel module loading failed, user space only get one of the
+following error messages:
+- -ENOEXEC
+  This is the most confusing one. From corrupted ELF header to bad
+  WRITE|EXEC flags check introduced by in module_enforce_rwx_sections()
+  all returns this error number.
 
-> Hi Peter, any idea how could this commit causing a regression on arm64
-> but not on x86_64?
+- -EPERM
+  This is for blacklisted modules. But mod doesn't do extra explain
+  on this error either.
 
-It's a bug^Wfeature in binutils-2.35.
+- -ENOMEM
+  The only error which needs no explain.
 
-See this thread: https://lkml.kernel.org/r/20200808101222.5103093e@coco.lan
+This means, if a user got "Exec format error" from modprobe, it provides
+no meaningful way for the user to debug, and will take extra time
+communicating to get extra info.
 
-People are working on a fix, see the tail of that thread.
+So this patch will add extra error messages for -ENOEXEC and -EPERM
+errors, allowing user to do better debugging and reporting.
+
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+---
+ kernel/module.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/module.c b/kernel/module.c
+index 1c5cff34d9f2..9f748c6eeb48 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -2096,8 +2096,12 @@ static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+ 	int i;
+ 
+ 	for (i = 0; i < hdr->e_shnum; i++) {
+-		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx)
++		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
++			pr_err(
++			"Module %s section %d has invalid WRITE|EXEC flags\n",
++				mod->name, i);
+ 			return -ENOEXEC;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -3825,8 +3829,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	char *after_dashes;
+ 
+ 	err = elf_header_check(info);
+-	if (err)
++	if (err) {
++		pr_err("Module has invalid ELF header\n");
+ 		goto free_copy;
++	}
+ 
+ 	err = setup_load_info(info, flags);
+ 	if (err)
+@@ -3834,6 +3840,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 
+ 	if (blacklisted(info->name)) {
+ 		err = -EPERM;
++		pr_err("Module %s is blacklisted\n", info->name);
+ 		goto free_copy;
+ 	}
+ 
+-- 
+2.27.0
+
