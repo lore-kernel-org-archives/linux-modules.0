@@ -1,235 +1,119 @@
-Return-Path: <SRS0=s/fV=CL=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=CO/U=CR=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60042C433E2
-	for <linux-modules@archiver.kernel.org>; Wed,  2 Sep 2020 00:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 216A9C433E2
+	for <linux-modules@archiver.kernel.org>; Tue,  8 Sep 2020 19:59:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2AAB0206EF
-	for <linux-modules@archiver.kernel.org>; Wed,  2 Sep 2020 00:06:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD17120658
+	for <linux-modules@archiver.kernel.org>; Tue,  8 Sep 2020 19:59:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AGx0FkZw"
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="i6HVXVbE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726193AbgIBAGb (ORCPT
+        id S1730361AbgIHT7l (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 1 Sep 2020 20:06:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32658 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726167AbgIBAGa (ORCPT
+        Tue, 8 Sep 2020 15:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731437AbgIHT7h (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 1 Sep 2020 20:06:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599005188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kPbgN8C2hSf8lczuc3BmoRLj5BPs9jBaa0Zgqfz+x2U=;
-        b=AGx0FkZwy8VNvbq0WMJES+UoZIkCCG/lSHD8vjj5zXuVFbMmsNALiX5oHosBAq4CA7eF3z
-        bgfeR1MTRqMRqY62yCPKVHfH/tvuk80XSZCxTVpW4P7HCYs7g6kqbULRUSuwGZT0fgaDGB
-        rF6CmeegmQGaQ1ClI8eOphTxcQP4ZvM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-185-xhEN1IAZNGWigmaVXOmS1w-1; Tue, 01 Sep 2020 20:06:26 -0400
-X-MC-Unique: xhEN1IAZNGWigmaVXOmS1w-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 688631DDF6;
-        Wed,  2 Sep 2020 00:06:25 +0000 (UTC)
-Received: from prarit.bos.redhat.com (prarit-guest.7a2m.lab.eng.bos.redhat.com [10.16.222.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E0D5C60BE2;
-        Wed,  2 Sep 2020 00:06:24 +0000 (UTC)
-Subject: Re: [PATCH] module: Add more error message for failed kernel module
- loading
-To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc:     Qu Wenruo <wqu@suse.com>, lkml <linux-kernel@vger.kernel.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        Rusty Russell <rusty@rustcorp.com.au>
-References: <20200829111437.96334-1-wqu@suse.com>
- <CAKi4VAJ_nZ9DT1Tm=uufbJPGgZJu+4j+DVVA9otv6oGXuD3jxg@mail.gmail.com>
- <df13d885-6f9d-dc8a-b850-8aa6ae6993eb@redhat.com>
- <CAKi4VAK4818=-FfSwG7jt-+CwY-3qEYrHfzZ45dTY948smOZ8g@mail.gmail.com>
-From:   Prarit Bhargava <prarit@redhat.com>
-Message-ID: <554c3764-526d-721b-69da-616ae22fdb70@redhat.com>
-Date:   Tue, 1 Sep 2020 20:06:24 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Tue, 8 Sep 2020 15:59:37 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0C4C061755
+        for <linux-modules@vger.kernel.org>; Tue,  8 Sep 2020 12:59:37 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id q9so184150wmj.2
+        for <linux-modules@vger.kernel.org>; Tue, 08 Sep 2020 12:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6Bi+XdwVbjYliaCr5IaGm6ChAPDH7ThwYB/lImKcl0Y=;
+        b=i6HVXVbE0kOV+N7lAKBaYWwFd7HEZJRbOc6+iTNLBk4cjl0+ot04iC2WeXf+DkHCZ7
+         oa3yHdXjvi4SMJ7OpBU5NnSo8Q8pTz8HPj8DTrd6Pz1Ye7swwxzcMAqB+QoOkwZfK8jh
+         gwmvsDcpgeYeP4glQEJF/PntcbrftJcPrWUShBDi2SqRpskFWJOj6MdCYD2fbot9Spam
+         3H3VBf5KVAQ1oTbSW/H4JTRhk/m9xCrDX3CO9SBr6i2KAZTRGM2vcM2wifw2Ue/A/DVa
+         whCJle/nDb9esmV9ivJJArdb/B0iTxu1vm6AOh3cmT7S/PCaXtt1ArXk79z7Ke4J+tER
+         TKQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6Bi+XdwVbjYliaCr5IaGm6ChAPDH7ThwYB/lImKcl0Y=;
+        b=eeneWVPlrdTu4SdPUb4CVia8uHoSxIy8A4OUkmbW8lkYzu1557E9g4+gR3FqLnDsYp
+         EvqkqwYcJVeWDytERMgF1Ipx6I8x2KoXGG9Pg3F/ZHy6Y4F4kHGterWAd4/HK0t8O4j8
+         y+8owX3DwnOX8ClPurIgeuGV4NFYRcTTQuMqtyoTmBDYwpHbsO0s6lZyx812YgAYKkSx
+         ne2POlX1Zz0R2Ri0FkXyWnBY8wE130MBlMVceRBhex13dj/qozV88Wc5LyfvnD7afmIj
+         f/fwwxbTYkvBfBzJctCPXunwLlPYfQ32ABllO+R3nyaM+lxJXwFARz8y1PEyM3h5KaZF
+         DSfQ==
+X-Gm-Message-State: AOAM531NRJqU1pgtB+xqTureo9FXiCqxLiYijS9tINuWPiNgKw56Gg/p
+        iSQlYghBSrrJgHtOx71fYekKCAFPxIj1vQ==
+X-Google-Smtp-Source: ABdhPJwcVFNJUfxQPeCxvwOv7GPVUBLz19uWBfuTSqfPGoF47931LVU0rxLP3vK2XqesM7DHB/Mliw==
+X-Received: by 2002:a1c:9ed8:: with SMTP id h207mr94523wme.116.1599595174011;
+        Tue, 08 Sep 2020 12:59:34 -0700 (PDT)
+Received: from localhost.localdomain (ip1f11fff1.dynamic.kabel-deutschland.de. [31.17.255.241])
+        by smtp.gmail.com with ESMTPSA id m3sm680855wme.31.2020.09.08.12.59.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 12:59:33 -0700 (PDT)
+From:   Torge Matthies <openglfreak@googlemail.com>
+To:     linux-modules@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Torge Matthies <openglfreak@googlemail.com>
+Subject: [PATCH v2 2/2] testsuite: add test for zstd-compressed module
+Date:   Tue,  8 Sep 2020 21:59:21 +0200
+Message-Id: <20200908195921.869779-2-openglfreak@googlemail.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200908195921.869779-1-openglfreak@googlemail.com>
+References: <20200908195921.869779-1-openglfreak@googlemail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAKi4VAK4818=-FfSwG7jt-+CwY-3qEYrHfzZ45dTY948smOZ8g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-modules@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+I took away one module from the gzip-compressed modules for this purpose.
 
+Signed-off-by: Torge Matthies <openglfreak@googlemail.com>
+---
+ testsuite/populate-modules.sh | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-On 9/1/20 4:17 PM, Lucas De Marchi wrote:
-> On Tue, Sep 1, 2020 at 12:56 PM Prarit Bhargava <prarit@redhat.com> wrote:
->>
->>
->>
->> On 9/1/20 2:50 PM, Lucas De Marchi wrote:
->>> On Sat, Aug 29, 2020 at 4:15 AM Qu Wenruo <wqu@suse.com> wrote:
->>>>
->>>> When kernel module loading failed, user space only get one of the
->>>> following error messages:
->>>> - -ENOEXEC
->>>>   This is the most confusing one. From corrupted ELF header to bad
->>>>   WRITE|EXEC flags check introduced by in module_enforce_rwx_sections()
->>>>   all returns this error number.
->>>>
->>>> - -EPERM
->>>>   This is for blacklisted modules. But mod doesn't do extra explain
->>>>   on this error either.
->>>>
->>>> - -ENOMEM
->>>>   The only error which needs no explain.
->>>>
->>>> This means, if a user got "Exec format error" from modprobe, it provides
->>>> no meaningful way for the user to debug, and will take extra time
->>>> communicating to get extra info.
->>>>
->>>> So this patch will add extra error messages for -ENOEXEC and -EPERM
->>>> errors, allowing user to do better debugging and reporting.
->>>>
->>>> Signed-off-by: Qu Wenruo <wqu@suse.com>
->>>> ---
->>>>  kernel/module.c | 11 +++++++++--
->>>>  1 file changed, 9 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/kernel/module.c b/kernel/module.c
->>>> index 1c5cff34d9f2..9f748c6eeb48 100644
->>>> --- a/kernel/module.c
->>>> +++ b/kernel/module.c
->>>> @@ -2096,8 +2096,12 @@ static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
->>>>         int i;
->>>>
->>>>         for (i = 0; i < hdr->e_shnum; i++) {
->>>> -               if ((sechdrs[i].sh_flags & shf_wx) == shf_wx)
->>>> +               if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
->>>> +                       pr_err(
->>>> +                       "Module %s section %d has invalid WRITE|EXEC flags\n",
->>>> +                               mod->name, i);
->>>>                         return -ENOEXEC;
->>>> +               }
->>>>         }
->>>>
->>>>         return 0;
->>>> @@ -3825,8 +3829,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
->>>>         char *after_dashes;
->>>>
->>>>         err = elf_header_check(info);
->>>> -       if (err)
->>>> +       if (err) {
->>>> +               pr_err("Module has invalid ELF header\n");
->>>>                 goto free_copy;
->>>> +       }
->>>>
->>>>         err = setup_load_info(info, flags);
->>>>         if (err)
->>>> @@ -3834,6 +3840,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
->>>>
->>>>         if (blacklisted(info->name)) {
->>>>                 err = -EPERM;
->>>> +               pr_err("Module %s is blacklisted\n", info->name);
->>>
->>> I wonder why would anyone actually add the blacklist to the command
->>> line like this and have no
->>> way to revert that back. This was introduced in
->>
->> Debug.  Debug.  Debug. ;)  The parameter was added to debug broken installations
->> and kernel boots.
->>
->>> be7de5f91fdc modules: Add kernel parameter to blacklist modules
->>> as a way to overcome broken initrd generation afaics.
->>
->> Not the generation of the initramfs, but blocking a module loaded during the
->> boot.  The installation may have failed and there's no easy way to then debug
->> what module was responsible for the failure.
-> 
-> if you are using initrd, then *inside* the initrd you should have the
-> /etc/modprobe.d/* file
-> you want. I said "broken initrd generation" because the tool should
-> put the file there, and
-> apparently for you it isn't.
-> 
-> Even if you don't have the file, you could use modprobe.blacklist= and
-> let the blacklist happen
-> in the userspace library rather than in the kernel. Module loading is
-> not like firmware loading
-> that happens without help from userspace.
-> 
->>
->>  Either kernel
->>> command line (using modprobe.blacklist)
->>> or /etc/modprobe.d options are honoured by libkmod and allow a
->>> sufficiently privileged user to bypass it.
->>>
->>
->> Both of those options only work if the filesystem is mounted IIRC.  It could be
->> the case that modprobe.blacklist now works earlier in the boot, however, I've
->> never used it because module_blacklist is the biggest and best hammer that I can
->> use to get through a broken installation or boot.
->>
->> In any case you're incorrectly assuming that the system has a filesystem on it.
->> That's not necessarily the case as I'll explain below.
->>
->>> +Rusty, +Prarit: is there anything this module parameter is covering
->>> that I'm missing?
->>
->> This is the situation I have repeatedly come across :  A system at a remote site
->> will not boot any flavor of Linux.  Since the system would not install the only
->> way to debug was to provide install images to workaround a module load failure.
->> As you can imagine that is a time consuming process as well as a bad end user
->> experience.
->>
->> I got so sick of it that I wrote the code above (well similar to it anyway --
->> thanks for the review Randy ;)) to add the module_blacklist parameter to make
->> debugging an uninstallable "bricked" system easier.
->>
->> It's come in handy in some unexpected ways.  We've had situations where modules
->> have loaded and corrupted memory and blacklisting them revealed that the modules
->> were responsible for the memory corruption.
-> 
-> ok... but this seems a reimplementation of modprobe.blacklist= option
-> in the kernel command line,
-> but in kernel space, with no way to remove it after the kernel is booted.
->
-
-That's *EXACTLY* what I want.  I do not want modprobe (because of some
-misconfiguration) to load the module I've explicitly blacklisted.
-
-P.
-
-> Lucas De Marchi
-> 
->>
->> P.
->>
->>>
->>> For the changes here,
->>>
->>> Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
->>>
->>> thanks
->>> Lucas De Marchi
->>>
->>>>                 goto free_copy;
->>>>         }
->>>>
->>>> --
->>>> 2.27.0
->>>>
->>>
->>
-> 
+diff --git a/testsuite/populate-modules.sh b/testsuite/populate-modules.sh
+index 5140f7a..358e740 100755
+--- a/testsuite/populate-modules.sh
++++ b/testsuite/populate-modules.sh
+@@ -66,10 +66,13 @@ map=(
+ 
+ gzip_array=(
+     "test-depmod/modules-order-compressed/lib/modules/4.4.4/kernel/drivers/block/cciss.ko"
+-    "test-depmod/modules-order-compressed/lib/modules/4.4.4/kernel/drivers/scsi/hpsa.ko"
+     "test-depmod/modules-order-compressed/lib/modules/4.4.4/kernel/drivers/scsi/scsi_mod.ko"
+     )
+ 
++zstd_array=(
++    "test-depmod/modules-order-compressed/lib/modules/4.4.4/kernel/drivers/scsi/hpsa.ko"
++    )
++
+ attach_sha256_array=(
+     "test-modinfo/mod-simple-sha256.ko"
+     )
+@@ -101,6 +104,11 @@ for m in "${gzip_array[@]}"; do
+     gzip $ROOTFS/$m
+ done
+ 
++# zstd-compress these modules
++for m in "${zstd_array[@]}"; do
++    zstd --rm $ROOTFS/$m
++done
++
+ for m in "${attach_sha1_array[@]}"; do
+     cat ${MODULE_PLAYGROUND}/dummy.sha1 >> ${ROOTFS}/$m
+ done
+-- 
+2.28.0
 
