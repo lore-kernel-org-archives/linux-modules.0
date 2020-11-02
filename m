@@ -1,78 +1,64 @@
-Return-Path: <SRS0=469u=D2=vger.kernel.org=linux-modules-owner@kernel.org>
+Return-Path: <SRS0=DODV=EI=vger.kernel.org=linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B4F6C433DF
-	for <linux-modules@archiver.kernel.org>; Mon, 19 Oct 2020 16:13:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F72BC00A89
+	for <linux-modules@archiver.kernel.org>; Mon,  2 Nov 2020 14:03:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C08072225F
-	for <linux-modules@archiver.kernel.org>; Mon, 19 Oct 2020 16:13:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 466BB223C7
+	for <linux-modules@archiver.kernel.org>; Mon,  2 Nov 2020 14:03:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730509AbgJSQNp (ORCPT
+        id S1725768AbgKBODd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 19 Oct 2020 12:13:45 -0400
-Received: from mga05.intel.com ([192.55.52.43]:58846 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730504AbgJSQNo (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 19 Oct 2020 12:13:44 -0400
-IronPort-SDR: OfiBek3qKpUWYfGOE8lbVm3cSDpVrcp90Zyvx7RR/xb2u9BznQB/VKVVDOURu8vy7/HOrCRDye
- Fdc+x8ZP4pJQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9779"; a="251753218"
-X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
-   d="scan'208";a="251753218"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 09:13:44 -0700
-IronPort-SDR: DBqiWZZR8kN4/tHU3DPTVHB3dFIOBYIMq9EfGQfCVBEhKaPrzGLkYivUcN+69TpjXvsc8OsT2m
- kDduvey8HOHQ==
-X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
-   d="scan'208";a="465580553"
-Received: from jkboswor-mobl2.amr.corp.intel.com (HELO ldmartin-desk1) ([10.255.231.68])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 09:13:43 -0700
-Date:   Mon, 19 Oct 2020 09:13:43 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Samanta Navarro <ferivoz@riseup.net>
-Cc:     linux-modules@vger.kernel.org
-Subject: Re: [PATCH] man: fix typo
-Message-ID: <20201019161343.5g46n6ezibn4vg7j@ldmartin-desk1>
-X-Patchwork-Hint: ignore
-References: <20201004114333.ekwqf5hvncv5vnid@localhost>
+        Mon, 2 Nov 2020 09:03:33 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:6734 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725616AbgKBODd (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Mon, 2 Nov 2020 09:03:33 -0500
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CPvlN0rnDzkdm2
+        for <linux-modules@vger.kernel.org>; Mon,  2 Nov 2020 22:03:28 +0800 (CST)
+Received: from [10.174.178.149] (10.174.178.149) by
+ DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 2 Nov 2020 22:03:22 +0800
+From:   Shuo Wang <wangshuo47@huawei.com>
+To:     <linux-modules@vger.kernel.org>, <lucas.de.marchi@gmail.com>
+CC:     Hushiyuan <hushiyuan@huawei.com>
+Subject: [PATCH] NEWS: fix typo
+Message-ID: <8e027904-f5b9-25cc-98f5-568358a9cdd0@huawei.com>
+Date:   Mon, 2 Nov 2020 22:03:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.0.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20201004114333.ekwqf5hvncv5vnid@localhost>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.149]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, Oct 04, 2020 at 11:43:33AM +0000, Samanta Navarro wrote:
->---
-> man/modules.dep.xml | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/man/modules.dep.xml b/man/modules.dep.xml
->index e53293a..ed63369 100644
->--- a/man/modules.dep.xml
->+++ b/man/modules.dep.xml
->@@ -48,7 +48,7 @@
->       libkmod.
->     </para>
->     <para>
->-      Its text counterpar is located in the same directory with the name
->+      Its text counterpart is located in the same directory with the name
+NEWS: fix typo
+---
+  NEWS | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Applied, thanks
-
-Lucas De Marchi
-
->       <filename>modules.dep</filename>. The text version is maintained only
->       for easy of reading by humans and is in no way used by any kmod tool.
->     </para>
->-- 
->2.28.0
->
+diff --git a/NEWS b/NEWS
+index 1c80582..39fe945 100644
+--- a/NEWS
++++ b/NEWS
+@@ -415,7 +415,7 @@ kmod 11
+  - New features:
+  	- libkmod now keeps a file opened after the first call to
+  	  kmod_module_get_{info,versions,symbols,dependency_symbols}. This
+-	  reduces signficantly the amount of time depmod tool takes to
++	  reduces significantly the amount of time depmod tool takes to
+  	  execute. Particularly if compressed modules are used.
+  	- Remove --with-rootprefix from build system. It was not a great idea
+  	  after all and should not be use since it causes more harm then
+-- 
+2.23.0
