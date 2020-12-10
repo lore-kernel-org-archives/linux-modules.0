@@ -2,63 +2,71 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D87CBC64E7B
-	for <linux-modules@archiver.kernel.org>; Thu,  3 Dec 2020 09:50:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FAFEC4361B
+	for <linux-modules@archiver.kernel.org>; Thu, 10 Dec 2020 23:15:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 84A8720C56
-	for <linux-modules@archiver.kernel.org>; Thu,  3 Dec 2020 09:50:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 708DE23B85
+	for <linux-modules@archiver.kernel.org>; Thu, 10 Dec 2020 23:15:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728958AbgLCJuc (ORCPT
+        id S2392230AbgLJXOe (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 3 Dec 2020 04:50:32 -0500
-Received: from mga02.intel.com ([134.134.136.20]:46643 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728789AbgLCJub (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 3 Dec 2020 04:50:31 -0500
-IronPort-SDR: CLIEjxN5KEmrQ/atT9QeozXPSF7npj5qn2dSE7xvCT5E8o6LBZXIE3QfJSHSDd6AqF83BU5R7d
- NT8oUYIncXcA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9823"; a="160221561"
-X-IronPort-AV: E=Sophos;i="5.78,389,1599548400"; 
-   d="scan'208";a="160221561"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2020 01:49:51 -0800
-IronPort-SDR: aAfKyuGeU0CB0x3yxhEyQjgAEsUAYKawfENEzBSeL1ZZqqJiDHnBdCcBPkvmojHTLJPjFxuVqh
- OPlFIiD9l63g==
-X-IronPort-AV: E=Sophos;i="5.78,389,1599548400"; 
-   d="scan'208";a="316415182"
-Received: from kvikashs-mobl1.amr.corp.intel.com (HELO ldmartin-desk1.intel.com) ([10.254.178.134])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2020 01:49:50 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     linux-modules@vger.kernel.org, lucas.de.marchi@gmail.com,
-        patchwork-bot@kernel.org, Shuo Wang <wangshuo47@huawei.com>
-Cc:     hushiyuan@huawei.com
-Subject: Re: [PATCH] NEWS: fix typo
-Date:   Thu,  3 Dec 2020 01:49:35 -0800
-Message-Id: <160698893481.49294.5586143633145480389.b4-ty@intel.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201125013121.4196-1-wangshuo47@huawei.com>
-References: <20201125013121.4196-1-wangshuo47@huawei.com>
+        Thu, 10 Dec 2020 18:14:34 -0500
+Received: from omta012.uswest2.a.cloudfilter.net ([35.164.127.235]:54092 "EHLO
+        omta012.uswest2.a.cloudfilter.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2393087AbgLJXOT (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 10 Dec 2020 18:14:19 -0500
+X-Greylist: delayed 335 seconds by postgrey-1.27 at vger.kernel.org; Thu, 10 Dec 2020 18:14:19 EST
+Received: from cxr.smtp.a.cloudfilter.net ([10.0.16.208])
+        by cmsmtp with ESMTP
+        id nIzCk8qHGcxd0nV2Hkhk5k; Thu, 10 Dec 2020 23:07:45 +0000
+Received: from thunder.sweets ([68.100.138.62])
+        by cmsmtp with ESMTPSA
+        id nV2EkxgWsASf9nV2GkNJVA; Thu, 10 Dec 2020 23:07:45 +0000
+Authentication-Results: cox.net; auth=pass (LOGIN) smtp.auth=jbuehler@cox.net
+X-Authority-Analysis: v=2.4 cv=EJrDb3VC c=1 sm=1 tr=0 ts=5fd2aa41
+ a=3mkzfl4ircflX6G+lDqBYw==:117 a=3mkzfl4ircflX6G+lDqBYw==:17
+ a=8nJEP1OIZ-IA:10 a=zTNgK-yGK50A:10 a=TNYumuwFysTXnyQBsCsA:9 a=wPNLvfGTeEIA:10
+Received: by thunder.sweets (Postfix, from userid 116)
+        id 7C0DC11B0E; Thu, 10 Dec 2020 18:07:36 -0500 (EST)
+Received: from [10.10.10.15] (thunder.sweets [10.10.10.15])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by thunder.sweets (Postfix) with ESMTPS id 0C28511AFF
+        for <linux-modules@vger.kernel.org>; Thu, 10 Dec 2020 18:07:34 -0500 (EST)
+Message-ID: <5FD2AA34.3000409@cox.net>
+Date:   Thu, 10 Dec 2020 18:07:32 -0500
+From:   Joe Buehler <aspam@cox.net>
+User-Agent: Thunderbird 1.5.0.12 (X11/20120201)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+To:     linux-modules@vger.kernel.org
+Subject: lspci: Unable to load libkmod resources: error -12
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfP3wnVxgcWDFl5MRDSlGCNwfLkigLJ9yx8hlLrBK6Rqqis0OwTB6+GTccF3TV1t8ou1RHuHgD+fX8tWEh6b0OOYCDPuI9fduHIo8Nl9bfco2590jQJv8
+ OjBdlZG+xuKmMCVmJqB9OKlzS63J8IMe/gcgNqdg2edOKY1r7FOpCXLuXPx8trKRkPCWAkmNVs7SoA==
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, 25 Nov 2020 09:31:21 +0800, Shuo Wang wrote:
-> 
+When running lspci -v on Ubuntu 20.40, I get the error message:
 
+lspci: Unable to load libkmod resources: error -12
 
-Applied, thanks!
+I tracked this down to a possible libkmod issue.  The kernel I am using
+has an empty modules.builtin.aliases.bin file (modules.builtin.aliases
+does not exist).
 
-[1/1] NEWS: fix typo
-      commit: c72433254ee0bda8db5d8d78a643c481a51f88a5
+kmod_load_resources() doesn't like this.  It calls index_mm_open() which
+checks the file size, sees that it is less than sizeof(hdr), error
+terminates, causing kmod_load_resources() to return -ENOMEM.
 
-Best regards,
--- 
-Lucas De Marchi <lucas.demarchi@intel.com>
+kmod version 27 as shipped with ubuntu 20.04
+
+Please copy me on any responses, I am not on this list.
+
+Joe Buehler
+
