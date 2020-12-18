@@ -6,92 +6,96 @@ X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 046A7C3526B
-	for <linux-modules@archiver.kernel.org>; Fri, 18 Dec 2020 16:03:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 931BFC4361B
+	for <linux-modules@archiver.kernel.org>; Fri, 18 Dec 2020 16:03:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D193723B70
-	for <linux-modules@archiver.kernel.org>; Fri, 18 Dec 2020 16:03:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4956A23B6C
+	for <linux-modules@archiver.kernel.org>; Fri, 18 Dec 2020 16:03:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727874AbgLRQC7 (ORCPT
+        id S1728665AbgLRQDP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 18 Dec 2020 11:02:59 -0500
+        Fri, 18 Dec 2020 11:03:15 -0500
 Received: from mga17.intel.com ([192.55.52.151]:59177 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726228AbgLRQC7 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 18 Dec 2020 11:02:59 -0500
-IronPort-SDR: VvB/BW8Wj0zJ3l1KtZgiYTOeud6VMzOLC57bLPPEaVdYMGhNzOe48z/6alnVGFAmvPy+igDSax
- M6islwnLnrXA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9839"; a="155257952"
+        id S1728570AbgLRQDP (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Fri, 18 Dec 2020 11:03:15 -0500
+IronPort-SDR: +Z4oRpbjrgptmSeeSe4Iw3QPUFOzRYbgChrCPIx/ZEY3wLl6FFS5bFvWh3rb6K/bP582G6TtKR
+ FXosenADRf/g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9839"; a="155257958"
 X-IronPort-AV: E=Sophos;i="5.78,430,1599548400"; 
-   d="scan'208";a="155257952"
+   d="scan'208";a="155257958"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2020 08:02:15 -0800
-IronPort-SDR: lhyGISzeo398XhRkPw79BD12GzeIXmdn+z5zftN/QdNoKvpNbip8ALzqwpdgjNLUND7FP5b0uK
- UWpD8tlEfsaw==
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2020 08:02:16 -0800
+IronPort-SDR: Y20jIAu+qcDm3SNJV2Y1y4NZAlMt3dVnqugzaw1Ob7epV/YUMFEht0HMueISWcOVGmDF61powg
+ L4pkfBFLjB9A==
 X-IronPort-AV: E=Sophos;i="5.78,430,1599548400"; 
-   d="scan'208";a="388582564"
+   d="scan'208";a="388582585"
 Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2020 08:02:15 -0800
 From:   Lucas De Marchi <lucas.demarchi@intel.com>
 To:     linux-modules@vger.kernel.org
 Cc:     Joe Buehler <aspam@cox.net>,
         Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Subject: [PATCH 1/3] depmod: unconditionally write builtin.alias.bin
-Date:   Fri, 18 Dec 2020 08:02:07 -0800
-Message-Id: <20201218160209.4037174-2-lucas.demarchi@intel.com>
+Subject: [PATCH 2/3] shared: fix UNIQ definition
+Date:   Fri, 18 Dec 2020 08:02:08 -0800
+Message-Id: <20201218160209.4037174-3-lucas.demarchi@intel.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201218160209.4037174-1-lucas.demarchi@intel.com>
 References: <20201218160209.4037174-1-lucas.demarchi@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The file is always created and unless we return an error, the temporary
-file is renamed to its final destination. All other places write the
-index without checking if the index is empty, so just do the same.
+We need a macro indirection for UNIQ to work. Otherwise it won't be
+unique at all since it will just append "UNIQ" to the name:
 
-Reported-by: Joe Buehler <aspam@cox.net>
+In file included from testsuite/test-init.c:30:
+testsuite/testsuite.h:142:27: error: redefinition of ‘stest_load_resourcesUNIQ’
 ---
- tools/depmod.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ shared/macro.h        | 7 +++++--
+ testsuite/testsuite.h | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 2c03dfe..3f31cdf 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -2419,7 +2419,7 @@ static int output_builtin_alias_bin(struct depmod *depmod, FILE *out)
- 	if (ret < 0) {
- 		if (ret == -ENOENT)
- 			ret = 0;
--		goto fail;
-+		goto out;
- 	}
+diff --git a/shared/macro.h b/shared/macro.h
+index 4fc5405..b59f7dc 100644
+--- a/shared/macro.h
++++ b/shared/macro.h
+@@ -45,9 +45,14 @@
+ 	})
  
- 	kmod_list_foreach(l, builtin) {
-@@ -2429,7 +2429,7 @@ static int output_builtin_alias_bin(struct depmod *depmod, FILE *out)
- 
- 		ret = kmod_module_get_info(mod, &info_list);
- 		if (ret < 0)
--			goto fail;
-+			goto out;
- 
- 		kmod_list_foreach(ll, info_list) {
- 			char alias[PATH_MAX];
-@@ -2454,9 +2454,11 @@ static int output_builtin_alias_bin(struct depmod *depmod, FILE *out)
- 		count++;
- 	}
- 
--	if (count)
-+out:
-+	/* do not bother writing the index if we are going to discard it */
-+	if (!ret)
- 		index_write(idx, out);
--fail:
+ #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + _array_size_chk(arr))
 +
- 	if (builtin)
- 		kmod_module_unref_list(builtin);
+ #define XSTRINGIFY(x) #x
+ #define STRINGIFY(x) XSTRINGIFY(x)
  
++#define XCONCATENATE(x, y) x ## y
++#define CONCATENATE(x, y) XCONCATENATE(x, y)
++#define UNIQ(x) CONCATENATE(x, __COUNTER__)
++
+ /* Temporaries for importing index handling */
+ #define NOFAIL(x) (x)
+ #define fatal(x...) do { } while (0)
+@@ -69,5 +74,3 @@
+ #define noreturn __attribute__((noreturn))
+ #endif
+ #endif
+-
+-#define UNIQ __COUNTER__
+diff --git a/testsuite/testsuite.h b/testsuite/testsuite.h
+index 7ed96bf..f190249 100644
+--- a/testsuite/testsuite.h
++++ b/testsuite/testsuite.h
+@@ -139,7 +139,7 @@ int test_run(const struct test *t);
+ 
+ /* Test definitions */
+ #define DEFINE_TEST(_name, ...) \
+-	static const struct test s##_name##UNIQ \
++	static const struct test UNIQ(s##_name) \
+ 	__attribute__((used, section("kmod_tests"), aligned(8))) = { \
+ 		.name = #_name, \
+ 		.func = _name, \
 -- 
 2.29.2
 
