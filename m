@@ -2,95 +2,94 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10DD9C433DB
-	for <linux-modules@archiver.kernel.org>; Mon, 11 Jan 2021 14:14:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A096FC43381
+	for <linux-modules@archiver.kernel.org>; Tue, 12 Jan 2021 16:03:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE7DB208E4
-	for <linux-modules@archiver.kernel.org>; Mon, 11 Jan 2021 14:14:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6604F21919
+	for <linux-modules@archiver.kernel.org>; Tue, 12 Jan 2021 16:03:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728008AbhAKOOG (ORCPT
+        id S2405691AbhALQC7 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 11 Jan 2021 09:14:06 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:10955 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727668AbhAKOOF (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 11 Jan 2021 09:14:05 -0500
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4DDwdb6HCyzj4dt;
-        Mon, 11 Jan 2021 22:12:35 +0800 (CST)
-Received: from huawei.com (10.174.176.87) by DGGEMS406-HUB.china.huawei.com
- (10.3.19.206) with Microsoft SMTP Server id 14.3.498.0; Mon, 11 Jan 2021
- 22:13:16 +0800
-From:   Shuo Wang <wangshuo47@huawei.com>
-To:     <lucas.de.marchi@gmail.com>, <patchwork-bot@kernel.org>,
-        <linux-modules@vger.kernel.org>
-CC:     <hushiyuan@huawei.com>
-Subject: [PATCH] libkmod: assign values to variables to fix warnings
-Date:   Mon, 11 Jan 2021 22:13:16 +0800
-Message-ID: <20210111141316.23108-1-wangshuo47@huawei.com>
-X-Mailer: git-send-email 2.19.0.windows.1
+        Tue, 12 Jan 2021 11:02:59 -0500
+Received: from mx2.suse.de ([195.135.220.15]:46574 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405624AbhALQC7 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Tue, 12 Jan 2021 11:02:59 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 0A972AC24;
+        Tue, 12 Jan 2021 16:02:18 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     linux-modules@vger.kernel.org
+Cc:     Michal Suchanek <msuchanek@suse.de>,
+        =?UTF-8?q?Marcus=20R=C3=BCckert?= <mrueckert@suse.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Dominique Leuenberger <dimstar@opensuse.org>
+Subject: [PATCH] modprobe.d: load from /usr/lib.
+Date:   Tue, 12 Jan 2021 17:02:11 +0100
+Message-Id: <20210112160211.5614-1-msuchanek@suse.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.176.87]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-gcc version 7.3.0 (GCC)
+There is an ongoing effort to limit use of files outside of /usr (or
+$prefix on general). Currently all modprobe.d paths are hardcoded to
+outside of $prefix. Teach kmod to load modprobe.d from $prefix/lib.
 
->what compiler?
->>libkmod/libkmod.c: In function 'kmod_lookup_alias_is_builtin':
->>./shared/util.h:73:9: warning: 'line' may be used uninitialized in this function [-Wmaybe-uninitialized]
->>         free(*(void**) p);
->>         ^~~~~~~~~~~~~~~~~
->>libkmod/libkmod.c:581:23: note: 'line' was declared here
->>  _cleanup_free_ char *line;
->>                       ^~~~
->>In file included from libkmod/libkmod-module.c:42:0:
->>libkmod/libkmod-module.c: In function 'kmod_module_probe_insert_module':
->>./shared/util.h:73:9: warning: 'cmd' may be used uninitialized in this function [-Wmaybe-uninitialized]
->>         free(*(void**) p);
->>         ^~~~~~~~~~~~~~~~~
->>libkmod/libkmod-module.c:1009:23: note: 'cmd' was declared here
->>  _cleanup_free_ char *cmd;
->>
->>---
->> libkmod/libkmod-module.c | 2 +-
->> libkmod/libkmod.c        | 2 +-
->> 2 files changed, 2 insertions(+), 2 deletions(-)
->>
->>diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
->>index 76a6dc3..2e973b5 100644
->>--- a/libkmod/libkmod-module.c
->>+++ b/libkmod/libkmod-module.c
->>@@ -1006,7 +1006,7 @@ static int module_do_install_commands(struct kmod_module *mod,
->> {
->> 	const char *command = kmod_module_get_install_commands(mod);
->> 	char *p;
->>-	_cleanup_free_ char *cmd;
->>+	_cleanup_free_ char *cmd = NULL;
->> 	int err;
->> 	size_t cmdlen, options_len, varlen;
->> 
->>diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
->>index 43423d6..66e658c 100644
->>--- a/libkmod/libkmod.c
->>+++ b/libkmod/libkmod.c
->>@@ -578,7 +578,7 @@ finish:
->> 
->> bool kmod_lookup_alias_is_builtin(struct kmod_ctx *ctx, const char *name)
->> {
->>-	_cleanup_free_ char *line;
->>+	_cleanup_free_ char *line = NULL;
->> 
->> 	line = lookup_builtin_file(ctx, name);
->> 
->>-- 
->>2.23.0
+Cc: Marcus Rückert <mrueckert@suse.com>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: Dominique Leuenberger <dimstar@opensuse.org>
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+ Makefile.am        | 1 +
+ libkmod/libkmod.c  | 1 +
+ man/modprobe.d.xml | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/Makefile.am b/Makefile.am
+index b29e943a4d29..702a665f0334 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -19,6 +19,7 @@ AM_CPPFLAGS = \
+ 	-include $(top_builddir)/config.h \
+ 	-I$(top_srcdir) \
+ 	-DSYSCONFDIR=\""$(sysconfdir)"\" \
++	-DPREFIX=\""$(prefix)"\" \
+ 	${zlib_CFLAGS}
+ 
+ AM_CFLAGS = $(OUR_CFLAGS)
+diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
+index 43423d63a889..9399c6c902f8 100644
+--- a/libkmod/libkmod.c
++++ b/libkmod/libkmod.c
+@@ -65,6 +65,7 @@ static const char *default_config_paths[] = {
+ 	SYSCONFDIR "/modprobe.d",
+ 	"/run/modprobe.d",
+ 	"/lib/modprobe.d",
++	PREFIX "/lib/modprobe.d",
+ 	NULL
+ };
+ 
+diff --git a/man/modprobe.d.xml b/man/modprobe.d.xml
+index 211af8488abb..ae5a83986a52 100644
+--- a/man/modprobe.d.xml
++++ b/man/modprobe.d.xml
+@@ -40,6 +40,7 @@
+   </refnamediv>
+ 
+   <refsynopsisdiv>
++    <para><filename>/usr/lib/modprobe.d/*.conf</filename></para>
+     <para><filename>/lib/modprobe.d/*.conf</filename></para>
+     <para><filename>/etc/modprobe.d/*.conf</filename></para>
+     <para><filename>/run/modprobe.d/*.conf</filename></para>
+-- 
+2.26.2
 
