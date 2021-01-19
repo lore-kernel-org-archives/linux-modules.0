@@ -2,123 +2,80 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C780C433E0
-	for <linux-modules@archiver.kernel.org>; Tue, 19 Jan 2021 15:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05A2EC433E6
+	for <linux-modules@archiver.kernel.org>; Tue, 19 Jan 2021 15:36:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12B11207C4
-	for <linux-modules@archiver.kernel.org>; Tue, 19 Jan 2021 15:07:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1CC320706
+	for <linux-modules@archiver.kernel.org>; Tue, 19 Jan 2021 15:36:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387715AbhASPFO (ORCPT
+        id S1731777AbhASPgB (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 19 Jan 2021 10:05:14 -0500
-Received: from mga03.intel.com ([134.134.136.65]:39972 "EHLO mga03.intel.com"
+        Tue, 19 Jan 2021 10:36:01 -0500
+Received: from attila.bofh.it ([85.94.204.146]:53546 "EHLO attila.bofh.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391709AbhASOzX (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 19 Jan 2021 09:55:23 -0500
-IronPort-SDR: i9kCwhN0zenE5DbnjvweKdm2+hNtqd1SDKm+SD2VK/j+nemmJoXC4Ni8snqLe19Jlzalmc8qm9
- DJ8+mqe4T4iw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9868"; a="179023532"
-X-IronPort-AV: E=Sophos;i="5.79,359,1602572400"; 
-   d="scan'208";a="179023532"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2021 06:54:24 -0800
-IronPort-SDR: 4Dk6ziHeO+IFmpd30IgqkjBmInIf/zK9Jm1c5bDaZhJ10DCpXtNwEPwdNf9EYYV08RXQh4X1UE
- R7E3iqUHE2NA==
-X-IronPort-AV: E=Sophos;i="5.79,359,1602572400"; 
-   d="scan'208";a="365772532"
-Received: from caophong-mobl.amr.corp.intel.com (HELO ldmartin-desk1.intel.com) ([10.213.166.105])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2021 06:54:22 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     linux-modules@vger.kernel.org
-Cc:     Jan Tojnar <jtojnar@gmail.com>
-Subject: [PATCH 3/3] Support /usr/local for configuration files
-Date:   Tue, 19 Jan 2021 06:52:38 -0800
-Message-Id: <20210119145238.12774-3-lucas.demarchi@intel.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210119145238.12774-1-lucas.demarchi@intel.com>
+        id S2391577AbhASPfz (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Tue, 19 Jan 2021 10:35:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.it;
+ i=@linux.it; q=dns/txt; s=attila; t=1611070501; h=date : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to : from : from;
+ bh=Q8/wmdeR6+kRyU/Ee/8H+zf+qWvYdFKqv209YU2YX2c=;
+ b=iaIbQnaEHf7U1vlBmO6XEb+S+qlRRMtgzb1/jgP07HVgPPG84BGwUHuZl9bRx1evOxRBT
+ zcTt2b00j2DujmsThoJWC3mskms4Rbk8lzYa+ZCEJ999S4gYb4ynIuhY3NFQzNUET5KOHdp
+ Ivg4QeK+lye+90undzjp5tiwqkJ49bE=
+Received: by attila.bofh.it (Postfix, from userid 10)
+        id 2D02D12FC1B; Tue, 19 Jan 2021 16:35:01 +0100 (CET)
+Received: by bongo.bofh.it (Postfix, from userid 1000)
+        id D8C7E840C81; Tue, 19 Jan 2021 16:34:45 +0100 (CET)
+Date:   Tue, 19 Jan 2021 16:34:45 +0100
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules@vger.kernel.org
+Subject: Re: [PATCH 2/3] depmod: fix precedence order
+Message-ID: <YAb8FfR+/I5YKxUq@bongo.bofh.it>
+Mail-Followup-To: Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-modules@vger.kernel.org
 References: <20210119145238.12774-1-lucas.demarchi@intel.com>
+ <20210119145238.12774-2-lucas.demarchi@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xR3XgMmjQv9QgDeY"
+Content-Disposition: inline
+In-Reply-To: <20210119145238.12774-2-lucas.demarchi@intel.com>
+From:   Marco d'Itri <md@Linux.IT>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Add /usr/local to the search path for configuration files. These are
-intended for local installs, provided /usr/local is given as prefix.
----
- libkmod/libkmod.c  | 10 ++++++----
- man/depmod.d.xml   |  1 +
- man/modprobe.d.xml |  1 +
- tools/depmod.c     |  1 +
- 4 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
-index 25655b9..7c2b889 100644
---- a/libkmod/libkmod.c
-+++ b/libkmod/libkmod.c
-@@ -64,6 +64,7 @@ static struct _index_files {
- static const char *default_config_paths[] = {
- 	SYSCONFDIR "/modprobe.d",
- 	"/run/modprobe.d",
-+	"/usr/local/lib/modprobe.d",
- 	"/lib/modprobe.d",
- 	NULL
- };
-@@ -234,10 +235,11 @@ static char *get_kernel_release(const char *dirname)
-  *           Otherwise, give an absolute dirname.
-  * @config_paths: ordered array of paths (directories or files) where
-  *                to load from user-defined configuration parameters such as
-- *                alias, blacklists, commands (install, remove). If
-- *                NULL defaults to /etc/modprobe.d, /run/modprobe.d and
-- *                /lib/modprobe.d. Give an empty vector if configuration should
-- *                not be read. This array must be null terminated.
-+ *                alias, blacklists, commands (install, remove). If NULL
-+ *                defaults to /etc/modprobe.d, /run/modprobe.d,
-+ *                /usr/local/lib/modprobe.d and /lib/modprobe.d. Give an empty
-+ *                vector if configuration should not be read. This array must
-+ *                be null terminated.
-  *
-  * Create kmod library context. This reads the kmod configuration
-  * and fills in the default values.
-diff --git a/man/depmod.d.xml b/man/depmod.d.xml
-index 6472bda..b315e93 100644
---- a/man/depmod.d.xml
-+++ b/man/depmod.d.xml
-@@ -40,6 +40,7 @@
- 
-   <refsynopsisdiv>
-     <para><filename>/usr/lib/depmod.d/*.conf</filename></para>
-+    <para><filename>/usr/local/lib/depmod.d/*.conf</filename></para>
-     <para><filename>/run/depmod.d/*.conf</filename></para>
-     <para><filename>/etc/depmod.d/*.conf</filename></para>
-   </refsynopsisdiv>
-diff --git a/man/modprobe.d.xml b/man/modprobe.d.xml
-index a674d69..0ab3e91 100644
---- a/man/modprobe.d.xml
-+++ b/man/modprobe.d.xml
-@@ -41,6 +41,7 @@
- 
-   <refsynopsisdiv>
-     <para><filename>/lib/modprobe.d/*.conf</filename></para>
-+    <para><filename>/usr/local/lib/modprobe.d/*.conf</filename></para>
-     <para><filename>/run/modprobe.d/*.conf</filename></para>
-     <para><filename>/etc/modprobe.d/*.conf</filename></para>
-   </refsynopsisdiv>
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 8e1d9ec..170a1d8 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -53,6 +53,7 @@ static const char CFG_EXTERNAL_KEY[] = "external";
- static const char *default_cfg_paths[] = {
- 	SYSCONFDIR "/depmod.d",
- 	"/run/depmod.d",
-+	"/usr/local/lib/depmod.d",
- 	"/lib/depmod.d",
- 	NULL
- };
--- 
-2.30.0
+--xR3XgMmjQv9QgDeY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Jan 19, Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+
+> Configuration in /etc should have higher prio than /run.
+> Given how rarely configuration in /run is used with depmod, this is
+> likely not to cause any problems, even if it's a change in behavior.
+I agree. But the order is documented in the man pages, so you should=20
+change it there as well.
+
+--=20
+ciao,
+Marco
+
+--xR3XgMmjQv9QgDeY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQnKUXNg20437dCfobLPsM64d7XgQUCYAb8FQAKCRDLPsM64d7X
+gfc8AQDU4U3Gge4ccmtf8PUpbvKeC1zfA1rZIf5KesvYU4fNhwD9HWMBcOLSFNRp
+vJs0I27q45mgnQqfL114bbFRc0p9GQY=
+=3vGq
+-----END PGP SIGNATURE-----
+
+--xR3XgMmjQv9QgDeY--
