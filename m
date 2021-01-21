@@ -2,214 +2,103 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AD35C433DB
-	for <linux-modules@archiver.kernel.org>; Thu, 21 Jan 2021 04:42:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D9F7C433DB
+	for <linux-modules@archiver.kernel.org>; Thu, 21 Jan 2021 07:08:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C56F238E8
-	for <linux-modules@archiver.kernel.org>; Thu, 21 Jan 2021 04:42:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7D3E23877
+	for <linux-modules@archiver.kernel.org>; Thu, 21 Jan 2021 07:08:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbhAUDyw (ORCPT
+        id S1726247AbhAUHHv (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 20 Jan 2021 22:54:52 -0500
-Received: from mga05.intel.com ([192.55.52.43]:53467 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393401AbhAUCyn (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 20 Jan 2021 21:54:43 -0500
-IronPort-SDR: Kvb1gwCBQ2TwuUinYaGDmNc5mRaNaJ3x4fKpLKtnGyfe56joX3jydPYbV00JD0iqvU2GQ+mx6O
- LPSX2XYQtA5w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="264023102"
-X-IronPort-AV: E=Sophos;i="5.79,362,1602572400"; 
-   d="scan'208";a="264023102"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 18:54:00 -0800
-IronPort-SDR: ZOGNQ2v4xfaYt0YrTCB0uD22dVTCuelBkzY8CRTJqquzClP9KD8T8Cb7Ri9sLgY3e/bpIur4NH
- diBr+DOLE7uQ==
-X-IronPort-AV: E=Sophos;i="5.79,362,1602572400"; 
-   d="scan'208";a="467297345"
-Received: from mrmehta1-mobl.amr.corp.intel.com (HELO ldmartin-desk1.intel.com) ([10.212.37.155])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 18:53:59 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     linux-modules@vger.kernel.org
-Subject: [PATCH] README: make github mirror official
-Date:   Wed, 20 Jan 2021 18:53:42 -0800
-Message-Id: <20210121025342.16405-1-lucas.demarchi@intel.com>
-X-Mailer: git-send-email 2.30.0
+        Thu, 21 Jan 2021 02:07:51 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:11120 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726316AbhAUHH3 (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 21 Jan 2021 02:07:29 -0500
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DLthN3VMLz15wB3;
+        Thu, 21 Jan 2021 15:05:40 +0800 (CST)
+Received: from huawei.com (10.174.176.87) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.498.0; Thu, 21 Jan 2021
+ 15:06:38 +0800
+From:   Shuo Wang <wangshuo47@huawei.com>
+To:     <lucas.de.marchi@gmail.com>, <patchwork-bot@kernel.org>,
+        <linux-modules@vger.kernel.org>
+CC:     <hushiyuan@huawei.com>
+Subject: [PATCH] libkmod: assign values to variables to fix warnings
+Date:   Thu, 21 Jan 2021 15:06:27 +0800
+Message-ID: <20210121070627.17072-1-wangshuo47@huawei.com>
+X-Mailer: git-send-email 2.19.0.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.176.87]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-For some time I've been maintaining a read-only mirror on github.
-I think it's time to allow patches flowing from there besides the
-mailing list: I created a new org to host the project:
 
-	https://github.com/kmod-project/kmod
----
- README    |   4 +-
- README.md | 126 +++++++++++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 126 insertions(+), 4 deletions(-)
+	Dear Lucas,
 
-diff --git a/README b/README
-index b541db9..59eb301 100644
---- a/README
-+++ b/README
-@@ -7,9 +7,6 @@ Mailing list:
- 	linux-modules@vger.kernel.org (no subscription needed)
- 	https://lore.kernel.org/linux-modules/
- 
--Patchwork:
--	https://patchwork.kernel.org/project/linux-modules/
--
- Signed packages:
- 	http://www.kernel.org/pub/linux/utils/kernel/kmod/
- 
-@@ -20,6 +17,7 @@ Git:
- 
- Gitweb:
- 	http://git.kernel.org/?p=utils/kernel/kmod/kmod.git
-+	https://github.com/kmod-project/kmod
- 
- Irc:
- 	#kmod on irc.freenode.org
-diff --git a/README.md b/README.md
-index d3b84bd..a83b4ac 100644
---- a/README.md
-+++ b/README.md
-@@ -2,4 +2,128 @@
- 
- [![Coverity Scan Status](https://scan.coverity.com/projects/2096/badge.svg)](https://scan.coverity.com/projects/2096)
- 
--This is a ***mirror only***. Please see [README](../master/README) file for more information.
-+
-+Information
-+===========
-+
-+Mailing list:
-+	linux-modules@vger.kernel.org (no subscription needed)
-+	https://lore.kernel.org/linux-modules/
-+
-+Signed packages:
-+	http://www.kernel.org/pub/linux/utils/kernel/kmod/
-+
-+Git:
-+	git://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
-+	http://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
-+	https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
-+
-+Gitweb:
-+	http://git.kernel.org/?p=utils/kernel/kmod/kmod.git
-+	https://github.com/kmod-project/kmod
-+
-+Irc:
-+	#kmod on irc.freenode.org
-+
-+License:
-+	LGPLv2.1+ for libkmod, testsuite and helper libraries
-+	GPLv2+ for tools/*
-+
-+
-+OVERVIEW
-+========
-+
-+kmod is a set of tools to handle common tasks with Linux kernel modules like
-+insert, remove, list, check properties, resolve dependencies and aliases.
-+
-+These tools are designed on top of libkmod, a library that is shipped with
-+kmod. See libkmod/README for more details on this library and how to use it.
-+The aim is to be compatible with tools, configurations and indexes from
-+module-init-tools project.
-+
-+Compilation and installation
-+============================
-+
-+In order to compiler the source code you need following software packages:
-+	- GCC compiler
-+	- GNU C library
-+
-+Optional dependencies:
-+	- ZLIB library
-+	- LZMA library
-+
-+Typical configuration:
-+	./configure CFLAGS="-g -O2" --prefix=/usr \
-+			--sysconfdir=/etc --libdir=/usr/lib
-+
-+Configure automatically searches for all required components and packages.
-+
-+To compile and install run:
-+	make && make install
-+
-+Hacking
-+=======
-+
-+Run 'autogen.sh' script before configure. If you want to accept the recommended
-+flags, you just need to run 'autogen.sh c'. Note that the recommended
-+flags require cython be installed to compile successfully.
-+
-+Make sure to read the CODING-STYLE file and the other READMEs: libkmod/README
-+and testsuite/README.
-+
-+Compatibility with module-init-tools
-+====================================
-+
-+kmod replaces module-init-tools, which is end-of-life. Most of its tools are
-+rewritten on top of libkmod so it can be used as a drop in replacements.
-+Somethings however were changed. Reasons vary from "the feature was already
-+long deprecated on module-init-tools" to "it would be too much trouble to
-+support it".
-+
-+There are several features that are being added in kmod, but we don't
-+keep track of them here.
-+
-+modprobe
-+--------
-+
-+* 'modprobe -l' was marked as deprecated and does not exist anymore
-+
-+* 'modprobe -t' is gone, together with 'modprobe -l'
-+
-+* modprobe doesn't parse configuration files with names not ending in
-+  '.alias' or '.conf'. modprobe used to warn about these files.
-+
-+* modprobe doesn't parse 'config' and 'include' commands in configuration
-+  files.
-+
-+* modprobe from m-i-t does not honour softdeps for install commands. E.g.:
-+  config:
-+
-+        install bli "echo bli"
-+	install bla "echo bla"
-+	softdep bla pre: bli
-+
-+  With m-i-t, the output of 'modprobe --show-depends bla' will be:
-+        install "echo bla"
-+
-+  While with kmod:
-+        install "echo bli"
-+        install "echo bla"
-+
-+* kmod doesn't dump the configuration as is in the config files. Instead it
-+  dumps the configuration as it was parsed. Therefore, comments and file names
-+  are not dumped, but on the good side we know what the exact configuration
-+  kmod is using. We did this because if we only want to know the entire content
-+  of configuration files, it's enough to use find(1) in modprobe.d directories
-+
-+depmod
-+------
-+
-+* there's no 'depmod -m' option: legacy modules.*map files are gone
-+
-+lsmod
-+-----
-+
-+* module-init-tools used /proc/modules to parse module info. kmod uses
-+  /sys/module/*, but there's a fallback to /proc/modules if the latter isn't
-+  available
--- 
-2.30.0
+Thanks for your reply. I was wondering if these changes will
+ be merged in the future?
 
+Best regards,
+Shuo
+
+>gcc version 7.3.0 (GCC)
+>
+>>what compiler?
+>>>libkmod/libkmod.c: In function 'kmod_lookup_alias_is_builtin':
+>>>./shared/util.h:73:9: warning: 'line' may be used uninitialized in this function [-Wmaybe-uninitialized]
+>>>         free(*(void**) p);
+>>>         ^~~~~~~~~~~~~~~~~
+>>>libkmod/libkmod.c:581:23: note: 'line' was declared here
+>>>  _cleanup_free_ char *line;
+>>>                       ^~~~
+>>>In file included from libkmod/libkmod-module.c:42:0:
+>>>libkmod/libkmod-module.c: In function 'kmod_module_probe_insert_module':
+>>>./shared/util.h:73:9: warning: 'cmd' may be used uninitialized in this function [-Wmaybe-uninitialized]
+>>>         free(*(void**) p);
+>>>         ^~~~~~~~~~~~~~~~~
+>>>libkmod/libkmod-module.c:1009:23: note: 'cmd' was declared here
+>>>  _cleanup_free_ char *cmd;
+>>>
+>>>---
+>>> libkmod/libkmod-module.c | 2 +-
+>>> libkmod/libkmod.c        | 2 +-
+>>> 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>>diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+>>>index 76a6dc3..2e973b5 100644
+>>>--- a/libkmod/libkmod-module.c
+>>>+++ b/libkmod/libkmod-module.c
+>>>@@ -1006,7 +1006,7 @@ static int module_do_install_commands(struct kmod_module *mod,
+>>> {
+>>> 	const char *command = kmod_module_get_install_commands(mod);
+>>> 	char *p;
+>>>-	_cleanup_free_ char *cmd;
+>>>+	_cleanup_free_ char *cmd = NULL;
+>>> 	int err;
+>>> 	size_t cmdlen, options_len, varlen;
+>>> 
+>>>diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
+>>>index 43423d6..66e658c 100644
+>>>--- a/libkmod/libkmod.c
+>>>+++ b/libkmod/libkmod.c
+>>>@@ -578,7 +578,7 @@ finish:
+>>> 
+>>> bool kmod_lookup_alias_is_builtin(struct kmod_ctx *ctx, const char *name)
+>>> {
+>>>-	_cleanup_free_ char *line;
+>>>+	_cleanup_free_ char *line = NULL;
+>>> 
+>>> 	line = lookup_builtin_file(ctx, name);
+>>> 
+>>>-- 
+>>>2.23.0
