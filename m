@@ -2,142 +2,86 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAFC5C433DB
-	for <linux-modules@archiver.kernel.org>; Sat, 23 Jan 2021 19:05:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 726F0C433DB
+	for <linux-modules@archiver.kernel.org>; Tue, 26 Jan 2021 06:06:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 795BC22B4E
-	for <linux-modules@archiver.kernel.org>; Sat, 23 Jan 2021 19:05:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 256A022A84
+	for <linux-modules@archiver.kernel.org>; Tue, 26 Jan 2021 06:06:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725910AbhAWTFB (ORCPT
+        id S1726286AbhAZGFB (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 23 Jan 2021 14:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725765AbhAWTFA (ORCPT
+        Tue, 26 Jan 2021 01:05:01 -0500
+Received: from mail-ej1-f49.google.com ([209.85.218.49]:36717 "EHLO
+        mail-ej1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726412AbhAYJV7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 23 Jan 2021 14:05:00 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEDEC06174A
-        for <linux-modules@vger.kernel.org>; Sat, 23 Jan 2021 11:04:20 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id o10so12163070lfl.13
-        for <linux-modules@vger.kernel.org>; Sat, 23 Jan 2021 11:04:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ar5MQLzQOmmCXVei8K8Zkn9gdITDm7Sk600uo7mbIqk=;
-        b=nZ3Cfzi627m44zi1qpGC1+IJnZ3S5tx2PSQTM53jhCDnd+5VAQqVrcLy5O8Pf3Ya1G
-         Lm7coxGFPZKjx5I1FbsRG+1OOTK4dlYCcLJLzWoFVbEAxIcU7ZM/Fs1iRiHKKCzRzWCg
-         Y210S2cY1y7cBR7BZOEbMcDrqf2Ojg/91uo1Ckeh4gagCV1XIxXotHj1BKEuFtHbrDJO
-         t/5MFWfDi7ufs5/vyUkS2tG35GvqevpHOrihXC2FMb4PNfemJY4xG6QgOfIXE19QP9D5
-         QTAXfs7BM/oqtt1GdCZIkZt6rIX/RoWRl4lnh/AkQGxff0sBS3bDM1fsxQnvUJK47xUh
-         +BSg==
+        Mon, 25 Jan 2021 04:21:59 -0500
+Received: by mail-ej1-f49.google.com with SMTP id l9so16977372ejx.3
+        for <linux-modules@vger.kernel.org>; Mon, 25 Jan 2021 01:21:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ar5MQLzQOmmCXVei8K8Zkn9gdITDm7Sk600uo7mbIqk=;
-        b=paoLRNEM220DAAqCF/L1K3/UVL+oUAjEv2Yu/LGBa8BiLUy+azQoRnzdUJFAViPQOU
-         u4hOyuDOti9XQEp23bcCYZ5LtoLc0Ot29iYMuhbAL6mQfh158w9V6EWFIrTcqslOcAiN
-         gNSs0P3i1nIsmhBwgvTrDJSJeErB3G4CXuqnAQUSsneNf5U+vHnPFzrseAN6CZKk6aVf
-         QFuVKkohxQWaP/IgfflXuHSfbH+teyEClJGPAwCF0Mj5cY9vycj/2D/a1dnEp4pjJEnJ
-         nC3pQ2Am74VAvQ0Xn337Yz/IdsMepNd7cNMhpsLRSnHvCciBTQ5CTJ6ps5Ar42YDNefv
-         28Lg==
-X-Gm-Message-State: AOAM532JoKw6D/W45uL9GWymw4IQXOZUNErsnkYWWT58fcxrx4JJR3ou
-        X3pDe1Ac8RBYj2si7baoiSrG9cjAd4TBqpOjA7g=
-X-Google-Smtp-Source: ABdhPJzgg0WwKwP0t+5FY1TmqMCzVQ4mRcyD2yoKdjKLrUXrUBb5fUlGwyc2p6zipoRuRQDIjekTtazkSKGHfCw6Cj0=
-X-Received: by 2002:a05:6512:49b:: with SMTP id v27mr15226lfq.220.1611428658603;
- Sat, 23 Jan 2021 11:04:18 -0800 (PST)
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=SSHRHht94Aiu/OqQMGfXG9vW3xgxeKKkxAlJUFiLx9I=;
+        b=SOaHlgGjwOIbARZj7lqaWHNtfI/hTcO/ThkGLBne/TyIaMXZb/cblu+AuwWhR6aOsl
+         XtRVRjyEAfxNebzLk1WkV24VcX0iU3HFt9txmlI8ohKx6bqlVy5PYXLSQ6wtFzLAZpHj
+         3aJJdOM4pilUHSAtaDfLX/8diEpwkf7hYwnl0Zd2sYoS5/vB5V+wir6Ybjxjp/Z1oS0h
+         nbmUApJnYE4WayyKsBA2d2V1k3nKoXSXGSpfaspA8njES88c3fmK+1nHVnPCDc7g52Ju
+         8ItT32rL5Nvm9nV14r/+XeIhI5/ZQark3NbXzL6Yn6kb7F6DIwQaeGxakaRusAouvpx5
+         I1ag==
+X-Gm-Message-State: AOAM531DvAnp9sO+qaunD7JhWw+WcvJ9L38b5DGyN3wJRgt1R2Ya2Dgi
+        hqGVxishj0MURRb2+2frESHtCJBoDLc=
+X-Google-Smtp-Source: ABdhPJwTxNSK1wlpBhNXnE1fwlh6qLLMoGGXCceueKQDfbXt9PuZKeE+itjXczE3Fv8mM1uEhlWm7g==
+X-Received: by 2002:a17:906:1f8b:: with SMTP id t11mr622146ejr.224.1611564554669;
+        Mon, 25 Jan 2021 00:49:14 -0800 (PST)
+Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id x17sm9861902edd.76.2021.01.25.00.49.13
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jan 2021 00:49:13 -0800 (PST)
+To:     linux-modules@vger.kernel.org
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: libkmod mishandles parameters re-quoted by grub2
+Message-ID: <70f1ef6c-d016-de57-82a8-db9d9cc414ef@kernel.org>
+Date:   Mon, 25 Jan 2021 09:49:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20210121070627.17072-1-wangshuo47@huawei.com>
-In-Reply-To: <20210121070627.17072-1-wangshuo47@huawei.com>
-From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Sat, 23 Jan 2021 11:04:06 -0800
-Message-ID: <CAKi4VALZ9ymom6-7ry++0cVPQTC2UhUqv8QU30kXpuR3dUG=Lg@mail.gmail.com>
-Subject: Re: [PATCH] libkmod: assign values to variables to fix warnings
-To:     Shuo Wang <wangshuo47@huawei.com>
-Cc:     patchwork-bot@kernel.org,
-        linux-modules <linux-modules@vger.kernel.org>,
-        hushiyuan@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jan 20, 2021 at 11:06 PM Shuo Wang <wangshuo47@huawei.com> wrote:
->
->
->         Dear Lucas,
->
-> Thanks for your reply. I was wondering if these changes will
->  be merged in the future?
+Hi,
 
-It seems those errors are actually compiler mistakes. Aren't there
-updates to the compiler?  What distro is shipping gcc 7.3.0??
-See below.
+when one passes to the kernel a module parameter from grub2 such as:
+   parport.dyndbg="file drivers/parport/ieee1284_ops.c +mpf"
+the kernel receives:
+   "parport.dyndbg=file drivers/parport/ieee1284_ops.c +mpf"
+as grub2 handles quotes this way. It may be a bug in grub2, it was even 
+tried to be fixed, but there is no all-cases-working fix yet:
+   https://bugzilla.suse.com/show_bug.cgi?id=1181111#c10
 
->
-> Best regards,
-> Shuo
->
-> >gcc version 7.3.0 (GCC)
-> >
-> >>what compiler?
-> >>>libkmod/libkmod.c: In function 'kmod_lookup_alias_is_builtin':
-> >>>./shared/util.h:73:9: warning: 'line' may be used uninitialized in this function [-Wmaybe-uninitialized]
-> >>>         free(*(void**) p);
-> >>>         ^~~~~~~~~~~~~~~~~
-> >>>libkmod/libkmod.c:581:23: note: 'line' was declared here
-> >>>  _cleanup_free_ char *line;
-> >>>                       ^~~~
-> >>>In file included from libkmod/libkmod-module.c:42:0:
-> >>>libkmod/libkmod-module.c: In function 'kmod_module_probe_insert_module':
-> >>>./shared/util.h:73:9: warning: 'cmd' may be used uninitialized in this function [-Wmaybe-uninitialized]
-> >>>         free(*(void**) p);
-> >>>         ^~~~~~~~~~~~~~~~~
-> >>>libkmod/libkmod-module.c:1009:23: note: 'cmd' was declared here
-> >>>  _cleanup_free_ char *cmd;
-> >>>
-> >>>---
-> >>> libkmod/libkmod-module.c | 2 +-
-> >>> libkmod/libkmod.c        | 2 +-
-> >>> 2 files changed, 2 insertions(+), 2 deletions(-)
-> >>>
-> >>>diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-> >>>index 76a6dc3..2e973b5 100644
-> >>>--- a/libkmod/libkmod-module.c
-> >>>+++ b/libkmod/libkmod-module.c
-> >>>@@ -1006,7 +1006,7 @@ static int module_do_install_commands(struct kmod_module *mod,
-> >>> {
-> >>>     const char *command = kmod_module_get_install_commands(mod);
-> >>>     char *p;
-> >>>-    _cleanup_free_ char *cmd;
-> >>>+    _cleanup_free_ char *cmd = NULL;
-> >>>     int err;
-> >>>     size_t cmdlen, options_len, varlen;
-> >>>
-> >>>diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
-> >>>index 43423d6..66e658c 100644
-> >>>--- a/libkmod/libkmod.c
-> >>>+++ b/libkmod/libkmod.c
-> >>>@@ -578,7 +578,7 @@ finish:
-> >>>
-> >>> bool kmod_lookup_alias_is_builtin(struct kmod_ctx *ctx, const char *name)
-> >>> {
-> >>>-    _cleanup_free_ char *line;
-> >>>+    _cleanup_free_ char *line = NULL;
-> >>>
-> >>>     line = lookup_builtin_file(ctx, name);
+The kernel parses the parameter correctly, though:
+   parse_one: doing dyndbg params: parport.dyndbg='file 
+drivers/parport/ieee1284_ops.c +mpf'
 
-line is declared above and just assigned here, the initial NULL makes
-no difference.
+But libkmod doesn't. When parport is modprobe-d, this parameter is not 
+passed to it.
 
-Lucas De Marchi
+kmod_config_parse_kcmdline ignores the parameter as:
+   if (is_quoted) {
+     /* don't consider a module until closing quotes */
 
-> >>>
-> >>>--
-> >>>2.23.0
+I am not sure how to fix this, can someone look into it and make the 
+parser similar to kernel's?
+
+thanks,
+-- 
+js
+suse labs
