@@ -2,86 +2,106 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 726F0C433DB
-	for <linux-modules@archiver.kernel.org>; Tue, 26 Jan 2021 06:06:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E57FC433E0
+	for <linux-modules@archiver.kernel.org>; Thu, 28 Jan 2021 04:08:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 256A022A84
-	for <linux-modules@archiver.kernel.org>; Tue, 26 Jan 2021 06:06:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF1E864D92
+	for <linux-modules@archiver.kernel.org>; Thu, 28 Jan 2021 04:08:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726286AbhAZGFB (ORCPT
+        id S231424AbhA1EIb (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 26 Jan 2021 01:05:01 -0500
-Received: from mail-ej1-f49.google.com ([209.85.218.49]:36717 "EHLO
-        mail-ej1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726412AbhAYJV7 (ORCPT
+        Wed, 27 Jan 2021 23:08:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231351AbhA1EGy (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 25 Jan 2021 04:21:59 -0500
-Received: by mail-ej1-f49.google.com with SMTP id l9so16977372ejx.3
-        for <linux-modules@vger.kernel.org>; Mon, 25 Jan 2021 01:21:43 -0800 (PST)
+        Wed, 27 Jan 2021 23:06:54 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD83C061353
+        for <linux-modules@vger.kernel.org>; Wed, 27 Jan 2021 20:05:23 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b2so5834273lfq.0
+        for <linux-modules@vger.kernel.org>; Wed, 27 Jan 2021 20:05:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YwmCjvTTtj4JWrmphbodI6XBGoqSzxBTcEkYGUebx24=;
+        b=p0DJ7vRy/7+ax7jSv5JhGRo+AIEIqNgd7uWQBrnYapWy5eKHsjtbdh4QtF2URt5W1h
+         o97a5UOXkIbGOegB67AJIQ+IkYxtwotwrPkfIQtyyBZ4DQu22CVaRLZNB5Iiyushasqd
+         L6XrZIBRFpkxezFz8tkmbBmLlmm9j6Bi2xi667zIfsVskDdJoj8gOoyefnHstKVNzZ5s
+         odO/c1fA4XkXhxqCS7AaN3gTx6idsM/PaR3sN44UjKZqc2PmwDL45sXZTyBtuLcjbAK+
+         DTulfFkgliTnIgHGcMFxxhNCYk33h/cQDjNPZKJislj3gO4VkI+G++emWCJPrYVb7fiO
+         xaWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=SSHRHht94Aiu/OqQMGfXG9vW3xgxeKKkxAlJUFiLx9I=;
-        b=SOaHlgGjwOIbARZj7lqaWHNtfI/hTcO/ThkGLBne/TyIaMXZb/cblu+AuwWhR6aOsl
-         XtRVRjyEAfxNebzLk1WkV24VcX0iU3HFt9txmlI8ohKx6bqlVy5PYXLSQ6wtFzLAZpHj
-         3aJJdOM4pilUHSAtaDfLX/8diEpwkf7hYwnl0Zd2sYoS5/vB5V+wir6Ybjxjp/Z1oS0h
-         nbmUApJnYE4WayyKsBA2d2V1k3nKoXSXGSpfaspA8njES88c3fmK+1nHVnPCDc7g52Ju
-         8ItT32rL5Nvm9nV14r/+XeIhI5/ZQark3NbXzL6Yn6kb7F6DIwQaeGxakaRusAouvpx5
-         I1ag==
-X-Gm-Message-State: AOAM531DvAnp9sO+qaunD7JhWw+WcvJ9L38b5DGyN3wJRgt1R2Ya2Dgi
-        hqGVxishj0MURRb2+2frESHtCJBoDLc=
-X-Google-Smtp-Source: ABdhPJwTxNSK1wlpBhNXnE1fwlh6qLLMoGGXCceueKQDfbXt9PuZKeE+itjXczE3Fv8mM1uEhlWm7g==
-X-Received: by 2002:a17:906:1f8b:: with SMTP id t11mr622146ejr.224.1611564554669;
-        Mon, 25 Jan 2021 00:49:14 -0800 (PST)
-Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id x17sm9861902edd.76.2021.01.25.00.49.13
-        for <linux-modules@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jan 2021 00:49:13 -0800 (PST)
-To:     linux-modules@vger.kernel.org
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: libkmod mishandles parameters re-quoted by grub2
-Message-ID: <70f1ef6c-d016-de57-82a8-db9d9cc414ef@kernel.org>
-Date:   Mon, 25 Jan 2021 09:49:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YwmCjvTTtj4JWrmphbodI6XBGoqSzxBTcEkYGUebx24=;
+        b=RqSh8BvY+XdRvaHO/MUjABDuh/f+v+VXaWDgml8BzqaCrpwNX0BstSyJuMh0tVr1Vy
+         mtY4iHcfHG/YuHYwHaTc7Mzg7I3xfUbsVh60ifkuyqhmTQUUosN37qJJhcLNhqMZYsJ1
+         HhgYWfO86nDf5edmItSpzGVOMEBzKQkn7/jbxxeJ0sg/4BSz5mNki+oHfsdMqKXGPkix
+         8DWO3J07WEJsJDQxreiOtWGYcouQLVjELZBGQ7HlDoW+EsyyGR94QYKHq60zsEX1gAWh
+         Ja0REINexamk9La2ZBROkafj/0ip7Km+Tyc1ljLUYDMDkNZpM8ny/d9PiuNL1rOjmw9s
+         W/2A==
+X-Gm-Message-State: AOAM530NQhNNubBx1LXqYBrSV0cYSHi4w0oQ9NKtGPbTnTqGsxY4anWm
+        lGuCHj1rGzCda5V75AxfnNxdZuK30J6uY/ZXxIvwbCJv/xndGw==
+X-Google-Smtp-Source: ABdhPJyF3agRAHqkiqylRJNKiekgnTnDCYe0VVm0SSZdEWlu8zCrwlMQZrMSi1wukftJK9AjOlP50dRt/1kMumM43lE=
+X-Received: by 2002:a19:7109:: with SMTP id m9mr6375946lfc.351.1611806721718;
+ Wed, 27 Jan 2021 20:05:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <70f1ef6c-d016-de57-82a8-db9d9cc414ef@kernel.org>
+In-Reply-To: <70f1ef6c-d016-de57-82a8-db9d9cc414ef@kernel.org>
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date:   Wed, 27 Jan 2021 20:05:09 -0800
+Message-ID: <CAKi4VALc_8pAuW0UtvzgZbT0nb=uGgSLZV0Xq8z5mw=vSe_exw@mail.gmail.com>
+Subject: Re: libkmod mishandles parameters re-quoted by grub2
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi,
+On Mon, Jan 25, 2021 at 10:06 PM Jiri Slaby <jirislaby@kernel.org> wrote:
+>
+> Hi,
+>
+> when one passes to the kernel a module parameter from grub2 such as:
+>    parport.dyndbg="file drivers/parport/ieee1284_ops.c +mpf"
+> the kernel receives:
+>    "parport.dyndbg=file drivers/parport/ieee1284_ops.c +mpf"
+> as grub2 handles quotes this way. It may be a bug in grub2, it was even
+> tried to be fixed, but there is no all-cases-working fix yet:
+>    https://bugzilla.suse.com/show_bug.cgi?id=1181111#c10
+>
+> The kernel parses the parameter correctly, though:
+>    parse_one: doing dyndbg params: parport.dyndbg='file
+> drivers/parport/ieee1284_ops.c +mpf'
+>
+> But libkmod doesn't. When parport is modprobe-d, this parameter is not
+> passed to it.
 
-when one passes to the kernel a module parameter from grub2 such as:
-   parport.dyndbg="file drivers/parport/ieee1284_ops.c +mpf"
-the kernel receives:
-   "parport.dyndbg=file drivers/parport/ieee1284_ops.c +mpf"
-as grub2 handles quotes this way. It may be a bug in grub2, it was even 
-tried to be fixed, but there is no all-cases-working fix yet:
-   https://bugzilla.suse.com/show_bug.cgi?id=1181111#c10
+yeah... if kernel parses the parameter correctly, we should accept it too.
 
-The kernel parses the parameter correctly, though:
-   parse_one: doing dyndbg params: parport.dyndbg='file 
-drivers/parport/ieee1284_ops.c +mpf'
+>
+> kmod_config_parse_kcmdline ignores the parameter as:
+>    if (is_quoted) {
+>      /* don't consider a module until closing quotes */
+>
+> I am not sure how to fix this, can someone look into it and make the
+> parser similar to kernel's?
 
-But libkmod doesn't. When parport is modprobe-d, this parameter is not 
-passed to it.
+I will take a look soon.
 
-kmod_config_parse_kcmdline ignores the parameter as:
-   if (is_quoted) {
-     /* don't consider a module until closing quotes */
+thanks
+Lucas De Marchi
 
-I am not sure how to fix this, can someone look into it and make the 
-parser similar to kernel's?
-
-thanks,
--- 
-js
-suse labs
+>
+> thanks,
+> --
+> js
+> suse labs
