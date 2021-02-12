@@ -2,182 +2,88 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93ED3C433DB
-	for <linux-modules@archiver.kernel.org>; Sat,  6 Feb 2021 04:02:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 175D5C433E0
+	for <linux-modules@archiver.kernel.org>; Fri, 12 Feb 2021 09:43:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 69F5064F06
-	for <linux-modules@archiver.kernel.org>; Sat,  6 Feb 2021 04:02:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBAC964E38
+	for <linux-modules@archiver.kernel.org>; Fri, 12 Feb 2021 09:43:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbhBFECo (ORCPT
+        id S230223AbhBLJnH (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 5 Feb 2021 23:02:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbhBFEAh (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 5 Feb 2021 23:00:37 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA54DC06174A
-        for <linux-modules@vger.kernel.org>; Fri,  5 Feb 2021 19:59:56 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id h12so13337125lfp.9
-        for <linux-modules@vger.kernel.org>; Fri, 05 Feb 2021 19:59:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BTnpehy4CTdCVEKest/1e3IaXzLBSmY6XBhUozP0tzg=;
-        b=gyQejwXcnRMSWLQsrbg5CYpp09f/16cPj0qFk1ag5wOA6BxFuhdS1LhJiMbPXp0VM+
-         2K0oCPvxXx6Hmckc3YJPUF6VAcjTjn/I4XxK/cHPqS+ATuPzA2KsW/PE+fApr9BQL4g1
-         GgLBgqCZuk3pBrZLFSbDEUuTUuPg6nz5Ojoa8rHGC7KTdKN0caOQmjnz9LYh6HymMkTn
-         4ev40PoHQjeDdIvO3zYiMlBpboqywsyedIgBdGsEZ5LwJqZma4zrRP8iEgwr6DvOGzvJ
-         SPa3UsxQU76qdiI4m+W1EQ+X9meXYD84fzO3cUKWr6rmFsouY5JU5P9CLw8O9CuOOTg1
-         ChWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BTnpehy4CTdCVEKest/1e3IaXzLBSmY6XBhUozP0tzg=;
-        b=Ar8pyS0UMvBR+n/VyhDknqtvFPz8jFKR2fh3HLQ46YRiOBaE0UzbTLGy4njLP8GD2C
-         EBebJoXOItvfnOAIZ26zJBZl/8kiR4uLr+Fgl7a8r4lYxhgk8mj2ty+g4ARhKRdhcRMU
-         AGCKaHBnBClMIHlssNVUehuO05wGe5xsJn9c7PB31x09Y0O+DrzBamdQvHl/gPV+RFF5
-         iF3+eYvajzFAly52JfF21ZP2ktF9scqnpjRIHL3nxilYipNFaV5xNRYYzn75up9LDNh+
-         XlJJxBnc0+YgeRdB+uS1vehWMHQ1XpTj4++TimZuPQhhJan/toUCNEqqKcHFIA/crM+B
-         yW5A==
-X-Gm-Message-State: AOAM532HvbPAWvVbKuEo0h82zFWBeptc0bilHgdCLqPXeNItCST3SRtL
-        Dzu/mim0mrOXwkYGG/L4avlHxffunEmmdFRqI4Q=
-X-Google-Smtp-Source: ABdhPJy2NR59GS/alYtqMtdg4teECoXRAWO4CKe38hcROnVQtQ0VdcfPYBYFSzoM0LfCzEh1upVeZ9Aa8gvFT7SHU8w=
-X-Received: by 2002:a05:6512:49b:: with SMTP id v27mr4373239lfq.220.1612583995189;
- Fri, 05 Feb 2021 19:59:55 -0800 (PST)
+        Fri, 12 Feb 2021 04:43:07 -0500
+Received: from mga17.intel.com ([192.55.52.151]:62378 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230060AbhBLJnF (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Fri, 12 Feb 2021 04:43:05 -0500
+IronPort-SDR: lPYGJ+9ptbt6E8sw+5wf+ZEfGovfRBxAFKUQA2b6+V/mAqQq4jC4Ywo5dAmhpJAATbtaTbgj9T
+ VQZqg8qm4GIw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9892"; a="162144659"
+X-IronPort-AV: E=Sophos;i="5.81,173,1610438400"; 
+   d="scan'208";a="162144659"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2021 01:42:23 -0800
+IronPort-SDR: sca8ZBf4HtrOey+sAPZmxG11oslF9b+BS74PSL7BUSeR42FSa0n/tuV4Xzz58SMZpJVoK3TjyT
+ ib3xdCOTHz/Q==
+X-IronPort-AV: E=Sophos;i="5.81,173,1610438400"; 
+   d="scan'208";a="437525340"
+Received: from aaramire-mobl2.amr.corp.intel.com (HELO ldmartin-desk1) ([10.212.210.126])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2021 01:42:23 -0800
+Date:   Fri, 12 Feb 2021 01:42:23 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-modules@vger.kernel.org
+Subject: Re: libkmod mishandles parameters re-quoted by grub2
+Message-ID: <20210212094223.yxxnnswhqhczk5an@ldmartin-desk1>
+X-Patchwork-Hint: comment
+References: <70f1ef6c-d016-de57-82a8-db9d9cc414ef@kernel.org>
 MIME-Version: 1.0
-References: <20210130023600.24239-1-lucas.demarchi@intel.com>
-In-Reply-To: <20210130023600.24239-1-lucas.demarchi@intel.com>
-From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date:   Fri, 5 Feb 2021 19:59:43 -0800
-Message-ID: <CAKi4VAKU4h5Z2ri=xYq=n3gtktKXNUPmwbO954f65WhnhvLGpw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] testsuite: compress modules if feature is enabled
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-modules <linux-modules@vger.kernel.org>,
-        =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>,
-        Petr Vorel <petr.vorel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <70f1ef6c-d016-de57-82a8-db9d9cc414ef@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Pushed, thanks for reviews.
+On Mon, Jan 25, 2021 at 09:49:13AM +0100, Jiri Slaby wrote:
+>Hi,
+>
+>when one passes to the kernel a module parameter from grub2 such as:
+>  parport.dyndbg="file drivers/parport/ieee1284_ops.c +mpf"
+>the kernel receives:
+>  "parport.dyndbg=file drivers/parport/ieee1284_ops.c +mpf"
+>as grub2 handles quotes this way. It may be a bug in grub2, it was 
+>even tried to be fixed, but there is no all-cases-working fix yet:
+>  https://bugzilla.suse.com/show_bug.cgi?id=1181111#c10
+>
+>The kernel parses the parameter correctly, though:
+>  parse_one: doing dyndbg params: parport.dyndbg='file 
+>drivers/parport/ieee1284_ops.c +mpf'
+>
+>But libkmod doesn't. When parport is modprobe-d, this parameter is not 
+>passed to it.
+>
+>kmod_config_parse_kcmdline ignores the parameter as:
+>  if (is_quoted) {
+>    /* don't consider a module until closing quotes */
+>
+>I am not sure how to fix this, can someone look into it and make the 
+>parser similar to kernel's?
+
+We have to ignore ill-formed kernel cmdline and that makes it harder.
+
+I threw out the current implementation and rewrote it into a state
+machine. It passes the tests, but it's unfortunate we have to do this,
+particularly because we have to re-quote it the "right way" to pass back
+to kernel, unmangling it.
+
+I will share the patch shortly.
 
 Lucas De Marchi
-
-On Sat, Jan 30, 2021 at 1:40 AM Lucas De Marchi
-<lucas.demarchi@intel.com> wrote:
 >
-> Since the output needs to be the same, regardless if the module is
-> compressed, change populate-modules.sh to conditionally compress the
-> module if that feature is enabled.
->
-> This way we can execute the tests with any build-time configuration and
-> it should still pass.
->
-> Suggested-by: Michal Such=C3=A1nek <msuchanek@suse.de>
-> ---
->  Makefile.am                   |  2 +-
->  testsuite/populate-modules.sh | 27 ++++++++++++++++++---------
->  testsuite/test-depmod.c       |  2 --
->  3 files changed, 19 insertions(+), 12 deletions(-)
->
-> diff --git a/Makefile.am b/Makefile.am
-> index b29e943..24a586e 100644
-> --- a/Makefile.am
-> +++ b/Makefile.am
-> @@ -249,7 +249,7 @@ CREATE_ROOTFS =3D $(AM_V_GEN) ( $(RM) -rf $(ROOTFS) &=
-& mkdir -p $(dir $(ROOTFS)) &
->                                 find $(ROOTFS) -type d -exec chmod +w {} =
-\; && \
->                                 find $(ROOTFS) -type f -name .gitignore -=
-exec rm -f {} \; && \
->                                 $(top_srcdir)/testsuite/populate-modules.=
-sh \
-> -                                       $(MODULE_PLAYGROUND) $(ROOTFS) ) =
-&& \
-> +                                       $(MODULE_PLAYGROUND) $(ROOTFS) $(=
-top_builddir)/config.h ) && \
->                                 touch testsuite/stamp-rootfs
->
->  build-module-playground:
-> diff --git a/testsuite/populate-modules.sh b/testsuite/populate-modules.s=
-h
-> index b0cc932..ae43884 100755
-> --- a/testsuite/populate-modules.sh
-> +++ b/testsuite/populate-modules.sh
-> @@ -4,6 +4,12 @@ set -e
->
->  MODULE_PLAYGROUND=3D$1
->  ROOTFS=3D$2
-> +CONFIG_H=3D$3
-> +
-> +feature_enabled() {
-> +       local feature=3D$1
-> +       grep KMOD_FEATURES  $CONFIG_H | head -n 1 | grep -q \+$feature
-> +}
->
->  declare -A map
->  map=3D(
-> @@ -99,15 +105,18 @@ done
->
->  # start poking the final rootfs...
->
-> -# gzip these modules
-> -for m in "${gzip_array[@]}"; do
-> -    gzip "$ROOTFS/$m"
-> -done
-> -
-> -# zstd-compress these modules
-> -for m in "${zstd_array[@]}"; do
-> -    zstd --rm $ROOTFS/$m
-> -done
-> +# compress modules with each format if feature is enabled
-> +if feature_enabled ZLIB; then
-> +       for m in "${gzip_array[@]}"; do
-> +           gzip "$ROOTFS/$m"
-> +       done
-> +fi
-> +
-> +if feature_enabled ZSTD; then
-> +       for m in "${zstd_array[@]}"; do
-> +           zstd --rm $ROOTFS/$m
-> +       done
-> +fi
->
->  for m in "${attach_sha1_array[@]}"; do
->      cat "${MODULE_PLAYGROUND}/dummy.sha1" >>"${ROOTFS}/$m"
-> diff --git a/testsuite/test-depmod.c b/testsuite/test-depmod.c
-> index 261559c..d7802d7 100644
-> --- a/testsuite/test-depmod.c
-> +++ b/testsuite/test-depmod.c
-> @@ -25,7 +25,6 @@
->
->  #include "testsuite.h"
->
-> -#ifdef ENABLE_ZLIB
->  #define MODULES_ORDER_UNAME "4.4.4"
->  #define MODULES_ORDER_ROOTFS TESTSUITE_ROOTFS "test-depmod/modules-order=
--compressed"
->  #define MODULES_ORDER_LIB_MODULES MODULES_ORDER_ROOTFS "/lib/modules/" M=
-ODULES_ORDER_UNAME
-> @@ -57,7 +56,6 @@ DEFINE_TEST(depmod_modules_order_for_compressed,
->                         { }
->                 },
->         });
-> -#endif
->
->  #define SEARCH_ORDER_SIMPLE_ROOTFS TESTSUITE_ROOTFS "test-depmod/search-=
-order-simple"
->  static noreturn int depmod_search_order_simple(const struct test *t)
-> --
-> 2.30.0
->
+>thanks,
+>-- 
+>js
+>suse labs
