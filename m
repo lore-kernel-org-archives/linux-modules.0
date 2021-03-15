@@ -2,75 +2,106 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2253C433E0
-	for <linux-modules@archiver.kernel.org>; Wed, 10 Mar 2021 17:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A339AC433DB
+	for <linux-modules@archiver.kernel.org>; Mon, 15 Mar 2021 20:27:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5B0564F71
-	for <linux-modules@archiver.kernel.org>; Wed, 10 Mar 2021 17:28:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6FA7864E90
+	for <linux-modules@archiver.kernel.org>; Mon, 15 Mar 2021 20:27:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbhCJR1h (ORCPT
+        id S229510AbhCOU0h (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 10 Mar 2021 12:27:37 -0500
-Received: from mga18.intel.com ([134.134.136.126]:4247 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232830AbhCJR1I (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 10 Mar 2021 12:27:08 -0500
-IronPort-SDR: 2GytNbB1+RJkgjOjGfJ0fRukXE9t2Hc9B/mqt0KWBxpyfrkaIxprpD43vfGOjrs/aTZV2pOvKE
- giZUOYucwo1A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9919"; a="176115596"
-X-IronPort-AV: E=Sophos;i="5.81,237,1610438400"; 
-   d="scan'208";a="176115596"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 09:26:57 -0800
-IronPort-SDR: ax74qRu91xNDFcS0hM6iDcj6/vycWYyic7JgI62VhzaJ//If3Qhhxl+RoWPg7r0eykDBN7VjH6
- rCwhOCWQU5ug==
-X-IronPort-AV: E=Sophos;i="5.81,237,1610438400"; 
-   d="scan'208";a="437995216"
-Received: from jerrycli-mobl.amr.corp.intel.com (HELO ldmartin-desk2.intel.com) ([10.209.26.189])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 09:26:57 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     linux-modules@vger.kernel.org
-Subject: [PATCH] libkmod-config: more chars allowed as space
-Date:   Wed, 10 Mar 2021 09:26:52 -0800
-Message-Id: <20210310172652.13638-1-lucas.demarchi@intel.com>
-X-Mailer: git-send-email 2.30.1
+        Mon, 15 Mar 2021 16:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231249AbhCOU0M (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Mon, 15 Mar 2021 16:26:12 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFE3C06174A
+        for <linux-modules@vger.kernel.org>; Mon, 15 Mar 2021 13:26:08 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id x4so52222406lfu.7
+        for <linux-modules@vger.kernel.org>; Mon, 15 Mar 2021 13:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lds8ZD/SW40IdgKmNQ3JBh4VXjFkpdP44VXrvXjqTyo=;
+        b=seeRY0WSt3/3Xc+TMl49IHLFJ3EuRIH/EJoCi/smdsUBcyUjitkK+9dCTJ2sUunoOZ
+         jyn240RgWkb0WJrz/AOB7aLbaYPTVKz6LEIyD57qJKB6S40J69EeOdXf83lTrKH8N1i/
+         ssyNu1RyYlz1ZoUgYrUThMuDjRdEmvpvwxDVu0yJqMskAk00DGD69f0oElMoqvDpZ/R+
+         Cvj47umb/ej3tdeg153Mp7aAI2jbdvviMQh+vBPa5A0WXyyhXpVy2SEWJuyya7wry24d
+         xcH1AdWOv7qw1+gdOeEJmEucyfCkL1xM1ay5zpyR03/AMd5sjZQXnM+FnXfke2VdHMx3
+         G1kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lds8ZD/SW40IdgKmNQ3JBh4VXjFkpdP44VXrvXjqTyo=;
+        b=nCGbo6nHVVAXpwraInoRzn5vub2tvyfzWuUfu0yKM9fiJdKSA4zgiCX5xI46I4YS4Z
+         KFxBFYqs2Cz9RBHexf7kiiBs2gX4dmjLNlA8gMngY/wjPmVCGJFRZQ8udG8E9RNK2QbY
+         Gzqv191ctorU0zzMadl1F48fvHLW8E1BX9p31enYurwD24fOkFqfEjJgLXBodxZRkhsY
+         ePjHURgVO2XgTwXc0yvuIlI42/hsUtMkfuvJSveh21JFzrh5QwXLsz3fwcbgGylYIpdE
+         XAB9Fb9Afj2jZSsVK6l0U8nS1rTyR4WjQvqnshOsZ7jZA400wMk9pZ/s+KeO7+pdE5bX
+         rbwA==
+X-Gm-Message-State: AOAM533qIc0MQS5PZM6859kEImFMs1MEFnQWPSTq/Ll+r4dvyu5W21EP
+        b/3KcKS6RfboEOZHaGuMlDefsLsapvqGMg6gVWzKu2in
+X-Google-Smtp-Source: ABdhPJzu6iAhvWkUSRPcZ7759f4ecJZEc5YXoI5jLZLRVADUlHXKQQRU07QLdafpBaiDNxA2PuEJF+A1y6ysSGHPxsI=
+X-Received: by 2002:ac2:5e26:: with SMTP id o6mr9153821lfg.355.1615839966879;
+ Mon, 15 Mar 2021 13:26:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210310172652.13638-1-lucas.demarchi@intel.com>
+In-Reply-To: <20210310172652.13638-1-lucas.demarchi@intel.com>
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date:   Mon, 15 Mar 2021 13:25:55 -0700
+Message-ID: <CAKi4VAJGg2AgxrJ5y9+GauJ1uRRiYt1xTWfaiaunA2+ey7XTXg@mail.gmail.com>
+Subject: Re: [PATCH] libkmod-config: more chars allowed as space
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Recently in a discussion I noticed that kernel allows more chars to be
-considered as space in the kernel command line. Switch to the equivalent
-of isspace() instead of considering only ' '.
----
- libkmod/libkmod-config.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+On Wed, Mar 10, 2021 at 9:31 AM Lucas De Marchi
+<lucas.demarchi@intel.com> wrote:
+>
+> Recently in a discussion I noticed that kernel allows more chars to be
+> considered as space in the kernel command line. Switch to the equivalent
+> of isspace() instead of considering only ' '.
 
-diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
-index 2873f06..4fdd40f 100644
---- a/libkmod/libkmod-config.c
-+++ b/libkmod/libkmod-config.c
-@@ -543,11 +543,14 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
- 
- 			break;
- 		case '\0':
--		case '\n':
--			/* Stop iterating on new chars */
- 			iter = false;
- 			/* fall-through */
- 		case ' ':
-+		case '\n':
-+		case '\t':
-+		case '\v':
-+		case '\f':
-+		case '\r':
- 			if (is_quoted && state == STATE_VALUE) {
- 				/* no state change*/;
- 			} else if (is_quoted) {
--- 
-2.30.1
+Applied,
 
+Lucas De Marchi
+
+> ---
+>  libkmod/libkmod-config.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
+> index 2873f06..4fdd40f 100644
+> --- a/libkmod/libkmod-config.c
+> +++ b/libkmod/libkmod-config.c
+> @@ -543,11 +543,14 @@ static int kmod_config_parse_kcmdline(struct kmod_config *config)
+>
+>                         break;
+>                 case '\0':
+> -               case '\n':
+> -                       /* Stop iterating on new chars */
+>                         iter = false;
+>                         /* fall-through */
+>                 case ' ':
+> +               case '\n':
+> +               case '\t':
+> +               case '\v':
+> +               case '\f':
+> +               case '\r':
+>                         if (is_quoted && state == STATE_VALUE) {
+>                                 /* no state change*/;
+>                         } else if (is_quoted) {
+> --
+> 2.30.1
+>
