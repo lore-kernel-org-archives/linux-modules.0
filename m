@@ -7,115 +7,115 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42527C433B4
-	for <linux-modules@archiver.kernel.org>; Tue, 13 Apr 2021 11:20:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E73B0C43460
+	for <linux-modules@archiver.kernel.org>; Tue, 13 Apr 2021 11:20:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 18AC661042
-	for <linux-modules@archiver.kernel.org>; Tue, 13 Apr 2021 11:20:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1D2C61042
+	for <linux-modules@archiver.kernel.org>; Tue, 13 Apr 2021 11:20:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbhDMLUo (ORCPT
+        id S229597AbhDMLUp (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 13 Apr 2021 07:20:44 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:44904 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbhDMLUn (ORCPT
+        Tue, 13 Apr 2021 07:20:45 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:43553 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231374AbhDMLUo (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 13 Apr 2021 07:20:43 -0400
+        Tue, 13 Apr 2021 07:20:44 -0400
 Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210413112021epoutp01c3c580e5fb30a2de9c40c36d053e5568~1Zu-2uoXs1042110421epoutp01-
-        for <linux-modules@vger.kernel.org>; Tue, 13 Apr 2021 11:20:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210413112021epoutp01c3c580e5fb30a2de9c40c36d053e5568~1Zu-2uoXs1042110421epoutp01-
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210413112022epoutp02b75bcbc13ff6593e3734994bc9bd0100~1ZvAkQQIA1114911149epoutp02W
+        for <linux-modules@vger.kernel.org>; Tue, 13 Apr 2021 11:20:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210413112022epoutp02b75bcbc13ff6593e3734994bc9bd0100~1ZvAkQQIA1114911149epoutp02W
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1618312821;
-        bh=Z5WeoyV9b7rmxiDt8gnxoyFCLUXsMef3Q9ea22mxqWA=;
+        s=mail20170921; t=1618312822;
+        bh=3c/iXf/evzyx+nDQtBYIwAmVdy4BsCUcmtJS4imYxiY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K0CPPxcGmViiuGZcUCMLfi2EqUTtM95YC/c0nQzzI2o0E9xgCS9cOVw5Op8c8/3qp
-         /M0TELUfT17zKfJKO7Wwsl/NPYEveStR9EtdIJkDVNftsOnB4d3HwlPedVBWTxC00r
-         v4FrThIbfHRz3ZxQkR7QhnW37YBF63B9MVUyAafc=
+        b=Ds2xAuzT3hsnQjT97Nbxvd8Bs9UsawQ3903LbaRXBPEYtjz0wxmXWB3B8xCk1naDV
+         lcaUFpFnYAfHz9g6ZImLT8YXlwkFnBps8apwy+ownZh7nY9ipD84sOi2RPriQ33Fi+
+         1qFI1OR5KcJ2L8/D73+wKDGPWLih0fsocUGW/F5c=
 Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20210413112021epcas1p4b742a5aa4bf39ed308d00d08c73e5dbe~1Zu-gKZ8U0392103921epcas1p4r;
-        Tue, 13 Apr 2021 11:20:21 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4FKNSN1G1hz4x9Px; Tue, 13 Apr
-        2021 11:20:20 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        30.BD.10347.37E75706; Tue, 13 Apr 2021 20:20:19 +0900 (KST)
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20210413112022epcas1p1749744f2f22a2a579dafc3e5d6d18625~1ZvAAKM9h3093630936epcas1p1I;
+        Tue, 13 Apr 2021 11:20:22 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.152]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4FKNSM4rn3z4x9Pt; Tue, 13 Apr
+        2021 11:20:19 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D2.B6.02277.37E75706; Tue, 13 Apr 2021 20:20:19 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20210413112018epcas1p4e7e6b23060a83694867b07a1f1afc200~1Zu9DkJVq0393903939epcas1p4T;
-        Tue, 13 Apr 2021 11:20:18 +0000 (GMT)
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20210413112019epcas1p22c64b861d296333a64c348020c7ca20e~1Zu9MjKwJ2326723267epcas1p28;
+        Tue, 13 Apr 2021 11:20:19 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210413112018epsmtrp13251972a5917129ccbd4a95535b6c7a5~1Zu9C3aIN2069620696epsmtrp1_;
-        Tue, 13 Apr 2021 11:20:18 +0000 (GMT)
-X-AuditID: b6c32a39-15dff7000002286b-f0-60757e739bce
+        20210413112019epsmtrp1399f4bce2bc987b1f2146008842b1bc8~1Zu9Ls-ZA2092420924epsmtrp1E;
+        Tue, 13 Apr 2021 11:20:19 +0000 (GMT)
+X-AuditID: b6c32a36-4d7ff700000108e5-ed-60757e739c79
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B5.6B.08745.27E75706; Tue, 13 Apr 2021 20:20:18 +0900 (KST)
+        26.6B.08745.27E75706; Tue, 13 Apr 2021 20:20:18 +0900 (KST)
 Received: from localhost.localdomain (unknown [10.113.221.223]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20210413112018epsmtip224c8170bbc560ba0661fa54021a6c954~1Zu81Gkj81774517745epsmtip2g;
+        20210413112018epsmtip21919d8017f9a9b4a9f535944a745b09f~1Zu87ltfX1912719127epsmtip2I;
         Tue, 13 Apr 2021 11:20:18 +0000 (GMT)
 From:   Seung-Woo Kim <sw0312.kim@samsung.com>
 To:     linux-modules@vger.kernel.org, lucas.de.marchi@gmail.com
 Cc:     gladkov.alexey@gmail.com, sw0312.kim@samsung.com,
         sungguk.na@samsung.com
-Subject: [PATCH 1/2] libkmod: fix an overflow with wrong
+Subject: [PATCH 2/2] libkmod: fix possible double free with wrong
  modules.builtin.modinfo
-Date:   Tue, 13 Apr 2021 20:23:14 +0900
-Message-Id: <20210413112315.18907-2-sw0312.kim@samsung.com>
+Date:   Tue, 13 Apr 2021 20:23:15 +0900
+Message-Id: <20210413112315.18907-3-sw0312.kim@samsung.com>
 X-Mailer: git-send-email 2.19.2
 In-Reply-To: <20210413112315.18907-1-sw0312.kim@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJKsWRmVeSWpSXmKPExsWy7bCmvm5xXWmCweeZkhYL3wdaNMz+zmqx
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMKsWRmVeSWpSXmKPExsWy7bCmrm5xXWmCwZl9ihYL3wdaNMz+zmqx
         unMCo8WOeQcZLWZMfsnmwOqxc9Zddo++LasYPT5vkgtgjsq2yUhNTEktUkjNS85PycxLt1Xy
         Do53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAHaqKRQlphTChQKSCwuVtK3synKLy1JVcjI
-        Ly6xVUotSMkpsCzQK07MLS7NS9dLzs+1MjQwMDIFKkzIzljT/Yi1oJ214uy2/YwNjJNZuhg5
-        OSQETCQ+v3wPZHNxCAnsYJR49fUIlPOJUeL3jWlMEM5nRommzZ3MMC0fTndBJXYxSuy/d5Ud
-        wvnCKLHzeCPYYDYBHYn9S36zgtgiAjYSU14/AoszC/hIPL34AswWFgiS+H3oGNhUFgFViTt/
-        jzCB2LwC1hKHn/6HOlBe4sKGW2BzOIHmzPiykA2iRlDi5MwnUDPlJZq3zmYGOUJC4BS7xP5L
-        /VCnukgsXbyHEcIWlnh1fAs7hC0l8bK/jR2ioZlRYumSXywQTg+jxJxFt1khqowl9i+dDHQS
-        B9AKTYn1u/QhwooSO3/PZYTYzCfx7msPK0iJhACvREebEESJisTOo5PYIMJSErM2BEOEPSRe
-        Ht7BDAmsfkaJt5/2MU9gVJiF5J9ZSP6ZhbB4ASPzKkax1ILi3PTUYsMCU+Q43sQIToNaljsY
-        p7/9oHeIkYmD8RCjBAezkgiv25SSBCHelMTKqtSi/Pii0pzU4kOMpsDQnsgsJZqcD0zEeSXx
-        hqZGxsbGFiaGZqaGhkrivEkGD+KFBNITS1KzU1MLUotg+pg4OKUamMLdbJfvf2T5QsCBM8jh
-        u5LbLquDCROWH1dVfCb5jP+NtuDU99dYpv/XLTjcnizIeXIvt/s5Xtu7M9b7TGBLZ3nYpsp6
-        k60rJnPp2rNS5noPfLwie47FOU4N27r96Ptou/0+/uUlvw/t3SIiprfV3MNm4j09cw6RiwIf
-        Lu66/Ovr2hsmL7bfM3pQnPSXKThYw3p3j7zfVHdW5j3Paq7oTXl/ZeW7bK+AxxdO8hZMdFQR
-        NDu33vOSkOyEl5qJHsc9C/+t25S1Nt3gW47Wnwdl/HfmS3apBx/unXjxSkTU14Kn5rvFhWQZ
-        exfXbft0qK5hc8FUTe/zha4m/soZ+4R+7sk10JsaFJZlExe53zxYTImlOCPRUIu5qDgRAK3M
-        01AMBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrALMWRmVeSWpSXmKPExsWy7bCSvG5RXWmCwccTRhYL3wdaNMz+zmqx
-        unMCo8WOeQcZLWZMfsnmwOqxc9Zddo++LasYPT5vkgtgjuKySUnNySxLLdK3S+DKWNP9iLWg
-        nbXi7Lb9jA2Mk1m6GDk5JARMJD6c7mLqYuTiEBLYwSgx+cAudoiElMTcb9sZuxg5gGxhicOH
-        iyFqPjFKXG/cwgpSwyagI7F/yW8wW0TATuLrivPMIDazQIDEkRtXGUFsYSD78PzlYDNZBFQl
-        7vw9wgRi8wpYSxx++h/qCHmJCxtugc3hFLCRmPFlIRvIXiGgmucfyiHKBSVOznzCAjFeXqJ5
-        62zmCYwCs5CkZiFJLWBkWsUomVpQnJueW2xYYJSXWq5XnJhbXJqXrpecn7uJERyoWlo7GPes
-        +qB3iJGJg/EQowQHs5IIr9uUkgQh3pTEyqrUovz4otKc1OJDjNIcLErivBe6TsYLCaQnlqRm
-        p6YWpBbBZJk4OKUamDLKG9RWLj8v0Sb96UfcDHWm3+W+jU4vb00vqEnKsZN+V/K6aD1fyeJn
-        fLLKDVW7d7Y5Zqbo2AlJrVyx7X+Bu2ijna93qPnl2JtrMl86rt/9oCotRMs+xPDYivPT1e1m
-        JjOePf11+anNpXodsiZvJT865W/eNHtjv7bYn8nL0mJ8j1rf37X2u9peQXO7uTZrV1auWfuH
-        xfzbU//mFYLGF2aqW0488X4ym8fcC6cF4z/XevFmO6VIXjzZffx1p77jE8mg/IVbRZfLVs07
-        ffbG1OVr63Z0CconnrV493r1Zt9Tb8/clWjTW7Rs4Yozs39zKBXkK8k16G18J1kjZlD9SvBD
-        23mnBbM6ejj2yv5NeKfEUpyRaKjFXFScCAD+dK0ywwIAAA==
-X-CMS-MailID: 20210413112018epcas1p4e7e6b23060a83694867b07a1f1afc200
+        Ly6xVUotSMkpsCzQK07MLS7NS9dLzs+1MjQwMDIFKkzIzrh8aA5TwTS2ihtX5rM3MDazdjFy
+        cEgImEhsXcjfxcjFISSwg1Gi5fkkJgjnE6PE7Wt/2SGcz4wSR7oambsYOcE6fs7Zzg5iCwns
+        YpS4/jwXougLo8ScjQfAEmwCOhL7l/xmBbFFBGwkprx+xAJiMwv4SDy9+IIFZLWwQLTE+lv1
+        ICaLgKpE1y9tkApeAWuJX5dOsUCskpe4sOEW2BROoCkzvixkg6gRlDg58wnURHmJ5q2zmUFO
+        kBA4xi7Rde0lK0Szi8Se5iWMELawxKvjW9ghbCmJl/1t7BANzYwSS5f8YoFweoAeWHQbqttY
+        Yv/SyUwg1zELaEqs36UPEVaU2Pl7LiPEZj6Jd197oMHIK9HRJgRRoiKx8+gkNoiwlMSsDcEQ
+        YQ+Jb1PWgX0uJNDPKLHOcAKjwiwk38xC8s0shLULGJlXMYqlFhTnpqcWGxYYIcfuJkZw6tMy
+        28E46e0HvUOMTByMhxglOJiVRHjdppQkCPGmJFZWpRblxxeV5qQWH2I0BQb1RGYp0eR8YPLN
+        K4k3NDUyNja2MDE0MzU0VBLnTTR4EC8kkJ5YkpqdmlqQWgTTx8TBKdXAJGv/5virZyublqoZ
+        fmv/OzlV3U/B65dUfftfUXGTrlJzt/vOabJL33420r5xM15zZYj+y+qHjIyuLx76G/17oHFM
+        omJpvmJA3ro5Opd/aZ1pvOZ5U/WAoZvKhV0pUw2sJwUoXNjyOyfvTUB48gKHvXdn8cxl3fBF
+        0iKg2STT1Nnyjm3A5W3LYh6z3liuFl4YlOXCHfzr8KUzEm7uHnk6Cfyy687Y9G44mZjgtczD
+        ufJo60UF3ygTm96neruWt+75eCbip0nZyY8MtpVzJh2+KmoSuq1upaoVV+h2ptmHfA5IWemk
+        e6dM4HR4ndWef9G7def+7fqTa698DreffrzjUlNq9iupfeoTftp+90xVYinOSDTUYi4qTgQA
+        vhS7qgYEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPLMWRmVeSWpSXmKPExsWy7bCSvG5RXWmCwZFTFhYL3wdaNMz+zmqx
+        unMCo8WOeQcZLWZMfsnmwOqxc9Zddo++LasYPT5vkgtgjuKySUnNySxLLdK3S+DKuHxoDlPB
+        NLaKG1fmszcwNrN2MXJySAiYSPycs529i5GLQ0hgB6PEl1+PoRJSEnO/bWfsYuQAsoUlDh8u
+        hqj5xChx/8laZpAaNgEdif1LfoPViwjYSXxdcR4sziwQIHHkxlVGEFtYIFLizba3YHNYBFQl
+        un5pg4R5Bawlfl06xQKxSl7iwoZbYGM4BWwkZnxZyAZSLgRU8/xDOUS5oMTJmU9YIKbLSzRv
+        nc08gVFgFpLULCSpBYxMqxglUwuKc9Nziw0LjPJSy/WKE3OLS/PS9ZLzczcxgsNUS2sH455V
+        H/QOMTJxMB5ilOBgVhLhdZtSkiDEm5JYWZValB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs
+        1NSC1CKYLBMHp1QDk7l3+dTLCrOSrkipPvlwIbvtyLQt9vw32li9jobHmBRd5NX0VNzHuewJ
+        b7DAhcet0ZEBma6ZRpu9PgXIPZW/fahmeYT9vktF2l9ULGtu/tvc+eDJDJPD/ldC3IPuWufw
+        3E609T3hNVX6daas/F3WfW2OeSYPX+QnzwkPypTK+DozP9Y6tjh9zotVNy/7iRooLzE9nsZ+
+        QGPuS1NX8WUXLzecn/Fg0qlirnNnOsJ3l02P6nTQrCzU6ty/njme75vfVqGVB/bKvF5+Qsii
+        acrUredM9yWc/F5XeT+32G3RujctN5Zkeuz+5r/Mnfktv4BX0qGc3+ckuWqPPWhddiH/hVsN
+        78/p9x4YfLrNnrD+ghJLcUaioRZzUXEiANZLOgLCAgAA
+X-CMS-MailID: 20210413112019epcas1p22c64b861d296333a64c348020c7ca20e
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210413112018epcas1p4e7e6b23060a83694867b07a1f1afc200
+X-CMS-RootMailID: 20210413112019epcas1p22c64b861d296333a64c348020c7ca20e
 References: <20210413112315.18907-1-sw0312.kim@samsung.com>
-        <CGME20210413112018epcas1p4e7e6b23060a83694867b07a1f1afc200@epcas1p4.samsung.com>
+        <CGME20210413112019epcas1p22c64b861d296333a64c348020c7ca20e@epcas1p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Fix a possbile overflow with exact PATH_MAX length modname
-in wrong modules.builtin.modinfo.
+Fix double free for *modinfo with non '\0' terminated wrong
+modules.builtin.modinfo, which is because EOF is minus value.
 
 Signed-off-by: Seung-Woo Kim <sw0312.kim@samsung.com>
 ---
@@ -123,18 +123,18 @@ Signed-off-by: Seung-Woo Kim <sw0312.kim@samsung.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/libkmod/libkmod-builtin.c b/libkmod/libkmod-builtin.c
-index fc9a37644261..a75a542f6942 100644
+index a75a542f6942..a002cb5ee2c6 100644
 --- a/libkmod/libkmod-builtin.c
 +++ b/libkmod/libkmod-builtin.c
-@@ -246,7 +246,7 @@ bool kmod_builtin_iter_get_modname(struct kmod_builtin_iter *iter,
- 
- 	len = dot - line;
- 
--	if (len > PATH_MAX) {
-+	if (len >= PATH_MAX) {
- 		sv_errno = ENAMETOOLONG;
- 		goto fail;
- 	}
+@@ -313,7 +313,7 @@ ssize_t kmod_builtin_get_modinfo(struct kmod_ctx *ctx, const char *modname,
+ 	while (offset < iter->next) {
+ 		offset = get_string(iter, pos, &line, &linesz);
+ 		if (offset <= 0) {
+-			count = (offset) ? -errno : -EOF;
++			count = (offset) ? -errno : -EINVAL;
+ 			free(*modinfo);
+ 			goto fail;
+ 		}
 -- 
 2.19.2
 
