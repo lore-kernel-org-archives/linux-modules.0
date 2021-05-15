@@ -2,158 +2,142 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 029BDC433B4
-	for <linux-modules@archiver.kernel.org>; Wed, 12 May 2021 13:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2360AC433ED
+	for <linux-modules@archiver.kernel.org>; Sat, 15 May 2021 22:32:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F725613DA
-	for <linux-modules@archiver.kernel.org>; Wed, 12 May 2021 13:30:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3AF561108
+	for <linux-modules@archiver.kernel.org>; Sat, 15 May 2021 22:32:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbhELNbU (ORCPT
+        id S229455AbhEOWdO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 12 May 2021 09:31:20 -0400
-Received: from smtp2.axis.com ([195.60.68.18]:36005 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230145AbhELNbS (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 12 May 2021 09:31:18 -0400
+        Sat, 15 May 2021 18:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229504AbhEOWdM (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Sat, 15 May 2021 18:33:12 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C29DC061573
+        for <linux-modules@vger.kernel.org>; Sat, 15 May 2021 15:31:58 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id i22so3372455lfl.10
+        for <linux-modules@vger.kernel.org>; Sat, 15 May 2021 15:31:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1620826210;
-  x=1652362210;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=HgetHWCoeg6ikUn4JqOA2Ej7NLwBcNece+IcPlOgMiA=;
-  b=NB89jxFx5RrFU1jQ8+HOa1hPbTWFcgVs7Bp00p6BR9mdtdSFHLD31Hf9
-   ReU+nb+FAImYnGJKU0b2K07ceobcQk1qRGssl5vWSCj4FWW9rN2fpJcGo
-   gmByMCtqmz+JkkF0JZtk27RBBReZOcNPIGHEkw85oFasJiMYxbViAVosm
-   v9skDdHquxk1wOtvfirD33i6nEVEC9ZMcfMBdu9br6rBjy57qyAb8spBG
-   +5xvarY3cy0QinXec+uYn3zND4u7kBLF1QiatXbhhvYq0odJzVlJpMXU5
-   YR0UhX2uGULRlZctFiUBmsNC0aMOKCKzZt4WDPzch9oYEKbI2NXcJTzax
-   g==;
-From:   Peter Kjellerstedt <peter.kjellerstedt@axis.com>
-To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-CC:     linux-modules <linux-modules@vger.kernel.org>,
-        Peter Kjellerstedt <peter.kjellerstedt@axis.com>
-Subject: RE: [PATCH] libkmod: Always search modules.builtin if no alias has
- been found
-Thread-Topic: [PATCH] libkmod: Always search modules.builtin if no alias has
- been found
-Thread-Index: AQHXQUFwKKiiPtblmUSr5sgh7GpCxarai8OAgAIzxsCAAapLAIAAEZuAgAFmmxA=
-Date:   Wed, 12 May 2021 13:30:08 +0000
-Message-ID: <c5f85d5738fa48c8acf7e8cbc8588ab8@XBOX03.axis.com>
-References: <20210504235836.24246-1-pkj@axis.com>
- <CAKi4VAJLS7_9T3kUcxqphASF+3FegXeDmaDebsEFEaejU0BS0w@mail.gmail.com>
- <91eb2b9fbd854cb0a3436fb4fcb7ceb1@XBOX03.axis.com>
- <CAKi4VAJxZM2RGdQcqun_=oSJ5v1pqXkgV7tW+BbOshYMBSsMyw@mail.gmail.com>
- <CAKi4VA+O67X=Tex+_-kitMMGPL33FEEWBoOy5muBfvPq8Ao=6g@mail.gmail.com>
-In-Reply-To: <CAKi4VA+O67X=Tex+_-kitMMGPL33FEEWBoOy5muBfvPq8Ao=6g@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.0.5.60]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f0p8YiEIAs4RZAI5PIRWQJw7kZcCs1gXXVVCIA7ZNKY=;
+        b=izdM++wyKoCoSB4QKsc3S1Hlv7lfWh1xV7Hhy8eUuqVO949mZBgn3X9Zm2hNifnIAr
+         LzBSMZTYx8NrgcCYuHv6yb05EgTnsJhFVj9iq1sRHqLujefwz7+rPmtrEMzWdkZl3gj2
+         xGAHjX75oDBtUwogxy5s+29yhRQzI41TX78kagoagANdLPu5+Zuzl2MkQoJfTGmdWB4T
+         F1jjrWJna/BqCotoSMjEuVp4KEsuCOf15JnVyiZhgQ0wL4yaJMjv8vm7U3tCalKHmGB4
+         xhiLXqa0/tzb39q7bwmgeSfU1iQ/Yed9Javuxw9PJvc6HXD8vr8eIwNMVSpM1IEdSqjr
+         HoNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f0p8YiEIAs4RZAI5PIRWQJw7kZcCs1gXXVVCIA7ZNKY=;
+        b=ZiRe81quFsNbCPds4lf3XA/c4DK934AlyCQMAJD4ewGpr7wHO014/UJARgRz+9vajC
+         UBxs6lWCyrt2AUZfbQ21+dmzN/esgvdfad4MpDkTeAS0Zdan0VQsiqYrRz1+IaS9pHGs
+         o7UjM1p0QAIyT2iNmhVKzztjiIpIPlQiPnvdfTh6/kYhxRUNGWlLysG6MPHm1kmyarQY
+         ChPZyHCyqFunWb73GkqrybIs967PMs3CTD2vzf8vGfGfmhysdRAqlPXy/w/EZG0TwQEj
+         z2WzR99qlf7SGUm4QG0n3aI13ZJ9aHwTTr+WP94kfUg1VvLnzieilIHXVjHUC3WowXA6
+         lW7Q==
+X-Gm-Message-State: AOAM530C5/Egp44m3EJ2J23AF8BDWNZ31zwkI6TBPPfjLYWVxowKmoRH
+        t9u5Ng9c3wefZo+CWK/lfKe+fujrIxZPGdzcmOI=
+X-Google-Smtp-Source: ABdhPJxRy1ExaEVoNK+DsQwKufASjHRP+c5etcKEzvXbbqWccxKfs5yWBpnB0gBxmGeHbLm6gOsIy2CjZw3WK/Dc1zA=
+X-Received: by 2002:ac2:5602:: with SMTP id v2mr36216054lfd.23.1621117916370;
+ Sat, 15 May 2021 15:31:56 -0700 (PDT)
 MIME-Version: 1.0
+References: <20210503105347.979635-1-rvarghes@redhat.com>
+In-Reply-To: <20210503105347.979635-1-rvarghes@redhat.com>
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date:   Sat, 15 May 2021 15:31:44 -0700
+Message-ID: <CAKi4VA+QqSkZMk+8=-9j7qH+_e7CRjW1mc+tVZ2V9Y+f=khe0w@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Introduce inclusive language in kmod
+To:     Reuben Varghese <rvarghes@redhat.com>
+Cc:     linux-modules <linux-modules@vger.kernel.org>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBMdWNhcyBEZSBNYXJjaGkgPGx1
-Y2FzLmRlLm1hcmNoaUBnbWFpbC5jb20+DQo+IFNlbnQ6IGRlbiAxMSBtYWogMjAyMSAyMDowMg0K
-PiBUbzogUGV0ZXIgS2plbGxlcnN0ZWR0IDxwZXRlci5ramVsbGVyc3RlZHRAYXhpcy5jb20+DQo+
-IENjOiBsaW51eC1tb2R1bGVzIDxsaW51eC1tb2R1bGVzQHZnZXIua2VybmVsLm9yZz4NCj4gU3Vi
-amVjdDogUmU6IFtQQVRDSF0gbGlia21vZDogQWx3YXlzIHNlYXJjaCBtb2R1bGVzLmJ1aWx0aW4g
-aWYgbm8gYWxpYXMNCj4gaGFzIGJlZW4gZm91bmQNCj4gDQo+IE9uIFR1ZSwgTWF5IDExLCAyMDIx
-IGF0IDk6NTggQU0gTHVjYXMgRGUgTWFyY2hpDQo+IDxsdWNhcy5kZS5tYXJjaGlAZ21haWwuY29t
-PiB3cm90ZToNCj4gPg0KPiA+IE9uIE1vbiwgTWF5IDEwLCAyMDIxIGF0IDY6NTUgQU0gUGV0ZXIg
-S2plbGxlcnN0ZWR0DQo+ID4gPHBldGVyLmtqZWxsZXJzdGVkdEBheGlzLmNvbT4gd3JvdGU6DQo+
-ID4gPg0KPiA+ID4gPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+ID4gPiBGcm9tOiBM
-dWNhcyBEZSBNYXJjaGkgPGx1Y2FzLmRlLm1hcmNoaUBnbWFpbC5jb20+DQo+ID4gPiA+IFNlbnQ6
-IGRlbiA5IG1haiAyMDIxIDA3OjU1DQo+ID4gPiA+IFRvOiBQZXRlciBLamVsbGVyc3RlZHQgPHBl
-dGVyLmtqZWxsZXJzdGVkdEBheGlzLmNvbT4NCj4gPiA+ID4gQ2M6IGxpbnV4LW1vZHVsZXMgPGxp
-bnV4LW1vZHVsZXNAdmdlci5rZXJuZWwub3JnPjsgUGV0ZXIgS2plbGxlcnN0ZWR0DQo+ID4gPiA+
-IDxwZXRlci5ramVsbGVyc3RlZHRAYXhpcy5jb20+DQo+ID4gPiA+IFN1YmplY3Q6IFJlOiBbUEFU
-Q0hdIGxpYmttb2Q6IEFsd2F5cyBzZWFyY2ggbW9kdWxlcy5idWlsdGluIGlmIG5vIGFsaWFzDQo+
-ID4gPiA+IGhhcyBiZWVuIGZvdW5kDQo+ID4gPiA+DQo+ID4gPiA+IE9uIFR1ZSwgTWF5IDQsIDIw
-MjEgYXQgNToxNyBQTSBQZXRlciBLamVsbGVyc3RlZHQgPHBrakBheGlzLmNvbT4gd3JvdGU6DQo+
-ID4gPiA+ID4NCj4gPiA+ID4gPiBDb21taXQgODk0NDMyMjBlIGJyb2tlIHRoZSBsb29rdXAgZm9y
-IGJ1aWx0aW4gbW9kdWxlcy4gbW9kdWxlcy5idWlsdGluDQo+ID4gPiA+ID4gd2FzIG5vIGxvbmdl
-ciBzZWFyY2hlZCBpZiBrbW9kX2xvb2t1cF9hbGlhc19mcm9tX2tlcm5lbF9idWlsdGluX2ZpbGUo
-KQ0KPiA+ID4gPiA+IHJldHVybmVkIDAuDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBTaWduZWQtb2Zm
-LWJ5OiBQZXRlciBLamVsbGVyc3RlZHQgPHBldGVyLmtqZWxsZXJzdGVkdEBheGlzLmNvbT4NCj4g
-PiA+ID4gPiAtLS0NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IEkgZG8gbm90IGtub3cgaWYgdGhpcyBp
-cyB0aGUgY29ycmVjdCB0aGluZyB0byBkbywgb3IgaWYgdGhlIGNvbW1pdA0KPiA+ID4gPiA+IG1l
-c3NhZ2UgbWFrZXMgYW55IHNlbnNlLiBIb3dldmVyLCBpdCBzb2x2ZXMgdGhlIHByb2JsZW0gd2Ug
-d2VyZSBzZWVpbmcuDQo+ID4gPiA+ID4gV2UgdXNlIGZ1c2UsIHdoaWNoIGluc3RhbGxzIC9ldGMv
-bW9kdWxlcy1sb2FkLmQvZnVzZS5jb25mIHRvIGxvYWQgdGhlDQo+ID4gPiA+ID4gZnVzZSBrZXJu
-ZWwgbW9kdWxlLiBIb3dldmVyLCB3ZSBoYXZlIGZ1c2UgYnVpbHQtaW4uIE5vcm1hbGx5LCB0aGUN
-Cj4gPiA+ID4gPiBmb2xsb3dpbmcgY2FuIGJlIHNlZW4gaW4gdGhlIGxvZzoNCj4gPiA+ID4gPg0K
-PiA+ID4gPiA+ICAgc3lzdGVtZC1tb2R1bGVzLWxvYWRbMTkyXTogTW9kdWxlICdmdXNlJyBpcyBi
-dWlsdCBpbg0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gYnV0IGFmdGVyIGNvbW1pdCA4OTQ0MzIyMGUs
-IHdlIGluc3RlYWQgZ290Og0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gICBzeXN0ZW1kLW1vZHVsZXMt
-bG9hZFsxOTNdOiBGYWlsZWQgdG8gZmluZCBtb2R1bGUgJ2Z1c2UnDQo+ID4gPiA+ID4NCj4gPiA+
-ID4gPiAvL1BldGVyDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiAgbGlia21vZC9saWJrbW9kLW1vZHVs
-ZS5jIHwgMiArLQ0KPiA+ID4gPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
-ZGVsZXRpb24oLSkNCj4gPiA+ID4gPg0KPiA+ID4gPiA+IGRpZmYgLS1naXQgYS9saWJrbW9kL2xp
-Ymttb2QtbW9kdWxlLmMgYi9saWJrbW9kL2xpYmttb2QtbW9kdWxlLmMNCj4gPiA+ID4gPiBpbmRl
-eCA3NmE2ZGMzLi42NzIwOTMwIDEwMDY0NA0KPiA+ID4gPiA+IC0tLSBhL2xpYmttb2QvbGlia21v
-ZC1tb2R1bGUuYw0KPiA+ID4gPiA+ICsrKyBiL2xpYmttb2QvbGlia21vZC1tb2R1bGUuYw0KPiA+
-ID4gPiA+IEBAIC01NzcsNyArNTc3LDcgQEAgS01PRF9FWFBPUlQgaW50IGttb2RfbW9kdWxlX25l
-d19mcm9tX2xvb2t1cChzdHJ1Y3Qga21vZF9jdHggKmN0eCwNCj4gPiA+ID4gPg0KPiA+ID4gPiA+
-ICAgICAgICAgREJHKGN0eCwgImxvb2t1cCBtb2R1bGVzLmJ1aWx0aW4ubW9kaW5mbyAlc1xuIiwg
-YWxpYXMpOw0KPiA+ID4gPiA+ICAgICAgICAgZXJyID0ga21vZF9sb29rdXBfYWxpYXNfZnJvbV9r
-ZXJuZWxfYnVpbHRpbl9maWxlKGN0eCwgYWxpYXMsIGxpc3QpOw0KPiA+ID4gPiA+IC0gICAgICAg
-aWYgKGVyciA9PSAtRU5PU1lTKSB7DQo+ID4gPiA+ID4gKyAgICAgICBpZiAoZXJyID09IDAgfHwg
-ZXJyID09IC1FTk9TWVMpIHsNCj4gPiA+ID4NCj4gPiA+ID4gU28gaW4geW91ciBjYXNlIHlvdSBk
-byBoYXZlIG1vZHVsZXMuYnVpbHRpbi5tb2RpbmZvLCBidXQgZnVzZSBkb2Vzbid0DQo+ID4gPiA+
-IHNob3cgdXAgdGhlcmUuIE9uIHRoZSBvdGhlciBoYW5kIGl0IGlzIGxpc3RlZCBpbiBtb2R1bGVz
-LmJ1aWx0aW4uDQo+ID4gPiA+IERvZXMgbW9kdWxlcy5idWlsdGluLmluZm8gY29udGFpbiBhbnl0
-aGluZyBvciBpcyBpdCBhbiBlbXB0eSBmaWxlPw0KPiA+ID4NCj4gPiA+IFdlIGhhdmUgbmVpdGhl
-ciBtb2R1bGVzLmJ1aWx0aW4ubW9kaW5mbyBub3IgbW9kdWxlcy5idWlsdGluLmluZm8uDQo+ID4g
-PiBBIGxpdHRsZSBnb29nbGluZyB0dXJuZWQgb3V0IHRoYXQgbW9kdWxlcy5idWlsdGluLm1vZGlu
-Zm8gc2VlbXMgdG8gaGF2ZQ0KPiA+ID4gYmVlbiBpbnRyb2R1Y2VkIGluIDUuMiwgYnV0IHRoaXMg
-cHJvZHVjdCB1c2VzIGEgNC4xOSBiYXNlZCBrZXJuZWwuDQo+ID4NCj4gPiBvaywgbm93IEkgdW5k
-ZXJzdG9vZCB0aGUgZW50aXJlIGNvbnRleHQuIFNvIGl0IHNlZW1zIHRoZSBwcm9ibGVtIGlzDQo+
-ID4gbm90IHRoYXQgd2UgYXJlIG1pc3NpbmcgdGhlIGhhbmRsaW5nIGZvciByZXR1cm4gMCwgYnV0
-IHJhdGhlciB0aGF0DQo+ID4ga21vZF9sb29rdXBfYWxpYXNfZnJvbV9rZXJuZWxfYnVpbHRpbl9m
-aWxlKCkgaXMgbm90IHJldHVybmluZyAtRU5PU1lTDQo+ID4gd2hlbiBpdCBzaG91bGQgKGluZGV4
-IGRvZXNuJ3QgZXhpc3QpLiAgSSB0aG91Z2h0IHRoaXMgd2FzIGNvdmVyZWQsIGJ1dA0KPiA+IG9i
-dmlvdXNseSBJIHdhcyB3cm9uZy4gSSB3aWxsIHRha2UgYSBsb29rIHdoYXQncyBnb2luZyBvbi4u
-Li4gd2UNCj4gPiBzaG91bGQgbm90IGhhbmRsZSBlcnIgPT0gMCB0aGUgc2FtZSB3YXkgd2UgaGFu
-ZGxlIGVyciA9PSAtRU5PU1lTLiBJZg0KPiA+IHRoZSBpbmRleCBpcyBtaXNzaW5nIHdlIHdhbnQg
-dG8gZmFsbGJhY2sgdG8gdGhlIG9sZCBvbmUsIGJ1dCBpZiB0aGUNCj4gPiBpbmRleCBpcyB0aGVy
-ZSBhbmQgd2UgZGlkbid0IGZpbmQgdGhlIG1vZHVsZSwgd2Ugc2hvdWxkIGp1c3QgcmV0dXJuDQo+
-ID4gYW4gZXJyb3IuDQo+IA0KPiBPaywgSSB0aGluayBJIHNlZSB3aGF0J3MgaGFwcGVuaW5nLiBJ
-ZiB5b3UgaGF2ZSBhIHJlY2VudCBrbW9kIHdpdGggYW4NCj4gb2xkIGtlcm5lbCwgeW91IGhhdmUg
-dGhpcyBzY2VuYXJpbzoNCj4gDQo+IDEpIG1vZHVsZXMuYnVpbHRpbi5tb2RpbmZvIGRvZXNuJ3Qg
-ZXhpc3Qgc2luY2Uga2VybmVsIGRpZG4ndCBjcmVhdGUgaXQNCj4gMikgZGVwbW9kIHdpbGwgd3Jp
-dGUgYW5kIGVtcHR5IGluZGV4IHRvIG1vZHVsZXMuYnVpbHRpbi5hbGlhcy5iaW4gd2hlbg0KPiBt
-b2R1bGVzLmJ1aWx0aW4ubW9kaW5mbyBpcyBub3QgcHJlc2VudA0KPiANCj4gSSBoYXZlIGEgZml4
-IHRvIGRlcG1vZCB0byBzdG9wIHdyaXRpbmcgYW4gZW1wdHkgaW5kZXguIEkgd2lsbCBzdWJtaXQN
-Cj4gdGhhdCBmb3IgcmV2aWV3Lg0KDQpJIGhhdmUgdGVzdGVkIHRoZSBzdWdnZXN0ZWQgc29sdXRp
-b24gYW5kIGl0IHNvbHZlcyB0aGUgcHJvYmxlbSBmb3IgdXMuIA0KVGhhbmsgeW91Lg0KDQovL1Bl
-dGVyDQoNCj4gdGhhbmtzDQo+IEx1Y2FzIERlIE1hcmNoaQ0KPiANCj4gDQo+ID4NCj4gPiBMdWNh
-cyBEZSBNYXJjaGkNCj4gPg0KPiA+ID4NCj4gPiA+ID4gSXQgc2VlbXMgdG8gbWUgc29tZXRoaW5n
-IGVsc2UgaXMgYnJva2VuOiAgYWxsIG1vZHVsZXMgaW4NCj4gPiA+ID4gbW9kdWxlcy5idWlsdGlu
-IHNob3VsZCBiZSBpbiBtb2R1bGVzLmJ1aWx0aW4ubW9kaW5mbyBhcyB3ZWxsLiBXaGF0DQo+IGlz
-DQo+ID4gPiA+IHRoZSByZXN1bHQgb2YgdGhlIGZvbGxvd2luZyBjb21tYW5kcz8NCj4gPiA+ID4N
-Cj4gPiA+ID4gZ3JlcCBmdXNlIC9saWIvbW9kdWxlcy8kKHVuYW1lIC1yKS9tb2R1bGVzLmJ1aWx0
-aW4NCj4gPiA+DQo+ID4gPiBrZXJuZWwvZnMvZnVzZS9mdXNlLmtvDQo+ID4gPg0KPiA+ID4gPiBn
-cmVwIGZ1c2UgL2xpYi9tb2R1bGVzLyQodW5hbWUgLXIpL21vZHVsZXMuYnVpbHRpbi5tb2RpbmZv
-DQo+ID4gPg0KPiA+ID4gZ3JlcDogL2xpYi9tb2R1bGVzLzQuMTkuMTEwLWF4aXM4L21vZHVsZXMu
-YnVpbHRpbi5tb2RpbmZvOiBObyBzdWNoDQo+IGZpbGUgb3IgZGlyZWN0b3J5DQo+ID4gPg0KPiA+
-ID4gVGhpcyBpcyBhbiBlbWJlZGRlZCBwcm9kdWN0IGJ1aWx0IHdpdGggb3VyIG93biBkaXN0cmli
-dXRpb24gYmFzZWQgb24NCj4gPiA+IFBva3kgR2F0ZXNnYXJ0aCBmcm9tIHRoZSBZb2N0byBQcm9q
-ZWN0LiBUaGUgcm9vdGZzIGlzIHJlYWQtb25seSwNCj4gaW5jbHVkaW5nDQo+ID4gPiAvbGliL21v
-ZHVsZXMsIHNvIGFueSBjb250ZXN0IHRoZXJlIGlzIGNyZWF0ZWQgd2hlbiB0aGUgZmlybXdhcmUg
-aW1hZ2UNCj4gaXMNCj4gPiA+IGJ1aWx0Lg0KPiA+ID4NCj4gPiA+ID4gdGhhbmtzDQo+ID4gPiA+
-IEx1Y2FzIERlIE1hcmNoaQ0KPiA+ID4gPg0KPiA+ID4gPiA+ICAgICAgICAgICAgICAgICAvKiBP
-cHRpb25hbCBpbmRleCBtaXNzaW5nLCB0cnkgdGhlIG9sZCBvbmUgKi8NCj4gPiA+ID4gPiAgICAg
-ICAgICAgICAgICAgREJHKGN0eCwgImxvb2t1cCBtb2R1bGVzLmJ1aWx0aW4gJXNcbiIsIGFsaWFz
-KTsNCj4gPiA+ID4gPiAgICAgICAgICAgICAgICAgZXJyID0ga21vZF9sb29rdXBfYWxpYXNfZnJv
-bV9idWlsdGluX2ZpbGUoY3R4LA0KPiBhbGlhcywgbGlzdCk7DQo+ID4gPg0KPiA+ID4gLy9QZXRl
-cg0KPiA+ID4NCg==
+On Mon, May 3, 2021 at 3:54 AM Reuben Varghese <rvarghes@redhat.com> wrote:
+>
+> In July 2020, linux moved to adopt inclusive and neutral language.
+> This includes replacing words slave/master with alternative terms
+> like primary/secondary or the words blacklist/whitelist with
+> blocklist/passlist.
+>
+> This patchset aims at editing the existing kmod code to make it inclusive.
+> This is mainly achieved by refactoring the blacklist command to blocklist.
+>
+> The first patch refactors the term and updates the relevant documentation.
+>
+> Since changing blacklist to blocklist and completely removing support for the
+> term blacklist will most likely break many systems, temporary support for the
+> term blacklist with a warning is introduced as part of the fallback patch.
+
+no warning should be added. The conf file with the blacklist command
+spans through
+OS packages and system administrators' files.
+
+> That being said, two possible approaches of phasing out the term
+> blacklist are listed below:
+> Approach 1: The moment the word blacklist is seen when reading the config file,
+> overwrite it to blocklist in the user's config file. The benefit of this approach
+> would be that we could stop support for the term blacklist immediately while at
+> the same time not breaking any systems.
+
+that is out of question. You can't write to the system's config file.
+The fs may even be readonly,
+or you may actually be writing to initrd instead of rootfs
+
+>
+> Approach 2: Add a warning each time the term blacklist is encountered.
+> This is the approach that is currently implemented. It is less aggresive
+> than approach 1 and serves the purpose of removing the term blacklist from
+> most places in the code.
+
+As I said, no warning should be added... That would be, I guess, option 3.
+
+thanks
+Lucas De Marchi
+
+>
+> Reuben Varghese (2):
+>   Refactor all instances of blacklist to blocklist and update
+>     documentation
+>   Continue temporary support for Blacklist command with warnings
+>
+>  Makefile.am                                   |  6 +--
+>  NEWS                                          | 12 ++---
+>  libkmod/docs/libkmod-sections.txt             |  4 +-
+>  libkmod/libkmod-config.c                      | 50 ++++++++++--------
+>  libkmod/libkmod-internal.h                    |  4 +-
+>  libkmod/libkmod-module.c                      | 52 +++++++++----------
+>  libkmod/libkmod.h                             | 12 ++---
+>  libkmod/libkmod.sym                           |  4 +-
+>  libkmod/python/kmod/_libkmod_h.pxd            |  2 +-
+>  libkmod/python/kmod/kmod.pyx                  |  2 +-
+>  man/modprobe.d.xml                            |  8 ++-
+>  man/modprobe.xml                              |  4 +-
+>  testsuite/.gitignore                          |  6 +--
+>  .../etc/modprobe.d/modprobe.conf              |  2 -
+>  .../etc/modprobe.d/modprobe.conf              |  2 +
+>  .../{test-blacklist.c => test-blocklist.c}    | 12 ++---
+>  tools/insert.c                                |  6 +--
+>  tools/modprobe.c                              | 18 +++----
+>  18 files changed, 109 insertions(+), 97 deletions(-)
+>  delete mode 100644 testsuite/rootfs-pristine/test-blacklist/etc/modprobe.d/modprobe.conf
+>  create mode 100644 testsuite/rootfs-pristine/test-blocklist/etc/modprobe.d/modprobe.conf
+>  rename testsuite/{test-blacklist.c => test-blocklist.c} (90%)
+>
+> --
+> 2.27.0
+>
