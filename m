@@ -2,95 +2,135 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDA65C433B4
-	for <linux-modules@archiver.kernel.org>; Tue, 18 May 2021 15:04:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0E03C433ED
+	for <linux-modules@archiver.kernel.org>; Thu, 20 May 2021 23:36:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B04DF6100C
-	for <linux-modules@archiver.kernel.org>; Tue, 18 May 2021 15:04:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 805D361363
+	for <linux-modules@archiver.kernel.org>; Thu, 20 May 2021 23:36:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343903AbhERPF4 (ORCPT
+        id S234219AbhETXh1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 18 May 2021 11:05:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26732 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344161AbhERPF4 (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 18 May 2021 11:05:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1621350277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CCNsQt9Bi1O9TNnmHk6AD9Txq6lRQnp/tsT6IZcTY14=;
-        b=Xp4YhTnf1xJ7ovZWe5D3sGvzr9CCkC2nZJ89tJM+N8bzj51F7ggwtztUAR2DcNPqUYZTjZ
-        hBJJT6Tq75IeJPrtXhoEC1ffp611CUTehk/6NWtoaaN1RXVb+0tOsNIHYzBjtVDMTExGMQ
-        Zm23wu1UBKt3Y51X7JJ3BbLhcdcTLxY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-529-76gKUOxVPVaxceFaEfZueQ-1; Tue, 18 May 2021 11:04:35 -0400
-X-MC-Unique: 76gKUOxVPVaxceFaEfZueQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 12C25107ACF2;
-        Tue, 18 May 2021 15:04:34 +0000 (UTC)
-Received: from rvarghes.bos.com (ovpn-114-37.phx2.redhat.com [10.3.114.37])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F1BAD10074E0;
-        Tue, 18 May 2021 15:04:32 +0000 (UTC)
-From:   Reuben Varghese <rvarghes@redhat.com>
-To:     linux-modules@vger.kernel.org
-Cc:     lucas.de.marchi@gmail.com, yauheni.kaliuta@redhat.com,
-        Reuben Varghese <rvarghes@redhat.com>
-Subject: [PATCH v2 3/3] Continue temporary support for Blacklist command
-Date:   Tue, 18 May 2021 08:03:19 -0700
-Message-Id: <20210518150319.60941-4-rvarghes@redhat.com>
-In-Reply-To: <20210518150319.60941-1-rvarghes@redhat.com>
-References: <CAKi4VA+QqSkZMk+8=-9j7qH+_e7CRjW1mc+tVZ2V9Y+f=khe0w@mail.gmail.com>
- <20210518150319.60941-1-rvarghes@redhat.com>
+        Thu, 20 May 2021 19:37:27 -0400
+Received: from mga04.intel.com ([192.55.52.120]:28660 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234076AbhETXh1 (ORCPT <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 20 May 2021 19:37:27 -0400
+IronPort-SDR: B15HPJ2YnXvNjsMociBbmj4TyBqebZRjM920M9V0nGZVPF0+j1OK/Cyvet5sQCga9CWWCzdv3P
+ o4qEqrea2QkQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9990"; a="199418108"
+X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
+   d="scan'208";a="199418108"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 16:36:05 -0700
+IronPort-SDR: PlEz2DB1msu9RjRVEekW6T1was9st6YbLk2OphTDXmwQKxsPoRROe8If3LypwwGaBPobuMyQ6i
+ sGSa5nNpz/uw==
+X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
+   d="scan'208";a="543814442"
+Received: from mkwong-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.254.1.188])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 16:36:04 -0700
+Date:   Thu, 20 May 2021 16:36:56 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     linux-modules <linux-modules@vger.kernel.org>
+Cc:     Jessica Yu <jeyu@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [ANNOUNCE] kmod 29
+Message-ID: <20210520233656.6begw57aglgfbwri@ldmartin-desk2>
+X-Patchwork-Hint: comment
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Since refactoring blacklist to blocklist without notice will surely
-result in a lot of broken systems, temporary support for the blacklist
-command is added.
+kmod 29 is out:
 
-Signed-off-by: Reuben Varghese <rvarghes@redhat.com>
----
- libkmod/libkmod-config.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+          https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-29.tar.xz
+          https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-29.tar.sign
 
-diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
-index ec148c6..a4435ca 100644
---- a/libkmod/libkmod-config.c
-+++ b/libkmod/libkmod-config.c
-@@ -476,7 +476,8 @@ static void kcmdline_parse_result(struct kmod_config *config, char *modname,
- 
- 	DBG(config->ctx, "%s %s\n", modname, param);
- 
--	if (streq(modname, "modprobe") && !strncmp(param, "blocklist=", 10)) {
-+	if (streq(modname, "modprobe") && (!strncmp(param, "blocklist=", 10) ||
-+					   !strncmp(param, "blacklist=", 10))) {
- 		for (;;) {
- 			char *t = strsep(&value, ",");
- 			if (t == NULL)
-@@ -662,7 +663,7 @@ static int kmod_config_parse(struct kmod_config *config, int fd,
- 				goto syntax_error;
- 
- 			kmod_config_add_alias(config, alias, modname);
--		} else if (streq(cmd, "blocklist")) {
-+		} else if (streq(cmd, "blacklist") || streq(cmd, "blocklist")) {
- 			char *modname = strtok_r(NULL, "\t ", &saveptr);
- 
- 			if (underscores(modname) < 0)
--- 
-2.27.0
+- Improvements
+         - Add support to use /usr/local as a place for configuration files. This makes it easier
+           to install locally without overriding distro files.
 
+- Bug fixes
+         - Fix `modinfo -F` when module is builtin: when we asked by a specific field from modinfo,
+           it was not working correctly if the module was builtin
+
+         - Documentation fixes on precedence order of /etc and /run: the correct order is
+           /etc/modprobe.d, /run/modprobe.d, /lib/modprobe.d
+
+         - Fix the priority order that we use for searching configuration files. The
+           correct one is /etc, /run, /usr/local/lib, /lib, for both modprobe.d
+           and depmo.d
+
+         - Fix kernel command line parsing when there are quotes present. Grub
+           mangles the command line and changes it from 'module.option="val with
+           spaces"' to '"module.option=val with spaces"'. Although this is weird
+           behavior and grub could have been fixed, the kernel understands it
+           correctly for builtin modules. So change libkmod to also parse it
+           correctly. This also brings another hidden behavior from the kernel:
+           newline in the kernel command line is also allowed and can be used to
+           separate options.
+
+         - Fix a memory leak, overflow and double free on error path
+
+         - Fix documentation for return value from kmod_module_get_info(): we
+           return the number of entries we added to the list
+
+         - Fix output of modules.builtin.alias.bin index: we were writing an empty file due to
+           the misuse of kmod_module_get_info()
+
+- Infra/internal
+         - Retire integration with semaphoreci
+
+         - Declare the github mirror also as an official upstream source: now besides accepting
+           patches via mailing list, PRs on github are also acceptable
+
+         - Misc improvements to testsuite, so we can use it reliably regardless
+           of the configuration used: now tests will skip if we don't have the
+           build dependencies)
+
+
+Shortlog is below:
+
+Lucas De Marchi (17):
+       README: remove leftover from semaphoreci
+       libkmod: Fix documentation on config precedence order
+       depmod: fix precedence order
+       Support /usr/local for configuration files
+       README: make github mirror official
+       testsuite: compress modules if feature is enabled
+       testsuite: also test xz compression
+       libkmod-config: revamp kcmdline parsing into a state machine
+       libkmod-config: re-quote option from kernel cmdline
+       testsuite: allow to re-use single function for tests
+       test-modprobe: share single function for kcmdline tests
+       libkmod-config: more chars allowed as space
+       gitignore: ignore .mbx and .cover for b4 integration
+       Fix return value doc for kmod_module_get_info()
+       depmod: fix modules.builtin.alias.bin output
+       testsuite: update gitignore
+       kmod 29
+
+Seung-Woo Kim (3):
+       libkmod-config: fix a memory leak when kmod_list_append() fails
+       libkmod: fix an overflow with wrong modules.builtin.modinfo
+       libkmod: fix possible double free with wrong modules.builtin.modinfo
+
+Marius Bakke (2):
+       testsuite: Add facility to skip tests.
+       testsuite: Automatically skip tests that fail when sysconfdir != /etc.
+
+Dave Reisner (1):
+       populate-modules: Use more bash, more quotes
+
+Marco d'Itri (1):
+       Fix "modinfo -F always shows name for built-ins"
+
+
+Thank you all for the contributions.
+
+
+Lucas De Marchi
