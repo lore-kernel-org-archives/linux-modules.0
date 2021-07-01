@@ -2,140 +2,136 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BED08C2B9F4
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Jun 2021 06:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE7EBC11F64
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Jul 2021 16:25:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8DC7C611AF
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Jun 2021 06:31:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93929613E3
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Jul 2021 16:25:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbhFVGd4 (ORCPT
+        id S231998AbhGAQ2X (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Jun 2021 02:33:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28419 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229490AbhFVGdz (ORCPT
+        Thu, 1 Jul 2021 12:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229664AbhGAQ2X (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Jun 2021 02:33:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624343500;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6dchryxcfneZ59jWYyYd4UlmCSnmuRKz2fcRoNpKD+k=;
-        b=KvGPtqEfiruYWQiO6ufcFZepdCin6Q3GCfJBL/tgjHHfvqerqGmPL19/LZOZnkjBfn5HCW
-        GttQsQ3Z7uboiTcnpFmrN3vW/jsY4io9FZfPf4sPcAZy56FictcLxj3gTq058dWuchcIaL
-        JisNPcCo9e+CiisOFwKFL42Z9atOoTs=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-540-HvKXmrwcNmCP4BcaJRq83A-1; Tue, 22 Jun 2021 02:31:38 -0400
-X-MC-Unique: HvKXmrwcNmCP4BcaJRq83A-1
-Received: by mail-wr1-f69.google.com with SMTP id q15-20020adfc50f0000b0290111f48b865cso9296620wrf.4
-        for <linux-modules@vger.kernel.org>; Mon, 21 Jun 2021 23:31:38 -0700 (PDT)
+        Thu, 1 Jul 2021 12:28:23 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD39AC061762
+        for <linux-modules@vger.kernel.org>; Thu,  1 Jul 2021 09:25:51 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id r4-20020a0568301204b029047d1030ef5cso161586otp.12
+        for <linux-modules@vger.kernel.org>; Thu, 01 Jul 2021 09:25:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=AFwJc8ho+bs+aAImi2kEPoBHTQSAvoUULI/CUwslYp0=;
+        b=T1oQwkyUAegQHoU8i/DbxGhSazL4v8dZJ7TWdnWZWS4Bsv7XqT/uswiD6by3cYjwHu
+         Hw9kF71AeAUHomog41JoLVs2MGK/0HeeU5xfqYnradFg/X9Jp17nFPMWXY8gnA5PBYpQ
+         2ZmKUK0LZusPaF8T2pzQPaKCCPpiRW6tfLVGEuVEfHiUHPf2sCvSEugAXGtAOMjP0ag+
+         YzN0cq+a4gVdHluj2g6rSwtEnU2qIm8rvvnDu8Rgm38Yrntagxugifwzlpq6Qt9AsEEb
+         BWSpnP2cCKWVLAOhExaby8DmRuFxw359QK5jna72MH2exFYG6cEAcrJXwh4MRejiGUZS
+         6eew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6dchryxcfneZ59jWYyYd4UlmCSnmuRKz2fcRoNpKD+k=;
-        b=t3IOVfGgZURvuuKMah1wKwUW8DjoIvqjw9Bu5ZqKym1VWd9bDvteLEb+ROuWHILF6l
-         J9cIUp8EyVWtJchQx7MCUXzspihKSIbNqRj0Y3mHu32c2v9qyU6vdrVrRyGGWascclG9
-         ap/vqn8C17hoQ5rK/Yl7kqst9eg1SLzf6Bg2kFVWg9x59SB7X00cVoBj5p/XOPPrkeT3
-         CKx2b/lkMKXU7PfraObn+Tt9tgtPcxMFjIvzpeDaMUtw4YQwwJSNAYLNExJPW4ojqsXR
-         BjY8qKx+p4jzwT+Ge+iDlxFEkhn9qqrTUVOXcszA4zO8z4IBD/UJfh28qoznQtkwHKmh
-         rd6A==
-X-Gm-Message-State: AOAM531tAczdRc+Q6mwGQXM9AX3tNvb8OfQvvvJiMVlLA68bvx12RVkc
-        a5mzKXN0zicwkWdcxfvLAgge6G65dOHoV6vNHk7zayyMVb4gPwxzZAVUzQHOY3S1x3tuwx/EJ9m
-        0HV/xt1D2Tn4AI1OXITkhmehpRLxXLNeRAxdG0sqkzg==
-X-Received: by 2002:adf:d22b:: with SMTP id k11mr2718040wrh.57.1624343497299;
-        Mon, 21 Jun 2021 23:31:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwfcxAsGA90YMxUmgFYjjugFkdmkEBGSIGbZ0oXrGesEhuoxCnjJg/6G1AlnDA0V0ZrxP49ERuQvWJZZ9BC8Mg=
-X-Received: by 2002:adf:d22b:: with SMTP id k11mr2718027wrh.57.1624343497138;
- Mon, 21 Jun 2021 23:31:37 -0700 (PDT)
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=AFwJc8ho+bs+aAImi2kEPoBHTQSAvoUULI/CUwslYp0=;
+        b=SZmSYZU9Z0KAvppMKMCEjZWSCsSTgv2zpVBmb8yUiBzvPr4qfgzFV11AZQe7FywkOT
+         mvD8FfIB7GkEqn1/kn9/1Y/SjI6eP90jg54LgNJiAQqBxb6JDUuoTSq2r2SbDBJWgeyo
+         a232fD15NnAgX5ZjCjiojgdJmP0RBBf+L0pvrKOEkEr+DxR0kHg+s0LVCiOePqZnG3Js
+         7qt5EdnVPXpqOtLvvqniLY5JJ5to8h7Ij8psfrrLBQJgcK6ZmlzFexjrDnauyCwgSeuw
+         pKCJw9waLTI3lfWvMQPKzFszt2cJq4T2YoCr8XVVe1hbMofIMrgpO/2PUQ4gZc9xbdbI
+         BTxw==
+X-Gm-Message-State: AOAM533G6ZqtstcH6/uuQIUM5E5hb190PikvS6xjhSYx0Qhf4Yq+Q1df
+        SPf+dBdhKhwhlB09XsCgxc41wNA+6nM=
+X-Google-Smtp-Source: ABdhPJxGe5awT3F/p4PEnEgsPtC7V+bZvUh7qvvFiC/FSwDe/AnHi5oQwo/ZgT2FgekWMzMAw6HZyQ==
+X-Received: by 2002:a9d:862:: with SMTP id 89mr698252oty.276.1625156751159;
+        Thu, 01 Jul 2021 09:25:51 -0700 (PDT)
+Received: from ian.penurio.us ([47.184.51.90])
+        by smtp.gmail.com with ESMTPSA id x3sm81950oie.24.2021.07.01.09.25.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jul 2021 09:25:50 -0700 (PDT)
+X-Mozilla-News-Host: news://lore.kernel.org:119
+To:     linux-modules@vger.kernel.org, kernelnewbies@kernelnewbies.org
+From:   Ian Pilcher <arequipeno@gmail.com>
+Subject: Seeking advice on "monkey patching" a driver
+Message-ID: <30faa352-0f60-10b9-887e-b2ee522d0a16@gmail.com>
+Date:   Thu, 1 Jul 2021 11:25:49 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210608062859.93959-1-ykaliuta@redhat.com> <20210608062923.94017-1-ykaliuta@redhat.com>
- <20210608062923.94017-2-ykaliuta@redhat.com> <20210609171053.c72kzwcdkdrgcwpv@ldmartin-desk2>
- <20210609171849.xvbgrsvyehxueowd@ldmartin-desk2>
-In-Reply-To: <20210609171849.xvbgrsvyehxueowd@ldmartin-desk2>
-From:   Yauheni Kaliuta <ykaliuta@redhat.com>
-Date:   Tue, 22 Jun 2021 09:31:21 +0300
-Message-ID: <CANoWswmHa54VY798aooHroa-3JWq+SC=jf7rV8y-SBwoZARk+A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] libkmod-builtin: consider final NIL in name length check
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-modules@vger.kernel.org, lucas.de.marchi@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jun 9, 2021 at 8:19 PM Lucas De Marchi <lucas.demarchi@intel.com> wrote:
->
-> On Wed, Jun 09, 2021 at 10:10:53AM -0700, Lucas De Marchi wrote:
-> >On Tue, Jun 08, 2021 at 09:29:23AM +0300, Yauheni Kaliuta wrote:
-> >>There is potential buffer overrun in kmod_builtin_iter_get_modname()
-> >>for the name of length PATH_MAX. The required buffer size is
-> >>PATH_MAX, so `modname[len] = '\0'` with len == PATH_MAX will write
-> >>right beyond the buffer.
-> >
-> >this doesn't look correct. "with len == PATH_MAX" we will actually
-> >return an error.
-> >
-> >What indeed is happening is truncation: since we are not reserving 1
-> >char for NUL termination, we will truncate the name. If we update the
-> >commit message to state the right reasoning, then we can land this patch.
-> >
-> >I don't see any buffer overflow here, but I may be missing something.
->
-> another thing... what is your git-sendemail setup? This is putting patch
-> 2 as a reply to patch 1 and that breaks b4. See:
-> https://lore.kernel.org/linux-modules/20210608062923.94017-1-ykaliuta@redhat.com/T/#u
+I maintain a couple of out-of-tree modules that enable "mainstream"
+distributions to be used on the Thecus N5550 NAS.
 
-Thanks, yes. I have thread = true, but send it after the cover letter with
+  https://github.com/ipilcher/n5550/tree/master/modules
 
-git send-email --to linux-modules@vger.kernel.org --cc
-lucas.de.marchi@gmail.com
---in-reply-to=20210608062859.93959-1-ykaliuta@redhat.com
-0001-libkmod-module-check-new_from_name-return-value-in-g.patch
-0002-libkmod-builtin-consider-final-NIL-in-name-length-ch.patch
+The disk activity LEDs in this NAS are software controlled, so the
+n5550_ahci_leds module exists to "inject" a wrapper around libahci's
+qc_issue() function which triggers the correct LED (if any).
 
-So, the right way is to send all together, or disable 'thread'.
+ 
+https://github.com/ipilcher/n5550/blob/25538096fffd7942be8b7f2c66af580620a422b6/modules/n5550_ahci_leds.c#L225
 
->
-> Lucas De Marchi
->
-> >
-> >thanks
-> >LUcas De Marchi
-> >
-> >>
-> >>Check the length against PATH_MAX - 1.
-> >>
-> >>Signed-off-by: Yauheni Kaliuta <ykaliuta@redhat.com>
-> >>---
-> >>libkmod/libkmod-builtin.c | 2 +-
-> >>1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >>diff --git a/libkmod/libkmod-builtin.c b/libkmod/libkmod-builtin.c
-> >>index a002cb5ee2c6..3d4d77ab29b3 100644
-> >>--- a/libkmod/libkmod-builtin.c
-> >>+++ b/libkmod/libkmod-builtin.c
-> >>@@ -246,7 +246,7 @@ bool kmod_builtin_iter_get_modname(struct kmod_builtin_iter *iter,
-> >>
-> >>      len = dot - line;
-> >>
-> >>-     if (len >= PATH_MAX) {
-> >>+     if (len >= PATH_MAX - 1) {
-> >>              sv_errno = ENAMETOOLONG;
-> >>              goto fail;
-> >>      }
-> >>--
-> >>2.31.1
-> >>
->
+It's certainly a hack, but it makes use of the modules much simpler, as
+there's no need to patch and rebuild libahci, override the distro-
+provided module, etc.  As long as modprobe is configured to load
+n5550_ahci_leds immediately after libahci and before any consumers of
+libahci are loaded, things "just work".
 
+The current version of n5550_ahci_leds attempts to ensure that no
+libahci consumers are loaded before it modifies libahci's
+ahci_ops.qc_issue.  It does this by:
+
+   * locking module_mutex
+   * getting a reference to the libahci module (with find_module())
+   * checking libahci's reference count
+   * grabbing a reference to *itself* to prevent itself from being
+     unloaded
+   * modifying ahci_ops.qc_issue
+   * unlocking module_mutex
+
+(There similar logic in the n5550_ahci_leds_enabled_store function to
+reverse the modifications, if no other libahci consumers are loaded.)
+
+It's very possible that some or all of these precautions are
+unnecessary (or that they're inadequate).  I am most definitely not an
+expert at kernel development or the details of the kernel's module
+loading mechanism.  I and few others have, however, been successfully
+using these modules for a number of years.
+
+I've just discovered that neither module_mutex nor find_module() are
+available in recent kernels, and I'm unsure how to proceed.  The two
+options that I've been able to think of thus far are:
+
+* YOLO!  I can simply remove the checks from the module and rely on user
+   space to ensure that n5550_ahci_leds is loaded before any libahci
+   consumers load (i.e. before udevd starts).
+
+* kprobes - I have a feeling that this is the "correct" way to do this
+   (and it would have the benefit of working even if libahci or its
+   consumers aren't built as modules).  OTOH, it isn't clear how I would
+   go about accessing the arguments passed into the function without
+   JProbes, and I'm not thrilled with the idea of adding additional
+   overhead and/or locking to the disk I/O path.
+
+I'd really appreciate any thoughts, advice, ideas, links etc.
+
+Thanks!
 
 -- 
-WBR, Yauheni
-
+========================================================================
+                  In Soviet Russia, Google searches you!
+========================================================================
