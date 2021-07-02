@@ -2,127 +2,139 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC06DC11F67
-	for <linux-modules@archiver.kernel.org>; Thu,  1 Jul 2021 21:04:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 409D9C11F68
+	for <linux-modules@archiver.kernel.org>; Fri,  2 Jul 2021 04:31:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 80A1D613C7
-	for <linux-modules@archiver.kernel.org>; Thu,  1 Jul 2021 21:04:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 27AC86141D
+	for <linux-modules@archiver.kernel.org>; Fri,  2 Jul 2021 04:31:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbhGAVH1 (ORCPT
+        id S229724AbhGBEd6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 1 Jul 2021 17:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbhGAVH1 (ORCPT
+        Fri, 2 Jul 2021 00:33:58 -0400
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:48603 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229596AbhGBEd6 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 1 Jul 2021 17:07:27 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E0EC061762
-        for <linux-modules@vger.kernel.org>; Thu,  1 Jul 2021 14:04:55 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id l26so4628042vsm.9
-        for <linux-modules@vger.kernel.org>; Thu, 01 Jul 2021 14:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8zG0lXa1LkWpJy9vKopborSI43CzkGXr3W656qJ8sA0=;
-        b=Jnr48n2d/NJ1GLqjctd27gaXBq2+TxA9ZjzOFOk4wWPg3njxPM5E6W0xWUc4fYah/k
-         ivm049VibO1KKQh7WKQ0l9hDPq6zSyX4uOZ2tg5Ht5CKG0iZFp6yhuOtMUF01/8+ABqy
-         XDrDRTQbQXobxBzoe4U+E4GmYRfjnjfxMKNNPu2+UHx7Ce2i0FPm/C/ORvHAjiTzFrZc
-         sayLatWvFcXmFj6RMCo3iMLksuOMwZqIREkcr8IjKApswyEbnwfCw+6JOdvh6qKFbuwH
-         VedI5k12/ITjS69vShraZCPg9RneiX3A/MTeDywTXCcO8g0YtHOPBmU4T47E+aOaP5dS
-         35VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8zG0lXa1LkWpJy9vKopborSI43CzkGXr3W656qJ8sA0=;
-        b=khGxL/ocC8k/SnGGslb4w4Z+EeiYF+jDdm56IOlHcHixxxqhWqw1vLVwIg4ofnn9xX
-         XQ/0s3igsBWYwTjyDUQuSRIzOJiamkVYdxKbz1iXW/kQlN7c41i018jHY1CsdM5XMtoz
-         BSwPnC9pWpMxnevTKnz7KTVDDbaFzcLSaqjmBhshnL9eNfqw4G/vnap/J2CMN0cCOMGz
-         +jdhaoOXFyJ0OebY/f+e12aOYziBMMVNYSggA8EiGoXbRNxDQLA1UatKa1EHnC/GjXhS
-         muSpca3Qp0yfYhF4QrtC6+cGiFf9ku3yJtFb+Pa0KlZffv9UUqzLIITargEltMOipFRn
-         VI2Q==
-X-Gm-Message-State: AOAM531IDhxnrFH2JdBshLDCnb6I8NnEjHw6NvLDsquGIVSzr3QQ3NPw
-        rAkp0qz83s1hMP1qy0Wh2j6tnQTQOMMuP9SqbMM=
-X-Google-Smtp-Source: ABdhPJzWN6cfd6S8WeqlDeUvGlstPtxTwYYUI3aKuKGvSQl8A3Eg1pbtrw2JUC9wDclLTaotoVK5aRoLCpZb131t9/o=
-X-Received: by 2002:a05:6102:ed6:: with SMTP id m22mr2575285vst.60.1625173494232;
- Thu, 01 Jul 2021 14:04:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <30faa352-0f60-10b9-887e-b2ee522d0a16@gmail.com>
- <YN4Ccf96sqMoPJM3@kroah.com> <b6e41740-94b7-e32e-5d57-deb7b730b2d9@gmail.com>
-In-Reply-To: <b6e41740-94b7-e32e-5d57-deb7b730b2d9@gmail.com>
-From:   jim.cromie@gmail.com
-Date:   Thu, 1 Jul 2021 15:04:28 -0600
-Message-ID: <CAJfuBxwoFGh9ei=_GEe4V8f7vMtH-G-pdOy4CvQKi-2nHeBQ8g@mail.gmail.com>
-Subject: Re: Seeking advice on "monkey patching" a driver
+        Fri, 2 Jul 2021 00:33:58 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 3BBE23200918;
+        Fri,  2 Jul 2021 00:31:26 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Fri, 02 Jul 2021 00:31:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=ZSco6ai+HKGcLMnrXE7k+lNDLid
+        rd5v0IQPXWIs0O0U=; b=mQSiqZYlz0z1TsV9r2lJALCsq2lzTLLe8F0MP9hqWcp
+        Kr54/CEjFUpGX7eMZ6LbwlpIecEAqdUwHWC3LJ7zO7OUN0LSK3OnJHMkYy/yANYW
+        7FY3WAeYEsN4K2ZMEF0LTvNdRNlUQD1MlJezoXXdBCI+dW7tavKrO5+a236pOjzF
+        ZbmjFxgSzIxzJEZcc2Qe1S0RqRx75g/pOe0yboJhvgx0Y5MIND48f3hGeRXRSxC4
+        Zdq8zhg9NznPKxNQzRFhHTUbBm1KrcNO+o/fhruXNamR+aIF71FRR2JvznoZ6ejF
+        qkcaZQPquiyPsReQkbPr+lgQBhpUHjMTKIIIhWN34Eg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ZSco6a
+        i+HKGcLMnrXE7k+lNDLidrd5v0IQPXWIs0O0U=; b=UmrzsIA3HgLLf1gWodv+RF
+        C7MYOgRqE14yrZHPJ3+/t0gGAKkPiBj4k9RO4k8P6iUw/fee052weYcePBx9u6Df
+        VLmmaImyZQunVPkg7g56GGcuTfrIrs9Yo8fbneAg+tqezETntto47mac8nNKUaEs
+        jYDk1Hpz78DoIHab4OBpBqCmkTTa6JYp/PKr7P8cRmXhVs5Q6SKVwRDgdJiXkq/A
+        NYJXLW8HM0kZBkOLR/sKRRWvBgZqZ7n1dYO8KARKJqyA6YkzLmOulxKQxAMm7+6I
+        mvWh1e9mfCfJJ1fkoUrbRdU1KBddeCFA4uIsRNRdyYRuH3wuIXb/qaav/Bc/wsFg
+        ==
+X-ME-Sender: <xms:nZbeYBumhkCqZ9eIYkm4Ln-RQNlp7X2AFXnPnT3zZSMLCkTHEna3rg>
+    <xme:nZbeYKcXa0WFuiRwXFz_j6CT6-azwOzZJq4dPcWYc12PJ8AKc7ryIoqnx8fmb9fy9
+    kSyfvcV6_liUw>
+X-ME-Received: <xmr:nZbeYEx0LV1PS4r43NhtD1J33HS7QDSdiK_e_GPKiu-C6YbRfmofXJzD5ucwEB4Iubz30Yqq51rRtZzyHXILrUXnu8NCo1XZ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeeijedgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
+    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
+    necuggftrfgrthhtvghrnhepveeuheejgfffgfeivddukedvkedtleelleeghfeljeeiue
+    eggeevueduudekvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghi
+    lhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:nZbeYIM4yuW3IeXpn_8khWs2CDVdXdXduaLXNgGYLcwZPnzDc3GkrQ>
+    <xmx:nZbeYB-G53TUYl6nh5kY_PlUDmHNEawkf9kfjnxCqGKvvLwpSpb5tQ>
+    <xmx:nZbeYIWRjtCIhb4xm5WNTFwOCH49JA4fMD52vAf6t0Fq4AUIrP04rQ>
+    <xmx:nZbeYNZx06xWQgOPghu89L5_Glqg_p1S1mM8QJkVcxaGAmCWaYTJdQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 2 Jul 2021 00:31:25 -0400 (EDT)
+Date:   Fri, 2 Jul 2021 06:31:22 +0200
+From:   Greg KH <greg@kroah.com>
 To:     Ian Pilcher <arequipeno@gmail.com>
-Cc:     Greg KH <greg@kroah.com>, linux-modules@vger.kernel.org,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-modules@vger.kernel.org, kernelnewbies@kernelnewbies.org
+Subject: Re: Seeking advice on "monkey patching" a driver
+Message-ID: <YN6Wml2QT2ZfppA2@kroah.com>
+References: <30faa352-0f60-10b9-887e-b2ee522d0a16@gmail.com>
+ <YN4Ccf96sqMoPJM3@kroah.com>
+ <b6e41740-94b7-e32e-5d57-deb7b730b2d9@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6e41740-94b7-e32e-5d57-deb7b730b2d9@gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jul 1, 2021 at 2:03 PM Ian Pilcher <arequipeno@gmail.com> wrote:
->
+On Thu, Jul 01, 2021 at 03:03:12PM -0500, Ian Pilcher wrote:
 > On 7/1/21 12:59 PM, Greg KH wrote:
 > > Oh that's horrible, please no, do not do that :)
->
+> 
 > Indeed it is, but it works, and it meets my main objective, which is to
 > allow the use of distribution kernel packages and modules.
->
+> 
 > > How about a third option, the correct one:
-> >       - submit your code changes upstream and they get merged into the
-> >         main kernel tree and no monkeypatching is ever needed at all!
-> >
+> > 	- submit your code changes upstream and they get merged into the
+> > 	  main kernel tree and no monkeypatching is ever needed at all!
+> > 
 > > Have you submitted your changes upstream to the existing drivers?  What
 > > is preventing that from happening today?
->
+> 
 > There are a couple of reasons that I've never attempted to do this.
->
+> 
 > * Scope of work - Currently, there is simply no mechanism to call an LED
+>   trigger from the ahci or libahci modules, presumably because this is
+>   something that  really ought to be done by the hardware.  So I would
+>   have to add some sort of generic framework to associate LED triggers
+>   with AHCI ports.
+> 
+>   I probably also don't really have the knowledge to do this.  I am not
+>   familiar with locking, memory management, etc. in the kernel.  Just
+>   because my "hack" works on a specific 2-core NAS doesn't mean that it
+>   won't cause all sorts of breakage on a higher-performance system with
+>   more parallelism.
+
+Why are ahci devices somehow "special" here?  Just add a trigger to the
+ahci core for LEDs and all should "just work".  We've done that for many
+subsystems already.
+
 > * (Probable) lack of upstream interest - As I mentioned, disk activity
->    LEDs really ought to be handled by the hardware.
+>   LEDs really ought to be handled by the hardware.  I don't know of any
+>   other system that suffers from this particular limitation.  So this
+>   is a very, very niche use case.  (Most users of this hardware use the
+>   manufacturer's "firmware".)
 
-Are LEDs really that important?
-Unless theyre rigged intrinsically into the operation, it seems tertiary
+Are you sure we don't already have LED triggers for disk activity?  Have
+you tried the ledtrig-disk.c driver?  It says it works on ATA devices,
+no reason it can't also work for other device types.
 
-
-
-  I don't know of any
->    other system that suffers from this particular limitation.  So this
->    is a very, very niche use case.  (Most users of this hardware use the
->    manufacturer's "firmware".)
->
->    I did ask about this on the linux-ide mailing list long ago when I
->    first wrote the modules, but I don't think that I ever received a
->    response, which reinforces my belief that upstream isn't likely to be
->    receptive.
->
-
-theres a firehose of patches.
-
-FWIW, now robots watch the list, and will grind your patches on lots
-of configs. arches
-
-
-
+>   I did ask about this on the linux-ide mailing list long ago when I
+>   first wrote the modules, but I don't think that I ever received a
+>   response, which reinforces my belief that upstream isn't likely to be
+>   receptive.
+> 
 > I've invested significant time in kernel patches in the past, only to
 > see them ultimately not be accepted, so I would need to know that
 > upstream was truly interested in such a feature before I would consider
 > making such a commitment.
->
 
-no guarantees, but there is staging. (here, more or less)
-provisional home for code while quality develops
-once youre in-tree, warts and all (to some extent, I dont know)
-you may well get help (patches) improving it, surely lots of feedback.
+That's not fair, there is no way anyone can promise anyone that their
+patches will be accepted, _before_ anyone sees them.  What would _you_
+do if you were in the kernel maintainer's position and read something
+like this?
 
+good luck!
 
-
-elsewhere, nobody knows it exists.
+greg k-h
