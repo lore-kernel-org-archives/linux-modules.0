@@ -2,126 +2,127 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D929FC4320E
-	for <linux-modules@archiver.kernel.org>; Fri,  6 Aug 2021 21:45:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74725C432BE
+	for <linux-modules@archiver.kernel.org>; Tue, 10 Aug 2021 05:16:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC586610E7
-	for <linux-modules@archiver.kernel.org>; Fri,  6 Aug 2021 21:45:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5535460EC0
+	for <linux-modules@archiver.kernel.org>; Tue, 10 Aug 2021 05:16:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244601AbhHFVpo (ORCPT
+        id S237242AbhHJFQ2 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 6 Aug 2021 17:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241587AbhHFVpn (ORCPT
+        Tue, 10 Aug 2021 01:16:28 -0400
+Received: from mail-pj1-f41.google.com ([209.85.216.41]:52908 "EHLO
+        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231620AbhHJFQ1 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 6 Aug 2021 17:45:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC1CC0613CF;
-        Fri,  6 Aug 2021 14:45:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3yo0Z1DqiPntRlxzgzVM4K1c9ilgCH5IdUhCZZNDe9s=; b=YEcpgCfI59SF9Tug3dbXK91OXX
-        sq9bPtmNl5qPktHwmAAihU+NGy4EI2Wu4qsPOh1YYDsBUr8cB8XertXL4GuKVn5dzjT+2S1FZ3ks2
-        ORtg4pVQ21049fLZZaN+E4/dG2qP3gkRUSMu6HVBgJTI1Z0dMoLe0I09+mcsDE/PnKAall2S/lIq0
-        4OTwMTLqvzUBf40IsuaIbSHTe4FUiD3OaquwRjBJ3LNndLJX1vzhAu32F2tb4kqIa7o0oif1GzujM
-        u/UJbjCcJ96IbwBmsdqgzM0qVc+m5TsYwt9kBS3BqP+RYOiQHBu6DkLVigbaVerIeFBT58rWnyT3O
-        csmQP7Bg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mC7ee-00DgiI-Nc; Fri, 06 Aug 2021 21:45:24 +0000
-Date:   Fri, 6 Aug 2021 14:45:24 -0700
+        Tue, 10 Aug 2021 01:16:27 -0400
+Received: by mail-pj1-f41.google.com with SMTP id nt11so8237964pjb.2;
+        Mon, 09 Aug 2021 22:16:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+zpOwbVou+jByg13qU0+g7J5etP/Qu5p7QOKi2Ty4XA=;
+        b=laxUOlDEkOJJhs8ogySOueYxKJg9sD+f9g+cHBqW6zFqDKc0hPTX/Am2gz2YRwSgxs
+         ao42THc7o+8yA5tkvjUSnJvRaES1TEAurj7VRtbMIn40bbN9a9vLkDz3C4+iEhVvULrP
+         FMCzpc2440tLbMPq9TPmlLOrUjamlTgL8hp6zA73VdCOOSPshgcVYU9MO1SM4j0YTZ/u
+         bCdmVL6HoMUy4QC3OpSX/qtF6K1miqLwbQGBK9wVLR7dmSI1Es1kvi/W/ifqrQhBlvKO
+         xCUnyERfg/wcADWbZE6NjfaCEdASyFnivYaerGJNqDz6YIzVcpp5seIoGTAlM3jIDuEi
+         y3jg==
+X-Gm-Message-State: AOAM531lmNr4MQIq6MnXk6ceSaVoMBsbjAAW8Snuv1P/98sRm6nMAvXB
+        cGK6BCaOoujavs+VRBo0BJM=
+X-Google-Smtp-Source: ABdhPJzyR0y8ESWGngQYGnUiWJ+Fr8MT9kxQa18PzVznFkcJjdUEqna8/JSJHjUV9s7UHJXZA/WPXw==
+X-Received: by 2002:a17:902:c404:b029:12c:4e68:ba6e with SMTP id k4-20020a170902c404b029012c4e68ba6emr21475883plk.39.1628572566003;
+        Mon, 09 Aug 2021 22:16:06 -0700 (PDT)
+Received: from localhost ([191.96.121.128])
+        by smtp.gmail.com with ESMTPSA id p34sm21806624pfh.172.2021.08.09.22.16.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Aug 2021 22:16:04 -0700 (PDT)
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
-        fstests@vger.kernel.org, linux-block@vger.kernel.org, hare@suse.de,
-        dgilbert@interlog.com, jeyu@kernel.org, osandov@fb.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] libkmod-module: add support for a patient module removal
- option
-Message-ID: <YQ2tdCZ5YynHtuHB@bombadil.infradead.org>
-References: <20210803202417.462197-1-mcgrof@kernel.org>
- <YQrVY8Wxb026TDWN@bombadil.infradead.org>
- <20210804184720.z27u5aymcl5hzqgh@ldmartin-desk2>
+To:     lucas.demarchi@intel.com, linux-modules@vger.kernel.org
+Cc:     live-patching@vger.kernel.org, fstests@vger.kernel.org,
+        linux-block@vger.kernel.org, hare@suse.de, dgilbert@interlog.com,
+        jeyu@kernel.org, osandov@fb.com, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH v2 0/3] kmod: add patient module removal support
+Date:   Mon,  9 Aug 2021 22:15:59 -0700
+Message-Id: <20210810051602.3067384-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210804184720.z27u5aymcl5hzqgh@ldmartin-desk2>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Aug 04, 2021 at 11:47:20AM -0700, Lucas De Marchi wrote:
-> On Wed, Aug 04, 2021 at 10:58:59AM -0700, Luis Chamberlain wrote:
-> > On Tue, Aug 03, 2021 at 01:24:17PM -0700, Luis Chamberlain wrote:
-> > > + diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-> > <-- snip -->
-> > > +		ERR(mod->ctx, "%s refcnt is %ld waiting for it to become 0\n", mod->name, refcnt);
-> > 
-> > OK after running many tests with this I think we need to just expand
-> > this so that the error message only applies when -v is passed to
-> > modprobe, otherwise we get the print message every time, and using
-> > INFO() doesn't cut it, given the next priority level available to
-> > the library is LOG_INFO (6) and when modprobe -v is passed we set the
-> > log level to LOG_NOTICE (5), so we need a new NOTICE(). I'll send a v2
-> > with that included as a separate patch.
-> 
-> Or maybe move the sleep to modprobe instead of doing it in the
-> library? 
+The kernel used to have wait support for delete_module() system call.
+This was removed via commmit 3f2b9c9cdf389e ("module: remove rmmod
+--wait option.") on v3.13 in favor for 10 second sleep on kmod. Lucas
+later remove that sleep(10) on kmod commit 017893f244 ("rmmod: remove
+--wait option") so on kmod 16.
 
-We have a few callers which need to impement the wait, and so having
-a library call is one way to share code. I realized this while first
-open coding this in each call site and realizing I was just
-re-inventing the wheel.
+There are races in module removal I have been chasing down and
+clearly documenting them. Module removal is not crazy stuff, its
+used in many test frameworks such as fstests and blktests and can
+even be used to remove live patches if a distribution supports that.
+If you are doing tests in a loop you can easily run into these races
+as false positives in your testing results.
 
-> The sleep(1) seems like an arbitrary number to be introduced
-> in the lib.
+Contrary to the last kernel wait delete_module() effort this series
+instead adds a patient module removal support into kmod and extends
+modprobe and rmmod to use it.
 
-Indeed, the ideal thing here is to introduce then a timeout, and have
-a default setting, which code can override.
+The most important change other than the requested during patch
+review this also now uses the same timeout to also re-try module
+removal if it fails when patient module removal is used.
 
-> Since kernfs is pollable,
-> maybe we could rather introduce an API to
-> return the pid in which the application has to wait for
+Changes on v2:
 
-The kernel does not have information to provide userspace any
-information for how long it should wait. I mean, in a test case I am
-using its an lvm pvremove and for some reason it seems the removal
-is asynchronously putting the module refcnt (even though I do not believe
-DM_DEFERRED_REMOVE is ever set by default), and I had fixed the kernel's
-own asynchronous removal of the request_queue a little while back so
-I don't think that's the issue either.
+- replace looking at the refcnt with poll() as requested by Lucas.
+  This uses clock_gettime(CLOCK_MONOTONIC), and systems without that
+  won't get patient module removal support, we'd revert back to
+  regular module removal attempt support. Since poll() in practice
+  just busy loops on the refcnt sysfs file today, we guard verbose
+  prints to only every 1/2 second. We can enhance poll() on the refcnt
+  later, for now this busy read helps prove the issue and test for it.
+- replaces the sleep(1) calls and make thie programmable timeouts as
+  requested by Lucas
+- extends macros to allow us to print something *more* on the library
+  when something like modprobe -v is used.
+- upon further testing and investigation of the refcnt issue where
+  the refcnt is 0 but the module cannot be removed [0] I've determined
+  that the only reasonable thing userspace can do is to retry the
+  delete_modue() call when doing a patient removal. You *might*
+  be tempted to look at this and suggest a new quiesce state which
+  userspace can request, however such quiesce states could actually
+  prove more problemantic than resolve anything. Consider how some
+  subystems may need to re-open a device only to close it when tearing
+  something down. Such quiesce efforts would break those subsystems.
 
-If you mean to consider adding *more* information to the kernel, as
-a new feature, I'm afraid any PID triggering a bump in the refcnt is
-ephemeral, and so I don't think it would help. It would only be useful
-if userspace *knew* it would trigger a recnt bump, and that seems
-likely a promise we would probaby want to break any time. Unless we
-want to get into the business of granting userspace the ability to
-bump refcnt's with new structural information it promises is legit.
-Then userspace can query for this. However that still seems overkill,
-I can't see a need for it yet.
+[0] https://bugzilla.kernel.org/show_bug.cgi?id=214015
 
-> and then the
-> application can use whatever it wants to poll, including controlling a
-> timeout.
+Luis Chamberlain (3):
+  libkmod: add a library notice log level print
+  libkmod/libkmod-module: add refcnt fd helper
+  libkmod-module: add support for a patient module removal option
 
-A dynamic timeout seems sensible indeed.
+ libkmod/docs/libkmod-sections.txt  |   4 +
+ libkmod/libkmod-internal.h         |   2 +
+ libkmod/libkmod-module.c           | 365 ++++++++++++++++++++++++++++-
+ libkmod/libkmod.c                  |  71 ++++++
+ libkmod/libkmod.h                  |   7 +
+ libkmod/libkmod.sym                |   4 +
+ libkmod/python/kmod/_libkmod_h.pxd |   3 +
+ libkmod/python/kmod/module.pyx     |   4 +
+ man/modprobe.xml                   |  59 +++++
+ man/rmmod.xml                      |  60 +++++
+ tools/modprobe.c                   |  21 +-
+ tools/remove.c                     |  12 +-
+ tools/rmmod.c                      |  27 ++-
+ 13 files changed, 610 insertions(+), 29 deletions(-)
 
-> I'm saying this because sleep(1) may be all fine for modprobe, but for
-> other applications using libkmod it may not play well with their mainloops
-> (and they may want to control both granularity of the sleep and a max
-> timeout).
+-- 
+2.30.2
 
-Indeed. A default timeout set into the context seem to be the way to go,
-which callers can override. Then modprobe -t <ms_wait> can use this caller to
-update the ctx timeout to a setting.
-
-I'll post a v2 with these changes.
-
-  Luis
