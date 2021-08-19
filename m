@@ -2,101 +2,81 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13C11C43214
-	for <linux-modules@archiver.kernel.org>; Wed, 18 Aug 2021 21:24:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BD7EC4338F
+	for <linux-modules@archiver.kernel.org>; Thu, 19 Aug 2021 15:28:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDAFF61101
-	for <linux-modules@archiver.kernel.org>; Wed, 18 Aug 2021 21:24:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4D0060FE8
+	for <linux-modules@archiver.kernel.org>; Thu, 19 Aug 2021 15:28:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbhHRVZb (ORCPT
+        id S239578AbhHSP2w (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 18 Aug 2021 17:25:31 -0400
-Received: from mga03.intel.com ([134.134.136.65]:16751 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234014AbhHRVZa (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 18 Aug 2021 17:25:30 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10080"; a="216463461"
-X-IronPort-AV: E=Sophos;i="5.84,332,1620716400"; 
-   d="scan'208";a="216463461"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2021 14:24:54 -0700
-X-IronPort-AV: E=Sophos;i="5.84,332,1620716400"; 
-   d="scan'208";a="531855765"
-Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2021 14:24:54 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     linux-modules <linux-modules@vger.kernel.org>
-Cc:     Michal Suchanek <msuchanek@suse.de>, Takashi Iwai <tiwai@suse.de>,
-        Petr Vorel <pvorel@suse.cz>,
+        Thu, 19 Aug 2021 11:28:52 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:47288 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238643AbhHSP2v (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Thu, 19 Aug 2021 11:28:51 -0400
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 96D8F1FDB3;
+        Thu, 19 Aug 2021 15:28:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1629386890;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kr6ax75RDQM75AhdKI4ptNi7kDlOeTak+FEaRlVGM4I=;
+        b=UnZJzl2ACYxjLkiOKESSD91eFCGuA0Hv8/zsr3spWoXzkll6AtpwBt3eYQoufe1sPmeerV
+        +/YwnqB2IM1m0txAv5DXNtmtCH7jSQCIWF8/39ABGDiDaDaRCENWNwMUp/IJse+nPn4n8s
+        3I1+8CIQN9SDkKYW4OwnOs8M/RPyvwE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1629386890;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kr6ax75RDQM75AhdKI4ptNi7kDlOeTak+FEaRlVGM4I=;
+        b=Y/nTBuCUygrRMpud1yy9+v0Fq0arHdCyBYQrrxnr9FcVQUC+jEexyGxzYeSMLsbeyRes1s
+        qmefWxZ+9dtv65AA==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 4306013A13;
+        Thu, 19 Aug 2021 15:28:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id cSmPDYp4HmGpGwAAGKfGzw
+        (envelope-from <pvorel@suse.cz>); Thu, 19 Aug 2021 15:28:10 +0000
+Date:   Thu, 19 Aug 2021 17:28:08 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules <linux-modules@vger.kernel.org>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Takashi Iwai <tiwai@suse.de>,
         Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH] libkmod: Set builtin to no when module is created from path.
-Date:   Wed, 18 Aug 2021 14:24:40 -0700
-Message-Id: <20210818212440.2224127-2-lucas.demarchi@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210818212440.2224127-1-lucas.demarchi@intel.com>
+Subject: Re: [PATCH v2] libkmod: Set builtin to no when module is created
+ from path.
+Message-ID: <YR54iKYSJSsUBcPU@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
 References: <20210818205159.6066-1-msuchanek@suse.de>
  <20210818212440.2224127-1-lucas.demarchi@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210818212440.2224127-1-lucas.demarchi@intel.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Michal Suchanek <msuchanek@suse.de>
+Hi all,
 
-A recent bug report showed that modinfo doesn't give the signature
-information for certain modules, and it turned out to happen only on
-the modules that are built-in on the running kernel; then modinfo
-skips the signature check, as if the target module file never exists.
-The behavior is, however, inconsistent when modinfo is performed for
-external modules (no matter which kernel version is) and the module
-file path is explicitly given by a command-line argument, which
-guarantees the presence of the module file itself.
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
 
-Fixes: e7e2cb61fa9f ("modinfo: Show information about built-in modules")
-Link: https://lore.kernel.org/linux-modules/CAKi4VAJVvY3=JdSZm-GD1hJqyCPYaYz-jBJ_REeY5BakVb6_ww@mail.gmail.com/
-BugLink: https://bugzilla.opensuse.org/show_bug.cgi?id=1189537
-Suggested-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
----
- libkmod/libkmod-module.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 6e0ff1a..6f7747c 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -431,17 +431,18 @@ KMOD_EXPORT int kmod_module_new_from_path(struct kmod_ctx *ctx,
- 			return -EEXIST;
- 		}
- 
--		*mod = kmod_module_ref(m);
--		return 0;
--	}
-+		kmod_module_ref(m);
-+	} else {
-+		err = kmod_module_new(ctx, name, name, namelen, NULL, 0, &m);
-+		if (err < 0) {
-+			free(abspath);
-+			return err;
-+		}
- 
--	err = kmod_module_new(ctx, name, name, namelen, NULL, 0, &m);
--	if (err < 0) {
--		free(abspath);
--		return err;
-+		m->path = abspath;
- 	}
- 
--	m->path = abspath;
-+	m->builtin = KMOD_MODULE_BUILTIN_NO;
- 	*mod = m;
- 
- 	return 0;
--- 
-2.31.1
-
+Kind regards,
+Petr
