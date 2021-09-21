@@ -2,56 +2,83 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E96D9C433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Sep 2021 17:41:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93ED2C433F5
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Sep 2021 05:52:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D5E2761244
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Sep 2021 17:41:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7D17261050
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Sep 2021 05:52:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbhIORmX (ORCPT
+        id S229701AbhIUFx2 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Sep 2021 13:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
+        Tue, 21 Sep 2021 01:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbhIORmW (ORCPT
+        with ESMTP id S229441AbhIUFx1 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Sep 2021 13:42:22 -0400
-Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB11C061574;
-        Wed, 15 Sep 2021 10:41:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qt2oy9vw0dXIN2QIKk1xtx0ae09ij6yfgJ9fhHl0i8g=; b=V1iybqMKBGo0UF49aDegibTuO4
-        9KRsxbz9kIeDITVYr+X620EG5+yLurXE3Cq+pCcupyd3B4/A5D7rJ8LOamDGqDl6e9NsMM3OhcyBI
-        DAxGVnoBNh+Y2+jXP3I5tcJc1S5aAIvMu41WpD2jFV0bwQEVhPCqgtcKFSxW3VstiFdFRZ70lydCF
-        1sr9SWxF/NVT2Woq1s7vcalDk3Knhh+go2dPCb1phH5u312m3kAPuBurahHH74kkD+QJzoLt7sAvy
-        5P83g8Lg4edQpZ0J2wWd2J5gCL0t6s+DYAgkX8ASczJLTjYrNZ4GpW4Kx6W6PMVuJ2Sgnno84xas1
-        FurilX2Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mQYu1-009eBn-JQ; Wed, 15 Sep 2021 17:40:57 +0000
-Date:   Wed, 15 Sep 2021 10:40:57 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     lucas.demarchi@intel.com, linux-modules@vger.kernel.org
-Cc:     live-patching@vger.kernel.org, fstests@vger.kernel.org,
-        linux-block@vger.kernel.org, hare@suse.de, dgilbert@interlog.com,
-        jeyu@kernel.org, osandov@fb.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] kmod: add patient module removal support
-Message-ID: <YUIwKUXc7YbVAqut@bombadil.infradead.org>
-References: <20210810051602.3067384-1-mcgrof@kernel.org>
+        Tue, 21 Sep 2021 01:53:27 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0C5C061574;
+        Mon, 20 Sep 2021 22:51:59 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id i4so77517366lfv.4;
+        Mon, 20 Sep 2021 22:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xglXQZeaLjpmUmpIXkt4X5ZZq8DlETABa0SEfcACxlA=;
+        b=c+as/OVscRWXx61L/O6SYawqHdzoWAXS7Y0w2FtvnkLeS/ZHScB2vkizB1M5VFFDAq
+         7HXqay36117dURzYK4HWLmOXm2q/UluEazL6COee4yhPwBxo9m3kOHwgUPaNFWqbwmGj
+         iK5kK385b/cUmijYPeVtShwwsdosOtpjpwSCrEEeII50ixgKzjH5mMZqq36/t+Ai0DS+
+         nj4ucjrKKEOb8CbKKq6ul2tRpcIuUlna/PpdP911Irsz7vHWiJEow7n6SzIbYBlT9poq
+         9UF8UAWaiTjQ8OHCQO/8T6t38Z/FYH/EkPeOq4w2mMXAcz6ZrflJu57wy+7cnMwY6uYO
+         hpmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xglXQZeaLjpmUmpIXkt4X5ZZq8DlETABa0SEfcACxlA=;
+        b=mAJrv7ov4lNzBIt2odwlPyJWpv8xL75vcQsBBc659qI9lM8vR+0lSYITgWApTfBtS2
+         NRf00skkyOPcGBsyTcx/dSGkEKi7PqnkwKPE3xypuHxXpw2H0iH3CwSyzwfQ5k9QrMhK
+         IzXVyaoM/nwfWEifcPPFj0W8uhWVnveEAYiqugzH4Chs7p7uRdynX8GZZHsAjiKZsbFt
+         FskOIa3xSwKUAVLv3CzijuQTFQ98xR4Zh5Xqy6AvX/KHEakN6ROJcgJdT+XGLm/p8xt0
+         dfz3m0AkLkwofA6hY1pJmqxwrW7ZuLZrZF+BtHz3Nr+gyINZmskmXG9TaShOyJaJr1jC
+         fbrA==
+X-Gm-Message-State: AOAM532EFj0YPu6rNTuqM8OtiOvltu3NTLHgxCiTrVmh1CvwhsjJNcPD
+        Ylb5VfKeqtZdt6A/hJcUVD83/ROtnRKXN9NRpvU=
+X-Google-Smtp-Source: ABdhPJysH4yBw6yw+y5ndoNNQA5gYKSyFWwGu7s/LIkvT2rq1MRDbLNhjBvx/5Wz+PxgYrCZT/Jn6f8i+rk/PKI/gbk=
+X-Received: by 2002:a05:6512:12c8:: with SMTP id p8mr6269890lfg.40.1632203518088;
+ Mon, 20 Sep 2021 22:51:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210810051602.3067384-1-mcgrof@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20210810051602.3067384-1-mcgrof@kernel.org> <YUIwKUXc7YbVAqut@bombadil.infradead.org>
+In-Reply-To: <YUIwKUXc7YbVAqut@bombadil.infradead.org>
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date:   Mon, 20 Sep 2021 22:51:46 -0700
+Message-ID: <CAKi4VAKbN31hqfg5EHZO=T_Hdkv3uhzarFLuEZO4b5Zm+TF77Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] kmod: add patient module removal support
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        live-patching@vger.kernel.org, fstests@vger.kernel.org,
+        linux-block@vger.kernel.org, hare@suse.de, dgilbert@interlog.com,
+        Jessica Yu <jeyu@kernel.org>, osandov@fb.com,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-*Friendly poke*
+On Wed, Sep 15, 2021 at 10:41 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> *Friendly poke*
 
-  Luis
+Sorry for the delay. Let me take a look in detail tomorrow.
+
+Lucas De Marchi
+
+
+>
+>   Luis
