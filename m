@@ -2,76 +2,76 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF8F3C433FE
-	for <linux-modules@archiver.kernel.org>; Wed, 27 Oct 2021 17:47:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A79CEC433F5
+	for <linux-modules@archiver.kernel.org>; Wed, 27 Oct 2021 17:47:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5EF860E73
-	for <linux-modules@archiver.kernel.org>; Wed, 27 Oct 2021 17:47:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9338C60F92
+	for <linux-modules@archiver.kernel.org>; Wed, 27 Oct 2021 17:47:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243424AbhJ0RuP (ORCPT
+        id S243402AbhJ0RuT (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 27 Oct 2021 13:50:15 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:36268 "EHLO
+        Wed, 27 Oct 2021 13:50:19 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:41416 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243393AbhJ0RuJ (ORCPT
+        by vger.kernel.org with ESMTP id S243403AbhJ0RuM (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 27 Oct 2021 13:50:09 -0400
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19RGTnee017567;
-        Wed, 27 Oct 2021 17:47:40 GMT
+        Wed, 27 Oct 2021 13:50:12 -0400
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19RHT3dG028933;
+        Wed, 27 Oct 2021 17:47:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=uvvQtessmyoYK1pqUcup3bTjRF4Sbj20I9i9NR9B7U8=;
- b=qU1INEbnldQR/XRf3Uo8bSVSLkLTHn6HDdulE3BTS7thdwtXjhoGl3B4yQEwAhdU8dsD
- 9UrK4aBDKLk3h+F73EE6fxiIJ7/u4oE3z0F72dlA2Wbs8zI2lo18y4109CTYBUsqU/t/
- GVs95HqvtriDtEe14erDNpzqRfhnQswtL4GONa5UYF2+kcZ/iVgPCT6sHrerenVQNPfB
- Zi/xRPZqH1G4Yashu0PaFFMGWq5Q7s+SEghgaKf3B71V1Cbv+I+xh0PQlqBtfpWrhxEQ
- U2KQ6PgQIaLgRDpgGZjtSng4A/whrzuuhODu1oHrv8N3a7xBKoMMQq/oLHE6oQD07VPV 1Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3bx4fg3srr-1
+ s=corp-2021-07-09; bh=MJIIpG5J/sZ/qkqMAjoO3Bcnzu1odC9OT6db7awLjKM=;
+ b=zOJPn8XftF3Nf5SOJSO1DsNeT+CCTR7l6mZrErqqjlwscYsbBHcHoa50kaLPeDjuN+mA
+ blDqmtgyu7/57XBjZ9jg85Px//0i8zyRjzCsqXJcMrQxdqOwcbxcYyL8FNG6efbSKZJX
+ 32fPXEDe9zp5qeuCTzjimnUu8LgCk6mj6FAehJH8NTqIcE09L1rD41rnuYZL5atYNUfR
+ 0c6ztDYG2dtHMhB79VC33X+jzDNZKS7ObVhzsdITR+2dHwnbq5gAoGqEyor8ZtpMzySy
+ bdhYMTF3DzpbizdlREXECv3BJWwylGf3vgxpouAfM3CMb5IJqIJ5+gYyf6PjQ4U8L+eO sQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3bx4fjms91-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 Oct 2021 17:47:40 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19RHfZaI186349;
-        Wed, 27 Oct 2021 17:47:39 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
-        by aserp3020.oracle.com with ESMTP id 3bx4gd3a2u-1
+        Wed, 27 Oct 2021 17:47:42 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19RHfwo4056701;
+        Wed, 27 Oct 2021 17:47:42 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2172.outbound.protection.outlook.com [104.47.58.172])
+        by userp3020.oracle.com with ESMTP id 3bx4grfjvr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 Oct 2021 17:47:39 +0000
+        Wed, 27 Oct 2021 17:47:41 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JD9BJtuh1GhvnKBCyQMm+3Mv1QM6U2Un9zu0H3IWrjPY0euSpAV40mxz9c92jLmQ1GSqZgEvWTi9Y/P78I3DwaT0u1e62m5dUorVvI8ZngT2lO5KI3W3Y4hvAwyid9rnEkbdVgvyXyGL/w4dpjdBbHZNsT3ZPLmOMtsdrVcC7rBtlUCxYvy8GPmFhFjayhYpgs4X8hU+I6lG31idCc+CaArd8ytKGIFFl21RMnuWo+zd6tMkPIKbqvFm9QRNFdIooYoGE2zXXI7PuEpAIrKq14fO67eavtcuJUxUkrozUpq9zR9/gW/28WFNYuwmIsWx/bwa/IhYL0B0Ro2RaHlLJQ==
+ b=VVdehk3NxA0fbxCpWMXW0SAJtNfc3hNkNEHL0VCcU7ybC5qK5D4S7tgZdKatPE8fxaf3jG/b552wRVg1uYsPITSAXlkyd5QqmF2sUttlZp1Ls3fRw1+ohza34B60BnvSnUkUrt9/TAx/9OBba4ZSBGaR2HMgPl3nFOxYMWd58rhjzyFUJMSGwnDLsr+wvD1Z6ousd54jNWvw9Id3XomthXyv9mT7nT30TFiRM0UVeJQvQ/S6d8zvsosxUopxpNhuF5gB4O6P/bBO2WJ7KL+ll9KHU2uGJhMiGHTDB2Pj14wtWCdT0XKhT9Ulqq2x1H61GWPhsItno8WkT8sdacDCzw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uvvQtessmyoYK1pqUcup3bTjRF4Sbj20I9i9NR9B7U8=;
- b=WR21UjmZDrDWBL2RqLFoh2DScktKx4/XbE8J6fnaPOPpx74O/opF1k9TVPWk2PFGQxnixcNTJLc9sUSWM5eMkzivo7tM9p7yRotRZohC7gCCRGf4GseLYdz1HXtHlv+hojTxn9kpCmKLRpuRW4YQwavf5PGCh7FTvaaD3ZqZ66ekar0ZOdVzp7mIwcZE9vHPfKOtS81Z6PNk/zkbKGJaIh67YROc9DnlKd441zURi7b0sOI9nwfqX6wqCUmQ9i6/ViS1oew5igYK0cM4KB97mwt90QGhmRHzCIJSxa+otGT8h2lVJnbGhN64B4u9dImNjBYXmVdEz1iOocgM84wXkw==
+ bh=MJIIpG5J/sZ/qkqMAjoO3Bcnzu1odC9OT6db7awLjKM=;
+ b=Jaa8yMOr/7wVvRc6yMeuNkUepijibvB05ZePN5vVqvWQsC8bTajkVpAN8jPIgAkX/DuNWIwAT+4v2JpjlsRfjWvIv+WKUyNyUa4OsaCRm0yEchQc25oxO46zeTpzx9heyFtHJN8I5xqzDHq29a17CcuwPTMkZdJtcqufrhX0ahVD7FckF8a8o2cYnjHfB/Gu+PrRbTcMTxXmPcy7OjJTUNy4yo1BfU3UO+ioCPvI9jwcgqmdqtydPJjtUNw+xbSwKec3Vup9+O/AnWZCFBDKQweeAYvx054IT3jWWJovHxGWE11JTvPeB0qGY1xpoTr9zFS1RIIL1Kj0vND0V89QHg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uvvQtessmyoYK1pqUcup3bTjRF4Sbj20I9i9NR9B7U8=;
- b=j+U68u+/yF/mHaBIjHHayW/Y3Cq8fBQa8SlwpOb7DYbD6+Nsj86NATjgBfnZceH/g4jJmG+1rgnOO38q0ecWHJMt7ryKWKFzGQdyJB+TypKPIyP7qO/8t9h1jWAOoPba04Abjes1zgUwV6z87T8cSKQQL8EsuEFz3AW2rVDs/lU=
+ bh=MJIIpG5J/sZ/qkqMAjoO3Bcnzu1odC9OT6db7awLjKM=;
+ b=Ro48sIZgt4Vy+GXtmgt805IIGzrgg5EE47sLIh85f4lkhGlDScs/X2KOXURJTVp/wJeUOFZ3KkA275tzEWQ5uMDgaB4W0XXPt+7kYDFrhYFbtwpvk3kEhINzQmmOYpvLYlzhYgyCRCeSMTxOrOeIR5D2ER2spojv3kBsJ1iuWW4=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
 Received: from SA2PR10MB4715.namprd10.prod.outlook.com (2603:10b6:806:fb::10)
- by SA2PR10MB4410.namprd10.prod.outlook.com (2603:10b6:806:fb::20) with
+ by SA2PR10MB4730.namprd10.prod.outlook.com (2603:10b6:806:117::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16; Wed, 27 Oct
- 2021 17:47:35 +0000
+ 2021 17:47:38 +0000
 Received: from SA2PR10MB4715.namprd10.prod.outlook.com
  ([fe80::6887:4e61:85f3:a83c]) by SA2PR10MB4715.namprd10.prod.outlook.com
  ([fe80::6887:4e61:85f3:a83c%7]) with mapi id 15.20.4649.015; Wed, 27 Oct 2021
- 17:47:35 +0000
+ 17:47:38 +0000
 From:   Nick Alcock <nick.alcock@oracle.com>
 To:     jeyu@kernel.org, masahiroy@kernel.org
 Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         arnd@arndb.de, eugene.loh@oracle.com, kris.van.hees@oracle.com
-Subject: [PATCH v5 5/7] kallsyms: optimize .kallsyms_modules*
-Date:   Wed, 27 Oct 2021 18:47:04 +0100
-Message-Id: <20211027174706.31010-6-nick.alcock@oracle.com>
+Subject: [PATCH v5 7/7] kallsyms: add reliable symbol size info
+Date:   Wed, 27 Oct 2021 18:47:06 +0100
+Message-Id: <20211027174706.31010-8-nick.alcock@oracle.com>
 X-Mailer: git-send-email 2.33.1.257.g9e0974a4e8
 In-Reply-To: <20211027174706.31010-1-nick.alcock@oracle.com>
 References: <20210929215154.300692-1-nick.alcock@oracle.com>
@@ -82,490 +82,428 @@ X-ClientProxiedBy: LO2P265CA0493.GBRP265.PROD.OUTLOOK.COM
  (2603:10a6:600:13a::18) To SA2PR10MB4715.namprd10.prod.outlook.com
  (2603:10b6:806:fb::10)
 MIME-Version: 1.0
-Received: from loom.srvr.nix (2001:8b0:1101:10::2) by LO2P265CA0493.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:13a::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15 via Frontend Transport; Wed, 27 Oct 2021 17:47:33 +0000
+Received: from loom.srvr.nix (2001:8b0:1101:10::2) by LO2P265CA0493.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:13a::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15 via Frontend Transport; Wed, 27 Oct 2021 17:47:37 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c05fec18-3bdc-4dfe-2a89-08d99971dc06
-X-MS-TrafficTypeDiagnostic: SA2PR10MB4410:
-X-Microsoft-Antispam-PRVS: <SA2PR10MB4410A754E5C561C5E37A4CF08B859@SA2PR10MB4410.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Office365-Filtering-Correlation-Id: 7a6f25a2-6f63-48ca-198e-08d99971ddeb
+X-MS-TrafficTypeDiagnostic: SA2PR10MB4730:
+X-Microsoft-Antispam-PRVS: <SA2PR10MB4730802C9F908EF289FB38358B859@SA2PR10MB4730.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aSUJloEzRx6Z1j/8jk5Dp/gu9zk5XXYHQX46/vCAqfxTGYCzfIvecTNM0zzPm+kyIY60OQZ9wMlbcmLy30qFglb3Ze3eTTz3X2m8OZ6rC3NiLwXh/eJGCbx9RE5lulyFIDg2H6YZx2zGMn1WdVEVuyz0GPwjtJwWwIjcrWvscDl21yDugRnGskC9fFi/EEFFSjnWKTBUAO7D+i6P0nU7F5bjcZxt3yHduNR3RRUW1khfNAK2+HfitnhFbI1tshhsQKJUN55EJQALh3WzNGS7QnUAVgKe8PjBiWAs40imLtdj9CkccBDe7rk8wNl+mldIvlY9ek3NCS1VGWxKSwK4YVarAVZDYiSFgLK601XZBWe+L1a/f8qVM6YYtBNgMm4JGTTmZCcrle+RIw1MjXzMFRzwiaaWABHCqhxmyAvntZPvrrTewBlItsoABykMP/gskbn7iIAyoJMkYAO9ZnnY56xNKaLGcD2bqCG1KS+G8X6OyDN5Y9k5hCI0YJFhb2x6IhAWbewxrs9/NM7qF05lp4pluIqhypyp3ThTg+VxVPvx/DQ1uzr89lfl05yIv7CuuadAtYUZ4AcpY9eRCvPq/nx8V6kCnqS4lpniKbs5hfxvV/IQYaTkvLAQOOuV+0qAPp++ecR47qMk9TXC50LZvFlasHSW0NHWPSummthckFnTHXWrX01C2cfa+9BqyyDSusT3wyNOV/ChYnrhPlbm2g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR10MB4715.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(316002)(107886003)(30864003)(6666004)(66476007)(44832011)(1076003)(66946007)(2616005)(5660300002)(38100700002)(8936002)(66556008)(4326008)(8676002)(2906002)(83380400001)(52116002)(186003)(6512007)(6506007)(508600001)(86362001)(36756003)(6486002)(142923001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: jIkwqSgSJ8MD1iulO0lXzQfwQx8ks8ykCgpGIDq0ZOk5KkeieUw4Qe8ulKWfjydh1vnFWWc4HsirBhE8yTtGfThdmlej1skQklmC41TCY7KPCo9T+wt196MA7oYetQF6BtpBFqRVxOOSLfW0CWBZq1FymkuV/yYbAjbWHXO6a908oAbtEAxESnKQRjzU0Gq+T299sy3njWEbqOwNHSFSnUcqGMPpaaQjSDhM4nLDh5OL3r8VeICfMo9g1xfU5dCqa0n0DXzAFO0AOU3qeJMUkGnt4eBNqGUZBRPkfRIpSyghptVc18AdBjhZA8/KVnhho+1TD2OMTqyxpncopwbI7dNfEyWXGdisJ2gXi6wNtK0wRScRm0zhZ080tgXG05Gsl353u5o2vryZ93Bb8n3vU5IcRWk+hnTA5VZnz4vAOtZCAe39GVjABjLnGscEObak/gOt+BHb8l7zY4QHLwL3kz8oj7a9Y1j2aup3cQxZSAFU+VUxj1DJSHZ2uX+ljH1ldxTvD8PDd8etaj9EBnxH4L5bDiFgtt6BrmyKgUNccDkF7s77sxu2GYkexKso4njaO/+angAPznDggCjUDRpWOQOG03x+giINgGfYSTE1pQ5SWkwxstK3SLp7IA/up5xOcplYIbbqTRQdrRiOvcDD1Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR10MB4715.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(107886003)(6666004)(1076003)(66556008)(36756003)(6506007)(2906002)(6512007)(86362001)(4326008)(6486002)(52116002)(66476007)(5660300002)(508600001)(66946007)(8936002)(30864003)(83380400001)(38100700002)(186003)(44832011)(316002)(8676002)(2616005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wxnmzWpJRkN8MZv0TqRZnCJJK7JIC1bCVrEQYZMOlByFUYS00x00MBkbI3wn?=
- =?us-ascii?Q?qwBLtkkgkFp9QrEwbT1rzcXmiWalPCU9OLYdfFPT3U1LsQT7o08/vFnDQ1ku?=
- =?us-ascii?Q?EJtzNcJufIpzrYEMunIQkSzZoCiRZLWSml/tB76tAWTX+NQlzwJAkU3U6VbZ?=
- =?us-ascii?Q?ktZAXrwCM0FhqLh7dRqhvguQcSYqENB8NZvFASSygzCT+N7orYCZNnvJ4n5L?=
- =?us-ascii?Q?1OlwdC1jyCTr9I2Y3XG8pFv8/CGb/mdZQHcQNJLd1+nrW0zPls7biCq4dMqs?=
- =?us-ascii?Q?R4I8lUm/kBgvig68yeW2jweC+Q8irB+vjdsavGxHw2Q70EHEpG3xO/ebBeRP?=
- =?us-ascii?Q?7vXQdwQHmjhzPAydcrmM/71jJ8/EWNFXiCGKZbRL2beI/gqKu3dXUBbKq66W?=
- =?us-ascii?Q?Qe5CzBE3pGLsDZhzFb+sTrVb6T2BHrXl21NahAEfbZfHSYAVTtysSFKnjH5i?=
- =?us-ascii?Q?xXsq7yKKXJfECU+zV2znEDS8dRH8wlSXx0n/K2RLf+UPXUuPUWX5FI9flpCk?=
- =?us-ascii?Q?K82vjKmZybwA59070onnMJIDriLcUlfrvOMGT3lkrujXV0ZOrW17zmNeGb9y?=
- =?us-ascii?Q?Zfx9fTewVg7HRha2tyTUnV1D90GnsGcB5uO/MSwwrG5XnbcUQgMHhD5NbJob?=
- =?us-ascii?Q?YRChjuy+Bmwejwdrh3iSHiCE6FnDAbjnlpqCyVHoUz+yitZAanmOOFCV/A3R?=
- =?us-ascii?Q?bp+1aKlsqjLYx6SLMjd/5ihBdQ7szfAxNiTATxyfiU6iOEnEFMrWTjwctPWA?=
- =?us-ascii?Q?GtuiGAbreqwAcm6wYpHssDwzArbv02RnHwDR2Oo5gm2lm5XnaihvrfEKR0Is?=
- =?us-ascii?Q?jAd0vuVckegdDZR3Qt10uBJOQz1r7iYFsyRXiBR326oK9Y8Xlcr8XRtntXGh?=
- =?us-ascii?Q?tVX6HHbYThOTKlOObNn8Q4Lun8+ZCbI0QFTaBcmuKlzlC/5dOylaTkMTsvZR?=
- =?us-ascii?Q?5/mySZMrE6K/al60t1J6Y+v7OthvsmKKnjzCva7jreVt9pIKyppF3YQyKuXD?=
- =?us-ascii?Q?5ip1yHSx1TVNm7eANvwvOOz0jZRjqceMFFoiU8tEaf5MmpfiDvjI8dH9FSB4?=
- =?us-ascii?Q?vlnsvhWXVdVJAEkJ3+MRz5SSL6jvE6JcJVi2LxDP/yj8Jg7AuidZN814oKDt?=
- =?us-ascii?Q?2OvzF/t+2e3qSSX+kESSYtjvDdUMGaKdIu7Alo1zguN3OoBfCKCcTX00R+2h?=
- =?us-ascii?Q?ezgxryX/j9ZeJ3WidWScllZNGulol7F+jxL9G0pkABNz0IKEk8qwndWymkbC?=
- =?us-ascii?Q?sxps4Zpcm9RAxOBMuiiDl6FCmnSEnI1UNFvIoZzvF2jB3QfzpQWQgG7c2VGs?=
- =?us-ascii?Q?SvFMxsQLSv+RwSOW3uk0lmjkQAuaoNefa6NkSTYzyVD0DrmgHMW+WMjUpFMW?=
- =?us-ascii?Q?GN8Hi9MdiSe1ECGUrRyCREKWLNjX+9oG1xJinUaq53jhWFhuXUxs28DwXuFJ?=
- =?us-ascii?Q?qLXyZFF/pXymEJZRWP+5Y0iIuUrMfpBB7rcammflbXt/G5QQUIAt7yovSjug?=
- =?us-ascii?Q?Ekf1cVV4UliqSSYoZyX5SYoCd7Dn6oSFYMlBCZQjwrangW+wOTfYTJT6yUR6?=
- =?us-ascii?Q?fhK3T058cjEe6zP/nfAFfvRMzFkQ+pysqJTAnaTkECmu7rtur2DALuhUha3k?=
- =?us-ascii?Q?MUlJ8D3ID/gLbSo0hFg370W/empPBBKT4yKv/kMO2OgL?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DY6CJcukuhiToj6Fm1/wr7L7ACiBamUCBf1VjTshrLyOn23zpDk9To79CheJ?=
+ =?us-ascii?Q?0FS2ia7NyhpGPnn49XywxRkLbHe4+fInUQUjJrnnOhZTp18Bncpm8KCMR/u3?=
+ =?us-ascii?Q?qd5WgH111w3fMwtFxTMChRo+PDx0HEWdwhNBioIEa20FjR2KJBUhzbD+3O8J?=
+ =?us-ascii?Q?gjFzfcpDfmtBnXebkQBWp15gCO4w7d9QgBS1N0TzlUUoZ0MkLrP9lXe0DvTi?=
+ =?us-ascii?Q?nxF1VvcFBArXZlVZDC38VaTcJm+6V0jMb6VWvKz5po8OXqAFaAF0qhEeL/Q1?=
+ =?us-ascii?Q?ZztkBMsvNQGlcs62lRMv2u36DjkqGHVj4eiGGj+iRjwp45QX2RHqAsT6pIMr?=
+ =?us-ascii?Q?Tqh9lzSjwhy9gT1Tu70Au3rQUw30vjz6MdYaSoSy4stxdErBWC2Nstg+n+ij?=
+ =?us-ascii?Q?nIkSqUGdBax3RwQ9xGKNvlphJbS5KH/TXXn7FS1DzhSyaAinm+8FA+e4YMQW?=
+ =?us-ascii?Q?40KoqGxQb1rtVLoMic29Aol0hIW2KJdAMvHP6P8Vb1CL8PcBqVRfEIb71hBu?=
+ =?us-ascii?Q?CunjgnZ5FrFZ8iIrBtMyaZy4DuHTCf1IgOuQ1yt5vva+63304RQmm12M42nc?=
+ =?us-ascii?Q?tLtD57OReEQi5xy35XN9kxQ0k8/YJNpyumRhZGFxlckHK9cySa70PWzQWIbA?=
+ =?us-ascii?Q?7idiqQXCSJlqUqY4tgezZKe+ObWEVTCaEwgQSSXJF8hSFIlx4F6DeNeWA6/X?=
+ =?us-ascii?Q?HptMM7W80YL9RXOS73ukcpjfesPQBDDOAjf916NYYJ6SSA7oG+9qsL/rld3S?=
+ =?us-ascii?Q?6yOXz3d0YQhI3vWtuB/DdT0X5LoMsQDWOtY05C8ReNBoT0e0evwyOH9WzU+D?=
+ =?us-ascii?Q?t/hzdptTvrrSLQsZSdHi1UcXr3VHbMEZ+IzL0Yc+H52jO8Ht9mSmcxjAOdAr?=
+ =?us-ascii?Q?T00kuj1NR99zPrQ1fCyyaq8tq8iAppwbknr/h/0Z/mZr+LPAzoatZTVl6h/w?=
+ =?us-ascii?Q?a+aklnbsHvgMMwaiLCI7ksX9hyx6cp5mAl0oW5KoRVUjT69FYkpmVAZZ3MY6?=
+ =?us-ascii?Q?CRTfBvpSB6nO0od8CutMSaIAlEWsfUh1qOQ+/krX/TdPWJViGRpR9kI05y72?=
+ =?us-ascii?Q?ZYDLx91WgIniGW+Ji3SJkZ6i2x4+4yLccTzvLh9lfr/cqJ6ANwK/Sxjw+iX3?=
+ =?us-ascii?Q?GKYIWrvovym7w2GHitUPcBUyMG6P15C46fmN5dYpfqoScKRPkJE86cTnE/OR?=
+ =?us-ascii?Q?B1msTYwOxT5ORi3EBHH3r9azUfXNe8xU1bwwvKL10IbIuS6O9bNW0mvYXC8l?=
+ =?us-ascii?Q?+63avI/GQSfKFptSFlOLlY+GjXT1Wr582fbP3zUqpiBIwNMpnT6/YLhZDu/z?=
+ =?us-ascii?Q?VPVSqdPwngJ0t7fxeM9UenCAswfGm9ySkXexIzy1AEcWqVEU22vY797DvDld?=
+ =?us-ascii?Q?sMsHSYA2K6Tvj9BJzw0pbcGdhIZU7YVVFYBG2lZGn6/Qylljl2pprs1LJQ64?=
+ =?us-ascii?Q?+To5xB4NWF/H1ul/xHXeOX4DuI8jh1y2r1SoSD3GjHu6+5Uwl4xTbJJCYNZJ?=
+ =?us-ascii?Q?rdZ0Uz2pLL3jHXuDrb/8N0NrPTMC+uL4Ih5cYjcBpYXRBsSeNoMt9jQc011N?=
+ =?us-ascii?Q?/dNr4hFPTeKDxGwmKNrgncKxmty/jF/ZeFkdG2IcjK/uvkNQ0ZURn1TLKMHh?=
+ =?us-ascii?Q?SIaWosD/zqtcrWNyDOEtQPT6D4Zn7lt5n5Rl9WSz1jzf?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c05fec18-3bdc-4dfe-2a89-08d99971dc06
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a6f25a2-6f63-48ca-198e-08d99971ddeb
 X-MS-Exchange-CrossTenant-AuthSource: SA2PR10MB4715.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2021 17:47:35.2466
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2021 17:47:38.5292
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GVbZ5piuYFdUzdhQzBUtFByGyzpZXWWVOPvN2svcmS0OY82DZ13wO07mqcvVDj8c6NOsX4BEc0Mvj5GhQ6yx6A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4410
+X-MS-Exchange-CrossTenant-UserPrincipalName: so7zOcbT2/FEwtDqw03BBTzPHKtJK8bAUV9aRZ6TBphwBtEncjUU0nXE5UaYOv9vbCQlIwKqnfv+oBUqoPqn1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4730
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10150 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
- bulkscore=0 phishscore=0 mlxscore=0 spamscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ adultscore=0 suspectscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2110270099
-X-Proofpoint-ORIG-GUID: 7SsDGp5qWhY14pe-WrrAl2mMqzcOBIZr
-X-Proofpoint-GUID: 7SsDGp5qWhY14pe-WrrAl2mMqzcOBIZr
+X-Proofpoint-GUID: i8K5H9AfOdWhCSoZDk-SxYcIW93GByI8
+X-Proofpoint-ORIG-GUID: i8K5H9AfOdWhCSoZDk-SxYcIW93GByI8
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-These symbols are terribly inefficiently stored at the moment.  Add a
-simple optimizer which fuses obj2mod_elem entries and uses this to
-implement three cheap optimizations:
+The existing mechanisms in get_symbol_pos to determine the end of a
+symbol is an inaccurate heuristic.  By passing nm -S output into
+scripts/kallsyms.c and writing the symbol sizes to a new .kallsyms_sizes
+section, we can get accurate sizes and sort the symbols accordingly,
+reliably sorting zero-size symbols first (on the grounds that they are
+usually e.g. section markers, and other symbols at the same address are
+conceptually contained within them and should be sorted after them),
+then larger symbols before smaller ones (so that overlapping symbols
+print the containing symbol first, before its containees).  We can
+also use this to improve aliased symbol detection.
 
- - duplicate names are eliminated from .kallsyms_module_names.
+Emit the size info as an extra column in /proc/kallmodsyms (since its
+format is not yet set in stone), and export it to iterator consumers.
 
- - entries in .kallsyms_modules which point at single-file modules which
-   also appear in a multi-module list are redirected to point inside
-   that list, and the single-file entry is dropped from
-   .kallsyms_module_names.  Thus, modules which contain some object
-   files shared with other modules and some object files exclusive to
-   them do not double up the module name.  (There might still be some
-   duplication between multiple multi-module lists, but this is an
-   extremely marginal size effect, and resolving it would require an
-   extra layer of lookup tables which would be even more complex, and
-   incompressible to boot).
+The notable downside of this is that the new .kallsyms_sizes is pretty
+big: a PTR per symbol, so vmlinux.o grows by almost a megabyte, though
+it compresses pretty well, so bzImage grows by only a megabyte.
 
- - Entries in .kallsyms_modules that would contain the same value after
-   the above optimizations are fused together, along with their
-   corresponding .kallsyms_module_addresses/offsets entries.  Due to
-   this fusion process, and because object files can be split apart into
-   multiple parts by the linker for hot/cold partitioning and the like,
-   entries in .kallsyms_module_addresses/offsets no longer correspond
-   1:1 to object files, but more to some contiguous range of addresses
-   which are guaranteed to belong to a single built-in module, but which
-   may well stretch over multiple object files.
+I'm not sure how to reduce this (perhaps using an array with elements
+sized to be no larger than needed for the contents, so that almost
+always two-byte entries would do? except that in my test kernel two
+symbols are bigger than this: sme_workarea, at 400K, and __log_buf, at
+100K: the latter seems often likely to be larger than 64K).  A simple
+scheme to reduce this would be to split the sizes array into several
+arrays with differently-sized elements, and run-length-compress away the
+zero bytes -- but that's not implemented yet, and might never be if
+people think the whole idea of this is pointless.
 
-The optimizer's time complexity is O(log n) in the number of objfiles at
-most (and probably much lower), so, given the relatively low number of
-objfiles, its runtime overhead is in the noise.
-
-Optimization reduces the overhead of the kallmodsyms tables by about
-7500 items, dropping the .tmp_kallsyms2.o object file size by about
-33KiB, leaving it 8672 bytes larger than before: a gain of .4%.
-
-The vmlinux size is not yet affected because the variables are not used
-and are eliminated by the linker: but if they were used (after the next
-commit), the size impact of all of this on the final kernel is minimal:
-in my testing, the kallsyms2.S file went from 14107772 to 14137245
-bytes, a gain of 29743 bytes, or 0.16%: vmlinux gained 10824 bytes, a
-gain of .017%, and the compressed vmlinux only 7552 bytes, a gain of
-.08%: though the latter two values are very configuration-dependent,
-they seem likely to scale roughly with the kernel they are part of.
+In the absence of a way to shrink things, this should probably be hidden
+behind a new config symbol if exposed at all, and kallmodsyms just shows
+zero sizes if it's configured out (but this is enough of an RFC that
+that's not yet done: possibly the benefits of this are too marginal to
+be worth it, even if they do let kall(mod)syms consumers distinguish
+symbols from padding, which was previously impossible).
 
 Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+Signed-off-by: Eugene Loh <eugene.loh@oracle.com>
 ---
- scripts/kallsyms.c | 267 +++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 258 insertions(+), 9 deletions(-)
+ include/linux/module.h  |  7 ++--
+ kernel/kallsyms.c       | 74 ++++++++++++++++++++++-------------------
+ kernel/module.c         |  4 ++-
+ scripts/kallsyms.c      | 29 +++++++++++++---
+ scripts/link-vmlinux.sh |  7 +++-
+ 5 files changed, 77 insertions(+), 44 deletions(-)
 
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 8f87b724d0fa..93fdf0dcf587 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -85,6 +85,17 @@ static unsigned int strhash(const char *s)
- 	return hash;
+diff --git a/include/linux/module.h b/include/linux/module.h
+index c9f1200b2312..b58f2de48957 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -590,7 +590,8 @@ struct module *find_module(const char *name);
+ /* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
+    symnum out of range. */
+ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+-			char *name, char *module_name, int *exported);
++		       char *name, char *module_name, unsigned long *size,
++		       int *exported);
+ 
+ /* Look for this name: can be of form module:name. */
+ unsigned long module_kallsyms_lookup_name(const char *name);
+@@ -768,8 +769,8 @@ static inline int lookup_module_symbol_attrs(unsigned long addr, unsigned long *
  }
  
-+static unsigned int memhash(char *s, size_t len)
-+{
-+	/* fnv32 hash */
-+	unsigned int hash = 2166136261U;
-+	size_t i;
-+
-+	for (i = 0; i < len; i++)
-+		hash = (hash ^ *(s + i)) * 0x01000193;
-+	return hash;
-+}
-+
- #define OBJ2MOD_BITS 10
- #define OBJ2MOD_N (1 << OBJ2MOD_BITS)
- #define OBJ2MOD_MASK (OBJ2MOD_N - 1)
-@@ -94,14 +105,24 @@ struct obj2mod_elem {
- 	size_t nmods;			/* number of modules in "mods" */
- 	size_t mods_size;		/* size of all mods together */
- 	int mod_offset;			/* offset in .kallsyms_module_names */
-+	/*
-+	 * If set at emission time, this points at another obj2mod entry that
-+	 * contains the module name we need (possibly at a slightly later
-+	 * offset, if the entry is for an objfile that appears in many modules).
-+	 */
-+	struct obj2mod_elem *xref;
- 	struct obj2mod_elem *obj2mod_next;
-+	struct obj2mod_elem *mod2obj_next;
- };
- 
- /*
-- * Map from object files to obj2mod entries (a unique mapping).
-+ * Map from object files to obj2mod entries (a unique mapping), and vice versa
-+ * (not unique, but entries for objfiles in more than one module in this hash
-+ * are ignored).
+ static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
+-					char *type, char *name,
+-					char *module_name, int *exported)
++				     char *type, char *name, char *module_name,
++				     unsigned long *size, int *exported)
+ {
+ 	return -ERANGE;
+ }
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 38109bb02bef..c87a593b40ea 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -36,6 +36,7 @@
   */
- 
- static struct obj2mod_elem *obj2mod[OBJ2MOD_N];
-+static struct obj2mod_elem *mod2obj[OBJ2MOD_N];
- static size_t num_objfiles;
+ extern const unsigned long kallsyms_addresses[] __weak;
+ extern const int kallsyms_offsets[] __weak;
++extern const unsigned long kallsyms_sizes[] __weak;
+ extern const u8 kallsyms_names[] __weak;
  
  /*
-@@ -143,6 +164,8 @@ static void obj2mod_add(char *obj, char *mod)
- 
- 	elem = obj2mod_get(obj);
- 	if (!elem) {
-+		int j = strhash(mod) & OBJ2MOD_MASK;
-+
- 		elem = malloc(sizeof(struct obj2mod_elem));
- 		if (!elem)
- 			goto oom;
-@@ -156,8 +179,15 @@ static void obj2mod_add(char *obj, char *mod)
- 
- 		elem->obj2mod_next = obj2mod[i];
- 		obj2mod[i] = elem;
-+		elem->mod2obj_next = mod2obj[j];
-+		mod2obj[j] = elem;
- 		num_objfiles++;
- 	} else {
-+		/*
-+		 * TU appears in multiple modules.  mod2obj for this entry will
-+		 * be ignored from now on, except insofar as it is needed to
-+		 * maintain the hash chain.
-+		 */
- 		elem->mods = realloc(elem->mods, elem->mods_size +
- 				     strlen(mod) + 1);
- 		if (!elem->mods)
-@@ -177,6 +207,164 @@ static void obj2mod_add(char *obj, char *mod)
- 	fprintf(stderr, "kallsyms: out of memory\n");
- 	exit(1);
+@@ -257,12 +258,24 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
  }
-+
+ #endif /* CONFIG_LIVEPATCH */
+ 
 +/*
-+ * Used inside optimize_obj2mod to identify duplicate module entries.
++ * The caller passes in an address, and we return an index to the symbol --
++ * potentially also size and offset information.
++ * But an address might map to multiple symbols because:
++ *   - some symbols might have zero size
++ *   - some symbols might be aliases of one another
++ *   - some symbols might span (encompass) others
++ * The symbols should already be ordered so that, for a particular address,
++ * we first have the zero-size ones, then the biggest, then the smallest.
++ * So we find the index by:
++ *   - finding the last symbol with the target address
++ *   - backing the index up so long as both the address and size are unchanged
 + */
-+struct obj2mod_modhash_elem {
-+	struct obj2mod_elem *elem;
-+	unsigned int modhash;		/* hash value of this entry */
-+};
-+
-+static int qstrcmp(const void *a, const void *b)
-+{
-+	return strcmp((const char *) a, (const char *) b);
-+}
-+
-+static int qmodhash(const void *a, const void *b)
-+{
-+	const struct obj2mod_modhash_elem *el_a = a;
-+	const struct obj2mod_modhash_elem *el_b = b;
-+	if (el_a->modhash < el_b->modhash)
-+		return -1;
-+	else if (el_a->modhash > el_b->modhash)
-+		return 1;
-+	return 0;
-+}
-+
-+/*
-+ * Associate all TUs in obj2mod which refer to the same module with a single
-+ * obj2mod entry for emission, preferring to point into the module list in a
-+ * multi-module objfile.
-+ */
-+static void optimize_obj2mod(void)
-+{
-+	size_t i;
-+	size_t n = 0;
-+	struct obj2mod_elem *elem;
-+	struct obj2mod_elem *dedup;
-+	/* An array of all obj2mod_elems, later sorted by hashval.  */
-+	struct obj2mod_modhash_elem *uniq;
-+	struct obj2mod_modhash_elem *last;
-+
-+	/*
-+	 * Canonicalize all module lists by sorting them, then compute their
-+	 * hash values.
-+	 */
-+	uniq = malloc(sizeof(struct obj2mod_modhash_elem) * num_objfiles);
-+	if (uniq == NULL)
-+		goto oom;
-+
-+	for (i = 0; i < OBJ2MOD_N; i++) {
-+		for (elem = obj2mod[i]; elem; elem = elem->obj2mod_next) {
-+			if (elem->nmods >= 2) {
-+				char **sorter;
-+				char *walk;
-+				char *tmp_mods;
-+				size_t j;
-+
-+				tmp_mods = malloc(elem->mods_size);
-+				sorter = malloc(sizeof(char *) * elem->nmods);
-+				if (sorter == NULL || tmp_mods == NULL)
-+					goto oom;
-+				memcpy(tmp_mods, elem->mods, elem->mods_size);
-+
-+				for (j = 0, walk = tmp_mods; j < elem->nmods;
-+				     j++) {
-+					sorter[j] = walk;
-+					walk += strlen(walk) + 1;
-+				}
-+				qsort(sorter, elem->nmods, sizeof (char *),
-+				      qstrcmp);
-+				for (j = 0, walk = elem->mods; j < elem->nmods;
-+				     j++) {
-+					strcpy(walk, sorter[j]);
-+					walk += strlen(walk) + 1;
-+				}
-+				free(tmp_mods);
-+				free(sorter);
-+			}
-+
-+			uniq[n].elem = elem;
-+			uniq[n].modhash = memhash(elem->mods, elem->mods_size);
-+			n++;
-+		}
-+	}
-+
-+	qsort (uniq, num_objfiles, sizeof (struct obj2mod_modhash_elem),
-+	       qmodhash);
-+
-+	/*
-+	 * Work over multimodule entries.  These must be emitted into
-+	 * .kallsyms_module_names as a unit, but we can still optimize by
-+	 * reusing some other identical entry.  Single-file modules are amenable
-+	 * to the same optimization, but we avoid doing it for now so that we
-+	 * can prefer to point them directly inside a multimodule entry.
-+	 */
-+	for (i = 0, last = NULL; i < num_objfiles; i++) {
-+		const char *onemod;
-+		size_t j;
-+
-+		if (uniq[i].elem->nmods < 2)
-+			continue;
-+
-+		/* Duplicate multimodule.  Reuse the first we saw.  */
-+		if (last != NULL && last->modhash == uniq[i].modhash) {
-+			uniq[i].elem->xref = last->elem;
-+			continue;
-+		}
-+
-+		/*
-+		 * Single-module entries relating to modules also emitted as
-+		 * part of this multimodule entry can refer to it: later, we
-+		 * will hunt down the right specific module name within this
-+		 * multimodule entry and point directly to it.
-+		 */
-+		onemod = uniq[i].elem->mods;
-+		for (j = uniq[i].elem->nmods; j > 0; j--) {
-+			int h = strhash(onemod) & OBJ2MOD_MASK;
-+
-+			for (dedup = mod2obj[h]; dedup;
-+			     dedup = dedup->mod2obj_next) {
-+				if (dedup->nmods > 1)
-+					continue;
-+
-+				if (strcmp(dedup->mods, onemod) != 0)
-+					continue;
-+				dedup->xref = uniq[i].elem;
-+				assert (uniq[i].elem->xref == NULL);
-+			}
-+			onemod += strlen(onemod) + 1;
-+		}
-+
-+		last = &uniq[i];
-+	}
-+
-+	/*
-+	 * Now traverse all single-module entries, xreffing every one that
-+	 * relates to a given module to the first one we saw that refers to that
-+	 * module.
-+	 */
-+	for (i = 0, last = NULL; i < num_objfiles; i++) {
-+		if (uniq[i].elem->nmods > 1)
-+			continue;
-+
-+		if (uniq[i].elem->xref != NULL)
-+			continue;
-+
-+		/* Duplicate module name.  Reuse the first we saw.  */
-+		if (last != NULL && last->modhash == uniq[i].modhash) {
-+			uniq[i].elem->xref = last->elem;
-+			assert (last->elem->xref == NULL);
-+			continue;
-+		}
-+		last = &uniq[i];
-+	}
-+	return;
-+oom:
-+	fprintf(stderr, "kallsyms: out of memory optimizing module list\n");
-+	exit(EXIT_FAILURE);
-+}
- #endif /* CONFIG_KALLMODSYMS */
+ static unsigned long get_symbol_pos(unsigned long addr,
+ 				    unsigned long *symbolsize,
+ 				    unsigned long *offset)
+ {
+-	unsigned long symbol_start = 0, symbol_end = 0;
+-	unsigned long i, low, high, mid;
++	unsigned long low, high, mid;
  
- static void usage(void)
-@@ -479,7 +667,7 @@ static void output_kallmodsyms_modules(void)
- 	size_t i;
- 
- 	/*
--	 * Traverse and emit, updating mod_offset accordingly.
-+	 * Traverse and emit, chasing xref and updating mod_offset accordingly.
- 	 * Emit a single \0 at the start, to encode non-modular objfiles.
- 	 */
- 	output_label("kallsyms_module_names");
-@@ -489,9 +677,15 @@ static void output_kallmodsyms_modules(void)
- 		     elem = elem->obj2mod_next) {
- 			const char *onemod;
- 			size_t i;
-+			struct obj2mod_elem *out_elem = elem;
- 
--			elem->mod_offset = offset;
--			onemod = elem->mods;
-+			if (elem->xref)
-+				out_elem = elem->xref;
-+			if (out_elem->mod_offset != 0)
-+				continue;	/* Already emitted.  */
-+
-+			out_elem->mod_offset = offset;
-+			onemod = out_elem->mods;
- 
- 			/*
- 			 * Technically this is a waste of space: we could just
-@@ -500,13 +694,13 @@ static void output_kallmodsyms_modules(void)
- 			 * entry, but doing it this way makes it more obvious
- 			 * when an entry is a multimodule entry.
- 			 */
--			if (elem->nmods != 1) {
-+			if (out_elem->nmods != 1) {
- 				printf("\t.byte\t0\n");
--				printf("\t.byte\t%zi\n", elem->nmods);
-+				printf("\t.byte\t%zi\n", out_elem->nmods);
- 				offset += 2;
- 			}
- 
--			for (i = elem->nmods; i > 0; i--) {
-+			for (i = out_elem->nmods; i > 0; i--) {
- 				printf("\t.asciz\t\"%s\"\n", onemod);
- 				offset += strlen(onemod) + 1;
- 				onemod += strlen(onemod) + 1;
-@@ -533,6 +727,13 @@ static void output_kallmodsyms_objfiles(void)
- 		long long offset;
- 		int overflow;
- 
-+                /*
-+                 * Fuse consecutive address ranges citing the same object file
-+                 * into one.
-+                 */
-+                if (i > 0 && addrmap[i-1].objfile == addrmap[i].objfile)
-+                        continue;
-+
- 		if (base_relative) {
- 			if (!absolute_percpu) {
- 				offset = addrmap[i].addr - relative_base;
-@@ -558,6 +759,13 @@ static void output_kallmodsyms_objfiles(void)
- 
- 	for (i = 0; i < addrmap_num; i++) {
- 		struct obj2mod_elem *elem = addrmap[i].objfile;
-+		int orig_nmods;
-+		const char *orig_modname;
-+		int mod_offset;
-+
-+		if (i > 0 && addrmap[i-1].objfile == addrmap[i].objfile)
-+			continue;
-+
- 		/*
- 		 * Address range cites no object file: point at 0, the built-in
- 		 * module.
-@@ -568,13 +776,53 @@ static void output_kallmodsyms_objfiles(void)
- 			continue;
- 		}
- 
-+		orig_nmods = elem->nmods;
-+		orig_modname = elem->mods;
-+
-+		/*
-+		 * Chase down xrefs, if need be.  There can only be one layer of
-+		 * these: from single-module entry to other single-module entry,
-+		 * or from single- or multi-module entry to another multi-module
-+		 * entry.  Single -> single and multi -> multi always points at
-+		 * the start of the xref target, so its offset can be used as is.
-+		 */
-+		if (elem->xref)
-+			elem = elem->xref;
-+
-+		if (elem->nmods == 1 || orig_nmods > 1)
-+			mod_offset = elem->mod_offset;
-+		else {
-+			/*
-+			 * If this is a reference from a single-module entry to
-+			 * a multi-module entry, hunt down the offset to this
-+			 * specific module's name (which is guaranteed to be
-+			 * present: see optimize_obj2mod).
-+			 */
-+
-+			size_t j = elem->nmods;
-+			const char *onemod = elem->mods;
-+			mod_offset = elem->mod_offset;
-+
-+			for (; j > 0; j--) {
-+				if (strcmp(orig_modname, onemod) == 0)
-+					break;
-+				onemod += strlen(onemod) + 1;
-+			}
-+			assert (j > 0);
-+			/*
-+			 * +2 to skip the null byte and count at the start of
-+			 * the multimodule entry.
-+			 */
-+			mod_offset += onemod - elem->mods + 2;
-+		}
-+
- 		/*
- 		 * Zero offset is the initial \0, there to catch uninitialized
- 		 * obj2mod entries, and is forbidden.
- 		 */
--		assert (elem->mod_offset != 0);
-+		assert (mod_offset != 0);
- 
--		printf("\t.long\t0x%x\n", elem->mod_offset);
-+		printf("\t.long\t0x%x\n", mod_offset);
- 		emitted_objfiles++;
+ 	/* This kernel should never had been booted. */
+ 	if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
+@@ -283,36 +296,17 @@ static unsigned long get_symbol_pos(unsigned long addr,
  	}
  
-@@ -1093,6 +1341,7 @@ static void read_modules(const char *modules_builtin)
+ 	/*
+-	 * Search for the first aliased symbol. Aliased
+-	 * symbols are symbols with the same address.
++	 * Search for the first aliased symbol.
+ 	 */
+-	while (low && kallsyms_sym_address(low-1) == kallsyms_sym_address(low))
++	while (low
++	    && kallsyms_sym_address(low-1) == kallsyms_sym_address(low)
++	    && kallsyms_sizes[low-1] == kallsyms_sizes[low])
+ 		--low;
  
- 	free(module_name);
- 	modules_thick_iter_free(i);
-+	optimize_obj2mod();
+-	symbol_start = kallsyms_sym_address(low);
+-
+-	/* Search for next non-aliased symbol. */
+-	for (i = low + 1; i < kallsyms_num_syms; i++) {
+-		if (kallsyms_sym_address(i) > symbol_start) {
+-			symbol_end = kallsyms_sym_address(i);
+-			break;
+-		}
+-	}
+-
+-	/* If we found no next symbol, we use the end of the section. */
+-	if (!symbol_end) {
+-		if (is_kernel_inittext(addr))
+-			symbol_end = (unsigned long)_einittext;
+-		else if (IS_ENABLED(CONFIG_KALLSYMS_ALL))
+-			symbol_end = (unsigned long)_end;
+-		else
+-			symbol_end = (unsigned long)_etext;
+-	}
+-
+ 	if (symbolsize)
+-		*symbolsize = symbol_end - symbol_start;
++		*symbolsize = kallsyms_sizes[low];
+ 	if (offset)
+-		*offset = addr - symbol_start;
++		*offset = addr - kallsyms_sym_address(low);
+ 
+ 	return low;
+ }
+@@ -633,6 +627,7 @@ struct kallsym_iter {
+ 	loff_t pos_bpf_end;
+ 	unsigned long value;
+ 	unsigned int nameoff; /* If iterating in core kernel symbols. */
++	unsigned long size;
+ 	char type;
+ 	char name[KSYM_NAME_LEN];
+ 	char module_name[MODULE_NAME_LEN];
+@@ -667,7 +662,7 @@ static int get_ksymbol_mod(struct kallsym_iter *iter)
+ 	int ret = module_get_kallsym(iter->pos - iter->pos_arch_end,
+ 				     &iter->value, &iter->type,
+ 				     iter->name, iter->module_name,
+-				     &iter->exported);
++				     &iter->size, &iter->exported);
+ 	iter->builtin_module_names = NULL;
+ 
+ 	if (ret < 0) {
+@@ -740,6 +735,7 @@ static unsigned long get_ksymbol_core(struct kallsym_iter *iter, int kallmodsyms
+ 	iter->exported = 0;
+ 	iter->value = kallsyms_sym_address(iter->pos);
+ 
++	iter->size = kallsyms_sizes[iter->pos];
+ 	iter->type = kallsyms_get_symbol_type(off);
+ 
+ 	iter->module_name[0] = '\0';
+@@ -858,12 +854,14 @@ static int s_show_internal(struct seq_file *m, void *p, int kallmodsyms)
+ {
+ 	void *value;
+ 	struct kallsym_iter *iter = m->private;
++	unsigned long size;
+ 
+ 	/* Some debugging symbols have no name.  Ignore them. */
+ 	if (!iter->name[0])
+ 		return 0;
+ 
+ 	value = iter->show_value ? (void *)iter->value : NULL;
++	size = iter->show_value ? iter->size : 0;
  
  	/*
- 	 * Read linker map.
+ 	 * Real module, or built-in module and /proc/kallsyms being shown.
+@@ -883,15 +881,15 @@ static int s_show_internal(struct seq_file *m, void *p, int kallmodsyms)
+ 			 * /proc/kallmodsyms, built as a module.
+ 			 */
+ 			if (iter->builtin_module_names == NULL)
+-				seq_printf(m, "%px %c %s\t[%s]\n", value,
+-					   type, iter->name,
++				seq_printf(m, "%px %lx %c %s\t[%s]\n", value,
++					   size, type, iter->name,
+ 					   iter->module_name);
+ 			/*
+ 			 * /proc/kallmodsyms, single-module symbol.
+ 			 */
+ 			else if (*iter->builtin_module_names != '\0')
+-				seq_printf(m, "%px %c %s\t[%s]\n", value,
+-					   type, iter->name,
++				seq_printf(m, "%px %lx %c %s\t[%s]\n", value,
++					   size, type, iter->name,
+ 					   iter->builtin_module_names);
+ 			/*
+ 			 * /proc/kallmodsyms, multimodule symbol.  Formatted
+@@ -902,8 +900,8 @@ static int s_show_internal(struct seq_file *m, void *p, int kallmodsyms)
+ 				size_t i = *(char *)(iter->builtin_module_names + 1);
+ 				const char *walk = iter->builtin_module_names + 2;
+ 
+-				seq_printf(m, "%px %c %s\t[%s]", value,
+-					   type, iter->name, walk);
++				seq_printf(m, "%px %lx %c %s\t[%s]", value,
++					   size, type, iter->name, walk);
+ 
+                                 while (--i > 0) {
+ 					walk += strlen(walk) + 1;
+@@ -915,7 +913,13 @@ static int s_show_internal(struct seq_file *m, void *p, int kallmodsyms)
+ #endif /* CONFIG_KALLMODSYMS */
+ 			seq_printf(m, "%px %c %s\t[%s]\n", value,
+ 				   type, iter->name, iter->module_name);
+-	} else
++	/*
++	 * Non-modular, /proc/kallmodsyms -> print size.
++	 */
++	} else if (kallmodsyms)
++		seq_printf(m, "%px %lx %c %s\n", value, size,
++			   iter->type, iter->name);
++	else
+ 		seq_printf(m, "%px %c %s\n", value,
+ 			   iter->type, iter->name);
+ 	return 0;
+diff --git a/kernel/module.c b/kernel/module.c
+index 40ec9a030eec..3653a7de9b41 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -4368,7 +4368,8 @@ int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size,
+ }
+ 
+ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+-			char *name, char *module_name, int *exported)
++		       char *name, char *module_name, unsigned long *size,
++		       int *exported)
+ {
+ 	struct module *mod;
+ 
+@@ -4387,6 +4388,7 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+ 			strlcpy(name, kallsyms_symbol_name(kallsyms, symnum), KSYM_NAME_LEN);
+ 			strlcpy(module_name, mod->name, MODULE_NAME_LEN);
+ 			*exported = is_exported(name, *value, mod);
++			*size = kallsyms->symtab[symnum].st_size;
+ 			preempt_enable();
+ 			return 0;
+ 		}
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 93fdf0dcf587..fcb1d706809c 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -5,7 +5,7 @@
+  * This software may be used and distributed according to the terms
+  * of the GNU General Public License, incorporated herein by reference.
+  *
+- * Usage: nm -n vmlinux
++ * Usage: nm -n -S vmlinux
+  *        | scripts/kallsyms [--all-symbols] [--absolute-percpu]
+  *             [--base-relative] [--builtin=modules_thick.builtin]
+  *        > symbols.S
+@@ -38,6 +38,7 @@
+ 
+ struct sym_entry {
+ 	unsigned long long addr;
++	unsigned long long size;
+ 	unsigned int len;
+ 	unsigned int start_pos;
+ 	unsigned int percpu_absolute;
+@@ -394,6 +395,7 @@ static bool is_ignored_symbol(const char *name, char type)
+ 		"kallsyms_addresses",
+ 		"kallsyms_offsets",
+ 		"kallsyms_relative_base",
++		"kallsyms_sizes",
+ 		"kallsyms_num_syms",
+ 		"kallsyms_num_modules",
+ 		"kallsyms_names",
+@@ -507,10 +509,11 @@ static struct sym_entry *read_symbol(FILE *in)
+ 	unsigned long long addr;
+ 	unsigned int len;
+ 	struct sym_entry *sym;
+-	int rc;
++	int rc = 0;
++	unsigned long long size;
+ 
+-	rc = fscanf(in, "%llx %c %499s\n", &addr, &type, name);
+-	if (rc != 3) {
++	rc = fscanf(in, "%llx %llx %c %499s\n", &addr, &size, &type, name);
++	if (rc != 4) {
+ 		if (rc != EOF && fgets(name, 500, in) == NULL)
+ 			fprintf(stderr, "Read error or end of file.\n");
+ 		return NULL;
+@@ -548,6 +551,7 @@ static struct sym_entry *read_symbol(FILE *in)
+ 	sym->sym[0] = type;
+ 	strcpy(sym_name(sym), name);
+ 	sym->percpu_absolute = 0;
++	sym->size = size;
+ 
+ 	return sym;
+ }
+@@ -932,6 +936,11 @@ static void write_src(void)
+ 		printf("\n");
+ 	}
+ 
++	output_label("kallsyms_sizes");
++	for (i = 0; i < table_cnt; i++)
++		printf("\tPTR\t%#llx\n", table[i]->size);
++	printf("\n");
++
+ #ifdef CONFIG_KALLMODSYMS
+ 	output_kallmodsyms_modules();
+ 	output_kallmodsyms_objfiles();
+@@ -1189,6 +1198,18 @@ static int compare_symbols(const void *a, const void *b)
+ 	if (sa->addr < sb->addr)
+ 		return -1;
+ 
++	/* zero-size markers before nonzero-size symbols */
++	if (sa->size > 0 && sb->size == 0)
++		return 1;
++	if (sa->size == 0 && sb->size > 0)
++		return -1;
++
++	/* sort by size (large size preceding symbols it encompasses) */
++	if (sa->size < sb->size)
++		return 1;
++	if (sa->size > sb->size)
++		return -1;
++
+ 	/* sort by "weakness" type */
+ 	wa = (sa->sym[0] == 'w') || (sa->sym[0] == 'W');
+ 	wb = (sb->sym[0] == 'w') || (sb->sym[0] == 'W');
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index a30075c14a25..c780f2a5d10c 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -274,7 +274,12 @@ kallsyms()
+ 	fi
+ 
+ 	info KSYMS ${2}
+-	${NM} -n ${1} | scripts/kallsyms ${kallsymopt} > ${2}
++	# "nm -S" does not print symbol size when size is 0
++	# Therefore use awk to regularize the data:
++	#   - when there are only three fields, add an explicit "0"
++	#   - when there are already four fields, pass through as is
++	${NM} -n -S ${1} | ${AWK} 'NF==3 {print $1, 0, $2, $3}; NF==4' | \
++	    scripts/kallsyms ${kallsymopt} > ${2}
+ }
+ 
+ # Perform one step in kallsyms generation, including temporary linking of
 -- 
 2.33.0.256.gb827f06fa9
 
