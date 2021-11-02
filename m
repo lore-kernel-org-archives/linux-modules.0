@@ -2,276 +2,426 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A576CC433EF
-	for <linux-modules@archiver.kernel.org>; Sat, 30 Oct 2021 16:49:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB16FC433F5
+	for <linux-modules@archiver.kernel.org>; Tue,  2 Nov 2021 18:39:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 78E0860F23
-	for <linux-modules@archiver.kernel.org>; Sat, 30 Oct 2021 16:49:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A60066103C
+	for <linux-modules@archiver.kernel.org>; Tue,  2 Nov 2021 18:39:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbhJ3QwS (ORCPT
+        id S235452AbhKBSl6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 30 Oct 2021 12:52:18 -0400
-Received: from mga04.intel.com ([192.55.52.120]:44481 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229734AbhJ3QwR (ORCPT <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 30 Oct 2021 12:52:17 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10153"; a="229558961"
-X-IronPort-AV: E=Sophos;i="5.87,195,1631602800"; 
-   d="gz'50?scan'50,208,50";a="229558961"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2021 09:49:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,195,1631602800"; 
-   d="gz'50?scan'50,208,50";a="666151706"
-Received: from lkp-server02.sh.intel.com (HELO c20d8bc80006) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 30 Oct 2021 09:49:43 -0700
-Received: from kbuild by c20d8bc80006 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mgrY7-0001an-0Z; Sat, 30 Oct 2021 16:49:43 +0000
-Date:   Sun, 31 Oct 2021 00:49:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Alcock <nick.alcock@oracle.com>, jeyu@kernel.org,
-        masahiroy@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de, eugene.loh@oracle.com,
+        Tue, 2 Nov 2021 14:41:58 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:60608 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235445AbhKBSl6 (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Tue, 2 Nov 2021 14:41:58 -0400
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A2IJ5fv007858;
+        Tue, 2 Nov 2021 18:39:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=7TXkWjpwrWe/ryW7X7pOUfExes4pJxwOTKjx9YlON5k=;
+ b=BmbK4kYmZnkN4p6xW7IjH/fmCsBJBZy37CSjB7tCRiCKL2mpPSw4b8Y4h7430eWn73LO
+ aiL0HUvN8+f7MXc5g2Kf0r8uiooVvs9ow7Vokj+6+48CxjBshp4RLrA0kkB+V60VBuJ5
+ gbuMG1IUsV12A6tveBobn91RXnoWnkq0F8t5N5lD2hv5JtZ+8p9C8e6CWwz6Ckmz8Mum
+ 6FhyQIyUhY8peB5mbz2jw0yHAWZ7ROP4AisQD5aRWdSSIIgkmIB89/hr0SO4vcsatoJr
+ K7RVV7IGxQFcgXJ09dy6+1uJmya97sLH7F17pdTYCyucoDLJrxSqTrYw+nw9W2eUACi6 rQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3c26e8hebg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 02 Nov 2021 18:39:18 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1A2IKKU2110028;
+        Tue, 2 Nov 2021 18:39:17 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2041.outbound.protection.outlook.com [104.47.66.41])
+        by userp3020.oracle.com with ESMTP id 3c1khu13pm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 02 Nov 2021 18:39:17 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gm4GT2gBkGc3DdIbZymmZL2aHdJFoFuWw1Scy0grkdMftU2ZvWLIuWyhPJHYsB1ZnBze0ca6QRLVTTopmIWk7yudR6oqD3QInwdAlDcQxlfbIYZXMH0/fbtYUfj/EGsi0qC18VJEJQewAYoZXyD3SDa+pT06gc46DNbwOnSKvrIAYzsXOQT+fl3yuyWRo6gt6V1nQe4VpImUzKO1CmYZmBLj+TsPp+1+Zu+IyoF+7HVbfPRMnQ8iReTcQ+nDubhNF8e5a/iJsYibrZ1ka9ILap8DDpDbUwR0hQv0t844q7+sGtzbRcsMsohKT8rLRFVuOlNTArmoEaq+jq+jchX5bA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7TXkWjpwrWe/ryW7X7pOUfExes4pJxwOTKjx9YlON5k=;
+ b=N9h1K35aG8Q1cbx3HXByY+7CiNGSLPCq9Ey35HT0AiT8POiYYOrWxaphlNkbDgvVn8V/a+3aHh4vmnpiAQIRa1Krttb7afjRsG2RbXidT5C2VGvkS+7wLpnP7AOtt4meyJlob1HDLYn8ckHz0GuzHtiVS28uTTsCJ+W1rG1idZjZFF1KKdiDdJIXKenKG4EVjceQjYi99fhKjJzXDAlHhOgp5ghilj5oEjzX22CKJTZEvyzlsqtRGCbA62N5SE2Dc3Jl9UkaQp72XiIKaS1psq1WgIPGoF1b1pCdvF3OkgcF9xxiEXMxAIGeax9gXDaHD2uHpyXjVQV0n9FJ645GOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7TXkWjpwrWe/ryW7X7pOUfExes4pJxwOTKjx9YlON5k=;
+ b=ZgCkpiPk5hzR4H3KtgtQ5rzI0UG45SQDE4DvKTHJ0SciPCtNPhm0aopwNQRhyHJQzK04FYJRsz/5dULcJ1nldB+lHxVtiMzc4tZraiuO6ZoJaIODPKtbIA17avHM8bOD1zkegMYUN+IJcWJqKf7ET+vGK+IwsqBQo7mvXwpKJNI=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
+Received: from CO1PR10MB4706.namprd10.prod.outlook.com (2603:10b6:303:9d::11)
+ by MWHPR10MB1566.namprd10.prod.outlook.com (2603:10b6:300:27::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.17; Tue, 2 Nov
+ 2021 18:39:14 +0000
+Received: from CO1PR10MB4706.namprd10.prod.outlook.com
+ ([fe80::1d71:7751:c11:e12e]) by CO1PR10MB4706.namprd10.prod.outlook.com
+ ([fe80::1d71:7751:c11:e12e%5]) with mapi id 15.20.4649.020; Tue, 2 Nov 2021
+ 18:39:14 +0000
+From:   Nick Alcock <nick.alcock@oracle.com>
+To:     jeyu@kernel.org, masahiroy@kernel.org
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
         kris.van.hees@oracle.com
-Subject: Re: [PATCH v5 3/7] kbuild: generate an address ranges map at vmlinux
- link time
-Message-ID: <202110310018.WkgG6qxr-lkp@intel.com>
-References: <20211027174706.31010-4-nick.alcock@oracle.com>
+Subject: [PING PATCH v6] kallsyms: new /proc/kallmodsyms with builtin modules
+Date:   Tue,  2 Nov 2021 18:38:44 +0000
+Message-Id: <20211102183851.168676-1-nick.alcock@oracle.com>
+X-Mailer: git-send-email 2.33.1.257.g9e0974a4e8
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P265CA0001.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2ad::14) To CO1PR10MB4706.namprd10.prod.outlook.com
+ (2603:10b6:303:9d::11)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="UugvWAfsgieZRqgk"
-Content-Disposition: inline
-In-Reply-To: <20211027174706.31010-4-nick.alcock@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: from loom.srvr.nix (2001:8b0:1101:10::2) by LO4P265CA0001.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2ad::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15 via Frontend Transport; Tue, 2 Nov 2021 18:39:11 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e85d2f1a-423e-4aae-dc8d-08d99e30115f
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1566:
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1566EED3DC946A6199FE231D8B8B9@MWHPR10MB1566.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yZ3SjwakG03LIAOW+yN/ekp5nzQrV9roWOKV2d/QwzVU261txYu8wJzNSkbY8zaCA2JmEZpZdD93+acBL+vbcDI8ROdEoxpdFbsQo3WAZnEO9xWjF0ANtPqlGllyptwyCrtvOVBlGb0U79mKtXEGEdAV2uEXG9FFHDsFE3a736nzc9yCPOjRktH12U617wnSLVYklMDID+Hwl7dYj1dswn6c+Nau5bvI1HrmTSVyqoPp9sGRphHH97x5HaKx6+9WSUIg/g1idjnWEQcHkFynjdbcxiQDSGpiH5PmNBxozWHgx7CeEgfU7INolM9uzjLWSE+lRuBaliRxSTxoXIhzhuKcTPGyij909egdJHPeaH5IbibGYIPaDNsGU96y7JVu5aqZjx2t5t4YCGXKV0JTh89wdE2ZQzuFC90Yvp6VWpRONX2hA3Y/vM/yjp4YPQYWN8axJMuR+jiyFPGa/mywAnvag+zFaJi8bCm/bg4HTv/ron0sGijxY+iQo08RBXKJ+ASfff768KOvV2Cdx+3Qurljp5rKOF+eKjYTUO8W+Y2XiS576I34TAFceDgTp7bkLp0x5ZRFOH348Qj+npXlcU8WT2pm2anXdqFs6X01GjjAa7UyDI8umnGrwEZ8w5Wa6udIbOUseyT6sYqfgxSjHA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4706.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2616005)(6506007)(5660300002)(4326008)(66556008)(66946007)(86362001)(66476007)(6666004)(2906002)(36756003)(30864003)(6486002)(107886003)(186003)(52116002)(508600001)(38100700002)(1076003)(44832011)(8936002)(6512007)(316002)(83380400001)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iuc44AnI1U0AB9YiAn6S5ts0Q2s9VL5GJ0Gf1k/RfAM7PgZIHZOC+k47dkJP?=
+ =?us-ascii?Q?OtH3OJ49K0gY4QGJmix552hVq3o/SRwT88YAS7MsAO12oyd8RyhkgryJBaf/?=
+ =?us-ascii?Q?4zrd1XxUUolwQZJK/Ji/twygSPb7KkGiT5IsYL/gxT4983K54lpYJoQtKs4w?=
+ =?us-ascii?Q?tTOQf10Dt96YOTTiNmlx0mhbgyHvKqrKtxGx7FTUfdvTVExu3nLDZ3Ukj8F6?=
+ =?us-ascii?Q?FhqJQGf2NVBHV4AH3o7q2NdN9+l0rWZorxt++fN1C4DWKwYFf9PIoHbceTKU?=
+ =?us-ascii?Q?+ZSnkalcpDTdGqnQbiOUUlddpFDX2IYvpOHtz0gzpSzY6138rX7qe0dd6433?=
+ =?us-ascii?Q?IGKxZh47w3h+qbtZBecKhFYHwxyWTMsRc0bZ/23cnVEQLdNqjisIwXWlNv7b?=
+ =?us-ascii?Q?eAkOYCwHx4KEAF+QC4OgIT1ngxpYrvRGjAWAmiDu99X56Tx78JMFDSjbIHhC?=
+ =?us-ascii?Q?sLIaSkKO1KsukmgKg5GEt+DtTknIcjXBQ8Xx3++raPJRIcPdUzal8W4PJCVa?=
+ =?us-ascii?Q?UrkjYuaMc9vFj9KY1qOWMOU/HjIOovmDTK8Vdh6t14YvBH2+4Wp4IFNLLZqr?=
+ =?us-ascii?Q?Fa7dO1OUHUYRnwpyWE+pr8vOa05jlqF9ZLs22f9URpQ4RpMxz1WVcEDxAoX3?=
+ =?us-ascii?Q?MEPhMK/F3bbTspQZBHBHgWDT1BNaNb5fn6qJIkZvZirx/MB6++xq9rdk2w5y?=
+ =?us-ascii?Q?5ML11yUSDRfDi4KxO3AuTruQo6Lqq02MX6cXqN+phUUkRAgODdJTaTsjYPjb?=
+ =?us-ascii?Q?UqHaXsz4BHA9D35jWzAUh9PtVPPU41bDCzn3SRNCEufXe2alvlpAIHu9d6yB?=
+ =?us-ascii?Q?FUhUS3k5ZD7pllxmZkU7A6yqqViPevcqlRtPXl/B19p4l6ftiFsCXF6yvC4a?=
+ =?us-ascii?Q?nq9kEQNcO+/+3CHmQt7vokM0rL4MF6BdDafZzfMhkU5ssTV+cEObBWor52yI?=
+ =?us-ascii?Q?PiQUaFBVUo3/659SOIP4n+zSuaqBC2TmRmtRnr9J9y8pT7ea4mpfww/62fym?=
+ =?us-ascii?Q?oq1/qWIXot//+Cu2sIqTwaok9FRKXIxDf1G3ftoVYKQCqjEpF6MOI1V2x9zu?=
+ =?us-ascii?Q?HTPiR/MMX9MiXw8AFr7MCRu3IZuKUgq1kUZPZWVVyElgjW0CadEBIWC2ok6O?=
+ =?us-ascii?Q?azPgIRz98V9Yhs7NzPOfL23NJbqLwU7EupPNx87prJ6pLnL6GYufqJR7zULd?=
+ =?us-ascii?Q?wNM6XPKcN7odeSkNeI0MlG46/26Wcb8cdm709bClCuq2ylPH+xobVW4UpLGj?=
+ =?us-ascii?Q?aIl3jtAQcQNQ9Lx2uFQpHftIwpUIaO28A3nmIf5lQRdfSf/0QTUm3o7IV80R?=
+ =?us-ascii?Q?tP8DBusy4r0Ump5ETAb151EadL+SC4uuZfaJ3FkPF5pvJH2egD2xckgY7nCM?=
+ =?us-ascii?Q?lIT/6T0ayFfq6yJSPtm05QYqKFjC2bTVetaGDrMb6YekYYQemCIwdCQM1JKw?=
+ =?us-ascii?Q?klsJiRS9huW4Ld1hsc0ArFvd1FfOk9FBLqgKHAFUfq4O85cbyQmqFGgn015z?=
+ =?us-ascii?Q?ah9TGDDy4vagOXCCH224Lenh9bW39h+VeJlb3s0UmZ4QFc7zyDABFp28/hgl?=
+ =?us-ascii?Q?dtlWqDSQgttNUMEvTEvVUxgIE5VXg2RzW3LAeBwkjifT39QFbMovqRlKyGgx?=
+ =?us-ascii?Q?7ndv9trU4qabsleqCbDQwk/jgi1RH9dt+9OUrQpyH7iY?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e85d2f1a-423e-4aae-dc8d-08d99e30115f
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4706.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2021 18:39:13.8641
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: agtj9JPxy5EfWcc140/AjNSK6uu8uKBAVip9imCtpFvW4VSeCffEn94bgCTD3lffdsm/3eN4u02QgBmox3T+iA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1566
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10156 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 bulkscore=0
+ spamscore=0 adultscore=0 suspectscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111020101
+X-Proofpoint-GUID: bGhT3oZ7gx713_dW0GFo-z6jvHMkobf-
+X-Proofpoint-ORIG-GUID: bGhT3oZ7gx713_dW0GFo-z6jvHMkobf-
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+/proc/kallsyms is very useful for tracers and other tools that need to
+map kernel symbols to addresses.
 
---UugvWAfsgieZRqgk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It would be useful if there were a mapping between kernel symbol and module
+name that only changed when the kernel source code is changed.  This mapping
+should not change simply because a module becomes built into the kernel.
+(DTrace for Linux already uses the approach in this patch for this purpose.)
 
-Hi Nick,
+It might also be useful if there were reliable symbol size information to
+determine whether an address is within a symbol or outside it, especially
+given that there could be huge gaps between symbols.
 
-Thank you for the patch! Yet something to improve:
+Fix this by introducing a new config parameter CONFIG_KALLMODSYMS, which
+when set results in output in /proc/kallmodsyms that looks like this:
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on linus/master v5.15-rc7]
-[cannot apply to jeyu/modules-next masahiroy/kconfig next-20211029]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+ffffffff8b013d20 409 t pt_buffer_setup_aux
+ffffffff8b014130 11f T intel_pt_interrupt
+ffffffff8b014250 2d T cpu_emergency_stop_pt
+ffffffff8b014280 13a t rapl_pmu_event_init      [intel_rapl_perf]
+ffffffff8b0143c0 bb t rapl_event_update [intel_rapl_perf]
+ffffffff8b014480 10 t rapl_pmu_event_read       [intel_rapl_perf]
+ffffffff8b014490 a3 t rapl_cpu_offline  [intel_rapl_perf]
+ffffffff8b014540 24 t __rapl_event_show [intel_rapl_perf]
+ffffffff8b014570 f2 t rapl_pmu_event_stop       [intel_rapl_perf]
 
-url:    https://github.com/0day-ci/linux/commits/Nick-Alcock/kbuild-bring-back-tristate-conf/20211028-024948
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2f111a6fd5b5297b4e92f53798ca086f7c7d33a4
-config: um-x86_64_defconfig (attached as .config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/a5f527e3449ec41735da78a430732e96080d49fe
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Nick-Alcock/kbuild-bring-back-tristate-conf/20211028-024948
-        git checkout a5f527e3449ec41735da78a430732e96080d49fe
-        # save the attached .config to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
+This is emitted even if intel_rapl_perf is built into the kernel.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Further down, we see what happens when object files are reused by
+multiple modules, all of which are built in to the kernel:
 
-All errors (new ones prefixed by >>):
+ffffffffa22b3aa0 ab t handle_timestamp  [liquidio]
+ffffffffa22b3b50 4a t free_netbuf       [liquidio]
+ffffffffa22b3ba0 8d t liquidio_ptp_settime      [liquidio]
+ffffffffa22b3c30 b3 t liquidio_ptp_adjfreq      [liquidio]
+[...]
+ffffffffa22b9490 203 t lio_vf_rep_create        [liquidio]
+ffffffffa22b96a0 16b t lio_vf_rep_destroy       [liquidio]
+ffffffffa22b9810 1f t lio_vf_rep_modinit        [liquidio]
+ffffffffa22b9830 1f t lio_vf_rep_modexit        [liquidio]
+ffffffffa22b9850 d2 t lio_ethtool_get_channels   [liquidio] [liquidio_vf]
+ffffffffa22b9930 9c t lio_ethtool_get_ringparam  [liquidio] [liquidio_vf]
+ffffffffa22b99d0 11 t lio_get_msglevel   [liquidio] [liquidio_vf]
+ffffffffa22b99f0 11 t lio_vf_set_msglevel        [liquidio] [liquidio_vf]
+ffffffffa22b9a10 2b t lio_get_pauseparam         [liquidio] [liquidio_vf]
+ffffffffa22b9a40 738 t lio_get_ethtool_stats     [liquidio] [liquidio_vf]
+ffffffffa22ba180 368 t lio_vf_get_ethtool_stats  [liquidio] [liquidio_vf]
+ffffffffa22ba4f0 37 t lio_get_regs_len   [liquidio] [liquidio_vf]
+ffffffffa22ba530 18 t lio_get_priv_flags         [liquidio] [liquidio_vf]
+ffffffffa22ba550 2e t lio_set_priv_flags         [liquidio] [liquidio_vf]
+ffffffffa22ba580 69 t lio_set_fecparam   [liquidio] [liquidio_vf]
+ffffffffa22ba5f0 92 t lio_get_fecparam   [liquidio] [liquidio_vf]
+[...]
+ffffffffa22cbd10 175 t liquidio_set_mac [liquidio_vf]
+ffffffffa22cbe90 ab t handle_timestamp  [liquidio_vf]
+ffffffffa22cbf40 4a t free_netbuf       [liquidio_vf]
+ffffffffa22cbf90 2b t octnet_link_status_change [liquidio_vf]
+ffffffffa22cbfc0 7e t liquidio_vxlan_port_command.constprop.0   [liquidio_vf]
 
->> gcc-9: error: unrecognized command line option '-Map=.tmp_vmlinux.map'
+Much more detail and information on the (nearly nonexistent) memory usage
+impact below.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---UugvWAfsgieZRqgk
-Content-Type: application/gzip
-Content-Disposition: attachment; filename=".config.gz"
-Content-Transfer-Encoding: base64
+We have to do several things to make this work, to figure out which
+object files are in which modules, then which address ranges correspond
+to these object files, then turn this into per-symbol output.
 
-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
-lwAA
+First, generate a file "modules_thick.builtin" that maps from the thin
+archives that make up built-in modules to their constituent object files.
+(This reintroduces the machinery that used to be used to generate
+modules.builtin.  I am not wedded to this mechanism: if someone can figure
+out a mechanism that does not require recursing over the entire build tree,
+I'm happy to use it, but I suspect that no such mechanism exists, since the
+only place the mapping from object file to module exists is in the makefiles
+themselves.  Regardless, this is fairly cheap, adding less than a second to
+a typical hot-cache build of a large enterprise kernel.  This is true even
+though it needs to be run unconditionally whenever the .config changes.)
 
---UugvWAfsgieZRqgk--
+Generate a linker map ".tmp_vmlinux.map", converting it into a new file
+".tmp_vmlinux.ranges", mapping address ranges to object files.
+
+Have scripts/kallsyms read these two new files to map symbol addresses
+to built-in-module names and then write a mapping from object file
+address to module name to the *.s output file.
+
+The mapping consists of three new symbols:
+
+ - kallsyms_module_addresses/kallsyms_module_offsets encodes the
+   address/offset of each object file (derived from the linker map), in
+   exactly the same way as kallsyms_addresses/kallsyms_offsets does
+   for symbols.  There is no size: instead, the object files are
+   assumed to tile the address space.  (This is slightly more
+   space-efficient than using a size).  Non-text-section addresses are
+   skipped: for now, all the users of this interface only need
+   module/non-module information for instruction pointer addresses, not
+   absolute-addressed symbols and the like.  This restriction can
+   easily be lifted in future.  (For why this isn't called
+   kallsyms_objfiles, see two entries below.)
+
+ - kallsyms_module_names encodes the name of each module in a modified
+   form of strtab: notably, if an object file appears in *multiple*
+   modules, all of which are built in, this is encoded via a zero byte,
+   a one-byte module count, then a series of that many null-terminated
+   strings.  Object files which appear in only one module in such a
+   multi-module list are redirected to point inside that list, so that
+   modules which contain some object files shared with other modules
+   and some object files exclusive to them do not double up the module
+   name.  (There might still be some duplication between multiple
+   multi-module lists, but this is an extremely marginal size effect,
+   and resolving it would require an extra layer of lookup tables which
+   would be even more complex, and incompressible to boot).  As a
+   special case, the table starts with a single zero byte which does
+   *not* represent the start of a multi-module list.
+
+ - kallsyms_modules connects the two, encoding a table associated 1:1
+   with kallsyms_module_addresses / kallsyms_module_offsets, pointing
+   at an offset in kallsyms_module_names describing which module (or
+   modules, for a multi-module list) the code occupying this address
+   range is part of.  If an address range is part of no module (always
+   built-in) it points at 0 (the null byte at the start of the
+   kallsyms_module_names list).  Entries in this list that would
+   contain the same value are fused together, along with their
+   corresponding kallsyms_module_addresses/offsets entries.  Due to
+   this fusion process, and because object files can be split apart into
+   multiple parts by the linker for hot/cold partitioning and the like,
+   entries in here do not really correspond to an object file, but more
+   to some contiguous range of addresses which are guaranteed to belong
+   to a single built-in module: so it seems best to call the symbols
+   kallsyms_modules*.  (The generator has a data structure that does
+   correspond more closely to object files, from which kallsyms_modules
+   is generated, and that does use 'objfiles' terminology.)
+
+Emit a new /proc/kallmodsyms file akin to /proc/kallsyms but with built-in
+module names, using a new kallsyms_builtin_module_address() almost identical
+to kallsyms_sym_address() to get the address corresponding to a given
+.kallsyms_modules index, and a new get_builtin_module_idx quite similar to
+get_symbol_pos to determine the index in the .kallsyms_modules array that
+relates to a given address.  Save a little time by exploiting the fact that
+all callers will only ever traverse this list from start to end by allowing
+them to pass in the previous index returned from this function as a hint:
+thus very few bsearches are actually needed.  (In theory this could change
+to just walk straight down kallsyms_module_addresses/offsets and not bother
+bsearching at all, but doing it this way is hardly any slower and much more
+robust.)
+
+The display process is complicated a little by the weird format of the
+.kallsyms_module_names table: we have to look for multimodule entries
+and print them as space-separated lists of module names.
+
+Like /proc/kallsyms, the output is driven by address, so keeps the
+curious property of /proc/kallsyms that symbols (like free_netbuf above)
+may appear repeatedly with different addresses: but now, unlike in
+/proc/kallsyms, we can see that those symbols appear repeatedly because
+they are *different symbols* that ultimately belong to different
+modules, all of which are built in to the kernel.
+
+Those symbols that come from object files that are genuinely reused and
+that appear only once in meory get a /proc/kallmodsyms line with
+[multiple] [modules] on it: consumers will have to be ready to handle
+such lines.
+
+Also, kernel symbols for built-in modules will probably appear
+interspersed with other symbols that are part of different modules and
+non-modular always-built-in symbols, which, as usual, have no
+square-bracketed module denotation.
+
+As with /proc/kallsyms, non-root usage produces addresses that are
+all zero.
+
+I am open to changing the name and/or format of /proc/kallmodsyms, but felt
+it best to split it out of /proc/kallsyms to avoid breaking existing
+kallsyms parsers.  Another possible syntax might be to use {curly brackets}
+or something to denote built-in modules: it might be possible to drop
+/proc/kallmodsyms and make /proc/kallsyms emit things in this format.
+(Equally, now kallmodsyms data uses very little space, the
+CONFIG_KALLMODSYMS config option might be something people don't want to
+bother with.)
+
+
+The size impact of all of this is minimal: for the case above, the
+kallsyms2.S file went from 14107772 to 14137245 bytes, a gain of 29743
+bytes, or 0.16%: vmlinux gained 10824 bytes, a gain of .017%, and the
+compressed vmlinux only 7552 bytes, a gain of .08%: though the latter two
+values are very configuration-dependent, they seem likely to scale roughly
+with the kernel they are part of.
+
+
+The last patch is an RFC to see if the idea is considered to be worth
+spending more time optimizing the representation, which adds a new
+kallsyms_sizes section that gives the size of each symbol, and uses this
+info to report reliable symbol sizes to in-kernel users, and (via a new
+column in /proc/kallmodsyms) to out-of-kernel users too.  Having reliable
+size info lets us identify inter-symbol gaps and sort symbols so that
+start/end-marker and overlapping symbols are consistently ordered with
+respect to the symbols they overlap.  This certainly uses too much space
+right now, 200KiB--1MiB: a better representation is certainly needed.  One
+that springs to mind is making the table sparse (pairs of symbol
+index/size), and recording explicit sizes only for those symbols that
+are not immediately followed by a subsequent symbol.
+
+Differences from v5, last week:
+
+ - Fix generation of mapfiles under UML
+
+Differences from v4, two months ago:
+
+ - Fix building of tristate.conf if missing (usually concealed by the
+   syncconfig being run for other reasons, but not always: the kernel
+   test robot spotted it).
+ - Forward-port atop v5.15-rc3.
+
+Differences from v3, a month earlier:
+
+ - Fix a kernel test robot warning in get_ksymbol_core (possible
+   use of uninitialized variable if kallmodsyms was wanted but
+   kallsyms_module_offsets was not present, which is most unlikely).
+
+Differences from v2, a couple of months before that:
+
+ - Split the series up.  In particular, the size impact of the table
+   optimizer is now quantified, and the symbol-size patch is split out and
+   turned into an RFC patch, with the /proc/kallmodsyms format before that
+   patch lacking a size column.  Some speculation on how to make the symbol
+   sizes less space-wasteful is added (but not yet implemented).
+
+ - Drop a couple of unnecessary #includes, one unnecessarily exported
+   symbol, and a needless de-staticing.
+
+Differences from v1, a year or so back:
+
+ - Move from a straight symbol->module name mapping to a mapping from
+   address-range to TU to module name list, bringing major space savings
+   over the previous approach and support for object files used by many
+   built-in modules at the same time, at the cost of a slightly more complex
+   approach (unavoidably so, I think, given that we have to merge three data
+   sources together: the link map in .tmp_vmlinux.ranges, the nm output on
+   stdin, and the mapping from TU name to module names in
+   modules_thick.builtin).
+
+   We do opportunistic merging of TUs if they cite the same modules and
+   reuse module names where doing so is simple: see optimize_obj2mod
+   below. I considered more extensive searches for mergeable entries and
+   more intricate encodings of the module name list allowing TUs that are
+   used by overlapping sets of modules to share their names, but such
+   modules are rare enough (and such overlapping sharings are vanishingly
+   rare) that it seemed likely to save only a few bytes at the cost of much
+   more hard-to-test code. This is doubly true now that the tables needed
+   are only a few kilobytes in length.
+
+Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+Signed-off-by: Eugene Loh <eugene.loh@oracle.com>
+Reviewed-by: Kris Van Hees <kris.van.hees@oracle.com>
+
+Nick Alcock (7):
+  kbuild: bring back tristate.conf
+  kbuild: add modules_thick.builtin
+  kbuild: generate an address ranges map at vmlinux link time
+  kallsyms: introduce sections needed to map symbols to built-in modules
+  kallsyms: optimize .kallsyms_modules*
+  kallsyms: add /proc/kallmodsyms
+  kallsyms: add reliable symbol size info
+
+ .gitignore                  |   1 +
+ Documentation/dontdiff      |   1 +
+ Makefile                    |  23 +-
+ include/linux/module.h      |   7 +-
+ init/Kconfig                |   8 +
+ kernel/kallsyms.c           | 304 ++++++++++++++---
+ kernel/module.c             |   4 +-
+ scripts/Kbuild.include      |   6 +
+ scripts/Makefile            |   6 +
+ scripts/Makefile.modbuiltin |  56 ++++
+ scripts/kallsyms.c          | 642 +++++++++++++++++++++++++++++++++++-
+ scripts/kconfig/confdata.c  |  41 ++-
+ scripts/link-vmlinux.sh     |  22 +-
+ scripts/modules_thick.c     | 200 +++++++++++
+ scripts/modules_thick.h     |  48 +++
+ 15 files changed, 1301 insertions(+), 68 deletions(-)
+ create mode 100644 scripts/Makefile.modbuiltin
+ create mode 100644 scripts/modules_thick.c
+ create mode 100644 scripts/modules_thick.h
+
+-- 
+2.33.1.257.g9e0974a4e8
+
