@@ -2,105 +2,68 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CACA0C433EF
-	for <linux-modules@archiver.kernel.org>; Fri,  3 Dec 2021 21:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27A5FC433EF
+	for <linux-modules@archiver.kernel.org>; Wed,  8 Dec 2021 12:53:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240447AbhLCVJe (ORCPT
+        id S233820AbhLHM5E (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 3 Dec 2021 16:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
+        Wed, 8 Dec 2021 07:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbhLCVJe (ORCPT
+        with ESMTP id S229751AbhLHM5D (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 3 Dec 2021 16:09:34 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC8AC061751;
-        Fri,  3 Dec 2021 13:06:09 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id f125so4335707pgc.0;
-        Fri, 03 Dec 2021 13:06:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XGO9VcIvVBE2m6N0pRqcs519qMf/SHuCfks/jYAJHuM=;
-        b=SQ4Htg19rxC8ajxfuw2S88U5TeUx9IlvmPx2/DGhqjjb8EicSnfva4T9JFFpkcrQ/2
-         oATPAMhk+oFWW3IDj0LyMmcqKN4UT7I8R4mBcQ/ATRehJfwgMfYrqTrYnoYTZOYsczIn
-         jUMuKPkpUta80wRnsxgo85C/jlOfPeFpmP09iW7NhjD+Gz3/c/gNR6lHXXMoVXBUS9xa
-         TpE++rumR8vKUAV4lDUTLUvqP5ptuZGaPXGlDUF/i+LHOPx7uBuQPVdjOg1OM0rt6O8d
-         xzyJTeRFRloafp/6tnS7ax0brRsmCgqdgPeVeNQmcK6NloUmnucWkFzEZ5z2ZGK8CsYR
-         BvfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XGO9VcIvVBE2m6N0pRqcs519qMf/SHuCfks/jYAJHuM=;
-        b=Ni8TEck4CIQ8CbkXe6CO/Z34yWQP/zRCZa/Gd60ztFWf8XCfTk/amlRt0REuDL/Vp8
-         MavNhki9cnKoN1OTHZ3ap30wt92joTIhOmOTx7SsmY3msk5bjqPdjQXGYosueY+j2Pyz
-         oNwSD2hpwuJ7j1TzD/koyUrmQdAlu2STA7oQZ2TFyaYMLHPVufMpp9WEFiJeftNAhxMf
-         lcnE3W/89eQWDXgJDFnKNOwW8zZk76hBRW62HqpTDFeqZeFdfYdethKYT/N9qIWCbckv
-         DM4aVVi0/b2HFh6qP88sz1PC2xTyJ1AzM2QHLU5AcS+1zZJiBS/pzqsS1JHYQ3WDC0H0
-         LjAw==
-X-Gm-Message-State: AOAM532aA5pvj9dKk++NQewgPOL1AuZRhW8VbU5ABu0kZ4iNnT2/FRCp
-        Ub+Cafcz4FnEulSml7DB7JE=
-X-Google-Smtp-Source: ABdhPJxdLnZMfBYdnf6LHNRIDxI05OrA2aWHDs4XVkS25qxNHeZvmuzf22pHqysTBWRBRtLRJFJl4g==
-X-Received: by 2002:a63:ec0a:: with SMTP id j10mr6225320pgh.396.1638565568948;
-        Fri, 03 Dec 2021 13:06:08 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:e637:aa31:c488:b6c0])
-        by smtp.gmail.com with ESMTPSA id on6sm7458874pjb.47.2021.12.03.13.06.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 13:06:07 -0800 (PST)
-Date:   Fri, 3 Dec 2021 13:06:05 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] module: add in-kernel support for decompressing
-Message-ID: <YaqGvffumIw14TbG@google.com>
-References: <YaMYJv539OEBz5B/@google.com>
- <202112011112.83416FCA2C@keescook>
- <YafYvA5JWMgb6PVy@google.com>
- <202112020012.8B4C205@keescook>
+        Wed, 8 Dec 2021 07:57:03 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066F2C061746;
+        Wed,  8 Dec 2021 04:53:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XoLdah4Vhal5BMwdRxmj89JX830AjtudjkfO7UjNrhQ=; b=mb7VDEXoLh0hh3nq3LaUmRU/uJ
+        u+2Mx5oXT+8M6uZbP/70Zdtoxz58tkS8+Er8ZDFqnsmyYVv8M17wJXMUtrx4k9U+435bMBfTcjk9S
+        PWKLuuG3WlXXPcfNHRNtXJ7DWSB9bAtvbFDjlGLG4/7SCuYg/sKq0VTcQBl8BS8zZybrt0lnkz9cu
+        X+SPRH92tW3/Gp+hHdFU31w1SZPRGjXstBPYFMEttR9ybSQS/4XqO3KSmS/COf76KXom4Z2jtrSah
+        P/51STuBRXPFHBzLuoB000bO0Wv8u+jYzfSUHlSoMG0stvEQve68Sce7wLMTn6pDsJDW3K4ysoFlm
+        Tpcz2srQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muwRv-00Cbun-AQ; Wed, 08 Dec 2021 12:53:31 +0000
+Date:   Wed, 8 Dec 2021 04:53:31 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
+        fstests@vger.kernel.org, linux-block@vger.kernel.org, hare@suse.de,
+        dgilbert@interlog.com, jeyu@kernel.org, osandov@fb.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] libkmod-module: add support for a patient module
+ removal option
+Message-ID: <YbCqy320/twxxCRb@bombadil.infradead.org>
+References: <20210810051602.3067384-1-mcgrof@kernel.org>
+ <20210810051602.3067384-4-mcgrof@kernel.org>
+ <20210923085156.scmf5wxr2phc356b@ldmartin-desk2>
+ <YVJyIGXN/TR8zdU9@bombadil.infradead.org>
+ <20210929184810.adrqpsvlfybnc5qt@ldmartin-desk2>
+ <YZLBPGtm2vF2DsTk@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202112020012.8B4C205@keescook>
+In-Reply-To: <YZLBPGtm2vF2DsTk@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Dec 02, 2021 at 12:14:18AM -0800, Kees Cook wrote:
-> On Wed, Dec 01, 2021 at 12:19:08PM -0800, Dmitry Torokhov wrote:
-> > On Wed, Dec 01, 2021 at 11:24:35AM -0800, Kees Cook wrote:
-> > > On Sat, Nov 27, 2021 at 09:48:22PM -0800, Dmitry Torokhov wrote:
-> > > >  /* Flags for sys_finit_module: */
-> > > >  #define MODULE_INIT_IGNORE_MODVERSIONS	1
-> > > >  #define MODULE_INIT_IGNORE_VERMAGIC	2
-> > > > +#define MODULE_INIT_COMPRESSED_DATA	4
-> > > 
-> > > bikeshedding: adding "_DATA" seems redundant/misleading? The entire
-> > > module is compressed, so maybe call it just MODULE_INIT_COMPRESSED ?
+On Mon, Nov 15, 2021 at 12:21:16PM -0800, Luis Chamberlain wrote:
+> On Wed, Sep 29, 2021 at 11:48:31AM -0700, Lucas De Marchi wrote:
+> > > Sorry don't follow. And since I have one day before vacation, I suppose
+> > > I won't get to this until I get back. But I'd be happy if you massage
+> > > it as you see fit as you're used to the code base and I'm sure have
+> > > a better idea of what likely is best for the library.
 > > 
-> > OK, or maybe MODULE_INIT_COMPRESSED_FILE since we are indeed dealing
-> > with a file?
+> > 
+> > sure, np. I will take a look as time permits.
 > 
-> Sounds good to me! :)
-> 
-> As far as my tangent on using the crypto subsystem, I think that looks
-> like a long path, so your existing routines are likely the right place
-> to start. I still wonder if it might be able to use of the "acomp" API
-> instead of calling directly into the specific decompressor.
+> Just a friendly poke.
 
-I looked at the acomp and it still needs preallocation of the output
-buffer, so it has to wait for your "get worst size" API additions before
-it can be used. But ideally I'd have some streaming option where I could
-feed it chunks of data and consume output...
+Just another friendy poke.
 
-Also, regarding your comment about not changing free_copy() but move
-this logic to load_module(): free copy is called twice there, both in
-success and error paths, and can't really be reduced to one call site
-even with "jumping backwards goto", so I'd be forced to duplicate this
-logic in 2 places, which is not great. Or did I misunderstand your idea?
-
-Thanks.
-
--- 
-Dmitry
+  Luis
