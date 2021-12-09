@@ -2,71 +2,73 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CA83C433F5
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Dec 2021 08:30:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE7AC433F5
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Dec 2021 08:36:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbhLIIeE (ORCPT
+        id S230330AbhLIIkH (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Dec 2021 03:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
+        Thu, 9 Dec 2021 03:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbhLIIeD (ORCPT
+        with ESMTP id S229604AbhLIIkH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Dec 2021 03:34:03 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A746C061746;
-        Thu,  9 Dec 2021 00:30:30 -0800 (PST)
+        Thu, 9 Dec 2021 03:40:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF24C061746;
+        Thu,  9 Dec 2021 00:36:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C316CCE2503;
-        Thu,  9 Dec 2021 08:30:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5E1DC004DD;
-        Thu,  9 Dec 2021 08:30:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04B5BB823F6;
+        Thu,  9 Dec 2021 08:36:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E6C4C004DD;
+        Thu,  9 Dec 2021 08:36:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639038627;
-        bh=MCzxBcEFTEc7oegEyl2A4TZ8NyqD8fdlm7fiXv1HsdM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ScRsORoelMLhEai6b2Dx/CfA9BNngH+fw/CqcbrxuX8hpg36Rb9ocgJMDdXlRQhzV
-         oFN7OfMdMsCfvTWm8i4XMurvuRuI/+61hTiNr3S0O5rSAI/nZBE90adz7XdN/NoBiG
-         INEfEr/IaRs1qgAecUB58/r4SVC/w088N41QGjCK3O6DpZ7mZnJDXjsDjM7j7qGalw
-         08p6xoxck2+cGg4W9nXXd/i8OyjaQUGKai0fForICrkeuoTHqD/38g2csNmt2IYYPk
-         aOeBKeTye0pBmR8ENsqbEpB4BMxwNrwzqUZhgKJ5dkO+RfMOmQhZI5oCWVehSLR83o
-         F73ndaxPi0Gvw==
+        s=k20201202; t=1639038991;
+        bh=LFIggLMpewC9uZQ1lQPk16RmUqYPsYlDDBIf7nXZwIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qbnUnJx01weAzTaaRT+k1ztsTOBn/f4y7J/ZK7jd3ctZL4m0MXcc3hddjCzuh2fvv
+         b6AJhOf2xl8byo7w9My8dWS6ghNKn9ZrrNp3JulALXas5Y8JQ2v0j8AIEzq4BSf5AW
+         isBJ+/sI9o4kHIe3mI+794FuLpkYtrMCNtemBuy7ZNDYnVwSiEd+VztG9JsNmKG3gm
+         bg9HDnk7hKB5kYe4MWJev7WCazdbSoHZ4MsJyfGoOb75wYBewPvbFOUby3hltWiPgM
+         14UhClkUlyYXCDYsa2eY9uzcSPg55S2f3+gA1eyYSuX2yb/B5GxvCenI/tL8+JjEcu
+         Cw8HPXb3Lq/Zg==
+Date:   Thu, 9 Dec 2021 09:36:27 +0100
 From:   Jessica Yu <jeyu@kernel.org>
 To:     Luis Chamberlain <mcgrof@kernel.org>
 Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Jessica Yu <jeyu@kernel.org>
-Subject: [PATCH] MAINTAINERS: Remove myself as modules maintainer
-Date:   Thu,  9 Dec 2021 09:28:50 +0100
-Message-Id: <20211209082850.10021-1-jeyu@kernel.org>
-X-Mailer: git-send-email 2.33.1
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Remove myself as modules maintainer
+Message-ID: <YbHAC8fU7WSu6U0r@p200300cbcf38f1003adeadfffec0265a.dip0.t-ipconnect.de>
+References: <20211209082850.10021-1-jeyu@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20211209082850.10021-1-jeyu@kernel.org>
+X-OS:   Linux p200300cbcf38f1003adeadfffec0265a.dip0.t-ipconnect.de
+ 5.13.8-1-default x86_64
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Luis has done a great job maintaining modules so far. As I'm planning to
-take a break from work soon, I think we're ready to transition over fully.
++++ Jessica Yu [09/12/21 09:28 +0100]:
+>Luis has done a great job maintaining modules so far. As I'm planning to
+>take a break from work soon, I think we're ready to transition over fully.
+>
+>Signed-off-by: Jessica Yu <jeyu@kernel.org>
+>---
+> MAINTAINERS | 1 -
+> 1 file changed, 1 deletion(-)
+>
+>diff --git a/MAINTAINERS b/MAINTAINERS
+>index 43007f2d29e0..a92145633fbe 100644
+>--- a/MAINTAINERS
+>+++ b/MAINTAINERS
+>@@ -12866,7 +12866,6 @@ F:	drivers/media/dvb-frontends/mn88473*
+>
+> MODULE SUPPORT
+> M:	Luis Chamberlain <mcgrof@kernel.org>
+>-M:	Jessica Yu <jeyu@kernel.org>
+> S:	Maintained
+> T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git modules-next
 
-Signed-off-by: Jessica Yu <jeyu@kernel.org>
----
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 43007f2d29e0..a92145633fbe 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12866,7 +12866,6 @@ F:	drivers/media/dvb-frontends/mn88473*
- 
- MODULE SUPPORT
- M:	Luis Chamberlain <mcgrof@kernel.org>
--M:	Jessica Yu <jeyu@kernel.org>
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git modules-next
- F:	include/linux/module.h
--- 
-2.33.1
-
+Grr, I forgot to change the git repo line - will resend shortly.
