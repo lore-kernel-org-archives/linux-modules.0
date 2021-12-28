@@ -2,66 +2,66 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E04C433FE
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Dec 2021 21:30:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB11CC4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 28 Dec 2021 21:30:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237577AbhL1Vay (ORCPT
+        id S237496AbhL1Va4 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Dec 2021 16:30:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39659 "EHLO
+        Tue, 28 Dec 2021 16:30:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30195 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237496AbhL1Vav (ORCPT
+        by vger.kernel.org with ESMTP id S237588AbhL1Vaz (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Dec 2021 16:30:51 -0500
+        Tue, 28 Dec 2021 16:30:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640727050;
+        s=mimecast20190719; t=1640727054;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uueBGakT/gT7TUjBGwoofDgqQKuu/ItyPgp72/wDjB0=;
-        b=UV64UiE0cenDMbREPH7RzEW1hviqMgY63FEvojA3HethXh0+ST59pczzjPQYIv6vMuk7+i
-        Nt0M73TFKjEoCMcNYVaBBVk0Bm4KMqF/j5cFq0vdBtgj7LrubTPi16So8Yn/4Aszph29CD
-        /2z927tkqo76COFXs+LBvH4RjTpmgcs=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=VxUWH6ivJOFpbXbRPW5hN0FCZVwBuQeN4pyxAhArSmU=;
+        b=MUWvaXbCvn10BtChfE2Nn3ZxPFoFonUTUVsDQ8VpPgWi+u6IUxLWKkIymGUjPBa05VCIYd
+        rH/hvDYQi/bVvBSMYRE8BS/dKWvaKgWe45kc4my0k+icB9oUdNbN8RQXTmUCtOPySwjN2f
+        VG1nnVwLHpdWfEay43V+ZgwDc6VxhmI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-150-cXrec3B9N8ifPhrggc1qWQ-1; Tue, 28 Dec 2021 16:30:49 -0500
-X-MC-Unique: cXrec3B9N8ifPhrggc1qWQ-1
-Received: by mail-wr1-f70.google.com with SMTP id j26-20020adfb31a000000b001a2356afd4fso4293930wrd.21
-        for <linux-modules@vger.kernel.org>; Tue, 28 Dec 2021 13:30:49 -0800 (PST)
+ us-mta-333-TyO615BwMbOtBxjzJ4nQOg-1; Tue, 28 Dec 2021 16:30:53 -0500
+X-MC-Unique: TyO615BwMbOtBxjzJ4nQOg-1
+Received: by mail-wr1-f72.google.com with SMTP id s30-20020adfa29e000000b001a25caee635so4301797wra.19
+        for <linux-modules@vger.kernel.org>; Tue, 28 Dec 2021 13:30:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uueBGakT/gT7TUjBGwoofDgqQKuu/ItyPgp72/wDjB0=;
-        b=zFVbdURCvad993xptPdraWYHHpJXbvxDBR+NnIFkG58gZcsyc756OkhXtYQIr1ym5x
-         85Yh1U/DPzqT+sS9H3HGVOxqxczVroJ8QDremXMjIOtBCdZ/9TR0mzypKOdwpbFOR2BI
-         KLEZp+5hygplITEph/zK62Y9z1q19t9oTDhyNp1QqGd1DtKPlelmy13eX+RKVGbOFyj8
-         5fwdAo3gYbaiTy+PREqTIHKqfiuFtcRI8Qez4NVTP820tmmpXd3+SxdaaNPtiu+VqysL
-         OH4bLLtO19TgPXr4/2tKLp9eRpBPt3UDjAPUg/FjRvwz38Pcl6Vl4MP4ww/51DgLZ6Ap
-         2akw==
-X-Gm-Message-State: AOAM532PuBFFUuecmS2bdTwf2lqd6/ERKK1U0om9VF0UoVCpUNO+Cgh9
-        hZ0QdpumSInQ3zOAjZUXVIg4Xc7qh9abzBTinkvDOpDU7dz/bmE2IAMlKWRiSqQlRB9mBrvoCy2
-        CXBvwWz7YlE0uTBiTes5IJ3fE
-X-Received: by 2002:a5d:64e7:: with SMTP id g7mr17559919wri.203.1640727048350;
-        Tue, 28 Dec 2021 13:30:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJws6dB1esH1e3GaF+mmVl28v1qQERbn6j07cqiDgOXtM4kgKG6I+CwoPZ6kiT0DmOhpvOraGg==
-X-Received: by 2002:a5d:64e7:: with SMTP id g7mr17559910wri.203.1640727048120;
-        Tue, 28 Dec 2021 13:30:48 -0800 (PST)
+        bh=VxUWH6ivJOFpbXbRPW5hN0FCZVwBuQeN4pyxAhArSmU=;
+        b=8AFzwsPUT4J3Zqi1+aR0IoCLuIi8ZfiVA9C1kWs8w2ZKpEmgGK4Ia0zPPignurLK5t
+         vMLolt5zhYIzua71ehRgI9Iw7F9/nBQ62NNiFWSxWMJHoJBLH1He+IM9DDIew1hZeOf6
+         mVEScV3g/AIBI+REjKcTBiFtsPwSYLJb80EFVSzlDvDouBpMOR7km/9rGRWXW3duCtYU
+         0YQ9MROfJ1cQR2wJfVtNYVVbN/PIx1y6hpMo2AwZ00D6iF6pZiU+Uzdq87L1h7n8ttmY
+         QvrsH6j/niznPGDEs7PIkzFP6w3oaIbAoto9bgz/rA2vO+B9mJmM4a9wvJAlr0QA/ogs
+         uFQg==
+X-Gm-Message-State: AOAM530ojdL26Wxh/WIP0Hp2eGXC+EyWfsRNADx15gcVKKZ6+4WLEqkW
+        W8eOpQ5q25i1eL/gmYMLgmxehMCVOPwWDl1HTPSf6gU2lCR+PFul81k6dzx26ZUTLyG/Ywc+JhH
+        4/dyj3Ey+u5rxNma7NSuCq7Ph
+X-Received: by 2002:adf:e8d2:: with SMTP id k18mr18380366wrn.187.1640727052332;
+        Tue, 28 Dec 2021 13:30:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx4lnaBslQfygUi2472o/r+KKnzwYQz+fbWy70cSMdNOs9GmXSxbGajrT7AXC8VOnkwen0NtQ==
+X-Received: by 2002:adf:e8d2:: with SMTP id k18mr18380348wrn.187.1640727052121;
+        Tue, 28 Dec 2021 13:30:52 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id c2sm21117243wri.50.2021.12.28.13.30.47
+        by smtp.gmail.com with ESMTPSA id e12sm20481584wrg.110.2021.12.28.13.30.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 13:30:47 -0800 (PST)
+        Tue, 28 Dec 2021 13:30:51 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         akpm@linux-foundation.org, jeyu@kernel.org,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
         atomlin@atomlin.com, ghalat@redhat.com
-Subject: [RFC PATCH 06/12] module: Move strict rwx support to a separate file
-Date:   Tue, 28 Dec 2021 21:30:35 +0000
-Message-Id: <20211228213041.1356334-7-atomlin@redhat.com>
+Subject: [RFC PATCH 10/12] module: Move procfs support into a separate file
+Date:   Tue, 28 Dec 2021 21:30:39 +0000
+Message-Id: <20211228213041.1356334-11-atomlin@redhat.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211228213041.1356334-1-atomlin@redhat.com>
 References: <YbKUUJUtjBk/n913@bombadil.infradead.org>
@@ -73,242 +73,257 @@ List-ID: <linux-modules.vger.kernel.org>
 
 No functional change.
 
-This patch migrates code that makes module text
-and rodata memory read-only and non-text memory
-non-executable from core module code into
-kernel/module/strict_rwx.c.
+This patch migrates code that allows one to generate a
+list of loaded/or linked modules via /proc when procfs
+support is enabled into kernel/module/procfs.c.
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- include/linux/module.h     | 18 ++++++++
- kernel/module/Makefile     |  1 +
- kernel/module/main.c       | 84 --------------------------------------
- kernel/module/strict_rwx.c | 83 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 102 insertions(+), 84 deletions(-)
- create mode 100644 kernel/module/strict_rwx.c
+ kernel/module/Makefile |   1 +
+ kernel/module/main.c   |  98 -------------------------------------
+ kernel/module/procfs.c | 108 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 109 insertions(+), 98 deletions(-)
+ create mode 100644 kernel/module/procfs.c
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index caa7212cf754..218ac6768433 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -354,6 +354,24 @@ extern void module_enable_x(const struct module *mod);
- static void module_enable_x(const struct module *mod) { }
- #endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
- 
-+#ifdef CONFIG_STRICT_MODULE_RWX
-+extern void frob_rodata(const struct module_layout *layout, int (*set_memory)(unsigned long start, int num_pages));
-+extern void frob_ro_after_init(const struct module_layout *layout, int (*set_memory)(unsigned long start, int num_pages));
-+extern void frob_writable_data(const struct module_layout *layout, int (*set_memory)(unsigned long start, int num_pages));
-+extern void module_enable_ro(const struct module *mod, bool after_init);
-+extern void module_enable_nx(const struct module *mod);
-+extern int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs, char *secstrings, struct module *mod);
-+
-+#else /* !CONFIG_STRICT_MODULE_RWX */
-+static void module_enable_nx(const struct module *mod) { }
-+static void module_enable_ro(const struct module *mod, bool after_init) {}
-+static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-+				       char *secstrings, struct module *mod)
-+{
-+	return 0;
-+}
-+#endif /* CONFIG_STRICT_MODULE_RWX */
-+
- #ifdef CONFIG_MODULES_TREE_LOOKUP
- struct mod_tree_root {
- 	struct latch_tree_root root;
 diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index 95fad95a0549..795fe10ac530 100644
+index 23582011ab08..cba3e608b4ca 100644
 --- a/kernel/module/Makefile
 +++ b/kernel/module/Makefile
-@@ -9,3 +9,4 @@ obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
- obj-$(CONFIG_LIVEPATCH) += livepatch.o
- obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
- obj-$(CONFIG_ARCH_HAS_STRICT_MODULE_RWX) += arch_strict_rwx.o
-+obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
+@@ -12,3 +12,4 @@ obj-$(CONFIG_ARCH_HAS_STRICT_MODULE_RWX) += arch_strict_rwx.o
+ obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
+ obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
+ obj-$(CONFIG_KALLSYMS) += kallsyms.o
++obj-$(CONFIG_PROC_FS) += procfs.o
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index a0619256b343..c404d00f7958 100644
+index 9813e1672d8c..2da580c7b069 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1774,90 +1774,6 @@ static void mod_sysfs_teardown(struct module *mod)
- 	mod_sysfs_fini(mod);
+@@ -21,7 +21,6 @@
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+ #include <linux/elf.h>
+-#include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
+ #include <linux/syscalls.h>
+ #include <linux/fcntl.h>
+@@ -3529,103 +3528,6 @@ static char *module_flags(struct module *mod, char *buf)
+ 	return buf;
  }
  
--#ifdef CONFIG_STRICT_MODULE_RWX
--static void frob_rodata(const struct module_layout *layout,
--			int (*set_memory)(unsigned long start, int num_pages))
+-#ifdef CONFIG_PROC_FS
+-/* Called by the /proc file system to return a list of modules. */
+-static void *m_start(struct seq_file *m, loff_t *pos)
 -{
--	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
--	set_memory((unsigned long)layout->base + layout->text_size,
--		   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
+-	mutex_lock(&module_mutex);
+-	return seq_list_start(&modules, *pos);
 -}
 -
--static void frob_ro_after_init(const struct module_layout *layout,
--				int (*set_memory)(unsigned long start, int num_pages))
+-static void *m_next(struct seq_file *m, void *p, loff_t *pos)
 -{
--	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
--	set_memory((unsigned long)layout->base + layout->ro_size,
--		   (layout->ro_after_init_size - layout->ro_size) >> PAGE_SHIFT);
+-	return seq_list_next(p, &modules, pos);
 -}
 -
--static void frob_writable_data(const struct module_layout *layout,
--			       int (*set_memory)(unsigned long start, int num_pages))
+-static void m_stop(struct seq_file *m, void *p)
 -{
--	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->size & (PAGE_SIZE-1));
--	set_memory((unsigned long)layout->base + layout->ro_after_init_size,
--		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
+-	mutex_unlock(&module_mutex);
 -}
 -
--static void module_enable_ro(const struct module *mod, bool after_init)
+-static int m_show(struct seq_file *m, void *p)
 -{
--	if (!rodata_enabled)
--		return;
+-	struct module *mod = list_entry(p, struct module, list);
+-	char buf[MODULE_FLAGS_BUF_SIZE];
+-	void *value;
 -
--	set_vm_flush_reset_perms(mod->core_layout.base);
--	set_vm_flush_reset_perms(mod->init_layout.base);
--	frob_text(&mod->core_layout, set_memory_ro);
+-	/* We always ignore unformed modules. */
+-	if (mod->state == MODULE_STATE_UNFORMED)
+-		return 0;
 -
--	frob_rodata(&mod->core_layout, set_memory_ro);
--	frob_text(&mod->init_layout, set_memory_ro);
--	frob_rodata(&mod->init_layout, set_memory_ro);
+-	seq_printf(m, "%s %u",
+-		   mod->name, mod->init_layout.size + mod->core_layout.size);
+-	print_unload_info(m, mod);
 -
--	if (after_init)
--		frob_ro_after_init(&mod->core_layout, set_memory_ro);
+-	/* Informative for users. */
+-	seq_printf(m, " %s",
+-		   mod->state == MODULE_STATE_GOING ? "Unloading" :
+-		   mod->state == MODULE_STATE_COMING ? "Loading" :
+-		   "Live");
+-	/* Used by oprofile and other similar tools. */
+-	value = m->private ? NULL : mod->core_layout.base;
+-	seq_printf(m, " 0x%px", value);
+-
+-	/* Taints info */
+-	if (mod->taints)
+-		seq_printf(m, " %s", module_flags(mod, buf));
+-
+-	seq_puts(m, "\n");
+-	return 0;
 -}
 -
--static void module_enable_nx(const struct module *mod)
--{
--	frob_rodata(&mod->core_layout, set_memory_nx);
--	frob_ro_after_init(&mod->core_layout, set_memory_nx);
--	frob_writable_data(&mod->core_layout, set_memory_nx);
--	frob_rodata(&mod->init_layout, set_memory_nx);
--	frob_writable_data(&mod->init_layout, set_memory_nx);
--}
+-/*
+- * Format: modulename size refcount deps address
+- *
+- * Where refcount is a number or -, and deps is a comma-separated list
+- * of depends or -.
+- */
+-static const struct seq_operations modules_op = {
+-	.start	= m_start,
+-	.next	= m_next,
+-	.stop	= m_stop,
+-	.show	= m_show
+-};
 -
--static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
--				       char *secstrings, struct module *mod)
+-/*
+- * This also sets the "private" pointer to non-NULL if the
+- * kernel pointers should be hidden (so you can just test
+- * "m->private" to see if you should keep the values private).
+- *
+- * We use the same logic as for /proc/kallsyms.
+- */
+-static int modules_open(struct inode *inode, struct file *file)
 -{
--	const unsigned long shf_wx = SHF_WRITE|SHF_EXECINSTR;
--	int i;
+-	int err = seq_open(file, &modules_op);
 -
--	for (i = 0; i < hdr->e_shnum; i++) {
--		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
--			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
--				mod->name, secstrings + sechdrs[i].sh_name, i);
--			return -ENOEXEC;
--		}
+-	if (!err) {
+-		struct seq_file *m = file->private_data;
+-		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
 -	}
 -
--	return 0;
+-	return err;
 -}
 -
--#else /* !CONFIG_STRICT_MODULE_RWX */
--static void module_enable_nx(const struct module *mod) { }
--static void module_enable_ro(const struct module *mod, bool after_init) {}
--static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
--				       char *secstrings, struct module *mod)
+-static const struct proc_ops modules_proc_ops = {
+-	.proc_flags	= PROC_ENTRY_PERMANENT,
+-	.proc_open	= modules_open,
+-	.proc_read	= seq_read,
+-	.proc_lseek	= seq_lseek,
+-	.proc_release	= seq_release,
+-};
+-
+-static int __init proc_modules_init(void)
 -{
+-	proc_create("modules", 0, NULL, &modules_proc_ops);
 -	return 0;
 -}
--#endif /*  CONFIG_STRICT_MODULE_RWX */
+-module_init(proc_modules_init);
+-#endif
 -
- void __weak module_memfree(void *module_region)
+ /* Given an address, look for it in the module exception tables. */
+ const struct exception_table_entry *search_module_extables(unsigned long addr)
  {
- 	/*
-diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+diff --git a/kernel/module/procfs.c b/kernel/module/procfs.c
 new file mode 100644
-index 000000000000..8a513ced02c6
+index 000000000000..98d898250475
 --- /dev/null
-+++ b/kernel/module/strict_rwx.c
-@@ -0,0 +1,83 @@
++++ b/kernel/module/procfs.c
+@@ -0,0 +1,108 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * kernel/module/strict_rwx.c - module strict rwx
++ * kernel/module/proc.c - module proc support
 + *
-+ * Copyright (C) 2015 Rusty Russell
++ * Copyright (C) 2008 Alexey Dobriyan
 + */
 +
 +#include <linux/module.h>
-+#include <linux/vmalloc.h>
-+#include <linux/set_memory.h>
++#include <linux/kallsyms.h>
++#include <linux/mutex.h>
++#include <linux/seq_file.h>
++#include <linux/proc_fs.h>
++#include "internal.h"
 +
-+void frob_rodata(const struct module_layout *layout,
-+			int (*set_memory)(unsigned long start, int num_pages))
++/* Called by the /proc file system to return a list of modules. */
++static void *m_start(struct seq_file *m, loff_t *pos)
 +{
-+	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
-+	set_memory((unsigned long)layout->base + layout->text_size,
-+		   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
++	mutex_lock(&module_mutex);
++	return seq_list_start(&modules, *pos);
 +}
 +
-+void frob_ro_after_init(const struct module_layout *layout,
-+				int (*set_memory)(unsigned long start, int num_pages))
++static void *m_next(struct seq_file *m, void *p, loff_t *pos)
 +{
-+	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
-+	set_memory((unsigned long)layout->base + layout->ro_size,
-+		   (layout->ro_after_init_size - layout->ro_size) >> PAGE_SHIFT);
++	return seq_list_next(p, &modules, pos);
 +}
 +
-+void frob_writable_data(const struct module_layout *layout,
-+			       int (*set_memory)(unsigned long start, int num_pages))
++static void m_stop(struct seq_file *m, void *p)
 +{
-+	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->size & (PAGE_SIZE-1));
-+	set_memory((unsigned long)layout->base + layout->ro_after_init_size,
-+		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
++	mutex_unlock(&module_mutex);
 +}
 +
-+void module_enable_ro(const struct module *mod, bool after_init)
++static int m_show(struct seq_file *m, void *p)
 +{
-+	if (!rodata_enabled)
-+		return;
++	struct module *mod = list_entry(p, struct module, list);
++	char buf[MODULE_FLAGS_BUF_SIZE];
++	void *value;
 +
-+	set_vm_flush_reset_perms(mod->core_layout.base);
-+	set_vm_flush_reset_perms(mod->init_layout.base);
-+	frob_text(&mod->core_layout, set_memory_ro);
++	/* We always ignore unformed modules. */
++	if (mod->state == MODULE_STATE_UNFORMED)
++		return 0;
 +
-+	frob_rodata(&mod->core_layout, set_memory_ro);
-+	frob_text(&mod->init_layout, set_memory_ro);
-+	frob_rodata(&mod->init_layout, set_memory_ro);
++	seq_printf(m, "%s %u",
++		   mod->name, mod->init_layout.size + mod->core_layout.size);
++	print_unload_info(m, mod);
 +
-+	if (after_init)
-+		frob_ro_after_init(&mod->core_layout, set_memory_ro);
-+}
++	/* Informative for users. */
++	seq_printf(m, " %s",
++		   mod->state == MODULE_STATE_GOING ? "Unloading" :
++		   mod->state == MODULE_STATE_COMING ? "Loading" :
++		   "Live");
++	/* Used by oprofile and other similar tools. */
++	value = m->private ? NULL : mod->core_layout.base;
++	seq_printf(m, " 0x%px", value);
 +
-+void module_enable_nx(const struct module *mod)
-+{
-+	frob_rodata(&mod->core_layout, set_memory_nx);
-+	frob_ro_after_init(&mod->core_layout, set_memory_nx);
-+	frob_writable_data(&mod->core_layout, set_memory_nx);
-+	frob_rodata(&mod->init_layout, set_memory_nx);
-+	frob_writable_data(&mod->init_layout, set_memory_nx);
-+}
++	/* Taints info */
++	if (mod->taints)
++		seq_printf(m, " %s", module_flags(mod, buf));
 +
-+int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-+				       char *secstrings, struct module *mod)
-+{
-+	const unsigned long shf_wx = SHF_WRITE|SHF_EXECINSTR;
-+	int i;
-+
-+	for (i = 0; i < hdr->e_shnum; i++) {
-+		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
-+			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
-+				mod->name, secstrings + sechdrs[i].sh_name, i);
-+			return -ENOEXEC;
-+		}
-+	}
-+
++	seq_puts(m, "\n");
 +	return 0;
 +}
++
++/*
++ * Format: modulename size refcount deps address
++ *
++ * Where refcount is a number or -, and deps is a comma-separated list
++ * of depends or -.
++ */
++static const struct seq_operations modules_op = {
++	.start	= m_start,
++	.next	= m_next,
++	.stop	= m_stop,
++	.show	= m_show
++};
++
++/*
++ * This also sets the "private" pointer to non-NULL if the
++ * kernel pointers should be hidden (so you can just test
++ * "m->private" to see if you should keep the values private).
++ *
++ * We use the same logic as for /proc/kallsyms.
++ */
++static int modules_open(struct inode *inode, struct file *file)
++{
++	int err = seq_open(file, &modules_op);
++
++	if (!err) {
++		struct seq_file *m = file->private_data;
++		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
++	}
++
++	return err;
++}
++
++static const struct proc_ops modules_proc_ops = {
++	.proc_flags	= PROC_ENTRY_PERMANENT,
++	.proc_open	= modules_open,
++	.proc_read	= seq_read,
++	.proc_lseek	= seq_lseek,
++	.proc_release	= seq_release,
++};
++
++static int __init proc_modules_init(void)
++{
++	proc_create("modules", 0, NULL, &modules_proc_ops);
++	return 0;
++}
++module_init(proc_modules_init);
 -- 
 2.31.1
 
