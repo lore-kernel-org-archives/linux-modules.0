@@ -2,197 +2,136 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5478BC433FE
-	for <linux-modules@archiver.kernel.org>; Sun,  2 Jan 2022 16:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC479C433FE
+	for <linux-modules@archiver.kernel.org>; Mon,  3 Jan 2022 16:04:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbiABQVW (ORCPT
+        id S233583AbiACQEg (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 2 Jan 2022 11:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233348AbiABQVW (ORCPT
+        Mon, 3 Jan 2022 11:04:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:51426 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229898AbiACQEd (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 2 Jan 2022 11:21:22 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCB2C061761;
-        Sun,  2 Jan 2022 08:21:21 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id m1so27597095pfk.8;
-        Sun, 02 Jan 2022 08:21:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FneKfEeM6t7V97+0czUOEIIjpFG+NHNOywBYdTBFn8U=;
-        b=d8rvVb5aVUB1pTIgKc1H8z543k51Z2LKbeO20W3Z4HjpXQIaAna573nwuoP2ivR0EL
-         dWA0NWeoolgtGm7fVeLN3Ky8thD4bjFnfZTSXSGymH3H5VtyhOEVShEOBRgZGPQso4hX
-         zvnZ9XdU3TxlpK/RxrFZzJW/qnrjVidVRY77E0+tsqV+fkU+zWmvcL99oOOC0tVZ0rUD
-         f0lqZzrIge9MMVYuVDhT6mipi9zeU45mzFeuLF2MXuetgCi6i5viNV3jl7UjsyPphulN
-         a5DzCAZn3/cdiTVXsIEtGACzci17wRD45l80oiTCOXRRkjsWjSt0ooUWITZ3VzsrLMWU
-         UwMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FneKfEeM6t7V97+0czUOEIIjpFG+NHNOywBYdTBFn8U=;
-        b=z7vkRL18a18yoYl9wy2VTPlC5iIhmVU6yPSc7q0zw9DON7jHQ2GRBZXLvey7b+j+Op
-         yry56btRlWi9n9dyDfhmhbV5yF3Ym6+aCUCBVsmUO2410W92r9OTg1pLf8G6u/Qkvi+8
-         9S3KHc2A5+i+GqzpoGF7ZmK1gRaBduuWfE8Rw8ipNbF0sKx7IfJ5z2mntEHirFsu8cnV
-         mY94qnyCzV7Q6yNbt9UFcT3RtINfMLcxPEK4eY61AKuBFaii7IGOTXKnhiQZL9i6x276
-         hZcqxY1RxFws2AD0Bb1V57GVujmosIVYF8AXN8j2hg/bRe7js5qlBMkfcIpFlYDTvzLV
-         NY0g==
-X-Gm-Message-State: AOAM533ggHdg9/5DkdN5FGGLeuKr1/+bw4+vKW55y83u+vd//+o97eOY
-        NE02X6T9pu5eJSAMQpjMwAdZoce8k4o=
-X-Google-Smtp-Source: ABdhPJxhLC5HZgy3skPzbcJW6m0dJ+4wOlZXhhrjj/zRu8XYzOFAUP4PW7TM84s5/+F2AiXfJyOpKQ==
-X-Received: by 2002:a05:6a00:14c9:b0:4bb:68c5:b649 with SMTP id w9-20020a056a0014c900b004bb68c5b649mr43531087pfu.25.1641140481360;
-        Sun, 02 Jan 2022 08:21:21 -0800 (PST)
-Received: from localhost ([2405:201:6014:d064:3d4e:6265:800c:dc84])
-        by smtp.gmail.com with ESMTPSA id cx5sm33102383pjb.22.2022.01.02.08.21.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jan 2022 08:21:21 -0800 (PST)
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH bpf-next v6 01/11] kernel: Implement try_module_get_live
-Date:   Sun,  2 Jan 2022 21:51:05 +0530
-Message-Id: <20220102162115.1506833-2-memxor@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220102162115.1506833-1-memxor@gmail.com>
-References: <20220102162115.1506833-1-memxor@gmail.com>
+        Mon, 3 Jan 2022 11:04:33 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id DC1841F381;
+        Mon,  3 Jan 2022 16:04:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641225871; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JI+ClfcBMEbVg7coPIrkba4vZBLWnxY727vXuk1pUjY=;
+        b=cAXVKimh/25e7k0h4Fjf9E377qfeC6mgx7qKcakGt6KYb8hqr1YNKzxyX468cF8JHd2hEz
+        1L/OIGta7OC8iDrISx0l38a1QC4d8vZogiwM9oCiQdIemq3VfonU3xVAjq2vpVdkeCWmUi
+        4DQFPk9PV6BHxAlVpS3d/r5bfGNDUcw=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B0EF3A3B8B;
+        Mon,  3 Jan 2022 16:04:31 +0000 (UTC)
+Date:   Mon, 3 Jan 2022 17:04:31 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     David Vernet <void@manifault.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com, linux-modules@vger.kernel.org,
+        mcgrof@kernel.org, jeyu@kernel.org, bpf@vger.kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, memxor@gmail.com
+Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
+Message-ID: <YdMej8L0bqe+XetW@alley>
+References: <Yc0yskk0m2bePLu6@dev0025.ash9.facebook.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3900; h=from:subject; bh=0xQJuMPHF9jAUeRRbCHR10LRMBj3BLengC9L+D9l2vg=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBh0dCJpKFzooU7tf/91QImFry8ZYWdj9EwitOF8zeJ IfebNjOJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYdHQiQAKCRBM4MiGSL8RysKWD/ 0UCxYPovkVO+6WskDoPzJXUpeIYsU1jxycTSodueyhUQ1gyCzKDP8HlRnBrPJ14ERamRB4Mp+71308 qHgB9L9w6zmhznEBSiNnvRz98nuDUSqJKC1lELMV8R3s5/pUT8ZjMmWx8RAJuMD5H78AHjf1r32rGa dG4wl1td5iFclrwvszFzDfL1NEGancPqRUbAzH0tl3pIFt7FL2jwAH0/PxaFPe209oOMDaOP0lGps1 VdPe+Y/NqyY8re2D8RLMj9vMLQ7dkxamPQqLuVEltejNSwWlFQ9I5xyXBojre/Kl8cZVS5+y8gYo9Z SVdf7arL6xVKIsFSkRXkp6BMimhhFBb8E8PaVaDhIKP2iHM3jG1IiN8EXwSVt67baFxQTM+74kWBHY 75nDMIVKQ6bF5zdrnxdTXmwoJ1rnPKc4o58wLIToaPK0cuzWtttTQlASO2oIGXUQ5mPavEN9je6F5a C9kPYGQl85v4diiE1Vb5ZofnyDRr40BohBINBDfQPT3X6IC+dLPbTx4kiZ4NLMqZv9D/7zZ00Ac4Vj ycYvblVmq2Y70q5vxjlY6GnbmR6+Jfrhg09wHpF5XrVpDYHV42TS59bNjCbCd0K+SXb4U4j0uDPp31 lvUHUNBzuiiDoaxBXtAw2m41B0DaS0+qXSYLY1yEcjBtN5/8KEq4l0KcuU5w==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yc0yskk0m2bePLu6@dev0025.ash9.facebook.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Refactor shared functionality between strong_try_module_get and
-try_module_get into a common helper, and expose try_module_get_live
-that returns a bool similar to try_module_get.
+On Wed 2021-12-29 20:16:50, David Vernet wrote:
+> Adding modules + BPF list and maintainers to this thread.
+> 
+> David Vernet <void@manifault.com> wrote on Wed [2021-Dec-29 13:56:47 -0800]:
+> > When initializing a 'struct klp_object' in klp_init_object_loaded(), and
+> > performing relocations in klp_resolve_symbols(), klp_find_object_symbol()
+> > is invoked to look up the address of a symbol in an already-loaded module
+> > (or vmlinux). This, in turn, calls kallsyms_on_each_symbol() or
+> > module_kallsyms_on_each_symbol() to find the address of the symbol that is
+> > being patched.
+> > 
+> > It turns out that symbol lookups often take up the most CPU time when
+> > enabling and disabling a patch, and may hog the CPU and cause other tasks
+> > on that CPU's runqueue to starve -- even in paths where interrupts are
+> > enabled.  For example, under certain workloads, enabling a KLP patch with
+> > many objects or functions may cause ksoftirqd to be starved, and thus for
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+This suggests that a single kallsyms_on_each_symbol() is not a big
+problem. cond_resched() might be called non-necessarily often there.
+I wonder if it would be enough to add cond_resched() into the two
+loops calling klp_find_object_symbol().
 
-It will be used in the next patch for btf_try_get_module, to eliminate a
-race between module __init function invocation and module_put from BPF
-side.
+That said, kallsyms_on_each_symbol() is a slow path and there might
+be many symbols. So, it might be the right place.
 
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Jessica Yu <jeyu@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-modules@vger.kernel.org
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- include/linux/module.h | 26 +++++++++++++++++++-------
- kernel/module.c        | 20 ++++++++------------
- 2 files changed, 27 insertions(+), 19 deletions(-)
+I am just thinking loudly. I do not have strong opinion. I am fine
+with any cond_resched() location that solves the problem. Feel free
+to use:
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index c9f1200b2312..eb83aaeaa76e 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -608,17 +608,17 @@ void symbol_put_addr(void *addr);
- /* Sometimes we know we already have a refcount, and it's easier not
-    to handle the error case (which only happens with rmmod --wait). */
- extern void __module_get(struct module *module);
--
--/* This is the Right Way to get a module: if it fails, it's being removed,
-- * so pretend it's not there. */
--extern bool try_module_get(struct module *module);
--
-+extern int __try_module_get(struct module *module, bool strong);
- extern void module_put(struct module *module);
- 
- #else /*!CONFIG_MODULE_UNLOAD*/
--static inline bool try_module_get(struct module *module)
-+static inline int __try_module_get(struct module *module, bool strong)
- {
--	return !module || module_is_live(module);
-+	if (module && !module_is_live(module))
-+		return -ENOENT;
-+	if (strong && module && module->state == MODULE_STATE_COMING)
-+		return -EBUSY;
-+	return 0;
- }
- static inline void module_put(struct module *module)
- {
-@@ -631,6 +631,18 @@ static inline void __module_get(struct module *module)
- 
- #endif /* CONFIG_MODULE_UNLOAD */
- 
-+/* This is the Right Way to get a module: if it fails, it's being removed,
-+ * so pretend it's not there. */
-+static inline bool try_module_get(struct module *module)
-+{
-+	return !__try_module_get(module, false);
-+}
-+/* Only take reference for modules which have fully initialized */
-+static inline bool try_module_get_live(struct module *module)
-+{
-+	return !__try_module_get(module, true);
-+}
-+
- /* This is a #define so the string doesn't get put in every .o file */
- #define module_name(mod)			\
- ({						\
-diff --git a/kernel/module.c b/kernel/module.c
-index 84a9141a5e15..a9bb0a5576c8 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -318,12 +318,7 @@ EXPORT_SYMBOL(unregister_module_notifier);
- static inline int strong_try_module_get(struct module *mod)
- {
- 	BUG_ON(mod && mod->state == MODULE_STATE_UNFORMED);
--	if (mod && mod->state == MODULE_STATE_COMING)
--		return -EBUSY;
--	if (try_module_get(mod))
--		return 0;
--	else
--		return -ENOENT;
-+	return __try_module_get(mod, true);
- }
- 
- static inline void add_taint_module(struct module *mod, unsigned flag,
-@@ -1066,24 +1061,25 @@ void __module_get(struct module *module)
- }
- EXPORT_SYMBOL(__module_get);
- 
--bool try_module_get(struct module *module)
-+int __try_module_get(struct module *module, bool strong)
- {
--	bool ret = true;
-+	int ret = 0;
- 
- 	if (module) {
- 		preempt_disable();
-+		if (strong && module->state == MODULE_STATE_COMING)
-+			ret = -EBUSY;
- 		/* Note: here, we can fail to get a reference */
--		if (likely(module_is_live(module) &&
-+		else if (likely(module_is_live(module) &&
- 			   atomic_inc_not_zero(&module->refcnt) != 0))
- 			trace_module_get(module, _RET_IP_);
- 		else
--			ret = false;
--
-+			ret = -ENOENT;
- 		preempt_enable();
- 	}
- 	return ret;
- }
--EXPORT_SYMBOL(try_module_get);
-+EXPORT_SYMBOL(__try_module_get);
- 
- void module_put(struct module *module)
- {
--- 
-2.34.1
+Acked-by: Petr Mladek <pmladek@suse.com>
 
+Best Regards,
+Petr
+
+
+> > interrupts to be backlogged and delayed. This may end up causing TCP
+> > retransmits on the host where the KLP patch is being applied, and in
+> > general, may cause any interrupts serviced by softirqd to be delayed while
+> > the patch is being applied.
+> > 
+> > So as to ensure that kallsyms_on_each_symbol() does not end up hogging the
+> > CPU, this patch adds a call to cond_resched() in kallsyms_on_each_symbol()
+> > and module_kallsyms_on_each_symbol(), which are invoked when doing a symbol
+> > lookup in vmlinux and a module respectively.  Without this patch, if a
+> > live-patch is applied on a 36-core Intel host with heavy TCP traffic, a
+> > ~10x spike is observed in TCP retransmits while the patch is being applied.
+> > Additionally, collecting sched events with perf indicates that ksoftirqd is
+> > awakened ~1.3 seconds before it's eventually scheduled.  With the patch, no
+> > increase in TCP retransmit events is observed, and ksoftirqd is scheduled
+> > shortly after it's awakened.
+> > 
+> > Signed-off-by: David Vernet <void@manifault.com>
+> > ---
+> >  kernel/kallsyms.c | 1 +
+> >  kernel/module.c   | 2 ++
+> >  2 files changed, 3 insertions(+)
+> > 
+> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> > index 0ba87982d017..2a9afe484aec 100644
+> > --- a/kernel/kallsyms.c
+> > +++ b/kernel/kallsyms.c
+> > @@ -223,6 +223,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+> >  		ret = fn(data, namebuf, NULL, kallsyms_sym_address(i));
+> >  		if (ret != 0)
+> >  			return ret;
+> > +		cond_resched();
+> >  	}
+> >  	return 0;
+> >  }
+> > diff --git a/kernel/module.c b/kernel/module.c
+> > index 40ec9a030eec..c96160f7f3f5 100644
+> > --- a/kernel/module.c
+> > +++ b/kernel/module.c
+> > @@ -4462,6 +4462,8 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> >  				 mod, kallsyms_symbol_value(sym));
+> >  			if (ret != 0)
+> >  				goto out;
+> > +
+> > +			cond_resched();
+> >  		}
+> >  	}
+> >  out:
+> > -- 
+> > 2.30.2
+> > 
