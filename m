@@ -2,136 +2,137 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC479C433FE
-	for <linux-modules@archiver.kernel.org>; Mon,  3 Jan 2022 16:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D863C433EF
+	for <linux-modules@archiver.kernel.org>; Thu,  6 Jan 2022 23:43:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbiACQEg (ORCPT
+        id S245644AbiAFXnY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 3 Jan 2022 11:04:36 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:51426 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiACQEd (ORCPT
+        Thu, 6 Jan 2022 18:43:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56377 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245626AbiAFXnX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:04:33 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id DC1841F381;
-        Mon,  3 Jan 2022 16:04:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641225871; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JI+ClfcBMEbVg7coPIrkba4vZBLWnxY727vXuk1pUjY=;
-        b=cAXVKimh/25e7k0h4Fjf9E377qfeC6mgx7qKcakGt6KYb8hqr1YNKzxyX468cF8JHd2hEz
-        1L/OIGta7OC8iDrISx0l38a1QC4d8vZogiwM9oCiQdIemq3VfonU3xVAjq2vpVdkeCWmUi
-        4DQFPk9PV6BHxAlVpS3d/r5bfGNDUcw=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B0EF3A3B8B;
-        Mon,  3 Jan 2022 16:04:31 +0000 (UTC)
-Date:   Mon, 3 Jan 2022 17:04:31 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     David Vernet <void@manifault.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        joe.lawrence@redhat.com, linux-modules@vger.kernel.org,
-        mcgrof@kernel.org, jeyu@kernel.org, bpf@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, memxor@gmail.com
-Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
-Message-ID: <YdMej8L0bqe+XetW@alley>
-References: <Yc0yskk0m2bePLu6@dev0025.ash9.facebook.com>
+        Thu, 6 Jan 2022 18:43:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641512603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zrSEVqbuwB224LNTaEpLTrbe7fqxzrVcpAcECOOMUH4=;
+        b=BSsWNKHGLrm31y0sKWux/LXo5ydi6G2y+2B3xkKfboc0xC8HJZme+WrBMR6LGMdPUzD34F
+        5Gv/rQpfwzAjF5UbF6Eo82qj25zyV2JQAM8Mj9nfSkYq0ZoQkxid+TKjWhxtqgwWuscKfE
+        B9CA7dPje4PVXZL74CfsbJgco8ZNpf8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-622-mHnH_fMkONqnd3LXUjvmIg-1; Thu, 06 Jan 2022 18:43:22 -0500
+X-MC-Unique: mHnH_fMkONqnd3LXUjvmIg-1
+Received: by mail-wm1-f69.google.com with SMTP id p18-20020a05600c1d9200b00346da4a9e26so2345112wms.1
+        for <linux-modules@vger.kernel.org>; Thu, 06 Jan 2022 15:43:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zrSEVqbuwB224LNTaEpLTrbe7fqxzrVcpAcECOOMUH4=;
+        b=B36Ydd7bQrcG28TWVkkCbnET7ZxN/hn+flDjGl6+QV4k6rpEvF4lh1Z6FBFSyhopLs
+         Ow6PW2Ubnh6LDiL8/+VawDkH+g5KaSADrTdHNEDRO+1eZ47G63S/JZO6zvQeWE/537c1
+         2q97jAgOJhJbe+rfryhCcPBrpiFHvKyHXFhTSfvUxkr/dZefFD5Shk4fpr/YGCYo9YNn
+         Nx0Jko9jrai1MxmY9ezIvXBQJwmv3p+1Yc7HLufI1SXCQWc1D0GCGsAQyX6yQLZEqIZA
+         OxGZWYzkOTcxa4Es3vEANExgRAodsQWU5jyCv3olufLzeuDAM/mlIR5GA1NlI3WZd9n7
+         64nQ==
+X-Gm-Message-State: AOAM533CaaPY/apjA0n1n4x1kUEdCujhr5cx0wMyiQgQf7QFS0usnT95
+        0s0jBCzd2ecyby1srW27mGaPfRKKVyz9aph5dfT5EoMMb9QgKOg7R4F/KRrRr6aR7AXXj10MovG
+        K3T5FGFXOA5XpQ5w4XgSK9t+5
+X-Received: by 2002:adf:cc8d:: with SMTP id p13mr50303318wrj.688.1641512600856;
+        Thu, 06 Jan 2022 15:43:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxRdGC6HSiAXHCJ3PH755CZuns/3bohmjBLq2aJpvQsD9hmLkI21O6AqLwtdy1S4MB2Ky1TIA==
+X-Received: by 2002:adf:cc8d:: with SMTP id p13mr50303313wrj.688.1641512600706;
+        Thu, 06 Jan 2022 15:43:20 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id l2sm3389354wrz.8.2022.01.06.15.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 15:43:20 -0800 (PST)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com, allen.lkml@gmail.com
+Subject: [RFC PATCH v2 00/13] module: core code clean up
+Date:   Thu,  6 Jan 2022 23:43:06 +0000
+Message-Id: <20220106234319.2067842-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yc0yskk0m2bePLu6@dev0025.ash9.facebook.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed 2021-12-29 20:16:50, David Vernet wrote:
-> Adding modules + BPF list and maintainers to this thread.
-> 
-> David Vernet <void@manifault.com> wrote on Wed [2021-Dec-29 13:56:47 -0800]:
-> > When initializing a 'struct klp_object' in klp_init_object_loaded(), and
-> > performing relocations in klp_resolve_symbols(), klp_find_object_symbol()
-> > is invoked to look up the address of a symbol in an already-loaded module
-> > (or vmlinux). This, in turn, calls kallsyms_on_each_symbol() or
-> > module_kallsyms_on_each_symbol() to find the address of the symbol that is
-> > being patched.
-> > 
-> > It turns out that symbol lookups often take up the most CPU time when
-> > enabling and disabling a patch, and may hog the CPU and cause other tasks
-> > on that CPU's runqueue to starve -- even in paths where interrupts are
-> > enabled.  For example, under certain workloads, enabling a KLP patch with
-> > many objects or functions may cause ksoftirqd to be starved, and thus for
-    ^^^^^^^^^^^^^^^^^^^^^^^^^
-This suggests that a single kallsyms_on_each_symbol() is not a big
-problem. cond_resched() might be called non-necessarily often there.
-I wonder if it would be enough to add cond_resched() into the two
-loops calling klp_find_object_symbol().
+Hi Luis,
 
-That said, kallsyms_on_each_symbol() is a slow path and there might
-be many symbols. So, it might be the right place.
+As per your suggestion [1], this is an attempt to refactor and split
+optional code out of core module support code into separate components.
+Unfortunately, nothing has been thoroughly tested yet. Please let me know
+your thoughts.
 
-I am just thinking loudly. I do not have strong opinion. I am fine
-with any cond_resched() location that solves the problem. Feel free
-to use:
+Changes since v1 [2]:
 
-Acked-by: Petr Mladek <pmladek@suse.com>
+  - Moved module version support code into a new file
 
-Best Regards,
-Petr
+[1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
+[2]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
 
+Aaron Tomlin (13):
+  module: Move all into module/
+  module: Simple refactor in preparation for split
+  module: Move livepatch support to a separate file
+  module: Move latched RB-tree support to a separate file
+  module: Move arch strict rwx support to a separate file
+  module: Move strict rwx support to a separate file
+  module: Move extra signature support out of core code
+  module: Move kmemleak support to a separate file
+  module: Move kallsyms support into a separate file
+  module: Move procfs support into a separate file
+  module: Move sysfs support into a separate file
+  module: Move kdb_modules list out of core code
+  module: Move version support into a separate file
 
-> > interrupts to be backlogged and delayed. This may end up causing TCP
-> > retransmits on the host where the KLP patch is being applied, and in
-> > general, may cause any interrupts serviced by softirqd to be delayed while
-> > the patch is being applied.
-> > 
-> > So as to ensure that kallsyms_on_each_symbol() does not end up hogging the
-> > CPU, this patch adds a call to cond_resched() in kallsyms_on_each_symbol()
-> > and module_kallsyms_on_each_symbol(), which are invoked when doing a symbol
-> > lookup in vmlinux and a module respectively.  Without this patch, if a
-> > live-patch is applied on a 36-core Intel host with heavy TCP traffic, a
-> > ~10x spike is observed in TCP retransmits while the patch is being applied.
-> > Additionally, collecting sched events with perf indicates that ksoftirqd is
-> > awakened ~1.3 seconds before it's eventually scheduled.  With the patch, no
-> > increase in TCP retransmit events is observed, and ksoftirqd is scheduled
-> > shortly after it's awakened.
-> > 
-> > Signed-off-by: David Vernet <void@manifault.com>
-> > ---
-> >  kernel/kallsyms.c | 1 +
-> >  kernel/module.c   | 2 ++
-> >  2 files changed, 3 insertions(+)
-> > 
-> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> > index 0ba87982d017..2a9afe484aec 100644
-> > --- a/kernel/kallsyms.c
-> > +++ b/kernel/kallsyms.c
-> > @@ -223,6 +223,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
-> >  		ret = fn(data, namebuf, NULL, kallsyms_sym_address(i));
-> >  		if (ret != 0)
-> >  			return ret;
-> > +		cond_resched();
-> >  	}
-> >  	return 0;
-> >  }
-> > diff --git a/kernel/module.c b/kernel/module.c
-> > index 40ec9a030eec..c96160f7f3f5 100644
-> > --- a/kernel/module.c
-> > +++ b/kernel/module.c
-> > @@ -4462,6 +4462,8 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
-> >  				 mod, kallsyms_symbol_value(sym));
-> >  			if (ret != 0)
-> >  				goto out;
-> > +
-> > +			cond_resched();
-> >  		}
-> >  	}
-> >  out:
-> > -- 
-> > 2.30.2
-> > 
+ include/linux/module.h                        |   76 +-
+ kernel/Makefile                               |    4 +-
+ kernel/debug/kdb/kdb_main.c                   |    5 +
+ kernel/module-internal.h                      |   31 -
+ kernel/module/Makefile                        |   17 +
+ kernel/module/arch_strict_rwx.c               |   44 +
+ kernel/module/debug_kmemleak.c                |   30 +
+ kernel/module/internal.h                      |  169 ++
+ kernel/module/kallsyms.c                      |  506 +++++
+ kernel/module/livepatch.c                     |   75 +
+ kernel/{module.c => module/main.c}            | 1872 +----------------
+ kernel/module/procfs.c                        |  111 +
+ .../signature.c}                              |    0
+ kernel/module/signing.c                       |  120 ++
+ kernel/module/strict_rwx.c                    |   83 +
+ kernel/module/sysfs.c                         |  426 ++++
+ kernel/module/tree_lookup.c                   |  108 +
+ kernel/module/version.c                       |  113 +
+ kernel/module_signing.c                       |   45 -
+ 19 files changed, 1968 insertions(+), 1867 deletions(-)
+ delete mode 100644 kernel/module-internal.h
+ create mode 100644 kernel/module/Makefile
+ create mode 100644 kernel/module/arch_strict_rwx.c
+ create mode 100644 kernel/module/debug_kmemleak.c
+ create mode 100644 kernel/module/internal.h
+ create mode 100644 kernel/module/kallsyms.c
+ create mode 100644 kernel/module/livepatch.c
+ rename kernel/{module.c => module/main.c} (63%)
+ create mode 100644 kernel/module/procfs.c
+ rename kernel/{module_signature.c => module/signature.c} (100%)
+ create mode 100644 kernel/module/signing.c
+ create mode 100644 kernel/module/strict_rwx.c
+ create mode 100644 kernel/module/sysfs.c
+ create mode 100644 kernel/module/tree_lookup.c
+ create mode 100644 kernel/module/version.c
+ delete mode 100644 kernel/module_signing.c
+
+-- 
+2.31.1
+
