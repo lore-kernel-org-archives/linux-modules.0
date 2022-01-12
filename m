@@ -2,60 +2,73 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C33EC433F5
-	for <linux-modules@archiver.kernel.org>; Wed, 12 Jan 2022 16:21:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB78EC433F5
+	for <linux-modules@archiver.kernel.org>; Wed, 12 Jan 2022 16:30:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349722AbiALQV2 (ORCPT
+        id S1343516AbiALQaH (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 12 Jan 2022 11:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        Wed, 12 Jan 2022 11:30:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343654AbiALQV1 (ORCPT
+        with ESMTP id S240969AbiALQaG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:21:27 -0500
+        Wed, 12 Jan 2022 11:30:06 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E8FC06173F;
-        Wed, 12 Jan 2022 08:21:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FBEC06173F;
+        Wed, 12 Jan 2022 08:30:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZxcrON9hmC2vN9kK0ta7qXEERljr+W7CEPSKNLlGTFQ=; b=DAZZmE8Uziug6hEBJNjgFgGgRM
-        Aqj0mQPPYan0L97NlnSkMOhrqiLQZdHao/4m9272YgxxjWJltHglGk1Yioo3Tixmj8v4LS9k/x+P4
-        RSD9Y6GQ5kJCI6SB5dJj3DyUanj1VnHdH0f+cPSrK73/ecwoc5e37E/7/+ls57+K3i/zlVovEj6np
-        45ol+r4kAUtPWrmgz+NEda0EIeJSG4UavObk9GMyH6U/+nGjbvtM+PKzRONcwisGhNMb/es/MAE+H
-        KpKJefbS3CMxe4HhfppAs77j9vF1jb2UB8K/K6XLk6qZLScf4MM2icBLXnjTKe132eXG9+xLdH5I7
-        4McXnGjA==;
+        bh=LedAk+GSW1w62gjO8Ys+jc28oKPlr3LVVvS4k8VmYa8=; b=KwPcY8c1shI3PSOnNiN2d+lqKr
+        qA8y64I81CVuR8g0ut5JWe4UJQxF39yAFG6d1SqkZHZ7/taOEZcegcCGOV40i3I90nLObJiHlNTxJ
+        nDfQ9x77eescnuGrZeOdZI/D7ERklsIRjN2hBt/QEF8qGsbrC4Q4Yn2rnv/SPFShhA1v67dc8PMC8
+        h2rFLzlNnTLoXbaq3qe3TdHBoiGANge/KCXq/pHLft9YXlCOPJQSnVu0lNVZNj00ePOw2hZ6/zxn/
+        wHctQ2YuVheY+tvmJ1BbRxUBXiAIhx2c3xrI53x+nbQBJVbEkzIPyRUPJG21JHh+7kJn/mkVMgfuA
+        4JTNrCCQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7gNF-00352z-Cf; Wed, 12 Jan 2022 16:21:21 +0000
-Date:   Wed, 12 Jan 2022 08:21:21 -0800
+        id 1n7gVg-0035wI-JY; Wed, 12 Jan 2022 16:30:04 +0000
+Date:   Wed, 12 Jan 2022 08:30:04 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        atomlin@atomlin.com, ghalat@redhat.com
-Subject: Re: [RFC PATCH 00/12] module: core code clean up
-Message-ID: <Yd8AAd/mj5MX6CFE@bombadil.infradead.org>
-References: <YbKUUJUtjBk/n913@bombadil.infradead.org>
- <20211228213041.1356334-1-atomlin@redhat.com>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     jeyu@kernel.org, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com
+Subject: Re: [PING PATCH v7] kallsyms: new /proc/kallmodsyms with builtin
+ modules
+Message-ID: <Yd8CDJA0dy0VaXrB@bombadil.infradead.org>
+References: <20211216201919.234994-1-nick.alcock@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211228213041.1356334-1-atomlin@redhat.com>
+In-Reply-To: <20211216201919.234994-1-nick.alcock@oracle.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Dec 28, 2021 at 09:30:29PM +0000, Aaron Tomlin wrote:
-> Hi Luis, Allen,
+On Thu, Dec 16, 2021 at 08:19:12PM +0000, Nick Alcock wrote:
+> /proc/kallsyms is very useful for tracers and other tools that need to
+> map kernel symbols to addresses.
 > 
-> I had some free time so decided to make a quick start.
-> There is more outstanding; albeit, I wanted to share what
-> was accomplished thus far. Unfortunately, nothing has been
-> thoroughly tested yet. Please let me know your thoughts.
-> 
+> It would be useful
 
-This is looking good!
+It took me digging on archives to see to *who* this is useful to.
+The short answer seeme to be dtrace. Can you work on getting use
+of this for something (I don't know, maybe kernelshark?) that does
+not taint the kernel? Last I checked using dtrace on linux taints the
+kernel.
+
+Without valid upstream users I see no need to add more complexity to the
+kernel. And complexity added by tainting modules or not upstream modules
+just implies maintaining something for someone who is not working
+upstream. I don't want to add more code or "features" to create a
+maintenance burden for code not upstream or code that taints the kernel.
+module.c is already the second largest file on the kernel/ directory and
+I want to ensure we keep it clean, not add fluff for speculated features
+which no proper non-taining Linux tool is using.
+
+Without a valid non-taining user being made very clear with a value-add,
+I will have to ignore this.
 
   Luis
