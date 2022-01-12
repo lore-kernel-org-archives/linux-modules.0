@@ -2,82 +2,81 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56B26C433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 12 Jan 2022 15:52:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A4A1C433F5
+	for <linux-modules@archiver.kernel.org>; Wed, 12 Jan 2022 16:13:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245571AbiALPwf (ORCPT
+        id S239810AbiALQNW (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 12 Jan 2022 10:52:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        Wed, 12 Jan 2022 11:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245483AbiALPwe (ORCPT
+        with ESMTP id S1343653AbiALQNH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:52:34 -0500
+        Wed, 12 Jan 2022 11:13:07 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97FAC06173F;
-        Wed, 12 Jan 2022 07:52:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F40C06173F;
+        Wed, 12 Jan 2022 08:13:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WJbLqDhZiskfp5FI4IE2x8brDDmN7SOUeyren1ySdPE=; b=jxnEEsy5n0BssJvJbU2r4hq+Ew
-        /D5esqzqKe83/Jar+jJ9J31vVLRiPHNNUZfgpMQmhKPeeJZXJQodW8TSjOqlavH86xSGIB4Xbq1y5
-        Ihgx/dD3V+p43hLKc4IS+jLFj/ikxFL0I6CEM7wI7CAHhQzgFD9rhpbZgJVMuL5c4ciVhE+Ankv4Q
-        itXE5XZ1OW5j/5ODe/1HJhSJIu6XOCEc6Yw88/sGuFX0G4JfGd8JTa/mrGRFKHbxlSMP9koaQcs1+
-        UFDziF99LWaYJb8B61onPRed20UYQY/F9v0NJU4LrSQbqoHWHwwNaxgOfg9KsdJoxEH4ao7VeSy9c
-        xmN2tFgQ==;
+        bh=G0+WM0j98iObaA9C7TB5WzjB/BZTanMfNLE+zZav7gk=; b=LvPWxY6RdYB2uGvehEABOnwH3G
+        DMNa1G+Bil83ZQjIqfcBE/s4+fE4tpBcq4D+5IK5nbi2PSrSHPlRVDROEFEnTNoj/zyri+yPJix6T
+        8avq3mHKdyILVkSVQHS2ij59er1/AHdJOycBxXrELJesDiBxSnrWBHQ+0iZwhULiHf2lvRmZPVnOj
+        49Rtaqp6pqUP2EL6gF+sbGkVVxxCTMRGs7qL8O6Nt+lZ+0zBVyuVS9y3SOIYK+vEDn4W2ndL4y5Gj
+        1+LBowBq97htMc1YuQohT8FrwUub1AM51MAF/Bw4qSxcEjuNBWEca9hY7dcdeTU35bgRLjzfnu1t2
+        GTXLavZQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7fvH-0030LB-GT; Wed, 12 Jan 2022 15:52:27 +0000
-Date:   Wed, 12 Jan 2022 07:52:27 -0800
+        id 1n7gFC-0033rD-QY; Wed, 12 Jan 2022 16:13:02 +0000
+Date:   Wed, 12 Jan 2022 08:13:02 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     Allen <allen.lkml@gmail.com>, Christoph Lameter <cl@linux.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com
-Subject: Re: [RFC PATCH v2 00/13] module: core code clean up
-Message-ID: <Yd75OzrhrjDp7CVa@bombadil.infradead.org>
-References: <20220106234319.2067842-1-atomlin@redhat.com>
- <CAOMdWSJHm9bRAcrB6U+FsRiK6Fg2bbtbUH82w54VD7kbFmnVsA@mail.gmail.com>
- <CAOMdWS+Sn1sZJt8ocig5U7d7qG3N8oJBW-D1ey0qbZ3AXF-JWg@mail.gmail.com>
- <20220112132104.7emyelwuv3jmmhdt@ava.usersys.com>
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com
+Subject: Re: [RFC PATCH 05/12] module: Move arch strict rwx support to a
+ separate file
+Message-ID: <Yd7+DnFiuklVScmI@bombadil.infradead.org>
+References: <YbKUUJUtjBk/n913@bombadil.infradead.org>
+ <20211228213041.1356334-1-atomlin@redhat.com>
+ <20211228213041.1356334-6-atomlin@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220112132104.7emyelwuv3jmmhdt@ava.usersys.com>
+In-Reply-To: <20211228213041.1356334-6-atomlin@redhat.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jan 12, 2022 at 01:21:04PM +0000, Aaron Tomlin wrote:
-> On Tue 2022-01-11 17:16 -0800, Allen wrote:
-> > Hi Aaron,
-> 
-> Hi Allen,
-> 
-> >   Was the code compile tested?
-> 
-> Not entirely i.e. not the whole of kernel/module/Makefile, unfortunately.
-> Furthermore, only x86-64 was compiled tested. At the moment, I felt the
-> need to share the concept/or approach thus far to simply obtain some
-> overall feedback before further modifications.
-> 
-> >   Unfortunately, I could not apply the series cleanly on top of the
-> > latest 5.17-rc1.
-> 
-> Sorry about that: this work was based on Linus' commit 81361b837a34 ("Merge
-> tag 'kbuild-v5.14' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.").
+On Tue, Dec 28, 2021 at 09:30:34PM +0000, Aaron Tomlin wrote:
+> diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+> index 9d593362156d..95fad95a0549 100644
+> --- a/kernel/module/Makefile
+> +++ b/kernel/module/Makefile
+> @@ -8,3 +8,4 @@ obj-$(CONFIG_MODULE_SIG) += signing.o
+>  obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
+>  obj-$(CONFIG_LIVEPATCH) += livepatch.o
+>  obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
+> +obj-$(CONFIG_ARCH_HAS_STRICT_MODULE_RWX) += arch_strict_rwx.o
+> diff --git a/kernel/module/arch_strict_rwx.c b/kernel/module/arch_strict_rwx.c
+> new file mode 100644
+> index 000000000000..68e970671ec5
+> --- /dev/null
+> +++ b/kernel/module/arch_strict_rwx.c
+> @@ -0,0 +1,44 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * kernel/module/arch_strict_rwx.c - module arch strict rwx
 
-Please work off of modules-next tree:
+No need to repeat the name of the file, a simple:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
++ * module arch strict rwx
 
-That is, this tree on the modules-next branch:
+Would do it.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+Please get 0day to test your git tree as you work on it, and before
+posting patches ensure they get tested by 0day, so we run into less
+issues once merged into modules-next.
 
   Luis
