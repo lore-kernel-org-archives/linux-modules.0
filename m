@@ -2,27 +2,42 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A148C433EF
-	for <linux-modules@archiver.kernel.org>; Thu, 13 Jan 2022 10:42:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81932C433EF
+	for <linux-modules@archiver.kernel.org>; Thu, 13 Jan 2022 14:16:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiAMKmw (ORCPT
+        id S232235AbiAMOQ5 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 13 Jan 2022 05:42:52 -0500
-Received: from p3plsmtpa08-02.prod.phx3.secureserver.net ([173.201.193.103]:47076
-        "EHLO p3plsmtpa08-02.prod.phx3.secureserver.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231148AbiAMKmw (ORCPT
+        Thu, 13 Jan 2022 09:16:57 -0500
+Received: from mail-qt1-f180.google.com ([209.85.160.180]:43913 "EHLO
+        mail-qt1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231591AbiAMOQ5 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:42:52 -0500
-Received: from localhost ([82.17.115.212])
-        by :SMTPAUTH: with ESMTPA
-        id 7xS7nVRjASGVw7xS9nNtM1; Thu, 13 Jan 2022 03:35:34 -0700
-X-CMAE-Analysis: v=2.4 cv=Q7IXX66a c=1 sm=1 tr=0 ts=61e00076
- a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
- a=IkcTkHD0fZMA:10 a=20KFwNOVAAAA:8 a=3a3v7Zz6WrtaihebJGEA:9 a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: atomlin@atomlin.com
-Date:   Thu, 13 Jan 2022 10:35:31 +0000
-From:   Aaron Tomlin <atomlin@atomlin.com>
-To:     David Vernet <void@manifault.com>
+        Thu, 13 Jan 2022 09:16:57 -0500
+Received: by mail-qt1-f180.google.com with SMTP id q14so6927587qtx.10;
+        Thu, 13 Jan 2022 06:16:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BJnOW0r4XvWzKJWyXxLLNdK9vGFIkKRXsum6p3nqYyI=;
+        b=nmbW0t/B4479V1IjC1H6B8MU0tyYqNzOX4Cm1Yz5GaxU5ins6vM07qkWr9wReNQGBL
+         w6l+otFYHHBStLnNbCyxtuk7l/WgQPa2M1LXLEW1Qtwg3mOtPPzaVEdMZNx/k1ASPZwC
+         bTMWTmBWkMVLGjh4ImfeIfPZWqc8GRw8mLalqZjPTXGIGUYfB+3XDe6nnZCpRoB8Wfm1
+         HFB9fX+76gRz+cKNbBHtN9pTXTd7RwVNoHPVut5gpLJhEtY+cwknbn5FIXo2BbkTL/au
+         OWpjSgkRqc48DhnngHI02ce3jq3b2eLxaGerEehQDG6l8O3ysxzX7cTC9S6q6TwBArC+
+         UODQ==
+X-Gm-Message-State: AOAM533Du1qjT3lECitFneqyCLR2c5p+2lj6eBGjfeddgeFLvZYIE05H
+        7QRgfrfRj+Aq3eZ7PL6wLuk=
+X-Google-Smtp-Source: ABdhPJxVwcGpaCxh8DWMtA3SvUFeANGoxh+RxoPbtyAizpP5m77mbHmrNea8AMP1I6hO6D4q/dhYIA==
+X-Received: by 2002:ac8:57d3:: with SMTP id w19mr1865035qta.658.1642083416642;
+        Thu, 13 Jan 2022 06:16:56 -0800 (PST)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-021.fbsv.net. [2a03:2880:20ff:15::face:b00c])
+        by smtp.gmail.com with ESMTPSA id br32sm1877272qkb.79.2022.01.13.06.16.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 06:16:56 -0800 (PST)
+Date:   Thu, 13 Jan 2022 06:16:54 -0800
+From:   David Vernet <void@manifault.com>
+To:     Aaron Tomlin <atomlin@atomlin.com>
 Cc:     Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org, cl@linux.com,
         pmladek@suse.com, mbenes@suse.cz, akpm@linux-foundation.org,
         jeyu@kernel.org, linux-kernel@vger.kernel.org,
@@ -30,51 +45,22 @@ Cc:     Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org, cl@linux.com,
         allen.lkml@gmail.com
 Subject: Re: [RFC PATCH v2 03/13] module: Move livepatch support to a
  separate file
-Message-ID: <20220113103531.sn76g34tfkxscs4e@ava.usersys.com>
+Message-ID: <20220113141654.74lllshgujatnopg@dev0025.ash9.facebook.com>
 References: <20220106234319.2067842-1-atomlin@redhat.com>
  <20220106234319.2067842-4-atomlin@redhat.com>
  <Yd8j/Q2H0zYrAA2c@dev0025.ash9.facebook.com>
+ <20220113103531.sn76g34tfkxscs4e@ava.usersys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yd8j/Q2H0zYrAA2c@dev0025.ash9.facebook.com>
-X-CMAE-Envelope: MS4xfMRZBsZt9wwkZjMH3N7eq8c6rDjO/mctLzhdDYgLDJ4J5XU2HoVtyeKJPSaWYj9Szc/gFSs8Jx2YTb4RikuCJxhzLeB/ub2EA6ez4mjRe8eK/0xiWKDw
- f1U3VjrGjnYyTbE1lYNPEEb6PIccnzNOeyR/yuhPi35xSnKzdQNARNdsCiIfpVyCE+JhkXVJtm4kK8ywoNvWPegGZlch8ABpSGrA62qy1TUg8ZqokaILZbhl
- YztiX5nbPwShbwqn5FhT1Ai0SPfdHAyVro59WlpwsvWrK1+P8EeWyC6NPBWo95IFn8+8AN7usmDRo7mTGK+0zeGKO8eJaJedj/j642OMyCrWrVuN8GoIjSQi
- BtK0Xo8Hhj30BAYKvbB+MuAamBB5vOY0ZuSORVdmm7n0Ivn3QxL0vdQk4HjtIgW1jFZ+PVacPHXBXwrXxDTAeIRxC2vVSsGOKRcq4a0DlntdJHZ/pAjakTwq
- yHZWjvNts7OFz4CSc/b/9HZhLfrrJpy4HcLGKkURJlWLfG3p+mef+KxfnPE=
+In-Reply-To: <20220113103531.sn76g34tfkxscs4e@ava.usersys.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed 2022-01-12 10:54 -0800, David Vernet wrote:
-> Thanks for doing this refactor. +1 to doing this, though Petr had some
-> suggestions in another thread that I'll wait on before Acking.
+Aaron Tomlin <atomlin@atomlin.com> wrote on Thu [2022-Jan-13 10:35:31 +0000]:
+> Who should I specify? I'm not entirely sure. If I understand correctly,
+> Jessica was the original author of the majority.
 
-No problem and yes, I will make the suggested modifications then add you on
-Cc.
-
-> Aaron Tomlin <atomlin@redhat.com> wrote on Thu [2022-Jan-06 23:43:09 +0000]:
-> > diff --git a/kernel/module/livepatch.c b/kernel/module/livepatch.c
-> > new file mode 100644
-> > index 000000000000..e147f5418327
-> > --- /dev/null
-> > +++ b/kernel/module/livepatch.c
-> > @@ -0,0 +1,75 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * kernel/module/livepatch.c - module livepatch support
-> > + *
-> > + * Copyright (C) 2016 Jessica Yu <jeyu@redhat.com>
-> > + */
-> 
-> Should the copyright year (and possibly author) be updated? Or just removed
-> entirely?
-
-Who should I specify? I'm not entirely sure. If I understand correctly,
-Jessica was the original author of the majority.
-
-
-Kind regards,
-
--- 
-Aaron Tomlin
+Personally I would just remove the whole copyright as the SPDX identifier
+should be sufficient. I'll let Luis weigh in here as the Modules
+maintainer, though.
