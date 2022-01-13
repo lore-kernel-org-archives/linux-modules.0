@@ -2,65 +2,72 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81932C433EF
-	for <linux-modules@archiver.kernel.org>; Thu, 13 Jan 2022 14:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CE45C433EF
+	for <linux-modules@archiver.kernel.org>; Thu, 13 Jan 2022 15:12:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbiAMOQ5 (ORCPT
+        id S230420AbiAMPMO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 13 Jan 2022 09:16:57 -0500
-Received: from mail-qt1-f180.google.com ([209.85.160.180]:43913 "EHLO
-        mail-qt1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbiAMOQ5 (ORCPT
+        Thu, 13 Jan 2022 10:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229838AbiAMPMO (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:16:57 -0500
-Received: by mail-qt1-f180.google.com with SMTP id q14so6927587qtx.10;
-        Thu, 13 Jan 2022 06:16:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BJnOW0r4XvWzKJWyXxLLNdK9vGFIkKRXsum6p3nqYyI=;
-        b=nmbW0t/B4479V1IjC1H6B8MU0tyYqNzOX4Cm1Yz5GaxU5ins6vM07qkWr9wReNQGBL
-         w6l+otFYHHBStLnNbCyxtuk7l/WgQPa2M1LXLEW1Qtwg3mOtPPzaVEdMZNx/k1ASPZwC
-         bTMWTmBWkMVLGjh4ImfeIfPZWqc8GRw8mLalqZjPTXGIGUYfB+3XDe6nnZCpRoB8Wfm1
-         HFB9fX+76gRz+cKNbBHtN9pTXTd7RwVNoHPVut5gpLJhEtY+cwknbn5FIXo2BbkTL/au
-         OWpjSgkRqc48DhnngHI02ce3jq3b2eLxaGerEehQDG6l8O3ysxzX7cTC9S6q6TwBArC+
-         UODQ==
-X-Gm-Message-State: AOAM533Du1qjT3lECitFneqyCLR2c5p+2lj6eBGjfeddgeFLvZYIE05H
-        7QRgfrfRj+Aq3eZ7PL6wLuk=
-X-Google-Smtp-Source: ABdhPJxVwcGpaCxh8DWMtA3SvUFeANGoxh+RxoPbtyAizpP5m77mbHmrNea8AMP1I6hO6D4q/dhYIA==
-X-Received: by 2002:ac8:57d3:: with SMTP id w19mr1865035qta.658.1642083416642;
-        Thu, 13 Jan 2022 06:16:56 -0800 (PST)
-Received: from dev0025.ash9.facebook.com (fwdproxy-ash-021.fbsv.net. [2a03:2880:20ff:15::face:b00c])
-        by smtp.gmail.com with ESMTPSA id br32sm1877272qkb.79.2022.01.13.06.16.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 06:16:56 -0800 (PST)
-Date:   Thu, 13 Jan 2022 06:16:54 -0800
-From:   David Vernet <void@manifault.com>
-To:     Aaron Tomlin <atomlin@atomlin.com>
-Cc:     Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org, cl@linux.com,
+        Thu, 13 Jan 2022 10:12:14 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B905C06161C;
+        Thu, 13 Jan 2022 07:12:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3bx833r6RpZnMzrPl+Mmdeh1bsazWa4CUEpQNSO0/VI=; b=0FA/wbVVAigVPO8SxjsQ6d3WTp
+        /8u6lEqBk4csz9dttKO2RGPXqiyaUsWk9YW+2+3ORS2KWP6pRJx3UbosxOqhRwjTOQ1oWavRtmhlV
+        siF+k6KCZf5nang7MytiaMBjv5Bzfv+iYYq0/T/8UfhsEsNTnHKtipl/JPrzyXqsfs1VjcwJh0DFq
+        aabLrOZeMA7oCF56oUV6xz74h9YYZ9CCx3wgsoaYSryFLvEoYL3q8Wc7/vcMQ6s99vGTlherxMvNN
+        +G48sk2vikUXsTYte2vzw8tiMnHc0QeXXgNXjc9E39S/ZqNxvzD6hvlYdkJ5UwGZQDJ9UPZQBtu/8
+        Gc0smJ6A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n81lj-006Mxe-B0; Thu, 13 Jan 2022 15:12:03 +0000
+Date:   Thu, 13 Jan 2022 07:12:03 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     David Vernet <void@manifault.com>
+Cc:     Aaron Tomlin <atomlin@atomlin.com>,
+        Aaron Tomlin <atomlin@redhat.com>, cl@linux.com,
         pmladek@suse.com, mbenes@suse.cz, akpm@linux-foundation.org,
         jeyu@kernel.org, linux-kernel@vger.kernel.org,
         linux-modules@vger.kernel.org, ghalat@redhat.com,
         allen.lkml@gmail.com
 Subject: Re: [RFC PATCH v2 03/13] module: Move livepatch support to a
  separate file
-Message-ID: <20220113141654.74lllshgujatnopg@dev0025.ash9.facebook.com>
+Message-ID: <YeBBQ+W/UaU06Fd5@bombadil.infradead.org>
 References: <20220106234319.2067842-1-atomlin@redhat.com>
  <20220106234319.2067842-4-atomlin@redhat.com>
  <Yd8j/Q2H0zYrAA2c@dev0025.ash9.facebook.com>
  <20220113103531.sn76g34tfkxscs4e@ava.usersys.com>
+ <20220113141654.74lllshgujatnopg@dev0025.ash9.facebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220113103531.sn76g34tfkxscs4e@ava.usersys.com>
+In-Reply-To: <20220113141654.74lllshgujatnopg@dev0025.ash9.facebook.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Aaron Tomlin <atomlin@atomlin.com> wrote on Thu [2022-Jan-13 10:35:31 +0000]:
-> Who should I specify? I'm not entirely sure. If I understand correctly,
-> Jessica was the original author of the majority.
+On Thu, Jan 13, 2022 at 06:16:54AM -0800, David Vernet wrote:
+> Aaron Tomlin <atomlin@atomlin.com> wrote on Thu [2022-Jan-13 10:35:31 +0000]:
+> > Who should I specify? I'm not entirely sure. If I understand correctly,
+> > Jessica was the original author of the majority.
+> 
+> Personally I would just remove the whole copyright as the SPDX identifier
+> should be sufficient. I'll let Luis weigh in here as the Modules
+> maintainer, though.
 
-Personally I would just remove the whole copyright as the SPDX identifier
-should be sufficient. I'll let Luis weigh in here as the Modules
-maintainer, though.
+Technically every contributor to the file has a copyright entry added,
+one does not need to add the name to the header, that's just common
+practice though. If someone goes through the work of at least adding
+the name of the main author, that a nice effort. Tons of files don't
+have authors listed, so I'd be fine with that too and it keeps things
+simple. What we should not do ever is remove the copyright notice so
+code which Rusty wrote should be maintained with the notice.
+
+  Luis
