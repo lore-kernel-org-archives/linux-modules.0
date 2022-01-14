@@ -2,72 +2,100 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CE45C433EF
-	for <linux-modules@archiver.kernel.org>; Thu, 13 Jan 2022 15:12:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54BF9C433F5
+	for <linux-modules@archiver.kernel.org>; Fri, 14 Jan 2022 09:14:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiAMPMO (ORCPT
+        id S233450AbiANJOG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 13 Jan 2022 10:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiAMPMO (ORCPT
+        Fri, 14 Jan 2022 04:14:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55695 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237440AbiANJOF (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 13 Jan 2022 10:12:14 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B905C06161C;
-        Thu, 13 Jan 2022 07:12:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3bx833r6RpZnMzrPl+Mmdeh1bsazWa4CUEpQNSO0/VI=; b=0FA/wbVVAigVPO8SxjsQ6d3WTp
-        /8u6lEqBk4csz9dttKO2RGPXqiyaUsWk9YW+2+3ORS2KWP6pRJx3UbosxOqhRwjTOQ1oWavRtmhlV
-        siF+k6KCZf5nang7MytiaMBjv5Bzfv+iYYq0/T/8UfhsEsNTnHKtipl/JPrzyXqsfs1VjcwJh0DFq
-        aabLrOZeMA7oCF56oUV6xz74h9YYZ9CCx3wgsoaYSryFLvEoYL3q8Wc7/vcMQ6s99vGTlherxMvNN
-        +G48sk2vikUXsTYte2vzw8tiMnHc0QeXXgNXjc9E39S/ZqNxvzD6hvlYdkJ5UwGZQDJ9UPZQBtu/8
-        Gc0smJ6A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n81lj-006Mxe-B0; Thu, 13 Jan 2022 15:12:03 +0000
-Date:   Thu, 13 Jan 2022 07:12:03 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Vernet <void@manifault.com>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Aaron Tomlin <atomlin@redhat.com>, cl@linux.com,
-        pmladek@suse.com, mbenes@suse.cz, akpm@linux-foundation.org,
-        jeyu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, ghalat@redhat.com,
-        allen.lkml@gmail.com
+        Fri, 14 Jan 2022 04:14:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642151644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+pWvo2OEmMNI1tZRpROSSx7Oe7LhQALrcOqQAzgndTM=;
+        b=DNaWPwS8TzD6qkX8AhspsImAC8Q4TCFRI1Hj5L1GAXfO1Aaaa52pxDfM6zxHEYLAJrdwwQ
+        0CHGuxJ9Vyi587gY/KrVbBczpJd98Ld8ezOOw2rWSF959uVkrc4KF1TkOn2r3QH2A8iIJg
+        6ZJOLuxAx/D1Mx2CcV0ZlnPEmiAgDZI=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-604-QPwk5LLSNuOwt3d8okUDRg-1; Fri, 14 Jan 2022 04:14:03 -0500
+X-MC-Unique: QPwk5LLSNuOwt3d8okUDRg-1
+Received: by mail-wm1-f70.google.com with SMTP id a3-20020a05600c348300b0034a0dfc86aaso5031115wmq.6
+        for <linux-modules@vger.kernel.org>; Fri, 14 Jan 2022 01:14:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+pWvo2OEmMNI1tZRpROSSx7Oe7LhQALrcOqQAzgndTM=;
+        b=FsR/GgeG6W9DdE0im5uimAXp8kAHzx6ODFxtPUNwK2jBc6tzJVuQTlx/N0Woye4Bsx
+         0JDpAX13KUuIeBgx6PH0VcwjGRUt9gzBqcFSYPinNcLITeyBYs8nq3AhGKFTENsKFrAx
+         3jumryGyInoi25jTldHgNHSIXCylctQWjl7zWKbfz1a7RwxLemvNGYql8jiYpbBzvodp
+         nkUDWU316KudKO4bxKnwdgjUVsp969efAysIZnW2gSF5JqEVp0rwa6vesq2XSN3d0tQZ
+         7magrN0rFAG8xOsodS7wbZxCSjJepJnORBC3rp2/nitFEYCjOFzI5FFVEu+MEs0D43U0
+         io0g==
+X-Gm-Message-State: AOAM533skRRwYNEV9293FUkMbvUTIV4UBoeCWRbEV90CLfwbm8qca5jY
+        Javwy0rSqCtLlWfm6g7bgax894t5ot0vue+XKQo9EpjERZtlPUDi5G22TmgU+La/gzQsJgPdR74
+        kucFt2ql/842bJy2C5CeKRgkv
+X-Received: by 2002:adf:e2c4:: with SMTP id d4mr7449712wrj.247.1642151642035;
+        Fri, 14 Jan 2022 01:14:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyRWSX6LUT9jDBPafrWdsVXhH8natyGtUEoDRAx4Eqym1QjMxZ7ScRzSJ2TMS04IjlUfo2Tyw==
+X-Received: by 2002:adf:e2c4:: with SMTP id d4mr7449692wrj.247.1642151641814;
+        Fri, 14 Jan 2022 01:14:01 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id d16sm5347116wrq.27.2022.01.14.01.14.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 01:14:01 -0800 (PST)
+Date:   Fri, 14 Jan 2022 09:14:00 +0000
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     mcgrof@kernel.org, cl@linux.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com, allen.lkml@gmail.com,
+        live-patching@vger.kernel.org
 Subject: Re: [RFC PATCH v2 03/13] module: Move livepatch support to a
  separate file
-Message-ID: <YeBBQ+W/UaU06Fd5@bombadil.infradead.org>
+Message-ID: <20220114091400.3jyiohxh26bzjzvi@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
 References: <20220106234319.2067842-1-atomlin@redhat.com>
  <20220106234319.2067842-4-atomlin@redhat.com>
- <Yd8j/Q2H0zYrAA2c@dev0025.ash9.facebook.com>
- <20220113103531.sn76g34tfkxscs4e@ava.usersys.com>
- <20220113141654.74lllshgujatnopg@dev0025.ash9.facebook.com>
+ <Yd8HpK44aWhhNI/Q@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220113141654.74lllshgujatnopg@dev0025.ash9.facebook.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <Yd8HpK44aWhhNI/Q@alley>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jan 13, 2022 at 06:16:54AM -0800, David Vernet wrote:
-> Aaron Tomlin <atomlin@atomlin.com> wrote on Thu [2022-Jan-13 10:35:31 +0000]:
-> > Who should I specify? I'm not entirely sure. If I understand correctly,
-> > Jessica was the original author of the majority.
+On Wed 2022-01-12 17:53 +0100, Petr Mladek wrote:
+> It would be better to have the two variants close each other. I mean
+> to have it somewhere like:
 > 
-> Personally I would just remove the whole copyright as the SPDX identifier
-> should be sufficient. I'll let Luis weigh in here as the Modules
-> maintainer, though.
+> #ifdef CONFIG_LIVEPATCH
+> 
+>    variant A
+> 
+> #else
+> 
+>    variant B
+> 
+> #endif
 
-Technically every contributor to the file has a copyright entry added,
-one does not need to add the name to the header, that's just common
-practice though. If someone goes through the work of at least adding
-the name of the main author, that a nice effort. Tons of files don't
-have authors listed, so I'd be fine with that too and it keeps things
-simple. What we should not do ever is remove the copyright notice so
-code which Rusty wrote should be maintained with the notice.
+Petr,
 
-  Luis
+I agree. I'll incorporate this approach into RFC PATCH v3.
+
+
+Kind regards,
+
+-- 
+Aaron Tomlin
+
