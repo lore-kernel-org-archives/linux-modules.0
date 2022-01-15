@@ -2,100 +2,126 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54BF9C433F5
-	for <linux-modules@archiver.kernel.org>; Fri, 14 Jan 2022 09:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28AECC433F5
+	for <linux-modules@archiver.kernel.org>; Sat, 15 Jan 2022 00:20:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233450AbiANJOG (ORCPT
+        id S230464AbiAOAUG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 14 Jan 2022 04:14:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55695 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237440AbiANJOF (ORCPT
+        Fri, 14 Jan 2022 19:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230450AbiAOAUG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:14:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642151644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+pWvo2OEmMNI1tZRpROSSx7Oe7LhQALrcOqQAzgndTM=;
-        b=DNaWPwS8TzD6qkX8AhspsImAC8Q4TCFRI1Hj5L1GAXfO1Aaaa52pxDfM6zxHEYLAJrdwwQ
-        0CHGuxJ9Vyi587gY/KrVbBczpJd98Ld8ezOOw2rWSF959uVkrc4KF1TkOn2r3QH2A8iIJg
-        6ZJOLuxAx/D1Mx2CcV0ZlnPEmiAgDZI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-604-QPwk5LLSNuOwt3d8okUDRg-1; Fri, 14 Jan 2022 04:14:03 -0500
-X-MC-Unique: QPwk5LLSNuOwt3d8okUDRg-1
-Received: by mail-wm1-f70.google.com with SMTP id a3-20020a05600c348300b0034a0dfc86aaso5031115wmq.6
-        for <linux-modules@vger.kernel.org>; Fri, 14 Jan 2022 01:14:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+pWvo2OEmMNI1tZRpROSSx7Oe7LhQALrcOqQAzgndTM=;
-        b=FsR/GgeG6W9DdE0im5uimAXp8kAHzx6ODFxtPUNwK2jBc6tzJVuQTlx/N0Woye4Bsx
-         0JDpAX13KUuIeBgx6PH0VcwjGRUt9gzBqcFSYPinNcLITeyBYs8nq3AhGKFTENsKFrAx
-         3jumryGyInoi25jTldHgNHSIXCylctQWjl7zWKbfz1a7RwxLemvNGYql8jiYpbBzvodp
-         nkUDWU316KudKO4bxKnwdgjUVsp969efAysIZnW2gSF5JqEVp0rwa6vesq2XSN3d0tQZ
-         7magrN0rFAG8xOsodS7wbZxCSjJepJnORBC3rp2/nitFEYCjOFzI5FFVEu+MEs0D43U0
-         io0g==
-X-Gm-Message-State: AOAM533skRRwYNEV9293FUkMbvUTIV4UBoeCWRbEV90CLfwbm8qca5jY
-        Javwy0rSqCtLlWfm6g7bgax894t5ot0vue+XKQo9EpjERZtlPUDi5G22TmgU+La/gzQsJgPdR74
-        kucFt2ql/842bJy2C5CeKRgkv
-X-Received: by 2002:adf:e2c4:: with SMTP id d4mr7449712wrj.247.1642151642035;
-        Fri, 14 Jan 2022 01:14:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyRWSX6LUT9jDBPafrWdsVXhH8natyGtUEoDRAx4Eqym1QjMxZ7ScRzSJ2TMS04IjlUfo2Tyw==
-X-Received: by 2002:adf:e2c4:: with SMTP id d4mr7449692wrj.247.1642151641814;
-        Fri, 14 Jan 2022 01:14:01 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id d16sm5347116wrq.27.2022.01.14.01.14.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 01:14:01 -0800 (PST)
-Date:   Fri, 14 Jan 2022 09:14:00 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     mcgrof@kernel.org, cl@linux.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        atomlin@atomlin.com, ghalat@redhat.com, allen.lkml@gmail.com,
-        live-patching@vger.kernel.org
-Subject: Re: [RFC PATCH v2 03/13] module: Move livepatch support to a
- separate file
-Message-ID: <20220114091400.3jyiohxh26bzjzvi@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220106234319.2067842-1-atomlin@redhat.com>
- <20220106234319.2067842-4-atomlin@redhat.com>
- <Yd8HpK44aWhhNI/Q@alley>
+        Fri, 14 Jan 2022 19:20:06 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577D9C061574;
+        Fri, 14 Jan 2022 16:20:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=RO/5y8HN7zPObC7kKeadO21COfIT8ymMOCtOZ5TJz+w=; b=AEUUzycjcNniu2XHDfBVwHP202
+        5DzBTeRdkUIC7uCWaJv5L+L3tjIXaBYXhkYi8S6uCyzaDt5XtcguwTe0Bzc2/tW1P2EwMPx99S23m
+        rqMjpsvxonLEM6WNsogVWWu/g8hwQpWZdecXQS8Hjmw3NreZRPXbJz3sscIz2mLDWIcjkZGgL+SzS
+        8Nr+R442HfcQEfnLKMjrZNB236vn3odkUqQG/wFEAhQBtkDFBsHVzYxNmRwrQA+xGwNgu0lEsJDHr
+        6+1WHucw40f4OrmOo8ogtlfAxnPh1QJl+P751PxEySipaHUcHY8mrYhxkwp3ZvAIP3Sikfv701l7T
+        zeIMf83A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n8WnY-00AUes-GI; Sat, 15 Jan 2022 00:20:00 +0000
+Date:   Fri, 14 Jan 2022 16:20:00 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jessica Yu <jeyu@kernel.org>,
+        Colin Ian King <colin.king@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Yu Chen <chen.yu@easystack.cn>, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, mcgrof@kernel.org
+Subject: Modules updates for v5.17-rc1
+Message-ID: <YeITMG7bKozB2xVQ@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yd8HpK44aWhhNI/Q@alley>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed 2022-01-12 17:53 +0100, Petr Mladek wrote:
-> It would be better to have the two variants close each other. I mean
-> to have it somewhere like:
-> 
-> #ifdef CONFIG_LIVEPATCH
-> 
->    variant A
-> 
-> #else
-> 
->    variant B
-> 
-> #endif
+Hi Linus,
 
-Petr,
+Here are the modules changes for v5.17-rc1. This is my second pull
+request to you, the first one was for v5.16-rc1. Hopefully this time
+around this all looks good now, otherwise please let me know and I'll
+be sure to tidy up more.
 
-I agree. I'll incorporate this approach into RFC PATCH v3.
+The following changes since commit daadb3bd0e8d3e317e36bc2c1542e86c528665e5:
 
+  Merge tag 'locking_core_for_v5.17_rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2022-01-11 17:24:45 -0800)
 
-Kind regards,
+are available in the Git repository at:
 
--- 
-Aaron Tomlin
+  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
 
+for you to fetch changes up to a97ac8cb24a3c3ad74794adb83717ef1605d1b47:
+
+  module: fix signature check failures when using in-kernel decompression (2022-01-14 09:40:49 -0800)
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      kernel: Fix spelling mistake "compresser" -> "compressor"
+
+Dmitry Torokhov (2):
+      module: add in-kernel support for decompressing
+      module: fix signature check failures when using in-kernel decompression
+
+Greg Kroah-Hartman (1):
+      module.h: allow #define strings to work with MODULE_IMPORT_NS
+
+Jessica Yu (1):
+      MAINTAINERS: Remove myself as modules maintainer
+
+Luis Chamberlain (1):
+      MAINTAINERS: add mailing lists for kmod and modules
+
+Yu Chen (1):
+      module: Remove outdated comment
+
+ MAINTAINERS                 |   6 +-
+ include/linux/module.h      |   3 +-
+ include/uapi/linux/module.h |   1 +
+ init/Kconfig                |  13 +++
+ kernel/Makefile             |   1 +
+ kernel/module-internal.h    |  19 ++++
+ kernel/module.c             |  45 +++++---
+ kernel/module_decompress.c  | 271 ++++++++++++++++++++++++++++++++++++++++++++
+ 8 files changed, 340 insertions(+), 19 deletions(-)
+ create mode 100644 kernel/module_decompress.c
+
+----------------------------------------------------------------
+
+modules changes for v5.17-rc1
+
+The biggest change here is in-kernel support for module decompression.
+This change is being made to help support LSMs like LoadPin as otherwise
+it loses link between the source of kernel module on the disk and binary
+blob that is being loaded into the kernel.
+
+kmod decompression is still done by userspace even with this is done,
+both because there are no measurable gains in not doing so and as it
+adds a secondary extra check for validating the module before loading it
+into the kernel.
+
+Although this change was only merged on January 11th, the patches have
+been being reviewed since early december. There was at least one fix
+already found for it and merged.
+
+The rest of the changes are minor, the only other change worth mentionin
+there is Jessica Yu is now bowing out of maintenance of modules as she's
+taking a break from work.
+
+While there were other changes posted for modules, those have not yet
+received much review of testing so I'm not yet comfortable in merging
+any of those changes yet.
+
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+
+  Luis
