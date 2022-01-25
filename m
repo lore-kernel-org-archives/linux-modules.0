@@ -2,76 +2,156 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6900C433F5
-	for <linux-modules@archiver.kernel.org>; Tue, 18 Jan 2022 16:17:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 175FFC433EF
+	for <linux-modules@archiver.kernel.org>; Tue, 25 Jan 2022 18:51:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243870AbiARQRQ (ORCPT
+        id S231199AbiAYSvF (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 18 Jan 2022 11:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
+        Tue, 25 Jan 2022 13:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347541AbiARQQ6 (ORCPT
+        with ESMTP id S230503AbiAYSuf (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:16:58 -0500
+        Tue, 25 Jan 2022 13:50:35 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A941BC06173F;
-        Tue, 18 Jan 2022 08:16:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EB9C061744;
+        Tue, 25 Jan 2022 10:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xjulHOS5CUwNIm036P6j8UbjrwgqOIyQQzkCAKbIpbY=; b=UOfvy6QYbtpEnRIvhnRAmZV8tM
-        uUPwsa0FpluV8AQMrNgGhnOpfr1ceFlKhbLO6j6TXzZPl1RSSEUFJQUHQUbIBDcOmQ6XPgRk5Dhon
-        gdE9+fYI0sRyMIrNeEqt/HZ9P1B0EMqwcfuBFSaT0xbOOttoczaMAWpF63kQVtILnbYspnywhTLQk
-        c67JRHO9HeQp041bd3xWpAbmscXASfrZVG4yG3AujijkVppqlzCIsWMR3GhYW+4LPLanMQ0RmW8jI
-        Hm7risGLwvd09syPIsD7cwoYDFnBoX1hIWXNNyuzpi7s0099ZVn79PsBEQC/YJkGJyCPrq3yAB0Lb
-        DytI5P4A==;
+        bh=wgDA9fP7U4eL48s1ELGNzJnpgnC00E8ctU7slTh1x70=; b=BDrV42wP0MTNpKdOsq+CgxPR41
+        XylFLZEfpc7AhwKkAvQlmqFNZybub36TqSMxrzODwNdvzWVBjYifALdKPVLoxIMF+cf3B/ewAmFH9
+        GWUvJc7NHgpAJIVHBgYVE0uR29Lumc40neFkHLfFycszbeP9wG/qo0ps54soiTfE1hPxyUJyTsDdT
+        iDu1lMyLzRHaOAVHithuQETPKoodbCqfm7forTkYLFm3kmXd9/vT+2Crc8zvaeeeL5I/kgVCTg0c8
+        DJ4p//fQoNMKCO8sKipbtWVD/7oo8L5cJXKlag0lVCM7Gbwy4844sutAc5Z7RyilIuNsexgSfAu0f
+        3m5ZR0dg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n9rAC-002D80-0z; Tue, 18 Jan 2022 16:16:52 +0000
-Date:   Tue, 18 Jan 2022 08:16:51 -0800
+        id 1nCQtm-009G7u-1e; Tue, 25 Jan 2022 18:50:34 +0000
+Date:   Tue, 25 Jan 2022 10:50:34 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jessica Yu <jeyu@kernel.org>,
-        Colin Ian King <colin.king@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Yu Chen <chen.yu@easystack.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: Modules updates for v5.17-rc1
-Message-ID: <Yebn8wWvCa4T6ppC@bombadil.infradead.org>
-References: <YeITMG7bKozB2xVQ@bombadil.infradead.org>
- <CAHk-=wjCajUWAZBNrQv3zrrjZBH7e7x2UrQ2n18+yk3TpGD9ag@mail.gmail.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, Jessica Yu <jeyu@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: Re: [PATCH bpf-next v6 01/11] kernel: Implement try_module_get_live
+Message-ID: <YfBGetHxW+qdk8WD@bombadil.infradead.org>
+References: <20220102162115.1506833-1-memxor@gmail.com>
+ <20220102162115.1506833-2-memxor@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wjCajUWAZBNrQv3zrrjZBH7e7x2UrQ2n18+yk3TpGD9ag@mail.gmail.com>
+In-Reply-To: <20220102162115.1506833-2-memxor@gmail.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Jan 17, 2022 at 07:38:25AM +0200, Linus Torvalds wrote:
-> On Sat, Jan 15, 2022 at 2:20 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > Although this change was only merged on January 11th, the patches have
-> > been being reviewed since early december. There was at least one fix
-> > already found for it and merged.
+On Sun, Jan 02, 2022 at 09:51:05PM +0530, Kumar Kartikeya Dwivedi wrote:
+> Refactor shared functionality between strong_try_module_get and
+> try_module_get into a common helper, and expose try_module_get_live
+> that returns a bool similar to try_module_get.
 > 
-> Grr..
+> It will be used in the next patch for btf_try_get_module, to eliminate a
+> race between module __init function invocation and module_put from BPF
+> side.
 > 
-> And that's exactly why it matters not about "being reviewed", but when
-> they were in linux-next etc.
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Jessica Yu <jeyu@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-modules@vger.kernel.org
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  include/linux/module.h | 26 +++++++++++++++++++-------
+>  kernel/module.c        | 20 ++++++++------------
+>  2 files changed, 27 insertions(+), 19 deletions(-)
 > 
-> I've pulled this, but consider this a complaint. Things should not be
-> "reviewed" before the merge window. They should be ready and merged
-> and have actually seen some testing.
-> 
-> Review is good. But nothing beats actually being out there and
-> actually seeing real-life testing (of course, linux-next probably
-> mostly gets build-testing, but what testing it gets is still better
-> than not being there).
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index c9f1200b2312..eb83aaeaa76e 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -608,17 +608,17 @@ void symbol_put_addr(void *addr);
+>  /* Sometimes we know we already have a refcount, and it's easier not
+>     to handle the error case (which only happens with rmmod --wait). */
+>  extern void __module_get(struct module *module);
+> -
+> -/* This is the Right Way to get a module: if it fails, it's being removed,
+> - * so pretend it's not there. */
+> -extern bool try_module_get(struct module *module);
+> -
+> +extern int __try_module_get(struct module *module, bool strong);
+>  extern void module_put(struct module *module);
+>  
+>  #else /*!CONFIG_MODULE_UNLOAD*/
+> -static inline bool try_module_get(struct module *module)
+> +static inline int __try_module_get(struct module *module, bool strong)
+>  {
+> -	return !module || module_is_live(module);
+> +	if (module && !module_is_live(module))
+> +		return -ENOENT;
+> +	if (strong && module && module->state == MODULE_STATE_COMING)
+> +		return -EBUSY;
+> +	return 0;
+>  }
 
-Understood, that gives me a better ballpark idea of when to defer
-things for a next release. Thanks for the feedback.
+The bool return is clear here before on try_module_get().
+
+>  static inline void module_put(struct module *module)
+>  {
+> @@ -631,6 +631,18 @@ static inline void __module_get(struct module *module)
+>  
+>  #endif /* CONFIG_MODULE_UNLOAD */
+>  
+> +/* This is the Right Way to get a module: if it fails, it's being removed,
+> + * so pretend it's not there. */
+> +static inline bool try_module_get(struct module *module)
+> +{
+> +	return !__try_module_get(module, false);
+
+Now you're making it negate an int return... 
+
+> +}
+> +/* Only take reference for modules which have fully initialized */
+> +static inline bool try_module_get_live(struct module *module)
+> +{
+> +	return !__try_module_get(module, true);
+> +}
+> +
+>  /* This is a #define so the string doesn't get put in every .o file */
+>  #define module_name(mod)			\
+>  ({						\
+> diff --git a/kernel/module.c b/kernel/module.c
+> index 84a9141a5e15..a9bb0a5576c8 100644
+> --- a/kernel/module.c
+> +++ b/kernel/module.c
+> @@ -318,12 +318,7 @@ EXPORT_SYMBOL(unregister_module_notifier);
+>  static inline int strong_try_module_get(struct module *mod)
+>  {
+>  	BUG_ON(mod && mod->state == MODULE_STATE_UNFORMED);
+> -	if (mod && mod->state == MODULE_STATE_COMING)
+> -		return -EBUSY;
+> -	if (try_module_get(mod))
+> -		return 0;
+> -	else
+> -		return -ENOENT;
+
+Before this change, this check had no disabled preemption
+prior to the first branch, now we are having it moved with
+preemption disabled. That's an OK change, but it is a
+small functional change.
+
+Because of these two things NACK on this patch for now.
+Please split the patch up if you intend to make a new
+functional change. And this patch should be easy to read,
+this is not.
 
   Luis
