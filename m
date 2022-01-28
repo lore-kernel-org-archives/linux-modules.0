@@ -2,118 +2,158 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CB06C433EF
-	for <linux-modules@archiver.kernel.org>; Fri, 28 Jan 2022 07:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEA17C433F5
+	for <linux-modules@archiver.kernel.org>; Fri, 28 Jan 2022 20:39:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346817AbiA1Hjd (ORCPT
+        id S238367AbiA1Ujj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 28 Jan 2022 02:39:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346892AbiA1Hjc (ORCPT
+        Fri, 28 Jan 2022 15:39:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42039 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238399AbiA1Ujj (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:39:32 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B2CC061714
-        for <linux-modules@vger.kernel.org>; Thu, 27 Jan 2022 23:39:31 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id ka4so13025075ejc.11
-        for <linux-modules@vger.kernel.org>; Thu, 27 Jan 2022 23:39:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NEcWsKqE5uYcNoVNkHmdsauLrUNyJ5ygZ3/BoJdf+E4=;
-        b=Y40QCpfOeH6Aopx4c8hAvMEdk/M0A8zJpVVLmEsHKftkXSlelUuP1OWByO4mwfVtSN
-         1hq/hh1gr/oeldhwCHxyuizYrRiu4msKg6qzqIgT7xtQKfjWgFO9AK9R5vYACW7xcXJq
-         lsNEEBfaLWcp1No1QVnd1H9XOjW0/KgzoO6ME=
+        Fri, 28 Jan 2022 15:39:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643402378;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=a75/LdXswV/+SBDNHc6horr9j5NsKsO2YOlm8qw0OGg=;
+        b=MJVpBCIDIyQ3xn/KAembAIZGFd1qBlUg8EZxXqX/o7YZISwUxf3gx7PMZ25jufXmLTMGEX
+        0Vqn+Ls8jyZ28XdtPSxE/Li68vbr0Hyj6EYWbuIGWi2JGjcsTVjvf2lhtz7rIPUtHjqHQz
+        plebSgYISrKrm/xZnyYjtC2xpXy+rN4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-263-gVnsjLjjOBuTONPTymEwbA-1; Fri, 28 Jan 2022 15:39:37 -0500
+X-MC-Unique: gVnsjLjjOBuTONPTymEwbA-1
+Received: by mail-wm1-f71.google.com with SMTP id o3-20020a1ca503000000b0035056b042deso3489092wme.0
+        for <linux-modules@vger.kernel.org>; Fri, 28 Jan 2022 12:39:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NEcWsKqE5uYcNoVNkHmdsauLrUNyJ5ygZ3/BoJdf+E4=;
-        b=Fe/Dh6ADKMKMACkF1l9YXz7JcnNRzaQZM6gxh7pbCwrzZaakFiwT3d8Dw4uF6ZZIfP
-         6h2LxETfvahoRv/prfvAoXjblrRBHs1ixWCAbFhnw6mlCrfTQrDLUAUR9cSlgX2H1v1u
-         8xmNSBE0cvAiFiT9UfNmBbUpllFXNM5bonK3RY+3uttU28JOCQB6nH8ibxuiTwXfJcSW
-         yRztyRSCdiZj1K47QxbmPHyQbvbEGw+LxQAI9KpAtjWjpQx0Hb4Uw/54V22mnDXye+aC
-         GvpqARoyweiMgyiltZwTH55mD0kff3JnOwg1YwnzCtwIKlO+2ayr37kQZZ1+z+5AMouR
-         fuyw==
-X-Gm-Message-State: AOAM530wF7TnaPo06au7TzPuu/khFkojp/t+pLXkxL93n7Wtqfq9TBjc
-        EtSlOtkHi0LWIrxxlO2g7X2ERac6oIIXQewu
-X-Google-Smtp-Source: ABdhPJzoq8U0dFg+jqPYN6SZWCwhrgc6aCw8x1b19+K0f/o6lkEWfVktZKldXmDWZ0krf+fvUskfUA==
-X-Received: by 2002:a17:907:6290:: with SMTP id nd16mr5566673ejc.33.1643355569846;
-        Thu, 27 Jan 2022 23:39:29 -0800 (PST)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id w8sm9624448ejq.220.2022.01.27.23.39.28
-        for <linux-modules@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 23:39:28 -0800 (PST)
-Received: by mail-wm1-f42.google.com with SMTP id m26so1239661wms.0
-        for <linux-modules@vger.kernel.org>; Thu, 27 Jan 2022 23:39:28 -0800 (PST)
-X-Received: by 2002:a05:600c:1912:: with SMTP id j18mr14480558wmq.155.1643355568648;
- Thu, 27 Jan 2022 23:39:28 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a75/LdXswV/+SBDNHc6horr9j5NsKsO2YOlm8qw0OGg=;
+        b=MOvpAR513SaVhnLjRu8CGLPM37g03KYxnHHxuqYexbWnqDJ7L9oOAbR9abOjOP6ALV
+         8dKnpFx2UvxrNUIzmloGTm8E/rT8Ch+wX5+d3ASSA4dm4mZ+8MgMaAcCWu3PM/V8fHUC
+         LAE+bw3QTXFX/MMswV5V0TKqziDJ1RCf87Lix2LZvePGKi+7yip3v5Qsq3xsKpnsMTx4
+         Q5NAzqd7fKX9oponkepv9SGemuvk7JP29oDoYpC1A0pPCgn6U7dCklzCQZyMSqIrTspF
+         h7TEz4el4i+qbnTcFAE/l58vIO7rRZbnqTcxFhdNz+UzZyXgSfKthCun3kB76kS4b32B
+         GINw==
+X-Gm-Message-State: AOAM532+EMPhADL+fXk9ulvUNSerZZXhr9tEjs41yNinho+xcjjuda5w
+        c6Yk6yxvqQGKWN8nVDNFTomTTF1xrcd1ldbCiju/A9b2rKiwjv1NCSS/Wc7B6qFyRj3Ipnzx4/H
+        eq+dn94wiHoJjbNsE2dCv3fNI
+X-Received: by 2002:a1c:a7c1:: with SMTP id q184mr17778096wme.158.1643402376203;
+        Fri, 28 Jan 2022 12:39:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx4wMzh4dOyDNZb1aj4V/G4TXfHZ+vtAm7rLuB5KfvNW6U9trUBjsWW0vbTmOpTLrQTAdGHog==
+X-Received: by 2002:a1c:a7c1:: with SMTP id q184mr17778071wme.158.1643402375941;
+        Fri, 28 Jan 2022 12:39:35 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id c13sm5608087wrv.24.2022.01.28.12.39.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 12:39:35 -0800 (PST)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com, allen.lkml@gmail.com
+Subject: [RFC PATCH v3 00/13] module: core code clean up
+Date:   Fri, 28 Jan 2022 20:39:21 +0000
+Message-Id: <20220128203934.600247-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220127233953.2185045-1-ipylypiv@google.com>
-In-Reply-To: <20220127233953.2185045-1-ipylypiv@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Jan 2022 09:39:12 +0200
-X-Gmail-Original-Message-ID: <CAHk-=whM5sHbOboEnPSfBZPQrLB-KCtzE+JXFxFRNgT95i37bw@mail.gmail.com>
-Message-ID: <CAHk-=whM5sHbOboEnPSfBZPQrLB-KCtzE+JXFxFRNgT95i37bw@mail.gmail.com>
-Subject: Re: [PATCH] Revert "module, async: async_synchronize_full() on module
- init iff async is used"
-To:     Igor Pylypiv <ipylypiv@google.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Tejun Heo <tj@kernel.org>,
-        linux-modules@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Changyuan Lyu <changyuanl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jan 28, 2022 at 1:40 AM Igor Pylypiv <ipylypiv@google.com> wrote:
->
-> This reverts commit 774a1221e862b343388347bac9b318767336b20b.
+Hi Luis,
 
-Whee. That's from early 2013, more than 9 years ago.
+[Note: Cc'd live-patching for feedback on livepatch specific changes]
 
-> This works when modprobe thread is calling async_schedule(), but it
-> does not work if module dispatches init code to a worker thread which
-> then calls async_schedule().
+Firstly, apologies for the delay.
 
-Hmm.
+As per your suggestion [1], this is an attempt to refactor and split
+optional code out of core module support code into separate components.
+This version is based on branch mcgrof/modules-next since a97ac8cb24a3/or
+modules-5.17-rc1. Please let me know your thoughts.
 
-You make a good argument:
+Changes since v1 [2]:
 
-> Commit 21c3c5d28007 ("block: don't request module during elevator init")
-> fixed the deadlock issue which the reverted commit 774a1221e862 ("module,
-> async: async_synchronize_full() on module init iff async is used") tried
-> to fix.
->
-> Since commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
-> request_module() from async workers") synchronous module loading
-> from async is not allowed.
+  - Moved module version support code into a new file
 
-This does seem to imply that limiting it to PF_USED_ASYNC is largely
-pointless, at least for the originally stated reason of deadlocks with
-other module loading.
+Changes since v2 [3]:
 
-However, we've done this for *so* long that I wonder if there might be
-situations that have ended up depending on the lack of synchronization
-for pure performance reasons.
+ - Move module decompress support to a separate file
+ - Make check_modinfo_livepatch() generic (Petr Mladek)
+ - Remove filename from each newly created file (Luis Chamberlain)
+ - Addressed some (i.e. --ignore=ASSIGN_IN_IF,AVOID_BUG was used)
+   minor scripts/checkpatch.pl concerns e.g., use strscpy over
+   strlcpy and missing a blank line after declarations (Allen)
 
-If *this* module loading process started the async work, then we'd
-wait for it, but what if there's other async work that was started by
-others? This revert would now make us wait for that async work too,
-and that might be a big deal slowing things down at boot time.
+[1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
+[2]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
+[3]: https://lore.kernel.org/lkml/20220106234319.2067842-1-atomlin@redhat.com/
 
-Looking at it, this is all under the 'module_mutex', so I guess we are
-already single-threaded at least wrt loading other modules, so the
-amount of unrelated async work going on is presumably fairly low and
-that isn't an issue.
 
-Anyway, I think this patch is the right thing to do, but just the fact
-that we've avoided that async wait for so long makes me a bit nervous
-about fallout from the revert.
+Aaron Tomlin (13):
+  module: Move all into module/
+  module: Simple refactor in preparation for split
+  module: Move livepatch support to a separate file
+  module: Move latched RB-tree support to a separate file
+  module: Move arch strict rwx support to a separate file
+  module: Move strict rwx support to a separate file
+  module: Move extra signature support out of core code
+  module: Move kmemleak support to a separate file
+  module: Move kallsyms support into a separate file
+  module: Move procfs support into a separate file
+  module: Move sysfs support into a separate file
+  module: Move kdb_modules list out of core code
+  module: Move version support into a separate file
 
-Comments? Maybe this is a "just apply it, see if somebody screams" situation?
+ MAINTAINERS                                   |    2 +-
+ include/linux/module.h                        |   92 +-
+ kernel/Makefile                               |    5 +-
+ kernel/debug/kdb/kdb_main.c                   |    5 +
+ kernel/module-internal.h                      |   50 -
+ kernel/module/Makefile                        |   18 +
+ kernel/module/arch_strict_rwx.c               |   44 +
+ kernel/module/debug_kmemleak.c                |   30 +
+ .../decompress.c}                             |    2 +-
+ kernel/module/internal.h                      |  202 ++
+ kernel/module/kallsyms.c                      |  502 +++++
+ kernel/module/livepatch.c                     |   74 +
+ kernel/{module.c => module/main.c}            | 1879 +----------------
+ kernel/module/procfs.c                        |  142 ++
+ .../signature.c}                              |    0
+ kernel/module/signing.c                       |  120 ++
+ kernel/module/strict_rwx.c                    |   83 +
+ kernel/module/sysfs.c                         |  425 ++++
+ kernel/module/tree_lookup.c                   |  108 +
+ kernel/module/version.c                       |  110 +
+ kernel/module_signing.c                       |   45 -
+ 21 files changed, 2032 insertions(+), 1906 deletions(-)
+ delete mode 100644 kernel/module-internal.h
+ create mode 100644 kernel/module/Makefile
+ create mode 100644 kernel/module/arch_strict_rwx.c
+ create mode 100644 kernel/module/debug_kmemleak.c
+ rename kernel/{module_decompress.c => module/decompress.c} (99%)
+ create mode 100644 kernel/module/internal.h
+ create mode 100644 kernel/module/kallsyms.c
+ create mode 100644 kernel/module/livepatch.c
+ rename kernel/{module.c => module/main.c} (63%)
+ create mode 100644 kernel/module/procfs.c
+ rename kernel/{module_signature.c => module/signature.c} (100%)
+ create mode 100644 kernel/module/signing.c
+ create mode 100644 kernel/module/strict_rwx.c
+ create mode 100644 kernel/module/sysfs.c
+ create mode 100644 kernel/module/tree_lookup.c
+ create mode 100644 kernel/module/version.c
+ delete mode 100644 kernel/module_signing.c
 
-                   Linus
+
+base-commit: a97ac8cb24a3c3ad74794adb83717ef1605d1b47
+-- 
+2.34.1
+
