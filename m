@@ -2,57 +2,57 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C9D5C433EF
-	for <linux-modules@archiver.kernel.org>; Sun, 30 Jan 2022 21:33:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFBC7C4321E
+	for <linux-modules@archiver.kernel.org>; Sun, 30 Jan 2022 21:33:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356725AbiA3Vcm (ORCPT
+        id S1356975AbiA3VdG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 30 Jan 2022 16:32:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36237 "EHLO
+        Sun, 30 Jan 2022 16:33:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58749 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356545AbiA3Vc1 (ORCPT
+        by vger.kernel.org with ESMTP id S1356578AbiA3Vc3 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 30 Jan 2022 16:32:27 -0500
+        Sun, 30 Jan 2022 16:32:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643578346;
+        s=mimecast20190719; t=1643578349;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pUE7TRSTRaoiZ1wlOtXxOCtAqDzvICLX8IMQbGpBGgE=;
-        b=g1cyHKPn9i57svEzHnFHpsG5fTA720dDHRXDVTBGgln+/6sneqS8dwzN5o5QizD6zX0jJB
-        0+GYSyerH5pIiGdytfFk8u48MImuRVPB61qDAlCIp0ptvP/z7w0QEmnd322R1gslNXdhGJ
-        ke5XQ5oG4L/kwBZ4mzjsnl3ZQr2pYzc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=RJ3wtlLtaJBB+rGMcpTUIkLwDhDnJi3iDHMFvemCFL0=;
+        b=EBdFXK1dO2h0iYMra49eKFx5C00EX6cegbqeUzz/rEua1Sb8/k4MPj38MJD0pN8xuE46u3
+        +Wa+qDWRUgYmcDjBssIAC1M1F7St5kVOIjOnWTiJw0C3avpbAdf6TPCvPw2iJiv+now+/d
+        hpOwrhDbRFNjo5PePJVjXV4q7b8zepU=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-367-Czgb9u5ZN06uLwY0L1qDmg-1; Sun, 30 Jan 2022 16:32:25 -0500
-X-MC-Unique: Czgb9u5ZN06uLwY0L1qDmg-1
-Received: by mail-wm1-f70.google.com with SMTP id f16-20020a1c6a10000000b00352570ae3b8so957968wmc.8
-        for <linux-modules@vger.kernel.org>; Sun, 30 Jan 2022 13:32:24 -0800 (PST)
+ us-mta-479-_zm43yr7NWGHmgeSjZedgQ-1; Sun, 30 Jan 2022 16:32:27 -0500
+X-MC-Unique: _zm43yr7NWGHmgeSjZedgQ-1
+Received: by mail-wr1-f69.google.com with SMTP id m17-20020adfa3d1000000b001dd66c10c0cso3990537wrb.19
+        for <linux-modules@vger.kernel.org>; Sun, 30 Jan 2022 13:32:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pUE7TRSTRaoiZ1wlOtXxOCtAqDzvICLX8IMQbGpBGgE=;
-        b=rFqrWrPcgFSXAzcV0cjTrCaVGA6G1PNZnHqkoywViZ3Cs9dNVnD0oHxFRvCfisJs7S
-         1kJpITE1hQeu98siQIG6zZPeBbJUD7kYRmUd98vyXSUEaMzBxR8ZuWBPY7Io6dfBHw6R
-         iXLrr/z57B4QYIoftuu+RPpdcahyFE+aeuQq7O2+ESmaTpGI3HvB2PEMAml4G+2ZE97z
-         KoHa4D6jODDr/y98rMWSNv2f7v71ody4uUGDxIfR3e8RRzhrVkLEOEgy0XLaY7tJg+Cg
-         ewKJUYkznNBJkrXmeWmiacFk6HdPLccGbHzIZnvKEJvWeaIeyDHWyKCEwEXMILZd9jKX
-         E/KQ==
-X-Gm-Message-State: AOAM530aXUcggmP0VXoCl8Sl6yWNczrX0e443BKkKQ1xCX344gemaxMj
-        nx674ZFaBzydgKXr3VrpJCa4BmZmY1VwkEMiDtt1yncoqQ1Xhn9gnn6UR9Vu5nr1z77u1GKM5p/
-        aDxGrIz+1rxV+YDb4TJ66Pxqq
-X-Received: by 2002:a05:600c:3d8c:: with SMTP id bi12mr16054802wmb.109.1643578343951;
-        Sun, 30 Jan 2022 13:32:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwqbRW6GKt1zWz3cu463QUS2dcAe0Zt6f1zElO6WwC0sHHOja9ANvD68R3Z1bShAGRbtS0uXg==
-X-Received: by 2002:a05:600c:3d8c:: with SMTP id bi12mr16054788wmb.109.1643578343759;
-        Sun, 30 Jan 2022 13:32:23 -0800 (PST)
+        bh=RJ3wtlLtaJBB+rGMcpTUIkLwDhDnJi3iDHMFvemCFL0=;
+        b=Ngts/gj9b6SAZT0F+Kttyrj0QNPvuty+3n5EFhIR44sV3McYQV1RIFUw62eQ/CN38h
+         GrkYe7+UhYZAaAVYOxIA+G43pTSRNDQF+gaKQoRcY/7GOjH4gckJrC40zV4bRhbPUSPf
+         ekXfbsSTm7UrJKz4qW534TCES0BgK91nnfNfzu1FSzxO6u6DGxTcDM80fD9T9omRMleM
+         ZDwCUH7ViPzIUT3C3okrQFlJHdOTfRbi+AfsQ0WvTREK9y5JvmeuRuWdkDGdI89BzHQS
+         hb1o5phYE+H74jK2O/WJB2Ni/l3SFVofR0MOpgkADOaRvYtBGSJ8pDV825rSQJ0l2hVW
+         0N7Q==
+X-Gm-Message-State: AOAM532Gea0oVlYTiWtkhY+fVMYrohs6kTztKkaR4EM/R8qIbIF12l7H
+        Ena6Kwi2r9/cftR/QPQlvfLe3/9o5QxtCP4RP59HJdp1vpra5TI0jFX936vuBvGKR2XcHDrqEIZ
+        ZjrT8GZNM7StrV0li1O0qUd5h
+X-Received: by 2002:a7b:ca55:: with SMTP id m21mr25031019wml.114.1643578346416;
+        Sun, 30 Jan 2022 13:32:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz8yo00K8umZij8wpGoKor3DR0Q5lrqw7AuO7i/8XAPVAsVqsIdoHyV/SKYbZG/stHDtrR7hw==
+X-Received: by 2002:a7b:ca55:: with SMTP id m21mr25031003wml.114.1643578346169;
+        Sun, 30 Jan 2022 13:32:26 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id p190sm7246166wmp.16.2022.01.30.13.32.22
+        by smtp.gmail.com with ESMTPSA id bg26sm7691200wmb.48.2022.01.30.13.32.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 13:32:23 -0800 (PST)
+        Sun, 30 Jan 2022 13:32:25 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -61,9 +61,9 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         live-patching@vger.kernel.org, atomlin@atomlin.com,
         ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
         joe@perches.com
-Subject: [RFC PATCH v4 05/13] module: Move arch strict rwx support to a separate file
-Date:   Sun, 30 Jan 2022 21:32:06 +0000
-Message-Id: <20220130213214.1042497-6-atomlin@redhat.com>
+Subject: [RFC PATCH v4 07/13] module: Move extra signature support out of core code
+Date:   Sun, 30 Jan 2022 21:32:08 +0000
+Message-Id: <20220130213214.1042497-8-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220130213214.1042497-1-atomlin@redhat.com>
 References: <20220130213214.1042497-1-atomlin@redhat.com>
@@ -74,183 +74,262 @@ List-ID: <linux-modules.vger.kernel.org>
 
 No functional change.
 
-This patch migrates applicable architecture code
-that support strict module rwx from core module code
-into kernel/module/arch_strict_rwx.c
+This patch migrates additional module signature check
+code from core module code into kernel/module/signing.c.
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- include/linux/module.h          | 17 +++++++++++
- kernel/module/Makefile          |  1 +
- kernel/module/arch_strict_rwx.c | 44 ++++++++++++++++++++++++++++
- kernel/module/main.c            | 51 ---------------------------------
- 4 files changed, 62 insertions(+), 51 deletions(-)
- create mode 100644 kernel/module/arch_strict_rwx.c
+ include/linux/module.h   |  5 ++-
+ kernel/module/internal.h |  9 +++++
+ kernel/module/main.c     | 87 ----------------------------------------
+ kernel/module/signing.c  | 75 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 87 insertions(+), 89 deletions(-)
 
 diff --git a/include/linux/module.h b/include/linux/module.h
-index faeb7ae49b89..8b75380bc340 100644
+index 520c0f4bb968..15ba2ebbca3e 100644
 --- a/include/linux/module.h
 +++ b/include/linux/module.h
-@@ -339,6 +339,23 @@ struct module_layout {
- #endif
- };
- 
-+/*
-+ * Modules' sections will be aligned on page boundaries
-+ * to ensure complete separation of code and data, but
-+ * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
-+ */
-+#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
-+# define debug_align(X) ALIGN(X, PAGE_SIZE)
-+
-+extern void frob_text(const struct module_layout *layout,
-+		      int (*set_memory)(unsigned long start, int num_pages));
-+extern void module_enable_x(const struct module *mod);
-+#else /* !CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
-+# define debug_align(X) (X)
-+
-+static void module_enable_x(const struct module *mod) { }
-+#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
-+
- #ifdef CONFIG_MODULES_TREE_LOOKUP
- /* Only touch one cacheline for common rbtree-for-core-layout case. */
- #define __module_layout_align ____cacheline_aligned
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index fc6d7a053a62..146509978708 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -10,4 +10,5 @@ obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
- ifdef CONFIG_MODULES
- obj-$(CONFIG_LIVEPATCH) += livepatch.o
- obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
-+obj-$(CONFIG_ARCH_HAS_STRICT_MODULE_RWX) += arch_strict_rwx.o
- endif
-diff --git a/kernel/module/arch_strict_rwx.c b/kernel/module/arch_strict_rwx.c
-new file mode 100644
-index 000000000000..9801cb4fef36
---- /dev/null
-+++ b/kernel/module/arch_strict_rwx.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module arch strict rwx
-+ *
-+ * Copyright (C) 2015 Rusty Russell
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/set_memory.h>
-+
-+/*
-+ * LKM RO/NX protection: protect module's text/ro-data
-+ * from modification and any data from execution.
-+ *
-+ * General layout of module is:
-+ *          [text] [read-only-data] [ro-after-init] [writable data]
-+ * text_size -----^                ^               ^               ^
-+ * ro_size ------------------------|               |               |
-+ * ro_after_init_size -----------------------------|               |
-+ * size -----------------------------------------------------------|
-+ *
-+ * These values are always page-aligned (as is base)
-+ */
-+
-+/*
-+ * Since some arches are moving towards PAGE_KERNEL module allocations instead
-+ * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() outside of the
-+ * CONFIG_STRICT_MODULE_RWX block below because they are needed regardless of
-+ * whether we are strict.
-+ */
-+void frob_text(const struct module_layout *layout,
-+		      int (*set_memory)(unsigned long start, int num_pages))
-+{
-+	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
-+	set_memory((unsigned long)layout->base,
-+		   layout->text_size >> PAGE_SHIFT);
-+}
-+
-+void module_enable_x(const struct module *mod)
-+{
-+	frob_text(&mod->core_layout, set_memory_x);
-+	frob_text(&mod->init_layout, set_memory_x);
-+}
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 941be7788626..7e98ea12b146 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -13,7 +13,6 @@
- #include <linux/trace_events.h>
- #include <linux/init.h>
- #include <linux/kallsyms.h>
--#include <linux/buildid.h>
- #include <linux/file.h>
- #include <linux/fs.h>
- #include <linux/sysfs.h>
-@@ -63,17 +62,6 @@
- #define CREATE_TRACE_POINTS
- #include <trace/events/module.h>
- 
--/*
-- * Modules' sections will be aligned on page boundaries
-- * to ensure complete separation of code and data, but
-- * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
-- */
--#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
--# define debug_align(X) ALIGN(X, PAGE_SIZE)
--#else
--# define debug_align(X) (X)
--#endif
--
- /*
-  * Mutex protects:
-  * 1) List of modules (also safely readable with preempt_disable),
-@@ -1794,45 +1782,6 @@ static void mod_sysfs_teardown(struct module *mod)
- 	mod_sysfs_fini(mod);
+@@ -720,8 +720,8 @@ static inline bool set_livepatch_module(struct module *mod)
+ 	return false;
  }
  
--/*
-- * LKM RO/NX protection: protect module's text/ro-data
-- * from modification and any data from execution.
-- *
-- * General layout of module is:
-- *          [text] [read-only-data] [ro-after-init] [writable data]
-- * text_size -----^                ^               ^               ^
-- * ro_size ------------------------|               |               |
-- * ro_after_init_size -----------------------------|               |
-- * size -----------------------------------------------------------|
-- *
-- * These values are always page-aligned (as is base)
-- */
+-bool is_module_sig_enforced(void);
+-void set_module_sig_enforced(void);
++extern bool is_module_sig_enforced(void);
++extern void set_module_sig_enforced(void);
+ 
+ #else /* !CONFIG_MODULES... */
+ 
+@@ -911,6 +911,7 @@ static inline bool module_sig_ok(struct module *module)
+ {
+ 	return true;
+ }
++#define sig_enforce false
+ #endif	/* CONFIG_MODULE_SIG */
+ 
+ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index de28d6bb7b5b..2ec2a1d9dd9f 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -114,3 +114,12 @@ static struct module *mod_find(unsigned long addr)
+ 	return NULL;
+ }
+ #endif /* CONFIG_MODULES_TREE_LOOKUP */
++
++#ifdef CONFIG_MODULE_SIG
++extern int module_sig_check(struct load_info *info, int flags);
++#else /* !CONFIG_MODULE_SIG */
++static int module_sig_check(struct load_info *info, int flags)
++{
++	return 0;
++}
++#endif /* !CONFIG_MODULE_SIG */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 1a0e659a27bc..90c7266087d7 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -22,7 +22,6 @@
+ #include <linux/vmalloc.h>
+ #include <linux/elf.h>
+ #include <linux/proc_fs.h>
+-#include <linux/security.h>
+ #include <linux/seq_file.h>
+ #include <linux/syscalls.h>
+ #include <linux/fcntl.h>
+@@ -123,28 +122,6 @@ static void module_assert_mutex_or_preempt(void)
+ #endif
+ }
+ 
+-#ifdef CONFIG_MODULE_SIG
+-static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
+-module_param(sig_enforce, bool_enable_only, 0644);
 -
--/*
-- * Since some arches are moving towards PAGE_KERNEL module allocations instead
-- * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() outside of the
-- * CONFIG_STRICT_MODULE_RWX block below because they are needed regardless of
-- * whether we are strict.
-- */
--#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
--static void frob_text(const struct module_layout *layout,
--		      int (*set_memory)(unsigned long start, int num_pages))
+-void set_module_sig_enforced(void)
 -{
--	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
--	set_memory((unsigned long)layout->base,
--		   layout->text_size >> PAGE_SHIFT);
+-	sig_enforce = true;
 -}
+-#else
+-#define sig_enforce false
+-#endif
 -
--static void module_enable_x(const struct module *mod)
+-/*
+- * Export sig_enforce kernel cmdline parameter to allow other subsystems rely
+- * on that instead of directly to CONFIG_MODULE_SIG_FORCE config.
+- */
+-bool is_module_sig_enforced(void)
 -{
--	frob_text(&mod->core_layout, set_memory_x);
--	frob_text(&mod->init_layout, set_memory_x);
+-	return sig_enforce;
 -}
--#else /* !CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
--static void module_enable_x(const struct module *mod) { }
--#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+-EXPORT_SYMBOL(is_module_sig_enforced);
 -
- #ifdef CONFIG_STRICT_MODULE_RWX
- static void frob_rodata(const struct module_layout *layout,
- 			int (*set_memory)(unsigned long start, int num_pages))
+ /* Block module loading/unloading? */
+ int modules_disabled = 0;
+ core_param(nomodule, modules_disabled, bint, 0);
+@@ -2525,70 +2502,6 @@ static inline void kmemleak_load_module(const struct module *mod,
+ }
+ #endif
+ 
+-#ifdef CONFIG_MODULE_SIG
+-static int module_sig_check(struct load_info *info, int flags)
+-{
+-	int err = -ENODATA;
+-	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+-	const char *reason;
+-	const void *mod = info->hdr;
+-	bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
+-				       MODULE_INIT_IGNORE_VERMAGIC);
+-	/*
+-	 * Do not allow mangled modules as a module with version information
+-	 * removed is no longer the module that was signed.
+-	 */
+-	if (!mangled_module &&
+-	    info->len > markerlen &&
+-	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+-		/* We truncate the module to discard the signature */
+-		info->len -= markerlen;
+-		err = mod_verify_sig(mod, info);
+-		if (!err) {
+-			info->sig_ok = true;
+-			return 0;
+-		}
+-	}
+-
+-	/*
+-	 * We don't permit modules to be loaded into the trusted kernels
+-	 * without a valid signature on them, but if we're not enforcing,
+-	 * certain errors are non-fatal.
+-	 */
+-	switch (err) {
+-	case -ENODATA:
+-		reason = "unsigned module";
+-		break;
+-	case -ENOPKG:
+-		reason = "module with unsupported crypto";
+-		break;
+-	case -ENOKEY:
+-		reason = "module with unavailable key";
+-		break;
+-
+-	default:
+-		/*
+-		 * All other errors are fatal, including lack of memory,
+-		 * unparseable signatures, and signature check failures --
+-		 * even if signatures aren't required.
+-		 */
+-		return err;
+-	}
+-
+-	if (is_module_sig_enforced()) {
+-		pr_notice("Loading of %s is rejected\n", reason);
+-		return -EKEYREJECTED;
+-	}
+-
+-	return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
+-}
+-#else /* !CONFIG_MODULE_SIG */
+-static int module_sig_check(struct load_info *info, int flags)
+-{
+-	return 0;
+-}
+-#endif /* !CONFIG_MODULE_SIG */
+-
+ static int validate_section_offset(struct load_info *info, Elf_Shdr *shdr)
+ {
+ #if defined(CONFIG_64BIT)
+diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+index 8aeb6d2ee94b..ff41541e982a 100644
+--- a/kernel/module/signing.c
++++ b/kernel/module/signing.c
+@@ -11,9 +11,28 @@
+ #include <linux/module_signature.h>
+ #include <linux/string.h>
+ #include <linux/verification.h>
++#include <linux/security.h>
+ #include <crypto/public_key.h>
+ #include "internal.h"
+ 
++static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
++module_param(sig_enforce, bool_enable_only, 0644);
++
++/*
++ * Export sig_enforce kernel cmdline parameter to allow other subsystems rely
++ * on that instead of directly to CONFIG_MODULE_SIG_FORCE config.
++ */
++bool is_module_sig_enforced(void)
++{
++	return sig_enforce;
++}
++EXPORT_SYMBOL(is_module_sig_enforced);
++
++void set_module_sig_enforced(void)
++{
++	sig_enforce = true;
++}
++
+ /*
+  * Verify the signature on a module.
+  */
+@@ -43,3 +62,59 @@ int mod_verify_sig(const void *mod, struct load_info *info)
+ 				      VERIFYING_MODULE_SIGNATURE,
+ 				      NULL, NULL);
+ }
++
++int module_sig_check(struct load_info *info, int flags)
++{
++	int err = -ENODATA;
++	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
++	const char *reason;
++	const void *mod = info->hdr;
++
++	/*
++	 * Require flags == 0, as a module with version information
++	 * removed is no longer the module that was signed
++	 */
++	if (flags == 0 &&
++	    info->len > markerlen &&
++	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
++		/* We truncate the module to discard the signature */
++		info->len -= markerlen;
++		err = mod_verify_sig(mod, info);
++		if (!err) {
++			info->sig_ok = true;
++			return 0;
++		}
++	}
++
++	/*
++	 * We don't permit modules to be loaded into the trusted kernels
++	 * without a valid signature on them, but if we're not enforcing,
++	 * certain errors are non-fatal.
++	 */
++	switch (err) {
++	case -ENODATA:
++		reason = "unsigned module";
++		break;
++	case -ENOPKG:
++		reason = "module with unsupported crypto";
++		break;
++	case -ENOKEY:
++		reason = "module with unavailable key";
++		break;
++
++	default:
++		/*
++		 * All other errors are fatal, including lack of memory,
++		 * unparseable signatures, and signature check failures --
++		 * even if signatures aren't required.
++		 */
++		return err;
++	}
++
++	if (is_module_sig_enforced()) {
++		pr_notice("Loading of %s is rejected\n", reason);
++		return -EKEYREJECTED;
++	}
++
++	return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
++}
 -- 
 2.34.1
 
