@@ -2,57 +2,57 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2640EC433FE
-	for <linux-modules@archiver.kernel.org>; Sun, 30 Jan 2022 21:33:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C823C433EF
+	for <linux-modules@archiver.kernel.org>; Sun, 30 Jan 2022 21:33:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356667AbiA3VdJ (ORCPT
+        id S1347671AbiA3VdJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
         Sun, 30 Jan 2022 16:33:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37557 "EHLO
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57775 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347671AbiA3Vc2 (ORCPT
+        by vger.kernel.org with ESMTP id S1356633AbiA3Vcg (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 30 Jan 2022 16:32:28 -0500
+        Sun, 30 Jan 2022 16:32:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643578347;
+        s=mimecast20190719; t=1643578355;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+8jA7bYfQPshsiLx0pkdrriw91RK3YxQWB2UbWGtHA0=;
-        b=V5csWtGy+CBHW8A+iwxhbdEsUxhJOrtFpc1/ABlAYiAcqRpNpBdmpzfYItv13qg5ZTns6J
-        3TgYdoLTMn+b6uwZwzDrRTsJgwsfsoHh2KdkoCSkDdWwrY/xinawRH6VpF8qlakf4gqMpB
-        yiyVpj7rhxH9IFHGfiQ6NQKvQchXF70=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4WWouBNY6XHsJho+NkhowbAagBN3wD6Bcpj36xe5bwk=;
+        b=iNbKc9aDbpu/cDmHdtvNCtV4oWZG/nt128Qw9G9qSjnDUQ7GuuB4/Abb84z2Z7UBmbPa9g
+        nXdH5FOzcAnA5t3ZtQZ5m+2C2QAlMQVCIeAMD4i1MB25BaQ3airH99WpEdtVhNWGScdZ+Q
+        O9g4Oqj2o2kEK5gWnzp0r517S0NVhQ0=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-439-yHNdvYgDPDOIuklwvBvJyw-1; Sun, 30 Jan 2022 16:32:26 -0500
-X-MC-Unique: yHNdvYgDPDOIuklwvBvJyw-1
-Received: by mail-wm1-f72.google.com with SMTP id l20-20020a05600c1d1400b0035153bf34c3so6611710wms.2
-        for <linux-modules@vger.kernel.org>; Sun, 30 Jan 2022 13:32:26 -0800 (PST)
+ us-mta-634-V6n-KJ2XP4CGSo2Oy_vggg-1; Sun, 30 Jan 2022 16:32:34 -0500
+X-MC-Unique: V6n-KJ2XP4CGSo2Oy_vggg-1
+Received: by mail-wm1-f71.google.com with SMTP id q71-20020a1ca74a000000b003507f38e330so9286231wme.9
+        for <linux-modules@vger.kernel.org>; Sun, 30 Jan 2022 13:32:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+8jA7bYfQPshsiLx0pkdrriw91RK3YxQWB2UbWGtHA0=;
-        b=NxrkUR+zQbK8/0+a4YjVuqMMfll5WRYo0Y/EWJA104eWu8xr55NhltICkRYY5vAfQv
-         EeajdciUl3gv9pubC/t9ttA9KjGyW9yby4Cu6J7ZY5+a8jdMDgJXqYuxnCdLV2HxPDL7
-         nB5yZvHT925FgkJiDvYGjH3CVUYq9nVq0S23+jYs/zaw3L/DXXDei5r7m97AGAOfJKN6
-         bPzOcmwwaGWlA84YKetL/QLsgwoNgDR027bRxgprUH7BYyDlCM/MWUmGa6bp9A5nMjMw
-         HMvzT+CVhZU/7VRSdvn6xOrrAHX1it5LDleClqrKkQVWtNEGv8GyxuXDq7C5995cAQ4Y
-         HB8w==
-X-Gm-Message-State: AOAM532HXqs3F4z3re+3Gmiuw+3vEk7qORvnkIiOFCDfmmiNAjg4AnsW
-        MaKuESqRXCYtLA5b7f1wEwcZZHm0AzwY/Jpt3M2tvUSs0/htMPc0Gpdyw/BzSouwrvX7XgWYT47
-        hDT37CeeRxyXYH1dsISGODLNR
-X-Received: by 2002:a5d:550f:: with SMTP id b15mr5171582wrv.384.1643578344977;
-        Sun, 30 Jan 2022 13:32:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyXgF4BvmYNdjyg50g9s9aIyE5u7AofJTtbWr5KA0J7EOgC8xa162nZ0tT185NM2i6SpoEnLg==
-X-Received: by 2002:a5d:550f:: with SMTP id b15mr5171573wrv.384.1643578344807;
-        Sun, 30 Jan 2022 13:32:24 -0800 (PST)
+        bh=4WWouBNY6XHsJho+NkhowbAagBN3wD6Bcpj36xe5bwk=;
+        b=hJ5ExkE/ElXmjG5xseRyciLLraj76Cxuu3eoVIwJ7CgXrGEt0ue7cOZkYFvNSNHmy2
+         GACRCnjXG4B5RDBnFp5heDTwzodb7IgelmIbe7TywHIEAEJx8zqXorvOgO2q9RTk/s1q
+         YTJFI8tRuuz+xFChFK3Ejudu5QrqSEqOxM3Rx/qUtP8vEWZph7OkSNGaN1Sl+DnE5giK
+         qtMm+UgIFoeIq8qG3Dwcofr0pQ6iaqvNBwDYcUBFHi3QuS+usDUCS4ylSfPd9I8yMSd8
+         QFYrdtbpveV3UMzD8habNm8btRxO/peRX4/3YNsldyOYtLf3iduDLPZW7ma9DY70XGzX
+         qRcA==
+X-Gm-Message-State: AOAM5333ULBBgtGS2Az5ds9z5KNrUzQuM1kwfYKQ/eOnQKrUv7TZ4XsM
+        OSvodK1z/ictfw5ooKLoy4L1SY1kujBRVvWtRyQVchW751WGSlcWnTCEBItt7SrSAcFSjPjzqYP
+        9CxVk1EFDwuPaP3zCl/BT/4oj
+X-Received: by 2002:a05:6000:1568:: with SMTP id 8mr15258943wrz.54.1643578353041;
+        Sun, 30 Jan 2022 13:32:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzxnioIPHbSlQTlSmnwMfQCG2ZAC/+LiIaUTTnbob+kakVGHe+nULEei/uHEJHjOGr8GoH4Vw==
+X-Received: by 2002:a05:6000:1568:: with SMTP id 8mr15258935wrz.54.1643578352896;
+        Sun, 30 Jan 2022 13:32:32 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id n13sm10203712wrm.68.2022.01.30.13.32.24
+        by smtp.gmail.com with ESMTPSA id o3sm10006613wrq.70.2022.01.30.13.32.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 13:32:24 -0800 (PST)
+        Sun, 30 Jan 2022 13:32:32 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -61,9 +61,9 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         live-patching@vger.kernel.org, atomlin@atomlin.com,
         ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
         joe@perches.com
-Subject: [RFC PATCH v4 06/13] module: Move strict rwx support to a separate file
-Date:   Sun, 30 Jan 2022 21:32:07 +0000
-Message-Id: <20220130213214.1042497-7-atomlin@redhat.com>
+Subject: [RFC PATCH v4 12/13] module: Move kdb_modules list out of core code
+Date:   Sun, 30 Jan 2022 21:32:13 +0000
+Message-Id: <20220130213214.1042497-13-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220130213214.1042497-1-atomlin@redhat.com>
 References: <20220130213214.1042497-1-atomlin@redhat.com>
@@ -74,247 +74,47 @@ List-ID: <linux-modules.vger.kernel.org>
 
 No functional change.
 
-This patch migrates code that makes module text
-and rodata memory read-only and non-text memory
-non-executable from core module code into
-kernel/module/strict_rwx.c.
+This patch migrates kdb_modules list to core kdb code
+since the list of added/or loaded modules is no longer
+private.
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- include/linux/module.h     | 22 ++++++++++
- kernel/module/Makefile     |  1 +
- kernel/module/main.c       | 84 --------------------------------------
- kernel/module/strict_rwx.c | 83 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 106 insertions(+), 84 deletions(-)
- create mode 100644 kernel/module/strict_rwx.c
+ kernel/debug/kdb/kdb_main.c | 5 +++++
+ kernel/module/main.c        | 4 ----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 8b75380bc340..520c0f4bb968 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -356,6 +356,28 @@ extern void module_enable_x(const struct module *mod);
- static void module_enable_x(const struct module *mod) { }
- #endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
+index 0852a537dad4..f101f5f078f4 100644
+--- a/kernel/debug/kdb/kdb_main.c
++++ b/kernel/debug/kdb/kdb_main.c
+@@ -59,6 +59,11 @@ EXPORT_SYMBOL(kdb_grepping_flag);
+ int kdb_grep_leading;
+ int kdb_grep_trailing;
  
-+#ifdef CONFIG_STRICT_MODULE_RWX
-+extern void frob_rodata(const struct module_layout *layout,
-+			int (*set_memory)(unsigned long start, int num_pages));
-+extern void frob_ro_after_init(const struct module_layout *layout,
-+			       int (*set_memory)(unsigned long start, int num_pages));
-+extern void frob_writable_data(const struct module_layout *layout,
-+			       int (*set_memory)(unsigned long start, int num_pages));
-+extern void module_enable_ro(const struct module *mod, bool after_init);
-+extern void module_enable_nx(const struct module *mod);
-+extern int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-+				       char *secstrings, struct module *mod);
++#ifdef CONFIG_MODULES
++extern struct list_head modules;
++struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
++#endif /* CONFIG_MODULES */
 +
-+#else /* !CONFIG_STRICT_MODULE_RWX */
-+static void module_enable_nx(const struct module *mod) { }
-+static void module_enable_ro(const struct module *mod, bool after_init) {}
-+static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-+				       char *secstrings, struct module *mod)
-+{
-+	return 0;
-+}
-+#endif /* CONFIG_STRICT_MODULE_RWX */
-+
- #ifdef CONFIG_MODULES_TREE_LOOKUP
- /* Only touch one cacheline for common rbtree-for-core-layout case. */
- #define __module_layout_align ____cacheline_aligned
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index 146509978708..d1dada641ad6 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -11,4 +11,5 @@ ifdef CONFIG_MODULES
- obj-$(CONFIG_LIVEPATCH) += livepatch.o
- obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
- obj-$(CONFIG_ARCH_HAS_STRICT_MODULE_RWX) += arch_strict_rwx.o
-+obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
- endif
+ /*
+  * Kernel debugger state flags
+  */
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 7e98ea12b146..1a0e659a27bc 100644
+index 1d16faea82b3..59e1c271812c 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1782,90 +1782,6 @@ static void mod_sysfs_teardown(struct module *mod)
- 	mod_sysfs_fini(mod);
+@@ -104,10 +104,6 @@ static void mod_update_bounds(struct module *mod)
+ 		__mod_update_bounds(mod->init_layout.base, mod->init_layout.size);
  }
  
--#ifdef CONFIG_STRICT_MODULE_RWX
--static void frob_rodata(const struct module_layout *layout,
--			int (*set_memory)(unsigned long start, int num_pages))
--{
--	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
--	set_memory((unsigned long)layout->base + layout->text_size,
--		   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
--}
+-#ifdef CONFIG_KGDB_KDB
+-struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
+-#endif /* CONFIG_KGDB_KDB */
 -
--static void frob_ro_after_init(const struct module_layout *layout,
--				int (*set_memory)(unsigned long start, int num_pages))
--{
--	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
--	set_memory((unsigned long)layout->base + layout->ro_size,
--		   (layout->ro_after_init_size - layout->ro_size) >> PAGE_SHIFT);
--}
--
--static void frob_writable_data(const struct module_layout *layout,
--			       int (*set_memory)(unsigned long start, int num_pages))
--{
--	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->size & (PAGE_SIZE-1));
--	set_memory((unsigned long)layout->base + layout->ro_after_init_size,
--		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
--}
--
--static void module_enable_ro(const struct module *mod, bool after_init)
--{
--	if (!rodata_enabled)
--		return;
--
--	set_vm_flush_reset_perms(mod->core_layout.base);
--	set_vm_flush_reset_perms(mod->init_layout.base);
--	frob_text(&mod->core_layout, set_memory_ro);
--
--	frob_rodata(&mod->core_layout, set_memory_ro);
--	frob_text(&mod->init_layout, set_memory_ro);
--	frob_rodata(&mod->init_layout, set_memory_ro);
--
--	if (after_init)
--		frob_ro_after_init(&mod->core_layout, set_memory_ro);
--}
--
--static void module_enable_nx(const struct module *mod)
--{
--	frob_rodata(&mod->core_layout, set_memory_nx);
--	frob_ro_after_init(&mod->core_layout, set_memory_nx);
--	frob_writable_data(&mod->core_layout, set_memory_nx);
--	frob_rodata(&mod->init_layout, set_memory_nx);
--	frob_writable_data(&mod->init_layout, set_memory_nx);
--}
--
--static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
--				       char *secstrings, struct module *mod)
--{
--	const unsigned long shf_wx = SHF_WRITE|SHF_EXECINSTR;
--	int i;
--
--	for (i = 0; i < hdr->e_shnum; i++) {
--		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
--			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
--				mod->name, secstrings + sechdrs[i].sh_name, i);
--			return -ENOEXEC;
--		}
--	}
--
--	return 0;
--}
--
--#else /* !CONFIG_STRICT_MODULE_RWX */
--static void module_enable_nx(const struct module *mod) { }
--static void module_enable_ro(const struct module *mod, bool after_init) {}
--static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
--				       char *secstrings, struct module *mod)
--{
--	return 0;
--}
--#endif /*  CONFIG_STRICT_MODULE_RWX */
--
- void __weak module_memfree(void *module_region)
+ static void module_assert_mutex_or_preempt(void)
  {
- 	/*
-diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-new file mode 100644
-index 000000000000..39060021755a
---- /dev/null
-+++ b/kernel/module/strict_rwx.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module strict rwx
-+ *
-+ * Copyright (C) 2015 Rusty Russell
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/vmalloc.h>
-+#include <linux/set_memory.h>
-+
-+void frob_rodata(const struct module_layout *layout,
-+			int (*set_memory)(unsigned long start, int num_pages))
-+{
-+	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
-+	set_memory((unsigned long)layout->base + layout->text_size,
-+		   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
-+}
-+
-+void frob_ro_after_init(const struct module_layout *layout,
-+				int (*set_memory)(unsigned long start, int num_pages))
-+{
-+	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
-+	set_memory((unsigned long)layout->base + layout->ro_size,
-+		   (layout->ro_after_init_size - layout->ro_size) >> PAGE_SHIFT);
-+}
-+
-+void frob_writable_data(const struct module_layout *layout,
-+			       int (*set_memory)(unsigned long start, int num_pages))
-+{
-+	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
-+	BUG_ON((unsigned long)layout->size & (PAGE_SIZE-1));
-+	set_memory((unsigned long)layout->base + layout->ro_after_init_size,
-+		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
-+}
-+
-+void module_enable_ro(const struct module *mod, bool after_init)
-+{
-+	if (!rodata_enabled)
-+		return;
-+
-+	set_vm_flush_reset_perms(mod->core_layout.base);
-+	set_vm_flush_reset_perms(mod->init_layout.base);
-+	frob_text(&mod->core_layout, set_memory_ro);
-+
-+	frob_rodata(&mod->core_layout, set_memory_ro);
-+	frob_text(&mod->init_layout, set_memory_ro);
-+	frob_rodata(&mod->init_layout, set_memory_ro);
-+
-+	if (after_init)
-+		frob_ro_after_init(&mod->core_layout, set_memory_ro);
-+}
-+
-+void module_enable_nx(const struct module *mod)
-+{
-+	frob_rodata(&mod->core_layout, set_memory_nx);
-+	frob_ro_after_init(&mod->core_layout, set_memory_nx);
-+	frob_writable_data(&mod->core_layout, set_memory_nx);
-+	frob_rodata(&mod->init_layout, set_memory_nx);
-+	frob_writable_data(&mod->init_layout, set_memory_nx);
-+}
-+
-+int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-+				       char *secstrings, struct module *mod)
-+{
-+	const unsigned long shf_wx = SHF_WRITE|SHF_EXECINSTR;
-+	int i;
-+
-+	for (i = 0; i < hdr->e_shnum; i++) {
-+		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
-+			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
-+				mod->name, secstrings + sechdrs[i].sh_name, i);
-+			return -ENOEXEC;
-+		}
-+	}
-+
-+	return 0;
-+}
+ #ifdef CONFIG_LOCKDEP
 -- 
 2.34.1
 
