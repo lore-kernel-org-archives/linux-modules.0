@@ -2,170 +2,141 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DF30C433FE
-	for <linux-modules@archiver.kernel.org>; Tue,  1 Feb 2022 16:44:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EF8EC433F5
+	for <linux-modules@archiver.kernel.org>; Tue,  1 Feb 2022 17:43:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241195AbiBAQof (ORCPT
+        id S241662AbiBARne (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 1 Feb 2022 11:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        Tue, 1 Feb 2022 12:43:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241161AbiBAQof (ORCPT
+        with ESMTP id S241623AbiBARna (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 1 Feb 2022 11:44:35 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD88C061714;
-        Tue,  1 Feb 2022 08:44:35 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id s9so33136906wrb.6;
-        Tue, 01 Feb 2022 08:44:34 -0800 (PST)
+        Tue, 1 Feb 2022 12:43:30 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BA9C06173B;
+        Tue,  1 Feb 2022 09:43:29 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id z5so15941865plg.8;
+        Tue, 01 Feb 2022 09:43:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4NqVfXxx+h1TNezmQlgpsbCyzSWdpfX1NQsAjeLv8n8=;
-        b=fczcmtf81RjPpNM/tTu+gn1dwpWgq3a63+K7X52ysenA8W3pxOdl3DV/Sw+VRvCwMr
-         0vxFp+72yF3RIL45oom+Qf0AJ4id4FUawVRtlK6P1+WI0F55Q6V6qCzNFfiz6k4k+8zk
-         4Aot5IOHCVf243anPC/vZAxkry0eI7dXFubiHKVmssBPmJRkBsatWKHryDkB7aIrudhD
-         iI++/Z6yhT/He1l/yGvWmzYLeYjKGh7kDcpGntTn95kSSHlZRsr5OnetfWIkEouY2nNk
-         H+D6GL8G9ABkP0aOhfLC5vd/2t+SEZcNe9QvJMyN2ANqT3zFUuLN/Ah9nQCjdqh0jx7A
-         EfXg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xtJMwxjU4Rj4Pcv//zGr7gCkoDaffyiUBign7P1X5Wo=;
+        b=pOROpeWkRE2TFTfv2Ds99CFvLljZ57Mkrg+wFSGZ/w6xbyGSH5RdtC1RFaYyNmYzRC
+         xbhHVB0oWSCimL0EbLvhI3KH0PVe73dlzKS1yTUCH3MwxM/7W1Sxi+rOM7HaT07cLhhr
+         byT0DsTzkdP21b8DepU80eb3GuOe98doT6jNn8wMYSkMSdWzy92Uz7ZC3Yl66+9OFO/B
+         sBM7RN//wKkJo0oRyvW8frTfS8U5gPP2ZnutgYjSOOaSNTTs6/23Y0wqv4VLGiveSbeS
+         Yphl7jcF1JYDH3ks9KFRIJe97AoCtI9PomQNvJLM8VDG4CHT9Xjf1kegnmUK/33kvRtj
+         HWCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4NqVfXxx+h1TNezmQlgpsbCyzSWdpfX1NQsAjeLv8n8=;
-        b=VqS1a6QwRq2AyTRVuOvqe8J2j1TSUbk67wW0mQa36E23yr1s6BOTlQ2Rx0MT2URaSz
-         5775482iHolKwoN0qaWcEGnYVy485bCI0Th8DhN/JblsXitFF4INMahtTORDdjgr5vnu
-         sLa+/OzGhNZT5o8fYyRtP9gbYLyeSyTf59rTxg9XcJFeu9NehcpO0IXif/jwwES3lCvX
-         OAm2dfUVldiMkWej7ijQXhX6SfV+GrYciH8i26Xfiol3NJj2kVMh9o7eiMouq0xlmnVJ
-         yGBBXaiQq7JHO81LYvQFSBjqzhWGmejiaTjTQA24vF37dhxd7zG66oVtA8f2/YrQ5OzR
-         h6oQ==
-X-Gm-Message-State: AOAM533DRFQjdNROKtK1WZ8vUOyT0U9nbfKr5lJRsUc6jGC6+oXSJrzO
-        5Pki/a4PPMfNKJHkdNTVfNX+QrMiwV3pyaTq00c=
-X-Google-Smtp-Source: ABdhPJw3stZCjqZ4Fj7gt98l5hnC3yQ5On1z/N1orlP47YPs96+Jd0iCWjg9Yr02w6W8Itx9zjB3uCaPxG7CH8EQGaE=
-X-Received: by 2002:adf:f302:: with SMTP id i2mr22235649wro.114.1643733873538;
- Tue, 01 Feb 2022 08:44:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20220130213214.1042497-1-atomlin@redhat.com>
-In-Reply-To: <20220130213214.1042497-1-atomlin@redhat.com>
-From:   Allen <allen.lkml@gmail.com>
-Date:   Tue, 1 Feb 2022 08:44:21 -0800
-Message-ID: <CAOMdWS+PDCNO3mpGOU-521mWcMwQW0R4iacsWPkgGZL0aYbxrw@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 00/13] module: core code clean up
-To:     Aaron Tomlin <atomlin@redhat.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=xtJMwxjU4Rj4Pcv//zGr7gCkoDaffyiUBign7P1X5Wo=;
+        b=a/3Fq2ijjh76JJ/Hx/rYsn7SbeNr69TL77H6+x8olst+tpwKSYjwQ0pN3HtH8Z/AnF
+         bZQ9TGCETNxAKhBw8NqWsOYYcqTopUy2zJRY4lOnfe8xlsT1Tu9PKDC1QkWjg/7Ks6Zn
+         6vFhE1STKePEFmsT5SFHEZdoi7JUJdVnoocdA1NUu74f9HiHEYWnmspEDytvGYDbGKpj
+         MBU49bnitKgFW7spbav5oE9iJbHgz95TDlVhNi0JT1dmOB6sLGKG0tlo5TGOlS6WmGhp
+         BVeAKUZ2p8EconzeSPaO9JoVTCFlrrfbNI2CH9jrui98yCIG6SNaHKKqDOROR29+vC6Y
+         C4WQ==
+X-Gm-Message-State: AOAM530BThzFWCQG9gXa9ouuNe3X4fF4WvJw3H5eXfevk7CUCQ1nQwD/
+        pj/g/4DoaVAQe2C7YVm2CjPOKeijDH8=
+X-Google-Smtp-Source: ABdhPJzPbTdI8h9vw7KAgGCw7+Gqs82eElXbtc+5ntsE2gYo3SCGnVCJ+x+9NsQ5IgWG5SP2QNTWpA==
+X-Received: by 2002:a17:90a:f0ce:: with SMTP id fa14mr3539033pjb.212.1643737409172;
+        Tue, 01 Feb 2022 09:43:29 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id c11sm23330188pfv.76.2022.02.01.09.43.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 09:43:28 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 1 Feb 2022 07:43:27 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Igor Pylypiv <ipylypiv@google.com>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
-        atomlin@atomlin.com, ghalat@redhat.com, void@manifault.com,
-        Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Changyuan Lyu <changyuanl@google.com>
+Subject: Re: [PATCH] Revert "module, async: async_synchronize_full() on
+ module init iff async is used"
+Message-ID: <YflxP28HlVrrNBU2@slm.duckdns.org>
+References: <20220127233953.2185045-1-ipylypiv@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127233953.2185045-1-ipylypiv@google.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Thanks Aaron for V4.
+On Thu, Jan 27, 2022 at 03:39:53PM -0800, Igor Pylypiv wrote:
+> This reverts commit 774a1221e862b343388347bac9b318767336b20b.
+> 
+> We need to finish all async code before the module init sequence is done.
+> In the reverted commit the PF_USED_ASYNC flag was added to mark a thread
+> that called async_schedule(). Then the PF_USED_ASYNC flag was used to
+> determine whether or not async_synchronize_full() needs to be invoked.
+> This works when modprobe thread is calling async_schedule(), but it
+> does not work if module dispatches init code to a worker thread which
+> then calls async_schedule().
+> 
+> For example, PCI driver probing is invoked from a worker thread based on
+> a node where device is attached:
+> 
+> 	if (cpu < nr_cpu_ids)
+> 		error = work_on_cpu(cpu, local_pci_probe, &ddi);
+> 	else
+> 		error = local_pci_probe(&ddi);
+> 
+> We end up in a situation where a worker thread gets the PF_USED_ASYNC flag
+> set instead of the modprobe thread. As a result, async_synchronize_full()
+> is not invoked and modprobe completes without waiting for the async code
+> to finish.
+> 
+> The issue was discovered while loading the pm80xx driver:
+> (scsi_mod.scan=async)
+> 
+> modprobe pm80xx                      worker
+> ...
+>   do_init_module()
+>   ...
+>     pci_call_probe()
+>       work_on_cpu(local_pci_probe)
+>                                      local_pci_probe()
+>                                        pm8001_pci_probe()
+>                                          scsi_scan_host()
+>                                            async_schedule()
+>                                            worker->flags |= PF_USED_ASYNC;
+>                                      ...
+>       < return from worker >
+>   ...
+>   if (current->flags & PF_USED_ASYNC) <--- false
+>   	async_synchronize_full();
+> 
+> Commit 21c3c5d28007 ("block: don't request module during elevator init")
+> fixed the deadlock issue which the reverted commit 774a1221e862 ("module,
+> async: async_synchronize_full() on module init iff async is used") tried
+> to fix.
+> 
+> Since commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
+> request_module() from async workers") synchronous module loading
+> from async is not allowed.
+> 
+> Given that the original deadlock issue is fixed and it is no longer allowed
+> to call synchronous request_module() from async we can remove PF_USED_ASYNC
+> flag to make module init consistently invoke async_synchronize_full()
+> unless async module probe is requested.
+> 
+> Signed-off-by: Igor Pylypiv <ipylypiv@google.com>
+> Reviewed-by: Changyuan Lyu <changyuanl@google.com>
 
-Build/boot test on qemu. Running more tests on BM.
+That's quite a walk down the memory lane and I agree with your analysis. The
+PF_USED_ASYNC is redundant for correctness with the removal of synchrnous
+loading from iosched path and the WARN_ON guarantees that nothing in kernel
+is creating a similar situation.
+
+Acked-by: Tejun Heo <tj@kernel.org>
 
 Thanks.
 
-On Sun, Jan 30, 2022 at 1:32 PM Aaron Tomlin <atomlin@redhat.com> wrote:
->
-> Hi Luis,
->
-> As per your suggestion [1], this is an attempt to refactor and split
-> optional code out of core module support code into separate components.
-> This version is based on branch mcgrof/modules-next since a97ac8cb24a3/or
-> modules-5.17-rc1. Please let me know your thoughts.
->
-> Changes since v1 [2]:
->
->   - Moved module version support code into a new file
->
-> Changes since v2 [3]:
->
->  - Moved module decompress support to a separate file
->  - Made check_modinfo_livepatch() generic (Petr Mladek)
->  - Removed filename from each newly created file (Luis Chamberlain)
->  - Addressed some (i.e. --ignore=ASSIGN_IN_IF,AVOID_BUG was used)
->    minor scripts/checkpatch.pl concerns e.g., use strscpy over
->    strlcpy and missing a blank line after declarations (Allen)
->
-> Changes since v3 [4]:
->
->  - Refactored both is_livepatch_module() and set_livepatch_module(),
->    respectively, to use IS_ENABLED(CONFIG_LIVEPATCH) (Joe Perches)
->  - Addressed various compiler warnings e.g., no previous prototype (0-day)
->
-> [1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
-> [2]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
-> [3]: https://lore.kernel.org/lkml/20220106234319.2067842-1-atomlin@redhat.com/
-> [4]: https://lore.kernel.org/lkml/20220128203934.600247-1-atomlin@redhat.com/
->
-> Aaron Tomlin (13):
->   module: Move all into module/
->   module: Simple refactor in preparation for split
->   module: Move livepatch support to a separate file
->   module: Move latched RB-tree support to a separate file
->   module: Move arch strict rwx support to a separate file
->   module: Move strict rwx support to a separate file
->   module: Move extra signature support out of core code
->   module: Move kmemleak support to a separate file
->   module: Move kallsyms support into a separate file
->   module: Move procfs support into a separate file
->   module: Move sysfs support into a separate file
->   module: Move kdb_modules list out of core code
->   module: Move version support into a separate file
->
->  MAINTAINERS                                   |    2 +-
->  include/linux/module.h                        |   64 +-
->  kernel/Makefile                               |    5 +-
->  kernel/debug/kdb/kdb_main.c                   |    5 +
->  kernel/module-internal.h                      |   50 -
->  kernel/module/Makefile                        |   20 +
->  kernel/module/arch_strict_rwx.c               |   44 +
->  kernel/module/debug_kmemleak.c                |   30 +
->  .../decompress.c}                             |    2 +-
->  kernel/module/internal.h                      |  236 +++
->  kernel/module/kallsyms.c                      |  502 +++++
->  kernel/module/livepatch.c                     |   74 +
->  kernel/{module.c => module/main.c}            | 1874 +----------------
->  kernel/module/procfs.c                        |  142 ++
->  .../signature.c}                              |    0
->  kernel/module/signing.c                       |  120 ++
->  kernel/module/strict_rwx.c                    |   83 +
->  kernel/module/sysfs.c                         |  425 ++++
->  kernel/module/tree_lookup.c                   |  109 +
->  kernel/module/version.c                       |  110 +
->  kernel/module_signing.c                       |   45 -
->  21 files changed, 2038 insertions(+), 1904 deletions(-)
->  delete mode 100644 kernel/module-internal.h
->  create mode 100644 kernel/module/Makefile
->  create mode 100644 kernel/module/arch_strict_rwx.c
->  create mode 100644 kernel/module/debug_kmemleak.c
->  rename kernel/{module_decompress.c => module/decompress.c} (99%)
->  create mode 100644 kernel/module/internal.h
->  create mode 100644 kernel/module/kallsyms.c
->  create mode 100644 kernel/module/livepatch.c
->  rename kernel/{module.c => module/main.c} (63%)
->  create mode 100644 kernel/module/procfs.c
->  rename kernel/{module_signature.c => module/signature.c} (100%)
->  create mode 100644 kernel/module/signing.c
->  create mode 100644 kernel/module/strict_rwx.c
->  create mode 100644 kernel/module/sysfs.c
->  create mode 100644 kernel/module/tree_lookup.c
->  create mode 100644 kernel/module/version.c
->  delete mode 100644 kernel/module_signing.c
->
->
-> base-commit: a97ac8cb24a3c3ad74794adb83717ef1605d1b47
-> --
-> 2.34.1
->
-
-
 -- 
-       - Allen
+tejun
