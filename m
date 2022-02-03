@@ -2,82 +2,88 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C340BC433F5
-	for <linux-modules@archiver.kernel.org>; Thu,  3 Feb 2022 19:19:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23513C433F5
+	for <linux-modules@archiver.kernel.org>; Thu,  3 Feb 2022 19:43:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243615AbiBCTTz (ORCPT
+        id S1353266AbiBCTnV (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 3 Feb 2022 14:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbiBCTTy (ORCPT
+        Thu, 3 Feb 2022 14:43:21 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:36426 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231996AbiBCTnU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:19:54 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBE5C061714
-        for <linux-modules@vger.kernel.org>; Thu,  3 Feb 2022 11:19:54 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id m11so8093420edi.13
-        for <linux-modules@vger.kernel.org>; Thu, 03 Feb 2022 11:19:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7cSZa6DBBFDOxX2GW/qnTrsYZ3zoJ+ZjemRz7cnhpqE=;
-        b=fCNr7CPXFLdcVd8PjZvoiasGZnLEu8KQ/XZwbGLm+yV2wWLdo8/zz6Gwya8F4pMZH2
-         9PrtXR7djkoDFL0VDJIh2cWDBzJnLY6/s1O7jndQ40X6X4ZFDpwZUZloZr6Vh92pTMZI
-         G9LaPnBdpVo9UTRwk6KpYQEb8gnycoM8Dr+wA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7cSZa6DBBFDOxX2GW/qnTrsYZ3zoJ+ZjemRz7cnhpqE=;
-        b=JzT5HDL1UaDHyCuAHdkssrhrRCJGxR0vXpRU3YWxtPExsnGcj642pwEW/ahL32qRmw
-         MYL/gBeAHSlB5R5t4+lUInE/ipd27bFR/EuATTytnf5NYT2rSi6Z1j+Diy2lvdQcd8aR
-         A5r1rW69Obbp7Q74mQughAksSbBcdcKpp1VvceK0R2wkaEheMn6LXWFcv/mYVnwJ+fr0
-         CZhZl508B8x5AQZasUnjnkYH6OrN9RWRJtzjwkJsfrHyzzJpJIIpvWvCiybC8upet5IS
-         K1AlPh1584oDrwpC7Z1lzl2WW71+91Zn6YjEdcaXpVrrZ4GB+gZ7CZTTSpQCwQLSSSwX
-         vayw==
-X-Gm-Message-State: AOAM532e06Y+zCaPX5MvmweK0vnGQTWIPIo01iEo/W9FaraAhPY/kXhX
-        QkEGxzGeu3ux8GKMfvAPfaVqo0uAGEFzZXDJ
-X-Google-Smtp-Source: ABdhPJxQKJp+MbovnQeRFzMPer4IF6L8l94BdsCLXEz59GdLTPsopdnnwHv96nQrySNNNorpfPaGdw==
-X-Received: by 2002:a50:ee09:: with SMTP id g9mr8300146eds.387.1643915992537;
-        Thu, 03 Feb 2022 11:19:52 -0800 (PST)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id oz18sm17078861ejb.106.2022.02.03.11.19.51
-        for <linux-modules@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 11:19:51 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id k18so6938368wrg.11
-        for <linux-modules@vger.kernel.org>; Thu, 03 Feb 2022 11:19:51 -0800 (PST)
-X-Received: by 2002:adf:f90c:: with SMTP id b12mr29879801wrr.97.1643915991226;
- Thu, 03 Feb 2022 11:19:51 -0800 (PST)
+        Thu, 3 Feb 2022 14:43:20 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id F3FE91F399;
+        Thu,  3 Feb 2022 19:43:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643917399; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=djYBuNzUo5jlyYldd5YsGcxLff7fJbIGicD7buvtm2k=;
+        b=NwM5TkfR1zyi/rgDW50fbTo0gTVrSMXizrc1Hdhka9rZBFsRiu1IrRdxGRLSj4edOVDiaC
+        U4627lPy3D9aD6lTwPLKBYSjy1mDOQt7w/g2IzW7Mdz/Vz6arGUir9qfXv7vfY8ZS9SBZS
+        EAC6fEiLmRag8QFr2rnW3PubGKi1LkY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643917399;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=djYBuNzUo5jlyYldd5YsGcxLff7fJbIGicD7buvtm2k=;
+        b=QGceBBfehFjsqNEjwXcVC31z3bq7/nzYuwVBDa0BISCQVByB2w4M478kVcehlHYQosR5FL
+        QEnUNk5Norx3y0Cw==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A061FA3B81;
+        Thu,  3 Feb 2022 19:43:18 +0000 (UTC)
+Date:   Thu, 3 Feb 2022 20:43:17 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>, cl@linux.com,
+        pmladek@suse.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com, allen.lkml@gmail.com,
+        void@manifault.com, joe@perches.com
+Subject: Re: [RFC PATCH v4 00/13] module: core code clean up
+Message-ID: <20220203194317.GC3113@kunlun.suse.cz>
+References: <20220130213214.1042497-1-atomlin@redhat.com>
+ <Yfsf2SGELhQ71Ovo@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20220127233953.2185045-1-ipylypiv@google.com> <YflxP28HlVrrNBU2@slm.duckdns.org>
- <Yfly0P4e84373mGF@slm.duckdns.org>
-In-Reply-To: <Yfly0P4e84373mGF@slm.duckdns.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 3 Feb 2022 11:19:35 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg4Tk-cV=nQ2Xrj7P9wN-TxVCR5hjtW3iDpNyjW4x3fzw@mail.gmail.com>
-Message-ID: <CAHk-=wg4Tk-cV=nQ2Xrj7P9wN-TxVCR5hjtW3iDpNyjW4x3fzw@mail.gmail.com>
-Subject: Re: [PATCH] Revert "module, async: async_synchronize_full() on module
- init iff async is used"
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Igor Pylypiv <ipylypiv@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Changyuan Lyu <changyuanl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yfsf2SGELhQ71Ovo@bombadil.infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Feb 1, 2022 at 9:50 AM Tejun Heo <tj@kernel.org> wrote:
->
-> BTW, I can route this through workqueue tree but -mm or going to Linus's
-> tree directly might be a better option. Any opinions?
+Hello,
 
-I'll take it directly. Hopefully nobody notices anything at all - but
-if it causes unexpected serialization and somebody screams we'll know
-more at that point..
+On Wed, Feb 02, 2022 at 04:20:41PM -0800, Luis Chamberlain wrote:
+> On Sun, Jan 30, 2022 at 09:32:01PM +0000, Aaron Tomlin wrote:
+> > Hi Luis,
+> > 
+> > As per your suggestion [1], this is an attempt to refactor and split
+> > optional code out of core module support code into separate components.
+> > This version is based on branch mcgrof/modules-next since a97ac8cb24a3/or
+> > modules-5.17-rc1. Please let me know your thoughts.
+> > 
+> > Changes since v1 [2]:
+> 
+> Thanks for all this work Aaron! Can you drop the RFC prefix,
+> rebase onto linus' latest tree (as he already merged my
+> modules-next, so his tree is more up to date), and submit again?
+> 
+> I'll then apply this to my modules-next, and then ask Christophe to
+> rebase on top of that.
+> 
+> Michal, you'd be up next if you want to go through modules-next.
 
-           Linus
+Sounds like a good idea. When rebasing on top of 5.17-rc1 the only
+conflict was on the module code.
+
+Thanks
+
+Michal
