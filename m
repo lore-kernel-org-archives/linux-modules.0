@@ -2,68 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BA7CC433EF
-	for <linux-modules@archiver.kernel.org>; Thu,  3 Feb 2022 20:47:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F085C433EF
+	for <linux-modules@archiver.kernel.org>; Sat,  5 Feb 2022 20:33:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354708AbiBCUrC (ORCPT
+        id S1381262AbiBEUdN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 3 Feb 2022 15:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356596AbiBCUq2 (ORCPT
+        Sat, 5 Feb 2022 15:33:13 -0500
+Received: from p3plsmtpa07-01.prod.phx3.secureserver.net ([173.201.192.230]:35826
+        "EHLO p3plsmtpa07-01.prod.phx3.secureserver.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1381238AbiBEUdN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:46:28 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E4BC061182;
-        Thu,  3 Feb 2022 12:44:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GdztUW9x+fNlUtnFtFu79iJaJ/d/JZTADTo3wiUu4gM=; b=x9OlGeOiYglbofGb2DmfMM2Oo9
-        hss+jAkhZ0AARNGf568KH2t244lOnXoiaeDkHJh9y88XSCfM4zhuX/O1ioBRmln6FZ8C6LcvxurRn
-        9BmgtvJh4O/xQJt5oCpe0LroEeYOhiR9ggMfxD+hCpj6XY8Tq+cFXyn9gzdRRPNndvGBKGm/V++RT
-        f56uVTLAp09p4IhpQeRdFSMw/NxMS1bYkXbDtLOdXU1SGwYn5ymmgLTLui08mbPMHtzmJ64zVl0An
-        p+vlKFaDtvUUgWMLwJ1bH8t5X1lTR/S94kMYPRbINNXfcsmdzm7HEZBnG/ol/aVX7WM9fYJ3HxNw/
-        nqdt8xjQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nFiyA-002piX-Io; Thu, 03 Feb 2022 20:44:42 +0000
-Date:   Thu, 3 Feb 2022 12:44:42 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "atomlin@redhat.com" <atomlin@redhat.com>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 1/2] modules: Make module_enable_x() independant of
- CONFIG_ARCH_HAS_STRICT_MODULE_RWX
-Message-ID: <Yfw+ulJ9mAT2tvvn@bombadil.infradead.org>
-References: <203348805c9ac9851d8939d15cb9802ef047b5e2.1643919758.git.christophe.leroy@csgroup.eu>
+        Sat, 5 Feb 2022 15:33:13 -0500
+Received: from localhost ([82.17.115.212])
+        by :SMTPAUTH: with ESMTPA
+        id GRk6nOlDx9DrwGRk8neHus; Sat, 05 Feb 2022 13:33:12 -0700
+X-CMAE-Analysis: v=2.4 cv=RN52o6u+ c=1 sm=1 tr=0 ts=61fedf08
+ a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
+ a=IkcTkHD0fZMA:10 a=qS7egxAB0wbPWyOtm4cA:9 a=QEXdDO2ut3YA:10
+X-SECURESERVER-ACCT: atomlin@atomlin.com
+Date:   Sat, 5 Feb 2022 20:33:10 +0000
+From:   Aaron Tomlin <atomlin@atomlin.com>
+To:     Allen <allen.lkml@gmail.com>
+Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
+        ghalat@redhat.com, void@manifault.com,
+        Joe Perches <joe@perches.com>
+Subject: Re: [RFC PATCH v4 00/13] module: core code clean up
+Message-ID: <20220205203310.ngedb64jlii7hmaw@ava.usersys.com>
+References: <20220130213214.1042497-1-atomlin@redhat.com>
+ <CAOMdWS+PDCNO3mpGOU-521mWcMwQW0R4iacsWPkgGZL0aYbxrw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <203348805c9ac9851d8939d15cb9802ef047b5e2.1643919758.git.christophe.leroy@csgroup.eu>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <CAOMdWS+PDCNO3mpGOU-521mWcMwQW0R4iacsWPkgGZL0aYbxrw@mail.gmail.com>
+X-CMAE-Envelope: MS4xfMiT/mCToqixUUYdfqKYJ3gd4+YuAYoW86EpX7LAhgPi+Alh83PcANN7rHcWm8YYwy94twc+YV2YdbTacSs5Wh5c5oGhEd56/xGkrHdT78krMOlH01Ul
+ HxfKtyUpwACMypTXJMYUnu6V1eiWoQaa6V7YMpuhTfBRjhXeiqLNz5k0bEjAtTnrFMCrpSbcvzFdWBVojxjszUDeaFxX0cDyhSeS5Tf/Mg5NEBztm1PzPYRL
+ QEQ2g8gke70BCZTkwQDkfvnE9eTYzXS/ttG7ZM/yxT30Y1yJIW6lehfo4S9yV0ELO8DbuyDQ6iY/yDxHZL9NZrVLznY6ovgt20r8xm/bL5jPihJKCx/TDpld
+ 2H5/fkBHSMYb+VT3qqOgtp+KqVGlMhBcVAl1rH/mLFjWjVzBWMBmTiE1CJQ3LZ9OQFa5dXFui4GfBxnYbOHOXnLibbWRPPkpN/dAJVKgo3v954gVzx0PRTm8
+ Fcz8//uy5unmkTstnHUOKeLIpyoCF9EpIXqArAiQp693BNzLgkyVmmBzenThf79uNZcTceLp7+eIsDZcNpfuMr+Qk+7QLqjFHnVrYRD9HBOj5yiOPP7Z2zll
+ Ov4=
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Feb 03, 2022 at 08:23:25PM +0000, Christophe Leroy wrote:
-> module_enable_x() has nothing to do with CONFIG_ARCH_HAS_STRICT_MODULE_RWX
-> allthough by coincidence architectures who need module_enable_x() are
-> selection CONFIG_ARCH_HAS_STRICT_MODULE_RWX.
-> 
-> Enable module_enable_x() for everyone everytime. If an architecture
-> already has module text set executable, it's a no-op.
-> 
-> Only check end boundary if CONFIG_STRICT_MODULE_RWX is set, and
-> make sure we entirely get the last page when the boundary is not
-> aligned. When CONFIG_STRICT_MODULE_RWX is not selected, it is not
-> a big deal to have the start of data as executable.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+On Tue 2022-02-01 08:44 -0800, Allen wrote:
+> Build/boot test on qemu. Running more tests on BM.
 
-Thanks!
+Thanks Allen.
 
-Both patches look good to me! I can merge this once Aaron's
-then your's and then Michal's KEXEC stuff gets merged.
+Kind regards,
 
-  Luis
+-- 
+Aaron Tomlin
