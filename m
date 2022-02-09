@@ -2,37 +2,37 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D65ADC433FE
-	for <linux-modules@archiver.kernel.org>; Wed,  9 Feb 2022 18:38:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69B1CC43217
+	for <linux-modules@archiver.kernel.org>; Wed,  9 Feb 2022 18:41:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239871AbiBISiN (ORCPT
+        id S240220AbiBISlh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 9 Feb 2022 13:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
+        Wed, 9 Feb 2022 13:41:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239593AbiBISiG (ORCPT
+        with ESMTP id S240528AbiBISlR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:38:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4306BC03E93D;
-        Wed,  9 Feb 2022 10:37:49 -0800 (PST)
+        Wed, 9 Feb 2022 13:41:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27CAC05CBBC;
+        Wed,  9 Feb 2022 10:40:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D282F61B86;
-        Wed,  9 Feb 2022 18:37:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8507C340E7;
-        Wed,  9 Feb 2022 18:37:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83303B82381;
+        Wed,  9 Feb 2022 18:40:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD818C340E9;
+        Wed,  9 Feb 2022 18:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644431868;
-        bh=qM+/wEV76oYlWKa8U71NI8CAdC+zm67GraWby1H9ZZM=;
+        s=k20201202; t=1644432051;
+        bh=R0yHZCf9s2m2YuuMMHzrazy0lPFN4pmsxFU+BYv9oNA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gn2WiR00tXD0LO7LExeMVVdk0U9GKaMbRkLaM3JyrIf5y5lwRU7ohc9050GuoJXZI
-         gF61nrp46OZlVEwH3/vp87KOV2YVeP1hy0otU5U5T7mzViFv9xnZleahCRE/tlDNjR
-         7LYtmExDmqkxNciyGpywxr6RgUGMCNUTex1I3b/l8/qF0YBivCfGg0wcl/0M6xmf+f
-         REj1WEgUdtwS27NSxlOi+7748v8yMm4MLU0wSkVagz5SXo29AxlUVqMHUjB2S7OOb4
-         9HiOuPjFCjNYNGhMshHjN3mI7EVohQuTVCak98ecpCAkHjCJt1cCK/Qp8bl/MBEaqf
-         k1QAR2O4eJC6Q==
+        b=h2qtH7DHp1gEqB87tfvLJDEfCw35M7XI9uy2c5wFtGjS2NGtW0DkA260ReEKHYMJn
+         zQs5/nGX1jVyRXOzEdRW+zFJ01Z3+Kkoy5oYGkRKZ2CrIYO0iG5ikbB2bnUWIub5cz
+         XhW3Ndn6XI+A9j3tvZYddM4yMt27ke0NDo/DOK9s05HQwLzCiCRT8OxiQ+glzclaCq
+         QqkFuen1W2NYO2Vs1uo9aPX+AGH8diRw8aC3udlHyvowvERltTrqbIh1C1VuP+wKZV
+         VbsLOrk0ePhwUJY/AnvyvrrCdw5f4HQAm2XJx+69xsTgetL2vsGOgBuhqlHG80o2eK
+         BhKVAPN2Fwi3A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Igor Pylypiv <ipylypiv@google.com>,
@@ -44,12 +44,12 @@ Cc:     Igor Pylypiv <ipylypiv@google.com>,
         peterz@infradead.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, akpm@linux-foundation.org,
         linux@rasmusvillemoes.dk, linux-modules@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 40/42] Revert "module, async: async_synchronize_full() on module init iff async is used"
-Date:   Wed,  9 Feb 2022 13:33:12 -0500
-Message-Id: <20220209183335.46545-40-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 34/36] Revert "module, async: async_synchronize_full() on module init iff async is used"
+Date:   Wed,  9 Feb 2022 13:37:57 -0500
+Message-Id: <20220209183759.47134-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220209183335.46545-1-sashal@kernel.org>
-References: <20220209183335.46545-1-sashal@kernel.org>
+In-Reply-To: <20220209183759.47134-1-sashal@kernel.org>
+References: <20220209183759.47134-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -131,10 +131,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 5 insertions(+), 24 deletions(-)
 
 diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 78c351e35fec6..ee5ed88219631 100644
+index c1a927ddec646..76e8695506465 100644
 --- a/include/linux/sched.h
 +++ b/include/linux/sched.h
-@@ -1672,7 +1672,6 @@ extern struct pid *cad_pid;
+@@ -1675,7 +1675,6 @@ extern struct pid *cad_pid;
  #define PF_MEMALLOC		0x00000800	/* Allocating memory */
  #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
  #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
@@ -157,10 +157,10 @@ index b8d7a663497f9..b2c4ba5686ee4 100644
  	queue_work_node(node, system_unbound_wq, &entry->work);
  
 diff --git a/kernel/module.c b/kernel/module.c
-index 84a9141a5e159..f25e7653aa150 100644
+index 5c26a76e800b5..83991c2d5af9e 100644
 --- a/kernel/module.c
 +++ b/kernel/module.c
-@@ -3722,12 +3722,6 @@ static noinline int do_init_module(struct module *mod)
+@@ -3683,12 +3683,6 @@ static noinline int do_init_module(struct module *mod)
  	}
  	freeinit->module_init = mod->init_layout.base;
  
@@ -173,7 +173,7 @@ index 84a9141a5e159..f25e7653aa150 100644
  	do_mod_ctors(mod);
  	/* Start the module */
  	if (mod->init != NULL)
-@@ -3753,22 +3747,13 @@ static noinline int do_init_module(struct module *mod)
+@@ -3714,22 +3708,13 @@ static noinline int do_init_module(struct module *mod)
  
  	/*
  	 * We need to finish all async code before the module init sequence
