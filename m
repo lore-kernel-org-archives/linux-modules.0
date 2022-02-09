@@ -2,474 +2,205 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02C8CC43217
-	for <linux-modules@archiver.kernel.org>; Wed,  9 Feb 2022 17:11:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D65ADC433FE
+	for <linux-modules@archiver.kernel.org>; Wed,  9 Feb 2022 18:38:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237937AbiBIRLZ (ORCPT
+        id S239871AbiBISiN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 9 Feb 2022 12:11:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        Wed, 9 Feb 2022 13:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237887AbiBIRLZ (ORCPT
+        with ESMTP id S239593AbiBISiG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 9 Feb 2022 12:11:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1D4BC05CB95
-        for <linux-modules@vger.kernel.org>; Wed,  9 Feb 2022 09:11:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644426685;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kkXl+3Le8t36ks8/Z+YqaA7sB3u+HWYgsDZLTvpdTOo=;
-        b=B6cj4q4zFoRVhshlSUjIz1VvytHTiKO2su0+am/76DpmUlbHmhHvacAlEW1/uyiDZauqvX
-        t9zXN6sToO7qOimJNOMLbA+EEqjz2VazYkJ4Fni+RvEM3fYqCk7t5dKnU9sebEMDloE0Hd
-        blN8F3N8TDf0RUnBZ3NmhUuIlUoROEo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-sC08nblfPmKQrBFys-xj5w-1; Wed, 09 Feb 2022 12:11:23 -0500
-X-MC-Unique: sC08nblfPmKQrBFys-xj5w-1
-Received: by mail-wm1-f72.google.com with SMTP id p2-20020a05600c430200b0037bb72b5865so289174wme.8
-        for <linux-modules@vger.kernel.org>; Wed, 09 Feb 2022 09:11:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:reply-to:mime-version:content-transfer-encoding;
-        bh=kkXl+3Le8t36ks8/Z+YqaA7sB3u+HWYgsDZLTvpdTOo=;
-        b=CWyEt2KvIBj7BaqC7WVLRFabFQl7wZ9c08Gm/l667LlmbfqBe6NDI2h/iiLFaKPjL1
-         bV7muOP/IWFSRwmlyT0Wxx3Eqgqd/CJ0G24c/eX7teEEMG9aI6BiQfpgQP8SXNWZZqEE
-         deCZpjD4m8RuTKoArOZAr9IFKkTg+A5ML7uTxTjqAI3bFOPHHJ83++30S8poeI5MqoeN
-         rotp7lz7qZnFtOC7qOytfo+QPF5ebCfEQkfhYrhjjsyAyNEaiOkPj/aIQJ/b/Q4iGrtq
-         E1NKeGpf9n2JJ4quZfS/ROxO+jrEMh05LDsnowyldqUqVZp10e1nk2jEMzhADJCZXtPR
-         jHog==
-X-Gm-Message-State: AOAM531LE6SQeycBrfnez6Wbk+IJKkhJFwgwkWRkwiUs/9WqIjlknbYj
-        EnsYzOG2dLqCY3xEk85dm9j7o1atskP1zqjfT/wrbWzJvizsj22T4EJxtKr8gGXNTmBbkUWLrdg
-        QG4jB4hl0YW1nTQfZi6LZJFM5
-X-Received: by 2002:a7b:cbd7:: with SMTP id n23mr3534233wmi.76.1644426682508;
-        Wed, 09 Feb 2022 09:11:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJypW/UZ5MhzuBc+8+WlgYQl4xVW5qe61lDMcIs26fERQMJUvjyNAJDoS7ez3xKA6FNLGN7vpg==
-X-Received: by 2002:a7b:cbd7:: with SMTP id n23mr3534206wmi.76.1644426682204;
-        Wed, 09 Feb 2022 09:11:22 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id e15sm1494238wrg.6.2022.02.09.09.11.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 09:11:21 -0800 (PST)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org
-Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
-        joe@perches.com, christophe.leroy@csgroup.eu, msuchanek@suse.de,
-        oleksandr@natalenko.name
-Subject: [PATCH v5 13/13] module: Move version support into a separate file
-Date:   Wed,  9 Feb 2022 17:11:18 +0000
-Message-Id: <20220209171118.3269581-3-atomlin@redhat.com>
+        Wed, 9 Feb 2022 13:38:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4306BC03E93D;
+        Wed,  9 Feb 2022 10:37:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D282F61B86;
+        Wed,  9 Feb 2022 18:37:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8507C340E7;
+        Wed,  9 Feb 2022 18:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644431868;
+        bh=qM+/wEV76oYlWKa8U71NI8CAdC+zm67GraWby1H9ZZM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gn2WiR00tXD0LO7LExeMVVdk0U9GKaMbRkLaM3JyrIf5y5lwRU7ohc9050GuoJXZI
+         gF61nrp46OZlVEwH3/vp87KOV2YVeP1hy0otU5U5T7mzViFv9xnZleahCRE/tlDNjR
+         7LYtmExDmqkxNciyGpywxr6RgUGMCNUTex1I3b/l8/qF0YBivCfGg0wcl/0M6xmf+f
+         REj1WEgUdtwS27NSxlOi+7748v8yMm4MLU0wSkVagz5SXo29AxlUVqMHUjB2S7OOb4
+         9HiOuPjFCjNYNGhMshHjN3mI7EVohQuTVCak98ecpCAkHjCJt1cCK/Qp8bl/MBEaqf
+         k1QAR2O4eJC6Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Igor Pylypiv <ipylypiv@google.com>,
+        Changyuan Lyu <changyuanl@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Tejun Heo <tj@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, akpm@linux-foundation.org,
+        linux@rasmusvillemoes.dk, linux-modules@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.16 40/42] Revert "module, async: async_synchronize_full() on module init iff async is used"
+Date:   Wed,  9 Feb 2022 13:33:12 -0500
+Message-Id: <20220209183335.46545-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220209171118.3269581-1-atomlin@redhat.com>
-References: <20220209171118.3269581-1-atomlin@redhat.com>
-Reply-To: 20220209170358.3266629-1-atomlin@redhat.com
+In-Reply-To: <20220209183335.46545-1-sashal@kernel.org>
+References: <20220209183335.46545-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-No functional change.
+From: Igor Pylypiv <ipylypiv@google.com>
 
-This patch migrates module version support out of core code into
-kernel/module/version.c. In addition simple code refactoring to
-make this possible.
+[ Upstream commit 67d6212afda218d564890d1674bab28e8612170f ]
 
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+This reverts commit 774a1221e862b343388347bac9b318767336b20b.
+
+We need to finish all async code before the module init sequence is
+done.  In the reverted commit the PF_USED_ASYNC flag was added to mark a
+thread that called async_schedule().  Then the PF_USED_ASYNC flag was
+used to determine whether or not async_synchronize_full() needs to be
+invoked.  This works when modprobe thread is calling async_schedule(),
+but it does not work if module dispatches init code to a worker thread
+which then calls async_schedule().
+
+For example, PCI driver probing is invoked from a worker thread based on
+a node where device is attached:
+
+	if (cpu < nr_cpu_ids)
+		error = work_on_cpu(cpu, local_pci_probe, &ddi);
+	else
+		error = local_pci_probe(&ddi);
+
+We end up in a situation where a worker thread gets the PF_USED_ASYNC
+flag set instead of the modprobe thread.  As a result,
+async_synchronize_full() is not invoked and modprobe completes without
+waiting for the async code to finish.
+
+The issue was discovered while loading the pm80xx driver:
+(scsi_mod.scan=async)
+
+modprobe pm80xx                      worker
+...
+  do_init_module()
+  ...
+    pci_call_probe()
+      work_on_cpu(local_pci_probe)
+                                     local_pci_probe()
+                                       pm8001_pci_probe()
+                                         scsi_scan_host()
+                                           async_schedule()
+                                           worker->flags |= PF_USED_ASYNC;
+                                     ...
+      < return from worker >
+  ...
+  if (current->flags & PF_USED_ASYNC) <--- false
+  	async_synchronize_full();
+
+Commit 21c3c5d28007 ("block: don't request module during elevator init")
+fixed the deadlock issue which the reverted commit 774a1221e862
+("module, async: async_synchronize_full() on module init iff async is
+used") tried to fix.
+
+Since commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
+request_module() from async workers") synchronous module loading from
+async is not allowed.
+
+Given that the original deadlock issue is fixed and it is no longer
+allowed to call synchronous request_module() from async we can remove
+PF_USED_ASYNC flag to make module init consistently invoke
+async_synchronize_full() unless async module probe is requested.
+
+Signed-off-by: Igor Pylypiv <ipylypiv@google.com>
+Reviewed-by: Changyuan Lyu <changyuanl@google.com>
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Acked-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/module/Makefile   |   1 +
- kernel/module/internal.h |  50 +++++++++++++
- kernel/module/main.c     | 150 +--------------------------------------
- kernel/module/version.c  | 110 ++++++++++++++++++++++++++++
- 4 files changed, 163 insertions(+), 148 deletions(-)
- create mode 100644 kernel/module/version.c
+ include/linux/sched.h |  1 -
+ kernel/async.c        |  3 ---
+ kernel/module.c       | 25 +++++--------------------
+ 3 files changed, 5 insertions(+), 24 deletions(-)
 
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index c30141c37eb3..1f111aa47e88 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -15,4 +15,5 @@ obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
- obj-$(CONFIG_PROC_FS) += procfs.o
- obj-$(CONFIG_SYSFS) += sysfs.o
-+obj-$(CONFIG_MODVERSIONS) += version.o
- endif
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index c49b4900b30b..475a66aa42f2 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -71,7 +71,31 @@ struct load_info {
- 	} index;
- };
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 78c351e35fec6..ee5ed88219631 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1672,7 +1672,6 @@ extern struct pid *cad_pid;
+ #define PF_MEMALLOC		0x00000800	/* Allocating memory */
+ #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
+ #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
+-#define PF_USED_ASYNC		0x00004000	/* Used async_schedule*(), used by module init */
+ #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
+ #define PF_FROZEN		0x00010000	/* Frozen for system suspend */
+ #define PF_KSWAPD		0x00020000	/* I am kswapd */
+diff --git a/kernel/async.c b/kernel/async.c
+index b8d7a663497f9..b2c4ba5686ee4 100644
+--- a/kernel/async.c
++++ b/kernel/async.c
+@@ -205,9 +205,6 @@ async_cookie_t async_schedule_node_domain(async_func_t func, void *data,
+ 	atomic_inc(&entry_count);
+ 	spin_unlock_irqrestore(&async_lock, flags);
  
-+struct symsearch {
-+	const struct kernel_symbol *start, *stop;
-+	const s32 *crcs;
-+	enum mod_license {
-+		NOT_GPL_ONLY,
-+		GPL_ONLY,
-+	} license;
-+};
-+
-+struct find_symbol_arg {
-+	/* Input */
-+	const char *name;
-+	bool gplok;
-+	bool warn;
-+
-+	/* Output */
-+	struct module *owner;
-+	const s32 *crc;
-+	const struct kernel_symbol *sym;
-+	enum mod_license license;
-+};
-+
- int mod_verify_sig(const void *mod, struct load_info *info);
-+int try_to_force_load(struct module *mod, const char *reason);
-+bool find_symbol(struct find_symbol_arg *fsa);
- struct module *find_module_all(const char *name, size_t len, bool even_unformed);
- unsigned long kernel_symbol_value(const struct kernel_symbol *sym);
- int cmp_name(const void *name, const void *sym);
-@@ -231,3 +255,29 @@ static inline void module_remove_modinfo_attrs(struct module *mod, int end) { }
- static inline void del_usage_links(struct module *mod) { }
- static inline void init_param_lock(struct module *mod) { }
- #endif /* CONFIG_SYSFS */
-+
-+#ifdef CONFIG_MODVERSIONS
-+int check_version(const struct load_info *info,
-+		  const char *symname, struct module *mod, const s32 *crc);
-+int check_modstruct_version(const struct load_info *info, struct module *mod);
-+int same_magic(const char *amagic, const char *bmagic, bool has_crcs);
-+#else /* !CONFIG_MODVERSIONS */
-+static inline int check_version(const struct load_info *info,
-+				const char *symname,
-+				struct module *mod,
-+				const s32 *crc)
-+{
-+	return 1;
-+}
-+
-+static inline int check_modstruct_version(const struct load_info *info,
-+					  struct module *mod)
-+{
-+	return 1;
-+}
-+
-+static inline int same_magic(const char *amagic, const char *bmagic, bool has_crcs)
-+{
-+	return strcmp(amagic, bmagic) == 0;
-+}
-+#endif /* CONFIG_MODVERSIONS */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 519c5335f7a6..b65bf5f7d474 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -241,28 +241,6 @@ static __maybe_unused void *any_section_objs(const struct load_info *info,
- #define symversion(base, idx) ((base != NULL) ? ((base) + (idx)) : NULL)
- #endif
+-	/* mark that this task has queued an async job, used by module init */
+-	current->flags |= PF_USED_ASYNC;
+-
+ 	/* schedule for execution */
+ 	queue_work_node(node, system_unbound_wq, &entry->work);
  
--struct symsearch {
--	const struct kernel_symbol *start, *stop;
--	const s32 *crcs;
--	enum mod_license {
--		NOT_GPL_ONLY,
--		GPL_ONLY,
--	} license;
--};
--
--struct find_symbol_arg {
--	/* Input */
--	const char *name;
--	bool gplok;
--	bool warn;
--
--	/* Output */
--	struct module *owner;
--	const s32 *crc;
--	const struct kernel_symbol *sym;
--	enum mod_license license;
--};
--
- static bool check_exported_symbol(const struct symsearch *syms,
- 				  struct module *owner,
- 				  unsigned int symnum, void *data)
-@@ -333,7 +311,7 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
-  * Find an exported symbol and return it, along with, (optional) crc and
-  * (optional) module which owns it.  Needs preempt disabled or module_mutex.
-  */
--static bool find_symbol(struct find_symbol_arg *fsa)
-+bool find_symbol(struct find_symbol_arg *fsa)
- {
- 	static const struct symsearch arr[] = {
- 		{ __start___ksymtab, __stop___ksymtab, __start___kcrctab,
-@@ -1007,7 +985,7 @@ size_t modinfo_attrs_count = ARRAY_SIZE(modinfo_attrs);
+diff --git a/kernel/module.c b/kernel/module.c
+index 84a9141a5e159..f25e7653aa150 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -3722,12 +3722,6 @@ static noinline int do_init_module(struct module *mod)
+ 	}
+ 	freeinit->module_init = mod->init_layout.base;
  
- static const char vermagic[] = VERMAGIC_STRING;
- 
--static int try_to_force_load(struct module *mod, const char *reason)
-+int try_to_force_load(struct module *mod, const char *reason)
- {
- #ifdef CONFIG_MODULE_FORCE_LOAD
- 	if (!test_taint(TAINT_FORCED_MODULE))
-@@ -1019,115 +997,6 @@ static int try_to_force_load(struct module *mod, const char *reason)
- #endif
- }
- 
--#ifdef CONFIG_MODVERSIONS
--
--static u32 resolve_rel_crc(const s32 *crc)
--{
--	return *(u32 *)((void *)crc + *crc);
--}
--
--static int check_version(const struct load_info *info,
--			 const char *symname,
--			 struct module *mod,
--			 const s32 *crc)
--{
--	Elf_Shdr *sechdrs = info->sechdrs;
--	unsigned int versindex = info->index.vers;
--	unsigned int i, num_versions;
--	struct modversion_info *versions;
--
--	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
--	if (!crc)
--		return 1;
--
--	/* No versions at all?  modprobe --force does this. */
--	if (versindex == 0)
--		return try_to_force_load(mod, symname) == 0;
--
--	versions = (void *) sechdrs[versindex].sh_addr;
--	num_versions = sechdrs[versindex].sh_size
--		/ sizeof(struct modversion_info);
--
--	for (i = 0; i < num_versions; i++) {
--		u32 crcval;
--
--		if (strcmp(versions[i].name, symname) != 0)
--			continue;
--
--		if (IS_ENABLED(CONFIG_MODULE_REL_CRCS))
--			crcval = resolve_rel_crc(crc);
--		else
--			crcval = *crc;
--		if (versions[i].crc == crcval)
--			return 1;
--		pr_debug("Found checksum %X vs module %lX\n",
--			 crcval, versions[i].crc);
--		goto bad_version;
--	}
--
--	/* Broken toolchain. Warn once, then let it go.. */
--	pr_warn_once("%s: no symbol version for %s\n", info->name, symname);
--	return 1;
--
--bad_version:
--	pr_warn("%s: disagrees about version of symbol %s\n",
--	       info->name, symname);
--	return 0;
--}
--
--static inline int check_modstruct_version(const struct load_info *info,
--					  struct module *mod)
--{
--	struct find_symbol_arg fsa = {
--		.name	= "module_layout",
--		.gplok	= true,
--	};
--
 -	/*
--	 * Since this should be found in kernel (which can't be removed), no
--	 * locking is necessary -- use preempt_disable() to placate lockdep.
+-	 * We want to find out whether @mod uses async during init.  Clear
+-	 * PF_USED_ASYNC.  async_schedule*() will set it.
 -	 */
--	preempt_disable();
--	if (!find_symbol(&fsa)) {
--		preempt_enable();
--		BUG();
--	}
--	preempt_enable();
--	return check_version(info, "module_layout", mod, fsa.crc);
--}
+-	current->flags &= ~PF_USED_ASYNC;
 -
--/* First part is kernel version, which we ignore if module has crcs. */
--static inline int same_magic(const char *amagic, const char *bmagic,
--			     bool has_crcs)
--{
--	if (has_crcs) {
--		amagic += strcspn(amagic, " ");
--		bmagic += strcspn(bmagic, " ");
--	}
--	return strcmp(amagic, bmagic) == 0;
--}
--#else
--static inline int check_version(const struct load_info *info,
--				const char *symname,
--				struct module *mod,
--				const s32 *crc)
--{
--	return 1;
--}
--
--static inline int check_modstruct_version(const struct load_info *info,
--					  struct module *mod)
--{
--	return 1;
--}
--
--static inline int same_magic(const char *amagic, const char *bmagic,
--			     bool has_crcs)
--{
--	return strcmp(amagic, bmagic) == 0;
--}
--#endif /* CONFIG_MODVERSIONS */
--
- static char *get_modinfo(const struct load_info *info, const char *tag);
- static char *get_next_modinfo(const struct load_info *info, const char *tag,
- 			      char *prev);
-@@ -3263,18 +3132,3 @@ void print_modules(void)
- 		pr_cont(" [last unloaded: %s]", last_unloaded_module);
- 	pr_cont("\n");
- }
--
--#ifdef CONFIG_MODVERSIONS
--/*
-- * Generate the signature for all relevant module structures here.
-- * If these change, we don't want to try to parse the module.
-- */
--void module_layout(struct module *mod,
--		   struct modversion_info *ver,
--		   struct kernel_param *kp,
--		   struct kernel_symbol *ks,
--		   struct tracepoint * const *tp)
--{
--}
--EXPORT_SYMBOL(module_layout);
--#endif
-diff --git a/kernel/module/version.c b/kernel/module/version.c
-new file mode 100644
-index 000000000000..10a1490d1b9e
---- /dev/null
-+++ b/kernel/module/version.c
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module version support
-+ *
-+ * Copyright (C) 2008 Rusty Russell
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/string.h>
-+#include <linux/printk.h>
-+#include "internal.h"
-+
-+static u32 resolve_rel_crc(const s32 *crc)
-+{
-+	return *(u32 *)((void *)crc + *crc);
-+}
-+
-+int check_version(const struct load_info *info,
-+			 const char *symname,
-+			 struct module *mod,
-+			 const s32 *crc)
-+{
-+	Elf_Shdr *sechdrs = info->sechdrs;
-+	unsigned int versindex = info->index.vers;
-+	unsigned int i, num_versions;
-+	struct modversion_info *versions;
-+
-+	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
-+	if (!crc)
-+		return 1;
-+
-+	/* No versions at all?  modprobe --force does this. */
-+	if (versindex == 0)
-+		return try_to_force_load(mod, symname) == 0;
-+
-+	versions = (void *) sechdrs[versindex].sh_addr;
-+	num_versions = sechdrs[versindex].sh_size
-+		/ sizeof(struct modversion_info);
-+
-+	for (i = 0; i < num_versions; i++) {
-+		u32 crcval;
-+
-+		if (strcmp(versions[i].name, symname) != 0)
-+			continue;
-+
-+		if (IS_ENABLED(CONFIG_MODULE_REL_CRCS))
-+			crcval = resolve_rel_crc(crc);
-+		else
-+			crcval = *crc;
-+		if (versions[i].crc == crcval)
-+			return 1;
-+		pr_debug("Found checksum %X vs module %lX\n",
-+			 crcval, versions[i].crc);
-+		goto bad_version;
-+	}
-+
-+	/* Broken toolchain. Warn once, then let it go.. */
-+	pr_warn_once("%s: no symbol version for %s\n", info->name, symname);
-+	return 1;
-+
-+bad_version:
-+	pr_warn("%s: disagrees about version of symbol %s\n",
-+	       info->name, symname);
-+	return 0;
-+}
-+
-+inline int check_modstruct_version(const struct load_info *info,
-+					  struct module *mod)
-+{
-+	struct find_symbol_arg fsa = {
-+		.name	= "module_layout",
-+		.gplok	= true,
-+	};
-+
-+	/*
-+	 * Since this should be found in kernel (which can't be removed), no
-+	 * locking is necessary -- use preempt_disable() to placate lockdep.
-+	 */
-+	preempt_disable();
-+	if (!find_symbol(&fsa)) {
-+		preempt_enable();
-+		BUG();
-+	}
-+	preempt_enable();
-+	return check_version(info, "module_layout", mod, fsa.crc);
-+}
-+
-+/* First part is kernel version, which we ignore if module has crcs. */
-+inline int same_magic(const char *amagic, const char *bmagic,
-+			     bool has_crcs)
-+{
-+	if (has_crcs) {
-+		amagic += strcspn(amagic, " ");
-+		bmagic += strcspn(bmagic, " ");
-+	}
-+	return strcmp(amagic, bmagic) == 0;
-+}
-+
-+/*
-+ * Generate the signature for all relevant module structures here.
-+ * If these change, we don't want to try to parse the module.
-+ */
-+void module_layout(struct module *mod,
-+		   struct modversion_info *ver,
-+		   struct kernel_param *kp,
-+		   struct kernel_symbol *ks,
-+		   struct tracepoint * const *tp)
-+{
-+}
-+EXPORT_SYMBOL(module_layout);
+ 	do_mod_ctors(mod);
+ 	/* Start the module */
+ 	if (mod->init != NULL)
+@@ -3753,22 +3747,13 @@ static noinline int do_init_module(struct module *mod)
+ 
+ 	/*
+ 	 * We need to finish all async code before the module init sequence
+-	 * is done.  This has potential to deadlock.  For example, a newly
+-	 * detected block device can trigger request_module() of the
+-	 * default iosched from async probing task.  Once userland helper
+-	 * reaches here, async_synchronize_full() will wait on the async
+-	 * task waiting on request_module() and deadlock.
+-	 *
+-	 * This deadlock is avoided by perfomring async_synchronize_full()
+-	 * iff module init queued any async jobs.  This isn't a full
+-	 * solution as it will deadlock the same if module loading from
+-	 * async jobs nests more than once; however, due to the various
+-	 * constraints, this hack seems to be the best option for now.
+-	 * Please refer to the following thread for details.
++	 * is done. This has potential to deadlock if synchronous module
++	 * loading is requested from async (which is not allowed!).
+ 	 *
+-	 * http://thread.gmane.org/gmane.linux.kernel/1420814
++	 * See commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
++	 * request_module() from async workers") for more details.
+ 	 */
+-	if (!mod->async_probe_requested && (current->flags & PF_USED_ASYNC))
++	if (!mod->async_probe_requested)
+ 		async_synchronize_full();
+ 
+ 	ftrace_free_mem(mod, mod->init_layout.base, mod->init_layout.base +
 -- 
 2.34.1
 
