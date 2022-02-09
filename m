@@ -2,37 +2,37 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0116C433EF
-	for <linux-modules@archiver.kernel.org>; Wed,  9 Feb 2022 18:45:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C367C4321E
+	for <linux-modules@archiver.kernel.org>; Wed,  9 Feb 2022 18:47:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240372AbiBISpY (ORCPT
+        id S240768AbiBISr2 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 9 Feb 2022 13:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        Wed, 9 Feb 2022 13:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240302AbiBISo4 (ORCPT
+        with ESMTP id S241575AbiBISqv (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:44:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1588C025454;
-        Wed,  9 Feb 2022 10:42:55 -0800 (PST)
+        Wed, 9 Feb 2022 13:46:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0546C0DE7E2;
+        Wed,  9 Feb 2022 10:44:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BFDB61197;
-        Wed,  9 Feb 2022 18:42:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C18C340E7;
-        Wed,  9 Feb 2022 18:42:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0AB6B82215;
+        Wed,  9 Feb 2022 18:44:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2E4C340E9;
+        Wed,  9 Feb 2022 18:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644432174;
-        bh=AOfI6k1EE62yiMSAf+eafXQyiJyJdqLyx0/J5CvBu24=;
+        s=k20201202; t=1644432246;
+        bh=P3udYnsCbEskvoh3uxv97i0MEqlxnGDxof8wHmeN2IQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pmqUbGlFgZiyY1Vm1yl9jqp1Nbv1TgPlFGNiwzFoERU/USocdL5X395RcegL/qGuI
-         ehhJ8PDo7vR+VEfjEKWl3E1imL15tV0D/ffmErYG/UXGWUFBjgb7qzJtviwk/V+fMq
-         3BmgrnXbgUApI4Spl8+sDueB1kIkTTeZ5IHJDJvcWa6mcHOgbKibGaxmW5BfgxLnt8
-         EBgenVJhudyk3bpYuncoSTh+4oQdG7dFfUxQ3lPvbeOWOUJSaz3MGEIU5hQo0G9DWQ
-         oNSOev0kjSvTvRp8EWuTt7o0WKUEQ6OIONuQChudGtmMxWm6Y4gZWQM5jtZqozjKpm
-         n1E+LyfCHrphw==
+        b=QfSOom6qSQhY3i1meRvKZ9A3SiClfINGPQGLPOcRF6IwPCQQ1a4GD28kC7EUJQBUd
+         li1yvMqizp0FlYJD1jqEG+uvfkRxrmQzRdemRyKBqCaIdT3vn3sbberQMaTMC+sC4f
+         VYfhhH8uguiIUf2ovBMb7HPZ2D9kBFv7XEXeSbpY/KCsLSA06VcUCC7MafqjFZ43OC
+         d23WWt963PN9fgetshU0lPNOD6jgE8z6csGzQ28N5mYzpWxJwFuY8DEQpl0yysbNug
+         NRou00vV8t5tpqaNnT/QRwZb8JPwJtDddLYhpUKVmYXCxWC9AQD5T4xRjJHqErY1P+
+         evTYOzMmzSCBA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Igor Pylypiv <ipylypiv@google.com>,
@@ -44,12 +44,12 @@ Cc:     Igor Pylypiv <ipylypiv@google.com>,
         peterz@infradead.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, akpm@linux-foundation.org,
         linux@rasmusvillemoes.dk, linux-modules@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 25/27] Revert "module, async: async_synchronize_full() on module init iff async is used"
-Date:   Wed,  9 Feb 2022 13:41:01 -0500
-Message-Id: <20220209184103.47635-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 15/15] Revert "module, async: async_synchronize_full() on module init iff async is used"
+Date:   Wed,  9 Feb 2022 13:43:01 -0500
+Message-Id: <20220209184305.47983-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220209184103.47635-1-sashal@kernel.org>
-References: <20220209184103.47635-1-sashal@kernel.org>
+In-Reply-To: <20220209184305.47983-1-sashal@kernel.org>
+References: <20220209184305.47983-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -131,10 +131,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 5 insertions(+), 24 deletions(-)
 
 diff --git a/include/linux/sched.h b/include/linux/sched.h
-index b85b26d9ccefe..f996d1f343bb7 100644
+index afee5d5eb9458..b341471de9d60 100644
 --- a/include/linux/sched.h
 +++ b/include/linux/sched.h
-@@ -1544,7 +1544,6 @@ extern struct pid *cad_pid;
+@@ -1454,7 +1454,6 @@ extern struct pid *cad_pid;
  #define PF_MEMALLOC		0x00000800	/* Allocating memory */
  #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
  #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
@@ -143,7 +143,7 @@ index b85b26d9ccefe..f996d1f343bb7 100644
  #define PF_FROZEN		0x00010000	/* Frozen for system suspend */
  #define PF_KSWAPD		0x00020000	/* I am kswapd */
 diff --git a/kernel/async.c b/kernel/async.c
-index 33258e6e20f83..1746cd65e271b 100644
+index 4f9c1d6140168..74660f611b97d 100644
 --- a/kernel/async.c
 +++ b/kernel/async.c
 @@ -205,9 +205,6 @@ async_cookie_t async_schedule_node_domain(async_func_t func, void *data,
@@ -157,10 +157,10 @@ index 33258e6e20f83..1746cd65e271b 100644
  	queue_work_node(node, system_unbound_wq, &entry->work);
  
 diff --git a/kernel/module.c b/kernel/module.c
-index 185b2655bc206..5f4403198f04b 100644
+index 59d487b8d8dad..e7656cf1652c9 100644
 --- a/kernel/module.c
 +++ b/kernel/module.c
-@@ -3714,12 +3714,6 @@ static noinline int do_init_module(struct module *mod)
+@@ -3711,12 +3711,6 @@ static noinline int do_init_module(struct module *mod)
  	}
  	freeinit->module_init = mod->init_layout.base;
  
@@ -173,7 +173,7 @@ index 185b2655bc206..5f4403198f04b 100644
  	do_mod_ctors(mod);
  	/* Start the module */
  	if (mod->init != NULL)
-@@ -3745,22 +3739,13 @@ static noinline int do_init_module(struct module *mod)
+@@ -3742,22 +3736,13 @@ static noinline int do_init_module(struct module *mod)
  
  	/*
  	 * We need to finish all async code before the module init sequence
