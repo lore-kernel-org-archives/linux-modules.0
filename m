@@ -2,77 +2,181 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD9EFC433EF
-	for <linux-modules@archiver.kernel.org>; Wed,  9 Feb 2022 14:40:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6C07C433F5
+	for <linux-modules@archiver.kernel.org>; Wed,  9 Feb 2022 17:04:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235129AbiBIOkO (ORCPT
+        id S231136AbiBIREB (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 9 Feb 2022 09:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        Wed, 9 Feb 2022 12:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiBIOkN (ORCPT
+        with ESMTP id S237657AbiBIREA (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 9 Feb 2022 09:40:13 -0500
-X-Greylist: delayed 138 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 06:40:17 PST
-Received: from p3plsmtpa07-09.prod.phx3.secureserver.net (p3plsmtpa07-09.prod.phx3.secureserver.net [173.201.192.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEA9C06157B
-        for <linux-modules@vger.kernel.org>; Wed,  9 Feb 2022 06:40:17 -0800 (PST)
-Received: from localhost ([82.17.115.212])
-        by :SMTPAUTH: with ESMTPA
-        id Ho6WnCu31VyEtHo6Yn8W0P; Wed, 09 Feb 2022 07:37:58 -0700
-X-CMAE-Analysis: v=2.4 cv=YLFadTKx c=1 sm=1 tr=0 ts=6203d1c6
- a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
- a=IkcTkHD0fZMA:10 a=9GtVR73LUgLZNubTt3gA:9 a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: atomlin@atomlin.com
-Date:   Wed, 9 Feb 2022 14:37:56 +0000
-From:   Aaron Tomlin <atomlin@atomlin.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org, cl@linux.com,
-        pmladek@suse.com, akpm@linux-foundation.org, jeyu@kernel.org,
+        Wed, 9 Feb 2022 12:04:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 196DBC05CB88
+        for <linux-modules@vger.kernel.org>; Wed,  9 Feb 2022 09:04:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644426242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8JGu9tc4Y2KyT1eiWiXzcd095Zw/Tpe85KWddWWs1mw=;
+        b=X8DI0XMquq1zAqqN+qv7Ci7ZLxArFMvu8wkK7yoZm385RwqD2p1NKZgdlLvlaieIy1FMlN
+        gRM0NehRHRbu3jlJx2EAb6xMAzMexWsyuU8RFAkFyzO0xXMHDcCvFrGS5pOCrEF3WOBaEm
+        HF/BAQ2S0hpIvcfZWZEQDwBHrY/A9r8=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-301-qSFYKS-_OHe4qmNWNqO_zQ-1; Wed, 09 Feb 2022 12:04:01 -0500
+X-MC-Unique: qSFYKS-_OHe4qmNWNqO_zQ-1
+Received: by mail-wr1-f71.google.com with SMTP id e11-20020adf9bcb000000b001e316b01456so1322723wrc.21
+        for <linux-modules@vger.kernel.org>; Wed, 09 Feb 2022 09:04:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8JGu9tc4Y2KyT1eiWiXzcd095Zw/Tpe85KWddWWs1mw=;
+        b=IAk7A2SrPFv0TlGwrxDGkHrrXr66epBq+pV+Ll1q7O866bPcYy4c5P56lkVPFowN5p
+         aDR6wyEtrxvATw/PmhIr09e+G2qFBk9NZPCeg9AiCq1fSONwOnBU4ex4P93Wq4Pd5ZBL
+         8NMMbwIsaWaKx6UBl6vaNbSROY3cSyrMJheYfFrsLR1t5QvcsNOYjd5sIY0VglhYBFej
+         QMkT4jf7lTwPC/2xiuB/V40ZQZJQa9hEaG38y3iFaE5YnK6LRxtagHpTYJO4nmUrE6yE
+         rd4A1CXID+bh/1CSnjGGGq04ofCbeiz469vmrWdbcSQECyKQvpv1fxQJfebUxOpO/LEo
+         ClEA==
+X-Gm-Message-State: AOAM5323xxW7Xh3a2bKwYzCX/vapE5bw9RpuvbV/cQCHl8kIFZoDH9nO
+        SiAQch9C0ZMARDVAC8G2kkTxKoZTNXWOu+Tm1HLCQ5HXWxIZquUaTKUH9LRMYLlfDOlOAQ9ao6c
+        z4vI8F+aA8pCiOg1z6sc84Mqx
+X-Received: by 2002:a1c:4c08:: with SMTP id z8mr3325120wmf.153.1644426239704;
+        Wed, 09 Feb 2022 09:03:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyRWErCzDJevBPge+wE4fG0SvqM8QFw7E/+3ejyBWy/H5JrEyjmJO/RMkyZAElXVcLz66DNUw==
+X-Received: by 2002:a1c:4c08:: with SMTP id z8mr3325089wmf.153.1644426239507;
+        Wed, 09 Feb 2022 09:03:59 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id r2sm23436081wrz.99.2022.02.09.09.03.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 09:03:58 -0800 (PST)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, ghalat@redhat.com,
-        allen.lkml@gmail.com, void@manifault.com, joe@perches.com
-Subject: Re: [RFC PATCH v4 07/13] module: Move extra signature support out of
- core code
-Message-ID: <20220209143756.53gw3ve46gaseqny@ava.usersys.com>
-References: <20220130213214.1042497-1-atomlin@redhat.com>
- <20220130213214.1042497-8-atomlin@redhat.com>
- <alpine.LSU.2.21.2202091526260.32090@pobox.suse.cz>
+        live-patching@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
+        joe@perches.com, christophe.leroy@csgroup.eu, msuchanek@suse.de,
+        oleksandr@natalenko.name
+Subject: [PATCH v5 00/13] module: core code clean up
+Date:   Wed,  9 Feb 2022 17:03:45 +0000
+Message-Id: <20220209170358.3266629-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.2202091526260.32090@pobox.suse.cz>
-X-CMAE-Envelope: MS4xfEeLTpDb717gdYrJ8fyJj8u9SbuxXa0FoEtTxchN+RygMn6avjFjDz9N44ZAJn4NF09emarra7B7k6YWEXFkXy4jjlZTCK/syx62dS3QtHH4AyFDi5zi
- m3KD+EFRaWERrm8o5Igt7fu78oTLn6xk5Zkj3FXHz7HaGODGGQmWOWyMzbvVW7CwHzQdzgbx8hp+U4MN7AGTV7GhbgRIdXswj96qgg+FNkEJ8dFxdk7yeyRu
- 4lirWRDwcBzIXcYhHjCRR+4QuJNAkRWy724B7CCmb1PvjkcI2ynC43rJYjT2Jlm111JdHg7MTCoiEaehgYS6kJr8qQt+MIi577r4VcKn8CyJku6IErT8y51D
- bNiEZ9Pbo0WVSAWThlzavS0dLWzjuFnXayYFwGnTWibCR8UJzqjul4LVBlhDne2eQC0CjRWSH6Wwov1l91S2qbCAWg5znBfTaHGdI3luseoeHM+YR18mEAjw
- Qqvhk7Ynq/E2L0TzbaXhNXabcgiRv9ZGXVP37Rp/eUx3j2L8jHv1DZcbEjSWtBSN9skxXBTh1U2IA4vof5J0BzZAOD+eAO+uhDAul0YH8Cw0ZfQaRAOD2qML
- LS4=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed 2022-02-09 15:28 +0100, Miroslav Benes wrote:
-> Please, drop these extern modifiers in front of function declarations. 
-> They are unnecessary. It applies to different patches of the set as well.
+Hi Luis,
 
-Agreed - this was suggested previously.
-The next iteration should be published soon. Just waiting on 0-day.
+As per your suggestion [1], this is an attempt to refactor and split
+optional code out of core module support code into separate components.
+This version is based on Linus' commit e6251ab4551f ("Merge tag
+'nfs-for-5.17-2' of git://git.linux-nfs.org/projects/anna/linux-nfs").
+Please let me know your thoughts. So far, no feedback from 0-day; albeit,
+if I see something, I'll let you know.
 
-> > +#ifdef CONFIG_MODULE_SIG
-> > +extern int module_sig_check(struct load_info *info, int flags);
-> > +#else /* !CONFIG_MODULE_SIG */
-> > +static int module_sig_check(struct load_info *info, int flags)
-> > +{
-> > +	return 0;
-> > +}
-> 
-> I think it should be 
-> static inline int module_sig_check(struct load_info *info, int flags)
+Changes since v1 [2]:
 
-Yes, indeed it should. Thanks for the feedback.
+  - Moved module version support code into a new file
+
+Changes since v2 [3]:
+
+ - Moved module decompress support to a separate file
+ - Made check_modinfo_livepatch() generic (Petr Mladek)
+ - Removed filename from each newly created file (Luis Chamberlain)
+ - Addressed some (i.e. --ignore=ASSIGN_IN_IF,AVOID_BUG was used)
+   minor scripts/checkpatch.pl concerns e.g., use strscpy over
+   strlcpy and missing a blank line after declarations (Allen)
+
+Changes since v3 [4]:
+
+ - Refactored both is_livepatch_module() and set_livepatch_module(),
+   respectively, to use IS_ENABLED(CONFIG_LIVEPATCH) (Joe Perches)
+ - Addressed various compiler warnings e.g., no previous prototype (0-day)
+
+Changes since v4 [5]:
+
+ - Dropped RFC (Luis Chamberlain)
+ - Moved is_livepatch_module() and set_livepatch_module() to
+   kernel/module/livepatch.c; set_livepatch_module() will
+   remain for internal use only
+ - Addressed minor compiler warning concerning
+   kernel/module/internal.h (0-day)
+ - Resolved style violations reported by scripts/checkpatch.pl
+ - Dropped patch 5 [6] so external patch [7] can be applied at
+   a later date post merge into module-next (Christophe Leroy)
+
+[1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
+[2]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
+[3]: https://lore.kernel.org/lkml/20220106234319.2067842-1-atomlin@redhat.com/
+[4]: https://lore.kernel.org/lkml/20220128203934.600247-1-atomlin@redhat.com/
+[5]: https://lore.kernel.org/lkml/20220130213214.1042497-1-atomlin@redhat.com/
+[6]: https://lore.kernel.org/lkml/20220130213214.1042497-6-atomlin@redhat.com/
+[7]: https://lore.kernel.org/lkml/203348805c9ac9851d8939d15cb9802ef047b5e2.1643919758.git.christophe.leroy@csgroup.eu/
 
 
-Kind regards,
+Aaron Tomlin (13):
+  module: Move all into module/
+  module: Simple refactor in preparation for split
+  module: Make internal.h more compliant
+  module: Move livepatch support to a separate file
+  module: Move latched RB-tree support to a separate file
+  module: Move strict rwx support to a separate file
+  module: Move extra signature support out of core code
+  module: Move kmemleak support to a separate file
+  module: Move kallsyms support into a separate file
+  module: Move procfs support into a separate file
+  module: Move sysfs support into a separate file
+  module: Move kdb_modules list out of core code
+  module: Move version support into a separate file
 
+ MAINTAINERS                                   |    2 +-
+ include/linux/module.h                        |   10 +-
+ kernel/Makefile                               |    5 +-
+ kernel/debug/kdb/kdb_main.c                   |    5 +
+ kernel/module-internal.h                      |   50 -
+ kernel/module/Makefile                        |   19 +
+ kernel/module/debug_kmemleak.c                |   30 +
+ .../decompress.c}                             |    2 +-
+ kernel/module/internal.h                      |  283 +++
+ kernel/module/kallsyms.c                      |  502 +++++
+ kernel/module/livepatch.c                     |   80 +
+ kernel/{module.c => module/main.c}            | 1862 +----------------
+ kernel/module/procfs.c                        |  142 ++
+ .../signature.c}                              |    0
+ kernel/module/signing.c                       |  120 ++
+ kernel/module/strict_rwx.c                    |   84 +
+ kernel/module/sysfs.c                         |  425 ++++
+ kernel/module/tree_lookup.c                   |  109 +
+ kernel/module/version.c                       |  110 +
+ kernel/module_signing.c                       |   45 -
+ 20 files changed, 2009 insertions(+), 1876 deletions(-)
+ delete mode 100644 kernel/module-internal.h
+ create mode 100644 kernel/module/Makefile
+ create mode 100644 kernel/module/debug_kmemleak.c
+ rename kernel/{module_decompress.c => module/decompress.c} (99%)
+ create mode 100644 kernel/module/internal.h
+ create mode 100644 kernel/module/kallsyms.c
+ create mode 100644 kernel/module/livepatch.c
+ rename kernel/{module.c => module/main.c} (64%)
+ create mode 100644 kernel/module/procfs.c
+ rename kernel/{module_signature.c => module/signature.c} (100%)
+ create mode 100644 kernel/module/signing.c
+ create mode 100644 kernel/module/strict_rwx.c
+ create mode 100644 kernel/module/sysfs.c
+ create mode 100644 kernel/module/tree_lookup.c
+ create mode 100644 kernel/module/version.c
+ delete mode 100644 kernel/module_signing.c
+
+
+base-commit: e6251ab4551f51fa4cee03523e08051898c3ce82
 -- 
-Aaron Tomlin
+2.34.1
+
