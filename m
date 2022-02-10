@@ -2,64 +2,31 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78113C433F5
-	for <linux-modules@archiver.kernel.org>; Thu, 10 Feb 2022 16:26:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E668FC433FE
+	for <linux-modules@archiver.kernel.org>; Thu, 10 Feb 2022 17:11:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244177AbiBJQ0o (ORCPT
+        id S245003AbiBJRLK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 10 Feb 2022 11:26:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42120 "EHLO
+        Thu, 10 Feb 2022 12:11:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244190AbiBJQ0n (ORCPT
+        with ESMTP id S244838AbiBJRLJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:26:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E4A0C4C
-        for <linux-modules@vger.kernel.org>; Thu, 10 Feb 2022 08:26:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644510402;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rY3phGFyqzvqC5XqBvgZRHwWvJirMd+irMKZuvfo6EI=;
-        b=RRtfBSydLtl+XiDxn7Gqj+KNvu6c2XQ2YOwk3yUCdljhWbb8s1h/UmC9i4EqFvMouH7dm0
-        SS1acdBF5alzNbhoF7j3BsUe7RgslNpQAgRKMCJqqhZuxAOh72qBTbSXaLRiLIKoIB63/K
-        SOv9rZo2KQs6LkBN70iXOuPe9LHNUyE=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-bC-3wos1NfS8mbZz_6Ojrg-1; Thu, 10 Feb 2022 11:26:39 -0500
-X-MC-Unique: bC-3wos1NfS8mbZz_6Ojrg-1
-Received: by mail-lj1-f198.google.com with SMTP id y19-20020a2e9793000000b0023f158d6cc0so2797107lji.10
-        for <linux-modules@vger.kernel.org>; Thu, 10 Feb 2022 08:26:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rY3phGFyqzvqC5XqBvgZRHwWvJirMd+irMKZuvfo6EI=;
-        b=NegLvd8qLEkUhDKf48YopYGMq4AcEAi9x1exvSkXhxyoI6eLgh08n4eoLUABUAkBuY
-         PQbhLNenI03ZcOHcFLW5UPAjiV1gHS8zF+GHx2TljSCzMLVoQeG0DA1VuzKZ02WHrx/h
-         RSyzQ4z/PWXmrnZ4JMKJA513OpkNg/NypfTOqEu80uIHOydm77Zuj/Cc6VB9tHeOMw6x
-         34+1U45H17/0tlnw6zjB2WSjFbjsj+P3yDKm1hCjMl6or91mEjR9u8fs97O5hYEjgILp
-         6EiyWg5ITcU9+cvizlGfseEuE0y57Etd3Qb3QdDoFviyKXZxMshP6pPtPd8UTdFuzuOo
-         ds9w==
-X-Gm-Message-State: AOAM5323pFs4QoHnnEbD9nB7KI+kOQ+f5JtrHC9PoKZnG2iUwmC12kZx
-        GWYUuneGQLtjjbSQzytMkAkqZUGxB8A49c/PJ9WJvA8F0lB5P35bq/4ttjCXSUu8RJ3jQOBuAom
-        dByzbpWC6X+Gme8LaNDA3+cMbJJt+3fnI6A6A4dX3
-X-Received: by 2002:a2e:9b42:: with SMTP id o2mr5338838ljj.85.1644510397651;
-        Thu, 10 Feb 2022 08:26:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw9JIlgHvIwzA75M+U5BYw5VLOvJhfEKK89UxctqRfc/hcGRqbB7269Gq1HJ/earlGgnR33FLSJpEfMa8PkcNk=
-X-Received: by 2002:a2e:9b42:: with SMTP id o2mr5338822ljj.85.1644510397492;
- Thu, 10 Feb 2022 08:26:37 -0800 (PST)
-MIME-Version: 1.0
-References: <20220209170358.3266629-1-atomlin@redhat.com> <20220209170358.3266629-3-atomlin@redhat.com>
- <f40fd2b2-2038-a53b-23ec-8f63941a2103@csgroup.eu>
-In-Reply-To: <f40fd2b2-2038-a53b-23ec-8f63941a2103@csgroup.eu>
-From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Thu, 10 Feb 2022 16:26:26 +0000
-Message-ID: <CANfR36jWjL9c1p8huGR8mh=XWXoNEc=Y8SmwXFCusEQ6CbuKmA@mail.gmail.com>
-Subject: Re: [PATCH v5 02/13] module: Simple refactor in preparation for split
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+        Thu, 10 Feb 2022 12:11:09 -0500
+X-Greylist: delayed 534 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 09:11:10 PST
+Received: from relay3.hostedemail.com (relay3.hostedemail.com [64.99.140.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2383E6C
+        for <linux-modules@vger.kernel.org>; Thu, 10 Feb 2022 09:11:10 -0800 (PST)
+Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id B1DF2968;
+        Thu, 10 Feb 2022 17:02:13 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id 11C1660016;
+        Thu, 10 Feb 2022 17:01:44 +0000 (UTC)
+Message-ID: <926e5c35d50ec5f6d7e789831be96744ca8d6423.camel@perches.com>
+Subject: Re: [PATCH v5 01/13] module: Move all into module/
+From:   Joe Perches <joe@perches.com>
+To:     Aaron Tomlin <atomlin@redhat.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
         "cl@linux.com" <cl@linux.com>,
         "pmladek@suse.com" <pmladek@suse.com>,
@@ -73,22 +40,46 @@ Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
         "ghalat@redhat.com" <ghalat@redhat.com>,
         "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
         "void@manifault.com" <void@manifault.com>,
-        "joe@perches.com" <joe@perches.com>,
         "msuchanek@suse.de" <msuchanek@suse.de>,
         "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Content-Type: text/plain; charset="UTF-8"
+Date:   Thu, 10 Feb 2022 09:02:09 -0800
+In-Reply-To: <CANfR36jh3yg9nqXkpCUWPeHV+sSD6yne9j1=uA5vyUpYOC8t9g@mail.gmail.com>
+References: <20220209170358.3266629-1-atomlin@redhat.com>
+         <20220209170358.3266629-2-atomlin@redhat.com>
+         <a22eb1b0-3fb5-a70e-cf6f-022571538efb@csgroup.eu>
+         <CANfR36jh3yg9nqXkpCUWPeHV+sSD6yne9j1=uA5vyUpYOC8t9g@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 11C1660016
+X-Stat-Signature: iz1wokkybbs73un6ik5i8wgk4d48418d
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+axLrpIxj27ofZZzUZv90vffF51j0MMg0=
+X-HE-Tag: 1644512504-437677
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu 2022-02-10 11:18 +0000, Christophe Leroy wrote:
-> > +#define MODULE_SECT_READ_SIZE (3 /* "0x", "\n" */ + (BITS_PER_LONG / 4))
->
-> This is used only in sysfs.c, why move it to internal.h ?
+On Thu, 2022-02-10 at 14:45 +0000, Aaron Tomlin wrote:
+> On Thu 2022-02-10 11:11 +0000, Christophe Leroy wrote:
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+[]
+> > > @@ -13001,7 +13001,7 @@ L:    linux-kernel@vger.kernel.org
+> > >   S:    Maintained
+> > >   T:    git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+> > >   F:    include/linux/module.h
+> > > -F:    kernel/module.c
+> > > +F:    kernel/module/main.c
+> > 
+> > Shouldn't it be the entire directory ?
+> 
+> Indeed it should. Moving forward: kernel/module/*
 
-Agreed. Since use is exclusive to kernel/module/sysfs.c it should be moved.
+Better would be:
 
-Kind regards,
+F:	kernel/module/
 
--- 
-Aaron Tomlin
+in case it ever gets subdirectories too.
+
 
