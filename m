@@ -2,177 +2,94 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C396CC433FE
-	for <linux-modules@archiver.kernel.org>; Thu, 10 Feb 2022 22:41:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9A7FC433EF
+	for <linux-modules@archiver.kernel.org>; Fri, 11 Feb 2022 08:42:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345074AbiBJWlk (ORCPT
+        id S1348103AbiBKImp (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 10 Feb 2022 17:41:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59540 "EHLO
+        Fri, 11 Feb 2022 03:42:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345065AbiBJWlk (ORCPT
+        with ESMTP id S1348092AbiBKImk (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:41:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E05E826DA
-        for <linux-modules@vger.kernel.org>; Thu, 10 Feb 2022 14:41:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644532899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D9z1haah+UIcdDYLlT29sLlYpdDn7jZamy9pjb18HtA=;
-        b=dAVwpkzmnyPm9vN8D5V5ZNcnJbRAjibOVy4VgtB6WqMhLd88IG4+gNT5grc0UtASO5jCUx
-        MwpuRDurNkLYYDieRKjhfx58YHeEDDXZrtEkjJ2DIpp2ESpFwlPBHgRCqxzed//ObXdfYb
-        i1v+M5MDsR1kw0jb7VhPg6GwK17N0zw=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-146--HhIS_dROsKOGf6Vhr51sA-1; Thu, 10 Feb 2022 17:41:38 -0500
-X-MC-Unique: -HhIS_dROsKOGf6Vhr51sA-1
-Received: by mail-lj1-f199.google.com with SMTP id a22-20020a05651c031600b0023d78ecb40cso3246682ljp.8
-        for <linux-modules@vger.kernel.org>; Thu, 10 Feb 2022 14:41:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D9z1haah+UIcdDYLlT29sLlYpdDn7jZamy9pjb18HtA=;
-        b=KyeEWoyUVgF0Eh7SrghTuRjjsQszCiXIjnok2xXiL59hkXaKpDDtNj5UPdjHJmD+EZ
-         66345RysdcIlQ6Ev9ZLKc42LsoNlq+vH2TOqFvaSaJ2KFqIZ7QWURSOv4GXuQ3PVO/PL
-         BiUjUSlHfylrZ+nMEtk1xXocsiCJJUSNFdiFaj4HXKoqpq3HyIQDqy/ED54vuBgC+5YN
-         5o8VUMAMKWg2wb0ExKmIqiuoywgtjkZZL2THTiF4TZ2vQVWTDLlD2C5AwM50KAzgqIZn
-         0W7Te2AgeYQ6iDnwfJS2ab+ZsIJ7NqGzFrNUL0f4h+tlHAAgSN3Gd9DE/4vLoPoT6++D
-         c/tw==
-X-Gm-Message-State: AOAM533+GEgvKo7odfAMukqXnJ9yxTaDYmaJFwNOsmIH7ig0XzzDpMwY
-        0vcuG3I0t10i6xlwqaIRMcCyNf88jWpC2KMa/NvRidZpfIU0Z47of4IsIov/45ZP/GBlrAoI+WI
-        ft7DmpSfyoKTXk2kettfoO/TWVAi1w2W7ws/Q6bGm
-X-Received: by 2002:a05:6512:33c8:: with SMTP id d8mr6470340lfg.41.1644532896199;
-        Thu, 10 Feb 2022 14:41:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzjGYPFGigD9D5dsbstwF6UYHTzLHLhy3FVbR0KZZXe7/vG4kYJtCyu+fmRfnrOqKewzMh+QFBD+44qNwh8PAk=
-X-Received: by 2002:a05:6512:33c8:: with SMTP id d8mr6470330lfg.41.1644532895928;
- Thu, 10 Feb 2022 14:41:35 -0800 (PST)
+        Fri, 11 Feb 2022 03:42:40 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D5DE5E
+        for <linux-modules@vger.kernel.org>; Fri, 11 Feb 2022 00:42:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644568959; x=1676104959;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=awLmTMsee8Wj05CPICoM3fem6XnfDv255JW7hE6gris=;
+  b=U5bd4dm8D0EoTDaP1u7YeMX9x4od7MKMc2LL5chCkckoG6ICeFA5s4D4
+   92j0C4Ur/kcnow5C23f2g1DQJCMCmNPorxjuk4EDyIlIYtJxcGO5G8ZTg
+   BaD42yuwsJ3JQiznvV0JLrxmwKSYHCvarbY+OEWPPOm4o/CDzlNkJ+hfC
+   Gsdhm7RckjzRm2Dto1N4jVx8fHnteZKAF8xLox5KxkeqEB1kpQxb2guDb
+   mQrzOX3pc8jcG3UZ3Ei2Utndsjz2D/2zCJrr2ewFxNCIqPC8u/3LfEIIB
+   rZL1IC3pxJk1nPQEvbcikZfrxe6ViUFIyEIWOIRl68oowjTUkH86yL2sp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="310427004"
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="310427004"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 00:42:39 -0800
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="526876367"
+Received: from cheryeoh-mobl.amr.corp.intel.com (HELO ldmartin-desk2.wifi.hicv.net) ([10.209.59.32])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 00:42:38 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     linux-modules@vger.kernel.org
+Cc:     gladkov.alexey@gmail.com
+Subject: [PATCH 1/3] libkmod: Prefer builtin index over builtin.alias
+Date:   Fri, 11 Feb 2022 00:42:28 -0800
+Message-Id: <20220211084230.4489-1-lucas.demarchi@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220209170358.3266629-1-atomlin@redhat.com> <20220209170358.3266629-6-atomlin@redhat.com>
- <32b37a9b-8765-ca96-7528-0ef4faa9ae34@csgroup.eu>
-In-Reply-To: <32b37a9b-8765-ca96-7528-0ef4faa9ae34@csgroup.eu>
-From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Thu, 10 Feb 2022 22:41:24 +0000
-Message-ID: <CANfR36iKsTd8Ave+gt2PUho0Zpcnc7kYJrXUHEG5_TrbH_+3jw@mail.gmail.com>
-Subject: Re: [PATCH v5 05/13] module: Move latched RB-tree support to a
- separate file
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu 2022-02-10 12:03 +0000, Christophe Leroy wrote:
-> > diff --git a/include/linux/module.h b/include/linux/module.h
-> > index 680b31ff57fa..fd6161d78127 100644
-> > --- a/include/linux/module.h
-> > +++ b/include/linux/module.h
-> > @@ -342,9 +342,9 @@ struct module_layout {
-> >   #ifdef CONFIG_MODULES_TREE_LOOKUP
-> >   /* Only touch one cacheline for common rbtree-for-core-layout case. */
-> >   #define __module_layout_align ____cacheline_aligned
-> > -#else
-> > +#else /* !CONFIG_MODULES_TREE_LOOKUP */
-> >   #define __module_layout_align
-> > -#endif
-> > +#endif /* CONFIG_MODULES_TREE_LOOKUP */
-> Commenting an #else / #endif is only usefull when the block is more than
-> one screen or when there are nested #ifdef inside the block.
+The modules.builtin.alias.bin is way larger than the
+modules.builtin.bin.  On a normal "distro kernel":
 
-For me, this is a personal style preference. That being said, fair enough.
+	21k modules.builtin.alias.bin
+	11k modules.builtin.bin
 
-> > +#else /* !CONFIG_MODULES_TREE_LOOKUP */
-> > +static unsigned long module_addr_min = -1UL, module_addr_max;
->
-> This is wrong to put that in a .h.
->
+From the kernel we get both modules.builtin and modules.builtin.modinfo.
+depmod generates modules.builtin.bin and modules.builtin.alias.bin
+from them respectively. modules.bultin is not going away: it's not
+deprecated by the new index added. So, let's just stop duplicating the
+information inside modules.builtin.alias.bin and just use the other
+index.
+---
+ libkmod/libkmod-module.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-I understand. This was an oversight. I'll move this to kernel/module/main.c
-in preparation for your work.
-
-> > +static void mod_tree_insert(struct module *mod) { }
-> > +static void mod_tree_remove_init(struct module *mod) { }
-> > +static void mod_tree_remove(struct module *mod) { }
-> > +static struct module *mod_find(unsigned long addr)
->
-> Also keep mod_find() in main.c, or make it a 'static inline'. Otherwise
-> it will be duplicated in every file including internal.h
-
-Agreed. This too was an oversight. I'll use the 'inline' keyword here.
-
-> > diff --git a/kernel/module/tree_lookup.c b/kernel/module/tree_lookup.c
-> > new file mode 100644
-> > index 000000000000..037d6eb2f56f
-> > --- /dev/null
-> > +++ b/kernel/module/tree_lookup.c
-> > @@ -0,0 +1,109 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * Modules tree lookup
-> > + *
-> > + * Copyright (C) 2015 Peter Zijlstra
-> > + * Copyright (C) 2015 Rusty Russell
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/rbtree_latch.h>
-> > +#include "internal.h"
-> > +
-> > +/*
-> > + * Use a latched RB-tree for __module_address(); this allows us to use
-> > + * RCU-sched lookups of the address from any context.
-> > + *
-> > + * This is conditional on PERF_EVENTS || TRACING because those can really hit
-> > + * __module_address() hard by doing a lot of stack unwinding; potentially from
-> > + * NMI context.
-> > + */
-> > +
-> > +__always_inline unsigned long __mod_tree_val(struct latch_tree_node *n)
->
-> Should be static.
-> > +__always_inline unsigned long __mod_tree_size(struct latch_tree_node *n)
->
-> Should be static.
-> > +__always_inline bool
-> > +mod_tree_less(struct latch_tree_node *a, struct latch_tree_node *b)
->
-> Should be static.
->
->
-> > +__always_inline int
-> > +mod_tree_comp(void *key, struct latch_tree_node *n)
->
-> Should be static.
->
-> > +const struct latch_tree_ops mod_tree_ops = {
-> > +    .less = mod_tree_less,
-> > +    .comp = mod_tree_comp,
-> > +};
->
-> Should be static.
-
-Agreed. Only used in kernel/module/tree_lookup.c.
-
-
+diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+index 6f7747c..40d394a 100644
+--- a/libkmod/libkmod-module.c
++++ b/libkmod/libkmod-module.c
+@@ -576,13 +576,14 @@ KMOD_EXPORT int kmod_module_new_from_lookup(struct kmod_ctx *ctx,
+ 	err = kmod_lookup_alias_from_aliases_file(ctx, alias, list);
+ 	CHECK_ERR_AND_FINISH(err, fail, list, finish);
+ 
++	DBG(ctx, "lookup modules.builtin %s\n", alias);
++	err = kmod_lookup_alias_from_builtin_file(ctx, alias, list);
++
+ 	DBG(ctx, "lookup modules.builtin.modinfo %s\n", alias);
+ 	err = kmod_lookup_alias_from_kernel_builtin_file(ctx, alias, list);
+-	if (err == -ENOSYS) {
+-		/* Optional index missing, try the old one */
+-		DBG(ctx, "lookup modules.builtin %s\n", alias);
+-		err = kmod_lookup_alias_from_builtin_file(ctx, alias, list);
+-	}
++	/* Optional index missing, ignore */
++	if (err == -ENOSYS)
++		err = 0;
+ 	CHECK_ERR_AND_FINISH(err, fail, list, finish);
+ 
+ 
 -- 
-Aaron Tomlin
+2.35.1
 
