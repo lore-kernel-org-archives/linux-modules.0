@@ -2,120 +2,120 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8323C433EF
-	for <linux-modules@archiver.kernel.org>; Sun, 13 Feb 2022 13:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63E59C433EF
+	for <linux-modules@archiver.kernel.org>; Sun, 13 Feb 2022 13:32:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiBMNNw (ORCPT
+        id S236301AbiBMNc3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 13 Feb 2022 08:13:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38134 "EHLO
+        Sun, 13 Feb 2022 08:32:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236247AbiBMNNw (ORCPT
+        with ESMTP id S236295AbiBMNc2 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 13 Feb 2022 08:13:52 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87A95F248
-        for <linux-modules@vger.kernel.org>; Sun, 13 Feb 2022 05:13:45 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id h6so22742590wrb.9
-        for <linux-modules@vger.kernel.org>; Sun, 13 Feb 2022 05:13:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ljvc+/nDJPw+FsTYwUK6boujCK9jtfrqIKhKEzHsnkw=;
-        b=Q24KJAn9zWuYMFFPbIxohqin4298ksBGxso+N3huor5F+NU0a2p8Tol3MNMcaHXDaM
-         MCJcN5wFxWBaFOgWQ7BGERD//CcQ4XOooDoYknmOK9BSOdWTU1DDRcqALPpVxck2dodX
-         JyaDKbSvkAIT3731NRz6Z37walOzKY4UHP1zOy/dbkrQ7v9rdzGRShapfbGqGwE7TWuj
-         PQXBrOsSSrJkuqHi/B+yMks5ZA7aFY3ZrUfcEPewrwVsZqIz4eLsz8+m/HJ6177N/cyD
-         o/DjPrKh5R8iRM/ia1yS8qK7lQ02udAUYtELfP7i4m8A4sRxpR70qdzKXJNtBNNNt1/C
-         R6zw==
+        Sun, 13 Feb 2022 08:32:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 111A25EDF6
+        for <linux-modules@vger.kernel.org>; Sun, 13 Feb 2022 05:32:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644759141;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uOYbuLgoQrIJu9nKfMdzzauQRx2lRskPgBFfceJrL3s=;
+        b=fu7YqESrPM3fhjsu3ou6FdqQeReou+eT1IVouA+eFBUxuar6lJpWZSWpLKNTOPAdn0zFPv
+        l1BcSID+cQ0FSWaay8PbwDmyvhQ+fTsNfwjt/PZZGsuxSuiRQPrxjR0YgTdA/e2uvupx1u
+        GOTwj9Kg3n72qyFMnah4EewgzwzXBrU=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-281-zusOef5HNoiamPA0u1QPnw-1; Sun, 13 Feb 2022 08:32:20 -0500
+X-MC-Unique: zusOef5HNoiamPA0u1QPnw-1
+Received: by mail-lf1-f70.google.com with SMTP id s18-20020a056512315200b0043fddc0a987so4388027lfi.11
+        for <linux-modules@vger.kernel.org>; Sun, 13 Feb 2022 05:32:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ljvc+/nDJPw+FsTYwUK6boujCK9jtfrqIKhKEzHsnkw=;
-        b=rQDGHyGQepUyE+xn3KKtD848pLlRVUqv7YGp03NL38PIp+YbOUn7sZDgKJy4vD2Bwn
-         T8bpF2a3dOseHM8bYJNP+PsWdVWEXeocMVi7cvmm8mY6kTr6EibROsmcHw9yWBwqQ7Xf
-         2TEQxVrt/G6IKCsml7oywSd1mJo8dNu1OFW9qdcOZ5BpGsIXTe2mC5CHebJQxrh8B0oW
-         OyZpGmPY3SPG7ABpakp1n/3QQQTI2nFEU9ykaUXnaSrcDDrHfcADmupj9gfqfnrnuvVU
-         tGgJp5BfXzEBZAfAwfk1rFcsVjwRkQceJXkdH4l+pAebMAQWm0bRsT0M67vXa39vk9yh
-         euQQ==
-X-Gm-Message-State: AOAM530SpLIjuX7vAOpV1JUX+L5fe6OuA1aauWdV4mqskmd/TWGejXuq
-        Ppr1QZlxD+/1PIViEOak+A8=
-X-Google-Smtp-Source: ABdhPJwiTGGlp+4tlftWHpWYLZKj9hBQgMotN71IdJcSj+Ir3AR9izIP6JWcTibIuBK4tp7VWzTh9Q==
-X-Received: by 2002:adf:ee11:: with SMTP id y17mr7861336wrn.410.1644758024173;
-        Sun, 13 Feb 2022 05:13:44 -0800 (PST)
-Received: from example.org (ip-78-45-37-102.net.upcbroadband.cz. [78.45.37.102])
-        by smtp.gmail.com with ESMTPSA id 3sm21422579wrz.86.2022.02.13.05.13.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 05:13:43 -0800 (PST)
-Date:   Sun, 13 Feb 2022 14:13:39 +0100
-From:   Alexey Gladkov <gladkov.alexey@gmail.com>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2] libkmod: Prefer builtin index over builtin.alias
-Message-ID: <20220213131339.yxi3rq3q6xexqbbx@example.org>
-References: <CAKi4VAJs8mC23vpvkryrdJiX2fJgkPPzb763Og4Y0vZv_JH8Gw@mail.gmail.com>
- <20220213074335.15774-1-lucas.demarchi@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uOYbuLgoQrIJu9nKfMdzzauQRx2lRskPgBFfceJrL3s=;
+        b=XdQBe75YMCiCDNAbNbjU4q2C90Io6zdnIaY4rxL0CtmVqsXY68NzImlUq365z6mZjD
+         TuBUpBdwsbkn0hH/xsAnbBVJWwU+KaINIT2Mfyk4sON1uDWuV8tchXDf3rvEWXNRyn+q
+         TkVVegbWNsStyrCXDshzmN7oWWLOlbwk8uJSVU8EkBV9Y7T55uZ/ZfWk2FHOwrQCEN78
+         IzceXhlQgGfvWchVRl0hgL2lcIaCjAZtw7ylQ8MwflNTIVpnMhYXe+H+7iINwK6ZlC42
+         fBG3IMRfi6/gBlgh8BczANfJeE7EjPGBASCcfhIMP0jzoKkAmAkMIEgcxOLa6rL2bDea
+         wBHw==
+X-Gm-Message-State: AOAM532RxzYVl4kgTI7BruzDzR2pdL9mdZgkV9LK2PgqhVCtIXOArS6L
+        YdbB+YLHX+yV2GH43w9fif4mXgvrvKMQruHUyKOiLylgiYCQkTFbvqyCRb35h6sZOCN4ePStsrr
+        Jf2O7etvkRTnevEOHkW1IIXMPIDIkz9aQzTG+x6G7
+X-Received: by 2002:a05:6512:3b91:: with SMTP id g17mr7860195lfv.79.1644759139004;
+        Sun, 13 Feb 2022 05:32:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw6QOJ9OCsgrJpykyWrVf7n930ImpTeONtk7WaCfpRLimBjJcl5tAk9Gz17gF2GFtFKp8pZMQwJ6onRNh1AcA4=
+X-Received: by 2002:a05:6512:3b91:: with SMTP id g17mr7860177lfv.79.1644759138845;
+ Sun, 13 Feb 2022 05:32:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220213074335.15774-1-lucas.demarchi@intel.com>
+References: <20220209171118.3269581-1-atomlin@redhat.com> <6d6cbfe4-ee1a-ec5f-4249-c25ab6142668@csgroup.eu>
+In-Reply-To: <6d6cbfe4-ee1a-ec5f-4249-c25ab6142668@csgroup.eu>
+From:   Aaron Tomlin <atomlin@redhat.com>
+Date:   Sun, 13 Feb 2022 13:32:07 +0000
+Message-ID: <CANfR36hWpznfhryHtjOR8Juv_rHqF4HOg-163r_OdwY8Sfri+A@mail.gmail.com>
+Subject: Re: [PATCH v5 11/13] module: Move sysfs support into a separate file
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "ghalat@redhat.com" <ghalat@redhat.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "void@manifault.com" <void@manifault.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Feb 12, 2022 at 09:43:35PM -1000, Lucas De Marchi wrote:
-> The modules.builtin.alias.bin is way larger than the
-> modules.builtin.bin.  On a normal "distro kernel":
-> 
-> 	21k modules.builtin.alias.bin
-> 	11k modules.builtin.bin
-> 
-> >From the kernel we get both modules.builtin and modules.builtin.modinfo.
-> depmod generates modules.builtin.bin and modules.builtin.alias.bin
-> from them respectively. modules.bultin is not going away: it's not
-> deprecated by the new index added. So, let's just stop duplicating the
-> information inside modules.builtin.alias.bin and just use the other
-> index.
+On Thu 2022-02-10 14:00 +0000, Christophe Leroy wrote:
+> Checkpatch:
+>
+>     total: 0 errors, 2 warnings, 10 checks, 946 lines checked
 
-The modules.builtin contains only module names. The modules.builtin.modinfo
-contains full info about builtin modules including names.
+Ok.
 
-I thought that if there is complete information about the modules, then
-reading the index with only the names does not make sense. And only in the
-absence of modules.builtin.modinfo, you need to fallback to the index
-with the names.
+> > diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> > index b67ce836746a..52d30bf6d6b0 100644
+> > --- a/kernel/module/internal.h
+> > +++ b/kernel/module/internal.h
+> > @@ -35,6 +35,9 @@
+> >   extern struct mutex module_mutex;
+> >   extern struct list_head modules;
+> >
+> > +extern struct module_attribute *modinfo_attrs[];
+> > +extern size_t modinfo_attrs_count;
+>
+> Can't this come in sysfs.c as well ?
 
-> ---
->  libkmod/libkmod-module.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-> index 6f7747c..6423339 100644
-> --- a/libkmod/libkmod-module.c
-> +++ b/libkmod/libkmod-module.c
-> @@ -576,13 +576,15 @@ KMOD_EXPORT int kmod_module_new_from_lookup(struct kmod_ctx *ctx,
->  	err = kmod_lookup_alias_from_aliases_file(ctx, alias, list);
->  	CHECK_ERR_AND_FINISH(err, fail, list, finish);
->  
-> +	DBG(ctx, "lookup modules.builtin %s\n", alias);
-> +	err = kmod_lookup_alias_from_builtin_file(ctx, alias, list);
-> +	CHECK_ERR_AND_FINISH(err, fail, list, finish);
-> +
->  	DBG(ctx, "lookup modules.builtin.modinfo %s\n", alias);
->  	err = kmod_lookup_alias_from_kernel_builtin_file(ctx, alias, list);
-> -	if (err == -ENOSYS) {
-> -		/* Optional index missing, try the old one */
-> -		DBG(ctx, "lookup modules.builtin %s\n", alias);
-> -		err = kmod_lookup_alias_from_builtin_file(ctx, alias, list);
-> -	}
-> +	/* Optional index missing, ignore */
-> +	if (err == -ENOSYS)
-> +		err = 0;
->  	CHECK_ERR_AND_FINISH(err, fail, list, finish);
+No.
 
-Yep. Looks good for me.
+> > +#ifdef CONFIG_SYSFS
+> > +int mod_sysfs_setup(struct module *mod, const struct load_info *info,
+> > +               struct kernel_param *kparam, unsigned int num_params);
+> > +void mod_sysfs_fini(struct module *mod);
+> > +void module_remove_modinfo_attrs(struct module *mod, int end);
+> > +void del_usage_links(struct module *mod);
+> > +void init_param_lock(struct module *mod);
+>
+> Why don't we move mod_sysfs_teardown() here as well ?
+
+Agreed.
+
+
+Kind regards,
 
 -- 
-Rgrds, legion
+Aaron Tomlin
 
