@@ -2,63 +2,64 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C776C433FE
-	for <linux-modules@archiver.kernel.org>; Sun, 13 Feb 2022 14:14:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF492C433FE
+	for <linux-modules@archiver.kernel.org>; Sun, 13 Feb 2022 18:03:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236404AbiBMOOz (ORCPT
+        id S237657AbiBMSD6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 13 Feb 2022 09:14:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37126 "EHLO
+        Sun, 13 Feb 2022 13:03:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236348AbiBMOOz (ORCPT
+        with ESMTP id S237621AbiBMSD5 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 13 Feb 2022 09:14:55 -0500
+        Sun, 13 Feb 2022 13:03:57 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D800E5F257
-        for <linux-modules@vger.kernel.org>; Sun, 13 Feb 2022 06:14:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D5705A5AB
+        for <linux-modules@vger.kernel.org>; Sun, 13 Feb 2022 10:03:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644761687;
+        s=mimecast20190719; t=1644775430;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6GDOxQGVDeSQrF28P9dVTC7+ArRcSB51YDX/25gUBmk=;
-        b=CwIDRfHgHhKjzmg9E9encOU8yHIfqWMtzOjw2N5E0ypAdi/J9BJNYmfGVfe+uZe2zeSp8r
-        WAxou3qgldiG4b7aK07DV3wUiU5ToiHmrFXZ353svfVYE1WoOdkQJXbGB6dSHJzMpTgLS9
-        nHkd3bXicq+1rsVl6NG54gDDB9WANKM=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=MzMGv99OCi8+2Db1ZNZFSg9ybIYsKPglxX6rxpaRY6Y=;
+        b=XIncsxXzvZ2aQfZK9acvXzIcOfcnC7bSdazE/8dsYtoy3PuI07QrO2WURRMGmmBv5BjrN3
+        Txm5z05RCxqWYtouyDizwN8mpU8BcJ9P6QM0ilTbvleNOiKnKFl958w3eXgqql9j7SsDVN
+        ZE4uR5+Ipf/3EHGSPBKQMIn+eYGUIz8=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-446-8DZnUB1dP7i4uxjz2d2B5w-1; Sun, 13 Feb 2022 09:14:46 -0500
-X-MC-Unique: 8DZnUB1dP7i4uxjz2d2B5w-1
-Received: by mail-lf1-f70.google.com with SMTP id j11-20020a19f50b000000b00443304eab91so705854lfb.13
-        for <linux-modules@vger.kernel.org>; Sun, 13 Feb 2022 06:14:46 -0800 (PST)
+ us-mta-362-yeKa-S-8P8CDnxxSqmEtjQ-1; Sun, 13 Feb 2022 13:03:49 -0500
+X-MC-Unique: yeKa-S-8P8CDnxxSqmEtjQ-1
+Received: by mail-lj1-f197.google.com with SMTP id by12-20020a05651c1a0c00b00244bf726482so246840ljb.0
+        for <linux-modules@vger.kernel.org>; Sun, 13 Feb 2022 10:03:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6GDOxQGVDeSQrF28P9dVTC7+ArRcSB51YDX/25gUBmk=;
-        b=yDcI92FwoVjhmahs8pJiJ1eji1Tf+ZN/fSKmqMG32YYfC4gV4draTyPe1gbLreXFzj
-         +chtWTrGvPmUssKPFgBFEyJy72hFemlnW50YfITnTued12NvqSVoGHaNZF+kO0Uv6qaJ
-         1XMLR9uVWqpMusDN0xoaZgelVZWFKTV3YD2NGeqzbDiSHHS87cwxR9ZtGeevfVNKpYtp
-         koN3VePt/Y21tNuS4mAC5KZk+sKXBxlLzALODIyH31pdS7gUH2TVwIQjdz4IA5nXbDkS
-         XckZzYp9QhHz/sGcEZiRa4weW8i457Ho0o+fZ7eWd16ytdCm+Bf8lw9MBEdFkxRb/2Fu
-         tjSA==
-X-Gm-Message-State: AOAM533KohBL2ryuS4oaeFNTGR8lscMHeg8fy7+8u6Del+OVDuTqJGWh
-        XssE8OzzbmXWAECBYIh7ZbjX2cPPs5IIZ8qLNwrgh8G1oOH0ikfQLPcNEpSkEHqU5C560UvoW57
-        ViVSO0r3saXKpzaWFtm24NFeA4JXr3vwt6mz8qBAD
-X-Received: by 2002:a05:6512:15a6:: with SMTP id bp38mr306537lfb.118.1644761685069;
-        Sun, 13 Feb 2022 06:14:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz83mwJy3I8oyj2IUUhtEPCDsHcc8BfCTfKxbZpJ9hv+glH5AqSuXL7NCVk+fr+Wru9cOxrowgs5fTnrb6RBiU=
-X-Received: by 2002:a05:6512:15a6:: with SMTP id bp38mr306524lfb.118.1644761684887;
- Sun, 13 Feb 2022 06:14:44 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MzMGv99OCi8+2Db1ZNZFSg9ybIYsKPglxX6rxpaRY6Y=;
+        b=m8a4ui3LO0xtNeDhbzBkQP355XMmbRBaAlGv98wJDtteKU27AxHOfhKKAX95TvCiGv
+         24gSL8G5YSAR7HwJnvJpR6OXvkkovDdBqszuIlOkSF1Eeit9mth9GGT9qf+tcky4moPg
+         u7UQ6SyCr7eSVCLSFILMsb2L0D3wWrq5FWjkqE7NvMXLrLBHWy/tbyBHo57aLwVXnXNs
+         sh4xobRli6F2RZg6WHkz90KQjR1w4jXDmEBvKmcHkCSoOOyqa6JGsiOImJQqUd5hgUU9
+         h1rq8nZDYkqI2k8JVAHAOnNea/uELxhefLro3uswvzjEXXOWOHXLkbD2T4lXFl9vhJP9
+         WEnw==
+X-Gm-Message-State: AOAM531g1mIJ1059xT9d4xMZANygx1zJYhwhRsOqdrImG3J0JjmcIpN2
+        RiI7PpSYd1RUaCbQgzpYecYK/uJA23fo8CBGL+iXEYoHMDImesJXDv9Tnjq0jJM9TQinYaDFgxv
+        FTBCBoCQEvHLLsKMT1pqNEjiHTn9+nVOzhT3SvxVW
+X-Received: by 2002:a05:6512:1032:: with SMTP id r18mr8185986lfr.678.1644775427510;
+        Sun, 13 Feb 2022 10:03:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwes2q5xf22MJdPcoboBes53363gO606y9zz8jO7gp+BzN+lD6OSPykVWJAaQM7JqN5TGO7fgvFg8JwEeveI28=
+X-Received: by 2002:a05:6512:1032:: with SMTP id r18mr8185979lfr.678.1644775427325;
+ Sun, 13 Feb 2022 10:03:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20220209171118.3269581-1-atomlin@redhat.com> <20220209171118.3269581-2-atomlin@redhat.com>
- <3a3cc6b3-7bac-3cfd-ce56-7c71abb2de60@csgroup.eu>
-In-Reply-To: <3a3cc6b3-7bac-3cfd-ce56-7c71abb2de60@csgroup.eu>
+References: <20220209171118.3269581-1-atomlin@redhat.com> <20220209171118.3269581-3-atomlin@redhat.com>
+ <14a1678f-0c56-1237-c5c7-4ca1bac4b42a@csgroup.eu>
+In-Reply-To: <14a1678f-0c56-1237-c5c7-4ca1bac4b42a@csgroup.eu>
 From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Sun, 13 Feb 2022 14:14:33 +0000
-Message-ID: <CANfR36in5DJ_QwOcOPyzfd28V2CPK1PTir8uDauF9R+9wr2i_Q@mail.gmail.com>
-Subject: Re: [PATCH v5 12/13] module: Move kdb_modules list out of core code
+Date:   Sun, 13 Feb 2022 18:03:36 +0000
+Message-ID: <CANfR36gVY+1k7YJy0fn1z+mGv-LqEmZJSvSHXn_BFR4WC+oJrQ@mail.gmail.com>
+Subject: Re: [PATCH v5 13/13] module: Move version support into a separate file
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
         "cl@linux.com" <cl@linux.com>,
@@ -77,49 +78,75 @@ Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
         "msuchanek@suse.de" <msuchanek@suse.de>,
         "oleksandr@natalenko.name" <oleksandr@natalenko.name>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu 2022-02-10 14:05 +0000, Christophe Leroy wrote:
-> > diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
-> > index 0852a537dad4..f101f5f078f4 100644
-> > --- a/kernel/debug/kdb/kdb_main.c
-> > +++ b/kernel/debug/kdb/kdb_main.c
-> > @@ -59,6 +59,11 @@ EXPORT_SYMBOL(kdb_grepping_flag);
-> >   int kdb_grep_leading;
-> >   int kdb_grep_trailing;
+On Thu 2022-02-10 14:28 +0000, Christophe Leroy wrote:
+>
+>
+> Le 09/02/2022 =C3=A0 18:11, Aaron Tomlin a =C3=A9crit :
+> > No functional change.
 > >
-> > +#ifdef CONFIG_MODULES
-> > +extern struct list_head modules;
+> > This patch migrates module version support out of core code into
+> > kernel/module/version.c. In addition simple code refactoring to
+> > make this possible.
+> >
+> > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> > ---
+> >   kernel/module/Makefile   |   1 +
+> >   kernel/module/internal.h |  50 +++++++++++++
+> >   kernel/module/main.c     | 150 +-------------------------------------=
+-
+> >   kernel/module/version.c  | 110 ++++++++++++++++++++++++++++
+> >   4 files changed, 163 insertions(+), 148 deletions(-)
+> >   create mode 100644 kernel/module/version.c
 >
-> Should go in module.h
-
-I disagree. Let's keep it restricted somewhat. The list of loaded/or added
-modules is not widely used.
-
-> > +struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
+> Sparse reports:
 >
-> Should be static and should be removed from kernel/debug/kdb/kdb_private.h
+>    CHECK   kernel/module/version.c
+> kernel/module/version.c:103:6: warning: symbol 'module_layout' was not
+> declared. Should it be static?
 
-Agreed. It is only used in kernel/debug/kdb/kdb_main.c.
+The function module_layout() does not appear to be used. So, I've decided
+to remove it.
 
-> > diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> > index 52d30bf6d6b0..c49b4900b30b 100644
-> > --- a/kernel/module/internal.h
-> > +++ b/kernel/module/internal.h
-> > @@ -225,6 +225,7 @@ static int mod_sysfs_setup(struct module *mod,
-> >   {
-> >       return 0;
-> >   }
-> > +
+> Checkpatch:
 >
-> This should go in previous patch if needed (patch 11 sysfs)
+>     total: 0 errors, 2 warnings, 3 checks, 337 lines checked
+
+Ok.
+
+> > +struct symsearch {
+> > +    const struct kernel_symbol *start, *stop;
+> > +    const s32 *crcs;
+> > +    enum mod_license {
+> > +        NOT_GPL_ONLY,
+> > +        GPL_ONLY,
+> > +    } license;
+> > +};
+>
+> Why don't leave this in main.c ?
+
+Yes, struct 'symsearch' is not used outside of kernel/module/main.c.
+
+> > +inline int check_modstruct_version(const struct load_info *info,
+> > +                      struct module *mod)
+>
+> inline is pointless for a non static function
+
+This was an unfortunate oversight.
+
+> > +inline int same_magic(const char *amagic, const char *bmagic,
+> > +                 bool has_crcs)
+>
+> Same, not point for inline keyword here.
 
 Agreed.
 
 
 Kind regards,
 
--- 
+--=20
 Aaron Tomlin
 
