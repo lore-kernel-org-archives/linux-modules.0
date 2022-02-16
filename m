@@ -2,48 +2,48 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57C0CC433F5
-	for <linux-modules@archiver.kernel.org>; Wed, 16 Feb 2022 07:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF59DC433EF
+	for <linux-modules@archiver.kernel.org>; Wed, 16 Feb 2022 07:56:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiBPH4X (ORCPT
+        id S229528AbiBPH4Y (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 16 Feb 2022 02:56:23 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55280 "EHLO
+        Wed, 16 Feb 2022 02:56:24 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiBPH4V (ORCPT
+        with ESMTP id S231344AbiBPH4W (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:56:21 -0500
+        Wed, 16 Feb 2022 02:56:22 -0500
 Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FEF1011
-        for <linux-modules@vger.kernel.org>; Tue, 15 Feb 2022 23:56:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5311F637C
+        for <linux-modules@vger.kernel.org>; Tue, 15 Feb 2022 23:56:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644998168; x=1676534168;
+  t=1644998169; x=1676534169;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yQxeXfVfmPuhiDOIMRS40NLHvlVYuqAc5Ax7SG5dyZY=;
-  b=h0gxmNJJYwQVow1Bvt5gj5wK+DZXInBywwN2+1cX8r2ne6vps3ssBTlR
-   8Z+5Mxj8oSaXQCSnU7/XJUE+30G/Ya0mu3IhjKc6JQ0rCSJaXMQyrHbZQ
-   Q3ShULCRkvqOfBBaAhSn20gut5m5pvy0RlZCfIe1DSXhWsJ99uY0JuFly
-   PPNyKIXgbRsrUgIDg1eYJzqN1TNrCH8KCPNH5mkFo3RI/h8GbTXo3/Tq+
-   30/O2iWxCeC1DEpgk0sQgR9EiPd1thmXWnP8T5a+xqSXnvaz44up6OxCs
-   9m5fD+4KvGrPHktQQvL6u6ejBYCO2UcyhqhPNEgo+QZniVLM68LrsMt2c
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="311286604"
+  bh=MpJOH/t0Sfkzz+a6Bqj3h/Tiy4jt+r250Ls7GYE+VjA=;
+  b=Q9Y6GNCPSwzBhGubjM0ts9he96GfUaCl5A4qmcWyNcw6GLpalAaeYgko
+   WEwtqQM5LRQDk/fo6PI8yWxWKVK+fvvPiIwtRfaeDFRIKjWDBaE4gSDV+
+   PMPEiFqJ8JWZmjGSocUqf8SrHJYfY2qg7UfIIYh5pmx/CTrsVLjbPDfBO
+   BaYvu95dujaO4zBTKa7uaE3vmIcH0C8M1YO+DYEikFIB3w1JcR9a/eIfg
+   usMcFesapmqDq+cw00GFmBHg8/PQQ5nFFczt7GFmOLvXecLGbN5rjT6CJ
+   yNd9RScR0fEdNclzbMDam5Kn+869KE9KPBmAWI+oTytrvabqJ7xu50BI1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="311286606"
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="311286604"
+   d="scan'208";a="311286606"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:56:04 -0800
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="636377646"
+   d="scan'208";a="636377652"
 Received: from dcanchal-mobl1.ger.corp.intel.com (HELO ldmartin-desk2.intel.com) ([10.212.233.152])
   by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:56:04 -0800
 From:   Lucas De Marchi <lucas.demarchi@intel.com>
 To:     linux-modules@vger.kernel.org
 Cc:     Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH 6/8] libkmod: Add lookup from module name
-Date:   Tue, 15 Feb 2022 23:55:31 -0800
-Message-Id: <20220216075533.185693-7-lucas.demarchi@intel.com>
+Subject: [PATCH 8/8] modinfo: Allow to force arg as module name
+Date:   Tue, 15 Feb 2022 23:55:33 -0800
+Message-Id: <20220216075533.185693-9-lucas.demarchi@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220216075533.185693-1-lucas.demarchi@intel.com>
 References: <20220216075533.185693-1-lucas.demarchi@intel.com>
@@ -52,110 +52,172 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Slightly different than kmod_module_new_from_lookup(): it doesn't
-consider aliases, only module names. This is useful for cases we want to
-force a tool to handle something as the module name, without trying to
-interpret it as an alias.
----
- libkmod/libkmod-module.c | 57 ++++++++++++++++++++++++++++++++++++++++
- libkmod/libkmod.h        |  3 +++
- libkmod/libkmod.sym      |  1 +
- 3 files changed, 61 insertions(+)
+If the Linux kernel or userspace sets an alias with the same name as a
+module, they force the tools to use that. However in some situations it
+may be desired to query the module itself. Getting the module
+information through modinfo is one such situation. So, add a option to
+modinfo to explicitly instruct it to handle the argument as a module
+name.
 
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 1c6ff24..a1839fa 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -591,6 +591,63 @@ KMOD_EXPORT int kmod_module_new_from_lookup(struct kmod_ctx *ctx,
+Example, when trying to output information about the crc32 module that
+is builtin:
+
+	$ modinfo crc32
+	filename:       /lib/modules/5.15.19-1-MANJARO/kernel/arch/x86/crypto/crc32-pclmul.ko.zst
+	alias:          crypto-crc32-pclmul
+	alias:          crc32-pclmul
+	alias:          crypto-crc32
+	alias:          crc32
+	license:        GPL
+	author:         Alexander Boyko <alexander_boyko@xyratex.com>
+	srcversion:     B6B2FF9236731E69418A2E5
+	alias:          cpu:type:x86,ven*fam*mod*:feature:*0081*
+	depends:
+	retpoline:      Y
+	intree:         Y
+	name:           crc32_pclmul
+	vermagic:       5.15.19-1-MANJARO SMP preempt mod_unload
+	sig_id:         PKCS#7
+	signer:         Build time autogenerated kernel key
+	sig_key:        77:FB:AA:BD:48:78:A4:C6:56:18:9A:7E:A6:F3:29:3E:C5:6B:E9:37
+	sig_hashalgo:   sha512
+	signature:      30:65:02:31:00:B0:D4:49:9D:1D:F1:71:4C:3C:BB:70:B2:3E:46:5D:
+			38:5A:F1:00:95:FD:7A:96:C4:2C:24:35:A2:1B:0B:A8:1C:29:6F:02:
+			7A:68:EE:BA:A4:1C:01:4B:86:39:15:3E:66:02:30:7F:7A:66:5E:F2:
+			2F:98:73:3D:AD:96:66:81:8B:94:6E:F3:3F:44:0F:85:E1:73:3A:9E:
+			F9:C4:BE:9B:88:02:BD:83:04:B9:2E:72:0B:93:BC:82:B6:A1:1B:6A:
+			C2:ED:8C
+	filename:       /lib/modules/5.15.19-1-MANJARO/kernel/crypto/crc32_generic.ko.zst
+	alias:          crypto-crc32-generic
+	alias:          crc32-generic
+	alias:          crypto-crc32
+	alias:          crc32
+	license:        GPL
+	description:    CRC32 calculations wrapper for lib/crc32
+	author:         Alexander Boyko <alexander_boyko@xyratex.com>
+	srcversion:     F08036C38DDB06BCD1E6091
+	depends:
+	retpoline:      Y
+	intree:         Y
+	name:           crc32_generic
+	vermagic:       5.15.19-1-MANJARO SMP preempt mod_unload
+	sig_id:         PKCS#7
+	signer:         Build time autogenerated kernel key
+	sig_key:        77:FB:AA:BD:48:78:A4:C6:56:18:9A:7E:A6:F3:29:3E:C5:6B:E9:37
+	sig_hashalgo:   sha512
+	signature:      30:65:02:31:00:E3:9E:C8:80:15:0E:D7:74:96:B5:25:EA:32:F7:DF:
+			E9:FC:3C:82:D9:B9:B9:37:C5:20:8D:06:31:02:62:B3:54:E8:DF:F2:
+			7E:E2:7C:A4:CF:49:17:CB:75:DF:2C:7A:2F:02:30:25:DE:7C:2A:2C:
+			97:3F:65:16:76:B3:71:FB:62:DB:8F:F3:33:65:77:98:F3:57:ED:D7:
+			87:78:FF:C2:04:55:70:00:10:63:1E:B2:FE:22:D8:E5:6D:5F:95:4E:
+			7D:2C:6B
+
+That is because the Linux kernel exports "crc32" as an alias to those modules,
+besides being a module itself:
+
+	$ grep crc32 /lib/modules/$(uname -r)/modules.builtin
+	kernel/lib/crc32.ko
+	$ $ grep "alias crc32 " /lib/modules/$(uname -r)/modules.alias
+	alias crc32 crc32_pclmul
+	alias crc32 crc32_generic
+
+With the new -m|--modname option it's possible to query the information about this (builtin):
+
+	$ modinfo --modname crc32
+	module explicitly:
+	name:           crc32
+	filename:       (builtin)
+	license:        GPL
+	file:           lib/crc32
+	description:    Various CRC32 calculations
+	author:         Matt Domsch <Matt_Domsch@dell.com>
+---
+ tools/modinfo.c | 30 ++++++++++++++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/tools/modinfo.c b/tools/modinfo.c
+index f51b7e4..d0aab20 100644
+--- a/tools/modinfo.c
++++ b/tools/modinfo.c
+@@ -293,6 +293,24 @@ static int modinfo_path_do(struct kmod_ctx *ctx, const char *path)
  	return err;
  }
  
-+/**
-+ * kmod_module_new_from_name_lookup:
-+ * @ctx: kmod library context
-+ * @modname: module name to look for
-+ * @mod: returned module on success
-+ *
-+ * Lookup by module name, without considering possible aliases. This is similar
-+ * to kmod_module_new_from_lookup(), but don't consider as source indexes and
-+ * configurations that work with aliases. When succesful, this always resolves
-+ * to one and only one module.
-+ *
-+ * The search order is: 1. module names in modules.dep index;
-+ * 2. builtin indexes from kernel.
-+ *
-+ * The initial refcount is 1, and needs to be decremented to release the
-+ * resources of the kmod_module. Since libkmod keeps track of all
-+ * kmod_modules created, they are all released upon @ctx destruction too. Do
-+ * not unref @ctx before all the desired operations with the returned list are
-+ * completed.
-+ *
-+ * Returns: 0 on success or < 0 otherwise. It fails if any of the lookup
-+ * methods failed, which is basically due to memory allocation failure. If
-+ * module is not found, it still returns 0, but @mod is left untouched.
-+ */
-+KMOD_EXPORT int kmod_module_new_from_name_lookup(struct kmod_ctx *ctx,
-+						 const char *modname,
-+						 struct kmod_module **mod)
++static int modinfo_name_do(struct kmod_ctx *ctx, const char *name)
 +{
-+	const lookup_func lookup[] = {
-+		kmod_lookup_alias_from_moddep_file,
-+		kmod_lookup_alias_from_builtin_file,
-+		kmod_lookup_alias_from_kernel_builtin_file,
-+	};
-+	char name_norm[PATH_MAX];
-+	struct kmod_list *list = NULL;
++	struct kmod_module *mod = NULL;
 +	int err;
 +
-+	if (ctx == NULL || modname == NULL || mod == NULL)
-+		return -ENOENT;
++	err = kmod_module_new_from_name_lookup(ctx, name, &mod);
++	if (err < 0 || mod == NULL) {
++		ERR("Module name %s not found.\n", name);
++		return err < 0 ? err : -ENOENT;
++	}
 +
-+	modname_normalize(modname, name_norm, NULL);
-+
-+	DBG(ctx, "input modname=%s, normalized=%s\n", modname, name_norm);
-+
-+	err = __kmod_module_new_from_lookup(ctx, lookup, sizeof(lookup),
-+					    name_norm, &list);
-+
-+	DBG(ctx, "lookup=%s found=%d\n", name_norm, err >= 0 && list);
-+
-+	if (err >= 0 && list != NULL)
-+		*mod = kmod_module_get_module(list);
-+
-+	kmod_module_unref_list(list);
++	err = modinfo_do(mod);
++	kmod_module_unref(mod);
 +
 +	return err;
 +}
 +
- /**
-  * kmod_module_unref_list:
-  * @list: list of kmod modules
-diff --git a/libkmod/libkmod.h b/libkmod/libkmod.h
-index 3cab2e5..fed216b 100644
---- a/libkmod/libkmod.h
-+++ b/libkmod/libkmod.h
-@@ -129,6 +129,9 @@ int kmod_module_new_from_path(struct kmod_ctx *ctx, const char *path,
- 						struct kmod_module **mod);
- int kmod_module_new_from_lookup(struct kmod_ctx *ctx, const char *given_alias,
- 						struct kmod_list **list);
-+int kmod_module_new_from_name_lookup(struct kmod_ctx *ctx,
-+				     const char *modname,
-+				     struct kmod_module **mod);
- int kmod_module_new_from_loaded(struct kmod_ctx *ctx,
- 						struct kmod_list **list);
++
+ static int modinfo_alias_do(struct kmod_ctx *ctx, const char *alias)
+ {
+ 	struct kmod_list *l, *list = NULL;
+@@ -318,7 +336,7 @@ static int modinfo_alias_do(struct kmod_ctx *ctx, const char *alias)
+ 	return err;
+ }
  
-diff --git a/libkmod/libkmod.sym b/libkmod/libkmod.sym
-index 5f5e1fb..0c04fda 100644
---- a/libkmod/libkmod.sym
-+++ b/libkmod/libkmod.sym
-@@ -30,6 +30,7 @@ global:
- 	kmod_module_new_from_name;
- 	kmod_module_new_from_path;
- 	kmod_module_new_from_lookup;
-+	kmod_module_new_from_name_lookup;
- 	kmod_module_new_from_loaded;
- 	kmod_module_ref;
- 	kmod_module_unref;
+-static const char cmdopts_s[] = "adlpn0F:k:b:Vh";
++static const char cmdopts_s[] = "adlpn0mF:k:b:Vh";
+ static const struct option cmdopts[] = {
+ 	{"author", no_argument, 0, 'a'},
+ 	{"description", no_argument, 0, 'd'},
+@@ -326,6 +344,7 @@ static const struct option cmdopts[] = {
+ 	{"parameters", no_argument, 0, 'p'},
+ 	{"filename", no_argument, 0, 'n'},
+ 	{"null", no_argument, 0, '0'},
++	{"modname", no_argument, 0, 'm'},
+ 	{"field", required_argument, 0, 'F'},
+ 	{"set-version", required_argument, 0, 'k'},
+ 	{"basedir", required_argument, 0, 'b'},
+@@ -345,6 +364,7 @@ static void help(void)
+ 		"\t-p, --parameters            Print only 'parm'\n"
+ 		"\t-n, --filename              Print only 'filename'\n"
+ 		"\t-0, --null                  Use \\0 instead of \\n\n"
++		"\t-m, --modname               Handle argument as module name instead of alias or filename\n"
+ 		"\t-F, --field=FIELD           Print only provided FIELD\n"
+ 		"\t-k, --set-version=VERSION   Use VERSION instead of `uname -r`\n"
+ 		"\t-b, --basedir=DIR           Use DIR as filesystem root for /lib/modules\n"
+@@ -372,6 +392,7 @@ static int do_modinfo(int argc, char *argv[])
+ 	const char *kversion = NULL;
+ 	const char *root = NULL;
+ 	const char *null_config = NULL;
++	bool arg_is_modname = false;
+ 	int i, err;
+ 
+ 	for (;;) {
+@@ -398,6 +419,9 @@ static int do_modinfo(int argc, char *argv[])
+ 		case '0':
+ 			separator = '\0';
+ 			break;
++		case 'm':
++			arg_is_modname = true;
++			break;
+ 		case 'F':
+ 			field = optarg;
+ 			break;
+@@ -454,7 +478,9 @@ static int do_modinfo(int argc, char *argv[])
+ 		const char *name = argv[i];
+ 		int r;
+ 
+-		if (is_module_filename(name))
++		if (arg_is_modname)
++			r = modinfo_name_do(ctx, name);
++		else if (is_module_filename(name))
+ 			r = modinfo_path_do(ctx, name);
+ 		else
+ 			r = modinfo_alias_do(ctx, name);
 -- 
 2.35.1
 
