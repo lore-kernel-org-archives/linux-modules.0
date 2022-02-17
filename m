@@ -2,59 +2,61 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE874C433EF
-	for <linux-modules@archiver.kernel.org>; Thu, 17 Feb 2022 08:11:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4997C4332F
+	for <linux-modules@archiver.kernel.org>; Thu, 17 Feb 2022 08:13:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiBQILx (ORCPT
+        id S237242AbiBQINY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 17 Feb 2022 03:11:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33124 "EHLO
+        Thu, 17 Feb 2022 03:13:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiBQILw (ORCPT
+        with ESMTP id S237139AbiBQINR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 17 Feb 2022 03:11:52 -0500
+        Thu, 17 Feb 2022 03:13:17 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA7213F00
-        for <linux-modules@vger.kernel.org>; Thu, 17 Feb 2022 00:11:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB361408F;
+        Thu, 17 Feb 2022 00:13:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CJ9wA5xZQ6IvOuKPSHCb1ZSzuqaxhhVACBmGtrCWtd4=; b=GZNG87X0SyHft2CPw+VL2zw/KM
-        IVkeI6DorTBIjh3gx7qQRZnTUgMdAs4PHPhCWhr3s2ujqIlG28ImYQ67Abtyku4rJDMxpGOEANobJ
-        VzBLMjH2Ra8gKn+jSfyMxaycbPF39jk7gHNpDZ8BjnkXXgAfcTV4Kh6fQ4Isjk8KgBJeaT/tGwSzQ
-        o9z5Jq3ELn+LYOcn+sEYK+ss5i4KjdIoFffRKJoDIr1zb5J95Df5r6NvDUAdost5yKlrrccVgGqlD
-        hKlJyst0vyhPN335DL90gVWVmXvTmCcp+vbauSXmu59MH3rjrv7FxVWp2fJ1zr4OJYc3lOa4cGg5b
-        jSSa4PQw==;
+        bh=MKddAxvR3DVk8W8n64+95ExqskCi1xkJSKR1SJCsL1U=; b=MAYBG/zhPbiffNY7Ezk4TsQ8s9
+        AQQDBYLz7ssEil/nEFhalLlCFlHKiwchSi/QOFznkxgD0K77IQZvSmdwutNxO/Cl/gPEVHuyrrTMC
+        u/Xvj+8BcQlNIfy+feGdAd/0zWDcczi02c7WEzlGZ2jI3I1gB39l2dCBWZ/0KVgqoVB72i7CTIsa1
+        CriF7E6ZbNci1cLxFo8VW+PdtHczCTIKFH9zji8wWTrxnDPvveB/MyGIS9WjhBkoG0yQQfwXPaHku
+        VqW6unSccjNd/y9VDPsExKfsKT3mfGa49Mfn4yZZw3Y2SGLtLha+Y106B6McXvhElA3pM82Mid1TS
+        UJ3RNDGA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKbt3-009NUf-PE; Thu, 17 Feb 2022 08:11:37 +0000
-Date:   Thu, 17 Feb 2022 00:11:37 -0800
+        id 1nKbuP-009NfT-1U; Thu, 17 Feb 2022 08:13:01 +0000
+Date:   Thu, 17 Feb 2022 00:13:01 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-modules@vger.kernel.org
-Subject: Re: [PATCH 0/8] Random fixes + modinfo --modname
-Message-ID: <Yg4DOfCUvIpDDBRd@bombadil.infradead.org>
-References: <20220216075533.185693-1-lucas.demarchi@intel.com>
+To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        live-patching@vger.kernel.org, fstests@vger.kernel.org,
+        linux-block@vger.kernel.org, hare@suse.de, dgilbert@interlog.com,
+        Jessica Yu <jeyu@kernel.org>, osandov@fb.com,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] kmod: add patient module removal support
+Message-ID: <Yg4Djc+vqRbMFRto@bombadil.infradead.org>
+References: <20210810051602.3067384-1-mcgrof@kernel.org>
+ <YUIwKUXc7YbVAqut@bombadil.infradead.org>
+ <CAKi4VAKbN31hqfg5EHZO=T_Hdkv3uhzarFLuEZO4b5Zm+TF77Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216075533.185693-1-lucas.demarchi@intel.com>
+In-Reply-To: <CAKi4VAKbN31hqfg5EHZO=T_Hdkv3uhzarFLuEZO4b5Zm+TF77Q@mail.gmail.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Feb 15, 2022 at 11:55:25PM -0800, Lucas De Marchi wrote:
-> First commits are some random fixes and refactors while preparing the
-> code base for a new API: kmod_module_new_from_name_lookup(). This new
-> function is used by modinfo to allow handling the argument as a module
-> name instead of alias or file. Main motivation is to allow to bypass
-> aliases set by kernel or user configuration that would otherwise forbid
-> to get the info from a particular module. Although for modules it's
-> possible to just find the correspondent file, this is not possible
-> for builtin modules.
+On Mon, Sep 20, 2021 at 10:51:46PM -0700, Lucas De Marchi wrote:
+> On Wed, Sep 15, 2021 at 10:41 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > *Friendly poke*
+> 
+> Sorry for the delay. Let me take a look in detail tomorrow.
 
-For 1-7:
-
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+*Friendly poke*
 
   Luis
