@@ -2,75 +2,78 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8190EC433F5
-	for <linux-modules@archiver.kernel.org>; Thu, 17 Feb 2022 22:20:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 005A6C433FE
+	for <linux-modules@archiver.kernel.org>; Fri, 18 Feb 2022 08:20:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343788AbiBQWU6 (ORCPT
+        id S232458AbiBRIVG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 17 Feb 2022 17:20:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55596 "EHLO
+        Fri, 18 Feb 2022 03:21:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245348AbiBQWU6 (ORCPT
+        with ESMTP id S230221AbiBRIVD (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 17 Feb 2022 17:20:58 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DD2166E01;
-        Thu, 17 Feb 2022 14:20:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yVkhgOMadaBnzm/XnULvKiT1nP14UmXpbBvTQigVGUM=; b=Q8GWOcRknsheImdHxLB2fottJk
-        wXt/z57iH1/doy9u418kkYsVNteIxD5mK0vfMIdKUkB/j0nOx/o7poXV7yNMiiRPq23mxZXLQlCC4
-        KAGQqdAyiMvKHvOCpxRB1K8MnZMTnJogeGawU7JTyWk03Waw6qE6u4ehabI2KdmWaa9paLGYRmu3Q
-        4cyn1U09/qAp09QJftpMPRx21gw5kmPYbZfB/XmVJjqtVVaUE/5/ep3I9yviyzCkSue4r1cpHc3g/
-        LVUhK/mAg7cWsOKznOuDanygUwc0zkIMu76wUOTv3BYzAf9yXCUOwQC5jGL6GvAWtgbIYe5xijG4z
-        6jJ0lARg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKp8e-00CMdg-2E; Thu, 17 Feb 2022 22:20:36 +0000
-Date:   Thu, 17 Feb 2022 14:20:36 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jessica Yu <jeyu@kernel.org>,
-        Colin Ian King <colin.king@intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        patches@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org, Aaron Tomlin <atomlin@redhat.com>,
-        Vimal Agrawal <avimalin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michal Suchanek <msuchanek@suse.de>
-Subject: Re: Modules fixes for v5.17-rc5
-Message-ID: <Yg7KNPtnuQkMISx+@bombadil.infradead.org>
-References: <Yg2C2NTphV3eMkUp@bombadil.infradead.org>
- <CAHk-=wjR67HKkrPkmHXYET5M0EVwtrfAFC+AvZPd4obpzvXLLw@mail.gmail.com>
+        Fri, 18 Feb 2022 03:21:03 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB82E25B2F7;
+        Fri, 18 Feb 2022 00:20:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645172446; x=1676708446;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5ejHrB5B466U6W+fI4GxsWg/8qpDAbd2bstCAFg1MpY=;
+  b=DesFvz0AAfxYpo6A+wazO9ViMVpCMtIHCj1JdwxvlrAtsy0eUxAKnK4F
+   IBtT6QHvmG26x/5RwHAAtGkHRDIIMcRPX4YJUB7VVlaOXLv9KH2LDVq3n
+   +qrQ5H5+jCSjmcdIwT1zNojTZeLZFzlHLq47Gt/Zf1o0pMzClZyoTSL/b
+   ++xBBTjlKepEMH+63dwB1jnZuVv8KvaIYERQzJCWXxbViMr0z+pccBf18
+   zzBZRV8lNF4oSQwVGj0dYeNHDS6fxN298X9JX4RhA48Uguf2CpfOCGkmY
+   o/YCKamHNNro54raPMJIgv+SR29OqXcn5IR63E2+JAoZW+wEIq/poHM39
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="275675307"
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="275675307"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 00:20:46 -0800
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="505115448"
+Received: from svaddara-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.147.37])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 00:20:45 -0800
+Date:   Fri, 18 Feb 2022 00:20:46 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        live-patching@vger.kernel.org, fstests@vger.kernel.org,
+        linux-block@vger.kernel.org, hare@suse.de, dgilbert@interlog.com,
+        Jessica Yu <jeyu@kernel.org>, osandov@fb.com,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] kmod: add patient module removal support
+Message-ID: <20220218082046.c33zz64owau3oiln@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20210810051602.3067384-1-mcgrof@kernel.org>
+ <YUIwKUXc7YbVAqut@bombadil.infradead.org>
+ <CAKi4VAKbN31hqfg5EHZO=T_Hdkv3uhzarFLuEZO4b5Zm+TF77Q@mail.gmail.com>
+ <Yg4Djc+vqRbMFRto@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wjR67HKkrPkmHXYET5M0EVwtrfAFC+AvZPd4obpzvXLLw@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <Yg4Djc+vqRbMFRto@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Feb 17, 2022 at 11:33:23AM -0800, Linus Torvalds wrote:
-> On Wed, Feb 16, 2022 at 3:03 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > So far only one fix has trickled through for modules. It is part of this
-> > pull request. It's a minor build fix for when CONFIG_SYSFS=n. Let me
-> > know if there are any issues with this.
-> 
-> The only issue I have is that because you didn't put "[GIT PULL]" in
-> the subject line, the pr-tracker-bot doesn't pick up on it, so you're
-> not getting a "this has been merged" confirmation email.
-> 
-> My own search criteria for pull requests aren't as strict, so I saw it
-> in my pending queue. But then I spent time wondering why I didn't see
-> the pr-tracker-bot response when I pushed out, so I actually prefer
-> for people to use the stricter rules that the pr-tracker-bot looks
-> at...
+On Thu, Feb 17, 2022 at 12:13:01AM -0800, Luis Chamberlain wrote:
+>On Mon, Sep 20, 2021 at 10:51:46PM -0700, Lucas De Marchi wrote:
+>> On Wed, Sep 15, 2021 at 10:41 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>> >
+>> > *Friendly poke*
+>>
+>> Sorry for the delay. Let me take a look in detail tomorrow.
+>
+>*Friendly poke*
 
-Got it, consider this a resolved matter for the future.
+oh, I dropped the ball here, sorry. Then I got busy with i915 and other
+projects. Let me take a look again at your implementation and respin it
 
-Thanks for the feedback.
-
-  Luis
+Lucas De Marchi
+>
+>  Luis
