@@ -2,151 +2,141 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 287E4C433EF
-	for <linux-modules@archiver.kernel.org>; Sat, 19 Feb 2022 18:41:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68F8AC433EF
+	for <linux-modules@archiver.kernel.org>; Sun, 20 Feb 2022 06:00:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242526AbiBSSl6 (ORCPT
+        id S236526AbiBTGBO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 19 Feb 2022 13:41:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40142 "EHLO
+        Sun, 20 Feb 2022 01:01:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232679AbiBSSl5 (ORCPT
+        with ESMTP id S234558AbiBTGBJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 19 Feb 2022 13:41:57 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6465C3885
-        for <linux-modules@vger.kernel.org>; Sat, 19 Feb 2022 10:41:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645296098; x=1676832098;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=91CTvnRgPFi6pesExLeCqtEV9j/Uf0vrqrRkeb7eWno=;
-  b=VOk89WEsMf8opW3LtCBDiEP6PXMmwt41ixOOWR54wIM46Zo/NNqOqAdQ
-   ERB2qDbliH24NV2IVMYvsvazYd+5P8XLy/O68S+n22k5kExdbeiU/WqU6
-   D4sDb0NDJnt3jW9RKS+hXqGmBO8bZXtdkN6U1j1Hag7tdUS5uYO8opNRK
-   exmiR6li9yAs8RebIizt2JOszTFfJi7014Hb0TGCgPMh5kTQxBsH9Py2y
-   q9II1FamlucUhtXZUsadZ/W+gMlUX4q5i/j2CzmnVqSr9lCRpqRnu+8lO
-   lLNEcgCwljpM0TWEBmVxKphZgN31nVJGnYVsW4FO6E5oqgpHse3rgVLwY
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10263"; a="275903989"
-X-IronPort-AV: E=Sophos;i="5.88,381,1635231600"; 
-   d="scan'208";a="275903989"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 10:41:38 -0800
-X-IronPort-AV: E=Sophos;i="5.88,381,1635231600"; 
-   d="scan'208";a="490003378"
-Received: from penglin1-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.88.150])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 10:41:37 -0800
-Date:   Sat, 19 Feb 2022 10:41:40 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Alexey Gladkov <gladkov.alexey@gmail.com>
-Cc:     linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2] libkmod: Prefer builtin index over builtin.alias
-Message-ID: <20220219184140.koabdkufdxspccrh@ldmartin-desk2>
-References: <CAKi4VAJs8mC23vpvkryrdJiX2fJgkPPzb763Og4Y0vZv_JH8Gw@mail.gmail.com>
- <20220213074335.15774-1-lucas.demarchi@intel.com>
- <20220213131339.yxi3rq3q6xexqbbx@example.org>
- <20220215074310.is2umkvdnsx5lk25@ldmartin-desk2>
- <20220219124042.th572glnwdivf2vw@example.org>
+        Sun, 20 Feb 2022 01:01:09 -0500
+Received: from smtpbg516.qq.com (smtpbg516.qq.com [203.205.250.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D83D4E38D
+        for <linux-modules@vger.kernel.org>; Sat, 19 Feb 2022 22:00:45 -0800 (PST)
+X-QQ-mid: bizesmtp65t1645336839trr4rl57
+Received: from localhost.localdomain (unknown [180.102.102.45])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 20 Feb 2022 14:00:32 +0800 (CST)
+X-QQ-SSF: 01400000002000B0F000B00A0000000
+X-QQ-FEAT: g3JGK9LspAkdPLuIKUMkLU2nZN/IgIz7rigkD/y4wwHIiZcWPMTYYVxSLLGxT
+        m2KkDvONxPdWZaRrkdzg8vD18jKhE9xShvpP+19sfwC7zrjVXg9o+NYfqei3hpDHKmAq1X2
+        juzQFknEnVgHMIb34gDebgeuR6TKaygU04SwpM7wv9C1ChyJVuouxnvOwNCIIQWmPojOPGy
+        uhbgMAGz0ceHlux5K39rjlXEMeOpJ+oCUMzIS8UpXGM2qggLnH4M0VPX1RXaTH6vxwlHt9O
+        FEGctFFE0YYB9TRjemd9zwYMNIPO+u7vrje3TZxF4agTTy0DwaVJxlLnMTlEFGBXpOlgfUq
+        ShZbQufJH4gavj5Hc2XHYF2Za1mcg==
+X-QQ-GoodBg: 2
+From:   tangmeng <tangmeng@uniontech.com>
+To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, nizhen@uniontech.com,
+        zhanglianjie@uniontech.com, nixiaoming@huawei.com,
+        tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH 03/11] kernel/kmod: move modprobe sysctl to its own file
+Date:   Sun, 20 Feb 2022 14:00:29 +0800
+Message-Id: <20220220060029.13434-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220219124042.th572glnwdivf2vw@example.org>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign5
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Feb 19, 2022 at 01:40:42PM +0100, Alexey Gladkov wrote:
->On Mon, Feb 14, 2022 at 11:43:10PM -0800, Lucas De Marchi wrote:
->> On Sun, Feb 13, 2022 at 02:13:39PM +0100, Alexey Gladkov wrote:
->> > On Sat, Feb 12, 2022 at 09:43:35PM -1000, Lucas De Marchi wrote:
->> > > The modules.builtin.alias.bin is way larger than the
->> > > modules.builtin.bin.  On a normal "distro kernel":
->> > >
->> > > 	21k modules.builtin.alias.bin
->> > > 	11k modules.builtin.bin
->> > >
->> > > >From the kernel we get both modules.builtin and modules.builtin.modinfo.
->> > > depmod generates modules.builtin.bin and modules.builtin.alias.bin
->> > > from them respectively. modules.bultin is not going away: it's not
->> > > deprecated by the new index added. So, let's just stop duplicating the
->> > > information inside modules.builtin.alias.bin and just use the other
->> > > index.
->> >
->> > The modules.builtin contains only module names. The modules.builtin.modinfo
->> > contains full info about builtin modules including names.
->> >
->> > I thought that if there is complete information about the modules, then
->> > reading the index with only the names does not make sense. And only in the
->> > absence of modules.builtin.modinfo, you need to fallback to the index
->> > with the names.
->>
->> yeah, but most of the time we really need only the module name, so we
->> can optimize for that. And since we are not getting rid of the other
->> index, we can simply use it first the same way that for modules we first
->> do lookup on lookup modules.dep and only later on modules.aliases.
->
->Yes and no. We can be sure that we don't need aliases. The argument passed
->to utilities can be very similar to the name of a module:
->
->$ modinfo fs-ext4
->name:           ext4
->filename:       (builtin)
->softdep:        pre: crc32c
->license:        GPL
->file:           fs/ext4/ext4
->description:    Fourth Extended Filesystem
->author:         Remy Card, Stephen Tweedie, Andrew Morton, Andreas Dilger, Theodore Ts'o and others
->alias:          fs-ext4
->alias:          ext3
->alias:          fs-ext3
->
->By the way, crc32c is also an alias:
->
->$ modinfo crc32c
->filename:       /lib/modules/5.14.0.61-centos-alt1.el9/kernel/arch/x86/crypto/crc32c-intel.ko
->alias:          crypto-crc32c-intel
->alias:          crc32c-intel
->alias:          crypto-crc32c
->alias:          crc32c
->license:        GPL
->description:    CRC32c (Castagnoli) optimization using Intel Hardware.
->author:         Austin Zhang <austin.zhang@intel.com>, Kent Liu <kent.liu@intel.com>
->rhelversion:    9.0
->srcversion:     1F2B6A533C8243A4017180A
->alias:          cpu:type:x86,ven*fam*mod*:feature:*0094*
->depends:
->retpoline:      Y
->intree:         Y
->name:           crc32c_intel
->vermagic:       5.14.0.61-centos-alt1.el9 SMP preempt mod_unload modversions
->
->This is because there are multiple implementations of crc32c. So, information
->about alias of builtin modules is almost always needed.
+kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
+dishes, this makes it very difficult to maintain.
 
-I was thinking about "optimization" related to libkmod/modprobe (which
-is what matters during boot and for the systemd integration). Not for
-modinfo which is only called by developers and auxiliary tools.
-But then I measured it doing 50k random lookups. The speed up exists but
-is under 1% and within the error margin, particularly because we need to
-maintain the order doing the alias lookup first. So the main benefit is
-really "we are not getting rid of the other index, so could as well just
-not duplicate the info".
+To help with this maintenance let's start by moving sysctls to places
+where they actually belong.  The proc sysctl maintainers do not want to
+know what sysctl knobs you wish to add for your own piece of code, we
+just care about the core logic.
 
-Another reason for not getting rid of the module is to be able to force
-the lookup to be by module name, ignoring the alias. That was the reason
-I sent this other series:
-https://lore.kernel.org/linux-modules/Yg4DOfCUvIpDDBRd@bombadil.infradead.org/T/#t
-so one can get the modinfo from the crc32 module, and not from its
-aliases:
+All filesystem syctls now get reviewed by fs folks. This commit
+follows the commit of fs, move the modprobe sysctl to its own file,
+kernel/kmod.c.
 
-	$ modinfo --modname crc32
-	module explicitly:
-	name:           crc32
-	filename:       (builtin)
-	license:        GPL
-	file:           lib/crc32
-	description:    Various CRC32 calculations
-	author:         Matt Domsch <Matt_Domsch@dell.com>
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
+---
+ include/linux/kmod.h |  3 ---
+ kernel/kmod.c        | 23 ++++++++++++++++++++++-
+ kernel/sysctl.c      |  7 -------
+ 3 files changed, 22 insertions(+), 11 deletions(-)
 
-Lucas De Marchi
+diff --git a/include/linux/kmod.h b/include/linux/kmod.h
+index 68f69362d427..9a07c3215389 100644
+--- a/include/linux/kmod.h
++++ b/include/linux/kmod.h
+@@ -14,10 +14,7 @@
+ #include <linux/workqueue.h>
+ #include <linux/sysctl.h>
+ 
+-#define KMOD_PATH_LEN 256
+-
+ #ifdef CONFIG_MODULES
+-extern char modprobe_path[]; /* for sysctl */
+ /* modprobe exit status on success, -ve on error.  Return value
+  * usually useless though. */
+ extern __printf(2, 3)
+diff --git a/kernel/kmod.c b/kernel/kmod.c
+index b717134ebe17..54df92abb8dd 100644
+--- a/kernel/kmod.c
++++ b/kernel/kmod.c
+@@ -55,10 +55,31 @@ static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
+  */
+ #define MAX_KMOD_ALL_BUSY_TIMEOUT 5
+ 
++#define KMOD_PATH_LEN 256
+ /*
+ 	modprobe_path is set via /proc/sys.
+ */
+-char modprobe_path[KMOD_PATH_LEN] = CONFIG_MODPROBE_PATH;
++static char modprobe_path[KMOD_PATH_LEN] = CONFIG_MODPROBE_PATH;
++
++#ifdef CONFIG_SYSCTL
++static struct ctl_table kern_modprobe_table[] = {
++	{
++		.procname       = "modprobe",
++		.data           = &modprobe_path,
++		.maxlen         = KMOD_PATH_LEN,
++		.mode           = 0644,
++		.proc_handler   = proc_dostring,
++	},
++	{ }
++};
++
++static __init int kernel_modprobe_sysctls_init(void)
++{
++	register_sysctl_init("kernel", kern_modprobe_table);
++	return 0;
++}
++late_initcall(kernel_modprobe_sysctls_init);
++#endif /* CONFIG_SYSCTL */
+ 
+ static void free_modprobe_argv(struct subprocess_info *info)
+ {
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index b41138d64e5e..126d47e8224d 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1791,13 +1791,6 @@ static struct ctl_table kern_table[] = {
+ 	},
+ #endif
+ #ifdef CONFIG_MODULES
+-	{
+-		.procname	= "modprobe",
+-		.data		= &modprobe_path,
+-		.maxlen		= KMOD_PATH_LEN,
+-		.mode		= 0644,
+-		.proc_handler	= proc_dostring,
+-	},
+ 	{
+ 		.procname	= "modules_disabled",
+ 		.data		= &modules_disabled,
+-- 
+2.20.1
+
+
+
