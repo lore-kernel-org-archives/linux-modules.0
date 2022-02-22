@@ -2,202 +2,130 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B167EC433EF
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 10:33:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80CC1C433EF
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 10:39:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbiBVKeC (ORCPT
+        id S231300AbiBVKjn (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Feb 2022 05:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        Tue, 22 Feb 2022 05:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbiBVKdl (ORCPT
+        with ESMTP id S230313AbiBVKjm (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:33:41 -0500
+        Tue, 22 Feb 2022 05:39:42 -0500
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B4F15B3DF;
-        Tue, 22 Feb 2022 02:33:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8BE1520E6;
+        Tue, 22 Feb 2022 02:39:17 -0800 (PST)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K2wVH1Zjyz9sSX;
-        Tue, 22 Feb 2022 11:32:55 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4K2wdc0fVsz9sT9;
+        Tue, 22 Feb 2022 11:39:16 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RiMi_WsiuT-o; Tue, 22 Feb 2022 11:32:55 +0100 (CET)
+        with ESMTP id 2O9RG79dWjM2; Tue, 22 Feb 2022 11:39:16 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K2wV94NjPz9sSh;
-        Tue, 22 Feb 2022 11:32:49 +0100 (CET)
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K2wdb6RWSz9sT4;
+        Tue, 22 Feb 2022 11:39:15 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 870788B779;
-        Tue, 22 Feb 2022 11:32:49 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C9B608B77C;
+        Tue, 22 Feb 2022 11:39:15 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id tymd31yq-Hgr; Tue, 22 Feb 2022 11:32:49 +0100 (CET)
+        with ESMTP id wfwOKewn2RBv; Tue, 22 Feb 2022 11:39:15 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1D60E8B778;
-        Tue, 22 Feb 2022 11:32:49 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A445D8B764;
+        Tue, 22 Feb 2022 11:39:15 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MAWgOH1075965
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MAd66I1076205
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 11:32:42 +0100
+        Tue, 22 Feb 2022 11:39:06 +0100
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MAWgRT1075964;
-        Tue, 22 Feb 2022 11:32:42 +0100
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MAd6pm1076204;
+        Tue, 22 Feb 2022 11:39:06 +0100
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Aaron Tomlin <atomlin@redhat.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        Jessica Yu <jeyu@kernel.org>
+        linux-modules@vger.kernel.org
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kgdb-bugreport@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: [PATCH v4 2/6] module: Prepare for handling several RB trees
-Date:   Tue, 22 Feb 2022 11:32:16 +0100
-Message-Id: <f8f7e052b8190fa98abe4a2a2adb9619b47c4b3e.1645525635.git.christophe.leroy@csgroup.eu>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/6] module: Have kernel/module/ dedicated to CONFIG_MODULES
+Date:   Tue, 22 Feb 2022 11:38:55 +0100
+Message-Id: <fae2502b6492059cfd9bbf2c3b5a00e8048f5b90.1645526008.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1645525635.git.christophe.leroy@csgroup.eu>
-References: <cover.1645525635.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <cover.1645526008.git.christophe.leroy@csgroup.eu>
+References: <cover.1645526008.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645525927; l=4776; s=20211009; h=from:subject:message-id; bh=Y55P+lefbDvXl7Onl0oN61fsJiw/jOLXz7/hnTxCB40=; b=T4TgUgtng1Z89lSYq4tAQ5GtC7ah6hMe5JwBz08myA7GN+AB1D/vdJZtYUYggS408vpP4j5K9d3v k7LHQtJyBV4IOsaJ2mBGMLKOkd9xJIFJV/KcKHjmAzMvjlbIGcle
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645526317; l=2248; s=20211009; h=from:subject:message-id; bh=U293g+lTgs0inrdbxXPK4v+1d094S6shdcVBALPrnlM=; b=eS6Qa+cXgZONSOWXof3UZfhfQvOyNb0IZDb3SEsE87arTGp2VLmxbBJKhpokG3Rxc27SrWQTKdnT rHGJ9CLnDY0czeMhIdpGMQYH+XdLne82cw6tJNtjXYeWSny1BUYJ
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-In order to separate text and data, we need to setup
-two rb trees.
+Move signature.c back into kernel/ because it is used by
+more than modules.
 
-Modify functions to give the tree as a parameter.
+Then build kernel/module/ only when CONFIG_MODULES is selected.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- kernel/module/internal.h    |  4 ++--
- kernel/module/main.c        | 16 ++++++++--------
- kernel/module/tree_lookup.c | 20 ++++++++++----------
- 3 files changed, 20 insertions(+), 20 deletions(-)
+Ideally this patch should be squashed in Aaron's series patch 1
+---
+ kernel/Makefile                                   | 3 ++-
+ kernel/module/Makefile                            | 5 +----
+ kernel/{module/signature.c => module_signature.c} | 0
+ 3 files changed, 3 insertions(+), 5 deletions(-)
+ rename kernel/{module/signature.c => module_signature.c} (100%)
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 07561753158d..26a1a3711d66 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -157,13 +157,13 @@ extern struct mod_tree_root mod_tree;
- void mod_tree_insert(struct module *mod);
- void mod_tree_remove_init(struct module *mod);
- void mod_tree_remove(struct module *mod);
--struct module *mod_find(unsigned long addr);
-+struct module *mod_find(unsigned long addr, struct mod_tree_root *tree);
- #else /* !CONFIG_MODULES_TREE_LOOKUP */
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 04cb6932c0d3..717075b65deb 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -52,7 +52,7 @@ obj-y += rcu/
+ obj-y += livepatch/
+ obj-y += dma/
+ obj-y += entry/
+-obj-y += module/
++obj-$(CONFIG_MODULES) += module/
  
- static inline void mod_tree_insert(struct module *mod) { }
- static inline void mod_tree_remove_init(struct module *mod) { }
- static inline void mod_tree_remove(struct module *mod) { }
--static inline struct module *mod_find(unsigned long addr)
-+static inline struct module *mod_find(unsigned long addr, struct mod_tree_root *tree)
- {
- 	struct module *mod;
+ obj-$(CONFIG_KCMP) += kcmp.o
+ obj-$(CONFIG_FREEZER) += freezer.o
+@@ -66,6 +66,7 @@ ifneq ($(CONFIG_SMP),y)
+ obj-y += up.o
+ endif
+ obj-$(CONFIG_UID16) += uid16.o
++obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
+ obj-$(CONFIG_KALLSYMS) += kallsyms.o
+ obj-$(CONFIG_BSD_PROCESS_ACCT) += acct.o
+ obj-$(CONFIG_CRASH_CORE) += crash_core.o
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index b57953bd47eb..5fe90d246fcc 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -7,12 +7,10 @@
+ # and produce insane amounts of uninteresting coverage.
+ KCOV_INSTRUMENT_main.o := n
  
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 3b75cb97f8c2..c0b961e02909 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -91,22 +91,22 @@ struct symsearch {
-  * Bounds of module text, for speeding up __module_address.
-  * Protected by module_mutex.
-  */
--static void __mod_update_bounds(void *base, unsigned int size)
-+static void __mod_update_bounds(void *base, unsigned int size, struct mod_tree_root *tree)
- {
- 	unsigned long min = (unsigned long)base;
- 	unsigned long max = min + size;
- 
--	if (min < module_addr_min)
--		module_addr_min = min;
--	if (max > module_addr_max)
--		module_addr_max = max;
-+	if (min < tree->addr_min)
-+		tree->addr_min = min;
-+	if (max > tree->addr_max)
-+		tree->addr_max = max;
- }
- 
- static void mod_update_bounds(struct module *mod)
- {
--	__mod_update_bounds(mod->core_layout.base, mod->core_layout.size);
-+	__mod_update_bounds(mod->core_layout.base, mod->core_layout.size, &mod_tree);
- 	if (mod->init_layout.size)
--		__mod_update_bounds(mod->init_layout.base, mod->init_layout.size);
-+		__mod_update_bounds(mod->init_layout.base, mod->init_layout.size, &mod_tree);
- }
- 
- static void module_assert_mutex_or_preempt(void)
-@@ -3051,7 +3051,7 @@ struct module *__module_address(unsigned long addr)
- 
- 	module_assert_mutex_or_preempt();
- 
--	mod = mod_find(addr);
-+	mod = mod_find(addr, &mod_tree);
- 	if (mod) {
- 		BUG_ON(!within_module(addr, mod));
- 		if (mod->state == MODULE_STATE_UNFORMED)
-diff --git a/kernel/module/tree_lookup.c b/kernel/module/tree_lookup.c
-index 0bc4ec3b22ce..995fe68059db 100644
---- a/kernel/module/tree_lookup.c
-+++ b/kernel/module/tree_lookup.c
-@@ -61,14 +61,14 @@ static const struct latch_tree_ops mod_tree_ops = {
- 	.comp = mod_tree_comp,
- };
- 
--static noinline void __mod_tree_insert(struct mod_tree_node *node)
-+static noinline void __mod_tree_insert(struct mod_tree_node *node, struct mod_tree_root *tree)
- {
--	latch_tree_insert(&node->node, &mod_tree.root, &mod_tree_ops);
-+	latch_tree_insert(&node->node, &tree->root, &mod_tree_ops);
- }
- 
--static void __mod_tree_remove(struct mod_tree_node *node)
-+static void __mod_tree_remove(struct mod_tree_node *node, struct mod_tree_root *tree)
- {
--	latch_tree_erase(&node->node, &mod_tree.root, &mod_tree_ops);
-+	latch_tree_erase(&node->node, &tree->root, &mod_tree_ops);
- }
- 
- /*
-@@ -80,28 +80,28 @@ void mod_tree_insert(struct module *mod)
- 	mod->core_layout.mtn.mod = mod;
- 	mod->init_layout.mtn.mod = mod;
- 
--	__mod_tree_insert(&mod->core_layout.mtn);
-+	__mod_tree_insert(&mod->core_layout.mtn, &mod_tree);
- 	if (mod->init_layout.size)
--		__mod_tree_insert(&mod->init_layout.mtn);
-+		__mod_tree_insert(&mod->init_layout.mtn, &mod_tree);
- }
- 
- void mod_tree_remove_init(struct module *mod)
- {
- 	if (mod->init_layout.size)
--		__mod_tree_remove(&mod->init_layout.mtn);
-+		__mod_tree_remove(&mod->init_layout.mtn, &mod_tree);
- }
- 
- void mod_tree_remove(struct module *mod)
- {
--	__mod_tree_remove(&mod->core_layout.mtn);
-+	__mod_tree_remove(&mod->core_layout.mtn, &mod_tree);
- 	mod_tree_remove_init(mod);
- }
- 
--struct module *mod_find(unsigned long addr)
-+struct module *mod_find(unsigned long addr, struct mod_tree_root *tree)
- {
- 	struct latch_tree_node *ltn;
- 
--	ltn = latch_tree_find((void *)addr, &mod_tree.root, &mod_tree_ops);
-+	ltn = latch_tree_find((void *)addr, &tree->root, &mod_tree_ops);
- 	if (!ltn)
- 		return NULL;
- 
+-obj-$(CONFIG_MODULES) += main.o
++obj-y += main.o
+ obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
+ obj-$(CONFIG_MODULE_SIG) += signing.o
+-obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
+ obj-$(CONFIG_LIVEPATCH) += livepatch.o
+-ifdef CONFIG_MODULES
+ obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
+ obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
+ obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
+@@ -20,4 +18,3 @@ obj-$(CONFIG_KALLSYMS) += kallsyms.o
+ obj-$(CONFIG_PROC_FS) += procfs.o
+ obj-$(CONFIG_SYSFS) += sysfs.o
+ obj-$(CONFIG_MODVERSIONS) += version.o
+-endif
+diff --git a/kernel/module/signature.c b/kernel/module_signature.c
+similarity index 100%
+rename from kernel/module/signature.c
+rename to kernel/module_signature.c
 -- 
 2.34.1
 
