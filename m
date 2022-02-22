@@ -2,264 +2,146 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 867EEC433F5
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 15:13:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DCCEC433F5
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 15:14:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiBVPNr (ORCPT
+        id S229620AbiBVPO5 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Feb 2022 10:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
+        Tue, 22 Feb 2022 10:14:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbiBVPNi (ORCPT
+        with ESMTP id S229524AbiBVPO4 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:13:38 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760F21275D8;
-        Tue, 22 Feb 2022 07:13:10 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K32j636hyz9sT2;
-        Tue, 22 Feb 2022 16:12:42 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Lsm4pOSsKJKl; Tue, 22 Feb 2022 16:12:42 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32hx3ZVzz9sSh;
-        Tue, 22 Feb 2022 16:12:33 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6A89B8B764;
-        Tue, 22 Feb 2022 16:12:33 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id aMGDjrgitSXc; Tue, 22 Feb 2022 16:12:33 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2BED68B787;
-        Tue, 22 Feb 2022 16:12:32 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MFCNN21087456
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 16:12:23 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MFCN9Q1087455;
-        Tue, 22 Feb 2022 16:12:23 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+        Tue, 22 Feb 2022 10:14:56 -0500
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120050.outbound.protection.outlook.com [40.107.12.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E9F13396C;
+        Tue, 22 Feb 2022 07:14:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CTgmHL+sIw9h0n5XlKYnqhpQTEsM1bBOweHc9EkJuCV+iJDUAgKd57whZVzLgfzMcX3rofxERzAhP7nX3IjStZewsXBKqQrowncNMS1jDfIesDlU3lJtZj/Ib45mKARXFzwH/a88ob3ROn6k996RpBbiGA6XiEOamS7vh/+lFY7kS5s7VRhOnnolBdMQiexAkctihyMIZUopu9m3fF2AJBmzNq8DvTU3vwsGi5w5fULIx8eZtMZT0rRbi2Y8ec6wlqS+HGesWA5lUyxF6bSVedNDmNMVYUAUI7MkBJeFbcfsiVaMJ2O3ISwlwMRkeRSFusPP/9W0N/C7yMnmNTgX6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BvVa6XLVpHnKnFtav8LLjZlpQ3+xQBfIDQIiJ/Ns8Wk=;
+ b=iDvopHPX2HukWGYGD7wCcnFwuI5IVDNRaSk0ADN5PEoG14RtmRzm2PBU+hA0SFGdE3XyEeuA3AOAdjbHFoMqVT8ZAZ+EbI9yhXNqSmLaCA8mKKYbAIaY5ZfvsbMmvNMzctcrTplMYmvV1fHFXCLtb39+0O0Xejhn7DakiGSDVaozcU1QEUgdAlbceLiQUwCSrW57+CNK3Ty/jk4vkFUyF9eQ0cen5jE3s5z4mialdkJVRdmISr9lFeVPL3UrLve+HEsBttu2qWyPJo4oTrwxp4rxB+4Hd/O/Z4+35Tyib09/8vVGC/YPkSs12nCcrFB8QRD6KoV9KIr14Sxo9Z15HQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR2P264MB0528.FRAP264.PROD.OUTLOOK.COM (2603:10a6:101:e::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.17; Tue, 22 Feb
+ 2022 15:14:27 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::8142:2e6f:219b:646d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::8142:2e6f:219b:646d%5]) with mapi id 15.20.5017.021; Tue, 22 Feb 2022
+ 15:14:27 +0000
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/4] module: Move module_enable_x() and frob_text() in strict_rwx.c
-Date:   Tue, 22 Feb 2022 16:12:16 +0100
-Message-Id: <1545ae8fcef61d5741fa684ad5816b5dd3a418bc.1645542447.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1645542447.git.christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/4] Miscellaneous cleanups
+Thread-Topic: [PATCH v2 0/4] Miscellaneous cleanups
+Thread-Index: AQHYJ/6il2MVw1p/fkyHa2Kl9f6KAKyfrcUA
+Date:   Tue, 22 Feb 2022 15:14:27 +0000
+Message-ID: <708fb1b3-e229-e9f6-48e7-500da8a894ef@csgroup.eu>
 References: <cover.1645542447.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <cover.1645542447.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7510469f-64fd-4613-482f-08d9f61604b5
+x-ms-traffictypediagnostic: PR2P264MB0528:EE_
+x-microsoft-antispam-prvs: <PR2P264MB052858C079AC932EE6DF988EED3B9@PR2P264MB0528.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XPkUbsQotGALQagmYM617ig7Bgv0kw4LRCeQalrz+CMbcs7DPGilgaxZHMgaePklFyTP0pgyp6aP7fdz9RDndDQS2bhRN7xkB2eCDgqlkYMnpLwFALIDkObUBWQYCEINZBc3AVg5b+kyYSmZpJ/ZsgQqxY9e5QvJboNhyz4Zt9vZBfZQ7nicE+3sEZzG2nl6v4V5Hsexdl7g5uD5wox+JVsp8mK88IazB5wJ/5/RqGsa1O3rwD+tVHVxMCzlsj59wQ9RxjY/5Sve8B4oKIANVhqUK+7O7ALqDRSfoAML65Eryb0M/SLJy4/y16pohXk8uPfmLhQHkBpFlZpVzzgF8VOkG9QxsB/7+u16e9UsSrUNVlghvYaNbNu6Hq4i6R9oiVa4dxYT6Y8hXG+ZJBoLYob5DkLFPw1JrvWT8Jr6E/wsQcxYHzAyQB02I3MJ+Z5IaG6O4lfWdo/D1w0X1ygHNLNBUAQMjjA8IvLYITj9fFOeNNgxKurglQGy7r0j67YAdgzRkYZD91QCP59TidweO1mLPmuD6Q4GZraNXGz+T+LtNTUQoJcOCPo6bo9sWsAYeaf8srx9MB25L0i3d9q6R/ufslUDxaEqGOIIVKb0AOEnbwFPqtY2Og+sP4aqYhwSNAcsErmC8SN0Fy1ydmKnpywUr2IHlFS6jXulwlchQn38hDUBuX/AKJI4Pk7+EiL0MUGF1bAsTrj6F1+hd/pmpj6lpMWIzQxOI4yTgaWGraH/2szsvoEJQmyOjixC/WQHv2+mTL7Lekuni6tWstLwZw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(2616005)(71200400001)(6506007)(38070700005)(6486002)(6512007)(31686004)(2906002)(38100700002)(508600001)(66476007)(186003)(5660300002)(64756008)(66946007)(4326008)(66446008)(91956017)(110136005)(66556008)(26005)(8936002)(66574015)(316002)(44832011)(122000001)(31696002)(86362001)(8676002)(76116006)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T0Z6R3hFczgwY0xncGxMNksvOFJua0I2S2E2SG50N3hnQjB0K3dNYzltYytj?=
+ =?utf-8?B?YW5aTUt5NEpzY0s0MUNhNXZuczNMdTg0MFhmejJIQmo2WG5ETHRCN2FJeE5R?=
+ =?utf-8?B?RFBjYkVwL3NWNng0aXZvOTl2bGtqcU5HalNMUzQ3ZlFwRjlscTB4WkJTRXpW?=
+ =?utf-8?B?NnIyMTUydDBXN05QR01jZzVjeEl3U1htbzlZeEJWSXdJZDJPcW1xZWFBY0tS?=
+ =?utf-8?B?M3JUSzNnMWZOVTh1dGFiR0FFb3NmUzRVTE1WT1NINFIxd0R2QjVtdjV1VTdO?=
+ =?utf-8?B?aGxGTjVUYW9xelZQalZBTm9RRUpQQUpuSGE4Ukh2UmRMME5XanY4a2NTU3Jo?=
+ =?utf-8?B?dTA3SG43c25XOWRMWEJnZE9xZzhaTFA0dElCZ05mMTRxSXhLc0NSalZEZnQy?=
+ =?utf-8?B?S28xcklqVmpQZjJCdnRpYlEwV2dEaW1pcG5ST3plZU56T044NDV3ZjhjU2Ny?=
+ =?utf-8?B?a2NuZVdwUG1XVE85Tko0YklnZkZyVU0vODE3eWVXRUFYMWd2Q2J6SGs1dGpT?=
+ =?utf-8?B?aHdUR2hGZUdpdmRMM2hBbnZtbS9GeGx3R3QzUVdldGJlVjFRb3hNUUlnQThV?=
+ =?utf-8?B?YytkRnBibnVHTHBSUEIxTkQxK0RRcDB1N0pCU3NmRE91TEpBWS8zNE9ONGZi?=
+ =?utf-8?B?dUgxT0Z5WUxOZDN5aVg1VDh1aWhHL0hxSTdzT0NSSnNTSHBMZTQzTHFUSFJi?=
+ =?utf-8?B?dTRtUmpBTGNqY1lEZEZreE5xRUFaOEkwaXlablgrRzVaajU5b1hEc2ZHT0Qz?=
+ =?utf-8?B?OFlRNWFMa3BKZHMvWUNUanUvOWZXbnpJdFBsNWQrRzlHd09IRzJJY3dFQlBq?=
+ =?utf-8?B?QmZIRlo3NnNoYTRnOG5xb1d5b21EUGRicnlxN3doZ1pwZzRVWC9IRGtLMC9R?=
+ =?utf-8?B?YTQ3N2VocDJuYXpBSG5jbXhGYTJmRlBQTkVjMkhzeVc0TEgwM1VOY0haNVAv?=
+ =?utf-8?B?OFI4MTF6YUY1WWNkc0lIY0NNb1dmU016N29tdEZtSEJka2UrRkdob1U5Z3lU?=
+ =?utf-8?B?RGhIVGtPNFB5bmlzd1V6Y0tmYjkzb0YrNmowRE9FRHYwVFliaGFGRHJaV3Z2?=
+ =?utf-8?B?aFdEa2dLdEk3UUNtK1laWnArOEprMHZ1K0pIaWM4R2Jjb0VNS203QzcxdnJR?=
+ =?utf-8?B?a01lUmZKOUJpWVEvaEhQSDIrUHlvakQ5M1RwYnRZM3ZrcUttZ2RndWQyeVZq?=
+ =?utf-8?B?QmhjaTIyYktLKzNWVktrMWNZUzZZSm1BaTUrcmYwQldVcFo3VlVlWkpZaDND?=
+ =?utf-8?B?eFRvZ3NRMXo3emcvRmlOa2oxV3JSYytiRzV4a1pKbVlWS3VGLzdwV0ZrNkFX?=
+ =?utf-8?B?SXN0bUJwMUNtNGx5ZHBwcXRUR1lQYWtCVHIwZFl5S3IzdjJNZThVc2pBcFAz?=
+ =?utf-8?B?UFZFTTM4Q3psRHR6NE5hS2huaGVCVlEwaU8xdXY4anpPeUZVdEQ0Z1FZUWZH?=
+ =?utf-8?B?REhTQ2dSTG9tcURzZHJrOVhTaDJTdVRiOEoxYTdWbi9ZaXhUalVYa3lrL24z?=
+ =?utf-8?B?MnZ5c1ZtN09TQ1BiNnVaaUlWVDhCYkpObmdIRkZHYUk1SklXaWVlMVBPZklM?=
+ =?utf-8?B?eWp3NjhFYUFzOHBWSHFOOWM0T3dqVm1QU2xGdXlCT0QvUkFZL2g3Y2NDSllk?=
+ =?utf-8?B?R2RpK1oyY2NTY3ZlY0tIQk1tMVRsN1VQMmFOOHdpSllPN1hab3UwdUFqOVZn?=
+ =?utf-8?B?dFBDdkl4Q0pnL2lrbUt6WldyS25oV1RPdWJpRTJhWFN1ZStrMFdBeVV1VWp5?=
+ =?utf-8?B?R2RhRm1aSCtMOThHbzNHSVVIblZ1am9tSGFoOWZHRnpNczRhNTdtbVkvT1pu?=
+ =?utf-8?B?bjZLZWJDWndJamlPcU5LY0NvSGhjZHpxcHNBSTYyRnNUQnR2bE5rVnY5eXI5?=
+ =?utf-8?B?bnlqbFRsak01NnN3WWdDRHlwQ0hzTzg1M2N6bFhZekFtWS9IMmQxeGNDR3dH?=
+ =?utf-8?B?eDNRYytWbUp1UzhvTHRXRUhXUXkrcHJxMEhRdUQ1bEFlbFFrekduS2xYNFNQ?=
+ =?utf-8?B?bThYVEFtaGx4VlpJYUdMbG8zSFVVZWJwM1ZlSldIcTh4TVNDb2hwQlU4S1RO?=
+ =?utf-8?B?UEpwWGxTMG9mb0dxTFlHV01EaDhDL3RPU3FET3FyZGhsM0o5K3VoZEFIT2VU?=
+ =?utf-8?B?WUpvME9neDQxcis3VXRrRFdWNjR3LzQwMlV3MmNRSHA1RVJqMkFOeTVkUnlL?=
+ =?utf-8?B?SDRyVHBmeGM2UWxudnVqN2Qxc1U0elNjRUN6M0tNMTRHaUxYNkl4K014Z3Jm?=
+ =?utf-8?Q?yVUJ4QhDjDZRRdEOejyLKbaF4l/doi7Mhv6xLMXlXI=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3257335E2825F74D92305BB5F6009AB0@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542740; l=7341; s=20211009; h=from:subject:message-id; bh=wUj6D7B9/Eu7E72Eq1hFg4hRDQ2fPolBrGntvtG6lQ8=; b=0rzs5nm7amEe1pab8Jt3hnq0vXLyZbHa4QOMnDUSeYFWhMXniIpvuF9TLuS1iXYQmbfao2Du4uUl pdVvtspgB0FMLxO1DxqGjVRNb0IV0JpwDEVJ08cD8XXcHyMXivn0
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7510469f-64fd-4613-482f-08d9f61604b5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2022 15:14:27.7557
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eu794yHTGgpKrXDJyFHE4kcQrMDx7FnXaHn1jmoef7+lAtrlXp31fe4Txw0LFPfbBizkzJP+RLaLityMDT5PTedp1ey9UCTxRohLDSLcQMM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR2P264MB0528
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Move module_enable_x() together with module_enable_nx() and
-module_enable_ro().
-
-Those three functions are going together, they are all used
-to set up the correct page flags on the different sections.
-
-As module_enable_x() is used independently of
-CONFIG_STRICT_MODULE_RWX, build strict_rwx.c all the time and
-use IS_ENABLED(CONFIG_STRICT_MODULE_RWX) when relevant.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- kernel/module/Makefile     |  3 +--
- kernel/module/internal.h   | 15 +-----------
- kernel/module/main.c       | 37 -----------------------------
- kernel/module/strict_rwx.c | 48 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+), 53 deletions(-)
-
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index a46e6361017f..a94f7b8b2740 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -7,12 +7,11 @@
- # and produce insane amounts of uninteresting coverage.
- KCOV_INSTRUMENT_module.o := n
- 
--obj-y += main.o
-+obj-y += main.o strict_rwx.o
- obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
- obj-$(CONFIG_MODULE_SIG) += signing.o
- obj-$(CONFIG_LIVEPATCH) += livepatch.o
- obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
--obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
- obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
- obj-$(CONFIG_PROC_FS) += procfs.o
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 7178b7c09cdd..276e3f49a4ae 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -182,25 +182,12 @@ static inline struct module *mod_find(unsigned long addr, struct mod_tree_root *
- }
- #endif /* CONFIG_MODULES_TREE_LOOKUP */
- 
--void frob_text(const struct module_layout *layout, int (*set_memory)(unsigned long start,
--								     int num_pages));
--
--#ifdef CONFIG_STRICT_MODULE_RWX
- void module_enable_ro(const struct module *mod, bool after_init);
- void module_enable_nx(const struct module *mod);
-+void module_enable_x(const struct module *mod);
- int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
- 				char *secstrings, struct module *mod);
- 
--#else /* !CONFIG_STRICT_MODULE_RWX */
--static inline void module_enable_nx(const struct module *mod) { }
--static inline void module_enable_ro(const struct module *mod, bool after_init) {}
--static inline int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
--				       char *secstrings, struct module *mod)
--{
--	return 0;
--}
--#endif /* CONFIG_STRICT_MODULE_RWX */
--
- #ifdef CONFIG_MODULE_SIG
- int module_sig_check(struct load_info *info, int flags);
- #else /* !CONFIG_MODULE_SIG */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index be3b31ba6e16..47addf849ef7 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1142,43 +1142,6 @@ resolve_symbol_wait(struct module *mod,
- 	return ksym;
- }
- 
--/*
-- * LKM RO/NX protection: protect module's text/ro-data
-- * from modification and any data from execution.
-- *
-- * General layout of module is:
-- *          [text] [read-only-data] [ro-after-init] [writable data]
-- * text_size -----^                ^               ^               ^
-- * ro_size ------------------------|               |               |
-- * ro_after_init_size -----------------------------|               |
-- * size -----------------------------------------------------------|
-- *
-- * These values are always page-aligned (as is base)
-- */
--
--/*
-- * Since some arches are moving towards PAGE_KERNEL module allocations instead
-- * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() outside of the
-- * CONFIG_STRICT_MODULE_RWX block below because they are needed regardless of
-- * whether we are strict.
-- */
--void frob_text(const struct module_layout *layout,
--	       int (*set_memory)(unsigned long start, int num_pages))
--{
--	set_memory((unsigned long)layout->base,
--		   PAGE_ALIGN(layout->text_size) >> PAGE_SHIFT);
--}
--
--static void module_enable_x(const struct module *mod)
--{
--	if (!PAGE_ALIGNED(mod->core_layout.base) ||
--	    !PAGE_ALIGNED(mod->init_layout.base))
--		return;
--
--	frob_text(&mod->core_layout, set_memory_x);
--	frob_text(&mod->init_layout, set_memory_x);
--}
--
- void __weak module_memfree(void *module_region)
- {
- 	/*
-diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-index 1a6b9573260b..6b99be9e88e1 100644
---- a/kernel/module/strict_rwx.c
-+++ b/kernel/module/strict_rwx.c
-@@ -11,6 +11,34 @@
- #include <linux/set_memory.h>
- #include "internal.h"
- 
-+/*
-+ * LKM RO/NX protection: protect module's text/ro-data
-+ * from modification and any data from execution.
-+ *
-+ * General layout of module is:
-+ *          [text] [read-only-data] [ro-after-init] [writable data]
-+ * text_size -----^                ^               ^               ^
-+ * ro_size ------------------------|               |               |
-+ * ro_after_init_size -----------------------------|               |
-+ * size -----------------------------------------------------------|
-+ *
-+ * These values are always page-aligned (as is base) when
-+ * CONFIG_STRICT_MODULE_RWX is set.
-+ */
-+
-+/*
-+ * Since some arches are moving towards PAGE_KERNEL module allocations instead
-+ * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() independent of
-+ * CONFIG_STRICT_MODULE_RWX because they are needed regardless of whether we
-+ * are strict.
-+ */
-+static void frob_text(const struct module_layout *layout,
-+		      int (*set_memory)(unsigned long start, int num_pages))
-+{
-+	set_memory((unsigned long)layout->base,
-+		   PAGE_ALIGN(layout->text_size) >> PAGE_SHIFT);
-+}
-+
- static void frob_rodata(const struct module_layout *layout,
- 		 int (*set_memory)(unsigned long start, int num_pages))
- {
-@@ -41,10 +69,24 @@ static void frob_writable_data(const struct module_layout *layout,
- 		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
- }
- 
-+void module_enable_x(const struct module *mod)
-+{
-+	if (!PAGE_ALIGNED(mod->core_layout.base) ||
-+	    !PAGE_ALIGNED(mod->init_layout.base))
-+		return;
-+
-+	frob_text(&mod->core_layout, set_memory_x);
-+	frob_text(&mod->init_layout, set_memory_x);
-+}
-+
- void module_enable_ro(const struct module *mod, bool after_init)
- {
-+	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-+		return;
-+#ifdef CONFIG_STRICT_MODULE_RWX
- 	if (!rodata_enabled)
- 		return;
-+#endif
- 
- 	set_vm_flush_reset_perms(mod->core_layout.base);
- 	set_vm_flush_reset_perms(mod->init_layout.base);
-@@ -60,6 +102,9 @@ void module_enable_ro(const struct module *mod, bool after_init)
- 
- void module_enable_nx(const struct module *mod)
- {
-+	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-+		return;
-+
- 	frob_rodata(&mod->data_layout, set_memory_nx);
- 	frob_ro_after_init(&mod->data_layout, set_memory_nx);
- 	frob_writable_data(&mod->data_layout, set_memory_nx);
-@@ -73,6 +118,9 @@ int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
- 	const unsigned long shf_wx = SHF_WRITE | SHF_EXECINSTR;
- 	int i;
- 
-+	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-+		return 0;
-+
- 	for (i = 0; i < hdr->e_shnum; i++) {
- 		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
- 			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
--- 
-2.34.1
-
+DQoNCkxlIDIyLzAyLzIwMjIgw6AgMTY6MTIsIENocmlzdG9waGUgTGVyb3kgYSDDqWNyaXTCoDoN
+Cj4gVGhpcyBzZXJpZXMgYXBwbGllcyBvbiB0b3Agb2YgbXkgc2VyaWVzICJBbGxvY2F0ZSBtb2R1
+bGUgdGV4dCBhbmQgZGF0YSBzZXBhcmF0ZWx5IiB2NS4NCj4gDQo+IEl0IGRvZXMgc29tZSBjbGVh
+bnVwIGFyb3VuZCB0aGUgc2V0dGxpbmcgb2YgbW9kdWxlcydzIGxheW91dCBwYWdlIGZsYWdzOg0K
+PiAtIE1ha2UgbW9kdWxlX2VuYWJsZV94KCkgaW5kZXBlbmRlbnQgb2YgQ09ORklHX0FSQ0hfSEFT
+X1NUUklDVF9NT0RVTEVfUldYDQo+IC0gUmV1bmlmeSBldmVyeXRoaW5nIGludG8gc3RyaWN0X3J3
+eC5jDQo+IC0gQ2hhbmdlIGJpZyBoYW1tZXIgQlVHX09OKClzIGludG8gV0FSTl9PTigpcw0KPiAt
+IENoYW5nZSBtaXNsZWFkaW5nIGRlYnVnX2FsaWduKCkgdG8gc3RyaWN0X2FsaWduKCkNCg0KU2Vl
+bXMgbGlrZSBJIG1hZGUgYSBiaWcgbWVzcyB3aXRoIHYyLg0KDQpJIHdpbGwgcmVzZW5kIGl0IGFz
+IHYzLg0KDQpTb3JyeSBmb3IgdGhhdC4NCg0KQ2hyaXN0b3BoZQ0KDQo+IA0KPiBDaGFuZ2VzIGlu
+IHYyOg0KPiAtIFJlYmFzZWQgb24gdG9wIG9mIG15IHNlcmllcyAiQWxsb2NhdGUgbW9kdWxlIHRl
+eHQgYW5kIGRhdGEgc2VwYXJhdGVseSIgdjUNCj4gLSBNb3ZlZCB0aGUgS2NvbmZpZyBwYXRjaCBv
+dXQgb2YgdGhpcyBzZXJpZXMsIGl0IGlzIGFuIGluZGVwZW5kZW50IGNoYW5nZQ0KPiANCj4gQ2hy
+aXN0b3BoZSBMZXJveSAoNCk6DQo+ICAgIG1vZHVsZTogTWFrZSBtb2R1bGVfZW5hYmxlX3goKSBp
+bmRlcGVuZGVudCBvZg0KPiAgICAgIENPTkZJR19BUkNIX0hBU19TVFJJQ1RfTU9EVUxFX1JXWA0K
+PiAgICBtb2R1bGU6IE1vdmUgbW9kdWxlX2VuYWJsZV94KCkgYW5kIGZyb2JfdGV4dCgpIGluIHN0
+cmljdF9yd3guYw0KPiAgICBtb2R1bGU6IFJld29yayBsYXlvdXQgYWxpZ25tZW50IHRvIGF2b2lk
+IEJVR19PTigpcw0KPiAgICBtb2R1bGU6IFJlbmFtZSBkZWJ1Z19hbGlnbigpIGFzIHN0cmljdF9h
+bGlnbigpDQo+IA0KPiAgIGtlcm5lbC9tb2R1bGUvTWFrZWZpbGUgICAgIHwgIDMgKy0NCj4gICBr
+ZXJuZWwvbW9kdWxlL2ludGVybmFsLmggICB8IDI2ICsrKy0tLS0tLS0tLS0NCj4gICBrZXJuZWwv
+bW9kdWxlL2thbGxzeW1zLmMgICB8ICA0ICstDQo+ICAga2VybmVsL21vZHVsZS9tYWluLmMgICAg
+ICAgfCA1OCArKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiAgIGtlcm5lbC9tb2R1bGUv
+c3RyaWN0X3J3eC5jIHwgNzYgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0N
+Cj4gICA1IGZpbGVzIGNoYW5nZWQsIDg4IGluc2VydGlvbnMoKyksIDc5IGRlbGV0aW9ucygtKQ0K
+PiA=
