@@ -2,482 +2,156 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A709C433F5
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 13:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C3C0C433F5
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 13:32:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232274AbiBVNR3 (ORCPT
+        id S230274AbiBVNdD (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Feb 2022 08:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36810 "EHLO
+        Tue, 22 Feb 2022 08:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbiBVNR1 (ORCPT
+        with ESMTP id S229659AbiBVNdD (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:17:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B9CF7DE16
-        for <linux-modules@vger.kernel.org>; Tue, 22 Feb 2022 05:17:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645535820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C7iy3XXY1FW76ZOySyW1DlI4p4Pff8Qou1NzefrHTuI=;
-        b=RuY0iDQQkZIVczG7LWUR6burxkmvMiQ2epGMszeqV+VYDtTxGgDd7l4SEQyfMYxYHDVfMP
-        f7keGgxCLb7ATXhd3Wpip/GG9klysRclN6JOW95dePiEsu2hxFYuhLsgltlLPHO6eswl30
-        YliTQdStJVSfhjAIYKKVk+VaCU53TXE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-_rGg5bLIO-usTSUerPp1Dw-1; Tue, 22 Feb 2022 08:16:59 -0500
-X-MC-Unique: _rGg5bLIO-usTSUerPp1Dw-1
-Received: by mail-wm1-f72.google.com with SMTP id 130-20020a1c0288000000b0037fae68fcc2so841332wmc.8
-        for <linux-modules@vger.kernel.org>; Tue, 22 Feb 2022 05:16:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=C7iy3XXY1FW76ZOySyW1DlI4p4Pff8Qou1NzefrHTuI=;
-        b=t8sacH6+cOpZ7LjEuXYTreNV2rR9JczfFZlYLvQZgavRNlPWMdlQhbjYko08xOBom6
-         VPZP3Pl+JeXXuHRFAcWKwfVjCNV2hUs/J/JBJgVCGggPiXbCZ0NnxvJOFZAk6hG1M+Rg
-         kcFrZUgsxAN3CUhTvHDWYIA00OCDSV7GQ+v7GFLd56YLmZsqFxxz/K9gH4BDUQiiBsnX
-         p3YJybp5zOJ23YRVbBpAu0ACgF818og3QSbf1RnlyrKb6Kq2n1es+s0oFPIp0N21YhHQ
-         aVCir39dJRDESXblqkyxKQZ6eV31G8WHHgSzPQitXD/FiAPQAPFMhihhUdoMLKA3RiGF
-         sRFA==
-X-Gm-Message-State: AOAM530KMMWyapb+2w5BohCVaTrY4dPtY8EoOhp5i1fjK+VqMlIlg6Bk
-        +sW/VvD46MgygF1+yBF/tv8G7GkHYpMhe3pPmyuQcLyGRnCUHjQRLTeD4mCVcUvH9fHkA++Uvic
-        PR9wdZ3/v8YIAgfSl3HnJhMZX
-X-Received: by 2002:adf:fbc4:0:b0:1e7:2060:d65 with SMTP id d4-20020adffbc4000000b001e720600d65mr18734280wrs.583.1645535818058;
-        Tue, 22 Feb 2022 05:16:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw8K3+2PIJMrK2H7sJ/BvXhPHOe0kFIV4gfcxcQonRROX3z2UY0K1iseZ5UzMpKZPIjBeB3+A==
-X-Received: by 2002:adf:fbc4:0:b0:1e7:2060:d65 with SMTP id d4-20020adffbc4000000b001e720600d65mr18734257wrs.583.1645535817742;
-        Tue, 22 Feb 2022 05:16:57 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id n4-20020a7bc5c4000000b0037e0c62604fsm2373591wmk.14.2022.02.22.05.16.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 05:16:57 -0800 (PST)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
-Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        void@manifault.com, atomlin@atomlin.com, allen.lkml@gmail.com,
-        joe@perches.com, msuchanek@suse.de, oleksandr@natalenko.name
-Subject: [PATCH v7 13/13] module: Move version support into a separate file
-Date:   Tue, 22 Feb 2022 13:16:55 +0000
-Message-Id: <20220222131655.1352953-2-atomlin@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220222131655.1352953-1-atomlin@redhat.com>
+        Tue, 22 Feb 2022 08:33:03 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90071.outbound.protection.outlook.com [40.107.9.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37BE3123E;
+        Tue, 22 Feb 2022 05:32:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Oti5OH0eNzI6QIhQfaDbq9HFYrvdmw6NtEYthc2he1EXn2IXUVFVd+odv89xNOzM0ISoxPcHiFlVNgqKrOZAoWNqnItuGRkm057jF/A00spreFo7AeD0YY18WLhGcEXcsRkPaZGm9XxGYqgqDwvQMRVu2V+SbMIxm7kUnU8NPs0kjkNH8cANZsSLyoRMOHoWFn4PTFIIYBQhFBU9VTt8lkcwiwYStuKu6E/FpROC8hZ/Kavky6aiegdLtVM0H97NrpBvEyI4E8UafqMGwuVI3HelOhVQfiYvjptiH1jwkKAPmJ7S/j4cYbQ61jEWPvwTHuqo598JSjWRza9Hpzg1nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e5l+C4J1YD1FryEuua9HspDnwhpt9VMr17ITOIT1aCs=;
+ b=X5TAQbhLhzXevsn6Ozp4qex6EmJovkGJTt9pT/6uIelU4maG4KWhgfqrusc1bf+l6GhsUL4jz+qIGwq7hPxQ0GDkp/e45ydvXephTxRv7SGITr5koLiF3TRppJkbvvRtpAa4vsEcvdMsKf0JIqisVCeTTtf51YrEX7BDva7mtvs6IAI6SeThD53ux6lxwRHwlnvTvXywrmSrw7pdjteoAidwSikNSehcM9ZmDbJJKD8H8tvrQR66uO/DxHmoEDDLDaLNfDMW77iYvTelrnHzRCO+5nbM8WMkSvEtdJmGBksFaffGyXofFb/kmLOme9A3ismFWLgAguMd3m1qjFBZ/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR2P264MB0466.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:7::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Tue, 22 Feb
+ 2022 13:32:35 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::8142:2e6f:219b:646d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::8142:2e6f:219b:646d%5]) with mapi id 15.20.5017.021; Tue, 22 Feb 2022
+ 13:32:35 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Aaron Tomlin <atomlin@redhat.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>
+CC:     "cl@linux.com" <cl@linux.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "void@manifault.com" <void@manifault.com>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
+Subject: Re: [PATCH v7 05/13] module: Move latched RB-tree support to a
+ separate file
+Thread-Topic: [PATCH v7 05/13] module: Move latched RB-tree support to a
+ separate file
+Thread-Index: AQHYJ+1rBFuVz8Qcf0aIdvhgWlVb0ayfkXEA
+Date:   Tue, 22 Feb 2022 13:32:35 +0000
+Message-ID: <8ed19f41-625a-154f-096c-ae7ea19a9649@csgroup.eu>
 References: <20220222130911.1348513-1-atomlin@redhat.com>
- <20220222131655.1352953-1-atomlin@redhat.com>
+ <20220222130911.1348513-6-atomlin@redhat.com>
+In-Reply-To: <20220222130911.1348513-6-atomlin@redhat.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3d42ae3e-932a-41cf-ca43-08d9f607c960
+x-ms-traffictypediagnostic: MR2P264MB0466:EE_
+x-microsoft-antispam-prvs: <MR2P264MB046608AC556C84E9950F3840ED3B9@MR2P264MB0466.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YhUDDh+Il3FQp+wWOw+fO6pvtPAQux5+sY3yvWIjWULvJmkc1uinwAMYeYLq1X0+id15krwfXolSQqSi9bcT0lD+0/zNqh8SgGujwox1FtNFXznnsOqsIKU9axQOs5If6cmmMHUOi91pTKV0slabaWCfSG2D6M5ixn11HMFxhgMy0LGfRbyBJhP6VZHnigpNurY7o/Hl3PGxbCuSmI5g67hiX9qk5DClBcGsltrVcBDCUiE0bTO9kMxKADErlL2RzmFAWbvTFPyCLtUBC/kumm6sy5C6G7ER8mkaUX4py/TmJWMmCjHjHz67W+6MZDQBU/o5Phh0P1i4y9jnHQQ+rfPW+INn48TodkVOsXfnAD2yE7Bt4KWSmrfKDOEAHNBBxkkxyuDojsD9oKQUAdm2Pf60CcID3wBFlDUOrIHYUu9MRjzqHgr18islVGcMMBxTJ/XGKgoRj6wbIwNx3/1brwafNoGisA5I1kTzen4sfZNZMDcIL7TOM4jDib/0wLMVn0QJq+lFowO/+WaWuJ6w7dCJrrNhmaCxzKzYivi8TsIB2y+Tc1p/x00vO/YkfdJ2L/HFpSFCFf/xrRzojAQqyG94uJnl88E1b0w6BXcIl5MQNS0uT6HyGjnIIBr4wa510gLVoza80V3xvPHddE15adrA+0wURH2iVdj6QbfrTJoChTE1lEmhwSIgE6MIPcqqpz43JBPQEMplZq3rw7ZRpN46qxecM5CfiL8d+7RcLfcYPjbqgaph+wz9Ql6T7BzyRCu2MVyyKejSx+6dM+Y2aw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(86362001)(6506007)(186003)(26005)(38100700002)(2906002)(122000001)(38070700005)(31686004)(71200400001)(44832011)(8676002)(66446008)(91956017)(66476007)(6486002)(66946007)(66556008)(316002)(508600001)(54906003)(4326008)(64756008)(76116006)(31696002)(8936002)(6512007)(7416002)(2616005)(5660300002)(110136005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NldqanVLMUQrNXJ4MlVuazY5Sjk1dGFFZ3pydFYwRXJJa0pOUGtBZjdXZEdY?=
+ =?utf-8?B?VWhzclpXb1lmUElqeCtWUERSWDlCUUZnU20wN0JiVjJGdnJrU1FKdHg1SFlo?=
+ =?utf-8?B?cThyZ3NCVlY5emlHamd3TXJneXlZTGVVNkRzbFFabXp2bUY0NFJ2MHZSZito?=
+ =?utf-8?B?emg2MVpYQnM1UWZTOFdtR1FaemVFbDhtL3J3OEhIRGU3RFIrcTY5T3NPL0J6?=
+ =?utf-8?B?eklJamdSUlkxZSthRFMwaWZESXNjWW5FZHJ4bytUbGhxR0JhUnRnN1N1dHl2?=
+ =?utf-8?B?eWtEZ0JoRjNlazNFNk1oNTZmY2ZRTzNyTjlHSDUyVkRidE1IZ3pVZzdtVEF5?=
+ =?utf-8?B?Wkk0bHppUDdJejZ2a25OUWNrQmxTSUtnLzh2bmlSR1p3RE4yQ2ZJbjl5N3BW?=
+ =?utf-8?B?eVBMWGw2K1duSEhwOEFYNVJ3MUw2M3Fvb0N3RGJJVy92ZW8xY2xINzVmNlNF?=
+ =?utf-8?B?WDluRVEybHMxOVRvV3ZpMG5YK2lQNExEZGdSTFVJMUFKQmVjVHNIS3hkNUVC?=
+ =?utf-8?B?SXNuZjJ0QXdvZ3hiQUtRbXBrTmxUNGNoMmNYV3ljNExwZElzVUFUZXJITzdp?=
+ =?utf-8?B?VW0xOUZlUC9PUmJqWGF5U1R2S2VCL0xqdXhlcUZlRnFBdENIMEhaOFM4cnNk?=
+ =?utf-8?B?UjBYaVJHZW5Hem45TkVxejJnaGNON0FSSU93MDBTZjZveVk4M3VPc1pJcVRK?=
+ =?utf-8?B?ejdlTGVLRHVRUUZ0T3lYZDB0dG5KNUdjRHM4SzVEbzNONXdYNWFlN3ZpM2RS?=
+ =?utf-8?B?eDlESmpnMGxRUmQzeERWK3FIOUxQWXdjSzNucDlrWHA1OTB5Y2tCbGp1ZGE4?=
+ =?utf-8?B?ZVdQV1lmeVdnVHJaTlVrczNCRW42YWp3R1kwazhWakF2RjdCY0YzRWcvem0y?=
+ =?utf-8?B?b0lYUzJaY3ovMmhvRzFIZ0c4V1BSSjMzQnFvdGJRdzFoY1hPSXpOY3d4elpF?=
+ =?utf-8?B?WGxreER4U2xjS1dFTTVETTd2SzFPM2xPcW1Tbk80R0x2OG5SMktaNjdrUERC?=
+ =?utf-8?B?dUF1dTZIUXB1dXl5UEk2MUdDTitOWktHOVpXQ2JVbEhOYWFaYjl2NU5ZbFRP?=
+ =?utf-8?B?TU1aY0c2SDMzQTV3YWJ5NmQxUCtCdVhzTHRvVmJmTEtvQnoyYWRUUE0rMWNj?=
+ =?utf-8?B?dDl2b3VGazNxNmk3aWxla1ZsYTlMK292MWIxbGlLZm02U3RUMmdPb0F5Vnkz?=
+ =?utf-8?B?OU1rUWFWbDBreUg1Y01XY0kwUmx2TVlRZkdtVkd5VzdsdUZEek1zTmM0Zmdw?=
+ =?utf-8?B?OHZzTWRLcGJ1QXRXSCtMUGpKL25QQkJHcTZnbUdsOXgxUDh2VTc1UnQ1bEU5?=
+ =?utf-8?B?ZWpHcE5OYVdKc2RNM3YzSUpic0U4L2FMRGpSakFqWGQ5aU5qNzlkMGdHaThG?=
+ =?utf-8?B?TWpnS21SM3lqZk5VYzJKQkVRVzByTDVaVGJSUHNUUkVlMmI5cHVNZFQxdVVz?=
+ =?utf-8?B?dFFrOVZGQTBlUTRjSEw4cEczVE4vODFXY0dxY1FnMmRhTndXWFJIUlA3bEtP?=
+ =?utf-8?B?ZzRtQmNFcTBvdWRPdU8yOWEzRlJXZlBnelUxSXZCeTFza3ExOGxkcjFlSmFP?=
+ =?utf-8?B?Q0phWUJyLzkzZ3hndmRuTlJYZ0taUDBha0ZIT2UrblduK3hlL0xnUW9RT3BL?=
+ =?utf-8?B?SThiNE9zZE9CckNzQ0tZUDlPeHJMZVN2QTM4RHk4Y3dvTzVUM1RoYk5LdHl2?=
+ =?utf-8?B?RTRPRHBLNWNlMTFEeVRNaWJpcUYwZVdRZVFBZW1aMUN4WUlPQmV6OGNZSkV3?=
+ =?utf-8?B?ZVVuQmVaL0Y3cnZrT0txSHlKUUo5R2hZZi9RaEgxUFo1WTFlNTRlSDdGMGxF?=
+ =?utf-8?B?WlZFUjk0ZVNETTB6dlkxUkljdGNqdUk1d2ZiY3NzcWFHWUtrVDJ2RGYzZWdl?=
+ =?utf-8?B?OU95U2RnMzd2WHNFU1hqQjNyUFZjU0hNOGlSMWp6MjVPUW5MUGZYdmJDUCsw?=
+ =?utf-8?B?cEFxeVIxSkRISW9hSDhrNUFGWHdReHJPb1huN3cyUW0xemNzN1dJajhZZEpO?=
+ =?utf-8?B?M3lDWFl6NUpUK1BHZUgvUE0rbW5rcVQ3ZXUwaFN0TzljalBGRFBRdkUwQm9n?=
+ =?utf-8?B?U3JnbGk2c0puaEhpdnp0UmYrZFExSVJZUCtzM3hWSEMvb2RMZml6d1ZxWVRn?=
+ =?utf-8?B?UWpCZXVLa0wyOEV2WkN4SnVpYmhJcTRSSktxWk1sY0gweklHNXJLVDIrMXJP?=
+ =?utf-8?B?TnorVldRVm54M1R0NjdaZDFHOU90TWV0ZUt1Qnd1ODVBOTI3UzhnTUh0dlhh?=
+ =?utf-8?Q?QOfjOt32L8Bi052Iz8YXCVj3UIuEDl1JmI/balKwaQ=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <231FCEE3CA02B04B8A8FCA5389912A7D@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d42ae3e-932a-41cf-ca43-08d9f607c960
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2022 13:32:35.2778
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PiFRpmk1+pAF+nJ24OHF7wtA7PbPcq6O31JYMEotv/Z8yio58KVcxs1kE/E/6bPbSmWWy3Tae5XTM8fDbB79+/DIsf2SBGUmtyVv39Jkaso=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR2P264MB0466
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-No functional change.
-
-This patch migrates module version support out of core code into
-kernel/module/version.c. In addition simple code refactoring to
-make this possible.
-
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- kernel/module/Makefile   |   1 +
- kernel/module/internal.h |  48 ++++++++++++
- kernel/module/main.c     | 156 ++-------------------------------------
- kernel/module/version.c  | 109 +++++++++++++++++++++++++++
- 4 files changed, 166 insertions(+), 148 deletions(-)
- create mode 100644 kernel/module/version.c
-
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index 828fab79d836..7d3d12be4c03 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -18,4 +18,5 @@ obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
- obj-$(CONFIG_PROC_FS) += procfs.o
- obj-$(CONFIG_SYSFS) += sysfs.o
-+obj-$(CONFIG_MODVERSIONS) += version.o
- endif
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 62d749ef695e..3fc139d5074b 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -70,7 +70,27 @@ struct load_info {
- 	} index;
- };
- 
-+enum mod_license {
-+	NOT_GPL_ONLY,
-+	GPL_ONLY,
-+};
-+
-+struct find_symbol_arg {
-+	/* Input */
-+	const char *name;
-+	bool gplok;
-+	bool warn;
-+
-+	/* Output */
-+	struct module *owner;
-+	const s32 *crc;
-+	const struct kernel_symbol *sym;
-+	enum mod_license license;
-+};
-+
- int mod_verify_sig(const void *mod, struct load_info *info);
-+int try_to_force_load(struct module *mod, const char *reason);
-+bool find_symbol(struct find_symbol_arg *fsa);
- struct module *find_module_all(const char *name, size_t len, bool even_unformed);
- int cmp_name(const void *name, const void *sym);
- long module_get_offset(struct module *mod, unsigned int *size, Elf_Shdr *sechdr,
-@@ -225,3 +245,31 @@ static inline int mod_sysfs_setup(struct module *mod,
- static inline void mod_sysfs_teardown(struct module *mod) { }
- static inline void init_param_lock(struct module *mod) { }
- #endif /* CONFIG_SYSFS */
-+
-+#ifdef CONFIG_MODVERSIONS
-+int check_version(const struct load_info *info,
-+		  const char *symname, struct module *mod, const s32 *crc);
-+void module_layout(struct module *mod, struct modversion_info *ver, struct kernel_param *kp,
-+		   struct kernel_symbol *ks, struct tracepoint * const *tp);
-+int check_modstruct_version(const struct load_info *info, struct module *mod);
-+int same_magic(const char *amagic, const char *bmagic, bool has_crcs);
-+#else /* !CONFIG_MODVERSIONS */
-+static inline int check_version(const struct load_info *info,
-+				const char *symname,
-+				struct module *mod,
-+				const s32 *crc)
-+{
-+	return 1;
-+}
-+
-+static inline int check_modstruct_version(const struct load_info *info,
-+					  struct module *mod)
-+{
-+	return 1;
-+}
-+
-+static inline int same_magic(const char *amagic, const char *bmagic, bool has_crcs)
-+{
-+	return strcmp(amagic, bmagic) == 0;
-+}
-+#endif /* CONFIG_MODVERSIONS */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index bcc4f7a82649..0749afdc34b5 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -86,6 +86,12 @@ struct mod_tree_root mod_tree __cacheline_aligned = {
- static unsigned long module_addr_min = -1UL, module_addr_max;
- #endif /* CONFIG_MODULES_TREE_LOOKUP */
- 
-+struct symsearch {
-+	const struct kernel_symbol *start, *stop;
-+	const s32 *crcs;
-+	enum mod_license license;
-+};
-+
- /*
-  * Bounds of module text, for speeding up __module_address.
-  * Protected by module_mutex.
-@@ -244,28 +250,6 @@ static __maybe_unused void *any_section_objs(const struct load_info *info,
- #define symversion(base, idx) ((base != NULL) ? ((base) + (idx)) : NULL)
- #endif
- 
--struct symsearch {
--	const struct kernel_symbol *start, *stop;
--	const s32 *crcs;
--	enum mod_license {
--		NOT_GPL_ONLY,
--		GPL_ONLY,
--	} license;
--};
--
--struct find_symbol_arg {
--	/* Input */
--	const char *name;
--	bool gplok;
--	bool warn;
--
--	/* Output */
--	struct module *owner;
--	const s32 *crc;
--	const struct kernel_symbol *sym;
--	enum mod_license license;
--};
--
- static bool check_exported_symbol(const struct symsearch *syms,
- 				  struct module *owner,
- 				  unsigned int symnum, void *data)
-@@ -327,7 +311,7 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
-  * Find an exported symbol and return it, along with, (optional) crc and
-  * (optional) module which owns it.  Needs preempt disabled or module_mutex.
-  */
--static bool find_symbol(struct find_symbol_arg *fsa)
-+bool find_symbol(struct find_symbol_arg *fsa)
- {
- 	static const struct symsearch arr[] = {
- 		{ __start___ksymtab, __stop___ksymtab, __start___kcrctab,
-@@ -1001,7 +985,7 @@ size_t modinfo_attrs_count = ARRAY_SIZE(modinfo_attrs);
- 
- static const char vermagic[] = VERMAGIC_STRING;
- 
--static int try_to_force_load(struct module *mod, const char *reason)
-+int try_to_force_load(struct module *mod, const char *reason)
- {
- #ifdef CONFIG_MODULE_FORCE_LOAD
- 	if (!test_taint(TAINT_FORCED_MODULE))
-@@ -1013,115 +997,6 @@ static int try_to_force_load(struct module *mod, const char *reason)
- #endif
- }
- 
--#ifdef CONFIG_MODVERSIONS
--
--static u32 resolve_rel_crc(const s32 *crc)
--{
--	return *(u32 *)((void *)crc + *crc);
--}
--
--static int check_version(const struct load_info *info,
--			 const char *symname,
--			 struct module *mod,
--			 const s32 *crc)
--{
--	Elf_Shdr *sechdrs = info->sechdrs;
--	unsigned int versindex = info->index.vers;
--	unsigned int i, num_versions;
--	struct modversion_info *versions;
--
--	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
--	if (!crc)
--		return 1;
--
--	/* No versions at all?  modprobe --force does this. */
--	if (versindex == 0)
--		return try_to_force_load(mod, symname) == 0;
--
--	versions = (void *) sechdrs[versindex].sh_addr;
--	num_versions = sechdrs[versindex].sh_size
--		/ sizeof(struct modversion_info);
--
--	for (i = 0; i < num_versions; i++) {
--		u32 crcval;
--
--		if (strcmp(versions[i].name, symname) != 0)
--			continue;
--
--		if (IS_ENABLED(CONFIG_MODULE_REL_CRCS))
--			crcval = resolve_rel_crc(crc);
--		else
--			crcval = *crc;
--		if (versions[i].crc == crcval)
--			return 1;
--		pr_debug("Found checksum %X vs module %lX\n",
--			 crcval, versions[i].crc);
--		goto bad_version;
--	}
--
--	/* Broken toolchain. Warn once, then let it go.. */
--	pr_warn_once("%s: no symbol version for %s\n", info->name, symname);
--	return 1;
--
--bad_version:
--	pr_warn("%s: disagrees about version of symbol %s\n",
--	       info->name, symname);
--	return 0;
--}
--
--static inline int check_modstruct_version(const struct load_info *info,
--					  struct module *mod)
--{
--	struct find_symbol_arg fsa = {
--		.name	= "module_layout",
--		.gplok	= true,
--	};
--
--	/*
--	 * Since this should be found in kernel (which can't be removed), no
--	 * locking is necessary -- use preempt_disable() to placate lockdep.
--	 */
--	preempt_disable();
--	if (!find_symbol(&fsa)) {
--		preempt_enable();
--		BUG();
--	}
--	preempt_enable();
--	return check_version(info, "module_layout", mod, fsa.crc);
--}
--
--/* First part is kernel version, which we ignore if module has crcs. */
--static inline int same_magic(const char *amagic, const char *bmagic,
--			     bool has_crcs)
--{
--	if (has_crcs) {
--		amagic += strcspn(amagic, " ");
--		bmagic += strcspn(bmagic, " ");
--	}
--	return strcmp(amagic, bmagic) == 0;
--}
--#else
--static inline int check_version(const struct load_info *info,
--				const char *symname,
--				struct module *mod,
--				const s32 *crc)
--{
--	return 1;
--}
--
--static inline int check_modstruct_version(const struct load_info *info,
--					  struct module *mod)
--{
--	return 1;
--}
--
--static inline int same_magic(const char *amagic, const char *bmagic,
--			     bool has_crcs)
--{
--	return strcmp(amagic, bmagic) == 0;
--}
--#endif /* CONFIG_MODVERSIONS */
--
- static char *get_modinfo(const struct load_info *info, const char *tag);
- static char *get_next_modinfo(const struct load_info *info, const char *tag,
- 			      char *prev);
-@@ -3247,18 +3122,3 @@ void print_modules(void)
- 		pr_cont(" [last unloaded: %s]", last_unloaded_module);
- 	pr_cont("\n");
- }
--
--#ifdef CONFIG_MODVERSIONS
--/*
-- * Generate the signature for all relevant module structures here.
-- * If these change, we don't want to try to parse the module.
-- */
--void module_layout(struct module *mod,
--		   struct modversion_info *ver,
--		   struct kernel_param *kp,
--		   struct kernel_symbol *ks,
--		   struct tracepoint * const *tp)
--{
--}
--EXPORT_SYMBOL(module_layout);
--#endif
-diff --git a/kernel/module/version.c b/kernel/module/version.c
-new file mode 100644
-index 000000000000..adaedce1dc97
---- /dev/null
-+++ b/kernel/module/version.c
-@@ -0,0 +1,109 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module version support
-+ *
-+ * Copyright (C) 2008 Rusty Russell
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/string.h>
-+#include <linux/printk.h>
-+#include "internal.h"
-+
-+static u32 resolve_rel_crc(const s32 *crc)
-+{
-+	return *(u32 *)((void *)crc + *crc);
-+}
-+
-+int check_version(const struct load_info *info,
-+		  const char *symname,
-+			 struct module *mod,
-+			 const s32 *crc)
-+{
-+	Elf_Shdr *sechdrs = info->sechdrs;
-+	unsigned int versindex = info->index.vers;
-+	unsigned int i, num_versions;
-+	struct modversion_info *versions;
-+
-+	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
-+	if (!crc)
-+		return 1;
-+
-+	/* No versions at all?  modprobe --force does this. */
-+	if (versindex == 0)
-+		return try_to_force_load(mod, symname) == 0;
-+
-+	versions = (void *)sechdrs[versindex].sh_addr;
-+	num_versions = sechdrs[versindex].sh_size
-+		/ sizeof(struct modversion_info);
-+
-+	for (i = 0; i < num_versions; i++) {
-+		u32 crcval;
-+
-+		if (strcmp(versions[i].name, symname) != 0)
-+			continue;
-+
-+		if (IS_ENABLED(CONFIG_MODULE_REL_CRCS))
-+			crcval = resolve_rel_crc(crc);
-+		else
-+			crcval = *crc;
-+		if (versions[i].crc == crcval)
-+			return 1;
-+		pr_debug("Found checksum %X vs module %lX\n",
-+			 crcval, versions[i].crc);
-+		goto bad_version;
-+	}
-+
-+	/* Broken toolchain. Warn once, then let it go.. */
-+	pr_warn_once("%s: no symbol version for %s\n", info->name, symname);
-+	return 1;
-+
-+bad_version:
-+	pr_warn("%s: disagrees about version of symbol %s\n", info->name, symname);
-+	return 0;
-+}
-+
-+int check_modstruct_version(const struct load_info *info,
-+			    struct module *mod)
-+{
-+	struct find_symbol_arg fsa = {
-+		.name	= "module_layout",
-+		.gplok	= true,
-+	};
-+
-+	/*
-+	 * Since this should be found in kernel (which can't be removed), no
-+	 * locking is necessary -- use preempt_disable() to placate lockdep.
-+	 */
-+	preempt_disable();
-+	if (!find_symbol(&fsa)) {
-+		preempt_enable();
-+		BUG();
-+	}
-+	preempt_enable();
-+	return check_version(info, "module_layout", mod, fsa.crc);
-+}
-+
-+/* First part is kernel version, which we ignore if module has crcs. */
-+int same_magic(const char *amagic, const char *bmagic,
-+	       bool has_crcs)
-+{
-+	if (has_crcs) {
-+		amagic += strcspn(amagic, " ");
-+		bmagic += strcspn(bmagic, " ");
-+	}
-+	return strcmp(amagic, bmagic) == 0;
-+}
-+
-+/*
-+ * Generate the signature for all relevant module structures here.
-+ * If these change, we don't want to try to parse the module.
-+ */
-+void module_layout(struct module *mod,
-+		   struct modversion_info *ver,
-+		   struct kernel_param *kp,
-+		   struct kernel_symbol *ks,
-+		   struct tracepoint * const *tp)
-+{
-+}
-+EXPORT_SYMBOL(module_layout);
--- 
-2.34.1
-
+DQoNCkxlIDIyLzAyLzIwMjIgw6AgMTQ6MDksIEFhcm9uIFRvbWxpbiBhIMOpY3JpdMKgOg0KPiBO
+byBmdW5jdGlvbmFsIGNoYW5nZS4NCj4gDQo+IFRoaXMgcGF0Y2ggbWlncmF0ZXMgbW9kdWxlIGxh
+dGNoZWQgUkItdHJlZSBzdXBwb3J0DQo+IChlLmcuIHNlZSBfX21vZHVsZV9hZGRyZXNzKCkpIGZy
+b20gY29yZSBtb2R1bGUgY29kZQ0KPiBpbnRvIGtlcm5lbC9tb2R1bGUvdHJlZV9sb29rdXAuYy4N
+Cj4gDQo+IFNpZ25lZC1vZmYtYnk6IEFhcm9uIFRvbWxpbiA8YXRvbWxpbkByZWRoYXQuY29tPg0K
+PiAtLS0NCj4gICBrZXJuZWwvbW9kdWxlL01ha2VmaWxlICAgICAgfCAgIDMgKw0KPiAgIGtlcm5l
+bC9tb2R1bGUvaW50ZXJuYWwuaCAgICB8ICAzMyArKysrKysrKysNCj4gICBrZXJuZWwvbW9kdWxl
+L21haW4uYyAgICAgICAgfCAxMzAgKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+DQo+ICAga2VybmVsL21vZHVsZS90cmVlX2xvb2t1cC5jIHwgMTA5ICsrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKw0KPiAgIDQgZmlsZXMgY2hhbmdlZCwgMTQ5IGluc2VydGlvbnMoKyksIDEy
+NiBkZWxldGlvbnMoLSkNCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQga2VybmVsL21vZHVsZS90cmVl
+X2xvb2t1cC5jDQo+IA0KPiBkaWZmIC0tZ2l0IGEva2VybmVsL21vZHVsZS9NYWtlZmlsZSBiL2tl
+cm5lbC9tb2R1bGUvTWFrZWZpbGUNCj4gaW5kZXggZWQzYWFjYjA0ZjE3Li5lODQxMzk3NWJmMWQg
+MTAwNjQ0DQo+IC0tLSBhL2tlcm5lbC9tb2R1bGUvTWFrZWZpbGUNCj4gKysrIGIva2VybmVsL21v
+ZHVsZS9NYWtlZmlsZQ0KPiBAQCAtMTEsMyArMTEsNiBAQCBvYmoteSArPSBtYWluLm8NCj4gICBv
+YmotJChDT05GSUdfTU9EVUxFX0RFQ09NUFJFU1MpICs9IGRlY29tcHJlc3Mubw0KPiAgIG9iai0k
+KENPTkZJR19NT0RVTEVfU0lHKSArPSBzaWduaW5nLm8NCj4gICBvYmotJChDT05GSUdfTElWRVBB
+VENIKSArPSBsaXZlcGF0Y2gubw0KPiAraWZkZWYgQ09ORklHX01PRFVMRVMNCg0KVGhpcyBpZmRl
+ZiBpcyBub3QgbmVlZGVkIGFueW1vcmUuDQoNCj4gK29iai0kKENPTkZJR19NT0RVTEVTX1RSRUVf
+TE9PS1VQKSArPSB0cmVlX2xvb2t1cC5vDQo+ICtlbmRpZg0KDQoNCkNocmlzdG9waGU=
