@@ -2,264 +2,172 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EBB6C433EF
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 15:12:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A48D5C4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 15:12:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbiBVPNF (ORCPT
+        id S232488AbiBVPNG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Feb 2022 10:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        Tue, 22 Feb 2022 10:13:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbiBVPNA (ORCPT
+        with ESMTP id S230003AbiBVPNG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:13:00 -0500
+        Tue, 22 Feb 2022 10:13:06 -0500
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E07E11E3C2;
-        Tue, 22 Feb 2022 07:12:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A677B11E3C2;
+        Tue, 22 Feb 2022 07:12:40 -0800 (PST)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K32hw5Zxcz9sSq;
-        Tue, 22 Feb 2022 16:12:32 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4K32hz07bzz9sT4;
+        Tue, 22 Feb 2022 16:12:35 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id P1r9RYZAEyJN; Tue, 22 Feb 2022 16:12:32 +0100 (CET)
+        with ESMTP id ehh-J2Jq36Vg; Tue, 22 Feb 2022 16:12:34 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32hw4Hc7z9sSX;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32hw5N7Mz9sSm;
         Tue, 22 Feb 2022 16:12:32 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 82ABE8B788;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A6B9B8B764;
         Tue, 22 Feb 2022 16:12:32 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id eqNz2s2VNj-b; Tue, 22 Feb 2022 16:12:32 +0100 (CET)
+        with ESMTP id 5C5N_sOOBsfq; Tue, 22 Feb 2022 16:12:32 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 139358B778;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1A3298B77A;
         Tue, 22 Feb 2022 16:12:32 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MFCOUN1087460
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MFCOB71087476
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
         Tue, 22 Feb 2022 16:12:24 +0100
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MFCOvv1087459;
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MFCOlg1087475;
         Tue, 22 Feb 2022 16:12:24 +0100
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/5] module: Move module_enable_x() and frob_text() in strict_rwx.c
-Date:   Tue, 22 Feb 2022 16:12:17 +0100
-Message-Id: <1545ae8fcef61d5741fa684ad5816b5dd3a418bc.1645542272.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v2 5/5] module: Rename debug_align() as strict_align()
+Date:   Tue, 22 Feb 2022 16:12:21 +0100
+Message-Id: <d12505e70e60806d9e8ffa4e163715bcc33795e9.1645542272.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1645542272.git.christophe.leroy@csgroup.eu>
 References: <cover.1645542272.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542740; l=7341; s=20211009; h=from:subject:message-id; bh=wUj6D7B9/Eu7E72Eq1hFg4hRDQ2fPolBrGntvtG6lQ8=; b=OO4XrTzAeRiwHbtRM9S1V1I36gCLn0J/voSk20PyYXmFeGRGjvtEhdEPXKUe4Iv7jBRIJ0RxSAZO JtANSlrWCJW6+Pi7aON60cBN2hJHjHVfNkIhRQXpSoZyzVg1XW/b
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542740; l=4185; s=20211009; h=from:subject:message-id; bh=AfRsGzNxNFEa6HyPLYyjXjVOnKsSzM6QrsC7nBlW+n4=; b=L1CWJXem0KIumVRwLvvREnQOMxe17ZEZqC1E4VM6MXH9YjrUmcjYGgqumYYIwNDrx9hxZ1dMXPB/ 51ZCXn7qCvdWnJZcomYYLWqdPt8OkzFBg7oRYjAIwOcVRCozMcIz
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Move module_enable_x() together with module_enable_nx() and
-module_enable_ro().
+debug_align() was added by commit 84e1c6bb38eb ("x86: Add RO/NX
+protection for loadable kernel modules")
 
-Those three functions are going together, they are all used
-to set up the correct page flags on the different sections.
+At that time the config item was CONFIG_DEBUG_SET_MODULE_RONX.
 
-As module_enable_x() is used independently of
-CONFIG_STRICT_MODULE_RWX, build strict_rwx.c all the time and
-use IS_ENABLED(CONFIG_STRICT_MODULE_RWX) when relevant.
+But nowadays it has changed to CONFIG_STRICT_MODULE_RWX and
+debug_align() is confusing because it has nothing to do with
+DEBUG.
+
+Rename it strict_align()
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- kernel/module/Makefile     |  3 +--
- kernel/module/internal.h   | 15 +-----------
- kernel/module/main.c       | 37 -----------------------------
- kernel/module/strict_rwx.c | 48 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+), 53 deletions(-)
+ kernel/module/internal.h |  4 ++--
+ kernel/module/kallsyms.c |  4 ++--
+ kernel/module/main.c     | 14 +++++++-------
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index a46e6361017f..a94f7b8b2740 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -7,12 +7,11 @@
- # and produce insane amounts of uninteresting coverage.
- KCOV_INSTRUMENT_module.o := n
- 
--obj-y += main.o
-+obj-y += main.o strict_rwx.o
- obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
- obj-$(CONFIG_MODULE_SIG) += signing.o
- obj-$(CONFIG_LIVEPATCH) += livepatch.o
- obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
--obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
- obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
- obj-$(CONFIG_PROC_FS) += procfs.o
 diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 7178b7c09cdd..276e3f49a4ae 100644
+index f3dcd40f300c..3e23bef5884d 100644
 --- a/kernel/module/internal.h
 +++ b/kernel/module/internal.h
-@@ -182,25 +182,12 @@ static inline struct module *mod_find(unsigned long addr, struct mod_tree_root *
+@@ -30,9 +30,9 @@
+  * only when CONFIG_STRICT_MODULE_RWX=y
+  */
+ #ifdef CONFIG_STRICT_MODULE_RWX
+-# define debug_align(X) PAGE_ALIGN(X)
++# define strict_align(X) PAGE_ALIGN(X)
+ #else
+-# define debug_align(X) (X)
++# define strict_align(X) (X)
+ #endif
+ 
+ extern struct mutex module_mutex;
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index 850cc66bb28c..c56de1686172 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -139,7 +139,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
+ 	mod->data_layout.size += strtab_size;
+ 	info->core_typeoffs = mod->data_layout.size;
+ 	mod->data_layout.size += ndst * sizeof(char);
+-	mod->data_layout.size = debug_align(mod->data_layout.size);
++	mod->data_layout.size = strict_align(mod->data_layout.size);
+ 
+ 	/* Put string table section at end of init part of module. */
+ 	strsect->sh_flags |= SHF_ALLOC;
+@@ -154,7 +154,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
+ 	mod->init_layout.size += sizeof(struct mod_kallsyms);
+ 	info->init_typeoffs = mod->init_layout.size;
+ 	mod->init_layout.size += nsrc * sizeof(char);
+-	mod->init_layout.size = debug_align(mod->init_layout.size);
++	mod->init_layout.size = strict_align(mod->init_layout.size);
  }
- #endif /* CONFIG_MODULES_TREE_LOOKUP */
  
--void frob_text(const struct module_layout *layout, int (*set_memory)(unsigned long start,
--								     int num_pages));
--
--#ifdef CONFIG_STRICT_MODULE_RWX
- void module_enable_ro(const struct module *mod, bool after_init);
- void module_enable_nx(const struct module *mod);
-+void module_enable_x(const struct module *mod);
- int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
- 				char *secstrings, struct module *mod);
- 
--#else /* !CONFIG_STRICT_MODULE_RWX */
--static inline void module_enable_nx(const struct module *mod) { }
--static inline void module_enable_ro(const struct module *mod, bool after_init) {}
--static inline int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
--				       char *secstrings, struct module *mod)
--{
--	return 0;
--}
--#endif /* CONFIG_STRICT_MODULE_RWX */
--
- #ifdef CONFIG_MODULE_SIG
- int module_sig_check(struct load_info *info, int flags);
- #else /* !CONFIG_MODULE_SIG */
+ /*
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index be3b31ba6e16..47addf849ef7 100644
+index 4876e2beb5b6..ce0ef17662c9 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1142,43 +1142,6 @@ resolve_symbol_wait(struct module *mod,
- 	return ksym;
- }
- 
--/*
-- * LKM RO/NX protection: protect module's text/ro-data
-- * from modification and any data from execution.
-- *
-- * General layout of module is:
-- *          [text] [read-only-data] [ro-after-init] [writable data]
-- * text_size -----^                ^               ^               ^
-- * ro_size ------------------------|               |               |
-- * ro_after_init_size -----------------------------|               |
-- * size -----------------------------------------------------------|
-- *
-- * These values are always page-aligned (as is base)
-- */
--
--/*
-- * Since some arches are moving towards PAGE_KERNEL module allocations instead
-- * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() outside of the
-- * CONFIG_STRICT_MODULE_RWX block below because they are needed regardless of
-- * whether we are strict.
-- */
--void frob_text(const struct module_layout *layout,
--	       int (*set_memory)(unsigned long start, int num_pages))
--{
--	set_memory((unsigned long)layout->base,
--		   PAGE_ALIGN(layout->text_size) >> PAGE_SHIFT);
--}
--
--static void module_enable_x(const struct module *mod)
--{
--	if (!PAGE_ALIGNED(mod->core_layout.base) ||
--	    !PAGE_ALIGNED(mod->init_layout.base))
--		return;
--
--	frob_text(&mod->core_layout, set_memory_x);
--	frob_text(&mod->init_layout, set_memory_x);
--}
--
- void __weak module_memfree(void *module_region)
- {
- 	/*
-diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-index 1a6b9573260b..6b99be9e88e1 100644
---- a/kernel/module/strict_rwx.c
-+++ b/kernel/module/strict_rwx.c
-@@ -11,6 +11,34 @@
- #include <linux/set_memory.h>
- #include "internal.h"
- 
-+/*
-+ * LKM RO/NX protection: protect module's text/ro-data
-+ * from modification and any data from execution.
-+ *
-+ * General layout of module is:
-+ *          [text] [read-only-data] [ro-after-init] [writable data]
-+ * text_size -----^                ^               ^               ^
-+ * ro_size ------------------------|               |               |
-+ * ro_after_init_size -----------------------------|               |
-+ * size -----------------------------------------------------------|
-+ *
-+ * These values are always page-aligned (as is base) when
-+ * CONFIG_STRICT_MODULE_RWX is set.
-+ */
-+
-+/*
-+ * Since some arches are moving towards PAGE_KERNEL module allocations instead
-+ * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() independent of
-+ * CONFIG_STRICT_MODULE_RWX because they are needed regardless of whether we
-+ * are strict.
-+ */
-+static void frob_text(const struct module_layout *layout,
-+		      int (*set_memory)(unsigned long start, int num_pages))
-+{
-+	set_memory((unsigned long)layout->base,
-+		   PAGE_ALIGN(layout->text_size) >> PAGE_SHIFT);
-+}
-+
- static void frob_rodata(const struct module_layout *layout,
- 		 int (*set_memory)(unsigned long start, int num_pages))
- {
-@@ -41,10 +69,24 @@ static void frob_writable_data(const struct module_layout *layout,
- 		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
- }
- 
-+void module_enable_x(const struct module *mod)
-+{
-+	if (!PAGE_ALIGNED(mod->core_layout.base) ||
-+	    !PAGE_ALIGNED(mod->init_layout.base))
-+		return;
-+
-+	frob_text(&mod->core_layout, set_memory_x);
-+	frob_text(&mod->init_layout, set_memory_x);
-+}
-+
- void module_enable_ro(const struct module *mod, bool after_init)
- {
-+	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-+		return;
-+#ifdef CONFIG_STRICT_MODULE_RWX
- 	if (!rodata_enabled)
- 		return;
-+#endif
- 
- 	set_vm_flush_reset_perms(mod->core_layout.base);
- 	set_vm_flush_reset_perms(mod->init_layout.base);
-@@ -60,6 +102,9 @@ void module_enable_ro(const struct module *mod, bool after_init)
- 
- void module_enable_nx(const struct module *mod)
- {
-+	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-+		return;
-+
- 	frob_rodata(&mod->data_layout, set_memory_nx);
- 	frob_ro_after_init(&mod->data_layout, set_memory_nx);
- 	frob_writable_data(&mod->data_layout, set_memory_nx);
-@@ -73,6 +118,9 @@ int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
- 	const unsigned long shf_wx = SHF_WRITE | SHF_EXECINSTR;
- 	int i;
- 
-+	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-+		return 0;
-+
- 	for (i = 0; i < hdr->e_shnum; i++) {
- 		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
- 			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
+@@ -1470,19 +1470,19 @@ static void layout_sections(struct module *mod, struct load_info *info)
+ 		}
+ 		switch (m) {
+ 		case 0: /* executable */
+-			mod->core_layout.size = debug_align(mod->core_layout.size);
++			mod->core_layout.size = strict_align(mod->core_layout.size);
+ 			mod->core_layout.text_size = mod->core_layout.size;
+ 			break;
+ 		case 1: /* RO: text and ro-data */
+-			mod->data_layout.size = debug_align(mod->data_layout.size);
++			mod->data_layout.size = strict_align(mod->data_layout.size);
+ 			mod->data_layout.ro_size = mod->data_layout.size;
+ 			break;
+ 		case 2: /* RO after init */
+-			mod->data_layout.size = debug_align(mod->data_layout.size);
++			mod->data_layout.size = strict_align(mod->data_layout.size);
+ 			mod->data_layout.ro_after_init_size = mod->data_layout.size;
+ 			break;
+ 		case 4: /* whole core */
+-			mod->data_layout.size = debug_align(mod->data_layout.size);
++			mod->data_layout.size = strict_align(mod->data_layout.size);
+ 			break;
+ 		}
+ 	}
+@@ -1504,11 +1504,11 @@ static void layout_sections(struct module *mod, struct load_info *info)
+ 		}
+ 		switch (m) {
+ 		case 0: /* executable */
+-			mod->init_layout.size = debug_align(mod->init_layout.size);
++			mod->init_layout.size = strict_align(mod->init_layout.size);
+ 			mod->init_layout.text_size = mod->init_layout.size;
+ 			break;
+ 		case 1: /* RO: text and ro-data */
+-			mod->init_layout.size = debug_align(mod->init_layout.size);
++			mod->init_layout.size = strict_align(mod->init_layout.size);
+ 			mod->init_layout.ro_size = mod->init_layout.size;
+ 			break;
+ 		case 2:
+@@ -1519,7 +1519,7 @@ static void layout_sections(struct module *mod, struct load_info *info)
+ 			mod->init_layout.ro_after_init_size = mod->init_layout.ro_size;
+ 			break;
+ 		case 4: /* whole init */
+-			mod->init_layout.size = debug_align(mod->init_layout.size);
++			mod->init_layout.size = strict_align(mod->init_layout.size);
+ 			break;
+ 		}
+ 	}
 -- 
 2.34.1
 
