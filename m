@@ -2,126 +2,99 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31BA2C433EF
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 10:19:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBEE9C433F5
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 10:23:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbiBVKTq (ORCPT
+        id S230502AbiBVKYN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Feb 2022 05:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        Tue, 22 Feb 2022 05:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiBVKTq (ORCPT
+        with ESMTP id S230507AbiBVKYN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:19:46 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8206913EF8D;
-        Tue, 22 Feb 2022 02:19:20 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3D4DF1F39A;
-        Tue, 22 Feb 2022 10:19:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645525159; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nd6Y06WPdUzGLt9uFP0+QcSRgSpsN30ENtdTm/2OQIw=;
-        b=LNDjK6NrofKlw36GmECzp8PiOVKAzoePJ0x6/QosEUnBxBpoVoW0ZxklczKgnlkP/KKtDz
-        gYGUBLMmr5eHMxbPj0ThWOTwx/0SQ73QajYPGXnocCq+MMaGhhaYYylZ8Ybf2Lz4QlUVNc
-        wDf0rz+hKoD9yc0Rq4oScb6uh4xPLOo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645525159;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nd6Y06WPdUzGLt9uFP0+QcSRgSpsN30ENtdTm/2OQIw=;
-        b=SHwU5F/z5IEJSmkyw4ybJwcRr76y5UKKBod6Om9yawkEXXiFqdID+ThEw/axQGDCjJLtTH
-        hkAs/P5UxXleekBw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CF122A3B8A;
-        Tue, 22 Feb 2022 10:19:18 +0000 (UTC)
-Date:   Tue, 22 Feb 2022 11:19:18 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Aaron Tomlin <atomlin@redhat.com>
-cc:     mcgrof@kernel.org, cl@linux.com, pmladek@suse.com,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com, allen.lkml@gmail.com, joe@perches.com,
-        christophe.leroy@csgroup.eu, msuchanek@suse.de,
-        oleksandr@natalenko.name
-Subject: Re: [PATCH v6 11/13] module: Move sysfs support into a separate
- file
-In-Reply-To: <20220218212757.888751-1-atomlin@redhat.com>
-Message-ID: <alpine.LSU.2.21.2202221115471.15071@pobox.suse.cz>
-References: <20220218212757.888751-1-atomlin@redhat.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Tue, 22 Feb 2022 05:24:13 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FECA83013;
+        Tue, 22 Feb 2022 02:23:43 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4K2wHd5ZpXz9sSV;
+        Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id wzHtau34bAPV; Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K2wHd4pBLz9sSN;
+        Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 933C18B77A;
+        Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 31ddN_IQDOwK; Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 740838B775;
+        Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MANWH51075620
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 22 Feb 2022 11:23:32 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MANW8f1075619;
+        Tue, 22 Feb 2022 11:23:32 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] Fixup for 87b31159f78a ("module: Move all into module/")
+Date:   Tue, 22 Feb 2022 11:23:24 +0100
+Message-Id: <cab881354cedd64c53ce4e35ef8c86806baad99c.1645525354.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645525381; l=1233; s=20211009; h=from:subject:message-id; bh=uSuQR2ZSU2t0Tv6BQdmIRToKcnjRDFHb05bjC+21ZUk=; b=S04yDIIXntxpV57+gsfk6Nx6NjKz3xlXNnVKb+XBmcAWgYG3toqyi73cBY/OkEJRWme1vD8sEP8W t0i6mF5WCRLTFBKOBN8qRVE6D27ZVPE82EKBpJJOV6tDpVis3Hct
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, 18 Feb 2022, Aaron Tomlin wrote:
+Fixes: 87b31159f78a ("module: Move all into module/")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ kernel/Makefile        | 1 -
+ kernel/module/Makefile | 4 ++++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-> No functional change.
-> 
-> This patch migrates module sysfs support out of core code into
-> kernel/module/sysfs.c. In addition simple code refactoring to
-> make this possible.
-> 
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 3a6380975c57..04cb6932c0d3 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -29,7 +29,6 @@ KCOV_INSTRUMENT_softirq.o := n
+ KCSAN_SANITIZE_softirq.o = n
+ # These are called from save_stack_trace() on slub debug path,
+ # and produce insane amounts of uninteresting coverage.
+-KCOV_INSTRUMENT_module.o := n
+ KCOV_INSTRUMENT_extable.o := n
+ KCOV_INSTRUMENT_stacktrace.o := n
+ # Don't self-instrument.
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index 686ca921fc8f..b57953bd47eb 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -3,6 +3,10 @@
+ # Makefile for linux kernel module support
+ #
+ 
++# These are called from save_stack_trace() on slub debug path,
++# and produce insane amounts of uninteresting coverage.
++KCOV_INSTRUMENT_main.o := n
++
+ obj-$(CONFIG_MODULES) += main.o
+ obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
+ obj-$(CONFIG_MODULE_SIG) += signing.o
+-- 
+2.34.1
 
-There was apparently a problem on your side when sending the series. There 
-is Reply-To field which probably should have been In-Reply-To. It also 
-applied to the following two patches.
-
->  kernel/module/Makefile   |   1 +
->  kernel/module/internal.h |  21 ++
->  kernel/module/main.c     | 469 +--------------------------------------
->  kernel/module/sysfs.c    | 436 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 461 insertions(+), 466 deletions(-)
->  create mode 100644 kernel/module/sysfs.c
-> 
-> diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-> index f66fda0b41cc..a3cbe09ce2b2 100644
-> --- a/kernel/module/Makefile
-> +++ b/kernel/module/Makefile
-> @@ -14,4 +14,5 @@ obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
->  obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
->  obj-$(CONFIG_KALLSYMS) += kallsyms.o
->  obj-$(CONFIG_PROC_FS) += procfs.o
-> +obj-$(CONFIG_SYSFS) += sysfs.o
->  endif
-> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> index ddb37024a0d6..74096cca742c 100644
-> --- a/kernel/module/internal.h
-> +++ b/kernel/module/internal.h
-> @@ -34,6 +34,9 @@
->  extern struct mutex module_mutex;
->  extern struct list_head modules;
->  
-> +extern struct module_attribute *modinfo_attrs[];
-> +extern size_t modinfo_attrs_count;
-> +
->  /* Provided by the linker */
->  extern const struct kernel_symbol __start___ksymtab[];
->  extern const struct kernel_symbol __stop___ksymtab[];
-> @@ -213,3 +216,21 @@ static inline bool sect_empty(const Elf_Shdr *sect)
->  static inline void layout_symtab(struct module *mod, struct load_info *info) { }
->  static inline void add_kallsyms(struct module *mod, const struct load_info *info) { }
->  #endif /* CONFIG_KALLSYMS */
-> +
-> +#ifdef CONFIG_SYSFS
-> +int mod_sysfs_setup(struct module *mod, const struct load_info *info,
-> +		    struct kernel_param *kparam, unsigned int num_params);
-> +void mod_sysfs_teardown(struct module *mod);
-> +void init_param_lock(struct module *mod);
-> +#else /* !CONFIG_SYSFS */
-> +static inline int mod_sysfs_setup(struct module *mod,
-> +			   	  const struct load_info *info,
-> +			   	  struct kernel_param *kparam,
-> +			   	  unsigned int num_params)
-
-Whitespace is broken here.
-
-Miroslav
