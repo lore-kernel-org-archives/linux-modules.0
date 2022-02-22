@@ -2,147 +2,113 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70867C433EF
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 10:24:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3C8CC433F5
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 10:32:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiBVKY2 (ORCPT
+        id S231153AbiBVKdS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Feb 2022 05:24:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
+        Tue, 22 Feb 2022 05:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbiBVKYX (ORCPT
+        with ESMTP id S229785AbiBVKdQ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:24:23 -0500
+        Tue, 22 Feb 2022 05:33:16 -0500
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851AC1598D2;
-        Tue, 22 Feb 2022 02:23:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D59159E9C;
+        Tue, 22 Feb 2022 02:32:51 -0800 (PST)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K2wHh2GJxz9sS4;
-        Tue, 22 Feb 2022 11:23:44 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4K2wV94QtFz9sSj;
+        Tue, 22 Feb 2022 11:32:49 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jxVYnHUx8S-W; Tue, 22 Feb 2022 11:23:44 +0100 (CET)
+        with ESMTP id KhXs1n8nazcn; Tue, 22 Feb 2022 11:32:49 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K2wHd57kTz9sSP;
-        Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K2wV93ZFcz9sS4;
+        Tue, 22 Feb 2022 11:32:49 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9E47E8B764;
-        Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 678BE8B781;
+        Tue, 22 Feb 2022 11:32:49 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id X5UJTYpoUT3A; Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+        with ESMTP id aAHTjz21EQky; Tue, 22 Feb 2022 11:32:49 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7962C8B778;
-        Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 290468B77B;
+        Tue, 22 Feb 2022 11:32:49 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MANWiT1075630
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MAWiFp1075982
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 11:23:32 +0100
+        Tue, 22 Feb 2022 11:32:44 +0100
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MANW7r1075629;
-        Tue, 22 Feb 2022 11:23:32 +0100
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MAWhg21075981;
+        Tue, 22 Feb 2022 11:32:43 +0100
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Aaron Tomlin <atomlin@redhat.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
+        Jessica Yu <jeyu@kernel.org>
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] Fixup for e5973a14d187 ("module: Move strict rwx support to a separate file")
-Date:   Tue, 22 Feb 2022 11:23:26 +0100
-Message-Id: <2c21af8d7dec7f76c0888f5487d0070b21060747.1645525354.git.christophe.leroy@csgroup.eu>
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kgdb-bugreport@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: [PATCH v4 6/6] powerpc: Select ARCH_WANTS_MODULES_DATA_IN_VMALLOC on book3s/32 and 8xx
+Date:   Tue, 22 Feb 2022 11:32:20 +0100
+Message-Id: <bb3d7fa8b4f52d0942240b5d95041be8909a7daa.1645525635.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cab881354cedd64c53ce4e35ef8c86806baad99c.1645525354.git.christophe.leroy@csgroup.eu>
-References: <cab881354cedd64c53ce4e35ef8c86806baad99c.1645525354.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <cover.1645525635.git.christophe.leroy@csgroup.eu>
+References: <cover.1645525635.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645525381; l=3547; s=20211009; h=from:subject:message-id; bh=mLhyWEWSW/LPZmLaaZtAyoj0qoyMiE2w/STsvCOO5SQ=; b=TPhW276FZApI2vNw+S/EoGUx5IaX+EIkQtxffrvizLBGgr/zqQGeo+NpYOYV32NVwNqtcqY2xprZ 7DC638YbCDqoBmrCsb/iA3rSkogZ5DCggsl1dyJYGKryT2I8lwBK
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645525928; l=1645; s=20211009; h=from:subject:message-id; bh=K04OWtjguCoft4Etc2/16pdJhJKZWZgWbhOpnNSgE7U=; b=hpk03SBCszNo742+2VK/eQLT92kOJCrSS+maM/ldh4eoCtbxQ0D87Y7BYTqu+2LyHwxlc99CUMOc cc433DAAB/dzMLBXJGZIifit9O7AQfafd+1sMzIYAzRMqytJi3zJ
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Fixes: e5973a14d187 ("module: Move strict rwx support to a separate file")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- kernel/module/internal.h   | 14 ++++----------
- kernel/module/strict_rwx.c | 13 +++++++------
- 2 files changed, 11 insertions(+), 16 deletions(-)
+book3s/32 and 8xx have a separate area for allocating modules,
+defined by MODULES_VADDR / MODULES_END.
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 97d9faec3a9a..6a54a1e06f4f 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -181,22 +181,16 @@ void frob_text(const struct module_layout *layout, int (*set_memory)(unsigned lo
- #endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
- 
- #ifdef CONFIG_STRICT_MODULE_RWX
--void frob_rodata(const struct module_layout *layout,
--		 int (*set_memory)(unsigned long start, int num_pages));
--void frob_ro_after_init(const struct module_layout *layout,
--			int (*set_memory)(unsigned long start, int num_pages));
--void frob_writable_data(const struct module_layout *layout,
--			int (*set_memory)(unsigned long start, int num_pages));
- void module_enable_ro(const struct module *mod, bool after_init);
- void module_enable_nx(const struct module *mod);
- int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
- 				char *secstrings, struct module *mod);
- 
- #else /* !CONFIG_STRICT_MODULE_RWX */
--static void module_enable_nx(const struct module *mod) { }
--static void module_enable_ro(const struct module *mod, bool after_init) {}
--static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
--				       char *secstrings, struct module *mod)
-+static inline void module_enable_nx(const struct module *mod) { }
-+static inline void module_enable_ro(const struct module *mod, bool after_init) {}
-+static inline int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-+					      char *secstrings, struct module *mod)
- {
- 	return 0;
- }
-diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-index c642889f8e77..bfee740f4bc1 100644
---- a/kernel/module/strict_rwx.c
-+++ b/kernel/module/strict_rwx.c
-@@ -6,12 +6,13 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/mm.h>
- #include <linux/vmalloc.h>
- #include <linux/set_memory.h>
- #include "internal.h"
- 
--void frob_rodata(const struct module_layout *layout,
--		 int (*set_memory)(unsigned long start, int num_pages))
-+static void frob_rodata(const struct module_layout *layout,
-+			int (*set_memory)(unsigned long start, int num_pages))
- {
- 	BUG_ON(!PAGE_ALIGNED(layout->base));
- 	BUG_ON(!PAGE_ALIGNED(layout->text_size));
-@@ -20,8 +21,8 @@ void frob_rodata(const struct module_layout *layout,
- 		   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
- }
- 
--void frob_ro_after_init(const struct module_layout *layout,
--			int (*set_memory)(unsigned long start, int num_pages))
-+static void frob_ro_after_init(const struct module_layout *layout,
-+			       int (*set_memory)(unsigned long start, int num_pages))
- {
- 	BUG_ON(!PAGE_ALIGNED(layout->base));
- 	BUG_ON(!PAGE_ALIGNED(layout->ro_size));
-@@ -30,8 +31,8 @@ void frob_ro_after_init(const struct module_layout *layout,
- 		   (layout->ro_after_init_size - layout->ro_size) >> PAGE_SHIFT);
- }
- 
--void frob_writable_data(const struct module_layout *layout,
--			int (*set_memory)(unsigned long start, int num_pages))
-+static void frob_writable_data(const struct module_layout *layout,
-+			       int (*set_memory)(unsigned long start, int num_pages))
- {
- 	BUG_ON(!PAGE_ALIGNED(layout->base));
- 	BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
+On book3s/32, it is not possible to protect against execution
+on a page basis. A full 256M segment is either Exec or NoExec.
+The module area is in an Exec segment while vmalloc area is
+in a NoExec segment.
+
+In order to protect module data against execution, select
+ARCH_WANTS_MODULES_DATA_IN_VMALLOC.
+
+For the 8xx (and possibly other 32 bits platform in the future),
+there is no such constraint on Exec/NoExec protection, however
+there is a critical distance between kernel functions and callers
+that needs to remain below 32Mbytes in order to avoid costly
+trampolines. By allocating data outside of module area, we
+increase the chance for module text to remain within acceptable
+distance from kernel core text.
+
+So select ARCH_WANTS_MODULES_DATA_IN_VMALLOC for 8xx as well.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+---
+ arch/powerpc/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 28e4047e99e8..478ee49a4fb4 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -156,6 +156,7 @@ config PPC
+ 	select ARCH_WANT_IPC_PARSE_VERSION
+ 	select ARCH_WANT_IRQS_OFF_ACTIVATE_MM
+ 	select ARCH_WANT_LD_ORPHAN_WARN
++	select ARCH_WANTS_MODULES_DATA_IN_VMALLOC	if PPC_BOOK3S_32 || PPC_8xx
+ 	select ARCH_WEAK_RELEASE_ACQUIRE
+ 	select BINFMT_ELF
+ 	select BUILDTIME_TABLE_SORT
 -- 
 2.34.1
 
