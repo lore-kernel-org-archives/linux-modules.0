@@ -2,46 +2,46 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 999D2C4332F
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 10:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70867C433EF
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 10:24:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbiBVKYW (ORCPT
+        id S231149AbiBVKY2 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Feb 2022 05:24:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        Tue, 22 Feb 2022 05:24:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiBVKYU (ORCPT
+        with ESMTP id S231147AbiBVKYX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:24:20 -0500
+        Tue, 22 Feb 2022 05:24:23 -0500
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9041598C9;
-        Tue, 22 Feb 2022 02:23:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851AC1598D2;
+        Tue, 22 Feb 2022 02:23:58 -0800 (PST)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K2wHg4fYyz9sSK;
-        Tue, 22 Feb 2022 11:23:43 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4K2wHh2GJxz9sS4;
+        Tue, 22 Feb 2022 11:23:44 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FvcC2oE_30W0; Tue, 22 Feb 2022 11:23:43 +0100 (CET)
+        with ESMTP id jxVYnHUx8S-W; Tue, 22 Feb 2022 11:23:44 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K2wHd4nGdz9sS4;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K2wHd57kTz9sSP;
         Tue, 22 Feb 2022 11:23:41 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 944358B77B;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9E47E8B764;
         Tue, 22 Feb 2022 11:23:41 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id XmT3q87Ny7oE; Tue, 22 Feb 2022 11:23:41 +0100 (CET)
+        with ESMTP id X5UJTYpoUT3A; Tue, 22 Feb 2022 11:23:41 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7406B8B764;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7962C8B778;
         Tue, 22 Feb 2022 11:23:41 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MANWHf1075634
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MANWiT1075630
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
         Tue, 22 Feb 2022 11:23:32 +0100
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MANWI91075633;
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MANW7r1075629;
         Tue, 22 Feb 2022 11:23:32 +0100
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
@@ -50,61 +50,99 @@ To:     Aaron Tomlin <atomlin@redhat.com>,
         linux-modules@vger.kernel.org
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] Fixup for 54f2273e5fef ("module: Move kallsyms support into a separate file")
-Date:   Tue, 22 Feb 2022 11:23:27 +0100
-Message-Id: <c1fdda1d836cdd7a05d3178d5e6ea4b687e548cd.1645525354.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH 3/4] Fixup for e5973a14d187 ("module: Move strict rwx support to a separate file")
+Date:   Tue, 22 Feb 2022 11:23:26 +0100
+Message-Id: <2c21af8d7dec7f76c0888f5487d0070b21060747.1645525354.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cab881354cedd64c53ce4e35ef8c86806baad99c.1645525354.git.christophe.leroy@csgroup.eu>
 References: <cab881354cedd64c53ce4e35ef8c86806baad99c.1645525354.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645525381; l=1918; s=20211009; h=from:subject:message-id; bh=FwgKdS8iKTLyex0Nq0FuY+Z+GBgNinuvCSGTdhHJdHE=; b=DsVT5DK2ayAeHEte4buz0UVJdqIJgYq6FRU0e1bCzfZ+8vzNZ9KnSBy9zMz78wCi6FMFiZPHlMGj qkXnAe06AmfHNMdFfIWvk836nHcPaiRKyjrqz3muXgrL1M9V0eZF
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645525381; l=3547; s=20211009; h=from:subject:message-id; bh=mLhyWEWSW/LPZmLaaZtAyoj0qoyMiE2w/STsvCOO5SQ=; b=TPhW276FZApI2vNw+S/EoGUx5IaX+EIkQtxffrvizLBGgr/zqQGeo+NpYOYV32NVwNqtcqY2xprZ 7DC638YbCDqoBmrCsb/iA3rSkogZ5DCggsl1dyJYGKryT2I8lwBK
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Fixes: 54f2273e5fef ("module: Move kallsyms support into a separate file")
+Fixes: e5973a14d187 ("module: Move strict rwx support to a separate file")
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- kernel/module/internal.h | 7 ++++---
- kernel/module/kallsyms.c | 3 +--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ kernel/module/internal.h   | 14 ++++----------
+ kernel/module/strict_rwx.c | 13 +++++++------
+ 2 files changed, 11 insertions(+), 16 deletions(-)
 
 diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 6a54a1e06f4f..fecfa590c149 100644
+index 97d9faec3a9a..6a54a1e06f4f 100644
 --- a/kernel/module/internal.h
 +++ b/kernel/module/internal.h
-@@ -212,12 +212,13 @@ static inline void kmemleak_load_module(const struct module *mod,
- 					const struct load_info *info) { }
- #endif /* CONFIG_DEBUG_KMEMLEAK */
+@@ -181,22 +181,16 @@ void frob_text(const struct module_layout *layout, int (*set_memory)(unsigned lo
+ #endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
  
--#ifdef CONFIG_KALLSYMS
--#ifdef CONFIG_STACKTRACE_BUILD_ID
-+#if defined(CONFIG_KALLSYMS) && defined(CONFIG_STACKTRACE_BUILD_ID)
- void init_build_id(struct module *mod, const struct load_info *info);
--#else /* !CONFIG_STACKTRACE_BUILD_ID */
-+#else
- static inline void init_build_id(struct module *mod, const struct load_info *info) { }
- #endif
-+
-+#ifdef CONFIG_KALLSYMS
- void layout_symtab(struct module *mod, struct load_info *info);
- void add_kallsyms(struct module *mod, const struct load_info *info);
- unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 6c8f1f390cf5..2ee8d2e67068 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -171,8 +171,7 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
- 	Elf_Shdr *symsec = &info->sechdrs[info->index.sym];
+ #ifdef CONFIG_STRICT_MODULE_RWX
+-void frob_rodata(const struct module_layout *layout,
+-		 int (*set_memory)(unsigned long start, int num_pages));
+-void frob_ro_after_init(const struct module_layout *layout,
+-			int (*set_memory)(unsigned long start, int num_pages));
+-void frob_writable_data(const struct module_layout *layout,
+-			int (*set_memory)(unsigned long start, int num_pages));
+ void module_enable_ro(const struct module *mod, bool after_init);
+ void module_enable_nx(const struct module *mod);
+ int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+ 				char *secstrings, struct module *mod);
  
- 	/* Set up to point into init section. */
--	mod->kallsyms = (struct mod_kallsyms __rcu *)mod->init_layout.base +
--		info->mod_kallsyms_init_off;
-+	mod->kallsyms = (void __rcu *)mod->init_layout.base + info->mod_kallsyms_init_off;
+ #else /* !CONFIG_STRICT_MODULE_RWX */
+-static void module_enable_nx(const struct module *mod) { }
+-static void module_enable_ro(const struct module *mod, bool after_init) {}
+-static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+-				       char *secstrings, struct module *mod)
++static inline void module_enable_nx(const struct module *mod) { }
++static inline void module_enable_ro(const struct module *mod, bool after_init) {}
++static inline int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
++					      char *secstrings, struct module *mod)
+ {
+ 	return 0;
+ }
+diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+index c642889f8e77..bfee740f4bc1 100644
+--- a/kernel/module/strict_rwx.c
++++ b/kernel/module/strict_rwx.c
+@@ -6,12 +6,13 @@
+  */
  
- 	/* The following is safe since this pointer cannot change */
- 	rcu_dereference_sched(mod->kallsyms)->symtab = (void *)symsec->sh_addr;
+ #include <linux/module.h>
++#include <linux/mm.h>
+ #include <linux/vmalloc.h>
+ #include <linux/set_memory.h>
+ #include "internal.h"
+ 
+-void frob_rodata(const struct module_layout *layout,
+-		 int (*set_memory)(unsigned long start, int num_pages))
++static void frob_rodata(const struct module_layout *layout,
++			int (*set_memory)(unsigned long start, int num_pages))
+ {
+ 	BUG_ON(!PAGE_ALIGNED(layout->base));
+ 	BUG_ON(!PAGE_ALIGNED(layout->text_size));
+@@ -20,8 +21,8 @@ void frob_rodata(const struct module_layout *layout,
+ 		   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
+ }
+ 
+-void frob_ro_after_init(const struct module_layout *layout,
+-			int (*set_memory)(unsigned long start, int num_pages))
++static void frob_ro_after_init(const struct module_layout *layout,
++			       int (*set_memory)(unsigned long start, int num_pages))
+ {
+ 	BUG_ON(!PAGE_ALIGNED(layout->base));
+ 	BUG_ON(!PAGE_ALIGNED(layout->ro_size));
+@@ -30,8 +31,8 @@ void frob_ro_after_init(const struct module_layout *layout,
+ 		   (layout->ro_after_init_size - layout->ro_size) >> PAGE_SHIFT);
+ }
+ 
+-void frob_writable_data(const struct module_layout *layout,
+-			int (*set_memory)(unsigned long start, int num_pages))
++static void frob_writable_data(const struct module_layout *layout,
++			       int (*set_memory)(unsigned long start, int num_pages))
+ {
+ 	BUG_ON(!PAGE_ALIGNED(layout->base));
+ 	BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
 -- 
 2.34.1
 
