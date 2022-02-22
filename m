@@ -2,665 +2,264 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC240C433EF
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 15:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 867EEC433F5
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Feb 2022 15:13:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbiBVPNk (ORCPT
+        id S230118AbiBVPNr (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Feb 2022 10:13:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        Tue, 22 Feb 2022 10:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbiBVPNd (ORCPT
+        with ESMTP id S233287AbiBVPNi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:13:33 -0500
+        Tue, 22 Feb 2022 10:13:38 -0500
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5755E15FC8E;
-        Tue, 22 Feb 2022 07:13:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760F21275D8;
+        Tue, 22 Feb 2022 07:13:10 -0800 (PST)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K32j53VfFz9sSX;
-        Tue, 22 Feb 2022 16:12:41 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4K32j636hyz9sT2;
+        Tue, 22 Feb 2022 16:12:42 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BuYy_dQO6cCP; Tue, 22 Feb 2022 16:12:41 +0100 (CET)
+        with ESMTP id Lsm4pOSsKJKl; Tue, 22 Feb 2022 16:12:42 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32hx05Fnz9sT2;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32hx3ZVzz9sSh;
         Tue, 22 Feb 2022 16:12:33 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E41A68B764;
-        Tue, 22 Feb 2022 16:12:32 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6A89B8B764;
+        Tue, 22 Feb 2022 16:12:33 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id XFsMAVDpWlMf; Tue, 22 Feb 2022 16:12:32 +0100 (CET)
+        with ESMTP id aMGDjrgitSXc; Tue, 22 Feb 2022 16:12:33 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 208FF8B781;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2BED68B787;
         Tue, 22 Feb 2022 16:12:32 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MFCNam1087448
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MFCNN21087456
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
         Tue, 22 Feb 2022 16:12:23 +0100
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MFCNjP1087447;
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MFCN9Q1087455;
         Tue, 22 Feb 2022 16:12:23 +0100
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/5] module: Move module's Kconfig item in kernel/module/
-Date:   Tue, 22 Feb 2022 16:12:14 +0100
-Message-Id: <4042712961d42186c449734c253511ea7076c780.1645542272.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v2 2/4] module: Move module_enable_x() and frob_text() in strict_rwx.c
+Date:   Tue, 22 Feb 2022 16:12:16 +0100
+Message-Id: <1545ae8fcef61d5741fa684ad5816b5dd3a418bc.1645542447.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1645542272.git.christophe.leroy@csgroup.eu>
-References: <cover.1645542272.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <cover.1645542447.git.christophe.leroy@csgroup.eu>
+References: <cover.1645542447.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542740; l=21654; s=20211009; h=from:subject:message-id; bh=f1WYkeljkpqDrXVJoanofP6w+qtYTk0izurDmHmfG8g=; b=66xGO3xy/kaJaREAeTpgtq5vSgKK8jis69IsXS5tInvZVyoTJJnzcfW7S9wN+AytbG+z8AFcx/0F xV+PN1UFBbE+7AiIo/8JvoMHMubByKu3mxlcBOWc+CZ+6zhsK3xX
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542740; l=7341; s=20211009; h=from:subject:message-id; bh=wUj6D7B9/Eu7E72Eq1hFg4hRDQ2fPolBrGntvtG6lQ8=; b=0rzs5nm7amEe1pab8Jt3hnq0vXLyZbHa4QOMnDUSeYFWhMXniIpvuF9TLuS1iXYQmbfao2Du4uUl pdVvtspgB0FMLxO1DxqGjVRNb0IV0JpwDEVJ08cD8XXcHyMXivn0
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-In init/Kconfig, the part dedicated to modules is quite large.
+Move module_enable_x() together with module_enable_nx() and
+module_enable_ro().
 
-Move it into a dedicated Kconfig in kernel/module/
+Those three functions are going together, they are all used
+to set up the correct page flags on the different sections.
+
+As module_enable_x() is used independently of
+CONFIG_STRICT_MODULE_RWX, build strict_rwx.c all the time and
+use IS_ENABLED(CONFIG_STRICT_MODULE_RWX) when relevant.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- init/Kconfig          | 286 +-----------------------------------------
- kernel/module/Kconfig | 286 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 287 insertions(+), 285 deletions(-)
- create mode 100644 kernel/module/Kconfig
+ kernel/module/Makefile     |  3 +--
+ kernel/module/internal.h   | 15 +-----------
+ kernel/module/main.c       | 37 -----------------------------
+ kernel/module/strict_rwx.c | 48 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 50 insertions(+), 53 deletions(-)
 
-diff --git a/init/Kconfig b/init/Kconfig
-index e9119bf54b1f..1c8828493385 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -2064,291 +2064,7 @@ config MODULE_SIG_FORMAT
- 	def_bool n
- 	select SYSTEM_DATA_VERIFICATION
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index a46e6361017f..a94f7b8b2740 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -7,12 +7,11 @@
+ # and produce insane amounts of uninteresting coverage.
+ KCOV_INSTRUMENT_module.o := n
  
--menuconfig MODULES
--	bool "Enable loadable module support"
--	modules
--	help
--	  Kernel modules are small pieces of compiled code which can
--	  be inserted in the running kernel, rather than being
--	  permanently built into the kernel.  You use the "modprobe"
--	  tool to add (and sometimes remove) them.  If you say Y here,
--	  many parts of the kernel can be built as modules (by
--	  answering M instead of Y where indicated): this is most
--	  useful for infrequently used options which are not required
--	  for booting.  For more information, see the man pages for
--	  modprobe, lsmod, modinfo, insmod and rmmod.
--
--	  If you say Y here, you will need to run "make
--	  modules_install" to put the modules under /lib/modules/
--	  where modprobe can find them (you may need to be root to do
--	  this).
--
--	  If unsure, say Y.
--
--if MODULES
--
--config MODULE_FORCE_LOAD
--	bool "Forced module loading"
--	default n
--	help
--	  Allow loading of modules without version information (ie. modprobe
--	  --force).  Forced module loading sets the 'F' (forced) taint flag and
--	  is usually a really bad idea.
--
--config MODULE_UNLOAD
--	bool "Module unloading"
--	help
--	  Without this option you will not be able to unload any
--	  modules (note that some modules may not be unloadable
--	  anyway), which makes your kernel smaller, faster
--	  and simpler.  If unsure, say Y.
--
--config MODULE_FORCE_UNLOAD
--	bool "Forced module unloading"
--	depends on MODULE_UNLOAD
--	help
--	  This option allows you to force a module to unload, even if the
--	  kernel believes it is unsafe: the kernel will remove the module
--	  without waiting for anyone to stop using it (using the -f option to
--	  rmmod).  This is mainly for kernel developers and desperate users.
--	  If unsure, say N.
--
--config MODVERSIONS
--	bool "Module versioning support"
--	help
--	  Usually, you have to use modules compiled with your kernel.
--	  Saying Y here makes it sometimes possible to use modules
--	  compiled for different kernels, by adding enough information
--	  to the modules to (hopefully) spot any changes which would
--	  make them incompatible with the kernel you are running.  If
--	  unsure, say N.
--
--config ASM_MODVERSIONS
--	bool
--	default HAVE_ASM_MODVERSIONS && MODVERSIONS
--	help
--	  This enables module versioning for exported symbols also from
--	  assembly. This can be enabled only when the target architecture
--	  supports it.
--
--config MODULE_REL_CRCS
--	bool
--	depends on MODVERSIONS
--
--config MODULE_SRCVERSION_ALL
--	bool "Source checksum for all modules"
--	help
--	  Modules which contain a MODULE_VERSION get an extra "srcversion"
--	  field inserted into their modinfo section, which contains a
--    	  sum of the source files which made it.  This helps maintainers
--	  see exactly which source was used to build a module (since
--	  others sometimes change the module source without updating
--	  the version).  With this option, such a "srcversion" field
--	  will be created for all modules.  If unsure, say N.
--
--config MODULE_SIG
--	bool "Module signature verification"
--	select MODULE_SIG_FORMAT
--	help
--	  Check modules for valid signatures upon load: the signature
--	  is simply appended to the module. For more information see
--	  <file:Documentation/admin-guide/module-signing.rst>.
--
--	  Note that this option adds the OpenSSL development packages as a
--	  kernel build dependency so that the signing tool can use its crypto
--	  library.
--
--	  You should enable this option if you wish to use either
--	  CONFIG_SECURITY_LOCKDOWN_LSM or lockdown functionality imposed via
--	  another LSM - otherwise unsigned modules will be loadable regardless
--	  of the lockdown policy.
--
--	  !!!WARNING!!!  If you enable this option, you MUST make sure that the
--	  module DOES NOT get stripped after being signed.  This includes the
--	  debuginfo strip done by some packagers (such as rpmbuild) and
--	  inclusion into an initramfs that wants the module size reduced.
--
--config MODULE_SIG_FORCE
--	bool "Require modules to be validly signed"
--	depends on MODULE_SIG
--	help
--	  Reject unsigned modules or signed modules for which we don't have a
--	  key.  Without this, such modules will simply taint the kernel.
--
--config MODULE_SIG_ALL
--	bool "Automatically sign all modules"
--	default y
--	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
--	help
--	  Sign all modules during make modules_install. Without this option,
--	  modules must be signed manually, using the scripts/sign-file tool.
--
--comment "Do not forget to sign required modules with scripts/sign-file"
--	depends on MODULE_SIG_FORCE && !MODULE_SIG_ALL
--
--choice
--	prompt "Which hash algorithm should modules be signed with?"
--	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
--	help
--	  This determines which sort of hashing algorithm will be used during
--	  signature generation.  This algorithm _must_ be built into the kernel
--	  directly so that signature verification can take place.  It is not
--	  possible to load a signed module containing the algorithm to check
--	  the signature on that module.
--
--config MODULE_SIG_SHA1
--	bool "Sign modules with SHA-1"
--	select CRYPTO_SHA1
--
--config MODULE_SIG_SHA224
--	bool "Sign modules with SHA-224"
--	select CRYPTO_SHA256
--
--config MODULE_SIG_SHA256
--	bool "Sign modules with SHA-256"
--	select CRYPTO_SHA256
--
--config MODULE_SIG_SHA384
--	bool "Sign modules with SHA-384"
--	select CRYPTO_SHA512
--
--config MODULE_SIG_SHA512
--	bool "Sign modules with SHA-512"
--	select CRYPTO_SHA512
--
--endchoice
--
--config MODULE_SIG_HASH
--	string
--	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
--	default "sha1" if MODULE_SIG_SHA1
--	default "sha224" if MODULE_SIG_SHA224
--	default "sha256" if MODULE_SIG_SHA256
--	default "sha384" if MODULE_SIG_SHA384
--	default "sha512" if MODULE_SIG_SHA512
--
--choice
--	prompt "Module compression mode"
--	help
--	  This option allows you to choose the algorithm which will be used to
--	  compress modules when 'make modules_install' is run. (or, you can
--	  choose to not compress modules at all.)
--
--	  External modules will also be compressed in the same way during the
--	  installation.
--
--	  For modules inside an initrd or initramfs, it's more efficient to
--	  compress the whole initrd or initramfs instead.
--
--	  This is fully compatible with signed modules.
--
--	  Please note that the tool used to load modules needs to support the
--	  corresponding algorithm. module-init-tools MAY support gzip, and kmod
--	  MAY support gzip, xz and zstd.
--
--	  Your build system needs to provide the appropriate compression tool
--	  to compress the modules.
--
--	  If in doubt, select 'None'.
--
--config MODULE_COMPRESS_NONE
--	bool "None"
--	help
--	  Do not compress modules. The installed modules are suffixed
--	  with .ko.
--
--config MODULE_COMPRESS_GZIP
--	bool "GZIP"
--	help
--	  Compress modules with GZIP. The installed modules are suffixed
--	  with .ko.gz.
--
--config MODULE_COMPRESS_XZ
--	bool "XZ"
--	help
--	  Compress modules with XZ. The installed modules are suffixed
--	  with .ko.xz.
--
--config MODULE_COMPRESS_ZSTD
--	bool "ZSTD"
--	help
--	  Compress modules with ZSTD. The installed modules are suffixed
--	  with .ko.zst.
--
--endchoice
--
--config MODULE_DECOMPRESS
--	bool "Support in-kernel module decompression"
--	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
--	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
--	select XZ_DEC if MODULE_COMPRESS_XZ
--	help
--
--	  Support for decompressing kernel modules by the kernel itself
--	  instead of relying on userspace to perform this task. Useful when
--	  load pinning security policy is enabled.
--
--	  If unsure, say N.
--
--config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
--	bool "Allow loading of modules with missing namespace imports"
--	help
--	  Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
--	  a namespace. A module that makes use of a symbol exported with such a
--	  namespace is required to import the namespace via MODULE_IMPORT_NS().
--	  There is no technical reason to enforce correct namespace imports,
--	  but it creates consistency between symbols defining namespaces and
--	  users importing namespaces they make use of. This option relaxes this
--	  requirement and lifts the enforcement when loading a module.
--
--	  If unsure, say N.
--
--config MODPROBE_PATH
--	string "Path to modprobe binary"
--	default "/sbin/modprobe"
--	help
--	  When kernel code requests a module, it does so by calling
--	  the "modprobe" userspace utility. This option allows you to
--	  set the path where that binary is found. This can be changed
--	  at runtime via the sysctl file
--	  /proc/sys/kernel/modprobe. Setting this to the empty string
--	  removes the kernel's ability to request modules (but
--	  userspace can still load modules explicitly).
--
--config TRIM_UNUSED_KSYMS
--	bool "Trim unused exported kernel symbols" if EXPERT
--	depends on !COMPILE_TEST
--	help
--	  The kernel and some modules make many symbols available for
--	  other modules to use via EXPORT_SYMBOL() and variants. Depending
--	  on the set of modules being selected in your kernel configuration,
--	  many of those exported symbols might never be used.
--
--	  This option allows for unused exported symbols to be dropped from
--	  the build. In turn, this provides the compiler more opportunities
--	  (especially when using LTO) for optimizing the code and reducing
--	  binary size.  This might have some security advantages as well.
--
--	  If unsure, or if you need to build out-of-tree modules, say N.
--
--config UNUSED_KSYMS_WHITELIST
--	string "Whitelist of symbols to keep in ksymtab"
--	depends on TRIM_UNUSED_KSYMS
--	help
--	  By default, all unused exported symbols will be un-exported from the
--	  build when TRIM_UNUSED_KSYMS is selected.
--
--	  UNUSED_KSYMS_WHITELIST allows to whitelist symbols that must be kept
--	  exported at all times, even in absence of in-tree users. The value to
--	  set here is the path to a text file containing the list of symbols,
--	  one per line. The path can be absolute, or relative to the kernel
--	  source tree.
--
--endif # MODULES
--
--config MODULES_TREE_LOOKUP
--	def_bool y
--	depends on PERF_EVENTS || TRACING || CFI_CLANG
-+source "kernel/module/Kconfig"
+-obj-y += main.o
++obj-y += main.o strict_rwx.o
+ obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
+ obj-$(CONFIG_MODULE_SIG) += signing.o
+ obj-$(CONFIG_LIVEPATCH) += livepatch.o
+ obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
+-obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
+ obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
+ obj-$(CONFIG_KALLSYMS) += kallsyms.o
+ obj-$(CONFIG_PROC_FS) += procfs.o
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 7178b7c09cdd..276e3f49a4ae 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -182,25 +182,12 @@ static inline struct module *mod_find(unsigned long addr, struct mod_tree_root *
+ }
+ #endif /* CONFIG_MODULES_TREE_LOOKUP */
  
- config INIT_ALL_POSSIBLE
- 	bool
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-new file mode 100644
-index 000000000000..9177cb38ea2e
---- /dev/null
-+++ b/kernel/module/Kconfig
-@@ -0,0 +1,286 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+menuconfig MODULES
-+	bool "Enable loadable module support"
-+	modules
-+	help
-+	  Kernel modules are small pieces of compiled code which can
-+	  be inserted in the running kernel, rather than being
-+	  permanently built into the kernel.  You use the "modprobe"
-+	  tool to add (and sometimes remove) them.  If you say Y here,
-+	  many parts of the kernel can be built as modules (by
-+	  answering M instead of Y where indicated): this is most
-+	  useful for infrequently used options which are not required
-+	  for booting.  For more information, see the man pages for
-+	  modprobe, lsmod, modinfo, insmod and rmmod.
+-void frob_text(const struct module_layout *layout, int (*set_memory)(unsigned long start,
+-								     int num_pages));
+-
+-#ifdef CONFIG_STRICT_MODULE_RWX
+ void module_enable_ro(const struct module *mod, bool after_init);
+ void module_enable_nx(const struct module *mod);
++void module_enable_x(const struct module *mod);
+ int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+ 				char *secstrings, struct module *mod);
+ 
+-#else /* !CONFIG_STRICT_MODULE_RWX */
+-static inline void module_enable_nx(const struct module *mod) { }
+-static inline void module_enable_ro(const struct module *mod, bool after_init) {}
+-static inline int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+-				       char *secstrings, struct module *mod)
+-{
+-	return 0;
+-}
+-#endif /* CONFIG_STRICT_MODULE_RWX */
+-
+ #ifdef CONFIG_MODULE_SIG
+ int module_sig_check(struct load_info *info, int flags);
+ #else /* !CONFIG_MODULE_SIG */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index be3b31ba6e16..47addf849ef7 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1142,43 +1142,6 @@ resolve_symbol_wait(struct module *mod,
+ 	return ksym;
+ }
+ 
+-/*
+- * LKM RO/NX protection: protect module's text/ro-data
+- * from modification and any data from execution.
+- *
+- * General layout of module is:
+- *          [text] [read-only-data] [ro-after-init] [writable data]
+- * text_size -----^                ^               ^               ^
+- * ro_size ------------------------|               |               |
+- * ro_after_init_size -----------------------------|               |
+- * size -----------------------------------------------------------|
+- *
+- * These values are always page-aligned (as is base)
+- */
+-
+-/*
+- * Since some arches are moving towards PAGE_KERNEL module allocations instead
+- * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() outside of the
+- * CONFIG_STRICT_MODULE_RWX block below because they are needed regardless of
+- * whether we are strict.
+- */
+-void frob_text(const struct module_layout *layout,
+-	       int (*set_memory)(unsigned long start, int num_pages))
+-{
+-	set_memory((unsigned long)layout->base,
+-		   PAGE_ALIGN(layout->text_size) >> PAGE_SHIFT);
+-}
+-
+-static void module_enable_x(const struct module *mod)
+-{
+-	if (!PAGE_ALIGNED(mod->core_layout.base) ||
+-	    !PAGE_ALIGNED(mod->init_layout.base))
+-		return;
+-
+-	frob_text(&mod->core_layout, set_memory_x);
+-	frob_text(&mod->init_layout, set_memory_x);
+-}
+-
+ void __weak module_memfree(void *module_region)
+ {
+ 	/*
+diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+index 1a6b9573260b..6b99be9e88e1 100644
+--- a/kernel/module/strict_rwx.c
++++ b/kernel/module/strict_rwx.c
+@@ -11,6 +11,34 @@
+ #include <linux/set_memory.h>
+ #include "internal.h"
+ 
++/*
++ * LKM RO/NX protection: protect module's text/ro-data
++ * from modification and any data from execution.
++ *
++ * General layout of module is:
++ *          [text] [read-only-data] [ro-after-init] [writable data]
++ * text_size -----^                ^               ^               ^
++ * ro_size ------------------------|               |               |
++ * ro_after_init_size -----------------------------|               |
++ * size -----------------------------------------------------------|
++ *
++ * These values are always page-aligned (as is base) when
++ * CONFIG_STRICT_MODULE_RWX is set.
++ */
 +
-+	  If you say Y here, you will need to run "make
-+	  modules_install" to put the modules under /lib/modules/
-+	  where modprobe can find them (you may need to be root to do
-+	  this).
++/*
++ * Since some arches are moving towards PAGE_KERNEL module allocations instead
++ * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() independent of
++ * CONFIG_STRICT_MODULE_RWX because they are needed regardless of whether we
++ * are strict.
++ */
++static void frob_text(const struct module_layout *layout,
++		      int (*set_memory)(unsigned long start, int num_pages))
++{
++	set_memory((unsigned long)layout->base,
++		   PAGE_ALIGN(layout->text_size) >> PAGE_SHIFT);
++}
 +
-+	  If unsure, say Y.
+ static void frob_rodata(const struct module_layout *layout,
+ 		 int (*set_memory)(unsigned long start, int num_pages))
+ {
+@@ -41,10 +69,24 @@ static void frob_writable_data(const struct module_layout *layout,
+ 		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
+ }
+ 
++void module_enable_x(const struct module *mod)
++{
++	if (!PAGE_ALIGNED(mod->core_layout.base) ||
++	    !PAGE_ALIGNED(mod->init_layout.base))
++		return;
 +
-+if MODULES
++	frob_text(&mod->core_layout, set_memory_x);
++	frob_text(&mod->init_layout, set_memory_x);
++}
 +
-+config MODULE_FORCE_LOAD
-+	bool "Forced module loading"
-+	default n
-+	help
-+	  Allow loading of modules without version information (ie. modprobe
-+	  --force).  Forced module loading sets the 'F' (forced) taint flag and
-+	  is usually a really bad idea.
+ void module_enable_ro(const struct module *mod, bool after_init)
+ {
++	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
++		return;
++#ifdef CONFIG_STRICT_MODULE_RWX
+ 	if (!rodata_enabled)
+ 		return;
++#endif
+ 
+ 	set_vm_flush_reset_perms(mod->core_layout.base);
+ 	set_vm_flush_reset_perms(mod->init_layout.base);
+@@ -60,6 +102,9 @@ void module_enable_ro(const struct module *mod, bool after_init)
+ 
+ void module_enable_nx(const struct module *mod)
+ {
++	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
++		return;
 +
-+config MODULE_UNLOAD
-+	bool "Module unloading"
-+	help
-+	  Without this option you will not be able to unload any
-+	  modules (note that some modules may not be unloadable
-+	  anyway), which makes your kernel smaller, faster
-+	  and simpler.  If unsure, say Y.
+ 	frob_rodata(&mod->data_layout, set_memory_nx);
+ 	frob_ro_after_init(&mod->data_layout, set_memory_nx);
+ 	frob_writable_data(&mod->data_layout, set_memory_nx);
+@@ -73,6 +118,9 @@ int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+ 	const unsigned long shf_wx = SHF_WRITE | SHF_EXECINSTR;
+ 	int i;
+ 
++	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
++		return 0;
 +
-+config MODULE_FORCE_UNLOAD
-+	bool "Forced module unloading"
-+	depends on MODULE_UNLOAD
-+	help
-+	  This option allows you to force a module to unload, even if the
-+	  kernel believes it is unsafe: the kernel will remove the module
-+	  without waiting for anyone to stop using it (using the -f option to
-+	  rmmod).  This is mainly for kernel developers and desperate users.
-+	  If unsure, say N.
-+
-+config MODVERSIONS
-+	bool "Module versioning support"
-+	help
-+	  Usually, you have to use modules compiled with your kernel.
-+	  Saying Y here makes it sometimes possible to use modules
-+	  compiled for different kernels, by adding enough information
-+	  to the modules to (hopefully) spot any changes which would
-+	  make them incompatible with the kernel you are running.  If
-+	  unsure, say N.
-+
-+config ASM_MODVERSIONS
-+	bool
-+	default HAVE_ASM_MODVERSIONS && MODVERSIONS
-+	help
-+	  This enables module versioning for exported symbols also from
-+	  assembly. This can be enabled only when the target architecture
-+	  supports it.
-+
-+config MODULE_REL_CRCS
-+	bool
-+	depends on MODVERSIONS
-+
-+config MODULE_SRCVERSION_ALL
-+	bool "Source checksum for all modules"
-+	help
-+	  Modules which contain a MODULE_VERSION get an extra "srcversion"
-+	  field inserted into their modinfo section, which contains a
-+	  sum of the source files which made it.  This helps maintainers
-+	  see exactly which source was used to build a module (since
-+	  others sometimes change the module source without updating
-+	  the version).  With this option, such a "srcversion" field
-+	  will be created for all modules.  If unsure, say N.
-+
-+config MODULE_SIG
-+	bool "Module signature verification"
-+	select MODULE_SIG_FORMAT
-+	help
-+	  Check modules for valid signatures upon load: the signature
-+	  is simply appended to the module. For more information see
-+	  <file:Documentation/admin-guide/module-signing.rst>.
-+
-+	  Note that this option adds the OpenSSL development packages as a
-+	  kernel build dependency so that the signing tool can use its crypto
-+	  library.
-+
-+	  You should enable this option if you wish to use either
-+	  CONFIG_SECURITY_LOCKDOWN_LSM or lockdown functionality imposed via
-+	  another LSM - otherwise unsigned modules will be loadable regardless
-+	  of the lockdown policy.
-+
-+	  !!!WARNING!!!  If you enable this option, you MUST make sure that the
-+	  module DOES NOT get stripped after being signed.  This includes the
-+	  debuginfo strip done by some packagers (such as rpmbuild) and
-+	  inclusion into an initramfs that wants the module size reduced.
-+
-+config MODULE_SIG_FORCE
-+	bool "Require modules to be validly signed"
-+	depends on MODULE_SIG
-+	help
-+	  Reject unsigned modules or signed modules for which we don't have a
-+	  key.  Without this, such modules will simply taint the kernel.
-+
-+config MODULE_SIG_ALL
-+	bool "Automatically sign all modules"
-+	default y
-+	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
-+	help
-+	  Sign all modules during make modules_install. Without this option,
-+	  modules must be signed manually, using the scripts/sign-file tool.
-+
-+comment "Do not forget to sign required modules with scripts/sign-file"
-+	depends on MODULE_SIG_FORCE && !MODULE_SIG_ALL
-+
-+choice
-+	prompt "Which hash algorithm should modules be signed with?"
-+	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
-+	help
-+	  This determines which sort of hashing algorithm will be used during
-+	  signature generation.  This algorithm _must_ be built into the kernel
-+	  directly so that signature verification can take place.  It is not
-+	  possible to load a signed module containing the algorithm to check
-+	  the signature on that module.
-+
-+config MODULE_SIG_SHA1
-+	bool "Sign modules with SHA-1"
-+	select CRYPTO_SHA1
-+
-+config MODULE_SIG_SHA224
-+	bool "Sign modules with SHA-224"
-+	select CRYPTO_SHA256
-+
-+config MODULE_SIG_SHA256
-+	bool "Sign modules with SHA-256"
-+	select CRYPTO_SHA256
-+
-+config MODULE_SIG_SHA384
-+	bool "Sign modules with SHA-384"
-+	select CRYPTO_SHA512
-+
-+config MODULE_SIG_SHA512
-+	bool "Sign modules with SHA-512"
-+	select CRYPTO_SHA512
-+
-+endchoice
-+
-+config MODULE_SIG_HASH
-+	string
-+	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
-+	default "sha1" if MODULE_SIG_SHA1
-+	default "sha224" if MODULE_SIG_SHA224
-+	default "sha256" if MODULE_SIG_SHA256
-+	default "sha384" if MODULE_SIG_SHA384
-+	default "sha512" if MODULE_SIG_SHA512
-+
-+choice
-+	prompt "Module compression mode"
-+	help
-+	  This option allows you to choose the algorithm which will be used to
-+	  compress modules when 'make modules_install' is run. (or, you can
-+	  choose to not compress modules at all.)
-+
-+	  External modules will also be compressed in the same way during the
-+	  installation.
-+
-+	  For modules inside an initrd or initramfs, it's more efficient to
-+	  compress the whole initrd or initramfs instead.
-+
-+	  This is fully compatible with signed modules.
-+
-+	  Please note that the tool used to load modules needs to support the
-+	  corresponding algorithm. module-init-tools MAY support gzip, and kmod
-+	  MAY support gzip, xz and zstd.
-+
-+	  Your build system needs to provide the appropriate compression tool
-+	  to compress the modules.
-+
-+	  If in doubt, select 'None'.
-+
-+config MODULE_COMPRESS_NONE
-+	bool "None"
-+	help
-+	  Do not compress modules. The installed modules are suffixed
-+	  with .ko.
-+
-+config MODULE_COMPRESS_GZIP
-+	bool "GZIP"
-+	help
-+	  Compress modules with GZIP. The installed modules are suffixed
-+	  with .ko.gz.
-+
-+config MODULE_COMPRESS_XZ
-+	bool "XZ"
-+	help
-+	  Compress modules with XZ. The installed modules are suffixed
-+	  with .ko.xz.
-+
-+config MODULE_COMPRESS_ZSTD
-+	bool "ZSTD"
-+	help
-+	  Compress modules with ZSTD. The installed modules are suffixed
-+	  with .ko.zst.
-+
-+endchoice
-+
-+config MODULE_DECOMPRESS
-+	bool "Support in-kernel module decompression"
-+	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
-+	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
-+	select XZ_DEC if MODULE_COMPRESS_XZ
-+	help
-+
-+	  Support for decompressing kernel modules by the kernel itself
-+	  instead of relying on userspace to perform this task. Useful when
-+	  load pinning security policy is enabled.
-+
-+	  If unsure, say N.
-+
-+config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-+	bool "Allow loading of modules with missing namespace imports"
-+	help
-+	  Symbols exported with EXPORT_SYMBOL_NS*() are considered exported in
-+	  a namespace. A module that makes use of a symbol exported with such a
-+	  namespace is required to import the namespace via MODULE_IMPORT_NS().
-+	  There is no technical reason to enforce correct namespace imports,
-+	  but it creates consistency between symbols defining namespaces and
-+	  users importing namespaces they make use of. This option relaxes this
-+	  requirement and lifts the enforcement when loading a module.
-+
-+	  If unsure, say N.
-+
-+config MODPROBE_PATH
-+	string "Path to modprobe binary"
-+	default "/sbin/modprobe"
-+	help
-+	  When kernel code requests a module, it does so by calling
-+	  the "modprobe" userspace utility. This option allows you to
-+	  set the path where that binary is found. This can be changed
-+	  at runtime via the sysctl file
-+	  /proc/sys/kernel/modprobe. Setting this to the empty string
-+	  removes the kernel's ability to request modules (but
-+	  userspace can still load modules explicitly).
-+
-+config TRIM_UNUSED_KSYMS
-+	bool "Trim unused exported kernel symbols" if EXPERT
-+	depends on !COMPILE_TEST
-+	help
-+	  The kernel and some modules make many symbols available for
-+	  other modules to use via EXPORT_SYMBOL() and variants. Depending
-+	  on the set of modules being selected in your kernel configuration,
-+	  many of those exported symbols might never be used.
-+
-+	  This option allows for unused exported symbols to be dropped from
-+	  the build. In turn, this provides the compiler more opportunities
-+	  (especially when using LTO) for optimizing the code and reducing
-+	  binary size.  This might have some security advantages as well.
-+
-+	  If unsure, or if you need to build out-of-tree modules, say N.
-+
-+config UNUSED_KSYMS_WHITELIST
-+	string "Whitelist of symbols to keep in ksymtab"
-+	depends on TRIM_UNUSED_KSYMS
-+	help
-+	  By default, all unused exported symbols will be un-exported from the
-+	  build when TRIM_UNUSED_KSYMS is selected.
-+
-+	  UNUSED_KSYMS_WHITELIST allows to whitelist symbols that must be kept
-+	  exported at all times, even in absence of in-tree users. The value to
-+	  set here is the path to a text file containing the list of symbols,
-+	  one per line. The path can be absolute, or relative to the kernel
-+	  source tree.
-+
-+config MODULES_TREE_LOOKUP
-+	def_bool y
-+	depends on PERF_EVENTS || TRACING || CFI_CLANG
-+
-+endif # MODULES
+ 	for (i = 0; i < hdr->e_shnum; i++) {
+ 		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
+ 			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
 -- 
 2.34.1
 
