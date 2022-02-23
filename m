@@ -2,147 +2,92 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1558BC433F5
-	for <linux-modules@archiver.kernel.org>; Wed, 23 Feb 2022 06:34:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD6DEC433EF
+	for <linux-modules@archiver.kernel.org>; Wed, 23 Feb 2022 09:01:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234430AbiBWGfG (ORCPT
+        id S239142AbiBWJBr (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 23 Feb 2022 01:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        Wed, 23 Feb 2022 04:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbiBWGfF (ORCPT
+        with ESMTP id S237086AbiBWJBr (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 23 Feb 2022 01:35:05 -0500
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90045.outbound.protection.outlook.com [40.107.9.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F046060DBD;
-        Tue, 22 Feb 2022 22:34:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J7c6uHrNzmcwTa4yTZblcRgMk76uNqEhibxKpQMPl65W7WbVaC9NY29zXc2Kyada15w6TCxbVIwRK8Tut3qZNfhP3alz0qZDdQaRQPQj9XA2WgfsKNg6RKPU6/fsECSoQy+AIzyhV6BimRvSOwYfiOIT19FWkrt2AttVAOtqcsYanjmzsz1Q7lq/az7hKSI9hMSy+C77CwmoGFdWQuCqafpKaxBrFYSjth+I8z6SxP8o72HREkCJj47VlFivmdKFGmxEoSB5vQjPtVKE/1yGW90CfaieekWYSgvLrf3l9HUbNpO9WDV412OOe00QP8gnf+w7j9ZneGL5+EVkBXPkrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qye22WnU6l5OO5+3aix54BydRV3JIPBhyUDxV7hsWs8=;
- b=PQ2P1X2CKz5PipLBQ0FyvsIQfj6xc95mMZn50rWbNLPjlqs7lTzF1hyzxeIsXpk0tRAS2ZuibrqgR4l2QeEOWAcwSBybAjWTM/LG3jlNfMUE20DEaofopGBoV0Z8JK63ZdZXH93K24g/84ftFrndBaOPHo/hq3bJYqH9tZ6Tt+LE7oQghg0B1orndLV8mVXL6Cq6wwY1PoPm7iKWZCnQT7W4fEFRhuD2+2WbcLWhdqNAVdtFEm15q6DmZdUqp3Q11HRWAkJe+R0ytg8oOwFw5ubn5rudnWWm+3YjIcVMSTWt5P/BT4FUB1wT2HJcVpGUasSDbfgI9teuEUT5ecSATw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRXP264MB0581.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:1e::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Wed, 23 Feb
- 2022 06:34:34 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8142:2e6f:219b:646d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8142:2e6f:219b:646d%5]) with mapi id 15.20.5017.021; Wed, 23 Feb 2022
- 06:34:34 +0000
+        Wed, 23 Feb 2022 04:01:47 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95F07D004;
+        Wed, 23 Feb 2022 01:01:19 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4K3VQ62Nm4z9sSq;
+        Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id tdaM3LWAsilI; Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K3VQ61gF0z9sSZ;
+        Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 245DC8B77C;
+        Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 1i2HwELHuxf6; Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.181])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CCEAE8B77B;
+        Wed, 23 Feb 2022 10:01:17 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21N918Aj1126384
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 10:01:08 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21N918OZ1126383;
+        Wed, 23 Feb 2022 10:01:08 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Aaron Tomlin <atomlin@redhat.com>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/4] Miscellaneous cleanups
-Thread-Topic: [PATCH v3 0/4] Miscellaneous cleanups
-Thread-Index: AQHYJ/85dfnoz0vqrEeFuKWAfjCOeqygSDqAgABmngA=
-Date:   Wed, 23 Feb 2022 06:34:34 +0000
-Message-ID: <f0c560b4-6f71-63c3-8cb4-1570f0ec42b2@csgroup.eu>
-References: <cover.1645542893.git.christophe.leroy@csgroup.eu>
- <YhV/ZQKsO2rElYdL@bombadil.infradead.org>
-In-Reply-To: <YhV/ZQKsO2rElYdL@bombadil.infradead.org>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 179e545c-7caf-4f6b-02f6-08d9f6968e9a
-x-ms-traffictypediagnostic: MRXP264MB0581:EE_
-x-microsoft-antispam-prvs: <MRXP264MB0581E1ECB6C5B05B45EE225AED3C9@MRXP264MB0581.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /+a/tFxG1SDuJQ3cRE2pbz9Wb6IysA0gzhJqQDpGPIRs34X5h3184j+zP+z06tVi+sbh72JfVb7W7SvPbeGitfFSTfV9pHtRqy8kh/vC3y8OvQSKvAzEul9pB0QWcZFUfSpIYoBGsT6LSh9EQjxK35jzSzgzw4MjfFcTUVC/rl1Yd580r7CWDhDk4PtSVvlBJ0hZ8CGKc6A4EOiVrxemmQjxOF3HafwVBJevGCtkLO111SnEHsWhHzjXcYx3tI1lRcAQdAPXvXocpKTR8l+rpLhppU7RoL77DQ+NUJ9DHSsaWyv8JZi4rpBIZYRDSKDM9qp4CR38t+HAX2ba2J30++HuLegZWvIqRz1pZiM49aZzJ0KglOH9aQxYd1QM3wRmH5WXmMfUbn11Sv5LsQQ2MfMKZ8kR5dHbiZv4IHVEoJX8C6YTxVA3GitAVV+QbU3EYhMAlNdRI+1GCVS1kk/dOp72NUf9ZTShZmkiqBzwv2z5sr4PIcAw8n9Y8C76kLNEia23vPWpWTG9n0AC/IlzX6LwAgz9XL7EEZh1UFl93WTkN3qCVpCZZtUN83h4jQRTJfchC6kzCEQx/2FIvHi+HojCwiNUy6bOMAjwzLj1vsU4oDJN4iC24Y2z0LoQcgqiIiB1uiurcLsTEEWLBEL1/IfZONyK9+SwgtVf+XYewU05V9G4PoWd0/rAEz0XaTE2rYsdAELD0x7Vp46LpCISdE8i73LJY/J8wGNvPbKbfpM6e+wjoe9NDHh2eXQJ4Q7wAUY0u7KlAmzIkBz1j+BW2A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(66476007)(66446008)(186003)(64756008)(26005)(4326008)(8676002)(66556008)(36756003)(66946007)(316002)(91956017)(76116006)(2616005)(2906002)(122000001)(86362001)(38100700002)(31686004)(31696002)(54906003)(44832011)(66574015)(5660300002)(8936002)(83380400001)(508600001)(71200400001)(6512007)(6486002)(6506007)(6916009)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YzZmT2s1OGkxYUVQNVNLUXVFNmRtRHFCSTFvY3VHdlNsd2M5MFNoVGdYZVh5?=
- =?utf-8?B?ZDU1TzI5U0VtNUFXYVR0M2dSRXFDWk40WGF2RGVJUVpLdkZRTGpNMUVwVUZi?=
- =?utf-8?B?MW9iZE84bWQ2eVdDM3FQNnczMGRwem0vM1FtVDhCeFJ1Y2kvbW5WTHZpRW9t?=
- =?utf-8?B?c1BHTE5uaGM4S3pubEtBK3NFL2J2Nmp5Y1Q1QWNPZkZMNmlITWZ4Uy9XeUhk?=
- =?utf-8?B?R0g0WWJXSmd1TW5VcTEyMjZOMlZWWkhkZEhiby9YOGh5RlJaNU55OUo1SWg4?=
- =?utf-8?B?clVTSEVqb2ZVVlBsS3RvcWVNeDZkRk9OQ2E2WjBGbWgyZ1JKaWtmQUY2SmJL?=
- =?utf-8?B?QTI5ZXA0V3BFbEVwZFQ4c1hMZjBFaTg1Wk9ZckNwdDNrNTRCV0c4KzU5cVVB?=
- =?utf-8?B?Q0RnUkxGQ0lLV1luVDNPUDh4ZmRsUWl4bDhWL01LQ3dZVksrS3JyWEpnbUd4?=
- =?utf-8?B?TGhnNHpKV2pCaVExQ0RKOTVwMnpBWjhXNS8yek9WMythK3F2L0NqOEdkV1VI?=
- =?utf-8?B?SFpQN0hicjFucWJCd0RnajZYaXV6NW5vcEJWVjBWS0h6VFJxWXVFYTl2dEkw?=
- =?utf-8?B?Y1dTUEpGOXEvRHNpOHFXa3QvWFZPb3RNNGRlV004YzEzQlVjNG4raUU4Y0F2?=
- =?utf-8?B?Zi9CSG1Vb0hUOTNGRmdFNUVYQkxsQzBvUW13ZFhDQk9FdnZTZW1wdHVWSWtH?=
- =?utf-8?B?TFYvRlljSGxVUithVEt4alVMUTVXbjFxYkJWUkEzWS9SUUVvMVlqUFUvYmNM?=
- =?utf-8?B?MnRQbnBYUmg4bFkwNDh6YVFURFkrODFxZ3ludFNLblFLODlvMjc2R29Nck1t?=
- =?utf-8?B?dWdRQThLUDY0V0FLRCt3UDJtb3BFRkQvdk1JbVlpck1nbGFYYWlnenhZbmx4?=
- =?utf-8?B?UmpWTkFiRGsvZzU3L3psSDBtOTJHUjJKbWZseGZVNGd2S2pxZTlxTHdUZERl?=
- =?utf-8?B?dW5Mdyt1bG9DaWxVSzBYYmJ3YXlRcHpFbmF6aUdUeERPRUxQY1ZSczIyMWVO?=
- =?utf-8?B?WDdveGVqZjNkWkJzbkVVMUtJaXBzbEZxK2xuUHBuVjNFTU5wVGJ4VjVlNnFI?=
- =?utf-8?B?VzFqWkplMGNEYkdjU2Q0TUJTaGlDTlF0SnROTmhoN1NTZ094T0MzYWhJVGJx?=
- =?utf-8?B?cERhaXRlSkoxSTdRZzZjWkJMOUpvcmVWUloxNzhjUE81ZUFyMWFpY0kzeHh3?=
- =?utf-8?B?UEtNT2ZidFBCOVNaaW5QMzNIcDVTSWduYks4RTMzN01RN2pzRGgyNklWbldz?=
- =?utf-8?B?QWNZSkx6MEtTaHFRendQa01pb1YwZ2c0dDMxRGJWbDR6SEVZcGd2RmVoTkxy?=
- =?utf-8?B?TkZ1RjNZQzFScHBoODJmQkViTU5sQ0ZBd0wvTHRFSHd3VWlsQVptaDlLbXFm?=
- =?utf-8?B?d09oTkJVV2Y5bzFKcDVkbUxLeDJIZHRPQW9DcSs1TEExRG1sL3hHMDR1T0dX?=
- =?utf-8?B?azhkcGRQQ2pMU0ZudklHYUhwT0t2UWRpL1Awd0Q1Tm9pNXpmMGRBVjVxOXJl?=
- =?utf-8?B?SUREUFI1ZVFkeEhQcDhkc01BWVpIN1liTzZUVUJXdldIbVNaMWE3VkhkdEV3?=
- =?utf-8?B?MUdkZU4zaFROZncwT2wrc0RFQmxpai9jc0Z4cEZxVGRWM0hRUXNUNExObVF6?=
- =?utf-8?B?RldzeTJEZHVRbjExZTdVcEVjSGRlMUZlVG1sQmEyQW5SdWxVMGxPejB3Ymlz?=
- =?utf-8?B?dXd4Tjgyak9IUzFqV28xSlh6M3JBby96TmlxbktncU1GMS83Tkw3ajdmY05i?=
- =?utf-8?B?UFpNdW5sR3lUTmNRUlNYWW11cU5vdkVjdDJuNGFSMEQ1Q2pmWURGcm1COFIr?=
- =?utf-8?B?b0VZcGprZ2dCUE5BVmdIZVpjcGxkWS9OQ0x5bEw0eUFpTUIxWkRaVlRhci9P?=
- =?utf-8?B?MnRtakdnY0RQUzZpK09zTDhBZEFiTWZma3V2dUlSelVzMmZHNXgxZDFNcGkr?=
- =?utf-8?B?R01Md2NVeCt0VGRLeTNDM0Nnc0ZRK2w1U1JwZ3JWTWlDU2k5UXBWMHVncTJY?=
- =?utf-8?B?SkZZeG1HdkpKaVZRRDdkU0U3c3plS0Nna2puWVdmSDhUQXYzU3Exb0pEeExV?=
- =?utf-8?B?MVpINkJpQzlWMWlGNHc0Tk5BakNhamZtM0lXODlGZHV4bXpMYmRrSGZvS0xD?=
- =?utf-8?B?Mi9iTHpsWjZ1UFo0eUwyYVRxcmdOaVQyVXpBTXU4RTkybGs0K1BFem5oQzEw?=
- =?utf-8?B?eWxtVTQ3UHF0eTc2NWIrWE8vWUgwb2Q3N1lpQ2hZclY4Nk9TNGNsTTRDSkw0?=
- =?utf-8?Q?zQ1M70b8SudtCxf1qemS0Fd8fp+YbqZhSwt28E3ImY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D9137136EF8E6D488800CEAEC48AD4E6@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/4] Miscellaneous cleanups
+Date:   Wed, 23 Feb 2022 10:00:57 +0100
+Message-Id: <cover.1645605431.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 179e545c-7caf-4f6b-02f6-08d9f6968e9a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2022 06:34:34.6527
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 34LNeKwAMD+5NzhzP/l7QJSoo67azpDgRqtR/52dIxFqaILVqDpomjSf3PBbG5PAvuRGalf2t4phPEeIzab5cdo16i0m4FP9z/bmhBBgYEs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0581
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645606850; l=1242; s=20211009; h=from:subject:message-id; bh=Uz2+kN1n/x9zpl6zVpcs3EmjKyxlQOcAPNtFojggR/A=; b=SAjF73NBrthBLLzdf4B7fowip1Hi2yVbpPKdDtYN/OjzlpJcb2pv6E2Dt3cTa92VHY5zkNyc/jv+ TeNS53VNCMX4dCLQ62qmyQC1WnNugPwg+7hUniO40YFOw0k7iZR/
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-DQoNCkxlIDIzLzAyLzIwMjIgw6AgMDE6MjcsIEx1aXMgQ2hhbWJlcmxhaW4gYSDDqWNyaXTCoDoN
-Cj4gT24gVHVlLCBGZWIgMjIsIDIwMjIgYXQgMDQ6MTY6MzBQTSArMDEwMCwgQ2hyaXN0b3BoZSBM
-ZXJveSB3cm90ZToNCj4+IFRoaXMgc2VyaWVzIGFwcGxpZXMgb24gdG9wIG9mIG15IHNlcmllcyAi
-QWxsb2NhdGUgbW9kdWxlIHRleHQgYW5kIGRhdGEgc2VwYXJhdGVseSIgdjUuDQo+Pg0KPj4gSXQg
-ZG9lcyBzb21lIGNsZWFudXAgYXJvdW5kIHRoZSBzZXR0bGluZyBvZiBtb2R1bGVzJ3MgbGF5b3V0
-IHBhZ2UgZmxhZ3M6DQo+PiAtIE1ha2UgbW9kdWxlX2VuYWJsZV94KCkgaW5kZXBlbmRlbnQgb2Yg
-Q09ORklHX0FSQ0hfSEFTX1NUUklDVF9NT0RVTEVfUldYDQo+PiAtIFJldW5pZnkgZXZlcnl0aGlu
-ZyBpbnRvIHN0cmljdF9yd3guYw0KPj4gLSBDaGFuZ2UgYmlnIGhhbW1lciBCVUdfT04oKXMgaW50
-byBXQVJOX09OKClzDQo+PiAtIENoYW5nZSBtaXNsZWFkaW5nIGRlYnVnX2FsaWduKCkgdG8gc3Ry
-aWN0X2FsaWduKCkNCj4+DQo+PiBDaGFuZ2VzIGluIHYyL3YzOg0KPj4gLSBSZWJhc2VkIG9uIHRv
-cCBvZiBteSBzZXJpZXMgIkFsbG9jYXRlIG1vZHVsZSB0ZXh0IGFuZCBkYXRhIHNlcGFyYXRlbHki
-IHY1DQo+PiAtIE1vdmVkIHRoZSBLY29uZmlnIHBhdGNoIG91dCBvZiB0aGlzIHNlcmllcywgaXQg
-aXMgYW4gaW5kZXBlbmRlbnQgY2hhbmdlDQo+Pg0KPj4gU29ycnkgZm9yIHRoZSBtZXNzIGluIHYy
-Lg0KPiANCj4gVGhhbmtzIGZvciBhbGwgdGhpcyB3b3JrISBBbnkgY2hhbmNlIHlvdSBjYW4gYWN0
-dWFsbHkgc3VibWl0IHRoaXMgcHJpb3INCj4gdG8geW91ciBhbGxvY2F0ZSBtb2R1bGUgc2VyaWVz
-PyBUaGlzIGFuZCB0aGUgcGF0Y2gsICJtb2R1bGU6IE1vdmUNCj4gbW9kdWxlJ3MgS2NvbmZpZyBp
-dGVtIGluIGtlcm5lbC9tb2R1bGUvIi4gQmVjYXVzZSAqaWZmKiB3ZSBnZXQgZW5vdWdoDQo+IHRl
-c3Rpbmcgb3V0IG9mIEFhcm9uJ3MgY2hhbmdlcyBhbmQgeW91ciBjbGVhbnVwcywgcGVyaGFwcyB0
-aG9zZSBtaWdodA0KPiBiZSBjYW5kaWRhdGVzIGZvciB0aGUgbmV4dCBtZXJnZSB3aW5kb3cuIFRo
-ZW4gd2UgY2FuIHNhdmUgYWxsIHRoZSBuZXcNCj4gZnVuY3Rpb25hbCBjaGFuZ2VzIGZvciB0aGUg
-b3RoZXIgbWVyZ2Ugd2luZG93Lg0KPiANCg0KU3VyZSBJIGNhbiBzd2l0Y2ggdGhlIHR3byBzZXJp
-ZXMuDQoNClRoZSBLY29uZmlnIHBhdGNoIGlzIGluZGVwZW5kYW50LCB5b3UgY2FuIGFscmVhZHkg
-YXBwbHkgaXQgaW4gYW55IG9yZGVyLCANCkkgd29uJ3QgcmVzZW5kIHVubGVzcyBJIGdldCBjb21t
-ZW50cyBvbiBpdC4NCg0KQ2hyaXN0b3BoZQ==
+This series applies on top of Aaron's series "module: core code clean up" v8.
+
+It does some cleanup around the settling of modules's layout page flags:
+- Make module_enable_x() independent of CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+- Reunify everything into strict_rwx.c
+- Change big hammer BUG_ON()s into WARN_ON()s
+- Change misleading debug_align() to strict_align()
+
+Changes in v4:
+- Rebased on top of Aaron's series "module: core code clean up" v8.
+
+Changes in v2/v3:
+- Rebased on top of my series "Allocate module text and data separately" v5
+- Moved the Kconfig patch out of this series, it is an independent change
+
+Christophe Leroy (4):
+  module: Make module_enable_x() independent of
+    CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+  module: Move module_enable_x() and frob_text() in strict_rwx.c
+  module: Rework layout alignment to avoid BUG_ON()s
+  module: Rename debug_align() as strict_align()
+
+ kernel/module/Makefile     |  3 +-
+ kernel/module/internal.h   | 26 +++----------
+ kernel/module/kallsyms.c   |  4 +-
+ kernel/module/main.c       | 58 ++++++-----------------------
+ kernel/module/strict_rwx.c | 75 +++++++++++++++++++++++++++++++++-----
+ 5 files changed, 87 insertions(+), 79 deletions(-)
+
+-- 
+2.34.1
+
