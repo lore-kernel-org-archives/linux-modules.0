@@ -2,92 +2,172 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD6DEC433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 23 Feb 2022 09:01:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF94DC433EF
+	for <linux-modules@archiver.kernel.org>; Wed, 23 Feb 2022 09:01:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239142AbiBWJBr (ORCPT
+        id S237086AbiBWJBv (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 23 Feb 2022 04:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        Wed, 23 Feb 2022 04:01:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237086AbiBWJBr (ORCPT
+        with ESMTP id S235746AbiBWJBv (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:01:47 -0500
+        Wed, 23 Feb 2022 04:01:51 -0500
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95F07D004;
-        Wed, 23 Feb 2022 01:01:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8A47D01B;
+        Wed, 23 Feb 2022 01:01:23 -0800 (PST)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K3VQ62Nm4z9sSq;
-        Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4K3VQ70lyVz9sSZ;
+        Wed, 23 Feb 2022 10:01:19 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tdaM3LWAsilI; Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+        with ESMTP id jdG7GfnuMEwY; Wed, 23 Feb 2022 10:01:19 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K3VQ61gF0z9sSZ;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K3VQ61tzDz9sSg;
         Wed, 23 Feb 2022 10:01:18 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 245DC8B77C;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2C4998B77B;
         Wed, 23 Feb 2022 10:01:18 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 1i2HwELHuxf6; Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+        with ESMTP id agD9yOZTGzRn; Wed, 23 Feb 2022 10:01:18 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.181])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id CCEAE8B77B;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C48D38B778;
         Wed, 23 Feb 2022 10:01:17 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21N918Aj1126384
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21N919LP1126400
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 10:01:08 +0100
+        Wed, 23 Feb 2022 10:01:09 +0100
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21N918OZ1126383;
-        Wed, 23 Feb 2022 10:01:08 +0100
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21N919Id1126399;
+        Wed, 23 Feb 2022 10:01:09 +0100
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/4] Miscellaneous cleanups
-Date:   Wed, 23 Feb 2022 10:00:57 +0100
-Message-Id: <cover.1645605431.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v4 4/4] module: Rename debug_align() as strict_align()
+Date:   Wed, 23 Feb 2022 10:01:01 +0100
+Message-Id: <d87f09e80033551bef2fb775919643095af08ed2.1645605431.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1645605431.git.christophe.leroy@csgroup.eu>
+References: <cover.1645605431.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645606850; l=1242; s=20211009; h=from:subject:message-id; bh=Uz2+kN1n/x9zpl6zVpcs3EmjKyxlQOcAPNtFojggR/A=; b=SAjF73NBrthBLLzdf4B7fowip1Hi2yVbpPKdDtYN/OjzlpJcb2pv6E2Dt3cTa92VHY5zkNyc/jv+ TeNS53VNCMX4dCLQ62qmyQC1WnNugPwg+7hUniO40YFOw0k7iZR/
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645606851; l=4185; s=20211009; h=from:subject:message-id; bh=7vA1x7q8Ldlupqg2MhGqeakAq8DBo60Yar/6GUgEfr8=; b=Ijs+ZWkilyjM/vmO2UOSJnJ3T/XWDzxkyh6Wh85drpl7LeFuZvjYsnpGjt7obUCI/s3JDyilIwIk 6/uh9pUdCfi1NRVXehM2JQ8XKWHQLQgyX84OKvNbqADdybhzVT8o
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This series applies on top of Aaron's series "module: core code clean up" v8.
+debug_align() was added by commit 84e1c6bb38eb ("x86: Add RO/NX
+protection for loadable kernel modules")
 
-It does some cleanup around the settling of modules's layout page flags:
-- Make module_enable_x() independent of CONFIG_ARCH_HAS_STRICT_MODULE_RWX
-- Reunify everything into strict_rwx.c
-- Change big hammer BUG_ON()s into WARN_ON()s
-- Change misleading debug_align() to strict_align()
+At that time the config item was CONFIG_DEBUG_SET_MODULE_RONX.
 
-Changes in v4:
-- Rebased on top of Aaron's series "module: core code clean up" v8.
+But nowadays it has changed to CONFIG_STRICT_MODULE_RWX and
+debug_align() is confusing because it has nothing to do with
+DEBUG.
 
-Changes in v2/v3:
-- Rebased on top of my series "Allocate module text and data separately" v5
-- Moved the Kconfig patch out of this series, it is an independent change
+Rename it strict_align()
 
-Christophe Leroy (4):
-  module: Make module_enable_x() independent of
-    CONFIG_ARCH_HAS_STRICT_MODULE_RWX
-  module: Move module_enable_x() and frob_text() in strict_rwx.c
-  module: Rework layout alignment to avoid BUG_ON()s
-  module: Rename debug_align() as strict_align()
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ kernel/module/internal.h |  4 ++--
+ kernel/module/kallsyms.c |  4 ++--
+ kernel/module/main.c     | 14 +++++++-------
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
- kernel/module/Makefile     |  3 +-
- kernel/module/internal.h   | 26 +++----------
- kernel/module/kallsyms.c   |  4 +-
- kernel/module/main.c       | 58 ++++++-----------------------
- kernel/module/strict_rwx.c | 75 +++++++++++++++++++++++++++++++++-----
- 5 files changed, 87 insertions(+), 79 deletions(-)
-
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index e94defbeda00..cbc268af23ae 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -26,9 +26,9 @@
+  * only when CONFIG_STRICT_MODULE_RWX=y
+  */
+ #ifdef CONFIG_STRICT_MODULE_RWX
+-# define debug_align(X) PAGE_ALIGN(X)
++# define strict_align(X) PAGE_ALIGN(X)
+ #else
+-# define debug_align(X) (X)
++# define strict_align(X) (X)
+ #endif
+ 
+ extern struct mutex module_mutex;
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index b6d49bb5afed..23034b50f8f5 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -139,7 +139,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
+ 	mod->core_layout.size += strtab_size;
+ 	info->core_typeoffs = mod->core_layout.size;
+ 	mod->core_layout.size += ndst * sizeof(char);
+-	mod->core_layout.size = debug_align(mod->core_layout.size);
++	mod->core_layout.size = strict_align(mod->core_layout.size);
+ 
+ 	/* Put string table section at end of init part of module. */
+ 	strsect->sh_flags |= SHF_ALLOC;
+@@ -154,7 +154,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
+ 	mod->init_layout.size += sizeof(struct mod_kallsyms);
+ 	info->init_typeoffs = mod->init_layout.size;
+ 	mod->init_layout.size += nsrc * sizeof(char);
+-	mod->init_layout.size = debug_align(mod->init_layout.size);
++	mod->init_layout.size = strict_align(mod->init_layout.size);
+ }
+ 
+ /*
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 2f950b986785..6e3a6b4efd21 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1447,19 +1447,19 @@ static void layout_sections(struct module *mod, struct load_info *info)
+ 		}
+ 		switch (m) {
+ 		case 0: /* executable */
+-			mod->core_layout.size = debug_align(mod->core_layout.size);
++			mod->core_layout.size = strict_align(mod->core_layout.size);
+ 			mod->core_layout.text_size = mod->core_layout.size;
+ 			break;
+ 		case 1: /* RO: text and ro-data */
+-			mod->core_layout.size = debug_align(mod->core_layout.size);
++			mod->core_layout.size = strict_align(mod->core_layout.size);
+ 			mod->core_layout.ro_size = mod->core_layout.size;
+ 			break;
+ 		case 2: /* RO after init */
+-			mod->core_layout.size = debug_align(mod->core_layout.size);
++			mod->core_layout.size = strict_align(mod->core_layout.size);
+ 			mod->core_layout.ro_after_init_size = mod->core_layout.size;
+ 			break;
+ 		case 4: /* whole core */
+-			mod->core_layout.size = debug_align(mod->core_layout.size);
++			mod->core_layout.size = strict_align(mod->core_layout.size);
+ 			break;
+ 		}
+ 	}
+@@ -1481,11 +1481,11 @@ static void layout_sections(struct module *mod, struct load_info *info)
+ 		}
+ 		switch (m) {
+ 		case 0: /* executable */
+-			mod->init_layout.size = debug_align(mod->init_layout.size);
++			mod->init_layout.size = strict_align(mod->init_layout.size);
+ 			mod->init_layout.text_size = mod->init_layout.size;
+ 			break;
+ 		case 1: /* RO: text and ro-data */
+-			mod->init_layout.size = debug_align(mod->init_layout.size);
++			mod->init_layout.size = strict_align(mod->init_layout.size);
+ 			mod->init_layout.ro_size = mod->init_layout.size;
+ 			break;
+ 		case 2:
+@@ -1496,7 +1496,7 @@ static void layout_sections(struct module *mod, struct load_info *info)
+ 			mod->init_layout.ro_after_init_size = mod->init_layout.ro_size;
+ 			break;
+ 		case 4: /* whole init */
+-			mod->init_layout.size = debug_align(mod->init_layout.size);
++			mod->init_layout.size = strict_align(mod->init_layout.size);
+ 			break;
+ 		}
+ 	}
 -- 
 2.34.1
 
