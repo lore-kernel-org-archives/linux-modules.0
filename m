@@ -2,124 +2,151 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F24EC433F5
-	for <linux-modules@archiver.kernel.org>; Fri, 25 Feb 2022 10:27:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3AD2C433F5
+	for <linux-modules@archiver.kernel.org>; Fri, 25 Feb 2022 10:34:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239448AbiBYK2H (ORCPT
+        id S239486AbiBYKeh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 25 Feb 2022 05:28:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
+        Fri, 25 Feb 2022 05:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238179AbiBYK2G (ORCPT
+        with ESMTP id S237638AbiBYKeh (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:28:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2325C403C6
-        for <linux-modules@vger.kernel.org>; Fri, 25 Feb 2022 02:27:34 -0800 (PST)
+        Fri, 25 Feb 2022 05:34:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F36D81E2FD1
+        for <linux-modules@vger.kernel.org>; Fri, 25 Feb 2022 02:34:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645784853;
+        s=mimecast20190719; t=1645785244;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=pcLo8HhUCSEqzQ84MhXy0mil81lymk7/0Pm/pFQBlcI=;
-        b=Fgargy+4abgLRL7cgIsrhFft3hbVUmVVW0S2Dd8/MD7rmJmOoGN5oILsNCf5YUwHH/4c0/
-        vBhvxOBDWq5DPiZ6notfO+ZVxJ/KO/xTnc7JZcvkfUcjHjA53vFimkQFdWSrE9r+24o+TM
-        yx/oHUVlhslIGQvBmaLC1SThGrJAo6A=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=K8IJXIhGpH0hpZ2WrQRw/kZrEheB/3ig8HjNNyMg7uw=;
+        b=d2XZKF/g8N4JEvpY95r4/0YZzdsNNgzMvn4Z3RluG8zTQD2hmJgyYqYGDTGlVBHd2WDZfv
+        nKJgrFjpLhqc4eWjDE8UkXGxDD2A6ZK8cpCBzcAv5C8sTp9UP1XCLZQJVSiBaxTkCwH02h
+        ycpmc/6nfIPNgXOaylrWATkX+5sTn+c=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-389-0SENw2cvNmexXrzgF1okXA-1; Fri, 25 Feb 2022 05:27:31 -0500
-X-MC-Unique: 0SENw2cvNmexXrzgF1okXA-1
-Received: by mail-lf1-f71.google.com with SMTP id q26-20020ac25a1a000000b00443f0462692so831451lfn.20
-        for <linux-modules@vger.kernel.org>; Fri, 25 Feb 2022 02:27:31 -0800 (PST)
+ us-mta-372-OHWexNrUO3Ksl6eubncO0Q-1; Fri, 25 Feb 2022 05:34:02 -0500
+X-MC-Unique: OHWexNrUO3Ksl6eubncO0Q-1
+Received: by mail-lf1-f69.google.com with SMTP id d1-20020a0565123d0100b004433d2e2fd0so847477lfv.8
+        for <linux-modules@vger.kernel.org>; Fri, 25 Feb 2022 02:34:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=pcLo8HhUCSEqzQ84MhXy0mil81lymk7/0Pm/pFQBlcI=;
-        b=jkIU8OKHb9mRgBV6y+trmnBD+gVbItYsLDi3rdkkxtocRJeQgFnaqUatNRjaaeYWyL
-         e/NfElqSVLWbeXWd/zobuHpNpbFGdnAnbjf3aH4/cj7i08kbqV4yYwCa8cMdG5Jtwqpq
-         YAiwcThQmWbS855f4DhmJjIKdVNcq43wMxZtDBarb1xNById1eBdPLQZ5ZNOgzug8G2G
-         275xdFg3oLC1Iv+Pq465VJwuABX9DhwPNr487e3eXmtabJCD6WlduYrIpvciHt63qrwu
-         1zXt25pd6HbuZeuRWHdtN378lfSM/DmSz4FShS9ou7ZaZOoojUOPYjIIGdFzGsPKhxdz
-         xEQA==
-X-Gm-Message-State: AOAM530tAWcZG7gKJaOSbHifiumXu2BqOZf6uKU3k3mVq1lanPZX4kiz
-        CrkL3RXe+1LWezTHAF7P6jCK0QGlXuGP8AR8n6zuZOiJuly8QFZfaWqrBnblwks+ZnBWbTANdmH
-        koO4SV1+5ZLj6uij0+ntMmDBJgsc05A6LWL4oJ5xo
-X-Received: by 2002:a05:6512:308b:b0:443:5f54:dcae with SMTP id z11-20020a056512308b00b004435f54dcaemr4846369lfd.79.1645784850338;
-        Fri, 25 Feb 2022 02:27:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx6MuhF+6LgSmAzEnwAwFmkG/DIt24tdoXVZYwMo+3YeU7eVOth2LXsJ+KD91+fuf1AW9YgqMKzzAi1acqvL5Q=
-X-Received: by 2002:a05:6512:308b:b0:443:5f54:dcae with SMTP id
- z11-20020a056512308b00b004435f54dcaemr4846362lfd.79.1645784850156; Fri, 25
- Feb 2022 02:27:30 -0800 (PST)
+        bh=K8IJXIhGpH0hpZ2WrQRw/kZrEheB/3ig8HjNNyMg7uw=;
+        b=T4nprI6rIPpjS4URQSQsI3XBRCHSyV68MKlKGfqE6JVsEin16plciXlAO+rG7KVuWh
+         HVM9/MxBRdNdVJyYMQZFp8Pvj70sZr9YjeckBD3LBATQEIY3GcIR+4VSuUFElbPnHoOz
+         vUyMJWq5s5P+OsVV1mqDqpASIOMWp3PMvfyZ3b3SZn5cZAQyG2OcUA/vcl8sONETgt/d
+         sqrkWsJujNy0JB6pKqZEu1B8pC2Ir9j9sZEK1RqFt9oul2b6+mpSln7n1nkXoi33Y7nU
+         qkVUeS92avTEG+lwdbmg1LKxeBrQ1eXy+uGvFH8KbISYUxbwmVMWZs5gFuSrwjrjpF+6
+         hkXg==
+X-Gm-Message-State: AOAM532cI2J2UHDtl+9TAOx0sNfQ1pVwra1SX++ck+mOog7EJ/Jsin1Q
+        EKSdxJqLklogD5dHK5dp5G4JEYoqANDr8ezTzTLkvthh09pRMdUyl7+kIPgbIJHaSUIBcTC6e0b
+        gQb4XiErkES+axM5w8Ntd6Ok7Tv+8JgLm2N9XJVTw
+X-Received: by 2002:a2e:88d6:0:b0:245:f22e:5125 with SMTP id a22-20020a2e88d6000000b00245f22e5125mr4712582ljk.529.1645785241183;
+        Fri, 25 Feb 2022 02:34:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxtUjupboRAzjq5CuwRyXIz+lvrJskcLy8gmAL34wrQuNAR5/WaTSpikJrYHdCD1jvG6QiOMBbt4TFAE0Rv/1s=
+X-Received: by 2002:a2e:88d6:0:b0:245:f22e:5125 with SMTP id
+ a22-20020a2e88d6000000b00245f22e5125mr4712576ljk.529.1645785240994; Fri, 25
+ Feb 2022 02:34:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20220222141303.1392190-1-atomlin@redhat.com> <20220222141303.1392190-10-atomlin@redhat.com>
- <YhieKf9EcS3GQSXG@alley> <f9449aa6-be9d-9021-66e7-fb0272909ee7@csgroup.eu> <YhisWkgZCK8dz5fl@alley>
-In-Reply-To: <YhisWkgZCK8dz5fl@alley>
+References: <20220222141303.1392190-1-atomlin@redhat.com> <20220222141303.1392190-5-atomlin@redhat.com>
+ <Yhiik2ledqAfGuN2@alley>
+In-Reply-To: <Yhiik2ledqAfGuN2@alley>
 From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Fri, 25 Feb 2022 10:27:18 +0000
-Message-ID: <CANfR36gsRw26C3M0hXGGK2w_05pC0rzkhg0-3Q+8tr_XxLiqiw@mail.gmail.com>
-Subject: Re: [PATCH v8 09/13] module: Move kallsyms support into a separate file
+Date:   Fri, 25 Feb 2022 10:33:49 +0000
+Message-ID: <CANfR36ho7ccXWSU0+ZP3yN39WDgoKS-2WvVQdM1ONG_15Vk=8Q@mail.gmail.com>
+Subject: Re: [PATCH v8 04/13] module: Move livepatch support to a separate file
 To:     Petr Mladek <pmladek@suse.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
+Cc:     "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Lameter, Christoph" <cl@linux.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Allen <allen.lkml@gmail.com>, Joe Perches <joe@perches.com>,
+        Michal Suchanek <msuchanek@suse.de>, oleksandr@natalenko.name
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri 2022-02-25 11:15 +0100, Petr Mladek wrote:
-> rcu_dereference_sched() makes sparse happy. But lockdep complains
-> because the _rcu pointer is not accessed under:
+On Fri 2022-02-25 10:34 +0100, Petr Mladek wrote:
+> This code include several other well hidden changes:
 >
->     rcu_read_lock_sched();
->     rcu_read_unlock_sched();
+> --- del.p    2022-02-24 16:55:26.570054922 +0100
+> +++ add.p    2022-02-24 16:56:04.766781394 +0100
+> @@ -3,14 +3,14 @@
+>   * section header table, section string table, and symtab section
+>   * index from info to mod->klp_info.
+>   */
+> -static int copy_module_elf(struct module *mod, struct load_info *info)
+> +int copy_module_elf(struct module *mod, struct load_info *info)
+>  {
+>      unsigned int size, symndx;
+>      int ret;
+>
+>      size = sizeof(*mod->klp_info);
+>      mod->klp_info = kmalloc(size, GFP_KERNEL);
+> -    if (mod->klp_info == NULL)
+> +    if (!mod->klp_info)
+>          return -ENOMEM;
+>
+>      /* Elf header */
+> @@ -20,7 +20,7 @@ static int copy_module_elf(struct module
+>      /* Elf section header table */
+>      size = sizeof(*info->sechdrs) * info->hdr->e_shnum;
+>      mod->klp_info->sechdrs = kmemdup(info->sechdrs, size, GFP_KERNEL);
+> -    if (mod->klp_info->sechdrs == NULL) {
+> +    if (!mod->klp_info->sechdrs) {
+>          ret = -ENOMEM;
+>          goto free_info;
+>      }
+> @@ -28,7 +28,7 @@ static int copy_module_elf(struct module
+>      /* Elf section name string table */
+>      size = info->sechdrs[info->hdr->e_shstrndx].sh_size;
+>      mod->klp_info->secstrings = kmemdup(info->secstrings, size, GFP_KERNEL);
+> -    if (mod->klp_info->secstrings == NULL) {
+> +    if (!mod->klp_info->secstrings) {
+>          ret = -ENOMEM;
+>          goto free_sechdrs;
+>      }
+> @@ -43,8 +43,7 @@ static int copy_module_elf(struct module
+>       * to core_kallsyms.symtab since the copy of the symtab in module
+>       * init memory is freed at the end of do_init_module().
+>       */
+> -    mod->klp_info->sechdrs[symndx].sh_addr = \
+> -        (unsigned long) mod->core_kallsyms.symtab;
+> +    mod->klp_info->sechdrs[symndx].sh_addr = (unsigned long)mod->core_kallsyms.symtab;
+>
+>      return 0;
+>
+>
+> Please do not do these small coding style changes. It complicates the
+> review and increases the risk of regressions. Different people
+> have different preferences. Just imagine that every half a year
+> someone update style of a code by his personal preferences. The
+> real changes will then get lost in a lot of noise.
+>
+> Coding style changes might be acceptable only when the code is
+> reworked or when it significantly improves readability.
+>
+>
+> That said. I reviewed and tested this patch and did not find any
+> problem. Feel free to use:
+>
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> Tested-by: Petr Mladek <pmladek@suse.com>
+>
+> Please, take the above as an advice for your future work.
 
 Hi Petr,
 
->
-> This is not the case here. Note that module_mutex does not
-> disable preemtion.
->
-> Now, the code is safe. The RCU access makes sure that "mod"
-> can't be freed in the meantime:
->
->    + add_kallsyms() is called by the module loaded when the module
->      is being loaded. It could not get removed in parallel
->      by definition.
->
->    + module_kallsyms_on_each_symbol() takes module_mutex.
->      It means that the module could not get removed.
-
-Indeed, which is why I did not use rcu_read_lock_sched() and
-rcu_read_unlock_sched() with rcu_dereference_sched(). That being said, I
-should have mentioned this in the commit message.
-
-> IMHO, we have two possibilities here:
->
->    + Make sparse and lockdep happy by using rcu_dereference_sched()
->      and calling the code under rcu_read_lock_sched().
->
->    + Cast (struct mod_kallsyms *)mod->kallsyms when accessing
->      the value.
-
-I prefer the first option.
-
-> I do not have strong preference. I am fine with both.
->
-> Anyway, such a fix should be done in a separate patch!
-
-Agreed.
+Firstly, thank you for your feedback. Fair enough and noted.
 
 
 Kind regards,
