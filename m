@@ -2,41 +2,66 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AB84C433F5
-	for <linux-modules@archiver.kernel.org>; Fri, 25 Feb 2022 10:15:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F24EC433F5
+	for <linux-modules@archiver.kernel.org>; Fri, 25 Feb 2022 10:27:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238985AbiBYKQ2 (ORCPT
+        id S239448AbiBYK2H (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 25 Feb 2022 05:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        Fri, 25 Feb 2022 05:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbiBYKQ2 (ORCPT
+        with ESMTP id S238179AbiBYK2G (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 25 Feb 2022 05:16:28 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF368239D56;
-        Fri, 25 Feb 2022 02:15:55 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A2F471F383;
-        Fri, 25 Feb 2022 10:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645784154; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 25 Feb 2022 05:28:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2325C403C6
+        for <linux-modules@vger.kernel.org>; Fri, 25 Feb 2022 02:27:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645784853;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=SGfc/78bTy+CB9nIZC7tP+8SZf15fx20SODiM5dDyOM=;
-        b=E/ofbkMDCo00t2R49q0Uy0Av2MLO3f/8iFb+XnXjzjTMMjxsSQpay1q0oRg0sidxGgJ1sO
-        MwRcIxJmcOGBnXr8MbVNe1Woot/YGBWsbXQ+0tWGF7ZC+q7AD/5VTNXXbqisUFi0J7u3QZ
-        4iW7Y9YmCiNLTl0DnVhaqP6fZ09SwXE=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5CF04A3B84;
-        Fri, 25 Feb 2022 10:15:54 +0000 (UTC)
-Date:   Fri, 25 Feb 2022 11:15:54 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        bh=pcLo8HhUCSEqzQ84MhXy0mil81lymk7/0Pm/pFQBlcI=;
+        b=Fgargy+4abgLRL7cgIsrhFft3hbVUmVVW0S2Dd8/MD7rmJmOoGN5oILsNCf5YUwHH/4c0/
+        vBhvxOBDWq5DPiZ6notfO+ZVxJ/KO/xTnc7JZcvkfUcjHjA53vFimkQFdWSrE9r+24o+TM
+        yx/oHUVlhslIGQvBmaLC1SThGrJAo6A=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-389-0SENw2cvNmexXrzgF1okXA-1; Fri, 25 Feb 2022 05:27:31 -0500
+X-MC-Unique: 0SENw2cvNmexXrzgF1okXA-1
+Received: by mail-lf1-f71.google.com with SMTP id q26-20020ac25a1a000000b00443f0462692so831451lfn.20
+        for <linux-modules@vger.kernel.org>; Fri, 25 Feb 2022 02:27:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pcLo8HhUCSEqzQ84MhXy0mil81lymk7/0Pm/pFQBlcI=;
+        b=jkIU8OKHb9mRgBV6y+trmnBD+gVbItYsLDi3rdkkxtocRJeQgFnaqUatNRjaaeYWyL
+         e/NfElqSVLWbeXWd/zobuHpNpbFGdnAnbjf3aH4/cj7i08kbqV4yYwCa8cMdG5Jtwqpq
+         YAiwcThQmWbS855f4DhmJjIKdVNcq43wMxZtDBarb1xNById1eBdPLQZ5ZNOgzug8G2G
+         275xdFg3oLC1Iv+Pq465VJwuABX9DhwPNr487e3eXmtabJCD6WlduYrIpvciHt63qrwu
+         1zXt25pd6HbuZeuRWHdtN378lfSM/DmSz4FShS9ou7ZaZOoojUOPYjIIGdFzGsPKhxdz
+         xEQA==
+X-Gm-Message-State: AOAM530tAWcZG7gKJaOSbHifiumXu2BqOZf6uKU3k3mVq1lanPZX4kiz
+        CrkL3RXe+1LWezTHAF7P6jCK0QGlXuGP8AR8n6zuZOiJuly8QFZfaWqrBnblwks+ZnBWbTANdmH
+        koO4SV1+5ZLj6uij0+ntMmDBJgsc05A6LWL4oJ5xo
+X-Received: by 2002:a05:6512:308b:b0:443:5f54:dcae with SMTP id z11-20020a056512308b00b004435f54dcaemr4846369lfd.79.1645784850338;
+        Fri, 25 Feb 2022 02:27:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx6MuhF+6LgSmAzEnwAwFmkG/DIt24tdoXVZYwMo+3YeU7eVOth2LXsJ+KD91+fuf1AW9YgqMKzzAi1acqvL5Q=
+X-Received: by 2002:a05:6512:308b:b0:443:5f54:dcae with SMTP id
+ z11-20020a056512308b00b004435f54dcaemr4846362lfd.79.1645784850156; Fri, 25
+ Feb 2022 02:27:30 -0800 (PST)
+MIME-Version: 1.0
+References: <20220222141303.1392190-1-atomlin@redhat.com> <20220222141303.1392190-10-atomlin@redhat.com>
+ <YhieKf9EcS3GQSXG@alley> <f9449aa6-be9d-9021-66e7-fb0272909ee7@csgroup.eu> <YhisWkgZCK8dz5fl@alley>
+In-Reply-To: <YhisWkgZCK8dz5fl@alley>
+From:   Aaron Tomlin <atomlin@redhat.com>
+Date:   Fri, 25 Feb 2022 10:27:18 +0000
+Message-ID: <CANfR36gsRw26C3M0hXGGK2w_05pC0rzkhg0-3Q+8tr_XxLiqiw@mail.gmail.com>
+Subject: Re: [PATCH v8 09/13] module: Move kallsyms support into a separate file
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         "mcgrof@kernel.org" <mcgrof@kernel.org>,
         "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
@@ -49,103 +74,56 @@ Cc:     Aaron Tomlin <atomlin@redhat.com>,
         "joe@perches.com" <joe@perches.com>,
         "msuchanek@suse.de" <msuchanek@suse.de>,
         "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Subject: Re: [PATCH v8 09/13] module: Move kallsyms support into a separate
- file
-Message-ID: <YhisWkgZCK8dz5fl@alley>
-References: <20220222141303.1392190-1-atomlin@redhat.com>
- <20220222141303.1392190-10-atomlin@redhat.com>
- <YhieKf9EcS3GQSXG@alley>
- <f9449aa6-be9d-9021-66e7-fb0272909ee7@csgroup.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f9449aa6-be9d-9021-66e7-fb0272909ee7@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri 2022-02-25 09:27:33, Christophe Leroy wrote:
-> 
-> 
-> Le 25/02/2022 à 10:15, Petr Mladek a écrit :
-> > On Tue 2022-02-22 14:12:59, Aaron Tomlin wrote:
-> >> No functional change.
-> > 
-> > The patch adds rcu_dereference_sched() into several locations.
-> > It triggers lockdep warnings, see below.
-> > 
-> > It is good example why avoid any hidden changes when shuffling
-> > code. The changes in the code should be done in a preparatory
-> > patch or not at all.
-> > 
-> > This patch is even worse because these changes were not
-> > mentioned in the commit message. It should describe what
-> > is done and why.
-> > 
-> > I wonder how many other changes are hidden in this patchset
-> > and if anyone really checked them.
-> 
-> That's probably my fault, when I reviewed version v5 of the series I 
-> mentionned all checkpatch and sparse reports asking Aaron to make his 
-> series exempt of such warnings. Most warnings where related to style 
-> (parenthesis alignment, blank lines, spaces, etc ...) or erroneous 
-> casting etc....
-> 
-> But for that particular patch we had:
-> 
-> kernel/module/kallsyms.c:174:23: warning: incorrect type in assignment 
-> (different address spaces)
-> kernel/module/kallsyms.c:174:23:    expected struct mod_kallsyms 
-> [noderef] __rcu *kallsyms
-> kernel/module/kallsyms.c:174:23:    got void *
-> kernel/module/kallsyms.c:176:12: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:177:12: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:179:12: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:180:12: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:189:18: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:190:35: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:191:20: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:196:32: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:199:45: warning: dereference of noderef expression
-> 
-> Aaron used rcu_dereference_sched() in order to fix that.
-> 
-> How should this be fixed if using rcu_dereference_sched() is not correct ?
+On Fri 2022-02-25 11:15 +0100, Petr Mladek wrote:
+> rcu_dereference_sched() makes sparse happy. But lockdep complains
+> because the _rcu pointer is not accessed under:
+>
+>     rcu_read_lock_sched();
+>     rcu_read_unlock_sched();
 
-IMHO, sparse complains that _rcu pointer is not accessed using RCU
-API.
+Hi Petr,
 
-rcu_dereference_sched() makes sparse happy. But lockdep complains
-because the _rcu pointer is not accessed under:
+>
+> This is not the case here. Note that module_mutex does not
+> disable preemtion.
+>
+> Now, the code is safe. The RCU access makes sure that "mod"
+> can't be freed in the meantime:
+>
+>    + add_kallsyms() is called by the module loaded when the module
+>      is being loaded. It could not get removed in parallel
+>      by definition.
+>
+>    + module_kallsyms_on_each_symbol() takes module_mutex.
+>      It means that the module could not get removed.
 
-	rcu_read_lock_sched();
-	rcu_read_unlock_sched();
+Indeed, which is why I did not use rcu_read_lock_sched() and
+rcu_read_unlock_sched() with rcu_dereference_sched(). That being said, I
+should have mentioned this in the commit message.
 
-This is not the case here. Note that module_mutex does not
-disable preemtion.
+> IMHO, we have two possibilities here:
+>
+>    + Make sparse and lockdep happy by using rcu_dereference_sched()
+>      and calling the code under rcu_read_lock_sched().
+>
+>    + Cast (struct mod_kallsyms *)mod->kallsyms when accessing
+>      the value.
 
-Now, the code is safe. The RCU access makes sure that "mod"
-can't be freed in the meantime:
+I prefer the first option.
 
-   + add_kallsyms() is called by the module loaded when the module
-     is being loaded. It could not get removed in parallel
-     by definition.
+> I do not have strong preference. I am fine with both.
+>
+> Anyway, such a fix should be done in a separate patch!
 
-   + module_kallsyms_on_each_symbol() takes module_mutex.
-     It means that the module could not get removed.
+Agreed.
 
 
-IMHO, we have two possibilities here:
+Kind regards,
 
-   + Make sparse and lockdep happy by using rcu_dereference_sched()
-     and calling the code under rcu_read_lock_sched().
+-- 
+Aaron Tomlin
 
-   + Cast (struct mod_kallsyms *)mod->kallsyms when accessing
-     the value.
-
-I do not have strong preference. I am fine with both.
-
-Anyway, such a fix should be done in a separate patch!
-
-Best Regards,
-Petr
