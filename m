@@ -2,185 +2,125 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 128A1C433EF
-	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 12:06:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2760C433EF
+	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 13:05:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbiB1MHN (ORCPT
+        id S234097AbiB1NGA (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 28 Feb 2022 07:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
+        Mon, 28 Feb 2022 08:06:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiB1MHM (ORCPT
+        with ESMTP id S232613AbiB1NF7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 28 Feb 2022 07:07:12 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A126517A;
-        Mon, 28 Feb 2022 04:06:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646049993; x=1677585993;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UuAla6m/V0nIds1h63OYuJUqlKC4Nbr7PiBMOfpW4x8=;
-  b=jPQZeZG1dsVTfZWgsHod9odxTpBdBqz6O9VHekiv25zvOT8VgVa13iej
-   koKmTZiMc83mZJHQfdGMUAqeoc91KaPghy9MryeFOwDkLVM9CbdHBynIu
-   yXsRK4kmSSgEnd25DccoXSp05nVLDv15Re5yflra5VvlXtIHKLGZ9r3Jp
-   ImcSpXZHP5t5dixXyMykxDoSs4NCL2LEYC+WYxJ/b30Hz6HbfZv8BZ0Gz
-   eu26Tb4ZHDhGSn3/NJ7yAerOtCOJdWK0HeF/5pvjmImxhF4IAOBWbqtvQ
-   AdQsu5Xvy4eCA2R9wmIW5tEyzxPV6Zv6hZlDjGjbrceVzz5dmvq7ZctQb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10271"; a="313584614"
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="313584614"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 04:06:33 -0800
-X-IronPort-AV: E=Sophos;i="5.90,142,1643702400"; 
-   d="scan'208";a="608431456"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 04:06:29 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nOekU-009IH6-OV;
-        Mon, 28 Feb 2022 14:03:30 +0200
-Date:   Mon, 28 Feb 2022 14:03:30 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Maninder Singh <maninder1.s@samsung.com>
-Cc:     mcgrof@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.or,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com
-Subject: Re: [PATCH 1/1] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
- disabled
-Message-ID: <Yhy6EtP/Yr03bHTl@smile.fi.intel.com>
-References: <CGME20220228053457epcas5p1dac3fced39d1594f8fdfc5e64e23ac73@epcas5p1.samsung.com>
- <20220228053447.1584704-1-maninder1.s@samsung.com>
+        Mon, 28 Feb 2022 08:05:59 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067F758388;
+        Mon, 28 Feb 2022 05:05:21 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9D5AE2197F;
+        Mon, 28 Feb 2022 13:05:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646053519; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EGyRPRJIpDnI4KGJdXL5GmjwMNnIG6JNSwMxITOgGUo=;
+        b=dbePSzv6701PxPA9P7l85kE97XexBm780M6pFmAJcw9KHylON1VSAWXCKn5SYnjDjzBDkm
+        2ZlsIRmV5WTId5yZpyA/VYn1WoIgCJajVXXu/45UJi25VHIkkJwR4YHy9nmoKFa4iwY7r7
+        rcQxa0lpu3jl3r7++1KDLuk6fE9wO3U=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 579AEA3B83;
+        Mon, 28 Feb 2022 13:05:19 +0000 (UTC)
+Date:   Mon, 28 Feb 2022 14:05:16 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "void@manifault.com" <void@manifault.com>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
+Subject: Re: [PATCH v8 04/13] module: Move livepatch support to a separate
+ file
+Message-ID: <YhzIjPYNw2tA4GmS@alley>
+References: <20220222141303.1392190-1-atomlin@redhat.com>
+ <20220222141303.1392190-5-atomlin@redhat.com>
+ <Yhiik2ledqAfGuN2@alley>
+ <fb1bb248-bd3f-0990-cdfd-d186b7579411@csgroup.eu>
+ <YhyqaGO+vbGOifpR@alley>
+ <ed8bb968-0a88-39cf-f388-032e8c205df7@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220228053447.1584704-1-maninder1.s@samsung.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ed8bb968-0a88-39cf-f388-032e8c205df7@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Feb 28, 2022 at 11:04:47AM +0530, Maninder Singh wrote:
-> with commit '82b37e632513 ("kallsyms: print module name in %ps/S
-> case when KALLSYMS is disabled"), module name printing was enhanced.
+On Mon 2022-02-28 11:46:33, Christophe Leroy wrote:
 > 
-> As per suggestion from Petr Mladek <pmladek@suse.com>, covering
-> other flavours also to print build id also.
 > 
-> for %pB no change as it needs to know symbol name to adjust address
-> value which can't be done without KALLSYMS.
+> Le 28/02/2022 à 11:56, Petr Mladek a écrit :
+> > On Fri 2022-02-25 16:49:31, Christophe Leroy wrote:
+> >> Le 25/02/2022 à 10:34, Petr Mladek a écrit :
+> >>>
+> >>> Please do not do these small coding style changes. It complicates the
+> >>> review and increases the risk of regressions. Different people
+> >>> have different preferences. Just imagine that every half a year
+> >>> someone update style of a code by his personal preferences. The
+> >>> real changes will then get lost in a lot of noise.
+> >>
+> >> I disagree here. We are not talking about people's preference here but
+> >> compliance with documented Linux kernel Codying Style and handling of
+> >> official checkpatch.pl script reports.
+> > 
+> > Really?
+> > 
+> > 1. I restored
+> > 
+> > 	+	if (mod->klp_info->secstrings == NULL) {
+> > 
+> >     and checkpatch.pl is happy.
 > 
-> original output with KALLSYMS:
-> [8.842129] ps function_1 [crash]
-> [8.842735] pS function_1+0x4/0x2c [crash]
-> [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> [8.843175] pB function_1+0x4/0x2c [crash]
-> [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> On mainline's kernel/module.c checkpatch.pl tells me:
 > 
-> original output without KALLSYMS:
-> [12.487424] ps 0xffff800000eb008c
-> [12.487598] pS 0xffff800000eb008c
-> [12.487723] pSb 0xffff800000eb008c
-> [12.487850] pB 0xffff800000eb008c
-> [12.487967] pBb 0xffff800000eb008c
+> CHECK: Comparison to NULL could be written "!mod->klp_info->secstrings"
+> #2092: FILE: kernel/module.c:2092:
+> +	if (mod->klp_info->secstrings == NULL) {
+
+Only with --strict option. Alias of this option is --subjective...
+
+> By the way some maintainers require checkpatch' clean patches even when 
+> this is only code move. I remember being requested to do that in the 
+> past, so now I almost always do it with my own patches.
+
+I see.
+
+From my POV, checkpatch is an useful tool for finding obvious mistakes.
+But it is just a best effort approach. It has false positives. And
+some complains are controversial.
+
+BTW: I have never heard about --strict/--subjective option. I wonder
+if some maintainer requires it.
+
+> > I would not have complained if it did not complicate my review.
+> > But it did!
 > 
-> With patched kernel without KALLSYMS:
-> [9.205207] ps 0xffff800000eb008c [crash]
-> [9.205564] pS 0xffff800000eb0000+0x8c [crash]
-> [9.205757] pSb 0xffff800000eb0000+0x8c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> [9.206066] pB 0xffff800000eb0000+0x8c [crash]
-> [9.206257] pBb 0xffff800000eb0000+0x8c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> Reviewing partial code move is not easy anyway, git is not very 
+> userfriendly with that.
 
-...
+Exactly. It is a real pain to find changes in moved functions. It is
+much easier when the author just shuffled the code. Anyway, the less
+changes the better.
 
-> +static int sprint_module_info(char *buf, char *end, unsigned long value,
-> +			     const char *fmt)
-> +{
-> +	struct module *mod;
-> +	unsigned long offset = 1;
-> +	unsigned long base;
-
-> +	int ret = 0;
-
-This is hard to find if it's not close to the first use.
-Since you are using positive numbers...
-
-> +	const char *modname;
-> +	int modbuildid = 0;
-> +	int len;
-> +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-> +	const unsigned char *buildid = NULL;
-> +#endif
-> +
-> +	if (is_ksym_addr(value))
-> +		return 0;
-
-> +	if (*fmt == 'B' && fmt[1] == 'b')
-> +		modbuildid = 1;
-> +	else if (*fmt == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b')))
-
-Why not to split to two conditionals? Would be easier to get,
-
-> +		modbuildid = 1;
-> +	else if (*fmt != 's') {
-
-These all are inconsistent, please switch to fmt[0].
-
-> +		/*
-> +		 * do nothing.
-> +		 */
-> +	} else
-> +		offset = 0;
-> +
-> +	preempt_disable();
-> +	mod = __module_address(value);
-> +	if (mod) {
-> +		ret = 1;
-> +		modname = mod->name;
-> +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-> +		if (modbuildid)
-> +			buildid = mod->build_id;
-> +#endif
-> +		if (offset) {
-> +			base = (unsigned long)mod->core_layout.base;
-> +			offset = value - base;
-> +		}
-> +	}
-> +
-> +	preempt_enable();
-
-> +	if (!ret)
-
-This looks a bit strange, but okay, I'm not familiar with the function of this
-code.
-
-> +		return 0;
-> +
-> +	/* address belongs to module */
-> +	if (offset)
-> +		len = sprintf(buf, "0x%lx+0x%lx", base, offset);
-> +	else
-> +		len = sprintf(buf, "0x%lx", value);
-> +
-> +	len += sprintf(buf + len, " [%s", modname);
-> +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-> +	if (modbuildid && buildid) {
-> +		/* build ID should match length of sprintf */
-> +		static_assert(sizeof(typeof_member(struct module, build_id)) == 20);
-> +		len += sprintf(buf + len, " %20phN", buildid);
-> +	}
-> +#endif
-> +	len += sprintf(buf + len, "]");
-> +
-> +	return len;
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Best Regards,
+Petr
