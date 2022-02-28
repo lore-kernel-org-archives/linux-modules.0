@@ -2,125 +2,99 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2760C433EF
-	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 13:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AF68C433F5
+	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 15:35:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234097AbiB1NGA (ORCPT
+        id S236750AbiB1PgY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 28 Feb 2022 08:06:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
+        Mon, 28 Feb 2022 10:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbiB1NF7 (ORCPT
+        with ESMTP id S230080AbiB1PgX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:05:59 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067F758388;
-        Mon, 28 Feb 2022 05:05:21 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9D5AE2197F;
-        Mon, 28 Feb 2022 13:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646053519; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EGyRPRJIpDnI4KGJdXL5GmjwMNnIG6JNSwMxITOgGUo=;
-        b=dbePSzv6701PxPA9P7l85kE97XexBm780M6pFmAJcw9KHylON1VSAWXCKn5SYnjDjzBDkm
-        2ZlsIRmV5WTId5yZpyA/VYn1WoIgCJajVXXu/45UJi25VHIkkJwR4YHy9nmoKFa4iwY7r7
-        rcQxa0lpu3jl3r7++1KDLuk6fE9wO3U=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 579AEA3B83;
-        Mon, 28 Feb 2022 13:05:19 +0000 (UTC)
-Date:   Mon, 28 Feb 2022 14:05:16 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Subject: Re: [PATCH v8 04/13] module: Move livepatch support to a separate
- file
-Message-ID: <YhzIjPYNw2tA4GmS@alley>
-References: <20220222141303.1392190-1-atomlin@redhat.com>
- <20220222141303.1392190-5-atomlin@redhat.com>
- <Yhiik2ledqAfGuN2@alley>
- <fb1bb248-bd3f-0990-cdfd-d186b7579411@csgroup.eu>
- <YhyqaGO+vbGOifpR@alley>
- <ed8bb968-0a88-39cf-f388-032e8c205df7@csgroup.eu>
+        Mon, 28 Feb 2022 10:36:23 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8943269CD1;
+        Mon, 28 Feb 2022 07:35:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GNPd2mBhTgr/5Zdb0t0XFMB2uX9xNt+6bXBEBE0PVvc=; b=5CuTzGzBCJfw5uqXXDfM577KCE
+        nH/HWTEjZNDCGG2goDLArSLnuJswpiT0GVi9HiV7zGyKUYv4+GXWbL6h7vGyCsRJZ3fQUs3MO4XDE
+        z2zjrlhrfVdxuSlV8W7gBfilrj/+3A412Qps3U2OCTnkf+UdHE5N+qIGhJ9XIdFRJ8fmkzMkhoYbt
+        spf6tjl2zmXFK5X3O0pP7kAmBfPRKKzvrWDAX32uIia4YZ4XhyZ33c36Jje9GMd1xGMQFbDdDDW5M
+        T788IZBcY9QXyFF3L4HLDFYXRY6UT5thMGKVICtpzaej9pwe090e0gfV7I7v7CKHZbpnE1ldrjDYp
+        nbYi1APQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nOi3g-00DAcP-06; Mon, 28 Feb 2022 15:35:32 +0000
+Date:   Mon, 28 Feb 2022 07:35:31 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.or,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        avimalin@gmail.com, atomlin@redhat.com
+Subject: Re: [PATCH 1/1] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
+ disabled
+Message-ID: <YhzrwwqGTFKVCiFy@bombadil.infradead.org>
+References: <CGME20220228053457epcas5p1dac3fced39d1594f8fdfc5e64e23ac73@epcas5p1.samsung.com>
+ <20220228053447.1584704-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ed8bb968-0a88-39cf-f388-032e8c205df7@csgroup.eu>
+In-Reply-To: <20220228053447.1584704-1-maninder1.s@samsung.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon 2022-02-28 11:46:33, Christophe Leroy wrote:
+On Mon, Feb 28, 2022 at 11:04:47AM +0530, Maninder Singh wrote:
+> with commit '82b37e632513 ("kallsyms: print module name in %ps/S
+> case when KALLSYMS is disabled"), module name printing was enhanced.
 > 
+> As per suggestion from Petr Mladek <pmladek@suse.com>, covering
+> other flavours also to print build id also.
 > 
-> Le 28/02/2022 à 11:56, Petr Mladek a écrit :
-> > On Fri 2022-02-25 16:49:31, Christophe Leroy wrote:
-> >> Le 25/02/2022 à 10:34, Petr Mladek a écrit :
-> >>>
-> >>> Please do not do these small coding style changes. It complicates the
-> >>> review and increases the risk of regressions. Different people
-> >>> have different preferences. Just imagine that every half a year
-> >>> someone update style of a code by his personal preferences. The
-> >>> real changes will then get lost in a lot of noise.
-> >>
-> >> I disagree here. We are not talking about people's preference here but
-> >> compliance with documented Linux kernel Codying Style and handling of
-> >> official checkpatch.pl script reports.
-> > 
-> > Really?
-> > 
-> > 1. I restored
-> > 
-> > 	+	if (mod->klp_info->secstrings == NULL) {
-> > 
-> >     and checkpatch.pl is happy.
+> for %pB no change as it needs to know symbol name to adjust address
+> value which can't be done without KALLSYMS.
 > 
-> On mainline's kernel/module.c checkpatch.pl tells me:
+> original output with KALLSYMS:
+> [8.842129] ps function_1 [crash]
+> [8.842735] pS function_1+0x4/0x2c [crash]
+> [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> [8.843175] pB function_1+0x4/0x2c [crash]
+> [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
 > 
-> CHECK: Comparison to NULL could be written "!mod->klp_info->secstrings"
-> #2092: FILE: kernel/module.c:2092:
-> +	if (mod->klp_info->secstrings == NULL) {
-
-Only with --strict option. Alias of this option is --subjective...
-
-> By the way some maintainers require checkpatch' clean patches even when 
-> this is only code move. I remember being requested to do that in the 
-> past, so now I almost always do it with my own patches.
-
-I see.
-
-From my POV, checkpatch is an useful tool for finding obvious mistakes.
-But it is just a best effort approach. It has false positives. And
-some complains are controversial.
-
-BTW: I have never heard about --strict/--subjective option. I wonder
-if some maintainer requires it.
-
-> > I would not have complained if it did not complicate my review.
-> > But it did!
+> original output without KALLSYMS:
+> [12.487424] ps 0xffff800000eb008c
+> [12.487598] pS 0xffff800000eb008c
+> [12.487723] pSb 0xffff800000eb008c
+> [12.487850] pB 0xffff800000eb008c
+> [12.487967] pBb 0xffff800000eb008c
 > 
-> Reviewing partial code move is not easy anyway, git is not very 
-> userfriendly with that.
+> With patched kernel without KALLSYMS:
+> [9.205207] ps 0xffff800000eb008c [crash]
+> [9.205564] pS 0xffff800000eb0000+0x8c [crash]
+> [9.205757] pSb 0xffff800000eb0000+0x8c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> [9.206066] pB 0xffff800000eb0000+0x8c [crash]
+> [9.206257] pBb 0xffff800000eb0000+0x8c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> 
+> Suggested-by: Petr Mladek <pmladek@suse.com>
+> Co-developed-by: Vaneet Narang <v.narang@samsung.com>
+> Signed-off-by: Vaneet Narang <v.narang@samsung.com>
+> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+> ---
+> earlier discussion: https://lkml.org/lkml/2022/2/10/185
+> 
+>  include/linux/kallsyms.h | 27 --------------
+>  kernel/module.c          |  4 +--
 
-Exactly. It is a real pain to find changes in moved functions. It is
-much easier when the author just shuffled the code. Anyway, the less
-changes the better.
+See Aaron's work which you'll need to base your work on:
 
-Best Regards,
-Petr
+https://lkml.kernel.org/r/20220222141303.1392190-1-atomlin@redhat.com
+
+Soon Aaron will post a v9.
+
+  Luis
