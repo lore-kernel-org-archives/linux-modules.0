@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8712C433EF
-	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 23:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4C5CC433F5
+	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 23:44:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbiB1Xom (ORCPT
+        id S231688AbiB1Xoq (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 28 Feb 2022 18:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
+        Mon, 28 Feb 2022 18:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiB1Xof (ORCPT
+        with ESMTP id S231693AbiB1Xol (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 28 Feb 2022 18:44:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13B8BF65E8
-        for <linux-modules@vger.kernel.org>; Mon, 28 Feb 2022 15:43:46 -0800 (PST)
+        Mon, 28 Feb 2022 18:44:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B26A8FBA4A
+        for <linux-modules@vger.kernel.org>; Mon, 28 Feb 2022 15:43:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646091824;
+        s=mimecast20190719; t=1646091829;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EwM5m/UKCLcQUodhjTTwfqA0OAG1WbMnIR0FKcI9qsQ=;
-        b=Zk7Fh6DY9h6kQ0iGCvQBK6bEPnZaOmNSWOq9kpYVenB8+QqyiywrtrVnqeZk09nLKQDT59
-        OSqHvipoHDYXUMq1pgsuJUxL7BxfzmrolrEnMq8wumMOnXS8+PunzfEgJKnA9YgZoACW4r
-        hq3ASQ3uFrDHfpX6PFvYekYZZ5lfIO0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=nlcVw0WJ8YWnydchI7778Sj1W6AqsxSBROpPSypOfl0=;
+        b=jMXBTMyBieodkQ8Q4xoeABhYVDgpcxjrEWfYRVnvumd5ZIz4BmzhrBPRb0Nvj0GA5rKggD
+        F72R6WVdbVPSQWhZAtzvNNfF31Fbt6x082t5ZBRyIeArOhVid3bv/RfFVZgJPUIVo4e/Si
+        E0UdAaWYfNqfsBPG69SS15w72ufrRCs=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-DoC1WUgxPT2BJii6VjQiGQ-1; Mon, 28 Feb 2022 18:43:43 -0500
-X-MC-Unique: DoC1WUgxPT2BJii6VjQiGQ-1
-Received: by mail-wr1-f70.google.com with SMTP id c16-20020adfa310000000b001ed9cd8f4c7so2587090wrb.6
-        for <linux-modules@vger.kernel.org>; Mon, 28 Feb 2022 15:43:43 -0800 (PST)
+ us-mta-658-MCdYU7BFPp2vXudET0mJSw-1; Mon, 28 Feb 2022 18:43:47 -0500
+X-MC-Unique: MCdYU7BFPp2vXudET0mJSw-1
+Received: by mail-wr1-f69.google.com with SMTP id ay18-20020a5d6f12000000b001efe36eb038so1135664wrb.17
+        for <linux-modules@vger.kernel.org>; Mon, 28 Feb 2022 15:43:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EwM5m/UKCLcQUodhjTTwfqA0OAG1WbMnIR0FKcI9qsQ=;
-        b=1x2niq9t41bcCII6TLR68ZCZ7XGU28Qoyv4SGFSKjnOMb0VAmHsVZ8sC3jjE6YpS2a
-         C5iPJxgWQLZ/XRiC5i30t3qovFoKyRUnJS7ITRxW2rF6h1BFn/4b6QXFavmLzVNtEhwf
-         +WnZRlWUWPtIl7kO5apYdhEk0yU2RcGgdWMpAlMXsdTMzT33Rg5gdo929zEBL5PfhPBP
-         A/7matQqeGvLnQla7ad4Ta3jUQ2ZgbyHtlEEUcBKmVCz6ry/Y+IjWBI4D64EFhWjpWw9
-         lKr3mlUzPRuYoyAFf/KxZnI1KOQvIk/oKL53M2G9DiNXjTanPHdBVPwcdVEeKlBRsY/f
-         0urQ==
-X-Gm-Message-State: AOAM532m6rEPxneiHt9sHUnFmbLrNkCs76DGzu5dFK3dzPsbMjnlKb0o
-        34ZuK93PIaAdU3z02O5Tne5iDwTWU01IrD53b/kFEHOoj6dpCM4MduKdxb7wwBdecTE7faMOuwG
-        33a/DWHtV2Pgr2j5Apn0DjcqX
-X-Received: by 2002:a1c:f018:0:b0:37b:c13c:3128 with SMTP id a24-20020a1cf018000000b0037bc13c3128mr15097532wmb.157.1646091822459;
-        Mon, 28 Feb 2022 15:43:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy+4fYogLlmhuNJHUQ1RmfC1W07I7eRCsAhMjKOwd1wZsDBbRfAVkVNhDUWlG5e6Oni4xYfcQ==
-X-Received: by 2002:a1c:f018:0:b0:37b:c13c:3128 with SMTP id a24-20020a1cf018000000b0037bc13c3128mr15097522wmb.157.1646091822292;
-        Mon, 28 Feb 2022 15:43:42 -0800 (PST)
+        bh=nlcVw0WJ8YWnydchI7778Sj1W6AqsxSBROpPSypOfl0=;
+        b=Bv1aDYk7Y8zBzHRTcfL/hwK6FDeo7pW22fb/sBk69joGFoREh6Cy2zgCFzpDdqJnWf
+         hnW3IvgJsfLMuTg0SSmfoRQERa+JKJZhOMSSww3VWPEdQWEeXsC2aRtcFTjqd4k84FOL
+         4KE7l0Mi4zlnVkzPkS6V0MsypGAb6YHqZXsQb/BvJSH1hhfOmcfJbGkHea+ttxQZWp+C
+         SPIMZ/zLqdTLRjbUVdusv7Pw23iji/z4MFDr3LULmxrpaXrYLA140G+XoNswJzGU0tRS
+         P0w1A1dBUDVH+6qOnbc/zA4lNGyB+/L9DFKA3KmLaeFUQNrS3y6IGsapoMsBe1VHhwiH
+         Safw==
+X-Gm-Message-State: AOAM532tL5JO95eqZ1oWOSdL7OYR5MS7czsTkTsFo4fnJDmYcpbRerxE
+        L6J8jtjjP2MBVKylf8vEcFJRVFQFlUFaNCJtfHK8feuEVgbE6PvDa/4wJWlIehYncZ6Lgy+HNSi
+        LzXhMjE82ek9gjEA9wp35hp4R
+X-Received: by 2002:adf:e5c1:0:b0:1ed:bf25:b924 with SMTP id a1-20020adfe5c1000000b001edbf25b924mr16853876wrn.136.1646091826497;
+        Mon, 28 Feb 2022 15:43:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw8G0j/K/4wCVW0BgGU1xWfpER4AoHHKdVwVoErwge2rAdB5beHRqvNp7GEiuUT3guLZKqvPw==
+X-Received: by 2002:adf:e5c1:0:b0:1ed:bf25:b924 with SMTP id a1-20020adfe5c1000000b001edbf25b924mr16853862wrn.136.1646091826312;
+        Mon, 28 Feb 2022 15:43:46 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id z3-20020a1cf403000000b0037d1f4a2201sm782025wma.21.2022.02.28.15.43.40
+        by smtp.gmail.com with ESMTPSA id v5-20020a05600c15c500b003810188b6basm708451wmf.28.2022.02.28.15.43.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 15:43:41 -0800 (PST)
+        Mon, 28 Feb 2022 15:43:45 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, pmladek@suse.com
 Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
@@ -64,9 +64,9 @@ Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
         atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
         msuchanek@suse.de, oleksandr@natalenko.name,
         jason.wessel@windriver.com, daniel.thompson@linaro.org
-Subject: [PATCH v9 08/14] module: Move kmemleak support to a separate file
-Date:   Mon, 28 Feb 2022 23:43:16 +0000
-Message-Id: <20220228234322.2073104-9-atomlin@redhat.com>
+Subject: [PATCH v9 10/14] module: kallsyms: Fix suspicious rcu usage
+Date:   Mon, 28 Feb 2022 23:43:18 +0000
+Message-Id: <20220228234322.2073104-11-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220228234322.2073104-1-atomlin@redhat.com>
 References: <20220228234322.2073104-1-atomlin@redhat.com>
@@ -77,117 +77,88 @@ List-ID: <linux-modules.vger.kernel.org>
 
 No functional change.
 
-This patch migrates kmemleak code out of core module
-code into kernel/module/debug_kmemleak.c
+The purpose of this patch is to address the various Sparse warnings
+due to the incorrect dereference/or access of an __rcu pointer.
 
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- kernel/module/Makefile         |  1 +
- kernel/module/debug_kmemleak.c | 30 ++++++++++++++++++++++++++++++
- kernel/module/internal.h       |  7 +++++++
- kernel/module/main.c           | 27 ---------------------------
- 4 files changed, 38 insertions(+), 27 deletions(-)
- create mode 100644 kernel/module/debug_kmemleak.c
+ kernel/module/kallsyms.c | 34 ++++++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
 
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index d313c8472cb3..12388627725c 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -13,3 +13,4 @@ obj-$(CONFIG_MODULE_SIG) += signing.o
- obj-$(CONFIG_LIVEPATCH) += livepatch.o
- obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
- obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
-+obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
-diff --git a/kernel/module/debug_kmemleak.c b/kernel/module/debug_kmemleak.c
-new file mode 100644
-index 000000000000..12a569d361e8
---- /dev/null
-+++ b/kernel/module/debug_kmemleak.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module kmemleak support
-+ *
-+ * Copyright (C) 2009 Catalin Marinas
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/kmemleak.h>
-+#include "internal.h"
-+
-+void kmemleak_load_module(const struct module *mod,
-+			  const struct load_info *info)
-+{
-+	unsigned int i;
-+
-+	/* only scan the sections containing data */
-+	kmemleak_scan_area(mod, sizeof(struct module), GFP_KERNEL);
-+
-+	for (i = 1; i < info->hdr->e_shnum; i++) {
-+		/* Scan all writable sections that's not executable */
-+		if (!(info->sechdrs[i].sh_flags & SHF_ALLOC) ||
-+		    !(info->sechdrs[i].sh_flags & SHF_WRITE) ||
-+		    (info->sechdrs[i].sh_flags & SHF_EXECINSTR))
-+			continue;
-+
-+		kmemleak_scan_area((void *)info->sechdrs[i].sh_addr,
-+				   info->sechdrs[i].sh_size, GFP_KERNEL);
-+	}
-+}
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index d6f646a5da41..b0c360839f63 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -167,3 +167,10 @@ static inline int module_sig_check(struct load_info *info, int flags)
- 	return 0;
- }
- #endif /* !CONFIG_MODULE_SIG */
-+
-+#ifdef CONFIG_DEBUG_KMEMLEAK
-+void kmemleak_load_module(const struct module *mod, const struct load_info *info);
-+#else /* !CONFIG_DEBUG_KMEMLEAK */
-+static inline void kmemleak_load_module(const struct module *mod,
-+					const struct load_info *info) { }
-+#endif /* CONFIG_DEBUG_KMEMLEAK */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c63e10c61694..7dd283959c5c 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2519,33 +2519,6 @@ bool __weak module_exit_section(const char *name)
- 	return strstarts(name, ".exit");
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index 1b0780e20aab..a3da0686a2a6 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -171,14 +171,17 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
+ 	Elf_Shdr *symsec = &info->sechdrs[info->index.sym];
+ 
+ 	/* Set up to point into init section. */
+-	mod->kallsyms = mod->init_layout.base + info->mod_kallsyms_init_off;
++	mod->kallsyms = (void __rcu *)mod->init_layout.base +
++		info->mod_kallsyms_init_off;
+ 
++	preempt_disable();
+ 	/* The following is safe since this pointer cannot change */
+-	mod->kallsyms->symtab = (void *)symsec->sh_addr;
+-	mod->kallsyms->num_symtab = symsec->sh_size / sizeof(Elf_Sym);
++	rcu_dereference_sched(mod->kallsyms)->symtab = (void *)symsec->sh_addr;
++	rcu_dereference_sched(mod->kallsyms)->num_symtab = symsec->sh_size / sizeof(Elf_Sym);
+ 	/* Make sure we get permanent strtab: don't use info->strtab. */
+-	mod->kallsyms->strtab = (void *)info->sechdrs[info->index.str].sh_addr;
+-	mod->kallsyms->typetab = mod->init_layout.base + info->init_typeoffs;
++	rcu_dereference_sched(mod->kallsyms)->strtab =
++		(void *)info->sechdrs[info->index.str].sh_addr;
++	rcu_dereference_sched(mod->kallsyms)->typetab = mod->init_layout.base + info->init_typeoffs;
+ 
+ 	/*
+ 	 * Now populate the cut down core kallsyms for after init
+@@ -187,20 +190,22 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
+ 	mod->core_kallsyms.symtab = dst = mod->core_layout.base + info->symoffs;
+ 	mod->core_kallsyms.strtab = s = mod->core_layout.base + info->stroffs;
+ 	mod->core_kallsyms.typetab = mod->core_layout.base + info->core_typeoffs;
+-	src = mod->kallsyms->symtab;
+-	for (ndst = i = 0; i < mod->kallsyms->num_symtab; i++) {
+-		mod->kallsyms->typetab[i] = elf_type(src + i, info);
++	src = rcu_dereference_sched(mod->kallsyms)->symtab;
++	for (ndst = i = 0; i < rcu_dereference_sched(mod->kallsyms)->num_symtab; i++) {
++		rcu_dereference_sched(mod->kallsyms)->typetab[i] = elf_type(src + i, info);
+ 		if (i == 0 || is_livepatch_module(mod) ||
+ 		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
+ 				   info->index.pcpu)) {
+ 			mod->core_kallsyms.typetab[ndst] =
+-			    mod->kallsyms->typetab[i];
++			    rcu_dereference_sched(mod->kallsyms)->typetab[i];
+ 			dst[ndst] = src[i];
+ 			dst[ndst++].st_name = s - mod->core_kallsyms.strtab;
+-			s += strscpy(s, &mod->kallsyms->strtab[src[i].st_name],
++			s += strscpy(s,
++				     &rcu_dereference_sched(mod->kallsyms)->strtab[src[i].st_name],
+ 				     KSYM_NAME_LEN) + 1;
+ 		}
+ 	}
++	preempt_enable();
+ 	mod->core_kallsyms.num_symtab = ndst;
  }
  
--#ifdef CONFIG_DEBUG_KMEMLEAK
--static void kmemleak_load_module(const struct module *mod,
--				 const struct load_info *info)
--{
--	unsigned int i;
--
--	/* only scan the sections containing data */
--	kmemleak_scan_area(mod, sizeof(struct module), GFP_KERNEL);
--
--	for (i = 1; i < info->hdr->e_shnum; i++) {
--		/* Scan all writable sections that's not executable */
--		if (!(info->sechdrs[i].sh_flags & SHF_ALLOC) ||
--		    !(info->sechdrs[i].sh_flags & SHF_WRITE) ||
--		    (info->sechdrs[i].sh_flags & SHF_EXECINSTR))
--			continue;
--
--		kmemleak_scan_area((void *)info->sechdrs[i].sh_addr,
--				   info->sechdrs[i].sh_size, GFP_KERNEL);
--	}
--}
--#else
--static inline void kmemleak_load_module(const struct module *mod,
--					const struct load_info *info)
--{
--}
--#endif
--
- static int validate_section_offset(struct load_info *info, Elf_Shdr *shdr)
- {
- #if defined(CONFIG_64BIT)
+@@ -478,11 +483,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+ 
+ 	mutex_lock(&module_mutex);
+ 	list_for_each_entry(mod, &modules, list) {
+-		/* We hold module_mutex: no need for rcu_dereference_sched */
+-		struct mod_kallsyms *kallsyms = mod->kallsyms;
++		struct mod_kallsyms *kallsyms;
+ 
+ 		if (mod->state == MODULE_STATE_UNFORMED)
+ 			continue;
++
++		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
++		preempt_disable();
++		kallsyms = rcu_dereference_sched(mod->kallsyms);
++		preempt_enable();
++
+ 		for (i = 0; i < kallsyms->num_symtab; i++) {
+ 			const Elf_Sym *sym = &kallsyms->symtab[i];
+ 
 -- 
 2.34.1
 
