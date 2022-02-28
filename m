@@ -2,187 +2,225 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6673DC4167B
-	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 17:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D39ACC433F5
+	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 23:43:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbiB1RpV (ORCPT
+        id S231254AbiB1XoK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 28 Feb 2022 12:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        Mon, 28 Feb 2022 18:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238948AbiB1Rnd (ORCPT
+        with ESMTP id S230501AbiB1XoJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:43:33 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E709D7D03F;
-        Mon, 28 Feb 2022 09:35:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646069725; x=1677605725;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rL/LDGX5IsDnQdPbHkRMVK6CvzA1sOWyScOPv1bJ4b0=;
-  b=dDmyROAHI4NL7nBBSYLrOi7fMIQLN2NRJebbCBIZKl5PX0yX/hzIpsiB
-   xh1lLfM+T7oBIjkF58OC0nxi315w1mt2k6tuD6N+hgAWAxlBmK3ZHTbzG
-   NvW0I2deYZHHwzsKHNZNH8hLnrquoElaVUhew+F6A+TMwhtwa4bDSUcBj
-   mKOjSUZn/PpwUEO7UK4o9hJlzLl3QQ0tw1xruI2AYUDJ7Kj9HTyM5fUsM
-   sd4iW7jeR33QmsswMeYGbKZL08/KB+TiowggsqnCDfLCUgUztnt7To5UQ
-   6H0/E+xF5/XySC/a2i/EDq4ZSmbeAsy9x8sFo26YxHXag4hh1ghxrnTG/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="339373867"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="339373867"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:35:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="510174103"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 28 Feb 2022 09:35:14 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOjvW-0007ZQ-6k; Mon, 28 Feb 2022 17:35:14 +0000
-Date:   Tue, 1 Mar 2022 01:35:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Maninder Singh <maninder1.s@samsung.com>, mcgrof@kernel.org,
-        pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com
-Cc:     kbuild-all@lists.01.org, v.narang@samsung.com, swboyd@chromium.org,
-        ojeda@kernel.or, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, avimalin@gmail.com,
-        atomlin@redhat.com, Maninder Singh <maninder1.s@samsung.com>
-Subject: Re: [PATCH 1/1] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
- disabled
-Message-ID: <202202281853.EofvQRmv-lkp@intel.com>
-References: <20220228053447.1584704-1-maninder1.s@samsung.com>
+        Mon, 28 Feb 2022 18:44:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18A633EAA4
+        for <linux-modules@vger.kernel.org>; Mon, 28 Feb 2022 15:43:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646091807;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZsO5SHy1I6b3tB1bQC/KAIGXiQjK/513nyyjen0vjSM=;
+        b=XORK++K6tSZ4u8Xr87DYD8pxoliT8CxseS7x3d0Fv/XN4sJfQY/ZETDWhcZlwc0GoNbrRk
+        aZhMcgPRGzl+2ndRCMpyCnpET8pOUGlFmXbDzIMCsI2EWNKbGc/nUTMfU0TYqySRhNJ+QI
+        Hio/f+NKwaAF+CUmqHYP7CXtFFEoBg4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-467-sLWJD5DPNEyQTyhjyqcU4Q-1; Mon, 28 Feb 2022 18:43:25 -0500
+X-MC-Unique: sLWJD5DPNEyQTyhjyqcU4Q-1
+Received: by mail-wm1-f71.google.com with SMTP id i131-20020a1c3b89000000b0037bb9f6feeeso320571wma.5
+        for <linux-modules@vger.kernel.org>; Mon, 28 Feb 2022 15:43:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZsO5SHy1I6b3tB1bQC/KAIGXiQjK/513nyyjen0vjSM=;
+        b=Drz/oEIEFKEmgT6XIqdU17lEyzts9pGieCfBqoqpHQVZK3gDYSxSKAzd20b7qDD7F7
+         zRUiq1itfBcRAShqewOwz/zHFOFwJC73lhaByq1u4E0B4NRMEdPmOEVJxirD/1Q1B3Wg
+         49818g1St1e7sqSCGA8cavwtziLVQqOmyU2oXAlrcmarQ6egKbHoeOuxzKagmJJ6hpzm
+         TfDMAYQFwBKJI/JTcmQM67f1r7r5oHhz5hDVUZehtQbN+nim2JpCwbV0nuZ6Wtx7lN98
+         YQot8czG7CCchn4mZLViV8g4zaOESRgnBoUoEW/6M9iIW1U3I02MSb1HB6/JqYKHT5mM
+         fiMQ==
+X-Gm-Message-State: AOAM531GJIJTX0geY81BP5RVWPNiGxve5+gW0jb4ccn+3Ny8sxzBgy1o
+        gfyzqyjXpnG3nZ8BgwQIh0bmyxHwwtbGBOZnVu+bo0Y6Hy+QWwoQ7Mg/YkfBouxxx49Z+mRAtaX
+        zoY3p8OK0NHv+WRt1CYn8G75F
+X-Received: by 2002:adf:d1e8:0:b0:1ef:f9a5:b114 with SMTP id g8-20020adfd1e8000000b001eff9a5b114mr2439714wrd.537.1646091804519;
+        Mon, 28 Feb 2022 15:43:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyTsVJqE3C8HPuDzAECv2PXacc2nnmBw8TXmYZQASk8rOqjI2TxGaUw4M6jgOq6cQKp9W6w6w==
+X-Received: by 2002:adf:d1e8:0:b0:1ef:f9a5:b114 with SMTP id g8-20020adfd1e8000000b001eff9a5b114mr2439688wrd.537.1646091804298;
+        Mon, 28 Feb 2022 15:43:24 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id f17-20020adffcd1000000b001edbf438d83sm11866792wrs.32.2022.02.28.15.43.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 15:43:23 -0800 (PST)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, pmladek@suse.com
+Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, daniel.thompson@linaro.org
+Subject: [PATCH v9 00/14] module: core code clean up
+Date:   Mon, 28 Feb 2022 23:43:08 +0000
+Message-Id: <20220228234322.2073104-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228053447.1584704-1-maninder1.s@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi Maninder,
+Hi Luis,
 
-Thank you for the patch! Perhaps something to improve:
+As per your suggestion [1], this is an attempt to refactor and split
+optional code out of core module support code into separate components.
+This version is based on Linus' commit 7993e65fdd0f ("Merge tag
+'mtd/fixes-for-5.17-rc5' of
+git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux").
 
-[auto build test WARNING on hnaz-mm/master]
-[also build test WARNING on next-20220225]
-[cannot apply to mcgrof/modules-next linus/master v5.17-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Petr,
 
-url:    https://github.com/0day-ci/linux/commits/Maninder-Singh/kallsyms-enhance-pS-s-b-printing-when-KALLSYSMS-is-disabled/20220228-140105
-base:   https://github.com/hnaz/linux-mm master
-config: alpha-randconfig-r032-20220227 (https://download.01.org/0day-ci/archive/20220228/202202281853.EofvQRmv-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/fbad94837350bb7c5b1b0c33648f8b20eff0150a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Maninder-Singh/kallsyms-enhance-pS-s-b-printing-when-KALLSYSMS-is-disabled/20220228-140105
-        git checkout fbad94837350bb7c5b1b0c33648f8b20eff0150a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
+I decided to use preempt_disable() instead to remain consistent with the
+rest of the file. Unfortunately, I did not make time to boot test etc.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Changes since v8 [2]
 
-All warnings (new ones prefixed by >>):
+ - Resolved the reported lockdep warnings in kernel/module/kallsyms.c
+   (Petr Mladek)
 
-   lib/vsprintf.c: In function 'sprint_module_info':
->> lib/vsprintf.c:993:13: warning: variable 'modbuildid' set but not used [-Wunused-but-set-variable]
-     993 |         int modbuildid = 0;
-         |             ^~~~~~~~~~
-   lib/vsprintf.c: In function 'va_format':
-   lib/vsprintf.c:1761:9: warning: function 'va_format' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-    1761 |         buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
-         |         ^~~
+Changes since v7 [3]
+
+ - Removed redundant ifdef CONFIG_MODULES and endif pairing from
+   kernel/module/Makefile
+
+Changes since v6 [4]
+
+ - Moved KCOV_INSTRUMENT_module.o out of kernel/Makefile into
+   kernel/module/Makefile (Christophe Leroy)
+ - Moved kernel/module/signature.c back into kernel/
+   (Christophe Leroy)
+ - Fixed Oops in add_kallsyms() due to an invalid pointer assignment
+   (Christophe Leroy)
+
+Changes since v5 [5]:
+
+ - Updated MAINTAINERS to include the entire kernel/module/ directory
+   (Christophe Leroy)
+ - Reintroduce commit a97ac8cb24a3 ("module: fix signature check failures
+   when using in-kernel decompression") (Michal Suchánek)
+ - Refactored code to address some (i.e.
+   --ignore=MULTIPLE_ASSIGNMENTS,ASSIGN_IN_IF was used) style violations
+   e.g. "Alignment should match open parenthesis", reported by
+   scripts/checkpatch.pl --strict (Christophe Leroy)
+ - Used PAGE_ALIGN() and PAGE_ALIGNED() instead (Christophe Leroy)
+ - Removed sig_enforce from include/linux/module.h as it is only
+   used in kernel/module/signing.c (Christophe Leroy)
+ - Added static keyword for anything not used outside a source file
+   (Christophe Leroy)
+ - Moved mod_sysfs_teardown() to kernel/module/sysfs.c (Christophe Leroy)
+ - Removed kdb_modules from kernel/debug/kdb/kdb_private.h
+   (Christophe Leroy)
+
+Changes since v4 [6]:
+
+ - Moved is_livepatch_module() and set_livepatch_module() to
+   kernel/module/livepatch.c
+ - Addressed minor compiler warning concerning
+   kernel/module/internal.h (0-day)
+ - Resolved style violations reported by scripts/checkpatch.pl
+ - Dropped patch 5 [7] so external patch [8] can be applied at
+   a later date post merge into module-next (Christophe Leroy)
+
+Changes since v3 [9]:
+
+ - Refactored both is_livepatch_module() and set_livepatch_module(),
+   respectively, to use IS_ENABLED(CONFIG_LIVEPATCH) (Joe Perches)
+ - Addressed various compiler warnings e.g., no previous prototype (0-day)
+
+Changes since v2 [10]:
+
+ - Moved module decompress support to a separate file
+ - Made check_modinfo_livepatch() generic (Petr Mladek)
+ - Removed filename from each newly created file (Luis Chamberlain)
+ - Addressed some (i.e. --ignore=ASSIGN_IN_IF,AVOID_BUG was used)
+   minor scripts/checkpatch.pl concerns e.g., use strscpy over
+   strlcpy and missing a blank line after declarations (Allen)
+
+Changes since v1 [11]:
+
+  - Moved module version support code into a new file
+
+[1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
+[2]: https://lore.kernel.org/all/20220222141303.1392190-2-atomlin@redhat.com/
+[3]: https://lore.kernel.org/lkml/20220222130911.1348513-1-atomlin@redhat.com/
+[4]: https://lore.kernel.org/lkml/20220218212511.887059-1-atomlin@redhat.com/
+[5]: https://lore.kernel.org/lkml/20220209170358.3266629-1-atomlin@redhat.com/
+[6]: https://lore.kernel.org/lkml/20220130213214.1042497-1-atomlin@redhat.com/
+[7]: https://lore.kernel.org/lkml/20220130213214.1042497-6-atomlin@redhat.com/
+[8]: https://lore.kernel.org/lkml/203348805c9ac9851d8939d15cb9802ef047b5e2.1643919758.git.christophe.leroy@csgroup.eu/
+[9]: https://lore.kernel.org/lkml/20220128203934.600247-1-atomlin@redhat.com/
+[10]: https://lore.kernel.org/lkml/20220106234319.2067842-1-atomlin@redhat.com/
+[11]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
 
 
-vim +/modbuildid +993 lib/vsprintf.c
+Aaron Tomlin (14):
+  module: Move all into module/
+  module: Simple refactor in preparation for split
+  module: Make internal.h and decompress.c more compliant
+  module: Move livepatch support to a separate file
+  module: Move latched RB-tree support to a separate file
+  module: Move strict rwx support to a separate file
+  module: Move extra signature support out of core code
+  module: Move kmemleak support to a separate file
+  module: Move kallsyms support into a separate file
+  module: kallsyms: Fix suspicious rcu usage
+  module: Move procfs support into a separate file
+  module: Move sysfs support into a separate file
+  module: Move kdb_modules list out of core code
+  module: Move version support into a separate file
 
-   983	
-   984	#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
-   985	static int sprint_module_info(char *buf, char *end, unsigned long value,
-   986				     const char *fmt)
-   987	{
-   988		struct module *mod;
-   989		unsigned long offset = 1;
-   990		unsigned long base;
-   991		int ret = 0;
-   992		const char *modname;
- > 993		int modbuildid = 0;
-   994		int len;
-   995	#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-   996		const unsigned char *buildid = NULL;
-   997	#endif
-   998	
-   999		if (is_ksym_addr(value))
-  1000			return 0;
-  1001	
-  1002		if (*fmt == 'B' && fmt[1] == 'b')
-  1003			modbuildid = 1;
-  1004		else if (*fmt == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b')))
-  1005			modbuildid = 1;
-  1006		else if (*fmt != 's') {
-  1007			/*
-  1008			 * do nothing.
-  1009			 */
-  1010		} else
-  1011			offset = 0;
-  1012	
-  1013		preempt_disable();
-  1014		mod = __module_address(value);
-  1015		if (mod) {
-  1016			ret = 1;
-  1017			modname = mod->name;
-  1018	#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-  1019			if (modbuildid)
-  1020				buildid = mod->build_id;
-  1021	#endif
-  1022			if (offset) {
-  1023				base = (unsigned long)mod->core_layout.base;
-  1024				offset = value - base;
-  1025			}
-  1026		}
-  1027	
-  1028		preempt_enable();
-  1029		if (!ret)
-  1030			return 0;
-  1031	
-  1032		/* address belongs to module */
-  1033		if (offset)
-  1034			len = sprintf(buf, "0x%lx+0x%lx", base, offset);
-  1035		else
-  1036			len = sprintf(buf, "0x%lx", value);
-  1037	
-  1038		len += sprintf(buf + len, " [%s", modname);
-  1039	#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-  1040		if (modbuildid && buildid) {
-  1041			/* build ID should match length of sprintf */
-  1042			static_assert(sizeof(typeof_member(struct module, build_id)) == 20);
-  1043			len += sprintf(buf + len, " %20phN", buildid);
-  1044		}
-  1045	#endif
-  1046		len += sprintf(buf + len, "]");
-  1047	
-  1048		return len;
-  1049	}
-  1050	#else
-  1051	static inline int sprint_module_info(char *buf, char *end, unsigned long value,
-  1052				     const char *fmt)
-  1053	{
-  1054		return 0;
-  1055	}
-  1056	#endif
-  1057	
+ MAINTAINERS                                   |    2 +-
+ include/linux/module.h                        |    9 +-
+ kernel/Makefile                               |    5 +-
+ kernel/debug/kdb/kdb_main.c                   |    5 +
+ kernel/debug/kdb/kdb_private.h                |    4 -
+ kernel/module-internal.h                      |   50 -
+ kernel/module/Makefile                        |   20 +
+ kernel/module/debug_kmemleak.c                |   30 +
+ .../decompress.c}                             |    5 +-
+ kernel/module/internal.h                      |  275 +++
+ kernel/module/kallsyms.c                      |  512 +++++
+ kernel/module/livepatch.c                     |   74 +
+ kernel/{module.c => module/main.c}            | 1856 +----------------
+ kernel/module/procfs.c                        |  142 ++
+ kernel/module/signing.c                       |  122 ++
+ kernel/module/strict_rwx.c                    |   85 +
+ kernel/module/sysfs.c                         |  436 ++++
+ kernel/module/tree_lookup.c                   |  109 +
+ kernel/module/version.c                       |  109 +
+ kernel/module_signing.c                       |   45 -
+ 20 files changed, 2013 insertions(+), 1882 deletions(-)
+ delete mode 100644 kernel/module-internal.h
+ create mode 100644 kernel/module/Makefile
+ create mode 100644 kernel/module/debug_kmemleak.c
+ rename kernel/{module_decompress.c => module/decompress.c} (99%)
+ create mode 100644 kernel/module/internal.h
+ create mode 100644 kernel/module/kallsyms.c
+ create mode 100644 kernel/module/livepatch.c
+ rename kernel/{module.c => module/main.c} (64%)
+ create mode 100644 kernel/module/procfs.c
+ create mode 100644 kernel/module/signing.c
+ create mode 100644 kernel/module/strict_rwx.c
+ create mode 100644 kernel/module/sysfs.c
+ create mode 100644 kernel/module/tree_lookup.c
+ create mode 100644 kernel/module/version.c
+ delete mode 100644 kernel/module_signing.c
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+base-commit: 7993e65fdd0fe07beb9f36f998f9bbef2c0ee391
+-- 
+2.34.1
+
