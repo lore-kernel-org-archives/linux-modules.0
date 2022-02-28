@@ -2,153 +2,209 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77EE6C433EF
-	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 09:33:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6092BC433F5
+	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 10:58:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbiB1Jdq (ORCPT
+        id S233892AbiB1K7e (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 28 Feb 2022 04:33:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        Mon, 28 Feb 2022 05:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbiB1Jdp (ORCPT
+        with ESMTP id S235291AbiB1K7O (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:33:45 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120082.outbound.protection.outlook.com [40.107.12.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895E140932;
-        Mon, 28 Feb 2022 01:33:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bqVXvKKXToS7P1yEk+Dug2mBZTvVlrc65B3A+5+xilVj/n2I+7ojPXfFHmXup41jNWhnqViKCweT6ueTZZeZ01HhwMELK5qJIhFKmDBWvv0kef/5QZ4VggIad/nR8lTtND3Nrw9zomxBdMNOqvguUdN7MfBtTgMp+a5gyNmjEmE7cN6Iw139G8F75jPhWK9mMnIoU/Wmwuuw/BFqZWW86PNtCsNqOuFWnUeJVaT6198nUXkx6aDfgV6FmwuhaCmJ7XtrGM6eu+qocX4T/PJRB2uxuivoK+wD2QdmAmvq5FJWABL95G+ysUa/Cmr5bFVYWN3e9rZePaCKEWm/8chfEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6MLFwjWsNIeTZG+TF6XgDilSGJImIKR/i2tBEY23/Ck=;
- b=RufO+hS7SMh5YjP0ZPLe7RRx5zM5L4K2pL+YgPTpcXmua0sYRNaLk8b9z/lc46ck11jXItB4LtL6nztl9TxltE/AkI4nsyM5XxE8QS9ZwW0yNEWAj/c3wZhU0Un4eYN8wldiriFIL5/wTf+iE1EHs7lLzsBqUnljY/nOZyQc1MInZZD1LTgrYcVNFSOOXaKvbY4Jsxr675tTZAwmDFpwe7TZ3NfryaKlvtUmcHsPAJVpoIPS3nfFQ/y3+hGuzUVoyJKx//UqyLgfjRoWjioIxglu96pMgX3XJIvPReDpGkJy0TuZyl+nvDlZdRa9dFprvOAMd7Ah9F+PsAWnXlzlyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB1660.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:166::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Mon, 28 Feb
- 2022 09:33:03 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8142:2e6f:219b:646d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8142:2e6f:219b:646d%5]) with mapi id 15.20.5017.027; Mon, 28 Feb 2022
- 09:33:03 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Aaron Tomlin <atomlin@atomlin.com>
-CC:     Luis Chamberlain <mcgrof@kernel.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Petr Mladek <pmladek@suse.com>, "cl@linux.com" <cl@linux.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
+        Mon, 28 Feb 2022 05:59:14 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C4B74624;
+        Mon, 28 Feb 2022 02:56:42 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id E807D1F894;
+        Mon, 28 Feb 2022 10:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646045800; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qOtMt6fswCb5ZWsDNnRLRm7wpeTZh52gBJXWt9L6fr0=;
+        b=H9CRUmIpY2VdMp0v56pKBAGoROmwwLNzhmTDuarydjBVLKebrYEYU4ulZHYl3BEnO7Y3KB
+        neIUltDSwb0R6oG4tLSM9DN2lBgvhTGn0YnCBQAuLF782/5T5j5glksrFte8ym/MLQVbjD
+        3+PiEWmemOdzw5/dCDpKKR+C9fH0UB8=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9D147A3B81;
+        Mon, 28 Feb 2022 10:56:40 +0000 (UTC)
+Date:   Mon, 28 Feb 2022 11:56:40 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "jeyu@kernel.org" <jeyu@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "void@manifault.com" <void@manifault.com>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
         "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
         "joe@perches.com" <joe@perches.com>,
         "msuchanek@suse.de" <msuchanek@suse.de>,
         "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Subject: Re: [PATCH v8 09/13] module: Move kallsyms support into a separate
+Subject: Re: [PATCH v8 04/13] module: Move livepatch support to a separate
  file
-Thread-Topic: [PATCH v8 09/13] module: Move kallsyms support into a separate
- file
-Thread-Index: AQHYJ/ZZRfC599+XvUO2sDt7Xl3WR6ykAICAgAADaYCAAA2CAIAAAy8AgAAgBwCAAAn0gIACECQAgAJlSoCAAAgbAIAAAFEA
-Date:   Mon, 28 Feb 2022 09:33:03 +0000
-Message-ID: <aa104381-80e2-2c8c-6bfa-974483d497df@csgroup.eu>
+Message-ID: <YhyqaGO+vbGOifpR@alley>
 References: <20220222141303.1392190-1-atomlin@redhat.com>
- <20220222141303.1392190-10-atomlin@redhat.com> <YhieKf9EcS3GQSXG@alley>
- <f9449aa6-be9d-9021-66e7-fb0272909ee7@csgroup.eu> <YhisWkgZCK8dz5fl@alley>
- <CANfR36gsRw26C3M0hXGGK2w_05pC0rzkhg0-3Q+8tr_XxLiqiw@mail.gmail.com>
- <CANfR36iKJ6pHU5gm3HKqTPZ=FGsC5qX316UKt2sN0aMFEODA9w@mail.gmail.com>
- <aad10c3f-ecaf-c8fb-f1c6-81ba6f1c4f8d@csgroup.eu>
- <YhqNRoEgIaoplF9b@bombadil.infradead.org>
- <5caa95d8-ba59-30f3-198d-b67389817762@csgroup.eu>
- <20220228093154.5gzs3ega23l7fwks@ava.usersys.com>
-In-Reply-To: <20220228093154.5gzs3ega23l7fwks@ava.usersys.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a112da47-ba0f-44cb-1a77-08d9fa9d518c
-x-ms-traffictypediagnostic: PR0P264MB1660:EE_
-x-microsoft-antispam-prvs: <PR0P264MB1660C9437C1656D6D5FD6F46ED019@PR0P264MB1660.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7AYh1Sw0LOqklNNkL48/Tez6FYaBAAk4On5oR8y4KvxSMxVb/5DbC3+w35952aEM1hi6sXE/olYHczu3y1BkiI+osryew8BhhjtdXTGYsOslS4rSPuJyIrT8ef9HMBkYitx9LS83pfm9QKeByq/Sgc4Pc8eoCmXMYHCLU42uFoRfJpvFtkhNaDEjVZhZ0ZrPUYgflLHPl/AIa6OKYcuCIH3EMW+9JyLPd4yy62jG8PTqU7vIIkwHex2U5ocf4LT3t7AiyZjf4PDegRoz1qBfb0oRBGA87FeiApJDLvjdLjmQ+x3wPTNlprcoArdXN2lRjLh26exH64/45fZtvz84MqVh1RVVQqPKPn2FOGHOMDb3ltzUO/rk9v9ioIRMnYqdO4s0IcI0fz5h+4zo0umGsFgN9T2akqbVvt263OtGxi+SIa9LDMNPAHl1nsN/2I1zXgEBM/zYsX1jAnyO8MCUTNvVTjkcaHWrRHa1QZpg6DEtafr+g/8SlMi9tiC77fKEIQQnbHjAe/OUG+iaiqkdOa32EieUPnqVy9Q3LRduuxSWotYv0oxAZaCWOLpzUpev2jM23oN6wqhdjwnXXUvKgLGqebDvRW+nNQjVnIE9dZ5u3sb84jBwxCqd5MCjGjByPY3ax/JlviW3F/F/YH3Ad/sRSBitYj9TNorGDwWb6BWMOyihveL3T+sAlcaXDD4DXSvpKgpiUHL7MWhkm8GpZYksr3qUxN4+J4g/PtBHkchxhHDrYaww+WMPb6pBLu24C4jqe2vzoSVF2FstooyIew==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(316002)(6486002)(66574015)(83380400001)(31696002)(54906003)(508600001)(71200400001)(26005)(186003)(86362001)(38070700005)(38100700002)(66946007)(31686004)(2906002)(122000001)(5660300002)(7416002)(8936002)(4744005)(91956017)(44832011)(2616005)(6506007)(6512007)(64756008)(66476007)(66556008)(66446008)(8676002)(76116006)(4326008)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?R0M5b2FZU2Z2eVdweURlbUFFUGh0MGF6TVZUWUpSWXg0eEoxb0FDYWUrZ1FL?=
- =?utf-8?B?bUJ2ck11eTZJSkYxMFlidmlFOCs0QzFIVEF0WXcyVEFZNi9ZYVNQNFRQM0do?=
- =?utf-8?B?amwvMlI2YWNzcEg5WW9hV0tZdmpRZ2F1ZU1JUTFEQmVUcUdYSjVjSW1ZVksz?=
- =?utf-8?B?ZDZ3ZXJMY1h1YXkrZUp6cFZleUNBT25kYkRkRzNneCs3VEdPL2JSbnVXVUZF?=
- =?utf-8?B?WTcwU0hIMmtJeW1nSGE1S2dwYnMzd1ZjUS9TUVJyTGdnd2xzNUp2MjNETlY0?=
- =?utf-8?B?N3haenpDYzA2SFVlQnNPNG04dzFzbWZ3TWhnQjI2QXRmcTR6MzhQWVRQQ0pW?=
- =?utf-8?B?Vi9jSWtGSW9NWTZNbVpseFZEUXZPUTduVzNTaVNTMXk5VWJORmhtbEZVajRz?=
- =?utf-8?B?Y1FFQlVZb3BsbU03VmtUS25kT1p6dkVwOGcxYU4zdjhvRWxzMG1zVXByWHBu?=
- =?utf-8?B?WWYvL2tQVXE0OGt2Vlp6eTFkMUNLVWdWYnAxQjM4UVNodmw5cnRlbWQ4d0FJ?=
- =?utf-8?B?bXpTSk55RDlyYlIzMmUvclkwdW1ralRsU1V2T2QwVXNhU0YreHVKV2dreHV5?=
- =?utf-8?B?ZXZvZEExZmtmdGN0ZmVNb25Dd21IRDViMHlaZlNza3J4REdGZW1WdmN2bGIz?=
- =?utf-8?B?UXBuTllsMDdYdkdrakNxeEZ4dGNJT0ZpcFd6dFFqd1ZNcjJuU1QrZnN0bmpK?=
- =?utf-8?B?eEwreDJYQ29LWkhLYW02eDQ5SEV4RU5LWkE3MjFNb3hweHBiTlZDelowNVdm?=
- =?utf-8?B?UHBMeEMvQUpEdEt6M09PUy9PMmc1U1ZmQ0VOZVZKbkp2TGM5cW0xOWlid0RJ?=
- =?utf-8?B?RWdmUXJ5SW5tZDJuNEdkKzhqWmlLVE4rNzl5by9RekZpZXdKWGVMV3RmN3J2?=
- =?utf-8?B?TEpvbTFsSjYzeXdCd3o1d09NczJYdDIxVjk4bVBiSlpsbkVMT2Y0U2JuVDd1?=
- =?utf-8?B?bUYvZHkvM1V3QTdnUTh4UHhsZXhka0tVbVEyZDBrRTZvZlhQYVZRTGFhVzFG?=
- =?utf-8?B?c0dWYUVuSXRqVVJqYjIrOEpjNEJKajE2dzdTbHRsQ1lSYU15SFhrc2F4ays2?=
- =?utf-8?B?dVhqS0l0YnJOSUFLb3Nmek41Z3VvaldadmtkVjZMKzF0eFh5dTdTVzNCRk1X?=
- =?utf-8?B?VmE3Z1F3S1BSK1hMMXR3R2ZiUTJYczNsRzdWSTQ2RzNHcklKNklEUzVzcnJ6?=
- =?utf-8?B?TFUyMzFzbXI0VEpxenVUcDBldFkrR080dmN5UmZkaU95d3QreDJ3ZkNvcEpa?=
- =?utf-8?B?ZDRFVUczbXBUK2cvUUNZR0VsK2V0cWhCOVJKT2dGNzhiTW9kSGZFMFNpdlpu?=
- =?utf-8?B?bmZzTERDNnlVNWwrRVFablV5TE4yMC9nSUZBcFJObjhxVHluVXZmcDZqdmE1?=
- =?utf-8?B?cmtkOFJnOFlsTC9VTUdpZngwTVFsZGowZ1lZT1ZrRXYwK3JYQ3VvdDJKLzRs?=
- =?utf-8?B?ajQzczFMMkM4SG9CYVlJVk4vdkpnQ2lBSFY0UkE4bGZXNGJrWldjSTcvcUl1?=
- =?utf-8?B?WlNrM2lmRDVZSE9tZnU2MjZ1SjQyTzFXQ01XRVZXSjV6NzlqbUNXT002TVpS?=
- =?utf-8?B?VUpvcWRiWTJ2UnJoZGdZcXNFcEtDSHljWTJEWHAwWUg5TkJGR2w5RXlHTkcr?=
- =?utf-8?B?NVErTkRyZW1HMUlmbFR6WnpuZ3dYRmROSHJ0TnI1S2JNQWdkT29MNmExWlVx?=
- =?utf-8?B?SzA3N1IvUm4vdjluTERzYk1GeGQ4MWlxaVVoS2pXV3RLUWNnS3hmc283Zk5L?=
- =?utf-8?B?N3lXVDlqRmFLVDRpMWREZVIrK0Y2R0ZzWUhYamRTd1kxb1ZJWTdMaWl0YkV6?=
- =?utf-8?B?d0dHdmVWS3R4TGl1dEx6ekk4WmJDMDNmZUdZUy90Ykk3bHJ5a1p5aStTeTVP?=
- =?utf-8?B?bnJ0RVc2UmdXdTRBTlpLQm81Q0xvcExTTGV2ZlY4MUJrUzNVay9keUFwb0Ez?=
- =?utf-8?B?eVhiSGpzS0Z6Tk54d3JqZEVQTk50UE1UaHFQWXQ5MGV6NlVhTEl4eVlvZzZJ?=
- =?utf-8?B?aW93cUxuSXRvRko3ZUxRV1MvWU5WMksrd1dTM2k0bS9PRWxVM2FvVzlZWHBS?=
- =?utf-8?B?aFVoZmYwUUdvemJ6VFNhRVozd0hrcFdYVmJRNnMwUzdRREI2dlp6NDNYTXVP?=
- =?utf-8?B?em1kcWpiamt5akgxUWlkMkx0ZEgzRU1Fd2lOQk02bUJEN2FRVGVCV0tJNkZq?=
- =?utf-8?B?bXIzbHdaYkY3eXlWMUFjNURFQ0FFdE1YV3JmeHNadUVXVHVWL1U4eVdqT3pt?=
- =?utf-8?Q?3sGfW9T3TqvMx7Z07eTFQ/wqmrYLUbIisIGU8hvHUc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C32E10A668FB35469364D68BAD0CA435@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+ <20220222141303.1392190-5-atomlin@redhat.com>
+ <Yhiik2ledqAfGuN2@alley>
+ <fb1bb248-bd3f-0990-cdfd-d186b7579411@csgroup.eu>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: a112da47-ba0f-44cb-1a77-08d9fa9d518c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2022 09:33:03.3800
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mMW/3pXW/FQNo7rb21cTSZjoXUZI+jyb3r5XJFPFD9NoCMMLUBi+uQDNgqI0c3pAKNN9xjJGCf+ntA3VLBDswi0gee2oNS/5lxHS9xrSWBE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB1660
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fb1bb248-bd3f-0990-cdfd-d186b7579411@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-DQoNCkxlIDI4LzAyLzIwMjIgw6AgMTA6MzEsIEFhcm9uIFRvbWxpbiBhIMOpY3JpdMKgOg0KPiBP
-biBNb24gMjAyMi0wMi0yOCAwOTowMiArMDAwMCwgQ2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+
-IEFhcm9uLCBkbyB5b3UgcGxhbiB0byBzZW5kIHY5IGFueXRpbWUgc29vbiA/DQo+IA0KPiBIaSBD
-aHJpc3RvcGhlLA0KPiANCj4gWWVzLCB0b2RheS4NCj4gDQo+IEFzIGRpc2N1c3NlZCBwcmV2aW91
-c2x5LCBJIHdpbGwgcmVzb2x2ZSB0aGUgU3BhcnNlIHdhcm5pbmdzLCBpbiB0aGUgY29udGV4dA0K
-PiBvZiBLY29uZmlnIENPTkZJR19LQUxMU1lNUywgd2l0aCBhbiBhcHByb3ByaWF0ZSBzdGF0ZW1l
-bnQgaW4gdGhlIGNvbW1pdA0KPiBtZXNzYWdlLCBhcyBhIHByZWxpbWluYXJ5IHBhdGNoIHRvIHRo
-ZSBzZXJpZXMuIFRoYXQgYmVpbmcgc2FpZCwgSSBiZWxpZXZlDQo+IGl0IG1ha2VzIHNlbnNlIHRv
-IGluY2x1ZGUgdGhlIGFmb3JlbWVudGlvbmVkIHBhdGNoIHdpdGhpbiB0aGUgc2VyaWVzLg0KPiBB
-bnkgb2JqZWN0aW9ucz8NCj4gDQoNCk5vIG9iamVjdGlvbi4NCg0KVGhhbmsgeW91DQpDaHJpc3Rv
-cGhl
+On Fri 2022-02-25 16:49:31, Christophe Leroy wrote:
+> 
+> 
+> Le 25/02/2022 à 10:34, Petr Mladek a écrit :
+> > On Tue 2022-02-22 14:12:54, Aaron Tomlin wrote:
+> >> No functional change.
+> >>
+> >> This patch migrates livepatch support (i.e. used during module
+> >> add/or load and remove/or deletion) from core module code into
+> >> kernel/module/livepatch.c. At the moment it contains code to
+> >> persist Elf information about a given livepatch module, only.
+> >>
+> > --- del.p	2022-02-24 16:55:26.570054922 +0100
+> > +++ add.p	2022-02-24 16:56:04.766781394 +0100
+> > @@ -3,14 +3,14 @@
+> >    * section header table, section string table, and symtab section
+> >    * index from info to mod->klp_info.
+> >    */
+> > -static int copy_module_elf(struct module *mod, struct load_info *info)
+> > +int copy_module_elf(struct module *mod, struct load_info *info)
+> 
+> That's not a hidden change. That's part of the move, that's required.
+
+Sure. I was not talking about this line. I kept it to show the context.
+
+> >   {
+> >   	unsigned int size, symndx;
+> >   	int ret;
+> >   
+> >   	size = sizeof(*mod->klp_info);
+> >   	mod->klp_info = kmalloc(size, GFP_KERNEL);
+> > -	if (mod->klp_info == NULL)
+> > +	if (!mod->klp_info)
+> >   		return -ENOMEM;
+> >   
+> >   	/* Elf header */
+> > @@ -20,7 +20,7 @@ static int copy_module_elf(struct module
+> >   	/* Elf section header table */
+> >   	size = sizeof(*info->sechdrs) * info->hdr->e_shnum;
+> >   	mod->klp_info->sechdrs = kmemdup(info->sechdrs, size, GFP_KERNEL);
+> > -	if (mod->klp_info->sechdrs == NULL) {
+> > +	if (!mod->klp_info->sechdrs) {
+> >   		ret = -ENOMEM;
+> >   		goto free_info;
+> >   	}
+> > @@ -28,7 +28,7 @@ static int copy_module_elf(struct module
+> >   	/* Elf section name string table */
+> >   	size = info->sechdrs[info->hdr->e_shstrndx].sh_size;
+> >   	mod->klp_info->secstrings = kmemdup(info->secstrings, size, GFP_KERNEL);
+> > -	if (mod->klp_info->secstrings == NULL) {
+> > +	if (!mod->klp_info->secstrings) {
+> >   		ret = -ENOMEM;
+> >   		goto free_sechdrs;
+> >   	}
+> > @@ -43,8 +43,7 @@ static int copy_module_elf(struct module
+> >   	 * to core_kallsyms.symtab since the copy of the symtab in module
+> >   	 * init memory is freed at the end of do_init_module().
+> >   	 */
+> > -	mod->klp_info->sechdrs[symndx].sh_addr = \
+> > -		(unsigned long) mod->core_kallsyms.symtab;
+> > +	mod->klp_info->sechdrs[symndx].sh_addr = (unsigned long)mod->core_kallsyms.symtab;
+> >   
+> >   	return 0;
+> > 
+> > 
+> > Please do not do these small coding style changes. It complicates the
+> > review and increases the risk of regressions. Different people
+> > have different preferences. Just imagine that every half a year
+> > someone update style of a code by his personal preferences. The
+> > real changes will then get lost in a lot of noise.
+> 
+> I disagree here. We are not talking about people's preference here but 
+> compliance with documented Linux kernel Codying Style and handling of 
+> official checkpatch.pl script reports.
+
+Really?
+
+1. I restored
+
+	+	if (mod->klp_info->secstrings == NULL) {
+
+   and checkpatch.pl is happy.
+
+
+2. I do not see anythinkg about if (xxx == NULL) checks in
+   Documentation/process/coding-style.rst
+
+3. $> git grep "if (.* == NULL" | wc -l
+   15041
+
+4. The result of
+	-	mod->klp_info->sechdrs[symndx].sh_addr = \
+	-		(unsigned long) mod->core_kallsyms.symtab;
+	+	mod->klp_info->sechdrs[symndx].sh_addr = (unsigned long)mod->core_kallsyms.symtab;
+
+   is 90 characeters long and Documentation/process/coding-style.rst says:
+
+	2) Breaking long lines and strings
+	----------------------------------
+
+	Coding style is all about readability and maintainability using commonly
+	available tools.
+
+	The preferred limit on the length of a single line is 80 columns.
+
+	Statements longer than 80 columns should be broken into sensible chunks,
+	unless exceeding 80 columns significantly increases readability and does
+	not hide information.
+
+   checkpatch.pl accepts lines up to 100 columns but 80 are still
+   preferred.
+
+
+> You are right that randomly updating the style every half a year would 
+> be a nightmare and would kill blamability of changes.
+> 
+> However when moving big peaces of code like this, blamability is broken 
+> anyway and this is a very good opportunity to increase compliance of 
+> kernel code to its own codying style. But doing it in several steps 
+> increases code churn and has no real added value.
+
+From Documentation/process/submitting-patches.rst:
+
+	One significant exception is when moving code from one file to
+	another -- in this case you should not modify the moved code at all in
+	the same patch which moves it.  This clearly delineates the act of
+	moving the code and your changes.  This greatly aids review of the
+	actual differences and allows tools to better track the history of
+	the code itself.
+
+
+> > 
+> > Coding style changes might be acceptable only when the code is
+> > reworked or when it significantly improves readability.
+> 
+> When code is moved around it is also a good opportunity.
+
+No!
+
+I would not have complained if it did not complicate my review.
+But it did!
+
+Best Regards,
+Petr
