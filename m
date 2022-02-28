@@ -2,230 +2,187 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF96AC433F5
-	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 17:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6673DC4167B
+	for <linux-modules@archiver.kernel.org>; Mon, 28 Feb 2022 17:44:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbiB1RLI (ORCPT
+        id S233699AbiB1RpV (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 28 Feb 2022 12:11:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        Mon, 28 Feb 2022 12:45:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbiB1RLI (ORCPT
+        with ESMTP id S238948AbiB1Rnd (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 28 Feb 2022 12:11:08 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EFE7486F;
-        Mon, 28 Feb 2022 09:10:29 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B991C219A4;
-        Mon, 28 Feb 2022 17:10:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646068227; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Se4zhHEaPU9V1yfCSSf057AkUax+xeAkyFZTtecsvOk=;
-        b=PnNjZmmzjdTC81o0wLPptLX10/+Iqzu9UE7f1fYDvqrY9DjWKwDYuchbuOlnzNHqKiz7i/
-        VgsVDpACPfAOiCFoQgHhtieQhBQ0PYUePRxXsQo74Sgh7/dwKZjhxAc2xZ1jOwHdFlpCAB
-        kGthl5H97S97NGMn34uqJdlHcSsP4fg=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B3B8FA3B81;
-        Mon, 28 Feb 2022 17:10:26 +0000 (UTC)
-Date:   Mon, 28 Feb 2022 18:10:26 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Maninder Singh <maninder1.s@samsung.com>, mcgrof@kernel.org,
-        rostedt@goodmis.org, senozhatsky@chromium.org,
-        linux@rasmusvillemoes.dk, akpm@linux-foundation.org,
-        wangkefeng.wang@huawei.com, v.narang@samsung.com,
-        swboyd@chromium.org, ojeda@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com,
-        Kees Cook <keescook@chromium.org>
+        Mon, 28 Feb 2022 12:43:33 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E709D7D03F;
+        Mon, 28 Feb 2022 09:35:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646069725; x=1677605725;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rL/LDGX5IsDnQdPbHkRMVK6CvzA1sOWyScOPv1bJ4b0=;
+  b=dDmyROAHI4NL7nBBSYLrOi7fMIQLN2NRJebbCBIZKl5PX0yX/hzIpsiB
+   xh1lLfM+T7oBIjkF58OC0nxi315w1mt2k6tuD6N+hgAWAxlBmK3ZHTbzG
+   NvW0I2deYZHHwzsKHNZNH8hLnrquoElaVUhew+F6A+TMwhtwa4bDSUcBj
+   mKOjSUZn/PpwUEO7UK4o9hJlzLl3QQ0tw1xruI2AYUDJ7Kj9HTyM5fUsM
+   sd4iW7jeR33QmsswMeYGbKZL08/KB+TiowggsqnCDfLCUgUztnt7To5UQ
+   6H0/E+xF5/XySC/a2i/EDq4ZSmbeAsy9x8sFo26YxHXag4hh1ghxrnTG/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="339373867"
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="339373867"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:35:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
+   d="scan'208";a="510174103"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 28 Feb 2022 09:35:14 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nOjvW-0007ZQ-6k; Mon, 28 Feb 2022 17:35:14 +0000
+Date:   Tue, 1 Mar 2022 01:35:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maninder Singh <maninder1.s@samsung.com>, mcgrof@kernel.org,
+        pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com
+Cc:     kbuild-all@lists.01.org, v.narang@samsung.com, swboyd@chromium.org,
+        ojeda@kernel.or, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, avimalin@gmail.com,
+        atomlin@redhat.com, Maninder Singh <maninder1.s@samsung.com>
 Subject: Re: [PATCH 1/1] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
  disabled
-Message-ID: <YhzywNowPiQm3IN4@alley>
-References: <CGME20220228053457epcas5p1dac3fced39d1594f8fdfc5e64e23ac73@epcas5p1.samsung.com>
- <20220228053447.1584704-1-maninder1.s@samsung.com>
- <Yhy6EtP/Yr03bHTl@smile.fi.intel.com>
+Message-ID: <202202281853.EofvQRmv-lkp@intel.com>
+References: <20220228053447.1584704-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yhy6EtP/Yr03bHTl@smile.fi.intel.com>
+In-Reply-To: <20220228053447.1584704-1-maninder1.s@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Adding Kees into Cc. This patch allows to see non-hashed base
-address of the module and eventually of vmlinux, see below.
+Hi Maninder,
 
-On Mon 2022-02-28 14:03:30, Andy Shevchenko wrote:
-> On Mon, Feb 28, 2022 at 11:04:47AM +0530, Maninder Singh wrote:
-> > with commit '82b37e632513 ("kallsyms: print module name in %ps/S
-> > case when KALLSYMS is disabled"), module name printing was enhanced.
+Thank you for the patch! Perhaps something to improve:
 
-The commit does not exist.
+[auto build test WARNING on hnaz-mm/master]
+[also build test WARNING on next-20220225]
+[cannot apply to mcgrof/modules-next linus/master v5.17-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Note that linux-next is regularly rebased. Commit IDs might still be
-stable when they are merged from a maintainer git tree. But Andrew's
--mm tree is imported from quilt and the patches always get new
-commit ID.
+url:    https://github.com/0day-ci/linux/commits/Maninder-Singh/kallsyms-enhance-pS-s-b-printing-when-KALLSYSMS-is-disabled/20220228-140105
+base:   https://github.com/hnaz/linux-mm master
+config: alpha-randconfig-r032-20220227 (https://download.01.org/0day-ci/archive/20220228/202202281853.EofvQRmv-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/fbad94837350bb7c5b1b0c33648f8b20eff0150a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Maninder-Singh/kallsyms-enhance-pS-s-b-printing-when-KALLSYSMS-is-disabled/20220228-140105
+        git checkout fbad94837350bb7c5b1b0c33648f8b20eff0150a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
 
-The best solution is to handle the changes in a single patchset.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > As per suggestion from Petr Mladek <pmladek@suse.com>, covering
-> > other flavours also to print build id also.
-> > 
-> > for %pB no change as it needs to know symbol name to adjust address
-> > value which can't be done without KALLSYMS.
-> > 
-> > original output with KALLSYMS:
-> > [8.842129] ps function_1 [crash]
-> > [8.842735] pS function_1+0x4/0x2c [crash]
-> > [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> > [8.843175] pB function_1+0x4/0x2c [crash]
-> > [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> > 
-> > original output without KALLSYMS:
-> > [12.487424] ps 0xffff800000eb008c
-> > [12.487598] pS 0xffff800000eb008c
-> > [12.487723] pSb 0xffff800000eb008c
-> > [12.487850] pB 0xffff800000eb008c
-> > [12.487967] pBb 0xffff800000eb008c
-> > 
-> > With patched kernel without KALLSYMS:
-> > [9.205207] ps 0xffff800000eb008c [crash]
-> > [9.205564] pS 0xffff800000eb0000+0x8c [crash]
-> > [9.205757] pSb 0xffff800000eb0000+0x8c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> > [9.206066] pB 0xffff800000eb0000+0x8c [crash]
-> > [9.206257] pBb 0xffff800000eb0000+0x8c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> 
-> ...
-> 
-> > +static int sprint_module_info(char *buf, char *end, unsigned long value,
-> > +			     const char *fmt)
-> > +{
-> > +	struct module *mod;
-> > +	unsigned long offset = 1;
-> > +	unsigned long base;
-> 
-> > +	int ret = 0;
-> 
-> This is hard to find if it's not close to the first use.
-> Since you are using positive numbers...
+All warnings (new ones prefixed by >>):
 
-The name of the variable is misleading. It is not a return value.
-It is set when:
-
-	if (mod) {
-		ret = 1;
-
-and used:
-
-	if (!ret)
-		return 0;
+   lib/vsprintf.c: In function 'sprint_module_info':
+>> lib/vsprintf.c:993:13: warning: variable 'modbuildid' set but not used [-Wunused-but-set-variable]
+     993 |         int modbuildid = 0;
+         |             ^~~~~~~~~~
+   lib/vsprintf.c: In function 'va_format':
+   lib/vsprintf.c:1761:9: warning: function 'va_format' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    1761 |         buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
+         |         ^~~
 
 
-In fact, we do not need the value at all. It is enough to do:
+vim +/modbuildid +993 lib/vsprintf.c
 
-	if (!mod)
-		return 0;
+   983	
+   984	#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
+   985	static int sprint_module_info(char *buf, char *end, unsigned long value,
+   986				     const char *fmt)
+   987	{
+   988		struct module *mod;
+   989		unsigned long offset = 1;
+   990		unsigned long base;
+   991		int ret = 0;
+   992		const char *modname;
+ > 993		int modbuildid = 0;
+   994		int len;
+   995	#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+   996		const unsigned char *buildid = NULL;
+   997	#endif
+   998	
+   999		if (is_ksym_addr(value))
+  1000			return 0;
+  1001	
+  1002		if (*fmt == 'B' && fmt[1] == 'b')
+  1003			modbuildid = 1;
+  1004		else if (*fmt == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b')))
+  1005			modbuildid = 1;
+  1006		else if (*fmt != 's') {
+  1007			/*
+  1008			 * do nothing.
+  1009			 */
+  1010		} else
+  1011			offset = 0;
+  1012	
+  1013		preempt_disable();
+  1014		mod = __module_address(value);
+  1015		if (mod) {
+  1016			ret = 1;
+  1017			modname = mod->name;
+  1018	#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+  1019			if (modbuildid)
+  1020				buildid = mod->build_id;
+  1021	#endif
+  1022			if (offset) {
+  1023				base = (unsigned long)mod->core_layout.base;
+  1024				offset = value - base;
+  1025			}
+  1026		}
+  1027	
+  1028		preempt_enable();
+  1029		if (!ret)
+  1030			return 0;
+  1031	
+  1032		/* address belongs to module */
+  1033		if (offset)
+  1034			len = sprintf(buf, "0x%lx+0x%lx", base, offset);
+  1035		else
+  1036			len = sprintf(buf, "0x%lx", value);
+  1037	
+  1038		len += sprintf(buf + len, " [%s", modname);
+  1039	#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+  1040		if (modbuildid && buildid) {
+  1041			/* build ID should match length of sprintf */
+  1042			static_assert(sizeof(typeof_member(struct module, build_id)) == 20);
+  1043			len += sprintf(buf + len, " %20phN", buildid);
+  1044		}
+  1045	#endif
+  1046		len += sprintf(buf + len, "]");
+  1047	
+  1048		return len;
+  1049	}
+  1050	#else
+  1051	static inline int sprint_module_info(char *buf, char *end, unsigned long value,
+  1052				     const char *fmt)
+  1053	{
+  1054		return 0;
+  1055	}
+  1056	#endif
+  1057	
 
-
-> > +	const char *modname;
-> > +	int modbuildid = 0;
-> > +	int len;
-> > +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-> > +	const unsigned char *buildid = NULL;
-> > +#endif
-> > +
-> > +	if (is_ksym_addr(value))
-> > +		return 0;
-> 
-> > +	if (*fmt == 'B' && fmt[1] == 'b')
-> > +		modbuildid = 1;
-> > +	else if (*fmt == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b')))
-> 
-> Why not to split to two conditionals? Would be easier to get,
-
-This is copy&paste from symbol_string().
-
-> > +		modbuildid = 1;
-> > +	else if (*fmt != 's') {
-> 
-> These all are inconsistent, please switch to fmt[0].
-> 
-> > +		/*
-> > +		 * do nothing.
-> > +		 */
-> > +	} else
-> > +		offset = 0;
-> > +
-> > +	preempt_disable();
-> > +	mod = __module_address(value);
-> > +	if (mod) {
-> > +		ret = 1;
-> > +		modname = mod->name;
-> > +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-> > +		if (modbuildid)
-> > +			buildid = mod->build_id;
-> > +#endif
-> > +		if (offset) {
-> > +			base = (unsigned long)mod->core_layout.base;
-> > +			offset = value - base;
-> > +		}
-> > +	}
-> > +
-> > +	preempt_enable();
-> 
-> > +	if (!ret)
-> 
-> This looks a bit strange, but okay, I'm not familiar with the function of this
-> code.
-
-Yes, this can be replaced by
-
-	/* We handle offset only against module base. */
-	if (!mod)
-		return 0;
-
-Hmm, why don't we compute offset against vmlinux base when the symbol
-is from vmlinux?
-
-Wait, this would show base address of vmlinux. It would be security
-hole.
-
-Wait, if the base address of vmlinux is security hole then the base
-address of module is security hole as well.
-
-IMHO, we must hash the base address when the hashing is not disabled!
-
-
-> > +		return 0;
-> > +
-> > +	/* address belongs to module */
-> > +	if (offset)
-> > +		len = sprintf(buf, "0x%lx+0x%lx", base, offset);
-> > +	else
-> > +		len = sprintf(buf, "0x%lx", value);
-> > +
-> > +	len += sprintf(buf + len, " [%s", modname);
-> > +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-> > +	if (modbuildid && buildid) {
-> > +		/* build ID should match length of sprintf */
-> > +		static_assert(sizeof(typeof_member(struct module, build_id)) == 20);
-> > +		len += sprintf(buf + len, " %20phN", buildid);
-> > +	}
-> > +#endif
-> > +	len += sprintf(buf + len, "]");
-
-And all these sprint() calls are copy&pasted from __sprint_symbol().
-
-We really should reduce the cut&pasting.
-
-> > +
-> > +	return len;
-> > +}
-
-Best Regards,
-Petr
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
