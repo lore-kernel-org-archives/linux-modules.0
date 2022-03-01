@@ -2,37 +2,38 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A83C2C433EF
-	for <linux-modules@archiver.kernel.org>; Tue,  1 Mar 2022 16:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C75FC433EF
+	for <linux-modules@archiver.kernel.org>; Tue,  1 Mar 2022 16:01:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235624AbiCAQAy (ORCPT
+        id S235936AbiCAQCN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 1 Mar 2022 11:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        Tue, 1 Mar 2022 11:02:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbiCAQAv (ORCPT
+        with ESMTP id S235942AbiCAQCM (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:00:51 -0500
+        Tue, 1 Mar 2022 11:02:12 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862878BE01;
-        Tue,  1 Mar 2022 08:00:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEBAA146A;
+        Tue,  1 Mar 2022 08:01:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
         Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
         Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=AgNYZtZNAmOKXj24WWg1pA/uw9HzH1g2htzJ4XQkn9o=; b=IDc4H3+9TDjIlSZLD3ksJ1bXSE
-        ILWdAWoZzkZ7Wss1bNGA0cTq2wtYDNTN3i2lG+sM/5d53qKWBP1R4SyyVTrovdx+EvZq1v3r7MX26
-        Lfq6ZjGIAWcsIsaxMK28DtBoku1+Z4nlyCJM8oe7CDG78MiavMchFxabARMrj12dmBtBIW1q6dgJu
-        iE1pqGXiH/F4K9yq89OfwSSQc9VG1pAgq0b+egaXFwbWTfytbbXDE6T1pkzyafqTtl+jxv6x4A8rx
-        zTsPoAzVPD5G4nIjAcZ3XPa9Kark+YpzP72W/oIXVNdo6zM7eGA0UZCsv76Nk9ZIVv33BZAxVbxUO
-        piUBXRPg==;
+        bh=qm5dRt7Gv4aZmweadp/wzo25KjVUcXv8NB7v3UutMTM=; b=1814yqXWXWPNT5Q0nL4NdOCsiQ
+        mxFREAXuA62BlyPV9R6t5SGOIaheXozWprFqVyBlipNT7IC2x9hQvaaDcRdfmbsfHzj5eoHQVx9pV
+        0gk/IYVY/V2XugPGQxACJVu4tTGsvFhVLBAXNOwwNjiEmpdQUAM7SDm6jFpdK+AsAh5CQ4O1AjrAL
+        ReNRmbXUtWj4uFalvaLSbLGhHz1DKjo/F9fvXe2B7g/3nSDa+K/hRvit9AnGXNjwbNzv4r1/2yZL5
+        4RO9oTMigDahqAXRI/KtW7sxuQvsmeLa8DYRvjx0gnhK+6BLmGqiB0RwGeqGmNtFIINTgdSZLOlw6
+        ixTeZD3g==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nP4uu-00HSOc-Sy; Tue, 01 Mar 2022 16:00:00 +0000
-Date:   Tue, 1 Mar 2022 08:00:00 -0800
+        id 1nP4wF-00HSkf-KG; Tue, 01 Mar 2022 16:01:23 +0000
+Date:   Tue, 1 Mar 2022 08:01:23 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     "pmladek@suse.com" <pmladek@suse.com>,
         "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "jeyu@kernel.org" <jeyu@kernel.org>,
@@ -45,55 +46,56 @@ Cc:     Aaron Tomlin <atomlin@redhat.com>,
         "msuchanek@suse.de" <msuchanek@suse.de>,
         "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
         "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>
+        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
+        Aaron Tomlin <atomlin@redhat.com>
 Subject: Re: [PATCH v9 00/14] module: core code clean up
-Message-ID: <Yh5DAJxyaULX6p/L@bombadil.infradead.org>
+Message-ID: <Yh5DU6n7oCRTfbtG@bombadil.infradead.org>
 References: <20220228234322.2073104-1-atomlin@redhat.com>
  <Yh1nGtM7MCMOI++l@bombadil.infradead.org>
- <6b6e02be-2d0a-31df-8375-baf79714d5b7@csgroup.eu>
+ <2e2860d7-23e8-63f3-f7d3-bce0aa57a3d0@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6b6e02be-2d0a-31df-8375-baf79714d5b7@csgroup.eu>
+In-Reply-To: <2e2860d7-23e8-63f3-f7d3-bce0aa57a3d0@csgroup.eu>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Mar 01, 2022 at 07:07:30AM +0000, Christophe Leroy wrote:
-> Hi Luis,
+On Tue, Mar 01, 2022 at 07:44:26AM +0000, Christophe Leroy wrote:
+> 
 > 
 > Le 01/03/2022 à 01:21, Luis Chamberlain a écrit :
-> > On Mon, Feb 28, 2022 at 11:43:08PM +0000, Aaron Tomlin wrote:
-> >> Hi Luis,
-> >>
-> >> As per your suggestion [1], this is an attempt to refactor and split
-> >> optional code out of core module support code into separate components.
-> >> This version is based on Linus' commit 7993e65fdd0f ("Merge tag
-> >> 'mtd/fixes-for-5.17-rc5' of
-> >> git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux").
-> >>
-> >> Petr,
-> >>
-> >> I decided to use preempt_disable() instead to remain consistent with the
-> >> rest of the file. Unfortunately, I did not make time to boot test etc.
-> > 
-> > Aaron, thanks so much for doing this!
-> > 
-> > Since no boot tests are performed yet, I just pushed this to modules-testing
-> > for now, after we get some boot test results I'll push to modules-next.
 > > 
 > > We should run kmod tests as well.
 > > 
 > 
-> 
-> My Kconfig patch and my two series still cleanly apply on v9. I don't 
-> need to rebase/resend them.
+> I tried to build kmod tests, but I get a crazy result:
 > 
 > 
-> boot test is OK for me with Aaron's v9.
+> $ ./configure --host=ppc-linux --prefix=/usr/local
+> 
+> $ make
+> 
+> $ cd testsuite
+> 
+> $ make
+> 
+> $ file test-list
+> test-list: ELF 32-bit MSB executable, PowerPC or cisco 4500, version 1 
+> (SYSV), dynamically linked, interpreter /lib/ld.so.1, for GNU/Linux 
+> 3.2.0, with debug_info, not stripped
+> 
+> $ file module-playground/mod-loop-a.ko
+> module-playground/mod-loop-a.ko: ELF 64-bit LSB relocatable, x86-64, 
+> version 1 (SYSV), 
+> BuildID[sha1]=d46956a4fd36d8d3467806c31831c81217a573f5, with debug_info, 
+> not stripped
+> 
+> 
+> 
+> How do I get it to crossbuild proper PowerPC module ?
 
-Great thanks yes, I intend on applying them as soon as I get some test
-confirmations on modules-testing. It's all about testing now.
+Lucas?
 
   Luis
