@@ -2,100 +2,72 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C75FC433EF
-	for <linux-modules@archiver.kernel.org>; Tue,  1 Mar 2022 16:01:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29348C433F5
+	for <linux-modules@archiver.kernel.org>; Tue,  1 Mar 2022 16:52:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235936AbiCAQCN (ORCPT
+        id S233294AbiCAQxP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 1 Mar 2022 11:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
+        Tue, 1 Mar 2022 11:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235942AbiCAQCM (ORCPT
+        with ESMTP id S233373AbiCAQxO (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:02:12 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEBAA146A;
-        Tue,  1 Mar 2022 08:01:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=qm5dRt7Gv4aZmweadp/wzo25KjVUcXv8NB7v3UutMTM=; b=1814yqXWXWPNT5Q0nL4NdOCsiQ
-        mxFREAXuA62BlyPV9R6t5SGOIaheXozWprFqVyBlipNT7IC2x9hQvaaDcRdfmbsfHzj5eoHQVx9pV
-        0gk/IYVY/V2XugPGQxACJVu4tTGsvFhVLBAXNOwwNjiEmpdQUAM7SDm6jFpdK+AsAh5CQ4O1AjrAL
-        ReNRmbXUtWj4uFalvaLSbLGhHz1DKjo/F9fvXe2B7g/3nSDa+K/hRvit9AnGXNjwbNzv4r1/2yZL5
-        4RO9oTMigDahqAXRI/KtW7sxuQvsmeLa8DYRvjx0gnhK+6BLmGqiB0RwGeqGmNtFIINTgdSZLOlw6
-        ixTeZD3g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nP4wF-00HSkf-KG; Tue, 01 Mar 2022 16:01:23 +0000
-Date:   Tue, 1 Mar 2022 08:01:23 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc:     "pmladek@suse.com" <pmladek@suse.com>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        Aaron Tomlin <atomlin@redhat.com>
-Subject: Re: [PATCH v9 00/14] module: core code clean up
-Message-ID: <Yh5DU6n7oCRTfbtG@bombadil.infradead.org>
+        Tue, 1 Mar 2022 11:53:14 -0500
+Received: from p3plsmtpa08-06.prod.phx3.secureserver.net (p3plsmtpa08-06.prod.phx3.secureserver.net [173.201.193.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1BDB53
+        for <linux-modules@vger.kernel.org>; Tue,  1 Mar 2022 08:52:32 -0800 (PST)
+Received: from localhost ([82.17.115.212])
+        by :SMTPAUTH: with ESMTPA
+        id P5jinZajW7hrhP5jjnpw7C; Tue, 01 Mar 2022 09:52:31 -0700
+X-CMAE-Analysis: v=2.4 cv=EqsXEQQA c=1 sm=1 tr=0 ts=621e4f4f
+ a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
+ a=IkcTkHD0fZMA:10 a=20KFwNOVAAAA:8 a=uMNopYx9kklUAK_Ie8EA:9 a=QEXdDO2ut3YA:10
+X-SECURESERVER-ACCT: atomlin@atomlin.com
+Date:   Tue, 1 Mar 2022 16:52:29 +0000
+From:   Aaron Tomlin <atomlin@atomlin.com>
+To:     pmladek@suse.com
+Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, cl@linux.com,
+        mbenes@suse.cz, akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        void@manifault.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, daniel.thompson@linaro.org
+Subject: Re: [PATCH v9 10/14] module: kallsyms: Fix suspicious rcu usage
+Message-ID: <20220301165229.5pwxyhxonbw5za3i@ava.usersys.com>
 References: <20220228234322.2073104-1-atomlin@redhat.com>
- <Yh1nGtM7MCMOI++l@bombadil.infradead.org>
- <2e2860d7-23e8-63f3-f7d3-bce0aa57a3d0@csgroup.eu>
+ <20220228234322.2073104-11-atomlin@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2e2860d7-23e8-63f3-f7d3-bce0aa57a3d0@csgroup.eu>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <20220228234322.2073104-11-atomlin@redhat.com>
+X-CMAE-Envelope: MS4xfINBdR/q/bcqzriP3IEMbFhi47PsAzTEpGuiTlKK9J3Tu1GOW2hMFU5HeFL6BP0gCS9Ex8GN8S3w1AJ8L1P2s4Zrgy92386sFKRfhJD/bgMWsZfnpPW/
+ cOYrDcTuhKpzORxfXNoJUGTy386F7nhO76AFns/9dTo+AShVlsbhd0GmhLOVM9YX55mxgq7+oQZ+mKEhd9N7jKlJ6HHuyNuXNZQpk/hlKfBBJdizJVjToV6z
+ SWYppYAiRwTbykNK2073+dJVKMt05vQTOBiguGuebeWOcn0ctbjLZJsev/CmmsuRqhfxinGJZTyQmazFRhMYYKuwNJn9TSK/k/mIaQ7eiPM7t9x0QpupHp0V
+ pTwAGN+jZ7ohsIkS6Jmw1T4J3jEqDZOnZYy9bVjM2xxFyvLNUDeCkcvqwdVUjCDEPlHRQ0cL5yNYaTz9/gLUbPwVsacLi1NDscT8ECFEh349CnfiE+TKfRcd
+ F+2uwrh8+Bg8Op2W9Ibion+0/nMBTw4atbuBVomw3pEvCZIsK0x54ZxUn8Eh6R3VKH9KmboZ8F5a34hO4OiTQTWZX0ElqST9SWcKcDjasFIx/zP5W63rrVap
+ QXLQjRtM1mG6xRGWy+0+UgOf0bxgk6/ZLGtIobTSu5Z++0XO14FCbVuJA+Tphv7Lq3/jxlKHKkcbvAPnUf8Ma/+t
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Mar 01, 2022 at 07:44:26AM +0000, Christophe Leroy wrote:
+On Mon 2022-02-28 23:43 +0000, Aaron Tomlin wrote:
+> No functional change.
 > 
+> The purpose of this patch is to address the various Sparse warnings
+> due to the incorrect dereference/or access of an __rcu pointer.
 > 
-> Le 01/03/2022 à 01:21, Luis Chamberlain a écrit :
-> > 
-> > We should run kmod tests as well.
-> > 
-> 
-> I tried to build kmod tests, but I get a crazy result:
-> 
-> 
-> $ ./configure --host=ppc-linux --prefix=/usr/local
-> 
-> $ make
-> 
-> $ cd testsuite
-> 
-> $ make
-> 
-> $ file test-list
-> test-list: ELF 32-bit MSB executable, PowerPC or cisco 4500, version 1 
-> (SYSV), dynamically linked, interpreter /lib/ld.so.1, for GNU/Linux 
-> 3.2.0, with debug_info, not stripped
-> 
-> $ file module-playground/mod-loop-a.ko
-> module-playground/mod-loop-a.ko: ELF 64-bit LSB relocatable, x86-64, 
-> version 1 (SYSV), 
-> BuildID[sha1]=d46956a4fd36d8d3467806c31831c81217a573f5, with debug_info, 
-> not stripped
-> 
-> 
-> 
-> How do I get it to crossbuild proper PowerPC module ?
+> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> ---
+>  kernel/module/kallsyms.c | 34 ++++++++++++++++++++++------------
+>  1 file changed, 22 insertions(+), 12 deletions(-)
 
-Lucas?
+Petr,
 
-  Luis
+Any concerns?
+
+Unfortunately, I didn't make enough time to test.
+
+
+Kind regards,
+
+-- 
+Aaron Tomlin
