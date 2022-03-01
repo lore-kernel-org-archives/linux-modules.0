@@ -2,72 +2,131 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29348C433F5
-	for <linux-modules@archiver.kernel.org>; Tue,  1 Mar 2022 16:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E47F0C433F5
+	for <linux-modules@archiver.kernel.org>; Tue,  1 Mar 2022 17:15:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbiCAQxP (ORCPT
+        id S233410AbiCARQj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 1 Mar 2022 11:53:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        Tue, 1 Mar 2022 12:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbiCAQxO (ORCPT
+        with ESMTP id S233008AbiCARQi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 1 Mar 2022 11:53:14 -0500
-Received: from p3plsmtpa08-06.prod.phx3.secureserver.net (p3plsmtpa08-06.prod.phx3.secureserver.net [173.201.193.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1BDB53
-        for <linux-modules@vger.kernel.org>; Tue,  1 Mar 2022 08:52:32 -0800 (PST)
-Received: from localhost ([82.17.115.212])
-        by :SMTPAUTH: with ESMTPA
-        id P5jinZajW7hrhP5jjnpw7C; Tue, 01 Mar 2022 09:52:31 -0700
-X-CMAE-Analysis: v=2.4 cv=EqsXEQQA c=1 sm=1 tr=0 ts=621e4f4f
- a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
- a=IkcTkHD0fZMA:10 a=20KFwNOVAAAA:8 a=uMNopYx9kklUAK_Ie8EA:9 a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: atomlin@atomlin.com
-Date:   Tue, 1 Mar 2022 16:52:29 +0000
-From:   Aaron Tomlin <atomlin@atomlin.com>
-To:     pmladek@suse.com
-Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, cl@linux.com,
-        mbenes@suse.cz, akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        void@manifault.com, allen.lkml@gmail.com, joe@perches.com,
-        msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org
-Subject: Re: [PATCH v9 10/14] module: kallsyms: Fix suspicious rcu usage
-Message-ID: <20220301165229.5pwxyhxonbw5za3i@ava.usersys.com>
+        Tue, 1 Mar 2022 12:16:38 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297D01ADAB;
+        Tue,  1 Mar 2022 09:15:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646154957; x=1677690957;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=X1c34HXtdEgIl+9aQPS9vy0y8L7rLHVZWQQB8shSRdw=;
+  b=TmKxKRIXYBkWfOhw/s8XwNUNkneKBbcnvFcIIev66eT/WIK4WA0NtJwx
+   43A1fn9UVYnfpucqnOEdZT19EePj4DnEKEqMTayITCnb1SGXKvaHdYlGb
+   0vo952OZvBGlFPxYOcDcWLWm0sSNwV9AAK9nmJ2YQgRNjU6ColsCJW8MB
+   5NWm0dinffde/mj+YfKLzUhm+WpuqHFbpCSz6AtnnlT+q/UgZvGKpqUdR
+   sNsJmUOAkUrGpGL1wA1tjOfWgjs8wDmUhvmHFh/sMnXnsyllLJNliL03M
+   drlHUdVwKW2C00b9Anyco/3GPU2NetfnjfMbLdd7XVEW4wFBICfS7ChK4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="252016876"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="252016876"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 09:15:56 -0800
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="534981666"
+Received: from zliu5x-mobl2.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.113.230])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 09:15:56 -0800
+Date:   Tue, 1 Mar 2022 09:15:55 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "void@manifault.com" <void@manifault.com>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+        "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
+        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
+        Aaron Tomlin <atomlin@redhat.com>
+Subject: Re: [PATCH v9 00/14] module: core code clean up
+Message-ID: <20220301171555.tzrqrmhtv2tkxtaj@ldmartin-desk2>
 References: <20220228234322.2073104-1-atomlin@redhat.com>
- <20220228234322.2073104-11-atomlin@redhat.com>
+ <Yh1nGtM7MCMOI++l@bombadil.infradead.org>
+ <2e2860d7-23e8-63f3-f7d3-bce0aa57a3d0@csgroup.eu>
+ <Yh5DU6n7oCRTfbtG@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220228234322.2073104-11-atomlin@redhat.com>
-X-CMAE-Envelope: MS4xfINBdR/q/bcqzriP3IEMbFhi47PsAzTEpGuiTlKK9J3Tu1GOW2hMFU5HeFL6BP0gCS9Ex8GN8S3w1AJ8L1P2s4Zrgy92386sFKRfhJD/bgMWsZfnpPW/
- cOYrDcTuhKpzORxfXNoJUGTy386F7nhO76AFns/9dTo+AShVlsbhd0GmhLOVM9YX55mxgq7+oQZ+mKEhd9N7jKlJ6HHuyNuXNZQpk/hlKfBBJdizJVjToV6z
- SWYppYAiRwTbykNK2073+dJVKMt05vQTOBiguGuebeWOcn0ctbjLZJsev/CmmsuRqhfxinGJZTyQmazFRhMYYKuwNJn9TSK/k/mIaQ7eiPM7t9x0QpupHp0V
- pTwAGN+jZ7ohsIkS6Jmw1T4J3jEqDZOnZYy9bVjM2xxFyvLNUDeCkcvqwdVUjCDEPlHRQ0cL5yNYaTz9/gLUbPwVsacLi1NDscT8ECFEh349CnfiE+TKfRcd
- F+2uwrh8+Bg8Op2W9Ibion+0/nMBTw4atbuBVomw3pEvCZIsK0x54ZxUn8Eh6R3VKH9KmboZ8F5a34hO4OiTQTWZX0ElqST9SWcKcDjasFIx/zP5W63rrVap
- QXLQjRtM1mG6xRGWy+0+UgOf0bxgk6/ZLGtIobTSu5Z++0XO14FCbVuJA+Tphv7Lq3/jxlKHKkcbvAPnUf8Ma/+t
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yh5DU6n7oCRTfbtG@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon 2022-02-28 23:43 +0000, Aaron Tomlin wrote:
-> No functional change.
-> 
-> The purpose of this patch is to address the various Sparse warnings
-> due to the incorrect dereference/or access of an __rcu pointer.
-> 
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-> ---
->  kernel/module/kallsyms.c | 34 ++++++++++++++++++++++------------
->  1 file changed, 22 insertions(+), 12 deletions(-)
+On Tue, Mar 01, 2022 at 08:01:23AM -0800, Luis Chamberlain wrote:
+>On Tue, Mar 01, 2022 at 07:44:26AM +0000, Christophe Leroy wrote:
+>>
+>>
+>> Le 01/03/2022 à 01:21, Luis Chamberlain a écrit :
+>> >
+>> > We should run kmod tests as well.
+>> >
+>>
+>> I tried to build kmod tests, but I get a crazy result:
+>>
+>>
+>> $ ./configure --host=ppc-linux --prefix=/usr/local
+>>
+>> $ make
+>>
+>> $ cd testsuite
+>>
+>> $ make
+>>
+>> $ file test-list
+>> test-list: ELF 32-bit MSB executable, PowerPC or cisco 4500, version 1
+>> (SYSV), dynamically linked, interpreter /lib/ld.so.1, for GNU/Linux
+>> 3.2.0, with debug_info, not stripped
+>>
+>> $ file module-playground/mod-loop-a.ko
+>> module-playground/mod-loop-a.ko: ELF 64-bit LSB relocatable, x86-64,
+>> version 1 (SYSV),
+>> BuildID[sha1]=d46956a4fd36d8d3467806c31831c81217a573f5, with debug_info,
+>> not stripped
+>>
+>>
+>>
+>> How do I get it to crossbuild proper PowerPC module ?
 
-Petr,
+do I understand correctly that you want to crossbuild kmod + kernel
+modules to do your test? why?
 
-Any concerns?
+If you really need it, then beware we just chainload the kernel build
+for the out-of-tree modules when compiling the test modules. Something
+like this should work:
 
-Unfortunately, I didn't make enough time to test.
+	make V=1 KDIR=$HOME/p/gfx-internal/linux-arm64/ ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- check
 
+But running the cross built binaries is probably not what you want?
 
-Kind regards,
+Another thing is that unless you are patching kmod binaries or libkmod,
+the testsuite won't test much. kmod's testsuite don't test anything on
+the kernel side... the kernel part is mocked by the testsuite itself.
+Adding proper integration with the kernel part is possible, but not
+something ready.
 
--- 
-Aaron Tomlin
+Lucas De Marchi
+
+>
+>Lucas?
+>
+>  Luis
