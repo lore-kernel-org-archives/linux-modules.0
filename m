@@ -2,116 +2,118 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2AA0C433F5
-	for <linux-modules@archiver.kernel.org>; Wed,  2 Mar 2022 16:26:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C500BC433EF
+	for <linux-modules@archiver.kernel.org>; Wed,  2 Mar 2022 17:02:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbiCBQ1M (ORCPT
+        id S236799AbiCBRC4 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 2 Mar 2022 11:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
+        Wed, 2 Mar 2022 12:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiCBQ1K (ORCPT
+        with ESMTP id S243656AbiCBRCx (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 2 Mar 2022 11:27:10 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9882A9E28
-        for <linux-modules@vger.kernel.org>; Wed,  2 Mar 2022 08:26:26 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id d3so3662757wrf.1
-        for <linux-modules@vger.kernel.org>; Wed, 02 Mar 2022 08:26:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4lZEInqzBQdxmom04rLGOTBOINe87ZHTNK8A1MHNUYM=;
-        b=zNY/A3DvXSSHSOLKYTxwjW4mjiSxKTe2DFTa9drWsknJ9Gobo/rAHMhdkBLLnUF8it
-         qObkZaPUtzMcW0vv80UyqbGn/5SqEJm5CWtnqtNf416LbLOH03IHCDcalJaCaNnQqmxa
-         n7JOmOog5D44bHsXOE9UR4UELZJ0fyDRKRw2sg464T2pSOZ/8YSImYpJ3+7w/18AZrm/
-         QVjeS2JlyxOhcZTWDhqbC0p+x8FcyzIDVLtpp9OSPqij50FzVjYaVMJ8SxAgdZHfT7RG
-         faSL3/PPKB61LMyU9PIhxtaqQqPnmwi8mqwaM9f4L8E7gFTt3Hft0K5TWhEtuzuGZbds
-         unrw==
+        Wed, 2 Mar 2022 12:02:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D67B8C42BC
+        for <linux-modules@vger.kernel.org>; Wed,  2 Mar 2022 09:02:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646240529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rd6aip8xWGW26J5sRuqwhGdbjTj2rP5btIv5QWD2Mkg=;
+        b=ZsIpHATLwMK0kg/s2Noynry1aw+IUGvw4A0P2fS0PKS2t6XvvVaEWjOV+OScw2G5WyUaeA
+        XMUcnbTUZxnViDUPl69Zq+QYCAozT/KDtQ1cAQ/UCr1cVrMFFSTKl2sL7/8GpK62hGvX1M
+        tS0Vv1Cfaac3qc3Q0lGjaz/Lbypm2CM=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-665-8mCg7y08MuWhxotGRF-VGA-1; Wed, 02 Mar 2022 12:02:05 -0500
+X-MC-Unique: 8mCg7y08MuWhxotGRF-VGA-1
+Received: by mail-wr1-f69.google.com with SMTP id q12-20020adfbb8c000000b001ea938f79e9so847802wrg.23
+        for <linux-modules@vger.kernel.org>; Wed, 02 Mar 2022 09:02:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=4lZEInqzBQdxmom04rLGOTBOINe87ZHTNK8A1MHNUYM=;
-        b=tPExOy+y4NVjIs300rJy1BmXDz0mYfQZHsotSTWVrqOHfiU+8KAIQjHpelrUwz0arP
-         jLhszmTjkJEF0QPuN5tz7g1/1moEb/YyaHAfAWPsmbUtjRgGoBhnYLet67A/MP7RG95t
-         DjTvAavkEqHbGSQp9ChoHm5thNFvt0dXiWu4m0vfkcJEQbsRIP3xTVitqTdMozWlkOwu
-         1IIp1kxwrwxnmIZarz/j/4ZpimH6cO1QvwE2iYObNQy3jr9WRBH9UrDPTaUb29WLkU4Q
-         l4wSbHniAvxLyVHOA0QwmSgSWHSlOcUYpydQslEkkNZJSO95/RTFNNRdW5zblgW82yd0
-         ef2g==
-X-Gm-Message-State: AOAM530nLjdvGxGjv+hEG+2kc0UhZ89ol6KlQZ30Pp6u+8xISMkMkh6e
-        ebu5svMWZj9RCTpsDb9Fl7qfdA==
-X-Google-Smtp-Source: ABdhPJxbCsWQrJHmYbdS8sJGQSK+IN5/SW7XDx1ANefT8UUiw7YoiSlpX6p5XW4Wc6Ducn8hIA0qbA==
-X-Received: by 2002:a5d:52d2:0:b0:1ef:e22d:18ba with SMTP id r18-20020a5d52d2000000b001efe22d18bamr10036216wrv.30.1646238385454;
-        Wed, 02 Mar 2022 08:26:25 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id g22-20020a1c4e16000000b003817614d4adsm6068399wmh.12.2022.03.02.08.26.24
+        bh=Rd6aip8xWGW26J5sRuqwhGdbjTj2rP5btIv5QWD2Mkg=;
+        b=YmdBPMNR58lvz9M9CYp7SCFMlzuX9+3T5SVaTu2D3+mGH14PsiSB4zBMszuiI0WkTo
+         nmubGRX6Au8LxKs0AFjW7k+sJvWCBbxrDMorqPL4jWJJASxZc5n8tShyaigyCK9fNgek
+         zzn6wwQdZmdlYrYofchU9g089D8R5n2dTZfIeEZCQrgNEvD4IagE1ZrLynNXnoqAvFXD
+         eAh/k+gbvc8ZKczBzKzxdgUnaifD1iz9vvkNGkL3IG7voNyDAXITfREch05Si/KRLmbS
+         J2lW8mazQChWjlBBiO+PatCX0AEMQYuTk9yKpm6acyxJk3iF0vZdRKM9DhpJmC9guwi4
+         95WA==
+X-Gm-Message-State: AOAM533oiiOxNNjjm55iRt6NlnD3GzU/x5e0gVt/A99GzWlt54wCclgY
+        UGcl6iymBcuULvdeGgYaVBJmyXO1Yi3+Grwvt1fzJRFm/ZamwADsr7TD32B8G62iiH8kPt9m5FN
+        t6GcfM59Usv0yBPzMvXtBQZrz
+X-Received: by 2002:a5d:654e:0:b0:1f0:1a18:166c with SMTP id z14-20020a5d654e000000b001f01a18166cmr5974866wrv.28.1646240524763;
+        Wed, 02 Mar 2022 09:02:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwxMzcpyzOGWIlpDjbhmT42tQ9LNvh9Wvh8XJd5z++9TTyMj7rOAC+j4Bhyrzp6SUNSrhq6qw==
+X-Received: by 2002:a5d:654e:0:b0:1f0:1a18:166c with SMTP id z14-20020a5d654e000000b001f01a18166cmr5974831wrv.28.1646240524459;
+        Wed, 02 Mar 2022 09:02:04 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id v20-20020a7bcb54000000b0037fa63db8aasm6443457wmj.5.2022.03.02.09.02.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 08:26:24 -0800 (PST)
-Date:   Wed, 2 Mar 2022 16:26:22 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, pmladek@suse.com,
-        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
-        jeyu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, void@manifault.com,
-        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        Wed, 02 Mar 2022 09:02:03 -0800 (PST)
+Date:   Wed, 2 Mar 2022 17:02:02 +0000
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     pmladek@suse.com
+Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, cl@linux.com,
+        mbenes@suse.cz, akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        void@manifault.com, allen.lkml@gmail.com, joe@perches.com,
         msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com
-Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
-Message-ID: <20220302162622.z5wxbdmxh2pqh6cb@maple.lan>
+        jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        atomlin@atomlin.com
+Subject: Re: [PATCH v9 10/14] module: kallsyms: Fix suspicious rcu usage
+Message-ID: <20220302170202.lsz2mqmll6gshuwr@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
 References: <20220228234322.2073104-1-atomlin@redhat.com>
- <20220228234322.2073104-14-atomlin@redhat.com>
- <20220302161917.gx5icfszakoye4uh@maple.lan>
+ <20220228234322.2073104-11-atomlin@redhat.com>
+ <20220301165229.5pwxyhxonbw5za3i@ava.usersys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220302161917.gx5icfszakoye4uh@maple.lan>
+In-Reply-To: <20220301165229.5pwxyhxonbw5za3i@ava.usersys.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Mar 02, 2022 at 04:19:17PM +0000, Daniel Thompson wrote:
-> On Mon, Feb 28, 2022 at 11:43:21PM +0000, Aaron Tomlin wrote:
-> > No functional change.
-> > 
-> > This patch migrates kdb_modules list to core kdb code
-> > since the list of added/or loaded modules is no longer
-> > private.
-> > 
-> > Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-> > ---
-> >  kernel/debug/kdb/kdb_main.c    | 5 +++++
-> >  kernel/debug/kdb/kdb_private.h | 4 ----
-> >  kernel/module/main.c           | 4 ----
-> >  3 files changed, 5 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
-> > index 0852a537dad4..5369bf45c5d4 100644
-> > --- a/kernel/debug/kdb/kdb_main.c
-> > +++ b/kernel/debug/kdb/kdb_main.c
-> > @@ -59,6 +59,11 @@ EXPORT_SYMBOL(kdb_grepping_flag);
-> >  int kdb_grep_leading;
-> >  int kdb_grep_trailing;
-> >  
-> > +#ifdef CONFIG_MODULES
-> > +extern struct list_head modules;
-
-Actually thinking a bit harder and trying
-`git grep '#include .*[.][.]' kernel/` (which finds some prior art) I
-wonder if we even want the extern or whether
-`#include "../../module/internal.h"` would be more robust.
-
-
-Daniel.
-
-
-> > +static struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
+On Tue 2022-03-01 16:52 +0000, Aaron Tomlin wrote:
+> Petr,
 > 
-> If modules is no longer static then why do we kdb_modules at all?
-> kdb_modules is used exactly once and it can now simply be replaced
-> with &modules.
+> Any concerns?
 > 
-> 
-> Daniel.
+> Unfortunately, I didn't make enough time to test.
+
+Petr,
+
+$ sudo ./test-livepatch.sh
+[sudo] password for atomlin:
+TEST: basic function patching ... ok
+TEST: multiple livepatches ... ok
+TEST: atomic replace livepatch ... ok
+
+ - dmesg output excerpt
+
+[  209.354909] ===== TEST: basic function patching =====
+[  209.435376] % modprobe test_klp_livepatch
+[  209.467226] test_klp_livepatch: tainting kernel with TAINT_LIVEPATCH
+[  209.539749] livepatch: enabling patch 'test_klp_livepatch'
+[  209.539785] livepatch: 'test_klp_livepatch': initializing patching transition
+[  209.543671] livepatch: 'test_klp_livepatch': starting patching transition
+[  210.716486] livepatch: 'test_klp_livepatch': completing patching transition
+[  210.717405] livepatch: 'test_klp_livepatch': patching complete
+[  210.766777] % echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
+[  210.767446] livepatch: 'test_klp_livepatch': initializing unpatching transition
+[  210.767548] livepatch: 'test_klp_livepatch': starting unpatching transition
+[  211.739802] livepatch: 'test_klp_livepatch': completing unpatching transition
+[  211.778846] livepatch: 'test_klp_livepatch': unpatching complete
+[  211.862102] % rmmod test_klp_livepatch
+
+
+Kind regards,
+
+-- 
+Aaron Tomlin
+
