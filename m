@@ -2,38 +2,37 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 627B9C433EF
-	for <linux-modules@archiver.kernel.org>; Thu,  3 Mar 2022 13:37:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2850AC433EF
+	for <linux-modules@archiver.kernel.org>; Thu,  3 Mar 2022 14:57:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbiCCNif (ORCPT
+        id S230512AbiCCO6U (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 3 Mar 2022 08:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        Thu, 3 Mar 2022 09:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiCCNie (ORCPT
+        with ESMTP id S233890AbiCCO6S (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 3 Mar 2022 08:38:34 -0500
+        Thu, 3 Mar 2022 09:58:18 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD64DE2EB;
-        Thu,  3 Mar 2022 05:37:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA4F18FAF9;
+        Thu,  3 Mar 2022 06:57:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FEVhRqa2ocuKXeElJ1GV1u7yPCnknSobAGsnmju/L8Q=; b=GyK4t2LUht31zC1Z6nUue7H8w/
-        Q/7L17Z2aC/7NT7JzSGTEOn/NQyH1q1I6oLaU9Usc73YL1fBIl8Q09jKMusLp5fHJdV4BLFRNx5Xr
-        UaMqqcRlfc71q/moX4k2wR8I/w8iqGbE5hPJBxqA64L25MiTwWkc5XY+shoUllXWAFQGZ3giG1Bfd
-        tDav4bKlGo+bj6oimX7t2i6FrIX0KwshXQgKPhQptCUzjot4J/qt+gtzlTbgaROPqXeoc3y/NfpT/
-        atUwfWFrt+ifBtojbO7PsNCPZx9H8H3KMNAU+PEgQlzG4z36mUPbreH/Z4aHysPz6c5T06HDP+NAq
-        wHWm9IVQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPle5-006W8k-DL; Thu, 03 Mar 2022 13:37:29 +0000
-Date:   Thu, 3 Mar 2022 05:37:29 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        bh=nTOmvpJSqckbzDf6eNL7+28B+F+UJStxYN/hNpPhOJs=; b=2hK1c4rR4aVG0ad7mKz7MpWxDj
+        x6Elg54vNkqJj+F/azQVGGzqo/Qf08ilktEoaP2BYNe8WJ/7ibQMOJtPLE9rYoqtChmuJ9/v0RYZM
+        W6VeyNcyhWO3ldIEVBaB5ha56PHJFwGCTNj7iat+XgkOYPkU64D78XfHsWNdcsqOEjrBmk+Q+30qV
+        tNEUNZtjNmgJpHKZymDRAR1LO7Itq+FYqPZafs++O8hGrqDYHsxt/SgmqyYJqHo45So8F3yRuobz8
+        N9yu3tGeWjw8LWKyW1XR3/JgdKEyp+g1v+pIzlSSalPP0UBPwICyq21Hqc7ZwxjgKIuIUWrcyD1jh
+        5JV27RdQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPmtL-006j7N-Eo; Thu, 03 Mar 2022 14:57:19 +0000
+Date:   Thu, 3 Mar 2022 06:57:19 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         Daniel Thompson <daniel.thompson@linaro.org>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
         "pmladek@suse.com" <pmladek@suse.com>,
         "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
@@ -48,26 +47,38 @@ Cc:     Aaron Tomlin <atomlin@redhat.com>,
         "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
         "jason.wessel@windriver.com" <jason.wessel@windriver.com>
 Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
-Message-ID: <YiDEmRf3X0fxSayK@infradead.org>
+Message-ID: <YiDXTycPZ555KI57@bombadil.infradead.org>
 References: <20220228234322.2073104-1-atomlin@redhat.com>
  <20220228234322.2073104-14-atomlin@redhat.com>
  <20220302161917.gx5icfszakoye4uh@maple.lan>
  <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
  <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
+ <Yh/zy7FCcDmIdAn8@bombadil.infradead.org>
+ <20220303104404.crqt7oz4kydq36fo@ava.usersys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20220303104404.crqt7oz4kydq36fo@ava.usersys.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Mar 02, 2022 at 08:56:23PM +0000, Christophe Leroy wrote:
-> Do we really want to hide the 'struct list_head modules' from external 
-> world ?
+On Thu, Mar 03, 2022 at 10:44:04AM +0000, Aaron Tomlin wrote:
+> On Wed 2022-03-02 14:46 -0800, Luis Chamberlain wrote:
+> > Since we are doing this to help with the cleaning this crap up
+> > the natural thing to do is have the code be a helper which only
+> > built-in code can use, so writing a helper starting with
+> > list_for_each_entry() which prints the modules out. I'm
+> > surprised we have no other users of this. There is nothing
+> > kdb specific about the functionality in that code. So it should
+> > just be moved.
 > 
-> Otherwise we could declare it in include/linux/module.h ?
+> Hi Luis,
+> 
+> Good point, albeit is it really worth it since the only external
+> user is kernel/debug/kdb/ code?
 
-I'd just move the trivial code that uses it from kernel/kdb/ to
-kernel/module/ as it is tied to module internals and just uses the
-KDB interfaces exposed to other parts of the kernel.
+Yes, no need to be exposing that list out anywhere else. And if the list
+is needed better to have a helper for the users.
+
+  Luis
