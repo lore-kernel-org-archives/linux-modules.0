@@ -2,111 +2,127 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 190E7C433EF
-	for <linux-modules@archiver.kernel.org>; Thu,  3 Mar 2022 10:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D840C433EF
+	for <linux-modules@archiver.kernel.org>; Thu,  3 Mar 2022 12:55:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbiCCKo4 (ORCPT
+        id S231304AbiCCM4e (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 3 Mar 2022 05:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        Thu, 3 Mar 2022 07:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbiCCKo4 (ORCPT
+        with ESMTP id S233174AbiCCM4e (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 3 Mar 2022 05:44:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D81845072
-        for <linux-modules@vger.kernel.org>; Thu,  3 Mar 2022 02:44:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646304249;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JprPZetbIa3gZelRValOQCvT2YcVAHIjq5tXKGeAvvg=;
-        b=ExOrXc7muzmRQ+zQ7dOUIehpFVv4AmWt5A4pQpd2nwpaFc4t1BOggVnyIGrJqLPXPHx4mC
-        vq3LQV7EoFlPRpwRf/HwK/nPvifVBYZPEMk9083igLvjezJNY81tjHQJHSM9Up6qJAdbK+
-        3HAgwPXoP22Qr5UsFWnO9bYHSv/EuPk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550--8F7SKMZPBS6p-5w9CbbNA-1; Thu, 03 Mar 2022 05:44:07 -0500
-X-MC-Unique: -8F7SKMZPBS6p-5w9CbbNA-1
-Received: by mail-wm1-f71.google.com with SMTP id v67-20020a1cac46000000b00383e71bb26fso1112441wme.1
-        for <linux-modules@vger.kernel.org>; Thu, 03 Mar 2022 02:44:07 -0800 (PST)
+        Thu, 3 Mar 2022 07:56:34 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C986D18621A
+        for <linux-modules@vger.kernel.org>; Thu,  3 Mar 2022 04:55:48 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id y5so3132761wmi.0
+        for <linux-modules@vger.kernel.org>; Thu, 03 Mar 2022 04:55:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=H4ymItM9GAkw2uO8ImByzVhFsH40NnmGZAruMPJduOY=;
+        b=WDKotuLWG/w09qDE5vlL55XvvZ0KmX8UKowJJhxX/G1ulTptpEz/BptHaOpDdrqCzo
+         YZJBSF7iz372E6TzNJT50z6yfr2JapWba6n07jA0oNHeUBqmnPEoIUvSG4pbh5w2Gpum
+         VGgSVKCdeUdtA04qpbOwvaCOxVLfK348u8qCs9oQp47uLZpkGRrRUVywW7lA/ORHLnQy
+         v5OPyc4yZi8Sg1GSjOT4uyFQ/OTkxvYoCX4YZamlo3NmehV3m5JpSUHjD8XY0lC9Ru+a
+         xyX0Ac94MCMNBc559qOuDJWpwZxFzHVYQGb0ZjvxlxMVJ8ws2Pg5wau063VBDBQOsev/
+         xbrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=JprPZetbIa3gZelRValOQCvT2YcVAHIjq5tXKGeAvvg=;
-        b=hZziSTG1KTeGY7JLtq9Uq+2nkuiZqbY/gieu9JXDhcbW5F06QbNMhp7LaNXFOxDzYZ
-         yckPS3yWKe+PB3ndExAMwM7Uz6giM6OAcd3lgLgybFJB1yS+QvJ2UiMNb8FyVjrVLohx
-         TDzgegg8OjWS/KFG7KTOivrpy7vCySD0hkNWqXpj/f7/uRIRLyxMFcN007rPf3SZgyIt
-         D8g/JQz3rdwDTfHx/cPnxJG0BuLddpnXtshXXxkg1Kbv/Bi9hHzOoVys/rS0crGclIMB
-         B9fICz8a5P2IGl/tTUn6HM5lAOHz0087FKPtWVIGLdu9XvFnuPk4/2h36T7XKxW8JceO
-         veOw==
-X-Gm-Message-State: AOAM530yixFmg6zTMevSVoDvfXFhxbP/XXdWWP3gyLEzZv5wN3R7Nlgp
-        lggXTkFw2xTZ/YoCDNVjkGnunduG3aAh26tKOBkRnU065W7ouEzTXq5XrFs/N+S46K02P4+JL6m
-        okYCPxe/PBs0QiHc1PgaZomiL
-X-Received: by 2002:adf:f947:0:b0:1ef:9b55:7cba with SMTP id q7-20020adff947000000b001ef9b557cbamr15963996wrr.142.1646304246605;
-        Thu, 03 Mar 2022 02:44:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxh9WCQeSpc3JiAKR09PprZtkHgEaKEjwnm3cnkYiHYbMin5c3oly+30gtLp/GKtHOUsxMucg==
-X-Received: by 2002:adf:f947:0:b0:1ef:9b55:7cba with SMTP id q7-20020adff947000000b001ef9b557cbamr15963983wrr.142.1646304246425;
-        Thu, 03 Mar 2022 02:44:06 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056000022a00b001f017dfb5cdsm2135555wrz.90.2022.03.03.02.44.05
+        bh=H4ymItM9GAkw2uO8ImByzVhFsH40NnmGZAruMPJduOY=;
+        b=EHpSOfKom887XsiuwrukLCBeZmzMFOYFNAXEpZ4+T9NV3mhLrMjNBod5pVmIL+3klH
+         oTca3dV0xnMcvjcpfR6XI0RsPBhPrjG+EPEI7vOkualcDa8UFxKUeCVn5YAZElz9I/ub
+         8fT6ENTdMz1yNqQ4DMUmKhOH4cp9IHDvkbA91kE2p10ste9o+ciHSNhZaER2DM1l1apy
+         wwfgiP+s6YrVIwzUgpnABTcWgdBjFZ+BRXUZnk1OUOqEmVrkChEPy3A19vvsdU4aD754
+         oRHDiDFtqRIgfbQuTMSXRqAxqgD0o/8P86b8tc94n6fWqa2uIMbZkKYYinQXdplV75SN
+         awVQ==
+X-Gm-Message-State: AOAM531h4+zGKglVKkpL2rMnmDVpGsBM5d2lTPZdn0KJW8lE08QdT+zy
+        PKujvyHCC2amuZjTVejzCp2Qng==
+X-Google-Smtp-Source: ABdhPJwO3KU2LifTRIz4uG1CGsqAyXsKWgkUpr3yx16G+UmhFjLMjuYyGmzT2fDC8dBb+ikord0xlA==
+X-Received: by 2002:a1c:5404:0:b0:381:6599:4620 with SMTP id i4-20020a1c5404000000b0038165994620mr3704162wmb.56.1646312147291;
+        Thu, 03 Mar 2022 04:55:47 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id x2-20020a7bc762000000b00380fd1ba4ebsm15017961wmk.9.2022.03.03.04.55.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 02:44:05 -0800 (PST)
-Date:   Thu, 3 Mar 2022 10:44:04 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "jason.wessel@windriver.com" <jason.wessel@windriver.com>
+        Thu, 03 Mar 2022 04:55:46 -0800 (PST)
+Date:   Thu, 3 Mar 2022 12:55:44 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu, pmladek@suse.com,
+        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com
 Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
-Message-ID: <20220303104404.crqt7oz4kydq36fo@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+Message-ID: <20220303125544.wigrv5ul47ftggwu@maple.lan>
 References: <20220228234322.2073104-1-atomlin@redhat.com>
  <20220228234322.2073104-14-atomlin@redhat.com>
  <20220302161917.gx5icfszakoye4uh@maple.lan>
  <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
- <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
- <Yh/zy7FCcDmIdAn8@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yh/zy7FCcDmIdAn8@bombadil.infradead.org>
+In-Reply-To: <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed 2022-03-02 14:46 -0800, Luis Chamberlain wrote:
-> Since we are doing this to help with the cleaning this crap up
-> the natural thing to do is have the code be a helper which only
-> built-in code can use, so writing a helper starting with
-> list_for_each_entry() which prints the modules out. I'm
-> surprised we have no other users of this. There is nothing
-> kdb specific about the functionality in that code. So it should
-> just be moved.
+On Wed, Mar 02, 2022 at 08:31:53PM +0000, Aaron Tomlin wrote:
+> On Wed 2022-03-02 16:19 +0000, Daniel Thompson wrote:
+> > On Mon, Feb 28, 2022 at 11:43:21PM +0000, Aaron Tomlin wrote:
+> > > No functional change.
+> > > 
+> > > This patch migrates kdb_modules list to core kdb code
+> > > since the list of added/or loaded modules is no longer
+> > > private.
+> > > 
+> > > Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> > > ---
+> > >  kernel/debug/kdb/kdb_main.c    | 5 +++++
+> > >  kernel/debug/kdb/kdb_private.h | 4 ----
+> > >  kernel/module/main.c           | 4 ----
+> > >  3 files changed, 5 insertions(+), 8 deletions(-)
+> > > 
+> > > diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
+> > > index 0852a537dad4..5369bf45c5d4 100644
+> > > --- a/kernel/debug/kdb/kdb_main.c
+> > > +++ b/kernel/debug/kdb/kdb_main.c
+> > > @@ -59,6 +59,11 @@ EXPORT_SYMBOL(kdb_grepping_flag);
+> > >  int kdb_grep_leading;
+> > >  int kdb_grep_trailing;
+> > >  
+> > > +#ifdef CONFIG_MODULES
+> > > +extern struct list_head modules;
+> > > +static struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
+> 
+> Hi Daniel,
+> 
+> > If modules is no longer static then why do we kdb_modules at all?
+> > kdb_modules is used exactly once and it can now simply be replaced
+> > with &modules.
+> 
+> In my opinion, I would prefer to avoid an explicit include of "internal.h"
+> in kernel/module. By definition it should be reserved for internal use to
+> kernel/module only. Please keep to the above logic.
 
-Hi Luis,
+Are you sure you are replying the right e-mail here? The quoted text
+doesn't propose what you are replying to (although my other e-mail did).
 
-Good point, albeit is it really worth it since the only external
-user is kernel/debug/kdb/ code?
+To be clear there are two bits of feedback here and I don't think
+"please keep to the above logic" is a sufficient answer.
+
+If I remove the proposal on how to fix the second issue get get:
+
+1. Remove kdb_modules because it is pointless (kdb_main.c can just use
+   &modules directly lower down the file).
+2. Having an extern in a kdb C file that duplicatively declares
+   something from an alien header file is gross ;-) .
 
 
-Kind regards,
-
--- 
-Aaron Tomlin
-
+Daniel.
