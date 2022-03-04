@@ -2,38 +2,65 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5F93C433EF
-	for <linux-modules@archiver.kernel.org>; Thu,  3 Mar 2022 19:21:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 273A2C433EF
+	for <linux-modules@archiver.kernel.org>; Fri,  4 Mar 2022 11:12:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiCCTWg (ORCPT
+        id S234098AbiCDLNB (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 3 Mar 2022 14:22:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
+        Fri, 4 Mar 2022 06:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiCCTWe (ORCPT
+        with ESMTP id S236846AbiCDLM7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:22:34 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FF319DE8F;
-        Thu,  3 Mar 2022 11:21:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=08w/JDc6qYmmd6ovLlMzlRArZfgwr+xAOgxsS/BhhsA=; b=KKQxlDmoKr87TIhmd/vvDz8YxI
-        lye7zT8OUNIA1y2tPc+aoZxCeR+bRqOYVXpp6JC6hiM5zuaoIb68Gmm9b11YOU7JTIW9uZu+dhfmi
-        41Dq8AIa2jmYj/MyeOStSXAwbhFXPEfhNknkxttwleckZu5cHpEyP1b2NK+R5eZn6S7vrw8j2cLGq
-        micWjVxpvAmflE+tY3/+lhMiuobASej5rGt9E9mM2PheRHz3TaCJGX4gRs5Yb1Yxb1qQIpWP3emoM
-        uKtznUa3WFOtpWKE7oLpavguGDVASYMiw63jofAyhUUXXNZgDkKGW5ctXUKX0ItGqKVPm4c4WeY1g
-        sRo7k6rw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPr1A-007ZIm-6q; Thu, 03 Mar 2022 19:21:40 +0000
-Date:   Thu, 3 Mar 2022 11:21:40 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
+        Fri, 4 Mar 2022 06:12:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B094C1B01B1
+        for <linux-modules@vger.kernel.org>; Fri,  4 Mar 2022 03:12:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646392331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AUSVwhnfRZoC3iB2YwKFKxHIJ6yrWchu41uAkpUPwY4=;
+        b=InGSPztKnCfy5WQFY/QyVNDVB7JFlY7ZK/FPjenZx2E+UbT/RAVIfEtPSauSAhwGPvaxKc
+        Abx88U6j3XkuNF0xbmjwKArh4iCRogC9kM94NDc4QFdRQN3DA7/mdteIi2biWfOm4gF1YJ
+        nsP8m3TlYIQ3g7WN89//vgtgtwV2u1M=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-299-xSGePGaLOQyERNlPN5ihTQ-1; Fri, 04 Mar 2022 06:12:10 -0500
+X-MC-Unique: xSGePGaLOQyERNlPN5ihTQ-1
+Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b003815245c642so4027989wma.6
+        for <linux-modules@vger.kernel.org>; Fri, 04 Mar 2022 03:12:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AUSVwhnfRZoC3iB2YwKFKxHIJ6yrWchu41uAkpUPwY4=;
+        b=jWn0Sk6j3CmPTAKDJAzQOYIEAaIvwzjY0QWnmvBXZgDj07zruoTvbegW3vmUzTweTF
+         swEYuVr2GkDzcQRlWs8HLkDSwxD6OHRO33rqiNL0WHA5i+xK7e61S7nvJY8971Q/Guo0
+         WURwkIsKxyT1DukZ6x+YAQaJdBVGPts8VnThzh2wLGEyPKoqLB1/3QsNK++ujUKpN2K2
+         PPE6eP9j0/UojUZtJ/CVw47YsYKsMq9AzgeI5+/LxyKvx/nvgNMCvEwLJu/tZ+0rgYnz
+         EmDmnig34je02q1MGDIYnp9/wMwJ7046CwfTWjPRZWD5fJuIj89qlLoSqYNS/A+x4lfw
+         u86A==
+X-Gm-Message-State: AOAM532Pwm3Lrc3LwGnKtyfVx3bykaGhThcpUeWjV/vEZNRR9839Q1oL
+        yYkaPIsj1zFjQPH4a9seYitc/Z0XNEnV7A68u4fn2f7clCX9zf0hE9FI3PFdA1fl4lXrI15Bhx/
+        78mG0a35x/B6WxNHzkgjRhgS4
+X-Received: by 2002:a5d:598f:0:b0:1e3:649:e6c3 with SMTP id n15-20020a5d598f000000b001e30649e6c3mr30074416wri.520.1646392329759;
+        Fri, 04 Mar 2022 03:12:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzvcDuGsktUT/oYRoSqkT5GCN7ol05dt6eg/Yp3ZoumXCrcGzAwTCnCSrQyurvMrQV4T5HLjQ==
+X-Received: by 2002:a5d:598f:0:b0:1e3:649:e6c3 with SMTP id n15-20020a5d598f000000b001e30649e6c3mr30074410wri.520.1646392329543;
+        Fri, 04 Mar 2022 03:12:09 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id bg18-20020a05600c3c9200b0037c2ef07493sm5716793wmb.3.2022.03.04.03.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 03:12:08 -0800 (PST)
+Date:   Fri, 4 Mar 2022 11:12:07 +0000
+From:   Aaron Tomlin <atomlin@redhat.com>
 To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Aaron Tomlin <atomlin@redhat.com>,
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
         "pmladek@suse.com" <pmladek@suse.com>,
         "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
@@ -48,212 +75,39 @@ Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
         "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
         "jason.wessel@windriver.com" <jason.wessel@windriver.com>
 Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
-Message-ID: <YiEVRFl3uOTO4uw9@bombadil.infradead.org>
+Message-ID: <20220304111207.pmopl7vgxrniwava@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
 References: <20220228234322.2073104-1-atomlin@redhat.com>
  <20220228234322.2073104-14-atomlin@redhat.com>
  <20220302161917.gx5icfszakoye4uh@maple.lan>
  <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
  <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
  <YiDEmRf3X0fxSayK@infradead.org>
- <20220303145949.inaz2tecmfuek2hf@maple.lan>
- <YiEAxgVYx552UQFS@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YiEAxgVYx552UQFS@infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <YiDEmRf3X0fxSayK@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Mar 03, 2022 at 09:54:14AM -0800, Christoph Hellwig wrote:
-> On Thu, Mar 03, 2022 at 02:59:49PM +0000, Daniel Thompson wrote:
+On Thu 2022-03-03 05:37 -0800, Christoph Hellwig wrote:
+> On Wed, Mar 02, 2022 at 08:56:23PM +0000, Christophe Leroy wrote:
+> > Do we really want to hide the 'struct list_head modules' from external 
+> > world ?
 > > 
-> > One of the best ways that we can common up code might be to dust
-> > off some code I wrote a while back to display seq_files from
-> > kdb.
-> > 
-> > The basic idea worked well enough but it often needs special
-> > start/stop operatings to ensure the start meeds kdb's rather
-> > odd locking restrictions. If there is a willingness for
-> > something like the below to be included in the module code then we
-> > could replace kdb_lsmod() with something that reused the code to
-> >  format /proc/modules.
-> 
-> Displaying seq_files sounds nice to have, but in the short term I'm
-> just thinking of something like this:
-> 
-> diff --git a/include/linux/kdb.h b/include/linux/kdb.h
-> index ea0f5e580fac2..07dfb6a20a1c4 100644
-> --- a/include/linux/kdb.h
-> +++ b/include/linux/kdb.h
-> @@ -222,5 +222,6 @@ enum {
->  
->  extern int kdbgetintenv(const char *, int *);
->  extern int kdb_set(int, const char **);
-> +int kdb_lsmod(int argc, const char **argv);
+> > Otherwise we could declare it in include/linux/module.h ?
+> I'd just move the trivial code that uses it from kernel/kdb/ to
+> kernel/module/ as it is tied to module internals and just uses the
+> KDB interfaces exposed to other parts of the kernel.
 
-Yes exactly.
+Hi Christoph,
 
->  #endif	/* !_KDB_H */
-> diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
-> index 0852a537dad4c..292a407118a4f 100644
-> --- a/kernel/debug/kdb/kdb_main.c
-> +++ b/kernel/debug/kdb/kdb_main.c
-> @@ -2004,54 +2004,6 @@ static int kdb_ef(int argc, const char **argv)
->  	return 0;
->  }
->  
-> -#if defined(CONFIG_MODULES)
-> -/*
-> - * kdb_lsmod - This function implements the 'lsmod' command.  Lists
-> - *	currently loaded kernel modules.
-> - *	Mostly taken from userland lsmod.
-> - */
-> -static int kdb_lsmod(int argc, const char **argv)
-> -{
-> -	struct module *mod;
-> -
-> -	if (argc != 0)
-> -		return KDB_ARGCOUNT;
-> -
-> -	kdb_printf("Module                  Size  modstruct     Used by\n");
-> -	list_for_each_entry(mod, kdb_modules, list) {
-> -		if (mod->state == MODULE_STATE_UNFORMED)
-> -			continue;
-> -
-> -		kdb_printf("%-20s%8u  0x%px ", mod->name,
-> -			   mod->core_layout.size, (void *)mod);
-> -#ifdef CONFIG_MODULE_UNLOAD
-> -		kdb_printf("%4d ", module_refcount(mod));
-> -#endif
-> -		if (mod->state == MODULE_STATE_GOING)
-> -			kdb_printf(" (Unloading)");
-> -		else if (mod->state == MODULE_STATE_COMING)
-> -			kdb_printf(" (Loading)");
-> -		else
-> -			kdb_printf(" (Live)");
-> -		kdb_printf(" 0x%px", mod->core_layout.base);
-> -
-> -#ifdef CONFIG_MODULE_UNLOAD
-> -		{
-> -			struct module_use *use;
-> -			kdb_printf(" [ ");
-> -			list_for_each_entry(use, &mod->source_list,
-> -					    source_list)
-> -				kdb_printf("%s ", use->target->name);
-> -			kdb_printf("]\n");
-> -		}
-> -#endif
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -#endif	/* CONFIG_MODULES */
-> -
->  /*
->   * kdb_env - This function implements the 'env' command.  Display the
->   *	current environment variables.
-> diff --git a/kernel/debug/kdb/kdb_private.h b/kernel/debug/kdb/kdb_private.h
-> index 0d2f9feea0a46..1f8c519a5f81c 100644
-> --- a/kernel/debug/kdb/kdb_private.h
-> +++ b/kernel/debug/kdb/kdb_private.h
-> @@ -226,10 +226,6 @@ extern void kdb_kbd_cleanup_state(void);
->  #define kdb_kbd_cleanup_state()
->  #endif /* ! CONFIG_KDB_KEYBOARD */
->  
-> -#ifdef CONFIG_MODULES
-> -extern struct list_head *kdb_modules;
-> -#endif /* CONFIG_MODULES */
-> -
->  extern char kdb_prompt_str[];
->  
->  #define	KDB_WORD_SIZE	((int)sizeof(unsigned long))
-> diff --git a/kernel/module.c b/kernel/module.c
-> index 6cea788fd965c..754ec20aab4f1 100644
-> --- a/kernel/module.c
-> +++ b/kernel/module.c
-> @@ -57,6 +57,7 @@
->  #include <linux/bsearch.h>
->  #include <linux/dynamic_debug.h>
->  #include <linux/audit.h>
-> +#include <linux/kdb.h>
->  #include <uapi/linux/module.h>
->  #include "module-internal.h"
->  
-> @@ -252,10 +253,6 @@ static void mod_update_bounds(struct module *mod)
->  		__mod_update_bounds(mod->init_layout.base, mod->init_layout.size);
->  }
->  
-> -#ifdef CONFIG_KGDB_KDB
-> -struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
-> -#endif /* CONFIG_KGDB_KDB */
-> -
->  static void module_assert_mutex_or_preempt(void)
->  {
->  #ifdef CONFIG_LOCKDEP
-> @@ -4808,3 +4805,45 @@ void module_layout(struct module *mod,
->  }
->  EXPORT_SYMBOL(module_layout);
->  #endif
-> +
-> +#ifdef CONFIG_KGDB_KDB
+This is a great idea. I'll do this instead.
 
-Yes! And then when we move all this crap to its own files on
-kernel/module/Makefile:
 
-obj-$(CONFIG_KGDB_KDB) += kdb.o
+Kind regards,
 
-> +int kdb_lsmod(int argc, const char **argv)
-> +{
-> +	struct module *mod;
-> +
-> +	if (argc != 0)
-> +		return KDB_ARGCOUNT;
-> +
-> +	kdb_printf("Module                  Size  modstruct     Used by\n");
+-- 
+Aaron Tomlin
 
-Indeed, we need to do it this way because kdb_printf() which emits
-messages directly to I/O drivers, bypassing the kernel log. Perhaps this
-info should be added to the top of kernel/module/kdb.c
-
-> +	list_for_each_entry(mod, &modules, list) {
-> +		if (mod->state == MODULE_STATE_UNFORMED)
-> +			continue;
-> +
-> +		kdb_printf("%-20s%8u  0x%px ", mod->name,
-> +			   mod->core_layout.size, (void *)mod);
-> +#ifdef CONFIG_MODULE_UNLOAD
-> +		kdb_printf("%4d ", module_refcount(mod));
-> +#endif
-
-Yes and later this can be if IS_ENABLED(CONFIG_MODULE_UNLOAD)
-
-> +		if (mod->state == MODULE_STATE_GOING)
-> +			kdb_printf(" (Unloading)");
-> +		else if (mod->state == MODULE_STATE_COMING)
-> +			kdb_printf(" (Loading)");
-> +		else
-> +			kdb_printf(" (Live)");
-> +		kdb_printf(" 0x%px", mod->core_layout.base);
-> +
-> +#ifdef CONFIG_MODULE_UNLOAD
-
-and if IS_ENABLED(CONFIG_MODULE_UNLOAD) later
-
-> +		{
-> +			struct module_use *use;
-> +			kdb_printf(" [ ");
-> +			list_for_each_entry(use, &mod->source_list,
-> +					    source_list)
-> +				kdb_printf("%s ", use->target->name);
-> +			kdb_printf("]\n");
-> +		}
-> +#endif
-> +	}
-> +
-> +	return 0;
-> +}
-> +#endif	/* CONFIG_KGDB_KDB */
-
-  Luis
