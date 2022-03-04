@@ -2,64 +2,58 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 273A2C433EF
-	for <linux-modules@archiver.kernel.org>; Fri,  4 Mar 2022 11:12:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4389C433EF
+	for <linux-modules@archiver.kernel.org>; Fri,  4 Mar 2022 11:54:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234098AbiCDLNB (ORCPT
+        id S238424AbiCDLzi (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 4 Mar 2022 06:13:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
+        Fri, 4 Mar 2022 06:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236846AbiCDLM7 (ORCPT
+        with ESMTP id S231389AbiCDLzh (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:12:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B094C1B01B1
-        for <linux-modules@vger.kernel.org>; Fri,  4 Mar 2022 03:12:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646392331;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AUSVwhnfRZoC3iB2YwKFKxHIJ6yrWchu41uAkpUPwY4=;
-        b=InGSPztKnCfy5WQFY/QyVNDVB7JFlY7ZK/FPjenZx2E+UbT/RAVIfEtPSauSAhwGPvaxKc
-        Abx88U6j3XkuNF0xbmjwKArh4iCRogC9kM94NDc4QFdRQN3DA7/mdteIi2biWfOm4gF1YJ
-        nsP8m3TlYIQ3g7WN89//vgtgtwV2u1M=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-299-xSGePGaLOQyERNlPN5ihTQ-1; Fri, 04 Mar 2022 06:12:10 -0500
-X-MC-Unique: xSGePGaLOQyERNlPN5ihTQ-1
-Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b003815245c642so4027989wma.6
-        for <linux-modules@vger.kernel.org>; Fri, 04 Mar 2022 03:12:10 -0800 (PST)
+        Fri, 4 Mar 2022 06:55:37 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D353D1B2AE9
+        for <linux-modules@vger.kernel.org>; Fri,  4 Mar 2022 03:54:48 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id bi14-20020a05600c3d8e00b00386f2897400so1299439wmb.5
+        for <linux-modules@vger.kernel.org>; Fri, 04 Mar 2022 03:54:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pKOBFhzwjYuGQ0/zLr+UcyZBkKfk85ofZ5SAsoGUAJ0=;
+        b=MJENXqVgVSqsNVQcM+jrjypEcMm/DNnckjceh0/izbM1MHKLRwBaXUBJ6bnNo+0qeQ
+         ymYmJPz2ro8JvSXEMhD8I2D79m2hF4iP0fj7Uc0yc8aMNpU2Vj+OwiK4eKktaeJbyXcR
+         Yy4p1MRkqbtVi3TSprr3gNBPEyLlHVsudbaGLIu+yehw+47BmL0q60WePWbv9qaG+PmC
+         IeWI36nXx5Ie0hlgLZdjtG8PADREqSYZDSL1D94artfKY3wbSYjFrZM0wP9+D868rxZA
+         j6XDpFa3hTUG65In3LWIfHJ4Girano9Ch5oduisspMu2waChXN33kAArXomzRhgKyfrP
+         xFjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=AUSVwhnfRZoC3iB2YwKFKxHIJ6yrWchu41uAkpUPwY4=;
-        b=jWn0Sk6j3CmPTAKDJAzQOYIEAaIvwzjY0QWnmvBXZgDj07zruoTvbegW3vmUzTweTF
-         swEYuVr2GkDzcQRlWs8HLkDSwxD6OHRO33rqiNL0WHA5i+xK7e61S7nvJY8971Q/Guo0
-         WURwkIsKxyT1DukZ6x+YAQaJdBVGPts8VnThzh2wLGEyPKoqLB1/3QsNK++ujUKpN2K2
-         PPE6eP9j0/UojUZtJ/CVw47YsYKsMq9AzgeI5+/LxyKvx/nvgNMCvEwLJu/tZ+0rgYnz
-         EmDmnig34je02q1MGDIYnp9/wMwJ7046CwfTWjPRZWD5fJuIj89qlLoSqYNS/A+x4lfw
-         u86A==
-X-Gm-Message-State: AOAM532Pwm3Lrc3LwGnKtyfVx3bykaGhThcpUeWjV/vEZNRR9839Q1oL
-        yYkaPIsj1zFjQPH4a9seYitc/Z0XNEnV7A68u4fn2f7clCX9zf0hE9FI3PFdA1fl4lXrI15Bhx/
-        78mG0a35x/B6WxNHzkgjRhgS4
-X-Received: by 2002:a5d:598f:0:b0:1e3:649:e6c3 with SMTP id n15-20020a5d598f000000b001e30649e6c3mr30074416wri.520.1646392329759;
-        Fri, 04 Mar 2022 03:12:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzvcDuGsktUT/oYRoSqkT5GCN7ol05dt6eg/Yp3ZoumXCrcGzAwTCnCSrQyurvMrQV4T5HLjQ==
-X-Received: by 2002:a5d:598f:0:b0:1e3:649:e6c3 with SMTP id n15-20020a5d598f000000b001e30649e6c3mr30074410wri.520.1646392329543;
-        Fri, 04 Mar 2022 03:12:09 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id bg18-20020a05600c3c9200b0037c2ef07493sm5716793wmb.3.2022.03.04.03.12.07
+        bh=pKOBFhzwjYuGQ0/zLr+UcyZBkKfk85ofZ5SAsoGUAJ0=;
+        b=hsA4urD7yME1545GKwx03udv/Tbi0TosyujlSMUCbo8iCDiyr+FhOc2Ybh6PnXpYn9
+         Iyw02THbD+OJumScOHyE8b9oOKtcKn2pz9zHNnS+vIRY76rIHcnAnAscd7MNd4Wjy1yn
+         O6coiZjFSkOuFJ9ZlLv3D6Z+J7jTJ6Fa0Gpa5QemrosA20Jn+7g57KMDIWjXAFtKR9Pr
+         VE5xmsjJBjDDHv23DYCCp2TSgId2yrTTe4XFizO+XtRLf7PfFYbtXtK5aPvMNsg8bXiV
+         M1VqfnhUPyGtyX4nn/SoNLholkNpD2/4ciOiKNKZ//1UPx4v7fVSNoo06dVI64KQSfj2
+         xYQQ==
+X-Gm-Message-State: AOAM5326JHTLzpwxDqFYHemI4JfaREnk23L2lhgq8MpwPwLrA4Saua2i
+        MGZ1dy4PSHEi/6IzYBC7j8MH1Q==
+X-Google-Smtp-Source: ABdhPJxmR0SZDu+4BKT+TwvbIcgk+VEUhcGKw5C6sreCAxlaRBiIdimb4VL1dSnVUcg583j8iFYrMA==
+X-Received: by 2002:a05:600c:354b:b0:381:7ff1:32b4 with SMTP id i11-20020a05600c354b00b003817ff132b4mr7483801wmq.134.1646394886995;
+        Fri, 04 Mar 2022 03:54:46 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id a17-20020a5d5091000000b001edb61b2687sm6109082wrt.63.2022.03.04.03.54.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 03:12:08 -0800 (PST)
-Date:   Fri, 4 Mar 2022 11:12:07 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
+        Fri, 04 Mar 2022 03:54:46 -0800 (PST)
+Date:   Fri, 4 Mar 2022 11:54:44 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
         "mcgrof@kernel.org" <mcgrof@kernel.org>,
         "pmladek@suse.com" <pmladek@suse.com>,
         "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
@@ -75,39 +69,47 @@ Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
         "jason.wessel@windriver.com" <jason.wessel@windriver.com>
 Subject: Re: [PATCH v9 13/14] module: Move kdb_modules list out of core code
-Message-ID: <20220304111207.pmopl7vgxrniwava@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+Message-ID: <20220304115444.jlfv6abblqgyzscj@maple.lan>
 References: <20220228234322.2073104-1-atomlin@redhat.com>
  <20220228234322.2073104-14-atomlin@redhat.com>
  <20220302161917.gx5icfszakoye4uh@maple.lan>
  <20220302203153.3kcmwu662szf3drt@ava.usersys.com>
  <a87aac32-52b1-3d56-6331-1c241fea032f@csgroup.eu>
  <YiDEmRf3X0fxSayK@infradead.org>
+ <20220304111207.pmopl7vgxrniwava@ava.usersys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YiDEmRf3X0fxSayK@infradead.org>
+In-Reply-To: <20220304111207.pmopl7vgxrniwava@ava.usersys.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu 2022-03-03 05:37 -0800, Christoph Hellwig wrote:
-> On Wed, Mar 02, 2022 at 08:56:23PM +0000, Christophe Leroy wrote:
-> > Do we really want to hide the 'struct list_head modules' from external 
-> > world ?
-> > 
-> > Otherwise we could declare it in include/linux/module.h ?
-> I'd just move the trivial code that uses it from kernel/kdb/ to
-> kernel/module/ as it is tied to module internals and just uses the
-> KDB interfaces exposed to other parts of the kernel.
+On Fri, Mar 04, 2022 at 11:12:07AM +0000, Aaron Tomlin wrote:
+> On Thu 2022-03-03 05:37 -0800, Christoph Hellwig wrote:
+> > On Wed, Mar 02, 2022 at 08:56:23PM +0000, Christophe Leroy wrote:
+> > > Do we really want to hide the 'struct list_head modules' from external 
+> > > world ?
+> > > 
+> > > Otherwise we could declare it in include/linux/module.h ?
+> > I'd just move the trivial code that uses it from kernel/kdb/ to
+> > kernel/module/ as it is tied to module internals and just uses the
+> > KDB interfaces exposed to other parts of the kernel.
+> 
+> Hi Christoph,
+> 
+> This is a great idea. I'll do this instead.
 
-Hi Christoph,
+Adding this as a new file is fine for me.
 
-This is a great idea. I'll do this instead.
+There were proposed changes to this function this kernel cycle
+(CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC) which I Acked already.
+However it looks like all involved with that are already particpating
+in this thread so I assume an merge issues with that are already in
+hand.
+
+Aaron: Are you OK to add the new kdb file to the "KGDB / KDB
+/debug_core" file list in MAINTAINERS? Mostly I'd expect to just
+Ack changes and move on... but I'd like to be in the loop.
 
 
-Kind regards,
-
--- 
-Aaron Tomlin
-
+Daniel.
