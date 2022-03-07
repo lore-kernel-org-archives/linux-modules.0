@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 284AFC433F5
-	for <linux-modules@archiver.kernel.org>; Mon,  7 Mar 2022 17:45:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 767E1C433FE
+	for <linux-modules@archiver.kernel.org>; Mon,  7 Mar 2022 17:45:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244556AbiCGRqi (ORCPT
+        id S244544AbiCGRql (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 7 Mar 2022 12:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        Mon, 7 Mar 2022 12:46:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244498AbiCGRqg (ORCPT
+        with ESMTP id S244549AbiCGRqi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:46:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F25D939FE
-        for <linux-modules@vger.kernel.org>; Mon,  7 Mar 2022 09:45:35 -0800 (PST)
+        Mon, 7 Mar 2022 12:46:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A1E6954A9
+        for <linux-modules@vger.kernel.org>; Mon,  7 Mar 2022 09:45:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646675134;
+        s=mimecast20190719; t=1646675137;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nlcVw0WJ8YWnydchI7778Sj1W6AqsxSBROpPSypOfl0=;
-        b=WqHsWzqMSAeOi9cPPZrlRCquRMUyvjUwG5nuegtmHh5IRSjj3+II+fLf4W+x+1hwScqP9Z
-        JnT1qHCYYS+V0QsA6t/rJdZWfgAfQVOJKRR6cOTMtNMVZL1EvliIZjSzvRu0Vl39B1qRXq
-        yxv9im+dZeLjIEF+AcvqWPyP05rZyNE=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=t51dSs9d9mDJR5zHj4NgMBJ6gQxLMRrjvZ9uJ9INxC4=;
+        b=NE7FGyB3BBZAoKWMqmh7rKl/qln8nLn3UBsJyzSLnA/V89e8TBrSm0vdjoWIiSGFe80atz
+        +2gP2gJvDCD67ieM2+ifcEf4EwE60X4pjnL+dI0e18RoHlh6uXarmjjvVw6MO1gC/ArTKM
+        sbR4SCwyqqWPVBzAKSpSfmnbgfhWqr8=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-601-6XFBqeXPOWmIbmgTwVqqcw-1; Mon, 07 Mar 2022 12:45:33 -0500
-X-MC-Unique: 6XFBqeXPOWmIbmgTwVqqcw-1
-Received: by mail-wr1-f69.google.com with SMTP id t15-20020adfdc0f000000b001ef93643476so4805120wri.2
-        for <linux-modules@vger.kernel.org>; Mon, 07 Mar 2022 09:45:32 -0800 (PST)
+ us-mta-50-AeH6GayCMpSgLxkB43n4yg-1; Mon, 07 Mar 2022 12:45:36 -0500
+X-MC-Unique: AeH6GayCMpSgLxkB43n4yg-1
+Received: by mail-wm1-f71.google.com with SMTP id 14-20020a05600c028e00b003897a4056e8so5110892wmk.9
+        for <linux-modules@vger.kernel.org>; Mon, 07 Mar 2022 09:45:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nlcVw0WJ8YWnydchI7778Sj1W6AqsxSBROpPSypOfl0=;
-        b=lOUmASoumI/LaaR6BqqmRdlon7Timu1pzEisBv6pYmvtBESXYyF6jvoJPfkS++wvwL
-         hqAi3IuTekjb7pghk+KfWtpRTYLM3tQ+oOmkwWGV+YonhU6ZtliDbvEEFVg0NuLruWH2
-         ZFklIIcSQmQZC196PHmCUVUN6QtH6wEn3PVfdpbwIj3X0VeqKTrG5OECVaz4f68q0X87
-         jQAF/2O+D784vRijgTIefzVilq40VKkHiVnVKiUGjPEkDLh9XiGJfPHpYPU1kjC9tbqd
-         VyFze/F4SZxwExLfCoReuIeBaY1o8dojPL4KJ78CvJO6/ZAaWyApDHqzC2Ugds39svxD
-         qS3Q==
-X-Gm-Message-State: AOAM531JCqRlYxRmh1TGHmAWWSDexeuPOQxR/HOapAaCMIMzeos1L7fU
-        TC/9OKhobOhQodXTo696PPqFmAAowPKVHCrz/Gr01NyfI0K2CzwmVwq3LrZSniuorkd1jIBKfUz
-        hCRpBAsFnIhs5LqxNFmkzhjaF
-X-Received: by 2002:adf:e50a:0:b0:1f0:224e:fd6f with SMTP id j10-20020adfe50a000000b001f0224efd6fmr9147913wrm.209.1646675131943;
-        Mon, 07 Mar 2022 09:45:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyqt7/tblgvqyApiOFuIbVv/e/Pm1i0tYOXmpyi0jdNPGvBzFGoQ+HCrkVXFT+QeBgBJaAlcg==
-X-Received: by 2002:adf:e50a:0:b0:1f0:224e:fd6f with SMTP id j10-20020adfe50a000000b001f0224efd6fmr9147883wrm.209.1646675131749;
-        Mon, 07 Mar 2022 09:45:31 -0800 (PST)
+        bh=t51dSs9d9mDJR5zHj4NgMBJ6gQxLMRrjvZ9uJ9INxC4=;
+        b=2/xPTWxPZjrQwr+GizBcV0//s2XUOw4mCxu/VvF2ZPRCi50vcauqcOTkj/yhLLZAGK
+         ZFMKeIpTjZIIoZwrjsWiLbtPgnDn+q1VQx2+/Ie7oZomeyGuKPjtkiP2Lu2l9pi40h9H
+         KMn2WPRtb14dfQJgVZVoE6GjLOYnLtgVQ5QtbkTMYlRAjCQpjcy+aW73h7kAmQNzmLGl
+         /xazKJxAgY2DhWpK4gijtWoFXF6D223nddC00OYywb5BmuAraITrvyePSs1TjLApdH0i
+         FAAPv4BOJGfnJ8WeoPexmZqniR7ywGB/A2+hv3yajXVoc7Mdd6b7uZsBHzw9XhqwcPxS
+         S59Q==
+X-Gm-Message-State: AOAM532S5ufI1+TZhxh4+JWUGbzPi0AwHhYb7k5cBfq0mcMBn+OfGA/2
+        WnLZmEyay4HFinr47N04uOmZIDfp4Hp7mBAIbHpOfZ91QpHx/XMn5GTlMxS4TE09CCpe8fJNjvh
+        o3358ePSGGPaZ7mgwvt15ZLTH
+X-Received: by 2002:adf:a199:0:b0:1f0:20f5:8f79 with SMTP id u25-20020adfa199000000b001f020f58f79mr8828990wru.296.1646675133737;
+        Mon, 07 Mar 2022 09:45:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyT7JNm8gY9Di2X0ytG5O26Fg7ODMOtWbn1PktMV3kcOZmv5N/38oELXfi+A/eOrlhkeMHW5g==
+X-Received: by 2002:adf:a199:0:b0:1f0:20f5:8f79 with SMTP id u25-20020adfa199000000b001f020f58f79mr8828961wru.296.1646675133463;
+        Mon, 07 Mar 2022 09:45:33 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id f8-20020adfb608000000b0020229d72a4esm567342wre.38.2022.03.07.09.45.30
+        by smtp.gmail.com with ESMTPSA id h17-20020a05600c351100b00381807bd920sm557wmq.28.2022.03.07.09.45.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 09:45:31 -0800 (PST)
+        Mon, 07 Mar 2022 09:45:32 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
 Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
@@ -65,9 +65,9 @@ Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
         msuchanek@suse.de, oleksandr@natalenko.name,
         jason.wessel@windriver.com, daniel.thompson@linaro.org,
         hch@infradead.org, pmladek@suse.com
-Subject: [PATCH v10 10/14] module: kallsyms: Fix suspicious rcu usage
-Date:   Mon,  7 Mar 2022 17:45:05 +0000
-Message-Id: <20220307174509.2887714-11-atomlin@redhat.com>
+Subject: [PATCH v10 11/14] module: Move procfs support into a separate file
+Date:   Mon,  7 Mar 2022 17:45:06 +0000
+Message-Id: <20220307174509.2887714-12-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220307174509.2887714-1-atomlin@redhat.com>
 References: <20220307174509.2887714-1-atomlin@redhat.com>
@@ -78,88 +78,359 @@ List-ID: <linux-modules.vger.kernel.org>
 
 No functional change.
 
-The purpose of this patch is to address the various Sparse warnings
-due to the incorrect dereference/or access of an __rcu pointer.
+This patch migrates code that allows one to generate a
+list of loaded/or linked modules via /proc when procfs
+support is enabled into kernel/module/procfs.c.
 
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- kernel/module/kallsyms.c | 34 ++++++++++++++++++++++------------
- 1 file changed, 22 insertions(+), 12 deletions(-)
+ kernel/module/Makefile   |   1 +
+ kernel/module/internal.h |   1 +
+ kernel/module/main.c     | 131 +-----------------------------------
+ kernel/module/procfs.c   | 142 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 145 insertions(+), 130 deletions(-)
+ create mode 100644 kernel/module/procfs.c
 
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 1b0780e20aab..a3da0686a2a6 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -171,14 +171,17 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
- 	Elf_Shdr *symsec = &info->sechdrs[info->index.sym];
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index 9901bed3ab5b..94296c98a67f 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -15,3 +15,4 @@ obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
+ obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
+ obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
+ obj-$(CONFIG_KALLSYMS) += kallsyms.o
++obj-$(CONFIG_PROC_FS) += procfs.o
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 44ca05b9eb8f..6af40c2d145f 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -72,6 +72,7 @@ struct module *find_module_all(const char *name, size_t len, bool even_unformed)
+ int cmp_name(const void *name, const void *sym);
+ long module_get_offset(struct module *mod, unsigned int *size, Elf_Shdr *sechdr,
+ 		       unsigned int section);
++char *module_flags(struct module *mod, char *buf);
  
- 	/* Set up to point into init section. */
--	mod->kallsyms = mod->init_layout.base + info->mod_kallsyms_init_off;
-+	mod->kallsyms = (void __rcu *)mod->init_layout.base +
-+		info->mod_kallsyms_init_off;
- 
-+	preempt_disable();
- 	/* The following is safe since this pointer cannot change */
--	mod->kallsyms->symtab = (void *)symsec->sh_addr;
--	mod->kallsyms->num_symtab = symsec->sh_size / sizeof(Elf_Sym);
-+	rcu_dereference_sched(mod->kallsyms)->symtab = (void *)symsec->sh_addr;
-+	rcu_dereference_sched(mod->kallsyms)->num_symtab = symsec->sh_size / sizeof(Elf_Sym);
- 	/* Make sure we get permanent strtab: don't use info->strtab. */
--	mod->kallsyms->strtab = (void *)info->sechdrs[info->index.str].sh_addr;
--	mod->kallsyms->typetab = mod->init_layout.base + info->init_typeoffs;
-+	rcu_dereference_sched(mod->kallsyms)->strtab =
-+		(void *)info->sechdrs[info->index.str].sh_addr;
-+	rcu_dereference_sched(mod->kallsyms)->typetab = mod->init_layout.base + info->init_typeoffs;
- 
- 	/*
- 	 * Now populate the cut down core kallsyms for after init
-@@ -187,20 +190,22 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
- 	mod->core_kallsyms.symtab = dst = mod->core_layout.base + info->symoffs;
- 	mod->core_kallsyms.strtab = s = mod->core_layout.base + info->stroffs;
- 	mod->core_kallsyms.typetab = mod->core_layout.base + info->core_typeoffs;
--	src = mod->kallsyms->symtab;
--	for (ndst = i = 0; i < mod->kallsyms->num_symtab; i++) {
--		mod->kallsyms->typetab[i] = elf_type(src + i, info);
-+	src = rcu_dereference_sched(mod->kallsyms)->symtab;
-+	for (ndst = i = 0; i < rcu_dereference_sched(mod->kallsyms)->num_symtab; i++) {
-+		rcu_dereference_sched(mod->kallsyms)->typetab[i] = elf_type(src + i, info);
- 		if (i == 0 || is_livepatch_module(mod) ||
- 		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
- 				   info->index.pcpu)) {
- 			mod->core_kallsyms.typetab[ndst] =
--			    mod->kallsyms->typetab[i];
-+			    rcu_dereference_sched(mod->kallsyms)->typetab[i];
- 			dst[ndst] = src[i];
- 			dst[ndst++].st_name = s - mod->core_kallsyms.strtab;
--			s += strscpy(s, &mod->kallsyms->strtab[src[i].st_name],
-+			s += strscpy(s,
-+				     &rcu_dereference_sched(mod->kallsyms)->strtab[src[i].st_name],
- 				     KSYM_NAME_LEN) + 1;
- 		}
- 	}
-+	preempt_enable();
- 	mod->core_kallsyms.num_symtab = ndst;
+ static inline unsigned long kernel_symbol_value(const struct kernel_symbol *sym)
+ {
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 952079987ea4..44b6fd1acc44 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -22,7 +22,6 @@
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+ #include <linux/elf.h>
+-#include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
+ #include <linux/syscalls.h>
+ #include <linux/fcntl.h>
+@@ -805,31 +804,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+ 	return ret;
  }
  
-@@ -478,11 +483,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+-static inline void print_unload_info(struct seq_file *m, struct module *mod)
+-{
+-	struct module_use *use;
+-	int printed_something = 0;
+-
+-	seq_printf(m, " %i ", module_refcount(mod));
+-
+-	/*
+-	 * Always include a trailing , so userspace can differentiate
+-	 * between this and the old multi-field proc format.
+-	 */
+-	list_for_each_entry(use, &mod->source_list, source_list) {
+-		printed_something = 1;
+-		seq_printf(m, "%s,", use->source->name);
+-	}
+-
+-	if (mod->init != NULL && mod->exit == NULL) {
+-		printed_something = 1;
+-		seq_puts(m, "[permanent],");
+-	}
+-
+-	if (!printed_something)
+-		seq_puts(m, "-");
+-}
+-
+ void __symbol_put(const char *symbol)
+ {
+ 	struct find_symbol_arg fsa = {
+@@ -919,12 +893,6 @@ void module_put(struct module *module)
+ EXPORT_SYMBOL(module_put);
  
- 	mutex_lock(&module_mutex);
- 	list_for_each_entry(mod, &modules, list) {
--		/* We hold module_mutex: no need for rcu_dereference_sched */
--		struct mod_kallsyms *kallsyms = mod->kallsyms;
-+		struct mod_kallsyms *kallsyms;
+ #else /* !CONFIG_MODULE_UNLOAD */
+-static inline void print_unload_info(struct seq_file *m, struct module *mod)
+-{
+-	/* We don't know the usage count, or what modules are using. */
+-	seq_puts(m, " - -");
+-}
+-
+ static inline void module_unload_free(struct module *mod)
+ {
+ }
+@@ -3596,7 +3564,7 @@ static void cfi_cleanup(struct module *mod)
+ }
  
- 		if (mod->state == MODULE_STATE_UNFORMED)
- 			continue;
+ /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
+-static char *module_flags(struct module *mod, char *buf)
++char *module_flags(struct module *mod, char *buf)
+ {
+ 	int bx = 0;
+ 
+@@ -3619,103 +3587,6 @@ static char *module_flags(struct module *mod, char *buf)
+ 	return buf;
+ }
+ 
+-#ifdef CONFIG_PROC_FS
+-/* Called by the /proc file system to return a list of modules. */
+-static void *m_start(struct seq_file *m, loff_t *pos)
+-{
+-	mutex_lock(&module_mutex);
+-	return seq_list_start(&modules, *pos);
+-}
+-
+-static void *m_next(struct seq_file *m, void *p, loff_t *pos)
+-{
+-	return seq_list_next(p, &modules, pos);
+-}
+-
+-static void m_stop(struct seq_file *m, void *p)
+-{
+-	mutex_unlock(&module_mutex);
+-}
+-
+-static int m_show(struct seq_file *m, void *p)
+-{
+-	struct module *mod = list_entry(p, struct module, list);
+-	char buf[MODULE_FLAGS_BUF_SIZE];
+-	void *value;
+-
+-	/* We always ignore unformed modules. */
+-	if (mod->state == MODULE_STATE_UNFORMED)
+-		return 0;
+-
+-	seq_printf(m, "%s %u",
+-		   mod->name, mod->init_layout.size + mod->core_layout.size);
+-	print_unload_info(m, mod);
+-
+-	/* Informative for users. */
+-	seq_printf(m, " %s",
+-		   mod->state == MODULE_STATE_GOING ? "Unloading" :
+-		   mod->state == MODULE_STATE_COMING ? "Loading" :
+-		   "Live");
+-	/* Used by oprofile and other similar tools. */
+-	value = m->private ? NULL : mod->core_layout.base;
+-	seq_printf(m, " 0x%px", value);
+-
+-	/* Taints info */
+-	if (mod->taints)
+-		seq_printf(m, " %s", module_flags(mod, buf));
+-
+-	seq_puts(m, "\n");
+-	return 0;
+-}
+-
+-/*
+- * Format: modulename size refcount deps address
+- *
+- * Where refcount is a number or -, and deps is a comma-separated list
+- * of depends or -.
+- */
+-static const struct seq_operations modules_op = {
+-	.start	= m_start,
+-	.next	= m_next,
+-	.stop	= m_stop,
+-	.show	= m_show
+-};
+-
+-/*
+- * This also sets the "private" pointer to non-NULL if the
+- * kernel pointers should be hidden (so you can just test
+- * "m->private" to see if you should keep the values private).
+- *
+- * We use the same logic as for /proc/kallsyms.
+- */
+-static int modules_open(struct inode *inode, struct file *file)
+-{
+-	int err = seq_open(file, &modules_op);
+-
+-	if (!err) {
+-		struct seq_file *m = file->private_data;
+-		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
+-	}
+-
+-	return err;
+-}
+-
+-static const struct proc_ops modules_proc_ops = {
+-	.proc_flags	= PROC_ENTRY_PERMANENT,
+-	.proc_open	= modules_open,
+-	.proc_read	= seq_read,
+-	.proc_lseek	= seq_lseek,
+-	.proc_release	= seq_release,
+-};
+-
+-static int __init proc_modules_init(void)
+-{
+-	proc_create("modules", 0, NULL, &modules_proc_ops);
+-	return 0;
+-}
+-module_init(proc_modules_init);
+-#endif
+-
+ /* Given an address, look for it in the module exception tables. */
+ const struct exception_table_entry *search_module_extables(unsigned long addr)
+ {
+diff --git a/kernel/module/procfs.c b/kernel/module/procfs.c
+new file mode 100644
+index 000000000000..2717e130788e
+--- /dev/null
++++ b/kernel/module/procfs.c
+@@ -0,0 +1,142 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Module proc support
++ *
++ * Copyright (C) 2008 Alexey Dobriyan
++ */
 +
-+		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
-+		preempt_disable();
-+		kallsyms = rcu_dereference_sched(mod->kallsyms);
-+		preempt_enable();
++#include <linux/module.h>
++#include <linux/kallsyms.h>
++#include <linux/mutex.h>
++#include <linux/seq_file.h>
++#include <linux/proc_fs.h>
++#include "internal.h"
 +
- 		for (i = 0; i < kallsyms->num_symtab; i++) {
- 			const Elf_Sym *sym = &kallsyms->symtab[i];
- 
++#ifdef CONFIG_MODULE_UNLOAD
++static inline void print_unload_info(struct seq_file *m, struct module *mod)
++{
++	struct module_use *use;
++	int printed_something = 0;
++
++	seq_printf(m, " %i ", module_refcount(mod));
++
++	/*
++	 * Always include a trailing , so userspace can differentiate
++	 * between this and the old multi-field proc format.
++	 */
++	list_for_each_entry(use, &mod->source_list, source_list) {
++		printed_something = 1;
++		seq_printf(m, "%s,", use->source->name);
++	}
++
++	if (mod->init && !mod->exit) {
++		printed_something = 1;
++		seq_puts(m, "[permanent],");
++	}
++
++	if (!printed_something)
++		seq_puts(m, "-");
++}
++#else /* !CONFIG_MODULE_UNLOAD */
++static inline void print_unload_info(struct seq_file *m, struct module *mod)
++{
++	/* We don't know the usage count, or what modules are using. */
++	seq_puts(m, " - -");
++}
++#endif /* CONFIG_MODULE_UNLOAD */
++
++/* Called by the /proc file system to return a list of modules. */
++static void *m_start(struct seq_file *m, loff_t *pos)
++{
++	mutex_lock(&module_mutex);
++	return seq_list_start(&modules, *pos);
++}
++
++static void *m_next(struct seq_file *m, void *p, loff_t *pos)
++{
++	return seq_list_next(p, &modules, pos);
++}
++
++static void m_stop(struct seq_file *m, void *p)
++{
++	mutex_unlock(&module_mutex);
++}
++
++static int m_show(struct seq_file *m, void *p)
++{
++	struct module *mod = list_entry(p, struct module, list);
++	char buf[MODULE_FLAGS_BUF_SIZE];
++	void *value;
++
++	/* We always ignore unformed modules. */
++	if (mod->state == MODULE_STATE_UNFORMED)
++		return 0;
++
++	seq_printf(m, "%s %u",
++		   mod->name, mod->init_layout.size + mod->core_layout.size);
++	print_unload_info(m, mod);
++
++	/* Informative for users. */
++	seq_printf(m, " %s",
++		   mod->state == MODULE_STATE_GOING ? "Unloading" :
++		   mod->state == MODULE_STATE_COMING ? "Loading" :
++		   "Live");
++	/* Used by oprofile and other similar tools. */
++	value = m->private ? NULL : mod->core_layout.base;
++	seq_printf(m, " 0x%px", value);
++
++	/* Taints info */
++	if (mod->taints)
++		seq_printf(m, " %s", module_flags(mod, buf));
++
++	seq_puts(m, "\n");
++	return 0;
++}
++
++/*
++ * Format: modulename size refcount deps address
++ *
++ * Where refcount is a number or -, and deps is a comma-separated list
++ * of depends or -.
++ */
++static const struct seq_operations modules_op = {
++	.start	= m_start,
++	.next	= m_next,
++	.stop	= m_stop,
++	.show	= m_show
++};
++
++/*
++ * This also sets the "private" pointer to non-NULL if the
++ * kernel pointers should be hidden (so you can just test
++ * "m->private" to see if you should keep the values private).
++ *
++ * We use the same logic as for /proc/kallsyms.
++ */
++static int modules_open(struct inode *inode, struct file *file)
++{
++	int err = seq_open(file, &modules_op);
++
++	if (!err) {
++		struct seq_file *m = file->private_data;
++
++		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
++	}
++
++	return err;
++}
++
++static const struct proc_ops modules_proc_ops = {
++	.proc_flags	= PROC_ENTRY_PERMANENT,
++	.proc_open	= modules_open,
++	.proc_read	= seq_read,
++	.proc_lseek	= seq_lseek,
++	.proc_release	= seq_release,
++};
++
++static int __init proc_modules_init(void)
++{
++	proc_create("modules", 0, NULL, &modules_proc_ops);
++	return 0;
++}
++module_init(proc_modules_init);
 -- 
 2.34.1
 
