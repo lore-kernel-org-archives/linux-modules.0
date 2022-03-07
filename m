@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A864C433F5
-	for <linux-modules@archiver.kernel.org>; Mon,  7 Mar 2022 17:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC4B9C433EF
+	for <linux-modules@archiver.kernel.org>; Mon,  7 Mar 2022 17:45:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244480AbiCGRqT (ORCPT
+        id S243986AbiCGRqV (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 7 Mar 2022 12:46:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        Mon, 7 Mar 2022 12:46:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240407AbiCGRqP (ORCPT
+        with ESMTP id S244486AbiCGRqU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:46:15 -0500
+        Mon, 7 Mar 2022 12:46:20 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4550371EE3
-        for <linux-modules@vger.kernel.org>; Mon,  7 Mar 2022 09:45:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D4FC93992
+        for <linux-modules@vger.kernel.org>; Mon,  7 Mar 2022 09:45:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646675119;
+        s=mimecast20190719; t=1646675124;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wTqJ9ZbJUCgx8VrF++WoBF0cwmRu2Y/rNRNUF4x8BCg=;
-        b=HBvvj4FeVw1MONING2lO0g+BSloszYl3AG2yJpiBAHVpLGJ3XttT4Vt3Vtw+QAyDtKtBQ/
-        koyCV/ZueGf2dlY5edNocziRRMZdZicajinyRPCHMmaTZ+j7AKqwOhqXUH7brN86I43pPI
-        Db5VOGa7TnRmFg5AINjaU5z0S90GqpY=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=eMk2ddem3feNmKWVGBt5fQ2XD1104DD2sU5e2PuX3nw=;
+        b=ekOkCBYAmA+0EAbd1FHcyH9ZRDFdd64iwq5t4sl62ZsjMJtkwikzWQTJBOMwfXgwGYBPHr
+        HiS0C9x8NTesC8/i723JFQJ27nT72PJddvGYfFtJUzWcLw88V8qb7px0QLcOWnSu4eCcLN
+        34+pj0xk3EOkWfx3HFi+F3D85ALtEVk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-673-sQwyao_sNXycS5Hfm3mFuQ-1; Mon, 07 Mar 2022 12:45:18 -0500
-X-MC-Unique: sQwyao_sNXycS5Hfm3mFuQ-1
-Received: by mail-wm1-f70.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so6935963wmj.5
-        for <linux-modules@vger.kernel.org>; Mon, 07 Mar 2022 09:45:18 -0800 (PST)
+ us-mta-425-I5e-C8y6Opy0pyFAF8I9CQ-1; Mon, 07 Mar 2022 12:45:23 -0500
+X-MC-Unique: I5e-C8y6Opy0pyFAF8I9CQ-1
+Received: by mail-wr1-f69.google.com with SMTP id k20-20020adfc714000000b001e305cd1597so4817885wrg.19
+        for <linux-modules@vger.kernel.org>; Mon, 07 Mar 2022 09:45:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wTqJ9ZbJUCgx8VrF++WoBF0cwmRu2Y/rNRNUF4x8BCg=;
-        b=bMSsY/fi9EOalo1sj/Wq/rZvReP45OgBpCcdz1YjqQ+8saeuEa4uSkKvNdtWM3V6gD
-         Gp9IhHsEs8uZoy4V8EForFB7vGGDglsSmXlDhu4pLrRE7XPCZyiHqLXHUfKH1Y4d/LGX
-         Ng8LMfRfOlGTbWoKF9GQYHfgiCNDU0ELeH+vwjppa8HvpqZiZHn5N73kYRq8G3DroZrX
-         ESrKfzdeZ5sAECYN1gz2hs7Itv4swx28Z4yDWGIxAWgrpxzRoRE8Cn9fHdOC7kYo6aAN
-         Ti7xckFmBkw0MheQUoD+tbREcQ2pvsvBONz/bAvu2874ROXnMYTxUt0uweCAOtZnbVkW
-         qxtA==
-X-Gm-Message-State: AOAM533M1Wqp/dwk8QRcguLm8Idp4YoaUxy8lEyWUqhngWt9Exzh4adZ
-        6pRnNIbu+lqzhdkkILfc4cY89SElfK1UkMt/uNQk7MXIwcT5SLyuEB7WfTjyYFH1W3uEW+/oobe
-        71QejTloJyGXcyFP7oUSx4cyS
-X-Received: by 2002:a05:600c:1994:b0:389:bcf5:6e79 with SMTP id t20-20020a05600c199400b00389bcf56e79mr30156wmq.43.1646675117029;
-        Mon, 07 Mar 2022 09:45:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxSlHfCNIFSMY6GvPD2hVj1xnBcjeTCxoOc/O12pWsyWj9bAUgSgODkL1aJlXzDdE4LyoIC+w==
-X-Received: by 2002:a05:600c:1994:b0:389:bcf5:6e79 with SMTP id t20-20020a05600c199400b00389bcf56e79mr30127wmq.43.1646675116770;
-        Mon, 07 Mar 2022 09:45:16 -0800 (PST)
+        bh=eMk2ddem3feNmKWVGBt5fQ2XD1104DD2sU5e2PuX3nw=;
+        b=QqVfGuLfiHYvmejn4Eca6ILKzoBW6fOlkM+1m2QgqlMECbf+4VDGpJm5+Tts1Ha3xl
+         Y2jato2E2A/soT/AUUsv3KPGp02GdjEPCgU5986vOJtxsWwzvBySKpe5flLGMdOr4d6q
+         rt0ndt1AukMmJ/0QHz4V7TeUKCCuvduKpm9sRIUW2j9QDKvbpFMlqDhRl0EcDffMFPgO
+         ftB8clYT+y1xoY0qXTuMmRUyHxg4PIQAxExkgB7yMI6ln8Frdr0iHp/kOP782pP6gg11
+         Yuj8KUCN99pc/AI/IeD/4QdRw1h7lfyr6nLjwkC+Knc/f45vKuttkxRibZTBjiocCoAA
+         t5Lg==
+X-Gm-Message-State: AOAM533VLOZOyZDi8eq6EY1y5A4p1NpA1ZzqusHrgqBsSiZgOeM915tF
+        xiwdyUka/AVAtDlTKKSiGBxnuCeVWfNhzZgvMSaztjsfYkiEV3Mg4gAkB/G+76N2KpkJoyYEmc+
+        oCsPpvpdC8lcOrlniTCDKC5T2
+X-Received: by 2002:a05:600c:4e48:b0:381:83d8:54f6 with SMTP id e8-20020a05600c4e4800b0038183d854f6mr65858wmq.18.1646675121830;
+        Mon, 07 Mar 2022 09:45:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw7aGPSgMx2MfqQsJSKt2uS7l7l+iW9rZoDnf3OLhOavEcCVfuUUsqamFr37T+/NpSwfLA3+Q==
+X-Received: by 2002:a05:600c:4e48:b0:381:83d8:54f6 with SMTP id e8-20020a05600c4e4800b0038183d854f6mr65837wmq.18.1646675121596;
+        Mon, 07 Mar 2022 09:45:21 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id v25-20020a05600c215900b0038117f41728sm19970307wml.43.2022.03.07.09.45.15
+        by smtp.gmail.com with ESMTPSA id q7-20020adfcd87000000b001e8a4f58a8csm11551719wrj.66.2022.03.07.09.45.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 09:45:15 -0800 (PST)
+        Mon, 07 Mar 2022 09:45:20 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
 Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
@@ -65,9 +65,9 @@ Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
         msuchanek@suse.de, oleksandr@natalenko.name,
         jason.wessel@windriver.com, daniel.thompson@linaro.org,
         hch@infradead.org, pmladek@suse.com
-Subject: [PATCH v10 03/14] module: Make internal.h and decompress.c more compliant
-Date:   Mon,  7 Mar 2022 17:44:58 +0000
-Message-Id: <20220307174509.2887714-4-atomlin@redhat.com>
+Subject: [PATCH v10 05/14] module: Move latched RB-tree support to a separate file
+Date:   Mon,  7 Mar 2022 17:45:00 +0000
+Message-Id: <20220307174509.2887714-6-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220307174509.2887714-1-atomlin@redhat.com>
 References: <20220307174509.2887714-1-atomlin@redhat.com>
@@ -76,112 +76,341 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This patch will address the following warning and style violations
-generated by ./scripts/checkpatch.pl in strict mode:
+No functional change.
 
-  WARNING: Use #include <linux/module.h> instead of <asm/module.h>
-  #10: FILE: kernel/module/internal.h:10:
-  +#include <asm/module.h>
+This patch migrates module latched RB-tree support
+(e.g. see __module_address()) from core module code
+into kernel/module/tree_lookup.c.
 
-  CHECK: spaces preferred around that '-' (ctx:VxV)
-  #18: FILE: kernel/module/internal.h:18:
-  +#define INIT_OFFSET_MASK (1UL << (BITS_PER_LONG-1))
-
-  CHECK: Please use a blank line after function/struct/union/enum declarations
-  #69: FILE: kernel/module/internal.h:69:
-  +}
-  +static inline void module_decompress_cleanup(struct load_info *info)
-						   ^
-  CHECK: extern prototypes should be avoided in .h files
-  #84: FILE: kernel/module/internal.h:84:
-  +extern int mod_verify_sig(const void *mod, struct load_info *info);
-
-  WARNING: Missing a blank line after declarations
-  #116: FILE: kernel/module/decompress.c:116:
-  +               struct page *page = module_get_next_page(info);
-  +               if (!page) {
-
-  WARNING: Missing a blank line after declarations
-  #174: FILE: kernel/module/decompress.c:174:
-  +               struct page *page = module_get_next_page(info);
-  +               if (!page) {
-
-  CHECK: Please use a blank line after function/struct/union/enum declarations
-  #258: FILE: kernel/module/decompress.c:258:
-  +}
-  +static struct kobj_attribute module_compression_attr = __ATTR_RO(compression);
-
-Note: Fortunately, the multiple-include optimisation found in
-include/linux/module.h will prevent duplication/or inclusion more than
-once.
-
-Fixes: f314dfea16a ("modsign: log module name in the event of an error")
 Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- kernel/module/decompress.c | 3 +++
- kernel/module/internal.h   | 6 ++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ kernel/module/Makefile      |   1 +
+ kernel/module/internal.h    |  33 +++++++++
+ kernel/module/main.c        | 130 ++----------------------------------
+ kernel/module/tree_lookup.c | 109 ++++++++++++++++++++++++++++++
+ 4 files changed, 147 insertions(+), 126 deletions(-)
+ create mode 100644 kernel/module/tree_lookup.c
 
-diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-index d14d6443225a..2fc7081dd7c1 100644
---- a/kernel/module/decompress.c
-+++ b/kernel/module/decompress.c
-@@ -113,6 +113,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
- 
- 	do {
- 		struct page *page = module_get_next_page(info);
-+
- 		if (!page) {
- 			retval = -ENOMEM;
- 			goto out_inflate_end;
-@@ -171,6 +172,7 @@ static ssize_t module_xz_decompress(struct load_info *info,
- 
- 	do {
- 		struct page *page = module_get_next_page(info);
-+
- 		if (!page) {
- 			retval = -ENOMEM;
- 			goto out;
-@@ -256,6 +258,7 @@ static ssize_t compression_show(struct kobject *kobj,
- {
- 	return sysfs_emit(buf, "%s\n", __stringify(MODULE_COMPRESSION));
- }
-+
- static struct kobj_attribute module_compression_attr = __ATTR_RO(compression);
- 
- static int __init module_decompress_sysfs_init(void)
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index ed3aacb04f17..88774e386276 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -11,3 +11,4 @@ obj-y += main.o
+ obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
+ obj-$(CONFIG_MODULE_SIG) += signing.o
+ obj-$(CONFIG_LIVEPATCH) += livepatch.o
++obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
 diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index ea8c4c02614c..e0775e66bcf7 100644
+index ad7a444253ed..f1682e3677be 100644
 --- a/kernel/module/internal.h
 +++ b/kernel/module/internal.h
-@@ -6,7 +6,8 @@
-  */
- 
- #include <linux/elf.h>
--#include <asm/module.h>
-+#include <linux/compiler.h>
-+#include <linux/module.h>
+@@ -9,6 +9,7 @@
+ #include <linux/compiler.h>
+ #include <linux/module.h>
  #include <linux/mutex.h>
++#include <linux/rculist.h>
  
  #ifndef ARCH_SHF_SMALL
-@@ -54,7 +55,7 @@ struct load_info {
- 	} index;
+ #define ARCH_SHF_SMALL 0
+@@ -93,3 +94,35 @@ static inline void module_decompress_cleanup(struct load_info *info)
+ {
+ }
+ #endif
++
++#ifdef CONFIG_MODULES_TREE_LOOKUP
++struct mod_tree_root {
++	struct latch_tree_root root;
++	unsigned long addr_min;
++	unsigned long addr_max;
++};
++
++extern struct mod_tree_root mod_tree;
++
++void mod_tree_insert(struct module *mod);
++void mod_tree_remove_init(struct module *mod);
++void mod_tree_remove(struct module *mod);
++struct module *mod_find(unsigned long addr);
++#else /* !CONFIG_MODULES_TREE_LOOKUP */
++
++static inline void mod_tree_insert(struct module *mod) { }
++static inline void mod_tree_remove_init(struct module *mod) { }
++static inline void mod_tree_remove(struct module *mod) { }
++static inline struct module *mod_find(unsigned long addr)
++{
++	struct module *mod;
++
++	list_for_each_entry_rcu(mod, &modules, list,
++				lockdep_is_held(&module_mutex)) {
++		if (within_module(addr, mod))
++			return mod;
++	}
++
++	return NULL;
++}
++#endif /* CONFIG_MODULES_TREE_LOOKUP */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 3596ebf3a6c3..76b53880ad91 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -90,138 +90,16 @@ static DECLARE_WORK(init_free_wq, do_free_init);
+ static LLIST_HEAD(init_free_list);
+ 
+ #ifdef CONFIG_MODULES_TREE_LOOKUP
+-
+-/*
+- * Use a latched RB-tree for __module_address(); this allows us to use
+- * RCU-sched lookups of the address from any context.
+- *
+- * This is conditional on PERF_EVENTS || TRACING because those can really hit
+- * __module_address() hard by doing a lot of stack unwinding; potentially from
+- * NMI context.
+- */
+-
+-static __always_inline unsigned long __mod_tree_val(struct latch_tree_node *n)
+-{
+-	struct module_layout *layout = container_of(n, struct module_layout, mtn.node);
+-
+-	return (unsigned long)layout->base;
+-}
+-
+-static __always_inline unsigned long __mod_tree_size(struct latch_tree_node *n)
+-{
+-	struct module_layout *layout = container_of(n, struct module_layout, mtn.node);
+-
+-	return (unsigned long)layout->size;
+-}
+-
+-static __always_inline bool
+-mod_tree_less(struct latch_tree_node *a, struct latch_tree_node *b)
+-{
+-	return __mod_tree_val(a) < __mod_tree_val(b);
+-}
+-
+-static __always_inline int
+-mod_tree_comp(void *key, struct latch_tree_node *n)
+-{
+-	unsigned long val = (unsigned long)key;
+-	unsigned long start, end;
+-
+-	start = __mod_tree_val(n);
+-	if (val < start)
+-		return -1;
+-
+-	end = start + __mod_tree_size(n);
+-	if (val >= end)
+-		return 1;
+-
+-	return 0;
+-}
+-
+-static const struct latch_tree_ops mod_tree_ops = {
+-	.less = mod_tree_less,
+-	.comp = mod_tree_comp,
+-};
+-
+-static struct mod_tree_root {
+-	struct latch_tree_root root;
+-	unsigned long addr_min;
+-	unsigned long addr_max;
+-} mod_tree __cacheline_aligned = {
++struct mod_tree_root mod_tree __cacheline_aligned = {
+ 	.addr_min = -1UL,
  };
  
--extern int mod_verify_sig(const void *mod, struct load_info *info);
-+int mod_verify_sig(const void *mod, struct load_info *info);
+ #define module_addr_min mod_tree.addr_min
+ #define module_addr_max mod_tree.addr_max
  
- #ifdef CONFIG_MODULE_DECOMPRESS
- int module_decompress(struct load_info *info, const void *buf, size_t size);
-@@ -65,6 +66,7 @@ static inline int module_decompress(struct load_info *info,
- {
- 	return -EOPNOTSUPP;
- }
+-static noinline void __mod_tree_insert(struct mod_tree_node *node)
+-{
+-	latch_tree_insert(&node->node, &mod_tree.root, &mod_tree_ops);
+-}
+-
+-static void __mod_tree_remove(struct mod_tree_node *node)
+-{
+-	latch_tree_erase(&node->node, &mod_tree.root, &mod_tree_ops);
+-}
+-
+-/*
+- * These modifications: insert, remove_init and remove; are serialized by the
+- * module_mutex.
+- */
+-static void mod_tree_insert(struct module *mod)
+-{
+-	mod->core_layout.mtn.mod = mod;
+-	mod->init_layout.mtn.mod = mod;
+-
+-	__mod_tree_insert(&mod->core_layout.mtn);
+-	if (mod->init_layout.size)
+-		__mod_tree_insert(&mod->init_layout.mtn);
+-}
+-
+-static void mod_tree_remove_init(struct module *mod)
+-{
+-	if (mod->init_layout.size)
+-		__mod_tree_remove(&mod->init_layout.mtn);
+-}
+-
+-static void mod_tree_remove(struct module *mod)
+-{
+-	__mod_tree_remove(&mod->core_layout.mtn);
+-	mod_tree_remove_init(mod);
+-}
+-
+-static struct module *mod_find(unsigned long addr)
+-{
+-	struct latch_tree_node *ltn;
+-
+-	ltn = latch_tree_find((void *)addr, &mod_tree.root, &mod_tree_ops);
+-	if (!ltn)
+-		return NULL;
+-
+-	return container_of(ltn, struct mod_tree_node, node)->mod;
+-}
+-
+-#else /* MODULES_TREE_LOOKUP */
+-
+-static unsigned long module_addr_min = -1UL, module_addr_max = 0;
+-
+-static void mod_tree_insert(struct module *mod) { }
+-static void mod_tree_remove_init(struct module *mod) { }
+-static void mod_tree_remove(struct module *mod) { }
+-
+-static struct module *mod_find(unsigned long addr)
+-{
+-	struct module *mod;
+-
+-	list_for_each_entry_rcu(mod, &modules, list,
+-				lockdep_is_held(&module_mutex)) {
+-		if (within_module(addr, mod))
+-			return mod;
+-	}
+-
+-	return NULL;
+-}
+-
+-#endif /* MODULES_TREE_LOOKUP */
++#else /* !CONFIG_MODULES_TREE_LOOKUP */
++static unsigned long module_addr_min = -1UL, module_addr_max;
++#endif /* CONFIG_MODULES_TREE_LOOKUP */
+ 
+ /*
+  * Bounds of module text, for speeding up __module_address.
+diff --git a/kernel/module/tree_lookup.c b/kernel/module/tree_lookup.c
+new file mode 100644
+index 000000000000..0bc4ec3b22ce
+--- /dev/null
++++ b/kernel/module/tree_lookup.c
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Modules tree lookup
++ *
++ * Copyright (C) 2015 Peter Zijlstra
++ * Copyright (C) 2015 Rusty Russell
++ */
 +
- static inline void module_decompress_cleanup(struct load_info *info)
- {
- }
++#include <linux/module.h>
++#include <linux/rbtree_latch.h>
++#include "internal.h"
++
++/*
++ * Use a latched RB-tree for __module_address(); this allows us to use
++ * RCU-sched lookups of the address from any context.
++ *
++ * This is conditional on PERF_EVENTS || TRACING because those can really hit
++ * __module_address() hard by doing a lot of stack unwinding; potentially from
++ * NMI context.
++ */
++
++static __always_inline unsigned long __mod_tree_val(struct latch_tree_node *n)
++{
++	struct module_layout *layout = container_of(n, struct module_layout, mtn.node);
++
++	return (unsigned long)layout->base;
++}
++
++static __always_inline unsigned long __mod_tree_size(struct latch_tree_node *n)
++{
++	struct module_layout *layout = container_of(n, struct module_layout, mtn.node);
++
++	return (unsigned long)layout->size;
++}
++
++static __always_inline bool
++mod_tree_less(struct latch_tree_node *a, struct latch_tree_node *b)
++{
++	return __mod_tree_val(a) < __mod_tree_val(b);
++}
++
++static __always_inline int
++mod_tree_comp(void *key, struct latch_tree_node *n)
++{
++	unsigned long val = (unsigned long)key;
++	unsigned long start, end;
++
++	start = __mod_tree_val(n);
++	if (val < start)
++		return -1;
++
++	end = start + __mod_tree_size(n);
++	if (val >= end)
++		return 1;
++
++	return 0;
++}
++
++static const struct latch_tree_ops mod_tree_ops = {
++	.less = mod_tree_less,
++	.comp = mod_tree_comp,
++};
++
++static noinline void __mod_tree_insert(struct mod_tree_node *node)
++{
++	latch_tree_insert(&node->node, &mod_tree.root, &mod_tree_ops);
++}
++
++static void __mod_tree_remove(struct mod_tree_node *node)
++{
++	latch_tree_erase(&node->node, &mod_tree.root, &mod_tree_ops);
++}
++
++/*
++ * These modifications: insert, remove_init and remove; are serialized by the
++ * module_mutex.
++ */
++void mod_tree_insert(struct module *mod)
++{
++	mod->core_layout.mtn.mod = mod;
++	mod->init_layout.mtn.mod = mod;
++
++	__mod_tree_insert(&mod->core_layout.mtn);
++	if (mod->init_layout.size)
++		__mod_tree_insert(&mod->init_layout.mtn);
++}
++
++void mod_tree_remove_init(struct module *mod)
++{
++	if (mod->init_layout.size)
++		__mod_tree_remove(&mod->init_layout.mtn);
++}
++
++void mod_tree_remove(struct module *mod)
++{
++	__mod_tree_remove(&mod->core_layout.mtn);
++	mod_tree_remove_init(mod);
++}
++
++struct module *mod_find(unsigned long addr)
++{
++	struct latch_tree_node *ltn;
++
++	ltn = latch_tree_find((void *)addr, &mod_tree.root, &mod_tree_ops);
++	if (!ltn)
++		return NULL;
++
++	return container_of(ltn, struct mod_tree_node, node)->mod;
++}
 -- 
 2.34.1
 
