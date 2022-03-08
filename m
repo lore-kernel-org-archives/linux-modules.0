@@ -2,210 +2,152 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CED5C433F5
-	for <linux-modules@archiver.kernel.org>; Tue,  8 Mar 2022 10:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2492BC433EF
+	for <linux-modules@archiver.kernel.org>; Tue,  8 Mar 2022 10:52:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345998AbiCHKwp (ORCPT
+        id S1345997AbiCHKxK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 8 Mar 2022 05:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        Tue, 8 Mar 2022 05:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345992AbiCHKwh (ORCPT
+        with ESMTP id S1346072AbiCHKxE (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:52:37 -0500
+        Tue, 8 Mar 2022 05:53:04 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B185643493
-        for <linux-modules@vger.kernel.org>; Tue,  8 Mar 2022 02:51:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4298D43490
+        for <linux-modules@vger.kernel.org>; Tue,  8 Mar 2022 02:52:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646736699;
+        s=mimecast20190719; t=1646736727;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fGHP5u/Zbzx5j7Gfciio1oHVz6AOtI5jro8ptGHtKdI=;
-        b=Zg3DndeUqWJNKnhowS59Li0F/IKyKtngexcuoTu1YjAjpLJbXnKNicXj2A2qVFa7Hk8SfE
-        uFOIUKshFpeW4E0CNCEvKcr73l0649Kta97B5KSrG2Pi9X9H8abJq2zgBZMy2UVWRbL4vU
-        y5qUnWz877Zaakb08ETR+mCEcynyC+Y=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=R1HEPCyruPf1eLWtXxVEMzx/0uUk6Tce0FMKc7iO5fU=;
+        b=UqTiWj8hmQpGez59utLYRo9OlMTiYfcROvJPa7EXGgcKgSdjH2sqNQ1WruGICA3UeQAzw8
+        n4ME6kKHSM4AQIbPWfNPxlN1mHNQ3pFS2I0EMz4A/LkTLAF23uARukRuTaFp87EktTozsZ
+        N1aD7TmvFFbW03D+6ryeX+WEbDX5iQY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-arYwNjZKMoigYSGfLoZQqQ-1; Tue, 08 Mar 2022 05:51:38 -0500
-X-MC-Unique: arYwNjZKMoigYSGfLoZQqQ-1
-Received: by mail-wr1-f69.google.com with SMTP id k20-20020adfc714000000b001e305cd1597so5335737wrg.19
-        for <linux-modules@vger.kernel.org>; Tue, 08 Mar 2022 02:51:38 -0800 (PST)
+ us-mta-279-PbJ9nXrKMCmW5dIZKUW1Dw-1; Tue, 08 Mar 2022 05:52:06 -0500
+X-MC-Unique: PbJ9nXrKMCmW5dIZKUW1Dw-1
+Received: by mail-wm1-f70.google.com with SMTP id j42-20020a05600c1c2a00b00381febe402eso1024752wms.0
+        for <linux-modules@vger.kernel.org>; Tue, 08 Mar 2022 02:52:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=fGHP5u/Zbzx5j7Gfciio1oHVz6AOtI5jro8ptGHtKdI=;
-        b=m4ltRSCwttdQEWyAWKSumzEf8hr5M/wFk56P2UB+ciw9zl4THJYeaTzmkYnWWFtnji
-         GeQuatv00F9nE9Fm8Y3qM0eMEPfNEUSW2JTGPnM24zKTOOUJkRapTbYVdNu8HoVP8/Eh
-         fYM/heNSQfwkONYGf6Z8iKpbU/7PCVFBiiV1CYXB6JEElULZN/bXhgmri9/XC9GKsvBD
-         8uPebYcJuMOFwQgcyZVCuSLSDVhag+W0A1czCi5Bqskesg5LVhmgVphHjvszlF+DRYok
-         8wq6ci8pSzL6A92LJSvFlxK87HB7jzE3pSu+NCOjCjqJNigWyhrVtgxw6bMeAQb0QDEq
-         V/JA==
-X-Gm-Message-State: AOAM530cg9C6JrS9oTk81bWS8EKrTWaZvV+oLvGdUwVxyT7eD/GN+awK
-        bcjXQfu+KjE+Kl910WcSbEQfSNb8yAlZTSvAMMCoM+vdhJoZs2lW7Pilyn8pCU7JrhY70CsGTtF
-        ut9ZeIuZ2laGDSp5NGdWnCf2D
-X-Received: by 2002:a5d:64c4:0:b0:202:29d7:2a4d with SMTP id f4-20020a5d64c4000000b0020229d72a4dmr3768579wri.624.1646736697577;
-        Tue, 08 Mar 2022 02:51:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzwRhOUg7FHvhHegjJXE7PwqmhXPJn4/LEToYlVXfLbXUBneGnbrYsN4lbqVGGq08DoadiCuw==
-X-Received: by 2002:a5d:64c4:0:b0:202:29d7:2a4d with SMTP id f4-20020a5d64c4000000b0020229d72a4dmr3768548wri.624.1646736697263;
-        Tue, 08 Mar 2022 02:51:37 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R1HEPCyruPf1eLWtXxVEMzx/0uUk6Tce0FMKc7iO5fU=;
+        b=754gRf7aVZa02+83HndtDpCTIXQscj6hP2DhJw8tKqR8IxjcMOIN+q9D96jxWVeO2I
+         Po6vy9oYm+xlxm70Yj9W8TPjh1MdiX3akvfB8ceJkDWbpYT0zssVr/8Vd3fs3vCovIIJ
+         YlElTvFxSrKRVbfaus/IdH4zsHH8kufWlbNfd8m8CWzVRDbCeAP3zRDwbPZn39VzCRBR
+         qZuBoZTpnvEbr0LIPzICMy5XD8qEorTTx5p5a83icrQABwbJwrEc7ZfWuRTWgPYWrNqi
+         NmqNc3n6X0TsPndAyXjuDQu6Bx0mCp7bbSLy2JGY3P+geWtTmWmY8c+R8yk7XR481CKR
+         5Vvw==
+X-Gm-Message-State: AOAM530iTTGMksJiko9bwmsnMi3YbnBF0lGUqsFX0lZSZLYRnnj9Vbgu
+        j3twqSI7JDWN+dVsTLzw8H92QIscvwELmEXHdU1ctOhukXY0nN6AES7qoxe12QWV6uIXava/AAV
+        7P2sSu5erdVjwjH6+x0Mwc/mp
+X-Received: by 2002:a05:600c:4ed2:b0:381:8c80:4774 with SMTP id g18-20020a05600c4ed200b003818c804774mr2915871wmq.4.1646736725147;
+        Tue, 08 Mar 2022 02:52:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyrLgM6L2NB/kVCLnMPCcY3VSUiwe8whTzoffN12U5JFpjrb0Ay3h4p8/8EXXLZeOCo6UKu5Q==
+X-Received: by 2002:a05:600c:4ed2:b0:381:8c80:4774 with SMTP id g18-20020a05600c4ed200b003818c804774mr2915841wmq.4.1646736724921;
+        Tue, 08 Mar 2022 02:52:04 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id v14-20020a7bcb4e000000b0034492fa24c6sm1801207wmj.34.2022.03.08.02.51.35
+        by smtp.gmail.com with ESMTPSA id n7-20020a05600c3b8700b00389a6241669sm2104230wms.33.2022.03.08.02.52.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 02:51:36 -0800 (PST)
-Date:   Tue, 8 Mar 2022 10:51:35 +0000
+        Tue, 08 Mar 2022 02:52:04 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "pmladek@suse.com" <pmladek@suse.com>
-Subject: Re: [PATCH v10 13/14] module: Move kdb module related code out of
- main kdb code
-Message-ID: <20220308105135.hvs6qqfvrxkpzykx@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220307174509.2887714-1-atomlin@redhat.com>
- <20220307174741.2889588-1-atomlin@redhat.com>
- <82088b20-6129-aecc-c43c-1c78171717c4@csgroup.eu>
+To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu,
+        daniel.thompson@linaro.org, hch@infradead.org
+Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, pmladek@suse.com
+Subject: [PATCH] kdb: Remove redundant module related references
+Date:   Tue,  8 Mar 2022 10:52:03 +0000
+Message-Id: <20220308105203.2981099-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220307174741.2889588-1-atomlin@redhat.com>
+References: <20220307174741.2889588-1-atomlin@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <82088b20-6129-aecc-c43c-1c78171717c4@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue 2022-03-08 08:36 +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 07/03/2022 à 18:47, Aaron Tomlin a écrit :
-> > diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
-> > index 0852a537dad4..f3a30cd5037f 100644
-> > --- a/kernel/debug/kdb/kdb_main.c
-> > +++ b/kernel/debug/kdb/kdb_main.c
-> > @@ -26,7 +26,6 @@
-> >   #include <linux/utsname.h>
-> >   #include <linux/vmalloc.h>
-> >   #include <linux/atomic.h>
-> > -#include <linux/module.h>
-> >   #include <linux/moduleparam.h>
-> >   #include <linux/mm.h>
-> >   #include <linux/init.h>
-> No need of linux/module.h here anymore ?
+Hi Luis, Christoph, Daniel,
 
-Hi Christophe,
-
-Correct.
-
-> In that case, I see several other files in kernel/debug/kdb/ that 
-> include linux/module.h
-> 
-> Should it be removed in those files as well ?
-
-I did not review the other kernel/debug/kdb/.*c files.
-Anyhow, yes it can be removed from each, since it is entirely redundant.
-
-> > diff --git a/kernel/module/kdb.c b/kernel/module/kdb.c
-> > new file mode 100644
-> > index 000000000000..60baeebea3e0
-> > --- /dev/null
-> > +++ b/kernel/module/kdb.c
-> > @@ -0,0 +1,55 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * Module kdb support
-> > + *
-> > + * Copyright (C) 2010 Jason Wessel
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/kdb.h>
-> > +#include "internal.h"
-> > +
-> > +/*
-> > + * kdb_lsmod - This function implements the 'lsmod' command.  Lists
-> > + *	currently loaded kernel modules.
-> > + *	Mostly taken from userland lsmod.
-> > + */
-> > +int kdb_lsmod(int argc, const char **argv)
-> > +{
-> > +	struct module *mod;
-> > +
-> > +	if (argc != 0)
-> > +		return KDB_ARGCOUNT;
-> > +
-> > +	kdb_printf("Module                  Size  modstruct     Used by\n");
-> > +	list_for_each_entry(mod, &modules, list) {
-> > +		if (mod->state == MODULE_STATE_UNFORMED)
-> > +			continue;
-> > +
-> > +		kdb_printf("%-20s%8u  0x%px ", mod->name,
-> > +			   mod->core_layout.size, (void *)mod);
-> > +#ifdef CONFIG_MODULE_UNLOAD
-> > +		kdb_printf("%4d ", module_refcount(mod));
-> > +#endif
-> > +		if (mod->state == MODULE_STATE_GOING)
-> > +			kdb_printf(" (Unloading)");
-> > +		else if (mod->state == MODULE_STATE_COMING)
-> > +			kdb_printf(" (Loading)");
-> > +		else
-> > +			kdb_printf(" (Live)");
-> > +		kdb_printf(" 0x%px", mod->core_layout.base);
-> > +
-> > +#ifdef CONFIG_MODULE_UNLOAD
-> > +		{
-> > +			struct module_use *use;
-> > +			kdb_printf(" [ ");
-> > +			list_for_each_entry(use, &mod->source_list,
-> > +					    source_list)
-> > +				kdb_printf("%s ", use->target->name);
-> > +			kdb_printf("]\n");
-> > +		}
-> > +#endif
-> 
-> That's a ugly construct. Could it be a function instead that you call 
-> from this loop,
-
-Fair enough and I agree; albeit, as you know, this was simply a migration
-to kernel/module/kdb.c. We could indeed address this format/or style
-concern later.
+Is this patch ok or would you rather another iteration of the series?
+Either way is fine for me. Thanks.
 
 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index b8a59b5c3e3a..bcc4f7a82649 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -108,10 +108,6 @@ static void mod_update_bounds(struct module *mod)
-> >   		__mod_update_bounds(mod->init_layout.base, mod->init_layout.size);
-> >   }
-> >   
-> > -#ifdef CONFIG_KGDB_KDB
-> > -struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
-> 
-> It should be removed from kernel/debug/kdb/kdb_private.h as well.
+No functional change.
 
-Agreed - this was missed.
+There is no need to include linux/module.h.
+This patch addresses the above. Furthermore, we remove the list of known
+loaded modules i.e. stored in 'kdb_modules', since it is now redundant.
 
+Fixes: 260681b3763f ("module: Move kdb module related code out of main kdb code")
+Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+---
+ kernel/debug/kdb/kdb_io.c       | 1 -
+ kernel/debug/kdb/kdb_keyboard.c | 1 -
+ kernel/debug/kdb/kdb_private.h  | 4 ----
+ kernel/debug/kdb/kdb_support.c  | 1 -
+ 4 files changed, 7 deletions(-)
 
-Thanks,
-
+diff --git a/kernel/debug/kdb/kdb_io.c b/kernel/debug/kdb/kdb_io.c
+index 6735ac36b718..67d3c48a1522 100644
+--- a/kernel/debug/kdb/kdb_io.c
++++ b/kernel/debug/kdb/kdb_io.c
+@@ -9,7 +9,6 @@
+  * Copyright (c) 2009 Wind River Systems, Inc.  All Rights Reserved.
+  */
+ 
+-#include <linux/module.h>
+ #include <linux/types.h>
+ #include <linux/ctype.h>
+ #include <linux/kernel.h>
+diff --git a/kernel/debug/kdb/kdb_keyboard.c b/kernel/debug/kdb/kdb_keyboard.c
+index f877a0a0d7cf..f87c750d3eb3 100644
+--- a/kernel/debug/kdb/kdb_keyboard.c
++++ b/kernel/debug/kdb/kdb_keyboard.c
+@@ -11,7 +11,6 @@
+ #include <linux/kdb.h>
+ #include <linux/keyboard.h>
+ #include <linux/ctype.h>
+-#include <linux/module.h>
+ #include <linux/io.h>
+ 
+ /* Keyboard Controller Registers on normal PCs. */
+diff --git a/kernel/debug/kdb/kdb_private.h b/kernel/debug/kdb/kdb_private.h
+index 0d2f9feea0a4..1f8c519a5f81 100644
+--- a/kernel/debug/kdb/kdb_private.h
++++ b/kernel/debug/kdb/kdb_private.h
+@@ -226,10 +226,6 @@ extern void kdb_kbd_cleanup_state(void);
+ #define kdb_kbd_cleanup_state()
+ #endif /* ! CONFIG_KDB_KEYBOARD */
+ 
+-#ifdef CONFIG_MODULES
+-extern struct list_head *kdb_modules;
+-#endif /* CONFIG_MODULES */
+-
+ extern char kdb_prompt_str[];
+ 
+ #define	KDB_WORD_SIZE	((int)sizeof(unsigned long))
+diff --git a/kernel/debug/kdb/kdb_support.c b/kernel/debug/kdb/kdb_support.c
+index df2bface866e..08229ffb6b5e 100644
+--- a/kernel/debug/kdb/kdb_support.c
++++ b/kernel/debug/kdb/kdb_support.c
+@@ -17,7 +17,6 @@
+ #include <linux/stddef.h>
+ #include <linux/vmalloc.h>
+ #include <linux/ptrace.h>
+-#include <linux/module.h>
+ #include <linux/highmem.h>
+ #include <linux/hardirq.h>
+ #include <linux/delay.h>
 -- 
-Aaron Tomlin
+2.34.1
 
