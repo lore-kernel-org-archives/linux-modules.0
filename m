@@ -2,95 +2,79 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F53CC433EF
-	for <linux-modules@archiver.kernel.org>; Fri, 11 Mar 2022 16:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA67C433EF
+	for <linux-modules@archiver.kernel.org>; Fri, 11 Mar 2022 18:00:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbiCKQVA (ORCPT
+        id S1349942AbiCKSBR (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 11 Mar 2022 11:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        Fri, 11 Mar 2022 13:01:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242453AbiCKQU7 (ORCPT
+        with ESMTP id S1344592AbiCKSBR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:20:59 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DAD1CD7E6
-        for <linux-modules@vger.kernel.org>; Fri, 11 Mar 2022 08:19:56 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id j26so13727377wrb.1
-        for <linux-modules@vger.kernel.org>; Fri, 11 Mar 2022 08:19:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=n703PiMdH28y8+lrGIdVHry6FOQRwEpTeriwZQDN8lM=;
-        b=PBCyV8agNbQ33tQiq+MU01pdv/2vyhWeps1vj+oMWSpaY+Zwj4DisvvIAifV/4MKkJ
-         NJ2NIBqIcthufAjjBSAeYhRmy+1mHARJQ8aZqbWnNvCRoL4UAflr3y1DocBlD91MJpAe
-         Ot8dEQ7Jg+VPHwQ94EYE8EMQuvTkn8Num0Si2DZNitP/kB1VYOWCOw+maZ5xO+bCv2OR
-         oTDtsRF9w3pGkAX+BS7kAWEf+Ei4pPB9XUtoUQOaPzvMdqzCJo3wSXykhgbzOT9jg4WH
-         FQzIwIV0gDHgmhL9jkhixEULdkLx2iUHvGgDAEB92XoGUYzFdZl+ONQD11aT5yfzdPjV
-         lUcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=n703PiMdH28y8+lrGIdVHry6FOQRwEpTeriwZQDN8lM=;
-        b=zGcWrHT3roBEk1RxDee3msADC3rS8mwCS4Ka3UM8YGjuRHhhujhWCqMy/9XZtjeTAC
-         aQDKLCnSu+q7yQfq2Stnsc0BHWWxZeyuX91/IiQI6wo378/GYEvLgLc1gKTGseHAdhYM
-         pe+D9AWR8UQnOs0wjMNAM2Rg3Kxa+aGz9MmxQXTxN2Wn6vK0vZ+WsxVB9LpYaJra/TGO
-         jsrukd0J/FdI53/lIQWz/OpzJGR3wUgaj08H88MSrXQVQ08U3wl9ScXqUWuNiG8Rif2L
-         VKiFZNFZKbzIcuGaF3Jb7ACDDIII3vjKw1FVVG7IAqe7YSVhd0XfVF7EnqCcMUc/M0ru
-         uTTg==
-X-Gm-Message-State: AOAM530RCvWuwD4Usy+f8c+g8Fff1P+5mEUNttYMENZ4yVZfuqD+0BBg
-        9XjS3LvmE9/An1FXOtZIs0GQHA==
-X-Google-Smtp-Source: ABdhPJwzTa35YepRUOfGsy0vO6pw8vrnH3Sck1bav/ru9whktgrIUK1FL634X/kgm+zL5GC5H501tw==
-X-Received: by 2002:adf:914f:0:b0:1ed:bb92:d0cc with SMTP id j73-20020adf914f000000b001edbb92d0ccmr7998579wrj.297.1647015594869;
-        Fri, 11 Mar 2022 08:19:54 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id ay24-20020a05600c1e1800b00389a420e1ecsm7527872wmb.37.2022.03.11.08.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 08:19:54 -0800 (PST)
-Date:   Fri, 11 Mar 2022 16:19:52 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, christophe.leroy@csgroup.eu,
-        hch@infradead.org, cl@linux.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        void@manifault.com, atomlin@atomlin.com, allen.lkml@gmail.com,
-        joe@perches.com, msuchanek@suse.de, oleksandr@natalenko.name,
-        jason.wessel@windriver.com, pmladek@suse.com
-Subject: Re: [PATCH] kdb: Remove redundant module related references
-Message-ID: <20220311161952.thugdrwd6junr7ib@maple.lan>
-References: <20220307174741.2889588-1-atomlin@redhat.com>
- <20220308105203.2981099-1-atomlin@redhat.com>
- <20220309120640.uumh46n2l37jaddf@maple.lan>
- <YiporeSIrkFg/YS8@bombadil.infradead.org>
- <20220311154723.ezo3wvgg4puu2zk7@maple.lan>
- <20220311160153.3k2avq24mpjyrdpy@ava.usersys.com>
+        Fri, 11 Mar 2022 13:01:17 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F351D3068;
+        Fri, 11 Mar 2022 10:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9Fsxced+cP/JAU6qIJzXyFDQ+HLcljGI9FeqA2TwMJo=; b=KIDm4YiGuH+nwsiNGJW1PBi3GW
+        7nzmByTGtnRb9hV3Fwwu30Ih39CCBejNxk+AezmWDSt0QlL+Y8SuLt48mjpA75/B/GQiF0YeHedJa
+        fUxDGUv3V72Wl6hb5hjku6ieBi2KPta1cHgg9UxgBTnCI0+TdT4WA8E5v16pLOrr9Gegb9TIPpDlQ
+        xIgY5hMrl653Vez8uUhG+kfes/oHxFrSkNDLgd2eTxiaQuWMKy9D1DSQXbnmR5QWZbbvo7P0Q4YeY
+        hU52+7VnJKmUwG6Hz5lMxGHotXoiM/p9AIeVphA7GXyH9tjxHyBMMZS0DINuQJE22BYLiAmJXHC3B
+        fopZVllA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nSjYb-00HZXL-Na; Fri, 11 Mar 2022 18:00:05 +0000
+Date:   Fri, 11 Mar 2022 10:00:05 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Aaron Tomlin <atomlin@redhat.com>, christophe.leroy@csgroup.eu,
+        cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, pmladek@suse.com, hch@infradead.org
+Subject: Re: [PATCH v11 13/14] module: Move kdb module related code out of
+ main kdb code
+Message-ID: <YiuOJclTu3/C9Olo@bombadil.infradead.org>
+References: <20220310102413.3438665-1-atomlin@redhat.com>
+ <20220310102625.3441888-1-atomlin@redhat.com>
+ <20220310102625.3441888-2-atomlin@redhat.com>
+ <20220311161736.2i53cjovg3plbiqu@maple.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220311160153.3k2avq24mpjyrdpy@ava.usersys.com>
+In-Reply-To: <20220311161736.2i53cjovg3plbiqu@maple.lan>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Mar 11, 2022 at 04:01:53PM +0000, Aaron Tomlin wrote:
-> On Fri 2022-03-11 15:47 +0000, Daniel Thompson wrote:
-> > On the whole it doesn't really matter much... but landing the
-> > independent parts via the normal route for kgdb code reduces what I
-> > have to remember acking.
+On Fri, Mar 11, 2022 at 04:17:36PM +0000, Daniel Thompson wrote:
+> On Thu, Mar 10, 2022 at 10:26:24AM +0000, Aaron Tomlin wrote:
+> > No functional change.
+> > 
+> > This patch migrates the kdb 'lsmod' command support out of main
+> > kdb code into its own file under kernel/module. In addition to
+> > the above, a minor style warning i.e. missing a blank line after
+> > declarations, was resolved too. The new file was added to
+> > MAINTAINERS. Finally we remove linux/module.h as it is entirely
+> > redundant.
+> > 
+> > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 > 
-> Hi Daniel,
+> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 > 
-> Any thoughts on this [1]? Unfortunately, the wrong In-Reply-To was
-> specified. So sorry about that. I will send another iteration of the series
-> so that it'll be easier for Luis to apply to mcgrof/modules-testing or
-> mcgrof/modules-next but after we have more feedback.
-> 
-> [1]: https://lore.kernel.org/lkml/20220310102625.3441888-2-atomlin@redhat.com/
+> Likewise w.r.t. to landing this via the modules tree, that's fine:
+> Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
 
-As above. I would rather not have to remember acking the header
-changes as well... but it's not like the sky is going to fall in.
+Groovy thanks, this won't go in for the upcoming merge window, it will
+wait until the next kernel release as we have tons of testing to do
+still.
 
+Thanks!
 
-Daniel.
+  Luis
