@@ -2,171 +2,249 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D8E5C433F5
-	for <linux-modules@archiver.kernel.org>; Tue, 15 Mar 2022 10:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7F32C433EF
+	for <linux-modules@archiver.kernel.org>; Tue, 15 Mar 2022 10:52:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347111AbiCOKcp (ORCPT
+        id S233135AbiCOKxs (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 15 Mar 2022 06:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        Tue, 15 Mar 2022 06:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242353AbiCOKcp (ORCPT
+        with ESMTP id S1347650AbiCOKws (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:32:45 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949F04EA2B;
-        Tue, 15 Mar 2022 03:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647340293; x=1678876293;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0dNmYUFs9nRuMrk1s4mw2ka06WKswNmTkimhAQ++6/g=;
-  b=gGAMnLW41HpadH9Gufd7lF4pIBWUsw7H7trf2oq+rGKFLFXTg7NOBhi7
-   pbuIPXs/0g0ApCvEkZCiuroRO8DSAzTmE/zal9Cikuf0NEcQEJukbxD6R
-   kNlVUrhYhQG4sfc3hpM5eD+a4AUHx/q5XQXYMpVHArYuhV3etxdQiOamv
-   mJy3iiqrtMN/dFPI0GBeTMB9omchDDLkrQJsWxVOKefq6Slo5RheWd6fM
-   5rGH7NsyYcP+/is+qxAyvG8I+grnz4gpqSoIKmnd8gEbD0RzsTHMap72F
-   xklbveSsMyrHb0zvwB2EAebUp/0vVL598/fKWWOuj/CRNZ4E3zD2w6UJK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="319486285"
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="319486285"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 03:31:31 -0700
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="598262614"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 03:31:28 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nU4Rz-000CgM-3g;
-        Tue, 15 Mar 2022 12:30:47 +0200
-Date:   Tue, 15 Mar 2022 12:30:46 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Maninder Singh <maninder1.s@samsung.com>
-Cc:     mcgrof@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com
-Subject: Re: [PATCH v2] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
+        Tue, 15 Mar 2022 06:52:48 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34F1546BD
+        for <linux-modules@vger.kernel.org>; Tue, 15 Mar 2022 03:50:23 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220315105015epoutp040483dbf4225e17e70f013fb4f901608d~ciEoig0iO2677026770epoutp04B
+        for <linux-modules@vger.kernel.org>; Tue, 15 Mar 2022 10:50:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220315105015epoutp040483dbf4225e17e70f013fb4f901608d~ciEoig0iO2677026770epoutp04B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647341415;
+        bh=ZuWevzFbsYXHUriHDZz7Wc7bDh940s8Anu63SP7PMd0=;
+        h=Date:Subject:Reply-To:From:To:CC:In-Reply-To:References:From;
+        b=QJIpk+Z5evyvNHyvPlLMtmxyImuK0l0aXTJPMlF8K/Oyj6AHZr+/JuUjBYOFG6LEw
+         YlzgbbKsOFZwvjwrVaVLWWqWq8TbrzuYSXfiws3aiBKo+RwYs9qP6hl2HWvdKtg+ee
+         3PVnKERnDAUK6Z4Kmak6z2zcSSsdWLB3FrhkkYgM=
+Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220315105014epcas5p2bbd6aeceef18a1c902373292adb453a6~ciEnGu74o2259822598epcas5p2S;
+        Tue, 15 Mar 2022 10:50:14 +0000 (GMT)
+X-AuditID: b6c32a49-b01ff70000001917-c9-62306f661045
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        54.9D.06423.66F60326; Tue, 15 Mar 2022 19:50:14 +0900 (KST)
+Date:   Tue, 15 Mar 2022 16:17:40 +0530
+Message-ID: <2032885049.3816543.1647341260934@mail-kr5-2>
+Mime-Version: 1.0
+Subject: RE: [PATCH v2] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
  disabled
-Message-ID: <YjBq1jg9cNgEqB8T@smile.fi.intel.com>
-References: <CGME20220315095129epcas5p230b94ea10517d148c9cae0669229b0fc@epcas5p2.samsung.com>
- <20220315095112.439580-1-maninder1.s@samsung.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315095112.439580-1-maninder1.s@samsung.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Reply-To: maninder1.s@samsung.com
+Sender: Maninder Singh <maninder1.s@samsung.com>
+From:   Maninder Singh <maninder1.s@samsung.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        Vaneet Narang <v.narang@samsung.com>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "ojeda@kernel.org" <ojeda@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "avimalin@gmail.com" <avimalin@gmail.com>,
+        "atomlin@redhat.com" <atomlin@redhat.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <YjBq1jg9cNgEqB8T@smile.fi.intel.com>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+X-CMS-MailID: 20220315104740epcms5p57da63ebd61283cd7c41025aa3fb47103
+Content-Type: multipart/mixed;
+        boundary="----=_Part_3816542_2122723889.1647341260934"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupik+LIzCtJLcpLzFFi42LZdlhTXTct3yDJYEU7m8Wc9WvYLHqbpjNZ
+        HJm/htXiwcHr7BaXd81hs2iY/Z3V4vGseWwWNyY8ZbRYOX85o8X/x19ZLfZ1PGCy2L1xEZvF
+        8TtPmSwOnZzLaNH4+T6jA7/H7IaLLB47Z91l92jZdwtIHHnL6rFpVSebx4kZv1k85p0M9LjQ
+        le3xft9VNo++LasYPdZvucri8XmTXABPFJdNSmpOZllqkb5dAlfG/O/b2QueaVRsejufpYHx
+        iVIXIyeHhICJxO3PfUxdjFwcQgK7GSU2r7zOApJgEVCVOPLmOjOIzStgKfFl91ugOAeQLSjx
+        d4cwSFhYIFziwpMZbCC2kICixIUZaxhBSoQFDCR+bdUACbMJ6Ems2rUHbKKIgLnEukmL2EBW
+        MQscZZXobdrLBnEDr8SM9qcsELa0xPblWxlBbE4BI4lny74xQcRFJW6ufssOY78/Np8RwhaR
+        aL13lhnCFpR48HM3VFxGYvXmXhaQZRIC3YwS69/thXJmMEr0PJoG1WEusX7JKnaQqyUEXCRu
+        LgJrZgZ6bPas+1CLZSWmnlrHBBHnk+j9/YQJ5ugd82BsVYmWmxtYYR74/PEj1DMeEtM29DFD
+        Ancto8SJZx8YJzDKz0KE4ywk6yBseYntb+cwg5QwC2hKrN+lDxFWk5jS/4UNwjaTaGifygJh
+        K0pM6X7IvoCRfRWjZGpBcW56arFpgWFearlecWJucWleul5yfu4mRnAS1fLcwXj3wQe9Q4xM
+        HIyHGFWA2h9tWH2BUYolLz8vVUmE98wL/SQh3pTEyqrUovz4otKc1OJDjNIcLErivKfTNyQK
+        CaQnlqRmp6YWpBbBZJk4OKUamKaWv8qT1P/kzlJypV586ZSapzwabL/Tkj4xpOm7dKcF5C9s
+        vDc5q3JZiM1jia1W5zWlAvbcqPPXvhNxhNEnn1v5/imbpOPKQfcitALTl5nMvDf/4n+jKd2f
+        v3T2vF304PlFe/2VBsWKYVPe1ghceMmx0nh5/GUXrTsbZGPqHupNOW7RPWljz4XOttq3PUf/
+        vTE12iBzLldxTcfVJva0KVNvzbare9MrvOjUlJVvN53I3cZ3taOsfF4Oz7JpuYGxIk/0+BYq
+        pUbPPnan5PueX7xs3T4RbT0vNr/YNyHsV3HsK7U1z6J4w2yeiuYt5TLlvXKiIsv+xSJv9hZf
+        zY+Bj/0esijuVMo7Ov3zyriJEkosxRmJhlrMRcWJAEenAGMdBAAA
+X-CMS-RootMailID: 20220315095129epcas5p230b94ea10517d148c9cae0669229b0fc
+References: <YjBq1jg9cNgEqB8T@smile.fi.intel.com>
+        <20220315095112.439580-1-maninder1.s@samsung.com>
+        <CGME20220315095129epcas5p230b94ea10517d148c9cae0669229b0fc@epcms5p5>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Mar 15, 2022 at 03:21:12PM +0530, Maninder Singh wrote:
-> print module information when KALLSYMS is disabled.
+------=_Part_3816542_2122723889.1647341260934
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+
+Hi,
+
+> > +int sprint_kallsym_common(char *buffer, unsigned long address, int build_id,
+> > +			    int backtrace, int symbol)
+> > +{
+> > +	if (backtrace)
+> > +		return __sprint_symbol(buffer, address, -1, 1, build_id);
 > 
-> No change for %pB, as it needs to know symbol name to adjust address
-> value which can't be done without KALLSYMS.
+> > +	else if (symbol)
+> > +		return __sprint_symbol(buffer, address, 0, 1, build_id);
+> > +	else
+> > +		return __sprint_symbol(buffer, address, 0, 0, 0);
+> 
+> Redundant 'else' in both cases.
+>
 
-...
+Ok, will change it
 
-> +int sprint_kallsym_common(char *buffer, unsigned long address, int build_id,
-> +			    int backtrace, int symbol)
-> +{
-> +	if (backtrace)
-> +		return __sprint_symbol(buffer, address, -1, 1, build_id);
+> > +}
+> 
+> ...
+> 
+> > +static int sprint_module_info(char *buf, char *end, unsigned long value,
+> > +			     const char *fmt, int modbuildid, int backtrace, int symbol)
+> 
+> fmt is not used.
 
-> +	else if (symbol)
-> +		return __sprint_symbol(buffer, address, 0, 1, build_id);
-> +	else
-> +		return __sprint_symbol(buffer, address, 0, 0, 0);
+Yes, did not notice it.(will remove both end and gmt)
 
-Redundant 'else' in both cases.
+> > +{
+> > +	struct module *mod;
+> > +	unsigned long offset = 0;
+> 
+> > +	unsigned long base;
+> 
+> Can it be the same type as core_layout.base? Why not?
+>
+> > +	char *modname;
+> > +	int len;
+> > +	const unsigned char *buildid = NULL;
+> > +
+> > +	if (is_ksym_addr(value))
+> > +		return 0;
+> > +
+> > +	if (backtrace || symbol)
+> > +		offset = 1;
+> 
+> I would expect here to have
+> 
+> 	else
+> 		offset = 0;
+> 
+> But see below.
+> 
+> > +	preempt_disable();
+> > +	mod = __module_address(value);
+> > +	if (mod) {
+> > +		modname = mod->name;
+> > +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+> > +		if (modbuildid)
+> > +			buildid = mod->build_id;
+> > +#endif
+> 
+> > +		if (offset) {
+> 
+> This seems quite confusing because semantically you use offset as a boolean
+> flag and offset. Why not add a boolean variable with a clear name?
+>
 
-> +}
+Ok, will add 2 separate variables.
 
-...
+> > +			base = (unsigned long)mod->core_layout.base;
+> > +			offset = value - base;
+> > +		}
+> > +	}
+> 
+> > +
+> 
+> Probably you can drop this blank line to group entire critical section,
+> or add a blank line above.
+> 
+> > +	preempt_enable();
+> > +	if (!mod)
+> > +		return 0;
+> > +
+> > +	/* address belongs to module */
+> > +	if (offset)
+> > +		len = sprintf(buf, "0x%p+0x%lx", (void *)base, offset);
+> > +	else
+> 
+> > +		len = sprintf(buf, "0x%lx", (void *)value);
+> 
+> What this casting is for? Don't you have a compilation warning?
 
-> +static int sprint_module_info(char *buf, char *end, unsigned long value,
-> +			     const char *fmt, int modbuildid, int backtrace, int symbol)
+My Bad, earlier I made patch with hashing this value also (%p), but after that
+changed it to %lx to have same original behavior in case of %ps, forgot to update final patch
+to remove typecast.
 
-fmt is not used.
+> 
+> > +	len += fill_name_build_id(buf, modname, modbuildid, buildid, len);
+> > +	return len;
+> 
+> 	return len + ...;
+> 
+> ?
+> 
+> > +}
 
-> +{
-> +	struct module *mod;
-> +	unsigned long offset = 0;
+Will modify patch with all changes.
 
-> +	unsigned long base;
+Thanks,
+Maninder Singh
+------=_Part_3816542_2122723889.1647341260934
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="rcptInfo.txt"
+Content-Transfer-Encoding: base64
 
-Can it be the same type as core_layout.base? Why not?
+DQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIFN1YmplY3QgICAgOiBSZTogW1BBVENIIHYyXSBr
+YWxsc3ltczogZW5oYW5jZSAlcFMvcy9iIHByaW50aW5nIHdoZW4gS0FMTFNZU01TIGlzIGRpc2Fi
+bGVkDQogICAgICBGcm9tICAgICAgIDogbnVsbA0KICAgICAgU2VudCBEYXRlICA6IDIwMjItMDMt
+MTUgMTY6MDIgIEdNVCs1OjMwDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgICAgICAgICAgICAg
+IE5hbWUgICAgICAgICAgICAgICAgVHlwZSAgICAgICAgICBKb2IgVGl0bGUgICAgICAgICAgICAg
+ICAgICAgICAgIERlcHQuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENvbXBhbnkgICAg
+ICAgICAgICAgICAgDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIE1hbmluZGVyIFNpbmdoICAg
+ICAgICAgICAgICAgICBUTyAgICAgICAgIFN0YWZmIEVuZ2luZWVyICAgICAgICAgICAgIFN5c3Rl
+bSBTL1cgR3JvdXAgL1NSSS1EZWxoaSAgICAgICAgICAgICAgIFNhbXN1bmfCoEVsZWN0cm9uaWNz
+wqANCiAgICAgIG1jZ3JvZkBrZXJuZWwub3JnICAgICAgICAgICAgICBDQw0KICAgICAgcG1sYWRl
+a0BzdXNlLmNvbSAgICAgICAgICAgICAgIENDDQogICAgICByb3N0ZWR0QGdvb2RtaXMub3JnICAg
+ICAgICAgICAgQ0MNCiAgICAgIHNlbm96aGF0c2t5QGNocm9taXVtLm9yZyAgICAgICBDQw0KICAg
+ICAgbGludXhAcmFzbXVzdmlsbGVtb2VzLmRrICAgICAgIENDDQogICAgICBha3BtQGxpbnV4LWZv
+dW5kYXRpb24ub3JnICAgICAgQ0MNCiAgICAgIHdhbmdrZWZlbmcud2FuZ0BodWF3ZWkuY29tICAg
+ICBDQw0KICAgICAgVmFuZWV0IE5hcmFuZyAgICAgICAgICAgICAgICAgIENDICAgICAgICAgQXNz
+b2NpYXRlIEFyY2hpdGVjdCAgICAgICAgU3lzdGVtIFMvVyBHcm91cCAvU1JJLURlbGhpICAgICAg
+ICAgICAgICAgU2Ftc3VuZyBFbGVjdHJvbmljcw0KICAgICAgc3dib3lkQGNocm9taXVtLm9yZyAg
+ICAgICAgICAgIENDDQogICAgICBvamVkYUBrZXJuZWwub3JnICAgICAgICAgICAgICAgQ0MNCiAg
+ICAgIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcgICBDQw0KICAgICAgbGludXgtbW9kdWxl
+c0B2Z2VyLmtlcm5lbC4uLiAgIENDDQogICAgICBhdmltYWxpbkBnbWFpbC5jb20gICAgICAgICAg
+ICAgQ0MNCiAgICAgIGF0b21saW5AcmVkaGF0LmNvbSAgICAgICAgICAgICBDQw0KICAgPT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09DQo=
 
-> +	char *modname;
-> +	int len;
-> +	const unsigned char *buildid = NULL;
-> +
-> +	if (is_ksym_addr(value))
-> +		return 0;
-> +
-> +	if (backtrace || symbol)
-> +		offset = 1;
-
-I would expect here to have
-
-	else
-		offset = 0;
-
-But see below.
-
-> +	preempt_disable();
-> +	mod = __module_address(value);
-> +	if (mod) {
-> +		modname = mod->name;
-> +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-> +		if (modbuildid)
-> +			buildid = mod->build_id;
-> +#endif
-
-> +		if (offset) {
-
-This seems quite confusing because semantically you use offset as a boolean
-flag and offset. Why not add a boolean variable with a clear name?
-
-> +			base = (unsigned long)mod->core_layout.base;
-> +			offset = value - base;
-> +		}
-> +	}
-
-> +
-
-Probably you can drop this blank line to group entire critical section,
-or add a blank line above.
-
-> +	preempt_enable();
-> +	if (!mod)
-> +		return 0;
-> +
-> +	/* address belongs to module */
-> +	if (offset)
-> +		len = sprintf(buf, "0x%p+0x%lx", (void *)base, offset);
-> +	else
-
-> +		len = sprintf(buf, "0x%lx", (void *)value);
-
-What this casting is for? Don't you have a compilation warning?
-
-> +	len += fill_name_build_id(buf, modname, modbuildid, buildid, len);
-> +	return len;
-
-	return len + ...;
-
-?
-
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+------=_Part_3816542_2122723889.1647341260934--
