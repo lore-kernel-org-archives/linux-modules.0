@@ -2,48 +2,42 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25CB8C433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 16 Mar 2022 04:40:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 274E9C433EF
+	for <linux-modules@archiver.kernel.org>; Wed, 16 Mar 2022 06:40:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345545AbiCPElR (ORCPT
+        id S1347471AbiCPGlV (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 16 Mar 2022 00:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        Wed, 16 Mar 2022 02:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343955AbiCPElQ (ORCPT
+        with ESMTP id S1348607AbiCPGlU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 16 Mar 2022 00:41:16 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF0939157
-        for <linux-modules@vger.kernel.org>; Tue, 15 Mar 2022 21:40:02 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220316044000epoutp0408c69a7921d9c964db6b1a0ea4877d3d~cwqps0h_N0812908129epoutp042
-        for <linux-modules@vger.kernel.org>; Wed, 16 Mar 2022 04:40:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220316044000epoutp0408c69a7921d9c964db6b1a0ea4877d3d~cwqps0h_N0812908129epoutp042
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1647405600;
-        bh=Pg2YkgWrqEHxCCE72dS09UgZo3qysKXpEiubDt7UJcQ=;
-        h=Date:Subject:Reply-To:From:To:CC:In-Reply-To:References:From;
-        b=Xux4FJmgZ78aMOuUP73aE1LsvTQczf33VBTYgWh/otP75Gt1byUZfd4N206CEFNr9
-         6twfBdhS2dt6Wmvlzb3Bf1BCtJasZc3wIRMzDn4T8buO6RxLPyaZlbb9mDVa50LQrJ
-         hxCnlOSnexkhz3AvD5v3MncEAWv+/2yzCMIXyYL8=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220316044000epcas5p41a87ceb5d7c4cefee45cf344b92bd037~cwqpEBomk0863108631epcas5p4q;
-        Wed, 16 Mar 2022 04:40:00 +0000 (GMT)
-X-AuditID: b6c32a4a-5b7ff700000030eb-34-62316a205ad1
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6F.10.12523.02A61326; Wed, 16 Mar 2022 13:40:00 +0900 (KST)
-Date:   Wed, 16 Mar 2022 10:09:53 +0530
-Message-ID: <453510261.3922147.1647405593710@mail-kr5-2>
-Mime-Version: 1.0
-Subject: RE: [PATCH v3] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
- disabled
-Reply-To: maninder1.s@samsung.com
-Sender: Maninder Singh <maninder1.s@samsung.com>
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
+        Wed, 16 Mar 2022 02:41:20 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90048.outbound.protection.outlook.com [40.107.9.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DCC5AEC8;
+        Tue, 15 Mar 2022 23:40:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RUExo2dtTMNJqzXIZYx+CiTNc9iGjkrk2xDOjlJi3JdfHip1x9YeaZOK6HDGh6WbJm6msuiMaWjbKFXBdTEYAhh3Iw97LcptwUMvqcB8EJKxhIOC9REEA4WebkInB3Nu+luuIG11h676UsAcloG+4+VeS5xmuYt9SabM4d0SeKinKtbwysabJaFwaoo1PSx9qHG4GhGg51vU3i/bQQwe1hgVOeI93O7i+E+Nf6wvzwuWfjewzkusUd9ZGjgOxs5Nu841kFZf1sSGJuQVbuQWOnI31+mINYg0MzrCZVs2NjX77VPeODUxiTkdVE5Iv+f4pDLyMlFLgOuhdy98JqgGRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7+wfMDWzev/652jrNREtKksVyn+0NHzoWSv5h03ddkE=;
+ b=nXizahvaY2KwTYyP4KWsD2EZTiRvCXnX8vNI4hyKK/CnLK3ool95fgZT9fK+MQjTtuGFlXcCGTP3sM5HMJGvshUWZrwDjylDal4W0IGboZ7LNIDy60Ib9Xn1hC2eps/Ly+kEfUlQVmA75ytQ70qrjGoT05mZNYs3FtmPuw0cg84ntNQGVpFhKAD3OZ7fjM0o+RTwXQYARo7G+AYhtt3uA33GBWyBoUoWS49y2qzACI/CrS+NnELaZ7dheGwL8pmiwqJ5Rhd6qZKjmmqGPy102CkJHOs6IOauQV48FEeo9Fxy0chXAPg0KBP9YcwKIUrc3IZBh1mowTDLrBrm08O6KQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB4343.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:256::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.24; Wed, 16 Mar
+ 2022 06:40:03 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d%6]) with mapi id 15.20.5081.014; Wed, 16 Mar 2022
+ 06:40:02 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Maninder Singh <maninder1.s@samsung.com>
 CC:     "pmladek@suse.com" <pmladek@suse.com>,
         "rostedt@goodmis.org" <rostedt@goodmis.org>,
         "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
@@ -52,132 +46,118 @@ CC:     "pmladek@suse.com" <pmladek@suse.com>,
         "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        Vaneet Narang <v.narang@samsung.com>,
+        "v.narang@samsung.com" <v.narang@samsung.com>,
         "swboyd@chromium.org" <swboyd@chromium.org>,
         "ojeda@kernel.org" <ojeda@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "avimalin@gmail.com" <avimalin@gmail.com>,
         "atomlin@redhat.com" <atomlin@redhat.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
+Subject: Re: [PATCH v3] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
+ disabled
+Thread-Topic: [PATCH v3] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
+ disabled
+Thread-Index: AQHYOIYIvWnstbkCdEiBL58y/A/yY6zAueoAgADWXQA=
+Date:   Wed, 16 Mar 2022 06:40:02 +0000
+Message-ID: <62c74547-deb0-539a-c1cc-64b2ac334c94@csgroup.eu>
+References: <CGME20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c@epcas5p2.samsung.com>
+ <20220315155100.516107-1-maninder1.s@samsung.com>
+ <YjDScHjMUbqYV4s4@bombadil.infradead.org>
 In-Reply-To: <YjDScHjMUbqYV4s4@bombadil.infradead.org>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-X-CMS-MailID: 20220316043953epcms5p64b6640822657cca1ceac10cc1bd94846
-Content-Type: multipart/mixed;
-        boundary="----=_Part_3922146_1652146221.1647405593709"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupik+LIzCtJLcpLzFFi42LZdlhTXVchyzDJ4MJULos569ewWfQ2TWey
-        ODJ/DavFg4PX2S0u75rDZtEw+zurxeNZ89gsbkx4ymixcv5yRov/j7+yWuzreMBksXvjIjaL
-        43eeMlkcOjmX0aLx831GB36P2Q0XWTx2zrrL7tGy7xaQOPKW1WPTqk42jxMzfrN4zDsZ6HGh
-        K9vj/b6rbB59W1YxeqzfcpXF4/MmuQCeKC6blNSczLLUIn27BK6MDa8KC6YqV/S/us/WwLhM
-        vouRk0NCwESiedNF9i5GLg4hgd2MElv2b2cHSbAIqEpMfraOBcTmFbCQaL95mbWLkQPIFpT4
-        u0MYJCwsEC5xcP85sBIhAUWJCzPWMIKUCAsYSPzaqgESZhPQk1i1aw9YiYiAhsS+Cb1MIKuY
-        BZ6zSryf28YOcQOvxIz2pywQtrTE9uVbGUFsTgEziY3rmpkg4qISN1e/ZYex3x+bzwhhi0i0
-        3jvLDGELSjz4uRsqLiOxenMvC8gyCYFuRon17/ZCOTMYJXoeTYPqMJdYv2QV1FQXiRs35oB1
-        MwN9dnj/T6i4rMTUU+uYIOJ8Er2/nzDBXL1jHoytKtFycwMrzAefP36E+sZDovnSI1ZI6G5k
-        lHi/6jLzBEb5WYiAnIVkHYQtL7H97RxmkBJmAU2J9bv0IcJqElP6v7BB2GYSDe1TWSBsRYkp
-        3Q/ZFzCyr2KUTC0ozk1PLTYtMMpLLdcrTswtLs1L10vOz93ECE6iWl47GB8++KB3iJGJg/EQ
-        owpQ+6MNqy8wSrHk5eelKonwnnmhnyTEm5JYWZValB9fVJqTWnyIUZqDRUmc93T6hkQhgfTE
-        ktTs1NSC1CKYLBMHp1QDU3rr4tdcBfPL1n6ZHsLN2OVlcFVX9+Spamb7de8cMkt3VDZ8WfTv
-        7JZJeg8fRhemJv3XZt14cOEhg7fMNnVyO34F7FlzwG77WQfZBbzHnl2Pc+R4nbQy84Dc3buX
-        94qsD1VdujQszcH6+sZGZ+GW581W+e6rlDsso+vcxVx3HPy90bJ4Paul0PINWY/bT3Rvt77H
-        HD2F/byOZ6qbsnP7wk21P5+bbl3z//fzzc+DJJUP1kt671xtHNMYl7RvRnXZ3IvPu5yjr2zT
-        vLuvYb7KHZsfV4RlQ8NL9Cft8ltwI0a7jzFQ5vBaXia7e1l71uwUmXBS2fx+9JcicX+Nx/8/
-        CznP1dyi9XF2a5z/D7XcN0osxRmJhlrMRcWJACtGHAEdBAAA
-X-CMS-RootMailID: 20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c
-References: <YjDScHjMUbqYV4s4@bombadil.infradead.org>
-        <20220315155100.516107-1-maninder1.s@samsung.com>
-        <CGME20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c@epcms5p6>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 708f8ebd-fdb2-4d7a-6568-08da0717cce4
+x-ms-traffictypediagnostic: PR1P264MB4343:EE_
+x-microsoft-antispam-prvs: <PR1P264MB4343C75935CB3B0E0CD47338ED119@PR1P264MB4343.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: F1v9czoGxr4uINgZWWHxD+ebyPpJrWk1Purt1aXyMsZJgyVX8wZuERGIyALGatlvgY4Je9d216xNtcyGFE9hiUaAfasjJq76eHzvmcSOvB8+n9BVDs7iKlnHrvYqcWnvODc9KEc5kt98m5FoiuiExDXcTdtulAVrVrMr9w13YDUEKVUVl183U6emirNWtggEd6Wcwyp0fyRlxW6AJ++C8H/nt11djxyHlI0Zt0YiHcZlc93V87tLjmyHQK9wMcwLh67XfWCOLHJmA78ddVmFHetMjcUVirKJJdxWM5DVZVJrH4AauKz3Rnn3KwhwSmqTD7+DWS8ZUftNioufi2HcjaCC6yX1Bdk56oLJbgg6Tl9fRTMmZfAquse3J/nJj49AXHQaINQXHbgBS17iXvWQ/YwbEqLhgh66iZmyuD6/TKYsjpy6TC1xEVOgTP6a32xt7wW9lRFVTXrtQkAL3Mv6h/+uOKmy4em6PU8/u4qrsR51DlWIA5R86LODnmo3gqhLWwWsd4v8/258NP9ZjnAXmmIPtZ1uFfay9L5E/5EQEiGS+vyA/hj1LL1XDjAvo2xxTIfffs9dU/MiiO/C5pFCigJhxpy7MoTKlo8ybYVlGEPJATJ70CouiHsgxy6zMnC5E4OwEH5ZvD5Df/2tPVwie/nDvVc3Hsk7kWBm6vywwl87Dj//P/Ni2qoTgIgYkmdWfVNcOKO6qRrFwlw6vC12hF8fwPejuNRMONL7i+yXzobJpRffHbT/I7QgOe6SoGRr+i6E9lLCJCbQt57gJj55rWFhOtR5KwX0IkmvXoaX8El0Cmw/2Xd4M+kZYjA+hqCqNdI6w15J5hu/cwSTWRjUlz/AjFWC812PaNG45rMsU3A=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(186003)(2616005)(966005)(6486002)(508600001)(6512007)(6506007)(38070700005)(71200400001)(122000001)(38100700002)(86362001)(7416002)(316002)(31696002)(2906002)(5660300002)(36756003)(66476007)(64756008)(8936002)(4326008)(66446008)(66556008)(91956017)(31686004)(66946007)(76116006)(54906003)(8676002)(110136005)(44832011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S2R2NFB4eHY2VHhBWFZBZXFhV2IyWmJacktxcmFxMDVkV3BrZURqVFJQSjJS?=
+ =?utf-8?B?U25IWmZGRWs4L0pTLzFIREdsbUxPOFIvcmVYUlBUYW1rSWZoMEJxaTR0SEJw?=
+ =?utf-8?B?TWxqR3pGU0Z1NExlMU84N1NtMng4aUlBQmNsSnU5T2szaVFRd3NRS292bFhY?=
+ =?utf-8?B?Z2haWlhIaVJDQnNOaElOU3hWTkJVTHFRV0lGZC8xc1FRU0hyaVpyK3ZSOEZ4?=
+ =?utf-8?B?dVdxTk90TlVabEJCRkpjeGdzeVIxcStQYThLWGNtdkorTXcvdXExQ2FMdlhq?=
+ =?utf-8?B?NDI2aEtLdWx5cFpKREZhL0xOUmIvMGhZRUtCQzlnS043aXlKdFlQNlB6Ni9I?=
+ =?utf-8?B?L3F0Sjc3YmdLaWdiZEx3bndXOGNCNzJ3RDMxL0RMZkNNTmlXbm5WS2p4NHhG?=
+ =?utf-8?B?MHU0c3pjNGd4Vms4cDZKWFpwNlVNMElLcXZEZkdMQTZqNlN2K2tCUllUdEla?=
+ =?utf-8?B?V2tJVlhCZVBiYXRhUkwrL1ppSndnVmU5VGoydmZIY0w5eVBiZ09keU0yZEhz?=
+ =?utf-8?B?N1h5cldFRTg5bUZpOFgveElEVUFINVFWeVRTN3lEV3ZUMVFkQXVMRUpEQVYz?=
+ =?utf-8?B?T1R3QWFUYlErSGpTZSszWnpRdk1pRWIrOURwWWhtcXcvVEZwY0t2Q0IvU3M2?=
+ =?utf-8?B?QmFlVStQa1h6VFNSdEFwTncvVXRjWXRrVFRUR3ltNHdOeEFDaGZXKzUySWJD?=
+ =?utf-8?B?QThKWDF6UnJSUDNvT25wYVNMVHI5WmVIRnhJQ3diM2hqYkgrUU1IaUxDRU1S?=
+ =?utf-8?B?MWZsVEtJYm0yc0ROaUlxZ2luSXgxTEtjMXo2QWNHa21vT1BhT1BySEQxWlJ1?=
+ =?utf-8?B?ZkJETm9Gc0lKOUNHWUZaRlM3ajBJaW13UXIxR1J2dVJXSHB6a0RnVUxMVHYv?=
+ =?utf-8?B?TGk0SmFqeGdQcjhlNXNWWXUrLy8yRkRIU3BzdnpMRUhPUmNNSElTWnlJZUd2?=
+ =?utf-8?B?Z0ZSekc1UjBMR2xJWjBGVkQ5V0VkcllGVStNS25VeXNTTHdjeXdmVWc0V0tz?=
+ =?utf-8?B?SXJrTC80SkNyT2FFVlFNREdGYjE4ZHViYnhFUXMvOUM4YmtpNDdyTS9yNTlz?=
+ =?utf-8?B?N0w2K0VnMUw5Y3VPeUpBZjhvLy9YcWg0K3o1L3BWWnJVREJPQ3VKOXB1eWdZ?=
+ =?utf-8?B?TVhiVFBLNXF1b2dZdUhhSlhvSDhDNVFOSnRiWmk3ZmNnZmpVb2hQMk5CamlU?=
+ =?utf-8?B?aUtNV2VKNHV4RGJKNWgySVlTblNQVnd3clg0QnZxcmxyMGh5T05YTFhBUW1L?=
+ =?utf-8?B?NDVoMFk2NllkYkdZa0liZWJJMlZXb3ZRM0tOeEVpSktxRjdDcWVVNTVnRzFI?=
+ =?utf-8?B?WW5IZFp3ZnprQXYvUjdDYU9UaFoxSzEzSmVqWXY3eHRKT0ZWZmNmM09GcTFT?=
+ =?utf-8?B?bjNqZWlxcjFYMVRESXlxTm9TOUdvcitzTTEvOU9SR2U1cGpIbnFpRHBCZHpF?=
+ =?utf-8?B?TTVpWmY2MkExejV2OXkyYVk4VmMrMm04ZkFnWEpXZ21tbFRsZWlDYk5JVHBR?=
+ =?utf-8?B?bWNQTDFNWE1BTjFWV053R0xVY3VZdGkvb2lFcFlDRjk1RDVUU2ExQ2FqZFdo?=
+ =?utf-8?B?QTlMUUxVZUt3VTd0MTVnbGFpR1phMWNYdXo1NWlXR2laV3FwY0NONVNTVFZE?=
+ =?utf-8?B?SitpUTl2ZUI1UmlaWmtYSitlREp1aktwK2d2RlZiUGVBY2xzdDZrTnVOeFQw?=
+ =?utf-8?B?WGpiUFBjNCtISzFrbWRIYjNnS3o3RUVsYkZORjBRN2hhcTVhNVJrbE5OOWRT?=
+ =?utf-8?B?UXRLV0U4YmJNNHVVL21WK2VrWW9PR1Zoc3NFaklCKzU4am5EM1I1cFhhcW5D?=
+ =?utf-8?B?aUJjd2xSOFVQL29vUTQ2aVkweXpkekVhd0N4WFdVNk1aSlpVandBeTFRSE1z?=
+ =?utf-8?B?U1hmU3FrTDFoWEt4eFhvNVZSb1RmZzdHTnJzemZjUDZUaGhWTHNPbDRMaUZQ?=
+ =?utf-8?B?eHFVSEYxS215Zmlqdk1vMDNVdlFHeXUzWU1wVkRmMGMvQlp1NVVKRVg4SFhj?=
+ =?utf-8?Q?M7fwj/mQZ8XuBXvCuikTFOwQqacdDk=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <24DD333A9B4E10438E7E3934285636DE@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 708f8ebd-fdb2-4d7a-6568-08da0717cce4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2022 06:40:02.8727
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: It8XmvSfxOINl9moaXxvj2+jRIPGjH768YUpLof27WdMtdFo5xIgOu50lNV7Z+1fx8NS/849f3ldTzmkdQnY9VbscJVbLxtXLIMSm7nukqs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB4343
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-------=_Part_3922146_1652146221.1647405593709
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-
-Hi Luis,
-
->> ---
->> commit id 'kallsyms: print module name in %ps/S case when KALLSYMS is disabled'
->>         needs to be removed from mm(linux-next) tree, current change is
->>         with ignorance of this commit. I was not sure how to send patch, with 2 patches
->>         consisting reversal commit also, or current approach is correct.
->> 
->> v1->v2: hash base address of module, change *fmt to fmt[0] and removed
->>         copy paste.
->> v2->v3: fixed review comments from Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> 
->>  include/linux/kallsyms.h |  2 +
->>  include/linux/module.h   | 20 ++++++++++
->>  kernel/kallsyms.c        | 27 +++++++------
->>  kernel/module.c          |  4 +-
->>  lib/vsprintf.c           | 85 ++++++++++++++++++++++++++++++++++------
-> 
-> Hey Maninder, thanks for your patch!
->  
-> Since this touches kernel/module.c and include/linux/module.h I'd prefer
-> this go through modules-next [0], and as you will see that's a different
-> world right now. I also have a set of at least 2 other patch sets to
-> merge there before yours.
->  
-> Also, what is on modules-next is not intended to go to Linus for the
-> next merge window as the changes there got merged only late, and I want
-> at least 2 months of testing on linux-newt before any pull requiest is
-> sent to Linus.
->  
-> Can you rebase to modules-next? I can evaluate the patches then for
-> integration there once the other stuff gets merged into that tree too.
->  
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
->  
->   Luis
-
-prepared and verified patch(KALLSYMS enabled and disabled both) on module-next rebase and sent in new mail.
-[PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when KALLSYSMS is disabled
-
-https://lkml.org/lkml/2022/3/16/7
-
-Thanks,
-Maninder Singh
-------=_Part_3922146_1652146221.1647405593709
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename="rcptInfo.txt"
-Content-Transfer-Encoding: base64
-
-DQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIFN1YmplY3QgICAgOiBSZTogW1BBVENIIHYzXSBr
-YWxsc3ltczogZW5oYW5jZSAlcFMvcy9iIHByaW50aW5nIHdoZW4gS0FMTFNZU01TIGlzIGRpc2Fi
-bGVkDQogICAgICBGcm9tICAgICAgIDogbnVsbA0KICAgICAgU2VudCBEYXRlICA6IDIwMjItMDMt
-MTUgMjM6MjMgIEdNVCs1OjMwDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgICAgICAgICAgICAg
-IE5hbWUgICAgICAgICAgICAgICAgVHlwZSAgICAgICAgICBKb2IgVGl0bGUgICAgICAgICAgICAg
-ICAgICAgICAgIERlcHQuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENvbXBhbnkgICAg
-ICAgICAgICAgICAgDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIE1hbmluZGVyIFNpbmdoICAg
-ICAgICAgICAgICAgICBUTyAgICAgICAgIFN0YWZmIEVuZ2luZWVyICAgICAgICAgICAgIFN5c3Rl
-bSBTL1cgR3JvdXAgL1NSSS1EZWxoaSAgICAgICAgICAgICAgIFNhbXN1bmfCoEVsZWN0cm9uaWNz
-wqANCiAgICAgIHBtbGFkZWtAc3VzZS5jb20gICAgICAgICAgICAgICBDQw0KICAgICAgcm9zdGVk
-dEBnb29kbWlzLm9yZyAgICAgICAgICAgIENDDQogICAgICBzZW5vemhhdHNreUBjaHJvbWl1bS5v
-cmcgICAgICAgQ0MNCiAgICAgIGFuZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmkuLi4gICBDQw0KICAg
-ICAgbGludXhAcmFzbXVzdmlsbGVtb2VzLmRrICAgICAgIENDDQogICAgICBha3BtQGxpbnV4LWZv
-dW5kYXRpb24ub3JnICAgICAgQ0MNCiAgICAgIHdhbmdrZWZlbmcud2FuZ0BodWF3ZWkuY29tICAg
-ICBDQw0KICAgICAgVmFuZWV0IE5hcmFuZyAgICAgICAgICAgICAgICAgIENDICAgICAgICAgQXNz
-b2NpYXRlIEFyY2hpdGVjdCAgICAgICAgU3lzdGVtIFMvVyBHcm91cCAvU1JJLURlbGhpICAgICAg
-ICAgICAgICAgU2Ftc3VuZyBFbGVjdHJvbmljcw0KICAgICAgc3dib3lkQGNocm9taXVtLm9yZyAg
-ICAgICAgICAgIENDDQogICAgICBvamVkYUBrZXJuZWwub3JnICAgICAgICAgICAgICAgQ0MNCiAg
-ICAgIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcgICBDQw0KICAgICAgbGludXgtbW9kdWxl
-c0B2Z2VyLmtlcm5lbC4uLiAgIENDDQogICAgICBhdmltYWxpbkBnbWFpbC5jb20gICAgICAgICAg
-ICAgQ0MNCiAgICAgIGF0b21saW5AcmVkaGF0LmNvbSAgICAgICAgICAgICBDQw0KICAgPT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09DQo=
-
-------=_Part_3922146_1652146221.1647405593709--
+SGkgTHVpcw0KDQoNCkxlIDE1LzAzLzIwMjIgw6AgMTg6NTIsIEx1aXMgQ2hhbWJlcmxhaW4gYSDD
+qWNyaXTCoDoNCj4gT24gVHVlLCBNYXIgMTUsIDIwMjIgYXQgMDk6MjE6MDBQTSArMDUzMCwgTWFu
+aW5kZXIgU2luZ2ggd3JvdGU6DQo+PiAgIGluY2x1ZGUvbGludXgva2FsbHN5bXMuaCB8ICAyICsN
+Cj4+ICAgaW5jbHVkZS9saW51eC9tb2R1bGUuaCAgIHwgMjAgKysrKysrKysrKw0KPj4gICBrZXJu
+ZWwva2FsbHN5bXMuYyAgICAgICAgfCAyNyArKysrKysrLS0tLS0tDQo+PiAgIGtlcm5lbC9tb2R1
+bGUuYyAgICAgICAgICB8ICA0ICstDQo+PiAgIGxpYi92c3ByaW50Zi5jICAgICAgICAgICB8IDg1
+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0NCj4gDQo+IEhleSBNYW5p
+bmRlciwgdGhhbmtzIGZvciB5b3VyIHBhdGNoIQ0KPiANCj4gU2luY2UgdGhpcyB0b3VjaGVzIGtl
+cm5lbC9tb2R1bGUuYyBhbmQgaW5jbHVkZS9saW51eC9tb2R1bGUuaCBJJ2QgcHJlZmVyDQo+IHRo
+aXMgZ28gdGhyb3VnaCBtb2R1bGVzLW5leHQgWzBdLCBhbmQgYXMgeW91IHdpbGwgc2VlIHRoYXQn
+cyBhIGRpZmZlcmVudA0KPiB3b3JsZCByaWdodCBub3cuIEkgYWxzbyBoYXZlIGEgc2V0IG9mIGF0
+IGxlYXN0IDIgb3RoZXIgcGF0Y2ggc2V0cyB0bw0KPiBtZXJnZSB0aGVyZSBiZWZvcmUgeW91cnMu
+DQo+IA0KPiBBbHNvLCB3aGF0IGlzIG9uIG1vZHVsZXMtbmV4dCBpcyBub3QgaW50ZW5kZWQgdG8g
+Z28gdG8gTGludXMgZm9yIHRoZQ0KPiBuZXh0IG1lcmdlIHdpbmRvdyBhcyB0aGUgY2hhbmdlcyB0
+aGVyZSBnb3QgbWVyZ2VkIG9ubHkgbGF0ZSwgYW5kIEkgd2FudA0KPiBhdCBsZWFzdCAyIG1vbnRo
+cyBvZiB0ZXN0aW5nIG9uIGxpbnV4LW5ld3QgYmVmb3JlIGFueSBwdWxsIHJlcXVpZXN0IGlzDQo+
+IHNlbnQgdG8gTGludXMuDQo+IA0KPiBDYW4geW91IHJlYmFzZSB0byBtb2R1bGVzLW5leHQ/IEkg
+Y2FuIGV2YWx1YXRlIHRoZSBwYXRjaGVzIHRoZW4gZm9yDQo+IGludGVncmF0aW9uIHRoZXJlIG9u
+Y2UgdGhlIG90aGVyIHN0dWZmIGdldHMgbWVyZ2VkIGludG8gdGhhdCB0cmVlIHRvby4NCj4gDQo+
+IFswXSBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9tY2dy
+b2YvbGludXguZ2l0L2xvZy8/aD1tb2R1bGVzLW5leHQNCj4gDQoNCkkgY2FuJ3Qgc2VlIEFhcm9u
+J3Mgc2VyaWVzIG9uIG1vZHVsZXMtbmV4dCB5ZXQsIGRvIHlvdSBwbGFuIHRvIG1lcmdlIGl0IA0K
+YW55dGltZSBzb29uID8NCg0KQXMgeW91IHNheSwgaXQgd2lsbCBiZSBhIGRpZmZlcmVudCB3b3Js
+ZCBieSB0aGVuLg0KDQpJIGhhdmUgbXkgc2VyaWVzIHJlYmFzZXMgb24gdG9wIG9mIGxhdGVzdCBB
+YXJvbidzIHNlcmllcywgYnV0IEkgd2FzIA0Kd2FpdGluZyB0aGF0IGl0IGxhbmRzIGluIG1vZHVs
+ZXMtbmV4dC4gSG93IGRvIHlvdSBwbGFuIHRvIHByb2NlZWQgPw0KDQpUaGFua3MNCkNocmlzdG9w
+aGU=
