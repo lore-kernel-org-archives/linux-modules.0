@@ -2,399 +2,182 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C3ACC433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 16 Mar 2022 04:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25CB8C433EF
+	for <linux-modules@archiver.kernel.org>; Wed, 16 Mar 2022 04:40:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240749AbiCPEhe (ORCPT
+        id S1345545AbiCPElR (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 16 Mar 2022 00:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
+        Wed, 16 Mar 2022 00:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237441AbiCPEhc (ORCPT
+        with ESMTP id S1343955AbiCPElQ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 16 Mar 2022 00:37:32 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3082601
-        for <linux-modules@vger.kernel.org>; Tue, 15 Mar 2022 21:36:16 -0700 (PDT)
+        Wed, 16 Mar 2022 00:41:16 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF0939157
+        for <linux-modules@vger.kernel.org>; Tue, 15 Mar 2022 21:40:02 -0700 (PDT)
 Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220316043611epoutp03d79036cdcd2e55537fd2432628268512~cwnT-hnQ41818318183epoutp03y
-        for <linux-modules@vger.kernel.org>; Wed, 16 Mar 2022 04:36:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220316043611epoutp03d79036cdcd2e55537fd2432628268512~cwnT-hnQ41818318183epoutp03y
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220316044000epoutp0408c69a7921d9c964db6b1a0ea4877d3d~cwqps0h_N0812908129epoutp042
+        for <linux-modules@vger.kernel.org>; Wed, 16 Mar 2022 04:40:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220316044000epoutp0408c69a7921d9c964db6b1a0ea4877d3d~cwqps0h_N0812908129epoutp042
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1647405371;
-        bh=/gm4AA8CLxszdt7ziOnnHN8fkkwV9dp3skuI6cB3n9Y=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=Ax4WCof0CihgblJvkZPSXXKY6cbKi5f5NW8AK4niWAi9Jqpi/UeKxjU3lN0Yz7EMM
-         Nd1ot5H/cni1keDICuqbLDuUM4YfZDURsfrBusy2NUZ9ylkcZZ7vlBMZEHLLGXko1L
-         mWqtgeCQr2e6ILE1byqSLeWcB6cYYbWfwDbr0/ZI=
+        s=mail20170921; t=1647405600;
+        bh=Pg2YkgWrqEHxCCE72dS09UgZo3qysKXpEiubDt7UJcQ=;
+        h=Date:Subject:Reply-To:From:To:CC:In-Reply-To:References:From;
+        b=Xux4FJmgZ78aMOuUP73aE1LsvTQczf33VBTYgWh/otP75Gt1byUZfd4N206CEFNr9
+         6twfBdhS2dt6Wmvlzb3Bf1BCtJasZc3wIRMzDn4T8buO6RxLPyaZlbb9mDVa50LQrJ
+         hxCnlOSnexkhz3AvD5v3MncEAWv+/2yzCMIXyYL8=
 Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220316043610epcas5p12eb332b22acaf98109514b899950a42c~cwnTSeYZZ0546505465epcas5p1U;
-        Wed, 16 Mar 2022 04:36:10 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220316044000epcas5p41a87ceb5d7c4cefee45cf344b92bd037~cwqpEBomk0863108631epcas5p4q;
+        Wed, 16 Mar 2022 04:40:00 +0000 (GMT)
+X-AuditID: b6c32a4a-5b7ff700000030eb-34-62316a205ad1
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
         epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E6.3F.12523.A3961326; Wed, 16 Mar 2022 13:36:10 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933~cwnCY9t7v1251512515epcas5p2l;
-        Wed, 16 Mar 2022 04:35:52 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220316043552epsmtrp289c7c86cadc8901dbb073a477b0638f7~cwnCW3vpT2071020710epsmtrp2T;
-        Wed, 16 Mar 2022 04:35:52 +0000 (GMT)
-X-AuditID: b6c32a4a-5a1ff700000030eb-bb-6231693ac7d8
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        11.EC.03370.82961326; Wed, 16 Mar 2022 13:35:52 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.109.224.44]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220316043549epsmtip205604eb6be39089cbf46f41a7a185dcf~cwm-GpVcy1218912189epsmtip2g;
-        Wed, 16 Mar 2022 04:35:48 +0000 (GMT)
+        6F.10.12523.02A61326; Wed, 16 Mar 2022 13:40:00 +0900 (KST)
+Date:   Wed, 16 Mar 2022 10:09:53 +0530
+Message-ID: <453510261.3922147.1647405593710@mail-kr5-2>
+Mime-Version: 1.0
+Subject: RE: [PATCH v3] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
+ disabled
+Reply-To: maninder1.s@samsung.com
+Sender: Maninder Singh <maninder1.s@samsung.com>
 From:   Maninder Singh <maninder1.s@samsung.com>
-To:     mcgrof@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, akpm@linux-foundation.org,
-        wangkefeng.wang@huawei.com
-Cc:     v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com, keescook@chromium.org,
-        ndesaulniers@google.com, rdunlap@infradead.org, void@manifault.com,
-        Maninder Singh <maninder1.s@samsung.com>
-Subject: [PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when
- KALLSYSMS is disabled
-Date:   Wed, 16 Mar 2022 10:05:40 +0530
-Message-Id: <20220316043540.677128-1-maninder1.s@samsung.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUxTVxTPfX3v9dENebYsXku2ShfMhEAVx3bjwJFI9EUlGWqyyLJItS+1
-        A1rSFreR/VGBfVDCACMDCoJsRkplK5ZKsTAm1Y0xyIQpHSpKEYiuClgKuA4XRvsw87/fxznn
-        d87NpXjCACGmVGo9q1XLc6SkAO+4uuWN+B2qbUe3+uekqN7aSqKywmoMXWtsJZCn908+GizN
-        RTec9SQy1D0l0KSpgURXG7/A0WjFNEBPKlYw1NLYDNDK5CKBZsaqcdTzlQdDXRe/JVHf2DSG
-        XP1nAHI0W0l00j8OUiOZOsMwzlw23eUzxT23+cxZWz5TfG2GYNrNsYzNUkIyv9Ys40xDfwYz
-        eKEDY4aM2cxczwjJfG23AMZqH8EZv+219yIyBckKNkd1gtXKdmYJjrdUnSLyJvd+Um6Y5RnA
-        vRQjoChIvwnND8RGIKCEdBeAznI3wZF5AGu9bh5H/ABW36lcJWGhjmeOdjyIhbQTwMXhrVzR
-        AoD/zpzHggZJJ0CLsxsPGpH0EIA3b3eHRvHoixisfXg6NEpEZ8GJR8shjNMxcMJzjgjicDoF
-        ftPdRHBxElj7x1M+p6+H/bVToWjeql50qS40FNILFCwZtK3tlwbP9XINkBZBb599DYuhf/ZH
-        kmsoBbCt9BecIzUA+ntHAFf1LpwaDkZTqxFboNUp4+RXYdVvP2Bc8jpYtjyFcXo47Gx4jmNg
-        8a22ta2joN/nwznMwOkHAyT3YB/C0sUlvAJITC8cZHrhINP/yWcBzwI2snm6XCWrS8pLVLMf
-        J+jkubp8tTLhmCbXBkK/M3ZvJ5jwPElwAYwCLgApnjQyfPCh7KgwXCH/tIDVao5o83NYnQtE
-        Ubh0Q/iAsk0upJVyPZvNsnms9rmLUWFiAyY5UW7x/v3lqHGToiAqTXWvaFTzTuAvt9vX49h5
-        5Wd7UaV4l3N3R6Gwpu2l5LfSUk/FxAciduiN+gOHXOn7UzPx3zfGyaMGrg8WDp9+VDb3/keX
-        RhevyAq6z69LSnk2e+TyiEZR0YwtlW3veL3+TrvoYN3hfe3mppLN2+3R68ej543mqgO7MrId
-        xyZfvm45WODd4x3y+eb11ROC1u8GAnzVZx+M/eNVuj3Jcca7b+/vI/wRu2O7REsnO+Pu7zEn
-        7pOkJ7ZUp9/KlH0ON5XrN+se+25Ym/oV8a9EBxwrNiQ6LN6QkSSTam4+5qsXZla6wyoz++7r
-        kyTRnvGsBuvCTxHfd0px3XH5tlieVif/D5XbfWwMBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHIsWRmVeSWpSXmKPExsWy7bCSvK5GpmGSwdNpkhZz1q9hs+htms5k
-        cWT+GlaLBwevs1uc6c61uLxrDptFw+zvrBaPZ81jszg8v43F4saEp4wWHyb8Z7JYOX85o8X/
-        x19ZLd7emc5isa/jAZPF7o2L2CyO33nKZHHo5FxGi+3L17NZNH6+z+gg4jG74SKLx85Zd9k9
-        WvbdYvdYsKnUo+XIW1aPzSu0PDat6mTzODHjN4vHvJOBHmdWb2PyuNCV7fF+31U2j74tqxg9
-        1m+5yuLxeZNcAH8Ul01Kak5mWWqRvl0CV8bKqZNYCx57VfQ3vGNuYLxn28XIySEhYCLxZ/tm
-        FhBbSGAHo8SGP6IQcWmJn//es0DYwhIr/z1n72LkAqr5xCjxZtovRpAEm4CexKpde1hAEiIC
-        NxglFi/sZAZxmAX2M0l823cDrF1YIE6i6cZDJhCbRUBV4uGDJawgNq+ArcS0PQtZIVbIS8y8
-        9J0dIi4ocXLmE7BeZqB489bZzBMY+WYhSc1CklrAyLSKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0
-        L10vOT93EyM4CrW0djDuWfVB7xAjEwfjIUYJDmYlEd4zL/SThHhTEiurUovy44tKc1KLDzFK
-        c7AoifNe6DoZLySQnliSmp2aWpBaBJNl4uCUamCSvlYypcjtm7rN+ara0jWhAQWHa5Qnr2x1
-        C82ev+7o2xrTnYdFLvz/q+z0wky0V2XO7FXHrhnN4zufd0jd2fTzCV3mKjXW8uW/TNxWby5O
-        XKwYpr/s0H5b20/F5tbXk2Ws3eUWHNgstOGh61+L78HTsjwWBR6Zduf0vmf3JwckvX4Suvz3
-        ojuOBw/M9us262ASf1egsJ3NdsKMHXt2tvTuN0o+6L52Q260SePCgy+9ZZPau9pfPFe955U8
-        W0nzc9nMravu7JN/y1eo4LFjVaBV8FLhcx+/TLV3FlTmvL5E4W7U3Lcbg7nZTwae5b6hVhL2
-        fbv6LLaDDQstMmoP3ZkcdvXGIpEjhnmvn/bmT3tnrsRSnJFoqMVcVJwIAHmzu8QxAwAA
-X-CMS-MailID: 20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     "pmladek@suse.com" <pmladek@suse.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        Vaneet Narang <v.narang@samsung.com>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "ojeda@kernel.org" <ojeda@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "avimalin@gmail.com" <avimalin@gmail.com>,
+        "atomlin@redhat.com" <atomlin@redhat.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <YjDScHjMUbqYV4s4@bombadil.infradead.org>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+X-CMS-MailID: 20220316043953epcms5p64b6640822657cca1ceac10cc1bd94846
+Content-Type: multipart/mixed;
+        boundary="----=_Part_3922146_1652146221.1647405593709"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
-X-CMS-RootMailID: 20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933
-References: <CGME20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933@epcas5p2.samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupik+LIzCtJLcpLzFFi42LZdlhTXVchyzDJ4MJULos569ewWfQ2TWey
+        ODJ/DavFg4PX2S0u75rDZtEw+zurxeNZ89gsbkx4ymixcv5yRov/j7+yWuzreMBksXvjIjaL
+        43eeMlkcOjmX0aLx831GB36P2Q0XWTx2zrrL7tGy7xaQOPKW1WPTqk42jxMzfrN4zDsZ6HGh
+        K9vj/b6rbB59W1YxeqzfcpXF4/MmuQCeKC6blNSczLLUIn27BK6MDa8KC6YqV/S/us/WwLhM
+        vouRk0NCwESiedNF9i5GLg4hgd2MElv2b2cHSbAIqEpMfraOBcTmFbCQaL95mbWLkQPIFpT4
+        u0MYJCwsEC5xcP85sBIhAUWJCzPWMIKUCAsYSPzaqgESZhPQk1i1aw9YiYiAhsS+Cb1MIKuY
+        BZ6zSryf28YOcQOvxIz2pywQtrTE9uVbGUFsTgEziY3rmpkg4qISN1e/ZYex3x+bzwhhi0i0
+        3jvLDGELSjz4uRsqLiOxenMvC8gyCYFuRon17/ZCOTMYJXoeTYPqMJdYv2QV1FQXiRs35oB1
+        MwN9dnj/T6i4rMTUU+uYIOJ8Er2/nzDBXL1jHoytKtFycwMrzAefP36E+sZDovnSI1ZI6G5k
+        lHi/6jLzBEb5WYiAnIVkHYQtL7H97RxmkBJmAU2J9bv0IcJqElP6v7BB2GYSDe1TWSBsRYkp
+        3Q/ZFzCyr2KUTC0ozk1PLTYtMMpLLdcrTswtLs1L10vOz93ECE6iWl47GB8++KB3iJGJg/EQ
+        owpQ+6MNqy8wSrHk5eelKonwnnmhnyTEm5JYWZValB9fVJqTWnyIUZqDRUmc93T6hkQhgfTE
+        ktTs1NSC1CKYLBMHp1QDU3rr4tdcBfPL1n6ZHsLN2OVlcFVX9+Spamb7de8cMkt3VDZ8WfTv
+        7JZJeg8fRhemJv3XZt14cOEhg7fMNnVyO34F7FlzwG77WQfZBbzHnl2Pc+R4nbQy84Dc3buX
+        94qsD1VdujQszcH6+sZGZ+GW581W+e6rlDsso+vcxVx3HPy90bJ4Paul0PINWY/bT3Rvt77H
+        HD2F/byOZ6qbsnP7wk21P5+bbl3z//fzzc+DJJUP1kt671xtHNMYl7RvRnXZ3IvPu5yjr2zT
+        vLuvYb7KHZsfV4RlQ8NL9Cft8ltwI0a7jzFQ5vBaXia7e1l71uwUmXBS2fx+9JcicX+Nx/8/
+        CznP1dyi9XF2a5z/D7XcN0osxRmJhlrMRcWJACtGHAEdBAAA
+X-CMS-RootMailID: 20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c
+References: <YjDScHjMUbqYV4s4@bombadil.infradead.org>
+        <20220315155100.516107-1-maninder1.s@samsung.com>
+        <CGME20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c@epcms5p6>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-print module information when KALLSYMS is disabled.
+------=_Part_3922146_1652146221.1647405593709
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
 
-No change for %pB, as it needs to know symbol name to adjust address
-value which can't be done without KALLSYMS.
+Hi Luis,
 
-(A) original output with KALLSYMS:
-[8.842129] ps function_1 [crash]
-[8.842735] pS function_1+0x4/0x2c [crash]
-[8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-[8.843175] pB function_1+0x4/0x2c [crash]
-[8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+>> ---
+>> commit id 'kallsyms: print module name in %ps/S case when KALLSYMS is disabled'
+>>         needs to be removed from mm(linux-next) tree, current change is
+>>         with ignorance of this commit. I was not sure how to send patch, with 2 patches
+>>         consisting reversal commit also, or current approach is correct.
+>> 
+>> v1->v2: hash base address of module, change *fmt to fmt[0] and removed
+>>         copy paste.
+>> v2->v3: fixed review comments from Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> 
+>>  include/linux/kallsyms.h |  2 +
+>>  include/linux/module.h   | 20 ++++++++++
+>>  kernel/kallsyms.c        | 27 +++++++------
+>>  kernel/module.c          |  4 +-
+>>  lib/vsprintf.c           | 85 ++++++++++++++++++++++++++++++++++------
+> 
+> Hey Maninder, thanks for your patch!
+>  
+> Since this touches kernel/module.c and include/linux/module.h I'd prefer
+> this go through modules-next [0], and as you will see that's a different
+> world right now. I also have a set of at least 2 other patch sets to
+> merge there before yours.
+>  
+> Also, what is on modules-next is not intended to go to Linus for the
+> next merge window as the changes there got merged only late, and I want
+> at least 2 months of testing on linux-newt before any pull requiest is
+> sent to Linus.
+>  
+> Can you rebase to modules-next? I can evaluate the patches then for
+> integration there once the other stuff gets merged into that tree too.
+>  
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
+>  
+>   Luis
 
-(B) original output without KALLSYMS:
-[12.487424] ps 0xffff800000eb008c
-[12.487598] pS 0xffff800000eb008c
-[12.487723] pSb 0xffff800000eb008c
-[12.487850] pB 0xffff800000eb008c
-[12.487967] pBb 0xffff800000eb008c
+prepared and verified patch(KALLSYMS enabled and disabled both) on module-next rebase and sent in new mail.
+[PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when KALLSYSMS is disabled
 
-(C) With patched kernel
-with KALLYSMS:
-[41.974576] ps function_1 [crash]
-[41.975173] pS function_1+0x4/0x2c [crash]
-[41.975386] pSb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-[41.975879] pB function_1+0x4/0x2c [crash]
-[41.976076] pBb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+https://lkml.org/lkml/2022/3/16/7
 
-without KALLSYMS:
-[9.624152] ps 0xffff800001bd008c [crash]	// similar to original, no changes
-[9.624548] pS 0x(____ptrval____)+0x8c [crash]   // base address hashed and offset is without hash
-[9.624847] pSb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-[9.625388] pB 0x(____ptrval____)+0x8c [crash]
-[9.625594] pBb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+Thanks,
+Maninder Singh
+------=_Part_3922146_1652146221.1647405593709
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="rcptInfo.txt"
+Content-Transfer-Encoding: base64
 
-with disable hashing:
-[8.563916] ps 0xffff800000f2008c [crash]
-[8.564574] pS 0xffff800000f20000+0x8c [crash]
-[8.564749] pSb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
-[8.565008] pB 0xffff800000f20000+0x8c [crash]
-[8.565154] pBb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
+DQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIFN1YmplY3QgICAgOiBSZTogW1BBVENIIHYzXSBr
+YWxsc3ltczogZW5oYW5jZSAlcFMvcy9iIHByaW50aW5nIHdoZW4gS0FMTFNZU01TIGlzIGRpc2Fi
+bGVkDQogICAgICBGcm9tICAgICAgIDogbnVsbA0KICAgICAgU2VudCBEYXRlICA6IDIwMjItMDMt
+MTUgMjM6MjMgIEdNVCs1OjMwDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgICAgICAgICAgICAg
+IE5hbWUgICAgICAgICAgICAgICAgVHlwZSAgICAgICAgICBKb2IgVGl0bGUgICAgICAgICAgICAg
+ICAgICAgICAgIERlcHQuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENvbXBhbnkgICAg
+ICAgICAgICAgICAgDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIE1hbmluZGVyIFNpbmdoICAg
+ICAgICAgICAgICAgICBUTyAgICAgICAgIFN0YWZmIEVuZ2luZWVyICAgICAgICAgICAgIFN5c3Rl
+bSBTL1cgR3JvdXAgL1NSSS1EZWxoaSAgICAgICAgICAgICAgIFNhbXN1bmfCoEVsZWN0cm9uaWNz
+wqANCiAgICAgIHBtbGFkZWtAc3VzZS5jb20gICAgICAgICAgICAgICBDQw0KICAgICAgcm9zdGVk
+dEBnb29kbWlzLm9yZyAgICAgICAgICAgIENDDQogICAgICBzZW5vemhhdHNreUBjaHJvbWl1bS5v
+cmcgICAgICAgQ0MNCiAgICAgIGFuZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmkuLi4gICBDQw0KICAg
+ICAgbGludXhAcmFzbXVzdmlsbGVtb2VzLmRrICAgICAgIENDDQogICAgICBha3BtQGxpbnV4LWZv
+dW5kYXRpb24ub3JnICAgICAgQ0MNCiAgICAgIHdhbmdrZWZlbmcud2FuZ0BodWF3ZWkuY29tICAg
+ICBDQw0KICAgICAgVmFuZWV0IE5hcmFuZyAgICAgICAgICAgICAgICAgIENDICAgICAgICAgQXNz
+b2NpYXRlIEFyY2hpdGVjdCAgICAgICAgU3lzdGVtIFMvVyBHcm91cCAvU1JJLURlbGhpICAgICAg
+ICAgICAgICAgU2Ftc3VuZyBFbGVjdHJvbmljcw0KICAgICAgc3dib3lkQGNocm9taXVtLm9yZyAg
+ICAgICAgICAgIENDDQogICAgICBvamVkYUBrZXJuZWwub3JnICAgICAgICAgICAgICAgQ0MNCiAg
+ICAgIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcgICBDQw0KICAgICAgbGludXgtbW9kdWxl
+c0B2Z2VyLmtlcm5lbC4uLiAgIENDDQogICAgICBhdmltYWxpbkBnbWFpbC5jb20gICAgICAgICAg
+ICAgQ0MNCiAgICAgIGF0b21saW5AcmVkaGF0LmNvbSAgICAgICAgICAgICBDQw0KICAgPT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09DQo=
 
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Co-developed-by: Vaneet Narang <v.narang@samsung.com>
-Signed-off-by: Vaneet Narang <v.narang@samsung.com>
-Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
----
- include/linux/kallsyms.h |  2 +
- include/linux/module.h   | 20 ++++++++++
- kernel/kallsyms.c        | 27 +++++++------
- kernel/module.c          |  4 +-
- lib/vsprintf.c           | 85 ++++++++++++++++++++++++++++++++++------
- 5 files changed, 109 insertions(+), 29 deletions(-)
-
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index 4176c7eca7b5..1813ba9854f9 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -89,6 +89,8 @@ extern int sprint_symbol_build_id(char *buffer, unsigned long address);
- extern int sprint_symbol_no_offset(char *buffer, unsigned long address);
- extern int sprint_backtrace(char *buffer, unsigned long address);
- extern int sprint_backtrace_build_id(char *buffer, unsigned long address);
-+extern int sprint_kallsym_common(char *buffer, unsigned long address, int build_id,
-+			    int backtrace, int symbol);
- 
- int lookup_symbol_name(unsigned long addr, char *symname);
- int lookup_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 1e135fd5c076..b154fa822f77 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -678,6 +678,20 @@ static inline bool is_livepatch_module(struct module *mod)
- bool is_module_sig_enforced(void);
- void set_module_sig_enforced(void);
- 
-+static inline int fill_name_build_id(char *buffer, char *modname,
-+			    int add_buildid, const unsigned char *buildid,
-+			    int len)
-+{
-+	len += sprintf(buffer + len, " [%s", modname);
-+#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-+	if (add_buildid && buildid) {
-+		/* build ID should match length of sprintf */
-+		static_assert(sizeof(typeof_member(struct module, build_id)) == 20);
-+		len += sprintf(buffer + len, " %20phN", buildid);
-+	}
-+#endif
-+	return len + sprintf(buffer + len, "]");
-+}
- #else /* !CONFIG_MODULES... */
- 
- static inline struct module *__module_address(unsigned long addr)
-@@ -818,6 +832,12 @@ void *dereference_module_function_descriptor(struct module *mod, void *ptr)
- 	return ptr;
- }
- 
-+static inline int fill_name_build_id(char *buffer, char *modname,
-+			    int add_buildid, const unsigned char *buildid,
-+			    int len)
-+{
-+	return 0;
-+}
- #endif /* CONFIG_MODULES */
- 
- #ifdef CONFIG_SYSFS
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 951c93216fc4..bd014504771d 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -461,19 +461,8 @@ static int __sprint_symbol(char *buffer, unsigned long address,
- 	if (add_offset)
- 		len += sprintf(buffer + len, "+%#lx/%#lx", offset, size);
- 
--	if (modname) {
--		len += sprintf(buffer + len, " [%s", modname);
--#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
--		if (add_buildid && buildid) {
--			/* build ID should match length of sprintf */
--#if IS_ENABLED(CONFIG_MODULES)
--			static_assert(sizeof(typeof_member(struct module, build_id)) == 20);
--#endif
--			len += sprintf(buffer + len, " %20phN", buildid);
--		}
--#endif
--		len += sprintf(buffer + len, "]");
--	}
-+	if (modname)
-+		len += fill_name_build_id(buffer, modname, add_buildid, buildid, len);
- 
- 	return len;
- }
-@@ -568,6 +557,18 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
- 	return __sprint_symbol(buffer, address, -1, 1, 1);
- }
- 
-+int sprint_kallsym_common(char *buffer, unsigned long address, int build_id,
-+			    int backtrace, int symbol)
-+{
-+	if (backtrace)
-+		return __sprint_symbol(buffer, address, -1, 1, build_id);
-+
-+	if (symbol)
-+		return __sprint_symbol(buffer, address, 0, 1, build_id);
-+
-+	return __sprint_symbol(buffer, address, 0, 0, 0);
-+}
-+
- /* To avoid using get_symbol_offset for every symbol, we carry prefix along. */
- struct kallsym_iter {
- 	loff_t pos;
-diff --git a/kernel/module.c b/kernel/module.c
-index 46a5c2ed1928..ccccb135c7fe 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -1465,12 +1465,10 @@ resolve_symbol_wait(struct module *mod,
- 	return ksym;
- }
- 
--#ifdef CONFIG_KALLSYMS
- static inline bool sect_empty(const Elf_Shdr *sect)
- {
- 	return !(sect->sh_flags & SHF_ALLOC) || sect->sh_size == 0;
- }
--#endif
- 
- /*
-  * /sys/module/foo/sections stuff
-@@ -2799,7 +2797,7 @@ static void add_kallsyms(struct module *mod, const struct load_info *info)
- }
- #endif /* CONFIG_KALLSYMS */
- 
--#if IS_ENABLED(CONFIG_KALLSYMS) && IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-+#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
- static void init_build_id(struct module *mod, const struct load_info *info)
- {
- 	const Elf_Shdr *sechdr;
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 3b8129dd374c..6f661f5a6814 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -979,33 +979,92 @@ char *bdev_name(char *buf, char *end, struct block_device *bdev,
- }
- #endif
- 
-+#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
-+static int sprint_module_info(char *buf, unsigned long value,
-+			     int modbuildid, int backtrace, int symbol)
-+{
-+	struct module *mod;
-+	unsigned long offset;
-+	void *base;
-+	char *modname;
-+	int len;
-+	const unsigned char *buildid = NULL;
-+	bool add_offset;
-+
-+	if (is_ksym_addr(value))
-+		return 0;
-+
-+	if (backtrace || symbol)
-+		add_offset = true;
-+	else
-+		add_offset = false;
-+
-+	preempt_disable();
-+	mod = __module_address(value);
-+	if (mod) {
-+		modname = mod->name;
-+#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-+		if (modbuildid)
-+			buildid = mod->build_id;
-+#endif
-+		if (add_offset) {
-+			base = mod->core_layout.base;
-+			offset = value - (unsigned long)base;
-+		}
-+	}
-+	preempt_enable();
-+	if (!mod)
-+		return 0;
-+
-+	/* address belongs to module */
-+	if (add_offset)
-+		len = sprintf(buf, "0x%p+0x%lx", base, offset);
-+	else
-+		len = sprintf(buf, "0x%lx", value);
-+
-+	return len + fill_name_build_id(buf, modname, modbuildid, buildid, len);
-+}
-+#else
-+static inline int sprint_module_info(char *buf, unsigned long value,
-+			     int modbuildid, int backtrace, int symbol)
-+{
-+	return 0;
-+}
-+#endif
-+
- static noinline_for_stack
- char *symbol_string(char *buf, char *end, void *ptr,
- 		    struct printf_spec spec, const char *fmt)
- {
- 	unsigned long value;
--#ifdef CONFIG_KALLSYMS
- 	char sym[KSYM_SYMBOL_LEN];
--#endif
-+	int backtrace = 0, symbol = 0, build_id = 0;
- 
- 	if (fmt[1] == 'R')
- 		ptr = __builtin_extract_return_addr(ptr);
- 	value = (unsigned long)ptr;
- 
--#ifdef CONFIG_KALLSYMS
--	if (*fmt == 'B' && fmt[1] == 'b')
--		sprint_backtrace_build_id(sym, value);
--	else if (*fmt == 'B')
--		sprint_backtrace(sym, value);
--	else if (*fmt == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b')))
--		sprint_symbol_build_id(sym, value);
--	else if (*fmt != 's')
--		sprint_symbol(sym, value);
--	else
--		sprint_symbol_no_offset(sym, value);
-+	if (fmt[0] == 'B' && fmt[1] == 'b') {
-+		backtrace = 1;
-+		build_id = 1;
-+	} else if (fmt[0] == 'B')
-+		backtrace = 1;
-+	else if (fmt[0] == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b'))) {
-+		symbol = 1;
-+		build_id = 1;
-+	} else if (fmt[0] != 's')
-+		symbol = 1;
-+	else {
-+		/* Do Nothing, no offset */
-+	}
- 
-+#ifdef CONFIG_KALLSYMS
-+	sprint_kallsym_common(sym, value, build_id, backtrace, symbol);
- 	return string_nocheck(buf, end, sym, spec);
- #else
-+	if (sprint_module_info(sym, value, build_id, backtrace, symbol))
-+		return string_nocheck(buf, end, sym, spec);
-+
- 	return special_hex_number(buf, end, value, sizeof(void *));
- #endif
- }
--- 
-2.17.1
-
+------=_Part_3922146_1652146221.1647405593709--
