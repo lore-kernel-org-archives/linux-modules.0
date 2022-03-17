@@ -2,170 +2,164 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B224CC433F5
-	for <linux-modules@archiver.kernel.org>; Wed, 16 Mar 2022 09:01:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1923BC433EF
+	for <linux-modules@archiver.kernel.org>; Thu, 17 Mar 2022 10:59:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240309AbiCPJCt (ORCPT
+        id S232778AbiCQLAh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 16 Mar 2022 05:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        Thu, 17 Mar 2022 07:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237283AbiCPJCt (ORCPT
+        with ESMTP id S232774AbiCQLAg (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 16 Mar 2022 05:02:49 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FD06515C
-        for <linux-modules@vger.kernel.org>; Wed, 16 Mar 2022 02:01:33 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220316090130epoutp0472af37ae5f014959bd21dfee5ed98bf3~c0O_Hq_uI0787607876epoutp048
-        for <linux-modules@vger.kernel.org>; Wed, 16 Mar 2022 09:01:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220316090130epoutp0472af37ae5f014959bd21dfee5ed98bf3~c0O_Hq_uI0787607876epoutp048
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1647421290;
-        bh=vKa+InXtFk9RtGasOYJjM/SZT2fiu8V+ixm4StA/cHA=;
-        h=Date:Subject:Reply-To:From:To:CC:In-Reply-To:References:From;
-        b=qBQ9g40H/wGc/BCW6PSSfCSylRxDHDfsGPwGrLtk9z/UzvtvAZfXFAglxSTUAogNd
-         CXZ+n65pW8HF1t9N6A6Hy9S2vvnmIkeej5ddzCGbVeaaf+4FbA+EYj4wyTEsZYD8tC
-         tQsA37i6GEpzErAURhsfMhRQnXhDMsKhQXLmNCRw=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220316090130epcas5p4d91b92015479d685f5d323e8febf3942~c0O9ZWEAJ0295602956epcas5p4z;
-        Wed, 16 Mar 2022 09:01:30 +0000 (GMT)
-X-AuditID: b6c32a4b-723ff700000015d6-46-6231a769ae14
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        55.88.05590.967A1326; Wed, 16 Mar 2022 18:01:30 +0900 (KST)
-Date:   Wed, 16 Mar 2022 14:31:21 +0530
-Message-ID: <385836468.3982590.1647421281746@mail-kr5-2>
-Mime-Version: 1.0
-Subject: RE: [PATCH v3] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
- disabled
-Reply-To: maninder1.s@samsung.com
-Sender: Maninder Singh <maninder1.s@samsung.com>
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        =?UTF-8?B?TWljaGFsIFN1Y2jDoW5law==?= <msuchanek@suse.de>
-CC:     "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        Vaneet Narang <v.narang@samsung.com>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "avimalin@gmail.com" <avimalin@gmail.com>,
-        "atomlin@redhat.com" <atomlin@redhat.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <YjGe961XL8GW7Qeh@bombadil.infradead.org>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-X-CMS-MailID: 20220316090121epcms5p1f24091165187c825e039c426dcd65c24
-Content-Type: multipart/mixed;
-        boundary="----=_Part_3982589_2041055906.1647421281746"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0xTZxjH856enh7ISk5LJ6/IRRpZqEzAMPWwLc7ELTtuycKSTZSYaBlH
-        RKDFloKbXwrC2oGVy7x0FVok3FYIZZVKLXKxiE7GTKviAMuGVVY2U0ARGeLGWtpm+/Lm9/yf
-        +5MXZ3C1WDieLSqgJSJhLh8LRi8PCgRbjrZszUiqbwRkraEdI1Ul5xHyuq6dSU5d+4VFOmpc
-        LPKupRYj5ReWmOQjjRYjx6qmAfltfweL/F7XAsjVR4tMsk85hZA9PzRg5E3HNEJab9UBsnjh
-        N7CLQ12Q21Fqcfw2Ql3RTLKo0r4Jz3PdzaSM+m8w6kf1Ckppb31K2cpzqLm+UYw63aUHlKFr
-        FKUu/XSCWjBGpYakB7+bSedmF9KSxJ2Hgo/UaDLypzcet7s7UDlwRJWDIBwSb0G73s4sB8E4
-        l+gBsKl/iOF1oEQsXB1WsrzMJkh4+fGSJwj3MAf+bQ71yqFEGrzWfxv1MpeIgTZ1O/CGhBJJ
-        8KUpzitjRALUW66i3vI84hyAF//sZXgNBuFiwrm6r1m+IdhQrZhGfbwBdreYgJeDiO2wsnSS
-        6dNfh+NtblaA527ogI95sOzXnxk+5sCp5R6/HgHbLqnWOkOiAkDDbK/fUAN4ynnOn7EDGhr1
-        /qrvw9HZmTWd4VntgXsQ8+mR8OxwB+LTQ6Bq5TESmNqsDXAsLB3vZAY2WHj61L8NBU/ecfrP
-        W43A3upuVhWI1vx3Sc3/2vk4HjZffMLwhjAIATRYEn3yG/BM5XN/yHYoV5xFfRwDz1Q8ZNUD
-        lh6sp/OleVm0dFt+soguSpAK86QyUVbCF+I8I1j7tps/NgPn1HyCFSA4sIJNnnRnZ5sNhKMi
-        sYjm89gjM4kZXHam8MuvaIn4oESWS0utYAOO8sPYw1mdQi6RJSygc2g6n5YEvAgeFC5HdLmN
-        SN26P+obZnNcnxEO1/7XftfPDzj/6ruzN+x4SavySkqnaILdfK/1xFxj9calD2beOYqpd8vT
-        8RdNkmdDluaXRbsdorHTYUnr4pej8fZCnt19qMp288355Kgc8oZLQX3+yfoDuojI/Ttq73ff
-        W97nTD42lhpmmbn/YlD1bHX2OedA6OG2+MqGgU2HremxRQLjP2kOk7iA5gzsvTtStxAzsGWE
-        fjtuIttkEbdG2lJXdu3MnC98KNyn4h8rcm8z8dKUS9EPRhuGQpomzUZZyqlBhnLxPUWNrPiV
-        WYaLSmJPVnSJypCPyhQR+j3ffaiJq++ucadf1RbvsQteHUx5EsRHpUeEWzczJFLhvxoiN/Ux
-        BAAA
-X-CMS-RootMailID: 20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c
-References: <YjGe961XL8GW7Qeh@bombadil.infradead.org>
-        <20220315155100.516107-1-maninder1.s@samsung.com>
-        <YjDScHjMUbqYV4s4@bombadil.infradead.org>
-        <62c74547-deb0-539a-c1cc-64b2ac334c94@csgroup.eu>
-        <CGME20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c@epcms5p1>
+        Thu, 17 Mar 2022 07:00:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF572176D29;
+        Thu, 17 Mar 2022 03:59:19 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3453021110;
+        Thu, 17 Mar 2022 10:59:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647514758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FRZFWYXu0lglEsdbgAkHKkmcItgzgemxTYTZc8fsVTc=;
+        b=InraB4+0kSCdc8UDu/okTjNgatj5P6RAXhgCUwmKkl5JBuP6Jc7a82aAVFQCKM5cJV03oP
+        loW9dzgewNjtEz6rsoEZ9jmW3SA7GOPDLYpS9JFRAiS9/7oKRCLfQcaX5T5WrPRqHSmMPf
+        97Oh7UgJ4tESVOfSiJe/aFWx82wNEnE=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 97D36A3B83;
+        Thu, 17 Mar 2022 10:59:16 +0000 (UTC)
+Date:   Thu, 17 Mar 2022 11:59:15 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     mcgrof@kernel.org, rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        avimalin@gmail.com, atomlin@redhat.com, keescook@chromium.org,
+        ndesaulniers@google.com, rdunlap@infradead.org, void@manifault.com
+Subject: Re: [PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when
+ KALLSYSMS is disabled
+Message-ID: <YjMUg8xwgRAH3lzA@alley>
+References: <CGME20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933@epcas5p2.samsung.com>
+ <20220316043540.677128-1-maninder1.s@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316043540.677128-1-maninder1.s@samsung.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-------=_Part_3982589_2041055906.1647421281746
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+On Wed 2022-03-16 10:05:40, Maninder Singh wrote:
+> print module information when KALLSYMS is disabled.
+> 
+> No change for %pB, as it needs to know symbol name to adjust address
+> value which can't be done without KALLSYMS.
+> 
+> (A) original output with KALLSYMS:
+> [8.842129] ps function_1 [crash]
+> [8.842735] pS function_1+0x4/0x2c [crash]
+> [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> [8.843175] pB function_1+0x4/0x2c [crash]
+> [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> 
+> (B) original output without KALLSYMS:
+> [12.487424] ps 0xffff800000eb008c
+> [12.487598] pS 0xffff800000eb008c
+> [12.487723] pSb 0xffff800000eb008c
+> [12.487850] pB 0xffff800000eb008c
+> [12.487967] pBb 0xffff800000eb008c
+> 
+> (C) With patched kernel
+> with KALLYSMS:
+> [41.974576] ps function_1 [crash]
+> [41.975173] pS function_1+0x4/0x2c [crash]
+> [41.975386] pSb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> [41.975879] pB function_1+0x4/0x2c [crash]
+> [41.976076] pBb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> 
+> without KALLSYMS:
+> [9.624152] ps 0xffff800001bd008c [crash]	// similar to original, no changes
+> [9.624548] pS 0x(____ptrval____)+0x8c [crash]   // base address hashed and offset is without hash
+> [9.624847] pSb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> [9.625388] pB 0x(____ptrval____)+0x8c [crash]
+> [9.625594] pBb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> 
+> with disable hashing:
+> [8.563916] ps 0xffff800000f2008c [crash]
+> [8.564574] pS 0xffff800000f20000+0x8c [crash]
+> [8.564749] pSb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
+> [8.565008] pB 0xffff800000f20000+0x8c [crash]
+> [8.565154] pBb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
+> 
+> --- a/lib/vsprintf.c
+> +++ b/lib/vsprintf.c
+> @@ -979,33 +979,92 @@ char *bdev_name(char *buf, char *end, struct block_device *bdev,
+>  }
+>  #endif
+>  
+> +#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
+> +static int sprint_module_info(char *buf, unsigned long value,
+> +			     int modbuildid, int backtrace, int symbol)
+> +{
+> +	struct module *mod;
+> +	unsigned long offset;
+> +	void *base;
+> +	char *modname;
+> +	int len;
+> +	const unsigned char *buildid = NULL;
+> +	bool add_offset;
+> +
+> +	if (is_ksym_addr(value))
+> +		return 0;
+> +
+> +	if (backtrace || symbol)
+> +		add_offset = true;
+> +	else
+> +		add_offset = false;
+> +
+> +	preempt_disable();
+> +	mod = __module_address(value);
+> +	if (mod) {
+> +		modname = mod->name;
+> +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+> +		if (modbuildid)
+> +			buildid = mod->build_id;
+> +#endif
+> +		if (add_offset) {
+> +			base = mod->core_layout.base;
+> +			offset = value - (unsigned long)base;
+> +		}
+> +	}
+> +	preempt_enable();
+> +	if (!mod)
+> +		return 0;
 
-Hi,
+I think that some earlier version of the patch allowed to print
+also the address from vmlinux with the offset. My concern was
+that it would show non-hashed base pointer. IMHO, it is fine
+to show it hashed.
 
-> Yes sorry about that, modules-testing is what had Aaron's code. And
-> Aaron noted that from his series 13/14 and 14/14 from his series
-> had their Message-Id modified accidently via git-send-email. Given
-> *current events* and since I use b4 am to verify KSIM signatures
-> I asked Aaron to wait and post a v12 to aggregate further reviews
-> and acked-by's. The reason being that if his v11 series has issues
-> I rather start from a very clean patchset.
-> =20
-> Yes I am paranoid :)
-> =20
-> Anyway so Aaron, let's give it a few more days, and please then post a
-> v12 collecing all new tags, then I'll apply your changes and then try to
-> apply Christophe's.
-> =20
-> There was some work by Michal Such=C3=A1nek=20which=20would=20go=20after,=
-=20but=0D=0A>=20its=20unclear=20if=20that's=20yet=20vetted=20by=20their=20o=
-ther=20respective=20maintainers.=0D=0A>=20Michal?=0D=0A>=20=20=0D=0A>=20Any=
-way,=20your=20stuff=20is=20at=20the=20end=20of=20the=20train=20after=20Mich=
-al's=20if=20that=0D=0A>=20stuff=20is=20really=20ready.=20So=20please=20don'=
-t=20be=20surprised=20if=20you=20later=20have=0D=0A>=20to=20rebase=20once=20=
-again,=20or=20two=20or=203=20times=20more.=20Thanks=20for=20your=20patience=
-.=0D=0A=20=0D=0ANo=20Worries=20:)=0D=0A=0D=0ALet=20me=20know=20when=20it=20=
-has=20to=20be=20done.=0D=0AWe=20will=20prepare=20and=20verify=20on=20new=20=
-rebase.=0D=0A=0D=0AThanks,=0D=0AManinder=20Singh
-------=_Part_3982589_2041055906.1647421281746
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename="rcptInfo.txt"
-Content-Transfer-Encoding: base64
+> +
+> +	/* address belongs to module */
+> +	if (add_offset)
+> +		len = sprintf(buf, "0x%p+0x%lx", base, offset);
+> +	else
+> +		len = sprintf(buf, "0x%lx", value);
+> +
+> +	return len + fill_name_build_id(buf, modname, modbuildid, buildid, len);
+> +}
 
-DQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIFN1YmplY3QgICAgOiBSZTogW1BBVENIIHYzXSBr
-YWxsc3ltczogZW5oYW5jZSAlcFMvcy9iIHByaW50aW5nIHdoZW4gS0FMTFNZU01TIGlzIGRpc2Fi
-bGVkDQogICAgICBGcm9tICAgICAgIDogbnVsbA0KICAgICAgU2VudCBEYXRlICA6IDIwMjItMDMt
-MTYgMTM6NTUgIEdNVCs1OjMwDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgICAgICAgICAgICAg
-IE5hbWUgICAgICAgICAgICAgICAgVHlwZSAgICAgICAgICBKb2IgVGl0bGUgICAgICAgICAgICAg
-ICAgICAgICAgIERlcHQuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENvbXBhbnkgICAg
-ICAgICAgICAgICAgDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIGNocmlzdG9waGUubGVyb3lA
-Y3Nncm91cC5ldSAgICBUTw0KICAgICAgbXN1Y2hhbmVrQHN1c2UuZGUgICAgICAgICAgICAgIFRP
-DQogICAgICBNYW5pbmRlciBTaW5naCAgICAgICAgICAgICAgICAgQ0MgICAgICAgICBTdGFmZiBF
-bmdpbmVlciAgICAgICAgICAgICBTeXN0ZW0gUy9XIEdyb3VwIC9TUkktRGVsaGkgICAgICAgICAg
-ICAgICBTYW1zdW5nwqBFbGVjdHJvbmljc8KgDQogICAgICBwbWxhZGVrQHN1c2UuY29tICAgICAg
-ICAgICAgICAgQ0MNCiAgICAgIHJvc3RlZHRAZ29vZG1pcy5vcmcgICAgICAgICAgICBDQw0KICAg
-ICAgc2Vub3poYXRza3lAY2hyb21pdW0ub3JnICAgICAgIENDDQogICAgICBhbmRyaXkuc2hldmNo
-ZW5rb0BsaW51eC5pLi4uICAgQ0MNCiAgICAgIGxpbnV4QHJhc211c3ZpbGxlbW9lcy5kayAgICAg
-ICBDQw0KICAgICAgYWtwbUBsaW51eC1mb3VuZGF0aW9uLm9yZyAgICAgIENDDQogICAgICB3YW5n
-a2VmZW5nLndhbmdAaHVhd2VpLmNvbSAgICAgQ0MNCiAgICAgIFZhbmVldCBOYXJhbmcgICAgICAg
-ICAgICAgICAgICBDQyAgICAgICAgIEFzc29jaWF0ZSBBcmNoaXRlY3QgICAgICAgIFN5c3RlbSBT
-L1cgR3JvdXAgL1NSSS1EZWxoaSAgICAgICAgICAgICAgIFNhbXN1bmcgRWxlY3Ryb25pY3MNCiAg
-ICAgIHN3Ym95ZEBjaHJvbWl1bS5vcmcgICAgICAgICAgICBDQw0KICAgICAgb2plZGFAa2VybmVs
-Lm9yZyAgICAgICAgICAgICAgIENDDQogICAgICBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
-ICAgQ0MNCiAgICAgIGxpbnV4LW1vZHVsZXNAdmdlci5rZXJuZWwuLi4gICBDQw0KICAgICAgYXZp
-bWFsaW5AZ21haWwuY29tICAgICAgICAgICAgIENDDQogICAgICBhdG9tbGluQHJlZGhhdC5jb20g
-ICAgICAgICAgICAgQ0MNCiAgID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0K
+Otherwise, it looks good to me. I did also some basic testing.
+The vmlinux address with offset can be added by a followup patch.
+Feel free to use:
 
-------=_Part_3982589_2041055906.1647421281746--
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Tested-by: Petr Mladek <pmladek@suse.com>
+
+Best Regards,
+Petr
