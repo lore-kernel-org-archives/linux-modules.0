@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36288C433EF
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Mar 2022 14:03:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5863DC433F5
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Mar 2022 14:04:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbiCVOFZ (ORCPT
+        id S236177AbiCVOFf (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Mar 2022 10:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
+        Tue, 22 Mar 2022 10:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236071AbiCVOFY (ORCPT
+        with ESMTP id S236054AbiCVOFc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:05:24 -0400
+        Tue, 22 Mar 2022 10:05:32 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D9352DD55
-        for <linux-modules@vger.kernel.org>; Tue, 22 Mar 2022 07:03:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4BE72ED63
+        for <linux-modules@vger.kernel.org>; Tue, 22 Mar 2022 07:03:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647957832;
+        s=mimecast20190719; t=1647957837;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Z+wk9OcypNxXOuIn7Ef+zLlKzZ3XkbDB6Wbd6NHqRh0=;
-        b=NDTo2QbATZRCbtV3uga86nTa1xK17vdRLut90S6iZXT44y9p5TtiA9Dn9hcgXyipaFClWX
-        Uc8rHb7YFwmvcCdtp3rzL3MJIcwNonEE0WShVd5XuGDpFrjckjYW7tNFgK4HgdWbczb0o0
-        afK3BgSm5McSPI5+RtjAVaMyfEeqjoU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=wTqJ9ZbJUCgx8VrF++WoBF0cwmRu2Y/rNRNUF4x8BCg=;
+        b=EOK0hy5dYHrn74jDgP2bOkWosv3vanSClNNJvOB2Az7nL5UQTle+vJLsdqphGDe4H+qi7q
+        YBIobjsLbJhf5QWQ4e0XEr7CwYWO6lXSd4xgKC/dxkl34q8fsMOarSdC4FHVlu3zLGSHNH
+        Dq/Yv7jia9Ev2JEGH7Nn6vz0bI4TUz0=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-zV2_Ta69MJynUR5Hggc1_w-1; Tue, 22 Mar 2022 10:03:51 -0400
-X-MC-Unique: zV2_Ta69MJynUR5Hggc1_w-1
-Received: by mail-wm1-f71.google.com with SMTP id i65-20020a1c3b44000000b00385c3f3defaso5319993wma.3
-        for <linux-modules@vger.kernel.org>; Tue, 22 Mar 2022 07:03:51 -0700 (PDT)
+ us-mta-633-zff0ooiEOb--SOLfR45jJQ-1; Tue, 22 Mar 2022 10:03:56 -0400
+X-MC-Unique: zff0ooiEOb--SOLfR45jJQ-1
+Received: by mail-wm1-f70.google.com with SMTP id r9-20020a1c4409000000b0038c15a1ed8cso1345221wma.7
+        for <linux-modules@vger.kernel.org>; Tue, 22 Mar 2022 07:03:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Z+wk9OcypNxXOuIn7Ef+zLlKzZ3XkbDB6Wbd6NHqRh0=;
-        b=w06i5sogUjhSsUl2L6UA+N+I9e/DzDnFGADpxgA8jJi+/QjVAXQBY/utSsy4JqQz1L
-         xugUtISQkMWkvtIBv/TGjA1E9hIbwrn0QzpNoL49f/t0+hqASL5kIol3XqJMnt+uj8A7
-         GBY15HL7y3jCarF5JK7deMf2TAeKom7B1YzytdtbRWw65kyzIN9sc6OeWqR1IOfsfGrJ
-         BNS4CST6xrRVc6LbPFubFnskyTnT9tCCCM8PwB5LlBWo5uhwzgb5CpGumDsjAeyYz6gr
-         lveICytYewxWMq5VmobJ/IX9pRnxXznNQv8G4VZOYUcZJR+EdzYK8IaSRYZkXR5C/LTN
-         bnVw==
-X-Gm-Message-State: AOAM530HKyKwIDOMz2pIuAv/dl4iMTDja8DW45+iRq1onNGXZDF6kbg0
-        9QHJZAfDRO9E29rAw7h/N780GYXYyYOD6zEI5z48Munv7exZOARXcHd0iUi8xwLphvh6JyGCToT
-        NNIvzhR+k3oJZiWuAlLanOh60
-X-Received: by 2002:adf:cf0c:0:b0:203:df96:f8f3 with SMTP id o12-20020adfcf0c000000b00203df96f8f3mr22307652wrj.266.1647957830096;
-        Tue, 22 Mar 2022 07:03:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy0ZXSZHiBx3zFzMpkr+fGwenBMyY/NOFIPHHNaALihMhUiXs06OVyh3Eq6zFaI7xxfgZxWVA==
-X-Received: by 2002:adf:cf0c:0:b0:203:df96:f8f3 with SMTP id o12-20020adfcf0c000000b00203df96f8f3mr22307629wrj.266.1647957829899;
-        Tue, 22 Mar 2022 07:03:49 -0700 (PDT)
+        bh=wTqJ9ZbJUCgx8VrF++WoBF0cwmRu2Y/rNRNUF4x8BCg=;
+        b=3leOn3QxvXNKQnpDj8kzyn3DuEh2Kf4l+5omInmNSGvO6D+VbpTbnIGl0db+uWey7/
+         mG94qIO2fOYH4RdSNbVyoqSvpRYdCZXSZ4KfjnVRCCzxyAZNtNtd629UG+lv/OiB+pyM
+         isk3k49/iSzJvO36QIGKzJfLrDlGuy3Q+B2MVzGdA7vlg793OGfaki7u2BsGvKSTkqDK
+         gBng/hDVst89U6+d+/yY6K+Kij1oFwQ/LETNfuL+xBMiVrdkkgMgOFd2+MnFKqLArXs/
+         P7NPnA3I2sdRzktFzh56fyAbjl7dX6epRKRt+S0tmFTaCVBunyJ2xDhpgih1VAc99+Oz
+         jiHA==
+X-Gm-Message-State: AOAM533CRtMVVd9+nNSuJB0ZmK+r4E7iDkfA0DTBbPAF8xJ3rl8nBYlj
+        puJoCKqYmR7haQJHdutYnMUgtWDcj2Rm9HP/B12s0MJQFobK7lvz9VH89jCYd+vbpe5X/7JbElq
+        JMhvn092Km5PHUEXmdLK185sH
+X-Received: by 2002:adf:eec2:0:b0:203:f121:2994 with SMTP id a2-20020adfeec2000000b00203f1212994mr18949177wrp.250.1647957835694;
+        Tue, 22 Mar 2022 07:03:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz3QF6brUhwxPN8O4fbmdzobovVsKOZCaKS1YVCwkBUqyqZX3zSij5vogVhYKv9b3oJMx5otw==
+X-Received: by 2002:adf:eec2:0:b0:203:f121:2994 with SMTP id a2-20020adfeec2000000b00203f1212994mr18949147wrp.250.1647957835515;
+        Tue, 22 Mar 2022 07:03:55 -0700 (PDT)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id o27-20020a05600c511b00b0038c8fba0bb3sm1906707wms.15.2022.03.22.07.03.47
+        by smtp.gmail.com with ESMTPSA id p14-20020a5d59ae000000b00203dcc87d39sm25592207wrr.54.2022.03.22.07.03.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 07:03:48 -0700 (PDT)
+        Tue, 22 Mar 2022 07:03:54 -0700 (PDT)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
 Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
@@ -65,9 +65,9 @@ Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
         msuchanek@suse.de, oleksandr@natalenko.name,
         jason.wessel@windriver.com, pmladek@suse.com,
         daniel.thompson@linaro.org, hch@infradead.org
-Subject: [PATCH v12 01/14] module: Move all into module/
-Date:   Tue, 22 Mar 2022 14:03:31 +0000
-Message-Id: <20220322140344.556474-2-atomlin@redhat.com>
+Subject: [PATCH v12 03/14] module: Make internal.h and decompress.c more compliant
+Date:   Tue, 22 Mar 2022 14:03:33 +0000
+Message-Id: <20220322140344.556474-4-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220322140344.556474-1-atomlin@redhat.com>
 References: <20220322140344.556474-1-atomlin@redhat.com>
@@ -76,142 +76,112 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-No functional changes.
+This patch will address the following warning and style violations
+generated by ./scripts/checkpatch.pl in strict mode:
 
-This patch moves all module related code into a separate directory,
-modifies each file name and creates a new Makefile. Note: this effort
-is in preparation to refactor core module code.
+  WARNING: Use #include <linux/module.h> instead of <asm/module.h>
+  #10: FILE: kernel/module/internal.h:10:
+  +#include <asm/module.h>
 
+  CHECK: spaces preferred around that '-' (ctx:VxV)
+  #18: FILE: kernel/module/internal.h:18:
+  +#define INIT_OFFSET_MASK (1UL << (BITS_PER_LONG-1))
+
+  CHECK: Please use a blank line after function/struct/union/enum declarations
+  #69: FILE: kernel/module/internal.h:69:
+  +}
+  +static inline void module_decompress_cleanup(struct load_info *info)
+						   ^
+  CHECK: extern prototypes should be avoided in .h files
+  #84: FILE: kernel/module/internal.h:84:
+  +extern int mod_verify_sig(const void *mod, struct load_info *info);
+
+  WARNING: Missing a blank line after declarations
+  #116: FILE: kernel/module/decompress.c:116:
+  +               struct page *page = module_get_next_page(info);
+  +               if (!page) {
+
+  WARNING: Missing a blank line after declarations
+  #174: FILE: kernel/module/decompress.c:174:
+  +               struct page *page = module_get_next_page(info);
+  +               if (!page) {
+
+  CHECK: Please use a blank line after function/struct/union/enum declarations
+  #258: FILE: kernel/module/decompress.c:258:
+  +}
+  +static struct kobj_attribute module_compression_attr = __ATTR_RO(compression);
+
+Note: Fortunately, the multiple-include optimisation found in
+include/linux/module.h will prevent duplication/or inclusion more than
+once.
+
+Fixes: f314dfea16a ("modsign: log module name in the event of an error")
 Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- MAINTAINERS                                         |  2 +-
- kernel/Makefile                                     |  5 +----
- kernel/module/Makefile                              | 12 ++++++++++++
- kernel/{module_decompress.c => module/decompress.c} |  2 +-
- kernel/{module-internal.h => module/internal.h}     |  0
- kernel/{module.c => module/main.c}                  |  2 +-
- kernel/{module_signing.c => module/signing.c}       |  2 +-
- 7 files changed, 17 insertions(+), 8 deletions(-)
- create mode 100644 kernel/module/Makefile
- rename kernel/{module_decompress.c => module/decompress.c} (99%)
- rename kernel/{module-internal.h => module/internal.h} (100%)
- rename kernel/{module.c => module/main.c} (99%)
- rename kernel/{module_signing.c => module/signing.c} (97%)
+ kernel/module/decompress.c | 3 +++
+ kernel/module/internal.h   | 6 ++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4386b12f86e8..012c9f55a06d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13045,7 +13045,7 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
- F:	include/linux/module.h
--F:	kernel/module.c
-+F:	kernel/module/
- 
- MONOLITHIC POWER SYSTEM PMIC DRIVER
- M:	Saravanan Sekar <sravanhome@gmail.com>
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 56f4ee97f328..717075b65deb 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -29,7 +29,6 @@ KCOV_INSTRUMENT_softirq.o := n
- KCSAN_SANITIZE_softirq.o = n
- # These are called from save_stack_trace() on slub debug path,
- # and produce insane amounts of uninteresting coverage.
--KCOV_INSTRUMENT_module.o := n
- KCOV_INSTRUMENT_extable.o := n
- KCOV_INSTRUMENT_stacktrace.o := n
- # Don't self-instrument.
-@@ -53,6 +52,7 @@ obj-y += rcu/
- obj-y += livepatch/
- obj-y += dma/
- obj-y += entry/
-+obj-$(CONFIG_MODULES) += module/
- 
- obj-$(CONFIG_KCMP) += kcmp.o
- obj-$(CONFIG_FREEZER) += freezer.o
-@@ -66,9 +66,6 @@ ifneq ($(CONFIG_SMP),y)
- obj-y += up.o
- endif
- obj-$(CONFIG_UID16) += uid16.o
--obj-$(CONFIG_MODULES) += module.o
--obj-$(CONFIG_MODULE_DECOMPRESS) += module_decompress.o
--obj-$(CONFIG_MODULE_SIG) += module_signing.o
- obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
- obj-$(CONFIG_BSD_PROCESS_ACCT) += acct.o
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-new file mode 100644
-index 000000000000..cdd5c61b8c7f
---- /dev/null
-+++ b/kernel/module/Makefile
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Makefile for linux kernel module support
-+#
-+
-+# These are called from save_stack_trace() on slub debug path,
-+# and produce insane amounts of uninteresting coverage.
-+KCOV_INSTRUMENT_module.o := n
-+
-+obj-y += main.o
-+obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
-+obj-$(CONFIG_MODULE_SIG) += signing.o
-diff --git a/kernel/module_decompress.c b/kernel/module/decompress.c
-similarity index 99%
-rename from kernel/module_decompress.c
-rename to kernel/module/decompress.c
-index ffef98a20320..d14d6443225a 100644
---- a/kernel/module_decompress.c
+diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+index d14d6443225a..2fc7081dd7c1 100644
+--- a/kernel/module/decompress.c
 +++ b/kernel/module/decompress.c
-@@ -12,7 +12,7 @@
- #include <linux/sysfs.h>
- #include <linux/vmalloc.h>
+@@ -113,6 +113,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
  
--#include "module-internal.h"
-+#include "internal.h"
+ 	do {
+ 		struct page *page = module_get_next_page(info);
++
+ 		if (!page) {
+ 			retval = -ENOMEM;
+ 			goto out_inflate_end;
+@@ -171,6 +172,7 @@ static ssize_t module_xz_decompress(struct load_info *info,
  
- static int module_extend_max_pages(struct load_info *info, unsigned int extent)
+ 	do {
+ 		struct page *page = module_get_next_page(info);
++
+ 		if (!page) {
+ 			retval = -ENOMEM;
+ 			goto out;
+@@ -256,6 +258,7 @@ static ssize_t compression_show(struct kobject *kobj,
  {
-diff --git a/kernel/module-internal.h b/kernel/module/internal.h
-similarity index 100%
-rename from kernel/module-internal.h
-rename to kernel/module/internal.h
-diff --git a/kernel/module.c b/kernel/module/main.c
-similarity index 99%
-rename from kernel/module.c
-rename to kernel/module/main.c
-index 46a5c2ed1928..34a2b0cf3c3e 100644
---- a/kernel/module.c
-+++ b/kernel/module/main.c
-@@ -58,7 +58,7 @@
- #include <linux/dynamic_debug.h>
- #include <linux/audit.h>
- #include <uapi/linux/module.h>
--#include "module-internal.h"
-+#include "internal.h"
+ 	return sysfs_emit(buf, "%s\n", __stringify(MODULE_COMPRESSION));
+ }
++
+ static struct kobj_attribute module_compression_attr = __ATTR_RO(compression);
  
- #define CREATE_TRACE_POINTS
- #include <trace/events/module.h>
-diff --git a/kernel/module_signing.c b/kernel/module/signing.c
-similarity index 97%
-rename from kernel/module_signing.c
-rename to kernel/module/signing.c
-index 8723ae70ea1f..8aeb6d2ee94b 100644
---- a/kernel/module_signing.c
-+++ b/kernel/module/signing.c
-@@ -12,7 +12,7 @@
- #include <linux/string.h>
- #include <linux/verification.h>
- #include <crypto/public_key.h>
--#include "module-internal.h"
-+#include "internal.h"
+ static int __init module_decompress_sysfs_init(void)
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index ea8c4c02614c..e0775e66bcf7 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -6,7 +6,8 @@
+  */
  
- /*
-  * Verify the signature on a module.
+ #include <linux/elf.h>
+-#include <asm/module.h>
++#include <linux/compiler.h>
++#include <linux/module.h>
+ #include <linux/mutex.h>
+ 
+ #ifndef ARCH_SHF_SMALL
+@@ -54,7 +55,7 @@ struct load_info {
+ 	} index;
+ };
+ 
+-extern int mod_verify_sig(const void *mod, struct load_info *info);
++int mod_verify_sig(const void *mod, struct load_info *info);
+ 
+ #ifdef CONFIG_MODULE_DECOMPRESS
+ int module_decompress(struct load_info *info, const void *buf, size_t size);
+@@ -65,6 +66,7 @@ static inline int module_decompress(struct load_info *info,
+ {
+ 	return -EOPNOTSUPP;
+ }
++
+ static inline void module_decompress_cleanup(struct load_info *info)
+ {
+ }
 -- 
 2.34.1
 
