@@ -2,82 +2,110 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB4A8C433F5
-	for <linux-modules@archiver.kernel.org>; Mon, 21 Mar 2022 17:36:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CF97C433F5
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Mar 2022 05:03:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238926AbiCURhi (ORCPT
+        id S236558AbiCVFEZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 21 Mar 2022 13:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
+        Tue, 22 Mar 2022 01:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237838AbiCURhi (ORCPT
+        with ESMTP id S236525AbiCVFEY (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:37:38 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCEDE997B;
-        Mon, 21 Mar 2022 10:36:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xNztFLfAKakM0DGCcou0dwOb3TGczIfFI6hfjoe/2aA=; b=kNIkVF2ASw/Gi/ZX4fijCmOMjc
-        LhV1WK/4eHogOl97NTkibv6bwnkLplqbRaxUDmYPDRlKJxyZs1PhMRIxuQN+uSxwRhkzZb66WprtD
-        pDVrIbiARITAuKXvkRaUMbH/yGnGOJqiZaGUz6Fs8Tcxk3eTYNUEcBUU7mjZlbxYoHPhCHNsh//RG
-        DCU+AcgS6wlgfygL7ZAEPpzWqeX4rNwAXvnUpdfo3T2Yd/OmxWCyOkLoaRgJaQozFsBPkJm6yQMab
-        FHhvPj7y/p/Egu+oHh20QIu3qTUlCe6VD4jCq7IUO+oMyrWFyfz0m7q7b6lADUOvhiAOCg7wWLVUT
-        VYydh5Uw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWLwY-008dhX-Fw; Mon, 21 Mar 2022 17:35:46 +0000
-Date:   Mon, 21 Mar 2022 10:35:46 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
-        Maninder Singh <maninder1.s@samsung.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "v.narang@samsung.com" <v.narang@samsung.com>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "avimalin@gmail.com" <avimalin@gmail.com>
-Subject: Re: [PATCH v3] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
- disabled
-Message-ID: <Yji3cqifyTf2SCxQ@bombadil.infradead.org>
-References: <CGME20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c@epcas5p2.samsung.com>
- <20220315155100.516107-1-maninder1.s@samsung.com>
- <YjDScHjMUbqYV4s4@bombadil.infradead.org>
- <62c74547-deb0-539a-c1cc-64b2ac334c94@csgroup.eu>
- <YjGe961XL8GW7Qeh@bombadil.infradead.org>
- <20220321133942.pbv7vvkn5r62ky5x@ava.usersys.com>
+        Tue, 22 Mar 2022 01:04:24 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15702DFB2
+        for <linux-modules@vger.kernel.org>; Mon, 21 Mar 2022 22:02:57 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id q1-20020a17090a4f8100b001c6575ae105so1301246pjh.0
+        for <linux-modules@vger.kernel.org>; Mon, 21 Mar 2022 22:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ceVg9Fx+CO6HpYy/wk+MDCRCh737lbvU2erecgf8G/g=;
+        b=mxnp8aq9c8RmSTr+e6WTFt0PYgN0OUF8B3c4CHhensbiquJ9nK8CjuOGHMbLVYFBmV
+         dKvEQ1YnCIaIq16BfUfeIlmFIy0WFGCbGlEiNv9GBwh0ov8k2HxZMRQO/Tq+f3gYL6gG
+         c84w/F6IWvHLE+rYj88GnBfLYuRlPh3R/Ztng=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ceVg9Fx+CO6HpYy/wk+MDCRCh737lbvU2erecgf8G/g=;
+        b=24CinP2TSc4DgUXU8JfWEBe2VSy1/onLcMS7uhBhw0niRlUbU68BA1Y2BdpszLfluu
+         rFkJjUBDfi8/APnu+1YVdFbdE5Uh6MPeGcz0OW5vWIJWhbuw+xvZ6eJeOhmPHjQRiTso
+         X3dzItDg1c+hVMIPYqzA0DMFObSRaYRTmgsi3Ur8/KuRh5AyniaU28Z4hMPJh7L8bzbq
+         ZkaOvdkuanSqLNqvIiZXQ9h9EOtM+vE8vHuwm33Ul67ZUcV5WJW3lXnR6MHYpWprGHRi
+         LeXUyryemVu+W55lTcaeQLQErxiVxKQlfagjNkjYcjTCY0bw4Oa/w3yBdkF4RuYIOHAP
+         YCYw==
+X-Gm-Message-State: AOAM532PkvBWwU3gY+Ze/9zGx2AEz+pbzJ0uXcPZvCExo8V9psTryXRT
+        QbiTdIIyUTVFZPasjt0B72T1ug==
+X-Google-Smtp-Source: ABdhPJxqXpXz9RuKGZvf3tsV1EyeStqE29usqEUErsYJl4nqwDkw4sq6z9LM7OiX6ejjHM0sm4Zr8Q==
+X-Received: by 2002:a17:90b:4b4b:b0:1be:fd9a:c279 with SMTP id mi11-20020a17090b4b4b00b001befd9ac279mr2865792pjb.83.1647925376557;
+        Mon, 21 Mar 2022 22:02:56 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:51af:6dff:4acd:7fa5])
+        by smtp.gmail.com with ESMTPSA id r11-20020a17090b050b00b001c741fd4890sm1058211pjz.9.2022.03.21.22.02.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 22:02:55 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 14:02:49 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     mcgrof@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
+        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, akpm@linux-foundation.org,
+        wangkefeng.wang@huawei.com, v.narang@samsung.com,
+        swboyd@chromium.org, ojeda@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        avimalin@gmail.com, atomlin@redhat.com, keescook@chromium.org,
+        ndesaulniers@google.com, rdunlap@infradead.org, void@manifault.com
+Subject: Re: [PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when
+ KALLSYSMS is disabled
+Message-ID: <YjlYeYpou9wdkcZS@google.com>
+References: <CGME20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933@epcas5p2.samsung.com>
+ <20220316043540.677128-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220321133942.pbv7vvkn5r62ky5x@ava.usersys.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <20220316043540.677128-1-maninder1.s@samsung.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Mar 21, 2022 at 01:39:42PM +0000, Aaron Tomlin wrote:
-> On Wed 2022-03-16 01:25 -0700, Luis Chamberlain wrote:
-> > I know this has been quite a bit of churn, but given Aaron's series I
-> > really hope we're goint to be in a better place for maintenance for
-> > modules long term.
-> > 
-> > I guess I gotta go automate tests to these things somehow too.
-> 
-> Hi Luis,
-> 
-> I can send a v12 now if you'd like?
+On (22/03/16 10:05), Maninder Singh wrote:
+[..]
+> +static int sprint_module_info(char *buf, unsigned long value,
+> +			     int modbuildid, int backtrace, int symbol)
+> +{
+> +	struct module *mod;
+> +	unsigned long offset;
+> +	void *base;
+> +	char *modname;
+> +	int len;
+> +	const unsigned char *buildid = NULL;
+> +	bool add_offset;
+> +
+> +	if (is_ksym_addr(value))
+> +		return 0;
+> +
+> +	if (backtrace || symbol)
+> +		add_offset = true;
+> +	else
+> +		add_offset = false;
+> +
+> +	preempt_disable();
+> +	mod = __module_address(value);
+> +	if (mod) {
+> +		modname = mod->name;
+> +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+> +		if (modbuildid)
+> +			buildid = mod->build_id;
+> +#endif
+> +		if (add_offset) {
+> +			base = mod->core_layout.base;
+> +			offset = value - (unsigned long)base;
+> +		}
 
-Sure, yes please, go for it, please be sure to collect all other
-Reviewed-by/etc tags.
+What if address is in module init? Shouldn't this be something like
 
-  Luis
+	if (within_module_init(value, mod))
+		offset = value - (unsigned long)mod->init_layout.base;
+	else
+		offset = value - (unsigned long)mod->core_layout.base;
