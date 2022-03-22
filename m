@@ -2,111 +2,81 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF113C433EF
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Mar 2022 17:32:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EDFEC433FE
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Mar 2022 17:37:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236835AbiCVRdk (ORCPT
+        id S239663AbiCVRjJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Mar 2022 13:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        Tue, 22 Mar 2022 13:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236000AbiCVRdk (ORCPT
+        with ESMTP id S239623AbiCVRjI (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Mar 2022 13:33:40 -0400
+        Tue, 22 Mar 2022 13:39:08 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D631A26AF8;
-        Tue, 22 Mar 2022 10:32:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC5050E25;
+        Tue, 22 Mar 2022 10:37:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NFkGwkkhrXKsXoNixvjMqhth6GVq1xT6H5Lol9T+VgU=; b=IR9zRK//WRfac+j77k3QtuHdQX
-        EIPyO0vIrQX4N5JoOX9kGpQFG9RNjID2VdiaJliR/IGjMTEEXCTL30GPpejZTR270Z7oeHcsCiVVt
-        /9C+hoeDPFXYIRlEJEwhsAhCIj9hxyvU94pGeVq64F9cqA55TCgSdBm4D4knqSshcqYAsnFkb3yxS
-        0/r6qwEn4PjLuocTXtfxJtopFGCyUOY6OXVc9+p+zbPSLWSmAy1e61+FInhcqDvWE5Fkjvms/ljDn
-        1X+P73+wiHNENBM4w7eOfb9hlOPp16sU8GW5hnxE37yy0VN0cJaxVUPYMlZUSoKOvnFBBtLul+3Pf
-        GCgTlcCw==;
+        bh=zVXKwBc1JcWHQCoSSK+DrgoMAyqc1wIUN0g4y2t1xXU=; b=FM6OAmOQAamX1rwFcjPZhLhkv9
+        JPdM78sMnPU3Wfz+ph/B/NHi/dGZHoK9a0D0YtFwhbsUGKlOfhH8jxv6JplGJ/Mwt5+6Xu8B5INLs
+        onq5r4RHi2ml+v43GbK13NcQFTHwMt3kxwRpmflaKyZiSRTMKwhTp42Z548wataFM4GJ6GSAhoTeR
+        JK5piU/Zv+uxpzp/ktuxAC4dBhfCgMSjW0rCTzKZQXI09zkC3GOw7hgzC7Zt+lkpsSDAiH+r0Asoe
+        3ruJuIvYxVv2Q7JXV8Cbu/guJ88QGP74ZN18VGCD2+OVQ+FU7lzz2JRIKUUFUQTXDQXKUIxIRrjJo
+        FfKsuj4w==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWiMC-00BkCB-9u; Tue, 22 Mar 2022 17:31:44 +0000
-Date:   Tue, 22 Mar 2022 10:31:44 -0700
+        id 1nWiRi-00BkYT-6u; Tue, 22 Mar 2022 17:37:26 +0000
+Date:   Tue, 22 Mar 2022 10:37:26 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Maninder Singh <maninder1.s@samsung.com>,
-        Vimal Agrawal <avimalin@gmail.com>
-Cc:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com, keescook@chromium.org,
-        ndesaulniers@google.com, rdunlap@infradead.org, void@manifault.com
-Subject: Re: [PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when
- KALLSYSMS is disabled
-Message-ID: <YjoIAF/FoFDFMiOi@bombadil.infradead.org>
-References: <CGME20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933@epcas5p2.samsung.com>
- <20220316043540.677128-1-maninder1.s@samsung.com>
+To:     Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Philipp Rudo <prudo@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        James Morse <james.morse@arm.com>,
+        Dave Young <dyoung@redhat.com>,
+        Kairui Song <kasong@redhat.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-modules@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        stable@kernel.org, Eric Snowberg <eric.snowberg@oracle.com>
+Subject: Re: [PATCH 4/4] module, KEYS: Make use of platform keyring for
+ signature verification
+Message-ID: <YjoJVnTuaw/3l7Xp@bombadil.infradead.org>
+References: <cover.1644953683.git.msuchanek@suse.de>
+ <840433bc93a58d6dfc4d96c34c0c3b158a0e669d.1644953683.git.msuchanek@suse.de>
+ <3e39412657a4b0839bcf38544d591959e89877b8.camel@linux.ibm.com>
+ <20220215204730.GQ3113@kunlun.suse.cz>
+ <c3f6f6c8a9db34cc1cdc1000f9272c2b36445e15.camel@linux.ibm.com>
+ <20220216105645.GS3113@kunlun.suse.cz>
+ <edb305079c28e49021166423af0378f8d218f269.camel@linux.ibm.com>
+ <20220216120911.GT3113@kunlun.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220316043540.677128-1-maninder1.s@samsung.com>
+In-Reply-To: <20220216120911.GT3113@kunlun.suse.cz>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Mar 16, 2022 at 10:05:40AM +0530, Maninder Singh wrote:
-> print module information when KALLSYMS is disabled.
-> 
-> No change for %pB, as it needs to know symbol name to adjust address
-> value which can't be done without KALLSYMS.
-> 
-> (A) original output with KALLSYMS:
-> [8.842129] ps function_1 [crash]
-> [8.842735] pS function_1+0x4/0x2c [crash]
-> [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> [8.843175] pB function_1+0x4/0x2c [crash]
-> [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> 
-> (B) original output without KALLSYMS:
-> [12.487424] ps 0xffff800000eb008c
-> [12.487598] pS 0xffff800000eb008c
-> [12.487723] pSb 0xffff800000eb008c
-> [12.487850] pB 0xffff800000eb008c
-> [12.487967] pBb 0xffff800000eb008c
-> 
-> (C) With patched kernel
-> with KALLYSMS:
-> [41.974576] ps function_1 [crash]
-> [41.975173] pS function_1+0x4/0x2c [crash]
-> [41.975386] pSb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> [41.975879] pB function_1+0x4/0x2c [crash]
-> [41.976076] pBb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> 
-> without KALLSYMS:
-> [9.624152] ps 0xffff800001bd008c [crash]	// similar to original, no changes
-> [9.624548] pS 0x(____ptrval____)+0x8c [crash]   // base address hashed and offset is without hash
-> [9.624847] pSb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> [9.625388] pB 0x(____ptrval____)+0x8c [crash]
-> [9.625594] pBb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> 
-> with disable hashing:
-> [8.563916] ps 0xffff800000f2008c [crash]
-> [8.564574] pS 0xffff800000f20000+0x8c [crash]
-> [8.564749] pSb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
-> [8.565008] pB 0xffff800000f20000+0x8c [crash]
-> [8.565154] pBb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
-> 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Co-developed-by: Vaneet Narang <v.narang@samsung.com>
-> Signed-off-by: Vaneet Narang <v.narang@samsung.com>
-> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
 
-I've pushed a lot of queued code into modules-testing (not modules-next
-yet) [0] please base your changes on that in a new iteration as that is what
-things look like now.
-
-Vimal might be interested in your work too and you might be interested
-in his patch too [1].
+How's this series going? Did you and Mimi sort things out? Either way,
+just wanted to let you kow you can base your changes on modules-testing
+[0] if you want to resubmit for v5.19 (v5.18 will be too late already).
+Once testing is done what is on modules-testing will go to modules-next
+for testing for v5.19. There are no changes planned for v5.18 other than
+fixes and so far there are none.
 
 [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-testing
-[1] https://lkml.kernel.org/r/CALkUMdRO+JAF_Dw3Q-mHOxvt7uM6gVDNGAA3OMeCUpnSvi7_Pg@mail.gmail.com
 
   Luis
