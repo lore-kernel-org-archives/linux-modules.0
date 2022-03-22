@@ -2,163 +2,249 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AEBFC433F5
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Mar 2022 06:23:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB40C433F5
+	for <linux-modules@archiver.kernel.org>; Tue, 22 Mar 2022 14:03:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236982AbiCVGY0 (ORCPT
+        id S236057AbiCVOFY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Mar 2022 02:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
+        Tue, 22 Mar 2022 10:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236933AbiCVGYY (ORCPT
+        with ESMTP id S232591AbiCVOFX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Mar 2022 02:24:24 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1C32716F
-        for <linux-modules@vger.kernel.org>; Mon, 21 Mar 2022 23:22:56 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220322062253epoutp02bfc670f465cdd2c3da8387a1b59f614a~en8LsF8HV2981329813epoutp02e
-        for <linux-modules@vger.kernel.org>; Tue, 22 Mar 2022 06:22:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220322062253epoutp02bfc670f465cdd2c3da8387a1b59f614a~en8LsF8HV2981329813epoutp02e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1647930173;
-        bh=b2Tm1I1oYfFqGoAEd6xIqKXTAY0QWdrTrH32PHTYG0A=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=HGuu0i2m6FRZWtzeBXN71AQ99WyojF4nEkL15dJmVxkWgCKg603qLKNZiaiOerzjJ
-         mzZtpKs5NDn8cudfr3uicZTIX71s/lTwJiNx/Yqws/tDVr+7Ao59j93PQ1ZHdJ8F61
-         DtCBr/xhPhQs/R8+JIA0YXxeQPOm+vQjvZNBS/JI=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220322062252epcas5p425e362d31c74f8218a3352c3bfd905d3~en8K8YL1Z1320513205epcas5p4J;
-        Tue, 22 Mar 2022 06:22:52 +0000 (GMT)
-X-AuditID: b6c32a4a-5b7ff700000030eb-b6-62396b3c0e47
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E1.15.12523.C3B69326; Tue, 22 Mar 2022 15:22:52 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when
- KALLSYSMS is disabled
-Reply-To: maninder1.s@samsung.com
-Sender: Maninder Singh <maninder1.s@samsung.com>
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-CC:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        Vaneet Narang <v.narang@samsung.com>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "avimalin@gmail.com" <avimalin@gmail.com>,
-        "atomlin@redhat.com" <atomlin@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "void@manifault.com" <void@manifault.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220322062219epcms5p1bc1cc758470ebf175aa4eee20b7837ae@epcms5p1>
-Date:   Tue, 22 Mar 2022 11:52:19 +0530
-X-CMS-MailID: 20220322062219epcms5p1bc1cc758470ebf175aa4eee20b7837ae
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLKsWRmVeSWpSXmKPExsWy7bCmuq5NtmWSwbwrfBZz1q9hs+htms5k
-        cWT+GlaLBwevs1uc6c61uLxrDptFw+zvrBaPZ81js7gx4SmjxYcJ/5ksVs5fzmjx//FXVou3
-        d6azWOzreMBksXvjIjaL43eeMlkcOjmX0WL78vVsFo2f7zM6CHvMbrjI4rFz1l12j5Z9t9g9
-        Fmwq9Wg58pbVY/MKLY9NqzrZPE7M+M3iMe9koMeZ1duYPC50ZXu833eVzaNvyypGj/VbrrJ4
-        fN4kF8AfxWWTkpqTWZZapG+XwJUxccsexoK/ahWvms6zNTD+Vu1i5OSQEDCROHP2L3MXIxeH
-        kMBuRomL+zeydTFycPAKCEr83SEMUiMskCKxdtceRhBbSEBR4sKMNYwgJcICBhK/tmqAhNkE
-        9CRW7drDAmKLCBhK/O9rZwIZySwwn13i9Jv77BC7eCVmtD9lgbClJbYv38oIYYtK3Fz9lh3G
-        fn9sPlRcRKL13llmCFtQ4sHP3VBxGYnVm3tZQBZICHQzSqx/txfKmcEo0fNoGlSHucT6JavA
-        pvIK+EpcOvMDrJtFQFWi88pCNogaF4mvV16DxZkFtCWWLXzNDPIZs4CmxPpd+hAlshJTT61j
-        gijhk+j9/YQJ5pkd82BsVYmWmxtYYR77/PEj1JMeEk+fn2aDBFygxLL3p9gnMMrPQgTvLCSL
-        ZyEsXsDIvIpRMrWgODc9tdi0wCgvtVyvODG3uDQvXS85P3cTIzhFanntYHz44IPeIUYmDsZD
-        jBIczEoivIs/mCcJ8aYkVlalFuXHF5XmpBYfYpTmYFES5z2dviFRSCA9sSQ1OzW1ILUIJsvE
-        wSnVwCSqtsRg9ZtUh381YRIuc2+/E1r19IRVjXiaTsH2E7wOnyaqLuRY5d++yW+CuP57oZff
-        Zh7qmiARar9l85ygnU/WhN18cbU53t/92uVUh+S2XfZM69LtviYfMbimfXaHbJDFkhcZl5+Z
-        ha24/zB88xLzpX+WHisNr1BqiM5iTKm9zn31Vfoj7+8fU6Wm7KuzKZJ8JMa4WvucgcIV5Z0C
-        zxYVRtWer3lYW9te5h3UFVGzg+fJP6HTKZGaby0L6rkUZYue5GqHNFv7n5WNU3+k5r28YlbO
-        F6d4lqXJ336rBrMtF01M2ZvepH9z2aFVR+O7W6Su+DLzpJl+6f+9p9LJ+8jS6B8eK15wmZeY
-        TuHtV2Ipzkg01GIuKk4EAKbOIBQABAAA
-X-CMS-RootMailID: 20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933
-References: <CGME20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933@epcms5p1>
+        Tue, 22 Mar 2022 10:05:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 222F92CCA0
+        for <linux-modules@vger.kernel.org>; Tue, 22 Mar 2022 07:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647957830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2lX2XksFQbPwbd5t533Vv9MU46m5xCCcK2EFrqJhDOE=;
+        b=VOreK0B5cDb7ryaa8YLG8vJZidBVy8tlq0dpLwdB3QqCObx4xzWhMQk0WpsEgd9Xv0ASYX
+        hcgpK5U1Af91VbO4gZ1zlugcMCE2bF65WCvNgBL/zXeFSq3dZ5GMW0uIbut7TrK71v9X0L
+        Q7iqICJ/OSpnbj6/pkXXXKJf6g/Jels=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-7LajXXmTNoiP4YqI6hBffA-1; Tue, 22 Mar 2022 10:03:48 -0400
+X-MC-Unique: 7LajXXmTNoiP4YqI6hBffA-1
+Received: by mail-wm1-f71.google.com with SMTP id r128-20020a1c4486000000b0038c8655c40eso1099522wma.6
+        for <linux-modules@vger.kernel.org>; Tue, 22 Mar 2022 07:03:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2lX2XksFQbPwbd5t533Vv9MU46m5xCCcK2EFrqJhDOE=;
+        b=BKEdc2OvzJmz1TsT2Egj+PAeQx6ZM+5f+IAAmLa60hGbx3VEsFEsf2CF9GWoTdX7Hn
+         Yg0MUq2NGWbmx3kopaZ75GHRg81p0lXD6Bh/OIzKHWZFPA6QKjILkAbjQvFu6Oz3WNFE
+         TaZNXAOXaS6t3BBlyZ/+ngWpeEc4inIhcjf2azmh4a5RvMuyE/wa7SQYL4oQCWpX5Ev2
+         Uhzuu1Wp22t2cI7kPtj+KFxeiw3Ga0dVPTbukIz6tth0uaBzeblnQrsYacEeb4zZfXYT
+         K2mvIWIkxmHB9vTEwyQk1weKfA8yl0v8p2g/Jvk9TafQERgLM6bD9OK4/lu99Gq6VH0e
+         UOuQ==
+X-Gm-Message-State: AOAM5339l5T52UawEAy8o2sMuvYg76KAgDQayhvhFdweghNeJZoBN8Ox
+        7y44a7RfpOFOVv1fGE3n7cxCBl+J5eW3XFOzz5Hb6RDM4UKrYHBePIzzSNO9/MV5Bs671bhexMJ
+        dlHeLrGHNhLFQ3F7WwMg6JmEz
+X-Received: by 2002:a05:6000:15c1:b0:204:7e75:1eb1 with SMTP id y1-20020a05600015c100b002047e751eb1mr3213102wry.482.1647957827345;
+        Tue, 22 Mar 2022 07:03:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwEgCEGCVCWJib18koHon306TiLO4/BKUs+A6w5+AeAWwG5OxCZMDuFGgPB2rhmClPGo/cxiQ==
+X-Received: by 2002:a05:6000:15c1:b0:204:7e75:1eb1 with SMTP id y1-20020a05600015c100b002047e751eb1mr3213076wry.482.1647957827016;
+        Tue, 22 Mar 2022 07:03:47 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id d15-20020a056000186f00b0020384249361sm18083087wri.104.2022.03.22.07.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 07:03:45 -0700 (PDT)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
+Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, pmladek@suse.com,
+        daniel.thompson@linaro.org, hch@infradead.org
+Subject: [PATCH v12 00/14] module: core code clean up
+Date:   Tue, 22 Mar 2022 14:03:30 +0000
+Message-Id: <20220322140344.556474-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi=C2=A0Sergey,=0D=0A=C2=A0=0D=0A>=C2=A0>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=
-=A0(add_offset)=C2=A0=7B=0D=0A>=C2=A0>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0base=C2=A0=3D=C2=A0mod->core_layout.=
-base;=0D=0A>=C2=A0>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0offset=C2=A0=3D=C2=A0value=C2=A0-=C2=A0(unsigned=C2=A0=
-long)base;=0D=0A>=C2=A0>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7D=0D=0A>=C2=A0=0D=
-=0A>=C2=A0What=C2=A0if=C2=A0address=C2=A0is=C2=A0in=C2=A0module=C2=A0init?=
-=C2=A0Shouldn't=C2=A0this=C2=A0be=C2=A0something=C2=A0like=0D=0A>=C2=A0=0D=
-=0A>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(within_m=
-odule_init(value,=C2=A0mod))=0D=0A>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0offset=C2=A0=
-=3D=C2=A0value=C2=A0-=C2=A0(unsigned=C2=A0long)mod->init_layout.base;=0D=0A=
->=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0else=0D=0A>=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0offset=C2=A0=3D=C2=A0value=C2=A0-=C2=A0(unsigned=C2=A0lon=
-g)mod->core_layout.base;=0D=0A=C2=A0=0D=0AYes,=C2=A0this=C2=A0can=C2=A0be=
-=C2=A0done,=C2=A0but=C2=A0I=C2=A0think=C2=A0then=C2=A0we=C2=A0need=C2=A0to=
-=C2=A0handle=C2=A0it=C2=A0with=C2=A0some=C2=A0more=C2=A0info.=0D=0A=C2=A0=
-=0D=0AIn=C2=A0module=C2=A0allocation=C2=A0first=C2=A0we=C2=A0load=C2=A0core=
-_layout=C2=A0and=C2=A0then=C2=A0init_layout=C2=A0w.r.t=C2=A0address=C2=A0ra=
-nge=0D=0Aas=C2=A0below=C2=A0(ARM64):=0D=0A=C2=A0=0D=0Affff800000eb0000=C2=
-=A0->=C2=A0core_layout=0D=0Affff800000eb4000=C2=A0->=C2=A0init_layout=0D=0A=
-=C2=A0=0D=0A=C2=A0=0D=0ASo=C2=A0if=C2=A0we=C2=A0write=C2=A0only=C2=A0offset=
-(w.r.t=C2=A0core_layout),=C2=A0then=C2=A0user=C2=A0can=C2=A0get=C2=A0a=C2=
-=A0hint=C2=A0if=C2=A0it=C2=A0going=C2=A0beyond=C2=A0normal=C2=A0text=0D=0At=
-hen=C2=A0it=C2=A0means=C2=A0it=C2=A0is=C2=A0init=C2=A0text.=0D=0A=C2=A0=0D=
-=0ABut=C2=A0if=C2=A0we=C2=A0take=C2=A0offset=C2=A0from=C2=A0init=C2=A0and=
-=C2=A0core=C2=A0separately,=C2=A0and=C2=A0we=C2=A0only=C2=A0print=C2=A0the=
-=C2=A0offset=C2=A0(not=C2=A0function=C2=A0name),=0D=0Awe=C2=A0need=C2=A0to=
-=C2=A0write=C2=A0alongwith=C2=A0offset=C2=A0that=C2=A0it=C2=A0is=C2=A0init=
-=C2=A0or=C2=A0core=C2=A0area.=0D=0AOtherwise=C2=A0user=C2=A0will=C2=A0get=
-=C2=A0confused=C2=A0which=C2=A0offset=C2=A0it=C2=A0is,=C2=A0whether=C2=A0to=
-=C2=A0check=C2=A0init=C2=A0or=C2=A0core=C2=A0text=C2=A0area.=0D=0A=C2=A0=0D=
-=0AAnd=C2=A0also=C2=A0while=C2=A0printing=C2=A0modules,=C2=A0kernel=C2=A0al=
-so=C2=A0uses=C2=A0core_layout=C2=A0as=C2=A0base=C2=A0address=C2=A0only:=0D=
-=0A=C2=A0=0D=0Astatic=C2=A0int=C2=A0m_show(struct=C2=A0seq_file=C2=A0*m,=C2=
-=A0void=C2=A0*p)=0D=0A=7B=0D=0A..=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0/*=C2=A0Used=C2=A0by=C2=A0oprofile=C2=A0and=C2=A0other=C2=A0sim=
-ilar=C2=A0tools.=C2=A0*/=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0value=C2=A0=3D=C2=A0m->private=C2=A0?=C2=A0NULL=C2=A0:=C2=A0mod->core_la=
-yout.base;=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0seq_printf(=
-m,=C2=A0=22=C2=A00x%px=22,=C2=A0value);=0D=0A..=0D=0A=7D=0D=0A=C2=A0=0D=0Aa=
-nd=C2=A0also=C2=A0normal=C2=A0%ps=C2=A0prints=C2=A0like=C2=A0below:=0D=0A=
-=C2=A0=0D=0Aps=C2=A00xffff800000eb4004=0D=0Aload=C2=A0address=C2=A0of=C2=A0=
-module=C2=A0is=C2=A00xffff800000eb0000=0D=0Aso=C2=A0normal=C2=A0offset=C2=
-=A0is=C2=A04004=C2=A0for=C2=A0init=C2=A0text=C2=A0section.=0D=0A=C2=A0=0D=
-=0Aand=C2=A0same=C2=A0thing=C2=A0is=C2=A0printed=C2=A0with=C2=A0current=C2=
-=A0patch:=0D=0ApS=C2=A00xffff800000eb0000+0x4004=C2=A0=5Bcrash=5D=0D=0A=C2=
-=A0=0D=0AStill=C2=A0if=C2=A0we=C2=A0need=C2=A0to=C2=A0handle=C2=A0separatel=
-y,=C2=A0then=C2=A0please=C2=A0suggest=C2=A0only=C2=A0offset=C2=A0is=C2=A0ok=
-=C2=A0or=C2=A0we=C2=A0need=C2=A0to=0D=0Aadd=C2=A0string=C2=A0for=C2=A0init=
-=C2=A0or=C2=A0core=C2=A0also=C2=A0like=C2=A0below:=0D=0A=C2=A0=0D=0A=C2=A0=
-=C2=A0=C2=A0init_text=C2=A0start=C2=A0+=C2=A0offset=0D=0ApS=C2=A00xffff8000=
-00eb4000+0x4=C2=A0=5Bcrash=C2=A0init_text=5D=0D=0A=C2=A0=0D=0AAnd=C2=A0also=
-=C2=A0then=C2=A0there=C2=A0will=C2=A0be=C2=A0discrepancy=C2=A0for=C2=A0roda=
-ta=C2=A0or=C2=A0other=C2=A0sections,=C2=A0which=C2=A0offset=C2=A0to=C2=A0ta=
-ke.=0D=0AIf=C2=A0we=C2=A0are=C2=A0taking=C2=A0it=C2=A0from=C2=A0core_layout=
-=C2=A0then=C2=A0init=C2=A0section=C2=A0can=C2=A0also=C2=A0be=C2=A0taken=C2=
-=A0with=C2=A0same.=0D=0AAs=C2=A0of=C2=A0now=C2=A0it=C2=A0is=C2=A0unique=C2=
-=A0offset=C2=A0calculation=C2=A0for=C2=A0all=C2=A0sections.=0D=0A=C2=A0=0D=
-=0AThanks,=0D=0AManinder=C2=A0Singh
+Hi Luis,
+
+As per your suggestion [1], this is an attempt to refactor and split
+optional code out of core module support code into separate components.
+This version is based on Linus' commit b47d5a4f6b8d ("Merge tag
+'audit-pr-20220321' of
+git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit").
+
+No changes in this iteration. Each patch has the same In-Reply-To.
+
+Changes since v10 [2]
+ - Removed kdb_modules as it is now redundant
+   (Christophe Leroy)
+ - Removed the include of linux/module.h from any source file
+   under kernel/debug/kdb
+ - Addressed minor style notice i.e. missing a blank line after
+   declarations
+
+Changes since v9 [3]
+ - Updated MAINTAINERS to include kernel/module/livepatch.c
+   and kernel/module/kdb.c, respectively
+ - Moved kdb module related code i.e. support for the 'lsmod',
+   out of core/or main kdb code into its own file under
+   kernel/module
+ - Ensured is_module_sig_enforced(), as a stub, is available
+   when Kconfig CONFIG_MODULE_SIG is not enabled/or selected
+   (Christophe Leroy)
+
+Changes since v8 [4]
+
+ - Resolved the reported lockdep warnings in kernel/module/kallsyms.c
+   (Petr Mladek)
+
+Changes since v7 [5]
+
+ - Removed redundant ifdef CONFIG_MODULES and endif pairing from
+   kernel/module/Makefile
+
+Changes since v6 [6]
+
+ - Moved KCOV_INSTRUMENT_module.o out of kernel/Makefile into
+   kernel/module/Makefile (Christophe Leroy)
+ - Moved kernel/module/signature.c back into kernel/
+   (Christophe Leroy)
+ - Fixed Oops in add_kallsyms() due to an invalid pointer assignment
+   (Christophe Leroy)
+
+Changes since v5 [7]:
+
+ - Updated MAINTAINERS to include the entire kernel/module/ directory
+   (Christophe Leroy)
+ - Reintroduce commit a97ac8cb24a3 ("module: fix signature check failures
+   when using in-kernel decompression") (Michal Suchánek)
+ - Refactored code to address some (i.e.
+   --ignore=MULTIPLE_ASSIGNMENTS,ASSIGN_IN_IF was used) style violations
+   e.g. "Alignment should match open parenthesis", reported by
+   scripts/checkpatch.pl --strict (Christophe Leroy)
+ - Used PAGE_ALIGN() and PAGE_ALIGNED() instead (Christophe Leroy)
+ - Removed sig_enforce from include/linux/module.h as it is only
+   used in kernel/module/signing.c (Christophe Leroy)
+ - Added static keyword for anything not used outside a source file
+   (Christophe Leroy)
+ - Moved mod_sysfs_teardown() to kernel/module/sysfs.c (Christophe Leroy)
+ - Removed kdb_modules from kernel/debug/kdb/kdb_private.h
+   (Christophe Leroy)
+
+Changes since v4 [7]:
+
+ - Moved is_livepatch_module() and set_livepatch_module() to
+   kernel/module/livepatch.c
+ - Addressed minor compiler warning concerning
+   kernel/module/internal.h (0-day)
+ - Resolved style violations reported by scripts/checkpatch.pl
+ - Dropped patch 5 [8] so external patch [9] can be applied at
+   a later date post merge into module-next (Christophe Leroy)
+
+Changes since v3 [10]:
+
+ - Refactored both is_livepatch_module() and set_livepatch_module(),
+   respectively, to use IS_ENABLED(CONFIG_LIVEPATCH) (Joe Perches)
+ - Addressed various compiler warnings e.g., no previous prototype (0-day)
+
+Changes since v2 [11]:
+
+ - Moved module decompress support to a separate file
+ - Made check_modinfo_livepatch() generic (Petr Mladek)
+ - Removed filename from each newly created file (Luis Chamberlain)
+ - Addressed some (i.e. --ignore=ASSIGN_IN_IF,AVOID_BUG was used)
+   minor scripts/checkpatch.pl concerns e.g., use strscpy over
+   strlcpy and missing a blank line after declarations (Allen)
+
+Changes since v1 [12]:
+
+  - Moved module version support code into a new file
+
+[1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
+[2]: https://lore.kernel.org/lkml/20220307174509.2887714-1-atomlin@redhat.com/
+[3]: https://lore.kernel.org/lkml/20220228234322.2073104-1-atomlin@redhat.com/
+[4]: https://lore.kernel.org/all/20220222141303.1392190-2-atomlin@redhat.com/
+[5]: https://lore.kernel.org/lkml/20220222130911.1348513-1-atomlin@redhat.com/
+[6]: https://lore.kernel.org/lkml/20220218212511.887059-1-atomlin@redhat.com/
+[7]: https://lore.kernel.org/lkml/20220209170358.3266629-1-atomlin@redhat.com/
+[8]: https://lore.kernel.org/lkml/20220130213214.1042497-1-atomlin@redhat.com/
+[9]: https://lore.kernel.org/lkml/20220130213214.1042497-6-atomlin@redhat.com/
+[10]: https://lore.kernel.org/lkml/203348805c9ac9851d8939d15cb9802ef047b5e2.1643919758.git.christophe.leroy@csgroup.eu/
+[11]: https://lore.kernel.org/lkml/20220128203934.600247-1-atomlin@redhat.com/
+[12]: https://lore.kernel.org/lkml/20220106234319.2067842-1-atomlin@redhat.com/
+[13]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
+
+
+Aaron Tomlin (14):
+  module: Move all into module/
+  module: Simple refactor in preparation for split
+  module: Make internal.h and decompress.c more compliant
+  module: Move livepatch support to a separate file
+  module: Move latched RB-tree support to a separate file
+  module: Move strict rwx support to a separate file
+  module: Move extra signature support out of core code
+  module: Move kmemleak support to a separate file
+  module: Move kallsyms support into a separate file
+  module: kallsyms: Fix suspicious rcu usage
+  module: Move procfs support into a separate file
+  module: Move sysfs support into a separate file
+  module: Move kdb module related code out of main kdb code
+  module: Move version support into a separate file
+
+ MAINTAINERS                                   |    4 +-
+ include/linux/kdb.h                           |    1 +
+ include/linux/module.h                        |   21 +-
+ kernel/Makefile                               |    5 +-
+ kernel/debug/kdb/kdb_io.c                     |    1 -
+ kernel/debug/kdb/kdb_keyboard.c               |    1 -
+ kernel/debug/kdb/kdb_main.c                   |   49 -
+ kernel/debug/kdb/kdb_private.h                |    4 -
+ kernel/debug/kdb/kdb_support.c                |    1 -
+ kernel/module-internal.h                      |   50 -
+ kernel/module/Makefile                        |   21 +
+ kernel/module/debug_kmemleak.c                |   30 +
+ .../decompress.c}                             |    5 +-
+ kernel/module/internal.h                      |  275 +++
+ kernel/module/kallsyms.c                      |  512 +++++
+ kernel/module/kdb.c                           |   56 +
+ kernel/module/livepatch.c                     |   74 +
+ kernel/{module.c => module/main.c}            | 1856 +----------------
+ kernel/module/procfs.c                        |  142 ++
+ kernel/module/signing.c                       |  122 ++
+ kernel/module/strict_rwx.c                    |   85 +
+ kernel/module/sysfs.c                         |  436 ++++
+ kernel/module/tree_lookup.c                   |  109 +
+ kernel/module/version.c                       |  109 +
+ kernel/module_signing.c                       |   45 -
+ 25 files changed, 2075 insertions(+), 1939 deletions(-)
+ delete mode 100644 kernel/module-internal.h
+ create mode 100644 kernel/module/Makefile
+ create mode 100644 kernel/module/debug_kmemleak.c
+ rename kernel/{module_decompress.c => module/decompress.c} (99%)
+ create mode 100644 kernel/module/internal.h
+ create mode 100644 kernel/module/kallsyms.c
+ create mode 100644 kernel/module/kdb.c
+ create mode 100644 kernel/module/livepatch.c
+ rename kernel/{module.c => module/main.c} (64%)
+ create mode 100644 kernel/module/procfs.c
+ create mode 100644 kernel/module/signing.c
+ create mode 100644 kernel/module/strict_rwx.c
+ create mode 100644 kernel/module/sysfs.c
+ create mode 100644 kernel/module/tree_lookup.c
+ create mode 100644 kernel/module/version.c
+ delete mode 100644 kernel/module_signing.c
+
+
+base-commit: b47d5a4f6b8d42f8a8fbe891b36215e4fddc53be
+-- 
+2.34.1
+
