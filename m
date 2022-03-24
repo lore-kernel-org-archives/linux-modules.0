@@ -2,195 +2,158 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9281CC433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 23 Mar 2022 22:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB85C433EF
+	for <linux-modules@archiver.kernel.org>; Thu, 24 Mar 2022 05:52:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239931AbiCWWL5 (ORCPT
+        id S242231AbiCXFx7 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 23 Mar 2022 18:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
+        Thu, 24 Mar 2022 01:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345119AbiCWWL5 (ORCPT
+        with ESMTP id S232029AbiCXFx6 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 23 Mar 2022 18:11:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985B98EB70;
-        Wed, 23 Mar 2022 15:10:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3218A61743;
-        Wed, 23 Mar 2022 22:10:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F128DC340E8;
-        Wed, 23 Mar 2022 22:10:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1648073425;
-        bh=xLoUSyyy7Fd4dqBNWHmtBAmPuHFOs/nkqaCLBf8yfFY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RaHLN8VRUw4CEvhzzrVUPpesktBspYHdxkXxAeg8BnI/U76ilSgZ7iWC5lE/qvUEL
-         hYbW/B6Sy+sjBvRbXfnk5cbb7ENgIkeqcGHqxyaEmDtJxpRqhk4o+h64mIrKeNAa1U
-         6bUC1z0LIUfHkmtzDx5Et4oG817etle8+NTbhkPM=
-Date:   Wed, 23 Mar 2022 15:10:24 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
+        Thu, 24 Mar 2022 01:53:58 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0654D91ADE;
+        Wed, 23 Mar 2022 22:52:26 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22O53EqU001940;
+        Thu, 24 Mar 2022 05:52:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=zjRaQoymWAqn6wUtVC/zmQ0DwYQuTGfZMXxUeCw6qMs=;
+ b=I3P2yxc3XcFwUF9EC+Wy5q9jpKXl81dcwF7AWZLe+a0FjHUUcwp6C0P/rdp1lt839O+s
+ 1H0ax/A/R24qDilyE5H6sXfhsW9S2Y/wkL2VX/Yamv3pFOK8lZ3k28ZMyZLk3GJXJEpC
+ TdmYcPKfGFC1ZhL2uVH4nHUKb1NKeP9V6bpnzHWDAHfUyV6Lf3syyLBR2IGhnBq6ZW4u
+ lAJRD19Tvx5+84uFY/fyX0RALCLW23qxGENS6JrKmvl5QiDyNqMFmOx0fK97v+D0JhbR
+ c7HgPju3ZnZwso5yESYqJFaXtP5cEv8gu3YyTmXjxaVKEY5LsZ+NWdEiFwJu2A6mPu/j Rg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ew5kcu5f3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Mar 2022 05:52:22 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22O5p2Kw031649;
+        Thu, 24 Mar 2022 05:52:21 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
+        by userp3020.oracle.com with ESMTP id 3exawjbst5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Mar 2022 05:52:20 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kl/A8mhoNVPNqr8OQTu9iALI9vXp1jlP38k05D2BOJzeit56npM+mbp7pPcbAwkr+koK6SJxq/9B4GnVz+1TSGNraJsA8y71Sd3u00HYs07ulH3rzNO1jehvu3dffgVxs3yM9S3pXb1pxH8QdkG0YUN/uFfYgR9bPZRSyEoxxHZAR5TqXwMk118LT97Ev4VO6+VkoOKPFzM2TdFbw4ABnmY5vs0HVH3XE41Y8iQkmUjbLTVZOgHKUszKE1F/F3Fq4rztzpAKzcfP7AhpkL6hEaaxNLgolZh1rw9dmnRCXwzoH0nD8uZ6vJFfQPlcN4xpCbPAQEr+MYAdg+uQDcH85g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zjRaQoymWAqn6wUtVC/zmQ0DwYQuTGfZMXxUeCw6qMs=;
+ b=Fu7Gge4V7fS0Vaxz0ctmbsWTsULrqW+weCzznhO2Vw3vyBhTxim9CW8QWcCctNpOK004ZJpB363f3mdJzywKBiiaWkknVufIv1+rzXHmQF0QRB2caHFhDR3+6Go4MzAG1YNtFJu5OWiIv0NVVYtNChYWyQbs36E6ypgblMuzl0sJxDB7Vd9ovnP4tZygRUprHo7pm7ab6p6JaJQr7qKWSa4VzxheTKHago0EqSDWSU1qxofa3fVXr74y0uA1tk25pL0aidX5qlMymamNvPTU8UHQMI/sjcytCuIDaam2QwQMphuY83dr5xsbWIGUfInphnQsFgFZkNvsCRUHgsQVnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zjRaQoymWAqn6wUtVC/zmQ0DwYQuTGfZMXxUeCw6qMs=;
+ b=q+7h1OWkEmG0SUfm3QjxDQOOB1IJLYyf3/g7iD0PAwPetABRIuV+hTFncGJk6c7tppu3o2lEkkmK+5QR8N/a2uS9UF4/WaLFKAK+j2RZp713AT6EkV4Tvyx9ZbMxAKWHkonMBeWX52aksXrLaZB4JGFu01BnqncScV+y1eowHNg=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CY4PR10MB1317.namprd10.prod.outlook.com
+ (2603:10b6:903:28::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Thu, 24 Mar
+ 2022 05:52:19 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d4e7:ee60:f060:e20c]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d4e7:ee60:f060:e20c%7]) with mapi id 15.20.5081.023; Thu, 24 Mar 2022
+ 05:52:19 +0000
+Date:   Thu, 24 Mar 2022 08:52:07 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Maninder Singh <maninder1.s@samsung.com>, pmladek@suse.com,
-        rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        wangkefeng.wang@huawei.com, v.narang@samsung.com,
-        swboyd@chromium.org, ojeda@kernel.org,
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com, keescook@chromium.org,
-        ndesaulniers@google.com, rdunlap@infradead.org, void@manifault.com
-Subject: Re: [PATCH 1/1 module-testing] kallsyms: enhance %pS/s/b printing
- when KALLSYSMS is disabled
-Message-Id: <20220323151024.84eb56bb87964a6e5522b1c4@linux-foundation.org>
-In-Reply-To: <YjuZa8Jd2+gpiM3J@bombadil.infradead.org>
-References: <CGME20220323164758epcas5p2d98f696230aaa5e2d6a8820bc2f13f0c@epcas5p2.samsung.com>
-        <20220323164742.2984281-1-maninder1.s@samsung.com>
-        <YjuZa8Jd2+gpiM3J@bombadil.infradead.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] lib/test: use after free in register_test_dev_kmod()
+Message-ID: <20220324055207.GA21683@kili>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: ZR0P278CA0137.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:40::16) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e9d4f6cd-5b97-4af2-53b7-08da0d5a7532
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1317:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR10MB1317A9E6EC975F9973DCAC998E199@CY4PR10MB1317.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8UJTtRdUJO1nhKble22dq7wqRHkkwqiOcQnr6kELp0Rhg/39VFZ6nFJWqhVDU/AKpBKrQhNzVTb9CVhO8RK2XzGyn5n/3vW68v1BcFqTYcWuSCWbdhyRvQDU3xbwRIgdVkJXyFTXOLV8Z2tEsetyIQwd2ejSFaNEgM6XItC9xw+FC2zSikTdqjmCW4JHW8N+45+LzFADjKGGI42UHGPHZz6U9Rd4YEBv66DxBj7zJ25IOUWEY1Ijks0IEeM99bUIr4Xer8k2WHsrS1nCo7qzn0tRwdomw8IOJ9WI/Sha9tvlFWK4BH8kJ3v+PScS+gBpuBEOm43P2lE469+BcTpq1seg6nW2SRVv+uJsaGjdbpywd36IC0anzV3/hAarPcxMTjtvMO1pN1i6I35DfJqL+WingA7XpS1LylOKK7WAAGtgKdtdUtgN9i6c8e8Ix2k6yPED4cfGvU/jvmdDXPd0H05J+4Rqon5cKdxuMUGFuR3EPxqSW8lQJ3MKBP8AdYtiRRrjJctR19SPHj28mMr2XgVsKvqFG0weaqFLftHxSkVsscyC679QvNOCnzcI79JvHNcKQEi4naf3MLY3xIO1A211laby1xzYvOBwHkzOaoCDI0N9E3LVc0/cJWvbPd9H3xxSj/zAkXlhlZph6wy8blNV7AdheytZHGq8YqoTcRo+jtkgBxMF46j3ylWAT7jQ1L9TPHCF8mQPmqEBkxuYNg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(4326008)(1076003)(66946007)(66556008)(66476007)(316002)(8676002)(86362001)(6666004)(9686003)(5660300002)(508600001)(52116002)(6506007)(6512007)(6486002)(6916009)(186003)(44832011)(4744005)(2906002)(8936002)(38100700002)(26005)(33656002)(33716001)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Knic34vQTVpnL9Z6STcw+XAvh9eVkGrdVwcGRqvL0csdBzuycv4dn1gIjXq2?=
+ =?us-ascii?Q?sn3VPKnSZug5WSqffOrDxlGbqyikL8ptj2WoaHSit86SEaCNpwEaxSqMbrOR?=
+ =?us-ascii?Q?yYhA1o8NprRRWAhlBBaJLlvMtRz5iadqdBzCEhJ8M29kZxhGKpUJxeYbjuZN?=
+ =?us-ascii?Q?DM3FlkBWDPQEkM0tTHtH7yGpA7vTh3TTX7TRDLK2yKg3nVJQEIfVjUgT4AqW?=
+ =?us-ascii?Q?Wesm/HKgfKwsAqIae288H7WdsPkzgDe6XqhcOu9iSTySfkoh+uFsJrM+KyF2?=
+ =?us-ascii?Q?wvHnLrbaTBpArweo6/x4mXC9pQlWaJarjEUK6j+phhipoTIClWwFG9uSK6Va?=
+ =?us-ascii?Q?AV8doSVPYnufiW0zk9ShAW1Et3TfD5155JpizsUMeiD0awxv9C//2iiWVCDc?=
+ =?us-ascii?Q?a+qBQ7WDIOaO+xgv6mUKfMhgTTOIa18dTlgepfM0mJ2tqzkU/t2bj+eD89m/?=
+ =?us-ascii?Q?fjPnni+uAb4JG1qOE16lcknyHju2ea+3l4m4bI/Mvs9AxFV3Nxa3kRSGBZmG?=
+ =?us-ascii?Q?NfZarcx5QJC920SghV+Zw6PDi9WHNrSlY2FkpxYOF3JUWvvjpmoWOqp6RQx6?=
+ =?us-ascii?Q?7tML4RtD/hZrK12jtDFNt4o07YVv66CSR+qoh48lJFmY3NXQfCfN/SDRx6HA?=
+ =?us-ascii?Q?TnSpyvdAR/YFTxxDqjavqR1/say+gQZLYXM/DcUygzTkNSx86kIecarWKv1I?=
+ =?us-ascii?Q?69iv9Zseng3+Y0xlNqEk/sL8IqcfsI1BbFlAwTxhSlH0ufUztkwldBrQlM1e?=
+ =?us-ascii?Q?jN4xc4hL6nBluh/40/vuyp4ls3bYnW/MJOUzG2Uny9VvY50IBQWHEAygJlfx?=
+ =?us-ascii?Q?bzLW5JsViSz6OujJPkl0PE9/RmpwFeAFAtO8Nj7VvgHIU5kuubYoi2VNo/FY?=
+ =?us-ascii?Q?b4QJ+8J7kpEWekkzsjehxsTHk5QNPL1mY+fZzesQb/jQIdyMsjXsexDnh5q9?=
+ =?us-ascii?Q?sohQO0t7Ojctjc92fXX0LW+eya/BxsXHbohEl9A0Tb1emauJz80wu1oWWawY?=
+ =?us-ascii?Q?H6raPA77uQq8m1TjuHI7bMjeWxKzIrYNP4PExv4gH3Y51cWfA88GcN7xwCri?=
+ =?us-ascii?Q?OE9j+ox2npRI2E0yCb67kRMKOp+RIa87GpedThxuyscV9NDjQ3/lr5crWMm2?=
+ =?us-ascii?Q?QrNEvHlb/Z4RDsIz7MaVKNlzoajOtgFjonl/1LBWMH0NXjqWui0Fx6EFT7/r?=
+ =?us-ascii?Q?ZLeSXz4LEEKLgjMtPJDqedNpl4QFmf95vGvKbBCrsVDbcEajOuNsQtL1KwOi?=
+ =?us-ascii?Q?LVKOXzt24a62409oQy31/tcRsQOs5XVVFIMSjVXw7a2KIs7d9/9BuqOyf2s6?=
+ =?us-ascii?Q?DcbGXwzgwy7m5C3TuA8L9TRoEfim4obk6lyiFGDQz2dCpT9df9NLLekUaEoa?=
+ =?us-ascii?Q?iWu1Bj30Asp9k2OB/rJkpKzUOOj7n+gfXDmFpKMPesM+dd0bU/QDNNgrWI6y?=
+ =?us-ascii?Q?kTmWcbVUqKVGcgHV6hn1pC5jxX3p4bBsQMFL7PwS1qVuApAplB5BKA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9d4f6cd-5b97-4af2-53b7-08da0d5a7532
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2022 05:52:19.2515
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wChoP0oJDz656QSZuEN2D0n5L8hcYgNblqPaz1LP04umSx40mDu28bfRntrpHxv3pjpBnStTW8qOfAX/vbbXnuhuTt1ttwefAbz3gp9fX0M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1317
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10295 signatures=694973
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203240035
+X-Proofpoint-GUID: V9i41Sy_J5xwKqCMpolmKHJSlEJXGyOk
+X-Proofpoint-ORIG-GUID: V9i41Sy_J5xwKqCMpolmKHJSlEJXGyOk
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, 23 Mar 2022 15:04:27 -0700 Luis Chamberlain <mcgrof@kernel.org> wrote:
+The "test_dev" pointer is freed but then returned to the caller.
 
-> On Wed, Mar 23, 2022 at 10:17:42PM +0530, Maninder Singh wrote:
-> > ---
-> > module-next -> module-testing: Petr's review and test tag is picked from previous version,
-> > current version has slight changes (module.c -> module/main.c). No functional change in patch,
-> > only init_build_id() function is moved to module/main.c as it can be independent of
-> > kallsyms.
-> 
-> Andrew,
-> 
-> I see this patch is merged on your tree, any chance we can yield until
-> the next release and I can then take it under modules-next ? It would
-> help given the slew of changes I now have queued up not for v5.18 but
-> for v5.19. I'm delaying the modules changes for v5.19 given the timing,
-> it is too soon to merge for v5.18 as I want tons of testing on this
-> all on linux-next after v5.18-rc1 is out.
-> 
-
-I don't actually have this patch in -mm.  What I do have is the below,
-which I shall now drop.  All yours to deal with as you see fit!
-
-
-
-From: Maninder Singh <maninder1.s@samsung.com>
-Subject: kallsyms: print module name in %ps/S case when KALLSYMS is disabled
-
-original:
-With KALLSYMS
-                   %pS                               %ps
-[16.4200]  hello_init+0x0/0x24 [crash]        hello_init [crash]
-
-Without KALLSYMS:
-[16.2200]      0xbe200040                         0xbe200040
-
-With Patch (Without KALLSYMS:) load address + current offset [Module Name]
-
-[13.5993]  0xbe200000+0x40 [crash]           0xbe200000+0x40 [crash]
-
-It will help in better debugging and checking when KALLSYMS is disabled,
-user will get information about module name and load address of module.
-
-verified for arm64:
-/ # insmod /crash.ko
-
-[   19.263556] 0xffff800000ec0000+0x38 [crash]
-
-..
-
-[   19.276023] Call trace:
-[   19.276277]  0xffff800000ec0000+0x28 [crash]
-[   19.276567]  0xffff800000ec0000+0x58 [crash]
-[   19.276727]  0xffff800000ec0000+0x74 [crash]
-[   19.276866]  0xffff8000080127d0
-[   19.276978]  0xffff80000812d95c
-[   19.277085]  0xffff80000812f554
-
-Link: https://lkml.kernel.org/r/20220201040044.1528568-1-maninder1.s@samsung.com
-Signed-off-by: Vaneet Narang <v.narang@samsung.com>
-Co-developed-by: Vaneet Narang <v.narang@samsung.com>
-Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Steven Rostedt (Google) <rostedt@goodmis.org>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc: Miroslav Benes <mbenes@suse.cz>
-Cc: Stephen Boyd <swboyd@chromium.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: d9c6a72d6fa2 ("kmod: add test driver to stress test the module loader")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 ---
+ lib/test_kmod.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- include/linux/kallsyms.h |   27 +++++++++++++++++++++++++++
- lib/vsprintf.c           |    5 +++--
- 2 files changed, 30 insertions(+), 2 deletions(-)
-
---- a/include/linux/kallsyms.h~kallsyms-print-module-name-in-%ps-s-case-when-kallsyms-is-disabled
-+++ a/include/linux/kallsyms.h
-@@ -163,6 +163,33 @@ static inline bool kallsyms_show_value(c
- 	return false;
- }
+diff --git a/lib/test_kmod.c b/lib/test_kmod.c
+index ce1589391413..cb800b1d0d99 100644
+--- a/lib/test_kmod.c
++++ b/lib/test_kmod.c
+@@ -1149,6 +1149,7 @@ static struct kmod_test_device *register_test_dev_kmod(void)
+ 	if (ret) {
+ 		pr_err("could not register misc device: %d\n", ret);
+ 		free_test_dev_kmod(test_dev);
++		test_dev = NULL;
+ 		goto out;
+ 	}
  
-+#ifdef CONFIG_MODULES
-+static inline int fill_minimal_module_info(char *sym, int size, unsigned long value)
-+{
-+	struct module *mod;
-+	unsigned long offset;
-+	int ret = 0;
-+
-+	preempt_disable();
-+	mod = __module_address(value);
-+	if (mod) {
-+		offset = value - (unsigned long)mod->core_layout.base;
-+		snprintf(sym, size - 1, "0x%lx+0x%lx [%s]",
-+				(unsigned long)mod->core_layout.base, offset, mod->name);
-+
-+		sym[size - 1] = '\0';
-+		ret = 1;
-+	}
-+
-+	preempt_enable();
-+	return ret;
-+}
-+#else
-+static inline int fill_minimal_module_info(char *sym, int size, unsigned long value)
-+{
-+	return 0;
-+}
-+#endif /*CONFIG_MODULES*/
- #endif /*CONFIG_KALLSYMS*/
- 
- static inline void print_ip_sym(const char *loglvl, unsigned long ip)
---- a/lib/vsprintf.c~kallsyms-print-module-name-in-%ps-s-case-when-kallsyms-is-disabled
-+++ a/lib/vsprintf.c
-@@ -984,9 +984,7 @@ char *symbol_string(char *buf, char *end
- 		    struct printf_spec spec, const char *fmt)
- {
- 	unsigned long value;
--#ifdef CONFIG_KALLSYMS
- 	char sym[KSYM_SYMBOL_LEN];
--#endif
- 
- 	if (fmt[1] == 'R')
- 		ptr = __builtin_extract_return_addr(ptr);
-@@ -1006,6 +1004,9 @@ char *symbol_string(char *buf, char *end
- 
- 	return string_nocheck(buf, end, sym, spec);
- #else
-+	if (fill_minimal_module_info(sym, KSYM_SYMBOL_LEN, value))
-+		return string_nocheck(buf, end, sym, spec);
-+
- 	return special_hex_number(buf, end, value, sizeof(void *));
- #endif
- }
-_
+-- 
+2.20.1
 
