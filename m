@@ -2,81 +2,53 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01C63C433EF
-	for <linux-modules@archiver.kernel.org>; Tue, 29 Mar 2022 09:09:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD6AFC433EF
+	for <linux-modules@archiver.kernel.org>; Tue, 29 Mar 2022 19:37:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbiC2JK4 (ORCPT
+        id S229702AbiC2Tjd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 29 Mar 2022 05:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
+        Tue, 29 Mar 2022 15:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234473AbiC2JKz (ORCPT
+        with ESMTP id S238235AbiC2Tjb (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 29 Mar 2022 05:10:55 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893463A713
-        for <linux-modules@vger.kernel.org>; Tue, 29 Mar 2022 02:09:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648544953; x=1680080953;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yA6vnsM89lCWKXh1vWMDbKjZBeSMUxLRjYDgBLqXccI=;
-  b=aojlQjrAOnB0XiwSmcYG/IEG5WM2gZf0EnKoij0gNSBh8u2SJ4QJpkNm
-   BHQiMjB28GEECUBNmKfj1DNSzAQf1Y7X5oN5rnMu56JtI1xIzk1GS3ISc
-   4utt3ENRtr6N51njFdHiLH/hCg6Pprx2VT3LvhLAtTKJTGEzuZ8slz4JZ
-   EVe+jLd2qECYFVtw1V8hB9BLkNHpPaS1gmTYovzooeAx6AvcGJaxKAaEN
-   C1GpzpzrnDvu7bG3+oZXg2cu2t3zGWV+ubYLfpHfkFYGUinwFSxo6jASc
-   1tya/wYPO+9HU5sQjZR/SVa9fH380KVjs9+rpfHaCpaSGeaOhLMou+9Qo
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="319901107"
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="319901107"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 02:09:13 -0700
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="649378096"
-Received: from mlopezja-mobl.amr.corp.intel.com (HELO ldmartin-desk2.jf.intel.com) ([10.255.231.179])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 02:09:12 -0700
-Date:   Tue, 29 Mar 2022 02:09:12 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     linux-modules@vger.kernel.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH 0/4] modprobe -r fixes and refactors
-Message-ID: <20220329090912.geymr6xk7taq4rtq@ldmartin-desk2.jf.intel.com>
+        Tue, 29 Mar 2022 15:39:31 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A05EB7C6B
+        for <linux-modules@vger.kernel.org>; Tue, 29 Mar 2022 12:37:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Tgz5HJr73kqmVLtUy5C3nCmPQjaFxTPqPUUaFnygag4=; b=CGigp32Ph8CRMEQPWqr50c07KG
+        xs4fn4BgDV/A6Hi9eKN1oyqhhM0CHk4BcO7JrF8076Y4pL10jllWJRKhUw7ZU4QO49Qnp+IZspr8x
+        HHK8fZP+dxTE9E30ldU1MGW5xWr3kfKt5tCD0X2ezlJqHJAfNiHavnW8ntBmwoFlYovBxUYxXCwSa
+        jE9uGmgc105AzFjDZRCq/ApLGvNGQ2mLlDl9VEgbKrY4Vuiw6enKJzGatL69Mk+t/U6xBnGo2NqtW
+        YRzcCFhgFnMRXHe567tFbr7OwcCku+o3ShWLb/rWj7LJfZc3iVY6QL6OuMFJk8wF1UJU1XbIXzWXF
+        2rsCur8w==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nZHf0-00DMmg-Og; Tue, 29 Mar 2022 19:37:46 +0000
+Date:   Tue, 29 Mar 2022 12:37:46 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules@vger.kernel.org
+Subject: Re: [PATCH 1/4] modprobe: Rename rmmod_do_deps_list
+Message-ID: <YkNgCm+l1pZRtfCA@bombadil.infradead.org>
 References: <20220329090540.38255-1-lucas.demarchi@intel.com>
+ <20220329090540.38255-2-lucas.demarchi@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220329090540.38255-1-lucas.demarchi@intel.com>
+In-Reply-To: <20220329090540.38255-2-lucas.demarchi@intel.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Mar 29, 2022 at 02:05:34AM -0700, Lucas De Marchi wrote:
->Fixes and refactors that I noticed were needed while preparing support
->for "patient module removal[1][2]" in modprobe.
->
->The added functionality will be sent on top of these.
->
->[1] https://lore.kernel.org/linux-modules/20210803202417.462197-1-mcgrof@kernel.org/
->[2] https://lore.kernel.org/linux-modules/20210810051602.3067384-1-mcgrof@kernel.org/
->
->Lucas De Marchi (4):
->  modprobe: Rename rmmod_do_deps_list
->  modprobe: Fix holders removal
->  modprobe: Move check for remove_holders to caller
->  modprobe: Make rmmod_do_module() contain all the removal sequence
+On Tue, Mar 29, 2022 at 02:05:35AM -0700, Lucas De Marchi wrote:
+> It's used not only for dependencies, but also for pre and post softdep.
+> 
+> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
-patches 1 and 3 were duplicate as I reworded the commit message.
-Please consider the ones matching subjects above.
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
-thanks
-Lucas De Marchi
-
->
-> tools/modprobe.c | 64 ++++++++++++++++++++++++++++--------------------
-> 1 file changed, 38 insertions(+), 26 deletions(-)
->
->-- 
->2.35.1
->
+  Luis
