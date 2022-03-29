@@ -2,169 +2,72 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49101C433EF
-	for <linux-modules@archiver.kernel.org>; Mon, 28 Mar 2022 16:29:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C8B0C433EF
+	for <linux-modules@archiver.kernel.org>; Tue, 29 Mar 2022 09:06:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236665AbiC1Qap (ORCPT
+        id S234446AbiC2JHq (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 28 Mar 2022 12:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
+        Tue, 29 Mar 2022 05:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235425AbiC1Qap (ORCPT
+        with ESMTP id S234431AbiC2JHj (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:30:45 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F882C649;
-        Mon, 28 Mar 2022 09:29:04 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C4AA0210DD;
-        Mon, 28 Mar 2022 16:29:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1648484942; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S32zs0pa2gEQEVNruGhWyIWEZSFgiNpA/SIR+p8B8Io=;
-        b=T7JP2LZxKvC6S64IAXjGt/3rro2IKKDx5Wwwk+5LDKln1XPFyTO9piyvZvPCoOdzIsESP5
-        tRzkCVOh1rdNSdartBydlZX3FeFTbK6c4ZPtVwpDEfVRrBcQkSU0Qt4gTWAHskJkBGWd1N
-        Jhyrh9fK6tLPCbpDovciiEEeN17G6y8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1648484942;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S32zs0pa2gEQEVNruGhWyIWEZSFgiNpA/SIR+p8B8Io=;
-        b=/9UV5RKOAnikidCt+0qBaYGt+ZUtALDd6HKE5cJm/x6k0se36icsNFK8f1zod5h/Z0tphR
-        8NGwZj6tqW5X+iBQ==
-Received: from kunlun.suse.cz (unknown [10.100.128.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5CCA3A3B89;
-        Mon, 28 Mar 2022 16:29:02 +0000 (UTC)
-Date:   Mon, 28 Mar 2022 18:29:01 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     joeyli <jlee@suse.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Philipp Rudo <prudo@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>,
-        James Morse <james.morse@arm.com>,
-        Dave Young <dyoung@redhat.com>,
-        Kairui Song <kasong@redhat.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "stable@kernel.org" <stable@kernel.org>
-Subject: Re: [PATCH 4/4] module, KEYS: Make use of platform keyring for
- signature verification
-Message-ID: <20220328162901.GC163591@kunlun.suse.cz>
-References: <cover.1644953683.git.msuchanek@suse.de>
- <840433bc93a58d6dfc4d96c34c0c3b158a0e669d.1644953683.git.msuchanek@suse.de>
- <3e39412657a4b0839bcf38544d591959e89877b8.camel@linux.ibm.com>
- <20220215204730.GQ3113@kunlun.suse.cz>
- <20220328101557.GA11641@linux-l9pv.suse>
- <6A29007F-F1B7-4CDE-B3ED-7BF700B5ED2B@oracle.com>
+        Tue, 29 Mar 2022 05:07:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2838B241B7A
+        for <linux-modules@vger.kernel.org>; Tue, 29 Mar 2022 02:05:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648544757; x=1680080757;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kbUousrLP5s0776xpRyC27A6iddacqyOy95LoW7/YBE=;
+  b=fX/ppVVEEH0t/3tEgSgrPxsUdbCJIANESX5NS6IHINr6V/OIu2IXcLIM
+   Cip6yB/xiDQJGTiDLcBOgLOlU68/5vIibzBP3fL/8SMY6yJfG3nPgoIiV
+   OnbuQOzLEk3BWpzY2DRQ4jhvGRgOQiiFbPLT90dfPIqYNXvIuWJNWE27j
+   rsNLD7Kcn7dWW64TwKoeQTLNNBmDo26Lf1/1+uLNIT8d4lCHVMOkCOlEE
+   YJOfvye6PVLyNHEovOLswHnEebM/YtOSgp0TOKSfcCIbGb49mI8D+nj1F
+   BLUgpzWO2TVfE7F7KoD3Csqc7/4ptDdB2JGd6Bh5q+xPGBxMnHZGGIWjd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="239134282"
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="239134282"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 02:05:56 -0700
+X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
+   d="scan'208";a="585502834"
+Received: from mlopezja-mobl.amr.corp.intel.com (HELO ldmartin-desk2.intel.com) ([10.255.231.179])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 02:05:55 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     linux-modules@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: [PATCH 0/4] modprobe -r fixes and refactors
+Date:   Tue, 29 Mar 2022 02:05:34 -0700
+Message-Id: <20220329090540.38255-1-lucas.demarchi@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6A29007F-F1B7-4CDE-B3ED-7BF700B5ED2B@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello,
+Fixes and refactors that I noticed were needed while preparing support
+for "patient module removal[1][2]" in modprobe.
 
-On Mon, Mar 28, 2022 at 02:44:30PM +0000, Eric Snowberg wrote:
-> 
-> 
-> > On Mar 28, 2022, at 4:15 AM, joeyli <jlee@suse.com> wrote:
-> > 
-> > Hi Mimi,
-> > 
-> > Sorry for bother you for this old topic.
-> > 
-> > On Tue, Feb 15, 2022 at 09:47:30PM +0100, Michal Suchánek wrote:
-> >> Hello,
-> >> 
-> >> On Tue, Feb 15, 2022 at 03:08:18PM -0500, Mimi Zohar wrote:
-> >>> [Cc'ing Eric Snowberg]
-> >>> 
-> >>> Hi Michal,
-> >>> 
-> >>> On Tue, 2022-02-15 at 20:39 +0100, Michal Suchanek wrote:
-> >>>> Commit 278311e417be ("kexec, KEYS: Make use of platform keyring for signature verify")
-> >>>> adds support for use of platform keyring in kexec verification but
-> >>>> support for modules is missing.
-> >>>> 
-> >>>> Add support for verification of modules with keys from platform keyring
-> >>>> as well.
-> >>> 
-> >>> Permission for loading the pre-OS keys onto the "platform" keyring and
-> >>> using them is limited to verifying the kexec kernel image, nothing
-> >>> else.
-> >> 
-> >> Why is the platform keyring limited to kexec, and nothing else?
-> >> 
-> >> It should either be used for everything or for nothing. You have the
-> >> option to compile it in and then it should be used, and the option to
-> >> not compile it in and then it cannot be used.
-> >> 
-> >> There are two basic use cases:
-> >> 
-> >> (1) there is a vendor key which is very hard to use so you sign
-> >> something small and simple like shim with the vendor key, and sign your
-> >> kernel and modules with your own key that's typically enrolled with shim
-> >> MOK, and built into the kernel.
-> >> 
-> >> (2) you import your key into the firmware, and possibly disable the
-> >> vendor key. You can load the kernel directly without shim, and then your
-> >> signing key is typically in the platform keyring and built into the
-> >> kernel.
-> >> 
-> > 
-> > In the second use case, if user can enroll their own key to db either before
-> > or after hardware shipping. And they don't need shim because they removed
-> > Microsoft or OEM/ODM keys.  Why kernel can not provide a Kconfig option to
-> > them for trusting db keys for verifying kernel module, or for IMA (using CA
-> > in db)?
-> > 
-> > In the above use case for distro, partner doesn't need to re-compiler distro
-> > kernel. They just need to re-sign distro kernel and modules. Which means
-> > that the partner trusted distro. Then the partner's key in db can be used to
-> > verify kernel image and also kernel module without shim involve.
-> 
-> If shim is used, the new machine keyring can be used to solve this problem. 
-> This pull request [1] allows additional certificates to be loaded into the MOKList 
-> without going through MokManager.  Have the end-user/partner create a 
-> shim_certificate.efi containing their key. Then sign it with their DB key.  When 
-> shim boots, it will validate shim_certificate.efi against the DB key and load the 
-> key contained within it into the MOKList.  Now both module and kernel validation 
-> can be performed with this key, since it is contained within the machine keyring.
+The added functionality will be sent on top of these.
 
-And why would you go through that when your platform keyring already has
-the key and you don't need shim for anything? This sounds a lot like "I
-have a hammer and all these look like nails" thinking.
+[1] https://lore.kernel.org/linux-modules/20210803202417.462197-1-mcgrof@kernel.org/
+[2] https://lore.kernel.org/linux-modules/20210810051602.3067384-1-mcgrof@kernel.org/
 
-Sure, there is use for the machine keyring in the case you need it and
-have it regardless of the kernel making any use of it for anything.
-Artifically adding it because the kernel fails to work with the platform
-keyring sounds backwards, though.
+Lucas De Marchi (4):
+  modprobe: Rename rmmod_do_deps_list
+  modprobe: Fix holders removal
+  modprobe: Move check for remove_holders to caller
+  modprobe: Make rmmod_do_module() contain all the removal sequence
 
-Thanks
+ tools/modprobe.c | 64 ++++++++++++++++++++++++++++--------------------
+ 1 file changed, 38 insertions(+), 26 deletions(-)
 
-Michal
+-- 
+2.35.1
+
