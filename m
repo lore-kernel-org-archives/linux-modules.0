@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24EF6C433F5
-	for <linux-modules@archiver.kernel.org>; Wed, 20 Apr 2022 11:53:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D38F3C433F5
+	for <linux-modules@archiver.kernel.org>; Wed, 20 Apr 2022 11:53:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378276AbiDTLzu (ORCPT
+        id S1378292AbiDTLzz (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 20 Apr 2022 07:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        Wed, 20 Apr 2022 07:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378277AbiDTLzt (ORCPT
+        with ESMTP id S1378287AbiDTLzw (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 20 Apr 2022 07:55:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B45114249C
-        for <linux-modules@vger.kernel.org>; Wed, 20 Apr 2022 04:53:03 -0700 (PDT)
+        Wed, 20 Apr 2022 07:55:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 662FD42493
+        for <linux-modules@vger.kernel.org>; Wed, 20 Apr 2022 04:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650455582;
+        s=mimecast20190719; t=1650455585;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wj4nXdv1p55S6gdjYiynG1yQGRwuN4zNBoal8sio/r8=;
-        b=RRfnzZG5B4Uzka+smO4lo+eWMWUH+LYzsw/rQX25ngzWH06yY0FG/UMakEH9SEpws7JmEC
-        nOCBLnYPfqDrFsminex800rzT0reOYbnF1NuMrYZAl+bFpMHp9F0Ki4N7xLaWSJJuFo2gA
-        deKb5P3WF0OHcJ5F5rAyv1mPQAW5p90=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=XyEpFOsVjUMPpghKZCBH2maNdoYb/HCQD9/+9CauZP8=;
+        b=RwYQVmmUtwVwaTlP7CMyhz9J22zfRruBL6q7j/xJD7OH6kxzbZ6AwwJfxHagS7K+ewwOAL
+        3X+CQzelY4ZGUUYlz06GwURUnl3fFe+RDYB10DnwFaGsaeGNg6WPo8H4U9BueGYvjb1Hla
+        QIchotB4F6np39BMrs/yZDmBQv6Ob/k=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-144-ubvketUGOvq-ZlSZ6Qi2iA-1; Wed, 20 Apr 2022 07:53:01 -0400
-X-MC-Unique: ubvketUGOvq-ZlSZ6Qi2iA-1
-Received: by mail-wm1-f70.google.com with SMTP id c125-20020a1c3583000000b0038e3f6e871aso810836wma.8
-        for <linux-modules@vger.kernel.org>; Wed, 20 Apr 2022 04:53:01 -0700 (PDT)
+ us-mta-73-h2Ep3ZLyOM6ZDEeXkgK5hQ-1; Wed, 20 Apr 2022 07:53:04 -0400
+X-MC-Unique: h2Ep3ZLyOM6ZDEeXkgK5hQ-1
+Received: by mail-wr1-f71.google.com with SMTP id s13-20020adfa28d000000b00205e049cff2so327198wra.17
+        for <linux-modules@vger.kernel.org>; Wed, 20 Apr 2022 04:53:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wj4nXdv1p55S6gdjYiynG1yQGRwuN4zNBoal8sio/r8=;
-        b=XMDTJqXxh3ihWrLYalBSQpGMJlzQC4M9j2momasTNWzfhOTd8HmN7wd+IWv6OU5t+8
-         q7Bp5vU87vFBMTxUa5ibuhtAB19PjXfBNMg/Ved68LveytZZ1uvxCHz9Hfj//PoKe4Ss
-         bIXvDCOq60wwKhr3lhIXfEqh5+BwGxrQP1sZJyECuw8Wi3Kqri5XTi0FaimNfRnZKG0o
-         YQZBoPCYotWSGGAHbgi3zGcprON6nI4Ch0YL6JDYNDwVPPRW1kQ006Exj2wsHaCFgE2j
-         QbB9jM58NQV8NjpKvc8xST2joQdK+Hjv1Mjldjg/8giPDCaz2pMTDrFG5oSOfsVel9dg
-         +9Qg==
-X-Gm-Message-State: AOAM5336gNnboy2mHnkR3qYR8fAcLrTuEmwBY1fT0Z3gnSoUpt3fqUWf
-        DCkTXExLGnllmFWC0jct5JC30sjzbuGVH97Zd+FTOiFblstvwUtTwOq5fbwJZQdGgI6U8Zo0GnD
-        Bnzp3hnXtH3h3XLuP2AZOL9eB
-X-Received: by 2002:a05:600c:3ac6:b0:38e:d79e:d9a with SMTP id d6-20020a05600c3ac600b0038ed79e0d9amr3231380wms.200.1650455580566;
-        Wed, 20 Apr 2022 04:53:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyptGP8duMmQo1LImHknI95oJYwmBAN9GbqtwZdsmtM8wxSj1PX+FCWEX4Pfh1PWJZNJ5TyOQ==
-X-Received: by 2002:a05:600c:3ac6:b0:38e:d79e:d9a with SMTP id d6-20020a05600c3ac600b0038ed79e0d9amr3231366wms.200.1650455580418;
-        Wed, 20 Apr 2022 04:53:00 -0700 (PDT)
+        bh=XyEpFOsVjUMPpghKZCBH2maNdoYb/HCQD9/+9CauZP8=;
+        b=tuCVBinDECVIP+CoMk8ph42tDkfEjLly5Qt5ZAxUotxge8DfrnBV3cXb3xvdPmupSM
+         79ucIU1mjtk2m4wPssIOUQJCElJO/ShZx5tDL0Czo4UQj+JKb4NoEgEvUOmG77pLhzBS
+         hRfC5L8i1X4sn0OBOC0sPMN+FhxEDF/nSEPYL3Mw/z0JWE5Z6JyYoMTqBrGiB5H/nn6G
+         5fP3H33YL7+AZCPQE/nT89qcXwljGVZLeNPSmDSuRldxNpXhzlzpj0FFzS5LDMEQbeJW
+         +9e+BHJDKZtChvFsPH70UrVgxvHS17Vo37W7ZAOCJTe/BI9kCQoyBr3BMZFN1Qd4u29p
+         uoAw==
+X-Gm-Message-State: AOAM531TVlG/SWS+OWJy8brCDnu319U1l+9bcD+/2ThTSvGbAbW4+BOd
+        CqfiI9zf/Wr5Z5l8d5ZLkrFSGthqWUL75rKfxYQkrEfLn5eHeGUzzwlzdeXbECEWAfBYVXnclJW
+        9CdgL5UetX/zRxnjtDkWP42sW
+X-Received: by 2002:adf:f783:0:b0:207:a8ce:c155 with SMTP id q3-20020adff783000000b00207a8cec155mr15340431wrp.258.1650455583063;
+        Wed, 20 Apr 2022 04:53:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw3mdcDdgnw8wBFd4oSvz2RFBCBuLcli0LAQbYaimimhCAkyCaDc/C/mRRY0k5Jc+1/dIwhWA==
+X-Received: by 2002:adf:f783:0:b0:207:a8ce:c155 with SMTP id q3-20020adff783000000b00207a8cec155mr15340418wrp.258.1650455582802;
+        Wed, 20 Apr 2022 04:53:02 -0700 (PDT)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id v14-20020a7bcb4e000000b0034492fa24c6sm18866730wmj.34.2022.04.20.04.52.59
+        by smtp.gmail.com with ESMTPSA id v11-20020a056000144b00b0020a9c02f60dsm6333233wrx.50.2022.04.20.04.53.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 04:52:59 -0700 (PDT)
+        Wed, 20 Apr 2022 04:53:01 -0700 (PDT)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -63,9 +63,9 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
         atomlin@atomlin.com, ghalat@redhat.com, oleksandr@natalenko.name,
         neelx@redhat.com
-Subject: [PATCH v3 1/2] module: Make module_flags_taint() accept a module's taints bitmap directly
-Date:   Wed, 20 Apr 2022 12:52:56 +0100
-Message-Id: <20220420115257.3498300-2-atomlin@redhat.com>
+Subject: [PATCH v3 2/2] module: Introduce module unload taint tracking
+Date:   Wed, 20 Apr 2022 12:52:57 +0100
+Message-Id: <20220420115257.3498300-3-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220420115257.3498300-1-atomlin@redhat.com>
 References: <20220420115257.3498300-1-atomlin@redhat.com>
@@ -74,55 +74,150 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-No functional change.
+Currently, only the initial module that tainted the kernel is
+recorded e.g. when an out-of-tree module is loaded.
 
-The purpose of this patch is to modify module_flags_taint() to accept a
-module's taints bitmap as a parameter and modifies all users accordingly.
-This is in preparation for module unload taint tracking support.
+The purpose of this patch is to allow the kernel to maintain a record of
+each unloaded module that taints the kernel. So, in addition to
+displaying a list of linked modules (see print_modules()) e.g. in the
+event of a detected bad page, unloaded modules that carried a taint/or
+taints are displayed too. A tainted module unload count is maintained.
+
+The number of tracked modules is not fixed. This feature is disabled by
+default.
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- kernel/module/main.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ init/Kconfig         | 11 ++++++++
+ kernel/module/main.c | 65 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 76 insertions(+)
 
+diff --git a/init/Kconfig b/init/Kconfig
+index ddcbefe535e9..6b30210f787d 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2118,6 +2118,17 @@ config MODULE_FORCE_UNLOAD
+ 	  rmmod).  This is mainly for kernel developers and desperate users.
+ 	  If unsure, say N.
+ 
++config MODULE_UNLOAD_TAINT_TRACKING
++	bool "Tainted module unload tracking"
++	depends on MODULE_UNLOAD
++	default n
++	help
++	  This option allows you to maintain a record of each unloaded
++	  module that tainted the kernel. In addition to displaying a
++	  list of linked (or loaded) modules e.g. on detection of a bad
++	  page (see bad_page()), the aforementioned details are also
++	  shown. If unsure, say N.
++
+ config MODVERSIONS
+ 	bool "Module versioning support"
+ 	help
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 05a42d8fcd7a..ea78cec316dd 100644
+index ea78cec316dd..d7cc64172dd1 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -890,13 +890,13 @@ static inline int module_unload_init(struct module *mod)
+@@ -68,6 +68,16 @@
+  */
+ DEFINE_MUTEX(module_mutex);
+ LIST_HEAD(modules);
++#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
++static LIST_HEAD(unloaded_tainted_modules);
++
++struct mod_unload_taint {
++	struct list_head list;
++	char name[MODULE_NAME_LEN];
++	unsigned long taints;
++	u64 count;
++};
++#endif
+ 
+ /* Work queue for freeing init sections in success case */
+ static void do_free_init(struct work_struct *w);
+@@ -150,6 +160,41 @@ int unregister_module_notifier(struct notifier_block *nb)
  }
- #endif /* CONFIG_MODULE_UNLOAD */
+ EXPORT_SYMBOL(unregister_module_notifier);
  
--static size_t module_flags_taint(struct module *mod, char *buf)
-+static size_t module_flags_taint(unsigned long taints, char *buf)
++#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
++static int try_add_tainted_module(struct module *mod)
++{
++	struct mod_unload_taint *mod_taint;
++
++	module_assert_mutex_or_preempt();
++
++	list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules, list,
++				lockdep_is_held(&module_mutex)) {
++		size_t len = strlen(mod_taint->name);
++
++		if (len == strlen(mod->name) && !memcmp(mod_taint->name, mod->name, len) &&
++		    mod_taint->taints & mod->taints) {
++			mod_taint->count++;
++			goto out;
++		}
++	}
++
++	mod_taint = kmalloc(sizeof(*mod_taint), GFP_KERNEL);
++	if (unlikely(!mod_taint))
++		return -ENOMEM;
++	strscpy(mod_taint->name, mod->name, MODULE_NAME_LEN);
++	mod_taint->taints = mod->taints;
++	list_add_rcu(&mod_taint->list, &unloaded_tainted_modules);
++	mod_taint->count = 1;
++out:
++	return 0;
++}
++#else /* MODULE_UNLOAD_TAINT_TRACKING */
++static int try_add_tainted_module(struct module *mod)
++{
++	return 0;
++}
++#endif
++
+ /*
+  * We require a truly strong try_module_get(): 0 means success.
+  * Otherwise an error is returned due to ongoing or failed
+@@ -1201,6 +1246,9 @@ static void free_module(struct module *mod)
+ 	module_bug_cleanup(mod);
+ 	/* Wait for RCU-sched synchronizing before releasing mod->list and buglist. */
+ 	synchronize_rcu();
++	if (try_add_tainted_module(mod))
++		pr_err("%s: adding tainted module to the unloaded tainted modules list failed.\n",
++		       mod->name);
+ 	mutex_unlock(&module_mutex);
+ 
+ 	/* Clean up CFI for the module. */
+@@ -3126,6 +3174,9 @@ struct module *__module_text_address(unsigned long addr)
+ void print_modules(void)
  {
- 	size_t l = 0;
- 	int i;
+ 	struct module *mod;
++#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
++	struct mod_unload_taint *mod_taint;
++#endif
+ 	char buf[MODULE_FLAGS_BUF_SIZE];
  
- 	for (i = 0; i < TAINT_FLAGS_COUNT; i++) {
--		if (taint_flags[i].module && test_bit(i, &mod->taints))
-+		if (taint_flags[i].module && test_bit(i, &taints))
- 			buf[l++] = taint_flags[i].c_true;
+ 	printk(KERN_DEFAULT "Modules linked in:");
+@@ -3136,6 +3187,20 @@ void print_modules(void)
+ 			continue;
+ 		pr_cont(" %s%s", mod->name, module_flags(mod, buf));
  	}
- 
-@@ -974,7 +974,7 @@ static ssize_t show_taint(struct module_attribute *mattr,
- {
- 	size_t l;
- 
--	l = module_flags_taint(mk->mod, buffer);
-+	l = module_flags_taint(mk->mod->taints, buffer);
- 	buffer[l++] = '\n';
- 	return l;
- }
-@@ -2993,7 +2993,7 @@ char *module_flags(struct module *mod, char *buf)
- 	    mod->state == MODULE_STATE_GOING ||
- 	    mod->state == MODULE_STATE_COMING) {
- 		buf[bx++] = '(';
--		bx += module_flags_taint(mod, buf + bx);
-+		bx += module_flags_taint(mod->taints, buf + bx);
- 		/* Show a - for module-is-being-unloaded */
- 		if (mod->state == MODULE_STATE_GOING)
- 			buf[bx++] = '-';
++#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
++	if (!list_empty(&unloaded_tainted_modules)) {
++		printk(KERN_DEFAULT "Unloaded tainted modules:");
++		list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules,
++					list) {
++			size_t l;
++
++			l = module_flags_taint(mod_taint->taints, buf);
++			buf[l++] = '\0';
++			pr_cont(" %s(%s):%llu", mod_taint->name, buf,
++				mod_taint->count);
++		}
++#endif
++	}
+ 	preempt_enable();
+ 	if (last_unloaded_module[0])
+ 		pr_cont(" [last unloaded: %s]", last_unloaded_module);
 -- 
 2.34.1
 
