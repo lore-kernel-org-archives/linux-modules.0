@@ -2,472 +2,194 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96346C433F5
-	for <linux-modules@archiver.kernel.org>; Thu, 21 Apr 2022 04:16:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D18EBC433EF
+	for <linux-modules@archiver.kernel.org>; Thu, 21 Apr 2022 06:45:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378213AbiDUETZ (ORCPT
+        id S1385103AbiDUGsP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 21 Apr 2022 00:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        Thu, 21 Apr 2022 02:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347377AbiDUETU (ORCPT
+        with ESMTP id S1385174AbiDUGrV (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 21 Apr 2022 00:19:20 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0C911153
-        for <linux-modules@vger.kernel.org>; Wed, 20 Apr 2022 21:16:30 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220421041625epoutp02efee76c5f2e4c9b227335843f8409b6f~nzkVnPyKr3018030180epoutp02I
-        for <linux-modules@vger.kernel.org>; Thu, 21 Apr 2022 04:16:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220421041625epoutp02efee76c5f2e4c9b227335843f8409b6f~nzkVnPyKr3018030180epoutp02I
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1650514585;
-        bh=Uhme5diI4XEjVU+7qvpXN7OUOzEchtuyK8DtVF5hywQ=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=eh5i3snb77lslK1o0WNTQWRPtGAmu7h/CTU8gqhD9X9xB3iLXKFb+2Xrj45gi9xVf
-         hvWV23zYYR8jPDxZLytumm5QAJpVov5vPO0J+2hUDCo4Yu1Exulz4/dx8xLrmSsO64
-         qHSpDySKBbjLsf1QlmkPK1WwI5IPkzIhq4H0UPpY=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220421041625epcas5p43f353e67d9e0e6a151c485ed6d5b054e~nzkVGuOQj0766607666epcas5p4l;
-        Thu, 21 Apr 2022 04:16:25 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        49.C2.09952.99AD0626; Thu, 21 Apr 2022 13:16:25 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220421041604epcas5p414cf2e851d1bd828a151dc6b2b004680~nzkB_kF2F0066000660epcas5p48;
-        Thu, 21 Apr 2022 04:16:04 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220421041604epsmtrp279afb081ee7b7024bdd255f635e8562c~nzkB9GmeS0572705727epsmtrp28;
-        Thu, 21 Apr 2022 04:16:04 +0000 (GMT)
-X-AuditID: b6c32a4b-4b5ff700000226e0-eb-6260da99e803
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        85.C3.03370.48AD0626; Thu, 21 Apr 2022 13:16:04 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.109.224.44]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220421041601epsmtip12ab9193fefba212f272bbabd8c0cd14e~nzj-FNF4X0994209942epsmtip1H;
-        Thu, 21 Apr 2022 04:16:01 +0000 (GMT)
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     mcgrof@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, akpm@linux-foundation.org,
-        wangkefeng.wang@huawei.com
-Cc:     v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.or,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com, onkarnath.1@samsung.com,
-        Maninder Singh <maninder1.s@samsung.com>
-Subject: [PATCH modules-next 1/1] kallsyms: enhance %pS/s/b printing when
- KALLSYSMS is disabled
-Date:   Thu, 21 Apr 2022 09:45:42 +0530
-Message-Id: <20220421041542.9195-1-maninder1.s@samsung.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Apr 2022 02:47:21 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F741572C;
+        Wed, 20 Apr 2022 23:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650523436; x=1682059436;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8tuzYD0kzCxwjDALEtiW/79HnfPkTWedPSRkSD6YBCc=;
+  b=Rfp15x59W1iWfViGMrSAtLaf5j1HT+83gDIRH0JVf3YR58rCKCO7R7jY
+   U/IOiG34fRCf8tml3BnJoSvxWpjoplrq5x5r3uuwOBuPTx0ERQjl2rFPo
+   jYAWCPkx1HgiOCIqgxdqKuQH1Dy+MoBy0Cflb65EHnx9BsqprgmOMf7AN
+   BgK5Xe/G35uWp/3Kx+L4iXjuQZ6iP2pSm7CDcaB2ZSDCsEYQZAOIVP6tb
+   4beSGKNh9LlpopqiSA3AZB2T3+UgiNmOIFAVQBeOEB2ohXf/gptnCXZWr
+   a57iEKVdxDLk2/BxrNGaP+e9z+n9qSws66vw/PWD/1zq7ADbsPK6ccAPQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="289369465"
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="289369465"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:43:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
+   d="scan'208";a="670049059"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 20 Apr 2022 23:43:51 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhQXf-000811-5k;
+        Thu, 21 Apr 2022 06:43:51 +0000
+Date:   Thu, 21 Apr 2022 14:43:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, cl@linux.com,
+        pmladek@suse.com, mbenes@suse.cz, christophe.leroy@csgroup.eu,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com, oleksandr@natalenko.name, neelx@redhat.com
+Subject: Re: [PATCH v3 2/2] module: Introduce module unload taint tracking
+Message-ID: <202204210819.DQQP836u-lkp@intel.com>
+References: <20220420115257.3498300-3-atomlin@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrEKsWRmVeSWpSXmKPExsWy7bCmpu7MWwlJBlt/81nMWb+GzaK3aTqT
-        xZH5a1gtHhy8zm5xedccNouG2d9ZLR7PmsdmcXh+G4vFjQlPGS1mfgEqWdHzgdXi/+OvrBb7
-        Oh4wWezeuIjN4vidp0wWh07OZbRo/Hyf0UHQY3bDRRaPnbPusnu07LsFJI68ZfX4cv08o8em
-        VZ1sHidm/GbxmHcy0ONCV7bH+31X2Tz6tqxi9Fi/5SqLx+dNcgG8UVw2Kak5mWWpRfp2CVwZ
-        NzfMYS1oTai42L6YvYFxt38XIyeHhICJRP+fuWxdjFwcQgK7GSWu/nvHDOF8YpQ4uO8jE4Tz
-        mVGi6+IBdpiWC73/2CESuxglJs08DdX/hVFiwvGzrCBVbAJ6Eqt27WEBSYgIXGCUuHJrD9hg
-        ZoE3jBJ3PzaCVQkLJEp8mf+YDcRmEVCVeL7nKAuIzStgLTFrYj8LxD55iZmXvrNDxAUlTs58
-        AhZnBoo3b53NDFFzgkNi/28rCNtFonP2HSYIW1ji1fEtUHdLSXx+txdoFweQXS6xdUI9yD0S
-        Ai2MEvvnTGGDqLGXeHJxIStIDbOApsT6XfoQYVmJqafWMUGs5ZPo/f0EajyvxI55MLaqRMvN
-        DawQtrTE548foc73kGj68wisRkggVuLglPOMExjlZyH5ZhaSb2YhbF7AyLyKUTK1oDg3PbXY
-        tMA4L7Vcrzgxt7g0L10vOT93EyM4GWp572B89OCD3iFGJg7GQ4wSHMxKIryhM+OThHhTEiur
-        Uovy44tKc1KLDzFKc7AoifOeSt+QKCSQnliSmp2aWpBaBJNl4uCUamBS2LCx3miVmIfsIVbJ
-        jX8uJe5frvaszyDSZLG9eaqk+PWVsZ5b7sqX3XFyWzHh75Ubm8N5vc31b82+ZODlHbBSi/vh
-        JM4T5l8vpN8XvXst37Xji+atFV6KQtoXdC+sys85m69pmfIx4XPF9uOM/0I6e6+42a+oXMZ8
-        1LXA3MtX4X2uJuuXBRFRPJKTFgs7+y1Y3uXBqamsvOphmfS5jEKLZEkpNQ7Znc1rny9/ffrf
-        uuV7nm9Y8dKrqLcv2mFPhnQDe9BZcfV5G6Ue1IQvm5Ixy9/j9gL7R0lhx/L6WXYe6he0S50a
-        967i85RJ0rXPlf4IfJD33H7p/bpJbO5H9KYdn2hbtvzp4+wLK0UdpxoosRRnJBpqMRcVJwIA
-        V0CqjvUDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpnkeLIzCtJLcpLzFFi42LZdlhJTrflVkKSQfN6XYs569ewWfQ2TWey
-        ODJ/DavFg4PX2S0u75rDZtEw+zurxeNZ89gsDs9vY7G4MeEpo8XML0AlK3o+sFr8f/yV1WJf
-        xwMmi90bF7FZHL/zlMni0Mm5jBaNn+8zOgh6zG64yOKxc9Zddo+WfbeAxJG3rB5frp9n9Ni0
-        qpPN48SM3ywe804GelzoyvZ4v+8qm0ffllWMHuu3XGXx+LxJLoA3issmJTUnsyy1SN8ugSvj
-        5oY5rAWtCRUX2xezNzDu9u9i5OSQEDCRuND7jx3EFhLYwSjx+2gSRFxa4ue/9ywQtrDEyn/P
-        gWq4gGo+MUrc7ZsJ1sAmoCexatceFpCEiMANRonFCzuZQRLMAt8YJfa054PYwgLxEvc+dYI1
-        sAioSjzfcxRsKq+AtcSsif1QG+QlZl76zg4RF5Q4OfMJC8QceYnmrbOZJzDyzUKSmoUktYCR
-        aRWjZGpBcW56brFhgVFearlecWJucWleul5yfu4mRnBcaWntYNyz6oPeIUYmDsZDjBIczEoi
-        vKEz45OEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCeWJKanZpakFoEk2Xi4JRqYDoe
-        tT/mtp61KWfGn38LFvfsap2nvJ1TsNzsuVuFg1z74uZTz5zur1jEvvNUa09f7RSvU9v4dxXt
-        WPl106ujfiFv7Blj1udwHZk9Z9n+51VsB9RO579m9Nti+YZf5+9eodzHjOK+Bvb5nsnCj+UY
-        Z0m3R6wXZjinX/JdLsP79JfWVW3flXOLvlb2dwXy3Not5/7kfF/QhoiIZIObwSt+nrh445Pv
-        hvt1h6zZmSZxSsspV4TU+U38Jf7iy6aW2KN2DdOWOkas9DHvmNHhlR7avJjv4fcSw7mu9gsX
-        BDaV79qxZuKS+6cyHN/4rHX9ZttUdnghm7//7CWNgVvbrNgUteZznBK4pX3IL7hpz4YWCSWW
-        4oxEQy3mouJEAPi2BUIaAwAA
-X-CMS-MailID: 20220421041604epcas5p414cf2e851d1bd828a151dc6b2b004680
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20220421041604epcas5p414cf2e851d1bd828a151dc6b2b004680
-References: <CGME20220421041604epcas5p414cf2e851d1bd828a151dc6b2b004680@epcas5p4.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420115257.3498300-3-atomlin@redhat.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-print module information when KALLSYMS is disabled.
+Hi Aaron,
 
-init_build_id() function is moved to module/main.c as it can be
-independent of kallsyms.
+Thank you for the patch! Yet something to improve:
 
-No change for %pB, as it needs to know symbol name to adjust address
-value which can't be done without KALLSYMS.
+[auto build test ERROR on eeaec7801c421e17edda6e45a32d4a5596b633da]
 
-(A) original output with KALLSYMS:
-[8.842129] ps function_1 [crash]
-[8.842735] pS function_1+0x4/0x2c [crash]
-[8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-[8.843175] pB function_1+0x4/0x2c [crash]
-[8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Tomlin/module-Introduce-module-unload-taint-tracking/20220420-195459
+base:   eeaec7801c421e17edda6e45a32d4a5596b633da
+config: hexagon-randconfig-r045-20220420 (https://download.01.org/0day-ci/archive/20220421/202204210819.DQQP836u-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/523ff1f52de42049b9cc5a4db0495a5f21a7ee7c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aaron-Tomlin/module-Introduce-module-unload-taint-tracking/20220420-195459
+        git checkout 523ff1f52de42049b9cc5a4db0495a5f21a7ee7c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-(B) original output without KALLSYMS:
-[12.487424] ps 0xffff800000eb008c
-[12.487598] pS 0xffff800000eb008c
-[12.487723] pSb 0xffff800000eb008c
-[12.487850] pB 0xffff800000eb008c
-[12.487967] pBb 0xffff800000eb008c
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-(C) With patched kernel
-with KALLYSMS:
-[41.974576] ps function_1 [crash]
-[41.975173] pS function_1+0x4/0x2c [crash]
-[41.975386] pSb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-[41.975879] pB function_1+0x4/0x2c [crash]
-[41.976076] pBb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+All errors (new ones prefixed by >>):
 
-without KALLSYMS:
-[9.624152] ps 0xffff800001bd008c [crash]	// similar to original, no changes
-[9.624548] pS 0x(____ptrval____)+0x8c [crash]   // base address hashed and offset is without hash
-[9.624847] pSb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-[9.625388] pB 0x(____ptrval____)+0x8c [crash]
-[9.625594] pBb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+>> kernel/module/main.c:3204:2: error: meaningless 'volatile' on asm outside function
+           preempt_enable();
+           ^
+   include/linux/preempt.h:277:28: note: expanded from macro 'preempt_enable'
+   #define preempt_enable()                        barrier()
+                                                   ^
+   include/linux/compiler.h:86:28: note: expanded from macro 'barrier'
+   # define barrier() __asm__ __volatile__("": : :"memory")
+                              ^
+   kernel/module/main.c:3204:2: error: expected ')'
+   include/linux/preempt.h:277:28: note: expanded from macro 'preempt_enable'
+   #define preempt_enable()                        barrier()
+                                                   ^
+   include/linux/compiler.h:86:43: note: expanded from macro 'barrier'
+   # define barrier() __asm__ __volatile__("": : :"memory")
+                                             ^
+   kernel/module/main.c:3204:2: note: to match this '('
+   include/linux/preempt.h:277:28: note: expanded from macro 'preempt_enable'
+   #define preempt_enable()                        barrier()
+                                                   ^
+   include/linux/compiler.h:86:40: note: expanded from macro 'barrier'
+   # define barrier() __asm__ __volatile__("": : :"memory")
+                                          ^
+   kernel/module/main.c:3205:2: error: expected identifier or '('
+           if (last_unloaded_module[0])
+           ^
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   kernel/module/main.c:3207:2: error: expected identifier or '('
+           pr_cont("\n");
+           ^
+   include/linux/printk.h:531:2: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+           ^
+   include/linux/printk.h:446:26: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ^
+   include/linux/printk.h:416:3: note: expanded from macro 'printk_index_wrap'
+           ({                                                              \
+            ^
+   kernel/module/main.c:3207:2: error: expected ')'
+   include/linux/printk.h:531:2: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+           ^
+   include/linux/printk.h:446:26: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ^
+   include/linux/printk.h:416:3: note: expanded from macro 'printk_index_wrap'
+           ({                                                              \
+            ^
+   kernel/module/main.c:3207:2: note: to match this '('
+   include/linux/printk.h:531:2: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+           ^
+   include/linux/printk.h:446:26: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ^
+   include/linux/printk.h:416:2: note: expanded from macro 'printk_index_wrap'
+           ({                                                              \
+           ^
+   kernel/module/main.c:3208:1: error: extraneous closing brace ('}')
+   }
+   ^
+   6 errors generated.
 
-with disable hashing:
-[8.563916] ps 0xffff800000f2008c [crash]
-[8.564574] pS 0xffff800000f20000+0x8c [crash]
-[8.564749] pSb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
-[8.565008] pB 0xffff800000f20000+0x8c [crash]
-[8.565154] pBb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
 
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Co-developed-by: Vaneet Narang <v.narang@samsung.com>
-Signed-off-by: Vaneet Narang <v.narang@samsung.com>
-Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Petr Mladek <pmladek@suse.com>
----
- include/linux/kallsyms.h |  2 +
- include/linux/module.h   | 20 ++++++++++
- kernel/kallsyms.c        | 27 +++++++------
- kernel/module/internal.h | 11 +++---
- kernel/module/kallsyms.c | 20 ----------
- kernel/module/main.c     | 20 ++++++++++
- lib/vsprintf.c           | 85 ++++++++++++++++++++++++++++++++++------
- 7 files changed, 133 insertions(+), 52 deletions(-)
+vim +/volatile +3204 kernel/module/main.c
 
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index ce1bd2fbf23e..72bd24e80545 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -89,6 +89,8 @@ extern int sprint_symbol_build_id(char *buffer, unsigned long address);
- extern int sprint_symbol_no_offset(char *buffer, unsigned long address);
- extern int sprint_backtrace(char *buffer, unsigned long address);
- extern int sprint_backtrace_build_id(char *buffer, unsigned long address);
-+extern int sprint_kallsym_common(char *buffer, unsigned long address, int build_id,
-+			    int backtrace, int symbol);
- 
- int lookup_symbol_name(unsigned long addr, char *symname);
- int lookup_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 46d4d5f2516e..66f4491249c5 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -682,6 +682,20 @@ static inline bool is_livepatch_module(struct module *mod)
- 
- void set_module_sig_enforced(void);
- 
-+static inline int fill_name_build_id(char *buffer, char *modname,
-+			    int add_buildid, const unsigned char *buildid,
-+			    int len)
-+{
-+	len += sprintf(buffer + len, " [%s", modname);
-+#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-+	if (add_buildid && buildid) {
-+		/* build ID should match length of sprintf */
-+		static_assert(sizeof(typeof_member(struct module, build_id)) == 20);
-+		len += sprintf(buffer + len, " %20phN", buildid);
-+	}
-+#endif
-+	return len + sprintf(buffer + len, "]");
-+}
- #else /* !CONFIG_MODULES... */
- 
- static inline struct module *__module_address(unsigned long addr)
-@@ -818,6 +832,12 @@ void *dereference_module_function_descriptor(struct module *mod, void *ptr)
- 	return ptr;
- }
- 
-+static inline int fill_name_build_id(char *buffer, char *modname,
-+			    int add_buildid, const unsigned char *buildid,
-+			    int len)
-+{
-+	return 0;
-+}
- #endif /* CONFIG_MODULES */
- 
- #ifdef CONFIG_SYSFS
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 79f2eb617a62..e6e96b2e0257 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -465,19 +465,8 @@ static int __sprint_symbol(char *buffer, unsigned long address,
- 	if (add_offset)
- 		len += sprintf(buffer + len, "+%#lx/%#lx", offset, size);
- 
--	if (modname) {
--		len += sprintf(buffer + len, " [%s", modname);
--#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
--		if (add_buildid && buildid) {
--			/* build ID should match length of sprintf */
--#if IS_ENABLED(CONFIG_MODULES)
--			static_assert(sizeof(typeof_member(struct module, build_id)) == 20);
--#endif
--			len += sprintf(buffer + len, " %20phN", buildid);
--		}
--#endif
--		len += sprintf(buffer + len, "]");
--	}
-+	if (modname)
-+		len += fill_name_build_id(buffer, modname, add_buildid, buildid, len);
- 
- 	return len;
- }
-@@ -572,6 +561,18 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
- 	return __sprint_symbol(buffer, address, -1, 1, 1);
- }
- 
-+int sprint_kallsym_common(char *buffer, unsigned long address, int build_id,
-+			    int backtrace, int symbol)
-+{
-+	if (backtrace)
-+		return __sprint_symbol(buffer, address, -1, 1, build_id);
-+
-+	if (symbol)
-+		return __sprint_symbol(buffer, address, 0, 1, build_id);
-+
-+	return __sprint_symbol(buffer, address, 0, 0, 0);
-+}
-+
- /* To avoid using get_symbol_offset for every symbol, we carry prefix along. */
- struct kallsym_iter {
- 	loff_t pos;
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 3e23bef5884d..cfff130f7c5f 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -206,21 +206,20 @@ static inline void kmemleak_load_module(const struct module *mod,
- #endif /* CONFIG_DEBUG_KMEMLEAK */
- 
- #ifdef CONFIG_KALLSYMS
--void init_build_id(struct module *mod, const struct load_info *info);
- void layout_symtab(struct module *mod, struct load_info *info);
- void add_kallsyms(struct module *mod, const struct load_info *info);
- unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
- 
--static inline bool sect_empty(const Elf_Shdr *sect)
--{
--	return !(sect->sh_flags & SHF_ALLOC) || sect->sh_size == 0;
--}
- #else /* !CONFIG_KALLSYMS */
--static inline void init_build_id(struct module *mod, const struct load_info *info) { }
- static inline void layout_symtab(struct module *mod, struct load_info *info) { }
- static inline void add_kallsyms(struct module *mod, const struct load_info *info) { }
- #endif /* CONFIG_KALLSYMS */
- 
-+static inline bool sect_empty(const Elf_Shdr *sect)
-+{
-+	return !(sect->sh_flags & SHF_ALLOC) || sect->sh_size == 0;
-+}
-+
- #ifdef CONFIG_SYSFS
- int mod_sysfs_setup(struct module *mod, const struct load_info *info,
- 		    struct kernel_param *kparam, unsigned int num_params);
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 3e11523bc6f6..576a597615a7 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -209,26 +209,6 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
- 	mod->core_kallsyms.num_symtab = ndst;
- }
- 
--#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
--void init_build_id(struct module *mod, const struct load_info *info)
--{
--	const Elf_Shdr *sechdr;
--	unsigned int i;
--
--	for (i = 0; i < info->hdr->e_shnum; i++) {
--		sechdr = &info->sechdrs[i];
--		if (!sect_empty(sechdr) && sechdr->sh_type == SHT_NOTE &&
--		    !build_id_parse_buf((void *)sechdr->sh_addr, mod->build_id,
--					sechdr->sh_size))
--			break;
--	}
--}
--#else
--void init_build_id(struct module *mod, const struct load_info *info)
--{
--}
--#endif
--
- /*
-  * This ignores the intensely annoying "mapping symbols" found
-  * in ARM ELF files: $a, $t and $d.
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 05a42d8fcd7a..d511a9c62b53 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2657,6 +2657,26 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
- 
- static void cfi_init(struct module *mod);
- 
-+#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-+static void init_build_id(struct module *mod, const struct load_info *info)
-+{
-+	const Elf_Shdr *sechdr;
-+	unsigned int i;
-+
-+	for (i = 0; i < info->hdr->e_shnum; i++) {
-+		sechdr = &info->sechdrs[i];
-+		if (!sect_empty(sechdr) && sechdr->sh_type == SHT_NOTE &&
-+		    !build_id_parse_buf((void *)sechdr->sh_addr, mod->build_id,
-+					sechdr->sh_size))
-+			break;
-+	}
-+}
-+#else
-+static inline void init_build_id(struct module *mod, const struct load_info *info)
-+{
-+}
-+#endif
-+
- /*
-  * Allocate and load the module: note that size of section 0 is always
-  * zero, and we rely on this for optional sections.
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 40d26a07a133..e0aba2c80b8e 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -999,33 +999,92 @@ char *bdev_name(char *buf, char *end, struct block_device *bdev,
- }
- #endif
- 
-+#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
-+static int sprint_module_info(char *buf, unsigned long value,
-+			     int modbuildid, int backtrace, int symbol)
-+{
-+	struct module *mod;
-+	unsigned long offset;
-+	void *base;
-+	char *modname;
-+	int len;
-+	const unsigned char *buildid = NULL;
-+	bool add_offset;
-+
-+	if (is_ksym_addr(value))
-+		return 0;
-+
-+	if (backtrace || symbol)
-+		add_offset = true;
-+	else
-+		add_offset = false;
-+
-+	preempt_disable();
-+	mod = __module_address(value);
-+	if (mod) {
-+		modname = mod->name;
-+#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-+		if (modbuildid)
-+			buildid = mod->build_id;
-+#endif
-+		if (add_offset) {
-+			base = mod->core_layout.base;
-+			offset = value - (unsigned long)base;
-+		}
-+	}
-+	preempt_enable();
-+	if (!mod)
-+		return 0;
-+
-+	/* address belongs to module */
-+	if (add_offset)
-+		len = sprintf(buf, "0x%p+0x%lx", base, offset);
-+	else
-+		len = sprintf(buf, "0x%lx", value);
-+
-+	return len + fill_name_build_id(buf, modname, modbuildid, buildid, len);
-+}
-+#else
-+static inline int sprint_module_info(char *buf, unsigned long value,
-+			     int modbuildid, int backtrace, int symbol)
-+{
-+	return 0;
-+}
-+#endif
-+
- static noinline_for_stack
- char *symbol_string(char *buf, char *end, void *ptr,
- 		    struct printf_spec spec, const char *fmt)
- {
- 	unsigned long value;
--#ifdef CONFIG_KALLSYMS
- 	char sym[KSYM_SYMBOL_LEN];
--#endif
-+	int backtrace = 0, symbol = 0, build_id = 0;
- 
- 	if (fmt[1] == 'R')
- 		ptr = __builtin_extract_return_addr(ptr);
- 	value = (unsigned long)ptr;
- 
--#ifdef CONFIG_KALLSYMS
--	if (*fmt == 'B' && fmt[1] == 'b')
--		sprint_backtrace_build_id(sym, value);
--	else if (*fmt == 'B')
--		sprint_backtrace(sym, value);
--	else if (*fmt == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b')))
--		sprint_symbol_build_id(sym, value);
--	else if (*fmt != 's')
--		sprint_symbol(sym, value);
--	else
--		sprint_symbol_no_offset(sym, value);
-+	if (fmt[0] == 'B' && fmt[1] == 'b') {
-+		backtrace = 1;
-+		build_id = 1;
-+	} else if (fmt[0] == 'B')
-+		backtrace = 1;
-+	else if (fmt[0] == 'S' && (fmt[1] == 'b' || (fmt[1] == 'R' && fmt[2] == 'b'))) {
-+		symbol = 1;
-+		build_id = 1;
-+	} else if (fmt[0] != 's')
-+		symbol = 1;
-+	else {
-+		/* Do Nothing, no offset */
-+	}
- 
-+#ifdef CONFIG_KALLSYMS
-+	sprint_kallsym_common(sym, value, build_id, backtrace, symbol);
- 	return string_nocheck(buf, end, sym, spec);
- #else
-+	if (sprint_module_info(sym, value, build_id, backtrace, symbol))
-+		return string_nocheck(buf, end, sym, spec);
-+
- 	return special_hex_number(buf, end, value, sizeof(void *));
- #endif
- }
+e610499e2656e61 kernel/module.c      Rusty Russell  2009-03-31  3172  
+^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3173  /* Don't grab lock, we're oopsing. */
+^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3174  void print_modules(void)
+^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3175  {
+^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3176  	struct module *mod;
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3177  #ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3178  	struct mod_unload_taint *mod_taint;
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3179  #endif
+7fd8329ba502ef7 kernel/module.c      Petr Mladek    2016-09-21  3180  	char buf[MODULE_FLAGS_BUF_SIZE];
+^1da177e4c3f415 kernel/module.c      Linus Torvalds 2005-04-16  3181  
+b231125af7811a2 kernel/module.c      Linus Torvalds 2009-06-16  3182  	printk(KERN_DEFAULT "Modules linked in:");
+d72b37513cdfbd3 kernel/module.c      Andi Kleen     2008-08-30  3183  	/* Most callers should already have preempt disabled, but make sure */
+d72b37513cdfbd3 kernel/module.c      Andi Kleen     2008-08-30  3184  	preempt_disable();
+0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3185  	list_for_each_entry_rcu(mod, &modules, list) {
+0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3186  		if (mod->state == MODULE_STATE_UNFORMED)
+0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3187  			continue;
+27bba4d6bb3779a kernel/module.c      Jiri Slaby     2014-02-03  3188  		pr_cont(" %s%s", mod->name, module_flags(mod, buf));
+0d21b0e3477395e kernel/module.c      Rusty Russell  2013-01-12  3189  	}
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3190  #ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3191  	if (!list_empty(&unloaded_tainted_modules)) {
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3192  		printk(KERN_DEFAULT "Unloaded tainted modules:");
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3193  		list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules,
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3194  					list) {
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3195  			size_t l;
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3196  
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3197  			l = module_flags_taint(mod_taint->taints, buf);
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3198  			buf[l++] = '\0';
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3199  			pr_cont(" %s(%s):%llu", mod_taint->name, buf,
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3200  				mod_taint->count);
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3201  		}
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3202  #endif
+523ff1f52de4204 kernel/module/main.c Aaron Tomlin   2022-04-20  3203  	}
+d72b37513cdfbd3 kernel/module.c      Andi Kleen     2008-08-30 @3204  	preempt_enable();
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
