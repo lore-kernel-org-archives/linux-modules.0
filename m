@@ -2,107 +2,149 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A01B4C4332F
-	for <linux-modules@archiver.kernel.org>; Thu, 21 Apr 2022 16:51:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24463C433EF
+	for <linux-modules@archiver.kernel.org>; Thu, 21 Apr 2022 17:53:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbiDUQyj (ORCPT
+        id S231863AbiDUR4Z (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 21 Apr 2022 12:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
+        Thu, 21 Apr 2022 13:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345792AbiDUQyh (ORCPT
+        with ESMTP id S236549AbiDUR4X (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 21 Apr 2022 12:54:37 -0400
+        Thu, 21 Apr 2022 13:56:23 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901354888F;
-        Thu, 21 Apr 2022 09:51:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5262F4A926;
+        Thu, 21 Apr 2022 10:53:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nokgEa2HolX7WWxhI5hndPhelPjuw7thbF93zCKCMdA=; b=qftrAhVi/nehnq1OBPEsVl1VoT
-        HD14CRCXX+aMfyYuu0gzFJmTCKNTZy6Y5PmnJbUThuPkFtXuSxZTtGDL1vREsxCg9j8BQov9pgZJ6
-        rLYWE2V+gwqxfgDFIoG5VuaV4If9GFtG3XRtt1anmmzdAs6B9Wbi+feA5fMXQcqnCdZE5zUz3Ul/V
-        sGsz94fgP7HgwHZl88jRBU/4RYh5w74uje5/W/LPyz878lUGPiEmwoEROzUxNycuAspjMXEv3zo3P
-        weJCn6DDBdemFYJs/A0PslHL/eVJkSM3oxuYJV7sptzZYtgeoUS1JwGWd+6/pDBgvG4ydMEYVJrmj
-        xKBhgacw==;
+        bh=OzMBFt4cX9sZG3+xKaNjpIrCYXW+IugofzGvsiKoa1c=; b=r+8wwH27HmVqrnNXROGmLzk+8Z
+        9BQdWmRbDA5sRoSKKRvgHo5MzzgfhN5j0Omy9hJXca1lszYylN6C6VhVBRerKkOqR3O3xnPvQx/0k
+        cjFj+cO1nW6yYtWNecbGNXyOmd0a1BKLaez4I8cGDSH7bF0Qjy733QIvq74FIcyVyeaqQLJnoAyGd
+        PpdS/8QRn5mLrCNg7LP4bWPEAmlsGn9sMfxBAPKo856bGPyOmrZJe2OLHRgVugg0+EtA41Os2EHp5
+        JXtRD2c/UC/Yopn1biddSqI6/4c9rgw4hbPDEc8hy+f7H10LkQPzaeoOhsXbpJNOIXRx+lEndjkM7
+        oBbuzUrw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nha1m-00EK0q-NS; Thu, 21 Apr 2022 16:51:34 +0000
-Date:   Thu, 21 Apr 2022 09:51:34 -0700
+        id 1nhazi-00EWI6-QM; Thu, 21 Apr 2022 17:53:30 +0000
+Date:   Thu, 21 Apr 2022 10:53:30 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Maninder Singh <maninder1.s@samsung.com>
-Cc:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.or,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com, onkarnath.1@samsung.com
-Subject: Re: [PATCH modules-next 1/1] kallsyms: enhance %pS/s/b printing when
- KALLSYSMS is disabled
-Message-ID: <YmGLliGQBDzMBRP0@bombadil.infradead.org>
-References: <CGME20220421041604epcas5p414cf2e851d1bd828a151dc6b2b004680@epcas5p4.samsung.com>
- <20220421041542.9195-1-maninder1.s@samsung.com>
+To:     Douglas Gilbert <dgilbert@interlog.com>
+Cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-modules@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Pankaj Malhotra <pankaj1.m@samsung.com>,
+        Vincent Fu <vincent.fu@samsung.com>
+Subject: scsi_debug in fstests and blktests (Was: Re: Fwd: [bug
+ report][bisected] modprob -r scsi-debug take more than 3mins during blktests
+ srp/ tests)
+Message-ID: <YmGaGoz2+Kdqu05l@bombadil.infradead.org>
+References: <CAHj4cs9OTm9sb_5fmzgz+W9OSLeVPKix3Yri856kqQVccwd_Mw@mail.gmail.com>
+ <fba69540-b623-9602-a0e2-00de3348dbd6@interlog.com>
+ <YlW7gY8nr9LnBEF+@bombadil.infradead.org>
+ <00ebace8-b513-53c0-f13b-d3320757695d@interlog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421041542.9195-1-maninder1.s@samsung.com>
+In-Reply-To: <00ebace8-b513-53c0-f13b-d3320757695d@interlog.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Apr 21, 2022 at 09:45:42AM +0530, Maninder Singh wrote:
-> print module information when KALLSYMS is disabled.
-> 
-> init_build_id() function is moved to module/main.c as it can be
-> independent of kallsyms.
-> 
-> No change for %pB, as it needs to know symbol name to adjust address
-> value which can't be done without KALLSYMS.
-> 
-> (A) original output with KALLSYMS:
-> [8.842129] ps function_1 [crash]
-> [8.842735] pS function_1+0x4/0x2c [crash]
-> [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> [8.843175] pB function_1+0x4/0x2c [crash]
-> [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> 
-> (B) original output without KALLSYMS:
-> [12.487424] ps 0xffff800000eb008c
-> [12.487598] pS 0xffff800000eb008c
-> [12.487723] pSb 0xffff800000eb008c
-> [12.487850] pB 0xffff800000eb008c
-> [12.487967] pBb 0xffff800000eb008c
-> 
-> (C) With patched kernel
-> with KALLYSMS:
-> [41.974576] ps function_1 [crash]
-> [41.975173] pS function_1+0x4/0x2c [crash]
-> [41.975386] pSb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> [41.975879] pB function_1+0x4/0x2c [crash]
-> [41.976076] pBb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> 
-> without KALLSYMS:
-> [9.624152] ps 0xffff800001bd008c [crash]	// similar to original, no changes
-> [9.624548] pS 0x(____ptrval____)+0x8c [crash]   // base address hashed and offset is without hash
-> [9.624847] pSb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> [9.625388] pB 0x(____ptrval____)+0x8c [crash]
-> [9.625594] pBb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> 
-> with disable hashing:
-> [8.563916] ps 0xffff800000f2008c [crash]
-> [8.564574] pS 0xffff800000f20000+0x8c [crash]
-> [8.564749] pSb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
-> [8.565008] pB 0xffff800000f20000+0x8c [crash]
-> [8.565154] pBb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
-> 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Co-developed-by: Vaneet Narang <v.narang@samsung.com>
-> Signed-off-by: Vaneet Narang <v.narang@samsung.com>
-> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> Tested-by: Petr Mladek <pmladek@suse.com>
+Moving this discussion to the lists as we need to really think
+about how testing on fstests and blktests uses scsi_debug for
+a high confidence in baseline without false positives on failures
+due to the inability to the remove scsi_debug module.
 
-Thanks! Queued onto modules-testing. If there are no complaints from the
-build I'll move this to modules-next.
+This should also apply to other test debug modules like null_blk,
+nvme target loop drivers, etc, it's all the same long term. But yeah
+scsi surely make this... painful today. In any case hopefully folks
+with other test debug drivesr are running tests to ensure you can
+always rmmod these modules regardless of what is happening.
+
+On Tue, Apr 12, 2022 at 06:03:40PM -0400, Douglas Gilbert wrote:
+> On 2022-04-12 13:48, Luis Chamberlain wrote:
+> > On Thu, Apr 07, 2022 at 10:09:54PM -0400, Douglas Gilbert wrote:
+> > > Hi,
+> > > Is it time to revert this patch?
+> > 
+> > Upstream kmod will indeed get patched soon witha  --patient-remove
+> > option. So the issue is that. However, it doesn't mean driver's
+> > can't / should strive to avoid these issues if they can. That is a
+> > thing left to driver's to implement / resolve if they want.
+> > 
+> > In the meantime userspace should change to user the patient removal,
+> > and if the upstream kmod doesn't have yet have it (note, the code is
+> > not yet merged) then tools doing module removal should open code the
+> > module removal. I modified fstests to do open coding of the patient
+> > module removal in case kmod does not support it.  I have a similar patch
+> > for blktests but that still requires regression testing on my part. I
+> > hope to finish that soon though.
+> > 
+> > So the answer to your question: it depends on how well you want to deal
+> > with these issues for users, or punt the problems to patient removal
+> > usage.
+> 
+> Hi,
+> There is a significant amount of work bringing down a driver like scsi_debug.
+> Apart from potentially consuming most of the ram on a box, it also has the
+> issue of SCSI commands that are "in flight" when rmmod is called.
+> 
+> So I think it is approaching impossible to make rmmod scsi_debug the equivalent
+> of an atomic operation. There are just too many moving parts, potentially
+> moving asynchronously to one another. This is an extremely good test for the
+> SCSI/block system, roughly equivalent to losing a HBA that has a lot of disks
+> behind it. Will the system stabilize and how long will that take?
+
+I understand. But I really cannot buy "impossible". Impossible I think should
+mean a design flaw somewhere.
+
+At least for now I think we should narrow our objectives so that
+this is *possible* within the context of fstests and blktests because
+otherwise *we really should not be using scsi_debug* for high fidelity
+in testing. One of the reasons is that we want to be able to run
+fstests or blktests in a loop with confidence so that failures are
+real. A failure due to the inability to not remove a debug module
+makes gaining confidence in a baseline a bit difficult and you'd have
+to implement hacks around it.
+
+mcgrof@fulton ~/devel/blktests (git::master)$ git grep _have_scsi_debug tests | wc -l
+10
+
+mcgrof@fulton ~/devel/xfstests-dev (git::master)$ git grep _require_scsi_debug tests| wc -l
+5
+
+Not insane, but enough for us to care, but I think if we *narrow* our
+scope to ensure scsi_debug *can* be removed *at least* with the patient
+module remover we're good.
+
+Do you think this is viable goal for scsi_debug?
+
+> Setting up races between modprobe and rmmod on scsi_debug was certainly not
+> top of mind for me.
+
+Oh I get it. But the community has already embraced it for years on
+fstests and blktests. So at this point I think we have no other option.
+
+I think one thing we *can* do is *not* use scsi_debug for tests which
+*really don't need scsi*.
+
+> Storage systems such as SCSI are a lot better defined
+> (and ordered) in the power-up scenario. Even with asynchronous scanning
+> (discovery) of devices (even SSDs) it can take 10 plus seconds to bring up
+> devices with a lot more handshaking between controller and the storage
+> device. And even with SSDs, there is increased power draw during power-up
+> (hard disks obviously need to accelerate the medium up to the rated speed).
+> That leads to big storage arrays staggering when they apply power to
+> different banks of SSDs/disks.
+
+Sure..
+
+> I wonder if anyone has tested building scsi_mod (the SCSI mid-level) as a
+> module and tried rmmod on it while, say, a USB key is being read :-)
+
+:)
 
   Luis
