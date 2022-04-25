@@ -2,222 +2,124 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F019C433F5
-	for <linux-modules@archiver.kernel.org>; Mon, 25 Apr 2022 09:09:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA58C433EF
+	for <linux-modules@archiver.kernel.org>; Mon, 25 Apr 2022 19:27:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241112AbiDYJMB (ORCPT
+        id S244660AbiDYTa7 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 25 Apr 2022 05:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        Mon, 25 Apr 2022 15:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiDYJL5 (ORCPT
+        with ESMTP id S230214AbiDYTa6 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:11:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B010C9B42
-        for <linux-modules@vger.kernel.org>; Mon, 25 Apr 2022 02:08:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650877732;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7UCwzHE3i1dq/qNGOoGWSbel4RLLAWZDbZnWwu5x7jM=;
-        b=OQUqyHSPU8BSkHxON+WM0Z48HdGUtMBjPbXiiD3GIb5FEMPkmhu4lFF86RP6BaaO4E7378
-        rOzSvBfAJ5Tx9MrG+jlGznmmu3Xnh3ADC2NbxCpjIpRcp/SUjJF2WJhDn8E8Xv/fCDOSes
-        jxR4QTuHhGE2WnUtQg1eLVNwoVuC/GM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-dio3lhGGPESihvugWo8OkA-1; Mon, 25 Apr 2022 05:08:49 -0400
-X-MC-Unique: dio3lhGGPESihvugWo8OkA-1
-Received: by mail-wm1-f71.google.com with SMTP id y11-20020a7bc18b000000b0038eac019fc0so6898640wmi.9
-        for <linux-modules@vger.kernel.org>; Mon, 25 Apr 2022 02:08:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7UCwzHE3i1dq/qNGOoGWSbel4RLLAWZDbZnWwu5x7jM=;
-        b=BeNsjeO82+9CYm6/c3qlOMdQeV6IxaZm7hTxnyBGWyeD0SFuq/jT57ttEpitWAJKl1
-         3tji5NCpIhn3V70lV4L6XL+TfbFSu/OqNF82l+mNciIxPErTw2DwG/8qQiHsHpC9L6qr
-         Uymc8VJiVcWPi6If1dK++i8XsmgeR1RG5CGbdfxG7Oj1jfSMRhMM5fERGQzy1JX3LHk1
-         5wwwUgEqpbFzXjfFaI9FcVQzxTjvgFtr1ra9HlTd23tO/jY7Xn7jqyV1lZ/MYUJtiZGF
-         Wm317QYrACGF/7Jud1tXYecTRQfQKX5sJUWwuwjQWdkNCt9K1gpP9p4mgpDoTKpANueW
-         TlZQ==
-X-Gm-Message-State: AOAM532C39VOfsxBodEZVwjLm/TkKP3z1ECAwkayQAXvzTIQeuA7hzuN
-        AhGoBaU9TZE7f9yjnsn2zMdcjPJMHw3uqEgvq+HDjUvXN0O4WstHxVleJFUzTQ0/JqiJBM6bqTN
-        sh/6rGiVS2mKJkTxFtAgGmvi6
-X-Received: by 2002:a05:600c:281:b0:38e:bc6e:5971 with SMTP id 1-20020a05600c028100b0038ebc6e5971mr15608767wmk.111.1650877728046;
-        Mon, 25 Apr 2022 02:08:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy+ka7rhRqfE4pSkDVBAfjJmPXrDOYb219F24apu+8D+rAjhTBnw9h3sbZ1t4AjyPzHf5C+Sg==
-X-Received: by 2002:a05:600c:281:b0:38e:bc6e:5971 with SMTP id 1-20020a05600c028100b0038ebc6e5971mr15608749wmk.111.1650877727825;
-        Mon, 25 Apr 2022 02:08:47 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id l10-20020a05600002aa00b0020a7cc29000sm9325070wry.75.2022.04.25.02.08.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 02:08:46 -0700 (PDT)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org
-Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        christophe.leroy@csgroup.eu, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        atomlin@atomlin.com, ghalat@redhat.com, oleksandr@natalenko.name,
-        neelx@redhat.com
-Subject: [PATCH v4 2/2] module: Introduce module unload taint tracking
-Date:   Mon, 25 Apr 2022 10:08:41 +0100
-Message-Id: <20220425090841.3958494-3-atomlin@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220425090841.3958494-1-atomlin@redhat.com>
-References: <20220425090841.3958494-1-atomlin@redhat.com>
+        Mon, 25 Apr 2022 15:30:58 -0400
+X-Greylist: delayed 313 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Apr 2022 12:27:51 PDT
+Received: from mp-relay-01.fibernetics.ca (mp-relay-01.fibernetics.ca [208.85.217.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC31110978;
+        Mon, 25 Apr 2022 12:27:51 -0700 (PDT)
+Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mp-relay-01.fibernetics.ca (Postfix) with ESMTPS id D0F9FE0F7E;
+        Mon, 25 Apr 2022 19:22:36 +0000 (UTC)
+Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
+        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id B304460284;
+        Mon, 25 Apr 2022 19:22:36 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
+        by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
+        with ESMTP id PaBD9BfcMjTl; Mon, 25 Apr 2022 19:22:36 +0000 (UTC)
+Received: from [192.168.48.23] (host-45-78-195-155.dyn.295.ca [45.78.195.155])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail.ca.inter.net (Postfix) with ESMTPSA id 535B860958;
+        Mon, 25 Apr 2022 19:22:35 +0000 (UTC)
+Message-ID: <bc0b2c10-10e6-a1d9-4139-ac93ad3512b2@interlog.com>
+Date:   Mon, 25 Apr 2022 15:22:34 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Reply-To: dgilbert@interlog.com
+Subject: Re: scsi_debug in fstests and blktests (Was: Re: Fwd: [bug
+ report][bisected] modprob -r scsi-debug take more than 3mins during blktests
+ srp/ tests)
+Content-Language: en-CA
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-modules@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Pankaj Malhotra <pankaj1.m@samsung.com>,
+        Vincent Fu <vincent.fu@samsung.com>
+References: <CAHj4cs9OTm9sb_5fmzgz+W9OSLeVPKix3Yri856kqQVccwd_Mw@mail.gmail.com>
+ <fba69540-b623-9602-a0e2-00de3348dbd6@interlog.com>
+ <YlW7gY8nr9LnBEF+@bombadil.infradead.org>
+ <00ebace8-b513-53c0-f13b-d3320757695d@interlog.com>
+ <YmGaGoz2+Kdqu05l@bombadil.infradead.org> <YmJDqceT1AiePyxj@infradead.org>
+ <YmLEeUhTImWKIshO@bombadil.infradead.org>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <YmLEeUhTImWKIshO@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Currently, only the initial module that tainted the kernel is
-recorded e.g. when an out-of-tree module is loaded.
+On 2022-04-22 11:06, Luis Chamberlain wrote:
+> On Thu, Apr 21, 2022 at 10:56:57PM -0700, Christoph Hellwig wrote:
+>> On Thu, Apr 21, 2022 at 10:53:30AM -0700, Luis Chamberlain wrote:
+>>> Moving this discussion to the lists as we need to really think
+>>> about how testing on fstests and blktests uses scsi_debug for
+>>> a high confidence in baseline without false positives on failures
+>>> due to the inability to the remove scsi_debug module.
+>>>
+>>> This should also apply to other test debug modules like null_blk,
+>>> nvme target loop drivers, etc, it's all the same long term. But yeah
+>>> scsi surely make this... painful today. In any case hopefully folks
+>>> with other test debug drivesr are running tests to ensure you can
+>>> always rmmod these modules regardless of what is happening.
+>>
+>> Maybe fix blktests to not rely on module removal  I have such a hard
+>> time actually using blktests because it is suck a f^^Y% broken piece
+>> of crap that assumes everything is modular.  Stop making that whole
+>> assumption and work fine with built-in driver as a first step.  Then
+>> start worrying about module removal.
+> 
+> It begs the question if the same wish should apply to fstests.
+> 
+> If we want to *not* rely on module removal then the right thing to do I
+> think would be to replace module removal on these debug modules
+> (scsi_debug) with an API as null_blk has which uses configfs to *add* /
+> *remove* devices.
 
-The purpose of this patch is to allow the kernel to maintain a record of
-each unloaded module that taints the kernel. So, in addition to
-displaying a list of linked modules (see print_modules()) e.g. in the
-event of a detected bad page, unloaded modules that carried a taint/or
-taints are displayed too. A tainted module unload count is maintained.
+The scsi_debug driver has been around for a while, I started maintaining it
+around 1998. It was always assumed that it would be used as a module while
+testing, then removed. You might wonder why the number of SCSI hosts simulated
+by scsi_debug is called "add_hosts"? That is because it is also a sysfs
+read-write parameter that can take a positive or negative integer to add or
+remove that number of SCSI hosts at runtime, without removing the module.
+See /sys/bus/pseudo/drivers/scsi_debug where about 2/3 of the parameters
+are writable. Perhaps configfs capability could be added to scsi_debug,
+patches welcome ...
 
-The number of tracked modules is not fixed. This feature is disabled by
-default.
+If you want a cheap ram disk to back file system tests then null_blk is the
+way to go.
 
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- init/Kconfig         | 11 ++++++++
- kernel/module/main.c | 65 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 76 insertions(+)
+The scsi_debug driver is a SCSI low level driver (LLD) controlling a
+simulated HBA (on the "pseudo" bus) that has zero or more SCSI devices
+(e.g. disks) attached to it. It is designed to back sd, st, ses Linux
+devices (e.g. /dev/sdb). And it can simulate various types of storage
+that are found in the real world, for example storage with associated
+protection information and more recently with zoned storage. It can also
+simulate errors and/or a _lot_ of devices (say 10,000) by sharing the
+backing ram behind each device.
 
-diff --git a/init/Kconfig b/init/Kconfig
-index ddcbefe535e9..6b30210f787d 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -2118,6 +2118,17 @@ config MODULE_FORCE_UNLOAD
- 	  rmmod).  This is mainly for kernel developers and desperate users.
- 	  If unsure, say N.
- 
-+config MODULE_UNLOAD_TAINT_TRACKING
-+	bool "Tainted module unload tracking"
-+	depends on MODULE_UNLOAD
-+	default n
-+	help
-+	  This option allows you to maintain a record of each unloaded
-+	  module that tainted the kernel. In addition to displaying a
-+	  list of linked (or loaded) modules e.g. on detection of a bad
-+	  page (see bad_page()), the aforementioned details are also
-+	  shown. If unsure, say N.
-+
- config MODVERSIONS
- 	bool "Module versioning support"
- 	help
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index ea78cec316dd..35686e63b32f 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -68,6 +68,16 @@
-  */
- DEFINE_MUTEX(module_mutex);
- LIST_HEAD(modules);
-+#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-+static LIST_HEAD(unloaded_tainted_modules);
-+
-+struct mod_unload_taint {
-+	struct list_head list;
-+	char name[MODULE_NAME_LEN];
-+	unsigned long taints;
-+	u64 count;
-+};
-+#endif
- 
- /* Work queue for freeing init sections in success case */
- static void do_free_init(struct work_struct *w);
-@@ -150,6 +160,41 @@ int unregister_module_notifier(struct notifier_block *nb)
- }
- EXPORT_SYMBOL(unregister_module_notifier);
- 
-+#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-+static int try_add_tainted_module(struct module *mod)
-+{
-+	struct mod_unload_taint *mod_taint;
-+
-+	module_assert_mutex_or_preempt();
-+
-+	list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules, list,
-+				lockdep_is_held(&module_mutex)) {
-+		size_t len = strlen(mod_taint->name);
-+
-+		if (!strncmp(mod_taint->name, mod->name, len) &&
-+		    mod_taint->taints & mod->taints) {
-+			mod_taint->count++;
-+			goto out;
-+		}
-+	}
-+
-+	mod_taint = kmalloc(sizeof(*mod_taint), GFP_KERNEL);
-+	if (unlikely(!mod_taint))
-+		return -ENOMEM;
-+	strscpy(mod_taint->name, mod->name, MODULE_NAME_LEN);
-+	mod_taint->taints = mod->taints;
-+	list_add_rcu(&mod_taint->list, &unloaded_tainted_modules);
-+	mod_taint->count = 1;
-+out:
-+	return 0;
-+}
-+#else /* MODULE_UNLOAD_TAINT_TRACKING */
-+static int try_add_tainted_module(struct module *mod)
-+{
-+	return 0;
-+}
-+#endif
-+
- /*
-  * We require a truly strong try_module_get(): 0 means success.
-  * Otherwise an error is returned due to ongoing or failed
-@@ -1201,6 +1246,9 @@ static void free_module(struct module *mod)
- 	module_bug_cleanup(mod);
- 	/* Wait for RCU-sched synchronizing before releasing mod->list and buglist. */
- 	synchronize_rcu();
-+	if (try_add_tainted_module(mod))
-+		pr_err("%s: adding tainted module to the unloaded tainted modules list failed.\n",
-+		       mod->name);
- 	mutex_unlock(&module_mutex);
- 
- 	/* Clean up CFI for the module. */
-@@ -3126,6 +3174,9 @@ struct module *__module_text_address(unsigned long addr)
- void print_modules(void)
- {
- 	struct module *mod;
-+#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-+	struct mod_unload_taint *mod_taint;
-+#endif
- 	char buf[MODULE_FLAGS_BUF_SIZE];
- 
- 	printk(KERN_DEFAULT "Modules linked in:");
-@@ -3136,6 +3187,20 @@ void print_modules(void)
- 			continue;
- 		pr_cont(" %s%s", mod->name, module_flags(mod, buf));
- 	}
-+#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
-+	if (!list_empty(&unloaded_tainted_modules)) {
-+		printk(KERN_DEFAULT "Unloaded tainted modules:");
-+		list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules,
-+					list) {
-+			size_t l;
-+
-+			l = module_flags_taint(mod_taint->taints, buf);
-+			buf[l++] = '\0';
-+			pr_cont(" %s(%s):%llu", mod_taint->name, buf,
-+				mod_taint->count);
-+		}
-+	}
-+#endif
- 	preempt_enable();
- 	if (last_unloaded_module[0])
- 		pr_cont(" [last unloaded: %s]", last_unloaded_module);
--- 
-2.34.1
+So the fact that the scsi_debug driver can support blktests could be seen
+as a bit of an accident, that is not its primary purpose.
+
+Doug Gilbert
+
 
