@@ -2,124 +2,82 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA58C433EF
-	for <linux-modules@archiver.kernel.org>; Mon, 25 Apr 2022 19:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDC95C433FE
+	for <linux-modules@archiver.kernel.org>; Mon, 25 Apr 2022 23:31:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244660AbiDYTa7 (ORCPT
+        id S237928AbiDYXfC (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 25 Apr 2022 15:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
+        Mon, 25 Apr 2022 19:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiDYTa6 (ORCPT
+        with ESMTP id S237895AbiDYXfC (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:30:58 -0400
-X-Greylist: delayed 313 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Apr 2022 12:27:51 PDT
-Received: from mp-relay-01.fibernetics.ca (mp-relay-01.fibernetics.ca [208.85.217.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC31110978;
-        Mon, 25 Apr 2022 12:27:51 -0700 (PDT)
-Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-01.fibernetics.ca (Postfix) with ESMTPS id D0F9FE0F7E;
-        Mon, 25 Apr 2022 19:22:36 +0000 (UTC)
-Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
-        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id B304460284;
-        Mon, 25 Apr 2022 19:22:36 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
-        by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
-        with ESMTP id PaBD9BfcMjTl; Mon, 25 Apr 2022 19:22:36 +0000 (UTC)
-Received: from [192.168.48.23] (host-45-78-195-155.dyn.295.ca [45.78.195.155])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail.ca.inter.net (Postfix) with ESMTPSA id 535B860958;
-        Mon, 25 Apr 2022 19:22:35 +0000 (UTC)
-Message-ID: <bc0b2c10-10e6-a1d9-4139-ac93ad3512b2@interlog.com>
-Date:   Mon, 25 Apr 2022 15:22:34 -0400
+        Mon, 25 Apr 2022 19:35:02 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD736AA69;
+        Mon, 25 Apr 2022 16:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qMnY4WbVpAxmQ/4X6WWLsIMxUBHKSMbpS3kcgrtCpFs=; b=wpbFIwSlzpm6J9Osh6cHP+j3IH
+        O51zNvj2lWTwt+74/Gomgb0sgotJiLmGAXEFCfHoIo5+vAr3SiXyNfOIHrsVgWJMYJuRYpwXBrW8C
+        sgDnGIB+99uWHFhFbOb/d5yG9H7ZFCgUfYXSMJg0zFwUMEmtiYPZszT4+ljOMfedEzdrmcY9917CW
+        37qJYdajQhWUBQcFNEeuqAVQOODqy4SYIp05YJUfNiW5GCuNQSQG6LUJpBK/GJtdfO8ha8WHoS6EV
+        lwoDBfZHwBZ318RFCviqoeWCj0PpYIG607lp59IqFHl7w+zynVh3a3QygHhkE5qw8iFmlfM/xnElj
+        +YBIJaaw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nj8BJ-00BjPh-H3; Mon, 25 Apr 2022 23:31:49 +0000
+Date:   Mon, 25 Apr 2022 16:31:49 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        christophe.leroy@csgroup.eu, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com, oleksandr@natalenko.name,
+        neelx@redhat.com
+Subject: Re: [PATCH v4 0/2] module: Introduce module unload taint tracking
+Message-ID: <YmcvZQSiu95MUvxI@bombadil.infradead.org>
+References: <20220425090841.3958494-1-atomlin@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Reply-To: dgilbert@interlog.com
-Subject: Re: scsi_debug in fstests and blktests (Was: Re: Fwd: [bug
- report][bisected] modprob -r scsi-debug take more than 3mins during blktests
- srp/ tests)
-Content-Language: en-CA
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-modules@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Pankaj Malhotra <pankaj1.m@samsung.com>,
-        Vincent Fu <vincent.fu@samsung.com>
-References: <CAHj4cs9OTm9sb_5fmzgz+W9OSLeVPKix3Yri856kqQVccwd_Mw@mail.gmail.com>
- <fba69540-b623-9602-a0e2-00de3348dbd6@interlog.com>
- <YlW7gY8nr9LnBEF+@bombadil.infradead.org>
- <00ebace8-b513-53c0-f13b-d3320757695d@interlog.com>
- <YmGaGoz2+Kdqu05l@bombadil.infradead.org> <YmJDqceT1AiePyxj@infradead.org>
- <YmLEeUhTImWKIshO@bombadil.infradead.org>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <YmLEeUhTImWKIshO@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425090841.3958494-1-atomlin@redhat.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 2022-04-22 11:06, Luis Chamberlain wrote:
-> On Thu, Apr 21, 2022 at 10:56:57PM -0700, Christoph Hellwig wrote:
->> On Thu, Apr 21, 2022 at 10:53:30AM -0700, Luis Chamberlain wrote:
->>> Moving this discussion to the lists as we need to really think
->>> about how testing on fstests and blktests uses scsi_debug for
->>> a high confidence in baseline without false positives on failures
->>> due to the inability to the remove scsi_debug module.
->>>
->>> This should also apply to other test debug modules like null_blk,
->>> nvme target loop drivers, etc, it's all the same long term. But yeah
->>> scsi surely make this... painful today. In any case hopefully folks
->>> with other test debug drivesr are running tests to ensure you can
->>> always rmmod these modules regardless of what is happening.
->>
->> Maybe fix blktests to not rely on module removal  I have such a hard
->> time actually using blktests because it is suck a f^^Y% broken piece
->> of crap that assumes everything is modular.  Stop making that whole
->> assumption and work fine with built-in driver as a first step.  Then
->> start worrying about module removal.
+On Mon, Apr 25, 2022 at 10:08:39AM +0100, Aaron Tomlin wrote:
+> Hi Luis,
 > 
-> It begs the question if the same wish should apply to fstests.
+> This iteration is still based on the latest mcgrof/modules-next branch.
 > 
-> If we want to *not* rely on module removal then the right thing to do I
-> think would be to replace module removal on these debug modules
-> (scsi_debug) with an API as null_blk has which uses configfs to *add* /
-> *remove* devices.
+> I have decided still to use RCU even though no entry is ever removed from
+> the unloaded tainted modules list. That being said, if I understand
+> correctly, it is not safe in some instances to use 'module_mutex' in
+> print_modules().  So instead we disable preemption to ensure list traversal
+> with concurrent list manipulation e.g. list_add_rcu(), is safe too.
+> 
+> Changes since v3 [1]
+>  - Fixed kernel build error reported by kernel test robot i.e. moved
+>    '#endif' outside 'if (!list_empty(&unloaded_tainted_modules))'
+>    statement in the context of print_modules()
+>  - Used strncmp() instead of memcmp()
+>    (Oleksandr Natalenko)
+>  - Removed the additional strlen()
+>    (Christoph Lameter)
+> 
+> Changes since v2 [2]
+>  - Dropped RFC from subject
+>  - Removed the newline i.e. "\n" in printk()
+>  - Always include the tainted module's unload count
+>  - Unconditionally display each unloaded tainted module
+> 
+> Please let me know your thoughts.
 
-The scsi_debug driver has been around for a while, I started maintaining it
-around 1998. It was always assumed that it would be used as a module while
-testing, then removed. You might wonder why the number of SCSI hosts simulated
-by scsi_debug is called "add_hosts"? That is because it is also a sysfs
-read-write parameter that can take a positive or negative integer to add or
-remove that number of SCSI hosts at runtime, without removing the module.
-See /sys/bus/pseudo/drivers/scsi_debug where about 2/3 of the parameters
-are writable. Perhaps configfs capability could be added to scsi_debug,
-patches welcome ...
+This all looks good except with all the work you did to remove
+#ifdef hell, it gets me wondering why not just use a new file for this?
 
-If you want a cheap ram disk to back file system tests then null_blk is the
-way to go.
+What does that look like?
 
-The scsi_debug driver is a SCSI low level driver (LLD) controlling a
-simulated HBA (on the "pseudo" bus) that has zero or more SCSI devices
-(e.g. disks) attached to it. It is designed to back sd, st, ses Linux
-devices (e.g. /dev/sdb). And it can simulate various types of storage
-that are found in the real world, for example storage with associated
-protection information and more recently with zoned storage. It can also
-simulate errors and/or a _lot_ of devices (say 10,000) by sharing the
-backing ram behind each device.
-
-So the fact that the scsi_debug driver can support blktests could be seen
-as a bit of an accident, that is not its primary purpose.
-
-Doug Gilbert
-
-
+  Luis
