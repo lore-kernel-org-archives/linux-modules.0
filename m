@@ -2,37 +2,40 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E97A0C433F5
-	for <linux-modules@archiver.kernel.org>; Sat, 30 Apr 2022 12:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D46FFC433EF
+	for <linux-modules@archiver.kernel.org>; Sat, 30 Apr 2022 13:38:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239633AbiD3MIa (ORCPT
+        id S242026AbiD3Nly (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 30 Apr 2022 08:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
+        Sat, 30 Apr 2022 09:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238806AbiD3MI3 (ORCPT
+        with ESMTP id S241973AbiD3Nlx (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 30 Apr 2022 08:08:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6925C663;
-        Sat, 30 Apr 2022 05:05:04 -0700 (PDT)
+        Sat, 30 Apr 2022 09:41:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EA22983C;
+        Sat, 30 Apr 2022 06:38:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BB9D60AF8;
-        Sat, 30 Apr 2022 12:05:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF9E4C385AA;
-        Sat, 30 Apr 2022 12:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651320303;
-        bh=tWlItz5i5kXdXuKnvQvNpU5f7HV/eMhhZ4OfG79KfB4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EWPWQ/+A8KiWNeEnnCkAKXMPSezGdtzp5Pu/mRwQ/MU866OQbmFsojF7i409gTuJu
-         COUJKad1RdoM48RcXRCz1/y234ep+r8F5hVv3U8qnSyXd89g/SqzfONVpSS2CCu9eN
-         CMKtf9Kko8TmVqrBl0bJ24rI3PoZ2XY2ikw7YirU=
-Date:   Sat, 30 Apr 2022 14:04:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4187DB82B82;
+        Sat, 30 Apr 2022 13:38:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA220C385AA;
+        Sat, 30 Apr 2022 13:38:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651325904;
+        bh=FzJFz5nQnOEB7AB6Bbc1j8nS92uMjFglrLsFGFrMKzw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jlSMgCulySK0sR8W6lTjvw+WKsHy9h2dvPSn/5YMc2Ov1/C/vSQeLPrh3/hxq3C2S
+         3IgkIw0WSNTct9hBvrXmgMyELaYee9X3mtIvkZ2yTAPC2v3ej3vzF8gFH8UU44MXbw
+         KAqWgwhvW5Kb+28/T9aQZOdeMKDQxhCoyaDM5Rc4HmIJ7hWl19h6P1Gfv/gEy6VuWa
+         AFwi7dJptexzaE2VQYSiaVEgvKpTyAV4wyKOTlFHh6sphvpGPBihxxB6k6TaJew2RL
+         kkHhZDiMzx49PBfmL29bVUZATY3SHGlyUfdYempi/ByrrXPMeyQ9uc+WWBkNDMAlQp
+         uxkJBLqr/FN2w==
+Date:   Sat, 30 Apr 2022 14:38:14 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
@@ -46,95 +49,67 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         mauro.chehab@linux.intel.com,
         Dan Williams <dan.j.williams@intel.com>
 Subject: Re: [PATCH v2 1/2] module: update dependencies at try_module_get()
-Message-ID: <Ym0l6yeTWCCAeww8@kroah.com>
+Message-ID: <20220430143814.7184bd93@sal.lan>
+In-Reply-To: <Ym0l6yeTWCCAeww8@kroah.com>
 References: <cover.1651314499.git.mchehab@kernel.org>
- <3c7547d551558c9da02038dda45992f91b1f5141.1651314499.git.mchehab@kernel.org>
+        <3c7547d551558c9da02038dda45992f91b1f5141.1651314499.git.mchehab@kernel.org>
+        <Ym0l6yeTWCCAeww8@kroah.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c7547d551558c9da02038dda45992f91b1f5141.1651314499.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Apr 30, 2022 at 11:30:58AM +0100, Mauro Carvalho Chehab wrote:
-> Sometimes, device drivers are bound into each other via try_module_get(),
-> making such references invisible when looking at /proc/modules or lsmod.
+Em Sat, 30 Apr 2022 14:04:59 +0200
+Greg KH <gregkh@linuxfoundation.org> escreveu:
+
+> On Sat, Apr 30, 2022 at 11:30:58AM +0100, Mauro Carvalho Chehab wrote:
+
+> Did you run checkpatch on this?  Please do :)
 > 
-> Add a function to allow setting up module references for such
-> cases, and call it when try_module_get() is used.
+> > +
+> > +	if (mod == this)
+> > +		return 0;  
 > 
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
+> How can this happen?
+> When people mistakenly call try_module_get(THIS_MODULE)?  
+
+Yes. There are lots of place where this is happening:
+
+	$ git grep try_module_get\(THIS_MODULE|wc -l
+	82
+
+> We should
+> throw up a big warning when that happens anyway as that's always wrong.
 > 
-> See [PATCH v2 0/2] at: https://lore.kernel.org/all/cover.1651314499.git.mchehab@kernel.org/
+> But that's a different issue from this change, sorry for the noise.
+
+It sounds very weird to use try_module_get(THIS_MODULE).
+
+We could add a WARN_ON() there - or something similar - but I would do it 
+on a separate patch.
+
 > 
->  include/linux/module.h |  4 +++-
->  kernel/module/main.c   | 35 +++++++++++++++++++++++++++++++++--
->  2 files changed, 36 insertions(+), 3 deletions(-)
+> > +
+> > +	mutex_lock(&module_mutex);
+> > +
+> > +	ret = ref_module(this, mod);
+> > +
+> > +#ifdef CONFIG_MODULE_UNLOAD
+> > +	if (ret)
+> > +		goto ret;
+> > +
+> > +	ret = sysfs_create_link(mod->holders_dir,
+> > +				&this->mkobj.kobj, this->name);  
 > 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 46d4d5f2516e..836851baaad4 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -620,7 +620,9 @@ extern void __module_get(struct module *module);
->  
->  /* This is the Right Way to get a module: if it fails, it's being removed,
->   * so pretend it's not there. */
-> -extern bool try_module_get(struct module *module);
-> +extern bool __try_module_get(struct module *module, struct module *this);
-> +
-> +#define try_module_get(mod) __try_module_get(mod, THIS_MODULE)
->  
->  extern void module_put(struct module *module);
->  
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 05a42d8fcd7a..9f4416381e65 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -631,6 +631,35 @@ static int ref_module(struct module *a, struct module *b)
->  	return 0;
->  }
->  
-> +static int ref_module_dependency(struct module *mod,
-> +				       struct module *this)
+> Meta comment, why do we only create links if we can unload things?
 
-This can be on one line, right?
+Good question. I don't know for certain. This is the already existing 
+pattern at add_usage_links() - see kernel/module/sysfs.c.
 
-> +{
-> +	int ret;
-> +
-> +	if (!this || !this->name) {
-> +		return -EINVAL;
-> +	}
+Also, lsmod uses sysfs links when showing dependencies.
 
-Did you run checkpatch on this?  Please do :)
+Regards,
+Mauro
 
-> +
-> +	if (mod == this)
-> +		return 0;
-
-How can this happen?
-
-When people mistakenly call try_module_get(THIS_MODULE)?  We should
-throw up a big warning when that happens anyway as that's always wrong.
-
-But that's a different issue from this change, sorry for the noise.
-
-> +
-> +	mutex_lock(&module_mutex);
-> +
-> +	ret = ref_module(this, mod);
-> +
-> +#ifdef CONFIG_MODULE_UNLOAD
-> +	if (ret)
-> +		goto ret;
-> +
-> +	ret = sysfs_create_link(mod->holders_dir,
-> +				&this->mkobj.kobj, this->name);
-
-Meta comment, why do we only create links if we can unload things?
-
-thanks,
-
-greg k-h
