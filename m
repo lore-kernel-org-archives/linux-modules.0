@@ -2,114 +2,97 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D46FFC433EF
-	for <linux-modules@archiver.kernel.org>; Sat, 30 Apr 2022 13:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F61AC433F5
+	for <linux-modules@archiver.kernel.org>; Sat, 30 Apr 2022 13:41:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242026AbiD3Nly (ORCPT
+        id S241993AbiD3NpR (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 30 Apr 2022 09:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        Sat, 30 Apr 2022 09:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241973AbiD3Nlx (ORCPT
+        with ESMTP id S231572AbiD3NpR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 30 Apr 2022 09:41:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EA22983C;
-        Sat, 30 Apr 2022 06:38:26 -0700 (PDT)
+        Sat, 30 Apr 2022 09:45:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE983A5C0;
+        Sat, 30 Apr 2022 06:41:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4187DB82B82;
-        Sat, 30 Apr 2022 13:38:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA220C385AA;
-        Sat, 30 Apr 2022 13:38:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2B6860EB9;
+        Sat, 30 Apr 2022 13:41:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B8E6C385A7;
+        Sat, 30 Apr 2022 13:41:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651325904;
-        bh=FzJFz5nQnOEB7AB6Bbc1j8nS92uMjFglrLsFGFrMKzw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jlSMgCulySK0sR8W6lTjvw+WKsHy9h2dvPSn/5YMc2Ov1/C/vSQeLPrh3/hxq3C2S
-         3IgkIw0WSNTct9hBvrXmgMyELaYee9X3mtIvkZ2yTAPC2v3ej3vzF8gFH8UU44MXbw
-         KAqWgwhvW5Kb+28/T9aQZOdeMKDQxhCoyaDM5Rc4HmIJ7hWl19h6P1Gfv/gEy6VuWa
-         AFwi7dJptexzaE2VQYSiaVEgvKpTyAV4wyKOTlFHh6sphvpGPBihxxB6k6TaJew2RL
-         kkHhZDiMzx49PBfmL29bVUZATY3SHGlyUfdYempi/ByrrXPMeyQ9uc+WWBkNDMAlQp
-         uxkJBLqr/FN2w==
-Date:   Sat, 30 Apr 2022 14:38:14 +0100
+        s=k20201202; t=1651326114;
+        bh=tqVXu6g9oh/W80TNZwCI08nLQ3wJ9C50shdsYteF9Wk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cb3YOJLytublE7wGW2KxxKiBXvgND1jxCpgihm/fRJWShxCwNNy8GbV5pg0ZWUz1F
+         usDbmllk91NQ1SDqP+Wg+5aaj7u0qE4gneSvSFmgNoLl5bFdHv+GUAWfit0rS2BzJB
+         cTs9YnMu4x9ZowvhBvm3fZW58SWTG1P+bW7T4pEfkVTGpCLVwg8fdtvOykn4uYO8ej
+         PHnQFjFdRZ+FyellvBvwi+DrArmU5sQbIJc1weosrPL7HFDuV+SJ7qJbY6qLDZJxyl
+         gYWYpTSlcFbWKxXYdQjfSWXGLRIZHI1qOtfPll3BC1vzREj89ROC9AsbnHbB6hy1f6
+         y4Vlu/Tc2bP9A==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nknM6-001nsj-Ji; Sat, 30 Apr 2022 14:41:50 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "David Airlie" <airlied@linux.ie>,
+        "Greg KH" <gregkh@linuxfoundation.org>,
+        "Jaroslav Kysela" <perex@perex.cz>,
+        "Kai Vehmanen" <kai.vehmanen@intel.com>,
+        "Lucas De Marchi" <lucas.demarchi@intel.com>,
+        "Pierre-Louis Bossart" <pierre-louis.bossart@intel.com>,
+        "Takashi Iwai" <tiwai@suse.com>, alsa-devel@alsa-project.org,
         dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        mauro.chehab@linux.intel.com,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH v2 1/2] module: update dependencies at try_module_get()
-Message-ID: <20220430143814.7184bd93@sal.lan>
-In-Reply-To: <Ym0l6yeTWCCAeww8@kroah.com>
-References: <cover.1651314499.git.mchehab@kernel.org>
-        <3c7547d551558c9da02038dda45992f91b1f5141.1651314499.git.mchehab@kernel.org>
-        <Ym0l6yeTWCCAeww8@kroah.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        mauro.chehab@linux.intel.com
+Subject: [PATCH v3 2/2] ALSA: hda - identify when audio is provided by a video driver
+Date:   Sat, 30 Apr 2022 14:41:48 +0100
+Message-Id: <6b5f1e2cec0137d5aab089a7e7497972ff5addb1.1651326000.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1651326000.git.mchehab@kernel.org>
+References: <cover.1651326000.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Em Sat, 30 Apr 2022 14:04:59 +0200
-Greg KH <gregkh@linuxfoundation.org> escreveu:
+On some devices, the hda driver needs to hook into a video driver,
+in order to be able to properly access the audio hardware and/or
+the power management function.
 
-> On Sat, Apr 30, 2022 at 11:30:58AM +0100, Mauro Carvalho Chehab wrote:
+That's the case of several snd_hda_intel devices that depends on
+i915 driver.
 
-> Did you run checkpatch on this?  Please do :)
-> 
-> > +
-> > +	if (mod == this)
-> > +		return 0;  
-> 
-> How can this happen?
-> When people mistakenly call try_module_get(THIS_MODULE)?  
+Ensure that a proper reference between the snd-hda driver needing
+such binding is shown at /proc/modules, in order to allow userspace
+to know about such binding.
 
-Yes. There are lots of place where this is happening:
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-	$ git grep try_module_get\(THIS_MODULE|wc -l
-	82
+See [PATCH v3 0/2] at: https://lore.kernel.org/all/cover.1651326000.git.mchehab@kernel.org/
 
-> We should
-> throw up a big warning when that happens anyway as that's always wrong.
-> 
-> But that's a different issue from this change, sorry for the noise.
+ sound/hda/hdac_component.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It sounds very weird to use try_module_get(THIS_MODULE).
-
-We could add a WARN_ON() there - or something similar - but I would do it 
-on a separate patch.
-
-> 
-> > +
-> > +	mutex_lock(&module_mutex);
-> > +
-> > +	ret = ref_module(this, mod);
-> > +
-> > +#ifdef CONFIG_MODULE_UNLOAD
-> > +	if (ret)
-> > +		goto ret;
-> > +
-> > +	ret = sysfs_create_link(mod->holders_dir,
-> > +				&this->mkobj.kobj, this->name);  
-> 
-> Meta comment, why do we only create links if we can unload things?
-
-Good question. I don't know for certain. This is the already existing 
-pattern at add_usage_links() - see kernel/module/sysfs.c.
-
-Also, lsmod uses sysfs links when showing dependencies.
-
-Regards,
-Mauro
+diff --git a/sound/hda/hdac_component.c b/sound/hda/hdac_component.c
+index bb37e7e0bd79..30e130457272 100644
+--- a/sound/hda/hdac_component.c
++++ b/sound/hda/hdac_component.c
+@@ -199,7 +199,7 @@ static int hdac_component_master_bind(struct device *dev)
+ 	}
+ 
+ 	/* pin the module to avoid dynamic unbinding, but only if given */
+-	if (!try_module_get(acomp->ops->owner)) {
++	if (!__try_module_get(acomp->ops->owner, dev->driver->owner)) {
+ 		ret = -ENODEV;
+ 		goto out_unbind;
+ 	}
+-- 
+2.35.1
 
