@@ -2,174 +2,97 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87FB6C433F5
-	for <linux-modules@archiver.kernel.org>; Fri, 29 Apr 2022 15:53:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4856EC433EF
+	for <linux-modules@archiver.kernel.org>; Sat, 30 Apr 2022 10:31:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378273AbiD2P4l (ORCPT
+        id S1382566AbiD3Kef (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 29 Apr 2022 11:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        Sat, 30 Apr 2022 06:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbiD2P4k (ORCPT
+        with ESMTP id S1350985AbiD3Kee (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:56:40 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D13CE10F;
-        Fri, 29 Apr 2022 08:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651247601; x=1682783601;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v3xHt04zUoM51m57wES9OEH4SBADCPxc9G7xtsUo2b0=;
-  b=SjLJi9WGQa+2fBsBQZ+iP6CnjRh4AsWjaLMZALplkkpKvmrmplw1/O9v
-   Y1FMeVs3wz2RklkEz0ddL0ALrnkQrVT34AABBeeDOMvMKzA/X1tcj4UAk
-   Y5P84xf2VajX2YnbJAyxhJ5L1Vh8wxN+oUxrEaFk9MUcylnPAxafnRx+z
-   4/9VlCqvyVQvdLkq8aGX9dtRY9gWCVdiqIjxjnidIImuJypIPaUdoILiO
-   mQXfJU+jpv2dI/mfX0Ce66Ltd3GknkEiKzrSka+XQgXwnh8ZJYK6xq3NI
-   0w3gLQChbC8A55L+N1kJW2weq6vZ40nKaQWTRwWCeM6xfjjUthNcj/2qz
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="329623786"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="329623786"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 08:52:21 -0700
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="706606733"
-Received: from vpareek-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.103.56])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 08:52:20 -0700
-Date:   Fri, 29 Apr 2022 08:52:20 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
-        Luis Chamberlain <mcgrof@kernel.org>, mauro.chehab@intel.com,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-modules@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>
-Subject: Re: [Intel-gfx] [PATCH 1/2] module: add a function to add module
- references
-Message-ID: <20220429155220.6k63lt5knhertj3g@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <cover.1651212016.git.mchehab@kernel.org>
- <a078eb2e46d00ec59c8a91ea0afa5190730c9e58.1651212016.git.mchehab@kernel.org>
- <YmuZovuDaCYDDG4c@phenom.ffwll.local>
- <20220429090757.1acb943a@sal.lan>
- <YmuiKcHgl+nABvo/@kroah.com>
- <20220429101503.4048db5b@sal.lan>
- <Ymu5f8EjdC1Mawzt@kroah.com>
- <20220429112351.0e044950@sal.lan>
+        Sat, 30 Apr 2022 06:34:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A9744A14;
+        Sat, 30 Apr 2022 03:31:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4586D60F72;
+        Sat, 30 Apr 2022 10:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B6AC385AA;
+        Sat, 30 Apr 2022 10:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651314668;
+        bh=ibLHZgh5duYmnW2CJ/M6W3zeJxWtJ8N0MnkeeNj5jHA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Xt7x+fVXZlma+/KQ+av/CDvdkz52dY3sf9Ve/rMRIqLlYnc8JhjnuQQDg8BGbaSFn
+         dBDYAivq9H1wK2Tg4Mkj4ycFiO2wkw3WV7RFOFOFmnqfnp1ILYDr1als9fa4cGjyG8
+         stYiFSL7N9kWWUOwAgAdQcCh0NM9BLYJgbCvCZntGCkgozydyqLPzEvbg/IQ+NZXv2
+         kwXAvjmlXXPMbCWlNhsdWk2iKvE+nhipH3XTy4uEVMPYA1kwRUF2VToGJiSq8+d7tQ
+         RgCe08Dg++2b7on9pABGBJ45kvEnphYSW146cqNBt570XUJTx0NX7UP0ArloJdSCMD
+         WbL+c9zpskX2A==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nkkNQ-001lBR-Gi; Sat, 30 Apr 2022 11:31:00 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "David Airlie" <airlied@linux.ie>,
+        "Greg KH" <gregkh@linuxfoundation.org>,
+        "Jaroslav Kysela" <perex@perex.cz>,
+        "Kai Vehmanen" <kai.vehmanen@intel.com>,
+        "Lucas De Marchi" <lucas.demarchi@intel.com>,
+        "Pierre-Louis Bossart" <pierre-louis.bossart@intel.com>,
+        "Takashi Iwai" <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        mauro.chehab@linux.intel.com
+Subject: [PATCH v2 2/2] ALSA: hda - identify when audio is provided by a video driver
+Date:   Sat, 30 Apr 2022 11:30:59 +0100
+Message-Id: <f93d5d8c490a013cbf7d3018655ac6d73dcab4e2.1651314499.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1651314499.git.mchehab@kernel.org>
+References: <cover.1651314499.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220429112351.0e044950@sal.lan>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Apr 29, 2022 at 11:23:51AM +0100, Mauro Carvalho Chehab wrote:
->Em Fri, 29 Apr 2022 12:10:07 +0200
->Greg KH <gregkh@linuxfoundation.org> escreveu:
->
->> On Fri, Apr 29, 2022 at 10:15:03AM +0100, Mauro Carvalho Chehab wrote:
->> > HI Greg,
->> >
->> > Em Fri, 29 Apr 2022 10:30:33 +0200
->> > Greg KH <gregkh@linuxfoundation.org> escreveu:
->> >
->> > > On Fri, Apr 29, 2022 at 09:07:57AM +0100, Mauro Carvalho Chehab wrote:
->> > > > Hi Daniel,
->> > > >
->> > > > Em Fri, 29 Apr 2022 09:54:10 +0200
->> > > > Daniel Vetter <daniel@ffwll.ch> escreveu:
->> > > >
->> > > > > On Fri, Apr 29, 2022 at 07:31:15AM +0100, Mauro Carvalho Chehab wrote:
->> > > > > > Sometimes, device drivers are bound using indirect references,
->> > > > > > which is not visible when looking at /proc/modules or lsmod.
->> > > > > >
->> > > > > > Add a function to allow setting up module references for such
->> > > > > > cases.
->> > > > > >
->> > > > > > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
->> > > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->> > > > >
->> > > > > This sounds like duct tape at the wrong level. We should have a
->> > > > > device_link connecting these devices, and maybe device_link internally
->> > > > > needs to make sure the respective driver modules stay around for long
->> > > > > enough too. But open-coding this all over the place into every driver that
->> > > > > has some kind of cross-driver dependency sounds terrible.
->> > > > >
->> > > > > Or maybe the bug is that the snd driver keeps accessing the hw/component
->> > > > > side when that is just plain gone. Iirc there's still fundamental issues
->> > > > > there on the sound side of things, which have been attempted to paper over
->> > > > > by timeouts and stuff like that in the past instead of enforcing a hard
->> > > > > link between the snd and i915 side.
->> > > >
->> > > > I agree with you that the device link between snd-hda and the DRM driver
->> > > > should properly handle unbinding on both directions. This is something
->> > > > that require further discussions with ALSA and DRM people, and we should
->> > > > keep working on it.
->> > > >
->> > > > Yet, the binding between those drivers do exist, but, despite other
->> > > > similar inter-driver bindings being properly reported by lsmod, this one
->> > > > is invisible for userspace.
->> > > >
->> > > > What this series does is to make such binding visible. As simple as that.
->> > >
->> > > It also increases the reference count, and creates a user/kernel api
->> > > with the symlinks, right?  Will the reference count increase prevent the
->> > > modules from now being unloadable?
->> > >
->> > > This feels like a very "weak" link between modules that should not be
->> > > needed if reference counting is implemented properly (so that things are
->> > > cleaned up in the correct order.)
->> >
->> > The refcount increment exists even without this patch, as
->> > hda_component_master_bind() at sound/hda/hdac_component.c uses
->> > try_module_get() when it creates the device link.
->>
->> Ok, then why shouldn't try_module_get() be creating this link instead of
->> having to manually do it this way again?  You don't want to have to go
->> around and add this call to all users of that function, right?
->
->Works for me, but this is not a too trivial change, as the new
->try_module_get() function will require two parameters, instead of one:
->
->	- the module to be referenced;
->	- the module which will reference it.
->
->On trivial cases, one will be THIS_MODULE, but, in the specific case
->of snd_hda, the binding is done via an ancillary routine under
->snd_hda_core, but the actual binding happens at snd_hda_intel.
->
->Ok, we could add a __try_module_get() (or whatever other name that
->would properly express what it does) with two parameters, and then
->define try_module_get() as:
->
->	#define try_module_get(mod) __try_module_get(mod, THIS_MODULE)
+On some devices, the hda driver needs to hook into a video driver,
+in order to be able to properly access the audio hardware and/or
+the power management function.
 
-agree that this should be done at this level rather than open coding it
-at every driver. Main improvement being fixed here regardless of the
-snd-hda-intel issue is to properly annotate what is holding a module.
+That's the case of several snd_hda_intel devices that depends on
+i915 driver.
 
-Right now we have 1) symbol module dependencies; 2) kernel references;
-3) userspace references. With (2) and (3) being unknown to the user from
-lsmod pov. Handling this any time try_module_get() is called would make
-(2) visible to lsmod.
+Ensure that a proper reference between the snd-hda driver needing
+such binding is shown at /proc/modules, in order to allow userspace
+to know about such binding.
 
-Paired with fixes to the (unreleased) kmod 30[1], this allows `modprobe
--r --remove-holders <module>` to also try removing the holders before
-removing the module itself.
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-thanks
-Lucas De Marchi
+See [PATCH v2 0/2] at: https://lore.kernel.org/all/cover.1651314499.git.mchehab@kernel.org/
 
-[1] https://lore.kernel.org/linux-modules/20220329090912.geymr6xk7taq4rtq@ldmartin-desk2.jf.intel.com/T/#t
+ sound/hda/hdac_component.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/sound/hda/hdac_component.c b/sound/hda/hdac_component.c
+index bb37e7e0bd79..30e130457272 100644
+--- a/sound/hda/hdac_component.c
++++ b/sound/hda/hdac_component.c
+@@ -199,7 +199,7 @@ static int hdac_component_master_bind(struct device *dev)
+ 	}
+ 
+ 	/* pin the module to avoid dynamic unbinding, but only if given */
+-	if (!try_module_get(acomp->ops->owner)) {
++	if (!__try_module_get(acomp->ops->owner, dev->driver->owner)) {
+ 		ret = -ENODEV;
+ 		goto out_unbind;
+ 	}
+-- 
+2.35.1
 
->
->Would that work for you?
->
->Regards,
->Mauro
