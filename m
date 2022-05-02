@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0751DC433EF
-	for <linux-modules@archiver.kernel.org>; Mon,  2 May 2022 20:51:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FFB8C433EF
+	for <linux-modules@archiver.kernel.org>; Mon,  2 May 2022 20:51:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387362AbiEBUyp (ORCPT
+        id S1387513AbiEBUyv (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 2 May 2022 16:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        Mon, 2 May 2022 16:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387493AbiEBUyo (ORCPT
+        with ESMTP id S1387505AbiEBUys (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 2 May 2022 16:54:44 -0400
+        Mon, 2 May 2022 16:54:48 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E462C642E
-        for <linux-modules@vger.kernel.org>; Mon,  2 May 2022 13:51:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE31A6565
+        for <linux-modules@vger.kernel.org>; Mon,  2 May 2022 13:51:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651524674;
+        s=mimecast20190719; t=1651524677;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fyk1qjVRfuvYLqg1SExRln/WT9DH+HXSu9T9RqEZXqo=;
-        b=BdR6EmYKuNLmnxFq51wlobIBBYGMPYhTk6ayQsPDGA0CbshZ412Gp6jq0deWuFrYAnUERB
-        Y73v+gJlzYJtNebSs3Jz5LnEJm2KosYliNk1YqbjAwL+7AjgemXVSleXq6W5tWTmR6t/5k
-        KqHDM6hA5H7utEtLj61j0SZmbM6aO0g=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=/RrE130eSMlvd7DvNif1xecZQXGFe2pTq64QlGNfROg=;
+        b=UAD49mW00URn2Cio8csmV5cC/LRQtfnHOvHcLC2n/Km2yvojA0KtFCr3P+XB9iaaYYXDcL
+        4jRb2ZgodYIhBvMnI8wyblqzlJguy5SNZfLlrj+oxMuxEiiTjlZ41A8mMhRLB19t3VBbuI
+        gd8jVcIL7FKPexejBDO3QsanR8X6eLs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-202-VAf3sqOPNg-xzO_PRHCxfg-1; Mon, 02 May 2022 16:51:12 -0400
-X-MC-Unique: VAf3sqOPNg-xzO_PRHCxfg-1
-Received: by mail-wm1-f70.google.com with SMTP id bh7-20020a05600c3d0700b003940829b48dso232466wmb.1
-        for <linux-modules@vger.kernel.org>; Mon, 02 May 2022 13:51:12 -0700 (PDT)
+ us-mta-502-qnWNM9a5MA28R2p34F2PzQ-1; Mon, 02 May 2022 16:51:16 -0400
+X-MC-Unique: qnWNM9a5MA28R2p34F2PzQ-1
+Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b0038ec265155fso218180wma.6
+        for <linux-modules@vger.kernel.org>; Mon, 02 May 2022 13:51:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fyk1qjVRfuvYLqg1SExRln/WT9DH+HXSu9T9RqEZXqo=;
-        b=1kz2DXTykTOL7QtUpks4X6ySkk8Op3H+4M1Yb0mc674iyqjPKAy5V5MfxSQTOL9noe
-         hHqoYpXR38RpR5LsF81PJg2UcYPNo6RoRnmHy7hFht7uod+46rhUXuTKnC8IRm7W+jkr
-         fyQx+7hwCyUqR2cQQcl6GTcwhMsfz4ZqdRDe3WMWRg+ER9KBDS6kEN4gNVu+FhEPq8BE
-         +1CIBy97G6B468qylZ/MZnKFprQE3aQ+h4BvRH2t7q1UcVX35EuyPSCbspCwt8Uoli6U
-         YFBOI/y+jE8VzTuLZ3ZXeBz1WCuf9ReLHyCrJpESk4MVp09qy1ViQqnIELCr1BxmSyHQ
-         aE5w==
-X-Gm-Message-State: AOAM532dbEdT2k54inQpmS7mkomG90U7pOJjrf1U2iO0qMpD9oVRzDDu
-        FdRPtoL8poc5us6pBA603HcQNLXTpATdIlzPYvXxbeNM8N9SGrmMZc65p7/+0GOYG0DAjUJp+Vl
-        vEkStNNdFc9ITDBQe33lPQxiN
-X-Received: by 2002:a7b:c190:0:b0:38e:7e47:744a with SMTP id y16-20020a7bc190000000b0038e7e47744amr679516wmi.38.1651524671477;
-        Mon, 02 May 2022 13:51:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxKsvS2IxsQjCeX7CT8ullWyqn23kIb1dUIoGUy6s0v5x+VIfJ9cUyBrwRp2d/3CxqpeULGAA==
-X-Received: by 2002:a7b:c190:0:b0:38e:7e47:744a with SMTP id y16-20020a7bc190000000b0038e7e47744amr679499wmi.38.1651524671272;
-        Mon, 02 May 2022 13:51:11 -0700 (PDT)
+        bh=/RrE130eSMlvd7DvNif1xecZQXGFe2pTq64QlGNfROg=;
+        b=idIhFyo7FE4kQw12VfjAqbhHU8m39fsreiJQWN19vQA+wRTdZkNk0kULzyh4j/2t3t
+         YsrxkU9p0BslxE7+PeR26FrKeUq0yDbEPsUJ0Mlxzpsq7l49mY5Qy7Vq4XCVRdobiC/3
+         t0W/VXHtpC/pTB6RZs6cDs1vHEp+Ou0pVVVaRmWkLQ9ty516eQVp5pDLFmGpdWYP4GTV
+         qhC5m2Dw3lhRkpWlQginCZY45SqLb7XipD7QtAeBCSDtbLwNERXjYIiTtDsAiexUUgGY
+         8FPp8jc/X3bzmljylok8dxf2Qy9wDoMdsq2f7CeVEhpVsj4hsJ7RlSTqWH0FmZbwa28j
+         Xpdg==
+X-Gm-Message-State: AOAM5327iFr7qcm7ljn1I5fB0Nk3eNNO3uuKHKhzBA8pwiqqGYCTh0S3
+        fGiCG/u2bU3dS3vrffUSMc9TXdTxA2o5vLw1c2X+wdoUVOdOnuqINWvemwUbthaNcrHxhWhBh2q
+        K8SwZZKpXuEAjmG80APAvkoop
+X-Received: by 2002:a05:600c:6009:b0:394:33ef:86c8 with SMTP id az9-20020a05600c600900b0039433ef86c8mr661400wmb.83.1651524673930;
+        Mon, 02 May 2022 13:51:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxkos8YnAEh9YSvm+XhUHPRClq8ESwoIPdhprAcYE9bzhNBVujcte0JM5awEg64V0rA4vlgxA==
+X-Received: by 2002:a05:600c:6009:b0:394:33ef:86c8 with SMTP id az9-20020a05600c600900b0039433ef86c8mr661386wmb.83.1651524673646;
+        Mon, 02 May 2022 13:51:13 -0700 (PDT)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id q14-20020adfaa4e000000b0020c5253d91fsm8177336wrd.107.2022.05.02.13.51.07
+        by smtp.gmail.com with ESMTPSA id e23-20020adf9bd7000000b0020c5253d8ccsm8068190wrc.24.2022.05.02.13.51.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 13:51:09 -0700 (PDT)
+        Mon, 02 May 2022 13:51:12 -0700 (PDT)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -63,9 +63,9 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
         atomlin@atomlin.com, ghalat@redhat.com, oleksandr@natalenko.name,
         neelx@redhat.com
-Subject: [PATCH v5 1/3] module: Make module_flags_taint() accept a module's taints bitmap and usable outside core code
-Date:   Mon,  2 May 2022 21:51:03 +0100
-Message-Id: <20220502205105.919523-2-atomlin@redhat.com>
+Subject: [PATCH v5 2/3] module: Move module_assert_mutex_or_preempt() to internal.h
+Date:   Mon,  2 May 2022 21:51:04 +0100
+Message-Id: <20220502205105.919523-3-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220502205105.919523-1-atomlin@redhat.com>
 References: <20220502205105.919523-1-atomlin@redhat.com>
@@ -76,70 +76,68 @@ List-ID: <linux-modules.vger.kernel.org>
 
 No functional change.
 
-The purpose of this patch is to modify module_flags_taint() to accept
-a module's taints bitmap as a parameter and modifies all users
-accordingly. Furthermore, it is now possible to access a given
-module's taint flags data outside of non-essential code yet does
-remain for internal use only.
-
-This is in preparation for module unload taint tracking support.
+This patch migrates module_assert_mutex_or_preempt() to internal.h.
+So, the aforementiond function can be used outside of main/or core
+module code yet will remain restricted for internal use only.
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- kernel/module/internal.h | 1 +
- kernel/module/main.c     | 8 ++++----
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ kernel/module/internal.h | 12 ++++++++++++
+ kernel/module/main.c     | 11 -----------
+ 2 files changed, 12 insertions(+), 11 deletions(-)
 
 diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 3e23bef5884d..abbd1c5ef264 100644
+index abbd1c5ef264..0bdf64c9dfb5 100644
 --- a/kernel/module/internal.h
 +++ b/kernel/module/internal.h
-@@ -100,6 +100,7 @@ int cmp_name(const void *name, const void *sym);
- long module_get_offset(struct module *mod, unsigned int *size, Elf_Shdr *sechdr,
- 		       unsigned int section);
- char *module_flags(struct module *mod, char *buf);
-+size_t module_flags_taint(unsigned long taints, char *buf);
+@@ -10,6 +10,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/rculist.h>
++#include <linux/rcupdate.h>
  
+ #ifndef ARCH_SHF_SMALL
+ #define ARCH_SHF_SMALL 0
+@@ -102,6 +103,17 @@ long module_get_offset(struct module *mod, unsigned int *size, Elf_Shdr *sechdr,
+ char *module_flags(struct module *mod, char *buf);
+ size_t module_flags_taint(unsigned long taints, char *buf);
+ 
++static inline void module_assert_mutex_or_preempt(void)
++{
++#ifdef CONFIG_LOCKDEP
++	if (unlikely(!debug_locks))
++		return;
++
++	WARN_ON_ONCE(!rcu_read_lock_sched_held() &&
++		     !lockdep_is_held(&module_mutex));
++#endif
++}
++
  static inline unsigned long kernel_symbol_value(const struct kernel_symbol *sym)
  {
+ #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 05a42d8fcd7a..7dbdd098b995 100644
+index 7dbdd098b995..7a0484900320 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -890,13 +890,13 @@ static inline int module_unload_init(struct module *mod)
+@@ -118,17 +118,6 @@ static void mod_update_bounds(struct module *mod)
+ #endif
  }
- #endif /* CONFIG_MODULE_UNLOAD */
  
--static size_t module_flags_taint(struct module *mod, char *buf)
-+size_t module_flags_taint(unsigned long taints, char *buf)
- {
- 	size_t l = 0;
- 	int i;
- 
- 	for (i = 0; i < TAINT_FLAGS_COUNT; i++) {
--		if (taint_flags[i].module && test_bit(i, &mod->taints))
-+		if (taint_flags[i].module && test_bit(i, &taints))
- 			buf[l++] = taint_flags[i].c_true;
- 	}
- 
-@@ -974,7 +974,7 @@ static ssize_t show_taint(struct module_attribute *mattr,
- {
- 	size_t l;
- 
--	l = module_flags_taint(mk->mod, buffer);
-+	l = module_flags_taint(mk->mod->taints, buffer);
- 	buffer[l++] = '\n';
- 	return l;
- }
-@@ -2993,7 +2993,7 @@ char *module_flags(struct module *mod, char *buf)
- 	    mod->state == MODULE_STATE_GOING ||
- 	    mod->state == MODULE_STATE_COMING) {
- 		buf[bx++] = '(';
--		bx += module_flags_taint(mod, buf + bx);
-+		bx += module_flags_taint(mod->taints, buf + bx);
- 		/* Show a - for module-is-being-unloaded */
- 		if (mod->state == MODULE_STATE_GOING)
- 			buf[bx++] = '-';
+-static void module_assert_mutex_or_preempt(void)
+-{
+-#ifdef CONFIG_LOCKDEP
+-	if (unlikely(!debug_locks))
+-		return;
+-
+-	WARN_ON_ONCE(!rcu_read_lock_sched_held() &&
+-		!lockdep_is_held(&module_mutex));
+-#endif
+-}
+-
+ /* Block module loading/unloading? */
+ int modules_disabled = 0;
+ core_param(nomodule, modules_disabled, bint, 0);
 -- 
 2.34.1
 
