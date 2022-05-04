@@ -2,70 +2,68 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE21EC433F5
-	for <linux-modules@archiver.kernel.org>; Wed,  4 May 2022 20:30:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F93BC433F5
+	for <linux-modules@archiver.kernel.org>; Wed,  4 May 2022 20:48:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242922AbiEDUeS (ORCPT
+        id S235092AbiEDUvu (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 4 May 2022 16:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
+        Wed, 4 May 2022 16:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378062AbiEDUeB (ORCPT
+        with ESMTP id S238964AbiEDUvt (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 4 May 2022 16:34:01 -0400
+        Wed, 4 May 2022 16:51:49 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EB7E2B;
-        Wed,  4 May 2022 13:30:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3214CD6B;
+        Wed,  4 May 2022 13:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=meJPT/FhJ0t/HxCnUl9CRH+QfNVPReDG9ZhriBQxFCY=; b=pLYhjoEj6qFf8XaRBebMuhPHUH
-        suyXEPq2mEYfo56Vk96bJ/+ovqCcO21nwCbGFaSzYhaFiJtoPHRD3mQZK3YgS8YlPAo3bhORPthpB
-        FvRjH6bshBTryeJk8eooSm/zrjhE+0pf5ZF95NHeIrkwN5dTnnBEY/pUXgDbXzcQyYbbRT9JyDj86
-        4uTLavN0VRsiT0XyxYtWOH9f9k+9n+5JC0bZ3ot1twjcM8FWsVKwdaeePEkFtWUnOX62mK+W1VkM1
-        MWEFn6KtA1UkQFUuPVgGreAu+DZzj8+Z02af/ycm0Q/OKc7JeX1GJdEUdQHFSTigVUHpnKrLhRL8E
-        kbkth4lg==;
+        bh=tk/LcmTUWVNG5nEkY4lVQG/gc3RdSayOBZ2TCUpRTL8=; b=ApD8MbjkZZSobqnBvKcHlUia9o
+        64LTt/muWOs9fuZ8dgS6Zq87PKcSinTn9vAPJVFLCBUnV8r9D7Jnc+Ls9m1RPMN7MDb++qmzAskKl
+        OjokttisTwYsdjkczTiHjekklL5GALJjszQ8QU/Z9T8M0CS00NnpHwn/auiCYPlXgWqV6feMY5x9g
+        fuYyO8Gq12yxCW26katNTm+nfx18LX+vxbJXWEzzTpxQC+3mMi0sD/7hM8GPGS3pxA5JPKW3E6j34
+        q9itG1vF8V0DCROTBs54WXCM6OHWLSvn+ORK+dtUV5zhZpg3jxxoNIs5Ab8LMMZZwsOpEYwjOzb+0
+        hgqAPa/g==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmLdY-00CZDY-Vg; Wed, 04 May 2022 20:30:17 +0000
-Date:   Wed, 4 May 2022 13:30:16 -0700
+        id 1nmLut-00CfkG-Q2; Wed, 04 May 2022 20:48:11 +0000
+Date:   Wed, 4 May 2022 13:48:11 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Frank van der Linden <fllinden@amazon.com>
-Subject: Re: [PATCH v2] module: fix [e_shstrndx].sh_size=0 OOB access
-Message-ID: <YnLiWHx24nTmhIM5@bombadil.infradead.org>
-References: <YnFC93NVRqOterbV@localhost.localdomain>
- <YnGNSNcUbkwLNWNd@bombadil.infradead.org>
- <YnJNTIJeB2NHK9Jh@localhost.localdomain>
+To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-modules@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        yj.chiang@mediatek.com, atomlin@redhat.com
+Subject: Re: [RESEND PATCH] module: show disallowed symbol name for
+ inherit_taint()
+Message-ID: <YnLmi26EBEFJM5aH@bombadil.infradead.org>
+References: <20220427073606.29752-1-lecopzer.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnJNTIJeB2NHK9Jh@localhost.localdomain>
+In-Reply-To: <20220427073606.29752-1-lecopzer.chen@mediatek.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 04, 2022 at 12:54:20PM +0300, Alexey Dobriyan wrote:
-> It is trivial to craft a module to trigger OOB access in this line:
+On Wed, Apr 27, 2022 at 03:36:06PM +0800, Lecopzer Chen wrote:
+> The error log for inherit_taint() doesn't really help to find the
+> symbol which violates GPL rules.
 > 
-> 	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
+> For example,
+> if a module has 300 symbol and includes 50 disallowed symbols,
+> the log only shows the content below and we have no idea what symbol is.
+>     AAA: module using GPL-only symbols uses symbols from proprietary module BBB.
 > 
-> BUG: unable to handle page fault for address: ffffc90000aa0fff
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 100000067 P4D 100000067 PUD 100066067 PMD 10436f067 PTE 0
-> Oops: 0000 [#1] PREEMPT SMP PTI
-> CPU: 7 PID: 1215 Comm: insmod Not tainted 5.18.0-rc5-00007-g9bf578647087-dirty #10
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/01/2014
-> RIP: 0010:load_module+0x19b/0x2391
+> It's hard for user who doesn't really know how the symbol was parsing.
 > 
-> Fixes: ec2a29593c83 ("module: harden ELF info handling")
-> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+> This patch add symbol name to tell the offending symbols explicitly.
+>     AAA: module using GPL-only symbols uses symbols SSS from proprietary module BBB.
+> 
+> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
 
-Thanks! I rebased your patch onto modules-next [0] and applied onto
-modules-testing and pushed out there. If that doesn't break I'll then
-push to modules-next as well.
+Thanks, pushed onto modules-testing. If there are no issues I'll
+eventually push this onto modules-next.
 
   Luis
