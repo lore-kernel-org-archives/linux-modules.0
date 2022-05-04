@@ -2,65 +2,203 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC745C433EF
-	for <linux-modules@archiver.kernel.org>; Tue,  3 May 2022 20:15:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BE52C43217
+	for <linux-modules@archiver.kernel.org>; Wed,  4 May 2022 08:52:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiECUSj (ORCPT
+        id S240794AbiEDI4K (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 3 May 2022 16:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        Wed, 4 May 2022 04:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiECUSi (ORCPT
+        with ESMTP id S1346935AbiEDIxy (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 3 May 2022 16:18:38 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54A321254;
-        Tue,  3 May 2022 13:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8G1IgSRjljB7m3TLcuv2mglJ8lKom48WHW6y+t8C30A=; b=a0xQ5Px9cKZmn5VfqnS+1U8U31
-        Aavv0T2vCXaU6HbVqdNOx0Q+amGaxchEXkgA1g7/+a5SBrei82teCEduBCWV8EakaSxgoM6pqedTX
-        G1Aew6/Pm5dUHBEF2v1puzq2LizypyhNVoS99YKYoyfi5iKhmPuRuGZrm+P+CFHmWRiNXi6v5ANQ1
-        496kJwKw0e4lbevpmRo9GkTRIQ+zPekl7KIt7sp9x8xWd+rfAEGz9t2ru7kBIu6y+ksTpPh6t8g5p
-        ve45eZu71/paO9V2kerEdvjWRAXuPwBfrlQHePteAQqwp+Buu7kjFlMPTJagLQSOPJ40oolTgnUXA
-        CmnvFptA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nlyvI-007Wqk-Dn; Tue, 03 May 2022 20:15:04 +0000
-Date:   Tue, 3 May 2022 13:15:04 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH] module: fix [e_shstrndx].sh_size=0 OOB access
-Message-ID: <YnGNSNcUbkwLNWNd@bombadil.infradead.org>
-References: <YnFC93NVRqOterbV@localhost.localdomain>
+        Wed, 4 May 2022 04:53:54 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF142613C
+        for <linux-modules@vger.kernel.org>; Wed,  4 May 2022 01:49:46 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id a21so935689edb.1
+        for <linux-modules@vger.kernel.org>; Wed, 04 May 2022 01:49:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XXrjEm2wIrBddPNT8DRElEMfxh0MzkztaH2UgBD/RaY=;
+        b=efE5YHtoUUJxgkMLw6aJY/tO1Sbsm/gyrBiwHtax5k21PegImsGITrNG8wnJx1I8Wx
+         JEzYO6eWqZBNTPlO4jqHXUEvMinO76P3PsI58d1/hufLNbsyGLjvtAY+TUsFKAhb/MMo
+         kpWR+sw+6y61D5IGtM9/mNtird2IBxuTVBTn0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=XXrjEm2wIrBddPNT8DRElEMfxh0MzkztaH2UgBD/RaY=;
+        b=S4F89a1OeIxhntbwDgneVdUbmVjevFsNYO7NtQhVISveZxU3Y3WE6UwEVMRJESzWWX
+         5tq0aUSn1Djhgez9yBN3hMRHfZ+V/E1dVQIEgOMhEKZuNecEF4wohi0AZ0f6kw5v8Rx8
+         b9yBaKfmxvzk4h5rRZXZEq/t8LiGIkYLFAT/SYk3myA1wy2g6aPEafE8abE2JNmpdyIJ
+         RLqj9b7mephpLviNXRU5b82q6aJ5pyivwdiVghvbk93fzRua3af2EKFJxtRRyAuitdfU
+         gUpmEU5qnZcbTQquyHamY41gQte2m6zJ14GFPMY3YquusbrSVsa5ZVBJi01uzcYOrJVR
+         Rvrg==
+X-Gm-Message-State: AOAM531M/HiwWd53pBsj3dhzTX1SKr0fELkkSBgf3eiRYGo0q9EyNpJe
+        u6YrgAxR0zh04pYfEGKddfCWIw==
+X-Google-Smtp-Source: ABdhPJzDxtt75yICh75Xfe3J/PRTpYBjGupKxzPWB5UB481q/1zFzLaBZ6sskEhMuC4ZJGYQgKLdcw==
+X-Received: by 2002:a05:6402:1e8d:b0:426:9:6ec with SMTP id f13-20020a0564021e8d00b00426000906ecmr22255316edf.55.1651654184780;
+        Wed, 04 May 2022 01:49:44 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id el10-20020a170907284a00b006f3ef214e32sm5433599ejc.152.2022.05.04.01.49.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 01:49:44 -0700 (PDT)
+Date:   Wed, 4 May 2022 10:49:42 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Luis Chamberlain <mcgrof@kernel.org>, mauro.chehab@intel.com,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH 1/2] module: add a function to add module references
+Message-ID: <YnI+Ji+EwLLUhq9T@phenom.ffwll.local>
+Mail-Followup-To: Greg KH <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>, mauro.chehab@intel.com,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Dan Williams <dan.j.williams@intel.com>
+References: <cover.1651212016.git.mchehab@kernel.org>
+ <a078eb2e46d00ec59c8a91ea0afa5190730c9e58.1651212016.git.mchehab@kernel.org>
+ <YmuZovuDaCYDDG4c@phenom.ffwll.local>
+ <20220429090757.1acb943a@sal.lan>
+ <YmuiKcHgl+nABvo/@kroah.com>
+ <20220429101503.4048db5b@sal.lan>
+ <Ymu5f8EjdC1Mawzt@kroah.com>
+ <20220429112351.0e044950@sal.lan>
+ <Ymu/keaggU6Uajom@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnFC93NVRqOterbV@localhost.localdomain>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <Ymu/keaggU6Uajom@kroah.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, May 03, 2022 at 05:57:59PM +0300, Alexey Dobriyan wrote:
-> It is trivial to craft a module to trigger OOB access in this line:
+On Fri, Apr 29, 2022 at 12:36:01PM +0200, Greg KH wrote:
+> On Fri, Apr 29, 2022 at 11:23:51AM +0100, Mauro Carvalho Chehab wrote:
+> > Em Fri, 29 Apr 2022 12:10:07 +0200
+> > Greg KH <gregkh@linuxfoundation.org> escreveu:
+> > 
+> > > On Fri, Apr 29, 2022 at 10:15:03AM +0100, Mauro Carvalho Chehab wrote:
+> > > > HI Greg,
+> > > > 
+> > > > Em Fri, 29 Apr 2022 10:30:33 +0200
+> > > > Greg KH <gregkh@linuxfoundation.org> escreveu:
+> > > >   
+> > > > > On Fri, Apr 29, 2022 at 09:07:57AM +0100, Mauro Carvalho Chehab wrote:  
+> > > > > > Hi Daniel,
+> > > > > > 
+> > > > > > Em Fri, 29 Apr 2022 09:54:10 +0200
+> > > > > > Daniel Vetter <daniel@ffwll.ch> escreveu:
+> > > > > >     
+> > > > > > > On Fri, Apr 29, 2022 at 07:31:15AM +0100, Mauro Carvalho Chehab wrote:    
+> > > > > > > > Sometimes, device drivers are bound using indirect references,
+> > > > > > > > which is not visible when looking at /proc/modules or lsmod.
+> > > > > > > > 
+> > > > > > > > Add a function to allow setting up module references for such
+> > > > > > > > cases.
+> > > > > > > > 
+> > > > > > > > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> > > > > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>      
+> > > > > > > 
+> > > > > > > This sounds like duct tape at the wrong level. We should have a
+> > > > > > > device_link connecting these devices, and maybe device_link internally
+> > > > > > > needs to make sure the respective driver modules stay around for long
+> > > > > > > enough too. But open-coding this all over the place into every driver that
+> > > > > > > has some kind of cross-driver dependency sounds terrible.
+> > > > > > > 
+> > > > > > > Or maybe the bug is that the snd driver keeps accessing the hw/component
+> > > > > > > side when that is just plain gone. Iirc there's still fundamental issues
+> > > > > > > there on the sound side of things, which have been attempted to paper over
+> > > > > > > by timeouts and stuff like that in the past instead of enforcing a hard
+> > > > > > > link between the snd and i915 side.    
+> > > > > > 
+> > > > > > I agree with you that the device link between snd-hda and the DRM driver
+> > > > > > should properly handle unbinding on both directions. This is something
+> > > > > > that require further discussions with ALSA and DRM people, and we should
+> > > > > > keep working on it.
+> > > > > > 
+> > > > > > Yet, the binding between those drivers do exist, but, despite other
+> > > > > > similar inter-driver bindings being properly reported by lsmod, this one
+> > > > > > is invisible for userspace.
+> > > > > > 
+> > > > > > What this series does is to make such binding visible. As simple as that.    
+> > > > > 
+> > > > > It also increases the reference count, and creates a user/kernel api
+> > > > > with the symlinks, right?  Will the reference count increase prevent the
+> > > > > modules from now being unloadable?
+> > > > >
+> > > > > This feels like a very "weak" link between modules that should not be
+> > > > > needed if reference counting is implemented properly (so that things are
+> > > > > cleaned up in the correct order.)  
+> > > > 
+> > > > The refcount increment exists even without this patch, as
+> > > > hda_component_master_bind() at sound/hda/hdac_component.c uses 
+> > > > try_module_get() when it creates the device link.  
+> > > 
+> > > Ok, then why shouldn't try_module_get() be creating this link instead of
+> > > having to manually do it this way again?  You don't want to have to go
+> > > around and add this call to all users of that function, right?
+> > 
+> > Works for me, but this is not a too trivial change, as the new 
+> > try_module_get() function will require two parameters, instead of one:
+> > 
+> > 	- the module to be referenced;
+> > 	- the module which will reference it.
+> > 
+> > On trivial cases, one will be THIS_MODULE, but, in the specific case
+> > of snd_hda, the binding is done via an ancillary routine under 
+> > snd_hda_core, but the actual binding happens at snd_hda_intel.
 > 
-> 	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
+> For calls that want to increment a module reference on behalf of a
+> different code segment than is calling it, create a new function so we
+> can audit-the-heck out of those code paths as odds are, they are unsafe.
 > 
-> BUG: unable to handle page fault for address: ffffc90000aa0fff
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 100000067 P4D 100000067 PUD 100066067 PMD 10436f067 PTE 0
-> Oops: 0000 [#1] PREEMPT SMP PTI
-> CPU: 7 PID: 1215 Comm: insmod Not tainted 5.18.0-rc5-00007-g9bf578647087-dirty #10
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/01/2014
-> RIP: 0010:load_module+0x19b/0x2391
+> For the normal code path, just turn try_module_get() into a macro that
+> includes THIS_MODULE as part of it like we do for the driver register
+> functions (see usb_register_driver() in include/linux/usb.h as an
+> example of how to do that.)
 > 
-> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+> > Ok, we could add a __try_module_get() (or whatever other name that
+> > would properly express what it does) with two parameters, and then
+> > define try_module_get() as:
+> > 
+> > 	#define try_module_get(mod) __try_module_get(mod, THIS_MODULE)
+> 
+> Yes, that's the way forward.
 
-Thanks! Can you resend and Cc stable? This seems like an issue present for
-a long time, can you identify the commit which introduced the issue?
+This might result in some complaints because it can create module refcount
+loops. Well, seemingly module refcount loops, you can break them by first
+unloading the driver, and then unloading the module. Currently a lot of
+folks rely on just unload the module to tear down the drivers (and all in
+right order through device links and component and all that). So maybe we
+want to make this some kind of weak reference, i.e. it shows up in lsmod,
+but the magic teardown still works and the module isn't actually pinnned.
 
-  Luis
+Either way I agree that something like this sounds like the right
+approach.
+-Daniel
+> 
+> thanks,
+> 
+> greg k-h
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
