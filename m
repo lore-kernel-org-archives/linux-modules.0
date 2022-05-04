@@ -2,121 +2,90 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04BDCC433F5
-	for <linux-modules@archiver.kernel.org>; Wed,  4 May 2022 09:54:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC554C433F5
+	for <linux-modules@archiver.kernel.org>; Wed,  4 May 2022 19:46:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345935AbiEDJ6A (ORCPT
+        id S239983AbiEDTuJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 4 May 2022 05:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
+        Wed, 4 May 2022 15:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235224AbiEDJ6A (ORCPT
+        with ESMTP id S1377706AbiEDTtx (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 4 May 2022 05:58:00 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEB2286D9;
-        Wed,  4 May 2022 02:54:24 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i19so1821916eja.11;
-        Wed, 04 May 2022 02:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TfvVKp6AkwRbq+jAIJDqhghg2eRcDHqJH8bycnO2Thw=;
-        b=E3z2I+NBUfSCR21hiF9iDq2sioocRjLNwF/AYut+EAiw2Uz3Eg/qJ2RXi3+zNvCVNk
-         zN15rrYpafWNEreJqLDP+t3ib9jSgfC8hfSEHnPQ6RORNw2C9K+NCZ/uaqQHQQT9dgGj
-         pE7JoOZ/R8bDrhWMjf4mD8fY5+PZEpO5jLFT6cmk0FFaPmKApHp22I9Xk7o1WVI0Nufq
-         X0qdnGy5cK5mYtvcZT1n6J/8AUf+ShN7ZugPn86cj4rN6SqbXImI5G/z0rrTXYcMsj75
-         aFOIwQZPMBDKxxnxdzs3i0oWdpZh7QH7K6zqJLIx+EKax7sRHXJFq1A6Kg/uAmv0FbA5
-         3nVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TfvVKp6AkwRbq+jAIJDqhghg2eRcDHqJH8bycnO2Thw=;
-        b=U0GignBkfl7O3d2KShkYbAnpTSfP5rcTUwLJW9XXj1yl8p+tA6wkzlUqFaWNoKMTrl
-         FXr3puiRTybHlTgkV3RZKGhrGndlyc1pOemWtWIFjvKmGWFiFkJjNGxPkeZPt0KEKYUp
-         8LenPU1oBYX2917SCudN1Pu8GXKouGhLBsw0aEiVrLyZXu2u0wwNz13AvQOjBldVz6Yy
-         pVxdS+YZoruCKkY5BlF81wsPFABe0+3lOzj50Gcg8w9+YVTSq98Ak8AmbqX/Xb3ACzRx
-         rx0GKDp/ZeFYgBU/5YEiZShq/S6IUo+wQYMZgHjDGq8fIgUJN2vNTPaO9cxq7UXdyHRJ
-         n6+Q==
-X-Gm-Message-State: AOAM531G1MSXyio0HCdwEJcSv3s86rROtmqjdzEtXr945QBIGBMvPrE8
-        mY8qmVpmMfDhdbMX7F/Tw1iGVVsu8g==
-X-Google-Smtp-Source: ABdhPJybCpwemBTPeZ+m5IJa9Wf7RRx3orImU2O0p/+HkMyXtiKmUBYFgeM+t8J3ZuJ1ySLxsD3EXg==
-X-Received: by 2002:a17:907:6d07:b0:6f3:d077:813a with SMTP id sa7-20020a1709076d0700b006f3d077813amr19942702ejc.138.1651658063146;
-        Wed, 04 May 2022 02:54:23 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.252.36])
-        by smtp.gmail.com with ESMTPSA id d12-20020a50fb0c000000b0042617ba6399sm8913640edq.35.2022.05.04.02.54.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 02:54:22 -0700 (PDT)
-Date:   Wed, 4 May 2022 12:54:20 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Frank van der Linden <fllinden@amazon.com>
-Subject: [PATCH v2] module: fix [e_shstrndx].sh_size=0 OOB access
-Message-ID: <YnJNTIJeB2NHK9Jh@localhost.localdomain>
-References: <YnFC93NVRqOterbV@localhost.localdomain>
- <YnGNSNcUbkwLNWNd@bombadil.infradead.org>
+        Wed, 4 May 2022 15:49:53 -0400
+Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F61F4DF7C
+        for <linux-modules@vger.kernel.org>; Wed,  4 May 2022 12:46:16 -0700 (PDT)
+Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-06.nifty.com with ESMTP id 244Jhst0002488
+        for <linux-modules@vger.kernel.org>; Thu, 5 May 2022 04:43:54 +0900
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-09.nifty.com with ESMTP id 244JhL7m001234;
+        Thu, 5 May 2022 04:43:23 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 244JhL7m001234
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1651693403;
+        bh=98mPeoJXI1ySCwQ5M2g+AhZXZflDUK/pAReyjjvyXS4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=APhVXgF3SPVf2PKJIsbMAnePRT0JFQ2ntS+b1lbf9Y9GPRqtq5tz68oC8TXQm7GCt
+         CUkt0QDH6qiCGxvc/2E1aStctEyNr5SLnKV26bYnmHGovbUXR6u8B3pmxnotzcznwP
+         GiuE8DkbGw92F1gDUHbTlVoWD5GH2jl+4tX0J9Am9pcxQA89OIQJXVlWAOlMC1gEJq
+         HtgCPU0S97XspvLGj9H1OPb2Dp1tD8WrFbBg4n7uxxjwU2QZs5lEIAjgqc83BUEllt
+         YnJd5YpvxmVMQcULTIIe66kwNN1syEb0IsbqZFK/ehABvsnv2uKdBb13VwNpcz6mfr
+         NlFizDg3/HLTw==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 2/3] module: do not binary-search in __ksymtab_gpl if fsa->gplok is false
+Date:   Thu,  5 May 2022 04:42:44 +0900
+Message-Id: <20220504194245.1088063-3-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220504194245.1088063-1-masahiroy@kernel.org>
+References: <20220504194245.1088063-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YnGNSNcUbkwLNWNd@bombadil.infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-It is trivial to craft a module to trigger OOB access in this line:
+Currently, !fsa->gplok && syms->license == GPL_ONLY) is checked after
+bsearch() succeeds.
 
-	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
+It is meaningless to do the binary search in the GPL symbol table when
+fsa->gplok is false because we know find_exported_symbol_in_section()
+will fail anyway.
 
-BUG: unable to handle page fault for address: ffffc90000aa0fff
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 100000067 P4D 100000067 PUD 100066067 PMD 10436f067 PTE 0
-Oops: 0000 [#1] PREEMPT SMP PTI
-CPU: 7 PID: 1215 Comm: insmod Not tainted 5.18.0-rc5-00007-g9bf578647087-dirty #10
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/01/2014
-RIP: 0010:load_module+0x19b/0x2391
+This check should be done before bsearch().
 
-Fixes: ec2a29593c83 ("module: harden ELF info handling")
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- kernel/module.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ kernel/module.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/kernel/module.c b/kernel/module.c
+index d57beb6b4eee..4380ceb825b9 100644
 --- a/kernel/module.c
 +++ b/kernel/module.c
-@@ -3033,6 +3033,10 @@ static int elf_validity_check(struct load_info *info)
- 	 * strings in the section safe.
- 	 */
- 	info->secstrings = (void *)info->hdr + strhdr->sh_offset;
-+	if (strhdr->sh_size == 0) {
-+		pr_err("empty section name table\n");
-+		goto no_exec;
-+	}
- 	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
- 		pr_err("ELF Spec violation: section name table isn't null terminated\n");
- 		goto no_exec;
+@@ -448,8 +448,6 @@ static bool check_exported_symbol(const struct symsearch *syms,
+ 				  struct module *owner, unsigned int symnum,
+ 				  struct find_symbol_arg *fsa)
+ {
+-	if (!fsa->gplok && syms->license == GPL_ONLY)
+-		return false;
+ 	fsa->owner = owner;
+ 	fsa->crc = symversion(syms->crcs, symnum);
+ 	fsa->sym = &syms->start[symnum];
+@@ -497,6 +495,9 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
+ {
+ 	struct kernel_symbol *sym;
+ 
++	if (!fsa->gplok && syms->license == GPL_ONLY)
++		return false;
++
+ 	sym = bsearch(fsa->name, syms->start, syms->stop - syms->start,
+ 			sizeof(struct kernel_symbol), cmp_name);
+ 
+-- 
+2.32.0
 
-
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
-
- kernel/module.c |    4 ++++
- 1 file changed, 4 insertions(+)
-
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3033,6 +3033,10 @@ static int elf_validity_check(struct load_info *info)
- 	 * strings in the section safe.
- 	 */
- 	info->secstrings = (void *)info->hdr + strhdr->sh_offset;
-+	if (strhdr->sh_size == 0) {
-+		pr_err("empty section name table\n");
-+		goto no_exec;
-+	}
- 	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
- 		pr_err("ELF Spec violation: section name table isn't null terminated\n");
- 		goto no_exec;
