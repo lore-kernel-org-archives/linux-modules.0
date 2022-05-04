@@ -2,61 +2,70 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD9E9C433EF
-	for <linux-modules@archiver.kernel.org>; Wed,  4 May 2022 20:22:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE21EC433F5
+	for <linux-modules@archiver.kernel.org>; Wed,  4 May 2022 20:30:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238526AbiEDUZo (ORCPT
+        id S242922AbiEDUeS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 4 May 2022 16:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
+        Wed, 4 May 2022 16:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235219AbiEDUZo (ORCPT
+        with ESMTP id S1378062AbiEDUeB (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 4 May 2022 16:25:44 -0400
+        Wed, 4 May 2022 16:34:01 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E75488A1;
-        Wed,  4 May 2022 13:22:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EB7E2B;
+        Wed,  4 May 2022 13:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rLx+c7VTqOEfz7fcI/lgHktEMgXhYRDtYOiELRvMPrc=; b=LlrQjoofxxS7kPCi/rC2//Wwok
-        Mb3oXzepzm1cWSQGZ444BCN1+dO/xftv7/5Z7Z27TmUORRD3gwB2sK4aoRXoJvbcROBnMZf9Rkjz7
-        FZ8t0ZEcP88eJ9MRJduocKOqSKYwT+i24NlHtWcfHvmAjDKgJBh/Qn2D8REn0NnFD4nArtfamhETt
-        h8ITkBdmGl0/2bLuOcSz4yxzrmkCIQqUpDUc5U91wcD5MnLsGFustS1cp3KsoKgSvyS9LWCGbo4kM
-        fbtG2Qj2Hi9qE8VpkLSTPb4hHt5BM9Q8GtwZF+70Nhdh1X6nFqnhyvMA4hPYf5ZHvVLftlkY0yQWk
-        neJ1s9MQ==;
+        bh=meJPT/FhJ0t/HxCnUl9CRH+QfNVPReDG9ZhriBQxFCY=; b=pLYhjoEj6qFf8XaRBebMuhPHUH
+        suyXEPq2mEYfo56Vk96bJ/+ovqCcO21nwCbGFaSzYhaFiJtoPHRD3mQZK3YgS8YlPAo3bhORPthpB
+        FvRjH6bshBTryeJk8eooSm/zrjhE+0pf5ZF95NHeIrkwN5dTnnBEY/pUXgDbXzcQyYbbRT9JyDj86
+        4uTLavN0VRsiT0XyxYtWOH9f9k+9n+5JC0bZ3ot1twjcM8FWsVKwdaeePEkFtWUnOX62mK+W1VkM1
+        MWEFn6KtA1UkQFUuPVgGreAu+DZzj8+Z02af/ycm0Q/OKc7JeX1GJdEUdQHFSTigVUHpnKrLhRL8E
+        kbkth4lg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmLVe-00CWlB-An; Wed, 04 May 2022 20:22:06 +0000
-Date:   Wed, 4 May 2022 13:22:06 -0700
+        id 1nmLdY-00CZDY-Vg; Wed, 04 May 2022 20:30:17 +0000
+Date:   Wed, 4 May 2022 13:30:16 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] module: trivial cleanups for symbol search
-Message-ID: <YnLgbjFdFke9Jzzv@bombadil.infradead.org>
-References: <20220504194245.1088063-1-masahiroy@kernel.org>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Frank van der Linden <fllinden@amazon.com>
+Subject: Re: [PATCH v2] module: fix [e_shstrndx].sh_size=0 OOB access
+Message-ID: <YnLiWHx24nTmhIM5@bombadil.infradead.org>
+References: <YnFC93NVRqOterbV@localhost.localdomain>
+ <YnGNSNcUbkwLNWNd@bombadil.infradead.org>
+ <YnJNTIJeB2NHK9Jh@localhost.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220504194245.1088063-1-masahiroy@kernel.org>
+In-Reply-To: <YnJNTIJeB2NHK9Jh@localhost.localdomain>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, May 05, 2022 at 04:42:42AM +0900, Masahiro Yamada wrote:
+On Wed, May 04, 2022 at 12:54:20PM +0300, Alexey Dobriyan wrote:
+> It is trivial to craft a module to trigger OOB access in this line:
 > 
-> Masahiro Yamada (3):
->   module: do not pass opaque pointer for symbol search
->   module: do not binary-search in __ksymtab_gpl if fsa->gplok is false
->   module: merge check_exported_symbol() into
->     find_exported_symbol_in_section()
+> 	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
 > 
->  kernel/module.c | 32 +++++++++++---------------------
->  1 file changed, 11 insertions(+), 21 deletions(-)
+> BUG: unable to handle page fault for address: ffffc90000aa0fff
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 100000067 P4D 100000067 PUD 100066067 PMD 10436f067 PTE 0
+> Oops: 0000 [#1] PREEMPT SMP PTI
+> CPU: 7 PID: 1215 Comm: insmod Not tainted 5.18.0-rc5-00007-g9bf578647087-dirty #10
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/01/2014
+> RIP: 0010:load_module+0x19b/0x2391
+> 
+> Fixes: ec2a29593c83 ("module: harden ELF info handling")
+> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
 
-Thanks! The droid you are looking for however has morphed quite a bit,
-any chance you can rebase onto modules-next [0] and resend a v2?
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
+Thanks! I rebased your patch onto modules-next [0] and applied onto
+modules-testing and pushed out there. If that doesn't break I'll then
+push to modules-next as well.
 
   Luis
