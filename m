@@ -2,68 +2,99 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F93BC433F5
-	for <linux-modules@archiver.kernel.org>; Wed,  4 May 2022 20:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E98D2C433EF
+	for <linux-modules@archiver.kernel.org>; Thu,  5 May 2022 03:53:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235092AbiEDUvu (ORCPT
+        id S241303AbiEED5H (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 4 May 2022 16:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
+        Wed, 4 May 2022 23:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238964AbiEDUvt (ORCPT
+        with ESMTP id S229556AbiEED5G (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 4 May 2022 16:51:49 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3214CD6B;
-        Wed,  4 May 2022 13:48:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tk/LcmTUWVNG5nEkY4lVQG/gc3RdSayOBZ2TCUpRTL8=; b=ApD8MbjkZZSobqnBvKcHlUia9o
-        64LTt/muWOs9fuZ8dgS6Zq87PKcSinTn9vAPJVFLCBUnV8r9D7Jnc+Ls9m1RPMN7MDb++qmzAskKl
-        OjokttisTwYsdjkczTiHjekklL5GALJjszQ8QU/Z9T8M0CS00NnpHwn/auiCYPlXgWqV6feMY5x9g
-        fuYyO8Gq12yxCW26katNTm+nfx18LX+vxbJXWEzzTpxQC+3mMi0sD/7hM8GPGS3pxA5JPKW3E6j34
-        q9itG1vF8V0DCROTBs54WXCM6OHWLSvn+ORK+dtUV5zhZpg3jxxoNIs5Ab8LMMZZwsOpEYwjOzb+0
-        hgqAPa/g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmLut-00CfkG-Q2; Wed, 04 May 2022 20:48:11 +0000
-Date:   Wed, 4 May 2022 13:48:11 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-modules@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        yj.chiang@mediatek.com, atomlin@redhat.com
-Subject: Re: [RESEND PATCH] module: show disallowed symbol name for
- inherit_taint()
-Message-ID: <YnLmi26EBEFJM5aH@bombadil.infradead.org>
-References: <20220427073606.29752-1-lecopzer.chen@mediatek.com>
+        Wed, 4 May 2022 23:57:06 -0400
+X-Greylist: delayed 29375 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 20:53:27 PDT
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657F863A2;
+        Wed,  4 May 2022 20:53:27 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id 2453qiRF021346;
+        Thu, 5 May 2022 12:52:45 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 2453qiRF021346
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1651722765;
+        bh=Xp/Il9izgFFUGGxMDiJyqVoFfLzqSe5l32yd/T521y4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VY6oS+YVRhjSqtwoy042ugda75ysUAUIojehflDfnYTlp0JXZa0/elFOosRxjN67y
+         JB6wRXlIL+0hEDv6YYMKMHwOFokVvVyV1HCmyvZG2wfz88aw6fNnFR6bHU1cgndSjK
+         FOX57Bxocv6ly6biNS23x+aHpiucHsoBUqjqzKb37LTSf97G4CpZ7nJ+qTF7G4diCO
+         uBEy1qIfBSutBrP70b58TsC5abSyO8ZEM1ZyCLx687ET9MztvtdnA7lDENDmAcQWxV
+         uTJW+1HnxjlmM3hY53g0j96oH3R0NV5dL+q3Btg4qnTiqd7GlYyAr06XqJoG4xGkan
+         QPzClrr4Kkqdg==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v2 1/3] module: do not pass opaque pointer for symbol search
+Date:   Thu,  5 May 2022 12:52:10 +0900
+Message-Id: <20220505035212.1130858-2-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220505035212.1130858-1-masahiroy@kernel.org>
+References: <20220505035212.1130858-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427073606.29752-1-lecopzer.chen@mediatek.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Apr 27, 2022 at 03:36:06PM +0800, Lecopzer Chen wrote:
-> The error log for inherit_taint() doesn't really help to find the
-> symbol which violates GPL rules.
-> 
-> For example,
-> if a module has 300 symbol and includes 50 disallowed symbols,
-> the log only shows the content below and we have no idea what symbol is.
->     AAA: module using GPL-only symbols uses symbols from proprietary module BBB.
-> 
-> It's hard for user who doesn't really know how the symbol was parsing.
-> 
-> This patch add symbol name to tell the offending symbols explicitly.
->     AAA: module using GPL-only symbols uses symbols SSS from proprietary module BBB.
-> 
-> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
+There is no need to use an opaque pointer for check_exported_symbol()
+or find_exported_symbol_in_section.
 
-Thanks, pushed onto modules-testing. If there are no issues I'll
-eventually push this onto modules-next.
+Pass (struct find_symbol_arg *) explicitly.
 
-  Luis
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ kernel/module/main.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index fe44d46c378b..28ece86d99dc 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -244,11 +244,9 @@ static __maybe_unused void *any_section_objs(const struct load_info *info,
+ #endif
+ 
+ static bool check_exported_symbol(const struct symsearch *syms,
+-				  struct module *owner,
+-				  unsigned int symnum, void *data)
++				  struct module *owner, unsigned int symnum,
++				  struct find_symbol_arg *fsa)
+ {
+-	struct find_symbol_arg *fsa = data;
+-
+ 	if (!fsa->gplok && syms->license == GPL_ONLY)
+ 		return false;
+ 	fsa->owner = owner;
+@@ -285,16 +283,15 @@ int cmp_name(const void *name, const void *sym)
+ 
+ static bool find_exported_symbol_in_section(const struct symsearch *syms,
+ 					    struct module *owner,
+-					    void *data)
++					    struct find_symbol_arg *fsa)
+ {
+-	struct find_symbol_arg *fsa = data;
+ 	struct kernel_symbol *sym;
+ 
+ 	sym = bsearch(fsa->name, syms->start, syms->stop - syms->start,
+ 			sizeof(struct kernel_symbol), cmp_name);
+ 
+ 	if (sym != NULL && check_exported_symbol(syms, owner,
+-						 sym - syms->start, data))
++						 sym - syms->start, fsa))
+ 		return true;
+ 
+ 	return false;
+-- 
+2.32.0
+
