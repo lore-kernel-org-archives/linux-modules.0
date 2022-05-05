@@ -2,88 +2,51 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A690C433FE
-	for <linux-modules@archiver.kernel.org>; Thu,  5 May 2022 03:53:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 890A9C433EF
+	for <linux-modules@archiver.kernel.org>; Thu,  5 May 2022 06:07:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241949AbiEED5K (ORCPT
+        id S231769AbiEEGK7 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 4 May 2022 23:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
+        Thu, 5 May 2022 02:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbiEED5H (ORCPT
+        with ESMTP id S230306AbiEEGK6 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 4 May 2022 23:57:07 -0400
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEDFB7C0;
-        Wed,  4 May 2022 20:53:27 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 2453qiRG021346;
-        Thu, 5 May 2022 12:52:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 2453qiRG021346
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651722766;
-        bh=Ucyg107RFa+06vZD++CcuYxSjjefwnfQNS/0NyIzQIg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DDIoxuNtXpepdbpzi5Z7MHUW865iucz9GQYpLQS2CZ1upBYd/EGLOdXL+IZFspXZY
-         5kJSySkgstLpH/LcspuJwA6nx6LmAZp8yTg6HOpnEAiC1s0UYZGXQNrAQN26PvGXwc
-         iu/jwS2BoJfA4NDck0geugmn5V9QOxjCFQsaagT4pVtoSd3RuiI27IlmOE8HjR6VYP
-         fY8+742PWFg2VXeDiy12jFfYXUjmpnSfv9+5vwwBDV7nFvD56e6ZU5SK4PEDTvBvyL
-         AvInFzB82DrGPAj03o99b1g7vssaV4jObEkFIpxnwi1CUf2QwbJm/NNKX47w5qvl8q
-         gsoT9TBwurGog==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v2 2/3] module: do not binary-search in __ksymtab_gpl if fsa->gplok is false
-Date:   Thu,  5 May 2022 12:52:11 +0900
-Message-Id: <20220505035212.1130858-3-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220505035212.1130858-1-masahiroy@kernel.org>
+        Thu, 5 May 2022 02:10:58 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948E837BC0;
+        Wed,  4 May 2022 23:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2Qpucw3oLv2CRbRUcWob5k8MPLSfidQ+h1vDMyl/0sg=; b=wAME08WBqMGroIuoojj2vANlMm
+        nzWTwW0VDOPHh9E70noMJvBFAtyB6Qi08bFjbBQ8Nw0Ro8InFvuJs7dHqHPbHdQevLJFDLfg2G9G8
+        wWAU9D5KurOawNpsLcGlJg2c6RcxIyFb1/3ea2yYXiLbSMDfbhjrA4ykx53CLHLV/MwlZy681CbNw
+        H2mMLfeEsaMa2bPYZsoKPnQFdv8efdQ5tnRRUAfk3R9+67JPG8IEoAGN3E7jVi8DkSMgMw+SL5BUk
+        na+QvMVdrUmK83xemQwmR+/7n+7NfSVZ9fRVYJIhssXE9V2LbGtf494wNwW9n4jsdCMgtN/Hz9TWR
+        ntz6wTXA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nmUe0-00E8uy-8A; Thu, 05 May 2022 06:07:20 +0000
+Date:   Wed, 4 May 2022 23:07:20 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] module: trivial cleanups for symbol search
+Message-ID: <YnNpmGmDD0xnC06j@bombadil.infradead.org>
 References: <20220505035212.1130858-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505035212.1130858-1-masahiroy@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Currently, !fsa->gplok && syms->license == GPL_ONLY) is checked after
-bsearch() succeeds.
+On Thu, May 05, 2022 at 12:52:09PM +0900, Masahiro Yamada wrote:
+> V2: rebase on module-next.
 
-It is meaningless to do the binary search in the GPL symbol table when
-fsa->gplok is false because we know find_exported_symbol_in_section()
-will fail anyway.
+Thanks! Pushed onto modules-testing, if there are no issues reported
+I'll move to modules-next.
 
-This check should be done before bsearch().
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- kernel/module/main.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 28ece86d99dc..22a860d42c16 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -247,8 +247,6 @@ static bool check_exported_symbol(const struct symsearch *syms,
- 				  struct module *owner, unsigned int symnum,
- 				  struct find_symbol_arg *fsa)
- {
--	if (!fsa->gplok && syms->license == GPL_ONLY)
--		return false;
- 	fsa->owner = owner;
- 	fsa->crc = symversion(syms->crcs, symnum);
- 	fsa->sym = &syms->start[symnum];
-@@ -287,6 +285,9 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
- {
- 	struct kernel_symbol *sym;
- 
-+	if (!fsa->gplok && syms->license == GPL_ONLY)
-+		return false;
-+
- 	sym = bsearch(fsa->name, syms->start, syms->stop - syms->start,
- 			sizeof(struct kernel_symbol), cmp_name);
- 
--- 
-2.32.0
-
+  Luis
