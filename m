@@ -2,102 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA61C433FE
-	for <linux-modules@archiver.kernel.org>; Thu,  5 May 2022 03:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09BF2C433F5
+	for <linux-modules@archiver.kernel.org>; Thu,  5 May 2022 03:53:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241847AbiEED5I (ORCPT
+        id S241925AbiEED5J (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 4 May 2022 23:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        Wed, 4 May 2022 23:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234446AbiEED5H (ORCPT
+        with ESMTP id S234037AbiEED5H (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Wed, 4 May 2022 23:57:07 -0400
 Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A435614027;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735C36584;
         Wed,  4 May 2022 20:53:27 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 2453qiRH021346;
-        Thu, 5 May 2022 12:52:46 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 2453qiRH021346
+        by conuserg-08.nifty.com with ESMTP id 2453qiRE021346;
+        Thu, 5 May 2022 12:52:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 2453qiRE021346
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651722766;
-        bh=24jtj+UYB0xv342M0DAJe77XkxPBb78c2WJx0IEENiY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dIbXKrf05r1Y4YxHOmc4jtJgcvH4V+h2lx5ydXY+efkZW+vFlpmpz0Pa2wesNvy9C
-         G3kHE50VhBIPpkY3VpBTrH1/UaxIW8MBAuWDETlbm8RDSnQNFYwsYcQ0xr6qVRvCv/
-         3kK0DC4XvlpHbFuGyAtj7JGMWeWv4I8wbfax9SFg7Z/TQVS772fWmv2wou9U24CWrn
-         buhad7efVW3TKU0u/DyZiGmuPsnv9lVpA6puXgyZXQID+jI9DFB4p9jSJRUufangcN
-         wVzllHHxmylVOvz+smzYoY4/z3S493lVMisRiUiFY501rYnVyzJoPoki9Lznfjt+Vd
-         NsWhkgufBfuwA==
+        s=dec2015msa; t=1651722765;
+        bh=4dot4VWke2BM46mzqxkMpIv5xMDbcGp5EcqAjN/9nu8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IreQMiQFBuDmaZSC7LeWQ6INfvvCckBFi6u0/hhq3MeuLF1AjaFoQUrYbJeoXlggK
+         kT1SJeBUNke7OJB3fF7TcBxGTK3FLtJq/b55ooEwG0L2r3h3ztR31PIe9MxCiFtiqQ
+         WZSw4s16qKERT9aXN9uLXOubXTJ2ZEbPZXDXKHuIlm3TWoJdpSjY/YI+sRUx9FmuZs
+         cJMI3seUz2v3KDnTzNbG7/u6h/RKldgADB8h/eRGHrCJglatclqoEft/ucPIH7BAte
+         zGx+Sc+o8SIkVhLDKo4PBz46ZD+smI5qzYG77k/fc9NQgph0P8iaeDAp3R7k0h6N9D
+         IrtVyAZlmg78Q==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     Luis Chamberlain <mcgrof@kernel.org>,
         linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v2 3/3] module: merge check_exported_symbol() into find_exported_symbol_in_section()
-Date:   Thu,  5 May 2022 12:52:12 +0900
-Message-Id: <20220505035212.1130858-4-masahiroy@kernel.org>
+Subject: [PATCH v2 0/3] module: trivial cleanups for symbol search
+Date:   Thu,  5 May 2022 12:52:09 +0900
+Message-Id: <20220505035212.1130858-1-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220505035212.1130858-1-masahiroy@kernel.org>
-References: <20220505035212.1130858-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Now check_exported_symbol() always succeeds.
+V2: rebase on module-next.
 
-Merge it into find_exported_symbol_in_search() to make the code concise.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+Masahiro Yamada (3):
+  module: do not pass opaque pointer for symbol search
+  module: do not binary-search in __ksymtab_gpl if fsa->gplok is false
+  module: merge check_exported_symbol() into
+    find_exported_symbol_in_section()
 
- kernel/module/main.c | 22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+ kernel/module/main.c | 32 +++++++++++---------------------
+ 1 file changed, 11 insertions(+), 21 deletions(-)
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 22a860d42c16..14686571d4fc 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -243,17 +243,6 @@ static __maybe_unused void *any_section_objs(const struct load_info *info,
- #define symversion(base, idx) ((base != NULL) ? ((base) + (idx)) : NULL)
- #endif
- 
--static bool check_exported_symbol(const struct symsearch *syms,
--				  struct module *owner, unsigned int symnum,
--				  struct find_symbol_arg *fsa)
--{
--	fsa->owner = owner;
--	fsa->crc = symversion(syms->crcs, symnum);
--	fsa->sym = &syms->start[symnum];
--	fsa->license = syms->license;
--	return true;
--}
--
- static const char *kernel_symbol_name(const struct kernel_symbol *sym)
- {
- #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
-@@ -290,12 +279,15 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
- 
- 	sym = bsearch(fsa->name, syms->start, syms->stop - syms->start,
- 			sizeof(struct kernel_symbol), cmp_name);
-+	if (!sym)
-+		return false;
- 
--	if (sym != NULL && check_exported_symbol(syms, owner,
--						 sym - syms->start, fsa))
--		return true;
-+	fsa->owner = owner;
-+	fsa->crc = symversion(syms->crcs, sym - syms->start);
-+	fsa->sym = sym;
-+	fsa->license = syms->license;
- 
--	return false;
-+	return true;
- }
- 
- /*
 -- 
 2.32.0
 
