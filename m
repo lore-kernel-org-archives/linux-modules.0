@@ -2,33 +2,33 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0B11C433EF
-	for <linux-modules@archiver.kernel.org>; Sat,  7 May 2022 08:02:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B62EC433F5
+	for <linux-modules@archiver.kernel.org>; Sat,  7 May 2022 19:14:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233714AbiEGIGL (ORCPT
+        id S231730AbiEGTSl (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 7 May 2022 04:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        Sat, 7 May 2022 15:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbiEGIGL (ORCPT
+        with ESMTP id S229437AbiEGTSl (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 7 May 2022 04:06:11 -0400
+        Sat, 7 May 2022 15:18:41 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAB95AA7C;
-        Sat,  7 May 2022 01:02:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30AF28980;
+        Sat,  7 May 2022 12:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tkwqm4F2hiHn48xSzCVsvhwNdnMuIuUf64oXwgqKA2o=; b=FdwqyopLQocQ4VUeM3kit/rLZd
-        BdCK8pa/UDoY8GStioaWz3Y9ormyN3yqGPh59F/9DEe2bBcKDTGb4mcTbmYgEnjqz949gEmdYa9ga
-        1vaCLqIJOBBcVyjEymlxsXHaGfo6zyM4b4WKctaxK2WWER63LxVvKVmYw1OEMzDWTSUOrfa07WVpv
-        BEOvUo32JxIF/YrSQrvOErKm4SO0bkJ/qx1weeUqGRSzowyQKbHOJO2lViU1mNQ82fLKqwQnwoals
-        uifmdUlKP20Oftxce+b4f0u7NxgHCkoXgNOpWHm1C2htb6HSGprKnk3XatWjhwxDJgFbuq9p5nm6I
-        SHem2w9A==;
+        bh=/znyXJRLDsok/YXirIxLkxYec6QFvnOe+R9jljS85JE=; b=V5byyGjS+aQTtTXriJ+35IDUKR
+        v3q+TWlwj4c97wcCcmG8DlQY+MLorVgC38EJB7oc1omiLMr2+FTBkkNT4GK2gGUFTKhw71ormve2g
+        jQ+VriF3FmMYXJH5iKuw6xPC2FmfoHlPfaGz/SlL/EANgoW+fsRQ4Zsg0rKqQnLsKE0P3JqP/9YQZ
+        TaGz6w1h9ZZrYf0zs9Z3e/rtASJOB7tPUOKXX0ZVHJqa1aaxyv4ebPkedCgnz/d1FNDoXO57GrBmo
+        1ivFTOe7e/CW+pCiPC4L2awJ8+JiW93SfrwgPIBj4WwwFVbeoisk1oVBiEC1/IgehgiBIJH2PdtBN
+        kiMQWe+w==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nnFOO-006Rgs-Mo; Sat, 07 May 2022 08:02:20 +0000
-Date:   Sat, 7 May 2022 01:02:20 -0700
+        id 1nnPt9-0085Um-Iu; Sat, 07 May 2022 19:14:47 +0000
+Date:   Sat, 7 May 2022 12:14:47 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
@@ -37,98 +37,107 @@ Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
         linuxppc-dev <linuxppc-dev@ozlabs.org>,
         "fnovak@us.ibm.com" <fnovak@us.ibm.com>
 Subject: Re: request_module DoS
-Message-ID: <YnYnjLXm6atlznPT@bombadil.infradead.org>
+Message-ID: <YnbFJ0fn5gLTRLX7@bombadil.infradead.org>
 References: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
  <77ecde32-e868-5804-d9a5-3bb22d314777@csgroup.eu>
+ <YnYnjLXm6atlznPT@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <77ecde32-e868-5804-d9a5-3bb22d314777@csgroup.eu>
+In-Reply-To: <YnYnjLXm6atlznPT@bombadil.infradead.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, May 07, 2022 at 07:10:23AM +0000, Christophe Leroy wrote:
-> > There are some code paths in the kernel where you can reliably
-> > trigger a request_module of a non-existant module.  For example,
-> > if you attempt to load a non-existent crypto algorithm, or create
-> > a socket of a non-existent network family, it will result in a
-> > request_module call that is guaranteed to fail.
-> > 
-> > As user-space can do this repeatedly, it can quickly overwhelm
-> > the concurrency limit in kmod.  This in itself is expected,
-> > however, at least on some platforms this appears to result in
-> > a live-lock.  Here is an example triggered by stress-ng on ppc64:
-> > 
-> > [  579.845320] request_module: modprobe crypto-aegis256 cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-> > [  580.414590] __request_module: 25 callbacks suppressed
-> > [  580.414597] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
-> > [  580.423082] watchdog: CPU 784 self-detected hard LOCKUP @ plpar_hcall_norets_notrace+0x18/0x2c
-> > [  580.423097] watchdog: CPU 784 TB:1297691958559475, last heartbeat TB:1297686321743840 (11009ms ago)
-> > [  580.423099] Modules linked in: cast6_generic cast5_generic cast_common camellia_generic blowfish_generic blowfish_common tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill bonding tls ip_set nf_tables nfnetlink pseries_rng binfmt_misc drm drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sg ibmvscsi ibmveth scsi_transport_srp vmx_crypto dm_mirror dm_region_hash dm_log dm_mod fuse
-> > [  580.423136] CPU: 784 PID: 77071 Comm: stress-ng Kdump: loaded Not tainted 5.14.0-55.el9.ppc64le #1
-> > [  580.423139] NIP:  c0000000000f8ff4 LR: c0000000001f7c38 CTR: 0000000000000000
-> > [  580.423140] REGS: c0000043fdd7bd60 TRAP: 0900   Not tainted  (5.14.0-55.el9.ppc64le)
-> > [  580.423142] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 28008202  XER: 20040000
-> > [  580.423148] CFAR: 0000000000000c00 IRQMASK: 1
-> >                 GPR00: 0000000028008202 c0000044c46b3850 c000000002a46f00 0000000000000000
-> >                 GPR04: ffffffffffffffff 0000000000000000 0000000000000010 c000000002a83060
-> >                 GPR08: 0000000000000000 0000000000000001 0000000000000001 0000000000000000
-> >                 GPR12: c0000000001b9530 c0000043ffe16700 0000000200000117 0000000010185ea8
-> >                 GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0
-> >                 GPR20: 0000000000000001 0000000000000000 0000000000000001 00000000000000ff
-> >                 GPR24: c0000043f4a00e14 c0000043fafe0e00 000000000c440000 0000000000000000
-> >                 GPR28: c0000043f4a00e00 c0000043f4a00e00 c0000000021e0e00 c000000002561aa0
-> > [  580.423166] NIP [c0000000000f8ff4] plpar_hcall_norets_notrace+0x18/0x2c
-> > [  580.423168] LR [c0000000001f7c38] __pv_queued_spin_lock_slowpath+0x528/0x530
-> > [  580.423173] Call Trace:
-> > [  580.423174] [c0000044c46b3850] [0000000100006b60] 0x100006b60 (unreliable)
-> > [  580.423177] [c0000044c46b3910] [c000000000ea6948] _raw_spin_lock_irqsave+0xa8/0xc0
-> > [  580.423182] [c0000044c46b3940] [c0000000001dd7c0] prepare_to_wait_event+0x40/0x200
-> > [  580.423185] [c0000044c46b39a0] [c00000000019e9e0] __request_module+0x320/0x510
-> > [  580.423188] [c0000044c46b3ac0] [c0000000006f1a14] crypto_alg_mod_lookup+0x1e4/0x2e0
-> > [  580.423192] [c0000044c46b3b60] [c0000000006f2178] crypto_alloc_tfm_node+0xa8/0x1a0
-> > [  580.423194] [c0000044c46b3be0] [c0000000006f84f8] crypto_alloc_aead+0x38/0x50
-> > [  580.423196] [c0000044c46b3c00] [c00000000072cba0] aead_bind+0x70/0x140
-> > [  580.423199] [c0000044c46b3c40] [c000000000727824] alg_bind+0xb4/0x210
-> > [  580.423201] [c0000044c46b3cc0] [c000000000bc2ad4] __sys_bind+0x114/0x160
-> > [  580.423205] [c0000044c46b3d90] [c000000000bc2b48] sys_bind+0x28/0x40
-> > [  580.423207] [c0000044c46b3db0] [c000000000030880] system_call_exception+0x160/0x300
-> > [  580.423209] [c0000044c46b3e10] [c00000000000c168] system_call_vectored_common+0xe8/0x278
-> > [  580.423213] --- interrupt: 3000 at 0x7fff9b824464
-> > [  580.423214] NIP:  00007fff9b824464 LR: 0000000000000000 CTR: 0000000000000000
-> > [  580.423215] REGS: c0000044c46b3e80 TRAP: 3000   Not tainted  (5.14.0-55.el9.ppc64le)
-> > [  580.423216] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 42004802  XER: 00000000
-> > [  580.423221] IRQMASK: 0
-> >                 GPR00: 0000000000000147 00007fffdcff2780 00007fff9b917100 0000000000000004
-> >                 GPR04: 00007fffdcff27e0 0000000000000058 0000000000000000 0000000000000000
-> >                 GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> >                 GPR12: 0000000000000000 00007fff9bc9efe0 0000000200000117 0000000010185ea8
-> >                 GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0
-> >                 GPR20: 0000000000000004 00007fffdcff2a00 0000000300000117 00000000101862b8
-> >                 GPR24: 0000000000000004 0000000046401570 0000000046401120 0000000046404650
-> >                 GPR28: 0000000000000020 0000000000000020 0000000000000060 0000000046404bf0
-> > [  580.423236] NIP [00007fff9b824464] 0x7fff9b824464
-> > [  580.423237] LR [0000000000000000] 0x0
-> > [  580.423238] --- interrupt: 3000
-> > [  580.423239] Instruction dump:
-> > [  580.423241] e8690000 7c0803a6 3884fff8 78630100 78840020 4bfffeb8 3c4c0295 3842df24
-> > [  580.423244] 7c421378 7c000026 90010008 44000022 <38800000> 988d0931 80010008 7c0ff120
-> > 
-> > Would it be possible to modify kmod so that in such cases that
-> > request_module calls fail more quickly rather than repeatedly
-> > obtaining a spinlock that appears to be under high contention?
+On Sat, May 07, 2022 at 01:02:20AM -0700, Luis Chamberlain wrote:
+> You can try to reproduce by using adding a new test type for crypto-aegis256
+> on lib/test_kmod.c. These tests however can try something similar but other
+> modules.
+> 
+> /tools/testing/selftests/kmod/kmod.sh -t 0008
+> /tools/testing/selftests/kmod/kmod.sh -t 0009
+> 
+> I can't decipher this yet.
 
-kmod count limit is lockless but prepare_to_wait_event() does hold a
-lock...
+Without testing it... but something like this might be an easier
+reproducer:
 
-You can try to reproduce by using adding a new test type for crypto-aegis256
-on lib/test_kmod.c. These tests however can try something similar but other
-modules.
-
-/tools/testing/selftests/kmod/kmod.sh -t 0008
-/tools/testing/selftests/kmod/kmod.sh -t 0009
-
-I can't decipher this yet.
-
-  Luis
+diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+index afd42387e8b2..48b6b5ec6c1e 100755
+--- a/tools/testing/selftests/kmod/kmod.sh
++++ b/tools/testing/selftests/kmod/kmod.sh
+@@ -41,6 +41,7 @@ set -e
+ TEST_NAME="kmod"
+ TEST_DRIVER="test_${TEST_NAME}"
+ TEST_DIR=$(dirname $0)
++PROC_CONFIG="/proc/config.gz"
+ 
+ # This represents
+ #
+@@ -65,6 +66,7 @@ ALL_TESTS="$ALL_TESTS 0010:1:1"
+ ALL_TESTS="$ALL_TESTS 0011:1:1"
+ ALL_TESTS="$ALL_TESTS 0012:1:1"
+ ALL_TESTS="$ALL_TESTS 0013:1:1"
++ALL_TESTS="$ALL_TESTS 0014:150:1"
+ 
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+@@ -79,6 +81,19 @@ test_modprobe()
+        fi
+ }
+ 
++kconfig_has()
++{
++	if [ -f $PROC_CONFIG ]; then
++		if zgrep -q $1 $PROC_CONFIG 2>/dev/null; then
++			echo "yes"
++		else
++			echo "no"
++		fi
++	else
++			echo "no"
++	fi
++}
++
+ function allow_user_defaults()
+ {
+ 	if [ -z $DEFAULT_KMOD_DRIVER ]; then
+@@ -106,6 +121,8 @@ function allow_user_defaults()
+ 	fi
+ 
+ 	MODPROBE_LIMIT_FILE="${PROC_DIR}/kmod-limit"
++	HAS_CRYPTO_AEGIS256_MOD="$(kconfig_has CONFIG_CRYPTO_AEGIS256=m)"
++	HAS_CRYPTO_AEGIS256_BUILTIN="$(kconfig_has CONFIG_CRYPTO_AEGIS256=y)"
+ }
+ 
+ test_reqs()
+@@ -504,6 +521,21 @@ kmod_test_0013()
+ 		"cat /sys/module/${DEFAULT_KMOD_DRIVER}/sections/.*text | head -n1"
+ }
+ 
++kmod_test_0014()
++{
++	kmod_defaults_driver
++	MODPROBE_LIMIT=$(config_get_modprobe_limit)
++	let EXTRA=$MODPROBE_LIMIT/6
++	config_set_driver crypto-aegis256
++	config_num_thread_limit_extra $EXTRA
++	config_trigger ${FUNCNAME[0]}
++	if [[ "$HAS_CRYPTO_AEGIS256_MOD" == "yes" || "$HAS_CRYPTO_AEGIS256_BUILTIN" == "yes" ]]; then
++		config_expect_result ${FUNCNAME[0]} SUCCESS
++	else
++		config_expect_result ${FUNCNAME[0]} MODULE_NOT_FOUND
++	fi
++}
++
+ list_tests()
+ {
+ 	echo "Test ID list:"
+@@ -525,6 +557,7 @@ list_tests()
+ 	echo "0011 x $(get_test_count 0011) - test completely disabling module autoloading"
+ 	echo "0012 x $(get_test_count 0012) - test /proc/modules address visibility under CAP_SYSLOG"
+ 	echo "0013 x $(get_test_count 0013) - test /sys/module/*/sections/* visibility under CAP_SYSLOG"
++	echo "0014 x $(get_test_count 0014) - multithreaded - push kmod_concurrent over max_modprobes for request_module() for crypto-aegis256"
+ }
+ 
+ usage()
