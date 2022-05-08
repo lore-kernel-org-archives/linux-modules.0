@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 079C5C4332F
-	for <linux-modules@archiver.kernel.org>; Sun,  8 May 2022 19:18:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D2DC433FE
+	for <linux-modules@archiver.kernel.org>; Sun,  8 May 2022 19:18:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiEHTWM (ORCPT
+        id S230174AbiEHTWL (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 8 May 2022 15:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        Sun, 8 May 2022 15:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiEHTPu (ORCPT
+        with ESMTP id S231245AbiEHTQO (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 8 May 2022 15:15:50 -0400
+        Sun, 8 May 2022 15:16:14 -0400
 Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E8112ACE;
-        Sun,  8 May 2022 12:11:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45EC12AE6;
+        Sun,  8 May 2022 12:11:15 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 248J8qSV030019;
-        Mon, 9 May 2022 04:09:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 248J8qSV030019
+        by conuserg-09.nifty.com with ESMTP id 248J8qSS030019;
+        Mon, 9 May 2022 04:08:58 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 248J8qSS030019
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652036942;
-        bh=/sRpYst46mRgR25HUnoY09SDWVnwLpOXCqbbaE612Nc=;
+        s=dec2015msa; t=1652036939;
+        bh=T233+M5ZMF8rUMgorj/Lt/jCSMW/kSv5PBB2geiLwtk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tgFPAVSKpYsuoxbPBWHKsYM4QCQlc7cMQi7+Veh2NrVu+CEJx53scUtGfz8suHjay
-         Sd+xk24KQzFBWXDaOCvr9/EZ1zfKS9YXeaMdiGqXBq9aPRfXPBMrx3F0h1ZjKuR74k
-         x0x2pJf7gTiDWVRGSXGue4aw+NJBZrhN8EKONQXUNxKT7RbSh74w36vrsxflOzK/0F
-         i+7nbTbLiXofc+Dw92B5WMAxi8w40n/xid56DOYmWXIW+D/dOH07rThUbMAAh2HjWm
-         yjvs2KLCp021RyVXvkreBz+VP1NBfURCPeJbtxYCWw3scy+rh4hZSkwYUTSNnzbkNe
-         gbNjn24SIiZgg==
+        b=HmOzBgE3BoxE4R4Q7Sh2n7SmfRDEyYnct2UnMWmQ/7rUNGYpRokNfBQuzjOxfvp8f
+         7NJQWFEZeMSrR0edlDjDRcUIBg/q+/sXKhHi3dXuQmGpMEKls/R5wgXYG4WgfflY72
+         kMULh7OZW1HXprl7JuvEqAa2EyTZ6CJ6TPXIDkPH5JqMqV7/H2Mw0b74IxSvZEvsRJ
+         xa/51ZJQERRXD0UOUoFcS4cXeFTDsE+5VdFRdTI9NrLeuO3jqjEAKIRsgy4Zgj4Gwi
+         T/3fY8KAR/EkQb8r/vZ9nLijLWCvW+zCVLLj4jWkU5H1SozH6ERpFO0ASq247c8RXp
+         ENYRkdOE7G7rw==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -43,9 +43,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v4 08/14] genksyms: adjust the output format to modpost
-Date:   Mon,  9 May 2022 04:06:25 +0900
-Message-Id: <20220508190631.2386038-9-masahiroy@kernel.org>
+Subject: [PATCH v4 05/14] modpost: extract symbol versions from *.cmd files
+Date:   Mon,  9 May 2022 04:06:22 +0900
+Message-Id: <20220508190631.2386038-6-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220508190631.2386038-1-masahiroy@kernel.org>
 References: <20220508190631.2386038-1-masahiroy@kernel.org>
@@ -54,13 +54,52 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Make genksyms output symbol versions in the format modpost expects,
-so the 'sed' is unneeded.
+Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
+versions into ELF objects. Then, modpost extracts the version CRCs
+from them.
 
-This commit makes *.symversions completely unneeded.
+The following figures show how it currently works, and how I am trying
+to change it.
 
-I will keep *.symversions in .gitignore and 'make clean' for a while.
-Otherwise, 'git status' might be surprising.
+Current implementation
+======================
+                                                           |----------|
+                 embed CRC      -------------------------->| final    |
+       $(CC)       $(LD)       /  |---------|              | link for |
+       -----> *.o -------> *.o -->| modpost |              | vmlinux  |
+      /              /            |         |-- *.mod.c -->| or       |
+     / genksyms     /             |---------|              | module   |
+  *.c ------> *.symversions                                |----------|
+
+Genksyms outputs the calculated CRCs in the form of linker script
+(*.symversions), which is used by $(LD) to update the object.
+
+If CONFIG_LTO_CLANG=y, the build process is much more complex. Embedding
+the CRCs is postponed until the LLVM bitcode is converted into ELF,
+creating another intermediate *.prelink.o.
+
+However, this complexity is unneeded. There is no reason why we must
+embed version CRCs in objects so early.
+
+There is final link stage for vmlinux (scripts/link-vmlinux.sh) and
+modules (scripts/Makefile.modfinal). We can link CRCs at the very last
+moment.
+
+New implementation
+==================
+                                                           |----------|
+                   --------------------------------------->| final    |
+       $(CC)      /    |---------|                         | link for |
+       -----> *.o ---->|         |                         | vmlinux  |
+      /                | modpost |--- .vmlinux.export.c -->| or       |
+     / genksyms        |         |--- *.mod.c ------------>| module   |
+  *.c ------> *.cmd -->|---------|                         |----------|
+
+Pass the symbol versions to modpost as separate text data, which are
+available in *.cmd files.
+
+This commit changes modpost to extract CRCs from *.cmd files instead of
+from ELF objects.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
@@ -70,47 +109,250 @@ Tested-by: Nathan Chancellor <nathan@kernel.org>
 (no changes since v2)
 
 Changes in v2:
-  - New patch
+  - Simplify the implementation (parse .cmd files after ELF)
 
- scripts/Makefile.build      | 6 ------
- scripts/genksyms/genksyms.c | 3 +--
- 2 files changed, 1 insertion(+), 8 deletions(-)
+ scripts/mod/modpost.c | 177 ++++++++++++++++++++++++++++++------------
+ 1 file changed, 129 insertions(+), 48 deletions(-)
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index dff9220135c4..461998a2ad2b 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -165,16 +165,10 @@ ifdef CONFIG_MODVERSIONS
- # o modpost will extract versions from that file and create *.c files that will
- #   be compiled and linked to the kernel and/or modules.
- 
--genksyms_format := __crc_\(.*\) = \(.*\);
--
- gen_symversions =								\
- 	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
- 		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
--		    > $@.symversions;						\
--		sed -n 's/$(genksyms_format)/$(pound)SYMVER \1 \2/p' $@.symversions \
- 			>> $(dot-target).cmd;					\
--	else									\
--		rm -f $@.symversions;						\
- 	fi
- 
- cmd_gen_symversions_c =	$(call gen_symversions,c)
-diff --git a/scripts/genksyms/genksyms.c b/scripts/genksyms/genksyms.c
-index 6e6933ae7911..f5dfdb9d80e9 100644
---- a/scripts/genksyms/genksyms.c
-+++ b/scripts/genksyms/genksyms.c
-@@ -680,8 +680,7 @@ void export_symbol(const char *name)
- 		if (flag_dump_defs)
- 			fputs(">\n", debugfile);
- 
--		/* Used as a linker script. */
--		printf("__crc_%s = 0x%08lx;\n", name, crc);
-+		printf("#SYMVER %s 0x%08lx\n", name, crc);
- 	}
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index fc5db1f73cf1..54f957952723 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -381,19 +381,10 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
+ 	return s;
  }
  
+-static void sym_set_crc(const char *name, unsigned int crc)
++static void sym_set_crc(struct symbol *sym, unsigned int crc)
+ {
+-	struct symbol *s = find_symbol(name);
+-
+-	/*
+-	 * Ignore stand-alone __crc_*, which might be auto-generated symbols
+-	 * such as __*_veneer in ARM ELF.
+-	 */
+-	if (!s)
+-		return;
+-
+-	s->crc = crc;
+-	s->crc_valid = true;
++	sym->crc = crc;
++	sym->crc_valid = true;
+ }
+ 
+ static void *grab_file(const char *filename, size_t *size)
+@@ -616,33 +607,6 @@ static int ignore_undef_symbol(struct elf_info *info, const char *symname)
+ 	return 0;
+ }
+ 
+-static void handle_modversion(const struct module *mod,
+-			      const struct elf_info *info,
+-			      const Elf_Sym *sym, const char *symname)
+-{
+-	unsigned int crc;
+-
+-	if (sym->st_shndx == SHN_UNDEF) {
+-		warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
+-		     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
+-		     symname, mod->name, mod->is_vmlinux ? "" : ".ko",
+-		     symname);
+-
+-		return;
+-	}
+-
+-	if (sym->st_shndx == SHN_ABS) {
+-		crc = sym->st_value;
+-	} else {
+-		unsigned int *crcp;
+-
+-		/* symbol points to the CRC in the ELF object */
+-		crcp = sym_get_data(info, sym);
+-		crc = TO_NATIVE(*crcp);
+-	}
+-	sym_set_crc(symname, crc);
+-}
+-
+ static void handle_symbol(struct module *mod, struct elf_info *info,
+ 			  const Elf_Sym *sym, const char *symname)
+ {
+@@ -760,6 +724,102 @@ static char *remove_dot(char *s)
+ 	return s;
+ }
+ 
++/*
++ * The CRCs are recorded in .*.cmd files in the form of:
++ * #SYMVER <name> <crc>
++ */
++static void extract_crcs_for_object(const char *object, struct module *mod)
++{
++	char cmd_file[PATH_MAX];
++	char *buf, *p;
++	const char *base;
++	int dirlen, ret;
++
++	base = strrchr(object, '/');
++	if (base) {
++		base++;
++		dirlen = base - object;
++	} else {
++		dirlen = 0;
++		base = object;
++	}
++
++	ret = snprintf(cmd_file, sizeof(cmd_file), "%.*s.%s.cmd",
++		       dirlen, object, base);
++	if (ret >= sizeof(cmd_file)) {
++		error("%s: too long path was truncated\n", cmd_file);
++		return;
++	}
++
++	buf = read_text_file(cmd_file);
++	p = buf;
++
++	while ((p = strstr(p, "\n#SYMVER "))) {
++		char *name;
++		size_t namelen;
++		unsigned int crc;
++		struct symbol *sym;
++
++		name = p + strlen("\n#SYMVER ");
++
++		p = strchr(name, ' ');
++		if (!p)
++			break;
++
++		namelen = p - name;
++		p++;
++
++		if (!isdigit(*p))
++			continue;	/* skip this line */
++
++		crc = strtol(p, &p, 0);
++		if (*p != '\n')
++			continue;	/* skip this line */
++
++		name[namelen] = '\0';
++
++		sym = sym_find_with_module(name, mod);
++		if (!sym) {
++			warn("Skip the version for unexported symbol \"%s\" [%s%s]\n",
++			     name, mod->name, mod->is_vmlinux ? "" : ".ko");
++			continue;
++		}
++		sym_set_crc(sym, crc);
++	}
++
++	free(buf);
++}
++
++/*
++ * The symbol versions (CRC) are recorded in the .*.cmd files.
++ * Parse them to retrieve CRCs for the current module.
++ */
++static void mod_set_crcs(struct module *mod)
++{
++	char objlist[PATH_MAX];
++	char *buf, *p, *obj;
++	int ret;
++
++	if (mod->is_vmlinux) {
++		strcpy(objlist, ".vmlinux.objs");
++	} else {
++		/* objects for a module are listed in the *.mod file. */
++		ret = snprintf(objlist, sizeof(objlist), "%s.mod", mod->name);
++		if (ret >= sizeof(objlist)) {
++			error("%s: too long path was truncated\n", objlist);
++			return;
++		}
++	}
++
++	buf = read_text_file(objlist);
++	p = buf;
++
++	while ((obj = strsep(&p, "\n")) && obj[0])
++		extract_crcs_for_object(obj, mod);
++
++	free(buf);
++}
++
+ static void read_symbols(const char *modname)
+ {
+ 	const char *symname;
+@@ -820,9 +880,6 @@ static void read_symbols(const char *modname)
+ 		if (strstarts(symname, "__kstrtabns_"))
+ 			sym_update_namespace(symname + strlen("__kstrtabns_"),
+ 					     sym_get_data(&info, sym));
+-		if (strstarts(symname, "__crc_"))
+-			handle_modversion(mod, &info, sym,
+-					  symname + strlen("__crc_"));
+ 	}
+ 
+ 	// check for static EXPORT_SYMBOL_* functions && global vars
+@@ -850,12 +907,17 @@ static void read_symbols(const char *modname)
+ 
+ 	parse_elf_finish(&info);
+ 
+-	/* Our trick to get versioning for module struct etc. - it's
+-	 * never passed as an argument to an exported function, so
+-	 * the automatic versioning doesn't pick it up, but it's really
+-	 * important anyhow */
+-	if (modversions)
++	if (modversions) {
++		/*
++		 * Our trick to get versioning for module struct etc. - it's
++		 * never passed as an argument to an exported function, so
++		 * the automatic versioning doesn't pick it up, but it's really
++		 * important anyhow
++		 */
+ 		sym_add_unresolved("module_layout", mod, false);
++
++		mod_set_crcs(mod);
++	}
+ }
+ 
+ static void read_symbols_from_files(const char *filename)
+@@ -1012,6 +1074,23 @@ static void add_header(struct buffer *b, struct module *mod)
+ 		buf_printf(b, "\nMODULE_INFO(staging, \"Y\");\n");
+ }
+ 
++static void check_symversions(struct module *mod)
++{
++	struct symbol *sym;
++
++	if (!modversions)
++		return;
++
++	list_for_each_entry(sym, &mod->exported_symbols, list) {
++		if (!sym->crc_valid) {
++			warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
++			     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
++			     sym->name, mod->name, mod->is_vmlinux ? "" : ".ko",
++			     sym->name);
++		}
++	}
++}
++
+ /**
+  * Record CRCs for unresolved symbols
+  **/
+@@ -1227,7 +1306,7 @@ static void read_dump(const char *fname)
+ 		}
+ 		s = sym_add_exported(symname, mod, gpl_only);
+ 		s->is_static = false;
+-		sym_set_crc(symname, crc);
++		sym_set_crc(s, crc);
+ 		sym_update_namespace(symname, namespace);
+ 	}
+ 	free(buf);
+@@ -1353,6 +1432,8 @@ int main(int argc, char **argv)
+ 		if (mod->from_dump)
+ 			continue;
+ 
++		check_symversions(mod);
++
+ 		if (!mod->is_vmlinux)
+ 			write_mod_c_file(mod);
+ 	}
 -- 
 2.32.0
 
