@@ -2,71 +2,127 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E36E4C433EF
-	for <linux-modules@archiver.kernel.org>; Mon,  9 May 2022 20:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44CA3C43217
+	for <linux-modules@archiver.kernel.org>; Mon,  9 May 2022 21:55:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiEIUmq (ORCPT
+        id S231390AbiEIV7U (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 9 May 2022 16:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        Mon, 9 May 2022 17:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiEIUmp (ORCPT
+        with ESMTP id S231398AbiEIV7G (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 9 May 2022 16:42:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D418D89;
-        Mon,  9 May 2022 13:38:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sVDi3ZkthDWhU24EgtzN+wCLFG3z5NXVqbnb7DL7KRg=; b=MSu8yd2G1QdsEetiBeGz/X3MKM
-        95MHBpcDUIVbe77heF3/WbEV+39tM/Gth0iTVQ2YXNQSdpZ+hLuwy5Yvfg7qNvoqE/FD0fnND5y1D
-        Nd0OqoHaem/jn+UyniR/gmp+kRo7GS5JczmtEIpjDS6/1+W944dyqpLsL0ypUb1o7ACx8eItUzN7T
-        nv6i0CJCp4GhlzodxwzbvAzpMNrIjGnUWW/ZesZkCeSyuC64rOwnmNFd+ct2DEfYGIZFuYk+NgrVq
-        6++7eT9mQ3pukrjrCDRBhq/MXjqgdfKATRraJkN+m9zX4Eww8OKfegheqNNEkVj16ohJN9pddjl9w
-        Cx/4S4MQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1noA9F-00GBdr-0y; Mon, 09 May 2022 20:38:29 +0000
-Date:   Mon, 9 May 2022 13:38:28 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     mauro.chehab@linux.intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v6 0/4] Let userspace know when snd-hda-intel needs i915
-Message-ID: <Ynl7xGy+a9MYjXi1@bombadil.infradead.org>
-References: <cover.1652113087.git.mchehab@kernel.org>
+        Mon, 9 May 2022 17:59:06 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30622734EB
+        for <linux-modules@vger.kernel.org>; Mon,  9 May 2022 14:52:57 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2f7c424c66cso160381837b3.1
+        for <linux-modules@vger.kernel.org>; Mon, 09 May 2022 14:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LglPYsJyh/Qh1FDu94XGq/MV3fomSZvl10mHqijKUDo=;
+        b=Mmprp3lzuQ9S3U5gBRl4SSYLlSOiIHLBvkcz5iOM/dqvawddalywuHly3fYkYSta8a
+         /wHH97/JwQuaJpGbSbc8YAh/70zYOA45R/uKi8HnO1a2FSGw1hEO80O8h+7YS8CvTNy/
+         Euq2/8lKMsPIykCcaR4MuOWPN6ENvIUCu3LU2TT18vptardX8ldDEZoc6ReZ3taS3hlH
+         ppaK1jD3PGKIDopg2Ag16lSA/ACo6BplIpJZzarADCnbXO9GoV38XDz5xn7QDtvn169K
+         iMBMjnNR/3DlG0wrr7uwC6BKfn+gNjtsaTLfXV1sdAvCLbMqgxZewCokViv9D/I9eVdh
+         91qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LglPYsJyh/Qh1FDu94XGq/MV3fomSZvl10mHqijKUDo=;
+        b=pYSqxXvF2LUdUxbbudCv6B1e+FG8MfyVeMS1n5Caak5AFCxix/Ok8X8zX3l+7J0TCd
+         SJOl4cGRFvzTd1ashfy2vQexqJqV/3VsEp0ha+50KKNYarrPImNe9T/1Wb6ykSuUxdMk
+         eCbEwi6No+cS7E8c1AzUxYhaNXzqVju8mFFKE5aXsvIoTURzhJrOgsQSLGk3PdAw2HxQ
+         P9USd5XyJYABJ8GmwLiZ7H3cnR9lBZhXCcJWAZW2TWx0Q3riMjYagEhNliecPZ7bB84Q
+         Cs0TdgTmXj3LBcS1m7kNcIwfCFq1bthA1SEVrL20OfeLfWf+Ei66KgQqMPGOjxyOlSmK
+         LOsw==
+X-Gm-Message-State: AOAM530INnH/F4HKXV+Cy/wBp+h9wZaPZM2WZrF3tyBNFAeNY8UVzwPk
+        5ChX4WfWR+TFpTkq6rEIqWvL3rXIN4RO4m7lg9qLzw==
+X-Google-Smtp-Source: ABdhPJxS9tOjdEtMe9p7ieQ7qesYkE+zdDxRJCQOrQnBBXsYJfCE0f7NGG8AtIWCus/riFP6yEy8E50WALQb9P5JyvY=
+X-Received: by 2002:a05:690c:13:b0:2e4:da22:27d9 with SMTP id
+ bc19-20020a05690c001300b002e4da2227d9mr17078815ywb.298.1652133176908; Mon, 09
+ May 2022 14:52:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1652113087.git.mchehab@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20220508190631.2386038-1-masahiroy@kernel.org> <20220508190631.2386038-6-masahiroy@kernel.org>
+In-Reply-To: <20220508190631.2386038-6-masahiroy@kernel.org>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 9 May 2022 14:52:21 -0700
+Message-ID: <CABCJKucG4dOLm9pPWrACc+YReBXG4GNM9V0djsy0YTp8pRGmaw@mail.gmail.com>
+Subject: Re: [PATCH v4 05/14] modpost: extract symbol versions from *.cmd files
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules@vger.kernel.org, linux-s390@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, May 09, 2022 at 06:23:35PM +0200, Mauro Carvalho Chehab wrote:
-> Currently, kernel/module annotates module dependencies when
-> request_symbol is used, but it doesn't cover more complex inter-driver
-> dependencies that are subsystem and/or driver-specific.
-> 
+On Sun, May 8, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
+> versions into ELF objects. Then, modpost extracts the version CRCs
+> from them.
+>
+> The following figures show how it currently works, and how I am trying
+> to change it.
+>
+> Current implementation
+> ======================
+>                                                            |----------|
+>                  embed CRC      -------------------------->| final    |
+>        $(CC)       $(LD)       /  |---------|              | link for |
+>        -----> *.o -------> *.o -->| modpost |              | vmlinux  |
+>       /              /            |         |-- *.mod.c -->| or       |
+>      / genksyms     /             |---------|              | module   |
+>   *.c ------> *.symversions                                |----------|
+>
+> Genksyms outputs the calculated CRCs in the form of linker script
+> (*.symversions), which is used by $(LD) to update the object.
+>
+> If CONFIG_LTO_CLANG=y, the build process is much more complex. Embedding
+> the CRCs is postponed until the LLVM bitcode is converted into ELF,
+> creating another intermediate *.prelink.o.
+>
+> However, this complexity is unneeded. There is no reason why we must
+> embed version CRCs in objects so early.
+>
+> There is final link stage for vmlinux (scripts/link-vmlinux.sh) and
+> modules (scripts/Makefile.modfinal). We can link CRCs at the very last
+> moment.
+>
+> New implementation
+> ==================
+>                                                            |----------|
+>                    --------------------------------------->| final    |
+>        $(CC)      /    |---------|                         | link for |
+>        -----> *.o ---->|         |                         | vmlinux  |
+>       /                | modpost |--- .vmlinux.export.c -->| or       |
+>      / genksyms        |         |--- *.mod.c ------------>| module   |
+>   *.c ------> *.cmd -->|---------|                         |----------|
+>
+> Pass the symbol versions to modpost as separate text data, which are
+> available in *.cmd files.
+>
+> This commit changes modpost to extract CRCs from *.cmd files instead of
+> from ELF objects.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-At this pount v5.18-rc7 is out and so it is too late to soak this
-in for the proper level of testing I'd like to see for modules-next.
-So I can review this after the next merge window. I'd want to beat
-the hell out of this and if possible I'd like to see if we can have
-some test coverage for the intended goal and how to break it.
+This looks good to me, it's great to get rid of the .symversions files!
 
-  Luis
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+
+Sami
