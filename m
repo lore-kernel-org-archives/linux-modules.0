@@ -2,152 +2,91 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB439C433FE
-	for <linux-modules@archiver.kernel.org>; Mon,  9 May 2022 04:31:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5A5BC4167E
+	for <linux-modules@archiver.kernel.org>; Mon,  9 May 2022 09:25:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiEIEdj (ORCPT
+        id S229702AbiEIJ3g (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 9 May 2022 00:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
+        Mon, 9 May 2022 05:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233684AbiEIEan (ORCPT
+        with ESMTP id S236595AbiEIIwh (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 9 May 2022 00:30:43 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9731059F4;
-        Sun,  8 May 2022 21:26:48 -0700 (PDT)
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 2494PhcJ014643;
-        Mon, 9 May 2022 13:25:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2494PhcJ014643
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652070344;
-        bh=DM2Qvk/KSJwggZQc+f9r/EEPApKQ0miaQHjxBSW8IV8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=o6XYg2bwQfHrSq3bmQnG8Jpcnk1UTD3FhC5a1TUoXExRLyvujSGeOMFR3dfEqtIxx
-         jZIb9XBWPLHupK1YnU+oibAr0NtF7JrU/xq9ge0bTvQxiXAsf5FSwZf/aBLkzokBSh
-         4pYnoQJrhruoSCAZW5vQpqOKLKRG+TD+bP/cc+wlRqd1lkmZ6G/jPPJMKc6+GeRK0p
-         yWn5WRjoA7b1nUAeCM1kGbAv1dll+XvcerBv59vD5767bpInjYSc63X4ghyeOgNpIk
-         O+3kAqdTjgld9pwF/oKvzQSUpg5noc20wbQuZ1RetnGg5M/PlDZ6Y1JjaznJKcydLK
-         Vxs0cbmmsKiPw==
-X-Nifty-SrcIP: [209.85.216.52]
-Received: by mail-pj1-f52.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so15924784pjb.5;
-        Sun, 08 May 2022 21:25:43 -0700 (PDT)
-X-Gm-Message-State: AOAM532XfFh1WmMfSMp+sY5k4d+qirDaMgiWiE+DRPH+6AQNQno3rwId
-        l8o+QZ4Kv6sNE/ZjyX4E+IjGA39jHZfvBylT3uE=
-X-Google-Smtp-Source: ABdhPJz+EyiLX7j6uh3WzqWMOrMkF5hlrWDy6od+IPDFGCNr8NC4vk92cU3B82hmpcsJDxTmnQ5GEcRpm1eC9pqP+d0=
-X-Received: by 2002:a17:902:7891:b0:15e:cae9:7620 with SMTP id
- q17-20020a170902789100b0015ecae97620mr14626650pll.136.1652070342778; Sun, 08
- May 2022 21:25:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org>
-In-Reply-To: <20220508190631.2386038-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 9 May 2022 13:24:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQtedww_RiemfTV7Ls=M01iKJhY14G3TiuAg=C3bvJjww@mail.gmail.com>
-Message-ID: <CAK7LNAQtedww_RiemfTV7Ls=M01iKJhY14G3TiuAg=C3bvJjww@mail.gmail.com>
-Subject: Re: [PATCH v4 00/14] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 9 May 2022 04:52:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780961D0D5;
+        Mon,  9 May 2022 01:48:44 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 348B01FA06;
+        Mon,  9 May 2022 08:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652086123; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XREMqynW/xsoTG/Ro19s3qT72KUQkPR/IVuvheXTmgs=;
+        b=Az8Vv25UR5pgLI3x7A3tQ3wA+W6gRjvAqDYJmNBCl18nRpnjNFCcDak0ZtVc0565FP9mZB
+        xtfaTtIDMMJ0npgI+GH7mZE3ehFa3rsPT+c+NF41oFulz9GG7020zYqunmWbKrTsCQX4os
+        Dkw9JwgPL42mICBRSORsVcBxSe6OT48=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652086123;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XREMqynW/xsoTG/Ro19s3qT72KUQkPR/IVuvheXTmgs=;
+        b=psk9BisxVfaRzk4GKoEoS7EfF3uiiHK6RSy6OvYqOMsCg0/Ou5oUk5t1gsjKaJiRuiR9s5
+        LnQGk5XRfr701QDg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 097F72C141;
+        Mon,  9 May 2022 08:48:41 +0000 (UTC)
+Date:   Mon, 09 May 2022 10:48:41 +0200
+Message-ID: <s5hee13m6qe.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "David Airlie" <airlied@linux.ie>,
+        "Greg KH" <gregkh@linuxfoundation.org>,
+        "Jaroslav Kysela" <perex@perex.cz>,
+        "Kai Vehmanen" <kai.vehmanen@intel.com>,
+        "Lucas De Marchi" <lucas.demarchi@intel.com>,
+        "Pierre-Louis Bossart" <pierre-louis.bossart@intel.com>,
+        "Takashi Iwai" <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        mauro.chehab@linux.intel.com
+Subject: Re: [PATCH v5 2/2] ALSA: hda - identify when audio is provided by a video driver
+In-Reply-To: <4a0f0e351941201d00b2cd8e2157d3b0181dc19e.1651348913.git.mchehab@kernel.org>
+References: <cover.1651348913.git.mchehab@kernel.org>
+        <4a0f0e351941201d00b2cd8e2157d3b0181dc19e.1651348913.git.mchehab@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, May 9, 2022 at 4:09 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> This is the third batch of cleanups in this development cycle.
->
-> Major changes in v4:
->  - Move static EXPORT_SYMBOL check to a script
->  - Some refactoring
->
-> Major changes in v3:
->
->  - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
->
-> Major changes in v2:
->
->  - V1 did not work with CONFIG_MODULE_REL_CRCS.
->    I fixed this for v2.
->
->  - Reflect some review comments in v1
->
->  - Refactor the code more
->
->  - Avoid too long argument error
+On Sat, 30 Apr 2022 22:04:55 +0200,
+Mauro Carvalho Chehab wrote:
+> 
+> On some devices, the hda driver needs to hook into a video driver,
+> in order to be able to properly access the audio hardware and/or
+> the power management function.
+> 
+> That's the case of several snd_hda_intel devices that depends on
+> i915 driver.
+> 
+> Ensure that a proper reference between the snd-hda driver needing
+> such binding is shown at /proc/modules, in order to allow userspace
+> to know about such binding.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-This series is available at
-git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-lto-cleanup-v4
+Maybe I was too late to the game (just back from vacation), but FWIW:
+
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
 
 
+thanks,
 
-
->
->
-> Masahiro Yamada (14):
->   modpost: remove left-over cross_compile declaration
->   modpost: change the license of EXPORT_SYMBOL to bool type
->   modpost: split the section mismatch checks into section-check.c
->   modpost: add sym_find_with_module() helper
->   modpost: extract symbol versions from *.cmd files
->   kbuild: link symbol CRCs at final link, removing
->     CONFIG_MODULE_REL_CRCS
->   kbuild: stop merging *.symversions
->   genksyms: adjust the output format to modpost
->   kbuild: do not create *.prelink.o for Clang LTO or IBT
->   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
->   kbuild: make built-in.a rule robust against too long argument error
->   kbuild: make *.mod rule robust against too long argument error
->   kbuild: add cmd_and_savecmd macro
->   kbuild: rebuild multi-object modules when objtool is updated
->
->  arch/powerpc/Kconfig            |    1 -
->  arch/s390/Kconfig               |    1 -
->  arch/um/Kconfig                 |    1 -
->  include/asm-generic/export.h    |   22 +-
->  include/linux/export-internal.h |   16 +
->  include/linux/export.h          |   30 +-
->  init/Kconfig                    |    4 -
->  kernel/module.c                 |   10 +-
->  scripts/Kbuild.include          |   10 +-
->  scripts/Makefile.build          |  134 +--
->  scripts/Makefile.lib            |    7 -
->  scripts/Makefile.modfinal       |    5 +-
->  scripts/Makefile.modpost        |    9 +-
->  scripts/check-local-export      |   48 +
->  scripts/genksyms/genksyms.c     |   18 +-
->  scripts/link-vmlinux.sh         |   33 +-
->  scripts/mod/Makefile            |    2 +-
->  scripts/mod/modpost.c           | 1499 ++++---------------------------
->  scripts/mod/modpost.h           |   35 +-
->  scripts/mod/section-check.c     | 1222 +++++++++++++++++++++++++
->  20 files changed, 1551 insertions(+), 1556 deletions(-)
->  create mode 100644 include/linux/export-internal.h
->  create mode 100755 scripts/check-local-export
->  create mode 100644 scripts/mod/section-check.c
->
-> --
-> 2.32.0
->
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20220508190631.2386038-1-masahiroy%40kernel.org.
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Takashi
