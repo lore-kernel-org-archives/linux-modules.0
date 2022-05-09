@@ -2,110 +2,152 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3ED9C433EF
-	for <linux-modules@archiver.kernel.org>; Mon,  9 May 2022 01:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB439C433FE
+	for <linux-modules@archiver.kernel.org>; Mon,  9 May 2022 04:31:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiEIBxa (ORCPT
+        id S232382AbiEIEdj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 8 May 2022 21:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
+        Mon, 9 May 2022 00:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234784AbiEIBq0 (ORCPT
+        with ESMTP id S233684AbiEIEan (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 8 May 2022 21:46:26 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A129E3BF9D;
-        Sun,  8 May 2022 18:42:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NuGSALwoLk4dQeQSKTaMdHjmaUOrXItUM4Q9Ls2i1Oc=; b=st/9uAHX4XrWNsxGP0umYxBgg/
-        DrgyN0OrxK18w0lI8wKiK3F1D/ZSideEp6TClnHVf4bXj+DnLOprzL/kpcYX20rNnZtFUAETXnACI
-        NrR4dBKGcooh3o9pbYIL1sabjC/6C2u0qFbVrjmqt84jvw/ZBz1QJTJFugwHJ0YbOagNKbrERb7Xj
-        DC1/myYrbNRTE/3NKFrZPd6gi+AT5VS30OQ/+7+Vym0Hg84QwjQhsA/ZM0YwTHLW5nRPoBHW/aok7
-        S9gIxHOFhwaM6UnAi2Y5imadRrfhgPHUxG598VPJ3svXo/ekU30ulT9nLgyxLha257KeazjdpJuMG
-        YL/cNS4g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nnsPs-00BzTe-Q1; Mon, 09 May 2022 01:42:28 +0000
-Date:   Sun, 8 May 2022 18:42:28 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@ozlabs.org>,
-        "fnovak@us.ibm.com" <fnovak@us.ibm.com>
-Subject: Re: request_module DoS
-Message-ID: <YnhxhIsSTCwSPphy@bombadil.infradead.org>
-References: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
- <77ecde32-e868-5804-d9a5-3bb22d314777@csgroup.eu>
- <YnYnjLXm6atlznPT@bombadil.infradead.org>
- <YnbFJ0fn5gLTRLX7@bombadil.infradead.org>
+        Mon, 9 May 2022 00:30:43 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9731059F4;
+        Sun,  8 May 2022 21:26:48 -0700 (PDT)
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 2494PhcJ014643;
+        Mon, 9 May 2022 13:25:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2494PhcJ014643
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1652070344;
+        bh=DM2Qvk/KSJwggZQc+f9r/EEPApKQ0miaQHjxBSW8IV8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=o6XYg2bwQfHrSq3bmQnG8Jpcnk1UTD3FhC5a1TUoXExRLyvujSGeOMFR3dfEqtIxx
+         jZIb9XBWPLHupK1YnU+oibAr0NtF7JrU/xq9ge0bTvQxiXAsf5FSwZf/aBLkzokBSh
+         4pYnoQJrhruoSCAZW5vQpqOKLKRG+TD+bP/cc+wlRqd1lkmZ6G/jPPJMKc6+GeRK0p
+         yWn5WRjoA7b1nUAeCM1kGbAv1dll+XvcerBv59vD5767bpInjYSc63X4ghyeOgNpIk
+         O+3kAqdTjgld9pwF/oKvzQSUpg5noc20wbQuZ1RetnGg5M/PlDZ6Y1JjaznJKcydLK
+         Vxs0cbmmsKiPw==
+X-Nifty-SrcIP: [209.85.216.52]
+Received: by mail-pj1-f52.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so15924784pjb.5;
+        Sun, 08 May 2022 21:25:43 -0700 (PDT)
+X-Gm-Message-State: AOAM532XfFh1WmMfSMp+sY5k4d+qirDaMgiWiE+DRPH+6AQNQno3rwId
+        l8o+QZ4Kv6sNE/ZjyX4E+IjGA39jHZfvBylT3uE=
+X-Google-Smtp-Source: ABdhPJz+EyiLX7j6uh3WzqWMOrMkF5hlrWDy6od+IPDFGCNr8NC4vk92cU3B82hmpcsJDxTmnQ5GEcRpm1eC9pqP+d0=
+X-Received: by 2002:a17:902:7891:b0:15e:cae9:7620 with SMTP id
+ q17-20020a170902789100b0015ecae97620mr14626650pll.136.1652070342778; Sun, 08
+ May 2022 21:25:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnbFJ0fn5gLTRLX7@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20220508190631.2386038-1-masahiroy@kernel.org>
+In-Reply-To: <20220508190631.2386038-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 9 May 2022 13:24:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQtedww_RiemfTV7Ls=M01iKJhY14G3TiuAg=C3bvJjww@mail.gmail.com>
+Message-ID: <CAK7LNAQtedww_RiemfTV7Ls=M01iKJhY14G3TiuAg=C3bvJjww@mail.gmail.com>
+Subject: Re: [PATCH v4 00/14] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, May 07, 2022 at 12:14:47PM -0700, Luis Chamberlain wrote:
-> On Sat, May 07, 2022 at 01:02:20AM -0700, Luis Chamberlain wrote:
-> > You can try to reproduce by using adding a new test type for crypto-aegis256
-> > on lib/test_kmod.c. These tests however can try something similar but other
-> > modules.
-> > 
-> > /tools/testing/selftests/kmod/kmod.sh -t 0008
-> > /tools/testing/selftests/kmod/kmod.sh -t 0009
-> > 
-> > I can't decipher this yet.
-> 
-> Without testing it... but something like this might be an easier
-> reproducer:
-> 
-> +	config_set_driver crypto-aegis256
+On Mon, May 9, 2022 at 4:09 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> This is the third batch of cleanups in this development cycle.
+>
+> Major changes in v4:
+>  - Move static EXPORT_SYMBOL check to a script
+>  - Some refactoring
+>
+> Major changes in v3:
+>
+>  - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
+>
+> Major changes in v2:
+>
+>  - V1 did not work with CONFIG_MODULE_REL_CRCS.
+>    I fixed this for v2.
+>
+>  - Reflect some review comments in v1
+>
+>  - Refactor the code more
+>
+>  - Avoid too long argument error
 
-If the module is not present though nothing really happens, and so
-is it possible this is another issue?
+This series is available at
+git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+lto-cleanup-v4
 
-Below a bogus module request.
 
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index afd42387e8b2..a747ad549940 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -65,6 +66,7 @@ ALL_TESTS="$ALL_TESTS 0010:1:1"
- ALL_TESTS="$ALL_TESTS 0011:1:1"
- ALL_TESTS="$ALL_TESTS 0012:1:1"
- ALL_TESTS="$ALL_TESTS 0013:1:1"
-+ALL_TESTS="$ALL_TESTS 0014:150:1"
- 
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
-@@ -504,6 +506,17 @@ kmod_test_0013()
- 		"cat /sys/module/${DEFAULT_KMOD_DRIVER}/sections/.*text | head -n1"
- }
- 
-+kmod_test_0014()
-+{
-+	kmod_defaults_driver
-+	MODPROBE_LIMIT=$(config_get_modprobe_limit)
-+	let EXTRA=$MODPROBE_LIMIT/6
-+	config_set_driver bogus_module_does_not_exist
-+	config_num_thread_limit_extra $EXTRA
-+	config_trigger ${FUNCNAME[0]}
-+	config_expect_result ${FUNCNAME[0]} MODULE_NOT_FOUND
-+}
-+
- list_tests()
- {
- 	echo "Test ID list:"
-@@ -525,6 +538,7 @@ list_tests()
- 	echo "0011 x $(get_test_count 0011) - test completely disabling module autoloading"
- 	echo "0012 x $(get_test_count 0012) - test /proc/modules address visibility under CAP_SYSLOG"
- 	echo "0013 x $(get_test_count 0013) - test /sys/module/*/sections/* visibility under CAP_SYSLOG"
-+	echo "0014 x $(get_test_count 0014) - multithreaded - push kmod_concurrent over max_modprobes for request_module() for a missing module"
- }
- 
- usage()
+
+
+>
+>
+> Masahiro Yamada (14):
+>   modpost: remove left-over cross_compile declaration
+>   modpost: change the license of EXPORT_SYMBOL to bool type
+>   modpost: split the section mismatch checks into section-check.c
+>   modpost: add sym_find_with_module() helper
+>   modpost: extract symbol versions from *.cmd files
+>   kbuild: link symbol CRCs at final link, removing
+>     CONFIG_MODULE_REL_CRCS
+>   kbuild: stop merging *.symversions
+>   genksyms: adjust the output format to modpost
+>   kbuild: do not create *.prelink.o for Clang LTO or IBT
+>   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
+>   kbuild: make built-in.a rule robust against too long argument error
+>   kbuild: make *.mod rule robust against too long argument error
+>   kbuild: add cmd_and_savecmd macro
+>   kbuild: rebuild multi-object modules when objtool is updated
+>
+>  arch/powerpc/Kconfig            |    1 -
+>  arch/s390/Kconfig               |    1 -
+>  arch/um/Kconfig                 |    1 -
+>  include/asm-generic/export.h    |   22 +-
+>  include/linux/export-internal.h |   16 +
+>  include/linux/export.h          |   30 +-
+>  init/Kconfig                    |    4 -
+>  kernel/module.c                 |   10 +-
+>  scripts/Kbuild.include          |   10 +-
+>  scripts/Makefile.build          |  134 +--
+>  scripts/Makefile.lib            |    7 -
+>  scripts/Makefile.modfinal       |    5 +-
+>  scripts/Makefile.modpost        |    9 +-
+>  scripts/check-local-export      |   48 +
+>  scripts/genksyms/genksyms.c     |   18 +-
+>  scripts/link-vmlinux.sh         |   33 +-
+>  scripts/mod/Makefile            |    2 +-
+>  scripts/mod/modpost.c           | 1499 ++++---------------------------
+>  scripts/mod/modpost.h           |   35 +-
+>  scripts/mod/section-check.c     | 1222 +++++++++++++++++++++++++
+>  20 files changed, 1551 insertions(+), 1556 deletions(-)
+>  create mode 100644 include/linux/export-internal.h
+>  create mode 100755 scripts/check-local-export
+>  create mode 100644 scripts/mod/section-check.c
+>
+> --
+> 2.32.0
+>
+> --
+> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20220508190631.2386038-1-masahiroy%40kernel.org.
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
