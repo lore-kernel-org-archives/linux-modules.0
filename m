@@ -2,98 +2,158 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2407CC433FE
-	for <linux-modules@archiver.kernel.org>; Mon,  9 May 2022 16:23:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C875AC433F5
+	for <linux-modules@archiver.kernel.org>; Mon,  9 May 2022 16:56:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239020AbiEIQ1m (ORCPT
+        id S239297AbiEIRAb (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 9 May 2022 12:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        Mon, 9 May 2022 13:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239019AbiEIQ1l (ORCPT
+        with ESMTP id S239330AbiEIRA2 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 9 May 2022 12:27:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F86B2689D7;
-        Mon,  9 May 2022 09:23:46 -0700 (PDT)
+        Mon, 9 May 2022 13:00:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2876654000;
+        Mon,  9 May 2022 09:56:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D045DCE1A16;
-        Mon,  9 May 2022 16:23:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D9AC385B1;
-        Mon,  9 May 2022 16:23:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B888E614F5;
+        Mon,  9 May 2022 16:56:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCA4C385B1;
+        Mon,  9 May 2022 16:56:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652113423;
-        bh=mdAPNlLnOrv84PSoSJSxXEtEdCuj0qy2zCvHlvJ5Njo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mi2544dS7YM1A/FSFwFeIwBDZblvgLsGSEpCwm+trqSAnt8wy5S5Qxto9Wur2y4tO
-         9cpkOftKBmZiVgPD7AYJPlCh5bucJIreuaqYsH3amUCE4IdKRG42FKL04zCcjwSABg
-         F/ii55iELg27DEEsp+767f5ls63aiwURAJEdXjUDQkwnfs/cq02uiDDSuY8Gu0wllF
-         EBzhbG4bWuU3xbaBtlYBCpHP6pWPpDqzbDXEBoFUOuZMg2SLH5sMo34M8upZFsdEOv
-         NBny6sycMAKpOlw1elPGs+06j0/ruIgmMXZbHNPxazEsK7iM72JdgdhjyPu/Wyvvco
-         88LhlYqi4D5jg==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1no6Ae-006xVb-Lo; Mon, 09 May 2022 18:23:40 +0200
+        s=k20201202; t=1652115387;
+        bh=NT/NSm+ixv4NTnm+bzYUbh8NWftsy0GkupiwFftUrCw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EtvoF8IpfrUKSdvwW8V1qeHxhWfkW598IrjNsAqteSHaADCcEdw4x8KXDr3TbpGco
+         +yggH/xodb4xZyPEnEeIc8mWLqDjS4iXNJXSCuBQpOQ/fSanq8ns6RptBh90cQlffa
+         ZydWP2ygHERY2FiBF7EYP2PUX0oJed77PI+PtGtAug8JPiOmVIAJvSdJSVF0l2WgT3
+         wW5f+Mu+92KTr/DOaR7Nqi5mZ7fd/NZ7bLFFprVwVSRAaFOoxIjPeDgJTM5EOXSyV1
+         crJcVua2rcdRuwnbPejGtAvrTv7VAS/uq+3pJDH8Q5DUtKss9HWmbgKe7fxadeJAws
+         EJ34J+Ehy52jg==
+Date:   Mon, 9 May 2022 18:56:20 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "David Airlie" <airlied@linux.ie>,
-        "Greg KH" <gregkh@linuxfoundation.org>,
-        "Jaroslav Kysela" <perex@perex.cz>,
-        "Kai Vehmanen" <kai.vehmanen@intel.com>,
-        "Lucas De Marchi" <lucas.demarchi@intel.com>,
-        "Pierre-Louis Bossart" <pierre-louis.bossart@intel.com>,
-        "Takashi Iwai" <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        mauro.chehab@linux.intel.com, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH v6 4/4] ALSA: hda - identify when audio is provided by a video driver
-Date:   Mon,  9 May 2022 18:23:39 +0200
-Message-Id: <f53f8a9d04b39a6843f19fe3069d1be7a9713aae.1652113087.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <cover.1652113087.git.mchehab@kernel.org>
-References: <cover.1652113087.git.mchehab@kernel.org>
+To:     Andi Shyti <andi.shyti@linux.intel.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, alsa-devel@alsa-project.org,
+        mauro.chehab@linux.intel.com, David Airlie <airlied@linux.ie>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        intel-gfx@lists.freedesktop.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Takashi Iwai <tiwai@suse.com>, dri-devel@lists.freedesktop.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        linux-modules@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v5 1/2] module: update dependencies at
+ try_module_get()
+Message-ID: <20220509185620.05567716@coco.lan>
+In-Reply-To: <YnRDIfthGJXdY23h@intel.intel>
+References: <cover.1651348913.git.mchehab@kernel.org>
+        <ad2a9fe66cf502e2e2e2325f1f04d0fae36aa82b.1651348913.git.mchehab@kernel.org>
+        <YnRDIfthGJXdY23h@intel.intel>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On some devices, the hda driver needs to hook into a video driver,
-in order to be able to properly access the audio hardware and/or
-the power management function.
+Em Thu, 5 May 2022 23:35:29 +0200
+Andi Shyti <andi.shyti@linux.intel.com> escreveu:
 
-That's the case of several snd_hda_intel devices that depends on
-i915 driver.
+> Hi Mauro,
+> 
+> [...]
+> 
+> > +static int ref_module_dependency(struct module *mod, struct module *this)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (!this || !this->name)
+> > +		return -EINVAL;
+> > +
+> > +	if (mod == this)
+> > +		return 0;
+> > +
+> > +	mutex_lock(&module_mutex);
+> > +
+> > +	ret = ref_module(this, mod);
+> > +
+> > +#ifdef CONFIG_MODULE_UNLOAD
+> > +	if (ret)
+> > +		goto ret;
+> > +
+> > +	ret = sysfs_create_link(mod->holders_dir,
+> > +				&this->mkobj.kobj, this->name);
+> > +#endif
+> > +
+> > +ret:
+> > +	mutex_unlock(&module_mutex);
+> > +	return ret;
+> > +}
+> > +
+> >  /* Clear the unload stuff of the module. */
+> >  static void module_unload_free(struct module *mod)
+> >  {
+> > @@ -841,24 +886,16 @@ void __module_get(struct module *module)
+> >  }
+> >  EXPORT_SYMBOL(__module_get);
+> >  
+> > -bool try_module_get(struct module *module)
+> > +bool try_module_get_owner(struct module *module, struct module *this)
+> >  {
+> > -	bool ret = true;
+> > +	int ret = __try_module_get(module);
+> >  
+> > -	if (module) {
+> > -		preempt_disable();
+> > -		/* Note: here, we can fail to get a reference */
+> > -		if (likely(module_is_live(module) &&
+> > -			   atomic_inc_not_zero(&module->refcnt) != 0))
+> > -			trace_module_get(module, _RET_IP_);
+> > -		else
+> > -			ret = false;
+> > +	if (ret)
+> > +		ref_module_dependency(module, this);  
+> 
+> do we care about the return value here?
 
-Ensure that a proper reference between the snd-hda driver needing
-such binding is shown at /proc/modules, in order to allow userspace
-to know about such binding.
+I don't think it should care about the return value, as a failure to
+create a sysfs node for the holder or to add it to the holders list
+is not fatal: modules can still continue working without that.
 
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+Also, I opted to be conservative here: currently, not creating these
+doesn't cause try_module_get() to fail. I'm not sure what would be the
+impact if this starts to fail.
 
-See [PATCH v6 0/4] at: https://lore.kernel.org/all/cover.1652113087.git.mchehab@kernel.org/
+So, right now, I'm opting to just ignore the return value. Perhaps
+in the future this could a warning (similarly to what sysfs create
+link does).
 
- sound/hda/hdac_component.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
+Mauro
 
-diff --git a/sound/hda/hdac_component.c b/sound/hda/hdac_component.c
-index bb37e7e0bd79..7789873ddf47 100644
---- a/sound/hda/hdac_component.c
-+++ b/sound/hda/hdac_component.c
-@@ -199,7 +199,7 @@ static int hdac_component_master_bind(struct device *dev)
- 	}
- 
- 	/* pin the module to avoid dynamic unbinding, but only if given */
--	if (!try_module_get(acomp->ops->owner)) {
-+	if (!try_module_get_owner(acomp->ops->owner, dev->driver->owner)) {
- 		ret = -ENODEV;
- 		goto out_unbind;
- 	}
--- 
-2.35.3
+> 
+> Andi
+> 
+> >  
+> > -		preempt_enable();
+> > -	}
+> >  	return ret;
+> >  }
+> > -EXPORT_SYMBOL(try_module_get);
+> > +EXPORT_SYMBOL(try_module_get_owner);
+> >  
+> >  void module_put(struct module *module)
+> >  {
+> > -- 
+> > 2.35.1  
 
+
+
+Thanks,
+Mauro
