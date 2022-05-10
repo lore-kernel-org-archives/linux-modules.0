@@ -2,147 +2,192 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1717FC433EF
-	for <linux-modules@archiver.kernel.org>; Mon,  9 May 2022 23:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6448C433EF
+	for <linux-modules@archiver.kernel.org>; Tue, 10 May 2022 06:56:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiEIXRp (ORCPT
+        id S237427AbiEJHAu (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 9 May 2022 19:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
+        Tue, 10 May 2022 03:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbiEIXRn (ORCPT
+        with ESMTP id S237417AbiEJHAr (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 9 May 2022 19:17:43 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FB22A3BE7
-        for <linux-modules@vger.kernel.org>; Mon,  9 May 2022 16:13:48 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2f7c57ee6feso161812777b3.2
-        for <linux-modules@vger.kernel.org>; Mon, 09 May 2022 16:13:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oazinpgomaqUG0jSYMm8ubizFPTzpD9YluLXTH1Uf+8=;
-        b=f6fWCk6p41OZaY/aYptJIOS/H7gQoR2LQU/vFrk5Gn4NSNwuGdiZDiDStk7AbG3yZD
-         IKBXb4w884/50UAgGFMYKZ1TW7UWPSrJsR6aU/0xVkQloWI1gv9dqJSDbnU+7ZRlaq+H
-         5q6FzLE9Jch5W51SjYRwMzmvNSaAVh59pmK1la7G6Ce7QS8+phGNXM1poUTxBJEghkkL
-         rkNzGIHiR6cg7h2j0E68I08LETn6PDCH3Bk2j2CtnK3mFxMH+qkZYlQ5Mbk0pgP96vbx
-         k86u84TYrd/iZlrt9edUpHqGeZQt6sH9DbxxljCpeCMl8DqbX8Q9LTMC9vVENf9lnOH2
-         8xnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oazinpgomaqUG0jSYMm8ubizFPTzpD9YluLXTH1Uf+8=;
-        b=6rwuvVwp9v+TSPjqOGvXfvAe3DAbfaUzJ4MyTTKUALN57V5awBDTQuc+I/L8bIImpo
-         hop/FhzAn2pNjS30dF0w2L8LPxKSpysettGHX+C1Cuv0vd1sU8xefZfiuw6tHZ+6XH5j
-         IoqFIHc/HLO0bhOCgCz65hakHYr/V2QuyR6KM5iRks7EImFHx3Ecuyk/vOGWuPzqS6BX
-         mLZX6O9xRv48Wy2T2sSTcTfUl9vw+pNI8uLTNHpPZXCJi65eiyUbn41DgTfk01iTE75f
-         4frfKtkEWMp/n8tWdTsCruav2oKyVHMNnEkTJJDbBRrsvHAoATUEx+ujT9SYeiYCv2op
-         Q0rg==
-X-Gm-Message-State: AOAM532Rd4H/gmcuXfSQWj2QRXSoOFbBIV8dJ1ydT5QyOc1yB1n6XB9Y
-        wKse5iAeT766mIZjmjoR+oxZk5XQ4ugi9Zsc7wwCeg==
-X-Google-Smtp-Source: ABdhPJxssHqsbnbsTj81I2dSgjtFlZace94GadSqyvpd5jqz1pk64Y4lHyhr+1TXl7QDxSK2F5OuNrrpLo+K4Kc2AN8=
-X-Received: by 2002:a81:1108:0:b0:2f7:bf11:3fb9 with SMTP id
- 8-20020a811108000000b002f7bf113fb9mr17011668ywr.305.1652138027673; Mon, 09
- May 2022 16:13:47 -0700 (PDT)
+        Tue, 10 May 2022 03:00:47 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532787485B;
+        Mon,  9 May 2022 23:56:48 -0700 (PDT)
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 24A6uWPt006909;
+        Tue, 10 May 2022 15:56:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 24A6uWPt006909
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1652165793;
+        bh=fEURvXR77OoRUwAby4ssOCC2y+9cYzZS2BTBBdHY5s4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=wCwaSRXELTeXaq2guIuReTuZg7U66E7IGNEBvRfkfezGlyZXsSMCiDdUr9QEJxarS
+         XrfMKl2ilUNX5U21uZSXL6zLwnIp0vZsPMbwwzeaW+huMjJN0lDJ6x9fPRe4b3ioLX
+         d1CWYofvXhCGeTNOH4b2zCthanuoTTMVhHVGhU/G+RblgSvtBBoQY1q8W0F5FwtyK8
+         pFbA+pcE2bpadKfX8PQAdO+AHk9AEs+Qvcqfz+EpBxXnZR+DExiobCnjj/rrTS0tnx
+         CZPaFmdEMVXzwdp/7Jw3Kyv3btpFQ7MhJ18jWwmea1L+fCMHlCb2QwIfpTWtpSAEz9
+         0NOjUjI1wdR0w==
+X-Nifty-SrcIP: [209.85.216.46]
+Received: by mail-pj1-f46.google.com with SMTP id iq10so15115325pjb.0;
+        Mon, 09 May 2022 23:56:33 -0700 (PDT)
+X-Gm-Message-State: AOAM530Yx4NqOCrZWxlmZ6whAaURMPWAefNzWF9V/GNdyNORuj3wUXlF
+        /LFU6ldwJ4z2CmT+9xRoarpYmzRcrA+ynNgI9jQ=
+X-Google-Smtp-Source: ABdhPJyEgi0eqH+b8oqMunpHr855g62eqCOt9y9rnuZ3PqXxdNPec+4B1Ab1EtAdW8GXjXd92AJ/4rFTNMbUFO627GA=
+X-Received: by 2002:a17:90a:e7cd:b0:1dc:74eb:7526 with SMTP id
+ kb13-20020a17090ae7cd00b001dc74eb7526mr21753943pjb.144.1652165792292; Mon, 09
+ May 2022 23:56:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org> <20220508190631.2386038-10-masahiroy@kernel.org>
-In-Reply-To: <20220508190631.2386038-10-masahiroy@kernel.org>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Mon, 9 May 2022 16:13:11 -0700
-Message-ID: <CABCJKudnbTS=_2WgX63xb_3oCwt_6jwotqfoV5wSjkmfjuUJZQ@mail.gmail.com>
-Subject: Re: [PATCH v4 09/14] kbuild: do not create *.prelink.o for Clang LTO
- or IBT
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
+References: <20220508190631.2386038-1-masahiroy@kernel.org>
+ <CAK7LNAQtedww_RiemfTV7Ls=M01iKJhY14G3TiuAg=C3bvJjww@mail.gmail.com> <YnmSCNDBlMMJCbjj@dev-arch.thelio-3990X>
+In-Reply-To: <YnmSCNDBlMMJCbjj@dev-arch.thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 10 May 2022 15:55:21 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATkm+GzqNLgpbh4F+M=U8LU48p2NH9MyqeO6uA_KYJFaQ@mail.gmail.com>
+Message-ID: <CAK7LNATkm+GzqNLgpbh4F+M=U8LU48p2NH9MyqeO6uA_KYJFaQ@mail.gmail.com>
+Subject: Re: [PATCH v4 00/14] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-modules@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-modules <linux-modules@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         clang-built-linux <clang-built-linux@googlegroups.com>,
-        Ard Biesheuvel <ardb@kernel.org>
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, May 8, 2022 at 12:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Tue, May 10, 2022 at 7:13 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> When CONFIG_LTO_CLANG=y, additional intermediate *.prelink.o is created
-> for each module. Also, objtool is postponed until LLVM bitcode is
-> converted to ELF.
+> On Mon, May 09, 2022 at 01:24:33PM +0900, Masahiro Yamada wrote:
+> > On Mon, May 9, 2022 at 4:09 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > This is the third batch of cleanups in this development cycle.
+> > >
+> > > Major changes in v4:
+> > >  - Move static EXPORT_SYMBOL check to a script
+> > >  - Some refactoring
+> > >
+> > > Major changes in v3:
+> > >
+> > >  - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
+> > >
+> > > Major changes in v2:
+> > >
+> > >  - V1 did not work with CONFIG_MODULE_REL_CRCS.
+> > >    I fixed this for v2.
+> > >
+> > >  - Reflect some review comments in v1
+> > >
+> > >  - Refactor the code more
+> > >
+> > >  - Avoid too long argument error
+> >
+> > This series is available at
+> > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+> > lto-cleanup-v4
 >
-> CONFIG_X86_KERNEL_IBT works in a similar way to postpone objtool until
-> objects are merged together.
+> Hi Masahiro,
 >
-> This commit stops generating *.prelink.o, so the build flow will look
-> the same with/without LTO.
+> I checked this out and went to run it through my QEMU tests but I see
+> two new errors.
 >
-> The following figures show how the LTO build currently works, and
-> how this commit is changing it.
+> Failure #1:
 >
-> Current build flow
-> ==================
+> In file included from scripts/mod/section-check.c:3:
+> scripts/mod/modpost.h:15:10: fatal error: 'elfconfig.h' file not found
+> #include "elfconfig.h"
+>          ^~~~~~~~~~~~~
+> 1 error generated.
 >
->  [1] single-object module
+> I was able to get past that with
 >
->                                       $(LD)
->            $(CC)                     +objtool              $(LD)
->     foo.c --------------------> foo.o -----> foo.prelink.o -----> foo.ko
->                            (LLVM bitcode)        (ELF)       |
->                                                              |
->                                                  foo.mod.o --/
+> diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
+> index ca739c6c68a1..c33b83bfbcad 100644
+> --- a/scripts/mod/Makefile
+> +++ b/scripts/mod/Makefile
+> @@ -16,7 +16,7 @@ targets += $(devicetable-offsets-file) devicetable-offsets.s
 >
->  [2] multi-object module
->                                       $(LD)
->            $(CC)         $(AR)       +objtool               $(LD)
->     foo1.c -----> foo1.o -----> foo.o -----> foo.prelink.o -----> foo.ko
->                            |  (archive)          (ELF)       |
->     foo2.c -----> foo2.o --/                                 |
->                 (LLVM bitcode)                   foo.mod.o --/
+>  # dependencies on generated files need to be listed explicitly
 >
->   One confusion is foo.o in multi-object module is an archive despite of
->   its suffix.
+> -$(obj)/modpost.o $(obj)/file2alias.o $(obj)/sumversion.o: $(obj)/elfconfig.h
+> +$(obj)/modpost.o $(obj)/file2alias.o $(obj)/sumversion.o $(obj)/section-check.o: $(obj)/elfconfig.h
+>  $(obj)/file2alias.o: $(obj)/$(devicetable-offsets-file)
 >
-> New build flow
-> ==============
->
->  [1] single-object module
->
->   Since there is only one object, we do not need to have the LLVM
->   bitcode stage. Use $(CC)+$(LD) to generate an ELF object in one
->   build rule. When LTO is disabled, $(LD) is unneeded because $(CC)
->   produces an ELF object.
->
->            $(CC)+$(LD)+objtool             $(LD)
->     foo.c ------------------------> foo.o -------> foo.ko
->                                     (ELF)    |
->                                              |
->                                  foo.mod.o --/
->
->  [2] multi-object module
->
->   Previously, $(AR) was used to combine LLVM bitcode into an archive,
->   but there was no technical reason to do so.
->   This commit just uses $(LD) to combine and convert them into a single
->   ELF object.
->
->                             $(LD)
->             $(CC)          +objtool        $(LD)
->     foo1.c -------> foo1.o -------> foo.o -------> foo.ko
->                               |     (ELF)    |
->     foo2.c -------> foo2.o ---/              |
->                 (LLVM bitcode)   foo.mod.o --/
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-Looks good, thanks for cleaning this up!
+Thanks for testing.
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-Sami
+I will slightly refactor the code as follows.
+
+
+
+
+@@ -16,7 +16,7 @@ targets += $(devicetable-offsets-file) devicetable-offsets.s
+
+ # dependencies on generated files need to be listed explicitly
+
+-$(obj)/modpost.o $(obj)/file2alias.o $(obj)/sumversion.o: $(obj)/elfconfig.h
++$(addprefix $(obj)/, $(modpost-objs)): $(obj)/elfconfig.h
+
+ $(obj)/file2alias.o: $(obj)/$(devicetable-offsets-file)
+
+ quiet_cmd_elfconfig = MKELF   $@
+
+
+
+
+
+
+
+
+>  quiet_cmd_elfconfig = MKELF   $@
+>
+> Failure #2:
+>
+>   GEN     .version
+>   CHK     include/generated/compile.h
+>   GEN     .tmp_initcalls.lds
+>   LTO     vmlinux.o
+>   OBJTOOL vmlinux.o
+>   MODPOST vmlinux.symvers
+>   MODINFO modules.builtin.modinfo
+>   GEN     modules.builtin
+>   LD      .tmp_vmlinux.btf
+> ld.lld: error: cannot open .vmlinux.export.o: No such file or directory
+>   BTF     .btf.vmlinux.bin.o
+> pahole: .tmp_vmlinux.btf: No such file or directory
+>   CC      .vmlinux.export.c
+>   LD      .tmp_vmlinux.kallsyms1
+> ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+> make[1]: *** [Makefile:1159: vmlinux] Error 1
+>
+> I was not really able to see what is going wrong here. Attached is the
+> configuration that I ran into this with. If you need any other
+> information, please let me know!
+
+Ah, OK.
+This is because .vmlinux.export.o is compiled after gen_btf.
+
+I will swap the order in v5.
+
+
+
+
+
+> Cheers,
+> Nathan
+
+
+
+--
+Best Regards
+Masahiro Yamada
