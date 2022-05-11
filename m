@@ -2,151 +2,147 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07056C433EF
-	for <linux-modules@archiver.kernel.org>; Tue, 10 May 2022 14:33:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56D37C433EF
+	for <linux-modules@archiver.kernel.org>; Wed, 11 May 2022 16:36:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243082AbiEJOhk (ORCPT
+        id S1344837AbiEKQgH (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 10 May 2022 10:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
+        Wed, 11 May 2022 12:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344703AbiEJOfu (ORCPT
+        with ESMTP id S1344879AbiEKQgF (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 10 May 2022 10:35:50 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC33923176;
-        Tue, 10 May 2022 06:55:23 -0700 (PDT)
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 24ADsqFH021437;
-        Tue, 10 May 2022 22:54:52 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 24ADsqFH021437
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652190892;
-        bh=GhyJd382a/wS1zL1PdRPTSc5dz0OmScabiVrpCKaIOA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UauZq89LrkM/cBmL1IrYEN9SfUuhjvaGe24+hHUTCr6S1DeVhg6gB6xE3NmQVWVBj
-         6DbqE9knamXjVI5te5FZFczDJTT7rQh6QEpZGNweYCbuimKgjSP/aGE47BFaaWV7QP
-         nWQxXCsVVeDV23zU0WTiLibA+WIGOjBJTHCjF4SPElVzM4LAreMHLGulclrOMvYw5E
-         qm1qnxBibkRLJhddDsUy2bW1mf7U3O4hZWjTWyZEgCdTAJ2UZWyhO6iXkwbD01KF5z
-         Z5XKrZ5vubGXCeK8VoNsMtnTLZZswrdolQP0koNBf4Nj8MTqic3HFt8425yBdlzD20
-         yW/2Fl9yu/nuQ==
-X-Nifty-SrcIP: [209.85.214.176]
-Received: by mail-pl1-f176.google.com with SMTP id i17so16800307pla.10;
-        Tue, 10 May 2022 06:54:52 -0700 (PDT)
-X-Gm-Message-State: AOAM532NTcpjBtDK34EPiQZlMkC0euoAT2hkOfRsfRlwirrLz8tkJuZT
-        mvr0v6LnSSBlIPozH2J8+7PXuUvYU47N4t8vHw4=
-X-Google-Smtp-Source: ABdhPJzh5Xg40qnHgjRxAy+2yZ4xm+X8+in8r4zEytwaErju3Iipi+xTG2cJwA+7X0E5U7wpLUUa0KgN+U0NnVHMv0g=
-X-Received: by 2002:a17:902:7891:b0:15e:cae9:7620 with SMTP id
- q17-20020a170902789100b0015ecae97620mr21001207pll.136.1652190891612; Tue, 10
- May 2022 06:54:51 -0700 (PDT)
+        Wed, 11 May 2022 12:36:05 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BACB25C54;
+        Wed, 11 May 2022 09:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gP4j0VTBaqd67iq071u/RwrWUu7NK1QjS14KvP0f4w4=; b=zH/IvvnLcd9KhzvxLczeTFaKMf
+        23ILOEtzst/8t24joEjQ3SQwZAMbZsO1vFO8h87wRSRBbvR58MoRTfBUHTqsQHUNqfjflkc9Em7Db
+        49FxfXeoOfG+SZQJKKYotIGO7lfCuKDvrgIw2YpIIT3rqYFAU5CVeOHNf5zpzj+H8twh/wmd9zm+j
+        CfL+/YOGpkYTdJ19qlMpQu3zi2E5dRQxmne2zF2FrkhxRDeoiQT7LZaeYsOURJGPdrDeAxi6n25hS
+        oGkMiaariQgL+O8+oMwVL5NaJ3RU/CrDEnIbHOMf6edFAYtQ/dCQLOhF+ebrZuVehVo+q9f+t86k/
+        nlwm2aRw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nopJb-007oQt-D3; Wed, 11 May 2022 16:35:55 +0000
+Date:   Wed, 11 May 2022 09:35:55 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        fnovak@us.ibm.com, linuxppc-dev@ozlabs.org,
+        christophe.leroy@csgroup.eu
+Subject: Re: request_module DoS
+Message-ID: <Ynvl6wCQRFdYsHar@bombadil.infradead.org>
+References: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
+ <874k1zt0ec.fsf@mpe.ellerman.id.au>
+ <Ynk9j6DQmVGAA3Jf@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org>
- <20220508190631.2386038-11-masahiroy@kernel.org> <CAKwvOdkhcJB8Bnrt51siRefWe+ZSvHagCs2G011PzkkrD3cxQw@mail.gmail.com>
-In-Reply-To: <CAKwvOdkhcJB8Bnrt51siRefWe+ZSvHagCs2G011PzkkrD3cxQw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 10 May 2022 22:53:40 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATMaW34NP+=0UF=aJ=Z7h0QSuzV2F1QjYjru9nFooG9tQ@mail.gmail.com>
-Message-ID: <CAK7LNATMaW34NP+=0UF=aJ=Z7h0QSuzV2F1QjYjru9nFooG9tQ@mail.gmail.com>
-Subject: Re: [PATCH v4 10/14] kbuild: check static EXPORT_SYMBOL* by script
- instead of modpost
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ynk9j6DQmVGAA3Jf@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, May 10, 2022 at 3:05 AM 'Nick Desaulniers' via Clang Built
-Linux <clang-built-linux@googlegroups.com> wrote:
->
-> On Sun, May 8, 2022 at 12:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > diff --git a/scripts/check-local-export b/scripts/check-local-export
-> > new file mode 100755
-> > index 000000000000..d1721fa63057
-> > --- /dev/null
-> > +++ b/scripts/check-local-export
-> > @@ -0,0 +1,48 @@
-> > +#!/bin/bash
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +#
-> > +# Copyright (C) 2022 Masahiro Yamada
-> > +
-> > +set -e
-> > +set -o pipefail
-> > +
-> > +declare -A symbol_types
-> > +declare -a export_symbols
-> > +
-> > +exit_code=0
-> > +
-> > +while read value type name
-> > +do
-> > +       # to avoid error for clang LTO; $name may be empty
-> > +       if [[ $value = -* && -z $name ]]; then
-> > +               continue
-> > +       fi
-> > +
-> > +       # The first field (value) may be empty. If so, fix it up.
-> > +       if [[ -z $name ]]; then
-> > +          name=${type}
-> > +          type=${value}
-> > +       fi
->
-> Consider adding examples of output from NM as comments where you're
-> handling special cases.
->
-> Aren't BOTH from LTO?  The first case is:
->
-> ---------------- T strncpy
+On Mon, May 09, 2022 at 09:13:03AM -0700, Luis Chamberlain wrote:
+> On Mon, May 09, 2022 at 09:23:39PM +1000, Michael Ellerman wrote:
+> > Herbert Xu <herbert@gondor.apana.org.au> writes:
+> > > Hi:
+> > >
+> > > There are some code paths in the kernel where you can reliably
+> > > trigger a request_module of a non-existant module.  For example,
+> > > if you attempt to load a non-existent crypto algorithm, or create
+> > > a socket of a non-existent network family, it will result in a
+> > > request_module call that is guaranteed to fail.
+> > >
+> > > As user-space can do this repeatedly, it can quickly overwhelm
+> > > the concurrency limit in kmod.  This in itself is expected,
+> > > however, at least on some platforms this appears to result in
+> > > a live-lock.  Here is an example triggered by stress-ng on ppc64:
+> > >
+> > > [  529.853264] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis128l, throttling...
+> > ...
+> > > [  580.414590] __request_module: 25 callbacks suppressed
+> > > [  580.414597] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module crypto-aegis256-all, throttling...
+> > > [  580.423082] watchdog: CPU 784 self-detected hard LOCKUP @ plpar_hcall_norets_notrace+0x18/0x2c
+> > > [  580.423097] watchdog: CPU 784 TB:1297691958559475, last heartbeat TB:1297686321743840 (11009ms ago)
+> > > [  580.423099] Modules linked in: cast6_generic cast5_generic cast_common camellia_generic blowfish_generic blowfish_common tun nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill bonding tls ip_set nf_tables nfnetlink pseries_rng binfmt_misc drm drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sg ibmvscsi ibmveth scsi_transport_srp vmx_crypto dm_mirror dm_region_hash dm_log dm_mod fuse
+> > > [  580.423136] CPU: 784 PID: 77071 Comm: stress-ng Kdump: loaded Not tainted 5.14.0-55.el9.ppc64le #1
+> > > [  580.423139] NIP:  c0000000000f8ff4 LR: c0000000001f7c38 CTR: 0000000000000000
+> > > [  580.423140] REGS: c0000043fdd7bd60 TRAP: 0900   Not tainted  (5.14.0-55.el9.ppc64le)
+> > > [  580.423142] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 28008202  XER: 20040000
+> > > [  580.423148] CFAR: 0000000000000c00 IRQMASK: 1 
+> > >                GPR00: 0000000028008202 c0000044c46b3850 c000000002a46f00 0000000000000000 
+> > >                GPR04: ffffffffffffffff 0000000000000000 0000000000000010 c000000002a83060 
+> > >                GPR08: 0000000000000000 0000000000000001 0000000000000001 0000000000000000 
+> > >                GPR12: c0000000001b9530 c0000043ffe16700 0000000200000117 0000000010185ea8 
+> > >                GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0 
+> > >                GPR20: 0000000000000001 0000000000000000 0000000000000001 00000000000000ff 
+> > >                GPR24: c0000043f4a00e14 c0000043fafe0e00 000000000c440000 0000000000000000 
+> > >                GPR28: c0000043f4a00e00 c0000043f4a00e00 c0000000021e0e00 c000000002561aa0 
+> > > [  580.423166] NIP [c0000000000f8ff4] plpar_hcall_norets_notrace+0x18/0x2c
+> > > [  580.423168] LR [c0000000001f7c38] __pv_queued_spin_lock_slowpath+0x528/0x530
+> > > [  580.423173] Call Trace:
+> > > [  580.423174] [c0000044c46b3850] [0000000100006b60] 0x100006b60 (unreliable)
+> > > [  580.423177] [c0000044c46b3910] [c000000000ea6948] _raw_spin_lock_irqsave+0xa8/0xc0
+> > > [  580.423182] [c0000044c46b3940] [c0000000001dd7c0] prepare_to_wait_event+0x40/0x200
+> > > [  580.423185] [c0000044c46b39a0] [c00000000019e9e0] __request_module+0x320/0x510
+> > > [  580.423188] [c0000044c46b3ac0] [c0000000006f1a14] crypto_alg_mod_lookup+0x1e4/0x2e0
+> > > [  580.423192] [c0000044c46b3b60] [c0000000006f2178] crypto_alloc_tfm_node+0xa8/0x1a0
+> > > [  580.423194] [c0000044c46b3be0] [c0000000006f84f8] crypto_alloc_aead+0x38/0x50
+> > > [  580.423196] [c0000044c46b3c00] [c00000000072cba0] aead_bind+0x70/0x140
+> > > [  580.423199] [c0000044c46b3c40] [c000000000727824] alg_bind+0xb4/0x210
+> > > [  580.423201] [c0000044c46b3cc0] [c000000000bc2ad4] __sys_bind+0x114/0x160
+> > > [  580.423205] [c0000044c46b3d90] [c000000000bc2b48] sys_bind+0x28/0x40
+> > > [  580.423207] [c0000044c46b3db0] [c000000000030880] system_call_exception+0x160/0x300
+> > > [  580.423209] [c0000044c46b3e10] [c00000000000c168] system_call_vectored_common+0xe8/0x278
+> > > [  580.423213] --- interrupt: 3000 at 0x7fff9b824464
+> > > [  580.423214] NIP:  00007fff9b824464 LR: 0000000000000000 CTR: 0000000000000000
+> > > [  580.423215] REGS: c0000044c46b3e80 TRAP: 3000   Not tainted  (5.14.0-55.el9.ppc64le)
+> > > [  580.423216] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 42004802  XER: 00000000
+> > > [  580.423221] IRQMASK: 0 
+> > >                GPR00: 0000000000000147 00007fffdcff2780 00007fff9b917100 0000000000000004 
+> > >                GPR04: 00007fffdcff27e0 0000000000000058 0000000000000000 0000000000000000 
+> > >                GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> > >                GPR12: 0000000000000000 00007fff9bc9efe0 0000000200000117 0000000010185ea8 
+> > >                GPR16: 0000000010212150 0000000010186198 00000000101863a0 000000001021b3c0 
+> > >                GPR20: 0000000000000004 00007fffdcff2a00 0000000300000117 00000000101862b8 
+> > >                GPR24: 0000000000000004 0000000046401570 0000000046401120 0000000046404650 
+> > >                GPR28: 0000000000000020 0000000000000020 0000000000000060 0000000046404bf0 
+> > > [  580.423236] NIP [00007fff9b824464] 0x7fff9b824464
+> > > [  580.423237] LR [0000000000000000] 0x0
+> > > [  580.423238] --- interrupt: 3000
+> > > [  580.423239] Instruction dump:
+> > > [  580.423241] e8690000 7c0803a6 3884fff8 78630100 78840020 4bfffeb8 3c4c0295 3842df24 
+> > > [  580.423244] 7c421378 7c000026 90010008 44000022 <38800000> 988d0931 80010008 7c0ff120 
+> > >
+> > > Would it be possible to modify kmod so that in such cases that
+> > > request_module calls fail more quickly rather than repeatedly
+> > > obtaining a spinlock that appears to be under high contention?
+> > 
+> > If you run stress-ng with a timeout does the system eventually recover?
+> 
+> OK the respective stress-ng test should be something like:
+> 
+> ./stress-ng --af-alg 8192
+> 
+> I had left this running overnight on x86_64 without issues:
+> 
+> sudo ./tools/testing/selftests/kmod/kmod.sh -t 0009
+> 
+> Going to leave the above stress-ng call running in a loop to see
+> if I can reproduce the live lock on x86_64.
 
+The following loop has been running on 5.18.0-rc5-next-20220506 since
+May 9 without any issues on x86_64:
 
-For LTO, I see
+while true; do sudo ./stress-ng --af-alg 8192; done
 
----------------- t
+Can someone try this on ppc64le system? At this point I am not convinced
+this issue is generic.
 
-in the llvm-nm output.
-
-
-
->
-> while the second is
->
->                  U strncpy
-
-Right, this happens for all unresolved symbols.
-The address part is empty.
-
-
-I will add the output example in the comment block.
-
-
-
-
-
-> IIUC?
->
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> --
-> Thanks,
-> ~Nick Desaulniers
->
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/CAKwvOdkhcJB8Bnrt51siRefWe%2BZSvHagCs2G011PzkkrD3cxQw%40mail.gmail.com.
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+  Luis
