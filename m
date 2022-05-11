@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 615D8C388F3
-	for <linux-modules@archiver.kernel.org>; Wed, 11 May 2022 16:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E858C433FE
+	for <linux-modules@archiver.kernel.org>; Wed, 11 May 2022 16:49:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345043AbiEKQtr (ORCPT
+        id S243630AbiEKQts (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 11 May 2022 12:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        Wed, 11 May 2022 12:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345026AbiEKQtq (ORCPT
+        with ESMTP id S1345031AbiEKQtq (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Wed, 11 May 2022 12:49:46 -0400
 Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A06195DD9;
-        Wed, 11 May 2022 09:49:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5911C95DE8;
+        Wed, 11 May 2022 09:49:42 -0700 (PDT)
 Received: from grover.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 24BGlWc4031975;
-        Thu, 12 May 2022 01:47:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWc4031975
+        by conuserg-08.nifty.com with ESMTP id 24BGlWbv031975;
+        Thu, 12 May 2022 01:47:35 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWbv031975
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652287662;
-        bh=tcr+72ZYpbdDhhd7b5O3qNkSWb92WQKtLNqtDxevyAs=;
+        s=dec2015msa; t=1652287655;
+        bh=nPFeNb7zcOn5IuqqOUBw3aAC983zUVDbQ5TFg7R+mlQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1xN57X9s6ScLJ/Z2hb1pNWWGLy1nt5xrcw/SRTDzpwMQbvnE8A08WHb1tRL2DBKCO
-         +pXkDzpxbY81fwxbG0a4ZZkdXAogExaeNGygVj8OuLcQNuJ7AiRunzbNiBtIc7spg1
-         8+kVanlYtmiRWoi0IcsTtPqIxwux0W9L6x/FwUyQ60BvJ379AzCT3xh3/e9TxPIp5S
-         Pc8nBrjlOMjG0duMJdm6spy738mTTr+f+FFcKcDaOyjaayqqqYRWWVZ0bHOrh9LfyX
-         sMYGko/4vxzWoqMu0AiEUGkSvhzF7286ufk7BC0AMXMVPovVKTcm1HkwUoJrVQMncw
-         9gXlUynDCRMKg==
+        b=gkESwt0tgX74oapFqHSCwWI/Bk8Ad4YZ8SrAbF7yZTsg2uxWwzhaWocVBJyzR0cnk
+         0K/qmOJdf1rNWwm3+EJQgBN7lGD+/6KmK6ukb613+nVKaNI20dpP2i/pC0oei1N8lW
+         nYcbSUfk0eUbIhd6kmm1elHieqjRN8kXKOn1E2408ZMc+BLwrqRCYOqh/tZLiRC+gk
+         /QasUWfa/8wjt0WSJZv8yk3rEk2IwA7c6zZCKPe7Iwso0wrfwuzjhDpsmggvTA0bXF
+         0ofYM6whQAGxcha+sJpZZ+XVltmAPe+wJyQuvYnK9krcypZso6n2TCvfol7/h+YrpJ
+         m7fjJTaJN6h1g==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -42,9 +42,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v5 09/12] kbuild: make built-in.a rule robust against too long argument error
-Date:   Thu, 12 May 2022 01:45:11 +0900
-Message-Id: <20220511164514.2741934-10-masahiroy@kernel.org>
+Subject: [PATCH v5 02/12] modpost: add sym_find_with_module() helper
+Date:   Thu, 12 May 2022 01:45:04 +0900
+Message-Id: <20220511164514.2741934-3-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220511164514.2741934-1-masahiroy@kernel.org>
 References: <20220511164514.2741934-1-masahiroy@kernel.org>
@@ -53,62 +53,65 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Kbuild runs at the top of objtree instead of changing the working
-directory to subdirectories. I think this design is nice overall but
-some commands have a scalability issue.
+find_symbol() returns the first symbol found in the hash table. This
+table is global, so it may return a symbol from an unexpected module.
 
-The build command of built-in.a is one of them whose length scales with:
+There is a case where we want to search for a symbol with a given name
+in a specified module.
 
-    O(D * N)
-
-Here, D is the length of the directory path (i.e. $(obj)/ prefix),
-N is the number of objects in the Makefile, O() is the big O notation.
-
-The deeper directory the Makefile directory is located, the more easily
-it will hit the too long argument error.
-
-We can make it better. Trim the $(obj)/ by Make's builtin function, and
-restore it by a shell command (sed).
-
-With this, the command length scales with:
-
-    O(D + N)
-
-In-tree modules still have some room to the limit (ARG_MAX=2097152),
-but this is more future-proof for big modules in a deep directory.
-
-For example, you can build i915 as builtin (CONFIG_DRM_I915=y) and
-compare drivers/gpu/drm/i915/.built-in.a.cmd with/without this commit.
+Add sym_find_with_module(), which receives the module pointer as the
+second argument. It is equivalent to find_module() if NULL is passed
+as the module pointer.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
 
-(no changes since v2)
+(no changes since v4)
+
+Changes in v4:
+  - Only takes the new helper from
+    https://patchwork.kernel.org/project/linux-kbuild/patch/20220505072244.1155033-2-masahiroy@kernel.org/
 
 Changes in v2:
-  - New patch
+  - Rename the new func to sym_find_with_module()
 
- scripts/Makefile.build | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ scripts/mod/modpost.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index c2a173b3fd60..8f1a355df7aa 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -374,7 +374,10 @@ $(subdir-modorder): $(obj)/%/modules.order: $(obj)/% ;
- #
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index e7e2c70a98f5..fc5db1f73cf1 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -266,7 +266,7 @@ static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
+ 	list_add_tail(&sym->list, &mod->unresolved_symbols);
+ }
  
- quiet_cmd_ar_builtin = AR      $@
--      cmd_ar_builtin = rm -f $@; $(AR) cDPrST $@ $(real-prereqs)
-+      cmd_ar_builtin = rm -f $@; \
-+		echo $(patsubst $(obj)/%,%,$(real-prereqs)) | \
-+		sed -E 's:([^ ]+):$(obj)/\1:g' | \
-+		xargs $(AR) cDPrST $@
+-static struct symbol *find_symbol(const char *name)
++static struct symbol *sym_find_with_module(const char *name, struct module *mod)
+ {
+ 	struct symbol *s;
  
- $(obj)/built-in.a: $(real-obj-y) FORCE
- 	$(call if_changed,ar_builtin)
+@@ -275,12 +275,17 @@ static struct symbol *find_symbol(const char *name)
+ 		name++;
+ 
+ 	for (s = symbolhash[tdb_hash(name) % SYMBOL_HASH_SIZE]; s; s = s->next) {
+-		if (strcmp(s->name, name) == 0)
++		if (strcmp(s->name, name) == 0 && (!mod || s->module == mod))
+ 			return s;
+ 	}
+ 	return NULL;
+ }
+ 
++static struct symbol *find_symbol(const char *name)
++{
++	return sym_find_with_module(name, NULL);
++}
++
+ struct namespace_list {
+ 	struct list_head list;
+ 	char namespace[];
 -- 
 2.32.0
 
