@@ -2,120 +2,137 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20E20C433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 11 May 2022 19:29:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D377C4332F
+	for <linux-modules@archiver.kernel.org>; Wed, 11 May 2022 19:51:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344613AbiEKT3M (ORCPT
+        id S1346786AbiEKTvS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 11 May 2022 15:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
+        Wed, 11 May 2022 15:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiEKT3M (ORCPT
+        with ESMTP id S1347293AbiEKTvN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 11 May 2022 15:29:12 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A319DF1367;
-        Wed, 11 May 2022 12:29:08 -0700 (PDT)
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 24BJSoZ9018134;
-        Thu, 12 May 2022 04:28:50 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 24BJSoZ9018134
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652297330;
-        bh=EaTId7H8QGxZ4wR/UutapdHBioVSBlwASrI8kZas40s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=S17erul53RNIeBjJYir+J8mpHUWqK7sXKHJMWRa/l2xSCxZgrdV1dU3+5hX9DFRPB
-         CxgugLFeqTZ4qkrOp/w8aAs9LC1q5WTQ18lo39qoonMr7iIjV8mWFGdEhV4ZCcs80q
-         2791ONW4kWbmvpu0bg8Ie6WMg2pBrWyRDmAD0TVba9wY0wF1xKvLuuao/XsCXNDByB
-         38FzgA8r7So3M8VePGduejUpewfBieSKGIXseq+GW7ZP4YbOEsCZ9Y+Cm76syaoNJ6
-         t7jCNxWrBvLyml46hUxkvSFtyWpcS1C/UwFi4wohFk8Ysn7VrS2i2PxIpRBTLc+/r3
-         YjPePFoJdPHHA==
-X-Nifty-SrcIP: [209.85.216.52]
-Received: by mail-pj1-f52.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso2975792pjg.0;
-        Wed, 11 May 2022 12:28:50 -0700 (PDT)
-X-Gm-Message-State: AOAM530Sk2S5gpR8eoR0AEnHcHmWIS8+HImf5ur29pRT6pczkG3LLJcl
-        +WzvlT0pUi+j8EBsjQ41t0G7SEzyQ1Br31/6EfI=
-X-Google-Smtp-Source: ABdhPJxpFvdEXgne/7yspfTVFpO5mJeb/64Ugd7xcTnf7hLoDN02lbCll4CkYvhtMmE1NpBHpwbzLRyJwjcVkvMYkaw=
-X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
- l5-20020a170903120500b0015e8cbcfd2bmr26952485plh.99.1652297329721; Wed, 11
- May 2022 12:28:49 -0700 (PDT)
+        Wed, 11 May 2022 15:51:13 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E391A3D4B0
+        for <linux-modules@vger.kernel.org>; Wed, 11 May 2022 12:51:11 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id ch13so6069892ejb.12
+        for <linux-modules@vger.kernel.org>; Wed, 11 May 2022 12:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=okDasmSIedZIfDNVfGzL/C0tlLQxT7cXpy43/5U1qMo=;
+        b=QUS04llQ/TQdvF3bJLtNkYv+9Y/6CRyA1IhJj03bD1ysf9ANin3YF7pIozL2ckCVd9
+         OEgvjLcrm/1wDU9oB6CTsdkJp6bSY0dGxFMc0XUZpQx5vjtv+lpaWgY+z91+b2dCfgUQ
+         oJPZmG2v8C8OYJmWR8Lmy78eHPjrvYJULiRqg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=okDasmSIedZIfDNVfGzL/C0tlLQxT7cXpy43/5U1qMo=;
+        b=ssUJuPFFzDqKxSqPiIVRxykPBt2uNXqhG6eRSQXH4vNzxVpkVC0vxxYPxTBsIihfbi
+         ktLgyYxV09CkzceRuQmf2QKuYCUQaQLekwP12Ng1r7+TdkiaYpUpDr4dIrC5Ql5BK878
+         2wFvrnu9HRmsIDYaiGaIA4lWEz+3V2VgrP/JqU+62JmV5ToWp33oGRBG718ZeqtBUZgn
+         +ThIhOP/oeyP5DEh9pkEHwmtLuWi2aQn6VetwUpH+XMbBmsR6z9YbxioCLB6qCbXYz51
+         +LARpBtt+vBXzcLEeUMRNwbkR8Cm0E3ZcFSzg1YfK2YYUv+WRcB360u9GNKQPyASv8ez
+         rTwA==
+X-Gm-Message-State: AOAM532FuEDlLsKgFyt7SM0ev1MaSJSqpF0hmnfSD9kC42oHo6x/wcJO
+        qXysd2DuNCaYjT+zvMj9QuUM9w==
+X-Google-Smtp-Source: ABdhPJzc30UDk4ot2UfqIn3JcPVtx5jKy3U9yzEWlwhCj1FbId8oXyy3bEiSM7KRq59c9iZ9/8xhUg==
+X-Received: by 2002:a17:906:b74b:b0:6f4:cd08:6fec with SMTP id fx11-20020a170906b74b00b006f4cd086fecmr28194512ejb.155.1652298670454;
+        Wed, 11 May 2022 12:51:10 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id cb13-20020a0564020b6d00b0042617ba639asm1598568edb.36.2022.05.11.12.51.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 12:51:09 -0700 (PDT)
+Date:   Wed, 11 May 2022 21:51:08 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        mauro.chehab@linux.intel.com, Takashi Iwai <tiwai@suse.de>
+Subject: Re: [PATCH v6 4/4] ALSA: hda - identify when audio is provided by a
+ video driver
+Message-ID: <YnwTrF6VpM7V1jdu@phenom.ffwll.local>
+Mail-Followup-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        mauro.chehab@linux.intel.com, Takashi Iwai <tiwai@suse.de>
+References: <cover.1652113087.git.mchehab@kernel.org>
+ <f53f8a9d04b39a6843f19fe3069d1be7a9713aae.1652113087.git.mchehab@kernel.org>
 MIME-Version: 1.0
-References: <20220508190631.2386038-1-masahiroy@kernel.org>
- <20220508190631.2386038-4-masahiroy@kernel.org> <CAKwvOd=LR=UNOeWJDmM-McJ=FrCWTo8w1ox+KGMQCwCVpiUyFg@mail.gmail.com>
- <CAK7LNARGNEDzPPUsPjDXsXUUUPSFK2erQRuyPocR_v5hTYRihg@mail.gmail.com> <CAKwvOdmK4oH0t8Q6F19sWKX1fT=AgS=kfvn05FT01HffLJwgMQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdmK4oH0t8Q6F19sWKX1fT=AgS=kfvn05FT01HffLJwgMQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 12 May 2022 04:27:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR5preB59HJH1-F_ZfEmoF3N8b9z4eRhYzsEVwu_XUH4Q@mail.gmail.com>
-Message-ID: <CAK7LNAR5preB59HJH1-F_ZfEmoF3N8b9z4eRhYzsEVwu_XUH4Q@mail.gmail.com>
-Subject: Re: [PATCH v4 03/14] modpost: split the section mismatch checks into section-check.c
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f53f8a9d04b39a6843f19fe3069d1be7a9713aae.1652113087.git.mchehab@kernel.org>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, May 12, 2022 at 3:48 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Mon, May 9, 2022 at 11:57 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > > > index a78b75f0eeb0..e7e2c70a98f5 100644
-> > > > --- a/scripts/mod/modpost.c
-> > > > +++ b/scripts/mod/modpost.c
-> > > > @@ -31,7 +31,7 @@ static bool external_module;
-> > > >  /* Only warn about unresolved symbols */
-> > > >  static bool warn_unresolved;
-> > > >
-> > > > -static int sec_mismatch_count;
-> > > > +int sec_mismatch_count;
-> > >
-> > > ^ this should go in modpost.h if it is to be used in two translation
-> > > units, rather than forward declaring it in section-check.c.  You did
-> > > this for the functions.
-> >
-> >
-> > Sorry, I do not understand.
-> >
-> >
-> > In modpost.h, I put the declaration:
-> >
-> >   extern int sec_mismatch_count;
-> >
-> > If I moved it to the header without 'extern'
-> > I would get multiple definitions.
->
-> Yeah, you need to _declare_ it w/ extern in the header, then _define_
-> it in one source file.
->
-> That way, if the type ever changes, the sources will agree on type in
-> all source files. You will get a redefinition error if the definition
-> changes the type of the variable since the last declaration.
->
-> What you're doing is forward declaring, which works, and is a common
-> pattern for (bloated) C++, but is less type safe than sharing a single
-> common declaration between multiple source files via a single common
-> shared header. (Sorry I didn't respond before you sent v5)
+On Mon, May 09, 2022 at 06:23:39PM +0200, Mauro Carvalho Chehab wrote:
+> On some devices, the hda driver needs to hook into a video driver,
+> in order to be able to properly access the audio hardware and/or
+> the power management function.
+> 
+> That's the case of several snd_hda_intel devices that depends on
+> i915 driver.
+> 
+> Ensure that a proper reference between the snd-hda driver needing
+> such binding is shown at /proc/modules, in order to allow userspace
+> to know about such binding.
+> 
+> Reviewed-by: Takashi Iwai <tiwai@suse.de>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+> 
+> See [PATCH v6 0/4] at: https://lore.kernel.org/all/cover.1652113087.git.mchehab@kernel.org/
+> 
+>  sound/hda/hdac_component.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/sound/hda/hdac_component.c b/sound/hda/hdac_component.c
+> index bb37e7e0bd79..7789873ddf47 100644
+> --- a/sound/hda/hdac_component.c
+> +++ b/sound/hda/hdac_component.c
+> @@ -199,7 +199,7 @@ static int hdac_component_master_bind(struct device *dev)
+>  	}
+>  
+>  	/* pin the module to avoid dynamic unbinding, but only if given */
+> -	if (!try_module_get(acomp->ops->owner)) {
+> +	if (!try_module_get_owner(acomp->ops->owner, dev->driver->owner)) {
 
-Sorry, I still do not understand your suggestion.
+I'm still a bit confused why snd-hda does this and why this wasn't put
+into component.c, but that's kinda a pre-existing issue and I guess could
+be fixed later on. It really shouldn't be anything specific to snd-hda
+here.
 
+Anyway I scrolled through the series, it makes a lot more sense than the
+intial hack to me, so on the series:
 
-Could you provide me with a code diff
-showing how to do this better?
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
+But maybe don't count that as real review :-)
 
-
+Cheers, Daniel
 -- 
-Best Regards
-Masahiro Yamada
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
