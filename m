@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBF03C433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 11 May 2022 16:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A96E9C4167B
+	for <linux-modules@archiver.kernel.org>; Wed, 11 May 2022 16:49:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243056AbiEKQtn (ORCPT
+        id S1345012AbiEKQtq (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 11 May 2022 12:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
+        Wed, 11 May 2022 12:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235800AbiEKQtm (ORCPT
+        with ESMTP id S1345023AbiEKQtp (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 11 May 2022 12:49:42 -0400
+        Wed, 11 May 2022 12:49:45 -0400
 Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3E995DDB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F6993982;
         Wed, 11 May 2022 09:49:41 -0700 (PDT)
 Received: from grover.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 24BGlWc1031975;
-        Thu, 12 May 2022 01:47:38 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWc1031975
+        by conuserg-08.nifty.com with ESMTP id 24BGlWbt031975;
+        Thu, 12 May 2022 01:47:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24BGlWbt031975
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652287659;
-        bh=9Q6mTn1bAGbkjgZhALJ6nTHBDHzsRRSkgxWQCfuUF6o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WheXMU9GEV/CluE33iXAr7vz1iDk23lqH+YQaVG5VXYoGJV9VsQYDXFzswjBLUAPw
-         mFs/FP6orbudynGzEF6DhFFyDAdUC4HkeOnVG6lCTUjuhzXhU0njrV4QrBq33rgDtZ
-         4y495WbU1FyN5dtYcOcD3wpTnSZTVW4fehiycOakd9fMA5/NAKOqga6Jyu29QKEQX4
-         F26o2NUEU1PlHoNpfXJDOIIJlCD2cQ2K34+5d3UToBEffOgK9NdCrhjG+XthkVpjSX
-         j7hF5BsKjpC2Ha5XTE3MWL25pO+MNhAdEAV2Qg8iNoQXn+wnuBf4rBi6Uj5Py9YAUr
-         Bl6quKoN+q4mA==
+        s=dec2015msa; t=1652287653;
+        bh=lrObdII52qYaJ8/FrDvrISgaVLdCtE8oZBm6XPqiaSk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HvtaKjwQOeSVYjh0ysolTKw0r7pYVYcERlcwdZpQLSOyb2htJarI4X6oEKYJW2JkY
+         tUbRVR91L2AF0dD1Rm2Vk0RX7YF7XqkSYZ3t1F7qvDTKnUgrepZMO5x7s6v92Y8eZ8
+         mD9InCNq+6Jxrb8ndZ0bQw05WvtYTPDYOT1UkYxyjwSGbXXDAj5fTVBUD+Xqcx4S7y
+         KKqMgXogOY3dTzJKqvR5i2XOEelm82Cnagl86UAClKILMUQ4PFtcdOa/yuLTeUv18Z
+         MfUEG6YvFOLsG9Wq1OxvL3Wia1Nn2LvlUkFG2cpMeRwfzP8jd0LY0ZWJHKQO1RCJOd
+         Bz2xXMR/ivgfw==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -42,73 +42,86 @@ Cc:     linux-kernel@vger.kernel.org,
         Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v5 06/12] genksyms: adjust the output format to modpost
-Date:   Thu, 12 May 2022 01:45:08 +0900
-Message-Id: <20220511164514.2741934-7-masahiroy@kernel.org>
+Subject: [PATCH v5 00/12] kbuild: yet another series of cleanups (modpost, LTO, MODULE_REL_CRCS, export.h)
+Date:   Thu, 12 May 2022 01:45:02 +0900
+Message-Id: <20220511164514.2741934-1-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220511164514.2741934-1-masahiroy@kernel.org>
-References: <20220511164514.2741934-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Make genksyms output symbol versions in the format modpost expects,
-so the 'sed' is unneeded.
 
-This commit makes *.symversions completely unneeded.
+This is the third batch of cleanups in this development cycle.
 
-I will keep *.symversions in .gitignore and 'make clean' for a while.
-Otherwise, 'git status' might be surprising.
+Major changes in v5:
+ - Fix build errors
+ - More cleanups
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
----
+Major changes in v4:
+ - Move static EXPORT_SYMBOL check to a script
+ - Some refactoring
 
-(no changes since v2)
+Major changes in v3:
 
-Changes in v2:
-  - New patch
+ - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
 
- scripts/Makefile.build      | 6 ------
- scripts/genksyms/genksyms.c | 2 +-
- 2 files changed, 1 insertion(+), 7 deletions(-)
+Major changes in v2:
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index dff9220135c4..461998a2ad2b 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -165,16 +165,10 @@ ifdef CONFIG_MODVERSIONS
- # o modpost will extract versions from that file and create *.c files that will
- #   be compiled and linked to the kernel and/or modules.
- 
--genksyms_format := __crc_\(.*\) = \(.*\);
--
- gen_symversions =								\
- 	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
- 		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
--		    > $@.symversions;						\
--		sed -n 's/$(genksyms_format)/$(pound)SYMVER \1 \2/p' $@.symversions \
- 			>> $(dot-target).cmd;					\
--	else									\
--		rm -f $@.symversions;						\
- 	fi
- 
- cmd_gen_symversions_c =	$(call gen_symversions,c)
-diff --git a/scripts/genksyms/genksyms.c b/scripts/genksyms/genksyms.c
-index 67b23cc0df0f..f5dfdb9d80e9 100644
---- a/scripts/genksyms/genksyms.c
-+++ b/scripts/genksyms/genksyms.c
-@@ -680,7 +680,7 @@ void export_symbol(const char *name)
- 		if (flag_dump_defs)
- 			fputs(">\n", debugfile);
- 
--		printf("__crc_%s = 0x%08lx;\n", name, crc);
-+		printf("#SYMVER %s 0x%08lx\n", name, crc);
- 	}
- }
- 
+ - V1 did not work with CONFIG_MODULE_REL_CRCS.
+   I fixed this for v2.
+
+ - Reflect some review comments in v1
+
+ - Refactor the code more
+
+ - Avoid too long argument error
+
+
+
+Masahiro Yamada (12):
+  modpost: split the section mismatch checks into section-check.c
+  modpost: add sym_find_with_module() helper
+  modpost: extract symbol versions from *.cmd files
+  kbuild: link symbol CRCs at final link, removing
+    CONFIG_MODULE_REL_CRCS
+  kbuild: stop merging *.symversions
+  genksyms: adjust the output format to modpost
+  kbuild: do not create *.prelink.o for Clang LTO or IBT
+  kbuild: check static EXPORT_SYMBOL* by script instead of modpost
+  kbuild: make built-in.a rule robust against too long argument error
+  kbuild: make *.mod rule robust against too long argument error
+  kbuild: add cmd_and_savecmd macro
+  kbuild: rebuild multi-object modules when objtool is updated
+
+ arch/m68k/include/asm/Kbuild    |    1 +
+ arch/m68k/include/asm/export.h  |    2 -
+ arch/powerpc/Kconfig            |    1 -
+ arch/s390/Kconfig               |    1 -
+ arch/um/Kconfig                 |    1 -
+ include/asm-generic/export.h    |   22 +-
+ include/linux/export-internal.h |   16 +
+ include/linux/export.h          |   30 +-
+ init/Kconfig                    |    4 -
+ kernel/module.c                 |   10 +-
+ scripts/Kbuild.include          |   10 +-
+ scripts/Makefile.build          |  134 +--
+ scripts/Makefile.lib            |    7 -
+ scripts/Makefile.modfinal       |    5 +-
+ scripts/Makefile.modpost        |    9 +-
+ scripts/check-local-export      |   64 ++
+ scripts/genksyms/genksyms.c     |   18 +-
+ scripts/link-vmlinux.sh         |   33 +-
+ scripts/mod/Makefile            |    4 +-
+ scripts/mod/modpost.c           | 1395 +++----------------------------
+ scripts/mod/modpost.h           |   34 +-
+ scripts/mod/section-check.c     | 1222 +++++++++++++++++++++++++++
+ 22 files changed, 1541 insertions(+), 1482 deletions(-)
+ delete mode 100644 arch/m68k/include/asm/export.h
+ create mode 100644 include/linux/export-internal.h
+ create mode 100755 scripts/check-local-export
+ create mode 100644 scripts/mod/section-check.c
+
 -- 
 2.32.0
 
