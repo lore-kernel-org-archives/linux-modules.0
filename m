@@ -2,181 +2,151 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E1D7C433EF
-	for <linux-modules@archiver.kernel.org>; Thu, 12 May 2022 03:36:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5EAAC433EF
+	for <linux-modules@archiver.kernel.org>; Thu, 12 May 2022 03:45:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344414AbiELDgf (ORCPT
+        id S1344777AbiELDo7 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 11 May 2022 23:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        Wed, 11 May 2022 23:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343808AbiELDge (ORCPT
+        with ESMTP id S240304AbiELDo7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 11 May 2022 23:36:34 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A871193F4;
-        Wed, 11 May 2022 20:36:29 -0700 (PDT)
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 24C3aGkF002223;
-        Thu, 12 May 2022 12:36:16 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 24C3aGkF002223
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652326576;
-        bh=VfPskzDmMntcl9mOqDJFkJyKAm5vxKV4Z3wLx5ippe8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=wczmTP5mRu9Q317XJvLADN30/rapQ66Vfla6MIyrp18RHxIaKFeAT4+xr4zeIISQq
-         oGFMJr+2+heyZtd3YgKLMEbPMOBkiN6nQptq+2B3WvQQdXRhulos+pFiuVp2N5HV0E
-         R/sGhpELffEpxbJfvkejvFoaD/raChJoWGo0ojHfZai5Tsx0alQMNhUZCLI9vkuxhk
-         bydVjwohwSrac2NzoG9lrJDJvopGWUxlLRNkQXkvddB2aMgya3T0WlRKIWXa4wDEI7
-         HZLJQi923Fv3P0XSIH3QQXAQURvpmPmIcLeK26RbFEIANAizUGnltOaGFZMtREQYCV
-         tvc17ZeCQB7zw==
-X-Nifty-SrcIP: [209.85.215.172]
-Received: by mail-pg1-f172.google.com with SMTP id l11so3438485pgt.13;
-        Wed, 11 May 2022 20:36:16 -0700 (PDT)
-X-Gm-Message-State: AOAM530ISyFLKiEC4x4j6zxlON80FgQvaIoNg56GGSx1q+KP084kHdRJ
-        69Vyscq3u/hIYCqdtq7u0jqNx+QutkNtKehwf18=
-X-Google-Smtp-Source: ABdhPJwUO93A4rM+aSh1Xly4NyDaW5KDkFVzu77d9cJuQFpEQOKPBQtyfzCWZaOT5taGjU3JP75XcJ9pj9AegKGofJA=
-X-Received: by 2002:a63:6989:0:b0:3c2:3c19:d661 with SMTP id
- e131-20020a636989000000b003c23c19d661mr23420542pgc.352.1652326575675; Wed, 11
- May 2022 20:36:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220511164514.2741934-1-masahiroy@kernel.org>
- <20220511164514.2741934-2-masahiroy@kernel.org> <CAKwvOdkMqyssbZ9imYM8Re+NL4U1K2tYj37_1XUtmjj8LSt5GQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdkMqyssbZ9imYM8Re+NL4U1K2tYj37_1XUtmjj8LSt5GQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 12 May 2022 12:35:03 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASToQxJsySjvpdkr_aHKBh1ZrECwswWpgCezDHcpRHVgQ@mail.gmail.com>
-Message-ID: <CAK7LNASToQxJsySjvpdkr_aHKBh1ZrECwswWpgCezDHcpRHVgQ@mail.gmail.com>
-Subject: Re: [PATCH v5 01/12] modpost: split the section mismatch checks into section-check.c
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 11 May 2022 23:44:59 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00649D05F
+        for <linux-modules@vger.kernel.org>; Wed, 11 May 2022 20:44:57 -0700 (PDT)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220512034451epoutp03b666954e13510cdb18f3a77fa87707ff~uPrw7lt_U3031030310epoutp03E
+        for <linux-modules@vger.kernel.org>; Thu, 12 May 2022 03:44:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220512034451epoutp03b666954e13510cdb18f3a77fa87707ff~uPrw7lt_U3031030310epoutp03E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1652327091;
+        bh=GirDdQEslfbySicVoQGet6fAqxxqlgyh1Y0KbsS0OHc=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=dipO9DyK5Y2LnxICuGJXTPAXXgOMfQhlp31I0B7TWf2kEr9KZ864kscO/OlOU57pk
+         0HOtdp+YUv+5PGxYP5THCBFwBMlU3M9ZbiJkJRPlCXuvdYvS3MTwENOuaZjTutD9hM
+         wXlP8kC0XiEEA0Ql4doCsWEKGmCemrTp0BUfsxyM=
+Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220512034450epcas5p3b74892a315c8163c6065b65e62ce1a08~uPrwRjVv12876328763epcas5p3E;
+        Thu, 12 May 2022 03:44:50 +0000 (GMT)
+X-AuditID: b6c32a49-4b5ff7000000274f-09-627c82b29056
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        01.C2.10063.2B28C726; Thu, 12 May 2022 12:44:50 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE: [PATCH modules-next 1/1] kallsyms: enhance %pS/s/b printing
+ when KALLSYSMS is disabled
+Reply-To: maninder1.s@samsung.com
+Sender: Maninder Singh <maninder1.s@samsung.com>
+From:   Maninder Singh <maninder1.s@samsung.com>
+To:     Kees Cook <keescook@chromium.org>
+CC:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        Vaneet Narang <v.narang@samsung.com>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "ojeda@kernel.or" <ojeda@kernel.or>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "avimalin@gmail.com" <avimalin@gmail.com>,
+        "atomlin@redhat.com" <atomlin@redhat.com>,
+        Onkarnath <onkarnath.1@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <202205111513.3AD646936@keescook>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220512034437epcms5p1b384e18e75f0f56ee70f67e62f7ab0ce@epcms5p1>
+Date:   Thu, 12 May 2022 09:14:37 +0530
+X-CMS-MailID: 20220512034437epcms5p1b384e18e75f0f56ee70f67e62f7ab0ce
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOKsWRmVeSWpSXmKPExsWy7bCmlu6mppokgxU9WhZz1q9hs+htms5k
+        cWT+GlaLBwevs1uc6c61uLxrDptFw+zvrBaPZ81js7gx4SmjxcwvQBUrej6wWvx//JXVYl/H
+        AyaL3RsXsVkcv/OUyeLQybmMFo2f7zM6CHrMbrjI4rFz1l12j5Z9t4DEkbesHl+un2f02LSq
+        k83jxIzfLB7zTgZ6XOjK9ni/7yqbR9+WVYwe67dcZfH4vEkugDeKyyYlNSezLLVI3y6BK2Nz
+        x03Wgtk8Fb2bDjA2ME7l7GLk5JAQMJFYvOIVWxcjF4eQwG5GiUfLtzB3MXJw8AoISvzdIQxS
+        IyyQKrFk91sWEFtIQFHiwow1jCAlwgIGEr+2aoCE2QT0JFbt2gNWIiKgKvH9UjMzyEhmga1s
+        Etf3nmOF2MUrMaP9KQuELS2xfflWRhCbE6j56PH7UDWiEjdXv2WHsd8fm88IYYtItN47ywxh
+        C0o8+LkbKi4jsXpzL9TMaomnr8+B/SIh0MIosW83TJG5xPolq8CG8gr4SjT3LgGLswBdOufC
+        czaIGheJ8xcWgw1iFpCX2P52DjgcmAU0Jdbv0ocokZWYemodE0QJn0Tv7ydMMH/tmAdjq0q0
+        3NzACvPj548foW7zkGj684gJEs7LGSW+HDjLPIFRYRYiqGch2TwLYfMCRuZVjJKpBcW56anF
+        pgWGeanlesWJucWleel6yfm5mxjBaVHLcwfj3Qcf9A4xMnEwHmKU4GBWEuHd31eRJMSbklhZ
+        lVqUH19UmpNafIhRmoNFSZz3dPqGRCGB9MSS1OzU1ILUIpgsEwenVAPTpLpWnXdtnU9lTOy7
+        ZbbznGoQmbd8o8Xb8gsGt/4vM7P85b7BR9dmsc3yvb8u6LvWsgaKlv54JNqxoHMS6wzHwMNO
+        nxfx3J6uIeD1MennvzntPxOMRR4Y3fbXOMx6iVMgTuOOduK+1AX3HU+WdJ5X+uMYUmr2dP2P
+        onWeZe3s8h84VnUaV89//j/LZQ/D9i9365dc7lziYqT9wmJPzM/Ajx3f+otYnioc2XtDSON1
+        5IEWC5crH7b/LWKcNOutmoxWb4Dkm93TCti2mfTZ+J3SnpBl+vF7srKR8LQ2AT7dOY3n279n
+        H5/4ZUfvn4sT/lfwNk/QOMNhkJW7/kNaRZaOxXUxTWfPo4vYtac1eOQrsRRnJBpqMRcVJwIA
+        NBwmvPoDAAA=
+X-CMS-RootMailID: 20220421041604epcas5p414cf2e851d1bd828a151dc6b2b004680
+References: <202205111513.3AD646936@keescook>
+        <20220421041542.9195-1-maninder1.s@samsung.com>
+        <CGME20220421041604epcas5p414cf2e851d1bd828a151dc6b2b004680@epcms5p1>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, May 12, 2022 at 7:31 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+Hi,
+
+> On Wed, May 11, 2022 at 01:36:56PM +0530, Maninder Singh wrote:
+> > kallsyms_show_value return false if KALLSYMS is disabled,
+> > but its usage is done by module.c also.
+> > Thus when KALLSYMS is disabled, system will not print module
+> > load address:
+> 
+> Eek, I hadn't see the other changes this depends on. I think those
+> changes need to be reworked first. Notably in the other patch, this is
+> no good:
+> 
+>         /* address belongs to module */
+>         if (add_offset)
+>                 len = sprintf(buf, "0x%p+0x%lx", base, offset);
+>         else
+>                 len = sprintf(buf, "0x%lx", value);
+> 
+> This is printing raw kernel addresses with no hashing, as far as I can
+> tell. That's not okay at all.
 >
-> On Wed, May 11, 2022 at 9:49 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > -/* sections that we do not want to do full section mismatch check on */
-> > -static const char *const section_white_list[] =
-> > -{
-> > -       ".comment*",
-> > -       ".debug*",
-> > -       ".cranges",             /* sh64 */
-> > -       ".zdebug*",             /* Compressed debug sections. */
-> > -       ".GCC.command.line",    /* record-gcc-switches */
-> > -       ".mdebug*",        /* alpha, score, mips etc. */
-> > -       ".pdr",            /* alpha, score, mips etc. */
-> > -       ".stab*",
-> > -       ".note*",
-> > -       ".got*",
-> > -       ".toc*",
-> > -       ".xt.prop",                              /* xtensa */
-> > -       ".xt.lit",         /* xtensa */
-> > -       ".arcextmap*",                  /* arc */
-> > -       ".gnu.linkonce.arcext*",        /* arc : modules */
-> > -       ".cmem*",                       /* EZchip */
-> > -       ".fmt_slot*",                   /* EZchip */
-> > -       ".gnu.lto*",
-> > -       ".discard.*",
-> > -       NULL
-> > -};
->
->
-> > -/**
-> > - * Whitelist to allow certain references to pass with no warning.
-> > - *
-> > - * Pattern 1:
-> > - *   If a module parameter is declared __initdata and permissions=0
-> > - *   then this is legal despite the warning generated.
-> > - *   We cannot see value of permissions here, so just ignore
-> > - *   this pattern.
-> > - *   The pattern is identified by:
-> > - *   tosec   = .init.data
-> > - *   fromsec = .data*
-> > - *   atsym   =__param*
-> > - *
-> > - * Pattern 1a:
-> > - *   module_param_call() ops can refer to __init set function if permissions=0
-> > - *   The pattern is identified by:
-> > - *   tosec   = .init.text
-> > - *   fromsec = .data*
-> > - *   atsym   = __param_ops_*
-> > - *
-> > - * Pattern 2:
-> > - *   Many drivers utilise a *driver container with references to
-> > - *   add, remove, probe functions etc.
-> > - *   the pattern is identified by:
-> > - *   tosec   = init or exit section
-> > - *   fromsec = data section
-> > - *   atsym = *driver, *_template, *_sht, *_ops, *_probe,
-> > - *           *probe_one, *_console, *_timer
-> > - *
-> > - * Pattern 3:
-> > - *   Whitelist all references from .head.text to any init section
-> > - *
-> > - * Pattern 4:
-> > - *   Some symbols belong to init section but still it is ok to reference
-> > - *   these from non-init sections as these symbols don't have any memory
-> > - *   allocated for them and symbol address and value are same. So even
-> > - *   if init section is freed, its ok to reference those symbols.
-> > - *   For ex. symbols marking the init section boundaries.
-> > - *   This pattern is identified by
-> > - *   refsymname = __init_begin, _sinittext, _einittext
-> > - *
-> > - * Pattern 5:
-> > - *   GCC may optimize static inlines when fed constant arg(s) resulting
-> > - *   in functions like cpumask_empty() -- generating an associated symbol
-> > - *   cpumask_empty.constprop.3 that appears in the audit.  If the const that
-> > - *   is passed in comes from __init, like say nmi_ipi_mask, we get a
-> > - *   meaningless section warning.  May need to add isra symbols too...
-> > - *   This pattern is identified by
-> > - *   tosec   = init section
-> > - *   fromsec = text section
-> > - *   refsymname = *.constprop.*
-> > - *
-> > - * Pattern 6:
-> > - *   Hide section mismatch warnings for ELF local symbols.  The goal
-> > - *   is to eliminate false positive modpost warnings caused by
-> > - *   compiler-generated ELF local symbol names such as ".LANCHOR1".
-> > - *   Autogenerated symbol names bypass modpost's "Pattern 2"
-> > - *   whitelisting, which relies on pattern-matching against symbol
-> > - *   names to work.  (One situation where gcc can autogenerate ELF
-> > - *   local symbols is when "-fsection-anchors" is used.)
-> > - **/
->
-> Losing the ability to git blame (from the top level) the above lines
-> does cause me grief and mental anguish though. It's not gone, just
-> buried a bit deeper.
 
+yes same was suggested by Petr also, because earlier we were printing base address also as raw address.
 
-According to 'man git-blame', -C option is needed
-to follow the code move between files.
+https://lkml.org/lkml/2022/2/28/847
 
-git blame -C  scripts/mod/section-check.c
+but then modified approach to print base address as hash when we are going to show offset of module address,
+but when we print complete address then we thought of keeping it same as it was:
 
-showed me the origin commit of each line.
+original:
+ [12.487424] ps 0xffff800000eb008c
+with patch:
+ [9.624152] ps 0xffff800001bd008c [crash]
+
+But if its has to be hashed, will fix that also.
+
+> Once that other patch gets fixed, this one then can be revisited.
+> 
+
+I will check detailed comments on that also
+
+> And just on naming: "kallsyms_tiny" is a weird name: it's just "ksyms"
+> -- there's no "all".  :)
+
+Ok :)
+
+Will name it as knosyms.c (if it seems ok).
 
 
 
-
-
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
---
-Best Regards
-Masahiro Yamada
+Thanks,
+Maninder Singh
