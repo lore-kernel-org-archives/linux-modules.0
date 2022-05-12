@@ -2,65 +2,75 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E72E5C433F5
-	for <linux-modules@archiver.kernel.org>; Thu, 12 May 2022 17:30:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74AF7C433EF
+	for <linux-modules@archiver.kernel.org>; Thu, 12 May 2022 17:43:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357060AbiELRaW (ORCPT
+        id S1357020AbiELRnc (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 12 May 2022 13:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
+        Thu, 12 May 2022 13:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347552AbiELRaV (ORCPT
+        with ESMTP id S1353035AbiELRnb (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 12 May 2022 13:30:21 -0400
+        Thu, 12 May 2022 13:43:31 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB63626BC86;
-        Thu, 12 May 2022 10:30:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87F95E743;
+        Thu, 12 May 2022 10:43:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bHhDJY4678gCF8Z5uA4n3ckQezyDMemB7BdtWkCEB8o=; b=WY9TQZs3o6cHUvQ+qQvdpRchty
-        d++4WIC3XVH1/Q6dJjBZbF0E+4n6WnETsAYS5r+7RjLDwLuhP4R9MPqL4Km+7i6IJDd/O11KcZd+8
-        u51+nLdnNULeN52d6kClRPWwwXanDwHWPR6iQc1MSg4M+Zic4NtGpBWX3SFBXtb6jayJMEH/B3oEU
-        PD5FDx81PKmP9eEnwcHXMYv1dM4GOBL3eLD2rt5R5208tx6musdgeQGopuY/zjNOiaKZZ9MthehrF
-        PNoCTHhztYUK40rKgadQGUhyAiB+awhV5ChwZo/rcHOi4+g95V9z6zy5ne1XxGpAAurII1WPJGJhc
-        gkBTD7rg==;
+        bh=GDncwLKphn/XZKopA1l8aEKODmu6Bj+8jDWkzig0Mlc=; b=v5VORm6ydKBJVYTVx2qzPm0X4n
+        YQfDJBSgMcZYJuWgHmve2wHpzkb0hCvcXqAo7doJHNBfw7BwNSzleBoKEu3ZRjnsyEO8TmQseSYpr
+        jr6EOX90POYPE6pFppucFilLWH3RLL3yef5L5pSGRsAOvN7Wr6z/XSKq2UXVdUq4w4/JS2Ho1+eK1
+        YNvheGtOLSp8qWZsMMcHYnt8JKjGs2Xjk51K8yQrNQxUqezHKSoAhP8aCL8XnptqeifSCgzwREEdH
+        NK4AimkTNmKo7O8d4Eq1S7YBMIwMHCw+jzLHNDyN8/AcO44bQ3FuND+JbHuJ6xsqZWnyc3vTkbeb1
+        fKhOzEKA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1npCdh-00D0O5-TP; Thu, 12 May 2022 17:30:13 +0000
-Date:   Thu, 12 May 2022 10:30:13 -0700
+        id 1npCqT-00D1fT-5d; Thu, 12 May 2022 17:43:25 +0000
+Date:   Thu, 12 May 2022 10:43:25 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Maninder Singh <maninder1.s@samsung.com>, pmladek@suse.com,
-        rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.or,
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com, onkarnath.1@samsung.com
-Subject: Re: [PATCH modules-next 1/1] kallsyms: enhance %pS/s/b printing when
- KALLSYSMS is disabled
-Message-ID: <Yn1EJZOSdu9q/V4w@bombadil.infradead.org>
-References: <CGME20220421041604epcas5p414cf2e851d1bd828a151dc6b2b004680@epcas5p4.samsung.com>
- <20220421041542.9195-1-maninder1.s@samsung.com>
- <202205111513.3AD646936@keescook>
+        fnovak@us.ibm.com, linuxppc-dev@ozlabs.org,
+        christophe.leroy@csgroup.eu
+Subject: Re: request_module DoS
+Message-ID: <Yn1HPSvyT4kAW7I/@bombadil.infradead.org>
+References: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
+ <874k1zt0ec.fsf@mpe.ellerman.id.au>
+ <Ynk9j6DQmVGAA3Jf@bombadil.infradead.org>
+ <Ynvl6wCQRFdYsHar@bombadil.infradead.org>
+ <871qwz8aot.fsf@mpe.ellerman.id.au>
+ <87v8ub6jk1.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202205111513.3AD646936@keescook>
+In-Reply-To: <87v8ub6jk1.fsf@mpe.ellerman.id.au>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 11, 2022 at 03:25:14PM -0700, Kees Cook wrote:
-> On Thu, Apr 21, 2022 at 09:45:42AM +0530, Maninder Singh wrote:
-> > print module information when KALLSYMS is disabled.
+On Thu, May 12, 2022 at 10:07:26PM +1000, Michael Ellerman wrote:
+> Michael Ellerman <mpe@ellerman.id.au> writes:
+> > Luis Chamberlain <mcgrof@kernel.org> writes:
+> ...
+> >
+> >> Can someone try this on ppc64le system? At this point I am not convinced
+> >> this issue is generic.
+> >
+> > Does your x86 system have at least 784 CPUs?
+> >
+> > I don't know where the original report came from, but the trace shows
+> > "CPU 784", which would usually indicate a system with at least that many
+> > CPUs.
 > 
-> I'd like this patch reverted from -next.
-> - too many logical changes is a single patch
-> - addition of dangerous API usage
-> - duplicated logic (maybe? hard to review due to the changes)
+> Update, apparently the report originally came from IBM, so I'll chase it
+> up internally.
+> 
+> I think you're right that there's probably no issue in the module code,
+> sorry to waste your time.
 
-Yanked out.
+It gives me testing happiness to know that may be the case :)
 
   Luis
