@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 298CAC433FE
-	for <linux-modules@archiver.kernel.org>; Fri, 13 May 2022 11:42:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44F3FC433FE
+	for <linux-modules@archiver.kernel.org>; Fri, 13 May 2022 11:43:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379980AbiEMLmV (ORCPT
+        id S1380027AbiEMLnR (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 13 May 2022 07:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        Fri, 13 May 2022 07:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379963AbiEMLmR (ORCPT
+        with ESMTP id S1379963AbiEMLnL (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 13 May 2022 07:42:17 -0400
+        Fri, 13 May 2022 07:43:11 -0400
 Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1041453A50;
-        Fri, 13 May 2022 04:42:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CDFD8081;
+        Fri, 13 May 2022 04:42:32 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-07.nifty.com with ESMTP id 24DBeEwc008349;
-        Fri, 13 May 2022 20:40:17 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwc008349
+        by conuserg-07.nifty.com with ESMTP id 24DBeEwh008349;
+        Fri, 13 May 2022 20:40:22 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwh008349
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652442018;
-        bh=cga2j3/RnX95UXo6+4HyPv/WWKGxfQZ0xpYK4BVs9G8=;
+        s=dec2015msa; t=1652442023;
+        bh=OcOEuS6jEbLubdZRYm9mI6nzM08ugGxo0tuefY4hIgE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p5ftmnST03FxjYRjjdJDBeXs1RhWVX7sEj20o6h2lFkAVs15LD1gYUdS+kWEJMdL5
-         MLb11fpAipT++S44EFXq3/PS6tTfaBrqtn75TgVO0yORnZoqj8I4topwBsyynYgYr2
-         MkT68Pxjy0ae+j/tZcpYGZzPmFuB7yVd4ulEip6sX2Zm9V8OyvUtoe7/7rN1gBovqk
-         sYlkruGLARitLMDo/zZwMuqKEUQfPksHfRv7c5VxaRH5iTO6CJUy+hxYw2VAPlDWZY
-         TJQE0xnYgcTEsNQF+b8WM9Sr6xPJSG7QP1df1B1kifECu8jVFRo8s6fCEBE4PxdR2c
-         aXWgWnQ/ledng==
+        b=bp9jvRuF56C6r43GNXjG6BX+TvZHLTbdTLlR34dCXZg/oW32238SNreYsd6ecrnG6
+         PWr/NUZR0Fj64xkX3yxzCkcDwm8BUtpOQer8MUJE0kfUxAXrmqhHXhUVBDO1eaFvmZ
+         Zd2DgWMNXGj/fTUiZ/fP4rrMZ0P/EShz6FzQ0fejjM7Fk5Mk+4x3zIAjw7LvNr3l8P
+         6RqksiC0umDQhSOQrTIO45Q7vzc3cdAd1y7uI/ao5m/kB6w/+AoM6bRZyfIpfL/JKy
+         BLmQpIaa0h1Ej7NhYPC3vBgHWU9i3BlD07Dxm/NP3Kvu3JsIm6e+nmrjotY7EuCyv8
+         GgKFtSPjQ+KrA==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -42,9 +42,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v6 03/10] kbuild: stop merging *.symversions
-Date:   Fri, 13 May 2022 20:39:23 +0900
-Message-Id: <20220513113930.10488-4-masahiroy@kernel.org>
+Subject: [PATCH v6 08/10] kbuild: make *.mod rule robust against too long argument error
+Date:   Fri, 13 May 2022 20:39:28 +0900
+Message-Id: <20220513113930.10488-9-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220513113930.10488-1-masahiroy@kernel.org>
 References: <20220513113930.10488-1-masahiroy@kernel.org>
@@ -53,118 +53,51 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Now modpost reads symbol versions from .*.cmd files.
+Like built-in.a, the command length of the *.mod rule scales with
+the depth of the directory times the number of objects in the Makefile.
 
-The merged *.symversions are no longer needed.
+Add $(obj)/ by the shell command (awk) instead of by Make's builtin
+function.
+
+In-tree modules still have some room to the limit (ARG_MAX=2097152),
+but this is more future-proof for big modules in a deep directory.
+
+For example, you can build i915 as a module (CONFIG_DRM_I915=m) and
+compare drivers/gpu/drm/i915/.i915.mod.cmd with/without this commit.
+
+The issue is more critical for external modules because the M= path
+can be very long as Jeff Johnson reported before [1].
+
+[1] https://lore.kernel.org/linux-kbuild/4c02050c4e95e4cb8cc04282695f8404@codeaurora.org/
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
 ---
 
-(no changes since v1)
+(no changes since v2)
 
- scripts/Makefile.build  | 21 ++-------------------
- scripts/link-vmlinux.sh | 19 -------------------
- 2 files changed, 2 insertions(+), 38 deletions(-)
+Changes in v2:
+  - New patch
+
+ scripts/Makefile.build | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index ddd9080fc028..dff9220135c4 100644
+index 8f1a355df7aa..f546b5f1f33f 100644
 --- a/scripts/Makefile.build
 +++ b/scripts/Makefile.build
-@@ -390,17 +390,6 @@ $(obj)/%.asn1.c $(obj)/%.asn1.h: $(src)/%.asn1 $(objtree)/scripts/asn1_compiler
- $(subdir-builtin): $(obj)/%/built-in.a: $(obj)/% ;
- $(subdir-modorder): $(obj)/%/modules.order: $(obj)/% ;
+@@ -270,8 +270,8 @@ $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
+ 	$(call if_changed_rule,cc_o_c)
+ 	$(call cmd,force_checksrc)
  
--# combine symversions for later processing
--ifeq ($(CONFIG_LTO_CLANG) $(CONFIG_MODVERSIONS),y y)
--      cmd_update_lto_symversions =					\
--	rm -f $@.symversions						\
--	$(foreach n, $(filter-out FORCE,$^),				\
--		$(if $(shell test -s $(n).symversions && echo y),	\
--			; cat $(n).symversions >> $@.symversions))
--else
--      cmd_update_lto_symversions = echo >/dev/null
--endif
--
- #
- # Rule to compile a set of .o files into one .a file (without symbol table)
- #
-@@ -408,11 +397,8 @@ endif
- quiet_cmd_ar_builtin = AR      $@
-       cmd_ar_builtin = rm -f $@; $(AR) cDPrST $@ $(real-prereqs)
+-cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
+-	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
++cmd_mod = echo $(call real-search, $*.o, .o, -objs -y -m) | \
++	$(AWK) -v RS='( |\n)' '!x[$$0]++ { print("$(obj)/"$$0) }' > $@
  
--quiet_cmd_ar_and_symver = AR      $@
--      cmd_ar_and_symver = $(cmd_update_lto_symversions); $(cmd_ar_builtin)
--
- $(obj)/built-in.a: $(real-obj-y) FORCE
--	$(call if_changed,ar_and_symver)
-+	$(call if_changed,ar_builtin)
- 
- #
- # Rule to create modules.order file
-@@ -432,16 +418,13 @@ $(obj)/modules.order: $(obj-m) FORCE
- #
- # Rule to compile a set of .o files into one .a file (with symbol table)
- #
--quiet_cmd_ar_lib = AR      $@
--      cmd_ar_lib = $(cmd_update_lto_symversions); $(cmd_ar)
- 
- $(obj)/lib.a: $(lib-y) FORCE
--	$(call if_changed,ar_lib)
-+	$(call if_changed,ar)
- 
- ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
- quiet_cmd_link_multi-m = AR [M]  $@
- cmd_link_multi-m =						\
--	$(cmd_update_lto_symversions);				\
- 	rm -f $@; 						\
- 	$(AR) cDPrsT $@ @$(patsubst %.o,%.mod,$@)
- else
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 7313cbd755df..47e5336d0c75 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -56,20 +56,6 @@ gen_initcalls()
- 		> .tmp_initcalls.lds
- }
- 
--# If CONFIG_LTO_CLANG is selected, collect generated symbol versions into
--# .tmp_symversions.lds
--gen_symversions()
--{
--	info GEN .tmp_symversions.lds
--	rm -f .tmp_symversions.lds
--
--	for o in ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}; do
--		if [ -f ${o}.symversions ]; then
--			cat ${o}.symversions >> .tmp_symversions.lds
--		fi
--	done
--}
--
- # Link of vmlinux.o used for section mismatch analysis
- # ${1} output file
- modpost_link()
-@@ -88,10 +74,6 @@ modpost_link()
- 		gen_initcalls
- 		lds="-T .tmp_initcalls.lds"
- 
--		if is_enabled CONFIG_MODVERSIONS; then
--			gen_symversions
--		fi
--
- 		# This might take a while, so indicate that we're doing
- 		# an LTO link
- 		info LTO ${1}
-@@ -307,7 +289,6 @@ cleanup()
- 	rm -f .btf.*
- 	rm -f .tmp_System.map
- 	rm -f .tmp_initcalls.lds
--	rm -f .tmp_symversions.lds
- 	rm -f .tmp_vmlinux*
- 	rm -f System.map
- 	rm -f vmlinux
+ $(obj)/%.mod: FORCE
+ 	$(call if_changed,mod)
 -- 
 2.32.0
 
