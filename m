@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CA5BC4332F
-	for <linux-modules@archiver.kernel.org>; Fri, 13 May 2022 11:42:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AD03C433FE
+	for <linux-modules@archiver.kernel.org>; Fri, 13 May 2022 11:42:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379948AbiEMLmP (ORCPT
+        id S1379953AbiEMLmP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
         Fri, 13 May 2022 07:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379933AbiEMLmO (ORCPT
+        with ESMTP id S1379934AbiEMLmO (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Fri, 13 May 2022 07:42:14 -0400
 Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A0C5AA79;
-        Fri, 13 May 2022 04:42:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8355A093;
+        Fri, 13 May 2022 04:42:11 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-07.nifty.com with ESMTP id 24DBeEwf008349;
-        Fri, 13 May 2022 20:40:20 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwf008349
+        by conuserg-07.nifty.com with ESMTP id 24DBeEwa008349;
+        Fri, 13 May 2022 20:40:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwa008349
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652442021;
-        bh=cqElzDKYpcUrgO4yHYvWdPTzjbjG7knRZ4i2745IA+I=;
+        s=dec2015msa; t=1652442016;
+        bh=kJSj0j+AXEcFQ8ZaJqXjHFqZBXEeirnzJV86O9qeRSY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sc3Y3caE/J1wed4rFYZnaCpQhbTPOPyo6Eo0nM+FrQSyiMx9UMcAK4hL4C/M5w8Ze
-         oLEckYtJTNT6qK4yaUuHkqrpjubN5bDQ47zCTsArPk352eWo2JqJVkCejliOY0ZDAQ
-         a5jNXw0kyOkiYbsbMQKHs9i1LjATm9v7pj0z5/1aXLsZxDhNNV3ViOdeG8S1jZrodG
-         bxHebxebti4fji1Czx/yAHQSgu6OMbfYJzhpyhLUBtwrEgt4lcrFcDhjA7rZs8RvLa
-         ba2itORo7C46mX1ysaHXHu73CYPEcGlmaXkBJs8//kpYZyYQYsqtLiLKtrHey91YRo
-         P7yxqNo9PrLsQ==
+        b=BM4uUUXsXYeQPGzbAMRpqzUkPiOPzds/ZOLS5bh+zuZDgEP2nI/NNf7yNqJxfA6Cz
+         Gg6wjwC7OM7KG4v94307ziySprB77YRlGNhcX711XbNRLbgLlClKakCiHkJ+NE6E4A
+         Q77Ed6tBm7MKC5X2qV754LARS9HXGVYYBhllVcLB4sCKzmwJ8vf4CH9FY1ScYq5D4r
+         cEohXEUSQSaKSbS9/xqrv8um3z6KfEzWq7om/tWedC9rsC645DOoMUzYPrawm1lruN
+         Pj+RkH0n6rZq8lqGP6cImO3s2poXi8fU0dVmPeFaOXTcOYEq00YklYl3fGKZcoHaiS
+         0TdVvBnoYohgQ==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -42,9 +42,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v6 06/10] kbuild: check static EXPORT_SYMBOL* by script instead of modpost
-Date:   Fri, 13 May 2022 20:39:26 +0900
-Message-Id: <20220513113930.10488-7-masahiroy@kernel.org>
+Subject: [PATCH v6 01/10] modpost: extract symbol versions from *.cmd files
+Date:   Fri, 13 May 2022 20:39:21 +0900
+Message-Id: <20220513113930.10488-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220513113930.10488-1-masahiroy@kernel.org>
 References: <20220513113930.10488-1-masahiroy@kernel.org>
@@ -53,236 +53,309 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The 'static' specifier and EXPORT_SYMBOL() are an odd combination.
+Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
+versions into ELF objects. Then, modpost extracts the version CRCs
+from them.
 
-Commit 15bfc2348d54 ("modpost: check for static EXPORT_SYMBOL*
-functions") tried to detect it, but this check has false negatives.
+The following figures show how it currently works, and how I am trying
+to change it.
 
-Here is the sample code.
+Current implementation
+======================
+                                                           |----------|
+                 embed CRC      -------------------------->| final    |
+       $(CC)       $(LD)       /  |---------|              | link for |
+       -----> *.o -------> *.o -->| modpost |              | vmlinux  |
+      /              /            |         |-- *.mod.c -->| or       |
+     / genksyms     /             |---------|              | module   |
+  *.c ------> *.symversions                                |----------|
 
-  Makefile:
+Genksyms outputs the calculated CRCs in the form of linker script
+(*.symversions), which is used by $(LD) to update the object.
 
-    obj-y += foo1.o foo2.o
+If CONFIG_LTO_CLANG=y, the build process is much more complex. Embedding
+the CRCs is postponed until the LLVM bitcode is converted into ELF,
+creating another intermediate *.prelink.o.
 
-  foo1.c:
+However, this complexity is unneeded. There is no reason why we must
+embed version CRCs in objects so early.
 
-    #include <linux/export.h>
-    static void foo(void) {}
-    EXPORT_SYMBOL(foo);
+There is final link stage for vmlinux (scripts/link-vmlinux.sh) and
+modules (scripts/Makefile.modfinal). We can link CRCs at the very last
+moment.
 
-  foo2.c:
+New implementation
+==================
+                                                           |----------|
+                   --------------------------------------->| final    |
+       $(CC)      /    |---------|                         | link for |
+       -----> *.o ---->|         |                         | vmlinux  |
+      /                | modpost |--- .vmlinux.export.c -->| or       |
+     / genksyms        |         |--- *.mod.c ------------>| module   |
+  *.c ------> *.cmd -->|---------|                         |----------|
 
-    void foo(void) {}
+Pass the symbol versions to modpost as separate text data, which are
+available in *.cmd files.
 
-foo1.c exports the static symbol 'foo', but modpost cannot catch it
-because it is fooled by foo2.c, which has a global symbol with the
-same name.
-
-s->is_static is cleared if a global symbol with the same name is found
-somewhere, but EXPORT_SYMBOL() and the global symbol do not necessarily
-belong to the same compilation unit.
-
-This check should be done per compilation unit, but I do not know how
-to do it in modpost. modpost runs against vmlinux.o or modules, which
-merges multiple objects, then forgets their origin.
-
-It is true modpost gets access to the lists of all the member objects
-(.vmlinux.objs and *.mod), but modpost cannot parse individual objects
-because they may not be ELF but LLVM IR when CONFIG_LTO_CLANG=y.
-
-Add a simple bash script to parse the output from ${NM}. This works for
-CONFIG_LTO_CLANG=y because llvm-nm can dump symbols of LLVM IR files.
-
-Revert 15bfc2348d54.
+This commit changes modpost to extract CRCs from *.cmd files instead of
+from ELF objects.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 ---
 
-(no changes since v5)
+Changes in v6:
+  - Fix false-positive warnings when CONFIG_TRIM_UNUSED_KSYMS=y
 
-Changes in v5:
-  - Add more comments in the script
+Changes in v2:
+  - Simplify the implementation (parse .cmd files after ELF)
 
-Changes in v4:
-  - New patch
+ scripts/mod/modpost.c | 179 +++++++++++++++++++++++++++++++-----------
+ 1 file changed, 131 insertions(+), 48 deletions(-)
 
- scripts/Makefile.build     |  4 +++
- scripts/check-local-export | 64 ++++++++++++++++++++++++++++++++++++++
- scripts/mod/modpost.c      | 28 +----------------
- 3 files changed, 69 insertions(+), 27 deletions(-)
- create mode 100755 scripts/check-local-export
-
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 838ea5e83174..c2a173b3fd60 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -244,9 +244,12 @@ cmd_gen_ksymdeps = \
- 	$(CONFIG_SHELL) $(srctree)/scripts/gen_ksymdeps.sh $@ >> $(dot-target).cmd
- endif
- 
-+cmd_check_local_export = $(srctree)/scripts/check-local-export $@
-+
- define rule_cc_o_c
- 	$(call cmd_and_fixdep,cc_o_c)
- 	$(call cmd,gen_ksymdeps)
-+	$(call cmd,check_local_export)
- 	$(call cmd,checksrc)
- 	$(call cmd,checkdoc)
- 	$(call cmd,gen_objtooldep)
-@@ -257,6 +260,7 @@ endef
- define rule_as_o_S
- 	$(call cmd_and_fixdep,as_o_S)
- 	$(call cmd,gen_ksymdeps)
-+	$(call cmd,check_local_export)
- 	$(call cmd,gen_objtooldep)
- 	$(call cmd,gen_symversions_S)
- endef
-diff --git a/scripts/check-local-export b/scripts/check-local-export
-new file mode 100755
-index 000000000000..829e0591c0be
---- /dev/null
-+++ b/scripts/check-local-export
-@@ -0,0 +1,64 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (C) 2022 Masahiro Yamada <masahiroy@kernel.org>
-+#
-+# Exit with error if a local exported symbol is found.
-+# EXPORT_SYMBOL should be used for global symbols.
-+
-+set -e
-+
-+declare -A symbol_types
-+declare -a export_symbols
-+
-+exit_code=0
-+
-+while read value type name
-+do
-+	# Exceptional case for Clang LTO.
-+	# llvm-nm outputs this:
-+	#   "---------------- t"
-+	# Skip this line because the name is empty.
-+	if [[ ${value} = -* && -z ${name} ]]; then
-+		continue
-+	fi
-+
-+	# For undefined symbols, the first field (value) is empty.
-+	# The outout looks like this:
-+	#   "                 U _printk"
-+	# Shift the fields.
-+	if [[ -z ${name} ]]; then
-+	   name=${type}
-+	   type=${value}
-+	fi
-+
-+	# save (name, type) in the associative array
-+	symbol_types[${name}]=${type}
-+
-+	# append the exported symbol to the array
-+	if [[ ${name} == __ksymtab_* ]]; then
-+		export_symbols+=(${name#__ksymtab_})
-+	fi
-+
-+	# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
-+	# shows 'no symbols' diagnostic (but exits with 0). It is harmless and
-+	# hidden by '2>/dev/null'. However, it suppresses real error messages
-+	# as well. Add a hand-crafted error message here.
-+	#
-+	# Use -q instead of 2>/dev/null when we upgrade the minimum version of
-+	# binutils to 2.37, llvm to 13.0.0.
-+done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
-+
-+# Catch error in the process substitution
-+wait $!
-+
-+for name in "${export_symbols[@]}"
-+do
-+	# nm(3) says "If lowercase, the symbol is usually local"
-+	if [[ ${symbol_types[$name]} =~ [a-z] ]]; then
-+		echo "$@: error: local symbol '${name}' was exported" >&2
-+		exit_code=1
-+	fi
-+done
-+
-+exit ${exit_code}
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 27c45427d989..2328522f8a78 100644
+index fc5db1f73cf1..213a130d1635 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -212,7 +212,6 @@ struct symbol {
- 	unsigned int crc;
- 	bool crc_valid;
- 	bool weak;
--	bool is_static;		/* true if symbol is not global */
- 	bool is_gpl_only;	/* exported by EXPORT_SYMBOL_GPL */
- 	char name[];
- };
-@@ -242,7 +241,7 @@ static struct symbol *alloc_symbol(const char *name)
- 
- 	memset(s, 0, sizeof(*s));
- 	strcpy(s->name, name);
--	s->is_static = true;
-+
+@@ -381,19 +381,10 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
  	return s;
  }
  
-@@ -877,20 +876,6 @@ static void read_symbols(const char *modname)
- 					     sym_get_data(&info, sym));
- 	}
+-static void sym_set_crc(const char *name, unsigned int crc)
++static void sym_set_crc(struct symbol *sym, unsigned int crc)
+ {
+-	struct symbol *s = find_symbol(name);
+-
+-	/*
+-	 * Ignore stand-alone __crc_*, which might be auto-generated symbols
+-	 * such as __*_veneer in ARM ELF.
+-	 */
+-	if (!s)
+-		return;
+-
+-	s->crc = crc;
+-	s->crc_valid = true;
++	sym->crc = crc;
++	sym->crc_valid = true;
+ }
  
--	// check for static EXPORT_SYMBOL_* functions && global vars
--	for (sym = info.symtab_start; sym < info.symtab_stop; sym++) {
--		unsigned char bind = ELF_ST_BIND(sym->st_info);
+ static void *grab_file(const char *filename, size_t *size)
+@@ -616,33 +607,6 @@ static int ignore_undef_symbol(struct elf_info *info, const char *symname)
+ 	return 0;
+ }
+ 
+-static void handle_modversion(const struct module *mod,
+-			      const struct elf_info *info,
+-			      const Elf_Sym *sym, const char *symname)
+-{
+-	unsigned int crc;
 -
--		if (bind == STB_GLOBAL || bind == STB_WEAK) {
--			struct symbol *s =
--				find_symbol(remove_dot(info.strtab +
--						       sym->st_name));
+-	if (sym->st_shndx == SHN_UNDEF) {
+-		warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
+-		     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
+-		     symname, mod->name, mod->is_vmlinux ? "" : ".ko",
+-		     symname);
 -
--			if (s)
--				s->is_static = false;
--		}
+-		return;
 -	}
 -
- 	check_sec_ref(mod, modname, &info);
+-	if (sym->st_shndx == SHN_ABS) {
+-		crc = sym->st_value;
+-	} else {
+-		unsigned int *crcp;
+-
+-		/* symbol points to the CRC in the ELF object */
+-		crcp = sym_get_data(info, sym);
+-		crc = TO_NATIVE(*crcp);
+-	}
+-	sym_set_crc(symname, crc);
+-}
+-
+ static void handle_symbol(struct module *mod, struct elf_info *info,
+ 			  const Elf_Sym *sym, const char *symname)
+ {
+@@ -760,6 +724,104 @@ static char *remove_dot(char *s)
+ 	return s;
+ }
  
- 	if (!mod->is_vmlinux) {
-@@ -1320,7 +1305,6 @@ static void read_dump(const char *fname)
- 			mod->from_dump = true;
++/*
++ * The CRCs are recorded in .*.cmd files in the form of:
++ * #SYMVER <name> <crc>
++ */
++static void extract_crcs_for_object(const char *object, struct module *mod)
++{
++	char cmd_file[PATH_MAX];
++	char *buf, *p;
++	const char *base;
++	int dirlen, ret;
++
++	base = strrchr(object, '/');
++	if (base) {
++		base++;
++		dirlen = base - object;
++	} else {
++		dirlen = 0;
++		base = object;
++	}
++
++	ret = snprintf(cmd_file, sizeof(cmd_file), "%.*s.%s.cmd",
++		       dirlen, object, base);
++	if (ret >= sizeof(cmd_file)) {
++		error("%s: too long path was truncated\n", cmd_file);
++		return;
++	}
++
++	buf = read_text_file(cmd_file);
++	p = buf;
++
++	while ((p = strstr(p, "\n#SYMVER "))) {
++		char *name;
++		size_t namelen;
++		unsigned int crc;
++		struct symbol *sym;
++
++		name = p + strlen("\n#SYMVER ");
++
++		p = strchr(name, ' ');
++		if (!p)
++			break;
++
++		namelen = p - name;
++		p++;
++
++		if (!isdigit(*p))
++			continue;	/* skip this line */
++
++		crc = strtol(p, &p, 0);
++		if (*p != '\n')
++			continue;	/* skip this line */
++
++		name[namelen] = '\0';
++
++		/*
++		 * sym_find_with_module() may return NULL here.
++		 * It typically occurs when CONFIG_TRIM_UNUSED_KSYMS=y.
++		 * Since commit e1327a127703, genksyms calculates CRCs of all
++		 * symbols, including trimmed ones. Ignore orphan CRCs.
++		 */
++		sym = sym_find_with_module(name, mod);
++		if (sym)
++			sym_set_crc(sym, crc);
++	}
++
++	free(buf);
++}
++
++/*
++ * The symbol versions (CRC) are recorded in the .*.cmd files.
++ * Parse them to retrieve CRCs for the current module.
++ */
++static void mod_set_crcs(struct module *mod)
++{
++	char objlist[PATH_MAX];
++	char *buf, *p, *obj;
++	int ret;
++
++	if (mod->is_vmlinux) {
++		strcpy(objlist, ".vmlinux.objs");
++	} else {
++		/* objects for a module are listed in the *.mod file. */
++		ret = snprintf(objlist, sizeof(objlist), "%s.mod", mod->name);
++		if (ret >= sizeof(objlist)) {
++			error("%s: too long path was truncated\n", objlist);
++			return;
++		}
++	}
++
++	buf = read_text_file(objlist);
++	p = buf;
++
++	while ((obj = strsep(&p, "\n")) && obj[0])
++		extract_crcs_for_object(obj, mod);
++
++	free(buf);
++}
++
+ static void read_symbols(const char *modname)
+ {
+ 	const char *symname;
+@@ -820,9 +882,6 @@ static void read_symbols(const char *modname)
+ 		if (strstarts(symname, "__kstrtabns_"))
+ 			sym_update_namespace(symname + strlen("__kstrtabns_"),
+ 					     sym_get_data(&info, sym));
+-		if (strstarts(symname, "__crc_"))
+-			handle_modversion(mod, &info, sym,
+-					  symname + strlen("__crc_"));
+ 	}
+ 
+ 	// check for static EXPORT_SYMBOL_* functions && global vars
+@@ -850,12 +909,17 @@ static void read_symbols(const char *modname)
+ 
+ 	parse_elf_finish(&info);
+ 
+-	/* Our trick to get versioning for module struct etc. - it's
+-	 * never passed as an argument to an exported function, so
+-	 * the automatic versioning doesn't pick it up, but it's really
+-	 * important anyhow */
+-	if (modversions)
++	if (modversions) {
++		/*
++		 * Our trick to get versioning for module struct etc. - it's
++		 * never passed as an argument to an exported function, so
++		 * the automatic versioning doesn't pick it up, but it's really
++		 * important anyhow.
++		 */
+ 		sym_add_unresolved("module_layout", mod, false);
++
++		mod_set_crcs(mod);
++	}
+ }
+ 
+ static void read_symbols_from_files(const char *filename)
+@@ -1012,6 +1076,23 @@ static void add_header(struct buffer *b, struct module *mod)
+ 		buf_printf(b, "\nMODULE_INFO(staging, \"Y\");\n");
+ }
+ 
++static void check_symversions(struct module *mod)
++{
++	struct symbol *sym;
++
++	if (!modversions)
++		return;
++
++	list_for_each_entry(sym, &mod->exported_symbols, list) {
++		if (!sym->crc_valid) {
++			warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
++			     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
++			     sym->name, mod->name, mod->is_vmlinux ? "" : ".ko",
++			     sym->name);
++		}
++	}
++}
++
+ /**
+  * Record CRCs for unresolved symbols
+  **/
+@@ -1227,7 +1308,7 @@ static void read_dump(const char *fname)
  		}
  		s = sym_add_exported(symname, mod, gpl_only);
--		s->is_static = false;
- 		sym_set_crc(s, crc);
+ 		s->is_static = false;
+-		sym_set_crc(symname, crc);
++		sym_set_crc(s, crc);
  		sym_update_namespace(symname, namespace);
  	}
-@@ -1385,7 +1369,6 @@ int main(int argc, char **argv)
- 	char *missing_namespace_deps = NULL;
- 	char *dump_write = NULL, *files_source = NULL;
- 	int opt;
--	int n;
- 	LIST_HEAD(dump_lists);
- 	struct dump_list *dl, *dl2;
+ 	free(buf);
+@@ -1353,6 +1434,8 @@ int main(int argc, char **argv)
+ 		if (mod->from_dump)
+ 			continue;
  
-@@ -1461,15 +1444,6 @@ int main(int argc, char **argv)
- 	if (sec_mismatch_count && !sec_mismatch_warn_only)
- 		error("Section mismatches detected.\n"
- 		      "Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.\n");
--	for (n = 0; n < SYMBOL_HASH_SIZE; n++) {
--		struct symbol *s;
--
--		for (s = symbolhash[n]; s; s = s->next) {
--			if (s->is_static)
--				error("\"%s\" [%s] is a static EXPORT_SYMBOL\n",
--				      s->name, s->module->name);
--		}
--	}
- 
- 	if (nr_unresolved > MAX_UNRESOLVED_REPORTS)
- 		warn("suppressed %u unresolved symbol warnings because there were too many)\n",
++		check_symversions(mod);
++
+ 		if (!mod->is_vmlinux)
+ 			write_mod_c_file(mod);
+ 	}
 -- 
 2.32.0
 
