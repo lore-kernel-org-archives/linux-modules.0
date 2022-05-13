@@ -2,127 +2,113 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19CD8C433FE
-	for <linux-modules@archiver.kernel.org>; Fri, 13 May 2022 11:21:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3027C433FE
+	for <linux-modules@archiver.kernel.org>; Fri, 13 May 2022 11:42:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379853AbiEMLV1 (ORCPT
+        id S1379937AbiEMLmO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 13 May 2022 07:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
+        Fri, 13 May 2022 07:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378094AbiEMLV0 (ORCPT
+        with ESMTP id S1379936AbiEMLmN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 13 May 2022 07:21:26 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D226A4BBAE;
-        Fri, 13 May 2022 04:21:23 -0700 (PDT)
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 24DBL5eI005328;
-        Fri, 13 May 2022 20:21:05 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 24DBL5eI005328
+        Fri, 13 May 2022 07:42:13 -0400
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B635641611;
+        Fri, 13 May 2022 04:42:10 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id 24DBeEwg008349;
+        Fri, 13 May 2022 20:40:21 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24DBeEwg008349
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652440865;
-        bh=3tI3D7hiyyyIzHnssR6gH32RhQ9iCi1PmX8JTdAAbK4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FNrcSNRu/H684rp9bSyXcSEnsqIndi8Cc+unqqxlbC7K9oAomCj4cnGTQVJCd/2hb
-         9b7OaMJaaCAbcQKX2fpCrN9YCw8jQm6B6TZmSALO51hED9MfPLMmduJM0EUnQHsoRl
-         ONJgfvVH2S9SCQYJQksfftzTxHsAVsWbiAkR4Q+tDzWnt4JbGxar/zBxVyVj1MYChI
-         jLj6Aaaf+ChkvzBHJl2MPIYDHGT8rkQe6KbYCmXDRrCJ0Xm/c7Zp2eGsylOP4vpzKu
-         bLP5744eETFsrwCANFrkgSRlssSu5FDzb9gc/Z2J6nScOgzqrEqJnd/jEpxs7Cs/Vr
-         sHWLM3BbBKCJQ==
-X-Nifty-SrcIP: [209.85.214.178]
-Received: by mail-pl1-f178.google.com with SMTP id d22so7624019plr.9;
-        Fri, 13 May 2022 04:21:05 -0700 (PDT)
-X-Gm-Message-State: AOAM531Cv4DmWzHbE/EcXOsMojZl4ibMnXjVomWDXqJdRhq/98L19sEL
-        nrKeSVN19CGxbbi8Ema/979uF04DU7pf3RNBNn8=
-X-Google-Smtp-Source: ABdhPJxrUzvKeAz23KKcJoGYoRhEsRSXGPu3aS7Qu2aL1nDGTyhJ/9/U10A4dP5fZ0eKdHZhvjye16kS7LpfUh26AlI=
-X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
- s7-20020a170902988700b001516e1c7082mr4333904plp.162.1652440864645; Fri, 13
- May 2022 04:21:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220511164514.2741934-1-masahiroy@kernel.org>
- <YnwWsYdL2khCikSY@dev-arch.thelio-3990X> <CAK7LNATs67zGL7JohD-79Nxig25XCC=T9Dih4Z8iwdhoiWai8w@mail.gmail.com>
-In-Reply-To: <CAK7LNATs67zGL7JohD-79Nxig25XCC=T9Dih4Z8iwdhoiWai8w@mail.gmail.com>
+        s=dec2015msa; t=1652442022;
+        bh=tcr+72ZYpbdDhhd7b5O3qNkSWb92WQKtLNqtDxevyAs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OV1zKueC95HJzEs4YNsULTic+nna5e5ypNTY7m3NhIVfc2INdeDR+cF7c9HiKtmfO
+         Qsxy9MeGttwP5DhD5nIjIGS6Jw3zwcorHMHHWVYJXiFYZuUK3k5q/BUSOsEBIqbT8G
+         tGuZMPTt2WpKvva0OBHxCxS11/aJcwiPnkgM61RQAg73E0WcoRQSJTRSOy/3bOCVla
+         QW2I/PD7vcNam1TYdRNs1sgpGDPvpJh0OJcetNEO9K2wXgxHC3AHv76hixXjfu06ul
+         6TB+psG90p2nRGU0R3CISH6Aixz7/sUjannthx6dJi3gpikM00BAsIF10kg0SIQGSy
+         Dmy2tZFi5CnoQ==
+X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 13 May 2022 20:19:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ7qHFjoSKhRQC0cAzAu3aD5i_z+tdnv7Hf0VYZ7mJbDw@mail.gmail.com>
-Message-ID: <CAK7LNAQ7qHFjoSKhRQC0cAzAu3aD5i_z+tdnv7Hf0VYZ7mJbDw@mail.gmail.com>
-Subject: Re: [PATCH v5 00/12] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
+        linux-modules@vger.kernel.org, llvm@lists.linux.dev,
         Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v6 07/10] kbuild: make built-in.a rule robust against too long argument error
+Date:   Fri, 13 May 2022 20:39:27 +0900
+Message-Id: <20220513113930.10488-8-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220513113930.10488-1-masahiroy@kernel.org>
+References: <20220513113930.10488-1-masahiroy@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, May 13, 2022 at 8:18 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Thu, May 12, 2022 at 5:04 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Masahiro,
-> >
-> > On Thu, May 12, 2022 at 01:45:02AM +0900, Masahiro Yamada wrote:
-> > >
-> > > This is the third batch of cleanups in this development cycle.
-> > >
-> > > Major changes in v5:
-> > >  - Fix build errors
-> > >  - More cleanups
-> > >
-> > > Major changes in v4:
-> > >  - Move static EXPORT_SYMBOL check to a script
-> > >  - Some refactoring
-> > >
-> > > Major changes in v3:
-> > >
-> > >  - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
-> > >
-> > > Major changes in v2:
-> > >
-> > >  - V1 did not work with CONFIG_MODULE_REL_CRCS.
-> > >    I fixed this for v2.
-> > >
-> > >  - Reflect some review comments in v1
-> > >
-> > >  - Refactor the code more
-> > >
-> > >  - Avoid too long argument error
-> > >
-> > >
-> > >
-> > > Masahiro Yamada (12):
-> > >   modpost: split the section mismatch checks into section-check.c
-> > >   modpost: add sym_find_with_module() helper
-> > >   modpost: extract symbol versions from *.cmd files
-> > >   kbuild: link symbol CRCs at final link, removing
-> > >     CONFIG_MODULE_REL_CRCS
-> > >   kbuild: stop merging *.symversions
-> > >   genksyms: adjust the output format to modpost
-> > >   kbuild: do not create *.prelink.o for Clang LTO or IBT
-> > >   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
-> > >   kbuild: make built-in.a rule robust against too long argument error
-> > >   kbuild: make *.mod rule robust against too long argument error
-> > >   kbuild: add cmd_and_savecmd macro
-> > >   kbuild: rebuild multi-object modules when objtool is updated
-> >
+Kbuild runs at the top of objtree instead of changing the working
+directory to subdirectories. I think this design is nice overall but
+some commands have a scalability issue.
 
-The first two applied.
+The build command of built-in.a is one of them whose length scales with:
 
-I will send v6 for the rest.
+    O(D * N)
 
+Here, D is the length of the directory path (i.e. $(obj)/ prefix),
+N is the number of objects in the Makefile, O() is the big O notation.
 
+The deeper directory the Makefile directory is located, the more easily
+it will hit the too long argument error.
 
+We can make it better. Trim the $(obj)/ by Make's builtin function, and
+restore it by a shell command (sed).
 
+With this, the command length scales with:
 
+    O(D + N)
 
+In-tree modules still have some room to the limit (ARG_MAX=2097152),
+but this is more future-proof for big modules in a deep directory.
+
+For example, you can build i915 as builtin (CONFIG_DRM_I915=y) and
+compare drivers/gpu/drm/i915/.built-in.a.cmd with/without this commit.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+---
+
+(no changes since v2)
+
+Changes in v2:
+  - New patch
+
+ scripts/Makefile.build | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index c2a173b3fd60..8f1a355df7aa 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -374,7 +374,10 @@ $(subdir-modorder): $(obj)/%/modules.order: $(obj)/% ;
+ #
+ 
+ quiet_cmd_ar_builtin = AR      $@
+-      cmd_ar_builtin = rm -f $@; $(AR) cDPrST $@ $(real-prereqs)
++      cmd_ar_builtin = rm -f $@; \
++		echo $(patsubst $(obj)/%,%,$(real-prereqs)) | \
++		sed -E 's:([^ ]+):$(obj)/\1:g' | \
++		xargs $(AR) cDPrST $@
+ 
+ $(obj)/built-in.a: $(real-obj-y) FORCE
+ 	$(call if_changed,ar_builtin)
 -- 
-Best Regards
-Masahiro Yamada
+2.32.0
+
