@@ -2,75 +2,135 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74AF7C433EF
-	for <linux-modules@archiver.kernel.org>; Thu, 12 May 2022 17:43:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEA39C433F5
+	for <linux-modules@archiver.kernel.org>; Fri, 13 May 2022 11:20:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357020AbiELRnc (ORCPT
+        id S1379841AbiEMLUV (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 12 May 2022 13:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        Fri, 13 May 2022 07:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353035AbiELRnb (ORCPT
+        with ESMTP id S236605AbiEMLUU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 12 May 2022 13:43:31 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87F95E743;
-        Thu, 12 May 2022 10:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GDncwLKphn/XZKopA1l8aEKODmu6Bj+8jDWkzig0Mlc=; b=v5VORm6ydKBJVYTVx2qzPm0X4n
-        YQfDJBSgMcZYJuWgHmve2wHpzkb0hCvcXqAo7doJHNBfw7BwNSzleBoKEu3ZRjnsyEO8TmQseSYpr
-        jr6EOX90POYPE6pFppucFilLWH3RLL3yef5L5pSGRsAOvN7Wr6z/XSKq2UXVdUq4w4/JS2Ho1+eK1
-        YNvheGtOLSp8qWZsMMcHYnt8JKjGs2Xjk51K8yQrNQxUqezHKSoAhP8aCL8XnptqeifSCgzwREEdH
-        NK4AimkTNmKo7O8d4Eq1S7YBMIwMHCw+jzLHNDyN8/AcO44bQ3FuND+JbHuJ6xsqZWnyc3vTkbeb1
-        fKhOzEKA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1npCqT-00D1fT-5d; Thu, 12 May 2022 17:43:25 +0000
-Date:   Thu, 12 May 2022 10:43:25 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        fnovak@us.ibm.com, linuxppc-dev@ozlabs.org,
-        christophe.leroy@csgroup.eu
-Subject: Re: request_module DoS
-Message-ID: <Yn1HPSvyT4kAW7I/@bombadil.infradead.org>
-References: <YnXiuhdZ49pKL/dK@gondor.apana.org.au>
- <874k1zt0ec.fsf@mpe.ellerman.id.au>
- <Ynk9j6DQmVGAA3Jf@bombadil.infradead.org>
- <Ynvl6wCQRFdYsHar@bombadil.infradead.org>
- <871qwz8aot.fsf@mpe.ellerman.id.au>
- <87v8ub6jk1.fsf@mpe.ellerman.id.au>
+        Fri, 13 May 2022 07:20:20 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31E92A7C03;
+        Fri, 13 May 2022 04:20:18 -0700 (PDT)
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 24DBK5Mb007622;
+        Fri, 13 May 2022 20:20:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 24DBK5Mb007622
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1652440806;
+        bh=YRv/xzScxOrQW/8sn4wWLVoj5v+rd5AiWdMBOiUctKg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UGqfwMzgeClovZLtU/GqthVETIVynVx++gBYzA2T8pfzgoyiaL4Z7jaKRI988iWEE
+         vtC85R/npyGd6jNzXc9I2Nf3U96knFJSAPuQIiZjG3HPdTLxg28yPh0pKxUSE8/GqV
+         Hg8542rC0YdVOgM6zl/fshK150AlPBFErNmnnsYvv5+moql/4PYhV6KZmmfg162el6
+         dQ9IipdOPTYDYdeHcG+HyPej5i20f6QHl8zp3AiUydBrVFT/TFOyclr+5hu6CU++dF
+         jozcIKEhhATo4P9sZBZs/lEvWgfNWW7Rd5VZ2ovWaf4kfOyQYX0CpHzySSY8L+XaoL
+         N7/IyShNio5Rw==
+X-Nifty-SrcIP: [209.85.214.181]
+Received: by mail-pl1-f181.google.com with SMTP id n18so7635257plg.5;
+        Fri, 13 May 2022 04:20:06 -0700 (PDT)
+X-Gm-Message-State: AOAM533FWOrhmkXkACOSLBkQjd6DpSJAWj8U6jgHUgF8+TlT1bc3vBlP
+        f7OrAWBB4WPBYhMQIHNzh9iuzilDu2nTCFtt5WI=
+X-Google-Smtp-Source: ABdhPJz0V9Y2MC7wSh+kiBkNiWNxINnBG3U6cqE/jpzo7kEQOTHjV4DFzyAxYOFsREJncHCrWOgIGQ61+cGpl/V6ZVE=
+X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
+ l5-20020a170903120500b0015e8cbcfd2bmr4405025plh.99.1652440805394; Fri, 13 May
+ 2022 04:20:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v8ub6jk1.fsf@mpe.ellerman.id.au>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20220511164514.2741934-1-masahiroy@kernel.org> <YnwWsYdL2khCikSY@dev-arch.thelio-3990X>
+In-Reply-To: <YnwWsYdL2khCikSY@dev-arch.thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 13 May 2022 20:18:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATs67zGL7JohD-79Nxig25XCC=T9Dih4Z8iwdhoiWai8w@mail.gmail.com>
+Message-ID: <CAK7LNATs67zGL7JohD-79Nxig25XCC=T9Dih4Z8iwdhoiWai8w@mail.gmail.com>
+Subject: Re: [PATCH v5 00/12] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, May 12, 2022 at 10:07:26PM +1000, Michael Ellerman wrote:
-> Michael Ellerman <mpe@ellerman.id.au> writes:
-> > Luis Chamberlain <mcgrof@kernel.org> writes:
-> ...
+On Thu, May 12, 2022 at 5:04 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Masahiro,
+>
+> On Thu, May 12, 2022 at 01:45:02AM +0900, Masahiro Yamada wrote:
 > >
-> >> Can someone try this on ppc64le system? At this point I am not convinced
-> >> this issue is generic.
+> > This is the third batch of cleanups in this development cycle.
 > >
-> > Does your x86 system have at least 784 CPUs?
+> > Major changes in v5:
+> >  - Fix build errors
+> >  - More cleanups
 > >
-> > I don't know where the original report came from, but the trace shows
-> > "CPU 784", which would usually indicate a system with at least that many
-> > CPUs.
-> 
-> Update, apparently the report originally came from IBM, so I'll chase it
-> up internally.
-> 
-> I think you're right that there's probably no issue in the module code,
-> sorry to waste your time.
+> > Major changes in v4:
+> >  - Move static EXPORT_SYMBOL check to a script
+> >  - Some refactoring
+> >
+> > Major changes in v3:
+> >
+> >  - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
+> >
+> > Major changes in v2:
+> >
+> >  - V1 did not work with CONFIG_MODULE_REL_CRCS.
+> >    I fixed this for v2.
+> >
+> >  - Reflect some review comments in v1
+> >
+> >  - Refactor the code more
+> >
+> >  - Avoid too long argument error
+> >
+> >
+> >
+> > Masahiro Yamada (12):
+> >   modpost: split the section mismatch checks into section-check.c
+> >   modpost: add sym_find_with_module() helper
+> >   modpost: extract symbol versions from *.cmd files
+> >   kbuild: link symbol CRCs at final link, removing
+> >     CONFIG_MODULE_REL_CRCS
+> >   kbuild: stop merging *.symversions
+> >   genksyms: adjust the output format to modpost
+> >   kbuild: do not create *.prelink.o for Clang LTO or IBT
+> >   kbuild: check static EXPORT_SYMBOL* by script instead of modpost
+> >   kbuild: make built-in.a rule robust against too long argument error
+> >   kbuild: make *.mod rule robust against too long argument error
+> >   kbuild: add cmd_and_savecmd macro
+> >   kbuild: rebuild multi-object modules when objtool is updated
+>
+> I applied this series to your latest kbuild branch, built an Arch
+> Linux x86_64 config and Fedora aarch64 config with
+> CONFIG_LTO_CLANG_FULL=y then CONFIG_LTO_CLANG_THIN=y, and boot tested
+> each kernel in QEMU with a full userspace. I did not notice any new
+> warnings/errors and everything appears to work fine.
+>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Cheers,
+> Nathan
 
-It gives me testing happiness to know that may be the case :)
 
-  Luis
+Thanks for your testing.
+
+I ended up with v6 due to a build issue
+of CONFIG_TRIM_UNUSED_KSYMS,
+but this patch set is getting in good shape.
+
+Thanks.
+
+
+-- 
+Best Regards
+Masahiro Yamada
