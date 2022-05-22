@@ -2,78 +2,130 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E95A6C433EF
-	for <linux-modules@archiver.kernel.org>; Sun, 22 May 2022 06:09:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 585BAC433F5
+	for <linux-modules@archiver.kernel.org>; Sun, 22 May 2022 06:50:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237186AbiEVGJQ (ORCPT
+        id S244732AbiEVGuj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 22 May 2022 02:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        Sun, 22 May 2022 02:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiEVGJO (ORCPT
+        with ESMTP id S244601AbiEVGuj (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 22 May 2022 02:09:14 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFA73C704;
-        Sat, 21 May 2022 23:09:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=f8vODVBPPT4aieHBVtPQZPwEE8oetsAgiBP0SHP03Ns=; b=dVrwKB+az4x8MRcYyIRObMC3Kz
-        0/Lk5RsZ/uHq7rxWTwLfDctoffMnHd/XYI6CywnbwDoBtQ0kGP0IAReMVRjqBcN7i0SOfz0WyQzjA
-        72LMGsN8V9ohaRMa+yuZL8XoU9VwEiQiE2PgbZvQra5fAtbw50/0JLdprjgLYkqxfuWFiZ6BP/ylm
-        NxxYXDcrYvan5XviHSu6Iu2oEMAP9rTCG164FVGAiNtLsWVSqGCba2HcD3pGV4AYzuLQExeQAeT4l
-        L1Dtehj+OTr3rq74yGZS0MDlKvD/f3IME9yzaWi1wHGZN47KQaz/+4mUl1RmIeJIrS4yLTIpAl1X9
-        obWQzOxQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nsekq-000fUe-8y; Sun, 22 May 2022 06:07:52 +0000
-Date:   Sat, 21 May 2022 23:07:52 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Maninder Singh <maninder1.s@samsung.com>
-Cc:     keescook@chromium.org, pmladek@suse.com, bcain@quicinc.com,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, satishkh@cisco.com,
-        sebaddel@cisco.com, kartilak@cisco.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, mcgrof@kernel.org,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        dianders@chromium.org, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
-        mhiramat@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, arnd@arndb.de,
-        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net, v.narang@samsung.com,
-        onkarnath.1@samsung.com
-Subject: Re: [PATCH 0/5] kallsyms: make kallsym APIs more safe with scnprintf
-Message-ID: <YonTOL4zC4CytVrn@infradead.org>
-References: <CGME20220520083715epcas5p400b11adef4d540756c985feb20ba29bc@epcas5p4.samsung.com>
- <20220520083701.2610975-1-maninder1.s@samsung.com>
+        Sun, 22 May 2022 02:50:39 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145CA366A8;
+        Sat, 21 May 2022 23:50:36 -0700 (PDT)
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 24M6oAek017213;
+        Sun, 22 May 2022 15:50:11 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 24M6oAek017213
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653202211;
+        bh=5TwfumVCNM+fvix8eWg6i86pc65IzESlNEbAwwhHqrU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ojV6XLeO60FMwlo+YWIjhWtRGEEawpk4CVTb4L9aglvOsxoK5f7z7QbZSOZfJ/tak
+         alBhcAPXcIxYqPD77l9IRzaTuM1+hmJzoN/AY0CLlXq3RF133ODYyShafJ1NmxJjCa
+         q0lpyWHvIylOEdH/w5NWWS57WrNaaAJ1LH6EpwkqOq/sHCzQtTbTby/WMAjGehyBu4
+         kVp9a8pzx79AFXB+F86AeNMng169Yna619lykZelRBT/YmqMzU/NmFg613kiYe1zhM
+         gliHIyRLAvkJUkXtL+XM5BQLs9Sn5t2kQlyC6svng8bF7Ur/kDDSJ0tasHLmdhpwVA
+         4ZAHOIk6oYabQ==
+X-Nifty-SrcIP: [209.85.210.176]
+Received: by mail-pf1-f176.google.com with SMTP id j6so11048580pfe.13;
+        Sat, 21 May 2022 23:50:11 -0700 (PDT)
+X-Gm-Message-State: AOAM532fMMBst104p0OK6IfasNpJJ+yYm0/NoVVgVsywwWk3D97q1g1L
+        YfOKYFhFVqsZOA/3WLXxgrlEa/opzqqV8kKt0/c=
+X-Google-Smtp-Source: ABdhPJxhJ2rh9Olkm7eNlJF8gpCf6NRGhN1KHbnGfK8m1IcXzz+fxX+v0f9XGq/1eBPx2nbsbhKNAZoEfz+GfSITou8=
+X-Received: by 2002:a63:9043:0:b0:3f9:6c36:3de3 with SMTP id
+ a64-20020a639043000000b003f96c363de3mr8127619pge.616.1653202210391; Sat, 21
+ May 2022 23:50:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520083701.2610975-1-maninder1.s@samsung.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+ <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
+In-Reply-To: <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 22 May 2022 15:49:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
+Message-ID: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, May 20, 2022 at 02:06:56PM +0530, Maninder Singh wrote:
-> kallsyms functionality depends on KSYM_NAME_LEN directly.
-> but if user passed array length lesser than it, sprintf
-> can cause issues of buffer overflow attack.
-> 
-> So changing *sprint* and *lookup* APIs in this patch set
-> to have buffer size as an argument and replacing sprintf with
-> scnprintf.
+On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > >
+> > > This is the third batch of cleanups in this development cycle.
+> > >
+> >
+> >
+> > This series is available at
+> > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+> >  lto-cleanup-v6
+> >
+>
+> Hi Masahiro,
+>
+> I cloned the repository on top of latest Linus Git.
+>
+> Not able to boot in Quemu - Not able to boot on bare metal.
+>
+> $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
+> 366:[    2.173265] floppy: disagrees about version of symbol module_layout
+> 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
+> 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
+> 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
+> 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
+> 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
+> 375:Begin: Running /scripts/local-premount ... [    2.298555]
+> crc32c_intel: disagrees about version of symbol module_layout
+> 376:[    2.303335] crc32c_generic: disagrees about version of symbol
+> module_layout
+> 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
+>
+> Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
+>
+> My linux-config and qemu-log are attached.
+>
 
-This is still a pretty horrible API.  Passing something like
-a struct seq_buf seems like the much better API here.  Also with
-the amount of arguments and by reference passing it might be worth
-to pass them as a structure while you're at it.
 
+Thanks for your testing.
+
+I was also able to reproduce this issue.
+
+
+The problematic parts are:
+
+[    2.298555] crc32c_intel: disagrees about version of symbol module_layout
+[    2.303335] crc32c_generic: disagrees about version of symbol module_layout
+[    2.306667] libcrc32c: disagrees about version of symbol module_layout
+
+
+
+When CONFIG_LTO_CLANG_THIN=y,
+I cannot see any __crc_* symbols in "nm  vmlinux".
+
+Perhaps, LTO might have discarded all the __crc_* symbols
+from vmlinux, but I am still checking the details...
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
