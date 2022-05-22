@@ -2,54 +2,38 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75490C433EF
-	for <linux-modules@archiver.kernel.org>; Fri, 20 May 2022 19:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E95A6C433EF
+	for <linux-modules@archiver.kernel.org>; Sun, 22 May 2022 06:09:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353329AbiETTwV (ORCPT
+        id S237186AbiEVGJQ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 20 May 2022 15:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        Sun, 22 May 2022 02:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347012AbiETTwN (ORCPT
+        with ESMTP id S229530AbiEVGJO (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 20 May 2022 15:52:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A438196698
-        for <linux-modules@vger.kernel.org>; Fri, 20 May 2022 12:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653076331;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QC4HhoSa5ax5VuJxdudrkP+hQQcM6Ir26+NRsLLyTuA=;
-        b=aVtD4MNkr5/hZNC4UNopXeVdvrGLRksvO2x+el9yARnUlcMFyLoJNjiC9bqZiCAApioGpY
-        yk5TvBeN+y85nKkXIzdi2ieUzTn1EQUibpiTGnJ3bT4ei6bQ5XFRUwfhLFKNQTHF5+WfqG
-        CzNtKEyR6O6K9vf8cxoBYDlR44RCRRU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-4t-3E9E5PQGx31S7cEd1eQ-1; Fri, 20 May 2022 15:52:06 -0400
-X-MC-Unique: 4t-3E9E5PQGx31S7cEd1eQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5AC1829AB3FB;
-        Fri, 20 May 2022 19:52:04 +0000 (UTC)
-Received: from [10.22.32.226] (unknown [10.22.32.226])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ED99440D2821;
-        Fri, 20 May 2022 19:52:01 +0000 (UTC)
-Message-ID: <f3627eae-f5ae-1d30-2c09-1820a255334a@redhat.com>
-Date:   Fri, 20 May 2022 15:52:01 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 1/5] kallsyms: pass buffer size in sprint_* APIs
-Content-Language: en-US
-To:     Maninder Singh <maninder1.s@samsung.com>, keescook@chromium.org,
-        pmladek@suse.com, bcain@quicinc.com, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        Sun, 22 May 2022 02:09:14 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFA73C704;
+        Sat, 21 May 2022 23:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=f8vODVBPPT4aieHBVtPQZPwEE8oetsAgiBP0SHP03Ns=; b=dVrwKB+az4x8MRcYyIRObMC3Kz
+        0/Lk5RsZ/uHq7rxWTwLfDctoffMnHd/XYI6CywnbwDoBtQ0kGP0IAReMVRjqBcN7i0SOfz0WyQzjA
+        72LMGsN8V9ohaRMa+yuZL8XoU9VwEiQiE2PgbZvQra5fAtbw50/0JLdprjgLYkqxfuWFiZ6BP/ylm
+        NxxYXDcrYvan5XviHSu6Iu2oEMAP9rTCG164FVGAiNtLsWVSqGCba2HcD3pGV4AYzuLQExeQAeT4l
+        L1Dtehj+OTr3rq74yGZS0MDlKvD/f3IME9yzaWi1wHGZN47KQaz/+4mUl1RmIeJIrS4yLTIpAl1X9
+        obWQzOxQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nsekq-000fUe-8y; Sun, 22 May 2022 06:07:52 +0000
+Date:   Sat, 21 May 2022 23:07:52 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     keescook@chromium.org, pmladek@suse.com, bcain@quicinc.com,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
         borntraeger@linux.ibm.com, svens@linux.ibm.com, satishkh@cisco.com,
         sebaddel@cisco.com, kartilak@cisco.com, jejb@linux.ibm.com,
         martin.petersen@oracle.com, mcgrof@kernel.org,
@@ -57,67 +41,39 @@ To:     Maninder Singh <maninder1.s@samsung.com>, keescook@chromium.org,
         dianders@chromium.org, naveen.n.rao@linux.ibm.com,
         anil.s.keshavamurthy@intel.com, davem@davemloft.net,
         mhiramat@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, boqun.feng@gmail.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, akpm@linux-foundation.org, arnd@arndb.de
-Cc:     linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, arnd@arndb.de,
+        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-modules@vger.kernel.org,
         kgdb-bugreport@lists.sourceforge.net, v.narang@samsung.com,
         onkarnath.1@samsung.com
-References: <20220520083701.2610975-1-maninder1.s@samsung.com>
- <CGME20220520083725epcas5p1c3e2989c991e50603a40c81ccc4982e0@epcas5p1.samsung.com>
- <20220520083701.2610975-2-maninder1.s@samsung.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220520083701.2610975-2-maninder1.s@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+Subject: Re: [PATCH 0/5] kallsyms: make kallsym APIs more safe with scnprintf
+Message-ID: <YonTOL4zC4CytVrn@infradead.org>
+References: <CGME20220520083715epcas5p400b11adef4d540756c985feb20ba29bc@epcas5p4.samsung.com>
+ <20220520083701.2610975-1-maninder1.s@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520083701.2610975-1-maninder1.s@samsung.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 5/20/22 04:36, Maninder Singh wrote:
-> As of now sprint_* APIs don't pass buffer size as an argument
-> and use sprintf directly.
->
-> To replace dangerous sprintf API to scnprintf,
-> buffer size is required in arguments.
->
-> Co-developed-by: Onkarnath <onkarnath.1@samsung.com>
-> Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
-> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
-> ---
->   arch/s390/lib/test_unwind.c    |  2 +-
->   drivers/scsi/fnic/fnic_trace.c |  8 ++++----
->   include/linux/kallsyms.h       | 20 ++++++++++----------
->   init/main.c                    |  2 +-
->   kernel/kallsyms.c              | 27 ++++++++++++++++-----------
->   kernel/trace/trace_output.c    |  2 +-
->   lib/vsprintf.c                 | 10 +++++-----
->   7 files changed, 38 insertions(+), 33 deletions(-)
->
-> diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
-> index 5a053b393d5c..adbc2b53db16 100644
-> --- a/arch/s390/lib/test_unwind.c
-> +++ b/arch/s390/lib/test_unwind.c
-> @@ -75,7 +75,7 @@ static noinline int test_unwind(struct task_struct *task, struct pt_regs *regs,
->   			ret = -EINVAL;
->   			break;
->   		}
-> -		sprint_symbol(sym, addr);
-> +		sprint_symbol(sym, KSYM_SYMBOL_LEN, addr);
+On Fri, May 20, 2022 at 02:06:56PM +0530, Maninder Singh wrote:
+> kallsyms functionality depends on KSYM_NAME_LEN directly.
+> but if user passed array length lesser than it, sprintf
+> can cause issues of buffer overflow attack.
+> 
+> So changing *sprint* and *lookup* APIs in this patch set
+> to have buffer size as an argument and replacing sprintf with
+> scnprintf.
 
-Instead of hardcoding KSYM_SYMBOL_LEN everywhere, will it better to hide 
-it like this:
-
-         extern int __sprint_symbol(char *buffer, size_t size, unsigned 
-long address);
-         #define sprint_symbol(buf, addr)        __sprint_symbol(buf, 
-sizeof(buf), addr)
-
-Or you can use sizeof(buf) directly instead of KSYM_SYMBOL_LEN.
-
-Cheers,
-Longman
+This is still a pretty horrible API.  Passing something like
+a struct seq_buf seems like the much better API here.  Also with
+the amount of arguments and by reference passing it might be worth
+to pass them as a structure while you're at it.
 
