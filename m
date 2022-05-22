@@ -2,130 +2,109 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 585BAC433F5
-	for <linux-modules@archiver.kernel.org>; Sun, 22 May 2022 06:50:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9E25C433FE
+	for <linux-modules@archiver.kernel.org>; Sun, 22 May 2022 09:43:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244732AbiEVGuj (ORCPT
+        id S237456AbiEVJnS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 22 May 2022 02:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        Sun, 22 May 2022 05:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244601AbiEVGuj (ORCPT
+        with ESMTP id S234369AbiEVJnR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 22 May 2022 02:50:39 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145CA366A8;
-        Sat, 21 May 2022 23:50:36 -0700 (PDT)
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 24M6oAek017213;
-        Sun, 22 May 2022 15:50:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 24M6oAek017213
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653202211;
-        bh=5TwfumVCNM+fvix8eWg6i86pc65IzESlNEbAwwhHqrU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ojV6XLeO60FMwlo+YWIjhWtRGEEawpk4CVTb4L9aglvOsxoK5f7z7QbZSOZfJ/tak
-         alBhcAPXcIxYqPD77l9IRzaTuM1+hmJzoN/AY0CLlXq3RF133ODYyShafJ1NmxJjCa
-         q0lpyWHvIylOEdH/w5NWWS57WrNaaAJ1LH6EpwkqOq/sHCzQtTbTby/WMAjGehyBu4
-         kVp9a8pzx79AFXB+F86AeNMng169Yna619lykZelRBT/YmqMzU/NmFg613kiYe1zhM
-         gliHIyRLAvkJUkXtL+XM5BQLs9Sn5t2kQlyC6svng8bF7Ur/kDDSJ0tasHLmdhpwVA
-         4ZAHOIk6oYabQ==
-X-Nifty-SrcIP: [209.85.210.176]
-Received: by mail-pf1-f176.google.com with SMTP id j6so11048580pfe.13;
-        Sat, 21 May 2022 23:50:11 -0700 (PDT)
-X-Gm-Message-State: AOAM532fMMBst104p0OK6IfasNpJJ+yYm0/NoVVgVsywwWk3D97q1g1L
-        YfOKYFhFVqsZOA/3WLXxgrlEa/opzqqV8kKt0/c=
-X-Google-Smtp-Source: ABdhPJxhJ2rh9Olkm7eNlJF8gpCf6NRGhN1KHbnGfK8m1IcXzz+fxX+v0f9XGq/1eBPx2nbsbhKNAZoEfz+GfSITou8=
-X-Received: by 2002:a63:9043:0:b0:3f9:6c36:3de3 with SMTP id
- a64-20020a639043000000b003f96c363de3mr8127619pge.616.1653202210391; Sat, 21
- May 2022 23:50:10 -0700 (PDT)
+        Sun, 22 May 2022 05:43:17 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6368E369F5;
+        Sun, 22 May 2022 02:43:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653212596; x=1684748596;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=J1uRxreTk2vcgBP+Mv+o2kjbzDSrcYl4+WqXF1IBsU8=;
+  b=XLdFBFgoTxYniEX/Tgn4Zn+eawD1UL5Q246madtsbUR93j8vJQJxGjGC
+   DSmUBRbgrz1vTIcybBLpuT4IxU6VLCyv0S4x5GShKFED4IgCb7Oq0htuq
+   JJzS5PP8EuSazctx0FafiAytjCG4YkwDjJ5d6xursevIyPMC/3+XZEYQ1
+   CU5NPbb35V0FZkTgnA4oN/pGVkgMvKLyufNbocRKD+0rRB1WL6DbGOvvc
+   E+3c6wF9N2x1TKJgnidh20sMU/i4ItCB0LdyCiNVDifDZTBXvtFyhs6rO
+   nm7O4P7n9m8b3D3NeSXjti3nte6hgIqoLVXtK5ZhGD9Ga2Gu4dtfRq+KA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="260564934"
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="260564934"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 02:43:15 -0700
+X-IronPort-AV: E=Sophos;i="5.91,244,1647327600"; 
+   d="scan'208";a="571562866"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2022 02:43:06 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nsi73-000IR6-9y;
+        Sun, 22 May 2022 12:43:01 +0300
+Date:   Sun, 22 May 2022 12:43:01 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Maninder Singh <maninder1.s@samsung.com>, keescook@chromium.org,
+        pmladek@suse.com, bcain@quicinc.com, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, satishkh@cisco.com,
+        sebaddel@cisco.com, kartilak@cisco.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, mcgrof@kernel.org,
+        jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        dianders@chromium.org, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
+        mhiramat@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        will@kernel.org, boqun.feng@gmail.com, rostedt@goodmis.org,
+        senozhatsky@chromium.org, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, arnd@arndb.de,
+        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net, v.narang@samsung.com,
+        onkarnath.1@samsung.com
+Subject: Re: [PATCH 1/5] kallsyms: pass buffer size in sprint_* APIs
+Message-ID: <YooFpVGuDoyfoQPS@smile.fi.intel.com>
+References: <20220520083701.2610975-1-maninder1.s@samsung.com>
+ <CGME20220520083725epcas5p1c3e2989c991e50603a40c81ccc4982e0@epcas5p1.samsung.com>
+ <20220520083701.2610975-2-maninder1.s@samsung.com>
+ <f3627eae-f5ae-1d30-2c09-1820a255334a@redhat.com>
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
- <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
-In-Reply-To: <CA+icZUUWww3fXvjQcefgFuq=tPO6+FYDbHE2E5PmL-BSJg4+cw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 22 May 2022 15:49:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
-Message-ID: <CAK7LNATx1QcM6BdqBSascV8J8rD6etRgRZj9PjBno5Qrb=p3Yg@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f3627eae-f5ae-1d30-2c09-1820a255334a@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, May 22, 2022 at 10:45 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Fri, May 13, 2022 at 4:31 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > >
-> > > This is the third batch of cleanups in this development cycle.
-> > >
-> >
-> >
-> > This series is available at
-> > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-> >  lto-cleanup-v6
-> >
->
-> Hi Masahiro,
->
-> I cloned the repository on top of latest Linus Git.
->
-> Not able to boot in Quemu - Not able to boot on bare metal.
->
-> $ grep module_layout log_quemu-5.18.0-rc7-2-amd64-clang14-lto.txt
-> 366:[    2.173265] floppy: disagrees about version of symbol module_layout
-> 367:[    2.198746] scsi_common: disagrees about version of symbol module_layout
-> 368:[    2.205573] i2c_piix4: disagrees about version of symbol module_layout
-> 369:[    2.210610] psmouse: disagrees about version of symbol module_layout
-> 370:[    2.225138] scsi_common: disagrees about version of symbol module_layout
-> 371:[    2.235536] scsi_common: disagrees about version of symbol module_layout
-> 375:Begin: Running /scripts/local-premount ... [    2.298555]
-> crc32c_intel: disagrees about version of symbol module_layout
-> 376:[    2.303335] crc32c_generic: disagrees about version of symbol
-> module_layout
-> 377:[    2.306667] libcrc32c: disagrees about version of symbol module_layout
->
-> Infos: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
->
-> My linux-config and qemu-log are attached.
->
+On Fri, May 20, 2022 at 03:52:01PM -0400, Waiman Long wrote:
+> On 5/20/22 04:36, Maninder Singh wrote:
 
+...
 
-Thanks for your testing.
+> > -		sprint_symbol(sym, addr);
+> > +		sprint_symbol(sym, KSYM_SYMBOL_LEN, addr);
+> 
+> Instead of hardcoding KSYM_SYMBOL_LEN everywhere, will it better to hide it
+> like this:
+> 
+>         extern int __sprint_symbol(char *buffer, size_t size, unsigned long
+> address);
+>         #define sprint_symbol(buf, addr)        __sprint_symbol(buf,
+> sizeof(buf), addr)
+> 
+> Or you can use sizeof(buf) directly instead of KSYM_SYMBOL_LEN.
 
-I was also able to reproduce this issue.
-
-
-The problematic parts are:
-
-[    2.298555] crc32c_intel: disagrees about version of symbol module_layout
-[    2.303335] crc32c_generic: disagrees about version of symbol module_layout
-[    2.306667] libcrc32c: disagrees about version of symbol module_layout
-
-
-
-When CONFIG_LTO_CLANG_THIN=y,
-I cannot see any __crc_* symbols in "nm  vmlinux".
-
-Perhaps, LTO might have discarded all the __crc_* symbols
-from vmlinux, but I am still checking the details...
-
+This assumes that buf is defined as char [], which might be not always the
+case. If you are going with the macro, than ARRAY_SIZE() seems appropriate
+to perform a check against the above mentioned constraint.
 
 
 -- 
-Best Regards
-Masahiro Yamada
+With Best Regards,
+Andy Shevchenko
+
+
