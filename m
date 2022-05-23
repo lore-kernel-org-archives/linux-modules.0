@@ -2,101 +2,114 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18D82C4321E
-	for <linux-modules@archiver.kernel.org>; Mon, 23 May 2022 19:43:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00A43C433EF
+	for <linux-modules@archiver.kernel.org>; Mon, 23 May 2022 21:04:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbiEWTnU (ORCPT
+        id S229677AbiEWVEU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 23 May 2022 15:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
+        Mon, 23 May 2022 17:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234016AbiEWTmU (ORCPT
+        with ESMTP id S229920AbiEWVET (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 23 May 2022 15:42:20 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D601311836
-        for <linux-modules@vger.kernel.org>; Mon, 23 May 2022 12:39:15 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id s14so13987877plk.8
-        for <linux-modules@vger.kernel.org>; Mon, 23 May 2022 12:39:15 -0700 (PDT)
+        Mon, 23 May 2022 17:04:19 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38E16C0EA
+        for <linux-modules@vger.kernel.org>; Mon, 23 May 2022 14:04:17 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id j10so4177602lfe.12
+        for <linux-modules@vger.kernel.org>; Mon, 23 May 2022 14:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9i0mf5EWjId+dJhDG42zI0t8gO1U5xR/fPTtg8h/guQ=;
-        b=G67mgEOcbKAzzfRqWT2tyqM6K9pitcq9pbTVcwT0LjmKZNi0oiqVsX8V97hEFwl2hf
-         AMnpF3tfbp0thJvNCE4CX5dI4O8ELTGwmxs1K5fhCNP737yCqZGbfIr/xW9c33Xf+LOK
-         scdJ+18kS7hWnfRSUS9ItgijmeteaopgZF3uU=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eOT6/IEEvL647FHmiCg7MRICtIFsZAtUMIfvYbPx3SA=;
+        b=TB/AO84lC0LITUBGehrw8rhOuiDSejBSA9Qz+lEc73w+ju8dHPmXn5PMLWT3SRdJrU
+         suS0JTx8GWUPOYH/AS5OeqGcjMJNPJXACAtcFXCFsCXYe6Wbnv4pDhnB44c73UUzHCQ0
+         PeCR2iNZ4GvbK+YZKJ3VW+i/zlDerIASKR9O3+qm/zq5vRzAmqvEVuPlRypYI/469BWA
+         EN03DN0SpFnK9+5MrULChGKPma7zq6vsVSYZroWCVM3zKA5Mx1xJRPnT8a7cmvOAag+4
+         ZdTyJdVFRW+/HnPRZy9TJdVxANnzklWvZyv8mPVgMxt+deT1r5U3HKxECduTDfkAer/M
+         Q71g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9i0mf5EWjId+dJhDG42zI0t8gO1U5xR/fPTtg8h/guQ=;
-        b=CCOLvFOSzxj6EO/LdQBAKbepFiucgS3ICMuuWVHtKLKy31+LAgF2wr1Kr2aw70kNm3
-         89kIC/kB2hkAYDld4nNgOveyXPFxJt0iUnXBGqZ4EuAqBuvCj7QhfvaR1qS5mQo5CRiI
-         CsrMx7YzLujUclRj2CX+chKDgNUpF/f7ZraULQ8IZHSuVSmyakA64MlVdKmQQqda3kGt
-         Y3FlAEyEoTRncOw5CQ+SRn93Bu9tD1tGwYXSMYgetcFRcBQEr3h9l3Kj4wAXsBhO1Wfa
-         M/vWU/Jwu0noLzYIGddUIAfil0p+8KfgtSA45BTvUTxn0MWeix9N3dDHwrsQCsvjSgf3
-         aFDg==
-X-Gm-Message-State: AOAM530OGkSXig0yXfoNwbJgvDJZ4UkFFoU/YXtYPGDos7452vhAw80Y
-        rlC+Sk68xuhwIa/FJZihFDkzXA==
-X-Google-Smtp-Source: ABdhPJwpmlrfLvCqOEAWUHk/iFb9vTBCFvDV+XiSslGuIShWmQMdDaruCMB2aTz4o4uZEjpK38rAug==
-X-Received: by 2002:a17:902:f605:b0:14d:9e11:c864 with SMTP id n5-20020a170902f60500b0014d9e11c864mr24236615plg.54.1653334755308;
-        Mon, 23 May 2022 12:39:15 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a9-20020a62bd09000000b0051827128aeasm7543246pff.131.2022.05.23.12.39.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 12:39:14 -0700 (PDT)
-Date:   Mon, 23 May 2022 12:39:12 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Maninder Singh <maninder1.s@samsung.com>, pmladek@suse.com,
-        bcain@quicinc.com, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, satishkh@cisco.com, sebaddel@cisco.com,
-        kartilak@cisco.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        mcgrof@kernel.org, jason.wessel@windriver.com,
-        daniel.thompson@linaro.org, dianders@chromium.org,
-        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
-        davem@davemloft.net, mhiramat@kernel.org, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, longman@redhat.com,
-        boqun.feng@gmail.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, akpm@linux-foundation.org, arnd@arndb.de,
-        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net, v.narang@samsung.com,
-        onkarnath.1@samsung.com
-Subject: Re: [PATCH 0/5] kallsyms: make kallsym APIs more safe with scnprintf
-Message-ID: <202205231238.FAF6D28@keescook>
-References: <CGME20220520083715epcas5p400b11adef4d540756c985feb20ba29bc@epcas5p4.samsung.com>
- <20220520083701.2610975-1-maninder1.s@samsung.com>
- <YonTOL4zC4CytVrn@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eOT6/IEEvL647FHmiCg7MRICtIFsZAtUMIfvYbPx3SA=;
+        b=rte5Yzm8got4bxK2ewR3dwGIAGQEaodi/+erlvkzBlGvHB0n4ZA7s8noah8JvEMzKI
+         /IVVxhidoB2eFrnlR2FiHiPZU4f87LWgSDCpPdwefdBb8GrIuFYJTKyRQHEDc5MvZYDR
+         XFApAtXsZgusYPwPQnIEFUsJvtpAT44IiAWTzuwrSEYZvmHBWWoyllj7JNCevASJGwhk
+         EoJcaKEZ+b4SXK+vcd+RilOZDAq0nadp6J4QRNQe1yIbBWFi0C2CMHQ8bueCfqLXyBce
+         tRl862XPLR2Jz9O0qzqk/po0cNSkxGLVtQaUce44I89sIMc6KkqU0udWQ/D1j8d/JjMy
+         SUaA==
+X-Gm-Message-State: AOAM530cSUAwtWC3JRxzt1S0fVfg7/01VviPJmtnpqSIizrozIHYlsHU
+        LVGwB/ivLmTcI2xmCzL6FWjGRp6ug80ovoZCjiWybQ==
+X-Google-Smtp-Source: ABdhPJwiiG4XoO6s8TxJDH+8amPPG6CcR3JcQv0U+ZDwF04t01N4pXb7x0yQtfESBBKBxKqDAER8pmvL0qGIg+evkxM=
+X-Received: by 2002:a05:6512:48e:b0:477:c024:1a1c with SMTP id
+ v14-20020a056512048e00b00477c0241a1cmr17906274lfq.100.1653339855792; Mon, 23
+ May 2022 14:04:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YonTOL4zC4CytVrn@infradead.org>
+References: <20220522160117.599023-1-masahiroy@kernel.org>
+In-Reply-To: <20220522160117.599023-1-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 23 May 2022 14:04:04 -0700
+Message-ID: <CAKwvOdnTFvDKDr_tr5digM1HguSQw65Eq+TT=mhr_AUcVGVLpQ@mail.gmail.com>
+Subject: Re: [PATCH] fixup! kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules@vger.kernel.org, llvm@lists.linux.dev,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, May 21, 2022 at 11:07:52PM -0700, Christoph Hellwig wrote:
-> On Fri, May 20, 2022 at 02:06:56PM +0530, Maninder Singh wrote:
-> > kallsyms functionality depends on KSYM_NAME_LEN directly.
-> > but if user passed array length lesser than it, sprintf
-> > can cause issues of buffer overflow attack.
-> > 
-> > So changing *sprint* and *lookup* APIs in this patch set
-> > to have buffer size as an argument and replacing sprintf with
-> > scnprintf.
-> 
-> This is still a pretty horrible API.  Passing something like
-> a struct seq_buf seems like the much better API here.  Also with
-> the amount of arguments and by reference passing it might be worth
-> to pass them as a structure while you're at it.
+On Sun, May 22, 2022 at 9:04 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> I will squash this into
+>
+>   https://patchwork.kernel.org/project/linux-kbuild/patch/20220513113930.10488-3-masahiroy@kernel.org/
+>
+> Sedat Reported an error:
+>
+>   https://lore.kernel.org/linux-kbuild/CA+icZUWttwjhDNPO1VuVyiMoReH5e83nsYDd0rEoY8-Uwv6pHw@mail.gmail.com/T/#md82f561e348b7959b7270c33ac86fa3edb0d773a
+>
+> __used is needed to make the combination of
+> CONFIG_MODVERSIONS and CONFIG_LTO_CLANG working.
 
-Yeah, I agree. It really seems like seq_buf would be nicer.
+Yep, vaguely reminiscent of
+commit f3751ad0116f ("tracepoint: Mark __tracepoint_string's __used")
+
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  include/linux/export-internal.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/export-internal.h b/include/linux/export-internal.h
+> index 77175d561058..c2b1d4fd5987 100644
+> --- a/include/linux/export-internal.h
+> +++ b/include/linux/export-internal.h
+> @@ -10,7 +10,8 @@
+>  #include <linux/compiler.h>
+>  #include <linux/types.h>
+>
+> +/* __used is needed to keep __crc_* for LTO */
+>  #define SYMBOL_CRC(sym, crc, sec)   \
+> -       u32 __section("___kcrctab" sec "+" #sym) __crc_##sym = crc
+> +       u32 __section("___kcrctab" sec "+" #sym) __used __crc_##sym = crc
+>
+>  #endif /* __LINUX_EXPORT_INTERNAL_H__ */
+> --
+> 2.32.0
+>
+
 
 -- 
-Kees Cook
+Thanks,
+~Nick Desaulniers
