@@ -2,114 +2,101 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4B41C433EF
-	for <linux-modules@archiver.kernel.org>; Sun, 22 May 2022 22:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18D82C4321E
+	for <linux-modules@archiver.kernel.org>; Mon, 23 May 2022 19:43:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236248AbiEVWgE (ORCPT
+        id S231287AbiEWTnU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 22 May 2022 18:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
+        Mon, 23 May 2022 15:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241209AbiEVWgD (ORCPT
+        with ESMTP id S234016AbiEWTmU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 22 May 2022 18:36:03 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F78B60EF;
-        Sun, 22 May 2022 15:36:01 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id t15so2448838ilg.13;
-        Sun, 22 May 2022 15:36:01 -0700 (PDT)
+        Mon, 23 May 2022 15:42:20 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D601311836
+        for <linux-modules@vger.kernel.org>; Mon, 23 May 2022 12:39:15 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id s14so13987877plk.8
+        for <linux-modules@vger.kernel.org>; Mon, 23 May 2022 12:39:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=ArpLUn2/pj9FP5lFRBkDLCBidWkCamGHeX/50G01bPs=;
-        b=DiI+Z83vWb7aN9j7eNGIypx40svWAdoh++1piqY8e96KsvuF5oPXAVVtqhQkMI357+
-         qF3wD7UVPlbDbHgc9dmbKwxXFdrp2i5qmzpZXCVwVOsAroG5oWfmHOcs2zFT3GbnR78L
-         sz9pPytFp3QWt2ruqRP+4rVEwDDl5y65x857BQ0pLARdhORynU+6vJu/0Zyew0p9bWG9
-         oG0bU22HFxMvV6zT0+YZ5C+fiU0T7aZ7BpdCFPoQcbm2sK94Qb18JboNEF4nYQX7uzrU
-         Jm+wkRTJsB/V2C/6GTCLGEDWFsWkVjYdOhuPNudY6WD4Uy4l0rhqLGxNhC7JhUpPYnMs
-         Kvbg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9i0mf5EWjId+dJhDG42zI0t8gO1U5xR/fPTtg8h/guQ=;
+        b=G67mgEOcbKAzzfRqWT2tyqM6K9pitcq9pbTVcwT0LjmKZNi0oiqVsX8V97hEFwl2hf
+         AMnpF3tfbp0thJvNCE4CX5dI4O8ELTGwmxs1K5fhCNP737yCqZGbfIr/xW9c33Xf+LOK
+         scdJ+18kS7hWnfRSUS9ItgijmeteaopgZF3uU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=ArpLUn2/pj9FP5lFRBkDLCBidWkCamGHeX/50G01bPs=;
-        b=a0G0r3XZ5dmsOHfofc5ssBYC9IU1U7s5rHh7/GJaxc3AlgtaZySjRYu7q4q5q9YTH7
-         WLT0JJ4XdvtoabZQdQ2uzeqQOWs62qaBWXbLIHVtTwQHdFYj71a5J8Oyhx9Vrwyk+G1K
-         YkLNmLopToc2O447y6EJn5ie1Dt0MFUbadZeNejzu+urxGIHXa3KhVMPMUEEb0PK2qp4
-         Q0lsBoMFkkVSLVxjhKj20ewPtyT1wyybVWBOHSES20OlvKn/az8uueW8rCp/+ypEXgJ+
-         +H4CHh2LgY6F6qYDXxA/VvBu9JqDKL+t9IJMz2hhyXXc73QZPgFMR+uWbRIVTdbpK/iK
-         2C8g==
-X-Gm-Message-State: AOAM531I2+UAmW3CD95EYY7jUcZ71D+DLdsD8Hj+lPK4UNgUY5HmTnJV
-        Y7w5p31GGyf7+nX0rH8Y6IHq0zeWsebmePn8ZSc=
-X-Google-Smtp-Source: ABdhPJyGISDr2Z+K29rTdFgt0lIY9GUwyNC5SfnmTm5ZFxVdZbc98PA0cihiMx1/6b7oICIsCaLYkQtBpIghRdlZJ8I=
-X-Received: by 2002:a05:6e02:1aa8:b0:2d1:7099:67ba with SMTP id
- l8-20020a056e021aa800b002d1709967bamr7955707ilv.1.1653258961101; Sun, 22 May
- 2022 15:36:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9i0mf5EWjId+dJhDG42zI0t8gO1U5xR/fPTtg8h/guQ=;
+        b=CCOLvFOSzxj6EO/LdQBAKbepFiucgS3ICMuuWVHtKLKy31+LAgF2wr1Kr2aw70kNm3
+         89kIC/kB2hkAYDld4nNgOveyXPFxJt0iUnXBGqZ4EuAqBuvCj7QhfvaR1qS5mQo5CRiI
+         CsrMx7YzLujUclRj2CX+chKDgNUpF/f7ZraULQ8IZHSuVSmyakA64MlVdKmQQqda3kGt
+         Y3FlAEyEoTRncOw5CQ+SRn93Bu9tD1tGwYXSMYgetcFRcBQEr3h9l3Kj4wAXsBhO1Wfa
+         M/vWU/Jwu0noLzYIGddUIAfil0p+8KfgtSA45BTvUTxn0MWeix9N3dDHwrsQCsvjSgf3
+         aFDg==
+X-Gm-Message-State: AOAM530OGkSXig0yXfoNwbJgvDJZ4UkFFoU/YXtYPGDos7452vhAw80Y
+        rlC+Sk68xuhwIa/FJZihFDkzXA==
+X-Google-Smtp-Source: ABdhPJwpmlrfLvCqOEAWUHk/iFb9vTBCFvDV+XiSslGuIShWmQMdDaruCMB2aTz4o4uZEjpK38rAug==
+X-Received: by 2002:a17:902:f605:b0:14d:9e11:c864 with SMTP id n5-20020a170902f60500b0014d9e11c864mr24236615plg.54.1653334755308;
+        Mon, 23 May 2022 12:39:15 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a9-20020a62bd09000000b0051827128aeasm7543246pff.131.2022.05.23.12.39.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 12:39:14 -0700 (PDT)
+Date:   Mon, 23 May 2022 12:39:12 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Maninder Singh <maninder1.s@samsung.com>, pmladek@suse.com,
+        bcain@quicinc.com, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, satishkh@cisco.com, sebaddel@cisco.com,
+        kartilak@cisco.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        mcgrof@kernel.org, jason.wessel@windriver.com,
+        daniel.thompson@linaro.org, dianders@chromium.org,
+        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net, mhiramat@kernel.org, peterz@infradead.org,
+        mingo@redhat.com, will@kernel.org, longman@redhat.com,
+        boqun.feng@gmail.com, rostedt@goodmis.org,
+        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, akpm@linux-foundation.org, arnd@arndb.de,
+        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net, v.narang@samsung.com,
+        onkarnath.1@samsung.com
+Subject: Re: [PATCH 0/5] kallsyms: make kallsym APIs more safe with scnprintf
+Message-ID: <202205231238.FAF6D28@keescook>
+References: <CGME20220520083715epcas5p400b11adef4d540756c985feb20ba29bc@epcas5p4.samsung.com>
+ <20220520083701.2610975-1-maninder1.s@samsung.com>
+ <YonTOL4zC4CytVrn@infradead.org>
 MIME-Version: 1.0
-References: <20220522160117.599023-1-masahiroy@kernel.org>
-In-Reply-To: <20220522160117.599023-1-masahiroy@kernel.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Mon, 23 May 2022 00:35:25 +0200
-Message-ID: <CA+icZUXos=M_6KE3p00tFpT3Pt_jd3HUvVLRxW7+eJoT26X5cQ@mail.gmail.com>
-Subject: Re: [PATCH] fixup! kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules@vger.kernel.org, llvm@lists.linux.dev,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YonTOL4zC4CytVrn@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, May 22, 2022 at 6:03 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> I will squash this into
->
->   https://patchwork.kernel.org/project/linux-kbuild/patch/20220513113930.10488-3-masahiroy@kernel.org/
->
-> Sedat Reported an error:
->
->   https://lore.kernel.org/linux-kbuild/CA+icZUWttwjhDNPO1VuVyiMoReH5e83nsYDd0rEoY8-Uwv6pHw@mail.gmail.com/T/#md82f561e348b7959b7270c33ac86fa3edb0d773a
->
-> __used is needed to make the combination of
-> CONFIG_MODVERSIONS and CONFIG_LTO_CLANG working.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Sat, May 21, 2022 at 11:07:52PM -0700, Christoph Hellwig wrote:
+> On Fri, May 20, 2022 at 02:06:56PM +0530, Maninder Singh wrote:
+> > kallsyms functionality depends on KSYM_NAME_LEN directly.
+> > but if user passed array length lesser than it, sprintf
+> > can cause issues of buffer overflow attack.
+> > 
+> > So changing *sprint* and *lookup* APIs in this patch set
+> > to have buffer size as an argument and replacing sprintf with
+> > scnprintf.
+> 
+> This is still a pretty horrible API.  Passing something like
+> a struct seq_buf seems like the much better API here.  Also with
+> the amount of arguments and by reference passing it might be worth
+> to pass them as a structure while you're at it.
 
-I was able to build and boot on bare metal.
+Yeah, I agree. It really seems like seq_buf would be nicer.
 
-Feel free to add my...
-
-Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
-
--Sedat-
-
-> ---
->
->  include/linux/export-internal.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/export-internal.h b/include/linux/export-internal.h
-> index 77175d561058..c2b1d4fd5987 100644
-> --- a/include/linux/export-internal.h
-> +++ b/include/linux/export-internal.h
-> @@ -10,7 +10,8 @@
->  #include <linux/compiler.h>
->  #include <linux/types.h>
->
-> +/* __used is needed to keep __crc_* for LTO */
->  #define SYMBOL_CRC(sym, crc, sec)   \
-> -       u32 __section("___kcrctab" sec "+" #sym) __crc_##sym = crc
-> +       u32 __section("___kcrctab" sec "+" #sym) __used __crc_##sym = crc
->
->  #endif /* __LINUX_EXPORT_INTERNAL_H__ */
-> --
-> 2.32.0
->
+-- 
+Kees Cook
