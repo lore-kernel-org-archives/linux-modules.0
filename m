@@ -2,114 +2,124 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00A43C433EF
-	for <linux-modules@archiver.kernel.org>; Mon, 23 May 2022 21:04:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F4194C433F5
+	for <linux-modules@archiver.kernel.org>; Wed, 25 May 2022 08:31:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiEWVEU (ORCPT
+        id S232603AbiEYIb4 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 23 May 2022 17:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
+        Wed, 25 May 2022 04:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiEWVET (ORCPT
+        with ESMTP id S232037AbiEYIbr (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 23 May 2022 17:04:19 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38E16C0EA
-        for <linux-modules@vger.kernel.org>; Mon, 23 May 2022 14:04:17 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id j10so4177602lfe.12
-        for <linux-modules@vger.kernel.org>; Mon, 23 May 2022 14:04:17 -0700 (PDT)
+        Wed, 25 May 2022 04:31:47 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C22C39;
+        Wed, 25 May 2022 01:31:44 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-f2c296d320so1010203fac.8;
+        Wed, 25 May 2022 01:31:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eOT6/IEEvL647FHmiCg7MRICtIFsZAtUMIfvYbPx3SA=;
-        b=TB/AO84lC0LITUBGehrw8rhOuiDSejBSA9Qz+lEc73w+ju8dHPmXn5PMLWT3SRdJrU
-         suS0JTx8GWUPOYH/AS5OeqGcjMJNPJXACAtcFXCFsCXYe6Wbnv4pDhnB44c73UUzHCQ0
-         PeCR2iNZ4GvbK+YZKJ3VW+i/zlDerIASKR9O3+qm/zq5vRzAmqvEVuPlRypYI/469BWA
-         EN03DN0SpFnK9+5MrULChGKPma7zq6vsVSYZroWCVM3zKA5Mx1xJRPnT8a7cmvOAag+4
-         ZdTyJdVFRW+/HnPRZy9TJdVxANnzklWvZyv8mPVgMxt+deT1r5U3HKxECduTDfkAer/M
-         Q71g==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+YhgW7NAnERndezG/DaemCXMRg733gpPkur4BTgIaQw=;
+        b=IuHTNa+IXAL6LEL2YyMB482iZtMh0+jmuW8i6AL7X/UkTx3yI9MdMXZ2u42WpedIx+
+         Ut4PzMpqdWrHa7YgBJ9GR0D07qh65VLonZwsByiXfoSD/X1tFr7x3HZ+l9Q2JCWC/Kic
+         8Y1VytjiBHSx2uz78Q9FatEcNiPyZ9OHREAgAqCcOmguatMXdh5REZcYMQrFTIjRtD40
+         AtjTc95Epz41aD3RKBR+ydNRSgjZttSLLOv/PVsBBagWjLdJ8LaCi4/7AEAoQbq/5zgU
+         +CQLASpfnpdIxA0y0HZ7mknsRGStXGke037bgzb3l8FStbN0MZ3ncLwP3fHwVcSePrRD
+         qZIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eOT6/IEEvL647FHmiCg7MRICtIFsZAtUMIfvYbPx3SA=;
-        b=rte5Yzm8got4bxK2ewR3dwGIAGQEaodi/+erlvkzBlGvHB0n4ZA7s8noah8JvEMzKI
-         /IVVxhidoB2eFrnlR2FiHiPZU4f87LWgSDCpPdwefdBb8GrIuFYJTKyRQHEDc5MvZYDR
-         XFApAtXsZgusYPwPQnIEFUsJvtpAT44IiAWTzuwrSEYZvmHBWWoyllj7JNCevASJGwhk
-         EoJcaKEZ+b4SXK+vcd+RilOZDAq0nadp6J4QRNQe1yIbBWFi0C2CMHQ8bueCfqLXyBce
-         tRl862XPLR2Jz9O0qzqk/po0cNSkxGLVtQaUce44I89sIMc6KkqU0udWQ/D1j8d/JjMy
-         SUaA==
-X-Gm-Message-State: AOAM530cSUAwtWC3JRxzt1S0fVfg7/01VviPJmtnpqSIizrozIHYlsHU
-        LVGwB/ivLmTcI2xmCzL6FWjGRp6ug80ovoZCjiWybQ==
-X-Google-Smtp-Source: ABdhPJwiiG4XoO6s8TxJDH+8amPPG6CcR3JcQv0U+ZDwF04t01N4pXb7x0yQtfESBBKBxKqDAER8pmvL0qGIg+evkxM=
-X-Received: by 2002:a05:6512:48e:b0:477:c024:1a1c with SMTP id
- v14-20020a056512048e00b00477c0241a1cmr17906274lfq.100.1653339855792; Mon, 23
- May 2022 14:04:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220522160117.599023-1-masahiroy@kernel.org>
-In-Reply-To: <20220522160117.599023-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 23 May 2022 14:04:04 -0700
-Message-ID: <CAKwvOdnTFvDKDr_tr5digM1HguSQw65Eq+TT=mhr_AUcVGVLpQ@mail.gmail.com>
-Subject: Re: [PATCH] fixup! kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=+YhgW7NAnERndezG/DaemCXMRg733gpPkur4BTgIaQw=;
+        b=5Kecmb9fA1h64jsjZd4W9CNVL6jScFT5IAgKL7B6jOtQY4i8UffdDKo01U6rHf0QeQ
+         MAA7MzerJAVyh5NpqduBnwivEwLoV7lc86sUTYlAKJW9jREm4Zx6zQi//95U38vD+p2f
+         aGWfiK05OXVlUClr14Qm/dDCX7+E115YV7lPip2EN0ypufzkgk3hvt7PoOJtG/Sfh3iF
+         yAfeCq8iSFQy4GHtwi3fif6gpYSuPSUkNoS5Zk8jEYo6iZyE7J+a/LsRqBoEs0Dh9ZfR
+         u9JeRp508Ay10Audq9vgSFXgN3VWQqyzt8kXokr/bvyCLz0pv6FhqOHfSAvA6q/H0Hiy
+         yicQ==
+X-Gm-Message-State: AOAM533CuwHTxvFovwByBdx+dwTYx+vMetGpM36Sh4gJhEHyoeGug0OK
+        nPGnS+ts37zXDLuePyx0Oio=
+X-Google-Smtp-Source: ABdhPJwJ3Af4TljiCBdGIlzA2/8casq4cg+0HOGwnV6RwOio8P/+jdi4JWYrKmiheK3fngNatmGwNQ==
+X-Received: by 2002:a05:6870:c207:b0:f1:85cd:648f with SMTP id z7-20020a056870c20700b000f185cd648fmr4747352oae.103.1653467504296;
+        Wed, 25 May 2022 01:31:44 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k1-20020a056870a4c100b000f28d8f2debsm2114774oal.2.2022.05.25.01.31.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 01:31:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 25 May 2022 01:31:42 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
         Peter Zijlstra <peterz@infradead.org>,
         linux-modules@vger.kernel.org, llvm@lists.linux.dev,
         Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH v6 06/10] kbuild: check static EXPORT_SYMBOL* by script
+ instead of modpost
+Message-ID: <20220525083142.GA1952409@roeck-us.net>
+References: <20220513113930.10488-1-masahiroy@kernel.org>
+ <20220513113930.10488-7-masahiroy@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513113930.10488-7-masahiroy@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, May 22, 2022 at 9:04 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> I will squash this into
->
->   https://patchwork.kernel.org/project/linux-kbuild/patch/20220513113930.10488-3-masahiroy@kernel.org/
->
-> Sedat Reported an error:
->
->   https://lore.kernel.org/linux-kbuild/CA+icZUWttwjhDNPO1VuVyiMoReH5e83nsYDd0rEoY8-Uwv6pHw@mail.gmail.com/T/#md82f561e348b7959b7270c33ac86fa3edb0d773a
->
-> __used is needed to make the combination of
-> CONFIG_MODVERSIONS and CONFIG_LTO_CLANG working.
+On Fri, May 13, 2022 at 08:39:26PM +0900, Masahiro Yamada wrote:
+> The 'static' specifier and EXPORT_SYMBOL() are an odd combination.
+> 
+> Commit 15bfc2348d54 ("modpost: check for static EXPORT_SYMBOL*
+> functions") tried to detect it, but this check has false negatives.
+> 
+> Here is the sample code.
+> 
+>   Makefile:
+> 
+>     obj-y += foo1.o foo2.o
+> 
+>   foo1.c:
+> 
+>     #include <linux/export.h>
+>     static void foo(void) {}
+>     EXPORT_SYMBOL(foo);
+> 
+>   foo2.c:
+> 
+>     void foo(void) {}
+> 
+> foo1.c exports the static symbol 'foo', but modpost cannot catch it
+> because it is fooled by foo2.c, which has a global symbol with the
+> same name.
+> 
+> s->is_static is cleared if a global symbol with the same name is found
+> somewhere, but EXPORT_SYMBOL() and the global symbol do not necessarily
+> belong to the same compilation unit.
+> 
+> This check should be done per compilation unit, but I do not know how
+> to do it in modpost. modpost runs against vmlinux.o or modules, which
+> merges multiple objects, then forgets their origin.
+> 
+> It is true modpost gets access to the lists of all the member objects
+> (.vmlinux.objs and *.mod), but modpost cannot parse individual objects
+> because they may not be ELF but LLVM IR when CONFIG_LTO_CLANG=y.
+> 
+> Add a simple bash script to parse the output from ${NM}. This works for
+> CONFIG_LTO_CLANG=y because llvm-nm can dump symbols of LLVM IR files.
+> 
 
-Yep, vaguely reminiscent of
-commit f3751ad0116f ("tracepoint: Mark __tracepoint_string's __used")
+On parisc builds, this patch results in:
 
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+Building parisc:allnoconfig ... failed
+--------------
+Error log:
+scripts/check-local-export: sh /opt/buildbot/slave/next-next/build/arch/parisc/nm failed
 
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  include/linux/export-internal.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/export-internal.h b/include/linux/export-internal.h
-> index 77175d561058..c2b1d4fd5987 100644
-> --- a/include/linux/export-internal.h
-> +++ b/include/linux/export-internal.h
-> @@ -10,7 +10,8 @@
->  #include <linux/compiler.h>
->  #include <linux/types.h>
->
-> +/* __used is needed to keep __crc_* for LTO */
->  #define SYMBOL_CRC(sym, crc, sec)   \
-> -       u32 __section("___kcrctab" sec "+" #sym) __crc_##sym = crc
-> +       u32 __section("___kcrctab" sec "+" #sym) __used __crc_##sym = crc
->
->  #endif /* __LINUX_EXPORT_INTERNAL_H__ */
-> --
-> 2.32.0
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Guenter
