@@ -2,83 +2,186 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E76E6C433EF
-	for <linux-modules@archiver.kernel.org>; Fri, 27 May 2022 00:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF61BC433FE
+	for <linux-modules@archiver.kernel.org>; Sat, 28 May 2022 22:47:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237985AbiE0Acx (ORCPT
+        id S229847AbiE1Wru (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 26 May 2022 20:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
+        Sat, 28 May 2022 18:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234393AbiE0Acv (ORCPT
+        with ESMTP id S229805AbiE1Wrt (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 26 May 2022 20:32:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D7913F7D;
-        Thu, 26 May 2022 17:32:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 875FC61D2D;
-        Fri, 27 May 2022 00:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 970CAC385A9;
-        Fri, 27 May 2022 00:32:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653611569;
-        bh=EJ+M0UolvZcc5eCQAgbviCxSXBshGpflKucWZ7mnGQo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=tHo3LrnI51gUIj/ZnfKNKaFaNtt0PdZ5Fe3c16jpOyAlouTJfPNwrhsg+ap52uevN
-         d2xTlqYYM/sxFABChVLYEyRRy2bNElZ7GMVeedGsBo4uwp+WCV48mGHDmuGsIapUD4
-         UJkjTdmDWsGsJyZck+IBl6tjr3Q7iByptjIjUf1/YL5To7FiSBmJoLnGfSjLzhplK2
-         IlP1mklaWfR4i4boxw+YOvyamklaE8u6HnRnUEBNfC/CDLxAUEoZFysCzI9iqCUwzw
-         ddip7kmvhE3bZP0CHgBk39ji6KDePoNGULCSh3/rnITh+ZZn7nNezEUAnXelgER76p
-         QGXYQg7VV0ybg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 81278F0394B;
-        Fri, 27 May 2022 00:32:49 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules fixes for v5.19-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yo6kboq8M8nUwy45@bombadil.infradead.org>
-References: <Yo6kboq8M8nUwy45@bombadil.infradead.org>
-X-PR-Tracked-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
-X-PR-Tracked-Message-Id: <Yo6kboq8M8nUwy45@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-5.19-rc1
-X-PR-Tracked-Commit-Id: 7390b94a3c2d93272d6da4945b81a9cf78055b7b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ef98f9cfe20d8ca063365d46d4ab2b85eeeb324f
-Message-Id: <165361156952.27205.7644773907998918342.pr-tracker-bot@kernel.org>
-Date:   Fri, 27 May 2022 00:32:49 +0000
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        patches@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>, mcgrof@kernel.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Keith Busch <kbusch@kernel.org>, live-patching@vger.kernel.org,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        linux-modules@vger.kernel.org
+        Sat, 28 May 2022 18:47:49 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5DE5BE6F;
+        Sat, 28 May 2022 15:47:48 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id t14-20020a9d66ce000000b0060af9ed4b87so5339847otm.9;
+        Sat, 28 May 2022 15:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TKshfHkC5Pvf7ig5EiZ4GmSmW76KnvCWjyhV6RL/CDU=;
+        b=UwshPpQ3sv/eETtkjsspaFEbkyclPdvMYuf8CQ4Sn6hG2bEMM5qxfNc3Pb7jrYWQ4F
+         0fNtNnhxPe0veQ8CPqxyUgnC/l97XfyLlZ497jO8Rx2CHz1gzOssU0HjhlXRsFPhsUZk
+         KBugrFVKBwr6/k9jenpSUTVUilY4zY4OeuxaVZDRNZxi/Hi7651QEuZ7Saju5+RuHNWd
+         qckO+i5aZsUjhbCGOAJPUsQwor+yJpyq3lC4c+kAMk0Krsnldcd1gV1XqDdMJrQHoUKN
+         XKQ8PoSs/5/G7bidV8+wHJ0V4i76l2fBL4rUwR+f1JkHJZHnrmKl21JpeRA8V1Utrv+K
+         PPdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=TKshfHkC5Pvf7ig5EiZ4GmSmW76KnvCWjyhV6RL/CDU=;
+        b=XLYxNlZb2OMSjSC/hjB/HG2B3FunAe5jf2XJxVaEOBlNNzd91pbDZCxjMhj/dn/cKy
+         z61rWEEQpucV2HAlUpe9BQWNRkyNMdjNMXfR/cBUo6G3wp6JtYa+hp+tIjPi3PlIYQ3c
+         BPrNYzAqkXxXkxsxNBp670IFPfsjxxJ8AXXRawkfWArc1X0CF5G3wUxN05vIlszuAtM9
+         CWnv+FtQC9RYmeEQl3brtXZbi7qE0uugkFMEi8zympjWvQ4db5B3h1Lgg8+6vifYPhL3
+         DdZl7lyVFBzPjbTzCWiZUzXBwKTYVAm6a9rTOqWpEVM/B9pbb4dDHCjVePGD+WPEgcUy
+         ozuw==
+X-Gm-Message-State: AOAM530bNjg00BCyL7T3qPeAzQL6FQ+jx2/X3iJ175otIDCiLQTA8Am6
+        eL71iitmYV1EFiEFoFLuzAk=
+X-Google-Smtp-Source: ABdhPJzfxwBZO8/g/x9lRQ5QRk4I7bGfdsN1gA1y2exJEV+YZZXTThQMguwqH9qoNE8Ad3BAzHwvfg==
+X-Received: by 2002:a05:6830:b85:b0:605:4e76:f077 with SMTP id a5-20020a0568300b8500b006054e76f077mr18436775otv.211.1653778067577;
+        Sat, 28 May 2022 15:47:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r33-20020a056870582100b000f169cbbb32sm1865092oap.43.2022.05.28.15.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 May 2022 15:47:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 28 May 2022 15:47:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules@vger.kernel.org, llvm@lists.linux.dev,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH v6 01/10] modpost: extract symbol versions from *.cmd
+ files
+Message-ID: <20220528224745.GA2501857@roeck-us.net>
+References: <20220513113930.10488-1-masahiroy@kernel.org>
+ <20220513113930.10488-2-masahiroy@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513113930.10488-2-masahiroy@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The pull request you sent on Wed, 25 May 2022 14:49:34 -0700:
+Hi,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-5.19-rc1
+On Fri, May 13, 2022 at 08:39:21PM +0900, Masahiro Yamada wrote:
+> Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
+> versions into ELF objects. Then, modpost extracts the version CRCs
+> from them.
+> 
+[ ... ]
+> This commit changes modpost to extract CRCs from *.cmd files instead of
+> from ELF objects.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ef98f9cfe20d8ca063365d46d4ab2b85eeeb324f
+This patch results in
 
-Thank you!
+._muldi3_di.o.cmd: No such file or directory
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+when building parisc64:defconfig, and
+
+._divsi3.o.cmd: No such file or directory
+
+when building csky:allmodconfig.
+
+Reverting this patch (and the subsequent kbuild patches to avoid
+conflicts) fixes the problem for both architectures. In case it
+helps, the complete build log when rebuilding an image for csky
+is as follows.
+
+#
+# No change to .config
+#
+  HOSTCC  scripts/mod/modpost.o
+  HOSTLD  scripts/mod/modpost
+  CALL    scripts/atomic/check-atomics.sh
+  CALL    scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+  SO2S    arch/csky/kernel/vdso/vdso-syms.S
+  AS      arch/csky/kernel/vdso/vdso-syms.o
+  AR      arch/csky/kernel/vdso/built-in.a
+  AR      arch/csky/kernel/built-in.a
+  CHK     kernel/kheaders_data.tar.xz
+  GEN     .version
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  AR      init/built-in.a
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+._divsi3.o.cmd: No such file or directory
+make[1]: *** [scripts/Makefile.modpost:59: vmlinux.symvers] Error 1
+make: *** [Makefile:1159: vmlinux] Error 2
+
+This was seen with gcc 11.2 and 11.3.
+
+Guenter
+
+---
+bisect on mainline:
+
+# bad: [9d004b2f4fea97cde123e7f1939b80e77bf2e695] Merge tag 'cxl-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl
+# good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
+git bisect start 'HEAD' 'v5.18'
+# good: [86c87bea6b42100c67418af690919c44de6ede6e] Merge tag 'devicetree-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
+git bisect good 86c87bea6b42100c67418af690919c44de6ede6e
+# good: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good c011dd537ffe47462051930413fed07dbdc80313
+# bad: [df202b452fe6c6d6f1351bad485e2367ef1e644e] Merge tag 'kbuild-v5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+git bisect bad df202b452fe6c6d6f1351bad485e2367ef1e644e
+# good: [d4dcdc53c492a7b9fa9031cb85e238b21208ada2] Merge tag 'qcom-arm64-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
+git bisect good d4dcdc53c492a7b9fa9031cb85e238b21208ada2
+# good: [ae862183285cbb2ef9032770d98ffa9becffe9d5] Merge tag 'arm-dt-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good ae862183285cbb2ef9032770d98ffa9becffe9d5
+# good: [cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e] Merge tag 'arm-drivers-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e
+# good: [ecf0aa5317b0ad6bb015128a5b763c954fd58708] Merge tag 'arm-multiplatform-5.19-1' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good ecf0aa5317b0ad6bb015128a5b763c954fd58708
+# good: [4484054816cab940fc2fde23fa989174fec889d0] modpost: use doubly linked list for dump_lists
+git bisect good 4484054816cab940fc2fde23fa989174fec889d0
+# good: [16477cdfefdb494235a675cc80563d736991d833] Merge tag 'asm-generic-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic
+git bisect good 16477cdfefdb494235a675cc80563d736991d833
+# good: [a44abaca0e196cfeef2374ed663b97daa1ad112a] modpost: move *.mod.c generation to write_mod_c_files()
+git bisect good a44abaca0e196cfeef2374ed663b97daa1ad112a
+# good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
+git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
+# bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+# bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
+git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
+# first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
+
+---
+bisect on kbuild-5.19:
+
+# bad: [5ce2176b81f77366bd02c27509b83049f0020544] genksyms: adjust the output format to modpost
+# good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
+git bisect start 'HEAD' 'v5.18-rc1'
+# good: [70ddb48db4aaddd3c2a7d8802463e15b21ce8525] modpost: move struct namespace_list to modpost.c
+git bisect good 70ddb48db4aaddd3c2a7d8802463e15b21ce8525
+# good: [e76cc48d8e6df5d949284132981db73d2dd8c6b5] modpost: make sym_add_exported() always allocate a new symbol
+git bisect good e76cc48d8e6df5d949284132981db73d2dd8c6b5
+# good: [78e9e56af3858bf2c52c065daa6c8bee0d72048c] kbuild: record symbol versions in *.cmd files
+git bisect good 78e9e56af3858bf2c52c065daa6c8bee0d72048c
+# good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
+git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
+# bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+# bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
+git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
+# first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
