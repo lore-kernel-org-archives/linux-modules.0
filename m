@@ -2,66 +2,68 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AC22C433EF
-	for <linux-modules@archiver.kernel.org>; Sun, 29 May 2022 23:42:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9191C433F5
+	for <linux-modules@archiver.kernel.org>; Sun, 29 May 2022 23:45:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbiE2Xm6 (ORCPT
+        id S231911AbiE2Xpn (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 29 May 2022 19:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        Sun, 29 May 2022 19:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiE2Xm5 (ORCPT
+        with ESMTP id S230131AbiE2Xpm (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 29 May 2022 19:42:57 -0400
+        Sun, 29 May 2022 19:45:42 -0400
 Received: from sonic306-24.consmr.mail.gq1.yahoo.com (sonic306-24.consmr.mail.gq1.yahoo.com [98.137.68.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976BC3F33A
-        for <linux-modules@vger.kernel.org>; Sun, 29 May 2022 16:42:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1653867776; bh=JGoT/dLVqRgZvTNxVbGQbelhV5QYb8uOewkl69lnjyU=; h=Date:Subject:To:References:From:In-Reply-To:From:Subject:Reply-To; b=cFTob/rCInNV18XckNWIdjA+73UUvch/K2u1H4s0NWbn9upDenn8MOS+oC2Hu0ntVZmiz9ohfHTwuqJKXT6HDVQFaViymN5RHGbUlyhpWO0VX3ciA79I9ncmSNgvNlAkURR5QljEtir04GvzcamRv/RyIks0eq2gmGLoASQg4kM=
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653867776; bh=cpCsiB3vZISTbKd36w4W4y0WvAdk9NzYem9jeBM2rvZ=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=VstyICQ5rxFpOxPkwCipoEx1iFgzBo8mZzlGkz8kMqhyWviHQkaArlJyqM3NvZHvGH6ocC0GYNub0z1vwHLOSNNWfZWFOM7VNXmP1l2pLk/hELViCKOEmZ6SwmlBcus+9LTuMKYF84469D8rbel6uj0DfdEZNrUk0I6ieefe2k7WP1//TGh7za5Omt4dc4N66nrxzNvlRjRQqGPPzrGa1zMUA37qR82fcl4wbAj7eWuZvdr7ro2LKB4Eu3kaRBNyXOeORbr4FziMt28sTFCILooUBUY1hWjG2V8JUpdhTiqjxne+qjjAd/ilrX0qITBZwZONZvue2MJRAjA/1qe6iA==
-X-YMail-OSG: ZUagYbwVM1lRG_nBz6Y_eG548TurxtUg.X9f4yoyB8bMqoMKW8Jro2PQJzjKwwp
- w.wcDszNN9EVVd9VExB9_HQ_qPMUhqNRKa3DXJQDH4vla2.wzp2FvB3BwNSOYisEfOe8UmemmH03
- sRLISjOprxnvI887DqDq.LvkeOFK8MLAlajTkB6wObHqcURjUiNMNmg33m4FuEhucigJolCehJNm
- xUgFn9WqKoMC.YntbPFEPumlm_6F0lZFXaoFNwTeNtpHAhYax3EbgHst20EtZkhSzu6nppL_BDR5
- nLgxo43T109ThLWsR0rVksIqZ_1_pO8Xlavy0lL9NOM43bflrExcvRbx9SXDcL8TH5wml1ArBvFU
- xL8yWmOrhVSMOfEpYgCVQwMdOlfXTh4qTak85ooHDQWpWfsTdEnF4OCXns8ZuFA1vywCl0IB5ZCI
- tGTJhWMXOEM8T93vffp4.IZihoRx5_TrIZUO3y7nX3kyGPgcyrxj7bd83a6SvdSda1VU3d6ZEBAp
- uDgYWgIjab0.lp3q.6M8IWCc.jS8ZoiipDFnNjsE9c6Y.bqn5I0kLN20uB9imGNlghX8yZxgIExk
- rY6TfDDERugwaDdGSXKshp5qHWzrY.OuF7FnMR6sJPnPJdV0NkQcamahP0wKu3m6VRJmYcBhzSFp
- 67R7rDUjpIxMcHzlxFROyjuEsywazI.eRkSTiO3jgg9ej8d76lt_OT5GEbUJzQYyY4R1QuSP55Ml
- 3APYyN5pzLC2uwOh4EASxo8CkwBZcwOXVSKj_yrJUQ3DngLYVH.qlQlL65rAkJDhvYJbu3Fmpxfe
- FdIKsvSXc5nKLKhBvx8CrQ6M3xyOpBAlfTDjiGqAJUVI5IgdwRl31FROLN1bbe.ai0lsIj4Xwo92
- ae47sZFudFK6AUT3mvb9rWR9.kHJEpsUSo8Ivug6V1E6VKJl.cqGI1qoE7lncVjIDsuZ2j6HeD77
- BX7YkAWGBqiBxPO2zD_FMhdLHGnH7Zcm08SjYtyM4vBW0v6ahSkWBc1xi58Oy.BUJZHvoX5sg74T
- GJFO8h5UfDLS2DBtgqZTZqUHPcTRbdzB5jIBWeeqfV.7xZf1uK2kQg7d0Xy2tLhq4UL83GT3ltGW
- MrVbn8bGwF4GSgK79PwkTElsO8y9VYaML3Y3cmccWXo1S0EVI1q9ouk.HL5qoTI_lmA9MpKdOeyg
- Ok3l3WZAqIg8e0029fdm47s8jHk0axjkwQm2Yk11VO4PWhRteQ2y_om7F2PTd97RjuuYArZEek1b
- 2u8Z150pBOjru0Q6u3KF3FRf0Nab5yqTAACPoDApemN93njmVjyx.5ZeMrwA.MuQSPyg6J1qOh4F
- k77jv98U2yk1c.JwfBpGfZoUBP9rxFQtym5OdbbeLQVVA2me1FgA9kzTUANehTmQP1f0SvofVJDZ
- oNjrl6PI.B5t1aTr_kWWCuiV4lH9WC0CTVeqwium0SEG.78xw0qmueDgvlDwN0ie2E8z1pgUwcCU
- SwHKNCi8S2ArF5Uqqamo8bzw6s__i.RKjVKwZKD_N3A5PPEclidCBbOpgpBhS1GQ_YXiAOHtQaBO
- VPqqeasGSSUIF6KFfhWlr6eOJ7s_llMRTbQdxdLA7xzGrS3CvGWFlC8E5LZmPvxaT4zTRpm5KgdI
- dmV4KiS5Ij_4Mvep_06IOc.ltvxQ27BFjLk9pW0k7ckMpJwa43WZT0L3XcoNhDtJmNeB0L4KanXk
- wXV8hYk2G7YFGaYZp8k72kgRy_BZBy5sqLa3apoLjHGC_d_hMQszrF1X7BRZ4dW55PbBuDL47RLW
- C029YSOCjsfTWUKgu3OFw7GwArg.gIo_o0t66hUZw1tKlI35y5LR6_t.lA4Flp5l6Y3fDZVZutTb
- gEWY9c72ywS0Tw4ItsMX9Qa63Ob8SjF.yANyMeFU5U4TCyNr5n2WOwTAHVqKqkfLBR5KJh2RFaUd
- Nhb6NySIeeRnB8qc4sz7KifztMYGzVAZwR7WMo3_ZYcTW5iB7OdqawWPKOeWa5NzRBp.F34AoEOC
- knqWR43Y1.UjMvkP_k3hJrg3EnE2XOvsqpozkdsvsSS4yiDDifImjfyEFk2PwCKV__WWAIbkEh.O
- l3qBDpIYHXSYhaOhOuj.EfX5_RyjU228tA6.QrFCxToiGmM0wnFT7e3LHZUDVOcZhHxdJEEKV2zo
- n8lfDLk2R_WPtEX9NO3HnYVAyejqY2SGmzqSLjnXujLz0IxXGCl5AJzywdECHLXUaTWq_lQ9IxI3
- _4q3YWYbnkLqc.IRJMlWpCOnytfnYDYnDY0Og5ovvCE73.RrXNKSa9abNMsEouVnbcAg-
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FDB4EDFD
+        for <linux-modules@vger.kernel.org>; Sun, 29 May 2022 16:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1653867941; bh=LyHIiwzQ85zJjJXdYrmYS7vDqGGe1tqy8kIf32+/1s8=; h=Date:Subject:To:References:From:In-Reply-To:From:Subject:Reply-To; b=iuh+hhz2klysa68tPeJyFp+gYoAzOW1O0QK8ee/2jZXsEBOVF4Wp05HPS41EtOr7tkYZTkr4G/eHwhisqxg+elyhNta9wN8WfmBpX7lm1SnGuMGcQe8+PF+IA1+VkIoBvGoLkUY0Z5HTzinjE945tYIjojS1QmeIvJpTcEfCERg=
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653867941; bh=4MNxbewl9odPoTBDM4t5azZNzUaPS77SeZU2yphvBvW=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ZYgskEjeNvzzOw34r3sZHvv+Ie9FXVMTQXcQTTd0vh/8EwHPHXPnMYljlbuYQBN9Y3Xbxxk6tWtYny0FBx7WFhyNgtkvlhtmdBTHYVGbHw3lyDmrNRGvD930ViPsEkP7y8HxOMm1513cPkG9E2trIddmWFdFcWEZ2ICbSRLooWiyYAg+5F5+1AySKxntHYU42xHe9UHRJGbhRfeqbcQ0v4vSGQWbm7zHdDVI8FopMP5tdi3yNlU0iwkQ3CxUrRJ1ggKkCXRPV/qJnROeNBA+KZjJ/J4upmtw5XWC0ABLk2RV0MjxC1ITg0z7eFHmdXxwuY6Zvahnpd8InF4c8Z7O9Q==
+X-YMail-OSG: zTItYR0VM1mpuFkrWRwmFe9IMoPpUIyYUqLiLIAe9a9vu.BgOqrlSBVJA1iIBRI
+ HVpfp7j5D6qGqWDKYSK_saYNryoonRUOLMxA.GNlatvY.YqYFx8NhbAZHM8_hv.kdnPJcdgJAq5z
+ SniHFOi8PtnsynZuFT.92gIhbrKQGptKcD3qIzZBxRpMEZE1l5HDJqlTZdL8zr7Rano3S_hplOoB
+ WSaxJ_RdWQZFDSXx1m1nbpmsqoF2AwnA.1rKyMLy9PB5vKTvQNN.hjxw25xxbrGRCpbOFMoqe62y
+ _ojfTIVYgZlDuttCRAXg1LkLsPnh33sFJwG002.zazXcf1nVmC75d9_ioiL_lE4R3vTDg77SYMg3
+ BKXQJcv.hNCNc3.W9rbvYqcLchrDdkWrw8Rwmcx5D9Hc7cCvXjLNLm64lYYuw_vSuEdN9OThJYpU
+ VDPUBFloUaoVxMVAXUJPvICsKGO9LMAfkwISgg2Ujw2zdgLXN2AS7qWfmlY7GoyFD1Olxqeck3xC
+ Vpspy6DdwP5.Rd3hZYeJtm9ZrPwk5z59E_r3snFdKg5vor0wuHFgWqXSGH2WEK1k60Nw2HAPRQwf
+ QGyaCzOQYsSU8uIPyOFreY6AxdREtmvJyZR057zr7RMQ20inVUx2onVAF5D3chsLJcUjRIqihUpM
+ LS6gVJC.cLmfWqFwirmotgT30M6f9ADmHkILz0nLaG8vPvTb9.ukTx4VMzxDVdP8pvlPkqMvN7.7
+ laqWpjnr1z1RNdqrpWjcL.J6dJs5EK34Mqwiq4bj594UgNkxtHWBqwbXWlXJwBbz5sadg48dARQo
+ eV2IhI3uElJO0WkI38aeo9ICjYO9o5PPjinlQDWPmU2V1QHk1U8JJbZhqX4N7uGNobW4vxeTPoIC
+ c0vxGeQ4dR_aoWmCLJjCEfft8BVs5FW5x7jFBXDsSpKg6Ae10oaE7ihIa_Rn2U5haDnEg.VsJeCC
+ jZIbNkg_QoMcfoKsJCxqTAfAlFXSv7ZxESKWbgJoN2p07l4OJc.E7vileaH.CUdYfxtxBjTxCzjI
+ AjQ3ruuUy91FVH3IAK2cBySVq849aMmtIBGbcTX0rQyHZCKHDmkoRI2_wBTKb1Pn5FtKyXtJGLdk
+ S_2ep._2cSMb0_Kv5LA_PKlMRQv3aCASwbS0d2JTZq1MkCjFU8lSBqZacIk6YxOPONzlG1pUOGGv
+ 5.ASawzgSVFyQctWTDz0cM.7xAgzow4e0S6L7m3cpc.rXKB3hVYAyR2XEhhIbuLurmgTTtwrTxtC
+ TNzd6.xkGJ9AXddE_cspUpdyInGIJ9CaaZ6SI24lve5h4v5FRLXUFqSSJSlMzPeuvOmwZoWsYgsW
+ fKcHXMnpLkNMNcZKOmOLeyleC1bFeMutypTTh3MWEYBc6MxUw1aJ6XZxiYkaR8weDhzuO7j_5LYj
+ 2ABbfhxxyusc_bmA.qqcDResyR7vI6M5mbj1GXYil9r0ggTfp22gmljUTwn.hnKu5XwoRZnMHl4g
+ KRiGW.X.RDjjGsCpT132Yqn0kHNfxfJVlBuJ0j71_T8RNpHnLAW9or4zaTkUD6pcxgbhYs9Ovh5l
+ K_Up_lpELAZAdxSeBxDxlFoXiTPqUoBxiUz9m26Ivf9g_MB38nqaidJpqg4XT_0h1TyFRihSl19T
+ Ns7Pbw6lsPx4ovxCXuW3irTp7HSjnnfIEEsUpWZnQS5WD_Ibz1PTVwzfzqUo3hDWfJdE8bLobv9O
+ YV7rgNiG0sqhuk5xO_PTvpmg5jGB5Ll4lMmtmf0wsVeWHAIItZWlV4VZ1J9ePLvbH2hpc30deUem
+ kcHAHis8HjIa0m2C0K.hI9fidoIMMbf_RSj7j5uYwKfgIc70.lqXdrgPfngBLftqR2mAwH3rqfRG
+ QzpDJ5e0_7fqlIispscTwBRWQ2CzglTldbzd1lvzNruDCg2W8BCogblpez.mY6VaHA5Q3Ovv7y4g
+ QO2CtNb4N8hLD_mjtdXhaPdRKhhiRvfNMFywDgWIeox9TKUa.7v9hc6uU51oN3GAA830Ka.rK5kw
+ sBfj.nRm6YB8dqAfskLMty.uwdgFk2kuMmDROHEbalrEOyrr54HKG_d5KxYCjFeK4l.SOMhQ.40V
+ .zZrQD4UPlsad19CElK7VdiPRMyszyd_Nwu2s5oP9N4YSjjVPirIHBboykXwogWX5Vr7XubXLuEh
+ C3HrZ9g470OULulEQX7djSoExjf3JMhEdRFvCqGAexLcnq.KTHgO.4ATWdvJvkZIk4pU0BcHk0vS
+ UUY_fSdv.9AQ1EmQfWynr9gZZCkmUAJ4v28oNJqaycvyR8MySao9ENFPqIfrG9opw.kVcir1Wp_7
+ pZujmIb6hnJ2.lMg4OCWT9_qbUA--
 X-Sonic-MF: <lesrhorer@att.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.gq1.yahoo.com with HTTP; Sun, 29 May 2022 23:42:56 +0000
-Received: by hermes--canary-production-ne1-799d7bd497-7lvgk (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID ac58646b807d8fc5508f36861b3220a0;
-          Sun, 29 May 2022 23:42:51 +0000 (UTC)
-Message-ID: <2d91a832-0648-c88a-c763-d5c5f30a8cd6@att.net>
-Date:   Sun, 29 May 2022 18:42:39 -0500
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.gq1.yahoo.com with HTTP; Sun, 29 May 2022 23:45:41 +0000
+Received: by hermes--canary-production-ne1-799d7bd497-8kdwl (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID f6c8cf899abfc94e7dc54acc5f12cd5d;
+          Sun, 29 May 2022 23:45:35 +0000 (UTC)
+Message-ID: <3b8f2ed6-11fd-b5a7-5442-7cac90348514@att.net>
+Date:   Sun, 29 May 2022 18:45:24 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: Modules list
+Subject: Module failure on new install of Debian Bullseye
 Content-Language: en-US
 To:     Randy Dunlap <rdunlap@infradead.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
 References: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0.ref@att.net>
  <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0@att.net>
@@ -70,35 +72,67 @@ References: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0.ref@att.net>
 From:   Leslie Rhorer <lesrhorer@att.net>
 In-Reply-To: <ba2fb3ff-22dd-d68e-fa99-02de39240f20@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-	OK, well the message, as I said, was bounced.  It's rather urgent.  Is 
-there a limit on the size of the message?  Even though I removed much of 
-the content, the message was still rather large, since it contained a 
-filtered output of dmesg.  I will try splitting t up.  Can attachments 
-be made in the list?  Zipping the contents of the dmesg output will cut 
-the size greatly.  I will also try zipping the dmesg text.
 
-On 5/29/2022 10:41 AM, Randy Dunlap wrote:
-> 
-> 
-> On 5/29/22 08:21, Christophe Leroy wrote:
->> Hi,
->>
->> Le 29/05/2022 à 13:35, Leslie Rhorer a écrit :
->>>          I sent a subscription to the linux-modules list which seemed to be
->>> successful, but when I sent a message, it bounced.  I sent the message
->>> to linux-modules@vger.kernel.org.  Did I do something wrong?
->>
->> Obviously you did it right as I got your message through the modules
->> list (I'm not subscribed to linux-kernel list).
->>
->> Christophe
-> 
-> and you can see it in the lore archives:
-> 
-> https://lore.kernel.org/linux-modules/7999b7b4-3b58-a9c4-4756-445e54404f0f@csgroup.eu/T/#t
-> 
+     If this is the wrong list, please let me know the correct one so I 
+can subscribe and post there.
+
+     Two of my servers are having bizarre problems after upgrading to 
+Debian Bullseye.  After attempting numerous fixes, I decided to wipe the 
+systems and do a fresh install.  I did a fresh install of he first from 
+a netinst thumb drive, but the .iso does not contain the bnx2c drivers 
+needed for the ASUS PEB-10G/57811-1S 10GbE SFP+ Network Adapters used by 
+both systems.  I tried adding what I thought to be the correct non-free 
+drivers, but I still got errors about the bnx2x drivers and the 
+interface shows no carrier.  Since no carrier is detected on the 
+interface, no LAN or internet access is possible.  The system is 
+effectively dead, although it boots up and of course I have local 
+console access.
+
+     After several different approaches, I changed from the netinst 
+image to a full non-free image.  It still would not properly load the 
+bnx2x drivers.  I tried downloading all six bnx2x e1, e1h, and e2 
+release 7.13.15.0 and 7.13.21.0 firmware files and adding them to the 
+initram image.  It no longer complains about missing files, but it 
+doesn't activate the NIC, either.  These servers are both essentially 
+dead in the water until I can get this fixed.
+
+     The only thing I spot from dmesg that seems possibly related is:
+
+[    1.420748] r8169 0000:0b:00.0: can't disable ASPM; OS doesn't have 
+ASPM control
+[    1.433467] r8169 0000:0b:00.0 eth0: RTL8168f/8111f, 
+50:46:5d:65:15:9c, XID 480, IRQ 39
+[    1.433469] r8169 0000:0b:00.0 eth0: jumbo features [frames: 9194 
+bytes, tx checksumming: ko]
+...
+[    1.458361] r8169 0000:0b:00.0 enp11s0: renamed from eth0
+[    1.465675] bnx2x: disagrees about version of symbol module_layout
+...
+[   12.976323] r8169 0000:0b:00.0: firmware: failed to load 
+rtl_nic/rtl8168f-1.fw (-2)
+[   12.976478] firmware_class: See https://wiki.debian.org/Firmware for 
+information about missing firmware
+[   12.976632] r8169 0000:0b:00.0: Direct firmware load for 
+rtl_nic/rtl8168f-1.fw failed with error -2
+[   12.976636] r8169 0000:0b:00.0: Unable to load firmware 
+rtl_nic/rtl8168f-1.fw (-2)
+[   12.977326] RTL8211E Gigabit Ethernet r8169-0-b00:00: attached PHY 
+driver [RTL8211E Gigabit Ethernet] (mii_bus:phy_addr=r8169-0-b00:00, 
+irq=IGNORE)
+[   13.046445] r8169 0000:0b:00.0 enp11s0: Link is Down
+
+     I would not expect the RTL8168 or RTL8169 firmware to be necessary, 
+but is it?  Either way, why isn't it on the image?  I would ask the same 
+thing about the bnx2x drivers, but they seem to have a bit of a history 
+of being fragmented.  All that aside, how can I get this fixed in a hurry?
+
+     This is an AMD system with an 8 core FX-8350 CPU.  The install 
+image is Debian GNU/Linux 11.3.0 "Bullseye" - Unofficial amd64 DVD 
+Binary-1 with firmware 20220326-11:23.  I pulled the extra firmware from
+
+git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/bnx2x/
