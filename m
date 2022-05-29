@@ -2,204 +2,73 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 358B3C433EF
-	for <linux-modules@archiver.kernel.org>; Sun, 29 May 2022 04:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CA36C433F5
+	for <linux-modules@archiver.kernel.org>; Sun, 29 May 2022 11:35:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiE2E3g (ORCPT
+        id S230046AbiE2Lf3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 29 May 2022 00:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        Sun, 29 May 2022 07:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiE2E3f (ORCPT
+        with ESMTP id S229593AbiE2Lf2 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 29 May 2022 00:29:35 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712F1B2240;
-        Sat, 28 May 2022 21:29:34 -0700 (PDT)
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 24T4TEqc026866;
-        Sun, 29 May 2022 13:29:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 24T4TEqc026866
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653798555;
-        bh=G/i1dwVBb3QQsD9CFilTnjlTJDW4bryVPOXgitbHRzQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XCyrl0g2GSOY2F6zfUOdjIZRvtSjkiMaWol30nf8GKmiDWxLsfI0zyrSKyH9oB2t0
-         GSe7tHhP8Syakdkh/AuPMUnS6Txck8tr1wJG5si05KD2dj3Gf4ODtIPl3wSUs3MIWc
-         0Ndf2j3Y8L0FBCcig65cdzelEHc9Pj9xUmlM0e1uWWUWUVMx0bPKwEzR17/mircllF
-         ZrrpxMvNP7hG5xLkYWq4dr6ct0sEwh3XAlpxA1HPBFaTMsSixFQx9S3vcad9BPD/A9
-         jkrWc1mNpO0n7AoGJ0QDf3CH3leM7kjanz9wJqlSganYri0mTimSOayyPsIf007Xze
-         X3olbDAhyM/vw==
-X-Nifty-SrcIP: [209.85.216.51]
-Received: by mail-pj1-f51.google.com with SMTP id qe5-20020a17090b4f8500b001e26126abccso5035159pjb.0;
-        Sat, 28 May 2022 21:29:15 -0700 (PDT)
-X-Gm-Message-State: AOAM530aoStgg+rSCYGgKkHhOz7uwPbNAgCupvWjDQGS+rAD5nhIGZCd
-        Q1kznnO582BsQ4GaQYBFSs17X2DGn39MXaEqdy8=
-X-Google-Smtp-Source: ABdhPJzNxHqxq69yNjBbxRveFRTwLx+8EEISbWq1N9bsPU/YNURXqavj/Dvr0ngQWN5AtBu4wR2ivtVeklv4ITjHQzU=
-X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
- s7-20020a170902988700b001516e1c7082mr49302906plp.162.1653798554247; Sat, 28
- May 2022 21:29:14 -0700 (PDT)
+        Sun, 29 May 2022 07:35:28 -0400
+Received: from sonic306-22.consmr.mail.gq1.yahoo.com (sonic306-22.consmr.mail.gq1.yahoo.com [98.137.68.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94509A9A1
+        for <linux-modules@vger.kernel.org>; Sun, 29 May 2022 04:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1653824127; bh=RRgJoG/L4BQHnc1cT7FRAwecnMXwJlauasCSmqnyPAM=; h=Date:To:From:Subject:References:From:Subject:Reply-To; b=Fboj+JvTxf0ky+/oYaQqkzG43VBGoM7l+ewOJEENxaaomc5ITi9CS1vv1Im/X3+yfvXmM/Fd5ma+N+7TD5xUYemXYodC5IRIV/DlRc8gAaqhE1l6Xs9kbDAGiwUuzUjyRv4IbkkSEcjBLVUTh3osjLLImZQ06+SvopbvY9xGNec=
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653824127; bh=nMBxSXruymYMWIVmmEPjdIlj2p/vMnVg3Uy6ZcpoO/F=; h=X-Sonic-MF:Date:To:From:Subject:From:Subject; b=jhRLL11SWLe7XzfH4wFjmae1+JL/G9ZfLL2L/3JILw3fM3auCyzKKEUTzK3dic5naJ/Pn9tvOG6H8R1+duwRsJNalyISb/Tped8BVZ8wpUJsEbV2azkpluSeNjj5tQry7/+F6kaZaV3BOVzO4HVmljHycL/q3ntEUsnmNDZB//khotyXc2Jn5n2mMcKkEd1EaP8jzJCeaXiIfwgB9T/DxLPjL47zU5Z3aj5s9GghAmww7xiPwdPbNLiBnB5WJArMlZPwYqBZfFgfWFMva115Dr0UXS2wP1yfHMeORqd66rEXZTmI2Kym+/yzRi7vo15HlZaKEMJcqWaGUEj7q36AHg==
+X-YMail-OSG: qsc4N60VM1lT.voDuqyBRRP1chLws0RRccxiCoSARPQR1NQGe7vq.V2jOKl8.yu
+ CnNuzfZiFb.j.oflBgIkldvk25vQpTQkccHOR9ipOybHRZz3mOkM8lfqdu18TmOPXY8OryY8_SQn
+ myMSq1sTgjxweLf13f.6.a2iLbPyvwSeIR3nz2yrVZ0F8Pdqqo74HKTJ_AJNMnOpPlZ4DYYEqFf9
+ 0SESFHFRHhxrQJEmUjnOLMfKGmxiOhBJI.mPqOkkxwsRkAvAXfsky3M7h67VxpN8nHFp8lDGrEbP
+ bRTrKhEFALMU6b5rVIzJCScJPmCpTt1EpYINCYHOQZQw4M2SG8b4yx6AEoamHDNPCOisvgNsh_Q5
+ 4dM3gfIrLuYSs2yyS1izDvAn7a1qNTxYWYymtc0ElZIMyN8Gg0Rq7g5BzJBdF0BQhY5uNCG7.RUM
+ 05ZxbjzPUplSf6v.QPf2e4EPCejx4IjMD0QI_qbOmeAkUgkjj45ZNV0pjoSrd6fivd3iA0rdloOZ
+ X6BNiIz6sMjrXe_NqnFxTljFXZeIVkimDQprrdkt6jc.ZDglI.fwWO6Td8T1HyhBvkdHDY5kztMP
+ YMufZrX1nZKp7hEfXf6KKrdL5mnsRjZPUVvgSj25XhILDkiy14veaTK16VQ.p6lAxIZG9aonBKyl
+ wOqAkRLFajyR0D0RcQOSVZ5Egpqe8epMGlQ4o1Hk_r0LMMZZZJ4G6sJAUr.agrAvPfr_GvkYmYSc
+ GxPe5nr0oaVRflgRvfN2RrYVvG_QgJxKDZ5hp8IPyLO5q0GQojq5z5zzJC6npcC1vOaocoWBSzUb
+ 7MzmdMiRiDD2GjwKIJ2UUs78YrS1ho1GXCm9D27_9HzmlbVs5hJMdsHKP9m5hsweK3Hmc6NT.Qh8
+ JlWd8nSeNVDpriSo5z.GdGvxVYOHTIg3hIpRCmMBCUNKj5C_4GNSf.uKabEj7lTGSVvgYngrS1Fj
+ PJ8xhZzFGmX6fbSbbX1hNwNUmspK1OifXFLSB8vFluy3In_m40gDWlXHIK1MlwKdbKVAPE8bn5A_
+ 1secPW6u_hnH7ywV9UV_VQZ2so000eehSE68aCdlO_4Y71uG6PRU4Q5ZKoWo0nGijrJEwPVSUDgk
+ 5brDVqn4y9fhQUWSCJ9j3MuN9rsbRNN01KwlkUeSkp2ncC8Sm_qvtzU1AfctQ3Kj_TtoTctTisrI
+ rOVahfHY9v5r.lGTyFgM1w_op3SWCYeZ7RfzQAhAWsIPMEiN7_pHH_XFfY0gDhWmqoKPI9JdrBpv
+ cEEMvqIvKboqAoQAbvqbMHj28s35eze7MoogFSGkrZ5jklJ..6p7KEEHnelNe6eR2GkuIc9snUhb
+ 3gCC_QA2v1DSizYgz973WpV2tSae6d.cHh1A2eLB5vfn02IIGX4C73I05K81gJY.zpG_dz4ndptO
+ .D3KaopOPctIJd0BUJVXWtF7IDt3pYEFeX8Oicm3X7poGcMVLW2KpspRmUPzB.kGB1SeKznw0o.V
+ HLyeTMf9On8jEFzgm1DWSGGUjEFcpzIDdBfINwz5r3cEgEaQrLHi4cXU9vn4GGmmcgsWtA3pZlI0
+ 7oyr3PKJR1bSGhGD6DYam3RI2a3Z7CvBAorlOcO4RWnkaZiUFLC8a_yDoxTJkkl3PMx.vVccotvk
+ EZa1fMz1Eh0YIQvPZHBLGOg7nMVBR5i9JAImVmfRCzNLJGH3gDRoIoiIN0gFCfWd6DlLrmCuZvxo
+ B3BEKJTUEqgpVkh2BUXnMyUWV1FGxMMevDPXkemBa4R6TisAwzZX_ki4B2TpDS_88OxFyynH87oq
+ zcQZ49eVsowX_xeZ1lXvru7HtgbmTLcUK.TkW0_Fi_pQt8qgDWoAMDfyUGnUNGr6dVWV4iu3TJy3
+ c4GgkfKyn6UUepqNvpDEgxZqW.Hk6oMkPrTeGmEnEnjmJwH7xybxFUdbt_DANMIqFSM3BmqD9Hab
+ Dh30NF4.OtS8aFQ.8A6ucQ3ns0j98WDxzZMd7YHgeCr5TtaWt4k41GI6UrGlS1g6x9DRMR8.H0dE
+ 5673l1bkBFU9vLWjzmHX7o5SR6u2xXqjp1p9.bCZkYT8eADE8ZKmqwYjw8B0RiBFEVwaXGit2NMt
+ yo4ZzL04wfQqpJg5F3NMbF2Jp7O4GMAHcv8Aa0mLlAKthMQtsi6r5Xx2Jt8QrlvYWHZnwI2nhrii
+ E8uFmfeRUunCBlwEHMTb3Y7RP1UK0nNh3hQyz3g0FlY.judvSwpeC6UIczaGFxzF7ReSZ1wpT65G
+ Er1F2CTBLO9jKhA--
+X-Sonic-MF: <lesrhorer@att.net>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.gq1.yahoo.com with HTTP; Sun, 29 May 2022 11:35:27 +0000
+Received: by hermes--canary-production-ne1-799d7bd497-7z8w4 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 45c10ca29e34986f6be115ab68704028;
+          Sun, 29 May 2022 11:35:25 +0000 (UTC)
+Message-ID: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0@att.net>
+Date:   Sun, 29 May 2022 06:35:19 -0500
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org> <20220513113930.10488-2-masahiroy@kernel.org>
- <20220528224745.GA2501857@roeck-us.net>
-In-Reply-To: <20220528224745.GA2501857@roeck-us.net>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 29 May 2022 13:27:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQU1oROfoWGqX37OZu=XkbYGBFu2eNHtwcWLEyvMtM11A@mail.gmail.com>
-Message-ID: <CAK7LNAQU1oROfoWGqX37OZu=XkbYGBFu2eNHtwcWLEyvMtM11A@mail.gmail.com>
-Subject: Re: [PATCH v6 01/10] modpost: extract symbol versions from *.cmd files
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+From:   Leslie Rhorer <lesrhorer@att.net>
+Subject: Modules list
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+References: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0.ref@att.net>
+X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, May 29, 2022 at 7:47 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> Hi,
->
-> On Fri, May 13, 2022 at 08:39:21PM +0900, Masahiro Yamada wrote:
-> > Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
-> > versions into ELF objects. Then, modpost extracts the version CRCs
-> > from them.
-> >
-> [ ... ]
-> > This commit changes modpost to extract CRCs from *.cmd files instead of
-> > from ELF objects.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> > Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
->
-> This patch results in
->
-> ._muldi3_di.o.cmd: No such file or directory
->
-> when building parisc64:defconfig, and
->
-> ._divsi3.o.cmd: No such file or directory
->
-> when building csky:allmodconfig.
->
-> Reverting this patch (and the subsequent kbuild patches to avoid
-> conflicts) fixes the problem for both architectures. In case it
-> helps, the complete build log when rebuilding an image for csky
-> is as follows.
-
-
-
-Thank you for the report!
-
-This commit has been in the tree for a while
-but I did not get this kind of report from the 0-day bot.
-
-The wide test coverage from your system is very helpful.
-I just submitted a fix.
-
-Thank you.
-
-
-
-
-
-
-
-
-
-> #
-> # No change to .config
-> #
->   HOSTCC  scripts/mod/modpost.o
->   HOSTLD  scripts/mod/modpost
->   CALL    scripts/atomic/check-atomics.sh
->   CALL    scripts/checksyscalls.sh
->   CHK     include/generated/compile.h
->   SO2S    arch/csky/kernel/vdso/vdso-syms.S
->   AS      arch/csky/kernel/vdso/vdso-syms.o
->   AR      arch/csky/kernel/vdso/built-in.a
->   AR      arch/csky/kernel/built-in.a
->   CHK     kernel/kheaders_data.tar.xz
->   GEN     .version
->   CHK     include/generated/compile.h
->   UPD     include/generated/compile.h
->   CC      init/version.o
->   AR      init/built-in.a
->   LD      vmlinux.o
->   MODPOST vmlinux.symvers
-> ._divsi3.o.cmd: No such file or directory
-> make[1]: *** [scripts/Makefile.modpost:59: vmlinux.symvers] Error 1
-> make: *** [Makefile:1159: vmlinux] Error 2
->
-> This was seen with gcc 11.2 and 11.3.
->
-> Guenter
->
-> ---
-> bisect on mainline:
->
-> # bad: [9d004b2f4fea97cde123e7f1939b80e77bf2e695] Merge tag 'cxl-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl
-> # good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
-> git bisect start 'HEAD' 'v5.18'
-> # good: [86c87bea6b42100c67418af690919c44de6ede6e] Merge tag 'devicetree-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
-> git bisect good 86c87bea6b42100c67418af690919c44de6ede6e
-> # good: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect good c011dd537ffe47462051930413fed07dbdc80313
-> # bad: [df202b452fe6c6d6f1351bad485e2367ef1e644e] Merge tag 'kbuild-v5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
-> git bisect bad df202b452fe6c6d6f1351bad485e2367ef1e644e
-> # good: [d4dcdc53c492a7b9fa9031cb85e238b21208ada2] Merge tag 'qcom-arm64-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
-> git bisect good d4dcdc53c492a7b9fa9031cb85e238b21208ada2
-> # good: [ae862183285cbb2ef9032770d98ffa9becffe9d5] Merge tag 'arm-dt-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect good ae862183285cbb2ef9032770d98ffa9becffe9d5
-> # good: [cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e] Merge tag 'arm-drivers-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect good cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e
-> # good: [ecf0aa5317b0ad6bb015128a5b763c954fd58708] Merge tag 'arm-multiplatform-5.19-1' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-> git bisect good ecf0aa5317b0ad6bb015128a5b763c954fd58708
-> # good: [4484054816cab940fc2fde23fa989174fec889d0] modpost: use doubly linked list for dump_lists
-> git bisect good 4484054816cab940fc2fde23fa989174fec889d0
-> # good: [16477cdfefdb494235a675cc80563d736991d833] Merge tag 'asm-generic-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic
-> git bisect good 16477cdfefdb494235a675cc80563d736991d833
-> # good: [a44abaca0e196cfeef2374ed663b97daa1ad112a] modpost: move *.mod.c generation to write_mod_c_files()
-> git bisect good a44abaca0e196cfeef2374ed663b97daa1ad112a
-> # good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
-> git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
-> # bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
-> git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
-> # bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
-> git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
-> # first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
->
-> ---
-> bisect on kbuild-5.19:
->
-> # bad: [5ce2176b81f77366bd02c27509b83049f0020544] genksyms: adjust the output format to modpost
-> # good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
-> git bisect start 'HEAD' 'v5.18-rc1'
-> # good: [70ddb48db4aaddd3c2a7d8802463e15b21ce8525] modpost: move struct namespace_list to modpost.c
-> git bisect good 70ddb48db4aaddd3c2a7d8802463e15b21ce8525
-> # good: [e76cc48d8e6df5d949284132981db73d2dd8c6b5] modpost: make sym_add_exported() always allocate a new symbol
-> git bisect good e76cc48d8e6df5d949284132981db73d2dd8c6b5
-> # good: [78e9e56af3858bf2c52c065daa6c8bee0d72048c] kbuild: record symbol versions in *.cmd files
-> git bisect good 78e9e56af3858bf2c52c065daa6c8bee0d72048c
-> # good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
-> git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
-> # bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
-> git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
-> # bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
-> git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
-> # first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
-
-
-
---
-Best Regards
-Masahiro Yamada
+	I sent a subscription to the linux-modules list which seemed to be 
+successful, but when I sent a message, it bounced.  I sent the message 
+to linux-modules@vger.kernel.org.  Did I do something wrong?
