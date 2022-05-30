@@ -2,166 +2,114 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1CAEC433EF
-	for <linux-modules@archiver.kernel.org>; Mon, 30 May 2022 06:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34DD7C433F5
+	for <linux-modules@archiver.kernel.org>; Mon, 30 May 2022 06:43:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbiE3GLZ (ORCPT
+        id S232292AbiE3Gn0 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 30 May 2022 02:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        Mon, 30 May 2022 02:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbiE3GLY (ORCPT
+        with ESMTP id S231896AbiE3GnZ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 30 May 2022 02:11:24 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120070.outbound.protection.outlook.com [40.107.12.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619872F398;
-        Sun, 29 May 2022 23:11:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=APo6GJ0NW898nZlmxf+gRrWdRCxRBfqqbTrxh3dDeJwKNmpsfRFMl/ZLaEzOVsnPcM1gcY57Wt3uTOvvx8rR8wDUmUDqCTXl/C4GogHjY5Y/1hXgqtLitXNnBwhUvEqoLIX2ONVCfeaWrD62yh/wzUfzBvpchDBt6Or5yDiHETlKJHcLIzwDB6t/uz93GEPsLBiRnOIyiO8D/tIec9ma9HfsQ7Q8oRhz/2FZX3PWD6TQ3Ie7ydZrfUKQJ6EXkqp2zxs3CQ0wbo05UNvlX98l/n7Uw/6R4crjIASMSA9UkrCd59NsXKJ9UuMVIAuAdnjqDesEu9EBbJdDr4FqcuORlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nDetIH6mesS+oJJJsFHo4SQRhVBVmdWC4n+DgKq8AQA=;
- b=l5N7FA4en4cHA7UXGuv6E5j62vLtrvHVpynUbCy4/Wxvc8xkYiRJeeBuDau001Bfty2pr3lu6pO/hIIUZf78lafByI6Aa8zw6uOdpvHkBaPP4nHIPQjXNMl0mrtvxf5i3QpFV8PMNRHYQB7v3/MT9KaLUHdXOBKobjrL2u3cdIGW3kkiHqoUHSyalJ/cLeVgqJ5ABSJgmZCv5syV1psj5Q7EBRqBJD8JyXldq7PDMm8yTc9lbv97WJcnjyG5F5SY2enwSihzbKFGuxSnJaXujePnwsTtOKXhI1zcvxqjYg7JFfnbvFlxeEYyzZw3sfoqdR8f5kT4iqal0hAvdaCLww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAYP264MB4127.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:119::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Mon, 30 May
- 2022 06:11:20 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5293.019; Mon, 30 May 2022
- 06:11:20 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Leslie Rhorer <lesrhorer@att.net>,
+        Mon, 30 May 2022 02:43:25 -0400
+Received: from sonic315-11.consmr.mail.gq1.yahoo.com (sonic315-11.consmr.mail.gq1.yahoo.com [98.137.65.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BE13B575
+        for <linux-modules@vger.kernel.org>; Sun, 29 May 2022 23:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1653893003; bh=r8p9jyY6bxvUUXiFW5S1xmrxidOtb2OM7NRl1Xaq38A=; h=Date:Subject:To:References:From:In-Reply-To:From:Subject:Reply-To; b=1V/khW4PrJQZsk5BUuB3OZp1v1B269fmWIjzjbDNj1vflNy5fsO9j4cF6wZIxZZyAZt3GSW4kPVokpNRSlAWIhdbGkE/2xoVTB3LA/HivKVyuQqWS3+6Jt6rjOBaA686FsMP1Sk7VRMQISAvfHM8rOD0wwG1NP9AgYkxL4AaWGY=
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653893003; bh=t4Kuoy6LcJPgGwhbGE6HcHBA46oTjMB6Cbn/qaTYeP0=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=fXyMl4Yd2Sap/AJBV99EQ3H110EUWtFu8x+XeY1XrqYXPv6ehd5aoyXJahrEmqbWwqfpdpRVibtMYxjgZppayR3gtevQOuQDOU3ImX5uTDs0yUbzz4C6FEr7qvefBe2BIZdEXFuw4Y872f6q6YqGXrOCBICQo+GZCSq35VLg3I98E4rOVzVNFerOzMzEAjsA4+KL+a4YuWkO7LgDAu7DQa/Necz2mHO5ZE3SKjjmxPKVItcPDj9nlM/uyp6QT6FPxhVCYENy33+vvtViQ9rnBpK8DoPh5qhu6gkzqQwZIOXCrhbg0M4BQ5EEVm3/V1dM/G7Uz/ohAQQGEHzvEABSyw==
+X-YMail-OSG: _JTbnocVM1mQniKyzDuKgNJ5PiByJB5MO7cLZXjKxr348of.5f30mFZyhUooBE1
+ 4KlMsXhvyiZR2TDBLeam5UshtPPkSgGqa87J3RJ8XCQdZIWWJrHV67GU0T0o5Kqqefu0ppr8MURe
+ vjVkufhjyPa5SniQdVtG1ZzWdFnQDmMzBJFlSsSALuHvp2G9lsUQaFSNn2yP.ouzeyx5tqzbN4Y6
+ IjbWwZosT8h9zXmPpKfAagW_yXwthUtBZ7fDRN.Tk.7Jornwvz9zeGkH2lnvmvmbatozWCpw_4CA
+ BhltcefBFnb71ry0QGoG2QPe8_TM3_2SPeZobOvJaJpFm67DmDE5DwbkTxcmKA523GRTbpD0w7qe
+ ax.xa5Im5.XMu3HSk8bbZl8CMygdtfatbab7vXMcGvPr_gbkkORe2vNObVohCSGpyPO4M10074KX
+ kFPO5SJkWFrHnu1F3rrA53KbUwKspVwmagDS6k2nVvZh8CyQLRlSwl3HzwNzQYZ0UxJnZ3uUhy5b
+ joYCXbKVfc7pALubWIi4D3R_liStAHJ5gmfs2kOHqopUmp3CC4K2c71Zz_teko._PfABtAX0Rfui
+ xxi_BZvn8Uv9NRB4FYu6v4XFLDjwoVJOlaVhDA3EYDvz3Ux5KblhSsjdi1Vm_WRunezL5vX6baKd
+ CJWCfef7PVoDRwdU5GUZY84Pskio52T8gpEh92xWN6nh95uWnigTYmgiC_Z9UZjjJvA7eYKjlvRE
+ ECK.5fddkMBX5tgyjVEWE4AeTYMrcx.xWSK_kSIx95IVcN2BnAjjVlcPfBBYpe35XbHDTuKs4Weo
+ GpNhdBRiuFCSrcjhnpZIIN.VQMH2GcunM05PnCrdWqozpU8TDxEKdmKuAig9CGhmGti25N4fJ9W9
+ 5hEOrj0UKaTZN4ifulLYARu7PSin8.70khsrquscluTsXbnfYo3JJ2j8nVZ_.BSa6uKi6vqdYgd2
+ z0_eOoekQ5wWjkVTyFzB6sJ5ruS8ZqF0WVTd5UFScvNUDbxJmuR4xYPFFVhvQSRgMbu.Va221r6s
+ MMGqH7AIAnz.QBYp4tuuvhWqSVGmjenkQXuafoAEcfefKg5TE9r9Rhkcy8ZkegL9XAHpYEYv7tbg
+ 3XA44mB56eBW7JC1Q9Z6UAEapK9mxdpelx0yvwRRNxVDg4EQWqImVX0q4CV.9KiwIkZfLQ3T.EFA
+ h7RsXelmLA5c3zevvvimwQye9K.hdOwsYQIjbBww8U2yuwdhPHMdtCkDKlfIc.8DwsojSPTLi5cj
+ s63.1xoPOI0J10554s4sfVvuUfSs7d_T5FlGZtgHqYDMLV.2alXrsa.rSWUwKAMpAp.5up3hcxfx
+ _PW5KMfkL_l34PXDlRiAWIOwLTfTa3a6cknzEhMEhLpJw3W8MaFyekm6dQ1Lvr5PpHzG7RIEzj_R
+ QcRIvxYCX8a_JqmHslHYssYqqz2kGBPA1zVUeB6MrP1V9DLn6E7FbuIsHT4GweybNz1r5MOOmN6T
+ JfGv8zrBmLX8HMu5rgAh3FvpblqKOkWz3EC7S1QB0537ykvlJRbQVgqTnjhLvlzt2j_P6an01703
+ HyvDHvJ76HuDLBNM5bazEDW_Z02JWyoFyH1AhlSUE3NDp_6x6SNXo1BE.pz_4sJg0xkU99pTsjOG
+ nO843HkeWIqsZNd4uE6gPocV4JyaI8ycT9OusccBpX5LrA6KP_0NlJFj9n0OJX4c5zgcMhxL6Tun
+ vOlD6k_SBcGCamxNUynN5wqxi5NUnyD5FPMyyUZBiXT5b1WCWdDeQSx3GHkyb606kZotyizUlB2O
+ zgHw.0BrnyI86MSts5XEaiuVC5HBAOQqWn_5q2jF70OGDyS.N2Cm4e60Yhu2z4VVksgpabnNk_SC
+ NId7Uvra9_PiJ8BjVpXOesuPkazdw7CEduaX5DTkWBu3bYAERdhMk1DtngPBnpPN5ntBA6X_KgAA
+ jYpEC5z0kC.9QLTGC5Dwr.fKKNZd4hiJlIT9Q7H9T2PlilSqwltFAheslC2y22NM_iA3aOtDHc.9
+ 4m9AshvqRTpIEUZzs_grCFx1hEDcLilMsjLdUbzy.eNhF0gJpMWl_uAcH1IowggCCUg3zIsY1ncM
+ TenI8iI0YQlhWUTVHfG8DsvEXwhSLtL0gpJ2JcboKcTsl4nstPPOdOUBVt8NJ4leSPWoYnltoHa0
+ xRJ6Tq.1rRpZK90f5QLOEMI0mPhqKZLX.6biAhW1n7Qhm_iRcmY9PJS_fKQ78ZL3jVPRV1Oj.dC3
+ mATcDQcp0SMwvK6AUErDNB2CtkE_fFr3oGthtzOed8Q4pRDCmpYnb7hdeH85q3J8Mn1f9vw--
+X-Sonic-MF: <lesrhorer@att.net>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.gq1.yahoo.com with HTTP; Mon, 30 May 2022 06:43:23 +0000
+Received: by hermes--canary-production-ne1-799d7bd497-rcgtf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 5202819b1e19cf12b555ad4e1623d824;
+          Mon, 30 May 2022 06:43:20 +0000 (UTC)
+Message-ID: <5bf81aee-a518-5bc4-804c-e05db230b1c1@att.net>
+Date:   Mon, 30 May 2022 01:43:05 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Module failure on new install of Debian Bullseye
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         Randy Dunlap <rdunlap@infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
-Subject: Re: Module failure on new install of Debian Bullseye
-Thread-Topic: Module failure on new install of Debian Bullseye
-Thread-Index: AQHYc7Y3nWKey7dPKEuAB013uT5mg6028LuA
-Date:   Mon, 30 May 2022 06:11:20 +0000
-Message-ID: <22c909ae-1bd5-731e-53e7-ff6e0b47c7bb@csgroup.eu>
 References: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0.ref@att.net>
  <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0@att.net>
  <7999b7b4-3b58-a9c4-4756-445e54404f0f@csgroup.eu>
  <ba2fb3ff-22dd-d68e-fa99-02de39240f20@infradead.org>
  <3b8f2ed6-11fd-b5a7-5442-7cac90348514@att.net>
-In-Reply-To: <3b8f2ed6-11fd-b5a7-5442-7cac90348514@att.net>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0823b092-b87f-46be-84be-08da4203375d
-x-ms-traffictypediagnostic: PAYP264MB4127:EE_
-x-microsoft-antispam-prvs: <PAYP264MB412778660CD26D9D242F07C3EDDD9@PAYP264MB4127.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: AhlSX8/Wdlfs8DdaC8UCFaZgQb0lJnuuTyMvFIEwy952VfJYIAaG84+uyIRtvm/hpTnnTtKi9F659IoQAP0y6TwNtRsGIDE/lHtpsOGgldS0QpFga446nVaLW3jWjovtxI3KRZB20G/BlM1jke3N+j1mkPe9OB9vO/9zfQRcWVWdYx15KjsErMsZVhdVv61ZmuLeUSw+lpiB5pQdiwiAEuffdJzM2d+NNBtFsuiHXg3U+ZEM6DMgov/VsznbDy60K/zGN3NmkBlpLDqjEVANegz409y4HewjbaVW30FZMnt6acU6JKlkY+w8COjBLco4vwiEfQmvc0M7SZruc3NNnKxfSIDxEK11DrvNi7kVXmvx1aM77+DJrHVJ7QO+Tgws0g8zwMCxTEdNpyQdoX7k3TYIDnPAtLsKZCK20FMnXBJSqCfzfr4/tQqpJQAjWeSRfqwZAFeh67SJygKIK/g+vjrebhZFG3mxtcJoprZAmzIW5cuW7FtU7q+fIoZzRai7BamA6Y53s6++rBOuLBLF097rE6tDR0ugTkc7EKjeZyMJ+mbg+52esA9xJP4pUvEE5mX+sMtzd3unbOcf9VSibbFoL2DXngRLwaipR+gmKK/GgeOkzxyktiTMqbnIey6n0DUvaLl9ZCh6qFk6CuxS1c9t1pJptiFHFosOEtu+LHoZn5lrnxOgvbN1IvWAjQRaNNpJSJ1vA1WjpGNkKMaZlb1PkV5qyOPWgRSEpXVhNwYF4MwljfAVf1ZL3r1byiQ7nCBK9ldz49cdgHYf246Dw/1rbza2FXt+jfBEPH/2478bXNWfD34SNOiwBGLRXxQ/CLkZUc7IoqA3lEEFPacEZlV5w1ttLWC3cSdeabT+2KE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(83380400001)(66574015)(38100700002)(38070700005)(122000001)(6506007)(36756003)(76116006)(66946007)(316002)(966005)(6486002)(71200400001)(66446008)(91956017)(66476007)(508600001)(110136005)(66556008)(64756008)(86362001)(2616005)(2906002)(26005)(6512007)(8676002)(5660300002)(44832011)(8936002)(31696002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b1pqWE5oTk11L1Y3ZWVZcTlYejBUY1lBVXk0Qk5YTkdsT3g4RnY5M3NDMWVJ?=
- =?utf-8?B?WEdDdkE0Z3lCYmpmenVUSUlXM0dlZ2NUaUFUdGlrQndmeTUzOURVVTNwYUJn?=
- =?utf-8?B?QjRKVUxaZG9DNVBMZDloVTlHcFFma3VIOUQ3ZjJOWktzK0Y4ZzgwaWE0MG90?=
- =?utf-8?B?Y2ZHNk9pdVBPY1Jyd0hIMmd4U2FJbjZKUFRWNVdXRTFQQ2M5UmR0cm04WE1C?=
- =?utf-8?B?SE1aS2dtYnFYODBxUTgxdEQ0akI1YmF6aWtpWUlzVFdwOFE2VTZtUUZaYUsz?=
- =?utf-8?B?K0JLK3F0WVEwaEYzb3ljVEExY2VSMVJ4NFV1dDczeVVnbGE3UURpSmNvNDZn?=
- =?utf-8?B?YWpsNjlkUXNYZ2NtTWt3c3BWQVhGYTNqR3htc0NWZUpGUUtscEJLeXQzeCtY?=
- =?utf-8?B?QkUrd1RhRnl3dFBSSi9rMzk5bDFyeWo1SVJ6Sy9qckJ0dUQ3REdvREFPaVND?=
- =?utf-8?B?TVhSVzFjOE9jeWd3VWFBZmM0T3dYNmFuSGJJb1FZQzBtTnlMQ3NUSzllK3p4?=
- =?utf-8?B?cWFhcW44WWFqUm41d0Z5Zkw0UjQ0ZHNnK2dpYllmdG8wWEtXdmpLVkp1Znh0?=
- =?utf-8?B?UGpSRDRrbXdpcWplRkRVL1J1cXpIMEtNdUV3MWlZWmRFVXF3ckliNVhyREdG?=
- =?utf-8?B?SXR2OHI2Qy9hNnNTTlh1alUvUUlHYUtQcU8rVEFwS0EzazhYK0JUVW1neFNC?=
- =?utf-8?B?K3JUU1c5czlxN3pyVm5nSzBpQWZySDU1aXFpa1dtTFQ1dGtudEZMK0tvNUFl?=
- =?utf-8?B?RGxoNTNFWVFtbzRyWHhKMHhCRjlWVWJ6alM1Wi9zclRBQUI3b0lKYkVnTUl4?=
- =?utf-8?B?TDRRYVB4dHM1RXlYNUxremNicmRzaFVEMndtWG1MZ3ZDTll2TU1nNmY5b2Jk?=
- =?utf-8?B?NFg5SVBNeFQ5K3NhSWRLWGVPYXNUSEdta3dwSXJIM3dFQncyL1p2aWtFWGx0?=
- =?utf-8?B?VGVuS3FoOG5YLzNGdlJ1Mm9aWGFNaXdMMmpadjNMTC9jdlJLbXgzcmlpRzBT?=
- =?utf-8?B?dVJOWXFBclNxclZBejJHOXUwTXpTZzFtVmdJNTl2cUpwTTdPcjh6OExIWUpq?=
- =?utf-8?B?NVpMOUs4VmFqZWd3VC8yTWdIU2dhOFE1QW5ielZwQlRLaGFNdkMrUm12UGVk?=
- =?utf-8?B?T2ZBOHg5aHpJWlJ1dzNkQ0MzaSs0SFBaVEhneC8xM2dEZi9qd1dIRjNoWHVE?=
- =?utf-8?B?K3I2NTZrd0ZXekcvNW54SUlGc2x2UFhmM3FyZElDcVB4UitxeDNPSVcvQ0dO?=
- =?utf-8?B?WVllZlBuQkIvc29nMkRXWGxYeTV1bGVoVG5LZjNaUHBCRFN4Mi8vUGZXTDBO?=
- =?utf-8?B?TVpGNzM3VkhYWjdFK29BandCUjBQSFNJRVdOTUtOMDRYNU04MjNhNkZQZEFx?=
- =?utf-8?B?VXpUVFRNc2RqaVU4ZjgrNlRVSnU3V3Nla1RSR1FjWVUxM2FmR3ZxVzJEZjJS?=
- =?utf-8?B?blEvNnZkOUNsSXB3Z3ZUd2pqU0lhOTJTODhVQUhmN0lHeUdvVVNXczM0OFdP?=
- =?utf-8?B?dXNNaGJXMVdGUTB4T0hRRUowR0JnNnFkNnlmZXIyOU5rUkY1UlYyZDdxK0Vs?=
- =?utf-8?B?UVJDRDFuNUtrSlZOZVFhL1N0MlZLMmZ1N1VWaFpGV0h1T2ZXcnlaemptY2Rw?=
- =?utf-8?B?eHMxZHNnZS9oTkZOa1VjQ0JHVTNOTGMwdGZEUEY0UTVPQjJlSGU3VFBZZmFH?=
- =?utf-8?B?Q0prSjE2VHYzcGtKRUladW9OdmJZSm53UGd6ck5qbGJSV2tlckJQcEZtaEMw?=
- =?utf-8?B?QTRuT1J1L3lpQjhyOW9aaHFGdVprQmxLNlk3OEJCcW1XYnFEQzJEdW1wSWV1?=
- =?utf-8?B?eDhSU0F5VnQyT1l3UUpNOFQ0UFdlVWFsWGJHS1BRdEJYYmZ2Y2k5OGs4T2VT?=
- =?utf-8?B?L2FSQmxJZDRNbW13cDRNYjhManRsU01ZZGR3RzFNVytGcXlkSnMvTWh0VTNR?=
- =?utf-8?B?RFBmVU9EVWkydUtnMkNtZHptU3IwOTl4T3lFd2lrb0w0VkdZbnNiekMvdzF4?=
- =?utf-8?B?Q3AwdGNyOHFJWGNKYWFZVm1wNm9Nd2RtRnI3MVlLaGgwdVMxZW9kb3p4eTFQ?=
- =?utf-8?B?Mmo3VlJ3TmNLQUxVbkNreEQvQWFvbkJGM3NiY1d3Nm13azZtVVlWV0lBL0h0?=
- =?utf-8?B?dTdpVDJKY2pxK1luYTF4U3BRdVR6N25BeFB3dmxadnhsYjlrcGhxNSsyTDFX?=
- =?utf-8?B?UnlXMHN5SmZyYlJLME1qZlNCK09EWDU4eVZVRHlvenVHY3NRUzhpb1F4ZnlL?=
- =?utf-8?B?eWpwSXNlNFhlekxVcjV4QlNHak9VTHd6SFlLSkg1NjFvS1NDOGQyc1JNODl2?=
- =?utf-8?B?aWtaUkcrMjE3bTl4akRIR1JxbUxhZWphK3FLWExqOENTdGZCckZMM2J6L3JF?=
- =?utf-8?Q?EarLskfpR57cAoRwP59qj2ytxVPwaOhj7OgSH?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <405F06A10249FE49BE32A02F18E9334D@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0823b092-b87f-46be-84be-08da4203375d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2022 06:11:20.7401
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gl68kkmZDQ4IN8h4nOHEG7ijtiWF8FbNXjzmUaAuDd8GoQGlB1BDxsmaKwk8l0FpvHX8yoXTs5fyl6wyU3789iSO5ww1t18oyTtpUSpFCV0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAYP264MB4127
+ <8de4e4b7-f741-eb4d-9e11-9b23ba65c21a@att.net>
+ <13529cf4-a00d-5e59-2e1c-cb1daf24bf71@csgroup.eu>
+From:   Leslie Rhorer <lesrhorer@att.net>
+In-Reply-To: <13529cf4-a00d-5e59-2e1c-cb1daf24bf71@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-DQoNCkxlIDMwLzA1LzIwMjIgw6AgMDE6NDUsIExlc2xpZSBSaG9yZXIgYSDDqWNyaXTCoDoNCj4g
-IMKgwqDCoCBJZiB0aGlzIGlzIHRoZSB3cm9uZyBsaXN0LCBwbGVhc2UgbGV0IG1lIGtub3cgdGhl
-IGNvcnJlY3Qgb25lIHNvIEkNCj4gY2FuIHN1YnNjcmliZSBhbmQgcG9zdCB0aGVyZS4NCj4gDQo+
-ICDCoMKgwqAgVHdvIG9mIG15IHNlcnZlcnMgYXJlIGhhdmluZyBiaXphcnJlIHByb2JsZW1zIGFm
-dGVyIHVwZ3JhZGluZyB0bw0KPiBEZWJpYW4gQnVsbHNleWUuwqAgQWZ0ZXIgYXR0ZW1wdGluZyBu
-dW1lcm91cyBmaXhlcywgSSBkZWNpZGVkIHRvIHdpcGUgdGhlDQo+IHN5c3RlbXMgYW5kIGRvIGEg
-ZnJlc2ggaW5zdGFsbC7CoCBJIGRpZCBhIGZyZXNoIGluc3RhbGwgb2YgaGUgZmlyc3QgZnJvbQ0K
-PiBhIG5ldGluc3QgdGh1bWIgZHJpdmUsIGJ1dCB0aGUgLmlzbyBkb2VzIG5vdCBjb250YWluIHRo
-ZSBibngyYyBkcml2ZXJzDQo+IG5lZWRlZCBmb3IgdGhlIEFTVVMgUEVCLTEwRy81NzgxMS0xUyAx
-MEdiRSBTRlArIE5ldHdvcmsgQWRhcHRlcnMgdXNlZCBieQ0KPiBib3RoIHN5c3RlbXMuwqAgSSB0
-cmllZCBhZGRpbmcgd2hhdCBJIHRob3VnaHQgdG8gYmUgdGhlIGNvcnJlY3Qgbm9uLWZyZWUNCj4g
-ZHJpdmVycywgYnV0IEkgc3RpbGwgZ290IGVycm9ycyBhYm91dCB0aGUgYm54MnggZHJpdmVycyBh
-bmQgdGhlDQo+IGludGVyZmFjZSBzaG93cyBubyBjYXJyaWVyLsKgIFNpbmNlIG5vIGNhcnJpZXIg
-aXMgZGV0ZWN0ZWQgb24gdGhlDQo+IGludGVyZmFjZSwgbm8gTEFOIG9yIGludGVybmV0IGFjY2Vz
-cyBpcyBwb3NzaWJsZS7CoCBUaGUgc3lzdGVtIGlzDQo+IGVmZmVjdGl2ZWx5IGRlYWQsIGFsdGhv
-dWdoIGl0IGJvb3RzIHVwIGFuZCBvZiBjb3Vyc2UgSSBoYXZlIGxvY2FsDQo+IGNvbnNvbGUgYWNj
-ZXNzLg0KPiANCj4gIMKgwqDCoCBBZnRlciBzZXZlcmFsIGRpZmZlcmVudCBhcHByb2FjaGVzLCBJ
-IGNoYW5nZWQgZnJvbSB0aGUgbmV0aW5zdA0KPiBpbWFnZSB0byBhIGZ1bGwgbm9uLWZyZWUgaW1h
-Z2UuwqAgSXQgc3RpbGwgd291bGQgbm90IHByb3Blcmx5IGxvYWQgdGhlDQo+IGJueDJ4IGRyaXZl
-cnMuwqAgSSB0cmllZCBkb3dubG9hZGluZyBhbGwgc2l4IGJueDJ4IGUxLCBlMWgsIGFuZCBlMg0K
-PiByZWxlYXNlIDcuMTMuMTUuMCBhbmQgNy4xMy4yMS4wIGZpcm13YXJlIGZpbGVzIGFuZCBhZGRp
-bmcgdGhlbSB0byB0aGUNCj4gaW5pdHJhbSBpbWFnZS7CoCBJdCBubyBsb25nZXIgY29tcGxhaW5z
-IGFib3V0IG1pc3NpbmcgZmlsZXMsIGJ1dCBpdA0KPiBkb2Vzbid0IGFjdGl2YXRlIHRoZSBOSUMs
-IGVpdGhlci7CoCBUaGVzZSBzZXJ2ZXJzIGFyZSBib3RoIGVzc2VudGlhbGx5DQo+IGRlYWQgaW4g
-dGhlIHdhdGVyIHVudGlsIEkgY2FuIGdldCB0aGlzIGZpeGVkLg0KPiANCj4gIMKgwqDCoCBUaGUg
-b25seSB0aGluZyBJIHNwb3QgZnJvbSBkbWVzZyB0aGF0IHNlZW1zIHBvc3NpYmx5IHJlbGF0ZWQg
-aXM6DQo+IA0KPiAuLi4NCj4gW8KgwqAgMTIuOTc2MzIzXSByODE2OSAwMDAwOjBiOjAwLjA6IGZp
-cm13YXJlOiBmYWlsZWQgdG8gbG9hZA0KPiBydGxfbmljL3J0bDgxNjhmLTEuZncgKC0yKQ0KPiBb
-wqDCoCAxMi45NzY0NzhdIGZpcm13YXJlX2NsYXNzOiBTZWUgaHR0cHM6Ly93aWtpLmRlYmlhbi5v
-cmcvRmlybXdhcmUgZm9yDQo+IGluZm9ybWF0aW9uIGFib3V0IG1pc3NpbmcgZmlybXdhcmUNCj4g
-W8KgwqAgMTIuOTc2NjMyXSByODE2OSAwMDAwOjBiOjAwLjA6IERpcmVjdCBmaXJtd2FyZSBsb2Fk
-IGZvcg0KPiBydGxfbmljL3J0bDgxNjhmLTEuZncgZmFpbGVkIHdpdGggZXJyb3IgLTINCj4gW8Kg
-wqAgMTIuOTc2NjM2XSByODE2OSAwMDAwOjBiOjAwLjA6IFVuYWJsZSB0byBsb2FkIGZpcm13YXJl
-DQo+IHJ0bF9uaWMvcnRsODE2OGYtMS5mdyAoLTIpDQoNCkRvIHlvdSBoYXZlIHRoYXQgZmlsZSBy
-dGw4MTY4Zi0xLmZ3IGluIHlvdXIgc2V0dXAgPyBJcyBpdCBhdCB0aGUgY29ycmVjdCANCnBsYWNl
-ID8NCg0KQnkgdGhlIHdheSwgdGhpcyBzZWVtcyB0byBiZSBtb3JlIGEgRGViaWFuIHByb2JsZW0g
-dGhhbiBhIGtlcm5lbCANCnByb2JsZW0uIEhhdmUgeW91IGFza2VkIHlvdXIgcXVlc3Rpb24gdG8g
-RGViaWFuIHN1cHBvcnQgPw0KDQpDaHJpc3RvcGhl
+
+
+On 5/30/2022 1:08 AM, Christophe Leroy wrote:
+> 
+> 
+> Le 30/05/2022 à 01:46, Leslie Rhorer a écrit :
+>>
+>>       Below is the output of dmesg after removing quite a few of what I
+>> am certain are unrelated lines:
+>>
+>> [    0.000000] Linux version 5.10.0-13-amd64
+>> (debian-kernel@lists.debian.org) (gcc-10 (Debian 10.2.1-6) 10.2.1
+>> 20210110, GNU ld (GNU Binutils for Debian) 2.35.2) #1 SMP Debian
+>> 5.10.106-1 (2022-03-17)
+> 
+>> [    1.465675] bnx2x: disagrees about version of symbol module_layout
+> 
+>> [   12.075903] bnx2x: disagrees about version of symbol module_layout
+> 
+> 
+> Those two messages means that you are trying to use modules that were
+> built for a different kernel version.
+
+	That is pretty clear
+
+> 
+> As far as I can see you are using kernel 5.10
+> 
+> You have to use bnx2 modules for that exact kernel.
+
+	Right.  I thought of compiling them myself, but so far I have not been 
+successful in loading the kernel headers.  I have tried adding a line to 
+the sources.list file, but so far I haven't found a directory in the 
+installation drive that apt doesn't complain about.
