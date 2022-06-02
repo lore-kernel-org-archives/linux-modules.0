@@ -2,67 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 344D6C43334
-	for <linux-modules@archiver.kernel.org>; Thu,  2 Jun 2022 19:41:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5437CC43334
+	for <linux-modules@archiver.kernel.org>; Thu,  2 Jun 2022 21:47:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238817AbiFBTlv (ORCPT
+        id S239483AbiFBVro (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 2 Jun 2022 15:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56074 "EHLO
+        Thu, 2 Jun 2022 17:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237412AbiFBTlO (ORCPT
+        with ESMTP id S237390AbiFBVrm (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 2 Jun 2022 15:41:14 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C21D33889
-        for <linux-modules@vger.kernel.org>; Thu,  2 Jun 2022 12:40:54 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id m20so11874300ejj.10
-        for <linux-modules@vger.kernel.org>; Thu, 02 Jun 2022 12:40:54 -0700 (PDT)
+        Thu, 2 Jun 2022 17:47:42 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1771DA6C
+        for <linux-modules@vger.kernel.org>; Thu,  2 Jun 2022 14:47:41 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id t31so10654855ybi.2
+        for <linux-modules@vger.kernel.org>; Thu, 02 Jun 2022 14:47:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=g8dK6D+XTwQM6Q2wZRKTjnaTGLe0PvZRBSojaTGRw0o=;
-        b=Fw9O5ZQr2akCs4XmkAleh4S1lzR/HnmE+gr+ExVcOzwPxlPBN+cxqks9XAmHum3a9r
-         EdR/pADzdNu2xsnplxjkFSOSAh4MgTkZa39ydrHWleBPDB0V3sGb1fyOvp86Qg0iOUmA
-         ZL4/cbSunc8oCfQv/NmSPlM9MXREEBXgNEDzo=
+        bh=Pd1LekGY0cpB3lKyT64rGGQFHBupdHGemhO5JR+nPi0=;
+        b=FJXojaZaObe7jR3cqMVF5PSwKT+cwoHHKDI75uBRHVAg/497qEByYBnnrzb2/9yhTa
+         kQo6uEGDrnRm25vP79gRadGhkB5GJy0fqmg8AY9bIRojmj1U0tD3CPLYXR+mHv8F2KWY
+         I+thDPBDeZJpTi34nM32Lw4f2Pk0OoFaFkSygxLOgA/XE5uWHy9wdGOXXyySNJCrt/Gq
+         p6HkD5xTtCS9wEFzJjQ2i1XdJTlpgWv8NnGQIJvIrvs+CVbvIfIWKIp92xgVE1qCIFrh
+         Rj487JsZVkUPEfBz8jsW/W4WfgtwrQxuX/e9c8LbObGgei94yAYcswJ6e51n5MZtFAfQ
+         6hBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g8dK6D+XTwQM6Q2wZRKTjnaTGLe0PvZRBSojaTGRw0o=;
-        b=Q8yPIuxccyRonFAkFDiKt9E2Vy8IyBd5ij0jRwk5+ZpYuPsYa9ZXZ9e/8OQpl8Mddc
-         2Amh4r1geI2epUYymLY0l9okTCOY++ah1pGiLqPBX+09CmnbmNMkse6NBcJ63hspSJbR
-         KMubzLXQ1VugAFLZ1aF/UhRzPFAmpaRG9r6oT8z+h9gSmQvZ/W6AojuwJiVL9lxrcNhA
-         TN4hEaXnnGc5073QZBetdFtcltLjD9hNbIZ9n1ZPDgzAxkyEgtLFx5jHrvonPVgYjARq
-         VOJTRN6KsLc52263zpi74hlzSDmqnPzvI/TIg2CsIHNMieM6r6p3jduSXgJwwn/nR163
-         IbLw==
-X-Gm-Message-State: AOAM5321LG4UyGmNmjjKIO8nXK7DiW6cmFphWFlKRxAwBWmgnVVOPXuG
-        xZiX/5loNwGtlglNz+uDQhONRKCZDZzZAh2Q
-X-Google-Smtp-Source: ABdhPJwTF50pkzr/rVqUdyS1yCmj/tz0k2DyC+pr6/xJBzikkh/KdeR3iBxz3ZEHtMVF8jr3N006tw==
-X-Received: by 2002:a17:907:7d8a:b0:6fe:dccb:cf4c with SMTP id oz10-20020a1709077d8a00b006fedccbcf4cmr5750033ejc.714.1654198851900;
-        Thu, 02 Jun 2022 12:40:51 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id x25-20020a170906b09900b006f52dbc192bsm2045290ejy.37.2022.06.02.12.40.48
-        for <linux-modules@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 12:40:49 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id q21so7731664wra.2
-        for <linux-modules@vger.kernel.org>; Thu, 02 Jun 2022 12:40:48 -0700 (PDT)
-X-Received: by 2002:a5d:6da6:0:b0:20f:bc8a:9400 with SMTP id
- u6-20020a5d6da6000000b0020fbc8a9400mr4890049wrs.274.1654198848176; Thu, 02
- Jun 2022 12:40:48 -0700 (PDT)
+        bh=Pd1LekGY0cpB3lKyT64rGGQFHBupdHGemhO5JR+nPi0=;
+        b=XF3Enzqhgwqtgq9ZHPyMyetMEqmIHCpjOUOnwGS04/7gX5Xoa/JoAY7dim14u8T1kh
+         gp7p8cUTGRBezUtnePitxddzc/2bjhsTPcs5dKXhj6T/kSVWIZvKHv8PWysGHbkhRttP
+         Qk7hweG9bwFxUfoUso3Z4DdpGaiHQx8Uu05q/S1ww5S7XiDUvn14ImI74FB8ganxOjFn
+         3ZAxGPe5bu3jpmCouKiWtAazErklNqfc5+VxdJKyrY/wBgzyLRPMLnMK7u78Yfo3BWYW
+         oDZwxGe1/1cNs2hyZ/UM+sSX6eDeONhEqDLcqn7FVLkiX1Q4Gd2ML52qxbPz44g/hlAW
+         KYdQ==
+X-Gm-Message-State: AOAM53384vCbXwzBTkTkUpcBCmQJ4w77AfdgRXxAnOXk+UUoDCg7bUWz
+        p5NHrJaCHikYUsOrlJMoJ3tNOZpzt7DGDmNVGpKlRw==
+X-Google-Smtp-Source: ABdhPJwhaVML6bY2sbv22pA3loCooNXtPYM9TGo3kGez3Md1KGwL7qsfflQkSlEjz20MmwDUAMTWcCzyNqTr6jeKvsI=
+X-Received: by 2002:a25:cc4c:0:b0:65c:8e83:fd5e with SMTP id
+ l73-20020a25cc4c000000b0065c8e83fd5emr8182576ybf.563.1654206460483; Thu, 02
+ Jun 2022 14:47:40 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220322140344.556474-2-atomlin@redhat.com> <20220602035653.4167316-1-saravanak@google.com>
- <YpkMelZC+E5hKTw6@bombadil.infradead.org>
-In-Reply-To: <YpkMelZC+E5hKTw6@bombadil.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 2 Jun 2022 12:40:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wit6ttmzdFsbH+YLkMeLucTspYADHnENn4fBXNrit0BUQ@mail.gmail.com>
-Message-ID: <CAHk-=wit6ttmzdFsbH+YLkMeLucTspYADHnENn4fBXNrit0BUQ@mail.gmail.com>
+ <YpkMelZC+E5hKTw6@bombadil.infradead.org> <CAHk-=wit6ttmzdFsbH+YLkMeLucTspYADHnENn4fBXNrit0BUQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wit6ttmzdFsbH+YLkMeLucTspYADHnENn4fBXNrit0BUQ@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 2 Jun 2022 14:47:04 -0700
+Message-ID: <CAGETcx9f5BiojqU6wr29eUrYr9s8k+CGj_t-7RvrTSmDm6WwJw@mail.gmail.com>
 Subject: Re: [PATCH v1] module: Fix prefix for module.sig_enforce module param
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Aaron Tomlin <atomlin@redhat.com>,
         Christoph Lameter <cl@linux.com>,
@@ -84,11 +77,18 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jun 2, 2022 at 12:16 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+On Thu, Jun 2, 2022 at 12:41 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Linus want to take this in or should I just queue these up?
+> On Thu, Jun 2, 2022 at 12:16 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > Linus want to take this in or should I just queue these up?
+>
+> I'll take it, and remove the unnecessary #ifdef/#endif. The #undef
+> might as well be unconditional - simpler and doesn't hurt.
 
-I'll take it, and remove the unnecessary #ifdef/#endif. The #undef
-might as well be unconditional - simpler and doesn't hurt.
+Sounds good. I just copy-pasted how it was done elsewhere. Luis was
+mentioning adding a wrapper to go this cleanly and I needed it in
+another instance too. So I'll look into doing that in a future patch.
 
-            Linus
+-Saravana
