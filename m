@@ -2,111 +2,127 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1504C433F5
-	for <linux-modules@archiver.kernel.org>; Mon, 30 May 2022 09:50:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D17FC433EF
+	for <linux-modules@archiver.kernel.org>; Thu,  2 Jun 2022 03:41:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbiE3Juq (ORCPT
+        id S229464AbiFBDlS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 30 May 2022 05:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
+        Wed, 1 Jun 2022 23:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiE3Jum (ORCPT
+        with ESMTP id S229497AbiFBDlR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 30 May 2022 05:50:42 -0400
-Received: from sonic305-22.consmr.mail.gq1.yahoo.com (sonic305-22.consmr.mail.gq1.yahoo.com [98.137.64.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739E76E8E9
-        for <linux-modules@vger.kernel.org>; Mon, 30 May 2022 02:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1653904240; bh=EFEC/oH8juQlnPNOqeAInsqk6DC/fa8WbfZPCkP3o3I=; h=Date:Subject:To:References:From:In-Reply-To:From:Subject:Reply-To; b=1UFSpT1LVuwg/+491t8n+WaGLghQwL8/R7uhAepMVW/eIrobZDliqKnui6u7GbFwQ5UKHhq70Wgm35Xr8nhGTh2yW0PQBqFxVd0/2FAP38tu0SZmux6jLb7rj/+EkdehXxJjMGXsS7/A3Q7jEWY2oivI1hlKuIGFib/wN2mcEEE=
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1653904240; bh=L22NCj1b4UiuAW7WcVf4Ho5MKU7JtXDC+IBo/OFhsOn=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=YSl2D/6oAsDHiecvsEj+RfhViPHXRUVSGjTKWjtQy6F9hSaXXU+DYi5Of7b92242aynsgh3iIj1tQxZ9+XtvxrZ27NmijLClASvwR6Zq2EV9UEcn501XOYcogOnTaQJ2+tv3kS5OX2gVmY/h97YZ9V28DuN2KvuVDRi7kkyryHrVsom64SkF/x4oW/LmgvDuQpV/ewEl+y6Ye02jDLcYjDDaEHI2tVphxZGYiTSdlr+kU/f4XDpUySL+Y9oTafKyzuduMHSA6iI2gVdBbw+SrLKfGSljWSV5dNjuxxp9VlyqsS3tJkmtXB13IeW6dT2PYGDxKOvOYyQvGTRTWq/y/w==
-X-YMail-OSG: _WfVTcUVM1kn8Mx7ZJbOlY6i2RiVFa6B7CYGdw7y31mKIRJxOgX7JKXh9gW1nn3
- Qj_84Q7KTEZWBP7eaplYaMt3xDpzJtTVDhP58MsfqoU5EQ_o61FKbgNfj_dmiJaviE2ByI.PXBaI
- DVGGtvHPhuuCmf5rpvzNGTtnAi6lPAkMmgJ5X7sVPUgsfLWQ6TpO_TfmLnWxPLcjcvve.aImtLCl
- 7rUabQe_23sCaH0LZYCfhygmC99X5.nuycz5s36ceDV02_AVh1FqgPUEBy7rwr8GBUcSUURi73zY
- 97mfSV7Dl0c.q9fXci0YduUj2ZAsdKMz_kTfQhcwXr8CEwqR95m3DQjrO7WdY.DIyAGTpx8pROtZ
- CbEHKBFJH6d0UqIgb_6Hh2zW1.R9LmFYHgyGJVzwrUg1aU60dUlFoiiNooRSsMYtSciAJYLK5Mhl
- p.KgTGcBdmEJAjMByRjM41PZUf5F2jU8ZTNb0dTMSIyY3THwbYthNFE1FfBG3A.gHWEMHa95hGXI
- IOgodMHiZHi7CnF5uITJk7c75SvlBLOhsw1T0AX.izH2OVcr0aPLRF6c7ycmE3zYjue15fEbRB.G
- psQ08HITsQ0U8Ed1lnD36CoKY9mvN5tzOP2tx0yWev9wVzSKPzVwqiVxfXRbrrJvpe_02IChQ8M5
- t5ik4AtJNRVAn1IejN65.hLIjBZXjHG08_Ez2nK87JoxG1QggbAIJlwpC6JHctad3z2VCB8LlQy1
- PlytW2f97P4w3A5Urr436UYKQim2vBcml3O1VOOgTlYkjjThMA0l7bZNw9U7z22H7rSzXYGgOUKX
- BEswbMgzzxtLTva7qIqfthMY9AOqotItpb7xj4EE468qmGUreX0t4l_bvtRJBqc5jDq1e5Knj46d
- C9F8w4qSYkHxVmn5a2ZnMyoHsuXYM0U4poVhO35bvVK5gvw2.COAKsDKkEi1tNfNq8M3.wGLdghm
- f8LbuSEK2gh7Tiu32bIhbRYqJdeFkC7QVALbvrDbGVyzCQwPFmSWOkxG4VE7P3ZQo4u_HNUAmHnp
- mZtDBO8li4w37PKh7IZLGwoHRs9bQjAXLQKzvttCHsK_kwXku4gEcIQoMGaiJ.amxXVibXAGS_nn
- M73X13bZur2jj95zSdb8ijsdCvn_UvhpvbxbrRP6yms4w_4vWvkukhHrXFQPZR41qrxmqKm3T1J5
- keCvyj0eVIZ34_uBg9xBXciEdd8z4H3.A0hGshD3a_I_4Wrcvr_4dUNmG03QoBvB5GQuu5R6._46
- 27DnI2_eKi9Z5wxdPC7URGm5WdumLAGt8diqMgluCnQ2cCEB5vIktWPfwDYKENwmhafCTOhF2VV.
- 2w8Tn.Eeyvsj1wuxfiKIU29TFYaEd1ZgNvSDV3Cg_qoWjzLGbXhSNMyzl_byjPCNSedtlxwa88LO
- ykkHSZ2mXR9rtRbWWDD_P5mp7IJRMGHytUdUgTOlE3I4aUKD25NJ3k6e5alzQIVduVZDh2oirpfR
- WpjfFBm_a_WnjkfVBfLobT.WG8tYTFGFrQWPH_oGgXf95G.0gn5Xks2v8oUn8Rp52z5V5UnBDPdD
- ulSe4pBhBXZNPq17UcIS3I332Nas515AVQxFXYYcCsCmwmRaqV7d2lJupC8DoIg9b9YZDZ0ofjmG
- kTC6TEbxYH4qRyr4YWcGcDQLbuCajL.XhS.r3yjn21xdatiP9OfOOyS.KvgeahwjmIZMLhd3u2WQ
- X9TVCAPt855xR5wQi9y.kUHjdoQCJmgOy2_fGy7iYrY3yqp1bq1J09CWZZNuQWXbST98UAMBAv_N
- rJf2PIpuSnzdmvNJm1yOCMTtt3Vjy5.a_hqL3h5ZFoq4RlHZWq_UzMePhFffbplvm6TZhiOiIvNT
- 5m1Khr0zurZ_yHwiNBq9.cT0hdj4mlPQgbI13QQNxbWArDl4IKKf7T5Yn_OTqJSaJTeILmwpaAdB
- diGtE97yQFSN8Ztp.7vl8VsNG6T369xBqGtNF92HrerDtC5fl7Z7FueBwPgMApzRcg7LjnN4kumI
- 49GlyTMyaoHUrtmHfYeqDT0IAXZfx2nmTNw0hQ.1D2_m89tfsJ3AndwXGor7ZNTen0Cj_RKBFs4U
- fCC06NN16ADtiuajnaleeqEePW3Wf77JVoWzadQsnYWOFQpQlqa6m2sRGm2TZFjoBFmPo5D9oUjH
- lrrcv3EmbwWQSvyz2pxsUuRn8KJomFw0OoyexSaOmASZ000knYuzG_FjgfmMoNmOY7OqoIgaChbK
- NAlLqhJIW.nAzKQ--
-X-Sonic-MF: <lesrhorer@att.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.gq1.yahoo.com with HTTP; Mon, 30 May 2022 09:50:40 +0000
-Received: by hermes--canary-production-ne1-799d7bd497-7lvgk (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 34a288aebce45ff4d5722f51bb565f1d;
-          Mon, 30 May 2022 09:50:39 +0000 (UTC)
-Message-ID: <3643b14f-5240-59b1-d442-09e528d228b3@att.net>
-Date:   Mon, 30 May 2022 04:50:22 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: Module failure on new install of Debian Bullseye
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
-References: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0.ref@att.net>
- <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0@att.net>
- <7999b7b4-3b58-a9c4-4756-445e54404f0f@csgroup.eu>
- <ba2fb3ff-22dd-d68e-fa99-02de39240f20@infradead.org>
- <3b8f2ed6-11fd-b5a7-5442-7cac90348514@att.net>
- <8de4e4b7-f741-eb4d-9e11-9b23ba65c21a@att.net>
- <13529cf4-a00d-5e59-2e1c-cb1daf24bf71@csgroup.eu>
-From:   Leslie Rhorer <lesrhorer@att.net>
-In-Reply-To: <13529cf4-a00d-5e59-2e1c-cb1daf24bf71@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+        Wed, 1 Jun 2022 23:41:17 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86BE10EA5B
+        for <linux-modules@vger.kernel.org>; Wed,  1 Jun 2022 20:41:15 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id y139-20020a253291000000b0065cff9ce37aso3073286yby.23
+        for <linux-modules@vger.kernel.org>; Wed, 01 Jun 2022 20:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:subject:from:to:cc;
+        bh=0TP45ri2Rm0IThufZmYq3gqP6Oy9O8gtuE5Zzf1fHAI=;
+        b=og8WzEFivR8Aec/KX7BrbGLQQPelHY3Yy/jjiXxB2vK6lARri6hHWfheQdsdX6Hy6+
+         UHkebTYJ0qp18z95eOavjJWjeFd9wrgOTICLUx08bZLN4T+Nw7DayipbRPSPqLonsZIy
+         LfyKCq5QkurwvGpFQ68jTCsxSbKHJ83VfcI4cTYeO/IDIro7YAbm7oWThRUJVI6Ol91e
+         Nil3SjjT2fa8WsD30Yhyv+1YPMmAwgbv/biePE5kQRa9arJJz4TR+O6IOXN5ZCXK1+CV
+         MfeQ8Pb9IO+WR1iAhApAHbXrerk5zm5EWLFIH5vePQiROln4wZmFC3sq7pndZ7dxbjof
+         lt9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version:subject
+         :from:to:cc;
+        bh=0TP45ri2Rm0IThufZmYq3gqP6Oy9O8gtuE5Zzf1fHAI=;
+        b=DVjFlAo9Wgzn6PThhjyhATwSzpDB27SzjNEwgSySOfztssL1UQX3CIQ/sxqqm5Fh5i
+         V8ubUYq/M5SccKs/volahv4yWxuDCNnzUW5lMCyDbdbJNRBq3ExkhyZOV8EX/NWwbFwk
+         f2Px7e2+0iZn2Ftiw0xww1tdU5wZWlhXqaCln4b23h/vhG8+vqnQz+ACx/7WFFYtxefo
+         uxC+LAF5Dp/fNPxjgOqD5tkCGhNdo103fnlmvX9oJIFeK2Gh4T3LQT+Wh+jDfdBTyWhg
+         vgdnmJIycF6Cd+Se7fhUXDW8h3Dhsev4Nx3hdA9xOLT8ALxERZtk9G8k22SIHHTIGahp
+         04vg==
+X-Gm-Message-State: AOAM532jIZYsp8JOHUkjvhhsj72qb5C7OD2oqUOdFTgXZutFcxR1Wtws
+        3h084W74rRMMv+eStRvuO23KlsY3fvS9qds=
+X-Google-Smtp-Source: ABdhPJyMQ1uPP0a6d0b+oQI3447LUskffZDUTKA0VTs1kzreaAXTeiomm5PVbRJ1j6J5zQ+3c6k/pZutNDYYZO0=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f3aa:cafe:c20a:e136])
+ (user=saravanak job=sendgmr) by 2002:a81:5512:0:b0:30c:398d:61d4 with SMTP id
+ j18-20020a815512000000b0030c398d61d4mr3350296ywb.58.1654141274869; Wed, 01
+ Jun 2022 20:41:14 -0700 (PDT)
+Date:   Wed,  1 Jun 2022 20:41:11 -0700
+In-Reply-To: <20220322140344.556474-2-atomlin@redhat.com>
+Message-Id: <20220602034111.4163292-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: Re: [PATCH v12 01/14] module: Move all into module/
+From:   Saravana Kannan <saravanak@google.com>
+To:     Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org,
+        christophe.leroy@csgroup.eu
+Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, pmladek@suse.com,
+        daniel.thompson@linaro.org, hch@infradead.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-	I was able to get the 1G interface on the motherboard up, so now I have 
-LAN connectoivity and apt is working.
+Aaron Tomlin <atomlin@redhat.com> wrote:
+> No functional changes.
 
-	It is kernel 5.10.0-13-amd64
+I could be mistaken, but I think this has a functional change and could
+break module signature enforcement in some cases.
 
-On 5/30/2022 1:08 AM, Christophe Leroy wrote:
 > 
+> This patch moves all module related code into a separate directory,
+> modifies each file name and creates a new Makefile. Note: this effort
+> is in preparation to refactor core module code.
 > 
-> Le 30/05/2022 à 01:46, Leslie Rhorer a écrit :
->>
->>       Below is the output of dmesg after removing quite a few of what I
->> am certain are unrelated lines:
->>
->> [    0.000000] Linux version 5.10.0-13-amd64
->> (debian-kernel@lists.debian.org) (gcc-10 (Debian 10.2.1-6) 10.2.1
->> 20210110, GNU ld (GNU Binutils for Debian) 2.35.2) #1 SMP Debian
->> 5.10.106-1 (2022-03-17)
-> 
->> [    1.465675] bnx2x: disagrees about version of symbol module_layout
-> 
->> [   12.075903] bnx2x: disagrees about version of symbol module_layout
-> 
-> 
-> Those two messages means that you are trying to use modules that were
-> built for a different kernel version.
-> 
-> As far as I can see you are using kernel 5.10
-> 
-> You have to use bnx2 modules for that exact kernel.
-> 
-> 
-> Christophe
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> ---
+>  MAINTAINERS                                         |  2 +-
+>  kernel/Makefile                                     |  5 +----
+>  kernel/module/Makefile                              | 12 ++++++++++++
+>  kernel/{module_decompress.c => module/decompress.c} |  2 +-
+>  kernel/{module-internal.h => module/internal.h}     |  0
+>  kernel/{module.c => module/main.c}                  |  2 +-
+>  kernel/{module_signing.c => module/signing.c}       |  2 +-
+
+I spent at least an hour trying to figure out how the code below in
+module/signing.c (was moved from module/main.c in a later patch in this
+series) managed to have a "module" prefix for "module.sig_enforce" kernel
+cmdline param and for the /sys/module/module/parameters/sig_enforce file.
+
+static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
+module_param(sig_enforce, bool_enable_only, 0644);
+
+I thought I was missing something until I realized this was a very recent
+change and might actually be a bug. If I'm not mistaken, the prefix will
+now become "signing". So the kernel cmdline param would get ignore and any
+userspace writes to /sys/module/module/parameters/sig_enforce will start
+failing.
+
+I don't have a device to boot 5.19-rcX in, but I think I'm right. Can
+someone confirm?
+
+If my code analysis is right, then the fix seems to be adding this code
+before the module_param() line.
+
+diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+index 85c8999dfecf..6b0672e4417b 100644
+--- a/kernel/module/signing.c
++++ b/kernel/module/signing.c
+@@ -16,6 +16,11 @@
+ #include <uapi/linux/module.h>
+ #include "internal.h"
+ 
++#ifdef MODULE_PARAM_PREFIX
++#undef MODULE_PARAM_PREFIX
++#endif
++#define MODULE_PARAM_PREFIX "module."
++
+ static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
+ module_param(sig_enforce, bool_enable_only, 0644);
+
+-Saravana
