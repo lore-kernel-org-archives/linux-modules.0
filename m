@@ -2,59 +2,59 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B3D3C43334
-	for <linux-modules@archiver.kernel.org>; Fri,  3 Jun 2022 21:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 718FDC433EF
+	for <linux-modules@archiver.kernel.org>; Fri,  3 Jun 2022 21:51:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240444AbiFCVvN (ORCPT
+        id S242876AbiFCVvN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
         Fri, 3 Jun 2022 17:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242876AbiFCVvL (ORCPT
+        with ESMTP id S245040AbiFCVvN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 3 Jun 2022 17:51:11 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F1C57B3E
-        for <linux-modules@vger.kernel.org>; Fri,  3 Jun 2022 14:51:10 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso13050052pjl.3
-        for <linux-modules@vger.kernel.org>; Fri, 03 Jun 2022 14:51:10 -0700 (PDT)
+        Fri, 3 Jun 2022 17:51:13 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285B2580C3
+        for <linux-modules@vger.kernel.org>; Fri,  3 Jun 2022 14:51:12 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id n8so7714809plh.1
+        for <linux-modules@vger.kernel.org>; Fri, 03 Jun 2022 14:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=iP6+MHi7sHxKscnvV/NWmNg2xqGqAE4GKnrgY09vfTo=;
-        b=o5F1Sb4IkaJQ4UCZpihfeFqXHhlHeQyqjU6r4jSYW1aXN2iU9ei+zNfm8rnWHoQ6qI
-         mxTgvqgdU77+/WdaSRnsNlhmARw8MnnPJtTaJo4DchrOMq1e3bBIf0YwNbQlCzpz9lxq
-         eswdcrrn2o/WCOUcCCw9K3PZsGtYgmKvwjuxOLxRL7yv8ell/FRnsHyR/bBCeMfcKecK
-         /+VBV3VI17OWywTwTPG59o9UnlUXQJqoK2axwNYNbwi1wesKYGbWcnGaZpQ6ZISKKv5q
-         B0W4Aq9o3MHuRqo18ZMXpBKMUxUjyLi+IAcwHFj/EMAYDMzUDPJWlwMtZIWGq27x+fKg
-         6pUg==
+        bh=4dfS+aVx0bMyj+vGaxCHuJwOGGxQuq6BokCwq/GVf94=;
+        b=kC7wfyayjutXk5l8dPUfunikhIOCc7extY0ibMnFmqxeaQAloq0Y5RAFqPDYUN9kCG
+         Jwsk86qOFTAM1bBYK1aznQxmCrMcFYwyDY8c3rbjOi8+M5HY3LGT4rZVD2bzchOik+Pv
+         QgA+PjxfBoJG4eRdlngs8okwRzSRB+nhxkUreWQFeVXH+v8mhFxcHsqc5VUjoI2agXLd
+         3QjWjXRVj4MdGeRSqYtk8FGta6sSQQHEDDBIKiUEZH/7era9oAq9LT6PzYNvoKTZGXOc
+         EqZJpYr6dxWIWMxdR7J/twQLhJBdFPIaBVPnzM9/djqIhHFfmOM1WAr6Wz3ql4M7EZh1
+         R+ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iP6+MHi7sHxKscnvV/NWmNg2xqGqAE4GKnrgY09vfTo=;
-        b=ay3useCRZsGkF3xDMriRlmr90OUPd95xqPRGdb1f18SkqtaujnjT0cvtJjwmXvsUF/
-         C2iQVk7SKNzrnLL1L0zSdXJMK+bcvaBIClaChpmAWRjMF9CYUP9NvjYGcYW2VLec9nKM
-         NwMfedOFX8DxA6TZ8JX5xLTLTCf4ym4gR44XkwWIsEKqhunIVmJO1wZWmVYmMK4aonUM
-         DoYB0/8J2QJS062YYqxPFNL+bfoQj41hphkR+cor03OLb1qic44lQWP1wfVmQzkuHO9c
-         6gdJ2n8mHrX3Y0Wln+cFia+zmrV2ZWY1TBdAXo9keM4JXsI9qLl/aOyabwtZCd0gUiiJ
-         0gGg==
-X-Gm-Message-State: AOAM530qRkJ22yav0gc+qzesMw0R0COIXFb5opTOdD1at2ZgikqMGAFZ
-        O9yuUJch+i8jVt3Cm7XhfeAqigVevq4=
-X-Google-Smtp-Source: ABdhPJxQgRUsDw3gc7EgRfWZvSFWZ91g4uav1g0wvc8stFt7rQZR+kJf/9XuuOVAthln15bCkzSVaQ==
-X-Received: by 2002:a17:902:e5cb:b0:166:3622:a7e4 with SMTP id u11-20020a170902e5cb00b001663622a7e4mr12038285plf.32.1654293069803;
-        Fri, 03 Jun 2022 14:51:09 -0700 (PDT)
+        bh=4dfS+aVx0bMyj+vGaxCHuJwOGGxQuq6BokCwq/GVf94=;
+        b=ednEX/6xrQE1Ah1H6BuL9QYbjIkInzrTzYkTvWwvQCji1REI2yskkJOxhOZMgU/tWx
+         YOBz7raR8k4orF2IyHckDnsDStmsYq9AdefaTLbYATCngMcWz3wHf+DrEB2Q6i/bPZWt
+         ECjgfOm12hcqSlcicMuvZ09hyaip73Nw/7+LjawJuKK43ZEtJ1ib0IP5DBb0i2YDNA4n
+         HNPxiBLOIIJBgpEnpzwXk0qeyeSdu8ILMykMgJCjH0W114BixUB6Epk4cbKyDH4wQeUf
+         bn0IiQKa+t2eWwdDOW1ognewV7DBQyroxtGKA1Q4Jy8a9G4+ubsuBwsL7ETY6djnNDxo
+         v8cw==
+X-Gm-Message-State: AOAM533F7Ywf//0znZc/36zk3oyZDP3mZ0mG7tP7EqWGoK4A4FDBDYl6
+        Kutl2esBzkKNNP0ssrhxkghHtsOjtvg=
+X-Google-Smtp-Source: ABdhPJzmC/4JEtYaOn9bsDOGtAUBvmkb/9QQN7dnRhoRRB+gwn6PWXY65NOviKNpRTqa1zNKy8ToCw==
+X-Received: by 2002:a17:90b:1a88:b0:1dc:8e84:9133 with SMTP id ng8-20020a17090b1a8800b001dc8e849133mr12891206pjb.231.1654293071247;
+        Fri, 03 Jun 2022 14:51:11 -0700 (PDT)
 Received: from ldmartin-desk2.. ([50.45.187.67])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b00163ffe73300sm6032866plg.137.2022.06.03.14.51.08
+        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b00163ffe73300sm6032866plg.137.2022.06.03.14.51.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 14:51:08 -0700 (PDT)
+        Fri, 03 Jun 2022 14:51:10 -0700 (PDT)
 From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
 To:     linux-modules@vger.kernel.org
 Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH 5/8] util: Add msec variants for time-related functions
-Date:   Fri,  3 Jun 2022 14:50:44 -0700
-Message-Id: <20220603215047.9607-6-lucas.de.marchi@gmail.com>
+Subject: [PATCH 6/8] util: Add exponential backoff sleep
+Date:   Fri,  3 Jun 2022 14:50:45 -0700
+Message-Id: <20220603215047.9607-7-lucas.de.marchi@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220603215047.9607-1-lucas.de.marchi@gmail.com>
 References: <20220603215047.9607-1-lucas.de.marchi@gmail.com>
@@ -63,61 +63,85 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+Add simple functions to put the current thread to sleep using
+exponential backoff to split the interval in smaller pieces.
+
 Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
 ---
- shared/util.c | 16 ++++++++++++++++
- shared/util.h |  4 ++++
- 2 files changed, 20 insertions(+)
+ shared/util.c | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ shared/util.h |  5 +++++
+ 2 files changed, 51 insertions(+)
 
 diff --git a/shared/util.c b/shared/util.c
-index aeb171f..d4452eb 100644
+index d4452eb..4b547ff 100644
 --- a/shared/util.c
 +++ b/shared/util.c
-@@ -466,6 +466,12 @@ unsigned long long ts_usec(const struct timespec *ts)
- 	       (unsigned long long) ts->tv_nsec / NSEC_PER_USEC;
+@@ -472,6 +472,52 @@ unsigned long long ts_msec(const struct timespec *ts)
+ 	       (unsigned long long) ts->tv_nsec / NSEC_PER_MSEC;
  }
  
-+unsigned long long ts_msec(const struct timespec *ts)
++static struct timespec msec_ts(unsigned long long msec)
 +{
-+	return (unsigned long long) ts->tv_sec * MSEC_PER_SEC +
-+	       (unsigned long long) ts->tv_nsec / NSEC_PER_MSEC;
++	struct timespec ts = {
++		.tv_sec = msec / MSEC_PER_SEC,
++		.tv_nsec = (msec % MSEC_PER_SEC) * NSEC_PER_MSEC,
++	};
++
++	return ts;
++}
++
++int sleep_until_msec(unsigned long long msec)
++{
++	struct timespec ts = msec_ts(msec);
++
++	if (clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL) < 0 &&
++	    errno != EINTR)
++		return -errno;
++
++	return 0;
++}
++
++/*
++ * Exponential retry backoff with tail
++ */
++unsigned long long get_backoff_delta_msec(unsigned long long t0,
++					  unsigned long long tend,
++					  unsigned long long *delta)
++{
++	unsigned long long t;
++
++	t = now_msec();
++
++	if (!*delta)
++		*delta = 1;
++	else
++		*delta <<= 1;
++
++	while (t + *delta > tend)
++		*delta >>= 1;
++
++	if (!*delta && tend > t)
++		*delta = tend - t;
++
++	return t + *delta;
 +}
 +
  unsigned long long now_usec(void)
  {
  	struct timespec ts;
-@@ -476,6 +482,16 @@ unsigned long long now_usec(void)
- 	return ts_usec(&ts);
- }
- 
-+unsigned long long now_msec(void)
-+{
-+	struct timespec ts;
-+
-+	if (clock_gettime(CLOCK_MONOTONIC, &ts) != 0)
-+		return 0;
-+
-+	return ts_msec(&ts);
-+}
-+
- unsigned long long stat_mstamp(const struct stat *st)
- {
- #ifdef HAVE_STRUCT_STAT_ST_MTIM
 diff --git a/shared/util.h b/shared/util.h
-index 734a523..bedafa3 100644
+index bedafa3..7030653 100644
 --- a/shared/util.h
 +++ b/shared/util.h
-@@ -48,9 +48,13 @@ unsigned long long stat_mstamp(const struct stat *st);
-  * ************************************************************************ */
- #define USEC_PER_SEC	1000000ULL
- #define USEC_PER_MSEC	1000ULL
-+#define MSEC_PER_SEC	1000ULL
-+#define NSEC_PER_MSEC	1000000ULL
- 
- unsigned long long ts_usec(const struct timespec *ts);
-+unsigned long long ts_msec(const struct timespec *ts);
+@@ -55,6 +55,11 @@ unsigned long long ts_usec(const struct timespec *ts);
+ unsigned long long ts_msec(const struct timespec *ts);
  unsigned long long now_usec(void);
-+unsigned long long now_msec(void);
+ unsigned long long now_msec(void);
++int sleep_until_msec(unsigned long long msec);
++unsigned long long get_backoff_delta_msec(unsigned long long t0,
++					  unsigned long long tend,
++					  unsigned long long *delta);
++
  
  /* endianess and alignments                                                 */
  /* ************************************************************************ */
