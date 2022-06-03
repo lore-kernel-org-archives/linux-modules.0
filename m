@@ -2,171 +2,132 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC3D4C43334
-	for <linux-modules@archiver.kernel.org>; Fri,  3 Jun 2022 04:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A27D6C43334
+	for <linux-modules@archiver.kernel.org>; Fri,  3 Jun 2022 05:55:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236249AbiFCEbd (ORCPT
+        id S241280AbiFCFzN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 3 Jun 2022 00:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        Fri, 3 Jun 2022 01:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiFCEbc (ORCPT
+        with ESMTP id S241397AbiFCFy5 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 3 Jun 2022 00:31:32 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4AD36B71;
-        Thu,  2 Jun 2022 21:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=h11mfFrK9QMlt7x6lBFFIFgCiCt5fV9MimCmymWkWMQ=; b=I208srKiAt4VBcE6LOzAteUE5T
-        J/iH43L+s9B00CBhtAekBO/BRB8C8jJjTJI3xsF5w53J799Ag5+2/FF8r0CdvrANbNPkI9JO6cGcy
-        QcQazxvlASiJBUDptiQ8I9zQHq5k39/ASmiL5L9/q96VeUy49feaoxCMclzLTu+GBYBqW8rZEyQ28
-        5XlU1AhGiMUpqUraysO/jc7VPnHyAC3G12eIi+9fGSDkX3ArZH8tA1eicdrEvAzChD+9jTvPmiLgR
-        pkVqVG3JlP+zZZYhQvN/Lp0SWjk68HrqrERGDjUd8/Be9EHF6W91pzdMjXXD+smfemW6znXjDsSpV
-        vIbyludA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwyxi-004Iu4-JQ; Fri, 03 Jun 2022 04:31:05 +0000
-Message-ID: <01bf93d3-06c4-594e-e3c6-b6f56a1efa83@infradead.org>
-Date:   Thu, 2 Jun 2022 21:30:53 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1] module: Fix prefix for module.sig_enforce module param
-Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>,
+        Fri, 3 Jun 2022 01:54:57 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6650369F5
+        for <linux-modules@vger.kernel.org>; Thu,  2 Jun 2022 22:54:56 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2fed274f3fbso60367087b3.17
+        for <linux-modules@vger.kernel.org>; Thu, 02 Jun 2022 22:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=RoBwt0zHEU67rWp9+CrvlYFHsmCCA3p1PhfaqmCXOeo=;
+        b=eyKFF1dCiNQ57w+ZE4SE0yw/Wk1OUn8JtcfiepC6euZILuQsEFeufqeYpMcWksZMK7
+         /ptJkoZXkNKzLA6PvqA0DSYuN54L6fTY2qpHmADDonr8NFRrHYfTeXgdNLOFdsUzWxRc
+         WQtR2vhz6vdFUPnjsbaQPV3pbT3l/em6jjE4W+JiqIJsIFs/Z19Ni4bJ7j5zXvx44V1B
+         trF2eged2CrGSyMshmoMhuJgQOVuhWTASkJW6zVPTS0okM8lVKOeluWgQNLUqpkvhIKo
+         RnnRehXjulITx8JOuKh4aV5T98Z9vBni8p09a99k8lqRlXpD3iUxci4TCQ3CMRqKzFGD
+         lMpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=RoBwt0zHEU67rWp9+CrvlYFHsmCCA3p1PhfaqmCXOeo=;
+        b=tSpMb3FhZsY1nQuH5dB3CFQdXIJOrh2XDeQK1GXn+W2NDFk4jBTORyfF846WNejmiA
+         N0yYig6Qsj81L+PyrOqTuIV2pQnOO5c2psDCdkrGeqOVMgr+7IaFOneVjTpLP+uVtOTF
+         AW3n4slIR4DDGi3IWTWPyG+UUhsjqm+lejAU/7UHw7gAg2ojloJOkHzgTcXY7jZT4/s9
+         2turgmauO/pFjlT0nC+3BkvVszAViPi4y6Wbg00Y0pYejaaAep+v974BJVCq/fkhvuMh
+         XzKURtUOAYC6D7p9jQlPr79/AOXgYm33ik9TnENMec4O8kHwOfcLAm45BBobn4+Y1VoC
+         l+uw==
+X-Gm-Message-State: AOAM532rxe2Ma4PStg6GY+WNSV2o7u3uFWTUpb2dT+OF6oVRaKFlZnVb
+        TAN4jzD8+jMiaAxgPtXA4A8lF/cZ+FCQQk8=
+X-Google-Smtp-Source: ABdhPJy8VzzznD94DSeEqNKWVPj7DmQUo3V9uDzsA9D0R+CJlbAToM3qWHIj6HjhA2UkYUUKPkhabzvAsKaUU7E=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f95e:2d1c:c00f:e866])
+ (user=saravanak job=sendgmr) by 2002:a25:7c1:0:b0:65c:c093:134 with SMTP id
+ 184-20020a2507c1000000b0065cc0930134mr9648263ybh.356.1654235695989; Thu, 02
+ Jun 2022 22:54:55 -0700 (PDT)
+Date:   Thu,  2 Jun 2022 22:54:41 -0700
+Message-Id: <20220603055442.521888-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH v1] module: Add support for default value for module async_probe
+From:   Saravana Kannan <saravanak@google.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
         Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org, void@manifault.com,
-        atomlin@atomlin.com, Allen Pais <allen.lkml@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Android Kernel Team <kernel-team@android.com>
-References: <20220322140344.556474-2-atomlin@redhat.com>
- <20220602035653.4167316-1-saravanak@google.com>
- <YpkMelZC+E5hKTw6@bombadil.infradead.org>
- <CAHk-=wit6ttmzdFsbH+YLkMeLucTspYADHnENn4fBXNrit0BUQ@mail.gmail.com>
- <CAGETcx9f5BiojqU6wr29eUrYr9s8k+CGj_t-7RvrTSmDm6WwJw@mail.gmail.com>
- <YplAxCvRiNnthK6d@bombadil.infradead.org>
- <CAGETcx-gEbH2ymx7FXCXZNt3p=r=5FXuhLUiMuNvofcb1HXysA@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAGETcx-gEbH2ymx7FXCXZNt3p=r=5FXuhLUiMuNvofcb1HXysA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi--
+Add a module.async_probe kernel command line option that allows enabling
+async probing for all modules. When this command line option is used,
+there might still be some modules for which we want to explicitly force
+synchronous probing, so extend <modulename>.async_probe to take an
+optional bool input so that async probing can be disabled for a specific
+module.
 
-On 6/2/22 20:48, Saravana Kannan wrote:
-> On Thu, Jun 2, 2022 at 3:59 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->>
->> On Thu, Jun 02, 2022 at 02:47:04PM -0700, Saravana Kannan wrote:
->>> On Thu, Jun 2, 2022 at 12:41 PM Linus Torvalds
->>> <torvalds@linux-foundation.org> wrote:
->>>>
->>>> On Thu, Jun 2, 2022 at 12:16 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->>>>>
->>>>> Linus want to take this in or should I just queue these up?
->>>>
->>>> I'll take it, and remove the unnecessary #ifdef/#endif. The #undef
->>>> might as well be unconditional - simpler and doesn't hurt.
->>>
->>> Sounds good. I just copy-pasted how it was done elsewhere. Luis was
->>> mentioning adding a wrapper to go this cleanly and I needed it in
->>> another instance too. So I'll look into doing that in a future patch.
->>
->> Virtual hug, or something hippie like that.
-> 
-> Thanks :)
-> 
-> I gave this a shot.
-> 
-> + #define set_module_param_prefix(prefix) \
-> + #undef MODULE_PARAM_PREFIX              \
-> + #define MODULE_PARAM_PREFIX prefix
-> 
-> I even wrote up a nice chunk of "function doc" before I tried
-> compiling it. And once I compiled it, I was smacked in the head by the
-> compiler for trying to put a #define inside a #define (Duh, the
-> preprocessing in a single pass).
-> 
-> Before I tried this, I looked up the current uses of the "hacky" snippet:
-> 
-> $ git grep -l "define.*MODULE_PARAM_PREFIX" -- :^include/
-> block/disk-events.c
-> drivers/misc/cxl/fault.c
-> drivers/mmc/core/block.c
-> drivers/pci/pcie/aspm.c
-> drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> drivers/tty/serial/8250/8250_core.c
-> drivers/xen/balloon.c
-> drivers/xen/events/events_base.c
-> kernel/debug/kdb/kdb_main.c
-> kernel/kcsan/core.c
-> kernel/rcu/tree.c
-> kernel/rcu/update.c
-> mm/damon/reclaim.c
-> mm/kfence/core.c
-> 
-> 
-> In a lot of those files, there are a lot of module params that follow
-> this snippet. Going on a tangent, some of the uses of #define
-> MODULE_PARAM_PREFIX don't seem to have any obvious use or param
-> macros.
-> 
-> So adding a module_param_prefixed() doesn't make sense to me either,
-> because I'll have to repeat the same prefix in every usage of
-> module_param_prefixed() AND I'll have to create a _prefixed() variant
-> for other param macros too.
-> 
-> So, something like:
-> module_param_prefixed("module.", sig_enforce, bool, 644);
-> module_param_prefixed("module.", another_param1, bool, 644);
-> module_param_prefixed("module.", another_param2, bool, 644);
-> 
-> Or replace "module." with a MY_PREFIX so that it's easy to ensure the
-> string is the same across each use:
-> #define MY_PREFIX "module."
-> module_param_prefixed(MY_PREFIX, sig_enforce, bool, 644);
-> module_param_prefixed(MY_PREFIX, another_param1, bool, 644);
-> module_param_prefixed(MY_PREFIX, another_param2, bool, 644);
-> 
-> But at that point, all I'm avoiding is one #undef MODULE_PARAM_PREFIX
-> and a whole lot of code churn.
-> 
-> One other option is to do something like:
-> #ifndef MOD_PREFIX
-> #define MODULE_PARAM_PREFIX KBUILD_MODNAME "."
-> #else
-> #define MODULE_PARAM_PREFIX MOD_PREFIX "."
-> #endif
-> 
-> But that will have the limitation that MOD_PREFIX has to be defined
-> before any #includes is in a file (similar to pr_fmt())  and doesn't
-> allow you to redefine the prefix half way through a file -- which is
-> also a thing that happens in drivers/tty/serial/8250/8250_core.c.
-> 
-> So, long story short, none of these options sound especially appealing
-> that it's worth all the code churn across multiple maintainer trees.
-> Let me know if you have other ideas that might work or you think one
-> of the options I dismissed is actually worth doing.
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+---
+ Documentation/admin-guide/kernel-parameters.txt |  8 ++++++--
+ kernel/module/main.c                            | 11 ++++++++++-
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
-I agree with your assessment. Nothing new is needed.
-
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 710b52d87bdd..32083056bd25 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1147,8 +1147,12 @@
+ 	nopku		[X86] Disable Memory Protection Keys CPU feature found
+ 			in some Intel CPUs.
+ 
+-	<module>.async_probe [KNL]
+-			Enable asynchronous probe on this module.
++	<module>.async_probe[=<bool>] [KNL]
++			If no <bool> value is specified or if the value
++			specified is not a valid <bool>, enable asynchronous
++			probe on this module.  Otherwise, enable/disable
++			asynchronous probe on this module as indicated by the
++			<bool> value.
+ 
+ 	early_ioremap_debug [KNL]
+ 			Enable debug messages in early_ioremap support. This
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index fed58d30725d..47085795f037 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2410,6 +2410,12 @@ static void do_free_init(struct work_struct *w)
+ 	}
+ }
+ 
++#undef MODULE_PARAM_PREFIX
++#define MODULE_PARAM_PREFIX "module."
++/* Default value for module->async_probe_requested */
++static bool async_probe;
++module_param(async_probe, bool, 0644);
++
+ /*
+  * This is where the real work happens.
+  *
+@@ -2630,7 +2636,8 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
+ 	int ret;
+ 
+ 	if (strcmp(param, "async_probe") == 0) {
+-		mod->async_probe_requested = true;
++		if (strtobool(val, &mod->async_probe_requested))
++			mod->async_probe_requested = true;
+ 		return 0;
+ 	}
+ 
+@@ -2797,6 +2804,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	if (err)
+ 		goto bug_cleanup;
+ 
++	mod->async_probe_requested = async_probe;
++
+ 	/* Module is ready to execute: parsing args may do that. */
+ 	after_dashes = parse_args(mod->name, mod->args, mod->kp, mod->num_kp,
+ 				  -32768, 32767, mod,
 -- 
-~Randy
+2.36.1.255.ge46751e96f-goog
+
