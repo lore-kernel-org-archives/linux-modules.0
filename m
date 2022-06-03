@@ -2,89 +2,84 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78344C43334
-	for <linux-modules@archiver.kernel.org>; Fri,  3 Jun 2022 15:01:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0B12C43334
+	for <linux-modules@archiver.kernel.org>; Fri,  3 Jun 2022 15:09:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245296AbiFCPB4 (ORCPT
+        id S245331AbiFCPJW (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 3 Jun 2022 11:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        Fri, 3 Jun 2022 11:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245300AbiFCPBz (ORCPT
+        with ESMTP id S230486AbiFCPJV (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:01:55 -0400
+        Fri, 3 Jun 2022 11:09:21 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7A110A8;
-        Fri,  3 Jun 2022 08:01:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4D839B91
+        for <linux-modules@vger.kernel.org>; Fri,  3 Jun 2022 08:09:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OHLzFhY1sgaXVkq2dkqUz+DXjlRYN/dI4bdYgt7Hz8c=; b=w2gkfziMSPSIJ07SVWnZmYlHmy
-        T1gBfH2AfJiFIxiGLpAYpvUBuoiUqkzW5WRorzZuXomV0iIdMIBIVsjYDUZGbwtszPYYWkx4jDct4
-        OIPYedfHpR/H5MFTA5A/M5QLQbPM20ChIWbUYx/uFD67CNhzLETygIjDkQIm7AWJao8TVOeY1+i76
-        bHOEkeyGf1D1wUpNLmWMQe+oD0R5hDf4GmPvClqF52qy1CxKupNmgmgz/1EtBPlTS4lsIIG+fjMtI
-        CSfsydhyflNa/c6N6Tz7kSunvmBXGO6T5NVL1GayEgIqTAKh6v8y23N+9BYqTmhUgwXJUJVR3Ci6m
-        WTJsAs0Q==;
+        bh=LYEniF+b/qO2ght9y6nzEPEY4PGpxkeHQMF/6YxuUQo=; b=TXZ/tNAcmjV41zrwvdfLNCwHCH
+        bpFDw/F75H0N9b3/YWebHFr7R/DL/hHXxAAPpHrCPPYD4OkGCgrGMROcHL8mFQPy6qxzspZHGcTvk
+        Ycp+Ff8JBLzBr56tsiE9RS4HODgZfh1W1kYJldo+qCraAILRFsTlUE2BMsfiwlatWzXvGK8GlVtLs
+        cNl4VeVV7PWcuCMFKQPoemQjCT5YZse40q/irJ+osHSeGKifLsWIKcKtVvS+0lQaq+mvRpwUpkpJG
+        9ExkKezLDfDB1Rr/Y7+CaUDpxwxkfgLbq+Wk57wqEI3PXQWXyQYnSWt+Ctg9bGN5Ju7MOEK5SyY4g
+        Fllt6P7g==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nx8o6-007vN1-US; Fri, 03 Jun 2022 15:01:46 +0000
-Date:   Fri, 3 Jun 2022 08:01:46 -0700
+        id 1nx8vN-007wbB-Ej; Fri, 03 Jun 2022 15:09:17 +0000
+Date:   Fri, 3 Jun 2022 08:09:17 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Saravana Kannan <saravanak@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v1] module: Add support for default value for module
- async_probe
-Message-ID: <YpoiWhMqANChE/ph@bombadil.infradead.org>
-References: <20220603055442.521888-1-saravanak@google.com>
+To:     Leslie Rhorer <lesrhorer@att.net>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+Subject: Re: Module failure on new install of Debian Bullseye
+Message-ID: <YpokHQKUPCG4L2Ar@bombadil.infradead.org>
+References: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0.ref@att.net>
+ <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0@att.net>
+ <7999b7b4-3b58-a9c4-4756-445e54404f0f@csgroup.eu>
+ <ba2fb3ff-22dd-d68e-fa99-02de39240f20@infradead.org>
+ <3b8f2ed6-11fd-b5a7-5442-7cac90348514@att.net>
+ <8de4e4b7-f741-eb4d-9e11-9b23ba65c21a@att.net>
+ <13529cf4-a00d-5e59-2e1c-cb1daf24bf71@csgroup.eu>
+ <3643b14f-5240-59b1-d442-09e528d228b3@att.net>
+ <a3973eea-510a-7091-4760-378b3ff7b0f1@att.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220603055442.521888-1-saravanak@google.com>
+In-Reply-To: <a3973eea-510a-7091-4760-378b3ff7b0f1@att.net>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jun 02, 2022 at 10:54:41PM -0700, Saravana Kannan wrote:
-> Add a module.async_probe kernel command line option that allows enabling
-> async probing for all modules. When this command line option is used,
-> there might still be some modules for which we want to explicitly force
-> synchronous probing, so extend <modulename>.async_probe to take an
-> optional bool input so that async probing can be disabled for a specific
-> module.
-> 
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt |  8 ++++++--
->  kernel/module/main.c                            | 11 ++++++++++-
->  2 files changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 710b52d87bdd..32083056bd25 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1147,8 +1147,12 @@
->  	nopku		[X86] Disable Memory Protection Keys CPU feature found
->  			in some Intel CPUs.
->  
-> -	<module>.async_probe [KNL]
-> -			Enable asynchronous probe on this module.
-> +	<module>.async_probe[=<bool>] [KNL]
-> +			If no <bool> value is specified or if the value
-> +			specified is not a valid <bool>, enable asynchronous
-> +			probe on this module.  Otherwise, enable/disable
-> +			asynchronous probe on this module as indicated by the
-> +			<bool> value.
+On Thu, Jun 02, 2022 at 11:00:00PM -0500, Leslie Rhorer wrote:
+> 	I may have a valid module ready to load copied from an archive of the
+> kernel I am using on this system.  I have placed it in
 
-The commit log says a bit more. Can you clarify this on the
-documentation?
+Huh? You should not be copying around modules loosely from other
+kernels.
 
-We should strive slowly towards more async probes. This will take
-time. To help with further then a Kconfig option which sets this
-to a default to true if enabled would be useful so that no kernel
-parameter is needed at all to set the default. Then you can
-override the default, and blacklist each driver as well.
+> /lib/modules/5.10.0-13-amd64/kernel/drivers/net/ethernet/bnx2x/
+> 
+> 	How do I proceed with attempting to load the driver?  Is there some way I
+> can insure the system will still boot with the existing LAN intact? It looks
+> like the system may try to eliminate the 1G interface when a module for the
+> 10G exists, whether the 10G is working or not.
+
+Sounds like you want to engage with the bnx2x developers and report
+whatever it is you are seeing. But note, you should probably try a
+more recent kernel.
+
+./scripts/get_maintainer.pl -f drivers/net/ethernet/broadcom/bnx2x/
+Ariel Elior <aelior@marvell.com> (supporter:BROADCOM BNX2X 10 GIGABIT ETHERNET DRIVER)
+Sudarsana Kalluru <skalluru@marvell.com> (supporter:BROADCOM BNX2X 10 GIGABIT ETHERNET DRIVER)
+Manish Chopra <manishc@marvell.com> (supporter:BROADCOM BNX2X 10 GIGABIT ETHERNET DRIVER)
+"David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS)
+Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
+Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS)
+Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
+netdev@vger.kernel.org (open list:BROADCOM BNX2X 10 GIGABIT ETHERNET DRIVER)
+linux-kernel@vger.kernel.org (open list)
 
   Luis
