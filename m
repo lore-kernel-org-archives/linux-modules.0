@@ -2,151 +2,124 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95B91C43334
-	for <linux-modules@archiver.kernel.org>; Sat,  4 Jun 2022 01:01:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1643C43334
+	for <linux-modules@archiver.kernel.org>; Sat,  4 Jun 2022 06:15:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245206AbiFDBBH (ORCPT
+        id S232626AbiFDGPE (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 3 Jun 2022 21:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
+        Sat, 4 Jun 2022 02:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231977AbiFDBBG (ORCPT
+        with ESMTP id S230285AbiFDGPD (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 3 Jun 2022 21:01:06 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918F537AA7
-        for <linux-modules@vger.kernel.org>; Fri,  3 Jun 2022 18:01:05 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 10-20020a250d0a000000b0065ca0e7be90so8130225ybn.17
-        for <linux-modules@vger.kernel.org>; Fri, 03 Jun 2022 18:01:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=RAgbyFTnXHd2EZQOA5JUlRHzTD1WbpQcsTK6b7kUvvY=;
-        b=mzm5BpNUjxLU8SESrQmStz6SQ3J+XNC1tGlqjvOEqWTvXJFpWKuDmr1BRysdJwIvP3
-         0zRDsErip3mxko0aQ9dgw/5spK/aS0VUKR66GKNFqK7vF1gVy9FJyeGpi5kD+5jvhKrR
-         1FJF+5Hd+LI0DO7nSwxEBoo5WCzFN20j2SBRfRfUMl7PeskT0BSULIuv2qdohuak1Mdw
-         vTlBXdz+GOFACD33k9svrkDmfkwfxpt6BbeWNpYorJKgLCAtfGHZM3g8Tf6wtdwnft+6
-         DEuh0xbr8gJhECmZT4qvKiiHnLXA6outMtHOYsc3kz1IcRILhpe6epWvzY+UFZzvV1d0
-         dV6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=RAgbyFTnXHd2EZQOA5JUlRHzTD1WbpQcsTK6b7kUvvY=;
-        b=N5XRZMukGjK08mR+if7J/8vvBQfR6vqf3WMbzSbPjrBIgfi9IFnfiOGHCWzJWRUBvg
-         JcgcC1D1ev1vBXTBJA2yjTGmTgragiAD2qIpjMsHq+iYWie2qC9NZLXRqx43OgInvYuc
-         iIWKp9HPfm7qd1/5LRulUCZUCFs7mxcBsQu1VtUcdapmbNk3aeXC9iom3MYLPmOv8eXD
-         nhlRr+h6uX5kpQSNzznmPksBMoTSmAFxq7e/w0vvhjPV5+DJmIdMHzMPUJEhzvuVttOW
-         6+YLgD6ZlhTPBDjnR/fiI5deMrb5GquCs46OQ0O3PJ1ysekeUg4Z94HzWZ9iFLHPBBKQ
-         1OFw==
-X-Gm-Message-State: AOAM533S1Nq96xptE4ysCf3RpNa9XfpI2UjF8ZEWgLMJZDrkizC6pabM
-        PuNYIW5lYC6q07GXscZh6FdF6mRn+a+ZxB4=
-X-Google-Smtp-Source: ABdhPJyNbz4Hrf3hy86F6wrLj1ZFqn12F959I1VHUKOAWqS1n29aJeybX34fekgnfKT8n7ttNLWrF34kDhOIIhA=
-X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f95e:2d1c:c00f:e866])
- (user=saravanak job=sendgmr) by 2002:a81:19c3:0:b0:310:1042:e847 with SMTP id
- 186-20020a8119c3000000b003101042e847mr6843667ywz.311.1654304464832; Fri, 03
- Jun 2022 18:01:04 -0700 (PDT)
-Date:   Fri,  3 Jun 2022 18:01:00 -0700
-Message-Id: <20220604010101.719508-1-saravanak@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2] module: Add support for default value for module async_probe
-From:   Saravana Kannan <saravanak@google.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 4 Jun 2022 02:15:03 -0400
+Received: from sonic305-22.consmr.mail.gq1.yahoo.com (sonic305-22.consmr.mail.gq1.yahoo.com [98.137.64.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890B910FDB
+        for <linux-modules@vger.kernel.org>; Fri,  3 Jun 2022 23:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1654323301; bh=xn/Ss34U/FxRX1HnF630xMUilOY/cASY1TGvYQ9+rIw=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=L+rEyi7t5bdTjCgo9UdUcKiZIGtrZO4j86tN4EBs4EtsQ3LuIyiGFhS/MBnsoa6F3hfhjEuThRTZJBz+ejWmcm+UB8IegXe5Vaws0CWPTZ1vewNd+QznLi+psw6RrEpHv6lKzYRT6kVJf/EmLKMLoGpDBP+6SJrriXqnsc/E95w=
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1654323301; bh=sduXNeZeycJ10Zu9IlS+/x9uH0hSK4t9cMDU40hsS6u=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=UIBXr54HHdao8LoILrH9zMfSjkEeu8133OyBI8hcK7g+3o+hLhdo+rhYvOd2BzjTC2O9qc07hqeikjIkK5yYi8oOrK9kujO6h7BwfHSVF8fhDJLZ9MR87TkTOUw4vshuhf1DT4H3TTKGrS4hK1fojtUXwWuJTxrclZoIbLxELjZmtRW50PhN8usnY2453UyvSn7WnESvSBrbmhXUQJmrMq3LI0UcrBX4mb0DEdtDdn4j3yGHUjnkvZUttX+RNz27IUJtzc5d6rgcnwKXHFofHIsT6KIdfHqWhqPlLUD+VwLwQ4gbr4rSRlwSKL08AKlYJ+2GAUzE4gI4wR/i41kulw==
+X-YMail-OSG: fodIpjIVM1kPQCM.FKQ6uhqdZzDI8JYAHqJzJxtseOM0eOzpNGQZOgGBFoFBQG3
+ Hf0p9FRYYWeiH7YujujkgC1gKfOaZOEMM1wZGatfNH2Q2FvWMqWdS6SLcr7.CeoGB2rjwQ9fjduL
+ 0CKwZ_CQiUYjPZTPOgSUG35Yl0lUwWRwSYPBHyN6GG_kBrvo8pXbPVJ7rhWj6BUCQL6p5o7jPSqJ
+ aImxzj_Mv2bpdZ9O_VToLHxECKcg7hjVouS6OKPrskuQWrj5l96SV75hh8.o3TsmTCmeCkGXEkpv
+ BpjmrsKZWm4ylrVOltlTHXH58XeydxJ0AL67lxIKMe_WprbbNYugpy7eX4OxFOudQQYwkPEy9PWC
+ LGd_E_c1QP72s7RrdQ0Bw5zLtR3jOXmNmgP_q1e38tBqmv9AOe_8LWpAlNvh5DiD0fofAVCQgqVY
+ siijpmBTPx4bLqStmhFUjxKePp0j8UP1ZpXqCgR9XGgrIUEO7cLP338APXi57OWHGdUFC1fOzOMi
+ Es3oxVrD8X8QVepDFAYgHiaTFtXfk9DZT9Nf22ZYU1DPnBidtU23rNTaSBUPr95px.OzfA84vwi7
+ 2fo2bXKV8fHY5f0TEUBuivukMyXRHjpY0fuJqKMpivtHVUy6.havrkDKDym2fVReTRoU2xcQEasa
+ 6I7IT.YMoAop5XyuzMlHcxved7oDOT5h_l3TQbXMqu9EI67PweE0oPNzzJa7Ls09v9clXpCTh8tl
+ CWiCDHB9LdUB3xo4dtljpM2.J08ZDzhC8mTsrvObSB6r7rjGwTHfAsKcQ_OfNY6.pPKHWPksEa4_
+ vx_bUbyNxQprAIyxB.Y59lBtVRKFAWCbnT8BL5Kap26tGtUGUtjLNv95oFPuICKAd3P_PoJLAskW
+ LzF3i7Q5w6vNwSTMESOh92VuFih2pr36Nj_zTcdxE15etJr9_7JNThAYAdLU.Ac3f9L7MqMdiTcp
+ oT7Jp5TiyRGBFlm_x9kldlDvkXzYCvm1j4rWfgA1F3T.kfwnD94possRWeB8D444aF52vU4JKj1V
+ 4bjX2g_IePWc.HgY_YzhX2q6gww1zz7JltSPphFbPZdAVf4JinxoRDmyX0s_j2z8LIdavU3BshzT
+ Vp071hv0eHQwI1Gwt9kCDlvdbhzEyqxEEjLD9vyUrOIIURAFkr3twtgA6TCncjsourKXGZj1E3zh
+ kcdPV33oRAQNKkRblsjX337kWBeDYrntiQIDk_PZZxhJxwnZWwv0sf4tawfFo8YZ82TWGFuXCjGV
+ gQW4frOh62eEIktgeUEZOexb23pbbBs_aWKPu0e1WANZFBcVfojSorXTgKV1xMEr8l0uKbvG8jxZ
+ PM21cXKN_dtECR6L8BvfBq07OjPSI5j6byzjRw3YqHEuJNGlLuLlwUawCxgAqVQ146BU8oGQ21.6
+ 5KAo_M5PLFPxMfbn7VnWt3uzBZyKGHkyu9V13d6kk5nlifkvugg0BnaF3BZBV2XDAmxReKL0ySoo
+ VS.rfU9i8s0.fI_w2XL_lwNUxndnC7adWAuYqd9lzPfDPqiAogU7LdHhMaSC.hxQ4hwXRDB25Y9W
+ OlcM_KQHJLxnw2j7Kcc7RqzyBi6Izz60yX4mSu4B9kqr2qivaLBrS2M1XwYgR8mmqaIyAC9SEP.z
+ gDtzU7kpFgw_T9.T0emczEffF3BjpjKDAC7IRF2Q35ISpXemSEDJXGZGahCUwIRsQdj3WtvKRszV
+ iENDkgaql.i3qcJ4cQjYQsKsXuf6TOg0sKo014MC8_HbtUMW7d2uCR3AbtWIP1lA4ZcH_Gf4Lfuv
+ SuWmPFkNNwFfIi7I42GmXPEWejwDsrZVZSKCmSDd2TFdHljusv74cjEj_9rOp1105BfPg5Y8bc88
+ K2aD53soLY6ktY1WUFARwdwZZVDU_tlM2H6y18l3Qj.dQMJ8Bn9ItgkcJPV5a17r5TiO.jDYt1.c
+ ByLQgc5QJvG8EMoxjTMHsmaOnw_joQoz.UshpXIjSAjiR19gZzprR3eC8jiJPf4wsVtQiWP9h1Iy
+ 6MxGqsJ28Ks9d5iortFRt6I6B9IRo2A3SBGbQoeAv.G7ClAcB_SLMQF_ICvHcyiUIntUJ11ObSEU
+ X7yhDgRk70i3BZRDnwQeUo_pN63jXr_m1Jp5z_rzRLHfVJHNRAJHqnNMj30_T6XPunb_m5QJ8_6G
+ DD3jae9lLOneUGUOVa4YFfqHCSJ4g_cZw9aAbLjeil0Uyvl_gM_ke3sk_4vi9Aix_Zl4XO1s6qpt
+ nWdJCZVjHZd1rrEDZAB4GcrN4C6uslBs61y.jA1JDn760nwqyUpi7fVBNw8HH
+X-Sonic-MF: <lesrhorer@att.net>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.gq1.yahoo.com with HTTP; Sat, 4 Jun 2022 06:15:01 +0000
+Received: by hermes--canary-production-bf1-856dbf94db-77vvq (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 6e34992c449647bbaf54db9f24739c8b;
+          Sat, 04 Jun 2022 06:14:59 +0000 (UTC)
+Message-ID: <bcc95958-832b-daa9-62c5-a5cdd634cba4@att.net>
+Date:   Sat, 4 Jun 2022 01:14:36 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: Module failure on new install of Debian Bullseye
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+References: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0.ref@att.net>
+ <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0@att.net>
+ <7999b7b4-3b58-a9c4-4756-445e54404f0f@csgroup.eu>
+ <ba2fb3ff-22dd-d68e-fa99-02de39240f20@infradead.org>
+ <3b8f2ed6-11fd-b5a7-5442-7cac90348514@att.net>
+ <8de4e4b7-f741-eb4d-9e11-9b23ba65c21a@att.net>
+ <13529cf4-a00d-5e59-2e1c-cb1daf24bf71@csgroup.eu>
+ <3643b14f-5240-59b1-d442-09e528d228b3@att.net>
+ <a3973eea-510a-7091-4760-378b3ff7b0f1@att.net>
+ <YpokHQKUPCG4L2Ar@bombadil.infradead.org>
+From:   Leslie Rhorer <lesrhorer@att.net>
+In-Reply-To: <YpokHQKUPCG4L2Ar@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Add a module.async_probe kernel command line option that allows enabling
-async probing for all modules. When this command line option is used,
-there might still be some modules for which we want to explicitly force
-synchronous probing, so extend <modulename>.async_probe to take an
-optional bool input so that async probing can be disabled for a specific
-module.
 
-Signed-off-by: Saravana Kannan <saravanak@google.com>
----
-v1->v2:
-- Updated the documentation to capture all the details/changes.
 
- Documentation/admin-guide/kernel-parameters.txt | 17 +++++++++++++++--
- kernel/module/main.c                            | 11 ++++++++++-
- 2 files changed, 25 insertions(+), 3 deletions(-)
+On 6/3/2022 10:09 AM, Luis Chamberlain wrote:
+> On Thu, Jun 02, 2022 at 11:00:00PM -0500, Leslie Rhorer wrote:
+>> 	I may have a valid module ready to load copied from an archive of the
+>> kernel I am using on this system.  I have placed it in
+> 
+> Huh? You should not be copying around modules loosely from other
+> kernels.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 710b52d87bdd..5174a08e20b0 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1147,8 +1147,12 @@
- 	nopku		[X86] Disable Memory Protection Keys CPU feature found
- 			in some Intel CPUs.
- 
--	<module>.async_probe [KNL]
--			Enable asynchronous probe on this module.
-+	<module>.async_probe[=<bool>] [KNL]
-+			If no <bool> value is specified or if the value
-+			specified is not a valid <bool>, enable asynchronous
-+			probe on this module.  Otherwise, enable/disable
-+			asynchronous probe on this module as indicated by the
-+			<bool> value. See also: module.async_probe
- 
- 	early_ioremap_debug [KNL]
- 			Enable debug messages in early_ioremap support. This
-@@ -3201,6 +3205,15 @@
- 			log everything. Information is printed at KERN_DEBUG
- 			so loglevel=8 may also need to be specified.
- 
-+	module.async_probe=<bool>
-+			[KNL] When set to true, modules will use async probing
-+			by default. To enable/disable async probing for a
-+			specific module, use the module specific control that
-+			is documented under <module>.async_probe. When both
-+			module.async_probe and <module>.async_probe are
-+			specified, <module>.async_probe takes precedence for
-+			the specific module.
-+
- 	module.sig_enforce
- 			[KNL] When CONFIG_MODULE_SIG is set, this means that
- 			modules without (valid) signatures will fail to load.
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index fed58d30725d..47085795f037 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2410,6 +2410,12 @@ static void do_free_init(struct work_struct *w)
- 	}
- }
- 
-+#undef MODULE_PARAM_PREFIX
-+#define MODULE_PARAM_PREFIX "module."
-+/* Default value for module->async_probe_requested */
-+static bool async_probe;
-+module_param(async_probe, bool, 0644);
-+
- /*
-  * This is where the real work happens.
-  *
-@@ -2630,7 +2636,8 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
- 	int ret;
- 
- 	if (strcmp(param, "async_probe") == 0) {
--		mod->async_probe_requested = true;
-+		if (strtobool(val, &mod->async_probe_requested))
-+			mod->async_probe_requested = true;
- 		return 0;
- 	}
- 
-@@ -2797,6 +2804,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	if (err)
- 		goto bug_cleanup;
- 
-+	mod->async_probe_requested = async_probe;
-+
- 	/* Module is ready to execute: parsing args may do that. */
- 	after_dashes = parse_args(mod->name, mod->args, mod->kp, mod->num_kp,
- 				  -32768, 32767, mod,
--- 
-2.36.1.255.ge46751e96f-goog
+	I know that.  This not from "another" kernel.  It is from an archive of 
+the same kernel.  IOW, I have another machine running a 5.10.0-15-amd64 
+kernel that was upgraded from 5.10.0-13-amd64, and still has the 0-13 
+bnx2x driver still in the archives.
 
+>> /lib/modules/5.10.0-13-amd64/kernel/drivers/net/ethernet/bnx2x/
+>>
+>> 	How do I proceed with attempting to load the driver?  Is there some way I
+>> can insure the system will still boot with the existing LAN intact? It looks
+>> like the system may try to eliminate the 1G interface when a module for the
+>> 10G exists, whether the 10G is working or not.
+> 
+> Sounds like you want to engage with the bnx2x developers and report
+> whatever it is you are seeing.
+
+	I have been trying (and apparently so have others) with no success.
+
+> But note, you should probably try a more recent kernel.
+
+	The same problem exists there.  Indeed, I need to wipe the other server 
+and reload its OS, but I will run into precisely the same issue, since 
+it is the 5.10.0-13-amd64 that is on the installation DVD.  I am 
+physically disabled, so having to reconfigure hardware for a reinstall 
+is a real problem.
+
+	I suppose I could upgrade the new server to 5.10.0-15-amd64, but then I 
+still need to install the 5.10.0-15-amd64 driver.  No matter what, I 
+need to insert the module.  When I look up the man for insmod, it says, 
+"don't use insmod, let the kernel do it", or words to that effect.  So 
+now, what?  One way or anotehr, I need to get this system working, and 
+then I need to do the same with the other system.
