@@ -2,124 +2,204 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1643C43334
-	for <linux-modules@archiver.kernel.org>; Sat,  4 Jun 2022 06:15:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BDF3CCA47C
+	for <linux-modules@archiver.kernel.org>; Tue,  7 Jun 2022 14:22:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbiFDGPE (ORCPT
+        id S245360AbiFGOWe (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 4 Jun 2022 02:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        Tue, 7 Jun 2022 10:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiFDGPD (ORCPT
+        with ESMTP id S245348AbiFGOWc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 4 Jun 2022 02:15:03 -0400
-Received: from sonic305-22.consmr.mail.gq1.yahoo.com (sonic305-22.consmr.mail.gq1.yahoo.com [98.137.64.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890B910FDB
-        for <linux-modules@vger.kernel.org>; Fri,  3 Jun 2022 23:15:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1654323301; bh=xn/Ss34U/FxRX1HnF630xMUilOY/cASY1TGvYQ9+rIw=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=L+rEyi7t5bdTjCgo9UdUcKiZIGtrZO4j86tN4EBs4EtsQ3LuIyiGFhS/MBnsoa6F3hfhjEuThRTZJBz+ejWmcm+UB8IegXe5Vaws0CWPTZ1vewNd+QznLi+psw6RrEpHv6lKzYRT6kVJf/EmLKMLoGpDBP+6SJrriXqnsc/E95w=
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1654323301; bh=sduXNeZeycJ10Zu9IlS+/x9uH0hSK4t9cMDU40hsS6u=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=UIBXr54HHdao8LoILrH9zMfSjkEeu8133OyBI8hcK7g+3o+hLhdo+rhYvOd2BzjTC2O9qc07hqeikjIkK5yYi8oOrK9kujO6h7BwfHSVF8fhDJLZ9MR87TkTOUw4vshuhf1DT4H3TTKGrS4hK1fojtUXwWuJTxrclZoIbLxELjZmtRW50PhN8usnY2453UyvSn7WnESvSBrbmhXUQJmrMq3LI0UcrBX4mb0DEdtDdn4j3yGHUjnkvZUttX+RNz27IUJtzc5d6rgcnwKXHFofHIsT6KIdfHqWhqPlLUD+VwLwQ4gbr4rSRlwSKL08AKlYJ+2GAUzE4gI4wR/i41kulw==
-X-YMail-OSG: fodIpjIVM1kPQCM.FKQ6uhqdZzDI8JYAHqJzJxtseOM0eOzpNGQZOgGBFoFBQG3
- Hf0p9FRYYWeiH7YujujkgC1gKfOaZOEMM1wZGatfNH2Q2FvWMqWdS6SLcr7.CeoGB2rjwQ9fjduL
- 0CKwZ_CQiUYjPZTPOgSUG35Yl0lUwWRwSYPBHyN6GG_kBrvo8pXbPVJ7rhWj6BUCQL6p5o7jPSqJ
- aImxzj_Mv2bpdZ9O_VToLHxECKcg7hjVouS6OKPrskuQWrj5l96SV75hh8.o3TsmTCmeCkGXEkpv
- BpjmrsKZWm4ylrVOltlTHXH58XeydxJ0AL67lxIKMe_WprbbNYugpy7eX4OxFOudQQYwkPEy9PWC
- LGd_E_c1QP72s7RrdQ0Bw5zLtR3jOXmNmgP_q1e38tBqmv9AOe_8LWpAlNvh5DiD0fofAVCQgqVY
- siijpmBTPx4bLqStmhFUjxKePp0j8UP1ZpXqCgR9XGgrIUEO7cLP338APXi57OWHGdUFC1fOzOMi
- Es3oxVrD8X8QVepDFAYgHiaTFtXfk9DZT9Nf22ZYU1DPnBidtU23rNTaSBUPr95px.OzfA84vwi7
- 2fo2bXKV8fHY5f0TEUBuivukMyXRHjpY0fuJqKMpivtHVUy6.havrkDKDym2fVReTRoU2xcQEasa
- 6I7IT.YMoAop5XyuzMlHcxved7oDOT5h_l3TQbXMqu9EI67PweE0oPNzzJa7Ls09v9clXpCTh8tl
- CWiCDHB9LdUB3xo4dtljpM2.J08ZDzhC8mTsrvObSB6r7rjGwTHfAsKcQ_OfNY6.pPKHWPksEa4_
- vx_bUbyNxQprAIyxB.Y59lBtVRKFAWCbnT8BL5Kap26tGtUGUtjLNv95oFPuICKAd3P_PoJLAskW
- LzF3i7Q5w6vNwSTMESOh92VuFih2pr36Nj_zTcdxE15etJr9_7JNThAYAdLU.Ac3f9L7MqMdiTcp
- oT7Jp5TiyRGBFlm_x9kldlDvkXzYCvm1j4rWfgA1F3T.kfwnD94possRWeB8D444aF52vU4JKj1V
- 4bjX2g_IePWc.HgY_YzhX2q6gww1zz7JltSPphFbPZdAVf4JinxoRDmyX0s_j2z8LIdavU3BshzT
- Vp071hv0eHQwI1Gwt9kCDlvdbhzEyqxEEjLD9vyUrOIIURAFkr3twtgA6TCncjsourKXGZj1E3zh
- kcdPV33oRAQNKkRblsjX337kWBeDYrntiQIDk_PZZxhJxwnZWwv0sf4tawfFo8YZ82TWGFuXCjGV
- gQW4frOh62eEIktgeUEZOexb23pbbBs_aWKPu0e1WANZFBcVfojSorXTgKV1xMEr8l0uKbvG8jxZ
- PM21cXKN_dtECR6L8BvfBq07OjPSI5j6byzjRw3YqHEuJNGlLuLlwUawCxgAqVQ146BU8oGQ21.6
- 5KAo_M5PLFPxMfbn7VnWt3uzBZyKGHkyu9V13d6kk5nlifkvugg0BnaF3BZBV2XDAmxReKL0ySoo
- VS.rfU9i8s0.fI_w2XL_lwNUxndnC7adWAuYqd9lzPfDPqiAogU7LdHhMaSC.hxQ4hwXRDB25Y9W
- OlcM_KQHJLxnw2j7Kcc7RqzyBi6Izz60yX4mSu4B9kqr2qivaLBrS2M1XwYgR8mmqaIyAC9SEP.z
- gDtzU7kpFgw_T9.T0emczEffF3BjpjKDAC7IRF2Q35ISpXemSEDJXGZGahCUwIRsQdj3WtvKRszV
- iENDkgaql.i3qcJ4cQjYQsKsXuf6TOg0sKo014MC8_HbtUMW7d2uCR3AbtWIP1lA4ZcH_Gf4Lfuv
- SuWmPFkNNwFfIi7I42GmXPEWejwDsrZVZSKCmSDd2TFdHljusv74cjEj_9rOp1105BfPg5Y8bc88
- K2aD53soLY6ktY1WUFARwdwZZVDU_tlM2H6y18l3Qj.dQMJ8Bn9ItgkcJPV5a17r5TiO.jDYt1.c
- ByLQgc5QJvG8EMoxjTMHsmaOnw_joQoz.UshpXIjSAjiR19gZzprR3eC8jiJPf4wsVtQiWP9h1Iy
- 6MxGqsJ28Ks9d5iortFRt6I6B9IRo2A3SBGbQoeAv.G7ClAcB_SLMQF_ICvHcyiUIntUJ11ObSEU
- X7yhDgRk70i3BZRDnwQeUo_pN63jXr_m1Jp5z_rzRLHfVJHNRAJHqnNMj30_T6XPunb_m5QJ8_6G
- DD3jae9lLOneUGUOVa4YFfqHCSJ4g_cZw9aAbLjeil0Uyvl_gM_ke3sk_4vi9Aix_Zl4XO1s6qpt
- nWdJCZVjHZd1rrEDZAB4GcrN4C6uslBs61y.jA1JDn760nwqyUpi7fVBNw8HH
-X-Sonic-MF: <lesrhorer@att.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.gq1.yahoo.com with HTTP; Sat, 4 Jun 2022 06:15:01 +0000
-Received: by hermes--canary-production-bf1-856dbf94db-77vvq (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 6e34992c449647bbaf54db9f24739c8b;
-          Sat, 04 Jun 2022 06:14:59 +0000 (UTC)
-Message-ID: <bcc95958-832b-daa9-62c5-a5cdd634cba4@att.net>
-Date:   Sat, 4 Jun 2022 01:14:36 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: Module failure on new install of Debian Bullseye
+        Tue, 7 Jun 2022 10:22:32 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2078.outbound.protection.outlook.com [40.107.220.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C2BC9662;
+        Tue,  7 Jun 2022 07:22:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KbQ4kkGHkfo86PpuoJqqt8kDrCp7r1QVKYemU92ay9fbu57JMPV5kTYBjfUq4LmdeTxRpQblje2c/5+hCEaAfP6/+9ttZ0a03h1eJNX6uXT/OQwE8K9b6NR8gWcHc2KrrskJKcX7XNIWC4JUuqNMkfWDe0b52dyluYsrqO021Kw6gEGmrlPK605g7shGriuZpPw2DgwrxhLX1m+/KAGLFIT34d+k19WQJYF5s4Z+Jllav1LPEg9Q0hAHLNczOCAswst/e3WrMjS5wwFYCtZjtPclI2fVO8bgU7w9t0EM5DH+DAZ755j1TVLk2eo3JGAwuaxyqFQsuP7FqRvum3K1+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P7/ekMqh55fq/CNJ9DskeQfEpFgN9KGW5BppG2Vat9Q=;
+ b=RJZaa6ntXzFd52FTFneIIk70HOoVoeE0FnMvVhy+nitAwQoIA7lAnjzjkX53yXQ5ryPGucn2JVDSPa4prgwIJrcs78ZXlSq1Qibu85w9uCAn5Ck12n178TunkYjqLmTKnM8wEKgSN1y5knX6jzlwWO9bq/AN0KZU9aQTWiSJKae9CryVFLOGQDcy4sIDisHLJOEykoMQLdSTcguZFtEV9+fgSfYRAh3XaYD8KOwtlt5bWHD7772IOy1ZJaNk9BojQMh7YPohQ0Whjob/us572dJ8rlaIzR6ljz5JvTnnQImIzq+yB+kdW+pl3FOgJusl6zhZIQXLuqJJiJH2c9upsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P7/ekMqh55fq/CNJ9DskeQfEpFgN9KGW5BppG2Vat9Q=;
+ b=jjcQsAfyQGp7vPO9YCHh/3MeIoHlurlenpyl3t8NznoAfimhR04D7kxKdia2HsbenAvAi9RUHwKUwYDdXI8HaEfiXWk2SFGqQZubaZpjafXDgZ1wBX0WT0zCfCJORFlTXT+G2jSsUm3yNfRXqd0LQw+FLHQ7WrsOo4CxZgmNQ/llGRd0yXHpaROVt2t68FKb2LYdkj9Qi3S1nRS0UTsPjp3n/z0Zb6rzWLXJczvul/3HIBQRVbOwpMMDZ3lQfiS/EYkDb1LhVJcf26EjF8gAoYuRixW8GeS+lv2sKeb+L56HRXzawA/zQgtfy2y5cHP5I89Eyo0b+Ne8QEE2NGHfNA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ CH2PR12MB3893.namprd12.prod.outlook.com (2603:10b6:610:21::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5314.15; Tue, 7 Jun 2022 14:22:29 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::f954:6840:ce82:c54f]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::f954:6840:ce82:c54f%4]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
+ 14:22:28 +0000
+Message-ID: <e020f60d-218c-8e47-5863-23dcb55452f2@nvidia.com>
+Date:   Tue, 7 Jun 2022 15:22:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 06/10] kbuild: check static EXPORT_SYMBOL* by script
+ instead of modpost
 Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
-References: <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0.ref@att.net>
- <dd7e69ce-41a4-cc5e-5a15-0ae9fc52aad0@att.net>
- <7999b7b4-3b58-a9c4-4756-445e54404f0f@csgroup.eu>
- <ba2fb3ff-22dd-d68e-fa99-02de39240f20@infradead.org>
- <3b8f2ed6-11fd-b5a7-5442-7cac90348514@att.net>
- <8de4e4b7-f741-eb4d-9e11-9b23ba65c21a@att.net>
- <13529cf4-a00d-5e59-2e1c-cb1daf24bf71@csgroup.eu>
- <3643b14f-5240-59b1-d442-09e528d228b3@att.net>
- <a3973eea-510a-7091-4760-378b3ff7b0f1@att.net>
- <YpokHQKUPCG4L2Ar@bombadil.infradead.org>
-From:   Leslie Rhorer <lesrhorer@att.net>
-In-Reply-To: <YpokHQKUPCG4L2Ar@bombadil.infradead.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules@vger.kernel.org, llvm@lists.linux.dev,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20220513113930.10488-1-masahiroy@kernel.org>
+ <20220513113930.10488-7-masahiroy@kernel.org>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20220513113930.10488-7-masahiroy@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20225 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-ClientProxiedBy: LO4P265CA0147.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c4::20) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 161eef67-fc17-4f76-1045-08da4891267f
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3893:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB389379682091F3E2DFD82BA6D9A59@CH2PR12MB3893.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: llmAUeshiwyE2xiHDmi414MRE0amDLHFESPadmA66ODdLR6CUHDGejJyMMOjO8eBw0kSyn6KBPUiP7Wy8fpo47QAspwPPWiY/1Fh1oTaeflfalQ+6q3LW/A46uSEvbMMh6QZRBeM25oBzfOUPwiFKBFWmEZgvfq/AUlNN1rBxcJMd4pbF46fW6FgKFTwoHNQ5UyG+clnezAtt4eRLGgUbBRQ+aiVsdD+TbBD2xNcqz5dWjuD77SGBxXE7w+hk7U6fJ0kVTXeZ3Yyio09lmOocu2b2XPEjbpC6AJ55Z01gqYpgjBaE+T56FXQ1HUj3KXTPcI25hRKpy90sx4j0GRqe9HvpFQawZB1PQSjLKy8WG8hR0S1o8yZePfpE0pR/NV4A4rh7d17RYnGzacCDHww5e1WKnPnNaVx4cE7nsYed8IMT4fbaClNB28C+tVq0SaTeBx4V18reisP66KtTE//ZPD5NAu892RgnrfaQYCpqyYh7Sb98GxLJVYaJfrlJf+s18PN3TbjprfYbTRNPDCBMD7GX2LM303dEdou5X4RVI7TX6+z4BQkXy3B5v9r1GLKnzkSR63qGtzl63MonmqTG8mtSvKepUW9UEZRpvUGRoN9WtaMxTPKxokZApX/4Dy5g7i3RiJYyu0TSpL2p0CTDZ5zB8z9eTBLCj6vHKgvIRR0nGU3nXFGwCZUAOCGhifgi4or1hSJPeoipcFFQ/Bjr0VCIbLP4cEZmQCKWHTrgMiVeTeyJuI5QpOeQ07I328l
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(186003)(36756003)(8676002)(6486002)(83380400001)(6512007)(66556008)(26005)(54906003)(66476007)(66946007)(8936002)(5660300002)(7416002)(508600001)(31686004)(2906002)(2616005)(6666004)(31696002)(55236004)(316002)(38100700002)(6506007)(4326008)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0RKRmg5MWF2a1EzbUVrYlp5UGxlWEJWWjE3MXVBWmlZUkRDVTVjdXJsNFZr?=
+ =?utf-8?B?MnNCK2FLMUlUbVhPMFZRZ3JUNjkrQTRUQ0x4SUhHZFg0My9EbVVydUZkTUNR?=
+ =?utf-8?B?ZFFxWEJEK1lSZW8waCtRWnVkNzZrZjdjU3lwdVNHUGZvRmdoMnFRUEVGMXhs?=
+ =?utf-8?B?NVExcnVUSFlvRldMaHErWFcyZmtnUXZCVjlTWTNFaVNIVkZhZnNreXVERE5R?=
+ =?utf-8?B?YWZlNnRtSHpHNkFHbDdYR0tuanNVb2U0VkpZbHJCeWlyRTc3WVorNUV5UWY5?=
+ =?utf-8?B?QlQzN3hvNGdMVFdiaGJSMC9lTHFHRDgrMUxjZ0MzMEt4NENOLzAzazRRSW16?=
+ =?utf-8?B?bDM1U2FGS0d2blpJbVE5dzJEZEVqUmVoQXBIUW9UZnZTUVRsRzdncEc0cGZa?=
+ =?utf-8?B?V3JzdWV1TFU3b3dDdDJHU04xaDRpMHRtZ3lLWmlEdXZpYUgxN25vYXJRQlBX?=
+ =?utf-8?B?QzRVRzBSUG9HSWF6dUp4NTNsVzZEOHVhdEpzOGlFUkR5aFYvaUJPd1lpSnF3?=
+ =?utf-8?B?S2dWZ1VEUG53L3RuMkRoY1BNb3g4aGhUUkZvVlFEbGg1THczaXFxZU9BZmVH?=
+ =?utf-8?B?UjAwVnJ4cFgvcUlyTzR2eTNoeUV1NXA0RDVOOTdacW1oQXM0MndMZDM4RWh6?=
+ =?utf-8?B?blcySk0xRzF4eWx3WEFEQlNOVWl2OW8rS2htM3hFY2ZDTnhBemR0cjFCRDQx?=
+ =?utf-8?B?OVpIQ0lVVTJFTWx5UVhFMUVJTDRsUnprS3NScWpkNk9hRFZ0TzlmanhpLzlh?=
+ =?utf-8?B?Y21Rdzk1OUFJZDBrd1VyaC9XYkhYdE44Ry80a0JScW0xNzN3UlhKRWV3dXds?=
+ =?utf-8?B?WEpvdWNOWTlueVMzRXZOYXpVOVFrOGtDcTU1dElaeExBaUdOWmJjMVp5dUtS?=
+ =?utf-8?B?WVVQRmhDN284em1zNkM0V3VaczNyWXBMYWVVN3cxd0trVHBPd05vR0NCRnZy?=
+ =?utf-8?B?NzZBNFVzcW5xMkpla2QvcVk3STVvUnd1NVc2SXVhUVhxcUltcklsbjdFM1Fy?=
+ =?utf-8?B?Qis0V1Ezc0FHSFdLV2tnMEVCeXJXTWcySjVvL1hoUG9uY3FKTWgzMFExejc2?=
+ =?utf-8?B?dkE5cWF0ZERHR0U4V0pUcE9sTFJEWEhQaXZwS3l6SEdVZHFXVjFHM1dvQVdI?=
+ =?utf-8?B?RlVQM2UvN1p0VTcyZ1EybTVUb3lzYmhDL3o1Q1lQZGxvUHdSRDE5VjNJdkJK?=
+ =?utf-8?B?ZzF1UlZyUnRCazhYemNjM3J5SHh1dXkyQUVIMFgyRDhFazg2VnJFMkxmNDdT?=
+ =?utf-8?B?eExpeUtWNnFjMGcycm8wUTRieHVDZm9odzg1MzliUE1KRFVkVTc2UTRZOFZ6?=
+ =?utf-8?B?MlZ4QVVFU0VjcWFJcTUrWEs2VWFOaC9YRmFPNkhhblJYMnhUd0w4VHFlNzc3?=
+ =?utf-8?B?ZmZzYUZvT3VqZFlpS3dCRlJXSXgvL3JCYy96Z1M5ZG5nUlFwWlZwU20wNzRs?=
+ =?utf-8?B?R3JqSmNzajhYYXh6Mm9kbVRROTJHU0Y1S0lpSUtUL25seC9QZzdSMk5hMWZ1?=
+ =?utf-8?B?UkV3VG1tR1Z2VlZlTVkyenJBV1B6OHE5dEhzSHZBdEpFTyt0dkM4bXBOcE5I?=
+ =?utf-8?B?N1dFS0huS25xTTBiMEdzdGc1UEkrOSszYUF1b2lRV1RXbHZGa1lmMTdVYjd4?=
+ =?utf-8?B?NWthYThza0dIaGRpUVR2dWJ6Q08vejVoMjI5b1Q4WWJsNUxlaWlDWWs5dVdC?=
+ =?utf-8?B?MWcvVktUWFBVWEwvT2IwcitLUnI4T3liLzhObXE1cFpGejZHdFBiM1I3emRh?=
+ =?utf-8?B?YVRhSitWbFRJOVRQRVJtdm5wMmdud2FYZ3UrWmEwaHI0bThpZzRocWIxN0Ew?=
+ =?utf-8?B?bSt0WU9YcFd0RFZpc1VGNDlKdXZCYXBQNHpCb3RqTHkxNW5hdTBiVlpXNVNl?=
+ =?utf-8?B?WjJ6MVZtOEExdmkyS0czY2c0NitTWkpXRjNRdzBGLzJsVTB0SFpBZmthcXV6?=
+ =?utf-8?B?UXpzcFF5QTFtZmlySXc1eGhxTnYwdVFINTdCTGtlZ0J3S3VNdU5ZbUYzcFIz?=
+ =?utf-8?B?aTN0WHVleGEzaUp3anRFcUY2V0xubEN5OHpxdW1kM2hLYWNpNjB4Uy9pbGxT?=
+ =?utf-8?B?U2twOUZrQTJmK0NqT3MxbmcxUE5kcktjdXBDSE14VW9SZHlySFB6bnY5UWwv?=
+ =?utf-8?B?NUNTYnRaTEx5cVNPc256OFI0bXhRR3RRM1dXNWtmM2dYU3haQU1BYVY0ejBK?=
+ =?utf-8?B?aWxvcldOTXdXYVpkNUV1MTl1elpQR0preUVOalZGdmF2YUZKRXFmekRJazlm?=
+ =?utf-8?B?SnQ3bEY2Q3ZEQ05NTExRYzZnMEdKSFRjSWtRSG9yU3ZISWhYSjE0V29SMXlm?=
+ =?utf-8?B?OCtWMm10MUt2NVR0YVJ4aThNa1pPVWNjUE5IVTNpbnBVNzJFNHJia3RxVTdJ?=
+ =?utf-8?Q?b5crClZ33OO2QanY=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 161eef67-fc17-4f76-1045-08da4891267f
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 14:22:28.2946
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P0wbqyMhqZNWWy7g8NJh4r9ONt32YNpyNeLIi5ZzdT/KoU2fQ0q0JEsTPxrECZASa2dvbByrMWnfbX/OQT2LuQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3893
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
 
-
-On 6/3/2022 10:09 AM, Luis Chamberlain wrote:
-> On Thu, Jun 02, 2022 at 11:00:00PM -0500, Leslie Rhorer wrote:
->> 	I may have a valid module ready to load copied from an archive of the
->> kernel I am using on this system.  I have placed it in
+On 13/05/2022 12:39, Masahiro Yamada wrote:
+> The 'static' specifier and EXPORT_SYMBOL() are an odd combination.
 > 
-> Huh? You should not be copying around modules loosely from other
-> kernels.
-
-	I know that.  This not from "another" kernel.  It is from an archive of 
-the same kernel.  IOW, I have another machine running a 5.10.0-15-amd64 
-kernel that was upgraded from 5.10.0-13-amd64, and still has the 0-13 
-bnx2x driver still in the archives.
-
->> /lib/modules/5.10.0-13-amd64/kernel/drivers/net/ethernet/bnx2x/
->>
->> 	How do I proceed with attempting to load the driver?  Is there some way I
->> can insure the system will still boot with the existing LAN intact? It looks
->> like the system may try to eliminate the 1G interface when a module for the
->> 10G exists, whether the 10G is working or not.
+> Commit 15bfc2348d54 ("modpost: check for static EXPORT_SYMBOL*
+> functions") tried to detect it, but this check has false negatives.
 > 
-> Sounds like you want to engage with the bnx2x developers and report
-> whatever it is you are seeing.
+> Here is the sample code.
+> 
+>    Makefile:
+> 
+>      obj-y += foo1.o foo2.o
+> 
+>    foo1.c:
+> 
+>      #include <linux/export.h>
+>      static void foo(void) {}
+>      EXPORT_SYMBOL(foo);
+> 
+>    foo2.c:
+> 
+>      void foo(void) {}
+> 
+> foo1.c exports the static symbol 'foo', but modpost cannot catch it
+> because it is fooled by foo2.c, which has a global symbol with the
+> same name.
+> 
+> s->is_static is cleared if a global symbol with the same name is found
+> somewhere, but EXPORT_SYMBOL() and the global symbol do not necessarily
+> belong to the same compilation unit.
+> 
+> This check should be done per compilation unit, but I do not know how
+> to do it in modpost. modpost runs against vmlinux.o or modules, which
+> merges multiple objects, then forgets their origin.
+> 
+> It is true modpost gets access to the lists of all the member objects
+> (.vmlinux.objs and *.mod), but modpost cannot parse individual objects
+> because they may not be ELF but LLVM IR when CONFIG_LTO_CLANG=y.
+> 
+> Add a simple bash script to parse the output from ${NM}. This works for
+> CONFIG_LTO_CLANG=y because llvm-nm can dump symbols of LLVM IR files.
+> 
+> Revert 15bfc2348d54.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-	I have been trying (and apparently so have others) with no success.
 
-> But note, you should probably try a more recent kernel.
+One some older build machines this is causing some builds (ARM/ARM64)
+to fail ...
 
-	The same problem exists there.  Indeed, I need to wipe the other server 
-and reload its OS, but I will run into precisely the same issue, since 
-it is the 5.10.0-13-amd64 that is on the installation DVD.  I am 
-physically disabled, so having to reconfigure hardware for a reinstall 
-is a real problem.
+/dvs/git/dirty/git-master_l4t-upstream/kernel/scripts/check-local-export: line 54: wait: pid 48433 is not a child of this shell
+/dvs/git/dirty/git-master_l4t-upstream/kernel/scripts/Makefile.build:250: recipe for target 'scripts/mod/empty.o' failed
+make[2]: *** [scripts/mod/empty.o] Error 127
+make[2]: *** Deleting file 'scripts/mod/empty.o'
+make[2]: *** Waiting for unfinished jobs....
+/dvs/git/dirty/git-master_l4t-upstream/kernel/Makefile:1285: recipe for target 'prepare0' failed
+make[1]: *** [prepare0] Error 2
+make[1]: Leaving directory '/dvs/git/dirty/git-master_l4t-upstream/artifacts/linux/arm64-defconfig-jetson'
+Makefile:228: recipe for target '__sub-make' failed
+make: *** [__sub-make] Error 2
 
-	I suppose I could upgrade the new server to 5.10.0-15-amd64, but then I 
-still need to install the 5.10.0-15-amd64 driver.  No matter what, I 
-need to insert the module.  When I look up the man for insmod, it says, 
-"don't use insmod, let the kernel do it", or words to that effect.  So 
-now, what?  One way or anotehr, I need to get this system working, and 
-then I need to do the same with the other system.
+Any ideas?
+
+Thanks
+Jon
+
+-- 
+nvpublic
