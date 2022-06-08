@@ -2,41 +2,57 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52FC9C433EF
-	for <linux-modules@archiver.kernel.org>; Wed,  8 Jun 2022 14:21:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 391DAC43334
+	for <linux-modules@archiver.kernel.org>; Wed,  8 Jun 2022 16:12:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241215AbiFHOVs (ORCPT
+        id S245101AbiFHQMz (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 8 Jun 2022 10:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        Wed, 8 Jun 2022 12:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241191AbiFHOVr (ORCPT
+        with ESMTP id S245050AbiFHQMx (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 8 Jun 2022 10:21:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93DA3D1D5;
-        Wed,  8 Jun 2022 07:21:38 -0700 (PDT)
+        Wed, 8 Jun 2022 12:12:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D6242EDF;
+        Wed,  8 Jun 2022 09:12:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFA7661B49;
-        Wed,  8 Jun 2022 14:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A51C34116;
-        Wed,  8 Jun 2022 14:21:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 348DAB82615;
+        Wed,  8 Jun 2022 16:12:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0110C341CF;
+        Wed,  8 Jun 2022 16:12:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654698097;
-        bh=1qpAEjSAq5djkkmLyIM6rUzEBFpBwb5S8o8YQ4yPKWA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f+5uNDkmztVja1h70Kf8HEKtlvbSFHPe7GufnVlMvMkA7EPZj1hNREAoLZkLn4yMZ
-         6bQ50bNMEBhe4ElBm12ffDV3hbaNZWOfcPkkH6bD1GJ7qTD49z3ahsgnNBTvpURWx5
-         rrvu5QDBi4lRbKEy6EZew4PC7oAb8cDKq8Fbm+3bojZb/vbBuJ9tfwqhpbvZdjxTl3
-         y+uNV/KGl545f2ZW+p6SVfNeUdQ8cwc6SLEJ01DZ+ERUPHKg87AJa/IPMGV7vQAvac
-         xZpWEpxQFIZUDnAYuJHwAFDjwTFYVd/DGOvZKjhTQTx1jhQ+TBRkABL3RxqqFRF6Ed
-         MNrXttwyxlWig==
-Date:   Wed, 8 Jun 2022 23:21:15 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Guo Ren <guoren@kernel.org>, Jarkko Sakkinen <jarkko@profian.com>,
+        s=k20201202; t=1654704766;
+        bh=sPGKDjlNYa4MR2u/HdIgrLdEoGRguN2WqLZlFp878w8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lByU8V8gKdKuGHwNFQ31BBmJTai90bm5fUqFEuBSsaa6btiPhIfz95tJkBi8S9AIO
+         vLz1pK/O2Drl1qSdBQGZEmUkLncmcYqPhY9ojMDcrzj/PoJiylIyB4jQ9TBj1LO7vf
+         E86TLeP7UlVOK/pvkh9gFUxUARll4qyH/h3l61Hb/qa/HAroJ4DVv/04sAyose4z+R
+         l1ezd9XxnR9NMDmViM7wkjScWiuMoHbc3tRttrKQSPMAUuuKANW9byaxXyqnJEWEMK
+         r9QIP0eljUMwKGt9NkqaB84zEOMLtwxSikm7jaOAlUIlC3KnM2nQNlDbedyjaUizAv
+         KmhijBJg1bgVQ==
+Received: by mail-yb1-f179.google.com with SMTP id g201so9480065ybf.12;
+        Wed, 08 Jun 2022 09:12:46 -0700 (PDT)
+X-Gm-Message-State: AOAM532dcsgCHnpAC6ITzTX8wYTwyCHGbuLBPuaWxKyH7jd3UJGirvA3
+        g601s4vKkyIXCMR+16nifS2IuLZzTBgWyFtfD+4=
+X-Google-Smtp-Source: ABdhPJzo2KFde92icAvNQAhts5Ivj5Z3Zxtv6YtGuJhZFN0HTgsP9YMJk/IQIjq/wQ9d9NGuy7Qoa0yG3TY53Ynahlk=
+X-Received: by 2002:a25:a242:0:b0:651:a78d:4636 with SMTP id
+ b60-20020a25a242000000b00651a78d4636mr35602450ybi.9.1654704765774; Wed, 08
+ Jun 2022 09:12:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220608000014.3054333-1-jarkko@profian.com> <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
+ <YqAy0qjI4Lktk/uJ@iki.fi> <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
+In-Reply-To: <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Wed, 8 Jun 2022 09:12:34 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
+Message-ID: <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Jarkko Sakkinen <jarkko@profian.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Nathaniel McCallum <nathaniel@profian.com>,
         Russell King <linux@armlinux.org.uk>,
@@ -60,11 +76,10 @@ Cc:     Guo Ren <guoren@kernel.org>, Jarkko Sakkinen <jarkko@profian.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Kees Cook <keescook@chromium.org>,
@@ -76,7 +91,7 @@ Cc:     Guo Ren <guoren@kernel.org>, Jarkko Sakkinen <jarkko@profian.com>,
         Marco Elver <elver@google.com>,
         Dan Li <ashimida@linux.alibaba.com>,
         Sami Tolvanen <samitolvanen@google.com>,
-        Song Liu <song@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
         "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -117,7 +132,7 @@ Cc:     Guo Ren <guoren@kernel.org>, Jarkko Sakkinen <jarkko@profian.com>,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Javier Martinez Canillas <javierm@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>,
-        =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
         Tiezhu Yang <yangtiezhu@loongson.cn>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Aaron Tomlin <atomlin@redhat.com>,
@@ -129,66 +144,68 @@ Cc:     Guo Ren <guoren@kernel.org>, Jarkko Sakkinen <jarkko@profian.com>,
         linux-s390 <linux-s390@vger.kernel.org>,
         sparclinux <sparclinux@vger.kernel.org>,
         linux-modules@vger.kernel.org
-Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-Message-Id: <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
-In-Reply-To: <YqAy0qjI4Lktk/uJ@iki.fi>
-References: <20220608000014.3054333-1-jarkko@profian.com>
-        <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
-        <YqAy0qjI4Lktk/uJ@iki.fi>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi Jarkko,
-
-On Wed, 8 Jun 2022 08:25:38 +0300
-Jarkko Sakkinen <jarkko@kernel.org> wrote:
-
-> On Wed, Jun 08, 2022 at 10:35:42AM +0800, Guo Ren wrote:
-> > .
-> > 
-> > On Wed, Jun 8, 2022 at 8:02 AM Jarkko Sakkinen <jarkko@profian.com> wrote:
+On Wed, Jun 8, 2022 at 7:21 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Jarkko,
+>
+> On Wed, 8 Jun 2022 08:25:38 +0300
+> Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> > On Wed, Jun 08, 2022 at 10:35:42AM +0800, Guo Ren wrote:
+> > > .
 > > >
-> > > Tracing with kprobes while running a monolithic kernel is currently
-> > > impossible because CONFIG_KPROBES is dependent of CONFIG_MODULES.  This
-> > > dependency is a result of kprobes code using the module allocator for the
-> > > trampoline code.
+> > > On Wed, Jun 8, 2022 at 8:02 AM Jarkko Sakkinen <jarkko@profian.com> wrote:
+> > > >
+> > > > Tracing with kprobes while running a monolithic kernel is currently
+> > > > impossible because CONFIG_KPROBES is dependent of CONFIG_MODULES.  This
+> > > > dependency is a result of kprobes code using the module allocator for the
+> > > > trampoline code.
+> > > >
+> > > > Detaching kprobes from modules helps to squeeze down the user space,
+> > > > e.g. when developing new core kernel features, while still having all
+> > > > the nice tracing capabilities.
+> > > >
+> > > > For kernel/ and arch/*, move module_alloc() and module_memfree() to
+> > > > module_alloc.c, and compile as part of vmlinux when either CONFIG_MODULES
+> > > > or CONFIG_KPROBES is enabled.  In addition, flag kernel module specific
+> > > > code with CONFIG_MODULES.
+> > > >
+> > > > As the result, kprobes can be used with a monolithic kernel.
+> > > It's strange when MODULES is n, but vmlinux still obtains module_alloc.
 > > >
-> > > Detaching kprobes from modules helps to squeeze down the user space,
-> > > e.g. when developing new core kernel features, while still having all
-> > > the nice tracing capabilities.
-> > >
-> > > For kernel/ and arch/*, move module_alloc() and module_memfree() to
-> > > module_alloc.c, and compile as part of vmlinux when either CONFIG_MODULES
-> > > or CONFIG_KPROBES is enabled.  In addition, flag kernel module specific
-> > > code with CONFIG_MODULES.
-> > >
-> > > As the result, kprobes can be used with a monolithic kernel.
-> > It's strange when MODULES is n, but vmlinux still obtains module_alloc.
-> > 
-> > Maybe we need a kprobe_alloc, right?
-> 
-> Perhaps not the best name but at least it documents the fact that
-> they use the same allocator.
-> 
-> Few years ago I carved up something "half-way there" for kprobes,
-> and I used the name text_alloc() [*].
-> 
-> [*] https://lore.kernel.org/all/20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com/ 
+> > > Maybe we need a kprobe_alloc, right?
+> >
+> > Perhaps not the best name but at least it documents the fact that
+> > they use the same allocator.
+> >
+> > Few years ago I carved up something "half-way there" for kprobes,
+> > and I used the name text_alloc() [*].
+> >
+> > [*] https://lore.kernel.org/all/20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com/
+>
+> Yeah, I remember that. Thank you for updating your patch!
+> I think the idea (split module_alloc() from CONFIG_MODULE) is good to me.
+> If module support maintainers think this name is not good, you may be
+> able to rename it as text_alloc() and make the module_alloc() as a
+> wrapper of it.
 
-Yeah, I remember that. Thank you for updating your patch!
-I think the idea (split module_alloc() from CONFIG_MODULE) is good to me.
-If module support maintainers think this name is not good, you may be
-able to rename it as text_alloc() and make the module_alloc() as a
-wrapper of it.
+IIUC, most users of module_alloc() use it to allocate memory for text, except
+that module code uses it for both text and data. Therefore, I guess calling it
+text_alloc() is not 100% accurate until we change the module code (to use
+a different API to allocate memory for data).
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-for kprobe side.
+Thanks,
+Song
 
-Thank you,
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> for kprobe side.
+>
+> Thank you,
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
