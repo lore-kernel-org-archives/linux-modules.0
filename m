@@ -2,46 +2,42 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C104C433EF
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Jun 2022 07:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F16EBCCA473
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Jun 2022 11:50:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239394AbiFIHsx (ORCPT
+        id S244746AbiFILuL (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Jun 2022 03:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
+        Thu, 9 Jun 2022 07:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238680AbiFIHsw (ORCPT
+        with ESMTP id S244644AbiFILuH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Jun 2022 03:48:52 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDB76A043;
-        Thu,  9 Jun 2022 00:48:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3xoIRA2BBvzVO0XOc/JU1zTILnsefWyOV49Y7IJ3FLY=; b=AGRuyJpQp9QMikHh/33qL0JsHV
-        U+WVKRpKqJjJvGyaFDokMlWsSCM9no5evqxr8XfHexEuz39eb12W7RP7lrous4XASMRUkOLz5VouH
-        wLOvqEp2LZsitkUiAmo4QZ4OqBM+FawBjbkxe3L4iSs+u4EoDbAZTWfm7hCu0mzKN+/zIyvki4As7
-        StixFRJyaOTciQhpHuJ8zWO31vomCg9cRzQQEama2CztMyJ+0N8odAUMXxupDZVXJ2vDzPMCIz1fo
-        q5Sz7FLf2dgFeqPVWUX5WWIQ+PRyBjxQp0aakORxRQrSWetvEE8P/oPwTCIquE+kqksSrLBnCbWei
-        uIwhbQZg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32800)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nzCtn-0005fb-B8; Thu, 09 Jun 2022 08:48:11 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nzCtG-0002ae-KM; Thu, 09 Jun 2022 08:47:38 +0100
-Date:   Thu, 9 Jun 2022 08:47:38 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jarkko Sakkinen <jarkko@profian.com>
-Cc:     linux-kernel@vger.kernel.org,
+        Thu, 9 Jun 2022 07:50:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2172B20B155;
+        Thu,  9 Jun 2022 04:50:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFC6CB82D36;
+        Thu,  9 Jun 2022 11:50:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D5E1C3411B;
+        Thu,  9 Jun 2022 11:50:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654775401;
+        bh=md2cOKY0UjufG4JRi8yS8d/Uy6RwmNPC5w/ptfzbrDI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=De+o670BbtOyb/W8kZuv1eJLacQIdlvshH76kO751dnHlBG9ViMAkMis6KRuoxNYC
+         hxi4KpllFRC2A0BKuuUS3IOoSUxaWz/0JTTZN/YOVl6lxfWRRcQPHAv0eFx/y/Hmal
+         Z6f3y/fxWtBMoM+h9oOVQhTuSN5K1yVlv6GRYsf777Mo7ELPHew9LGyg//lHrCj/2f
+         xUWagCs+J6qo5XlYXX06rKdTz4CtfSjmblhEeV9HNPeWsBSGzXmVkKXW1Ms5tvZns/
+         wVEBoygFpSksMVX+0JkbCCn6ldys+Sb/YT7pT6GCNe8xiVizupbn0QdKTx0wuIzLjM
+         8nlBqin4Cd+LQ==
+Date:   Thu, 9 Jun 2022 14:48:02 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Jarkko Sakkinen <jarkko@profian.com>, linux-kernel@vger.kernel.org,
         Nathaniel McCallum <nathaniel@profian.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -126,44 +122,45 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-modules@vger.kernel.org
 Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-Message-ID: <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
+Message-ID: <YqHd8mwRVWg0u+Ci@iki.fi>
 References: <20220608000014.3054333-1-jarkko@profian.com>
+ <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220608000014.3054333-1-jarkko@profian.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jun 08, 2022 at 02:59:27AM +0300, Jarkko Sakkinen wrote:
-> diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
-> index 553866751e1a..d2bb954cd54f 100644
-> --- a/arch/arm/kernel/Makefile
-> +++ b/arch/arm/kernel/Makefile
-> @@ -44,6 +44,11 @@ obj-$(CONFIG_CPU_IDLE)		+= cpuidle.o
->  obj-$(CONFIG_ISA_DMA_API)	+= dma.o
->  obj-$(CONFIG_FIQ)		+= fiq.o fiqasm.o
->  obj-$(CONFIG_MODULES)		+= armksyms.o module.o
-> +ifeq ($(CONFIG_MODULES),y)
-> +obj-y				+= module_alloc.o
-> +else
-> +obj-$(CONFIG_KPROBES)		+= module_alloc.o
-> +endif
+On Thu, Jun 09, 2022 at 08:47:38AM +0100, Russell King (Oracle) wrote:
+> On Wed, Jun 08, 2022 at 02:59:27AM +0300, Jarkko Sakkinen wrote:
+> > diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
+> > index 553866751e1a..d2bb954cd54f 100644
+> > --- a/arch/arm/kernel/Makefile
+> > +++ b/arch/arm/kernel/Makefile
+> > @@ -44,6 +44,11 @@ obj-$(CONFIG_CPU_IDLE)		+= cpuidle.o
+> >  obj-$(CONFIG_ISA_DMA_API)	+= dma.o
+> >  obj-$(CONFIG_FIQ)		+= fiq.o fiqasm.o
+> >  obj-$(CONFIG_MODULES)		+= armksyms.o module.o
+> > +ifeq ($(CONFIG_MODULES),y)
+> > +obj-y				+= module_alloc.o
+> > +else
+> > +obj-$(CONFIG_KPROBES)		+= module_alloc.o
+> > +endif
+> 
+> Doesn't:
+> 
+> obj-$(CONFIG_MODULES)		+= module_alloc.o
+> obj-$(CONFIG_KPROBES)		+= module_alloc.o
+> 
+> work just as well? The kbuild modules.rst documentation says:
+> 
+>         The order of files in $(obj-y) is significant.  Duplicates in
+>         the lists are allowed: the first instance will be linked into
+>         built-in.a and succeeding instances will be ignored.
+> 
+> so you should be fine... or the documentation is wrong!
 
-Doesn't:
+OK, I did not know this. Thanks for the tip!
 
-obj-$(CONFIG_MODULES)		+= module_alloc.o
-obj-$(CONFIG_KPROBES)		+= module_alloc.o
-
-work just as well? The kbuild modules.rst documentation says:
-
-        The order of files in $(obj-y) is significant.  Duplicates in
-        the lists are allowed: the first instance will be linked into
-        built-in.a and succeeding instances will be ignored.
-
-so you should be fine... or the documentation is wrong!
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+BR, Jarkko
