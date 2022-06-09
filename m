@@ -2,44 +2,46 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3189C433EF
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Jun 2022 05:40:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C104C433EF
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Jun 2022 07:48:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238490AbiFIFj7 (ORCPT
+        id S239394AbiFIHsx (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Jun 2022 01:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
+        Thu, 9 Jun 2022 03:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237522AbiFIFj6 (ORCPT
+        with ESMTP id S238680AbiFIHsw (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Jun 2022 01:39:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27C73FDA7;
-        Wed,  8 Jun 2022 22:39:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87718B82C20;
-        Thu,  9 Jun 2022 05:39:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C191AC34114;
-        Thu,  9 Jun 2022 05:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654753192;
-        bh=ZBzW7c26dslHeRr0ieKbrHN+05ZdER8p0imFsIG2U6Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F2o+ddHoBAh/ztSTEKLJZaE98wUIiQxUNoAdW7BKWVIFeAQYKxd9oL3vnlesLyKiT
-         VPKotdlsvpJZKg7TX7GrDwbwHGgxs3Qf8sMkZdCE0hRTpjzlMCugH24kzF76BmzYme
-         FUzeMivArYzPXUNpXIYaEwcOX33YkdGM40VXdm0o37FlvFRqULsbkJoYQ5wnf0eIx0
-         TsgucyhkqJSUb8zaXjI6z38KzJrwe/5gEy/qHB66zJJ+NN0dJalvYXl+h/dTuz52xO
-         KDwJeNKP7bAq38rvYsyIpD7YkTJTxX5WVGn8fBd514jOuj6Fut8wOy/CTcFyzoQstK
-         voCzneXRcBiJw==
-Date:   Thu, 9 Jun 2022 08:37:54 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko@profian.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thu, 9 Jun 2022 03:48:52 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDB76A043;
+        Thu,  9 Jun 2022 00:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=3xoIRA2BBvzVO0XOc/JU1zTILnsefWyOV49Y7IJ3FLY=; b=AGRuyJpQp9QMikHh/33qL0JsHV
+        U+WVKRpKqJjJvGyaFDokMlWsSCM9no5evqxr8XfHexEuz39eb12W7RP7lrous4XASMRUkOLz5VouH
+        wLOvqEp2LZsitkUiAmo4QZ4OqBM+FawBjbkxe3L4iSs+u4EoDbAZTWfm7hCu0mzKN+/zIyvki4As7
+        StixFRJyaOTciQhpHuJ8zWO31vomCg9cRzQQEama2CztMyJ+0N8odAUMXxupDZVXJ2vDzPMCIz1fo
+        q5Sz7FLf2dgFeqPVWUX5WWIQ+PRyBjxQp0aakORxRQrSWetvEE8P/oPwTCIquE+kqksSrLBnCbWei
+        uIwhbQZg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32800)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nzCtn-0005fb-B8; Thu, 09 Jun 2022 08:48:11 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nzCtG-0002ae-KM; Thu, 09 Jun 2022 08:47:38 +0100
+Date:   Thu, 9 Jun 2022 08:47:38 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jarkko Sakkinen <jarkko@profian.com>
+Cc:     linux-kernel@vger.kernel.org,
         Nathaniel McCallum <nathaniel@profian.com>,
-        Russell King <linux@armlinux.org.uk>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -59,8 +61,8 @@ Cc:     Jarkko Sakkinen <jarkko@profian.com>,
         "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
         "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
@@ -75,8 +77,7 @@ Cc:     Jarkko Sakkinen <jarkko@profian.com>,
         Marco Elver <elver@google.com>,
         Dan Li <ashimida@linux.alibaba.com>,
         Sami Tolvanen <samitolvanen@google.com>,
-        Song Liu <song@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Song Liu <song@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Chen Zhongjin <chenzhongjin@huawei.com>,
@@ -125,59 +126,44 @@ Cc:     Jarkko Sakkinen <jarkko@profian.com>,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-modules@vger.kernel.org
 Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-Message-ID: <YqGHMs4ha7JMvODf@iki.fi>
+Message-ID: <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
 References: <20220608000014.3054333-1-jarkko@profian.com>
- <CAMj1kXFsdEq6XZ6eOuf8Ks-F4qgneVxFeLYNN_S4JaPy8koEyw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXFsdEq6XZ6eOuf8Ks-F4qgneVxFeLYNN_S4JaPy8koEyw@mail.gmail.com>
+In-Reply-To: <20220608000014.3054333-1-jarkko@profian.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jun 08, 2022 at 06:27:51PM +0200, Ard Biesheuvel wrote:
-> Hello Jarkko,
-> 
-> On Wed, 8 Jun 2022 at 02:02, Jarkko Sakkinen <jarkko@profian.com> wrote:
-> >
-> > Tracing with kprobes while running a monolithic kernel is currently
-> > impossible because CONFIG_KPROBES is dependent of CONFIG_MODULES.  This
-> > dependency is a result of kprobes code using the module allocator for the
-> > trampoline code.
-> >
-> > Detaching kprobes from modules helps to squeeze down the user space,
-> > e.g. when developing new core kernel features, while still having all
-> > the nice tracing capabilities.
-> >
-> > For kernel/ and arch/*, move module_alloc() and module_memfree() to
-> > module_alloc.c, and compile as part of vmlinux when either CONFIG_MODULES
-> > or CONFIG_KPROBES is enabled.  In addition, flag kernel module specific
-> > code with CONFIG_MODULES.
-> >
-> > As the result, kprobes can be used with a monolithic kernel.
-> 
-> I think I may have mentioned this the previous time as well, but I
-> don't think this is the right approach.
+On Wed, Jun 08, 2022 at 02:59:27AM +0300, Jarkko Sakkinen wrote:
+> diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
+> index 553866751e1a..d2bb954cd54f 100644
+> --- a/arch/arm/kernel/Makefile
+> +++ b/arch/arm/kernel/Makefile
+> @@ -44,6 +44,11 @@ obj-$(CONFIG_CPU_IDLE)		+= cpuidle.o
+>  obj-$(CONFIG_ISA_DMA_API)	+= dma.o
+>  obj-$(CONFIG_FIQ)		+= fiq.o fiqasm.o
+>  obj-$(CONFIG_MODULES)		+= armksyms.o module.o
+> +ifeq ($(CONFIG_MODULES),y)
+> +obj-y				+= module_alloc.o
+> +else
+> +obj-$(CONFIG_KPROBES)		+= module_alloc.o
+> +endif
 
-OK, I apologize for my ignorance. It's been a while.
+Doesn't:
 
-> Kprobes uses alloc_insn_page() to allocate executable memory, but the
-> requirements for this memory are radically different compared to
-> loadable modules, which need to be within an arch-specific distance of
-> the core kernel, need KASAN backing etc etc.
-> 
-> This is why arm64, for instance, does not implement alloc_insn_page()
-> in terms of module_alloc() [and likely does not belong in this patch
-> for that reason]
-> 
-> Is there any reason kprobes cannot simply use vmalloc()?
+obj-$(CONFIG_MODULES)		+= module_alloc.o
+obj-$(CONFIG_KPROBES)		+= module_alloc.o
 
-All arch's, except nios2 use vmalloc() in the end for module_alloc().
-nios2 uses kmalloc() for the reasons that I'm not aware of, but it does
-not support kprobes in the first place.
+work just as well? The kbuild modules.rst documentation says:
 
-Based on this, I think that could work out just fine.
+        The order of files in $(obj-y) is significant.  Duplicates in
+        the lists are allowed: the first instance will be linked into
+        built-in.a and succeeding instances will be ignored.
 
-I could cope with that.
+so you should be fine... or the documentation is wrong!
 
-BR, Jarkko
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
