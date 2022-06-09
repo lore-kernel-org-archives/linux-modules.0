@@ -2,36 +2,27 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A62ECCA47A
-	for <linux-modules@archiver.kernel.org>; Wed,  8 Jun 2022 20:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EF55CCA473
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Jun 2022 03:49:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiFHU0h (ORCPT
+        id S232493AbiFIDtH (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 8 Jun 2022 16:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
+        Wed, 8 Jun 2022 23:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiFHU0g (ORCPT
+        with ESMTP id S229833AbiFIDtD (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 8 Jun 2022 16:26:36 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD5F3A4CC5;
-        Wed,  8 Jun 2022 13:26:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UslqCti0qqUSvM7NSsuVph4LPbUHbcSI30SBdlOy048=; b=oWSTSrJHo+c3AeKRudCHbJrEtu
-        M/cVAkxCfYBh3bHZCR/E4oQsHb4DDQOzTw/YixFD0ZT8TsAkRDBxYP+aPzobRm2PTnwAZYXTaq6Fw
-        rkqnKz7V8L7TMY53wRqi6bu8gCIJ0XsNNLAmA7KCu4po7dqsaRK6+nSArbM5p64scbG5ePLbhiUFt
-        2R5rf9M67rrdmynxd+nZ1qOmERF4P9uO/eVBCpmCJ8wbXSXFD9vh7/fDo6cWh4lxcqnQJ+zIkK/CM
-        MiaBE+93YVXNM1muCECUywxQI9Ew8SQMp0oYGUwO2K5I3CKWGNdPTbrkh2R9aMT5wCg7d6jdj4+BM
-        YCuRJatQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nz2Fv-00Es7U-II; Wed, 08 Jun 2022 20:26:19 +0000
-Date:   Wed, 8 Jun 2022 13:26:19 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <song@kernel.org>, Christoph Hellwig <hch@lst.de>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Wed, 8 Jun 2022 23:49:03 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A57232C;
+        Wed,  8 Jun 2022 20:49:01 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id EFD956732D; Thu,  9 Jun 2022 05:48:52 +0200 (CEST)
+Date:   Thu, 9 Jun 2022 05:48:52 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Song Liu <song@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Guo Ren <guoren@kernel.org>,
         Jarkko Sakkinen <jarkko@profian.com>,
@@ -126,67 +117,26 @@ Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         sparclinux <sparclinux@vger.kernel.org>,
         linux-modules@vger.kernel.org
 Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-Message-ID: <YqEF6+YKqCHsWZJW@bombadil.infradead.org>
-References: <20220608000014.3054333-1-jarkko@profian.com>
- <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
- <YqAy0qjI4Lktk/uJ@iki.fi>
- <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
- <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
- <CAPhsuW6BzUtqnjvaGJScXRpghs0_V_phpdyd4_oAKhvmkX-GFw@mail.gmail.com>
+Message-ID: <20220609034852.GA30873@lst.de>
+References: <20220608000014.3054333-1-jarkko@profian.com> <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com> <YqAy0qjI4Lktk/uJ@iki.fi> <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org> <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com> <CAPhsuW6BzUtqnjvaGJScXRpghs0_V_phpdyd4_oAKhvmkX-GFw@mail.gmail.com> <YqEF6+YKqCHsWZJW@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPhsuW6BzUtqnjvaGJScXRpghs0_V_phpdyd4_oAKhvmkX-GFw@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <YqEF6+YKqCHsWZJW@bombadil.infradead.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jun 08, 2022 at 11:20:53AM -0700, Song Liu wrote:
-> On Wed, Jun 8, 2022 at 9:12 AM Song Liu <song@kernel.org> wrote:
-> > On Wed, Jun 8, 2022 at 7:21 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > On Wed, 8 Jun 2022 08:25:38 +0300
-> > > Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > On Wed, Jun 08, 2022 at 10:35:42AM +0800, Guo Ren wrote:
-> > > > > On Wed, Jun 8, 2022 at 8:02 AM Jarkko Sakkinen <jarkko@profian.com> wrote:
-> > > > > > As the result, kprobes can be used with a monolithic kernel.
-> > > > > It's strange when MODULES is n, but vmlinux still obtains module_alloc.
-> > > > >
-> > > > > Maybe we need a kprobe_alloc, right?
-> > > >
-> > > > Perhaps not the best name but at least it documents the fact that
-> > > > they use the same allocator.
-> > > >
-> > > > Few years ago I carved up something "half-way there" for kprobes,
-> > > > and I used the name text_alloc() [*].
-> > > >
-> > > > [*] https://lore.kernel.org/all/20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com/
-> > >
-> > > Yeah, I remember that. Thank you for updating your patch!
-> > > I think the idea (split module_alloc() from CONFIG_MODULE) is good to me.
-> > > If module support maintainers think this name is not good, you may be
-> > > able to rename it as text_alloc() and make the module_alloc() as a
-> > > wrapper of it.
-> >
-> > IIUC, most users of module_alloc() use it to allocate memory for text, except
-> > that module code uses it for both text and data. Therefore, I guess calling it
-> > text_alloc() is not 100% accurate until we change the module code (to use
-> > a different API to allocate memory for data).
-> 
-> Git history showed me
-> 
-> 7a0e27b2a0ce mm: remove vmalloc_exec
-> 
-> I guess we are somehow going back in time...
+On Wed, Jun 08, 2022 at 01:26:19PM -0700, Luis Chamberlain wrote:
+> No, that was removed because it has only one user.
 
-No, that was removed because it has only one user. The real hard work
-to generalize vmalloc_exec() with all the arch special sauce was not
-done.
+That is only part of the story.  The other part is that the overall
+kernel simply does not have any business allocating exutable memory.
+Executable memory is a very special concept for modules or module-like
+code like kprobes, and should not be exposed as a general concept.
 
-To do this properly architectures must be able to override it. We can
-use the old vmalloc_exec() or text_alloc(). I think vmalloc_exec() is
-more in line with mm stuff, but it would be our first __weak mm call
-from what I can tell.
-
-Anyway patches welcomed.
-
-  Luis
+Especially as executable memory really should not also be writable
+for security reasons.  In other words, we should actually never
+allocate executable memory, every.  We might seal memory and then
+mark it executable after having written to it, which is how modules
+and kprobes are implemented on all modern Linux ports anyway.
