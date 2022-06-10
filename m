@@ -2,98 +2,186 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14AD9CCA47B
-	for <linux-modules@archiver.kernel.org>; Fri, 10 Jun 2022 18:35:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32809C433EF
+	for <linux-modules@archiver.kernel.org>; Fri, 10 Jun 2022 21:42:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350407AbiFJSfm (ORCPT
+        id S1348091AbiFJVmJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 10 Jun 2022 14:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        Fri, 10 Jun 2022 17:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350072AbiFJSfU (ORCPT
+        with ESMTP id S1350950AbiFJVmH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 10 Jun 2022 14:35:20 -0400
-X-Greylist: delayed 72 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Jun 2022 11:35:00 PDT
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632273ED30;
-        Fri, 10 Jun 2022 11:35:00 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 25AIX5TL020882;
-        Sat, 11 Jun 2022 03:33:05 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 25AIX5TL020882
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654885986;
-        bh=9V5ZtNuA93j8Q20aLKhJjsp/qlA4DxrP5ew51lWbprM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EiMGDoVxhBnNAUwmy9Pw4D8rmphe8eCNo0y+s4fv97gyda6/4gSz7svrcCC6tDIQW
-         aP0vbki01SCpg1hqhOCJc4naCcSl0SfPT+qJU7xSLOBGfdpcT+Ret0MBFozRLn5XIp
-         UVOJrKlfMMp/pEzmmedySfSmWAXRkowNr8dxMvxmjVqMgpXrRm3B52le1YCUqlnDBs
-         2NZDyLIkqRMlZyvrMhzWQv9MSgxNZ7474xOBSyN1ger4f19kJWCP1zXBV6tX7vTDy8
-         zzBTSPJRj8Gbv2W92g931cV6L+rKVyDjDTRdAJoThsRtiCCFLpVtndbszNtF06H1QM
-         4e+Hs+bAbBl0w==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Fri, 10 Jun 2022 17:42:07 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5671A79803
+        for <linux-modules@vger.kernel.org>; Fri, 10 Jun 2022 14:42:06 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id c4so404700lfj.12
+        for <linux-modules@vger.kernel.org>; Fri, 10 Jun 2022 14:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hTuTxAMjCajC/1vYQQYpCYbbAjPzudqNWU9h993rD9s=;
+        b=tis3vvo11BQYB2E6Oe6sgEpUUdvySDAEHAmTA5sN8t8hLwD8OrV0zl1LSRWVLNGBQD
+         2ms4/NuoNN8d7c85d6BAhws1lHMrlYszE0croUX07GJTqn+1kEsE/MKQ8NRGOEC9B1PV
+         m6a4SCGWXQVDnFFDBEr9nV9FQ+1UbkIfonwAUumofP4MtAje4cDnmK7yjpDxLZ0XF0tJ
+         0JkV3WnWO8LGE195rkgmfWcx6Xa9h82pJLsfQVRvRv3RBXhnylIhWF2YmSIMbz681N/R
+         m09Hy+6t9JbACCnW3S4Low0Bs9RnwmtHhc0NKxR/oemYeRCskBMbpxduBdBsHGiPt0yX
+         4B7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hTuTxAMjCajC/1vYQQYpCYbbAjPzudqNWU9h993rD9s=;
+        b=Ke39vuHtNFoShpqvImfonRzuqKG7f3qBd3NRM9G11eyOxG9+Ly90WN1aHnvlV+ECeM
+         jihWinHZWk185+3Xsxo61QEc6FKF+D+Hv3fslFvfZk3BVpYMFHpyAv7i+Z8c8+BC8wcn
+         hqTgUMw2YLAoqVH3V6jAG5+DFtIQqMphAKWOnn//udD0ZWT+fR2kTCLpfAbqZLMPRwvi
+         jH9avlrmFaRSo9SUsscd7oLNMTNzqqwyMQsXDwkrcqvZMola+dBHPvJOVbrGg7GYZNFN
+         +57iyK74eUypcOZzSgpWsBpaETyd7gwG+41avw4zZgXTleTGTDBit/BJAwd8gFUBL3BE
+         vfRg==
+X-Gm-Message-State: AOAM530YG5/2LFGupKxD+kXS6uhvub4BIEnnbXcQWDQ1+Kg5QAyKyjqK
+        N0wqbFxa2H/ppljzApscjTd29AVkkRxHDhmAB7hK7Q==
+X-Google-Smtp-Source: ABdhPJwU+oIxHw35O4RStA/C+Kb3V+Ogfc+yp0teH8QGDM6HLjVR4XKGUpms34V5zg5NaaQcgcd4YD0Z5qjPR/Ppdns=
+X-Received: by 2002:ac2:5c44:0:b0:479:11e1:36f7 with SMTP id
+ s4-20020ac25c44000000b0047911e136f7mr26779320lfp.432.1654897324408; Fri, 10
+ Jun 2022 14:42:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220610183236.1272216-1-masahiroy@kernel.org> <20220610183236.1272216-3-masahiroy@kernel.org>
+In-Reply-To: <20220610183236.1272216-3-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 10 Jun 2022 14:41:52 -0700
+Message-ID: <CAKwvOdn+fYiiU=x7tqxp68Zkb3E88suEg6oNNucom3AehqayJA@mail.gmail.com>
+Subject: Re: [PATCH 2/7] modpost: put get_secindex() call inside sec_name()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Nicolas Pitre <npitre@baylibre.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alessio Igor Bogani <abogani@kernel.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rusty Russell <rusty@rustcorp.com.au>,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 0/7] Unify <linux/export.h> and <asm/export.h>, remove EXPORT_DATA_SYMBOL()
-Date:   Sat, 11 Jun 2022 03:32:29 +0900
-Message-Id: <20220610183236.1272216-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+On Fri, Jun 10, 2022 at 11:34 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> There are 5 callsites of sec_name(). In all the places, sec_name() is
+> used together with get_secindex().
+>
+> So, it is simpler to merge two function calls
+>
+>     sec_name(elf, get_secindex(elf, sym))
+>
+> into one call:
+>
+>     sec_name_of_symbol(elf, sym)
+>
+> While I was here, I also inserted this array range check:
+>
+>     if (secindex >= info->num_sections)
+>             return "";
+>
+> This will make the code robust against info->sechdrs[] overrun.
+>
+> sym->st_shndx is 2 bytes (for both 32 and 64 bit systems), and the
+> range 0xff00..0xffff is reserved for special sections.
+>
+> For example, a symbol specifies an absolute value, sym->st_shndx==0xfff1.
+> get_secindex() remaps it to 0xfffffff1.
+>
+> There is no corresponding section header for such special sections.
+>
+> The existing code does not hit this issue, but it is better to check
+> the array range.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-This patch set refactors EXPORT_SYMBOL, <linux/export.h> and <asm/export.h>.
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-You can still put EXPORT_SYMBOL() in *.S file, very close to the definition,
-but you do not need to care about whether it is a function or a data.
-Remove EXPORT_DATA_SYMBOL().
+> ---
+>
+>  scripts/mod/modpost.c | 23 +++++++++++++++++------
+>  1 file changed, 17 insertions(+), 6 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 620dc8c4c814..b9f2a040f185 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -339,8 +339,19 @@ static const char *sech_name(const struct elf_info *info, Elf_Shdr *sechdr)
+>                                       sechdr->sh_name);
+>  }
+>
+> -static const char *sec_name(const struct elf_info *info, int secindex)
+> +static const char *sec_name_of_symbol(const struct elf_info *info,
+> +                                     const Elf_Sym *sym)
+>  {
+> +       unsigned int secindex = get_secindex(info, sym);
+> +
+> +       /*
+> +        * If sym->st_shndx is within the special section range, get_secindex()
+> +        * will remapit to a big number.
+> +        * Bail out here, otherwise info->sechdrs[secindex] would overrun.
+> +        */
+> +       if (secindex >= info->num_sections)
+> +               return "";
+> +
+>         return sech_name(info, &info->sechdrs[secindex]);
+>  }
+>
+> @@ -649,7 +660,7 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
+>                         const char *name, *secname;
+>
+>                         name = symname + strlen("__ksymtab_");
+> -                       secname = sec_name(info, get_secindex(info, sym));
+> +                       secname = sec_name_of_symbol(info, sym);
+>
+>                         if (strstarts(secname, "___ksymtab_gpl+"))
+>                                 sym_add_exported(name, mod, true);
+> @@ -1217,7 +1228,7 @@ static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
+>
+>                 if (is_shndx_special(sym->st_shndx))
+>                         continue;
+> -               symsec = sec_name(elf, get_secindex(elf, sym));
+> +               symsec = sec_name_of_symbol(elf, sym);
+>                 if (strcmp(symsec, sec) != 0)
+>                         continue;
+>                 if (!is_valid_name(elf, sym))
+> @@ -1457,7 +1468,7 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+>         if (strstarts(fromsym, "reference___initcall"))
+>                 return;
+>
+> -       tosec = sec_name(elf, get_secindex(elf, sym));
+> +       tosec = sec_name_of_symbol(elf, sym);
+>         to = find_elf_symbol(elf, r->r_addend, sym);
+>         tosym = sym_name(elf, to);
+>
+> @@ -1559,7 +1570,7 @@ static void extable_mismatch_handler(const char* modname, struct elf_info *elf,
+>                                      Elf_Rela* r, Elf_Sym* sym,
+>                                      const char *fromsec)
+>  {
+> -       const char* tosec = sec_name(elf, get_secindex(elf, sym));
+> +       const char *tosec = sec_name_of_symbol(elf, sym);
+>
+>         sec_mismatch_count++;
+>
+> @@ -1593,7 +1604,7 @@ static void extable_mismatch_handler(const char* modname, struct elf_info *elf,
+>  static void check_section_mismatch(const char *modname, struct elf_info *elf,
+>                                    Elf_Rela *r, Elf_Sym *sym, const char *fromsec)
+>  {
+> -       const char *tosec = sec_name(elf, get_secindex(elf, sym));
+> +       const char *tosec = sec_name_of_symbol(elf, sym);
+>         const struct sectioncheck *mismatch = section_mismatch(fromsec, tosec);
+>
+>         if (mismatch) {
+> --
+> 2.32.0
+>
 
-
-
-Masahiro Yamada (7):
-  modpost: fix section mismatch check for exported init/exit sections
-  modpost: put get_secindex() call inside sec_name()
-  kbuild: generate struct kernel_symbol by modpost
-  ia64,export.h: replace EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
-  checkpatch: warn if <asm/export.h> is included
-  modpost: merge sym_update_namespace() into sym_add_exported()
-  modpost: use null string instead of NULL pointer for default namespace
-
- arch/ia64/include/asm/Kbuild    |   1 +
- arch/ia64/include/asm/export.h  |   3 -
- arch/ia64/kernel/head.S         |   2 +-
- arch/ia64/kernel/ivt.S          |   2 +-
- include/asm-generic/export.h    |  83 +------------------
- include/linux/export-internal.h |  44 ++++++++++
- include/linux/export.h          |  97 ++++++++--------------
- kernel/module/internal.h        |  12 +++
- kernel/module/main.c            |   1 -
- scripts/Makefile.build          |   8 +-
- scripts/check-local-export      |   4 +-
- scripts/checkpatch.pl           |   7 ++
- scripts/mod/modpost.c           | 139 +++++++++++++++++---------------
- scripts/mod/modpost.h           |   1 +
- 14 files changed, 182 insertions(+), 222 deletions(-)
- delete mode 100644 arch/ia64/include/asm/export.h
 
 -- 
-2.32.0
-
+Thanks,
+~Nick Desaulniers
