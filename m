@@ -2,57 +2,57 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32809C433EF
-	for <linux-modules@archiver.kernel.org>; Fri, 10 Jun 2022 21:42:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67A60C43334
+	for <linux-modules@archiver.kernel.org>; Fri, 10 Jun 2022 22:27:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348091AbiFJVmJ (ORCPT
+        id S1343526AbiFJW1D (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 10 Jun 2022 17:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        Fri, 10 Jun 2022 18:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350950AbiFJVmH (ORCPT
+        with ESMTP id S244632AbiFJW1B (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 10 Jun 2022 17:42:07 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5671A79803
-        for <linux-modules@vger.kernel.org>; Fri, 10 Jun 2022 14:42:06 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id c4so404700lfj.12
-        for <linux-modules@vger.kernel.org>; Fri, 10 Jun 2022 14:42:06 -0700 (PDT)
+        Fri, 10 Jun 2022 18:27:01 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DF61115B
+        for <linux-modules@vger.kernel.org>; Fri, 10 Jun 2022 15:26:59 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id c2so645578lfk.0
+        for <linux-modules@vger.kernel.org>; Fri, 10 Jun 2022 15:26:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hTuTxAMjCajC/1vYQQYpCYbbAjPzudqNWU9h993rD9s=;
-        b=tis3vvo11BQYB2E6Oe6sgEpUUdvySDAEHAmTA5sN8t8hLwD8OrV0zl1LSRWVLNGBQD
-         2ms4/NuoNN8d7c85d6BAhws1lHMrlYszE0croUX07GJTqn+1kEsE/MKQ8NRGOEC9B1PV
-         m6a4SCGWXQVDnFFDBEr9nV9FQ+1UbkIfonwAUumofP4MtAje4cDnmK7yjpDxLZ0XF0tJ
-         0JkV3WnWO8LGE195rkgmfWcx6Xa9h82pJLsfQVRvRv3RBXhnylIhWF2YmSIMbz681N/R
-         m09Hy+6t9JbACCnW3S4Low0Bs9RnwmtHhc0NKxR/oemYeRCskBMbpxduBdBsHGiPt0yX
-         4B7g==
+        bh=Tfd/TAR0ufan394wnNBz+IKQVbIk+aytMj5qI0Sj/hk=;
+        b=THD3zqVbgeWQWfIvdLAsxo39zXC/mI7Xdkz4psppRHS0LXhBGK2htigBMZ5+eAWN/G
+         H/2hftNy1wYLZX7FFcmZeXIRfhkOIvuBL33ITi8ncT0RIWDW7EwBhIQ3zL1kH+Pam1kr
+         ClfM8PSldRRLXwp0urc4FcTyMvlIx1QCXsbPaINSPypVfTyB2WIOKopzVSGuc2m8+KNA
+         qj4E2aeNXAWs+Qb4WMHF6mimnXzCagjk9GChVXAnFimUQ7nJpY4eH95bvhidpvjATTe8
+         vKS8t3BIGDEkrU5cE3qG/E5vCkbLYBXN/QWkHPys9HXIHzBRxU/X9Wbpi8gBb4fUEDKc
+         UDUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hTuTxAMjCajC/1vYQQYpCYbbAjPzudqNWU9h993rD9s=;
-        b=Ke39vuHtNFoShpqvImfonRzuqKG7f3qBd3NRM9G11eyOxG9+Ly90WN1aHnvlV+ECeM
-         jihWinHZWk185+3Xsxo61QEc6FKF+D+Hv3fslFvfZk3BVpYMFHpyAv7i+Z8c8+BC8wcn
-         hqTgUMw2YLAoqVH3V6jAG5+DFtIQqMphAKWOnn//udD0ZWT+fR2kTCLpfAbqZLMPRwvi
-         jH9avlrmFaRSo9SUsscd7oLNMTNzqqwyMQsXDwkrcqvZMola+dBHPvJOVbrGg7GYZNFN
-         +57iyK74eUypcOZzSgpWsBpaETyd7gwG+41avw4zZgXTleTGTDBit/BJAwd8gFUBL3BE
-         vfRg==
-X-Gm-Message-State: AOAM530YG5/2LFGupKxD+kXS6uhvub4BIEnnbXcQWDQ1+Kg5QAyKyjqK
-        N0wqbFxa2H/ppljzApscjTd29AVkkRxHDhmAB7hK7Q==
-X-Google-Smtp-Source: ABdhPJwU+oIxHw35O4RStA/C+Kb3V+Ogfc+yp0teH8QGDM6HLjVR4XKGUpms34V5zg5NaaQcgcd4YD0Z5qjPR/Ppdns=
-X-Received: by 2002:ac2:5c44:0:b0:479:11e1:36f7 with SMTP id
- s4-20020ac25c44000000b0047911e136f7mr26779320lfp.432.1654897324408; Fri, 10
- Jun 2022 14:42:04 -0700 (PDT)
+        bh=Tfd/TAR0ufan394wnNBz+IKQVbIk+aytMj5qI0Sj/hk=;
+        b=xDWRP0f8BFApcb3kJ315MxtbNMrouhJYjBMQ4K9F7tesVHngL/Q7RKJHwMuVF8zk0X
+         5zAmdhnsQuaH5WHqvJbLglu7ZCepag1SD7xkhauQemRWwYCT944E5F1eJSHBpvZVRGBX
+         2kSqo/BqB5B7BtxFTZvussPawbJqxss3GrzZpfPF+Y7XEPY/JLiV1Uzc27QjSl4X4x3K
+         0pcviDA0ya+vAyjEfBi5hU8f5bMuaYS6+E5uVe9UCR3BlD0nvZ96J2Ly0HNJYAP1hXRb
+         5BdGKE5D/3OKPI9UycB9p6eHd+DqTPRewlrM73KP6Lrxwe3VlC6itYp2JuAWImAYt6Kr
+         HmyQ==
+X-Gm-Message-State: AOAM533mXrLAU64nnwjXl+Vfa+UQxscAMuBznP9tJweT0WVFBLSGZPSE
+        ytpLuuU3OacawZ5UqAFIuOcl3KLTCCo8tikINJy7ow==
+X-Google-Smtp-Source: ABdhPJxb5CTKop1RwIBIe8ZOCCTPU8a0rjXQU054V+HvLqSQh5V//sbYOcEKwkYosQQa63ufD4Uiy/BTeHtP948qXgg=
+X-Received: by 2002:a05:6512:ad6:b0:479:5599:d834 with SMTP id
+ n22-20020a0565120ad600b004795599d834mr14594725lfu.103.1654900017856; Fri, 10
+ Jun 2022 15:26:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220610183236.1272216-1-masahiroy@kernel.org> <20220610183236.1272216-3-masahiroy@kernel.org>
-In-Reply-To: <20220610183236.1272216-3-masahiroy@kernel.org>
+References: <20220610183236.1272216-1-masahiroy@kernel.org> <20220610183236.1272216-7-masahiroy@kernel.org>
+In-Reply-To: <20220610183236.1272216-7-masahiroy@kernel.org>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 10 Jun 2022 14:41:52 -0700
-Message-ID: <CAKwvOdn+fYiiU=x7tqxp68Zkb3E88suEg6oNNucom3AehqayJA@mail.gmail.com>
-Subject: Re: [PATCH 2/7] modpost: put get_secindex() call inside sec_name()
+Date:   Fri, 10 Jun 2022 15:26:46 -0700
+Message-ID: <CAKwvOdk++w0K+y-spCn1fHbhO+G3oJ8LF9LDFJKWg-acW04XBQ@mail.gmail.com>
+Subject: Re: [PATCH 6/7] modpost: merge sym_update_namespace() into sym_add_exported()
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
@@ -68,34 +68,9 @@ List-ID: <linux-modules.vger.kernel.org>
 
 On Fri, Jun 10, 2022 at 11:34 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> There are 5 callsites of sec_name(). In all the places, sec_name() is
-> used together with get_secindex().
+> Pass a set of the name, license, and namespace to sym_add_exported().
 >
-> So, it is simpler to merge two function calls
->
->     sec_name(elf, get_secindex(elf, sym))
->
-> into one call:
->
->     sec_name_of_symbol(elf, sym)
->
-> While I was here, I also inserted this array range check:
->
->     if (secindex >= info->num_sections)
->             return "";
->
-> This will make the code robust against info->sechdrs[] overrun.
->
-> sym->st_shndx is 2 bytes (for both 32 and 64 bit systems), and the
-> range 0xff00..0xffff is reserved for special sections.
->
-> For example, a symbol specifies an absolute value, sym->st_shndx==0xfff1.
-> get_secindex() remaps it to 0xfffffff1.
->
-> There is no corresponding section header for such special sections.
->
-> The existing code does not hit this issue, but it is better to check
-> the array range.
+> sym_update_namespace() is unneeded.
 >
 > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
@@ -104,79 +79,84 @@ Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 > ---
 >
->  scripts/mod/modpost.c | 23 +++++++++++++++++------
->  1 file changed, 17 insertions(+), 6 deletions(-)
+>  scripts/mod/modpost.c | 41 +++++++++--------------------------------
+>  1 file changed, 9 insertions(+), 32 deletions(-)
 >
 > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 620dc8c4c814..b9f2a040f185 100644
+> index f738dddde7b8..0db2cbb74a2a 100644
 > --- a/scripts/mod/modpost.c
 > +++ b/scripts/mod/modpost.c
-> @@ -339,8 +339,19 @@ static const char *sech_name(const struct elf_info *info, Elf_Shdr *sechdr)
->                                       sechdr->sh_name);
->  }
+> @@ -357,26 +357,8 @@ static const char *sec_name_of_symbol(const struct elf_info *info,
 >
-> -static const char *sec_name(const struct elf_info *info, int secindex)
-> +static const char *sec_name_of_symbol(const struct elf_info *info,
-> +                                     const Elf_Sym *sym)
+>  #define strstarts(str, prefix) (strncmp(str, prefix, strlen(prefix)) == 0)
+>
+> -static void sym_update_namespace(const char *symname, const char *namespace)
+> -{
+> -       struct symbol *s = find_symbol(symname);
+> -
+> -       /*
+> -        * That symbol should have been created earlier and thus this is
+> -        * actually an assertion.
+> -        */
+> -       if (!s) {
+> -               error("Could not update namespace(%s) for symbol %s\n",
+> -                     namespace, symname);
+> -               return;
+> -       }
+> -
+> -       free(s->namespace);
+> -       s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
+> -}
+> -
+>  static struct symbol *sym_add_exported(const char *name, struct module *mod,
+> -                                      bool gpl_only)
+> +                                      bool gpl_only, const char *namespace)
 >  {
-> +       unsigned int secindex = get_secindex(info, sym);
-> +
-> +       /*
-> +        * If sym->st_shndx is within the special section range, get_secindex()
-> +        * will remapit to a big number.
-> +        * Bail out here, otherwise info->sechdrs[secindex] would overrun.
-> +        */
-> +       if (secindex >= info->num_sections)
-> +               return "";
-> +
->         return sech_name(info, &info->sechdrs[secindex]);
->  }
+>         struct symbol *s = find_symbol(name);
 >
-> @@ -649,7 +660,7 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
->                         const char *name, *secname;
+> @@ -389,6 +371,7 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
+>         s = alloc_symbol(name);
+>         s->module = mod;
+>         s->is_gpl_only = gpl_only;
+> +       s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
+>         list_add_tail(&s->list, &mod->exported_symbols);
+>         hash_add_symbol(s);
 >
->                         name = symname + strlen("__ksymtab_");
-> -                       secname = sec_name(info, get_secindex(info, sym));
-> +                       secname = sec_name_of_symbol(info, sym);
+> @@ -658,17 +641,12 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
+>                 break;
+>         default:
+>                 if (sym->st_shndx == info->export_symbol_sec) {
+> -                       const char *name;
+> -
+> -                       if (strstarts(symname, "__export_symbol_gpl.")) {
+> -                               name = symname + strlen("__export_symbol_gpl.");
+> -                               sym_add_exported(name, mod, true);
+> -                               sym_update_namespace(name, sym_get_data(info, sym));
+> -                       } else if (strstarts(symname, "__export_symbol.")) {
+> -                               name = symname + strlen("__export_symbol.");
+> -                               sym_add_exported(name, mod, false);
+> -                               sym_update_namespace(name, sym_get_data(info, sym));
+> -                       }
+> +                       if (strstarts(symname, "__export_symbol_gpl."))
+> +                               sym_add_exported(symname + strlen("__export_symbol_gpl."),
+> +                                                mod, true, sym_get_data(info, sym));
+> +                       else if (strstarts(symname, "__export_symbol."))
+> +                               sym_add_exported(symname + strlen("__export_symbol."),
+> +                                                mod, false, sym_get_data(info, sym));
 >
->                         if (strstarts(secname, "___ksymtab_gpl+"))
->                                 sym_add_exported(name, mod, true);
-> @@ -1217,7 +1228,7 @@ static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
->
->                 if (is_shndx_special(sym->st_shndx))
->                         continue;
-> -               symsec = sec_name(elf, get_secindex(elf, sym));
-> +               symsec = sec_name_of_symbol(elf, sym);
->                 if (strcmp(symsec, sec) != 0)
->                         continue;
->                 if (!is_valid_name(elf, sym))
-> @@ -1457,7 +1468,7 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
->         if (strstarts(fromsym, "reference___initcall"))
->                 return;
->
-> -       tosec = sec_name(elf, get_secindex(elf, sym));
-> +       tosec = sec_name_of_symbol(elf, sym);
->         to = find_elf_symbol(elf, r->r_addend, sym);
->         tosym = sym_name(elf, to);
->
-> @@ -1559,7 +1570,7 @@ static void extable_mismatch_handler(const char* modname, struct elf_info *elf,
->                                      Elf_Rela* r, Elf_Sym* sym,
->                                      const char *fromsec)
->  {
-> -       const char* tosec = sec_name(elf, get_secindex(elf, sym));
-> +       const char *tosec = sec_name_of_symbol(elf, sym);
->
->         sec_mismatch_count++;
->
-> @@ -1593,7 +1604,7 @@ static void extable_mismatch_handler(const char* modname, struct elf_info *elf,
->  static void check_section_mismatch(const char *modname, struct elf_info *elf,
->                                    Elf_Rela *r, Elf_Sym *sym, const char *fromsec)
->  {
-> -       const char *tosec = sec_name(elf, get_secindex(elf, sym));
-> +       const char *tosec = sec_name_of_symbol(elf, sym);
->         const struct sectioncheck *mismatch = section_mismatch(fromsec, tosec);
->
->         if (mismatch) {
+>                         break;
+>                 }
+> @@ -2470,9 +2448,8 @@ static void read_dump(const char *fname)
+>                         mod = new_module(modname, strlen(modname));
+>                         mod->from_dump = true;
+>                 }
+> -               s = sym_add_exported(symname, mod, gpl_only);
+> +               s = sym_add_exported(symname, mod, gpl_only, namespace);
+>                 sym_set_crc(s, crc);
+> -               sym_update_namespace(symname, namespace);
+>         }
+>         free(buf);
+>         return;
 > --
 > 2.32.0
 >
