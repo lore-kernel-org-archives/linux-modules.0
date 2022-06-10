@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CE55C433EF
-	for <linux-modules@archiver.kernel.org>; Fri, 10 Jun 2022 18:34:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39283C43334
+	for <linux-modules@archiver.kernel.org>; Fri, 10 Jun 2022 18:35:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346713AbiFJSeu (ORCPT
+        id S1350284AbiFJSfR (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 10 Jun 2022 14:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
+        Fri, 10 Jun 2022 14:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349791AbiFJSeh (ORCPT
+        with ESMTP id S1347795AbiFJSer (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 10 Jun 2022 14:34:37 -0400
+        Fri, 10 Jun 2022 14:34:47 -0400
 Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3FF3A1A3;
-        Fri, 10 Jun 2022 11:34:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165063A5C7;
+        Fri, 10 Jun 2022 11:34:38 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 25AIX5TM020882;
-        Sat, 11 Jun 2022 03:33:06 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 25AIX5TM020882
+        by conuserg-12.nifty.com with ESMTP id 25AIX5TS020882;
+        Sat, 11 Jun 2022 03:33:12 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 25AIX5TS020882
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654885987;
-        bh=dWrkbZ/zCsAQbt1ylsfirph76FCDu7eUxy+/dh5/pjo=;
+        s=dec2015msa; t=1654885992;
+        bh=Fv4Q2sQU9/jGRzTAgd2r3B6fBk4S6c2Z53z5KaB5G4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EKhRJEaK3gX99ziov/rjxAhmo76ZnId9lzn3GpSIVc9AK8OtHMiqQlPqRY40Pll4s
-         wPGEtZv/GV70FNdJiqwh3lmynNvSm0E9xw0JWIqYuZ5G/Nitx5ImpaWkpMy/SNwCuu
-         fgIptFOsTMpS7zg0mm5qo19VSDSOLLICqmTAz6eJ/TKufDm1ReBHEh4Ks4qMtgfRKb
-         +lVoSCyxyjesKMHD760+vQ7DQ8tz4LkG5iQsoUaCcPn4vSIfndOU3RN9u/kLRy9R/3
-         NsCKJl97GxHzhgDQF7Sv3Oj9zAW8OtcQVEieSvGoP32j2EOJs9sFsE8tYvwF4zgWDY
-         N7ouJ1/AOlGFg==
+        b=zfczt2NaxLXAYn3OGPGpV6wFMUIu/m80wEWYFsaxM/S5uFGRFQ6O89+xGr1tOfYuy
+         vo6Llz4Romdo1QylXEvMULly0QGTjRm1mMATFSVxsnAGZOOfix9T3SSGStb8iHYfRj
+         tX8OlJcBk5E9XLgafJ04nlTrRYAiHP+pEFubun4vM8NihUwanoO3MZPZj4aMA7rEuk
+         Uk0VRqv+RYi/6kxiG++sqYpDiK5p0ope/uODBcjZQ063s4meH/RWTpUZA4e3iNTlSP
+         O6+BVb4nwQj6+4sDeTeekpZQSFz9VwAbakRvxO1+F6h/pFnAW996aBg4BmFtZlzt4G
+         BhsgcuKfnErgg==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -38,14 +38,12 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Luis Chamberlain <mcgrof@kernel.org>,
         linux-modules@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alessio Igor Bogani <abogani@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
-        Rusty Russell <rusty@rustcorp.com.au>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/7] modpost: fix section mismatch check for exported init/exit sections
-Date:   Sat, 11 Jun 2022 03:32:30 +0900
-Message-Id: <20220610183236.1272216-2-masahiroy@kernel.org>
+Subject: [PATCH 7/7] modpost: use null string instead of NULL pointer for default namespace
+Date:   Sat, 11 Jun 2022 03:32:36 +0900
+Message-Id: <20220610183236.1272216-8-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220610183236.1272216-1-masahiroy@kernel.org>
 References: <20220610183236.1272216-1-masahiroy@kernel.org>
@@ -54,36 +52,85 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Since commit f02e8a6596b7 ("module: Sort exported symbols"),
-EXPORT_SYMBOL* is placed in the individual section ___ksymtab(_gpl)+<sym>
-(3 leading underscores instead of 2).
+The default namespace is the null string, "".
 
-Since then, modpost cannot detect the bad combination of EXPORT_SYMBOL
-and __init/__exit.
+When set, the null string "" is converted to NULL:
 
-Fix the .fromsec field.
+  s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
 
-Fixes: f02e8a6596b7 ("module: Sort exported symbols")
+When printed, the NULL pointer is get back to the null string:
+
+  sym->namespace ?: ""
+
+This saves 1 byte memory allocated for "", but loses the readability.
+
+In kernel-space, we strive to save memory, but modpost is a userspace
+tool used to build the kernel. On modern systems, such small piece of
+memory is not a big deal.
+
+Handle the namespace string as is.
+
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
 
- scripts/mod/modpost.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/mod/modpost.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 29d5a841e215..620dc8c4c814 100644
+index 0db2cbb74a2a..5a1785645943 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -980,7 +980,7 @@ static const struct sectioncheck sectioncheck[] = {
- },
- /* Do not export init/exit functions or data */
+@@ -296,6 +296,13 @@ static bool contains_namespace(struct list_head *head, const char *namespace)
  {
--	.fromsec = { "__ksymtab*", NULL },
-+	.fromsec = { "___ksymtab*", NULL },
- 	.bad_tosec = { INIT_SECTIONS, EXIT_SECTIONS, NULL },
- 	.mismatch = EXPORT_TO_INIT_EXIT,
- 	.symbol_white_list = { DEFAULT_SYMBOL_WHITE_LIST, NULL },
+ 	struct namespace_list *list;
+ 
++	/*
++	 * The default namespace is null string "", which is always implicitly
++	 * contained.
++	 */
++	if (!namespace[0])
++		return true;
++
+ 	list_for_each_entry(list, head, list) {
+ 		if (!strcmp(list->namespace, namespace))
+ 			return true;
+@@ -371,7 +378,7 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
+ 	s = alloc_symbol(name);
+ 	s->module = mod;
+ 	s->is_gpl_only = gpl_only;
+-	s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
++	s->namespace = NOFAIL(strdup(namespace));
+ 	list_add_tail(&s->list, &mod->exported_symbols);
+ 	hash_add_symbol(s);
+ 
+@@ -2117,8 +2124,7 @@ static void check_exports(struct module *mod)
+ 		else
+ 			basename = mod->name;
+ 
+-		if (exp->namespace &&
+-		    !contains_namespace(&mod->imported_namespaces, exp->namespace)) {
++		if (!contains_namespace(&mod->imported_namespaces, exp->namespace)) {
+ 			modpost_log(allow_missing_ns_imports ? LOG_WARN : LOG_ERROR,
+ 				    "module %s uses symbol %s from namespace %s, but does not import it.\n",
+ 				    basename, exp->name, exp->namespace);
+@@ -2201,7 +2207,7 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
+ 	list_for_each_entry(sym, &mod->exported_symbols, list)
+ 		buf_printf(buf, "KSYMTAB_ENTRY(%s, \"%s\", \"%s\");\n",
+ 			   sym->name, sym->is_gpl_only ? "_gpl" : "",
+-			   sym->namespace ?: "");
++			   sym->namespace);
+ 
+ 	if (!modversions)
+ 		return;
+@@ -2471,7 +2477,7 @@ static void write_dump(const char *fname)
+ 			buf_printf(&buf, "0x%08x\t%s\t%s\tEXPORT_SYMBOL%s\t%s\n",
+ 				   sym->crc, sym->name, mod->name,
+ 				   sym->is_gpl_only ? "_GPL" : "",
+-				   sym->namespace ?: "");
++				   sym->namespace);
+ 		}
+ 	}
+ 	write_buf(&buf, fname);
 -- 
 2.32.0
 
