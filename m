@@ -2,99 +2,133 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 659EFC43334
-	for <linux-modules@archiver.kernel.org>; Sat, 11 Jun 2022 01:43:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AA09C433EF
+	for <linux-modules@archiver.kernel.org>; Sat, 11 Jun 2022 18:48:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350738AbiFKBn3 convert rfc822-to-8bit (ORCPT
+        id S230435AbiFKSsc (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 10 Jun 2022 21:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        Sat, 11 Jun 2022 14:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244611AbiFKBnR (ORCPT
+        with ESMTP id S229672AbiFKSs3 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 10 Jun 2022 21:43:17 -0400
-X-Greylist: delayed 605 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Jun 2022 18:43:16 PDT
-Received: from relay5.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F8C443E0E
-        for <linux-modules@vger.kernel.org>; Fri, 10 Jun 2022 18:43:16 -0700 (PDT)
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id A5CAC21849;
-        Sat, 11 Jun 2022 01:33:09 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id C68C36000F;
-        Sat, 11 Jun 2022 01:33:07 +0000 (UTC)
-Message-ID: <c86b53f8d8c60a16a4cb3b34ac9ab2ab8b992595.camel@perches.com>
-Subject: Re: [PATCH 5/7] checkpatch: warn if <asm/export.h> is included
-From:   Joe Perches <joe@perches.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org
+        Sat, 11 Jun 2022 14:48:29 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B8F46672;
+        Sat, 11 Jun 2022 11:48:25 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 25BIm5kL003581;
+        Sun, 12 Jun 2022 03:48:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 25BIm5kL003581
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654973286;
+        bh=OJU24WbqmimMYRsIh1ewIsGhAVbQLx3txvyBGLHeO1k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=yPWnpNrh1S682UMdCy2xRKV0nrfelc88TI16XUiek8cvMXVCNlTxhriiqQO+5ADC1
+         dg6rQzE95S0VmLCo3BAi+37VggRNO3qFuQOYznZiQ1C6WUOuoWrM3B5XcHWwxyQSBi
+         56lNT0/EEJwIClXLSEMv0e1JOTdzqZUoPKOJVDYO6325v8W4ETHVohlGhccGOYVXST
+         nsOYnfuN9hFINEuEoxEDpOMb2MGq9/0/1cezB/hYqTP7l62zbTytCoYFNcanmOOo1w
+         3G5bjTr1dxR6EO0ewir9ONz54qAFMyAmoZtie4zDQ0hmU7iWdP41qsvLni41w90wtu
+         NCC8bubAl31ww==
+X-Nifty-SrcIP: [209.85.221.54]
+Received: by mail-wr1-f54.google.com with SMTP id c21so2437729wrb.1;
+        Sat, 11 Jun 2022 11:48:05 -0700 (PDT)
+X-Gm-Message-State: AOAM530EDqZ9bqx6bFmc7UXJccoCaY6KJto6bpuQZ/mBcXPUa9aN+ZT3
+        v10+F3qbAf9DChkSfxFI2t2z34IX4vTDoUQpQ/k=
+X-Google-Smtp-Source: ABdhPJxbHanpX6AbHetOK3rMz1pMBQZREhQ/9hwWAadZPeVmpGmRxmrP9S3VU2JRwZBzpQMKmxbHB5lWZJPn+RgOjgM=
+X-Received: by 2002:a05:6000:156d:b0:210:3135:ce1c with SMTP id
+ 13-20020a056000156d00b002103135ce1cmr50144120wrz.409.1654973284279; Sat, 11
+ Jun 2022 11:48:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220610183236.1272216-1-masahiroy@kernel.org> <20220610183236.1272216-4-masahiroy@kernel.org>
+In-Reply-To: <20220610183236.1272216-4-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 12 Jun 2022 03:47:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS-VYZ3G3-TmmTQSNuanGsufkoWTv32HNKdDkE+7-6mcg@mail.gmail.com>
+Message-ID: <CAK7LNAS-VYZ3G3-TmmTQSNuanGsufkoWTv32HNKdDkE+7-6mcg@mail.gmail.com>
+Subject: Re: [PATCH 3/7] kbuild: generate struct kernel_symbol by modpost
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Nicolas Pitre <npitre@baylibre.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 10 Jun 2022 18:33:06 -0700
-In-Reply-To: <20220610183236.1272216-6-masahiroy@kernel.org>
-References: <20220610183236.1272216-1-masahiroy@kernel.org>
-         <20220610183236.1272216-6-masahiroy@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
-MIME-Version: 1.0
-X-Rspamd-Queue-Id: C68C36000F
-X-Stat-Signature: de5mfnp8ux5zw686hw4ahh34rdrwa9om
-X-Rspamd-Server: rspamout02
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+Z+c4AphhDFTvORlz0qKlomJRpQrbLtJA=
-X-HE-Tag: 1654911187-1721
+        linux-modules <linux-modules@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, 2022-06-11 at 03:32 +0900, Masahiro Yamada wrote:
-> With the previous refactoring,
-> 
->  - <asm/export.h> is a wrapper of <asm-generic/export.h>
->  - <asm-generic/export.h> is a wrapper of <linux/export.h>
-> 
-> My hope is to replace
-> 
->    #include <asm/export.h>  -->  #include <linux/export.h>
-> 
-> for all *.S files.
-> 
-> For now, adding a warning in the checkpatch.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  scripts/checkpatch.pl | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-[]
-> @@ -3753,6 +3753,13 @@ sub process {
->  			     "Avoid using '.L' prefixed local symbol names for denoting a range of code via 'SYM_*_START/END' annotations; see Documentation/asm-annotations.rst\n" . $herecurr);
->  		}
->  
-> +# warn if <asm/export.h> is included.
-> +# <asm/export.h> is a wrapper of <linux/export.h>. Please include <linux/export.h> directly.
-> +		if ($tree && $rawline =~ m{^.\s*\#\s*include\s*\<asm\/export\.h\>}) {
-> +			WARN("INCLUDE_LINUX_EXPORT",
-> +			    "Please include <linux/export.h> instead of <asm/export.h>\n" . $herecurr);
-> +		}
+On Sat, Jun 11, 2022 at 3:34 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Commit 7b4537199a4a ("kbuild: link symbol CRCs at final link, removing
+> CONFIG_MODULE_REL_CRCS") made the module versioning implementation
+> arch-agnostic; now all the version CRCs are generated by modpost as C
+> code whether the EXPORT_SYMBOL() is placed in *.c or *.S.
+>
+> Doing similar for the entire data structure of EXPORT_SYMBOL() makes
+> further cleanups possible.
+>
+> This commit splits EXPORT_SYMBOL() compilation into two stages.
+>
+> When a source file is compiled, EXPORT_SYMBOL() is converted into a
+> dummy symbol in the .discard.export_symbol section.
+>
+> For example,
+>
+>     EXPORT_SYMBOL(foo);
+>     EXPORT_SYMBOL_NS_GPL(bar, BAR_NAMESPACE);
+>
+> will be expanded into the following assembly code:
+>
+>     .section .discard.export_symbol
+>     __export_symbol.foo:
+>         .asciz ""
+>     .previous
+>
+>     .section .discard.export_symbol
+>     __export_symbol_gpl.bar:
+>         .asciz "BAR_NAMESPACE"
+>     .previous
+>
+> They are just markers to tell modpost the name, license, and namespace
+> of the symbols. They will be dropped from the final vmlinux and modules
+> because the section name starts with ".discard.".
+>
+> Then, modpost extracts all the information of EXPORT_SYMBOL() from the
+> .discard.export_symbol section, then generates C code:
+>
+>     KSYMTAB_ENTRY(foo, "", "");
+>     KSYMTAB_ENTRY(bar, "_gpl", "BAR_NAMESPACE");
+>
+> KSYMTAB_ENTRY() is expanded to struct kernel_symbol that will be linked
+> to the vmlinux or a module.
+>
+> With this change, EXPORT_SYMBOL() works in the same way for *.c and *.S
+> files, providing the following benefits.
+>
+> [1] Deprecate EXPORT_DATA_SYMBOL()
 
-This warns on patch context lines.
-That's not something checkpatch generally does.
 
-Likely this should use /^\+ rather than /^.
 
-And it's nice to have --fix capability
+Sorry, please let me take back this.
 
-			if (WARN("etc...") &&
-			    $fix) {
-				$fixed[$fixlinenr] =~ s/\s*#\s*include\s*\<asm\/export\.h\>/#include <linux/export.h>/;
-			}
+I completely missed how linkage for ia64 works.
+I used inline assembly in C, so it would break ia64.
 
-cheers, Joe
+Please ignore this patch.
+
+
+
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
