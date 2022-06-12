@@ -2,125 +2,112 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D510EC433EF
-	for <linux-modules@archiver.kernel.org>; Sat, 11 Jun 2022 18:57:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6A66C433EF
+	for <linux-modules@archiver.kernel.org>; Sun, 12 Jun 2022 10:17:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiFKS5H (ORCPT
+        id S235959AbiFLKRq (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 11 Jun 2022 14:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        Sun, 12 Jun 2022 06:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiFKS5H (ORCPT
+        with ESMTP id S235937AbiFLKRp (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 11 Jun 2022 14:57:07 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1664B56FB1;
-        Sat, 11 Jun 2022 11:57:05 -0700 (PDT)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 25BIuipR007517;
-        Sun, 12 Jun 2022 03:56:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 25BIuipR007517
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654973805;
-        bh=AoopS6AH6/JYPKTM3ymepP+zzBS9+J7pNi+ot06aLfU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=1hxHdjea+yXpMjpsTMSPebRmtgQDusnHAGA0js0Znn3iWgpqUiSNenmTl6Xumu0Ba
-         6qd05Tac04EI0EvhxbVJLNmwsjC9O0SV7FSZs6COtCFKjQ9JmARDoKy6VfSDLjJbks
-         zSdZ0spJgl3n7aY5gwSO1/UQyuzBcFI++nRlDCx+66Qx0UyTnP8G/yj/Qz/oeIFDYn
-         Jiaf2pvBeeu8M4uLnS0P2kXPSGZfmO5Fk+wAcUmFcjgWYpYNju2crY3y+woMD2uqdb
-         GH5r7oGZj+uI52aIInWTlTqiFP+MUlPKie9ywS+19h0IQ9t6Cn2dk3q0rwBkH9SHZY
-         meiqS68rxPC3w==
-X-Nifty-SrcIP: [209.85.221.49]
-Received: by mail-wr1-f49.google.com with SMTP id c21so2451983wrb.1;
-        Sat, 11 Jun 2022 11:56:44 -0700 (PDT)
-X-Gm-Message-State: AOAM5306m/gx1ieViX0dQVK91CgVAfASkl+lZDcsn409kZh0m8rKb4Le
-        ptwFny51ynAJUVGtEkkuL3vRCQ8QqlAlplX+jp0=
-X-Google-Smtp-Source: ABdhPJxB1C4InfiSv00V6Ot8xswrI/1/InpXbFlsD/nXyEPcwu4M+CGhlUqKoYF564m9vLYDkPaZQTAztf1lF9q4UAU=
-X-Received: by 2002:a5d:584f:0:b0:219:e106:3e02 with SMTP id
- i15-20020a5d584f000000b00219e1063e02mr11725196wrf.461.1654973803245; Sat, 11
- Jun 2022 11:56:43 -0700 (PDT)
+        Sun, 12 Jun 2022 06:17:45 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF613E84;
+        Sun, 12 Jun 2022 03:17:41 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LLVxw3l7Xz9tDN;
+        Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XTndmNYRrRMU; Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LLVxw2dQPz9t9d;
+        Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 427B78B76D;
+        Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id zw5tKwdR51RN; Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.193])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 06EA68B767;
+        Sun, 12 Jun 2022 12:17:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25CAHUYV048681
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sun, 12 Jun 2022 12:17:30 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25CAHT59048680;
+        Sun, 12 Jun 2022 12:17:29 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH] module: Fix selfAssignment cppcheck warning
+Date:   Sun, 12 Jun 2022 12:17:25 +0200
+Message-Id: <023c3097576650c1af77344be9937833bb303a6c.1655028735.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20220610183236.1272216-1-masahiroy@kernel.org>
- <20220610183236.1272216-6-masahiroy@kernel.org> <c86b53f8d8c60a16a4cb3b34ac9ab2ab8b992595.camel@perches.com>
-In-Reply-To: <c86b53f8d8c60a16a4cb3b34ac9ab2ab8b992595.camel@perches.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 12 Jun 2022 03:56:06 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATVUh2nOKGA0OUC4r37xYeae2ZEPE=FHFvRn5-3o5H11g@mail.gmail.com>
-Message-ID: <CAK7LNATVUh2nOKGA0OUC4r37xYeae2ZEPE=FHFvRn5-3o5H11g@mail.gmail.com>
-Subject: Re: [PATCH 5/7] checkpatch: warn if <asm/export.h> is included
-To:     Joe Perches <joe@perches.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655029044; l=2346; s=20211009; h=from:subject:message-id; bh=Cnody7fZ4v0eN7AnNtz5ncbw0xjUREFAKECK08Dh6Qc=; b=DiutiPtOwrPMsKZnyuojtmuBNjpId1BXFWTwR7weS4E+bLl1q+rvj7g3z1dUjIizcLZw8ZrzdCgv bu1qJ9+ABS6Py5C0PxwKUEulmxMe244Cc8J5sOO/DGgjps0ZQmc4
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Jun 11, 2022 at 10:33 AM Joe Perches <joe@perches.com> wrote:
->
-> On Sat, 2022-06-11 at 03:32 +0900, Masahiro Yamada wrote:
-> > With the previous refactoring,
-> >
-> >  - <asm/export.h> is a wrapper of <asm-generic/export.h>
-> >  - <asm-generic/export.h> is a wrapper of <linux/export.h>
-> >
-> > My hope is to replace
-> >
-> >    #include <asm/export.h>  -->  #include <linux/export.h>
-> >
-> > for all *.S files.
-> >
-> > For now, adding a warning in the checkpatch.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  scripts/checkpatch.pl | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> []
-> > @@ -3753,6 +3753,13 @@ sub process {
-> >                            "Avoid using '.L' prefixed local symbol names for denoting a range of code via 'SYM_*_START/END' annotations; see Documentation/asm-annotations.rst\n" . $herecurr);
-> >               }
-> >
-> > +# warn if <asm/export.h> is included.
-> > +# <asm/export.h> is a wrapper of <linux/export.h>. Please include <linux/export.h> directly.
-> > +             if ($tree && $rawline =~ m{^.\s*\#\s*include\s*\<asm\/export\.h\>}) {
-> > +                     WARN("INCLUDE_LINUX_EXPORT",
-> > +                         "Please include <linux/export.h> instead of <asm/export.h>\n" . $herecurr);
-> > +             }
->
-> This warns on patch context lines.
-> That's not something checkpatch generally does.
->
-> Likely this should use /^\+ rather than /^.
->
-> And it's nice to have --fix capability
->
->                         if (WARN("etc...") &&
->                             $fix) {
->                                 $fixed[$fixlinenr] =~ s/\s*#\s*include\s*\<asm\/export\.h\>/#include <linux/export.h>/;
->                         }
->
-> cheers, Joe
+cppcheck reports the following warnings:
 
+kernel/module/main.c:1455:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
+   mod->core_layout.size = strict_align(mod->core_layout.size);
+                         ^
+kernel/module/main.c:1489:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+   mod->init_layout.size = strict_align(mod->init_layout.size);
+                         ^
+kernel/module/main.c:1493:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+   mod->init_layout.size = strict_align(mod->init_layout.size);
+                         ^
+kernel/module/main.c:1504:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+   mod->init_layout.size = strict_align(mod->init_layout.size);
+                         ^
+kernel/module/main.c:1459:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
+   mod->data_layout.size = strict_align(mod->data_layout.size);
+                         ^
+kernel/module/main.c:1463:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
+   mod->data_layout.size = strict_align(mod->data_layout.size);
+                         ^
+kernel/module/main.c:1467:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
+   mod->data_layout.size = strict_align(mod->data_layout.size);
+                         ^
 
+This is due to strict_align() being a no-op when
+CONFIG_STRICT_MODULE_RWX is not selected.
 
-I retract this patch series because I realized it was breaking ia64.
-Please ignore this patch.
+Change strict_align() to a bitwise OR with 0 in order to feint cppcheck.
 
-Anyway, your expert feedback about checkpatch.pl
-was very appreciated. Thank you.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ kernel/module/internal.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index bc5507ab8450..8396d5f5daa0 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -33,7 +33,8 @@
+ #ifdef CONFIG_STRICT_MODULE_RWX
+ # define strict_align(X) PAGE_ALIGN(X)
+ #else
+-# define strict_align(X) (X)
++/* OR with zero to avoid cppcheck selfAssignment warning */
++# define strict_align(X) ((X) | 0)
+ #endif
+ 
+ extern struct mutex module_mutex;
 -- 
-Best Regards
-Masahiro Yamada
+2.35.3
+
