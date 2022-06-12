@@ -2,130 +2,115 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6AABC433EF
-	for <linux-modules@archiver.kernel.org>; Sun, 12 Jun 2022 15:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF8ACC43334
+	for <linux-modules@archiver.kernel.org>; Sun, 12 Jun 2022 15:33:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235423AbiFLPWU (ORCPT
+        id S236423AbiFLPdf (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 12 Jun 2022 11:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        Sun, 12 Jun 2022 11:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiFLPWT (ORCPT
+        with ESMTP id S237740AbiFLPdd (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 12 Jun 2022 11:22:19 -0400
+        Sun, 12 Jun 2022 11:33:33 -0400
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B635C647;
-        Sun, 12 Jun 2022 08:22:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30C71FCDD;
+        Sun, 12 Jun 2022 08:33:31 -0700 (PDT)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LLdjM2M0vz9tND;
-        Sun, 12 Jun 2022 17:22:15 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4LLdyL4Wxdz9tND;
+        Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MGK4W9O8n3tt; Sun, 12 Jun 2022 17:22:15 +0200 (CEST)
+        with ESMTP id eknzzkiQ2Vxt; Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LLdjM1KYnz9tFn;
-        Sun, 12 Jun 2022 17:22:15 +0200 (CEST)
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LLdyL3R5Fz9tFn;
+        Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 16F5B8B76D;
-        Sun, 12 Jun 2022 17:22:15 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5C6FF8B76D;
+        Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id oxDVUVRfU13z; Sun, 12 Jun 2022 17:22:14 +0200 (CEST)
+        with ESMTP id bcVSCS3LNj_0; Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (po16064.idsi0.si.c-s.fr [192.168.6.194])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C5B1D8B767;
-        Sun, 12 Jun 2022 17:22:14 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 24C0C8B767;
+        Sun, 12 Jun 2022 17:33:30 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25CFM4IU065415
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25CFXKk9070302
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sun, 12 Jun 2022 17:22:04 +0200
+        Sun, 12 Jun 2022 17:33:20 +0200
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25CFM4e6065406;
-        Sun, 12 Jun 2022 17:22:04 +0200
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25CFXKG7070301;
+        Sun, 12 Jun 2022 17:33:20 +0200
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] module: Fix selfAssignment cppcheck warning
-Date:   Sun, 12 Jun 2022 17:21:56 +0200
-Message-Id: <3c3041d4815d6d6ad5f7ab78b202e192210f6694.1655047308.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH] module: Fix "warning: variable 'exit' set but not used"
+Date:   Sun, 12 Jun 2022 17:33:20 +0200
+Message-Id: <a7e1cf121cc52969878d0450b273e7fa10043835.1655047991.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1655047314; l=2803; s=20211009; h=from:subject:message-id; bh=Ii/yRThss71Bh4QygDM4O7u+M5n7yYzdy6Xemv6OwBE=; b=sBCb5++zfZ+8U6lLVTW6wHL9t5iNaRkN8TCF0oVoSHpDYk+a9/fQhS7cQX23FFb0ik7hf31AbMgA TK2VgtDtD1tPFU1ul0O/fCGqj2mApAXEf6BMtPn8eHRG8cfFJI3q
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655047996; l=1716; s=20211009; h=from:subject:message-id; bh=LQHsvDZxdtPGyxK4kLcZMc4XILopXjVtdWTqz6awXSw=; b=YFO6mFFEmb/uqVSKc0m9nMFOGGjxNbXBbzNKiZoPPpTUrut+sQwptrE57lcDC5BfFQP0PuWGkT8h TAqf8Im6C7BPFSEV23+u+5daSNdSVVo0Xtj6bvzXX4/wj5QQ4T1G
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-cppcheck reports the following warnings:
+When CONFIG_MODULE_UNLOAD is not selected, 'exit' is
+set but never used.
 
-kernel/module/main.c:1455:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
-   mod->core_layout.size = strict_align(mod->core_layout.size);
-                         ^
-kernel/module/main.c:1489:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
-   mod->init_layout.size = strict_align(mod->init_layout.size);
-                         ^
-kernel/module/main.c:1493:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
-   mod->init_layout.size = strict_align(mod->init_layout.size);
-                         ^
-kernel/module/main.c:1504:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
-   mod->init_layout.size = strict_align(mod->init_layout.size);
-                         ^
-kernel/module/main.c:1459:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
-   mod->data_layout.size = strict_align(mod->data_layout.size);
-                         ^
-kernel/module/main.c:1463:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
-   mod->data_layout.size = strict_align(mod->data_layout.size);
-                         ^
-kernel/module/main.c:1467:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
-   mod->data_layout.size = strict_align(mod->data_layout.size);
-                         ^
+It is not possible to replace the #ifdef CONFIG_MODULE_UNLOAD by
+IS_ENABLED(CONFIG_MODULE_UNLOAD) because mod->exit doesn't exist
+when CONFIG_MODULE_UNLOAD is not selected.
 
-This is due to strict_align() being a no-op when
-CONFIG_STRICT_MODULE_RWX is not selected.
-
-Transform strict_align() macro into an inline function. It will
-allow type checking and avoid the selfAssignment warning.
+And because of the rcu_read_lock_sched() section it is not easy
+to regroup everything in a single #ifdef. Let's regroup partially
+and add missing #ifdef to completely opt out the use of
+'exit' when CONFIG_MODULE_UNLOAD is not selected.
 
 Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- kernel/module/internal.h | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ kernel/module/main.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index bc5507ab8450..ec104c2950c3 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -11,6 +11,7 @@
- #include <linux/mutex.h>
- #include <linux/rculist.h>
- #include <linux/rcupdate.h>
-+#include <linux/mm.h>
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index fed58d30725d..0548151dd933 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2939,24 +2939,25 @@ static void cfi_init(struct module *mod)
+ {
+ #ifdef CONFIG_CFI_CLANG
+ 	initcall_t *init;
++#ifdef CONFIG_MODULE_UNLOAD
+ 	exitcall_t *exit;
++#endif
  
- #ifndef ARCH_SHF_SMALL
- #define ARCH_SHF_SMALL 0
-@@ -30,11 +31,13 @@
-  * to ensure complete separation of code and data, but
-  * only when CONFIG_STRICT_MODULE_RWX=y
-  */
--#ifdef CONFIG_STRICT_MODULE_RWX
--# define strict_align(X) PAGE_ALIGN(X)
--#else
--# define strict_align(X) (X)
--#endif
-+static inline unsigned int strict_align(unsigned int size)
-+{
-+	if (IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-+		return PAGE_ALIGN(size);
-+	else
-+		return size;
-+}
+ 	rcu_read_lock_sched();
+ 	mod->cfi_check = (cfi_check_fn)
+ 		find_kallsyms_symbol_value(mod, "__cfi_check");
+ 	init = (initcall_t *)
+ 		find_kallsyms_symbol_value(mod, "__cfi_jt_init_module");
+-	exit = (exitcall_t *)
+-		find_kallsyms_symbol_value(mod, "__cfi_jt_cleanup_module");
+-	rcu_read_unlock_sched();
+-
+ 	/* Fix init/exit functions to point to the CFI jump table */
+ 	if (init)
+ 		mod->init = *init;
+ #ifdef CONFIG_MODULE_UNLOAD
++	exit = (exitcall_t *)
++		find_kallsyms_symbol_value(mod, "__cfi_jt_cleanup_module");
+ 	if (exit)
+ 		mod->exit = *exit;
+ #endif
++	rcu_read_unlock_sched();
  
- extern struct mutex module_mutex;
- extern struct list_head modules;
+ 	cfi_module_add(mod, mod_tree.addr_min);
+ #endif
 -- 
 2.35.3
 
