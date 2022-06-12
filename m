@@ -2,112 +2,72 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6A66C433EF
-	for <linux-modules@archiver.kernel.org>; Sun, 12 Jun 2022 10:17:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5744C43334
+	for <linux-modules@archiver.kernel.org>; Sun, 12 Jun 2022 10:46:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235959AbiFLKRq (ORCPT
+        id S236009AbiFLKqm (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 12 Jun 2022 06:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        Sun, 12 Jun 2022 06:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235937AbiFLKRp (ORCPT
+        with ESMTP id S231658AbiFLKql (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 12 Jun 2022 06:17:45 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF613E84;
-        Sun, 12 Jun 2022 03:17:41 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LLVxw3l7Xz9tDN;
-        Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id XTndmNYRrRMU; Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LLVxw2dQPz9t9d;
-        Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 427B78B76D;
-        Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id zw5tKwdR51RN; Sun, 12 Jun 2022 12:17:40 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.193])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 06EA68B767;
-        Sun, 12 Jun 2022 12:17:39 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25CAHUYV048681
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sun, 12 Jun 2022 12:17:30 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25CAHT59048680;
-        Sun, 12 Jun 2022 12:17:29 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH] module: Fix selfAssignment cppcheck warning
-Date:   Sun, 12 Jun 2022 12:17:25 +0200
-Message-Id: <023c3097576650c1af77344be9937833bb303a6c.1655028735.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.3
+        Sun, 12 Jun 2022 06:46:41 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A3E1929D;
+        Sun, 12 Jun 2022 03:46:41 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id v14so3860873wra.5;
+        Sun, 12 Jun 2022 03:46:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=L7wZV8OxqYvAB1GlMd0evBeabIpJY4/r3rWWpYVpI+k=;
+        b=j5d2ONoPE99ch9Qamp9mZJ9tAlkbgXFGiyti1lJQ9Orcr5mO65tK0YNRGsJXmztmF6
+         FpAazgaTAhGgBs085+A+z1OCgdJ8Zm6mhuzCqGJGGo4BTFNZaBD9hZsM4PieOZ4Pe6Mj
+         5th68YqiO6JsSZJasJamO5Lu4dFGmOTOf/XJD26oSna4H7/u2xIQCTmoDBUf2P98Nk60
+         Ha1GqFVryGEDwBJUh0yzGsXPAo0wN3+ltg97fZX6j/54kAO7B/TxDaTeBhFqkDf32yRi
+         DiQvrtyiURqZbchBOGTT56qatDs5FyHczH0t1FhtiMMNR2h9pFjkwZGOX2TeI/SxAxc6
+         70IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=L7wZV8OxqYvAB1GlMd0evBeabIpJY4/r3rWWpYVpI+k=;
+        b=H79z13AA8oNyhehPBCRRUfJxfGstMwxnLVNsQUViUcJBsaNckaGT4miqPict61Ea50
+         fv8H1afS2/T1TnjHaGbYWQSijlqfVUeprNHri4PJhywV0dwOHb8uNuRZfVFNs0BPLeks
+         LPATCcyIy5wNsQWWnb0kKw57lE9V8Wi9/DaSthOXgyBhwA+pJK/p8T9m2Dmd8Aduwwyt
+         QWYq3VOcLD2qym+uf+0uD0nINJZd8rsJGgIS7WZEfg9r3wx/jKUaiDGXELG3Rb+NbkW+
+         4F1TqGP+WVT+J8Gk9BRJ8uQU2zb3JPjEpA/jOjxh8lsFtyncbFFTc/n+ip6lHO/lIrRq
+         EwQA==
+X-Gm-Message-State: AOAM532Issi4eokCI009iuhGsVD0Ps3X2XRowZjLIYByntMXZ72+Z5T2
+        iDR7l4ouR0u2dTMEUpOVhofcHcV7TA==
+X-Google-Smtp-Source: ABdhPJyfWcMdEp1K8Uu+ys4Lw7xJjNCyGiGgBhas1dUxVlhMcbo7zp1LDMCe1/zadnF58H4i8bXJ4A==
+X-Received: by 2002:a05:6000:1f09:b0:21a:5f3:316a with SMTP id bv9-20020a0560001f0900b0021a05f3316amr805820wrb.682.1655030799648;
+        Sun, 12 Jun 2022 03:46:39 -0700 (PDT)
+Received: from localhost.localdomain ([46.53.248.224])
+        by smtp.gmail.com with ESMTPSA id j7-20020a05600c190700b0039c4ba160absm20880712wmq.2.2022.06.12.03.46.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 03:46:38 -0700 (PDT)
+Date:   Sun, 12 Jun 2022 13:46:36 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     christophe.leroy@csgroup.eu
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] module: Fix selfAssignment cppcheck warning
+Message-ID: <YqXEDCzsYvDKsgQa@localhost.localdomain>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1655029044; l=2346; s=20211009; h=from:subject:message-id; bh=Cnody7fZ4v0eN7AnNtz5ncbw0xjUREFAKECK08Dh6Qc=; b=DiutiPtOwrPMsKZnyuojtmuBNjpId1BXFWTwR7weS4E+bLl1q+rvj7g3z1dUjIizcLZw8ZrzdCgv bu1qJ9+ABS6Py5C0PxwKUEulmxMe244Cc8J5sOO/DGgjps0ZQmc4
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-cppcheck reports the following warnings:
+> @@ -33,7 +33,8 @@
+> #ifdef CONFIG_STRICT_MODULE_RWX
+> # define strict_align(X) PAGE_ALIGN(X)
+> #else
+> -# define strict_align(X) (X)
+> +/* OR with zero to avoid cppcheck selfAssignment warning */
+> +# define strict_align(X) ((X) | 0)
+>  #endif
 
-kernel/module/main.c:1455:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
-   mod->core_layout.size = strict_align(mod->core_layout.size);
-                         ^
-kernel/module/main.c:1489:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
-   mod->init_layout.size = strict_align(mod->init_layout.size);
-                         ^
-kernel/module/main.c:1493:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
-   mod->init_layout.size = strict_align(mod->init_layout.size);
-                         ^
-kernel/module/main.c:1504:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
-   mod->init_layout.size = strict_align(mod->init_layout.size);
-                         ^
-kernel/module/main.c:1459:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
-   mod->data_layout.size = strict_align(mod->data_layout.size);
-                         ^
-kernel/module/main.c:1463:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
-   mod->data_layout.size = strict_align(mod->data_layout.size);
-                         ^
-kernel/module/main.c:1467:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
-   mod->data_layout.size = strict_align(mod->data_layout.size);
-                         ^
-
-This is due to strict_align() being a no-op when
-CONFIG_STRICT_MODULE_RWX is not selected.
-
-Change strict_align() to a bitwise OR with 0 in order to feint cppcheck.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- kernel/module/internal.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index bc5507ab8450..8396d5f5daa0 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -33,7 +33,8 @@
- #ifdef CONFIG_STRICT_MODULE_RWX
- # define strict_align(X) PAGE_ALIGN(X)
- #else
--# define strict_align(X) (X)
-+/* OR with zero to avoid cppcheck selfAssignment warning */
-+# define strict_align(X) ((X) | 0)
- #endif
- 
- extern struct mutex module_mutex;
--- 
-2.35.3
-
+Can these myopic tools be taught to see around and notice second
+definition which does mutate variable so there is no self-assignment?
