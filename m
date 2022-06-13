@@ -2,134 +2,158 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3F02C43334
-	for <linux-modules@archiver.kernel.org>; Mon, 13 Jun 2022 06:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FBABC43334
+	for <linux-modules@archiver.kernel.org>; Mon, 13 Jun 2022 08:20:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiFMGCt (ORCPT
+        id S238452AbiFMIUB (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 13 Jun 2022 02:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
+        Mon, 13 Jun 2022 04:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233908AbiFMGCj (ORCPT
+        with ESMTP id S233189AbiFMIUA (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 13 Jun 2022 02:02:39 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D6718B03;
-        Sun, 12 Jun 2022 23:02:31 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LM1F20g3Zz9t84;
-        Mon, 13 Jun 2022 08:02:30 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UO-KPle3HrFb; Mon, 13 Jun 2022 08:02:30 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LM1F13NcPz9t6t;
-        Mon, 13 Jun 2022 08:02:29 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 66A468B767;
-        Mon, 13 Jun 2022 08:02:29 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 8hyBN8EFX1NR; Mon, 13 Jun 2022 08:02:29 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 49AAB8B764;
-        Mon, 13 Jun 2022 08:02:29 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25D62Hue114106
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 13 Jun 2022 08:02:20 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25D6293B114103;
-        Mon, 13 Jun 2022 08:02:09 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+        Mon, 13 Jun 2022 04:20:00 -0400
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E9C1EAE5;
+        Mon, 13 Jun 2022 01:19:58 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id 25D8Hqcs011074;
+        Mon, 13 Jun 2022 17:17:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 25D8Hqcs011074
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1655108273;
+        bh=CmhbukpBhZs7hao25rQlICLG+Ns0/87DXmi5jDvd2iE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hBKp+jS9P7HmrcT7zp7l6kQNJUNh88ugzYtEluVI0KDn7TlAkLIDc8ju3Mi1RuIeH
+         N5S8Z6ThORDDGC/9XFYl+0Zod6QhGHMSD7Ds4vB+DnLevHTpIi8lZcB6NtoxMxRfbX
+         bTCLu7klIZirLYKtICeNotC+RVxKTvmM+qAH2v7jrhz5zjVquH0z4tSbw+U510lBrN
+         oh5JlCQJy7sMEamM1ncpm4+yIe8e/puiVt2+HU+ka2BNfHM9hZY2hio62Oy2Ir1vVO
+         UwKckHWfho3ccbl9oir28ZefJYO1uSj4xgWcjC4wI3buDWwwhHoYScccyxw7eWa4K2
+         IFrRwCAKfKCZg==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alex Shi <alexs@kernel.org>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthias Maennich <maennich@google.com>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] module: Increase readability of module_kallsyms_lookup_name()
-Date:   Mon, 13 Jun 2022 08:02:02 +0200
-Message-Id: <133321ea63ceb4cdd83346e068d1d16b676678f8.1655100096.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <f15dcfd75e064f80eeb75c9baf9e881196039db7.1655100096.git.christophe.leroy@csgroup.eu>
-References: <f15dcfd75e064f80eeb75c9baf9e881196039db7.1655100096.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH] doc: module: update file references
+Date:   Mon, 13 Jun 2022 17:17:40 +0900
+Message-Id: <20220613081741.1699713-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1655100120; l=2069; s=20211009; h=from:subject:message-id; bh=UfRo/pGq3a9kCG9vy69xGUCYVC9crc9vfJMw2h/1Hsw=; b=8+EDxn3dcsTW46QRsIl17/VAh4TbNSqjKp2Xo1sHblUJ4vPsU/hO7wEnRckSofHcwZoE8pb5c/C2 3zm7vCo2CN8Sp009iQlwb03OC0LANiFKD78sz6ZenbSad/+iTso0
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-module_kallsyms_lookup_name() has several exit conditions but
-can't return immediately due to preempt_disable().
+Adjust documents to the file moves made by commit cfc1d277891e ("module:
+Move all into module/").
 
-Refactor module_kallsyms_lookup_name() to allow returning from
-anywhere, and reduce depth.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- kernel/module/kallsyms.c | 38 ++++++++++++++++++++++++--------------
- 1 file changed, 24 insertions(+), 14 deletions(-)
 
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index fe3636bde605..df0150c467d4 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -448,29 +448,39 @@ unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
- 	return 0;
- }
+I did not touch
+
+  Documentation/translations/zh_CN/core-api/kernel-api.rst
+
+because I cannot modify it.
+
+ Documentation/core-api/kernel-api.rst                  |  2 +-
+ Documentation/core-api/symbol-namespaces.rst           |  4 ++--
+ Documentation/livepatch/module-elf-format.rst          | 10 +++++-----
+ .../translations/it_IT/core-api/symbol-namespaces.rst  |  6 +++---
+ .../translations/zh_CN/core-api/symbol-namespaces.rst  |  2 +-
+ 5 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
+index d6b3f94b9f1f..0793c400d4b0 100644
+--- a/Documentation/core-api/kernel-api.rst
++++ b/Documentation/core-api/kernel-api.rst
+@@ -223,7 +223,7 @@ Module Loading
+ Inter Module support
+ --------------------
  
--/* Look for this name: can be of form module:name. */
--unsigned long module_kallsyms_lookup_name(const char *name)
-+static unsigned long __module_kallsyms_lookup_name(const char *name)
- {
- 	struct module *mod;
- 	char *colon;
--	unsigned long ret = 0;
+-Refer to the file kernel/module.c for more information.
++Refer to the files in kernel/module/ for more information.
  
--	/* Don't lock: we're in enough trouble already. */
--	preempt_disable();
- 	colon = strnchr(name, MODULE_NAME_LEN, ':');
- 	if (colon) {
- 		mod = find_module_all(name, colon - name, false);
- 		if (mod)
--			ret = find_kallsyms_symbol_value(mod, colon + 1);
--	} else {
--		list_for_each_entry_rcu(mod, &modules, list) {
--			if (mod->state == MODULE_STATE_UNFORMED)
--				continue;
--			ret = find_kallsyms_symbol_value(mod, name);
--			if (ret)
--				break;
--		}
-+			return find_kallsyms_symbol_value(mod, colon + 1);
-+		return 0;
- 	}
-+
-+	list_for_each_entry_rcu(mod, &modules, list) {
-+		unsigned long ret;
-+
-+		if (mod->state == MODULE_STATE_UNFORMED)
-+			continue;
-+		ret = find_kallsyms_symbol_value(mod, name);
-+		if (ret)
-+			return ret;
-+	}
-+	return 0;
-+}
-+
-+/* Look for this name: can be of form module:name. */
-+unsigned long module_kallsyms_lookup_name(const char *name)
-+{
-+	unsigned long ret;
-+
-+	/* Don't lock: we're in enough trouble already. */
-+	preempt_disable();
-+	ret = __module_kallsyms_lookup_name(name);
- 	preempt_enable();
- 	return ret;
- }
+ Hardware Interfaces
+ ===================
+diff --git a/Documentation/core-api/symbol-namespaces.rst b/Documentation/core-api/symbol-namespaces.rst
+index 5ad9e0abe42c..12e4aecdae94 100644
+--- a/Documentation/core-api/symbol-namespaces.rst
++++ b/Documentation/core-api/symbol-namespaces.rst
+@@ -51,8 +51,8 @@ namespace ``USB_STORAGE``, use::
+ The corresponding ksymtab entry struct ``kernel_symbol`` will have the member
+ ``namespace`` set accordingly. A symbol that is exported without a namespace will
+ refer to ``NULL``. There is no default namespace if none is defined. ``modpost``
+-and kernel/module.c make use the namespace at build time or module load time,
+-respectively.
++and kernel/module/main.c make use the namespace at build time or module load
++time, respectively.
+ 
+ 2.2 Using the DEFAULT_SYMBOL_NAMESPACE define
+ =============================================
+diff --git a/Documentation/livepatch/module-elf-format.rst b/Documentation/livepatch/module-elf-format.rst
+index dbe9b400e39f..7347638895a0 100644
+--- a/Documentation/livepatch/module-elf-format.rst
++++ b/Documentation/livepatch/module-elf-format.rst
+@@ -210,11 +210,11 @@ module->symtab.
+ =====================================
+ Normally, a stripped down copy of a module's symbol table (containing only
+ "core" symbols) is made available through module->symtab (See layout_symtab()
+-in kernel/module.c). For livepatch modules, the symbol table copied into memory
+-on module load must be exactly the same as the symbol table produced when the
+-patch module was compiled. This is because the relocations in each livepatch
+-relocation section refer to their respective symbols with their symbol indices,
+-and the original symbol indices (and thus the symtab ordering) must be
++in kernel/module/kallsyms.c). For livepatch modules, the symbol table copied
++into memory on module load must be exactly the same as the symbol table produced
++when the patch module was compiled. This is because the relocations in each
++livepatch relocation section refer to their respective symbols with their symbol
++indices, and the original symbol indices (and thus the symtab ordering) must be
+ preserved in order for apply_relocate_add() to find the right symbol.
+ 
+ For example, take this particular rela from a livepatch module:::
+diff --git a/Documentation/translations/it_IT/core-api/symbol-namespaces.rst b/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
+index 42f5d04e38ec..0f6898860d6d 100644
+--- a/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
++++ b/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
+@@ -50,9 +50,9 @@ Di conseguenza, nella tabella dei simboli del kernel ci sarà una voce
+ rappresentata dalla struttura ``kernel_symbol`` che avrà il campo
+ ``namespace`` (spazio dei nomi) impostato. Un simbolo esportato senza uno spazio
+ dei nomi avrà questo campo impostato a ``NULL``. Non esiste uno spazio dei nomi
+-di base. Il programma ``modpost`` e il codice in kernel/module.c usano lo spazio
+-dei nomi, rispettivamente, durante la compilazione e durante il caricamento
+-di un modulo.
++di base. Il programma ``modpost`` e il codice in kernel/module/main.c usano lo
++spazio dei nomi, rispettivamente, durante la compilazione e durante il
++caricamento di un modulo.
+ 
+ 2.2 Usare il simbolo di preprocessore DEFAULT_SYMBOL_NAMESPACE
+ ==============================================================
+diff --git a/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst b/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
+index 6abf7ed534ca..bb16f0611046 100644
+--- a/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
++++ b/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
+@@ -52,7 +52,7 @@
+ 
+ 相应的 ksymtab 条目结构体 ``kernel_symbol`` 将有相应的成员 ``命名空间`` 集。
+ 导出时未指明命名空间的符号将指向 ``NULL`` 。如果没有定义命名空间，则默认没有。
+-``modpost`` 和kernel/module.c分别在构建时或模块加载时使用名称空间。
++``modpost`` 和kernel/module/main.c分别在构建时或模块加载时使用名称空间。
+ 
+ 2.2 使用DEFAULT_SYMBOL_NAMESPACE定义
+ ====================================
 -- 
-2.35.3
+2.32.0
 
