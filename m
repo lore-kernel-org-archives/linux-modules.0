@@ -2,213 +2,112 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F11CCCA47C
-	for <linux-modules@archiver.kernel.org>; Tue, 14 Jun 2022 12:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 821D0C43334
+	for <linux-modules@archiver.kernel.org>; Tue, 14 Jun 2022 21:34:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244153AbiFNMji (ORCPT
+        id S1345327AbiFNVeB (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 14 Jun 2022 08:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
+        Tue, 14 Jun 2022 17:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbiFNMiP (ORCPT
+        with ESMTP id S232052AbiFNVeA (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:38:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F634C424;
-        Tue, 14 Jun 2022 05:35:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB541615C0;
-        Tue, 14 Jun 2022 12:34:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9871EC3411E;
-        Tue, 14 Jun 2022 12:34:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655210085;
-        bh=S7mRYBt8dKQ302Phsd6Akm5kJqqFOUkmEA1v3KsTPWU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RnGKuF+/Y/3maKreiqaBVGd5HuZNeDQoPMRXQEpiMn/f8SIJpRly6PX6lIVouvSRe
-         xRFy4EGBk0z6QKt+Lz8vk6SzVZNTytJsNMc59tX/IUD7KSvHaKZebzDN6GiCttUHep
-         wXb4Tjb7kuj6K751aGII97hYZlNWKbGQyTiy30ylzeLfPk8aM7eYe2aDaylZCNoeQR
-         ATclZjOy43jDWkMIsNXUmPF4JLxmfzu7IwS+MDaUS4slOfQg5l4B5Bz1S20GP1bc6b
-         sBMsCSdmiWO4qBNgMSuBqkfY0qDHqU9XbdztWs0lH8KCt5CzSbvS7jQB/nQOXFnOd8
-         zwJhPQWCFHDxw==
-Date:   Tue, 14 Jun 2022 15:32:38 +0300
-From:   "jarkko@kernel.org" <jarkko@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "hch@lst.de" <hch@lst.de>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "zepan@sipeed.com" <zepan@sipeed.com>,
-        "iii@linux.ibm.com" <iii@linux.ibm.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "joey.gouly@arm.com" <joey.gouly@arm.com>,
-        "anemo@mba.ocn.ne.jp" <anemo@mba.ocn.ne.jp>,
-        "egorenar@linux.ibm.com" <egorenar@linux.ibm.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "luis.machado@linaro.org" <luis.machado@linaro.org>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jniethe5@gmail.com" <jniethe5@gmail.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "dja@axtens.net" <dja@axtens.net>,
-        "liaochang1@huawei.com" <liaochang1@huawei.com>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "huschle@linux.ibm.com" <huschle@linux.ibm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "song@kernel.org" <song@kernel.org>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "dave.anglin@bell.net" <dave.anglin@bell.net>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "atomlin@redhat.com" <atomlin@redhat.com>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "philipp.tomsich@vrull.eu" <philipp.tomsich@vrull.eu>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>,
-        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "heiko@sntech.de" <heiko@sntech.de>,
-        "nathaniel@profian.com" <nathaniel@profian.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "rmk+kernel@armlinux.org.uk" <rmk+kernel@armlinux.org.uk>,
-        "Sakkinen, Jarkko" <jarkko@profian.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "tmricht@linux.ibm.com" <tmricht@linux.ibm.com>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "atishp@atishpatra.org" <atishp@atishpatra.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "nico@fluxnic.net" <nico@fluxnic.net>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "kernel@esmil.dk" <kernel@esmil.dk>,
-        "ashimida@linux.alibaba.com" <ashimida@linux.alibaba.com>,
-        "elver@google.com" <elver@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "Keshavamurthy, Anil S" <anil.s.keshavamurthy@intel.com>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "andrealmeid@igalia.com" <andrealmeid@igalia.com>,
-        "changbin.du@intel.com" <changbin.du@intel.com>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>
-Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-Message-ID: <Yqh/5nn0AhdwaCm8@iki.fi>
-References: <20220608000014.3054333-1-jarkko@profian.com>
- <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com>
- <YqAy0qjI4Lktk/uJ@iki.fi>
- <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
- <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
- <CAPhsuW6BzUtqnjvaGJScXRpghs0_V_phpdyd4_oAKhvmkX-GFw@mail.gmail.com>
- <YqEF6+YKqCHsWZJW@bombadil.infradead.org>
- <20220609034852.GA30873@lst.de>
- <YqH0iEgsi6+bwS3x@bombadil.infradead.org>
- <e7dedb9086193ca7682edc10fabc4195894e5146.camel@intel.com>
+        Tue, 14 Jun 2022 17:34:00 -0400
+X-Greylist: delayed 134040 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Jun 2022 14:33:59 PDT
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31582656B;
+        Tue, 14 Jun 2022 14:33:59 -0700 (PDT)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 25ELXbSA002614;
+        Wed, 15 Jun 2022 06:33:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 25ELXbSA002614
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1655242418;
+        bh=jMu3IJf/gNsh1yOykgEfXmOTW4pfvsSKna8A1KEVPDk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=H8Vj0TEWaZDAyCb57/jCPeJSrt7udqr5gEj9vpZGF0yiUPM5DWETorzCvL6z4TT6r
+         dvPEbKwUr1Aqw5yycPgaJetlesEOn5iQscdrqVW3Hb+5Oxmwpfaqp/q5R0WxEeJpi2
+         mkb2r1cLq/6dGTbrCXf+EYfUOlBKnTFG8EP9XutPStoqSTK1Hdqss5r9rl1LoypyJH
+         Mt1vkvsmiMdgCwxTAIEJzmJMFomsZQxuIAvYpAGHVqfrl6njsQyy05rr746+JeIkgU
+         IgIL5R9Bs2GeHQ9jfxLcSxjPjoRWYRVYeTriy/oeLb1zS1i8wO3NuK95GyKZ6/BOEZ
+         8ZfbBDzevJtpA==
+X-Nifty-SrcIP: [209.85.128.54]
+Received: by mail-wm1-f54.google.com with SMTP id a10so5341470wmj.5;
+        Tue, 14 Jun 2022 14:33:38 -0700 (PDT)
+X-Gm-Message-State: AOAM5330k/mWGq75deKm8FkX/J9GFrIuCBGCA1PH/LaqY3Lot2dj2kDA
+        VF0gSZ1VxNtGpQKda81RbItGzJK5A6ghij1XHyU=
+X-Google-Smtp-Source: ABdhPJy382JsXm03MT6GFbPL63zd9b3gVqd3oo2ll0beKVq4fIQ7srKKI6FHgfmvJhPvDB9A162ob2fGjKC0YYGqwDs=
+X-Received: by 2002:a7b:ce04:0:b0:394:1f46:213 with SMTP id
+ m4-20020a7bce04000000b003941f460213mr6175903wmc.157.1655242416515; Tue, 14
+ Jun 2022 14:33:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7dedb9086193ca7682edc10fabc4195894e5146.camel@intel.com>
+References: <20220613081741.1699713-1-masahiroy@kernel.org> <027dcfc9-be47-5fb5-7ea8-26eb19122095@loongson.cn>
+In-Reply-To: <027dcfc9-be47-5fb5-7ea8-26eb19122095@loongson.cn>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 15 Jun 2022 06:32:59 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAROs84jWCHxKHuv+TOzUkCJDUgkaFU0nKopGPwNKV+VQg@mail.gmail.com>
+Message-ID: <CAK7LNAROs84jWCHxKHuv+TOzUkCJDUgkaFU0nKopGPwNKV+VQg@mail.gmail.com>
+Subject: Re: [PATCH] doc: module: update file references
+To:     Yanteng Si <siyanteng@loongson.cn>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, Alex Shi <alexs@kernel.org>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthias Maennich <maennich@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jun 09, 2022 at 06:41:36PM +0000, Edgecombe, Rick P wrote:
-> On Thu, 2022-06-09 at 06:24 -0700, Luis Chamberlain wrote:
-> > On Thu, Jun 09, 2022 at 05:48:52AM +0200, Christoph Hellwig wrote:
-> > > On Wed, Jun 08, 2022 at 01:26:19PM -0700, Luis Chamberlain wrote:
-> > > > No, that was removed because it has only one user.
-> > > 
-> > > That is only part of the story.  The other part is that the overall
-> > > kernel simply does not have any business allocating exutable
-> > > memory.
-> > > Executable memory is a very special concept for modules or module-
-> > > like
-> > > code like kprobes, and should not be exposed as a general concept.
-> > 
-> > It is not just modules and kprobes, it is also ftrace and bpf too
-> > now.
-> > So while it should not be used everywhere calling it module_alloc()
-> > is just confusing at this point. Likewise, module_alloc_huge() is
-> > being proposed too and I'd rather we deal with this properly in
-> > aligment
-> > of taking care of the rename as well.
-> > 
-> > If the concern is to restrict access we can use the module namespace
-> > stuff
-> > so to ensure only intended users get access to it.
-> 
-> BPF even has multiple uses for text allocation. It has its own
-> trampoline feature that puts different type of text in the allocation,
-> with its own allocation routine. I looks like there are even more
-> little allocators in there.
-> 
-> So yea, there seems to be a lot of the kernel in the business of
-> dynamically generated text, for better or worse. I agree that it needs
-> to be done carefully. However, these usages always seem to have the
-> same problems (W^X, arch eccentricities, etc). So I don't think we
-> should hide away the pieces. Instead we should have something with
-> guard rails on it, so they can't get the allocation part wrong.
-> 
-> But I guess the question here is: what should we do in the meantime? It
-> is kind of similar to the questions that came up around the bpf prog
-> pack allocator. Should we hold up allocator related work until
-> underlying problems are resolved and there is some mature core
-> solution?
-> 
-> Personally I had thought we would need to do some clean switch to a
-> much different interface. I still think someday it will be required,
-> but it seems to be evolving naturally for the time being.
-> 
-> Like say for a next step we moved prog pack out of bpf into core code,
-> gave it it's own copy of module_alloc(), and then made kprobes use it.
-> Then we would have something with improved W^X guard rails, and kprobes
-> would not depend on modules anymore. I think maybe it's a step in the
-> right direction, even if it's not perfect.
+On Tue, Jun 14, 2022 at 9:28 PM Yanteng Si <siyanteng@loongson.cn> wrote:
+>
+> On 2022/6/13 =E4=B8=8B=E5=8D=884:17, Masahiro Yamada wrote:
+> > Adjust documents to the file moves made by commit cfc1d277891e ("module=
+:
+> > Move all into module/").
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Acked-by: Yanteng Si <siyanteng@loongson.cn>
+> > ---
+> >
+> > I did not touch
+> >
+> >    Documentation/translations/zh_CN/core-api/kernel-api.rst
+> diff --git a/Documentation/translations/zh_CN/core-api/kernel-api.rst
+> b/Documentation/translations/zh_CN/core-api/kernel-api.rst
+> index e45fe80d1cd8..962d31d019d7 100644
+> --- a/Documentation/translations/zh_CN/core-api/kernel-api.rst
+> +++ b/Documentation/translations/zh_CN/core-api/kernel-api.rst
+> @@ -224,7 +224,7 @@ kernel/kmod.c
+>   =E6=A8=A1=E5=9D=97=E6=8E=A5=E5=8F=A3=E6=94=AF=E6=8C=81
+>   ------------
+>
+> -=E6=9B=B4=E5=A4=9A=E4=BF=A1=E6=81=AF=E8=AF=B7=E5=8F=82=E8=80=83=E6=96=87=
+=E4=BB=B6kernel/module.c=E3=80=82
+> +=E6=9B=B4=E5=A4=9A=E4=BF=A1=E6=81=AF=E8=AF=B7=E5=8F=82=E9=98=85kernel/mo=
+dule/=E7=9B=AE=E5=BD=95=E4=B8=8B=E7=9A=84=E6=96=87=E4=BB=B6=E3=80=82
+>
+>   =E7=A1=AC=E4=BB=B6=E6=8E=A5=E5=8F=A3
+>   =3D=3D=3D=3D=3D=3D=3D=3D
+>
+> >
+> > because I cannot modify it.Let me help you, it's my pleasure.  :)
 
-So you're saying that I should (as a first step) basically clone
-module_alloc() implementation for kprobes, and future for BPF 
-use, in order to get a clean starting point?
 
-BR, Jarkko
+Thank you very much!
+
+I will send v2 with the update.
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
