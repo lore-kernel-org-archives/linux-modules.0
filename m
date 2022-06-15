@@ -2,107 +2,104 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2724C433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Jun 2022 08:02:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 565C3C433EF
+	for <linux-modules@archiver.kernel.org>; Wed, 15 Jun 2022 16:31:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236403AbiFOICD (ORCPT
+        id S241710AbiFOQbf (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Jun 2022 04:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
+        Wed, 15 Jun 2022 12:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiFOICD (ORCPT
+        with ESMTP id S1356055AbiFOQbd (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Jun 2022 04:02:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B2A4578B;
-        Wed, 15 Jun 2022 01:02:01 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EB64B21B27;
-        Wed, 15 Jun 2022 08:01:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655280119; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DaM9M2rnjrvdQGQ7RvZB3kRvN0KL8OK3uY7jsfFlhwM=;
-        b=qRtiw/EwzIsZzY7D7oh0BeOfU6iIQ38xDbUtfQXTtdaPPWK3B2vJeEb6IIHEt7MxZ3zKcC
-        dfyx4Mc4tIb/eF0FliF28q8hNk+hU2TEYFUekYuM8cDMqgo0Awx7lmNgOzPGeK/9Q2qhBN
-        CjKBFgcYgu+XVY7XBl81AW22w0F/oCg=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E39D82C142;
-        Wed, 15 Jun 2022 08:01:57 +0000 (UTC)
-Date:   Wed, 15 Jun 2022 10:01:57 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Maninder Singh <maninder1.s@samsung.com>, bcain@quicinc.com,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, satishkh@cisco.com,
-        sebaddel@cisco.com, kartilak@cisco.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, mcgrof@kernel.org,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        dianders@chromium.org, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
-        mhiramat@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, arnd@arndb.de,
-        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net, v.narang@samsung.com,
-        onkarnath.1@samsung.com
-Subject: Re: [PATCH 0/5] kallsyms: make kallsym APIs more safe with scnprintf
-Message-ID: <YqmR9ZeiwMQLyKDu@alley>
-References: <CGME20220520083715epcas5p400b11adef4d540756c985feb20ba29bc@epcas5p4.samsung.com>
- <20220520083701.2610975-1-maninder1.s@samsung.com>
- <YonTOL4zC4CytVrn@infradead.org>
- <202205231238.FAF6D28@keescook>
+        Wed, 15 Jun 2022 12:31:33 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB92840A1C
+        for <linux-modules@vger.kernel.org>; Wed, 15 Jun 2022 09:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655310692; x=1686846692;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x/pdN0lZ0oPaR/HhsgW8BO6vJTL/PT/jlUK2OuZ3R4c=;
+  b=C7Ln//TqhcKAGG62lFkD2klgNw+0/ICjQzVb0Z+iSLhrWwF5L2jhvdo9
+   jHQpd2U4Ged4dkL6p47P6lQK2r41mGek9/ryNZwyQjCd2ch6BSvnaTM6y
+   Waz/iexxXAPgDevFhtL1OfxvkeVMsmRJz1TJ9zv2ks5Igk01VRoCWHVfb
+   cZA1Xxcv/zeYzSKc0ba/WdCdf0l4fo+2ywqasqdRDXkWA0ieRdJ9T7vxo
+   q2E0lXW2E4KQBvGm0hvGzJ+2Fj2BWjwVJIjk5vrLHp6ITc1qVwS3sEA1W
+   Qg78zjExWMhCX4O3NM/2rBWiN26IPtRksDqot3Mq0xvrOBKGMQt+nrZpz
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="277816136"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="277816136"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 09:31:31 -0700
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="641089099"
+Received: from gkonidal-mobl2.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.170.1])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 09:31:31 -0700
+Date:   Wed, 15 Jun 2022 09:31:29 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     linux-modules@vger.kernel.org, mcgrof@kernel.org
+Subject: Re: [PATCH 0/8] Add --wait to modprobe -r
+Message-ID: <20220615163129.sy23yezwsx7xyhyj@ldmartin-desk2>
+References: <20220603215047.9607-1-lucas.de.marchi@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <202205231238.FAF6D28@keescook>
+In-Reply-To: <20220603215047.9607-1-lucas.de.marchi@gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon 2022-05-23 12:39:12, Kees Cook wrote:
-> On Sat, May 21, 2022 at 11:07:52PM -0700, Christoph Hellwig wrote:
-> > On Fri, May 20, 2022 at 02:06:56PM +0530, Maninder Singh wrote:
-> > > kallsyms functionality depends on KSYM_NAME_LEN directly.
-> > > but if user passed array length lesser than it, sprintf
-> > > can cause issues of buffer overflow attack.
-> > > 
-> > > So changing *sprint* and *lookup* APIs in this patch set
-> > > to have buffer size as an argument and replacing sprintf with
-> > > scnprintf.
-> > 
-> > This is still a pretty horrible API.  Passing something like
-> > a struct seq_buf seems like the much better API here.  Also with
-> > the amount of arguments and by reference passing it might be worth
-> > to pass them as a structure while you're at it.
-> 
-> Yeah, I agree. It really seems like seq_buf would be nicer.
+Luis, are you still interested in the --wait to modprobe? If so, could
+you take a look in this series?
 
-There is a new patchset that is trying to use this kind of buffer
-in vsprintf.
+If there is still interest for the fs tests, I want to bring this in and
+then do release. Otherwise I may just leave it for the next release when
+I plan to move stuff from modprobe to the library, particularly related
+to the module removal.
 
-It introduces another buffer struct because vsprintf() needs a bit
-different semantic than the one used in seq_buf. But it actually
-replaces seq_buf() in the end. I am not sure if this is the right
-approach.
+thanks
+Lucas De Marchi
 
-Anyway, the initial API is very simple, see
-https://lore.kernel.org/r/20220604193042.1674951-2-kent.overstreet@gmail.com
-
-And it makes the internal vsprintf() API more sane, see
-https://lore.kernel.org/r/20220604193042.1674951-4-kent.overstreet@gmail.com
-
-It would eventually solve also concerns about the kallsysms API.
-Any comments on the new printbuf API are much appreaciated.
-
-Best Regards,
-Petr
+On Fri, Jun 03, 2022 at 02:50:39PM -0700, Lucas De Marchi wrote:
+>Keep trying to remove the module if it's failing with EAGAIN. This is an
+>alternative to
+>
+>v1: https://lore.kernel.org/linux-modules/20210803202417.462197-1-mcgrof@kernel.org/
+>v2: https://lore.kernel.org/linux-modules/20210810051602.3067384-1-mcgrof@kernel.org/
+>
+>The v2 above or variand thereof would be probably a better way, but
+>unfortunately we can't poll the refcnt file in sysfs to get notified
+>when it reaches 0. The alternative in v1, with sleep(), uses an arbitrary
+>interval/maximum. It's not something I'm very  confortable to add to the
+>library side. So, add a quick implementation in modprobe to allow it
+>to remove the module and wait up until a maximum timeout. Intention is
+>to later migrate part of the logic in modprobe to libkmod, including for
+>example the holders removal recently fixed.
+>
+>Lucas De Marchi (8):
+>  modprobe: Move -R to "Query options"
+>  libkmod: Allow to ignore log message on module removal
+>  module-playground: Add debugfs entry in mod-simple
+>  util: Add time-related functions from testsuite
+>  util: Add msec variants for time-related functions
+>  util: Add exponential backoff sleep
+>  testsuite: Add tests for sleep calculation
+>  modprobe: Add --wait
+>
+> libkmod/libkmod-module.c                 | 13 ++--
+> libkmod/libkmod.h                        |  2 +
+> man/modprobe.xml                         | 17 ++++++
+> shared/util.c                            | 72 ++++++++++++++++++++++
+> shared/util.h                            | 17 ++++++
+> testsuite/module-playground/mod-simple.c | 18 +++++-
+> testsuite/test-util.c                    | 41 +++++++++++++
+> testsuite/testsuite.c                    | 14 +----
+> tools/modprobe.c                         | 76 ++++++++++++++++++++----
+> 9 files changed, 240 insertions(+), 30 deletions(-)
+>
+>-- 
+>2.36.1
+>
