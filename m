@@ -2,104 +2,203 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 565C3C433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Jun 2022 16:31:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 120D9CCA473
+	for <linux-modules@archiver.kernel.org>; Wed, 15 Jun 2022 21:26:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241710AbiFOQbf (ORCPT
+        id S1346864AbiFOV0R (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Jun 2022 12:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
+        Wed, 15 Jun 2022 17:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356055AbiFOQbd (ORCPT
+        with ESMTP id S1346775AbiFOV0P (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:31:33 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB92840A1C
-        for <linux-modules@vger.kernel.org>; Wed, 15 Jun 2022 09:31:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655310692; x=1686846692;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x/pdN0lZ0oPaR/HhsgW8BO6vJTL/PT/jlUK2OuZ3R4c=;
-  b=C7Ln//TqhcKAGG62lFkD2klgNw+0/ICjQzVb0Z+iSLhrWwF5L2jhvdo9
-   jHQpd2U4Ged4dkL6p47P6lQK2r41mGek9/ryNZwyQjCd2ch6BSvnaTM6y
-   Waz/iexxXAPgDevFhtL1OfxvkeVMsmRJz1TJ9zv2ks5Igk01VRoCWHVfb
-   cZA1Xxcv/zeYzSKc0ba/WdCdf0l4fo+2ywqasqdRDXkWA0ieRdJ9T7vxo
-   q2E0lXW2E4KQBvGm0hvGzJ+2Fj2BWjwVJIjk5vrLHp6ITc1qVwS3sEA1W
-   Qg78zjExWMhCX4O3NM/2rBWiN26IPtRksDqot3Mq0xvrOBKGMQt+nrZpz
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="277816136"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="277816136"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 09:31:31 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="641089099"
-Received: from gkonidal-mobl2.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.170.1])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 09:31:31 -0700
-Date:   Wed, 15 Jun 2022 09:31:29 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc:     linux-modules@vger.kernel.org, mcgrof@kernel.org
-Subject: Re: [PATCH 0/8] Add --wait to modprobe -r
-Message-ID: <20220615163129.sy23yezwsx7xyhyj@ldmartin-desk2>
-References: <20220603215047.9607-1-lucas.de.marchi@gmail.com>
+        Wed, 15 Jun 2022 17:26:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856445621C;
+        Wed, 15 Jun 2022 14:26:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2155361778;
+        Wed, 15 Jun 2022 21:26:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0651C3411A;
+        Wed, 15 Jun 2022 21:26:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655328373;
+        bh=C7SBMi7ghKBLQo7MHmIHsy7eWtSdXq8eTAqAwVvVPfw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rcYBdB9v2iJolM6fd27OAYzgDAh4Cy36Z7LWBpda/a/SgPCwn9xHu/xsTl0o0PoAY
+         SDWwvGa6oWW820UDU6Jc02SuNLbRnkJFOQVwHgARir+e+zZY2YYmSygPZks1a6y3Ds
+         URcIAW8dSzvf2PvwOefgZcSyVjUseugdFY03G/WaZrjHpsue9BMdMgV/6QSVfrrb8T
+         HBYs8Z1/kOPfZU6aIUJtdFd1gH4nSJbil/mnEhsnjRnWKGFlJqJnnCZ5QjEvuHpB9f
+         WFwZw2bJeWIQ2/RB+5zvSIptEsCuVnGlMNxUSbksXDmUo/nUflwAwou4zwqCvuobWa
+         8/YxoqDiXQD1Q==
+Date:   Thu, 16 Jun 2022 00:24:04 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jarkko Sakkinen <jarkko@profian.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Song Liu <song@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dave Anglin <dave.anglin@bell.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Daniel Axtens <dja@axtens.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jordan Niethe <jniethe5@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liao Chang <liaochang1@huawei.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Wu Caize <zepan@sipeed.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tobias Huschle <huschle@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+Message-ID: <YqpN9NAkAKhgiunQ@iki.fi>
+References: <20220608000014.3054333-1-jarkko@profian.com>
+ <YqGlmpbx8HTrWmpF@shell.armlinux.org.uk>
+ <YqH5TfN9w35kHFLU@bombadil.infradead.org>
+ <Yqh+k7Udth0IOBrd@iki.fi>
+ <144b7e90-5d75-7e2c-4e54-8a73f914dfdf@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220603215047.9607-1-lucas.de.marchi@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <144b7e90-5d75-7e2c-4e54-8a73f914dfdf@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Luis, are you still interested in the --wait to modprobe? If so, could
-you take a look in this series?
+On Tue, Jun 14, 2022 at 12:36:25PM +0000, Christophe Leroy wrote:
+> 
+> 
+> Le 14/06/2022 à 14:26, Jarkko Sakkinen a écrit :
+> > On Thu, Jun 09, 2022 at 06:44:45AM -0700, Luis Chamberlain wrote:
+> >> On Thu, Jun 09, 2022 at 08:47:38AM +0100, Russell King (Oracle) wrote:
+> >>> On Wed, Jun 08, 2022 at 02:59:27AM +0300, Jarkko Sakkinen wrote:
+> >>>> diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
+> >>>> index 553866751e1a..d2bb954cd54f 100644
+> >>>> --- a/arch/arm/kernel/Makefile
+> >>>> +++ b/arch/arm/kernel/Makefile
+> >>>> @@ -44,6 +44,11 @@ obj-$(CONFIG_CPU_IDLE)		+= cpuidle.o
+> >>>>   obj-$(CONFIG_ISA_DMA_API)	+= dma.o
+> >>>>   obj-$(CONFIG_FIQ)		+= fiq.o fiqasm.o
+> >>>>   obj-$(CONFIG_MODULES)		+= armksyms.o module.o
+> >>>> +ifeq ($(CONFIG_MODULES),y)
+> >>>> +obj-y				+= module_alloc.o
+> >>>> +else
+> >>>> +obj-$(CONFIG_KPROBES)		+= module_alloc.o
+> >>>> +endif
+> >>>
+> >>> Doesn't:
+> >>>
+> >>> obj-$(CONFIG_MODULES)		+= module_alloc.o
+> >>> obj-$(CONFIG_KPROBES)		+= module_alloc.o
+> >>
+> >> That just begs for a new kconfig symbol for the object, and for
+> >> the object then to be built with it.
+> >>
+> >> The archs which override the default can use ARCH_HAS_VM_ALLOC_EXEC.
+> >> Please note that the respective free is important as well and its
+> >> not clear if we need an another define for the free. Someone has
+> >> to do that work. We want to ensure to noexec the code on free and
+> >> this can vary on each arch.
+> > 
+> > Let me check if I understand this (not 100% sure).
+> > 
+> > So if arch define ARCH_HAS_VMALLOC_EXEC, then this would set
+> > config flag CONFIG_VMALLOC_EXEC, which would be used to include
+> > the compilation unit?
+> > 
+> 
+> I guess you have two possible approaches.
+> 
+> Either architectures select CONFIG_ARCH_HAS_VMALLOC_EXEC at all time and 
+> then you add a CONFIG_VMALLOC_EXEC which depends on 
+> CONFIG_ARCH_HAS_VMALLOC_EXEC and CONFIG_MODULES or CONFIG_KPROBES,
+> 
+> Or architectures select CONFIG_ARCH_HAS_VMALLOC_EXEC only when either 
+> CONFIG_MODULES or CONFIG_KPROBES is selected, in that case there is no 
+> need for a CONFIG_VMALLOC_EXEC.
 
-If there is still interest for the fs tests, I want to bring this in and
-then do release. Otherwise I may just leave it for the next release when
-I plan to move stuff from modprobe to the library, particularly related
-to the module removal.
+Right, got it now. Thanks for the elaboration.
 
-thanks
-Lucas De Marchi
+> Christophe
 
-On Fri, Jun 03, 2022 at 02:50:39PM -0700, Lucas De Marchi wrote:
->Keep trying to remove the module if it's failing with EAGAIN. This is an
->alternative to
->
->v1: https://lore.kernel.org/linux-modules/20210803202417.462197-1-mcgrof@kernel.org/
->v2: https://lore.kernel.org/linux-modules/20210810051602.3067384-1-mcgrof@kernel.org/
->
->The v2 above or variand thereof would be probably a better way, but
->unfortunately we can't poll the refcnt file in sysfs to get notified
->when it reaches 0. The alternative in v1, with sleep(), uses an arbitrary
->interval/maximum. It's not something I'm very  confortable to add to the
->library side. So, add a quick implementation in modprobe to allow it
->to remove the module and wait up until a maximum timeout. Intention is
->to later migrate part of the logic in modprobe to libkmod, including for
->example the holders removal recently fixed.
->
->Lucas De Marchi (8):
->  modprobe: Move -R to "Query options"
->  libkmod: Allow to ignore log message on module removal
->  module-playground: Add debugfs entry in mod-simple
->  util: Add time-related functions from testsuite
->  util: Add msec variants for time-related functions
->  util: Add exponential backoff sleep
->  testsuite: Add tests for sleep calculation
->  modprobe: Add --wait
->
-> libkmod/libkmod-module.c                 | 13 ++--
-> libkmod/libkmod.h                        |  2 +
-> man/modprobe.xml                         | 17 ++++++
-> shared/util.c                            | 72 ++++++++++++++++++++++
-> shared/util.h                            | 17 ++++++
-> testsuite/module-playground/mod-simple.c | 18 +++++-
-> testsuite/test-util.c                    | 41 +++++++++++++
-> testsuite/testsuite.c                    | 14 +----
-> tools/modprobe.c                         | 76 ++++++++++++++++++++----
-> 9 files changed, 240 insertions(+), 30 deletions(-)
->
->-- 
->2.36.1
->
+BR, Jarkko
