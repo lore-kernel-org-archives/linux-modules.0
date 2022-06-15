@@ -2,179 +2,155 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42029CCA47B
-	for <linux-modules@archiver.kernel.org>; Tue, 14 Jun 2022 21:36:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30F81CCA47F
+	for <linux-modules@archiver.kernel.org>; Wed, 15 Jun 2022 06:37:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354302AbiFNVgb (ORCPT
+        id S1347103AbiFOGhU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 14 Jun 2022 17:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
+        Wed, 15 Jun 2022 02:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiFNVga (ORCPT
+        with ESMTP id S241616AbiFOGhT (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:36:30 -0400
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25245515BA;
-        Tue, 14 Jun 2022 14:36:27 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 25ELXIHV019651;
-        Wed, 15 Jun 2022 06:33:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 25ELXIHV019651
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1655242400;
-        bh=5+O/WET8/MvFr5QgfQja8FukZMFl5uO2WE+7ouj7R5A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rO0iCtvYLyc50iRSUlYdV5zCwWJEQvikyZLqAZ2QI6i4HfB2kuxsnmJ+keZs3/XP3
-         9CkSJ8v6rJKSmQYdKl+LGVPhlAkTvjzNeX9Oip4haALg3epKPBSo+e/HnR3kwy4XAS
-         H3beByBQ/xUYeZTKErQaWbnmmHeU2NcgXkb6m6I1dl/yyPs81DP4ZaeMAxmzIvuwtJ
-         dRxgQIHQqtIMoPb+JdAwspye5SyXIcDNr4eRZponj6TZBrG7wraeaHEzaKpo9M6SZX
-         ZD/1rAgRZuQ4PXWgVay7LRQmWTm7Lg8pHwYFX1zAt4zA+B+saiuxP+Ge5U5ZvT4ayB
-         H/sEatkTLHhCw==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Alex Shi <alexs@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Matthias Maennich <maennich@google.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] doc: module: update file references
-Date:   Wed, 15 Jun 2022 06:33:03 +0900
-Message-Id: <20220614213303.1944104-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Wed, 15 Jun 2022 02:37:19 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BDD42EFD;
+        Tue, 14 Jun 2022 23:37:16 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id D469067373; Wed, 15 Jun 2022 08:37:07 +0200 (CEST)
+Date:   Wed, 15 Jun 2022 08:37:07 +0200
+From:   "hch@lst.de" <hch@lst.de>
+To:     "jarkko@kernel.org" <jarkko@kernel.org>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "hch@lst.de" <hch@lst.de>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "zepan@sipeed.com" <zepan@sipeed.com>,
+        "iii@linux.ibm.com" <iii@linux.ibm.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "joey.gouly@arm.com" <joey.gouly@arm.com>,
+        "anemo@mba.ocn.ne.jp" <anemo@mba.ocn.ne.jp>,
+        "egorenar@linux.ibm.com" <egorenar@linux.ibm.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "luis.machado@linaro.org" <luis.machado@linaro.org>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jniethe5@gmail.com" <jniethe5@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "dja@axtens.net" <dja@axtens.net>,
+        "liaochang1@huawei.com" <liaochang1@huawei.com>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "huschle@linux.ibm.com" <huschle@linux.ibm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@hansenpartnership.com>,
+        "song@kernel.org" <song@kernel.org>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "dave.anglin@bell.net" <dave.anglin@bell.net>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "atomlin@redhat.com" <atomlin@redhat.com>,
+        "bristot@redhat.com" <bristot@redhat.com>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "javierm@redhat.com" <javierm@redhat.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "philipp.tomsich@vrull.eu" <philipp.tomsich@vrull.eu>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>,
+        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        "nathaniel@profian.com" <nathaniel@profian.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "rmk+kernel@armlinux.org.uk" <rmk+kernel@armlinux.org.uk>,
+        "Sakkinen, Jarkko" <jarkko@profian.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "tmricht@linux.ibm.com" <tmricht@linux.ibm.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "atishp@atishpatra.org" <atishp@atishpatra.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "nico@fluxnic.net" <nico@fluxnic.net>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "kernel@esmil.dk" <kernel@esmil.dk>,
+        "ashimida@linux.alibaba.com" <ashimida@linux.alibaba.com>,
+        "elver@google.com" <elver@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "Keshavamurthy, Anil S" <anil.s.keshavamurthy@intel.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
+        "andrealmeid@igalia.com" <andrealmeid@igalia.com>,
+        "changbin.du@intel.com" <changbin.du@intel.com>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>
+Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
+Message-ID: <20220615063707.GA22930@lst.de>
+References: <CAJF2gTQgCn2CyZ4+VBqEEBT2b4+1KxoEXxrd+Ritk=58+U8EFA@mail.gmail.com> <YqAy0qjI4Lktk/uJ@iki.fi> <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org> <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com> <CAPhsuW6BzUtqnjvaGJScXRpghs0_V_phpdyd4_oAKhvmkX-GFw@mail.gmail.com> <YqEF6+YKqCHsWZJW@bombadil.infradead.org> <20220609034852.GA30873@lst.de> <YqH0iEgsi6+bwS3x@bombadil.infradead.org> <e7dedb9086193ca7682edc10fabc4195894e5146.camel@intel.com> <Yqh/5nn0AhdwaCm8@iki.fi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yqh/5nn0AhdwaCm8@iki.fi>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Adjust documents to the file moves made by commit cfc1d277891e ("module:
-Move all into module/").
+On Tue, Jun 14, 2022 at 03:32:38PM +0300, jarkko@kernel.org wrote:
+> > Like say for a next step we moved prog pack out of bpf into core code,
+> > gave it it's own copy of module_alloc(), and then made kprobes use it.
+> > Then we would have something with improved W^X guard rails, and kprobes
+> > would not depend on modules anymore. I think maybe it's a step in the
+> > right direction, even if it's not perfect.
+> 
+> So you're saying that I should (as a first step) basically clone
+> module_alloc() implementation for kprobes, and future for BPF 
+> use, in order to get a clean starting point?
 
-Thanks to Yanteng Si for helping me to update
-Documentation/translations/zh_CN/core-api/kernel-api.rst
+I don't think cloning the code helps anyone.  The fact that except
+for the eBPF mess everyone uses module_alloc and the related
+infrastructure is a feature and not a bug.  The interface should
+become better than what we have right now, but there is few enough
+users that this can be done in one go.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Acked-by: Yanteng Si <siyanteng@loongson.cn>
----
-
-Changes in v2:
-  - Update Documentation/translations/zh_CN/core-api/kernel-api.rst
-
- Documentation/core-api/kernel-api.rst                  |  2 +-
- Documentation/core-api/symbol-namespaces.rst           |  4 ++--
- Documentation/livepatch/module-elf-format.rst          | 10 +++++-----
- .../translations/it_IT/core-api/symbol-namespaces.rst  |  6 +++---
- .../translations/zh_CN/core-api/kernel-api.rst         |  2 +-
- .../translations/zh_CN/core-api/symbol-namespaces.rst  |  2 +-
- 6 files changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
-index d6b3f94b9f1f..0793c400d4b0 100644
---- a/Documentation/core-api/kernel-api.rst
-+++ b/Documentation/core-api/kernel-api.rst
-@@ -223,7 +223,7 @@ Module Loading
- Inter Module support
- --------------------
- 
--Refer to the file kernel/module.c for more information.
-+Refer to the files in kernel/module/ for more information.
- 
- Hardware Interfaces
- ===================
-diff --git a/Documentation/core-api/symbol-namespaces.rst b/Documentation/core-api/symbol-namespaces.rst
-index 5ad9e0abe42c..12e4aecdae94 100644
---- a/Documentation/core-api/symbol-namespaces.rst
-+++ b/Documentation/core-api/symbol-namespaces.rst
-@@ -51,8 +51,8 @@ namespace ``USB_STORAGE``, use::
- The corresponding ksymtab entry struct ``kernel_symbol`` will have the member
- ``namespace`` set accordingly. A symbol that is exported without a namespace will
- refer to ``NULL``. There is no default namespace if none is defined. ``modpost``
--and kernel/module.c make use the namespace at build time or module load time,
--respectively.
-+and kernel/module/main.c make use the namespace at build time or module load
-+time, respectively.
- 
- 2.2 Using the DEFAULT_SYMBOL_NAMESPACE define
- =============================================
-diff --git a/Documentation/livepatch/module-elf-format.rst b/Documentation/livepatch/module-elf-format.rst
-index dbe9b400e39f..7347638895a0 100644
---- a/Documentation/livepatch/module-elf-format.rst
-+++ b/Documentation/livepatch/module-elf-format.rst
-@@ -210,11 +210,11 @@ module->symtab.
- =====================================
- Normally, a stripped down copy of a module's symbol table (containing only
- "core" symbols) is made available through module->symtab (See layout_symtab()
--in kernel/module.c). For livepatch modules, the symbol table copied into memory
--on module load must be exactly the same as the symbol table produced when the
--patch module was compiled. This is because the relocations in each livepatch
--relocation section refer to their respective symbols with their symbol indices,
--and the original symbol indices (and thus the symtab ordering) must be
-+in kernel/module/kallsyms.c). For livepatch modules, the symbol table copied
-+into memory on module load must be exactly the same as the symbol table produced
-+when the patch module was compiled. This is because the relocations in each
-+livepatch relocation section refer to their respective symbols with their symbol
-+indices, and the original symbol indices (and thus the symtab ordering) must be
- preserved in order for apply_relocate_add() to find the right symbol.
- 
- For example, take this particular rela from a livepatch module:::
-diff --git a/Documentation/translations/it_IT/core-api/symbol-namespaces.rst b/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
-index 42f5d04e38ec..0f6898860d6d 100644
---- a/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
-+++ b/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
-@@ -50,9 +50,9 @@ Di conseguenza, nella tabella dei simboli del kernel ci sarà una voce
- rappresentata dalla struttura ``kernel_symbol`` che avrà il campo
- ``namespace`` (spazio dei nomi) impostato. Un simbolo esportato senza uno spazio
- dei nomi avrà questo campo impostato a ``NULL``. Non esiste uno spazio dei nomi
--di base. Il programma ``modpost`` e il codice in kernel/module.c usano lo spazio
--dei nomi, rispettivamente, durante la compilazione e durante il caricamento
--di un modulo.
-+di base. Il programma ``modpost`` e il codice in kernel/module/main.c usano lo
-+spazio dei nomi, rispettivamente, durante la compilazione e durante il
-+caricamento di un modulo.
- 
- 2.2 Usare il simbolo di preprocessore DEFAULT_SYMBOL_NAMESPACE
- ==============================================================
-diff --git a/Documentation/translations/zh_CN/core-api/kernel-api.rst b/Documentation/translations/zh_CN/core-api/kernel-api.rst
-index e45fe80d1cd8..962d31d019d7 100644
---- a/Documentation/translations/zh_CN/core-api/kernel-api.rst
-+++ b/Documentation/translations/zh_CN/core-api/kernel-api.rst
-@@ -224,7 +224,7 @@ kernel/kmod.c
- 模块接口支持
- ------------
- 
--更多信息请参考文件kernel/module.c。
-+更多信息请参阅kernel/module/目录下的文件。
- 
- 硬件接口
- ========
-diff --git a/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst b/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
-index 6abf7ed534ca..bb16f0611046 100644
---- a/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
-+++ b/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
-@@ -52,7 +52,7 @@
- 
- 相应的 ksymtab 条目结构体 ``kernel_symbol`` 将有相应的成员 ``命名空间`` 集。
- 导出时未指明命名空间的符号将指向 ``NULL`` 。如果没有定义命名空间，则默认没有。
--``modpost`` 和kernel/module.c分别在构建时或模块加载时使用名称空间。
-+``modpost`` 和kernel/module/main.c分别在构建时或模块加载时使用名称空间。
- 
- 2.2 使用DEFAULT_SYMBOL_NAMESPACE定义
- ====================================
--- 
-2.32.0
-
+So assuming we really care deeply enough about fancy tracing without
+modules (and I'm not sure we do, even if you don't use modules it
+doesn't hurt to just build the modules code, I do that all the time
+for my test machines), the general approach in your series is the
+right one.
