@@ -2,189 +2,161 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A1B2CCA47D
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Jun 2022 21:31:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07EB3C43334
+	for <linux-modules@archiver.kernel.org>; Thu, 16 Jun 2022 03:20:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349941AbiFOVba (ORCPT
+        id S1354540AbiFPDUO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Jun 2022 17:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        Wed, 15 Jun 2022 23:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239542AbiFOVb3 (ORCPT
+        with ESMTP id S1349612AbiFPDUN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:31:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902744924D;
-        Wed, 15 Jun 2022 14:31:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 268F6617C1;
-        Wed, 15 Jun 2022 21:31:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA8F8C3411A;
-        Wed, 15 Jun 2022 21:31:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655328687;
-        bh=h/A3iOsL+jSiXeun+GclseG7VDKI7T9E6iC83VBXQmc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jRcv7OdG8w6WZvKDmpHu4ZTNDPKNmUeNwkF/5kyOU3kogbTfbnziKBi4Jemy89mPK
-         VB9ZLSW8Ef+8WhlhpERgKh3C4AwlLVT0YSGP+NZY7Y8aQQnRCCTfxkla/ct4P4xzOS
-         m384ySKBIIAd638YYDqCOcxaXX3uj/4hJTyxkYvLHgkuIFRDDkI8+xZ2gKK6GJvocM
-         p6WIsw8yQJAavGl0gEUO2R8b7panqmJ9rBrYblYA0mmSsjYt6gOUgcj3KHSNIx9Iq4
-         CevdQYGBbuq+VVg9ZAfGZt1g9BYutIbzx1PyMaX9HpjQg/PQYxJc+gN2u0EeJbcuw0
-         5w3ycwJy5spww==
-Date:   Thu, 16 Jun 2022 00:29:18 +0300
-From:   "jarkko@kernel.org" <jarkko@kernel.org>
-To:     "hch@lst.de" <hch@lst.de>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "zepan@sipeed.com" <zepan@sipeed.com>,
-        "iii@linux.ibm.com" <iii@linux.ibm.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "joey.gouly@arm.com" <joey.gouly@arm.com>,
-        "anemo@mba.ocn.ne.jp" <anemo@mba.ocn.ne.jp>,
-        "egorenar@linux.ibm.com" <egorenar@linux.ibm.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "luis.machado@linaro.org" <luis.machado@linaro.org>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jniethe5@gmail.com" <jniethe5@gmail.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "dja@axtens.net" <dja@axtens.net>,
-        "liaochang1@huawei.com" <liaochang1@huawei.com>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "huschle@linux.ibm.com" <huschle@linux.ibm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "song@kernel.org" <song@kernel.org>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "dave.anglin@bell.net" <dave.anglin@bell.net>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "atomlin@redhat.com" <atomlin@redhat.com>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "philipp.tomsich@vrull.eu" <philipp.tomsich@vrull.eu>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>,
-        "aneesh.kumar@linux.ibm.com" <aneesh.kumar@linux.ibm.com>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "heiko@sntech.de" <heiko@sntech.de>,
-        "nathaniel@profian.com" <nathaniel@profian.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "rmk+kernel@armlinux.org.uk" <rmk+kernel@armlinux.org.uk>,
-        "Sakkinen, Jarkko" <jarkko@profian.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "tmricht@linux.ibm.com" <tmricht@linux.ibm.com>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "atishp@atishpatra.org" <atishp@atishpatra.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "nico@fluxnic.net" <nico@fluxnic.net>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "kernel@esmil.dk" <kernel@esmil.dk>,
-        "ashimida@linux.alibaba.com" <ashimida@linux.alibaba.com>,
-        "elver@google.com" <elver@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "Keshavamurthy, Anil S" <anil.s.keshavamurthy@intel.com>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "andrealmeid@igalia.com" <andrealmeid@igalia.com>,
-        "changbin.du@intel.com" <changbin.du@intel.com>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>
-Subject: Re: [PATCH] kprobes: Enable tracing for mololithic kernel images
-Message-ID: <YqpPLqW6/AWEQhGr@iki.fi>
-References: <YqAy0qjI4Lktk/uJ@iki.fi>
- <20220608232115.ccd4399f4a1d133e9b65c2a9@kernel.org>
- <CAPhsuW6iUieQvA6KqzSLgtxmjkVSWCuVwNA338DATb_myHxo7w@mail.gmail.com>
- <CAPhsuW6BzUtqnjvaGJScXRpghs0_V_phpdyd4_oAKhvmkX-GFw@mail.gmail.com>
- <YqEF6+YKqCHsWZJW@bombadil.infradead.org>
- <20220609034852.GA30873@lst.de>
- <YqH0iEgsi6+bwS3x@bombadil.infradead.org>
- <e7dedb9086193ca7682edc10fabc4195894e5146.camel@intel.com>
- <Yqh/5nn0AhdwaCm8@iki.fi>
- <20220615063707.GA22930@lst.de>
+        Wed, 15 Jun 2022 23:20:13 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F0B5AA52
+        for <linux-modules@vger.kernel.org>; Wed, 15 Jun 2022 20:20:11 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3176d94c236so1917277b3.3
+        for <linux-modules@vger.kernel.org>; Wed, 15 Jun 2022 20:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yZC94QyGrxl20UVmi6Bbzh0z18nlmSnWSZKrrHOOlIU=;
+        b=nHLVhA6zL+rr1952EK4dDV99gYj7eeUWk5vsiO5wZJUyS45PabFeca4mj5gjXNGyLc
+         1zJFAAjJvkbtkdYElrt6Zs8VWwCTee9GP375AJDVmzZHPV1WuASUTbZ2dcohWHoDlfdH
+         BrdsWLzS/BhNKK4O9esn7kFkseBYhREmF5IqhNjOeT1sTyL9Gdpf5AarECMER4NXc3h/
+         hbxuG7PBpvVWc19f3t5qU2lSnef2mJW2q3AB4dCEA1h3x9HBsnFobZyy0Hiqf7lx6zMc
+         KTWzzys98kURmMHk2EAoi64fjETZKhn53ZJsIRZhvPM1/zU8M/HboMjrXDMAlHNq+yhU
+         9i2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yZC94QyGrxl20UVmi6Bbzh0z18nlmSnWSZKrrHOOlIU=;
+        b=jzL3dohqkH3STrYYLpzQPTlFY0+ZHD77B5Bd/Nx7vGNJnnEr/KvJdzpQagyJaM+XOv
+         ujB6NQbUP3Ivv5M8PEhrlL9fgoeOTSuTT8DeUY7k5EWnfhLCe4VTy8YuKLQwpJCUO0TU
+         hN1909SeYUBHCOxgVTW4I1xjgQ7Lalz/ETTI44vNBOAZlV46Y75GmWePawNGgUTuO5EE
+         4KYKFI+HUP/Lcz7qRUIfd3OObYds+aDc9rzJe2rlAH50BWyrR6BCERQHJG9vHyGLarzN
+         rYtfo5UEsBv+l2bPChy2duxW+S/hoGph/R1vhZFN6MktDunacm0OjsDSabA6nTx6WG4w
+         vcSw==
+X-Gm-Message-State: AJIora9B9QdqKejz9XkOm6O6szA5ukyqRdeaGrFX7MBHXDgRahmYYGZe
+        IN8JrWyhHbO+hDTEokhESMbaOI9VDNSiLkNe0XLlfw==
+X-Google-Smtp-Source: AGRyM1tRDeWpcUh85R6nZJELiK50ZhN1KTNctwS1M4XiRR4sm0BrQ50F4dmy0+hMKWAlzdbrYVLXOGYB6+n3mVA+Xyw=
+X-Received: by 2002:a81:7557:0:b0:317:6536:d404 with SMTP id
+ q84-20020a817557000000b003176536d404mr2710980ywc.459.1655349610880; Wed, 15
+ Jun 2022 20:20:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615063707.GA22930@lst.de>
+References: <20220604010101.719508-1-saravanak@google.com>
+In-Reply-To: <20220604010101.719508-1-saravanak@google.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 15 Jun 2022 20:19:34 -0700
+Message-ID: <CAGETcx_9AxUzmSFou=PqLpAJ6P_k4mq5tjFpt0WOC348RRBF0g@mail.gmail.com>
+Subject: Re: [PATCH v2] module: Add support for default value for module async_probe
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jun 15, 2022 at 08:37:07AM +0200, hch@lst.de wrote:
-> On Tue, Jun 14, 2022 at 03:32:38PM +0300, jarkko@kernel.org wrote:
-> > > Like say for a next step we moved prog pack out of bpf into core code,
-> > > gave it it's own copy of module_alloc(), and then made kprobes use it.
-> > > Then we would have something with improved W^X guard rails, and kprobes
-> > > would not depend on modules anymore. I think maybe it's a step in the
-> > > right direction, even if it's not perfect.
-> > 
-> > So you're saying that I should (as a first step) basically clone
-> > module_alloc() implementation for kprobes, and future for BPF 
-> > use, in order to get a clean starting point?
-> 
-> I don't think cloning the code helps anyone.  The fact that except
-> for the eBPF mess everyone uses module_alloc and the related
-> infrastructure is a feature and not a bug.  The interface should
-> become better than what we have right now, but there is few enough
-> users that this can be done in one go.
-> 
-> So assuming we really care deeply enough about fancy tracing without
-> modules (and I'm not sure we do, even if you don't use modules it
-> doesn't hurt to just build the modules code, I do that all the time
-> for my test machines), the general approach in your series is the
-> right one.
+On Fri, Jun 3, 2022 at 6:01 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> Add a module.async_probe kernel command line option that allows enabling
+> async probing for all modules. When this command line option is used,
+> there might still be some modules for which we want to explicitly force
+> synchronous probing, so extend <modulename>.async_probe to take an
+> optional bool input so that async probing can be disabled for a specific
+> module.
+>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+> v1->v2:
+> - Updated the documentation to capture all the details/changes.
 
-OK, thanks for the elaboration!
+Luis,
 
-However I bake it, I doubt that next version is going to be the final
-version, given all the angles. Therefore, I mostly Christophe's
-suggestions on compilation flags, and also split this into per-arch
-patches.
+Gentle reminder.
 
-That should be at least to the right direction.
+-Saravana
 
-BR, Jarkko
+>
+>  Documentation/admin-guide/kernel-parameters.txt | 17 +++++++++++++++--
+>  kernel/module/main.c                            | 11 ++++++++++-
+>  2 files changed, 25 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 710b52d87bdd..5174a08e20b0 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1147,8 +1147,12 @@
+>         nopku           [X86] Disable Memory Protection Keys CPU feature found
+>                         in some Intel CPUs.
+>
+> -       <module>.async_probe [KNL]
+> -                       Enable asynchronous probe on this module.
+> +       <module>.async_probe[=<bool>] [KNL]
+> +                       If no <bool> value is specified or if the value
+> +                       specified is not a valid <bool>, enable asynchronous
+> +                       probe on this module.  Otherwise, enable/disable
+> +                       asynchronous probe on this module as indicated by the
+> +                       <bool> value. See also: module.async_probe
+>
+>         early_ioremap_debug [KNL]
+>                         Enable debug messages in early_ioremap support. This
+> @@ -3201,6 +3205,15 @@
+>                         log everything. Information is printed at KERN_DEBUG
+>                         so loglevel=8 may also need to be specified.
+>
+> +       module.async_probe=<bool>
+> +                       [KNL] When set to true, modules will use async probing
+> +                       by default. To enable/disable async probing for a
+> +                       specific module, use the module specific control that
+> +                       is documented under <module>.async_probe. When both
+> +                       module.async_probe and <module>.async_probe are
+> +                       specified, <module>.async_probe takes precedence for
+> +                       the specific module.
+> +
+>         module.sig_enforce
+>                         [KNL] When CONFIG_MODULE_SIG is set, this means that
+>                         modules without (valid) signatures will fail to load.
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index fed58d30725d..47085795f037 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2410,6 +2410,12 @@ static void do_free_init(struct work_struct *w)
+>         }
+>  }
+>
+> +#undef MODULE_PARAM_PREFIX
+> +#define MODULE_PARAM_PREFIX "module."
+> +/* Default value for module->async_probe_requested */
+> +static bool async_probe;
+> +module_param(async_probe, bool, 0644);
+> +
+>  /*
+>   * This is where the real work happens.
+>   *
+> @@ -2630,7 +2636,8 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
+>         int ret;
+>
+>         if (strcmp(param, "async_probe") == 0) {
+> -               mod->async_probe_requested = true;
+> +               if (strtobool(val, &mod->async_probe_requested))
+> +                       mod->async_probe_requested = true;
+>                 return 0;
+>         }
+>
+> @@ -2797,6 +2804,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>         if (err)
+>                 goto bug_cleanup;
+>
+> +       mod->async_probe_requested = async_probe;
+> +
+>         /* Module is ready to execute: parsing args may do that. */
+>         after_dashes = parse_args(mod->name, mod->args, mod->kp, mod->num_kp,
+>                                   -32768, 32767, mod,
+> --
+> 2.36.1.255.ge46751e96f-goog
+>
