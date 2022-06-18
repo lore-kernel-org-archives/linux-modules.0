@@ -2,48 +2,48 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5B92C43334
-	for <linux-modules@archiver.kernel.org>; Sat, 18 Jun 2022 11:37:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3AFCC433EF
+	for <linux-modules@archiver.kernel.org>; Sat, 18 Jun 2022 12:48:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbiFRLhg (ORCPT
+        id S235775AbiFRMs0 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 18 Jun 2022 07:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        Sat, 18 Jun 2022 08:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233232AbiFRLhY (ORCPT
+        with ESMTP id S233293AbiFRMsX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 18 Jun 2022 07:37:24 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79F41A041;
-        Sat, 18 Jun 2022 04:37:21 -0700 (PDT)
+        Sat, 18 Jun 2022 08:48:23 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E8213DD0;
+        Sat, 18 Jun 2022 05:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655552241; x=1687088241;
+  t=1655556503; x=1687092503;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=trJevHg9pw/ezRiw4PuJjXBPnKq5vd9v7IT0hWBUmjs=;
-  b=nTfRcL+RznaoaintCyx+/llluE1JcgqCyShELSdwnOb60MHOcYT+lV2W
-   UFfiXfHgjCNTTxYtLbbq1ELMK9RCar2Lt2/5q2wc4M3CmrXsBYM67MpQY
-   1wBaipWSlXYw07bhHlOb3frmRdMZeFxDf+FrpPXLGDPXfIBbQcbKOnHEp
-   RljMa5zvGctTR7A11W63RRq3+M9oBVhtw640CCvYehdiBr1M26Ze6hBtN
-   NKLCmgIt/yvVFjUNeUUHbwEkXRlrQXPa94wMBurzB9iSoeyHNia6q9Mu9
-   VHa/lmq0CI2RBCQH4i4cdRb7U9CaxLkSMNGcjVNEiBDSCnncLJatkk06P
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="262690059"
+  bh=L0u3OGCTfFetGTTP1NGlLb83GnefDKjn1DOmKdkgXls=;
+  b=M8V4C/ToubdcIkw1UqoPb4GPNNHnEeNEzkDij+gcqKg0CA83QAVXS+15
+   9v612iugAXgOUc+Is4C18ty0Hp2MeneFdSy54yliRkE9ymSk4W85I/uaJ
+   vWQil5SM6TiEMP/MUQOUEOdSNTSq/cTTqVeqZLeYsFhEAcYgDKRif+8WZ
+   c7J1H7WvPuPJLOblsvcBxXI9AEoe/ZbyL0x72rXcah8lEg5xmMjGG7abd
+   44b/zwfTNKI9euRHVCDmyejO+FNxy07zEv5RkbWyKnfwqi2cwPf9en4Bf
+   CFpsbgNholx9TZTVhL4vw3u4KvlB35M36Qx49/H+UwArQt8GjCnNFj35c
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="305084546"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="262690059"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 04:37:20 -0700
+   d="scan'208";a="305084546"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 05:48:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="912969164"
+   d="scan'208";a="763567439"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Jun 2022 04:37:16 -0700
+  by orsmga005.jf.intel.com with ESMTP; 18 Jun 2022 05:48:17 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o2WlP-000QHv-Cp;
-        Sat, 18 Jun 2022 11:37:15 +0000
-Date:   Sat, 18 Jun 2022 19:36:18 +0800
+        id 1o2Xs8-000QKB-QM;
+        Sat, 18 Jun 2022 12:48:16 +0000
+Date:   Sat, 18 Jun 2022 20:47:26 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
@@ -55,8 +55,9 @@ To:     David Gow <davidgow@google.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andra Paraschiv <andraprs@amazon.com>,
         Longpeng <longpeng2@huawei.com>
-Cc:     kbuild-all@lists.01.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
         linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
@@ -64,7 +65,7 @@ Cc:     kbuild-all@lists.01.org, kunit-dev@googlegroups.com,
         Matt Johnston <matt@codeconstruct.com.au>,
         David Gow <davidgow@google.com>
 Subject: Re: [PATCH 1/5] kunit: unify module and builtin suite definitions
-Message-ID: <202206181950.qNG3jcE8-lkp@intel.com>
+Message-ID: <202206182025.UNVY0coI-lkp@intel.com>
 References: <20220618090310.1174932-2-davidgow@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -78,6 +79,7 @@ Hi David,
 I love your patch! Yet something to improve:
 
 [auto build test ERROR on linus/master]
+[also build test ERROR on v5.19-rc2 next-20220617]
 [cannot apply to mcgrof/modules-next joel-aspeed/for-next ulf-hansson-mmc-mirror/next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
@@ -85,38 +87,39 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4b35035bcf80ddb47c0112c4fbd84a63a2836a18
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20220618/202206181950.qNG3jcE8-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
+config: riscv-randconfig-r034-20220617 (https://download.01.org/0day-ci/archive/20220618/202206182025.UNVY0coI-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 91688716ba49942051dccdf7b9c4f81a7ec8feaf)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
         # https://github.com/intel-lab-lkp/linux/commit/14ff6ae01a41e301f1409874dd5aa38f73bc96f5
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
         git checkout 14ff6ae01a41e301f1409874dd5aa38f73bc96f5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash lib/kunit/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash lib/kunit/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   lib/kunit/test.c: In function 'kunit_module_init':
->> lib/kunit/test.c:618:28: error: 'struct module' has no member named 'num_kunit_suites'
-     618 |         for (i = 0; i < mod->num_kunit_suites; i++)
-         |                            ^~
->> lib/kunit/test.c:619:45: error: 'struct module' has no member named 'kunit_suites'
-     619 |                 __kunit_test_suites_init(mod->kunit_suites[i]);
-         |                                             ^~
-   lib/kunit/test.c: In function 'kunit_module_exit':
-   lib/kunit/test.c:626:28: error: 'struct module' has no member named 'num_kunit_suites'
-     626 |         for (i = 0; i < mod->num_kunit_suites; i++)
-         |                            ^~
-   lib/kunit/test.c:627:45: error: 'struct module' has no member named 'kunit_suites'
-     627 |                 __kunit_test_suites_exit(mod->kunit_suites[i]);
-         |                                             ^~
+>> lib/kunit/test.c:618:23: error: no member named 'num_kunit_suites' in 'struct module'
+           for (i = 0; i < mod->num_kunit_suites; i++)
+                           ~~~  ^
+>> lib/kunit/test.c:619:33: error: no member named 'kunit_suites' in 'struct module'
+                   __kunit_test_suites_init(mod->kunit_suites[i]);
+                                            ~~~  ^
+   lib/kunit/test.c:626:23: error: no member named 'num_kunit_suites' in 'struct module'
+           for (i = 0; i < mod->num_kunit_suites; i++)
+                           ~~~  ^
+   lib/kunit/test.c:627:33: error: no member named 'kunit_suites' in 'struct module'
+                   __kunit_test_suites_exit(mod->kunit_suites[i]);
+                                            ~~~  ^
+   4 errors generated.
 
 
 vim +618 lib/kunit/test.c
