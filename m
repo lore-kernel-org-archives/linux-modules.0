@@ -2,163 +2,149 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 257D2CCA479
-	for <linux-modules@archiver.kernel.org>; Mon, 20 Jun 2022 09:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77686CCA480
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Jun 2022 08:53:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240707AbiFTJ1H (ORCPT
+        id S1346751AbiFUIxz (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 20 Jun 2022 05:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        Tue, 21 Jun 2022 04:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240692AbiFTJ1G (ORCPT
+        with ESMTP id S1346884AbiFUIxz (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 20 Jun 2022 05:27:06 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3889213CC7;
-        Mon, 20 Jun 2022 02:27:04 -0700 (PDT)
+        Tue, 21 Jun 2022 04:53:55 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8D918348
+        for <linux-modules@vger.kernel.org>; Tue, 21 Jun 2022 01:53:53 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id 11-20020aa7914b000000b00524db3e97e5so4082484pfi.10
+        for <linux-modules@vger.kernel.org>; Tue, 21 Jun 2022 01:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1655717224; x=1687253224;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BcnzPCl+w6LzQQ4CxVrsHze1QzVlSp7IFQFI+hTRtqQ=;
-  b=U3TOvjVcBH1pMniB0N+9oY0ip9wG9wG/eRthIKyZYuCmuR4aYZXfW/ny
-   PAChnbbSMBbCTnNikbjpEfPvkJEe5gSzpgl+8sY31gg75aEdifnNClUu/
-   7fE3BXfAlqof5+61MeK+7iK9zvJjVe3moWiNgmLwn8QVOMVBpIwXQhNLU
-   s=;
-X-IronPort-AV: E=Sophos;i="5.92,306,1650931200"; 
-   d="scan'208";a="209430580"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-c275e159.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP; 20 Jun 2022 09:26:49 +0000
-Received: from EX13D16EUB003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-c275e159.us-west-2.amazon.com (Postfix) with ESMTPS id 50FBF81570;
-        Mon, 20 Jun 2022 09:26:48 +0000 (UTC)
-Received: from [192.168.24.192] (10.43.162.51) by EX13D16EUB003.ant.amazon.com
- (10.43.166.99) with Microsoft SMTP Server (TLS) id 15.0.1497.36; Mon, 20 Jun
- 2022 09:26:39 +0000
-Message-ID: <d6f031fa-f287-75e6-dee0-b94bd22bd32d@amazon.com>
-Date:   Mon, 20 Jun 2022 12:26:14 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH 4/5] nitro_enclaves: test: Use kunit_test_suite() macro
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=nf95HhrfWFUahqXSIitMKY23Se4rd+JJ9W9asuRVrfE=;
+        b=Ogsxr29vx7siAKBfxHcDd5vtA34uCszdFjp4M0pFwM3VCiNoCHpKhuGE5wgAtGqqHl
+         aCbOy32LCBU1l6SioJ723Ij5R8zHkMv6Ki0aQhFeYBWTMupd7de4Yq4HKQEgTBvLeYFY
+         qfTvVI3VxufEyM+pOkc9/Y0+8xQt6AYeRLNmovW+8Nn7Ai7EnB7tqpMZ0cplADz6SWN3
+         4WRDtNJUjqYiW80yyV3yZ+tn7w0CUK29zSyHR1iRT5yuA1kTdYdl4fVhmLRy0APOiM7m
+         EvlxApHEF4iDoOVP0PaNNrl7zYefWUgZo5Bou5AAzguAE+BIysGEnbHAffq1DWjcIYWq
+         qeoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=nf95HhrfWFUahqXSIitMKY23Se4rd+JJ9W9asuRVrfE=;
+        b=FY3n5eDHXoii1n58J9Mc7s+99iYBngRZqMI+a7K7zX06FSRlldo7jkKy+Hp8WQ2BJ0
+         P6Tc14/xpTBFKH4kUnUMhhgyOLk9qCI0WRe0gnfRW2xR0M6Tx/hMAIjBoACgUJQe8abF
+         81Z5jTyVxLLGxX/gsP/VTQmfQjRle7H/sLg3AtHFR70bkqJ6NczGFYSQo0RadgBSeSiM
+         wGaeaHv2Yp5PNQXscTc5ZB+szkN5/xZa/1R43pJ6ON3a1pWT9K4PrlRofO0CwJFpDQJK
+         AWe71j74W0UORb0QwvP9hcBJ2RfyM1aRoePA0kAyK3isS2olbJEBlhd6TS/UP1JKDmBK
+         75BQ==
+X-Gm-Message-State: AJIora8gWC1KfL5yurRJiBflNqIcq23TqITSH6o87GZd1QxtYyElpfvG
+        PXRA8UtSDHTs1n0SkC0b6X9/THCMHsSlNA==
+X-Google-Smtp-Source: AGRyM1vm7uKvTRSoy8DBny3ZH2I/R3zY1c/M5lzSFFKf5zbsgHT5nrh/r0nP22nRH6TvP9voZc09YjHiLsB5UA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90a:4a97:b0:1ea:fa24:467c with SMTP
+ id f23-20020a17090a4a9700b001eafa24467cmr694965pjh.1.1655801632812; Tue, 21
+ Jun 2022 01:53:52 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 16:53:40 +0800
+Message-Id: <20220621085345.603820-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
+Subject: [PATCH v2 0/5] Rework KUnit test execution in modules
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Jeremy Kerr <jk@codeconstruct.com.au>,
         Daniel Latypov <dlatypov@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Andrew Jeffery <andrew@aj.id.au>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
         Longpeng <longpeng2@huawei.com>
-CC:     <kunit-dev@googlegroups.com>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
-        <linux-mmc@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>,
-        <openbmc@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <linux-modules@vger.kernel.org>,
+Cc:     Paraschiv@google.com,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
         Matt Johnston <matt@codeconstruct.com.au>
-References: <20220618090310.1174932-1-davidgow@google.com>
- <20220618090310.1174932-5-davidgow@google.com>
-From:   "Paraschiv, Andra-Irina" <andraprs@amazon.com>
-In-Reply-To: <20220618090310.1174932-5-davidgow@google.com>
-X-Originating-IP: [10.43.162.51]
-X-ClientProxiedBy: EX13D41UWB004.ant.amazon.com (10.43.161.135) To
- EX13D16EUB003.ant.amazon.com (10.43.166.99)
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-CgpPbiAxOC4wNi4yMDIyIDEyOjAzLCBEYXZpZCBHb3cgd3JvdGU6Cj4gCj4gVGhlIGt1bml0X3Rl
-c3Rfc3VpdGUoKSBtYWNybyBwcmV2aW91c2x5IGNvbmZsaWN0ZWQgd2l0aCBtb2R1bGVfaW5pdCwK
-PiBtYWtpbmcgaXQgdW5zdWl0YWJsZSBmb3IgdXNlIGluIHRoZSBuaXRyb19lbmNsYXZlcyB0ZXN0
-LiBOb3cgdGhhdCBpdCdzCj4gZml4ZWQsIHdlIGNhbiB1c2UgaXQgaW5zdGVhZCBvZiBhIGN1c3Rv
-bSBjYWxsIGludG8gaW50ZXJuYWwgS1VuaXQKPiBmdW5jdGlvbnMgdG8gcnVuIHRoZSB0ZXN0Lgo+
-IAo+IEFzIGEgc2lkZS1lZmZlY3QsIHRoaXMgbWVhbnMgdGhhdCB0aGUgdGVzdCByZXN1bHRzIGFy
-ZSBwcm9wZXJseSBpbmNsdWRlZAo+IHdpdGggb3RoZXIgc3VpdGVzIHdoZW4gYnVpbHQtaW4uIFRv
-IGNlbGVicmF0ZSwgZW5hYmxlIHRoZSB0ZXN0IGJ5Cj4gZGVmYXVsdCB3aGVuIEtVTklUX0FMTF9U
-RVNUUyBpcyBzZXQgKGFuZCBOSVRST19FTkNMQVZFUyBlbmFibGVkKS4KPiAKPiBUaGUgbml0cm9f
-ZW5jbGF2ZSB0ZXN0cyBjYW4gbm93IGJlIHJ1biB2aWEga3VuaXRfdG9vbCB3aXRoOgo+ICAgICAg
-ICAgIC4vdG9vbHMvdGVzdGluZy9rdW5pdC9rdW5pdC5weSBydW4gLS1hcmNoPXg4Nl82NCBcCj4g
-ICAgICAgICAgLS1rY29uZmlnX2FkZCBDT05GSUdfUENJPXkgLS1rY29uZmlnX2FkZCBDT05GSUdf
-U01QPXkgXAo+ICAgICAgICAgIC0ta2NvbmZpZ19hZGQgQ09ORklHX0hPVFBMVUdfQ1BVPXkgXAo+
-ICAgICAgICAgIC0ta2NvbmZpZ19hZGQgQ09ORklHX1ZJUlRfRFJJVkVSUz15IFwKPiAgICAgICAg
-ICAtLWtjb25maWdfYWRkIENPTkZJR19OSVRST19FTkNMQVZFUz15IFwKPiAgICAgICAgICAnbmVf
-bWlzY19kZXZfdGVzdCcKPiAKPiAoVGhpcyBpcyBhIHByZXR0eSBsb25nIGNvbW1hbmQsIHNvIGl0
-IG1heSBiZSB3b3J0aCBhZGRpbmcgYSAua3VuaXRjb25maWcKPiBmaWxlIGF0IHNvbWUgcG9pbnQs
-IGluc3RlYWQuKQo+IAo+IFNpZ25lZC1vZmYtYnk6IERhdmlkIEdvdyA8ZGF2aWRnb3dAZ29vZ2xl
-LmNvbT4KClRoYW5rIHlvdSwgRGF2aWQsIGZvciB0aGUgS1VuaXQgdXBkYXRlIGFuZCBmb3IgdGhp
-cyBwYXRjaC4KCj4gLS0tCj4gICBkcml2ZXJzL3RodW5kZXJib2x0L0tjb25maWcgICAgICAgICAg
-ICAgICAgICAgfCAgNSArKy0tCj4gICBkcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2ZXMvS2NvbmZp
-ZyAgICAgICAgICAgfCAgNSArKy0tCj4gICBkcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2ZXMvbmVf
-bWlzY19kZXYuYyAgICAgfCAyNyAtLS0tLS0tLS0tLS0tLS0tLS0tCj4gICAuLi4vdmlydC9uaXRy
-b19lbmNsYXZlcy9uZV9taXNjX2Rldl90ZXN0LmMgICAgfCAgNSArLS0tCj4gICA0IGZpbGVzIGNo
-YW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgMzUgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvdGh1bmRlcmJvbHQvS2NvbmZpZyBiL2RyaXZlcnMvdGh1bmRlcmJvbHQvS2NvbmZp
-Zwo+IGluZGV4IDRiZmVjOGEyODA2NC4uMmEwNjNkMzQ0Yjk0IDEwMDY0NAo+IC0tLSBhL2RyaXZl
-cnMvdGh1bmRlcmJvbHQvS2NvbmZpZwo+ICsrKyBiL2RyaXZlcnMvdGh1bmRlcmJvbHQvS2NvbmZp
-Zwo+IEBAIC0yOCw4ICsyOCw5IEBAIGNvbmZpZyBVU0I0X0RFQlVHRlNfV1JJVEUKPiAgICAgICAg
-ICAgIHRoaXMgZm9yIHByb2R1Y3Rpb24gc3lzdGVtcyBvciBkaXN0cm8ga2VybmVscy4KPiAKPiAg
-IGNvbmZpZyBVU0I0X0tVTklUX1RFU1QKPiAtICAgICAgIGJvb2wgIktVbml0IHRlc3RzIgo+IC0g
-ICAgICAgZGVwZW5kcyBvbiBLVU5JVD15Cj4gKyAgICAgICBib29sICJLVW5pdCB0ZXN0cyIgaWYg
-IUtVTklUX0FMTF9URVNUUwo+ICsgICAgICAgZGVwZW5kcyBvbiBLVU5JVAo+ICsgICAgICAgZGVm
-YXVsdCBLVU5JVF9BTExfVEVTVFMKPiAKPiAgIGNvbmZpZyBVU0I0X0RNQV9URVNUCj4gICAgICAg
-ICAgdHJpc3RhdGUgIkRNQSB0cmFmZmljIHRlc3QgZHJpdmVyIgoKVGhpcyBuZWVkcyB0byBiZSBp
-bmNsdWRlZCBpbiB0aGUgcHJldmlvdXMgcGF0Y2ggaW5zdGVhZCAocGF0Y2ggMy81LCBmb3IgCnRo
-dW5kZXJib2x0KS4KCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdmlydC9uaXRyb19lbmNsYXZlcy9L
-Y29uZmlnIGIvZHJpdmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL0tjb25maWcKPiBpbmRleCAyZDNk
-OTgxNTgxMjEuLmNlOTFhZGQ4MTQwMSAxMDA2NDQKPiAtLS0gYS9kcml2ZXJzL3ZpcnQvbml0cm9f
-ZW5jbGF2ZXMvS2NvbmZpZwo+ICsrKyBiL2RyaXZlcnMvdmlydC9uaXRyb19lbmNsYXZlcy9LY29u
-ZmlnCj4gQEAgLTE2LDggKzE2LDkgQEAgY29uZmlnIE5JVFJPX0VOQ0xBVkVTCj4gICAgICAgICAg
-ICBUaGUgbW9kdWxlIHdpbGwgYmUgY2FsbGVkIG5pdHJvX2VuY2xhdmVzLgo+IAo+ICAgY29uZmln
-IE5JVFJPX0VOQ0xBVkVTX01JU0NfREVWX1RFU1QKPiAtICAgICAgIGJvb2wgIlRlc3RzIGZvciB0
-aGUgbWlzYyBkZXZpY2UgZnVuY3Rpb25hbGl0eSBvZiB0aGUgTml0cm8gRW5jbGF2ZXMiCj4gLSAg
-ICAgICBkZXBlbmRzIG9uIE5JVFJPX0VOQ0xBVkVTICYmIEtVTklUPXkKPiArICAgICAgIGJvb2wg
-IlRlc3RzIGZvciB0aGUgbWlzYyBkZXZpY2UgZnVuY3Rpb25hbGl0eSBvZiB0aGUgTml0cm8gRW5j
-bGF2ZXMiIGlmICFLVU5JVF9BTExfVEVTVFMKPiArICAgICAgIGRlcGVuZHMgb24gTklUUk9fRU5D
-TEFWRVMgJiYgS1VOSVQKPiArICAgICAgIGRlZmF1bHQgS1VOSVRfQUxMX1RFU1RTCj4gICAgICAg
-ICAgaGVscAo+ICAgICAgICAgICAgRW5hYmxlIEtVbml0IHRlc3RzIGZvciB0aGUgbWlzYyBkZXZp
-Y2UgZnVuY3Rpb25hbGl0eSBvZiB0aGUgTml0cm8KPiAgICAgICAgICAgIEVuY2xhdmVzLiBTZWxl
-Y3QgdGhpcyBvcHRpb24gb25seSBpZiB5b3Ugd2lsbCBib290IHRoZSBrZXJuZWwgZm9yCj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvdmlydC9uaXRyb19lbmNsYXZlcy9uZV9taXNjX2Rldi5jIGIvZHJp
-dmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL25lX21pc2NfZGV2LmMKPiBpbmRleCAyMGM4ODFiNmE0
-YjYuLjI0MWI5NGY2MmU1NiAxMDA2NDQKPiAtLS0gYS9kcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2
-ZXMvbmVfbWlzY19kZXYuYwo+ICsrKyBiL2RyaXZlcnMvdmlydC9uaXRyb19lbmNsYXZlcy9uZV9t
-aXNjX2Rldi5jCj4gQEAgLTE3NTksMzUgKzE3NTksMTAgQEAgc3RhdGljIGxvbmcgbmVfaW9jdGwo
-c3RydWN0IGZpbGUgKmZpbGUsIHVuc2lnbmVkIGludCBjbWQsIHVuc2lnbmVkIGxvbmcgYXJnKQo+
-IAo+ICAgI2lmIGRlZmluZWQoQ09ORklHX05JVFJPX0VOQ0xBVkVTX01JU0NfREVWX1RFU1QpCj4g
-ICAjaW5jbHVkZSAibmVfbWlzY19kZXZfdGVzdC5jIgo+IC0KPiAtc3RhdGljIGlubGluZSBpbnQg
-bmVfbWlzY19kZXZfdGVzdF9pbml0KHZvaWQpCj4gLXsKPiAtICAgICAgIHJldHVybiBfX2t1bml0
-X3Rlc3Rfc3VpdGVzX2luaXQobmVfbWlzY19kZXZfdGVzdF9zdWl0ZXMpOwo+IC19Cj4gLQo+IC1z
-dGF0aWMgaW5saW5lIHZvaWQgbmVfbWlzY19kZXZfdGVzdF9leGl0KHZvaWQpCj4gLXsKPiAtICAg
-ICAgIF9fa3VuaXRfdGVzdF9zdWl0ZXNfZXhpdChuZV9taXNjX2Rldl90ZXN0X3N1aXRlcyk7Cj4g
-LX0KPiAtI2Vsc2UKPiAtc3RhdGljIGlubGluZSBpbnQgbmVfbWlzY19kZXZfdGVzdF9pbml0KHZv
-aWQpCj4gLXsKPiAtICAgICAgIHJldHVybiAwOwo+IC19Cj4gLQo+IC1zdGF0aWMgaW5saW5lIHZv
-aWQgbmVfbWlzY19kZXZfdGVzdF9leGl0KHZvaWQpCj4gLXsKPiAtfQo+ICAgI2VuZGlmCj4gCj4g
-ICBzdGF0aWMgaW50IF9faW5pdCBuZV9pbml0KHZvaWQpCj4gICB7Cj4gLSAgICAgICBpbnQgcmMg
-PSAwOwo+IC0KPiAtICAgICAgIHJjID0gbmVfbWlzY19kZXZfdGVzdF9pbml0KCk7Cj4gLSAgICAg
-ICBpZiAocmMgPCAwKQo+IC0gICAgICAgICAgICAgICByZXR1cm4gcmM7Cj4gLQo+ICAgICAgICAg
-IG11dGV4X2luaXQoJm5lX2NwdV9wb29sLm11dGV4KTsKPiAKPiAgICAgICAgICByZXR1cm4gcGNp
-X3JlZ2lzdGVyX2RyaXZlcigmbmVfcGNpX2RyaXZlcik7Cj4gQEAgLTE3OTgsOCArMTc3Myw2IEBA
-IHN0YXRpYyB2b2lkIF9fZXhpdCBuZV9leGl0KHZvaWQpCj4gICAgICAgICAgcGNpX3VucmVnaXN0
-ZXJfZHJpdmVyKCZuZV9wY2lfZHJpdmVyKTsKPiAKPiAgICAgICAgICBuZV90ZWFyZG93bl9jcHVf
-cG9vbCgpOwo+IC0KPiAtICAgICAgIG5lX21pc2NfZGV2X3Rlc3RfZXhpdCgpOwo+ICAgfQo+IAo+
-ICAgbW9kdWxlX2luaXQobmVfaW5pdCk7Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdmlydC9uaXRy
-b19lbmNsYXZlcy9uZV9taXNjX2Rldl90ZXN0LmMgYi9kcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2
-ZXMvbmVfbWlzY19kZXZfdGVzdC5jCj4gaW5kZXggMjY1Nzk3YmVkMGVhLi43NGRmNDNiOTI1YmUg
-MTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL25lX21pc2NfZGV2X3Rl
-c3QuYwo+ICsrKyBiL2RyaXZlcnMvdmlydC9uaXRyb19lbmNsYXZlcy9uZV9taXNjX2Rldl90ZXN0
-LmMKPiBAQCAtMTUxLDcgKzE1MSw0IEBAIHN0YXRpYyBzdHJ1Y3Qga3VuaXRfc3VpdGUgbmVfbWlz
-Y19kZXZfdGVzdF9zdWl0ZSA9IHsKPiAgICAgICAgICAudGVzdF9jYXNlcyA9IG5lX21pc2NfZGV2
-X3Rlc3RfY2FzZXMsCj4gICB9Owo+IAo+IC1zdGF0aWMgc3RydWN0IGt1bml0X3N1aXRlICpuZV9t
-aXNjX2Rldl90ZXN0X3N1aXRlc1tdID0gewo+IC0gICAgICAgJm5lX21pc2NfZGV2X3Rlc3Rfc3Vp
-dGUsCj4gLSAgICAgICBOVUxMCj4gLX07Cj4gK2t1bml0X3Rlc3Rfc3VpdGUobmVfbWlzY19kZXZf
-dGVzdF9zdWl0ZSk7Cj4gLS0KPiAyLjM2LjEuNDc2LmcwYzRkYWEyMDZkLWdvb2cKPiAKCk90aGVy
-IHRoYW4gdGhhdCwgbG9va3MgZ29vZCB0byBtZS4KClRoYW5rIHlvdS4KCkFuZHJhCgoKCkFtYXpv
-biBEZXZlbG9wbWVudCBDZW50ZXIgKFJvbWFuaWEpIFMuUi5MLiByZWdpc3RlcmVkIG9mZmljZTog
-MjdBIFNmLiBMYXphciBTdHJlZXQsIFVCQzUsIGZsb29yIDIsIElhc2ksIElhc2kgQ291bnR5LCA3
-MDAwNDUsIFJvbWFuaWEuIFJlZ2lzdGVyZWQgaW4gUm9tYW5pYS4gUmVnaXN0cmF0aW9uIG51bWJl
-ciBKMjIvMjYyMS8yMDA1Lgo=
+This patch series makes two changes to how KUnit test suites are stored
+and executed:
+- The .kunit_test_suites section is now used for tests in modules (in
+  lieu of a module_init funciton), as well as for built-in tests. The
+  module loader will now trigger test execution. This frees up the
+  module_init function for other uses.
+- Instead of storing an array of arrays of suites, have the
+  kunit_test_suite() and kunit_test_suites() macros append to one global
+  (or per-module) list of test suites. This removes a needless layer of
+  indirection, and removes the need to NULL-terminate suite_sets.
+
+The upshot of this is that it should now be possible to use the
+kunit_test_suite() and kunit_test_suites() macros to register test
+suites even from within modules which otherwise had module_init
+functions. This was proving to be quite a common issue, resulting in
+several modules calling into KUnit's private suite execution functions
+to run their tests (often introducing incompatibilities with the KUnit
+tooling).
+
+This series also fixes the thunderbolt, nitro_enclaves, and
+sdhci-of-aspeed tests to use kunit_test_suite() now that it works. This
+is required, as otherwise the first two patches may break these tests
+entirely.
+
+Huge thanks to Jeremy Kerr, who designed and implemented the module
+loader changes, and to Daniel Latypov for pushing the simplification of
+the nested arrays in .kunit_test_suites.
+
+I've tested this series both with builtin tests, and with modules on
+x86_64, but there's always the possibility that there's something subtle
+and nasty on another architecture, so please test!
+
+Cheers,
+-- David
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20220618090310.1174932-1-davidgow@google.com/
+- Fix a compile issue when CONFIG_KUNIT=m (Thanks Christophe)
+- No longer NULL-terminate suite_sets.
+- Move the thunderbird Kconfig to the correct patch (Thanks Andra)
+- Add all the Tested-by and Acked-by tags.
+
+---
+Daniel Latypov (1):
+  kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites
+
+David Gow (3):
+  thunderbolt: test: Use kunit_test_suite() macro
+  nitro_enclaves: test: Use kunit_test_suite() macro
+  mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
+
+Jeremy Kerr (1):
+  kunit: unify module and builtin suite definitions
+
+ drivers/mmc/host/Kconfig                      |   5 +-
+ drivers/mmc/host/sdhci-of-aspeed-test.c       |   8 +-
+ drivers/mmc/host/sdhci-of-aspeed.c            |  27 ----
+ drivers/thunderbolt/Kconfig                   |   5 +-
+ drivers/thunderbolt/domain.c                  |   3 -
+ drivers/thunderbolt/tb.h                      |   8 -
+ drivers/thunderbolt/test.c                    |  12 +-
+ drivers/virt/nitro_enclaves/Kconfig           |   5 +-
+ drivers/virt/nitro_enclaves/ne_misc_dev.c     |  27 ----
+ .../virt/nitro_enclaves/ne_misc_dev_test.c    |   5 +-
+ include/kunit/test.h                          |  60 ++------
+ include/linux/module.h                        |   5 +
+ kernel/module/main.c                          |   6 +
+ lib/kunit/executor.c                          | 115 ++++----------
+ lib/kunit/executor_test.c                     | 144 +++++-------------
+ lib/kunit/test.c                              |  54 ++++++-
+ 16 files changed, 152 insertions(+), 337 deletions(-)
+
+-- 
+2.37.0.rc0.104.g0611611a94-goog
 
