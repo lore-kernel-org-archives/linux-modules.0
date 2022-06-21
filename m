@@ -2,194 +2,159 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44F26CCA480
-	for <linux-modules@archiver.kernel.org>; Tue, 21 Jun 2022 08:54:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA0D0CCA481
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Jun 2022 15:58:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344495AbiFUIyg (ORCPT
+        id S241043AbiFUP6J (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 21 Jun 2022 04:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        Tue, 21 Jun 2022 11:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346484AbiFUIyR (ORCPT
+        with ESMTP id S1353347AbiFUP5x (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:54:17 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C7A2654E
-        for <linux-modules@vger.kernel.org>; Tue, 21 Jun 2022 01:54:15 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-317f6128c86so24963907b3.22
-        for <linux-modules@vger.kernel.org>; Tue, 21 Jun 2022 01:54:15 -0700 (PDT)
+        Tue, 21 Jun 2022 11:57:53 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DD02CE21;
+        Tue, 21 Jun 2022 08:57:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=sMhw4RZ/mWWPPEUWkgHgKXiigOXLUScNjtTFmn2v0ww=;
-        b=WYhhSDqtQLk2QwIQ9Mr+OfByWeTNLN8sNc4QhSP14iedILM5LNdrlTY82CM6VPKQCE
-         By6Ua1qc4cn6zsrHKakHGav00eshow0V3SRetAmA0xPNxDAyQihPZF7xBJ0KTM/lOqVD
-         yAhIvn2GX/NfazxHfKC654SnUE7VoOHGZr3pWPPebIBxIOX2UvpIL4VDNO0I6QH/j5Gz
-         YqGIfw9M0roZ/xk2YYqZrsC8UH2LzF0G9fjmQredjggrZW8PNMWTCbL06TbFWUJ7e2/x
-         7HjOI5S5pt2/z0kYY9bCfy6eQ49h/EoCWOj36bKQ3He5JQvrn3N7cPPpRMn1UzZH9WZI
-         RVCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=sMhw4RZ/mWWPPEUWkgHgKXiigOXLUScNjtTFmn2v0ww=;
-        b=HVcCpcGMiG5Lav8pVI/hSp/b+yvGesq1tATfBEE6INZZS3dWrrrxKsu/JgBEJIR492
-         mrEiXUiRl9xA30gWKeikOFn1s9B6VfHaCq12U1VzOVTgy+wF/GuTAU08OSi2mPX0QEF4
-         SRAWFxsCs830aJgZ2IHQRGiChn7dcq24ZifVkYpYMBBH1mJbbfE6Z+k+pLOUHvkyfqsT
-         4bYAmIb+AfDx2ar7icm7uOlZ+SsgYVouRX0suTYGSZJp48OM/lJLUeBaRz0b9jWsX6vf
-         ZVDXw8tN+bM19SEHtX671FAeFuR69Wi3/HRMHxHuOfhCX4r6+C54B7yN8lEObIXgMmNd
-         R9pQ==
-X-Gm-Message-State: AJIora862qrPmXSDAh4XPeapKw/e1KXND9NQpOLbQI2IdQp8AL1xR3h6
-        0IeagGp0dLRuCzmGfJER3OM7G5XE+/XWEg==
-X-Google-Smtp-Source: AGRyM1vieUr2pRKhrhNOp1dFpCWfaNn7lwjXBL4J8TaauocML9PYRPmYH8ZaoDHS6H8PaqQG31H3ZdL9MJQ6hg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a0d:f045:0:b0:317:e6b2:2c64 with SMTP id
- z66-20020a0df045000000b00317e6b22c64mr7404945ywe.350.1655801655027; Tue, 21
- Jun 2022 01:54:15 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 16:53:45 +0800
-In-Reply-To: <20220621085345.603820-1-davidgow@google.com>
-Message-Id: <20220621085345.603820-6-davidgow@google.com>
-Mime-Version: 1.0
-References: <20220621085345.603820-1-davidgow@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
-Subject: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1655827063; x=1687363063;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6mIaPxRsGigk5Fmzx4C3+h9sWlkBF9gn2ObKcp08TGs=;
+  b=kGIMxMAiYJRDLhLbah/sVK66LxQFKMvJt4X+WrUNWGL1V7e2/hXKQ8zn
+   WUfP0lPM20apgR+5SsidjP8SNm8++WkkbkIHoxEk1UGnbfVyvveFaDuRK
+   +KCtIK7pJKyEN8wrnOUQhi2Ftr0gfFbBVRJh6tRBiFlMXdRYzK46CqFM5
+   8=;
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-2520d768.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 21 Jun 2022 15:57:30 +0000
+Received: from EX13D16EUB003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-2520d768.us-west-2.amazon.com (Postfix) with ESMTPS id 6220743479;
+        Tue, 21 Jun 2022 15:57:29 +0000 (UTC)
+Received: from [192.168.13.50] (10.43.161.183) by EX13D16EUB003.ant.amazon.com
+ (10.43.166.99) with Microsoft SMTP Server (TLS) id 15.0.1497.36; Tue, 21 Jun
+ 2022 15:57:20 +0000
+Message-ID: <d171b002-7d24-3194-2647-267754864dd8@amazon.com>
+Date:   Tue, 21 Jun 2022 18:57:10 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v2 4/5] nitro_enclaves: test: Use kunit_test_suite() macro
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Jeremy Kerr <jk@codeconstruct.com.au>,
         Daniel Latypov <dlatypov@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Andrew Jeffery <andrew@aj.id.au>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>
-Cc:     Paraschiv@google.com,
+        Longpeng <longpeng2@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     <Paraschiv@google.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
-        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
+        <kunit-dev@googlegroups.com>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
+        <linux-mmc@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>,
+        <openbmc@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <linux-modules@vger.kernel.org>,
         Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"
+References: <20220621085345.603820-1-davidgow@google.com>
+ <20220621085345.603820-5-davidgow@google.com>
+From:   "Paraschiv, Andra-Irina" <andraprs@amazon.com>
+In-Reply-To: <20220621085345.603820-5-davidgow@google.com>
+X-Originating-IP: [10.43.161.183]
+X-ClientProxiedBy: EX13D07UWB003.ant.amazon.com (10.43.161.66) To
+ EX13D16EUB003.ant.amazon.com (10.43.166.99)
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The kunit_test_suite() macro is no-longer incompatible with module_add,
-so its use can be reinstated.
-
-Since this fixes parsing with builtins and kunit_tool, also enable the
-test by default when KUNIT_ALL_TESTS is enabled.
-
-The test can now be run via kunit_tool with:
-	./tools/testing/kunit/kunit.py run --arch=x86_64 \
-	--kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
-	--kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
-	--kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
-	--kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
-	'sdhci-of-aspeed'
-
-(It may be worth adding a .kunitconfig at some point, as there are
-enough dependencies to make that command scarily long.)
-
-Signed-off-by: David Gow <davidgow@google.com>
----
-
-No changes since v1:
-https://lore.kernel.org/linux-kselftest/20220618090310.1174932-6-davidgow@google.com/
-
----
- drivers/mmc/host/Kconfig                |  5 +++--
- drivers/mmc/host/sdhci-of-aspeed-test.c |  8 +-------
- drivers/mmc/host/sdhci-of-aspeed.c      | 27 -------------------------
- 3 files changed, 4 insertions(+), 36 deletions(-)
-
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index d6144978e32d..10c563999d3d 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -169,8 +169,9 @@ config MMC_SDHCI_OF_ASPEED
- 	  If unsure, say N.
- 
- config MMC_SDHCI_OF_ASPEED_TEST
--	bool "Tests for the ASPEED SDHCI driver"
--	depends on MMC_SDHCI_OF_ASPEED && KUNIT=y
-+	bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
-+	depends on MMC_SDHCI_OF_ASPEED && KUNIT
-+	default KUNIT_ALL_TESTS
- 	help
- 	  Enable KUnit tests for the ASPEED SDHCI driver. Select this
- 	  option only if you will boot the kernel for the purpose of running
-diff --git a/drivers/mmc/host/sdhci-of-aspeed-test.c b/drivers/mmc/host/sdhci-of-aspeed-test.c
-index 1ed4f86291f2..ecb502606c53 100644
---- a/drivers/mmc/host/sdhci-of-aspeed-test.c
-+++ b/drivers/mmc/host/sdhci-of-aspeed-test.c
-@@ -96,10 +96,4 @@ static struct kunit_suite aspeed_sdhci_test_suite = {
- 	.test_cases = aspeed_sdhci_test_cases,
- };
- 
--static struct kunit_suite *aspeed_sdc_test_suite_array[] = {
--	&aspeed_sdhci_test_suite,
--	NULL,
--};
--
--static struct kunit_suite **aspeed_sdc_test_suites
--	__used __section(".kunit_test_suites") = aspeed_sdc_test_suite_array;
-+kunit_test_suite(aspeed_sdhci_test_suite);
-diff --git a/drivers/mmc/host/sdhci-of-aspeed.c b/drivers/mmc/host/sdhci-of-aspeed.c
-index 6e4e132903a6..c10367946bc7 100644
---- a/drivers/mmc/host/sdhci-of-aspeed.c
-+++ b/drivers/mmc/host/sdhci-of-aspeed.c
-@@ -606,25 +606,6 @@ static struct platform_driver aspeed_sdc_driver = {
- 
- #if defined(CONFIG_MMC_SDHCI_OF_ASPEED_TEST)
- #include "sdhci-of-aspeed-test.c"
--
--static inline int aspeed_sdc_tests_init(void)
--{
--	return __kunit_test_suites_init(aspeed_sdc_test_suites);
--}
--
--static inline void aspeed_sdc_tests_exit(void)
--{
--	__kunit_test_suites_exit(aspeed_sdc_test_suites);
--}
--#else
--static inline int aspeed_sdc_tests_init(void)
--{
--	return 0;
--}
--
--static inline void aspeed_sdc_tests_exit(void)
--{
--}
- #endif
- 
- static int __init aspeed_sdc_init(void)
-@@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
- 	if (rc < 0)
- 		goto cleanup_sdhci;
- 
--	rc = aspeed_sdc_tests_init();
--	if (rc < 0) {
--		platform_driver_unregister(&aspeed_sdc_driver);
--		goto cleanup_sdhci;
--	}
--
- 	return 0;
- 
- cleanup_sdhci:
-@@ -656,8 +631,6 @@ module_init(aspeed_sdc_init);
- 
- static void __exit aspeed_sdc_exit(void)
- {
--	aspeed_sdc_tests_exit();
--
- 	platform_driver_unregister(&aspeed_sdc_driver);
- 	platform_driver_unregister(&aspeed_sdhci_driver);
- }
--- 
-2.37.0.rc0.104.g0611611a94-goog
+CgpPbiAyMS4wNi4yMDIyIDExOjUzLCBEYXZpZCBHb3cgd3JvdGU6Cj4gCj4gVGhlIGt1bml0X3Rl
+c3Rfc3VpdGUoKSBtYWNybyBwcmV2aW91c2x5IGNvbmZsaWN0ZWQgd2l0aCBtb2R1bGVfaW5pdCwK
+PiBtYWtpbmcgaXQgdW5zdWl0YWJsZSBmb3IgdXNlIGluIHRoZSBuaXRyb19lbmNsYXZlcyB0ZXN0
+LiBOb3cgdGhhdCBpdCdzCj4gZml4ZWQsIHdlIGNhbiB1c2UgaXQgaW5zdGVhZCBvZiBhIGN1c3Rv
+bSBjYWxsIGludG8gaW50ZXJuYWwgS1VuaXQKPiBmdW5jdGlvbnMgdG8gcnVuIHRoZSB0ZXN0Lgo+
+IAo+IEFzIGEgc2lkZS1lZmZlY3QsIHRoaXMgbWVhbnMgdGhhdCB0aGUgdGVzdCByZXN1bHRzIGFy
+ZSBwcm9wZXJseSBpbmNsdWRlZAo+IHdpdGggb3RoZXIgc3VpdGVzIHdoZW4gYnVpbHQtaW4uIFRv
+IGNlbGVicmF0ZSwgZW5hYmxlIHRoZSB0ZXN0IGJ5Cj4gZGVmYXVsdCB3aGVuIEtVTklUX0FMTF9U
+RVNUUyBpcyBzZXQgKGFuZCBOSVRST19FTkNMQVZFUyBlbmFibGVkKS4KPiAKPiBUaGUgbml0cm9f
+ZW5jbGF2ZSB0ZXN0cyBjYW4gbm93IGJlIHJ1biB2aWEga3VuaXRfdG9vbCB3aXRoOgo+ICAgICAg
+ICAgIC4vdG9vbHMvdGVzdGluZy9rdW5pdC9rdW5pdC5weSBydW4gLS1hcmNoPXg4Nl82NCBcCj4g
+ICAgICAgICAgLS1rY29uZmlnX2FkZCBDT05GSUdfUENJPXkgLS1rY29uZmlnX2FkZCBDT05GSUdf
+U01QPXkgXAo+ICAgICAgICAgIC0ta2NvbmZpZ19hZGQgQ09ORklHX0hPVFBMVUdfQ1BVPXkgXAo+
+ICAgICAgICAgIC0ta2NvbmZpZ19hZGQgQ09ORklHX1ZJUlRfRFJJVkVSUz15IFwKPiAgICAgICAg
+ICAtLWtjb25maWdfYWRkIENPTkZJR19OSVRST19FTkNMQVZFUz15IFwKPiAgICAgICAgICAnbmVf
+bWlzY19kZXZfdGVzdCcKPiAKPiAoVGhpcyBpcyBhIHByZXR0eSBsb25nIGNvbW1hbmQsIHNvIGl0
+IG1heSBiZSB3b3J0aCBhZGRpbmcgYSAua3VuaXRjb25maWcKPiBmaWxlIGF0IHNvbWUgcG9pbnQs
+IGluc3RlYWQuKQo+IAo+IEFja2VkLWJ5OiBQYXJhc2NoaXYsIEFuZHJhLUlyaW5hIDxhbmRyYXBy
+c0BhbWF6b24uY29tPgo+IFNpZ25lZC1vZmYtYnk6IERhdmlkIEdvdyA8ZGF2aWRnb3dAZ29vZ2xl
+LmNvbT4KPiAtLS0KPiAKPiBDaGFuZ2VzIHNpbmNlIHYxOgo+IGh0dHBzOi8vbG9yZS5rZXJuZWwu
+b3JnL2xpbnV4LWtzZWxmdGVzdC8yMDIyMDYxODA5MDMxMC4xMTc0OTMyLTUtZGF2aWRnb3dAZ29v
+Z2xlLmNvbS8KPiAtIE1vdmUgdGhlIG1pc3Rha2VubHktYWRkZWQgdGh1bmRlcmJvbHQgS2NvbmZp
+ZyB0byB0aGUgcHJldmlvdXMgcGF0Y2gKPiAgICAoVGhhbmtzIEFuZHJhKQo+IC0gQWRkIEFuZHJh
+J3MgQWNrZWQtYnkgdGFnLgo+IAo+IC0tLQo+ICAgZHJpdmVycy92aXJ0L25pdHJvX2VuY2xhdmVz
+L0tjb25maWcgICAgICAgICAgIHwgIDUgKystLQo+ICAgZHJpdmVycy92aXJ0L25pdHJvX2VuY2xh
+dmVzL25lX21pc2NfZGV2LmMgICAgIHwgMjcgLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICAgLi4uL3Zp
+cnQvbml0cm9fZW5jbGF2ZXMvbmVfbWlzY19kZXZfdGVzdC5jICAgIHwgIDUgKy0tLQo+ICAgMyBm
+aWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDMzIGRlbGV0aW9ucygtKQoKUmV2aWV3ZWQt
+Ynk6IEFuZHJhIFBhcmFzY2hpdiA8YW5kcmFwcnNAYW1hem9uLmNvbT4KClRoYW5rIHlvdSwgRGF2
+aWQsIGZvciB0aGUgcGF0Y2ggdXBkYXRlcy4KCkFkZGVkIEdyZWcgdG8gdGhlIGxpc3Qgb2YgbWFp
+bCByZWNpcGllbnRzLCB0byBiZSBhd2FyZSBvZiB0aGlzIHBhdGNoIApjaGFuZ2VzLCBnaXZlbiB0
+aGF0IHRoZSBOaXRybyBFbmNsYXZlcyBrZXJuZWwgZHJpdmVyIGlzIHRyYWNrZWQgdmlhIHRoZSAK
+Y2hhci1taXNjIHRyZWUuCgpUaGFua3MsCkFuZHJhCgo+IAo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L3ZpcnQvbml0cm9fZW5jbGF2ZXMvS2NvbmZpZyBiL2RyaXZlcnMvdmlydC9uaXRyb19lbmNsYXZl
+cy9LY29uZmlnCj4gaW5kZXggMmQzZDk4MTU4MTIxLi5jZTkxYWRkODE0MDEgMTAwNjQ0Cj4gLS0t
+IGEvZHJpdmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL0tjb25maWcKPiArKysgYi9kcml2ZXJzL3Zp
+cnQvbml0cm9fZW5jbGF2ZXMvS2NvbmZpZwo+IEBAIC0xNiw4ICsxNiw5IEBAIGNvbmZpZyBOSVRS
+T19FTkNMQVZFUwo+ICAgICAgICAgICAgVGhlIG1vZHVsZSB3aWxsIGJlIGNhbGxlZCBuaXRyb19l
+bmNsYXZlcy4KPiAKPiAgIGNvbmZpZyBOSVRST19FTkNMQVZFU19NSVNDX0RFVl9URVNUCj4gLSAg
+ICAgICBib29sICJUZXN0cyBmb3IgdGhlIG1pc2MgZGV2aWNlIGZ1bmN0aW9uYWxpdHkgb2YgdGhl
+IE5pdHJvIEVuY2xhdmVzIgo+IC0gICAgICAgZGVwZW5kcyBvbiBOSVRST19FTkNMQVZFUyAmJiBL
+VU5JVD15Cj4gKyAgICAgICBib29sICJUZXN0cyBmb3IgdGhlIG1pc2MgZGV2aWNlIGZ1bmN0aW9u
+YWxpdHkgb2YgdGhlIE5pdHJvIEVuY2xhdmVzIiBpZiAhS1VOSVRfQUxMX1RFU1RTCj4gKyAgICAg
+ICBkZXBlbmRzIG9uIE5JVFJPX0VOQ0xBVkVTICYmIEtVTklUCj4gKyAgICAgICBkZWZhdWx0IEtV
+TklUX0FMTF9URVNUUwo+ICAgICAgICAgIGhlbHAKPiAgICAgICAgICAgIEVuYWJsZSBLVW5pdCB0
+ZXN0cyBmb3IgdGhlIG1pc2MgZGV2aWNlIGZ1bmN0aW9uYWxpdHkgb2YgdGhlIE5pdHJvCj4gICAg
+ICAgICAgICBFbmNsYXZlcy4gU2VsZWN0IHRoaXMgb3B0aW9uIG9ubHkgaWYgeW91IHdpbGwgYm9v
+dCB0aGUga2VybmVsIGZvcgo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2
+ZXMvbmVfbWlzY19kZXYuYyBiL2RyaXZlcnMvdmlydC9uaXRyb19lbmNsYXZlcy9uZV9taXNjX2Rl
+di5jCj4gaW5kZXggMjBjODgxYjZhNGI2Li4yNDFiOTRmNjJlNTYgMTAwNjQ0Cj4gLS0tIGEvZHJp
+dmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL25lX21pc2NfZGV2LmMKPiArKysgYi9kcml2ZXJzL3Zp
+cnQvbml0cm9fZW5jbGF2ZXMvbmVfbWlzY19kZXYuYwo+IEBAIC0xNzU5LDM1ICsxNzU5LDEwIEBA
+IHN0YXRpYyBsb25nIG5lX2lvY3RsKHN0cnVjdCBmaWxlICpmaWxlLCB1bnNpZ25lZCBpbnQgY21k
+LCB1bnNpZ25lZCBsb25nIGFyZykKPiAKPiAgICNpZiBkZWZpbmVkKENPTkZJR19OSVRST19FTkNM
+QVZFU19NSVNDX0RFVl9URVNUKQo+ICAgI2luY2x1ZGUgIm5lX21pc2NfZGV2X3Rlc3QuYyIKPiAt
+Cj4gLXN0YXRpYyBpbmxpbmUgaW50IG5lX21pc2NfZGV2X3Rlc3RfaW5pdCh2b2lkKQo+IC17Cj4g
+LSAgICAgICByZXR1cm4gX19rdW5pdF90ZXN0X3N1aXRlc19pbml0KG5lX21pc2NfZGV2X3Rlc3Rf
+c3VpdGVzKTsKPiAtfQo+IC0KPiAtc3RhdGljIGlubGluZSB2b2lkIG5lX21pc2NfZGV2X3Rlc3Rf
+ZXhpdCh2b2lkKQo+IC17Cj4gLSAgICAgICBfX2t1bml0X3Rlc3Rfc3VpdGVzX2V4aXQobmVfbWlz
+Y19kZXZfdGVzdF9zdWl0ZXMpOwo+IC19Cj4gLSNlbHNlCj4gLXN0YXRpYyBpbmxpbmUgaW50IG5l
+X21pc2NfZGV2X3Rlc3RfaW5pdCh2b2lkKQo+IC17Cj4gLSAgICAgICByZXR1cm4gMDsKPiAtfQo+
+IC0KPiAtc3RhdGljIGlubGluZSB2b2lkIG5lX21pc2NfZGV2X3Rlc3RfZXhpdCh2b2lkKQo+IC17
+Cj4gLX0KPiAgICNlbmRpZgo+IAo+ICAgc3RhdGljIGludCBfX2luaXQgbmVfaW5pdCh2b2lkKQo+
+ICAgewo+IC0gICAgICAgaW50IHJjID0gMDsKPiAtCj4gLSAgICAgICByYyA9IG5lX21pc2NfZGV2
+X3Rlc3RfaW5pdCgpOwo+IC0gICAgICAgaWYgKHJjIDwgMCkKPiAtICAgICAgICAgICAgICAgcmV0
+dXJuIHJjOwo+IC0KPiAgICAgICAgICBtdXRleF9pbml0KCZuZV9jcHVfcG9vbC5tdXRleCk7Cj4g
+Cj4gICAgICAgICAgcmV0dXJuIHBjaV9yZWdpc3Rlcl9kcml2ZXIoJm5lX3BjaV9kcml2ZXIpOwo+
+IEBAIC0xNzk4LDggKzE3NzMsNiBAQCBzdGF0aWMgdm9pZCBfX2V4aXQgbmVfZXhpdCh2b2lkKQo+
+ICAgICAgICAgIHBjaV91bnJlZ2lzdGVyX2RyaXZlcigmbmVfcGNpX2RyaXZlcik7Cj4gCj4gICAg
+ICAgICAgbmVfdGVhcmRvd25fY3B1X3Bvb2woKTsKPiAtCj4gLSAgICAgICBuZV9taXNjX2Rldl90
+ZXN0X2V4aXQoKTsKPiAgIH0KPiAKPiAgIG1vZHVsZV9pbml0KG5lX2luaXQpOwo+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2ZXMvbmVfbWlzY19kZXZfdGVzdC5jIGIvZHJp
+dmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL25lX21pc2NfZGV2X3Rlc3QuYwo+IGluZGV4IDI2NTc5
+N2JlZDBlYS4uNzRkZjQzYjkyNWJlIDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvdmlydC9uaXRyb19l
+bmNsYXZlcy9uZV9taXNjX2Rldl90ZXN0LmMKPiArKysgYi9kcml2ZXJzL3ZpcnQvbml0cm9fZW5j
+bGF2ZXMvbmVfbWlzY19kZXZfdGVzdC5jCj4gQEAgLTE1MSw3ICsxNTEsNCBAQCBzdGF0aWMgc3Ry
+dWN0IGt1bml0X3N1aXRlIG5lX21pc2NfZGV2X3Rlc3Rfc3VpdGUgPSB7Cj4gICAgICAgICAgLnRl
+c3RfY2FzZXMgPSBuZV9taXNjX2Rldl90ZXN0X2Nhc2VzLAo+ICAgfTsKPiAKPiAtc3RhdGljIHN0
+cnVjdCBrdW5pdF9zdWl0ZSAqbmVfbWlzY19kZXZfdGVzdF9zdWl0ZXNbXSA9IHsKPiAtICAgICAg
+ICZuZV9taXNjX2Rldl90ZXN0X3N1aXRlLAo+IC0gICAgICAgTlVMTAo+IC19Owo+ICtrdW5pdF90
+ZXN0X3N1aXRlKG5lX21pc2NfZGV2X3Rlc3Rfc3VpdGUpOwo+IC0tCj4gMi4zNy4wLnJjMC4xMDQu
+ZzA2MTE2MTFhOTQtZ29vZwo+IAoKCgpBbWF6b24gRGV2ZWxvcG1lbnQgQ2VudGVyIChSb21hbmlh
+KSBTLlIuTC4gcmVnaXN0ZXJlZCBvZmZpY2U6IDI3QSBTZi4gTGF6YXIgU3RyZWV0LCBVQkM1LCBm
+bG9vciAyLCBJYXNpLCBJYXNpIENvdW50eSwgNzAwMDQ1LCBSb21hbmlhLiBSZWdpc3RlcmVkIGlu
+IFJvbWFuaWEuIFJlZ2lzdHJhdGlvbiBudW1iZXIgSjIyLzI2MjEvMjAwNS4K
 
