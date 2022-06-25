@@ -2,72 +2,68 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A68C3CCA47E
-	for <linux-modules@archiver.kernel.org>; Thu, 23 Jun 2022 12:24:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61F2AC43334
+	for <linux-modules@archiver.kernel.org>; Sat, 25 Jun 2022 05:10:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbiFWMYh (ORCPT
+        id S231642AbiFYFKn (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 23 Jun 2022 08:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
+        Sat, 25 Jun 2022 01:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbiFWMYf (ORCPT
+        with ESMTP id S231527AbiFYFKm (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:24:35 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAA631DF8
-        for <linux-modules@vger.kernel.org>; Thu, 23 Jun 2022 05:24:34 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-101dc639636so16616626fac.6
-        for <linux-modules@vger.kernel.org>; Thu, 23 Jun 2022 05:24:34 -0700 (PDT)
+        Sat, 25 Jun 2022 01:10:42 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9A74833B
+        for <linux-modules@vger.kernel.org>; Fri, 24 Jun 2022 22:10:40 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id r6-20020a5b06c6000000b006693f6a6d67so3826056ybq.7
+        for <linux-modules@vger.kernel.org>; Fri, 24 Jun 2022 22:10:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qcOFv+gUkOUIJJ72OOZ9NseYxv0LoGb9wAQ/jFJ2Dk8=;
-        b=ZGAwRzzE8VL85qRDYfMIvCrIHJkVRiIYei98dO36+lgVyF3FWJUe7hqqUrsTwy639Y
-         fc+W8/1hfo7JZohSBn0BmrXgCAuBJ5vCaJB2sAWPRSGsx6O74BR4aBhFhTsdrI8SVpw6
-         yHYggGBjd/sq0CYiDjkFfZkeqRUmrn4J7Dg4e7iicPa2yWiHeuY+8e+bLsDAiI4i8pyr
-         EV80OclS5ilc1yqKp6AG1B401ALvhV3exYBeb2IeV0OW8rpAFVov8Ge0ATahc3RcmxRF
-         4FFQUAnzOwhEN6/m8cyLiVsmXun+S618Er5jfz5mSVTteervSKejh8lx4MtRyhHmQCtR
-         ZssA==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=w4sImYlkO8ijtHtHqXjuNpZj0tKuVZDrJNUstUmHo0Y=;
+        b=EqD8y2+aOVUkTGcq5ZUmSJSlcNdi0/42WaEgggkl5B3OgbsWkhjLvSidKJ/JJ0Ii8D
+         n5a4Jh42vH8vTZ+mrg+TgQiYpMZMV5Wwr7Ontt6SKvDFTSV2uVH5HifBJwaRiN+Mta7o
+         R5UWn0iyCaAL68/7Educg/KLDyigRQWkyUnoluYUe7nfxYLaByKZUDwGF46yZEtAKhbG
+         8UsVYqpRwR/p+mL+pPSwt9lVlTi4ocx+NI0DRkaxQZ5aSTH7oaa9h7Btr1uOipe43x6N
+         IqIiTq7UsvFiUg2NM3r57zmp1YW3HI30VyzT2gakok84AaaSUhD3aDEahzIZwKyBUfhd
+         4f/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qcOFv+gUkOUIJJ72OOZ9NseYxv0LoGb9wAQ/jFJ2Dk8=;
-        b=FkYIH0LkQ86V9zwr51+Pn17pwoZmPAbLzoPV4ZQybFP399EcVhCET6UA/qIMfskggu
-         v+A98nQX6TdOhWGcHy2OGhGkNmQHTFozGReGfBlDCdG/BrvNRHygucWDp8kKDi4wFmxB
-         pS9DAaCDZwRzthF5Bwsw6jKvLn4aSV993PbbhmJcl7bTME6dZfzDUVzfYp0UTSMlZgcq
-         Rk/ITiPvpfB66C3D9wjDbP9VGkH6g0QqAEDwrcRzlDsmvf00P3xloIksf54mjuuNrvM9
-         He9rImxNGyPD9Bh/TGhV2+ZKN38LbqoMoQTcurgFExEpE8mRXeAvdcV/jWttzrxQFm8E
-         i5zQ==
-X-Gm-Message-State: AJIora+CiLMx+n+txXuVT1FQ/r6yC5UPk3dNiC/X4hr01A3mCuJJUujh
-        86VQmdjB6rRu6yRk0vK9MAgTHVKy0uB4+GgllET0WQ==
-X-Google-Smtp-Source: AGRyM1tolYit2qOF13LQll2M1apYzVAPtBssHfNXvX79yFs+qX/QdnWSuZSn9LvvuTfowIJzogE5Gto6i2wMUvkyN5I=
-X-Received: by 2002:a05:6870:33a9:b0:f2:c44c:d054 with SMTP id
- w41-20020a05687033a900b000f2c44cd054mr2317236oae.70.1655987073368; Thu, 23
- Jun 2022 05:24:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-6-davidgow@google.com>
- <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 23 Jun 2022 14:23:57 +0200
-Message-ID: <CAPDyKFq0cTX5pfTLxTa9SEUBiiEcMuiEeDi3OPfMjFuBWca_jw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
-To:     David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=w4sImYlkO8ijtHtHqXjuNpZj0tKuVZDrJNUstUmHo0Y=;
+        b=KTYlgSsarPp+QgRN9dWEXFgAV2y3XuEChHVC6q96VqO41jLxRb18ilRzh7uJT0E56E
+         sRpnQ71S+5K0669r5d+IN+6u5dwmOxK+77zKAGZBssoTH/ivy+VzHZQPC9XnAnx5OMgF
+         ZF7B4C5p88foTQcUy5xeqO1OI2wFJcl4k3lnnCjLJRDVXtipPvskA5y7FidlwsX6foII
+         lQTIKRK0yzVFBUq0snjG0Li2tod9n5PGPXLvJob8Wt7aP7C3sP8XjhLlcqEsITwJ1hrD
+         upPx0WnajwxDZNOok8JKx8pnZuDKRDm0McZD/ypPlxrzaQXQMzk2VVy4wwx5z2O4L3KB
+         gpDg==
+X-Gm-Message-State: AJIora/oKdbYakNXuLCVIo5n88LF6Guyiyrkdp6DoCSyeD3gEKzm7xMk
+        qn3RqrU5vCENALQxVDhH8Fmd4fSGp4dfsw==
+X-Google-Smtp-Source: AGRyM1un+sBPc/7wBD+YQSQ7XAND66LYZk9RBj7rFNjc67YShu92PiqgyBy4jeaAtiwe0X78yPXPHI8EK15Tmw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a81:7cd6:0:b0:317:b6a2:6f15 with SMTP id
+ x205-20020a817cd6000000b00317b6a26f15mr2708816ywc.234.1656133839830; Fri, 24
+ Jun 2022 22:10:39 -0700 (PDT)
+Date:   Sat, 25 Jun 2022 13:08:34 +0800
+Message-Id: <20220625050838.1618469-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v3 0/5] Rework KUnit test execution in modules
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Jeremy Kerr <jk@codeconstruct.com.au>,
+        Daniel Latypov <dlatypov@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Andrew Jeffery <andrew@aj.id.au>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>, Paraschiv@google.com,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        Longpeng <longpeng2@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
         linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
         linux-modules@vger.kernel.org,
@@ -76,64 +72,88 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, 22 Jun 2022 at 00:19, Daniel Latypov <dlatypov@google.com> wrote:
->
->  On Tue, Jun 21, 2022 at 1:54 AM David Gow <davidgow@google.com> wrote:
-> >
-> > The kunit_test_suite() macro is no-longer incompatible with module_add,
-> > so its use can be reinstated.
-> >
-> > Since this fixes parsing with builtins and kunit_tool, also enable the
-> > test by default when KUNIT_ALL_TESTS is enabled.
-> >
-> > The test can now be run via kunit_tool with:
-> >         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
-> >         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
-> >         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
-> >         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
-> >         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
-> >         'sdhci-of-aspeed'
-> >
-> > (It may be worth adding a .kunitconfig at some point, as there are
-> > enough dependencies to make that command scarily long.)
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> Acked-by: Daniel Latypov <dlatypov@google.com>
->
-> Minor, optional suggestion below.
->
-> >  static int __init aspeed_sdc_init(void)
-> > @@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
-> >         if (rc < 0)
-> >                 goto cleanup_sdhci;
-> >
-> > -       rc = aspeed_sdc_tests_init();
-> > -       if (rc < 0) {
-> > -               platform_driver_unregister(&aspeed_sdc_driver);
-> > -               goto cleanup_sdhci;
-> > -       }
-> > -
-> >         return 0;
-> >
-> >  cleanup_sdhci:
->
-> This goto was added in 4af307f57426 ("mmc: sdhci-of-aspeed: Fix
-> kunit-related build error") to allow for this extra call to
-> aspeed_sdc_tests_init().
->
-> This could now be reverted back to what is
->         rc = platform_driver_register(&aspeed_sdc_driver);
->         if (rc < 0)
->                platform_driver_unregister(&aspeed_sdhci_driver);
->
->         return rc;
->
-> but let's see what the maintainers think.
+This patch series makes two changes to how KUnit test suites are stored
+and executed:
+- The .kunit_test_suites section is now used for tests in modules (in
+  lieu of a module_init funciton), as well as for built-in tests. The
+  module loader will now trigger test execution. This frees up the
+  module_init function for other uses.
+- Instead of storing an array of arrays of suites, have the
+  kunit_test_suite() and kunit_test_suites() macros append to one global
+  (or per-module) list of test suites. This removes a needless layer of
+  indirection, and removes the need to NULL-terminate suite_sets.
 
-I don't have a strong opinion on this, feel free to pick any of the options.
+The upshot of this is that it should now be possible to use the
+kunit_test_suite() and kunit_test_suites() macros to register test
+suites even from within modules which otherwise had module_init
+functions. This was proving to be quite a common issue, resulting in
+several modules calling into KUnit's private suite execution functions
+to run their tests (often introducing incompatibilities with the KUnit
+tooling).
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+This series also fixes the thunderbolt, nitro_enclaves, and
+sdhci-of-aspeed tests to use kunit_test_suite() now that it works. This
+is required, as otherwise the first two patches may break these tests
+entirely.
 
-Kind regards
-Uffe
+Huge thanks to Jeremy Kerr, who designed and implemented the module
+loader changes, and to Daniel Latypov for pushing the simplification of
+the nested arrays in .kunit_test_suites.
+
+I've tested this series both with builtin tests on a number of
+architectures, and with modules on x86_64, and it seems good-to-go to
+me. More testing (particularly of modules) with more interesting setups
+never hurts, though!
+
+Cheers,
+-- David
+
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20220621085345.603820-1-davidgow@google.com/
+- Add various Reviewed-by and Acked-by tags.
+- Fix the Kconfig for thunderbolt to not allow USB4=y and KUNIT=m with
+  tests enabled.
+- Clean up the sdhci-of-aspeed init a bit more (Thanks Daniel)
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20220618090310.1174932-1-davidgow@google.com/
+- Fix a compile issue when CONFIG_KUNIT=m (Thanks Christophe)
+- No longer NULL-terminate suite_sets.
+- Move the thunderbird Kconfig to the correct patch (Thanks Andra)
+- Add all the Tested-by and Acked-by tags.
+
+---
+Daniel Latypov (1):
+
+Daniel Latypov (1):
+  kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites
+
+David Gow (3):
+  thunderbolt: test: Use kunit_test_suite() macro
+  nitro_enclaves: test: Use kunit_test_suite() macro
+  mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
+
+Jeremy Kerr (1):
+  kunit: unify module and builtin suite definitions
+
+ drivers/mmc/host/Kconfig                      |   5 +-
+ drivers/mmc/host/sdhci-of-aspeed-test.c       |   8 +-
+ drivers/mmc/host/sdhci-of-aspeed.c            |  34 +----
+ drivers/thunderbolt/Kconfig                   |   6 +-
+ drivers/thunderbolt/domain.c                  |   3 -
+ drivers/thunderbolt/tb.h                      |   8 -
+ drivers/thunderbolt/test.c                    |  12 +-
+ drivers/virt/nitro_enclaves/Kconfig           |   5 +-
+ drivers/virt/nitro_enclaves/ne_misc_dev.c     |  27 ----
+ .../virt/nitro_enclaves/ne_misc_dev_test.c    |   5 +-
+ include/kunit/test.h                          |  60 ++------
+ include/linux/module.h                        |   5 +
+ kernel/module/main.c                          |   6 +
+ lib/kunit/executor.c                          | 115 ++++----------
+ lib/kunit/executor_test.c                     | 144 +++++-------------
+ lib/kunit/test.c                              |  54 ++++++-
+ 16 files changed, 154 insertions(+), 343 deletions(-)
+
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+
