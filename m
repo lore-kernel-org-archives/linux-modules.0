@@ -2,96 +2,143 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78ED9C433EF
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Jun 2022 07:47:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE65FC433EF
+	for <linux-modules@archiver.kernel.org>; Tue, 28 Jun 2022 08:18:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiF1HrR (ORCPT
+        id S242231AbiF1ISi (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Jun 2022 03:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        Tue, 28 Jun 2022 04:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiF1HrQ (ORCPT
+        with ESMTP id S244154AbiF1ISN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:47:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FBEC393
-        for <linux-modules@vger.kernel.org>; Tue, 28 Jun 2022 00:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656402433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vhwYJTHCpA5f1vgUVZ/tbiw7F2pML5jzftZeJbrY+xY=;
-        b=LmWdJ7nQp9B+5Fz0JCf/QvbKLgwiPw0FriFsYBLjUof38jT75VnzlO9cX/1f8wknD6jiE3
-        7Jq+fTVD3vK7U4NLZTLOgUZhQBTP9NRbOPb6ReJwYVUQ5R84qJARd3Y4KUz4mxV486bt7e
-        jQ6xxvEiRXhNti6XRHwOe1Zu96tWoFY=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-O3pgTF8yPsWobOzFSOtAOQ-1; Tue, 28 Jun 2022 03:47:11 -0400
-X-MC-Unique: O3pgTF8yPsWobOzFSOtAOQ-1
-Received: by mail-wr1-f70.google.com with SMTP id s1-20020a5d69c1000000b0021b9f3abfebso1565679wrw.2
-        for <linux-modules@vger.kernel.org>; Tue, 28 Jun 2022 00:47:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vhwYJTHCpA5f1vgUVZ/tbiw7F2pML5jzftZeJbrY+xY=;
-        b=DKgQzSrOzBiME0wj2lqJ6Nm3tKhiJ9r0T10Kbu65E2uSLsZMFnnp+0/Kaw3XaTlA/E
-         bcJZh5mMrhLBItkBgwprndeH53vVxfmD8+6pIfkF7FVKnamkMyicZl9HXz17qMtYFNOn
-         AQ0DKFN7y3IwyF9KdJh6WyRcdR7lo7BpF7wRLi6UWs/N0VGldNFVNxQvSgd78UMBz+3f
-         iwnUpikXYxhqRFC321iCVyLI4XnhEsz/yCiifZ75AE7j34O7Ih2Pi/Y8pZz1DDAlJI9s
-         5zLzERRINI/gnNgzjs8qNbBMpDvZQ7UOKpnJaExskAujqqNthmzwgs6sgOi2eb/PLRb2
-         lJgA==
-X-Gm-Message-State: AJIora/KNahKhxatjsen1A01UJSOeixwQVaAScp6fdTkR5ZACchyC54I
-        ASa5ciwFlJc1lRbtZHm2jnhDpbzPwKl1J8cYwjzdUtnD0GfnBUQ88wVxL/q5i6McOFTr7M/0rrw
-        GA+YVfbzDtHLoCRCPZ4onyrpe
-X-Received: by 2002:a05:600c:4f13:b0:39d:b6c5:ce4e with SMTP id l19-20020a05600c4f1300b0039db6c5ce4emr25402395wmq.34.1656402429977;
-        Tue, 28 Jun 2022 00:47:09 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vtS3T9UbI6Ib3KtZ+peaUDKLlP6cSEmfzlOgUCOkeKGlpETh+pHg15t7TzPLRS39uNiiA5oA==
-X-Received: by 2002:a05:600c:4f13:b0:39d:b6c5:ce4e with SMTP id l19-20020a05600c4f1300b0039db6c5ce4emr25402380wmq.34.1656402429815;
-        Tue, 28 Jun 2022 00:47:09 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id i1-20020adffc01000000b0021b5861eaf7sm13057958wrr.3.2022.06.28.00.47.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 00:47:08 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 08:47:08 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        Tue, 28 Jun 2022 04:18:13 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120051.outbound.protection.outlook.com [40.107.12.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394D02ED4C;
+        Tue, 28 Jun 2022 01:16:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XhEP9Emu8dAOQrBwx8TDooqxBqe3+f+lauh9qCrNmErGq/XrjUl5QzJltYZtnAeQRC92zhVtAlThQSgFGBRfk9ck8WJfv8Hzap/+oizYCkYs2iT3wegfnp8lCaWc5VoXioDX7kwpMz90GHej7OPBg6kMV4rL5HsvWeaoc1DTvMf4UeOL8SkT2z3JsIKB/fPMg0nDsDdunqXz4vMDY5s/jBq8sU0Qy1elRjY9Spgjxugj8jVq8agreiLg7X2QdoUHiappAfJAXvpHYI88ECzfNUda+3K9rhAhLZYv1VNwD4rBQRJUe+508iim2daMAgSsVjEtOan9iR+eXePCvbw0Ig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q/KoQXqzSvXLUUiDYTuAg/FqCmWv8II+1Y6OEjjcnVg=;
+ b=AxTzd0qg8YWg+ri1Rycj1aqBifAkjZSdJL1lhHc8Sb6n29+NsDEbQ6zqhmwSem0e/X4vivyuUkcIFG3mW0xel+FpOFipj/rWo6iGvdW1vEUfIlMTI6RmslJDM2MO/vWRLfkZYKKj4dai63O3ZFwWsBrGo+g+kteCda+GhF/7mMcfwk2uODEB8TGIc+xFzjBYGmNuWr0m+oK+Ism0Jyv8YoetwMadp/rm+dbQMMfVThat7UbKI8Xur9t9Z0NJat1aW1BZqCVjSxtvSTXduVnkP1uC/Ppa+0Od6LIhW5horoU36O3yOSlEFhcGZk6KpFwye7YyGXwm2ZhgbktLfq63Ng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q/KoQXqzSvXLUUiDYTuAg/FqCmWv8II+1Y6OEjjcnVg=;
+ b=enxMx2t+l+npQ3TX6fA2Zg33O/L8gOCT+GxbkwNtFonHH3P4fTOgEnj2+fKxX4ZOzo07jIgYWfTfdhf/lNnr1DnmGJxSp/5tDr8baO25PKlwKC3+/tCI3iJNzXLQsonfbFnJgq2ptUpPDuBOIZ1oTkw7CMF9DcHHMxN003iKSVZzquVPrHtrMhZfcoAs6UKXkpFBq3uu4ogXQJmVPT06IUiw9cMnhlJHxqfN8tcyPPW7Qn/1nhyvR2Iuh0UqH0DfQpBCL43N9Yt9Dv+YQxuQHjz+bX5vg6OCJ5aT9Dw2CtMniEuqD2v+kyd2RTWZYgJFs6+8qCZ55bCWPnAktZPWng==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB3091.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:3c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Tue, 28 Jun
+ 2022 08:16:23 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e10e:bd98:2143:4d44]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e10e:bd98:2143:4d44%3]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
+ 08:16:23 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Aaron Tomlin <atomlin@redhat.com>
+CC:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
         "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH 2/2] module: Show the last unloaded module's taint flag(s)
-Message-ID: <20220628074708.fg3ocx3vu7affkxl@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+Thread-Topic: [PATCH 2/2] module: Show the last unloaded module's taint
+ flag(s)
+Thread-Index: AQHYikTbUdkHh6fPnEGMFwf8xJyI+a1kUoOAgAAffACAAAgqgA==
+Date:   Tue, 28 Jun 2022 08:16:23 +0000
+Message-ID: <b44b2b4a-20e2-2d42-22b1-c1e44c6f999d@csgroup.eu>
 References: <20220627164052.2416485-1-atomlin@redhat.com>
  <20220627164052.2416485-2-atomlin@redhat.com>
  <4ddb64da-58f0-a4af-cf57-a870015a0077@csgroup.eu>
+ <20220628074708.fg3ocx3vu7affkxl@ava.usersys.com>
+In-Reply-To: <20220628074708.fg3ocx3vu7affkxl@ava.usersys.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4f928162-cb96-4b0e-be28-08da58de7d57
+x-ms-traffictypediagnostic: MR1P264MB3091:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JU6+fBGhwNn9tVCLvQs7MsDp4HaSOTR4dmHPz8wkw7G8YzUjvFSwDOLh9QoCjoRyOzoH8rseYT85jtbHNz+5KpynDVpCVy7A6LRPHFEBb0lvpSPUP0OK0bGuA/82byBJlgChtQSYPqH8zLbZuQMwVrcVFmK7HLu65sfnO9bE0chEozx1vq0aAUICkvpFmud3GLyCTvOjMfGVvvenoHj/6h56mUCBEEAS3sHFT1LUZ86SntHAPynTIw93XljDpb8z+q9UaxSmr02OckaDBGQccoUTmmbQIpoOdaqPAR33/MhzNRROHWxAuqaSdprfGDD4DMa2qI8lQ1Xf2wREt7kTsT1L6Yaju1vqlUf+MJ+GytRCrUjVmC3X6SpB+as0oHmdGk3mMD1ndU0jwBaXTljnijOYC7MxOh5ip7sZ2mhI2cgom+8PzihcCoOXwc96hs1NnBPXqmAuj+H1YCUJuL5WNKTvW4r+mzq6KDCYz/5DsJ08sou7i9X7ndPyfJCGJ4u5vpt2RDdHsxJiSR4CTRMniwDQQDjSMPafyLqC6ncP6JTsMr87LfLN06+qPXpJ6/XtiTl1g1aL0qoWDw7+frpXXOoRFek+uWXs9p2Uz67Z1QM1jfBkATAz85mpZzJv2aCdMtk6YaBIoldCV6J+Pm+kz+arfCXlBhLa8suggdHVsP8M0mNPM7s6QRVYOgGix4t4RzX+H49cMdzL/IYY7nYVsOyAe670nObSOg6gtbBR9O68QdnsVaQgp0oTIZRmWQYwdWMBQyNn1drbwjgvdq9xWAc5Sf8neh9QApoPEUUEwE0XskK83lDiH1eqUKcuNa9d1PXj/DU8DNEk4/qE9AKXcBFOHToZDrZn9tW+lhijX+A=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(366004)(346002)(376002)(396003)(36756003)(478600001)(31686004)(64756008)(66446008)(76116006)(41300700001)(186003)(122000001)(2906002)(5660300002)(66556008)(4744005)(38070700005)(66946007)(31696002)(38100700002)(6486002)(66476007)(4326008)(316002)(54906003)(71200400001)(6916009)(6512007)(2616005)(86362001)(44832011)(8676002)(91956017)(26005)(8936002)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VEhZZEVPZ0Z5Z1REMkNZWkFvZWd4WnhyN0orUWNmOFFzMmZEQUY2S0gwNVY1?=
+ =?utf-8?B?VUFiY2RkaCs3YlV6M1gzYWEwYjNMR2t3QXBycXY0WHN5TFV6UThNc0ZnVVpX?=
+ =?utf-8?B?K2VhVmZIbW1FYjU5TEFCcVgyNlhqelJxNXlzL3ZWT3BwSTNoTDdnUFFYWGcw?=
+ =?utf-8?B?QnFFeVNIejZpdVIvcEFuekdyd1hyVlp0MEdLa3VXcHlrOUZtMHVPU3JEUjJU?=
+ =?utf-8?B?eHdTb3NBMzFBQzV2ZkEwajVMa29sR05UK3ZJZ0xMVnkvdTc3U0NBcTBseE81?=
+ =?utf-8?B?Y2NuZ2pOck5VTktwVDl3Ky80ZkFEM3FKYzRLb25scEhpM0lwS3lKOEUyYmRv?=
+ =?utf-8?B?V1UwN1RlaTNWYzZYbnA3VGlaUHdLWk5PK1lRcUt5VXRHTXNyelZ2QzFkcE1I?=
+ =?utf-8?B?OWRhUnduRCtFWWVNcXBzSUFBekEraWJKSVBnMG9TT1JCTW4zOEVZTUYvVFRZ?=
+ =?utf-8?B?QmgreGh1bFYxQmhyeEtmQnErRDhyK2NuTzNvYUVWN1V4RFAyRmlFMHArUWpW?=
+ =?utf-8?B?cTl5Y2VNbG1IMmduOE1yNmdYNDRSVDFIclJIbE1QdDZOdGlOZ1ZSdmJ2cjU3?=
+ =?utf-8?B?VlV6Vi9tVDdyYWx0cmo2c0R3VldTMDVhSmF6My8rektiMnB0TzArNk9JT0d1?=
+ =?utf-8?B?QWl2YUEzU3ZVaTBhc01oR0tSWlJXb3o0MFFOTEt4VlZrcThON2JrOWl5RGpr?=
+ =?utf-8?B?TmZoUVZTZFBvMXEzVDZWMC9TdmFnZXRmTk1hY3U2Qldjc2YvSG8yRXB0dE5i?=
+ =?utf-8?B?YXAyWjUzOWkvTHpnc1Z1VDVqd2l3Vzl4M0hOeGFEak82RXBqb0xsdHAzWjYv?=
+ =?utf-8?B?WThxREQyRXYyKzdxL1BaQjc2YkxybHVxbm9vemFDVk1LZ1FJdE9NbFVnRlhH?=
+ =?utf-8?B?dFk2Z0FhNm4xYlpCSmVyZXUzY3pMeE5LS0VVRHJ3ZXVRWkl0SUJIMjM5MFc4?=
+ =?utf-8?B?QjZtL2RwUGJNSlhwWFArRGxzZzA3b1JreXJuaWpjMit0bjdoM1Z2U2gvZzg0?=
+ =?utf-8?B?MzZyMUNXc2RZZGlJNm4rS1UyRDJIL0NDSExaNzNFbzNZUjhDcmkwSmdLalM3?=
+ =?utf-8?B?OEZibjBmWXdTVUhHOFdFcFh3c3ZRRGdNTlVSL2NTb0FUUkJaMXJyOEVnSith?=
+ =?utf-8?B?OUsxS2dJYlpUVkJhSU5sQkZKSDRVd1VKdkM0eEVtWWxoQWtIZWp1K1RGTVBs?=
+ =?utf-8?B?dUNIMmo0ejBEa3Q5UHlvTHh2bld3aW1UVTdLSWNRQmJLamFNTTIvU3NmT2Rx?=
+ =?utf-8?B?dGZmeFhLa3labzR4Mno0N1Qzc09pNDdvVU1Pa2FES0dxaWwyQ256ZFBsWVN5?=
+ =?utf-8?B?NUdRVWI0ai95RTd6OFhwUFdaWXJhRjdkVU9idkJhc3lTUGltMGtMMG1CbkVQ?=
+ =?utf-8?B?TWJrbVhqeWFKbG53ckhOTCtvOEluZTBxd1VPUHpQMG91MGR0R3liSjJETktR?=
+ =?utf-8?B?Skc3T0Z4T2tzdWJtYmtlbE9hai9RUWJHUTE3cXpaSFRUdmlCb2swMXc1MVps?=
+ =?utf-8?B?M1JpMWluK3ovOWlZNUpvalhPV3BHbmJhZzdDWWxucldVVGRkVTJpVUxKZnFC?=
+ =?utf-8?B?REY2Wm1IK1dWaHE2U3lITkhISTBvTC9rTnZIdGhyQm1IMk1QZ2Q5SVk0UWpp?=
+ =?utf-8?B?QVdaVWFQNkFOUjNXUTVKRytWbFU3SEk4eHlUTmdzdUtxOVM2Uld0L1FaZThM?=
+ =?utf-8?B?dm43UkhVR21MZEorbkZ0blA2L1kyeEJ1S0xLV01XejM1T2pmRFR6d29QZk9O?=
+ =?utf-8?B?WSs5d3FoNHlieHlPSDlKa1VMd1JQWkRtZllkVDdyRzlvWnZPdlR0M1NDRnlH?=
+ =?utf-8?B?Y1BPNUdQUExwOE1wWlRHS1Z0VjcrQkpYUndlejlYVkcyeVBzeVcyQUhkbjcz?=
+ =?utf-8?B?SHhnYWdoY3piVFNDdG1Ua0tBR0ZwaWNIbTh1MlBuT0Jpak5ubGJvbkZLYWpK?=
+ =?utf-8?B?OGp3SWhHai8zT0lqSHpzZ21HTDN0UHRMYUFoMHNnSE1qWlNkZlpsc2JPQXkz?=
+ =?utf-8?B?a1BmSFBtUHZoaFlNOHZKWmc4ZVVJZnlQQTJlMlFNcGVwaEYzcnlGNUczQjhX?=
+ =?utf-8?B?NW5mSlUraXdYR2t3MFhIUkEwS3NuUGxjWWphNXBrVFZaVkVuZFg1aWJVVE0v?=
+ =?utf-8?B?MndCYWFNRm5wNHFBR0cwa1RWT1VrVkFKN09xVHRrcStwaDBpRVQxYitGSVdK?=
+ =?utf-8?Q?CvKUNOMQGPstQIu8WUi3Gdk=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0945038670317149ADCF14964248D383@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4ddb64da-58f0-a4af-cf57-a870015a0077@csgroup.eu>
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f928162-cb96-4b0e-be28-08da58de7d57
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2022 08:16:23.4920
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Nwl2XF+E6vk3SUTZwb6MuJO7JVQj5hgfMl6iXRluGczHjaQqnla07JxhApEfo+lE6h2SUIKSdaeR5p/ql55dbvFY98iNGscOHeXJfFqUSXI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3091
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue 2022-06-28 05:54 +0000, Christophe Leroy wrote:
-> > -	/* Store the name of the last unloaded module for diagnostic purposes */
-> >   	strlcpy(last_unloaded_module, mod->name, sizeof(last_unloaded_module));
-> > +	strcat(last_unloaded_module, module_flags(mod, buf, false));
-> 
-> You replace a bounded string copy by an unbounded strict contat.
-> 
-> Should you use strlcat() instead ?
-
-Hi Christophe,
-
-Why? If I understand correctly, both the destination and source string are
-NULL-terminated (see module_flags()). So, strcat() should be sufficient.
-
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+DQoNCkxlIDI4LzA2LzIwMjIgw6AgMDk6NDcsIEFhcm9uIFRvbWxpbiBhIMOpY3JpdMKgOg0KPiBP
+biBUdWUgMjAyMi0wNi0yOCAwNTo1NCArMDAwMCwgQ2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+
+PiAtCS8qIFN0b3JlIHRoZSBuYW1lIG9mIHRoZSBsYXN0IHVubG9hZGVkIG1vZHVsZSBmb3IgZGlh
+Z25vc3RpYyBwdXJwb3NlcyAqLw0KPj4+ICAgIAlzdHJsY3B5KGxhc3RfdW5sb2FkZWRfbW9kdWxl
+LCBtb2QtPm5hbWUsIHNpemVvZihsYXN0X3VubG9hZGVkX21vZHVsZSkpOw0KPj4+ICsJc3RyY2F0
+KGxhc3RfdW5sb2FkZWRfbW9kdWxlLCBtb2R1bGVfZmxhZ3MobW9kLCBidWYsIGZhbHNlKSk7DQo+
+Pg0KPj4gWW91IHJlcGxhY2UgYSBib3VuZGVkIHN0cmluZyBjb3B5IGJ5IGFuIHVuYm91bmRlZCBz
+dHJpY3QgY29udGF0Lg0KPj4NCj4+IFNob3VsZCB5b3UgdXNlIHN0cmxjYXQoKSBpbnN0ZWFkID8N
+Cj4gDQo+IEhpIENocmlzdG9waGUsDQo+IA0KPiBXaHk/IElmIEkgdW5kZXJzdGFuZCBjb3JyZWN0
+bHksIGJvdGggdGhlIGRlc3RpbmF0aW9uIGFuZCBzb3VyY2Ugc3RyaW5nIGFyZQ0KPiBOVUxMLXRl
+cm1pbmF0ZWQgKHNlZSBtb2R1bGVfZmxhZ3MoKSkuIFNvLCBzdHJjYXQoKSBzaG91bGQgYmUgc3Vm
+ZmljaWVudC4NCj4gDQoNCkFyZSB5b3Ugc3VyZSB5b3Ugd2lsbCBuZXZlciBldmVyIGVuZCB1cCB3
+aXRoIGEgc3RyaW5nIGxvbmdlciB0aGFuIHRoZSANCmxlbmd0aCBvZiBsYXN0X3VubG9hZGVkX21v
+ZHVsZSA/
