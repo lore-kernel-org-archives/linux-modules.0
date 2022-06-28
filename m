@@ -2,87 +2,171 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23D81CCA47E
-	for <linux-modules@archiver.kernel.org>; Mon, 27 Jun 2022 19:06:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39FEDC43334
+	for <linux-modules@archiver.kernel.org>; Tue, 28 Jun 2022 00:55:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240152AbiF0TG1 (ORCPT
+        id S242135AbiF1Azi (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 27 Jun 2022 15:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
+        Mon, 27 Jun 2022 20:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240126AbiF0TG0 (ORCPT
+        with ESMTP id S236425AbiF1Azh (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:06:26 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DD52633;
-        Mon, 27 Jun 2022 12:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656356779;
-        bh=R/qipisl2syKO7HuuaFI9NW1bwuOk9k4IT6q8rnJ5lk=;
-        h=X-UI-Sender-Class:From:To:Subject:Date:In-Reply-To:References;
-        b=Q71SYLwhvUoc4KOpTwY6mHTTSQyPMrWJUti8DJKu4PJHYh6ac197bnFKGlDB0S/kK
-         iSBgMY5ZcQr22X9qNE23HSDKTI+i0icxFziOhu6RVBkPDD5if2I4Qp5ADEHJuT4686
-         df2tS1uEsCuwv55r57Qbg+Y3y1p4UaN2aV+Wq4Hs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ls3530.fritz.box ([92.116.176.39]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MPXd2-1oJZ4C3b7a-00MdAn; Mon, 27
- Jun 2022 21:06:18 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     mcgrof@kernel.org, jeyu@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
-Subject: [PATCH 2/2] MAINTAINERS: Update file list for module maintainers
-Date:   Mon, 27 Jun 2022 21:05:51 +0200
-Message-Id: <20220627190551.517561-2-deller@gmx.de>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220627190551.517561-1-deller@gmx.de>
-References: <20220627190551.517561-1-deller@gmx.de>
+        Mon, 27 Jun 2022 20:55:37 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6741D0E5;
+        Mon, 27 Jun 2022 17:55:35 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id b133so8591578qkc.6;
+        Mon, 27 Jun 2022 17:55:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=xuT7J5doI1Fzk1y+roRLQ1hNMG6KHDUXMZs++4UnW28=;
+        b=Zj+tSmAt+cy52Gjo2psozKosRNwTMqqrTnMm7mOlC08u091ipAYciRlaHXzVmfLEJl
+         huA2w53TDWBTsxlR4qJHatyDqGlgXYdiekH2ZBSlk+HwR3OgwMUZZ9pe9qHItuuVYBUV
+         snnyq6rkH8uvGRpUb2zE4rSjNjCFCs/s1QBRPcw/BFG1aSHTOynBTnhlCgVJXfguoxAP
+         srFI66nxBeWd9QySY/fwenVA7UgdEVJuRgXQzpf7SpMOczpq4ZZ6vv9ULGSy/Uq2m00l
+         yJ9H1FnyhGIAWAjFyo6yQH57kVWJwNQpZ6AHhJFJ+IGHc+hNj73UlTvMODrITwbmMxvP
+         Jh8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=xuT7J5doI1Fzk1y+roRLQ1hNMG6KHDUXMZs++4UnW28=;
+        b=m1FOhktT+x1TuvmcnPdohf4i7spYIh8xPlBQ67v2VO0FMpCUQPcFdzrTHuyjgdJjyf
+         PSp660q6qA1MkSinKYb1Utl0+ZjkfCwhk7TECqx0IHBjLEMkMjNfoAWkrzj8d+Q6+dHu
+         JZtM+gnzIQWyJu7ET5WGXI9fVgLMhG8FvU9HdXF7ZU97fLLf401GlQppmftcUdW+bXuU
+         3b5CGutvIKhScRzCKqys+NwDtwrVzkY9mgY5K2fnh7XBdKDqvAyEGmND5Hd233JSBwLi
+         pZvBussrI8dORUd2NETKpTmf4GAZJATGk5P//zgnZ8cs13T1ZADKvuD0p3rWy9EQdBTS
+         n7vw==
+X-Gm-Message-State: AJIora8HSA0AQhQUkpAyc0awvCv4bxK1DtGTzyHJ7kOYEuGjeTwwIrs1
+        SnfgJ7pXzddeRLE32RQjR7IEEC1cj1/sZq/sgeLXgR079dU=
+X-Google-Smtp-Source: AGRyM1sHZjoMFQeVPG8Gv1jvoLu2cljadO/fHv3IbNF7R4rjjoDYQYrK894J5Q0sNKAmdxyER1OuFmJhWrrh7zlB1Xk=
+X-Received: by 2002:a37:48b:0:b0:6af:2c49:1598 with SMTP id
+ 133-20020a37048b000000b006af2c491598mr4791654qke.121.1656377735033; Mon, 27
+ Jun 2022 17:55:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:GX33wLBAVhASID2agrbjDjTpqdYIF8ASsWJcP8T7Q0fCa6QHN7S
- VEk2mh6wNObAhpyPImperMU+qyaY+HhMEPSS0tpUovfPCT/++P28oz9Arm5PrMqHgIvA76q
- lB9l+TafR0otFi/CJcvBFV+C2NArNJd5hrrYYPpSw8Wz3zWGNiTh1O8h/y2BzA6cw7m27MP
- jBmK2glRXhbpD2Lsq+9jA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5aw0eG7G8b8=:rDHNEVwKNUkgHyGGqy853X
- pGJvpL7VVKE0kug0/VobqDB0R48sIVHfVjsZhxYiL9FMRJWWP8HrinmY9TtFihD7xa6K9ax0v
- eCwJkOj6Q8t15vak/lQSAZfaqq6dDAjfiX8kHyFgVBF97TavhVi3a8vr8JsUU14vrBUtmvbJw
- fr05nKvFQMRlqwuzrNVX8gR5Sr53MLvvIsqnqvN/Lf9MF4TD3KacxS+ljE01ZhqC0/8v9tp0f
- AyRhqh8b2HT495aI2UyzNS0Y/jshhW64+gTZj9gH+5m87ISRJ3/V+d07O7gGCR9mjVX09TlUd
- ZAhWyAwb6ZmbXA+P6i7p8fIiUK6yILUK7ARwy/1hrEcAjkQ+uLYEECqO08CclDOBSnNnM7Hrq
- bivp3apjYzAGRXhvAgHh+XPiAR6THjsN6KvLrls74TKDrLWeeGmwsi6zsggZ7ByWZj9kMqRE/
- /fvdWcMh1kO6eqPwRd0bZfx4RKcIzb5d9JZccpHiITKdsT4b8KaMKklfPkPnaEPzGaRFKpQK3
- eDQLdzkfelJKHoDAS2rRtUOh91JbeFwdBc/3A2zIzRXRVIkAtcLAniiKtF5u/uGxmigA4XPDl
- UGweKxUmxHb0Ia73Hd4dewDMh3tijwM/uGKPHMhcxapDgT+KU+Pu2L88HqyKU+2gkub50LGhN
- S+CveWmJkjln7D9h6oq0kNTx6lH3Dl8s+H8iWzrBHb3LffUOGu1X1ojsc2GmPDFvgd1vXVKW2
- AI+gUFqZrXQiV3/2Xv7YHc3jII47cW0tBQ94LXb6gDnTbJED2D1b1K9q/4gBeT03XcPYva0dY
- Jo85H5Hduj5veesShItRalwWZW790ojtELZCSqCqY4wMfL+WsedsrnnNc05/j3/CkCBmT7fMA
- 1gMSfUw/T6Ix3UvCKFllXcwkkmzuZEcRBGdw9/YF0kfesKLKniTQGYzvCLKFipizLb7M5yL/Z
- f8P3O8/cgLF8DJm4cN8Ts9J9O03G4Bl6KKOW6gK5X9su0aUyn6OOeRq3ofOw77zlkFKA6WAWQ
- sJlxlmnk68j95b4PXWt9Cx3nvEc40PdKAYbBzFQHhX7Si2NZkbYw/BmpggpCaQH505cH3RDD+
- jU5EbSe1SugF4L6NrmQIFbqR30o32G5dFxjPzVKzQX/v9+I0DsK1p+p5A==
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Tue, 28 Jun 2022 08:55:24 +0800
+Message-ID: <CAABZP2wCsXG=qaZ68OwDDPA=uG-4Wb-e6WxMNuHNbJTZ1ruenA@mail.gmail.com>
+Subject: Possible problem in check-local-export during the kernel build
+ process (RCU torture)
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rcu <rcu@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The scripts/module.lds.S and scripts/modules-check.sh files
-should be maintained by the "MODULE SUPPORT" maintainers.
+Dear Masahiro:
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-=2D--
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+1. The cause of the problem
+When I am doing RCU torture test:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe5daf141501..6073fc7c0fa4 100644
-=2D-- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13471,6 +13471,7 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git mod=
-ules-next
- F:	include/linux/module.h
- F:	kernel/module/
-+F:	scripts/module*
+#git clone https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+#cd linux-rcu
+#git checkout remotes/origin/pmladek.2022.06.15a
+#./tools/testing/selftests/rcutorture/bin/torture.sh
 
- MONOLITHIC POWER SYSTEM PMIC DRIVER
- M:	Saravanan Sekar <sravanhome@gmail.com>
-=2D-
-2.35.3
+The kernel building report error something in both Dell PowerEdge R720
+and Thinkpad T14 (Amd).
 
+For example:
+/mnt/rcu/linux-rcu/tools/testing/selftests/rcutorture/res/2022.06.27-10.42.37-torture#
+find . -name Make.out|xargs grep Error
+./results-rcutorture-kasan/RUDE01/Make.out:make[2]: ***
+[scripts/Makefile.build:257: kernel/trace/power-traces.o] Error 255
+
+2. I trace the problem to check-local-export
+I add some echo statement in Makefile.build
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 1f01ac65c0cd..0d48a2d3efff 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -227,13 +227,21 @@ cmd_check_local_export =
+$(srctree)/scripts/check-local-export $@
+
+ define rule_cc_o_c
+        $(call cmd_and_fixdep,cc_o_c)
++       echo "after fixdep $$? $<"
+        $(call cmd,gen_ksymdeps)
++       echo "after gen_ksymdeps $$? $<"
+        $(call cmd,check_local_export)
++       echo "after check_local_export $$? $<"
+        $(call cmd,checksrc)
++       echo "after checksrc $$? $<"
+        $(call cmd,checkdoc)
++       echo "after checkdoc $$? $<"
+        $(call cmd,gen_objtooldep)
++       echo "after gen_objtooldep $$? $<"
+        $(call cmd,gen_symversions_c)
++       echo "after gen_symversions $$? $<"
+        $(call cmd,record_mcount)
++       echo "after record_mcount $$? $<"
+ endef
+
+Then I rerun the torture.sh
+
+The result show it is check_local_export did not continue in all failed builds.
+
+3. I trace into wait statement in check-local-export
+diff --git a/scripts/check-local-export b/scripts/check-local-export
+index da745e2743b7..d35477d95bdc 100755
+--- a/scripts/check-local-export
++++ b/scripts/check-local-export
+@@ -12,7 +12,7 @@ declare -A symbol_types
+ declare -a export_symbols
+
+ exit_code=0
+-
++echo "check-local-export L15 ${0} ${1}"
+ while read value type name
+ do
+        # Skip the line if the number of fields is less than 3.
+@@ -50,9 +50,10 @@ do
+        #   done < <(${NM} --quiet ${1})
+ done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
+
++echo "check-local-export L53 ${0} ${1}"
+ # Catch error in the process substitution
+ wait $!
+-
++echo "check-local-export L56 ${0} ${1} $! $?"
+ for name in "${export_symbols[@]}"
+ do
+        # nm(3) says "If lowercase, the symbol is usually local"
+@@ -61,5 +62,9 @@ do
+                exit_code=1
+        fi
+ done
+-
++if [ ${exit_code} -ne 0 ] ; then
++    echo "Zhouyi Zhou"
++    echo ${exit_code}
++fi
++echo "check-local-export L69 $? ${exit_code}"
+ exit ${exit_code}
+
+Then I rerun the torture.sh
+
+The result show it is wait $! in all failed builds because in all failed cases,
+there is L53, but no L56
+
+4. I look into source code of wait command
+#wget http://ftp.gnu.org/gnu/bash/bash-5.0.tar.gz
+#tar zxf tar zxf bash-5.0.tar.gz
+I found that there are QUIT statements in realization of function wait_for
+
+5. My Guess
+wait statement in check-local-export may cause bash to quit
+I am very interested in this problem, but I am a rookie, I am very
+glad to proceed the investigation with your further directions.
+
+Sorry to have brought you so much trouble.
+
+
+Kind Regard
+Thank you very much
+Zhouyi
