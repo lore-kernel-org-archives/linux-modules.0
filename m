@@ -2,207 +2,96 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8F25C43334
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Jun 2022 07:25:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78ED9C433EF
+	for <linux-modules@archiver.kernel.org>; Tue, 28 Jun 2022 07:47:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242485AbiF1HZn (ORCPT
+        id S232778AbiF1HrR (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Jun 2022 03:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
+        Tue, 28 Jun 2022 03:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242568AbiF1HZi (ORCPT
+        with ESMTP id S231398AbiF1HrQ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:25:38 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C684F2CE2F;
-        Tue, 28 Jun 2022 00:25:35 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 25S7PDr0009602;
-        Tue, 28 Jun 2022 16:25:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 25S7PDr0009602
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1656401115;
-        bh=eLjAiVxuGvO6AzWFnOFJI+C+QcXzQ40aD2WDoOMylOo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fVTQn4EnvDBVZS0FLVGRzFY+R2/L/OWZz6Fe/S9B6zhRK8n6MQmJoBsIV9TwpONeB
-         HvDz+HuxaeDU1+IUDE5INxS90LD5NJt6icxiFhpvIRhRANtlIWORuXbp/pE/LTMfZU
-         5AGBCuJrZYxPoFl9Xhwl57lj/SAlTOwQgbszYOdjjIlOcWMwrtoHNubeCOmYLjuCAc
-         qmP536XTz+5bomt598YJqcDNmQFiYzcR/+/mW4DE8b+HcvaoS8IKjhtOlFAD6gfI9K
-         qXUgnzDhhAi7SFvfe2FD/2vdVVrOtgKkECrP9vnov+Yt5CFoz8vN0LTAQv3pxLSgJ7
-         7+9sCRPilbpFg==
-X-Nifty-SrcIP: [209.85.221.53]
-Received: by mail-wr1-f53.google.com with SMTP id s1so16266703wra.9;
-        Tue, 28 Jun 2022 00:25:14 -0700 (PDT)
-X-Gm-Message-State: AJIora+PCCmiwMBfCMQnsCtQpZk1lawz2MrJ5TOjsVQCS00zLhKPF8EN
-        t4LAnOm1J5z/K3kBywvmqKaJURn0IEQjwG9/A+Y=
-X-Google-Smtp-Source: AGRyM1uZt0JBBIngefTOq5ciOXsKG9KrTWDDKK7vu9jmcRu4wRqqpeYUcz2ffXtsi6U5Y2sLFFuZqSTom9sFhummQ8w=
-X-Received: by 2002:adf:d1ea:0:b0:21b:a6cb:fcf6 with SMTP id
- g10-20020adfd1ea000000b0021ba6cbfcf6mr15985029wrd.477.1656401112927; Tue, 28
- Jun 2022 00:25:12 -0700 (PDT)
+        Tue, 28 Jun 2022 03:47:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FBEC393
+        for <linux-modules@vger.kernel.org>; Tue, 28 Jun 2022 00:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656402433;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vhwYJTHCpA5f1vgUVZ/tbiw7F2pML5jzftZeJbrY+xY=;
+        b=LmWdJ7nQp9B+5Fz0JCf/QvbKLgwiPw0FriFsYBLjUof38jT75VnzlO9cX/1f8wknD6jiE3
+        7Jq+fTVD3vK7U4NLZTLOgUZhQBTP9NRbOPb6ReJwYVUQ5R84qJARd3Y4KUz4mxV486bt7e
+        jQ6xxvEiRXhNti6XRHwOe1Zu96tWoFY=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-197-O3pgTF8yPsWobOzFSOtAOQ-1; Tue, 28 Jun 2022 03:47:11 -0400
+X-MC-Unique: O3pgTF8yPsWobOzFSOtAOQ-1
+Received: by mail-wr1-f70.google.com with SMTP id s1-20020a5d69c1000000b0021b9f3abfebso1565679wrw.2
+        for <linux-modules@vger.kernel.org>; Tue, 28 Jun 2022 00:47:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vhwYJTHCpA5f1vgUVZ/tbiw7F2pML5jzftZeJbrY+xY=;
+        b=DKgQzSrOzBiME0wj2lqJ6Nm3tKhiJ9r0T10Kbu65E2uSLsZMFnnp+0/Kaw3XaTlA/E
+         bcJZh5mMrhLBItkBgwprndeH53vVxfmD8+6pIfkF7FVKnamkMyicZl9HXz17qMtYFNOn
+         AQ0DKFN7y3IwyF9KdJh6WyRcdR7lo7BpF7wRLi6UWs/N0VGldNFVNxQvSgd78UMBz+3f
+         iwnUpikXYxhqRFC321iCVyLI4XnhEsz/yCiifZ75AE7j34O7Ih2Pi/Y8pZz1DDAlJI9s
+         5zLzERRINI/gnNgzjs8qNbBMpDvZQ7UOKpnJaExskAujqqNthmzwgs6sgOi2eb/PLRb2
+         lJgA==
+X-Gm-Message-State: AJIora/KNahKhxatjsen1A01UJSOeixwQVaAScp6fdTkR5ZACchyC54I
+        ASa5ciwFlJc1lRbtZHm2jnhDpbzPwKl1J8cYwjzdUtnD0GfnBUQ88wVxL/q5i6McOFTr7M/0rrw
+        GA+YVfbzDtHLoCRCPZ4onyrpe
+X-Received: by 2002:a05:600c:4f13:b0:39d:b6c5:ce4e with SMTP id l19-20020a05600c4f1300b0039db6c5ce4emr25402395wmq.34.1656402429977;
+        Tue, 28 Jun 2022 00:47:09 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vtS3T9UbI6Ib3KtZ+peaUDKLlP6cSEmfzlOgUCOkeKGlpETh+pHg15t7TzPLRS39uNiiA5oA==
+X-Received: by 2002:a05:600c:4f13:b0:39d:b6c5:ce4e with SMTP id l19-20020a05600c4f1300b0039db6c5ce4emr25402380wmq.34.1656402429815;
+        Tue, 28 Jun 2022 00:47:09 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id i1-20020adffc01000000b0021b5861eaf7sm13057958wrr.3.2022.06.28.00.47.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 00:47:08 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 08:47:08 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] module: Show the last unloaded module's taint flag(s)
+Message-ID: <20220628074708.fg3ocx3vu7affkxl@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220627164052.2416485-1-atomlin@redhat.com>
+ <20220627164052.2416485-2-atomlin@redhat.com>
+ <4ddb64da-58f0-a4af-cf57-a870015a0077@csgroup.eu>
 MIME-Version: 1.0
-References: <CAABZP2wCsXG=qaZ68OwDDPA=uG-4Wb-e6WxMNuHNbJTZ1ruenA@mail.gmail.com>
-In-Reply-To: <CAABZP2wCsXG=qaZ68OwDDPA=uG-4Wb-e6WxMNuHNbJTZ1ruenA@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 28 Jun 2022 16:24:28 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATNo74bcp6F08iiYjbMrnNeQWsOSys5vYfG88jjpU-kZQ@mail.gmail.com>
-Message-ID: <CAK7LNATNo74bcp6F08iiYjbMrnNeQWsOSys5vYfG88jjpU-kZQ@mail.gmail.com>
-Subject: Re: Possible problem in check-local-export during the kernel build
- process (RCU torture)
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        rcu <rcu@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4ddb64da-58f0-a4af-cf57-a870015a0077@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jun 28, 2022 at 9:55 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
->
-> Dear Masahiro:
->
-> 1. The cause of the problem
-> When I am doing RCU torture test:
->
-> #git clone https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-> #cd linux-rcu
-> #git checkout remotes/origin/pmladek.2022.06.15a
-> #./tools/testing/selftests/rcutorture/bin/torture.sh
->
-> The kernel building report error something in both Dell PowerEdge R720
-> and Thinkpad T14 (Amd).
->
-> For example:
-> /mnt/rcu/linux-rcu/tools/testing/selftests/rcutorture/res/2022.06.27-10.42.37-torture#
-> find . -name Make.out|xargs grep Error
-> ./results-rcutorture-kasan/RUDE01/Make.out:make[2]: ***
-> [scripts/Makefile.build:257: kernel/trace/power-traces.o] Error 255
+On Tue 2022-06-28 05:54 +0000, Christophe Leroy wrote:
+> > -	/* Store the name of the last unloaded module for diagnostic purposes */
+> >   	strlcpy(last_unloaded_module, mod->name, sizeof(last_unloaded_module));
+> > +	strcat(last_unloaded_module, module_flags(mod, buf, false));
+> 
+> You replace a bounded string copy by an unbounded strict contat.
+> 
+> Should you use strlcat() instead ?
+
+Hi Christophe,
+
+Why? If I understand correctly, both the destination and source string are
+NULL-terminated (see module_flags()). So, strcat() should be sufficient.
 
 
-check-local-export stopped using the process substitution.
-Seet this commit:
-
-
-commit da4288b95baa1c7c9aa8a476f58b37eb238745b0
-Author: Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed Jun 8 10:11:00 2022 +0900
-
-    scripts/check-local-export: avoid 'wait $!' for process substitution
-
-
-
-
-You are debugging the stale Kbuild code.
-
-If your main interest is RCU torture,
-please narrow it down to a standalone script,
-not the entire Kbuild.
-
-
-
-
-
-
-
-
-
->
-> 2. I trace the problem to check-local-export
-> I add some echo statement in Makefile.build
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 1f01ac65c0cd..0d48a2d3efff 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -227,13 +227,21 @@ cmd_check_local_export =
-> $(srctree)/scripts/check-local-export $@
->
->  define rule_cc_o_c
->         $(call cmd_and_fixdep,cc_o_c)
-> +       echo "after fixdep $$? $<"
->         $(call cmd,gen_ksymdeps)
-> +       echo "after gen_ksymdeps $$? $<"
->         $(call cmd,check_local_export)
-> +       echo "after check_local_export $$? $<"
->         $(call cmd,checksrc)
-> +       echo "after checksrc $$? $<"
->         $(call cmd,checkdoc)
-> +       echo "after checkdoc $$? $<"
->         $(call cmd,gen_objtooldep)
-> +       echo "after gen_objtooldep $$? $<"
->         $(call cmd,gen_symversions_c)
-> +       echo "after gen_symversions $$? $<"
->         $(call cmd,record_mcount)
-> +       echo "after record_mcount $$? $<"
->  endef
->
-> Then I rerun the torture.sh
->
-> The result show it is check_local_export did not continue in all failed builds.
->
-> 3. I trace into wait statement in check-local-export
-> diff --git a/scripts/check-local-export b/scripts/check-local-export
-> index da745e2743b7..d35477d95bdc 100755
-> --- a/scripts/check-local-export
-> +++ b/scripts/check-local-export
-> @@ -12,7 +12,7 @@ declare -A symbol_types
->  declare -a export_symbols
->
->  exit_code=0
-> -
-> +echo "check-local-export L15 ${0} ${1}"
->  while read value type name
->  do
->         # Skip the line if the number of fields is less than 3.
-> @@ -50,9 +50,10 @@ do
->         #   done < <(${NM} --quiet ${1})
->  done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
->
-> +echo "check-local-export L53 ${0} ${1}"
->  # Catch error in the process substitution
->  wait $!
-> -
-> +echo "check-local-export L56 ${0} ${1} $! $?"
->  for name in "${export_symbols[@]}"
->  do
->         # nm(3) says "If lowercase, the symbol is usually local"
-> @@ -61,5 +62,9 @@ do
->                 exit_code=1
->         fi
->  done
-> -
-> +if [ ${exit_code} -ne 0 ] ; then
-> +    echo "Zhouyi Zhou"
-> +    echo ${exit_code}
-> +fi
-> +echo "check-local-export L69 $? ${exit_code}"
->  exit ${exit_code}
->
-> Then I rerun the torture.sh
->
-> The result show it is wait $! in all failed builds because in all failed cases,
-> there is L53, but no L56
->
-> 4. I look into source code of wait command
-> #wget http://ftp.gnu.org/gnu/bash/bash-5.0.tar.gz
-> #tar zxf tar zxf bash-5.0.tar.gz
-> I found that there are QUIT statements in realization of function wait_for
->
-> 5. My Guess
-> wait statement in check-local-export may cause bash to quit
-> I am very interested in this problem, but I am a rookie, I am very
-> glad to proceed the investigation with your further directions.
->
-> Sorry to have brought you so much trouble.
->
->
-> Kind Regard
-> Thank you very much
-> Zhouyi
-
-
+Kind regards,
 
 -- 
-Best Regards
-Masahiro Yamada
+Aaron Tomlin
+
