@@ -2,226 +2,89 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 371FBCCA480
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Jun 2022 23:35:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67BCBC433EF
+	for <linux-modules@archiver.kernel.org>; Thu, 30 Jun 2022 09:11:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiF1Xfn (ORCPT
+        id S233069AbiF3JLR (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Jun 2022 19:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
+        Thu, 30 Jun 2022 05:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiF1Xfm (ORCPT
+        with ESMTP id S232392AbiF3JLR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Jun 2022 19:35:42 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C0E39179;
-        Tue, 28 Jun 2022 16:35:40 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id e2so19769684edv.3;
-        Tue, 28 Jun 2022 16:35:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kl62yh9fcFGqVyYLNjMbcUjr7j+88ktEAbLSuJ6L1KY=;
-        b=M6u8xP/isYO4zwe1vwxJwWsp4YrBRQw2N343gV4jBw2i/29+NTYiAMrPcgFlC+b5uV
-         TOYjMeUjdf3jen1z9w7Ivo9JGpHRKUa4zP92JDjV3JLQZOGmXmLTqeeqk6DspIXeW38P
-         Qzf0ZFmhnmXObPKJd9AoBQCs/hwBPeeM4uxRyLQXcpEK/2DZ91pVTxDOllTwv4QG6Xn/
-         wb1xtfzJwLrwJfPP1Fdf/02hjRokHf2olFFpBd+Z4sfh1/4F/SvRfYanxkpu8E/Z8RMm
-         xaXKZT5i7eAnMB0AacjCr63cU8bNTuKBegH4MtldDwTa9/1lZT8SiUXRKaEbM/GGzJPN
-         dSBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kl62yh9fcFGqVyYLNjMbcUjr7j+88ktEAbLSuJ6L1KY=;
-        b=2Ty03sKf0Az3VqWZZh1Oml6q4fPlNg61iFus1PfUkhOq5+pDlhpj5Qc07ABPvfkFGm
-         13YjCeHimrIevY+7OmadvW1bec3dihwLOiz+DdYxqyxETRxD0DmpsTfe1OTxArVDWES+
-         JwzeV/xGA0EJAbfTXPX8IeoNXohsfU0oCWAHjedhAdu0ys6n5nVIaGvzBBuXG7TocVFY
-         sgR9cSDJJA62zSimAD2XEeAkbzcou5fIp1JCm9XZdzkkzxl60zrwhb488KRZDqDKwrfN
-         /sy85Yx3YRtayCce/42vVC4NyNYdE/WnerQDCU863wzYhhNVuBcbp/jij8F+qb3vfAC6
-         3iaQ==
-X-Gm-Message-State: AJIora9HxE0ZvEG72YBH3dc0usL6YZLxx8Av898O0SvcVVXyj+l7KrXb
-        0VJjjKV2Jbrp13JT2L0jtHNHynDbFi+YBzyBMDE=
-X-Google-Smtp-Source: AGRyM1t5umLiHjcwLID87ouxNCjRvmkitFjy0Lz5f0X/cd77dmmK/oDjS+pai03X+fSYzgFMpV5cmMDAtNqQnwyE6i0=
-X-Received: by 2002:a05:6402:42c6:b0:435:dc4b:1bb2 with SMTP id
- i6-20020a05640242c600b00435dc4b1bb2mr602470edc.355.1656459339402; Tue, 28 Jun
- 2022 16:35:39 -0700 (PDT)
+        Thu, 30 Jun 2022 05:11:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F165319290
+        for <linux-modules@vger.kernel.org>; Thu, 30 Jun 2022 02:11:15 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LYXZn10T4zkWml
+        for <linux-modules@vger.kernel.org>; Thu, 30 Jun 2022 17:09:21 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 30 Jun 2022 17:11:13 +0800
+Received: from huawei.com (10.175.101.6) by kwepemm600010.china.huawei.com
+ (7.193.23.86) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 30 Jun
+ 2022 17:11:12 +0800
+From:   <luhuaxin1@huawei.com>
+To:     <linux-modules@vger.kernel.org>
+CC:     <lucas.de.marchi@gmail.com>
+Subject: [PATCH] libkmod: Support SM3 hash algorithm
+Date:   Thu, 30 Jun 2022 14:36:05 +0800
+Message-ID: <20220630063605.9192-1-luhuaxin1@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <CAABZP2wCsXG=qaZ68OwDDPA=uG-4Wb-e6WxMNuHNbJTZ1ruenA@mail.gmail.com>
- <CAK7LNATNo74bcp6F08iiYjbMrnNeQWsOSys5vYfG88jjpU-kZQ@mail.gmail.com>
-In-Reply-To: <CAK7LNATNo74bcp6F08iiYjbMrnNeQWsOSys5vYfG88jjpU-kZQ@mail.gmail.com>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Wed, 29 Jun 2022 07:35:27 +0800
-Message-ID: <CAABZP2y0ScFKftLJsyi9qP16ezpSMy1UxoDmWp1mDktCxJkh1A@mail.gmail.com>
-Subject: Re: Possible problem in check-local-export during the kernel build
- process (RCU torture)
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        rcu <rcu@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jun 28, 2022 at 3:25 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Tue, Jun 28, 2022 at 9:55 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
-> >
-> > Dear Masahiro:
-> >
-> > 1. The cause of the problem
-> > When I am doing RCU torture test:
-> >
-> > #git clone https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-> > #cd linux-rcu
-> > #git checkout remotes/origin/pmladek.2022.06.15a
-> > #./tools/testing/selftests/rcutorture/bin/torture.sh
-> >
-> > The kernel building report error something in both Dell PowerEdge R720
-> > and Thinkpad T14 (Amd).
-> >
-> > For example:
-> > /mnt/rcu/linux-rcu/tools/testing/selftests/rcutorture/res/2022.06.27-10.42.37-torture#
-> > find . -name Make.out|xargs grep Error
-> > ./results-rcutorture-kasan/RUDE01/Make.out:make[2]: ***
-> > [scripts/Makefile.build:257: kernel/trace/power-traces.o] Error 255
->
->
-> check-local-export stopped using the process substitution.
-> Seet this commit:
->
->
-> commit da4288b95baa1c7c9aa8a476f58b37eb238745b0
-> Author: Masahiro Yamada <masahiroy@kernel.org>
-> Date:   Wed Jun 8 10:11:00 2022 +0900
->
->     scripts/check-local-export: avoid 'wait $!' for process substitution
->
->
->
->
-> You are debugging the stale Kbuild code.
-Thank Masahiro for your help
-I patched da4288b95baa1c7c9aa8a476f58b37eb238745b0 to
-pmladek.2022.06.15a branch of linux-rcu, after 13 hours' RCU torture
-test,
-all the testcases are built successfully!
+From: HuaxinLu <luhuaxin1@huawei.com>
 
-Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
->
-> If your main interest is RCU torture,
-> please narrow it down to a standalone script,
-> not the entire Kbuild.
-OK and Thank you and Paul both for your guidance and encouragement ;-)
->
->
->
->
->
->
->
->
->
-> >
-> > 2. I trace the problem to check-local-export
-> > I add some echo statement in Makefile.build
-> > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> > index 1f01ac65c0cd..0d48a2d3efff 100644
-> > --- a/scripts/Makefile.build
-> > +++ b/scripts/Makefile.build
-> > @@ -227,13 +227,21 @@ cmd_check_local_export =
-> > $(srctree)/scripts/check-local-export $@
-> >
-> >  define rule_cc_o_c
-> >         $(call cmd_and_fixdep,cc_o_c)
-> > +       echo "after fixdep $$? $<"
-> >         $(call cmd,gen_ksymdeps)
-> > +       echo "after gen_ksymdeps $$? $<"
-> >         $(call cmd,check_local_export)
-> > +       echo "after check_local_export $$? $<"
-> >         $(call cmd,checksrc)
-> > +       echo "after checksrc $$? $<"
-> >         $(call cmd,checkdoc)
-> > +       echo "after checkdoc $$? $<"
-> >         $(call cmd,gen_objtooldep)
-> > +       echo "after gen_objtooldep $$? $<"
-> >         $(call cmd,gen_symversions_c)
-> > +       echo "after gen_symversions $$? $<"
-> >         $(call cmd,record_mcount)
-> > +       echo "after record_mcount $$? $<"
-> >  endef
-> >
-> > Then I rerun the torture.sh
-> >
-> > The result show it is check_local_export did not continue in all failed builds.
-> >
-> > 3. I trace into wait statement in check-local-export
-> > diff --git a/scripts/check-local-export b/scripts/check-local-export
-> > index da745e2743b7..d35477d95bdc 100755
-> > --- a/scripts/check-local-export
-> > +++ b/scripts/check-local-export
-> > @@ -12,7 +12,7 @@ declare -A symbol_types
-> >  declare -a export_symbols
-> >
-> >  exit_code=0
-> > -
-> > +echo "check-local-export L15 ${0} ${1}"
-> >  while read value type name
-> >  do
-> >         # Skip the line if the number of fields is less than 3.
-> > @@ -50,9 +50,10 @@ do
-> >         #   done < <(${NM} --quiet ${1})
-> >  done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
-> >
-> > +echo "check-local-export L53 ${0} ${1}"
-> >  # Catch error in the process substitution
-> >  wait $!
-> > -
-> > +echo "check-local-export L56 ${0} ${1} $! $?"
-> >  for name in "${export_symbols[@]}"
-> >  do
-> >         # nm(3) says "If lowercase, the symbol is usually local"
-> > @@ -61,5 +62,9 @@ do
-> >                 exit_code=1
-> >         fi
-> >  done
-> > -
-> > +if [ ${exit_code} -ne 0 ] ; then
-> > +    echo "Zhouyi Zhou"
-> > +    echo ${exit_code}
-> > +fi
-> > +echo "check-local-export L69 $? ${exit_code}"
-> >  exit ${exit_code}
-> >
-> > Then I rerun the torture.sh
-> >
-> > The result show it is wait $! in all failed builds because in all failed cases,
-> > there is L53, but no L56
-> >
-> > 4. I look into source code of wait command
-> > #wget http://ftp.gnu.org/gnu/bash/bash-5.0.tar.gz
-> > #tar zxf tar zxf bash-5.0.tar.gz
-> > I found that there are QUIT statements in realization of function wait_for
-> >
-> > 5. My Guess
-> > wait statement in check-local-export may cause bash to quit
-> > I am very interested in this problem, but I am a rookie, I am very
-> > glad to proceed the investigation with your further directions.
-> >
-> > Sorry to have brought you so much trouble.
-> >
-> >
-> > Kind Regard
-> > Thank you very much
-> > Zhouyi
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
-Best Regards
-Zhouyi
+SM3 has been supported in kernel and cryptographic libraries like openssl.
+This patch adds support for the SM3 algorithm of kmod.
+
+Signed-off-by: HuaxinLu <luhuaxin1@huawei.com>
+---
+ libkmod/libkmod-signature.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+index 4e8748c..4ae5af6 100644
+--- a/libkmod/libkmod-signature.c
++++ b/libkmod/libkmod-signature.c
+@@ -56,6 +56,7 @@ enum pkey_hash_algo {
+ 	PKEY_HASH_SHA384,
+ 	PKEY_HASH_SHA512,
+ 	PKEY_HASH_SHA224,
++	PKEY_HASH_SM3,
+ 	PKEY_HASH__LAST
+ };
+ 
+@@ -68,6 +69,7 @@ const char *const pkey_hash_algo[PKEY_HASH__LAST] = {
+ 	[PKEY_HASH_SHA384]	= "sha384",
+ 	[PKEY_HASH_SHA512]	= "sha512",
+ 	[PKEY_HASH_SHA224]	= "sha224",
++	[PKEY_HASH_SM3]		= "sm3",
+ };
+ 
+ enum pkey_id_type {
+@@ -161,6 +163,10 @@ static int obj_to_hash_algo(const ASN1_OBJECT *o)
+ 		return PKEY_HASH_SHA512;
+ 	case NID_sha224:
+ 		return PKEY_HASH_SHA224;
++# ifndef OPENSSL_NO_SM3
++	case NID_sm3:
++		return PKEY_HASH_SM3;
++# endif
+ 	default:
+ 		return -1;
+ 	}
+-- 
+2.33.0
+
