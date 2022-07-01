@@ -2,121 +2,82 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C65AC43334
-	for <linux-modules@archiver.kernel.org>; Fri,  1 Jul 2022 21:25:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1090C433EF
+	for <linux-modules@archiver.kernel.org>; Fri,  1 Jul 2022 21:46:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiGAVZ3 (ORCPT
+        id S232222AbiGAVp7 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 1 Jul 2022 17:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        Fri, 1 Jul 2022 17:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiGAVZ2 (ORCPT
+        with ESMTP id S231901AbiGAVpt (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 1 Jul 2022 17:25:28 -0400
+        Fri, 1 Jul 2022 17:45:49 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2E443AE0;
-        Fri,  1 Jul 2022 14:25:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF5B70E41;
+        Fri,  1 Jul 2022 14:45:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ds8jh0l5EsIdliBH9eqhr4U5uNb1IBs028DxPs3Imn4=; b=wIcgEjKxGgxSrUuF95csVmK7Fp
-        ZsEMWiv26PKR8MZ2CSFW+5VIWA3Lok6BkGdPfvOKkkA2AksPa/25NKv2bgF69NAtKzfgqwboKzDIv
-        VI0Dfa7L4oDaNbMB0uRn3PKbTJZQ9fkk3qfPhNczpRyqPu+Pkkw4Xj58N+fGeJvl7NSYZswMS+gNp
-        MGGrCCwdqxDW4ylfkqtibSKmy+3Vz7kXVIhqZ0YByyhDevTCjZ2oAPqvcFDWGiUNhALYv0kruTTdz
-        yJnomGQ1WxLTR7p83++BUUCGMr1VuI/1vVnW+wDaemK2tgQI+cHdu/sjDhMcX5FB27nByAR/oVabP
-        /Vm+35lA==;
+        bh=3cFpCkDcgwXTNgkLW8NYHD/uOpNoht3E07/8tRuvcQo=; b=xHHEVYUw+oDD1f15MIb4xRFhaB
+        nQcsRlXshXyMal5foqMCb+pq4sYE0WdbJ8LdjtliGIRDjAB/tOPate1k8AslSGx0OpMy57B465SpX
+        7mTgiScxlL/25vp135FkFBhTtc434NUOCdXtPWtdLbtXwNkaII47UDomjcJr17KkeUTI3c3eeXduC
+        3muCcHsKMdyQCdtBsEoL7vLVhuvJWgEZsAuvvMzSbeR9Oc9XVyPgaTGkfw6xM7avoQ4WOPOMv2Kgi
+        v6i832IF1nHSsZG1De6gOu7oiASX7TiH8VsI431r6v9IjYTiLr92OIO2YCVpAbGwsQ6JR2ADyzC7k
+        +LO1LYGA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o7O8l-0070Lt-4u; Fri, 01 Jul 2022 21:25:27 +0000
-Date:   Fri, 1 Jul 2022 14:25:27 -0700
+        id 1o7OSJ-0074EC-B2; Fri, 01 Jul 2022 21:45:39 +0000
+Date:   Fri, 1 Jul 2022 14:45:39 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-modules <linux-modules@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [ANNOUNCE] kmod 30
-Message-ID: <Yr9mR/xGhoQU/WTG@bombadil.infradead.org>
-References: <20220630153621.3fggpqrbyvunhwfu@ldmartin-desk2>
- <Yr4fHBR08VAVbs2E@bombadil.infradead.org>
- <20220630223323.2hko2imx62embtsj@ldmartin-desk2>
- <Yr8zlqicFErzw0dc@bombadil.infradead.org>
- <20220701181321.zgzxv7p3zrbzkuf6@ldmartin-desk2>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] module: Fix selfAssignment cppcheck warning
+Message-ID: <Yr9rA5U/Sa0Tamau@bombadil.infradead.org>
+References: <3c3041d4815d6d6ad5f7ab78b202e192210f6694.1655047308.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220701181321.zgzxv7p3zrbzkuf6@ldmartin-desk2>
+In-Reply-To: <3c3041d4815d6d6ad5f7ab78b202e192210f6694.1655047308.git.christophe.leroy@csgroup.eu>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jul 01, 2022 at 11:13:21AM -0700, Lucas De Marchi wrote:
-> On Fri, Jul 01, 2022 at 10:49:10AM -0700, Luis Chamberlain wrote:
-> > On Thu, Jun 30, 2022 at 03:33:23PM -0700, Lucas De Marchi wrote:
-> > > On Thu, Jun 30, 2022 at 03:09:32PM -0700, Luis Chamberlain wrote:
-> > > > Sorry for the super late review, I was swamped. OK so the only issue
-> > > > I can think of is that rmmod *used* to support the kernel wait support
-> > > > with $(rmmod --wait) so wouldn't this be odd?
-> > > 
-> > > any reason not to use modprobe -r?
-> > 
-> > I was referring to old scripts which may have used $(rmmod --wait) before.
-> > But since support for that was ripped, then yeah I can see that should
-> > not be an issue.
-> > 
-> > However I can think of *one* issue, did we ever support `modprobe--wait`?
+On Sun, Jun 12, 2022 at 05:21:56PM +0200, Christophe Leroy wrote:
+> cppcheck reports the following warnings:
 > 
-> no
+> kernel/module/main.c:1455:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
+>    mod->core_layout.size = strict_align(mod->core_layout.size);
+>                          ^
+> kernel/module/main.c:1489:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+>    mod->init_layout.size = strict_align(mod->init_layout.size);
+>                          ^
+> kernel/module/main.c:1493:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+>    mod->init_layout.size = strict_align(mod->init_layout.size);
+>                          ^
+> kernel/module/main.c:1504:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+>    mod->init_layout.size = strict_align(mod->init_layout.size);
+>                          ^
+> kernel/module/main.c:1459:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
+>    mod->data_layout.size = strict_align(mod->data_layout.size);
+>                          ^
+> kernel/module/main.c:1463:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
+>    mod->data_layout.size = strict_align(mod->data_layout.size);
+>                          ^
+> kernel/module/main.c:1467:26: warning: Redundant assignment of 'mod->data_layout.size' to itself. [selfAssignment]
+>    mod->data_layout.size = strict_align(mod->data_layout.size);
+>                          ^
 > 
-> > 
-> > Because the way fstests / blktests would implement this feature
-> > detection is with something like this now:
-> > 
-> > _has_modprobe_patient()
-> > {
-> > 	modprobe --help >& /dev/null || return 1
-> > 	modprobe --help | grep -q -1 "remove-patiently" || return 1
-> > 	return 0
-> > }
+> This is due to strict_align() being a no-op when
+> CONFIG_STRICT_MODULE_RWX is not selected.
 > 
-> the grep would need to be changed to something like "-w, --wait"
-
-Yes of course, that's easy, but we modprobe ever supportedl "--wait"
-this would be a problem. Since it did not, we are good then!
-
-> > > > It is why I had gone with:
-> > > >
-> > > > -p | --remove-patiently   patiently removes the module
-> > > > -t | --timeout            timeout in ms to remove the module
-> > > >
-> > > > You would know better though.
-> > > >
-> > > > Also just curious, is it really terrible to just support waiting
-> > > > forever?
-> > > 
-> > > is there a use case for that? If we are trying to cover some races, I
-> > > imagine a small timeout would be sufficient. Also notice that if the
-> > > timeout is too big, so will be the interval between the retries.  On
-> > > your v2 I had suggested polling the refcnt so we would get notificed
-> > > on changes, but as you also noticed, that didn't work very well.  So I
-> > > went back to a time-based retry solution.
-> > > 
-> > > if there is a use-case, should we cap the interval between retries?
-> > 
-> > I really can't think of a use case except for catching glaring
-> > unexpected bugs in test suites where the kernel developer would
-> > really like to know something really bad happened, but even then
-> > a timeout is likely desirable.
+> Transform strict_align() macro into an inline function. It will
+> allow type checking and avoid the selfAssignment warning.
 > 
-> yeah... if developer wants to possibly wait for a long time, `--wait -1`
-> is available to wait for years.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-:) good call
-
-> > So just a heads up the timeout I'll use for fstests / blktests will be
-> > of 100 seconds.
-> 
-> yeah... 100 seconds still make more sense than -1 IMO
-
-Great we'll go with that. Hopefully this will put a nail on the flaky
-modules issue for good!
+Queued up thanks!
 
   Luis
