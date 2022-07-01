@@ -2,68 +2,61 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8740C43334
-	for <linux-modules@archiver.kernel.org>; Fri,  1 Jul 2022 21:49:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B13BEC43334
+	for <linux-modules@archiver.kernel.org>; Fri,  1 Jul 2022 21:54:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiGAVth (ORCPT
+        id S230077AbiGAVyW (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 1 Jul 2022 17:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        Fri, 1 Jul 2022 17:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiGAVtf (ORCPT
+        with ESMTP id S229803AbiGAVyV (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 1 Jul 2022 17:49:35 -0400
+        Fri, 1 Jul 2022 17:54:21 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A40F5925B;
-        Fri,  1 Jul 2022 14:49:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C14B6F37D;
+        Fri,  1 Jul 2022 14:54:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fjeXK1KZbGprcvCBSDuxzycjeEJ3g+xJ7Sip51yEnQ8=; b=K3K5sLpPzzqguJkgowRr6+XHZE
-        zBcK98guCTsDg3wPwvINIEnbEeQtjm+2kx4yLPYv/eZi4oNGX2V6HzO90ge8K9k+EYDdlSR6nsgFY
-        uy3fewggenXepq689csZ95Ezwl0eoyYwQP0FnWNHNLril64eErscnKUX7Ut3nWsLpbpFheHes/+Ch
-        5hQuz5kVaErWQ11vQRPS+MF28uPlq9YlrzAkxMqeTtsYZEyUctWTCw1cbiCY8VzT29tUU1u8QLHoS
-        /uLTYUM+R5wXgt87nWZ1ASDkqjobPkaPN5h1BSBnk91/z73O0PASHu1OcwXJXREETewdBJhhVWLk3
-        vlriCCIg==;
+        bh=kwaV21aI98J9eQWnMTeGY4/ZCRsVEnaxnrHura0TvR0=; b=J6tNZrlo5hXk9SCHaMlucvUinC
+        Gj0utyF0ftc2HMNo+NNQ7dcF3FRTw/BeYfL0Ef1QMF0fpuDG+nuZKfW+mQ+fD4qVg4u8LrDGelg3q
+        IOOV5eJsVt8ChzS/qwtDZkZBQ9GRtqQQRv+NkptTQy4IxI+18n2kMwwbmmrAGZp0skPsW00OLXo7P
+        3RBlLN3sqdZ2eUqrxeb4Z0nabCpbZ6bFHSUQQnQs5Pb2Vq98cxHcZ5h5/pUSPhp58DBj74zQcMuUZ
+        0yp1STiTzrVimsk99B1bAU6WK21NoVvpYI1hunqFWq+7YCFnNqGojSccs8Ye4giYcJ2XhXpIpNT7q
+        6DcJV3iA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o7OW6-00760i-Sx; Fri, 01 Jul 2022 21:49:34 +0000
-Date:   Fri, 1 Jul 2022 14:49:34 -0700
+        id 1o7Oah-0076wh-Cd; Fri, 01 Jul 2022 21:54:19 +0000
+Date:   Fri, 1 Jul 2022 14:54:19 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-modules@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, Alex Shi <alexs@kernel.org>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthias Maennich <maennich@google.com>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] doc: module: update file references
-Message-ID: <Yr9r7nVASTv3cVky@bombadil.infradead.org>
-References: <20220613081741.1699713-1-masahiroy@kernel.org>
- <Yr9ryl7SiiAlMQ0f@bombadil.infradead.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH v2] module: Add support for default value for module
+ async_probe
+Message-ID: <Yr9tC2TDVKiJVTgY@bombadil.infradead.org>
+References: <20220604010101.719508-1-saravanak@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yr9ryl7SiiAlMQ0f@bombadil.infradead.org>
+In-Reply-To: <20220604010101.719508-1-saravanak@google.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jul 01, 2022 at 02:48:58PM -0700, Luis Chamberlain wrote:
-> On Mon, Jun 13, 2022 at 05:17:40PM +0900, Masahiro Yamada wrote:
-> > Adjust documents to the file moves made by commit cfc1d277891e ("module:
-> > Move all into module/").
-> > 
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Fri, Jun 03, 2022 at 06:01:00PM -0700, Saravana Kannan wrote:
+> Add a module.async_probe kernel command line option that allows enabling
+> async probing for all modules. When this command line option is used,
+> there might still be some modules for which we want to explicitly force
+> synchronous probing, so extend <modulename>.async_probe to take an
+> optional bool input so that async probing can be disabled for a specific
+> module.
 > 
-> Queued up, thanks!
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
 
-Sorry, missed the v2, taking that.
+Queued up thanks!
 
   Luis
