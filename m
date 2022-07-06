@@ -2,75 +2,106 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91C58C43334
-	for <linux-modules@archiver.kernel.org>; Wed,  6 Jul 2022 23:33:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 868E8C433EF
+	for <linux-modules@archiver.kernel.org>; Wed,  6 Jul 2022 23:37:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbiGFXdj (ORCPT
+        id S234685AbiGFXhN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 6 Jul 2022 19:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
+        Wed, 6 Jul 2022 19:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiGFXdj (ORCPT
+        with ESMTP id S234627AbiGFXhH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 6 Jul 2022 19:33:39 -0400
+        Wed, 6 Jul 2022 19:37:07 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047A42C135;
-        Wed,  6 Jul 2022 16:33:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595092CDC6;
+        Wed,  6 Jul 2022 16:37:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+ziVL8l45N1j8hHSl9LgmfhnTA7yOdWor6E4r8/k7yg=; b=UH/OkfVs7Cpj/LrUgT0DHqZLoi
-        S7s1dgLIMpSKGh48el+4LoYQfgSeyCS9ZMSXx/0pvWGHVKnMhhXPuCmRFtItIy4LadtG9Z/+2Ybd+
-        dmeABV+cOZC2tgvQEFkUbrKC4OBqEgIhMyW7e/51PoY0Lm7pRK0frAfGfTB4xNuMVg0kfYQXuFnrh
-        uo0gJMxkwfqXOyI5UlFWAcLrN8uy8lIn/Nsy+Zu1n5XIUUM7R5o+VX/TXotM0SUDJla/6ElxsdvKH
-        /CqaunG0R0DfE5gkROjyLtb8vE0CWih8lrUYA8kdoA3XfjomaTg1D3Vkhi6KkvSGmjtPHnLcVdhAu
-        SzQF3bEQ==;
+        bh=D09A+SL0PWvZ3ThuAmaRek+4bTTKIaie6FGwPac4dZI=; b=tyLYzUJ5gXXykof2FQlMnmuiWx
+        c8qCBX6FN6VtidXXPgM0uCcjYG6jF4nSLSN5iFPTHZtp6ALwAMMhgXuhI8Ek11YZ58lOrrPll6/wN
+        WzcQgPAOt+/WL9hogQ9/UfZ34VmkIG4HBTwfwkmg+DT00ojP2rvycN05j1Ss5dFwAg8LzBvzeb5F5
+        bzfqxfsncAhtlP5el8PsfP3DIOAktWALp6Fmzs8CDXI0CXZ5K2NiO4rTvuOxe4nxUnAydrcN2wSJg
+        JGR1G/fblzjbKIcNV6I152J/bBaNjPcgE6vuv8/DJ5zQlLS27fAJ9mKAv+6Ls1a9hU2gdvOn5nRfp
+        ZU6qCWYA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9EWU-00ClG8-VB; Wed, 06 Jul 2022 23:33:34 +0000
-Date:   Wed, 6 Jul 2022 16:33:34 -0700
+        id 1o9EZt-00CloN-E7; Wed, 06 Jul 2022 23:37:05 +0000
+Date:   Wed, 6 Jul 2022 16:37:05 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 2/2] module: Show the last unloaded module's taint flag(s)
-Message-ID: <YsYbzgnO2KL9eFvc@bombadil.infradead.org>
+Message-ID: <YsYcoVKA0KzxykqN@bombadil.infradead.org>
 References: <20220627164052.2416485-1-atomlin@redhat.com>
  <20220627164052.2416485-2-atomlin@redhat.com>
- <4ddb64da-58f0-a4af-cf57-a870015a0077@csgroup.eu>
- <20220628074708.fg3ocx3vu7affkxl@ava.usersys.com>
- <20220703142218.65dacvxozppgct6y@ava.usersys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220703142218.65dacvxozppgct6y@ava.usersys.com>
+In-Reply-To: <20220627164052.2416485-2-atomlin@redhat.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, Jul 03, 2022 at 03:22:18PM +0100, Aaron Tomlin wrote:
-> On Tue 2022-06-28 08:47 +0100, Aaron Tomlin wrote:
-> > On Tue 2022-06-28 05:54 +0000, Christophe Leroy wrote:
-> > > > -	/* Store the name of the last unloaded module for diagnostic purposes */
-> > > >   	strlcpy(last_unloaded_module, mod->name, sizeof(last_unloaded_module));
-> > > > +	strcat(last_unloaded_module, module_flags(mod, buf, false));
-> > > 
-> > > You replace a bounded string copy by an unbounded strict contat.
-> > > 
-> > > Should you use strlcat() instead ?
-> > 
-> > Hi Christophe,
-> > 
-> > Why? If I understand correctly, both the destination and source string are
-> > NULL-terminated (see module_flags()). So, strcat() should be sufficient.
+On Mon, Jun 27, 2022 at 05:40:52PM +0100, Aaron Tomlin wrote:
+> For diagnostic purposes, this patch, in addition to keeping a record/or
+> track of the last known unloaded module, we now will include the
+> module's taint flag(s) too e.g: " [last unloaded: fpga_mgr_mod(OE)]"
 > 
-> Hi Luis,
+> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> ---
+>  kernel/module/main.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> Any thoughts on this? As far as I can tell, the destination string cannot
-> be overwritten; albeit, I can use the safer option if you prefer.
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index dcb83cf18d84..0ca6fd38b903 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -524,7 +524,12 @@ static struct module_attribute modinfo_##field = {                    \
+>  MODINFO_ATTR(version);
+>  MODINFO_ATTR(srcversion);
+>  
+> -static char last_unloaded_module[MODULE_NAME_LEN+1];
+> +/*
+> + * Maximum number of characters written by module_flags()
+> + * without a module's state information.
+> + */
+> +#define LAST_UNLOADED_MODULE_NAME_LEN (MODULE_NAME_LEN + MODULE_FLAGS_BUF_SIZE - 2 + 1)
+> +static char last_unloaded_module[LAST_UNLOADED_MODULE_NAME_LEN];
 
-Yeah I don't like this as-is, it makes it not so easy to follow, I'll
-reply in my review of your patch now.
+First of all this then confuses a reader easily as one would expect
+last_unloaded_module always just has the module. Second, "module flags"
+really throws a user off, as one would expect a module flag is some sort
+of parameter, but in reality these are just taint flags.
+
+So I'd much prefer we split the taint flags out to its own buffer and
+dump the data to it alone.
+
+The first patch seems sensible.
 
   Luis
+
+>  #ifdef CONFIG_MODULE_UNLOAD
+>  
+> @@ -694,6 +699,7 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+>  {
+>  	struct module *mod;
+>  	char name[MODULE_NAME_LEN];
+> +	char buf[LAST_UNLOADED_MODULE_NAME_LEN];
+>  	int ret, forced = 0;
+>  
+>  	if (!capable(CAP_SYS_MODULE) || modules_disabled)
+> @@ -753,8 +759,8 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+>  
+>  	async_synchronize_full();
+>  
+> -	/* Store the name of the last unloaded module for diagnostic purposes */
+>  	strlcpy(last_unloaded_module, mod->name, sizeof(last_unloaded_module));
+> +	strcat(last_unloaded_module, module_flags(mod, buf, false));
+>  
+>  	free_module(mod);
+>  	/* someone could wait for the module in add_unformed_module() */
+> -- 
+> 2.34.3
+> 
