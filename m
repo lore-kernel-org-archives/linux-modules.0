@@ -2,57 +2,57 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC9C9CCA47C
-	for <linux-modules@archiver.kernel.org>; Wed,  6 Jul 2022 21:21:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65002CCA481
+	for <linux-modules@archiver.kernel.org>; Wed,  6 Jul 2022 21:24:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234382AbiGFVVw (ORCPT
+        id S233364AbiGFVYc (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 6 Jul 2022 17:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
+        Wed, 6 Jul 2022 17:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233768AbiGFVVw (ORCPT
+        with ESMTP id S233806AbiGFVYa (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 6 Jul 2022 17:21:52 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA04C1A066
-        for <linux-modules@vger.kernel.org>; Wed,  6 Jul 2022 14:21:49 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u15so4767621ejx.9
-        for <linux-modules@vger.kernel.org>; Wed, 06 Jul 2022 14:21:49 -0700 (PDT)
+        Wed, 6 Jul 2022 17:24:30 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A4519012
+        for <linux-modules@vger.kernel.org>; Wed,  6 Jul 2022 14:24:28 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id n4so9927388ejz.10
+        for <linux-modules@vger.kernel.org>; Wed, 06 Jul 2022 14:24:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=b+jNR09nevXwyZD3QcB2efT/aRwjkNE4wZb+r0B6XwE=;
-        b=I6DkDmx26h+CaG/uyqSSoQf0Kpgi3UibjsyI7hR3HtcwlbuXqjSaN373PhsoVA8c/q
-         dP48qLIWwvOkDivqhfCZ9qhqTvobqYE1RdzdhZgsY9X6p1WRrO8y8vZlwC4mJguHh3J2
-         QVHtybfrf6REnR+cLGEVSkcYhTZoN+EAZzqyp91YnDE2h0AB5urwdz4ZAbag8iGXPhdf
-         +G7Qe/WEhy5mYP3bU+JrpZquZQ5DIQOI4BCF/cQ1ezg8Awhq0CRvK74F06s5exP/dLGW
-         dhns8DWwOEGwfzBkdzyAULDjp5+Hd43di+1wckPzbttZOsctcdW6qtLlSLhGgc2hRwlB
-         lU9g==
+        bh=+IXn0jI0ldRL7YIjp8QrMhyxAPtVIFHuatfuckvUqnQ=;
+        b=fQNvjxAJ1U+/Z5BLvLosjiWEbNpCZr4z3sBkgnVLosoYyjz5Kec9u9Kf+o2d4q/jrl
+         zJwnBFX/aQaqwYhjaVXnYTPOA2N2wRNI1ZdXo3LS5c53rJQDBg/01HLlXC+3nnmX1FkL
+         MSdhueU1Cby+/ZbGkB6Mdv+e7uPB4fONBcFU7hDeLOqJrh0okawS2UkVcxgAZSr0S41d
+         EjuYNIXct/or+FpmV7ItHH0l+xZ+FN4ZCnWFp1FCF0qr6P13rCX9ffwocjeI/nUoEGLH
+         Lz9yGwfWbHPhHgAWaHOOnshg+WGNM0O/k+l0h1lGaoviuCLThNi+10/uzCb/6nd4wSY3
+         rrjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=b+jNR09nevXwyZD3QcB2efT/aRwjkNE4wZb+r0B6XwE=;
-        b=z+6FFP03slEUOOZeiLCgI5SLC23nOkJj82R8pEKc/+mz1EjuIdgJRT/7TTnk5RvTLp
-         FmjeZDq08nE3/EdwNIx+mU+Mz/QqcQulGXkB1zBz0boWREyOQ9lWluUce3n0Qhp756uE
-         mm9sg/KV6YDgw+GCqk+k49Dz1/omBJm3Kaa2rj/752aBrMFGBH9MT7HVyzIm9KUSbCHa
-         BFa6umKkaMTlhmLAfd7zDBc4tb/U0VwNlHR0O1Hfq+oxkaujnT5dh5cmQXZTQ282WPGX
-         MLgpx6ivCFbWMtb76Qx10vE4NYRYpsnO0dPCC8z1HDW0fagqi+FiUY22tuMfCT0wLAy7
-         TR2Q==
-X-Gm-Message-State: AJIora9qb7dRTrT8yKcpxXnKslY8dVWcD08FpbsszSqp/gJIisLiwfXu
-        iav799tlpOvKTyRN0KZvCnO5uS95c9yADqhrNESzhA==
-X-Google-Smtp-Source: AGRyM1unmOCSqJ1JoDSIrmquHUHd+3hyWJM/lpJegqaohJgOcShxHgQq8EC+4/uCGtnOiBPC//jVBWUzROPdZlv/7Ms=
-X-Received: by 2002:a17:906:cc96:b0:728:baf0:ba03 with SMTP id
- oq22-20020a170906cc9600b00728baf0ba03mr40471193ejb.52.1657142508217; Wed, 06
- Jul 2022 14:21:48 -0700 (PDT)
+        bh=+IXn0jI0ldRL7YIjp8QrMhyxAPtVIFHuatfuckvUqnQ=;
+        b=RKyKOKAGxN/OTQcWWibgW3Eag8soLB1gETIV8rql3LdCTMmT+as8jFMlVBbPn8Ugye
+         rvic6gGPu4bEWFpWjP6+DEB0ntrq4hXjTLBiof8X8XJmWHaGUrNSVutmf3Tr9/0m/ey+
+         8CK0bevIsqlfMikWRmdfwe6zEsiJ9fFKxILkiaULx2MiNZGKWpVC6Od5/+3tDKkgAcu4
+         OVxR5jg1Lcahiz30kSRy1U2eqNOBB35ty/4alJWuLq8ZqoFy87OhSnbqYwjf6k0DMTwO
+         JUpLoE5DlcsaXFxPI61EsnhyY5mhHLpZhYDuU0RJQrN+lXyaHV075jJUWbH9TurYAdvZ
+         j3Tg==
+X-Gm-Message-State: AJIora89g1TUw0IzmxEycZXlrCmHHtypCS8vRsTzhBbyaZ/l+fqesG2W
+        tKIOFhh2LaI/0Jlb/EoD13rtfGQhcZvOzp7WKdNj0A==
+X-Google-Smtp-Source: AGRyM1sbHYk2Pqpc9qaurG8ACQ+7E+4bfTKqXLTRu9d3ipv8YkEaaHIX9oSlPBTljwJ+/ekeV3QqQO0PmuZmUQvJ4AU=
+X-Received: by 2002:a17:907:3f81:b0:6ff:1a3d:9092 with SMTP id
+ hr1-20020a1709073f8100b006ff1a3d9092mr41359251ejc.319.1657142667241; Wed, 06
+ Jul 2022 14:24:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-5-davidgow@google.com>
-In-Reply-To: <20220625050838.1618469-5-davidgow@google.com>
+References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-6-davidgow@google.com>
+In-Reply-To: <20220625050838.1618469-6-davidgow@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 17:21:37 -0400
-Message-ID: <CAFd5g45www4FZ0BoXN+mbqAJEkub07mM-nfzMtjm4p3q_VSCXw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] nitro_enclaves: test: Use kunit_test_suite() macro
+Date:   Wed, 6 Jul 2022 17:24:16 -0400
+Message-ID: <CAFd5g45-SPvFs7JUNEsm=bMbDEZYTA57r0bA6cgRbSGoMz9-uQ@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
 To:     David Gow <davidgow@google.com>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Jeremy Kerr <jk@codeconstruct.com.au>,
@@ -69,34 +69,34 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
         linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Ulf Hansson <ulf.hansson@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Jun 25, 2022 at 1:10 AM David Gow <davidgow@google.com> wrote:
+On Sat, Jun 25, 2022 at 1:11 AM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> The kunit_test_suite() macro previously conflicted with module_init,
-> making it unsuitable for use in the nitro_enclaves test. Now that it's
-> fixed, we can use it instead of a custom call into internal KUnit
-> functions to run the test.
+> The kunit_test_suite() macro is no-longer incompatible with module_add,
+> so its use can be reinstated.
 >
-> As a side-effect, this means that the test results are properly included
-> with other suites when built-in. To celebrate, enable the test by
-> default when KUNIT_ALL_TESTS is set (and NITRO_ENCLAVES enabled).
+> Since this fixes parsing with builtins and kunit_tool, also enable the
+> test by default when KUNIT_ALL_TESTS is enabled.
 >
-> The nitro_enclave tests can now be run via kunit_tool with:
+> The test can now be run via kunit_tool with:
 >         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
->         --kconfig_add CONFIG_PCI=y --kconfig_add CONFIG_SMP=y \
->         --kconfig_add CONFIG_HOTPLUG_CPU=y \
->         --kconfig_add CONFIG_VIRT_DRIVERS=y \
->         --kconfig_add CONFIG_NITRO_ENCLAVES=y \
->         'ne_misc_dev_test'
+>         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
+>         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
+>         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
+>         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
+>         'sdhci-of-aspeed'
 >
-> (This is a pretty long command, so it may be worth adding a .kunitconfig
-> file at some point, instead.)
+> (It may be worth adding a .kunitconfig at some point, as there are
+> enough dependencies to make that command scarily long.)
 >
-> Reviewed-by: Andra Paraschiv <andraprs@amazon.com>
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+> Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 > Signed-off-by: David Gow <davidgow@google.com>
 
 Acked-by: Brendan Higgins <brendanhiggins@google.com>
