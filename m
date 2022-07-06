@@ -2,101 +2,75 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65002CCA481
-	for <linux-modules@archiver.kernel.org>; Wed,  6 Jul 2022 21:24:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91C58C43334
+	for <linux-modules@archiver.kernel.org>; Wed,  6 Jul 2022 23:33:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233364AbiGFVYc (ORCPT
+        id S231558AbiGFXdj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 6 Jul 2022 17:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        Wed, 6 Jul 2022 19:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233806AbiGFVYa (ORCPT
+        with ESMTP id S231373AbiGFXdj (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 6 Jul 2022 17:24:30 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A4519012
-        for <linux-modules@vger.kernel.org>; Wed,  6 Jul 2022 14:24:28 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id n4so9927388ejz.10
-        for <linux-modules@vger.kernel.org>; Wed, 06 Jul 2022 14:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+IXn0jI0ldRL7YIjp8QrMhyxAPtVIFHuatfuckvUqnQ=;
-        b=fQNvjxAJ1U+/Z5BLvLosjiWEbNpCZr4z3sBkgnVLosoYyjz5Kec9u9Kf+o2d4q/jrl
-         zJwnBFX/aQaqwYhjaVXnYTPOA2N2wRNI1ZdXo3LS5c53rJQDBg/01HLlXC+3nnmX1FkL
-         MSdhueU1Cby+/ZbGkB6Mdv+e7uPB4fONBcFU7hDeLOqJrh0okawS2UkVcxgAZSr0S41d
-         EjuYNIXct/or+FpmV7ItHH0l+xZ+FN4ZCnWFp1FCF0qr6P13rCX9ffwocjeI/nUoEGLH
-         Lz9yGwfWbHPhHgAWaHOOnshg+WGNM0O/k+l0h1lGaoviuCLThNi+10/uzCb/6nd4wSY3
-         rrjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+IXn0jI0ldRL7YIjp8QrMhyxAPtVIFHuatfuckvUqnQ=;
-        b=RKyKOKAGxN/OTQcWWibgW3Eag8soLB1gETIV8rql3LdCTMmT+as8jFMlVBbPn8Ugye
-         rvic6gGPu4bEWFpWjP6+DEB0ntrq4hXjTLBiof8X8XJmWHaGUrNSVutmf3Tr9/0m/ey+
-         8CK0bevIsqlfMikWRmdfwe6zEsiJ9fFKxILkiaULx2MiNZGKWpVC6Od5/+3tDKkgAcu4
-         OVxR5jg1Lcahiz30kSRy1U2eqNOBB35ty/4alJWuLq8ZqoFy87OhSnbqYwjf6k0DMTwO
-         JUpLoE5DlcsaXFxPI61EsnhyY5mhHLpZhYDuU0RJQrN+lXyaHV075jJUWbH9TurYAdvZ
-         j3Tg==
-X-Gm-Message-State: AJIora89g1TUw0IzmxEycZXlrCmHHtypCS8vRsTzhBbyaZ/l+fqesG2W
-        tKIOFhh2LaI/0Jlb/EoD13rtfGQhcZvOzp7WKdNj0A==
-X-Google-Smtp-Source: AGRyM1sbHYk2Pqpc9qaurG8ACQ+7E+4bfTKqXLTRu9d3ipv8YkEaaHIX9oSlPBTljwJ+/ekeV3QqQO0PmuZmUQvJ4AU=
-X-Received: by 2002:a17:907:3f81:b0:6ff:1a3d:9092 with SMTP id
- hr1-20020a1709073f8100b006ff1a3d9092mr41359251ejc.319.1657142667241; Wed, 06
- Jul 2022 14:24:27 -0700 (PDT)
+        Wed, 6 Jul 2022 19:33:39 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047A42C135;
+        Wed,  6 Jul 2022 16:33:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+ziVL8l45N1j8hHSl9LgmfhnTA7yOdWor6E4r8/k7yg=; b=UH/OkfVs7Cpj/LrUgT0DHqZLoi
+        S7s1dgLIMpSKGh48el+4LoYQfgSeyCS9ZMSXx/0pvWGHVKnMhhXPuCmRFtItIy4LadtG9Z/+2Ybd+
+        dmeABV+cOZC2tgvQEFkUbrKC4OBqEgIhMyW7e/51PoY0Lm7pRK0frAfGfTB4xNuMVg0kfYQXuFnrh
+        uo0gJMxkwfqXOyI5UlFWAcLrN8uy8lIn/Nsy+Zu1n5XIUUM7R5o+VX/TXotM0SUDJla/6ElxsdvKH
+        /CqaunG0R0DfE5gkROjyLtb8vE0CWih8lrUYA8kdoA3XfjomaTg1D3Vkhi6KkvSGmjtPHnLcVdhAu
+        SzQF3bEQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9EWU-00ClG8-VB; Wed, 06 Jul 2022 23:33:34 +0000
+Date:   Wed, 6 Jul 2022 16:33:34 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] module: Show the last unloaded module's taint flag(s)
+Message-ID: <YsYbzgnO2KL9eFvc@bombadil.infradead.org>
+References: <20220627164052.2416485-1-atomlin@redhat.com>
+ <20220627164052.2416485-2-atomlin@redhat.com>
+ <4ddb64da-58f0-a4af-cf57-a870015a0077@csgroup.eu>
+ <20220628074708.fg3ocx3vu7affkxl@ava.usersys.com>
+ <20220703142218.65dacvxozppgct6y@ava.usersys.com>
 MIME-Version: 1.0
-References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-6-davidgow@google.com>
-In-Reply-To: <20220625050838.1618469-6-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 17:24:16 -0400
-Message-ID: <CAFd5g45-SPvFs7JUNEsm=bMbDEZYTA57r0bA6cgRbSGoMz9-uQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
-To:     David Gow <davidgow@google.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220703142218.65dacvxozppgct6y@ava.usersys.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Jun 25, 2022 at 1:11 AM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> The kunit_test_suite() macro is no-longer incompatible with module_add,
-> so its use can be reinstated.
->
-> Since this fixes parsing with builtins and kunit_tool, also enable the
-> test by default when KUNIT_ALL_TESTS is enabled.
->
-> The test can now be run via kunit_tool with:
->         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
->         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
->         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
->         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
->         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
->         'sdhci-of-aspeed'
->
-> (It may be worth adding a .kunitconfig at some point, as there are
-> enough dependencies to make that command scarily long.)
->
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: David Gow <davidgow@google.com>
+On Sun, Jul 03, 2022 at 03:22:18PM +0100, Aaron Tomlin wrote:
+> On Tue 2022-06-28 08:47 +0100, Aaron Tomlin wrote:
+> > On Tue 2022-06-28 05:54 +0000, Christophe Leroy wrote:
+> > > > -	/* Store the name of the last unloaded module for diagnostic purposes */
+> > > >   	strlcpy(last_unloaded_module, mod->name, sizeof(last_unloaded_module));
+> > > > +	strcat(last_unloaded_module, module_flags(mod, buf, false));
+> > > 
+> > > You replace a bounded string copy by an unbounded strict contat.
+> > > 
+> > > Should you use strlcat() instead ?
+> > 
+> > Hi Christophe,
+> > 
+> > Why? If I understand correctly, both the destination and source string are
+> > NULL-terminated (see module_flags()). So, strcat() should be sufficient.
+> 
+> Hi Luis,
+> 
+> Any thoughts on this? As far as I can tell, the destination string cannot
+> be overwritten; albeit, I can use the safer option if you prefer.
 
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
+Yeah I don't like this as-is, it makes it not so easy to follow, I'll
+reply in my review of your patch now.
+
+  Luis
