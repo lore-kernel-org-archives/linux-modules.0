@@ -2,266 +2,114 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87B45C433EF
-	for <linux-modules@archiver.kernel.org>; Thu,  7 Jul 2022 00:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3435C433EF
+	for <linux-modules@archiver.kernel.org>; Thu,  7 Jul 2022 16:58:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbiGGAtG (ORCPT
+        id S235915AbiGGQ6C (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 6 Jul 2022 20:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        Thu, 7 Jul 2022 12:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiGGAtG (ORCPT
+        with ESMTP id S235240AbiGGQ55 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 6 Jul 2022 20:49:06 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAFD2CDDE;
-        Wed,  6 Jul 2022 17:49:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eKVp5k3k/Mi0/qvMSWAz3I45APz4Z+f2neoyr3EBBk8=; b=y/l+gyEDKQLQwYx67C/tiLjSvj
-        a0Rj2klHPOOnWB4ifiC8iV44uRyT6gMRDIJu8Dv2ER2oy4a08J4hLSVXwdwacPVzApHheuzw5jsPU
-        ueZNNpL2ZmPny582FLFVGY50TKdBSBNSDRaSrzMtaoRVLEFaqTQAbNK/WSNJcEmYQ8h7wHmPjoU27
-        DW3Xq13JSCqOCHS1BopLuVmKIN9Zf5Ji55U4mcFqLPOEZvp5H6i7+PNNKtDoLx+343HZnseieDEQT
-        BOdpcJ4pvICvl35OyEvix4J3mkDlYJHSklNMqD9bLTfOsm1P8WTN1vBh8vTbVUZYeupio+esFxNHg
-        YnMsYrjg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o9FhM-00Ctk7-8V; Thu, 07 Jul 2022 00:48:52 +0000
-Date:   Wed, 6 Jul 2022 17:48:52 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Helge Deller <deller@gmx.de>, Borislav Petkov <bp@alien8.de>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>, jeyu@kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v2] modules: Ensure natural alignment for
- .altinstructions and __bug_table sections
-Message-ID: <YsYtdMmsW2tHVx54@bombadil.infradead.org>
-References: <Yr8/gr8e8I7tVX4d@p100>
- <Yr9l24rvCAPJvuJQ@bombadil.infradead.org>
- <040d5924-eb42-2ee4-d663-88ef393cd4ae@gmx.de>
+        Thu, 7 Jul 2022 12:57:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2003A2E6B9
+        for <linux-modules@vger.kernel.org>; Thu,  7 Jul 2022 09:57:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657213075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b5Se+ncO6ecEP2j0IGRLm2ErCWYimTOfWI6Y6AOlL5w=;
+        b=R3owD50aAWyFvi+unNu7ZTDeC57bZ3/BSorHwyoqwBaHWSlr1AIlm0/eWdM0qz7MCqhaZl
+        yZNyI08u7l2SWyjw4LbnHuIKQ4iC35HeSq1Twk6zLVg1ytA3CLo0jomz2wveS9Bk7R7aFL
+        OyPa09wWEoviz2h5GdmGnzTValoxe6k=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-456-gwYKsCK3NYWvL-6hVK334A-1; Thu, 07 Jul 2022 12:57:54 -0400
+X-MC-Unique: gwYKsCK3NYWvL-6hVK334A-1
+Received: by mail-wm1-f72.google.com with SMTP id m17-20020a05600c3b1100b003a04a2f4936so9801913wms.6
+        for <linux-modules@vger.kernel.org>; Thu, 07 Jul 2022 09:57:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=b5Se+ncO6ecEP2j0IGRLm2ErCWYimTOfWI6Y6AOlL5w=;
+        b=r+boRVtpl1aHRVdQxdsMNAcSi93FEoLupgO3UrlIh1z9r54wEzoglLMnOk5Nc9xYTZ
+         wgMz6QYpUlSSDn4lkoCGuWM4iQqWELLfSPre4FDMJ+zbf+8wMqTaP4Ta1yKyqkJx0tVG
+         oOFkn/QQpkERBuSOqE4YpkXmkYcE6pp+CVkIjeTvRzuf+7tOchstUhXf+aGxi/uUyaA3
+         Q5wfagJ0V//t0KPuXg5x7IE5fAD3bszFV0XFy5F+kCtlUT8ERFZWhZn9z1MgjJwDylw1
+         Bc0bNkSXXdnI2IA/I1Z0LWrVEuMKjEm7zz0N2+vRpuTIWwc2WVa+t3akZhsXYq97XkxX
+         31Bg==
+X-Gm-Message-State: AJIora9Hvzk4efqQ5+blAAmWr5suQY1rK8jfMnIRHossU0TY4xK+cNM1
+        9PZ9+QRD+x7Lq9B9MLzzNKnXAPuwDk6yg5Wfbeep0JwPtLF2Jg+bMii0acB5OAwcnFLnThkRJ1P
+        5d+dcE4qxbydm1FFP1d0tG0Mv
+X-Received: by 2002:adf:f304:0:b0:21d:7656:83e5 with SMTP id i4-20020adff304000000b0021d765683e5mr14230058wro.407.1657213072537;
+        Thu, 07 Jul 2022 09:57:52 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sigDFIJcjtmUc1O7k0RVKhIrrr7aDHeemIxnkS8BpfHtXpLin1X8wgxmCtbkdtLWp+U6eoIg==
+X-Received: by 2002:adf:f304:0:b0:21d:7656:83e5 with SMTP id i4-20020adff304000000b0021d765683e5mr14230040wro.407.1657213072309;
+        Thu, 07 Jul 2022 09:57:52 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id x2-20020adfdd82000000b0021d62e30a62sm14742505wrl.50.2022.07.07.09.57.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 09:57:51 -0700 (PDT)
+Date:   Thu, 7 Jul 2022 17:57:50 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     rostedt@goodmis.org, cl@linux.com, pmladek@suse.com,
+        mbenes@suse.cz, christophe.leroy@csgroup.eu,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com, oleksandr@natalenko.name, neelx@redhat.com,
+        daniel.thompson@linaro.org, hch@infradead.org, tglx@linutronix.de,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [PATCH v2] module: kallsyms: Ensure preemption in add_kallsyms()
+ with PREEMPT_RT
+Message-ID: <20220707165750.tk4fadpv3d4zr2mb@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220704161753.4033684-1-atomlin@redhat.com>
+ <YsXNVSAtO+VDggcI@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <040d5924-eb42-2ee4-d663-88ef393cd4ae@gmx.de>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <YsXNVSAtO+VDggcI@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Jul 02, 2022 at 06:24:52PM +0200, Helge Deller wrote:
-> Hi Luis,
+On Wed 2022-07-06 10:58 -0700, Luis Chamberlain wrote:
+> Hey Aaron, thanks again!
+
+Hi Luis,
+
+No problem :)
+
+> On Mon, Jul 04, 2022 at 05:17:53PM +0100, Aaron Tomlin wrote:
+> > To disable preemption in the context of add_kallsyms() is incorrect.
 > 
-> On 7/1/22 23:23, Luis Chamberlain wrote:
-> > On Fri, Jul 01, 2022 at 08:40:02PM +0200, Helge Deller wrote:
-> >> In the kernel image vmlinux.lds.S linker scripts the .altinstructions
-> >> and __bug_table sections are 32- or 64-bit aligned because they hold 32-
-> >> and/or 64-bit values.
-> >>
-> >> But for modules the module.lds.S linker script doesn't define a default
-> >> alignment yet, so the linker chooses the default byte alignment, which
-> >> then leads to unnecessary unaligned memory accesses at runtime.
-> >>
-> >> Usually such unaligned accesses are unnoticed, because either the
-> >> hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on hppa
-> >> or sparc) emulate and fix them up at runtime.
-> >>
-> >> On hppa the 32-bit unalignment exception handler was temporarily broken
-> >> due another bad commit, and as such wrong values were returned on
-> >> unaligned accesses to the altinstructions table.
-> >
-> > OK so some bad commit broke something which caused bad alignment access
-> > on altinstructions... But why on modules?!
-> >
-> > I am not aware of modules using alternatives, given that alternatives
-> > are hacks to help with bootup. For modules we can use other things
-> > like jump labels, static keys.
-> 
-> IMHO altinstructions isn't a hack.
-> They are much simpler and easier to use for static replacements.
-> jump labels and static keys are much more komplex, but of course they
-> give the possibility to switch back and forth if you need it.
-> But let's keep this discussion aside...
+> Why, what broke? Did this used to work? Was the commit in question a
+> regression then? Clarifying all this will help a lot.
 
-Yeah sure whatever.
+Sorry for the confusion! If I understand correctly, nothing broke
+intrinsically.
 
-> I checked a few other architectures, and here is what I found.
-> I dropped unimportant sections/lines.
-> 
-> Linux amdahl 4.19.0-20-arm64 #1 SMP Debian 4.19.235-1 (2022-03-17) aarch64 GNU/Linux
-> deller@amdahl:/lib/modules/4.19.0-19-arm64/kernel/block$ objdump -h bfq.ko
-> bfq.ko:     file format elf64-littleaarch64
-> Sections:
-> Idx Name          Size      VMA               LMA               File off  Algn
->   6 .altinstructions 000000b4  0000000000000000  0000000000000000  000090a4  2**0
->                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
->  13 __jump_table  00000018  0000000000000000  0000000000000000  0000d358  2**3
->                   CONTENTS, ALLOC, LOAD, RELOC, DATA
->  15 __bug_table   00000018  0000000000000000  0000000000000000  0000dcf8  2**2
->                   CONTENTS, ALLOC, LOAD, RELOC, DATA
-> 
-> -> aarch64 uses altinstructions in modules as well.
-> -> alignment of altinstructions is wrong (but offset suggests it gets address right).
-> -> jump_table/bug_table -> Ok.
-> 
-> ----
-> 
-> Linux abel 4.19.0-20-armmp-lpae #1 SMP Debian 4.19.235-1 (2022-03-17) armv7l GNU/Linux
-> deller@abel:/lib/modules/4.19.0-20-armmp-lpae/kernel/block$ objdump -h bfq.ko
-> bfq.ko:     file format elf32-littlearm
-> Sections:
-> Idx Name          Size      VMA       LMA       File off  Algn
->   9 __mcount_loc  000002ac  00000000  00000000  00009bf4  2**2
->                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
->  11 __jump_table  0000000c  00000000  00000000  0000b320  2**3
->                   CONTENTS, ALLOC, LOAD, RELOC, DATA
-> 
-> -> arm looks good.
-> 
-> ----
-> 
-> Linux plummer 4.19.0-20-powerpc64le #1 SMP Debian 4.19.235-1 (2022-03-17) ppc64le GNU/Linux
-> deller@plummer:/lib/modules/4.19.0-20-powerpc64le/kernel/block$ objdump -h bfq.ko
-> bfq.ko:     file format elf64-powerpcle
-> Sections:
-> Idx Name          Size      VMA               LMA               File off  Algn
->   9 __mcount_loc  00000530  0000000000000000  0000000000000000  0000bc68  2**0
->                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
->  12 __jump_table  00000018  0000000000000000  0000000000000000  000109d8  2**3
->                   CONTENTS, ALLOC, LOAD, RELOC, DATA
->  16 __bug_table   00000030  0000000000000000  0000000000000000  000115a0  2**0
->                   CONTENTS, ALLOC, LOAD, RELOC, DATA
-> 
-> -> ppc64le has wrong alignment for mcount_loc and bug_table (but file offs suggests it's correct).
-> 
-> ----
-> 
-> Linux zelenka 4.19.0-20-s390x #1 SMP Debian 4.19.235-1 (2022-03-17) s390x GNU/Linux
-> deller@zelenka:/lib/modules/4.19.0-20-s390x/kernel/block$ objdump -h bfq.ko
-> bfq.ko:     file format elf64-s390
-> Sections:
-> Idx Name          Size      VMA               LMA               File off  Algn
->   3 .altinstr_replacement 00000038  0000000000000000  0000000000000000  0000a440  2**0
->                   CONTENTS, ALLOC, LOAD, READONLY, CODE
->   8 .altinstructions 000000a8  0000000000000000  0000000000000000  0000b04e  2**0
->                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
->  10 __mcount_loc  00000538  0000000000000000  0000000000000000  0000b1b0  2**3
->                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
->  13 __jump_table  00000018  0000000000000000  0000000000000000  0000c8e0  2**3
->                   CONTENTS, ALLOC, LOAD, RELOC, DATA
->  17 __bug_table   00000018  0000000000000000  0000000000000000  0000d280  2**0
->                   CONTENTS, ALLOC, LOAD, RELOC, DATA
-> 
-> -> s390x uses altinstructions in modules.
-> -> alignment should be fixed for altinstructions and bug_table
+Rather with commit 08126db5ff73 ("module: kallsyms: Fix suspicious rcu
+usage") under PREEMPT_RT=y, by disabling preemption, I introduced an
+unbounded latency since the loop is not fixed which is generally frowned
+upon. So, I would say this was a regression since earlier preemption was
+not disabled and we would dereference RCU-protected pointers explicitly
+i.e. without using the more appropriate rcu_dereference() family
+of primitives. That being said, these pointers cannot change in this
+context as explained previously.
 
-Thanks for checking. I was wondering what uses cases openly used
-alternatives in modules. It was surprising to see bfq using it for some
-architectures.
+Would the above be suitable - just to confirm before I send another
+iteration?
 
-The problem with this question is that there are quite a bit of uses
-of ALTERNATIVE() on many calls on for example arch/arm64/include/.
-So really it could land on any module.
 
-> > So I don't understand still how this happened yet.
-> 
-> Happened what?
-> Even on x86 there is a call to apply_alternatives() in module_finalize() in
-> arch/x86/kernel/module.c.
+Kind regards,
 
-> I didn't found alternatives in amd64 modules in kernel 4.19 though...
+-- 
+Aaron Tomlin
 
-I do see one on bfq on 5.17:
-
-objdump  /lib/modules/5.17.0-1-amd64/kernel/block/bfq.ko -h --section=.altinstructions --section=.altinstr_replacement 
-objdump: Warning: Separate debug info file
-/usr/lib/modules/5.17.0-1-amd64/kernel/block/bfq.ko found, but CRC does not match - ignoring
-
-/lib/modules/5.17.0-1-amd64/kernel/block/bfq.ko:     file format
-elf64-x86-64
-
-Sections:
-Idx Name          Size      VMA               LMA               File off
-Algn
-  3 .altinstr_replacement 0000001c  0000000000000000  0000000000000000  0000c500  2**0
-                    CONTENTS, ALLOC, LOAD, READONLY, CODE
-  9 .altinstructions 00000054  0000000000000000 0000000000000000  0
-                    CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
-
-I also them on even filesystems like xfs and so yeah, anywhere where a
-primative the achitecture uses which a driver uses will peg an
-alternative to a module.
-
-> >> This then led to
-> >> undefined behaviour because wrong kernel addresses were patched and we
-> >> suddenly faced lots of unrelated bugs, as can be seen in this mail
-> >> thread:
-> >> https://lore.kernel.org/all/07d91863-dacc-a503-aa2b-05c3b92a1e39@bell.net/T/#mab602dfa32be5e229d5e192ab012af196d04d75d
-> >>
-> >> This patch adds the missing natural alignment for kernel modules to
-> >> avoid unnecessary (hard- or software-based) fixups.
-> >
-> > Is it correct to infer that issue you found through a bad commit was
-> > then through code inspection after the bad commit made the kernel do
-> > something stupid with unaligned access to some module altinstructions
-> > section ? Ie, that should not have happened.
-> 
-> Right. Without the bad commit I would not have noticed the problem.
-
-OK please clarify this in your next spin of this patch.
-
-> > I'd like to determine if this is a stable fix, a regression, etc. And
-> > this is not yet clear.
-> 
-> I fully understand that it's a hard to decide if it should go to stable!
-
-> It's not critical or required to go to stable series now.
-
-I agree.
-
-Given, as you noted, that "usually such unaligned accesses are unnoticed,
-because either the hardware (as on x86 CPUs) or in-kernel exception handlers
-emulate and fix them up at runtime", I'm inclined to say no. 
-
-I'll let others chime in, in case I've missed some corner case.
-
-> My suggestion:
-> Add it to current head, wait for 1-2 releases, and *if required* we can
-> push it backwards at any time later.
-
-Yeah that sounds good. Can you re-work the commit log a bit more to make
-the judgement call to move stable later a bit easier? If one doesn't
-work with alternatives regularly there is some information that can
-quickly be lost during patch review / commit log review. And these days
-bots pick up patches for stable... so they might override in the end.
-
-  Luis
-> 
-> Helge
-> 
-> 
-> >   Luis
-> >
-> >>
-> >> Signed-off-by: Helge Deller <deller@gmx.de>
-> >> ---
-> >>  scripts/module.lds.S | 2 ++
-> >>  1 file changed, 2 insertions(+)
-> >>
-> >> --
-> >> v2: updated commit message
-> >>
-> >> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-> >> index 1d0e1e4dc3d2..3a3aa2354ed8 100644
-> >> --- a/scripts/module.lds.S
-> >> +++ b/scripts/module.lds.S
-> >> @@ -27,6 +27,8 @@ SECTIONS {
-> >>  	.ctors			0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
-> >>  	.init_array		0 : ALIGN(8) { *(SORT(.init_array.*)) *(.init_array) }
-> >>
-> >> +	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
-> >> +	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
-> >>  	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
-> >>
-> >>  	__patchable_function_entries : { *(__patchable_function_entries) }
-> 
