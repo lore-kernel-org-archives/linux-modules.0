@@ -2,146 +2,175 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99F47CCA47F
-	for <linux-modules@archiver.kernel.org>; Fri,  8 Jul 2022 18:23:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 137B7C433EF
+	for <linux-modules@archiver.kernel.org>; Fri,  8 Jul 2022 22:24:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239487AbiGHSXi (ORCPT
+        id S237131AbiGHWYo (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 8 Jul 2022 14:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
+        Fri, 8 Jul 2022 18:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238630AbiGHSXX (ORCPT
+        with ESMTP id S231629AbiGHWYo (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 8 Jul 2022 14:23:23 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2F488F2B
-        for <linux-modules@vger.kernel.org>; Fri,  8 Jul 2022 11:23:19 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id k15so20460547iok.5
-        for <linux-modules@vger.kernel.org>; Fri, 08 Jul 2022 11:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=97VK5iQW+OLAMctb3bRhnVJI2Dk4NFeFeJbQXMmdP9g=;
-        b=dm7gPCV+4gyiVAxSxrFBQejGH77CCYpAJBElNtgCngEA5WBI7Yc2n3yywfIFlpcCQd
-         78g5turygqj6DdxWi3846rwYQBQlX8o9NVT3W8VVAhJUOgBlNd71vpPAVU7MkPRWnoyV
-         mxwci8zjQG/h2zn69Vyv0HFfD7p0oOaFdBVmG/CeXp4vKGkaOR8ntd+QkwJKIvtSKtA3
-         iDWXSAT7vQ0X1EGvbKQyqsp55ZEhSbF8lpjPQDRJ7aqB5JL0JpaM/9HcziOkPjuENTsi
-         +vuwgM7BUKnDpoiNFCqHK6QcJ8qeVKH6wEXSEvf67S6wPwYcKKbL7mxAZlb01woQqmE6
-         XTyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=97VK5iQW+OLAMctb3bRhnVJI2Dk4NFeFeJbQXMmdP9g=;
-        b=zKWgA3aEzXkzjWlNEX3cKetwjBirDWsNQVmSlfHuGaWGRY4b/ofQt9yKgJhzj9e4N1
-         hAKG4SXWjuGMQXdBgCm3QBBeIO1xhsKOJn5UEgjCIKzr4Rq5hSte12Ds8mXzcpbwFoVB
-         8/8XKy9iT0RKDqyzjhhnJy5FfyUmS4Ab02XzqOJE97MeSUvhqnJlNmOp7EoYweWxq+1p
-         ZnsyTckjiXV7Of75Pp8ul/FdQm3DVc+EixxNuUznPW6czstOoS3G/WTsvYAy1SXtT1zr
-         7uJF8vOvLTkJtqxyUUhR/+Rlv1y6mQ6b82p6KFaw71q6mTVg9d1sIWdo+ApjV0iYikm3
-         12EA==
-X-Gm-Message-State: AJIora9c2Y+QHVHcO+3220XnZGkWgXRAZCn36kwt0a1kSViTHvmK4+m6
-        F0uzFIwNrBr2CD9lgDr2Ozh5mjG/Ky83J/aWy2LTAQ==
-X-Google-Smtp-Source: AGRyM1v951IbthTm0LElBbaQF/7RITAtzDe990vOEfJILkJ06LZs6GkFPaKHhzsiSy2JTGmWeVbLwI83+m4nwKm1Q7M=
-X-Received: by 2002:a02:a105:0:b0:33f:1909:6c82 with SMTP id
- f5-20020a02a105000000b0033f19096c82mr2997602jag.278.1657304599260; Fri, 08
- Jul 2022 11:23:19 -0700 (PDT)
+        Fri, 8 Jul 2022 18:24:44 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B25CA2E42;
+        Fri,  8 Jul 2022 15:24:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UHEzehHRKRsWXz+8IPbg41NbpQNGDaruCrZKYM7gqVs=; b=rnxODVY0bahe1vwOxdXRU4Q4CD
+        23CMxLYDMfuwShOZdcRgiTh/izRoE5wPPYJWpyuKDdpJN0TbXjYJ11HLnD/XhFLfHGLThb0BUh5i+
+        RAQXmru36B2JL95aXKu9mBtH9yb7HtxzmrTe0qnUcOMFGBDYwrCwcOKHpf1DM0ga3F/W5QUxOHI5m
+        CEkWpn6zEs/5IEjy2Pk7n8kjXp012hn4jnMAqFNWpeLBHxWQEtwUBnwku/31ks5kHp7QELfUsyOtK
+        6CZRonwrHEsQ2VgZgOXg+9TDUWL6rqQsw8In+Wy9r64TAspHaKK4qkt3PPXExVb7am1f8ivj5IUy8
+        X1lJp52A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o9wOs-006C4b-8a; Fri, 08 Jul 2022 22:24:38 +0000
+Date:   Fri, 8 Jul 2022 15:24:38 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
+Message-ID: <YsiupnNJ8WANZiIc@bombadil.infradead.org>
+References: <20220707223546.4124919-1-song@kernel.org>
+ <YsdlXjpRrlE9Z+Jq@bombadil.infradead.org>
+ <F000FF60-CF95-4E6B-85BD-45FC668AAE0A@fb.com>
+ <YseAEsjE49AZDp8c@bombadil.infradead.org>
+ <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
+ <YshUEEQ0lk1ON7H6@bombadil.infradead.org>
+ <863A2D5B-976D-4724-AEB1-B2A494AD2BDB@fb.com>
 MIME-Version: 1.0
-References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-2-davidgow@google.com>
-In-Reply-To: <20220625050838.1618469-2-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 8 Jul 2022 11:23:08 -0700
-Message-ID: <CAGS_qxrGwVL37AOUWCxwx=qg6YvXCDSSu4p_PSt7_87N3RxJZw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] kunit: unify module and builtin suite definitions
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <863A2D5B-976D-4724-AEB1-B2A494AD2BDB@fb.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jun 24, 2022 at 10:10 PM David Gow <davidgow@google.com> wrote:
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 8ffcd7de9607..54306271cfbf 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -250,41 +250,8 @@ static inline int kunit_run_all_tests(void)
->  }
->  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
->
-> -#ifdef MODULE
-> -/**
-> - * kunit_test_suites_for_module() - used to register one or more
-> - *                      &struct kunit_suite with KUnit.
-> - *
-> - * @__suites: a statically allocated list of &struct kunit_suite.
-> - *
-> - * Registers @__suites with the test framework. See &struct kunit_suite for
-> - * more information.
-> - *
-> - * If a test suite is built-in, module_init() gets translated into
-> - * an initcall which we don't want as the idea is that for builtins
-> - * the executor will manage execution.  So ensure we do not define
-> - * module_{init|exit} functions for the builtin case when registering
-> - * suites via kunit_test_suites() below.
-> - */
-> -#define kunit_test_suites_for_module(__suites)                         \
+On Fri, Jul 08, 2022 at 07:58:44PM +0000, Song Liu wrote:
+> 
+> 
+> > On Jul 8, 2022, at 8:58 AM, Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > 
+> > On Fri, Jul 08, 2022 at 01:36:25AM +0000, Song Liu wrote:
+> >> 
+> >> 
+> >>> On Jul 7, 2022, at 5:53 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >>> 
+> >>> On Thu, Jul 07, 2022 at 11:52:58PM +0000, Song Liu wrote:
+> >>>>> On Jul 7, 2022, at 3:59 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >>>>> 
+> >>>>> On Thu, Jul 07, 2022 at 03:35:41PM -0700, Song Liu wrote:
+> >>>>>> This set is the second half of v4 [1].
+> >>>>>> 
+> >>>>>> Changes v5 => v6:
+> >>>>>> 1. Rebase and extend CC list.
+> >>>>> 
+> >>>>> Why post a new iteration so soon without completing the discussion we
+> >>>>> had? It seems like we were at least going somewhere. If it's just
+> >>>>> to include mm as I requested, sure, that's fine, but this does not
+> >>>>> provide context as to what we last were talking about.
+> >>>> 
+> >>>> Sorry for sending v6 too soon. The primary reason was to extend the CC
+> >>>> list and add it back to patchwork (v5 somehow got archived). 
+> >>>> 
+> >>>> Also, I think vmalloc_exec_ work would be a separate project, while this 
+> >>>> set is the followup work of bpf_prog_pack. Does this make sense? 
+> >>>> 
+> >>>> Btw, vmalloc_exec_ work could be a good topic for LPC. It will be much
+> >>>> more efficient to discuss this in person. 
+> >>> 
+> >>> What we need is input from mm / arch folks. What is not done here is
+> >>> what that stuff we're talking about is and so mm folks can't guess. My
+> >>> preference is to address that.
+> >>> 
+> >>> I don't think in person discussion is needed if the only folks
+> >>> discussing this topic so far is just you and me.
+> >> 
+> >> How about we start a thread with mm / arch folks for the vmalloc_exec_*
+> >> topic? I will summarize previous discussions and include pointers to 
+> >> these discussions. If necessary, we can continue the discussion at LPC.
+> > 
+> > This sounds like a nice thread to use as this is why we are talking
+> > about that topic.
+> > 
+> >> OTOH, I guess the outcome of that discussion should not change this set? 
+> > 
+> > If the above is done right then actually I think it would show similar
+> > considerations for a respective free for module_alloc_huge().
+> > 
+> >> If we have concern about module_alloc_huge(), maybe we can have bpf code 
+> >> call vmalloc directly (until we have vmalloc_exec_)? 
+> > 
+> > You'd need to then still open code in a similar way the same things
+> > which we are trying to reach consensus on.
+> 
+> >> What do you think about this plan?
+> > 
+> > I think we should strive to not be lazy and sloppy, and prevent growth
+> > of sloppy code. So long as we do that I think this is all reasoanble.
+> 
+> Let me try to understand your concerns here. Say if we want module code
+> to be a temporary home for module_alloc_huge before we move it to mm
+> code. Would you think it is ready to ship if we:
 
-Deleting this bit now causes merge conflicts with Shuah's kunit
-branch, due to https://patchwork.kernel.org/project/linux-kselftest/patch/20220702040959.3232874-3-davidgow@google.com/
-I.e. We added in a MODULE_INFO(test, "Y") in this to-be-deleted section.
+Please CC Christoph and linux-modules@vger.kernel.org on future patches
+and dicussions aroudn this, and all others now CC'd.
 
-Perhaps something like this would be a fix?
+> 1) Rename module_alloc_huge as module_alloc_text_huge();
 
-  #ifdef MODULE
-  #define _kunit_mark_test_module MODULE_INFO(test, "Y")
-  #else
-  #define _kunit_mark_test_module
-  #endif /* MODULE */
+module_alloc_text_huge() is too long, but I've suggested names before
+which are short and generic, and also suggested that if modules are
+not the only users this needs to go outside of modules and so
+vmalloc_text_huge() or whatever.
 
-  #define __kunit_test_suites(unique_array, unique_suites, ...)
-          \
-          _kunit_mark_test_module;
-          \
-          static struct kunit_suite *unique_array[] = { __VA_ARGS__,
-NULL };     \
-          static struct kunit_suite **unique_suites
-          \
-          __used __section(".kunit_test_suites") = unique_array
+To do this right it begs the question why we don't do that for the
+existing module_alloc(), as the users of this code is well outside of
+modules now. Last time a similar generic name was used all the special
+arch stuff was left to be done by the module code still, but still
+non-modules were still using that allocator. From my perspective the
+right thing to do is to deal with all the arch stuff as well in the
+generic handler, and have the module code *and* the other users which
+use module_alloc() to use that new caller as well.
 
+> 2) Add module_free_text_huge();
 
-> -       static int __init kunit_test_suites_init(void)                  \
-> -       {                                                               \
-> -               return __kunit_test_suites_init(__suites);              \
-> -       }                                                               \
-> -       module_init(kunit_test_suites_init);                            \
-> -                                                                       \
-> -       static void __exit kunit_test_suites_exit(void)                 \
-> -       {                                                               \
-> -               return __kunit_test_suites_exit(__suites);              \
-> -       }                                                               \
-> -       module_exit(kunit_test_suites_exit)
-> -#else
-> -#define kunit_test_suites_for_module(__suites)
-> -#endif /* MODULE */
-> -
->  #define __kunit_test_suites(unique_array, unique_suites, ...)                 \
->         static struct kunit_suite *unique_array[] = { __VA_ARGS__, NULL };     \
-> -       kunit_test_suites_for_module(unique_array);                            \
->         static struct kunit_suite **unique_suites                              \
->         __used __section(".kunit_test_suites") = unique_array
->
+Right, we have special handling for how we free this special code for regular
+module_alloc() and so similar considerations would be needed here for
+the huge stuff.
+
+> 3) Move set_memory_* and fill_ill_insn logic into module_alloc_text_huge()
+>   and module_free_text_huge(). 
+
+Yes, that's a bit hairy now, and so a saner and consistent way to do
+this would be best.
+
+> Are these on the right direction? Did I miss anything important?
+
+I've also hinted before that another way to help here is to have draw
+up a simple lib/test_vmalloc_text.c or something like that which would
+enable a selftest to ensure correctness of this code on different archs
+and maybe even let you do performance analysis using perf [0]. You have
+good reasons to move to the huge allocator and the performance metrics
+are an abstract load, however perf measurements can also give you real
+raw data which you can reproduce and enable others to do similar
+comparisons later.
+
+The last thing I'd ask is just ensure you Cc folks who have already been in
+these discussions.
+
+[0] https://lkml.kernel.org/r/Yog+d+oR5TtPp2cs@bombadil.infradead.org
+
+  Luis
