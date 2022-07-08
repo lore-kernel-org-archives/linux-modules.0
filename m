@@ -2,87 +2,111 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 653A0C43334
-	for <linux-modules@archiver.kernel.org>; Thu,  7 Jul 2022 18:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F8ABC43334
+	for <linux-modules@archiver.kernel.org>; Fri,  8 Jul 2022 09:45:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236610AbiGGS6p (ORCPT
+        id S237661AbiGHJpD (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 7 Jul 2022 14:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
+        Fri, 8 Jul 2022 05:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236614AbiGGS6o (ORCPT
+        with ESMTP id S237533AbiGHJpD (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 7 Jul 2022 14:58:44 -0400
-X-Greylist: delayed 138 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Jul 2022 11:58:39 PDT
-Received: from p3plsmtpa11-09.prod.phx3.secureserver.net (p3plsmtpa11-09.prod.phx3.secureserver.net [68.178.252.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386A53206A
-        for <linux-modules@vger.kernel.org>; Thu,  7 Jul 2022 11:58:39 -0700 (PDT)
-Received: from localhost ([82.17.115.212])
-        by :SMTPAUTH: with ESMTPA
-        id 9WfjoIiykskDW9WfkoGRQw; Thu, 07 Jul 2022 11:56:21 -0700
-X-CMAE-Analysis: v=2.4 cv=Xs8/hXJ9 c=1 sm=1 tr=0 ts=62c72c55
- a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
- a=IkcTkHD0fZMA:10 a=eTMhzGaj8ZgCguw-XMsA:9 a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: atomlin@atomlin.com
-Date:   Thu, 7 Jul 2022 19:56:19 +0100
-From:   Aaron Tomlin <atomlin@atomlin.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Aaron Tomlin <atomlin@redhat.com>, rostedt@goodmis.org,
-        cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        christophe.leroy@csgroup.eu, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        ghalat@redhat.com, oleksandr@natalenko.name, neelx@redhat.com,
-        daniel.thompson@linaro.org, hch@infradead.org, tglx@linutronix.de,
-        linux-rt-users@vger.kernel.org
-Subject: Re: [PATCH v2] module: kallsyms: Ensure preemption in add_kallsyms()
- with PREEMPT_RT
-Message-ID: <20220707185619.sryhytlfkolmklnn@ava.usersys.com>
-References: <20220704161753.4033684-1-atomlin@redhat.com>
- <YsXNVSAtO+VDggcI@bombadil.infradead.org>
- <20220707165750.tk4fadpv3d4zr2mb@ava.usersys.com>
- <YscV7ujYs6Q60N+E@bombadil.infradead.org>
+        Fri, 8 Jul 2022 05:45:03 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE8F7B36B;
+        Fri,  8 Jul 2022 02:45:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1657273496;
+        bh=bYx4iLT2+ds595MZ/RgQpapL+sI1v2/qdy+2mnOoejI=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=fl5i/kXWL2d8amI6IcaTHVHEt2SD8FcTQ4CeayzrGQw78g+ZacI7aJGL2e9bO0e2k
+         1zmi130GmS8ro7erbbMvAFYI+HmssU9fghoZoZ5r0ELNovbFSze+K/vMpb5x4+sluk
+         mYCGx5Z9S9t44PjJA0gI19fSQm8opqPXdleW2mww=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from p100 ([92.116.171.120]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mw9UK-1nHdsx3JZM-00s581; Fri, 08
+ Jul 2022 11:44:55 +0200
+Date:   Fri, 8 Jul 2022 11:44:54 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     mcgrof@kernel.org, jeyu@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: [PATCH v3] modules: Ensure natural alignment for .altinstructions
+ and __bug_table sections
+Message-ID: <Ysf8lojv8UMZsvBM@p100>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YscV7ujYs6Q60N+E@bombadil.infradead.org>
-X-CMAE-Envelope: MS4xfGEMyf6Pz6mlMCSJNtHLJiYMh7dgsvwhNEd4JPCgr+M9xzhH21w9OoBC0LiHe0S66f3rKR/w8RiPmVGRg6390rdCCMs//UhGAo2BvKBdnklQnxf8+gFT
- 1MhEawYd4UqLCWcXpEk3+GrGzN9EIURTCAroHzZLExclzNaTkGCvHNxGJxzeS74uTqi5JPWp8JrAgO05BGu4tBYo3WT8m97ptLDry6Gmc35loe3tDxVjlacs
- CsqNlDPolZvTBv1oOEImTbHehwgM0YHlNMD4L7hjHvFvPUhXQG+PqHkr/Otf0+9oHNZjkS9DrTmiDtX5lRIxk0dkF4Noo1/MwaHMF56zY38O0OB/d4viQf1Z
- 4QM9vOKQ/xsFbnPG14tezHJOQmHcpFEmB7Z33etagOYbihoQRMyASRKfqPeG6tlhrZ+xwx4S5AKoYScqAlYTdAaAwf01QRjtA0itnBcqGYRk60dattexZee0
- aD18YX/UGoaGphq3kh90S78TQVaXbrcvY1WDwS8/+DmS/gZ1/Cnjj+ZqFv1dDQWt1Q7w7Wsb/IKW7yDYZRLOyA+QvHxFkwKUxzUMraJ5yyVUC5A6fe5XffHB
- /wObdG1dGe0QNfR1UNQB1yw31rZNsVt8nEYLs5WGSQc/VcURgsGfRQI2YaAxqAWEuyIgmx9Turs4kQ79ttJEiOLSIs3j7NYqbD1nDcuOMyk2LlcNgKA7h4MO
- 8wclV0+bWyY=
+X-Provags-ID: V03:K1:3cVGiRXOX4mAe/DFDRgXP7qMYZvWpKJm3OwwLkEoz0F63K6wYKD
+ LdtPzv9lLfUTA1vwkcJEW2UNn7DVd2t23MUGZ2jDwxb6iGQOfbHRmcsSLp4lsm2dyJ8HvaM
+ BtSYWOQKd7EdbVuVuAN7KN2bi+SVNqnV/L6p0TPGSeMwKG42O+oRzwypmtGDFn4N4Sah+WT
+ B8ySHv7scaGq+8wS9T4Mw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LfMUMTxEuwA=:hWQaqpScGsQGXdy/bEBrkc
+ OI+wMS5aMY48/brHD1YMGvn3JlYIRl7NGkgRhe6Yus11p3IQ5CkLjXgDbWW4Nxq8Rjo5kGQst
+ 0DhLhCHHTVX6stvlHMmeMYaAtD20FqCuw7bqsxi37wu/AQqx+Dka7a/5us/KYpKNuw7RsBUJE
+ 9iaqrCThBVTKezgzTncwyN//H847i4RDKvZoCHx55V2D+iq6JYSl8koCK9smB1jLa06TiLWNo
+ NibByh2erZq8i1aXKK5YyGoKgHg6KaNkmTpPprliAXogjnQ0yoqCq+j6A6Dcq+HvlxYrgYGwp
+ Aa81xoB4wrr/m9LTp5oTJHivHgJieIg1lfdiyot06zOj0mfR6wFZ07z9KEfP0ljls/40K+KUO
+ TgF4Gzdwj5PmEakWGUqohK2kmk6uLDobTjlOZLrv9ILmLOdbzJ1BmdGJ6QOD2oE/VQRkVezRs
+ p7j7Sgzavmxq7LppmiYUyGZzjDAaq5ADo64RAWLM+Vioj+pHzTWGPWfQ1V2JRtKU1hd8rBi3v
+ LPdmSOk/BR+i6tPGXnE/R8LELCpy72huorlgKDXH2L02SxMKMBkDyHt4kncuISyAjnIGnffgj
+ 3FngTbsCFv3N88AY6OapIkjYxlStA5kxkvbGAXbKiwXk24YxHKC5PVNONldXVxfFsw9daq16d
+ fDXIIU98DXijGQ25riVrU2rJi/4ulHhZsyBEEHZG/i8a+/BxAkIPFF7O53OCab3dmOaYJV2Rb
+ qWalxBdarS3K519vkrJwO1mf4xqTSC8O41pfZ4t8AmsHLFPVCXr4XbkHFcV3YsgOA06Tr74mH
+ 9ieDe2UHAfKLpoBXF2LWepyLAyUhSeJkGWoCeJoqSTcYSDYzISdXXppegIfolNos4eJ8wh2tp
+ ny4p+mVf0PpTKt+5Z8FBW6j/5oxPhgM30PJcZVyUQZYzDDCPmX+yWkrHETZBCMNa0jPxOZDsh
+ BGTnqj3YryXLPC/HbfMLcFLbyDASzApISrYQ4Ho3x2RZ590Z4hJSk4vm90dgxTW83AD4C/Og2
+ TEpPNTxh5X8wEnGuQpF2F0PMa5pteA2fvN58VDzyB9U5EGd7HK6MLvJ2Qo4nvYuwxIH4qvt4O
+ yq7nY93WSVO2f9yEcIlQwBJz01SjYpCRNqiDt023+2KMlKvXlCsb0eW8g==
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu 2022-07-07 10:20 -0700, Luis Chamberlain wrote:
-> This is incredibly important information which should be added to the
-> commit log, specialy as PREEMPT_RT=y becomes a first class citizen.
+In the kernel image vmlinux.lds.S linker scripts the .altinstructions
+and __bug_table sections are 4- or 8-byte aligned because they hold 32-
+and/or 64-bit values.
 
-Understood.
+Most architectures use altinstructions and BUG() or WARN() in modules as
+well, but in the module linker script (module.lds.S) those sections are
+currently missing. As consequence the linker will store their content
+byte-aligned by default, which then can lead to unnecessary unaligned
+memory accesses by the CPU when those tables are processed at runtime.
 
-> 
-> > So, I would say this was a regression since earlier preemption was
-> > not disabled and we would dereference RCU-protected pointers explicitly
-> > i.e. without using the more appropriate rcu_dereference() family
-> > of primitives. That being said, these pointers cannot change in this
-> > context as explained previously.
-> > 
-> > Would the above be suitable - just to confirm before I send another
-> > iteration?
-> 
-> Yes, I would send this to Linus for the rc series. Please adjust the
-> commit log with all this information.
+Usually unaligned memory accesses are unnoticed, because either the
+hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on
+parisc or sparc) emulate and fix them up at runtime. Nevertheless, such
+unaligned accesses introduce a performance penalty and can even crash
+the kernel if there is a bug in the unalignment exception handlers
+(which happened once to me on the parisc architecture and which is why I
+noticed that issue at all).
 
-Will do.
+This patch fixes a non-critical issue and might be backported at any time.
+It's trivial and shouldn't introduce any regression because it simply
+tells the linker to use a different (8-byte alignment) for those
+sections by default.
 
-> BTW I think there is just one more fix pending from you right?
+Signed-off-by: Helge Deller <deller@gmx.de>
+Link: https://lore.kernel.org/all/Yr8%2Fgr8e8I7tVX4d@p100/
+---
+ scripts/module.lds.S | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Yes - I will send/or prepare it as a partial revert:
-'s/strscpy/strlcpy/' with a brief explanation.
+--
+Changes:
+v3: updated commit message
+v2: updated commit message
+
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index 1d0e1e4dc3d2..3a3aa2354ed8 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -27,6 +27,8 @@ SECTIONS {
+ 	.ctors			0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
+ 	.init_array		0 : ALIGN(8) { *(SORT(.init_array.*)) *(.init_array) }
+
++	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
++	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
+ 	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
+
+ 	__patchable_function_entries : { *(__patchable_function_entries) }
 
 
-Kind regards,
-
--- 
-Aaron Tomlin
