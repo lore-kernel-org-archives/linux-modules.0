@@ -2,242 +2,88 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47F6ACCA480
-	for <linux-modules@archiver.kernel.org>; Sat,  9 Jul 2022 03:25:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B433C43334
+	for <linux-modules@archiver.kernel.org>; Mon, 11 Jul 2022 15:57:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiGIDZW (ORCPT
+        id S229839AbiGKP5l (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 8 Jul 2022 23:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        Mon, 11 Jul 2022 11:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiGIDZV (ORCPT
+        with ESMTP id S230323AbiGKP5k (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 8 Jul 2022 23:25:21 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B25E6BC2A
-        for <linux-modules@vger.kernel.org>; Fri,  8 Jul 2022 20:25:19 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so2156387wme.0
-        for <linux-modules@vger.kernel.org>; Fri, 08 Jul 2022 20:25:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e8nAKHtyRysiLNEsVeH7x7LSqL9gOUZQBj4PofSK3jg=;
-        b=i797YqT2ib4N6AbUChmOPNPQCPxkhjtwk21cUE0C8EwRY6flZWLQdY3cRD2EktUxob
-         Wpht87bOmRh1622524d9MK0LBaAR5o3T3LBSOcbKR4IV44Y8T/tVWz+Yn6Ap3SlIEAbC
-         qb0SJFWfpW1Q05E7OMk5IKkCFLaMhDfx2m8K6BYAs8ffTNd94I1C+X56z1EFlo/agDhC
-         ScNreNpMNfcea1qxLk1e66J4bh5PxE51ZWfYXZUQqJNbVutMwqw3cM9jvtNihMzIiwi8
-         YYRFU/l09zitBPe72RwRIcrcZMkQCNqVLMtlYkOEMWgyO9mqinSa4z3vF+cESOYTUdmj
-         meuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e8nAKHtyRysiLNEsVeH7x7LSqL9gOUZQBj4PofSK3jg=;
-        b=DeJCSBtBy1MGK0RQWFcZxDUtUNexRtsoczt3kszw/FYjX6+M6NPVkPnBgdaIZo4sLp
-         31+Im5zFv35tvCVfnm2ffP4paA32OGhlX6Q06m0wjJn0HenK4QQH6mB/kMUSsQXolPhv
-         gB4FsX0pSPp+9jQHg3icDX91Ti+t806p+wKbKEv1iEBgpIjj9WbWsSUpuNIv3/WD0ZT/
-         /hzHJNISq3J5eruy2LLmZ+f4uQZ1p0NWpjAJ2qMeow3rVP/fZEK+Z7UwaeUwZzYiiboI
-         auDc1EelzzZf6ZndXBH5apxt/FL4anV5+nkgl9tXeKKOpe292r/493MOYLs8M//jxseN
-         VGAg==
-X-Gm-Message-State: AJIora/ipsLvf0fA6o4xUHS34+U/cCLCtiQSblp8yygrwtjpS8XZmzLg
-        V+Wcg47rfLJy2SVEViJY/HuJKu393k4N12j4UFd+CA==
-X-Google-Smtp-Source: AGRyM1swXGC1sfaXQRy1Xn69Dt8GxfoLuFYMy74dgllMBgXsH8MqmBm3CWHwxaQO0WXjO23yCp57TBd/Ze4MIb/YpdM=
-X-Received: by 2002:a05:600c:4fc8:b0:3a1:99cf:800 with SMTP id
- o8-20020a05600c4fc800b003a199cf0800mr3054967wmq.60.1657337117577; Fri, 08 Jul
- 2022 20:25:17 -0700 (PDT)
+        Mon, 11 Jul 2022 11:57:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A6A33413;
+        Mon, 11 Jul 2022 08:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=S5eI42e6zt7NmkB9y9JfjDA8loQFmC6DlzCNO41e3LY=; b=0Rhdgwxibnfkm5r5i7jTEVBK19
+        imIyo9ZmAX7xikNkYe0icYcht/V3sLap/GbLNgDJAHCwfkQv3ZJYLRibFZl1VuCir5FdwHUlLC6I9
+        yEPK/yR2Kj/HfvPRXsIw7cIo9Y1ju6zCOcEIEMJ2miOaDQChtOKy0/66LTxGvsfbkL0fv/jUEoxwM
+        8dSnBSh60s7lkLKOYf5NR9hHEYHCOPoLV/i/QWNb0gT52afidT4Nb2hxISHO2R2ZMuod1PNHOXJea
+        cLVU6pRhwjgwNv+denF7LFANFKRsf/jMU8tP65kNbIiYqCHIhV8dyMDgM65Rm6nTu4URTOE4Kyq0M
+        iDTquLRw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oAvmn-0033fT-53; Mon, 11 Jul 2022 15:57:25 +0000
+Date:   Mon, 11 Jul 2022 08:57:25 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Aaron Tomlin <atomlin@atomlin.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Aaron Tomlin <atomlin@redhat.com>, rostedt@goodmis.org,
+        cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        christophe.leroy@csgroup.eu, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        ghalat@redhat.com, oleksandr@natalenko.name, neelx@redhat.com,
+        daniel.thompson@linaro.org, hch@infradead.org, tglx@linutronix.de,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [PATCH v2] module: kallsyms: Ensure preemption in add_kallsyms()
+ with PREEMPT_RT
+Message-ID: <YsxIZfhgdQnh2QsJ@bombadil.infradead.org>
+References: <20220704161753.4033684-1-atomlin@redhat.com>
+ <YsXNVSAtO+VDggcI@bombadil.infradead.org>
+ <20220707165750.tk4fadpv3d4zr2mb@ava.usersys.com>
+ <YscV7ujYs6Q60N+E@bombadil.infradead.org>
+ <20220707185619.sryhytlfkolmklnn@ava.usersys.com>
 MIME-Version: 1.0
-References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-2-davidgow@google.com>
- <CAGS_qxrGwVL37AOUWCxwx=qg6YvXCDSSu4p_PSt7_87N3RxJZw@mail.gmail.com>
-In-Reply-To: <CAGS_qxrGwVL37AOUWCxwx=qg6YvXCDSSu4p_PSt7_87N3RxJZw@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 9 Jul 2022 11:25:06 +0800
-Message-ID: <CABVgOS=AfJ7X5xqEKvXCzQ=UzOWrmR9KBO_TnkQw4Ti3fmKHBw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] kunit: unify module and builtin suite definitions
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-usb@vger.kernel.org, linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002f752905e356de28"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707185619.sryhytlfkolmklnn@ava.usersys.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
---0000000000002f752905e356de28
-Content-Type: text/plain; charset="UTF-8"
+On Thu, Jul 07, 2022 at 07:56:19PM +0100, Aaron Tomlin wrote:
+> On Thu 2022-07-07 10:20 -0700, Luis Chamberlain wrote:
+> > This is incredibly important information which should be added to the
+> > commit log, specialy as PREEMPT_RT=y becomes a first class citizen.
+> 
+> Understood.
+> 
+> > 
+> > > So, I would say this was a regression since earlier preemption was
+> > > not disabled and we would dereference RCU-protected pointers explicitly
+> > > i.e. without using the more appropriate rcu_dereference() family
+> > > of primitives. That being said, these pointers cannot change in this
+> > > context as explained previously.
+> > > 
+> > > Would the above be suitable - just to confirm before I send another
+> > > iteration?
+> > 
+> > Yes, I would send this to Linus for the rc series. Please adjust the
+> > commit log with all this information.
+> 
+> Will do.
+> 
+> > BTW I think there is just one more fix pending from you right?
+> 
+> Yes - I will send/or prepare it as a partial revert:
+> 's/strscpy/strlcpy/' with a brief explanation.
 
-On Sat, Jul 9, 2022 at 2:23 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Fri, Jun 24, 2022 at 10:10 PM David Gow <davidgow@google.com> wrote:
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index 8ffcd7de9607..54306271cfbf 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -250,41 +250,8 @@ static inline int kunit_run_all_tests(void)
-> >  }
-> >  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
-> >
-> > -#ifdef MODULE
-> > -/**
-> > - * kunit_test_suites_for_module() - used to register one or more
-> > - *                      &struct kunit_suite with KUnit.
-> > - *
-> > - * @__suites: a statically allocated list of &struct kunit_suite.
-> > - *
-> > - * Registers @__suites with the test framework. See &struct kunit_suite for
-> > - * more information.
-> > - *
-> > - * If a test suite is built-in, module_init() gets translated into
-> > - * an initcall which we don't want as the idea is that for builtins
-> > - * the executor will manage execution.  So ensure we do not define
-> > - * module_{init|exit} functions for the builtin case when registering
-> > - * suites via kunit_test_suites() below.
-> > - */
-> > -#define kunit_test_suites_for_module(__suites)                         \
->
-> Deleting this bit now causes merge conflicts with Shuah's kunit
-> branch, due to https://patchwork.kernel.org/project/linux-kselftest/patch/20220702040959.3232874-3-davidgow@google.com/
-> I.e. We added in a MODULE_INFO(test, "Y") in this to-be-deleted section.
+If that is just the kallsyms fix Adrian Hunter already sent a fix:
 
-Nice catch. I've rebased this series on top of the taint stuff:
-https://lore.kernel.org/linux-kselftest/20220709032001.819487-2-davidgow@google.com/T/#u
+https://lkml.kernel.org/r/20220701094403.3044-1-adrian.hunter@intel.com         
 
-> Perhaps something like this would be a fix?
-
-Thanks.The rebased version is basically this, but without the #ifdef
-MODULE indirection, as MODULE_INFO() will decay to nothing if MODULE
-is not defined, anyway.
-
->   #ifdef MODULE
->   #define _kunit_mark_test_module MODULE_INFO(test, "Y")
->   #else
->   #define _kunit_mark_test_module
->   #endif /* MODULE */
->
->   #define __kunit_test_suites(unique_array, unique_suites, ...)
->           \
->           _kunit_mark_test_module;
->           \
->           static struct kunit_suite *unique_array[] = { __VA_ARGS__,
-> NULL };     \
->           static struct kunit_suite **unique_suites
->           \
->           __used __section(".kunit_test_suites") = unique_array
->
->
-> > -       static int __init kunit_test_suites_init(void)                  \
-> > -       {                                                               \
-> > -               return __kunit_test_suites_init(__suites);              \
-> > -       }                                                               \
-> > -       module_init(kunit_test_suites_init);                            \
-> > -                                                                       \
-> > -       static void __exit kunit_test_suites_exit(void)                 \
-> > -       {                                                               \
-> > -               return __kunit_test_suites_exit(__suites);              \
-> > -       }                                                               \
-> > -       module_exit(kunit_test_suites_exit)
-> > -#else
-> > -#define kunit_test_suites_for_module(__suites)
-> > -#endif /* MODULE */
-> > -
-> >  #define __kunit_test_suites(unique_array, unique_suites, ...)                 \
-> >         static struct kunit_suite *unique_array[] = { __VA_ARGS__, NULL };     \
-> > -       kunit_test_suites_for_module(unique_array);                            \
-> >         static struct kunit_suite **unique_suites                              \
-> >         __used __section(".kunit_test_suites") = unique_array
-> >
-
---0000000000002f752905e356de28
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBl
-JmrHJzQ0vK1xYKaDEDYwR3rzNd2KyrVjy2GQK6mVbzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MDkwMzI1MTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAlhD8Y9l2qJpJSHbsezKz
-AoI+Xv+FHHBzuTK2N9hJyGjtt7jFiiPYYf4bGpzIFX/sSTpd0Z7xOXtE5UpyA1lArMmWvWnFshJk
-JaaeTfJqrFEnPBv2QLVKFb+oBSjSFF6SbymFOnqs3v83Wu4ICwP+iZNYqaMSPsv4V4qEbIoUtKm7
-gl8ecAoPtoZRoek0wE49XtF1yCBLS3gKvrcCfpKw0L8ZSKPLssfO4gUakft6tLpi9PG+96CTGK1Z
-wXl8h+QlaYFi/oP83EPkJbc08GIegicX/2Y2q0T7h2v2v6QV7/Xz/jRYTrz1+rbFZ8hjWpZydZRy
-vZ8yWuqbB0qhxbm59Q==
---0000000000002f752905e356de28--
+  Luis
