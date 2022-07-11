@@ -2,88 +2,76 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B433C43334
-	for <linux-modules@archiver.kernel.org>; Mon, 11 Jul 2022 15:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67026CCA47B
+	for <linux-modules@archiver.kernel.org>; Mon, 11 Jul 2022 16:08:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiGKP5l (ORCPT
+        id S229913AbiGKQIP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 11 Jul 2022 11:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
+        Mon, 11 Jul 2022 12:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiGKP5k (ORCPT
+        with ESMTP id S231894AbiGKQIB (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 11 Jul 2022 11:57:40 -0400
+        Mon, 11 Jul 2022 12:08:01 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A6A33413;
-        Mon, 11 Jul 2022 08:57:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE236E89E;
+        Mon, 11 Jul 2022 09:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=S5eI42e6zt7NmkB9y9JfjDA8loQFmC6DlzCNO41e3LY=; b=0Rhdgwxibnfkm5r5i7jTEVBK19
-        imIyo9ZmAX7xikNkYe0icYcht/V3sLap/GbLNgDJAHCwfkQv3ZJYLRibFZl1VuCir5FdwHUlLC6I9
-        yEPK/yR2Kj/HfvPRXsIw7cIo9Y1ju6zCOcEIEMJ2miOaDQChtOKy0/66LTxGvsfbkL0fv/jUEoxwM
-        8dSnBSh60s7lkLKOYf5NR9hHEYHCOPoLV/i/QWNb0gT52afidT4Nb2hxISHO2R2ZMuod1PNHOXJea
-        cLVU6pRhwjgwNv+denF7LFANFKRsf/jMU8tP65kNbIiYqCHIhV8dyMDgM65Rm6nTu4URTOE4Kyq0M
-        iDTquLRw==;
+        bh=L9MaBX0ADCbYKPOd5iafLk3ONE1qneBOG6QIpxWT8/I=; b=eIweT0CWd1DwElj/q4N/Bs2EYQ
+        fWkvmzkz3WP3CU2XidwPn9jHWSd0NKKlqsvFmJz7C11+LQHxWqgqf7eT/BANntkshoUrsdGe+0uvM
+        B+gebA0UIGukk0caBUMIv4lh4Av7judVNRrosKCTpsKfDmtiN1GZH2oQxDV/JfeuhnwskYy+lRzBM
+        daWZDfPgIfN1P40tTtJIWAJu44XpwfG/SM6i83vhK88/lvNBRKsTOjwpDdwerLQFfjM/pzGdnQ64Y
+        e8ekbETuvWz5LgjIyfFeOI87+DZzjOBYiLKYUFT8nxGjYq7on30FucfTwt8DUgplc2SxnSbQA1BzU
+        ZlGaZhpA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oAvmn-0033fT-53; Mon, 11 Jul 2022 15:57:25 +0000
-Date:   Mon, 11 Jul 2022 08:57:25 -0700
+        id 1oAvwn-0037cE-AB; Mon, 11 Jul 2022 16:07:45 +0000
+Date:   Mon, 11 Jul 2022 09:07:45 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Tomlin <atomlin@atomlin.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Aaron Tomlin <atomlin@redhat.com>, rostedt@goodmis.org,
-        cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        christophe.leroy@csgroup.eu, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        ghalat@redhat.com, oleksandr@natalenko.name, neelx@redhat.com,
-        daniel.thompson@linaro.org, hch@infradead.org, tglx@linutronix.de,
-        linux-rt-users@vger.kernel.org
-Subject: Re: [PATCH v2] module: kallsyms: Ensure preemption in add_kallsyms()
- with PREEMPT_RT
-Message-ID: <YsxIZfhgdQnh2QsJ@bombadil.infradead.org>
-References: <20220704161753.4033684-1-atomlin@redhat.com>
- <YsXNVSAtO+VDggcI@bombadil.infradead.org>
- <20220707165750.tk4fadpv3d4zr2mb@ava.usersys.com>
- <YscV7ujYs6Q60N+E@bombadil.infradead.org>
- <20220707185619.sryhytlfkolmklnn@ava.usersys.com>
+To:     Helge Deller <deller@gmx.de>
+Cc:     jeyu@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v3] modules: Ensure natural alignment for
+ .altinstructions and __bug_table sections
+Message-ID: <YsxK0ViJHnCAwHwI@bombadil.infradead.org>
+References: <Ysf8lojv8UMZsvBM@p100>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707185619.sryhytlfkolmklnn@ava.usersys.com>
+In-Reply-To: <Ysf8lojv8UMZsvBM@p100>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jul 07, 2022 at 07:56:19PM +0100, Aaron Tomlin wrote:
-> On Thu 2022-07-07 10:20 -0700, Luis Chamberlain wrote:
-> > This is incredibly important information which should be added to the
-> > commit log, specialy as PREEMPT_RT=y becomes a first class citizen.
+On Fri, Jul 08, 2022 at 11:44:54AM +0200, Helge Deller wrote:
+> In the kernel image vmlinux.lds.S linker scripts the .altinstructions
+> and __bug_table sections are 4- or 8-byte aligned because they hold 32-
+> and/or 64-bit values.
 > 
-> Understood.
+> Most architectures use altinstructions and BUG() or WARN() in modules as
+> well, but in the module linker script (module.lds.S) those sections are
+> currently missing. As consequence the linker will store their content
+> byte-aligned by default, which then can lead to unnecessary unaligned
+> memory accesses by the CPU when those tables are processed at runtime.
 > 
-> > 
-> > > So, I would say this was a regression since earlier preemption was
-> > > not disabled and we would dereference RCU-protected pointers explicitly
-> > > i.e. without using the more appropriate rcu_dereference() family
-> > > of primitives. That being said, these pointers cannot change in this
-> > > context as explained previously.
-> > > 
-> > > Would the above be suitable - just to confirm before I send another
-> > > iteration?
-> > 
-> > Yes, I would send this to Linus for the rc series. Please adjust the
-> > commit log with all this information.
+> Usually unaligned memory accesses are unnoticed, because either the
+> hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on
+> parisc or sparc) emulate and fix them up at runtime. Nevertheless, such
+> unaligned accesses introduce a performance penalty and can even crash
+> the kernel if there is a bug in the unalignment exception handlers
+> (which happened once to me on the parisc architecture and which is why I
+> noticed that issue at all).
 > 
-> Will do.
+> This patch fixes a non-critical issue and might be backported at any time.
+> It's trivial and shouldn't introduce any regression because it simply
+> tells the linker to use a different (8-byte alignment) for those
+> sections by default.
 > 
-> > BTW I think there is just one more fix pending from you right?
-> 
-> Yes - I will send/or prepare it as a partial revert:
-> 's/strscpy/strlcpy/' with a brief explanation.
+> Signed-off-by: Helge Deller <deller@gmx.de>
+> Link: https://lore.kernel.org/all/Yr8%2Fgr8e8I7tVX4d@p100/
 
-If that is just the kallsyms fix Adrian Hunter already sent a fix:
-
-https://lkml.kernel.org/r/20220701094403.3044-1-adrian.hunter@intel.com         
+Thanks! Queued onto modules-next.
 
   Luis
