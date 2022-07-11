@@ -2,75 +2,52 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67026CCA47B
-	for <linux-modules@archiver.kernel.org>; Mon, 11 Jul 2022 16:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 327F6C433EF
+	for <linux-modules@archiver.kernel.org>; Mon, 11 Jul 2022 16:09:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiGKQIP (ORCPT
+        id S229618AbiGKQJr (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 11 Jul 2022 12:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
+        Mon, 11 Jul 2022 12:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiGKQIB (ORCPT
+        with ESMTP id S229621AbiGKQJq (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 11 Jul 2022 12:08:01 -0400
+        Mon, 11 Jul 2022 12:09:46 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE236E89E;
-        Mon, 11 Jul 2022 09:07:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B366F7F9;
+        Mon, 11 Jul 2022 09:09:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=L9MaBX0ADCbYKPOd5iafLk3ONE1qneBOG6QIpxWT8/I=; b=eIweT0CWd1DwElj/q4N/Bs2EYQ
-        fWkvmzkz3WP3CU2XidwPn9jHWSd0NKKlqsvFmJz7C11+LQHxWqgqf7eT/BANntkshoUrsdGe+0uvM
-        B+gebA0UIGukk0caBUMIv4lh4Av7judVNRrosKCTpsKfDmtiN1GZH2oQxDV/JfeuhnwskYy+lRzBM
-        daWZDfPgIfN1P40tTtJIWAJu44XpwfG/SM6i83vhK88/lvNBRKsTOjwpDdwerLQFfjM/pzGdnQ64Y
-        e8ekbETuvWz5LgjIyfFeOI87+DZzjOBYiLKYUFT8nxGjYq7on30FucfTwt8DUgplc2SxnSbQA1BzU
-        ZlGaZhpA==;
+        bh=jtFKKqFHXDZ7AsX4ox49Z0SbEvofYL729VB8Xo+YbJI=; b=UwStMCjPYyQ/BSpqwXMF14i8GT
+        GvyLkf4jM2Y81JuHeICoDZtukHEP4rcTHMsN4P6paPsaBs8UkpCjNGEWIHY3phHP4PVvaMZAap94J
+        wa5FyISOFw+3FsuxmtwbWm4IlqOyRgelg8A3H1JnOO07R+i5hgfglB7P0UegiHKP2bQiv2muypDAK
+        QN6ww4Oo7ZMiA4joh/qpyVjwU0LZBe3fDOlS0MVY4zl81mFkXTCiDA+Fo7zwXEyBETKq0d/TArKbT
+        AiAkEhqtBZqOFnzxuZWJi3/CbdrCR5WpYPCdUzrVtghB/VdjvqSg2jGB3lQ204ZboITAI+JLkD3/b
+        M0DntlVw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oAvwn-0037cE-AB; Mon, 11 Jul 2022 16:07:45 +0000
-Date:   Mon, 11 Jul 2022 09:07:45 -0700
+        id 1oAvyj-0038Nx-So; Mon, 11 Jul 2022 16:09:45 +0000
+Date:   Mon, 11 Jul 2022 09:09:45 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     jeyu@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v3] modules: Ensure natural alignment for
- .altinstructions and __bug_table sections
-Message-ID: <YsxK0ViJHnCAwHwI@bombadil.infradead.org>
-References: <Ysf8lojv8UMZsvBM@p100>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH -next] module: Use vzalloc() instead of
+ vmalloc()/memset(0)
+Message-ID: <YsxLSSXC3yjvXEx8@bombadil.infradead.org>
+References: <20220704120337.4119910-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ysf8lojv8UMZsvBM@p100>
+In-Reply-To: <20220704120337.4119910-1-yangyingliang@huawei.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jul 08, 2022 at 11:44:54AM +0200, Helge Deller wrote:
-> In the kernel image vmlinux.lds.S linker scripts the .altinstructions
-> and __bug_table sections are 4- or 8-byte aligned because they hold 32-
-> and/or 64-bit values.
+On Mon, Jul 04, 2022 at 08:03:37PM +0800, Yang Yingliang wrote:
+> Use vzalloc() instead of vmalloc() and memset(0) to simpify the code.
 > 
-> Most architectures use altinstructions and BUG() or WARN() in modules as
-> well, but in the module linker script (module.lds.S) those sections are
-> currently missing. As consequence the linker will store their content
-> byte-aligned by default, which then can lead to unnecessary unaligned
-> memory accesses by the CPU when those tables are processed at runtime.
-> 
-> Usually unaligned memory accesses are unnoticed, because either the
-> hardware (as on x86 CPUs) or in-kernel exception handlers (e.g. on
-> parisc or sparc) emulate and fix them up at runtime. Nevertheless, such
-> unaligned accesses introduce a performance penalty and can even crash
-> the kernel if there is a bug in the unalignment exception handlers
-> (which happened once to me on the parisc architecture and which is why I
-> noticed that issue at all).
-> 
-> This patch fixes a non-critical issue and might be backported at any time.
-> It's trivial and shouldn't introduce any regression because it simply
-> tells the linker to use a different (8-byte alignment) for those
-> sections by default.
-> 
-> Signed-off-by: Helge Deller <deller@gmx.de>
-> Link: https://lore.kernel.org/all/Yr8%2Fgr8e8I7tVX4d@p100/
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
 Thanks! Queued onto modules-next.
 
