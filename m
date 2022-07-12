@@ -2,74 +2,183 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23FE0C43334
-	for <linux-modules@archiver.kernel.org>; Mon, 11 Jul 2022 20:02:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3297C43334
+	for <linux-modules@archiver.kernel.org>; Tue, 12 Jul 2022 04:19:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiGKUC6 (ORCPT
+        id S230227AbiGLETc (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 11 Jul 2022 16:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
+        Tue, 12 Jul 2022 00:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiGKUC4 (ORCPT
+        with ESMTP id S230232AbiGLET1 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 11 Jul 2022 16:02:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D16C45F69
-        for <linux-modules@vger.kernel.org>; Mon, 11 Jul 2022 13:02:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2901D615E9
-        for <linux-modules@vger.kernel.org>; Mon, 11 Jul 2022 20:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 83359C34115;
-        Mon, 11 Jul 2022 20:02:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657569775;
-        bh=kRdW7hkywXO+vOz5XEoww4FCXZDivTrHgpI1RLqgCn0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Z738+XkoSLyB9PZO2tCnbYjECeeSyCuxlAU7DpsiuDPy/FnW63bdJzLX08cp2TTGK
-         2L9td6gvQmaAwtQs/S7rADXzTrFg8Gpx4Exbj4tvPk3V2+v8JvD4ID0Hz9a9BnCfRK
-         5lkORUNoKzL1uGLRqsxqobBv6wdufb2wYo6ZinpamQFoplFOn4ClnuLrXK1QmKJSqI
-         kQiBS12a0Hj0qwYkd79UKDjPVHidhLE2K6qlI+aMxUaL4sPY4Mog1JwTsyvzhhX4s7
-         GHpn4+1Xjx/L1VlMVY5X/fBT9lFsF5w64LvV8NFYWEAB+PbBR0TnsHh+6nMDt0PLlf
-         jGqQ2I+AQSpUg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6F39EE4521F;
-        Mon, 11 Jul 2022 20:02:55 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules fixes for v5.19-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YsxkpIjGs7YwdIai@bombadil.infradead.org>
-References: <YsxkpIjGs7YwdIai@bombadil.infradead.org>
-X-PR-Tracked-List-Id: <linux-modules.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YsxkpIjGs7YwdIai@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-5.19-rc7
-X-PR-Tracked-Commit-Id: e69a66147d49506062cd837f3b230ee3e98102ab
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b5374396e5de0402822bce4945c886d2a2962a40
-Message-Id: <165756977544.22959.3460302847665260417.pr-tracker-bot@kernel.org>
-Date:   Mon, 11 Jul 2022 20:02:55 +0000
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        Tue, 12 Jul 2022 00:19:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA389DFB0;
+        Mon, 11 Jul 2022 21:19:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SerALkoKkILFqR40xrtVLu7qCXWoTY5YVNTXw341g5M=; b=JkhW4IaWbotUT+4T1nlgzM0/mi
+        3J3G0B15QqJw92tXicvjFX6bv3jehp952EXaLwVjeebCGVdpLpConV5X701ky4yIA7uumUmU5Qojp
+        Wozqu6yfxwiAWzMq8k1OlYJ7cvJZgEJ0EfXTGYguP0AWJfaM4TIAx0jNv7t7NJ+oWvMP1HgGuPpo0
+        DOpDBd1oyAAMtm/1XazxcAluYMFd0RAabjzuruTfRmH1HHTpN6OO8nSM+qLQ4Oiul40pqW6NFlDvF
+        Y8YkaXgIRV96VHMeNj8TeJq075TJrolZCBNb39XVqmf12EDm4CVIP5fTg+Ly4Bu+q4I1fX9FknKNH
+        q9/k/bjw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oB7ML-007GZm-C7; Tue, 12 Jul 2022 04:18:53 +0000
+Date:   Mon, 11 Jul 2022 21:18:53 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <songliubraving@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
         Davidlohr Bueso <dave@stgolabs.net>,
-        linux-modules@vger.kernel.org
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
+Message-ID: <Ysz2LX3q2OsaO4gM@bombadil.infradead.org>
+References: <20220707223546.4124919-1-song@kernel.org>
+ <YsdlXjpRrlE9Z+Jq@bombadil.infradead.org>
+ <F000FF60-CF95-4E6B-85BD-45FC668AAE0A@fb.com>
+ <YseAEsjE49AZDp8c@bombadil.infradead.org>
+ <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
+ <YshUEEQ0lk1ON7H6@bombadil.infradead.org>
+ <863A2D5B-976D-4724-AEB1-B2A494AD2BDB@fb.com>
+ <YsiupnNJ8WANZiIc@bombadil.infradead.org>
+ <6214B9C9-557B-4DC0-BFDE-77EAC425E577@fb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6214B9C9-557B-4DC0-BFDE-77EAC425E577@fb.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The pull request you sent on Mon, 11 Jul 2022 10:57:56 -0700:
+On Sat, Jul 09, 2022 at 01:14:23AM +0000, Song Liu wrote:
+> > On Jul 8, 2022, at 3:24 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > 
+> >> 1) Rename module_alloc_huge as module_alloc_text_huge();
+> > 
+> > module_alloc_text_huge() is too long, but I've suggested names before
+> > which are short and generic, and also suggested that if modules are
+> > not the only users this needs to go outside of modules and so
+> > vmalloc_text_huge() or whatever.
+> > 
+> > To do this right it begs the question why we don't do that for the
+> > existing module_alloc(), as the users of this code is well outside of
+> > modules now. Last time a similar generic name was used all the special
+> > arch stuff was left to be done by the module code still, but still
+> > non-modules were still using that allocator. From my perspective the
+> > right thing to do is to deal with all the arch stuff as well in the
+> > generic handler, and have the module code *and* the other users which
+> > use module_alloc() to use that new caller as well.
+> 
+> The key difference between module_alloc() and the new API is that the 
+> API will return RO+X memory, and the user need text-poke like API to
+> modify this buffer. Archs that do not support text-poke will not be
+> able to use the new API. Does this sound like a reasonable design?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-5.19-rc7
+I'm adding kprobe + ftrace folks.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b5374396e5de0402822bce4945c886d2a2962a40
+I can't see why we need to *require* text_poke for just a
+module_alloc_huge(). Enhancements on module_alloc() are just
+enhancements, not requirements. So we have these for instance:
 
-Thank you!
+``` from arch/Kconfig
+config ARCH_OPTIONAL_KERNEL_RWX
+	def_bool n
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+config ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+	def_bool n
+
+config ARCH_HAS_STRICT_KERNEL_RWX
+	def_bool n
+
+config STRICT_KERNEL_RWX
+	bool "Make kernel text and rodata read-only" if ARCH_OPTIONAL_KERNEL_RWX
+	depends on ARCH_HAS_STRICT_KERNEL_RWX
+	default !ARCH_OPTIONAL_KERNEL_RWX || ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+	help
+	  If this is set, kernel text and rodata memory will be made read-only,
+	  and non-text memory will be made non-executable. This provides
+	  protection against certain security exploits (e.g. executing the heap
+	  or modifying text)
+
+	  These features are considered standard security practice these days.
+	  You should say Y here in almost all cases.
+
+config ARCH_HAS_STRICT_MODULE_RWX
+	def_bool n
+
+config STRICT_MODULE_RWX
+	bool "Set loadable kernel module data as NX and text as RO" if ARCH_OPTIONAL_KERNEL_RWX
+	depends on ARCH_HAS_STRICT_MODULE_RWX && MODULES
+	default !ARCH_OPTIONAL_KERNEL_RWX || ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+	help
+	  If this is set, module text and rodata memory will be made read-only,
+	  and non-text memory will be made non-executable. This provides
+	  protection against certain security exploits (e.g. writing to text)
+```
+
+With module_alloc() we have the above symbols to tell us when we *can*
+support strict module rwx. So the way the kernel's modules are allocated
+and used is:
+
+for each module section:
+	module_alloc()
+module_enable_ro()
+module_enable_nx()
+module_enable_x()
+
+The above can be read in the code as:
+
+load_module() -->
+	layout_and_allocate()
+	complete_formation()
+
+Then there is the consideration of set_vm_flush_reset_perms() for
+freeing. On the module code we use this fore the RO+X stuff (core_layout,
+init_layout), but now that is a bit obfuscated due to the placement of
+the call. It would seem the other users use it for the same:
+
+ * ebpf
+ * kprobes
+ * ftrace
+
+I believe you are mentioning requiring text_poke() because the way
+eBPF code uses the module_alloc() is different. Correct me if I'm
+wrong, but from what I gather is you use the text_poke_copy() as the data
+is already RO+X, contrary module_alloc() use cases. You do this since your
+bpf_prog_pack_alloc() calls set_memory_ro() and set_memory_x() after
+module_alloc() and before you can use this memory. This is a different type
+of allocator. And, again please correct me if I'm wrong but now you want to
+share *one* 2 MiB huge-page for multiple BPF programs to help with the
+impact of TLB misses.
+
+A vmalloc_ro_exec() by definition would imply a text_poke().
+
+Can kprobes, ftrace and modules use it too? It would be nice
+so to not have to deal with the loose semantics on the user to
+have to use set_vm_flush_reset_perms() on ro+x later, but
+I think this can be addressed separately on a case by case basis.
+
+But a vmalloc_ro_exec() with a respective free can remove the
+requirement to do set_vm_flush_reset_perms().
+
+  Luis
