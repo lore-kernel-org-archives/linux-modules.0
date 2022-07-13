@@ -2,224 +2,94 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8CA1C43334
-	for <linux-modules@archiver.kernel.org>; Tue, 12 Jul 2022 23:42:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3645C433EF
+	for <linux-modules@archiver.kernel.org>; Wed, 13 Jul 2022 00:52:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiGLXm5 (ORCPT
+        id S229915AbiGMAwa (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 12 Jul 2022 19:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        Tue, 12 Jul 2022 20:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiGLXm4 (ORCPT
+        with ESMTP id S229729AbiGMAwa (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 12 Jul 2022 19:42:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45166BE0C5;
-        Tue, 12 Jul 2022 16:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1GUN/YtQA9mT9gQIEhu74W6F99Ud11donCnvyusM+y4=; b=AA3VHE8HlUUwnmiz6EYWtMtgKZ
-        B5fsBfh4Deq0dN5C3zDOUcvPcWF7JAdYMJ7xh9T5yVwkfrf/1GDjk0kqGNqsLfEteJHlaPdUwbwAF
-        M9m0+W5Bq16vK+yHal0yjZVZTaCKclQDtEfDqfr/DvNVTG78g82a2cLeSLWYpO3EFYpMVgGvWUrA+
-        4Gj4rolRr9XoB/8mkBKfXTL6YdouEBpPMUsT4P/dl1Pyt1wINgElDzfMzmEatGqVsjVTeL+p738fH
-        Ii8Bd5fij2do+8BHaEHlSYqfO6ylr/DfJMTHqNawS6T4045IZOixTmrlgsqXkiGIpNfC0oZA2KIpr
-        yl10XtLw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBPWN-00FpAm-SH; Tue, 12 Jul 2022 23:42:27 +0000
-Date:   Tue, 12 Jul 2022 16:42:27 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Kees Cook <keescook@chromium.org>, Song Liu <song@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Christoph Hellwig <hch@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v6 bpf-next 0/5] bpf_prog_pack followup
-Message-ID: <Ys4G4/dG6SGYV/iz@bombadil.infradead.org>
-References: <YseAEsjE49AZDp8c@bombadil.infradead.org>
- <C96F5607-6FFE-4B45-9A9D-B89E3F67A79A@fb.com>
- <YshUEEQ0lk1ON7H6@bombadil.infradead.org>
- <863A2D5B-976D-4724-AEB1-B2A494AD2BDB@fb.com>
- <YsiupnNJ8WANZiIc@bombadil.infradead.org>
- <6214B9C9-557B-4DC0-BFDE-77EAC425E577@fb.com>
- <Ysz2LX3q2OsaO4gM@bombadil.infradead.org>
- <E23B6EB1-AFFA-4B65-963E-B44BA0F2142D@fb.com>
- <Ys3FvYnASr2v9iPc@bombadil.infradead.org>
- <6CB56563-29E2-4CE0-BF7B-360979E42429@fb.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6CB56563-29E2-4CE0-BF7B-360979E42429@fb.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+        Tue, 12 Jul 2022 20:52:30 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28441BD6BD
+        for <linux-modules@vger.kernel.org>; Tue, 12 Jul 2022 17:52:29 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31cbe6ad44fso83383647b3.10
+        for <linux-modules@vger.kernel.org>; Tue, 12 Jul 2022 17:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=IBBthWT9u4UyqwX/3AheGhzcyiFLeqqA+WnxRGpF0DM=;
+        b=XtraHLVXVA8Q6rk2B0/mqyPO5tmI/GN09VHw9Jf2QsZFNymE9Gklp34Po5wmBkyH4o
+         5MN4giuBFiOSKIHN6ar6lcpcvtIx43YA93hNOq1NKSx61TIvEo5/8ydelhCplS1w7Mnj
+         Nogt/4wrqMKnPx2HLqNg2zLTcFLKNOeLHnH0cCMOgOI9WIlPDnUmK5S61LpZ25I9aJl3
+         gbOTt6ItboRu00B3vjNg3Z77Q7YkCzyjb39RvdjVXZtK3tTx5kiu8trcCSlNBB9Ma5YD
+         w16Me6jHQpRZ2/6V8FGtQdzIe0HE2b5IMGUECRDasyDV3WkqtxJWnFLtjbqL7KFdCcjl
+         gGnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=IBBthWT9u4UyqwX/3AheGhzcyiFLeqqA+WnxRGpF0DM=;
+        b=La63Xs2IadkG7i+ZSEscAYTpOZLnl0qvOxJta/tzupNKjChMlhARwSnYJEXzUUcwYU
+         gx5DEu/fll8zyJBueljmdF+ijxR6HJJ0qmoRMY0+ZZuNXRMPl0D03WcIh5ma5QonjbRS
+         HeEVrKtiddPLkJLfYXYHx5IsP4E+zBHWJNQCiDB7/tWd+qXZjoBFkXLYntM7oXK6QE6R
+         S7NL1oNHPNjAwazFwJ9BZNK2HU8HZcT1ZrMLI1AZo3GK2CMgznMB3Bnu0MFdsjzL7tpV
+         l1WC/i/MRrM33d9cs0vz5fW66sQ4rLVRLrRoDy0aGK1kbF/rH7zUo6lkDSdy6Y47knUI
+         RVTw==
+X-Gm-Message-State: AJIora+TpyXCXJSEa2n91VSw0eV7dFgVuFk9oXAIVUZNXoskidiBQDRP
+        Sb8ovX3pe4X+eHOaBw7HNI5SwTOpPrzmww==
+X-Google-Smtp-Source: AGRyM1tNeaI0uRA4XyHMmAsxk/ZwGTuVu3qI8Hv1n5Q0nkKc8YdOCBEsVUhM8hAZSzrZt0BG2Y3xc5OX9fvGhA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:cb0e:0:b0:66f:7b31:3563 with SMTP id
+ b14-20020a25cb0e000000b0066f7b313563mr1141957ybg.85.1657673548486; Tue, 12
+ Jul 2022 17:52:28 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 08:52:20 +0800
+Message-Id: <20220713005221.1926290-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.144.g8ac04bfd2-goog
+Subject: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>
+Cc:     David Gow <davidgow@google.com>, linux-modules@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jul 12, 2022 at 11:12:22PM +0000, Song Liu wrote:
-> 
-> 
-> > On Jul 12, 2022, at 12:04 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > 
-> > On Tue, Jul 12, 2022 at 05:49:32AM +0000, Song Liu wrote:
-> >>> On Jul 11, 2022, at 9:18 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >> 
-> >>> I believe you are mentioning requiring text_poke() because the way
-> >>> eBPF code uses the module_alloc() is different. Correct me if I'm
-> >>> wrong, but from what I gather is you use the text_poke_copy() as the data
-> >>> is already RO+X, contrary module_alloc() use cases. You do this since your
-> >>> bpf_prog_pack_alloc() calls set_memory_ro() and set_memory_x() after
-> >>> module_alloc() and before you can use this memory. This is a different type
-> >>> of allocator. And, again please correct me if I'm wrong but now you want to
-> >>> share *one* 2 MiB huge-page for multiple BPF programs to help with the
-> >>> impact of TLB misses.
-> >> 
-> >> Yes, sharing 1x 2MiB huge page is the main reason to require text_poke. 
-> >> OTOH, 2MiB huge pages without sharing is not really useful. Both kprobe
-> >> and ftrace only uses a fraction of a 4kB page. Most BPF programs and 
-> >> modules cannot use 2MiB either. Therefore, vmalloc_rw_exec() doesn't add
-> >> much value on top of current module_alloc(). 
-> > 
-> > Thanks for the clarification.
-> > 
-> >>> A vmalloc_ro_exec() by definition would imply a text_poke().
-> >>> 
-> >>> Can kprobes, ftrace and modules use it too? It would be nice
-> >>> so to not have to deal with the loose semantics on the user to
-> >>> have to use set_vm_flush_reset_perms() on ro+x later, but
-> >>> I think this can be addressed separately on a case by case basis.
-> >> 
-> >> I am pretty confident that kprobe and ftrace can share huge pages with 
-> >> BPF programs.
-> > 
-> > Then wonderful, we know where to go in terms of a new API then as it
-> > can be shared in the future for sure and there are gains.
-> > 
-> >> I haven't looked into all the details with modules, but 
-> >> given CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, I think it is also 
-> >> possible.
-> > 
-> > Sure.
-> > 
-> >> Once this is done, a regular system (without huge BPF program or huge
-> >> modules) will just use 1x 2MB page for text from module, ftrace, kprobe, 
-> >> and bpf programs. 
-> > 
-> > That would be nice, if possible, however modules will require likely its
-> > own thing, on my system I see about 57 MiB used on coresize alone.
-> > 
-> > lsmod | grep -v Module | cut -f1 -d ' ' | \
-> > 	xargs sudo modinfo | grep filename | \
-> > 	grep -o '/.*' | xargs stat -c "%s - %n" | \
-> > 	awk 'BEGIN {sum=0} {sum+=$1} END {print sum}'
-> > 60001272
-> > 
-> > And so perhaps we need such a pool size to be configurable.
-> > 
-> >>> But a vmalloc_ro_exec() with a respective free can remove the
-> >>> requirement to do set_vm_flush_reset_perms().
-> >> 
-> >> Removing the requirement to set_vm_flush_reset_perms() is the other
-> >> reason to go directly to vmalloc_ro_exec(). 
-> > 
-> > Yes fantastic.
-> > 
-> >> My current version looks like this:
-> >> 
-> >> void *vmalloc_exec(unsigned long size);
-> >> void vfree_exec(void *ptr, unsigned int size);
-> >> 
-> >> ro is eliminated as there is no rw version of the API. 
-> > 
-> > Alright.
-> > 
-> > I am not sure if 2 MiB will suffice given what I mentioned above, and
-> > what to do to ensure this grows at a reasonable pace. Then, at least for
-> > usage for all architectures since not all will support text_poke() we
-> > will want to consider a way to make it easy to users to use non huge
-> > page fallbacks, but that would be up to those users, so we can wait for
-> > that.
-> 
-> We are not limited to 2MiB total. The logic is like: 
-> 
-> 1. Anything bigger than 2MiB gets its own allocation.
+The new KUnit module handling has KUnit test suites listed in a
+.kunit_test_suites section of each module. This should be loaded when
+the module is, but at the moment this only happens if KUnit is built-in.
 
-And does that allocation get split up into a few huge 2 MiB pages?
-When freed does that go into the pool of available list of 2 MiB pages
-to use?
+Also load this when KUnit is enabled as a module: it'll not be usable
+unless KUnit is loaded, but such modules are likely to depend on KUnit
+anyway, so it's unlikely to ever be loaded needlessly.
 
-> 2. We maintain a list of 2MiB pages, and bitmaps showing which parts of 
->    these pages are in use. 
+Fixes: 3d6e44623841 ("kunit: unify module and builtin suite definitions")
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ kernel/module/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-How many 2 MiB huge pages are allocated initially? Do we have a cap?
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 324a770f789c..222a0b7263b6 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2094,7 +2094,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 					      sizeof(*mod->static_call_sites),
+ 					      &mod->num_static_call_sites);
+ #endif
+-#ifdef CONFIG_KUNIT
++#if IS_ENABLED(CONFIG_KUNIT)
+ 	mod->kunit_suites = section_objs(info, ".kunit_test_suites",
+ 					      sizeof(*mod->kunit_suites),
+ 					      &mod->num_kunit_suites);
+-- 
+2.37.0.144.g8ac04bfd2-goog
 
-> 3. For objects smaller than 2MiB, we will try to fit it in one of these
->    pages. 
->    3. a) If there isn't a page with big enough continuous free space, we
->         will allocate a new 2MiB page. 
-> 
-> (For system with n NUMA nodes, multiple 2MiB above by n). 
-> 
-> So, if we have 100 kernel modules using 1MiB each, they will share 50x
-> 2MiB pages. 
-
-lsmod | grep -v Module | cut -f1 -d ' ' | \
-	xargs sudo modinfo | grep filename |\
-	grep -o '/.*' | xargs stat -c "%s - %n" | \
-	awk 'BEGIN {sum=0} {sum+=$1} END {print sum/NR/1024}' 
-271.273
-
-On average my system's modules are 271 KiB.
-
-Then I only have 6 out of 216 modules which are use more than 2 MiB or
-memory for coresize. So roughly 97% of my modules would be covered
-with this. Not bad.
-
-The monsters:
-
-lsmod | grep -v Module | cut -f1 -d ' ' | xargs sudo modinfo \
-	| grep filename |grep -o '/.*' | xargs stat -c "%s %n" | \
-	sort -n -k 1 -r | head -10 | \
-	awk '{print $1/1024/1024" "$2}'
-6.50775 /lib/modules/5.17.0-1-amd64/kernel/drivers/gpu/drm/i915/i915.ko
-3.6847 /lib/modules/5.17.0-1-amd64/kernel/fs/xfs/xfs.ko
-3.34252 /lib/modules/5.17.0-1-amd64/kernel/fs/btrfs/btrfs.ko
-2.37677 /lib/modules/5.17.0-1-amd64/kernel/net/mac80211/mac80211.ko
-2.2972 /lib/modules/5.17.0-1-amd64/kernel/net/wireless/cfg80211.ko
-2.05754 /lib/modules/5.17.0-1-amd64/kernel/arch/x86/kvm/kvm.ko
-1.96126 /lib/modules/5.17.0-1-amd64/kernel/net/bluetooth/bluetooth.ko
-1.83429 /lib/modules/5.17.0-1-amd64/kernel/fs/ext4/ext4.ko
-1.7724 /lib/modules/5.17.0-1-amd64/kernel/fs/nfsd/nfsd.ko
-1.60539 /lib/modules/5.17.0-1-amd64/kernel/net/sunrpc/sunrpc.ko
-
-On a big iron server I have 149 modules and the situation is better
-there:
-
-3.69791 /lib/modules/5.16.0-6-amd64/kernel/fs/xfs/xfs.ko
-3.35575 /lib/modules/5.16.0-6-amd64/kernel/fs/btrfs/btrfs.ko
-3.21056 /lib/modules/5.16.0-6-amd64/kernel/drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
-2.02773 /lib/modules/5.16.0-6-amd64/kernel/arch/x86/kvm/kvm.ko
-1.82574 /lib/modules/5.16.0-6-amd64/kernel/fs/ext4/ext4.ko
-1.36571 /lib/modules/5.16.0-6-amd64/kernel/net/sunrpc/sunrpc.ko
-1.32686 /lib/modules/5.16.0-6-amd64/kernel/fs/nfsd/nfsd.ko
-1.12648 /lib/modules/5.16.0-6-amd64/kernel/drivers/gpu/drm/drm.ko
-0.898623 /lib/modules/5.16.0-6-amd64/kernel/drivers/infiniband/hw/mlx5/mlx5_ib.ko
-0.86922 /lib/modules/5.16.0-6-amd64/kernel/drivers/infiniband/core/ib_core.ko
-
-So this may just work nicely.
-
-  Luis
