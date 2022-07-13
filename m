@@ -2,107 +2,101 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03BD5C433EF
-	for <linux-modules@archiver.kernel.org>; Wed, 13 Jul 2022 07:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 883BCC433EF
+	for <linux-modules@archiver.kernel.org>; Wed, 13 Jul 2022 08:04:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234620AbiGMHNH (ORCPT
+        id S235007AbiGMIEk (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 13 Jul 2022 03:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        Wed, 13 Jul 2022 04:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbiGMHNG (ORCPT
+        with ESMTP id S235017AbiGMIEf (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:13:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9313DEA9;
-        Wed, 13 Jul 2022 00:13:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 275B960BCA;
-        Wed, 13 Jul 2022 07:13:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67A83C34114;
-        Wed, 13 Jul 2022 07:13:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657696384;
-        bh=TQNeEGV3rKJ8ew7HDAUcPp3TPAeemTm6ChOgvZkJsrk=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=Hf895GfwxtmCMtfREvKug/f47fG4hj127g+YzBM6DUD4hMNkSssB3eqXO5BS8zKfR
-         owUnaBDPGiCODXPxLW+tdjbtQgJFD2eGvLP9fPOIKl+kuoz8PbUQEkh0yrJk+POrVd
-         jc8OCU+pfepT9hTW0L/FvcBzpwvVIrliPWrxISGDN1EvFCVGy3BYEGeaTOxfraf0bj
-         PXgzkuAgyXVGyCEWdnFJ577hhEkIUa49U2g//JIq+hGmQSMMFvKDeWpJIJVxEi33hA
-         tH2fdXhQEdrVwcD6RXhL9bs1vfqkxFb4pwzdmBi7Lm9W74DP0mXwL3kpPVIu9gpnAw
-         /VBNCHv8eub4A==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-modules\@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "atomlin\@redhat.com" <atomlin@redhat.com>
-Subject: Re: [PATCH] modules: move module symbols from init/Kconfig
-References: <20220711162049.761342-1-mcgrof@kernel.org>
-        <74dcc785-f3e7-6832-9af3-e0a0f69c58c9@csgroup.eu>
-        <Ysx1C9IkJiFL+OH5@bombadil.infradead.org>
-        <09f3ec9a-3a8e-d116-d38a-2fdb55f125c6@csgroup.eu>
-        <Ys3G+ZGr9k+2fTsx@bombadil.infradead.org>
-Date:   Wed, 13 Jul 2022 10:12:58 +0300
-In-Reply-To: <Ys3G+ZGr9k+2fTsx@bombadil.infradead.org> (Luis Chamberlain's
-        message of "Tue, 12 Jul 2022 12:09:45 -0700")
-Message-ID: <87zghdmqo5.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 13 Jul 2022 04:04:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9ACF1E1904
+        for <linux-modules@vger.kernel.org>; Wed, 13 Jul 2022 01:04:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657699473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NOytE1OpwEr9XiR8fNK3GgWZvLZYvbznSGDQ7mcwWyY=;
+        b=ZyCzKbGxr3G5ca/GnnTZrOTvODa6JOD7A/KAJpqZskJVjjJt9X7YDGHFs8H5eoxCrUod5T
+        HgDCkoMxusiqQFM1u78ZWc7M0S1hy1X5V6oQ//A9n0Ae59PqR2JCDdr603RccxN3Df7kog
+        a0QIj+ud5YOebFoHwar38KT6XAKu5CQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-sKwMgi4cMlK-SwVyz_Lecg-1; Wed, 13 Jul 2022 04:04:32 -0400
+X-MC-Unique: sKwMgi4cMlK-SwVyz_Lecg-1
+Received: by mail-wm1-f71.google.com with SMTP id 23-20020a05600c229700b003a2eda0c59cso630018wmf.7
+        for <linux-modules@vger.kernel.org>; Wed, 13 Jul 2022 01:04:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NOytE1OpwEr9XiR8fNK3GgWZvLZYvbznSGDQ7mcwWyY=;
+        b=YgagUy+WofTLtXVO/HZzVky6TDPga1291o81u00CXhFiqFu7VPyf4/iteixr2ZmB5R
+         m6R6e8EZUTUiEG2DvtHVWARPRxgmNf52sppys8zpVoK/sx2RE4dpEILcKHFQpYMPwdsf
+         xmsR4sLkPyg4w2/b4wVKy12Z6Vf+dIUzi5VV5Q0cJxZrwmsQya7gdmLBW+W/80ZHLjFH
+         PjAOmpj1u90ZEty1mtJe7N76kAZXJNfLmq0Fexy+NNG5tgEORnuOtxN15AhOFQv2FQzJ
+         81rPbmpeZ6E4rnHzyBM49IbvR3IJzfRpr8K97+jnVNffXUR85TEEuFIYIKPi3ovNklRX
+         lqHw==
+X-Gm-Message-State: AJIora92K5ELVcgF/BZ7DDodj6/whDJ11Jz89vDiJDl1gnaNTJ2yWqq2
+        19FI/kcByxHbbuSDh/RJc9ilpHmAZt2PHebF903vMj/kVNGAIMFe3Pp8q0Y7FVKngEvaUoBFdMj
+        GjKETugeBqEFy9N8x4OoHPI49
+X-Received: by 2002:a5d:6a09:0:b0:21d:7a73:c48a with SMTP id m9-20020a5d6a09000000b0021d7a73c48amr1905401wru.366.1657699470991;
+        Wed, 13 Jul 2022 01:04:30 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vqbSTaA6ud72cVb/lQc2F1Aucex9l4ksWc+z8bOYyYLxbP+MGfqfsA5Iy9lPmmsNnjexlwhw==
+X-Received: by 2002:a5d:6a09:0:b0:21d:7a73:c48a with SMTP id m9-20020a5d6a09000000b0021d7a73c48amr1905389wru.366.1657699470793;
+        Wed, 13 Jul 2022 01:04:30 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id q13-20020adff94d000000b0020e6ce4dabdsm10156872wrr.103.2022.07.13.01.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 01:04:29 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 09:04:29 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] module: Move module's Kconfig items in kernel/module/
+Message-ID: <20220713080429.7r2xcpumnynhnyhe@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <fdc6016e2414a26f17a17024d287087627052ea6.1657605146.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+In-Reply-To: <fdc6016e2414a26f17a17024d287087627052ea6.1657605146.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Luis Chamberlain <mcgrof@kernel.org> writes:
+On Tue 2022-07-12 07:52 +0200, Christophe Leroy wrote:
+> In init/Kconfig, the part dedicated to modules is quite large.
+> 
+> Move it into a dedicated Kconfig in kernel/module/
+> 
+> MODULES_TREE_LOOKUP was outside of the 'if MODULES', but as it is
+> only used when MODULES are set, move it in with everything else to
+> avoid confusion.
+> 
+> MODULE_SIG_FORMAT is left in init/Kconfig because this configuration
+> item is not used in kernel/modules/ but in kernel/ and can be
+> selected independently from CONFIG_MODULES. It is for instance
+> selected from security/integrity/ima/Kconfig.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  init/Kconfig          | 293 +-----------------------------------------
+>  kernel/module/Kconfig | 293 ++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 294 insertions(+), 292 deletions(-)
+>  create mode 100644 kernel/module/Kconfig
 
-> On Tue, Jul 12, 2022 at 05:57:35AM +0000, Christophe Leroy wrote:
->>=20
->>=20
->> Le 11/07/2022 =C3=A0 21:07, Luis Chamberlain a =C3=A9crit=C2=A0:
->> > On Mon, Jul 11, 2022 at 06:33:08PM +0000, Christophe Leroy wrote:
->> >>
->> >>
->> >> Le 11/07/2022 =C3=A0 18:20, Luis Chamberlain a =C3=A9crit=C2=A0:
->> >>> This moves all the module symbols from init/Kconfig to its
->> >>> own dedicated file now that we have all of the module code in
->> >>> its own directory.
->> >>>
->> >>> This does not introduce any functional changes.
->> >>>
->> >>> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
->> >>
->> >> It is similar to the patch I sent in February, isn't it ?
->> >> (https://patchwork.kernel.org/project/linux-modules/patch/4042712961d=
-42186c449734c253511ea7076c780.1645543105.git.christophe.leroy@csgroup.eu/)
->> >=20
->> > Sorry, I had missed that. Can you send a new v2 based on today's
->> > modules-next? And I'll just drop my patch?
->> >=20
->>=20
->> I sent out v2 rebased on today's modules-next=20
->> (c76654e22da1e0cb830bd0eb5832072fb76df358)
->>=20
->> I see all my patches still have status 'new' in modules's patchwork=20
->> (https://patchwork.kernel.org/project/linux-modules/list/?submitter=3D19=
-2363).
->>=20
->> Don't you maintain it ?
->
-> Yes but I never knew we used to have patchwork for modules, but glad we h=
-ave
-> that now. Anyway all your patches are applied, is patchwork dumb to not
-> pick that up?
+Thanks Christophe!
 
-patchwork does not have that functionality built in, you need to enable
-the bot separately:
+Reviewed-by: Aaron Tomlin <atomlin@redhat.com>
 
-https://korg.docs.kernel.org/patchwork/pwbot.html
+-- 
+Aaron Tomlin
 
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
