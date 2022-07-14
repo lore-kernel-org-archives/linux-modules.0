@@ -2,106 +2,99 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94DF4C43334
-	for <linux-modules@archiver.kernel.org>; Thu, 14 Jul 2022 10:16:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC833C433EF
+	for <linux-modules@archiver.kernel.org>; Thu, 14 Jul 2022 15:39:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237857AbiGNKQk (ORCPT
+        id S240011AbiGNPjk (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 14 Jul 2022 06:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        Thu, 14 Jul 2022 11:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237801AbiGNKQj (ORCPT
+        with ESMTP id S240008AbiGNPjj (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:16:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586DB120A5;
-        Thu, 14 Jul 2022 03:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0Gkk0NC34K+apqrYO+RTe0+nfUNqT3lfjLteCbnILho=; b=UFnSe+fhAVY6yhXjV2wPJ61iZ8
-        2Zw0OYv0osZnIIxvRy4gbl9Ye5kgg+qtQKMQkvhFyAK32I4SIz8biMp+cQChL4nwYrIOG6C9ex0Ef
-        f8U+9j9tY1bXIkJVNz+BPOChOnGQrY3uTbXPb+H8mB29/YqRxwsKepdNGgjXhQGGRQAiaiCXQXaCR
-        fpHfR8jE+VDhlrnJsDgRZjQMdGT1qeIdRxvz6Re/H0sOAKr8FKrB+YaDbMcUjAbbDYwWHaeq77Jdg
-        /X5bj3osOCoUykMSaOAx17CzfJkkDvSFWE1X4eNNlbC4Qk3E0NHW17ULmCJInK+jjxGJdV7o3rS7d
-        pVljFdig==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBvsy-009HkF-C2; Thu, 14 Jul 2022 10:15:56 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E144A980120; Thu, 14 Jul 2022 12:10:36 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 12:10:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "anil.s.keshavamurthy@intel.com" <anil.s.keshavamurthy@intel.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH bpf-next 1/3] mm/vmalloc: introduce vmalloc_exec which
- allocates RO+X memory
-Message-ID: <Ys/rnFf/ewPA85Iz@worktop.programming.kicks-ass.net>
-References: <20220713071846.3286727-1-song@kernel.org>
- <20220713071846.3286727-2-song@kernel.org>
- <Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net>
- <7C927986-3665-4BD6-A339-D3FE4A71E3D4@fb.com>
- <Ys8qfRwkTbUYwmKM@worktop.programming.kicks-ass.net>
- <78A18945-0841-4CCE-8A33-6C09ECBFF7E1@fb.com>
+        Thu, 14 Jul 2022 11:39:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CD25BC84
+        for <linux-modules@vger.kernel.org>; Thu, 14 Jul 2022 08:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657813177;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KAfZzaXnYv7OEcE1kDa0BJxr1W4FR0BFr3KGIcgK5Jg=;
+        b=WU4rolIAjLcTwBBJDxJJJuW+aboNDvM9G3MbvcTVzkRKrfYPmBE9OUYf7XZgWyZWFC74eH
+        lJube2V4QdgnQ0CUqk/BtsT79BikY8oaWq4Er0yEOzFGjixcZkQ+ra9BmxWNg/+zy66k+v
+        D+MD1q03dUW7ZbVyK7+O1oUoHys7MIM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-94-5epw6HW2PBCl0Uvyl_aa0g-1; Thu, 14 Jul 2022 11:39:36 -0400
+X-MC-Unique: 5epw6HW2PBCl0Uvyl_aa0g-1
+Received: by mail-wm1-f69.google.com with SMTP id c126-20020a1c3584000000b003a02fa133ceso805513wma.2
+        for <linux-modules@vger.kernel.org>; Thu, 14 Jul 2022 08:39:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KAfZzaXnYv7OEcE1kDa0BJxr1W4FR0BFr3KGIcgK5Jg=;
+        b=BPmqWjy+9Ofv5NbyoY/mhGoNI4FvLrlBDQTVmYC+oP1AvuEtBe6J4ki1BtFiThyXPY
+         Ec0ePiU+sA3SLPcM+pYEljm0bWymf5t/EPu991ZL86SRzeIZsRdh8vvyc98K++iBKiZ+
+         /92lsTVpPI14XSqIx2prR8pV3Krid52LdW/LGKG1JS/CZ7zFdyPrHU3kmCcSa4guoiQQ
+         aPRExzbcEP3lTJJzDJg1onI+gM790i6Z1klUKhFLmqp5Ce16thLU01GlGgyewcgQ4sC6
+         ydUy6+njNba3Rr6WhxzjoR/Zaoq4qAnLS9PUrzn61bACbY61DTbfst5FfHvDoZpK1rvb
+         rZEg==
+X-Gm-Message-State: AJIora8eT9PB3nk1OG5+E0ufyy0X4+5yUAR6B9CKT34SjS3hRiCK7RUV
+        Iyz69XrGpR1ZwPXPvS9CAdShoP6m1h3JxK7fQr1EAHDRDqbSQhPyanzpfczXzb4qqQMisBIQAhR
+        HHh+DJKxcHHCDz9mRNR0y0H4x
+X-Received: by 2002:a7b:c4d3:0:b0:3a1:8fbf:f03f with SMTP id g19-20020a7bc4d3000000b003a18fbff03fmr15786620wmk.172.1657813174904;
+        Thu, 14 Jul 2022 08:39:34 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ssFje9JTaDAgNe5RdPrzlw4k+BLRSkczVLTXUldIbK9PhmS2JvLjyb0rBqD2o+5c4gi6PpSw==
+X-Received: by 2002:a7b:c4d3:0:b0:3a1:8fbf:f03f with SMTP id g19-20020a7bc4d3000000b003a18fbff03fmr15786602wmk.172.1657813174719;
+        Thu, 14 Jul 2022 08:39:34 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id m9-20020adfe949000000b0021d4694fcaesm1671279wrn.107.2022.07.14.08.39.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jul 2022 08:39:33 -0700 (PDT)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, oleksandr@natalenko.name, neelx@redhat.com
+Subject: [PATCH v2 0/3] module: Show the last unloaded module's taint flag(s)
+Date:   Thu, 14 Jul 2022 16:39:30 +0100
+Message-Id: <20220714153933.2095776-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <78A18945-0841-4CCE-8A33-6C09ECBFF7E1@fb.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jul 13, 2022 at 09:20:55PM +0000, Song Liu wrote:
-> 
-> 
-> > On Jul 13, 2022, at 1:26 PM, Peter Zijlstra <peterz@infradead.org> wrote:
-> > 
-> > On Wed, Jul 13, 2022 at 03:48:35PM +0000, Song Liu wrote:
-> > 
-> >>> So how about instead we separate them? Then much of the problem goes
-> >>> away, you don't need to track these 2M chunks at all.
-> >> 
-> >> If we manage the memory in < 2MiB granularity, either 4kB or smaller, 
-> >> we still need some way to track which parts are being used, no? I mean
-> >> the bitmap.  
-> > 
-> > I was thinking the vmalloc vmap_area tree could help out there.
-> 
-> Interesting. vmap_area tree indeed keeps a lot of useful information. 
-> 
-> Currently, powerpc supports CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, 
+Hi Luis, Christophe,
 
-Only PPC32; and it's due to a constraint in their MMU vs page
-protections.
+In addition to the previous iteration, since this particular series does
+indeed modify last_unloaded_module, I decided to use strscpy() as a
+replacement for the now deprecated strlcpy().
 
-> which leaves module_alloc just for module text. If this works, we get
-> separation between RO+X and RW memory. What would it take to enable
-> CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC for x86_64? 
+Changes since v1 [1][2]:
 
-The VM_TOPDOWN_VMAP flag and ensuring the data and code regions never
-overlap. Once you have that you can enable it.
+  - Replaced the deprecated strlcpy() for strscpy()
+  - Replaced last_unloaded_module[] with an anonymous structure
+    i.e. last_unloaded_module.name and last_unloaded_module.taints
+  - Ensured we modify last_unloaded_module.taints only when required
 
-Specifically the problem is that data needs to be in the s32 immediate
-range just like code, so we're constrained to the module range. Given
-that constraint, the easiest solution is to use the different ends of
-that range.
+[1]: https://lore.kernel.org/lkml/20220627164052.2416485-1-atomlin@redhat.com/
+[2]: https://lore.kernel.org/lkml/20220627164052.2416485-2-atomlin@redhat.com/
+
+
+Aaron Tomlin (3):
+  module: Modify module_flags() to accept show_state argument
+  module: Use strscpy() for last_unloaded_module
+  module: Show the last unloaded module's taint flag(s)
+
+ kernel/module/internal.h |  2 +-
+ kernel/module/main.c     | 27 ++++++++++++++++++---------
+ kernel/module/procfs.c   |  2 +-
+ 3 files changed, 20 insertions(+), 11 deletions(-)
+
+-- 
+2.34.3
+
