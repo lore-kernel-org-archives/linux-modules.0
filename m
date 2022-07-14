@@ -2,99 +2,128 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B1F1CCA483
-	for <linux-modules@archiver.kernel.org>; Thu, 14 Jul 2022 15:39:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A233C43334
+	for <linux-modules@archiver.kernel.org>; Thu, 14 Jul 2022 18:16:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240406AbiGNPj4 (ORCPT
+        id S238579AbiGNSQE (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 14 Jul 2022 11:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        Thu, 14 Jul 2022 14:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240354AbiGNPjo (ORCPT
+        with ESMTP id S232100AbiGNSQD (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 14 Jul 2022 11:39:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35CAE2C647
-        for <linux-modules@vger.kernel.org>; Thu, 14 Jul 2022 08:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657813182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mpFwBg17MPLedEeXsKR0g11KSb+p+AI/SVxHMocug7Y=;
-        b=ec1RPWh2V5eR7jxHnrhfI8aRAUnpcLGq5izFJDGWGCHjnDsjyzHcLck9axPA36wePFslmV
-        DD1Uh6Zpyq9k2B0H/wYZFBVAAvfefa2wbttBUniX7COF2ucJKITxwov3Fk5WeIcvVDNOIU
-        aWE1tjSY1KtjOzNJSYkG28YOCEwubR8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-13-Wl0x9h42MzmdvMGsiEFH6A-1; Thu, 14 Jul 2022 11:39:40 -0400
-X-MC-Unique: Wl0x9h42MzmdvMGsiEFH6A-1
-Received: by mail-wm1-f71.google.com with SMTP id z20-20020a1c4c14000000b003a3020da654so717472wmf.5
-        for <linux-modules@vger.kernel.org>; Thu, 14 Jul 2022 08:39:40 -0700 (PDT)
+        Thu, 14 Jul 2022 14:16:03 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CD067CAA;
+        Thu, 14 Jul 2022 11:16:02 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id w2so3099462ljj.7;
+        Thu, 14 Jul 2022 11:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2QX/Lxw1dM3em+AdcVNETTOfkI14eEfg7V1aSOQdTQM=;
+        b=cL80WLc/zql6U7gVA/bMoRIaeyJja2A7Hl+8eM1sjIXk66Z69jRPAKragoT+s5oy5k
+         1a8lc7LUo/0ZDCf2dAYC7YpNREsVd0CncKUzvRERTqnIbl3jCZT/M+6Mlz90DZP0LPBn
+         cf7++pETwaA0ZfmkxaCN/CL2O2mgZP+X6tA3x+MxPdsIhW2wvuAEQjL0l4mloz5KY2uk
+         HbSkdnKi7NbTpl4TVaQnbMbMDVLWqeE9PTKvc1LDsEBZDNUeWqyY+Rf1n3G/9Zmj34gZ
+         PP5eWPuOXKBifT8R/noIRJY4rZywnQduq1Rncu2XnGHyRKmzuXz2etugNPmcDSmBV6ws
+         tBPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mpFwBg17MPLedEeXsKR0g11KSb+p+AI/SVxHMocug7Y=;
-        b=UKvtPAEMVAO3kZ0/xA5+JXnACkhwJa3EychNRS5BFccx4f5vjBt5YGwd2ENZPPCdrn
-         ZF1xQcVvjoU7GOaULBRqtemOXx/b4ij6VBpbYMs7QwcNeH/m2XEVdAohiCQp2IylzrxH
-         jN1IflHXI+p6w8/IckKEyPM1xa0wMbAt7DL80POZwxeeeC6o4/CDIli05HJcWHM2RoRL
-         Qk2jbrt5RfSJJhYza085uhVk8C9WK31E+Sw36NzQ5M7pTOCCQWnMFVvpS3swJqtNDg6b
-         QFBjBeiI8v0HHoBPEftjvulIapoUgRl8k+RSM4RqswF//UQjsl/kLyzgS8HkppkKaoz/
-         QiNg==
-X-Gm-Message-State: AJIora/NEUYvCKh31/7hNEwhziazd9KuXjf+NfeqPTjD9YeIWHVSCyWP
-        8dnT/1Ir+Cbbfi4dIIONrsBIs7QOKlA3dxYOw8wc2Y0mVX2f0zGEFF3H2BlPzk6uLYf88idjmUH
-        l//ivZfBfG6/OjqM+3XRddTR8
-X-Received: by 2002:adf:f746:0:b0:21d:6afd:b7d3 with SMTP id z6-20020adff746000000b0021d6afdb7d3mr8680746wrp.501.1657813179272;
-        Thu, 14 Jul 2022 08:39:39 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t5tKhmAkul9pcobJT+isErEbVQ/CkLfg6Gb+rF4t/kzbOpZtS1pgsyb94YxSH6cD9DrPkr8Q==
-X-Received: by 2002:adf:f746:0:b0:21d:6afd:b7d3 with SMTP id z6-20020adff746000000b0021d6afdb7d3mr8680732wrp.501.1657813179045;
-        Thu, 14 Jul 2022 08:39:39 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id w10-20020adfcd0a000000b0021d888e1132sm1729356wrm.43.2022.07.14.08.39.37
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2QX/Lxw1dM3em+AdcVNETTOfkI14eEfg7V1aSOQdTQM=;
+        b=NBIqa2uPmu4FOQsfyZXBLExLsE8ki7pkd/69xduT0fpiHbSjXavA5XhwhNsB53gjYx
+         dLMAIQD0bqKsx4mW/lyXv9+uFwYOsGuRmoEZre2vza1BidGUUezQMSl85B6hepXW7+jJ
+         BvIna74YyOcnjrxy5OUyMad0WzLGMVuFHBxq2Fc1RJdD82/fFJFaSBnyb8WD9kQhsJEU
+         0euIgznbgKSUyS3YoAR4K+ZvCXYvfMCWLu80LQeyaoKOcEW6vlKURg/bAOpafuMWJV7a
+         E0tQ1XqK697eI9EtdZRSUihTOWiO1JS3831rjzmQ5SC5Kb2JxLEoXPubBn+wV5GsTLqE
+         XoOQ==
+X-Gm-Message-State: AJIora9pylqZUe3wqix7wi0GtMMnBELGnN3c0xindONjVDGm2rL9NUpi
+        A1BmjTpbc+bn1RX40hfW4Pw=
+X-Google-Smtp-Source: AGRyM1tpHk0AhqgOpToqpDTVrMgKe6SHJxLYZZJu+FPz/pCXoZQpyRbm608wTJYHdeLLsSOS4dK+hQ==
+X-Received: by 2002:a05:651c:158c:b0:250:a23d:2701 with SMTP id h12-20020a05651c158c00b00250a23d2701mr5429808ljq.475.1657822560608;
+        Thu, 14 Jul 2022 11:16:00 -0700 (PDT)
+Received: from pc636 (host-90-235-11-208.mobileonline.telia.com. [90.235.11.208])
+        by smtp.gmail.com with ESMTPSA id bi32-20020a05651c232000b0025bbd5e3febsm386358ljb.132.2022.07.14.11.15.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 08:39:38 -0700 (PDT)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        atomlin@atomlin.com, oleksandr@natalenko.name, neelx@redhat.com
-Subject: [PATCH v2 2/3] module: Use strscpy() for last_unloaded_module
-Date:   Thu, 14 Jul 2022 16:39:32 +0100
-Message-Id: <20220714153933.2095776-3-atomlin@redhat.com>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20220714153933.2095776-1-atomlin@redhat.com>
-References: <20220714153933.2095776-1-atomlin@redhat.com>
+        Thu, 14 Jul 2022 11:15:59 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Thu, 14 Jul 2022 20:15:56 +0200
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, Song Liu <song@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "anil.s.keshavamurthy@intel.com" <anil.s.keshavamurthy@intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH bpf-next 1/3] mm/vmalloc: introduce vmalloc_exec which
+ allocates RO+X memory
+Message-ID: <YtBdSYbCyGJeIHHO@pc636>
+References: <20220713071846.3286727-1-song@kernel.org>
+ <20220713071846.3286727-2-song@kernel.org>
+ <Ys6ZkDUhRZcmvPYy@infradead.org>
+ <BE896037-B79C-4B38-B777-96002C5861F5@fb.com>
+ <Ys+aVKFJaQd130Pn@infradead.org>
+ <8AC2399B-F3B2-4F91-B18C-D9D3D5085471@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8AC2399B-F3B2-4F91-B18C-D9D3D5085471@fb.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The use of strlcpy() is considered deprecated [1].
-In this particular context, there is no need to remain with strlcpy().
-Therefore we transition to strscpy().
+On Thu, Jul 14, 2022 at 04:54:40AM +0000, Song Liu wrote:
+> 
+> 
+> > On Jul 13, 2022, at 9:23 PM, Christoph Hellwig <hch@infradead.org> wrote:
+> > 
+> > On Wed, Jul 13, 2022 at 03:49:45PM +0000, Song Liu wrote:
+> >> 
+> >> 
+> >>> On Jul 13, 2022, at 3:08 AM, Christoph Hellwig <hch@infradead.org> wrote:
+> >>> 
+> >>> NAK.  This is not something that should be an exported public API
+> >>> ever.
+> >> 
+> >> Hmm.. I will remove EXPORT_SYMBOL_GPL (if we ever do a v2 of this..)
+> > 
+> > Even without that it really is not a vmalloc API anyway.  
+> 
+> This ...
+> 
+> > Executable
+> > memory needs to be written first, so we should allocate it in that state
+> > and only mark it executable after that write has completed.
+> 
+> ... and this are two separate NAKs.
+> 
+> For the first NAK, I agree that my version is another layer on top of 
+> vmalloc. But what do you think about Peter's idea? AFAICT, that fits
+> well in vmalloc logic. 
+> 
+I am not able to find the patch/change to see what you have done. But
+please do not build a new allocator on top of vmalloc code. We have
+three different ones what make things to be complicated :)
 
-[1]: https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- kernel/module/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index a4d23b0ebbc0..c5db13d06995 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -754,7 +754,7 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
- 	async_synchronize_full();
- 
- 	/* Store the name of the last unloaded module for diagnostic purposes */
--	strlcpy(last_unloaded_module, mod->name, sizeof(last_unloaded_module));
-+	strscpy(last_unloaded_module, mod->name, sizeof(last_unloaded_module));
- 
- 	free_module(mod);
- 	/* someone could wait for the module in add_unformed_module() */
--- 
-2.34.3
-
+--
+Uladzislau Rezki
