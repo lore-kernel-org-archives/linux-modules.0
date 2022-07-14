@@ -2,92 +2,106 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D8E6C433EF
-	for <linux-modules@archiver.kernel.org>; Thu, 14 Jul 2022 07:27:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94DF4C43334
+	for <linux-modules@archiver.kernel.org>; Thu, 14 Jul 2022 10:16:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235353AbiGNH1D (ORCPT
+        id S237857AbiGNKQk (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 14 Jul 2022 03:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
+        Thu, 14 Jul 2022 06:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiGNH1D (ORCPT
+        with ESMTP id S237801AbiGNKQj (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:27:03 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8543A1A828;
-        Thu, 14 Jul 2022 00:27:01 -0700 (PDT)
+        Thu, 14 Jul 2022 06:16:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586DB120A5;
+        Thu, 14 Jul 2022 03:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MxjTs9nuJ3FmUOtUGZD4K0rKKYlzahKqtMX7rQs+RMQ=; b=P+HF2qeaBGfEDHrWZkyaJPn3IB
-        QiNrtA//HWV+0ORiO+86u7mo74SlcDdcVqFoIgZCWMGIoxYPaVQGU+72wQPOBiQ0vqF2fr+XRsVbn
-        nG4Lm56rEpjCfhHtpiCFZf03XpUsAJZgKdFlccUm7lCAO3u1M/WuvVAV2x9aOziByeZBhRqtX/9ft
-        5DZmULcqm2l89KTXWlaN47QZXt8XCD3bthIsytQv8r1CKT3O3kx6tAfz7rw9SYprDq1RXGJq2pCc/
-        jB9UMMQ/l8jzUSCKC6r6Bmgb5It5ci3rvZPoHr5b7OlcWI/3C+MzPHmlXP8EX53pPhhfRJrmH2Fyh
-        PzeRPolA==;
+        bh=0Gkk0NC34K+apqrYO+RTe0+nfUNqT3lfjLteCbnILho=; b=UFnSe+fhAVY6yhXjV2wPJ61iZ8
+        2Zw0OYv0osZnIIxvRy4gbl9Ye5kgg+qtQKMQkvhFyAK32I4SIz8biMp+cQChL4nwYrIOG6C9ex0Ef
+        f8U+9j9tY1bXIkJVNz+BPOChOnGQrY3uTbXPb+H8mB29/YqRxwsKepdNGgjXhQGGRQAiaiCXQXaCR
+        fpHfR8jE+VDhlrnJsDgRZjQMdGT1qeIdRxvz6Re/H0sOAKr8FKrB+YaDbMcUjAbbDYwWHaeq77Jdg
+        /X5bj3osOCoUykMSaOAx17CzfJkkDvSFWE1X4eNNlbC4Qk3E0NHW17ULmCJInK+jjxGJdV7o3rS7d
+        pVljFdig==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBtEs-003mx0-U9; Thu, 14 Jul 2022 07:26:23 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oBvsy-009HkF-C2; Thu, 14 Jul 2022 10:15:56 +0000
 Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D0146980083; Thu, 14 Jul 2022 09:26:22 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 09:26:22 +0200
+        id E144A980120; Thu, 14 Jul 2022 12:10:36 +0200 (CEST)
+Date:   Thu, 14 Jul 2022 12:10:36 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-modules@vger.kernel.org, mcgrof@kernel.org,
-        rostedt@goodmis.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, mhiramat@kernel.org, naveen.n.rao@linux.ibm.com,
-        davem@davemloft.net, anil.s.keshavamurthy@intel.com,
-        keescook@chromium.org, dave@stgolabs.net, daniel@iogearbox.net,
-        kernel-team@fb.com, x86@kernel.org, dave.hansen@linux.intel.com,
-        rick.p.edgecombe@intel.com, akpm@linux-foundation.org
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "anil.s.keshavamurthy@intel.com" <anil.s.keshavamurthy@intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
 Subject: Re: [PATCH bpf-next 1/3] mm/vmalloc: introduce vmalloc_exec which
  allocates RO+X memory
-Message-ID: <Ys/FHgonNLo29Bp2@worktop.programming.kicks-ass.net>
+Message-ID: <Ys/rnFf/ewPA85Iz@worktop.programming.kicks-ass.net>
 References: <20220713071846.3286727-1-song@kernel.org>
  <20220713071846.3286727-2-song@kernel.org>
  <Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net>
- <Ys+mtMUb7lXZ/GaS@infradead.org>
+ <7C927986-3665-4BD6-A339-D3FE4A71E3D4@fb.com>
+ <Ys8qfRwkTbUYwmKM@worktop.programming.kicks-ass.net>
+ <78A18945-0841-4CCE-8A33-6C09ECBFF7E1@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ys+mtMUb7lXZ/GaS@infradead.org>
+In-Reply-To: <78A18945-0841-4CCE-8A33-6C09ECBFF7E1@fb.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jul 13, 2022 at 10:16:36PM -0700, Christoph Hellwig wrote:
-> On Wed, Jul 13, 2022 at 12:20:09PM +0200, Peter Zijlstra wrote:
-> > Start by adding VM_TOPDOWN_VMAP, which instead of returning the lowest
-> > (leftmost) vmap_area that fits, picks the higests (rightmost).
-> > 
-> > Then add module_alloc_data() that uses VM_TOPDOWN_VMAP and make
-> > ARCH_WANTS_MODULE_DATA_IN_VMALLOC use that instead of vmalloc (with a
-> > weak function doing the vmalloc).
-> > 
-> > This gets you bottom of module range is RO+X only, top is shattered
-> > between different !X types.
-> > 
-> > Then track the boundary between X and !X and ensure module_alloc_data()
-> > and module_alloc() never cross over and stay strictly separated.
-> > 
-> > Then change all module_alloc() users to expect RO+X memory, instead of
-> > RW.
-> > 
-> > Then make sure any extention of the X range is 2M aligned.
-> > 
-> > And presto, *everybody* always uses 2M TLB for text, modules, bpf,
-> > ftrace, the lot and nobody is tracking chunks.
-> > 
-> > Maybe migration can be eased by instead providing module_alloc_text()
-> > and ARCH_WANTS_MODULE_ALLOC_TEXT.
+On Wed, Jul 13, 2022 at 09:20:55PM +0000, Song Liu wrote:
 > 
-> This all looks pretty sensible.  How are we going to do the initial
-> write to the executable memory, though?
+> 
+> > On Jul 13, 2022, at 1:26 PM, Peter Zijlstra <peterz@infradead.org> wrote:
+> > 
+> > On Wed, Jul 13, 2022 at 03:48:35PM +0000, Song Liu wrote:
+> > 
+> >>> So how about instead we separate them? Then much of the problem goes
+> >>> away, you don't need to track these 2M chunks at all.
+> >> 
+> >> If we manage the memory in < 2MiB granularity, either 4kB or smaller, 
+> >> we still need some way to track which parts are being used, no? I mean
+> >> the bitmap.  
+> > 
+> > I was thinking the vmalloc vmap_area tree could help out there.
+> 
+> Interesting. vmap_area tree indeed keeps a lot of useful information. 
+> 
+> Currently, powerpc supports CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, 
 
-With something like text_poke_memcpy(). I suppose that the proposed
-ARCH_WANTS_MODULE_ALLOC_TEXT needs to imply availability of that too.
+Only PPC32; and it's due to a constraint in their MMU vs page
+protections.
 
-If the 4K copy thing ends up being a bottleneck we can easily extend
-that to have a 2M option as well.
+> which leaves module_alloc just for module text. If this works, we get
+> separation between RO+X and RW memory. What would it take to enable
+> CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC for x86_64? 
+
+The VM_TOPDOWN_VMAP flag and ensuring the data and code regions never
+overlap. Once you have that you can enable it.
+
+Specifically the problem is that data needs to be in the s32 immediate
+range just like code, so we're constrained to the module range. Given
+that constraint, the easiest solution is to use the different ends of
+that range.
