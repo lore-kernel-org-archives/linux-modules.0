@@ -2,93 +2,89 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D2E4C43334
-	for <linux-modules@archiver.kernel.org>; Tue, 19 Jul 2022 17:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02C10CCA47F
+	for <linux-modules@archiver.kernel.org>; Tue, 19 Jul 2022 20:24:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239755AbiGSR6v (ORCPT
+        id S237380AbiGSUYJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 19 Jul 2022 13:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        Tue, 19 Jul 2022 16:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239615AbiGSR6u (ORCPT
+        with ESMTP id S229939AbiGSUYI (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:58:50 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EE14D163;
-        Tue, 19 Jul 2022 10:58:49 -0700 (PDT)
+        Tue, 19 Jul 2022 16:24:08 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C8E3FA19;
+        Tue, 19 Jul 2022 13:24:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=V0qiTrhKb5cDn7xIAf2JVpihXBS1asZkPJ9Pieu4GWQ=; b=TLdQhm87tVe/Km85VW344stqSW
-        sGnhygUmoZeMCvY+KgA6lZ97rKTdlG4gdJ0pxREFFi5A+679pJNM3qKHlmlIH58qU2zL5bJyGs76V
-        xw8+/fSGkRuqWq/8jpRptkA2FekKdawjW2AjvqNVN6wUhZXsEMatGmKeecDXx9Efww4Jbf+c6CXhh
-        TTui8HWbn63uFSFS9R/3QEAaeEAcu3QZaIE7Je5Gsh6lRahE5QrdW2lEYbkK5oBCndywlf0SMMJ9+
-        tQNUgEZo+vsiFwQ5SkTogBj5c7u8UaV/rfzaOW8/04ix8bTyftX45GC5s/n60llqQrZogkF99fhpi
-        ur5rOExA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDrUb-00B2xA-Ge; Tue, 19 Jul 2022 17:58:45 +0000
-Date:   Tue, 19 Jul 2022 10:58:45 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-modules@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when
- CONFIG_KUNIT=m
-Message-ID: <Ytbw1T6uspICqj5B@bombadil.infradead.org>
-References: <20220713005221.1926290-1-davidgow@google.com>
- <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=u8oopSHac3jAE+8NMeybfxni/MQzhvEmpTnO4gjiYYg=; b=NQucyI/8BzDtUqhyMIkdmfE21C
+        PBg5VrarOl8oiCeI5Es7bC64lW0ilVfPE3YYXVLvZHU2vRp1GfpeknIsmz04zH3JoG/Hfo4tI+vW5
+        5pkbFoMPWkGnhdaqNAyruHWOQDtSUCadJ0ptMXnOhNyEAAAEpFUAkqpzhdCGuJx92pE13xDLtnXuD
+        JWzYj/RAPN4PabCQ+/dkvH0pIoITdrKcR41UyWV08Y2lpwgh+1nkw+oXGDYiJLm9d+DOlmTUPQmlv
+        NGNigKgxL+DD7AALhEFUNj0JulS0WcB0AQQuNH0/J5Kvq0ssyONEN7mip0bP5weE93jpfbPmbNaDu
+        hh/e6Brw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDtkz-00Drg7-Ms; Tue, 19 Jul 2022 20:23:49 +0000
+Date:   Tue, 19 Jul 2022 21:23:49 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Song Liu <song@kernel.org>, Takashi Iwai <tiwai@suse.de>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] module: Replace kmap() with kmap_local_page()
+Message-ID: <YtcS1QNcIrTt0DN1@casper.infradead.org>
+References: <20220718002645.28817-1-fmdefrancesco@gmail.com>
+ <YtXchtEwetMvKrKY@bombadil.infradead.org>
+ <5303077.Sb9uPGUboI@opensuse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5303077.Sb9uPGUboI@opensuse>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jul 13, 2022 at 08:24:32AM -0700, Daniel Latypov wrote:
-> On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
-> >
-> > The new KUnit module handling has KUnit test suites listed in a
-> > .kunit_test_suites section of each module. This should be loaded when
-> > the module is, but at the moment this only happens if KUnit is built-in.
-> >
-> > Also load this when KUnit is enabled as a module: it'll not be usable
-> > unless KUnit is loaded, but such modules are likely to depend on KUnit
-> > anyway, so it's unlikely to ever be loaded needlessly.
+On Tue, Jul 19, 2022 at 11:19:24AM +0200, Fabio M. De Francesco wrote:
+> On martedì 19 luglio 2022 00:19:50 CEST Luis Chamberlain wrote:
+> > > Therefore, replace kmap() with kmap_local_page().
+> > 
+> > While this churn is going on everywhere I was wondering why not
+> > go ahead and adopt kmap_local_folio() instead?
 > 
-> This seems reasonable to me.
-> 
-> Question: what happens in this case?
-> 1. insmod <test-module>
-> 2. insmod kunit
-> 3. rmmod <test-module>
-> 
-> I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
-> for <test-module>, I think?
-> But we never called __kunit_test_suites_init().
-> My fear is what breaks as a result of this precondition break.
-> 
-> E.g. In the case that CONFIG_KUNIT_DEBUGFS is enabled, this includes a
-> call to kunit_debugfs_destroy_suite() with no previous call to
-> kunit_debugfs_create_suite().
-> That will include a call to debugfs_remove_recursive(suite->debugfs),
-> where suite->debugfs is an uninitialized pointer.
-> 
-> Maybe we can treat it as "undefined behavior" for now and proceed with
-> this patch.
-> 
-> In terms of long-term fixes, perhaps insmod kunit could trigger it to
-> 1. run all built-in tests (IIUC, it doesn't right now)
-> 2. run all the tests of currently loaded modules
-> 3. track which modules already ran so if you rmmod + insmod kunit
-> again, it won't rerun tests?
+> I'm sorry but, due to my lack of knowledge and experience, I'm not sure to 
+> understand how kmap_local_folio() could help here. My fault. I'm going to 
+> make some research and ask for help from more experienced developers. 
 
-Let's please address these considerations.
+I haven't made this suggestion to Fabio before for a few reasons.
 
-  Luis
+First, it makes his work harder.  He not only has to understand the
+implications of the kmap semantic changes but also the implications of
+the folio change.
+
+Then, I'm not sure that I necessarily have enough infrastructure in place
+for doing a folio conversion everywhere that he's doing a kmap/kmap_atomic
+to kmap_local_page conversion.
+
+What makes it particularly tricky is that you can only kmap a single
+page out of a folio at a time; there's no ability to kmap the entire
+folio, no matter how large it is.  I've looked at doing the conversion
+for ext2 directories, and it's _tricky_.  There's only one 'checked'
+flag for the entire folio, but ext2_check_page() needs to take a mapped
+page.  So now we have to make a judgement call about whether to support
+caching ext2 directories with large folios or whether to restrict them
+to single-page folios.
+
+So yes, there's probably a second patch coming for maintainers to look
+at that will convert the kmap_local_page() to kmap_local_folio().
+However, I think it's actually less of a burden for maintainers if
+these two different conversions happen separately because there are very
+different considerations to review.  Also, there's no equivalent to kmap()
+or kmap_atomic() for folios (deliberately), so the more conversions to
+kmap_local_page() Fabio gets done, the easier it will be for a later
+folio conversion.
