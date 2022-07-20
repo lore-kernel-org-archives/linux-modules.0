@@ -2,141 +2,109 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6E03C43334
-	for <linux-modules@archiver.kernel.org>; Wed, 20 Jul 2022 16:19:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79DB0C43334
+	for <linux-modules@archiver.kernel.org>; Wed, 20 Jul 2022 20:29:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbiGTQTl (ORCPT
+        id S229471AbiGTU3R (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 20 Jul 2022 12:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        Wed, 20 Jul 2022 16:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiGTQTj (ORCPT
+        with ESMTP id S229452AbiGTU3Q (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:19:39 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D0156BBE;
-        Wed, 20 Jul 2022 09:19:38 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id n12so13988260wrc.8;
-        Wed, 20 Jul 2022 09:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EjQ9X1UjGVK0ekLcqOx1pwSEWHylQ1/QnduEAyjuRmc=;
-        b=TByb/N/DHTn7/Z8JvsFqoLDpF8Ud+M5a3LoilYUmA/eyfKEx42r81eG6MYdOEfgT1b
-         CyOLK1u3RyiMHhsl5/6FO7PYqJKe6sxhKsAM8Uld9SbQQI36YnFbtxuVWIuq/SxEl0Rr
-         L9AmlXzOhJ9xDl7t2/vsIaL6hr6McskDftxnSeG6mW4hFGjj4+IRjwn6WzrN32tHV3hw
-         lECz+WC6NQloeLCM0lHGCHaloIDT2og3ckuOwG+1g8OdLGB/ShhY+CK+WuBU+HaGG4Hi
-         1d2gd0DC/4WBF/iXZFvoN8P6zsVLKSL23TDicgJ7Lm1HqGw5mfTo5G4Fv1vias2Z8R7g
-         Cxdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EjQ9X1UjGVK0ekLcqOx1pwSEWHylQ1/QnduEAyjuRmc=;
-        b=MVc0fFv5fX8AkKnelFO5TBSZVkvVf9xS4z1Coox7urWEYp2/fL/7Km33kneBA7yaC/
-         S/s2nY5V51swPLELDiWWUv1524s4WwE89I7reRO0sPOtNcixL1GcGGJsKaLi7sH7yC06
-         f4qtRr/V9EOtBW2GKEDREK3HhQKBW2vW00Jda5du6hjePuO25fCSyQcS2SugzHdjLAp0
-         R5T3602FPRWtlBt35mmxnrq2UVu1BY7W4CXTS3a/Byewt3fOsyQYxzI47q7Hwspcuwc2
-         sCady3YgeSv+RSOQf+BQZBfCW/leiEClKgvtpWz2krOlv3yCiKY5Uc3iXi3UYl4KnCSn
-         NsVw==
-X-Gm-Message-State: AJIora+tAcKaChBR8HygejJtTN/Y3tU0OG30SVFfaE4CRq98iC50mGoT
-        VPO9iqHpbaP6MEcagVB+nAc=
-X-Google-Smtp-Source: AGRyM1u918blttAuw2LS6/j/k2GCPiyM7r0oBnDfCG5hlleh0SVlyUss6NQBeh38HtvQduCNetF+vQ==
-X-Received: by 2002:adf:d1e8:0:b0:21d:ac9c:983d with SMTP id g8-20020adfd1e8000000b0021dac9c983dmr31067113wrd.629.1658333977372;
-        Wed, 20 Jul 2022 09:19:37 -0700 (PDT)
-Received: from localhost.localdomain (host-95-235-102-55.retail.telecomitalia.it. [95.235.102.55])
-        by smtp.gmail.com with ESMTPSA id p20-20020a1c5454000000b003a30c3d0c9csm3044513wmi.8.2022.07.20.09.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 09:19:36 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Ira Weiny <ira.weiny@intel.com>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Song Liu <song@kernel.org>,
-        Takashi Iwai <tiwai@suse.de>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Matthew Wilcox <willy@infradead.com>
-Subject: [PATCH v2] module: Replace kmap() with kmap_local_page()
-Date:   Wed, 20 Jul 2022 18:19:32 +0200
-Message-Id: <20220720161932.9567-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 20 Jul 2022 16:29:16 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C34A48C9F;
+        Wed, 20 Jul 2022 13:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zxE+g7/OLayRp/SvLyFE7/rwft45pMJGSNXI0aaEGpY=; b=Cl4oaZLAMdmHTCIavvFTdMS3Cx
+        qyez5eI2p/aqfA5uUUy2CDWJ8qez4zCgeXDrdudnjUxXddFEcOMrdnE0OtT0nnWTyHb2kK2YxZgsZ
+        54grIl1vMnA86UmtYaryYImnU6RlDa868ri4ylyAK2o0zXAiCzSTdfDFQrhbzv6qSmiN8ZXL4NBlQ
+        9CRuY6U2F/1MsJJKHs1urc4scWxrEfy6rtv4t3r/HlqFzK4Fh6C4/3f83GMKa6XBTZykoNG5x6tac
+        bHj8gXtGm32kBXLdpgfMXmlz6++7gE9Zyq1+04f2egOSP54fnRh1pOLfoN97M4sWvKvh+J/SFgPg2
+        AjTz6Thw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEGJh-00AmDZ-Cg; Wed, 20 Jul 2022 20:29:09 +0000
+Date:   Wed, 20 Jul 2022 13:29:09 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-modules@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when
+ CONFIG_KUNIT=m
+Message-ID: <YthllWFPAjq5YHpL@bombadil.infradead.org>
+References: <20220713005221.1926290-1-davidgow@google.com>
+ <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
+ <Ytbw1T6uspICqj5B@bombadil.infradead.org>
+ <CABVgOSkpT2kqVec2F7BsTF5tyABO43bseETC2Dz238zN+sTfQw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABVgOSkpT2kqVec2F7BsTF5tyABO43bseETC2Dz238zN+sTfQw@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-kmap() is being deprecated in favor of kmap_local_page().
+On Wed, Jul 20, 2022 at 05:26:02PM +0800, David Gow wrote:
+> On Wed, Jul 20, 2022 at 1:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Wed, Jul 13, 2022 at 08:24:32AM -0700, Daniel Latypov wrote:
+> > > On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
+> > > >
+> > > > The new KUnit module handling has KUnit test suites listed in a
+> > > > .kunit_test_suites section of each module. This should be loaded when
+> > > > the module is, but at the moment this only happens if KUnit is built-in.
+> > > >
+> > > > Also load this when KUnit is enabled as a module: it'll not be usable
+> > > > unless KUnit is loaded, but such modules are likely to depend on KUnit
+> > > > anyway, so it's unlikely to ever be loaded needlessly.
+> > >
+> > > This seems reasonable to me.
+> > >
+> > > Question: what happens in this case?
+> > > 1. insmod <test-module>
+> > > 2. insmod kunit
+> > > 3. rmmod <test-module>
+> > >
+> > > I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
+> > > for <test-module>, I think?
+> > > But we never called __kunit_test_suites_init().
+> > > My fear is what breaks as a result of this precondition break.
+> 
+> I don't think this should be possible: any module with KUnit tests
+> will depend on the 'kunit' module (or, at least, kunit symbols), so
+> shouldn't load without kunit already present.
+> 
+> If modprobe is used, kunit will automatically be loaded. If insmod is
+> used directly, loading the first module should error out with
+> something like:
+> [   82.393629] list_test: loading test module taints kernel.
+> [   82.409607] list_test: Unknown symbol kunit_binary_ptr_assert_format (err -2)
+> [   82.409657] list_test: Unknown symbol kunit_do_failed_assertion (err -2)
+> [   82.409799] list_test: Unknown symbol kunit_binary_assert_format (err -2)
+> [   82.409820] list_test: Unknown symbol kunit_unary_assert_format (err -2)
+> insmod: ERROR: could not insert module
+> /lib/modules/5.19.0-rc1-15284-g9ec67db0c271/kernel/lib/list-test.ko:
+> Unknown symbol in module
 
-Two main problems with kmap(): (1) It comes with an overhead as mapping
-space is restricted and protected by a global lock for synchronization and
-(2) it also requires global TLB invalidation when the kmap’s pool wraps
-and it might block when the mapping space is fully utilized until a slot
-becomes available.
+This can be fixed with a request_module() call. And since this is a
+generic requirement, you can have the wrappers do it for you.
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-Tasks can be preempted and, when scheduled to run again, the kernel
-virtual addresses are restored and still valid.
+> Maybe you could get into some trouble by force-removing modules at
+> various points, but you're in undefined behaviour generally at that
+> point, so I don't think there's much point going out-of-our-way to try
+> to support that.
 
-kmap_local_page() is faster than kmap() in kernels with HIGHMEM enabled.
+You can prevent that by refcounting the kunit module / symbols, by each test.
 
-Since the use of kmap_local_page() in module_gzip_decompress() and in
-module_xz_decompress() is safe (i.e., it does not break the strict rules
-of use), it should be preferred over kmap().
-
-Therefore, replace kmap() with kmap_local_page().
-
-Tested on a QEMU/KVM x86_32 VM with 4GB RAM, booting kernels with
-HIGHMEM64GB enabled. Modules compressed with XZ or GZIP decompress
-properly.
-
-Cc: Matthew Wilcox <willy@infradead.com>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
-
-v1->v2: Add information which says that the pointers returned by
-kmap_local_page() are still valid if tasks are preempted and then
-rescheduled to run again (thanks to Luis Chamberlain).
-
- kernel/module/decompress.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-index 2fc7081dd7c1..4d0bcb3d9e44 100644
---- a/kernel/module/decompress.c
-+++ b/kernel/module/decompress.c
-@@ -119,10 +119,10 @@ static ssize_t module_gzip_decompress(struct load_info *info,
- 			goto out_inflate_end;
- 		}
- 
--		s.next_out = kmap(page);
-+		s.next_out = kmap_local_page(page);
- 		s.avail_out = PAGE_SIZE;
- 		rc = zlib_inflate(&s, 0);
--		kunmap(page);
-+		kunmap_local(s.next_out);
- 
- 		new_size += PAGE_SIZE - s.avail_out;
- 	} while (rc == Z_OK);
-@@ -178,11 +178,11 @@ static ssize_t module_xz_decompress(struct load_info *info,
- 			goto out;
- 		}
- 
--		xz_buf.out = kmap(page);
-+		xz_buf.out = kmap_local_page(page);
- 		xz_buf.out_pos = 0;
- 		xz_buf.out_size = PAGE_SIZE;
- 		xz_ret = xz_dec_run(xz_dec, &xz_buf);
--		kunmap(page);
-+		kunmap_local(xz_buf.out);
- 
- 		new_size += xz_buf.out_pos;
- 	} while (xz_buf.out_pos == PAGE_SIZE && xz_ret == XZ_OK);
--- 
-2.37.1
-
+  Luis
