@@ -2,62 +2,61 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9F08C43334
-	for <linux-modules@archiver.kernel.org>; Wed, 20 Jul 2022 09:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E3F3C43334
+	for <linux-modules@archiver.kernel.org>; Wed, 20 Jul 2022 09:32:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238388AbiGTJ0R (ORCPT
+        id S229478AbiGTJci (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 20 Jul 2022 05:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
+        Wed, 20 Jul 2022 05:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234888AbiGTJ0Q (ORCPT
+        with ESMTP id S229636AbiGTJci (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:26:16 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20F454ACD
-        for <linux-modules@vger.kernel.org>; Wed, 20 Jul 2022 02:26:14 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id h8so2536075wrw.1
-        for <linux-modules@vger.kernel.org>; Wed, 20 Jul 2022 02:26:14 -0700 (PDT)
+        Wed, 20 Jul 2022 05:32:38 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED665A894
+        for <linux-modules@vger.kernel.org>; Wed, 20 Jul 2022 02:32:36 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id b6so9951887wmq.5
+        for <linux-modules@vger.kernel.org>; Wed, 20 Jul 2022 02:32:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=F+ldWaV/2LuyEnVDp5cnxfzp0tE47q+kPjvvdXmNlxo=;
-        b=HLcnM+vkKFEn9/i2RiRG+RGBB9sgQJX0GjGC89+RR9nbybayEwdbX6tiM4rw7UxDdh
-         +8pBdxNv5os0UY3IRtN9Ks67xd+j7hGWwLWG8kkCNa3upoNmGX39BQLwjwHMxCRR5H7F
-         JlX5U+iQcKOmD5Z/jHq0yNvaVvhuDxbZevXhwyJlmLghYTRA/jh5Lcf9uOiQH9/vH3vi
-         dj+jEVJnxsYhQ6xXG378NxXhq3PKCgMZQjp2a5LeIs5nArIMKdok0AEqoGRuIJB2bvMA
-         KnkgxxX9J1fIxgl4FZmbVYRCCxN94fhmoRdLRNIrS/yKBcqOCc8qY4tcEoFgOA3oYWwz
-         LR9g==
+        bh=v22FUqElTjijRY7S6FC4Y1I46Wvlr5f3k95qZS0WK6o=;
+        b=O9TiAh18VwjICX9Px7zvMrHUWs2pBLDuTtnlp6TtXFvQGTDUZI3Z9O71++Mba9JKm7
+         FTilSLh0LH9G9ZGYS5JuAbdkghgcH8g47cLUTpWWuSU24qx+XMpDHncBm2AuobJSLcXd
+         QlqHbMA6zYb8nph1AqKUXWwLd7/bz1SMgIpVc7kPGNnVnLwwYSIIuT08ipOoCFC/Ssw/
+         YwEXDpVlKjAMCWCDhdLxz1PXsqCio/+Qq7evxkuh2u73gDEuoSUZAumJ8+IiU15N1cS4
+         8AUq6Fk7nFNa17E61UAz8gGCrmjQiX5tcEGXutOiIgdTTDgQlrhJllVWvHCB+mSkPMaS
+         lbtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=F+ldWaV/2LuyEnVDp5cnxfzp0tE47q+kPjvvdXmNlxo=;
-        b=UznzD4J9EpoYq0Sp1gnkx9F++rgyPj67t1lLJuFkuTleXTm50Gd9zzgNYWCO7ttZ/n
-         PxiGvEPMyfDNppwKkWQX/BjARxNiCYHZr5mWsRJwWrOIMZZi33RhG3BaI+DNKdUFzfZf
-         an9gJGRKOGgypv98QXjE7D6ib58gCPvBe3a6zyV5SPFpwwMgFx/w1hMZfI+PvFhOUUzA
-         Lb1Luh0Vgyy86OrxlhnWHMrW15MdsPY1EoHrnLRBITwuFsXzhHT7oIxDHxOzg/S0lmU6
-         aFDUenUKkdwZElenaPzwpQm1C+BDlOXUCvryuosHLmUmn7ysCaFDi9b0QbHX4VWXIoAd
-         YUBw==
-X-Gm-Message-State: AJIora/R+eFCj79cotJlKVY6HbhRD67+rmzdLTeqM9dAo3RkQ4Q5SoR2
-        TMvUox0WNqTICWy8LxMqm1iLSV9twAwZ77XRpZzalg==
-X-Google-Smtp-Source: AGRyM1vPUTNYZtrbOlmCgU5sTGfrMq58qQzXIAIOaEzSmiLik6FnswjHhwybz1D8taJr0kvYmoBocRRvMBVhd8uPth4=
-X-Received: by 2002:a5d:4708:0:b0:21e:4eda:5cda with SMTP id
- y8-20020a5d4708000000b0021e4eda5cdamr301867wrq.337.1658309173441; Wed, 20 Jul
- 2022 02:26:13 -0700 (PDT)
+        bh=v22FUqElTjijRY7S6FC4Y1I46Wvlr5f3k95qZS0WK6o=;
+        b=eIfGbWkeP+5JJwDMO3ipM1AQhuPt/7mkO4WALZGDfvvh/QlGOG3cdsW83MvQwUKK6k
+         /pASr7wkVb+k454EeOm/EgEkxSBxaoHGSH4nIER6PYvZbWfPZsooq1q2ZpKxJWeCGp6b
+         OlzAkV8F6kFsGwlnQt1IXcGtT96EJ8nR1qmWVDtY50QXSdBS+UcZRE6GnNYADX7bzwfD
+         vMXOE5PKBjMF4aZqusQWyWJOObFd7KuFhBwfUol1+wqYHdpVGDq35mv+ZXfUaaJhiL6J
+         ei7yGnQvkHx/j+mPRWsSx4hG7pYl/raIWPH4Ze8LdqvAKtOanoLkzz5k+/g5Iiv8EGAR
+         kBGg==
+X-Gm-Message-State: AJIora++QtwkgGAvqGfGA8IeRZNcnpLPbSgQAFk7O90EapihJ7tYcADX
+        i2X++AA2d8QVB2JgIMppVuP/KPBtH9xDzDNAtsUaFA==
+X-Google-Smtp-Source: AGRyM1vDMif7d2tIFvV4zCU/lON860YmX8asq31iwtRwC1y4FfhOdoAuEMs/wnsqwBdPw2jfQft6F+0dOarmOwHRmpU=
+X-Received: by 2002:a05:600c:4fcd:b0:3a3:1be9:965c with SMTP id
+ o13-20020a05600c4fcd00b003a31be9965cmr2931884wmq.60.1658309555110; Wed, 20
+ Jul 2022 02:32:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220713005221.1926290-1-davidgow@google.com> <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
- <Ytbw1T6uspICqj5B@bombadil.infradead.org>
-In-Reply-To: <Ytbw1T6uspICqj5B@bombadil.infradead.org>
+References: <20220713005221.1926290-1-davidgow@google.com> <YtbwixbViJr9zkv8@bombadil.infradead.org>
+In-Reply-To: <YtbwixbViJr9zkv8@bombadil.infradead.org>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 20 Jul 2022 17:26:02 +0800
-Message-ID: <CABVgOSkpT2kqVec2F7BsTF5tyABO43bseETC2Dz238zN+sTfQw@mail.gmail.com>
+Date:   Wed, 20 Jul 2022 17:32:23 +0800
+Message-ID: <CABVgOSm4=Zz3ypK7uPh3phE9NqOc9mP50Di5pGAdwh2cs538jQ@mail.gmail.com>
 Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
 To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
         Jeremy Kerr <jk@codeconstruct.com.au>,
         linux-modules@vger.kernel.org,
         KUnit Development <kunit-dev@googlegroups.com>,
@@ -65,99 +64,55 @@ Cc:     Daniel Latypov <dlatypov@google.com>,
         <linux-kselftest@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003a408a05e4393175"
+        boundary="000000000000f94f1a05e4394781"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
---0000000000003a408a05e4393175
+--000000000000f94f1a05e4394781
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jul 20, 2022 at 1:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+On Wed, Jul 20, 2022 at 1:57 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
 >
-> On Wed, Jul 13, 2022 at 08:24:32AM -0700, Daniel Latypov wrote:
-> > On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
-> > >
-> > > The new KUnit module handling has KUnit test suites listed in a
-> > > .kunit_test_suites section of each module. This should be loaded when
-> > > the module is, but at the moment this only happens if KUnit is built-in.
-> > >
-> > > Also load this when KUnit is enabled as a module: it'll not be usable
-> > > unless KUnit is loaded, but such modules are likely to depend on KUnit
-> > > anyway, so it's unlikely to ever be loaded needlessly.
+> On Wed, Jul 13, 2022 at 08:52:20AM +0800, David Gow wrote:
+> > The new KUnit module handling has KUnit test suites listed in a
+> > .kunit_test_suites section of each module. This should be loaded when
+> > the module is, but at the moment this only happens if KUnit is built-in.
 > >
-> > This seems reasonable to me.
-> >
-> > Question: what happens in this case?
-> > 1. insmod <test-module>
-> > 2. insmod kunit
-> > 3. rmmod <test-module>
-> >
-> > I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
-> > for <test-module>, I think?
-> > But we never called __kunit_test_suites_init().
-> > My fear is what breaks as a result of this precondition break.
-
-I don't think this should be possible: any module with KUnit tests
-will depend on the 'kunit' module (or, at least, kunit symbols), so
-shouldn't load without kunit already present.
-
-If modprobe is used, kunit will automatically be loaded. If insmod is
-used directly, loading the first module should error out with
-something like:
-[   82.393629] list_test: loading test module taints kernel.
-[   82.409607] list_test: Unknown symbol kunit_binary_ptr_assert_format (err -2)
-[   82.409657] list_test: Unknown symbol kunit_do_failed_assertion (err -2)
-[   82.409799] list_test: Unknown symbol kunit_binary_assert_format (err -2)
-[   82.409820] list_test: Unknown symbol kunit_unary_assert_format (err -2)
-insmod: ERROR: could not insert module
-/lib/modules/5.19.0-rc1-15284-g9ec67db0c271/kernel/lib/list-test.ko:
-Unknown symbol in module
-
-Maybe you could get into some trouble by force-removing modules at
-various points, but you're in undefined behaviour generally at that
-point, so I don't think there's much point going out-of-our-way to try
-to support that.
-
-> >
-> > E.g. In the case that CONFIG_KUNIT_DEBUGFS is enabled, this includes a
-> > call to kunit_debugfs_destroy_suite() with no previous call to
-> > kunit_debugfs_create_suite().
-> > That will include a call to debugfs_remove_recursive(suite->debugfs),
-> > where suite->debugfs is an uninitialized pointer.
-> >
-> > Maybe we can treat it as "undefined behavior" for now and proceed with
-> > this patch.
-> >
-> > In terms of long-term fixes, perhaps insmod kunit could trigger it to
-> > 1. run all built-in tests (IIUC, it doesn't right now)
-> > 2. run all the tests of currently loaded modules
-> > 3. track which modules already ran so if you rmmod + insmod kunit
-> > again, it won't rerun tests?
 >
-> Let's please address these considerations.
+> This commit log does not describe what functionality is broken exactly
+> without this commit. What functionality from kunit is provided when
+> .kunit_test_suites is available?
 >
 
-Again, I think the module and Kconfig dependencies should prevent
-these situations from ever arising. It shouldn't be possible to have
-any built-in tests if kunit is not itself built-in, so case (1) can't
-occur. Equally, it shouldn't be possible to load any test modules
-before the kunit module is loaded, so (2) can't occur. And rmmod kunit
-will give an error if there are any test modules loaded: "rmmod:
-ERROR: Module kunit is in use by: list_test", so (3) can't occur.
+Sorry: the explanation is a bit obtuse, I admit.
 
-The only similar situation to (3) I can think of is where both the
-test modules and kunit are rmmod-ed and reloaded. I think we'd want to
-re-run the tests in that case, so tracking which modules already ran
-would be counterproductive.
+Basically, when kunit itself is built as a module, no tests run. This
+is because the code to load the .kunit_test_suites section is compiled
+out if kunit is not built-in, but it should be present even if kunit
+is built as a module.
 
-In short, I _think_ what we're doing now should be correct, and the
-cases above are all prevented by module dependencies. But do let me
-know if I'm missing something...
+> > Also load this when KUnit is enabled as a module: it'll not be usable
+> > unless KUnit is loaded,
+>
+> What benefit is there to load a kunit module without kunit?
+>
+
+None whatsoever, and it should be impossible. This was just rationale
+for the overhead of loading the section being likely insignificant,
+but it's worded pretty poorly.
+
+> > but such modules are likely to depend on KUnit
+> > anyway, so it's unlikely to ever be loaded needlessly.
+> >
+> > Fixes: 3d6e44623841 ("kunit: unify module and builtin suite definitions")
+> > Signed-off-by: David Gow <davidgow@google.com>
+
+I'll update the commit message when I send a new version of this out.
 
 Cheers,
 -- David
 
---0000000000003a408a05e4393175
+--000000000000f94f1a05e4394781
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -224,14 +179,14 @@ OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
 3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
 lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDi
-lHOHniqfhL0SWmohcV+5LiuONdCSzCpOpCAEz4azOjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjAwOTI2MTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA0
+kprqb70GhqJ+/ovkrTxBisrd22RaxKnFUDeCUxXIiTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjAwOTMyMzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEABdV3+caJ97XIyT5tGUCk
-ltvPscFweSroK7m3nXXUzR/OQM27SLhw86k8a4pWTeEsb74hdMKcvxScvELf75trIy9ZrsNmg36p
-VWtivqDolTF0nJpFVhUyqIgurv0EnRmRS9iI9UBzPOhKlwYVZqXBDvY4SUhQ7DYwu3KM9U/o6Z0T
-o3nDL1Jl2s/bCrXod60x6tC4wlShB3cafyzRoHRAuogx9CpCQCcJ+JoQ8H4N/QfF91IqRdNY5322
-bbsdyR+hBo/MvgoMHYIlpMk4jeuAw9yuD7ketEBuISXb8798LqfErBBVujiYwf/kw+pSyakvwBOE
-YZExTaaglCRKkYJz2A==
---0000000000003a408a05e4393175--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAcG63GNO+rH8c8WU+oIeF
+JuS9DflsZN5bDTjxcsHAG3gv9eFcfy3VLWpFvzdam3rpee6LBw3nb/aI/W3QtxmSHOet5YaDBgZh
+QmgdWAPP9oUskwg7Du/NwaeCKtXnShMwTIyTrTzyYrFmKfphKLXwoWH3z6r4VCig6c7MWSnuQBpc
+nLCYLzpyxbomF3sGTSNGLfIPbjRuFlgu0RUart76apnUsJKvjs9lBsrquzwIdZv+SWlfpIB4Rc9k
+OCjlOGb4yu/c6LxWHEJonWSWiqHmg1oYkKHa/xO3Hg7f3FSYr/g9gI84TQ7k6fvosnznGZIGMYp9
+2jE63hemtur43JpN5A==
+--000000000000f94f1a05e4394781--
