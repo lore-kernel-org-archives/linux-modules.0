@@ -2,158 +2,162 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F5CCC43334
-	for <linux-modules@archiver.kernel.org>; Fri, 22 Jul 2022 02:25:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23F2FC43334
+	for <linux-modules@archiver.kernel.org>; Mon, 25 Jul 2022 16:43:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234367AbiGVCZZ (ORCPT
+        id S236537AbiGYQnK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 21 Jul 2022 22:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
+        Mon, 25 Jul 2022 12:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234178AbiGVCZB (ORCPT
+        with ESMTP id S236458AbiGYQnJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 21 Jul 2022 22:25:01 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B809823D
-        for <linux-modules@vger.kernel.org>; Thu, 21 Jul 2022 19:24:45 -0700 (PDT)
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 39CD13F133
-        for <linux-modules@vger.kernel.org>; Fri, 22 Jul 2022 02:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658456683;
-        bh=21lfF1OMKLeXFtULRWjRtXARMWFjMfI3d/p5JlAEia8=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=Vf7233D7ytA6ZTtX9mLYYWxhKK9hYQtdMFnxeN1tmh3hKfX4TVbolh602Sm5j6+XE
-         IHVJ+gq6i1/7lKF40qeHk4xg7mR9o2HDPkbY1/z1+PJCoUNysK+cuRGeLocuNUmVAV
-         js76IMhzVMHe3yDm4WmsUNLBI94R5idTJFnYvZ0z3L+3h6gAL4BfqOuyJ3hh/Kt4iu
-         XrqtwGSh14MJUYIZtKcDCqdXK7Ns8oYqqmGObQz1fh4Gk6Xzlyirr4zezFytq9r+2m
-         ZMS2R5wGaAKG9vmvZ/EatNqeJ3pzGLR35uyvfbN1Vv6ktiWS0kPh9EEJTGiWKKUoLa
-         Yv5sUkIV0yaEQ==
-Received: by mail-oi1-f197.google.com with SMTP id u127-20020aca6085000000b00335812e0b1eso1699289oib.22
-        for <linux-modules@vger.kernel.org>; Thu, 21 Jul 2022 19:24:43 -0700 (PDT)
+        Mon, 25 Jul 2022 12:43:09 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E978F73
+        for <linux-modules@vger.kernel.org>; Mon, 25 Jul 2022 09:43:08 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id z25so18998619lfr.2
+        for <linux-modules@vger.kernel.org>; Mon, 25 Jul 2022 09:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6GXN4LpbvWNFX8wB7bFkXQ9JIKeCsqQJeuvH6j+VamE=;
+        b=TPKDQMzbZgN6H+Ftdpl/d2CbZ3dOR41Yd+IPC/laL4QqRJjOysTqT8QIwhZbrffX7X
+         5Z7F/PBdnMSca6lEOHBKW5d1OFdVCsXJ+SGNbiHfhaWfICEfLuKqNRPT4O1sYTpAh4Wb
+         v/4TCGjMp//GWe26w2moqZaozrOgRarYBe5oeosA15mAGVDZ8SM2IgcvUsaUeDrhMSoh
+         A19vzL8jV4t7yfANUFrDgaDTGD6xJw3S20Jw5mtAFWztKOoft6+Lhg6jRnWcJayWJcDd
+         ss0oUhDETHNFMojUC9KfVhIPJHHFm5RYRa8xQtG9LAv3X939LJ3z1RpsI/8MyHw4XY9Z
+         Wkqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=21lfF1OMKLeXFtULRWjRtXARMWFjMfI3d/p5JlAEia8=;
-        b=QtldXLbN6mBbaHAVeUGqFagLAmg/67ttGGhbMY9N2eDXzhqzYMAdQRqbJhXC0SmIbX
-         /Rtad0TXs1vXqpBOz9LRgz+Gn8gd6eoHR1UhmbrlUtqra1Pq1jEph3NU7TlcXgp5TGDU
-         7yGaLFXRiBCoXivZkAnTUAFu7yCqMhKmQC6kP9Vci0LzRfvW9X73K+hZE5cynvVjKDST
-         8vJ6qM+c28ppyq8lYUf1t9vxVhr4Kb8UI5KcD5AgLWTdXtv4CjffZ1XuyBol1bLLLAjz
-         8hWQkTLx8mg2v2MsUtqrXBelIj5NQ11squ4zMmOF7sHihv5GhHQoEuWECmXON2dK2kC3
-         vnqg==
-X-Gm-Message-State: AJIora8pT9tNQwiy3Ldh2KRysr6Ywhnz7JKo5iumqF1iScMt1xcpDBrS
-        8GZrlGF279IxS+szxWmo1jwH58t6RfbMkmugRxaQkntxgc0XdLdd0V2jYOcu0YG+GcL94G/4qHA
-        utFHFZfa5R3BD0PxHBdjKJk1cRx1/FfZeTXn3376ly0k=
-X-Received: by 2002:a05:6870:9691:b0:10d:4e09:6d0d with SMTP id o17-20020a056870969100b0010d4e096d0dmr620836oaq.54.1658456682544;
-        Thu, 21 Jul 2022 19:24:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uvU9qJw3xZdY8qLtAMfrO1WVNCSVRdNA2PSo7g3N3dxoTLVc+Yd1R+zm9uxw3Fm3r+ZL9hVg==
-X-Received: by 2002:a05:6870:9691:b0:10d:4e09:6d0d with SMTP id o17-20020a056870969100b0010d4e096d0dmr620824oaq.54.1658456682346;
-        Thu, 21 Jul 2022 19:24:42 -0700 (PDT)
-Received: from mfo-t470.. ([2804:14c:4e1:8732:c479:1206:16fb:ce1f])
-        by smtp.gmail.com with ESMTPSA id k23-20020a056870959700b000f5f4ad194bsm1814528oao.25.2022.07.21.19.24.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 19:24:41 -0700 (PDT)
-From:   Mauricio Faria de Oliveira <mfo@canonical.com>
-To:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Subject: [RFC PATCH 6/6] sysctl: introduce /proc/sys/kernel/modprobe_sysctl_alias
-Date:   Thu, 21 Jul 2022 23:24:16 -0300
-Message-Id: <20220722022416.137548-7-mfo@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220722022416.137548-1-mfo@canonical.com>
-References: <20220722022416.137548-1-mfo@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6GXN4LpbvWNFX8wB7bFkXQ9JIKeCsqQJeuvH6j+VamE=;
+        b=P/HyDL1ElgOEdcqkVhJPfnAfZ8QsxuquZ8LjWmz5E0Xclvo7DGiGB7cubzv4JJyant
+         /xA7k0jAq7RCJ4HmrOi9dORIZInXSlTBcd0yR4+JZlHKmmdahYu7RiakckmL5ebl/RRj
+         gsCxIaLZOET2EXWWyVW8Ep/+aikZFZVqzPCmqA4GpdVrfgSdrspA7fn84qGih79aDP+N
+         RgrpMwPeK+n1DJw6HhIWYTp8cqNDhlCuOdQGfhvQeMS1cdh1w2j3kfvLvIcSHND6mAxP
+         QslQ/Kk6MPw4sPE3G4J5Lj70ebzvD04N/He1XuslOVAuAcpgjvm3HCxeckjJOBUQqW8S
+         q19A==
+X-Gm-Message-State: AJIora/Wh90A6tP3rh5T3VoryxooM8MUUzKV6Cq7So1sa4LmPhlQnIUe
+        XFwRjD+br/iok3jNyC4Lk6AU3m+UDT3A48J7jz+WqQ==
+X-Google-Smtp-Source: AGRyM1u4LwpNuQcu1clupnA8Af/UahPp2RV+KMGfCQyROw4AGJp8En2cKS+W4Z+fOHQP0sy6Gu3dzkyLOpdpNlLaNXw=
+X-Received: by 2002:a05:6512:3e24:b0:48a:97af:d76e with SMTP id
+ i36-20020a0565123e2400b0048a97afd76emr985048lfv.432.1658767386174; Mon, 25
+ Jul 2022 09:43:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220610183236.1272216-1-masahiroy@kernel.org> <20220610183236.1272216-8-masahiroy@kernel.org>
+In-Reply-To: <20220610183236.1272216-8-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 25 Jul 2022 09:42:53 -0700
+Message-ID: <CAKwvOd=TCSWmG_sca9e49V-h3ZRdtP+cEazoO26vf475mJfyzg@mail.gmail.com>
+Subject: Re: [PATCH 7/7] modpost: use null string instead of NULL pointer for
+ default namespace
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The goal of the earlier patches is to let sysctl userspace tools
-load the kernel module with a sysctl entry that is not available
-yet in /proc/sys/ when the tool runs (so it can become available).
+On Fri, Jun 10, 2022 at 11:34 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> The default namespace is the null string, "".
+>
+> When set, the null string "" is converted to NULL:
+>
+>   s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
+>
+> When printed, the NULL pointer is get back to the null string:
+>
+>   sym->namespace ?: ""
+>
+> This saves 1 byte memory allocated for "", but loses the readability.
+>
+> In kernel-space, we strive to save memory, but modpost is a userspace
+> tool used to build the kernel. On modern systems, such small piece of
+> memory is not a big deal.
+>
+> Handle the namespace string as is.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Let's expose this file for userspace for two reasons:
+Sorry for the late review.  If this is still useful:
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-1) Allow such tools to identify that the running kernel has the
-   code which produces sysctl module aliases, so they could run
-   'modprobe sysctl:<entry>' only when it may actually help.
+Feel free to ping me via mail if I'm falling behind. Otherwise you
+should join us on IRC. (#clangbuiltlinux on libera)
 
-2) Allow an administrator to hint such tools not to do that, if
-   that is desired for some reason (e.g., rather have the tools
-   fail if something is misconfigured in a critical deployment).
+> ---
+>
+>  scripts/mod/modpost.c | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 0db2cbb74a2a..5a1785645943 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -296,6 +296,13 @@ static bool contains_namespace(struct list_head *head, const char *namespace)
+>  {
+>         struct namespace_list *list;
+>
+> +       /*
+> +        * The default namespace is null string "", which is always implicitly
+> +        * contained.
+> +        */
+> +       if (!namespace[0])
+> +               return true;
+> +
+>         list_for_each_entry(list, head, list) {
+>                 if (!strcmp(list->namespace, namespace))
+>                         return true;
+> @@ -371,7 +378,7 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
+>         s = alloc_symbol(name);
+>         s->module = mod;
+>         s->is_gpl_only = gpl_only;
+> -       s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
+> +       s->namespace = NOFAIL(strdup(namespace));
+>         list_add_tail(&s->list, &mod->exported_symbols);
+>         hash_add_symbol(s);
+>
+> @@ -2117,8 +2124,7 @@ static void check_exports(struct module *mod)
+>                 else
+>                         basename = mod->name;
+>
+> -               if (exp->namespace &&
+> -                   !contains_namespace(&mod->imported_namespaces, exp->namespace)) {
+> +               if (!contains_namespace(&mod->imported_namespaces, exp->namespace)) {
+>                         modpost_log(allow_missing_ns_imports ? LOG_WARN : LOG_ERROR,
+>                                     "module %s uses symbol %s from namespace %s, but does not import it.\n",
+>                                     basename, exp->name, exp->namespace);
+> @@ -2201,7 +2207,7 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
+>         list_for_each_entry(sym, &mod->exported_symbols, list)
+>                 buf_printf(buf, "KSYMTAB_ENTRY(%s, \"%s\", \"%s\");\n",
+>                            sym->name, sym->is_gpl_only ? "_gpl" : "",
+> -                          sym->namespace ?: "");
+> +                          sym->namespace);
+>
+>         if (!modversions)
+>                 return;
+> @@ -2471,7 +2477,7 @@ static void write_dump(const char *fname)
+>                         buf_printf(&buf, "0x%08x\t%s\t%s\tEXPORT_SYMBOL%s\t%s\n",
+>                                    sym->crc, sym->name, mod->name,
+>                                    sym->is_gpl_only ? "_GPL" : "",
+> -                                  sym->namespace ?: "");
+> +                                  sym->namespace);
+>                 }
+>         }
+>         write_buf(&buf, fname);
+> --
+> 2.32.0
+>
 
-Also add a module parameter for that (proc.modprobe_sysctl_alias),
-for another method that doesn't depend on sysctl tools to be set
-(that wouldn't fail them to try and set it if it's not there yet).
 
-Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
----
- fs/proc/proc_sysctl.c  | 8 ++++++++
- include/linux/module.h | 1 +
- kernel/sysctl.c        | 9 +++++++++
- 3 files changed, 18 insertions(+)
-
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index ebbf8702387e..1e63819fcda8 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -33,6 +33,14 @@ static void check_struct_sysctl_device_id(void)
- 	BUILD_BUG_ON(offsetof(struct sysctl_device_id, procname)
- 			!= offsetof(struct ctl_table, procname));
- }
-+
-+/*
-+ * Hint sysctl userspace tools whether or not to run modprobe with sysctl alias
-+ * ('modprobe sysctl:entry') if they cannot find the file '/proc/sys/.../entry'
-+ */
-+int modprobe_sysctl_alias = 1;
-+module_param(modprobe_sysctl_alias, int, 0644);
-+
- #else
- static void check_struct_sysctl_device_id(void) {}
- #endif
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 3010f687df19..5f565491c596 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -304,6 +304,7 @@ struct notifier_block;
- #ifdef CONFIG_MODULES
- 
- extern int modules_disabled; /* for sysctl */
-+extern int modprobe_sysctl_alias; /* for proc sysctl */
- /* Get/put a kernel symbol (calls must be symmetric) */
- void *__symbol_get(const char *symbol);
- void *__symbol_get_gpl(const char *symbol);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 15073621cfa8..b396cfcb55fc 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1763,6 +1763,15 @@ static struct ctl_table kern_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dostring,
- 	},
-+#ifdef CONFIG_PROC_SYSCTL
-+	{
-+		.procname	= "modprobe_sysctl_alias",
-+		.data		= &modprobe_sysctl_alias,
-+		.maxlen		= sizeof(modprobe_sysctl_alias),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+	},
-+#endif
- 	{
- 		.procname	= "modules_disabled",
- 		.data		= &modules_disabled,
 -- 
-2.25.1
-
+Thanks,
+~Nick Desaulniers
