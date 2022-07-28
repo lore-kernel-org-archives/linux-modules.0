@@ -2,195 +2,151 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 055A4C04A68
-	for <linux-modules@archiver.kernel.org>; Wed, 27 Jul 2022 18:08:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9BF6C04A68
+	for <linux-modules@archiver.kernel.org>; Thu, 28 Jul 2022 08:42:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242714AbiG0SIr (ORCPT
+        id S235234AbiG1Ima (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 27 Jul 2022 14:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        Thu, 28 Jul 2022 04:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbiG0SIb (ORCPT
+        with ESMTP id S235125AbiG1Ima (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 27 Jul 2022 14:08:31 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC634CB75B
-        for <linux-modules@vger.kernel.org>; Wed, 27 Jul 2022 10:11:56 -0700 (PDT)
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A1FB03F144
-        for <linux-modules@vger.kernel.org>; Wed, 27 Jul 2022 17:11:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658941914;
-        bh=p8BxUinmu0In37tgfklk8SPEbUyiUeXieDC0F6YQ4cE=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Uj4A/Q9u7jxyf3Oy4sDfu/99qyDs5raIKd+MBBSpaogMgVCMbCrO0RI+QiuzL8Jsf
-         p78Y9mPUvnrR4TRKObxhcnOx7W3PbZDIVMdTVP81JJMLh7WMxNlAniETm7+RRAhx9T
-         I/6ETcV+Np6YzC7OChcAWtrl9wY7UOLZmWT8EX03/L24Uu7Qdk8nTlL0qbCwL/8v5/
-         kd85h8j9XuZk2zXLALyjLJx0jXMAl9w0XCH1o7GjwbC1exBHg/5Kyj4bukRVscaxnl
-         3Q+8Yzsg0dH5ch0NeS8KdhAXpaAUx4tV0nF87aVAu+H99+XhnnjzE8KxtOfxQObyRM
-         7qLrgVKOYB2qQ==
-Received: by mail-oi1-f198.google.com with SMTP id r69-20020acaa848000000b0033a6ad03126so7876909oie.4
-        for <linux-modules@vger.kernel.org>; Wed, 27 Jul 2022 10:11:54 -0700 (PDT)
+        Thu, 28 Jul 2022 04:42:30 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C373762A61
+        for <linux-modules@vger.kernel.org>; Thu, 28 Jul 2022 01:42:28 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id 129so989203vsq.8
+        for <linux-modules@vger.kernel.org>; Thu, 28 Jul 2022 01:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L69tTE2sH+PMx280GbvtDkw3gNuAyH0o9/0HeA0+XoA=;
+        b=j/c5UpIF73D7K3bcNVXSTIOMPDPw1ZZIwrFEIHGEmQ2hfCs63+1CtBLnwvtBjNcHIT
+         W/R6yLZZlLhLjUBi0wstREns8Vn6JQNPqmYAJoK9jU3jJhhuXZT5P6P3Jeup5fcHa4mm
+         xSzvcnkeWa1v1ggGp791wpOThlGf35ucdfr8bqJeQcUKz1speVD2qtWFDYGJ41Ay1DXH
+         lNSj+PW0I4YOKeH0heh12zUvSg+cR3/8+X0U1mVkoRbdHUX+hyX6j1g/CymkL0M17yOF
+         b4ePaT4/tswlLBf3LDopM8gfJZvgN9qdMbwbrN2ql7ZWxQW7rhlmpQLBfC8Y7Q/ynbfR
+         3d8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=p8BxUinmu0In37tgfklk8SPEbUyiUeXieDC0F6YQ4cE=;
-        b=yo8RRBF+KXO2nAO/wiNUBsiOTse5clk+jpwn91b4NUoRLLwKye67/ClKVlBxBCgBeu
-         cqgdsfG9VHIF49VvAlqO8rJzW/lg00gZgKJ37/WmuvITz+jBYNLUWCdX6XxpXElNxxln
-         5E+dfdY0dS0YO/NzhOpzRuGmLJwfrMnWWR+zuIP23BHEdxdzO37OZccTHiMF3VL9jK0Y
-         qmrW3nceIcEr07XEfXv9nOKepbVCYh/wcxFH/oZtoEHgFfKw5MxQba88nBexoP8AJOVU
-         51/ZSweKPZdD8epotXE9cWN1UfdX/yHE+Iasy0CAPleY14QpCsJ4Hop+vI326WuiM+RH
-         zrCg==
-X-Gm-Message-State: AJIora/9NeDvwkNkpfNBzSFDWgIbimEPH/+Gn6ChDh2KNnKFSzpRwoPB
-        vmWlvcHf3CrpKN00rq2wQxxx8iJb7b4fP99wuedXkIXrtt0Q2EtumbOrOUOvE00hcqevYHodcQJ
-        htzQGO1M5f4MWDli33qKVcCj2fbNg2zXB4sIsjhvV58nNue0d0wJp2pKj4Oo=
-X-Received: by 2002:a54:4789:0:b0:33a:5a42:71c with SMTP id o9-20020a544789000000b0033a5a42071cmr2428443oic.239.1658941911506;
-        Wed, 27 Jul 2022 10:11:51 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sjA2df/OeFt0huzK7VUHvD950PBKeHpumiDp/V7HBV47IAKGCR86pSSZrHEHOHOu4IOdk2k6op21RrZN9myhs=
-X-Received: by 2002:a54:4789:0:b0:33a:5a42:71c with SMTP id
- o9-20020a544789000000b0033a5a42071cmr2428429oic.239.1658941911233; Wed, 27
- Jul 2022 10:11:51 -0700 (PDT)
+        bh=L69tTE2sH+PMx280GbvtDkw3gNuAyH0o9/0HeA0+XoA=;
+        b=q1CbQvZC/y9C1GrzLklofnpf3wK965f0tWVK6Bj9WzRB8W/YFHoAyR154UqxNAu19G
+         kSJQY46WvgCiMTiuCBYHuh/A+MGoN5M+ntFRCh0pckIsY04KnLvKJG6vpEuxt90T3ZFc
+         hW3gMzNj4iwM4aWsci9DXwZN9ov7v/3trUlDbSf6fRlab+jFYG6hwgBBlI45y7O8HXDO
+         3HXWqjCE9D8bVKZDTUmU5wDtdJ0rbEInVcRx1BaJsPAp1kNH7sSgLXyMHWoWunLUy4F2
+         d6kNlX4eqqKJ3kfZW4mfXWseCJf6ExE3Yi61jLEURS0CmQUQe2Fsr2kldUMLdBRh38Uz
+         Xijg==
+X-Gm-Message-State: AJIora9Didl7Nu3EvZDyWzHss5s7NQ9grh/VAXVBSixem6i/ruoHFBAj
+        1OPrG+E1ZF1n9SwWrykunmonsK+GEfDuZ0LpsJZOEw==
+X-Google-Smtp-Source: AGRyM1vmeHmNdG+8W3+/i8ug6s6VPZStYQfUcfiEivq89bhT6FaV5XmJFQju73GNHE+yl0qP0wG4zWViYFrmeDzIW98=
+X-Received: by 2002:a67:c191:0:b0:358:5ca6:f98d with SMTP id
+ h17-20020a67c191000000b003585ca6f98dmr6818737vsj.71.1658997747795; Thu, 28
+ Jul 2022 01:42:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722022416.137548-1-mfo@canonical.com> <20220722022416.137548-4-mfo@canonical.com>
- <CAK7LNARvJEhEOwg_PHe3WKT9BkSchnGOmeiUaB+7E__NS9qrVw@mail.gmail.com>
-In-Reply-To: <CAK7LNARvJEhEOwg_PHe3WKT9BkSchnGOmeiUaB+7E__NS9qrVw@mail.gmail.com>
-From:   Mauricio Faria de Oliveira <mfo@canonical.com>
-Date:   Wed, 27 Jul 2022 14:11:39 -0300
-Message-ID: <CAO9xwp2Ud-60Eb0cdpsBpq_ixOBaiOannxZ7SsbfHKrjj8mGDQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/6] sysctl, mod_devicetable: shadow struct
- ctl_table.procname for file2alias
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
+References: <20220713005221.1926290-1-davidgow@google.com> <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
+ <Ytbw1T6uspICqj5B@bombadil.infradead.org> <CABVgOSkpT2kqVec2F7BsTF5tyABO43bseETC2Dz238zN+sTfQw@mail.gmail.com>
+ <YthllWFPAjq5YHpL@bombadil.infradead.org>
+In-Reply-To: <YthllWFPAjq5YHpL@bombadil.infradead.org>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 28 Jul 2022 16:42:16 +0800
+Message-ID: <CABVgOSnYQyRg8+nysnRAqn9-jEG+UzEdU7gSUOOEzU-aqYLSMQ@mail.gmail.com>
+Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-modules@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jul 26, 2022 at 6:27 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Thu, Jul 21, 2022 at 4:29 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
 >
-> On Fri, Jul 22, 2022 at 11:24 AM Mauricio Faria de Oliveira
-> <mfo@canonical.com> wrote:
+> On Wed, Jul 20, 2022 at 05:26:02PM +0800, David Gow wrote:
+> > On Wed, Jul 20, 2022 at 1:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > >
+> > > On Wed, Jul 13, 2022 at 08:24:32AM -0700, Daniel Latypov wrote:
+> > > > On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
+> > > > >
+> > > > > The new KUnit module handling has KUnit test suites listed in a
+> > > > > .kunit_test_suites section of each module. This should be loaded when
+> > > > > the module is, but at the moment this only happens if KUnit is built-in.
+> > > > >
+> > > > > Also load this when KUnit is enabled as a module: it'll not be usable
+> > > > > unless KUnit is loaded, but such modules are likely to depend on KUnit
+> > > > > anyway, so it's unlikely to ever be loaded needlessly.
+> > > >
+> > > > This seems reasonable to me.
+> > > >
+> > > > Question: what happens in this case?
+> > > > 1. insmod <test-module>
+> > > > 2. insmod kunit
+> > > > 3. rmmod <test-module>
+> > > >
+> > > > I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
+> > > > for <test-module>, I think?
+> > > > But we never called __kunit_test_suites_init().
+> > > > My fear is what breaks as a result of this precondition break.
 > >
-> > In order to expose a sysctl entry to modpost (file2alias.c, precisely)
-> > we have to shadow 'struct ctl_table' in mod_devicetable.h, as scripts
-> > should not access kernel headers or its types (see file2alias.c).
+> > I don't think this should be possible: any module with KUnit tests
+> > will depend on the 'kunit' module (or, at least, kunit symbols), so
+> > shouldn't load without kunit already present.
 > >
-> > The required field is '.procname' (basename of '/proc/sys/.../entry').
-> >
-> > Since 'struct ctl_table' is annotated for structure randomization and
-> > we need a known offset for '.procname' (remember, no kernel headers),
-> > take it out of the randomized portion (as in, eg, 'struct task_struct').
-> >
-> > Of course, add build-time checks for struct size and .procname offset
-> > between both structs. (This has to be done on kernel side; for headers.)
-> >
-> > With that in place, use the regular macros in devicetable-offsets.c to
-> > define SIZE_... and OFF_... macros for the shadow struct and the field
-> > of interest.
-> >
-> > Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
-> > ---
-> >  fs/proc/proc_sysctl.c             | 19 +++++++++++++++++++
-> >  include/linux/mod_devicetable.h   | 25 +++++++++++++++++++++++++
-> >  include/linux/sysctl.h            | 11 ++++++++++-
-> >  kernel/sysctl.c                   |  1 +
-> >  scripts/mod/devicetable-offsets.c |  3 +++
-> >  5 files changed, 58 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-> > index 021e83fe831f..ebbf8702387e 100644
-> > --- a/fs/proc/proc_sysctl.c
-> > +++ b/fs/proc/proc_sysctl.c
-> > @@ -19,6 +19,24 @@
-> >  #include <linux/kmemleak.h>
-> >  #include "internal.h"
-> >
-> > +#ifdef CONFIG_MODULES
-> > +#include <linux/mod_devicetable.h>
-> > +
-> > +static void check_struct_sysctl_device_id(void)
-> > +{
-> > +       /*
-> > +        * The shadow struct sysctl_device_id for file2alias.c needs
-> > +        * the same size of struct ctl_table and offset for procname.
-> > +        */
-> > +       BUILD_BUG_ON(sizeof(struct sysctl_device_id)
-> > +                       != sizeof(struct ctl_table));
-> > +       BUILD_BUG_ON(offsetof(struct sysctl_device_id, procname)
-> > +                       != offsetof(struct ctl_table, procname));
+> > If modprobe is used, kunit will automatically be loaded. If insmod is
+> > used directly, loading the first module should error out with
+> > something like:
+> > [   82.393629] list_test: loading test module taints kernel.
+> > [   82.409607] list_test: Unknown symbol kunit_binary_ptr_assert_format (err -2)
+> > [   82.409657] list_test: Unknown symbol kunit_do_failed_assertion (err -2)
+> > [   82.409799] list_test: Unknown symbol kunit_binary_assert_format (err -2)
+> > [   82.409820] list_test: Unknown symbol kunit_unary_assert_format (err -2)
+> > insmod: ERROR: could not insert module
+> > /lib/modules/5.19.0-rc1-15284-g9ec67db0c271/kernel/lib/list-test.ko:
+> > Unknown symbol in module
 >
+> This can be fixed with a request_module() call. And since this is a
+> generic requirement, you can have the wrappers do it for you.
 >
-> Nit:
->
-> If you use static_assert(), you can remove
->  check_struct_sysctl_device_id().
->
->
-> You can write static_assert() out of a function.
 
-That's a nice cleanup; thanks!
+I'm not convinced that this is worth the trouble, particularly since
+KUnit needs to be loaded already before any test-specific code in a
+module is run. _Maybe_ we could put it in the code which looks for the
+.kunit_test_suites section, but even then it seems like a bit of an
+ugly hack.
 
->
->
->
-> > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> > index 223376959d29..15073621cfa8 100644
-> > --- a/kernel/sysctl.c
-> > +++ b/kernel/sysctl.c
-> > @@ -2487,6 +2487,7 @@ int __init sysctl_init_bases(void)
-> >
-> >         return 0;
-> >  }
-> > +
->
->
-> Noise.
+Personally, I'm not particularly concerned about test modules failing
+to load if KUnit isn't already present -- if people want all of a
+module's dependencies loaded, that's what modprobe is for.
 
-Fixed.
+That being said, if you feel particularly strongly about it, this is
+something we can look at. Let's do so in a separate patch though: this
+one does fix a regression as-is.
 
+> > Maybe you could get into some trouble by force-removing modules at
+> > various points, but you're in undefined behaviour generally at that
+> > point, so I don't think there's much point going out-of-our-way to try
+> > to support that.
+>
+> You can prevent that by refcounting the kunit module / symbols, by each test.
+>
 
->
->
->
->
-> >  #endif /* CONFIG_SYSCTL */
-> >  /*
-> >   * No sense putting this after each symbol definition, twice,
-> > diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
-> > index c0d3bcb99138..43b2549940d2 100644
-> > --- a/scripts/mod/devicetable-offsets.c
-> > +++ b/scripts/mod/devicetable-offsets.c
-> > @@ -262,5 +262,8 @@ int main(void)
-> >         DEVID(ishtp_device_id);
-> >         DEVID_FIELD(ishtp_device_id, guid);
-> >
-> > +       DEVID(sysctl_device_id);
-> > +       DEVID_FIELD(sysctl_device_id, procname);
-> > +
-> >         return 0;
-> >  }
-> > --
-> > 2.25.1
-> >
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+Again, I don't think KUnit is any more special than any other module
+here. I don't think we need to do this ourselves, as it shouldn't be
+possible to remove kunit without first removing any dependent modules.
 
+Of course, happy to look into this again if anyone can come up with an
+actual crash, but I'd rather get this fix in first. At the very least,
+this patch shouldn't introduce any _new_ issues.
 
-
---
-Mauricio Faria de Oliveira
+Cheers,
+-- David
+>   Luis
