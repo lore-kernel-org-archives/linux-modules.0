@@ -2,143 +2,140 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A89FC00140
-	for <linux-modules@archiver.kernel.org>; Mon,  8 Aug 2022 15:53:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9094C25B0C
+	for <linux-modules@archiver.kernel.org>; Mon,  8 Aug 2022 17:37:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243283AbiHHPxW (ORCPT
+        id S236004AbiHHRhh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 8 Aug 2022 11:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
+        Mon, 8 Aug 2022 13:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiHHPxV (ORCPT
+        with ESMTP id S235852AbiHHRhg (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:53:21 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2CED8F
-        for <linux-modules@vger.kernel.org>; Mon,  8 Aug 2022 08:53:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=fGgS4I4JEMlEpFDKLmo/A9VwbeOnF7UjtRxOWjqb5J4=; b=D71J2nR1FFLesgghtj9J9koz9b
-        NNd3lQ9T0tYalZABzfLwQc3EUPqUeeY+vbRPaev97zNXay7nCoIzjIZqjzc2lp/8f9xvr9cLqxxpP
-        pRNY31PoA45QzX90mNY6PFmR57zGmcR/BvR7LVtypLGHaO9a3QDR+UAZFAiJV4sPremNDO7q9bT/d
-        ZPhuRd6RgzMrgQ5JsyuKn9N+v9HjPWic+uPbFLnG7aKHPkNWBGJjR4MJe82p7KEEwHETPP2ZWvkw6
-        hZElvPYVvQdp+caMidtgXoU58doRW6lRGEew/OygOO/ibA92g/fkfvbQ+yxOsu/MzjW/qRbdK+ozx
-        Ail33cFQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oL53x-00EmlQ-So; Mon, 08 Aug 2022 15:53:05 +0000
-Date:   Mon, 8 Aug 2022 08:53:05 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        fmdefrancesco@gmail.com, deller@gmx.de, yangyingliang@huawei.com,
-        saravanak@google.com, mcgrof@kernel.org,
-        linux-modules@vger.kernel.org
-Subject: [GIT PULL] Modules updates for v6.0-rc1
-Message-ID: <YvExYYWJY4HRi/NS@bombadil.infradead.org>
+        Mon, 8 Aug 2022 13:37:36 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592FE13E91;
+        Mon,  8 Aug 2022 10:37:35 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 278HbJRH004735;
+        Tue, 9 Aug 2022 02:37:20 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 278HbJRH004735
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1659980240;
+        bh=BuY1TMSXWdED7zukVvB5l/59DaxxbcqQ2IOZciXPWIY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=P7aSEtMvrm0rPN77TPEfS9Fwxu6H4SqYPBOM+Yqn9iXKeuLQpG9dbACaBGz/W04jX
+         17vcTbboznbJeo8gfBomBvUtXO8dO0hZQ6rSz8+PFYnpuR3LZgXc0Qtw4OgCsYYC80
+         n76wofFLTf89hE7+t0ixRY2UehFA29CtNWdhHvd2AAyYxloFIpYY2WtqtyBEX/GInf
+         IR2eo6FRZ7Ww0mu9Cs1D3Gu7dJK/klwaPyZmgKX1Sbl4N0AcnCISvmZPZbjCDQlsgQ
+         A91G7WzyIyo7vVkBxQNwvXBl65B8jbVQ8NkTT2zBiXoY450RrNOk2+5YY7eOOv5NEG
+         fDEaL/i65BtDA==
+X-Nifty-SrcIP: [209.85.221.45]
+Received: by mail-wr1-f45.google.com with SMTP id l4so11641169wrm.13;
+        Mon, 08 Aug 2022 10:37:20 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3Mh86Q7RDjk1RcsF4t1XMDbnUZay6vpFqqdRI8Qsj/7kmkuWvm
+        35WjqSCdTKRxT2x5KILcj06OjyOAaQmhOCwWgLg=
+X-Google-Smtp-Source: AA6agR5TLez3BClNRdpePrpc8q6eKNE0zlD502ux+r07wV1rDelRX/GyGxXX4tLJF8qojzyjNwVqNb0ZK6QfgKdcSTM=
+X-Received: by 2002:a05:6000:1f83:b0:223:60ee:6c08 with SMTP id
+ bw3-20020a0560001f8300b0022360ee6c08mr1572173wrb.682.1659980238492; Mon, 08
+ Aug 2022 10:37:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+ <2c496d24174e63b27ec047f383df6700@matoro.tk> <CAK7LNASWKhj0tZK6jA1PsYje+idTjzdbYa9avyGeakVScj843A@mail.gmail.com>
+ <38a9853e59db8946999316ce3a6b4621@matoro.tk>
+In-Reply-To: <38a9853e59db8946999316ce3a6b4621@matoro.tk>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 9 Aug 2022 02:36:41 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATa1fdwQsuC3LOkzhr1SaR6ipJqe1b0fAC1pk3LX9wDhA@mail.gmail.com>
+Message-ID: <CAK7LNATa1fdwQsuC3LOkzhr1SaR6ipJqe1b0fAC1pk3LX9wDhA@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To:     matoro <matoro_mailinglist_kernel@matoro.tk>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The following changes since commit 1a0e93df1e107dc766fdf86ae88076efd9f376e6:
+On Mon, Aug 8, 2022 at 10:27 PM matoro
+<matoro_mailinglist_kernel@matoro.tk> wrote:
+>
+> I have real hardware for all these arches in my collection.  I use it
+> for testing the latest kernel and toolchains on as many of the
+> less-popular arches as possible, exactly to find issues like this one :)
+>
+> Specifically we support all of these in Gentoo.  To double-check this
+> wasn't a config issue, I asked another user who also runs sparc to try
+> building 5.19 with his config (not copying mine), and he observed the
+> same problem.  You can reach us in #gentoo-sparc on Libera.
+>
+> As for testing, I make all this hardware available on an as-needed
+> basis.  So if you can't or don't want to fiddle with qemu, just let me
+> know (email or IRC, same username on Libera), and I will get you direct
+> access to my hardware.  Thanks!!
 
-  Merge tag 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma (2022-06-30 10:03:22 -0700)
 
-are available in the Git repository at:
+I found the root cause.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.0-rc1
+When I build the sparc kernel, I see a warning
 
-for you to fetch changes up to 554694ba120b87e39cf732ed632e6a0c52fafb7c:
+WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation
+failed, symbol will not be versioned.
 
-  module: Replace kmap() with kmap_local_page() (2022-07-20 14:27:46 -0700)
 
-----------------------------------------------------------------
-Modules updates for 6.0
+Then, modpost missed to write out the entry.
 
-For the 6.0 merge window the modules code shifts to cleanup and minor fixes
-effort. This is becomes much easier to do and review now due to the code
-split to its own directory from effort on the last kernel release. I expect
-to see more of this with time and as we expand on test coverage in the future.
-The cleanups and fixes come from usual suspects such as Christophe Leroy and
-Aaron Tomlin but there are also some other contributors.
+With the following patch, you will be able to load the module.
 
-One particular minor fix worth mentioning is from Helge Deller, where he spotted
-a *forever* incorrect natural alignment on both ELF section header tables:
+I will send a patch with a proper commit log tomorrow. I need some sleep now.
 
-  * .altinstructions
-  * __bug_table sections
 
-A lot of back and forth went on in trying to determine the ill effects of this
-misalignment being present for years and it has been determined there should
-be no real ill effects unless you have a buggy exception handler. Helge actually
-hit one of these buggy exception handlers on parisc which is how he ended up
-spotting this issue. When implemented correctly these paths with incorrect
-misalignment would just mean a performance penalty, but given that we are
-dealing with alternatives on modules and with the __bug_table (where info
-regardign BUG()/WARN() file/line information associated with it is stored)
-this really shouldn't be a big deal.
 
-The only other change with mentioning is the kmap() with kmap_local_page()
-and my only concern with that was on what is done after preemption, but the
-virtual addresses are restored after preemption. This is only used on module
-decompression.
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 29474cee10b1..337bd36a890a 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -2206,13 +2206,11 @@ static void add_exported_symbols(struct buffer
+*buf, struct module *mod)
+        /* record CRCs for exported symbols */
+        buf_printf(buf, "\n");
+        list_for_each_entry(sym, &mod->exported_symbols, list) {
+-               if (!sym->crc_valid) {
++               if (!sym->crc_valid)
+                        warn("EXPORT symbol \"%s\" [%s%s] version
+generation failed, symbol will not be versioned.\n"
+                             "Is \"%s\" prototyped in
+<asm/asm-prototypes.h>?\n",
+                             sym->name, mod->name, mod->is_vmlinux ? "" : ".ko",
+                             sym->name);
+-                       continue;
+-               }
 
-This all has sit on linux-next for a while except the kmap stuff which has
-been there for 3 weeks.
+                buf_printf(buf, "SYMBOL_CRC(%s, 0x%08x, \"%s\");\n",
+                           sym->name, sym->crc, sym->is_gpl_only ? "_gpl" : "");
 
-----------------------------------------------------------------
-Aaron Tomlin (4):
-      module: kallsyms: Ensure preemption in add_kallsyms() with PREEMPT_RT
-      module: Modify module_flags() to accept show_state argument
-      module: Use strscpy() for last_unloaded_module
-      module: Show the last unloaded module's taint flag(s)
 
-Adrian Hunter (1):
-      modules: Fix corruption of /proc/kallsyms
 
-Christophe Leroy (5):
-      module: Fix selfAssignment cppcheck warning
-      module: Fix "warning: variable 'exit' set but not used"
-      module: Fix ERRORs reported by checkpatch.pl
-      module: Increase readability of module_kallsyms_lookup_name()
-      module: Move module's Kconfig items in kernel/module/
 
-Fabio M. De Francesco (1):
-      module: Replace kmap() with kmap_local_page()
 
-Helge Deller (2):
-      modules: Ensure natural alignment for .altinstructions and __bug_table sections
-      MAINTAINERS: Update file list for module maintainers
 
-Masahiro Yamada (1):
-      doc: module: update file references
 
-Saravana Kannan (1):
-      module: Add support for default value for module async_probe
 
-Yang Yingliang (1):
-      module: Use vzalloc() instead of vmalloc()/memset(0)
 
- Documentation/admin-guide/kernel-parameters.txt    |  17 +-
- Documentation/core-api/kernel-api.rst              |   2 +-
- Documentation/core-api/symbol-namespaces.rst       |   4 +-
- Documentation/livepatch/module-elf-format.rst      |  10 +-
- .../it_IT/core-api/symbol-namespaces.rst           |   6 +-
- .../translations/zh_CN/core-api/kernel-api.rst     |   2 +-
- .../zh_CN/core-api/symbol-namespaces.rst           |   2 +-
- MAINTAINERS                                        |   1 +
- init/Kconfig                                       | 293 +--------------------
- kernel/module/Kconfig                              | 293 +++++++++++++++++++++
- kernel/module/decompress.c                         |   8 +-
- kernel/module/internal.h                           |  15 +-
- kernel/module/kallsyms.c                           |  76 ++++--
- kernel/module/main.c                               |  52 ++--
- kernel/module/procfs.c                             |   2 +-
- scripts/module.lds.S                               |   2 +
- 16 files changed, 423 insertions(+), 362 deletions(-)
- create mode 100644 kernel/module/Kconfig
+
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
