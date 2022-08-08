@@ -2,44 +2,55 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3B51C19F2D
-	for <linux-modules@archiver.kernel.org>; Sat,  6 Aug 2022 13:27:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76253C25B0C
+	for <linux-modules@archiver.kernel.org>; Mon,  8 Aug 2022 05:55:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiHFN1n (ORCPT
+        id S235830AbiHHFzD (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 6 Aug 2022 09:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        Mon, 8 Aug 2022 01:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiHFN1n (ORCPT
+        with ESMTP id S235801AbiHHFzC (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 6 Aug 2022 09:27:43 -0400
-X-Greylist: delayed 925 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 06 Aug 2022 06:27:42 PDT
-Received: from matoro.tk (unknown [IPv6:2600:1700:4b10:9d80::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50403DFE0
-        for <linux-modules@vger.kernel.org>; Sat,  6 Aug 2022 06:27:42 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; bh=NgjIxfiLr9uAbAmk3wWQnrtGLQCUOPaOTT5Oe/ZeRt0=;
- c=relaxed/relaxed; d=matoro.tk;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
- i=@matoro.tk; s=20220801; t=1659791521; v=1; x=1660223521;
- b=YegtRKSQr8okAdxA1AbGAlpGEYfnwiguq7kZDTIIslOWvPut/2nIAOedmBlvW7REWEONU9Wa
- 4jzxRbKsKALwI+IKYslEpFnwx2N4FHzfyEszO3GM7H5rF+bdEz895lZ7VcziIdGyFhRAmwUKDAP
- iSQHTTBW4c0yU7Lcr+Ethr89BAryagv5lb5sGbqPqXQQzheKUKZqtHVGp+fXjId/2mjHAJ2GbuA
- U+sjU8auY+GuL9dOCG8r3gyVykYYPYYMbtV8TzGamNsQnb0gAjS4RvxAyeQyHrpLQ6vJ2H1YDV5
- j9uAgdKAmXkwlNX77atViCljK9JqmHGfnRYqa3xRN+2TiKj3jwsC4Rtw/1GLD7d0GcJLhAO4w4y
- 6hJ75Xxn+h7YeulZEMYDgpZD7krL+zVv+yDDaIp5SE5G7WuuJ1YkJnNrBFgR7rdGcUjNjT7TjGt
- POTVflo6etSRCsq9znc86mHDwxE7zJemIC7U097DzzSj+ZSgTsRkSe4pQFIWQaq7xC9LcTcjupZ
- qrnLvre7YX2QjeeKnV80gnZqGoNagrseyxMsYdB+VEvod0Hfo7QqGaqwl9yGuaLCNRKVrF7xWRv
- 1GThAViZZpCPniUwXYRQPIdPEaQX6p97JDQSqtmTDlevsqlYqFPN8VskQ4Nf9e4275Dj5ZkoVax
- pYHoZr0Jmv8=
-Received: by matoro.tk (envelope-sender
- <matoro_mailinglist_kernel@matoro.tk>) with ESMTPS id 12a86f0d; Sat, 06 Aug
- 2022 09:12:01 -0400
+        Mon, 8 Aug 2022 01:55:02 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F97C2DC9;
+        Sun,  7 Aug 2022 22:55:00 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 2785sh62023443;
+        Mon, 8 Aug 2022 14:54:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2785sh62023443
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1659938085;
+        bh=qejQ7qBbGWyXlXw+9ltBzYOdnZJ6o0o+M0Ple7B/+Yc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=xf4BG++C4DsMw1wETGD16aAQgXcOyMOxYC2YWW7ygBM7SEqeSyBBPTemr6qeyddWl
+         wav4+MXO1jLQ+yWnY+H7OJyLkbVwIyGP3QDCPV5Osc8pVfc1+AHHn0lecHbJFdW+MY
+         uXc2o+8qOrZadUUEvaYJbb8MAWGqgmpVAlC3ZehWTRzSQfuSLhG635F7bwHbgONzoP
+         7Tszn2Vgn8lwVuqsBRpwQAXvlAeuiO+TPY3m1nC31wuRIniQ/z1MIHpCL7Q2pT6xQb
+         5XlMHSaEdws5tdcC3fWZiWARshGt7cNzkTOH5vcd1dnmFqhees5B/3AY7xYULe0xnn
+         mctvHC4lcUI1w==
+X-Nifty-SrcIP: [209.85.128.49]
+Received: by mail-wm1-f49.google.com with SMTP id 17-20020a05600c241100b003a536b6d536so1766738wmp.2;
+        Sun, 07 Aug 2022 22:54:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo339nN0gBO86FflYa03XFF1XRtpFBfykPGY0jREJg+P3q16ZOig
+        +WLjLJGdeyZRiuqRqbbTRBiwalyTZRKyPMOi6c0=
+X-Google-Smtp-Source: AA6agR67yrrIq8MxybypgJHhJrFW1rEbYpjlPy4b/RNP2FAT2d6tNuWjP4sOb5OhWgDNVEW9M61wQ1NMknMtRkFldGA=
+X-Received: by 2002:a05:600c:35ce:b0:3a3:1b7f:bbd8 with SMTP id
+ r14-20020a05600c35ce00b003a31b7fbbd8mr11090211wmq.22.1659938083218; Sun, 07
+ Aug 2022 22:54:43 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Sat, 06 Aug 2022 09:12:01 -0400
-From:   matoro <matoro_mailinglist_kernel@matoro.tk>
-To:     sedat.dilek@gmail.com
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+References: <20220513113930.10488-1-masahiroy@kernel.org> <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
+ <2c496d24174e63b27ec047f383df6700@matoro.tk>
+In-Reply-To: <2c496d24174e63b27ec047f383df6700@matoro.tk>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 8 Aug 2022 14:54:06 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASWKhj0tZK6jA1PsYje+idTjzdbYa9avyGeakVScj843A@mail.gmail.com>
+Message-ID: <CAK7LNASWKhj0tZK6jA1PsYje+idTjzdbYa9avyGeakVScj843A@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
+ LTO, MODULE_REL_CRCS, export.h)
+To:     matoro <matoro_mailinglist_kernel@matoro.tk>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
@@ -49,109 +60,78 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         clang-built-linux <llvm@lists.linux.dev>,
         Ard Biesheuvel <ardb@kernel.org>,
         Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups (modpost,
- LTO, MODULE_REL_CRCS, export.h)
-In-Reply-To: <CA+icZUWkDEZhJ+fVGPJ3LE5p9k0yWjg-XtAk7evES2crjbADUA@mail.gmail.com>
-References: <20220513113930.10488-1-masahiroy@kernel.org>
- <CAK7LNAQvneCi11myLpkikuXh=i5PLtTaLe0nGpDZXgv_Q1L0Ow@mail.gmail.com>
- <2c496d24174e63b27ec047f383df6700@matoro.tk>
- <CA+icZUWkDEZhJ+fVGPJ3LE5p9k0yWjg-XtAk7evES2crjbADUA@mail.gmail.com>
-Message-ID: <ad42a7c6886648982bc82c2f75c6707b@matoro.tk>
-X-Sender: matoro_mailinglist_kernel@matoro.tk
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi Sedat - I pulled these configs from the running systems, but I used 
-"make olddefconfig" on these working 5.18 configs to generate the 
-corresponding 5.19 configs that failed to boot.  I'll see if I can go 
-back in and repeat this process to regen the 5.19 configs (I deleted it 
-all after 5.19 failed to boot).
+Hi Matoro,
 
--------- Original Message --------
-Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups 
-(modpost, LTO, MODULE_REL_CRCS, export.h)
-Date: 2022-08-06 03:23
- From: Sedat Dilek <sedat.dilek@gmail.com>
-To: matoro <matoro_mailinglist_kernel@matoro.tk>
+Thanks for the report.
 
-On Sat, Aug 6, 2022 at 1:40 AM matoro
+
+I have qemu-system-sparc installed on my Ubuntu machine,
+so I think I will be able to test it on sparc, at least.
+
+How did you test these 4 architectures (sparc, alpha, riscv, ia64)?
+QEMU?
+
+Thanks
+
+
+
+
+On Sat, Aug 6, 2022 at 8:39 AM matoro
 <matoro_mailinglist_kernel@matoro.tk> wrote:
-> 
+>
 > Hi Masahiro, I'm sorry to raise this after release but this seems to be
 > broken on SOME architectures.  So far I have tested:
-> 
+>
 > Affected - sparc, alpha
 > Unaffected - riscv, ia64
-> 
-
-What do you mean by "release"?
-
-Checking the kernel-version from your paste-URLs:
-
-# Automatically generated file; DO NOT EDIT.
-# Linux/sparc64 5.18.16-gentoo Kernel Configuration
-
-# Automatically generated file; DO NOT EDIT.
-# Linux/alpha 5.18.15-gentoo Kernel Configuration
-
-# Automatically generated file; DO NOT EDIT.
-# Linux/riscv 5.19.0-gentoo Kernel Configuration
-
-# Automatically generated file; DO NOT EDIT.
-# Linux/ia64 5.19.0-gentoo Kernel Configuration
-
-Maybe you should try "Affected - sparc, alpha" with Linux v5.19.0
-instead of 5.18.x :-)?
-
--Sedat-
-
+>
 > The affected systems are unable to load modules, similar to the
 > previously reported issue.  All module loading fails with "disagrees
 > about version of symbol module_layout".
-> 
+>
 > Bisect blames 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b, but this does
-> not revert cleanly.  Presumably CONFIG_MODVERSIONS=n would fix, but 
-> this
+> not revert cleanly.  Presumably CONFIG_MODVERSIONS=n would fix, but this
 > is a pretty core feature.
-> 
+>
 > Unlike the issue Sedat reported, this is on a GNU toolchain, no clang
 > involved.
-> 
+>
 > Here are the configs I am using (with make olddefconfig on upgrade to
 > 5.19):
-> 
+>
 > Broken - sparc - https://dpaste.com/5A8F2JD6U
 > Broken - alpha - https://dpaste.com/FYKK23L9X
 > Working - riscv - https://dpaste.com/HV6Y4V6NT
 > Working - ia64 - https://dpaste.com/HDLDNEAK4
-> 
+>
 > Please let me know if there's anything I can do to help track down this
 > regression.
-> 
-> 
+>
+>
 > -------- Original Message --------
 > Subject: Re: [PATCH v6 00/10] kbuild: yet another series of cleanups
 > (modpost, LTO, MODULE_REL_CRCS, export.h)
 > Date: 2022-05-13 08:20
 >  From: Masahiro Yamada <masahiroy@kernel.org>
 > To: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-> 
+>
 > On Fri, May 13, 2022 at 8:42 PM Masahiro Yamada <masahiroy@kernel.org>
 > wrote:
 > >
 > >
 > > This is the third batch of cleanups in this development cycle.
 > >
-> 
-> 
+>
+>
 > This series is available at
 > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
 >   lto-cleanup-v6
-> 
-> 
+>
+>
 > >
 > > Changes in v6:
 > >   - Fix false-positive warnings when CONFIG_TRIM_UNUSED_KSYMS=y
@@ -227,4 +207,9 @@ instead of 5.18.x :-)?
 > > --
 > > 2.32.0
 > >
-> 
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
