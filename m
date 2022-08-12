@@ -2,156 +2,97 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B2DFC25B0C
-	for <linux-modules@archiver.kernel.org>; Thu, 11 Aug 2022 17:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F112C00140
+	for <linux-modules@archiver.kernel.org>; Fri, 12 Aug 2022 08:07:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236478AbiHKROo (ORCPT
+        id S235949AbiHLIH0 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 11 Aug 2022 13:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        Fri, 12 Aug 2022 04:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235279AbiHKROa (ORCPT
+        with ESMTP id S229552AbiHLIHZ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 11 Aug 2022 13:14:30 -0400
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82868A00C7
-        for <linux-modules@vger.kernel.org>; Thu, 11 Aug 2022 09:56:10 -0700 (PDT)
-Received: by mail-vk1-xa2f.google.com with SMTP id c22so9228703vko.7
-        for <linux-modules@vger.kernel.org>; Thu, 11 Aug 2022 09:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=G0jqPx9rziCQX4VfMuTReGksQVA2TXCq4FcbporBUUE=;
-        b=bY6Z46A2sYDi7bnO93xe0wKNlM2kWwf1rZ8WXR+o0b9U0kcPZQvX/b6U7wJuCkJ0ra
-         OtVWeOHzn2C13uh/TAQVBKdSyMwxAlLY5vMkRXrVW0tXv57ai1ksQg9RI5TbRzp4x43d
-         Fj94pCnbuUVMLnlRNzV+CFBDUDJq1DUFhFZ+dmA7JCHH1VtL9Pb1qqG4go1GIUX/eEI5
-         YJD83lNAz8S4xiiVJOTKCFPgDPPb+huEJLkUpLeFiYvFq7I9xUEE9WIbxNS6s1A3s6E8
-         jKZc55buqasK/K1J0cmf7ct7U3d3VMbV/D0iKvTzJkuJegb7KftZAFJI4Io+ZEU5R0qc
-         3qgg==
+        Fri, 12 Aug 2022 04:07:25 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1514A8307;
+        Fri, 12 Aug 2022 01:07:23 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id n21so254212qkk.3;
+        Fri, 12 Aug 2022 01:07:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=G0jqPx9rziCQX4VfMuTReGksQVA2TXCq4FcbporBUUE=;
-        b=5fdmhtGTqFRpOv5NNH17LMrODHnWwjNwRuhKTCLE3u2o7Gz6910sKZx+ZmfkYNnhCn
-         Q4fUDs2Sys3+fWxz7dTcc7tqSNUcdR7x/i0luESzBlP500euEG36PfqoviiUSBeDjBnq
-         w/HQGb5SrQi1jEdrWCwdB6Ycjh1a5xXpWW7DiIYV6PhBZ+Okui14xd152B83z0aWfVXJ
-         3rpw4kKtSQR1Vz5vIPShKu1CHfSrRRUnJMljPh1TNj4p5hJJx+Qz3NOp7VRoPGRAkr+/
-         dqdLxbliZ/SacbS2sgRRCDc06M0sEMff6bdZ0Qiy/7ehOnQwuizMb7KR+XoMJETVYJBi
-         31zw==
-X-Gm-Message-State: ACgBeo0KBO3QpeQi5olfoeReTHat+uWBiU7Ct6LouGKMz7s28fSEFvxx
-        bRccRR42ujMakvvgyjp6mZYq9JeDP+UGmu2WYPZLng==
-X-Google-Smtp-Source: AA6agR7OdJBDdsv27oJWMCBkG7w1cww7Zf3DnUJ98jysy8HZ/Q85KSrXHjt06FJo0I8HQr0pnWwdZYA6hlRaWORya6g=
-X-Received: by 2002:a1f:dac3:0:b0:377:8cb:4544 with SMTP id
- r186-20020a1fdac3000000b0037708cb4544mr12084vkg.7.1660236969573; Thu, 11 Aug
- 2022 09:56:09 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=aFJNyT5Djgzn7r7XrxfkkghlVBwDmpHCizKv7Git9FM=;
+        b=v3yGdnFZKTDUdi+wldQjvwCeMY0EhHPqcg+Br3ec2gTsfR4632qjo2wXVj4stKWe1O
+         ftVUB879s8Y0o8hIZlve75ZrpAiQIpP32ARXapmlcD421di0l0Gb8NDUip42nGirrsf5
+         rphC0qKZ8sjsM9cecvSQ5AOT5hpjCXDr5qAhpTy+EbImtzI9tN341S5Tmx4gg8bPOEGo
+         n/+9DC3QDEzbzHVbaJHL4kOk1/h0Ij6ahIifa6qr+GDeeK9k4//vIOInKOYAgo1bv3hA
+         Yxj3ItFnN/BwnfZH27dM/fbDIXuqTAvF1NJmWHUW40/u9bB7FkFoaDN139OgpXyjV29b
+         7xaA==
+X-Gm-Message-State: ACgBeo2ubKjiXIOALbeylA0jyLHH2ceU6f9bSG5kiMPNULHyStf/D48J
+        WhpHcvDLx/cViAs8XPyePMrGiH4H8QC6oQ==
+X-Google-Smtp-Source: AA6agR4+8cNfaP3mJTrhLDDdvRqVKb+2Oz2XMyx8aaaqNQ4yXDtYYjEpNm/AXWgzTFR1Of6WnFdOkQ==
+X-Received: by 2002:a05:620a:424e:b0:6ab:96ea:40cb with SMTP id w14-20020a05620a424e00b006ab96ea40cbmr1992179qko.483.1660291642681;
+        Fri, 12 Aug 2022 01:07:22 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id u12-20020ac858cc000000b003437b558f48sm41919qta.3.2022.08.12.01.07.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 01:07:22 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id i62so371548yba.5;
+        Fri, 12 Aug 2022 01:07:22 -0700 (PDT)
+X-Received: by 2002:a05:6902:100a:b0:676:ed53:25b0 with SMTP id
+ w10-20020a056902100a00b00676ed5325b0mr2288014ybt.365.1660291641943; Fri, 12
+ Aug 2022 01:07:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220709032001.819487-1-davidgow@google.com> <20220709032001.819487-2-davidgow@google.com>
- <CAMuHMdUdvGyMFyDSX3cSGDz9x3Q0+z1e0nQB5cB0GFazyPcK3A@mail.gmail.com>
-In-Reply-To: <CAMuHMdUdvGyMFyDSX3cSGDz9x3Q0+z1e0nQB5cB0GFazyPcK3A@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 12 Aug 2022 00:55:58 +0800
-Message-ID: <CABVgOSk_Y-eEoqH1xbbXfK5TN3P188JFeuZn3ZgV59Bs3Ds4Hg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/5] kunit: unify module and builtin suite definitions
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jeremy Kerr <jk@codeconstruct.com.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
+References: <20220713005221.1926290-1-davidgow@google.com>
+In-Reply-To: <20220713005221.1926290-1-davidgow@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 12 Aug 2022 10:07:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWLcakTVEVYwN_Z_Ed8AZK8+WUuzcVbtwKhg7O61FTDPw@mail.gmail.com>
+Message-ID: <CAMuHMdWLcakTVEVYwN_Z_Ed8AZK8+WUuzcVbtwKhg7O61FTDPw@mail.gmail.com>
+Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-modules@vger.kernel.org,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Aug 11, 2022 at 9:49 PM Geert Uytterhoeven <geert@linux-m68k.org> w=
-rote:
->
-> Hi David, Jeremy,
->
-> On Sat, Jul 9, 2022 at 5:21 AM David Gow <davidgow@google.com> wrote:
-> > From: Jeremy Kerr <jk@codeconstruct.com.au>
-> >
-> > Currently, KUnit runs built-in tests and tests loaded from modules
-> > differently. For built-in tests, the kunit_test_suite{,s}() macro adds =
-a
-> > list of suites in the .kunit_test_suites linker section. However, for
-> > kernel modules, a module_init() function is used to run the test suites=
-.
-> >
-> > This causes problems if tests are included in a module which already
-> > defines module_init/exit_module functions, as they'll conflict with the
-> > kunit-provided ones.
-> >
-> > This change removes the kunit-defined module inits, and instead parses
-> > the kunit tests from their own section in the module. After module init=
-,
-> > we call __kunit_test_suites_init() on the contents of that section,
-> > which prepares and runs the suite.
-> >
-> > This essentially unifies the module- and non-module kunit init formats.
-> >
-> > Tested-by: Ma=C3=ADra Canal <maira.canal@usp.br>
-> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> > Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> Thanks for your patch, which is now commit 3d6e44623841c8b8 ("kunit:
-> unify module and builtin suite definitions") upstream.
->
-> Since this commit, modular kunit tests are no longer run at all.
->
-> Before:
->
->     # insmod lib/kunit/kunit.ko
->     # insmod lib/test_hash.ko
->     test_hash: loading test module taints kernel.
->         # Subtest: hash
->         1..2
->         ok 1 - test_string_or
->         ok 2 - test_hash_or
->     # hash: pass:2 fail:0 skip:0 total:2
->     # Totals: pass:2 fail:0 skip:0 total:2
->     ok 1 - hash
->
-> After:
->
->     # insmod lib/kunit/kunit.ko
->     # insmod lib/test_hash.ko
->     test_hash: loading test module taints kernel.
->
-> The actual test code (and test init code, if it exists) is not run.
->
-> Reverting commits e5857d396f35e59e ("kunit: flatten kunit_suite***
-> to kunit_suite** in .kunit_test_suites") and 3d6e44623841c8b8 ("kunit:
-> unify module and builtin suite definitions") fixes the issue.
+Hi David,
 
-Thanks Geert,
+On Wed, Jul 13, 2022 at 2:55 AM David Gow <davidgow@google.com> wrote:
+> The new KUnit module handling has KUnit test suites listed in a
+> .kunit_test_suites section of each module. This should be loaded when
+> the module is, but at the moment this only happens if KUnit is built-in.
+>
+> Also load this when KUnit is enabled as a module: it'll not be usable
+> unless KUnit is loaded, but such modules are likely to depend on KUnit
+> anyway, so it's unlikely to ever be loaded needlessly.
+>
+> Fixes: 3d6e44623841 ("kunit: unify module and builtin suite definitions")
+> Signed-off-by: David Gow <davidgow@google.com>
 
-This is a known issue. There's a patch to fix it here, which just
-missed the pull request:
-https://patchwork.kernel.org/project/linux-kselftest/patch/20220713005221.1=
-926290-1-davidgow@google.com/
+Thanks for your patch!
 
-We'll try to get it merged as soon as possible.
+This fixes the regression where modular tests are no longer run
+after loading them.
+Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Cheers,
--- David
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
