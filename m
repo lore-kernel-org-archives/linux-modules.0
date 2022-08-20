@@ -2,538 +2,229 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F1F0C28D13
-	for <linux-modules@archiver.kernel.org>; Sat, 20 Aug 2022 03:11:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80B16C32774
+	for <linux-modules@archiver.kernel.org>; Sat, 20 Aug 2022 10:02:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233564AbiHTDLq (ORCPT
+        id S1343944AbiHTKCK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 19 Aug 2022 23:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        Sat, 20 Aug 2022 06:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239003AbiHTDLm (ORCPT
+        with ESMTP id S231132AbiHTKCJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 19 Aug 2022 23:11:42 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4DD12AE9
-        for <linux-modules@vger.kernel.org>; Fri, 19 Aug 2022 20:11:40 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id v125so6715509oie.0
-        for <linux-modules@vger.kernel.org>; Fri, 19 Aug 2022 20:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc;
-        bh=xIFJwNuKiorxPxXA1Gv0CiyCxhqWzw+mgI0moUs8Zv0=;
-        b=H2IypzF+DCEaJYbUrjPAnWyblhOte1ndd5U9yRNj3se8uJvyqGoz0VA57yBEyYXiSZ
-         bOwqRKJkB30d2zg4TGw9TugzLtfgzMHNc0jwDl1yCuXHSzTLChIlL8kfpLcNqLM1I7oT
-         1gO9JYmOyGN6LI695/pgY1Fsxtyqd5niksPjM2FSN79qecME8qromSADeXvSqKv3fAMd
-         6Yyodp11AZdo9eprcwHj9Fk+srDclVRKnZ+bwjqHF5GW5wYAqJVpV7TnmMStb1hsy1bz
-         lxNslaRZhvoZH1kQgrSk81kngC/LuQNO3gI8Xuwu+gVlmEkJrHqAqMpx5xmrggK2B7x9
-         XfCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=xIFJwNuKiorxPxXA1Gv0CiyCxhqWzw+mgI0moUs8Zv0=;
-        b=AZNHLl1+rFENPnwFgIVSpBTqhdrPM5MVxgvXwhmdn0yM150XzOdEFXJgSRUTSHT4/C
-         +0L7WEQvwPMFxjLaXTASx29UY1JtC1JtqHvM4Q2+ISJwt1i9VZ3xthxZzp/Oi8dgfRjv
-         7QVzCoTi8JpURqgeHq2RNM4298mAA1tL1HN/EEMRAOm8F+Ldg9RG3B4FYuqqjvw12S55
-         XbNmOCi7P7EuV71os4RhZSfs3Oofwc6p7P2M588lBOjmmOSkAIUr396btXjVRpHeClzB
-         m5NgSzrzXDN2zhWei64Pqq9R2HmSg9z7Zo7+o8LACco7GNugQFAkjos3fKwBwTPSn90l
-         XX1w==
-X-Gm-Message-State: ACgBeo3zCZKTBZmLaLR27tvHN8ZSncE/AxxIEqQ2Sizr1wN96d7ozxKd
-        UQKLT2n3Ia+sozU3lbIjrRcswYYIazI85NIHvbQl/Z03toY=
-X-Google-Smtp-Source: AA6agR77wbrVy7TVWBnt/VJT7PROS1eYdxbBhW0Yh0Xd0o3W2f3hn2i40EDrPDUnxNkBEKm7REpbiAfbJa/M+HfaZ6M=
-X-Received: by 2002:a05:6808:209:b0:342:ed43:2f97 with SMTP id
- l9-20020a056808020900b00342ed432f97mr6862400oie.255.1660965099781; Fri, 19
- Aug 2022 20:11:39 -0700 (PDT)
+        Sat, 20 Aug 2022 06:02:09 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90053.outbound.protection.outlook.com [40.107.9.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E6687690;
+        Sat, 20 Aug 2022 03:02:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XcP7i4qhG2OtBCSQx+jR/n6y+iEjRBGYAfCPR3vdEpRHrqJO5KQRih2++GO9ilScTO7Bf8NWhT/0rapdDAF2em5PKPBwH0sBoBEnKarrMnVO9CU+N+InkqE77loIaP3fQVW0Imvxv2njevwMfcdps0bBLYoKWHykB62a/zhoRBtEQRtFFsCtlWlwyINsZzzS0l4De8R/FkRQNj72LzTvUWyhxNznoJdNiFB5GzNTh4DokK4Ev9Vy79XqurGS0ekJWFcBsXt8Bxc5o4YK7NT3obcEPa2RwC6mkai60pKGEk7JiBoqINkCYa3goPMNmwDBga+SfNpqbKsOXqStSZVxLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+9HqCtjXBl+EkvtFJtnHmSjk/muLLVBaR2Zy2h8twrE=;
+ b=QI93f7NmOPOtSIQeC6DjXp0D4pvWvTETSFxK6kKRS5VaJ+qsBiWClpU8Z9FAqGWLbgYKEAIyYPGz//57OyNlQmempO4JjW/fjwc6htsNA5UI5/MMDkuEwdsOUKZ17WXCCCaNFBYKFBH3f2ffJj/3LFiFnWtLdBbEog2QjfjOJ9Z8UO1n3EhAzx4enAA7rFSpqt2Rf+zE76Geyiw9e5YVprvWDaYKtXj1/ipih+W+A0nONKI/bpd1zBEuPoIXYaXLhKMFrD61bVfuddJPaG2+Qaw2oivOU4tTl3RdgeaRQ38B5u5slTowpHTeC4LybpY2ChqBcbjk+ZK4e8Bqast2lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+9HqCtjXBl+EkvtFJtnHmSjk/muLLVBaR2Zy2h8twrE=;
+ b=jOuTMSPH+84LVrcYSyvs4iGp/YmoSQkKRFtn5+CoqFboBtj8uQScRNjsiHaz/XCegBOMiDRUfULwaDK982nHvht8mtwVwR5/YO8hOJzUTBWytoyfgCYkw/2Wb5gNOyigALqzWTWC/L+WeDvAxqFx8ggrLH6dyPkwI9HUzKK7cxwIulKnc6Ltjq6pg0LHP7PM+YAEm23eaNvPNBVhW6H81dUJUiBTJLsN/MY71ts5URMt5NmUoIDwZUxtZuyX2Pzi9gFnDOQDsjEsbvRcTPEHpJ2ITyv82zmZy13bzusf0GnKbm2E3owTakyTi52hfytDy3fSi2i+bOrhfSK31jNGBA==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB3731.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:21::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Sat, 20 Aug
+ 2022 10:02:04 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::888e:a92e:a4ee:ce9e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::888e:a92e:a4ee:ce9e%5]) with mapi id 15.20.5546.020; Sat, 20 Aug 2022
+ 10:02:04 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Build/boot problem with 7b4537199a4a (Re: [PATCH v6 02/10] kbuild:
+ link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS)
+Thread-Topic: Build/boot problem with 7b4537199a4a (Re: [PATCH v6 02/10]
+ kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS)
+Thread-Index: AQHYtHvmHBMhgvHYdkutxUw4JYFhKQ==
+Date:   Sat, 20 Aug 2022 10:02:04 +0000
+Message-ID: <38605f6a-a568-f884-f06f-ea4da5b214f0@csgroup.eu>
+References: <20220513113930.10488-1-masahiroy@kernel.org>
+ <20220513113930.10488-3-masahiroy@kernel.org>
+In-Reply-To: <20220513113930.10488-3-masahiroy@kernel.org>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f2707a22-2b7c-4b8c-204b-08da82930898
+x-ms-traffictypediagnostic: MR1P264MB3731:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TKfWXr0Z0x3956pP7AQp6vVdG5wgQE/GaifiIIgvVzAKIQSIm5x/Q4ByXSrRoY13mzU3YBqG3b1IyIaaDpO3JoVXMik9iY6FKrWgLXoosufIRQ9jGk2xlBwm3ady6tBn9DeciCIFPxdZZVuNX/cRWF4ofcriHEGoLegE1yROAjGwGjBIhika1nsg7ulz2suEzdXqz8SWXAamBikhJDVazbH0zWdoEF3r/peZ2fzFmCNe6a6w4aYss1pPqAGEm2wtzqLAHf7kvRTy5NeYMPfq7iaxK6RSkfPFbS7Yz8Hhw3iNG6kWE1+J8Ct69vUjuGu1qcFaTY8FlMwIuCpJndt6Snm4jSg6Fr9r/k8q4y/eL2G1jj0CYlFIPF3WGUJV8TmsyecPM2IH5WBybBhtkyAN1egOZi7LcaLhDTdLySAIk6CK4ReVI/VdiifJMuy0jipr3V+KEgEfJrNtNDN+x38SdMp4JQNrdi6mDCXnBodbCZye6OWw4DsTgj3UNB1bDZAJ6fPEDD3lSfjNIq5CPacNMUpiexC/nbJzrsXNs2E0GjiF/KXGkaUciVTjMs82I0eN++TFwlKTLwZL72UIOfC1XMuM9A/ArB3cEaY84wZPaMx15clyVeD9bbSOHTV9H+we87SgjKkDyZLS3YNUedRrSU4gJX8p7FDQD1EAza+5Y/VaL1b8idJvVXxd9ADB+zofrF4ALuwYYmdhx0DpUxW8F3/aXtNVwFFDSE/WpkxYWOZLIx1/0Us87LyZvDDq9omjo9hXfAZxNBBxLtvUcu9pwff3N9U/mjRYW4cE2suivheOqQkEvGw0R6re+JUKsSBtNKXrtpEU/zaxvqPkekULTg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(39850400004)(376002)(136003)(366004)(45080400002)(122000001)(31686004)(54906003)(316002)(2616005)(110136005)(38100700002)(26005)(36756003)(6512007)(186003)(38070700005)(71200400001)(66476007)(8936002)(478600001)(66556008)(7416002)(64756008)(2906002)(8676002)(4326008)(86362001)(6506007)(83380400001)(66946007)(91956017)(31696002)(76116006)(66446008)(5660300002)(44832011)(6486002)(41300700001)(66574015)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M0lmQytJU1ZRV0lpZHpBV0NBbWxZcHhoNkNkOXRrWXhocTVuRGY4b0QvaDZY?=
+ =?utf-8?B?OS9pVkxQdTZmNHJLcCszVUxPQmNQdXM1YUFmRHJoQ0c1anJoa0xqZmYwYXIw?=
+ =?utf-8?B?V2plbW84NG5CK0NCQ2pyc2lwS2x6dGs1Ly8yQWhXbmpBR2U2eVdBRGJlM29p?=
+ =?utf-8?B?ekVjSjdBMGJSeEkrNWwyRG15TXdybGYvVkgyOFpGdGdRZHFFSG9XODRZYVZu?=
+ =?utf-8?B?UmxpUUFFalBUWkRuZXFCUDBzNTc4TDJrWEcxdmk4UHRDQUJFSE9nWFFZTUly?=
+ =?utf-8?B?d2tob1hsRi9xQzhpdC9uUDEvdnRPbURUZW5NRHB1YzZOaUIzenU4TDNwclBa?=
+ =?utf-8?B?UXAvWW8vVEd3WGJVajBpR2VPTVcwMGRsLzBLU3NITDFhc0N4VTEvSDFGQ01l?=
+ =?utf-8?B?ZURPT25uTysrTVV4MC9Rai9oc3QveVBWWk03dG1Yb1hTNEtnUUVrRzZHT0I3?=
+ =?utf-8?B?TFA1TXpXR29QMytxb2EyQjI1enRQOTF2ZTY4eFhLR1ExTVdJdjhWTmhlMEJ4?=
+ =?utf-8?B?WmFhb3NtTDkwazRkQzZMRDAzYU1aN1FQSWhuSndkOTVEWExIclREc0d3UjZD?=
+ =?utf-8?B?VmphdStDZG5tVFFmWTRkaC9CT1RNTWJvM2lOdHFhRUw2N2VFcm96a1pqeXFS?=
+ =?utf-8?B?VXlFNXcxZUxZRFFabFpMYy9wOGZDRUFQbC9NNU91VmpQTy9LYTlwbWdwRGda?=
+ =?utf-8?B?UHl1RmttZHcxZ2p1TkIvM2lCZ0wvbjBrenI1TzQxWEhld0hrT1QyT1pOd0FE?=
+ =?utf-8?B?U05UWXJub295NENyYXdBSXQ1bFl0VFlNV2tiUXcwWVYwblZNTXlCSktrQWg1?=
+ =?utf-8?B?T3FTUFNyNEZBNWZKRFZuT2hIWEhSek9Vd01yMkMxQUkyOFE3NFFwUU5GRE0x?=
+ =?utf-8?B?Q1NTcWM3NnQ4MVpzbUxFaFNMRkNJcXVPU3cwbUxQMXJCejE3WUVXdXdKZHFV?=
+ =?utf-8?B?VWxUWkZYZ0xHOE10SVFMMHRhRWhPOW5RRzB0N2ZOZmFQK3dBVVdZT3pLTGtK?=
+ =?utf-8?B?b045UEpBSUxvclUvMDhaU2VqU1A2ODVqMzdWNUpNVVdQQ3JlbUxoVG14d2dG?=
+ =?utf-8?B?NlFmVlFRM1BHcFArMmdmRHQ4N2U3ZlphSjZ0aVNaaTFVanZkTjJoMGxZZHhC?=
+ =?utf-8?B?R0VmVGp5UStJak54dmJCdVlKaEpEMUk2ckszdldENmVxTjB4bmc3WFdYK0JR?=
+ =?utf-8?B?VEI2bkppTnduZ3BodGNob1ZJeTlmY3VLb3ZDS08xUTF1YkJkeENkNnZ1NTdv?=
+ =?utf-8?B?cmZoR3oyOVZUQlcrMVJiNUVNRkYvM3phYkxWdUlqak9rcmpFNHA5bVBqY0xv?=
+ =?utf-8?B?YmN5RFQ4eWppZFBjRUdJNWY4Y0YrcEN6RC9kUHRDcDJwV28xTSt6eGQrUS8w?=
+ =?utf-8?B?cEZOdklmTUxmV0FwT1FiS3ZiOFF4UEhLczN1RTk2dWtBK1V3K3VWMGR1RTVZ?=
+ =?utf-8?B?M2ZCaWFIV1Y3ZStZWCt1Rm80b1lNeDZJRm5RdkRYbkxMZTB0TStrd3ZWTVhQ?=
+ =?utf-8?B?b1Z0QzZ5K1Z5NTdSUE1JSEM3OER1NEtiSGdja2lPWGx3R2JSeTQ4WkVTbWFU?=
+ =?utf-8?B?RzFwY1J4eUJvRnZyZ29TZUJkR0tqakRBMkpwYnVEVThmWHcvR2sya1ZwcjNV?=
+ =?utf-8?B?a205c0RWVmt2dG1qRkRubTJ6ZGZFQVpzVElMTm41TEdOMk5pZmM0RW9uKzgw?=
+ =?utf-8?B?OS9jOEZ4dUM4KzM4TW1wZlRsVzRtc29DeElYN2MyUFRxOTVpV2J4T2dkbTJZ?=
+ =?utf-8?B?eGRUWjRUWXJzaXRHZkw4YnJxcFN5K2hpN3RVQTlYaUFlZm56bnVKdjg5YmpI?=
+ =?utf-8?B?bHFEUy94L3R5QXJ2eVZEUjdNeDRkU0Q3ajlLeElVaXFPbHJNajZRZFpKcjVB?=
+ =?utf-8?B?c2lhcDVLd0lxeTVUTVdsVlVVWkJEdmhLT216VlE3QXpES0hwMkVUWW0vcCtk?=
+ =?utf-8?B?TDdEcUpWcE92THlZcEtVVXl5OHlQcHljMUpSN3hIYW83aWU3aHNhV0tmMmo2?=
+ =?utf-8?B?ci9xMnIzektxdUNYNnRScjdZWlB3UytKbk1GT0oremhNb3VGK2hvcXFGTXdQ?=
+ =?utf-8?B?blZMbEM4aE9pdG02Ry9hWmR5UnBubFEyVTJuaXNTY3J0ZS9zeElxaER5YlF0?=
+ =?utf-8?B?aEljOHh1RnRRcDlpTVdPVWpORW00ZUc2RTFHU2dvdDVTeGI4dDBiMzhFMUU2?=
+ =?utf-8?B?Nmc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1681685B5D50574591EE2EAED767A2AB@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CAGRSmLt46=1JRahn-yDVz-kDeywOhHx1zQS6TXM3kfKQTWv0Kg@mail.gmail.com>
-In-Reply-To: <CAGRSmLt46=1JRahn-yDVz-kDeywOhHx1zQS6TXM3kfKQTWv0Kg@mail.gmail.com>
-From:   "David F." <df7729@gmail.com>
-Date:   Fri, 19 Aug 2022 20:11:28 -0700
-Message-ID: <CAGRSmLsYwJZzDUvSFzFVLpMLt7Xa=inZrnhpMMX9iwQb9HD2jA@mail.gmail.com>
-Subject: Re: Block module crash loading on 5.15.x kernel?
-To:     linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2707a22-2b7c-4b8c-204b-08da82930898
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2022 10:02:04.1711
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: g4YrhU9WwvR81QL6Tg1eDM8yomKWgP4Y4Z8VtEPQ7O9DPCj/vLdojLPEiV5L6IUNdPRNKhGTKqvlJafNZXb4wbSoXpIBjP2rHi/KUcLGj7o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3731
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-I found it - needed to add:
-
-vhxdev->GenDisk->minors = 1;
-
-On Fri, Aug 19, 2022 at 5:46 PM David F. <df7729@gmail.com> wrote:
->
-> I have a private custom block module that has been around since the
-> kernel 4.x days.   Every once in a while it wouldn't build on a kernel
-> update, so I'd have to figure out what you do with the new kernel
-> (luckily most of the time someone else already asked and found the
-> solution).   This break happened again with the kernel 5.15.x update.
-> The last kernel I built this for was and it was working was 5.10.x.  I
-> found examples of what is done now, however, it's not working for me.
-> I'm getting a crash / failure when calling the add_disk() function.
->
-> Is there something I'm missing?    I took out the 4.x specific code
-> from below, but left the other 5.x stuff in.  Here's a skeleton
-> outline of the module (the failure occurs on insmod of the kernel
-> which is just creating a block device that doesn't do much but look
-> for ioctl requests).  Can one of the expects look at what I may be
-> doing wrong?   Here's that skeleton code:
->
-> #include <linux/module.h>
-> #include <linux/kernel.h>
-> #include <linux/version.h>
-> #include <linux/fs.h>
-> #include <linux/types.h>
-> #include <linux/spinlock.h>
-> #include <linux/genhd.h>
-> #include <linux/blkdev.h>
-> #include <linux/errno.h>
-> #include <linux/sched.h> // for set_user_nice
-> #include <linux/math64.h>
-> #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0))
-> #include <linux/blk-mq.h>
-> #endif
->
-> //---------------------
-> // Macro
-> //---------------------
-> #define MIN_NICE -20  // can't find it on this system.
->
-> #define BUFFERmaxElements(s) (sizeof(s)/sizeof((s)[0]))
-> #define SZBUFFERmaxStrLen(s) ((sizeof(s)/sizeof((s)[0]))-1)
->
-> #define NUMdevicesDefault   10
-> #define NUMdevicesMin        2
-> #define NUMdevicesMax          27
->
-> //---------------------
-> // Types
-> //----------------------
-> typedef struct _sVHXMountDev {
->     spinlock_t Lock;                  // lock for device access
->     struct mutex IOCTLLock;           // mutext for handling of ioctl
->     #if (LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0))
->     struct request_queue *Queue;      // request queue for device
->     #endif
->     struct gendisk *GenDisk;          // kernel disk device
->     #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0))
->     struct blk_mq_tag_set tag_set;    // new blk_mq method
->     #endif
->     unsigned int OpenCount;           // keep track if device open
->
->     void *VHXMountObj;                // CVHXMount mounted object for
-> vhx file (C version)
-> } sVHXMountDev, *psVHXMountDev;
->
->
-> //----------------------
-> // Parameters
-> //----------------------
-> static unsigned int MajorDevNum=0;
-> module_param(MajorDevNum, uint, 0444);
-> static unsigned int NumDevices=NUMdevicesDefault;
-> module_param(NumDevices, uint, 0444);
->
-> //----------------------
-> // Local Data
-> //----------------------
-> static const char VHXMountDevName[]="vhx";
-> static const char VHXMountDevNameFmt[]="vhx%c";
->
-> static sVHXMountDev *VHXMountDevArr=NULL;
->
-> unsigned int VHXMountMajor=0;
-> unsigned int VHXMountNumDevices=NUMdevicesDefault;
->
-> //-------------------------------------------------------------------------
-> // Block operations structure
-> //-------------------------------------------------------------------------
->
-> static struct block_device_operations VHXMountBlockOps=
-> {
->     .owner = THIS_MODULE,       // required initialization
->     .open = VHXMountOpen,       // open device function
->     .release = VHXMountClose,   // close device function
->     .ioctl = VHXMountIOCTL,        // the ioctl handler
-> #if defined(CONFIG_COMPAT)
->     .compat_ioctl = VHXMountIOCTL,  // no special version needed
-> #endif
-> };
->
-> #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0))
->
-> static struct blk_mq_ops _mq_ops = {
->     .queue_rq = VHXMountRequest,
-> };
->
-> #endif
->
-> //-------------------------------------------------------------------------
-> // Purpose: Uninitialize device
-> //
-> // Input:   vhxdev  - [io] device to uninitalize
-> //
-> // Output:  na
-> //
-> // Notes:   This removes a mounted drive
-> //
-> static void VHXUnintializeDevice(sVHXMountDev *vhxdev)
-> {
->   //printk(KERN_DEBUG "VHXUninitializeDevice(%p)", vhxdev);
->
->   int devindex=-1;
->
->   // check if gen disk setup
->   if (vhxdev->GenDisk) {
->     devindex=vhxdev->GenDisk->first_minor / VHXMOUNT_MINOR_CNT;
->     //printk(KERN_DEBUG "VHXUninitializeDevice: gendisk");
->
->     // stop new requests from arriving (okay to call del_gendisk
-> without add_gendisk)
->     del_gendisk(vhxdev->GenDisk);
->     #if (LINUX_VERSION_CODE > KERNEL_VERSION(5,10,0))
->     blk_cleanup_disk(vhxdev->GenDisk);
->     #else
->     put_disk(vhxdev->GenDisk);
->     #endif
->     vhxdev->GenDisk=NULL;
->   }
->
->   #if (LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0))
->   // check if queue setup
->   if (vhxdev->Queue) {
->     //printk(KERN_DEBUG "VHXUninitializeDevice: queue");
->     blk_cleanup_queue(vhxdev->Queue);
->     vhxdev->Queue=NULL;
->   }
->   #endif
->
->   #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0))
->   // free blk_mq tag item
->   if (vhxdev->tag_set.tags) {
->     blk_mq_free_tag_set(&vhxdev->tag_set);
->   }
->   #endif
->
->   //printk(KERN_DEBUG "VHXUninitializeDevice: object");
->   // close down the object if it exists
->   VHXMountObjDelete(vhxdev->VHXMountObj);
->   vhxdev->VHXMountObj=NULL;
->
->   if (devindex>=0) {
->       printk(KERN_INFO "VHXMount %i: driver uninstalled.\n", devindex);
->   }
-> }
->
-> //-------------------------------------------------------------------------
-> // Purpose: Sets up the device being mounted per the arguments
-> //
-> // Input:   vhxdev         - [o] device to initialize
-> //          devindex       - [i] device index being initialized
-> //          ioctlarg       - [i] arguments for mounting vhx file
-> //
-> // Output:  negative error code or zero if success
-> //
-> // Notes:   ioctl is used to cause mounting of image file
-> //
-> static int VHXMountSetupDevice(sVHXMountDev *vhxdev, unsigned int
-> devindex, const sVHXMountIOCTLArg *ioctlarg)
-> {
->     // ensure structure is zeroed
->     memset(vhxdev, 0, sizeof(*vhxdev));
->
->     // check if master device or actual mount
->     if (ioctlarg!=NULL) {
->         // N/A - REMOVED
->     }
->
->     // init spinlock for request queue
->     spin_lock_init(&vhxdev->Lock);
->     // init mutext
->     mutex_init(&vhxdev->IOCTLLock);
->
-> #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0))
->
->     memset(&vhxdev->tag_set, 0, sizeof(vhxdev->tag_set));
->     vhxdev->tag_set.ops = &_mq_ops;
->     vhxdev->tag_set.nr_hw_queues = 1;
->     vhxdev->tag_set.nr_maps = 1;
->     vhxdev->tag_set.queue_depth = 128;
->     vhxdev->tag_set.numa_node = NUMA_NO_NODE;
->     vhxdev->tag_set.flags = BLK_MQ_F_SHOULD_MERGE /*| BLK_MQ_F_SG_MERGE*/;
->     vhxdev->tag_set.driver_data = vhxdev;
->
->     {
->         int ret = blk_mq_alloc_tag_set(&vhxdev->tag_set);
->         if (ret) {
->             printk (KERN_WARNING "VHXMount: unable to allocate and
-> initialize tag set. Error %i\n", ret);
->             VHXUnintializeDevice(vhxdev);
->             return ret;
->         }
->     }
->
->     vhxdev->GenDisk = blk_mq_alloc_disk(&vhxdev->tag_set, vhxdev);
->
->     if (IS_ERR(vhxdev->GenDisk)) {
->         int err=PTR_ERR(vhxdev->GenDisk);
->         printk(KERN_ERR "VHXMount %i: blk_mq_alloc_disk failure
-> (%i).\n", devindex, err);
->         VHXUnintializeDevice(vhxdev);
->         return err;
->     }
-> #else
->     vhxdev->tag_set.cmd_size = 0;
->     vhxdev->tag_set.driver_data = vhxdev;
->
->     vhxdev->Queue = blk_mq_init_sq_queue (&vhxdev->tag_set, &_mq_ops,
-> 128, BLK_MQ_F_SHOULD_MERGE /*| BLK_MQ_F_SG_MERGE*/);
->     if (IS_ERR (vhxdev->Queue)) {
->         int ret = PTR_ERR (vhxdev->Queue);
->         printk (KERN_WARNING "VHXMount: unable to allocate and
-> initialize tag set. Error %i\n", ret);
->         vhxdev->Queue=NULL;
->         VHXUnintializeDevice(vhxdev);
->         return ret;
->     }
->     vhxdev->Queue->queuedata = vhxdev;
->
->     // setup the gendisk structure
->     vhxdev->GenDisk = alloc_disk(VHXMOUNT_MINOR_CNT);
->     if (!vhxdev->GenDisk) {
->         printk(KERN_ERR "VHXMount %i: alloc_disk failure.\n", devindex);
->         VHXUnintializeDevice(vhxdev);
->         return -ENOMEM;
->     }
->
->      // setup the gendisk structure
->     vhxdev->GenDisk->queue = vhxdev->Queue;
-> #endif
->
->     vhxdev->GenDisk->major = VHXMountMajor;
->     vhxdev->GenDisk->first_minor = VHXMOUNT_MINOR_CNT*devindex;
->     vhxdev->GenDisk->flags |= GENHD_FL_NO_PART_SCAN;
-> //GENHD_FL_SUPPRESS_PARTITION_INFO; // use to stop from being added to
-> /proc/partitions
->     vhxdev->GenDisk->fops = &VHXMountBlockOps;
->     vhxdev->GenDisk->private_data = vhxdev;
->     set_disk_ro(vhxdev->GenDisk, 1);
->
->     // add items for non master device
->     if (vhxdev->VHXMountObj) {
->         snprintf(vhxdev->GenDisk->disk_name,
-> BUFFERmaxElements(vhxdev->GenDisk->disk_name), VHXMountDevNameFmt,
-> devindex+'a'-1);
->         set_capacity(vhxdev->GenDisk,
-> VHXMountObjGetTotalSectors(vhxdev->VHXMountObj)*(VHXMountObjGetBytesPerSector(vhxdev->VHXMountObj)/KERNEL_SECTOR_SIZE));
->         //printk(KERN_DEBUG "Set capacity to %llu sectors\n",
-> (uint64_t) get_capacity(vhxdev->GenDisk));
->         // setup worker thread
->     }
->     else {
->         // master device
->         strncpy(vhxdev->GenDisk->disk_name, VHXMountDevName,
-> SZBUFFERmaxStrLen(vhxdev->GenDisk->disk_name));
->     }
->
->     // do this last as several functions can be called prior to this returning
->     int err=add_disk(vhxdev->GenDisk);
->
->     /*    #######################################################################
->         #######################################################################
->         This is where there is a dump in the message log for 5.15.60 showing:
->
->         Aug 20 00:06:19 (none) user.warn kernel: ------------[ cut
-> here ]------------
->         Aug 20 00:06:19 (none) user.warn kernel: WARNING: CPU: 0 PID:
-> 891 at block/genhd.c:416 device_add_disk+0x37/0x336
->         Aug 20 00:06:19 (none) user.warn kernel: Modules linked in:
-> vhdxmount(PO+) hid_generic sg usbhid usb_storage hid sr_mod sd_mod
-> cdrom nvme i2c_i801 nvme_core i2c_smbus evdev ahci libahci i2c_core
-> tulip pcspkr xhci_pci xhci_hcd ehci_pci t10_pi ehci_hcd thermal video
-> butt
->         Aug 20 00:06:19 (none) user.warn kernel: CPU: 0 PID: 891 Comm:
-> insmod Tainted: P        W  O      5.15.60-amd64-custom #1
->         Aug 20 00:06:19 (none) user.warn kernel: Hardware name:
-> /DH77KC, BIOS KCH7710H.86A.0111.2018.0329.1405 03/29/2018
->         Aug 20 00:06:19 (none) user.warn kernel: RIP:
-> 0010:device_add_disk+0x37/0x336
->         Aug 20 00:06:19 (none) user.warn kernel: Code: f6 41 55 41 54
-> 53 51 48 8b 7e 50 48 8b 5e 40 48 89 55 d0 e8 26 fe fe ff 41 83 3e 00
-> 4c 8d 6b 40 74 46 41 8b 46 08 85 c0 75 04 <0f> 0b eb 43 3d 00 01 00 00
-> 7e 19 be 00 01 00 00 48 c7 c7 58 2b de
->         Aug 20 00:06:19 (none) user.warn kernel: RSP:
-> 0018:ffffc900000cfc38 EFLAGS: 00010246
->         Aug 20 00:06:19 (none) user.warn kernel: RAX: 0000000000000000
-> RBX: ffff88803dabd2c0 RCX: ffff88800df96dc0
->         Aug 20 00:06:19 (none) user.warn kernel: RDX: 0000000000000000
-> RSI: 0000000000000286 RDI: ffff88800df96dd0
->         Aug 20 00:06:19 (none) user.warn kernel: RBP: ffffc900000cfc68
-> R08: 0000000000000000 R09: ffffc900000cfb68
->         Aug 20 00:06:19 (none) user.warn kernel: R10: 0000000000000286
-> R11: 000000000000026c R12: ffff88803d6fc000
->         Aug 20 00:06:19 (none) user.warn kernel: R13: ffff88803dabd300
-> R14: ffff88800df02000 R15: 0000000000000000
->         Aug 20 00:06:19 (none) user.warn kernel: FS:
-> 0000000000000000(0000) GS:ffff888100200000(0063)
-> knlGS:00000000f7f45a80
->         Aug 20 00:06:19 (none) user.warn kernel: CS:  0010 DS: 002b
-> ES: 002b CR0: 0000000080050033
->         Aug 20 00:06:19 (none) user.warn kernel: CR2: 00000000f7e32461
-> CR3: 000000003ce86003 CR4: 00000000000606f0
->         Aug 20 00:06:19 (none) user.warn kernel: Call Trace:
->         Aug 20 00:06:19 (none) user.warn kernel:  <TASK>
->         Aug 20 00:06:19 (none) user.warn kernel:
-> VHXMountSetupDevice+0x1da/0x20e [vhdxmount]
->         Aug 20 00:06:19 (none) user.warn kernel:  ? 0xffffffffa00f9000
->         Aug 20 00:06:19 (none) user.warn kernel:
-> VHXMountInitC+0x117/0x1000 [vhdxmount]
->         Aug 20 00:06:19 (none) user.warn kernel:  do_one_initcall+0x64/0x144
->         Aug 20 00:06:19 (none) user.warn kernel:  ? kmem_cache_alloc+0x73/0x82
->         Aug 20 00:06:19 (none) user.warn kernel:  do_init_module+0x48/0x1e3
->         Aug 20 00:06:19 (none) user.warn kernel:  load_module+0x1c96/0x224a
->         Aug 20 00:06:19 (none) user.warn kernel:
-> __do_sys_finit_module+0x9a/0xab
->         Aug 20 00:06:19 (none) user.warn kernel:
-> __ia32_sys_finit_module+0x14/0x16
->         Aug 20 00:06:19 (none) user.warn kernel:  __do_fast_syscall_32+0xa4/0xcb
->         Aug 20 00:06:19 (none) user.warn kernel:  do_fast_syscall_32+0x34/0x72
->         Aug 20 00:06:19 (none) user.warn kernel:  do_SYSENTER_32+0x1f/0x21
->         Aug 20 00:06:19 (none) user.warn kernel:
-> entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
->         Aug 20 00:06:19 (none) user.warn kernel: RIP: 0023:0xf7f04549
->         Aug 20 00:06:19 (none) user.warn kernel: Code: 03 74 c0 01 10
-> 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01
-> 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d
-> b4 26 00 00 00 00 8d b4 26 00 00 00 00
->         Aug 20 00:06:19 (none) user.warn kernel: RSP:
-> 002b:00000000ffefd3dc EFLAGS: 00000296 ORIG_RAX: 000000000000015e
->         Aug 20 00:06:19 (none) user.warn kernel: RAX: ffffffffffffffda
-> RBX: 0000000000000003 RCX: 00000000f7f2446c
->         Aug 20 00:06:19 (none) user.warn kernel: RDX: 0000000000000000
-> RSI: 0000000057f25220 RDI: 0000000057f242a0
->         Aug 20 00:06:19 (none) user.warn kernel: RBP: 00000000f7f227bc
-> R08: 0000000000000000 R09: 0000000000000000
->         Aug 20 00:06:19 (none) user.warn kernel: R10: 0000000000000000
-> R11: 0000000000000000 R12: 0000000000000000
->         Aug 20 00:06:19 (none) user.warn kernel: R13: 0000000000000000
-> R14: 0000000000000000 R15: 0000000000000000
->         Aug 20 00:06:19 (none) user.warn kernel:  </TASK>
->         Aug 20 00:06:19 (none) user.warn kernel: ---[ end trace
-> e02aadea0ffa66da ]---
->         Aug 20 00:06:19 (none) user.err kernel: VHXMount 0: failed to
-> add disk (-22).
->         Aug 20 00:06:19 (none) user.info kernel: VHXMount 0: driver uninstalled.
->
->         #######################################################################
->         #######################################################################
-> */
->
->     if (err!=0) {
->         printk(KERN_ERR "VHXMount %i: failed to add disk (%i).\n",
-> devindex, err);
->         VHXUnintializeDevice(vhxdev);
->         return err;
->     }
->
->     // disk now exists
->     printk(KERN_INFO "VHXMount %i: driver installed.\n", devindex);
->     return 0;
-> }
->
->
->
-> //-------------------------------------------------------------------------
-> // Purpose: Required registration and init for linux driver
-> //
-> // Input:   na
-> //
-> // Output:
-> //
-> // Notes:
-> //
-> static int __init VHXMountInitC(void)
-> {
->     int result;
->
->     // assign parameters over to values so they don't change during run.
->     VHXMountMajor=MajorDevNum;
->     VHXMountNumDevices=NumDevices;
->
->     // validate num devices values
->     if (VHXMountNumDevices<NUMdevicesMin) {
->         VHXMountNumDevices=NUMdevicesMin;
->     }
->     else if (VHXMountNumDevices>NUMdevicesMax) {
->         VHXMountNumDevices=NUMdevicesMax;
->     }
->
->     // assign back to variables for output to /sys/module/vhxmount/parameters
->     NumDevices=VHXMountNumDevices;
->
->     // register block device
->     //  if VHXMountMajor!=0 then returns 0 on success and negative on error
->     //  if VHXMountMajor==0 then returns the new major num 1-255 or
-> negative on error
->     result=register_blkdev(VHXMountMajor, VHXMountDevName);
->     if (result<=0) {
->         printk(KERN_ERR "VHXMount: register_blkdev failure.\n");
->         return -EBUSY;
->     }
->
->     // assign return device num if major was zero
->     if (VHXMountMajor==0) {
->         VHXMountMajor=result;
->         MajorDevNum=result;
->     }
->
->     // allocate array for preallocated devices
->     if ((VHXMountDevArr=(sVHXMountDev*)kmalloc(VHXMountNumDevices*sizeof(sVHXMountDev),
-> GFP_KERNEL))==NULL) {
->         unregister_blkdev(VHXMountMajor, VHXMountDevName);
->         return -ENOMEM;
->     }
->     // zero memory error of array
->     memset(VHXMountDevArr, 0, VHXMountNumDevices*sizeof(sVHXMountDev));
->
->     // setup master device
->     VHXMountSetupDevice(VHXMountDevArr, 0, NULL);
->
->     return 0;
-> }
->
-> //-------------------------------------------------------------------------
-> // Purpose: Remove linux driver
-> //
-> // Input:   na
-> //
-> // Output:
-> //
-> // Notes:
-> //
-> static void __exit VHXMountRemoveC(void)
-> {
->   // handle each device
->   for (unsigned int i=0;i<VHXMountNumDevices;i++) {
->     // uninitialize device
->     VHXUnintializeDevice(VHXMountDevArr+i);
->   }
->   // handle cleanup of block device
->     unregister_blkdev(VHXMountMajor, VHXMountDevName);
->   // clean up array
->   kfree(VHXMountDevArr);
->   VHXMountDevArr=NULL;
-> }
->
-> //----------------------
-> // Driver Information
-> //----------------------
->
-> module_init(VHXMountInitC);
-> module_exit(VHXMountRemoveC);
->
-> MODULE_LICENSE("Proprietary");
-> MODULE_AUTHOR("Acme, Inc.");
-> MODULE_DESCRIPTION("VHXMount Driver");
-> MODULE_ALIAS_BLOCKDEV_MAJOR(MajorDevNum);
+SGksDQoNCkxlIDEzLzA1LzIwMjIgw6AgMTM6MzksIE1hc2FoaXJvIFlhbWFkYSBhIMOpY3JpdMKg
+Og0KPiBpbmNsdWRlL3tsaW51eCxhc20tZ2VuZXJpY30vZXhwb3J0LmggZGVmaW5lcyBhIHdlYWsg
+c3ltYm9sLCBfX2NyY18qDQo+IGFzIGEgcGxhY2Vob2xkZXIuDQo+IA0KPiBHZW5rc3ltcyB3cml0
+ZXMgdGhlIHZlcnNpb24gQ1JDcyBpbnRvIHRoZSBsaW5rZXIgc2NyaXB0LCB3aGljaCB3aWxsIGJl
+DQo+IHVzZWQgZm9yIGZpbGxpbmcgdGhlIF9fY3JjXyogc3ltYm9scy4gVGhlIGxpbmtlciBzY3Jp
+cHQgZm9ybWF0IGRlcGVuZHMNCj4gb24gQ09ORklHX01PRFVMRV9SRUxfQ1JDUy4gSWYgaXQgaXMg
+ZW5hYmxlZCwgX19jcmNfKiBob2xkcyB0aGUgb2Zmc2V0DQo+IHRvIHRoZSByZWZlcmVuY2Ugb2Yg
+Q1JDLg0KPiANCj4gSXQgaXMgdGltZSB0byBnZXQgcmlkIG9mIHRoaXMgY29tcGxleGl0eS4NCj4g
+DQo+IE5vdyB0aGF0IG1vZHBvc3QgcGFyc2VzIHRleHQgZmlsZXMgKC4qLmNtZCkgdG8gY29sbGVj
+dCBhbGwgdGhlIENSQ3MsDQo+IGl0IGNhbiBnZW5lcmF0ZSBDIGNvZGUgdGhhdCB3aWxsIGJlIGxp
+bmtlZCB0byB0aGUgdm1saW51eCBvciBtb2R1bGVzLg0KPiANCj4gR2VuZXJhdGUgYSBuZXcgQyBm
+aWxlLCAudm1saW51eC5leHBvcnQuYywgd2hpY2ggY29udGFpbnMgdGhlIENSQ3Mgb2YNCj4gc3lt
+Ym9scyBleHBvcnRlZCBieSB2bWxpbnV4LiBJdCBpcyBjb21waWxlZCBhbmQgbGlua2VkIHRvIHZt
+bGludXggaW4NCj4gc2NyaXB0cy9saW5rLXZtbGludXguc2guDQo+IA0KPiBQdXQgdGhlIENSQ3Mg
+b2Ygc3ltYm9scyBleHBvcnRlZCBieSBtb2R1bGVzIGludG8gdGhlIGV4aXN0aW5nICoubW9kLmMN
+Cj4gZmlsZXMuIE5vIGFkZGl0aW9uYWwgYnVpbGQgc3RlcCBpcyBuZWVkZWQgZm9yIG1vZHVsZXMu
+IEFzIGJlZm9yZSwNCj4gKi5tb2QuYyBhcmUgY29tcGlsZWQgYW5kIGxpbmtlZCB0byAqLmtvIGlu
+IHNjcmlwdHMvTWFrZWZpbGUubW9kZmluYWwuDQo+IA0KPiBObyBsaW5rZXIgbWFnaWMgaXMgdXNl
+ZCBoZXJlLiBUaGUgbmV3IEMgaW1wbGVtZW50YXRpb24gd29ya3MgaW4gdGhlDQo+IHNhbWUgd2F5
+LCB3aGV0aGVyIENPTkZJR19SRUxPQ0FUQUJMRSBpcyBlbmFibGVkIG9yIG5vdC4NCj4gQ09ORklH
+X01PRFVMRV9SRUxfQ1JDUyBpcyBubyBsb25nZXIgbmVlZGVkLg0KPiANCj4gUHJldmlvdXNseSwg
+S2J1aWxkIGludm9rZWQgYWRkaXRpb25hbCAkKExEKSB0byB1cGRhdGUgdGhlIENSQ3MgaW4NCj4g
+b2JqZWN0cywgYnV0IHRoaXMgc3RlcCBpcyB1bm5lZWRlZCB0b28uDQo+IA0KPiBTaWduZWQtb2Zm
+LWJ5OiBNYXNhaGlybyBZYW1hZGEgPG1hc2FoaXJveUBrZXJuZWwub3JnPg0KPiBUZXN0ZWQtYnk6
+IE5hdGhhbiBDaGFuY2VsbG9yIDxuYXRoYW5Aa2VybmVsLm9yZz4NCj4gVGVzdGVkLWJ5OiBOaWNv
+bGFzIFNjaGllciA8bmljb2xhc0BmamFzbGUuZXU+DQo+IFJldmlld2VkLWJ5OiBOaWNvbGFzIFNj
+aGllciA8bmljb2xhc0BmamFzbGUuZXU+DQoNClByb2JsZW0gd2l0aCB2Ni4wLXJjMQ0KUHJvYmxl
+bSB3aXRoIHY1LjE5DQpObyBwcm9ibGVtIHdpdGggdjUuMTgNCg0KQmlzZWN0ZWQgdG8gN2I0NTM3
+MTk5YTRhICgia2J1aWxkOiBsaW5rIHN5bWJvbCBDUkNzIGF0IGZpbmFsIGxpbmssIA0KcmVtb3Zp
+bmcgQ09ORklHX01PRFVMRV9SRUxfQ1JDUyIpDQoNClRoZSBhYm92ZSBwYXRjaCBsZWFkcyB0byB0
+aGUgZm9sbG93aW5nIHByb2JsZW0gYnVpbGRpbmcgDQptcGM4NXh4X2RlZmNvbmZpZyArIENPTkZJ
+R19SRUxPQ0FUQUJMRQ0KDQogICBMRCAgICAgIHZtbGludXgNCiAgIFNZU01BUCAgU3lzdGVtLm1h
+cA0KICAgU09SVFRBQiB2bWxpbnV4DQogICBDSEtSRUwgIHZtbGludXgNCldBUk5JTkc6IDQ1MSBi
+YWQgcmVsb2NhdGlvbnMNCmMwYjBmMjZkIFJfUFBDX1VBRERSMzIgICAgIC5oZWFkLnRleHQtMHgz
+ZmY5ZjJiYw0KYzBiMGYyNzEgUl9QUENfVUFERFIzMiAgICAgLmhlYWQudGV4dC0weDNmZmFjMzAw
+DQpjMGIwZjI3NSBSX1BQQ19VQUREUjMyICAgICAuaGVhZC50ZXh0LTB4M2ZmYjBiZGMNCmMwYjBm
+Mjc5IFJfUFBDX1VBRERSMzIgICAgIC5oZWFkLnRleHQtMHgzZmUxZTA4MA0KYzBiMGYyN2QgUl9Q
+UENfVUFERFIzMiAgICAgLmhlYWQudGV4dC0weDNmZTFkZjRjDQpjMGIwZjI4MSBSX1BQQ19VQURE
+UjMyICAgICAuaGVhZC50ZXh0LTB4M2ZlMjE1MTQNCmMwYjBmMjg1IFJfUFBDX1VBRERSMzIgICAg
+IC5oZWFkLnRleHQtMHgzZmUyMTFjMA0KYzBiMGYyODkgUl9QUENfVUFERFIzMiAgICAgLmhlYWQu
+dGV4dC0weDNmZmFiZGEwDQpjMGIwZjI4ZCBSX1BQQ19VQUREUjMyICAgICAuaGVhZC50ZXh0LTB4
+M2ZlMjEyNTgNCmMwYjBmMjkxIFJfUFBDX1VBRERSMzIgICAgIC5oZWFkLnRleHQtMHgzZmUwNzRk
+MA0KYzBiMGYyOTUgUl9QUENfVUFERFIzMiAgICAgLmhlYWQudGV4dC0weDNmZTA3YWQ0DQpjMGIw
+ZjI5OSBSX1BQQ19VQUREUjMyICAgICAuaGVhZC50ZXh0LTB4M2ZlMTM0NzANCmMwYjBmMjlkIFJf
+UFBDX1VBRERSMzIgICAgIC5oZWFkLnRleHQtMHgzZmUyMjcwMA0KYzBiMGYyYTEgUl9QUENfVUFE
+RFIzMiAgICAgLmhlYWQudGV4dC0weDNmZjRiOGUwDQpjMGIwZjJhNSBSX1BQQ19VQUREUjMyICAg
+ICAuaGVhZC50ZXh0LTB4M2ZlMDgzMjANCmMwYjBmMmE5IFJfUFBDX1VBRERSMzIgICAgIC5oZWFk
+LnRleHQtMHgzZmUyMjBkYw0KYzBiMGYyYWQgUl9QUENfVUFERFIzMiAgICAgLmhlYWQudGV4dC0w
+eDNmZTIxZGEwDQpjMGIwZjJiMSBSX1BQQ19VQUREUjMyICAgICAuaGVhZC50ZXh0LTB4M2ZmODlk
+YzANCmMwYjBmMmI1IFJfUFBDX1VBRERSMzIgICAgIC5oZWFkLnRleHQtMHgzZmUxNjUyNA0KYzBi
+MGYyYjkgUl9QUENfVUFERFIzMiAgICAgLmhlYWQudGV4dC0weDNmZTFlZjc0DQpjMGIwZjJiZCBS
+X1BQQ19VQUREUjMyICAgICAuaGVhZC50ZXh0LTB4M2ZmOThiODQNCmMwYjBmMmMxIFJfUFBDX1VB
+RERSMzIgICAgIC5oZWFkLnRleHQtMHgzZmRlZjlhMA0KYzBiMGYyYzUgUl9QUENfVUFERFIzMiAg
+ICAgLmhlYWQudGV4dC0weDNmZGYyMWFjDQpjMGIwZjJjOSBSX1BQQ19VQUREUjMyICAgICAuaGVh
+ZC50ZXh0LTB4M2ZmOTkzYzQNCi4uLg0KYzBiMGY5NjkgUl9QUENfVUFERFIzMiAgICAgLmhlYWQu
+dGV4dC0weDNmZjg5ZGMwDQpjMGIwZjk2ZCBSX1BQQ19VQUREUjMyICAgICAuaGVhZC50ZXh0LTB4
+M2ZlOWFkNDANCmMwYjBmOTcxIFJfUFBDX1VBRERSMzIgICAgIC5oZWFkLnRleHQtMHgzZmYyZWIw
+MA0KYzBiMGY5NzUgUl9QUENfVUFERFIzMiAgICAgLmhlYWQudGV4dC0weDNmZjg5ZGMwDQoNCkFu
+ZCBib290IGZhaWxzOg0KDQpSdW4gL2luaXQgYXMgaW5pdCBwcm9jZXNzDQprZXJuZWwgdHJpZWQg
+dG8gZXhlY3V0ZSB1c2VyIHBhZ2UgKDApIC0gZXhwbG9pdCBhdHRlbXB0PyAodWlkOiAwKQ0KQlVH
+OiBVbmFibGUgdG8gaGFuZGxlIGtlcm5lbCBpbnN0cnVjdGlvbiBmZXRjaCAoTlVMTCBwb2ludGVy
+PykNCkZhdWx0aW5nIGluc3RydWN0aW9uIGFkZHJlc3M6IDB4MDAwMDAwMDANCk9vcHM6IEtlcm5l
+bCBhY2Nlc3Mgb2YgYmFkIGFyZWEsIHNpZzogMTEgWyMxXQ0KQkUgUEFHRV9TSVpFPTRLIE1QQzg1
+NDQgRFMNCk1vZHVsZXMgbGlua2VkIGluOg0KQ1BVOiAwIFBJRDogMSBDb21tOiBpbml0IE5vdCB0
+YWludGVkIDUuMTguMC1yYzEtMDAwNTQtZzdiNDUzNzE5OWE0YSAjMTUyMw0KTklQOiAgMDAwMDAw
+MDAgTFI6IGMwMDE1MGU0IENUUjogMDAwMDAwMDANClJFR1M6IGMzMDkxZTEwIFRSQVA6IDA0MDAg
+ICBOb3QgdGFpbnRlZCAgKDUuMTguMC1yYzEtMDAwNTQtZzdiNDUzNzE5OWE0YSkNCk1TUjogIDAw
+MDA5MDAwIDxFRSxNRT4gIENSOiA4ODAwMDQyMiAgWEVSOiAyMDAwMDAwMA0KDQpHUFIwMDogMDAw
+MDQwMDAgYzMwOTFmMDAgYzMwYzgwMDAgMDAwMDAwMDAgMDAwMDAwMTMgYjdiYjlmNGMgYjdiZDhm
+NjAgDQpiZmVlNjY1MA0KR1BSMDg6IDAwMDAwMDU0IDAwMDAwMDAwIGMwYjBmMjZkIDAwMDAwMDAw
+IGMxM2IwMDAwIDAwMDAwMDAwIGJmZWU2NjY4IA0KMDAwMDAwMDANCkdQUjE2OiA4NGUwODAwMCAw
+MDAwMDAwMCAwODAwMDAwMCAwMDAwMDA2NCAwMDAwMDAwMCAwMDEwMjAwMCAwMDAwMDAwMSANCjAw
+MDAwMDAxDQpHUFIyNDogMDAwMDAwMDEgMDAwMDAwMDEgYjdiOWM3ZDAgMTAwMDAwMzQgMDAwMDAw
+MDkgYjdiZDhmMzggYjdiZDk4NTQgDQpiN2JkODY4OA0KTklQIFswMDAwMDAwMF0gMHgwDQpMUiBb
+YzAwMTUwZTRdIHJldF9mcm9tX3N5c2NhbGwrMHgwLzB4MjgNCkNhbGwgVHJhY2U6DQpbYzMwOTFm
+MDBdIFtjMDAwMGFmMF0gSW5zdHJ1Y3Rpb25TdG9yYWdlKzB4MTUwLzB4MTYwICh1bnJlbGlhYmxl
+KQ0KLS0tIGludGVycnVwdDogYzAwIGF0IDB4YjdiYjI4ZTgNCk5JUDogIGI3YmIyOGU4IExSOiBi
+N2JiMTM4NCBDVFI6IGI3YmIxMjE4DQpSRUdTOiBjMzA5MWYxMCBUUkFQOiAwYzAwICAgTm90IHRh
+aW50ZWQgICg1LjE4LjAtcmMxLTAwMDU0LWc3YjQ1MzcxOTlhNGEpDQpNU1I6ICAwMDAyZDAwMCA8
+Q0UsRUUsUFIsTUU+ICBDUjogMjgwMDA0MjIgIFhFUjogMjAwMDAwMDANCg0KR1BSMDA6IDAwMDAw
+MDJkIGJmZWU2MWYwIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDEzIGI3YmI5ZjRjIGI3YmQ4ZjYw
+IA0KYmZlZTY2NTANCkdQUjA4OiAwMDAwMDA1NCAwMDAwMDAyMCBiZmVlNjY0OCAwMDAwMDAwMCAw
+MDAwMDAwMSAwMDAwMDAwMCBiZmVlNjY2OCANCjAwMDAwMDAwDQpHUFIxNjogODRlMDgwMDAgMDAw
+MDAwMDAgMDgwMDAwMDAgMDAwMDAwNjQgMDAwMDAwMDAgMDAxMDIwMDAgMDAwMDAwMDEgDQowMDAw
+MDAwMQ0KR1BSMjQ6IDAwMDAwMDAxIDAwMDAwMDAxIGI3YjljN2QwIDEwMDAwMDM0IDAwMDAwMDA5
+IGI3YmQ4ZjM4IGI3YmQ5ODU0IA0KYjdiZDg2ODgNCk5JUCBbYjdiYjI4ZThdIDB4YjdiYjI4ZTgN
+CkxSIFtiN2JiMTM4NF0gMHhiN2JiMTM4NA0KLS0tIGludGVycnVwdDogYzAwDQpJbnN0cnVjdGlv
+biBkdW1wOg0KWFhYWFhYWFggWFhYWFhYWFggWFhYWFhYWFggWFhYWFhYWFggWFhYWFhYWFggWFhY
+WFhYWFggWFhYWFhYWFggWFhYWFhYWFgNClhYWFhYWFhYIFhYWFhYWFhYIFhYWFhYWFhYIFhYWFhY
+WFhYIFhYWFhYWFhYIFhYWFhYWFhYIFhYWFhYWFhYIFhYWFhYWFhYDQotLS1bIGVuZCB0cmFjZSAw
+MDAwMDAwMDAwMDAwMDAwIF0tLS0NCg0KS2VybmVsIHBhbmljIC0gbm90IHN5bmNpbmc6IEF0dGVt
+cHRlZCB0byBraWxsIGluaXQhIGV4aXRjb2RlPTB4MDAwMDAwMGINCg0KDQoNCkNocmlzdG9waGU=
