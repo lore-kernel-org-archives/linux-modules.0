@@ -2,163 +2,140 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FFCCC32772
-	for <linux-modules@archiver.kernel.org>; Tue, 23 Aug 2022 20:12:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 252DEECAAD4
+	for <linux-modules@archiver.kernel.org>; Mon, 29 Aug 2022 07:14:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiHWUMY (ORCPT
+        id S229540AbiH2HOi (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 23 Aug 2022 16:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        Mon, 29 Aug 2022 03:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234120AbiHWUMC (ORCPT
+        with ESMTP id S229463AbiH2HOh (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 23 Aug 2022 16:12:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A217435C
-        for <linux-modules@vger.kernel.org>; Tue, 23 Aug 2022 12:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661283151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=H+uuhl1NN5QAxVTi9BhvP08GGdmaB2im78PYqW4VJEw=;
-        b=TEIZ63yiSTRQqzSQnr2HhogApCnUQegefG+g4g3WDz9g/OeYtomw/sSudU3/skeQbMw68w
-        6UJkziwNi4IrfgF3A+T6C/tbSNcvdxjaS6BiIPi8Q0zXac9UGO2PUCUkb7ym06ljYQz1vr
-        n1M5tkSmIrRZVH03TvVzynPo60UWQh4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-646-9shGXT8qMb6sqpqlRu2CZw-1; Tue, 23 Aug 2022 15:32:29 -0400
-X-MC-Unique: 9shGXT8qMb6sqpqlRu2CZw-1
-Received: by mail-wm1-f69.google.com with SMTP id f18-20020a05600c4e9200b003a5f81299caso8367853wmq.7
-        for <linux-modules@vger.kernel.org>; Tue, 23 Aug 2022 12:32:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=H+uuhl1NN5QAxVTi9BhvP08GGdmaB2im78PYqW4VJEw=;
-        b=uK2xPj3esS2FQCikpA1WM4iGgOcfnnY9kdH3U6nE+KwqNoKjJgdNt4EIwdh/dP5hTr
-         +fdb/3KKvCwAi7dcndIVws+nk4vkOIsQ/j4Zi6u1+cCOOgvohbYaX/s8EVcUsYY1fj/5
-         YBum6ICHt5oWa417kfdzvZNTUwN41ftMVDbJpje4IF5BQrhfLy+RzE6CvumuiWOlFPbY
-         UAGKkZRhvpCUZ0K8PN8S3/YHtqPTABtt/7Yl1ea/iK4RcFzXZTs0XkdaGbW5k/QR4uVC
-         zI+pCcfv3udoZhAlYEs5Ao44qL66JGYd3has6emzehxx5/ys5wdNEcRK49oteGy//B6E
-         RfGg==
-X-Gm-Message-State: ACgBeo1N61ajqSdUI/bj74A75AWaHnRwy85HpV2gmQOff84pQ7oJeaQ4
-        0ygZtxfAUqieh6yhVXckhNek041ce9ZgZKXb+fudxOzZeJMFtieN/Zs9oX5Y1FL+7oV2IVaEyq+
-        UWMPxZv+23NIk4UEg7aHekayX
-X-Received: by 2002:a05:600c:3514:b0:3a5:dc71:d9c4 with SMTP id h20-20020a05600c351400b003a5dc71d9c4mr3164887wmq.42.1661283147975;
-        Tue, 23 Aug 2022 12:32:27 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6vhXh7wc08Je7KJIA0KF0gMVDREzyVEI+mbql4xGLu+MnUDvZwRlIZchn/+sMZztXegMEpMg==
-X-Received: by 2002:a05:600c:3514:b0:3a5:dc71:d9c4 with SMTP id h20-20020a05600c351400b003a5dc71d9c4mr3164879wmq.42.1661283147767;
-        Tue, 23 Aug 2022 12:32:27 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05600c1d9000b003a5fcae64d4sm19528005wms.29.2022.08.23.12.32.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 12:32:26 -0700 (PDT)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org
+        Mon, 29 Aug 2022 03:14:37 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2044.outbound.protection.outlook.com [40.107.20.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF67D4DB04;
+        Mon, 29 Aug 2022 00:14:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HY0+nQlUTq7GTRlM9UwkxzDP/KgfXV1zusjHNtBaumIuiqSGnEp7lH9sXd8bFq4A50xIAojW1K+ECDfObskTc5T0X0KqYBe+asqMaTKaw5XNYiU+T/xlA5KHdqfTpN94E6FjNY1NLmzXD1dHhbYuksqrG/IFAtiHuwBnSDKK8uHlURtm+e1OMkO3lrjvzOfa3Wo4rOjsiBnUBkYJeh215mzJTyRzTZ1knddqpYD/xGkIAzfjW8B4Mpe7YN08OnybFfu9/gNIvcaog3s1paMzqdUwbwjFgkBcZAEBAWyHjAWirBbJOvlpkzvQ7RQ5e3LyV6X+yTH33RkwiTQJHRcrrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BbvYsuSsANPoxPGBVV/Xw6M5alWpbfSyzZ0YQRo/d14=;
+ b=iUNb/sUev4mYx+SEUhIuDxxRf2Zuo1Cfz3Z36F8SjNbFF4IsUU4DKZLqpLdciTN6lrKTg/cFNEg9EWVfCnRizlHXk1oiFQg4WTFaAakZ8FN4FkHD73FqQCaeRTWiA7h65NW6PoRAR8tq481M7rOfSemdWbl6GqCGGZ2D8b8Gmj3BY3G6L2psGOLmWTgSSU6jlAQh967Hp+huyAp9Ves+p1IPiwR+CNyVpNHnmrt2cXOi4zSs0xJPKClJj53HwaeO7DeFaL/qSEH66X2f2zpjKYX1cXkirdtKECiTPSPdwO6nFgWrKLel+xslftlD2QLTqwGgtitTQ7OJEwqQmaP0Lg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BbvYsuSsANPoxPGBVV/Xw6M5alWpbfSyzZ0YQRo/d14=;
+ b=vI8Da9L8q9PCnn0FJohBQJp5dJeLL6xSiqqI/BuVwURzQSct90QO/uSE8i6+FWl++Xbu54rh3tThE1YS/JS6AnvpDcfF5CHcofbz+drTXCeK+2BtPSLd4BqsfOIiUh9hrvJN3PiGsBEJeZojg0FQp7E5mqiT6j41E4BMEnYenLxoRI3l+LizyMk6HafFhyACzZ68aA8PsPrdu1FKGzHmPqDFry1VwiPUFI4re5V011X3U9Ats4hH3pF/mkUTtNj5phePnGeOGpkLd7HiLbnCx8/3fTPANN6nJ2oiipujUS1hXCjsvJcb0x56j7TT86IDrJMLU4fl5FIjiMdEOkDvRQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16) by VI1PR04MB6175.eurprd04.prod.outlook.com
+ (2603:10a6:803:fb::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Mon, 29 Aug
+ 2022 07:14:34 +0000
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::69b0:d4da:39ec:4dc8]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::69b0:d4da:39ec:4dc8%3]) with mapi id 15.20.5566.021; Mon, 29 Aug 2022
+ 07:14:34 +0000
+Message-ID: <2bf2b4ee-fd8d-962d-0daa-9c8093ad331e@suse.com>
+Date:   Mon, 29 Aug 2022 09:14:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH modules-next] module: Add debugfs interface to view
+ unloaded tainted modules
+Content-Language: en-US
+To:     Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org
 Cc:     christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org,
         linux-modules@vger.kernel.org, atomlin@atomlin.com
-Subject: [PATCH modules-next] module: Add debugfs interface to view unloaded tainted modules
-Date:   Tue, 23 Aug 2022 20:32:25 +0100
-Message-Id: <20220823193225.2072649-1-atomlin@redhat.com>
-X-Mailer: git-send-email 2.37.1
+References: <20220823193225.2072649-1-atomlin@redhat.com>
+From:   Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20220823193225.2072649-1-atomlin@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0164.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::18) To AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8ea0ab94-1f6c-4c4d-57ad-08da898e1feb
+X-MS-TrafficTypeDiagnostic: VI1PR04MB6175:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NOZnJbU3E7exSIPZF57Qtf+nw7zJI/gn2fo+dSJvjA2E5LJ4iFL41ckVPHl48x1hNjQ76aUBEhqSoa8ah+YS3AtJfYnwlktqcaN1AVH1j1fr9cyfbhc7QiiDmj3kWeO/adgDfsq1ZG+BpZZ8MuzM+VZq3zmwiPiqFt0lQod7/CUhzRHi1/l0989b7VEBHzxECMs0XPQX9/USP6V1osu5jNyfSpnydypfy5otmTRYILsGqhuBipl7lkEgNpXBMoGmS0qLTg6ca3Q7fTEp2A31RczrASWOGAF4njmScgGetahYExVzZwBuMSuaqueJotePMon0TftSG1+8xd9yb+oqLUEeamoNPdxmkSVPgq0C6cD2WmMZYKKYIMAHz30JQCoRxuFzWqtpDRyZ6+fJSzEKzqWA8Q3pjFgeZduw6sk6ubKm0zLQYLn1kvnyITQbEH8/z7Cvc/MY9Jq97yG2cZ5uq+BJDeYeJC0sykJEkI2cS7hdYUqmkloqvT81hnkXYX2tTMw+uC1F4cSIny0DKDsDQfRxk9zVuF9xupdCI8GgsNtC+JgQL4Hn8w6y/hB7UbLa0uMSNQCFB3xnrJO+JC+h5f8KGOwiSfmFYrV7AKoD8+R/OVn/cQYLUD6ClKVnbKlTZ88wQE+r90My6CuIA38u/ko7i3qXbFvK0J7XUIdDNg1lxcow6dtMfJ4nwIY21FlwmZt0b6EH1wvo4wnnRMMhYJIcv+i8w6If9C6PLsgGb0YTylOPTThMdQN01i4HKRxZ5ouUnP5/aC6X64ErjIMsNPwKpGA0ULTaXUYHObXCb/0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(376002)(39850400004)(136003)(396003)(5660300002)(8936002)(41300700001)(55236004)(186003)(2616005)(86362001)(31696002)(6506007)(44832011)(26005)(6512007)(4744005)(83380400001)(53546011)(2906002)(36756003)(31686004)(316002)(66476007)(478600001)(38100700002)(4326008)(6486002)(66556008)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RmdXa2lZNk1Jb2hLVXdia3pUcEIvWlVkc0pIT0xURkVyb2hWY3lSNHBkME42?=
+ =?utf-8?B?K1A1Q2hJNUMxVlZrUEFKTmN3b0R5UFZiZ09jaFJYWUMydWxhNkhDTTVTSzRV?=
+ =?utf-8?B?YTAyeTFEejJIZzVxRVpYcnJnOE50cWhxeVZYaE9ISG4zR05OWGRST250bTZx?=
+ =?utf-8?B?a0p0N2RSY3pjUVIzTGNacUhrbkZLL2svUFEzSFhnYjU3VndlK0Z6UTF3Ulpj?=
+ =?utf-8?B?aDdDTUx1dEFnNVg3dGtKSVJEMnFiUmwwM0ZtMlAxdXFQampSbXJlNFdGYXBS?=
+ =?utf-8?B?MTFubXQ0TzVBdFk3Q0NtUEpUZVZ1RlY1THozSDlnOW1SclBBTEllVTJ0OVJs?=
+ =?utf-8?B?YUFibmg2NFl6THZXOThwcWY5d1dOR3V4Q1lQS2VQa1gvazZvL1FjNXdyTnc2?=
+ =?utf-8?B?ejhYTmFEUlFKbys0eTJXRUVneDZWKzk4MXFQaVliMHZYcVZybEx5NEtBWW44?=
+ =?utf-8?B?QzNLVFFxN3R5THY5Z3RmKzVBdWE5L3ZLMUQ0d1hQdFRkSkFiNU5jYmtLcTRj?=
+ =?utf-8?B?b3E0UDg2WVd5VTFkeWFTRFdTbzA3dlhGbXhnUDlpTkF3a3EvMHBkZlFnL2hi?=
+ =?utf-8?B?aGFkcUtVMDhhY3dNV3MzRjRJc2ZlRGpwRzhXb2xDMExNZUZGVHRWZUJWMkNs?=
+ =?utf-8?B?aDZWUUpjU3diZXNjMnQrVnJxblB6a2l2bDdzeXUxdjhhdy9oRDR0ajJIeFdV?=
+ =?utf-8?B?OEprckhvbXcrOGlpajJ0cG51NlhFN2cvZGNVWEZvQm5rQ1EzMVV6dzEzSi9W?=
+ =?utf-8?B?WVU4MkpXRU8wOXh4czZ5b1VUSmtUd3M1cVhJZS8rSlo4SkFlY01keTVkZFda?=
+ =?utf-8?B?eEdoaUY2VldXN3JiZHYxUEwwcGlCSFVVTEEwemcrS3lLMFl1ZVg2OVZKRmNJ?=
+ =?utf-8?B?UFUrdzJsY2JFKytTQ3FSVjIrQlA0TTE3NDFRYnVpMmlJTlVLN2tlUjdmK3hN?=
+ =?utf-8?B?WWdMRUNwQiswbUJpYXZrQUZkQVIrYnVtMjNibFZpNkd5N2xKN1N3OVhIVlEy?=
+ =?utf-8?B?bFNSeWRzWDE5VndjU0JyL3pGbVJPU0ErRStLNExvbGFiam1LZ20yNTlBSCtZ?=
+ =?utf-8?B?aitwM1RWcjY3M1IzQ3I5WVVpV3YyUmRvdjFqYmxrQ0lrMTRnbXAxdlF3dUtL?=
+ =?utf-8?B?VVk4aDZjVytkd1BiY1hXZENJaXhkR21Wd3g5UGF3N2tLM3RNYzN2MlduR0xY?=
+ =?utf-8?B?dHJNRlI4ZzROa0JiUFdLRHA2WXExZmQydlR2b0sxeU45WXJjcWpXUTMzbFlO?=
+ =?utf-8?B?YkxBUVozQlBCSTgrRkZvMFlXNHRLRUNFQWFMTmJ5WVRqVi9SNVZCcDkrZDN5?=
+ =?utf-8?B?TEJFcWd3Q3R0K1ZHMTBOQmNLcEFRSjRyM0ZkcitoWmxIb0V6TG5OV3hKNzF4?=
+ =?utf-8?B?dWlkZllESms4ZUhoYmhKSzhNMHRWYlVvSy9IQ0RLQ3FaY3ZlNmNPRGcxVTI0?=
+ =?utf-8?B?Q2t5Q1VtbWM1NkVaZUFwUVJlc3BzUTJST3J1RFUvMDcrVnVIQWhCM2lsejQ2?=
+ =?utf-8?B?K2xpTGZZKy95UkZQTy92SXovQ2x0U2RWMHd2TjRqeWVBNkptMHU2U1VVTE5R?=
+ =?utf-8?B?ZjBKT3dPQkZjbnFtM1BQRW9Bb0hPSWVDSXZiWGh3Q21DTWNQejJGcnVsbzkz?=
+ =?utf-8?B?WU5HNTdGKzYyQXNhbmswRkNzZi90YnVETHlLRGszRXlsNk9oa09mVThYY1J6?=
+ =?utf-8?B?WStKT0E4QnY0MVFyS3BPb0QxTmxGZkZOY2ZvZy9uVk9rd2JhR3BGdTJSSHZH?=
+ =?utf-8?B?bStoMWhZTUJjeS83WXI5eHJUa2NKQ0x4WXpWWDRaRGJZU3F0eGNwUERZRk16?=
+ =?utf-8?B?UFlFZHc5SFd6enNwZE1HR3ZLL1gvdWJ5a0tqOXFENEtJaTBtQnAvYXUyak16?=
+ =?utf-8?B?bUNOVDNmQUJud3ZJcGVWckV2VERrd3NyZWg0eHYrVkZyY2kvZ0NjUkFBdysz?=
+ =?utf-8?B?RnZONkZTQXpGWWVWWDFVWm9IeElzcWVSV3FWT1NINWo4b2J1NytYMmNSTWdU?=
+ =?utf-8?B?Vld6bjE4cXFkVUtyN0pXT3V5b20wQ3BOdUxYaEZmUXdINENwYlI1Ry9nTTBy?=
+ =?utf-8?B?Y3ZvR2E1RXZYb1NjM0tYOWxtb0JhYnh3T0pOK1ppby9SOUZVTzVIT1o2VytC?=
+ =?utf-8?Q?dzum6YRPYdNptPAXkq/A2kliv?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ea0ab94-1f6c-4c4d-57ad-08da898e1feb
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 07:14:34.5068
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OULRxu+T8UxZr8CsIkSH08O+cpcEtCHwnLtB4xaaHuBNML8nNPHjpmUMXJSg1KpuB3f47rVcAOlxa9TXfr8qPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6175
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This patch provides debug/modules/unloaded_tainted file to see
-a record of unloaded tainted modules.
+On 8/23/22 21:32, Aaron Tomlin wrote:
+> [...]
+> @@ -59,3 +60,68 @@ void print_unloaded_tainted_modules(void)
+>  		}
+>  	}
+>  }
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +static void *unloaded_tainted_modules_seq_start(struct seq_file *m, loff_t *pos)
+> +{
+> +	mutex_lock(&module_mutex);
+> +	return seq_list_start_rcu(&unloaded_tainted_modules, *pos);
+> +}
 
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- kernel/module/tracking.c | 66 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+unloaded_tainted_modules looks to be a proper RCU list which makes me think
+this reader could use just rcu_read_lock() instead of
+mutex_lock(&module_mutex)?
 
-diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
-index 7f8133044d09..015e641bc346 100644
---- a/kernel/module/tracking.c
-+++ b/kernel/module/tracking.c
-@@ -10,6 +10,7 @@
- #include <linux/printk.h>
- #include <linux/slab.h>
- #include <linux/list.h>
-+#include <linux/debugfs.h>
- #include <linux/rculist.h>
- #include "internal.h"
- 
-@@ -59,3 +60,68 @@ void print_unloaded_tainted_modules(void)
- 		}
- 	}
- }
-+
-+#ifdef CONFIG_DEBUG_FS
-+static void *unloaded_tainted_modules_seq_start(struct seq_file *m, loff_t *pos)
-+{
-+	mutex_lock(&module_mutex);
-+	return seq_list_start_rcu(&unloaded_tainted_modules, *pos);
-+}
-+
-+static void *unloaded_tainted_modules_seq_next(struct seq_file *m, void *p, loff_t *pos)
-+{
-+	return seq_list_next_rcu(p, &unloaded_tainted_modules, pos);
-+}
-+
-+static void unloaded_tainted_modules_seq_stop(struct seq_file *m, void *p)
-+{
-+	mutex_unlock(&module_mutex);
-+}
-+
-+static int unloaded_tainted_modules_seq_show(struct seq_file *m, void *p)
-+{
-+	struct mod_unload_taint *mod_taint;
-+	char buf[MODULE_FLAGS_BUF_SIZE];
-+	size_t l;
-+
-+	mod_taint = list_entry(p, struct mod_unload_taint, list);
-+	l = module_flags_taint(mod_taint->taints, buf);
-+	buf[l++] = '\0';
-+
-+	seq_printf(m, "%s (%s) %llu", mod_taint->name, buf, mod_taint->count);
-+	seq_puts(m, "\n");
-+
-+	return 0;
-+}
-+
-+static const struct seq_operations unloaded_tainted_modules_seq_ops = {
-+	.start = unloaded_tainted_modules_seq_start,
-+	.next  = unloaded_tainted_modules_seq_next,
-+	.stop  = unloaded_tainted_modules_seq_stop,
-+	.show  = unloaded_tainted_modules_seq_show,
-+};
-+
-+static int unloaded_tainted_modules_open(struct inode *inode, struct file *file)
-+{
-+	return seq_open(file, &unloaded_tainted_modules_seq_ops);
-+}
-+
-+static const struct file_operations unloaded_tainted_modules_fops = {
-+	.open = unloaded_tainted_modules_open,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = seq_release,
-+};
-+
-+static int __init unloaded_tainted_modules_init(void)
-+{
-+	struct dentry *dir;
-+
-+	dir = debugfs_create_dir("modules", NULL);
-+	debugfs_create_file("unloaded_tainted", 0444, dir, NULL,
-+			    &unloaded_tainted_modules_fops);
-+
-+	return 0;
-+}
-+module_init(unloaded_tainted_modules_init);
-+#endif /* CONFIG_DEBUG_FS */
-
-base-commit: 554694ba120b87e39cf732ed632e6a0c52fafb7c
--- 
-2.37.1
-
+Thanks,
+Petr
