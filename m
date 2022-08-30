@@ -2,58 +2,58 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B37F9ECAAD5
-	for <linux-modules@archiver.kernel.org>; Tue, 30 Aug 2022 21:52:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2C4AECAAD5
+	for <linux-modules@archiver.kernel.org>; Tue, 30 Aug 2022 21:52:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbiH3VwY (ORCPT
+        id S230350AbiH3Vwu (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 30 Aug 2022 17:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        Tue, 30 Aug 2022 17:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiH3Vvd (ORCPT
+        with ESMTP id S232107AbiH3Vvy (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:51:33 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455F140E12
-        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:11 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id f12-20020a25b6cc000000b0069a9e36de26so716954ybm.16
-        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:11 -0700 (PDT)
+        Tue, 30 Aug 2022 17:51:54 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2CD5C353
+        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:12 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-337ed9110c2so189632057b3.15
+        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=PaZc/ErQmIz9CmZWuOwZKmMvFAFDhrfR0u4+oqULyqs=;
-        b=hebs9Ab4jQ13PLVsrCINOWSpgoH5EATUTa9Cks3Eg1nmkxH7qE2oRwCx7AF5BNZXTH
-         AHzIFQ24Or2oJnVcja+AOnCs2XgXBCldmNcsagLkjdyOLpIpceU0bsUf62DWg4fCi92e
-         s30PWdmXxABwFMNU1JgUL6Fp0h2PBQ5hgdc0oQExPZeqJt/0xfqCgMF0cTxAmuBThoZJ
-         frR4uwNwpRrRdJWEew4t7LzoFroWP+hLZBEH0mT+P1Yv4GgQEDG37uiXZMEF+0m6Voke
-         PgoPiZ8qXrLB1DY6fUVv3gddg9c6Rea7O2e0xIyCiy2p7GROj3EzsKBaYmh74I5z0+5s
-         1/pA==
+        bh=ofrC1PqNoYIKnyKYWjHD7inVuacSGBJJLHypr0RookE=;
+        b=VGRf/84iZ1p67fJnvZ/X1xcCS67elVIPk9IGJJ+bUuWMMIF3sRy7RxzaFdrO+WG7dH
+         d/TlbooTEmNgUOWOqFkIyFyAhgj636EU+aMGf3bhfUhI9LPGF0x0v39+rp3COSYRpICF
+         emKVXtjPhIhzNDYojpJwNosafP0nhIDkwMZkM1SszHz/jzoceNfVxm+3TZcljgHgvL8y
+         TVQxs/Koc6RZpeES3hIup/YjX0wdMTaa96AxFv1wg+iYYTwvZ7GGZBg+tBO+knqi5Juw
+         fEBz0idUpafaOWyAi5+6IN+BrsO4tEn9FOM/qV9RCHSE0DEDO6hWPkFyyM8anxAPc5xB
+         lw8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=PaZc/ErQmIz9CmZWuOwZKmMvFAFDhrfR0u4+oqULyqs=;
-        b=jXvZlHlRKPG/+2itIK2dZCwc47jTIqIEl2uE3pRJjFlCuIDoyE/zQKhi5QrWp2ozD8
-         K2AMBkh3j/TBeYJj2YItCTyQBV001DiaPGf1Z3hIaQ7QOo2Sti/iddTEqnbG7lQTRv7f
-         0agakIeIK1orHh54rPiBCdpzMBw2SB/k5j9/rQpvl9IH5U1lkrzlHlizSEwKYVwQLY36
-         1IYNVbC+64Al8PgU5WXKYjGnuHVQg/WRYQtsjNhp0KiYmpp0J/PEcoY2N2pLzV0YCL9R
-         IDxTPSyBXPs2eOrppInahyZMVvvb3u3HKMaV6r/HQbfAQN5uOtHuvIZazu8FJxAzglAL
-         GUGQ==
-X-Gm-Message-State: ACgBeo2xn73ZL4zr/tQRVkXhz8v1aZT6qjn04AwxEjdF+DnzQiRej+lg
-        w4z/Y4IIusl4Ed5CxCPjH7KaDi4PGuE=
-X-Google-Smtp-Source: AA6agR60bKzipuEg+9xXy+Pee21QZvBbTBPOhKhJO0fVzuHKtaTXE6dCUM7Zh4tN5bptU+EiRysnFAQW6po=
+        bh=ofrC1PqNoYIKnyKYWjHD7inVuacSGBJJLHypr0RookE=;
+        b=6jXTOe07We8MIw8PoeoElSNbwP3BAIDDGCCXp/niyMSt74I8v/bAjgEr2Hu2dSbrY/
+         qAKzRqMLnd3wiAYigb8n+/X2AiyxGsMSBd0PhHBUpkeZb3cHejxh8dRtmR6Gi/updJNi
+         D8+nKg8zjVh+PfanvRkPv575lGnOp2S/ibLf9q1H0iglIbOXFVqzNG6gMWFgAIxDga99
+         BSzsnCoKQoOEhDDTcyHL61ekA2sEXwC+YrCJHdvYcDvbglINEymtjXhg1g/wqF4OsHb5
+         9ieXhKabzMqnt5ojxBrXo0iHHaT5V+uDqjA8Jd1Z0Ic+wjwkECy+ShtUbcpF78nSaZKt
+         0oJA==
+X-Gm-Message-State: ACgBeo0mWKK78nST3ya4zPSrm8cig6filsptRPLXKEksDMqKNd+vUS5b
+        0sz3tgFAE4m3FR1DzHzur8kSK9BiA3o=
+X-Google-Smtp-Source: AA6agR5S9pMWRwrdqx3FNbA74RB4ArEfkNsuNbxmIMNnFeUvwj+w6zosapneZCdX4VxzXX80wAu2gx5OQhs=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:a005:55b3:6c26:b3e4])
- (user=surenb job=sendgmr) by 2002:a25:31d5:0:b0:677:28b:1451 with SMTP id
- x204-20020a2531d5000000b00677028b1451mr13217805ybx.437.1661896208990; Tue, 30
- Aug 2022 14:50:08 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 14:49:06 -0700
+ (user=surenb job=sendgmr) by 2002:a0d:cd43:0:b0:329:febf:8c25 with SMTP id
+ p64-20020a0dcd43000000b00329febf8c25mr15393402ywd.90.1661896211649; Tue, 30
+ Aug 2022 14:50:11 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:49:07 -0700
 In-Reply-To: <20220830214919.53220-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220830214919.53220-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830214919.53220-18-surenb@google.com>
-Subject: [RFC PATCH 17/30] lib/string.c: strsep_no_empty()
+Message-ID: <20220830214919.53220-19-surenb@google.com>
+Subject: [RFC PATCH 18/30] codetag: add codetag query helper functions
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -81,57 +81,194 @@ List-ID: <linux-modules.vger.kernel.org>
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-This adds a new helper which is like strsep, except that it skips empty
-tokens.
+Provide codetag_query_parse() to parse codetag queries and
+codetag_matches_query() to check if the query affects a given codetag.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 ---
- include/linux/string.h |  1 +
- lib/string.c           | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+)
+ include/linux/codetag.h |  27 ++++++++
+ lib/codetag.c           | 135 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 162 insertions(+)
 
-diff --git a/include/linux/string.h b/include/linux/string.h
-index 61ec7e4f6311..b950ac9cfa56 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -96,6 +96,7 @@ extern char * strpbrk(const char *,const char *);
- #ifndef __HAVE_ARCH_STRSEP
- extern char * strsep(char **,const char *);
- #endif
-+extern char *strsep_no_empty(char **, const char *);
- #ifndef __HAVE_ARCH_STRSPN
- extern __kernel_size_t strspn(const char *,const char *);
- #endif
-diff --git a/lib/string.c b/lib/string.c
-index 6f334420f687..6939f5b751f2 100644
---- a/lib/string.c
-+++ b/lib/string.c
-@@ -596,6 +596,25 @@ char *strsep(char **s, const char *ct)
- EXPORT_SYMBOL(strsep);
+diff --git a/include/linux/codetag.h b/include/linux/codetag.h
+index 386733e89b31..0c605417ebbe 100644
+--- a/include/linux/codetag.h
++++ b/include/linux/codetag.h
+@@ -80,4 +80,31 @@ static inline void codetag_load_module(struct module *mod) {}
+ static inline void codetag_unload_module(struct module *mod) {}
  #endif
  
-+/**
-+ * strsep_no_empt - Split a string into tokens, but don't return empty tokens
-+ * @s: The string to be searched
-+ * @ct: The characters to search for
-+ *
-+ * strsep() updates @s to point after the token, ready for the next call.
-+ */
-+char *strsep_no_empty(char **s, const char *ct)
++/* Codetag query parsing */
++
++struct codetag_query {
++	const char	*filename;
++	const char	*module;
++	const char	*function;
++	const char	*class;
++	unsigned int	first_line, last_line;
++	unsigned int	first_index, last_index;
++	unsigned int	cur_index;
++
++	bool		match_line:1;
++	bool		match_index:1;
++
++	unsigned int	set_enabled:1;
++	unsigned int	enabled:2;
++
++	unsigned int	set_frequency:1;
++	unsigned int	frequency;
++};
++
++char *codetag_query_parse(struct codetag_query *q, char *buf);
++bool codetag_matches_query(struct codetag_query *q,
++			   const struct codetag *ct,
++			   const struct codetag_module *mod,
++			   const char *class);
++
+ #endif /* _LINUX_CODETAG_H */
+diff --git a/lib/codetag.c b/lib/codetag.c
+index f0a3174f9b71..288ccfd5cbd0 100644
+--- a/lib/codetag.c
++++ b/lib/codetag.c
+@@ -246,3 +246,138 @@ void codetag_unload_module(struct module *mod)
+ 	}
+ 	mutex_unlock(&codetag_lock);
+ }
++
++/* Codetag query parsing */
++
++#define CODETAG_QUERY_TOKENS()	\
++	x(func)			\
++	x(file)			\
++	x(line)			\
++	x(module)		\
++	x(class)		\
++	x(index)
++
++enum tokens {
++#define x(name)		TOK_##name,
++	CODETAG_QUERY_TOKENS()
++#undef x
++};
++
++static const char * const token_strs[] = {
++#define x(name)		#name,
++	CODETAG_QUERY_TOKENS()
++#undef x
++	NULL
++};
++
++static int parse_range(char *str, unsigned int *first, unsigned int *last)
 +{
-+	char *ret;
++	char *first_str = str;
++	char *last_str = strchr(first_str, '-');
 +
-+	do {
-+		ret = strsep(s, ct);
-+	} while (ret && !*ret);
++	if (last_str)
++		*last_str++ = '\0';
 +
-+	return ret;
++	if (kstrtouint(first_str, 10, first))
++		return -EINVAL;
++
++	if (!last_str)
++		*last = *first;
++	else if (kstrtouint(last_str, 10, last))
++		return -EINVAL;
++
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(strsep_no_empty);
 +
- #ifndef __HAVE_ARCH_MEMSET
- /**
-  * memset - Fill a region of memory with the given value
++char *codetag_query_parse(struct codetag_query *q, char *buf)
++{
++	while (1) {
++		char *p = buf;
++		char *str1 = strsep_no_empty(&p, " \t\r\n");
++		char *str2 = strsep_no_empty(&p, " \t\r\n");
++		int ret, token;
++
++		if (!str1 || !str2)
++			break;
++
++		token = match_string(token_strs, ARRAY_SIZE(token_strs), str1);
++		if (token < 0)
++			break;
++
++		switch (token) {
++		case TOK_func:
++			q->function = str2;
++			break;
++		case TOK_file:
++			q->filename = str2;
++			break;
++		case TOK_line:
++			ret = parse_range(str2, &q->first_line, &q->last_line);
++			if (ret)
++				return ERR_PTR(ret);
++			q->match_line = true;
++			break;
++		case TOK_module:
++			q->module = str2;
++			break;
++		case TOK_class:
++			q->class = str2;
++			break;
++		case TOK_index:
++			ret = parse_range(str2, &q->first_index, &q->last_index);
++			if (ret)
++				return ERR_PTR(ret);
++			q->match_index = true;
++			break;
++		}
++
++		buf = p;
++	}
++
++	return buf;
++}
++
++bool codetag_matches_query(struct codetag_query *q,
++			   const struct codetag *ct,
++			   const struct codetag_module *mod,
++			   const char *class)
++{
++	size_t classlen = q->class ? strlen(q->class) : 0;
++
++	if (q->module &&
++	    (!mod->mod ||
++	     strcmp(q->module, ct->modname)))
++		return false;
++
++	if (q->filename &&
++	    strcmp(q->filename, ct->filename) &&
++	    strcmp(q->filename, kbasename(ct->filename)))
++		return false;
++
++	if (q->function &&
++	    strcmp(q->function, ct->function))
++		return false;
++
++	/* match against the line number range */
++	if (q->match_line &&
++	    (ct->lineno < q->first_line ||
++	     ct->lineno > q->last_line))
++		return false;
++
++	/* match against the class */
++	if (classlen &&
++	    (strncmp(q->class, class, classlen) ||
++	     (class[classlen] && class[classlen] != ':')))
++		return false;
++
++	/* match against the fault index */
++	if (q->match_index &&
++	    (q->cur_index < q->first_index ||
++	     q->cur_index > q->last_index)) {
++		q->cur_index++;
++		return false;
++	}
++
++	q->cur_index++;
++	return true;
++}
 -- 
 2.37.2.672.g94769d06f0-goog
 
