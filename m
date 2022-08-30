@@ -2,58 +2,58 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2E98ECAAD4
-	for <linux-modules@archiver.kernel.org>; Tue, 30 Aug 2022 21:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14EE5ECAAA1
+	for <linux-modules@archiver.kernel.org>; Tue, 30 Aug 2022 21:55:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbiH3Vyp (ORCPT
+        id S232009AbiH3VzY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 30 Aug 2022 17:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        Tue, 30 Aug 2022 17:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232194AbiH3Vx0 (ORCPT
+        with ESMTP id S232254AbiH3Vxj (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:53:26 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CA597536
-        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:39 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3363b1dffa0so189726107b3.23
-        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:39 -0700 (PDT)
+        Tue, 30 Aug 2022 17:53:39 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F10798376
+        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:45 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id y81-20020a253254000000b0069339437485so709494yby.5
+        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=ZStBKMvqZf5cf9FAaMePhJpKdJzTFBwr6u3tFotg8hA=;
-        b=VTVsraZqevmRCaObBRFMsjzBHvekcfce8MtBSaZZ5Crg1seH0CtSm9c29RKCC59TBN
-         19FBNPHC8dpOcblrHciXVuHQoofaiZfBwdvimHRJsLndFImNdH+eu+YtfXaacByCuPex
-         4skGzTc23jNuehJZ1slH7Ll/8rph1Z+dZIGkIrmDgscRY7RIgNnfOz1AT6ADLF2JebGP
-         ImyuFSTfbcS7qk97+Srdow1KJqFKbaNXoPDO2ySg/qcfR6YEVvxMJcvJ5RrVZoonHGUz
-         PLJ9fn0z6uZxXsmBY3YesylZ0YvtVFfBxK+5t+T1HyPEAGObb07elO3lsln5Hg+z0Hea
-         kK4g==
+        bh=q3DJ62FdAkc75G5f5TC1WQpGOVt3l/MJJCNdx5cTnOk=;
+        b=C8JONxxXVlTpftHaAGAIlpLkK3JbLire6Nmp7rtyqKkA8STqUN7GtKHqgck9OnhnK6
+         JLmVEdOBtO4UgVT+rqGSVVb8el9/E2EzKFM8T34Szjzm3zJ0p5kFz3mCYcxw5G4J1WvF
+         QMb4GTQ/yzzPPSsO8n/bi291Hq8qngpZB5y0K7P/GbpAFTCQEKZCNPr9wH/IKiRw2v40
+         589a1BB4hctRlz5v1afevUX177R+LYQq/8EEHO7YXqeqRF8HSNYDOdN7xFassnCgRext
+         TnhJSTiUhrw0wYWDFlFWpRGy66tj1fz8fdmGodc46WuVd0A4xLZ7WpBC/QBvDzjQGrdA
+         SEig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=ZStBKMvqZf5cf9FAaMePhJpKdJzTFBwr6u3tFotg8hA=;
-        b=mqUpcEMkuK5Wn05NI+Z8wEA4reCk4eDsrTiS/L694g298kp3mx8BnUZC1sVgJ+HJ8k
-         UuoDDk+CIr38TQnbIPHP22j46C0kgtoIXMep0BeqA4UtN0HyKXb0uhdNQDNLUPJj8oep
-         CNx3zKKF0xMPT1iDpUOd6bDneuAIgYcRo74gDykrzkzgT30V1YlEr34ttQameUOVbkAA
-         MD3YtlrxkPGKEHQ398pk7CiO+qY/jec1Bd/f3IDSAxS6noa5RUcGUpc16uaI/8t2WH5d
-         6MuVPTMMsgM5AxQli+bUJRi4eRLPwORyhHspzYDUJPWE8KGY3xIGUFAvVOif60bQjc2u
-         cbXQ==
-X-Gm-Message-State: ACgBeo1FQYFqDSChDPtkxRheVkEsSOv6LnlEXe963oyjZ7xOcL7C50Ox
-        cfBOzLgtBCe1n5NaYiOY8yPm8IaUUi0=
-X-Google-Smtp-Source: AA6agR5ZJaVBuvkDlBerd8g/D0cXVNCnXViOohqfD6wf3W0FPvTvaQusAJxcQ2WbQWopoioqQ9vnkekcbVo=
+        bh=q3DJ62FdAkc75G5f5TC1WQpGOVt3l/MJJCNdx5cTnOk=;
+        b=GZ1SnrYAt6vnxbgY88ZLyuWsoAfOMHnYqiJMNhE3aPqxVNwXNwwkUlvYAQJNilfVVy
+         G4qZCTn34Q785Tcq+WZNtKUD9gGZJ8RsH/VCsU9FXKQvFoJUq3Hcx6F2xZOZq3JdABsc
+         4e4qPuenQrPXwFtrP4CXLUSNH18e1srJbCKHQjkz+Xw+X7EhkBdAC2qD8d6wL2vdD98a
+         UxoNoPFSkun4hoBx8M8PPywCx373YGoCUaZ8/Yu+G2Dhn1YJ5Jw125pZOMeryuHfNLZY
+         g7pK+ppUdPau6iFGZb5HfsOefw+HHhHApaCZ8weDS1XQiq6EdPW75PldyaRRm4FQQLtO
+         7blQ==
+X-Gm-Message-State: ACgBeo3i3OcUflfqw05crg14jOHArBift+ezA3fQJwyp00z7PILKXE4g
+        70Bu5hY37Im/FpCquAZRnWmc7jOZoZc=
+X-Google-Smtp-Source: AA6agR6mRIYh/Ugh76Z9OGxiRjbQrZ+9wpxKxcSIOnClnh/ne0QVaaMxuz4y8WxW9UVOyJ1glmO9CKBYbzs=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:a005:55b3:6c26:b3e4])
- (user=surenb job=sendgmr) by 2002:a05:6902:15cf:b0:67c:1ee7:149 with SMTP id
- l15-20020a05690215cf00b0067c1ee70149mr13333139ybu.594.1661896238275; Tue, 30
- Aug 2022 14:50:38 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 14:49:17 -0700
+ (user=surenb job=sendgmr) by 2002:a25:8a85:0:b0:671:715e:a1b0 with SMTP id
+ h5-20020a258a85000000b00671715ea1b0mr12680068ybl.98.1661896243785; Tue, 30
+ Aug 2022 14:50:43 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:49:19 -0700
 In-Reply-To: <20220830214919.53220-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220830214919.53220-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830214919.53220-29-surenb@google.com>
-Subject: [RFC PATCH 28/30] Improved symbolic error names
+Message-ID: <20220830214919.53220-31-surenb@google.com>
+Subject: [RFC PATCH 30/30] MAINTAINERS: Add entries for code tagging & related
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -81,274 +81,79 @@ List-ID: <linux-modules.vger.kernel.org>
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-This patch adds per-error-site error codes, with error strings that
-include their file and line number.
-
-To use, change code that returns an error, e.g.
-    return -ENOMEM;
-to
-    return -ERR(ENOMEM);
-
-Then, errname() will return a string that includes the file and line
-number of the ERR() call, for example
-    printk("Got error %s!\n", errname(err));
-will result in
-    Got error ENOMEM at foo.c:1234
-
-To convert back to the original error code (before returning it to
-outside code that does not understand dynamic error codes), use
-    return error_class(err);
-
-To test if an error is of some type, replace
-    if (err == -ENOMEM)
-with
-    if (error_matches(err, ENOMEM))
-
-Implementation notes:
-
-Error codes are allocated dynamically on module load and deallocated on
-module unload. On memory allocation failure (i.e. the data structures
-for indexing error strings and error parents), ERR() will fall back to
-returning the error code that it was passed.
-
-MAX_ERRNO has been raised from 4096 to 1 million, which should be
-sufficient given the number of lines of code and the fraction that throw
-errors in the kernel codebase.
-
-This has implications for ERR_PTR(), since the range of the address
-space reserved for errors is unavailable for other purposes. Since
-ERR_PTR() ptrs are at the top of the address space there should not be
-any major difficulties.
+The new code & libraries added are being maintained - mark them as such.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 ---
- include/asm-generic/codetag.lds.h |   3 +-
- include/linux/err.h               |   2 +-
- include/linux/errname.h           |  50 +++++++++++++++
- lib/errname.c                     | 103 ++++++++++++++++++++++++++++++
- 4 files changed, 156 insertions(+), 2 deletions(-)
+ MAINTAINERS | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/codetag.lds.h
-index d799f4aced82..b087cf1874a9 100644
---- a/include/asm-generic/codetag.lds.h
-+++ b/include/asm-generic/codetag.lds.h
-@@ -11,6 +11,7 @@
- #define CODETAG_SECTIONS()		\
- 	SECTION_WITH_BOUNDARIES(alloc_tags)		\
- 	SECTION_WITH_BOUNDARIES(dynamic_fault_tags)	\
--	SECTION_WITH_BOUNDARIES(time_stats_tags)
-+	SECTION_WITH_BOUNDARIES(time_stats_tags)	\
-+	SECTION_WITH_BOUNDARIES(error_code_tags)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 589517372408..902c96744bcb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5111,6 +5111,19 @@ S:	Supported
+ F:	Documentation/process/code-of-conduct-interpretation.rst
+ F:	Documentation/process/code-of-conduct.rst
  
- #endif /* __ASM_GENERIC_CODETAG_LDS_H */
-diff --git a/include/linux/err.h b/include/linux/err.h
-index a139c64aef2a..1d8d6c46ab9c 100644
---- a/include/linux/err.h
-+++ b/include/linux/err.h
-@@ -15,7 +15,7 @@
-  * This should be a per-architecture thing, to allow different
-  * error and pointer decisions.
-  */
--#define MAX_ERRNO	4095
-+#define MAX_ERRNO	((1 << 20) - 1)
++CODE TAGGING
++M:	Suren Baghdasaryan <surenb@google.com>
++M:	Kent Overstreet <kent.overstreet@linux.dev>
++S:	Maintained
++F:	lib/codetag.c
++F:	include/linux/codetag.h
++
++CODE TAGGING TIME STATS
++M:	Kent Overstreet <kent.overstreet@linux.dev>
++S:	Maintained
++F:	lib/codetag_time_stats.c
++F:	include/linux/codetag_time_stats.h
++
+ COMEDI DRIVERS
+ M:	Ian Abbott <abbotti@mev.co.uk>
+ M:	H Hartley Sweeten <hsweeten@visionengravers.com>
+@@ -11405,6 +11418,12 @@ M:	John Hawley <warthog9@eaglescrag.net>
+ S:	Maintained
+ F:	tools/testing/ktest
  
- #ifndef __ASSEMBLY__
++LAZY PERCPU COUNTERS
++M:	Kent Overstreet <kent.overstreet@linux.dev>
++S:	Maintained
++F:	lib/lazy-percpu-counter.c
++F:	include/linux/lazy-percpu-counter.h
++
+ L3MDEV
+ M:	David Ahern <dsahern@kernel.org>
+ L:	netdev@vger.kernel.org
+@@ -13124,6 +13143,15 @@ F:	include/linux/memblock.h
+ F:	mm/memblock.c
+ F:	tools/testing/memblock/
  
-diff --git a/include/linux/errname.h b/include/linux/errname.h
-index e8576ad90cb7..dd39fe7120bb 100644
---- a/include/linux/errname.h
-+++ b/include/linux/errname.h
-@@ -5,12 +5,62 @@
- #include <linux/stddef.h>
++MEMORY ALLOCATION TRACKING
++M:	Suren Baghdasaryan <surenb@google.com>
++M:	Kent Overstreet <kent.overstreet@linux.dev>
++S:	Maintained
++F:	lib/alloc_tag.c
++F:	lib/pgalloc_tag.c
++F:	include/linux/alloc_tag.h
++F:	include/linux/codetag_ctx.h
++
+ MEMORY CONTROLLER DRIVERS
+ M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ L:	linux-kernel@vger.kernel.org
+@@ -20421,6 +20449,12 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/luca/wl12xx.git
+ F:	drivers/net/wireless/ti/
+ F:	include/linux/wl12xx.h
  
- #ifdef CONFIG_SYMBOLIC_ERRNAME
++TIME STATS
++M:	Kent Overstreet <kent.overstreet@linux.dev>
++S:	Maintained
++F:	lib/time_stats.c
++F:	include/linux/time_stats.h
 +
- const char *errname(int err);
-+
-+#include <linux/codetag.h>
-+
-+struct codetag_error_code {
-+	const char		*str;
-+	int			err;
-+};
-+
-+/**
-+ * ERR - return an error code that records the error site
-+ *
-+ * E.g., instead of
-+ *   return -ENOMEM;
-+ * Use
-+ *   return -ERR(ENOMEM);
-+ *
-+ * Then, when a caller prints out the error with errname(), the error string
-+ * will include the file and line number.
-+ */
-+#define ERR(_err)							\
-+({									\
-+	static struct codetag_error_code				\
-+	__used								\
-+	__section("error_code_tags")					\
-+	__aligned(8) e = {						\
-+		.str	= #_err " at " __FILE__ ":" __stringify(__LINE__),\
-+		.err	= _err,						\
-+	};								\
-+									\
-+	e.err;								\
-+})
-+
-+int error_class(int err);
-+bool error_matches(int err, int class);
-+
- #else
-+
-+static inline int error_class(int err)
-+{
-+	return err;
-+}
-+
-+static inline bool error_matches(int err, int class)
-+{
-+	return err == class;
-+}
-+
-+#define ERR(_err)	_err
-+
- static inline const char *errname(int err)
- {
- 	return NULL;
- }
-+
- #endif
- 
- #endif /* _LINUX_ERRNAME_H */
-diff --git a/lib/errname.c b/lib/errname.c
-index 05cbf731545f..2db8f5301ba0 100644
---- a/lib/errname.c
-+++ b/lib/errname.c
-@@ -1,9 +1,20 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/build_bug.h>
-+#include <linux/codetag.h>
- #include <linux/errno.h>
- #include <linux/errname.h>
-+#include <linux/idr.h>
- #include <linux/kernel.h>
- #include <linux/math.h>
-+#include <linux/module.h>
-+#include <linux/xarray.h>
-+
-+#define DYNAMIC_ERRCODE_START	4096
-+
-+static DEFINE_IDR(dynamic_error_strings);
-+static DEFINE_XARRAY(error_classes);
-+
-+static struct codetag_type *cttype;
- 
- /*
-  * Ensure these tables do not accidentally become gigantic if some
-@@ -200,6 +211,9 @@ static const char *names_512[] = {
- 
- static const char *__errname(unsigned err)
- {
-+	if (err >= DYNAMIC_ERRCODE_START)
-+		return idr_find(&dynamic_error_strings, err);
-+
- 	if (err < ARRAY_SIZE(names_0))
- 		return names_0[err];
- 	if (err >= 512 && err - 512 < ARRAY_SIZE(names_512))
-@@ -222,3 +236,92 @@ const char *errname(int err)
- 
- 	return err > 0 ? name + 1 : name;
- }
-+
-+/**
-+ * error_class - return standard/parent error (of a dynamic error code)
-+ *
-+ * When using dynamic error codes returned by ERR(), error_class() will return
-+ * the original errorcode that was passed to ERR().
-+ */
-+int error_class(int err)
-+{
-+	int class = abs(err);
-+
-+	if (class > DYNAMIC_ERRCODE_START)
-+		class = (unsigned long) xa_load(&error_classes,
-+					      class - DYNAMIC_ERRCODE_START);
-+	if (err < 0)
-+		class = -class;
-+	return class;
-+}
-+EXPORT_SYMBOL(error_class);
-+
-+/**
-+ * error_matches - test if error is of some type
-+ *
-+ * When using dynamic error codes, instead of checking for errors with e.g.
-+ *   if (err == -ENOMEM)
-+ * Instead use
-+ *   if (error_matches(err, ENOMEM))
-+ */
-+bool error_matches(int err, int class)
-+{
-+	err	= abs(err);
-+	class	= abs(class);
-+
-+	BUG_ON(err	>= MAX_ERRNO);
-+	BUG_ON(class	>= MAX_ERRNO);
-+
-+	if (err != class)
-+		err = error_class(err);
-+
-+	return err == class;
-+}
-+EXPORT_SYMBOL(error_matches);
-+
-+static void errcode_module_load(struct codetag_type *cttype, struct codetag_module *mod)
-+{
-+	struct codetag_error_code *i, *start = (void *) mod->range.start;
-+	struct codetag_error_code *end = (void *) mod->range.stop;
-+
-+	for (i = start; i != end; i++) {
-+		int err = idr_alloc(&dynamic_error_strings,
-+				    (char *) i->str,
-+				    DYNAMIC_ERRCODE_START,
-+				    MAX_ERRNO,
-+				    GFP_KERNEL);
-+		if (err < 0)
-+			continue;
-+
-+		xa_store(&error_classes,
-+			 err - DYNAMIC_ERRCODE_START,
-+			 (void *)(unsigned long) abs(i->err),
-+			 GFP_KERNEL);
-+
-+		i->err = i->err < 0 ? -err : err;
-+	}
-+}
-+
-+static void errcode_module_unload(struct codetag_type *cttype, struct codetag_module *mod)
-+{
-+	struct codetag_error_code *i, *start = (void *) mod->range.start;
-+	struct codetag_error_code *end = (void *) mod->range.stop;
-+
-+	for (i = start; i != end; i++)
-+		idr_remove(&dynamic_error_strings, abs(i->err));
-+}
-+
-+static int __init errname_init(void)
-+{
-+	const struct codetag_type_desc desc = {
-+		.section	= "error_code_tags",
-+		.tag_size	= sizeof(struct codetag_error_code),
-+		.module_load	= errcode_module_load,
-+		.module_unload	= errcode_module_unload,
-+	};
-+
-+	cttype = codetag_register_type(&desc);
-+
-+	return PTR_ERR_OR_ZERO(cttype);
-+}
-+module_init(errname_init);
+ TIMEKEEPING, CLOCKSOURCE CORE, NTP, ALARMTIMER
+ M:	John Stultz <jstultz@google.com>
+ M:	Thomas Gleixner <tglx@linutronix.de>
 -- 
 2.37.2.672.g94769d06f0-goog
 
