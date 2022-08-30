@@ -2,58 +2,59 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E4F2ECAAA1
-	for <linux-modules@archiver.kernel.org>; Tue, 30 Aug 2022 21:51:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D6D6ECAAD4
+	for <linux-modules@archiver.kernel.org>; Tue, 30 Aug 2022 21:52:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiH3Vvy (ORCPT
+        id S232022AbiH3VwG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 30 Aug 2022 17:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        Tue, 30 Aug 2022 17:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbiH3VvI (ORCPT
+        with ESMTP id S231797AbiH3VvS (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:51:08 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9578186FA
-        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:00 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33dbfb6d2a3so188944177b3.11
-        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:00 -0700 (PDT)
+        Tue, 30 Aug 2022 17:51:18 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB32A1A04A
+        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:01 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id p12-20020a259e8c000000b006958480b858so717438ybq.12
+        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:50:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=lEzLHp5EUALGBDR080eL/ZTXye/B6ScLofp8WoGZutw=;
-        b=b1R/0Nzef/8svLYP03pWrgs7vVHFpmq4XPsUT6SPRcEERNTFUBKXL3gF3rV3lAxbCu
-         zXGaLab/bgugeQVtB6fQn7BhC15GHiYy8yfVXRL4GYXQsnil0/qsZR4erD7n1daSxUT/
-         hbKk1xyU9Ykc1njB28pQzjTGt5yf81XdbMvnJj3jJrZZVKL0FDy5ZPsMSVZCq6qj2GNq
-         5xqR3jFoEpuD7VZT5PIkQzsQQ7XeVpMK6yxsDE98VmdfDUzKzdP+i7iVBsy7CZO0ECYl
-         ds6ZVkTkDhj6OOx/cOiCWsxrgV2NyVoWxYPRsclO00W2nRWfmYoOg0iJH72Y79yCTeat
-         6jXg==
+        bh=gY+PdoFf3bNnEB0W9Vd0woPoFdt9hhtegjhiPtTj+AE=;
+        b=pP4c3oP+YdesowZgNPs4eE1Xp1hWxAr9Ov2IDGBfglQ7uK9BWLrmzhDJ/utRpkPDJK
+         tLMoERW1+3/smlLhO5G46VfqVywVDMABKHAv9jnhzz9ZshpBvX9ODCL7lsQaaZS0MLOk
+         moKmQwwsOGjNod+M4t/tjA/+LNyP1VXOc5752+/a3Um/WwaPBzNEpe5l2cE7BDo787CF
+         /PWmu6igP2xWBoiVtEHlimVT5AWdWMQxPlHvsqYO1szpGDqcGUPThIrLg/hGXqOCKmhM
+         XRoOlsQx66oUshjUnxZWYY0qi/lYffvprIXZMUGryr7KjlXRCtsueZ1FZIWTKefulhTk
+         stEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=lEzLHp5EUALGBDR080eL/ZTXye/B6ScLofp8WoGZutw=;
-        b=VZ179Duc94PXpdbga89jLkuZ4PiTBV29bwg0p+sUhJI3UymeKiUuf2bDpA1qdKVp3b
-         EYaz+bAM0l7iNFOc4o5POu5zchpVFWog5GEGawRNJxAy5Il0i5RkmU7a02VmTnBIHh62
-         ONpOnFvxYoOr/b1XN7prEgNS2W/eu/QItpRtMmDcl08zLb7PBK4YrHMlsCLM46QZIrGg
-         z61kEOFiHjLXvCCX8xuMCNkPSQM5/vDDqTyeYyjOAoaii6/CzZThe3nNRlenvFUH+eO8
-         ByceiIO4zQeje07qcMGRL6nhvKzCs29x3u+OduPe012wE0Hy/HXyK6tirx3bSEwwya2c
-         DKPA==
-X-Gm-Message-State: ACgBeo3k401sdZBPKEzjF1W+5smy9ms6+33oNPTuKVYaMN+6BsUk138m
-        rqECtX+jvKmC89x7tn0A28nKtHVmKjg=
-X-Google-Smtp-Source: AA6agR5aFDFTV93gABXVtI6sO2HuTqIfM7XjbTB1z4Gt/hzYUN7LO58jr4g2RITDfY5OEI/Zy7OiK9gpPj0=
+        bh=gY+PdoFf3bNnEB0W9Vd0woPoFdt9hhtegjhiPtTj+AE=;
+        b=P4bo1hLwFtttpTuA6VdChbOFt4X64ld+4lp9M8jJ/GXJKzrpMrfU8NeMfroY+gmkyF
+         w2BrLL628irFCiM8PhoKRwFK2xKXyf2TlAq2RNQbhPh56sBcsASD+HGLzF6c6WFb3tlS
+         ZEit8QFtUnrPiUQt+t4tQFwYHXoOEgDv/ly0h3JLbm7T6FR335bvNBdtzYLHJM1Do6pF
+         OzOrU1Iz/dKV1am2pMItT5+LQBHtxCqu2rUeBlWHQ+1O3YJn1cDg+ubc8dsDs+nbCc4k
+         LSQwLAlTYux5de/rBMe5u/apLi8mMUBkANitj0G2BF1y0FfWMT00p7/HqEA5RnZCk1LB
+         IQrQ==
+X-Gm-Message-State: ACgBeo175GuVdCanJSyOUkr90GhP2bDYmottJAiQiaMXJayuFVSy/j92
+        0qWZ0isK20yCRGi/WrCCKhaua17eNsQ=
+X-Google-Smtp-Source: AA6agR7WLdIMrAR0FWfuROzkHWzqEUxzLPyMUzXzjD/46yfJpgch8NK3VM+VyOZeNwYsSnGIQ5TrqCRxJvQ=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:a005:55b3:6c26:b3e4])
- (user=surenb job=sendgmr) by 2002:a05:6902:89:b0:695:7ed0:d8cb with SMTP id
- h9-20020a056902008900b006957ed0d8cbmr13360099ybs.77.1661896198026; Tue, 30
- Aug 2022 14:49:58 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 14:49:02 -0700
+ (user=surenb job=sendgmr) by 2002:a25:ba91:0:b0:683:ebc2:7114 with SMTP id
+ s17-20020a25ba91000000b00683ebc27114mr13866830ybg.319.1661896200808; Tue, 30
+ Aug 2022 14:50:00 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:49:03 -0700
 In-Reply-To: <20220830214919.53220-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220830214919.53220-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830214919.53220-14-surenb@google.com>
-Subject: [RFC PATCH 13/30] mm/slab: introduce SLAB_NO_OBJ_EXT to avoid obj_ext creation
+Message-ID: <20220830214919.53220-15-surenb@google.com>
+Subject: [RFC PATCH 14/30] mm: prevent slabobj_ext allocations for slabobj_ext
+ and kmem_cache objects
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -79,74 +80,45 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Slab extension objects can't be allocated before slab infrastructure is
-initialized. Some caches, like kmem_cache and kmem_cache_node, are created
-before slab infrastructure is initialized. Objects from these caches can't
-have extension objects. Introduce SLAB_NO_OBJ_EXT slab flag to mark these
-caches and avoid creating extensions for objects allocated from these
-slabs.
+Use __GFP_NO_OBJ_EXT to prevent recursions when allocating slabobj_ext
+objects. Also prevent slabobj_ext allocations for kmem_cache objects.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/slab.h | 7 +++++++
- mm/slab.c            | 2 +-
- mm/slub.c            | 5 +++--
- 3 files changed, 11 insertions(+), 3 deletions(-)
+ mm/memcontrol.c | 2 ++
+ mm/slab.h       | 6 ++++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 0fefdf528e0d..55ae3ea864a4 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -124,6 +124,13 @@
- #define SLAB_RECLAIM_ACCOUNT	((slab_flags_t __force)0x00020000U)
- #define SLAB_TEMPORARY		SLAB_RECLAIM_ACCOUNT	/* Objects are short-lived */
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 3f407ef2f3f1..dabb451dc364 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2809,6 +2809,8 @@ int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
+ 	void *vec;
  
-+#ifdef CONFIG_SLAB_OBJ_EXT
-+/* Slab created using create_boot_cache */
-+#define SLAB_NO_OBJ_EXT         ((slab_flags_t __force)0x20000000U)
-+#else
-+#define SLAB_NO_OBJ_EXT         0
-+#endif
+ 	gfp &= ~OBJCGS_CLEAR_MASK;
++	/* Prevent recursive extension vector allocation */
++	gfp |= __GFP_NO_OBJ_EXT;
+ 	vec = kcalloc_node(objects, sizeof(struct slabobj_ext), gfp,
+ 			   slab_nid(slab));
+ 	if (!vec)
+diff --git a/mm/slab.h b/mm/slab.h
+index c767ce3f0fe2..d93b22b8bbe2 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -475,6 +475,12 @@ static inline void prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags,
+ 	if (is_kmem_only_obj_ext())
+ 		return;
+ 
++	if (s->flags & SLAB_NO_OBJ_EXT)
++		return;
 +
- /*
-  * ZERO_SIZE_PTR will be returned for zero sized kmalloc requests.
-  *
-diff --git a/mm/slab.c b/mm/slab.c
-index 10e96137b44f..ba97aeef7ec1 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -1233,7 +1233,7 @@ void __init kmem_cache_init(void)
- 	create_boot_cache(kmem_cache, "kmem_cache",
- 		offsetof(struct kmem_cache, node) +
- 				  nr_node_ids * sizeof(struct kmem_cache_node *),
--				  SLAB_HWCACHE_ALIGN, 0, 0);
-+				  SLAB_HWCACHE_ALIGN | SLAB_NO_OBJ_EXT, 0, 0);
- 	list_add(&kmem_cache->list, &slab_caches);
- 	slab_state = PARTIAL;
- 
-diff --git a/mm/slub.c b/mm/slub.c
-index 862dbd9af4f5..80199d5ac7c9 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -4825,7 +4825,8 @@ void __init kmem_cache_init(void)
- 		node_set(node, slab_nodes);
- 
- 	create_boot_cache(kmem_cache_node, "kmem_cache_node",
--		sizeof(struct kmem_cache_node), SLAB_HWCACHE_ALIGN, 0, 0);
-+			sizeof(struct kmem_cache_node),
-+			SLAB_HWCACHE_ALIGN | SLAB_NO_OBJ_EXT, 0, 0);
- 
- 	register_hotmemory_notifier(&slab_memory_callback_nb);
- 
-@@ -4835,7 +4836,7 @@ void __init kmem_cache_init(void)
- 	create_boot_cache(kmem_cache, "kmem_cache",
- 			offsetof(struct kmem_cache, node) +
- 				nr_node_ids * sizeof(struct kmem_cache_node *),
--		       SLAB_HWCACHE_ALIGN, 0, 0);
-+			SLAB_HWCACHE_ALIGN | SLAB_NO_OBJ_EXT, 0, 0);
- 
- 	kmem_cache = bootstrap(&boot_kmem_cache);
- 	kmem_cache_node = bootstrap(&boot_kmem_cache_node);
++	if (flags & __GFP_NO_OBJ_EXT)
++		return;
++
+ 	slab = virt_to_slab(p);
+ 	if (!slab_obj_exts(slab))
+ 		WARN(alloc_slab_obj_exts(slab, s, flags, false),
 -- 
 2.37.2.672.g94769d06f0-goog
 
