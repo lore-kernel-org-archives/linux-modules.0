@@ -2,140 +2,386 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 252DEECAAD4
-	for <linux-modules@archiver.kernel.org>; Mon, 29 Aug 2022 07:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F05BC0502A
+	for <linux-modules@archiver.kernel.org>; Tue, 30 Aug 2022 21:49:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiH2HOi (ORCPT
+        id S231734AbiH3Vt2 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 29 Aug 2022 03:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
+        Tue, 30 Aug 2022 17:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiH2HOh (ORCPT
+        with ESMTP id S231727AbiH3Vt1 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 29 Aug 2022 03:14:37 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2044.outbound.protection.outlook.com [40.107.20.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF67D4DB04;
-        Mon, 29 Aug 2022 00:14:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HY0+nQlUTq7GTRlM9UwkxzDP/KgfXV1zusjHNtBaumIuiqSGnEp7lH9sXd8bFq4A50xIAojW1K+ECDfObskTc5T0X0KqYBe+asqMaTKaw5XNYiU+T/xlA5KHdqfTpN94E6FjNY1NLmzXD1dHhbYuksqrG/IFAtiHuwBnSDKK8uHlURtm+e1OMkO3lrjvzOfa3Wo4rOjsiBnUBkYJeh215mzJTyRzTZ1knddqpYD/xGkIAzfjW8B4Mpe7YN08OnybFfu9/gNIvcaog3s1paMzqdUwbwjFgkBcZAEBAWyHjAWirBbJOvlpkzvQ7RQ5e3LyV6X+yTH33RkwiTQJHRcrrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BbvYsuSsANPoxPGBVV/Xw6M5alWpbfSyzZ0YQRo/d14=;
- b=iUNb/sUev4mYx+SEUhIuDxxRf2Zuo1Cfz3Z36F8SjNbFF4IsUU4DKZLqpLdciTN6lrKTg/cFNEg9EWVfCnRizlHXk1oiFQg4WTFaAakZ8FN4FkHD73FqQCaeRTWiA7h65NW6PoRAR8tq481M7rOfSemdWbl6GqCGGZ2D8b8Gmj3BY3G6L2psGOLmWTgSSU6jlAQh967Hp+huyAp9Ves+p1IPiwR+CNyVpNHnmrt2cXOi4zSs0xJPKClJj53HwaeO7DeFaL/qSEH66X2f2zpjKYX1cXkirdtKECiTPSPdwO6nFgWrKLel+xslftlD2QLTqwGgtitTQ7OJEwqQmaP0Lg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BbvYsuSsANPoxPGBVV/Xw6M5alWpbfSyzZ0YQRo/d14=;
- b=vI8Da9L8q9PCnn0FJohBQJp5dJeLL6xSiqqI/BuVwURzQSct90QO/uSE8i6+FWl++Xbu54rh3tThE1YS/JS6AnvpDcfF5CHcofbz+drTXCeK+2BtPSLd4BqsfOIiUh9hrvJN3PiGsBEJeZojg0FQp7E5mqiT6j41E4BMEnYenLxoRI3l+LizyMk6HafFhyACzZ68aA8PsPrdu1FKGzHmPqDFry1VwiPUFI4re5V011X3U9Ats4hH3pF/mkUTtNj5phePnGeOGpkLd7HiLbnCx8/3fTPANN6nJ2oiipujUS1hXCjsvJcb0x56j7TT86IDrJMLU4fl5FIjiMdEOkDvRQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16) by VI1PR04MB6175.eurprd04.prod.outlook.com
- (2603:10a6:803:fb::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Mon, 29 Aug
- 2022 07:14:34 +0000
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::69b0:d4da:39ec:4dc8]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::69b0:d4da:39ec:4dc8%3]) with mapi id 15.20.5566.021; Mon, 29 Aug 2022
- 07:14:34 +0000
-Message-ID: <2bf2b4ee-fd8d-962d-0daa-9c8093ad331e@suse.com>
-Date:   Mon, 29 Aug 2022 09:14:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH modules-next] module: Add debugfs interface to view
- unloaded tainted modules
-Content-Language: en-US
-To:     Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org
-Cc:     christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, atomlin@atomlin.com
-References: <20220823193225.2072649-1-atomlin@redhat.com>
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20220823193225.2072649-1-atomlin@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0164.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::18) To AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8ea0ab94-1f6c-4c4d-57ad-08da898e1feb
-X-MS-TrafficTypeDiagnostic: VI1PR04MB6175:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NOZnJbU3E7exSIPZF57Qtf+nw7zJI/gn2fo+dSJvjA2E5LJ4iFL41ckVPHl48x1hNjQ76aUBEhqSoa8ah+YS3AtJfYnwlktqcaN1AVH1j1fr9cyfbhc7QiiDmj3kWeO/adgDfsq1ZG+BpZZ8MuzM+VZq3zmwiPiqFt0lQod7/CUhzRHi1/l0989b7VEBHzxECMs0XPQX9/USP6V1osu5jNyfSpnydypfy5otmTRYILsGqhuBipl7lkEgNpXBMoGmS0qLTg6ca3Q7fTEp2A31RczrASWOGAF4njmScgGetahYExVzZwBuMSuaqueJotePMon0TftSG1+8xd9yb+oqLUEeamoNPdxmkSVPgq0C6cD2WmMZYKKYIMAHz30JQCoRxuFzWqtpDRyZ6+fJSzEKzqWA8Q3pjFgeZduw6sk6ubKm0zLQYLn1kvnyITQbEH8/z7Cvc/MY9Jq97yG2cZ5uq+BJDeYeJC0sykJEkI2cS7hdYUqmkloqvT81hnkXYX2tTMw+uC1F4cSIny0DKDsDQfRxk9zVuF9xupdCI8GgsNtC+JgQL4Hn8w6y/hB7UbLa0uMSNQCFB3xnrJO+JC+h5f8KGOwiSfmFYrV7AKoD8+R/OVn/cQYLUD6ClKVnbKlTZ88wQE+r90My6CuIA38u/ko7i3qXbFvK0J7XUIdDNg1lxcow6dtMfJ4nwIY21FlwmZt0b6EH1wvo4wnnRMMhYJIcv+i8w6If9C6PLsgGb0YTylOPTThMdQN01i4HKRxZ5ouUnP5/aC6X64ErjIMsNPwKpGA0ULTaXUYHObXCb/0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(376002)(39850400004)(136003)(396003)(5660300002)(8936002)(41300700001)(55236004)(186003)(2616005)(86362001)(31696002)(6506007)(44832011)(26005)(6512007)(4744005)(83380400001)(53546011)(2906002)(36756003)(31686004)(316002)(66476007)(478600001)(38100700002)(4326008)(6486002)(66556008)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RmdXa2lZNk1Jb2hLVXdia3pUcEIvWlVkc0pIT0xURkVyb2hWY3lSNHBkME42?=
- =?utf-8?B?K1A1Q2hJNUMxVlZrUEFKTmN3b0R5UFZiZ09jaFJYWUMydWxhNkhDTTVTSzRV?=
- =?utf-8?B?YTAyeTFEejJIZzVxRVpYcnJnOE50cWhxeVZYaE9ISG4zR05OWGRST250bTZx?=
- =?utf-8?B?a0p0N2RSY3pjUVIzTGNacUhrbkZLL2svUFEzSFhnYjU3VndlK0Z6UTF3Ulpj?=
- =?utf-8?B?aDdDTUx1dEFnNVg3dGtKSVJEMnFiUmwwM0ZtMlAxdXFQampSbXJlNFdGYXBS?=
- =?utf-8?B?MTFubXQ0TzVBdFk3Q0NtUEpUZVZ1RlY1THozSDlnOW1SclBBTEllVTJ0OVJs?=
- =?utf-8?B?YUFibmg2NFl6THZXOThwcWY5d1dOR3V4Q1lQS2VQa1gvazZvL1FjNXdyTnc2?=
- =?utf-8?B?ejhYTmFEUlFKbys0eTJXRUVneDZWKzk4MXFQaVliMHZYcVZybEx5NEtBWW44?=
- =?utf-8?B?QzNLVFFxN3R5THY5Z3RmKzVBdWE5L3ZLMUQ0d1hQdFRkSkFiNU5jYmtLcTRj?=
- =?utf-8?B?b3E0UDg2WVd5VTFkeWFTRFdTbzA3dlhGbXhnUDlpTkF3a3EvMHBkZlFnL2hi?=
- =?utf-8?B?aGFkcUtVMDhhY3dNV3MzRjRJc2ZlRGpwRzhXb2xDMExNZUZGVHRWZUJWMkNs?=
- =?utf-8?B?aDZWUUpjU3diZXNjMnQrVnJxblB6a2l2bDdzeXUxdjhhdy9oRDR0ajJIeFdV?=
- =?utf-8?B?OEprckhvbXcrOGlpajJ0cG51NlhFN2cvZGNVWEZvQm5rQ1EzMVV6dzEzSi9W?=
- =?utf-8?B?WVU4MkpXRU8wOXh4czZ5b1VUSmtUd3M1cVhJZS8rSlo4SkFlY01keTVkZFda?=
- =?utf-8?B?eEdoaUY2VldXN3JiZHYxUEwwcGlCSFVVTEEwemcrS3lLMFl1ZVg2OVZKRmNJ?=
- =?utf-8?B?UFUrdzJsY2JFKytTQ3FSVjIrQlA0TTE3NDFRYnVpMmlJTlVLN2tlUjdmK3hN?=
- =?utf-8?B?WWdMRUNwQiswbUJpYXZrQUZkQVIrYnVtMjNibFZpNkd5N2xKN1N3OVhIVlEy?=
- =?utf-8?B?bFNSeWRzWDE5VndjU0JyL3pGbVJPU0ErRStLNExvbGFiam1LZ20yNTlBSCtZ?=
- =?utf-8?B?aitwM1RWcjY3M1IzQ3I5WVVpV3YyUmRvdjFqYmxrQ0lrMTRnbXAxdlF3dUtL?=
- =?utf-8?B?VVk4aDZjVytkd1BiY1hXZENJaXhkR21Wd3g5UGF3N2tLM3RNYzN2MlduR0xY?=
- =?utf-8?B?dHJNRlI4ZzROa0JiUFdLRHA2WXExZmQydlR2b0sxeU45WXJjcWpXUTMzbFlO?=
- =?utf-8?B?YkxBUVozQlBCSTgrRkZvMFlXNHRLRUNFQWFMTmJ5WVRqVi9SNVZCcDkrZDN5?=
- =?utf-8?B?TEJFcWd3Q3R0K1ZHMTBOQmNLcEFRSjRyM0ZkcitoWmxIb0V6TG5OV3hKNzF4?=
- =?utf-8?B?dWlkZllESms4ZUhoYmhKSzhNMHRWYlVvSy9IQ0RLQ3FaY3ZlNmNPRGcxVTI0?=
- =?utf-8?B?Q2t5Q1VtbWM1NkVaZUFwUVJlc3BzUTJST3J1RFUvMDcrVnVIQWhCM2lsejQ2?=
- =?utf-8?B?K2xpTGZZKy95UkZQTy92SXovQ2x0U2RWMHd2TjRqeWVBNkptMHU2U1VVTE5R?=
- =?utf-8?B?ZjBKT3dPQkZjbnFtM1BQRW9Bb0hPSWVDSXZiWGh3Q21DTWNQejJGcnVsbzkz?=
- =?utf-8?B?WU5HNTdGKzYyQXNhbmswRkNzZi90YnVETHlLRGszRXlsNk9oa09mVThYY1J6?=
- =?utf-8?B?WStKT0E4QnY0MVFyS3BPb0QxTmxGZkZOY2ZvZy9uVk9rd2JhR3BGdTJSSHZH?=
- =?utf-8?B?bStoMWhZTUJjeS83WXI5eHJUa2NKQ0x4WXpWWDRaRGJZU3F0eGNwUERZRk16?=
- =?utf-8?B?UFlFZHc5SFd6enNwZE1HR3ZLL1gvdWJ5a0tqOXFENEtJaTBtQnAvYXUyak16?=
- =?utf-8?B?bUNOVDNmQUJud3ZJcGVWckV2VERrd3NyZWg0eHYrVkZyY2kvZ0NjUkFBdysz?=
- =?utf-8?B?RnZONkZTQXpGWWVWWDFVWm9IeElzcWVSV3FWT1NINWo4b2J1NytYMmNSTWdU?=
- =?utf-8?B?Vld6bjE4cXFkVUtyN0pXT3V5b20wQ3BOdUxYaEZmUXdINENwYlI1Ry9nTTBy?=
- =?utf-8?B?Y3ZvR2E1RXZYb1NjM0tYOWxtb0JhYnh3T0pOK1ppby9SOUZVTzVIT1o2VytC?=
- =?utf-8?Q?dzum6YRPYdNptPAXkq/A2kliv?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ea0ab94-1f6c-4c4d-57ad-08da898e1feb
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 07:14:34.5068
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OULRxu+T8UxZr8CsIkSH08O+cpcEtCHwnLtB4xaaHuBNML8nNPHjpmUMXJSg1KpuB3f47rVcAOlxa9TXfr8qPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6175
+        Tue, 30 Aug 2022 17:49:27 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93868E9AA
+        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:49:25 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id d8-20020a25bc48000000b00680651cf051so723890ybk.23
+        for <linux-modules@vger.kernel.org>; Tue, 30 Aug 2022 14:49:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
+        bh=1lX3k8bH6+3ighIlH+rh55fF9o5O4fyOugMRXdd7M+o=;
+        b=TLaJItWbDQbvhKHzG038LNGm0CScYZSKmwQZZ5uimu3NF1cUdVRiMphTcTUfMFGxbA
+         5MXDa00pC4jx1dox6rXbqMWBtWC4G64n3rtvQ9WFmciJtHtJLVCWET5Kdb7EyuzkVYPX
+         i4J0Y6C4bz8XfJq1YpoTofkF51DS5zPKbupPaaT66wch8+NkTWL2E1S5s0ZkHIotLxVb
+         lHmExQmnrBRVXZ4L6czz/14NhyHQZKxDWFmpYXVuNp5UTUZUPBV0MZqwCFaN6+K53hjG
+         Et4iC4dnJNUgJmAGWozRlGh2FkpEq40YiSSTQfp1Q8IZTvSW9ersWg+tDXVZ8w+7HE/r
+         XOYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc;
+        bh=1lX3k8bH6+3ighIlH+rh55fF9o5O4fyOugMRXdd7M+o=;
+        b=CRqnOKPoQON52hMe1CqkiYXdIFvLMYIh4E+RQWvMmcYyNuG7ccGEYLCQi9aMlysXDg
+         4cR6viIBQg3Nartj2qCWVMX8wFl7Txv9dRfgDcYrDCPnQnqD3Gfhl3VLyGwzL41O8POD
+         kxpRp1rxS7v2oE6il4Yx1XGSj11IsjOXzel0CC5avmmNkI4rZ/L4tD5EZY7GqIF0pkEW
+         OC/b2hAVdJR0KA3oJo8OaUGyvawAGHirMbsSCxrT1K2jZ++1LFNGtoO8Z7JOj8ZekF4j
+         6prScFlSc67/cX9NpFlG/dzQEma3DdHemJDFUyP3Wc+UhQzlbknvb8r/i059bTMu2gr/
+         iABw==
+X-Gm-Message-State: ACgBeo1XKI+9Y33HwjZaKwlU9/SxnfOUpN+2q1DSLAcDzroq7muyNn3m
+        E/CtAKJd0mrNGmzX8naUTCfXHBG7MCI=
+X-Google-Smtp-Source: AA6agR5j08Skk81v71QmaDi/WT6bCECv+zqPYuRoUXIcSYHRwqbk8VPDDLd37sGsnmTNsd8iQzIrOAzDMtY=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:a005:55b3:6c26:b3e4])
+ (user=surenb job=sendgmr) by 2002:a81:7992:0:b0:336:8015:4889 with SMTP id
+ u140-20020a817992000000b0033680154889mr16036203ywc.80.1661896164558; Tue, 30
+ Aug 2022 14:49:24 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:48:49 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220830214919.53220-1-surenb@google.com>
+Subject: [RFC PATCH 00/30] Code tagging framework and applications
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, dvyukov@google.com, shakeelb@google.com,
+        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        surenb@google.com, kernel-team@android.com, linux-mm@kvack.org,
+        iommu@lists.linux.dev, kasan-dev@googlegroups.com,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 8/23/22 21:32, Aaron Tomlin wrote:
-> [...]
-> @@ -59,3 +60,68 @@ void print_unloaded_tainted_modules(void)
->  		}
->  	}
->  }
-> +
-> +#ifdef CONFIG_DEBUG_FS
-> +static void *unloaded_tainted_modules_seq_start(struct seq_file *m, loff_t *pos)
-> +{
-> +	mutex_lock(&module_mutex);
-> +	return seq_list_start_rcu(&unloaded_tainted_modules, *pos);
-> +}
+===========================
+Code tagging framework
+===========================
+Code tag is a structure identifying a specific location in the source code
+which is generated at compile time and can be embedded in an application-
+specific structure. Several applications of code tagging are included in
+this RFC, such as memory allocation tracking, dynamic fault injection,
+latency tracking and improved error code reporting.
+Basically, it takes the old trick of "define a special elf section for
+objects of a given type so that we can iterate over them at runtime" and
+creates a proper library for it.
 
-unloaded_tainted_modules looks to be a proper RCU list which makes me think
-this reader could use just rcu_read_lock() instead of
-mutex_lock(&module_mutex)?
+===========================
+Memory allocation tracking
+===========================
+The goal for using codetags for memory allocation tracking is to minimize
+performance and memory overhead. By recording only the call count and
+allocation size, the required operations are kept at the minimum while
+collecting statistics for every allocation in the codebase. With that
+information, if users are interested in mode detailed context for a
+specific allocation, they can enable more in-depth context tracking,
+which includes capturing the pid, tgid, task name, allocation size,
+timestamp and call stack for every allocation at the specified code
+location.
+Memory allocation tracking is implemented in two parts:
 
-Thanks,
-Petr
+part1: instruments page and slab allocators to record call count and total
+memory allocated at every allocation in the source code. Every time an
+allocation is performed by an instrumented allocator, the codetag at that
+location increments its call and size counters. Every time the memory is
+freed these counters are decremented. To decrement the counters upon free,
+allocated object needs a reference to its codetag. Page allocators use
+page_ext to record this reference while slab allocators use memcg_data of
+the slab page.
+The data is exposed to the user space via a read-only debugfs file called
+alloc_tags.
+
+Usage example:
+
+$ sort -hr /sys/kernel/debug/alloc_tags|head
+  153MiB     8599 mm/slub.c:1826 module:slub func:alloc_slab_page
+ 6.08MiB      49 mm/slab_common.c:950 module:slab_common func:_kmalloc_order
+ 5.09MiB     6335 mm/memcontrol.c:2814 module:memcontrol func:alloc_slab_obj_exts
+ 4.54MiB      78 mm/page_alloc.c:5777 module:page_alloc func:alloc_pages_exact
+ 1.32MiB      338 include/asm-generic/pgalloc.h:63 module:pgtable func:__pte_alloc_one
+ 1.16MiB      603 fs/xfs/xfs_log_priv.h:700 module:xfs func:xlog_kvmalloc
+ 1.00MiB      256 mm/swap_cgroup.c:48 module:swap_cgroup func:swap_cgroup_prepare
+  734KiB     5380 fs/xfs/kmem.c:20 module:xfs func:kmem_alloc
+  640KiB      160 kernel/rcu/tree.c:3184 module:tree func:fill_page_cache_func
+  640KiB      160 drivers/char/virtio_console.c:452 module:virtio_console func:alloc_buf
+
+part2: adds support for the user to select a specific code location to capture
+allocation context. A new debugfs file called alloc_tags.ctx is used to select
+which code location should capture allocation context and to read captured
+context information.
+
+Usage example:
+
+$ cd /sys/kernel/debug/
+$ echo "file include/asm-generic/pgalloc.h line 63 enable" > alloc_tags.ctx
+$ cat alloc_tags.ctx
+  920KiB      230 include/asm-generic/pgalloc.h:63 module:pgtable func:__pte_alloc_one
+    size: 4096
+    pid: 1474
+    tgid: 1474
+    comm: bash
+    ts: 175332940994
+    call stack:
+         pte_alloc_one+0xfe/0x130
+         __pte_alloc+0x22/0xb0
+         copy_page_range+0x842/0x1640
+         dup_mm+0x42d/0x580
+         copy_process+0xfb1/0x1ac0
+         kernel_clone+0x92/0x3e0
+         __do_sys_clone+0x66/0x90
+         do_syscall_64+0x38/0x90
+         entry_SYSCALL_64_after_hwframe+0x63/0xcd
+...
+
+NOTE: slab allocation tracking is not yet stable and has a leak that
+shows up in long-running tests. We are working on fixing it and posting
+the RFC early to collect some feedback and to have a reference code in
+public before presenting the idea at LPC2022.
+
+===========================
+Dynamic fault injection
+===========================
+Dynamic fault injection lets you do fault injection with a single call
+to dynamic_fault(), with a debugfs interface similar to dynamic_debug.
+
+Calls to dynamic_fault are listed in debugfs and can be enabled at
+runtime (oneshot mode or a defined frequency are also available). This
+patch also uses the memory allocation wrapper macros introduced by the
+memory allocation tracking patches to add distinct fault injection
+points for every memory allocation in the kernel.
+
+Example fault injection points, after hooking memory allocation paths:
+
+  fs/xfs/libxfs/xfs_iext_tree.c:606 module:xfs func:xfs_iext_realloc_rootclass:memory disabled "
+  fs/xfs/libxfs/xfs_inode_fork.c:503 module:xfs func:xfs_idata_reallocclass:memory disabled "
+  fs/xfs/libxfs/xfs_inode_fork.c:399 module:xfs func:xfs_iroot_reallocclass:memory disabled "
+  fs/xfs/xfs_buf.c:373 module:xfs func:xfs_buf_alloc_pagesclass:memory disabled "
+  fs/xfs/xfs_iops.c:497 module:xfs func:xfs_vn_get_linkclass:memory disabled "
+  fs/xfs/xfs_mount.c:85 module:xfs func:xfs_uuid_mountclass:memory disabled "
+
+===========================
+Latency tracking
+===========================
+This lets you instrument code for measuring latency with just two calls
+to code_tag_time_stats_start() and code_tag_time_stats_finish(), and
+makes statistics available in debugfs on a per-callsite basis.
+
+Recorded statistics include total count, frequency/rate, average
+duration, max duration, and event duration quantiles.
+
+Additionally, this patch instruments prepare_to_wait() and finish_wait().
+
+Example output:
+
+  fs/xfs/xfs_extent_busy.c:589 module:xfs func:xfs_extent_busy_flush
+  count:          61
+  rate:           0/sec
+  frequency:    19 sec
+  avg duration:   632 us
+  max duration:   2 ms
+  quantiles (us): 274 288 288 296 296 296 296 336 336 336 336 336 336 336 336
+
+===========================
+Improved error codes
+===========================
+Ever waste hours trying to figure out which line of code from some
+obscure module is returning you -EINVAL and nothing else?
+
+What if we had... more error codes?
+
+This patch adds ERR(), which returns a unique error code that is related
+to the error code that passed to it: the original error code can be
+recovered with error_class(), and errname() (as well as %pE) returns an
+error string that includes the file and line number of the ERR() call.
+
+Example output:
+
+  VFS: Cannot open root device "sda" or unknown-block(8,0): error -EINVAL at fs/ext4/super.c:4387
+
+===========================
+Dynamic debug conversion to code tagging
+===========================
+There are several open coded implementations of the "define a special elf
+section for objects and iterate" technique that should be converted to
+code tagging. This series just converts dynamic debug; there are others
+(multiple in ftrace, in particular) that should also be converted.
+
+===========================
+
+The patchset applies cleanly over Linux 6.0-rc3
+The tree for testing is published at:
+https://github.com/surenbaghdasaryan/linux/tree/alloc_tags_rfc
+
+The structure of the patchset is:
+- code tagging framework (patches 1-6)
+- page allocation tracking (patches 7-10)
+- slab allocation tracking (patch 11-16)
+- allocation context capture (patch 17-21)
+- dynamic fault injection (patch 22)
+- latency tracking (patch 23-27)
+- improved error codes (patch 28)
+- dynamic debug conversion to code tagging (patch 29)
+- MAINTAINERS update (patch 30)
+
+Next steps:
+- track and fix slab allocator leak mentioned earlier;
+- instrument more allocators: vmalloc, per-cpu allocations, others?
+
+
+Kent Overstreet (14):
+  lib/string_helpers: Drop space in string_get_size's output
+  Lazy percpu counters
+  scripts/kallysms: Always include __start and __stop symbols
+  lib/string.c: strsep_no_empty()
+  codetag: add codetag query helper functions
+  Code tagging based fault injection
+  timekeeping: Add a missing include
+  wait: Clean up waitqueue_entry initialization
+  lib/time_stats: New library for statistics on events
+  bcache: Convert to lib/time_stats
+  Code tagging based latency tracking
+  Improved symbolic error names
+  dyndbg: Convert to code tagging
+  MAINTAINERS: Add entries for code tagging & related
+
+Suren Baghdasaryan (16):
+  kernel/module: move find_kallsyms_symbol_value declaration
+  lib: code tagging framework
+  lib: code tagging module support
+  lib: add support for allocation tagging
+  lib: introduce page allocation tagging
+  change alloc_pages name in dma_map_ops to avoid name conflicts
+  mm: enable page allocation tagging for __get_free_pages and
+    alloc_pages
+  mm: introduce slabobj_ext to support slab object extensions
+  mm: introduce __GFP_NO_OBJ_EXT flag to selectively prevent slabobj_ext
+    creation
+  mm/slab: introduce SLAB_NO_OBJ_EXT to avoid obj_ext creation
+  mm: prevent slabobj_ext allocations for slabobj_ext and kmem_cache
+    objects
+  lib: introduce slab allocation tagging
+  mm: enable slab allocation tagging for kmalloc and friends
+  move stack capture functionality into a separate function for reuse
+  lib: introduce support for storing code tag context
+  lib: implement context capture support for page and slab allocators
+
+ MAINTAINERS                         |  34 ++
+ arch/x86/kernel/amd_gart_64.c       |   2 +-
+ drivers/iommu/dma-iommu.c           |   2 +-
+ drivers/md/bcache/Kconfig           |   1 +
+ drivers/md/bcache/bcache.h          |   1 +
+ drivers/md/bcache/bset.c            |   8 +-
+ drivers/md/bcache/bset.h            |   1 +
+ drivers/md/bcache/btree.c           |  12 +-
+ drivers/md/bcache/super.c           |   3 +
+ drivers/md/bcache/sysfs.c           |  43 ++-
+ drivers/md/bcache/util.c            |  30 --
+ drivers/md/bcache/util.h            |  57 ---
+ drivers/xen/grant-dma-ops.c         |   2 +-
+ drivers/xen/swiotlb-xen.c           |   2 +-
+ include/asm-generic/codetag.lds.h   |  18 +
+ include/asm-generic/vmlinux.lds.h   |   8 +-
+ include/linux/alloc_tag.h           |  84 +++++
+ include/linux/codetag.h             | 159 +++++++++
+ include/linux/codetag_ctx.h         |  48 +++
+ include/linux/codetag_time_stats.h  |  54 +++
+ include/linux/dma-map-ops.h         |   2 +-
+ include/linux/dynamic_debug.h       |  11 +-
+ include/linux/dynamic_fault.h       |  79 +++++
+ include/linux/err.h                 |   2 +-
+ include/linux/errname.h             |  50 +++
+ include/linux/gfp.h                 |  10 +-
+ include/linux/gfp_types.h           |  12 +-
+ include/linux/io_uring_types.h      |   2 +-
+ include/linux/lazy-percpu-counter.h |  67 ++++
+ include/linux/memcontrol.h          |  23 +-
+ include/linux/module.h              |   1 +
+ include/linux/page_ext.h            |   3 +-
+ include/linux/pgalloc_tag.h         |  63 ++++
+ include/linux/sbitmap.h             |   6 +-
+ include/linux/sched.h               |   6 +-
+ include/linux/slab.h                | 136 +++++---
+ include/linux/slab_def.h            |   2 +-
+ include/linux/slub_def.h            |   4 +-
+ include/linux/stackdepot.h          |   3 +
+ include/linux/string.h              |   1 +
+ include/linux/time_stats.h          |  44 +++
+ include/linux/timekeeping.h         |   1 +
+ include/linux/wait.h                |  72 ++--
+ include/linux/wait_bit.h            |   7 +-
+ init/Kconfig                        |   5 +
+ kernel/dma/mapping.c                |   4 +-
+ kernel/module/internal.h            |   3 -
+ kernel/module/main.c                |  27 +-
+ kernel/sched/wait.c                 |  15 +-
+ lib/Kconfig                         |   6 +
+ lib/Kconfig.debug                   |  46 +++
+ lib/Makefile                        |  10 +
+ lib/alloc_tag.c                     | 391 +++++++++++++++++++++
+ lib/codetag.c                       | 519 ++++++++++++++++++++++++++++
+ lib/codetag_time_stats.c            | 143 ++++++++
+ lib/dynamic_debug.c                 | 452 +++++++++---------------
+ lib/dynamic_fault.c                 | 372 ++++++++++++++++++++
+ lib/errname.c                       | 103 ++++++
+ lib/lazy-percpu-counter.c           | 141 ++++++++
+ lib/pgalloc_tag.c                   |  22 ++
+ lib/stackdepot.c                    |  68 ++++
+ lib/string.c                        |  19 +
+ lib/string_helpers.c                |   3 +-
+ lib/time_stats.c                    | 236 +++++++++++++
+ mm/kfence/core.c                    |   2 +-
+ mm/memcontrol.c                     |  62 ++--
+ mm/mempolicy.c                      |   4 +-
+ mm/page_alloc.c                     |  13 +-
+ mm/page_ext.c                       |   6 +
+ mm/page_owner.c                     |  54 +--
+ mm/slab.c                           |   4 +-
+ mm/slab.h                           | 125 ++++---
+ mm/slab_common.c                    |  49 ++-
+ mm/slob.c                           |   2 +
+ mm/slub.c                           |   7 +-
+ scripts/kallsyms.c                  |  13 +
+ scripts/module.lds.S                |   7 +
+ 77 files changed, 3406 insertions(+), 703 deletions(-)
+ create mode 100644 include/asm-generic/codetag.lds.h
+ create mode 100644 include/linux/alloc_tag.h
+ create mode 100644 include/linux/codetag.h
+ create mode 100644 include/linux/codetag_ctx.h
+ create mode 100644 include/linux/codetag_time_stats.h
+ create mode 100644 include/linux/dynamic_fault.h
+ create mode 100644 include/linux/lazy-percpu-counter.h
+ create mode 100644 include/linux/pgalloc_tag.h
+ create mode 100644 include/linux/time_stats.h
+ create mode 100644 lib/alloc_tag.c
+ create mode 100644 lib/codetag.c
+ create mode 100644 lib/codetag_time_stats.c
+ create mode 100644 lib/dynamic_fault.c
+ create mode 100644 lib/lazy-percpu-counter.c
+ create mode 100644 lib/pgalloc_tag.c
+ create mode 100644 lib/time_stats.c
+
+-- 
+2.37.2.672.g94769d06f0-goog
+
