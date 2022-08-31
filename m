@@ -2,201 +2,119 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85A16ECAAD3
-	for <linux-modules@archiver.kernel.org>; Wed, 31 Aug 2022 16:48:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FF06ECAAD1
+	for <linux-modules@archiver.kernel.org>; Wed, 31 Aug 2022 17:30:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbiHaQsg (ORCPT
+        id S230521AbiHaRa3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 31 Aug 2022 12:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        Wed, 31 Aug 2022 13:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbiHaQsb (ORCPT
+        with ESMTP id S229786AbiHaRa1 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 31 Aug 2022 12:48:31 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CB1D86D9
-        for <linux-modules@vger.kernel.org>; Wed, 31 Aug 2022 09:48:29 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 11so5002580ybu.0
-        for <linux-modules@vger.kernel.org>; Wed, 31 Aug 2022 09:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=6n1zc63jDuzyjKJX97Ppd3P3cpaKkA3xHe9Swtr7rxY=;
-        b=VIdq+RErxf0PvdNDjrVGs2xPK3B0rNLymMqmwIf/bH5QaRKd3T3TPNaSejCRtao3kK
-         KXPLbmwg5LRzFYtF5BuBFJiwK/+mPBjKO/MlQ27xXQf8k4L7vWPckSKFmWQP7Dfsp6Sl
-         M5hXBIs6T8rqHUTvYskZOH6CC+dXw6Lm4bBWXUwBF1eDWO7eNfIGjAEigAV+0s81txPn
-         Fz0URG4E8J5Lj4s98oD61ddGJEDNPlbl1qKyb3s4bDCN9GbA0+acWByl//DGVqlqSYLa
-         B+9EEskkUFezCj8PiDfqv37B3qhmrr/PjuX9xcNxSUscGYuyFBYe2yRfMi3mBikEte0+
-         ygEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6n1zc63jDuzyjKJX97Ppd3P3cpaKkA3xHe9Swtr7rxY=;
-        b=fy5MYWw3ANKLZ7VPAn+WNXBw735IrFoU4YVvYG3g/+QSddxlymC4xxwadQ+D3Cj9si
-         /96gE3LkIhzAHb6SjXc/DikQmXZCjCspW3qsWTKyzTULDK0PUfVHH+ZWTCky0UEN53le
-         cmU7MoSMZyDPekcV08VyiYhIqtHekLeP2XIPLHfgvPTzR8/hxQ50FcnXcjTvM5XufJVZ
-         amB9TNb3zrV09Of4VdG96DZ9H2ISgsh27sKkAQkRYV7Bgjv1aou+X9NYbp2mqpEN16ZI
-         dU8tb9zP5o4bOayOSXyXF3RK7pmYuEhPQy+Bm1mbNbrwjcL8yaJW53SC4jz8kjUBohwr
-         ZGJw==
-X-Gm-Message-State: ACgBeo0cSt3Rwobm05dnA9RDvvvLRmIXxUlU5aa/laeORL/WfaOjxD7s
-        eXKlvOgsbZ0d7UO0ae0XqOuQhYQu5RMMnduY6/MzJg==
-X-Google-Smtp-Source: AA6agR4yhCoLDamoorLSfffIdQAWE2JXv8ZvTcRtyX3MuCW3iMDBbPaNi4yGEiRj94PMg+OOUK3k3jnByRFyc9VhtmY=
-X-Received: by 2002:a05:6902:1366:b0:691:4335:455b with SMTP id
- bt6-20020a056902136600b006914335455bmr15675462ybb.282.1661964508623; Wed, 31
- Aug 2022 09:48:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
- <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <CAJuCfpGZ==v0HGWBzZzHTgbo4B_ZBe6V6U4T_788LVWj8HhCRQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpGZ==v0HGWBzZzHTgbo4B_ZBe6V6U4T_788LVWj8HhCRQ@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 31 Aug 2022 09:48:17 -0700
-Message-ID: <CAJuCfpEuLjd+FJ7MQQ+y=ghVnYQP-WDcXxLCcy07JQ0VFweLEg@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Mel Gorman <mgorman@suse.de>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>, dvyukov@google.com,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        Wed, 31 Aug 2022 13:30:27 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2686833352;
+        Wed, 31 Aug 2022 10:30:25 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 13:30:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661967023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=akPUYJQ75fwIwMQFIb22LwWbtwnw5UTZVlPBgEDeTMs=;
+        b=vE3CF/hYHXAE/K4932q4ajXNld0qKiFjAcWoi7fiBYp/VCovZl1Zx/Bw+pURhB6ZWUguOM
+        yEECHfCMBhWuOS+8pPpB6WgHDKJe+QP39AFR9pm6A02T9tr9GTZUhFMtmSYMptto4Yr//a
+        Edg/I2CSqagd7R1KnuqkPz3zjkZJkHU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, shakeelb@google.com, songmuchun@bytedance.com,
+        arnd@arndb.de, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
         kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
         linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
         linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 22/30] Code tagging based fault injection
+Message-ID: <20220831173010.wc5j3ycmfjx6ezfu@moria.home.lan>
+References: <20220830214919.53220-1-surenb@google.com>
+ <20220830214919.53220-23-surenb@google.com>
+ <CACT4Y+ZX3U1=cAPXPhoOy6xrngSCfSmyFagXK-9fWtWWODfsew@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+ZX3U1=cAPXPhoOy6xrngSCfSmyFagXK-9fWtWWODfsew@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Aug 31, 2022 at 8:28 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Wed, Aug 31, 2022 at 3:47 AM Michal Hocko <mhocko@suse.com> wrote:
+On Wed, Aug 31, 2022 at 12:37:14PM +0200, Dmitry Vyukov wrote:
+> On Tue, 30 Aug 2022 at 23:50, Suren Baghdasaryan <surenb@google.com> wrote:
 > >
-> > On Wed 31-08-22 11:19:48, Mel Gorman wrote:
-> > > On Wed, Aug 31, 2022 at 04:42:30AM -0400, Kent Overstreet wrote:
-> > > > On Wed, Aug 31, 2022 at 09:38:27AM +0200, Peter Zijlstra wrote:
-> > > > > On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
-> > > > > > ===========================
-> > > > > > Code tagging framework
-> > > > > > ===========================
-> > > > > > Code tag is a structure identifying a specific location in the source code
-> > > > > > which is generated at compile time and can be embedded in an application-
-> > > > > > specific structure. Several applications of code tagging are included in
-> > > > > > this RFC, such as memory allocation tracking, dynamic fault injection,
-> > > > > > latency tracking and improved error code reporting.
-> > > > > > Basically, it takes the old trick of "define a special elf section for
-> > > > > > objects of a given type so that we can iterate over them at runtime" and
-> > > > > > creates a proper library for it.
-> > > > >
-> > > > > I might be super dense this morning, but what!? I've skimmed through the
-> > > > > set and I don't think I get it.
-> > > > >
-> > > > > What does this provide that ftrace/kprobes don't already allow?
-> > > >
-> > > > You're kidding, right?
-> > >
-> > > It's a valid question. From the description, it main addition that would
-> > > be hard to do with ftrace or probes is catching where an error code is
-> > > returned. A secondary addition would be catching all historical state and
-> > > not just state since the tracing started.
-> > >
-> > > It's also unclear *who* would enable this. It looks like it would mostly
-> > > have value during the development stage of an embedded platform to track
-> > > kernel memory usage on a per-application basis in an environment where it
-> > > may be difficult to setup tracing and tracking. Would it ever be enabled
-> > > in production? Would a distribution ever enable this? If it's enabled, any
-> > > overhead cannot be disabled/enabled at run or boot time so anyone enabling
-> > > this would carry the cost without never necessarily consuming the data.
->
-> Thank you for the question.
-> For memory tracking my intent is to have a mechanism that can be enabled in
-> the field testing (pre-production testing on a large population of
-> internal users).
-> The issue that we are often facing is when some memory leaks are happening
-> in the field but very hard to reproduce locally. We get a bugreport
-> from the user
-> which indicates it but often has not enough information to track it. Note that
-> quite often these leaks/issues happen in the drivers, so even simply finding out
-> where they came from is a big help.
-> The way I envision this mechanism to be used is to enable the basic memory
-> tracking in the field tests and have a user space process collecting
-> the allocation
-> statistics periodically (say once an hour). Once it detects some counter growing
-> infinitely or atypically (the definition of this is left to the user
-> space) it can enable
-> context capturing only for that specific location, still keeping the
-> overhead to the
-> minimum but getting more information about potential issues. Collected stats and
-> contexts are then attached to the bugreport and we get more visibility
-> into the issue
-> when we receive it.
-> The goal is to provide a mechanism with low enough overhead that it
-> can be enabled
-> all the time during these field tests without affecting the device's
-> performance profiles.
-> Tracing is very cheap when it's disabled but having it enabled all the
-> time would
-> introduce higher overhead than the counter manipulations.
-> My apologies, I should have clarified all this in this cover letter
-> from the beginning.
->
-> As for other applications, maybe I'm not such an advanced user of
-> tracing but I think only
-> the latency tracking application might be done with tracing, assuming
-> we have all the
-> right tracepoints but I don't see how we would use tracing for fault
-> injections and
-> descriptive error codes. Again, I might be mistaken.
+> > From: Kent Overstreet <kent.overstreet@linux.dev>
+> >
+> > This adds a new fault injection capability, based on code tagging.
+> >
+> > To use, simply insert somewhere in your code
+> >
+> >   dynamic_fault("fault_class_name")
+> >
+> > and check whether it returns true - if so, inject the error.
+> > For example
+> >
+> >   if (dynamic_fault("init"))
+> >       return -EINVAL;
+> 
+> Hi Suren,
+> 
+> If this is going to be used by mainline kernel, it would be good to
+> integrate this with fail_nth systematic fault injection:
+> https://elixir.bootlin.com/linux/latest/source/lib/fault-inject.c#L109
+> 
+> Otherwise these dynamic sites won't be tested by testing systems doing
+> systematic fault injection testing.
 
-Sorry about the formatting of my reply. Forgot to reconfigure the editor on
-the new machine.
+That's a discussion we need to have, yeah. We don't want two distinct fault
+injection frameworks, we'll have to have a discussion as to whether this is (or
+can be) better enough to make a switch worthwhile, and whether a compatibility
+interface is needed - or maybe there's enough distinct interesting bits in both
+to make merging plausible?
 
->
-> Thanks,
-> Suren.
->
-> > >
-> > > It might be an ease-of-use thing. Gathering the information from traces
-> > > is tricky and would need combining multiple different elements and that
-> > > is development effort but not impossible.
-> > >
-> > > Whatever asking for an explanation as to why equivalent functionality
-> > > cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
-> >
-> > Fully agreed and this is especially true for a change this size
-> > 77 files changed, 3406 insertions(+), 703 deletions(-)
-> >
-> > --
-> > Michal Hocko
-> > SUSE Labs
+The debugfs interface for this fault injection code is necessarily different
+from our existing fault injection - this gives you a fault injection point _per
+callsite_, which is huge - e.g. for filesystem testing what I need is to be able
+to enable fault injection points within a given module. I can do that easily
+with this, not with our current fault injection.
+
+I think the per-callsite fault injection points would also be pretty valuable
+for CONFIG_FAULT_INJECTION_USERCOPY, too.
+
+OTOH, existing kernel fault injection can filter based on task - this fault
+injection framework doesn't have that. Easy enough to add, though. Similar for
+the interval/probability/ratelimit stuff.
+
+fail_function is the odd one out, I'm not sure how that would fit into this
+model. Everything else I've seen I think fits into this model.
+
+Also, it sounds like you're more familiar with our existing fault injection than
+I am, so if I've misunderstood anything about what it can do please do correct
+me.
+
+Interestingly: I just discovered from reading the code that
+CONFIG_FAULT_INJECTION_STACKTRACE_FILTER is a thing (hadn't before because it
+depends on !X86_64 - what?). That's cool, though.
