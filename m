@@ -2,58 +2,58 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 941B1ECAAD1
-	for <linux-modules@archiver.kernel.org>; Wed, 31 Aug 2022 15:56:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8F83ECAAD1
+	for <linux-modules@archiver.kernel.org>; Wed, 31 Aug 2022 15:56:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiHaP4F (ORCPT
+        id S231727AbiHaP45 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 31 Aug 2022 11:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
+        Wed, 31 Aug 2022 11:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbiHaPzl (ORCPT
+        with ESMTP id S229498AbiHaP4h (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:55:41 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874B0B3B24
-        for <linux-modules@vger.kernel.org>; Wed, 31 Aug 2022 08:55:37 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3321c2a8d4cso311557937b3.5
-        for <linux-modules@vger.kernel.org>; Wed, 31 Aug 2022 08:55:37 -0700 (PDT)
+        Wed, 31 Aug 2022 11:56:37 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F410F74DEC
+        for <linux-modules@vger.kernel.org>; Wed, 31 Aug 2022 08:56:22 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-33dc345ad78so311559447b3.3
+        for <linux-modules@vger.kernel.org>; Wed, 31 Aug 2022 08:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=sybFcqH1KKlLZJ30kAOhH4vwj7X3FRQlsLR8cFlMDYU=;
-        b=ONehLJlMia7mkVvk2Zcl9HnY/oTkc+1EwkoR6Jx3DnNxre4Sp/FSdNv9mcbGgEmDyx
-         hcwrMSJR7ZiQ1gQ0UYolLJ1KfSsEifqyTyCpB3HNLZA2KMDBC4nzkHtXo4jdW5MEBTL/
-         oeY/VF0jamX2X6EV+5N0Xd7mZ1j4MlgintI5pKX6sIFdlOA1BP37vU/laD/NgNYsqPs7
-         ry3YkegZ8oI5uWS54z5Ryp1YEZwXewCN8pUvCwKMKDNaZ0LFaWzFXYjHfSoj16inAquU
-         wnZgCdGNLRRqt1agsDuWNICevBAb1Fc4Vo2v2Ob02GeQiQO1vTHDvn4tcp5ikcEVDh90
-         MGRQ==
+        bh=cCRpuq5ugrZCMPNASqLzmnmQqSHwIbDaqesnsW6hpVY=;
+        b=dp7ag/s/XswteEOQhIlZJ0Nr9OSh2piBWOaxYRC3sJJA1h7P9YiBLyTj5ZbqtTA5s/
+         QVBATN/coisioHRuuIpGq3gJNfqJZeq14BoEa/ktEy7OjVkakgw2dN07PvsjfH2DKU0B
+         bxLma1WzIl4FKw+quVea/qjMwPtAOmq0TevZHzdNCNncQhM1PD4uyKVu4HWZvLI6BqTx
+         H7kaRy09fBu1xgcDeDqWrzFeKvin7yA3AAOKZ6MQsBsn3T/kb8YICvKVh7LgyXMq+5Bi
+         FLuEciavzkBG7ruhxzyjiDdwLtfbNolH0swGrGj9z+IyuUE/sK6RMxqKOGNWiAhwfBa3
+         5mXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=sybFcqH1KKlLZJ30kAOhH4vwj7X3FRQlsLR8cFlMDYU=;
-        b=OhkYu2hiUK/gSUA3i/4q9G25w/NRhq/g6jJIrERWIOKxLhWAUy+UhMDdG26E1Va6ij
-         ewfpsUBuV/C2p9naxWGa0BiNKLJDhzatqwBKwbD69P7hkCYBWcUKL/XhcNv+A+rOlEV1
-         PIGkkGesXfrzw4FbCLiuq1oA3vAhhQ4A1ijCETwosUwLiCEKDZ35HntT1bQv0pB+rHpz
-         IcZ8/1nPqvoUSouMPtV8M4eW9SgIOqF1tWOVE1JZLAT/lzXRKV0242xCogYfR13NqgAX
-         /ZdWbWwa8FhEKCWvajz4gFu81ada9pjisZdCjHXkzuXfcxn15nUNhLRIXLbZvSA2NLdF
-         c3Eg==
-X-Gm-Message-State: ACgBeo3FGKiRjQuhs8wGE+UdW4YAOZRD4Ctqi0g2GKlkPUB4Pmh3Ggua
-        XaaqTwoAp6jzSYvu0WJ+O3OCO5IpQKCH2mW7VfMXeg==
-X-Google-Smtp-Source: AA6agR4NChdz7hhi2/Bkod2bRWHC00+BPJkQJe+enovUPIqOU12s621gnom9CkqxdAsQy2M3vDnXK/nOmkkUrisgkSc=
-X-Received: by 2002:a81:a186:0:b0:33d:bf97:5b14 with SMTP id
- y128-20020a81a186000000b0033dbf975b14mr18636737ywg.514.1661961335065; Wed, 31
- Aug 2022 08:55:35 -0700 (PDT)
+        bh=cCRpuq5ugrZCMPNASqLzmnmQqSHwIbDaqesnsW6hpVY=;
+        b=gOmVYdzz5nwIBvroOklteWnYzRgyEuqYcPXvN0EwnHC0n6bBBKhIYGiC7JXMK8/M8Y
+         fBmpa1D4fhmAnqz26mBUHQzpMhZpZro+6l0DRClSoZ4RNGb7VDIPrld45neLaQ5SH+Ew
+         Fb1qx3WS7uK0yyUThTPOULM9cb3L6FXdLF7iDbbtGPJCFGLlUux0JzTbel+6oD4J1MHz
+         rrNbEShi81ez6JbOVtt7jxuURZchmfcbRN1M6LILsCPywmnajK+D2pVgIpLD27Y3U0Qm
+         0WCLzEJ/yKfc64lXGUtUJl8UNRw2RKjG1urBKr3+cflgYycG/Q3RHA1iLUf4ojeFTCv9
+         UKWg==
+X-Gm-Message-State: ACgBeo15Y4eZuEq7BS0KmoSgr4dj6Z69H3Ea8rN+8Pdtz4cpuP30wJBt
+        qLYBKqMEvMG52iGgmCvtuBGCQJLXk3E19ikppBVqBg==
+X-Google-Smtp-Source: AA6agR7Lu6PK9CdXu23xIn3AG3MYNgxqZ4pzHv7Fy3xw9o0fL/gGGSH+N2uXtSf2ZsqL9IuP0dnF/6Y/gY//h7qjU0c=
+X-Received: by 2002:a81:85c3:0:b0:33d:a4d9:4599 with SMTP id
+ v186-20020a8185c3000000b0033da4d94599mr18562781ywf.237.1661961381492; Wed, 31
+ Aug 2022 08:56:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-28-surenb@google.com>
- <241c05a3-52a2-d49f-6962-3af5a94bc3fc@infradead.org>
-In-Reply-To: <241c05a3-52a2-d49f-6962-3af5a94bc3fc@infradead.org>
+References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-23-surenb@google.com>
+ <b252a4e0-57a1-0f27-f4b0-598e851b47ea@infradead.org>
+In-Reply-To: <b252a4e0-57a1-0f27-f4b0-598e851b47ea@infradead.org>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 31 Aug 2022 08:55:24 -0700
-Message-ID: <CAJuCfpE2qrN7uXqZjJz6o20Rh4cQgcUBzAxzP4s+u=6XtmBnbg@mail.gmail.com>
-Subject: Re: [RFC PATCH 27/30] Code tagging based latency tracking
+Date:   Wed, 31 Aug 2022 08:56:10 -0700
+Message-ID: <CAJuCfpFff1iVx50QeJWE7=sJUZ2enig34VTAOCz75u_SY2EXKw@mail.gmail.com>
+Subject: Re: [RFC PATCH 22/30] Code tagging based fault injection
 To:     Randy Dunlap <rdunlap@infradead.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Kent Overstreet <kent.overstreet@linux.dev>,
@@ -99,31 +99,45 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Aug 30, 2022 at 6:53 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Tue, Aug 30, 2022 at 6:52 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
 >
 >
 > On 8/30/22 14:49, Suren Baghdasaryan wrote:
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index b7d03afbc808..b0f86643b8f0 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -1728,6 +1728,14 @@ config LATENCYTOP
-> >         Enable this option if you want to use the LatencyTOP tool
-> >         to find out which userspace is blocking on what kernel operations.
+> > From: Kent Overstreet <kent.overstreet@linux.dev>
 > >
-> > +config CODETAG_TIME_STATS
-> > +     bool "Code tagging based latency measuring"
-> > +     depends on DEBUG_FS
-> > +     select TIME_STATS
-> > +     select CODE_TAGGING
-> > +     help
-> > +       Enabling this option makes latency statistics available in debugfs
+> > This adds a new fault injection capability, based on code tagging.
+> >
+> > To use, simply insert somewhere in your code
+> >
+> >   dynamic_fault("fault_class_name")
+> >
+> > and check whether it returns true - if so, inject the error.
+> > For example
+> >
+> >   if (dynamic_fault("init"))
+> >       return -EINVAL;
+> >
+> > There's no need to define faults elsewhere, as with
+> > include/linux/fault-injection.h. Faults show up in debugfs, under
+> > /sys/kernel/debug/dynamic_faults, and can be selected based on
+> > file/module/function/line number/class, and enabled permanently, or in
+> > oneshot mode, or with a specified frequency.
+> >
+> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 >
-> Missing period at the end of the sentence.
+> Missing Signed-off-by: from Suren.
+> See Documentation/process/submitting-patches.rst:
+>
+> When to use Acked-by:, Cc:, and Co-developed-by:
+> ------------------------------------------------
+>
+> The Signed-off-by: tag indicates that the signer was involved in the
+> development of the patch, or that he/she was in the patch's delivery path.
 
-Ack.
+Thanks for the note! Will fix in the next respin.
 
+>
 >
 > --
 > ~Randy
