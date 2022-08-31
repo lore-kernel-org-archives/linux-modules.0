@@ -2,172 +2,108 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30178C0502C
-	for <linux-modules@archiver.kernel.org>; Wed, 31 Aug 2022 10:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41913ECAAD1
+	for <linux-modules@archiver.kernel.org>; Wed, 31 Aug 2022 10:19:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiHaKL0 (ORCPT
+        id S229449AbiHaKTP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 31 Aug 2022 06:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        Wed, 31 Aug 2022 06:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiHaKLO (ORCPT
+        with ESMTP id S229529AbiHaKTN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 31 Aug 2022 06:11:14 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7B56B14F
-        for <linux-modules@vger.kernel.org>; Wed, 31 Aug 2022 03:11:11 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 270971F8B4
-        for <linux-modules@vger.kernel.org>; Wed, 31 Aug 2022 10:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661940670; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 31 Aug 2022 06:19:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A0749B76
+        for <linux-modules@vger.kernel.org>; Wed, 31 Aug 2022 03:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661941152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9ZcqM4yN/Uj2veB6/peO+/NOESYU9wobXvQy0yQjV4o=;
-        b=Yy6RUQdM9jmsAxglplkxXX5ltqNnErSYCX9NG/KP34nto93gbhP8A03TGq2nPa/LvHZzml
-        btOJNLDHOI9hpuLsLjm09qtoqhoSAt44HVPsOPOvmrViCmO/bUFitzMEPHx5x2KSfVOCD4
-        vfr1uon403pQHuoUNgbpFaM/H1r2Wf8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661940670;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9ZcqM4yN/Uj2veB6/peO+/NOESYU9wobXvQy0yQjV4o=;
-        b=KUiIFlqbF9LwRuhv7UYrcQNDomt2Z2X+zy/MToMnTER4Y3BnTVv72LaVQ5k1u0/+kR20Pu
-        NSrzG7KAdz5wpiBA==
-Received: from suse.de (unknown [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C2D002C142;
-        Wed, 31 Aug 2022 10:11:04 +0000 (UTC)
-Date:   Wed, 31 Aug 2022 11:11:03 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
-        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 10/30] mm: enable page allocation tagging for
- __get_free_pages and alloc_pages
-Message-ID: <20220831101103.fj5hjgy3dbb44fit@suse.de>
-References: <20220830214919.53220-1-surenb@google.com>
- <20220830214919.53220-11-surenb@google.com>
+        bh=ZpRLTT1itQwP+u94Lmsh32laOgKQktQ3e6PuJ0p2Rms=;
+        b=YG46NREptaJz/FegmIQTc9Dku7vF+84g6SdlHDFVBviQZPZo+ZvkYi9uU3omuZ47g7cpd3
+        t+fd4VOKsX0nOvQJg+N53GUzd380IU3mJZsZPyaIHCfwKs3Kx0IjbFTBOYYzsskaH0j1NC
+        DWDcsR1Kzol5GIWyxOBu6f9D8CJqVRw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-379-X2ZHv0PiNSSY6gGXFoy8Eg-1; Wed, 31 Aug 2022 06:19:10 -0400
+X-MC-Unique: X2ZHv0PiNSSY6gGXFoy8Eg-1
+Received: by mail-wm1-f70.google.com with SMTP id c64-20020a1c3543000000b003a61987ffb3so8082788wma.6
+        for <linux-modules@vger.kernel.org>; Wed, 31 Aug 2022 03:19:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ZpRLTT1itQwP+u94Lmsh32laOgKQktQ3e6PuJ0p2Rms=;
+        b=DWmv5xbPg5AQEEeKcJ1rjht8wipM8ytgmBZMS5/9F9367SpRJjJr+ljYohJF+Wc3Mx
+         uRszj6LZx8r3/pZ/mJb/FRgcSvTgVZPAdNfE2Jan0zCWn/QVn5ARtQDsUx4c+Bhol322
+         B4hNLJM60XXfmAT7eGkMmrhfenxJ8byZ8xvSmE9ghhVG2RqibkYKAetGSV6nMbPMy6yc
+         bpY9e29kZnlz8dOeCfl6IhpeDDOJxLvTt0Fx4rl4byA05X8LdrrrIMGURBX01KqXxClb
+         YPV+tTq1PKhVTmfdQqd6gNopvsN0U8iacxlYkoDusBsZ1KoloTj4silPSP7tHaE92I4r
+         GPIg==
+X-Gm-Message-State: ACgBeo3cumQep+d/FUreFCFVHTVwaITAS/gtoHd0lMBYau//rRdnxvHn
+        3uajoKgyhvIvnBby4eUaZLfmEv5/DFLy+pQxd7/j3MsaMNX3te/L89zlV2DXsSVLoFO2QbHUFV9
+        oaOwQ/1aLfhzjtmB1VNM6pxqW
+X-Received: by 2002:a7b:c5c3:0:b0:3a6:14f3:8ea7 with SMTP id n3-20020a7bc5c3000000b003a614f38ea7mr1465431wmk.76.1661941149694;
+        Wed, 31 Aug 2022 03:19:09 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7PA9SH0oxj5GA6arasN/HeWr1ySDu7wDrfw96TfFaP41YwtAWjTM8Fq70mv1aAeWH9rphx4g==
+X-Received: by 2002:a7b:c5c3:0:b0:3a6:14f3:8ea7 with SMTP id n3-20020a7bc5c3000000b003a614f38ea7mr1465421wmk.76.1661941149506;
+        Wed, 31 Aug 2022 03:19:09 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id e14-20020adfef0e000000b0021d6924b777sm7186178wro.115.2022.08.31.03.19.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 03:19:08 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 11:19:07 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     mcgrof@kernel.org, christophe.leroy@csgroup.eu,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com
+Subject: Re: [PATCH modules-next] module: Add debugfs interface to view
+ unloaded tainted modules
+Message-ID: <20220831101907.5rqz6ylj2dyojqnj@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220823193225.2072649-1-atomlin@redhat.com>
+ <2bf2b4ee-fd8d-962d-0daa-9c8093ad331e@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220830214919.53220-11-surenb@google.com>
+In-Reply-To: <2bf2b4ee-fd8d-962d-0daa-9c8093ad331e@suse.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Aug 30, 2022 at 02:48:59PM -0700, Suren Baghdasaryan wrote:
-> Redefine alloc_pages, __get_free_pages to record allocations done by
-> these functions. Instrument deallocation hooks to record object freeing.
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> +#ifdef CONFIG_PAGE_ALLOC_TAGGING
-> +
->  #include <linux/alloc_tag.h>
->  #include <linux/page_ext.h>
->  
-> @@ -25,4 +27,37 @@ static inline void pgalloc_tag_dec(struct page *page, unsigned int order)
->  		alloc_tag_sub(get_page_tag_ref(page), PAGE_SIZE << order);
->  }
->  
-> +/*
-> + * Redefinitions of the common page allocators/destructors
-> + */
-> +#define pgtag_alloc_pages(gfp, order)					\
-> +({									\
-> +	struct page *_page = _alloc_pages((gfp), (order));		\
-> +									\
-> +	if (_page)							\
-> +		alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
-> +	_page;								\
-> +})
-> +
+On Mon 2022-08-29 09:14 +0200, Petr Pavlu wrote:
+> On 8/23/22 21:32, Aaron Tomlin wrote:
+> > [...]
+> > @@ -59,3 +60,68 @@ void print_unloaded_tainted_modules(void)
+> >  		}
+> >  	}
+> >  }
+> > +
+> > +#ifdef CONFIG_DEBUG_FS
+> > +static void *unloaded_tainted_modules_seq_start(struct seq_file *m, loff_t *pos)
+> > +{
+> > +	mutex_lock(&module_mutex);
+> > +	return seq_list_start_rcu(&unloaded_tainted_modules, *pos);
+> > +}
 
-Instead of renaming alloc_pages, why is the tagging not done in
-__alloc_pages()? At least __alloc_pages_bulk() is also missed. The branch
-can be guarded with IS_ENABLED.
+Hi Petr,
 
-> +#define pgtag_get_free_pages(gfp_mask, order)				\
-> +({									\
-> +	struct page *_page;						\
-> +	unsigned long _res = _get_free_pages((gfp_mask), (order), &_page);\
-> +									\
-> +	if (_res)							\
-> +		alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
-> +	_res;								\
-> +})
-> +
+> unloaded_tainted_modules looks to be a proper RCU list which makes me think
+> this reader could use just rcu_read_lock() instead of
+> mutex_lock(&module_mutex)?
 
-Similar, the tagging could happen in a core function instead of a wrapper.
+If I understand correctly, yes: the use of rcu_read_lock() and
+rcu_read_unlock(), respectively, will be sufficient.
 
-> +#else /* CONFIG_PAGE_ALLOC_TAGGING */
-> +
-> +#define pgtag_alloc_pages(gfp, order) _alloc_pages(gfp, order)
-> +
-> +#define pgtag_get_free_pages(gfp_mask, order) \
-> +	_get_free_pages((gfp_mask), (order), NULL)
-> +
-> +#define pgalloc_tag_dec(__page, __size)		do {} while (0)
-> +
-> +#endif /* CONFIG_PAGE_ALLOC_TAGGING */
-> +
->  #endif /* _LINUX_PGALLOC_TAG_H */
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index b73d3248d976..f7e6d9564a49 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -2249,7 +2249,7 @@ EXPORT_SYMBOL(vma_alloc_folio);
->   * flags are used.
->   * Return: The page on success or NULL if allocation fails.
->   */
-> -struct page *alloc_pages(gfp_t gfp, unsigned order)
-> +struct page *_alloc_pages(gfp_t gfp, unsigned int order)
->  {
->  	struct mempolicy *pol = &default_policy;
->  	struct page *page;
-> @@ -2273,7 +2273,7 @@ struct page *alloc_pages(gfp_t gfp, unsigned order)
->  
->  	return page;
->  }
-> -EXPORT_SYMBOL(alloc_pages);
-> +EXPORT_SYMBOL(_alloc_pages);
->  
->  struct folio *folio_alloc(gfp_t gfp, unsigned order)
->  {
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index e5486d47406e..165daba19e2a 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -763,6 +763,7 @@ static inline bool pcp_allowed_order(unsigned int order)
->  
->  static inline void free_the_page(struct page *page, unsigned int order)
->  {
-> +
->  	if (pcp_allowed_order(order))		/* Via pcp? */
->  		free_unref_page(page, order);
->  	else
+I will send a follow up patch.
 
-Spurious wide-space change.
+
+Kind regards,
 
 -- 
-Mel Gorman
-SUSE Labs
+Aaron Tomlin
+
