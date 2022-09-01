@@ -2,168 +2,219 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02AE1ECAAD1
-	for <linux-modules@archiver.kernel.org>; Thu,  1 Sep 2022 15:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA188ECAAD8
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Sep 2022 15:33:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234284AbiIAP0Q (ORCPT
+        id S233820AbiIAPdf (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 1 Sep 2022 11:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        Thu, 1 Sep 2022 11:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233155AbiIAP0O (ORCPT
+        with ESMTP id S233646AbiIAPde (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:26:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EFA49B44
-        for <linux-modules@vger.kernel.org>; Thu,  1 Sep 2022 08:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662045913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L8f4s5rqo1zwV3cO5t7nG7LhzQRJNI558jhBcTgE3u0=;
-        b=RzIsYQmqNKUr4gPdLFxDm0SAOXYN5D90sKlV60Ykd17Qkm858F3LSzWNX08RNMFRrMWtxt
-        cSo7zbL7eJyWZaEl+giTaqwbFHRFIj71ai87SdbNqFBmgpja7rA/sW9TrtFwGsLAa0IDu+
-        ktvd6V+cVOyA1vkdafgCVvI/noDi2zA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-171-R_xcA6O8OZ2yq0BTDYw1_w-1; Thu, 01 Sep 2022 11:25:03 -0400
-X-MC-Unique: R_xcA6O8OZ2yq0BTDYw1_w-1
-Received: by mail-wm1-f71.google.com with SMTP id f9-20020a7bcd09000000b003a62725489bso931425wmj.2
-        for <linux-modules@vger.kernel.org>; Thu, 01 Sep 2022 08:25:03 -0700 (PDT)
+        Thu, 1 Sep 2022 11:33:34 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F3988DD3
+        for <linux-modules@vger.kernel.org>; Thu,  1 Sep 2022 08:33:31 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 21so9131237ybl.6
+        for <linux-modules@vger.kernel.org>; Thu, 01 Sep 2022 08:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=cuZ+nGX7dbAKHVSMzM9WDnRxW6f4Hrbmbun1Vl7XZUY=;
+        b=nPy2aaUnPlKN9168rAezb9LSPcW4fo9+X5T3qYP77vPFcpzl+GhEzMZUxcz6J/8TiE
+         IizY0PKy2tILVlboBx4hOHtK6o3BgdgdGqsyzqTvhnIsClaTwjg++DGXEdjbBPa8JR6s
+         MIO2ZCktfdOzY88zke9nN4gcVwpbigx1IRCHgdE2F2Mq1597r9VFdc/4HIbMkV/CeG8x
+         zsKr4C+BAyJ34f5F1Hb/vV3IvHxRb8IEQg4iOBO9diUXfW6M3nrOExLvEuVNGqzKErqg
+         hzqElImWPPWWViyded2pBo3h+cgyvOivEpW732ttVGvmx+I0KmbeGYZvy64qW3Me0ncH
+         pw1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=L8f4s5rqo1zwV3cO5t7nG7LhzQRJNI558jhBcTgE3u0=;
-        b=CO/PYd3K62tg2jeX/wTfCVxUSUyU7v1i/ZdyJBQyLtU+eW4IwOrj7Xhyxr/sDJYGvK
-         004phcPKejFyICJLwiR08qDp+eb788HNAqGLynEiVhbpcibDNUCGYg/yOQtgu9wkJHg3
-         YgXhmEnAHXU6ZzjWRoCpLcvgNilGKJ8ugcstMfSfPwCYM0tP7SHNC/Q+wni+gUfqVbLJ
-         QhdDWJRGbx81gYu0ymZ8AZpX14l/McontCUtnAz8EFqRMX7sfhaFwUYPCKGMxPmofUiP
-         ijVcXETMzPZb8VLmoS3Pgsh+0LjqIgu1BOpL5GKgp3K0AatQ/O3JKrxJtaVkCBpT3JbG
-         8Nsg==
-X-Gm-Message-State: ACgBeo1x+KHdJsT3jn2p6aG4tFZnP0oRexzv2wmbkhQ5syCWNGa0TkiQ
-        LTJ6iwuBkugEblhnOMq4Qz/4uh8JdTBJs+jA5iUjLoMtGDd3KPU/4jKM5fel5oXnwNIm3rTFfQE
-        kVuJjYT2SFfX8Cl8Ufh5AMAE1
-X-Received: by 2002:a05:600c:40d5:b0:3a5:3d9f:6e7f with SMTP id m21-20020a05600c40d500b003a53d9f6e7fmr5534143wmh.21.1662045902190;
-        Thu, 01 Sep 2022 08:25:02 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR52P3HlyK/lb9QikJKrVE3z2Tzfd31k/wfWxA+g+0yktZAJ4Y33BhiH/+VnAxRZ+FZJssSfTA==
-X-Received: by 2002:a05:600c:40d5:b0:3a5:3d9f:6e7f with SMTP id m21-20020a05600c40d500b003a53d9f6e7fmr5534136wmh.21.1662045901983;
-        Thu, 01 Sep 2022 08:25:01 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id o8-20020a05600c4fc800b003a54f1d007csm6005807wmq.10.2022.09.01.08.25.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 08:25:00 -0700 (PDT)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org
-Cc:     petr.pavlu@suse.com, christophe.leroy@csgroup.eu,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        atomlin@atomlin.com
-Subject: [PATCH v2 modules-next 1/1] module: Add debugfs interface to view unloaded tainted modules
-Date:   Thu,  1 Sep 2022 16:24:54 +0100
-Message-Id: <20220901152454.2394228-2-atomlin@redhat.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220901152454.2394228-1-atomlin@redhat.com>
-References: <20220901152454.2394228-1-atomlin@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=cuZ+nGX7dbAKHVSMzM9WDnRxW6f4Hrbmbun1Vl7XZUY=;
+        b=KhjNeTry9quaFlGZngXL4OuUD9NYXq6ubFfv6s7jHKmCbmwo64nnaOrwQq3JVK+lXT
+         WO9iFgals4ZQA5ewfONIFVhMnNni5xGBcG3AGi+fY9s3fMMNv4wkTqDA7ePjGPuh4A6v
+         Fs1ah11oTAtCnAEgSPeLDaSMNvJCNxWWuQ4T8uZ9svmilUxlLrBgIXEWiqdnXa9Fpi+a
+         EQgUUJdwcCWfkPMcth4oitXGJf0bk4s8Hs9aj/m4ZtncfYwsB+hBQT2cdBEdSIdx2hbz
+         ThQ6N0+busKwBBDWywu2DzP+9KRXTgVBRyiW7Pl3X1PcKLqKr8Dz8JxLYLGO7cOUIekF
+         Hihw==
+X-Gm-Message-State: ACgBeo1maFDX91W1RUsqagOvX+g3X97PR6DgBiToFog7VUJBP+e2FdEm
+        CrY/CdWxtW+gjfmOl+l5XWK1oXwUtALYyHjHLfUS0g==
+X-Google-Smtp-Source: AA6agR7nkVcaAE7evofOhQO8CQyYLS6FGoseisRuE7p9aju3ICNx4/ZUVa/hlS8HLwBhdw8j7iOCWiWLZKuRzYzC+BI=
+X-Received: by 2002:a05:6902:705:b0:695:b3b9:41bc with SMTP id
+ k5-20020a056902070500b00695b3b941bcmr19699146ybt.426.1662046410779; Thu, 01
+ Sep 2022 08:33:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+ <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
+In-Reply-To: <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 1 Sep 2022 08:33:19 -0700
+Message-ID: <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This patch provides debug/modules/unloaded_tainted file to see a
-record of unloaded tainted modules.
+On Thu, Sep 1, 2022 at 12:18 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Wed 31-08-22 15:01:54, Kent Overstreet wrote:
+> > On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
+> > > On Wed 31-08-22 11:19:48, Mel Gorman wrote:
+> > > > Whatever asking for an explanation as to why equivalent functionality
+> > > > cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
+> > >
+> > > Fully agreed and this is especially true for a change this size
+> > > 77 files changed, 3406 insertions(+), 703 deletions(-)
+> >
+> > In the case of memory allocation accounting, you flat cannot do this with ftrace
+> > - you could maybe do a janky version that isn't fully accurate, much slower,
+> > more complicated for the developer to understand and debug and more complicated
+> > for the end user.
+> >
+> > But please, I invite anyone who's actually been doing this with ftrace to
+> > demonstrate otherwise.
+> >
+> > Ftrace just isn't the right tool for the job here - we're talking about adding
+> > per callsite accounting to some of the fastest fast paths in the kernel.
+> >
+> > And the size of the changes for memory allocation accounting are much more
+> > reasonable:
+> >  33 files changed, 623 insertions(+), 99 deletions(-)
+> >
+> > The code tagging library should exist anyways, it's been open coded half a dozen
+> > times in the kernel already.
+> >
+> > And once we've got that, the time stats code is _also_ far simpler than doing it
+> > with ftrace would be. If anyone here has successfully debugged latency issues
+> > with ftrace, I'd really like to hear it. Again, for debugging latency issues you
+> > want something that can always be on, and that's not cheap with ftrace - and
+> > never mind the hassle of correlating start and end wait trace events, builting
+> > up histograms, etc. - that's all handled here.
+> >
+> > Cheap, simple, easy to use. What more could you want?
+>
+> A big ad on a banner. But more seriously.
+>
+> This patchset is _huge_ and touching a lot of different areas. It will
+> be not only hard to review but even harder to maintain longterm. So
+> it is completely reasonable to ask for potential alternatives with a
+> smaller code footprint. I am pretty sure you are aware of that workflow.
 
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- kernel/module/tracking.c | 68 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+The patchset is huge because it introduces a reusable part (the first
+6 patches introducing code tagging) and 6 different applications in
+very different areas of the kernel. We wanted to present all of them
+in the RFC to show the variety of cases this mechanism can be reused
+for. If the code tagging is accepted, each application can be posted
+separately to the appropriate group of people. Hopefully that makes it
+easier to review. Those first 6 patches are not that big and are quite
+isolated IMHO:
 
-diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
-index 7f8133044d09..a139e63b6f20 100644
---- a/kernel/module/tracking.c
-+++ b/kernel/module/tracking.c
-@@ -10,6 +10,7 @@
- #include <linux/printk.h>
- #include <linux/slab.h>
- #include <linux/list.h>
-+#include <linux/debugfs.h>
- #include <linux/rculist.h>
- #include "internal.h"
- 
-@@ -59,3 +60,70 @@ void print_unloaded_tainted_modules(void)
- 		}
- 	}
- }
-+
-+#ifdef CONFIG_DEBUG_FS
-+static void *unloaded_tainted_modules_seq_start(struct seq_file *m, loff_t *pos)
-+	__acquires(rcu)
-+{
-+	rcu_read_lock();
-+	return seq_list_start_rcu(&unloaded_tainted_modules, *pos);
-+}
-+
-+static void *unloaded_tainted_modules_seq_next(struct seq_file *m, void *p, loff_t *pos)
-+{
-+	return seq_list_next_rcu(p, &unloaded_tainted_modules, pos);
-+}
-+
-+static void unloaded_tainted_modules_seq_stop(struct seq_file *m, void *p)
-+	__releases(rcu)
-+{
-+	rcu_read_unlock();
-+}
-+
-+static int unloaded_tainted_modules_seq_show(struct seq_file *m, void *p)
-+{
-+	struct mod_unload_taint *mod_taint;
-+	char buf[MODULE_FLAGS_BUF_SIZE];
-+	size_t l;
-+
-+	mod_taint = list_entry(p, struct mod_unload_taint, list);
-+	l = module_flags_taint(mod_taint->taints, buf);
-+	buf[l++] = '\0';
-+
-+	seq_printf(m, "%s (%s) %llu", mod_taint->name, buf, mod_taint->count);
-+	seq_puts(m, "\n");
-+
-+	return 0;
-+}
-+
-+static const struct seq_operations unloaded_tainted_modules_seq_ops = {
-+	.start = unloaded_tainted_modules_seq_start,
-+	.next  = unloaded_tainted_modules_seq_next,
-+	.stop  = unloaded_tainted_modules_seq_stop,
-+	.show  = unloaded_tainted_modules_seq_show,
-+};
-+
-+static int unloaded_tainted_modules_open(struct inode *inode, struct file *file)
-+{
-+	return seq_open(file, &unloaded_tainted_modules_seq_ops);
-+}
-+
-+static const struct file_operations unloaded_tainted_modules_fops = {
-+	.open = unloaded_tainted_modules_open,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = seq_release,
-+};
-+
-+static int __init unloaded_tainted_modules_init(void)
-+{
-+	struct dentry *dir;
-+
-+	dir = debugfs_create_dir("modules", NULL);
-+	debugfs_create_file("unloaded_tainted", 0444, dir, NULL,
-+			    &unloaded_tainted_modules_fops);
-+
-+	return 0;
-+}
-+module_init(unloaded_tainted_modules_init);
-+#endif /* CONFIG_DEBUG_FS */
--- 
-2.37.1
+ include/linux/codetag.h             |  83 ++++++++++
+ include/linux/lazy-percpu-counter.h |  67 ++++++++
+ include/linux/module.h              |   1 +
+ kernel/module/internal.h            |   1 -
+ kernel/module/main.c                |   4 +
+ lib/Kconfig                         |   3 +
+ lib/Kconfig.debug                   |   4 +
+ lib/Makefile                        |   3 +
+ lib/codetag.c                       | 248 ++++++++++++++++++++++++++++
+ lib/lazy-percpu-counter.c           | 141 ++++++++++++++++
+ lib/string_helpers.c                |   3 +-
+ scripts/kallsyms.c                  |  13 ++
 
+>
+> So I find Peter's question completely appropriate while your response to
+> that not so much! Maybe ftrace is not the right tool for the intented
+> job. Maybe there are other ways and it would be really great to show
+> that those have been evaluated and they are not suitable for a), b) and
+> c) reasons.
+
+That's fair.
+For memory tracking I looked into using kmemleak and page_owner which
+can't match the required functionality at an overhead acceptable for
+production and pre-production testing environments. traces + BPF I
+haven't evaluated myself but heard from other members of my team who
+tried using that in production environment with poor results. I'll try
+to get more specific information on that.
+
+>
+> E.g. Oscar has been working on extending page_ext to track number of
+> allocations for specific calltrace[1]. Is this 1:1 replacement? No! But
+> it can help in environments where page_ext can be enabled and it is
+> completely non-intrusive to the MM code.
+
+Thanks for pointing out this work. I'll need to review and maybe
+profile it before making any claims.
+
+>
+> If the page_ext overhead is not desirable/acceptable then I am sure
+> there are other options. E.g. kprobes/LivePatching framework can hook
+> into functions and alter their behavior. So why not use that for data
+> collection? Has this been evaluated at all?
+
+I'm not sure how I can hook into say alloc_pages() to find out where
+it was called from without capturing the call stack (which would
+introduce an overhead at every allocation). Would love to discuss this
+or other alternatives if they can be done with low enough overhead.
+Thanks,
+Suren.
+
+>
+> And please note that I am not claiming the presented work is approaching
+> the problem from a wrong direction. It might very well solve multiple
+> problems in a single go _but_ the long term code maintenance burden
+> really has to to be carefully evaluated and if we can achieve a
+> reasonable subset of the functionality with an existing infrastructure
+> then I would be inclined to sacrifice some portions with a considerably
+> smaller code footprint.
+>
+> [1] http://lkml.kernel.org/r/20220901044249.4624-1-osalvador@suse.de
+>
+> --
+> Michal Hocko
+> SUSE Labs
