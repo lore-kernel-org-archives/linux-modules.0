@@ -2,42 +2,42 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DED8ECAAD1
-	for <linux-modules@archiver.kernel.org>; Thu,  1 Sep 2022 07:41:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 353E8C64991
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Sep 2022 07:42:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbiIAHlO (ORCPT
+        id S232495AbiIAHmb (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 1 Sep 2022 03:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
+        Thu, 1 Sep 2022 03:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233999AbiIAHlJ (ORCPT
+        with ESMTP id S233178AbiIAHma (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:41:09 -0400
+        Thu, 1 Sep 2022 03:42:30 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3768310D4FC;
-        Thu,  1 Sep 2022 00:41:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5D51090AC;
+        Thu,  1 Sep 2022 00:42:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qqD5irythXcXnrZi3fFnP54DNBcaxZAOs7bCGWArgiE=; b=ZhvYUfsOVZfpS5Hal0dOI4T8sU
-        PNc+vhmIUmOhTzG2jygS6fZDnv4E7A8cEH34MHu/GJW5fxW0FsWlJpiJjUenDHQqSnwxEI5GXxOfi
-        ieFRy6iseDaQxWHqkKo+aE3IWTS2iT8jcbgwVHviCi1gvBk1EpqhUD/IxzFVA43sXpGAoI//tD4o7
-        DTq74As/XL+IUxAUoQcOMw9+Echuc+WtLNgyHhVHwco+lUUk18VbMVD+vebmmLUbv71Ofs9lwD97H
-        rLOOmkKjdINa5JkLcdScQbPyypaLsZb7x9/x0p1oU1C7YpIc541zuWJSdEwkNQlWeNWbSa+YEesS7
-        0Tt++BmA==;
+        bh=3R95H7o4Ps0Xt8Fb2RGRK8ftexUpMSTfRccKzarlwv8=; b=Eg80MMaySfuaV1ldmooclI5Nle
+        IN65bkkyoGAXjGnjvZ9Dz97arRuZEhWCpPPCP1gw1nVSAW07lMYUIubOMxvASCB4vmoiTLGUvHrLv
+        mnlyZtBunER3vltL8aBUMSfY4OGfxQTUnrR0dVTN+q9nK3Ed9aJ7y3lLrPOxju5X4dgv8lB4Rw2/S
+        M4qKtJDbH/5MyAfn5zL3v6Z2qbXeFnlVENhNiHvxEi1N3ly1LlBYvlGl7CCxhftPsoPtvO9AoJQWv
+        yv5KTzNibXIV76seLfOwEBNoqddr2AJkeDRRPmkEtfLxUWCG6NSjcEJWY7wpS3gtx9W2q+ItfapFU
+        +bbvPyyg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTeoy-005qNM-GL; Thu, 01 Sep 2022 07:41:04 +0000
+        id 1oTeqK-005qQi-Us; Thu, 01 Sep 2022 07:42:29 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A96683004C3;
-        Thu,  1 Sep 2022 09:41:02 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 447DF3004C7;
+        Thu,  1 Sep 2022 09:42:27 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 925E52B871FC0; Thu,  1 Sep 2022 09:41:02 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 09:41:02 +0200
+        id 344DD2B871FC3; Thu,  1 Sep 2022 09:42:27 +0200 (CEST)
+Date:   Thu, 1 Sep 2022 09:42:27 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Kent Overstreet <kent.overstreet@linux.dev>
 Cc:     Mel Gorman <mgorman@suse.de>,
@@ -61,39 +61,34 @@ Cc:     Mel Gorman <mgorman@suse.de>,
         linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
         linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 10/30] mm: enable page allocation tagging for
- __get_free_pages and alloc_pages
-Message-ID: <YxBiDmmhn4wlwIHC@hirez.programming.kicks-ass.net>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <YxBiY5hDUSE4ZqKM@hirez.programming.kicks-ass.net>
 References: <20220830214919.53220-1-surenb@google.com>
- <20220830214919.53220-11-surenb@google.com>
- <20220831101103.fj5hjgy3dbb44fit@suse.de>
- <20220831174629.zpa2pu6hpxmytqya@moria.home.lan>
+ <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
+ <20220831101948.f3etturccmp5ovkl@suse.de>
+ <20220831155941.q5umplytbx6offku@moria.home.lan>
+ <YxBZv1pZ6N2vwcP3@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831174629.zpa2pu6hpxmytqya@moria.home.lan>
+In-Reply-To: <YxBZv1pZ6N2vwcP3@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Aug 31, 2022 at 01:46:29PM -0400, Kent Overstreet wrote:
+On Thu, Sep 01, 2022 at 09:05:36AM +0200, Peter Zijlstra wrote:
+> On Wed, Aug 31, 2022 at 11:59:41AM -0400, Kent Overstreet wrote:
+> 
+> > Also, ftrace can drop events. Not really ideal if under system load your memory
+> > accounting numbers start to drift.
+> 
+> You could attach custom handlers to tracepoints. If you were to replace
+> these unconditional code hooks of yours with tracepoints then you could
+> conditionally (say at boot) register custom handlers that do the
+> accounting you want.
+> 
+> Nobody is mandating you use the ftrace ringbuffer to consume tracepoints.
+> Many people these days attach eBPF scripts to them and do whatever they
+> want.
 
-> Because all the counters are statically allocated, without even a pointer deref
-> to get to them in the allocation path (one pointer deref to get to them in the
-> deallocate path), that makes this _much, much_ cheaper than anything that could
-> be done with tracing - cheap enough that I expect many users will want to enable
-> it in production.
-
-You're contributing to death-by-a-thousand-cuts here. By making all this
-unconditional you're putting distros in a bind. Most of their users will
-likely not care about this, but if they enable it, they'll still pay the
-price for having it.
-
-Even static counters will have cache misses etc..
-
-So yes, for the few people that actually care about this stuff, this
-might be a bit faster, but IMO it gets the econimics all backwards,
-you're making everybody pay the price instead of only those that care.
-
-Also note that you can have your tracepoint based handler have
-statically allocated data just fine.
-
+Look at kernel/trace/blktrace.c for a fine in-kernel !BFP example of this.
