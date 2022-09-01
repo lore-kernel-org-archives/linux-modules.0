@@ -2,163 +2,93 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82567ECAAD3
-	for <linux-modules@archiver.kernel.org>; Thu,  1 Sep 2022 15:07:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C262ECAAD3
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Sep 2022 15:26:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233686AbiIAPHW (ORCPT
+        id S234220AbiIAP0P (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 1 Sep 2022 11:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        Thu, 1 Sep 2022 11:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233729AbiIAPHU (ORCPT
+        with ESMTP id S229514AbiIAP0O (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:07:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD02784EFE
-        for <linux-modules@vger.kernel.org>; Thu,  1 Sep 2022 08:07:14 -0700 (PDT)
+        Thu, 1 Sep 2022 11:26:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2C424BD5
+        for <linux-modules@vger.kernel.org>; Thu,  1 Sep 2022 08:25:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662044833;
+        s=mimecast20190719; t=1662045902;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n51zgqgBl470PB0vgcZT4BRIRHbxoQSrqhNCiStba2E=;
-        b=T9zofeULhQE98i1oQf8bu7x46PYqNJSo8BMJT+2VZQ4BmmlV1UHNKKj5nXBwWF02TQd2/a
-        ljuhtvTtERGEZzKDold0JX188Um0+1Pd2IEd1Jx0PHdIDwlj4GIgN/JG+hWi8yz+2M09iX
-        LuMoktOnv2MvGnVlRGh/iTIdAY5ahGY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gkJGKge+6uIm46PgUxrIJL/kWjX9EjAB7hcnEhK4b9A=;
+        b=f4MRXWcjOnf/sPRzmQDY2F0qh9Kwbn1/gdsyYxHtAFf+KBucfHCYHVAP1Uq/0/VvLcrykj
+        9vSKYoNhWGupWiXrkdH2w1DpQiL3W1YYauAG5MNw2LmLjqC9nUeNfHrDImrsM593FP89PX
+        g2BueVSGflDWlMH58OWLIRUmuJfIMcw=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-176-4YUF8GBWP9e80C0t5Cj-Ag-1; Thu, 01 Sep 2022 11:07:12 -0400
-X-MC-Unique: 4YUF8GBWP9e80C0t5Cj-Ag-1
-Received: by mail-wr1-f72.google.com with SMTP id j12-20020adfff8c000000b002265dcdfad7so3097776wrr.2
-        for <linux-modules@vger.kernel.org>; Thu, 01 Sep 2022 08:07:12 -0700 (PDT)
+ us-mta-605-R82VdR0JOmuutC3fkWnp7w-1; Thu, 01 Sep 2022 11:25:00 -0400
+X-MC-Unique: R82VdR0JOmuutC3fkWnp7w-1
+Received: by mail-wm1-f72.google.com with SMTP id q10-20020a1ce90a000000b003a60123678aso929277wmc.6
+        for <linux-modules@vger.kernel.org>; Thu, 01 Sep 2022 08:25:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=n51zgqgBl470PB0vgcZT4BRIRHbxoQSrqhNCiStba2E=;
-        b=i7fnLwvsXnQzUAyXAL7gfXHhMgWmR4ZROsStQYZT3HY4kIWj9sHs85OZESfaq7S0gQ
-         HhhVb2i3//1+Mx1S/BYz1nV0ZTbJVkZRQNI5EHxdIkcHFSFKOJEjz0vrc69MsPzYk6r1
-         yItLyOGXSSkMcU5wHFSZjBG48GU9GqNgaDM+xTuBHsMxeviWBkQ7w7OtRO/ForMGy6j7
-         bEhv+3YLozLxfsKVqvRgvbd8BJtXVXzz8Gwdl3VDn9Ngl/t13KqWeavxMZN1pKA3yBaR
-         P85LO7a8aj/weOvE7ZoLyC8wOgyVxV5NYQuYpLHhRlPSrOlpSTyo8r3OV5W98lcSsOW5
-         X2DQ==
-X-Gm-Message-State: ACgBeo1RLqldJYt/f9IndHEuAGJBk3LXOt560n5LnAYbMTRoaB5Hdl5u
-        rab/lyFBxGIEwF6620I6g1RV7VGVr9oXQmNGnH61tI9STQtLNNcB+amjlAUcHsD053963K+HO9n
-        nWKc20/E5iPk9q6QEfrxRkxcycg==
-X-Received: by 2002:a7b:ce13:0:b0:3a6:34f8:e21d with SMTP id m19-20020a7bce13000000b003a634f8e21dmr5628108wmc.22.1662044831139;
-        Thu, 01 Sep 2022 08:07:11 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4MsTHzosmA7E7hGiZjHmjlTUlB0s2DWeDkp38EpmRPnqXeJG3hehRWe5SqC6TIKnfqy7LhVg==
-X-Received: by 2002:a7b:ce13:0:b0:3a6:34f8:e21d with SMTP id m19-20020a7bce13000000b003a634f8e21dmr5628080wmc.22.1662044830813;
-        Thu, 01 Sep 2022 08:07:10 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:9e00:fec0:7e96:15cb:742? (p200300cbc7079e00fec07e9615cb0742.dip0.t-ipconnect.de. [2003:cb:c707:9e00:fec0:7e96:15cb:742])
-        by smtp.gmail.com with ESMTPSA id a6-20020a5d4d46000000b00226dedf1ab7sm9303786wru.76.2022.09.01.08.07.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 08:07:09 -0700 (PDT)
-Message-ID: <78e55029-0eaf-b4b3-7e86-1086b97c60c6@redhat.com>
-Date:   Thu, 1 Sep 2022 17:07:06 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=gkJGKge+6uIm46PgUxrIJL/kWjX9EjAB7hcnEhK4b9A=;
+        b=Xu7f3Cp3XPevX0/0Zj4ehU9rLm0cZgrmsQSByvHMsTkQShzkck7VjiPUuosuivgUxG
+         Q5KdBI76IYlJQ9DxzvJ/BaukiBvZVueDSJpOg2djw+fT9WEAk7eLJqO+yw/Xao2QlItl
+         UxdcdUOF7ewcdfBMkyWmiUltfpfou7pdZ7ZBzNpnzVlqckABBQHlXyBaqVRO80d+vVts
+         GOIh6OSTFKlXcTiJEu9HfhB9DQUF/zuRWynQt6GrIabkBzhcy3E2CMRuYeMbN7aSvz19
+         s3rjzmlN6apdSX79sPkLiS5Kd0IoZBfYklRbr5Hyh5mst0/LT8lCYUdThFWri97xag2K
+         zzXg==
+X-Gm-Message-State: ACgBeo0ttCVKWpKJet1lsvXSBEv2A1te34zJb1m8gj3nam0rpuO2V3pP
+        cW/6DSD8RIA9K+jgXhG2QgjBPeNTjo57BuMUEXgJ3Co3Wkd3dQgrllHvUJLiw26l9bvzaK4SSwg
+        LF3KDLS+BJErM3R3iiyoBbbNK
+X-Received: by 2002:a05:6000:100b:b0:226:d51d:8a76 with SMTP id a11-20020a056000100b00b00226d51d8a76mr13300037wrx.257.1662045899744;
+        Thu, 01 Sep 2022 08:24:59 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7D2pBQa6pfEp9i4xzRkLxHK53YKbsNFHMdsRHn9fb5ph5CjPweWQ+Tg0xAgynsLsK19y/A6w==
+X-Received: by 2002:a05:6000:100b:b0:226:d51d:8a76 with SMTP id a11-20020a056000100b00b00226d51d8a76mr13300029wrx.257.1662045899488;
+        Thu, 01 Sep 2022 08:24:59 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id bd17-20020a05600c1f1100b003a540fef440sm6203845wmb.1.2022.09.01.08.24.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 08:24:55 -0700 (PDT)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org
+Cc:     petr.pavlu@suse.com, christophe.leroy@csgroup.eu,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com
+Subject: [PATCH v2 modules-next 0/1] module: Add debugfs interface to view unloaded tainted modules
+Date:   Thu,  1 Sep 2022 16:24:53 +0100
+Message-Id: <20220901152454.2394228-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, void@manifault.com, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, peterx@redhat.com, axboe@kernel.dk,
-        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
-        changbin.du@intel.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, dvyukov@google.com, shakeelb@google.com,
-        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de> <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
- <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
- <404e947a-e1b2-0fae-8b4f-6f2e3ba6328d@redhat.com>
- <20220901142345.agkfp2d5lijdp6pt@moria.home.lan>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-In-Reply-To: <20220901142345.agkfp2d5lijdp6pt@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 01.09.22 16:23, Kent Overstreet wrote:
-> On Thu, Sep 01, 2022 at 10:05:03AM +0200, David Hildenbrand wrote:
->> On 31.08.22 21:01, Kent Overstreet wrote:
->>> On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
->>>> On Wed 31-08-22 11:19:48, Mel Gorman wrote:
->>>>> Whatever asking for an explanation as to why equivalent functionality
->>>>> cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
->>>>
->>>> Fully agreed and this is especially true for a change this size
->>>> 77 files changed, 3406 insertions(+), 703 deletions(-)
->>>
->>> In the case of memory allocation accounting, you flat cannot do this with ftrace
->>> - you could maybe do a janky version that isn't fully accurate, much slower,
->>> more complicated for the developer to understand and debug and more complicated
->>> for the end user.
->>>
->>> But please, I invite anyone who's actually been doing this with ftrace to
->>> demonstrate otherwise.
->>>
->>> Ftrace just isn't the right tool for the job here - we're talking about adding
->>> per callsite accounting to some of the fastest fast paths in the kernel.
->>>
->>> And the size of the changes for memory allocation accounting are much more
->>> reasonable:
->>>  33 files changed, 623 insertions(+), 99 deletions(-)
->>>
->>> The code tagging library should exist anyways, it's been open coded half a dozen
->>> times in the kernel already.
->>
->> Hi Kent,
->>
->> independent of the other discussions, if it's open coded already, does
->> it make sense to factor that already-open-coded part out independently
->> of the remainder of the full series here?
-> 
-> It's discussed in the cover letter, that is exactly how the patch series is
-> structured.
+Hi Luis,
 
-Skimming over the patches (that I was CCed on) and skimming over the
-cover letter, I got the impression that everything after patch 7 is
-introducing something new instead of refactoring something out.
+Changes since v1 [1]:
 
->  
->> [I didn't immediately spot if this series also attempts already to
->> replace that open-coded part]
-> 
-> Uh huh.
-> 
-> Honestly, some days it feels like lkml is just as bad as slashdot, with people
-> wanting to get in their two cents without actually reading...
+  - Replaced the use of module_mutex to instead mark
+    a RCU read-side critical section (Petr Pavlu)
+  - Added __acquires() and __releases() to support
+    sparse context checking
 
-... and of course you had to reply like that. I should just have learned
-from my last upstream experience with you and kept you on my spam list.
+[1]: https://lore.kernel.org/lkml/20220823193225.2072649-1-atomlin@redhat.com/
 
-Thanks, bye
 
+Aaron Tomlin (1):
+  module: Add debugfs interface to view unloaded tainted modules
+
+ kernel/module/tracking.c | 68 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+
+
+base-commit: 554694ba120b87e39cf732ed632e6a0c52fafb7c
 -- 
-Thanks,
-
-David / dhildenb
+2.37.1
 
