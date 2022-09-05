@@ -2,63 +2,63 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5442AECAAD5
-	for <linux-modules@archiver.kernel.org>; Mon,  5 Sep 2022 18:07:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70A18ECAAD3
+	for <linux-modules@archiver.kernel.org>; Mon,  5 Sep 2022 18:09:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiIESHj (ORCPT
+        id S232200AbiIESIg (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 5 Sep 2022 14:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
+        Mon, 5 Sep 2022 14:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiIESHi (ORCPT
+        with ESMTP id S232148AbiIESIf (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 5 Sep 2022 14:07:38 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D80350073
-        for <linux-modules@vger.kernel.org>; Mon,  5 Sep 2022 11:07:37 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id y187so7342525iof.0
-        for <linux-modules@vger.kernel.org>; Mon, 05 Sep 2022 11:07:37 -0700 (PDT)
+        Mon, 5 Sep 2022 14:08:35 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699CA606AF
+        for <linux-modules@vger.kernel.org>; Mon,  5 Sep 2022 11:08:33 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id k2so4939314ilu.9
+        for <linux-modules@vger.kernel.org>; Mon, 05 Sep 2022 11:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=Bum5cdqCm4gIf+I6AQy+wa1rXRQMNTd23PbVP2YAzEs=;
-        b=P1Rb3fVwlXmtVf21S4DMQt260sMuniAXM5U5+atV+MhvCaumM2tXM3K6KXNyMSjZe0
-         3nRcAmBfF+7W6/WOVR2XOADKxyQte4OnojdLmDBhMFh9NdRikO81nZDemeys0l200+Ya
-         BtEOzumSQwgu7ZWm3QeSZrXIo15d7vuotOaip8lu87RHKwjf3TUmogDdVvisjKKDmHLO
-         PI+YQ7orIzFlOARyvXxCAIGW+yY5UcwZ3NgJ+U4tIgdfF/EioIbKjubkaR07oZSndJ0y
-         pThgMzg7BhFJemuG5SPivo5QOLrPUeLBb55vYf5zQYtWTw5SjAAGq1FqYgp+ZLnBdvd/
-         Qr0g==
+        bh=hbTvjCqXtfZwCNAPDugxhLvbO4tPW4uXsytclFMPf88=;
+        b=BWl6tEU0Jv/5Ok7izOy2X+2XFHIjW2yJwE8yMIwADusWnEOeQC8si1U6iks3IFTXtR
+         5tbbeyYCmyTiKFNMcU3D2cV+gb/s5ohOcUII9kU6FU7ji/Zh8BrlwKsCQaRcerXV6BGZ
+         8PlGGmZZYHPvdH+WgSsyR10w9r/j2bW/3D0lAGkx1tIn87fB5RB3pcjDyqMnvPGCsyas
+         uH/yoycyrf5kaO5p9L7J37V/vDYJvxKCrEBpA8AorAMThecIv/vXA5VLdyTk9mhWPhlm
+         xhk4J8Awk+fBDhqAh5Kc3xuDELqvWV7xGoRQ08TJNeQzRqgNOVW6ruxsZF0Lyj7+Dw3B
+         m0Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Bum5cdqCm4gIf+I6AQy+wa1rXRQMNTd23PbVP2YAzEs=;
-        b=Durc2XGExigY7u51CgQKleu0qCIwXfK9TguFqc1miuIT63+0nQB4g79+xYEETHQLZH
-         y2LiVbm8aknLu7d6uKpblvdufCn1xCf93IyG+M3loKCVKN3PkHv35W0YqbqEcqgqt6SO
-         sCJBvMiP8NbreUoHpDp9Z95tRwqJerOLE/uOtQwi11mTENQJ247bO4uTSvpiWJw0xp1c
-         T3bZyV5TD6qpynOUiGDDcSgS6pzKpR093MeMI9jmhS3SHSiWHm2Zu/WcepPP3y8cTDch
-         o2VXiLI37MHzxoP1E31VLObk7ma/PgNMCFbo5idUBwugf1HJ82HXIH2lFryuPcqAVucn
-         ZhxQ==
-X-Gm-Message-State: ACgBeo0z6nOM0tvSqZ4eHc+c0quBxMicvj0g32uaCQcicB+yaAU6worX
-        KqvuIHPmlsMvdTrDostrmvjnB6Wo0SX2vEsloXwz0g==
-X-Google-Smtp-Source: AA6agR6r5XgehoMYjBLme4+OWXroqyk9NqBwquoUHJYNtZV3MpkU67zLpVv3eXPms5QzjDOiUeZjqJqeUZuYSAeGarw=
-X-Received: by 2002:a05:6638:1492:b0:34c:d42:ac2f with SMTP id
- j18-20020a056638149200b0034c0d42ac2fmr13910620jak.305.1662401256621; Mon, 05
- Sep 2022 11:07:36 -0700 (PDT)
+        bh=hbTvjCqXtfZwCNAPDugxhLvbO4tPW4uXsytclFMPf88=;
+        b=jh6SqK9JJzGKFckJS0EinBcPhADovJN0zvmRE8gEQTKK3f9nlUKD/+2JC/xdMTYIzB
+         O8mxnc9pwHTLWfnMfOfoomuh3Xmw0eqQ1jw3uXSik4hBaVKkbXA/V40DL0+cOt2s8Ii2
+         7eHhsI0HfK6BYHy5ptyBc9dpXLSVG6p5dpbYNG5WyZAmGg3xDf1WZbmuIVWkbk2/K3py
+         vCeCsmprT3rqMddoBDNal8KP7J96+g/SN8S4k5IrVPQvVNUXLxLNBWdnkDJckd59IMu2
+         iMiVqsUeOMYd5KHas/vfavhro5NHy+07PGQQrXwe9pFvrw3eZgJs5ICAumTTR+lXIHK3
+         a3+g==
+X-Gm-Message-State: ACgBeo16JgxW5JpQEln2k8dm2WMa1+8xR3W8AQqccXC9WQYkJJhM3sit
+        wAZfFVl/t/GTfPm7xC1TXps9w52MR6sq6lK/pVz4aw==
+X-Google-Smtp-Source: AA6agR4Rv/lC85vS43o4ySf3NvmJunla0lbszDaoWXhv+p4vulk9P6WBBoE0T5B+Wry+ZoXPm1CE94n4VZxipIKzyxQ=
+X-Received: by 2002:a92:ca06:0:b0:2eb:391a:a2a4 with SMTP id
+ j6-20020a92ca06000000b002eb391aa2a4mr16719486ils.199.1662401312639; Mon, 05
+ Sep 2022 11:08:32 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
  <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
  <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
  <YxBc1xuGbB36f8zC@dhcp22.suse.cz> <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
  <YxEE1vOwRPdzKxoq@dhcp22.suse.cz> <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
- <YxWvbMYLkPoJrQyr@dhcp22.suse.cz> <CANpmjNOYNWSSiV+VzvzBAeDJX+c1DRP+6jedKMt3gLNg8bgWKA@mail.gmail.com>
-In-Reply-To: <CANpmjNOYNWSSiV+VzvzBAeDJX+c1DRP+6jedKMt3gLNg8bgWKA@mail.gmail.com>
+ <20220905110713.27304149@gandalf.local.home>
+In-Reply-To: <20220905110713.27304149@gandalf.local.home>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 5 Sep 2022 11:07:25 -0700
-Message-ID: <CAJuCfpF4Meeo5b=ZTGe+YDCd9-jJ+WUazpJzaq7stOu2=1oP9Q@mail.gmail.com>
+Date:   Mon, 5 Sep 2022 11:08:21 -0700
+Message-ID: <CAJuCfpF-O6Gz2o7YqCgFHV+KEFuzC-PTUoBHj25DNRkkSmhbUg@mail.gmail.com>
 Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-To:     Marco Elver <elver@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Michal Hocko <mhocko@suse.com>,
         Kent Overstreet <kent.overstreet@linux.dev>,
         Mel Gorman <mgorman@suse.de>,
@@ -79,7 +79,6 @@ Cc:     Michal Hocko <mhocko@suse.com>,
         masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
         ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
         Benjamin Segall <bsegall@google.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <vschneid@redhat.com>,
@@ -87,6 +86,7 @@ Cc:     Michal Hocko <mhocko@suse.com>,
         Pekka Enberg <penberg@kernel.org>,
         Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
         Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
         Dmitry Vyukov <dvyukov@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
@@ -103,56 +103,38 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Sep 5, 2022 at 1:58 AM Marco Elver <elver@google.com> wrote:
+On Mon, Sep 5, 2022 at 8:06 AM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
-> On Mon, 5 Sept 2022 at 10:12, Michal Hocko <mhocko@suse.com> wrote:
-> > On Sun 04-09-22 18:32:58, Suren Baghdasaryan wrote:
-> > > On Thu, Sep 1, 2022 at 12:15 PM Michal Hocko <mhocko@suse.com> wrote:
-> > [...]
-> > > > Yes, tracking back the call trace would be really needed. The question
-> > > > is whether this is really prohibitively expensive. How much overhead are
-> > > > we talking about? There is no free lunch here, really.  You either have
-> > > > the overhead during runtime when the feature is used or on the source
-> > > > code level for all the future development (with a maze of macros and
-> > > > wrappers).
-> > >
-> > > As promised, I profiled a simple code that repeatedly makes 10
-> > > allocations/frees in a loop and measured overheads of code tagging,
-> > > call stack capturing and tracing+BPF for page and slab allocations.
-> > > Summary:
-> > >
-> > > Page allocations (overheads are compared to get_free_pages() duration):
-> > > 6.8% Codetag counter manipulations (__lazy_percpu_counter_add + __alloc_tag_add)
-> > > 8.8% lookup_page_ext
-> > > 1237% call stack capture
-> > > 139% tracepoint with attached empty BPF program
-> >
-> > Yes, I am not surprised that the call stack capturing is really
-> > expensive comparing to the allocator fast path (which is really highly
-> > optimized and I suspect that with 10 allocation/free loop you mostly get
-> > your memory from the pcp lists). Is this overhead still _that_ visible
-> > for somehow less microoptimized workloads which have to take slow paths
-> > as well?
-> >
-> > Also what kind of stack unwinder is configured (I guess ORC)? This is
-> > not my area but from what I remember the unwinder overhead varies
-> > between ORC and FP.
-> >
-> > And just to make it clear. I do realize that an overhead from the stack
-> > unwinding is unavoidable. And code tagging would logically have lower
-> > overhead as it performs much less work. But the main point is whether
-> > our existing stack unwiding approach is really prohibitively expensive
-> > to be used for debugging purposes on production systems. I might
-> > misremember but I recall people having bigger concerns with page_owner
-> > memory footprint than the actual stack unwinder overhead.
+> On Sun, 4 Sep 2022 18:32:58 -0700
+> Suren Baghdasaryan <surenb@google.com> wrote:
 >
-> This is just to point out that we've also been looking at cheaper
-> collection of the stack trace (for KASAN and other sanitizers). The
-> cheapest way to unwind the stack would be a system with "shadow call
-> stack" enabled. With compiler support it's available on arm64, see
-> CONFIG_SHADOW_CALL_STACK. For x86 the hope is that at one point the
-> kernel will support CET, which newer Intel and AMD CPUs support.
-> Collecting the call stack would then be a simple memcpy.
+> > Page allocations (overheads are compared to get_free_pages() duration):
+> > 6.8% Codetag counter manipulations (__lazy_percpu_counter_add + __alloc_tag_add)
+> > 8.8% lookup_page_ext
+> > 1237% call stack capture
+> > 139% tracepoint with attached empty BPF program
+>
+> Have you tried tracepoint with custom callback?
+>
+> static void my_callback(void *data, unsigned long call_site,
+>                         const void *ptr, struct kmem_cache *s,
+>                         size_t bytes_req, size_t bytes_alloc,
+>                         gfp_t gfp_flags)
+> {
+>         struct my_data_struct *my_data = data;
+>
+>         { do whatever }
+> }
+>
+> [..]
+>         register_trace_kmem_alloc(my_callback, my_data);
+>
+> Now the my_callback function will be called directly every time the
+> kmem_alloc tracepoint is hit.
+>
+> This avoids that perf and BPF overhead.
 
-Thanks for the note Marco! I'll check out the CONFIG_SHADOW_CALL_STACK
-on Android.
+Haven't tried that yet but will do. Thanks for the reference code!
+
+>
+> -- Steve
