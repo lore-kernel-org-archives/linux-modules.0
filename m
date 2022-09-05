@@ -2,64 +2,65 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83244ECAAD3
-	for <linux-modules@archiver.kernel.org>; Mon,  5 Sep 2022 18:03:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5442AECAAD5
+	for <linux-modules@archiver.kernel.org>; Mon,  5 Sep 2022 18:07:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbiIESDv (ORCPT
+        id S231277AbiIESHj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 5 Sep 2022 14:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        Mon, 5 Sep 2022 14:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbiIESDt (ORCPT
+        with ESMTP id S231162AbiIESHi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 5 Sep 2022 14:03:49 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C81D42AD6
-        for <linux-modules@vger.kernel.org>; Mon,  5 Sep 2022 11:03:47 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id e7so4934722ilc.5
-        for <linux-modules@vger.kernel.org>; Mon, 05 Sep 2022 11:03:47 -0700 (PDT)
+        Mon, 5 Sep 2022 14:07:38 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D80350073
+        for <linux-modules@vger.kernel.org>; Mon,  5 Sep 2022 11:07:37 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id y187so7342525iof.0
+        for <linux-modules@vger.kernel.org>; Mon, 05 Sep 2022 11:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=T67TRgbvL4Ai6kaNg3fck6vcoHVKT+0s4pwJ/NSZTGA=;
-        b=cPF8g7Tq5Xr7vWwWPXlAIGbvK841YSQ7JL9eISWcCc1GmuozWN4LmUfAHYFGsC3plp
-         xbkMUOOnQhpFxa0XIBosBwjnD4RAr2Kl5FqcTcUiqI63BnVfEWkAAfAMPK2+2D9jC4rI
-         SBcZs3gwdK8qGIp1MV9X/fGPGkKuR5qRQqaUNUEfXT08Tya/qRlmc89AlTJ5Ml7Xorrw
-         xo1/RpLc8BQEQ206qriFaMJIssLZDxhxOljYpigcvkdlTlPx06einaUW7/uPd1dNz5in
-         HXBRJcn7nXiV8BlMPqUAxSW6U9l+lE6gj/Oi85wJcyYJwIvqaZZYLOTvZP+kHnJ13k+5
-         7W5g==
+        bh=Bum5cdqCm4gIf+I6AQy+wa1rXRQMNTd23PbVP2YAzEs=;
+        b=P1Rb3fVwlXmtVf21S4DMQt260sMuniAXM5U5+atV+MhvCaumM2tXM3K6KXNyMSjZe0
+         3nRcAmBfF+7W6/WOVR2XOADKxyQte4OnojdLmDBhMFh9NdRikO81nZDemeys0l200+Ya
+         BtEOzumSQwgu7ZWm3QeSZrXIo15d7vuotOaip8lu87RHKwjf3TUmogDdVvisjKKDmHLO
+         PI+YQ7orIzFlOARyvXxCAIGW+yY5UcwZ3NgJ+U4tIgdfF/EioIbKjubkaR07oZSndJ0y
+         pThgMzg7BhFJemuG5SPivo5QOLrPUeLBb55vYf5zQYtWTw5SjAAGq1FqYgp+ZLnBdvd/
+         Qr0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=T67TRgbvL4Ai6kaNg3fck6vcoHVKT+0s4pwJ/NSZTGA=;
-        b=xJZexImriOHOdCSSvOiwg+7jUi31Tg3EYlrRSUcvCh+TC+/6nLzWJjzfqDQ6XxxIDK
-         8U3nTHKClHXZBnHL44fPCyfxSMEJPGQco5Q96urOFikq1YlZ93lQCbIF/6AB6UDT9O4j
-         JEDjS/x4CRlwdruyPpcEFr0WCZM7h3u1Rrb+EkZ7bYbjHUxZQdNYAeYSfY94neU+YYt2
-         FXwvDbGaL9xewQtILXwOxaKi6qqXg9utHFS9Q14Hfwrnb31fwMkuyC+T2jJBjcKI2qXF
-         zDqpHXxZdDtOT5AVr/rENPyDAa8/co08XwE48HdHEo/nHw8tGG36V+ECJv+8gj+0ZqbJ
-         5PQg==
-X-Gm-Message-State: ACgBeo1aAc0ADF/eZOTMDTW0dqGDi4vUTYNxSxJcZNLgDtUzwvdgsSRG
-        MfLpLWDEFf87L+0jGLwSBfuEeGT8LA59I2byyASIZQ==
-X-Google-Smtp-Source: AA6agR4B7x+HXZFIStbcPiXGjinnhf/x5VSF8+h0pcx1isIR3eJmYhiMXqo5jfQScJCtZZmLuVhzCMYw0KB/RJ8mvlI=
-X-Received: by 2002:a05:6e02:1ba8:b0:2eb:7d50:5fb8 with SMTP id
- n8-20020a056e021ba800b002eb7d505fb8mr14014798ili.296.1662401026346; Mon, 05
- Sep 2022 11:03:46 -0700 (PDT)
+        bh=Bum5cdqCm4gIf+I6AQy+wa1rXRQMNTd23PbVP2YAzEs=;
+        b=Durc2XGExigY7u51CgQKleu0qCIwXfK9TguFqc1miuIT63+0nQB4g79+xYEETHQLZH
+         y2LiVbm8aknLu7d6uKpblvdufCn1xCf93IyG+M3loKCVKN3PkHv35W0YqbqEcqgqt6SO
+         sCJBvMiP8NbreUoHpDp9Z95tRwqJerOLE/uOtQwi11mTENQJ247bO4uTSvpiWJw0xp1c
+         T3bZyV5TD6qpynOUiGDDcSgS6pzKpR093MeMI9jmhS3SHSiWHm2Zu/WcepPP3y8cTDch
+         o2VXiLI37MHzxoP1E31VLObk7ma/PgNMCFbo5idUBwugf1HJ82HXIH2lFryuPcqAVucn
+         ZhxQ==
+X-Gm-Message-State: ACgBeo0z6nOM0tvSqZ4eHc+c0quBxMicvj0g32uaCQcicB+yaAU6worX
+        KqvuIHPmlsMvdTrDostrmvjnB6Wo0SX2vEsloXwz0g==
+X-Google-Smtp-Source: AA6agR6r5XgehoMYjBLme4+OWXroqyk9NqBwquoUHJYNtZV3MpkU67zLpVv3eXPms5QzjDOiUeZjqJqeUZuYSAeGarw=
+X-Received: by 2002:a05:6638:1492:b0:34c:d42:ac2f with SMTP id
+ j18-20020a056638149200b0034c0d42ac2fmr13910620jak.305.1662401256621; Mon, 05
+ Sep 2022 11:07:36 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
  <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
  <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
  <YxBc1xuGbB36f8zC@dhcp22.suse.cz> <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
  <YxEE1vOwRPdzKxoq@dhcp22.suse.cz> <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
- <YxWvbMYLkPoJrQyr@dhcp22.suse.cz>
-In-Reply-To: <YxWvbMYLkPoJrQyr@dhcp22.suse.cz>
+ <YxWvbMYLkPoJrQyr@dhcp22.suse.cz> <CANpmjNOYNWSSiV+VzvzBAeDJX+c1DRP+6jedKMt3gLNg8bgWKA@mail.gmail.com>
+In-Reply-To: <CANpmjNOYNWSSiV+VzvzBAeDJX+c1DRP+6jedKMt3gLNg8bgWKA@mail.gmail.com>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 5 Sep 2022 11:03:35 -0700
-Message-ID: <CAJuCfpHJsfe172YUQbOqkkpNEEF7B6pJZuWnMa2BsdZwwEGKmA@mail.gmail.com>
+Date:   Mon, 5 Sep 2022 11:07:25 -0700
+Message-ID: <CAJuCfpF4Meeo5b=ZTGe+YDCd9-jJ+WUazpJzaq7stOu2=1oP9Q@mail.gmail.com>
 Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+To:     Marco Elver <elver@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
         Mel Gorman <mgorman@suse.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -86,7 +87,6 @@ Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
         Pekka Enberg <penberg@kernel.org>,
         Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
         Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
         Dmitry Vyukov <dvyukov@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
@@ -103,91 +103,56 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Sep 5, 2022 at 1:12 AM Michal Hocko <mhocko@suse.com> wrote:
+On Mon, Sep 5, 2022 at 1:58 AM Marco Elver <elver@google.com> wrote:
 >
-> On Sun 04-09-22 18:32:58, Suren Baghdasaryan wrote:
-> > On Thu, Sep 1, 2022 at 12:15 PM Michal Hocko <mhocko@suse.com> wrote:
-> [...]
-> > > Yes, tracking back the call trace would be really needed. The question
-> > > is whether this is really prohibitively expensive. How much overhead are
-> > > we talking about? There is no free lunch here, really.  You either have
-> > > the overhead during runtime when the feature is used or on the source
-> > > code level for all the future development (with a maze of macros and
-> > > wrappers).
+> On Mon, 5 Sept 2022 at 10:12, Michal Hocko <mhocko@suse.com> wrote:
+> > On Sun 04-09-22 18:32:58, Suren Baghdasaryan wrote:
+> > > On Thu, Sep 1, 2022 at 12:15 PM Michal Hocko <mhocko@suse.com> wrote:
+> > [...]
+> > > > Yes, tracking back the call trace would be really needed. The question
+> > > > is whether this is really prohibitively expensive. How much overhead are
+> > > > we talking about? There is no free lunch here, really.  You either have
+> > > > the overhead during runtime when the feature is used or on the source
+> > > > code level for all the future development (with a maze of macros and
+> > > > wrappers).
+> > >
+> > > As promised, I profiled a simple code that repeatedly makes 10
+> > > allocations/frees in a loop and measured overheads of code tagging,
+> > > call stack capturing and tracing+BPF for page and slab allocations.
+> > > Summary:
+> > >
+> > > Page allocations (overheads are compared to get_free_pages() duration):
+> > > 6.8% Codetag counter manipulations (__lazy_percpu_counter_add + __alloc_tag_add)
+> > > 8.8% lookup_page_ext
+> > > 1237% call stack capture
+> > > 139% tracepoint with attached empty BPF program
 > >
-> > As promised, I profiled a simple code that repeatedly makes 10
-> > allocations/frees in a loop and measured overheads of code tagging,
-> > call stack capturing and tracing+BPF for page and slab allocations.
-> > Summary:
+> > Yes, I am not surprised that the call stack capturing is really
+> > expensive comparing to the allocator fast path (which is really highly
+> > optimized and I suspect that with 10 allocation/free loop you mostly get
+> > your memory from the pcp lists). Is this overhead still _that_ visible
+> > for somehow less microoptimized workloads which have to take slow paths
+> > as well?
 > >
-> > Page allocations (overheads are compared to get_free_pages() duration):
-> > 6.8% Codetag counter manipulations (__lazy_percpu_counter_add + __alloc_tag_add)
-> > 8.8% lookup_page_ext
-> > 1237% call stack capture
-> > 139% tracepoint with attached empty BPF program
+> > Also what kind of stack unwinder is configured (I guess ORC)? This is
+> > not my area but from what I remember the unwinder overhead varies
+> > between ORC and FP.
+> >
+> > And just to make it clear. I do realize that an overhead from the stack
+> > unwinding is unavoidable. And code tagging would logically have lower
+> > overhead as it performs much less work. But the main point is whether
+> > our existing stack unwiding approach is really prohibitively expensive
+> > to be used for debugging purposes on production systems. I might
+> > misremember but I recall people having bigger concerns with page_owner
+> > memory footprint than the actual stack unwinder overhead.
 >
-> Yes, I am not surprised that the call stack capturing is really
-> expensive comparing to the allocator fast path (which is really highly
-> optimized and I suspect that with 10 allocation/free loop you mostly get
-> your memory from the pcp lists). Is this overhead still _that_ visible
-> for somehow less microoptimized workloads which have to take slow paths
-> as well?
+> This is just to point out that we've also been looking at cheaper
+> collection of the stack trace (for KASAN and other sanitizers). The
+> cheapest way to unwind the stack would be a system with "shadow call
+> stack" enabled. With compiler support it's available on arm64, see
+> CONFIG_SHADOW_CALL_STACK. For x86 the hope is that at one point the
+> kernel will support CET, which newer Intel and AMD CPUs support.
+> Collecting the call stack would then be a simple memcpy.
 
-Correct, it's a comparison with the allocation fast path, so in a
-sense represents the worst case scenario. However at the same time the
-measurements are fair because they measure the overheads against the
-same meaningful baseline, therefore can be used for comparison.
-
->
-> Also what kind of stack unwinder is configured (I guess ORC)? This is
-> not my area but from what I remember the unwinder overhead varies
-> between ORC and FP.
-
-I used whatever is default and didn't try other mechanisms. Don't
-think the difference would be orders of magnitude better though.
-
->
-> And just to make it clear. I do realize that an overhead from the stack
-> unwinding is unavoidable. And code tagging would logically have lower
-> overhead as it performs much less work. But the main point is whether
-> our existing stack unwiding approach is really prohibitively expensive
-> to be used for debugging purposes on production systems. I might
-> misremember but I recall people having bigger concerns with page_owner
-> memory footprint than the actual stack unwinder overhead.
-
-That's one of those questions which are very difficult to answer (if
-even possible) because that would depend on the use scenario. If the
-workload allocates frequently then adding the overhead will likely
-affect it, otherwise might not be even noticeable. In general, in
-pre-production testing we try to minimize the difference in
-performance and memory profiles between the software we are testing
-and the production one. From that point of view, the smaller the
-overhead, the better. I know it's kinda obvious but unfortunately I
-have no better answer to that question.
-
-For the memory overhead, in my early internal proposal with assumption
-of 10000 instrumented allocation call sites, I've made some
-calculations for an 8GB 8-core system (quite typical for Android) and
-ended up with the following:
-
-                                    per-cpu counters      atomic counters
-page_ext references     16MB                      16MB
-slab object references   10.5MB                   10.5MB
-alloc_tags                      900KB                    312KB
-Total memory overhead 27.4MB                  26.8MB
-
-so, about 0.34% of the total memory. Our implementation has changed
-since then and the number might not be completely correct but it
-should be in the ballpark.
-I just checked the number of instrumented calls that we currently have
-in the 6.0-rc3 built with defconfig and it's 165 page allocation and
-2684 slab allocation sites. I readily accept that we are probably
-missing some allocations and additional modules can also contribute to
-these numbers but my guess it's still less than 10000 that I used in
-my calculations.
-I don't claim that 0.34% overhead is low enough to be always
-acceptable, just posting the numbers to provide some reference points.
-
-> --
-> Michal Hocko
-> SUSE Labs
+Thanks for the note Marco! I'll check out the CONFIG_SHADOW_CALL_STACK
+on Android.
