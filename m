@@ -2,109 +2,121 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15E6DC6FA86
-	for <linux-modules@archiver.kernel.org>; Wed,  7 Sep 2022 13:45:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8257C54EE9
+	for <linux-modules@archiver.kernel.org>; Wed,  7 Sep 2022 15:23:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiIGNpx (ORCPT
+        id S230175AbiIGPX6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 7 Sep 2022 09:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        Wed, 7 Sep 2022 11:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiIGNpi (ORCPT
+        with ESMTP id S229702AbiIGPX4 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 7 Sep 2022 09:45:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E398E43603;
-        Wed,  7 Sep 2022 06:44:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3811CCE1BC3;
-        Wed,  7 Sep 2022 13:44:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E8F1C433C1;
-        Wed,  7 Sep 2022 13:44:38 +0000 (UTC)
-Date:   Wed, 7 Sep 2022 09:45:18 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <20220907094306.3383dac2@gandalf.local.home>
-In-Reply-To: <20220907130323.rwycrntnckc6h43n@kmo-framework>
-References: <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
-        <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
-        <YxEE1vOwRPdzKxoq@dhcp22.suse.cz>
-        <CAJuCfpHuzJGTA_-m0Jfawc7LgJLt4GztUUY4K9N9-7bFqJuXnw@mail.gmail.com>
-        <20220901201502.sn6223bayzwferxv@moria.home.lan>
-        <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
-        <20220905234649.525vorzx27ybypsn@kmo-framework>
-        <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
-        <20220906182058.iijmpzu4rtxowy37@kmo-framework>
-        <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
-        <20220907130323.rwycrntnckc6h43n@kmo-framework>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 7 Sep 2022 11:23:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114A1B7EDC
+        for <linux-modules@vger.kernel.org>; Wed,  7 Sep 2022 08:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662564223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+TiBDwzUMwuA8zr/qVC4cXXeItR3hCv3DGvVOTqvT4Q=;
+        b=L932411wENBieNEfqxmGBa/8SW5LhOXQSWmEijMVzW6TKWMfb+Fx1gXIdmuxiYDX2GqRg+
+        FprdYAktg/gBgYDB8mf55ZyigNj5G0/gOyljPbb1iU7of38Eg5MJGc3W9c8MZKWeOYMQ37
+        IA1M9o/WzvVhkkyzMi+dgsm2atcUUpo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-643-Fe-0ttXeOeSDaL6Ag-kN5A-1; Wed, 07 Sep 2022 11:23:42 -0400
+X-MC-Unique: Fe-0ttXeOeSDaL6Ag-kN5A-1
+Received: by mail-wm1-f72.google.com with SMTP id ay21-20020a05600c1e1500b003a6271a9718so7549377wmb.0
+        for <linux-modules@vger.kernel.org>; Wed, 07 Sep 2022 08:23:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=+TiBDwzUMwuA8zr/qVC4cXXeItR3hCv3DGvVOTqvT4Q=;
+        b=O/WwP5E/yqdQMgtjvL9YsYeoCdf+IhdcVhAwLio/MxWVaRCmsoKFoczVz5kreLQoTs
+         AZ8qLmjGBDATpyhNZg5nMYUT+15KyFoua5iU0rKT1WPCVt9ILdR+K40B/6FC9/ceB4+I
+         NG21jcP3aqPP6yOoFQZPpvHK0Q29B+OR0aeV1uA1sr4v5mNclCSZYovo+YS74y2S8wKl
+         /BlXt4vsnTl7O5LdJeOyUfCOSek6deKlEe7koEChJJteP6qBOK6wPhNNA2/DfS7LLUmg
+         ZhawemsGH1EvAWYdr86Od2KlVQw+KcJE9M/JE1DMKsQiDTE56Sv3my79bpmY/gHhc2Q/
+         bP6A==
+X-Gm-Message-State: ACgBeo0GqhyZvqNUFJREa7f0QYhC5Polw7yBzarC6/pRp5w+vzWDU9y/
+        vjf1cz7Nz7bf7Gr9O1AWCcYmF3FKNj+uasR0MzXYZrRI6oOuWtxp6uE+n415jX6fjPJZS8WDFN0
+        cKEBKfoRi2tsdacqjLpGZKye5
+X-Received: by 2002:a05:6000:11ca:b0:228:632c:76c8 with SMTP id i10-20020a05600011ca00b00228632c76c8mr2564085wrx.612.1662564219616;
+        Wed, 07 Sep 2022 08:23:39 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5mfANCJxn8n3V1FktoZGErJCkTRp1cV+ja4Vofvq0yThZoU+NK5xVFVKHN1bAfHTf1vlTUCw==
+X-Received: by 2002:a05:6000:11ca:b0:228:632c:76c8 with SMTP id i10-20020a05600011ca00b00228632c76c8mr2564076wrx.612.1662564219380;
+        Wed, 07 Sep 2022 08:23:39 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id q1-20020a05600c2e4100b003a2cf1ba9e2sm18051498wmf.6.2022.09.07.08.23.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 08:23:38 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 16:23:38 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     David Disseldorp <ddiss@suse.de>
+Cc:     dmitry.torokhov@gmail.com, mcgrof@kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH resend] module/decompress: generate sysfs string at
+ compile time
+Message-ID: <20220907152338.e6bw7qlgsa3ifcpe@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220906080317.15426-1-ddiss@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220906080317.15426-1-ddiss@suse.de>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, 7 Sep 2022 09:04:28 -0400
-Kent Overstreet <kent.overstreet@linux.dev> wrote:
-
-> On Wed, Sep 07, 2022 at 01:00:09PM +0200, Michal Hocko wrote:
-> > Hmm, it seems that further discussion doesn't really make much sense
-> > here. I know how to use my time better.  
+On Tue 2022-09-06 10:03 +0200, David Disseldorp wrote:
+> compression_show() before (with noinline):
+>    0xffffffff810b5ff0 <+0>:     mov    %rdx,%rdi
+>    0xffffffff810b5ff3 <+3>:     mov    $0xffffffff81b55629,%rsi
+>    0xffffffff810b5ffa <+10>:    mov    $0xffffffff81b0cde2,%rdx
+>    0xffffffff810b6001 <+17>:    call   0xffffffff811b8fd0 <sysfs_emit>
+>    0xffffffff810b6006 <+22>:    cltq
+>    0xffffffff810b6008 <+24>:    ret
 > 
-> Just a thought, but I generally find it more productive to propose ideas than to
-> just be disparaging.
+> After:
+>    0xffffffff810b5ff0 <+0>:     mov    $0xffffffff81b0cde2,%rsi
+>    0xffffffff810b5ff7 <+7>:     mov    %rdx,%rdi
+>    0xffffffff810b5ffa <+10>:    call   0xffffffff811b8fd0 <sysfs_emit>
+>    0xffffffff810b5fff <+15>:    cltq
+>    0xffffffff810b6001 <+17>:    ret
+> 
+> Signed-off-by: David Disseldorp <ddiss@suse.de>
+> ---
+>  kernel/module/decompress.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Resend: Maintainer addresses added.
+> 
+> Feel free to drop the to-be-expected commit message body if desired.
+> 
+> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+> index 4d0bcb3d9e449..c033572d83f0e 100644
+> --- a/kernel/module/decompress.c
+> +++ b/kernel/module/decompress.c
+> @@ -256,7 +256,7 @@ void module_decompress_cleanup(struct load_info *info)
+>  static ssize_t compression_show(struct kobject *kobj,
+>  				struct kobj_attribute *attr, char *buf)
+>  {
+> -	return sysfs_emit(buf, "%s\n", __stringify(MODULE_COMPRESSION));
+> +	return sysfs_emit(buf, __stringify(MODULE_COMPRESSION) "\n");
+>  }
+>  
+>  static struct kobj_attribute module_compression_attr = __ATTR_RO(compression);
+> -- 
+> 2.35.3
 > 
 
-But it's not Michal's job to do so. He's just telling you that the given
-feature is not worth the burden. He's telling you the issues that he has
-with the patch set. It's the submitter's job to address those concerns and
-not the maintainer's to tell you how to make it better.
+Reviewed-by: Aaron Tomlin <atomlin@redhat.com>
 
-When Linus tells us that a submission is crap, we don't ask him how to make
-it less crap, we listen to why he called it crap, and then rewrite to be
-not so crappy. If we cannot figure it out, it doesn't get in.
+-- 
+Aaron Tomlin
 
--- Steve
