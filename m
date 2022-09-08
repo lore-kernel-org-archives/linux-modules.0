@@ -2,133 +2,136 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 483FAC6FA83
-	for <linux-modules@archiver.kernel.org>; Thu,  8 Sep 2022 07:48:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FCFBC38145
+	for <linux-modules@archiver.kernel.org>; Thu,  8 Sep 2022 13:10:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiIHHr7 (ORCPT
+        id S232199AbiIHNKr (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 8 Sep 2022 03:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
+        Thu, 8 Sep 2022 09:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiIHHr6 (ORCPT
+        with ESMTP id S232203AbiIHNKd (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 8 Sep 2022 03:47:58 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760B3C6FEC;
-        Thu,  8 Sep 2022 00:47:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 11A6F1F921;
-        Thu,  8 Sep 2022 07:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662623276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4+jY/L5+xe35wjNUaKjbU+iCet/hLbz6TyCvxP2dmm0=;
-        b=q2uaKkC1rcu77DvPauruHEVNp78d3UcgHYo6roqYS04TbzQga+wo3gUgYM7xc8RTAbag0b
-        Siee5YfUMtfmfxPxqkOhtZP8FU1vyGEbeWhPo02Tz2AY0PEdGFeJwOjRT85XiTIOJmldhN
-        n8cvx7UnpYatYAeIOdBLBa+REawwQmI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFAA713A6D;
-        Thu,  8 Sep 2022 07:47:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id v6YhNiueGWPJGgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 08 Sep 2022 07:47:55 +0000
-Date:   Thu, 8 Sep 2022 09:47:55 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Thu, 8 Sep 2022 09:10:33 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDAFBF61;
+        Thu,  8 Sep 2022 06:10:12 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MNfWw45tNz14QMJ;
+        Thu,  8 Sep 2022 21:06:20 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 8 Sep 2022 21:10:10 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 8 Sep 2022 21:10:09 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <YxmeK2/HHS4AkXh0@dhcp22.suse.cz>
-References: <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
- <20220905234649.525vorzx27ybypsn@kmo-framework>
- <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
- <20220906182058.iijmpzu4rtxowy37@kmo-framework>
- <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
- <20220907130323.rwycrntnckc6h43n@kmo-framework>
- <20220907094306.3383dac2@gandalf.local.home>
- <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
- <YxmV7a2pnj1Kldzi@dhcp22.suse.cz>
- <20220908072950.yapakb5scocxezhy@kmo-framework>
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 1/7] scripts/kallsyms: don't compress symbol type when CONFIG_KALLSYMS_ALL=y
+Date:   Thu, 8 Sep 2022 21:09:30 +0800
+Message-ID: <20220908130936.674-2-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
+In-Reply-To: <20220908130936.674-1-thunder.leizhen@huawei.com>
+References: <20220908130936.674-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908072950.yapakb5scocxezhy@kmo-framework>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu 08-09-22 03:29:50, Kent Overstreet wrote:
-> On Thu, Sep 08, 2022 at 09:12:45AM +0200, Michal Hocko wrote:
-> > Then you have probably missed a huge part of my emails. Please
-> > re-read. If those arguments are not clear, feel free to ask for
-> > clarification. Reducing the whole my reasoning and objections to the
-> > sentence above and calling that vapid and lazy is not only unfair but
-> > also disrespectful.
-> 
-> What, where you complained about slab's page allocations showing up in the
-> profile instead of slab, and I pointed out to you that actually each and every
-> slab call is instrumented, and you're just seeing some double counting (that we
-> will no doubt fix?)
-> 
-> Or when you complained about allocation sites where it should actually be the
-> caller that should be instrumented, and I pointed out that it'd be quite easy to
-> simply change that code to use _kmalloc() and slab_tag_add() directly, if it
-> becomes an issue.
-> 
-> Of course, if we got that far, we'd have this code to thank for telling us where
-> to look!
-> 
-> Did I miss anything?
+Currently, to search for a symbol, we need to expand the symbols in
+'kallsyms_names' one by one, and then use the expanded string for
+comparison. This is very slow.
 
-Feel free to reponse to specific arguments as I wrote them. I won't
-repeat them again. Sure we can discuss how important/relevant those
-are. And that _can_ be a productive discussion.
+In fact, we can first compress the name being looked up and then use
+it for comparison when traversing 'kallsyms_names'.
 
+This increases the size of 'kallsyms_names'. About 48KiB, 2.67%, on x86
+with defconfig.
+Before: kallsyms_num_syms=131392, sizeof(kallsyms_names)=1823659
+After : kallsyms_num_syms=131392, sizeof(kallsyms_names)=1872418
+
+However, if CONFIG_KALLSYMS_ALL is not set, the size of 'kallsyms_names'
+does not change.
+
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ scripts/kallsyms.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index f18e6dfc68c5839..ab6fe7cd014efd1 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -60,6 +60,7 @@ static unsigned int table_size, table_cnt;
+ static int all_symbols;
+ static int absolute_percpu;
+ static int base_relative;
++static int sym_start_idx;
+ 
+ static int token_profit[0x10000];
+ 
+@@ -511,7 +512,7 @@ static void learn_symbol(const unsigned char *symbol, int len)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < len - 1; i++)
++	for (i = sym_start_idx; i < len - 1; i++)
+ 		token_profit[ symbol[i] + (symbol[i + 1] << 8) ]++;
+ }
+ 
+@@ -520,7 +521,7 @@ static void forget_symbol(const unsigned char *symbol, int len)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < len - 1; i++)
++	for (i = sym_start_idx; i < len - 1; i++)
+ 		token_profit[ symbol[i] + (symbol[i + 1] << 8) ]--;
+ }
+ 
+@@ -538,7 +539,7 @@ static unsigned char *find_token(unsigned char *str, int len,
+ {
+ 	int i;
+ 
+-	for (i = 0; i < len - 1; i++) {
++	for (i = sym_start_idx; i < len - 1; i++) {
+ 		if (str[i] == token[0] && str[i+1] == token[1])
+ 			return &str[i];
+ 	}
+@@ -780,6 +781,14 @@ int main(int argc, char **argv)
+ 	} else if (argc != 1)
+ 		usage();
+ 
++	/*
++	 * Skip the symbol type, do not compress it to optimize the performance
++	 * of finding or traversing symbols in kernel, this is good for modules
++	 * such as livepatch.
++	 */
++	if (all_symbols)
++		sym_start_idx = 1;
++
+ 	read_map(stdin);
+ 	shrink_table();
+ 	if (absolute_percpu)
 -- 
-Michal Hocko
-SUSE Labs
+2.25.1
+
