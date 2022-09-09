@@ -2,34 +2,33 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1039AC54EE9
-	for <linux-modules@archiver.kernel.org>; Fri,  9 Sep 2022 01:17:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25D6EECAAA1
+	for <linux-modules@archiver.kernel.org>; Fri,  9 Sep 2022 13:03:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbiIIBRq (ORCPT
+        id S229502AbiIINDQ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 8 Sep 2022 21:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
+        Fri, 9 Sep 2022 09:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiIIBRp (ORCPT
+        with ESMTP id S229658AbiIINDP (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 8 Sep 2022 21:17:45 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F17E1098EF;
-        Thu,  8 Sep 2022 18:17:44 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNyfb0P30zZcl8;
-        Fri,  9 Sep 2022 09:13:11 +0800 (CST)
+        Fri, 9 Sep 2022 09:03:15 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A0CD1E05;
+        Fri,  9 Sep 2022 06:03:14 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MPGKN6HrkzlVqG;
+        Fri,  9 Sep 2022 20:59:20 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 09:17:41 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
+ 15.1.2375.24; Fri, 9 Sep 2022 21:03:12 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 09:17:40 +0800
-Subject: Re: [PATCH 0/7] kallsyms: Optimizes the performance of lookup symbols
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+ 15.1.2375.24; Fri, 9 Sep 2022 21:03:11 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
@@ -40,58 +39,65 @@ CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
         <linux-modules@vger.kernel.org>
-References: <20220908130936.674-1-thunder.leizhen@huawei.com>
- <YxqDyyVwVUnqc8B1@bombadil.infradead.org>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <0e662541-baf8-1074-06bd-1398bdf7c2a7@huawei.com>
-Date:   Fri, 9 Sep 2022 09:17:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH v2 0/8] kallsyms: Optimizes the performance of lookup symbols
+Date:   Fri, 9 Sep 2022 21:00:08 +0800
+Message-ID: <20220909130016.727-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-In-Reply-To: <YxqDyyVwVUnqc8B1@bombadil.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+v1 --> v2:
+Add self-test facility
 
+v1:
+Currently, to search for a symbol, we need to expand the symbols in
+'kallsyms_names' one by one, and then use the expanded string for
+comparison. This is very slow.
 
-On 2022/9/9 8:07, Luis Chamberlain wrote:
-> On Thu, Sep 08, 2022 at 09:09:29PM +0800, Zhen Lei wrote:
->> Currently, to search for a symbol, we need to expand the symbols in
->> 'kallsyms_names' one by one, and then use the expanded string for
->> comparison. This is very slow.
->>
->> In fact, we can first compress the name being looked up and then use
->> it for comparison when traversing 'kallsyms_names'.
->>
->> This patch series optimizes the performance of function kallsyms_lookup_name(),
->> and function klp_find_object_symbol() in the livepatch module. Based on the
->> test results, the performance overhead is reduced to 5%. That is, the
->> performance of these functions is improved by 20 times.
->>
->> To avoid increasing the kernel size in non-debug mode, the optimization is only
->> for the case CONFIG_KALLSYMS_ALL=y.
-> 
-> WIthout having time yet to reveiw the implementation details, it would
-> seem this is an area we may want to test for future improvements easily,
-> so a selftest better yet a kunit test may be nice for this. Can you
-> write one so we can easily gather a simple metric for "how long does
-> this take"?
+In fact, we can first compress the name being looked up and then use
+it for comparison when traversing 'kallsyms_names'.
 
-Good advice. I'll write it today.
+This patch series optimizes the performance of function kallsyms_lookup_name(),
+and function klp_find_object_symbol() in the livepatch module. Based on the
+test results, the performance overhead is reduced to 5%. That is, the
+performance of these functions is improved by 20 times.
 
-> 
->   Luis
-> .
-> 
+To avoid increasing the kernel size in non-debug mode, the optimization is only
+for the case CONFIG_KALLSYMS_ALL=y.
+
+Zhen Lei (8):
+  scripts/kallsyms: don't compress symbol type when
+    CONFIG_KALLSYMS_ALL=y
+  scripts/kallsyms: rename build_initial_tok_table()
+  kallsyms: Adjust the types of some local variables
+  kallsyms: Improve the performance of kallsyms_lookup_name()
+  kallsyms: Add helper kallsyms_on_each_match_symbol()
+  livepatch: Use kallsyms_on_each_match_symbol() to improve performance
+  livepatch: Improve the search performance of
+    module_kallsyms_on_each_symbol()
+  kallsyms: Add self-test facility
+
+ include/linux/kallsyms.h   |   8 ++
+ init/Kconfig               |  13 ++
+ kernel/Makefile            |   1 +
+ kernel/kallsyms.c          | 135 ++++++++++++++++++++-
+ kernel/kallsyms_selftest.c | 243 +++++++++++++++++++++++++++++++++++++
+ kernel/livepatch/core.c    |  25 +++-
+ kernel/module/kallsyms.c   |  13 +-
+ scripts/kallsyms.c         |  19 ++-
+ 8 files changed, 441 insertions(+), 16 deletions(-)
+ create mode 100644 kernel/kallsyms_selftest.c
 
 -- 
-Regards,
-  Zhen Lei
+2.25.1
+
