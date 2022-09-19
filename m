@@ -2,31 +2,31 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F20BC6FA99
-	for <linux-modules@archiver.kernel.org>; Mon, 19 Sep 2022 15:17:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D0C4ECAAD3
+	for <linux-modules@archiver.kernel.org>; Mon, 19 Sep 2022 15:17:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiISPRG (ORCPT
+        id S229592AbiISPRI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 19 Sep 2022 11:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        Mon, 19 Sep 2022 11:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiISPQo (ORCPT
+        with ESMTP id S229819AbiISPQq (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:16:44 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2FC6388;
-        Mon, 19 Sep 2022 08:16:29 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MWSpG6j0Hz14QfQ;
-        Mon, 19 Sep 2022 23:12:22 +0800 (CST)
+        Mon, 19 Sep 2022 11:16:46 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99332113D;
+        Mon, 19 Sep 2022 08:16:33 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MWSrb6qZbzHnxT;
+        Mon, 19 Sep 2022 23:14:23 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 23:16:27 +0800
+ 15.1.2375.31; Mon, 19 Sep 2022 23:16:31 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 23:16:26 +0800
+ 15.1.2375.31; Mon, 19 Sep 2022 23:16:30 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -42,9 +42,9 @@ To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Luis Chamberlain" <mcgrof@kernel.org>,
         <linux-modules@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v3 1/8] scripts/kallsyms: rename build_initial_tok_table()
-Date:   Mon, 19 Sep 2022 23:15:26 +0800
-Message-ID: <20220919151533.1734-2-thunder.leizhen@huawei.com>
+Subject: [PATCH v3 7/8] livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
+Date:   Mon, 19 Sep 2022 23:15:32 +0800
+Message-ID: <20220919151533.1734-8-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20220919151533.1734-1-thunder.leizhen@huawei.com>
 References: <20220919151533.1734-1-thunder.leizhen@huawei.com>
@@ -58,43 +58,85 @@ X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Except for the function build_initial_tok_table(), no token abbreviation
-is used elsewhere.
+Currently we traverse all symbols of all modules to find the specified
+function for the specified module. But in reality, we just need to find
+the given module and then traverse all the symbols in it.
 
-$ cat scripts/kallsyms.c | grep tok | wc -l
-33
-$ cat scripts/kallsyms.c | grep token | wc -l
-31
+In order to achieve this purpose, split the call to hook 'fn' into two
+phases:
+1. Finds the given module. Pass pointer 'mod'. Hook 'fn' directly returns
+   the comparison result of the module name without comparing the function
+   name.
+2. Finds the given function in that module. Pass pointer 'mod = NULL'.
+   Hook 'fn' skip the comparison of module name and directly compare
+   function names.
 
-Here, it would be clearer to use the full name.
+Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
+                |
+Phase2:          -->f1-->f2-->f3
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- scripts/kallsyms.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/livepatch/core.c  |  7 ++-----
+ kernel/module/kallsyms.c | 13 ++++++++++++-
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index f18e6dfc68c5839..8caccc8f4a23703 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -525,7 +525,7 @@ static void forget_symbol(const unsigned char *symbol, int len)
- }
- 
- /* do the initial token count */
--static void build_initial_tok_table(void)
-+static void build_initial_token_table(void)
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index 31b57ccf908017e..98e23137e4133bc 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -130,15 +130,12 @@ static int klp_find_callback(void *data, const char *name,
  {
- 	unsigned int i;
+ 	struct klp_find_arg *args = data;
  
-@@ -650,7 +650,7 @@ static void insert_real_symbols_in_table(void)
+-	if ((mod && !args->objname) || (!mod && args->objname))
+-		return 0;
++	if (mod)
++		return strcmp(args->objname, mod->name);
  
- static void optimize_token_table(void)
- {
--	build_initial_tok_table();
-+	build_initial_token_table();
+ 	if (strcmp(args->name, name))
+ 		return 0;
  
- 	insert_real_symbols_in_table();
+-	if (args->objname && strcmp(args->objname, mod->name))
+-		return 0;
+-
+ 	args->addr = addr;
+ 	args->count++;
  
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index f5c5c9175333df7..b033613e6c7e3bb 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -510,6 +510,11 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+ 		if (mod->state == MODULE_STATE_UNFORMED)
+ 			continue;
+ 
++		/* check mod->name first */
++		ret = fn(data, NULL, mod, 0);
++		if (ret)
++			continue;
++
+ 		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
+ 		preempt_disable();
+ 		kallsyms = rcu_dereference_sched(mod->kallsyms);
+@@ -522,10 +527,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+ 				continue;
+ 
+ 			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
+-				 mod, kallsyms_symbol_value(sym));
++				 NULL, kallsyms_symbol_value(sym));
+ 			if (ret != 0)
+ 				goto out;
+ 		}
++
++		/*
++		 * The given module is found, the subsequent modules do not
++		 * need to be compared.
++		 */
++		break;
+ 	}
+ out:
+ 	mutex_unlock(&module_mutex);
 -- 
 2.25.1
 
