@@ -2,31 +2,31 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8A92C6FA98
-	for <linux-modules@archiver.kernel.org>; Mon, 19 Sep 2022 15:17:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A93CC6FA86
+	for <linux-modules@archiver.kernel.org>; Mon, 19 Sep 2022 15:17:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiISPRF (ORCPT
+        id S229887AbiISPRH (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 19 Sep 2022 11:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
+        Mon, 19 Sep 2022 11:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiISPQp (ORCPT
+        with ESMTP id S229749AbiISPQp (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Mon, 19 Sep 2022 11:16:45 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6741D1401E;
-        Mon, 19 Sep 2022 08:16:31 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MWSpJ4rlSzlW0t;
-        Mon, 19 Sep 2022 23:12:24 +0800 (CST)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4F9DEEE;
+        Mon, 19 Sep 2022 08:16:32 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MWSpL2v81z14QgQ;
+        Mon, 19 Sep 2022 23:12:26 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 23:16:29 +0800
+ 15.1.2375.31; Mon, 19 Sep 2022 23:16:30 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 23:16:28 +0800
+ 15.1.2375.31; Mon, 19 Sep 2022 23:16:30 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -42,9 +42,9 @@ To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Luis Chamberlain" <mcgrof@kernel.org>,
         <linux-modules@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v3 4/8] kallsyms: Improve the performance of kallsyms_lookup_name()
-Date:   Mon, 19 Sep 2022 23:15:29 +0800
-Message-ID: <20220919151533.1734-5-thunder.leizhen@huawei.com>
+Subject: [PATCH v3 6/8] livepatch: Use kallsyms_on_each_match_symbol() to improve performance
+Date:   Mon, 19 Sep 2022 23:15:31 +0800
+Message-ID: <20220919151533.1734-7-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20220919151533.1734-1-thunder.leizhen@huawei.com>
 References: <20220919151533.1734-1-thunder.leizhen@huawei.com>
@@ -58,156 +58,53 @@ X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Currently, to search for a symbol, we need to expand the symbols in
-'kallsyms_names' one by one, and then use the expanded string for
-comparison. This process can be optimized.
-
-And now scripts/kallsyms no longer compresses the symbol types, each
-symbol type always occupies one byte. So we can first compress the
-searched symbol and then make a quick comparison based on the compressed
-length and content. In this way, for entries with mismatched lengths,
-there is no need to expand and compare strings. And for those matching
-lengths, there's no need to expand the symbol. This saves a lot of time.
-According to my test results, the average performance of
-kallsyms_lookup_name() can be improved by 20 to 30 times.
-
-The pseudo code of the test case is as follows:
-static int stat_find_name(...)
-{
-	start = sched_clock();
-	(void)kallsyms_lookup_name(name);
-	end = sched_clock();
-	//Update min, max, cnt, sum
-}
-
-/*
- * Traverse all symbols in sequence and collect statistics on the time
- * taken by kallsyms_lookup_name() to lookup each symbol.
- */
-kallsyms_on_each_symbol(stat_find_name, NULL);
-
-The test results are as follows (twice):
-After : min=5250, max=  726560, avg= 302132
-After : min=5320, max=  726850, avg= 301978
-Before: min=170,  max=15949190, avg=7553906
-Before: min=160,  max=15877280, avg=7517784
-
-The average time consumed is only 4.01% and the maximum time consumed is
-only 4.57% of the time consumed before optimization.
+Based on the test results of kallsyms_on_each_match_symbol() and
+kallsyms_on_each_symbol(), the average performance can be improved by 20
+to 30 times.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- kernel/kallsyms.c | 79 +++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 76 insertions(+), 3 deletions(-)
+ kernel/livepatch/core.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 3e7e2c2ad2f75ef..2d76196cfe89f34 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -87,6 +87,71 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
- 	return off;
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index 42f7e716d56bf72..31b57ccf908017e 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -153,6 +153,24 @@ static int klp_find_callback(void *data, const char *name,
+ 	return 0;
  }
  
-+static int kallsyms_name_to_tokens(const char *name, char *buf)
++static int klp_match_callback(void *data, unsigned long addr)
 +{
-+	int i, j, k, n;
-+	int len, token_len;
-+	const char *token;
-+	unsigned char token_idx[KSYM_NAME_LEN];
-+	unsigned char token_bak[KSYM_NAME_LEN];
++	struct klp_find_arg *args = data;
++
++	args->addr = addr;
++	args->count++;
 +
 +	/*
-+	 * n, number of tokens in the string name.
-+	 * token_idx[i], the start index of the ith token.
-+	 * token_idx[n] is used to calculate the length of the last token.
++	 * Finish the search when the symbol is found for the desired position
++	 * or the position is not defined for a non-unique symbol.
 +	 */
-+	n = strlen(name);
-+	if (n >= KSYM_NAME_LEN) {
-+		buf[0] = 0;
-+		return 0;
-+	}
-+	for (i = 0; i <= n; i++)
-+		token_idx[i] = (unsigned char)i;
++	if ((args->pos && (args->count == args->pos)) ||
++	    (!args->pos && (args->count > 1)))
++		return 1;
 +
-+	/*
-+	 * For tokens whose token_len >= 2, a larger index value indicates
-+	 * a higher occurrence frequency. See scripts/kallsyms.c
-+	 */
-+	for (i = 255; i >= 0; i--) {
-+		token = &kallsyms_token_table[kallsyms_token_index[i]];
-+		token_len = strlen(token);
-+		if (token_len <= 1)
-+			continue;
-+
-+		/*
-+		 * Find and merge two tokens into one.
-+		 *
-+		 *                |<-- new_token -->|
-+		 *                | token1 | token2 |
-+		 * token_idx[]:   j       j+1      j+2
-+		 *
-+		 */
-+		for (j = 0; j < n - 1; j++) {
-+			len = token_idx[j + 2] - token_idx[j];
-+			if (len == token_len &&
-+			    !strncmp(name + token_idx[j], token, len)) {
-+				token_bak[token_idx[j]] = (unsigned char)i;
-+				for (k = j + 1; k < n; k++)
-+					token_idx[k] = token_idx[k + 1];
-+				n--;
-+			}
-+		}
-+	}
-+
-+	for (j = 0; j < n; j++) {
-+		len = token_idx[j + 1] - token_idx[j];
-+		if (len <= 1) {
-+			buf[j] = name[token_idx[j]];
-+			continue;
-+		}
-+
-+		buf[j] = token_bak[token_idx[j]];
-+	}
-+	buf[n] = 0;
-+
-+	return n;
++	return 0;
 +}
 +
- /*
-  * Get symbol type information. This is encoded as a single char at the
-  * beginning of the symbol name.
-@@ -192,20 +257,28 @@ unsigned long kallsyms_lookup_name(const char *name)
- 	char namebuf[KSYM_NAME_LEN];
- 	unsigned long i;
- 	unsigned int off;
-+	int len;
+ static int klp_find_object_symbol(const char *objname, const char *name,
+ 				  unsigned long sympos, unsigned long *addr)
+ {
+@@ -167,7 +185,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+ 	if (objname)
+ 		module_kallsyms_on_each_symbol(klp_find_callback, &args);
+ 	else
+-		kallsyms_on_each_symbol(klp_find_callback, &args);
++		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
  
- 	/* Skip the search for empty string. */
- 	if (!*name)
- 		return 0;
- 
-+	len = kallsyms_name_to_tokens(name, namebuf);
-+	for (i = 0, off = 0; len && i < kallsyms_num_syms; i++) {
-+		if (kallsyms_names[off] == len + 1 &&
-+		    !memcmp(&kallsyms_names[off + 2], namebuf, len))
-+			return kallsyms_sym_address(i);
-+
-+		off += kallsyms_names[off] + 1;
-+	}
-+
- 	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
- 		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
- 
--		if (strcmp(namebuf, name) == 0)
--			return kallsyms_sym_address(i);
--
- 		if (cleanup_symbol_name(namebuf) && strcmp(namebuf, name) == 0)
- 			return kallsyms_sym_address(i);
- 	}
-+
- 	return module_kallsyms_lookup_name(name);
- }
- 
+ 	/*
+ 	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
 -- 
 2.25.1
 
