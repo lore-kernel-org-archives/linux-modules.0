@@ -2,194 +2,88 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB9FCC54EE9
-	for <linux-modules@archiver.kernel.org>; Tue, 20 Sep 2022 14:02:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3982C54EE9
+	for <linux-modules@archiver.kernel.org>; Tue, 20 Sep 2022 17:13:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiITOCF (ORCPT
+        id S230244AbiITRNr (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 20 Sep 2022 10:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
+        Tue, 20 Sep 2022 13:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiITOCD (ORCPT
+        with ESMTP id S229503AbiITRNq (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 20 Sep 2022 10:02:03 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06403386B5;
-        Tue, 20 Sep 2022 07:01:59 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MX3586W8QzMnGc;
-        Tue, 20 Sep 2022 21:57:16 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 22:01:56 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 22:01:56 +0800
-Subject: Re: [PATCH v2 7/8] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-To:     Petr Mladek <pmladek@suse.com>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>
-References: <20220909130016.727-1-thunder.leizhen@huawei.com>
- <20220909130016.727-8-thunder.leizhen@huawei.com> <YymtJwYB7Q9mTPgS@alley>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <263d1b98-463f-79b0-a4ff-41b9af900e9c@huawei.com>
-Date:   Tue, 20 Sep 2022 22:01:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 20 Sep 2022 13:13:46 -0400
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277BE5FAF2;
+        Tue, 20 Sep 2022 10:13:44 -0700 (PDT)
+Received: by mail-pf1-f170.google.com with SMTP id d82so3334668pfd.10;
+        Tue, 20 Sep 2022 10:13:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=LS+xvqH5TidkBm9cBo74q89x2X9YMXuEfVMD6zijR4Y=;
+        b=xb1zjZixp5HlY+1ocq/NN8zz71jHw7p0RnjmtMToSPK3cGJY2Lv+i++FOy4JvlPuEb
+         xWKY26Z2EciILHgG9dfX7wJJ2A+KoTBEUmdAfnSKribbrf3wSCS5Y2b3RvivYGsK9ZQH
+         7s5fCmtaUJ5DBERd7MvJzuyDKG3iFSQPyxxGvmPpIJgY70Zhk5ijCu9QWZx32I7j2Jty
+         JTzX+BXhyrtTMIRuiEHYr5ExxP3/4Byav/7zaZzEreHLCQJXenqcCN/urTPX8jxg/Nu+
+         8lr6o6ir7jzORy+r4pomTBblwaS5MJvyt1Qsvshd7u33RHa4c8Syn7JT5Rcj4SiT1yPV
+         RD1g==
+X-Gm-Message-State: ACrzQf0y+Wvz6ymlES3XfB3pHtnSWNVSjUpZtrSpr8Hexhi+MOoS6W0U
+        T1u707b0JagxWn5A1H5VqfA=
+X-Google-Smtp-Source: AMsMyM5MG/c6tCB0kAWoINlDQsFGlE7peDpe9Jodz1n2GIU+i1UA3gUDB8pJQ7DdRIgNvMo5zrTsPw==
+X-Received: by 2002:a63:5d0c:0:b0:43b:a2df:858 with SMTP id r12-20020a635d0c000000b0043ba2df0858mr2909730pgb.442.1663694023429;
+        Tue, 20 Sep 2022 10:13:43 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:c7e0:1691:74c9:2e9? ([2620:15c:211:201:c7e0:1691:74c9:2e9])
+        by smtp.gmail.com with ESMTPSA id i8-20020aa796e8000000b0053db6f7d2f1sm121469pfq.181.2022.09.20.10.13.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 10:13:42 -0700 (PDT)
+Message-ID: <a4084b27-dd2d-10df-493c-35998eed664c@acm.org>
+Date:   Tue, 20 Sep 2022 10:13:40 -0700
 MIME-Version: 1.0
-In-Reply-To: <YymtJwYB7Q9mTPgS@alley>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
+ exit code
 Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Tejun Heo <tj@kernel.org>
+References: <20220914225621.415631-1-bvanassche@acm.org>
+ <20220914225621.415631-7-bvanassche@acm.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220914225621.415631-7-bvanassche@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+On 9/14/22 15:56, Bart Van Assche wrote:
+> Some kernel modules call device_del() from their module exit code and
+> schedule asynchronous work from inside the .release callback without waiting
+> until that callback has finished. As an example, many SCSI LLD drivers call
+> scsi_remove_host() from their module exit code. scsi_remove_host() may
+> invoke scsi_device_dev_release_usercontext() asynchronously.
+> scsi_device_dev_release_usercontext() uses the host template pointer and
+> that pointer usually exists in static storage in the SCSI LLD. Support
+> using the module reference count to keep the module around until
+> asynchronous module exiting has completed by waiting in the delete_module()
+> system call until the module reference count drops to zero.
 
+Hi Luis,
 
-On 2022/9/20 20:08, Petr Mladek wrote:
-> On Fri 2022-09-09 21:00:15, Zhen Lei wrote:
->> Currently we traverse all symbols of all modules to find the specified
->> function for the specified module. But in reality, we just need to find
->> the given module and then traverse all the symbols in it.
-> 
-> I agree that it might be noticeable speedup.
-> 
->> In order to achieve this purpose, split the call to hook 'fn' into two
->> phases:
->> 1. Finds the given module. Pass pointer 'mod'. Hook 'fn' directly returns
->>    the comparison result of the module name without comparing the function
->>    name.
->> 2. Finds the given function in that module. Pass pointer 'mod = NULL'.
->>    Hook 'fn' skip the comparison of module name and directly compare
->>    function names.
->>
->> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
->>                 |
->> Phase2:          -->f1-->f2-->f3
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  kernel/livepatch/core.c  |  7 ++-----
->>  kernel/module/kallsyms.c | 13 ++++++++++++-
->>  2 files changed, 14 insertions(+), 6 deletions(-)
->>
->> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
->> index 31b57ccf908017e..98e23137e4133bc 100644
->> --- a/kernel/livepatch/core.c
->> +++ b/kernel/livepatch/core.c
->> @@ -130,15 +130,12 @@ static int klp_find_callback(void *data, const char *name,
->>  {
->>  	struct klp_find_arg *args = data;
->>  
->> -	if ((mod && !args->objname) || (!mod && args->objname))
->> -		return 0;
->> +	if (mod)
->> +		return strcmp(args->objname, mod->name);
->>  
->>  	if (strcmp(args->name, name))
->>  		return 0;
->>  
->> -	if (args->objname && strcmp(args->objname, mod->name))
->> -		return 0;
->> -
->>  	args->addr = addr;
->>  	args->count++;
->>  
->> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
->> index f5c5c9175333df7..b033613e6c7e3bb 100644
->> --- a/kernel/module/kallsyms.c
->> +++ b/kernel/module/kallsyms.c
->> @@ -510,6 +510,11 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
->>  		if (mod->state == MODULE_STATE_UNFORMED)
->>  			continue;
->>  
->> +		/* check mod->name first */
->> +		ret = fn(data, NULL, mod, 0);
->> +		if (ret)
->> +			continue;
-> 
-> Hmm, it somehow gets too complicated. The same fn() callback has to
-> behave correctly in 3 different situations. I would suggest to
-> simplify everything:
-> 
-> 
-> 1. Pass the requested modname as a parameter to module_kallsyms_on_each_symbol()
-> 
-> /*
->  * Iterate over all symbols in the given @modname. For symbols from
->  * vmlinux use kallsyms_on_each_symbol() instead.
->  */
-> int module_kallsyms_on_each_symbol(const char *modname,
-> 				   int (*fn)(void *, const char *,
-> 					     struct module *, unsigned long),
-> 				   void *data)
-> 
-> and do here:
-> 
-> 		if (strcmp(modname, mod->name))
-> 			continue;
+I'd like to know your opinion about this patch since you are the 
+maintainer of the kernel module system.
 
-Right, looks good. This makes the code logic much clearer. Thanks.
+Thanks,
 
-> 
-> 
-> 2. We do not even need to pass .objname in struct klp_find_arg
->    could simplify the callback:
-> 
-
-Yes
-
-> static int klp_find_callback(void *data, const char *name,
-> 			     struct module *mod, unsigned long addr)
-> {
-> 	struct klp_find_arg *args = data;
-> 
-> 	if (strcmp(args->name, name))
-> 		return 0;
-> 
-> 	args->addr = addr;
-> 	args->count++;
-> 
-> 	/*
-> 	 * Finish the search when the symbol is found for the desired position
-> 	 * or the position is not defined for a non-unique symbol.
-> 	 */
-> 	if ((args->pos && (args->count == args->pos)) ||
-> 	    (!args->pos && (args->count > 1)))
-> 		return 1;
-> 
-> 	return 0;
-> }
-> 
-> 3. As a result the *mod parameter won't be used by any existing
->    fn() callback and could be removed. This should be done as
->    a separate patch. It touches also ftrace_lookup_symbols().
-
-OK, I will do it tomorrow. The next version is v5.
-
-> 
-> Best Regards,
-> Petr
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+Bart.
