@@ -2,97 +2,143 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B67A1C54EE9
-	for <linux-modules@archiver.kernel.org>; Tue, 20 Sep 2022 05:26:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C5EFECAAD8
+	for <linux-modules@archiver.kernel.org>; Tue, 20 Sep 2022 06:13:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbiITF0A (ORCPT
+        id S230083AbiITGNh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 20 Sep 2022 01:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
+        Tue, 20 Sep 2022 02:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiITFZr (ORCPT
+        with ESMTP id S230210AbiITGNe (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 20 Sep 2022 01:25:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6B45B785;
-        Mon, 19 Sep 2022 22:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663651534; x=1695187534;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xuDq04V3ERIqON4UuLH1RmjGkFR75KWm8lnYzEvFeDI=;
-  b=bwThOS93ImKi8FoVPR0KilzgeEBl7U1tFUSXGrqMPQT/t0SerPkn90gq
-   4QuqlXw7h3JV4zwYjylQaiWQXBt9eLkZ6c6UpFIGwy4nc/ofTSacckHNJ
-   BLo24M4wwT2Ya51A3tm/ZB4EDL/vNU6+t4PI8bsk4cQcBkI7J8DZe+2Fc
-   Opoi9aHtid8M7RBnIjKYP3a+1OsGsQeLUOSDcJIB0+F73dDtN8PGe6loG
-   VIP5G5UkyE8Ic7xmNjbeA1VKvF1iyHODw25linVuvj/Gs2cvfGkm0n71T
-   MOai9PMJXqxi4mPf1TAMqOU5kWXHW/T/dpP2deGr1IuP8vYrnSltndCzq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="279981349"
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="279981349"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 22:25:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="794124954"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga005.jf.intel.com with ESMTP; 19 Sep 2022 22:25:01 -0700
-Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.59.34])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id C58B4580713;
-        Mon, 19 Sep 2022 22:24:56 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 07:24:54 +0200
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org,
-        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-Subject: Re: [PATCH v6 0/4] Let userspace know when snd-hda-intel needs i915
-Message-ID: <20220920072454.4cf91f24@maurocar-mobl2>
-In-Reply-To: <Ynl7xGy+a9MYjXi1@bombadil.infradead.org>
-References: <cover.1652113087.git.mchehab@kernel.org>
-        <Ynl7xGy+a9MYjXi1@bombadil.infradead.org>
+        Tue, 20 Sep 2022 02:13:34 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710C243626;
+        Mon, 19 Sep 2022 23:13:32 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MWrjK1gR6z14QkD;
+        Tue, 20 Sep 2022 14:09:25 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 14:13:30 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 14:13:29 +0800
+Subject: Re: [PATCH v3 8/8] kallsyms: Add self-test facility
+To:     kernel test robot <lkp@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+CC:     <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+        "Linux Memory Management List" <linux-mm@kvack.org>
+References: <20220919151533.1734-9-thunder.leizhen@huawei.com>
+ <202209201123.hihIfjo1-lkp@intel.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <6c02ff59-99f9-5a4b-9bf2-ab0ea12de2c8@huawei.com>
+Date:   Tue, 20 Sep 2022 14:13:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <202209201123.hihIfjo1-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi Luis,
 
-On Mon, 9 May 2022 13:38:28 -0700
-Luis Chamberlain <mcgrof@kernel.org> wrote:
 
-> On Mon, May 09, 2022 at 06:23:35PM +0200, Mauro Carvalho Chehab wrote:
-> > Currently, kernel/module annotates module dependencies when
-> > request_symbol is used, but it doesn't cover more complex inter-driver
-> > dependencies that are subsystem and/or driver-specific.
-> >   
+On 2022/9/20 11:14, kernel test robot wrote:
+> Hi Zhen,
 > 
-> At this pount v5.18-rc7 is out and so it is too late to soak this
-> in for the proper level of testing I'd like to see for modules-next.
-> So I can review this after the next merge window. I'd want to beat
-> the hell out of this and if possible I'd like to see if we can have
-> some test coverage for the intended goal and how to break it.
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on mcgrof/modules-next]
+> [also build test WARNING on linus/master v6.0-rc6 next-20220919]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220919-231916
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+> config: i386-randconfig-a001-20220919 (https://download.01.org/0day-ci/archive/20220920/202209201123.hihIfjo1-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/26fdb8f3984ffbdb57da2d1fac7e32ae418bfa96
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220919-231916
+>         git checkout 26fdb8f3984ffbdb57da2d1fac7e32ae418bfa96
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> kernel/kallsyms.c:196:15: warning: no previous prototype for function 'kallsyms_sym_address' [-Wmissing-prototypes]
+>    unsigned long kallsyms_sym_address(int idx)
+>                  ^
+>    kernel/kallsyms.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    unsigned long kallsyms_sym_address(int idx)
+>    ^
 
-Any news with regards to this patch series?
+Well, thanks. Because it's just for testing code, I'm thinking about not
+changing the header file, but it looks like I'll have to change it.
 
+>    static 
+>    kernel/kallsyms.c:668:12: warning: no previous prototype for function 'arch_get_kallsym' [-Wmissing-prototypes]
+>    int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+>               ^
+>    kernel/kallsyms.c:668:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+>    ^
+>    static 
+>    2 warnings generated.
+> 
+> 
+> vim +/kallsyms_sym_address +196 kernel/kallsyms.c
+> 
+>    195	
+>  > 196	unsigned long kallsyms_sym_address(int idx)
+>    197	{
+>    198		if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
+>    199			return kallsyms_addresses[idx];
+>    200	
+>    201		/* values are unsigned offsets if --absolute-percpu is not in effect */
+>    202		if (!IS_ENABLED(CONFIG_KALLSYMS_ABSOLUTE_PERCPU))
+>    203			return kallsyms_relative_base + (u32)kallsyms_offsets[idx];
+>    204	
+>    205		/* ...otherwise, positive offsets are absolute values */
+>    206		if (kallsyms_offsets[idx] >= 0)
+>    207			return kallsyms_offsets[idx];
+>    208	
+>    209		/* ...and negative offsets are relative to kallsyms_relative_base - 1 */
+>    210		return kallsyms_relative_base - 1 - kallsyms_offsets[idx];
+>    211	}
+>    212	
+> 
+
+-- 
 Regards,
-Mauro
+  Zhen Lei
