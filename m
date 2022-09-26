@@ -2,596 +2,148 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47DDDC6FA86
-	for <linux-modules@archiver.kernel.org>; Sat, 24 Sep 2022 12:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C981C07E9D
+	for <linux-modules@archiver.kernel.org>; Mon, 26 Sep 2022 05:50:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbiIXMXb (ORCPT
+        id S233403AbiIZFuk (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 24 Sep 2022 08:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
+        Mon, 26 Sep 2022 01:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233879AbiIXMXU (ORCPT
+        with ESMTP id S229561AbiIZFuj (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 24 Sep 2022 08:23:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96572E237F;
-        Sat, 24 Sep 2022 05:22:58 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MZSj01bwPzHthx;
-        Sat, 24 Sep 2022 20:18:12 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 20:22:56 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 20:22:55 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v6 11/11] kallsyms: Add self-test facility
-Date:   Sat, 24 Sep 2022 20:20:51 +0800
-Message-ID: <20220924122051.362-12-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20220924122051.362-1-thunder.leizhen@huawei.com>
-References: <20220924122051.362-1-thunder.leizhen@huawei.com>
+        Mon, 26 Sep 2022 01:50:39 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120053.outbound.protection.outlook.com [40.107.12.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4058E1F616;
+        Sun, 25 Sep 2022 22:50:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XSzbuO7OLsXNBa/6bE09gs0NLGcxz2CdkIN6UmcbZ/jYi9tED4OSB948ZIzClZKegsjIgtvuP9Lr1PYid25PHmBFAgbvMdmZnp8c/FRRPUb64sWtoKjwexyQZ7n24tMfxLuCFv/gb8xit1laYMq5WWZuNGZlZ6QFgsvPssbFtukSiEpeS4mT4IMYBIeLA3sxWOOMQosj7hVhAep0CSyDXByk6168cKjDBikeT1ZrU6mt4uAxtMJrIz91ommujts9lnCGnlXBgzB1fv/q5+NfQvWFyacAgB8dvd5ErDNrJOVaCZpNcd0HKQFUGsYoH3G7SnDxExknpWOIfN16bsN8Jw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L0BdvWzPsbSA1KdkqLTvfyHdpEuxwdXoyAuHeGsKBlY=;
+ b=AshOKEESB7cqAETA4MqWaRwU25aXq9+vbVY7qL7Bl6RsXIDvNLy0lN8ZwzRnax2A8Nb68KoZf6oyyV8lOL0LV1GcpbyLy0VLbl0wsJMWXHHEu8RGkOtQMEQW1J/lrfnzIYXjhBa93i5V1kctSqidxhIF/JHuRS10u31JWm7vqAoSGHa5rmxMkPFFnmuD4w6pmJzLQDpcOh9n2QXBDgONoYug8yNK909YRznTo8Lo1yB1ujiK3Eb6tNnU+p6uy3iojbfbMvwwFexPvgmt9oWYWr+5fEaTiFYlmwAn/kVUsxu2SyElBW+MWiyHYJT27KwKBsItTUqZpsGtp3H56hnv8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L0BdvWzPsbSA1KdkqLTvfyHdpEuxwdXoyAuHeGsKBlY=;
+ b=nLvKVmaW7AI1gZXIcOipJa8k/a2yu7PIAMb470G4YAX7zJXnlr0Di6+zVqgRIeJazPkcFZLoehbUFak6H8N51HemvSOdKb9TYAPHgInuB31HwKXPj9Ix17iq/PJwvBnP3uHEaiVvo4VV9mDNysaF6fE4nvw16QQGSztzaYEeudA6eJtAm5idt0SDDyJbQepzenMqC1QrtJkkP598ItUhedX3IGXc9R2FGEZseJStjhBJicN+0xsKgsUVqKucnPDYdhG7BuUiW3UqtVgBZN+iDHdbcXj/ZTayPbu5JViPMQ0UlgmJH1TthnJ6rQ3A2mHpQIze0rQN6wfS91EuEHW4hg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB2376.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e3::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.18; Mon, 26 Sep
+ 2022 05:50:34 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::f4ad:3944:a7f4:fcf3]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::f4ad:3944:a7f4:fcf3%5]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
+ 05:50:34 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+CC:     "mcgrof@kernel.org" <mcgrof@kernel.org>
+Subject: Re: [PATCH -next] module: Remove unused macros module_addr_min/max
+Thread-Topic: [PATCH -next] module: Remove unused macros module_addr_min/max
+Thread-Index: AQHYz+chPhSPkZvS6kKNHdkSShHvSa3xN/sA
+Date:   Mon, 26 Sep 2022 05:50:34 +0000
+Message-ID: <6ddafe26-a5c3-c617-526e-f41dfb57b82f@csgroup.eu>
+References: <20220924072216.103876-1-chenzhongjin@huawei.com>
+In-Reply-To: <20220924072216.103876-1-chenzhongjin@huawei.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB2376:EE_
+x-ms-office365-filtering-correlation-id: 51a5f7de-e5bf-4503-5dfd-08da9f8307cc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: utW+TOFxE3u47o7jgtY5q4WJllke6aDrKhJMESP+qle4g7PeO7K2YL9DHkqwINEpWClxAEqdL+de7ooqacyRQ8/hjQkq4tEqJXkaTg9zKiChnikECLC2PJlXf1pjK7th89VXfX6u4SD4uv334bjD8yabtvGp9LUDh5h/0DtbXalYf5JYTT34dTh2FwD3RMlWpnKdeeDWnjZBRMXYVM7BKyfmP0Tka+uhAb0JN6ifwyN4ZsUuaG2ZueGWWi8AKklRRuWeQPGjIaMtdCbgt8W7w5jUsk0Zhz/oKpydN5bJLC4l+me+2CVAIts+dSgRXEnApuqTjYhsbqUkzwDGUPiIt5y40e5JPz1PtQ9Zf0puMB2MF76a1LkUujCtTj/Q5LV3lDUewexxGYc9OO1GtAUQeq+nSWx942d136doZgWHBKz59+oweAsY+MZGYLf+74JlfwJhNXYgkjs/9EaC02KvDTIvS7LX2lw+IDCaPqZnzGpqErcFlhjj0W79YyN+mW+/+m3xAmPsF8AWzXPzpYtOqQ6dYeK/XR/SCXPtTR+VI1Bh7gG8viaYaYUQ841lxMgI9ovYH9ITdR1ifCB9YyEt+qo6SSgatWjin8DVFrSS1YgkTd0YJfJkA3Ho8nkqsBQKPekW0DL9M5/9hlsrP3FiD9rtZmgwaI0B6Oq/WlSgdFeE3QiB8jgMovwFUe0iQ/kN81Sy2yASjLWUV3qVVSZUmybbITsaGpJCDNoPr93Za9N8/BstAUZrY0br5sLecw00Nx8l8sErnEdyzBZ73uIeHsi/BbJCU52LutlikWb7goIfT/KMrllOa+iMg5SwJdA2tzL+Kgbb2ysaQOcdJM22+Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(346002)(366004)(39850400004)(136003)(451199015)(38100700002)(8676002)(41300700001)(76116006)(66946007)(66556008)(91956017)(122000001)(26005)(66446008)(66476007)(64756008)(4326008)(186003)(2906002)(2616005)(83380400001)(8936002)(6506007)(36756003)(6512007)(44832011)(5660300002)(31696002)(86362001)(71200400001)(38070700005)(31686004)(316002)(6486002)(110136005)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bzF6QkR0TE5IWFN6QzloU1FvOUd3M0x2WTF2Mkl4ZGVzL0JteXRpdHdHWHNI?=
+ =?utf-8?B?MHBCeGd2VzFoRlpjbGcybVhiUVdUNlZxbDNGREV4MzUvUjhWdmJuQTdPRlBO?=
+ =?utf-8?B?WEk4V0FnSFErZERDNkZHVmUrKzJDUDZoSVVROTFvaFpjVFlpYW9uSFpwYWor?=
+ =?utf-8?B?ZDV0cFcvUFZRdkMrZzJNS0RhUUZ5eUtKTmUzc1NtcEJnYmU2a3BEN3JLdGxM?=
+ =?utf-8?B?bXlVT0VmK0ZORkI4THNoSDJ4WkRhNzJobmJ0blNTSnIyK1E3OEkxTmN2bFpB?=
+ =?utf-8?B?bDRTK3BjeG1zeW5BUDZMVXNGQStXcnpBdlJweU9UUHA4bHZxRzd3cFVhSGFD?=
+ =?utf-8?B?Y0g4VFVhRVU2YTVNZUhOcVc3VkF5TEV2WXdQMUJVaVU0eUNOZ0JLd2JBejNF?=
+ =?utf-8?B?YmgvZmNxUWZKN2NBNGR3VDhxWjVqajNDeFppckd0WUxSTEdFTVQ2VStFR1Bo?=
+ =?utf-8?B?STErNGVqQjNGNlFJZEl2RVcyMDFvM0M1b3BuQlA0K284V1VJVC8wTWgzcndx?=
+ =?utf-8?B?MFFKRi9uL0E3RjIxWTJzbnZWZWt2S3NRaHp4MWNWS2pSUElBd1ZvVjhuVGRH?=
+ =?utf-8?B?OElrc0MrNVQxY3EydjVkM3prQlo3Z1JIa1c4MUJvZ29NbzNuc0VrcEoyQzVx?=
+ =?utf-8?B?MUtOS2drYmpDYUNFVW1DbnpiSW5ib0VZbnUyT2JxMWt6MG90TE1DS3NxcU1H?=
+ =?utf-8?B?bE9FTXV0d1ZnTGsyYnRtd2NqSm1CWmJhZWpsay9Eczh4cnNJMVNRWkxYU3pG?=
+ =?utf-8?B?R1UwSTlGUnJrcHB5N1FyK0g4U3pXTzJQQVVROVRQcDdYOUR4TXNhZ0dEVXlQ?=
+ =?utf-8?B?dmZHVkJTT0N2eE9sTUdFdEliZ1hPZVNJRTFpcURScTRKdVJMZ2J0cnpCZTM0?=
+ =?utf-8?B?MG85cGU4MU5iVGFCUTIwM2l4cHJQODJGTDNiRmUrRklJN0l0MkZHZFlGWElp?=
+ =?utf-8?B?dDdRQ1dRY21IQlNZTlA2NXlzbFJlaVYxS05iZmtuUUcvSEJ5b0ozV0QxNFFQ?=
+ =?utf-8?B?TnVyM01KQmY0c2tGTWVJcFd4cXVYeDl4N1BXYnUxV2JCMkk0OVhueEcyUDBq?=
+ =?utf-8?B?VlVHYU9OeE5Odng0WGtIazdKNTFURHdNb0x2YUtsM0dYRHJUTDlSa0h3K3hh?=
+ =?utf-8?B?UkpVZUMvSEZzSDRheVUwNEJTT1pVeVpFQVFVM0VVQjBtaEFRd2RtYkRNN0NM?=
+ =?utf-8?B?Tmo5MHZYTG1kY1ZhS3RVZmpUWUJkU2YxRTZhTHBTWndTWllMeVBudlQvdU55?=
+ =?utf-8?B?OTlTaWpXZ2MrUExodVRSdGVmaUd4S1pkbE84b1NzNTlXa2R3V2VuWnFFMEJZ?=
+ =?utf-8?B?V3ZzWkl6b3lQazVLUzJxWFl3R1QvNG1RTnZpOUo1anl2TDVxQlZqUUltdW45?=
+ =?utf-8?B?Q2p4MXlXYXMzdjFoTnBJUm02L0JWRGxmcFNiakYyK2ZOczV3K0F2d2l4bzln?=
+ =?utf-8?B?OWZ4cEI0UDg4K1hPRlIva3VpbEFxdVhWa0ZlaitxTzFYOXl3eW9GaUxqTXFp?=
+ =?utf-8?B?RUxHeDdkQ2tzbTFEemNUL3F0dThaY1B1Tk5BNWlDbjFTVkFOeFRTdy9aT1JO?=
+ =?utf-8?B?RTVUaHVsTXkvcHRsd1FjM3ZTejFKUzFFQkVYVzlidVpIVzFnVUJ6L2xQNXdT?=
+ =?utf-8?B?a1dORE5LTUgybWZoR2xFRnd0bFdQZmNsVXRxRGRUYktKMVZnTGpia0NhZGdS?=
+ =?utf-8?B?bVN4b29tZmZCQURSemw1UWpmdG50eHNDUG5HWjFqVGx2RzVQalhYUDVlTTB1?=
+ =?utf-8?B?K2pTb011YjdSNFJvbHJmazdscjVCZzdZU2E1TExIUWVJNm5kUUR2eG1TcmRU?=
+ =?utf-8?B?VU5wcWlUbUUvVFk4VE56T2llT3RqeHNpOUVXaUxacis4dXd3L3RhdmpOUS90?=
+ =?utf-8?B?SlRDb2F4K1BrSnVER1RpeVR5TlBhUHRkc0lJZS84dXFqM0JwUERNczJXOHMr?=
+ =?utf-8?B?U3g3S1RuR3FXMlROSU1KRnd5OXJaWUxudUlxcXBCU0dJQ0EwekRHTERCc2RC?=
+ =?utf-8?B?dGg5OFRiNWdRUWJpY3M1eTdqaEVIVUtwSzVQbTlNMUJYMTdNeTFtWkZhYWhk?=
+ =?utf-8?B?K3loT3hkSk0yWnNDMVJSbTRvVkZYZ1EwbjNsbDQzcHdiT25ycFU4WURkUUV2?=
+ =?utf-8?B?VDMrakRyQUwrTkhVVncvc1RJTTVPU1Z1bTJIeWJRNnZDREE0cWQrbG9McUZl?=
+ =?utf-8?B?dkE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9664349BB04B464AA6E5C48BB61F9D95@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51a5f7de-e5bf-4503-5dfd-08da9f8307cc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Sep 2022 05:50:34.6087
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l/t8eZPAYx/VW1dX8SiDGWuOF/+mSw0FUxdGzKI9/PptrAXmsAWnZgaTVA9a/LdZbVhZy6I8HFg/qBxQbd04NUneMIZGCP7eBWZzkgvG6gI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2376
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Added test cases for basic functions and performance of functions
-kallsyms_lookup_name(), kallsyms_on_each_symbol() and
-kallsyms_on_each_match_symbol(). It also calculates the compression rate
-of the kallsyms compression algorithm for the current symbol set.
-
-The basic functions test begins by testing a set of symbols whose address
-values are known. Then, traverse all symbol addresses and find the
-corresponding symbol name based on the address. It's impossible to
-determine whether these addresses are correct, but we can use the above
-three functions along with the addresses to test each other. Due to the
-traversal operation of kallsyms_on_each_symbol() is too slow, only 60
-symbols can be tested in one second, so let it test on average once
-every 128 symbols. The other two functions validate all symbols.
-
-If the basic functions test is passed, print only performance test
-results. If the test fails, print error information, but do not perform
-subsequent performance tests.
-
-Start self-test automatically after system startup if
-CONFIG_KALLSYMS_SELFTEST=y.
-
-Example of output content: (prefix 'kallsyms_selftest:' is omitted)
- start
-  ---------------------------------------------------------
- | nr_symbols | compressed size | original size | ratio(%) |
- |---------------------------------------------------------|
- |     174099 |       1960154   |      3750756  |  52.26   |
-  ---------------------------------------------------------
- kallsyms_lookup_name() looked up 174099 symbols
- The time spent on each symbol is (ns): min=5250, max=726560, avg=302132
- kallsyms_on_each_symbol() traverse all: 16659500 ns
- kallsyms_on_each_match_symbol() traverse all: 557400 ns
- finish
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- include/linux/kallsyms.h   |   1 +
- init/Kconfig               |  13 ++
- kernel/Makefile            |   1 +
- kernel/kallsyms.c          |   2 +-
- kernel/kallsyms_selftest.c | 421 +++++++++++++++++++++++++++++++++++++
- 5 files changed, 437 insertions(+), 1 deletion(-)
- create mode 100644 kernel/kallsyms_selftest.c
-
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index 015c7685765978e..c7219d74e29000c 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -66,6 +66,7 @@ static inline void *dereference_symbol_descriptor(void *ptr)
- }
- 
- #ifdef CONFIG_KALLSYMS
-+unsigned long kallsyms_sym_address(int idx);
- int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
- 			    void *data);
- int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
-diff --git a/init/Kconfig b/init/Kconfig
-index 532362fcfe31fd3..60193fd185fb6e6 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1716,6 +1716,19 @@ config KALLSYMS
- 	  symbolic stack backtraces. This increases the size of the kernel
- 	  somewhat, as all symbols have to be loaded into the kernel image.
- 
-+config KALLSYMS_SELFTEST
-+	bool "Test the basic functions and performance of kallsyms"
-+	depends on KALLSYMS
-+	default n
-+	help
-+	  Test the basic functions and performance of some interfaces, such as
-+	  kallsyms_lookup_name. It also calculates the compression rate of the
-+	  kallsyms compression algorithm for the current symbol set.
-+
-+	  Start self-test automatically after system startup. Suggest executing
-+	  "dmesg | grep kallsyms_selftest" to collect test results. "finish" is
-+	  displayed in the last line, indicating that the test is complete.
-+
- config KALLSYMS_ALL
- 	bool "Include all symbols in kallsyms"
- 	depends on DEBUG_KERNEL && KALLSYMS
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 318789c728d3290..122a5fed457bd98 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -68,6 +68,7 @@ endif
- obj-$(CONFIG_UID16) += uid16.o
- obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
-+obj-$(CONFIG_KALLSYMS_SELFTEST) += kallsyms_selftest.o
- obj-$(CONFIG_BSD_PROCESS_ACCT) += acct.o
- obj-$(CONFIG_CRASH_CORE) += crash_core.o
- obj-$(CONFIG_KEXEC_CORE) += kexec_core.o
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 8e7e83842bcfdd3..1512db69aa0a1b2 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -208,7 +208,7 @@ static unsigned int get_symbol_offset(unsigned long pos)
- 	return name - kallsyms_names;
- }
- 
--static unsigned long kallsyms_sym_address(int idx)
-+unsigned long kallsyms_sym_address(int idx)
- {
- 	if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
- 		return kallsyms_addresses[idx];
-diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
-new file mode 100644
-index 000000000000000..f7538a70d36c531
---- /dev/null
-+++ b/kernel/kallsyms_selftest.c
-@@ -0,0 +1,421 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Test the function and performance of kallsyms
-+ *
-+ * Copyright (C) Huawei Technologies Co., Ltd., 2022
-+ *
-+ * Authors: Zhen Lei <thunder.leizhen@huawei.com> Huawei
-+ */
-+
-+#define pr_fmt(fmt) "kallsyms_selftest: " fmt
-+
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/kallsyms.h>
-+#include <linux/random.h>
-+#include <linux/sched/clock.h>
-+#include <linux/kthread.h>
-+#include <linux/vmalloc.h>
-+
-+#include "kallsyms_internal.h"
-+
-+
-+#define MAX_NUM_OF_RECORDS		64
-+
-+struct test_stat {
-+	int min;
-+	int max;
-+	int save_cnt;
-+	int real_cnt;
-+	u64 sum;
-+	char *name;
-+	unsigned long addr;
-+	unsigned long addrs[MAX_NUM_OF_RECORDS];
-+};
-+
-+struct test_item {
-+	char *name;
-+	unsigned long addr;
-+};
-+
-+#define ITEM_FUNC(s)				\
-+	{					\
-+		.name = #s,			\
-+		.addr = (unsigned long)s,	\
-+	}
-+
-+#define ITEM_DATA(s)				\
-+	{					\
-+		.name = #s,			\
-+		.addr = (unsigned long)&s,	\
-+	}
-+
-+static int test_var_bss_static;
-+static int test_var_data_static = 1;
-+int test_var_bss;
-+int test_var_data = 1;
-+
-+static int test_func_static(void)
-+{
-+	test_var_bss_static++;
-+	test_var_data_static++;
-+
-+	return 0;
-+}
-+
-+int test_func(void)
-+{
-+	return test_func_static();
-+}
-+
-+__weak int test_func_weak(void)
-+{
-+	test_var_bss++;
-+	test_var_data++;
-+	return 0;
-+}
-+
-+static struct test_item test_items[] = {
-+	ITEM_FUNC(test_func_static),
-+	ITEM_FUNC(test_func),
-+	ITEM_FUNC(test_func_weak),
-+	ITEM_FUNC(vmalloc),
-+	ITEM_FUNC(vfree),
-+#ifdef CONFIG_KALLSYMS_ALL
-+	ITEM_DATA(test_var_bss_static),
-+	ITEM_DATA(test_var_data_static),
-+	ITEM_DATA(test_var_bss),
-+	ITEM_DATA(test_var_data),
-+	ITEM_DATA(vmap_area_list),
-+#endif
-+};
-+
-+static char stub_name[KSYM_NAME_LEN];
-+
-+static int stat_symbol_len(void *data, const char *name, unsigned long addr)
-+{
-+	*(u32 *)data += strlen(name);
-+
-+	return 0;
-+}
-+
-+static void test_kallsyms_compression_ratio(void)
-+{
-+	int i;
-+	const u8 *name;
-+	u32 pos;
-+	u32 ratio, total_size, total_len = 0;
-+
-+	kallsyms_on_each_symbol(stat_symbol_len, &total_len);
-+
-+	/*
-+	 * A symbol name cannot start with a number. This stub name helps us
-+	 * traverse the entire symbol table without finding a match. It's used
-+	 * for subsequent performance tests, and its length is the average
-+	 * length of all symbol names.
-+	 */
-+	memset(stub_name, '4', sizeof(stub_name));
-+	pos = total_len / kallsyms_num_syms;
-+	stub_name[pos] = 0;
-+
-+	pos = kallsyms_num_syms - 1;
-+	name = &kallsyms_names[kallsyms_markers[pos >> 8]];
-+	for (i = 0; i <= (pos & 0xff); i++)
-+		name = name + (*name) + 1;
-+
-+	/*
-+	 * 1. The length fields is not counted
-+	 * 2. The memory occupied by array kallsyms_token_table[] and
-+	 *    kallsyms_token_index[] needs to be counted.
-+	 */
-+	total_size = (name - kallsyms_names) - kallsyms_num_syms;
-+	pos = kallsyms_token_index[0xff];
-+	total_size += pos + strlen(&kallsyms_token_table[pos]) + 1;
-+	total_size += 0x100 * sizeof(u16);
-+
-+	pr_info(" ---------------------------------------------------------\n");
-+	pr_info("| nr_symbols | compressed size | original size | ratio(%%) |\n");
-+	pr_info("|---------------------------------------------------------|\n");
-+	ratio = 10000ULL * total_size / total_len;
-+	pr_info("| %10d |    %10d   |   %10d  |  %2d.%-2d   |\n",
-+		kallsyms_num_syms, total_size, total_len, ratio / 100, ratio % 100);
-+	pr_info(" ---------------------------------------------------------\n");
-+}
-+
-+static int lookup_name(void *data, const char *name, unsigned long addr)
-+{
-+	u64 t0, t1, t;
-+	unsigned long flags;
-+	struct test_stat *stat = (struct test_stat *)data;
-+
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	(void)kallsyms_lookup_name(name);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+
-+	t = t1 - t0;
-+	if (t < stat->min)
-+		stat->min = t;
-+
-+	if (t > stat->max)
-+		stat->max = t;
-+
-+	stat->real_cnt++;
-+	stat->sum += t;
-+
-+	return 0;
-+}
-+
-+static void test_perf_kallsyms_lookup_name(void)
-+{
-+	struct test_stat stat;
-+
-+	memset(&stat, 0, sizeof(stat));
-+	stat.min = INT_MAX;
-+	kallsyms_on_each_symbol(lookup_name, &stat);
-+	pr_info("kallsyms_lookup_name() looked up %d symbols\n", stat.real_cnt);
-+	pr_info("The time spent on each symbol is (ns): min=%d, max=%d, avg=%lld\n",
-+		stat.min, stat.max, stat.sum / stat.real_cnt);
-+}
-+
-+static int find_symbol(void *data, const char *name, unsigned long addr)
-+{
-+	struct test_stat *stat = (struct test_stat *)data;
-+
-+	if (strcmp(name, stat->name) == 0) {
-+		stat->real_cnt++;
-+		stat->addr = addr;
-+
-+		if (stat->save_cnt < MAX_NUM_OF_RECORDS) {
-+			stat->addrs[stat->save_cnt] = addr;
-+			stat->save_cnt++;
-+		}
-+
-+		if (stat->real_cnt == stat->max)
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static void test_perf_kallsyms_on_each_symbol(void)
-+{
-+	u64 t0, t1;
-+	unsigned long flags;
-+	struct test_stat stat;
-+
-+	memset(&stat, 0, sizeof(stat));
-+	stat.max = INT_MAX;
-+	stat.name = stub_name;
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	kallsyms_on_each_symbol(find_symbol, &stat);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+	pr_info("kallsyms_on_each_symbol() traverse all: %lld ns\n", t1 - t0);
-+}
-+
-+static int match_symbol(void *data, unsigned long addr)
-+{
-+	struct test_stat *stat = (struct test_stat *)data;
-+
-+	stat->real_cnt++;
-+	stat->addr = addr;
-+
-+	if (stat->save_cnt < MAX_NUM_OF_RECORDS) {
-+		stat->addrs[stat->save_cnt] = addr;
-+		stat->save_cnt++;
-+	}
-+
-+	if (stat->real_cnt == stat->max)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static void test_perf_kallsyms_on_each_match_symbol(void)
-+{
-+	u64 t0, t1;
-+	unsigned long flags;
-+	struct test_stat stat;
-+
-+	memset(&stat, 0, sizeof(stat));
-+	stat.max = INT_MAX;
-+	stat.name = stub_name;
-+	local_irq_save(flags);
-+	t0 = sched_clock();
-+	kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
-+	t1 = sched_clock();
-+	local_irq_restore(flags);
-+	pr_info("kallsyms_on_each_match_symbol() traverse all: %lld ns\n", t1 - t0);
-+}
-+
-+static int test_kallsyms_basic_function(void)
-+{
-+	int i, j, ret;
-+	int next = 0, nr_failed = 0;
-+	char *prefix;
-+	unsigned short rand;
-+	unsigned long addr;
-+	char namebuf[KSYM_NAME_LEN];
-+	struct test_stat stat, stat1, stat2;
-+
-+	prefix = "kallsyms_lookup_name() for";
-+	for (i = 0; i < ARRAY_SIZE(test_items); i++) {
-+		addr = kallsyms_lookup_name(test_items[i].name);
-+		if (addr != test_items[i].addr) {
-+			nr_failed++;
-+			pr_info("%s %s failed: addr=%lx, expect %lx\n",
-+				prefix, test_items[i].name, addr, test_items[i].addr);
-+		}
-+	}
-+
-+	prefix = "kallsyms_on_each_symbol() for";
-+	for (i = 0; i < ARRAY_SIZE(test_items); i++) {
-+		memset(&stat, 0, sizeof(stat));
-+		stat.max = INT_MAX;
-+		stat.name = test_items[i].name;
-+		kallsyms_on_each_symbol(find_symbol, &stat);
-+		if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
-+			nr_failed++;
-+			pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
-+				prefix, test_items[i].name,
-+				stat.real_cnt, stat.addr, test_items[i].addr);
-+		}
-+	}
-+
-+	prefix = "kallsyms_on_each_match_symbol() for";
-+	for (i = 0; i < ARRAY_SIZE(test_items); i++) {
-+		memset(&stat, 0, sizeof(stat));
-+		stat.max = INT_MAX;
-+		stat.name = test_items[i].name;
-+		kallsyms_on_each_match_symbol(match_symbol, test_items[i].name, &stat);
-+		if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
-+			nr_failed++;
-+			pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
-+				prefix, test_items[i].name,
-+				stat.real_cnt, stat.addr, test_items[i].addr);
-+		}
-+	}
-+
-+	if (nr_failed)
-+		return -ESRCH;
-+
-+	for (i = 0; i < kallsyms_num_syms; i++) {
-+		addr = kallsyms_sym_address(i);
-+		if (!is_ksym_addr(addr))
-+			continue;
-+
-+		ret = lookup_symbol_name(addr, namebuf);
-+		if (unlikely(ret)) {
-+			namebuf[0] = 0;
-+			goto failed;
-+		}
-+
-+		stat.addr = kallsyms_lookup_name(namebuf);
-+
-+		memset(&stat1, 0, sizeof(stat1));
-+		stat1.max = INT_MAX;
-+		kallsyms_on_each_match_symbol(match_symbol, namebuf, &stat1);
-+
-+		/*
-+		 * kallsyms_on_each_symbol() is too slow, randomly select some
-+		 * symbols for test.
-+		 */
-+		if (i >= next) {
-+			memset(&stat2, 0, sizeof(stat2));
-+			stat2.max = INT_MAX;
-+			stat2.name = namebuf;
-+			kallsyms_on_each_symbol(find_symbol, &stat2);
-+
-+			/*
-+			 * kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
-+			 * need to get the same traversal result.
-+			 */
-+			if (stat1.addr != stat2.addr ||
-+			    stat1.real_cnt != stat2.real_cnt ||
-+			    memcmp(stat1.addrs, stat2.addrs,
-+				   stat1.save_cnt * sizeof(stat1.addrs[0])))
-+				goto failed;
-+
-+			/*
-+			 * The average of random increments is 128, that is, one of
-+			 * them is tested every 128 symbols.
-+			 */
-+			get_random_bytes(&rand, sizeof(rand));
-+			next = i + (rand & 0xff) + 1;
-+		}
-+
-+		/* Need to be found at least once */
-+		if (!stat1.real_cnt)
-+			goto failed;
-+
-+		/*
-+		 * kallsyms_lookup_name() returns the address of the first
-+		 * symbol found and cannot be NULL.
-+		 */
-+		if (!stat.addr || stat.addr != stat1.addrs[0])
-+			goto failed;
-+
-+		/*
-+		 * If the addresses of all matching symbols are recorded, the
-+		 * target address needs to be exist.
-+		 */
-+		if (stat1.real_cnt <= MAX_NUM_OF_RECORDS) {
-+			for (j = 0; j < stat1.save_cnt; j++) {
-+				if (stat1.addrs[j] == addr)
-+					break;
-+			}
-+
-+			if (j == stat1.save_cnt)
-+				goto failed;
-+		}
-+	}
-+
-+	return 0;
-+
-+failed:
-+	pr_info("Test for %dth symbol failed: (%s) addr=%lx", i, namebuf, addr);
-+	return -ESRCH;
-+}
-+
-+static int test_entry(void *p)
-+{
-+	int ret;
-+
-+	do {
-+		schedule_timeout(5 * HZ);
-+	} while (system_state != SYSTEM_RUNNING);
-+
-+	pr_info("start\n");
-+	ret = test_kallsyms_basic_function();
-+	if (ret) {
-+		pr_info("abort\n");
-+		return 0;
-+	}
-+
-+	test_kallsyms_compression_ratio();
-+	test_perf_kallsyms_lookup_name();
-+	test_perf_kallsyms_on_each_symbol();
-+	test_perf_kallsyms_on_each_match_symbol();
-+	pr_info("finish\n");
-+
-+	return 0;
-+}
-+
-+static int __init kallsyms_test_init(void)
-+{
-+	struct task_struct *t;
-+
-+	t = kthread_create(test_entry, NULL, "kallsyms_test");
-+	if (IS_ERR(t)) {
-+		pr_info("Create kallsyms selftest task failed\n");
-+		return PTR_ERR(t);
-+	}
-+	kthread_bind(t, 0);
-+	wake_up_process(t);
-+
-+	return 0;
-+}
-+late_initcall(kallsyms_test_init);
--- 
-2.25.1
-
+DQoNCkxlIDI0LzA5LzIwMjIgw6AgMDk6MjIsIENoZW4gWmhvbmdqaW4gYSDDqWNyaXTCoDoNCj4g
+VW51c2VkIG1hY3JvcyByZXBvcnRlZCBieSBbLVd1bnVzZWQtbWFjcm9zXS4NCj4gDQo+IFRoZXNl
+IG1hY3JvcyBhcmUgaW50cm9kdWNlZCB0byByZWNvcmQgdGhlIGJvdW5kIGFkZHJlc3Mgb2YgbW9k
+dWxlcy4NCj4gDQo+ICc4MGI4YmY0MzY5OTAgKCJtb2R1bGU6IEFsd2F5cyBoYXZlIHN0cnVjdCBt
+b2RfdHJlZV9yb290IiknDQo+IFRoaXMgY29tbWl0IGhhcyBtYWRlIHN0cnVjdCBtb2RfdHJlZV9y
+b290IGFsd2F5cyBleGlzdCwgd2hpY2ggbWVhbnMNCj4gd2UgY2FuIGFsd2F5cyByZWZlcmVuY2lu
+ZyBtb2RfdHJlZSBkZXJlY3RseSByYXRoZXIgdGhhbiB1c2luZyB0aGlzDQo+IG1hY3JvLg0KPiAN
+Cj4gU28gdGhleSBhcmUgdXNlbGVzcywgcmVtb3ZlIHRoZW0gZm9yIGNvZGUgY2xlYW5pbmcuDQoN
+ClllYWgsIGl0IGxvb2tzIGxpa2UgdGhpcyByZW1vdmFsIGdvdCBsb3N0IGR1cmluZyBhIHJlYmFz
+ZS4NClNob3VsZCBoYXZlIGJlZW4gcGFydCBvZiA1NWNlNTU2ZGJmOTIgKCJtb2R1bGU6IFJlbW92
+ZSBtb2R1bGVfYWRkcl9taW4gDQphbmQgbW9kdWxlX2FkZHJfbWF4IikNCg0KUmV2aWV3ZWQtYnk6
+IENocmlzdG9waGUgTGVyb3kgPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4NCg0KPiANCj4g
+U2lnbmVkLW9mZi1ieTogQ2hlbiBaaG9uZ2ppbiA8Y2hlbnpob25namluQGh1YXdlaS5jb20+DQo+
+IC0tLQ0KPiAgIGtlcm5lbC9tb2R1bGUvbWFpbi5jIHwgMyAtLS0NCj4gICAxIGZpbGUgY2hhbmdl
+ZCwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9rZXJuZWwvbW9kdWxlL21haW4u
+YyBiL2tlcm5lbC9tb2R1bGUvbWFpbi5jDQo+IGluZGV4IGE0ZTRkODRiNmY0ZS4uOTZkY2M5NTBk
+YTYwIDEwMDY0NA0KPiAtLS0gYS9rZXJuZWwvbW9kdWxlL21haW4uYw0KPiArKysgYi9rZXJuZWwv
+bW9kdWxlL21haW4uYw0KPiBAQCAtODQsOSArODQsNiBAQCBzdHJ1Y3QgbW9kX3RyZWVfcm9vdCBt
+b2RfZGF0YV90cmVlIF9fY2FjaGVsaW5lX2FsaWduZWQgPSB7DQo+ICAgfTsNCj4gICAjZW5kaWYN
+Cj4gICANCj4gLSNkZWZpbmUgbW9kdWxlX2FkZHJfbWluIG1vZF90cmVlLmFkZHJfbWluDQo+IC0j
+ZGVmaW5lIG1vZHVsZV9hZGRyX21heCBtb2RfdHJlZS5hZGRyX21heA0KPiAtDQo+ICAgc3RydWN0
+IHN5bXNlYXJjaCB7DQo+ICAgCWNvbnN0IHN0cnVjdCBrZXJuZWxfc3ltYm9sICpzdGFydCwgKnN0
+b3A7DQo+ICAgCWNvbnN0IHMzMiAqY3Jjczs=
