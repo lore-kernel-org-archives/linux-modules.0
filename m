@@ -2,113 +2,95 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D315BC6FA82
-	for <linux-modules@archiver.kernel.org>; Mon, 26 Sep 2022 20:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD36DC54EE9
+	for <linux-modules@archiver.kernel.org>; Tue, 27 Sep 2022 23:32:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiIZUpF (ORCPT
+        id S229870AbiI0XcP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 26 Sep 2022 16:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
+        Tue, 27 Sep 2022 19:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiIZUpD (ORCPT
+        with ESMTP id S229692AbiI0XcO (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 26 Sep 2022 16:45:03 -0400
-Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322546052F;
-        Mon, 26 Sep 2022 13:44:58 -0700 (PDT)
-Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-03.nifty.com with ESMTP id 28QKbh0O030098;
-        Tue, 27 Sep 2022 05:38:02 +0900
-Received: from zoe.. (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 28QKaWu0018737;
-        Tue, 27 Sep 2022 05:36:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 28QKaWu0018737
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664224593;
-        bh=lb3a5drEKLdeXLqemWkYG7kTPErJKgT8MUmB5b6StBw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=a0YahL0BCSGVdAPKTAvRLbUz1CEmuSqTisgJkZhpPdf5aOB/6N3O7lfN8i6WkILYH
-         /tMFaRU/7p5oMro4eu7J3wmU/ugb8CldXDvypeUz8UwVQQzTotVmzHrejPOpnd8coZ
-         weoiQBHgYWpZuSAIsxGidIM6A0+mD1hPpTcRdEx4Lsd+AiLcuDayy6f1AdWh/qKve7
-         HSO3sHYh67nj4r+EIC1g7lookLFpd/TILUGwwzUxMLy0q+nCDMz84bv7Jd/XXVpai8
-         jDQhhALoBKsisEs8gB/2qRd6VSdDcA/ItUPryjxJNBtZHDeBJj18XQajVT4ZPZEJAn
-         lkX62AmoE/DfA==
-X-Nifty-SrcIP: [133.32.182.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-modules@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH v2 0/7] Unify <linux/export.h> and <asm/export.h>, remove EXPORT_DATA_SYMBOL(), faster TRIM_UNUSED_KSYMS
-Date:   Tue, 27 Sep 2022 05:36:18 +0900
-Message-Id: <20220926203625.1117261-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 27 Sep 2022 19:32:14 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D487D1C6A41;
+        Tue, 27 Sep 2022 16:32:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=S8UJUP0VBuQngd2OEhP0OtJLPeHHAHk+DG1PtoI2pnk=; b=xRpltdoE+BX4wJj6Dn/xqNhxlx
+        dNbrhZ20jxjllsS1ta1wO+7ebIr+chPK780UY/3Y9XqriWy5TXjz53IfQpA4PQyuszNpgBF79SQ90
+        MKDt/qDALUhpwL/XrjAZzfRVunyxJkfVw3Ka5tk/dqfXjOlsuK0gfBzsGkVG8CToVfU/QRQ+T3nXY
+        1wXjQlbfLxb9c/A3hML8pHwk6Qg0VU+eNHdUV1EmLgPH1LTXTjrJr6hx5jOyiC6Lyorup2B3f6XQb
+        VQ5Y5BFREOKh5/3Wy8fn0pJIaHZ2+oVmAwD3b9hu1B7FEM9SmJs+RGTJBR8xNdMndP/c5/HTG1pcl
+        VCYMtUqQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1odK3O-00D9Po-9y; Tue, 27 Sep 2022 23:31:54 +0000
+Date:   Tue, 27 Sep 2022 16:31:54 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org,
+        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH v6 0/4] Let userspace know when snd-hda-intel needs i915
+Message-ID: <YzOH6oV6B6UKb7DF@bombadil.infradead.org>
+References: <cover.1652113087.git.mchehab@kernel.org>
+ <Ynl7xGy+a9MYjXi1@bombadil.infradead.org>
+ <20220920072454.4cf91f24@maurocar-mobl2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920072454.4cf91f24@maurocar-mobl2>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This patch set refactors EXPORT_SYMBOL, <linux/export.h> and <asm/export.h>.
-Also, re-implement TRIM_UNUSED_KSYMS in one-pass.
+On Tue, Sep 20, 2022 at 07:24:54AM +0200, Mauro Carvalho Chehab wrote:
+> Hi Luis,
+> 
+> On Mon, 9 May 2022 13:38:28 -0700
+> Luis Chamberlain <mcgrof@kernel.org> wrote:
+> 
+> > On Mon, May 09, 2022 at 06:23:35PM +0200, Mauro Carvalho Chehab wrote:
+> > > Currently, kernel/module annotates module dependencies when
+> > > request_symbol is used, but it doesn't cover more complex inter-driver
+> > > dependencies that are subsystem and/or driver-specific.
+> > >   
+> > 
+> > At this pount v5.18-rc7 is out and so it is too late to soak this
+> > in for the proper level of testing I'd like to see for modules-next.
+> > So I can review this after the next merge window. I'd want to beat
+> > the hell out of this and if possible I'd like to see if we can have
+> > some test coverage for the intended goal and how to break it.
+> 
+> Any news with regards to this patch series?
 
-You can still put EXPORT_SYMBOL() in *.S file, very close to the definition,
-but you do not need to care about whether it is a function or a data.
-Remove EXPORT_DATA_SYMBOL().
+0-day had a rant about a bug with it, it would be wonderful if you can
+fix that bug and rebase. Yet again we're now on v6.0-rc7 but it doesn't
+mean we can't start testing all this on linux-next. I can just get this
+merged to linux-next as soon as this is ready for a new spin, but we
+certainly will have to wait until 6.2 as we haven't yet gotten proper
+coverage for this on v6.1.
 
-In v1, I broke ia64 because of missing distinction between functions and data.
+Is there any testing situations you can think of using which can demo
+this a bit more separately from existing drivers, perhaps a new
+selftests or something?
 
-V2 handles it correctly.
-If the exported symbols is a function, KSYMTAB_FUNC is output.
-Otherwise, KSYMTAB_DATA is output.
-
-
-
-Masahiro Yamada (7):
-  kbuild: generate KSYMTAB entries by modpost
-  ia64,export.h: replace EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
-  modpost: merge sym_update_namespace() into sym_add_exported()
-  modpost: use null string instead of NULL pointer for default namespace
-  modpost: squash report_sec_mismatch() and remove enum mismatch
-  kbuild: implement CONFIG_TRIM_UNUSED_KSYMS without recursion
-  kbuild: move modules.builtin(.modinfo) rules to Makefile.vmlinux_o
-
- .gitignore                      |   1 -
- Makefile                        |  24 +---
- arch/ia64/include/asm/Kbuild    |   1 +
- arch/ia64/include/asm/export.h  |   3 -
- arch/ia64/kernel/head.S         |   2 +-
- arch/ia64/kernel/ivt.S          |   2 +-
- include/asm-generic/export.h    |  83 +-----------
- include/linux/export-internal.h |  67 +++++++++-
- include/linux/export.h          | 114 +++-------------
- kernel/module/internal.h        |   1 +
- kernel/module/main.c            |   1 -
- scripts/Makefile.build          |  15 +--
- scripts/Makefile.modpost        |   8 +-
- scripts/Makefile.vmlinux_o      |  26 +++-
- scripts/adjust_autoksyms.sh     |  73 ----------
- scripts/basic/fixdep.c          |   3 +-
- scripts/check-local-export      |   4 +-
- scripts/gen_autoksyms.sh        |  62 ---------
- scripts/gen_ksymdeps.sh         |  30 -----
- scripts/link-vmlinux.sh         |  12 +-
- scripts/mod/modpost.c           | 228 ++++++++++++++++----------------
- scripts/mod/modpost.h           |   1 +
- scripts/remove-stale-files      |   2 +
- 23 files changed, 258 insertions(+), 505 deletions(-)
- delete mode 100644 arch/ia64/include/asm/export.h
- delete mode 100755 scripts/adjust_autoksyms.sh
- delete mode 100755 scripts/gen_autoksyms.sh
- delete mode 100755 scripts/gen_ksymdeps.sh
-
--- 
-2.34.1
-
+  Luis
