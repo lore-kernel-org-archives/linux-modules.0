@@ -2,56 +2,55 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23A9DC6FA82
-	for <linux-modules@archiver.kernel.org>; Wed, 28 Sep 2022 18:18:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF360C04A95
+	for <linux-modules@archiver.kernel.org>; Wed, 28 Sep 2022 19:27:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbiI1SSo (ORCPT
+        id S233918AbiI1T1M (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 28 Sep 2022 14:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        Wed, 28 Sep 2022 15:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234433AbiI1SSW (ORCPT
+        with ESMTP id S232702AbiI1T1L (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:18:22 -0400
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5D410B5AA;
-        Wed, 28 Sep 2022 11:17:41 -0700 (PDT)
-Received: by mail-pg1-f178.google.com with SMTP id bh13so12936357pgb.4;
-        Wed, 28 Sep 2022 11:17:40 -0700 (PDT)
+        Wed, 28 Sep 2022 15:27:11 -0400
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58627D7A8;
+        Wed, 28 Sep 2022 12:27:10 -0700 (PDT)
+Received: by mail-pg1-f170.google.com with SMTP id s206so13101822pgs.3;
+        Wed, 28 Sep 2022 12:27:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=BwwaY79I9QcIrTb81yb3ikNlh+MhC+I08Q+Grdnb0GI=;
-        b=Hit7QaGhy3FkjeM9epr9YXAQFSpfqDEIo/05Xoby3EQUpIl3O+mfA9Ra1GS3a9oZ43
-         60hqxukRmJLHGyBF+697Ll/ohwcWX3qD3kHHA0GZnfgIAgoArfhrdRoIeBSeIhCe7fFJ
-         KCRo9v1/TMQFfsNzOXEI434VH7Ou12CwGiB4Xdf/y+/a0CwZCxsJtkGDNk42Dff4Ntwf
-         YNPgCiqnInyeZ2q5h2wgud5q+QQyRdyDe9pf7NuB1B2ZvYdpNbKBO4JQC/g9aZXofF9Y
-         SAybu3H53X7LL/Ik5iXnptJJ+WnsQJtqAtwCl2VsitX5s8mAPMfSQIGLM/H2GqPyrqn0
-         GT5g==
-X-Gm-Message-State: ACrzQf3HihdHaoeIgARhvERjC4Mx0a58cIE+mItyMLjEDlJxkwxwKRNd
-        CFHKheG21DSkOeJUoH4g2sQ=
-X-Google-Smtp-Source: AMsMyM5s8ZNMA/P6QTvoMBHJMPScb7WEDokxM2aeLSmDwrz3/Y9hlZPT64DFm4NVh6oHzcvmbZQuZg==
-X-Received: by 2002:a63:5f08:0:b0:434:c081:37eb with SMTP id t8-20020a635f08000000b00434c08137ebmr29927750pgb.40.1664389026723;
-        Wed, 28 Sep 2022 11:17:06 -0700 (PDT)
+        bh=fi13tgaUqw4cLZkJIZHH5F/+Kj1zVWfq2Z8e4osB/qU=;
+        b=0zU2HIySj7frGQNyGeg8RTBZQzZvq6D8JnqIT5hMxoKXMd7F2eFp/tmsnANZvDGklX
+         lR/sQcDipyBkygoBsRBPPylk8ETmkEfPsCBQnRpKCnTFeidzvyNorFhN0Atr8CaBgjyK
+         Goopw0grWFJvIsiVoK5Vv1O5Evv/q29VxkcZfg1Seu7HY/dz1LmC/DRujKtCCveqaBxq
+         e4YkZstqLYMZ8wIIZJDdXtqAKfO9VfGgnGm72l2VxlySZFgqtZu9ly8uANq0ssAgO2Kp
+         cYALGmGM6DHFwX8e/Fu7Cn0UqX27nzJ/zAdTNmFvfcTwilv3GftU48/MIjD6GWJXfdEN
+         lIYA==
+X-Gm-Message-State: ACrzQf0lUP9bXtpTAOmrRuvO6NeYe2m4i3uyL3sMOUO3T5j+x7/jPx5x
+        b2gsNARySmIQG6WRRKeF67c=
+X-Google-Smtp-Source: AMsMyM4Wq/ODU6oLlycsV/TSsGP3st5KOplktf0lq4S7Inz58H2pIA8EPZXkLTHsTxDYidYXSbH0fA==
+X-Received: by 2002:a05:6a00:2314:b0:546:ce91:89a3 with SMTP id h20-20020a056a00231400b00546ce9189a3mr35734387pfh.77.1664393230024;
+        Wed, 28 Sep 2022 12:27:10 -0700 (PDT)
 Received: from ?IPV6:2620:15c:211:201:4cba:f1a9:6ef8:3759? ([2620:15c:211:201:4cba:f1a9:6ef8:3759])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170902d48500b00178143a728esm3994552plg.275.2022.09.28.11.17.04
+        by smtp.gmail.com with ESMTPSA id 5-20020a170902c20500b00176d347e9a7sm4090106pll.233.2022.09.28.12.27.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 11:17:05 -0700 (PDT)
-Message-ID: <33ee1c3a-d37a-b81f-68be-d1901c7dd6e8@acm.org>
-Date:   Wed, 28 Sep 2022 11:17:02 -0700
+        Wed, 28 Sep 2022 12:27:09 -0700 (PDT)
+Message-ID: <2acc2220-65dc-4af5-ffd3-997f779d41c0@acm.org>
+Date:   Wed, 28 Sep 2022 12:27:07 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
 Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
  exit code
 Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Ming Lei <ming.lei@redhat.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        linux-scsi@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
         John Garry <john.garry@huawei.com>,
         Mike Christie <michael.christie@oracle.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -60,59 +59,113 @@ Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Tejun Heo <tj@kernel.org>
 References: <20220914225621.415631-1-bvanassche@acm.org>
- <20220914225621.415631-7-bvanassche@acm.org>
- <a4084b27-dd2d-10df-493c-35998eed664c@acm.org>
- <YzOPJHSQsPtc5o0Y@bombadil.infradead.org>
+ <20220914225621.415631-7-bvanassche@acm.org> <YzOe3pYmn5qO9lFb@T590>
 From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <YzOPJHSQsPtc5o0Y@bombadil.infradead.org>
+In-Reply-To: <YzOe3pYmn5qO9lFb@T590>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 9/27/22 17:02, Luis Chamberlain wrote:
-> On Tue, Sep 20, 2022 at 10:13:40AM -0700, Bart Van Assche wrote:
->> On 9/14/22 15:56, Bart Van Assche wrote:
->>> Some kernel modules call device_del() from their module exit code and
->>> schedule asynchronous work from inside the .release callback without waiting
->>> until that callback has finished. As an example, many SCSI LLD drivers call
->>> scsi_remove_host() from their module exit code. scsi_remove_host() may
->>> invoke scsi_device_dev_release_usercontext() asynchronously.
->>> scsi_device_dev_release_usercontext() uses the host template pointer and
->>> that pointer usually exists in static storage in the SCSI LLD. Support
->>> using the module reference count to keep the module around until
->>> asynchronous module exiting has completed by waiting in the delete_module()
->>> system call until the module reference count drops to zero.
->>
->> Hi Luis,
->>
->> I'd like to know your opinion about this patch since you are the maintainer
->> of the kernel module system.
+On 9/27/22 18:09, Ming Lei wrote:
+> On Wed, Sep 14, 2022 at 03:56:20PM -0700, Bart Van Assche wrote:
+>> Some kernel modules call device_del() from their module exit code and
+>> schedule asynchronous work from inside the .release callback without waiting
+>> until that callback has finished. As an example, many SCSI LLD drivers call
 > 
-> See this patch which extends the documentation of try_module_get():
+> It isn't only related with device, any kobject has such issue, or any
+> reference counter usage has similar potential risk, see previous discussion:
 > 
-> https://lkml.kernel.org/r/20211029184500.2821444-7-mcgrof@kernel.org
+> https://lore.kernel.org/lkml/YsZm7lSXYAHT14ui@T590/
 > 
-> You can ignore discussion around the thread as sadly it is just
-> irrelevant stuff not about that patch. But the logic it spells out
-> is still true.
+> IMO, it is one fundamental problem wrt. module vs. reference counting or
+> kobject uses at least, since the callback depends on module code
+> segment.
 > 
-> So, in short, using try_module_get() on exit is actually the wrong
-> thing to do and it is no surprise it would fail. I haven't gotten
-> yet around to reviewing Mauro's driver API which let's you unbind
-> drivers, but it sounds related so I CC'd you on that.
+>> scsi_remove_host() from their module exit code. scsi_remove_host() may
+>> invoke scsi_device_dev_release_usercontext() asynchronously.
+>> scsi_device_dev_release_usercontext() uses the host template pointer and
+>> that pointer usually exists in static storage in the SCSI LLD. Support
+>> using the module reference count to keep the module around until
+>> asynchronous module exiting has completed by waiting in the delete_module()
+>> system call until the module reference count drops to zero.
 > 
-> So I'd like to ask instead if an alternative to using try_module_get()
-> on exit would be better here and for the future.
+> The issue can't be addressed by the normal mod->refcnt, since user need
+> to unload module when the device isn't used.
 
-Hi Luis,
+Hi Ming,
 
-The extended documentation of try_module_get() is very helpful. But 
-please note that this patch is not related to try_module_get() at all. 
-See also patch 7/7 in this series 
-(https://lore.kernel.org/linux-scsi/20220914225621.415631-8-bvanassche@acm.org/).
+How about removing support for calling scsi_device_put() from atomic context
+as is done in the untested patch below?
 
 Thanks,
 
 Bart.
 
+diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+index c59eac7a32f2..661753a10b47 100644
+--- a/drivers/scsi/scsi.c
++++ b/drivers/scsi/scsi.c
+@@ -561,6 +561,8 @@ EXPORT_SYMBOL(scsi_report_opcode);
+   */
+  int scsi_device_get(struct scsi_device *sdev)
+  {
++	might_sleep();
++
+  	if (sdev->sdev_state == SDEV_DEL || sdev->sdev_state == SDEV_CANCEL)
+  		goto fail;
+  	if (!get_device(&sdev->sdev_gendev))
+@@ -588,6 +590,7 @@ void scsi_device_put(struct scsi_device *sdev)
+  {
+  	struct module *mod = sdev->host->hostt->module;
+
++	might_sleep();
+  	put_device(&sdev->sdev_gendev);
+  	module_put(mod);
+  }
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index a3aaafdeac1d..4cfc9317b4ad 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -441,7 +441,7 @@ static void scsi_device_cls_release(struct device *class_dev)
+  	put_device(&sdev->sdev_gendev);
+  }
+
+-static void scsi_device_dev_release_usercontext(struct work_struct *work)
++static void scsi_device_dev_release(struct device *dev)
+  {
+  	struct scsi_device *sdev;
+  	struct device *parent;
+@@ -450,11 +450,8 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
+  	struct scsi_vpd *vpd_pg0 = NULL, *vpd_pg89 = NULL;
+  	struct scsi_vpd *vpd_pgb0 = NULL, *vpd_pgb1 = NULL, *vpd_pgb2 = NULL;
+  	unsigned long flags;
+-	struct module *mod;
+-
+-	sdev = container_of(work, struct scsi_device, ew.work);
+
+-	mod = sdev->host->hostt->module;
++	sdev = to_scsi_device(dev);
+
+  	parent = sdev->sdev_gendev.parent;
+
+@@ -516,19 +513,6 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
+
+  	if (parent)
+  		put_device(parent);
+-	module_put(mod);
+-}
+-
+-static void scsi_device_dev_release(struct device *dev)
+-{
+-	struct scsi_device *sdp = to_scsi_device(dev);
+-
+-	/* Set module pointer as NULL in case of module unloading */
+-	if (!try_module_get(sdp->host->hostt->module))
+-		sdp->host->hostt->module = NULL;
+-
+-	execute_in_process_context(scsi_device_dev_release_usercontext,
+-				   &sdp->ew);
+  }
+
+  static struct class sdev_class = {
