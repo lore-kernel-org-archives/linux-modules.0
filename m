@@ -2,95 +2,92 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD36DC54EE9
-	for <linux-modules@archiver.kernel.org>; Tue, 27 Sep 2022 23:32:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A006BC07E9D
+	for <linux-modules@archiver.kernel.org>; Wed, 28 Sep 2022 00:02:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiI0XcP (ORCPT
+        id S231428AbiI1ACy (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 27 Sep 2022 19:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        Tue, 27 Sep 2022 20:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiI0XcO (ORCPT
+        with ESMTP id S229489AbiI1ACx (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 27 Sep 2022 19:32:14 -0400
+        Tue, 27 Sep 2022 20:02:53 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D487D1C6A41;
-        Tue, 27 Sep 2022 16:32:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624E7B6D54;
+        Tue, 27 Sep 2022 17:02:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=S8UJUP0VBuQngd2OEhP0OtJLPeHHAHk+DG1PtoI2pnk=; b=xRpltdoE+BX4wJj6Dn/xqNhxlx
-        dNbrhZ20jxjllsS1ta1wO+7ebIr+chPK780UY/3Y9XqriWy5TXjz53IfQpA4PQyuszNpgBF79SQ90
-        MKDt/qDALUhpwL/XrjAZzfRVunyxJkfVw3Ka5tk/dqfXjOlsuK0gfBzsGkVG8CToVfU/QRQ+T3nXY
-        1wXjQlbfLxb9c/A3hML8pHwk6Qg0VU+eNHdUV1EmLgPH1LTXTjrJr6hx5jOyiC6Lyorup2B3f6XQb
-        VQ5Y5BFREOKh5/3Wy8fn0pJIaHZ2+oVmAwD3b9hu1B7FEM9SmJs+RGTJBR8xNdMndP/c5/HTG1pcl
-        VCYMtUqQ==;
+        bh=guf6A20S3MwV/sozfojk73A9a5gLzuwZOHcY81yWs9s=; b=V+2f75PvljF3lRCCcfchpHgtNm
+        Cb5hEGrH1L7Clwr8w8F7ZIUtHCA9POwQ/uCm0CYoJu+DUAoAMFK8Dbg9Wn6nkXqLQ9zBgNLPKvlYG
+        7iv7QdXWG0OAjOWs4gprIa7W2gbycW42Cw1Yr1Y0mTNY7N9zVAi9hJh3154PBmlK0vkYTeQ3BBWNp
+        UE8exWdMXdRjbMME6NZF08HjFatVITEMX2av+3crRXQDLtkeQYPW0COvoZLi7/69j0YWfZzodsGoP
+        jQg1zzz4940cYoA39xTRhJc6Ff/82hZ/QTZZX2Evyn9i5Khn2aY31vjgF6+GXzAj239pUHPHfLzW8
+        ns9Wsx+Q==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odK3O-00D9Po-9y; Tue, 27 Sep 2022 23:31:54 +0000
-Date:   Tue, 27 Sep 2022 16:31:54 -0700
+        id 1odKXE-00DELX-JK; Wed, 28 Sep 2022 00:02:44 +0000
+Date:   Tue, 27 Sep 2022 17:02:44 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org,
-        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH v6 0/4] Let userspace know when snd-hda-intel needs i915
-Message-ID: <YzOH6oV6B6UKb7DF@bombadil.infradead.org>
-References: <cover.1652113087.git.mchehab@kernel.org>
- <Ynl7xGy+a9MYjXi1@bombadil.infradead.org>
- <20220920072454.4cf91f24@maurocar-mobl2>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
+ exit code
+Message-ID: <YzOPJHSQsPtc5o0Y@bombadil.infradead.org>
+References: <20220914225621.415631-1-bvanassche@acm.org>
+ <20220914225621.415631-7-bvanassche@acm.org>
+ <a4084b27-dd2d-10df-493c-35998eed664c@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220920072454.4cf91f24@maurocar-mobl2>
+In-Reply-To: <a4084b27-dd2d-10df-493c-35998eed664c@acm.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Sep 20, 2022 at 07:24:54AM +0200, Mauro Carvalho Chehab wrote:
+On Tue, Sep 20, 2022 at 10:13:40AM -0700, Bart Van Assche wrote:
+> On 9/14/22 15:56, Bart Van Assche wrote:
+> > Some kernel modules call device_del() from their module exit code and
+> > schedule asynchronous work from inside the .release callback without waiting
+> > until that callback has finished. As an example, many SCSI LLD drivers call
+> > scsi_remove_host() from their module exit code. scsi_remove_host() may
+> > invoke scsi_device_dev_release_usercontext() asynchronously.
+> > scsi_device_dev_release_usercontext() uses the host template pointer and
+> > that pointer usually exists in static storage in the SCSI LLD. Support
+> > using the module reference count to keep the module around until
+> > asynchronous module exiting has completed by waiting in the delete_module()
+> > system call until the module reference count drops to zero.
+> 
 > Hi Luis,
 > 
-> On Mon, 9 May 2022 13:38:28 -0700
-> Luis Chamberlain <mcgrof@kernel.org> wrote:
-> 
-> > On Mon, May 09, 2022 at 06:23:35PM +0200, Mauro Carvalho Chehab wrote:
-> > > Currently, kernel/module annotates module dependencies when
-> > > request_symbol is used, but it doesn't cover more complex inter-driver
-> > > dependencies that are subsystem and/or driver-specific.
-> > >   
-> > 
-> > At this pount v5.18-rc7 is out and so it is too late to soak this
-> > in for the proper level of testing I'd like to see for modules-next.
-> > So I can review this after the next merge window. I'd want to beat
-> > the hell out of this and if possible I'd like to see if we can have
-> > some test coverage for the intended goal and how to break it.
-> 
-> Any news with regards to this patch series?
+> I'd like to know your opinion about this patch since you are the maintainer
+> of the kernel module system.
 
-0-day had a rant about a bug with it, it would be wonderful if you can
-fix that bug and rebase. Yet again we're now on v6.0-rc7 but it doesn't
-mean we can't start testing all this on linux-next. I can just get this
-merged to linux-next as soon as this is ready for a new spin, but we
-certainly will have to wait until 6.2 as we haven't yet gotten proper
-coverage for this on v6.1.
+See this patch which extends the documentation of try_module_get():
 
-Is there any testing situations you can think of using which can demo
-this a bit more separately from existing drivers, perhaps a new
-selftests or something?
+https://lkml.kernel.org/r/20211029184500.2821444-7-mcgrof@kernel.org
+
+You can ignore discussion around the thread as sadly it is just
+irrelevant stuff not about that patch. But the logic it spells out
+is still true.
+
+So, in short, using try_module_get() on exit is actually the wrong
+thing to do and it is no surprise it would fail. I haven't gotten
+yet around to reviewing Mauro's driver API which let's you unbind
+drivers, but it sounds related so I CC'd you on that.
+
+So I'd like to ask instead if an alternative to using try_module_get()
+on exit would be better here and for the future.
 
   Luis
