@@ -2,51 +2,54 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62986C32771
-	for <linux-modules@archiver.kernel.org>; Wed, 28 Sep 2022 19:30:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61B62C6FA82
+	for <linux-modules@archiver.kernel.org>; Wed, 28 Sep 2022 21:14:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233904AbiI1Taf (ORCPT
+        id S234729AbiI1VOd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 28 Sep 2022 15:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        Wed, 28 Sep 2022 17:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbiI1Tae (ORCPT
+        with ESMTP id S235018AbiI1VOJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 28 Sep 2022 15:30:34 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF758980F;
-        Wed, 28 Sep 2022 12:30:33 -0700 (PDT)
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 28SJUIZ0023087;
-        Thu, 29 Sep 2022 04:30:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28SJUIZ0023087
+        Wed, 28 Sep 2022 17:14:09 -0400
+Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCF3110B12;
+        Wed, 28 Sep 2022 14:09:10 -0700 (PDT)
+Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-06.nifty.com with ESMTP id 28SL5JwE013651;
+        Thu, 29 Sep 2022 06:05:19 +0900
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 28SL4kYs027628;
+        Thu, 29 Sep 2022 06:04:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28SL4kYs027628
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664393419;
-        bh=P+mo1kAnSpuWBcJQBFI24YMS/Mo+9UYb3U5TZ6VU0KQ=;
+        s=dec2015msa; t=1664399087;
+        bh=la5EsbEMHmA/CJNM5Muo6C+Tq1IqrhfhIXVR576yhI4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vCcZf2q3W/WQnJwbZP6Rt3Urp3Eaig7wqUKLSKcsoKbnyfGDC2bYNvYSEZNxdjYhj
-         B+5kdUfRebUSLi6j0ddJ/Fli9GMhE4lJ++Tg7wFRx82bcVJNFtEGuHz4YWwwwDWnbo
-         0u0GYZyz51QcefmEruDJCD7wIto90IDlmMgw+mICyJhAqp/sCvH7IWtmpu6HsPi5gF
-         lrn0w6t4mqFnFGagNXRd7bl0I8KFybo36u2pg1TsYA6OTVXo6c7ZWw1qe3MvjKXxvf
-         Tx5JnfIO1kEFWV9ttuftcWWl9QzWBLdXgcINF8s+KMZwQPh0K4vBQbW7Cd9EK0MCCj
-         RxfugBfJtQ6Cg==
-X-Nifty-SrcIP: [209.85.210.54]
-Received: by mail-ot1-f54.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso1115795otb.2;
-        Wed, 28 Sep 2022 12:30:18 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0aJxqsGwBxJGxueWVz7HIyxLYIhLAFhBRxcpi22flbjbuu/kRq
-        w9Yk/ivgm1wCb+iWkISNf+RMPNtBZCNmfp9uKkY=
-X-Google-Smtp-Source: AMsMyM5gnuffA1b3nRhl0cvz2YH2ANAIyN8tapXvX58e7uoc6gKZycodp72r+5Den7g8RFUU7B7dKmeXxV/+HCes/4c=
-X-Received: by 2002:a05:6830:3115:b0:658:ea61:249c with SMTP id
- b21-20020a056830311500b00658ea61249cmr15615036ots.225.1664393417324; Wed, 28
- Sep 2022 12:30:17 -0700 (PDT)
+        b=0xjS+HokgTAU6kykjqgYtjKz0jxmy+3LdP3cMcJHu+q+1xOZwXi+MWzZveVqtgSij
+         37LB4ehOlUx3A9cQPJ7H2KDVud99BZ0BCghRGLbnwilqqLQFFxmFcapYxRK/NwxC/D
+         xtJBFDynJ8HdevSGWcyrCs9eo+iiZDDL43zNnK840H0UIiuL4VFpRJ52VTIUnDKtWD
+         B27y23S3cpsA2z70Jp4nlt4RiXmQS+vkRFE0jGpcbpZCrv0viN3dC22u1YYtsAr1vd
+         F501/9Fz3tzRmswzZMJ/8O72yVFrKuXmb+wBepX2BUHL9IuQh3nvFrIApqI3e9XMkd
+         CmSw1BoBrGkBg==
+X-Nifty-SrcIP: [209.85.160.41]
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-13189cd5789so7106477fac.11;
+        Wed, 28 Sep 2022 14:04:47 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3S+M0vWNsumDngacdUse3ItN4pPQm3OtP9W/s9YPQUBnGRK7Oh
+        RNw9DbYIjohAvRAYSsSAZnEVc3YzYVwrdrz5dQ8=
+X-Google-Smtp-Source: AMsMyM6zUXjs63osdv/4PtoIRZPm5pM0/2GbAXZtQFtkOYhlyrTLkXOA/MyaUldtI41YO3Iyzt+XIGVub+g3qLnneww=
+X-Received: by 2002:a05:6870:6326:b0:131:9200:c99d with SMTP id
+ s38-20020a056870632600b001319200c99dmr4953220oao.194.1664399086115; Wed, 28
+ Sep 2022 14:04:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220928063947.299333-1-masahiroy@kernel.org> <20220928063947.299333-4-masahiroy@kernel.org>
-In-Reply-To: <20220928063947.299333-4-masahiroy@kernel.org>
+References: <20220928063947.299333-1-masahiroy@kernel.org>
+In-Reply-To: <20220928063947.299333-1-masahiroy@kernel.org>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 29 Sep 2022 04:29:41 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASLf0Jbyfu7HB1qLRbc6-3QeZiw3okb6O+c5YhHA-a_bA@mail.gmail.com>
-Message-ID: <CAK7LNASLf0Jbyfu7HB1qLRbc6-3QeZiw3okb6O+c5YhHA-a_bA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/8] kbuild: generate KSYMTAB entries by modpost
+Date:   Thu, 29 Sep 2022 06:04:09 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATcD6k+R66YFVg_mhe7-FGNc0nYaTPuORCcd34Qw3ra2g@mail.gmail.com>
+Message-ID: <CAK7LNATcD6k+R66YFVg_mhe7-FGNc0nYaTPuORCcd34Qw3ra2g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/8] Unify <linux/export.h> and <asm/export.h>, remove
+ EXPORT_DATA_SYMBOL(), faster TRIM_UNUSED_KSYMS
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-ia64@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
@@ -55,141 +58,45 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        linux-modules@vger.kernel.org
+        Tom Rix <trix@redhat.com>, linux-modules@vger.kernel.org,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
 On Wed, Sep 28, 2022 at 3:41 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> Commit 7b4537199a4a ("kbuild: link symbol CRCs at final link, removing
-> CONFIG_MODULE_REL_CRCS") made modpost output CRCs in the same way
-> whether the EXPORT_SYMBOL() is placed in *.c or *.S.
 >
-> This commit applies a similar approach to the entire data structure of
-> EXPORT_SYMBOL() for further cleanups. The EXPORT_SYMBOL() compilation
-> is split into two stages.
+> This patch set refactors EXPORT_SYMBOL, <linux/export.h> and <asm/export.h>.
+> Also, re-implement TRIM_UNUSED_KSYMS in one-pass.
 >
-> When a source file is compiled, EXPORT_SYMBOL() is converted into a
-> dummy symbol in the .discard.export_symbol section.
+> You can still put EXPORT_SYMBOL() in *.S file, very close to the definition,
+> but you do not need to care about whether it is a function or a data.
+> Remove EXPORT_DATA_SYMBOL().
 >
-> For example,
+> In v1, I broke ia64 because of missing distinction between functions and data.
 >
->     EXPORT_SYMBOL(foo);
->     EXPORT_SYMBOL_NS_GPL(bar, BAR_NAMESPACE);
+> V2 handles it correctly.
+> If the exported symbols is a function, KSYMTAB_FUNC is output.
+> Otherwise, KSYMTAB_DATA is output.
 >
-> will be encoded into the following assembly code:
->
->     .section .discard.export_symbol
->     __export_symbol.foo:
->             .asciz ""
->     .previous
->
->     .section .discard.export_symbol
->     __export_symbol_gpl.bar:
->             .asciz "BAR_NAMESPACE"
->     .previous
->
-> They are just markers to tell modpost the name, license, and namespace
-> of the symbols. They will be dropped from the final vmlinux and modules
-> because the section name starts with ".discard.".
->
-> Then, modpost extracts all the information about EXPORT_SYMBOL() from the
-> .discard.export_symbol section, and generates C code:
->
->     KSYMTAB_FUNC(foo, "", "");
->     KSYMTAB_FUNC(bar, "_gpl", "BAR_NAMESPACE");
->
-> KSYMTAB_FUNC() (or KSYMTAB_DATA() if it is data) is expanded to struct
-> kernel_symbol that will be linked to the vmlinux or a module.
->
-> With this change, EXPORT_SYMBOL() works in the same way for *.c and *.S
-> files, providing the following benefits.
->
-> [1] Deprecate EXPORT_DATA_SYMBOL()
->
-> In the old days, EXPORT_SYMBOL() was only available in C files. To export
-> a symbol in *.S, EXPORT_SYMBOL() was placed in a separate *.c file.
-> arch/arm/kernel/armksyms.c is one example written in the classic manner.
->
-> Commit 22823ab419d8 ("EXPORT_SYMBOL() for asm") removed this limitation.
-> Since then, EXPORT_SYMBOL() can be placed close to the symbol definition
-> in *.S files. It was a nice improvement.
->
-> However, as that commit mentioned, you need to use EXPORT_DATA_SYMBOL()
-> for data objects on some architectures.
->
-> In the new approach, modpost checks symbol's type (STT_FUNC or not),
-> and outputs KSYMTAB_FUNC() or KSYMTAB_DATA() accordingly.
->
-> There are only two users of EXPORT_DATA_SYMBOL:
->
->   EXPORT_DATA_SYMBOL_GPL(empty_zero_page)    (arch/ia64/kernel/head.S)
->   EXPORT_DATA_SYMBOL(ia64_ivt)               (arch/ia64/kernel/ivt.S)
->
-> They are transformed as follows and output into .vmlinux.export.c
->
->   KSYMTAB_DATA(empty_zero_page, "_gpl", "");
->   KSYMTAB_DATA(ia64_ivt, "", "");
->
-> The other EXPORT_SYMBOL users in ia64 assembly are output as
-> KSYMTAB_FUNC().
->
-> EXPORT_DATA_SYMBOL() is now deprecated.
->
-> [2] merge <linux/export.h> and <asm-generic/export.h>
->
-> There are two similar header implementations:
->
->   include/linux/export.h        for .c files
->   include/asm-generic/export.h  for .S files
->
-> Ideally, the functionality should be consistent between them, but they
-> tend to diverge.
->
-> Commit 8651ec01daed ("module: add support for symbol namespaces.") did
-> not support the namespace for *.S files.
->
-> This commit shifts the essential implementation part to C, which supports
-> EXPORT_SYMBOL_NS() for *.S files.
->
-> <asm/export.h> and <asm-generic/export.h> will remain as a wrapper of
-> <linux/export.h> for a while.
->
-> They will be removed after #include <asm/export.h> directives are all
-> replaced with #include <linux/export.h>.
->
-> [3] Implement CONFIG_TRIM_UNUSED_KSYMS in one-pass algorithm (by a later commit)
->
-> When CONFIG_TRIM_UNUSED_KSYMS is enabled, Kbuild recursively traverses
-> the directory tree to determine which EXPORT_SYMBOL to trim. If an
-> EXPORT_SYMBOL turns out to be unused by anyone, Kbuild begins the
-> second traverse, where some source files are recompiled with their
-> EXPORT_SYMBOL() tuned into a no-op.
->
-> We can do this better now; modpost can selectively emit KSYMTAB entries
-> that are really used by modules.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
 
 
-After some more tests, I noticed this introduced
-false positive warnings:
+I noticed this patch set is broken in multiple ways.
+No test is needed.
+(0day may send various reports, but please ignore them)
 
-  ERROR: modpost: phy_init .init.text vmlinux: EXPORT_SYMBOL used for
-init symbol. Remove __init or EXPORT_SYMBOL.
-  ERROR: modpost: phy_exit .exit.text vmlinux: EXPORT_SYMBOL used for
-exit symbol. Remove __exit or EXPORT_SYMBOL.
-
-
-If I find how to fix it, I will send v4.
+I will fix the code when I have time.
 
 
 
 
 
--- 
+
+
 Best Regards
+
 Masahiro Yamada
