@@ -2,94 +2,180 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98FEEC54EE9
-	for <linux-modules@archiver.kernel.org>; Wed, 28 Sep 2022 01:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FB28C54EE9
+	for <linux-modules@archiver.kernel.org>; Wed, 28 Sep 2022 01:35:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiI1BKW (ORCPT
+        id S229692AbiI1Bfj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 27 Sep 2022 21:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
+        Tue, 27 Sep 2022 21:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiI1BKT (ORCPT
+        with ESMTP id S232473AbiI1Bfi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 27 Sep 2022 21:10:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436AB5F22D
-        for <linux-modules@vger.kernel.org>; Tue, 27 Sep 2022 18:10:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664327409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yuhYrI3O2et4AQDqfdAc7XVomQ7XZIW92EUt5M6cRFY=;
-        b=NhSx1CSg7wa/QETmbkSR3WGIhJ8dUxlfg8y9C14aIsOtd6Qu4KLBwmZSPkSQJBwILYEW9O
-        3rSd8vW6niic0UjV8XGEX7BbRZgh/ustKPLJXL0ahss6vQKf7olJEHqanBbEPAKtMbsXBN
-        0yC3gnxwoh/579CWRK5E0T/cO7QqrWc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-434-53R5vA26MeOJJtwaB5DeVw-1; Tue, 27 Sep 2022 21:10:06 -0400
-X-MC-Unique: 53R5vA26MeOJJtwaB5DeVw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8801A185A78F;
-        Wed, 28 Sep 2022 01:10:05 +0000 (UTC)
-Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 350B1C15BA4;
-        Wed, 28 Sep 2022 01:09:55 +0000 (UTC)
-Date:   Wed, 28 Sep 2022 09:09:50 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Tejun Heo <tj@kernel.org>, ming.lei@redhat.com
-Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
- exit code
-Message-ID: <YzOe3pYmn5qO9lFb@T590>
-References: <20220914225621.415631-1-bvanassche@acm.org>
- <20220914225621.415631-7-bvanassche@acm.org>
+        Tue, 27 Sep 2022 21:35:38 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8013A112651;
+        Tue, 27 Sep 2022 18:35:35 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4McfBF6dfBzpVMq;
+        Wed, 28 Sep 2022 09:32:37 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 09:35:33 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 09:35:33 +0800
+Subject: Re: [PATCH v4 4/8] kallsyms: Improve the performance of
+ kallsyms_lookup_name()
+To:     Petr Mladek <pmladek@suse.com>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+References: <20220920071317.1787-1-thunder.leizhen@huawei.com>
+ <20220920071317.1787-5-thunder.leizhen@huawei.com> <Yyss3SWM0nTVnjT7@alley>
+ <3c86335e-c5b8-b291-d0c2-9b69f912f900@huawei.com> <YywIcQzaGmV43zr6@alley>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <5508d96b-1651-5192-4e46-9dd145abe3fb@huawei.com>
+Date:   Wed, 28 Sep 2022 09:35:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914225621.415631-7-bvanassche@acm.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+In-Reply-To: <YywIcQzaGmV43zr6@alley>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Sep 14, 2022 at 03:56:20PM -0700, Bart Van Assche wrote:
-> Some kernel modules call device_del() from their module exit code and
-> schedule asynchronous work from inside the .release callback without waiting
-> until that callback has finished. As an example, many SCSI LLD drivers call
-
-It isn't only related with device, any kobject has such issue, or any
-reference counter usage has similar potential risk, see previous discussion:
-
-https://lore.kernel.org/lkml/YsZm7lSXYAHT14ui@T590/
-
-IMO, it is one fundamental problem wrt. module vs. reference counting or
-kobject uses at least, since the callback depends on module code
-segment.
-
-> scsi_remove_host() from their module exit code. scsi_remove_host() may
-> invoke scsi_device_dev_release_usercontext() asynchronously.
-> scsi_device_dev_release_usercontext() uses the host template pointer and
-> that pointer usually exists in static storage in the SCSI LLD. Support
-> using the module reference count to keep the module around until
-> asynchronous module exiting has completed by waiting in the delete_module()
-> system call until the module reference count drops to zero.
-
-The issue can't be addressed by the normal mod->refcnt, since user need
-to unload module when the device isn't used.
 
 
-thanks,
-Ming
+On 2022/9/22 15:02, Petr Mladek wrote:
+> On Thu 2022-09-22 10:15:22, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2022/9/21 23:25, Petr Mladek wrote:
+>>> On Tue 2022-09-20 15:13:13, Zhen Lei wrote:
+>>>> Currently, to search for a symbol, we need to expand the symbols in
+>>>> 'kallsyms_names' one by one, and then use the expanded string for
+>>>> comparison. This process can be optimized.
+>>>>
+>>>> And now scripts/kallsyms no longer compresses the symbol types, each
+>>>> symbol type always occupies one byte. So we can first compress the
+>>>> searched symbol and then make a quick comparison based on the compressed
+>>>> length and content. In this way, for entries with mismatched lengths,
+>>>> there is no need to expand and compare strings. And for those matching
+>>>> lengths, there's no need to expand the symbol. This saves a lot of time.
+>>>> According to my test results, the average performance of
+>>>> kallsyms_lookup_name() can be improved by 20 to 30 times.
+>>>>
+>>>> The pseudo code of the test case is as follows:
+>>>> static int stat_find_name(...)
+>>>> {
+>>>> 	start = sched_clock();
+>>>> 	(void)kallsyms_lookup_name(name);
+>>>> 	end = sched_clock();
+>>>> 	//Update min, max, cnt, sum
+>>>> }
+>>>>
+>>>> /*
+>>>>  * Traverse all symbols in sequence and collect statistics on the time
+>>>>  * taken by kallsyms_lookup_name() to lookup each symbol.
+>>>>  */
+>>>> kallsyms_on_each_symbol(stat_find_name, NULL);
+>>>>
+>>>> The test results are as follows (twice):
+>>>> After : min=5250, max=  726560, avg= 302132
+>>>> After : min=5320, max=  726850, avg= 301978
+>>>> Before: min=170,  max=15949190, avg=7553906
+>>>> Before: min=160,  max=15877280, avg=7517784
+>>>>
+>>>> The average time consumed is only 4.01% and the maximum time consumed is
+>>>> only 4.57% of the time consumed before optimization.
+>>>>
+>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>>> ---
+>>>>  kernel/kallsyms.c | 79 +++++++++++++++++++++++++++++++++++++++++++++--
+>>>>  1 file changed, 76 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+>>>> index 3e7e2c2ad2f75ef..2d76196cfe89f34 100644
+>>>> --- a/kernel/kallsyms.c
+>>>> +++ b/kernel/kallsyms.c
+>>>> @@ -87,6 +87,71 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
+>>>> +{
+>>>> +	int i, j, k, n;
+>>>> +	int len, token_len;
+>>>> +	const char *token;
+>>>> +	unsigned char token_idx[KSYM_NAME_LEN];
+>>>> +	unsigned char token_bak[KSYM_NAME_LEN];
+>>>
+>>> Why do we need two buffers? It should be possible to compress the name
+>>> in the same buffer as it is done in compress_symbols() in scripts/callsyms.c.
+>>
+>> Because the performance would be a little better. Now this function takes
+>> just over a microsecond. Currently, it takes about 250 microseconds on
+>> average to lookup a symbol, so adding a little more time to this function
+>> doesn't affect the overall picture. I'll modify and test it as you suggest
+>> below.
+> 
+> We need to be careful about a stack overflow. I have seen that
+> KSYM_NAME_LEN might need to be increased to 512 because of
+> Rust support, see
+> https://lore.kernel.org/r/20220805154231.31257-6-ojeda@kernel.org
+> 
+>>>> @@ -192,20 +257,28 @@ unsigned long kallsyms_lookup_name(const char *name)
+>>>>  	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
+>>>>  		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+>>>>  
+>>>> -		if (strcmp(namebuf, name) == 0)
+>>>> -			return kallsyms_sym_address(i);
+>>>> -
+>>>>  		if (cleanup_symbol_name(namebuf) && strcmp(namebuf, name) == 0)
+>>>>  			return kallsyms_sym_address(i);
+>>>
+>>> Hmm, it means that the speedup is not usable when kernel is compiled LLVM?
+>>> It might actually slow down the search because we would need to use
+>>> both fast and slow search?
+>>
+>> Theoretically, I don't think so. A string comparison was removed from the
+>> slow search. "if (name_len != len)" is faster than
+>> "if (strcmp(namebuf, name) == 0)". Even if they're equal,
+>> kallsyms_compress_symbol_name() only takes 1-2us, it doesn't affect the
+>> overall picture. The average lookup time before optimization is
+>> millisecond-level.
+>>
+>> Before: min=170,  max=15949190, avg=7553906
+> 
+> Good point! I agree that the potential extra overhead is negligible
+> when using the old code as a fallback.
 
+These days sleep better. When I got up this morning, my subconscious told me that
+compiled LLVM could also be optimized. In fact, the method is simple, that is,
+check whether the next token starts with '.' or '$' after being expanded.
+
+I will post v7 before the holidays.
+
+> 
+> Best Regards,
+> Petr
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
