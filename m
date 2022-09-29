@@ -2,119 +2,89 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 742A4C433F5
-	for <linux-modules@archiver.kernel.org>; Thu, 29 Sep 2022 12:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07420C433FE
+	for <linux-modules@archiver.kernel.org>; Thu, 29 Sep 2022 17:27:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234880AbiI2MKs (ORCPT
+        id S235307AbiI2R1V (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 29 Sep 2022 08:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        Thu, 29 Sep 2022 13:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbiI2MKr (ORCPT
+        with ESMTP id S234100AbiI2R1V (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 29 Sep 2022 08:10:47 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F59E79A51
-        for <linux-modules@vger.kernel.org>; Thu, 29 Sep 2022 05:10:45 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id o2so1902135lfc.10
-        for <linux-modules@vger.kernel.org>; Thu, 29 Sep 2022 05:10:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=NsrrWIjf2uyMMXyxY7icXqYe+9FJkb9IHxNntDwreP4=;
-        b=XWdx3nnbholxUaQlNpAYPNQWHmifAfs11gtmtx33+5wKkyrm5AFhGQPzcVhYtrfLkk
-         EtoWaTJPd+B6YtUixt/Q78iUkiDl5oJHYnFSh11hOBjVgjOv4sD3ufr/KzHpetgSMD51
-         MZpuEgMTMS9T+WuemoX3uw39+wcbsZjt+Ed1g=
+        Thu, 29 Sep 2022 13:27:21 -0400
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A771D88F7;
+        Thu, 29 Sep 2022 10:27:20 -0700 (PDT)
+Received: by mail-pj1-f50.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso6592934pjf.5;
+        Thu, 29 Sep 2022 10:27:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=NsrrWIjf2uyMMXyxY7icXqYe+9FJkb9IHxNntDwreP4=;
-        b=0QiCvh8WaGIeczuZDA52FiVeb3dD+bdlYzFJp/bkBPN9wCzV8/2MpF2l0ESYS77mYM
-         g0/5G68qXG/W//Ju9WnNQxD0+ZA0M6VgkREQPHiUTli3QRBAgNpxpLoG7DKXniZhBYpA
-         KAlpnLZoWyAkvqtsxbjRu5mgdUXvifxOnVgMfzMIgtmTPIQ3DLNqjFOqNLPtsWqvZQQU
-         nH1aUVlFldqXaDJJC00/iB4xUj+iwKa99Ns/b+P7vDtERspkNWgeOBwuirP2yoekqh1x
-         hwKiM0JrvJ6LxE3cxJFAtyvfM/jNniRbdED7IX+Gniu3ZhgDgYUkc/Wtvjl8+WiH/Ri6
-         r3Cw==
-X-Gm-Message-State: ACrzQf1TcFqtgloiYV0hL+JsBWxqXx2hnURiYFXN142EzTOsaAqHlrCA
-        L0nUiOFiew7kZ8GiNphgl6H3b9BC8rE/T/ng
-X-Google-Smtp-Source: AMsMyM5utwA6mqx1GWSzGWmcGTdL8ObnQwkFKgX/HF/+wvlKA00E1HQEYJw3V/fRLHpwjk9qxiEq9A==
-X-Received: by 2002:ac2:4f03:0:b0:495:ec98:bcac with SMTP id k3-20020ac24f03000000b00495ec98bcacmr1220332lfr.339.1664453443617;
-        Thu, 29 Sep 2022 05:10:43 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id x4-20020a056512078400b00497a61453a9sm767713lfr.243.2022.09.29.05.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 05:10:42 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] module: remove redundant module_sysfs_initialized variable
-Date:   Thu, 29 Sep 2022 14:10:39 +0200
-Message-Id: <20220929121039.702873-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=49qp+heZEryBDi4E6l3bbGg+YlRJd6kyFipm/Dx+3lY=;
+        b=dc95+uQVTKjlIlgvPzgv2fkEIhseGULh8viBdR8+iEmfcxs/L7VMU/qQ1RU4xJw7+U
+         ImXQzpZgRaP+iGCJDr6J/D/DyW8DDUgtC/1l+Mc1hwuto3rCpj4GIolv4eNI8sOUu1Mk
+         3rZPkD/wt7a0eRBgVxXUK6P/QLQUS2ueK+QzhWRkxa3rHYLjD1G4C1DD898zWnxI+PD7
+         Svmt/m0lcaUrq3dIx2ROg3lMPeT/bpffQlfyyLNZs4SMcWtEs11oL2ERxKeLaV+j7DPK
+         SL36amiUQt7KF8PmLN9AtgMfgAIb/4plUlNUH0pBNe+NoI7mSz8Y5gjhyvGyzCjCHzE7
+         4gvw==
+X-Gm-Message-State: ACrzQf3O+sbiIw8Nrv5ZGSyIKF6ZcdF0lGiVJj4qGJxj/JjgFIsBoRJ9
+        YSVV82h4ctRsOSYdMIZpVE4=
+X-Google-Smtp-Source: AMsMyM49r2YsAcmEWTWdQjIsGDmiiWsT/TgxuLjKU5yytl15VTnKDIxrm5yBxG1+a+3LDN/5jBnthQ==
+X-Received: by 2002:a17:902:f548:b0:178:44b:4ea9 with SMTP id h8-20020a170902f54800b00178044b4ea9mr4509518plf.77.1664472439943;
+        Thu, 29 Sep 2022 10:27:19 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:2e63:ed10:2841:950e? ([2620:15c:211:201:2e63:ed10:2841:950e])
+        by smtp.gmail.com with ESMTPSA id q17-20020a170902f35100b0017a1145eec7sm132225ple.157.2022.09.29.10.27.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 10:27:19 -0700 (PDT)
+Message-ID: <67e70e00-3a79-c8b0-525a-92071a015366@acm.org>
+Date:   Thu, 29 Sep 2022 10:27:16 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
+ exit code
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Tejun Heo <tj@kernel.org>
+References: <20220914225621.415631-1-bvanassche@acm.org>
+ <20220914225621.415631-7-bvanassche@acm.org> <YzOe3pYmn5qO9lFb@T590>
+ <2acc2220-65dc-4af5-ffd3-997f779d41c0@acm.org> <YzTwgxX+WMuJyAJy@T590>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <YzTwgxX+WMuJyAJy@T590>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The variable module_sysfs_initialized is used for checking whether
-module_kset has been initialized. Checking module_kset itself works
-just fine for that.
+On 9/28/22 18:10, Ming Lei wrote:
+> On Wed, Sep 28, 2022 at 12:27:07PM -0700, Bart Van Assche wrote:
+>> How about removing support for calling scsi_device_put() from atomic context
+>> as is done in the untested patch below?
+> 
+> That can't work.
+> 
+> The problem is that no existed mechanism can guarantee that kobject reference
+> drops to zero inside module_exit().
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- include/linux/module.h | 1 -
- kernel/module/sysfs.c  | 2 +-
- kernel/params.c        | 2 --
- 3 files changed, 1 insertion(+), 4 deletions(-)
+Hi Ming,
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 518296ea7f73..727176de2890 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -827,7 +827,6 @@ void *dereference_module_function_descriptor(struct module *mod, void *ptr)
- #ifdef CONFIG_SYSFS
- extern struct kset *module_kset;
- extern struct kobj_type module_ktype;
--extern int module_sysfs_initialized;
- #endif /* CONFIG_SYSFS */
- 
- #define symbol_request(x) try_then_request_module(symbol_get(x), "symbol:" #x)
-diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-index ce68f821dcd1..c921bf044050 100644
---- a/kernel/module/sysfs.c
-+++ b/kernel/module/sysfs.c
-@@ -340,7 +340,7 @@ static int mod_sysfs_init(struct module *mod)
- 	int err;
- 	struct kobject *kobj;
- 
--	if (!module_sysfs_initialized) {
-+	if (!module_kset) {
- 		pr_err("%s: module sysfs not initialized\n", mod->name);
- 		err = -EINVAL;
- 		goto out;
-diff --git a/kernel/params.c b/kernel/params.c
-index 5b92310425c5..8d4e9a3f0df2 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -940,7 +940,6 @@ static const struct kset_uevent_ops module_uevent_ops = {
- };
- 
- struct kset *module_kset;
--int module_sysfs_initialized;
- 
- static void module_kobj_release(struct kobject *kobj)
- {
-@@ -964,7 +963,6 @@ static int __init param_sysfs_init(void)
- 			__FILE__, __LINE__);
- 		return -ENOMEM;
- 	}
--	module_sysfs_initialized = 1;
- 
- 	version_sysfs_builtin();
- 	param_sysfs_builtin();
--- 
-2.37.2
+I agree that the patch in my previous email won't address potential calls of
+.release functions while a module is being unloaded or after a module has been
+unloaded. However, that's not the purpose of that patch. The purpose of that
+patch is to rework all code that modifies members of the scsi host template.
 
+Thanks,
+
+Bart.
