@@ -2,101 +2,108 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61B62C6FA82
-	for <linux-modules@archiver.kernel.org>; Wed, 28 Sep 2022 21:14:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAACFC04A95
+	for <linux-modules@archiver.kernel.org>; Thu, 29 Sep 2022 01:10:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234729AbiI1VOd (ORCPT
+        id S233645AbiI2BKv (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 28 Sep 2022 17:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
+        Wed, 28 Sep 2022 21:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235018AbiI1VOJ (ORCPT
+        with ESMTP id S233060AbiI2BKu (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 28 Sep 2022 17:14:09 -0400
-Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCF3110B12;
-        Wed, 28 Sep 2022 14:09:10 -0700 (PDT)
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-06.nifty.com with ESMTP id 28SL5JwE013651;
-        Thu, 29 Sep 2022 06:05:19 +0900
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 28SL4kYs027628;
-        Thu, 29 Sep 2022 06:04:47 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28SL4kYs027628
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664399087;
-        bh=la5EsbEMHmA/CJNM5Muo6C+Tq1IqrhfhIXVR576yhI4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=0xjS+HokgTAU6kykjqgYtjKz0jxmy+3LdP3cMcJHu+q+1xOZwXi+MWzZveVqtgSij
-         37LB4ehOlUx3A9cQPJ7H2KDVud99BZ0BCghRGLbnwilqqLQFFxmFcapYxRK/NwxC/D
-         xtJBFDynJ8HdevSGWcyrCs9eo+iiZDDL43zNnK840H0UIiuL4VFpRJ52VTIUnDKtWD
-         B27y23S3cpsA2z70Jp4nlt4RiXmQS+vkRFE0jGpcbpZCrv0viN3dC22u1YYtsAr1vd
-         F501/9Fz3tzRmswzZMJ/8O72yVFrKuXmb+wBepX2BUHL9IuQh3nvFrIApqI3e9XMkd
-         CmSw1BoBrGkBg==
-X-Nifty-SrcIP: [209.85.160.41]
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-13189cd5789so7106477fac.11;
-        Wed, 28 Sep 2022 14:04:47 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3S+M0vWNsumDngacdUse3ItN4pPQm3OtP9W/s9YPQUBnGRK7Oh
-        RNw9DbYIjohAvRAYSsSAZnEVc3YzYVwrdrz5dQ8=
-X-Google-Smtp-Source: AMsMyM6zUXjs63osdv/4PtoIRZPm5pM0/2GbAXZtQFtkOYhlyrTLkXOA/MyaUldtI41YO3Iyzt+XIGVub+g3qLnneww=
-X-Received: by 2002:a05:6870:6326:b0:131:9200:c99d with SMTP id
- s38-20020a056870632600b001319200c99dmr4953220oao.194.1664399086115; Wed, 28
- Sep 2022 14:04:46 -0700 (PDT)
+        Wed, 28 Sep 2022 21:10:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37367B0B0B
+        for <linux-modules@vger.kernel.org>; Wed, 28 Sep 2022 18:10:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664413847;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2btDcA0Eb0Lbvuk+gmwVVQo3+wu4HeJ6n54Ununsy7E=;
+        b=hqNsHXMq9NyJL7OahbLzLF/J1rVmV/QL6GEmiwcjnuWhACWHPfVXlvMSfMu3g04nEPuaUS
+        1VfcYCqx/zjGvoeWCOjrORvclcS8IlRRk19DAvdYz/5fcaDYmSHQC9pDvhJmz5+3+o8Mxd
+        1UOVsrempkzgwlc/PbPWZD2npCpTMsM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-183-XS4IEKxKMMCpFzgb3vguXg-1; Wed, 28 Sep 2022 21:10:42 -0400
+X-MC-Unique: XS4IEKxKMMCpFzgb3vguXg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5C4D980206D;
+        Thu, 29 Sep 2022 01:10:41 +0000 (UTC)
+Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 13B301121315;
+        Thu, 29 Sep 2022 01:10:32 +0000 (UTC)
+Date:   Thu, 29 Sep 2022 09:10:27 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
+ exit code
+Message-ID: <YzTwgxX+WMuJyAJy@T590>
+References: <20220914225621.415631-1-bvanassche@acm.org>
+ <20220914225621.415631-7-bvanassche@acm.org>
+ <YzOe3pYmn5qO9lFb@T590>
+ <2acc2220-65dc-4af5-ffd3-997f779d41c0@acm.org>
 MIME-Version: 1.0
-References: <20220928063947.299333-1-masahiroy@kernel.org>
-In-Reply-To: <20220928063947.299333-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 29 Sep 2022 06:04:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATcD6k+R66YFVg_mhe7-FGNc0nYaTPuORCcd34Qw3ra2g@mail.gmail.com>
-Message-ID: <CAK7LNATcD6k+R66YFVg_mhe7-FGNc0nYaTPuORCcd34Qw3ra2g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/8] Unify <linux/export.h> and <asm/export.h>, remove
- EXPORT_DATA_SYMBOL(), faster TRIM_UNUSED_KSYMS
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-modules@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2acc2220-65dc-4af5-ffd3-997f779d41c0@acm.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Sep 28, 2022 at 3:41 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
->
-> This patch set refactors EXPORT_SYMBOL, <linux/export.h> and <asm/export.h>.
-> Also, re-implement TRIM_UNUSED_KSYMS in one-pass.
->
-> You can still put EXPORT_SYMBOL() in *.S file, very close to the definition,
-> but you do not need to care about whether it is a function or a data.
-> Remove EXPORT_DATA_SYMBOL().
->
-> In v1, I broke ia64 because of missing distinction between functions and data.
->
-> V2 handles it correctly.
-> If the exported symbols is a function, KSYMTAB_FUNC is output.
-> Otherwise, KSYMTAB_DATA is output.
->
+On Wed, Sep 28, 2022 at 12:27:07PM -0700, Bart Van Assche wrote:
+> On 9/27/22 18:09, Ming Lei wrote:
+> > On Wed, Sep 14, 2022 at 03:56:20PM -0700, Bart Van Assche wrote:
+> > > Some kernel modules call device_del() from their module exit code and
+> > > schedule asynchronous work from inside the .release callback without waiting
+> > > until that callback has finished. As an example, many SCSI LLD drivers call
+> > 
+> > It isn't only related with device, any kobject has such issue, or any
+> > reference counter usage has similar potential risk, see previous discussion:
+> > 
+> > https://lore.kernel.org/lkml/YsZm7lSXYAHT14ui@T590/
+> > 
+> > IMO, it is one fundamental problem wrt. module vs. reference counting or
+> > kobject uses at least, since the callback depends on module code
+> > segment.
+> > 
+> > > scsi_remove_host() from their module exit code. scsi_remove_host() may
+> > > invoke scsi_device_dev_release_usercontext() asynchronously.
+> > > scsi_device_dev_release_usercontext() uses the host template pointer and
+> > > that pointer usually exists in static storage in the SCSI LLD. Support
+> > > using the module reference count to keep the module around until
+> > > asynchronous module exiting has completed by waiting in the delete_module()
+> > > system call until the module reference count drops to zero.
+> > 
+> > The issue can't be addressed by the normal mod->refcnt, since user need
+> > to unload module when the device isn't used.
+> 
+> Hi Ming,
+> 
+> How about removing support for calling scsi_device_put() from atomic context
+> as is done in the untested patch below?
+
+That can't work.
+
+The problem is that no existed mechanism can guarantee that kobject reference
+drops to zero inside module_exit().
 
 
+Thanks,
+Ming
 
-I noticed this patch set is broken in multiple ways.
-No test is needed.
-(0day may send various reports, but please ignore them)
-
-I will fix the code when I have time.
-
-
-
-
-
-
-
-Best Regards
-
-Masahiro Yamada
