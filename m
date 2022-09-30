@@ -2,89 +2,68 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07420C433FE
-	for <linux-modules@archiver.kernel.org>; Thu, 29 Sep 2022 17:27:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99336C433F5
+	for <linux-modules@archiver.kernel.org>; Fri, 30 Sep 2022 11:30:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235307AbiI2R1V (ORCPT
+        id S230176AbiI3Lav (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 29 Sep 2022 13:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        Fri, 30 Sep 2022 07:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234100AbiI2R1V (ORCPT
+        with ESMTP id S230469AbiI3L3v (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 29 Sep 2022 13:27:21 -0400
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A771D88F7;
-        Thu, 29 Sep 2022 10:27:20 -0700 (PDT)
-Received: by mail-pj1-f50.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso6592934pjf.5;
-        Thu, 29 Sep 2022 10:27:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=49qp+heZEryBDi4E6l3bbGg+YlRJd6kyFipm/Dx+3lY=;
-        b=dc95+uQVTKjlIlgvPzgv2fkEIhseGULh8viBdR8+iEmfcxs/L7VMU/qQ1RU4xJw7+U
-         ImXQzpZgRaP+iGCJDr6J/D/DyW8DDUgtC/1l+Mc1hwuto3rCpj4GIolv4eNI8sOUu1Mk
-         3rZPkD/wt7a0eRBgVxXUK6P/QLQUS2ueK+QzhWRkxa3rHYLjD1G4C1DD898zWnxI+PD7
-         Svmt/m0lcaUrq3dIx2ROg3lMPeT/bpffQlfyyLNZs4SMcWtEs11oL2ERxKeLaV+j7DPK
-         SL36amiUQt7KF8PmLN9AtgMfgAIb/4plUlNUH0pBNe+NoI7mSz8Y5gjhyvGyzCjCHzE7
-         4gvw==
-X-Gm-Message-State: ACrzQf3O+sbiIw8Nrv5ZGSyIKF6ZcdF0lGiVJj4qGJxj/JjgFIsBoRJ9
-        YSVV82h4ctRsOSYdMIZpVE4=
-X-Google-Smtp-Source: AMsMyM49r2YsAcmEWTWdQjIsGDmiiWsT/TgxuLjKU5yytl15VTnKDIxrm5yBxG1+a+3LDN/5jBnthQ==
-X-Received: by 2002:a17:902:f548:b0:178:44b:4ea9 with SMTP id h8-20020a170902f54800b00178044b4ea9mr4509518plf.77.1664472439943;
-        Thu, 29 Sep 2022 10:27:19 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:2e63:ed10:2841:950e? ([2620:15c:211:201:2e63:ed10:2841:950e])
-        by smtp.gmail.com with ESMTPSA id q17-20020a170902f35100b0017a1145eec7sm132225ple.157.2022.09.29.10.27.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 10:27:19 -0700 (PDT)
-Message-ID: <67e70e00-3a79-c8b0-525a-92071a015366@acm.org>
-Date:   Thu, 29 Sep 2022 10:27:16 -0700
+        Fri, 30 Sep 2022 07:29:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CF632DA2;
+        Fri, 30 Sep 2022 04:20:50 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9EE261F8E2;
+        Fri, 30 Sep 2022 11:20:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664536849; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sq16qV9KAC6HhtR2SG4ysqHRgl4G28JmjfBwyTS++Oc=;
+        b=xxu3ODCsAN/Qh9LG/9w9HvEk9+uSHbPptVsQndei0FIbAGoONJX7zSj2B0QzNCEy5/Sv2U
+        UAVogGGl8qdWEwK36P4QkR9PyAGmjnhfm7Kz9/XFZ6ckRaTgH/e3LNrHqBbYLL6Dmdp5lU
+        AizZB04SST5axA2ZXXsJg+Q01sM/8lE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664536849;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sq16qV9KAC6HhtR2SG4ysqHRgl4G28JmjfBwyTS++Oc=;
+        b=oLziVKiJ4TCUaUb+Rhirru0RKAyr6bCwI+NCwTrjHrHjDM4Sj5fPJo8KAbE260ETGaJXC5
+        sr6Qlb7NqZsN1jAQ==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 847A12C161;
+        Fri, 30 Sep 2022 11:20:49 +0000 (UTC)
+Date:   Fri, 30 Sep 2022 13:20:49 +0200 (CEST)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] module: remove redundant module_sysfs_initialized
+ variable
+In-Reply-To: <20220929121039.702873-1-linux@rasmusvillemoes.dk>
+Message-ID: <alpine.LSU.2.21.2209301320330.11771@pobox.suse.cz>
+References: <20220929121039.702873-1-linux@rasmusvillemoes.dk>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
- exit code
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Tejun Heo <tj@kernel.org>
-References: <20220914225621.415631-1-bvanassche@acm.org>
- <20220914225621.415631-7-bvanassche@acm.org> <YzOe3pYmn5qO9lFb@T590>
- <2acc2220-65dc-4af5-ffd3-997f779d41c0@acm.org> <YzTwgxX+WMuJyAJy@T590>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <YzTwgxX+WMuJyAJy@T590>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 9/28/22 18:10, Ming Lei wrote:
-> On Wed, Sep 28, 2022 at 12:27:07PM -0700, Bart Van Assche wrote:
->> How about removing support for calling scsi_device_put() from atomic context
->> as is done in the untested patch below?
+On Thu, 29 Sep 2022, Rasmus Villemoes wrote:
+
+> The variable module_sysfs_initialized is used for checking whether
+> module_kset has been initialized. Checking module_kset itself works
+> just fine for that.
 > 
-> That can't work.
-> 
-> The problem is that no existed mechanism can guarantee that kobject reference
-> drops to zero inside module_exit().
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-Hi Ming,
+Reviewed-by: Miroslav Benes <mbenes@suse.cz>
 
-I agree that the patch in my previous email won't address potential calls of
-.release functions while a module is being unloaded or after a module has been
-unloaded. However, that's not the purpose of that patch. The purpose of that
-patch is to rework all code that modifies members of the scsi host template.
-
-Thanks,
-
-Bart.
+M
