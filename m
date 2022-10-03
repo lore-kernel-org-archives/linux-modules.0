@@ -2,56 +2,83 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B6F1C433FE
-	for <linux-modules@archiver.kernel.org>; Mon,  3 Oct 2022 23:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C139EC433F5
+	for <linux-modules@archiver.kernel.org>; Mon,  3 Oct 2022 23:43:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiJCXk1 (ORCPT
+        id S229495AbiJCXns (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 3 Oct 2022 19:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
+        Mon, 3 Oct 2022 19:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiJCXkN (ORCPT
+        with ESMTP id S229461AbiJCXnr (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 3 Oct 2022 19:40:13 -0400
+        Mon, 3 Oct 2022 19:43:47 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3997646;
-        Mon,  3 Oct 2022 16:40:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D767E41D08;
+        Mon,  3 Oct 2022 16:43:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Hj6VoUAiKuP/EluI/8iLksuUOCqH6aetuiEUiC0KiF4=; b=gvShoPKYzAGsLgWPXFX2TdtjO1
-        v8iWBcjQHUvVifadKTqy/NgLsv5O+0gFBQqmtJpnb/o/Pswu5l4b4MsgHDdNv3M+efRgae1m2V95H
-        bmuy2DxU1ZBSTgH1TSWjJLUSKSap1hzBJOEjcFEz8QTnK+haOAv/hBiWBuJAhqxxfp89OHBP/DEFM
-        mMpl9S3QLT61uCkDj62my0TGMAHwjHidtDHRpPzmEzduJUE9gnQTx8CTHri/T227w7fUsdyx6H3ck
-        SNY8c181Pt9u7CWayQRN6tQMkeNRZ7d1OtkZnArh45uuT6qi3cmWAugEUO/Wh99jlekHGTHifaWjA
-        42DooiWg==;
+        bh=gwGVH40lApPNMqa2bDiJVGCrfKhOLgLuTaCOdT4sR6c=; b=kH6VyNF0sa6QIxkK/MAchvATc7
+        6vYKiYrk0dFv5uuXEMIImHPLGvGpejXUrw9Xe3YOm8a5dBcoN4otZaumx6ay3vF+GYYdynB+FJ6Ev
+        FxdUY2weFbM79sTu7+4ZgxtnPRKGe7Tt4SeqluImGD3ENJXT9/pKON9Cbvy3jnaYXeNmzckQA1WHR
+        39HfwM5cA0vbMJwInYsarL0I4dsGBTAL3AmokLagRoS1iEE3fr/HH4WawOVpnCWrymuu66ru1jCVZ
+        bp/bnytP0E15y+OcXbap2gNCLiRtpPmIO/jZx3v1RHXJognRZrsKjsyPZ0Y5IRsm2awKVno0ShP37
+        /uIgBqWA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ofV2g-0084lP-Th; Mon, 03 Oct 2022 23:40:10 +0000
-Date:   Mon, 3 Oct 2022 16:40:10 -0700
+        id 1ofV68-0085RW-6i; Mon, 03 Oct 2022 23:43:44 +0000
+Date:   Mon, 3 Oct 2022 16:43:44 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: remove redundant module_sysfs_initialized
- variable
-Message-ID: <Yzty2iIZgv7NQrqL@bombadil.infradead.org>
-References: <20220929121039.702873-1-linux@rasmusvillemoes.dk>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH -next] module: Remove unused macros module_addr_min/max
+Message-ID: <YztzsFsytGnMtQAq@bombadil.infradead.org>
+References: <20220924072216.103876-1-chenzhongjin@huawei.com>
+ <alpine.LSU.2.21.2209301329490.11771@pobox.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929121039.702873-1-linux@rasmusvillemoes.dk>
+In-Reply-To: <alpine.LSU.2.21.2209301329490.11771@pobox.suse.cz>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Sep 29, 2022 at 02:10:39PM +0200, Rasmus Villemoes wrote:
-> The variable module_sysfs_initialized is used for checking whether
-> module_kset has been initialized. Checking module_kset itself works
-> just fine for that.
+On Fri, Sep 30, 2022 at 01:37:25PM +0200, Miroslav Benes wrote:
+> Hi,
 > 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> On Sat, 24 Sep 2022, Chen Zhongjin wrote:
+> 
+> > Unused macros reported by [-Wunused-macros].
+> > 
+> > These macros are introduced to record the bound address of modules.
+> > 
+> > '80b8bf436990 ("module: Always have struct mod_tree_root")'
+> > This commit has made struct mod_tree_root always exist, which means
+> > we can always referencing mod_tree derectly rather than using this
+> > macro.
+> > 
+> > So they are useless, remove them for code cleaning.
+> 
+> a nit, but I would rephrase the changelog a bit...
+> 
+> "
+> Commit 80b8bf436990 ("module: Always have struct mod_tree_root") made 
+> "struct mod_tree_root" always present and its members addr_min and 
+> addr_max can be directly accessed.
+> 
+> Macros module_addr_min and module_addr_min are not used anymore, so remove 
+> them.
+> "
+> 
+> > Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> 
+> Anyway
+> 
+> Reviewed-by: Miroslav Benes <mbenes@suse.cz>
 
-Looks pretty sane to me, thanks! I'll queue this up for 6.2
-as we didn't get a chance to spin test this for 6.1 on linux-next.
+Thanks all, I've changed the commit message as suggested by Miroslav,
+and will queue this up for 6.2.
 
   Luis
