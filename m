@@ -2,111 +2,56 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9426C433FE
-	for <linux-modules@archiver.kernel.org>; Fri, 30 Sep 2022 20:30:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B6F1C433FE
+	for <linux-modules@archiver.kernel.org>; Mon,  3 Oct 2022 23:40:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiI3UaQ (ORCPT
+        id S229669AbiJCXk1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 30 Sep 2022 16:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
+        Mon, 3 Oct 2022 19:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbiI3UaN (ORCPT
+        with ESMTP id S229817AbiJCXkN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:30:13 -0400
+        Mon, 3 Oct 2022 19:40:13 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B517DF62;
-        Fri, 30 Sep 2022 13:30:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3997646;
+        Mon,  3 Oct 2022 16:40:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GJcHGfGVCmktBV+LdVjLjV4qA2kilpmpBXZeIc/9ch0=; b=MGpB9o6QlKmJMZVXYY8TvYeEVc
-        I3bdvalSwDMM3NfVDsGbWF9Tq0fMC1ddMhysrewEUkkY27tIk9TuS0Q9NqTKy+aPxrV3V+BfMnKA0
-        NsJeLAqL9O5ShJ8UbcuwmTmhK99Kk1CcdNqIHA+0OYZ4oZHZgcxqA9/mq/y8rff9BWVkjFKMMRUdY
-        eLfu3FGMcSRQKwJMl4sDnokfVyQ4MiovexHBpOxFXDPK5tywGximpws7sZq9mss+HMnVF4SQJyPBW
-        zC07nMnxRp/Ih2TkOkm48O9+XSj/A66VmgcMzQupSipZYBJUSQEy/2ZKnHc/RWx3iMwNXzvWdHyHU
-        70c0GF1A==;
+        bh=Hj6VoUAiKuP/EluI/8iLksuUOCqH6aetuiEUiC0KiF4=; b=gvShoPKYzAGsLgWPXFX2TdtjO1
+        v8iWBcjQHUvVifadKTqy/NgLsv5O+0gFBQqmtJpnb/o/Pswu5l4b4MsgHDdNv3M+efRgae1m2V95H
+        bmuy2DxU1ZBSTgH1TSWjJLUSKSap1hzBJOEjcFEz8QTnK+haOAv/hBiWBuJAhqxxfp89OHBP/DEFM
+        mMpl9S3QLT61uCkDj62my0TGMAHwjHidtDHRpPzmEzduJUE9gnQTx8CTHri/T227w7fUsdyx6H3ck
+        SNY8c181Pt9u7CWayQRN6tQMkeNRZ7d1OtkZnArh45uuT6qi3cmWAugEUO/Wh99jlekHGTHifaWjA
+        42DooiWg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oeMeA-00BQ0O-6x; Fri, 30 Sep 2022 20:30:10 +0000
-Date:   Fri, 30 Sep 2022 13:30:10 -0700
+        id 1ofV2g-0084lP-Th; Mon, 03 Oct 2022 23:40:10 +0000
+Date:   Mon, 3 Oct 2022 16:40:10 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
-Message-ID: <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
-References: <20220919123233.8538-1-petr.pavlu@suse.com>
- <20220919123233.8538-3-petr.pavlu@suse.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] module: remove redundant module_sysfs_initialized
+ variable
+Message-ID: <Yzty2iIZgv7NQrqL@bombadil.infradead.org>
+References: <20220929121039.702873-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919123233.8538-3-petr.pavlu@suse.com>
+In-Reply-To: <20220929121039.702873-1-linux@rasmusvillemoes.dk>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Sep 19, 2022 at 02:32:33PM +0200, Petr Pavlu wrote:
-> During a system boot, it can happen that the kernel receives a burst of
-> requests to insert the same module but loading it eventually fails
-> during its init call. 
+On Thu, Sep 29, 2022 at 02:10:39PM +0200, Rasmus Villemoes wrote:
+> The variable module_sysfs_initialized is used for checking whether
+> module_kset has been initialized. Checking module_kset itself works
+> just fine for that.
+> 
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-Please take a look at kmod selftest lib/test_kmod.c and the respective shell
-selftest tools/testing/selftests/kmod/kmod.sh. Can you modify it to add
-support to reproduce this issue?
-
-> For instance, udev can make a request to insert
-> a frequency module for each individual CPU 
-
-That seems stupid indeed, it would seem we should be able for sure to prevent
-such cases, it can't just be happening for frequency modules.
-
-> when another frequency module
-> is already loaded which causes the init function of the new module to
-> return an error.
-
-Holy smokes.
-
-> The module loader currently serializes all such requests, with the
-> barrier in add_unformed_module(). This creates a lot of unnecessary work
-> and delays the boot.
-
-Sure..
-
-> This patch improves the behavior as follows:
-> * A check whether a module load matches an already loaded module is
->   moved right after a module name is determined. -EEXIST continues to be
->   returned if the module exists and is live, -EBUSY is returned if
->   a same-name module is going.
-
-OK nice.
-
-> * A new reference-counted shared_load_info structure is introduced to
->   keep track of duplicate load requests. Two loads are considered
->   equivalent if their module name matches. In case a load duplicates
->   another running insert, the code waits for its completion and then
->   returns -EEXIST or -EBUSY depending on whether it succeeded.
-
-Groovy.
-
-> Note that prior to 6e6de3dee51a ("kernel/module.c: Only return -EEXIST
-> for modules that have finished loading"), the kernel already did merge
-> some of same load requests but it was more by accident and relied on
-> specific timing. The patch brings this behavior back in a more explicit
-> form.
-
-I'm having a hard time with this, because it is not clear if you are
-suggesting this is a regression introduced by 6e6de3dee51a or not. I'd
-like you to evaluate the impact of *not* merging a fix to older kernels.
-In practice I think we'd end up with delays on boot, but is that all?
-Would boot ever fail? The commit log does not make that clear.
-
-The commit log should make it clear if this a regression or not and the
-impact of not having these fixes merged. Please not that bots will try
-to scrape for fixes and I suspect bots will pour their heart out on this
-commit log and identify and assume this if a fix already as-is.
-
-If this *is* a regression, we should try to see how perhaps we can split
-this up into a part which is mergable to stable and then a secondary
-part which  does some new fancy optimizations.
+Looks pretty sane to me, thanks! I'll queue this up for 6.2
+as we didn't get a chance to spin test this for 6.1 on linux-next.
 
   Luis
