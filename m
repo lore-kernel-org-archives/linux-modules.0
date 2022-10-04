@@ -2,35 +2,52 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 272BFC433F5
-	for <linux-modules@archiver.kernel.org>; Mon,  3 Oct 2022 23:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC53FC433FE
+	for <linux-modules@archiver.kernel.org>; Tue,  4 Oct 2022 00:24:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbiJCX5E (ORCPT
+        id S229725AbiJDAYI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 3 Oct 2022 19:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        Mon, 3 Oct 2022 20:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiJCX4u (ORCPT
+        with ESMTP id S229662AbiJDAYH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 3 Oct 2022 19:56:50 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6077F27CDB;
-        Mon,  3 Oct 2022 16:56:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=G37LnXkC8VTdsMvruTDa2+n50xVxzxAz9mNwqVDycIY=; b=XTOqMBWME2UGab0kwjo1gzrMRW
-        gB+DuURn9NS4zcZSmoeMs18rQmqAsTNNa6uuhzopJE7oJUzHFGX+qVY7cdxQlfhPuwqLeXoDvetBs
-        CcsdjMo+/vbb/SNGM9xa8ArXmcyHMYiLJbgqoh53RFxan4Zh6rxIM0KwecTCGmVw7g/2QE2XOPexA
-        zmbGEaVvP9cKgoIuClztMdTyR+b3wnCwudN9YEIqi1v33/NbiEad2VssWmt64gBQQnGlv4v+/ejDr
-        cvjhjQ2lZjbHT91+3gOMqh0aGmftMrWfQC/SD1FT/gQY7QqVITbhlMYVu9rTYP2v6z59AYKycxcnF
-        095W7VAA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ofVIh-0086q0-0V; Mon, 03 Oct 2022 23:56:43 +0000
-Date:   Mon, 3 Oct 2022 16:56:42 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Bart Van Assche <bvanassche@acm.org>
+        Mon, 3 Oct 2022 20:24:07 -0400
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80C2252B7;
+        Mon,  3 Oct 2022 17:24:06 -0700 (PDT)
+Received: by mail-pl1-f173.google.com with SMTP id n7so11155807plp.1;
+        Mon, 03 Oct 2022 17:24:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ZlIEylRGLBdWzVOp9/7uT68mfePWL3R9HT/LBHC0RSk=;
+        b=rXVsLNWeDEkK0hkqyYFKy8w8ommLTLIAl6au+GPL9NJwwW9zENh80F9YHFrTMgwdcW
+         BKLbC7hYQr0I9SZDCSyP/jSai4gVF+aWZiHQwjS2/YAtLS+4dLu6zwH4V/TVdjbjiIjr
+         2dDiy5PX9LRccYVpkRZUBRS5kVltawTZ7CKvNiOpCZfc5fQ3x3znWKB+XtAyO3OKEx/H
+         7fz5v3yG5SfgZ2y5R3n6sDA8sGprwziDx/X6pXe004MpTd/VyPohAW/+KzQVGlp+6flv
+         W6wyAyWLurxnqYvMlk7/2E2CM2qaGMeRj9VaGl6k5rETaLLUtNcw04qtyO3+P6DIpehA
+         hWxQ==
+X-Gm-Message-State: ACrzQf2WXJrhl4u+mjqPT9+7YL8RXTYiREUegaTBSmvW9RXvIx0ktxSr
+        zqYscRf4wX0qoT19GDEVqNA=
+X-Google-Smtp-Source: AMsMyM4ww3P9R1BBmvg/a2newHXvdFWHzuvV0JG7sF2Yjly01BtaIMSCGTYeCJ4scPy6hGdvU5yCZA==
+X-Received: by 2002:a17:90b:1a89:b0:20a:a3d8:b05a with SMTP id ng9-20020a17090b1a8900b0020aa3d8b05amr7362421pjb.224.1664843046134;
+        Mon, 03 Oct 2022 17:24:06 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id d17-20020aa797b1000000b0054a1534516dsm8221618pfq.97.2022.10.03.17.24.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 17:24:05 -0700 (PDT)
+Message-ID: <d87e5f8c-c221-f5cb-0ae7-969867fbc9b5@acm.org>
+Date:   Mon, 3 Oct 2022 17:24:03 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
+ exit code
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
@@ -42,84 +59,34 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
- exit code
-Message-ID: <Yzt2upqiG2i/eHnV@bombadil.infradead.org>
 References: <20220914225621.415631-1-bvanassche@acm.org>
  <20220914225621.415631-7-bvanassche@acm.org>
  <a4084b27-dd2d-10df-493c-35998eed664c@acm.org>
  <YzOPJHSQsPtc5o0Y@bombadil.infradead.org>
  <33ee1c3a-d37a-b81f-68be-d1901c7dd6e8@acm.org>
  <YzdF72yRae7lnZAy@bombadil.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzdF72yRae7lnZAy@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+ <Yzt2upqiG2i/eHnV@bombadil.infradead.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <Yzt2upqiG2i/eHnV@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Sep 30, 2022 at 12:39:27PM -0700, Luis Chamberlain wrote:
-> On Wed, Sep 28, 2022 at 11:17:02AM -0700, Bart Van Assche wrote:
-> > On 9/27/22 17:02, Luis Chamberlain wrote:
-> > > On Tue, Sep 20, 2022 at 10:13:40AM -0700, Bart Van Assche wrote:
-> > > > On 9/14/22 15:56, Bart Van Assche wrote:
-> > > > > Some kernel modules call device_del() from their module exit code and
-> > > > > schedule asynchronous work from inside the .release callback without waiting
-> > > > > until that callback has finished. As an example, many SCSI LLD drivers call
-> > > > > scsi_remove_host() from their module exit code. scsi_remove_host() may
-> > > > > invoke scsi_device_dev_release_usercontext() asynchronously.
-> > > > > scsi_device_dev_release_usercontext() uses the host template pointer and
-> > > > > that pointer usually exists in static storage in the SCSI LLD. Support
-> > > > > using the module reference count to keep the module around until
-> > > > > asynchronous module exiting has completed by waiting in the delete_module()
-> > > > > system call until the module reference count drops to zero.
-> > > > 
-> > > > Hi Luis,
-> > > > 
-> > > > I'd like to know your opinion about this patch since you are the maintainer
-> > > > of the kernel module system.
-> > > 
-> > > See this patch which extends the documentation of try_module_get():
-> > > 
-> > > https://lkml.kernel.org/r/20211029184500.2821444-7-mcgrof@kernel.org
-> > > 
-> > > You can ignore discussion around the thread as sadly it is just
-> > > irrelevant stuff not about that patch. But the logic it spells out
-> > > is still true.
-> > > 
-> > > So, in short, using try_module_get() on exit is actually the wrong
-> > > thing to do and it is no surprise it would fail. I haven't gotten
-> > > yet around to reviewing Mauro's driver API which let's you unbind
-> > > drivers, but it sounds related so I CC'd you on that.
-> > > 
-> > > So I'd like to ask instead if an alternative to using try_module_get()
-> > > on exit would be better here and for the future.
-> > 
-> > Hi Luis,
-> > 
-> > The extended documentation of try_module_get() is very helpful. But please
-> > note that this patch is not related to try_module_get() at all. See also
-> > patch 7/7 in this series (https://lore.kernel.org/linux-scsi/20220914225621.415631-8-bvanassche@acm.org/).
-> 
-> I cannot see how this patch set is no way related to try_module_get()
-> given the 7/7 patch you posted replaces try_module_get() with __module_get().
-> My point, and hint, is that the original construct that added try_module_get()
-> on removal was flawed and I'm not sure trying to expand on that idea would
-> or even *should* be fruitful given the issues / tribal knowledge I tried
-> extending documentation for.
-> 
-> It would beg the question if instead re-evaluating the goal could be
-> done in such a way that the new documentation I suggested on try_module_get()
-> would be seriously taken into account.
+On 10/3/22 16:56, Luis Chamberlain wrote:
+> Yeah I've gone ahead and re-read your original patch again the issue
+> with that is it waits *once* for the refcnt to go to 0, but that does
+> not forbit it from going back up, at which point you have a race which
+> can still create the situation. Every subsystem is different, but for
+> instance simply running a loop opening a device block file should
+> suffice to bump the refcnt of a respective block driver module. So
+> at least the patch itself won't ultimately address this issue I'm
+> afraid.
 
-Yeah I've gone ahead and re-read your original patch again the issue
-with that is it waits *once* for the refcnt to go to 0, but that does
-not forbit it from going back up, at which point you have a race which
-can still create the situation. Every subsystem is different, but for
-instance simply running a loop opening a device block file should
-suffice to bump the refcnt of a respective block driver module. So
-at least the patch itself won't ultimately address this issue I'm
-afraid.
+Hi Luis,
 
-  Luis
+Thanks for the feedback. I will try to find a solution that does not 
+require to modify the kernel module code.
+
+Bart.
+
