@@ -2,111 +2,92 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67C3BC433FE
-	for <linux-modules@archiver.kernel.org>; Thu,  6 Oct 2022 16:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4407C433FE
+	for <linux-modules@archiver.kernel.org>; Fri,  7 Oct 2022 00:11:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiJFQiQ (ORCPT
+        id S231796AbiJGALY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 6 Oct 2022 12:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
+        Thu, 6 Oct 2022 20:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbiJFQiP (ORCPT
+        with ESMTP id S231356AbiJGALX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 6 Oct 2022 12:38:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F41CE9BD
-        for <linux-modules@vger.kernel.org>; Thu,  6 Oct 2022 09:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665074293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VEpKybDwIIb0k1AUZxnrl1NRW+TcgE4ZiwpoFiD+2/o=;
-        b=T4Tf816AyUg78mhk+21LTH1pWyQQJZJ4U1Wr+tchD2d1Ny63dlve03FzoRYPVfVl2wbdAe
-        iAZPr3LCDaEICOGxz+wnFM/8x5zcnsE3JJ0yyE/duW+PpLnnvaHwwETTSpuZ9d6akntxKt
-        05JUsE1+qdG3GIXKl9Zm7Cjvpdmh4W8=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-522-gYfSh0S0NgKF4lM26m8WQg-1; Thu, 06 Oct 2022 12:38:12 -0400
-X-MC-Unique: gYfSh0S0NgKF4lM26m8WQg-1
-Received: by mail-wr1-f69.google.com with SMTP id l6-20020adfa386000000b0022e6b57045bso717053wrb.20
-        for <linux-modules@vger.kernel.org>; Thu, 06 Oct 2022 09:38:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VEpKybDwIIb0k1AUZxnrl1NRW+TcgE4ZiwpoFiD+2/o=;
-        b=XtrowfCd6moe1UGdJcQkVAsnyQqeog9ZpXHy2e4zcLmj4B6cYJlhBAmV1COGVoUi7e
-         42xuRZYoZY9Qf2gLQPqJILm/07apogZmE2dNbNyz2zBkh4EidOYSqk5TypAVihl58tOq
-         BTkViO+H1//TLKfSzY8Z4PUrcbOFB9bnLRfwp8QH0751GUQoRPj45418NfcE4qvWk4bN
-         UrY3ceIZIyg9F9LfuZOr4OcJvCnQCoO8TygfjDwjbyaxg9OHJ0IHD0L3qOPXV0SCE635
-         bPYMVhZSfxDrwJhEd/ihx0z7N6UbIQRflvh4t9XAbSLNqwAbjDch1AFAb0/+y4Etmm3O
-         NHZQ==
-X-Gm-Message-State: ACrzQf1jhwQgh0JN3hUM0NFCEIgKbgb1EcCPv6rGeUSEe/MC9tv2PyfE
-        Pmvs9vfErNJ7Ychq6/VkBaNqIV7DzfQ2BNjeXt4s81bH05C42pBuLzEoBKHQm5QItm6zHi/syBq
-        vj2Hkp/vKmDZrn4LuT7gPQ9sf
-X-Received: by 2002:adf:db03:0:b0:22e:47a0:c455 with SMTP id s3-20020adfdb03000000b0022e47a0c455mr623729wri.54.1665074290937;
-        Thu, 06 Oct 2022 09:38:10 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5sJaSmZC7Zqmac4HCz2ut86SBFfniEHgzmCX6xcd+GIkW+bX3ysIGJ1QugXtqltQcFmMbNMw==
-X-Received: by 2002:adf:db03:0:b0:22e:47a0:c455 with SMTP id s3-20020adfdb03000000b0022e47a0c455mr623716wri.54.1665074290758;
-        Thu, 06 Oct 2022 09:38:10 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id j13-20020a5d452d000000b00228a6ce17b4sm17974302wra.37.2022.10.06.09.38.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 09:38:10 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 17:38:09 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     mcgrof@kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: "Unloaded tainted modules:" prints repeated wrong value
-Message-ID: <20221006163809.6gzl23ylu36gerli@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <YzwraXZ3J0p7lch2@localhost.localdomain>
+        Thu, 6 Oct 2022 20:11:23 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC4DC2C84
+        for <linux-modules@vger.kernel.org>; Thu,  6 Oct 2022 17:11:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=zv3Bs/f97akjpHKHZqSglgDx3YvTvB3RBQDo7mLCjyw=; b=oLLFLUeOzMqlBHfzSDBRwGFHUm
+        EsqPT0T7jKMz8fi7YWtaIV6tpGxODJ10FfceOXaopak0dSQUCoSnG5UhJKcbkrt/54eb03BYz02qs
+        ftNfIy8evFymdRSWgBtXpd5qZ0mRIN69EB96zVFXLRR4p9rO+veGCiHD8P1AJP0w92ovzlGMXHrL3
+        KEw8yzwMXRFsYvODosnSGqLGcQgclku7/gGb/AL88aIPJP/c2a03S4sO/IPDZ0vyH4SrSnvYoVAL4
+        fRl3Ey6wVrb6KioZYccWKoLtp9C8bUpYHJ89fUfmC0inbIqcRuzkZ/bymniAHQH1eNJv8oucwB/WJ
+        eHmcARuA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ogaxS-0069v7-JE; Fri, 07 Oct 2022 00:11:18 +0000
+Date:   Thu, 6 Oct 2022 17:11:18 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ddiss@suse.de, Aaron Tomlin <atomlin@redhat.com>,
+        Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
+        mcgrof@kernel.org
+Subject: [GIT PULL] Modules updates for v6.1-rc1
+Message-ID: <Yz9upiun+Y4FUMbV@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzwraXZ3J0p7lch2@localhost.localdomain>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue 2022-10-04 15:47 +0300, Alexey Dobriyan wrote:
-> I got obiously incorrect values of "pcc_cpufreq():1" on a clean kernel
-> and clean oops (see below). Original oops is different bug.
+The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
-Hi Alexey,
+  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
 
-[Added Luis Chamberlain and linux-modules@vger.kernel.org on Cc]
+are available in the Git repository at:
 
-Sorry about that!
+  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.1-rc1
 
-Indeed, in the context of the module deletion code path, no module
-record/or entry should be added to 'unloaded_tainted_modules' if
-the module does not carry a taint. I will send a patch shortly.
-The following solution should be sufficient:
+for you to fetch changes up to 77d6354bd422c8a451ef7d2235322dbf33e7427b:
 
-diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
-index 7f8133044d09..af52cabfe632 100644
---- a/kernel/module/tracking.c
-+++ b/kernel/module/tracking.c
-@@ -21,6 +21,9 @@ int try_add_tainted_module(struct module *mod)
- 
- 	module_assert_mutex_or_preempt();
- 
-+	if (!mod->taints)
-+		goto out;
-+
- 	list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules, list,
- 				lockdep_is_held(&module_mutex)) {
- 		if (!strcmp(mod_taint->name, mod->name) &&
+  module/decompress: generate sysfs string at compile time (2022-09-08 17:00:43 -0700)
 
+----------------------------------------------------------------
+Modules changes for v6.1-rc1
 
+There's only two pathes queued up for v6.1 for modules, these have
+been grinding on linux-next for at least 4 weeks now:
 
-Kind regards,
+  * David Disseldorp's minor enhancement for sysfs compression string
+  * Aaron Tomlin's debugfs interface to view unloaded tainted modules
 
--- 
-Aaron Tomlin
+But there are other changes queued up for testing for the next merge
+window already. One change being still discussed, and *not* yet even close
+to testing on linux-next, but worth mentioning to put on your radar is
+the generalization of the bpf prog_pack thing. The idea with that is to
+generalize the iTLB gains seen with using huge pages on eBPF to other text
+uses on the kernel (modules, ftrace, kprobes). Song Liu is doing a good job
+following up on that difficult task as the semantics for the special
+permissions are crap, and it really hasn't been easy to put all this
+together. The latest effort can be read on his vmalloc_exec() patch
+series [0].
 
+Aaron will have a fix posted soon for the debugfs interface for unloaded
+modules, when that comes I'll just bounce that to you as it should be
+merged.
+
+[0] https://lkml.kernel.org/r/20220818224218.2399791-1-song@kernel.org
+
+----------------------------------------------------------------
+Aaron Tomlin (1):
+      module: Add debugfs interface to view unloaded tainted modules
+
+David Disseldorp (1):
+      module/decompress: generate sysfs string at compile time
+
+ kernel/module/decompress.c |  2 +-
+ kernel/module/tracking.c   | 68 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 69 insertions(+), 1 deletion(-)
