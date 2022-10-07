@@ -2,92 +2,98 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4407C433FE
-	for <linux-modules@archiver.kernel.org>; Fri,  7 Oct 2022 00:11:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5A3FC433F5
+	for <linux-modules@archiver.kernel.org>; Fri,  7 Oct 2022 13:38:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbiJGALY (ORCPT
+        id S229983AbiJGNiX (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 6 Oct 2022 20:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        Fri, 7 Oct 2022 09:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbiJGALX (ORCPT
+        with ESMTP id S229944AbiJGNiU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 6 Oct 2022 20:11:23 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC4DC2C84
-        for <linux-modules@vger.kernel.org>; Thu,  6 Oct 2022 17:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=zv3Bs/f97akjpHKHZqSglgDx3YvTvB3RBQDo7mLCjyw=; b=oLLFLUeOzMqlBHfzSDBRwGFHUm
-        EsqPT0T7jKMz8fi7YWtaIV6tpGxODJ10FfceOXaopak0dSQUCoSnG5UhJKcbkrt/54eb03BYz02qs
-        ftNfIy8evFymdRSWgBtXpd5qZ0mRIN69EB96zVFXLRR4p9rO+veGCiHD8P1AJP0w92ovzlGMXHrL3
-        KEw8yzwMXRFsYvODosnSGqLGcQgclku7/gGb/AL88aIPJP/c2a03S4sO/IPDZ0vyH4SrSnvYoVAL4
-        fRl3Ey6wVrb6KioZYccWKoLtp9C8bUpYHJ89fUfmC0inbIqcRuzkZ/bymniAHQH1eNJv8oucwB/WJ
-        eHmcARuA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ogaxS-0069v7-JE; Fri, 07 Oct 2022 00:11:18 +0000
-Date:   Thu, 6 Oct 2022 17:11:18 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ddiss@suse.de, Aaron Tomlin <atomlin@redhat.com>,
-        Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
-        mcgrof@kernel.org
-Subject: [GIT PULL] Modules updates for v6.1-rc1
-Message-ID: <Yz9upiun+Y4FUMbV@bombadil.infradead.org>
+        Fri, 7 Oct 2022 09:38:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244B79DD8B
+        for <linux-modules@vger.kernel.org>; Fri,  7 Oct 2022 06:38:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665149898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KLExc21YikxYfkGzogVL5HvRLyAIOk3MYbkInTDglKs=;
+        b=F8U0yXCt9f9LRmj1P0O3CZ6fGU2uCrng4ayZaNpETXARyN8sm6HFjbk4MP458r6bAL4835
+        +ihW7V16qC4xbxA4R1qffbrTx2XJ0GvehFQFl+x3+eH3BXg4MZu0GJNYYoUb6NP/J0h4JF
+        iwVG+6l3itLboI1Ts6JxXZpSnu++CWo=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-453-8sq8Lcn0OwymXl8IF5o0XA-1; Fri, 07 Oct 2022 09:38:16 -0400
+X-MC-Unique: 8sq8Lcn0OwymXl8IF5o0XA-1
+Received: by mail-wr1-f71.google.com with SMTP id e14-20020adf9bce000000b0022d18139c79so1437908wrc.5
+        for <linux-modules@vger.kernel.org>; Fri, 07 Oct 2022 06:38:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KLExc21YikxYfkGzogVL5HvRLyAIOk3MYbkInTDglKs=;
+        b=NvMSnVf0EB4qfpMmQRNOeFPhCinhq1gQ8N3myCxdqr4bd2gGinETEdBwKYRS/TI0Yv
+         IrmR6frHc9VdW40EHGS84E6Ge5LzRRqYYowtwFmee7RELeYzXlBVT/2BihATQmNsCPdO
+         oz7fWQ2WHjqGWT4o+Rn3PMu2MdkJSLp70pUlzt8dKd+LqIcC/stAYY9pbKyjnzc3Pxd6
+         6JgKWEZqR6wHJ42XZhr8dX2NbN88ZmIxumcUFYcUTZKAU6NQ/i4eAwGZiL2p3uh/pCyo
+         KtpjXmqe8d3q5QL2oaXUrTeFdvLCFihlDJ05RzYqNT+SmFtNtYfp/uP1SrvWwDD/yeYO
+         Mycw==
+X-Gm-Message-State: ACrzQf1kHkUzw6yOOFYOn8a96a4qtO/OrJv6h2WvYG2CHPP4ut7XJB/w
+        MbL23sX8bwkfN1ijJlwXpT2TroU8QwPF41y5DqN1NnEZFAuztAWq+RSdgvoNBfyiVQZpCfO/5xt
+        DWOdy+cHO2sxJ/hTzs7upCnWF
+X-Received: by 2002:a5d:6442:0:b0:22e:2c71:fdac with SMTP id d2-20020a5d6442000000b0022e2c71fdacmr3087505wrw.243.1665149895153;
+        Fri, 07 Oct 2022 06:38:15 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM70RDA0DD69O0XjxoiDBxjeGXQHA+jCC60Vq1qMN7flnCd8L1EiVTzKLW6Zic2kg6PV2dI03A==
+X-Received: by 2002:a5d:6442:0:b0:22e:2c71:fdac with SMTP id d2-20020a5d6442000000b0022e2c71fdacmr3087487wrw.243.1665149894757;
+        Fri, 07 Oct 2022 06:38:14 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id m8-20020adffe48000000b0022e3cba367fsm2092740wrs.100.2022.10.07.06.38.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 06:38:13 -0700 (PDT)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org
+Cc:     adobriyan@gmail.com, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, atomlin@atomlin.com
+Subject: [PATCH modules-next] module: tracking: Keep a record of tainted unloaded modules only
+Date:   Fri,  7 Oct 2022 14:38:12 +0100
+Message-Id: <20221007133812.804837-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
+This patch ensures that no module record/or entry is added to the
+unloaded_tainted_modules list if it does not carry a taint.
 
-  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
+Reported-by: Alexey Dobriyan <adobriyan@gmail.com>
+Fixes: 99bd9956551b ("module: Introduce module unload taint tracking")
 
-are available in the Git repository at:
+Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+---
+ kernel/module/tracking.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.1-rc1
+diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
+index a139e63b6f20..26d812e07615 100644
+--- a/kernel/module/tracking.c
++++ b/kernel/module/tracking.c
+@@ -22,6 +22,9 @@ int try_add_tainted_module(struct module *mod)
+ 
+ 	module_assert_mutex_or_preempt();
+ 
++	if (!mod->taints)
++		goto out;
++
+ 	list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules, list,
+ 				lockdep_is_held(&module_mutex)) {
+ 		if (!strcmp(mod_taint->name, mod->name) &&
+-- 
+2.37.3
 
-for you to fetch changes up to 77d6354bd422c8a451ef7d2235322dbf33e7427b:
-
-  module/decompress: generate sysfs string at compile time (2022-09-08 17:00:43 -0700)
-
-----------------------------------------------------------------
-Modules changes for v6.1-rc1
-
-There's only two pathes queued up for v6.1 for modules, these have
-been grinding on linux-next for at least 4 weeks now:
-
-  * David Disseldorp's minor enhancement for sysfs compression string
-  * Aaron Tomlin's debugfs interface to view unloaded tainted modules
-
-But there are other changes queued up for testing for the next merge
-window already. One change being still discussed, and *not* yet even close
-to testing on linux-next, but worth mentioning to put on your radar is
-the generalization of the bpf prog_pack thing. The idea with that is to
-generalize the iTLB gains seen with using huge pages on eBPF to other text
-uses on the kernel (modules, ftrace, kprobes). Song Liu is doing a good job
-following up on that difficult task as the semantics for the special
-permissions are crap, and it really hasn't been easy to put all this
-together. The latest effort can be read on his vmalloc_exec() patch
-series [0].
-
-Aaron will have a fix posted soon for the debugfs interface for unloaded
-modules, when that comes I'll just bounce that to you as it should be
-merged.
-
-[0] https://lkml.kernel.org/r/20220818224218.2399791-1-song@kernel.org
-
-----------------------------------------------------------------
-Aaron Tomlin (1):
-      module: Add debugfs interface to view unloaded tainted modules
-
-David Disseldorp (1):
-      module/decompress: generate sysfs string at compile time
-
- kernel/module/decompress.c |  2 +-
- kernel/module/tracking.c   | 68 ++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 69 insertions(+), 1 deletion(-)
