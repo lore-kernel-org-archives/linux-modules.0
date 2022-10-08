@@ -2,64 +2,110 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDF53C433FE
-	for <linux-modules@archiver.kernel.org>; Fri,  7 Oct 2022 17:51:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2696DC4332F
+	for <linux-modules@archiver.kernel.org>; Sat,  8 Oct 2022 07:09:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiJGRvI (ORCPT
+        id S229668AbiJHHJS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 7 Oct 2022 13:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        Sat, 8 Oct 2022 03:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiJGRvI (ORCPT
+        with ESMTP id S229712AbiJHHJR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 7 Oct 2022 13:51:08 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80370D25B5;
-        Fri,  7 Oct 2022 10:51:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WpLPULCGom74clmD3yH2xg/VRGobfFWKQal67/aC74I=; b=DDQfN3+uh+ZMNBOlAj74K5X5fm
-        Bq3Z1lv8z87IiybLdzwrR1/xUVAxx8nv/Zjs0hhfNPDyMAokTdtgg/lUIKnj5ieIqXxfNewNUjb/P
-        lwMPA8GScXGwxRVxRhVTWHCknRFD3Xt3hMeEMyQ7yjVXzQVGqpKH0OzgoRiQ762LOeDB0KlM+1S19
-        eQC+bwTkSlePec7Mvk47bOOWxnaOgnvh8rlPt8oC26/wiaJTOPI3Vfi2Gon9pDRUflBG+NcTd8Xt7
-        NbvvQ55Oxh9NVfC0e9wRuPBTsEkglcsj9joShOd5ksn6bPbol1OhaxAOJK20e733+cvOSUsb1c+iH
-        XCcod2nw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ogrV0-009xVC-3R; Fri, 07 Oct 2022 17:51:02 +0000
-Date:   Fri, 7 Oct 2022 10:51:02 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Tomlin <atomlin@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     adobriyan@gmail.com, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, atomlin@atomlin.com
-Subject: Re: [PATCH modules-next] module: tracking: Keep a record of tainted
- unloaded modules only
-Message-ID: <Y0BnBlEdTro9DpfY@bombadil.infradead.org>
-References: <20221007133812.804837-1-atomlin@redhat.com>
+        Sat, 8 Oct 2022 03:09:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28CCBC60E;
+        Sat,  8 Oct 2022 00:09:13 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mkx4H3h6hzHtvW;
+        Sat,  8 Oct 2022 15:04:15 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 8 Oct 2022 15:09:11 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 8 Oct 2022 15:09:10 +0800
+Subject: Re: [PATCH v6 11/11] kallsyms: Add self-test facility
+To:     kernel test robot <lkp@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ingo Molnar" <mingo@redhat.com>
+CC:     <kbuild-all@lists.01.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+References: <20220924122051.362-12-thunder.leizhen@huawei.com>
+ <202210060828.LgrzwmRo-lkp@intel.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <1f7e5ebd-8345-41cd-ba9e-c4cef28c5574@huawei.com>
+Date:   Sat, 8 Oct 2022 15:09:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221007133812.804837-1-atomlin@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <202210060828.LgrzwmRo-lkp@intel.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Oct 07, 2022 at 02:38:12PM +0100, Aaron Tomlin wrote:
-> This patch ensures that no module record/or entry is added to the
-> unloaded_tainted_modules list if it does not carry a taint.
+
+
+On 2022/10/6 8:24, kernel test robot wrote:
+> Hi Zhen,
 > 
-> Reported-by: Alexey Dobriyan <adobriyan@gmail.com>
-> Fixes: 99bd9956551b ("module: Introduce module unload taint tracking")
+> Thank you for the patch! Yet something to improve:
 > 
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> [auto build test ERROR on mcgrof/modules-next]
+> [also build test ERROR on rostedt-trace/for-next v6.0]
+> [cannot apply to linus/master next-20221005]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220924-202522
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+> config: i386-allyesconfig
+> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://github.com/intel-lab-lkp/linux/commit/43e45bdbf95415fc26a9d55e7db43a75bdb8e99a
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220924-202522
+>         git checkout 43e45bdbf95415fc26a9d55e7db43a75bdb8e99a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    ld: kernel/kallsyms_selftest.o: in function `test_perf_kallsyms_lookup_name':
+>>> kallsyms_selftest.c:(.text.unlikely+0x5e3): undefined reference to `__udivdi3'
+>    ld: kernel/kallsyms_selftest.o: in function `test_kallsyms_compression_ratio':
+>    kallsyms_selftest.c:(.text.unlikely+0x771): undefined reference to `__udivdi3'
+> 
 
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+OK, thanks, I should use do_div() to calculate percentage.
 
-Linus, this is the patch I mentioned Aaron was going to post, if I can
-trouble you to merge that after my pull request, that would be great.
 
-Thanks!
-
-  Luis
+-- 
+Regards,
+  Zhen Lei
