@@ -2,120 +2,198 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 900C2C433F5
-	for <linux-modules@archiver.kernel.org>; Tue, 11 Oct 2022 15:53:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A64FDC4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 11 Oct 2022 17:56:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbiJKPxV (ORCPT
+        id S229619AbiJKRz7 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 11 Oct 2022 11:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
+        Tue, 11 Oct 2022 13:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiJKPwy (ORCPT
+        with ESMTP id S229446AbiJKRz6 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 11 Oct 2022 11:52:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B608C10052
-        for <linux-modules@vger.kernel.org>; Tue, 11 Oct 2022 08:51:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665503494;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KeMqmm6RZi8nEiwf9Am5Lyu5xHfrJbfXudXrmpg8EVU=;
-        b=aLZ5Mw5dCN7M5mHzO1Mn6O2MlpLR0y/1XDFvYPXc3uZ3pREt79ER1fr5LlIVaY5MvlB8ZD
-        j879c3F2zME2NHiH6J82gBt81Oq2hyH0KD5gh2+IrhV90o8wktV3biNO+aDUynbbGjEHaD
-        iCGuJUOcuFUaKAO9NOWd8VDYlk30wCo=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-353-zo5anyIHPLuN4zQMVCLaxQ-1; Tue, 11 Oct 2022 11:51:33 -0400
-X-MC-Unique: zo5anyIHPLuN4zQMVCLaxQ-1
-Received: by mail-wr1-f72.google.com with SMTP id s4-20020adfbc04000000b0022e03fc10a9so4003285wrg.15
-        for <linux-modules@vger.kernel.org>; Tue, 11 Oct 2022 08:51:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KeMqmm6RZi8nEiwf9Am5Lyu5xHfrJbfXudXrmpg8EVU=;
-        b=xfkEJ6xlZ3tlRwPjWP4Fw8ke3i0rf1C6MaLxPxZOIN7ucjhoEdfGGTBL7KS+kFit6E
-         zekzSPejZ1MVxzyeQrDXaGZfgdh+jzF+0QI3JLoKX0aWPjvGyZUqg5+XCpMWX7QssHNA
-         3zurdH4NI8aPU02sMHjC6+BV82q6Osn35li6JkvIJh63Ef7nVm2XuUO6pmU6vI4QEOdw
-         ylrAMKO4HZHzo5zua2nJDBHK3ccecC0kqAHI+w3b6ho2tHY4/eDzUJYUJLZ4p1gYRh7p
-         lnY6eOFyPM4FkFemT/nA8CNTegs9ubaXQAiTz0VQEoLoMR+cM9Wrlxa/AVtToVLtL/KD
-         qR2g==
-X-Gm-Message-State: ACrzQf3GIZy3XPKv5mQvTq0L2nARSwGl9y3IS+Ewh+9dYUllzlyuj2Dm
-        2lOx9G9ksXDQkdmQk8zZ4ftgaK9ZrBOlhMSGZH8yQ/3hZnGdygIOR4smVZZwDwGLYwezBuWo3Op
-        007G/X2qyUdIOAYi0RQCWAEqj
-X-Received: by 2002:adf:dec3:0:b0:22e:6efe:7861 with SMTP id i3-20020adfdec3000000b0022e6efe7861mr15840533wrn.454.1665503490701;
-        Tue, 11 Oct 2022 08:51:30 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5sB9t5u06LkupTlbVy8ECDTcOLBS1O5d6P3Qmwe1/vtkKfuRgNig3wn4YTbJ9AGejvjbghHQ==
-X-Received: by 2002:adf:dec3:0:b0:22e:6efe:7861 with SMTP id i3-20020adfdec3000000b0022e6efe7861mr15840520wrn.454.1665503490490;
-        Tue, 11 Oct 2022 08:51:30 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id az29-20020a05600c601d00b003c6b70a4d69sm5485564wmb.42.2022.10.11.08.51.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 08:51:29 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 16:51:28 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        Tue, 11 Oct 2022 13:55:58 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEFD62919;
+        Tue, 11 Oct 2022 10:55:56 -0700 (PDT)
+Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29BGrqh1017271;
+        Tue, 11 Oct 2022 17:55:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=6771/YNI9Y53OtCxCvattwjspBRfRI6zeap7bVdVEf8=;
+ b=kCHSe+jC4FwSepe2jtrQi9WWz0zjpdV6yKSu1CQETjcEmg9Rgbms/kDs1UbdfiBZDVKy
+ 6E5rtM6CrrTVEVsEluO2AwdKesLp813u6nDxwg60LROXi1pKkLD4TJIVsfVgH3vs2W+l
+ aofS6RSlx9VVWZX3+AOQDcmWqK/HY1o6T8lnOxtaLIqYv+krrubGUAR/wfFKAQTlzpvt
+ MdwZYQrhhkUkQnZuSwzJcB36dC5UAwKV/Hi0CqRadw7GYVKHPSTUI/Qf9ioxGWb0G4x7
+ PS1mQsY8W8J9ImF+nc0j1VEeRMceNyUFVZetpIYNgL1lVr2CSWrmrBiK7IsPK09Q2Hlp gg== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3k5cdggh9q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 17:55:54 +0000
+Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 461D2B2;
+        Tue, 11 Oct 2022 17:55:54 +0000 (UTC)
+Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
+ p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 11 Oct 2022 05:55:47 -1200
+Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Tue, 11 Oct 2022 05:55:47 -1200
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 11 Oct 2022 05:55:47 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GpEBmAjZKGzpJcjTAcjBGb0XO54OUiu2lF+Ml0hEpP2X96B0DoI4iBQGLZQlBHE1goo2a1BCjYVtRmR5B4i4DkREArxRWLGpNo1Vbz2D+CVyWDBqA4XvUxfIPa7HZsp5YLEw4QVK4Ej9TdRSrHcz7IxW/g2QZucq6Xw5YpdC2LE4fg3TmvenwIBuZ0cWj6sNn+lNE5gGNrEGGSonl2XEWmSf9hD/pP1lXc6QQ50mTYKgsrTQqyea3bpUCbeubmDovgND6b58O21RzD74wfl5C7mNkg8X0B+aj81nxVRGidlLYFp77y3tcDA4MwxZoRNAq/B4wRVwe43ZDfmIPTh3DA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6771/YNI9Y53OtCxCvattwjspBRfRI6zeap7bVdVEf8=;
+ b=MSVB5kTHSmsPM2MUNnSJMlN5ml+FE8xvt5/eC6JNV/Ctv/i74QiQkxEj+kT8zxMtS/5pcmpluR7622lO1Fx50NAtX0y9LMECLiu6rIixMb+8Ary/DcbhKHus+ZOR/bM4QTBTSpbfWP78PG+eQH4Oyz+vVfn5ltcqMezYnw//8HFhdHBNva493LPo1E4UoJ8z093Qv0KatKpKSjBvHzAD1G/G/rlG3CPjuHxrZE4a8cxmiRKFUYJXcaGN/JRjFvv0i8YQivgVgAcsMyVqk0g+ABfDWvIe7O5KcMWFvT221CfODMKn0bTcPPuIbiOGl3tLATGr+KBm6tet2G+L9dD+NQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c4::18)
+ by DM4PR84MB1590.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:49::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.19; Tue, 11 Oct
+ 2022 17:55:46 +0000
+Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::c023:cb9a:111f:a1b2]) by MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::c023:cb9a:111f:a1b2%5]) with mapi id 15.20.5676.032; Tue, 11 Oct 2022
+ 17:55:46 +0000
+From:   "Elliott, Robert (Servers)" <elliott@hpe.com>
+To:     Aaron Tomlin <atomlin@redhat.com>
+CC:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: Unloaded tainted modules list with tcrypt
-Message-ID: <20221011155128.k27rsgevfwyawvbh@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+Subject: RE: Unloaded tainted modules list with tcrypt
+Thread-Topic: Unloaded tainted modules list with tcrypt
+Thread-Index: AdjcuQahMl2C8lRIQDeORTZxmzyv4AATEgAAACEBFwAAA6j/UA==
+Date:   Tue, 11 Oct 2022 17:55:46 +0000
+Message-ID: <MW5PR84MB1842AD39D409C79F67E7CB01AB239@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
 References: <MW5PR84MB1842AE1F86F2B66A5D57DAA5AB209@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
  <MW5PR84MB184240ECFBB251B8A9CC1B8EAB239@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+ <20221011155128.k27rsgevfwyawvbh@ava.usersys.com>
+In-Reply-To: <20221011155128.k27rsgevfwyawvbh@ava.usersys.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW5PR84MB1842:EE_|DM4PR84MB1590:EE_
+x-ms-office365-filtering-correlation-id: faf5ec8a-d67d-4a4d-d40b-08daabb1d2db
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jqfFU8HjY6lujPlweeJrrLY/cAQULusemvUaDXWyaPM4SwfAyybwju3MgR5oF6xOUQSY194z+iwJHk/bhSeT/4C8GO0xNvXIYTjbOVPFx+jE/GLNTvieaOObe4KJqxPDT9NOxQwAkR8Q/9jWUzd8/u+/BZDGpzuCzVqWAM+m1liIm1e0aYZxt+kXpeCohfKti6aG+16u7Lzf7PjkVRtpaadT9pa5LCmtqrsnD3PoGzGHPgDgoyO4dn9fgWD0gNr/s7zfRrcGeEDo8nS0aOtX819dzO4AFRnlokVd+KUEFh/SzYIUY9qIpkTUqDJ+W+bwVK/lhGgf9+XHzQm0n/Jv8+u7SftYMCR9q4SnmGU20M8sCZO+AXWNH8UuGesFvlPqz4ARW966zyKifcgdhIILtRGXF6KhJNApHmHw/WNyG6rW6YZk98QxLgHp5AHZfYVkqVcYAGrrSUDrpbBLTRLpCp0wI7mRdnFVbWVEz1Ctx4qrM8m+xL1U8ymuJp8dezSZMJzBT+IA0xnheVkZy7VbHdgMA0cU9cpdvfkEtIroqHdMG0oXHM7red5BvArh9zd2PRWwFpCGjcf4UVcNPMMLscnehFxEuD2ki3kqfBEgNFSEsYmyuvdrFJtopmm77QSGLXNmuMFMa4aG63nNn/sOR7YVl/VFCbO1rMj1MxvdNyzs0m6wR2Ck0a84656QfAm5ryGdclwbQX8jV0bps/ccXmIKZvVl0yrkgBxJYIt3ltITZILXnHR6q0pAMU22VK34U8mvbG4hmDQ87yG9YZLAjQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(396003)(376002)(346002)(366004)(451199015)(26005)(9686003)(55016003)(316002)(122000001)(38100700002)(38070700005)(71200400001)(8676002)(54906003)(82960400001)(33656002)(6916009)(83380400001)(6506007)(7696005)(186003)(53546011)(478600001)(86362001)(5660300002)(52536014)(2906002)(8936002)(66446008)(64756008)(41300700001)(66946007)(76116006)(4326008)(66476007)(66556008)(4001150100001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZVlUTnRFbDc2eVV0OFZLam5jVnNlcCt0REV6NGRidm94SW1HNU5JdjlBVlVm?=
+ =?utf-8?B?aUtwdUo2RzIrVlRrZFdXRUVFMFZyNWJ6UWtheDNsRHFZN1FQSVRiZ1hlVmpT?=
+ =?utf-8?B?Yzl3S3h2MWY2NU1uOHFhd0x1WEViSFRQQlBleWVqbkhCOWdKK3NRR0ZVS0dk?=
+ =?utf-8?B?UzFZcEpHRFRXVTBNdHJmQXdQMWk4U2pHS2U5dUpUNm1jU3RXU1hFTXplQWE4?=
+ =?utf-8?B?ZWVhUGNid0NoUWhDN2JOeWt2UHBOKzA0Yi93RXdscWZGL3ZvK2ZpZFJPUS9F?=
+ =?utf-8?B?eFlyS0xSa201QnVObEw2djlvdCtXdWlaSU1RUVRCQ2FnNXoveFBURWtDY0RY?=
+ =?utf-8?B?RXd5RXM4dG83QmU1TnM3Z0NIRVh2RVNhTFFaRTFDbnFxbStoMjRza2ZVYzUy?=
+ =?utf-8?B?cVh4YkpjbTg3ZFpmRkhHSzdxU3l2YlJ0Q2NMTWxncGtnd3d1MG12MHdISjBP?=
+ =?utf-8?B?anVFbVF6RDN2WldHc1htMWdaZVFzOUVIb0NjNjhxZ3dydjBYbkJtTEYrRkQz?=
+ =?utf-8?B?MzhZd0ZSSElETW5FeCt4aDdSZjNUUnVocGsxUndsdTZhdFFsTkYvR3V6YnpM?=
+ =?utf-8?B?aHlOOHpSSStHMENVSFl4dlJ0ZE1tRW91bjk3cnNqSGw4U1ZDV2p2VTFXQzBx?=
+ =?utf-8?B?YTJoWWlieUZSWVJDN0tlWVNyVENNZ29tc1hza01JdjlwOXRkaHpENGQzZFFO?=
+ =?utf-8?B?VTNXOFV1a1FVMEQvQm5PemFwKzA3SDQyVFRNamRpb29rVjNxTFF2ZWF4R0dH?=
+ =?utf-8?B?eno4bWdTY25tbmhDQ2Q0aWg2ZUsySFQ2TGs5VVFwd0pZUWRVR3dWTjhBQjBv?=
+ =?utf-8?B?c1RxcjFnRHpRVVk4dEhETXpYaDV6T1ZsOUN3Y0JqUENRbUJBQ0lyYVBLUzJy?=
+ =?utf-8?B?S2tsajR6SlpvSEVkcEtidFRoMDVicFRLVWNCMi9Pc29pZVFwdFlFdGhwcEU0?=
+ =?utf-8?B?TWZadWVJNi9wSVozQy9JeEdYbmdEWG5SZ3VpRXR4YXhHZXh3UC9lUVlaSHRI?=
+ =?utf-8?B?Q3Axck53ZVdkMmpra1ArWFBDYUIvaXl6d1J2TjBEVUJaN0tOWVk2NGMvUnZV?=
+ =?utf-8?B?OVM1czZ0YW9OMEVRbXFRTnhOYUdLVGxKN2x3dmtZeUxDRGFYdjRXc0ErM0Zj?=
+ =?utf-8?B?NG55TjBwc3lmRGVWaHVCYlo2U3pDRENPZ2VsS1Z1bjJSK1RTYmVmeWllOGJI?=
+ =?utf-8?B?OStZNkNXai95V2J1NWZuajNCTkFZc0ZqTFMxcjZxaGsyRWdIOVh1bThsb1A1?=
+ =?utf-8?B?YzZ1bkNTNGZqYVJTZGgrOWhiNnJYTWlQOHBmTDdWblRvOFl1WHJXcmlWTVpX?=
+ =?utf-8?B?UGl2U1RoM2x3YytiWUUwZ1ZIQVpTL05pVzNza3Fra0ZiaGI2cHU5SmZkYzlY?=
+ =?utf-8?B?dW94b3V3WldRVUpFY3k5OGhDajJJdElta1k3ZmlLcWh3TXltblBDQ0s5c1pM?=
+ =?utf-8?B?eEtqQ0lCdEl3WGxzRzBXKytIWGlrcVhQZXk1UFFxUTNKcXlpQVpLQldHcGFh?=
+ =?utf-8?B?bEFDZW1QQjd5bWx4eWd6dU9QME4rYkczUWw4QU0xMWpSelB5YWY3bUlOQnhY?=
+ =?utf-8?B?aXdaZ3UvT1MzOThqcEN3dmdWMU54Yzc4RVZmZ3pXNWNWYTVsYkZmbk1TSElt?=
+ =?utf-8?B?bzlteFE5d3VwZUxpZXp0UE90QmZxUHNNMnJFSTF0OFNPclQzb3NuZG50RVJS?=
+ =?utf-8?B?QUdQNm43Y2tGT2NldUlDa2Q0c1pvN2NESGtpVDBZeG9VZzg0Z2ZETXVMK0Nh?=
+ =?utf-8?B?SDUyS05lTGh2eFIyOEh6amR2aDdOdzFtUVBwZ0N4UWlRVXdIZFVXN25BRFJ5?=
+ =?utf-8?B?YjBmdmVKQ0VNdUpPUitueGIrdkJhdU55SW1KWUl5Y0RjU1BjbTU4Umpnc0Vr?=
+ =?utf-8?B?cXRPNWVPWVRXSGJVZDVPQ3JpVUpwQjJlc0FyS0J3bm1oSE0yd29ZMkdkVjBn?=
+ =?utf-8?B?bVZVZFp4VGFIZG5uclZoNElqZWJVdVpMR2wzbTV2MGRvNkFSUC9HdkpJeVdt?=
+ =?utf-8?B?cWR5MjZwYVRzWlNwWmFGSXFRZ3BZd0xEcTVUU0IrNFZ2VFE4VlYzdDZWTmto?=
+ =?utf-8?B?ckFsR1I5MWtZZFFpVHM2NFNXRTJtK0ZiTlo3aDBVL1UzU0QvZ0l2QTRkY1F5?=
+ =?utf-8?Q?ZFjw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <MW5PR84MB184240ECFBB251B8A9CC1B8EAB239@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: faf5ec8a-d67d-4a4d-d40b-08daabb1d2db
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2022 17:55:46.1203
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YWY912wHiTjMyh/syYG0BrklSBDSjaCudg5KdrGxALP+cpAcKAZQb13mq3BRR5DI
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR84MB1590
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: H5MoglDs2VScnU8IHLT_3BpkNMdIqROH
+X-Proofpoint-ORIG-GUID: H5MoglDs2VScnU8IHLT_3BpkNMdIqROH
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-11_08,2022-10-11_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 adultscore=0 priorityscore=1501 spamscore=0 impostorscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210110103
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue 2022-10-11 00:09 +0000, Elliott, Robert (Servers) wrote:
-> Changing to == seems to work well - that shows incremented counts
-> rather than new entries:
-> Unloaded tainted modules: tcrypt():40 padlock_aes():1 isst_if_mbox_msr():56 pcc_cpufreq():56 acpi_cpufreq():112
-
-Hi Elliott,
-
-Please note, any module that does not carry a taint should _not_
-be on the aforementioned list. See the following which is already
-in Linus' tree:
-
-commit 47cc75aa92837a9d3f15157d6272ff285585d75d
-Author: Aaron Tomlin <atomlin@redhat.com>
-Date:   Fri Oct 7 14:38:12 2022 +0100
-
-    module: tracking: Keep a record of tainted unloaded modules only
-    
-    This ensures that no module record/or entry is added to the
-    unloaded_tainted_modules list if it does not carry a taint.
-    
-    Reported-by: Alexey Dobriyan <adobriyan@gmail.com>
-    Fixes: 99bd9956551b ("module: Introduce module unload taint tracking")
-    Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-    Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-
-diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
-index a139e63b6f20..26d812e07615 100644
---- a/kernel/module/tracking.c
-+++ b/kernel/module/tracking.c
-@@ -22,6 +22,9 @@ int try_add_tainted_module(struct module *mod)
- 
- 	module_assert_mutex_or_preempt();
- 
-+	if (!mod->taints)
-+		goto out;
-+
- 	list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules, list,
- 				lockdep_is_held(&module_mutex)) {
- 		if (!strcmp(mod_taint->name, mod->name) &&
-
-
--- 
-Aaron Tomlin
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQWFyb24gVG9tbGluIDxh
+dG9tbGluQHJlZGhhdC5jb20+DQo+IFNlbnQ6IFR1ZXNkYXksIE9jdG9iZXIgMTEsIDIwMjIgMTA6
+NTEgQU0NCj4gVG86IEVsbGlvdHQsIFJvYmVydCAoU2VydmVycykgPGVsbGlvdHRAaHBlLmNvbT4N
+Cj4gQ2M6IGxpbnV4LW1vZHVsZXNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5r
+ZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBVbmxvYWRlZCB0YWludGVkIG1vZHVsZXMgbGlzdCB3
+aXRoIHRjcnlwdA0KPiANCj4gT24gVHVlIDIwMjItMTAtMTEgMDA6MDkgKzAwMDAsIEVsbGlvdHQs
+IFJvYmVydCAoU2VydmVycykgd3JvdGU6DQo+ID4gQ2hhbmdpbmcgdG8gPT0gc2VlbXMgdG8gd29y
+ayB3ZWxsIC0gdGhhdCBzaG93cyBpbmNyZW1lbnRlZCBjb3VudHMNCj4gPiByYXRoZXIgdGhhbiBu
+ZXcgZW50cmllczoNCj4gPiBVbmxvYWRlZCB0YWludGVkIG1vZHVsZXM6IHRjcnlwdCgpOjQwIHBh
+ZGxvY2tfYWVzKCk6MSBpc3N0X2lmX21ib3hfbXNyKCk6NTYNCj4gcGNjX2NwdWZyZXEoKTo1NiBh
+Y3BpX2NwdWZyZXEoKToxMTINCj4gDQo+IEhpIEVsbGlvdHQsDQo+IA0KPiBQbGVhc2Ugbm90ZSwg
+YW55IG1vZHVsZSB0aGF0IGRvZXMgbm90IGNhcnJ5IGEgdGFpbnQgc2hvdWxkIF9ub3RfDQo+IGJl
+IG9uIHRoZSBhZm9yZW1lbnRpb25lZCBsaXN0LiBTZWUgdGhlIGZvbGxvd2luZyB3aGljaCBpcyBh
+bHJlYWR5DQo+IGluIExpbnVzJyB0cmVlOg0KPiANCj4gY29tbWl0IDQ3Y2M3NWFhOTI4MzdhOWQz
+ZjE1MTU3ZDYyNzJmZjI4NTU4NWQ3NWQNCj4gQXV0aG9yOiBBYXJvbiBUb21saW4gPGF0b21saW5A
+cmVkaGF0LmNvbT4NCj4gRGF0ZTogICBGcmkgT2N0IDcgMTQ6Mzg6MTIgMjAyMiArMDEwMA0KPiAN
+Cj4gICAgIG1vZHVsZTogdHJhY2tpbmc6IEtlZXAgYSByZWNvcmQgb2YgdGFpbnRlZCB1bmxvYWRl
+ZCBtb2R1bGVzIG9ubHkNCg0KVGhhbmtzLiBXaXRoIHRoYXQgY2hhbmdlLCB0aGUgbGlzdCByZW1h
+aW5zIGJsYW5rIGFzIHRjcnlwdCBhbmQgdGhlDQpvdGhlcnMgYXJlIG5ldmVyIGFkZGVkLg0KDQpU
+aGUgY291bnRzIG9mIGZhaWxlZCBsb2FkcyBhcmUgbWlsZGx5IGludGVyZXN0aW5nIChlLmcuLCBj
+cHVmcmVxDQphdHRlbXB0cyBhcmUgYXBwYXJlbnRseSBiYXNlZCBvbiB0aGUgbnVtYmVyIG9mIENQ
+VSBjb3JlcyBwcmVzZW50KSwgYnV0DQp0aGVyZSBhcmUgb3RoZXIgd2F5cyB0byBvYnNlcnZlIHRo
+YXQuDQoNCj4gICAgIFRoaXMgZW5zdXJlcyB0aGF0IG5vIG1vZHVsZSByZWNvcmQvb3IgZW50cnkg
+aXMgYWRkZWQgdG8gdGhlDQo+ICAgICB1bmxvYWRlZF90YWludGVkX21vZHVsZXMgbGlzdCBpZiBp
+dCBkb2VzIG5vdCBjYXJyeSBhIHRhaW50Lg0KPiANCj4gICAgIFJlcG9ydGVkLWJ5OiBBbGV4ZXkg
+RG9icml5YW4gPGFkb2JyaXlhbkBnbWFpbC5jb20+DQo+ICAgICBGaXhlczogOTliZDk5NTY1NTFi
+ICgibW9kdWxlOiBJbnRyb2R1Y2UgbW9kdWxlIHVubG9hZCB0YWludCB0cmFja2luZyIpDQo+ICAg
+ICBTaWduZWQtb2ZmLWJ5OiBBYXJvbiBUb21saW4gPGF0b21saW5AcmVkaGF0LmNvbT4NCj4gICAg
+IEFja2VkLWJ5OiBMdWlzIENoYW1iZXJsYWluIDxtY2dyb2ZAa2VybmVsLm9yZz4NCj4gICAgIFNp
+Z25lZC1vZmYtYnk6IExpbnVzIFRvcnZhbGRzIDx0b3J2YWxkc0BsaW51eC1mb3VuZGF0aW9uLm9y
+Zz4NCj4gDQo+IGRpZmYgLS1naXQgYS9rZXJuZWwvbW9kdWxlL3RyYWNraW5nLmMgYi9rZXJuZWwv
+bW9kdWxlL3RyYWNraW5nLmMNCj4gaW5kZXggYTEzOWU2M2I2ZjIwLi4yNmQ4MTJlMDc2MTUgMTAw
+NjQ0DQo+IC0tLSBhL2tlcm5lbC9tb2R1bGUvdHJhY2tpbmcuYw0KPiArKysgYi9rZXJuZWwvbW9k
+dWxlL3RyYWNraW5nLmMNCj4gQEAgLTIyLDYgKzIyLDkgQEAgaW50IHRyeV9hZGRfdGFpbnRlZF9t
+b2R1bGUoc3RydWN0IG1vZHVsZSAqbW9kKQ0KPiANCj4gIAltb2R1bGVfYXNzZXJ0X211dGV4X29y
+X3ByZWVtcHQoKTsNCj4gDQo+ICsJaWYgKCFtb2QtPnRhaW50cykNCj4gKwkJZ290byBvdXQ7DQo+
+ICsNCg0KT25lIG5pdCAtIHNpbmNlIHRoZSBvdXQgbGFiZWwganVzdCBsZWFkcyB0byBhIHJldHVy
+biBzdGF0ZW1lbnQsDQp0aGUgZ290b3MgaW4gdGhlIGZ1bmN0aW9uIHdvdWxkIGJlIHNpbXBsZXIg
+YXMgInJldHVybiAwIi4NCg0K
