@@ -2,194 +2,120 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 285F3C433FE
-	for <linux-modules@archiver.kernel.org>; Tue, 11 Oct 2022 00:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 900C2C433F5
+	for <linux-modules@archiver.kernel.org>; Tue, 11 Oct 2022 15:53:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiJKAKL (ORCPT
+        id S231290AbiJKPxV (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 10 Oct 2022 20:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        Tue, 11 Oct 2022 11:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiJKAJ5 (ORCPT
+        with ESMTP id S230078AbiJKPwy (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 10 Oct 2022 20:09:57 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5A917052;
-        Mon, 10 Oct 2022 17:09:43 -0700 (PDT)
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29AM1xhJ032241;
-        Tue, 11 Oct 2022 00:09:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=N61mw4GHXui+1ssjTfxHH2pcFQbwXxrDs5/cl7gqgp8=;
- b=MOkypRZ/KFk6yDmlp4YDncJfNunIeUnIqQxPFg9luH4p2BYufCeZmb15vOknYwF+rq3J
- ASyQa/mVb61KWu+P/zv1o2tZhA/t/Rjn6yWV6msOIUc311nHDq+sgR6vqB/kIy1CK+eC
- EeaDnD3cfTrFQaFktR6Wd666nCCYx6IKeW7BmqYXOqc5B8RnhTrg3si8EYNMgnRkiq4r
- rZck2Ep3Qyjp0b8kcfnl+GgkWP1bBYowjI+KEudnB6IWPuD4X9sH3xP62IyOBZ6aRye8
- c/DsxwUcfBxNjnaPC5bDcbBNA+SmNjIFUdevVMs9Mt/MDtxc6v1jKpKbIcYaCdkVF6kB Ww== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3k4tj317rx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Oct 2022 00:09:41 +0000
-Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 8D71D801AC0;
-        Tue, 11 Oct 2022 00:09:40 +0000 (UTC)
-Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 10 Oct 2022 12:09:39 -1200
-Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Mon, 10 Oct 2022 12:09:39 -1200
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 10 Oct 2022 12:09:39 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RKzBk/LrAyql8LxRihAPpyBlDvphCUlOS+OBpWjYzHigAUnwf/TMHQoMM2C27sqNuMMnj6WnEtGXa0qSbnQ3jxFTtth+JFK15CHH5wU+MrorSnYYwXHa9/Rk3p0I2DvAMqtC5xyODZgAvHQtqYWJ2g+X7WCxhgjJDsXC8oWSeSMz+tYh7MOTsUfCD5LS9BhwSZGKD4PkPe9Uw8+swZ+aN6FW95P2i9+cYMUVfPpE7qOskFUDeH2y0ob0xQBdSjTPZEXMjXVC864yA2IO1mt5IdkvW3cEU798UA+2yrr5QY1tiX18IgErdkfyULdtrq47g0o9QUMgAONZtYSIH+RaOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N61mw4GHXui+1ssjTfxHH2pcFQbwXxrDs5/cl7gqgp8=;
- b=gvrERZrmO9oONjmT7Vx/7IvbDwGUBHfukDYvi9B4t9fupa4IcuwOj0OO4o2eKPB/TsF8crg6rrk7m68uS/t/mhR2Bu1Znx3EblOFurxRxdESsBjervh88AuPKoVsCF/GxPRGBADukUnVPsvrqXw+dN4runoCV9oVB07imynWCEtozKWeBUAymze845IOHga4vJYMaYysnqru+WXXfDag3FXdVURUcgA12ttBtR53o2N//hzi9yunO3EAL5CGXwN+HEekFDHzivP4h+Pqe3zVYccgi/ZLtn66BiTkHa4amtgK+j1D++YBZrsQCRwMMw21oPRTCGhQ4VsxRAX5sZAJww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c4::18)
- by MW5PR84MB1498.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c0::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.32; Tue, 11 Oct
- 2022 00:09:38 +0000
-Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::c023:cb9a:111f:a1b2]) by MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::c023:cb9a:111f:a1b2%5]) with mapi id 15.20.5676.032; Tue, 11 Oct 2022
- 00:09:38 +0000
-From:   "Elliott, Robert (Servers)" <elliott@hpe.com>
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        Tue, 11 Oct 2022 11:52:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B608C10052
+        for <linux-modules@vger.kernel.org>; Tue, 11 Oct 2022 08:51:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665503494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KeMqmm6RZi8nEiwf9Am5Lyu5xHfrJbfXudXrmpg8EVU=;
+        b=aLZ5Mw5dCN7M5mHzO1Mn6O2MlpLR0y/1XDFvYPXc3uZ3pREt79ER1fr5LlIVaY5MvlB8ZD
+        j879c3F2zME2NHiH6J82gBt81Oq2hyH0KD5gh2+IrhV90o8wktV3biNO+aDUynbbGjEHaD
+        iCGuJUOcuFUaKAO9NOWd8VDYlk30wCo=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-353-zo5anyIHPLuN4zQMVCLaxQ-1; Tue, 11 Oct 2022 11:51:33 -0400
+X-MC-Unique: zo5anyIHPLuN4zQMVCLaxQ-1
+Received: by mail-wr1-f72.google.com with SMTP id s4-20020adfbc04000000b0022e03fc10a9so4003285wrg.15
+        for <linux-modules@vger.kernel.org>; Tue, 11 Oct 2022 08:51:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KeMqmm6RZi8nEiwf9Am5Lyu5xHfrJbfXudXrmpg8EVU=;
+        b=xfkEJ6xlZ3tlRwPjWP4Fw8ke3i0rf1C6MaLxPxZOIN7ucjhoEdfGGTBL7KS+kFit6E
+         zekzSPejZ1MVxzyeQrDXaGZfgdh+jzF+0QI3JLoKX0aWPjvGyZUqg5+XCpMWX7QssHNA
+         3zurdH4NI8aPU02sMHjC6+BV82q6Osn35li6JkvIJh63Ef7nVm2XuUO6pmU6vI4QEOdw
+         ylrAMKO4HZHzo5zua2nJDBHK3ccecC0kqAHI+w3b6ho2tHY4/eDzUJYUJLZ4p1gYRh7p
+         lnY6eOFyPM4FkFemT/nA8CNTegs9ubaXQAiTz0VQEoLoMR+cM9Wrlxa/AVtToVLtL/KD
+         qR2g==
+X-Gm-Message-State: ACrzQf3GIZy3XPKv5mQvTq0L2nARSwGl9y3IS+Ewh+9dYUllzlyuj2Dm
+        2lOx9G9ksXDQkdmQk8zZ4ftgaK9ZrBOlhMSGZH8yQ/3hZnGdygIOR4smVZZwDwGLYwezBuWo3Op
+        007G/X2qyUdIOAYi0RQCWAEqj
+X-Received: by 2002:adf:dec3:0:b0:22e:6efe:7861 with SMTP id i3-20020adfdec3000000b0022e6efe7861mr15840533wrn.454.1665503490701;
+        Tue, 11 Oct 2022 08:51:30 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5sB9t5u06LkupTlbVy8ECDTcOLBS1O5d6P3Qmwe1/vtkKfuRgNig3wn4YTbJ9AGejvjbghHQ==
+X-Received: by 2002:adf:dec3:0:b0:22e:6efe:7861 with SMTP id i3-20020adfdec3000000b0022e6efe7861mr15840520wrn.454.1665503490490;
+        Tue, 11 Oct 2022 08:51:30 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id az29-20020a05600c601d00b003c6b70a4d69sm5485564wmb.42.2022.10.11.08.51.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 08:51:29 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 16:51:28 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: Unloaded tainted modules list with tcrypt
-Thread-Topic: Unloaded tainted modules list with tcrypt
-Thread-Index: AdjcuQahMl2C8lRIQDeORTZxmzyv4AATEgAA
-Date:   Tue, 11 Oct 2022 00:09:38 +0000
-Message-ID: <MW5PR84MB184240ECFBB251B8A9CC1B8EAB239@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+Subject: Re: Unloaded tainted modules list with tcrypt
+Message-ID: <20221011155128.k27rsgevfwyawvbh@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
 References: <MW5PR84MB1842AE1F86F2B66A5D57DAA5AB209@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <MW5PR84MB1842AE1F86F2B66A5D57DAA5AB209@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW5PR84MB1842:EE_|MW5PR84MB1498:EE_
-x-ms-office365-filtering-correlation-id: cf5ee1c6-e6e7-4fdb-3701-08daab1ce30f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jUme+bXmEHH8NDvCnsyyhoa/tqqX2y0cBvXpQgLZR4rPe6jNcc2/wnNVHDqve9sR+XAySDz3RaVM/Yz3e44TAMhR0HUVy4ZSF4Kh2xT1kQfhd+2NYDyXLoGWW65xs9lHgneEdWoRmUmkYx/rotbfS7FXyeOvmcTue6XjDNpeBGtkL2akXUyW9x/57X2qnzLewjZRhA7XYjTcCpIsc6VE9WypDS+wsdT/PDP4ayXFCATC04A5Uc8VqHS1tz5T1fI87UreAY00gnxg6dZp2cezd03yptOEH1WAOmC2uUY4dGCl9A294HKacAnfgHFB5tReKWch1EPOiZXTGWed+YjjplnH2nbwff3RsszfcoH+SBTFYLcv1OUlxkBCPmxC8UdR9DHbHwDPrTa1sC6NKagjTcl0ul8JntHBVpTPE8TyZTD05jmS2ZaNT/OiPy9a7xODbgmip7AMu0G9Qj7dnJfAneceThKBCLgJBQ5X7O8cM19/RtxB+VpR2dOxZiSozVBgYJzLMSch4Bx0F4xvVjf5LkAoC9J1H2e3XJjNbiEAovkFyInUeIOvXMs+SxiBgmAWer5FcFApFvM0g6jCNlW6OTy++V9X6mM3HMNX3Q79pHkoZh9IdM2gAxBILCY1hyLNJi8nvedqzdwQ07jLkYs/Pxv0Rt1vRErVhGc4Nmd1jU8MncOhMNfR9CtjWJ9h0R7xMgiGr3eWHkC4O0a3x5h9h9sXfLccRL3t2lwJ4OtRcERjbAbgTAe/myxOx7ufZSkSgYN/SSkRK9Gyb4stgtQCjw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(376002)(346002)(366004)(396003)(451199015)(186003)(53546011)(83380400001)(316002)(38100700002)(41300700001)(82960400001)(8676002)(66556008)(33656002)(9686003)(26005)(478600001)(7696005)(6506007)(76116006)(8936002)(2906002)(110136005)(52536014)(38070700005)(66446008)(5660300002)(122000001)(66946007)(66476007)(64756008)(86362001)(55016003)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Yrl+scudoPVFAdjFiGzQu4n3f+wofsd6Eb98L8fw//jz7wougTdmxrSotN4m?=
- =?us-ascii?Q?W8oju1G85uOlKkQP6BlmtPzNfqWILfzTPfxBg2mReG4zPeYhD1IshCRXLJZs?=
- =?us-ascii?Q?RlcZvIxHn3ywj/HCySCGfKK8dwXMJoJSDjY2FLdCMB5Gy3bqOUtlytBBmQsm?=
- =?us-ascii?Q?a1RSRTO3H9xBHleGQn01JzF+1dH3fV5W1osgDWZUNhfyAn/UwptnvYB/1NF3?=
- =?us-ascii?Q?PMbmMZhv79ZBsib2htBbXinwzTBB7OnV0YHB4S9g+idbFjwHr+O2xbodP4Wu?=
- =?us-ascii?Q?itZ+P6DvFmFGf+xW+WzndpGRe2dAhggt55V9cIruUzeDL1sq1ka8C9haNanV?=
- =?us-ascii?Q?HPU4ZUTOzX9ho8EuriRMa5wPybv/YWu5089xCoi9pdWPB9f/yJQUPuDULPtu?=
- =?us-ascii?Q?muMskEJDWwZvX6QQeRKhlqEZSrhP5GQrcDnj/PO6yrHsvqjSsLmOoUNvc4uU?=
- =?us-ascii?Q?owRmVeN8DsQvBh9S3cUEa42p9SN74OG1g6G8FCrRK+2Jxe6Xf37FzCQQYZ3g?=
- =?us-ascii?Q?UXL2oBts7LUHYueXK/8JYmrO6k8Ymv+ENnx+ZRzXUVC7/r3wJjNNr4N6u0Fv?=
- =?us-ascii?Q?puV27lxrtAbf+4ymAq8RGGU4du6P9N4gVlPQlVu2oEl7fZSO/MDDxUNp4fZz?=
- =?us-ascii?Q?6ylZAJ8OwULXSbTO+5+yTqiEDLPCisES98bf9bNOV3KKA1Mbc7bnED6zrlAF?=
- =?us-ascii?Q?bAGosa2aHf/29jB33RQjWtTeBCFQGuc7p2x3BlTIK1g6p+380plk4gh7pyZW?=
- =?us-ascii?Q?CUBPR/yyrYwHmsXVI75z2zGx3HYwmJzU12VgrAwIeFo56stZvYYYZ7c4+rHQ?=
- =?us-ascii?Q?KorILYbShT464xby5Tw/bF17daVTI+GgVT8Eqypevv/2faICMFpX7RJaySJP?=
- =?us-ascii?Q?2b+jFO3rHOnNSLVLQjiULExtrdJWu3NmIFgJ0ho4936VkVW+d/L0Ja2xBnMm?=
- =?us-ascii?Q?ruk/EZ6657Vcf1CfVEFYa+MvtT99Z9EagNAFrg/ERISGJCUoR2csJut0/MCd?=
- =?us-ascii?Q?OlXZXuKY5pJ+cZAjRD7Sj0Vx+9KmVCkIby83M/eoryv/tezHPgjzd5EXmy96?=
- =?us-ascii?Q?x9koPSU55bPYYkvP4n8zjH2jourTaU9RfVzw3HJ7fYJh5QJQIdqraTQGsy33?=
- =?us-ascii?Q?mopGz9tpCP9GHdRHLJs8yeedCtbjhh4yJ3uVpoQn6sCcZ12uamT/Ht8s9n0v?=
- =?us-ascii?Q?bYsr/7PoRf2G7L8eWrau8aq6GIh2Jw0T9XojoOrKbmKIkAdK4wApHwHxzplc?=
- =?us-ascii?Q?hhTCHAR5QA9+rXWyVuos4Za0Yz4fSfMCMNlHya+/Kk5phmdU9n6A0wD2etQJ?=
- =?us-ascii?Q?8Uw0wOpCMIbYmPsaF/aD5WIlW+nhGbQ4B4YtsdOfc1F5rm3UzRfMSVYQb+J6?=
- =?us-ascii?Q?t9qiB5RSegFQHWxOTKT1Iz/FU3rnifRI477Naslrm5fuGUpJGpuKx+Z4Rfxq?=
- =?us-ascii?Q?NuykS7LkVaJbV0OlgznVc7Qh1RUY1iIq4PSby3tDw62P7csF2TXw1S4gh4gt?=
- =?us-ascii?Q?n/+uHsFENNXfPM5zYuauThw5nAxS/NosEqX/fqmifXju71jxKIdhg1pGbg5z?=
- =?us-ascii?Q?f0OHPXqG9XHHBih3bDw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <MW5PR84MB184240ECFBB251B8A9CC1B8EAB239@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf5ee1c6-e6e7-4fdb-3701-08daab1ce30f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2022 00:09:38.2893
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mh3idLHH8MEFzfReFZjMx9DA8TMxUvO/iJJTEXU64HySUhiZZGcarpSf99Xv9LLc
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR84MB1498
-X-OriginatorOrg: hpe.com
-X-Proofpoint-ORIG-GUID: E1OJMDd7TB5jO3H-Xkd4GMK_VchE36Jo
-X-Proofpoint-GUID: E1OJMDd7TB5jO3H-Xkd4GMK_VchE36Jo
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-10_12,2022-10-10_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- mlxscore=0 mlxlogscore=641 priorityscore=1501 suspectscore=0
- lowpriorityscore=0 phishscore=0 impostorscore=0 adultscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210100143
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <MW5PR84MB184240ECFBB251B8A9CC1B8EAB239@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+On Tue 2022-10-11 00:09 +0000, Elliott, Robert (Servers) wrote:
+> Changing to == seems to work well - that shows incremented counts
+> rather than new entries:
+> Unloaded tainted modules: tcrypt():40 padlock_aes():1 isst_if_mbox_msr():56 pcc_cpufreq():56 acpi_cpufreq():112
+
+Hi Elliott,
+
+Please note, any module that does not carry a taint should _not_
+be on the aforementioned list. See the following which is already
+in Linus' tree:
+
+commit 47cc75aa92837a9d3f15157d6272ff285585d75d
+Author: Aaron Tomlin <atomlin@redhat.com>
+Date:   Fri Oct 7 14:38:12 2022 +0100
+
+    module: tracking: Keep a record of tainted unloaded modules only
+    
+    This ensures that no module record/or entry is added to the
+    unloaded_tainted_modules list if it does not carry a taint.
+    
+    Reported-by: Alexey Dobriyan <adobriyan@gmail.com>
+    Fixes: 99bd9956551b ("module: Introduce module unload taint tracking")
+    Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+    Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+
+diff --git a/kernel/module/tracking.c b/kernel/module/tracking.c
+index a139e63b6f20..26d812e07615 100644
+--- a/kernel/module/tracking.c
++++ b/kernel/module/tracking.c
+@@ -22,6 +22,9 @@ int try_add_tainted_module(struct module *mod)
+ 
+ 	module_assert_mutex_or_preempt();
+ 
++	if (!mod->taints)
++		goto out;
++
+ 	list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules, list,
+ 				lockdep_is_held(&module_mutex)) {
+ 		if (!strcmp(mod_taint->name, mod->name) &&
 
 
-> -----Original Message-----
-> From: Elliott, Robert (Servers) <elliott@hpe.com>
-> Sent: Monday, October 10, 2022 10:12 AM
-> To: Aaron Tomlin <atomlin@redhat.com>; linux-modules@vger.kernel.org; lin=
-ux-
-> kernel@vger.kernel.org
-> Subject: Unloaded tainted modules list with tcrypt
->=20
-> When repeatedly using the tcrypt module (which is designed to never
-> load successfully), the "Unloaded tainted modules" list grows forever:
->=20
-> Unloaded tainted modules: tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1
-> tcrypt():1 tcrypt():1 padlock_aes():1 padlock_aes():1
-> isst_if_mbox_msr():1 acpi_cpufreq():1 pcc_cpufreq():1 isst_if_mbox_msr():=
-1
-> acpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1
-> pcc_cpufreq():1 isst_if_mbox_msr():1 acpi_cpufreq():1 acpi_cpufreq():1
-> pcc_cpufreq():1 isst_if_mbox_msr():1 acpi_cpufreq():1 acpi_cpufreq():1
-> isst_if_mbox_msr():1 isst_if_mbox_msr():1
-> acpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 isst_if_mbox_msr():1
->=20
-> Some other modules like acpi_cpufreq() are repeated too.
->=20
-> Maybe this check after the name comparison:
-> 	mod_taint->taints & mod->taints
-> should be:
-> 	mod_taint->taints =3D=3D mod->taints
->=20
-> or shouldn't be there at all?
-
-Changing to =3D=3D seems to work well - that shows incremented counts
-rather than new entries:
-Unloaded tainted modules: tcrypt():40 padlock_aes():1 isst_if_mbox_msr():56=
- pcc_cpufreq():56 acpi_cpufreq():112
-
+-- 
+Aaron Tomlin
 
