@@ -2,203 +2,132 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 717FEC43217
-	for <linux-modules@archiver.kernel.org>; Fri, 14 Oct 2022 07:16:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7EAEC433FE
+	for <linux-modules@archiver.kernel.org>; Fri, 14 Oct 2022 07:55:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiJNHQH (ORCPT
+        id S230019AbiJNHzD (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 14 Oct 2022 03:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
+        Fri, 14 Oct 2022 03:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiJNHQG (ORCPT
+        with ESMTP id S229984AbiJNHzB (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 14 Oct 2022 03:16:06 -0400
+        Fri, 14 Oct 2022 03:55:01 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349C5125012
-        for <linux-modules@vger.kernel.org>; Fri, 14 Oct 2022 00:16:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D0032AB4
+        for <linux-modules@vger.kernel.org>; Fri, 14 Oct 2022 00:54:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665731764;
+        s=mimecast20190719; t=1665734093;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KO4vXEPLGC2thf70UdJUXD19wedZIU97Jq4KCtGmIIs=;
-        b=hszTEZzkRuSf8n2AiV0OB9YZjcU7MZyoKAOrClGZGYw1E+Dmt6CeN9z/vrQmmtXVCyrFtH
-        5HQXBH/dF8BFdV2R0AyJo0Kxmq2wmseopi7cwgrYDPgp4s1EGhDBY3kFpO20jrV8N7vBxE
-        KJqnwmAIaqXok9AAR/wyViPEi0ETcts=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=kwtn6uvhgQEqm/XpkC52bizaNd8cjGpKe1WGKPimX2I=;
+        b=UNGzN68VwMF05ZNykEjg7O9sYN7F15kZ+AYjJvFYX4arZNj2+Aabbh6TIu+WXBmZcvqIuP
+        OlSK3HBshyLolCSVDzcpyecrVAqEgzlcQh9JywpscsBbrbncMaoHxPgkhuXk9gFIEEZuw7
+        X7kQC4mWTF94u1b3R2EmnqNbf090y2Y=
+Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com
+ [209.85.217.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-627-V70Xz0j5Okue_t6tDnH_Mw-1; Fri, 14 Oct 2022 03:16:02 -0400
-X-MC-Unique: V70Xz0j5Okue_t6tDnH_Mw-1
-Received: by mail-wr1-f70.google.com with SMTP id u20-20020adfc654000000b0022cc05e9119so1574534wrg.16
-        for <linux-modules@vger.kernel.org>; Fri, 14 Oct 2022 00:16:02 -0700 (PDT)
+ us-mta-527-E41bAKeiN0SALFOUew90ig-1; Fri, 14 Oct 2022 03:54:52 -0400
+X-MC-Unique: E41bAKeiN0SALFOUew90ig-1
+Received: by mail-vs1-f70.google.com with SMTP id z190-20020a6765c7000000b003a6ec561837so1078990vsb.19
+        for <linux-modules@vger.kernel.org>; Fri, 14 Oct 2022 00:54:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KO4vXEPLGC2thf70UdJUXD19wedZIU97Jq4KCtGmIIs=;
-        b=ldEs81Wl44RpBMJhYj/gW6U06o2M66Pyz8WbW19CcWm/ggDZxubNBMIXljtG0haCIO
-         LNzsY1lF/ZIrYWsAllqYiy9MqYUmLINltNUMbm2tl9YDhtRIzS/xuwsFtigF9SuRHONm
-         SVidRWGubmiiqe/rwFxQa/bK7K9GYN/devLkKSoP8sYwGVqU0o6oyKdodAE5/HVE8A0Y
-         OeDIooPn3mrB3S4kL0rl+Zo7/UYGwtmHCbjtbCmWTq1SjPXJZ4+sPU8mjt9SDh2aRBR4
-         0Q00tzy8pqwVerjIA0JkppEzTZjYghCULTN3zkWgIzHofvOKdAVeEiQO2z8cOjo7s4nl
-         eKdg==
-X-Gm-Message-State: ACrzQf1SbgRYzN6NZPyxpCHghXRc94tEEr0/2Rg8mmwTo8UTznH7lZvf
-        gmMy0q5+pYlMeTwX1iS1qOQ5yJ9YRpeaIaFBv7bIj4POC+bbvRCPbTQK1L3tDP1o2+rcgenTDJB
-        J+HHbJzzz3i3PF9ntEgKd5Pt+xA==
-X-Received: by 2002:a05:6000:1565:b0:22f:1407:9bfd with SMTP id 5-20020a056000156500b0022f14079bfdmr2279483wrz.620.1665731761368;
-        Fri, 14 Oct 2022 00:16:01 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM41rldxBoNh/RMt1ByTlaTXLw9SYpH3W5fAvpDXpxqtb3bZsCT/4Dv37kMAf+ueHCWdQV2ZKA==
-X-Received: by 2002:a05:6000:1565:b0:22f:1407:9bfd with SMTP id 5-20020a056000156500b0022f14079bfdmr2279458wrz.620.1665731761011;
-        Fri, 14 Oct 2022 00:16:01 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:8f00:9219:ab4c:826e:9646? (p200300cbc7048f009219ab4c826e9646.dip0.t-ipconnect.de. [2003:cb:c704:8f00:9219:ab4c:826e:9646])
-        by smtp.gmail.com with ESMTPSA id f7-20020a05600c154700b003a3442f1229sm6872888wmg.29.2022.10.14.00.15.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 00:16:00 -0700 (PDT)
-Message-ID: <77d0c7e8-ca07-bd38-5624-03fbc659733b@redhat.com>
-Date:   Fri, 14 Oct 2022 09:15:59 +0200
+        bh=kwtn6uvhgQEqm/XpkC52bizaNd8cjGpKe1WGKPimX2I=;
+        b=fjCeLGkEF+Zh1O5KVSeCh6Abg9eOXKsG5rguEDnM0JRe5WxF/z8G75kMIM4I+T3prG
+         Dxdu4BTD+GbYnLPFEEHs0ucOGLdOrsJtrE+uV+/mxs3QBjM7sJHICaymd/tnf29KayHL
+         Xi4GCpgr+qFs3pS+viZXTGE5OpI3IGrGFfXMKNeCSFv1ddEhiM0NA3NhCuujWT3sJr7a
+         EK9TBM3xsTeYCknC3g9sgVierDoeToQ8JEfv/blE28BQzdziVx/H22z1U0gsPlMh1zUO
+         3EXtKhEaTQPH8PV8lhp6e+FycKyR8u7d7XpT7Bkq2UgytR0tTr9Cx/2yBSLXpudgXjaQ
+         wD3Q==
+X-Gm-Message-State: ACrzQf3zaZdJhQL2uuceLEUXjm6AKWBaeOrF60SJ1BV72SEUa5ZiOUN8
+        P+AuX1kJXlo4VWehPcA4BWbZuaFhx9dAZbYRqWPqz1CD8RWwzCqJT7Qv5DIdkuloMlp5kCg/jMG
+        9Mvxy2DULfIYxQAG8na73Xc12lK6T4nvR86AQAKA6hA==
+X-Received: by 2002:ab0:7590:0:b0:3ea:d2ef:ee0d with SMTP id q16-20020ab07590000000b003ead2efee0dmr1991788uap.62.1665734091459;
+        Fri, 14 Oct 2022 00:54:51 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM56JqUVAqmbVw+dtHtQM+y2Di+UwZLKyQqOqheAu6wo2RecBdTSfwx+px7+hQCfD79pvuwlD+7EI56QH9y5dR4=
+X-Received: by 2002:ab0:7590:0:b0:3ea:d2ef:ee0d with SMTP id
+ q16-20020ab07590000000b003ead2efee0dmr1991781uap.62.1665734091201; Fri, 14
+ Oct 2022 00:54:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-        Lin Liu <linl@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        petr.pavlu@suse.com
-References: <20221013180518.217405-1-david@redhat.com>
- <alpine.LSU.2.21.2210140806130.17614@pobox.suse.cz>
-Content-Language: en-US
+References: <20220919123233.8538-1-petr.pavlu@suse.com> <20220919123233.8538-3-petr.pavlu@suse.com>
+In-Reply-To: <20220919123233.8538-3-petr.pavlu@suse.com>
 From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1] kernel/module: allocate module vmap space after making
- sure the module is unique
-In-Reply-To: <alpine.LSU.2.21.2210140806130.17614@pobox.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Date:   Fri, 14 Oct 2022 09:54:40 +0200
+Message-ID: <CADFyXm5AP8pvXAKRBVNsZd5SUPziKBV0UktwORokuLU7c6Sbvg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     mcgrof@kernel.org, pmladek@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 14.10.22 08:09, Miroslav Benes wrote:
-> Hi,
-> 
-> On Thu, 13 Oct 2022, David Hildenbrand wrote:
-> 
->> We already make sure to allocate percpu data only after we verified that
->> the module we're loading hasn't already been loaded and isn't
->> concurrently getting loaded -- that it's unique.
->>
->> On big systems (> 400 CPUs and many devices) with KASAN enabled, we're now
->> phasing a similar issue with the module vmap space.
->>
->> When KASAN_INLINE is enabled (resulting in large module size), plenty
->> of devices that udev wants to probe and plenty (> 400) of CPUs that can
->> carry out that probing concurrently, we can actually run out of module
->> vmap space and trigger vmap allocation errors:
->>
->> [  165.818200] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
->> [  165.836622] vmap allocation for size 315392 failed: use vmalloc=<size> to increase size
->> [  165.837461] vmap allocation for size 315392 failed: use vmalloc=<size> to increase size
->> [  165.840573] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
->> [  165.841059] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
->> [  165.841428] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
->> [  165.841819] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
->> [  165.842123] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
->> [  165.843359] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
->> [  165.844894] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
->> [  165.847028] CPU: 253 PID: 4995 Comm: systemd-udevd Not tainted 5.19.0 #2
->> [  165.935689] Hardware name: Lenovo ThinkSystem SR950 -[7X12ABC1WW]-/-[7X12ABC1WW]-, BIOS -[PSE130O-1.81]- 05/20/2020
->> [  165.947343] Call Trace:
->> [  165.950075]  <TASK>
->> [  165.952425]  dump_stack_lvl+0x57/0x81
->> [  165.956532]  warn_alloc.cold+0x95/0x18a
->> [  165.960836]  ? zone_watermark_ok_safe+0x240/0x240
->> [  165.966100]  ? slab_free_freelist_hook+0x11d/0x1d0
->> [  165.971461]  ? __get_vm_area_node+0x2af/0x360
->> [  165.976341]  ? __get_vm_area_node+0x2af/0x360
->> [  165.981219]  __vmalloc_node_range+0x291/0x560
->> [  165.986087]  ? __mutex_unlock_slowpath+0x161/0x5e0
->> [  165.991447]  ? move_module+0x4c/0x630
->> [  165.995547]  ? vfree_atomic+0xa0/0xa0
->> [  165.999647]  ? move_module+0x4c/0x630
->> [  166.003741]  module_alloc+0xe7/0x170
->> [  166.007747]  ? move_module+0x4c/0x630
->> [  166.011840]  move_module+0x4c/0x630
->> [  166.015751]  layout_and_allocate+0x32c/0x560
->> [  166.020519]  load_module+0x8e0/0x25c0
->> [  166.024623]  ? layout_and_allocate+0x560/0x560
->> [  166.029586]  ? kernel_read_file+0x286/0x6b0
->> [  166.034269]  ? __x64_sys_fspick+0x290/0x290
->> [  166.038946]  ? userfaultfd_unmap_prep+0x430/0x430
->> [  166.044203]  ? lock_downgrade+0x130/0x130
->> [  166.048698]  ? __do_sys_finit_module+0x11a/0x1c0
->> [  166.053854]  __do_sys_finit_module+0x11a/0x1c0
->> [  166.058818]  ? __ia32_sys_init_module+0xa0/0xa0
->> [  166.063882]  ? __seccomp_filter+0x92/0x930
->> [  166.068494]  do_syscall_64+0x59/0x90
->> [  166.072492]  ? do_syscall_64+0x69/0x90
->> [  166.076679]  ? do_syscall_64+0x69/0x90
->> [  166.080864]  ? do_syscall_64+0x69/0x90
->> [  166.085047]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
->> [  166.090984]  ? lockdep_hardirqs_on+0x79/0x100
->> [  166.095855]  entry_SYSCALL_64_after_hwframe+0x63/0xcd[  165.818200] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
->>
->> Interestingly, when reducing the number of CPUs (nosmt), it works as
->> expected.
->>
->> The underlying issue is that we first allocate memory (including module
->> vmap space) in layout_and_allocate(), and then verify whether the module
->> is unique in add_unformed_module(). So we end up allocating module vmap
->> space even though we might not need it -- which is a problem when modules
->> are big and we can have a lot of concurrent probing of the same set of
->> modules as on the big system at hand.
->>
->> Unfortunately, we cannot simply add the module earlier, because
->> move_module() -- that allocates the module vmap space -- essentially
->> brings the module to life from a temporary one. Adding the temporary one
->> and replacing it is also sub-optimal (because replacing it would require
->> to synchronize against RCU) and feels kind of dangerous judging that we
->> end up copying it.
->>
->> So instead, add a second list (pending_load_infos) that tracks the modules
->> (via their load_info) that are unique and are still getting loaded
->> ("pending"), but haven't made it to the actual module list yet. This
->> shouldn't have a notable runtime overhead when concurrently loading
->> modules: the new list is expected to usually either be empty or contain
->> very few entries for a short time.
->>
->> Thanks to Uladzislau for his help to verify that it's not actually a
->> vmap code issue.
-> 
-> this seems to be related to what
-> https://lore.kernel.org/all/20220919123233.8538-1-petr.pavlu@suse.com/
-> tries to solve. Just your symptoms are different. Does the patch set fix
-> your issue too?
+On Mon, Sep 19, 2022 at 2:33 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>
+> During a system boot, it can happen that the kernel receives a burst of
+> requests to insert the same module but loading it eventually fails
+> during its init call. For instance, udev can make a request to insert
+> a frequency module for each individual CPU when another frequency module
+> is already loaded which causes the init function of the new module to
+> return an error.
+>
+> The module loader currently serializes all such requests, with the
+> barrier in add_unformed_module(). This creates a lot of unnecessary work
+> and delays the boot.
+>
+> This patch improves the behavior as follows:
+> * A check whether a module load matches an already loaded module is
+>   moved right after a module name is determined. -EEXIST continues to be
+>   returned if the module exists and is live, -EBUSY is returned if
+>   a same-name module is going.
+> * A new reference-counted shared_load_info structure is introduced to
+>   keep track of duplicate load requests. Two loads are considered
+>   equivalent if their module name matches. In case a load duplicates
+>   another running insert, the code waits for its completion and then
+>   returns -EEXIST or -EBUSY depending on whether it succeeded.
+>
+> Note that prior to 6e6de3dee51a ("kernel/module.c: Only return -EEXIST
+> for modules that have finished loading"), the kernel already did merge
+> some of same load requests but it was more by accident and relied on
+> specific timing. The patch brings this behavior back in a more explicit
+> form.
+>
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
 
-Hi Miroslav,
+Hi Petr,
 
-the underlying approach with a load_info list is similar (which is nice 
-to see), so I assume it will similarly fix the issue.
+as you might have seen I sent a patch/fix yesterday (not being aware
+of this patch and that
+this is also a performance issue, which is interesting), that
+similarly makes sure that modules
+are unique early.
 
-I'm not sure if merging the requests (adding the refcount logic and the 
--EBUSY change is really required/wanted), though. Looks like some of 
-these changes that might have been factored out into separate patches.
+https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
 
-Not my call to make. I'll give the set a churn on the machine where I 
-can reproduce the issue.
+It doesn't perform the -EBUSY changes or use something like
+shared_load_info/refcounts;
+it simply uses a second list while the module cannot be placed onto
+the module list yet.
 
--- 
-Thanks,
+Not sure if that part is really required (e.g., for performance
+reasons). Like Luis, I feel like
+some of these parts could be split into separate patches, if the other
+parts are really required.
 
-David / dhildenb
+I just tested your patch in the environment where I can reproduce the
+vmap allocation issue, and
+(unsurprisingly) this patch similarly seems to fix the issue.
+
+So if your patch ends up upstream, it would be good to add some details
+of my patch description (vmap allocation issue) to this patch description.
+
+
+Cheers,
+David
 
