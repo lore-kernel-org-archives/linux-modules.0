@@ -2,226 +2,139 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23096C4321E
-	for <linux-modules@archiver.kernel.org>; Mon, 17 Oct 2022 06:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98C93C4332F
+	for <linux-modules@archiver.kernel.org>; Mon, 17 Oct 2022 07:27:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiJQGxg (ORCPT
+        id S230141AbiJQH1E (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 17 Oct 2022 02:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        Mon, 17 Oct 2022 03:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiJQGxT (ORCPT
+        with ESMTP id S229887AbiJQH1A (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 17 Oct 2022 02:53:19 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9F759261;
-        Sun, 16 Oct 2022 23:52:11 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MrSJl5bwDzJn55;
-        Mon, 17 Oct 2022 14:49:11 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 14:50:40 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 14:50:39 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v7 04/11] kallsyms: Add helper kallsyms_compress_symbol_name()
-Date:   Mon, 17 Oct 2022 14:49:43 +0800
-Message-ID: <20221017064950.2038-5-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
-In-Reply-To: <20221017064950.2038-1-thunder.leizhen@huawei.com>
-References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
+        Mon, 17 Oct 2022 03:27:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08845A3E5
+        for <linux-modules@vger.kernel.org>; Mon, 17 Oct 2022 00:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665991617;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gGoMgeRGXw4hi/WWoISGPQpcxM3VtVgZ48E6ULq6kLw=;
+        b=h+P4YYwW65ytO8KWxuF+nNEWb+trknJDrZdPZ3OgZmfqxEG3DCcxJg4HEEjUQnce8g8Oim
+        Gl0uKNzxXzektlF0fLUn0qcoV3GSqtPVYY+L9pQOMHoMjBp35apPiu8NA5xmhJHB22cncC
+        I++9YVCmE2NfCK98B/+PIHhSFKkRZ38=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-539-gIv3VUcnPKGsHSol9AVHRw-1; Mon, 17 Oct 2022 03:26:56 -0400
+X-MC-Unique: gIv3VUcnPKGsHSol9AVHRw-1
+Received: by mail-wm1-f70.google.com with SMTP id ay12-20020a05600c1e0c00b003c6e18d9aa8so6832050wmb.8
+        for <linux-modules@vger.kernel.org>; Mon, 17 Oct 2022 00:26:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gGoMgeRGXw4hi/WWoISGPQpcxM3VtVgZ48E6ULq6kLw=;
+        b=uM8HndWQ2SVe8upGvOGzfFsImTPaCitKBSf+3Z++O/EV11r+gghVKH42TsZNuwaV8U
+         Z1WDjn0t/r33tnAkQlSeyQAKIbBH/tY+DwFRlOFCigB11CtiwkUWG2UaWTM3yJzEcjak
+         tEAGrm3Pq81KA8GsGjaxexdVw9fk7Qvk1VixhGkCaf7pEMf6CVUZJz1V327ZdR1H384p
+         pwXDe2awMmZAcbTVZnVbiTkv17SEgGP7BzM2EaN5Y08qdUPVJpx4lpojHu5RsOGO8EI/
+         fZ8YdHSyDVCwzbmRYtNVpFaPiqrPGwxgG+ucJTLMOJo+ONkBNKVevNQ/RO3AGEvSPPMS
+         9x6A==
+X-Gm-Message-State: ACrzQf0fpCjiXw349ViKgUB4gEO+hQ7ShUElqxtLbcoF8fYJ+3AaeMYU
+        9MEFw2E+oN4Spe3oYSjEUZ75hguYOrgSzGzI83esNcQql4T+pbT49qOp/0ubdlip1bQEXRHnHG1
+        rzTZku8+2HB+QZPulcMzlvi1vuQ==
+X-Received: by 2002:a05:600c:5486:b0:3b4:7e47:e19 with SMTP id iv6-20020a05600c548600b003b47e470e19mr6278803wmb.12.1665991615348;
+        Mon, 17 Oct 2022 00:26:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5ZwAJialK4CYQyhU1mwCtOe1ur1tfEFWuhI00xSBfQZtTEfMUKCemLgq49pQIrLmQymOvsZw==
+X-Received: by 2002:a05:600c:5486:b0:3b4:7e47:e19 with SMTP id iv6-20020a05600c548600b003b47e470e19mr6278782wmb.12.1665991615026;
+        Mon, 17 Oct 2022 00:26:55 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:2300:e5ce:21ba:1d93:4323? (p200300cbc7072300e5ce21ba1d934323.dip0.t-ipconnect.de. [2003:cb:c707:2300:e5ce:21ba:1d93:4323])
+        by smtp.gmail.com with ESMTPSA id r3-20020a05600c158300b003c21ba7d7d6sm8997969wmf.44.2022.10.17.00.26.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 00:26:54 -0700 (PDT)
+Message-ID: <4856f28f-3da5-bf3e-161c-495aa837ae03@redhat.com>
+Date:   Mon, 17 Oct 2022 09:26:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v3 1/4] module: Correct wake up of module_wq
+Content-Language: en-US
+To:     Petr Pavlu <petr.pavlu@suse.com>, mcgrof@kernel.org
+Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221016123031.3963-1-petr.pavlu@suse.com>
+ <20221016123031.3963-2-petr.pavlu@suse.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221016123031.3963-2-petr.pavlu@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-To speed up the lookup of a symbol in the kernel, we'd better compress
-the searched symbol first and then make a quick comparison based on the
-compressed length and content. But the tokens in kallsyms_token_table[]
-have been expanded, a more complex process is required to complete the
-compression of a symbol. So generate kallsyms_best_token_table[] helps
-us to compress a symbol in the kernel using a process similar to
-compress_symbol(). The implementation of kallsyms_compress_symbol_name()
-is almost the same as that of compress_symbols() in scripts/kallsyms.c.
+On 16.10.22 14:30, Petr Pavlu wrote:
+> The module_wq wait queue has only non-exclusive waiters and all waits
+> are interruptible, therefore for consistency use wake_up_interruptible()
+> to wake its waiters.
+> 
+> Suggested-by: Petr Mladek <pmladek@suse.com>
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
+>   kernel/module/main.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index d02d39c7174e..a12e177ea81f 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -764,7 +764,7 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+>   
+>   	free_module(mod);
+>   	/* someone could wait for the module in add_unformed_module() */
+> -	wake_up_all(&module_wq);
+> +	wake_up_interruptible(&module_wq);
+>   	return 0;
+>   out:
+>   	mutex_unlock(&module_mutex);
+> @@ -2522,7 +2522,7 @@ static noinline int do_init_module(struct module *mod)
+>   		schedule_work(&init_free_wq);
+>   
+>   	mutex_unlock(&module_mutex);
+> -	wake_up_all(&module_wq);
+> +	wake_up_interruptible(&module_wq);
+>   
+>   	return 0;
+>   
+> @@ -2538,7 +2538,7 @@ static noinline int do_init_module(struct module *mod)
+>   	klp_module_going(mod);
+>   	ftrace_release_mod(mod);
+>   	free_module(mod);
+> -	wake_up_all(&module_wq);
+> +	wake_up_interruptible(&module_wq);
+>   	return ret;
+>   }
+>   
+> @@ -2879,7 +2879,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>   	/* Unlink carefully: kallsyms could be walking list. */
+>   	list_del_rcu(&mod->list);
+>   	mod_tree_remove(mod);
+> -	wake_up_all(&module_wq);
+> +	wake_up_interruptible(&module_wq);
+>   	/* Wait for RCU-sched synchronizing before releasing mod->list. */
+>   	synchronize_rcu();
+>   	mutex_unlock(&module_mutex);
 
-Some minor changes have been made to reduce memory usage and improve
-compression performance.
-1. Some entries in best_table[] are single characters, and most of them
-   are clustered together. such as a-z, A-Z, 0-9. These individual
-   characters are not used in the process of compressing a symbol. Let
-   kallsyms_best_token_table[i][0] = 0x00, [i][0] = number of consecutive
-   single characters (for exampe, a-z is 26). When [i][0] = 0x00 is
-   encountered, we can skip to the next token with two elements.
-2. Now ARRAY_SIZE(kallsyms_best_token_table) is not fixed, we store
-   the content of best_table[] to kallsyms_best_token_table[] in reverse
-   order. That is, the higher the frequency, the lower the index.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-The modifier '__maybe_unused' of kallsyms_compress_symbol_name() is
-temporary and will be removed in the next patch.
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- kernel/kallsyms.c          | 80 ++++++++++++++++++++++++++++++++++++++
- kernel/kallsyms_internal.h |  1 +
- scripts/kallsyms.c         | 18 +++++++++
- 3 files changed, 99 insertions(+)
-
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 60c20f301a6ba2c..f1fe404af184047 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -95,6 +95,86 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
- 	return off;
- }
- 
-+static unsigned char *find_token(unsigned char *str, int len,
-+				 const unsigned char *token)
-+{
-+	int i;
-+
-+	for (i = 0; i < len - 1; i++) {
-+		if (str[i] == token[0] && str[i+1] == token[1])
-+			return &str[i];
-+	}
-+	return NULL;
-+}
-+
-+static int __maybe_unused kallsyms_compress_symbol_name(const char *name, char *buf, size_t size)
-+{
-+	int i, j, n, len;
-+	unsigned char *p1, *p2;
-+	const unsigned char *token;
-+
-+	len = strscpy(buf, name, size);
-+	if (WARN_ON_ONCE(len <= 0))
-+		return 0;
-+
-+	/*
-+	 * For each entry in kallsyms_best_token_table[], the storage
-+	 * format is:
-+	 * 1. For tokens that cannot be used to compress characters, the value
-+	 *    at [j] is 0, and the value at [j+1] is the number of consecutive
-+	 *    tokens with this feature.
-+	 * 2. For each token: the larger the token value, the higher the
-+	 *    frequency, and the lower the index.
-+	 *
-+	 *  -------------------------------
-+	 * |  j  |   [j]  [j+1]  |  token  |
-+	 *  -----|---------------|---------|
-+	 * |  0  |   ??    ??	 |   255   |
-+	 * |  2  |   ??    ??    |   254   |
-+	 * | ... |   ??    ??    |   ...   |
-+	 * | n-2 |   ??    ??    |    x    |
-+	 * |  n  |   00    len   |   x-1   |
-+	 * | n+2 |   ??    ??    | x-1-len |
-+	 *      above '??' is non-zero
-+	 */
-+	for (i = 255, j = 0; i >= 0; i--, j += 2) {
-+		if (!kallsyms_best_token_table[j]) {
-+			i -= kallsyms_best_token_table[j + 1];
-+			if (i < 0)
-+				break;
-+			j += 2;
-+		}
-+		token = &kallsyms_best_token_table[j];
-+
-+		p1 = buf;
-+
-+		/* find the token on the symbol */
-+		p2 = find_token(p1, len, token);
-+		if (!p2)
-+			continue;
-+
-+		n = len;
-+
-+		do {
-+			*p2 = i;
-+			p2++;
-+			n -= (p2 - p1);
-+			memmove(p2, p2 + 1, n);
-+			p1 = p2;
-+			len--;
-+
-+			if (n < 2)
-+				break;
-+
-+			/* find the token on the symbol */
-+			p2 = find_token(p1, n, token);
-+
-+		} while (p2);
-+	}
-+
-+	return len;
-+}
-+
- /*
-  * Get symbol type information. This is encoded as a single char at the
-  * beginning of the symbol name.
-diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
-index 2d0c6f2f0243a28..d9672ede8cfc215 100644
---- a/kernel/kallsyms_internal.h
-+++ b/kernel/kallsyms_internal.h
-@@ -26,5 +26,6 @@ extern const char kallsyms_token_table[] __weak;
- extern const u16 kallsyms_token_index[] __weak;
- 
- extern const unsigned int kallsyms_markers[] __weak;
-+extern const unsigned char kallsyms_best_token_table[] __weak;
- 
- #endif // LINUX_KALLSYMS_INTERNAL_H_
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 60686094f665164..9864ce5e6c5bfc1 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -548,6 +548,24 @@ static void write_src(void)
- 	for (i = 0; i < 256; i++)
- 		printf("\t.short\t%d\n", best_idx[i]);
- 	printf("\n");
-+
-+	output_label("kallsyms_best_token_table");
-+	for (i = 255, k = 0; (int)i >= 0; i--) {
-+		if (best_table_len[i] <= 1) {
-+			k++;
-+			continue;
-+		}
-+
-+		if (k) {
-+			printf("\t.byte 0x00, 0x%02x\n", k);
-+			k = 0;
-+		}
-+
-+		printf("\t.byte 0x%02x, 0x%02x\n", best_table[i][0], best_table[i][1]);
-+	}
-+	if (k)
-+		printf("\t.byte 0x00, 0x%02x\n", k);
-+	printf("\n");
- }
- 
- 
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 
