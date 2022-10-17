@@ -2,112 +2,92 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23C6DC433FE
-	for <linux-modules@archiver.kernel.org>; Mon, 17 Oct 2022 12:54:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42BA9C4332F
+	for <linux-modules@archiver.kernel.org>; Mon, 17 Oct 2022 13:51:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiJQMyx (ORCPT
+        id S229956AbiJQNvm (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 17 Oct 2022 08:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
+        Mon, 17 Oct 2022 09:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiJQMyw (ORCPT
+        with ESMTP id S229822AbiJQNvl (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 17 Oct 2022 08:54:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140F91D31B;
-        Mon, 17 Oct 2022 05:54:50 -0700 (PDT)
+        Mon, 17 Oct 2022 09:51:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3081C125;
+        Mon, 17 Oct 2022 06:51:37 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A605A20600;
-        Mon, 17 Oct 2022 12:54:49 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 81BF73400A;
+        Mon, 17 Oct 2022 13:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666011289; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1666014696; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=e2PdxLW6+r2pi48yfBDZ5ggNpMgA3AiGQmAM/6SfZRo=;
-        b=k4/lzhhkSNarfdJL1YvllZxTxqo6AnHSGLSwI+vJHWEaLRA65NddClMbKjlIQ1PEV/72kG
-        TLmSusfHmWupditnWdIR21asSISuHyAI+Pyopn/TbnS7QAP0ccVfkR32wPK1ep0N1UzbZX
-        HXAwvKSkqO0FPTuZuzaa9kfkTNt1ZUg=
+        bh=wsWr+Ep+EK7rnuxntXQBk+r8nFSCsmWYWDo+ktsF+E8=;
+        b=A0yN/V4qtthZpmxpz2jrPEuoGvck4A9nlmJIVT00d+XsIa9YkV9RRAh7dlAU12gj57j/et
+        Ie33KUNQee6OtTH2SX9985b1hwXSlJiJLxOKuR2pGXuDPWzurg2TI0KvHPsnGY60+qold2
+        FyjQ9PvxSYI+6yHGT4vvpiojZPaiCT8=
 Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 880532C143;
-        Mon, 17 Oct 2022 12:54:49 +0000 (UTC)
-Date:   Mon, 17 Oct 2022 14:54:46 +0200
+        by relay2.suse.de (Postfix) with ESMTPS id 6226D2C141;
+        Mon, 17 Oct 2022 13:51:36 +0000 (UTC)
+Date:   Mon, 17 Oct 2022 15:51:35 +0200
 From:   Petr Mladek <pmladek@suse.com>
 To:     Petr Pavlu <petr.pavlu@suse.com>
 Cc:     mcgrof@kernel.org, david@redhat.com, linux-modules@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] module: Merge same-name module load requests
-Message-ID: <Y01Qlp0E+3FJVVWW@alley>
+Subject: Re: [PATCH v3 4/4] selftests: kmod: Add tests for merging same-name
+ module load requests
+Message-ID: <Y01d50Z2DK3f9V+Q@alley>
 References: <20221016123031.3963-1-petr.pavlu@suse.com>
- <20221016123031.3963-4-petr.pavlu@suse.com>
+ <20221016123031.3963-5-petr.pavlu@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221016123031.3963-4-petr.pavlu@suse.com>
+In-Reply-To: <20221016123031.3963-5-petr.pavlu@suse.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun 2022-10-16 14:30:30, Petr Pavlu wrote:
-> During a system boot, it can happen that the kernel receives a burst of
-> requests to insert the same module but loading it eventually fails
-> during its init call. For instance, udev can make a request to insert
-> a frequency module for each individual CPU when another frequency module
-> is already loaded which causes the init function of the new module to
-> return an error.
-> 
-> The module loader currently serializes all such requests, with the
-> barrier in add_unformed_module(). This creates a lot of unnecessary work
-> and delays the boot. It can prevent udev from loading drivers for other
-> devices and might cause timeouts of services waiting on them and
-> subsequently a failed boot.
-> 
-> The mentioned serialization was introduced as a side-effect of commit
-> 6e6de3dee51a. The kernel before that merged some of same load requests
-> although it was more by accident and relied on specific timing. The
-> patch brings this behavior back in a more explicit form.
-> 
-> The logic is improved as follows:
-> * A check whether a module load matches an already loaded module is
->   moved right after a module name is determined. -EEXIST continues to be
->   returned if the module exists and is live, -EBUSY is returned if
->   a same-name module is going.
-> * A new reference-counted shared_load_info structure is introduced to
->   keep track of duplicate load requests. Two loads are considered
->   equivalent if their module name matches. In case a load duplicates
->   another running insert, the code waits for its completion and then
->   returns -EEXIST or -EBUSY depending on whether it succeeded.
-> 
-> Moving the check for same-name module loads earlier has also a positive
-> effect on reducing memory pressure. For instance, David Hildenbrand and
-> Lin Liu reported [1] that when KASAN_INLINE is enabled (resulting in
-> large module size), with plenty of devices that udev wants to probe and
-> with plenty of CPUs that can carry out that probing concurrently, the
-> system can actually run out of module vmap space and trigger vmap
-> allocation errors. This is fixed by the patch too as it avoids duplicate
-> layout_and_allocate() work.
-> 
-> [1] https://lore.kernel.org/all/20221013180518.217405-1-david@redhat.com/
-> 
-> Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+On Sun 2022-10-16 14:30:31, Petr Pavlu wrote:
+> Add two tests to check that loading the same module multiple times in
+> parallel results only in one real attempt to initialize it.
+> Synchronization of the loads is done by waiting 1000 ms in the init
 
-All these tags should be in the order of (logical) appearance.
-Somethings like:
+I do not have a good experience with this kind of synchronization.
+It usually is not reliable. The test might be very slow especially when
+false positives are solved by prolonging the delay.
 
-Suggested-by:  if any
-Signed-off-by: author of the patch
-Acked-by:      in order of appearance
-Revived-by:   in order of appearance
-Tested-by:     in order of appearance
-Signed-off-by: committer (upstream maintainer)
+Alternative solution would be to have two modules:
 
+1st module would provide a counter, for example:
 
-I know that I provided Reviewed-by before you did the final changes.
-Well, you could use my tag only when you did only cosmetic changes or
-changes that I requested. You expect that I would agree with the patch
-even after it was updated.
+int modB_load_cnt;
+module_param(modB_load_cnt, int, 0444);
+EXPORT_SYMBOL(modB_load_cnt);
+
+EXPORT_SYMBOL() should allow to directly increment the counter
+from the 2nd module.
+
+module_param() should make the value readable via
+/sys/module/modA/parameters/modB_load_cnt. It can be
+checked by kmod_sh.
+
+> function of a sample module kmod_test_0014. The tests measure time
+> needed to perform all inserts to verify that the loads get merged by the
+> module loader and are not serialized.
+> 
+> * Case 0014 checks a situation when the load is successful. It should
+>   result in one insert returning 0 and remaining inserts returning
+>   EEXIST.
+> * Case 0015 checks a situation when the load is failing because the
+>   module init function returns ENODEV. It should result in one insert
+>   returning this error code and remaining inserts returning EBUSY.
+> 
+> The tests use a simple init_module program to load kmod_test_0014.ko. It
+> enables to obtain directly a return code from the finit_module syscall.
+
+The tested scenarios look good.
 
 Best Regards,
 Petr
