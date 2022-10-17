@@ -2,104 +2,112 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AEB4C43217
-	for <linux-modules@archiver.kernel.org>; Mon, 17 Oct 2022 12:23:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23C6DC433FE
+	for <linux-modules@archiver.kernel.org>; Mon, 17 Oct 2022 12:54:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJQMXX (ORCPT
+        id S230156AbiJQMyx (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 17 Oct 2022 08:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        Mon, 17 Oct 2022 08:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiJQMXW (ORCPT
+        with ESMTP id S230160AbiJQMyw (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 17 Oct 2022 08:23:22 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094B65C976;
-        Mon, 17 Oct 2022 05:22:58 -0700 (PDT)
+        Mon, 17 Oct 2022 08:54:52 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140F91D31B;
+        Mon, 17 Oct 2022 05:54:50 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 4243C218B0;
-        Mon, 17 Oct 2022 12:22:30 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id A605A20600;
+        Mon, 17 Oct 2022 12:54:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666009350; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1666011289; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=mewzSTIGGxkGiHot6bRTFd+4P1VqYOY9FFhGowKMq1s=;
-        b=E5Zq/gfIBnkozXR3mViAhr7Z1y6MF/YsEvmi8JEQlvnz4KNoHkXkU3ZxuE9ersZfhZcEfk
-        /DAJ4caKEsGeOm022IB+s7h+ktj4es/Ds5TxJnUbJOd5w3RGGaFIBFWZNHAov2crmHtPVk
-        L7mM5g4vkCXYCRTuYWv18gtS7YhY2J0=
+        bh=e2PdxLW6+r2pi48yfBDZ5ggNpMgA3AiGQmAM/6SfZRo=;
+        b=k4/lzhhkSNarfdJL1YvllZxTxqo6AnHSGLSwI+vJHWEaLRA65NddClMbKjlIQ1PEV/72kG
+        TLmSusfHmWupditnWdIR21asSISuHyAI+Pyopn/TbnS7QAP0ccVfkR32wPK1ep0N1UzbZX
+        HXAwvKSkqO0FPTuZuzaa9kfkTNt1ZUg=
 Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 1F4382C141;
-        Mon, 17 Oct 2022 12:22:30 +0000 (UTC)
-Date:   Mon, 17 Oct 2022 14:22:27 +0200
+        by relay2.suse.de (Postfix) with ESMTPS id 880532C143;
+        Mon, 17 Oct 2022 12:54:49 +0000 (UTC)
+Date:   Mon, 17 Oct 2022 14:54:46 +0200
 From:   Petr Mladek <pmladek@suse.com>
 To:     Petr Pavlu <petr.pavlu@suse.com>
 Cc:     mcgrof@kernel.org, david@redhat.com, linux-modules@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] module: Update a comment describing what is
- protected by module_mutex
-Message-ID: <Y01JA8vzY3uVSJeY@alley>
+Subject: Re: [PATCH v3 3/4] module: Merge same-name module load requests
+Message-ID: <Y01Qlp0E+3FJVVWW@alley>
 References: <20221016123031.3963-1-petr.pavlu@suse.com>
- <20221016123031.3963-3-petr.pavlu@suse.com>
+ <20221016123031.3963-4-petr.pavlu@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221016123031.3963-3-petr.pavlu@suse.com>
+In-Reply-To: <20221016123031.3963-4-petr.pavlu@suse.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun 2022-10-16 14:30:29, Petr Pavlu wrote:
-
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->  kernel/module/main.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+On Sun 2022-10-16 14:30:30, Petr Pavlu wrote:
+> During a system boot, it can happen that the kernel receives a burst of
+> requests to insert the same module but loading it eventually fails
+> during its init call. For instance, udev can make a request to insert
+> a frequency module for each individual CPU when another frequency module
+> is already loaded which causes the init function of the new module to
+> return an error.
 > 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index a12e177ea81f..5288843ca40f 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -62,10 +62,11 @@
->  
->  /*
->   * Mutex protects:
-> - * 1) List of modules (also safely readable with preempt_disable),
-> + * 1) list of modules (also safely readable with preempt_disable, delete and add
+> The module loader currently serializes all such requests, with the
+> barrier in add_unformed_module(). This creates a lot of unnecessary work
+> and delays the boot. It can prevent udev from loading drivers for other
+> devices and might cause timeouts of services waiting on them and
+> subsequently a failed boot.
+> 
+> The mentioned serialization was introduced as a side-effect of commit
+> 6e6de3dee51a. The kernel before that merged some of same load requests
+> although it was more by accident and relied on specific timing. The
+> patch brings this behavior back in a more explicit form.
+> 
+> The logic is improved as follows:
+> * A check whether a module load matches an already loaded module is
+>   moved right after a module name is determined. -EEXIST continues to be
+>   returned if the module exists and is live, -EBUSY is returned if
+>   a same-name module is going.
+> * A new reference-counted shared_load_info structure is introduced to
+>   keep track of duplicate load requests. Two loads are considered
+>   equivalent if their module name matches. In case a load duplicates
+>   another running insert, the code waits for its completion and then
+>   returns -EEXIST or -EBUSY depending on whether it succeeded.
+> 
+> Moving the check for same-name module loads earlier has also a positive
+> effect on reducing memory pressure. For instance, David Hildenbrand and
+> Lin Liu reported [1] that when KASAN_INLINE is enabled (resulting in
+> large module size), with plenty of devices that udev wants to probe and
+> with plenty of CPUs that can carry out that probing concurrently, the
+> system can actually run out of module vmap space and trigger vmap
+> allocation errors. This is fixed by the patch too as it avoids duplicate
+> layout_and_allocate() work.
+> 
+> [1] https://lore.kernel.org/all/20221013180518.217405-1-david@redhat.com/
+> 
+> Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
-This is slightly over 80 characters per line ;-)
+All these tags should be in the order of (logical) appearance.
+Somethings like:
 
-It is not reported by checkpatch.pl because the longer line sometimes
-makes the code better readable. So people asked to make checkpatch.pl
-more relaxed and accept lines < 100. But the 80-characters per-line
-rule is still there. It should be honored when it does not make things
-visibly worse.
-
-> + *    uses RCU list operations).
-
+Suggested-by:  if any
+Signed-off-by: author of the patch
+Acked-by:      in order of appearance
+Revived-by:   in order of appearance
+Tested-by:     in order of appearance
+Signed-off-by: committer (upstream maintainer)
 
 
->   * 2) module_use links,
-> - * 3) mod_tree.addr_min/mod_tree.addr_max.
-> - * (delete and add uses RCU list operations).
-> + * 3) mod_tree.addr_min/mod_tree.addr_max,
-> + * 4) list of unloaded_tainted_modules.
-
-Please, mention that this list can be safely read using RCU.
-It is similar to the list of modules.
-
-Also it would be nice to mention the commit 99bd9956551b27cb6f
-("module: Introduce module unload taint tracking") in the commit
-message. It helps to find the related code. Also this is kind
-of a followup fix.
-
->   */
->  DEFINE_MUTEX(module_mutex);
->  LIST_HEAD(modules);
-
-All the above are minor or cosmetic issues. Feel free to use:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+I know that I provided Reviewed-by before you did the final changes.
+Well, you could use my tag only when you did only cosmetic changes or
+changes that I requested. You expect that I would agree with the patch
+even after it was updated.
 
 Best Regards,
 Petr
