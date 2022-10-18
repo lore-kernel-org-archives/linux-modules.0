@@ -2,559 +2,275 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16528C433FE
-	for <linux-modules@archiver.kernel.org>; Tue, 18 Oct 2022 08:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32D28C433FE
+	for <linux-modules@archiver.kernel.org>; Tue, 18 Oct 2022 09:11:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiJRIwh (ORCPT
+        id S231205AbiJRJLa (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 18 Oct 2022 04:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
+        Tue, 18 Oct 2022 05:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiJRIwg (ORCPT
+        with ESMTP id S229607AbiJRJL1 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 18 Oct 2022 04:52:36 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2070.outbound.protection.outlook.com [40.107.21.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8861D318;
-        Tue, 18 Oct 2022 01:52:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KtC9B0a2QeVcVTBVcXcbqdqClZYDvAGOW6CSWSStgbriElQFdLd0hTibb7HMx0HhH35AbJMEYu7pr41HQlemlOtg/XTQwAzjcFUYssqGFJP4HBpos2obAs/xM89Im1WcbZMfWZYxIt/PaCmXy8VCvPyDv5Emj/512zkrulqg+t2F+konNJmdPYH0aQvb9D4bvRkhdb7h0Dk04bU5mknWWJ+shtgB2PDpc95vcU9+TEaeSWAYU3njS75w8DCrKK3xG/SWWTkSipcTY4Jsg5UAJYJyz/CCkeQi32uys9inC1o7yHceR9+dAf3xQjM3QHqa3Vam/uf4aKSqDe7i82a66A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GMj+hvV5i0LhwojKDczSIeTvpfRzui9xArJtdUU2g/E=;
- b=bmgLRuIlUiUGCq91wABjniuw43YO37wvm8BqAqqUNiDCqnvjyIN2vf1F+FlBQA4u53WkGHKr17syVSbtj0BrBuHd61ta42yfr+ZBwn/8YAW5TkhYO/1YguSyLd1IJG1SkjgLl65rgpucfYvBf7zlsc5d4b0vwAgZ6NfMJU5ThVvuyP+2I/KY4LZ4MkC21TfVWuEGCbyvBkG8SZvyqF1TuXmsjcE9n+HKQNWf5LGQbQehXOIP5Vdi1UIJa+BN1UO5fKJkaWng4quyDtil2hxwrf8W8LzG3//CymZuPSLgBUB4lRdhsa1UwRuBVZ/FP2dqxi+rTftc8qIhKlPb0bN8UQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GMj+hvV5i0LhwojKDczSIeTvpfRzui9xArJtdUU2g/E=;
- b=szRTqwRCyETNldqTVowak6ZoVV4q5jjslmA8y9leAB2Rc32Xgz40ccrMHujn8oVl1mbqfIvFHCWubuQAqSuswoN27HeezetuBwYZYSZvGT2IBj3kxVYidRIOgGBZT4PsuxrPUdk6BbMaDiCUmvxBntvuH55x0OZYeDyKrIWv/Zz1yQaSxSD7C6jpfWR8I23eUvpRf9rYl7ql5mrAa7wGreVtroQ8LBbMNaqzWt1v0h+ZuzV5ovOEWZNVxS9vhZsA2FUoPHi/6Ck+2bxVLn/RfSlV3vfV2mdN3eWIhF3qUdqQ7KmORUYfQrrDb/2EyZQW/0K9YWPYc2YFijXEpTyVVQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16) by DU0PR04MB9420.eurprd04.prod.outlook.com
- (2603:10a6:10:35b::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Tue, 18 Oct
- 2022 08:52:31 +0000
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::7f81:2760:2539:7115]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::7f81:2760:2539:7115%2]) with mapi id 15.20.5723.030; Tue, 18 Oct 2022
- 08:52:31 +0000
-Message-ID: <86ed1568-52ce-b030-0fb0-1b902cb222d1@suse.com>
-Date:   Tue, 18 Oct 2022 10:52:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 3/4] module: Merge same-name module load requests
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, mcgrof@kernel.org
-Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221016123031.3963-1-petr.pavlu@suse.com>
- <20221016123031.3963-4-petr.pavlu@suse.com>
- <d6e6abc4-84ae-0ddf-eb02-9f0537d4bed1@redhat.com>
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <d6e6abc4-84ae-0ddf-eb02-9f0537d4bed1@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0150.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:95::19) To AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16)
+        Tue, 18 Oct 2022 05:11:27 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65C115FD9;
+        Tue, 18 Oct 2022 02:11:24 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Ms7MJ52JfzJn2y;
+        Tue, 18 Oct 2022 17:08:44 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 17:11:18 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 18 Oct 2022 17:11:17 +0800
+Subject: Re: [PATCH v7 11/11] kallsyms: Add self-test facility
+To:     kernel test robot <lkp@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ingo Molnar" <mingo@redhat.com>
+CC:     <kbuild-all@lists.01.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+References: <20221017064950.2038-12-thunder.leizhen@huawei.com>
+ <202210181636.S8XlpSMd-lkp@intel.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <e8c45c81-d488-db80-57cf-cfc59f05f32d@huawei.com>
+Date:   Tue, 18 Oct 2022 17:11:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|DU0PR04MB9420:EE_
-X-MS-Office365-Filtering-Correlation-Id: b22219f0-a8a5-4bc5-27d5-08dab0e61783
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yGg6ermhAIJs4JJfsLxdDUp/vY7rvEcqMbQeRYJBWucryHmAPPJDbnhjyAT82eQnM4DE2MJl9IRgj+2kZYfe2YJMlc6Z13hdLgopQmW6lDR8OyoW7YNQV89PhPyKkDBdrYswuU0CJn4+7CNLEGBvtcd4u4Uy44DX1iMHsXaCu5iL0ngAEhzAR2zObBgfmOgypLToHCZENAaBc7zTYA2tK8dAquWQsBQlddSHev19icppbaIkuBaUWrKyrCLYIhK6TU2mQH+9mbMYOCJChIow9nKCnfl5yRqUeNQeN3Wvx88NK/b8BWC01yLml9khF310sczozJpLGddgmAxxYj7WhvBmSdqmWFFW087qRJStKyGSx5Mtp9tzdhw/1Dy6I9z5SIvzqOBEaNCqUWYCE842nCqq1g2Y08Oc+L7cm+m2+8dE18T6ZJBntHSkr5jxib8/8Lp/Dljo8ElXsh91DcFmlWZGMf3G454UIksofvXSKSX8JlyHUlYOP77TRDeneygO/C1bb1e0VVQM6SCawbQlGiDZoIjK5V6+f7Yhjfd1VbrlLumI6Yw4YPgtEkbmNf0YZbB8GrvbzgHyBZNuSVlx1VSkZ3inebM9Yc/uxmXDI2xQfy3QSGj+XtntKClS3SL3HhXcRyBdSE1kbewwiyWqZpAe67vNCuMznTzwKDwpT1WwjNmMyxnRFi6lNh8xzkxVz4ljHFVNNCU62N3/4MxI0tRwLtzSbvxqRQe0mWcxAlNqqzuJb0xb6RbffldHHyK6IfqIeO9ModLLmn0g19+Vy7h5JB5b/ov9YfzzgSyAbq0otzHnNVGq0Oqx+YzF+iR/VmoWMdMJp/0qdP4MyUnYt6aaoRl97c1lMt5ZIeOpSwo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(346002)(39860400002)(396003)(136003)(451199015)(31686004)(44832011)(30864003)(66476007)(316002)(55236004)(41300700001)(6506007)(66899015)(4326008)(8676002)(6512007)(478600001)(66556008)(26005)(53546011)(186003)(2906002)(6486002)(966005)(5660300002)(2616005)(8936002)(36756003)(83380400001)(38100700002)(66946007)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cVFaZjYvZmMxY1ZMRXFXVVpyMWg1S0Y2MllKTHlBeWV0SFV0bUIwL1BYY1hV?=
- =?utf-8?B?U3hLZUdxK0U3Q3p2M0RjVE5CaWFqKy9KZUJFb2RLRmNWRk8xMS9ORlM4d0hk?=
- =?utf-8?B?ZTZGSThWa3NTUU56UHZIWHlXNEVucU1xQit6QU9JMFdRT09GRk9NL0ZXSzlL?=
- =?utf-8?B?cGRUUWk0UEFWQVpUVkFqQzAxNXNhY1QrL09wSHFaRlNwandyTndHa1k1WXNy?=
- =?utf-8?B?aEM2LzBpVUxnMVZHREltbGFMZUUwMTZHR0tHVU1GcHhxb0FEWFEyVTVPcS9L?=
- =?utf-8?B?Tmd5cTJZRW5HQXV6ZVc0amJWdjVHc1IwdzlKOU1XdTFqa0JmY283SkVXTmpo?=
- =?utf-8?B?MG56aWdkK2VwNlpuS3YxTVZRUVlmRU5hcDA4V0VEWmJqclNLOEQ3NlVVaTVz?=
- =?utf-8?B?Z29SdXhoYWJMeVBBRW1reXlSSUxrZFNtdlhCY3JSRlBvajIzRCt5MVExYjd5?=
- =?utf-8?B?VzkxNTdwbmZHMDM1S1dSQ0o3NkJTY3k5WVgwNVQ4V0FpS1VtOVYzdjY0SDdy?=
- =?utf-8?B?S213RWhadUtOQVk5U0ZZN2Z0SmhGZ0haajlrZkZiTnBuMk1YQkNSWkp4K3N1?=
- =?utf-8?B?Nk9xRlZpeTRxbTliVnkzVHhJemNkMkdjYTAvL3FRKzdxcXA1WHNvRmJDc2Yw?=
- =?utf-8?B?aldqR29LOExpcWFFTHRXeXV6anBiYjl1em82MzhwTk5DQmJaTzlFUkQxZndo?=
- =?utf-8?B?R3lSaHloaUFONGNPRFV2S2FFTk9aZ0VHYU01Vm9McTNpVm5SbXR4RFBpa1Qr?=
- =?utf-8?B?V3Z4UGp2VDdlam82Z3ZqOVB0YlRBQ2xzS0lsc29NalBTMTgwYXhmUHk3NzUv?=
- =?utf-8?B?eUQ5OXhiVDdBcWJHeXpQVXV3ZnR6dHFHK2FVYzdDV0hxYWRaT3lsYmdJVnlK?=
- =?utf-8?B?eE1zajVaSjVqSWF0OHBwUUF5VHNOMHRmdE5XVXNQMlZzRm1VaFY3dkM3S0NE?=
- =?utf-8?B?NHR0dFNCeHkvenRlVFNhZGdadytpK25WVVdiaEtHRGJUY0EzdUpGWE4xUith?=
- =?utf-8?B?RWdjQjlwVDFVaUdMenlEYTBpNU4xWXEzczNYQlEzOUNQN3c5bVJ5S2gyeDVv?=
- =?utf-8?B?cEFQbEF2TnZSUkFHblJlMkYwQlIva1BOYWFkVGxjVEVNUVNHQ3pJQUM3ckhF?=
- =?utf-8?B?a0xoQ1lIQ2ZyRVZscGpWcWVkWms4VHBhMnNCRk1aQXN2anVFQXFXV1ZRVWtn?=
- =?utf-8?B?cks5RzlDWHBiSThJQ3Q1RExrMlVaUjc5cmJDM0Yzb3MxZzI5UWRHRlh0SHpI?=
- =?utf-8?B?VGkzdFlhUGVaZXB1aDFZYUhmTHhmUVhRaE5LZzRnc3c4ckxheVozT0ZoSHlL?=
- =?utf-8?B?ZVEybm5LNU5Xd2xUeEJBV2VjSUZ5cFFjdm9hNGg1U0FPOGtSaW56QXZiVERw?=
- =?utf-8?B?MkVJQmlqS05aSXpDei8yVlhFNG0xMFUxRTdDTnNmUXNhRXJyZGRtcCtyV3Fk?=
- =?utf-8?B?Q2JaeVd3Q2pHSy9rNCtESkJQbncwWWppTkNjTnVYSnRKbmlxbmFlN1pRTWJL?=
- =?utf-8?B?Tld2NDg1M0tkN1BON3dYcVUrSHc1TUw4eWI0dzJZVE4vSk8zQmpEem5sd2ZW?=
- =?utf-8?B?Rmc3VktKZitQdTdYZmI5bDVKbkppWGJHSWJSNzMvcVRLYllqa1hiQjVwc1lk?=
- =?utf-8?B?TENud2xFVm9KWjlCUUpGRHYyTXBmUXZOWWpGZ05jL1k0QURaOWlSQVRrMDlL?=
- =?utf-8?B?RGh0Tk5mY3NlQUlsMHVDUjEzZXdIZjZxVDFCSTlXSXdTZ21FSmJoOVFxbXRB?=
- =?utf-8?B?MGZsS3h5M1A5dml6cWdXU0YrVmZmNXRId1FtRCtjUEtCZWRXbGVqdnJkNVRw?=
- =?utf-8?B?Q1FLYndsYW1Kc0lweGFybGs3TS9kQmt4aGZmTFlkWmNtMkdGUE5idytiRFp2?=
- =?utf-8?B?WVhFYmNNOTJyRlpjTFQxbGJrR2FJc05wT2duTkc4dDdoencrd0JTdWlkT1JO?=
- =?utf-8?B?SWhFMGRncG5wK2Viem1TN2ZNMUs0TERVNmdiZ3RxTlB0Y1FEd01yR1FFQkV2?=
- =?utf-8?B?S3pYNExheVNvZTJvbGRBT2RJdU9MWkxiSU1QaUFSMW1uRmtXY1pBT2N6Qmxo?=
- =?utf-8?B?VStEVG04K1NuSEM2SjE1NXN0ZzVEMSt6RmFGRnBNdmZObVZrS1VJSkhPdTlw?=
- =?utf-8?Q?iqlpfFipiSuhplBYy81vXcMp8?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b22219f0-a8a5-4bc5-27d5-08dab0e61783
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2022 08:52:31.1190
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ENGPbMih15gRa4bz3LRbkpAC7Ostq8cfF75bxEnpdv4UGwTp04ANr0cT9CopfWpAZyumyvanjkHB3qnISiitbw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9420
+In-Reply-To: <202210181636.S8XlpSMd-lkp@intel.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 10/17/22 09:43, David Hildenbrand wrote:
-> On 16.10.22 14:30, Petr Pavlu wrote:
->> During a system boot, it can happen that the kernel receives a burst of
->> requests to insert the same module but loading it eventually fails
->> during its init call. For instance, udev can make a request to insert
->> a frequency module for each individual CPU when another frequency module
->> is already loaded which causes the init function of the new module to
->> return an error.
->>
->> The module loader currently serializes all such requests, with the
->> barrier in add_unformed_module(). This creates a lot of unnecessary work
->> and delays the boot. It can prevent udev from loading drivers for other
->> devices and might cause timeouts of services waiting on them and
->> subsequently a failed boot.
->>
->> The mentioned serialization was introduced as a side-effect of commit
->> 6e6de3dee51a. The kernel before that merged some of same load requests
->> although it was more by accident and relied on specific timing. The
->> patch brings this behavior back in a more explicit form.
->>
->> The logic is improved as follows:
->> * A check whether a module load matches an already loaded module is
->>    moved right after a module name is determined. -EEXIST continues to be
->>    returned if the module exists and is live, -EBUSY is returned if
->>    a same-name module is going.
+
+
+On 2022/10/18 16:21, kernel test robot wrote:
+> Hi Zhen,
 > 
-> Can you clarify why the EBUSY change is needed? Why not simply return 
-> EEXIST?
+> Thank you for the patch! Perhaps something to improve:
 > 
-> If you have thread 0 loading the module and thread 1 unloading the 
-> module concurrently, then it's pretty much unpredictable what the 
-> outcome will be either way, no?
+> [auto build test WARNING on masahiroy-kbuild/for-next]
+> [also build test WARNING on linus/master v6.1-rc1 next-20221018]
+> [cannot apply to mcgrof/modules-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> Add a random sleep to thread 1 (such that the module is *not* going yet) 
-> and the result will be EEXIST.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20221017-145455
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+> patch link:    https://lore.kernel.org/r/20221017064950.2038-12-thunder.leizhen%40huawei.com
+> patch subject: [PATCH v7 11/11] kallsyms: Add self-test facility
+> config: sh-allmodconfig
+> compiler: sh4-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/3f5fc7fa1f657df865ef14b2d24f837a7cc079c9
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20221017-145455
+>         git checkout 3f5fc7fa1f657df865ef14b2d24f837a7cc079c9
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
 > 
-> I suggest avoiding a EBUSY change unless there is real reason to do so.
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
 > 
-> User space that concurrently loads and unloads the same module is shaky 
-> already, no?
-
-I cannot quite think of a scenario where it would practically matter how this
-corner case is handled. Prior to 6e6de3dee51a ("kernel/module.c: Only return
--EEXIST for modules that have finished loading"), an init_module() call would
-have returned EEXIST in this case. After the mentioned commit, the loader
-waits for the old module to be gone and then proceeds with the load. Finally,
-this patch changes init_module() to immediately return EBUSY.
-
-With the proposed changes, EEXIST and EBUSY is used as follows:
-* EEXIST is returned from init_module() if a given module is already loaded or
-  becomes live by a parallel load.
-* EBUSY is returned if a concurrent operation is detected on a module with the
-  same name and the module is not live. This applies to both init_module() and
-  delete_module().
-
-I think it is generally a good idea to return EEXIST from init_module() only
-if a given module is fully operational. Userspace (udev) typically handles
-EEXIST as "success" and so there is some potential for confusion otherwise.
-
-However, I don't feel strongly about this particular case.
-
->> * A new reference-counted shared_load_info structure is introduced to
->>    keep track of duplicate load requests. Two loads are considered
->>    equivalent if their module name matches. In case a load duplicates
->>    another running insert, the code waits for its completion and then
->>    returns -EEXIST or -EBUSY depending on whether it succeeded.
->>
->> Moving the check for same-name module loads earlier has also a positive
->> effect on reducing memory pressure. For instance, David Hildenbrand and
->> Lin Liu reported [1] that when KASAN_INLINE is enabled (resulting in
->> large module size), with plenty of devices that udev wants to probe and
->> with plenty of CPUs that can carry out that probing concurrently, the
->> system can actually run out of module vmap space and trigger vmap
->> allocation errors. This is fixed by the patch too as it avoids duplicate
->> layout_and_allocate() work.
+> All warnings (new ones prefixed by >>):
 > 
-> It might we reasonable to add the kernel messages here. Can you also add 
-> the Reported-by?
+>    kernel/kallsyms_selftest.c:67:5: warning: no previous prototype for 'test_func' [-Wmissing-prototypes]
+>       67 | int test_func(void)
+>          |     ^~~~~~~~~
+>    kernel/kallsyms_selftest.c:72:12: warning: no previous prototype for 'test_func_weak' [-Wmissing-prototypes]
+>       72 | __weak int test_func_weak(void)
+>          |            ^~~~~~~~~~~~~~
+>    kernel/kallsyms_selftest.c: In function 'test_kallsyms_basic_function':
+>>> kernel/kallsyms_selftest.c:424:1: warning: the frame size of 1124 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>      424 | }
+>          | ^
 
-Ok, I avoided adding the Reported-by tag because I was not sure how to
-properly record that it applies only to the vmap allocation issue. I suspect
-it can be clarified after the tag in a "[...]" note.
+OK, thanks. These warnings are minor. I will fix them in the next version after collecting review comments.
 
-My plan is to add the following:
-
-[  165.842123] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
-[  165.843359] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
-[  165.844894] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
-[  165.847028] CPU: 253 PID: 4995 Comm: systemd-udevd Not tainted 5.19.0 #2
-[  165.935689] Hardware name: Lenovo ThinkSystem SR950 -[7X12ABC1WW]-/-[7X12ABC1WW]-, BIOS -[PSE130O-1.81]- 05/20/2020
-[  165.947343] Call Trace:
-[  165.950075]  <TASK>
-[  165.952425]  dump_stack_lvl+0x57/0x81
-[  165.956532]  warn_alloc.cold+0x95/0x18a
-[  165.981219]  __vmalloc_node_range+0x291/0x560
-[  166.003741]  module_alloc+0xe7/0x170
-[  166.011840]  move_module+0x4c/0x630
-[  166.015751]  layout_and_allocate+0x32c/0x560
-[  166.020519]  load_module+0x8e0/0x25c0
-[  166.053854]  __do_sys_finit_module+0x11a/0x1c0
-[  166.068494]  do_syscall_64+0x59/0x90
-[  166.095855]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[  165.818200] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
-
-Reported-by: Lin Liu <linl@redhat.com>
-Reported-by: David Hildenbrand <david@redhat.com>
-[the vmap allocation issue]
-
->>
->> [1] https://lore.kernel.org/all/20221013180518.217405-1-david@redhat.com/
->>
->> Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
->> Reviewed-by: Petr Mladek <pmladek@suse.com>
->> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
->> ---
->>   kernel/module/main.c | 217 ++++++++++++++++++++++++++++++-------------
->>   1 file changed, 155 insertions(+), 62 deletions(-)
->>
->> diff --git a/kernel/module/main.c b/kernel/module/main.c
->> index 5288843ca40f..2228c0f725e7 100644
->> --- a/kernel/module/main.c
->> +++ b/kernel/module/main.c
->> @@ -66,11 +66,28 @@
->>    *    uses RCU list operations).
->>    * 2) module_use links,
->>    * 3) mod_tree.addr_min/mod_tree.addr_max,
->> - * 4) list of unloaded_tainted_modules.
->> + * 4) list of unloaded_tainted_modules,
->> + * 5) list of running_loads.
->>    */
->>   DEFINE_MUTEX(module_mutex);
->>   LIST_HEAD(modules);
->>   
->> +/* Shared information to track duplicate module loads. */
->> +struct shared_load_info {
->> +	char name[MODULE_NAME_LEN];
->> +	refcount_t refcnt;
->> +	struct list_head list;
->> +	struct completion done;
->> +	int err;
->> +};
->> +static LIST_HEAD(running_loads);
->> +
->> +/*
->> + * Waiting for a module load when the exact module name is not known, for
->> + * example, when resolving symbols from another modules.
->> + */
->> +static DECLARE_WAIT_QUEUE_HEAD(module_wq);
->> +
->>   /* Work queue for freeing init sections in success case */
->>   static void do_free_init(struct work_struct *w);
->>   static DECLARE_WORK(init_free_wq, do_free_init);
->> @@ -124,9 +141,6 @@ static void mod_update_bounds(struct module *mod)
->>   int modules_disabled;
->>   core_param(nomodule, modules_disabled, bint, 0);
->>   
->> -/* Waiting for a module to finish initializing? */
->> -static DECLARE_WAIT_QUEUE_HEAD(module_wq);
->> -
->>   static BLOCKING_NOTIFIER_HEAD(module_notify_list);
->>   
->>   int register_module_notifier(struct notifier_block *nb)
->> @@ -764,8 +778,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
->>   	strscpy(last_unloaded_module.taints, module_flags(mod, buf, false), sizeof(last_unloaded_module.taints));
->>   
->>   	free_module(mod);
->> -	/* someone could wait for the module in add_unformed_module() */
->> -	wake_up_interruptible(&module_wq);
->>   	return 0;
->>   out:
->>   	mutex_unlock(&module_mutex);
->> @@ -2373,26 +2385,6 @@ static int post_relocation(struct module *mod, const struct load_info *info)
->>   	return module_finalize(info->hdr, info->sechdrs, mod);
->>   }
->>   
->> -/* Is this module of this name done loading?  No locks held. */
->> -static bool finished_loading(const char *name)
->> -{
->> -	struct module *mod;
->> -	bool ret;
->> -
->> -	/*
->> -	 * The module_mutex should not be a heavily contended lock;
->> -	 * if we get the occasional sleep here, we'll go an extra iteration
->> -	 * in the wait_event_interruptible(), which is harmless.
->> -	 */
->> -	sched_annotate_sleep();
->> -	mutex_lock(&module_mutex);
->> -	mod = find_module_all(name, strlen(name), true);
->> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
->> -	mutex_unlock(&module_mutex);
->> -
->> -	return ret;
->> -}
->> -
->>   /* Call module constructors. */
->>   static void do_mod_ctors(struct module *mod)
->>   {
->> @@ -2523,7 +2515,6 @@ static noinline int do_init_module(struct module *mod)
->>   		schedule_work(&init_free_wq);
->>   
->>   	mutex_unlock(&module_mutex);
->> -	wake_up_interruptible(&module_wq);
->>   
->>   	return 0;
->>   
->> @@ -2539,7 +2530,6 @@ static noinline int do_init_module(struct module *mod)
->>   	klp_module_going(mod);
->>   	ftrace_release_mod(mod);
->>   	free_module(mod);
->> -	wake_up_interruptible(&module_wq);
->>   	return ret;
->>   }
->>   
->> @@ -2551,43 +2541,138 @@ static int may_init_module(void)
->>   	return 0;
->>   }
->>   
->> +static struct shared_load_info *
->> +shared_load_info_alloc(const struct load_info *info)
->> +{
->> +	struct shared_load_info *shared_info =
->> +		kzalloc(sizeof(*shared_info), GFP_KERNEL);
->> +	if (shared_info == NULL)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	strscpy(shared_info->name, info->name, sizeof(shared_info->name));
->> +	refcount_set(&shared_info->refcnt, 1);
->> +	INIT_LIST_HEAD(&shared_info->list);
->> +	init_completion(&shared_info->done);
->> +	return shared_info;
->> +}
->> +
->> +static void shared_load_info_get(struct shared_load_info *shared_info)
->> +{
->> +	refcount_inc(&shared_info->refcnt);
->> +}
->> +
->> +static void shared_load_info_put(struct shared_load_info *shared_info)
->> +{
->> +	if (refcount_dec_and_test(&shared_info->refcnt))
->> +		kfree(shared_info);
->> +}
->> +
->>   /*
->> - * We try to place it in the list now to make sure it's unique before
->> - * we dedicate too many resources.  In particular, temporary percpu
->> + * Check that a module load is unique and make it visible to others. The code
->> + * looks for parallel running inserts and already loaded modules. Two inserts
->> + * are considered equivalent if their module name matches. In case this load
->> + * duplicates another running insert, the code waits for its completion and
->> + * then returns -EEXIST or -EBUSY depending on whether it succeeded.
->> + *
->> + * Detecting early that a load is unique avoids dedicating too many cycles and
->> + * resources to bring up the module. In particular, it prevents temporary percpu
->>    * memory exhaustion.
->> + *
->> + * Merging same load requests then primarily helps during the boot process. It
->> + * can happen that the kernel receives a burst of requests to load the same
->> + * module (for example, a same module for each individual CPU) and loading it
->> + * eventually fails during its init call. Merging the requests allows that only
->> + * one full attempt to load the module is made.
->> + *
->> + * On a non-error return, it is guaranteed that this load is unique.
->>    */
->> -static int add_unformed_module(struct module *mod)
->> +static struct shared_load_info *add_running_load(const struct load_info *info)
->>   {
->> -	int err;
->>   	struct module *old;
->> +	struct shared_load_info *shared_info;
->>   
->> -	mod->state = MODULE_STATE_UNFORMED;
->> -
->> -again:
->>   	mutex_lock(&module_mutex);
->> -	old = find_module_all(mod->name, strlen(mod->name), true);
->> -	if (old != NULL) {
->> -		if (old->state != MODULE_STATE_LIVE) {
->> -			/* Wait in case it fails to load. */
->> +
->> +	/* Search if there is a running load of a module with the same name. */
->> +	list_for_each_entry(shared_info, &running_loads, list)
->> +		if (strcmp(shared_info->name, info->name) == 0) {
->> +			int err;
->> +
->> +			shared_load_info_get(shared_info);
->>   			mutex_unlock(&module_mutex);
->> -			err = wait_event_interruptible(module_wq,
->> -					       finished_loading(mod->name));
->> -			if (err)
->> -				goto out_unlocked;
->> -			goto again;
->> +
->> +			err = wait_for_completion_interruptible(
->> +				&shared_info->done);
->> +			/*
->> +			 * Return -EBUSY when the parallel load failed for any
->> +			 * reason. This load might end up another way but we are
->> +			 * not going to try.
-> 
-> Why not? Usually "-EAGAIN" signals that user space should retry. But I 
-> hope that we can avoid EBUSY altogether and simply retry here.
-> 
-> I'd suggest shared_load_info_put()+retry.
-> 
-> No need to optimize for corner cases (concurrent load failing so we 
-> don't retry ourselves).
-
-Avoiding a retry in this case is actually the main motivation for this patch.
-It looks I'm still failing to explain this in the commit message, but please
-see my replies on previous versions of the patch where I provided more details
-about the observed issue [1, 2].
-
-Worth noting is that both your scenario and my case are situations where
-a same module is attempted to be loaded multiple times, once per each CPU.
-Even if only one attempt is eventually fully processed, the decision that
-other parallel loads are not needed happens quite late. In particular, udev
-(libkmod) still has to load and decompress a given module binary multiple
-times. Ideally, I think this should be prevented altogether by improving other
-parts of the whole process. Udev could be made smarter to avoid duplicate
-loads or the kernel could model uevents related to CPUs differently. This is
-something that I was also considering but eventually settled on trying to fix
-only the immediate kernel regression.
-
->> +			 */
->> +			if (!err)
->> +				err = shared_info->err ? -EBUSY : -EEXIST;
->> +			shared_load_info_put(shared_info);
->> +			shared_info = ERR_PTR(err);
->> +			goto out_unlocked;
->> +		}
->> +
->> +	/* Search if there is a live module with the given name already. */
->> +	old = find_module_all(info->name, strlen(info->name), true);
->> +	if (old != NULL) {
->> +		if (old->state == MODULE_STATE_LIVE) {
->> +			shared_info = ERR_PTR(-EEXIST);
->> +			goto out;
->>   		}
->> -		err = -EEXIST;
->> +
->> +		/*
->> +		 * Any active load always has its record in running_loads and so
->> +		 * would be found above. This applies independent whether such
->> +		 * a module is currently in MODULE_STATE_UNFORMED,
->> +		 * MODULE_STATE_COMING, or even in MODULE_STATE_GOING if its
->> +		 * initialization failed. It therefore means this must be an
->> +		 * older going module and the caller should try later once it is
->> +		 * gone.
->> +		 */
->> +		WARN_ON(old->state != MODULE_STATE_GOING);
->> +		shared_info = ERR_PTR(-EBUSY);
-> 
-> As raised above, why not EEXIST? Concurrent loading+unloading is racy 
-> either way.
-
-Discussed above.
-
->>   		goto out;
->>   	}
->> -	mod_update_bounds(mod);
->> -	list_add_rcu(&mod->list, &modules);
->> -	mod_tree_insert(mod);
->> -	err = 0;
->> +
->> +	/* The load is unique, make it visible to others. */
->> +	shared_info = shared_load_info_alloc(info);
->> +	if (IS_ERR(shared_info))
->> +		goto out;
->> +	list_add(&shared_info->list, &running_loads);
->>   
->>   out:
->>   	mutex_unlock(&module_mutex);
->>   out_unlocked:
->> -	return err;
->> +	return shared_info;
->> +}
->> +
->> +static void finalize_running_load(struct shared_load_info *shared_info, int err)
-> 
-> s/finalize/release? It would be nice if the name could correspond to an 
-> opposite action of "add_running_load".
-> 
-
-Ok, I can change this.
-
-Note though that functions add_running_load() and finalize_running_load() are
-not exactly opposite actions. I tried to avoid using "release" because it
-typically suggests to me a simple free of resources while
-finalize_running_load() still does some important work.
-
->> +{
->> +	/* Inform other duplicate inserts that the load finished. */
->> +	mutex_lock(&module_mutex);
->> +	list_del(&shared_info->list);
->> +	shared_info->err = err;
->> +	mutex_unlock(&module_mutex);
->> +
->> +	complete_all(&shared_info->done);
->> +	shared_load_info_put(shared_info);
->> +
->> +	/* Tell other modules waiting on this one that it completed loading. */
->> +	wake_up_interruptible(&module_wq);
->> +}
->> +
 > 
 > 
-> [...]
+> vim +424 kernel/kallsyms_selftest.c
 > 
->>    sysfs_cleanup:
->>   	mod_sysfs_teardown(mod);
->> @@ -2880,15 +2973,15 @@ static int load_module(struct load_info *info, const char __user *uargs,
->>   	/* Unlink carefully: kallsyms could be walking list. */
->>   	list_del_rcu(&mod->list);
->>   	mod_tree_remove(mod);
->> -	wake_up_interruptible(&module_wq);
->>   	/* Wait for RCU-sched synchronizing before releasing mod->list. */
->>   	synchronize_rcu();
->>   	mutex_unlock(&module_mutex);
->> - free_module:
->>   	/* Free lock-classes; relies on the preceding sync_rcu() */
->>   	lockdep_free_key_range(mod->data_layout.base, mod->data_layout.size);
->>   
->>   	module_deallocate(mod, info);
->> + free_shared:
+>    275	
+>    276	static int test_kallsyms_basic_function(void)
+>    277	{
+>    278		int i, j, ret;
+>    279		int next = 0, nr_failed = 0;
+>    280		char *prefix;
+>    281		unsigned short rand;
+>    282		unsigned long addr, lookup_addr;
+>    283		char namebuf[KSYM_NAME_LEN];
+>    284		struct test_stat stat, stat2;
+>    285	
+>    286		prefix = "kallsyms_lookup_name() for";
+>    287		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
+>    288			addr = kallsyms_lookup_name(test_items[i].name);
+>    289			if (addr != test_items[i].addr) {
+>    290				nr_failed++;
+>    291				pr_info("%s %s failed: addr=%lx, expect %lx\n",
+>    292					prefix, test_items[i].name, addr, test_items[i].addr);
+>    293			}
+>    294		}
+>    295	
+>    296		prefix = "kallsyms_on_each_symbol() for";
+>    297		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
+>    298			memset(&stat, 0, sizeof(stat));
+>    299			stat.max = INT_MAX;
+>    300			stat.name = test_items[i].name;
+>    301			kallsyms_on_each_symbol(find_symbol, &stat);
+>    302			if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
+>    303				nr_failed++;
+>    304				pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
+>    305					prefix, test_items[i].name,
+>    306					stat.real_cnt, stat.addr, test_items[i].addr);
+>    307			}
+>    308		}
+>    309	
+>    310		prefix = "kallsyms_on_each_match_symbol() for";
+>    311		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
+>    312			memset(&stat, 0, sizeof(stat));
+>    313			stat.max = INT_MAX;
+>    314			stat.name = test_items[i].name;
+>    315			kallsyms_on_each_match_symbol(match_symbol, test_items[i].name, &stat);
+>    316			if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
+>    317				nr_failed++;
+>    318				pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
+>    319					prefix, test_items[i].name,
+>    320					stat.real_cnt, stat.addr, test_items[i].addr);
+>    321			}
+>    322		}
+>    323	
+>    324		if (nr_failed)
+>    325			return -ESRCH;
+>    326	
+>    327		for (i = 0; i < kallsyms_num_syms; i++) {
+>    328			addr = kallsyms_sym_address(i);
+>    329			if (!is_ksym_addr(addr))
+>    330				continue;
+>    331	
+>    332			ret = lookup_symbol_name(addr, namebuf);
+>    333			if (unlikely(ret)) {
+>    334				namebuf[0] = 0;
+>    335				goto failed;
+>    336			}
+>    337	
+>    338			/*
+>    339			 * The first '.' may be the initial letter, in which case the
+>    340			 * entire symbol name will be truncated to an empty string in
+>    341			 * cleanup_symbol_name(). Do not test these symbols.
+>    342			 *
+>    343			 * For example:
+>    344			 * cat /proc/kallsyms | awk '{print $3}' | grep -E "^\." | head
+>    345			 * .E_read_words
+>    346			 * .E_leading_bytes
+>    347			 * .E_trailing_bytes
+>    348			 * .E_write_words
+>    349			 * .E_copy
+>    350			 * .str.292.llvm.12122243386960820698
+>    351			 * .str.24.llvm.12122243386960820698
+>    352			 * .str.29.llvm.12122243386960820698
+>    353			 * .str.75.llvm.12122243386960820698
+>    354			 * .str.99.llvm.12122243386960820698
+>    355			 */
+>    356			if (IS_ENABLED(CONFIG_LTO_CLANG) && !namebuf[0])
+>    357				continue;
+>    358	
+>    359			lookup_addr = kallsyms_lookup_name(namebuf);
+>    360	
+>    361			memset(&stat, 0, sizeof(stat));
+>    362			stat.max = INT_MAX;
+>    363			kallsyms_on_each_match_symbol(match_symbol, namebuf, &stat);
+>    364	
+>    365			/*
+>    366			 * kallsyms_on_each_symbol() is too slow, randomly select some
+>    367			 * symbols for test.
+>    368			 */
+>    369			if (i >= next) {
+>    370				memset(&stat2, 0, sizeof(stat2));
+>    371				stat2.max = INT_MAX;
+>    372				stat2.name = namebuf;
+>    373				kallsyms_on_each_symbol(find_symbol, &stat2);
+>    374	
+>    375				/*
+>    376				 * kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
+>    377				 * need to get the same traversal result.
+>    378				 */
+>    379				if (stat.addr != stat2.addr ||
+>    380				    stat.real_cnt != stat2.real_cnt ||
+>    381				    memcmp(stat.addrs, stat2.addrs,
+>    382					   stat.save_cnt * sizeof(stat.addrs[0])))
+>    383					goto failed;
+>    384	
+>    385				/*
+>    386				 * The average of random increments is 128, that is, one of
+>    387				 * them is tested every 128 symbols.
+>    388				 */
+>    389				get_random_bytes(&rand, sizeof(rand));
+>    390				next = i + (rand & 0xff) + 1;
+>    391			}
+>    392	
+>    393			/* Need to be found at least once */
+>    394			if (!stat.real_cnt)
+>    395				goto failed;
+>    396	
+>    397			/*
+>    398			 * kallsyms_lookup_name() returns the address of the first
+>    399			 * symbol found and cannot be NULL.
+>    400			 */
+>    401			if (!lookup_addr || lookup_addr != stat.addrs[0])
+>    402				goto failed;
+>    403	
+>    404			/*
+>    405			 * If the addresses of all matching symbols are recorded, the
+>    406			 * target address needs to be exist.
+>    407			 */
+>    408			if (stat.real_cnt <= MAX_NUM_OF_RECORDS) {
+>    409				for (j = 0; j < stat.save_cnt; j++) {
+>    410					if (stat.addrs[j] == addr)
+>    411						break;
+>    412				}
+>    413	
+>    414				if (j == stat.save_cnt)
+>    415					goto failed;
+>    416			}
+>    417		}
+>    418	
+>    419		return 0;
+>    420	
+>    421	failed:
+>    422		pr_info("Test for %dth symbol failed: (%s) addr=%lx", i, namebuf, addr);
+>    423		return -ESRCH;
+>  > 424	}
+>    425	
 > 
-> Ideally, the label matches what's actually being done. So maybe 
-> "release_shared" if you go with "release_..."
 
-Ok.
-
-[1] https://lore.kernel.org/linux-modules/0ccb384f-bbd5-f0fd-3832-c2255df505b2@suse.com/
-[2] https://lore.kernel.org/linux-modules/aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com/
-
-Thanks,
-Petr
+-- 
+Regards,
+  Zhen Lei
