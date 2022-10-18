@@ -2,275 +2,248 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32D28C433FE
-	for <linux-modules@archiver.kernel.org>; Tue, 18 Oct 2022 09:11:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C784C4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 18 Oct 2022 09:18:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiJRJLa (ORCPT
+        id S230216AbiJRJS1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 18 Oct 2022 05:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
+        Tue, 18 Oct 2022 05:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJRJL1 (ORCPT
+        with ESMTP id S230076AbiJRJS0 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 18 Oct 2022 05:11:27 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65C115FD9;
-        Tue, 18 Oct 2022 02:11:24 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Ms7MJ52JfzJn2y;
-        Tue, 18 Oct 2022 17:08:44 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 17:11:18 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 17:11:17 +0800
-Subject: Re: [PATCH v7 11/11] kallsyms: Add self-test facility
-To:     kernel test robot <lkp@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>
-CC:     <kbuild-all@lists.01.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-References: <20221017064950.2038-12-thunder.leizhen@huawei.com>
- <202210181636.S8XlpSMd-lkp@intel.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <e8c45c81-d488-db80-57cf-cfc59f05f32d@huawei.com>
-Date:   Tue, 18 Oct 2022 17:11:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 18 Oct 2022 05:18:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDB1ABD72
+        for <linux-modules@vger.kernel.org>; Tue, 18 Oct 2022 02:18:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666084700;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iIDXdwfZHTBvNme63up4p5nGL42BSI+TUibwt0PBRvw=;
+        b=JWHJbj3RURXj6y+QtdqpSjEFp55Yxpp55c2meijxaA5M1EQjSs57nmQux9VuPviayXwU+K
+        e3nCYslgCMFl76BEvvo5Dd4IlrBVfrMaR18Oez+0j5qvxYSjBKfsiJkL6bzLw5lrhtR3wV
+        neNzPzEWHHC7iEtHUOnAUsN2r2H1oDk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-339-HCdXNhvTMKiuUzptlGTINw-1; Tue, 18 Oct 2022 05:18:18 -0400
+X-MC-Unique: HCdXNhvTMKiuUzptlGTINw-1
+Received: by mail-wm1-f70.google.com with SMTP id ay12-20020a05600c1e0c00b003c6e18d9aa8so8730173wmb.8
+        for <linux-modules@vger.kernel.org>; Tue, 18 Oct 2022 02:18:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iIDXdwfZHTBvNme63up4p5nGL42BSI+TUibwt0PBRvw=;
+        b=XuzfPQsNBvuNNEWIqkjssXAyVVduFOc5n/3UnmhqlceOJBqJtC01sbi1sg6vvwyhDk
+         M/SGQRNIgEChSfg0KuDPkcB3Rj91WSqsJRSewtov49dOZKFh/OfyZity8U6lb3XtQc4i
+         k+qNjAKf2fS9qbnAxSof3Z4SJQmCy3Se8gQCSW1BvMGmQOdcJcxY36axUfa96mjgCj4x
+         zpkTC1awa4TWLPiWdi49yBzJ531O47ZGSo0w/IJK6b7l4DaZnMOo/MTNMxATGVQ8zIY+
+         PWquP9aGHwMSK7DP8QSGS9SFRoAG/B41MW4z4VtuIk6DsyhabhL5bqZGeYItSDH/Qetw
+         Rwmw==
+X-Gm-Message-State: ACrzQf1kVfOSXPEix5hVuTyxdTR9QJU9fF1PHirBzgjrkzfiFX583MRH
+        ENUnKmHTyZPgiuhyhifSre8wY3GxaTr6jNX9cTQqnFktpcl7Iaid53n4DDO46nyECSQ+6RXrjGt
+        AtK+v4pvbIAgTL8vzfJ+KRTrYQQ==
+X-Received: by 2002:a7b:cb92:0:b0:3c4:cf60:7a7 with SMTP id m18-20020a7bcb92000000b003c4cf6007a7mr1278706wmi.24.1666084697251;
+        Tue, 18 Oct 2022 02:18:17 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM53SnT+0rXdVe6JPVnCYamGaykaRTOLltCDPLFVbV0fkm5zDkD32g0rRrGF1UY19SAk1K/1TA==
+X-Received: by 2002:a7b:cb92:0:b0:3c4:cf60:7a7 with SMTP id m18-20020a7bcb92000000b003c4cf6007a7mr1278691wmi.24.1666084696890;
+        Tue, 18 Oct 2022 02:18:16 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:8900:d1f:5430:86b1:31ba? (p200300cbc70589000d1f543086b131ba.dip0.t-ipconnect.de. [2003:cb:c705:8900:d1f:5430:86b1:31ba])
+        by smtp.gmail.com with ESMTPSA id dn7-20020a05600c654700b003b47ff307e1sm12073106wmb.31.2022.10.18.02.18.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 02:18:16 -0700 (PDT)
+Message-ID: <aada0b86-cca8-78f1-59ad-cd82b99c5f4a@redhat.com>
+Date:   Tue, 18 Oct 2022 11:18:15 +0200
 MIME-Version: 1.0
-In-Reply-To: <202210181636.S8XlpSMd-lkp@intel.com>
-Content-Type: text/plain; charset="windows-1252"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
 Content-Language: en-US
+To:     Petr Pavlu <petr.pavlu@suse.com>, mcgrof@kernel.org
+Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221016123031.3963-1-petr.pavlu@suse.com>
+ <20221016123031.3963-4-petr.pavlu@suse.com>
+ <d6e6abc4-84ae-0ddf-eb02-9f0537d4bed1@redhat.com>
+ <86ed1568-52ce-b030-0fb0-1b902cb222d1@suse.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v3 3/4] module: Merge same-name module load requests
+In-Reply-To: <86ed1568-52ce-b030-0fb0-1b902cb222d1@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+>> User space that concurrently loads and unloads the same module is shaky
+>> already, no?
+> 
+> I cannot quite think of a scenario where it would practically matter how this
+> corner case is handled. Prior to 6e6de3dee51a ("kernel/module.c: Only return
+> -EEXIST for modules that have finished loading"), an init_module() call would
+> have returned EEXIST in this case. After the mentioned commit, the loader
+> waits for the old module to be gone and then proceeds with the load. Finally,
+> this patch changes init_module() to immediately return EBUSY.
+> 
+> With the proposed changes, EEXIST and EBUSY is used as follows:
+> * EEXIST is returned from init_module() if a given module is already loaded or
+>    becomes live by a parallel load.
+> * EBUSY is returned if a concurrent operation is detected on a module with the
+>    same name and the module is not live. This applies to both init_module() and
+>    delete_module().
+> 
+> I think it is generally a good idea to return EEXIST from init_module() only
+> if a given module is fully operational. Userspace (udev) typically handles
+> EEXIST as "success" and so there is some potential for confusion otherwise.
+> 
+> However, I don't feel strongly about this particular case.
+> 
 
+I'd vote to keep it simple and not change the way errors are returned 
+unless there is real reason.
 
-On 2022/10/18 16:21, kernel test robot wrote:
-> Hi Zhen,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on masahiroy-kbuild/for-next]
-> [also build test WARNING on linus/master v6.1-rc1 next-20221018]
-> [cannot apply to mcgrof/modules-next]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20221017-145455
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-> patch link:    https://lore.kernel.org/r/20221017064950.2038-12-thunder.leizhen%40huawei.com
-> patch subject: [PATCH v7 11/11] kallsyms: Add self-test facility
-> config: sh-allmodconfig
-> compiler: sh4-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/3f5fc7fa1f657df865ef14b2d24f837a7cc079c9
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20221017-145455
->         git checkout 3f5fc7fa1f657df865ef14b2d24f837a7cc079c9
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    kernel/kallsyms_selftest.c:67:5: warning: no previous prototype for 'test_func' [-Wmissing-prototypes]
->       67 | int test_func(void)
->          |     ^~~~~~~~~
->    kernel/kallsyms_selftest.c:72:12: warning: no previous prototype for 'test_func_weak' [-Wmissing-prototypes]
->       72 | __weak int test_func_weak(void)
->          |            ^~~~~~~~~~~~~~
->    kernel/kallsyms_selftest.c: In function 'test_kallsyms_basic_function':
->>> kernel/kallsyms_selftest.c:424:1: warning: the frame size of 1124 bytes is larger than 1024 bytes [-Wframe-larger-than=]
->      424 | }
->          | ^
+EBUSY is currently documented to be only returned for "Timeout while 
+trying to resolve a symbol reference by this module.". Your're changing 
+that.
 
-OK, thanks. These warnings are minor. I will fix them in the next version after collecting review comments.
+EEXIST: "A module with this name is already loaded." -- which includes 
+IMHO if the module is concurrently going away. Again, it's all racy 
+either way.
+
+>>> * A new reference-counted shared_load_info structure is introduced to
+>>>     keep track of duplicate load requests. Two loads are considered
+>>>     equivalent if their module name matches. In case a load duplicates
+>>>     another running insert, the code waits for its completion and then
+>>>     returns -EEXIST or -EBUSY depending on whether it succeeded.
+>>>
+>>> Moving the check for same-name module loads earlier has also a positive
+>>> effect on reducing memory pressure. For instance, David Hildenbrand and
+>>> Lin Liu reported [1] that when KASAN_INLINE is enabled (resulting in
+>>> large module size), with plenty of devices that udev wants to probe and
+>>> with plenty of CPUs that can carry out that probing concurrently, the
+>>> system can actually run out of module vmap space and trigger vmap
+>>> allocation errors. This is fixed by the patch too as it avoids duplicate
+>>> layout_and_allocate() work.
+>>
+>> It might we reasonable to add the kernel messages here. Can you also add
+>> the Reported-by?
+> 
+> Ok, I avoided adding the Reported-by tag because I was not sure how to
+> properly record that it applies only to the vmap allocation issue. I suspect
+> it can be clarified after the tag in a "[...]" note.
+> 
+> My plan is to add the following:
+> 
+> [  165.842123] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.843359] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.844894] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> [  165.847028] CPU: 253 PID: 4995 Comm: systemd-udevd Not tainted 5.19.0 #2
+> [  165.935689] Hardware name: Lenovo ThinkSystem SR950 -[7X12ABC1WW]-/-[7X12ABC1WW]-, BIOS -[PSE130O-1.81]- 05/20/2020
+> [  165.947343] Call Trace:
+> [  165.950075]  <TASK>
+> [  165.952425]  dump_stack_lvl+0x57/0x81
+> [  165.956532]  warn_alloc.cold+0x95/0x18a
+> [  165.981219]  __vmalloc_node_range+0x291/0x560
+> [  166.003741]  module_alloc+0xe7/0x170
+> [  166.011840]  move_module+0x4c/0x630
+> [  166.015751]  layout_and_allocate+0x32c/0x560
+> [  166.020519]  load_module+0x8e0/0x25c0
+> [  166.053854]  __do_sys_finit_module+0x11a/0x1c0
+> [  166.068494]  do_syscall_64+0x59/0x90
+> [  166.095855]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [  165.818200] vmap allocation for size 2498560 failed: use vmalloc=<size> to increase size
+> 
+> Reported-by: Lin Liu <linl@redhat.com>
+> Reported-by: David Hildenbrand <david@redhat.com>
+> [the vmap allocation issue]
+
+Sounds good, you can also mention which issue was reported by whom in 
+the text in addition.
+
+[...]
+
+>>> -static int add_unformed_module(struct module *mod)
+>>> +static struct shared_load_info *add_running_load(const struct load_info *info)
+>>>    {
+>>> -	int err;
+>>>    	struct module *old;
+>>> +	struct shared_load_info *shared_info;
+>>>    
+>>> -	mod->state = MODULE_STATE_UNFORMED;
+>>> -
+>>> -again:
+>>>    	mutex_lock(&module_mutex);
+>>> -	old = find_module_all(mod->name, strlen(mod->name), true);
+>>> -	if (old != NULL) {
+>>> -		if (old->state != MODULE_STATE_LIVE) {
+>>> -			/* Wait in case it fails to load. */
+>>> +
+>>> +	/* Search if there is a running load of a module with the same name. */
+>>> +	list_for_each_entry(shared_info, &running_loads, list)
+>>> +		if (strcmp(shared_info->name, info->name) == 0) {
+>>> +			int err;
+>>> +
+>>> +			shared_load_info_get(shared_info);
+>>>    			mutex_unlock(&module_mutex);
+>>> -			err = wait_event_interruptible(module_wq,
+>>> -					       finished_loading(mod->name));
+>>> -			if (err)
+>>> -				goto out_unlocked;
+>>> -			goto again;
+>>> +
+>>> +			err = wait_for_completion_interruptible(
+>>> +				&shared_info->done);
+>>> +			/*
+>>> +			 * Return -EBUSY when the parallel load failed for any
+>>> +			 * reason. This load might end up another way but we are
+>>> +			 * not going to try.
+>>
+>> Why not? Usually "-EAGAIN" signals that user space should retry. But I
+>> hope that we can avoid EBUSY altogether and simply retry here.
+>>
+>> I'd suggest shared_load_info_put()+retry.
+>>
+>> No need to optimize for corner cases (concurrent load failing so we
+>> don't retry ourselves).
+> 
+> Avoiding a retry in this case is actually the main motivation for this patch.
+> It looks I'm still failing to explain this in the commit message, but please
+> see my replies on previous versions of the patch where I provided more details
+> about the observed issue [1, 2].
+
+How is it the common case we care about that a parallel load *failed* 
+(not with -EEXIST but via some other error)?
+
+That would mean we're optimizing for the case that 400 CPUs try loading 
+the same module and loading the module essentially always fails.
+
+Is this really what we want to optimize?
+
+Isn't there a way to not report EBUSY in that case as well? Return the 
+error from the other load that failed?
 
 > 
-> 
-> vim +424 kernel/kallsyms_selftest.c
-> 
->    275	
->    276	static int test_kallsyms_basic_function(void)
->    277	{
->    278		int i, j, ret;
->    279		int next = 0, nr_failed = 0;
->    280		char *prefix;
->    281		unsigned short rand;
->    282		unsigned long addr, lookup_addr;
->    283		char namebuf[KSYM_NAME_LEN];
->    284		struct test_stat stat, stat2;
->    285	
->    286		prefix = "kallsyms_lookup_name() for";
->    287		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
->    288			addr = kallsyms_lookup_name(test_items[i].name);
->    289			if (addr != test_items[i].addr) {
->    290				nr_failed++;
->    291				pr_info("%s %s failed: addr=%lx, expect %lx\n",
->    292					prefix, test_items[i].name, addr, test_items[i].addr);
->    293			}
->    294		}
->    295	
->    296		prefix = "kallsyms_on_each_symbol() for";
->    297		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
->    298			memset(&stat, 0, sizeof(stat));
->    299			stat.max = INT_MAX;
->    300			stat.name = test_items[i].name;
->    301			kallsyms_on_each_symbol(find_symbol, &stat);
->    302			if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
->    303				nr_failed++;
->    304				pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
->    305					prefix, test_items[i].name,
->    306					stat.real_cnt, stat.addr, test_items[i].addr);
->    307			}
->    308		}
->    309	
->    310		prefix = "kallsyms_on_each_match_symbol() for";
->    311		for (i = 0; i < ARRAY_SIZE(test_items); i++) {
->    312			memset(&stat, 0, sizeof(stat));
->    313			stat.max = INT_MAX;
->    314			stat.name = test_items[i].name;
->    315			kallsyms_on_each_match_symbol(match_symbol, test_items[i].name, &stat);
->    316			if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
->    317				nr_failed++;
->    318				pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
->    319					prefix, test_items[i].name,
->    320					stat.real_cnt, stat.addr, test_items[i].addr);
->    321			}
->    322		}
->    323	
->    324		if (nr_failed)
->    325			return -ESRCH;
->    326	
->    327		for (i = 0; i < kallsyms_num_syms; i++) {
->    328			addr = kallsyms_sym_address(i);
->    329			if (!is_ksym_addr(addr))
->    330				continue;
->    331	
->    332			ret = lookup_symbol_name(addr, namebuf);
->    333			if (unlikely(ret)) {
->    334				namebuf[0] = 0;
->    335				goto failed;
->    336			}
->    337	
->    338			/*
->    339			 * The first '.' may be the initial letter, in which case the
->    340			 * entire symbol name will be truncated to an empty string in
->    341			 * cleanup_symbol_name(). Do not test these symbols.
->    342			 *
->    343			 * For example:
->    344			 * cat /proc/kallsyms | awk '{print $3}' | grep -E "^\." | head
->    345			 * .E_read_words
->    346			 * .E_leading_bytes
->    347			 * .E_trailing_bytes
->    348			 * .E_write_words
->    349			 * .E_copy
->    350			 * .str.292.llvm.12122243386960820698
->    351			 * .str.24.llvm.12122243386960820698
->    352			 * .str.29.llvm.12122243386960820698
->    353			 * .str.75.llvm.12122243386960820698
->    354			 * .str.99.llvm.12122243386960820698
->    355			 */
->    356			if (IS_ENABLED(CONFIG_LTO_CLANG) && !namebuf[0])
->    357				continue;
->    358	
->    359			lookup_addr = kallsyms_lookup_name(namebuf);
->    360	
->    361			memset(&stat, 0, sizeof(stat));
->    362			stat.max = INT_MAX;
->    363			kallsyms_on_each_match_symbol(match_symbol, namebuf, &stat);
->    364	
->    365			/*
->    366			 * kallsyms_on_each_symbol() is too slow, randomly select some
->    367			 * symbols for test.
->    368			 */
->    369			if (i >= next) {
->    370				memset(&stat2, 0, sizeof(stat2));
->    371				stat2.max = INT_MAX;
->    372				stat2.name = namebuf;
->    373				kallsyms_on_each_symbol(find_symbol, &stat2);
->    374	
->    375				/*
->    376				 * kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
->    377				 * need to get the same traversal result.
->    378				 */
->    379				if (stat.addr != stat2.addr ||
->    380				    stat.real_cnt != stat2.real_cnt ||
->    381				    memcmp(stat.addrs, stat2.addrs,
->    382					   stat.save_cnt * sizeof(stat.addrs[0])))
->    383					goto failed;
->    384	
->    385				/*
->    386				 * The average of random increments is 128, that is, one of
->    387				 * them is tested every 128 symbols.
->    388				 */
->    389				get_random_bytes(&rand, sizeof(rand));
->    390				next = i + (rand & 0xff) + 1;
->    391			}
->    392	
->    393			/* Need to be found at least once */
->    394			if (!stat.real_cnt)
->    395				goto failed;
->    396	
->    397			/*
->    398			 * kallsyms_lookup_name() returns the address of the first
->    399			 * symbol found and cannot be NULL.
->    400			 */
->    401			if (!lookup_addr || lookup_addr != stat.addrs[0])
->    402				goto failed;
->    403	
->    404			/*
->    405			 * If the addresses of all matching symbols are recorded, the
->    406			 * target address needs to be exist.
->    407			 */
->    408			if (stat.real_cnt <= MAX_NUM_OF_RECORDS) {
->    409				for (j = 0; j < stat.save_cnt; j++) {
->    410					if (stat.addrs[j] == addr)
->    411						break;
->    412				}
->    413	
->    414				if (j == stat.save_cnt)
->    415					goto failed;
->    416			}
->    417		}
->    418	
->    419		return 0;
->    420	
->    421	failed:
->    422		pr_info("Test for %dth symbol failed: (%s) addr=%lx", i, namebuf, addr);
->    423		return -ESRCH;
->  > 424	}
->    425	
-> 
+> Worth noting is that both your scenario and my case are situations where
+> a same module is attempted to be loaded multiple times, once per each CPU.
+> Even if only one attempt is eventually fully processed, the decision that
+> other parallel loads are not needed happens quite late. In particular, udev
+> (libkmod) still has to load and decompress a given module binary multiple
+> times. Ideally, I think this should be prevented altogether by improving other
+> parts of the whole process. Udev could be made smarter to avoid duplicate
+> loads or the kernel could model uevents related to CPUs differently. This is
+> something that I was also considering but eventually settled on trying to fix
+> only the immediate kernel regression.
+
+Yes, exactly same thoughts here.
+
 
 -- 
-Regards,
-  Zhen Lei
+Thanks,
+
+David / dhildenb
+
