@@ -2,52 +2,69 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46F93FA3748
-	for <linux-modules@archiver.kernel.org>; Mon, 24 Oct 2022 14:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78F3EECAAA1
+	for <linux-modules@archiver.kernel.org>; Mon, 24 Oct 2022 15:23:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbiJXOAT (ORCPT
+        id S230454AbiJXPXY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 24 Oct 2022 10:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        Mon, 24 Oct 2022 11:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237124AbiJXN70 (ORCPT
+        with ESMTP id S231923AbiJXPXA (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:59:26 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2062d.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1a::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D429240A6;
-        Mon, 24 Oct 2022 05:46:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I5OGgm7rABHipgnmJGlhOoTjo1jj6HA3rJ8YDXIwms3a4dXNr4SpcA+gpNWo0jtqsCBSfKItBmNtHkvwABJh8eWnPKOvyKqKGKn1N1NTlJaMAmn/Npmt9Z+KvQZ3Cnwd/01btjxykVfERbM7rtRI12C/uYUk5IsYpP4So3E+eTsavn8YM0MMjGTo/1olzlUW0XHsrHpFeKPlxUPLOpsgbzGkeWxp+G/TA+Q57zJLHGfupMs1Z39YcrukCTXsKJ3DzWv7M9vb57uXDMvkrXUtZn2Cd/MM9WTu2cViPC1x5OW/6W0eteTe3wZMhQO1xBOb8osbso9MISx8AZKypCv7IA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MlUqAbn1TK1GybaPbxdUl2WSBmBLNJigGTp6pCgQVEs=;
- b=IaJXwn+k8G+uLS8ZMNcIF+p/YPFfWl+wLLYzbeMprJp+qG2UjucaTdYehjTLbG4ZZfWSxCJwG/x4fbtw+ud5fWRBPoCBl/qBmHEIEipdWiTg3pB7kl+GqEbH1KotB/TYPTKjIcazOY46F8oLAaxUC4RJSKYeDnkAsBb2a08f+trAsCBPWddxA7sPpda7unj23QJoDnoL/FycUNLdC0+KsgHM+YWf3XWt7ri0EtOsWJdFQJFn69iLYgniif1ydKq0wGVtTHXl8oGDM05diJJfvt1xOS5RaRKOgc43sKqV2cROH2NEdh/+UOlY12NfhY1aK1cBC3TleAzYDu4RgPa23g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MlUqAbn1TK1GybaPbxdUl2WSBmBLNJigGTp6pCgQVEs=;
- b=2iG3nY2DPXNh573L+DgDL3xMU4YiBQI3nreTTrkwPczHdXBZAoEdtPObP5R8xuFI/HrSZ9dx2ysPp8UfyEnG6PSMGOZKXErU+hs4bER8lBcp4utgOd+Fm/BxQVfQrLlnVB7BTCwrAEQRSjPNIUP/EJpM7PSRDO20IOAWnyBPnTrJPTTVv3/p+jdEKAcX635EPM23h3I+tuEsSfMnoWeFiSm+IbVkZYDurb54+1bWGoPavPJFmlxSTJGOAPMZZ1xl41PRcylFyr0DxF3g0s6FHLW232NZb3/52C0+wiqcrZs/dvT23DIM///yEL8BO/3cruFTna3RTwMwH/jcgjJ4Aw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16) by VI1PR04MB6926.eurprd04.prod.outlook.com
- (2603:10a6:803:133::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Mon, 24 Oct
- 2022 12:37:45 +0000
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::7f81:2760:2539:7115]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::7f81:2760:2539:7115%2]) with mapi id 15.20.5723.036; Mon, 24 Oct 2022
- 12:37:45 +0000
-Message-ID: <1b747e11-d358-52aa-0dfc-e795a8949106@suse.com>
-Date:   Mon, 24 Oct 2022 14:37:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
+        Mon, 24 Oct 2022 11:23:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAFF2B5
+        for <linux-modules@vger.kernel.org>; Mon, 24 Oct 2022 07:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666620241;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zfAUAmtuZAJ2/gdCGNu3yXanAGczpHvB4SK/U8ucWH4=;
+        b=GyAYui5eVAHbjnUzXuaQLiSm9UaIn9LSgOljxHAiYdXYjRaqNFBVcxnkLAtklYPfdiFEP4
+        jC1zeV3VsNJzGxPhyKmG0wjiEz2RmeJVQt1fwifv+2raRXianzKVDe8f0R/TTdPUVznRyQ
+        RGaTdtCDS+0WGBEmu3bC1prfAaE96i8=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-249-0AwdnSJ_MK-WTIK8wqEzlA-1; Mon, 24 Oct 2022 10:00:23 -0400
+X-MC-Unique: 0AwdnSJ_MK-WTIK8wqEzlA-1
+Received: by mail-qt1-f198.google.com with SMTP id b12-20020a05622a020c00b003983950639bso7103491qtx.16
+        for <linux-modules@vger.kernel.org>; Mon, 24 Oct 2022 07:00:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zfAUAmtuZAJ2/gdCGNu3yXanAGczpHvB4SK/U8ucWH4=;
+        b=ApLyI0X3V6yfYxMNfJwAsC5ugyJiq52iRyLsqEGU43iyopjjQVa6ifR14awa85n27k
+         hv8h5vIpSlu4jAdUVYa9LSB1YwGtY/D7EawmoK4AiN9uKn7EDxkp1u4Z1h2GukxrHPet
+         VCRiHdh+Ox8t424Ejx/KQqZ9DyM/PJULpQ7lVwIc10JGVesXIP9lw48alO2oqIILe/zW
+         lN3DC0mVsSkVEe3AAWJe5/7MV4+UC77pJxxz4Fix178W+2CCmihOuC/Kxt7GKBpCDd1s
+         wUJffpWIqG+u4z2ObyY2AdBwgAXSl//BR1K1E7hX2KpEvFQ8GtIqFRIR28WlhN/gmdjC
+         gt6A==
+X-Gm-Message-State: ACrzQf3KSXXdSZKg0t8h72NXoQMdwKVvVBYavMONzDYWF47MQj4rmA5v
+        DQTW/qX2i1GnVa5ioz/VAvU5jATkELid01F0LprDjSFW4H1N2UhkcLSooY/8On59Kp9oeEduGZ+
+        SZG9KZqHuMWl+MK/kNQPBccTzVg==
+X-Received: by 2002:a05:620a:4111:b0:6ed:ddf9:6955 with SMTP id j17-20020a05620a411100b006edddf96955mr22791746qko.19.1666620023279;
+        Mon, 24 Oct 2022 07:00:23 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4b+bYbc6QWX6s1Eqnf4Y9AvCIRYdXACGADlzYGuUDmKZpTN1IFVNl7kD66DHjZw/UmufcYcQ==
+X-Received: by 2002:a05:620a:4111:b0:6ed:ddf9:6955 with SMTP id j17-20020a05620a411100b006edddf96955mr22791716qko.19.1666620022904;
+        Mon, 24 Oct 2022 07:00:22 -0700 (PDT)
+Received: from [10.16.222.26] (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b006ef1a8f1b81sm31248qko.5.2022.10.24.07.00.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 07:00:22 -0700 (PDT)
+Message-ID: <3ca5f15d-7d14-2ab0-db1f-1c4384894e0d@redhat.com>
+Date:   Mon, 24 Oct 2022 10:00:20 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
 Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
 Content-Language: en-US
-To:     Prarit Bhargava <prarit@redhat.com>,
+To:     Petr Pavlu <petr.pavlu@suse.com>,
         Luis Chamberlain <mcgrof@kernel.org>
 Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -57,134 +74,111 @@ References: <20220919123233.8538-1-petr.pavlu@suse.com>
  <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
  <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
  <2342ef17-f8f9-501f-0f7b-5a69e85c2cf4@redhat.com>
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <2342ef17-f8f9-501f-0f7b-5a69e85c2cf4@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+ <1b747e11-d358-52aa-0dfc-e795a8949106@suse.com>
+From:   Prarit Bhargava <prarit@redhat.com>
+In-Reply-To: <1b747e11-d358-52aa-0dfc-e795a8949106@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0046.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4a::12) To AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|VI1PR04MB6926:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2a2dbf83-b4e6-43b3-2767-08dab5bc8d32
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jRZFnM8MEuPugIZtFy33IlHgd+ImMfmr9bU90tOzG/sQ45Vv5FFGH/IHrw60qAsGzn8saF+b1fMzDEaDpyawEsQeglIZvwi8HYc1jiAnBvOmBFL0B3YO1ittG0hfYsofeJIBgep1rrCNRiYhm/KR6WGeO8wWOgm34JkNdmk5PXRHH6Y9yG3bwg5d7cSi342m33C1JLetab/hJD91PX3TgT8FZjRvpghDkAZo891libDDzqdknw0PL9w/jD/rObRcVP/IfsSL928hmvesLNU5H7+zs0YEMKSKfWhsBHlzDoS4+k+oLOMdDMyR+oZ+Y2q0v92+w/nVzdJWHWVyTpNrgLRwKixL5ayt9F2EY0n2vn0KOQBLScEL7vit5qk4fr8gsLQskioeT1CDXF3p4GgKWPgIxZbtp5wnFFItOZY60U1qU0WKXHaQ2H/GAT5hz5wRrkw+AnS1QkQjg7YzZfefYTQbTOPW2mKFHXNbiLTV6rSOEJLTjcuTv7xv+441Aah5EiNX7YjaKE4FhKW2RMoVX33/vOSgIuHNSz8lN+pRiXY5IpEXOEVuQ+TlRBIC5jX2kujVLP5zW6iXsgPKmeQ6hNJHTA7TnLyxHnG1KCCKWizXPM6wql5Kg3rsrwiZg0t6aJzlsGvEsbg8lDAy4H6gxlwJh6NpXa7a2lzA/TytvKqoG3ZPxz9MV8cPgKAp0lWUKZ3mc/XSpmJfk+1qyusyMWTgmVQPY2xFdYQeJF87+092DvYl7jgOCekIBCwkKRACEeWEUS8BvgXhiY5Cbx7Z+FckPqLt4oGlhA/+GPDymPNuEoGhXU/Hvv7kPZToPFWr
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(346002)(376002)(136003)(396003)(366004)(451199015)(86362001)(31696002)(6506007)(36756003)(41300700001)(6512007)(26005)(4326008)(8676002)(55236004)(53546011)(44832011)(2616005)(66476007)(5660300002)(66556008)(8936002)(6486002)(966005)(478600001)(66946007)(316002)(110136005)(38100700002)(186003)(2906002)(83380400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YTkwNTNhOUpBSEtBWXdseXJ6YjdTK2QzbktPd1hlaUd1dGMrMmc1TVNqSjhp?=
- =?utf-8?B?YTRUaWs1VUc0S3FLa3M0VzNKdFBJRTlIUU03M1grc20ySjZGbEVETnYzbVVa?=
- =?utf-8?B?UDVZUkdwN1o1V1F6V3RHWWZJWnlML24rVTNzaTdRTTg2Ty9XdE85OWFnSFhr?=
- =?utf-8?B?OGZBMmc2S0R5bXJ2WDZaYXBnMEZQZUlVdGovNEpFbXk2M3hxY1FSNUNKUit6?=
- =?utf-8?B?ZTcxbHZUTnRqZGErVmE3OXFoS3p5MTBmRlJlbG5XWXVpM0I0L2VXU1MveWp1?=
- =?utf-8?B?R3QzcGZmU3JScmVCQ0lGcUhWQzQ0YXhKYUZLOWRqZEtqS21ZaEpGSXBGNm5N?=
- =?utf-8?B?SkFmZXRlc1cxVWVnTjg0NklzdVFGdjJLM3Z5eXRDem9QMHp6V1ducDdlTjBZ?=
- =?utf-8?B?aDZISTZYcmV3aTZxMTBxQ0JUK3hWVnVFRnpTS0JWN2VoeXJoTkJaVVk1Tm5s?=
- =?utf-8?B?QitKM2lTd3dVU1UyMjgxYnIxdDFhMHh1VW01UHczSFo3cW5CU3RFOC9xYUVU?=
- =?utf-8?B?anN5RmVVMUNXZ2FiMjhBVDArWFUxRlovekhUNnNxLzlxaWFEZ1paYjArYjFw?=
- =?utf-8?B?Z3NWTW05Zk9Lb1VOTlhxcHFySlFmb3BGWTdCMk04YXpzV1JKaXg1WnkwQmRz?=
- =?utf-8?B?MzUyejgya1NNbnpMMkVhZTl6MXllbThvSVV1RFJzcG5wdDFXTldxVlJDa0lL?=
- =?utf-8?B?NXdKRnNrSVVySVlsSVgrZWRXRS92MDBFeHpITkVlcHltVUhiMnRsN3pWdGkr?=
- =?utf-8?B?UDNDK3U2cjVTWmtxd0l0SGRZb2xHUzE4MlFydlFOeG9reFc4SkdjZkZldnJl?=
- =?utf-8?B?emlJVjBVRXo1bjJLUlpDRjVQdHlBVURSRU52aUZYVEp1Z2Q5aEc0eTUxamhh?=
- =?utf-8?B?dDFmVFJ4bEdvNTFWTGlRTWVmaUtVT1N6RXhzQ1FITkJ5cnBtK05PaEJ5Wlhr?=
- =?utf-8?B?MzNLOGhSSGE1OXUvVkQzeTZXYUJuS0dxaGJQMy9NbGNoRk9xMjJ6VDdzTmdl?=
- =?utf-8?B?dEh5VDdvdUVNYm9mQVoyZ0lnajNsMHBEMXNYWDBNcnpKYmNpdk1lTnpCWGpj?=
- =?utf-8?B?M0duN0JuR1BSM0pXN3J1RTVibW1wRzViU0xlaVd1NGlVUWpZZFhnRmg1VmZE?=
- =?utf-8?B?VzkyNkpwNVlvNG9vR0MrRlV2KzgwWUFWcWZtOVcyQngrbHZYNTVjWUVQOEwv?=
- =?utf-8?B?K2tnTVNlYnBCbnRqdlNsNm5BcDRIY3NYR1pDSXpzNFFxZ0l3VFlyQjRWeTBn?=
- =?utf-8?B?MGl0czcvc2VPNDFFRURDU3dUMTh0QVYxMGZUanFwMHEvOVRveTkrQWowNG1h?=
- =?utf-8?B?bWwxdnQxWEdYOUVzb2lYcnJXQXEvR0RXZ3g0R0RpaW1tR1NxUS9LU2pHdzd2?=
- =?utf-8?B?RXBZUXR4aW9TZTNkWmtYOE5kV3JVRnR6bTBkeGhha2Rrb25ocmRYRkQ5TTlO?=
- =?utf-8?B?UDJ0Y215bDJhTnlKcHNaNk1mSXFMOUxTSWFyQjFzemRpdERieVFEVk0zVjJl?=
- =?utf-8?B?OUE3b1BTN1plSjdiMGxobDVxVGJEZjRKSDM1VHlvZkpTSnZEY25xTkxJU3Zv?=
- =?utf-8?B?d2NuTXJxb2Zvby9aNHlNcU1ZemJ3T1FEU3hObXJ6dGpqRjZxakhza2NNdEFp?=
- =?utf-8?B?bXJzMTBZTWFocmV5bVdUR3dOQm9TSWZYelU0SDkzWjl1WEZJQmF0djZ0eC8r?=
- =?utf-8?B?cEk4WlFFUnJzVzRrM3FIR21NWXJxdGxhbkRFN0xFcXRUZTVNYlZNb0ZpbG5R?=
- =?utf-8?B?Vlo0UXJhRzRzOUR6VVlnUytTd1IxYnE2L3Y4eXR2b0dDLzczaVVBS3lrTFJp?=
- =?utf-8?B?THJ4b2dPM0JBR1JMTnFvd0x6MXBjMjZXeFhRVGh6QjYzbWRDWmVrNi8vTlM1?=
- =?utf-8?B?Yml0dUJ3aUgwV05tUkZwTnlvVmZ3NVMydVFyL1lNYmNhVmZlUmVONGNLVFhS?=
- =?utf-8?B?NWlTYTlrL3NVR3hBNU95eko5aDZKVWxLNjk2WGJsMVEzWEVXODlucVRPb0dZ?=
- =?utf-8?B?dGp1eG90dzM2WnBpSEozSTdiSTBQbWpVMEdmWTVKN29BVWpZOER3SEdNbXht?=
- =?utf-8?B?M081Q0Z0dm84Z2JQSXNpejg1V0dyQ1d1R2dHN1JPWVc2Z3RCTkxXK1hkbFM5?=
- =?utf-8?Q?CqLA5MbEwiLdxmbexak643/1D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a2dbf83-b4e6-43b3-2767-08dab5bc8d32
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 12:37:45.5731
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9W/Wa3M8MuvqSc36kEI7P+Ukyov+PMklzMKwwiEcjHYViegEYoZ2PDX8VtiTXLQDmJq6J9tu52w+d3xw8GcOow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6926
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 10/18/22 21:53, Prarit Bhargava wrote:
-> Quoting from the original thread,
-> 
+On 10/24/22 08:37, Petr Pavlu wrote:
+> On 10/18/22 21:53, Prarit Bhargava wrote:
+>> Quoting from the original thread,
 >>
->> Motivation for this patch is to fix an issue observed on larger machines with
->> many CPUs where it can take a significant amount of time during boot to run
->> systemd-udev-trigger.service. An x86-64 system can have already intel_pstate
->> active but as its CPUs can match also acpi_cpufreq and pcc_cpufreq, udev will
->> attempt to load these modules too. The operation will eventually fail in the
->> init function of a respective module where it gets recognized that another
->> cpufreq driver is already loaded and -EEXIST is returned. However, one uevent
->> is triggered for each CPU and so multiple loads of these modules will be
->> present. The current code then processes all such loads individually and
->> serializes them with the barrier in add_unformed_module().
+>>>
+>>> Motivation for this patch is to fix an issue observed on larger machines with
+>>> many CPUs where it can take a significant amount of time during boot to run
+>>> systemd-udev-trigger.service. An x86-64 system can have already intel_pstate
+>>> active but as its CPUs can match also acpi_cpufreq and pcc_cpufreq, udev will
+>>> attempt to load these modules too. The operation will eventually fail in the
+>>> init function of a respective module where it gets recognized that another
+>>> cpufreq driver is already loaded and -EEXIST is returned. However, one uevent
+>>> is triggered for each CPU and so multiple loads of these modules will be
+>>> present. The current code then processes all such loads individually and
+>>> serializes them with the barrier in add_unformed_module().
+>>>
 >>
+>> The way to solve this is not in the module loading code, but in the udev
+>> code by adding a new event or in the userspace which handles the loading
+>> events.
+>>
+>> Option 1)
+>>
+>> Write/modify a udev rule to to use a flock userspace file lock to
+>> prevent repeated loading.  The problem with this is that it is still
+>> racy and still consumes CPU time repeated load the ELF header and,
+>> depending on the system (ie a large number of cpus) would still cause a
+>> boot delay.  This would be better than what we have and is worth looking
+>> at as a simple solution.  I'd like to see boot times with this change,
+>> and I'll try to come up with a measurement on a large CPU system.
 > 
-> The way to solve this is not in the module loading code, but in the udev 
-> code by adding a new event or in the userspace which handles the loading 
-> events.
+> It is not immediately clear to me how this can be done as a udev rule. You
+> mention that you'll try to test this on a large CPU system. Does it mean that
+> you have a prototype implemented already? If yes, could you please share it?
 > 
-> Option 1)
+
+Hi Petr,
+
+Sorry, I haven't had a chance to actually test this out but I see this 
+problem with the acpi_cpufreq and other multiple-cpu drivers which load 
+once per logical cpu.  I was thinking of adding a udev rule like:
+
+ACTION!="add", GOTO="acpi_cpufreq_end"
+
+# I may have to add CPU modaliases here to get this to work correctly
+ENV{MODALIAS}=="acpi:ACPI0007:", GOTO="acpi_cpufreq_start"
+
+GOTO="acpi_cpufreq_start"
+GOTO="acpi_cpufreq_end"
+
+LABEL="acpi_cpufreq_start"
+
+ENV{DELAY_MODALIAS}="$env{MODALIAS}"
+ENV{MODALIAS}=""
+PROGRAM="/bin/sh -c flock -n /tmp/delay_acpi_cpufreq sleep 2'", 
+RESULT=="", RUN{builtin}+="kmod load $env{DELAY_MODALIAS}"
+
+LABEL="acpi_cpufreq_end"
+
+
+> My reading is that one would need to update the "MODALIAS" rule in
+> 80-drivers.rules [1] to do this locking. However, that just collects
+> 'kmod load' (builtin) for udev to execute after all rules are processed. It
+> would then be required to synchronize udev workers to prevent repeated
+> loading?
 > 
-> Write/modify a udev rule to to use a flock userspace file lock to 
-> prevent repeated loading.  The problem with this is that it is still 
-> racy and still consumes CPU time repeated load the ELF header and, 
-> depending on the system (ie a large number of cpus) would still cause a 
-> boot delay.  This would be better than what we have and is worth looking 
-> at as a simple solution.  I'd like to see boot times with this change, 
-> and I'll try to come up with a measurement on a large CPU system.
 
-It is not immediately clear to me how this can be done as a udev rule. You
-mention that you'll try to test this on a large CPU system. Does it mean that
-you have a prototype implemented already? If yes, could you please share it?
+Yes, that would be the case.
 
-My reading is that one would need to update the "MODALIAS" rule in
-80-drivers.rules [1] to do this locking. However, that just collects
-'kmod load' (builtin) for udev to execute after all rules are processed. It
-would then be required to synchronize udev workers to prevent repeated
-loading?
-
-> Option 2)
+>> Option 2)
+>>
+>> Create a new udev action, "add_once" to indicate to userspace that the
+>> module only needs to be loaded one time, and to ignore further load
+>> requests.  This is a bit tricky as both kernel space and userspace would
+>> have be modified.  The udev rule would end up looking very similar to
+>> what we now.
+>>
+>> The benefit of option 2 is that driver writers themselves can choose
+>> which drivers should issue "add_once" instead of add.  Drivers that are
+>> known to run on all devices at once would call "add_once" to only issue
+>> a single load.
 > 
-> Create a new udev action, "add_once" to indicate to userspace that the 
-> module only needs to be loaded one time, and to ignore further load 
-> requests.  This is a bit tricky as both kernel space and userspace would 
-> have be modified.  The udev rule would end up looking very similar to 
-> what we now.
+> On the device event side, I more wonder if it would be possible to avoid tying
+> up cpufreq and edac modules to individual CPU devices. Maybe their loading
+> could be attached to some platform device, even if it means introducing an
+> auxiliary device for this purpose? I need to look a bit more into this idea.
+
+That's an interesting idea and something I had not considered.  Creating 
+a virtual device and loading against that device would be much better 
+(easier?) of a solution.
+
+P.
+
 > 
-> The benefit of option 2 is that driver writers themselves can choose 
-> which drivers should issue "add_once" instead of add.  Drivers that are 
-> known to run on all devices at once would call "add_once" to only issue 
-> a single load.
-
-On the device event side, I more wonder if it would be possible to avoid tying
-up cpufreq and edac modules to individual CPU devices. Maybe their loading
-could be attached to some platform device, even if it means introducing an
-auxiliary device for this purpose? I need to look a bit more into this idea.
-
-[1] https://github.com/systemd/systemd/blob/4856f63846fc794711e1b8ec970e4c56494cd320/rules.d/80-drivers.rules
-
-Thanks,
-Petr
+> [1] https://github.com/systemd/systemd/blob/4856f63846fc794711e1b8ec970e4c56494cd320/rules.d/80-drivers.rules
+> 
+> Thanks,
+> Petr
+> 
 
