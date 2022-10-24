@@ -2,183 +2,146 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78F3EECAAA1
-	for <linux-modules@archiver.kernel.org>; Mon, 24 Oct 2022 15:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B2FAC67871
+	for <linux-modules@archiver.kernel.org>; Mon, 24 Oct 2022 20:08:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbiJXPXY (ORCPT
+        id S231587AbiJXUIb (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 24 Oct 2022 11:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
+        Mon, 24 Oct 2022 16:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231923AbiJXPXA (ORCPT
+        with ESMTP id S230281AbiJXUID (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:23:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAFF2B5
-        for <linux-modules@vger.kernel.org>; Mon, 24 Oct 2022 07:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666620241;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zfAUAmtuZAJ2/gdCGNu3yXanAGczpHvB4SK/U8ucWH4=;
-        b=GyAYui5eVAHbjnUzXuaQLiSm9UaIn9LSgOljxHAiYdXYjRaqNFBVcxnkLAtklYPfdiFEP4
-        jC1zeV3VsNJzGxPhyKmG0wjiEz2RmeJVQt1fwifv+2raRXianzKVDe8f0R/TTdPUVznRyQ
-        RGaTdtCDS+0WGBEmu3bC1prfAaE96i8=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-249-0AwdnSJ_MK-WTIK8wqEzlA-1; Mon, 24 Oct 2022 10:00:23 -0400
-X-MC-Unique: 0AwdnSJ_MK-WTIK8wqEzlA-1
-Received: by mail-qt1-f198.google.com with SMTP id b12-20020a05622a020c00b003983950639bso7103491qtx.16
-        for <linux-modules@vger.kernel.org>; Mon, 24 Oct 2022 07:00:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zfAUAmtuZAJ2/gdCGNu3yXanAGczpHvB4SK/U8ucWH4=;
-        b=ApLyI0X3V6yfYxMNfJwAsC5ugyJiq52iRyLsqEGU43iyopjjQVa6ifR14awa85n27k
-         hv8h5vIpSlu4jAdUVYa9LSB1YwGtY/D7EawmoK4AiN9uKn7EDxkp1u4Z1h2GukxrHPet
-         VCRiHdh+Ox8t424Ejx/KQqZ9DyM/PJULpQ7lVwIc10JGVesXIP9lw48alO2oqIILe/zW
-         lN3DC0mVsSkVEe3AAWJe5/7MV4+UC77pJxxz4Fix178W+2CCmihOuC/Kxt7GKBpCDd1s
-         wUJffpWIqG+u4z2ObyY2AdBwgAXSl//BR1K1E7hX2KpEvFQ8GtIqFRIR28WlhN/gmdjC
-         gt6A==
-X-Gm-Message-State: ACrzQf3KSXXdSZKg0t8h72NXoQMdwKVvVBYavMONzDYWF47MQj4rmA5v
-        DQTW/qX2i1GnVa5ioz/VAvU5jATkELid01F0LprDjSFW4H1N2UhkcLSooY/8On59Kp9oeEduGZ+
-        SZG9KZqHuMWl+MK/kNQPBccTzVg==
-X-Received: by 2002:a05:620a:4111:b0:6ed:ddf9:6955 with SMTP id j17-20020a05620a411100b006edddf96955mr22791746qko.19.1666620023279;
-        Mon, 24 Oct 2022 07:00:23 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4b+bYbc6QWX6s1Eqnf4Y9AvCIRYdXACGADlzYGuUDmKZpTN1IFVNl7kD66DHjZw/UmufcYcQ==
-X-Received: by 2002:a05:620a:4111:b0:6ed:ddf9:6955 with SMTP id j17-20020a05620a411100b006edddf96955mr22791716qko.19.1666620022904;
-        Mon, 24 Oct 2022 07:00:22 -0700 (PDT)
-Received: from [10.16.222.26] (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b006ef1a8f1b81sm31248qko.5.2022.10.24.07.00.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 07:00:22 -0700 (PDT)
-Message-ID: <3ca5f15d-7d14-2ab0-db1f-1c4384894e0d@redhat.com>
-Date:   Mon, 24 Oct 2022 10:00:20 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
+        Mon, 24 Oct 2022 16:08:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC24213E2D;
+        Mon, 24 Oct 2022 11:27:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EF3dfbCXssSwWopFX4bO0gLJ97ZCziT/aN+xXzLRDMQ=; b=URvLDdyKS//D0ORqv6ydCJ7ZKZ
+        Sn0lg1TnDa6oI31wT1QCThPPKyIW8uCLxXeau+b/a4CbdN1EuZA88hRsyqtmyEx79zzeSBl/o2da8
+        y4OSBJX2vdKCmbMgPf/Dl7wHMK4ERC1Dmd7nbqiEaA4l//jCO+/+cCtwA4G38HHtOdLNgl+upyVvR
+        rIFZe6pOYI3v0EJ/CPAMe/UhTsummtp1xS6N8OLugJqSwtzmuASODv7VMZV6xwiJORR9JAknt0cqX
+        pxwnnsb/7ydKamK08R71SGseaxE0VdO40W6pE4oH8epVVLDVpssPiKTDYpuf1j0wguBAqaYvZuaNO
+        Qute+SvA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1on1e9-002Y9W-Ko; Mon, 24 Oct 2022 17:53:57 +0000
+Date:   Mon, 24 Oct 2022 10:53:57 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
-Content-Language: en-US
-To:     Petr Pavlu <petr.pavlu@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Message-ID: <Y1bRNStBDrFqf/EH@bombadil.infradead.org>
 References: <20220919123233.8538-1-petr.pavlu@suse.com>
  <20220919123233.8538-3-petr.pavlu@suse.com>
  <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
  <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
  <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
- <2342ef17-f8f9-501f-0f7b-5a69e85c2cf4@redhat.com>
- <1b747e11-d358-52aa-0dfc-e795a8949106@suse.com>
-From:   Prarit Bhargava <prarit@redhat.com>
-In-Reply-To: <1b747e11-d358-52aa-0dfc-e795a8949106@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
+ <Y1Dyy/SAP1U3tPve@alley>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1Dyy/SAP1U3tPve@alley>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 10/24/22 08:37, Petr Pavlu wrote:
-> On 10/18/22 21:53, Prarit Bhargava wrote:
->> Quoting from the original thread,
->>
->>>
->>> Motivation for this patch is to fix an issue observed on larger machines with
->>> many CPUs where it can take a significant amount of time during boot to run
->>> systemd-udev-trigger.service. An x86-64 system can have already intel_pstate
->>> active but as its CPUs can match also acpi_cpufreq and pcc_cpufreq, udev will
->>> attempt to load these modules too. The operation will eventually fail in the
->>> init function of a respective module where it gets recognized that another
->>> cpufreq driver is already loaded and -EEXIST is returned. However, one uevent
->>> is triggered for each CPU and so multiple loads of these modules will be
->>> present. The current code then processes all such loads individually and
->>> serializes them with the barrier in add_unformed_module().
->>>
->>
->> The way to solve this is not in the module loading code, but in the udev
->> code by adding a new event or in the userspace which handles the loading
->> events.
->>
->> Option 1)
->>
->> Write/modify a udev rule to to use a flock userspace file lock to
->> prevent repeated loading.  The problem with this is that it is still
->> racy and still consumes CPU time repeated load the ELF header and,
->> depending on the system (ie a large number of cpus) would still cause a
->> boot delay.  This would be better than what we have and is worth looking
->> at as a simple solution.  I'd like to see boot times with this change,
->> and I'll try to come up with a measurement on a large CPU system.
+On Thu, Oct 20, 2022 at 09:03:39AM +0200, Petr Mladek wrote:
+> On Wed 2022-10-19 14:00:55, Petr Pavlu wrote:
+> > On 10/18/22 20:33, Luis Chamberlain wrote:
+> > > On Sat, Oct 15, 2022 at 11:27:10AM +0200, Petr Pavlu wrote:
+> > >> The patch does address a regression observed after commit 6e6de3dee51a
+> > >> ("kernel/module.c: Only return -EEXIST for modules that have finished
+> > >> loading"). I guess it can have a Fixes tag added to the patch.
+> > >>
+> > >> I think it is hard to split this patch into parts because the implemented
+> > >> "optimization" is the fix.
+> > > 
+> > > git describe --contains 6e6de3dee51a
+> > > v5.3-rc1~38^2~6
+> > > 
+> > > I'm a bit torn about this situation. Reverting 6e6de3dee51a would be the
+> > > right thing to do, but without it, it still leaves the issue reported
+> > > by Prarit Bhargava. We need a way to resolve the issue on stable and
+> > > then your optimizations can be applied on top.
+> > 
+> > Simpler could be to do the following:
+> > 
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index d02d39c7174e..0302ac387e93 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
+> >  	sched_annotate_sleep();
+> >  	mutex_lock(&module_mutex);
+> >  	mod = find_module_all(name, strlen(name), true);
+> > -	ret = !mod || mod->state == MODULE_STATE_LIVE;
+> > +	ret = !mod || mod->state == MODULE_STATE_LIVE
+> > +		|| mod->state == MODULE_STATE_GOING;
+> >  	mutex_unlock(&module_mutex);
+> >  
+> >  	return ret;
+> > @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
+> >  	mutex_lock(&module_mutex);
+> >  	old = find_module_all(mod->name, strlen(mod->name), true);
+> >  	if (old != NULL) {
+> > -		if (old->state != MODULE_STATE_LIVE) {
+> > +		if (old->state == MODULE_STATE_COMING
+> > +		    || old->state == MODULE_STATE_UNFORMED) {
+> >  			/* Wait in case it fails to load. */
+> >  			mutex_unlock(&module_mutex);
+> >  			err = wait_event_interruptible(module_wq,
+> > @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
+> >  				goto out_unlocked;
+> >  			goto again;
+> >  		}
+> > -		err = -EEXIST;
+> > +		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
+> >
+> >  		goto out;
+> >  	}
+> >  	mod_update_bounds(mod);
+> > 
+> > This is an alternative approach to fix the issue that 6e6de3dee51a addressed
+> > and it preserves the previous handling of same-module parallel loads.
+> > 
+> > It works well in practice but a problem is that this previous handling is
+> > somewhat fragile because it requires specific timings. A second load of a same
+> > module returns EBUSY only if it observes the first load in the going state.
+> > 
+> > The following can then happen:
+> > * A first load of module A is requested. It passes add_unformed_module() and
+> >   proceeds with full initialization.
+> > * A second load of module A arrives. It proceeds up to add_unformed_module()
+> >   where it waits on the first module to complete its initialization.
+> > * The first load fails because its init function happens to produce an error.
+> >   The cleanup code in do_init_module() unlinks the module from the modules
+> >   list, frees the module and finally calls wake_up_all(&module_wq).
+> > * The second load gets woken up. It sees that there is no module with the same
+> >   name in the modules list and continues with its full initialization, which
+> >   likely again fails in the init function.
 > 
-> It is not immediately clear to me how this can be done as a udev rule. You
-> mention that you'll try to test this on a large CPU system. Does it mean that
-> you have a prototype implemented already? If yes, could you please share it?
+> Another solution would be to add one more reference counter directly
+> into struct module. The existing counter is about dependencies on the
+> module. It forces the module to stay in MODULE_STATE_LIVE when there
+> is some dependency. The new reference counter would be just about
+> life time of struct module.
 > 
-
-Hi Petr,
-
-Sorry, I haven't had a chance to actually test this out but I see this 
-problem with the acpi_cpufreq and other multiple-cpu drivers which load 
-once per logical cpu.  I was thinking of adding a udev rule like:
-
-ACTION!="add", GOTO="acpi_cpufreq_end"
-
-# I may have to add CPU modaliases here to get this to work correctly
-ENV{MODALIAS}=="acpi:ACPI0007:", GOTO="acpi_cpufreq_start"
-
-GOTO="acpi_cpufreq_start"
-GOTO="acpi_cpufreq_end"
-
-LABEL="acpi_cpufreq_start"
-
-ENV{DELAY_MODALIAS}="$env{MODALIAS}"
-ENV{MODALIAS}=""
-PROGRAM="/bin/sh -c flock -n /tmp/delay_acpi_cpufreq sleep 2'", 
-RESULT=="", RUN{builtin}+="kmod load $env{DELAY_MODALIAS}"
-
-LABEL="acpi_cpufreq_end"
-
-
-> My reading is that one would need to update the "MODALIAS" rule in
-> 80-drivers.rules [1] to do this locking. However, that just collects
-> 'kmod load' (builtin) for udev to execute after all rules are processed. It
-> would then be required to synchronize udev workers to prevent repeated
-> loading?
+> It should be easier than to add new structure for passing err code.
 > 
+> Also it would allow to remove the racy finished_loading().
+> wait_event_interruptible() could just check mod->state.
 
-Yes, that would be the case.
+Sounds good, but let us just keep in mind we *first* want a fix for
+stable, which also fixes 6e6de3dee51a and addresses the fix it intended
+to have.
 
->> Option 2)
->>
->> Create a new udev action, "add_once" to indicate to userspace that the
->> module only needs to be loaded one time, and to ignore further load
->> requests.  This is a bit tricky as both kernel space and userspace would
->> have be modified.  The udev rule would end up looking very similar to
->> what we now.
->>
->> The benefit of option 2 is that driver writers themselves can choose
->> which drivers should issue "add_once" instead of add.  Drivers that are
->> known to run on all devices at once would call "add_once" to only issue
->> a single load.
-> 
-> On the device event side, I more wonder if it would be possible to avoid tying
-> up cpufreq and edac modules to individual CPU devices. Maybe their loading
-> could be attached to some platform device, even if it means introducing an
-> auxiliary device for this purpose? I need to look a bit more into this idea.
+So I welcome patches, let us first get a small fix in for 6e6de3dee51a
+and we can optimize away after.
 
-That's an interesting idea and something I had not considered.  Creating 
-a virtual device and loading against that device would be much better 
-(easier?) of a solution.
-
-P.
-
-> 
-> [1] https://github.com/systemd/systemd/blob/4856f63846fc794711e1b8ec970e4c56494cd320/rules.d/80-drivers.rules
-> 
-> Thanks,
-> Petr
-> 
-
+  Luis
