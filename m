@@ -2,184 +2,75 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8715AC38A2D
-	for <linux-modules@archiver.kernel.org>; Mon, 24 Oct 2022 21:49:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88D41FA373E
+	for <linux-modules@archiver.kernel.org>; Tue, 25 Oct 2022 17:51:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiJXVtk (ORCPT
+        id S230366AbiJYRvV (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 24 Oct 2022 17:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        Tue, 25 Oct 2022 13:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbiJXVsj (ORCPT
+        with ESMTP id S231889AbiJYRvT (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:48:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B8B285B5D
-        for <linux-modules@vger.kernel.org>; Mon, 24 Oct 2022 13:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666641561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4yFzP+SUyhmoWsUm8wlibl5IGQr01hdntFp1qHSNIyk=;
-        b=RhqMTEncmTZda4tm9CFbA5CSCucJYOZrn4n+hfgpmQ0A5+fyrJgdFlbcY95rI0jY3Z4rbJ
-        5+aNlBxbUbRKZO1qedR4TF/C84xbwpN/rL3oZFyR6wB5vNaWHv8uifgG/QyEiNj5j2IpZE
-        IPE+Buj/H7LdmyBa65HrfQjfsePdFEA=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-606-kjVq95eNNWeqB01XeKZAWg-1; Mon, 24 Oct 2022 09:22:38 -0400
-X-MC-Unique: kjVq95eNNWeqB01XeKZAWg-1
-Received: by mail-qv1-f69.google.com with SMTP id jn13-20020ad45ded000000b004b1d055fbc7so5170609qvb.2
-        for <linux-modules@vger.kernel.org>; Mon, 24 Oct 2022 06:22:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4yFzP+SUyhmoWsUm8wlibl5IGQr01hdntFp1qHSNIyk=;
-        b=itB7avV18xWOwCRT4GVKEFjsKFH8MVbsqECT8P7Job8Ximpf0wMzwiWn2nF/xwVRtv
-         jJM6qgFf76R/hvtfCnwbeDSjhkKU1Wyn415Ronga0vEUwqHO9Uy88boURtfWl7+WX6tR
-         FMbav25C94BqnvDwc5MVOW4hjbwyHkDTMzUe3ONQ+5AloknNSPspL98WJA7mApGWvnVQ
-         z+bfKd+pUqVEqREdYJZAICemNZKO7uECUN8kifYTmfGkGNSQ+mWZiJ1WLs49vuEBsYcB
-         twndnXqmHkpx5vvh8zeWsLGRtt3KO9Z7w53iGF1LW5TzI+j52W8rTQ+UACV06/ymvyqp
-         NXxQ==
-X-Gm-Message-State: ACrzQf2rtOt5rltU8tsYfLEe6ViGQU2zUINea0nB92HGot7o1n7qKjW/
-        MXFng4C6iyo8XQQZSXkf1t6W740lQ9yp+lbY1rmouBmwBUXxEz8GzCiYV5IKkIbBlDRaI1s3+pD
-        uaH2ycQChR+m7d6xmVbiemjzNyw==
-X-Received: by 2002:a05:620a:13e1:b0:6ee:9408:1f90 with SMTP id h1-20020a05620a13e100b006ee94081f90mr23038349qkl.502.1666617758388;
-        Mon, 24 Oct 2022 06:22:38 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5/mEYrDkNwyLxqg2VNkiHN2kXMv4D8ir4idxS6UCSaxtUMTT//i1ZNYxV2Fp4BYylrhhi+6w==
-X-Received: by 2002:a05:620a:13e1:b0:6ee:9408:1f90 with SMTP id h1-20020a05620a13e100b006ee94081f90mr23038322qkl.502.1666617757993;
-        Mon, 24 Oct 2022 06:22:37 -0700 (PDT)
-Received: from [10.16.222.26] (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05620a414b00b006e99290e83fsm15183842qko.107.2022.10.24.06.22.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 06:22:37 -0700 (PDT)
-Message-ID: <848276b0-f038-565a-cad1-30a0531cc851@redhat.com>
-Date:   Mon, 24 Oct 2022 09:22:35 -0400
+        Tue, 25 Oct 2022 13:51:19 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D1F1900A;
+        Tue, 25 Oct 2022 10:51:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5N1wutp/qlXBYy2QP7C/3+5yhBOHXBrYT/91aOtTBAU=; b=QuXa0ioU3lLXiJ3+Vjs8Dn2cxi
+        8tMU2Rfj6xaIQAk0vicqGHCxB5kNEn4wZN0kmgGoy2jnGvcLu9WqNKkGBf9u53m97Fe4/t0elf2o4
+        ZYG3sHFienIpVx4jnraCmtXmDLvLcr6Oqs8UNEbCRbNtziOeHqCF40ixz3aEppokHXbpoNE2hPWWy
+        itEUCJbnFHWTnPBY3YkeREHpder8a1/Bbv1yFaddphXYLmapwe3G4FnbgHTF7G8kCobLQcB9z25cF
+        FBH+G6hsvd6KuhwXZMm/GYXeq4uPfCvef4eyw+mX9VvczqJ+2IJEJ35NTYIjKo+Vzpl/RBCHflrPw
+        CKf/H6DQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1onO54-006YCt-FJ; Tue, 25 Oct 2022 17:51:14 +0000
+Date:   Tue, 25 Oct 2022 10:51:14 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Petr Pavlu <petr.pavlu@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     pmladek@suse.com, david@redhat.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] selftests: kmod: Add tests for merging same-name
+ module load requests
+Message-ID: <Y1giEusr0/sGNrGC@bombadil.infradead.org>
+References: <20221016123031.3963-1-petr.pavlu@suse.com>
+ <20221016123031.3963-5-petr.pavlu@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Petr Pavlu <petr.pavlu@suse.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220919123233.8538-1-petr.pavlu@suse.com>
- <20220919123233.8538-3-petr.pavlu@suse.com>
- <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
- <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
- <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
- <2342ef17-f8f9-501f-0f7b-5a69e85c2cf4@redhat.com> <Y1D2kFy+I8dgDkll@alley>
-From:   Prarit Bhargava <prarit@redhat.com>
-In-Reply-To: <Y1D2kFy+I8dgDkll@alley>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221016123031.3963-5-petr.pavlu@suse.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 10/20/22 03:19, Petr Mladek wrote:
-> On Tue 2022-10-18 15:53:03, Prarit Bhargava wrote:
->> On 10/18/22 14:33, Luis Chamberlain wrote:
->>> On Sat, Oct 15, 2022 at 11:27:10AM +0200, Petr Pavlu wrote:
->>>> The patch does address a regression observed after commit 6e6de3dee51a
->>>> ("kernel/module.c: Only return -EEXIST for modules that have finished
->>>> loading"). I guess it can have a Fixes tag added to the patch.
->>>>
->>>> I think it is hard to split this patch into parts because the implemented
->>>> "optimization" is the fix.
->>>
->>> git describe --contains 6e6de3dee51a
->>> v5.3-rc1~38^2~6
->>>
->>> I'm a bit torn about this situation. Reverting 6e6de3dee51a would be the
->>> right thing to do, but without it, it still leaves the issue reported
->>> by Prarit Bhargava. We need a way to resolve the issue on stable and
->>> then your optimizations can be applied on top.
->>>
->>> Prarit Bhargava, please review Petry's work and see if you can come up
->>> with a sensible way to address this for stable.
->>
->> I found the original thread surrounding these changes and I do not think
->> this solution should have been committed to the kernel.  It is not a good
->> solution to the problem being solved and adds complexity where none is
->> needed IMO.
->>
->> Quoting from the original thread,
->>
->>>
->>> Motivation for this patch is to fix an issue observed on larger machines with
->>> many CPUs where it can take a significant amount of time during boot to run
->>> systemd-udev-trigger.service. An x86-64 system can have already intel_pstate
->>> active but as its CPUs can match also acpi_cpufreq and pcc_cpufreq, udev will
->>> attempt to load these modules too. The operation will eventually fail in the
->>> init function of a respective module where it gets recognized that another
->>> cpufreq driver is already loaded and -EEXIST is returned. However, one uevent
->>> is triggered for each CPU and so multiple loads of these modules will be
->>> present. The current code then processes all such loads individually and
->>> serializes them with the barrier in add_unformed_module().
->>>
->>
->> The way to solve this is not in the module loading code, but in the udev
->> code by adding a new event or in the userspace which handles the loading
->> events.
->>
->> Option 1)
->>
->> Write/modify a udev rule to to use a flock userspace file lock to prevent
->> repeated loading.  The problem with this is that it is still racy and still
->> consumes CPU time repeated load the ELF header and, depending on the system
->> (ie a large number of cpus) would still cause a boot delay.  This would be
->> better than what we have and is worth looking at as a simple solution.  I'd
->> like to see boot times with this change, and I'll try to come up with a
->> measurement on a large CPU system.
-> 
-> This sounds like a ping-pong between projects where to put the
-> complexity. Honestly, I think that it would be more reliable if
-> we serialized/squashed parallel loads on the kernel side.
-> 
+On Sun, Oct 16, 2022 at 02:30:31PM +0200, Petr Pavlu wrote:
+> diff --git a/tools/testing/selftests/kmod/init_module.c b/tools/testing/selftests/kmod/init_module.c
+> @@ -525,6 +662,8 @@ list_tests()
+>  	echo "0011 x $(get_test_count 0011) - test completely disabling module autoloading"
+>  	echo "0012 x $(get_test_count 0012) - test /proc/modules address visibility under CAP_SYSLOG"
+>  	echo "0013 x $(get_test_count 0013) - test /sys/module/*/sections/* visibility under CAP_SYSLOG"
+> +	echo "0014 x $(get_test_count 0014) - test handling of parallel loads, success case"
+> +	echo "0015 x $(get_test_count 0015) - test handling of parallel loads, init returning error"
 
-Well, that's the world we live in.  Module loading ping pongs between 
-udev and the kernel.
+Good stuff!
 
-> 
->> Option 2)
->>
->> Create a new udev action, "add_once" to indicate to userspace that the
->> module only needs to be loaded one time, and to ignore further load
->> requests.  This is a bit tricky as both kernel space and userspace would
->> have be modified.  The udev rule would end up looking very similar to what
->> we now.
->>
->> The benefit of option 2 is that driver writers themselves can choose which
->> drivers should issue "add_once" instead of add.  Drivers that are known to
->> run on all devices at once would call "add_once" to only issue a single
->> load.
-> 
-> My concern is how to distinguish first attempts and later (fixed)
-> attempts.
-> 
-> I mean that the module load might fail at boot. But the user might
-> fix the root of the problem and try to load the module once again
-> without reboot. The other load need not be direct. It might be part
-> of another more complex operation. Reload of another module.
-> Restart of a service.
-> 
+So test 0015 mimics the error reported by Prarit Bhargava through
+commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules
+that have finished loading")? If so it would be good to document that
+here.
 
-This is an interesting complication, and something to think about.
+Also, this patch should go first, with the ALL_TESTS variable set to
+disable the tests which are known to fail, so to demonstrate the *new*
+issues as they are failing and then your fix first and then you enable
+that test afterwards.
 
-P.
+If 6e6de3dee51a introduced another regression which is not covered
+by the tests we'd add it, and fix on top of it as a stepping stone
+to prove / send to stable.
 
-
-> It might be problematic to do this an user-friendly way.
-> And it might be much more complicated in the end.
-
-
-> 
-> Best Regards,
-> Petr
-> 
-
+  Luis
