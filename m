@@ -2,75 +2,95 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88D41FA373E
-	for <linux-modules@archiver.kernel.org>; Tue, 25 Oct 2022 17:51:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2931FC38A2D
+	for <linux-modules@archiver.kernel.org>; Tue, 25 Oct 2022 17:54:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiJYRvV (ORCPT
+        id S232208AbiJYRyI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 25 Oct 2022 13:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
+        Tue, 25 Oct 2022 13:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbiJYRvT (ORCPT
+        with ESMTP id S232192AbiJYRyH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 25 Oct 2022 13:51:19 -0400
+        Tue, 25 Oct 2022 13:54:07 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D1F1900A;
-        Tue, 25 Oct 2022 10:51:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CED6C7871;
+        Tue, 25 Oct 2022 10:54:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5N1wutp/qlXBYy2QP7C/3+5yhBOHXBrYT/91aOtTBAU=; b=QuXa0ioU3lLXiJ3+Vjs8Dn2cxi
-        8tMU2Rfj6xaIQAk0vicqGHCxB5kNEn4wZN0kmgGoy2jnGvcLu9WqNKkGBf9u53m97Fe4/t0elf2o4
-        ZYG3sHFienIpVx4jnraCmtXmDLvLcr6Oqs8UNEbCRbNtziOeHqCF40ixz3aEppokHXbpoNE2hPWWy
-        itEUCJbnFHWTnPBY3YkeREHpder8a1/Bbv1yFaddphXYLmapwe3G4FnbgHTF7G8kCobLQcB9z25cF
-        FBH+G6hsvd6KuhwXZMm/GYXeq4uPfCvef4eyw+mX9VvczqJ+2IJEJ35NTYIjKo+Vzpl/RBCHflrPw
-        CKf/H6DQ==;
+        bh=Snq3KmyK7Ytjcm1GfrE+K6Gm9Itr4ZtEw1p7NmTsejY=; b=cLKIm7NQUNUYLqy2QECCgw1UGW
+        ahdKs/XeI5MrFdEuseNPTmUDdyhJAoUEEspMwF5K+J5JoOGT4AM8g7Tudd1E7QjfVotI60sXsZGvy
+        BOROQpIOE4HP0ZdRC//MwfHCB2yhcz3DQqJ6nqNdWk7uQ7gx7vvtTcZkAYAt1RArJuC/azVDrkaTv
+        OyPdtR/2X4lsCKRuviH+BtkgqFBj3F7TbW+HNIN8K4VWXjF1Drq0KS5ySgE39DVYq85CcbWuT5lK1
+        //1U0QOIfdusW4UqNFl3OTfgZkwvD2UFqU3k8nP0L8WzniPLJr5XJK6zyZZ72IxRnDmYLLgXrspAw
+        1Ga1Ig2A==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onO54-006YCt-FJ; Tue, 25 Oct 2022 17:51:14 +0000
-Date:   Tue, 25 Oct 2022 10:51:14 -0700
+        id 1onO7d-006YOz-Us; Tue, 25 Oct 2022 17:53:53 +0000
+Date:   Tue, 25 Oct 2022 10:53:53 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Pavlu <petr.pavlu@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     pmladek@suse.com, david@redhat.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] selftests: kmod: Add tests for merging same-name
- module load requests
-Message-ID: <Y1giEusr0/sGNrGC@bombadil.infradead.org>
-References: <20221016123031.3963-1-petr.pavlu@suse.com>
- <20221016123031.3963-5-petr.pavlu@suse.com>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-modules@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
+ symbols
+Message-ID: <Y1gisUFzgt1D1Jle@bombadil.infradead.org>
+References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
+ <Y0/nEngJF6bbINEx@bombadil.infradead.org>
+ <ad9e51c6-f77d-d9e9-9c13-42fcbbde7147@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221016123031.3963-5-petr.pavlu@suse.com>
+In-Reply-To: <ad9e51c6-f77d-d9e9-9c13-42fcbbde7147@huawei.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, Oct 16, 2022 at 02:30:31PM +0200, Petr Pavlu wrote:
-> diff --git a/tools/testing/selftests/kmod/init_module.c b/tools/testing/selftests/kmod/init_module.c
-> @@ -525,6 +662,8 @@ list_tests()
->  	echo "0011 x $(get_test_count 0011) - test completely disabling module autoloading"
->  	echo "0012 x $(get_test_count 0012) - test /proc/modules address visibility under CAP_SYSLOG"
->  	echo "0013 x $(get_test_count 0013) - test /sys/module/*/sections/* visibility under CAP_SYSLOG"
-> +	echo "0014 x $(get_test_count 0014) - test handling of parallel loads, success case"
-> +	echo "0015 x $(get_test_count 0015) - test handling of parallel loads, init returning error"
+On Wed, Oct 19, 2022 at 10:11:58PM +0800, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/10/19 20:01, Luis Chamberlain wrote:
+> > On Mon, Oct 17, 2022 at 02:49:39PM +0800, Zhen Lei wrote:
+> >> Currently, to search for a symbol, we need to expand the symbols in
+> >> 'kallsyms_names' one by one, and then use the expanded string for
+> >> comparison. This is very slow.
+> >>
+> >> In fact, we can first compress the name being looked up and then use
+> >> it for comparison when traversing 'kallsyms_names'.
+> >>
+> >> This patch series optimizes the performance of function kallsyms_lookup_name(),
+> >> and function klp_find_object_symbol() in the livepatch module. Based on the
+> >> test results, the performance overhead is reduced to 5%. That is, the
+> >> performance of these functions is improved by 20 times.
+> > 
+> > Stupid question, is a hash table in order?
+> 
+> No hash table.
+> 
+> All symbols are arranged in ascending order of address. For example: cat /proc/kallsyms
+> 
+> The addresses of all symbols are stored in kallsyms_addresses[], and names of all symbols
+> are stored in kallsyms_names[]. The elements in these two arrays are in a one-to-one
+> relationship. For any symbol, it has the same index in both arrays.
+> 
+> Therefore, when we look up a symbolic name based on an address, we use a binary lookup.
+> However, when we look up an address based on a symbol name, we can only traverse array
+> kallsyms_names[] in sequence. I think the reason why hash is not used is to save memory.
 
-Good stuff!
-
-So test 0015 mimics the error reported by Prarit Bhargava through
-commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules
-that have finished loading")? If so it would be good to document that
-here.
-
-Also, this patch should go first, with the ALL_TESTS variable set to
-disable the tests which are known to fail, so to demonstrate the *new*
-issues as they are failing and then your fix first and then you enable
-that test afterwards.
-
-If 6e6de3dee51a introduced another regression which is not covered
-by the tests we'd add it, and fix on top of it as a stepping stone
-to prove / send to stable.
+This answers how we don't use a hash table, the question was *should* we
+use one?
 
   Luis
