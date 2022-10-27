@@ -2,82 +2,112 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0404C38A2D
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Oct 2022 19:06:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABF16FA3740
+	for <linux-modules@archiver.kernel.org>; Thu, 27 Oct 2022 03:26:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbiJZTG4 (ORCPT
+        id S229592AbiJ0D0P (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 26 Oct 2022 15:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        Wed, 26 Oct 2022 23:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234528AbiJZTGh (ORCPT
+        with ESMTP id S232865AbiJ0D0O (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:06:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113AF141383;
-        Wed, 26 Oct 2022 12:03:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=r3Pfzq8iLf21/gz3vKU7KH69j7rAkB4oAHyVkIHhiQY=; b=xF+2rcJB7udh+J+Ag+JT79VckR
-        5/aeywQviRtPSnZ1ya9NT5lSAPGHHA9rhIJHo+Mt4EvVqNvp16GSByh4l3YA9wr8mnJzJlGr0jCNb
-        uc39VCS4doPpfNlfEzYYzd4AJkxMzm2sl++QAN6ALwLoz4CuzlvQH4V9bO9UxEPW/Mha+7kDNixxS
-        aIPz0NPwzTOrk56hw0Un20+nzgGcVR3U7I5bS7KX7GDsvt+tKFrYomWjZehL+775+fzIPKyCRurCd
-        l8ddecgsWb6qqaZy2vUq7BcVpJtQHOeWC3pdyvillVYqjLFfj8sFJnT2gwkfY8rwDK6pv0ikz65Js
-        jjZd+1yQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onlge-00Aer3-5w; Wed, 26 Oct 2022 19:03:36 +0000
-Date:   Wed, 26 Oct 2022 12:03:36 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Wed, 26 Oct 2022 23:26:14 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DF54D828;
+        Wed, 26 Oct 2022 20:26:11 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MyWDB4mkPzmVY0;
+        Thu, 27 Oct 2022 11:21:14 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 11:26:08 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 11:26:07 +0800
+Subject: Re: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
+ symbols
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
         Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-modules@vger.kernel.org,
+        <linux-modules@vger.kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
- symbols
-Message-ID: <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
+        "Ingo Molnar" <mingo@redhat.com>
 References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
  <Y0/nEngJF6bbINEx@bombadil.infradead.org>
  <ad9e51c6-f77d-d9e9-9c13-42fcbbde7147@huawei.com>
  <Y1gisUFzgt1D1Jle@bombadil.infradead.org>
  <77f1c8f0-5e67-0e57-9285-15ba613044fb@huawei.com>
+ <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <4f06547b-456f-e1ec-c535-16577f502ff1@huawei.com>
+Date:   Thu, 27 Oct 2022 11:26:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77f1c8f0-5e67-0e57-9285-15ba613044fb@huawei.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Oct 26, 2022 at 02:44:36PM +0800, Leizhen (ThunderTown) wrote:
-> On 2022/10/26 1:53, Luis Chamberlain wrote:
-> > This answers how we don't use a hash table, the question was *should* we
-> > use one?
-> 
-> I'm not the original author, and I can only answer now based on my understanding. Maybe
-> the original author didn't think of the hash method, or he has weighed it out.
-> 
-> Hash is a good solution if only performance is required and memory overhead is not
-> considered. Using hash will increase the memory size by up to "4 * kallsyms_num_syms +
-> 4 * ARRAY_SIZE(hashtable)" bytes, kallsyms_num_syms is about 1-2 million.
-> 
-> Because I don't know what hash algorithm will be used, the cost of generating the
-> hash value corresponding to the symbol name is unknown now. But I think it's gonna
-> be small. But it definitely needs a simpler algorithm, the tool needs to implement
-> the same hash algorithm.
 
-For instance, you can look at evaluating if alloc_large_system_hash() would help.
 
-  Luis
+On 2022/10/27 3:03, Luis Chamberlain wrote:
+> On Wed, Oct 26, 2022 at 02:44:36PM +0800, Leizhen (ThunderTown) wrote:
+>> On 2022/10/26 1:53, Luis Chamberlain wrote:
+>>> This answers how we don't use a hash table, the question was *should* we
+>>> use one?
+>>
+>> I'm not the original author, and I can only answer now based on my understanding. Maybe
+>> the original author didn't think of the hash method, or he has weighed it out.
+>>
+>> Hash is a good solution if only performance is required and memory overhead is not
+>> considered. Using hash will increase the memory size by up to "4 * kallsyms_num_syms +
+>> 4 * ARRAY_SIZE(hashtable)" bytes, kallsyms_num_syms is about 1-2 million.
+>>
+>> Because I don't know what hash algorithm will be used, the cost of generating the
+>> hash value corresponding to the symbol name is unknown now. But I think it's gonna
+>> be small. But it definitely needs a simpler algorithm, the tool needs to implement
+>> the same hash algorithm.
+> 
+> For instance, you can look at evaluating if alloc_large_system_hash() would help.
+
+OK, I found the right hash function. In this way, the tool does not need to consider
+the byte order.
+
+include/linux/stringhash.h
+
+/*
+ * Version 1: one byte at a time.  Example of use:
+ *
+ * unsigned long hash = init_name_hash;
+ * while (*p)
+ *      hash = partial_name_hash(tolower(*p++), hash);
+ * hash = end_name_hash(hash);
+
+
+> 
+>   Luis
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
