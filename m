@@ -2,60 +2,65 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB3C0C4332F
-	for <linux-modules@archiver.kernel.org>; Wed,  2 Nov 2022 18:41:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 787A3C433FE
+	for <linux-modules@archiver.kernel.org>; Wed,  2 Nov 2022 23:59:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiKBSlJ (ORCPT
+        id S230305AbiKBX7z (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 2 Nov 2022 14:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        Wed, 2 Nov 2022 19:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiKBSlI (ORCPT
+        with ESMTP id S230364AbiKBX7w (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:41:08 -0400
+        Wed, 2 Nov 2022 19:59:52 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97B7E0C8;
-        Wed,  2 Nov 2022 11:41:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F306F55BC;
+        Wed,  2 Nov 2022 16:59:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=a0QsxHnHaVdr7Z/zTUS3MGyhibIGFKVlfjPe/j6Bv18=; b=FDUztCQqNhOyI6cGVyHvdapFKc
-        sp22jfxIEbeHnut8nwsxubwjNsuqV/UG4PoMCMcC5IxC5nU2S0yjzdvcqjazyh/3PBZB87dm/ApKT
-        10GK3hXzaZmAU0ICl7cg+UMcWrwL0MKkF7evcHjkT7E7EKiPdtU2NroepW52odmcrVi9SQp7ZpVp9
-        EcxbdWhHjvyVaPAkKPK/xpSLD8S6A+CECjdZuKXC+rrgUojTP9toiG9VR6DUMwKmlUag3NKarcQjN
-        dBAotbMFv0+MP7LCA+NWQ95GEoynflhyMU7oAOeUZisqB95dMiwawi1a5S/XXmVhzQdHtjiU5gC1h
-        zHi0PCCw==;
+        bh=t5AqGgPaokx6x0rdC5uz+rjU5dq/lOC3mQZwI1qWWWM=; b=2lQc0nXIKirMBa4o/dvF+NXVyc
+        nyq0G4c3Y6tODFlxfJPvEFrzp7u999cDdCbQImfmCGm8LEr+avFItV98IZ7vT5r4g2F8qlDLoXKrI
+        sGcK1fLVzSFrDpi9ihWorXe7ZAD/yBzC9Xk9li1KNmQLQu+O/Y0+BQZGHtAIHhCR6GlXj6h/38caX
+        g98vFMkepKFvL68ADOye4fDgtHlk2uT1OJfBAAdFp3gbMm01dltKKhP22PndC8Wffr+qJOcE8y6Rp
+        Tb8TsWBuG9oyXMBdQcgXP3kPnqcdpc2qpNa9GD4ckfBgsCBVeoXRWEKKL+Ns0+SQotRwqBV5g4kc3
+        LPHdLXuQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oqIff-00DBqt-TK; Wed, 02 Nov 2022 18:41:03 +0000
-Date:   Wed, 2 Nov 2022 11:41:03 -0700
+        id 1oqNeA-00FFcb-PY; Wed, 02 Nov 2022 23:59:50 +0000
+Date:   Wed, 2 Nov 2022 16:59:50 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH 18/30] module: Use kstrtobool() instead of strtobool()
-Message-ID: <Y2K5v08yIDNk7sNW@bombadil.infradead.org>
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
- <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     linux-modules@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jessica Yu <jeyu@kernel.org>
+Subject: Re: [PATCH v5 1/2] module: add module_elf_check_arch for
+ module-specific checks
+Message-ID: <Y2MEdgcrkR79yWqs@bombadil.infradead.org>
+References: <20221031120733.3956781-1-npiggin@gmail.com>
+ <20221031120733.3956781-2-npiggin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221031120733.3956781-2-npiggin@gmail.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Nov 01, 2022 at 10:14:06PM +0100, Christophe JAILLET wrote:
-> strtobool() is the same as kstrtobool().
-> However, the latter is more used within the kernel.
+On Mon, Oct 31, 2022 at 10:07:32PM +1000, Nicholas Piggin wrote:
+> The elf_check_arch() function is also used to test compatibility of
+> usermode binaries. Kernel modules may have more specific requirements,
+> for example powerpc would like to test for ABI version compatibility.
 > 
-> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-> the other function name.
+> Add a weak module_elf_check_arch() that defaults to true, and call it
+> from elf_validity_check().
 > 
-> While at it, include the corresponding header file (<linux/kstrtox.h>)
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Jessica Yu <jeyu@kernel.org>
+> [np: added changelog, adjust name, rebase]
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
   Luis
