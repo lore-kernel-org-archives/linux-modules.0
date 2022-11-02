@@ -2,93 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37249C433FE
-	for <linux-modules@archiver.kernel.org>; Wed,  2 Nov 2022 12:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB3C0C4332F
+	for <linux-modules@archiver.kernel.org>; Wed,  2 Nov 2022 18:41:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbiKBMBT convert rfc822-to-8bit (ORCPT
+        id S229850AbiKBSlJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 2 Nov 2022 08:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        Wed, 2 Nov 2022 14:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiKBMBB (ORCPT
+        with ESMTP id S231211AbiKBSlI (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:01:01 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070AF22286
-        for <linux-modules@vger.kernel.org>; Wed,  2 Nov 2022 05:00:56 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-258-1yQNw3MuPJOLWPGjyRulkQ-1; Wed, 02 Nov 2022 12:00:53 +0000
-X-MC-Unique: 1yQNw3MuPJOLWPGjyRulkQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 2 Nov
- 2022 12:00:51 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Wed, 2 Nov 2022 12:00:51 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Zhen Lei' <thunder.leizhen@huawei.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>
-Subject: RE: [PATCH v8 4/9] kallsyms: Reduce the memory occupied by
- kallsyms_seqs_of_names[]
-Thread-Topic: [PATCH v8 4/9] kallsyms: Reduce the memory occupied by
- kallsyms_seqs_of_names[]
-Thread-Index: AQHY7pgsdRO9dUiW6k27i3NhSmpxX64riAdg
-Date:   Wed, 2 Nov 2022 12:00:51 +0000
-Message-ID: <bd30cbc9b7594261a7b9da26e9c98da4@AcuMS.aculab.com>
-References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
- <20221102084921.1615-5-thunder.leizhen@huawei.com>
-In-Reply-To: <20221102084921.1615-5-thunder.leizhen@huawei.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 2 Nov 2022 14:41:08 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97B7E0C8;
+        Wed,  2 Nov 2022 11:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=a0QsxHnHaVdr7Z/zTUS3MGyhibIGFKVlfjPe/j6Bv18=; b=FDUztCQqNhOyI6cGVyHvdapFKc
+        sp22jfxIEbeHnut8nwsxubwjNsuqV/UG4PoMCMcC5IxC5nU2S0yjzdvcqjazyh/3PBZB87dm/ApKT
+        10GK3hXzaZmAU0ICl7cg+UMcWrwL0MKkF7evcHjkT7E7EKiPdtU2NroepW52odmcrVi9SQp7ZpVp9
+        EcxbdWhHjvyVaPAkKPK/xpSLD8S6A+CECjdZuKXC+rrgUojTP9toiG9VR6DUMwKmlUag3NKarcQjN
+        dBAotbMFv0+MP7LCA+NWQ95GEoynflhyMU7oAOeUZisqB95dMiwawi1a5S/XXmVhzQdHtjiU5gC1h
+        zHi0PCCw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oqIff-00DBqt-TK; Wed, 02 Nov 2022 18:41:03 +0000
+Date:   Wed, 2 Nov 2022 11:41:03 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH 18/30] module: Use kstrtobool() instead of strtobool()
+Message-ID: <Y2K5v08yIDNk7sNW@bombadil.infradead.org>
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Zhen Lei
-> Sent: 02 November 2022 08:49
+On Tue, Nov 01, 2022 at 10:14:06PM +0100, Christophe JAILLET wrote:
+> strtobool() is the same as kstrtobool().
+> However, the latter is more used within the kernel.
 > 
-> kallsyms_seqs_of_names[] records the symbol index sorted by address, the
-> maximum value in kallsyms_seqs_of_names[] is the number of symbols. And
-> 2^24 = 16777216, which means that three bytes are enough to store the
-> index. This can help us save (1 * kallsyms_num_syms) bytes of memory.
+> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
+> the other function name.
+> 
+> While at it, include the corresponding header file (<linux/kstrtox.h>)
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-You can get the compiler to do the 'heavy lifting' for you.
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
-struct uint24 {
-    unsigned int val24:24;
-} __attribute__((packed));
-
-struct uint24 table[1024];
-
-works fine.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+  Luis
