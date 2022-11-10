@@ -2,104 +2,71 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BE8EC4332F
-	for <linux-modules@archiver.kernel.org>; Thu, 10 Nov 2022 02:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A8EBC4332F
+	for <linux-modules@archiver.kernel.org>; Thu, 10 Nov 2022 03:56:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbiKJC6u (ORCPT
+        id S229974AbiKJD4M (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 9 Nov 2022 21:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
+        Wed, 9 Nov 2022 22:56:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbiKJC6t (ORCPT
+        with ESMTP id S229516AbiKJD4L (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:58:49 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABE75F8F;
-        Wed,  9 Nov 2022 18:58:48 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id f63so488230pgc.2;
-        Wed, 09 Nov 2022 18:58:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pvz205DnpMYHAC74hYEPtX/pc7K6R5jYdg5JQ8ou98w=;
-        b=om6xhvj1Dif40J0ma2nZNHqR4zbPBvrVJXZ2gRRs/6SCtI89feoKTCwzpw8RqyOQD/
-         nSm3tuwZD+pQhZiPQBybXayqS09vD5Pq4hGLjNbTPemO/8qkI2yKPr/MYeKBZTWeglRH
-         TyAzFN9AA/umJz67fnPXeoi5i+stD+OFlhTLgf0ZZUA6vfegZkjXwY9r7F9+y6ifAIte
-         tK5QlkD3KNSYSoSmdKaUHYCbhcF4Dcubi2oO0O5+qknx35O2haOuU5kPC1WWvt1iGoWi
-         +pLoBzKCFP4mP8ubtk9Qp81KZypLfrtudcndXrp059ti9ojw/H7O7SKsVXXCcPr1gC6D
-         t+6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Pvz205DnpMYHAC74hYEPtX/pc7K6R5jYdg5JQ8ou98w=;
-        b=d51fQuRXHh1HfLdky2Wdn8kBUy7gW9SljoffMiG93xT4CpnZv8uMn9Y8AXo8yCpxCf
-         V2Fh9/vLpxVcX5qOcaIKoI0Li3B6/eislesO5nqtJc2uNkdI5f5yxqK7dmTffrVmJbf6
-         vJTIiz5nXMJuIFjMSRJfWd6YWjimwWnUjHUveHPIzqx+GJZHP/W9N1Ih3eYvxIo9U8kq
-         pyGTiM3v1C/KLMiP2CPSlyWOBODSoJZnc3Sq2lbpfWI+gi518yDmPx6bWxYB9B/psFjT
-         lPEx9lXCOV0HA9RMS4neTl92+RuC+dCiqahVayCXCndruw1sQdJC8WGfKktrKwAVQ0xp
-         fPOQ==
-X-Gm-Message-State: ACrzQf2vAcZBlRDc67do6lJ5DwsETAsoBFBcutd2Ns3BjPvKoy+Qsj0W
-        Ig9QVoWPwVKQ8+0yNB5TJjGb+jgeJ0JcmIlL
-X-Google-Smtp-Source: AMsMyM4XLyYu30PUcwOIp3OUIXUywgKftZPwtv2iyCqObaEGYOgvNy/y5V2TGA1z/vPttY2qjZFeYQ==
-X-Received: by 2002:a63:8641:0:b0:46e:c693:2e57 with SMTP id x62-20020a638641000000b0046ec6932e57mr52122180pgd.341.1668049127688;
-        Wed, 09 Nov 2022 18:58:47 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id iz5-20020a170902ef8500b00176a2d23d1asm9817368plb.56.2022.11.09.18.58.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 18:58:47 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] module: Fix NULL vs IS_ERR checking for module_get_next_page
-Date:   Thu, 10 Nov 2022 06:58:34 +0400
-Message-Id: <20221110025834.1624394-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.37.3.671.ge2130fe6da78.dirty
+        Wed, 9 Nov 2022 22:56:11 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A3E13CC3;
+        Wed,  9 Nov 2022 19:56:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=R9bwS/U7S7bV0/7KYScNF9R6LQoDUoxJzxINgcOLK3k=; b=rnziAupdKaVrSkWJdztAWl3t29
+        Yn19OB1/8PTpNZ/bs8YIMaxByQ+8jW2da9eMRRirQjgNjNIgBGJcfnRSQFvsXJN11QtKZntOn9dlH
+        voRh7kroEOSX/g3g8bLI4ua2IPnZP8Y9mPfXJdb32RFsKBHA6P6WArARMYYOSCvnixMG2IMyVmZcQ
+        BPY9bWS942C1Z1bk1h/3pr/m/oEsJZTKFh5diJbCCGhTnef3vLnITDxnkJ3qpS0OSZXAIbsbM43Za
+        hmTi6/MohzoksbTMyq2t4at/xo8d+ycHXTAPBmVRfcK2vmVPdpmJ404ve/+bPo5eyZexRlUmsAANr
+        234IM3Pg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1osyff-002RfX-Ga; Thu, 10 Nov 2022 03:56:07 +0000
+Date:   Wed, 9 Nov 2022 19:56:07 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com, mcgrof@kernel.org
+Subject: Re: [PATCH v9 1/8] kbuild: bring back tristate.conf
+Message-ID: <Y2x2V7QoGQXbzycc@bombadil.infradead.org>
+References: <20221109134132.9052-1-nick.alcock@oracle.com>
+ <20221109134132.9052-2-nick.alcock@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109134132.9052-2-nick.alcock@oracle.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The module_get_next_page() function return error pointers on error
-instead of NULL.
-Use IS_ERR() to check the return value to fix this.
+On Wed, Nov 09, 2022 at 01:41:25PM +0000, Nick Alcock wrote:
+> tristate.conf was dropped because it is not needed to build a
+> modules.builtin (although dropping it introduces a few false positives
+> into modules.builtin support), and doing so avoids one round of
+> recursion through the build tree to build it.  But kallmodsyms support
+> requires building a mapping from object file name to built-in module
+> name for all builtin modules: this seems to me impossible to accomplish
+> without parsing all makefiles under the influence of tristate.conf,
+> since the makefiles are the only place this mapping is recorded.
+> 
+> So bring it back for this purpose.  (Thanks to the refactoring in
+> the 5.16 timeframe, this is basically a reimplementation of commit
+> 8b41fc4454e36fbfdbb23f940d023d4dece2de29 rather than a simple
+> reversion.)
+> 
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Reviewed-by: Victor Erminpour <victor.erminpour@oracle.com>
+> Reviewed-by: Kris Van Hees <kris.van.hees@oracle.com>
 
-Fixes: b1ae6dc41eaa ("module: add in-kernel support for decompressing")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- kernel/module/decompress.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I don't see the need, see the review of next patch.
 
-diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-index c033572d83f0..720e719253cd 100644
---- a/kernel/module/decompress.c
-+++ b/kernel/module/decompress.c
-@@ -114,8 +114,8 @@ static ssize_t module_gzip_decompress(struct load_info *info,
- 	do {
- 		struct page *page = module_get_next_page(info);
- 
--		if (!page) {
--			retval = -ENOMEM;
-+		if (IS_ERR(page)) {
-+			retval = PTR_ERR(page);
- 			goto out_inflate_end;
- 		}
- 
-@@ -173,8 +173,8 @@ static ssize_t module_xz_decompress(struct load_info *info,
- 	do {
- 		struct page *page = module_get_next_page(info);
- 
--		if (!page) {
--			retval = -ENOMEM;
-+		if (IS_ERR(page)) {
-+			retval = PTR_ERR(page);
- 			goto out;
- 		}
- 
--- 
-2.37.3.671.ge2130fe6da78.dirty
+  Luis
 
