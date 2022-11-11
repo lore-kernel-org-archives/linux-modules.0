@@ -2,67 +2,67 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE464C4332F
-	for <linux-modules@archiver.kernel.org>; Fri, 11 Nov 2022 13:52:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D8D7C4332F
+	for <linux-modules@archiver.kernel.org>; Fri, 11 Nov 2022 14:14:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbiKKNwc (ORCPT
+        id S234422AbiKKOOP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 11 Nov 2022 08:52:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        Fri, 11 Nov 2022 09:14:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbiKKNwa (ORCPT
+        with ESMTP id S234162AbiKKON4 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:52:30 -0500
+        Fri, 11 Nov 2022 09:13:56 -0500
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7904821E22;
-        Fri, 11 Nov 2022 05:52:29 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDijUw026352;
-        Fri, 11 Nov 2022 13:52:22 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B6F83B92;
+        Fri, 11 Nov 2022 06:04:10 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDhkou013729;
+        Fri, 11 Nov 2022 14:03:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : references : date : in-reply-to : message-id : content-type :
  mime-version; s=corp-2022-7-12;
- bh=haHuZpdKvHkojenHross7LviVGwZQJ21CNfZyMd01cY=;
- b=aQMmkIBkDL+bp2U5XMNMwy8z4mlUmt9xKHKWHCD7zGjY2N/VKbIzyc2gkJhvDTGAOIwp
- jBx1vX8VctKG5KA7GXf7VzKpvwUFcrrJl7Che5x1uqUknXeoqWnku9WzNlusLSI2gzST
- 5a0o9RIVoLGhfPqof+piEPrH5e6B1QV6kb8I6CjxCbiziGL3W6cI2G4rEUzfyLTQ0Wpc
- VwNPxegBi90B4HnDoLyl3aPkVv7eflEgDfNTkStp7EmYNP6K9/yjFs495kI1EmptG1tN
- K3TANSto4fHNpMPLZcHJUaI/Qx92G4Rw3/YEGz+PcQrXiVy1ZmERkFcK5QbWB8atO9yG GA== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ksqj180hx-1
+ bh=q70Wrrwfd0MAGjQANnCx/gTOnZ2WfE9mmP9oGwVRMts=;
+ b=XddvMeWoDLxBKIqUn+YceTqXlHZ38keyrmRZqsy79CU1T1QEcPczV0lBb+0e01pMDzTQ
+ bcudPho5FXztQ7ir3pUHiIJycSwdVa3sEjSALrF/5h49cIB5DY7wdxf57LnZSmKwG/3u
+ SzvJL1A6QdfWjZW6jeQdWSt+LhZUvprNN6You4xL8BGjPney9ci26vgNsecFUt5hyIZQ
+ YJVMj9LDhz5GOi3ivWL51wy96/cINjxevxQS7ehUiSVfYAWZVWL3WkkGp2r7frf63Jiw
+ cshKUvFT/rgNm9V0DJwqRutph1QCSECnRQFkHFEIK7QjSR+BQ96BDRgfaWKLvEoywLYv yA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ksqh301xx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Nov 2022 13:52:21 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDWhD6011772;
-        Fri, 11 Nov 2022 13:47:20 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kpctgmv1s-1
+        Fri, 11 Nov 2022 14:03:57 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDWp7C009038;
+        Fri, 11 Nov 2022 14:03:55 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kpcqmjdwn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Nov 2022 13:47:20 +0000
+        Fri, 11 Nov 2022 14:03:55 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eeVToHIgnpIrw6gA+TNELGjO99go7twpZE1KajMeZn14qd4W5LfyM/wLe9Ih3mz8/bcDldvIZnvksDMsaP0uXlX2kfVJC0ZqarTFZcEtoiBqmxZSgNUqUXFYYDodxbz3hJtJpgsbY+3kS6eNQhV8aIBKjXaH09TT04SQN4XYjvfWmEh75FbfitUFmMji/pN5rK2M1o+bnJcdWn0eyriZpy2Gbt1IZWRBzIDpRT46iNm/m8Xf4w/vYMqlQUEjZRk/yYavqC989zF3jMwvYfNjFX6TjSmWnpxUBQzXpEIVWq8jI8gItGAsHEUKzZ1NjT5zz2ilCI2IYGrqloGlw4OcQg==
+ b=cBdRxuSIn2R67oojhoFc8ZxL2XvoU5TSI3EuPLwfOY2ZXu0/EAHeydoKTKDck/+Fhe1k/M9XH8Qjmt0PyHtWSlOKAKv91kwmce6YqCiq04n0TBYKxutMXgZxqEUJZUibTBfxyokJEPlkT1jHHsyWaAkiwOPdDaKJ3regnY1mkc1P+MRXHWSG28CLi6vgRmZrL8wXBBF9vOenbHhNEUTm4Yog+PWJbRCy7KDXaPpOY/QpVYLNZEb/av0sxFdk1hUtFy9MJyqaCaHhrY7iO16fD3IajqqW2MUa8gxDfCknu/1djLLA9CI4C4kLjN4jkysDxqVYJli5Y7IdCTifL7cPcQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=haHuZpdKvHkojenHross7LviVGwZQJ21CNfZyMd01cY=;
- b=HCgGmPex9x6mgeU1zcG5Ib/k9WqNML8oEj0/a49NcwxauMmad5Z7oA3E4uoqrGqQX+vYsU8HND8l03hGKAokbEbr0DCxgtsM5KSUE2KmKAO/i8L+e30Gofxvqm9HW99Vt+vMUV5EfxeLmmgqshSaGJILjzvcDndZyQsKH7E0aecnd3rDaEV38VivTeKshx1YKn8CVaIZouBMH0uREtja4UKQl7U7/7Q3yFaKMaD81RenQwZ0yJbT5XDc4wBSoNpi9dRTc7mplXxFGk++Th26O8Er5Bfgdx74ik4LB0wLy+LXe8o0XgynP9vRexJHwq5gzrKg2nBNIZr04qkwBNRcUg==
+ bh=q70Wrrwfd0MAGjQANnCx/gTOnZ2WfE9mmP9oGwVRMts=;
+ b=iBvPPWmIYH0oxEqujpYwu+ZoPdt5RcgZCqDOS5DNASsoqe+WlFFXQrrD7lp17YLA9r7DDLdyDIgB9qP3KJGiCeKzvHTGPO+TKTMkIXWQjSNfbarywKqT4DjaPShYDGFocneNVK7gzEFAWiGfiQmNvxLmPnvVHPmpoiJUEzkItl6UFU66clIXWT8zydbkhLhxlmipq5+FmGg58P4v/Of1rqCJUKH9xKH3dHcj8qgSLs8YZumesB2KglaJo4sfJ0vx7prbNnDR55fxqNnRDaVLmH3fvwx/XrbCfn2ct3+aF55REMPbSN8+W+7aUUv/2pe+zkULX4fXm6qU7sqgiZGZ7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=haHuZpdKvHkojenHross7LviVGwZQJ21CNfZyMd01cY=;
- b=R1dqE7hiAxqZ+WJLiRdsm8wmr3jxfJFm0LnaxajvLtcOUsJG2fvbGta+XMHmpYT9Nd5WrG4pJ2+NkJ6jkdRBWYjiUjXHN0jD0/kNocHU5rH1fa2ZInOTn1w5gqo0Dl3fjoJKHle3TVZxI6pX8kT6Z2AB7YLRtQfpElMD3+bkl78=
+ bh=q70Wrrwfd0MAGjQANnCx/gTOnZ2WfE9mmP9oGwVRMts=;
+ b=xgt8sBnkktyJj9FE6eRCKGS7RVf3r7RJjFX8xPCrIiwrejz9Sv/CEE4wtnoE1NElCJ3jmz0H4L1/JCsaIPj0nwXWarT+Uyl2fqjWhZYPaY6ZDGqG3Knn55TWnmVeFN4Es0r8O5TSf6F50SubR6Rz+ex9PfMuU+V0crr6M6iCONw=
 Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
- by SJ0PR10MB4557.namprd10.prod.outlook.com (2603:10b6:a03:2d4::16) with
+ by MN0PR10MB5983.namprd10.prod.outlook.com (2603:10b6:208:3c9::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.12; Fri, 11 Nov
- 2022 13:47:18 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Fri, 11 Nov
+ 2022 14:03:48 +0000
 Received: from DS0PR10MB6798.namprd10.prod.outlook.com
  ([fe80::d361:ae7a:f995:2bb2]) by DS0PR10MB6798.namprd10.prod.outlook.com
  ([fe80::d361:ae7a:f995:2bb2%3]) with mapi id 15.20.5791.027; Fri, 11 Nov 2022
- 13:47:18 +0000
+ 14:03:48 +0000
 From:   Nick Alcock <nick.alcock@oracle.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
@@ -73,130 +73,105 @@ Subject: Re: [PATCH v9 2/8] kbuild: add modules_thick.builtin
 References: <20221109134132.9052-1-nick.alcock@oracle.com>
         <20221109134132.9052-3-nick.alcock@oracle.com>
         <Y2x22mKtaZvC7ZSk@bombadil.infradead.org>
-Emacs:  indefensible, reprehensible, and fully extensible.
-Date:   Fri, 11 Nov 2022 13:47:03 +0000
-In-Reply-To: <Y2x22mKtaZvC7ZSk@bombadil.infradead.org> (Luis Chamberlain's
-        message of "Wed, 9 Nov 2022 19:58:18 -0800")
-Message-ID: <87h6z5wqlk.fsf@esperi.org.uk>
+        <87h6z5wqlk.fsf@esperi.org.uk>
+Emacs:  it's all fun and games, until somebody tries to edit a file.
+Date:   Fri, 11 Nov 2022 14:03:43 +0000
+In-Reply-To: <87h6z5wqlk.fsf@esperi.org.uk> (Nick Alcock's message of "Fri, 11
+        Nov 2022 13:47:03 +0000")
+Message-ID: <87cz9twpts.fsf@esperi.org.uk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
 Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0423.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18b::14) To DS0PR10MB6798.namprd10.prod.outlook.com
+X-ClientProxiedBy: LO4P123CA0420.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18b::11) To DS0PR10MB6798.namprd10.prod.outlook.com
  (2603:10b6:8:13c::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|SJ0PR10MB4557:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b146f5b-0b7d-4943-5ff8-08dac3eb3f90
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|MN0PR10MB5983:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0708acce-698f-4882-3c8c-08dac3ed8e0e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: O8nxOuFG+A7lC6BU3XP0SMlOZ7fkBLJK1NKt/CZayRJ8QS2LwAjKfOle7Fa7b9Q/2QFd7klHX56NbhLAQppqTNzEUwg9EDWUNxmV3B3dAk38f5oz4cvBnWACN5axyNoGOb03CqebBajmagJ5T75lBBZ/6KajnM0lOqSoGMTK6NN6+GA6pUn+BW5NLFkSMDraO8t4g6kdaqQXX5z665fRHJN1+LQDVfxz4hbicA7stAXZ5LO3+1vsKpVe7mQXTLs/VL331ROFEbsdWNyXSaVLCvzstbMoja+xYttDNdWp4w3tFMhf1UjYjjmyt6RrmiZ9oluzeXPPbBzhATVQCVjFUd76JRSspYRdDwzbjYe41SSMRFvkZJsiGRm19MLaOxuQfND041HWI0dgGXbu+CHMWI0/6Wi1JEdxhB7BC9SOZQZUgtl2rM84z31lin45qrQXb9MDJ6ERiOGwO5EdcBwMTfkwZj9jlnWhWOdPxoRNBm1hWZyCfcNuXwS+yOyDZGaPzKLy++2ByUdHox/TGc2H+8t7ZB8Ww6KG7VuZO8C7pBwoB/wsUz2T4zaNbckyHJm/ms/fenlgpDL0RcEaygQXbIK0oHfP35pr7hedjMGlzpiWMpkkpesHefjTCWEQvO2Bk8cycZViv3r0J2I/IiRHqbURTS/A1qFLJvlA435tATYcKAqd6tyfZEstTJIrRn/aou48gmF6gZ/5pPpHkYIG1w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39860400002)(136003)(346002)(376002)(366004)(451199015)(478600001)(8936002)(6666004)(5660300002)(86362001)(66476007)(66556008)(8676002)(6512007)(4326008)(36756003)(9686003)(6916009)(66946007)(41300700001)(6486002)(316002)(44832011)(38100700002)(2906002)(107886003)(6506007)(186003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: UfCw+81Itt4C4gyJOz+CMTuSICBGpu/IZdqeJDqL0jSGh1E/7ibDIgu7XhJSg8Xnqh+Ot2RgxoOesRS3n6zF52GabWvSBanA+4UgP41dIqrtYnN9j1y1n0My/kbSjXMoGoA8mP57AEyoXJCUrNsCnmR/lr933fzw3mK6QyT5eHD2BfxXlnalKHoTIKzAoHInvXvi7jake38MAuBOv4L6X4r/Fuv+1wfrXSft85KhL+MuFq0qq2PEnRZT/8IzmXskl8vluhQuQdgM/+o55EeFbRvzFj9mLeJmO34oQiq+xx+t/WZQJPr5bHKWDErvXXfQ6zPNRuThM6SYy8rm07hUF6dhGZSXZQGCXaBS+n9aDfCfMmCOfsaJ5Gw/m7IbVAkk9z+kWLmYG8bTcrR/U6DUjsHNJEY2uBaS/x9Z1Bx45sy+ZXs5sZ2s59vP1q7Vg1AYBDkC2uvnXVhNe5JRfh6X6TkGW4NlNqTamZ5OEulpywLVZkCwebMSTR15nb0pRJfikTxzNPPImhuktn228wbPkNV/bqxzQObugY5HNM25pna4pZjCRlqHLU3XK51348DpAimjzHpZJmGqR+Te+vlcIF5TBFvGKL7Nm5Sx5VGhxqAbkBxxubG+D+4S0RiTvnEEoH3l6+woy6WxfWEG0wBlvcANS2IXtTQRWiVv41XnOicIUXbn6DLz4OLQoUHoy4ROXxW0pp0Rd8FEoCZtiPnCXg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(396003)(346002)(136003)(366004)(451199015)(8676002)(107886003)(4326008)(44832011)(8936002)(6666004)(9686003)(6512007)(5660300002)(66946007)(66556008)(478600001)(66476007)(6486002)(2906002)(86362001)(6506007)(36756003)(41300700001)(186003)(38100700002)(316002)(6916009);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pMHwE9xniI6FHCf8KiAkzTTzeYzbz6hq0gTB2yueleaxbDLbzHFeNuccs9CT?=
- =?us-ascii?Q?40cx4yWqHVnV1uiDbhn0+czpALWi5itVakNFJn2dwU7AXET7+I9BirstEA+c?=
- =?us-ascii?Q?K/PQGVOWNOWymXzyvSTQnmCszVoC5sZHC4SVUSDMLqw6jLGbtF6C9TGuvnL+?=
- =?us-ascii?Q?2N5W7WO/YG2JQJ2F6GikZ8xx72OPKEBeIWhbQmNpQ7EWyMYGIjOLPVrg0bus?=
- =?us-ascii?Q?Yl76Tr61w9lp5f8rkYyJMSQwZinOzdIPGJSytjg9HzPhoJoPbdapkFLD4wsq?=
- =?us-ascii?Q?3ZOtN/DwdWYY3nibY/TTUNlmzwTWBV2lBHKQy7jOdI218LRBL/1aOH7OV6N/?=
- =?us-ascii?Q?FrJyYT4uNEwYlmYgHbQ79mueAgnA2DqcWRvfJUtFCFuuLpY0mN/Kh9vRLiKQ?=
- =?us-ascii?Q?f1N6GWnmuI7lDswcfJhQfmfweommKTWYhAtmxr3XFduWXFiejptYaMIVLsqP?=
- =?us-ascii?Q?hblgVnP6ryTvEEaVGuFJuEerWgdPl8BP1TBE9AONOu6BEHqzZ48/4jVux1wj?=
- =?us-ascii?Q?pXGhu3PkYuzJFauaLCT9MRymQodRHLZqUsKZTykiim1kRdHLKT8e6tpVFbaj?=
- =?us-ascii?Q?5qvZY9wdUqR6fneP4yTkkVC5D2CoLLONx9YL3no6HsOtCO3o7JJ9MX0HsNNT?=
- =?us-ascii?Q?tsiIu29hrjL600i1S/SPFB618JLY63TnZvV0hg+FGGSH6TVjQUCYpB0oIwKV?=
- =?us-ascii?Q?b5U6jlwXvr+ajnMg+gfhNRhzxHEZQpNOC+JGlmHj7zPG0AkMURdhfIdLmZ3h?=
- =?us-ascii?Q?p1jlSNYMqiHk6xzybz42alrsBrFBs5Lwp5nS4UgbpRyUrkUqKd1pQCIicrUe?=
- =?us-ascii?Q?iFuExskGM0F4pVibX9QF0yJyEWwNYl5RuvpzNsSsTltC7R2Edvpx9q4pQr1B?=
- =?us-ascii?Q?TBjRkxYOUjImnWOQFvfZs6Uz7Dm6zvbRKgIQ45mSFoAwMrlyOc18BBW44mTn?=
- =?us-ascii?Q?oefgwolabI/GC/LxrzQTKD1nSzin/waYhBlYk98Q0OXWyzJe2BaDDXltjIz6?=
- =?us-ascii?Q?Gj2l5ihs5hUhcCAOf1O7iLZXWtEj9MukhuXQp8diN9HmVTTFYIy/IuCF0+7T?=
- =?us-ascii?Q?xjuVd1MGHxu0HhzHmlT8l78JMWqjuLTvqRhLwF3CDPLG9J+pwjyLav5zEOZF?=
- =?us-ascii?Q?eyKpvL2rGMP0/TUwHXoz++AIeWaKro4MNChlKCErTZNpWMwRYi+jWIulyfqc?=
- =?us-ascii?Q?cVY3jfBTBF/LfXou3NQRlNsgdvB6X/EFjnaX9ei0ts3oawRDOhoxrNBc0PC4?=
- =?us-ascii?Q?8W9IHTwdVh6kcHZ6/z2Me6GB/Naju7jKm4AK6xycxIac5U0HtaUuX9ShKOVl?=
- =?us-ascii?Q?YTY0swbCKrg0FCChZLuVnQ2gh5Wr8j8fr8YuboFxWEsFesEy92HRfUecB+8A?=
- =?us-ascii?Q?T1bb61Wgn1QOqHMvjT7RWArT7rkZa6VWjFuxcQ33t6xEpkZWDejOeqQ1KsTd?=
- =?us-ascii?Q?3TVxqb8GNRGhjmfaPAGsnNLPn4S3OW7qF93f/e8Kyv5wv8YEdcwi2w4PEf/a?=
- =?us-ascii?Q?gLNDRxcaTq7wJWpTORjg75CnU9ZW2ZBOiZBUE+vSid1Z+9B5xTIr6Fj13QKz?=
- =?us-ascii?Q?NwaEZaGfntbP/g8xGUrvZg84+ujT+viSyX1jvwm6pqixMZ8ug0Z6qMY/S9ea?=
- =?us-ascii?Q?7A=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zyUXuczyOShRMKPbxr+kdcGR43gbBM+u19nqdDXarkGeOVrToDptddcfFYeB?=
+ =?us-ascii?Q?yQwkVYqKE+FP9IMapp1Z+WXApCn1lBr8FPncRWrErfXq3RHHx3OXa0c2dXI5?=
+ =?us-ascii?Q?SJ383eqh1LMEOsTydug5xSnX8oL3ip40ccbVThAa2zpe/oz+wDdqulIQ9gZz?=
+ =?us-ascii?Q?cDfMXysR+kJqhrve1Y2W3u30uewDixncBssIYmZQFd7FcZYvngzB62LBi5dd?=
+ =?us-ascii?Q?36NZ+T2HY74QhoMXVa/5l+VA2H0IndGSsUYi1Wi0CxUhS7JEEcMx1Mq5I7DW?=
+ =?us-ascii?Q?0x4iH9peNNxIJu9U4YazlJmBZBTgK9bO8bvwA3eyO9DLps9t8CVUOj1wDA3Z?=
+ =?us-ascii?Q?eOhsZEB9V95Imatssk39uEHwnW2UnnkfShEHR4I/hLwWqKkcX7hfMwf9Es5s?=
+ =?us-ascii?Q?3mr2YsRnjcjYMSwTfJrgKG6bT+zssiXWzeOiZ+RF60Pp6hWBrHHT4k5LIHvL?=
+ =?us-ascii?Q?TO23eNYGDB750otiCyAn+wAuwhlH9eKqAybCwqD9huGO2zIH8tp8oecPrIZ7?=
+ =?us-ascii?Q?+89dHipmCuu+1sE5ow6LM9pIAgru6GEtARFmStfJUeulcz3MRXMtZDpVeTCC?=
+ =?us-ascii?Q?HCAnNWq+RTSpD9CnHLH6Apd3zZ91+VLu7CTMRhiIFoQBbfYO1heGQ4SUU9N6?=
+ =?us-ascii?Q?nX380gaVWK1wehEsxN8HemAVi70eWxNTPec7FXfY1SAHpzizlyZUragd3i59?=
+ =?us-ascii?Q?AvXRnh0RlzFYeTZe9XyGKswXBSfVSYlPUDuN/inOuTG4AvhQcf3WFAAFRqYl?=
+ =?us-ascii?Q?Tt3V8UXy+/wAeEIyaeHLnxRHF94IWkXah/fep2f4ySDv3MkgV5l6X6REXQb8?=
+ =?us-ascii?Q?zGDlY79FVudWK5Quk3TjdI92pEITneIhA6Q/f0zFok/9LDHkHxMqHUIji+vi?=
+ =?us-ascii?Q?r+xDg7CJIZpkuTkqivJCKwyZxlyAax4RnyWInLaH4ygpe7RubWKt6LrDRB+v?=
+ =?us-ascii?Q?84bhXOfixjnCfIERFJG40GWqVTEw9EdyL2m2Fu/8USfBrE8FMBt4TAHfO4cA?=
+ =?us-ascii?Q?+X9jMx0/+LYNEKffZ0O7KNGrVMRnLwT2Td7+Dwpm1XFfzJ2z8HvGpBGmcoj4?=
+ =?us-ascii?Q?ONAkwH9zAKb/3Ir/u4u9uVaQK8Dq5NUDLfWjyujKDraAEjomwT6mfM/gqHiu?=
+ =?us-ascii?Q?YfC0tlcW47YrOk1KrrcULaoIoiZkDC/vi3lRLaAK0pH8AKQizAJByu/pjrj1?=
+ =?us-ascii?Q?UATi9kXDaOwRNcAnMHl6x3uax8H/oyM0XsdLvZw+fNNyKewm7gwHSol+4r+t?=
+ =?us-ascii?Q?vVMkkDBrWoJDqeDnSFRqiUCI53G9Ab5NLeoSE6CHXgDt2cI0HUuC8uxOxeAw?=
+ =?us-ascii?Q?9qVmlTQb9BK+VZLfxG/Z9GONRqrsBywCUTfOOzH2mcAklYkTjzFIS1kId3I7?=
+ =?us-ascii?Q?6cpBRZ28cperf0kwOskT9SWjYDf1+r4dwEZ7lgn8/VORKeogrMsTyhqsuHwb?=
+ =?us-ascii?Q?bgveDSPZu9qvKJuosmT47/TtZ2WVUrcQH/R2rkpxFN7B8FkLiq4ZObv+9U8N?=
+ =?us-ascii?Q?qRQfX6k3+JGqPHfxCF9zp9AYxTncX5x3Qx1Bqujorjpg5UzAwWMLpCXdH6C4?=
+ =?us-ascii?Q?WpMvisuQ4UgbJ+ZQ1Nl0TyVY18pGZ+OOj8K7j7cA8uujb8dQYsUOfLAccnXj?=
+ =?us-ascii?Q?bw=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b146f5b-0b7d-4943-5ff8-08dac3eb3f90
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0708acce-698f-4882-3c8c-08dac3ed8e0e
 X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 13:47:18.0941
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 14:03:48.4934
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: w/p72Yt7IrEXjJfh84ff5uSsFFcJIm9FdQ7TQfHxRuhqPvOQXQUBQPJ2MTEuAjVDZJqirzbm7CYCAL2NAZ5k9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4557
+X-MS-Exchange-CrossTenant-UserPrincipalName: JAcYPzVopfWDYjO1JeKI8XlIv5mg5+FPaTK0PYoFgeTRfHwUtUliE//aTQJ6m11148YYfwO3O6irxLVB/X3Tsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5983
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-11_08,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 spamscore=0
- bulkscore=0 suspectscore=0 adultscore=0 malwarescore=0 mlxlogscore=957
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=538 adultscore=0 mlxscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 bulkscore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211110092
-X-Proofpoint-GUID: oclpAlM3LAAePBuwHj6zJ7lQ6eVtaSZO
-X-Proofpoint-ORIG-GUID: oclpAlM3LAAePBuwHj6zJ7lQ6eVtaSZO
+ definitions=main-2211110094
+X-Proofpoint-GUID: 7cVE4r5nzkYWxa7W6k7iGD1skcWUsqSB
+X-Proofpoint-ORIG-GUID: 7cVE4r5nzkYWxa7W6k7iGD1skcWUsqSB
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 10 Nov 2022, Luis Chamberlain uttered the following:
+On 11 Nov 2022, Nick Alcock said:
 
-> On Wed, Nov 09, 2022 at 01:41:26PM +0000, Nick Alcock wrote:
->> I am not wedded to the approach used to construct this file, but I don't
->> see any other way to do it despite spending a week or so trying to tie
->> it into Kbuild without using a separate Makefile.modbuiltin: unlike the
->> names of builtin modules (which are also recorded in the source files
->> themseves via MODULE_*() macros) the mapping from object file name to
->> built-in module name is not recorded anywhere but in the makefiles
->> themselves, so we have to at least reparse them with something to
->> indicate the builtin-ness of each module (i.e., tristate.conf) if we are
->> to figure out which modules are built-in and which are not.
+> But... it's not quite doing the same thing, so perhaps it can't be that
+> much simpler. Picking the first item that appears in my test build of
+> this but not in modules_thick.builtin:
 >
-> Please try this patch, unless I am not understanding perhaps we may be
-> able to replace the first two patches with this one? It also seems
-> to capture a bit more data than the modules_thick.builtin file.
+> +arch/x86/crypto/libblake2s-x86_64.o: arch/x86/crypto/blake2s-core.o arch/x86/crypto/blake2s-glue.o
+>
+> But...
+>
+> obj-$(CONFIG_CRYPTO_BLAKE2S_X86) += libblake2s-x86_64.o
+> libblake2s-x86_64-y := blake2s-core.o blake2s-glue.o
+>
+> config CRYPTO_BLAKE2S_X86
+>         bool "Hash functions: BLAKE2s (SSSE3/AVX-512)"
+>
+> This cannot be built as a module. The point of modules_thick.builtin was
+> not to capture things that can be built into the kernel or left
+> unconfigured entirely (though that is *also* a nice thing to capture,
+> and should probably be captured regardless) but to capture *those things
+> that can possibly be built as modules*, i.e. those things which are
+> tristates in Kbuild and might possibly get built into .ko's. That was
+> the whole reason we needed the tristate stuff in the first place, and
+> I'm still not sure how to do it without that.
 
-Oh thank you! At first sight this looks really good. I had trouble
-believing it could be that much simpler :)
-
-...
-
-But... it's not quite doing the same thing, so perhaps it can't be that
-much simpler. Picking the first item that appears in my test build of
-this but not in modules_thick.builtin:
-
-+arch/x86/crypto/libblake2s-x86_64.o: arch/x86/crypto/blake2s-core.o arch/x86/crypto/blake2s-glue.o
-
-But...
-
-obj-$(CONFIG_CRYPTO_BLAKE2S_X86) += libblake2s-x86_64.o
-libblake2s-x86_64-y := blake2s-core.o blake2s-glue.o
-
-config CRYPTO_BLAKE2S_X86
-        bool "Hash functions: BLAKE2s (SSSE3/AVX-512)"
-
-This cannot be built as a module. The point of modules_thick.builtin was
-not to capture things that can be built into the kernel or left
-unconfigured entirely (though that is *also* a nice thing to capture,
-and should probably be captured regardless) but to capture *those things
-that can possibly be built as modules*, i.e. those things which are
-tristates in Kbuild and might possibly get built into .ko's. That was
-the whole reason we needed the tristate stuff in the first place, and
-I'm still not sure how to do it without that.
-
-(The reason: if your tracer or whatever has a distinct notation used by
-users for things in named modules, then you'd usually like to keep that
-notation the same if you choose to build something into the kernel that
-might otherwise be a module. Things that cannot be built as modules
-could just use the in-the-core-kernel notation unconditionally, because
-there's no way they can ever be found anywhere else: and users are
-likely to expect that. At least, when I broke it in DTrace years ago, I
-got complaints!)
-
--- 
-NULL && (void)
+OK, I think I should be able to combine your patch with (a variant of)
+the tristate stuff and get the best of both worlds (only-modular plus
+the efficiency of building and simplicity of your patch, with no nasty
+separate recursion like I had for modules_thick.builtin). Working on
+that...
