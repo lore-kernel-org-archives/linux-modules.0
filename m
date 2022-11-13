@@ -2,119 +2,71 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DB3FC433FE
-	for <linux-modules@archiver.kernel.org>; Sat, 12 Nov 2022 01:47:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33A2EC433FE
+	for <linux-modules@archiver.kernel.org>; Sun, 13 Nov 2022 02:44:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiKLBrc (ORCPT
+        id S231972AbiKMCon (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 11 Nov 2022 20:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
+        Sat, 12 Nov 2022 21:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbiKLBrb (ORCPT
+        with ESMTP id S231252AbiKMCom (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 11 Nov 2022 20:47:31 -0500
+        Sat, 12 Nov 2022 21:44:42 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0AB5CD39;
-        Fri, 11 Nov 2022 17:47:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C03511146;
+        Sat, 12 Nov 2022 18:44:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1h4b36xjfrJxeVTHNiWTObUZ6e0AouI8FvL/L/clyFk=; b=hgypyjf+iYre0pd/UehroNA3Ow
-        WXtRXmiviSXv6BjKh5VSOU9wa+UnrYyU0pYgxDHL1LvFbcX37VoW+FP0uexXeJlIfWnO32BZsG4/D
-        zE+4RbUmDg1R+r5kkjebDP0zwi7N2mSoNtsQ02hnlH94Yu2bBhbnrmI6iw+VPP6/aXSaa2YdAYEEE
-        lqfYqOgMfio1cTIG8JfQGdoNgmDhRXu1ZZawCCfBTtq0Obv/0gTVp0tGj7V235fYMKKnV5q71qExp
-        do/r9iB25zNJxqFGojvahHaa1j6ti47P59cC4h/kTpG/1eOtBCZwLrAGxG/RrBdR1ag711F3RT2CQ
-        l4wNhUGQ==;
+        bh=PFC/3gpZ/w6uCN7OIH1RY890hMXcXfGXd92XAeM8pJY=; b=Ny1dJjzGyl4ZWzd34xFjfvi7ac
+        rKKtpQ0qL2nD4hxEyZB2x0V2IXXLrRo0olJYKASn7Be+O8UNBjMwojK7ZIEfvAi5GCH1POJxXrfB1
+        PODWL7PxfXn/Mz1WzB8Kvg6FAthsp39/8IUZZRO6zLeRTU/26PHAQX+Zl42K/xF09udZlAmZF6OZ9
+        OSBcyufEPZKs6WndMhGQ0Ii4YUTWEcxL6a/ZGpNIjJsN3fT8pW2tAdQD3fTRQNe7MSCzcZhmcQ3/d
+        TJ+nVkQgohLawzY8YG5FIrarkP1/z+6ewSSTZPGTIVEQsrHBpDRmpV6+QMYq+IjhaO/0Hk1s50zdz
+        MoXR3tzQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1otfc5-002QhM-DU; Sat, 12 Nov 2022 01:47:25 +0000
-Date:   Fri, 11 Nov 2022 17:47:17 -0800
+        id 1ou2yw-009APa-FH; Sun, 13 Nov 2022 02:44:26 +0000
+Date:   Sat, 12 Nov 2022 18:44:26 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Prarit Bhargava <prarit@redhat.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     pmladek@suse.com, Petr Pavlu <petr.pavlu@suse.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mcgrof@kernel.org
-Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
-Message-ID: <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
-References: <20220919123233.8538-1-petr.pavlu@suse.com>
- <20220919123233.8538-3-petr.pavlu@suse.com>
- <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
- <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
- <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
- <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-modules@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH v8 0/9] kallsyms: Optimizes the performance of lookup
+ symbols
+Message-ID: <Y3BaCii5iz2TiUx7@bombadil.infradead.org>
+References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
+In-Reply-To: <20221102084921.1615-1-thunder.leizhen@huawei.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Oct 19, 2022 at 02:00:55PM +0200, Petr Pavlu wrote:
-> On 10/18/22 20:33, Luis Chamberlain wrote:
-> > On Sat, Oct 15, 2022 at 11:27:10AM +0200, Petr Pavlu wrote:
-> >> The patch does address a regression observed after commit 6e6de3dee51a
-> >> ("kernel/module.c: Only return -EEXIST for modules that have finished
-> >> loading"). I guess it can have a Fixes tag added to the patch.
-> >>
-> >> I think it is hard to split this patch into parts because the implemented
-> >> "optimization" is the fix.
-> > 
-> > git describe --contains 6e6de3dee51a
-> > v5.3-rc1~38^2~6
-> > 
-> > I'm a bit torn about this situation. Reverting 6e6de3dee51a would be the
-> > right thing to do, but without it, it still leaves the issue reported
-> > by Prarit Bhargava. We need a way to resolve the issue on stable and
-> > then your optimizations can be applied on top.
+On Wed, Nov 02, 2022 at 04:49:12PM +0800, Zhen Lei wrote:
+> v7 --> v8:
+> Sort the symbols by name and implement kallsyms_lookup_name() using a binary
+> search. The performance is more than 20 times higher than that of v7. Of course,
+> the memory overhead is also extended to (3 * kallsyms_num_syms) bytes. Discard
+> all implementations of compression and then comparison in v7.
 > 
-> Simpler could be to do the following:
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index d02d39c7174e..0302ac387e93 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
->  	sched_annotate_sleep();
->  	mutex_lock(&module_mutex);
->  	mod = find_module_all(name, strlen(name), true);
-> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
-> +	ret = !mod || mod->state == MODULE_STATE_LIVE
-> +		|| mod->state == MODULE_STATE_GOING;
->  	mutex_unlock(&module_mutex);
->  
->  	return ret;
-> @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
->  	mutex_lock(&module_mutex);
->  	old = find_module_all(mod->name, strlen(mod->name), true);
->  	if (old != NULL) {
-> -		if (old->state != MODULE_STATE_LIVE) {
-> +		if (old->state == MODULE_STATE_COMING
-> +		    || old->state == MODULE_STATE_UNFORMED) {
->  			/* Wait in case it fails to load. */
->  			mutex_unlock(&module_mutex);
->  			err = wait_event_interruptible(module_wq,
-> @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
->  				goto out_unlocked;
->  			goto again;
->  		}
-> -		err = -EEXIST;
-> +		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
->  		goto out;
->  	}
->  	mod_update_bounds(mod);
+> In addition, all sparse warnings about kallsyms_selftest.c are cleared.
 
+Awesome work, I can't find a single thing I hate about this, but my
+biggest conern is the lack of testing so I'm going to merge this to
 
-Prarit, can you verify this still does not break the issue you reported?
-David, does this also fix your issue?
-
-Petr, does this solve *any* of your issues? Can you also send a proper
-patch with a commit log once we get confirmation of the tests.
-
-I've been nose diving onto all of these 3 issues now and I have some
-ideas of how to split this crap better and save even more memory on
-bootup due to these stupid multiple requests. I want to first solve this
-regression.
-
-  Luis
