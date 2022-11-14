@@ -2,164 +2,127 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CB05C4332F
-	for <linux-modules@archiver.kernel.org>; Mon, 14 Nov 2022 13:26:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67E24C4332F
+	for <linux-modules@archiver.kernel.org>; Mon, 14 Nov 2022 15:38:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236181AbiKNN0Z (ORCPT
+        id S236720AbiKNPic (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 14 Nov 2022 08:26:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        Mon, 14 Nov 2022 10:38:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234803AbiKNN0Y (ORCPT
+        with ESMTP id S236124AbiKNPib (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:26:24 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D690183B6;
-        Mon, 14 Nov 2022 05:26:23 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id v17so17273774edc.8;
-        Mon, 14 Nov 2022 05:26:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AjEtgGGwNMbPprD3H7P+1amTVuS4bSxngS1okyU2BrQ=;
-        b=JVpBwR/tgyW0nfSDZeOYStbM7P6ueoMgnbP96FdN+FP/v4XA+J/K1oVMRqGeZl55PN
-         egMcxElq18V/AantX0ASEZe+GY0JtRHJGUwMetqM9XsLyIJqx4kCQGmfdtK4GuUjqni9
-         f6rE+0yL24ESEASBJEVpbsYNhC4te0jAyiH+LOU119v8WlfvzllCtahNFTvrchWAFLyv
-         Rf66x69TrKQcPOBY6onBz7v3KNiUdubea6wDxX/+46TCLPe38g3AqpGyC0WEHuCkAv/O
-         cutFgnCYAXPyJQkPixELElguvE8tbFqaKgaqECNZ5+ETkT4aEEcKECPZXo5monjFf5wE
-         V6Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AjEtgGGwNMbPprD3H7P+1amTVuS4bSxngS1okyU2BrQ=;
-        b=Z+3F0/pYVUncqQO0QVSwx62AdE1Zbv5KOKOMF4ygpC4guYQL6kvfuKuXTo9C/8MlFQ
-         yvi2HpkUZUDxy5TGzltZyob/aT6/2ctweunbra8Sv2MRyvi6p8lz+a68IhhKYH011SxY
-         Mymeq7YrT1TR+Xrn7J5RPnNh1Cz+XGeIQyZI9iMvuFPWXp+itlXO3iaHcEEOMmapLXYj
-         jOEO8iWVXMf2ovIgW7D6ENyInof4EARXmCORb0mdTJ9fzBJKk3KOjBRLPOHZj04zaOWw
-         kiJAxwU/WdBXD6+4C6LjWQW1bLuJYbWU9dJo5BSU898dgOTmX33kqNImPgoSaQzvGl2x
-         quoA==
-X-Gm-Message-State: ANoB5pmyFYjNXDGxS800fIK9DlAnsgpD448NxZmaprW5IgrPQed49b45
-        C+9yycs2m/Lcm/wndT6S1whkNtZ6jHHoUg==
-X-Google-Smtp-Source: AA0mqf6IPlcVUMBFbPlmxPvEGJH+/EHq8udoRbxRttEMufGeS2dm/xvdO1iGjsKkHFidd3gv7CKIMQ==
-X-Received: by 2002:aa7:de88:0:b0:458:b42e:46e6 with SMTP id j8-20020aa7de88000000b00458b42e46e6mr11250927edv.375.1668432381832;
-        Mon, 14 Nov 2022 05:26:21 -0800 (PST)
-Received: from krava ([83.240.62.198])
-        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b007aa3822f4d2sm4305324ejg.17.2022.11.14.05.26.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 05:26:21 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 14 Nov 2022 14:26:19 +0100
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Laight <David.Laight@aculab.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-Message-ID: <Y3JB++KOXxMWWX35@krava>
-References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
- <20221102084921.1615-8-thunder.leizhen@huawei.com>
- <Y3HyrIwlZPYM8zYd@krava>
- <050b7513-4a20-75c7-0574-185004770329@huawei.com>
- <Y3IJ5GjrXBYDbfnA@krava>
- <ad637488-930e-33c1-558c-fc03d848afa8@huawei.com>
- <Y3IY6gzDtk1ze3u7@krava>
- <955eebae-0b36-d13f-0199-2f1b32af7da6@huawei.com>
+        Mon, 14 Nov 2022 10:38:31 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6813BBB8;
+        Mon, 14 Nov 2022 07:38:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uZjZHgVZVYg09RCV/ZTHwTfPg4g7gHQcNAZSrhfP1yM=; b=RLG9JtfNVlXDGmV0guc6KvbTz3
+        fh8FFURX7gYuI3TIW9ZnqLfXE9CudFz+ZRU/xNGIZL+n+/t92bbez8w7h9/6YdpssgK7ZBtr4ZzmK
+        iffoMPI7rdAa/jDBSZZ6DwpFBxZ2NzArKVyM4YDcesekoirLhHJ+SbZ2JpyIsL+tEyOF/6JJ/hElm
+        MlGz3bxpExPImeok3oDW8t+6+b2ESDfo46zEKmtU/aJO/fnXcVwDDc/wVMGkl+cUty1qyCNpM5c9v
+        TtzmYK4gbfYpiZ3TNFsowHkEippuBtOabOr0naWjCiO/GCCISKIZaShN0UqAg+TrQRKr0eI7m10Uv
+        OzMCtGRw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oubXV-002IRv-CR; Mon, 14 Nov 2022 15:38:25 +0000
+Date:   Mon, 14 Nov 2022 07:38:25 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Prarit Bhargava <prarit@redhat.com>, pmladek@suse.com,
+        Petr Pavlu <petr.pavlu@suse.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
+Message-ID: <Y3Jg8X7qv2AKPU1J@bombadil.infradead.org>
+References: <20220919123233.8538-1-petr.pavlu@suse.com>
+ <20220919123233.8538-3-petr.pavlu@suse.com>
+ <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
+ <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
+ <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
+ <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
+ <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
+ <e070839f-c224-047b-9411-91143c1d8394@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <955eebae-0b36-d13f-0199-2f1b32af7da6@huawei.com>
+In-Reply-To: <e070839f-c224-047b-9411-91143c1d8394@redhat.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Nov 14, 2022 at 07:30:16PM +0800, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/11/14 18:31, Jiri Olsa wrote:
-> > On Mon, Nov 14, 2022 at 06:00:38PM +0800, Leizhen (ThunderTown) wrote:
-> >>
-> >>
-> >> On 2022/11/14 17:27, Jiri Olsa wrote:
-> >>> On Mon, Nov 14, 2022 at 04:50:25PM +0800, Leizhen (ThunderTown) wrote:
-> >>>>
-> >>>> On 2022/11/14 15:47, Jiri Olsa wrote:
-> >>>>> On Wed, Nov 02, 2022 at 04:49:19PM +0800, Zhen Lei wrote:
-> >>>>>> Currently we traverse all symbols of all modules to find the specified
-> >>>>>> function for the specified module. But in reality, we just need to find
-> >>>>>> the given module and then traverse all the symbols in it.
-> >>>>> hi,
-> >>>>> sorry for delayed answer, I did not notice this until Stephen's email
-> >>>>> about merge issue with recent bpf change [1]
-> >>>>>
-> >>>>>> Let's add a new parameter 'const char *modname' to function
-> >>>>>> module_kallsyms_on_each_symbol(), then we can compare the module names
-> >>>>> we have use case for iterating all modules and their symbols when we
-> >>>>> want to resolve passed addresses for tracing
-> >>>>>
-> >>>>> we don't have 'modname' that we could pass, we need to iterate all modules
-> >>>>>
-> >>>>> so perhaps this could be made optional like with passing NULL for modname?
-> >>>> The deletion of modname was suggested by Petr Mladek. The reason is that
-> >>>> everyone passes modname as NULL, there was no actual demand at the time.
-> >>>> https://lkml.org/lkml/2022/9/20/682
-> >>>>
-> >>>>>> directly in this function and call hook 'fn' after matching. And the
-> >>>>>> parameter 'struct module *' in the hook 'fn' can also be deleted.
-> >>>>> we need 'struct module *' argument in the callback as well because we are
-> >>>>> taking the module reference if we trace function in it, so it wont get
-> >>>>> unloaded
-> >>>>>
-> >>>>> please let me know if I should do the change or can help in any way
-> >>>> It seems that we should take the module reference before invoking callback
-> >>>> and put it after it is called, without passing modname.
-> >>> we take the module ref only if we (callback) find the traced address in
-> >>> the module, we don't have the module object before
-> >>>
-> >>> jirka
-> >>>
-> >>
-> >> Do it in function module_kallsyms_on_each_symbol()?
-> >>
-> >> But I just saw that mutex_lock(&module_mutex) protection is already
-> >> provided in this function. So reference counting protection may not
-> >> be required.
+On Mon, Nov 14, 2022 at 09:57:56AM +0100, David Hildenbrand wrote:
+> On 12.11.22 02:47, Luis Chamberlain wrote:
+> > On Wed, Oct 19, 2022 at 02:00:55PM +0200, Petr Pavlu wrote:
+> > > On 10/18/22 20:33, Luis Chamberlain wrote:
+> > > > On Sat, Oct 15, 2022 at 11:27:10AM +0200, Petr Pavlu wrote:
+> > > > > The patch does address a regression observed after commit 6e6de3dee51a
+> > > > > ("kernel/module.c: Only return -EEXIST for modules that have finished
+> > > > > loading"). I guess it can have a Fixes tag added to the patch.
+> > > > > 
+> > > > > I think it is hard to split this patch into parts because the implemented
+> > > > > "optimization" is the fix.
+> > > > 
+> > > > git describe --contains 6e6de3dee51a
+> > > > v5.3-rc1~38^2~6
+> > > > 
+> > > > I'm a bit torn about this situation. Reverting 6e6de3dee51a would be the
+> > > > right thing to do, but without it, it still leaves the issue reported
+> > > > by Prarit Bhargava. We need a way to resolve the issue on stable and
+> > > > then your optimizations can be applied on top.
+> > > 
+> > > Simpler could be to do the following:
+> > > 
+> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > > index d02d39c7174e..0302ac387e93 100644
+> > > --- a/kernel/module/main.c
+> > > +++ b/kernel/module/main.c
+> > > @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
+> > >   	sched_annotate_sleep();
+> > >   	mutex_lock(&module_mutex);
+> > >   	mod = find_module_all(name, strlen(name), true);
+> > > -	ret = !mod || mod->state == MODULE_STATE_LIVE;
+> > > +	ret = !mod || mod->state == MODULE_STATE_LIVE
+> > > +		|| mod->state == MODULE_STATE_GOING;
+> > >   	mutex_unlock(&module_mutex);
+> > >   	return ret;
+> > > @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
+> > >   	mutex_lock(&module_mutex);
+> > >   	old = find_module_all(mod->name, strlen(mod->name), true);
+> > >   	if (old != NULL) {
+> > > -		if (old->state != MODULE_STATE_LIVE) {
+> > > +		if (old->state == MODULE_STATE_COMING
+> > > +		    || old->state == MODULE_STATE_UNFORMED) {
+> > >   			/* Wait in case it fails to load. */
+> > >   			mutex_unlock(&module_mutex);
+> > >   			err = wait_event_interruptible(module_wq,
+> > > @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
+> > >   				goto out_unlocked;
+> > >   			goto again;
+> > >   		}
+> > > -		err = -EEXIST;
+> > > +		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
+> > >   		goto out;
+> > >   	}
+> > >   	mod_update_bounds(mod);
 > > 
-> > we take the module ref so it won't unload even outside of the
-> > module_kallsyms_on_each_symbol function
+> > 
+> > Prarit, can you verify this still does not break the issue you reported?
+> > David, does this also fix your issue?
 > 
-> There's another way to do it, but it's more time consuming.
-> 
-> struct module *__module_text_address(unsigned long addr);
-> struct module *__module_address(unsigned long addr);
-> 
-> Which way do you think is more appropriate?
+> I didn't try, but from a quick glimpse I assume no. Allocating module space
+> happens before handling eventual duplicates right now, before a module even
+> is "alive" and in the MODULE_STATE_UNFORMED state.
 
-I think it'd be best to keep the module argument in the callback,
-I don't see the harm.. AFAICS it was removed because you thought
-nobody was using it, but that's not the case
+The first two hunks are a revert of commit 6e6de3dee51a and I'm under
+the impression that cauased your issues as *more* modules states are
+allowed through.
 
-using __module_text_address/__module_address might be doable and
-it might be fast enough, because it's using rbtree
+The last hunk tries to fix what 6e6de3dee51a wanted to do.
 
-I'll check on that, meanwhile if we could keep the module argument,
-that'd be great
+> But maybe I am missing something important.
 
-thanks,
-jirka
+Please do test if you can.
+
+  Luis
