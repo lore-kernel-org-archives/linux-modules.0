@@ -2,155 +2,268 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D85D3C433FE
-	for <linux-modules@archiver.kernel.org>; Mon, 14 Nov 2022 08:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C8CCC433FE
+	for <linux-modules@archiver.kernel.org>; Mon, 14 Nov 2022 09:27:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236640AbiKNI7k (ORCPT
+        id S236766AbiKNJ1N (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 14 Nov 2022 03:59:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        Mon, 14 Nov 2022 04:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236021AbiKNI7a (ORCPT
+        with ESMTP id S236174AbiKNJ1G (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:59:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FABB1DDF2
-        for <linux-modules@vger.kernel.org>; Mon, 14 Nov 2022 00:58:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668416281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wZg0DxB8so7m34QKRBpTnK7NzeILrTRgIJDNhSB4dJs=;
-        b=Fehn472R6kXcyhS5dVEpWFOqbwPmMloEmgMfEMpYVwgSP+nVCKpsMqf42z+liP7v6UzLbw
-        JUZmb1/vv+UfFmn+EAM5CHGEMoGJgU7//cmDAk1cJjka05OZSq/KbastrutEiDKdCUYWxA
-        MUqn7aZI3OVsYP8HQ6BJ2OiVmaC9WTA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-563-nvARq5h0N2SXYBFcNJt6JA-1; Mon, 14 Nov 2022 03:57:59 -0500
-X-MC-Unique: nvARq5h0N2SXYBFcNJt6JA-1
-Received: by mail-wr1-f69.google.com with SMTP id j20-20020adfb314000000b002366d9f67aaso1748238wrd.3
-        for <linux-modules@vger.kernel.org>; Mon, 14 Nov 2022 00:57:58 -0800 (PST)
+        Mon, 14 Nov 2022 04:27:06 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC891D31D;
+        Mon, 14 Nov 2022 01:27:05 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id w14so16978261wru.8;
+        Mon, 14 Nov 2022 01:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvWu08XzkXkZhpj7JNv2DfEXbFQhdIZI5jbEYBna98g=;
+        b=jTTMyAH5v5m2HPu0gotkwsSXiApjzz9/T66MmOBfij+6Qrr8vBujig/csxgnR9fyfA
+         EQ1nJ4hBRXlfbn7q7gEa4/tyGSDDnR1QkUwGMekc/DKpNvNLkshHn9zl5JP0bHv6qn6z
+         rQbBxmFq3wi6+sIgNZ2S/Qvw/WHq+BjhOW14B2iKUezln7ZOrcm/y7n83BDhJYCNAsFW
+         YQ8PoEzk+B5yBfA2s0pgNUQNbxhBmDJUJgdxKet3/CexQlXdit3WrvbXUxBhyxh2Mvet
+         uNkHr9rqHUK2TMJk6qv8SZVTgaWIjoxVhMlHnQlLvJuWp/bhatplAu/hyoWrH6pA5Cnw
+         hynA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wZg0DxB8so7m34QKRBpTnK7NzeILrTRgIJDNhSB4dJs=;
-        b=j4ScVKZwEu4pGOilACnEx1Z4xKTMKraaTRabWRiAPrO6woRTE7EcLtFAYMHdkeDCZ6
-         b2TSSRJeNcB+opzsAxnrPxqoB7GL4LcMX6TI8+cFyXLrWBmnMiYC+A/xtOWknzUXz/I5
-         RmjCZeRuXn+0AVClJfFt7JGYELQ00vZeJGPhIqjuOXHpxGQ9rrtrKvTec62cfL1EmD2t
-         RuQPoWjA0YNxjRtm2pM0/QpysBNdm0lAqqldZwwLvn5K1eBE9pYhlyjhJBieTsRl0666
-         olIrUqUBn0K5ViwyQiGqXhIVTNo6Re79WGMv657MC6l7ZJo6tj3EeK8QSK3TguyO2/Qg
-         hF5Q==
-X-Gm-Message-State: ANoB5pmg/T8Y1hiJksfc/seSfRxUo9tI15aU9DhGFrbj/i2qZJGjqysr
-        NaNm6vLluYbZRtbExM5XL5a2gSKso1j3BEXEDHZSfTHC6K3otoEnJQeGqQWzFviBZ3+tj45+vjw
-        CIGYyvzoEZQWKmsMe+O9xvcs7Cw==
-X-Received: by 2002:adf:ea42:0:b0:236:cfcf:8e36 with SMTP id j2-20020adfea42000000b00236cfcf8e36mr6883704wrn.323.1668416277878;
-        Mon, 14 Nov 2022 00:57:57 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6C4tbw+mII5DH1BvxyEuPB/WV9+rqn3TOzxHf0EGkwtwfnzuHykZnjcAk4yYnUVmxJBgTX3g==
-X-Received: by 2002:adf:ea42:0:b0:236:cfcf:8e36 with SMTP id j2-20020adfea42000000b00236cfcf8e36mr6883692wrn.323.1668416277602;
-        Mon, 14 Nov 2022 00:57:57 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:d300:8765:6ef2:3111:de53? (p200300cbc703d30087656ef23111de53.dip0.t-ipconnect.de. [2003:cb:c703:d300:8765:6ef2:3111:de53])
-        by smtp.gmail.com with ESMTPSA id r2-20020a5d6942000000b0022e47b57735sm9002499wrw.97.2022.11.14.00.57.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 00:57:57 -0800 (PST)
-Message-ID: <e070839f-c224-047b-9411-91143c1d8394@redhat.com>
-Date:   Mon, 14 Nov 2022 09:57:56 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fvWu08XzkXkZhpj7JNv2DfEXbFQhdIZI5jbEYBna98g=;
+        b=PumFYOXjWX99WLMM69lvBeoZll43AkxmlEvnpFvx6GWhnchWVpl93XFTi5W1YcUKYa
+         9Fr/SBebWsKiJLlPc/gu+2TyjF1Ku+dxSoVx9ER+2S1IlVFwa8lhSVx21nk37X5BD+us
+         vBiB8XYJoJ3qLLBOqo4lDaViOytWpeLRBdgN8YGlG2uyst8xZg2Je9YHeOxh2EgvQ6s4
+         8qLTo2qlOVVGZOAwb2IyUKBWtA2bh3i786jr/zY3QE3XhRaGlKTRHrFR0Nk0BZhHgniD
+         LbtGoiM8LGR2K2wu2EaMR0NfqyWlI/V/SUgICSc1zfjRezV+IeasBTIuP0j5EWFzAAMQ
+         +Vaw==
+X-Gm-Message-State: ANoB5pl0wmBjYHfr14tZFT+zwlrGSCpdWeFPgVBSsrBs6KX+9G4yOpIu
+        iGFfx1BGJFWh/XbMCGQhxemkvZvlRMhJBg==
+X-Google-Smtp-Source: AA0mqf6jx8+75LK4ui7ms84kmtUu6kXg0iAmFRcdoiI/Uxd9byoRYZ9gRFfrl+eLHRPNUn7kjsBOtA==
+X-Received: by 2002:adf:f18c:0:b0:236:862b:c457 with SMTP id h12-20020adff18c000000b00236862bc457mr6674563wro.154.1668418023707;
+        Mon, 14 Nov 2022 01:27:03 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id j17-20020a5d6191000000b0023657e1b980sm9045363wru.53.2022.11.14.01.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 01:27:03 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 14 Nov 2022 10:27:00 +0100
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
+ module_kallsyms_on_each_symbol()
+Message-ID: <Y3IJ5GjrXBYDbfnA@krava>
+References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
+ <20221102084921.1615-8-thunder.leizhen@huawei.com>
+ <Y3HyrIwlZPYM8zYd@krava>
+ <050b7513-4a20-75c7-0574-185004770329@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Prarit Bhargava <prarit@redhat.com>
-Cc:     pmladek@suse.com, Petr Pavlu <petr.pavlu@suse.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220919123233.8538-1-petr.pavlu@suse.com>
- <20220919123233.8538-3-petr.pavlu@suse.com>
- <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
- <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
- <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
- <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
- <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <050b7513-4a20-75c7-0574-185004770329@huawei.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 12.11.22 02:47, Luis Chamberlain wrote:
-> On Wed, Oct 19, 2022 at 02:00:55PM +0200, Petr Pavlu wrote:
->> On 10/18/22 20:33, Luis Chamberlain wrote:
->>> On Sat, Oct 15, 2022 at 11:27:10AM +0200, Petr Pavlu wrote:
->>>> The patch does address a regression observed after commit 6e6de3dee51a
->>>> ("kernel/module.c: Only return -EEXIST for modules that have finished
->>>> loading"). I guess it can have a Fixes tag added to the patch.
->>>>
->>>> I think it is hard to split this patch into parts because the implemented
->>>> "optimization" is the fix.
->>>
->>> git describe --contains 6e6de3dee51a
->>> v5.3-rc1~38^2~6
->>>
->>> I'm a bit torn about this situation. Reverting 6e6de3dee51a would be the
->>> right thing to do, but without it, it still leaves the issue reported
->>> by Prarit Bhargava. We need a way to resolve the issue on stable and
->>> then your optimizations can be applied on top.
->>
->> Simpler could be to do the following:
->>
->> diff --git a/kernel/module/main.c b/kernel/module/main.c
->> index d02d39c7174e..0302ac387e93 100644
->> --- a/kernel/module/main.c
->> +++ b/kernel/module/main.c
->> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
->>   	sched_annotate_sleep();
->>   	mutex_lock(&module_mutex);
->>   	mod = find_module_all(name, strlen(name), true);
->> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
->> +	ret = !mod || mod->state == MODULE_STATE_LIVE
->> +		|| mod->state == MODULE_STATE_GOING;
->>   	mutex_unlock(&module_mutex);
->>   
->>   	return ret;
->> @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
->>   	mutex_lock(&module_mutex);
->>   	old = find_module_all(mod->name, strlen(mod->name), true);
->>   	if (old != NULL) {
->> -		if (old->state != MODULE_STATE_LIVE) {
->> +		if (old->state == MODULE_STATE_COMING
->> +		    || old->state == MODULE_STATE_UNFORMED) {
->>   			/* Wait in case it fails to load. */
->>   			mutex_unlock(&module_mutex);
->>   			err = wait_event_interruptible(module_wq,
->> @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
->>   				goto out_unlocked;
->>   			goto again;
->>   		}
->> -		err = -EEXIST;
->> +		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
->>   		goto out;
->>   	}
->>   	mod_update_bounds(mod);
+On Mon, Nov 14, 2022 at 04:50:25PM +0800, Leizhen (ThunderTown) wrote:
 > 
 > 
-> Prarit, can you verify this still does not break the issue you reported?
-> David, does this also fix your issue?
+> On 2022/11/14 15:47, Jiri Olsa wrote:
+> > On Wed, Nov 02, 2022 at 04:49:19PM +0800, Zhen Lei wrote:
+> >> Currently we traverse all symbols of all modules to find the specified
+> >> function for the specified module. But in reality, we just need to find
+> >> the given module and then traverse all the symbols in it.
+> > 
+> > hi,
+> > sorry for delayed answer, I did not notice this until Stephen's email
+> > about merge issue with recent bpf change [1]
+> > 
+> >>
+> >> Let's add a new parameter 'const char *modname' to function
+> >> module_kallsyms_on_each_symbol(), then we can compare the module names
+> > 
+> > we have use case for iterating all modules and their symbols when we
+> > want to resolve passed addresses for tracing
+> > 
+> > we don't have 'modname' that we could pass, we need to iterate all modules
+> > 
+> > so perhaps this could be made optional like with passing NULL for modname?
+> 
+> The deletion of modname was suggested by Petr Mladek. The reason is that
+> everyone passes modname as NULL, there was no actual demand at the time.
+> https://lkml.org/lkml/2022/9/20/682
+> 
+> > 
+> >> directly in this function and call hook 'fn' after matching. And the
+> >> parameter 'struct module *' in the hook 'fn' can also be deleted.
+> > 
+> > we need 'struct module *' argument in the callback as well because we are
+> > taking the module reference if we trace function in it, so it wont get
+> > unloaded
+> > 
+> > please let me know if I should do the change or can help in any way
+> 
+> It seems that we should take the module reference before invoking callback
+> and put it after it is called, without passing modname.
 
-I didn't try, but from a quick glimpse I assume no. Allocating module 
-space happens before handling eventual duplicates right now, before a 
-module even is "alive" and in the MODULE_STATE_UNFORMED state.
+we take the module ref only if we (callback) find the traced address in
+the module, we don't have the module object before
 
-But maybe I am missing something important.
+jirka
 
--- 
-Thanks,
-
-David / dhildenb
-
+> 
+> > 
+> > thanks,
+> > jirka
+> > 
+> > [1] https://lore.kernel.org/lkml/20221114111350.38e44eec@canb.auug.org.au/
+> > 
+> >>
+> >> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
+> >>                 |
+> >> Phase2:          -->f1-->f2-->f3
+> >>
+> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> >> ---
+> >>  include/linux/module.h   |  4 ++--
+> >>  kernel/livepatch/core.c  | 13 ++-----------
+> >>  kernel/module/kallsyms.c | 15 ++++++++++++---
+> >>  3 files changed, 16 insertions(+), 16 deletions(-)
+> >>
+> >> diff --git a/include/linux/module.h b/include/linux/module.h
+> >> index ec61fb53979a92a..0a3b44ff885a48c 100644
+> >> --- a/include/linux/module.h
+> >> +++ b/include/linux/module.h
+> >> @@ -879,8 +879,8 @@ static inline bool module_sig_ok(struct module *module)
+> >>  }
+> >>  #endif	/* CONFIG_MODULE_SIG */
+> >>  
+> >> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> >> -					     struct module *, unsigned long),
+> >> +int module_kallsyms_on_each_symbol(const char *modname,
+> >> +				   int (*fn)(void *, const char *, unsigned long),
+> >>  				   void *data);
+> >>  
+> >>  #endif /* _LINUX_MODULE_H */
+> >> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+> >> index 50bfc3481a4ee38..d4fe2d1b0e562bc 100644
+> >> --- a/kernel/livepatch/core.c
+> >> +++ b/kernel/livepatch/core.c
+> >> @@ -118,27 +118,19 @@ static struct klp_object *klp_find_object(struct klp_patch *patch,
+> >>  }
+> >>  
+> >>  struct klp_find_arg {
+> >> -	const char *objname;
+> >>  	const char *name;
+> >>  	unsigned long addr;
+> >>  	unsigned long count;
+> >>  	unsigned long pos;
+> >>  };
+> >>  
+> >> -static int klp_find_callback(void *data, const char *name,
+> >> -			     struct module *mod, unsigned long addr)
+> >> +static int klp_find_callback(void *data, const char *name, unsigned long addr)
+> >>  {
+> >>  	struct klp_find_arg *args = data;
+> >>  
+> >> -	if ((mod && !args->objname) || (!mod && args->objname))
+> >> -		return 0;
+> >> -
+> >>  	if (strcmp(args->name, name))
+> >>  		return 0;
+> >>  
+> >> -	if (args->objname && strcmp(args->objname, mod->name))
+> >> -		return 0;
+> >> -
+> >>  	args->addr = addr;
+> >>  	args->count++;
+> >>  
+> >> @@ -175,7 +167,6 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+> >>  				  unsigned long sympos, unsigned long *addr)
+> >>  {
+> >>  	struct klp_find_arg args = {
+> >> -		.objname = objname,
+> >>  		.name = name,
+> >>  		.addr = 0,
+> >>  		.count = 0,
+> >> @@ -183,7 +174,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+> >>  	};
+> >>  
+> >>  	if (objname)
+> >> -		module_kallsyms_on_each_symbol(klp_find_callback, &args);
+> >> +		module_kallsyms_on_each_symbol(objname, klp_find_callback, &args);
+> >>  	else
+> >>  		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
+> >>  
+> >> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> >> index f5c5c9175333df7..329cef573675d49 100644
+> >> --- a/kernel/module/kallsyms.c
+> >> +++ b/kernel/module/kallsyms.c
+> >> @@ -495,8 +495,8 @@ unsigned long module_kallsyms_lookup_name(const char *name)
+> >>  }
+> >>  
+> >>  #ifdef CONFIG_LIVEPATCH
+> >> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> >> -					     struct module *, unsigned long),
+> >> +int module_kallsyms_on_each_symbol(const char *modname,
+> >> +				   int (*fn)(void *, const char *, unsigned long),
+> >>  				   void *data)
+> >>  {
+> >>  	struct module *mod;
+> >> @@ -510,6 +510,9 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> >>  		if (mod->state == MODULE_STATE_UNFORMED)
+> >>  			continue;
+> >>  
+> >> +		if (strcmp(modname, mod->name))
+> >> +			continue;
+> >> +
+> >>  		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
+> >>  		preempt_disable();
+> >>  		kallsyms = rcu_dereference_sched(mod->kallsyms);
+> >> @@ -522,10 +525,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> >>  				continue;
+> >>  
+> >>  			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
+> >> -				 mod, kallsyms_symbol_value(sym));
+> >> +				 kallsyms_symbol_value(sym));
+> >>  			if (ret != 0)
+> >>  				goto out;
+> >>  		}
+> >> +
+> >> +		/*
+> >> +		 * The given module is found, the subsequent modules do not
+> >> +		 * need to be compared.
+> >> +		 */
+> >> +		break;
+> >>  	}
+> >>  out:
+> >>  	mutex_unlock(&module_mutex);
+> >> -- 
+> >> 2.25.1
+> >>
+> > .
+> > 
+> 
+> -- 
+> Regards,
+>   Zhen Lei
