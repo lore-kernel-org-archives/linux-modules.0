@@ -2,109 +2,68 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10D87C433FE
-	for <linux-modules@archiver.kernel.org>; Tue, 15 Nov 2022 20:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68EA3C4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 15 Nov 2022 20:37:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiKOUOz (ORCPT
+        id S229638AbiKOUhe (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 15 Nov 2022 15:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        Tue, 15 Nov 2022 15:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbiKOUNI (ORCPT
+        with ESMTP id S230393AbiKOUhB (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:13:08 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440D52A97C;
-        Tue, 15 Nov 2022 12:13:04 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBcmm2tMqz4xGH;
-        Wed, 16 Nov 2022 07:12:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668543179;
-        bh=GLcwQC9Jey0b7v1gW6TupEgoQDbotOlF8RSjbbR1d54=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ijYmjipDyfjJii5jHIqg3BOxpP+mQU+n0YVoFAcE+i7JRhuLfwOLXPGJpX8iimsVd
-         ynzUw9hJ1YG3co9qe2qdqYZ3KhlId3Urs090BCdOcj2mAVHBMsBQv8357HL7jIQhj8
-         UInS7RscBiLR9FZKhIo7O+GwxidKtHkRRIc175VHX8JqYt1YFVBnAVGYbc8gp1h5yi
-         PlAuhie2ZvvUCcSgEEt0ivo5QYTCDb1ZQ69ljt/EpzFoEu7wwYmICdrienrD0z0541
-         gOeEXREvqbRFTVutoMywqPmsF8Lc5mkAjPzx0/xsJQawvpcVdvNY9VBFkdXLZffZo6
-         nh85A7f3H082Q==
-Date:   Wed, 16 Nov 2022 07:11:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>
+        Tue, 15 Nov 2022 15:37:01 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA24BB3;
+        Tue, 15 Nov 2022 12:37:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Qy+DZuwA4M5WDugo0KAEoxGF9d6DWwiaweGeOENwlAA=; b=eeLAhDPOVheILTNUaMZAeCutI7
+        G+ckJYCpaI5UJ0GTgnAyOgw5lDsvQf25ULwX2jnRAbd09KnVHR5+ud+TBakN4h+hr8qpAxvRT8lJK
+        +Gvv9XYmLmOxBCJYsNA5rJk4UjlN3ftUxD79rmtSrMe9YChraW4hNwyL3XggoNw73bL/6dGBMIIcX
+        b1kfOIN6xYBe3v2+rK5VMOdqzrQqhNUn0VbXIvWcq5OIy81P4z7/4EeZJWOl+Ymw5NFrCYVMrwnmy
+        VpzQxiFQDxD9ql6QAsqmNUJbLGBvVHDP0ElX7u0DGvrpNZ/eAMaw11zGWcFqlAnTv6XBfMInpJ2XH
+        xI/iYEaw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ov2ft-00EcX0-LD; Tue, 15 Nov 2022 20:36:53 +0000
+Date:   Tue, 15 Nov 2022 12:36:53 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
 Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        Jiri Olsa <olsajiri@gmail.com>, nick.alcock@oracle.com,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-modules@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Laight <David.Laight@aculab.com>
-Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-Message-ID: <20221116071151.3d756b1d@canb.auug.org.au>
-In-Reply-To: <Y3NFoLn/GOJybXoc@bombadil.infradead.org>
-References: <Y3HyrIwlZPYM8zYd@krava>
-        <050b7513-4a20-75c7-0574-185004770329@huawei.com>
-        <Y3IJ5GjrXBYDbfnA@krava>
-        <ad637488-930e-33c1-558c-fc03d848afa8@huawei.com>
-        <Y3IY6gzDtk1ze3u7@krava>
-        <955eebae-0b36-d13f-0199-2f1b32af7da6@huawei.com>
-        <Y3JB++KOXxMWWX35@krava>
-        <Y3JivLcvbHNcIcSB@bombadil.infradead.org>
-        <df46ad45-2de4-0300-4afa-5788463d712a@huawei.com>
-        <Y3NADwGUIvfwnGTp@krava>
-        <Y3NFoLn/GOJybXoc@bombadil.infradead.org>
+        masahiroy@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v9 4/8] kallsyms: introduce sections needed to map
+ symbols to built-in modules
+Message-ID: <Y3P4ZXF97b88nVh5@bombadil.infradead.org>
+References: <20221109134132.9052-1-nick.alcock@oracle.com>
+ <20221109134132.9052-5-nick.alcock@oracle.com>
+ <Y3BhRvt53xO5A0iQ@bombadil.infradead.org>
+ <87mt8tv554.fsf@esperi.org.uk>
+ <76d7ba29-c7d2-d082-5928-599844112494@huawei.com>
+ <87edu4uz7z.fsf@esperi.org.uk>
+ <Y3PvavbJDZsQCiuQ@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Gi/v++55E.o/dC7HkZBlTma";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3PvavbJDZsQCiuQ@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
---Sig_/Gi/v++55E.o/dC7HkZBlTma
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Nov 15, 2022 at 11:58:34AM -0800, Luis Chamberlain wrote:
+> And then users.. we need users clearly documented, who the heck is
+> using this or wants this / is going to use it and why.
 
-Hi Luis,
+What issues did existing users run into? Why is this an issue? If no
+bugs have been reported why isn't this an issue then? Why does the
+existing duplicate stuff not cause issues in-kernel for symbol
+lookups?
 
-On Mon, 14 Nov 2022 23:54:08 -0800 Luis Chamberlain <mcgrof@kernel.org> wro=
-te:
->
-> Stephen, you can drop your fix from linux-next, hopefully there should
-> no longer be any merge conflicts. The module requirement will stick for
-> now.
+Who is dying for this feature? What userspace tools / whatever has
+support for this and can't wait to get their hands on this?
 
-OK, will do.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Gi/v++55E.o/dC7HkZBlTma
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNz8ogACgkQAVBC80lX
-0GxJGwf7BBsfhz9nEHmmWNZAgDzaPYbx1GDkVoywaB9VsL3hB4P7PkYM2LlhRdqC
-KtKIZygES6z1csqToA1K6YMKbFz8xcBqFjFf0utVo+fBWMZN5RCjENuyB/XyIajC
-7MN7TsmH02ofGzUV9SEOrxE2pUqVFzuMbdT3Q6bVTzPeTXuSMxUhTObo0vyOUgya
-Mjh6Suw5PhkoMKw+pnsEjHXh35tL3ZqdTT99ggBWoXPI2caZ+/HXdE3b04S7Eyne
-UpxGUs03Q1ikplAZQyuLnPI9/oM/fZgjxImpRbz79EWznK7Qb4NURGEV93/2K919
-UvoYQiTV9DOTG1iyAWAZ6I9AG286NA==
-=hIYn
------END PGP SIGNATURE-----
-
---Sig_/Gi/v++55E.o/dC7HkZBlTma--
+  Luis
