@@ -2,62 +2,36 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89489C4332F
-	for <linux-modules@archiver.kernel.org>; Tue, 15 Nov 2022 16:05:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42D66C4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 15 Nov 2022 17:35:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiKOQFt (ORCPT
+        id S229693AbiKORf2 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 15 Nov 2022 11:05:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        Tue, 15 Nov 2022 12:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiKOQFs (ORCPT
+        with ESMTP id S229656AbiKORf1 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:05:48 -0500
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2F62609
-        for <linux-modules@vger.kernel.org>; Tue, 15 Nov 2022 08:05:47 -0800 (PST)
-Received: by mail-ua1-x929.google.com with SMTP id e24so1899546uam.10
-        for <linux-modules@vger.kernel.org>; Tue, 15 Nov 2022 08:05:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lC7HjZv0YJWdCVBbJCdX8oFBfIQJ4Z3YaREpAMcE+Wk=;
-        b=KgVjl7BfpCjRgjtSt2c/YBlO7fe/v0kF+BVh0VYOX/B/FaIDt++uPju25o7yqcAQ3Y
-         17By9vzo9dpgu3y88VCU0NtpPmJAiFbr5iTH9vfwhKUAmkLkxlg9A411Vdw2LXOge+4x
-         QQNiWdTmaD6rFo80fd1cdH7kERGpZaCRgblqBAR4bfDHiPQGKzTyHCgWKDLETrz8JIh3
-         Ns7kNVu+m4hB5wbqtTQQ+B1hFiGZTkpCPW7AuOGq0xNfFRULnaza5rMNMBQbug+F5CDk
-         +Q30rkH5YEHY4r2mBwxhXFKUAj0RCByz+Cbzg6l7awtZNPBMWqQ1aieAMin5+XLAKNuJ
-         F7fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lC7HjZv0YJWdCVBbJCdX8oFBfIQJ4Z3YaREpAMcE+Wk=;
-        b=VSioQILBS5nwknEMAtvGQY9yqMdQmpmFdVBqzpI/RNPeI7c95c7HSbl/V559jUp9xZ
-         YMiKrY0TALJAQyMj/XBTxf6606VTJlIwaWEQPxwywSmU/vwGiHQW87oB1+BnyuliJ+ma
-         xr0dRVSrCFTpC23W35hgl+tNZVCr+CBNkZuQxHpRb4nO6pNFY2jTaFRC2YtYMsPPofPf
-         82lOjneijMzbA9CqbYWGRqwgTIAPtqsEVOi+DAtNzsHNNIVIJxKsnDlL/PjzBGc8zgcK
-         a70iIjxccZ6upfbdsZIdAP8p96aSL/6xxW7CBt8hhZnSVZfUD/cg9HdvI4VWL7a2yuDJ
-         MKsA==
-X-Gm-Message-State: ANoB5pkBKYOwh8mWL640N4RwFabj8Xcf+D5C3ebN95PgPD5m5tMzuntd
-        bGvrDHhVOfi+kPW9CR40TpHqXsjmxYf7DcJtQExCPA==
-X-Google-Smtp-Source: AA0mqf7XZPLE4b06KBKnQS2e/lwLCOJPIb0LYbRgKMs1aOxiUs5qRglW1N48luGT5NFDiDl8N53CwuC13k5IFjoy8BA=
-X-Received: by 2002:ab0:2044:0:b0:411:7c09:b011 with SMTP id
- g4-20020ab02044000000b004117c09b011mr10000001ual.95.1668528346162; Tue, 15
- Nov 2022 08:05:46 -0800 (PST)
-MIME-Version: 1.0
-References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
- <20221111152852.2837363-1-allenwebb@google.com> <Y26UcbviRaoK9a3C@bombadil.infradead.org>
- <CAJzde06b4d065y7KSoGO6qQBgvcVdkUai1WAy_TkrkTCDHS41A@mail.gmail.com> <20221114172214.ilnk5wj3eevpsqts@ldmartin-desk2.lan>
-In-Reply-To: <20221114172214.ilnk5wj3eevpsqts@ldmartin-desk2.lan>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Tue, 15 Nov 2022 10:05:35 -0600
-Message-ID: <CAJzde04id1kWhnR5HfuFEZR+ej7xXAsmQ9HpwYT5rQEY4Jsntw@mail.gmail.com>
-Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Tue, 15 Nov 2022 12:35:27 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565A918360;
+        Tue, 15 Nov 2022 09:35:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xKJI9SOGNy34zKV8aehb6R2QO5TFVEQr7/jH6rpCfbc=; b=XKXMfCzbqhX3BPrpS3eldTlN3y
+        sNzfSKUTAT58GfygdyU2TitFCkkqI2QUNl3FttQv5+sYM53sn/sSiO3GUgZbxUAZLnGutQAqQbxYQ
+        h9Vo0n4UWJxuBfohz6/KK8OL9sXv0/S7ummuzP/gcSNPrs2zhfM1xr4/K/kTI60L/4ND8T1sonuRk
+        S9EWB/ddfCNQ+t0EbXL1Rgv0PJ4LXJQ9VGW1oarIBWLh/woBg8OfmZ2QhijQKIlq8qGlqY4bv3Aor
+        mHO/9Vr/Ko4LgE5RERDnvIMhJnu0B4RN6EScZ7PWF7TNV6MaQ1gkOeVvrBn8YHl0f6FXyu0RosuC8
+        458//vHw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ouzq4-00DWPE-P0; Tue, 15 Nov 2022 17:35:12 +0000
+Date:   Tue, 15 Nov 2022 09:35:12 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
         Alexey Gladkov <gladkov.alexey@gmail.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -65,62 +39,70 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
+Message-ID: <Y3PN0GZYvFyUF83g@bombadil.infradead.org>
+References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
+ <20221111152852.2837363-1-allenwebb@google.com>
+ <Y26UcbviRaoK9a3C@bombadil.infradead.org>
+ <CAJzde06b4d065y7KSoGO6qQBgvcVdkUai1WAy_TkrkTCDHS41A@mail.gmail.com>
+ <20221114172214.ilnk5wj3eevpsqts@ldmartin-desk2.lan>
+ <CAJzde04id1kWhnR5HfuFEZR+ej7xXAsmQ9HpwYT5rQEY4Jsntw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJzde04id1kWhnR5HfuFEZR+ej7xXAsmQ9HpwYT5rQEY4Jsntw@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Nov 14, 2022 at 11:22 AM Lucas De Marchi
-<lucas.demarchi@intel.com> wrote:
->
-> On Mon, Nov 14, 2022 at 10:42:50AM -0600, Allen Webb wrote:
-> >On Fri, Nov 11, 2022 at 12:29 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >>
-> >> On Fri, Nov 11, 2022 at 09:28:52AM -0600, Allen Webb wrote:
-> >> > USB devices support the authorized attribute which can be used by
-> >> > user-space to implement trust-based systems for enabling USB devices. It
-> >> > would be helpful when building these systems to be able to know in
-> >> > advance which kernel drivers (or modules) are reachable from a
-> >> > particular USB device.
-> >> >
-> >> > This information is readily available for external modules in
-> >> > modules.alias. However, builtin kernel modules are not covered. This
-> >> > patch adds a sys-fs attribute to both builtin and loaded modules
-> >> > exposing the matching rules in the modalias format for integration
-> >> > with tools like USBGuard.
-> >> >
-> >> > Signed-off-by: Allen Webb <allenwebb@google.com>
-> >>
-> >> Thanks for the patch Allen!
-> >>
-> >> I'd rather have something generic though, and it would seem kmod [0] already
-> >> does this, have you seen the kmod support for builtin.alias.bin
-> >>
-> >> Can't that be used?
+On Tue, Nov 15, 2022 at 10:05:35AM -0600, Allen Webb wrote:
+> On Mon, Nov 14, 2022 at 11:22 AM Lucas De Marchi
+> <lucas.demarchi@intel.com> wrote:
 > >
-> >Probably, but I don't see the builtin.alias.bin in my build. Is it experimental?
->
-> no. That is generated by depmod since v27 using modules.builtin.modinfo
-> generated by the kernel build system. Highly recommend v30 though
-> as there were fixes in v28 and v29 and some changes to speed up its
-> generation/use in v30:  See entries mentioning
-> builtin.alias and bultin.modinfo in
-> https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/tree/NEWS
->
-> libkmod/modprobe/modinfo also have the corresponding changes to lookup that
-> index when resolving aliases.
-
-I see the file but it is largely missing the aliases I am interested
-in, so it looks like I might need to modify my patch that creates
-buildin.alias to add the missing alias defines in the header along
-with the other module metadata for builtin modules. Does this sound
-right to you?
-
->
-> Lucas De Marchi
->
->
+> > On Mon, Nov 14, 2022 at 10:42:50AM -0600, Allen Webb wrote:
+> > >On Fri, Nov 11, 2022 at 12:29 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > >>
+> > >> On Fri, Nov 11, 2022 at 09:28:52AM -0600, Allen Webb wrote:
+> > >> > USB devices support the authorized attribute which can be used by
+> > >> > user-space to implement trust-based systems for enabling USB devices. It
+> > >> > would be helpful when building these systems to be able to know in
+> > >> > advance which kernel drivers (or modules) are reachable from a
+> > >> > particular USB device.
+> > >> >
+> > >> > This information is readily available for external modules in
+> > >> > modules.alias. However, builtin kernel modules are not covered. This
+> > >> > patch adds a sys-fs attribute to both builtin and loaded modules
+> > >> > exposing the matching rules in the modalias format for integration
+> > >> > with tools like USBGuard.
+> > >> >
+> > >> > Signed-off-by: Allen Webb <allenwebb@google.com>
+> > >>
+> > >> Thanks for the patch Allen!
+> > >>
+> > >> I'd rather have something generic though, and it would seem kmod [0] already
+> > >> does this, have you seen the kmod support for builtin.alias.bin
+> > >>
+> > >> Can't that be used?
+> > >
+> > >Probably, but I don't see the builtin.alias.bin in my build. Is it experimental?
 > >
-> >>
-> >> [0] git://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
-> >>
-> >>   Luis
+> > no. That is generated by depmod since v27 using modules.builtin.modinfo
+> > generated by the kernel build system. Highly recommend v30 though
+> > as there were fixes in v28 and v29 and some changes to speed up its
+> > generation/use in v30:  See entries mentioning
+> > builtin.alias and bultin.modinfo in
+> > https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/tree/NEWS
+> >
+> > libkmod/modprobe/modinfo also have the corresponding changes to lookup that
+> > index when resolving aliases.
+> 
+> I see the file but it is largely missing the aliases I am interested
+> in, so it looks like I might need to modify my patch that creates
+> buildin.alias to add the missing alias defines in the header along
+> with the other module metadata for builtin modules. Does this sound
+> right to you?
+
+Can you clarify what is missing and why? And an RFC is welcomed if it
+helps demonstrates what you mean.
+
+  Luis
