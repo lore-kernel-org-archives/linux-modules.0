@@ -2,61 +2,54 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72F41C433FE
-	for <linux-modules@archiver.kernel.org>; Tue, 15 Nov 2022 08:44:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57C39C4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 15 Nov 2022 11:47:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiKOIoF (ORCPT
+        id S232917AbiKOLrd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 15 Nov 2022 03:44:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
+        Tue, 15 Nov 2022 06:47:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbiKOIoD (ORCPT
+        with ESMTP id S229787AbiKOLrc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:44:03 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C72F12091;
-        Tue, 15 Nov 2022 00:44:01 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBKPS5bH9zqSQQ;
-        Tue, 15 Nov 2022 16:40:12 +0800 (CST)
+        Tue, 15 Nov 2022 06:47:32 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E6525EAD;
+        Tue, 15 Nov 2022 03:47:31 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NBPTx47QNzJnWW;
+        Tue, 15 Nov 2022 19:44:21 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 16:43:59 +0800
+ 15.1.2375.31; Tue, 15 Nov 2022 19:47:29 +0800
 Received: from [10.174.178.55] (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 16:43:58 +0800
-Subject: Re: [PATCH v9] kallsyms: Add self-test facility
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-CC:     David Laight <David.Laight@ACULAB.COM>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+ 15.1.2375.31; Tue, 15 Nov 2022 19:47:28 +0800
+Subject: Re: [PATCH v9 4/8] kallsyms: introduce sections needed to map symbols
+ to built-in modules
+To:     Nick Alcock <nick.alcock@oracle.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+CC:     <masahiroy@kernel.org>, <linux-modules@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <arnd@arndb.de>,
+        <akpm@linux-foundation.org>, <eugene.loh@oracle.com>,
+        <kris.van.hees@oracle.com>, Steven Rostedt <rostedt@goodmis.org>
+References: <20221109134132.9052-1-nick.alcock@oracle.com>
+ <20221109134132.9052-5-nick.alcock@oracle.com>
+ <Y3BhRvt53xO5A0iQ@bombadil.infradead.org> <87mt8tv554.fsf@esperi.org.uk>
 From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <f21eb27b-4c7f-5136-85ab-61a8ca762496@huawei.com>
-Date:   Tue, 15 Nov 2022 16:43:57 +0800
+Message-ID: <76d7ba29-c7d2-d082-5928-599844112494@huawei.com>
+Date:   Tue, 15 Nov 2022 19:47:27 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+In-Reply-To: <87mt8tv554.fsf@esperi.org.uk>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -64,58 +57,41 @@ List-ID: <linux-modules.vger.kernel.org>
 
 
 
-On 2022/11/15 16:33, Zhen Lei wrote:
-> Added test cases for basic functions and performance of functions
-> kallsyms_lookup_name(), kallsyms_on_each_symbol() and
-> kallsyms_on_each_match_symbol(). It also calculates the compression rate
-> of the kallsyms compression algorithm for the current symbol set.
+On 2022/11/15 1:04, Nick Alcock wrote:
+> On 13 Nov 2022, Luis Chamberlain outgrape:
 > 
-> The basic functions test begins by testing a set of symbols whose address
-> values are known. Then, traverse all symbol addresses and find the
-> corresponding symbol name based on the address. It's impossible to
-> determine whether these addresses are correct, but we can use the above
-> three functions along with the addresses to test each other. Due to the
-> traversal operation of kallsyms_on_each_symbol() is too slow, only 60
-> symbols can be tested in one second, so let it test on average once
-> every 128 symbols. The other two functions validate all symbols.
+>> On Wed, Nov 09, 2022 at 01:41:28PM +0000, Nick Alcock wrote:
+>>> The mapping consists of three new symbols
+>>
+>> The entire commit log does not describe *why*.
 > 
-> If the basic functions test is passed, print only performance test
-> results. If the test fails, print error information, but do not perform
-> subsequent performance tests.
+> ... because it's in the other commit logs and the cover letter. I can
+> repeat the motivation in this log too if you like.
 > 
-> Start self-test automatically after system startup if
-> CONFIG_KALLSYMS_SELFTEST=y.
+>> Can I also trouble you to rebase on top of modules-next [0]
 > 
-> Example of output content: (prefix 'kallsyms_selftest:' is omitted
->  start
->   ---------------------------------------------------------
->  | nr_symbols | compressed size | original size | ratio(%) |
->  |---------------------------------------------------------|
->  |     107543 |       1357912   |      2407433  |  56.40   |
->   ---------------------------------------------------------
->  kallsyms_lookup_name() looked up 107543 symbols
->  The time spent on each symbol is (ns): min=630, max=35295, avg=7353
->  kallsyms_on_each_symbol() traverse all: 11782628 ns
->  kallsyms_on_each_match_symbol() traverse all: 9261 ns
->  finish
+> Sure!
 > 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  include/linux/kallsyms.h   |   1 +
->  init/Kconfig               |  13 +
->  kernel/Makefile            |   1 +
->  kernel/kallsyms.c          |   2 +-
->  kernel/kallsyms_selftest.c | 485 +++++++++++++++++++++++++++++++++++++
->  kernel/kallsyms_selftest.h |  13 +
->  6 files changed, 514 insertions(+), 1 deletion(-)
->  create mode 100644 kernel/kallsyms_selftest.c
->  create mode 100644 kernel/kallsyms_selftest.h
+>> Does the kallsyms loop more than 3 times now with Zhen Lei's work and
+>> your new symbols on top on a allyesconfig build?
+> 
+> I don't understand the question, sorry. If this is about the number of
+> KALLSYMS invocations in the kernel build, that should be unchanged by
+> this patch. This was an explicit design goal because it's quite slow to
+> run kallsyms more times and I was already feeling guilty about having to
+> bring back the tristate recursion.
+> 
+> I haven't tried it with Zhen Lei's work: will try for the next
+> iteration, as a matter of course after the rebase. (And, looking at the
+> patch series at the top of modules-next, wow is that quite a hefty
+> performance improvement. And a hefty memory usage increase :( I have a
+> horrible feeling that one of my machines won't have enough memory to
+> boot after this goes in, but it was terribly outdated anyway.)
 
-v8 --> v9:
-[v8] https://lkml.org/lkml/2022/11/2/225
+It's only about 500K. It shouldn't be a problem. Your machine boot from flash?
 
-Adjust the prototype of some callback functions. Because 7/9 and 8/9
-in v8 are dropped.
+> .
+> 
 
 -- 
 Regards,
