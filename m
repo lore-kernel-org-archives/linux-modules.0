@@ -2,88 +2,63 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B83DC4332F
-	for <linux-modules@archiver.kernel.org>; Tue, 15 Nov 2022 21:22:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 257C3C4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 15 Nov 2022 21:25:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiKOVWr (ORCPT
+        id S229888AbiKOVZl (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 15 Nov 2022 16:22:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
+        Tue, 15 Nov 2022 16:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiKOVWq (ORCPT
+        with ESMTP id S231905AbiKOVZY (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:22:46 -0500
+        Tue, 15 Nov 2022 16:25:24 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5519D205D8;
-        Tue, 15 Nov 2022 13:22:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37FD1115;
+        Tue, 15 Nov 2022 13:24:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XQ4vjzmLft8hrI4vNqpGBBjaeT3aE0jxmG9YPZLO+L4=; b=P+2yQ5JwTL+eWMGWC9ThB3NQSh
-        ssYCSSH7CyoT+X2629fu4040V0VFjm4td7W1W2IdxrbsHSiiRKRm1//kxoaWbMFkxU3rsoRxe0/33
-        C00rXUNhYEOKVpN1vf4uJfh5UpUWw1XlKmJEesLTJaupDLSoENORSTvps6KB9S2/uRG/9z8ybmuL/
-        fX6wkiL0CrVkEh2Q04S0JoiGM/NnCWBjGerkckYJG+T384Rtph48IovpuIp2M4cxRlm1m/ijx+fIi
-        ue29hhd84uIA/0NsEdDkdrPzNq2axotIgtQv3nOmgTVoJrnTfGny1DpgBTXnRoQaHDHalX/6/T+4P
-        E08SbFBA==;
+        bh=Had04J9P5Vsju0/PzF3EVxNTwGTiLJcT7wb5/iaijj0=; b=xzxTxaI1eYTB8w8acxwXxJACos
+        vMUlUjQl9Kf3ltDYTVZ3C+slp/bZaToYc/AmiI+pgmo9mnozdXGnCy5EIeEEF05M1pRDVYUgbA3NJ
+        HgJM4SjRMAgBdZjWUlaI5ep8qgVNV0iJuVH0eN8bf2FySrcMZuqC2XTGSo7BqV5r481ICR5cMsKSu
+        jbKLQPdGPpQbLHO1Qzsyqk+s5oS9R7+X3YSjuxLRMKE9NLPZEOf4UK1/h87VNIlECytUscRosvcGB
+        Mbs1cQ5mALcHLYRBLdykH9Veml2JaNdmV20SZhfLOLwi2WLiUGsymGy/ObQ1npOUoPH0xOD2Uwm9W
+        j2HmdsWA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ov3OD-00F2Gc-7N; Tue, 15 Nov 2022 21:22:41 +0000
-Date:   Tue, 15 Nov 2022 13:22:41 -0800
+        id 1ov3QI-00F2d4-4M; Tue, 15 Nov 2022 21:24:50 +0000
+Date:   Tue, 15 Nov 2022 13:24:50 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     masahiroy@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        akpm@linux-foundation.org, eugene.loh@oracle.com,
-        kris.van.hees@oracle.com, thunder.leizhen@huawei.com,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v9 3/8] kbuild: generate an address ranges map at vmlinux
- link time
-Message-ID: <Y3QDIVy0c01Tie3L@bombadil.infradead.org>
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v9 7/8] kallsyms: add /proc/kallmodsyms for text symbol
+ disambiguation
+Message-ID: <Y3QDoqa4gW8Y0hUG@bombadil.infradead.org>
 References: <20221109134132.9052-1-nick.alcock@oracle.com>
- <20221109134132.9052-4-nick.alcock@oracle.com>
- <Y3BeTbHxj9OmmmIY@bombadil.infradead.org>
- <87v8nhv5vq.fsf@esperi.org.uk>
+ <20221109134132.9052-8-nick.alcock@oracle.com>
+ <Y3Bjy8UlZXdpWMYn@bombadil.infradead.org>
+ <87r0y5v5hu.fsf@esperi.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87v8nhv5vq.fsf@esperi.org.uk>
+In-Reply-To: <87r0y5v5hu.fsf@esperi.org.uk>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Nov 14, 2022 at 04:48:57PM +0000, Nick Alcock wrote:
-> [Added Steve Rostedt to Cc:]
+On Mon, Nov 14, 2022 at 04:57:17PM +0000, Nick Alcock wrote:
+> > I'd like much more review from other parties other than Oracle on this then.
 > 
-> On 13 Nov 2022, Luis Chamberlain stated:
-> 
-> > On Wed, Nov 09, 2022 at 01:41:27PM +0000, Nick Alcock wrote:
-> >> This emits a new file, .tmp_vmlinux.ranges, which maps address
-> >> range/size pairs in vmlinux to the object files which make them up,
-> >> e.g., in part:
-> >> 
-> >> 0x0000000000000000 0x30 arch/x86/kernel/cpu/common.o
-> >> 0x0000000000001000 0x1000 arch/x86/events/intel/ds.o
-> >> 0x0000000000002000 0x4000 arch/x86/kernel/irq_64.o
-> >> 0x0000000000006000 0x5000 arch/x86/kernel/process.o
-> >> 0x000000000000b000 0x1000 arch/x86/kernel/cpu/common.o
-> >> 0x000000000000c000 0x5000 arch/x86/mm/cpu_entry_area.o
-> >> 0x0000000000011000 0x10 arch/x86/kernel/espfix_64.o
-> >> 0x0000000000011010 0x2 arch/x86/kernel/cpu/common.o
-> >> [...]
-> >
-> > This does't say why we'd want this. So either you merge it with its
-> > first user or you explain here why anyone might find this useful.
-> 
-> Uh... the first user is later in this patch series? If you want each
-> commit to have a self-contained explanation, I could certainly note why
-> it's useful for said first user in this commit message (and adjust other
-> messages similarly), but I had previous complaints that commit log
-> messages and the cover letter were repeating points, so I was trying to
-> reduce that kind of thing.
+> Well, yes. That's what these postings are all about. If I was supposed
+> to get review from someone else as well, I'm happy to add those people
+> to the Cc: of future iterations.
 
-Commit logs should be self contained. The reason for *why* we want to
-add ranges should go here, not the cover letter. You can be terse in the
-cover letter over the general solution.
+Yes, given Zhen is active on the same exact area I figured his input
+would be of great value here too. I'd be wonderful if you can get
+those eager to see this upstream on the toolside too.
 
   Luis
-
