@@ -2,68 +2,88 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68EA3C4332F
-	for <linux-modules@archiver.kernel.org>; Tue, 15 Nov 2022 20:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DCCBC433FE
+	for <linux-modules@archiver.kernel.org>; Tue, 15 Nov 2022 21:21:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiKOUhe (ORCPT
+        id S229888AbiKOVVx (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 15 Nov 2022 15:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        Tue, 15 Nov 2022 16:21:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbiKOUhB (ORCPT
+        with ESMTP id S238716AbiKOVVi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:37:01 -0500
+        Tue, 15 Nov 2022 16:21:38 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA24BB3;
-        Tue, 15 Nov 2022 12:37:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D387205D8;
+        Tue, 15 Nov 2022 13:21:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Qy+DZuwA4M5WDugo0KAEoxGF9d6DWwiaweGeOENwlAA=; b=eeLAhDPOVheILTNUaMZAeCutI7
-        G+ckJYCpaI5UJ0GTgnAyOgw5lDsvQf25ULwX2jnRAbd09KnVHR5+ud+TBakN4h+hr8qpAxvRT8lJK
-        +Gvv9XYmLmOxBCJYsNA5rJk4UjlN3ftUxD79rmtSrMe9YChraW4hNwyL3XggoNw73bL/6dGBMIIcX
-        b1kfOIN6xYBe3v2+rK5VMOdqzrQqhNUn0VbXIvWcq5OIy81P4z7/4EeZJWOl+Ymw5NFrCYVMrwnmy
-        VpzQxiFQDxD9ql6QAsqmNUJbLGBvVHDP0ElX7u0DGvrpNZ/eAMaw11zGWcFqlAnTv6XBfMInpJ2XH
-        xI/iYEaw==;
+        bh=nyKgzABuL/ly1ySWJPooscj+ldW3eJWZmk6Lzgs1mvE=; b=hqycI/WOAi9Lm6ARDyTBomx+/p
+        tDXAsPRy7wE+jawPq2mMiT2xKb3H0ZgdwivCPfIQNZQfBzrgrSBTntsUsKgMrKIqlQ2RUAre20cfp
+        NrvPU+kP0geGkqNHC2ntPKAxf2dbEtNoKUCEPwFO20nb23QyOFMUnWIxZvym8pfbT1tUDzXJebpW/
+        wNEsZLv8HwqIva87ZQwSDn5PhEA/eTO3IYAlEQqkozyJsOS7sRzJZxrc0TOM33rw7frJ+LsHmDjzy
+        uAWrpUBo5zBv/uXwtcIg47rsmY+btLvrLGw1ZkRQS1tg+++sDjKfsWH0qV2qOb/MekhdbcOU1hAxH
+        a5fA5XDA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ov2ft-00EcX0-LD; Tue, 15 Nov 2022 20:36:53 +0000
-Date:   Tue, 15 Nov 2022 12:36:53 -0800
+        id 1ov3Mu-00F2AJ-9l; Tue, 15 Nov 2022 21:21:20 +0000
+Date:   Tue, 15 Nov 2022 13:21:20 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        masahiroy@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        akpm@linux-foundation.org, eugene.loh@oracle.com,
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
         kris.van.hees@oracle.com, Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v9 4/8] kallsyms: introduce sections needed to map
- symbols to built-in modules
-Message-ID: <Y3P4ZXF97b88nVh5@bombadil.infradead.org>
+Subject: Re: [PATCH v9 2/8] kbuild: add modules_thick.builtin
+Message-ID: <Y3QC0OIbZgSmvAxT@bombadil.infradead.org>
 References: <20221109134132.9052-1-nick.alcock@oracle.com>
- <20221109134132.9052-5-nick.alcock@oracle.com>
- <Y3BhRvt53xO5A0iQ@bombadil.infradead.org>
- <87mt8tv554.fsf@esperi.org.uk>
- <76d7ba29-c7d2-d082-5928-599844112494@huawei.com>
- <87edu4uz7z.fsf@esperi.org.uk>
- <Y3PvavbJDZsQCiuQ@bombadil.infradead.org>
+ <20221109134132.9052-3-nick.alcock@oracle.com>
+ <Y2x22mKtaZvC7ZSk@bombadil.infradead.org>
+ <87h6z5wqlk.fsf@esperi.org.uk>
+ <Y25mXAGty35I5lQx@bombadil.infradead.org>
+ <87iljhv321.fsf@esperi.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3PvavbJDZsQCiuQ@bombadil.infradead.org>
+In-Reply-To: <87iljhv321.fsf@esperi.org.uk>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Nov 15, 2022 at 11:58:34AM -0800, Luis Chamberlain wrote:
-> And then users.. we need users clearly documented, who the heck is
-> using this or wants this / is going to use it and why.
+On Mon, Nov 14, 2022 at 05:49:58PM +0000, Nick Alcock wrote:
+> On 11 Nov 2022, Luis Chamberlain outgrape:
+> 
+> > On Fri, Nov 11, 2022 at 01:47:03PM +0000, Nick Alcock wrote:
+> >> +arch/x86/crypto/libblake2s-x86_64.o: arch/x86/crypto/blake2s-core.o arch/x86/crypto/blake2s-glue.o
+> >> 
+> >> But...
+> >> 
+> >> obj-$(CONFIG_CRYPTO_BLAKE2S_X86) += libblake2s-x86_64.o
+> >> libblake2s-x86_64-y := blake2s-core.o blake2s-glue.o
+> >> 
+> >> config CRYPTO_BLAKE2S_X86
+> >>         bool "Hash functions: BLAKE2s (SSSE3/AVX-512)"
+> >> 
+> >> This cannot be built as a module.
+> >
+> > mcgrof@fulton ~/linux (git::modules-next)$ git grep MODULE_LICENSE arch/x86/crypto/blake2s-*
+> > arch/x86/crypto/blake2s-glue.c:MODULE_LICENSE("GPL v2");
+> >
+> > Try removing that.
+> 
+> OK, that works!
+> 
+> So if we're using the presence of MODULE_LICENSE to indicate that
+> something is potentially modular, I guess this means I need to do a
+> sweep through the kernel and find everywhere that cites a MODULE_LICENSE
+> and cannot be built as a module before this will say things are modules
+> that really are.
 
-What issues did existing users run into? Why is this an issue? If no
-bugs have been reported why isn't this an issue then? Why does the
-existing duplicate stuff not cause issues in-kernel for symbol
-lookups?
+Yes, make allyesconfig builds + a verifier for tristate would be nice.
+scripts/kconfig/streamline_config.pl has an iterator over kconfig files
+and also objects which you might find useful.
 
-Who is dying for this feature? What userspace tools / whatever has
-support for this and can't wait to get their hands on this?
+At build time such a thing could nag about issues like the above.
 
   Luis
