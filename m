@@ -2,86 +2,66 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2771DC433FE
-	for <linux-modules@archiver.kernel.org>; Wed, 16 Nov 2022 20:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B2A2C4332F
+	for <linux-modules@archiver.kernel.org>; Thu, 17 Nov 2022 15:54:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbiKPUmW (ORCPT
+        id S234421AbiKQPyU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 16 Nov 2022 15:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        Thu, 17 Nov 2022 10:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKPUmV (ORCPT
+        with ESMTP id S231469AbiKQPyT (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 16 Nov 2022 15:42:21 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAA7D5A
-        for <linux-modules@vger.kernel.org>; Wed, 16 Nov 2022 12:42:20 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id s204so8897819vkb.3
-        for <linux-modules@vger.kernel.org>; Wed, 16 Nov 2022 12:42:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vO5311Qe6LB2FIy4YoKv4H8uuO4JMc6A/UgteLfosX8=;
-        b=O8RLzwCakZklUR+LYHgZkLukNV+NhgiYievXBxx4o4/BXnIgG41Be2zTmlxvo7qqgr
-         gv7dHNBotogbw3kQ1MpQxeHtZ2+CcXIeJ0rOI1js52OXbz0aeYXiVJ1daCjsZQzuP/QV
-         kFDJopCQXw2i+PcPpmHV1LQvL5AvElPnKE0RzI9nN8EioMIWYNfJ7nNMtTFqkiEqm0jk
-         P98f2CdUcgVPCjDX/4BpKwLVUSToTtzKw5idfP4e9XTK/MXqIxUW2yi3etTuBBHeCAL2
-         4aWHCdJN9rarL3tS5x/USPAug5rp260aTN7LayEmjBkqqKAEsgxwvBvryNm9ZvspZ0Sq
-         5HKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vO5311Qe6LB2FIy4YoKv4H8uuO4JMc6A/UgteLfosX8=;
-        b=bLDd0pyd+EuCvhbpZJlc5QwPNF26vStTuOXst6LwAt8g1bK385eDNcCsdsfUTQYExm
-         1QqRGeAzmdn+h/4wIGsLp8cvJkg5AUPC9yT3a+xUnCaHucma3OwpGA8bGSzN4tVEUFR2
-         WJc9yA2lUtbQWoQJs0pWt8dpzySiD4RR9cCCcTma/PpKov3oW6NZCjFT12syG6GYqoip
-         CyiNEghmVK/B21hDiLZ8nqzB6sbmavZQaHR/EuHdy8kweffOPT/fuQxcLNrt0es14Bfc
-         +ZI4Md8e+axHPYe4rmKSfqomVnqtbu/X0WDzWuy+rWMUxlIaihOwR5Hr40kKcWF+Sbke
-         rOzQ==
-X-Gm-Message-State: ANoB5pl/VN2rsIQVyeeQbiHYfh3C16cUMwH+lVkChZ75CHKveXHfNS9a
-        ObjmGl+ZklhdJMi0sfU4vw3PVBIETYxJ5FgiTTtstA==
-X-Google-Smtp-Source: AA0mqf5XJefBQw6SXETwoEsAo80++wTS4Jn4DgAC/4bK8t42Go+Rf+yfdLi5Z73mZyPRSK4J97lCSjZicQ4PktnYuno=
-X-Received: by 2002:a1f:19d4:0:b0:3bb:ebc4:cab4 with SMTP id
- 203-20020a1f19d4000000b003bbebc4cab4mr12792135vkz.26.1668631339343; Wed, 16
- Nov 2022 12:42:19 -0800 (PST)
-MIME-Version: 1.0
-References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
- <20221111152852.2837363-1-allenwebb@google.com> <Y26UcbviRaoK9a3C@bombadil.infradead.org>
- <CAJzde06b4d065y7KSoGO6qQBgvcVdkUai1WAy_TkrkTCDHS41A@mail.gmail.com>
- <20221114172214.ilnk5wj3eevpsqts@ldmartin-desk2.lan> <CAJzde04id1kWhnR5HfuFEZR+ej7xXAsmQ9HpwYT5rQEY4Jsntw@mail.gmail.com>
- <Y3PN0GZYvFyUF83g@bombadil.infradead.org> <CAJzde06cFefEFwRxYo1ia=27rUw6yPn9ejkNChEH8YnVK1LWYQ@mail.gmail.com>
-In-Reply-To: <CAJzde06cFefEFwRxYo1ia=27rUw6yPn9ejkNChEH8YnVK1LWYQ@mail.gmail.com>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Wed, 16 Nov 2022 14:42:08 -0600
-Message-ID: <CAJzde06o9acw4gW1bn9UXkCOPHSRTyDxroTiWZFU3aORaAy9+g@mail.gmail.com>
-Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>,
+        Thu, 17 Nov 2022 10:54:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB28DED8;
+        Thu, 17 Nov 2022 07:54:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 391366209A;
+        Thu, 17 Nov 2022 15:54:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D37C433C1;
+        Thu, 17 Nov 2022 15:54:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668700457;
+        bh=EsSvC1Bd9cCDqcgDGICCIVHG9/jMhUY/m8+coxXZkIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nKSqxuRw1M0PQaaRRBx71A6+DEbyathvdZpqW62OcEVQcqq66SN1DGGjENCcWh4cq
+         MjmtHm2SdOvguZkN3E9gQDA7LLPO5qXfd31kuDc/kItR/WyOB4HAS0AOqT+YNhGncv
+         Mfj3Klu1lYWj1WBRuDtqB4C7FqrVOSZ9AS5rvZ52DExkzlyQPcKar3aCZdIrBVU7gp
+         IIuVdodU0xScbxBMl9gb3nS0Ahkc0D0222sEUaXwIKxfpB6zPLIw1ZQDDsNQ/F4xNg
+         RKn6TPHASeH1+d4WzahD3dhaccxoheWpEDl/Mlp8j23CorWG4cXtEj6CaoEk/w3C7L
+         r9gkfO3LWEZAw==
+Date:   Thu, 17 Nov 2022 16:54:12 +0100
+From:   Alexey Gladkov <legion@kernel.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
+Message-ID: <Y3ZZJGSsC4VruKg3@example.org>
+References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
+ <20221111152852.2837363-1-allenwebb@google.com>
+ <Y26UcbviRaoK9a3C@bombadil.infradead.org>
+ <CAJzde06b4d065y7KSoGO6qQBgvcVdkUai1WAy_TkrkTCDHS41A@mail.gmail.com>
+ <20221114172214.ilnk5wj3eevpsqts@ldmartin-desk2.lan>
+ <CAJzde04id1kWhnR5HfuFEZR+ej7xXAsmQ9HpwYT5rQEY4Jsntw@mail.gmail.com>
+ <Y3PN0GZYvFyUF83g@bombadil.infradead.org>
+ <CAJzde06cFefEFwRxYo1ia=27rUw6yPn9ejkNChEH8YnVK1LWYQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJzde06cFefEFwRxYo1ia=27rUw6yPn9ejkNChEH8YnVK1LWYQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-I think I am misunderstanding something because the aliases visible
-through kmod_config_get_aliases don't look anything like the
-modaliases used by udev to match devices to modules.
-
-I have some concern that making the changes necessary to use kmod
-would result in the files/indexes being much larger to include all the
-extra values that are being left out, so I think the sysfs approach
-might be the better way to go.
-
-On Tue, Nov 15, 2022 at 12:40 PM Allen Webb <allenwebb@google.com> wrote:
->
+On Tue, Nov 15, 2022 at 12:40:57PM -0600, Allen Webb wrote:
 > When i get the modinfo for usbhid, there are no aliases listed:
 > ```
 > localhost ~ # modinfo usbhid
@@ -101,7 +81,15 @@ On Tue, Nov 15, 2022 at 12:40 PM Allen Webb <allenwebb@google.com> wrote:
 > parm:           jspoll:Polling interval of joysticks (uint)
 > parm:           mousepoll:Polling interval of mice (uint)
 > ```
->
+
+Hm. Interesting. Actually, alias gets into modules.builtin.modinfo:
+
+$ tr '\0' '\n' <  /lib/modules/`uname -r`/modules.builtin.modinfo |grep ^crc32c_generic.alias=
+crc32c_generic.alias=crypto-crc32c-generic
+crc32c_generic.alias=crc32c-generic
+crc32c_generic.alias=crypto-crc32c
+crc32c_generic.alias=crc32c
+
 > bluetooth however has an alias listed:
 > ```
 > localhost ~ # modinfo bluetooth
@@ -122,15 +110,15 @@ On Tue, Nov 15, 2022 at 12:40 PM Allen Webb <allenwebb@google.com> wrote:
 > parm:           enable_ecred:Enable enhanced credit flow control mode (bool)
 > parm:           disable_ertm:Disable enhanced retransmission mode (bool)
 > ```
->
+> 
 > I believe the reason for this is many modules use `#define
 > MODULE_DEVICE_TABLE(type, name)` which is a noop for buildin modules.
 > I have a local patch that resolves that issue here:
 > See: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3840672/1/include/linux/module.h#b246
->
+> 
 > However, I probably ought to rework that patch to create the
 > MODULE_ALIAS defines instead of the buildin.alias file.
->
+> 
 > On Tue, Nov 15, 2022 at 11:35 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
 > >
 > > On Tue, Nov 15, 2022 at 10:05:35AM -0600, Allen Webb wrote:
@@ -184,3 +172,8 @@ On Tue, Nov 15, 2022 at 12:40 PM Allen Webb <allenwebb@google.com> wrote:
 > > helps demonstrates what you mean.
 > >
 > >   Luis
+> 
+
+-- 
+Rgrds, legion
+
