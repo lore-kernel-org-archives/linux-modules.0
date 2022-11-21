@@ -2,33 +2,33 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D4DCC433FE
-	for <linux-modules@archiver.kernel.org>; Mon, 21 Nov 2022 19:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 131A4C433FE
+	for <linux-modules@archiver.kernel.org>; Mon, 21 Nov 2022 19:19:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbiKUTNQ (ORCPT
+        id S231368AbiKUTS6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 21 Nov 2022 14:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        Mon, 21 Nov 2022 14:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbiKUTMz (ORCPT
+        with ESMTP id S231298AbiKUTSy (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 21 Nov 2022 14:12:55 -0500
+        Mon, 21 Nov 2022 14:18:54 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BAD13DDB;
-        Mon, 21 Nov 2022 11:12:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625D9E0BC;
+        Mon, 21 Nov 2022 11:18:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=I1dMuXGh4BFD544YIqWPLeTZToGUlatxS6Fvgv6hOhU=; b=t3hiiBlcGvC17357KM2w12Bbf/
-        9iECHeonh7YR0gRFCiLyoZXiDD25ybfBhVytfVFPI3/B/GrQxjTbD3asPVG7jYSEy9PnTs13IY1Xi
-        pYx+qhsZ3p+41mtRz7pBVkS3OyJ7NzHW/BZLsS2aEL4a/Cp+UrqoKLroKTBV3d0TtxW4S8GpGXTRA
-        gb2Bkfuc3RwICsGcbNvufg+8WbZGUEM+Q7GawVYNFzLVjHlrZ4fMypdmhcjg4kNRbEZCcpfrjI75i
-        0wHv8hY1IVS4yhjhW/dTy5WeYWiXLO9JtoNq0BQ6yuHgZfpNMZLHvvXP356O2Z9+W/2ZTQQXvNVuf
-        NVIP+7sg==;
+        bh=IDAgf8lbbVFqJgU6JDXwJ+JnvJXOpPzVGT7LvHAItiU=; b=abvqVpdQR0wHO7xvGAqrNSuGfr
+        3M/2TCKr8LfeRENw2g03/rbmixDR2SO7+Z1HTFX1SLp3oRct5m5ea6wh8s1BmjWB1GQ4XnBuhurhp
+        jZiLKyXUFrpetDsIK9XOCDTTV3M67LCgf4tyytZ/4dq0rFrZsJnTz4uuGk0mu6YXfVEFJDKA7vk6L
+        zDGURJYoIo00DpACVjbrUr0XdQ/nzIM8VJtQYXOnQaEBwyI3wpYsyr4chgNLZYNdahkugxz9nUAD1
+        JvQrgDEdQ/DxvonOQ2ECj0+cQS4p0GOhsGrA0MRG+FAfgdWaGDjqxvcYHdJYQCdyfJJEiVpXzssBh
+        7RCWKr0w==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxCDs-00HCoQ-0H; Mon, 21 Nov 2022 19:12:52 +0000
-Date:   Mon, 21 Nov 2022 11:12:51 -0800
+        id 1oxCJc-00HDXP-73; Mon, 21 Nov 2022 19:18:48 +0000
+Date:   Mon, 21 Nov 2022 11:18:48 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Nick Alcock <nick.alcock@oracle.com>,
         Masahiro Yamada <masahiroy@kernel.org>
@@ -36,7 +36,7 @@ Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
         kris.van.hees@oracle.com, Steven Rostedt <rostedt@goodmis.org>
 Subject: Re: [PATCH v9 2/8] kbuild: add modules_thick.builtin
-Message-ID: <Y3vNs41m9I51Eu7x@bombadil.infradead.org>
+Message-ID: <Y3vPGDmKVx3UWbwJ@bombadil.infradead.org>
 References: <20221109134132.9052-1-nick.alcock@oracle.com>
  <20221109134132.9052-3-nick.alcock@oracle.com>
  <Y2x22mKtaZvC7ZSk@bombadil.infradead.org>
@@ -45,28 +45,46 @@ References: <20221109134132.9052-1-nick.alcock@oracle.com>
  <87iljhv321.fsf@esperi.org.uk>
  <Y3QC0OIbZgSmvAxT@bombadil.infradead.org>
  <87sfics595.fsf@esperi.org.uk>
+ <Y3vNs41m9I51Eu7x@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87sfics595.fsf@esperi.org.uk>
+In-Reply-To: <Y3vNs41m9I51Eu7x@bombadil.infradead.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Nov 21, 2022 at 03:21:10PM +0000, Nick Alcock wrote:
-> One question: do you think it's worthwhile me submitting patches to
-> de-MODULE_* things that need it?
+On Mon, Nov 21, 2022 at 11:12:52AM -0800, Luis Chamberlain wrote:
+> On Mon, Nov 21, 2022 at 03:21:10PM +0000, Nick Alcock wrote:
+> > One question: do you think it's worthwhile me submitting patches to
+> > de-MODULE_* things that need it?
+> 
+> 100% yes.
+> 
+> Yes please remove all that module declration helpers for things that are
+> not modules, and after you add your helper which will nag at build time
+> when it finds new ones.
+> 
+> For justification just mention in the commit log that after commit
+> 8b41fc4454e ("kbuild: create modules.builtin without Makefile.modbuiltin or
+> tristate.conf") we rely on the module license tag to generate the
+> modules.builtin file and so built-in code which uses module helpers
+> just need to be removed.
 
-100% yes.
+You should also mention what modules.builtin is used for as per our
+Documentation/kbuild/kbuild.rst, and that it is only used for
+modprobe to *not* fail when trying to load a module which is
+built-in.
 
-Yes please remove all that module declration helpers for things that are
-not modules, and after you add your helper which will nag at build time
-when it finds new ones.
+And so, the removing these tags doesn't fix anything critical
+in particular, but it does fix false positive uses of userspace
+modprobe use against built-in symbols.
 
-For justification just mention in the commit log that after commit
-8b41fc4454e ("kbuild: create modules.builtin without Makefile.modbuiltin or
-tristate.conf") we rely on the module license tag to generate the
-modules.builtin file and so built-in code which uses module helpers
-just need to be removed.
+That would *complete* the commit log with a clear justification and
+evaluation of impact.
+
+How many of these are we talking about? I'm happy to take them
+via modules-next. I'd hope to not run accross many conflicts against
+other trees.
 
   Luis
