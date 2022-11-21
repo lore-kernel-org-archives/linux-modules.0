@@ -2,152 +2,243 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF25DC433FE
-	for <linux-modules@archiver.kernel.org>; Fri, 18 Nov 2022 17:35:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CE8FC4332F
+	for <linux-modules@archiver.kernel.org>; Mon, 21 Nov 2022 15:22:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242550AbiKRRfb (ORCPT
+        id S232246AbiKUPWd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 18 Nov 2022 12:35:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        Mon, 21 Nov 2022 10:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241614AbiKRRfH (ORCPT
+        with ESMTP id S232422AbiKUPWG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:35:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43024920B1
-        for <linux-modules@vger.kernel.org>; Fri, 18 Nov 2022 09:32:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668792778;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TydPydB++R7u+oQGl1q73u032SmAgan46ItVYeROsmQ=;
-        b=dSFzVuNFjdXfbyLPsL+RlbkH8QyivHgK++pF4JLNQVPPRQUkc4eV5bQ2qnSl26U93mumAq
-        9RDUhIlsikTeo/FKHbLqKn4miDhN8VjsrQufvJX1vFQ+4pXifN5TQ9jauOU34svdPFlFs7
-        QpE+kTgK86m45V9l4uKL0ARMXT03pbs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589-gbMRxe8SMhG_tSsT4lzzTQ-1; Fri, 18 Nov 2022 12:32:57 -0500
-X-MC-Unique: gbMRxe8SMhG_tSsT4lzzTQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 84-20020a1c0257000000b003cfe9e8e3f9so2573468wmc.0
-        for <linux-modules@vger.kernel.org>; Fri, 18 Nov 2022 09:32:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TydPydB++R7u+oQGl1q73u032SmAgan46ItVYeROsmQ=;
-        b=X03b4mzAoJH60qELauZWsd2+C0WNY8dObIxFZbZkWxjLWbLlNr/E6O3lq4vqwff7Tn
-         g+NEt+c+T7w9s4o3mOs2yJUXBgl3VI8+HcciVVSZRGPdUNJfqAjRj/YLVAhGWRATdyKz
-         oe9Q4NyxDBKkmtMX0L4qm4DQM9IvS0l3SD0UUr4y/Mbw3MFJ4lDWGnswmlweQq8VGaFU
-         laTI6n7emhiX01GVOADBb+STcvL3OLe6TzCDQI5EEOeTVeuDZgcqZvHJKOlFb9N2iIxV
-         +UTzi2h++gjxuZNZ82hN2YrSBl6FciSiVsSTVxgz9z+GQL/PLNOohSaqGkXXlqq3grvv
-         TUdg==
-X-Gm-Message-State: ANoB5pmg6eqTM6Yv/7Iudz13z7wzub9YTomcbALiXeLbYBOiNGSWcTTW
-        LiNnsAT0HHX9xYFBAqJW2KcAsFdu7FQmvb3Yh2qNURJmnN8Q6dDBdlImUTfM01OLXQ8B4q2HYDN
-        exgPUuiB90Xztgaq7gaEZazJh1g==
-X-Received: by 2002:a5d:4406:0:b0:22d:6988:30de with SMTP id z6-20020a5d4406000000b0022d698830demr4874348wrq.186.1668792775959;
-        Fri, 18 Nov 2022 09:32:55 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6h6uJI53TwrfBbOFhzVPE+9cul+4RlRYm2mCAY21zH5E2yX6081R0EKooIKFTacK6p6dCbLQ==
-X-Received: by 2002:a5d:4406:0:b0:22d:6988:30de with SMTP id z6-20020a5d4406000000b0022d698830demr4874330wrq.186.1668792775614;
-        Fri, 18 Nov 2022 09:32:55 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:f500:6512:fac3:2687:15ff? (p200300cbc704f5006512fac3268715ff.dip0.t-ipconnect.de. [2003:cb:c704:f500:6512:fac3:2687:15ff])
-        by smtp.gmail.com with ESMTPSA id y7-20020adff6c7000000b002368f6b56desm4806305wrp.18.2022.11.18.09.32.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 09:32:55 -0800 (PST)
-Message-ID: <8c826c96-62ec-2f72-c4cb-30139d5639d1@redhat.com>
-Date:   Fri, 18 Nov 2022 18:32:54 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
+        Mon, 21 Nov 2022 10:22:06 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49203BD2;
+        Mon, 21 Nov 2022 07:21:26 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALEgTUp030869;
+        Mon, 21 Nov 2022 15:21:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=YKTZ3r1sfJellpfD45Lbbe6yp3B4k9IYqfFmpTRb7ZQ=;
+ b=rCYHFrjdBIo1NhoZ9vme5Cp/KuS8TwII+6CJQ3j5xOeqE54QJ8TUea7sS0XHlNmaWIhD
+ ZwBAsEExowt6RBX1ljL2xHM5cOZZXKOOBPioOXps5/kdbSOeNnC3YdS5Gkv4BBLJFWoM
+ lw0uD/33LQX6nqjVLYIAlaAoaf4qSBlAL3mNJ1igffyuomlaPBLw95knrpuHjG0o6TjK
+ Zsi3Fzb+kWp9FdiKZSFyJjsq4Pz/4gCK/oXfB4k0ui2aldYS1nQZrqxghJL0x9fANLwC
+ +hfm+Z0PVYi9GFbCBS1nmBbGwmCj5yn+yQCE1poM8fAQiuSqvZXggLh5zWbDEol52GWa oA== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kxr99mxfb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Nov 2022 15:21:19 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2ALDmEMf008232;
+        Mon, 21 Nov 2022 15:21:18 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kxnk3bkf9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Nov 2022 15:21:18 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cz0W790xGMA5rr8ajzIHuf2cU3FHlayhk12K142zDpv4QjZWfivdbqaovZsX42lkpv0HmmiBX0sJ9WqA0BHOQgcd66LZD8vrQ8wy0nxgLXjswR0ziQ7DFrOC4ZqzDowQFi0KP53pTXp4fCh7fDpx8Gn4zAkNaT1dYl1ZWrkIsu6X19nxyKy/Ptz/HHEY2pIyyQOQJnSbCK113H6txvdxckAKb7fZBoMthXFou2JuBtwEBAuef9b/A3evFKsKPE951qD4vAgaF7U6WLlVCm+mJnK0tsGZGzrtSDwRKCTrGYB4wIGfXwYoh4k++eZsmlKHwsEJKRAspCMRLgN9RhUvaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YKTZ3r1sfJellpfD45Lbbe6yp3B4k9IYqfFmpTRb7ZQ=;
+ b=nUPP55Ajfd1C4fbFg+dUSP7fBDfpoqtEyXS6ylrkMe4XIUP5w0QWY/FPNhiU7vFwCzsQk63TxyAvNoCiDh7oQCsZFnf9F3WuSqSBw+NP0ENlGEzDjUftzSijYcqevtIXoRJiz7B83de99al0I8DCGE8BvM8yjOGryyWC4fVGLib9Rdntp9u6fLnw/L/pVvneWokPEsrsjNmg+4zIxxRlLeApiZ37xNJ/zeE8Jumlrcr4zXezPs5x/5AnNQSGTa5tgmHHbvJJh6Jed9Ej4utifJtVRG1PH1Xii417QOiQqqQmuUqPphMEqP3zcG72YsDOiXCGBUfPtIZhhTLbKM8SJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YKTZ3r1sfJellpfD45Lbbe6yp3B4k9IYqfFmpTRb7ZQ=;
+ b=PyGEt/Ui/NbX4zrSmAK9htxQSRw9Wko0YdzRPtIrYxxN+YAQtaO8Ieg/ks1+hwC0R1tOHwLq72DAtiRZDy4IgY/T1w9u6BN/wwJNx0TPbWcem0RLMUhqogT93nkiyMqzmHrC5MtoHtBs49sNSwfV0tZcMdSbf1fFFvcmxmtAKic=
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
+ by BN0PR10MB5126.namprd10.prod.outlook.com (2603:10b6:408:129::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Mon, 21 Nov
+ 2022 15:21:15 +0000
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::6696:2164:2057:4b25]) by DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::6696:2164:2057:4b25%3]) with mapi id 15.20.5834.009; Mon, 21 Nov 2022
+ 15:21:15 +0000
+From:   Nick Alcock <nick.alcock@oracle.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Prarit Bhargava <prarit@redhat.com>, pmladek@suse.com,
-        Petr Pavlu <petr.pavlu@suse.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220919123233.8538-1-petr.pavlu@suse.com>
- <20220919123233.8538-3-petr.pavlu@suse.com>
- <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
- <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
- <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
- <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
- <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
- <e070839f-c224-047b-9411-91143c1d8394@redhat.com>
- <Y3Jg8X7qv2AKPU1J@bombadil.infradead.org>
- <5467e66d-55de-ca8f-c1ae-ffe6efe7290d@redhat.com>
- <Y3Pol5H4kJioAV9W@bombadil.infradead.org>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y3Pol5H4kJioAV9W@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v9 2/8] kbuild: add modules_thick.builtin
+References: <20221109134132.9052-1-nick.alcock@oracle.com>
+        <20221109134132.9052-3-nick.alcock@oracle.com>
+        <Y2x22mKtaZvC7ZSk@bombadil.infradead.org>
+        <87h6z5wqlk.fsf@esperi.org.uk>
+        <Y25mXAGty35I5lQx@bombadil.infradead.org>
+        <87iljhv321.fsf@esperi.org.uk>
+        <Y3QC0OIbZgSmvAxT@bombadil.infradead.org>
+Emacs:  freely redistributable; void where prohibited by law.
+Date:   Mon, 21 Nov 2022 15:21:10 +0000
+In-Reply-To: <Y3QC0OIbZgSmvAxT@bombadil.infradead.org> (Luis Chamberlain's
+        message of "Tue, 15 Nov 2022 13:21:20 -0800")
+Message-ID: <87sfics595.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P265CA0056.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2af::23) To DS0PR10MB6798.namprd10.prod.outlook.com
+ (2603:10b6:8:13c::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|BN0PR10MB5126:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ca6591e-a060-49fc-fc97-08dacbd4080f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6fKymWHTjzSyTxIf1jv1ktmUruczS+YTrktQgXbQyFWV7xB2kd2CeuHhTGJQGoQhvF/JEXjvL3T7vk5Q5FBFgSkFeADUVtEK8XIipG7gdyHnLswBD6q6g7LdRFM4qTthOoEKE6kFXbAUCuIUwNUpOJ+4xCsLihNBd88x8gY6glG1kMBmQPmrAlNp0nGmHLvmwnuQQdGH4QBBB8WAJ9UAVp0aqdgwdaj+izMWVPds2Vhg/3jWvANIGkUIonwlIkWhGTS8WTs98mFuw72R1RRUC8ehr0UJmqsmq1EjS5JvoQtZMBqtOmmCZldE8ZuXergWJEtVjGSG1cYShDZl/2zWDH5xjuK9SoVuprRJczzMMauTeCGA4TlS9ue2YWtScBBdwilAkVsDui6Bcisg2xfCeUBCOZagt8C5AtPXVDYW25LT0hRVNaoCAQ36ZjKJmd53wXWGX0oEJVVAWisNCEjwv4cE5nxoiIMqonL8lK5jmg1Gp47POdFePhn4s5Eijmfldkjjf9Y0bR4QH+9pcs1e7Kj6RaQmf7yPRF7ZPIxlgwqLUq/Gf6EupzufcP5r93BJqqY5tG9+1+duSBWtcY6bACTBwL7hE6CoKBV+dgnaVJ9wDoV2zpgbV37w1IDaCQMf3t5LtsPSeRUxZvbF5HrVJA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(376002)(366004)(346002)(39860400002)(451199015)(6512007)(9686003)(186003)(83380400001)(38100700002)(44832011)(2906002)(5660300002)(6506007)(6486002)(54906003)(6916009)(66556008)(478600001)(4326008)(6666004)(8676002)(66476007)(8936002)(41300700001)(316002)(66946007)(36756003)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?olKNZPIGJydXFTZgRbwvMKTa5QjZT9Wo6/W09xA8l07FwRCTiJxUKeBi6c9S?=
+ =?us-ascii?Q?NN9PapwX/6QS9f5OqMSlSWkjOn+EN+vQLoJl3Lc/TDRemXeykSsJtU+uU8rO?=
+ =?us-ascii?Q?KvozM8qvUS8HIAowncEqdQk8XsUQfOUdK9Omjj88XIaw5C7jgOwbXmSckfhG?=
+ =?us-ascii?Q?Fib7X2Qm1o7LeDUQojzadnaAl47W11TYyF4FaytxsHwBcE59/k/1YcVAuD5L?=
+ =?us-ascii?Q?TWV3Piwxe1z/nPwJUwvBTxSuQ0xWKuJTTdWKKE3O7LhpQl6QWiGDpNOTXkWb?=
+ =?us-ascii?Q?wYxjztVL0puJ7UFlOWLWsYGSZA07ftEO0D+67SvvyGZvzMwpV5pLWLfjars1?=
+ =?us-ascii?Q?hsjHDfpqj70BMtGbt7mNtvwcj90KiSyZ0uzJ2cwL9VmQt6Ek18r3FygoNsMY?=
+ =?us-ascii?Q?qAI85AaCHTiRWVeJd2/VU+ISZ5s0qQcUXd0zQMsG8jyzNXf63Myd8BoPEzFj?=
+ =?us-ascii?Q?SMLAOeafEJFaAAaxcHiD8r+QIzuQgHxogahfg0YT9GLmLNCNJ/6J8O9BqM0e?=
+ =?us-ascii?Q?oNubyXjI2AyQJZJy4rmyq8J1DvAxA4ktCJ1bIaKwVZeeqwBICldP1CP04+OF?=
+ =?us-ascii?Q?FD2bP/NmO5oWtMoF60G+FlXv1/7v4CGn6MSWT0BddKldNq8h1k9MwQ3rQ2XC?=
+ =?us-ascii?Q?Rgl/pPZd9QIhcxZV2cYxeqR9u343rO2JN/XCUKCKcs3/aXkwvHi5A3e+JDDm?=
+ =?us-ascii?Q?kKBR9ymr1ATfTWk+mRCleOmIhfFwBdaNz2JCQzCoK30PxdZf48CVFPUQzyQm?=
+ =?us-ascii?Q?vJ45/ARICcW55n10IoNDjKgZ47bsqv3VJOUiYfphXl1EPT75fEEj8kxgFcjt?=
+ =?us-ascii?Q?O17+tqbcxTTjviMsQV+9CU4jHQncmogBCdqrSxDb6e2UercJJBtO3Pa8TFtu?=
+ =?us-ascii?Q?swXA3AUaT1962WmnODnZ0clOtQCl73fp8WWAd9RnWOpXwJhbWKONIG5stBqw?=
+ =?us-ascii?Q?8m3hNjikYMD0+wUrScwxMY5z+AFXfsA+ddE91mijVIYCxDutJp5KwWQ6NpiY?=
+ =?us-ascii?Q?3AvQGQ7+z5/WFfItfBLtwd6qWwBhpEi2xr+tJ22vwQFpHk2OFF0aPxyo+H4j?=
+ =?us-ascii?Q?g/0ENh36DAoN3jS4YMMsCgzHeik2W5n/TcHUMBKEzSERrRSwQVEguwKUiq4B?=
+ =?us-ascii?Q?XNT3scBv9L+lD5Ao/4AqUXmJ1/sw5MBta4iPcH2zW6PkcCixcCT5/7+lBuLf?=
+ =?us-ascii?Q?n5p6o2IAZgqvU1/1f4efWGJ1pGGxgX3wp+2vmqMGAXwQXxF3NRC5EJBWP51y?=
+ =?us-ascii?Q?ksw3QHJ/MGHYSqT9BRBxonVpzQFJSfWMqr1U31lQejQee3g/ud5ljH54mz1/?=
+ =?us-ascii?Q?qjVpWw8K8fqmuteH/pcfxgCdNOJC0ng1jjNMOcVz3+VjzO6CuzWxdHBQBQwy?=
+ =?us-ascii?Q?dvKXbR4o6/7mxMaGcYBK+9mV3e6hOR388m7fWr9K0PvTTsgOhtRm44EAB0r+?=
+ =?us-ascii?Q?dfsPZtoM6AnSDWvaYWqUFbEEjE/YGt0X7tD4TRGYQCToDj27uL63O6RHY/wO?=
+ =?us-ascii?Q?mh7ekhuvFL0EfWmzjFSeulCxwinyVisgeXmgg8YJOv+i48PUlWC8ooT+sYtc?=
+ =?us-ascii?Q?bgcuyZFqrlr63OfNgms0HNoodYMuiK4rIwIt3T2s+d0MkPIPZKmotw7dUMWd?=
+ =?us-ascii?Q?SA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?1jonGo/UcYmQvaI93ePr+93p95Iw4F4shTu0cJSC8SWO+wkRsV9lEOdDK8oX?=
+ =?us-ascii?Q?IWz2u/i5RY5gLXSas0X8jlyYS/4apMwTrxegH/6J0DeFrYcCU4vygSW8rd00?=
+ =?us-ascii?Q?YB8utVCyJKvVcNjZtnafOlbNXu+RETWaVJmSAzewRnYgAtvK609p+ujT3IeR?=
+ =?us-ascii?Q?Y+cpqG2chFmBtTsG4N2K4Bi/8zRk11TV4SpJwAYrb8606vWHu5yw23jfy61e?=
+ =?us-ascii?Q?tXJi6Xi2Gg66N7OYOCEgz05xrgjADKobbkytOhwxr9P9dHNmbmtRhioZrJSK?=
+ =?us-ascii?Q?dEJDbhSkeYXZLLS4ceHPz4HU/hpHwhTvSvBfKcaEcQRYgsFTs5uPVMMs1/bO?=
+ =?us-ascii?Q?qIC8z6qgGIgpFJ1Qjrhqr/6dGBenlCoaAScWZiSpxopPvmxuLwD4nOUREPi3?=
+ =?us-ascii?Q?jIzmUUgmofg+nVje6278oq3hSkGNbx1ayOv8xlpqGcXbmfabLur7FCnERNWH?=
+ =?us-ascii?Q?qWthNHyDk5ef5HM03ES6Xe0Cr7/jQGYgN8pYJ1X46MB/0HUz6sgaeM/ThDz9?=
+ =?us-ascii?Q?smsJRSdq9cjOZVy+kZzwZ79WnjnswXHTRl+/6x4iJVxiH6NEjhd44U0QK42j?=
+ =?us-ascii?Q?Lfrv9jEidMy/fGRlCjiwuXH+TTTsQYkTmqOkUsybG8OHQoLo9aSH4c9/znJH?=
+ =?us-ascii?Q?+qPthpsai0+S8oK0fcjp/n0FUayzm9SGMjG8+oNZFbhI2V8cGuPFvw9xXx+/?=
+ =?us-ascii?Q?bPscAxItWTEsozDe80kjsr2/ZJbyFntyCWcJVpboFaKhJuRDuWzLBn2h/F2r?=
+ =?us-ascii?Q?cmCLvUx7voVCt67kb03XToyg5lTIZZYNla8NXJnirbeC0XtzkGwbGyPxldwn?=
+ =?us-ascii?Q?X7roJu5kVqqDHKz51rsZBwHcKGaZPmFo9INwxK+3RhK25wNo3qpong8zEriG?=
+ =?us-ascii?Q?HQsuqiKCiU/8gl/qDUYSARdyKBn0Ol37uv5Hx21GGPxJ5ydFVbUM2Nwze0d3?=
+ =?us-ascii?Q?MHSfPJGwApYfwPlmsg0oQdyuI5yV1CXBOw8+8TnK/rk=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ca6591e-a060-49fc-fc97-08dacbd4080f
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 15:21:15.7304
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /CEpsQo5/fAd/5014L1tNdy+jgXPTp0wvLy13jf2+BR3UrXYHk3hzP1ZJeVoywmEYwEXw4IfUYXqVCFWHBYUJw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5126
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-21_13,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ suspectscore=0 bulkscore=0 mlxscore=0 spamscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211210119
+X-Proofpoint-GUID: xtWY-PvJUoF3_DaYvnEn3KdEApsU7fqh
+X-Proofpoint-ORIG-GUID: xtWY-PvJUoF3_DaYvnEn3KdEApsU7fqh
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 15.11.22 20:29, Luis Chamberlain wrote:
-> On Mon, Nov 14, 2022 at 04:45:05PM +0100, David Hildenbrand wrote:
->> Note that I don't think the issue I raised is due to 6e6de3dee51a.
->> I don't have the machine at hand right now. But, again, I doubt this will
->> fix it.
-> 
-> There are *more* modules processed after that commit. That's all. So
-> testing would be appreciated.
+On 15 Nov 2022, Luis Chamberlain uttered the following:
 
-I just tested that change on top of 6.1.0-rc5+ on that large system
-and CONFIG_KASAN_INLINE=y. No change.
+> On Mon, Nov 14, 2022 at 05:49:58PM +0000, Nick Alcock wrote:
+>> On 11 Nov 2022, Luis Chamberlain outgrape:
+>> 
+>> > On Fri, Nov 11, 2022 at 01:47:03PM +0000, Nick Alcock wrote:
+>> >> +arch/x86/crypto/libblake2s-x86_64.o: arch/x86/crypto/blake2s-core.o arch/x86/crypto/blake2s-glue.o
+>> >> 
+>> >> But...
+>> >> 
+>> >> obj-$(CONFIG_CRYPTO_BLAKE2S_X86) += libblake2s-x86_64.o
+>> >> libblake2s-x86_64-y := blake2s-core.o blake2s-glue.o
+>> >> 
+>> >> config CRYPTO_BLAKE2S_X86
+>> >>         bool "Hash functions: BLAKE2s (SSSE3/AVX-512)"
+>> >> 
+>> >> This cannot be built as a module.
+>> >
+>> > mcgrof@fulton ~/linux (git::modules-next)$ git grep MODULE_LICENSE arch/x86/crypto/blake2s-*
+>> > arch/x86/crypto/blake2s-glue.c:MODULE_LICENSE("GPL v2");
+>> >
+>> > Try removing that.
+>> 
+>> OK, that works!
+>> 
+>> So if we're using the presence of MODULE_LICENSE to indicate that
+>> something is potentially modular, I guess this means I need to do a
+>> sweep through the kernel and find everywhere that cites a MODULE_LICENSE
+>> and cannot be built as a module before this will say things are modules
+>> that really are.
+>
+> Yes, make allyesconfig builds + a verifier for tristate would be nice.
+> scripts/kconfig/streamline_config.pl has an iterator over kconfig files
+> and also objects which you might find useful.
+>
+> At build time such a thing could nag about issues like the above.
+
+OK, I've got enough of this working now that weird edge cases are
+popping out and it's starting to become fun rather than frustrating!
+
+Some of them are bugs in the tristate-checker side of things, e.g. in
+net/bridge/Makefile we see
+
+bridge-$(subst m,y,$(CONFIG_BRIDGE_NETFILTER)) += br_nf_core.o
+
+and my code is tripping over because while it runs
+CONFIG_BRIDGE_NETFILTER comes from tristate.conf and has an uppercase
+value. This sort of thing is rare (a dozen cases at most across the
+tree) and easily fixable in the individual makefiles as part of the
+tristate checker commit, so I'll just do that.
+
+But some are I think obscure bugs in the new machinery. e.g. in
+security/keys/encrypted-keys/Makefile we have this wonderfully crazy
+thing:
+
+masterkey-$(CONFIG_TRUSTED_KEYS)-$(CONFIG_ENCRYPTED_KEYS) := masterkey_trusted.o
+
+This produces things that look like masterkey-y-y, which does not match
+$(modname)-y. I'll come up with a more complete list shortly (a make
+allyesconfig is spinning now). We can probably hack around these by also
+expanding $(modname)-y-y etc, for as many steps out as it seems people
+are actually doing in the tree right now. I can submit a patch that does
+that if you like. (If there's a less gross and fragile approach, I'd be
+happy to do that instead.)
 
 
-[  207.955184] vmap allocation for size 2490368 failed: use vmalloc=<size> to increase size
-[  207.955891] vmap allocation for size 2490368 failed: use vmalloc=<size> to increase size
-[  207.956253] vmap allocation for size 2490368 failed: use vmalloc=<size> to increase size
-[  207.956461] systemd-udevd: vmalloc error: size 2486272, vm_struct allocation failed, mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=1-7
-[  207.956573] CPU: 88 PID: 4925 Comm: systemd-udevd Not tainted 6.1.0-rc5+ #4
-[  207.956580] Hardware name: Lenovo ThinkSystem SR950 -[7X12ABC1WW]-/-[7X12ABC1WW]-, BIOS -[PSE130O-1.81]- 05/20/2020
-[  207.956584] Call Trace:
-[  207.956588]  <TASK>
-[  207.956593] vmap allocation for size 2490368 failed: use vmalloc=<size> to increase size
-[  207.956593]  dump_stack_lvl+0x5b/0x77
-[  207.956613]  warn_alloc.cold+0x86/0x195
-[  207.956632]  ? zone_watermark_ok_safe+0x2b0/0x2b0
-[  207.956641]  ? slab_free_freelist_hook+0x11e/0x1d0
-[  207.956672]  ? __get_vm_area_node+0x2a4/0x340
-[  207.956694]  __vmalloc_node_range+0xad6/0x11b0
-[  207.956699]  ? trace_contention_end+0xda/0x140
-[  207.956715]  ? __mutex_lock+0x254/0x1360
-[  207.956740]  ? __mutex_unlock_slowpath+0x154/0x600
-[  207.956752]  ? bit_wait_io_timeout+0x170/0x170
-[  207.956761]  ? vfree_atomic+0xa0/0xa0
-[  207.956775]  ? load_module+0x1d8f/0x7ff0
-[  207.956786]  module_alloc+0xe7/0x170
-[  207.956802]  ? load_module+0x1d8f/0x7ff0
-[  207.956822]  load_module+0x1d8f/0x7ff0
-[  207.956876]  ? module_frob_arch_sections+0x20/0x20
-[  207.956888]  ? ima_post_read_file+0x15a/0x180
-[  207.956904]  ? ima_read_file+0x140/0x140
-[  207.956918]  ? kernel_read+0x5c/0x140
-[  207.956931]  ? security_kernel_post_read_file+0x6d/0xb0
-[  207.956950]  ? kernel_read_file+0x21d/0x7d0
-[  207.956971]  ? __x64_sys_fspick+0x270/0x270
-[  207.956999]  ? __do_sys_finit_module+0xfc/0x180
-[  207.957005]  __do_sys_finit_module+0xfc/0x180
-[  207.957012]  ? __ia32_sys_init_module+0xa0/0xa0
-[  207.957023]  ? __seccomp_filter+0x15e/0xc20
-[  207.957066]  ? syscall_trace_enter.constprop.0+0x98/0x230
-[  207.957078]  do_syscall_64+0x58/0x80
-[  207.957085]  ? asm_exc_page_fault+0x22/0x30
-[  207.957095]  ? lockdep_hardirqs_on+0x7d/0x100
-[  207.957103]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+One question: do you think it's worthwhile me submitting patches to
+de-MODULE_* things that need it? It looks like I need to tear all the
+MODULE_ lines out before the .modinfo section goes away and this gives
+accurate results. This isn't actually deleting copyright lines, but it's
+making me a bit worried anyway: it feels morally equivalent somehow.
 
-
-I have access to the system for a couple more days, if there
-is anything else I should test.
-
--- 
-Thanks,
-
-David / dhildenb
-
+Is it actually considered OK to just delete MODULE_LICENSE,
+MODULE_AUTHOR etc for non-modules when they were written by someone
+else? (Commenting them out, leaving them as documentation, is presumably
+less likely to anger people but might be considered ugly.)
