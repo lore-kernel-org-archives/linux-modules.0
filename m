@@ -2,85 +2,131 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18EA7C433FE
-	for <linux-modules@archiver.kernel.org>; Tue, 22 Nov 2022 17:59:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCEB2C433FE
+	for <linux-modules@archiver.kernel.org>; Wed, 23 Nov 2022 13:31:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiKVR66 (ORCPT
+        id S238712AbiKWNbm (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 22 Nov 2022 12:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
+        Wed, 23 Nov 2022 08:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbiKVR6q (ORCPT
+        with ESMTP id S238234AbiKWNbO (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 22 Nov 2022 12:58:46 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC28D2FA;
-        Tue, 22 Nov 2022 09:58:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZNAd/L3ZgbNcQldFxZ5AePOKH80viQBr86CXLFlx6Ts=; b=TetgmfMnLO+t/MSK8WjlM7+buV
-        x/rspsf3QkTVdnAMmVqRS4qlbyvCq8wfvLFPEdIlNJkQZmuSP5oBZ080ZsMFnMjju7rypbiLPZyMH
-        I85xIRN3zmD/jn7psUWSCvUubMy13OsjB+bOg9LIGlOLLs5ziLdC4+cyvTUaCa79oqLt3liRzU251
-        uY8GGWyafwiOmp8uZrO9c+jcewcyEAIxL9qfRbZ/BKN3CMAh3KofPMcG0G2WX6HEGjOj+DMXcLkdM
-        2STYJvtebyvaKjHS1SRsJYzC7WTsuQi6lskyOqAwthiQKCpf7Jpe/8wwI1FuV1KgVviZ1W5xSITKm
-        C0TgWq/A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxXXf-00BC0Q-7s; Tue, 22 Nov 2022 17:58:43 +0000
-Date:   Tue, 22 Nov 2022 09:58:43 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     Prarit Bhargava <prarit@redhat.com>, pmladek@suse.com,
+        Wed, 23 Nov 2022 08:31:14 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7423931352;
+        Wed, 23 Nov 2022 05:13:06 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 05E0321875;
+        Wed, 23 Nov 2022 13:13:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669209185; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=iz1HRqkggoLI/S14nTxBDCcxxQV81AgfLfdqBcyXeZY=;
+        b=EjgqBi3fsvzjjAiQ7uHz0ZN8XQAzcmGw/LLZUk+BjcL9eFvUAlxrn21WLO5IkdCcKN+3C4
+        NhTySQGKjWTej7+KKKbaBwoLYz9vPA6RimvtHV87/1Y9w2+rap613OwVDMZqqsfdeB1hS2
+        LPtnZl1udKikg1FmMR5/gLb6iyg1oLU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C622813A37;
+        Wed, 23 Nov 2022 13:13:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9+1fL2AcfmN9ewAAMHmgww
+        (envelope-from <petr.pavlu@suse.com>); Wed, 23 Nov 2022 13:13:04 +0000
+From:   Petr Pavlu <petr.pavlu@suse.com>
+To:     mcgrof@kernel.org
+Cc:     pmladek@suse.com, prarit@redhat.com, david@redhat.com,
+        mwilck@suse.com, petr.pavlu@suse.com,
         linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
-Message-ID: <Y30N06kggeZKT8VD@bombadil.infradead.org>
-References: <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
- <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
- <e070839f-c224-047b-9411-91143c1d8394@redhat.com>
- <Y3Jg8X7qv2AKPU1J@bombadil.infradead.org>
- <5467e66d-55de-ca8f-c1ae-ffe6efe7290d@redhat.com>
- <Y3Pol5H4kJioAV9W@bombadil.infradead.org>
- <c2e841b7-e2b3-09f9-8187-328131d72c5d@redhat.com>
- <049a8f8a-baf8-744d-6250-575fc0dc533e@suse.com>
- <Y3vLbDAeILx7gJPT@bombadil.infradead.org>
- <3f50021f-2dbf-4e5e-d85f-bf41a02b6b6a@suse.com>
+        stable@vger.kernel.org
+Subject: [PATCH] module: Don't wait for GOING modules
+Date:   Wed, 23 Nov 2022 14:12:26 +0100
+Message-Id: <20221123131226.24359-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f50021f-2dbf-4e5e-d85f-bf41a02b6b6a@suse.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Nov 22, 2022 at 02:59:18PM +0100, Petr Pavlu wrote:
-> On 11/21/22 20:03, Luis Chamberlain wrote:
-> > To be clear I don't care about the patch mentioned in the above URL, I care
-> > about this:
-> > 
-> > https://lkml.kernel.org/r/d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com
-> > [...]
-> > 
-> > Petr, you had mentioned in the commit log for your second patch in this
-> > thread that your change fixes a regression. What I asked for was for a
-> > patch that fixes that regression alone first so we can send to stable.
-> > So what issue is that alternative patch fixing?
-> 
-> This alternative patch fixes the discussed regression with failing inserts of
-> acpi_cpufreq and pcc_cpufreq delaying boot. As mentioned, the situation can in
-> the worst case prevent udev from loading drivers for other devices and might
-> cause timeouts of services waiting on them and subsequently a failed boot.
-> 
-> The patch attempts a different solution for the problem that 6e6de3dee51a was
-> trying to solve. Rather than waiting for the unloading to complete, it returns
-> a different error code (-EBUSY) for modules in the GOING state. This should
-> avoid the error situation that was described in 6e6de3dee51a (user space
-> attempting to load a dependent module because the -EEXIST error code would
-> suggest to user space that the first module had been loaded successfully),
-> while avoiding the delay issue too.
+During a system boot, it can happen that the kernel receives a burst of
+requests to insert the same module but loading it eventually fails
+during its init call. For instance, udev can make a request to insert
+a frequency module for each individual CPU when another frequency module
+is already loaded which causes the init function of the new module to
+return an error.
 
-Great, can you send a proper patch now with a proper commit log and Cc
-stable tag?
+Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
+modules that have finished loading"), the kernel waits for modules in
+MODULE_STATE_GOING state to finish unloading before making another
+attempt to load the same module.
 
-  Luis
+This creates unnecessary work in the described scenario and delays the
+boot. In the worst case, it can prevent udev from loading drivers for
+other devices and might cause timeouts of services waiting on them and
+subsequently a failed boot.
+
+This patch attempts a different solution for the problem 6e6de3dee51a
+was trying to solve. Rather than waiting for the unloading to complete,
+it returns a different error code (-EBUSY) for modules in the GOING
+state. This should avoid the error situation that was described in
+6e6de3dee51a (user space attempting to load a dependent module because
+the -EEXIST error code would suggest to user space that the first module
+had been loaded successfully), while avoiding the delay situation too.
+
+Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
+Co-developed-by: Martin Wilck <mwilck@suse.com>
+Signed-off-by: Martin Wilck <mwilck@suse.com>
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+Cc: stable@vger.kernel.org
+---
+
+Notes:
+    Sending this alternative patch per the discussion in
+    https://lore.kernel.org/linux-modules/20220919123233.8538-1-petr.pavlu@suse.com/.
+    The initial version comes internally from Martin, hence the co-developed tag.
+
+ kernel/module/main.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index d02d39c7174e..b7e08d1edc27 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
+ 	sched_annotate_sleep();
+ 	mutex_lock(&module_mutex);
+ 	mod = find_module_all(name, strlen(name), true);
+-	ret = !mod || mod->state == MODULE_STATE_LIVE;
++	ret = !mod || mod->state == MODULE_STATE_LIVE
++		|| mod->state == MODULE_STATE_GOING;
+ 	mutex_unlock(&module_mutex);
+ 
+ 	return ret;
+@@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
+ 	mutex_lock(&module_mutex);
+ 	old = find_module_all(mod->name, strlen(mod->name), true);
+ 	if (old != NULL) {
+-		if (old->state != MODULE_STATE_LIVE) {
++		if (old->state == MODULE_STATE_COMING
++		    || old->state == MODULE_STATE_UNFORMED) {
+ 			/* Wait in case it fails to load. */
+ 			mutex_unlock(&module_mutex);
+ 			err = wait_event_interruptible(module_wq,
+@@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
+ 				goto out_unlocked;
+ 			goto again;
+ 		}
+-		err = -EEXIST;
++		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
+ 		goto out;
+ 	}
+ 	mod_update_bounds(mod);
+-- 
+2.35.3
+
