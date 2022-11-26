@@ -2,123 +2,258 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A7BCC4332F
-	for <linux-modules@archiver.kernel.org>; Thu, 24 Nov 2022 08:29:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCC6FC4167B
+	for <linux-modules@archiver.kernel.org>; Sat, 26 Nov 2022 14:43:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiKXI3Y (ORCPT
+        id S229673AbiKZOnW (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 24 Nov 2022 03:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        Sat, 26 Nov 2022 09:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKXI3X (ORCPT
+        with ESMTP id S229669AbiKZOnJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:29:23 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB587DEF8;
-        Thu, 24 Nov 2022 00:29:22 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 2CF3C1F8C0;
-        Thu, 24 Nov 2022 08:29:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669278561; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=d4emVWBJUhe5u0uHQ5OQewGttkQp0KoCl0jT+rAfSO0=;
-        b=Qzx6KpGIfSLmpQsi4jHmXhINPjMrw8ki9woHMvzYWM1HIvJ800Lnk+0LO5CCd9Qvt3zM7X
-        bUYsCC7OYJlTVwXo6VhudFlz2l5mMVhlYPyWfVgyaUNhByPNJZYHq8txzwqX4qvl9INksX
-        ATLQP8+12tg1YTAv4zdF6z5fJ9Tc94A=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DD98A2C141;
-        Thu, 24 Nov 2022 08:29:20 +0000 (UTC)
-Date:   Thu, 24 Nov 2022 09:29:20 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Laight <David.Laight@aculab.com>
-Subject: Re: [PATCH v8 6/9] livepatch: Use kallsyms_on_each_match_symbol() to
- improve performance
-Message-ID: <Y38rYMTSQLrPxz4u@alley>
-References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
- <20221102084921.1615-7-thunder.leizhen@huawei.com>
- <Y34f+IqqSGbtC82V@alley>
- <45a28bcf-c6e1-8d39-613a-d30bd7b685f0@huawei.com>
+        Sat, 26 Nov 2022 09:43:09 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2067.outbound.protection.outlook.com [40.107.241.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B7813CCF;
+        Sat, 26 Nov 2022 06:43:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FX0lsvnxXD5varBy+vnx4hmwfEc53Hd3JM1AZCx90N5W6SOQLajwOI4u/hcJs85Q6PYa9Y9DhCTpjFqcztbOwuyU7wnIuRHCQjm7kChz3Yz8Wi7YbhRJI1Jhm094RX92fS8Sr1Nw35MbPmiDl/Bn6kWh0EKxbLBzAhMbxdcifljdi4zLMxS8xHMxd9SJSCpWARcoRRzvZWCfXsxHvWTKfLtFpTXv2gTE30b+y6MEssbbduf+01W3ugs/re9xN/NuYxnZ0RC+jIxqJlNY2dNPTB8ix3uWeRtk1ZoqwguAvMABWMfnhvyzyAnE+FgJyUSlKeteOtGbzDwEZgljYratlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y+bqL0GdXCPkYXr9IoH7Zt3D/PyKa/KqO2ZdfsZ14ME=;
+ b=BsP1uu557s9URRqr8/Yl5eVWLFt8dJE50l1QsvD8cpF0jbHOnRe5kV8Sf+FykiuioAfurVmgjbcqJX4yT72Zq1PfT0xsx8xMVxpCABJL6/3a/pnJoBy1LSYYPEpXYFS/AVLr71bJ/S4G24a8DDKeXUY3CBT57P5AJ7RYYGH1ZQWH2VcaDstjhGewJ8Y59yKGGaYFEyGcz2uqO5F7H1ObzdG77TakMMkBA6GHL54ZtFuNbgZnEBWhVCCLMHeanxBNlCKYhFloI8s81yaMNa25GVUNKYygKIvxylKMnN0nF562J5a7IzfXQD66SH85SniIkHS90dRUdUpXoNkp1LFzTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y+bqL0GdXCPkYXr9IoH7Zt3D/PyKa/KqO2ZdfsZ14ME=;
+ b=fqHymeWxx5m8clix+xavV0WuwpMIyquCt5fsdBtozu/cm1p+NHY4tlw2W0qf76jKNZ/Iprihp9bL76PsHFpCzf2JUVBPAhNLY2bmXysl7rLbv+iSRqTB7gS7J1kfTGrpZ2MvuAQn7mN7CKxJoqV0Po/2+8iimdiXpkMH3slT36Ew49Ayuc15xKBsBXS05qnCM4cnZa1hk/GlY8bpK5Oj8u5QHyKQfXWHle3WHQnpYno/gWzGDe1HmrFZrkfrcG8vPvF3TBTA2ycg+l6cIJuWh7ZPrNNszRT03E+13gy2yqtJ7M8PG0j/B9LJwX4sQGVtcJGM/y3bLCAR3GpCroJGYg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16) by AM0PR04MB7154.eurprd04.prod.outlook.com
+ (2603:10a6:208:19f::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Sat, 26 Nov
+ 2022 14:43:05 +0000
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::14eb:6506:8510:875f]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::14eb:6506:8510:875f%7]) with mapi id 15.20.5857.020; Sat, 26 Nov 2022
+ 14:43:05 +0000
+Message-ID: <a26ed87f-9e4c-7c1f-515b-edaaff9140fd@suse.com>
+Date:   Sat, 26 Nov 2022 15:43:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] module: Don't wait for GOING modules
+Content-Language: en-US
+To:     mcgrof@kernel.org, Petr Mladek <pmladek@suse.com>
+Cc:     prarit@redhat.com, david@redhat.com, mwilck@suse.com,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20221123131226.24359-1-petr.pavlu@suse.com>
+ <Y348QNmO2AHh3eNr@alley>
+From:   Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <Y348QNmO2AHh3eNr@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0007.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a::17) To AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <45a28bcf-c6e1-8d39-613a-d30bd7b685f0@huawei.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|AM0PR04MB7154:EE_
+X-MS-Office365-Filtering-Correlation-Id: c6b883ed-84ae-4aa6-51e0-08dacfbc86a4
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fRk6qxC+5Aw/K5n4VKLJnoGVoSxEKHXv0f+i3JWCOOmZX2lS/6xux5tDLjrBnBT1WrjHfR4ihyE4AFl96RzMAUNfshDVSRwSy0EoitvGMN/+RO8czSenPczoPuvHaq+VK/qXZFko5Dk8KRnsGv5jWA2re3uXkSHqxuJrsD1gUV5jd4JodI/zA/llZoQRwVnSYr5ttm+i3tn8GGEKeXttfHnrXhK1VnE5n6ZKVN0WMUS0GJs7wzx4vK+uL2luiPgLlHKyCV2fFnBEWEigyaD1mfZ7XQWHbEwSnVErztz5IWCPK6QMIQ3Tws5JkcCV0V1mXMaA26Z/6eb/YjO7HpN9fo7XXjktFn9dptUtQR/YP3kXeUiQ/WAffSOn1QtWVN4oR9QPkq/dt9W55iusUOJuiXfJgLG3CnjqW17nivY6jacAUW2TrKU6RuEsZRhpcmbOurf5F13NO2AcTdzu2O6HmcsqYd2TeDRQdor6/nbWoMAtIMLcAFgaUMKUd7hwoWPUD+IBAbaxqKwrBRCkMK+freBkMpQTeEoNwOUPtviqcdqF2j70TyM0e8ucB4vZXhovqxE0u1OVBTm8SzPzM9NfgmGL6s+xpxvJOVhuwmNaBtbdxGDfSrSvqyE86pC2LPoFpMEnWYODckxiyY+qfa6ng9H9e/hTRJBrBBPk2g6BadI3pig4ro3VipTiEMq9tLQe1YhDx2wP9o/jPTLgXaRbmNkpoNmwlLXJJXpIFEMWke6BaoIfANY53FsC6xm86fJA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39850400004)(366004)(396003)(346002)(376002)(451199015)(31686004)(36756003)(38100700002)(4001150100001)(2906002)(41300700001)(44832011)(83380400001)(31696002)(86362001)(66946007)(66476007)(6636002)(37006003)(316002)(6486002)(966005)(8676002)(66556008)(2616005)(478600001)(8936002)(6862004)(5660300002)(55236004)(186003)(53546011)(6666004)(26005)(6512007)(4326008)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzNuYjhIUHdmV0Y4eDUwaUhLL25rOFJVMnk3SktNZmpHbzFCbHB3ZW9JVWpC?=
+ =?utf-8?B?aUZ5MFp2TGxHWWVzdHdXdHpsUFA4cFk2MHNoU213L0pDK1ltTm9ZdmF3UU5E?=
+ =?utf-8?B?dGxZVmo3akFKc1NlZjJTVUhVL0lXSEJ5T1BkT2xodUNZbDNyZEhHZmpOY2Vj?=
+ =?utf-8?B?VVlNbjFkTzhlZEcxU241bjhMZlNMcnJPaTlNWkxXeDN0aE1Hd3dpVHFSMWtq?=
+ =?utf-8?B?TnU5MDBkYTJDeWpISXFQdmZZTVlxcWJzaWtucHREWlRZS1ZYL0YxRlp2dnJS?=
+ =?utf-8?B?UFJ4NTNvZllKSWRRMUt3Y2F1REJUSXA4UTdIN200c05oZHZ5cjV6cVVjbVJr?=
+ =?utf-8?B?OHhOMXFwcGc4OEppYXY0T1ZMWEtmTXdYSllvRHFySnNEaU1xMnVhdi9sa1V0?=
+ =?utf-8?B?c3N4L2d6c0R5anN1WnpDM1JCUmtmU1lpNjVwYVBDZmlWak1hOVlCVDVzVFQ5?=
+ =?utf-8?B?TlVNaHRzYjZ2bVJmMWVjRWhRNlhQeXF3K1JiRTl5aG56Qy9xSU0wMjlGOVJ5?=
+ =?utf-8?B?dkVnTk9vdDkrN0dUWitTcU1BMVBXYWdBVlFlZ1ovUVpRSzJqQ29ITldsRk51?=
+ =?utf-8?B?NS9MYlcwbTlTMDh3bVpnQVRZdkwwYzl2WDVxbEpVRGl1K3BBTkNxbFBBL0RK?=
+ =?utf-8?B?KysxZTUxUzcrVlArbyt5NDBqc3FGZVExS016dzVGbkxZTUpuT1Ntd3pXbGtR?=
+ =?utf-8?B?cnpOdTVMaDIraHlUZ0ZwMW1JK3REbmppMnFMa09FUXRKaFhaOUt0S2NLWE9v?=
+ =?utf-8?B?MkNUaGs2eCtUNFZiOXUxVnN3Q2JRM2ZrU1VpYmgrc2R5VkFDUzlBanQyYTRh?=
+ =?utf-8?B?cmUvQm5vaGR3L1ljVmR3ZnE3cVpvZzU3VTBsb1V6ZUxCR2U2SUJsOTBHYThn?=
+ =?utf-8?B?bHU3R3piQTc0RGE1N1FVcEFMOHN5emxoRXhpOExIRU4wdFh3NGlGM3ZIR205?=
+ =?utf-8?B?bHQ2R05zK1RaTUwyYVZESUJLWEFWVThiVi9TQkpTQW1qZkRJVVJNTi9wMTA3?=
+ =?utf-8?B?UDI1RzU5ZDdrcjdEQ0s5dGJEMjhaQzN0akNVMTNxWFBybUQ3enNsKzY2UGVM?=
+ =?utf-8?B?MGQyMjZITWVpbno1SHZ0RzNkc2EyRXM2VW5uRUhlcEJMZjFUVGFGUnF4dzhX?=
+ =?utf-8?B?ODV4QzhhajBKQUpNYmUweWcxbjc5V2VKN05XMnAvUHFrWnhqeGVYWEgrY0V4?=
+ =?utf-8?B?TUZva2RqTUo0dmFSTnFNS0FKS2pHRlRuNk9Ld3ZmR05oREJmYzNvTXRNKytE?=
+ =?utf-8?B?OElUdzNGUU9waGVtSnRVNlFpZUxPVWRoTEliZmRZZFZoVlJjSjJpV0pKdlEw?=
+ =?utf-8?B?Q2VSVUdvOW1KWWdPbXhoYlhmcHNUMVVyWFRQTk03citTR1g2QWZzMFF4cmMz?=
+ =?utf-8?B?WHl0dmM0TU53cEJZbUtGQkg0WE9NaXA2aFZUNzlKZ1JqVDVyZndRRm5KV1Va?=
+ =?utf-8?B?KzBqQWZXOWJiaFFXaDkxSEUrMGM2OGpTUFZFTFFIMlloR0FJei9UTnkrRTRZ?=
+ =?utf-8?B?bGdYdi83MWsvYVh5UTRWdHJEa1RtM3RLMzczRkVzRktnZmFqdGxFSjRpeUhO?=
+ =?utf-8?B?R091ZFhyVjNpS2JJWUErNVd5bnJRTGF2bnpqSVhNN25EOWM4SFozWDcwZVZs?=
+ =?utf-8?B?WXBRS0pGRUJzTTJNMVloamZTSmpvNHppQWd0ZnFqTHhwRi9uMnBqR1l5V2Na?=
+ =?utf-8?B?VEw5SjgwNVRicVY1eDJ4SWIzWThXanpxeXc1bncxZUo1SExMYkRGN05XZTRx?=
+ =?utf-8?B?d09IWkZxL3ZXSU9WNm9yQlk2ZUprcVNwaUNxNU1Td1dtQi81VVFBQndZQ0xB?=
+ =?utf-8?B?Q0kweFp5dVBlSjdkNnBwWXd2aS9FQUx2ZFUwTDUxTm9TcnhkL1JQdy9IZ0l2?=
+ =?utf-8?B?T01VSTBwUlBGQVBIYmhray9pV01zR25rRWI1Z2xsMVA0VmxjenZQbHVJT09P?=
+ =?utf-8?B?OTloMDNlN0JYUVBMTVpDQzYvVnRaYTBCYThDZ2FlRW5jMkdwRDRwQkY3Tmw4?=
+ =?utf-8?B?VURULzNKSWdNd1lReGNEOUlsVWFKYXdaZThibkROMXRGZTNPMVRqRk95Zzd5?=
+ =?utf-8?B?Y2ZJaHhmMWl5Zmc0M00yY3pXVU9PUElMRGlSRzhFcm02RVZ5Qi9OUkVvbHVT?=
+ =?utf-8?Q?dnO6umH8NiAchNWzD5Ikj46tV?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6b883ed-84ae-4aa6-51e0-08dacfbc86a4
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2022 14:43:04.8719
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nUO3R1lMR4/TIh8qAvqqW9lwbXg8eAqZlWgXpSbbJLHvsDVXieZ+P2FEBBWWH7oGVqh0Q88auOF/QVg9S6G0Gw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7154
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu 2022-11-24 10:36:23, Leizhen (ThunderTown) wrote:
-> On 2022/11/23 21:28, Petr Mladek wrote:
-> > Hi,
-> > 
-> > I am sorry for the late review. I have been snowed under another
-> > tasks.
-> > 
-> > On Wed 2022-11-02 16:49:18, Zhen Lei wrote:
-> >> Based on the test results of kallsyms_on_each_match_symbol() and
-> >> kallsyms_on_each_symbol(), the average performance can be improved by
-> >> more than 1500 times.
-> > 
-> > Sounds great.
-> > 
-> >> --- a/kernel/livepatch/core.c
-> >> +++ b/kernel/livepatch/core.c
-> >> @@ -153,6 +153,24 @@ static int klp_find_callback(void *data, const char *name,
-> >>  	return 0;
-> >>  }
-> >>  
-> >> +static int klp_match_callback(void *data, unsigned long addr)
-> >> +{
-> >> +	struct klp_find_arg *args = data;
-> >> +
-> >> +	args->addr = addr;
-> >> +	args->count++;
-> >> +
-> >> +	/*
-> >> +	 * Finish the search when the symbol is found for the desired position
-> >> +	 * or the position is not defined for a non-unique symbol.
-> >> +	 */
-> >> +	if ((args->pos && (args->count == args->pos)) ||
-> >> +	    (!args->pos && (args->count > 1)))
-> >> +		return 1;
-> >> +
-> >> +	return 0;
-> > 
-> > This duplicates most of the klp_find_callback(). Please, call this
-> > new function in klp_find_callback() instead of the duplicated code.
-> > I mean to do:
-> > 
-> > static int klp_find_callback(void *data, const char *name, unsigned long addr)
-> > {
-> > 	struct klp_find_arg *args = data;
-> > 
-> > 	if (strcmp(args->name, name))
-> > 		return 0;
-> > 
-> > 	return klp_match_callback(data, addr);
-> > }
+On 11/23/22 16:29, Petr Mladek wrote:
+> On Wed 2022-11-23 14:12:26, Petr Pavlu wrote:
+>> During a system boot, it can happen that the kernel receives a burst of
+>> requests to insert the same module but loading it eventually fails
+>> during its init call. For instance, udev can make a request to insert
+>> a frequency module for each individual CPU when another frequency module
+>> is already loaded which causes the init function of the new module to
+>> return an error.
+>>
+>> Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
+>> modules that have finished loading"), the kernel waits for modules in
+>> MODULE_STATE_GOING state to finish unloading before making another
+>> attempt to load the same module.
+>>
+>> This creates unnecessary work in the described scenario and delays the
+>> boot. In the worst case, it can prevent udev from loading drivers for
+>> other devices and might cause timeouts of services waiting on them and
+>> subsequently a failed boot.
+>>
+>> This patch attempts a different solution for the problem 6e6de3dee51a
+>> was trying to solve. Rather than waiting for the unloading to complete,
+>> it returns a different error code (-EBUSY) for modules in the GOING
+>> state. This should avoid the error situation that was described in
+>> 6e6de3dee51a (user space attempting to load a dependent module because
+>> the -EEXIST error code would suggest to user space that the first module
+>> had been loaded successfully), while avoiding the delay situation too.
+>>
+>> Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
+>> Co-developed-by: Martin Wilck <mwilck@suse.com>
+>> Signed-off-by: Martin Wilck <mwilck@suse.com>
+>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+>> Cc: stable@vger.kernel.org
+>> ---
+>>
+>> Notes:
+>>     Sending this alternative patch per the discussion in
+>>     https://lore.kernel.org/linux-modules/20220919123233.8538-1-petr.pavlu@suse.com/.
+>>     The initial version comes internally from Martin, hence the co-developed tag.
+>>
+>>  kernel/module/main.c | 8 +++++---
+>>  1 file changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/kernel/module/main.c b/kernel/module/main.c
+>> index d02d39c7174e..b7e08d1edc27 100644
+>> --- a/kernel/module/main.c
+>> +++ b/kernel/module/main.c
+>> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
+>>  	sched_annotate_sleep();
+>>  	mutex_lock(&module_mutex);
+>>  	mod = find_module_all(name, strlen(name), true);
+>> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
+>> +	ret = !mod || mod->state == MODULE_STATE_LIVE
+>> +		|| mod->state == MODULE_STATE_GOING;
+>>  	mutex_unlock(&module_mutex);
+>>  
+>>  	return ret;
+>> @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
+>>  	mutex_lock(&module_mutex);
+>>  	old = find_module_all(mod->name, strlen(mod->name), true);
+>>  	if (old != NULL) {
+>> -		if (old->state != MODULE_STATE_LIVE) {
+>> +		if (old->state == MODULE_STATE_COMING
+>> +		    || old->state == MODULE_STATE_UNFORMED) {
+>>  			/* Wait in case it fails to load. */
+>>  			mutex_unlock(&module_mutex);
+>>  			err = wait_event_interruptible(module_wq,
+>> @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
+>>  				goto out_unlocked;
+>>  			goto again;
+>>  		}
+>> -		err = -EEXIST;
+>> +		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
 > 
-> Good idea. But these patches have been merged into linux-next, how about I post
-> a new cleanup patch after v6.2-rc1?
+> Hmm, this is not much reliable. It helps only when we manage to read
+> the old module state before it is gone.
+> 
+> A better solution would be to always return when there was a parallel
+> load. The older patch from Petr Pavlu was more precise because it
+> stored result of the exact parallel load. The below code is easier
+> and might be good enough.
+> 
+> static int add_unformed_module(struct module *mod)
+> {
+> 	int err;
+> 	struct module *old;
+> 
+> 	mod->state = MODULE_STATE_UNFORMED;
+> 
+> 	mutex_lock(&module_mutex);
+> 	old = find_module_all(mod->name, strlen(mod->name), true);
+> 	if (old != NULL) {
+> 		if (old->state == MODULE_STATE_COMING
+> 		    || old->state == MODULE_STATE_UNFORMED) {
+> 			/* Wait for the result of the parallel load. */
+> 			mutex_unlock(&module_mutex);
+> 			err = wait_event_interruptible(module_wq,
+> 					       finished_loading(mod->name));
+> 			if (err)
+> 				goto out_unlocked;
+> 		}
+> 
+> 		/* The module might have gone in the meantime. */
+> 		mutex_lock(&module_mutex);
+> 		old = find_module_all(mod->name, strlen(mod->name), true);
+> 
+> 		/*
+> 		 * We are here only when the same module was being loaded.
+> 		 * Do not try to load it again right now. It prevents
+> 		 * long delays caused by serialized module load failures.
+> 		 * It might happen when more devices of the same type trigger
+> 		 * load of a particular module.
+> 		 */
+> 		if (old && old->state == MODULE_STATE_LIVE)
+> 			err = -EXIST;
+> 		else
+> 			err = -EBUSY;
+> 		goto out;
+> 	}
+> 	mod_update_bounds(mod);
+> 	list_add_rcu(&mod->list, &modules);
+> 	mod_tree_insert(mod);
+> 	err = 0;
+> 
+> out:
+> 	mutex_unlock(&module_mutex);
+> out_unlocked:
+> 	return err;
+> }
 
-I am fine with it.
+I think this makes sense. The suggested code only needs to have the second
+mutex_lock()+find_module_all() pair moved into the preceding if block to work
+correctly. I will wait a bit if there is more feedback and post an updated
+patch.
 
-Best Regards,
+Thanks,
 Petr
