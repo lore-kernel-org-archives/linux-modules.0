@@ -2,258 +2,171 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCC6FC4167B
-	for <linux-modules@archiver.kernel.org>; Sat, 26 Nov 2022 14:43:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B778AC4321E
+	for <linux-modules@archiver.kernel.org>; Sun, 27 Nov 2022 11:21:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiKZOnW (ORCPT
+        id S229515AbiK0LVz (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 26 Nov 2022 09:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        Sun, 27 Nov 2022 06:21:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiKZOnJ (ORCPT
+        with ESMTP id S229493AbiK0LVx (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 26 Nov 2022 09:43:09 -0500
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2067.outbound.protection.outlook.com [40.107.241.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B7813CCF;
-        Sat, 26 Nov 2022 06:43:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FX0lsvnxXD5varBy+vnx4hmwfEc53Hd3JM1AZCx90N5W6SOQLajwOI4u/hcJs85Q6PYa9Y9DhCTpjFqcztbOwuyU7wnIuRHCQjm7kChz3Yz8Wi7YbhRJI1Jhm094RX92fS8Sr1Nw35MbPmiDl/Bn6kWh0EKxbLBzAhMbxdcifljdi4zLMxS8xHMxd9SJSCpWARcoRRzvZWCfXsxHvWTKfLtFpTXv2gTE30b+y6MEssbbduf+01W3ugs/re9xN/NuYxnZ0RC+jIxqJlNY2dNPTB8ix3uWeRtk1ZoqwguAvMABWMfnhvyzyAnE+FgJyUSlKeteOtGbzDwEZgljYratlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y+bqL0GdXCPkYXr9IoH7Zt3D/PyKa/KqO2ZdfsZ14ME=;
- b=BsP1uu557s9URRqr8/Yl5eVWLFt8dJE50l1QsvD8cpF0jbHOnRe5kV8Sf+FykiuioAfurVmgjbcqJX4yT72Zq1PfT0xsx8xMVxpCABJL6/3a/pnJoBy1LSYYPEpXYFS/AVLr71bJ/S4G24a8DDKeXUY3CBT57P5AJ7RYYGH1ZQWH2VcaDstjhGewJ8Y59yKGGaYFEyGcz2uqO5F7H1ObzdG77TakMMkBA6GHL54ZtFuNbgZnEBWhVCCLMHeanxBNlCKYhFloI8s81yaMNa25GVUNKYygKIvxylKMnN0nF562J5a7IzfXQD66SH85SniIkHS90dRUdUpXoNkp1LFzTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y+bqL0GdXCPkYXr9IoH7Zt3D/PyKa/KqO2ZdfsZ14ME=;
- b=fqHymeWxx5m8clix+xavV0WuwpMIyquCt5fsdBtozu/cm1p+NHY4tlw2W0qf76jKNZ/Iprihp9bL76PsHFpCzf2JUVBPAhNLY2bmXysl7rLbv+iSRqTB7gS7J1kfTGrpZ2MvuAQn7mN7CKxJoqV0Po/2+8iimdiXpkMH3slT36Ew49Ayuc15xKBsBXS05qnCM4cnZa1hk/GlY8bpK5Oj8u5QHyKQfXWHle3WHQnpYno/gWzGDe1HmrFZrkfrcG8vPvF3TBTA2ycg+l6cIJuWh7ZPrNNszRT03E+13gy2yqtJ7M8PG0j/B9LJwX4sQGVtcJGM/y3bLCAR3GpCroJGYg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16) by AM0PR04MB7154.eurprd04.prod.outlook.com
- (2603:10a6:208:19f::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Sat, 26 Nov
- 2022 14:43:05 +0000
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::14eb:6506:8510:875f]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::14eb:6506:8510:875f%7]) with mapi id 15.20.5857.020; Sat, 26 Nov 2022
- 14:43:05 +0000
-Message-ID: <a26ed87f-9e4c-7c1f-515b-edaaff9140fd@suse.com>
-Date:   Sat, 26 Nov 2022 15:43:02 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] module: Don't wait for GOING modules
-Content-Language: en-US
-To:     mcgrof@kernel.org, Petr Mladek <pmladek@suse.com>
-Cc:     prarit@redhat.com, david@redhat.com, mwilck@suse.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
+        Sun, 27 Nov 2022 06:21:53 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300DDBF70
+        for <linux-modules@vger.kernel.org>; Sun, 27 Nov 2022 03:21:50 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-267-9oGNHm0mPuqOpULexa31pA-1; Sun, 27 Nov 2022 11:21:47 +0000
+X-MC-Unique: 9oGNHm0mPuqOpULexa31pA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 27 Nov
+ 2022 11:21:45 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Sun, 27 Nov 2022 11:21:45 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Petr Pavlu' <petr.pavlu@suse.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        Petr Mladek <pmladek@suse.com>
+CC:     "prarit@redhat.com" <prarit@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "mwilck@suse.com" <mwilck@suse.com>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] module: Don't wait for GOING modules
+Thread-Topic: [PATCH] module: Don't wait for GOING modules
+Thread-Index: AQHZAaVxB8H1UydPLE6UJhyT5xD8cq5SoAfQ
+Date:   Sun, 27 Nov 2022 11:21:45 +0000
+Message-ID: <8224e68169eb49ec9866c253be84b09b@AcuMS.aculab.com>
 References: <20221123131226.24359-1-petr.pavlu@suse.com>
- <Y348QNmO2AHh3eNr@alley>
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <Y348QNmO2AHh3eNr@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0007.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a::17) To AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16)
+ <Y348QNmO2AHh3eNr@alley> <a26ed87f-9e4c-7c1f-515b-edaaff9140fd@suse.com>
+In-Reply-To: <a26ed87f-9e4c-7c1f-515b-edaaff9140fd@suse.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|AM0PR04MB7154:EE_
-X-MS-Office365-Filtering-Correlation-Id: c6b883ed-84ae-4aa6-51e0-08dacfbc86a4
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fRk6qxC+5Aw/K5n4VKLJnoGVoSxEKHXv0f+i3JWCOOmZX2lS/6xux5tDLjrBnBT1WrjHfR4ihyE4AFl96RzMAUNfshDVSRwSy0EoitvGMN/+RO8czSenPczoPuvHaq+VK/qXZFko5Dk8KRnsGv5jWA2re3uXkSHqxuJrsD1gUV5jd4JodI/zA/llZoQRwVnSYr5ttm+i3tn8GGEKeXttfHnrXhK1VnE5n6ZKVN0WMUS0GJs7wzx4vK+uL2luiPgLlHKyCV2fFnBEWEigyaD1mfZ7XQWHbEwSnVErztz5IWCPK6QMIQ3Tws5JkcCV0V1mXMaA26Z/6eb/YjO7HpN9fo7XXjktFn9dptUtQR/YP3kXeUiQ/WAffSOn1QtWVN4oR9QPkq/dt9W55iusUOJuiXfJgLG3CnjqW17nivY6jacAUW2TrKU6RuEsZRhpcmbOurf5F13NO2AcTdzu2O6HmcsqYd2TeDRQdor6/nbWoMAtIMLcAFgaUMKUd7hwoWPUD+IBAbaxqKwrBRCkMK+freBkMpQTeEoNwOUPtviqcdqF2j70TyM0e8ucB4vZXhovqxE0u1OVBTm8SzPzM9NfgmGL6s+xpxvJOVhuwmNaBtbdxGDfSrSvqyE86pC2LPoFpMEnWYODckxiyY+qfa6ng9H9e/hTRJBrBBPk2g6BadI3pig4ro3VipTiEMq9tLQe1YhDx2wP9o/jPTLgXaRbmNkpoNmwlLXJJXpIFEMWke6BaoIfANY53FsC6xm86fJA
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39850400004)(366004)(396003)(346002)(376002)(451199015)(31686004)(36756003)(38100700002)(4001150100001)(2906002)(41300700001)(44832011)(83380400001)(31696002)(86362001)(66946007)(66476007)(6636002)(37006003)(316002)(6486002)(966005)(8676002)(66556008)(2616005)(478600001)(8936002)(6862004)(5660300002)(55236004)(186003)(53546011)(6666004)(26005)(6512007)(4326008)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzNuYjhIUHdmV0Y4eDUwaUhLL25rOFJVMnk3SktNZmpHbzFCbHB3ZW9JVWpC?=
- =?utf-8?B?aUZ5MFp2TGxHWWVzdHdXdHpsUFA4cFk2MHNoU213L0pDK1ltTm9ZdmF3UU5E?=
- =?utf-8?B?dGxZVmo3akFKc1NlZjJTVUhVL0lXSEJ5T1BkT2xodUNZbDNyZEhHZmpOY2Vj?=
- =?utf-8?B?VVlNbjFkTzhlZEcxU241bjhMZlNMcnJPaTlNWkxXeDN0aE1Hd3dpVHFSMWtq?=
- =?utf-8?B?TnU5MDBkYTJDeWpISXFQdmZZTVlxcWJzaWtucHREWlRZS1ZYL0YxRlp2dnJS?=
- =?utf-8?B?UFJ4NTNvZllKSWRRMUt3Y2F1REJUSXA4UTdIN200c05oZHZ5cjV6cVVjbVJr?=
- =?utf-8?B?OHhOMXFwcGc4OEppYXY0T1ZMWEtmTXdYSllvRHFySnNEaU1xMnVhdi9sa1V0?=
- =?utf-8?B?c3N4L2d6c0R5anN1WnpDM1JCUmtmU1lpNjVwYVBDZmlWak1hOVlCVDVzVFQ5?=
- =?utf-8?B?TlVNaHRzYjZ2bVJmMWVjRWhRNlhQeXF3K1JiRTl5aG56Qy9xSU0wMjlGOVJ5?=
- =?utf-8?B?dkVnTk9vdDkrN0dUWitTcU1BMVBXYWdBVlFlZ1ovUVpRSzJqQ29ITldsRk51?=
- =?utf-8?B?NS9MYlcwbTlTMDh3bVpnQVRZdkwwYzl2WDVxbEpVRGl1K3BBTkNxbFBBL0RK?=
- =?utf-8?B?KysxZTUxUzcrVlArbyt5NDBqc3FGZVExS016dzVGbkxZTUpuT1Ntd3pXbGtR?=
- =?utf-8?B?cnpOdTVMaDIraHlUZ0ZwMW1JK3REbmppMnFMa09FUXRKaFhaOUt0S2NLWE9v?=
- =?utf-8?B?MkNUaGs2eCtUNFZiOXUxVnN3Q2JRM2ZrU1VpYmgrc2R5VkFDUzlBanQyYTRh?=
- =?utf-8?B?cmUvQm5vaGR3L1ljVmR3ZnE3cVpvZzU3VTBsb1V6ZUxCR2U2SUJsOTBHYThn?=
- =?utf-8?B?bHU3R3piQTc0RGE1N1FVcEFMOHN5emxoRXhpOExIRU4wdFh3NGlGM3ZIR205?=
- =?utf-8?B?bHQ2R05zK1RaTUwyYVZESUJLWEFWVThiVi9TQkpTQW1qZkRJVVJNTi9wMTA3?=
- =?utf-8?B?UDI1RzU5ZDdrcjdEQ0s5dGJEMjhaQzN0akNVMTNxWFBybUQ3enNsKzY2UGVM?=
- =?utf-8?B?MGQyMjZITWVpbno1SHZ0RzNkc2EyRXM2VW5uRUhlcEJMZjFUVGFGUnF4dzhX?=
- =?utf-8?B?ODV4QzhhajBKQUpNYmUweWcxbjc5V2VKN05XMnAvUHFrWnhqeGVYWEgrY0V4?=
- =?utf-8?B?TUZva2RqTUo0dmFSTnFNS0FKS2pHRlRuNk9Ld3ZmR05oREJmYzNvTXRNKytE?=
- =?utf-8?B?OElUdzNGUU9waGVtSnRVNlFpZUxPVWRoTEliZmRZZFZoVlJjSjJpV0pKdlEw?=
- =?utf-8?B?Q2VSVUdvOW1KWWdPbXhoYlhmcHNUMVVyWFRQTk03citTR1g2QWZzMFF4cmMz?=
- =?utf-8?B?WHl0dmM0TU53cEJZbUtGQkg0WE9NaXA2aFZUNzlKZ1JqVDVyZndRRm5KV1Va?=
- =?utf-8?B?KzBqQWZXOWJiaFFXaDkxSEUrMGM2OGpTUFZFTFFIMlloR0FJei9UTnkrRTRZ?=
- =?utf-8?B?bGdYdi83MWsvYVh5UTRWdHJEa1RtM3RLMzczRkVzRktnZmFqdGxFSjRpeUhO?=
- =?utf-8?B?R091ZFhyVjNpS2JJWUErNVd5bnJRTGF2bnpqSVhNN25EOWM4SFozWDcwZVZs?=
- =?utf-8?B?WXBRS0pGRUJzTTJNMVloamZTSmpvNHppQWd0ZnFqTHhwRi9uMnBqR1l5V2Na?=
- =?utf-8?B?VEw5SjgwNVRicVY1eDJ4SWIzWThXanpxeXc1bncxZUo1SExMYkRGN05XZTRx?=
- =?utf-8?B?d09IWkZxL3ZXSU9WNm9yQlk2ZUprcVNwaUNxNU1Td1dtQi81VVFBQndZQ0xB?=
- =?utf-8?B?Q0kweFp5dVBlSjdkNnBwWXd2aS9FQUx2ZFUwTDUxTm9TcnhkL1JQdy9IZ0l2?=
- =?utf-8?B?T01VSTBwUlBGQVBIYmhray9pV01zR25rRWI1Z2xsMVA0VmxjenZQbHVJT09P?=
- =?utf-8?B?OTloMDNlN0JYUVBMTVpDQzYvVnRaYTBCYThDZ2FlRW5jMkdwRDRwQkY3Tmw4?=
- =?utf-8?B?VURULzNKSWdNd1lReGNEOUlsVWFKYXdaZThibkROMXRGZTNPMVRqRk95Zzd5?=
- =?utf-8?B?Y2ZJaHhmMWl5Zmc0M00yY3pXVU9PUElMRGlSRzhFcm02RVZ5Qi9OUkVvbHVT?=
- =?utf-8?Q?dnO6umH8NiAchNWzD5Ikj46tV?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6b883ed-84ae-4aa6-51e0-08dacfbc86a4
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2022 14:43:04.8719
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nUO3R1lMR4/TIh8qAvqqW9lwbXg8eAqZlWgXpSbbJLHvsDVXieZ+P2FEBBWWH7oGVqh0Q88auOF/QVg9S6G0Gw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7154
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 11/23/22 16:29, Petr Mladek wrote:
-> On Wed 2022-11-23 14:12:26, Petr Pavlu wrote:
->> During a system boot, it can happen that the kernel receives a burst of
->> requests to insert the same module but loading it eventually fails
->> during its init call. For instance, udev can make a request to insert
->> a frequency module for each individual CPU when another frequency module
->> is already loaded which causes the init function of the new module to
->> return an error.
->>
->> Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
->> modules that have finished loading"), the kernel waits for modules in
->> MODULE_STATE_GOING state to finish unloading before making another
->> attempt to load the same module.
->>
->> This creates unnecessary work in the described scenario and delays the
->> boot. In the worst case, it can prevent udev from loading drivers for
->> other devices and might cause timeouts of services waiting on them and
->> subsequently a failed boot.
->>
->> This patch attempts a different solution for the problem 6e6de3dee51a
->> was trying to solve. Rather than waiting for the unloading to complete,
->> it returns a different error code (-EBUSY) for modules in the GOING
->> state. This should avoid the error situation that was described in
->> 6e6de3dee51a (user space attempting to load a dependent module because
->> the -EEXIST error code would suggest to user space that the first module
->> had been loaded successfully), while avoiding the delay situation too.
->>
->> Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
->> Co-developed-by: Martin Wilck <mwilck@suse.com>
->> Signed-off-by: Martin Wilck <mwilck@suse.com>
->> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
->> Cc: stable@vger.kernel.org
->> ---
->>
->> Notes:
->>     Sending this alternative patch per the discussion in
->>     https://lore.kernel.org/linux-modules/20220919123233.8538-1-petr.pavlu@suse.com/.
->>     The initial version comes internally from Martin, hence the co-developed tag.
->>
->>  kernel/module/main.c | 8 +++++---
->>  1 file changed, 5 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/module/main.c b/kernel/module/main.c
->> index d02d39c7174e..b7e08d1edc27 100644
->> --- a/kernel/module/main.c
->> +++ b/kernel/module/main.c
->> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
->>  	sched_annotate_sleep();
->>  	mutex_lock(&module_mutex);
->>  	mod = find_module_all(name, strlen(name), true);
->> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
->> +	ret = !mod || mod->state == MODULE_STATE_LIVE
->> +		|| mod->state == MODULE_STATE_GOING;
->>  	mutex_unlock(&module_mutex);
->>  
->>  	return ret;
->> @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
->>  	mutex_lock(&module_mutex);
->>  	old = find_module_all(mod->name, strlen(mod->name), true);
->>  	if (old != NULL) {
->> -		if (old->state != MODULE_STATE_LIVE) {
->> +		if (old->state == MODULE_STATE_COMING
->> +		    || old->state == MODULE_STATE_UNFORMED) {
->>  			/* Wait in case it fails to load. */
->>  			mutex_unlock(&module_mutex);
->>  			err = wait_event_interruptible(module_wq,
->> @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
->>  				goto out_unlocked;
->>  			goto again;
->>  		}
->> -		err = -EEXIST;
->> +		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
-> 
-> Hmm, this is not much reliable. It helps only when we manage to read
-> the old module state before it is gone.
-> 
-> A better solution would be to always return when there was a parallel
-> load. The older patch from Petr Pavlu was more precise because it
-> stored result of the exact parallel load. The below code is easier
-> and might be good enough.
-> 
-> static int add_unformed_module(struct module *mod)
-> {
-> 	int err;
-> 	struct module *old;
-> 
-> 	mod->state = MODULE_STATE_UNFORMED;
-> 
-> 	mutex_lock(&module_mutex);
-> 	old = find_module_all(mod->name, strlen(mod->name), true);
-> 	if (old != NULL) {
-> 		if (old->state == MODULE_STATE_COMING
-> 		    || old->state == MODULE_STATE_UNFORMED) {
-> 			/* Wait for the result of the parallel load. */
-> 			mutex_unlock(&module_mutex);
-> 			err = wait_event_interruptible(module_wq,
-> 					       finished_loading(mod->name));
-> 			if (err)
-> 				goto out_unlocked;
-> 		}
-> 
-> 		/* The module might have gone in the meantime. */
-> 		mutex_lock(&module_mutex);
-> 		old = find_module_all(mod->name, strlen(mod->name), true);
-> 
-> 		/*
-> 		 * We are here only when the same module was being loaded.
-> 		 * Do not try to load it again right now. It prevents
-> 		 * long delays caused by serialized module load failures.
-> 		 * It might happen when more devices of the same type trigger
-> 		 * load of a particular module.
-> 		 */
-> 		if (old && old->state == MODULE_STATE_LIVE)
-> 			err = -EXIST;
-> 		else
-> 			err = -EBUSY;
-> 		goto out;
-> 	}
-> 	mod_update_bounds(mod);
-> 	list_add_rcu(&mod->list, &modules);
-> 	mod_tree_insert(mod);
-> 	err = 0;
-> 
-> out:
-> 	mutex_unlock(&module_mutex);
-> out_unlocked:
-> 	return err;
-> }
+RnJvbTogUGV0ciBQYXZsdQ0KPiBTZW50OiAyNiBOb3ZlbWJlciAyMDIyIDE0OjQzDQo+IA0KPiBP
+biAxMS8yMy8yMiAxNjoyOSwgUGV0ciBNbGFkZWsgd3JvdGU6DQo+ID4gT24gV2VkIDIwMjItMTEt
+MjMgMTQ6MTI6MjYsIFBldHIgUGF2bHUgd3JvdGU6DQo+ID4+IER1cmluZyBhIHN5c3RlbSBib290
+LCBpdCBjYW4gaGFwcGVuIHRoYXQgdGhlIGtlcm5lbCByZWNlaXZlcyBhIGJ1cnN0IG9mDQo+ID4+
+IHJlcXVlc3RzIHRvIGluc2VydCB0aGUgc2FtZSBtb2R1bGUgYnV0IGxvYWRpbmcgaXQgZXZlbnR1
+YWxseSBmYWlscw0KPiA+PiBkdXJpbmcgaXRzIGluaXQgY2FsbC4gRm9yIGluc3RhbmNlLCB1ZGV2
+IGNhbiBtYWtlIGEgcmVxdWVzdCB0byBpbnNlcnQNCj4gPj4gYSBmcmVxdWVuY3kgbW9kdWxlIGZv
+ciBlYWNoIGluZGl2aWR1YWwgQ1BVIHdoZW4gYW5vdGhlciBmcmVxdWVuY3kgbW9kdWxlDQo+ID4+
+IGlzIGFscmVhZHkgbG9hZGVkIHdoaWNoIGNhdXNlcyB0aGUgaW5pdCBmdW5jdGlvbiBvZiB0aGUg
+bmV3IG1vZHVsZSB0bw0KPiA+PiByZXR1cm4gYW4gZXJyb3IuDQo+ID4+DQo+ID4+IFNpbmNlIGNv
+bW1pdCA2ZTZkZTNkZWU1MWEgKCJrZXJuZWwvbW9kdWxlLmM6IE9ubHkgcmV0dXJuIC1FRVhJU1Qg
+Zm9yDQo+ID4+IG1vZHVsZXMgdGhhdCBoYXZlIGZpbmlzaGVkIGxvYWRpbmciKSwgdGhlIGtlcm5l
+bCB3YWl0cyBmb3IgbW9kdWxlcyBpbg0KPiA+PiBNT0RVTEVfU1RBVEVfR09JTkcgc3RhdGUgdG8g
+ZmluaXNoIHVubG9hZGluZyBiZWZvcmUgbWFraW5nIGFub3RoZXINCj4gPj4gYXR0ZW1wdCB0byBs
+b2FkIHRoZSBzYW1lIG1vZHVsZS4NCj4gPj4NCj4gPj4gVGhpcyBjcmVhdGVzIHVubmVjZXNzYXJ5
+IHdvcmsgaW4gdGhlIGRlc2NyaWJlZCBzY2VuYXJpbyBhbmQgZGVsYXlzIHRoZQ0KPiA+PiBib290
+LiBJbiB0aGUgd29yc3QgY2FzZSwgaXQgY2FuIHByZXZlbnQgdWRldiBmcm9tIGxvYWRpbmcgZHJp
+dmVycyBmb3INCj4gPj4gb3RoZXIgZGV2aWNlcyBhbmQgbWlnaHQgY2F1c2UgdGltZW91dHMgb2Yg
+c2VydmljZXMgd2FpdGluZyBvbiB0aGVtIGFuZA0KPiA+PiBzdWJzZXF1ZW50bHkgYSBmYWlsZWQg
+Ym9vdC4NCj4gPj4NCj4gPj4gVGhpcyBwYXRjaCBhdHRlbXB0cyBhIGRpZmZlcmVudCBzb2x1dGlv
+biBmb3IgdGhlIHByb2JsZW0gNmU2ZGUzZGVlNTFhDQo+ID4+IHdhcyB0cnlpbmcgdG8gc29sdmUu
+IFJhdGhlciB0aGFuIHdhaXRpbmcgZm9yIHRoZSB1bmxvYWRpbmcgdG8gY29tcGxldGUsDQo+ID4+
+IGl0IHJldHVybnMgYSBkaWZmZXJlbnQgZXJyb3IgY29kZSAoLUVCVVNZKSBmb3IgbW9kdWxlcyBp
+biB0aGUgR09JTkcNCj4gPj4gc3RhdGUuIFRoaXMgc2hvdWxkIGF2b2lkIHRoZSBlcnJvciBzaXR1
+YXRpb24gdGhhdCB3YXMgZGVzY3JpYmVkIGluDQo+ID4+IDZlNmRlM2RlZTUxYSAodXNlciBzcGFj
+ZSBhdHRlbXB0aW5nIHRvIGxvYWQgYSBkZXBlbmRlbnQgbW9kdWxlIGJlY2F1c2UNCj4gPj4gdGhl
+IC1FRVhJU1QgZXJyb3IgY29kZSB3b3VsZCBzdWdnZXN0IHRvIHVzZXIgc3BhY2UgdGhhdCB0aGUg
+Zmlyc3QgbW9kdWxlDQo+ID4+IGhhZCBiZWVuIGxvYWRlZCBzdWNjZXNzZnVsbHkpLCB3aGlsZSBh
+dm9pZGluZyB0aGUgZGVsYXkgc2l0dWF0aW9uIHRvby4NCj4gPj4NCj4gPj4gRml4ZXM6IDZlNmRl
+M2RlZTUxYSAoImtlcm5lbC9tb2R1bGUuYzogT25seSByZXR1cm4gLUVFWElTVCBmb3IgbW9kdWxl
+cyB0aGF0IGhhdmUgZmluaXNoZWQgbG9hZGluZyIpDQo+ID4+IENvLWRldmVsb3BlZC1ieTogTWFy
+dGluIFdpbGNrIDxtd2lsY2tAc3VzZS5jb20+DQo+ID4+IFNpZ25lZC1vZmYtYnk6IE1hcnRpbiBX
+aWxjayA8bXdpbGNrQHN1c2UuY29tPg0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBQZXRyIFBhdmx1IDxw
+ZXRyLnBhdmx1QHN1c2UuY29tPg0KPiA+PiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPiA+
+PiAtLS0NCj4gPj4NCj4gPj4gTm90ZXM6DQo+ID4+ICAgICBTZW5kaW5nIHRoaXMgYWx0ZXJuYXRp
+dmUgcGF0Y2ggcGVyIHRoZSBkaXNjdXNzaW9uIGluDQo+ID4+ICAgICBodHRwczovL2xvcmUua2Vy
+bmVsLm9yZy9saW51eC1tb2R1bGVzLzIwMjIwOTE5MTIzMjMzLjg1MzgtMS1wZXRyLnBhdmx1QHN1
+c2UuY29tLy4NCj4gPj4gICAgIFRoZSBpbml0aWFsIHZlcnNpb24gY29tZXMgaW50ZXJuYWxseSBm
+cm9tIE1hcnRpbiwgaGVuY2UgdGhlIGNvLWRldmVsb3BlZCB0YWcuDQo+ID4+DQo+ID4+ICBrZXJu
+ZWwvbW9kdWxlL21haW4uYyB8IDggKysrKystLS0NCj4gPj4gIDEgZmlsZSBjaGFuZ2VkLCA1IGlu
+c2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+ID4+DQo+ID4+IGRpZmYgLS1naXQgYS9rZXJu
+ZWwvbW9kdWxlL21haW4uYyBiL2tlcm5lbC9tb2R1bGUvbWFpbi5jDQo+ID4+IGluZGV4IGQwMmQz
+OWM3MTc0ZS4uYjdlMDhkMWVkYzI3IDEwMDY0NA0KPiA+PiAtLS0gYS9rZXJuZWwvbW9kdWxlL21h
+aW4uYw0KPiA+PiArKysgYi9rZXJuZWwvbW9kdWxlL21haW4uYw0KPiA+PiBAQCAtMjM4Niw3ICsy
+Mzg2LDggQEAgc3RhdGljIGJvb2wgZmluaXNoZWRfbG9hZGluZyhjb25zdCBjaGFyICpuYW1lKQ0K
+PiA+PiAgCXNjaGVkX2Fubm90YXRlX3NsZWVwKCk7DQo+ID4+ICAJbXV0ZXhfbG9jaygmbW9kdWxl
+X211dGV4KTsNCj4gPj4gIAltb2QgPSBmaW5kX21vZHVsZV9hbGwobmFtZSwgc3RybGVuKG5hbWUp
+LCB0cnVlKTsNCj4gPj4gLQlyZXQgPSAhbW9kIHx8IG1vZC0+c3RhdGUgPT0gTU9EVUxFX1NUQVRF
+X0xJVkU7DQo+ID4+ICsJcmV0ID0gIW1vZCB8fCBtb2QtPnN0YXRlID09IE1PRFVMRV9TVEFURV9M
+SVZFDQo+ID4+ICsJCXx8IG1vZC0+c3RhdGUgPT0gTU9EVUxFX1NUQVRFX0dPSU5HOw0KPiA+PiAg
+CW11dGV4X3VubG9jaygmbW9kdWxlX211dGV4KTsNCj4gPj4NCj4gPj4gIAlyZXR1cm4gcmV0Ow0K
+PiA+PiBAQCAtMjU2Niw3ICsyNTY3LDggQEAgc3RhdGljIGludCBhZGRfdW5mb3JtZWRfbW9kdWxl
+KHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gPj4gIAltdXRleF9sb2NrKCZtb2R1bGVfbXV0ZXgpOw0K
+PiA+PiAgCW9sZCA9IGZpbmRfbW9kdWxlX2FsbChtb2QtPm5hbWUsIHN0cmxlbihtb2QtPm5hbWUp
+LCB0cnVlKTsNCj4gPj4gIAlpZiAob2xkICE9IE5VTEwpIHsNCj4gPj4gLQkJaWYgKG9sZC0+c3Rh
+dGUgIT0gTU9EVUxFX1NUQVRFX0xJVkUpIHsNCj4gPj4gKwkJaWYgKG9sZC0+c3RhdGUgPT0gTU9E
+VUxFX1NUQVRFX0NPTUlORw0KPiA+PiArCQkgICAgfHwgb2xkLT5zdGF0ZSA9PSBNT0RVTEVfU1RB
+VEVfVU5GT1JNRUQpIHsNCj4gPj4gIAkJCS8qIFdhaXQgaW4gY2FzZSBpdCBmYWlscyB0byBsb2Fk
+LiAqLw0KPiA+PiAgCQkJbXV0ZXhfdW5sb2NrKCZtb2R1bGVfbXV0ZXgpOw0KPiA+PiAgCQkJZXJy
+ID0gd2FpdF9ldmVudF9pbnRlcnJ1cHRpYmxlKG1vZHVsZV93cSwNCj4gPj4gQEAgLTI1NzUsNyAr
+MjU3Nyw3IEBAIHN0YXRpYyBpbnQgYWRkX3VuZm9ybWVkX21vZHVsZShzdHJ1Y3QgbW9kdWxlICpt
+b2QpDQo+ID4+ICAJCQkJZ290byBvdXRfdW5sb2NrZWQ7DQo+ID4+ICAJCQlnb3RvIGFnYWluOw0K
+PiA+PiAgCQl9DQo+ID4+IC0JCWVyciA9IC1FRVhJU1Q7DQo+ID4+ICsJCWVyciA9IG9sZC0+c3Rh
+dGUgIT0gTU9EVUxFX1NUQVRFX0xJVkUgPyAtRUJVU1kgOiAtRUVYSVNUOw0KPiA+DQo+ID4gSG1t
+LCB0aGlzIGlzIG5vdCBtdWNoIHJlbGlhYmxlLiBJdCBoZWxwcyBvbmx5IHdoZW4gd2UgbWFuYWdl
+IHRvIHJlYWQNCj4gPiB0aGUgb2xkIG1vZHVsZSBzdGF0ZSBiZWZvcmUgaXQgaXMgZ29uZS4NCj4g
+Pg0KPiA+IEEgYmV0dGVyIHNvbHV0aW9uIHdvdWxkIGJlIHRvIGFsd2F5cyByZXR1cm4gd2hlbiB0
+aGVyZSB3YXMgYSBwYXJhbGxlbA0KPiA+IGxvYWQuIFRoZSBvbGRlciBwYXRjaCBmcm9tIFBldHIg
+UGF2bHUgd2FzIG1vcmUgcHJlY2lzZSBiZWNhdXNlIGl0DQo+ID4gc3RvcmVkIHJlc3VsdCBvZiB0
+aGUgZXhhY3QgcGFyYWxsZWwgbG9hZC4gVGhlIGJlbG93IGNvZGUgaXMgZWFzaWVyDQo+ID4gYW5k
+IG1pZ2h0IGJlIGdvb2QgZW5vdWdoLg0KPiA+DQo+ID4gc3RhdGljIGludCBhZGRfdW5mb3JtZWRf
+bW9kdWxlKHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gPiB7DQo+ID4gCWludCBlcnI7DQo+ID4gCXN0
+cnVjdCBtb2R1bGUgKm9sZDsNCj4gPg0KPiA+IAltb2QtPnN0YXRlID0gTU9EVUxFX1NUQVRFX1VO
+Rk9STUVEOw0KPiA+DQo+ID4gCW11dGV4X2xvY2soJm1vZHVsZV9tdXRleCk7DQo+ID4gCW9sZCA9
+IGZpbmRfbW9kdWxlX2FsbChtb2QtPm5hbWUsIHN0cmxlbihtb2QtPm5hbWUpLCB0cnVlKTsNCj4g
+PiAJaWYgKG9sZCAhPSBOVUxMKSB7DQo+ID4gCQlpZiAob2xkLT5zdGF0ZSA9PSBNT0RVTEVfU1RB
+VEVfQ09NSU5HDQo+ID4gCQkgICAgfHwgb2xkLT5zdGF0ZSA9PSBNT0RVTEVfU1RBVEVfVU5GT1JN
+RUQpIHsNCj4gPiAJCQkvKiBXYWl0IGZvciB0aGUgcmVzdWx0IG9mIHRoZSBwYXJhbGxlbCBsb2Fk
+LiAqLw0KPiA+IAkJCW11dGV4X3VubG9jaygmbW9kdWxlX211dGV4KTsNCj4gPiAJCQllcnIgPSB3
+YWl0X2V2ZW50X2ludGVycnVwdGlibGUobW9kdWxlX3dxLA0KPiA+IAkJCQkJICAgICAgIGZpbmlz
+aGVkX2xvYWRpbmcobW9kLT5uYW1lKSk7DQo+ID4gCQkJaWYgKGVycikNCj4gPiAJCQkJZ290byBv
+dXRfdW5sb2NrZWQ7DQo+ID4gCQl9DQo+ID4NCj4gPiAJCS8qIFRoZSBtb2R1bGUgbWlnaHQgaGF2
+ZSBnb25lIGluIHRoZSBtZWFudGltZS4gKi8NCj4gPiAJCW11dGV4X2xvY2soJm1vZHVsZV9tdXRl
+eCk7DQo+ID4gCQlvbGQgPSBmaW5kX21vZHVsZV9hbGwobW9kLT5uYW1lLCBzdHJsZW4obW9kLT5u
+YW1lKSwgdHJ1ZSk7DQo+ID4NCj4gPiAJCS8qDQo+ID4gCQkgKiBXZSBhcmUgaGVyZSBvbmx5IHdo
+ZW4gdGhlIHNhbWUgbW9kdWxlIHdhcyBiZWluZyBsb2FkZWQuDQo+ID4gCQkgKiBEbyBub3QgdHJ5
+IHRvIGxvYWQgaXQgYWdhaW4gcmlnaHQgbm93LiBJdCBwcmV2ZW50cw0KPiA+IAkJICogbG9uZyBk
+ZWxheXMgY2F1c2VkIGJ5IHNlcmlhbGl6ZWQgbW9kdWxlIGxvYWQgZmFpbHVyZXMuDQo+ID4gCQkg
+KiBJdCBtaWdodCBoYXBwZW4gd2hlbiBtb3JlIGRldmljZXMgb2YgdGhlIHNhbWUgdHlwZSB0cmln
+Z2VyDQo+ID4gCQkgKiBsb2FkIG9mIGEgcGFydGljdWxhciBtb2R1bGUuDQo+ID4gCQkgKi8NCj4g
+PiAJCWlmIChvbGQgJiYgb2xkLT5zdGF0ZSA9PSBNT0RVTEVfU1RBVEVfTElWRSkNCj4gPiAJCQll
+cnIgPSAtRVhJU1Q7DQo+ID4gCQllbHNlDQo+ID4gCQkJZXJyID0gLUVCVVNZOw0KPiA+IAkJZ290
+byBvdXQ7DQo+ID4gCX0NCj4gPiAJbW9kX3VwZGF0ZV9ib3VuZHMobW9kKTsNCj4gPiAJbGlzdF9h
+ZGRfcmN1KCZtb2QtPmxpc3QsICZtb2R1bGVzKTsNCj4gPiAJbW9kX3RyZWVfaW5zZXJ0KG1vZCk7
+DQo+ID4gCWVyciA9IDA7DQo+ID4NCj4gPiBvdXQ6DQo+ID4gCW11dGV4X3VubG9jaygmbW9kdWxl
+X211dGV4KTsNCj4gPiBvdXRfdW5sb2NrZWQ6DQo+ID4gCXJldHVybiBlcnI7DQo+ID4gfQ0KPiAN
+Cj4gSSB0aGluayB0aGlzIG1ha2VzIHNlbnNlLiBUaGUgc3VnZ2VzdGVkIGNvZGUgb25seSBuZWVk
+cyB0byBoYXZlIHRoZSBzZWNvbmQNCj4gbXV0ZXhfbG9jaygpK2ZpbmRfbW9kdWxlX2FsbCgpIHBh
+aXIgbW92ZWQgaW50byB0aGUgcHJlY2VkaW5nIGlmIGJsb2NrIHRvIHdvcmsNCj4gY29ycmVjdGx5
+LiBJIHdpbGwgd2FpdCBhIGJpdCBpZiB0aGVyZSBpcyBtb3JlIGZlZWRiYWNrIGFuZCBwb3N0IGFu
+IHVwZGF0ZWQNCj4gcGF0Y2guDQoNCldoaWxlIHBlb3BsZSBoYXZlIGFsbCB0aGlzIGNvZGUgY2Fj
+aGVkIGluIHRoZWlyIGJyYWlucw0KdGhlcmUgaXMgcmVsYXRlZCBwcm9ibGVtIEkgY2FuIGVhc2ls
+eSBoaXQuDQoNCklmIHR3byBwcm9jZXNzZXMgY3JlYXRlIHNjdHAgc29ja2V0cyBhdCB0aGUgc2Ft
+ZSB0aW1lIGFuZCBzY3RwDQptb2R1bGUgaGFzIHRvIGJlIGxvYWRlZCB0aGVuIHRoZSBzZWNvbmQg
+cHJvY2VzcyBjYW4gZW50ZXIgdGhlDQptb2R1bGUgY29kZSBiZWZvcmUgaXMgaXQgZnVsbHkgaW5p
+dGlhbGlzZWQuDQpUaGlzIG1pZ2h0IGJlIGJlY2F1c2UgdGhlIHRyeV9tb2R1bGVfZ2V0KCkgc3Vj
+Y2VlZHMgYmVmb3JlIHRoZQ0KbW9kdWxlIGluaXRpYWxpc2F0aW9uIGZ1bmN0aW9uIHJldHVybnMu
+DQoNCkkndmUgYXZvaWRlZCB0aGUgaXNzdWUgYnkgZW5zdXJpbmcgdGhlIHNvY2tldCBjcmVhdGVz
+IGFyZSBzZXJpYWxpc2VkLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2Vz
+aWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVL
+DQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-I think this makes sense. The suggested code only needs to have the second
-mutex_lock()+find_module_all() pair moved into the preceding if block to work
-correctly. I will wait a bit if there is more feedback and post an updated
-patch.
-
-Thanks,
-Petr
