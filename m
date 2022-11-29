@@ -2,285 +2,662 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90524C4321E
-	for <linux-modules@archiver.kernel.org>; Tue, 29 Nov 2022 13:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE527C46467
+	for <linux-modules@archiver.kernel.org>; Tue, 29 Nov 2022 22:43:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbiK2NOs (ORCPT
+        id S236772AbiK2Wnl (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 29 Nov 2022 08:14:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
+        Tue, 29 Nov 2022 17:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbiK2NOX (ORCPT
+        with ESMTP id S236543AbiK2Wnh (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 29 Nov 2022 08:14:23 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2045.outbound.protection.outlook.com [40.107.20.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6293263158;
-        Tue, 29 Nov 2022 05:13:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TuqCdBDB9Hm4ZiD2B5TZU6E60RNJHkhg+d10Yi3JIYqmpSYephi11pmeTQNvXNyURn17RFILrdNSIaWsSd/Oh4K2MUGEIAtlR9gDtmtu9G3ggRnD6REmmsek5y0QYsQnyFjWO+JkTb1Ea/iU+MvndIlEE0reX+ICWJsC/COJroQj3I/8LJCgT4SDbmB+i5HhSOpWf7O+n1YwQLfeVHzR92nM5bnxGdTKuojvsLD5nFfhT7t/8HuKEW9/avGt50r0LbWlJdBl8gmTWGuwfsL0KF739h9l3XAEUTEL4P7MfuMuXU3cOR7M2UM7IB3EUFr6+rJAQTlOlnc+Pe5fvItl0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+ddLoPqUlGwN54qz/sZSyEFbmj1Q4v1kwEK4epfP/bo=;
- b=nu43Su27CxJOkIhRgxjSt6MLOyFTVC2XbFzv3Gl0+EVhazm4F/ur/lQgLUAEcuxf6k2Cl0wTKklG1Kl3aupjJe05FK441ufEG7oykyKoDU8zV2iYpAxnXaDTSlnNGTAM+RG3mGnCjrabM8ComizSa3Kq/k/my+T8AOtMzq2KThnERlomqbX2lZr/cQ+DJSTGhyHgXixcpyPU5OU98jitP5HC5H4MLSUByVC0beI2Q7NqF1jITqAQjBezgKEkRucI9TjAjxXr7+m/Ih6BwsxJx5EX5tchgwVY2Zhfo6cQml+VCmMgark4Yw9smV2GTF5vehKfsBKcfQ+E56zuXiXD2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+ddLoPqUlGwN54qz/sZSyEFbmj1Q4v1kwEK4epfP/bo=;
- b=ixML41x2FfewdTQnV7SzN913lTdCSR30Uoom3S7HQlxTvJxoAmS2m4r6eMB/HDTdw2qkie/2ca0ky6I63FkC1n0Ays1GnokRvGXF2P6seYKJK+8oXwhJoqORBogSgjDu4cFJ0Ns2LV8XvuBwaCnPp+AzahlVNEqy4/TD4Q8fohOt5m2puQ17zFTh1CPWJDlsj90yH95Jz81ue3j4T7CxWPxNaw0uWi66p6bVgHeBuxRR9egOXhcrXlf7lv0LpxUWxySKrF8jgPFqznVLriIpYGfxs5Z02YCNwTrI9IPim+XYvma+xfxM6pKd5U9hkHgwXRuqtX5eycHGzvtyRswKwA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16) by DBBPR04MB7753.eurprd04.prod.outlook.com
- (2603:10a6:10:1e1::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Tue, 29 Nov
- 2022 13:13:40 +0000
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::14eb:6506:8510:875f]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::14eb:6506:8510:875f%7]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
- 13:13:39 +0000
-Message-ID: <2ac0b871-60d0-c535-3fe0-bfaa0d9f7685@suse.com>
-Date:   Tue, 29 Nov 2022 14:13:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
-Content-Language: en-US
-To:     Prarit Bhargava <prarit@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220919123233.8538-1-petr.pavlu@suse.com>
- <20220919123233.8538-3-petr.pavlu@suse.com>
- <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
- <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
- <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
- <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
- <Y277Jb9i2VeXQoTL@bombadil.infradead.org>
- <e070839f-c224-047b-9411-91143c1d8394@redhat.com>
- <Y3Jg8X7qv2AKPU1J@bombadil.infradead.org>
- <5467e66d-55de-ca8f-c1ae-ffe6efe7290d@redhat.com>
- <94cd5565-1058-2c97-57bb-0ddf12416cd6@redhat.com>
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <94cd5565-1058-2c97-57bb-0ddf12416cd6@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0173.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9f::8) To AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|DBBPR04MB7753:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0314f4f-10d6-4b21-fc22-08dad20b8803
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EySiwnHeGvQYZmpc1twdhv7RrR7fujvNjhNczVJLAJP5jiGhwjBxbCbiyNGAFR9PclHEmBlgPvFFaZP+RFyrYo34Trn1LWV+ZrbYX6DKfQ0oi17+uwqrxHqXKh7/07zwqkOe7sbj+EhQXpwlwRn1/HvE6V5iYKDlArgrQ8/OplcFB4BFRBPWaB8+pIIUADVhFsqPD8h1Z76lkISsbOll1RFV3beooY1TtWURbrsZBCbc6L7jfG1OkFm0j2UegNxZxu+nM26D627DdUiohILkMpH5Br03C8QxvIjeBBGkos3JdD/9+leeJOZydSd0ieEeVSaYmFAOyINM5NUd877Pmq6PfEB/wGS99bTKvfwNLQM+N0GkTfxjAXiISy0AhVqB1L9+jST+hArZ2DC/iD2SkdG+Sl+yA9u2ZDaz15O1qIZetWQuJ3RN9PfEm2/EzphqnSu6k3j3x3Zjx7cbzsmj+Am5lMmVNHQViWpPFxnq1Ed7Vi2HbNDL9WN6/9yZxmEKDzaQfoZeG2wuAVzuI6BzAXewcLomvl9UuisTwC36Q263tuatjfG7dNOP4FfjifT46gjHBEAGgiU7I9CoZ6ZVKmt7NI+tJmJWEezxsQbb7F8HoyEJ1VyUzrX3t859F3+NGdp/6drU7Agal+hnXErmt9K82lXbAnFwxum7oG1clWx0azexlCPp4XyOV5g6tLl1es20MaJ5no7e6Kib/BJcTCNOJCV0XY+WGgiLlHJd8bQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(366004)(376002)(39860400002)(346002)(451199015)(6486002)(186003)(41300700001)(31686004)(478600001)(2616005)(36756003)(110136005)(38100700002)(6506007)(316002)(26005)(6512007)(55236004)(66946007)(86362001)(31696002)(66476007)(4326008)(66556008)(8676002)(8936002)(5660300002)(53546011)(2906002)(83380400001)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R1l1WW5MTTlnbXdiQmZlaDR1Y2dBc0ljWlVmclMxcGMyVjYvZ3VJSDJKQUYw?=
- =?utf-8?B?azJNeGRRdTVEZzE3WVJkOTRmN0pFVE50NHA0TlJ1a3RXS3pxc3lNaTBLOTY4?=
- =?utf-8?B?d1F3WnU4cUMvM25sNzF4anBPMWlrMVNzUCt2dG5kU2FRSm1wWWhVY2ZkemdL?=
- =?utf-8?B?N2E3elVEWDN3Ni93VXhaRGhtWDdYZHZScVE5ZDZIUGdmZ2lreUhlSDBwZUcx?=
- =?utf-8?B?TjdzWlVLNmhRM1cveS9ZMVR3d0tJS3NmVVlCMnNhdWVzUDBreEgzRm5ycWlT?=
- =?utf-8?B?TDU1eVpsdjEvMnZybjZRYjNZWmZaNTdrNk5CVlVJbXI5Rkcwa0pZendPbkV6?=
- =?utf-8?B?TjZkSit2VlZuTGVOdTgvSjI2bG1KaVVabEZqa1RucXNLQ1FSMzJyblFyUmYr?=
- =?utf-8?B?bWd1L25XL1lmZ29NNjduTEFWZTBhZisrREFMY0JLZHgzcUZOY3E4QVlja0Ur?=
- =?utf-8?B?eG42KzIyM3U5aXluTGFrSG5ZV21yVW5JbW8xbHRwV1NzNEF4SU9LRHFwck1F?=
- =?utf-8?B?M3Jac3V5dTN3VERnMlZFRmNFcjJWMlJiNnY2V0JWYU83R210Y0NkYWR5WEhS?=
- =?utf-8?B?YXl2bG82cmpncWo1T2JXZmhkZC9CZDRmUjcwaVdnK3ZkMUpoZVNnTk0zbGJO?=
- =?utf-8?B?cFZwcnEzc0x2c1JMTjVLTmJ6UDZId3B6VmZGR3Rsdlk0NVE2SmJlN29XQjhX?=
- =?utf-8?B?UkJxeXZSYVE4eXloSWdyTGpTZmEva0pWejJ2V3FJcldmN1o3dDdkS2pjalBH?=
- =?utf-8?B?eWFGd0pGakROR25SZDlyeUlRTERiV0dYbFVibnNlVnB4d2JHeFN1ZnJDQSts?=
- =?utf-8?B?dnZEWjVpWnNHWkp4ZE1yL3podEhYb0hadEd1eGdrdGVIKzY0bno3blVCNkZn?=
- =?utf-8?B?WWJSeElmMDJ4VFljZUUycDhpRU1kaEFETTF2SnZoMTJ4Nmp6ZVA1MVVzaHdR?=
- =?utf-8?B?VjBvSlRaaVlEL21ocHAyakk1cmxSczZiL1FLbXJzMTltcGhkVFczcGxuZ1BY?=
- =?utf-8?B?bG5EMjhYeDlZaHRHQllLTnVSME1HbEVlSXdjUmo4emZ6eHVzc2E4c3A0Yyth?=
- =?utf-8?B?NTZlWmloMnl5QWc4OFRyMEx4aEorRmNQZEEydXEzSjhQQ3pzK3ZBejc5ck5E?=
- =?utf-8?B?cnBTV0orMlp2WTE0ZjdadzdEUlZObElzZi92dXBNQmxLYmNNNlpQVzNUcHU3?=
- =?utf-8?B?Z0tYZ3BZbjgzYktDQlJ1Z2VFS21UVFdUS3FKNXg3RCtJZEF0K0Vqa3JuWW9U?=
- =?utf-8?B?dCs0OEgzcmV4VUh4aHNVNGNma0FvUnA2MGw5U0xGVzRBTzlSYVdyMFN4UWNO?=
- =?utf-8?B?QU1tUUNSSllKejl1aUhuMlcyWVZ4T2FDbXlmaUZWaDhnWE94Z3Q4RjZxVUVM?=
- =?utf-8?B?Qloybm9ZQzQxUWhFTmFyMnRXWmcxYjFNNnM3WlU0M0dyNzVGdVA5a0VzNmR1?=
- =?utf-8?B?MElOMExuU0hsaDVMSVVWc29uRUxzUG5wNHZTWUxsMVd1YnhUVXBLWldISUYv?=
- =?utf-8?B?bStWcVJHamd2MVV5NmU5OCtjNnpCeEtDNDlxR0paSHdvRVRpK1hOWEwrNk50?=
- =?utf-8?B?YU9xdXQwT1BBcWQ3a0NlcVkrNUExQ3VVN0R6ZGRBTDRodFdYdkp1RHdTMHdu?=
- =?utf-8?B?cjlOcEdPK3cyZk5qWlZzRGdqZ1lSWmhNUTJvVzBkU0F5SXZrd2pmV2JzYnNp?=
- =?utf-8?B?R3h6L1AwdmJpMW1mcXExM0RJNEJxejVLdEJJeHZPTVcwY2s3b0NYQ1BHYUJm?=
- =?utf-8?B?WVZwNjlQUUFCQ01ldXVEeHo4V1pSbk5taE1EYVdmUVVXTDZCMzRhaFdncUNG?=
- =?utf-8?B?aFFmaVIvTGduczFPRFlUbmtINFRUaURSaXJ6a2lHS0hNWmpMT1kycHlCcnVa?=
- =?utf-8?B?Skw5UzFwTkltQW16MDl6MmplOUlBZWMxaWJBdkM4UkF1Sytva1Q5NU9lNjZG?=
- =?utf-8?B?aUZjd0RzUHNrcFg5TXU5RG41MmFaWjY5LzFHY1J6eUI2bytXc00yRlEzb0JI?=
- =?utf-8?B?UDNJdTllS3M5VlFYdytMbkY3OHMxM3UwNlB6V0hVZitKMDh6bkVTMFN6Njhh?=
- =?utf-8?B?SXpzZlhucThDMTZjeEtHajBRYUNLSVBWM0ZuR0NJTmkrQTJ3d2JzVkMvQnc0?=
- =?utf-8?Q?FHU09h/fGX+MNjGlwQVe+1J4M?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0314f4f-10d6-4b21-fc22-08dad20b8803
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 13:13:39.8219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: imr0k1sRjjv0sTVQdmqoQeq/ENR0A0t4AXGk42bIqpUbWOiGgwZS2E2JxcNr0BdAAZ03N4qMD0rmLpe9WF80KQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7753
+        Tue, 29 Nov 2022 17:43:37 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3BE70474
+        for <linux-modules@vger.kernel.org>; Tue, 29 Nov 2022 14:43:34 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3b0af5bcbd3so137141037b3.0
+        for <linux-modules@vger.kernel.org>; Tue, 29 Nov 2022 14:43:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+p/NmsqXTHTh45zq3RpLTmuF+zYkFAfcILgpemc+P+A=;
+        b=NJrafwsj5Zvbj+bg1uckcgi4DSLz3BEk7zy6v1pY3m6nrZpZSawrRBwEUoD+MsL6jI
+         YAGqvhljFWuDALVsaMrchE6kKqEudPu1RqcwHGc18proixjov0ezDShaQBCy4c7+7lmL
+         sUbRS5BPdBz3KKI6m5K50mxBSOb/MPiSnKpABEy8LHsbh0LsHbbWaSF7/E+Dq0dNk1ad
+         yzSWRbTP78vlEYL+USwfYBgRXz/eT24TZLhsj4iuSTCDDOlbKwyk+FRVb676YWYcJ968
+         ja/tReZJxV5RUqFv6LnlQLEai8Pbw0wkvhTDAw/0YFHr0234NVJ4qh+l/kSXKk488dwh
+         nWeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+p/NmsqXTHTh45zq3RpLTmuF+zYkFAfcILgpemc+P+A=;
+        b=xTZIg/jeA+bFEdzhaEMCe/xz+g0lLtSZfnKlVelzA7tssmr5VNg/QU9qqUR56pRmCK
+         ZpdzNC0aPyiVpQtlg5ynnkIoIVvqKmwJfSOeV5SCR2+ymhgPEnlqSHLxAFXwjTswgmQ8
+         Q0ZK6upHvq4QnNyvTby9vbaS7Tm/7ySXG2DHAvB6xmNWBdowQuC9pJti5kY8HYn3BKVH
+         QyvAuir49VsOmilQlCixFW02SI1uMZwzrxQCCr+ScviJVCll3iMCPVqQ7uevO84AnTRT
+         OWBMPmDoon/5SBaokAHONULR436oQEtMnC88mdKF35N/H8+gapRFgo8pP1eGDiqE66PC
+         B27A==
+X-Gm-Message-State: ANoB5plsqg9E/gCmFdra3Y6oFLM5hMmdRcBytdchRAxM3YvRSGc/HrJN
+        7rmf4FN1pCmMfgfl4q2RMxw72ZcFNEKDFyU=
+X-Google-Smtp-Source: AA0mqf6cCJwmMDfHBgVLsXVS8Y6d/Nj++NxqWdzbPlS7xv2p9KmsPfUJGjtJWZKTyXLP0tlcHfQePhRc/POfsZU=
+X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
+ (user=allenwebb job=sendgmr) by 2002:a81:7b8b:0:b0:3b5:8832:31eb with SMTP id
+ w133-20020a817b8b000000b003b5883231ebmr25542382ywc.46.1669761813447; Tue, 29
+ Nov 2022 14:43:33 -0800 (PST)
+Date:   Tue, 29 Nov 2022 16:43:13 -0600
+In-Reply-To: <CAJzde06+FXNpyBzT+NfS2GCfqEERMkGDpdsmHQj=v1foLJW4Cw@mail.gmail.com>
+Mime-Version: 1.0
+References: <CAJzde06+FXNpyBzT+NfS2GCfqEERMkGDpdsmHQj=v1foLJW4Cw@mail.gmail.com>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221129224313.455862-1-allenwebb@google.com>
+Subject: [PATCH v3] modules: add modalias file to sysfs for modules.
+From:   Allen Webb <allenwebb@google.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Allen Webb <allenwebb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 11/28/22 17:29, Prarit Bhargava wrote:
-> On 11/14/22 10:45, David Hildenbrand wrote:
->> On 14.11.22 16:38, Luis Chamberlain wrote:
->>> On Mon, Nov 14, 2022 at 09:57:56AM +0100, David Hildenbrand wrote:
->>>> On 12.11.22 02:47, Luis Chamberlain wrote:
->>>>> On Wed, Oct 19, 2022 at 02:00:55PM +0200, Petr Pavlu wrote:
->>>>>> On 10/18/22 20:33, Luis Chamberlain wrote:
->>>>>>> On Sat, Oct 15, 2022 at 11:27:10AM +0200, Petr Pavlu wrote:
->>>>>>>> The patch does address a regression observed after commit 
->>>>>>>> 6e6de3dee51a
->>>>>>>> ("kernel/module.c: Only return -EEXIST for modules that have 
->>>>>>>> finished
->>>>>>>> loading"). I guess it can have a Fixes tag added to the patch.
->>>>>>>>
->>>>>>>> I think it is hard to split this patch into parts because the 
->>>>>>>> implemented
->>>>>>>> "optimization" is the fix.
->>>>>>>
->>>>>>> git describe --contains 6e6de3dee51a
->>>>>>> v5.3-rc1~38^2~6
->>>>>>>
->>>>>>> I'm a bit torn about this situation. Reverting 6e6de3dee51a would 
->>>>>>> be the
->>>>>>> right thing to do, but without it, it still leaves the issue reported
->>>>>>> by Prarit Bhargava. We need a way to resolve the issue on stable and
->>>>>>> then your optimizations can be applied on top.
->>>>>>
->>>>>> Simpler could be to do the following:
->>>>>>
->>>>>> diff --git a/kernel/module/main.c b/kernel/module/main.c
->>>>>> index d02d39c7174e..0302ac387e93 100644
->>>>>> --- a/kernel/module/main.c
->>>>>> +++ b/kernel/module/main.c
->>>>>> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
->>>>>>        sched_annotate_sleep();
->>>>>>        mutex_lock(&module_mutex);
->>>>>>        mod = find_module_all(name, strlen(name), true);
->>>>>> -    ret = !mod || mod->state == MODULE_STATE_LIVE;
->>>>>> +    ret = !mod || mod->state == MODULE_STATE_LIVE
->>>>>> +        || mod->state == MODULE_STATE_GOING;
->>>>>>        mutex_unlock(&module_mutex);
->>>>>>        return ret;
->>>>>> @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module 
->>>>>> *mod)
->>>>>>        mutex_lock(&module_mutex);
->>>>>>        old = find_module_all(mod->name, strlen(mod->name), true);
->>>>>>        if (old != NULL) {
->>>>>> -        if (old->state != MODULE_STATE_LIVE) {
->>>>>> +        if (old->state == MODULE_STATE_COMING
->>>>>> +            || old->state == MODULE_STATE_UNFORMED) {
->>>>>>                /* Wait in case it fails to load. */
->>>>>>                mutex_unlock(&module_mutex);
->>>>>>                err = wait_event_interruptible(module_wq,
->>>>>> @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module 
->>>>>> *mod)
->>>>>>                    goto out_unlocked;
->>>>>>                goto again;
->>>>>>            }
->>>>>> -        err = -EEXIST;
->>>>>> +        err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
->>>>>>            goto out;
->>>>>>        }
->>>>>>        mod_update_bounds(mod);
->>>>>
->>>>>
->>>>> Prarit, can you verify this still does not break the issue you 
->>>>> reported?
->>>>> David, does this also fix your issue?
->>>>
->>>> I didn't try, but from a quick glimpse I assume no. Allocating module 
->>>> space
->>>> happens before handling eventual duplicates right now, before a 
->>>> module even
->>>> is "alive" and in the MODULE_STATE_UNFORMED state.
->>>
->>> The first two hunks are a revert of commit 6e6de3dee51a and I'm under
->>> the impression that cauased your issues as *more* modules states are
->>> allowed through.
->>>
->>> The last hunk tries to fix what 6e6de3dee51a wanted to do.
->>>
->>
->> Note that I don't think the issue I raised is due to 6e6de3dee51a.
->>
->>>> But maybe I am missing something important.
->>>
->>> Please do test if you can.
->>
->> I don't have the machine at hand right now. But, again, I doubt this 
->> will fix it.
->>
->>
->> The flow is in load_module():
->>
->>      mod = layout_and_allocate(info, flags);
->>      if (IS_ERR(mod)) {
->>          ...
->>      }
->>
->>      audit_log_kern_module(mod->name);
->>
->>      /* Reserve our place in the list. */
->>      err = add_unformed_module(mod);
->>      if (err)
->>          goto free_module;
->>
->>
->> You can have 400 threads in layout_and_allocate() loading the same 
->> module at the same time and running out of module space. Any changes to 
->> add_unformed_module() and finished_loading() won't change that, because 
->> they are not involved before the module space allocations happened.
->>
-> 
-> I'd like to see a refreshed patch but I tested the latest version and 
-> see that the boot time is LONGER with the change
-> 
-> Before:
-> 
-> [11:17 AM root@intel-eaglestream-spr-15 kernel-ark]# systemd-analyze
-> Startup finished in 55.418s (firmware) + 22.766s (loader) + 35.856s 
-> (kernel) + 5.830s (initrd) + 15.671s (userspace) = 2min 15.542s
-> multi-user.target reached after 15.606s in userspace.
-> 
-> After:
-> 
-> Startup finished in 55.314s (firmware) + 23.033s (loader) + 35.331s 
-> (kernel) + 5.176s (initrd) + 23.465s (userspace) = 2min 22.320s
-> multi-user.target reached after 23.093s in userspace.
-> 
-> Subsequent reboots also indicate that userspace boot time is longer 
-> after the change.
+USB devices support the authorized attribute which can be used by
+user-space to implement trust-based systems for enabling USB devices. It
+would be helpful when building these systems to be able to know in
+advance which kernel drivers (or modules) are reachable from a
+particular USB device.
 
-Thanks for testing this patch, that is an interesting result.
+This information is readily available for external modules in
+modules.alias. However, builtin kernel modules are not covered. This
+patch adds a sys-fs attribute to both builtin and loaded modules
+exposing the matching rules in the modalias format for integration
+with tools like USBGuard.
 
-I see the following dependency chain on my system (openSUSE Tumbleweed):
-multi-user.target -> basic.target -> sysinit.target -> systemd-udev-trigger.service.
+Change-Id: I83b6f0c30e06e65cbe223f1606187283fcb13215
+Signed-off-by: Allen Webb <allenwebb@google.com>
+---
+ drivers/base/Makefile          |   2 +-
+ drivers/base/base.h            |   8 ++
+ drivers/base/bus.c             |  42 ++++++
+ drivers/base/mod_devicetable.c | 249 +++++++++++++++++++++++++++++++++
+ drivers/usb/core/driver.c      |   2 +
+ include/linux/device/bus.h     |   8 ++
+ include/linux/module.h         |   1 +
+ kernel/module/internal.h       |   2 +
+ kernel/module/sysfs.c          |  88 ++++++++++++
+ kernel/params.c                |   2 +
+ 10 files changed, 403 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/base/mod_devicetable.c
 
-My understanding is that the udev trigger service only performs the trigger
-operation but does not actually wait on all devices to be processed by udevd.
-In other words, handling of the forced udev events can still be in progress
-after multi-user.target is reached.
+diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+index 83217d243c25b..924d46ae987f4 100644
+--- a/drivers/base/Makefile
++++ b/drivers/base/Makefile
+@@ -15,7 +15,7 @@ obj-y				+= firmware_loader/
+ obj-$(CONFIG_NUMA)	+= node.o
+ obj-$(CONFIG_MEMORY_HOTPLUG) += memory.o
+ ifeq ($(CONFIG_SYSFS),y)
+-obj-$(CONFIG_MODULES)	+= module.o
++obj-$(CONFIG_MODULES)	+= mod_devicetable.o module.o
+ endif
+ obj-$(CONFIG_SYS_HYPERVISOR) += hypervisor.o
+ obj-$(CONFIG_REGMAP)	+= regmap/
+diff --git a/drivers/base/base.h b/drivers/base/base.h
+index b902d1ecc247f..beaa252c04388 100644
+--- a/drivers/base/base.h
++++ b/drivers/base/base.h
+@@ -173,6 +173,14 @@ static inline void module_add_driver(struct module *mod,
+ static inline void module_remove_driver(struct device_driver *drv) { }
+ #endif
+ 
++#if defined(CONFIG_SYSFS)
++ssize_t usb_drv_to_modalias(struct device_driver *drv, char *buf,
++			    size_t count);
++#else
++static inline ssize_t usb_drv_to_modalias(struct device_driver *drv, char *buf,
++					  size_t count) { return -EINVAL; }
++#endif
++
+ #ifdef CONFIG_DEVTMPFS
+ extern int devtmpfs_init(void);
+ #else
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index 7ca47e5b3c1f4..4e0c5925545e5 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -178,6 +178,48 @@ static const struct kset_uevent_ops bus_uevent_ops = {
+ 
+ static struct kset *bus_kset;
+ 
++/**
++ * bus_for_each - bus iterator.
++ * @start: bus to start iterating from.
++ * @data: data for the callback.
++ * @fn: function to be called for each device.
++ *
++ * Iterate over list of buses, and call @fn for each,
++ * passing it @data. If @start is not NULL, we use that bus to
++ * begin iterating from.
++ *
++ * We check the return of @fn each time. If it returns anything
++ * other than 0, we break out and return that value.
++ *
++ * NOTE: The bus that returns a non-zero value is not retained
++ * in any way, nor is its refcount incremented. If the caller needs
++ * to retain this data, it should do so, and increment the reference
++ * count in the supplied callback.
++ */
++int bus_for_each(void *data, int (*fn)(struct bus_type *, void *))
++{
++	int error = 0;
++	struct bus_type *bus;
++	struct subsys_private *bus_prv;
++	struct kset *subsys;
++	struct kobject *k;
++
++	spin_lock(&bus_kset->list_lock);
++
++	list_for_each_entry(k, &bus_kset->list, entry) {
++		subsys = container_of(k, struct kset, kobj);
++		bus_prv = container_of(subsys, struct subsys_private, subsys);
++		bus = bus_prv->bus;
++		error = fn(bus, data);
++		if (error)
++			break;
++	}
++
++	spin_unlock(&bus_kset->list_lock);
++	return error;
++}
++EXPORT_SYMBOL_GPL(bus_for_each);
++
+ /* Manually detach a device from its associated driver. */
+ static ssize_t unbind_store(struct device_driver *drv, const char *buf,
+ 			    size_t count)
+diff --git a/drivers/base/mod_devicetable.c b/drivers/base/mod_devicetable.c
+new file mode 100644
+index 0000000000000..f1d3de9f111c4
+--- /dev/null
++++ b/drivers/base/mod_devicetable.c
+@@ -0,0 +1,249 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * mod_devicetable.c - helpers for displaying modaliases through sysfs.
++ *
++ * This borrows a lot from file2alias.c
++ */
++
++#include <linux/device/bus.h>
++#include <linux/device.h>
++#include <linux/usb.h>
++
++#include "base.h"
++#include "../usb/core/usb.h"
++
++#define ADD(buf, count, len, sep, cond, field)				\
++do {									\
++	if (cond)							\
++		(len) += scnprintf(&(buf)[len],				\
++			(count) - (len),				\
++			sizeof(field) == 1 ? (sep "%02X") :		\
++			sizeof(field) == 2 ? (sep "%04X") :		\
++			sizeof(field) == 4 ? (sep "%08X") : "",		\
++			(field));					\
++	else								\
++		(len) += scnprintf(&(buf)[len], (count) - (len), (sep "*")); \
++} while (0)
++
++#ifdef CONFIG_USB
++/* USB related modaliases can be split because of device number matching, so
++ * this function handles individual modaliases for one segment of the range.
++ *
++ *
++ */
++static ssize_t usb_id_to_modalias(const struct usb_device_id *id,
++				  unsigned int bcdDevice_initial,
++				  int bcdDevice_initial_digits,
++				  unsigned char range_lo,
++				  unsigned char range_hi,
++				  unsigned char max, const char *mod_name,
++				  char *buf, size_t count)
++{
++	ssize_t len = 0;
++
++	ADD(buf, count, len, "alias usb:v",
++	    id->match_flags & USB_DEVICE_ID_MATCH_VENDOR, id->idVendor);
++	ADD(buf, count, len, "p", id->match_flags & USB_DEVICE_ID_MATCH_PRODUCT,
++	    id->idProduct);
++
++	len += scnprintf(&buf[len], count - len, "d");
++	if (bcdDevice_initial_digits)
++		len += scnprintf(&buf[len], count - len, "%0*X",
++			bcdDevice_initial_digits, bcdDevice_initial);
++	if (range_lo == range_hi) {
++		len += scnprintf(&buf[len], count - len, "%X", range_lo);
++	} else if (range_lo > 0 || range_hi < max) {
++		if (range_lo > 0x9 || range_hi < 0xA) {
++			len += scnprintf(&buf[len], count - len, "[%X-%X]",
++					 range_lo, range_hi);
++		} else {
++			len += scnprintf(&buf[len], count - len,
++				range_lo < 0x9 ? "[%X-9" : "[%X",
++				range_lo);
++			len += scnprintf(&buf[len], count - len,
++				range_hi > 0xA ? "A-%X]" : "%X]",
++				range_hi);
++		}
++	}
++	if (bcdDevice_initial_digits < (sizeof(id->bcdDevice_lo) * 2 - 1))
++		len += scnprintf(&buf[len], count - len, "*");
++
++	ADD(buf, count, len, "dc",
++	    id->match_flags & USB_DEVICE_ID_MATCH_DEV_CLASS, id->bDeviceClass);
++	ADD(buf, count, len, "dsc",
++	    id->match_flags & USB_DEVICE_ID_MATCH_DEV_SUBCLASS,
++	    id->bDeviceSubClass);
++	ADD(buf, count, len, "dp",
++	    id->match_flags & USB_DEVICE_ID_MATCH_DEV_PROTOCOL,
++	    id->bDeviceProtocol);
++	ADD(buf, count, len, "ic",
++	    id->match_flags & USB_DEVICE_ID_MATCH_INT_CLASS,
++	    id->bInterfaceClass);
++	ADD(buf, count, len, "isc",
++	    id->match_flags & USB_DEVICE_ID_MATCH_INT_SUBCLASS,
++	    id->bInterfaceSubClass);
++	ADD(buf, count, len, "ip",
++	    id->match_flags & USB_DEVICE_ID_MATCH_INT_PROTOCOL,
++	    id->bInterfaceProtocol);
++	ADD(buf, count, len, "in",
++	    id->match_flags & USB_DEVICE_ID_MATCH_INT_NUMBER,
++	    id->bInterfaceNumber);
++
++	len += scnprintf(&buf[len], count - len, " %s\n", mod_name);
++	return len;
++}
++
++/* Handles increment/decrement of BCD formatted integers */
++/* Returns the previous value, so it works like i++ or i-- */
++static unsigned int incbcd(unsigned int *bcd,
++			   int inc,
++			   unsigned char max,
++			   size_t chars)
++{
++	unsigned int init = *bcd, i, j;
++	unsigned long long c, dec = 0, div;
++
++	/* If bcd is not in BCD format, just increment */
++	if (max > 0x9) {
++		*bcd += inc;
++		return init;
++	}
++
++	/* Convert BCD to Decimal */
++	for (i = 0 ; i < chars ; i++) {
++		c = (*bcd >> (i << 2)) & 0xf;
++		c = c > 9 ? 9 : c; /* force to bcd just in case */
++		for (j = 0 ; j < i ; j++)
++			c = c * 10;
++		dec += c;
++	}
++
++	/* Do our increment/decrement */
++	dec += inc;
++	*bcd  = 0;
++
++	/* Convert back to BCD */
++	for (i = 0 ; i < chars ; i++) {
++		for (c = 1, j = 0 ; j < i ; j++)
++			c = c * 10;
++		div = dec;
++		(void)do_div(div, c); /* div = div / c */
++		c = do_div(div, 10); /* c = div % 10; div = div / 10 */
++		*bcd += c << (i << 2);
++	}
++	return init;
++}
++
++/* Print the modaliases for the specified struct usb_device_id.
++ */
++static ssize_t usb_id_to_modalias_multi(const struct usb_device_id *id,
++					const char *mod_name, char *buf,
++					size_t count)
++{
++	ssize_t len = 0;
++	unsigned int devlo, devhi;
++	unsigned char chi, clo, max;
++	int ndigits;
++
++	devlo = id->match_flags & USB_DEVICE_ID_MATCH_DEV_LO ?
++		id->bcdDevice_lo : 0x0U;
++	devhi = id->match_flags & USB_DEVICE_ID_MATCH_DEV_HI ?
++		id->bcdDevice_hi : ~0x0U;
++
++	/* Figure out if this entry is in bcd or hex format */
++	max = 0x9; /* Default to decimal format */
++	for (ndigits = 0 ; ndigits < sizeof(id->bcdDevice_lo) * 2 ; ndigits++) {
++		clo = (devlo >> (ndigits << 2)) & 0xf;
++		chi = ((devhi > 0x9999 ? 0x9999 : devhi) >>
++		       (ndigits << 2)) & 0xf;
++		if (clo > max || chi > max) {
++			max = 0xf;
++			break;
++		}
++	}
++
++	/*
++	 * Some modules (visor) have empty slots as placeholder for
++	 * run-time specification that results in catch-all alias
++	 */
++	if (!(id->idVendor || id->idProduct || id->bDeviceClass ||
++	      id->bInterfaceClass))
++		return len;
++
++	/* Convert numeric bcdDevice range into fnmatch-able pattern(s) */
++	for (ndigits = sizeof(id->bcdDevice_lo) * 2 - 1; devlo <= devhi;
++	     ndigits--) {
++		clo = devlo & 0xf;
++		chi = devhi & 0xf;
++		/* If we are in bcd mode, truncate if necessary */
++		if (chi > max)
++			chi = max;
++		devlo >>= 4;
++		devhi >>= 4;
++
++		if (devlo == devhi || !ndigits) {
++			len += usb_id_to_modalias(id, devlo, ndigits, clo, chi,
++						  max, mod_name, buf + len,
++						  count - len);
++			break;
++		}
++
++		if (clo > 0x0)
++			len += usb_id_to_modalias(id,
++				incbcd(&devlo, 1, max,
++				       sizeof(id->bcdDevice_lo) * 2),
++				ndigits, clo, max, max, mod_name, buf + len,
++				count - len);
++
++		if (chi < max)
++			len += usb_id_to_modalias(id,
++				incbcd(&devhi, -1, max,
++				       sizeof(id->bcdDevice_lo) * 2),
++				ndigits, 0x0, chi, max, mod_name, buf + len,
++				count - len);
++	}
++	return len;
++}
++
++/* Print the modaliases for the given driver assumed to be an usb_driver or
++ * usb_device_driver.
++ *
++ * "alias" is prepended and the module name is appended to each modalias to
++ * match the format in modules.aliases.
++ *
++ * The modaliases will be written out to @buf with @count being the maximum
++ * bytes to write. The return value is a negative errno on error or the number
++ * of bytes written to @buf on success.
++ */
++ssize_t usb_drv_to_modalias(struct device_driver *drv, char *buf,
++			    size_t count)
++{
++	ssize_t len = 0;
++	const struct usb_device_id *id;
++	const char *mod_name;
++
++	if (drv->bus != &usb_bus_type)
++		return -EINVAL;
++
++	if (drv->owner)
++		mod_name = drv->owner->name;
++	else
++		mod_name = drv->mod_name;
++
++	if (is_usb_device_driver(drv))
++		id = to_usb_device_driver(drv)->id_table;
++	else
++		id = to_usb_driver(drv)->id_table;
++	if (!id)
++		return len;
++
++	for (; id->match_flags; id++) {
++		len += usb_id_to_modalias_multi(id, mod_name, buf + len,
++						count - len);
++	}
++	return len;
++}
++#else
++inline ssize_t usb_drv_to_modalias(struct device_driver *drv, char *buf,
++				   size_t count){ return 0; }
++#endif
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 7e7e119c253fb..fdbc197b64c9c 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -32,6 +32,7 @@
+ #include <linux/usb/quirks.h>
+ #include <linux/usb/hcd.h>
+ 
++#include "../../base/base.h"
+ #include "usb.h"
+ 
+ 
+@@ -2030,4 +2031,5 @@ struct bus_type usb_bus_type = {
+ 	.match =	usb_device_match,
+ 	.uevent =	usb_uevent,
+ 	.need_parent_lock =	true,
++	.drv_to_modalias = usb_drv_to_modalias,
+ };
+diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+index d8b29ccd07e56..cce0bedec63d9 100644
+--- a/include/linux/device/bus.h
++++ b/include/linux/device/bus.h
+@@ -61,6 +61,10 @@ struct fwnode_handle;
+  *			this bus.
+  * @dma_cleanup:	Called to cleanup DMA configuration on a device on
+  *			this bus.
++ * @drv_to_modalias:    Called to convert the matching IDs in a
++ *                      struct device_driver to their corresponding modaliases.
++ *                      Note that the struct device_driver is expected to belong
++ *                      to this bus.
+  * @pm:		Power management operations of this bus, callback the specific
+  *		device driver's pm-ops.
+  * @iommu_ops:  IOMMU specific operations for this bus, used to attach IOMMU
+@@ -107,6 +111,9 @@ struct bus_type {
+ 	int (*dma_configure)(struct device *dev);
+ 	void (*dma_cleanup)(struct device *dev);
+ 
++	ssize_t (*drv_to_modalias)(struct device_driver *drv, char *buf,
++				   size_t count);
++
+ 	const struct dev_pm_ops *pm;
+ 
+ 	const struct iommu_ops *iommu_ops;
+@@ -161,6 +168,7 @@ void subsys_dev_iter_init(struct subsys_dev_iter *iter,
+ struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter);
+ void subsys_dev_iter_exit(struct subsys_dev_iter *iter);
+ 
++int bus_for_each(void *data, int (*fn)(struct bus_type *, void *));
+ int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
+ 		     int (*fn)(struct device *dev, void *data));
+ struct device *bus_find_device(struct bus_type *bus, struct device *start,
+diff --git a/include/linux/module.h b/include/linux/module.h
+index ec61fb53979a9..0bfa859a21566 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -47,6 +47,7 @@ struct module_kobject {
+ 	struct kobject *drivers_dir;
+ 	struct module_param_attrs *mp;
+ 	struct completion *kobj_completion;
++	struct bin_attribute modalias_attr;
+ } __randomize_layout;
+ 
+ struct module_attribute {
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 2e2bf236f5582..8d7ae37584868 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -259,11 +259,13 @@ static inline void add_kallsyms(struct module *mod, const struct load_info *info
+ #endif /* CONFIG_KALLSYMS */
+ 
+ #ifdef CONFIG_SYSFS
++void add_modalias_attr(struct module_kobject *mk);
+ int mod_sysfs_setup(struct module *mod, const struct load_info *info,
+ 		    struct kernel_param *kparam, unsigned int num_params);
+ void mod_sysfs_teardown(struct module *mod);
+ void init_param_lock(struct module *mod);
+ #else /* !CONFIG_SYSFS */
++static inline void add_modalias_attr(struct module_kobject *mk) {}
+ static inline int mod_sysfs_setup(struct module *mod,
+ 			   	  const struct load_info *info,
+ 			   	  struct kernel_param *kparam,
+diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
+index ce68f821dcd12..651c677c4ab96 100644
+--- a/kernel/module/sysfs.c
++++ b/kernel/module/sysfs.c
+@@ -5,6 +5,8 @@
+  * Copyright (C) 2008 Rusty Russell
+  */
+ 
++#include <linux/device/bus.h>
++#include <linux/device/driver.h>
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/fs.h>
+@@ -240,6 +242,90 @@ static inline void add_notes_attrs(struct module *mod, const struct load_info *i
+ static inline void remove_notes_attrs(struct module *mod) { }
+ #endif /* CONFIG_KALLSYMS */
+ 
++/* Track of the buffer and module identity in callbacks when walking the list of
++ * drivers for each bus.
++ */
++struct modalias_bus_print_state {
++	struct module_kobject *mk;
++	char *buf;
++	size_t count;
++	ssize_t len;
++};
++
++static int print_modalias_for_drv(struct device_driver *drv, void *p)
++{
++	struct modalias_bus_print_state *s = p;
++	struct module_kobject *mk = s->mk;
++	ssize_t len;
++	/* Skip drivers that do not match this module. */
++	if (mk->mod) {
++		if (mk->mod != drv->owner)
++			return 0;
++	} else if (!mk->kobj.name || !drv->mod_name ||
++		   strcmp(mk->kobj.name, drv->mod_name))
++		return 0;
++
++	if (drv->bus && drv->bus->drv_to_modalias) {
++		len = drv->bus->drv_to_modalias(drv, s->buf + s->len,
++						s->count - s->len);
++		if (len < 0)
++			return len;
++		s->len += len;
++	}
++	return 0;
++}
++
++static int print_modalias_for_bus(struct bus_type *type, void *p)
++{
++	return bus_for_each_drv(type, NULL, p, print_modalias_for_drv);
++}
++
++static ssize_t module_modalias_read(struct file *filp, struct kobject *kobj,
++				    struct bin_attribute *bin_attr,
++				    char *buf, loff_t pos, size_t count)
++{
++	struct module_kobject *mk = container_of(kobj, struct module_kobject,
++						 kobj);
++	struct modalias_bus_print_state state = {mk, buf, count, 0};
++	int error = 0;
++
++	if (pos != 0)
++		return -EINVAL;
++
++	error = bus_for_each(&state, print_modalias_for_bus);
++	if (error)
++		return error;
++
++	/*
++	 * The caller checked the pos and count against our size.
++	 */
++	return state.len;
++}
++
++/* Used in kernel/params.c for builtin modules.
++ *
++ * `struct module_kobject` is used instead of `struct module` because for
++ * builtin modules, the `struct module` is not available when this is called.
++ */
++void add_modalias_attr(struct module_kobject *mk)
++{
++	sysfs_bin_attr_init(&mk->modalias_attr);
++	mk->modalias_attr.attr.name = "modalias";
++	mk->modalias_attr.attr.mode = 0444;
++	mk->modalias_attr.read = module_modalias_read;
++	if (sysfs_create_bin_file(&mk->kobj, &mk->modalias_attr)) {
++		/* We shouldn't ignore the return type, but there is nothing to
++		 * do.
++		 */
++		return;
++	}
++}
++
++static void remove_modalias_attr(struct module_kobject *mk)
++{
++	sysfs_remove_bin_file(&mk->kobj, &mk->modalias_attr);
++}
++
+ static void del_usage_links(struct module *mod)
+ {
+ #ifdef CONFIG_MODULE_UNLOAD
+@@ -398,6 +484,7 @@ int mod_sysfs_setup(struct module *mod,
+ 
+ 	add_sect_attrs(mod, info);
+ 	add_notes_attrs(mod, info);
++	add_modalias_attr(&mod->mkobj);
+ 
+ 	return 0;
+ 
+@@ -415,6 +502,7 @@ int mod_sysfs_setup(struct module *mod,
+ 
+ static void mod_sysfs_fini(struct module *mod)
+ {
++	remove_modalias_attr(&mod->mkobj);
+ 	remove_notes_attrs(mod);
+ 	remove_sect_attrs(mod);
+ 	mod_kobject_put(mod);
+diff --git a/kernel/params.c b/kernel/params.c
+index 5b92310425c50..111024196361a 100644
+--- a/kernel/params.c
++++ b/kernel/params.c
+@@ -13,6 +13,7 @@
+ #include <linux/slab.h>
+ #include <linux/ctype.h>
+ #include <linux/security.h>
++#include "module/internal.h"
+ 
+ #ifdef CONFIG_SYSFS
+ /* Protects all built-in parameters, modules use their own param_lock */
+@@ -815,6 +816,7 @@ static void __init kernel_add_sysfs_param(const char *name,
+ 	BUG_ON(err);
+ 	kobject_uevent(&mk->kobj, KOBJ_ADD);
+ 	kobject_put(&mk->kobj);
++	add_modalias_attr(mk);
+ }
+ 
+ /*
+-- 
+2.37.3
 
-The current serialization of same-name module loads can result in many udev
-workers sleeping in add_unformed_module() and hence creating at that point
-less pressure on the CPU time from udevd. I wonder if this then maybe allows
-other work needed to reach multi-user.target to proceed faster.
-
-Could you please boot the machine with 'udev.log_level=debug' and provide me
-logs ('journalctl -b -o short-monotonic') from a run with the vanilla kernel
-and with the discussed patch?
-
-Thanks,
-Petr
+Removes some debug prints and fixes 64-bit unsigned divide issue
+| Reported-by: kernel test robot <lkp@intel.com>
