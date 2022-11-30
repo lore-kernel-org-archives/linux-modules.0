@@ -2,111 +2,124 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F3BCC433FE
-	for <linux-modules@archiver.kernel.org>; Wed, 30 Nov 2022 07:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C2ECC433FE
+	for <linux-modules@archiver.kernel.org>; Wed, 30 Nov 2022 13:16:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbiK3HGi (ORCPT
+        id S235632AbiK3NQk (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 30 Nov 2022 02:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        Wed, 30 Nov 2022 08:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233628AbiK3HGd (ORCPT
+        with ESMTP id S232519AbiK3NQi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 30 Nov 2022 02:06:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D19958000;
-        Tue, 29 Nov 2022 23:06:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 30 Nov 2022 08:16:38 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE7556D4B;
+        Wed, 30 Nov 2022 05:16:38 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id BE7B21F8D4;
+        Wed, 30 Nov 2022 13:16:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669814196; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=InTVSiPNY3KgtbrUipVQFtm2qipHlsJxEeslMAjnJJE=;
+        b=BHU3Y2gSx5A154Ec4LapeBDMjO30vp7ImX6Pe0CIiWmpCzBx36Rav8CtnBHvJ9o09Iy2Sh
+        Eh5nxlF5Mi4lyF03rytpUKZ406LvN4ozuj3q0AkmlWC/P65NwZoBsAby16H3WFAXpkQIjf
+        Cjx2ulVvezXsLbJ6m5oMv98KyGPCE9w=
+Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFAB061A47;
-        Wed, 30 Nov 2022 07:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D34C433B5;
-        Wed, 30 Nov 2022 07:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669791991;
-        bh=jx1GVgEKam2FNWsSssWOWOrXk2ds1Pc2DkdN2fdfBTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hmkBFqCnTZV9cTBv3qi7J4NxMnLup0W+LN51Abegdci0Dybhj7Xxe6RAbihH83re7
-         ArNEBoM0P9TVYb6rTv8JmT0m67gUViW99ZV/IPx9j80QYdLJY4cJ7yJX01Zrd7mJ0q
-         nw5/48fJ/324JB2jBPb2SyKrveem+MhzNH/7o+Jg=
-Date:   Wed, 30 Nov 2022 08:06:27 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        by relay2.suse.de (Postfix) with ESMTPS id 9DCDA2C14F;
+        Wed, 30 Nov 2022 13:16:35 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 14:16:32 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Petr Pavlu' <petr.pavlu@suse.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "prarit@redhat.com" <prarit@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "mwilck@suse.com" <mwilck@suse.com>,
         "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] modules: add modalias file to sysfs for modules.
-Message-ID: <Y4cA8y1NX1ZPTboF@kroah.com>
-References: <CAJzde06+FXNpyBzT+NfS2GCfqEERMkGDpdsmHQj=v1foLJW4Cw@mail.gmail.com>
- <20221129224313.455862-1-allenwebb@google.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] module: Don't wait for GOING modules
+Message-ID: <Y4dXsNKve02fGGEl@alley>
+References: <20221123131226.24359-1-petr.pavlu@suse.com>
+ <Y348QNmO2AHh3eNr@alley>
+ <a26ed87f-9e4c-7c1f-515b-edaaff9140fd@suse.com>
+ <8224e68169eb49ec9866c253be84b09b@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221129224313.455862-1-allenwebb@google.com>
+In-Reply-To: <8224e68169eb49ec9866c253be84b09b@AcuMS.aculab.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Nov 29, 2022 at 04:43:13PM -0600, Allen Webb wrote:
-> USB devices support the authorized attribute which can be used by
-> user-space to implement trust-based systems for enabling USB devices. It
-> would be helpful when building these systems to be able to know in
-> advance which kernel drivers (or modules) are reachable from a
-> particular USB device.
+On Sun 2022-11-27 11:21:45, David Laight wrote:
+> From: Petr Pavlu
+> > Sent: 26 November 2022 14:43
+> > 
+> > On 11/23/22 16:29, Petr Mladek wrote:
+> > > On Wed 2022-11-23 14:12:26, Petr Pavlu wrote:
+> > >> During a system boot, it can happen that the kernel receives a burst of
+> > >> requests to insert the same module but loading it eventually fails
+> > >> during its init call. For instance, udev can make a request to insert
+> > >> a frequency module for each individual CPU when another frequency module
+> > >> is already loaded which causes the init function of the new module to
+> > >> return an error.
+> > >>
+> > >> Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
+> > >> modules that have finished loading"), the kernel waits for modules in
+> > >> MODULE_STATE_GOING state to finish unloading before making another
+> > >> attempt to load the same module.
+> > >>
+> > >> This creates unnecessary work in the described scenario and delays the
+> > >> boot. In the worst case, it can prevent udev from loading drivers for
+> > >> other devices and might cause timeouts of services waiting on them and
+> > >> subsequently a failed boot.
+> > >>
+> > >> This patch attempts a different solution for the problem 6e6de3dee51a
+> > >> was trying to solve. Rather than waiting for the unloading to complete,
+> > >> it returns a different error code (-EBUSY) for modules in the GOING
+> > >> state. This should avoid the error situation that was described in
+> > >> 6e6de3dee51a (user space attempting to load a dependent module because
+> > >> the -EEXIST error code would suggest to user space that the first module
+> > >> had been loaded successfully), while avoiding the delay situation too.
+> > >>
 > 
-> This information is readily available for external modules in
-> modules.alias. However, builtin kernel modules are not covered. This
-> patch adds a sys-fs attribute to both builtin and loaded modules
-> exposing the matching rules in the modalias format for integration
-> with tools like USBGuard.
+> While people have all this code cached in their brains
+> there is related problem I can easily hit.
 > 
-> Change-Id: I83b6f0c30e06e65cbe223f1606187283fcb13215
-> Signed-off-by: Allen Webb <allenwebb@google.com>
-> ---
->  drivers/base/Makefile          |   2 +-
->  drivers/base/base.h            |   8 ++
->  drivers/base/bus.c             |  42 ++++++
->  drivers/base/mod_devicetable.c | 249 +++++++++++++++++++++++++++++++++
->  drivers/usb/core/driver.c      |   2 +
->  include/linux/device/bus.h     |   8 ++
->  include/linux/module.h         |   1 +
->  kernel/module/internal.h       |   2 +
->  kernel/module/sysfs.c          |  88 ++++++++++++
->  kernel/params.c                |   2 +
->  10 files changed, 403 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/base/mod_devicetable.c
-> 
+> If two processes create sctp sockets at the same time and sctp
+> module has to be loaded then the second process can enter the
+> module code before is it fully initialised.
+> This might be because the try_module_get() succeeds before the
+> module initialisation function returns.
 
-Hi,
+Right, the race is there. And it is true that nobody should use
+the module until mod->init() succeeds.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Well, I am not sure if there is an easy solution. It might require
+reviewing what all try_module_get() callers expect.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+We could not easily wait. For example, __sock_create() calls
+try_module_get() under rcu_read_lock().
 
-- Your patch contains warnings and/or errors noticed by the
-  scripts/checkpatch.pl tool.
+And various callers might want special handing when the module
+is coming, going, and when it is not there at all.
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
+I guess that it would require adding some new API and update
+the various callers.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+> I've avoided the issue by ensuring the socket creates are serialised.
 
-thanks,
+I see. It would be great to have a clean solution, definitely.
 
-greg k-h's patch email bot
+Sigh, there are more issues with the module life time. For example,
+kobjects might call the release() callback asynchronously and
+it might happen when the module/code has gone, see
+https://lore.kernel.org/all/20211105063710.4092936-1-ming.lei@redhat.com/
+
+Best Regards,
+PEtr
