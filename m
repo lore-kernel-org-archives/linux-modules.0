@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33FCEC4332F
-	for <linux-modules@archiver.kernel.org>; Fri,  2 Dec 2022 22:48:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D07DAC4332F
+	for <linux-modules@archiver.kernel.org>; Fri,  2 Dec 2022 22:48:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234759AbiLBWsC (ORCPT
+        id S234318AbiLBWsE (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 2 Dec 2022 17:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        Fri, 2 Dec 2022 17:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234753AbiLBWsB (ORCPT
+        with ESMTP id S234777AbiLBWsD (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 2 Dec 2022 17:48:01 -0500
-Received: from mail-il1-x149.google.com (mail-il1-x149.google.com [IPv6:2607:f8b0:4864:20::149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840807BC22
-        for <linux-modules@vger.kernel.org>; Fri,  2 Dec 2022 14:47:59 -0800 (PST)
-Received: by mail-il1-x149.google.com with SMTP id c4-20020a056e020bc400b0030098df879dso6749561ilu.6
-        for <linux-modules@vger.kernel.org>; Fri, 02 Dec 2022 14:47:59 -0800 (PST)
+        Fri, 2 Dec 2022 17:48:03 -0500
+Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA31DECB
+        for <linux-modules@vger.kernel.org>; Fri,  2 Dec 2022 14:48:02 -0800 (PST)
+Received: by mail-io1-xd49.google.com with SMTP id k21-20020a5e8915000000b006de391b332fso5672924ioj.4
+        for <linux-modules@vger.kernel.org>; Fri, 02 Dec 2022 14:48:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kr2FFYjrlmKQpl0FW9cRYWBpZCQQ4WxEePYVPH7PqT0=;
-        b=aig6Am3XKh1f74fIoP78XmyYoMV06xOmH0SRrk9TCuJ30vcxCB6RIZVxlkWc4IW82q
-         2uIqiG3js6ixvzMtrv2w3qAX1gMUNHU9Jpd+qiPXSNFHKbehWNF7Yhw2hnsYzBVHiz+U
-         /xJtJBId/qyG3lUq5Gebw3wMCtj97OgR8Iuh+NX2oUJTao+RSD97NbqgA6jJbdPMvs0d
-         v0DCQHtlp3kq5Ddfnf3WHfDLXQoDLyzfX18K4SfCv7rdPhWhlGu0YOEWfi4OkK0rmIKe
-         Vz8L0l0NKQWQ8QpriqE46JttBua6QTtUfOf6j36qUTSKJGD76Wfrp8mqX71XIjDSw2Ur
-         J52w==
+        bh=FQ0NLGuGNf2nmEf2q9NS2Egdev1pTrmorLb5o1IyVfI=;
+        b=LqvilsrT0WDYFMxva3mnL4sDbBeOOycVYSCdCucnJhIhrH/n9yxuXV+02TVV2VTbYL
+         C3tXr3mtGqS1uTaf2qt2nIG54dW90K6KCQWQRCIQebrSEmkRA9GH+WRYwFgUaj1/AS/U
+         bP3yaiQ7keRJEf4hqI+3CJVYe1wWfEAIsGBM0lheuwdxGXoTwpDViGnXQ+z96GWZGoV3
+         0ZhqWuoL3eIhZbVoc1shTY6tP3oGAi+mm6HJrnRI3ESNEs7PGrMgcO+ftYqbPXH5rX3m
+         c1rk6O928RIWKg/OUXfHoVYJ5eNFrNI+FIPcekp2eGBdxv3WTsMP78mSGXgfMLOIDISH
+         gF7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kr2FFYjrlmKQpl0FW9cRYWBpZCQQ4WxEePYVPH7PqT0=;
-        b=GnbvAbk4JZggnnVcMvbId/6EhDFCNDw70wbTaRHF7TB/wtvkcW2rios7gI2W+/DoCu
-         aAoo5/rkoBECb0ic5GazJVnlohi3LTXduuNHduU3MGlGlGqrqVPwnyROZFllXExUSK5C
-         d88s+x+UGt7h6ySytNzZhe/dvjof/1S+8H+Q+1VoTGWj4US64bQ+y9U8KoL11V7m66uB
-         Hp2cX1aNLeoQaG98r10Ahl2tdwhvSkYQ0bHr4ZG7r9FAYV42b63oMdRKQfmzlsOXUc17
-         ZHx7nD5mWqOPvB4jVRmkYjkJD1tZniK+0/WORzD9N/mbNAF3mWiDeaQ+5Y4cTWcRReCZ
-         S+oQ==
-X-Gm-Message-State: ANoB5pmpQfSBlpDZJMDYnFLs1nTmZ34s1cEfWya2iPK4LCTG2mFb4aqb
-        uImkUs3JWuLES22bKwTbBCJvWYzI8g4t1/f6T4LmjugjFK5d/k3xmzcofNfZHfOJ6O9i18T1SMd
-        JyJvnEb9h72xPAYux1+kEj1HI5Iwf+ZRy0r70qHI46nU9SYhje6AFgvJd0nL7hGm8WwxAzC5LAo
-        oKtbM=
-X-Google-Smtp-Source: AA0mqf6Pfb/78vXpVbkKCzqWVQv6p/o5CGfleflTWNDSxkmzuLudt9k+BC1QXoNkn4IL0y9f0t/YX3baNUddM3A=
+        bh=FQ0NLGuGNf2nmEf2q9NS2Egdev1pTrmorLb5o1IyVfI=;
+        b=xDBK13CgRgho/o0IbYVeSdWQ0zmRh8ClslEPznURziiZ8ptLrfplhpHzhw3IfgU/9A
+         d7rHvIWq/mD58fXTAmVWMUuY0cP9IjX/+LHOciBeh4MQlWH6p09jkinoU8YKud+SbbKG
+         nGTABToLnIzwfDeOeD2vtxuSIPnBA4h+PeA7kIzJX+VqxKIDriVB75MtucjrYcVZhhXz
+         dQNzyRxnYurOIPBhUIAwJz/ugmin2snBXKBrTS7ELQo/+lK9lP2C4/yS8zv98v6rH0Yi
+         rj7TN4+zH1IPaxEbtBogtvqlv2zLf98Sxs9ZU3YnVwQ6YTGobAhzW4l6iMsVlJ+FPzVL
+         oqug==
+X-Gm-Message-State: ANoB5plQIaSVEJeD1Ua/Q5OWJ0K3KBYdncOg1oKAQN0XkRt1SWw0fj91
+        waozEXWg5Q1xavLvrfoTgV5Be7Y0ccNag8WcDG/no4NQMM7cg/H1OcBj9r+kqLepTftl9tqxmz9
+        Lgn2/rrAgNAsf6fAApDuipyiSxfc8A9pCMl1VPtpElxkVe8zghN8rHfY9HjXbHrBCoVm8EEosie
+        U1CJ4=
+X-Google-Smtp-Source: AA0mqf7L8bU8vEGHPG0t4DmWSIrUy40io8GqFAppQrTU+eKacA28oUGbAXAgTHeLSmBBeYrAav3GPwiKH75v4ko=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a6b:fb13:0:b0:6de:383e:4146 with SMTP id
- h19-20020a6bfb13000000b006de383e4146mr27314176iog.48.1670021278767; Fri, 02
- Dec 2022 14:47:58 -0800 (PST)
-Date:   Fri,  2 Dec 2022 16:47:40 -0600
-In-Reply-To: <20221202224540.1446952-1-allenwebb@google.com>
+ (user=allenwebb job=sendgmr) by 2002:a05:6638:4806:b0:389:da33:5460 with SMTP
+ id cp6-20020a056638480600b00389da335460mr13676291jab.109.1670021281656; Fri,
+ 02 Dec 2022 14:48:01 -0800 (PST)
+Date:   Fri,  2 Dec 2022 16:47:41 -0600
+In-Reply-To: <20221202224744.1447448-1-allenwebb@google.com>
 Mime-Version: 1.0
-References: <20221202224540.1446952-1-allenwebb@google.com>
+References: <20221202224540.1446952-1-allenwebb@google.com> <20221202224744.1447448-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221202224744.1447448-1-allenwebb@google.com>
-Subject: [PATCH v6 1/5] module: Add empty modalias sysfs attribute
+Message-ID: <20221202224744.1447448-2-allenwebb@google.com>
+Subject: [PATCH v6 2/5] drivers: Add bus_for_each for iterating over the subsystems
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -68,130 +68,82 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This adds the modalias sysfs attribute in preparation for its
-implementation.
+In order to print the match-id-based modaliases it must be possible to
+reach the match id tables of each driver. With this function it becomes
+possible to iterate over each subsystem which can be paired with
+iterating over each driver.
 
 Signed-off-by: Allen Webb <allenwebb@google.com>
 ---
- include/linux/module.h   |  1 +
- kernel/module/internal.h |  2 ++
- kernel/module/sysfs.c    | 33 +++++++++++++++++++++++++++++++++
- kernel/params.c          |  7 +++++++
- 4 files changed, 43 insertions(+)
+ drivers/base/bus.c         | 42 ++++++++++++++++++++++++++++++++++++++
+ include/linux/device/bus.h |  1 +
+ 2 files changed, 43 insertions(+)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index ec61fb53979a9..0bfa859a21566 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -47,6 +47,7 @@ struct module_kobject {
- 	struct kobject *drivers_dir;
- 	struct module_param_attrs *mp;
- 	struct completion *kobj_completion;
-+	struct bin_attribute modalias_attr;
- } __randomize_layout;
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index 7ca47e5b3c1f4..4e0c5925545e5 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -178,6 +178,48 @@ static const struct kset_uevent_ops bus_uevent_ops = {
  
- struct module_attribute {
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 2e2bf236f5582..8d7ae37584868 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -259,11 +259,13 @@ static inline void add_kallsyms(struct module *mod, const struct load_info *info
- #endif /* CONFIG_KALLSYMS */
+ static struct kset *bus_kset;
  
- #ifdef CONFIG_SYSFS
-+void add_modalias_attr(struct module_kobject *mk);
- int mod_sysfs_setup(struct module *mod, const struct load_info *info,
- 		    struct kernel_param *kparam, unsigned int num_params);
- void mod_sysfs_teardown(struct module *mod);
- void init_param_lock(struct module *mod);
- #else /* !CONFIG_SYSFS */
-+static inline void add_modalias_attr(struct module_kobject *mk) {}
- static inline int mod_sysfs_setup(struct module *mod,
- 			   	  const struct load_info *info,
- 			   	  struct kernel_param *kparam,
-diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-index ce68f821dcd12..8dafec7455fbe 100644
---- a/kernel/module/sysfs.c
-+++ b/kernel/module/sysfs.c
-@@ -240,6 +240,37 @@ static inline void add_notes_attrs(struct module *mod, const struct load_info *i
- static inline void remove_notes_attrs(struct module *mod) { }
- #endif /* CONFIG_KALLSYMS */
- 
-+static ssize_t module_modalias_read(struct file *filp, struct kobject *kobj,
-+				    struct bin_attribute *bin_attr,
-+				    char *buf, loff_t pos, size_t count)
-+{
-+	return 0;
-+}
-+
-+/* Used in kernel/params.c for builtin modules.
++/**
++ * bus_for_each - bus iterator.
++ * @start: bus to start iterating from.
++ * @data: data for the callback.
++ * @fn: function to be called for each device.
 + *
-+ * `struct module_kobject` is used instead of `struct module` because for
-+ * builtin modules, the `struct module` is not available when this is called.
++ * Iterate over list of buses, and call @fn for each,
++ * passing it @data. If @start is not NULL, we use that bus to
++ * begin iterating from.
++ *
++ * We check the return of @fn each time. If it returns anything
++ * other than 0, we break out and return that value.
++ *
++ * NOTE: The bus that returns a non-zero value is not retained
++ * in any way, nor is its refcount incremented. If the caller needs
++ * to retain this data, it should do so, and increment the reference
++ * count in the supplied callback.
 + */
-+void add_modalias_attr(struct module_kobject *mk)
++int bus_for_each(void *data, int (*fn)(struct bus_type *, void *))
 +{
-+	sysfs_bin_attr_init(&mk->modalias_attr);
-+	mk->modalias_attr.attr.name = "modalias";
-+	mk->modalias_attr.attr.mode = 0444;
-+	mk->modalias_attr.read = module_modalias_read;
-+	if (sysfs_create_bin_file(&mk->kobj, &mk->modalias_attr)) {
-+		/* We shouldn't ignore the return type, but there is nothing to
-+		 * do.
-+		 */
-+		return;
++	int error = 0;
++	struct bus_type *bus;
++	struct subsys_private *bus_prv;
++	struct kset *subsys;
++	struct kobject *k;
++
++	spin_lock(&bus_kset->list_lock);
++
++	list_for_each_entry(k, &bus_kset->list, entry) {
++		subsys = container_of(k, struct kset, kobj);
++		bus_prv = container_of(subsys, struct subsys_private, subsys);
++		bus = bus_prv->bus;
++		error = fn(bus, data);
++		if (error)
++			break;
 +	}
++
++	spin_unlock(&bus_kset->list_lock);
++	return error;
 +}
++EXPORT_SYMBOL_GPL(bus_for_each);
 +
-+static void remove_modalias_attr(struct module_kobject *mk)
-+{
-+	sysfs_remove_bin_file(&mk->kobj, &mk->modalias_attr);
-+}
-+
- static void del_usage_links(struct module *mod)
- {
- #ifdef CONFIG_MODULE_UNLOAD
-@@ -398,6 +429,7 @@ int mod_sysfs_setup(struct module *mod,
+ /* Manually detach a device from its associated driver. */
+ static ssize_t unbind_store(struct device_driver *drv, const char *buf,
+ 			    size_t count)
+diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+index d8b29ccd07e56..82a5583437099 100644
+--- a/include/linux/device/bus.h
++++ b/include/linux/device/bus.h
+@@ -161,6 +161,7 @@ void subsys_dev_iter_init(struct subsys_dev_iter *iter,
+ struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter);
+ void subsys_dev_iter_exit(struct subsys_dev_iter *iter);
  
- 	add_sect_attrs(mod, info);
- 	add_notes_attrs(mod, info);
-+	add_modalias_attr(&mod->mkobj);
- 
- 	return 0;
- 
-@@ -415,6 +447,7 @@ int mod_sysfs_setup(struct module *mod,
- 
- static void mod_sysfs_fini(struct module *mod)
- {
-+	remove_modalias_attr(&mod->mkobj);
- 	remove_notes_attrs(mod);
- 	remove_sect_attrs(mod);
- 	mod_kobject_put(mod);
-diff --git a/kernel/params.c b/kernel/params.c
-index 5b92310425c50..b7fd5313a3118 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -14,6 +14,12 @@
- #include <linux/ctype.h>
- #include <linux/security.h>
- 
-+#ifdef CONFIG_MODULES
-+#include "module/internal.h"
-+#else
-+static inline void add_modalias_attr(struct module_kobject *mk) {}
-+#endif /* !CONFIG_MODULES */
-+
- #ifdef CONFIG_SYSFS
- /* Protects all built-in parameters, modules use their own param_lock */
- static DEFINE_MUTEX(param_lock);
-@@ -815,6 +821,7 @@ static void __init kernel_add_sysfs_param(const char *name,
- 	BUG_ON(err);
- 	kobject_uevent(&mk->kobj, KOBJ_ADD);
- 	kobject_put(&mk->kobj);
-+	add_modalias_attr(mk);
- }
- 
- /*
++int bus_for_each(void *data, int (*fn)(struct bus_type *, void *));
+ int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
+ 		     int (*fn)(struct device *dev, void *data));
+ struct device *bus_find_device(struct bus_type *bus, struct device *start,
 -- 
 2.37.3
 
