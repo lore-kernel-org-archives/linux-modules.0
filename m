@@ -2,155 +2,104 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14FB6C4332F
-	for <linux-modules@archiver.kernel.org>; Mon,  5 Dec 2022 19:56:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EDCEC47090
+	for <linux-modules@archiver.kernel.org>; Tue,  6 Dec 2022 09:11:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbiLETz6 (ORCPT
+        id S233451AbiLFJLg (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 5 Dec 2022 14:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60204 "EHLO
+        Tue, 6 Dec 2022 04:11:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbiLETz2 (ORCPT
+        with ESMTP id S233865AbiLFJLX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 5 Dec 2022 14:55:28 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C7FE3;
-        Mon,  5 Dec 2022 11:54:07 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5C91621F77;
-        Mon,  5 Dec 2022 19:54:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670270046; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+CEPKOUcs58XcBBC3BmQTUM9eA7+p9pfmnjTyRe6bBU=;
-        b=n9QqsjMXkjVk9c9DLv/RkVJfCO9dPih0612QxVCsDr+1PT8pnsh0nGyLwBKApivdlnEfqy
-        qRTkgRdzdPx5gCagyJP2auvzxIf+WPv82F1jw1wpqdjg+Cfq9bsPSsUHobH6jqS8YDUdRx
-        YsDiexm+yib29GBLyhET7yHwLiJNozg=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3F5722C141;
-        Mon,  5 Dec 2022 19:54:06 +0000 (UTC)
-Date:   Mon, 5 Dec 2022 20:54:05 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     mcgrof@kernel.org, prarit@redhat.com, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y45MXVrGNkY/bGSl@alley>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
+        Tue, 6 Dec 2022 04:11:23 -0500
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7031EEF8;
+        Tue,  6 Dec 2022 01:11:22 -0800 (PST)
+Received: by mail-qk1-f172.google.com with SMTP id m5so5458164qkg.0;
+        Tue, 06 Dec 2022 01:11:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xecAIxqgdkhlDnskCgGkdXEsAstHBuFzAgEKe0CMxQ0=;
+        b=KfytAYO9F49g5s9lztaqU/5+UzgojlMqCadE0j1zY2ueTk6LROKwr5e33ADEK4LLk1
+         0UJPo6tv4wt996NNvu4vvqbeIIQwOnsaj3WOjxY4bqL82SbHCHI16oGbfCrgTcf8tu4o
+         0GoHJucXkWyDrsB7OpRZrf/yK4M080sQSuypDRy8cNkvbYg/bTLYCc5u7Te0ciA+TeV2
+         q3872gY3q65/BFJUPqV5/p62sGm9HHFLhr3SfnxMvmRhG2IEFa2ebXaD3jFzZmUUoTz8
+         zPdjixlvlJSreK6ZgRLXfWgrXz1KpEMZddeP5OIqZ0u1L79FPPq65qnT5GZldNvYtTow
+         BcWA==
+X-Gm-Message-State: ANoB5pnZWKs1UoL/d+jHzPrRTQ4AxqblNmU0fX0SKenPNw/Vvqm3lTOO
+        RsKAoFp1pawCvpcmwntuC9+VrRtgi3+Osw==
+X-Google-Smtp-Source: AA0mqf7F/AAPhAhlvFo0AEEAXp2XGpuf5b+N+NcFZN/nHPHXqTC4IxZHT3gT5UyEcc/XDQAExGWKwg==
+X-Received: by 2002:a05:620a:1398:b0:6fa:1d51:74a1 with SMTP id k24-20020a05620a139800b006fa1d5174a1mr59677651qki.688.1670317881311;
+        Tue, 06 Dec 2022 01:11:21 -0800 (PST)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id o13-20020ac85a4d000000b003a68fe872a5sm2305892qta.96.2022.12.06.01.11.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 01:11:20 -0800 (PST)
+Received: by mail-yb1-f172.google.com with SMTP id s11so3280889ybe.2;
+        Tue, 06 Dec 2022 01:11:20 -0800 (PST)
+X-Received: by 2002:a25:9:0:b0:6f9:29ef:a5ee with SMTP id 9-20020a250009000000b006f929efa5eemr28698201yba.380.1670317880298;
+ Tue, 06 Dec 2022 01:11:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205103557.18363-1-petr.pavlu@suse.com>
+References: <20221205163157.269335-1-nick.alcock@oracle.com> <20221205163157.269335-6-nick.alcock@oracle.com>
+In-Reply-To: <20221205163157.269335-6-nick.alcock@oracle.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 6 Dec 2022 10:11:08 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVrP1sLGRS999q=2L-5JhxXwcjBLkQREdcJhDerg70OtA@mail.gmail.com>
+Message-ID: <CAMuHMdVrP1sLGRS999q=2L-5JhxXwcjBLkQREdcJhDerg70OtA@mail.gmail.com>
+Subject: Re: [PATCH v10 05/13] kbuild: remove MODULE_LICENSE/AUTHOR/DESCRIPTION
+ in non-modules
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon 2022-12-05 11:35:57, Petr Pavlu wrote:
-> During a system boot, it can happen that the kernel receives a burst of
-> requests to insert the same module but loading it eventually fails
-> during its init call. For instance, udev can make a request to insert
-> a frequency module for each individual CPU when another frequency module
-> is already loaded which causes the init function of the new module to
-> return an error.
-> 
-> Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
-> modules that have finished loading"), the kernel waits for modules in
-> MODULE_STATE_GOING state to finish unloading before making another
-> attempt to load the same module.
-> 
-> This creates unnecessary work in the described scenario and delays the
-> boot. In the worst case, it can prevent udev from loading drivers for
-> other devices and might cause timeouts of services waiting on them and
-> subsequently a failed boot.
-> 
-> This patch attempts a different solution for the problem 6e6de3dee51a
-> was trying to solve. Rather than waiting for the unloading to complete,
-> it returns a different error code (-EBUSY) for modules in the GOING
-> state. This should avoid the error situation that was described in
-> 6e6de3dee51a (user space attempting to load a dependent module because
-> the -EEXIST error code would suggest to user space that the first module
-> had been loaded successfully), while avoiding the delay situation too.
-> 
-> Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
-> Co-developed-by: Martin Wilck <mwilck@suse.com>
-> Signed-off-by: Martin Wilck <mwilck@suse.com>
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> Cc: stable@vger.kernel.org
-> ---
-> 
-> Changes since v1 [1]:
-> - Don't attempt a new module initialization when a same-name module
->   completely disappeared while waiting on it, which means it went
->   through the GOING state implicitly already.
-> 
-> [1] https://lore.kernel.org/linux-modules/20221123131226.24359-1-petr.pavlu@suse.com/
-> 
->  kernel/module/main.c | 26 +++++++++++++++++++++-----
->  1 file changed, 21 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index d02d39c7174e..7a627345d4fd 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
->  	sched_annotate_sleep();
->  	mutex_lock(&module_mutex);
->  	mod = find_module_all(name, strlen(name), true);
-> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
-> +	ret = !mod || mod->state == MODULE_STATE_LIVE
-> +		|| mod->state == MODULE_STATE_GOING;
+Hi Nick,
 
-There is a actually one more race.
+Thanks for your patch!
 
-This function is supposed to wait until load of a particular module
-finishes. But we might find some another module of the same name here.
+On Mon, Dec 5, 2022 at 5:34 PM Nick Alcock <nick.alcock@oracle.com> wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations in
+> non-modules will cause modprobe to misidentify their containing object
+> file as a module when it is not, which might cause it to spuriously fail
+> when trying to load something that is built in to the kernel.  They
+> also cause misconstruction of modules.builtin.objs, leading to incorrect
+> output in kallmodsyms (notating things as being in modules when they
+> actually cannot be built as a module at all).
+>
+> Automatically identified with the new tristate checker, and purged with
+> sed and a subsequent make allmodconfig to double-check.
+>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
 
-Maybe, it is not that bad. If many modules of the same name are loaded
-in parallel then hopefully most of them would wait for the first one
-in add_unformed_module(). And they will never appear in the @modules
-list.
+I can (sort of) agree with the MODULE_LICENSE(), as it duplicates the
+SPDX-License-Identifier at the top.
+However, you don't explain why it is a good thing to remove the
+MODULE_{AUTHOR,DESCRIPTION}, too.  This is useful information, in an
+easy-to-parse format.
 
-Anyway, to be on the safe side. We might want to pass the pointer
-to the @old module found in add_unformed_module() and make sure
-that we find the same module here. Something like:
+Moreover, many of the affected drivers might be converted into modules
+in the near or far future.
 
-/*
- * @pending_mod: pointer to module that we are waiting for
- * @name: name of the module; the string must stay even when
- *	the pending module goes away completely
- */
-static bool finished_loading(const struct module *pending_mod,
-			    const char *name)
-{
-	struct module *mod;
-	bool ret = true;
+If the presence of these causes issues for the tooling, perhaps the
+tooling can be fixed instead?
 
-	/*
-	 * The module_mutex should not be a heavily contended lock;
-	 * if we get the occasional sleep here, we'll go an extra iteration
-	 * in the wait_event_interruptible(), which is harmless.
-	 */
-	sched_annotate_sleep();
-	mutex_lock(&module_mutex);
+Gr{oetje,eeting}s,
 
-	mod = find_module_all(name, strlen(name), true);
-	/* Check if the pending module is still being loaded */
-	if (mod == pending_mod &&
-	    (mod->state == MODULE_STATE_UNFORMED ||
-	       mod->state == MODULE_STATE_COMMING))
-	       ret = false;
-	mutex_unlock(&module_mutex);
+                        Geert
 
-	return ret;
-}
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Another advantage is that this is using the very same logic
-(if condition) as add_formed_module() and not the inverted one ;-)
-
-Otherwise, the patch looks good. I wonder how it works for Prarit.
-
-Best Regards,
-Petr
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
