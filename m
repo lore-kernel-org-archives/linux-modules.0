@@ -2,250 +2,207 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FFB5C47090
-	for <linux-modules@archiver.kernel.org>; Tue,  6 Dec 2022 16:57:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4D64C352A1
+	for <linux-modules@archiver.kernel.org>; Tue,  6 Dec 2022 20:03:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbiLFQ5n (ORCPT
+        id S229588AbiLFUDY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 6 Dec 2022 11:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
+        Tue, 6 Dec 2022 15:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbiLFQ5j (ORCPT
+        with ESMTP id S229496AbiLFUDX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:57:39 -0500
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2082.outbound.protection.outlook.com [40.107.15.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75545F53;
-        Tue,  6 Dec 2022 08:57:37 -0800 (PST)
+        Tue, 6 Dec 2022 15:03:23 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9489726558;
+        Tue,  6 Dec 2022 12:03:21 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B6IwsWP028083;
+        Tue, 6 Dec 2022 20:03:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=qWlKEI4amWuK2Jdg96n7qPsNGWDLiKJlNwUT6+YdwV0=;
+ b=1lH+45wBRxjF0OMmPeaPd29V4vZmhY7IgSf/LofpKlrZc2sbJVzq3z03EbcA2mTxQl8X
+ UFnNJ9xN5xg9AujMpjnfTAL3Xt40xTIeo4X4KLe6owiV0Ul98GRsqN3gg4VyRdaUXlKL
+ Ghb2OJdAZrTHlr42LKyZPQFxTQqiEeq28qSo8gKCLiXoICNvlYzf4xGvUQv0H8kdCGK8
+ CnK681WFJnAqafd2mWda0142TY85SSXnkX+4Ej4wc0FXS8+WUxVJ7IvovEXKO4z6qis3
+ 92cYVvfF7LHCC3UGwX54fa5GNEgyK4B8PzepYOFmh9c3+ZA+6n/aXCC7lCGjQ5aMksoI JQ== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m7ybgrm63-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 06 Dec 2022 20:03:13 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B6J5Mwh030642;
+        Tue, 6 Dec 2022 20:03:12 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa67pk2q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 06 Dec 2022 20:03:12 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JkHdj+1iD+rfZlEAipZY4JH6paS5f6Aiikxze64hXdgbbzGYLwjL8dJPahApYtWSj+Uml7xX4EOk+o5D8oOFy4GFUcPvMFBjRFwuiNj+2swZ9nA7MFPhjlPy8m32wyyKpNqESGjzQ3LIDqfnlNUoD556DS4tCt7oNPI5hw+mYArd+aq16DzbJZWHdb6PsAimRo5nmlB9/ULREYKHsXbRzoS0oTzn1SORDgn5pt9Fcz1loB1HVJAia2EX33IEhRy5/cwQIriRgcF9g/LYI8AUxWdvCqkEfEZ2AGVWXrwQSkWbJzFxOf6U2YfDilQta8v0VKZk2fKrUUnZrXKOu/tcUA==
+ b=Gtg3xskCgBd9T3eBM5Br9yedKTdrCAzomo89Lv8MFPe7fTYAdti02RvH5S/GWcYFYS3nB/vI5EeOkfEOYqX0T7oGK9rY/zE5h3u1sgjvSkC3kUN1D/BZGBceceGgw695hjJAo58a18eMfKfwI0y4bRd180qMaogQBVmT0l5Ebk/aHI70URxlB09AXKyqM7tkWamtz6grsMVUbjQk8pI2tYYel2Csy0JxdOtWhA2ajCJ+c+6J/yY6zDjaTyGKvJmNKbIierQbKOh8jAM8mu8P/xxNV+PJGIdKHEJLFr7wCZ1R3dspkeLcdjhuy5NbguCC0Wjrmw70y4ZKGkPk8ZEEfw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NnCrkItCe7Br8W7P/gdK3sVepl5bdYgNmhFRn7ZtHrA=;
- b=f7eyXPt9b6xvCw4UBolkaZ1805rd7pWXFHb0IbahSvhBWTY9xJdcHC55AxcDDkfSCYzs3qOlD3OmvAB8tHK1tB69Il5+p9ss8QTTFUJy3xBH/9w3YFnQmib2jJBF7HSJVVpSUngXhYIwxP4rXfsz9byANjKitoRPbxPdSfO7nrESjVZ1u0HnQcqlzAwJZ1lpTAdxbUcCMdkfhg0/JcCjT+e4nc8uzkvbf03elF/8LKEhoy0ijMI9cuBye4b+TX8e7yOm5UW/I1eTCeQdfU4rCBv/wwLJ+0KtMBzWACxCZFi0Pv1oBsZOse+9ipUgkPowWEK7IUUpFii2VlFmGHp0xg==
+ bh=qWlKEI4amWuK2Jdg96n7qPsNGWDLiKJlNwUT6+YdwV0=;
+ b=Zriy1HPoVWGjlrKf4xwdQHb5YYuFs1HKXjJoGSVW2mUTIMobLUHA7EpSBlUy0+d/wjNl6qDM3PPBXkNW/6fD4iB49cpmvOZRCVXaWI+dfLoEXyrPE6Gs0J90e73XF7vJ5/xzwH693k6tLLBwO01jCNYL937IkbnyYbF0sRBzWlCfv05marowa+6q/lJyArOSjLZoZApuPUoXeapNSz506cias6r78Eg7nEMEF09upyvkhPA+ZpPahPhLN+1s6D+kVDlq8wHRLlIWJ6bwUzyiru80S2xSL2QZVMmXskukNTVA0O+Mj2WmhmtBUWKtZSG5aL+aGgWiJtQXqiZBvzXVVA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NnCrkItCe7Br8W7P/gdK3sVepl5bdYgNmhFRn7ZtHrA=;
- b=ejWX7lwQw5eKTiCerPDa7ljCZN1pjDSZuoLEnuFl8bHtyAdtF7sBwIP0p9TEME3fgmOZtCWK+4XHgw3j6Iu+O6XfngBG186YD0wE65Ej1ogls2nyMOX57S2QWx8ifemI08eP9mhHJwq2xSL83f4r9QFDO4MxRl+McKDsC4keIIsSSE1brAx7PHm2DpMvzz1/3A4NHwu4wJkG7ghk3J5KHrEmsoyAWeUsstZ+Mr0mwiwAhAN4c0cQIGBxgRW0C+wK/Q9ywdVMOoDBNtQgsjOMqe7APrsx4Eqk1NJaRHJKAW9r8OLWiGXQnXY8U6mOKPpBMkmRP5LBOcZJAmZyBI1u4g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0402MB3406.eurprd04.prod.outlook.com (2603:10a6:803:c::27)
- by PA4PR04MB7744.eurprd04.prod.outlook.com (2603:10a6:102:c9::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Tue, 6 Dec
- 2022 16:57:32 +0000
-Received: from VI1PR0402MB3406.eurprd04.prod.outlook.com
- ([fe80::a207:31a9:1bfc:1d11]) by VI1PR0402MB3406.eurprd04.prod.outlook.com
- ([fe80::a207:31a9:1bfc:1d11%4]) with mapi id 15.20.5880.013; Tue, 6 Dec 2022
- 16:57:31 +0000
-Message-ID: <d528111b-4caa-e292-59f4-4ce1eab1f27c@suse.com>
-Date:   Tue, 6 Dec 2022 17:57:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     mcgrof@kernel.org, prarit@redhat.com, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y45MXVrGNkY/bGSl@alley>
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <Y45MXVrGNkY/bGSl@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0108.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a3::11) To VI1PR0402MB3406.eurprd04.prod.outlook.com
- (2603:10a6:803:c::27)
+ bh=qWlKEI4amWuK2Jdg96n7qPsNGWDLiKJlNwUT6+YdwV0=;
+ b=HuKMbWJCaanPzvAqgK4VDxJzLD/rAePRadIflRwgZbJgAdTLUHrlOLdDOZM6BU3ARa41uamTLrgHcIDJUBZdvnuWOW8/yLd0DrT2t4D9jbjP6RZNeCYICJ77J7G6BHaJcJHdYUn+yNwU9nvFDfyqrUEPf1encpQWlbXDiST1aQ8=
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
+ by DS0PR10MB7271.namprd10.prod.outlook.com (2603:10b6:8:f6::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.14; Tue, 6 Dec 2022 20:03:10 +0000
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::6e94:e2a2:ca1f:2a7]) by DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::6e94:e2a2:ca1f:2a7%9]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
+ 20:03:10 +0000
+From:   Nick Alcock <nick.alcock@oracle.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     mcgrof@kernel.org, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com
+Subject: Re: [PATCH v10 05/13] kbuild: remove
+ MODULE_LICENSE/AUTHOR/DESCRIPTION in non-modules
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+        <20221205163157.269335-6-nick.alcock@oracle.com>
+        <CAMuHMdVrP1sLGRS999q=2L-5JhxXwcjBLkQREdcJhDerg70OtA@mail.gmail.com>
+Emacs:  no job too big... no job.
+Date:   Tue, 06 Dec 2022 20:03:05 +0000
+In-Reply-To: <CAMuHMdVrP1sLGRS999q=2L-5JhxXwcjBLkQREdcJhDerg70OtA@mail.gmail.com>
+        (Geert Uytterhoeven's message of "Tue, 6 Dec 2022 10:11:08 +0100")
+Message-ID: <87mt80l2py.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0630.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:294::13) To DS0PR10MB6798.namprd10.prod.outlook.com
+ (2603:10b6:8:13c::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB3406:EE_|PA4PR04MB7744:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3e3eec24-ec63-45f5-bfc2-08dad7aaf71e
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|DS0PR10MB7271:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc50f776-f883-47d7-2420-08dad7c4e620
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bKAqReNiZcD/iri+1+lWq09Rc54hqBt9hZjznXTkgqpDgByX4td25RCFVZ0Nme2g2xzrDJIHSspakYovEFo6oTRM4+WiznhXb5AB0yc5zomcKpN4yw/+anoDoX5c40b8PMAcbTaajlT7EVhOuVtOZycr7Cb8MNGat2I64BJXAfsw1TYitqOf/v4NE+g/aurC73iDV6jM66+0MrMHIXD1TLCtvsVHrv65X419gmHVcxrmW8FQXTzAYhOP+kKbyMrykWiG6/wjTMaxH/64MfjyutXC/IGCSt4ymLgpyvKoGrdMAeGn2x2bVlR2zEhG7ODWHeXaEb2V33imgq/j7MG5iX+5qt1cLN41xZTANteZ+rELcXZA3/JZxP/jjh+dXl+8Tmr4GVEBacT1XbCUyR+uVs0dB1fQkGTs3PngKuDHXmEpNNUnkowRj656J1bdl3R3rk49HhyEU7NDHUvNdi35Hm19cwtyKqDVs2iKSutjzvXLHzNoVsMk6DyvM+ZY8m9nPsEeQkVWKZlvFtiAfgIpfoIRgA5N4L9ztHYdUiUkgfHXdvhv/q1eA47z0WfoP1aDFPtJmAvbphy0gan/0gCVw9EtXPk2M56FrdllOIK17H3Z8PyA3OfQSqPJQp6W238Hpo50EPiVk/45vv/W1/Gf9omgtO34l+mnqVeo74CQ981nB/N6vejH74UA/hCnXmWdwdeHNIul2Cgj9idpNRW3AanMmtDdneOJpKKcsyJ81s3XWtIFt4HWvGvV1s0BtGEH
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3406.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(366004)(39860400002)(396003)(136003)(451199015)(36756003)(38100700002)(31696002)(86362001)(6862004)(41300700001)(8936002)(2906002)(4326008)(5660300002)(44832011)(83380400001)(478600001)(6486002)(6636002)(66476007)(37006003)(66946007)(2616005)(66556008)(31686004)(316002)(8676002)(53546011)(966005)(186003)(55236004)(26005)(6506007)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: qdUoinNdHIkP1Xx47Ku//kb5IbCRBvQepp60s3sJR+6xf4N6G7ygZ3nlYppZUerq47QyeJ8TovpmBFcR5pDbvHyAXIWky0MDMoIGBWEjPEJhHTyvTmoPfGXhkNW5TLrhGTSbmUf6ygQg9QElIznVENj/vfQpLO5mH3yzcorvMid8mcJ0hSPymnLmW00vqpEAYa47WoZmwrpKo0wMoZ6wHUBbd84utUcsIWWUudrabvmY9CJOcPbdxSV44hlGnaCTSBP+G74uqJU9lKvdbKuTjYBDjVRlVu0QhbqBnxuGU2qo3xWXbF2vzjuuO8iJI8+p1uLmVmS2qPCTpha/FJBhAlp99Q1Gb4HzHOT1JPtrZLIUbDIz8/5jpbpArFCgJdcMsNwiuQ+mRw3VtzB6Ri7BInnK4HL0evW2rYGy4QCjkZRnrlehVKI9e2IjWg+bIO52qzrncGnVAfVZbO0uoSnjvfTiQUkQO91WetzkvNgn951ZSV1o1Be2gW7q4E622pH0Mwme1iQ4Cb+zQQIKG/HdP0iXvbabK01UP4Q8LhDqwRqudCfU7JDaProZHLD3Qf3iJBufZPJe1jvpVr8ktxtdZZ/sFULfBeso+Ri4tf6u4NkhlBl7dJFmmRpLTxdqDtPToO+ALciRAzolVqDxqlCDlQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(376002)(396003)(346002)(39860400002)(451199015)(2906002)(66476007)(41300700001)(86362001)(36756003)(38100700002)(186003)(9686003)(6512007)(66556008)(8936002)(8676002)(4326008)(44832011)(5660300002)(66946007)(6666004)(6486002)(316002)(6916009)(6506007)(53546011)(107886003)(478600001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Slh5eThjQ3o5eGtiNUYwZlBqaEtTK3g3ZTdSTlVXdXM3aWMzeHNiUkxzck9z?=
- =?utf-8?B?WFRQd0dHblNtdXhwcDJmR2xYUndGQ0R3UWRHTS9hTVlzSnhud1lHZEVCaXp1?=
- =?utf-8?B?TXp2NTJyVFpuWmlDdkNRbkNXK3FITk5DZDBpR2V6ZW5OcFlxNWVnaHlPbnBp?=
- =?utf-8?B?VVhxQ1UzS2JBQnoyWGl0Qmh2amYxKzliZVRFWmhsODJCSGczNzNhaUloWTVk?=
- =?utf-8?B?a1U4ckRCcE9tK0FKWEZvZGZHUVE5cytFT2ZXMlVVK2daL2RIaGd2QW5oSzZk?=
- =?utf-8?B?K1daRkdFRkhzQ1hIVGV6UUhHQ2s1ejJBVFVMUVJCRG1iSXdsNnIvMThIMU4r?=
- =?utf-8?B?RW9XTVhyYUErcXFWUWV6T2xGYzkzUUszd1p3R2NOSzV0WDYrKzJQRm1xTDI3?=
- =?utf-8?B?R2tIaUY5Rlk5RWE1K09qRXlhM0FUMmNyeHY0SkYzY3RpVUVjUktWbWlEV2xM?=
- =?utf-8?B?QTcrOGQyQ0JLL1Fnb1Q0V0ttZmN6djNoN3Iyd3hudTZXWTAwa3BkcFZoMUMx?=
- =?utf-8?B?dHNjb3V5N2lHOUlVNWF5N3JBSStqV3RFUGFlV1MzL1NUTkFsQ2pQc3RuUFZZ?=
- =?utf-8?B?ZWw3TTB1NUYwZjRZY1Q5VFV1TElMZERZZ3podEM3K0p0QVk5V3lkQ0FFRFBQ?=
- =?utf-8?B?ekNJcFFTZHBWYzhPK2hJb3Z2RzNncnJ6Wnk0bnpaaUdXWHcrWlloZHFYUEd4?=
- =?utf-8?B?T1JlMXRTeTRpa1RoUERlY3VNbFRVeTRjRXJCVXAxZWRWOTdLZzZQYTR6d2Zh?=
- =?utf-8?B?NUVHazF0VnNjcXRHWS9DTWxzaU1nTWJTUWNnNGFHRElLTmVSdWtvTXlOS1hr?=
- =?utf-8?B?ZXVZOXc2Z25hREJQYUQzTGRIcjJrdEZLRVVOOGFVWVJhNWV2Vjh5Y29OZktB?=
- =?utf-8?B?SFJSR1JUaHZYMUE5dHBnbUtwZHFkMFRNSjIwUHdKTW1QRk1OQnBPRlI0bDlo?=
- =?utf-8?B?UDd0RXJvSzFCQWFkK3J6OGx1cWVoeE1yYUt2czVxTWlVY0FFTEVuaFowcjlF?=
- =?utf-8?B?RTBObVA0TlhETUQ5RmRNMkxZMVZGcEVwaGF4TlFjZGpZN25PQ1huNTVVZ1Qy?=
- =?utf-8?B?d0RYbzJtenB0NTJpMUVpMnZlTUdrVWxqenV0RTZsd2djZmsvMWtPUjl2U0ly?=
- =?utf-8?B?WWs5WTNzNC9MdXZMNUNBOXJmdE5wdllveGJUZFQzTjhqL3pWdTVZbVpKYm5J?=
- =?utf-8?B?RElxS2daMU9hTTNnekEyekFQRUdUSWRadzBDS1JlaUdTZkRNUG9WSVhscW9Q?=
- =?utf-8?B?Rld2enFqaS9OWk1PR1MvQ2d0Q0g0TjA4MXNqMHhrUE5haXRwQ0txV2FuOGJQ?=
- =?utf-8?B?S3ZUK0FHR09jeHZyYm9oY09YWFQ5ejFiTC9KcFlFVUJYYjZJQndxVTZpelpZ?=
- =?utf-8?B?c0JXZGhRcDVrUWpXSkl4TzNFNC90MDN0akErNUlDcHpPc01CMEU1eG9YU2Y5?=
- =?utf-8?B?RmhoSXZQYnBQcloxS0hHSzl1dzlPL1Y0dU1GNlRCYmpMNlBYRnlpY2FqVzh3?=
- =?utf-8?B?b045czBXaGhha3htR29nVTVjM29RdXJiYWZLRVdWRzBZSHFDalN3VjBCTmhQ?=
- =?utf-8?B?WlBLT0tkZzFIekRBYzlKUFYzOGN1cDMvaFd0TDBrU0V5MWdqSktZMFNDRHgv?=
- =?utf-8?B?QkRFWTdNeHp0QjVSdEN5cWt5R05zL1VHT3IxQjRUTjhwSkMxRDMxT1g4dmtG?=
- =?utf-8?B?UjAyRGFXSXZZcnY2NFVWeE1ja2NRSjF4Q0g5WGt6RVBrK1h1dUFpa0h1cmdB?=
- =?utf-8?B?Y1ZKYitNRFBsNTZ6TGozOEhrSDhYNzNSQ3F0a2d6WFRhMUtNWitjaWVyOG5V?=
- =?utf-8?B?aHlxUGFrMlluQUEwVzVVdkI0cVZabUs3SHp3bkJPOVkzL1BPVzJKRStlajZI?=
- =?utf-8?B?ZWlxOHdyaGEvSnVMdUcxdE81VnByWmdvQmhnakdDVWdFWWdKRVJ6dS9OcEp1?=
- =?utf-8?B?ZG5QTHFXZVhrTVN5REdTRjRQZndJMGN6aTg3cjliV25WVm1TTnRmSjc0K0pi?=
- =?utf-8?B?ZEZ5K2VrMHp3ZCt3Z2ZNMmJLbEd3Rmh4Qm5nQ2RjcThjM2xEdTlMVEtOc0hH?=
- =?utf-8?B?emtGaDhkaCsrWlI0bHp0K2ttUUdjcGRpZmN4NHpiZEs3elZoOEdiQ3BaUDg1?=
- =?utf-8?Q?tE6uC2UXqD1rsBiBEGikLvh+1?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e3eec24-ec63-45f5-bfc2-08dad7aaf71e
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3406.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NkIY+RsYla+lY1ice+W4fsXYRJutaNfZqQyxQjcd5IaacTBLpgwa2f/pDeP5?=
+ =?us-ascii?Q?1zcWP7BLLV5aXDz80fWa/Si/wmtJ6FOCM+4lNabqwe/HX4Bjez57cwVvWmcP?=
+ =?us-ascii?Q?ntHTfmIXhblMahXIh6u8a48Z7ID87fG6Q5rV3OOi1SVmuYlejlHJjqnVQgVs?=
+ =?us-ascii?Q?r3sPKuVlZAloYdatqDO0bqjYoHRPjZUBpkhUGW692YSYWr0nuMJ4H6H0cPYh?=
+ =?us-ascii?Q?Pcy4Dv1hNVIPRHLQ/xwgpi/U4D9YvQdWkcbogFtx1fW20MwsROgenJX93bqI?=
+ =?us-ascii?Q?CQPd0j8kDA6a66UHtjpIM/u3Y5DYP5VWl2RsyYlJIZWFfsza/IYb0dqT7vbZ?=
+ =?us-ascii?Q?pzLv8cSuGEvwGppaOoztz60wRPZxXvNB/Kq4E5HiMbpxDRC5PWgxxIJvqYGl?=
+ =?us-ascii?Q?OPPJcx6FgFZfMlPKdzV/pUidqu4wAxRQ436H93PocyicSF+0wY27EuHdnM7B?=
+ =?us-ascii?Q?PPOChBgo2TW0mgYSzLMjtImR8+DGGOFLaBed1TaGgo6uuhFbNBZjyVUVOLfQ?=
+ =?us-ascii?Q?RGGS5d2xY76SS93gBBzcgBpB97juIxs5OfXOovSZyIvRkHPA1e9VwMwC847g?=
+ =?us-ascii?Q?ct941RfsG9M1itMUDq97wy+wPLkDpfahI9yzQTbnMvmr6JpfeAuz8a+k3wKJ?=
+ =?us-ascii?Q?+ZttAwx3uhzp3RvSw9O4h7HsakY4uq72wbx7eVCmQyVatBj/L17+bzxafAoV?=
+ =?us-ascii?Q?WO0r+zCVOMGylnFVT/Mf/ysPNgiduVIYYZdocGjG6wqNnMu2f+0t2z6RWm20?=
+ =?us-ascii?Q?eLXHYUzSGT991dy00fVSa44m79+e5+JCMSOjHlTdvvdyIl2j3okC1aGEWs+g?=
+ =?us-ascii?Q?Edes8G2yBgivRuX1qjfFWjGAk0SP+dFcKTFnU5pLpk2Q2qYNhI5F43V0htFx?=
+ =?us-ascii?Q?rmpHFrN/tbvzHqFQMXTLOpAIDIk1Gk8VIaEUa3p7MlC0Sys2e0/Ks4VlM61G?=
+ =?us-ascii?Q?L/aFg7uxv1L7wmIwxT23A4gw0aIu6Bu3JNj7RFRROEd/dQ45qUhqZKzew/uh?=
+ =?us-ascii?Q?K+vt17NQiNttxuiXhvUqsW+7wTUeJ+adNEGEZU9rjUtft7nkD7g1wnhvfZzP?=
+ =?us-ascii?Q?fJ5azfQpEswftl71j2yA26rruxJW0yG8Swy9nUc9n4uCY4L5RweK+zlK73k6?=
+ =?us-ascii?Q?NvFK1jyFc/GZQ0caV+Sm1sdImgkk9gAUCJuACglrIy6v+LEuiHVGsHT8jtZR?=
+ =?us-ascii?Q?alNYaDOzgpecjAaIrN924xEjefjHdn0YY9mP36Vnww1VpDfKRpR5EJN7elNq?=
+ =?us-ascii?Q?VZhTTEUqiPHgo8mXaSppIJK9c364soaUeRroD8zJlq94qmfPwewHQaCcySMi?=
+ =?us-ascii?Q?pALWO0eW0x3bnL/SMRIOqYpkCdDMJ6piKOoSlIabdLxggpYCsgk1vG2tkTa5?=
+ =?us-ascii?Q?OCoBfIZBixyvmgxhiNPPKL1zpcf3STdgeY8wOjtrhQgT7IWQ+0mJeqm6z4Tu?=
+ =?us-ascii?Q?oAR2Ub1wAuBAn4OMovkRoGMGreef8MYbVcNjcRfgVovdjPMHGmfZa3Zd9FXk?=
+ =?us-ascii?Q?NZVoO06wveCfrgYgW+XSf4qF8aBJukSJdMYIUkESIOgLuXsHcNiFGb9D4LIB?=
+ =?us-ascii?Q?inhQ/+6HA8+Ypf9jpXR60QJsQlwvxosVl+DswkX8ocvDJExNy+n3hRgPCDlZ?=
+ =?us-ascii?Q?+A=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?BxAx8yvLlnaytpsG6nTNPgHeVMXSgzuWQGLjp7eOBZp9QuvrbHlDOC7kFmlJ?=
+ =?us-ascii?Q?woj8Dt0PCd+qqKWy7wtM46OqcLikrH3a0w1zwe060wp1Xtdhfwb7K8fyQpzM?=
+ =?us-ascii?Q?ZEPrN6/yhihPztuS3a7ijf73oaublbFIdbOOQGUmeRXd48xWeL8mGvglPtIu?=
+ =?us-ascii?Q?TwVPBDfgbJlIdMPLtI/WWccndT7FVKZNNXTn0NAIOajDTZPkDzPcQBeH0X4i?=
+ =?us-ascii?Q?wMwG80a4tV/PqlbV0J71i6qwaDB1uGsen/tvTHOOEyrQa54Yj+WMrqhJqjPE?=
+ =?us-ascii?Q?2TtXu46QYDEzK4AIOt9ZO6S9v3Pf0L5/dSR0hZjorvoMNMzT44m0hGDU7YXQ?=
+ =?us-ascii?Q?+3hXUOiv3DuGkiZK26oIao8f5U4LZgqgs/eAtvsWn98qY0ZSVfM9wLiLIjWc?=
+ =?us-ascii?Q?9rbJ5L5JJu3ajm8R6wrYzKTdTkfH/XAXSqcOztRZ6WHCo5YgOt02wPLqJ9e4?=
+ =?us-ascii?Q?ZbQttuSE960Dn8ijFvawDnNUqUaBHg6FQnDF1JfVrcyVZQD6CZEVGnyqjhUY?=
+ =?us-ascii?Q?p8fNBmhDFbhEdcrcraJMJgVf5ZK36wJaeHpwTQ/cJnEfsQh3efAsCj7qUw8p?=
+ =?us-ascii?Q?5QxvevUMYIg3SjtST2OAGGN9qjQ7n/XiuxqH1ejydPx/DQg+I0axFzP3BBbN?=
+ =?us-ascii?Q?VMHY9Afs2ZUpWLKSOBHgkh8MSmKp+in+XJi5j5ayFur2znMWu153uzO+2n5a?=
+ =?us-ascii?Q?vSYkOB4SDO/1ljAhV2IEu7dJuRTg0uiDWorAU68mS5Ju80CL1xW7wIBNegYq?=
+ =?us-ascii?Q?srb0eM0n4o+hoBX2Yz908QIIXNZei/HNRYVv2zKh34tHvaw8QbLqN0kkuyGo?=
+ =?us-ascii?Q?IcTmEdJOQA07HA16SvVJbRUHH1HLIG9DcNXVxQc5wH/h8nIWZL7AP6rTI4US?=
+ =?us-ascii?Q?u7D6ALa6orVElZlVi2M00JFXa7Dy8iRVmlPphHS4Q0Nl3ADXRASSxDZ7um+Y?=
+ =?us-ascii?Q?E/7ABs3rpk7gRjp+l9I0K+v4tm9jdQucmU70gwqrgfx1eRd+xBIJl0tpihzN?=
+ =?us-ascii?Q?4MLQOxyhutlQE23FrlEAmO9Fww=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc50f776-f883-47d7-2420-08dad7c4e620
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 16:57:31.8621
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 20:03:10.3274
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wvkPiiOnXK5A3y+WfNoQjMOHKHz5ch5BJWpBBtJoY9F95oDaKHc2HsEDcqvB2xDJQgXUg49D/71T2F5yLgekrA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7744
+X-MS-Exchange-CrossTenant-UserPrincipalName: aspjyDMWjQ1QvqX0iYDEJf8BNsJEvdpDwHfOYWwtEF/BAxpPMSrWtLTHuOKzqUHS3VDBH8uun1E8Feh3oq8jlQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7271
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-06_11,2022-12-06_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212060168
+X-Proofpoint-ORIG-GUID: RG71rR1O5fYNrF05VKiiKP6tQUa-ZoU6
+X-Proofpoint-GUID: RG71rR1O5fYNrF05VKiiKP6tQUa-ZoU6
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 12/5/22 20:54, Petr Mladek wrote:
-> On Mon 2022-12-05 11:35:57, Petr Pavlu wrote:
->> During a system boot, it can happen that the kernel receives a burst of
->> requests to insert the same module but loading it eventually fails
->> during its init call. For instance, udev can make a request to insert
->> a frequency module for each individual CPU when another frequency module
->> is already loaded which causes the init function of the new module to
->> return an error.
->>
->> Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
->> modules that have finished loading"), the kernel waits for modules in
->> MODULE_STATE_GOING state to finish unloading before making another
->> attempt to load the same module.
->>
->> This creates unnecessary work in the described scenario and delays the
->> boot. In the worst case, it can prevent udev from loading drivers for
->> other devices and might cause timeouts of services waiting on them and
->> subsequently a failed boot.
->>
->> This patch attempts a different solution for the problem 6e6de3dee51a
->> was trying to solve. Rather than waiting for the unloading to complete,
->> it returns a different error code (-EBUSY) for modules in the GOING
->> state. This should avoid the error situation that was described in
->> 6e6de3dee51a (user space attempting to load a dependent module because
->> the -EEXIST error code would suggest to user space that the first module
->> had been loaded successfully), while avoiding the delay situation too.
->>
->> Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
->> Co-developed-by: Martin Wilck <mwilck@suse.com>
->> Signed-off-by: Martin Wilck <mwilck@suse.com>
->> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
->> Cc: stable@vger.kernel.org
->> ---
->>
->> Changes since v1 [1]:
->> - Don't attempt a new module initialization when a same-name module
->>   completely disappeared while waiting on it, which means it went
->>   through the GOING state implicitly already.
->>
->> [1] https://lore.kernel.org/linux-modules/20221123131226.24359-1-petr.pavlu@suse.com/
->>
->>  kernel/module/main.c | 26 +++++++++++++++++++++-----
->>  1 file changed, 21 insertions(+), 5 deletions(-)
->>
->> diff --git a/kernel/module/main.c b/kernel/module/main.c
->> index d02d39c7174e..7a627345d4fd 100644
->> --- a/kernel/module/main.c
->> +++ b/kernel/module/main.c
->> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
->>  	sched_annotate_sleep();
->>  	mutex_lock(&module_mutex);
->>  	mod = find_module_all(name, strlen(name), true);
->> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
->> +	ret = !mod || mod->state == MODULE_STATE_LIVE
->> +		|| mod->state == MODULE_STATE_GOING;
-> 
-> There is a actually one more race.
-> 
-> This function is supposed to wait until load of a particular module
-> finishes. But we might find some another module of the same name here.
-> 
-> Maybe, it is not that bad. If many modules of the same name are loaded
-> in parallel then hopefully most of them would wait for the first one
-> in add_unformed_module(). And they will never appear in the @modules
-> list.
+On 6 Dec 2022, Geert Uytterhoeven uttered the following:
 
-Good point, a load waiting in add_unformed_module() could miss that its older
-parallel load already finished if another insert of the same module appears in
-the modules list in the meantime. This requires that the new load happens to
-arrive just after the old one finishes and before the waiting load makes its
-check.
+> On Mon, Dec 5, 2022 at 5:34 PM Nick Alcock <nick.alcock@oracle.com> wrote:
+>> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+>> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations in
+>> non-modules will cause modprobe to misidentify their containing object
+>> file as a module when it is not, which might cause it to spuriously fail
+>> when trying to load something that is built in to the kernel.  They
+>> also cause misconstruction of modules.builtin.objs, leading to incorrect
+>> output in kallmodsyms (notating things as being in modules when they
+>> actually cannot be built as a module at all).
+>>
+>> Automatically identified with the new tristate checker, and purged with
+>> sed and a subsequent make allmodconfig to double-check.
+>>
+>> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+>
+> I can (sort of) agree with the MODULE_LICENSE(), as it duplicates the
+> SPDX-License-Identifier at the top.
+> However, you don't explain why it is a good thing to remove the
+> MODULE_{AUTHOR,DESCRIPTION}, too.  This is useful information, in an
+> easy-to-parse format.
 
-This is somewhat similar to the current state where new same-name insert
-requests can skip and starve the ones already waiting in
-add_unformed_module().
+I was concerned about that, but I kinda thought they went together and
+it would be neater to take them out in one go -- but I'd be happy to
+keep them in and only drop MODULE_LICENSE.
 
-I think in practice the situation should occur very rarely and be cleared
-soon, as long one doesn't continuously try to insert the same module.
+> Moreover, many of the affected drivers might be converted into modules
+> in the near or far future.
+>
+> If the presence of these causes issues for the tooling, perhaps the
+> tooling can be fixed instead?
 
-> Anyway, to be on the safe side. We might want to pass the pointer
-> to the @old module found in add_unformed_module() and make sure
-> that we find the same module here. Something like:
-> 
-> /*
->  * @pending_mod: pointer to module that we are waiting for
->  * @name: name of the module; the string must stay even when
->  *	the pending module goes away completely
->  */
-> static bool finished_loading(const struct module *pending_mod,
-> 			    const char *name)
-> {
-> 	struct module *mod;
-> 	bool ret = true;
-> 
-> 	/*
-> 	 * The module_mutex should not be a heavily contended lock;
-> 	 * if we get the occasional sleep here, we'll go an extra iteration
-> 	 * in the wait_event_interruptible(), which is harmless.
-> 	 */
-> 	sched_annotate_sleep();
-> 	mutex_lock(&module_mutex);
-> 
-> 	mod = find_module_all(name, strlen(name), true);
-> 	/* Check if the pending module is still being loaded */
-> 	if (mod == pending_mod &&
-> 	    (mod->state == MODULE_STATE_UNFORMED ||
-> 	       mod->state == MODULE_STATE_COMMING))
-> 	       ret = false;
-> 	mutex_unlock(&module_mutex);
-> 
-> 	return ret;
-> }
+Only MODULE_LICENSE invokes MODULE_FILE and thus ends up introducing a
+KBUILD_MODOBJS entry that triggers things going wrong iff not a module:
+so only it needs to go out (or be replaced with a variant that doesn't
+invoke MODULE_FILE, if you want to keep the license in too -- but if the
+thing is no longer a standalone entity at all I'm not sure what meaning
+it could possibly have).
 
-The new pending_mod pointer has no ownership of the target module which can be
-then destroyed at any time. While no dereference of pending_mod is made in
-finished_loading(), this looks still problematic to me.
-
-I think it is generally good to treat a pointer as invalid and its value as
-indeterminate when the object it points to reaches the end of its lifetime.
-One specific problem here is that nothing guarantees that a new module doesn't
-get allocated at the exactly same address as the old one that got released and
-the code is actually waiting on.
-
-Improving this case then likely results in a more complex solution, similar
-to the one that was discussed originally.
-
-Thanks,
-Petr
+-- 
+NULL && (void)
