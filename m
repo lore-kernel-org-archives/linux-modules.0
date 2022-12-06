@@ -2,105 +2,216 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDD17C63704
-	for <linux-modules@archiver.kernel.org>; Tue,  6 Dec 2022 21:03:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8B21C3A5A7
+	for <linux-modules@archiver.kernel.org>; Tue,  6 Dec 2022 21:53:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiLFVDH (ORCPT
+        id S229724AbiLFVxY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 6 Dec 2022 16:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
+        Tue, 6 Dec 2022 16:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiLFVDA (ORCPT
+        with ESMTP id S229715AbiLFVxW (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 6 Dec 2022 16:03:00 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F946167DD;
-        Tue,  6 Dec 2022 13:02:57 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 3A9BB3200916;
-        Tue,  6 Dec 2022 16:02:54 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 06 Dec 2022 16:02:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1670360573; x=1670446973; bh=O9LowNv7Tt
-        p6oS8aiZUbddfsOjLqyuslyKaWKZkNyKI=; b=wDpYiRrFN0zv3w0K8BPhTJJknB
-        whSsrh+f4mjjdUph9NJDNzvUJi78iFp23qY/BfCg0PC32donkELnnYRJ+0MtoO1H
-        y+yhwsR/WNrkxJo/DiYJ/4Kt+7W9lspzycdfeZOavnRr/cf5cVAg6F8t+Fl3megx
-        0D1JNG3An/Xge6NVSjL3agXAuCj9y2WfZZSti1wY/BudempbpF054zm0PiT+HAYZ
-        BSk0E5XUcPFqlrf6I/ZFyHCynh6Z/LSVTMgsRy37m2xzH+Q1uIdIL2Rg73pVngHQ
-        PSvfRLn5CfOAI5x6UTtUrI/YlwbWc0oxAXdCRr21nQb9jhL9D/6L2hLbAENw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1670360573; x=1670446973; bh=O9LowNv7Ttp6oS8aiZUbddfsOjLq
-        yuslyKaWKZkNyKI=; b=pDNuJSVZNK/VASCmeIRn4p8eC2ie0noKNGEZzsdXJruV
-        UI7I7qpslBAYsyjpNE2cTcHhBpZEdUj7vnlXAcgEReGtxCpHf9aXMug/wltFkHZz
-        po1d/l4CqK3XSmHiiQR8BLXUPwAc5KjkQoUVzEPxTrY1KSMkQ//ScAZP+zRqXES9
-        P2Gh5zeWbm3MTDO5uxnfDnBfdvKcD582Hda3vL5Tw51tkoYEoYmuRdMt5zhVXZXj
-        fP+kyzhJKyn1PjIbhpb0520J6OLZOnlTMnyuejgYaDSqSWdpf9lqi6F1H0k0lIxy
-        X57h2j9t2QyPG8h2WkXYf6OkySb9WevWzAwh28u43g==
-X-ME-Sender: <xms:_a2PY8ZwZSfm9MRS6z0Txk84ut1YX9bG4UV0V8fvoMruZYoSqXrlQA>
-    <xme:_a2PY3YEAdwSCt30fD2UBbU7MxTE1irJzRexgHB8eElWsKZ2aSCG-f0yRdB1Vyt1I
-    lPKqYbs9F03k3uBV4o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeigddugeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:_a2PY29Cmf7veQnMQ7FYPnEGPzu8zSt8iRuxVDwRTgw-DTrsuNCCUA>
-    <xmx:_a2PY2pvKN5PUz60MY8d7QYjTjzQndppupJgb2ymUwk5srgaZ9Q3dA>
-    <xmx:_a2PY3pwTMmEpQyHUSWmQPU2VJPwwGcSjHj6qOCtbeIzPDOtbzn92Q>
-    <xmx:_a2PYzKYLBa-r2blCGgtnIdk9OU6nwcqc74dwdpZuN8ObXwcBPJHJw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 00F3BB60086; Tue,  6 Dec 2022 16:02:52 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <5f0a5ea7-2d48-435f-aaa0-82b6ef8cfcc5@app.fastmail.com>
-In-Reply-To: <87mt80l2py.fsf@esperi.org.uk>
-References: <20221205163157.269335-1-nick.alcock@oracle.com>
- <20221205163157.269335-6-nick.alcock@oracle.com>
- <CAMuHMdVrP1sLGRS999q=2L-5JhxXwcjBLkQREdcJhDerg70OtA@mail.gmail.com>
- <87mt80l2py.fsf@esperi.org.uk>
-Date:   Tue, 06 Dec 2022 22:02:30 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nick Alcock" <nick.alcock@oracle.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Andrew Morton" <akpm@linux-foundation.org>, eugene.loh@oracle.com,
-        kris.van.hees@oracle.com
-Subject: Re: [PATCH v10 05/13] kbuild: remove MODULE_LICENSE/AUTHOR/DESCRIPTION in
- non-modules
-Content-Type: text/plain
+        Tue, 6 Dec 2022 16:53:22 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6878A42F7D
+        for <linux-modules@vger.kernel.org>; Tue,  6 Dec 2022 13:53:21 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id h193so14560984pgc.10
+        for <linux-modules@vger.kernel.org>; Tue, 06 Dec 2022 13:53:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rR7AezfryDSZesedhBewMciK+qFNUMypeH+qg8UKslY=;
+        b=jOzVZpcNG3thP3z85CN8Tvgokln54TFy5mIRBK7HOtwTvfLKN5gaJokT130HHKKQZh
+         ibOQ0ipxGG5qoIYaKmWyjz/yx8eXeSO4iTiWbmAo5+LcQqFUgU8iWtfi4KuP4H6oT0PH
+         R4Ta21bKoaOorIvBvc+uK1d4AkkxdtzpnLhN0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rR7AezfryDSZesedhBewMciK+qFNUMypeH+qg8UKslY=;
+        b=GxP2agaeksr/h7PBW4EKsts2NPTOg8DdRi8ZIqJgHo66ktMbVEFIAyoTid6fx08rQx
+         6DQRnaN6rbajlVQ/iqvZqhjUF0tCf08Flg/ukOW0/hVRt+8JBqHIKSWI3w7mMeJOhShn
+         Yg5MQYfOtME7It05sbRk5aPGshpz3Snx6yna0pQUSxO/tQOMkvZD6mzH0+6YOCCxd4Vn
+         LbMOFNcCRBGEVj7gY7W2JHjuQtV47F7iW1+Y26pi7AEpLpD+uIWonbhy5h9s3NEVDk5m
+         R/EizwG21ZTVRYuJB9sqxEgiAXcSdD89l5BW0SetTnL0kn494KytSJNSic21IRXgoiCx
+         aNCA==
+X-Gm-Message-State: ANoB5pnjAAcilvbM7a/Uaytaz/DggZhdtZ7cA389thM9K9ReswQJt7Gl
+        +f3ORFc3cKNt8ycq0J50XF8CqQ==
+X-Google-Smtp-Source: AA0mqf4KsT5qv1qb2rSbbKG1mjZtwWikGqgMdjgeun2HsjE+5jdNvFH5zWXJao5tB5J8wzB4yu9Yqw==
+X-Received: by 2002:aa7:8e54:0:b0:574:fddf:9946 with SMTP id d20-20020aa78e54000000b00574fddf9946mr48212025pfr.79.1670363600855;
+        Tue, 06 Dec 2022 13:53:20 -0800 (PST)
+Received: from smtp.gmail.com ([2620:15c:11a:201:cb30:cf01:5668:eda7])
+        by smtp.gmail.com with ESMTPSA id z4-20020a170902d54400b001769206a766sm13034661plf.307.2022.12.06.13.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 13:53:20 -0800 (PST)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Nick Terrell <terrelln@fb.com>
+Subject: [PATCH] module/decompress: Support zstd in-kernel decompression
+Date:   Tue,  6 Dec 2022 13:53:18 -0800
+Message-Id: <20221206215318.3955400-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Dec 6, 2022, at 21:03, Nick Alcock wrote:
-> On 6 Dec 2022, Geert Uytterhoeven uttered the following:
-> Only MODULE_LICENSE invokes MODULE_FILE and thus ends up introducing a
-> KBUILD_MODOBJS entry that triggers things going wrong iff not a module:
-> so only it needs to go out (or be replaced with a variant that doesn't
-> invoke MODULE_FILE, if you want to keep the license in too --
+Add support for zstd compressed modules to the in-kernel decompression
+code. This allows zstd compressed modules to be decompressed by the
+kernel, similar to the existing support for gzip and xz compressed
+modules.
 
-That sounds like a better alternative
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Piotr Gorski <lucjan.lucjanov@gmail.com>
+Cc: Nick Terrell <terrelln@fb.com>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ kernel/module/Kconfig      |  3 +-
+ kernel/module/decompress.c | 92 +++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 92 insertions(+), 3 deletions(-)
 
-> but if the thing is no longer a standalone entity at all I'm not sure
-> what meaning it could possibly have).
+diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+index 26ea5d04f56c..424b3bc58f3f 100644
+--- a/kernel/module/Kconfig
++++ b/kernel/module/Kconfig
+@@ -221,9 +221,10 @@ endchoice
+ 
+ config MODULE_DECOMPRESS
+ 	bool "Support in-kernel module decompression"
+-	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
++	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ || MODULE_COMPRESS_ZSTD
+ 	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
+ 	select XZ_DEC if MODULE_COMPRESS_XZ
++	select ZSTD_DECOMPRESS if MODULE_COMPRESS_ZSTD
+ 	help
+ 
+ 	  Support for decompressing kernel modules by the kernel itself
+diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+index c033572d83f0..44f14643d014 100644
+--- a/kernel/module/decompress.c
++++ b/kernel/module/decompress.c
+@@ -50,7 +50,7 @@ static struct page *module_get_next_page(struct load_info *info)
+ 	return page;
+ }
+ 
+-#ifdef CONFIG_MODULE_COMPRESS_GZIP
++#if defined(CONFIG_MODULE_COMPRESS_GZIP)
+ #include <linux/zlib.h>
+ #define MODULE_COMPRESSION	gzip
+ #define MODULE_DECOMPRESS_FN	module_gzip_decompress
+@@ -141,7 +141,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
+ 	kfree(s.workspace);
+ 	return retval;
+ }
+-#elif CONFIG_MODULE_COMPRESS_XZ
++#elif defined(CONFIG_MODULE_COMPRESS_XZ)
+ #include <linux/xz.h>
+ #define MODULE_COMPRESSION	xz
+ #define MODULE_DECOMPRESS_FN	module_xz_decompress
+@@ -199,6 +199,94 @@ static ssize_t module_xz_decompress(struct load_info *info,
+ 	xz_dec_end(xz_dec);
+ 	return retval;
+ }
++#elif defined(CONFIG_MODULE_COMPRESS_ZSTD)
++#include <linux/zstd.h>
++#define MODULE_COMPRESSION	zstd
++#define MODULE_DECOMPRESS_FN	module_zstd_decompress
++
++static ssize_t module_zstd_decompress(struct load_info *info,
++				    const void *buf, size_t size)
++{
++	static const u8 signature[] = { 0x28, 0xb5, 0x2f, 0xfd };
++	ZSTD_outBuffer zstd_dec;
++	ZSTD_inBuffer zstd_buf;
++	zstd_frame_header header;
++	size_t wksp_size;
++	void *wksp = NULL;
++	ZSTD_DStream *dstream;
++	size_t ret;
++	size_t new_size = 0;
++	int retval;
++
++	if (size < sizeof(signature) ||
++	    memcmp(buf, signature, sizeof(signature))) {
++		pr_err("not a zstd compressed module\n");
++		return -EINVAL;
++	}
++
++	zstd_buf.src = buf;
++	zstd_buf.pos = 0;
++	zstd_buf.size = size;
++
++	ret = zstd_get_frame_header(&header, zstd_buf.src, zstd_buf.size);
++	if (ret != 0) {
++		pr_err("ZSTD-compressed data has an incomplete frame header\n");
++		retval = -EINVAL;
++		goto out;
++	}
++	if (header.windowSize > (1 << ZSTD_WINDOWLOG_MAX)) {
++		pr_err("ZSTD-compressed data has too large a window size\n");
++		retval = -EINVAL;
++		goto out;
++	}
++
++	wksp_size = zstd_dstream_workspace_bound(header.windowSize);
++	wksp = kmalloc(wksp_size, GFP_KERNEL);
++	if (!wksp) {
++		retval = -ENOMEM;
++		goto out;
++	}
++
++	dstream = zstd_init_dstream(header.windowSize, wksp, wksp_size);
++	if (!dstream) {
++		pr_err("Can't initialize ZSTD stream\n");
++		retval = -ENOMEM;
++		goto out;
++	}
++
++	do {
++		struct page *page = module_get_next_page(info);
++
++		if (!IS_ERR(page)) {
++			retval = PTR_ERR(page);
++			goto out;
++		}
++
++		zstd_dec.dst = kmap_local_page(page);
++		zstd_dec.pos = 0;
++		zstd_dec.size = PAGE_SIZE;
++
++		ret = zstd_decompress_stream(dstream, &zstd_dec, &zstd_buf);
++		kunmap(page);
++		retval = zstd_get_error_code(ret);
++		if (retval)
++			break;
++
++		new_size += zstd_dec.pos;
++	} while (zstd_dec.pos == PAGE_SIZE && ret != 0);
++
++	if (retval) {
++		pr_err("ZSTD-decompression failed with status %d\n", retval);
++		retval = -EINVAL;
++		goto out;
++	}
++
++	retval = new_size;
++
++ out:
++	kfree(wksp);
++	return retval;
++}
+ #else
+ #error "Unexpected configuration for CONFIG_MODULE_DECOMPRESS"
+ #endif
 
-As far as I can tell, the general trend is to make more things modules,
-so there is a good chance that these come back eventually. If the
-information in the MODULE_LICENSE field isn't wrong, I would just
-leave it in there.
+base-commit: 76dcd734eca23168cb008912c0f69ff408905235
+-- 
+https://chromeos.dev
 
-    Arnd
