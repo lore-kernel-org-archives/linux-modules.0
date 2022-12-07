@@ -2,188 +2,203 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEC7EC4708E
-	for <linux-modules@archiver.kernel.org>; Wed,  7 Dec 2022 15:15:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E708CC352A1
+	for <linux-modules@archiver.kernel.org>; Wed,  7 Dec 2022 17:02:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiLGPPY (ORCPT
+        id S229589AbiLGRCw (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 7 Dec 2022 10:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
+        Wed, 7 Dec 2022 12:02:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiLGPPY (ORCPT
+        with ESMTP id S229796AbiLGRBt (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:15:24 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504765FB96;
-        Wed,  7 Dec 2022 07:15:23 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id ED1DE21E8C;
-        Wed,  7 Dec 2022 15:15:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670426121; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=doN8OAAvm/Kul2jr/dWYi2PVymsfdKhPapqin9FX5hk=;
-        b=mMG6q1ALjgO/KA7H5MVoSFAxPUtwgcc1JVntKEZUHrNOApEsYDD5V3e9vXjJMKD5Ei9cqs
-        h8IAYK+d1J8TVa0xLQ2Pd+eMVBRRJwecuFEHegxhQCu+mOK16qbKNlGk89uLF3SqmRBhTY
-        d8aVGdSJaLd2qWS9jmLyjY6ST8AIwQg=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D20782C141;
-        Wed,  7 Dec 2022 15:15:21 +0000 (UTC)
-Date:   Wed, 7 Dec 2022 16:15:21 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     mcgrof@kernel.org, prarit@redhat.com, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y5CuCVe02W5Ni/Fc@alley>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y45MXVrGNkY/bGSl@alley>
- <d528111b-4caa-e292-59f4-4ce1eab1f27c@suse.com>
+        Wed, 7 Dec 2022 12:01:49 -0500
+X-Greylist: delayed 477 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Dec 2022 09:01:47 PST
+Received: from mail.ptr1337.dev (unknown [IPv6:2a03:4000:56:b87:463:c8ff:fee4:a8c1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79CC63B9B;
+        Wed,  7 Dec 2022 09:01:47 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5028F280236;
+        Wed,  7 Dec 2022 17:53:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
+        t=1670432028; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+         content-transfer-encoding:content-language:in-reply-to:references;
+        bh=Fd9owE0M0AMh/gPHes5KTqqFXaIkb5Vj2avnF3sKQ1E=;
+        b=Ih6JIUE2lJuDDvGrjuqPNzW+X+ngnKX/YAV+Mw9EWqNAST5PPSbtR3mM5fs4a+AyCMO+Ie
+        FE+2mWDmvTxLvu7QsKXpVXxyApay3HCT23WY60tU5FXHrftazLxcmB/6fop2AAAuupEpvN
+        QScr7HAyMTtVuPbYKJ/bO+f4tfgF5O8dg7a7N2ZOzDXX5Lh22PM+FdIcLGXID/xFSpkvg3
+        yqFzQGkMilZW7fgYjM6SUrjSwt/PndIuR23J/8s4o9LgvlpkTyf11WQuKJUZcUsvO1xagZ
+        v4QUKX2M5fZ/y5edf2Sr+KRKHxRplw6E+RkxkW75c+ZNRg1ieDBxgB4xIsjM6g==
+Message-ID: <36d27afc-bee8-127d-12d1-31c0a5dcda4e@cachyos.org>
+Date:   Wed, 7 Dec 2022 17:53:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d528111b-4caa-e292-59f4-4ce1eab1f27c@suse.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] module/decompress: Support zstd in-kernel decompression
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Nick Terrell <terrelln@fb.com>
+References: <20221206215318.3955400-1-swboyd@chromium.org>
+From:   Piotr Gorski <piotrgorski@cachyos.org>
+In-Reply-To: <20221206215318.3955400-1-swboyd@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue 2022-12-06 17:57:30, Petr Pavlu wrote:
-> On 12/5/22 20:54, Petr Mladek wrote:
-> > On Mon 2022-12-05 11:35:57, Petr Pavlu wrote:
-> >> During a system boot, it can happen that the kernel receives a burst of
-> >> requests to insert the same module but loading it eventually fails
-> >> during its init call. For instance, udev can make a request to insert
-> >> a frequency module for each individual CPU when another frequency module
-> >> is already loaded which causes the init function of the new module to
-> >> return an error.
-> >>
-> >> Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
-> >> modules that have finished loading"), the kernel waits for modules in
-> >> MODULE_STATE_GOING state to finish unloading before making another
-> >> attempt to load the same module.
-> >>
-> >> This creates unnecessary work in the described scenario and delays the
-> >> boot. In the worst case, it can prevent udev from loading drivers for
-> >> other devices and might cause timeouts of services waiting on them and
-> >> subsequently a failed boot.
-> >>
-> >> This patch attempts a different solution for the problem 6e6de3dee51a
-> >> was trying to solve. Rather than waiting for the unloading to complete,
-> >> it returns a different error code (-EBUSY) for modules in the GOING
-> >> state. This should avoid the error situation that was described in
-> >> 6e6de3dee51a (user space attempting to load a dependent module because
-> >> the -EEXIST error code would suggest to user space that the first module
-> >> had been loaded successfully), while avoiding the delay situation too.
-> >>
-> >> --- a/kernel/module/main.c
-> >> +++ b/kernel/module/main.c
-> >> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
-> >>  	sched_annotate_sleep();
-> >>  	mutex_lock(&module_mutex);
-> >>  	mod = find_module_all(name, strlen(name), true);
-> >> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
-> >> +	ret = !mod || mod->state == MODULE_STATE_LIVE
-> >> +		|| mod->state == MODULE_STATE_GOING;
-> > 
-> > There is a actually one more race.
-> > 
-> > This function is supposed to wait until load of a particular module
-> > finishes. But we might find some another module of the same name here.
-> > 
-> > Maybe, it is not that bad. If many modules of the same name are loaded
-> > in parallel then hopefully most of them would wait for the first one
-> > in add_unformed_module(). And they will never appear in the @modules
-> > list.
-> 
-> Good point, a load waiting in add_unformed_module() could miss that its older
-> parallel load already finished if another insert of the same module appears in
-> the modules list in the meantime. This requires that the new load happens to
-> arrive just after the old one finishes and before the waiting load makes its
-> check.
+Reviewed-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
+
+> Add support for zstd compressed modules to the in-kernel decompression
+> code. This allows zstd compressed modules to be decompressed by the
+> kernel, similar to the existing support for gzip and xz compressed
+> modules.
 >
-> This is somewhat similar to the current state where new same-name insert
-> requests can skip and starve the ones already waiting in
-> add_unformed_module().
-> 
-> I think in practice the situation should occur very rarely and be cleared
-> soon, as long one doesn't continuously try to insert the same module.
-
-I am not completely sure how rare it is. Anyway, the conditions are
-rather complex so it feels rare ;-)
-
-Anyway, the important part of this race is that the new module
-found in finished_loading() did not see the previously loaded
-module and did not wait in add_unformed_module(). It means
-that the load was not parallel enough. It means that the
-optimization added by this patch was not used.
-
-By other words, if the multiple loads are not parallel enough
-then the optimization added by this patch will not help.
-
-And the other way. If this patch helps in practice then
-this race is not important.
-
-> > Anyway, to be on the safe side. We might want to pass the pointer
-> > to the @old module found in add_unformed_module() and make sure
-> > that we find the same module here. Something like:
-> > 
-> > /*
-> >  * @pending_mod: pointer to module that we are waiting for
-> >  * @name: name of the module; the string must stay even when
-> >  *	the pending module goes away completely
-> >  */
-> > static bool finished_loading(const struct module *pending_mod,
-> > 			    const char *name)
-> > {
-> > 	struct module *mod;
-> > 	bool ret = true;
-> > 
-> > 	/*
-> > 	 * The module_mutex should not be a heavily contended lock;
-> > 	 * if we get the occasional sleep here, we'll go an extra iteration
-> > 	 * in the wait_event_interruptible(), which is harmless.
-> > 	 */
-> > 	sched_annotate_sleep();
-> > 	mutex_lock(&module_mutex);
-> > 
-> > 	mod = find_module_all(name, strlen(name), true);
-> > 	/* Check if the pending module is still being loaded */
-> > 	if (mod == pending_mod &&
-> > 	    (mod->state == MODULE_STATE_UNFORMED ||
-> > 	       mod->state == MODULE_STATE_COMMING))
-> > 	       ret = false;
-> > 	mutex_unlock(&module_mutex);
-> > 
-> > 	return ret;
-> > }
-> 
-> The new pending_mod pointer has no ownership of the target module which can be
-> then destroyed at any time. While no dereference of pending_mod is made in
-> finished_loading(), this looks still problematic to me.
-> 
-> I think it is generally good to treat a pointer as invalid and its value as
-> indeterminate when the object it points to reaches the end of its lifetime.
-> One specific problem here is that nothing guarantees that a new module doesn't
-> get allocated at the exactly same address as the old one that got released and
-> the code is actually waiting on.
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Piotr Gorski <lucjan.lucjanov@gmail.com>
+> Cc: Nick Terrell <terrelln@fb.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>   kernel/module/Kconfig      |  3 +-
+>   kernel/module/decompress.c | 92 +++++++++++++++++++++++++++++++++++++-
+>   2 files changed, 92 insertions(+), 3 deletions(-)
 >
-> Improving this case then likely results in a more complex solution, similar
-> to the one that was discussed originally.
-
-Fair enough. Let's ignore the race in finished_loading().
-
-Otherwise, the patch looks good to me. It is easy enough.
-IMHO, it makes sense to use it if it helps in practice
-(multiple loads are parallel enough[*]). Feel free to use:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-Of course, the ideal solution would be to avoid the multiple
-loads in the first place. AFAIK, everything starts in the kernel
-that sends the same udev events for each CPU...
-
-Best Regards,
-Petr
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index 26ea5d04f56c..424b3bc58f3f 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+> @@ -221,9 +221,10 @@ endchoice
+>   
+>   config MODULE_DECOMPRESS
+>   	bool "Support in-kernel module decompression"
+> -	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
+> +	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ || MODULE_COMPRESS_ZSTD
+>   	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
+>   	select XZ_DEC if MODULE_COMPRESS_XZ
+> +	select ZSTD_DECOMPRESS if MODULE_COMPRESS_ZSTD
+>   	help
+>   
+>   	  Support for decompressing kernel modules by the kernel itself
+> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+> index c033572d83f0..44f14643d014 100644
+> --- a/kernel/module/decompress.c
+> +++ b/kernel/module/decompress.c
+> @@ -50,7 +50,7 @@ static struct page *module_get_next_page(struct load_info *info)
+>   	return page;
+>   }
+>   
+> -#ifdef CONFIG_MODULE_COMPRESS_GZIP
+> +#if defined(CONFIG_MODULE_COMPRESS_GZIP)
+>   #include <linux/zlib.h>
+>   #define MODULE_COMPRESSION	gzip
+>   #define MODULE_DECOMPRESS_FN	module_gzip_decompress
+> @@ -141,7 +141,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
+>   	kfree(s.workspace);
+>   	return retval;
+>   }
+> -#elif CONFIG_MODULE_COMPRESS_XZ
+> +#elif defined(CONFIG_MODULE_COMPRESS_XZ)
+>   #include <linux/xz.h>
+>   #define MODULE_COMPRESSION	xz
+>   #define MODULE_DECOMPRESS_FN	module_xz_decompress
+> @@ -199,6 +199,94 @@ static ssize_t module_xz_decompress(struct load_info *info,
+>   	xz_dec_end(xz_dec);
+>   	return retval;
+>   }
+> +#elif defined(CONFIG_MODULE_COMPRESS_ZSTD)
+> +#include <linux/zstd.h>
+> +#define MODULE_COMPRESSION	zstd
+> +#define MODULE_DECOMPRESS_FN	module_zstd_decompress
+> +
+> +static ssize_t module_zstd_decompress(struct load_info *info,
+> +				    const void *buf, size_t size)
+> +{
+> +	static const u8 signature[] = { 0x28, 0xb5, 0x2f, 0xfd };
+> +	ZSTD_outBuffer zstd_dec;
+> +	ZSTD_inBuffer zstd_buf;
+> +	zstd_frame_header header;
+> +	size_t wksp_size;
+> +	void *wksp = NULL;
+> +	ZSTD_DStream *dstream;
+> +	size_t ret;
+> +	size_t new_size = 0;
+> +	int retval;
+> +
+> +	if (size < sizeof(signature) ||
+> +	    memcmp(buf, signature, sizeof(signature))) {
+> +		pr_err("not a zstd compressed module\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	zstd_buf.src = buf;
+> +	zstd_buf.pos = 0;
+> +	zstd_buf.size = size;
+> +
+> +	ret = zstd_get_frame_header(&header, zstd_buf.src, zstd_buf.size);
+> +	if (ret != 0) {
+> +		pr_err("ZSTD-compressed data has an incomplete frame header\n");
+> +		retval = -EINVAL;
+> +		goto out;
+> +	}
+> +	if (header.windowSize > (1 << ZSTD_WINDOWLOG_MAX)) {
+> +		pr_err("ZSTD-compressed data has too large a window size\n");
+> +		retval = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	wksp_size = zstd_dstream_workspace_bound(header.windowSize);
+> +	wksp = kmalloc(wksp_size, GFP_KERNEL);
+> +	if (!wksp) {
+> +		retval = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	dstream = zstd_init_dstream(header.windowSize, wksp, wksp_size);
+> +	if (!dstream) {
+> +		pr_err("Can't initialize ZSTD stream\n");
+> +		retval = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	do {
+> +		struct page *page = module_get_next_page(info);
+> +
+> +		if (!IS_ERR(page)) {
+> +			retval = PTR_ERR(page);
+> +			goto out;
+> +		}
+> +
+> +		zstd_dec.dst = kmap_local_page(page);
+> +		zstd_dec.pos = 0;
+> +		zstd_dec.size = PAGE_SIZE;
+> +
+> +		ret = zstd_decompress_stream(dstream, &zstd_dec, &zstd_buf);
+> +		kunmap(page);
+> +		retval = zstd_get_error_code(ret);
+> +		if (retval)
+> +			break;
+> +
+> +		new_size += zstd_dec.pos;
+> +	} while (zstd_dec.pos == PAGE_SIZE && ret != 0);
+> +
+> +	if (retval) {
+> +		pr_err("ZSTD-decompression failed with status %d\n", retval);
+> +		retval = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	retval = new_size;
+> +
+> + out:
+> +	kfree(wksp);
+> +	return retval;
+> +}
+>   #else
+>   #error "Unexpected configuration for CONFIG_MODULE_DECOMPRESS"
+>   #endif
+>
+> base-commit: 76dcd734eca23168cb008912c0f69ff408905235
