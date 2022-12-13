@@ -2,218 +2,150 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58576C4332F
-	for <linux-modules@archiver.kernel.org>; Tue, 13 Dec 2022 10:17:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C26DC4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 13 Dec 2022 13:36:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235114AbiLMKRv (ORCPT
+        id S234956AbiLMNgU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 13 Dec 2022 05:17:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        Tue, 13 Dec 2022 08:36:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234753AbiLMKRs (ORCPT
+        with ESMTP id S229787AbiLMNgS (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 13 Dec 2022 05:17:48 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C96EB485;
-        Tue, 13 Dec 2022 02:17:47 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 358511FE90;
-        Tue, 13 Dec 2022 10:17:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670926665; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tWdApeddYiMYXB8pmHjPXlFof6sqZG2lI5ncWpQKXcI=;
-        b=hoRrXygslHjny+uwKR2kFMu+k1f8vpCZftGqeMF8I/Y5/lQepUhIumx8Zo3XeYbxkb0CR9
-        PLLaYj1pa1Hpp11YQ9NfXtE7a4PqlFMmNH7Up8pnhAmPZWzY/wYzVfwIpupSS9cbkv1F/L
-        nMYA7NXBuyQCN9BmViL0dx1Vjypg3rY=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 140322C141;
-        Tue, 13 Dec 2022 10:17:45 +0000 (UTC)
-Date:   Tue, 13 Dec 2022 11:17:42 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>, prarit@redhat.com,
-        david@redhat.com, mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+        Tue, 13 Dec 2022 08:36:18 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2073.outbound.protection.outlook.com [40.107.241.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A181B18E29;
+        Tue, 13 Dec 2022 05:36:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LJNa5yLD8JtlXIsSkXPoNm8JJSa1d0k5WTw9lbfR9fqJ2E+aXHZye+yADLW6rjqviLmH1czR94AHszU4KyBBbuvuxFwd+qE7kJAe7Si2EnXjOqM76/7QPl4KYH0uXFfM2cZySRduWLnh3kx5ppyK3J1jyRbrqz5qBU9SmIyPi/wLusfR4yNTYfjmfJjuHYWifXfe9ZzvJXU765uVtWX1+7fdHMyRJYvDjHlNGP9MCYcipGxD+PLWZ97d80dGowNl1FGmxiYu+1TLf5gUujuRRKHiJfx7ndAbq/9g8OoCb4HEFg8SttmQRWXkvpUFhkaO5CMZgaD2NWl+0fwLznsggQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S6PAdXM0jMa1B6kNQRap1uI/o4J6sPdYGibggRqH73E=;
+ b=MvslIHt2HQO6SpgovAx/Fw2aEcmqEGOhwLgMerbNJvr2X1eHwYfsKj6WeB4kr0YtlhbrDBKXcVNgcxUeCOCrF1rvZfRxYovBcefTiuG41Gd5GLSmI1uewrVcl3XG5E2kP7k6ayxEOBputNVcavlNxu7dtiwGoeND2yTrkT/84eXPudlSidFmVBWEuWtQ004n9GduQbqtW1tZuhQ59pFvw6fid17JzA8Z6VQDBkmRiUJdqJO0Hi9Hp8VfAdpUGsIWv9oaPpEjU1/TpLahuZKCYX2pv+1sLrpXpd8CoZ33O92hU3Ls8AuioubLzShm536NJwDOZV0oykoBextQ6GsMeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S6PAdXM0jMa1B6kNQRap1uI/o4J6sPdYGibggRqH73E=;
+ b=stE5Sb/u7N61Ictw3F4KXVSMXU29rfKK5250YzenORkOrUxRfO8zmuBDfegcp3pkEwcM5A69bMkpa5zWewSI5eEE3izpsgKG5S8o0lLESg/SuH62zZN/W5Z5RO+zYtNyTd3t/nZokzS29yAIifdS6Wyb5zo42dKXYbGgoBMmTgC6RcxXcVJGzxm6Ip5hVmhFmr7hbmOJmm7vGqIhPBaj4I0DjPi4ajBUBafD9DjvbTeRsx80WZ8SBVHpOgVF7du0mP8yMujbs+QBinK9Gw8Uh7iFTPqH86dJMogEBSzBROmHReps5DhI793k4DaGBCgkzp9BlRTLL+Tlgdv6oYTI4g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR0402MB3406.eurprd04.prod.outlook.com (2603:10a6:803:c::27)
+ by PAXPR04MB8781.eurprd04.prod.outlook.com (2603:10a6:102:20c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Tue, 13 Dec
+ 2022 13:36:13 +0000
+Received: from VI1PR0402MB3406.eurprd04.prod.outlook.com
+ ([fe80::a207:31a9:1bfc:1d11]) by VI1PR0402MB3406.eurprd04.prod.outlook.com
+ ([fe80::a207:31a9:1bfc:1d11%4]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
+ 13:36:12 +0000
+Message-ID: <c4408a3b-5862-3245-e596-613eadc76ed4@suse.com>
+Date:   Tue, 13 Dec 2022 14:36:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
 Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y5hRRnBGYaPby/RS@alley>
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     prarit@redhat.com, david@redhat.com, mwilck@suse.com,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
 References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
+ <Y5gI/3crANzRv22J@bombadil.infradead.org> <Y5hRRnBGYaPby/RS@alley>
+From:   Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <Y5hRRnBGYaPby/RS@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0060.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:4b::10) To VI1PR0402MB3406.eurprd04.prod.outlook.com
+ (2603:10a6:803:c::27)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5gI/3crANzRv22J@bombadil.infradead.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR0402MB3406:EE_|PAXPR04MB8781:EE_
+X-MS-Office365-Filtering-Correlation-Id: c9d771df-a6f7-476a-7a30-08dadd0f0051
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K2YfoDaXMGnrXrdINSa3ThK8TQbfRSPwrFT9oaqQ7eHBezbUQ3KJLAzX7OaMbV+WiuoZIrPJ1vzOXAKZoyBNjbUPic8rBiXYBjMKTKYouSwYYwn9DxkxF0vHZdsQ+Y8E80f+yhm2/l2E2E/YP9LZfrHOQUWi9dbJvsT5I5Zp5/d/TRlCMymQApI6d4jm2VRWetlu4GDRHHBVm1xsA73qV4nfGOdLqkcVgTMViEKjO1I4U7lVGNxJFVc55DnXybW4QomQAbDTQbtuRLQLP8QzXHF0hP4zPg0y9gkWDXKP3YCPfVngX9fEv84yBraA5x8Cn31KwCsxM8q7JQCzfCcuGo/uLHC2yRxTr9BLQgVqzrpGXP507O4FD/Wwbce9GzvyR2Gl7uEuA0jtmGAhY+h7Z1F4j5qcs2w8bxq8NVSHwhQxt39IOjTfa9+W2MS/cHR6idtvcI7JhjXYkwxruWe1qUlZKOQO5DE/whvidJLFpSUTRMSoIW+57JsC+Pg9jFw1bFZIuM6KZKKv30lR7muSMy1G0LLcZuoCCMK0qKTm+H8MD4fPcrBAkE04CISUeV4C4bh8jkCSsyXVm27TvTdwpChVCzyfbG5f6v0WywqrD6OKYd/iS3jcvjUXYly6Lu/nSjUxLtmeC+AoFPOJIMAATNO+8lrx+jrRAf5fEbcHd1w+mzVoY//+o1uxQLcD5IMfFgk3fnj1Jmygl2xr3a5pXeXH0qVVha9+cSmIqCKS1Ss=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3406.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(366004)(136003)(39860400002)(396003)(451199015)(36756003)(86362001)(8936002)(6486002)(66899015)(38100700002)(31696002)(478600001)(5660300002)(8676002)(44832011)(2616005)(31686004)(66556008)(110136005)(4326008)(55236004)(66476007)(66946007)(41300700001)(26005)(186003)(4001150100001)(6512007)(2906002)(6506007)(53546011)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZHpNZ20ySWRmYnRmaGs2L0Y0Vnd5ZkZ2TEIwdW9hRUdqeHg5V044VVdpYmdr?=
+ =?utf-8?B?QnBoYUJWaGtZbW4vdzJlVDRiK1M3M1NYWUs2VEpjZW5mRy9zK1BBazl5ZXJq?=
+ =?utf-8?B?RmtPR1JwRDEzYURmU1lxc3dQK0R2M2pRMzV2cXF0dDN1WTV2YlZzNUVYSGVT?=
+ =?utf-8?B?QUFyWGhQMElCWFRRUkFNVktvYVI0WHphVjNUbFNha3FkanNxOVYwRE5zVmRW?=
+ =?utf-8?B?aFZnSjU2TTZRblJLUVVqRzJXMExpQzZaaTBWWC9JYjFCSkYzVzd2WURYeFVX?=
+ =?utf-8?B?dVdNRXZodlJXOWdmbU9BWTNaNW05cUxFWkFGV3QzbDdhbnBGaXVQbmFFVW9v?=
+ =?utf-8?B?anJDRzQ4aDhqdi9zV0VMZmJkSm0yNy9LSzd5aGNpNkFSN1h3UlhiSHdCL01W?=
+ =?utf-8?B?aTJiblY0U0FBUjY1NDEvRDRLSFhsK0pZdkxZckYrRldHRm9TSWpYMTZlbFZ5?=
+ =?utf-8?B?Y3k2N3l2SU1JYm1zWkpKQk9yY0NVbFg1Q0JRMloxYXZNUEZ4eW9MVUpJOGtS?=
+ =?utf-8?B?anJGRS9oWFB2QlNqMklTUVJxcThaTzByTXV4V2xlT0JJZk5BRVpVckxzN3RB?=
+ =?utf-8?B?dyt0UHE4SjBJN2MzMytmeGticGk5QUNaR09xbGpEbkRmM2t2QjV3eHQ0Ni96?=
+ =?utf-8?B?N0Q1aHFRczZwK1N3amh5OUVYQVBsQUxCSTg4Y1RNc1EwczNFckNiem5mYVNu?=
+ =?utf-8?B?bTJ0dTRiSDRETXlaSGRZSjdRVkoxelJteU1vYm1Zb084bGFKVnFMZ2pXN3p2?=
+ =?utf-8?B?OW9ON3hQOXg0UE5pMjNOZUlGVDJXTWw0Qjl2bDNabEl6SngyaThhbUFJT3JT?=
+ =?utf-8?B?ci9ENVAwWTBGN3d2R3Y2YlU2Q2JSTGZIYTVPd0NpZmZxdG9UbUgycjlsVXdK?=
+ =?utf-8?B?VzdQeWhCSDYvZml0ZkcyREp4U0Z3Y3ExTnpSSExhWG1lY2JsYTd3UjR3RllG?=
+ =?utf-8?B?MUs4dElZQXIycjRyaHVLeHRRRFJ0WUp5MUpjRVdaVEtmMStjODNZSHA1R3I3?=
+ =?utf-8?B?SW1rNTMrTWJZZUZWQllHZzlsbDEvcmgwVWpJSEJSMzhwUmZxeXZ1d1pIVGVi?=
+ =?utf-8?B?Vm9jK1l4NzgzVWtITFlTZ0owcTgzSUhZOUV6R0h2N2pVMXFSRW9GUVprdjd3?=
+ =?utf-8?B?Z1NIOHVRWUg0QkZtV3JNS1hMQjROa0pHTEk4a3VRZFZaSm13aWJWeW5ZM3RZ?=
+ =?utf-8?B?T3FNNk1mZjBuTE14ZGNXZDZYbEhCaFllOE1jQlNlUmxnOHRpYWg0Mk1IZDZH?=
+ =?utf-8?B?bGJxMlhSeFJXOE9ZRndNTUpRNmxLeEdjc0JnMDg5R2dGWXlBRE8vT1hJRmU4?=
+ =?utf-8?B?cllGYWVMTTU0RVhOYkRwaTNiS0lPZHUvRlhFRVlPTHNuMnFzaHAxR2FONWdS?=
+ =?utf-8?B?Q3ZDdnozam1SYmt2UDJIaysvTFl5bWs1NWtVRENLSi9mOFUxUzkySE9ielBo?=
+ =?utf-8?B?OWYzSkZ5c3A5SlRBdzNSbU5ZL0I2VFpGdlJMRU5MTlBTeTRzYUMwcEM4cjNt?=
+ =?utf-8?B?eG93MWt1T2FSek5kb282TWdhSzhIbC9MRGxYUUJ2MERHQloyMXgzNkh5Rks1?=
+ =?utf-8?B?eFF5aTRqRXFYNUZ6Z3RqUjUxUWhTYVJTaEZveEJYdzRDQzU4Zk9xdW9IOXp2?=
+ =?utf-8?B?NTBFS1djZVZyK3pYR2dtNC9YK1IwSUlrTFRSNG44b1QwQTM3SFA5aDdMdUNy?=
+ =?utf-8?B?QnF3d0E5ZDlPeGg3NnFGMVQ0c1JjUmV2OE9XQWwwbHQxM2x3aWZlcUZ5Y0g2?=
+ =?utf-8?B?MWUvMkkyMGJKR2dobUVRVHBHQ0thUGtiR0FrZFJtMGVtMGpjdW5OS3pDU2ZD?=
+ =?utf-8?B?ZGJzSytKZVl4UjFqWVF6WmZUOEswLzlscGtyamlzTVBNTVVDVjRaQWZ2M2FX?=
+ =?utf-8?B?aEJ2ekVTeVp1VUYraVpSNm5uMFRoMVU5d3BtWE5pcVdua3QrKzFJMVhWbmZv?=
+ =?utf-8?B?cGhQaGNpNExnUzVuYmxIbExUWGtkL2QyR2hyNWZ6RGxUN2lwdFA5akRhV1JW?=
+ =?utf-8?B?dlJ6d2wrMDU3eTBYeHk5WVoydlBwZUNmYzYwK2xOQkdiczFLSlBKcEN1Tm1r?=
+ =?utf-8?B?VjRBdjdqcjd6dUY2VWNBdTJjMTkyZTAreDFXdVdOV2grQWRJeUtOQk5DeFVl?=
+ =?utf-8?Q?RGA1mDDXmMnsjrTA1qNgNTzYX?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9d771df-a6f7-476a-7a30-08dadd0f0051
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3406.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2022 13:36:12.7965
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HDTjRAgO3WaMq13msh4ct8r89KUNpY47MzVVXTD3Qorpjehz76fJWJS/Z+xg3n43AyYRKxtBgyo5lZWP+ZUYsw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8781
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
-> On Mon, Dec 05, 2022 at 11:35:57AM +0100, Petr Pavlu wrote:
-> > During a system boot, it can happen that the kernel receives a burst of
-> > requests to insert the same module but loading it eventually fails
-> > during its init call. For instance, udev can make a request to insert
-> > a frequency module for each individual CPU when another frequency module
-> > is already loaded which causes the init function of the new module to
-> > return an error.
-> > 
-> > This patch attempts a different solution for the problem 6e6de3dee51a
-> > was trying to solve. Rather than waiting for the unloading to complete,
-> > it returns a different error code (-EBUSY) for modules in the GOING
-> > state. This should avoid the error situation that was described in
-> > 6e6de3dee51a (user space attempting to load a dependent module because
-> > the -EEXIST error code would suggest to user space that the first module
-> > had been loaded successfully), while avoiding the delay situation too.
-> > 
+On 12/13/22 11:17, Petr Mladek wrote:
+> On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
+>> 3) *Fixing* a kernel regression by adding new expected API for testing
+>> against -EBUSY seems not ideal.
 > 
-> So sorry for the late review but these ideas only came to me as I
-> drafted my pull request to Linus.
+> IMHO, the right solution is to fix the subsystems so that they send
+> only one uevent.
 > 
-> Let's recap the issue from the start as this is why I ended having
-> to pause for a second and couldn't believe myself as I wrote that
-> we had merged this.
+> The question is how the module loader would deal with "broken"
+> subsystems. Petr Pavlu, please, fixme. I think that there are
+> more subsystems doing this ugly thing.
 
-IMHO, it is perfectly fine to delay this. The problem is not trivial.
-It always made my head spin. There is a risk of regression. The change
-spent in linux next only one week. And this particular merge window is
-not good for risking because of the holiday season.
+The issue has been seen with cpufreq and edac modules. It is a combination of
+them being loaded per CPU and use of a cooperative pattern to allow only one
+module of each such type on the system.
 
+Fixing the module loader addresses the immediate regression, but should be
+useful in general to cope better if some module which is tried to be loaded
+multiple times per N devices is failing its initialization.
 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index d02d39c7174e..7a627345d4fd 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
-> >  	sched_annotate_sleep();
-> >  	mutex_lock(&module_mutex);
-> >  	mod = find_module_all(name, strlen(name), true);
-> > -	ret = !mod || mod->state == MODULE_STATE_LIVE;
-> > +	ret = !mod || mod->state == MODULE_STATE_LIVE
-> > +		|| mod->state == MODULE_STATE_GOING;
-> >  	mutex_unlock(&module_mutex);
-> >  
-> >  	return ret;
-> > @@ -2562,20 +2563,35 @@ static int add_unformed_module(struct module *mod)
-> >  
-> >  	mod->state = MODULE_STATE_UNFORMED;
-> >  
-> > -again:
-> 
-> So this is part of my biggest concern for regression, the removal of
-> this tag and its use.
-> 
-> Before this we always looped back to trying again and again.
+I'm not sure if these subsystems can be called "broken". However, I agree it
+makes sense to have a look at some of the mentioned drivers separately if they
+can be improved to try to load them only once on each system, because they can
+be viewed more as whole-platform drivers than per-CPU ones.
 
-Just to be sure that we are on the same page.
-
-The loop was _not_ infinite. It serialized all attempts to load
-the same module. In our case, it serialized all failures and
-prolonged the pain.
-
-
-> >  	mutex_lock(&module_mutex);
-> >  	old = find_module_all(mod->name, strlen(mod->name), true);
-> >  	if (old != NULL) {
-> > -		if (old->state != MODULE_STATE_LIVE) {
-> > +		if (old->state == MODULE_STATE_COMING
-> > +		    || old->state == MODULE_STATE_UNFORMED) {
-> >  			/* Wait in case it fails to load. */
-> >  			mutex_unlock(&module_mutex);
-> >  			err = wait_event_interruptible(module_wq,
-> >  					       finished_loading(mod->name));
-> >  			if (err)
-> >  				goto out_unlocked;
-> > -			goto again;
-> 
-> We essentially bound this now, and before we didn't.
-> 
-> Yes we we wait for finished_loading() of the module -- but if udev is
-> hammering tons of same requests, well, we *will* surely hit this, as
-> many requests managed to get in before userspace saw the module present.
-> 
-> While this typically can be useful, it means *quite a bit* of conditions which
-> definitely *did* happen before will now *bail out* fast, to the extent
-> that I'm not even sure why we just re-try once now.
-
-I do not understand this. We do _not_ re-try the load in the new
-version. We just wait for the result of the parallel attempt to
-load the module.
-
-Maybe, you are confused that we repeat find_module_all(). But it is
-the way how to find the result of the parallel load.
-
-
-> If we're going to 
-> just re-check *once* why not do something graceful like *at least*
-> cond_resched() to let the system breathe for a *tiny bit*.
-
-We must check the result under module_mutex. We have to take this
-sleeping lock. There is actually a rescheduling. I do not think that
-cond_resched() would do any difference.
-
-
-> > +
-> > +			/* The module might have gone in the meantime. */
-> > +			mutex_lock(&module_mutex);
-> > +			old = find_module_all(mod->name, strlen(mod->name),
-> > +					      true);
-> >  		}
-> > -		err = -EEXIST;
-> > +
-> > +		/*
-> > +		 * We are here only when the same module was being loaded. Do
-> > +		 * not try to load it again right now. It prevents long delays
-> > +		 * caused by serialized module load failures. It might happen
-> > +		 * when more devices of the same type trigger load of
-> > +		 * a particular module.
-> > +		 */
-> > +		if (old && old->state == MODULE_STATE_LIVE)
-> > +			err = -EEXIST;
-> > +		else
-> > +			err = -EBUSY;
-> 
-> And for all those use cases we end up here now, with -EBUSY. So udev
-> before was not bounded, and kept busy-looping on the retry in-kernel,
-> and we now immediately bound its condition to just 2 tries to see if the
-> old module existed and now *return* a new value to userspace.
-> 
-> My main concerns are:
-> 
-> 0) Why not use cond_resched() if we're just going to check twice?
-
-We take module_mutex. It should cause even bigger delay than cond_resched().
-
-
-> 1) How are we sure we are not regressing userspace by removing the boundless
-> loop there? (even if the endless loop was stupid)
-
-We could not be sure. On the other hand, if more attempts help to load
-the module then it is racy and not reliable. The new approach would
-make it better reproducible and fix the race.
-
-
-> 2) How is it we expect that we won't resgress userspace now by bounding
-> that check and pretty much returning -EBUSY right away? This last part
-> seems dangerous, in that if userspace did not expect -EBUSY and if an
-> error before caused a module to fail and fail boot, why wouldn't we fail
-> boot now by bailing out faster??
-
-Same answer as for 1)
-
-
-> 3) *Fixing* a kernel regression by adding new expected API for testing
-> against -EBUSY seems not ideal.
-
-IMHO, the right solution is to fix the subsystems so that they send
-only one uevent.
-
-The question is how the module loader would deal with "broken"
-subsystems. Petr Pavlu, please, fixme. I think that there are
-more subsystems doing this ugly thing.
-
-I personally thing that returning -EBUSY is better than serializing
-all the loads. It makes eventual problem easier to reproduce and fix.
-
-Best Regards,
+Thanks,
 Petr
