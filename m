@@ -2,140 +2,73 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EADE8C4332F
-	for <linux-modules@archiver.kernel.org>; Tue, 13 Dec 2022 02:53:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EADA7C4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 13 Dec 2022 02:58:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbiLMCxl (ORCPT
+        id S234352AbiLMC6l (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 12 Dec 2022 21:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
+        Mon, 12 Dec 2022 21:58:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiLMCxh (ORCPT
+        with ESMTP id S233100AbiLMC6j (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 12 Dec 2022 21:53:37 -0500
+        Mon, 12 Dec 2022 21:58:39 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF17BC83;
-        Mon, 12 Dec 2022 18:53:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18256140B8;
+        Mon, 12 Dec 2022 18:58:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=ZKX8lutJbYrUDMvUvqcO0M/AYzReqeJcn+AU7sWbq3c=; b=EzNOmVlRZedDG9/bRxvhjj+pzY
-        8cNF1TGiL/ingdazs5LswFkhQQj6oaJUAZUDP25ZlfsNzm+G9PCMZe/wSPPYEudkHJNgAPnR0iB70
-        7hIJP6wtcO2jDybwjEaapLAmNHqCm3xih4DUNm76dXY9B1ED0FNNqpLYIrqS7Wq8FDNKTEdNLv/T9
-        ij6/E9JYbW4XtBeQgTe8SjWqwCND58EeobUlVmAjBLj/miAiRyFBRjbHnT4BbHk1/n04rSyJqH7xt
-        eXDx0QT8GwA/SKU+SfHOJKGCtp93BtUoOY1Ng5uIzmSXrrXCbEBfeoq39YL8EOOmnnyBRWeG3VUB4
-        u4vEKwHA==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HpZ9jX3u4847/+62/XiO19y9qAcrk3g+ILqUmJpDZtY=; b=veZwu5/Eb8m4aS4Crkb0P1/wsj
+        YwFyUxJIwfc2OqEiXDFLmJA8cFBdMJqRuNev+HB8RKnzra5xMT6eJLcEZ6eePLlqpzWZ2xsld4jal
+        5fqZn1xhl9wrhVl231xMS0ycXCdwNfpPVOC93J/d9cQBUix9ODwvoOkpo4az+hEolyTZtToMVojY6
+        pq0mJHfJAAfaaHdcnwMkuptqDPF3k0YGBnPBwGoK/+i6GP5BORIkaTZjCAyaidOU7IWUE6UvEz+Q/
+        c81Lk0bOtzmThZITeObp4DSLwpdT+A69GP1S4aNYrv9MP+pEtDwCzEpLagcIbveKniTxAKwALLzSl
+        9Spt2ozw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p4vQ7-009xiv-1i; Tue, 13 Dec 2022 02:53:27 +0000
-Date:   Mon, 12 Dec 2022 18:53:27 -0800
+        id 1p4vV5-00A3qb-71; Tue, 13 Dec 2022 02:58:35 +0000
+Date:   Mon, 12 Dec 2022 18:58:35 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     thunder.leizhen@huawei.com, swboyd@chromium.org,
-        yang.lee@linux.alibaba.com, linux@rasmusvillemoes.dk,
-        petr.pavlu@suse.com, mwilck@suse.com, pmladek@suse.com,
-        mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] modules changes for v6.2-rc1
-Message-ID: <Y5fpJ6MOxf9PD8Vh@bombadil.infradead.org>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     david@redhat.com, Petr Mladek <pmladek@suse.com>,
+        prarit@redhat.com, mwilck@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <Y5fqW7hQy+WbTh3R@bombadil.infradead.org>
+References: <20221205103557.18363-1-petr.pavlu@suse.com>
+ <Y45MXVrGNkY/bGSl@alley>
+ <d528111b-4caa-e292-59f4-4ce1eab1f27c@suse.com>
+ <Y5CuCVe02W5Ni/Fc@alley>
+ <Y5FPkEgEbDlVXkRK@bombadil.infradead.org>
+ <0017c9ce-7e92-6010-7bc9-716131a25ec5@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <0017c9ce-7e92-6010-7bc9-716131a25ec5@suse.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The following changes since commit eb037f16f7e843722db5f0275d84b3f738d5649d:
+On Mon, Dec 12, 2022 at 12:29:02PM +0100, Petr Pavlu wrote:
+> On 12/8/22 03:44, Luis Chamberlain wrote:
+> > On Wed, Dec 07, 2022 at 04:15:21PM +0100, Petr Mladek wrote:
+> >> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> > 
+> > Queued onto modules-next.
+> 
+> Thanks both.
 
-  Merge tag 'perf-tools-fixes-for-v6.1-2-2022-11-10' of git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux (2022-11-11 09:45:30 -0800)
+I'm **terribly sorry** for dropping this to Linus' pull request late
+but I kept trying to justify a few things and I couldn't do it, and
+so I'll reply to this patch with my last minute observations soon.
 
-are available in the Git repository at:
+I figured it was better to be safe than sorry and the potential for
+yet *more* regressions was *real* and I really wanted to avoid us
+having to crunch / race for a fix over the holidays.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc1
+I will leave the fix as-is now in modules-next though, so it can get
+more testing, but indeed, I don't feel quite ready for the masses
+specially before the holidays.
 
-for you to fetch changes up to 4f1354d5c6a3264c91238962d1597eef40c40419:
-
-  livepatch: Call klp_match_callback() in klp_find_callback() to avoid code duplication (2022-12-12 18:30:58 -0800)
-
-----------------------------------------------------------------
-modules changes for v6.2-rc1
-
-Tux gets for xmass improving the average lookup performance of
-kallsyms_lookup_name() by 715x thanks to the work by Zhen Lei, which
-upgraded our old implementation from being O(n) to O(log(n)), while also
-retaining the old implementation support on /proc/kallsyms. The only
-penalty was increasing the memory footprint by 3 * kallsyms_num_syms.
-Folks who want to improve this further now also have a dedicated selftest
-facility through KALLSYMS_SELFTEST. Since I had to start reviewing other
-future kallsyms / modules enhancements by Nick Alcock (his stuff is not
-merged, it requires more work) I carefully reviewed and merged Zhen Lei's
-kallsyms changes through modules-next tree a bit less than a month ago.
-So this has been exposed on linux-next for about a month now with no
-reported regressions.
-
-Stephen Boyd added zstd in-kernel decompression support, but the only
-users of this would be folks using the load-pin LSM because otherwise
-we do module docompression in userspace. This is the newest code and
-was merged last week on modules-next.
-
-We spent a lot of time analyzing and coming to grips with a proper
-fix to an old modules regression which only recently came to light
-(since v5.3-rc1, May 2019) but even though I merged that fix onto
-modules-next last week I'm having second thoughts about it now as I was
-writing about that fix in this git tag message for you, as I found a few
-things we cannot quite justify there yet. So I'm going to push back to the
-drawing board again there until all i's are properly dotted. Yes, it's a
-regression but the issue has been there for 2 years now and it came up
-because of high end CPU count, it can wait a *tiny* bit more for a proper
-fix.
-
-The only other thing with mentioning is a minor boot time optimization by
-Rasmus Villemoes which deferes param_sysfs_init() to late init. The rest
-is cleanups and minor fixes.
-
-----------------------------------------------------------------
-Chen Zhongjin (1):
-      module: Remove unused macros module_addr_min/max
-
-Miaoqian Lin (1):
-      module: Fix NULL vs IS_ERR checking for module_get_next_page
-
-Rasmus Villemoes (2):
-      module: remove redundant module_sysfs_initialized variable
-      kernel/params.c: defer most of param_sysfs_init() to late_initcall time
-
-Stephen Boyd (1):
-      module/decompress: Support zstd in-kernel decompression
-
-Yang Li (1):
-      kallsyms: Remove unneeded semicolon
-
-Zhen Lei (8):
-      scripts/kallsyms: rename build_initial_tok_table()
-      kallsyms: Improve the performance of kallsyms_lookup_name()
-      kallsyms: Correctly sequence symbols when CONFIG_LTO_CLANG=y
-      kallsyms: Reduce the memory occupied by kallsyms_seqs_of_names[]
-      kallsyms: Add helper kallsyms_on_each_match_symbol()
-      livepatch: Use kallsyms_on_each_match_symbol() to improve performance
-      kallsyms: Add self-test facility
-      livepatch: Call klp_match_callback() in klp_find_callback() to avoid code duplication
-
- include/linux/kallsyms.h   |   9 +
- include/linux/module.h     |   1 -
- init/Kconfig               |  13 ++
- kernel/Makefile            |   1 +
- kernel/kallsyms.c          | 116 +++++++++--
- kernel/kallsyms_internal.h |   1 +
- kernel/kallsyms_selftest.c | 485 +++++++++++++++++++++++++++++++++++++++++++++
- kernel/kallsyms_selftest.h |  13 ++
- kernel/livepatch/core.c    |  31 +--
- kernel/module/Kconfig      |   3 +-
- kernel/module/decompress.c | 100 +++++++++-
- kernel/module/main.c       |   3 -
- kernel/module/sysfs.c      |   2 +-
- kernel/params.c            |  23 ++-
- scripts/kallsyms.c         |  78 +++++++-
- scripts/link-vmlinux.sh    |   4 +
- 16 files changed, 840 insertions(+), 43 deletions(-)
- create mode 100644 kernel/kallsyms_selftest.c
- create mode 100644 kernel/kallsyms_selftest.h
+  Luis
