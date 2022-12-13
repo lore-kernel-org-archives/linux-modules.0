@@ -2,150 +2,72 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C26DC4332F
-	for <linux-modules@archiver.kernel.org>; Tue, 13 Dec 2022 13:36:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91366C4167B
+	for <linux-modules@archiver.kernel.org>; Tue, 13 Dec 2022 22:35:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234956AbiLMNgU (ORCPT
+        id S236887AbiLMWfx (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 13 Dec 2022 08:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        Tue, 13 Dec 2022 17:35:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiLMNgS (ORCPT
+        with ESMTP id S236892AbiLMWfr (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 13 Dec 2022 08:36:18 -0500
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2073.outbound.protection.outlook.com [40.107.241.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A181B18E29;
-        Tue, 13 Dec 2022 05:36:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LJNa5yLD8JtlXIsSkXPoNm8JJSa1d0k5WTw9lbfR9fqJ2E+aXHZye+yADLW6rjqviLmH1czR94AHszU4KyBBbuvuxFwd+qE7kJAe7Si2EnXjOqM76/7QPl4KYH0uXFfM2cZySRduWLnh3kx5ppyK3J1jyRbrqz5qBU9SmIyPi/wLusfR4yNTYfjmfJjuHYWifXfe9ZzvJXU765uVtWX1+7fdHMyRJYvDjHlNGP9MCYcipGxD+PLWZ97d80dGowNl1FGmxiYu+1TLf5gUujuRRKHiJfx7ndAbq/9g8OoCb4HEFg8SttmQRWXkvpUFhkaO5CMZgaD2NWl+0fwLznsggQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S6PAdXM0jMa1B6kNQRap1uI/o4J6sPdYGibggRqH73E=;
- b=MvslIHt2HQO6SpgovAx/Fw2aEcmqEGOhwLgMerbNJvr2X1eHwYfsKj6WeB4kr0YtlhbrDBKXcVNgcxUeCOCrF1rvZfRxYovBcefTiuG41Gd5GLSmI1uewrVcl3XG5E2kP7k6ayxEOBputNVcavlNxu7dtiwGoeND2yTrkT/84eXPudlSidFmVBWEuWtQ004n9GduQbqtW1tZuhQ59pFvw6fid17JzA8Z6VQDBkmRiUJdqJO0Hi9Hp8VfAdpUGsIWv9oaPpEjU1/TpLahuZKCYX2pv+1sLrpXpd8CoZ33O92hU3Ls8AuioubLzShm536NJwDOZV0oykoBextQ6GsMeg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S6PAdXM0jMa1B6kNQRap1uI/o4J6sPdYGibggRqH73E=;
- b=stE5Sb/u7N61Ictw3F4KXVSMXU29rfKK5250YzenORkOrUxRfO8zmuBDfegcp3pkEwcM5A69bMkpa5zWewSI5eEE3izpsgKG5S8o0lLESg/SuH62zZN/W5Z5RO+zYtNyTd3t/nZokzS29yAIifdS6Wyb5zo42dKXYbGgoBMmTgC6RcxXcVJGzxm6Ip5hVmhFmr7hbmOJmm7vGqIhPBaj4I0DjPi4ajBUBafD9DjvbTeRsx80WZ8SBVHpOgVF7du0mP8yMujbs+QBinK9Gw8Uh7iFTPqH86dJMogEBSzBROmHReps5DhI793k4DaGBCgkzp9BlRTLL+Tlgdv6oYTI4g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0402MB3406.eurprd04.prod.outlook.com (2603:10a6:803:c::27)
- by PAXPR04MB8781.eurprd04.prod.outlook.com (2603:10a6:102:20c::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Tue, 13 Dec
- 2022 13:36:13 +0000
-Received: from VI1PR0402MB3406.eurprd04.prod.outlook.com
- ([fe80::a207:31a9:1bfc:1d11]) by VI1PR0402MB3406.eurprd04.prod.outlook.com
- ([fe80::a207:31a9:1bfc:1d11%4]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
- 13:36:12 +0000
-Message-ID: <c4408a3b-5862-3245-e596-613eadc76ed4@suse.com>
-Date:   Tue, 13 Dec 2022 14:36:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     prarit@redhat.com, david@redhat.com, mwilck@suse.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org> <Y5hRRnBGYaPby/RS@alley>
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <Y5hRRnBGYaPby/RS@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0060.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4b::10) To VI1PR0402MB3406.eurprd04.prod.outlook.com
- (2603:10a6:803:c::27)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB3406:EE_|PAXPR04MB8781:EE_
-X-MS-Office365-Filtering-Correlation-Id: c9d771df-a6f7-476a-7a30-08dadd0f0051
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K2YfoDaXMGnrXrdINSa3ThK8TQbfRSPwrFT9oaqQ7eHBezbUQ3KJLAzX7OaMbV+WiuoZIrPJ1vzOXAKZoyBNjbUPic8rBiXYBjMKTKYouSwYYwn9DxkxF0vHZdsQ+Y8E80f+yhm2/l2E2E/YP9LZfrHOQUWi9dbJvsT5I5Zp5/d/TRlCMymQApI6d4jm2VRWetlu4GDRHHBVm1xsA73qV4nfGOdLqkcVgTMViEKjO1I4U7lVGNxJFVc55DnXybW4QomQAbDTQbtuRLQLP8QzXHF0hP4zPg0y9gkWDXKP3YCPfVngX9fEv84yBraA5x8Cn31KwCsxM8q7JQCzfCcuGo/uLHC2yRxTr9BLQgVqzrpGXP507O4FD/Wwbce9GzvyR2Gl7uEuA0jtmGAhY+h7Z1F4j5qcs2w8bxq8NVSHwhQxt39IOjTfa9+W2MS/cHR6idtvcI7JhjXYkwxruWe1qUlZKOQO5DE/whvidJLFpSUTRMSoIW+57JsC+Pg9jFw1bFZIuM6KZKKv30lR7muSMy1G0LLcZuoCCMK0qKTm+H8MD4fPcrBAkE04CISUeV4C4bh8jkCSsyXVm27TvTdwpChVCzyfbG5f6v0WywqrD6OKYd/iS3jcvjUXYly6Lu/nSjUxLtmeC+AoFPOJIMAATNO+8lrx+jrRAf5fEbcHd1w+mzVoY//+o1uxQLcD5IMfFgk3fnj1Jmygl2xr3a5pXeXH0qVVha9+cSmIqCKS1Ss=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3406.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(366004)(136003)(39860400002)(396003)(451199015)(36756003)(86362001)(8936002)(6486002)(66899015)(38100700002)(31696002)(478600001)(5660300002)(8676002)(44832011)(2616005)(31686004)(66556008)(110136005)(4326008)(55236004)(66476007)(66946007)(41300700001)(26005)(186003)(4001150100001)(6512007)(2906002)(6506007)(53546011)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZHpNZ20ySWRmYnRmaGs2L0Y0Vnd5ZkZ2TEIwdW9hRUdqeHg5V044VVdpYmdr?=
- =?utf-8?B?QnBoYUJWaGtZbW4vdzJlVDRiK1M3M1NYWUs2VEpjZW5mRy9zK1BBazl5ZXJq?=
- =?utf-8?B?RmtPR1JwRDEzYURmU1lxc3dQK0R2M2pRMzV2cXF0dDN1WTV2YlZzNUVYSGVT?=
- =?utf-8?B?QUFyWGhQMElCWFRRUkFNVktvYVI0WHphVjNUbFNha3FkanNxOVYwRE5zVmRW?=
- =?utf-8?B?aFZnSjU2TTZRblJLUVVqRzJXMExpQzZaaTBWWC9JYjFCSkYzVzd2WURYeFVX?=
- =?utf-8?B?dVdNRXZodlJXOWdmbU9BWTNaNW05cUxFWkFGV3QzbDdhbnBGaXVQbmFFVW9v?=
- =?utf-8?B?anJDRzQ4aDhqdi9zV0VMZmJkSm0yNy9LSzd5aGNpNkFSN1h3UlhiSHdCL01W?=
- =?utf-8?B?aTJiblY0U0FBUjY1NDEvRDRLSFhsK0pZdkxZckYrRldHRm9TSWpYMTZlbFZ5?=
- =?utf-8?B?Y3k2N3l2SU1JYm1zWkpKQk9yY0NVbFg1Q0JRMloxYXZNUEZ4eW9MVUpJOGtS?=
- =?utf-8?B?anJGRS9oWFB2QlNqMklTUVJxcThaTzByTXV4V2xlT0JJZk5BRVpVckxzN3RB?=
- =?utf-8?B?dyt0UHE4SjBJN2MzMytmeGticGk5QUNaR09xbGpEbkRmM2t2QjV3eHQ0Ni96?=
- =?utf-8?B?N0Q1aHFRczZwK1N3amh5OUVYQVBsQUxCSTg4Y1RNc1EwczNFckNiem5mYVNu?=
- =?utf-8?B?bTJ0dTRiSDRETXlaSGRZSjdRVkoxelJteU1vYm1Zb084bGFKVnFMZ2pXN3p2?=
- =?utf-8?B?OW9ON3hQOXg0UE5pMjNOZUlGVDJXTWw0Qjl2bDNabEl6SngyaThhbUFJT3JT?=
- =?utf-8?B?ci9ENVAwWTBGN3d2R3Y2YlU2Q2JSTGZIYTVPd0NpZmZxdG9UbUgycjlsVXdK?=
- =?utf-8?B?VzdQeWhCSDYvZml0ZkcyREp4U0Z3Y3ExTnpSSExhWG1lY2JsYTd3UjR3RllG?=
- =?utf-8?B?MUs4dElZQXIycjRyaHVLeHRRRFJ0WUp5MUpjRVdaVEtmMStjODNZSHA1R3I3?=
- =?utf-8?B?SW1rNTMrTWJZZUZWQllHZzlsbDEvcmgwVWpJSEJSMzhwUmZxeXZ1d1pIVGVi?=
- =?utf-8?B?Vm9jK1l4NzgzVWtITFlTZ0owcTgzSUhZOUV6R0h2N2pVMXFSRW9GUVprdjd3?=
- =?utf-8?B?Z1NIOHVRWUg0QkZtV3JNS1hMQjROa0pHTEk4a3VRZFZaSm13aWJWeW5ZM3RZ?=
- =?utf-8?B?T3FNNk1mZjBuTE14ZGNXZDZYbEhCaFllOE1jQlNlUmxnOHRpYWg0Mk1IZDZH?=
- =?utf-8?B?bGJxMlhSeFJXOE9ZRndNTUpRNmxLeEdjc0JnMDg5R2dGWXlBRE8vT1hJRmU4?=
- =?utf-8?B?cllGYWVMTTU0RVhOYkRwaTNiS0lPZHUvRlhFRVlPTHNuMnFzaHAxR2FONWdS?=
- =?utf-8?B?Q3ZDdnozam1SYmt2UDJIaysvTFl5bWs1NWtVRENLSi9mOFUxUzkySE9ielBo?=
- =?utf-8?B?OWYzSkZ5c3A5SlRBdzNSbU5ZL0I2VFpGdlJMRU5MTlBTeTRzYUMwcEM4cjNt?=
- =?utf-8?B?eG93MWt1T2FSek5kb282TWdhSzhIbC9MRGxYUUJ2MERHQloyMXgzNkh5Rks1?=
- =?utf-8?B?eFF5aTRqRXFYNUZ6Z3RqUjUxUWhTYVJTaEZveEJYdzRDQzU4Zk9xdW9IOXp2?=
- =?utf-8?B?NTBFS1djZVZyK3pYR2dtNC9YK1IwSUlrTFRSNG44b1QwQTM3SFA5aDdMdUNy?=
- =?utf-8?B?QnF3d0E5ZDlPeGg3NnFGMVQ0c1JjUmV2OE9XQWwwbHQxM2x3aWZlcUZ5Y0g2?=
- =?utf-8?B?MWUvMkkyMGJKR2dobUVRVHBHQ0thUGtiR0FrZFJtMGVtMGpjdW5OS3pDU2ZD?=
- =?utf-8?B?ZGJzSytKZVl4UjFqWVF6WmZUOEswLzlscGtyamlzTVBNTVVDVjRaQWZ2M2FX?=
- =?utf-8?B?aEJ2ekVTeVp1VUYraVpSNm5uMFRoMVU5d3BtWE5pcVdua3QrKzFJMVhWbmZv?=
- =?utf-8?B?cGhQaGNpNExnUzVuYmxIbExUWGtkL2QyR2hyNWZ6RGxUN2lwdFA5akRhV1JW?=
- =?utf-8?B?dlJ6d2wrMDU3eTBYeHk5WVoydlBwZUNmYzYwK2xOQkdiczFLSlBKcEN1Tm1r?=
- =?utf-8?B?VjRBdjdqcjd6dUY2VWNBdTJjMTkyZTAreDFXdVdOV2grQWRJeUtOQk5DeFVl?=
- =?utf-8?Q?RGA1mDDXmMnsjrTA1qNgNTzYX?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9d771df-a6f7-476a-7a30-08dadd0f0051
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3406.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2022 13:36:12.7965
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HDTjRAgO3WaMq13msh4ct8r89KUNpY47MzVVXTD3Qorpjehz76fJWJS/Z+xg3n43AyYRKxtBgyo5lZWP+ZUYsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8781
+        Tue, 13 Dec 2022 17:35:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E885D19004;
+        Tue, 13 Dec 2022 14:35:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 832B361744;
+        Tue, 13 Dec 2022 22:35:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E299BC433D2;
+        Tue, 13 Dec 2022 22:35:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670970946;
+        bh=new3YaTtbUyNtea+91i8A486mJdUC7vF704r5+cqMoQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=XXsnIfVbQ0vDffZf9bvjHP1O/Osk/h7IlbW9zZUprkJgn0SwkNv8eLZl/byyhvJJP
+         sVRmWUn5kzxcdrQYgkuBcpzzi6MV2mQ69DroFX+NVxAbMeTwRVmdWb02v1sHZI98Dz
+         0NYd/Fwryb2eErfisgXK9uHoJKBwzT+KKmOQ28ST/HbI20oi1JWXSDgaA0ISLNsF98
+         9/GrN58Mk5/ei71awUsYUOLMlhcmb7wFk1R4Qacs8xWnVT5D2+FyopFNBNPHnV8VAi
+         ASK0tEDFLuf8FGl3pvvZ3J4ZdoNFeO1C1mLPLa/kfQLnp3gTpMaFz80b4i56tsqTIr
+         AtTlgiLNJktoQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3336C41612;
+        Tue, 13 Dec 2022 22:35:45 +0000 (UTC)
+Subject: Re: [GIT PULL] modules changes for v6.2-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y5fpJ6MOxf9PD8Vh@bombadil.infradead.org>
+References: <Y5fpJ6MOxf9PD8Vh@bombadil.infradead.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y5fpJ6MOxf9PD8Vh@bombadil.infradead.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc1
+X-PR-Tracked-Commit-Id: 4f1354d5c6a3264c91238962d1597eef40c40419
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3ba2c3ff98ea8bfb219288dbacf2a23a902c751b
+Message-Id: <167097094586.5412.16383358267507306912.pr-tracker-bot@kernel.org>
+Date:   Tue, 13 Dec 2022 22:35:45 +0000
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        thunder.leizhen@huawei.com, swboyd@chromium.org,
+        yang.lee@linux.alibaba.com, linux@rasmusvillemoes.dk,
+        petr.pavlu@suse.com, mwilck@suse.com, pmladek@suse.com,
+        mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 12/13/22 11:17, Petr Mladek wrote:
-> On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
->> 3) *Fixing* a kernel regression by adding new expected API for testing
->> against -EBUSY seems not ideal.
-> 
-> IMHO, the right solution is to fix the subsystems so that they send
-> only one uevent.
-> 
-> The question is how the module loader would deal with "broken"
-> subsystems. Petr Pavlu, please, fixme. I think that there are
-> more subsystems doing this ugly thing.
+The pull request you sent on Mon, 12 Dec 2022 18:53:27 -0800:
 
-The issue has been seen with cpufreq and edac modules. It is a combination of
-them being loaded per CPU and use of a cooperative pattern to allow only one
-module of each such type on the system.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc1
 
-Fixing the module loader addresses the immediate regression, but should be
-useful in general to cope better if some module which is tried to be loaded
-multiple times per N devices is failing its initialization.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3ba2c3ff98ea8bfb219288dbacf2a23a902c751b
 
-I'm not sure if these subsystems can be called "broken". However, I agree it
-makes sense to have a look at some of the mentioned drivers separately if they
-can be improved to try to load them only once on each system, because they can
-be viewed more as whole-platform drivers than per-CPU ones.
+Thank you!
 
-Thanks,
-Petr
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
