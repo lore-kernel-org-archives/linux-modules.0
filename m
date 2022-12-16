@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FC47C3DA6E
-	for <linux-modules@archiver.kernel.org>; Fri, 16 Dec 2022 22:17:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E97ABC4332F
+	for <linux-modules@archiver.kernel.org>; Fri, 16 Dec 2022 22:17:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiLPWRW (ORCPT
+        id S229979AbiLPWRZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 16 Dec 2022 17:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
+        Fri, 16 Dec 2022 17:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiLPWRV (ORCPT
+        with ESMTP id S229894AbiLPWRX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 16 Dec 2022 17:17:21 -0500
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729C0286D9
-        for <linux-modules@vger.kernel.org>; Fri, 16 Dec 2022 14:17:17 -0800 (PST)
-Received: by mail-il1-x14a.google.com with SMTP id l13-20020a056e0212ed00b00304c6338d79so2458088iln.21
-        for <linux-modules@vger.kernel.org>; Fri, 16 Dec 2022 14:17:17 -0800 (PST)
+        Fri, 16 Dec 2022 17:17:23 -0500
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7EE2A703
+        for <linux-modules@vger.kernel.org>; Fri, 16 Dec 2022 14:17:20 -0800 (PST)
+Received: by mail-io1-xd4a.google.com with SMTP id j5-20020a5d9d05000000b006e2f0c28177so2008366ioj.17
+        for <linux-modules@vger.kernel.org>; Fri, 16 Dec 2022 14:17:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4m9/17/W1kdv8VNLbmTKSjFzkHpfUuXrqh07MxTcPP0=;
-        b=awtmRWhSH5BBP5maTj8NUSByURHW3qElgQPLx05IV8E1WMxTZiRXcmKIrAjZTRWoc+
-         0m8LjRSFO1A8x5T2kRQsY0zET9Kmo2xGrP+pMDoN26EIMRqA2EaVHTOhvMyrzABAwBnw
-         AZbCW8b/nVhuxrMUmopTN9/20D34xhxNOwIv3Uz0cIN5GrIwX2fEAYwan0wv5526a4zB
-         zsPd8wN8Rn3W0CJ+1BBlyoeKyUNXeoDlxrprjhHZ7Zj8kaB5E+VfSztDx9+nF/hXDffO
-         LmvkTp/IVMaVGGc7wJc1RNegXaSgDDbUO+GB7hw3ExnQvxpPQZAkEOrfo7vxeUNKKBIG
-         Wu3A==
+        bh=QIkoHfPVoGJGQCXWyZmF+mudK9y7JC4uGfB+VF9vmAA=;
+        b=DPM862br1ksx4WgfZPPdueiIQnI6WvqPmGTG1MgLblwtuOlS7D2+IHQhAHJWXU9iNG
+         j4RxkkFEM0HoFL3kqNsdC+IJMWBTwI8W6+Ta5PvZplSXceS8nTDmbx2x+33J5oD92OFT
+         g77b5zdEyCeTgxNQQFcZA/XalLB+/1uF5YTqvBjiIxsFzKG/Km8FlFj84+FnuoT0LMow
+         HT2aw6HDm83sOt0XTM+xnEBPzPFUkRx+tiHqOWVrRF/4zSEfTDSIW0wZe/YA3+3tJQA8
+         F7V6Z8l7ZANhHSadRJglbkKVcT0i88Xi5gRe00KnPx6R6+C1xOoBUsZ+idFieWINkCzf
+         aXbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4m9/17/W1kdv8VNLbmTKSjFzkHpfUuXrqh07MxTcPP0=;
-        b=ou/NWgyXViqObWf4L2F4hkMuvLOJTwG54MJFmYmF/ZLdSXSWDqAoXCPJ7RxVGJSdxg
-         znra9XDBw57r/6Qvn0ST1hPM7yjVZumv8pI2rMd8Ud1w/jlmghpAaY662CWnY/Dp7J0B
-         Z7ZbDNYA5Zz7cYpQWarkySpFIrnCfbHkoP/NEFM/cwQIYRMQzi9G/zTTLtNRsef1OBt5
-         +O4+5d4lskh2GAMrPh8KYtWG6T6Q6hr25WOp8PA5j5IF6lDiZCoGKK4RIfE8ptEqWyHX
-         g4mv3zbU1SRVWZ53dl75wXmg8YClAjhWrJMkkeu4z0sDEirpzE0OEBFr2UQBxPcRG/uh
-         459g==
-X-Gm-Message-State: ANoB5pmOEaqflDhCGkEgewxJn7C7anDDZ6ycGDSHKfsY+3bqwf/IxV7t
-        C93dJjtPVePiSPPYxCJzLltYk8uuUg3R4bAKnzJ8kDjZqSdmC96ccjugP0hQwLEYXRvO/1prgux
-        toWlYaI2owhr4OU/KqzNld2mQSsKBxfctHECSc19ohkBDQ6NJ5n3RkXc6QOuYnW7zTZp9Lfb60i
-        N5SVA=
-X-Google-Smtp-Source: AA0mqf6kuFKB8N1S+8Y3w73Baf2yFjpFU9gX7RM8EzhYHrKd8Om3h9q3nkvEDuQvMYocfszIZJIqzsx37UAaSYo=
+        bh=QIkoHfPVoGJGQCXWyZmF+mudK9y7JC4uGfB+VF9vmAA=;
+        b=ZOvJp9U1ph5XR5QSrzyE0PIg/icOFcfrMgC9OLqA9bqbNxqBwAqJvmpVxtjR/ls8WN
+         Je8DpWv+6BJAhVFJ6QRcpaExVsv6qIR2+m/7URh356hYgtRB43YXLq2cmRiakzXIM9nF
+         ZvLZomuqV0GX4Fe3belNY1AJMiKGK7cQ9TnH7401lWDCZtwpSYiH1cR2dOYY5/TTVueb
+         34Z0GJAzf4Zw0jliAQVWFbrDbDdfvO8esDh7QFdxtGjmBSjalEl3M/926kZhV6o2pXjp
+         fH5y8JHdXR/OEIcND4sEknbvBaYNhtAoQ1pcDpS68F8tpAMKy0b5wr9wpBGAMAmQ0cQM
+         7unw==
+X-Gm-Message-State: ANoB5pnZwD8k8nHS9moNRDw26Y5fMNOQIYsUEo9NdIvGpSOhBXAuWGHO
+        BlItXTcRCZfxFoc6OjGYV8mZa37go/bWiHktYEUG57kVdJ9zTFm/bU4JkvYwd0FmiuH7FI8RSWL
+        bcrEuK1jWbuA4TgXUdke7/o1JRWzw4dYP3dQs4VPV7T42rz+ZxpgcL8V+R96eL6mk/ehAfVbndA
+        JIzI4=
+X-Google-Smtp-Source: AA0mqf6TfmBK0Mx/g4QE2FH2JCuQ34V+4c+rpIqMat7imN4HKSMjxbOfVMuq9+IWftjxtKMRD5QngzlpEPjmoOk=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a05:6638:4605:b0:38a:8db5:76b with SMTP
- id bw5-20020a056638460500b0038a8db5076bmr2888647jab.89.1671229036583; Fri, 16
- Dec 2022 14:17:16 -0800 (PST)
-Date:   Fri, 16 Dec 2022 16:16:58 -0600
-In-Reply-To: <Y5IA2NYE5IaAzNby@kroah.com>
+ (user=allenwebb job=sendgmr) by 2002:a5d:9e4a:0:b0:6de:42ff:d96b with SMTP id
+ i10-20020a5d9e4a000000b006de42ffd96bmr34882896ioi.58.1671229040270; Fri, 16
+ Dec 2022 14:17:20 -0800 (PST)
+Date:   Fri, 16 Dec 2022 16:16:59 -0600
+In-Reply-To: <20221216221703.294683-1-allenwebb@google.com>
 Mime-Version: 1.0
-References: <Y5IA2NYE5IaAzNby@kroah.com>
+References: <Y5IA2NYE5IaAzNby@kroah.com> <20221216221703.294683-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221216221703.294683-1-allenwebb@google.com>
-Subject: [PATCH v7 0/5] Generate modules.builtin.alias from match ids
+Message-ID: <20221216221703.294683-2-allenwebb@google.com>
+Subject: [PATCH v7 1/5] module.h: MODULE_DEVICE_TABLE for built-in modules
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -68,86 +68,35 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Generate modules.builtin.alias from match ids
+Implement MODULE_DEVICE_TABLE for build-in modules to make it possible
+to generate a builtin.alias file to complement modules.alias.
 
-This patch series (v7) pivots to adding `modules.builtin.alias` from the
-previous approach of adding a sysfs attribute. The goal is for tools
-like USBGuard to leverage not only modules.aliases but also
-`modules.builtin.aliases` to associate devices with the modules that may
-be bound before deciding to authorize a device or not. This is
-particularly useful in cases when new devices of a particular type
-shouldn't be allowed part of the time like for lock screens.
+Signed-off-by: Allen Webb <allenwebb@google.com>
+---
+ include/linux/module.h | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Note that `modules.builtin.alias` is generated directly by modpost. This
-differs from how `modules.alias` is generated because modpost converts
-the match-id based module aliases into c-files that add additional
-aliases to the module info. No such c-file is present for vmlinuz though
-it would be possible to add one. A downside of this would be vmlinuz
-would grow by 100-200kb for a typical ChromeOS kernel config.
-
-
---
-
-# Generate modules.builtin.alias from match ids
-
-Previous versions of this patch series addressed the same problem by
-adding a sysfs attribute instead of `modules.builtin.alias`.
-Consequently, they have a different name and include completely
-different commits than this version.
-Note, cover letters were first added in v5.
-
-  RFC (broken patch): https://lore.kernel.org/lkml/CAJzde042-M4UbpNYKw0eDVg4JqYmwmPYSsmgK+kCMTqsi+-2Yw@mail.gmail.com/
-  v1 (missing v1 label): https://lore.kernel.org/lkml/20221111152852.2837363-1-allenwebb@google.com/
-  v2 (missing v2 label): https://lore.kernel.org/lkml/20221128201332.3482092-1-allenwebb@google.com/
-  v3: https://lore.kernel.org/lkml/20221129224313.455862-1-allenwebb@google.com/
-  v4: https://lore.kernel.org/lkml/20221130221447.1202206-1-allenwebb@google.com/
-  v5: https://lore.kernel.org/lkml/20221201211630.101541-1-allenwebb@google.com/
-  v6: https://lore.kernel.org/lkml/20221202224540.1446952-1-allenwebb@google.com/
-  v7: This version
-
-
-## Patch series status
-
-This series is still going through revisions in response to comments.
-This version generates match-id based aliases for all subsystems unlike
-previous patch series versions which only implemented aliases for USB.
-
-I believe there is potential to improve the Makefile part of the patch
-series as well as an open question of whether modpost should generate
-`modules.built.alias` directly or create a vmlinuz.mod.c containing the
-missing module info for the match-id based aliases for built-in modules.
-
-## Acknowledgements
-
-Thanks to Greg Kroah-Hartman and the Linux maintainers for being patient
-with me as I have worked through learning the kernel workflow to get
-this series into a more presentable state.
-
-Thanks to Luis Chamberlain for raising the alternative of using kmod to
-address the primary motivation of the patch series.
-
-Also, thanks to Intel's kernel test robot <lkp@intel.com> for catching
-issues that showed up on different kernel configurations.
-
-
-
-
-Allen Webb (5):
-  module.h: MODULE_DEVICE_TABLE for built-in modules
-  modpost: Track module name for built-in modules
-  modpost: Add -b option for emitting built-in aliases
-  file2alias.c: Implement builtin.alias generation
-  build: Add modules.builtin.alias
-
- .gitignore               |  1 +
- Makefile                 |  1 +
- include/linux/module.h   | 10 ++++-
- scripts/Makefile.modpost | 17 +++++++-
- scripts/mod/file2alias.c | 92 +++++++++++++++++++++++++++++++---------
- scripts/mod/modpost.c    | 23 +++++++++-
- scripts/mod/modpost.h    |  2 +
- 7 files changed, 121 insertions(+), 25 deletions(-)
-
+diff --git a/include/linux/module.h b/include/linux/module.h
+index ec61fb53979a9..49e4019393127 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -243,7 +243,15 @@ extern void cleanup_module(void);
+ extern typeof(name) __mod_##type##__##name##_device_table		\
+   __attribute__ ((unused, alias(__stringify(name))))
+ #else  /* !MODULE */
+-#define MODULE_DEVICE_TABLE(type, name)
++/* The names may not be unique for built-in modules, so include the module name
++ * to guarantee uniqueness.
++ */
++#define MODULE_DEVICE_TABLE(type, name)					\
++extern void *CONCATENATE(						\
++	CONCATENATE(__mod_##type##__##name##__,				\
++		__KBUILD_MODNAME),					\
++	_device_table)							\
++	__attribute__ ((unused, alias(__stringify(name))))
+ #endif
+ 
+ /* Version of form [<epoch>:]<version>[-<extra-version>].
 -- 
 2.37.3
 
