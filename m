@@ -2,176 +2,158 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08401C4167B
-	for <linux-modules@archiver.kernel.org>; Sat, 17 Dec 2022 07:32:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E8D8C4332F
+	for <linux-modules@archiver.kernel.org>; Sat, 17 Dec 2022 10:05:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbiLQHb6 (ORCPT
+        id S230339AbiLQKFW (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 17 Dec 2022 02:31:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        Sat, 17 Dec 2022 05:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiLQHb4 (ORCPT
+        with ESMTP id S230333AbiLQKFU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 17 Dec 2022 02:31:56 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828281DF35;
-        Fri, 16 Dec 2022 23:31:54 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NYyGr1YPYzqT6p;
-        Sat, 17 Dec 2022 15:27:32 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 17 Dec 2022 15:31:50 +0800
-Subject: Re: [PATCH v9] kallsyms: Add self-test facility
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Steven Rostedt' <rostedt@goodmis.org>
-CC:     'Andreas Schwab' <schwab@linux-m68k.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        Sat, 17 Dec 2022 05:05:20 -0500
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2078.outbound.protection.outlook.com [40.107.12.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61267178A7;
+        Sat, 17 Dec 2022 02:05:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nolec61XN+Cb3BFsROHWA7XOXbjU7lGuWVOJD7fe5qwRYjaeA/9acl7ybSR2HTrhErAhm78taxMKBbNzOKcJc2mvkKnjBQLAghzsMwkB/aJPUbm9Brg6gSB4i+AEq0/0W9Nx1f4VOSjLjH5SMsTWqSikWs0DxAtEuM3HcUr8r0w9AiYuwxMqD9QHvBxgH5ZgnZ8OwwU7cPP5wzghUgEahboDnChOQHx8jVGYQA7mKAGhgbUj2aIBA5mBW/st51pM0KOuo+XZAUK6tcaI6kr280FKxgBop1Z6Zsj3/mE/pgNsnW+aRWUYAhHB7hlHV5gM8XJz9v04+YmtdWby82eLEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gbnYCAJGrOPSQEDh36RJ/Zwl/ecVvRp2aGCZi9KtH34=;
+ b=fAD3AvXFj9mU7mWrKuteuljEfiN0eNtChsxX5AE+8raSxBqHukVhkmoEbsSVZE+XMuYwRwc/VZgGdkRKVVWfQi9MC9mefZGrJ48OWhv49XZbV9AxKFjSVhTh9ntocFL62TyTTrWY6x4Gl5dxsYeqT3Z7+AXvkFYXBim1053SrXTkdlqYrDQED6Fb7L9SzE9JcKq1BywJGnEJ6wE539HdxELNkGODGEXBPbjMwwjfCLuLJ6XRmoZNLLh+CR4QuKS0SyH6UMGoYfVS2dLT1//GgLMeHAfqeuNnhG1RxzbeBLLude0OZBXvKISLWCz3AAvtiKArUl99DZZWvOLQd0fM3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gbnYCAJGrOPSQEDh36RJ/Zwl/ecVvRp2aGCZi9KtH34=;
+ b=1sKINo2cJE85D03eMWXlGe7gufBUtSRE5MnXufZBPxs+uwk0isSUlof9n2e7VUk/nOFMuGqeEXopkU20lBcsKEW3IXs3WzVVYu8Mj5cmhsjDW9HoFzIlTI6anw/m/eF37D0sk3aneCiY5Jq3hl6TtXSFn9EWptXpER9Rw1yZ94OLof8EB3UYA+JeXKpGYsqTgBX9m82qTvG+m5LyzOzafrJDIrwD3H/ArEFAGanVkmiB6m8Nq9yms1tuFByRg1j9tZ4vBJ/gUe6httXqZ2iM16ZJzFBEMZi/9pDBUH16hrcOcyjzB4niUD4lcm1061vaF3or/YkSEjJRVFzR6J1JPg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB1598.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b4::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Sat, 17 Dec
+ 2022 10:05:15 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::8e8b:856e:12eb:ff9d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::8e8b:856e:12eb:ff9d%9]) with mapi id 15.20.5924.016; Sat, 17 Dec 2022
+ 10:05:15 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Allen Webb <allenwebb@google.com>,
         "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
- <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
- <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
- <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
- <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
- <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
- <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
- <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
- <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
- <87pmcjidfe.fsf@igel.home>
- <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
- <87len7ibtt.fsf@igel.home>
- <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com>
- <87fsdfib07.fsf@igel.home>
- <819801284eb745d9a4189759bad297f5@AcuMS.aculab.com>
- <20221216115314.6120beb7@gandalf.local.home>
- <ecf4939dbff84709a1782a8e8851b29f@AcuMS.aculab.com>
- <20221216121947.7d03b651@gandalf.local.home>
- <20221216123805.6eba002c@gandalf.local.home>
- <83701d57c0064c709669c03cecc38356@AcuMS.aculab.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <066d4a61-3df9-b9c8-81a2-40dfcd3c73ef@huawei.com>
-Date:   Sat, 17 Dec 2022 15:31:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <83701d57c0064c709669c03cecc38356@AcuMS.aculab.com>
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v7 1/5] module.h: MODULE_DEVICE_TABLE for built-in modules
+Thread-Topic: [PATCH v7 1/5] module.h: MODULE_DEVICE_TABLE for built-in
+ modules
+Thread-Index: AQHZEZwy65nCi6FE60ChA+D3ghoPpK5x2uWA
+Date:   Sat, 17 Dec 2022 10:05:15 +0000
+Message-ID: <7394f5cc-35be-0bc8-f92d-bb9e71d3f85c@csgroup.eu>
+References: <Y5IA2NYE5IaAzNby@kroah.com>
+ <20221216221703.294683-1-allenwebb@google.com>
+ <20221216221703.294683-2-allenwebb@google.com>
+In-Reply-To: <20221216221703.294683-2-allenwebb@google.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB1598:EE_
+x-ms-office365-filtering-correlation-id: 696e3bcc-8d2a-4da4-299f-08dae01631ed
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5aZqumEiqGXyD1SfopETK0Tv4puUdSrjET4DaqSDsn1jY3RlF89QjmBcT7ZH96QaSYIK8XV8SRB9T7A+ue49nhQotYrDxpsPqh0NXENXUdD7sySJc4GZk3tiiKASCtRt/+OCDJnSSLHdrXEwGED/VnGfGLiJNmDdSGo/wnu9Y9gLcvML0NsXOMXZYuQZ3mKzn55eRmkuuym4ZN3qt4dLEkD7mKibzUyCL873a9FpWDSGP1lDtdwN0n8LMUmjydmqASYzif7LsoH6VV4k7Gf9jlJKQPwDg4CsapmPvsbwvmoZN6CA/XxIhsKJ5UvJ5QRAwBaXKHBJLLLxw7CMn4bRqlG+QRUjoFGhzohaFItzmQyoLUFz+BNpfSZ3e+FV2AbKxDAfxpvjaZCTlU4PoiKX1Q9Zt5dmqcuZwdNiUu2xVmyG9yyeF9CJWhMf5eENPRZrO/0U1RGyxDIyh4JRV7zK7bbm+72YQqCCLvp4Nn3K/8zQYZ9G1PACR+R4BUdsSiZdK9KrRwvUhiAgczBkGGYbdAjukSwk+rvvbnrZTZx/POPgc6ip6LXetSXMtzT4ViyBM48JTjb5OmvszLnRzEk/lxv6e73JQ5fifYYwFq3kz6g6VeIrt6BwENu2GdTiYwywqZjUaZEcTDWwwteGIJXb5ez0DHGytGMHkcdq3RIRMjTSovQiOHxEs9hgFGoKk+WTwYLFlfrUkhJXNRoiiCyDvucXYKBysL1m2JAKY9INnsrW6MqpvXybGcSdbS3KrSJsIbMi1JrcFQWi6F1Fpwt/fMVfMdnIxnAtxdC64mZNHAQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(346002)(376002)(39850400004)(396003)(451199015)(71200400001)(6506007)(2906002)(966005)(478600001)(6486002)(31686004)(6512007)(26005)(186003)(316002)(36756003)(54906003)(110136005)(66946007)(66446008)(2616005)(76116006)(66556008)(66476007)(64756008)(4326008)(8676002)(91956017)(8936002)(41300700001)(66574015)(5660300002)(122000001)(83380400001)(44832011)(38100700002)(86362001)(38070700005)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MkJrQ29xV0RTWFYrWGJBNVc1emtQOGFBM3BPRndzNzJkVnVOZ25QaXNjc2U4?=
+ =?utf-8?B?VklwS2FkZUkxb0ZsM05FSy95QXF6OEpuczNJOXU1QVBPNzk1ZjRpZnhWa2lX?=
+ =?utf-8?B?eUlUOFBHRm9ya0hkOXZxZkIyTG1zS2ZtQUtuSHJ6ZEt3aDRuSWx5WC8ydnpN?=
+ =?utf-8?B?c1dpdU9TRThXcU1DaGpQSTdWZmx1Qldya2svWUdRTWF1Qk1mTDJGZkppbzI1?=
+ =?utf-8?B?Vm11R1hmT1kwTlZZUG8wN2pwb0hIOUhyenU0dXIwVnVidG9MQVV4SnNOc1Jm?=
+ =?utf-8?B?c1Z2QWZWTDZ2ZGFwbkp2OTRERUljVXlucDlqOXhVbGVId0VsVjdyYkNWVnUy?=
+ =?utf-8?B?YVorcjNrVnBCR3VhMlhDczFQS25HWkp3MlVhdForNEVWMUlKTStqdUYyZkNV?=
+ =?utf-8?B?OUhxaTFuMTNmeE5lVUk1UExTYnFROHN0cXhWUWk5S2dJQXRjTVY4Mm4yQlVM?=
+ =?utf-8?B?TTMrb2JOM3JxSnNaeS9NOVl1dnAvK0pJeWlMQmJlMjhjRzBWcWxvc01VZjFr?=
+ =?utf-8?B?cFhWT1hpdXNiZVF0QWFHY3FLMStTUjVTdEQyNlZSMU1odFg4VVVtN2hPdzdW?=
+ =?utf-8?B?OTdJNHgvTFRmMXlCSVI5QkRyMXFhS3pGOGxteHhudnFEN1pFSEdSTURyNU1w?=
+ =?utf-8?B?YkZyU1NvdjZRejlNYmRMK01DaUNIdzhEOTRCSmNGM3g0eFYyTUxsMExBOFh2?=
+ =?utf-8?B?MmN0aEUvd29lTS9NMS9QQkNxWFZEN3VHVkxlaC8yNTdZN3hHV3JnNlQ0RlJx?=
+ =?utf-8?B?UEFVNDhiM2IxL2NoK1l2QmhLSFhMRlRQd3RpZTgxRHBOVStBTkYyaGoxbkZZ?=
+ =?utf-8?B?Nms1WXFBMUplb1NEdkRiUFRlTWtteCs1MVdHSUdscHpqdVlpdU1lSHIxTmVp?=
+ =?utf-8?B?T0kzbEJ0RHFtTFIwTFpSY3NkZmN5eDc0ZWpmMmRkUkYvRjltL1VjcEVPOVdz?=
+ =?utf-8?B?bk9tTnpJVHR4Tk14RkdNcjBtcFZmQlBNMjJhZUdNWUQyRVlXTUJrajZMeDJr?=
+ =?utf-8?B?blZzMHFZS1JvZmFadXhlSjQvSmp4NGdHSUZVekxkbWhKZkEvNThCbnhmYnhn?=
+ =?utf-8?B?UGlTQ3NOVnhIbVZTVmdUNGk3MUJoMVpKdGZ4RFhTYzgxMW81RndLQlkxUkpS?=
+ =?utf-8?B?aE1uNGhGTmgxcGVXbkhGMTJOdHhjaXNtR3ZxWklYSXRYSWloUzltRkdqT2FJ?=
+ =?utf-8?B?dU9md0M0QlNEMHU3NzhZeDZ5eUNGNXEydi9PenVlNHZ4NE9zQXdlbzgzNG81?=
+ =?utf-8?B?VnlhOGc3amd0OWVIbUZ0TnBCejZuRnhHQ0dJSjZEQ2syRzNxMThmRWlIZ1pw?=
+ =?utf-8?B?bHZmcTRVMXNrclpuckgwcTZ3SzhiQ25CMUVubXd4ckR4eU5OM21YYTJCVGsy?=
+ =?utf-8?B?cUwzclZPUWZlOVVONG4zR0ppalVmeUIyazJqbUpKRTRhd1ROVmhsYWVpMFpp?=
+ =?utf-8?B?enJlNEFkK2hjcU4xdXhaQWV4a3dkUWFydXJreDJ5bVc2T0NOZkNjUUpleHRq?=
+ =?utf-8?B?Y05BaGZMK2crT0loRnpPS0szNEtIc3hSZjNuZm5UQzl5T3dUMGkwa2ZxNzVC?=
+ =?utf-8?B?QnhWMGc1ZThuVHJ4bUtIa0xIU2QzZE11cGlHUlNNSFFYMlRhbEs4V2hITXBx?=
+ =?utf-8?B?SnM5dWprVm85bEk0eEFzeHcxeTZ5Qit0NFJyR2phLzdoSk1MbXhxSlE3bFBV?=
+ =?utf-8?B?bnVtZjRDb3U1NGxGalA5TTVXSDZsTEF4OFNuL1IzaEFhWEtQakwyZ2JhYmg1?=
+ =?utf-8?B?UlgzcDRqZnI5MGZxNllwOEtBc01OcEhqRDZmVTNLck16UXRsYW91L0lFNmFs?=
+ =?utf-8?B?NnNWYXRwRVdlbVduRzdDN1JrNU1lL2wwNGFhaDZGeUQ4OWJwWlI5MEx6NmVk?=
+ =?utf-8?B?VERtWkVxb2hZazNzZUoxMG9CbkM0WWYwNFdVbDlwYUcvWVg2aHU4TGxyOTJO?=
+ =?utf-8?B?UHYwY00rYncrM3F4dUtsNTl4N1FNNWQyQVYyU2xreXdrcXVJa29GTGFic1Ja?=
+ =?utf-8?B?YnZPZGlxNWJybG5ha3ZtUHVBWlZFRWM5emdRZm1FM0xSZi91OWpRS205MkY0?=
+ =?utf-8?B?TUdoOUlLTEJaUmMwSzNHWnh5aURqNlBGYVdSeWtDTENXSlFtUEczZGhJVk90?=
+ =?utf-8?B?MWxxMnB3NUVoZWxTbWxpMmdTKzd0RnRFcXlnRHByNkRSV2dNUGJNdUtYa1l1?=
+ =?utf-8?B?a3c9PQ==?=
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-ID: <6245D3807D4FC845A0F9254C607A296C@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 696e3bcc-8d2a-4da4-299f-08dae01631ed
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2022 10:05:15.7562
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZadKUc0mBfhWwzX0agrn8f5TPAfM6vvaeiQxZI5gSelhYHB8UvqPuwGFMHduUPCoDiBqUFLOjnHwlBw1aCI51/Wd3gM9uVTYivQ6Wd/O7ik=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB1598
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-
-
-On 2022/12/17 3:27, David Laight wrote:
-> From: Steven Rostedt
->> Sent: 16 December 2022 17:38
->>
->> On Fri, 16 Dec 2022 12:19:47 -0500
->> Steven Rostedt <rostedt@goodmis.org> wrote:
->>
->>> I assumed that "memory" was for memory unrelated to the input constraints.
->>
->> Well, it looks like you do need a "memory" barrier.
->>
->>   https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html
->>
->> "memory"
->>
->>       The "memory" clobber tells the compiler that the assembly code
->>       performs memory reads or writes to items other than those listed in
->>       the input and output operands (for example, accessing the memory
->>       pointed to by one of the input parameters). To ensure memory contains
->>       correct values, GCC may need to flush specific register values to
->>       memory before executing the asm. Further, the compiler does not
->>       assume that any values read from memory before an asm remain
->>       unchanged after that asm; it reloads them as needed. Using the
->>       "memory" clobber effectively forms a read/write memory barrier for
->>       the compiler.
->>
->> As the "(for example, accessing the memory pointed to by one of the input
->> parameters)" is exactly this case.
-> 
-> Without the memory clobber code like:
-> int f(const char *s)
-> {
-> 	char c[4] = "abc";
-> 	return strcmp(s, c);
-> }
-> is very like to get optimised so that c[] is never written.
-> 
-> However, in this case, the strings have all existed for ages.
-> So that won't be the problem.
-> 
-> It might be obvious what is wrong from the asm output.
-> Although the binary-chop lookup is suspect I'd also check
-> that the sorted index is plausible - just tracing the first
-> 20 entries might be enough.
-> No point peering at the search code if the setup is wrong.
-
-6.47.2.1 Volatile
-GCC’s optimizers sometimes discard asm statements if they determine there is no need for
-the output variables. Also, the optimizers may move code out of loops if they believe that
-the code will always return the same result (i.e. none of its input values change between
-calls). Using the volatile qualifier disables these optimizations.
-
-So it's quite possible (I didn't disassemble vmlinux, because I didn't learn m68k):
-
-//binary search
-while (low <= high) {
-    ...
-    ret = compare_symbol_name(name, namebuf);   ----> (1)
-    if (!ret)
-        break;
-}
-
-low = mid;
-while (low) {
-    ...
-    if (compare_symbol_name(name, namebuf))     ----> (2)
-        break;
-    low--;
-}
-
-The pointer 'name' and 'namebuf' of (1) and (2) are the same,
-so the 'if' statement of (2) maybe omitted by compiler.
-
-By the way, I tried no volatile but with
-+               : : "memory");
-It also works well.
-
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
-> 
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+DQoNCkxlIDE2LzEyLzIwMjIgw6AgMjM6MTYsIEFsbGVuIFdlYmIgYSDDqWNyaXTCoDoNCj4gSW1w
+bGVtZW50IE1PRFVMRV9ERVZJQ0VfVEFCTEUgZm9yIGJ1aWxkLWluIG1vZHVsZXMgdG8gbWFrZSBp
+dCBwb3NzaWJsZQ0KPiB0byBnZW5lcmF0ZSBhIGJ1aWx0aW4uYWxpYXMgZmlsZSB0byBjb21wbGVt
+ZW50IG1vZHVsZXMuYWxpYXMuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBBbGxlbiBXZWJiIDxhbGxl
+bndlYmJAZ29vZ2xlLmNvbT4NCj4gLS0tDQo+ICAgaW5jbHVkZS9saW51eC9tb2R1bGUuaCB8IDEw
+ICsrKysrKysrKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspLCAxIGRlbGV0
+aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9tb2R1bGUuaCBiL2luY2x1
+ZGUvbGludXgvbW9kdWxlLmgNCj4gaW5kZXggZWM2MWZiNTM5NzlhOS4uNDllNDAxOTM5MzEyNyAx
+MDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51eC9tb2R1bGUuaA0KPiArKysgYi9pbmNsdWRlL2xp
+bnV4L21vZHVsZS5oDQo+IEBAIC0yNDMsNyArMjQzLDE1IEBAIGV4dGVybiB2b2lkIGNsZWFudXBf
+bW9kdWxlKHZvaWQpOw0KPiAgIGV4dGVybiB0eXBlb2YobmFtZSkgX19tb2RfIyN0eXBlIyNfXyMj
+bmFtZSMjX2RldmljZV90YWJsZQkJXA0KPiAgICAgX19hdHRyaWJ1dGVfXyAoKHVudXNlZCwgYWxp
+YXMoX19zdHJpbmdpZnkobmFtZSkpKSkNCj4gICAjZWxzZSAgLyogIU1PRFVMRSAqLw0KPiAtI2Rl
+ZmluZSBNT0RVTEVfREVWSUNFX1RBQkxFKHR5cGUsIG5hbWUpDQo+ICsvKiBUaGUgbmFtZXMgbWF5
+IG5vdCBiZSB1bmlxdWUgZm9yIGJ1aWx0LWluIG1vZHVsZXMsIHNvIGluY2x1ZGUgdGhlIG1vZHVs
+ZSBuYW1lDQo+ICsgKiB0byBndWFyYW50ZWUgdW5pcXVlbmVzcy4NCj4gKyAqLw0KDQpUaGlzIGlz
+IG5ldHdvcmsgb25seSBjb21tZW50IHN0eWxlLg0KDQpPdGhlciBwYXJ0cyBvZiBrZW5lbCBoYXZl
+IGRpZmZlcmVudCBzdHlsZSwgc2VlIA0KaHR0cHM6Ly9kb2NzLmtlcm5lbC5vcmcvcHJvY2Vzcy9j
+b2Rpbmctc3R5bGUuaHRtbCNjb21tZW50aW5nDQoNCj4gKyNkZWZpbmUgTU9EVUxFX0RFVklDRV9U
+QUJMRSh0eXBlLCBuYW1lKQkJCQkJXA0KPiArZXh0ZXJuIHZvaWQgKkNPTkNBVEVOQVRFKAkJCQkJ
+CVwNCg0KJ2V4dGVybicga2V5d29yZCBpcyBwb2ludGxlc3Mgb2YgZnVuY3Rpb24gcHJvdG90eXBl
+cyBhbmQgZGVwcmVjYXRlZC4gDQpEb24ndCBhZGQgbmV3IG9jY3VyZW5jZXMuDQoNCj4gKwlDT05D
+QVRFTkFURShfX21vZF8jI3R5cGUjI19fIyNuYW1lIyNfXywJCQkJXA0KPiArCQlfX0tCVUlMRF9N
+T0ROQU1FKSwJCQkJCVwNCj4gKwlfZGV2aWNlX3RhYmxlKQkJCQkJCQlcDQo+ICsJX19hdHRyaWJ1
+dGVfXyAoKHVudXNlZCwgYWxpYXMoX19zdHJpbmdpZnkobmFtZSkpKSkNCj4gICAjZW5kaWYNCj4g
+ICANCj4gICAvKiBWZXJzaW9uIG9mIGZvcm0gWzxlcG9jaD46XTx2ZXJzaW9uPlstPGV4dHJhLXZl
+cnNpb24+XS4NCg==
