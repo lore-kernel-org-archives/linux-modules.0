@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBC35C4332F
-	for <linux-modules@archiver.kernel.org>; Mon, 19 Dec 2022 20:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ADEAC4167B
+	for <linux-modules@archiver.kernel.org>; Mon, 19 Dec 2022 20:47:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232744AbiLSUrO (ORCPT
+        id S232361AbiLSUrP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 19 Dec 2022 15:47:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        Mon, 19 Dec 2022 15:47:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiLSUqk (ORCPT
+        with ESMTP id S232688AbiLSUqp (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 19 Dec 2022 15:46:40 -0500
-Received: from mail-il1-x149.google.com (mail-il1-x149.google.com [IPv6:2607:f8b0:4864:20::149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1874312AE7
-        for <linux-modules@vger.kernel.org>; Mon, 19 Dec 2022 12:46:30 -0800 (PST)
-Received: by mail-il1-x149.google.com with SMTP id l16-20020a056e02067000b0030325bbd570so7208047ilt.0
-        for <linux-modules@vger.kernel.org>; Mon, 19 Dec 2022 12:46:30 -0800 (PST)
+        Mon, 19 Dec 2022 15:46:45 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692FF13D24
+        for <linux-modules@vger.kernel.org>; Mon, 19 Dec 2022 12:46:33 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-411c31a2c20so120753527b3.12
+        for <linux-modules@vger.kernel.org>; Mon, 19 Dec 2022 12:46:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RHzej/1PRqREjwzL8yy+/gC2rwJnW9I5Nh9PS4uQu5Q=;
-        b=qF7j3UMvzJCUsQLLBjLgzSlmOXfqeEaNvw3PLXzeRWDcyY3bD8OOA38EQdGqqCZrSa
-         iZncq8o51eeujFRZtBj6GVXss1cKEXggq6R/z5mdQ5oGh7e4OTlkwSEut6Vgt5ailuuP
-         Ed8N28NG0EMmlAF45ESity6Pkkw741SVRjm2mDeGj1255GePszv1dQ+FkisGc7bA9Zi+
-         PxalhtbeDVQuKtLNXx40YFKl4kZTz7hZ9GB7/D2GRe8u5St+PZ3YIZZ29RK+RgepiQRB
-         Zd9kHw0ZtKBVgwDl7AT/HspdSRo1e7RQggsVmuqHRJipm5Guv5SA6HoxE4OVIO2cVfY1
-         Ztbg==
+        bh=ffbS/pv8mbkzwi7BuDuXxKBVWgm3Q+ZGzVMRzNeN5+Y=;
+        b=P+tl9R92zOQTC3t4VBw6Y+REEQFR+YIPONKj6GW/JEp8bc5No52C7OOCdrsY39r2pk
+         ySPHB3qcvlRU5J3a0c1HKvTnRbrxxdIckGKtiUEsyPUN5l0UfD7v1cnFyxsrMHjSeg9k
+         ntwmZ6EMaNMngUAGGGjhgxLGtrqzmZppNYMUFeLMBFNfhfJNRapWUo64IFmy95TDVTW6
+         eYrn2ifH7UePSbFRu2IUDUsVJRJvY1OfevX06T1K98mae5bCESQfnTcEHkMzZpKmcw2g
+         1P8ECfIrvtAqhfF2Tnx6DZS+hcBtScf5fdyw1R4krdijYiv/Vn51BrnMfhW4zs8gKpg2
+         1oQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RHzej/1PRqREjwzL8yy+/gC2rwJnW9I5Nh9PS4uQu5Q=;
-        b=WWpZgq3RBVe/5oF8naGNwFlb5PXqeaNcJzZB6BWBDiDUonDdCiwmx27BOWPbWasR/J
-         8ZE1QG5S2UHDf4kXWRULOn030SnnMwQiscWubVxNAsKvBryqG/dd2Im8DJlCv1elQL8o
-         cxs/YnQ6jBYjGuujry1jVZE0YHyYdguZudkQ2C0kH0/3O1l6s5GlKICSVnD5ML+pw0gJ
-         dp/Lq9obc/i6iqjlID23yuni9h2Exp9UzEiAipqe7ivgBZtGS4W/ckwtOD60EaBjSSef
-         jF1VBBp9YzTjUvkfCxl1exeG4PJzSTpTJSb1qP1eY/ahecAI2X1zK5IY2vIJiWaQTk8F
-         j5yA==
-X-Gm-Message-State: ANoB5pmc6M2A2FpHLfZL2LPXHaWoR19jW0AJu+mrmSMgd47kKa6XfJ1y
-        fv6ElDwVWv/mH/n0BsH5DHler0ofxZSp/IrIpYjFeD7ebGRLpyVi7Ne8r3X2fN3LwHLhR9A5enP
-        /8X+xU5hj5Rv43nvHkcaytqkMPf+ETNteAYg+JQWnrZ+vENzqBFD3r1Np0vIgyx+B8NbxLqQNik
-        Ub9dI=
-X-Google-Smtp-Source: AA0mqf6P0aFwhaiO/Hq5T9Jzwbu4P/V1ES2mCZhd8CSbA9Dg3bOw2kpuFSOzPqyC1YM4SB2aGePgn2HQQq3dYk8=
+        bh=ffbS/pv8mbkzwi7BuDuXxKBVWgm3Q+ZGzVMRzNeN5+Y=;
+        b=I7qMesNB4h8reucHTEB2F6qevo7X/DXpQjr8Wm1x6RRPndGu0YzJ4gqsatHdHl+jE4
+         VbWrNnauDeV+8gYEztPcBA7spKWs+vQjFyRNNfJRp/sjGkgR8Y12wCmyRAQTt7gnmRqR
+         sVR6rXZjZ1CcjglTGUUAOWv+VPQjW+q3pdTQtCEGrlWc9hkTocLGLd+5piffXd/4r2Rm
+         cYpyzctUT4ZWCDenpVpbG81lY+jvfjA83Ud1WRGCpyKKVKJeTwZYGUV+85XiCl9PoBfo
+         oUz3eYtKTAzEUSuCg3aUTWHJTHUoZJ0Yw6c1mWwmtJE+m+WlZzumb3/LslVgzRaaCyYD
+         CyRQ==
+X-Gm-Message-State: ANoB5pn5B/M46RZaIeQfS3oKQkLwob2s00Pzsr7MbMtvVRj882Qd0i5t
+        SqtTHbH6Je3gV0vE/s+WYVsHOTgoFsNV8d3gg7SAnHUbQ5PgtfJGVekkJ0jGunzpceahRVDCerZ
+        dL9o/XLTym7Ctml7HAWC9I0oA9S7w9I80AJEV70WTC3S84i6AScER21ZtwdctnFCeNPUOxK8ZOT
+        496hI=
+X-Google-Smtp-Source: AA0mqf6w0d+8XmJPolVDX0bIGkOzyjIsL/6QyfMCMFcnlg7Ya0kUphOTNwSV8DaOZXqoHbReS+J1QcL40M1hjW8=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a92:cd83:0:b0:300:56a5:ae19 with SMTP id
- r3-20020a92cd83000000b0030056a5ae19mr43568707ilb.72.1671482789512; Mon, 19
- Dec 2022 12:46:29 -0800 (PST)
-Date:   Mon, 19 Dec 2022 14:46:15 -0600
+ (user=allenwebb job=sendgmr) by 2002:a05:690c:ec2:b0:3bd:7135:c319 with SMTP
+ id cs2-20020a05690c0ec200b003bd7135c319mr4467546ywb.89.1671482792621; Mon, 19
+ Dec 2022 12:46:32 -0800 (PST)
+Date:   Mon, 19 Dec 2022 14:46:18 -0600
 In-Reply-To: <20221219204619.2205248-1-allenwebb@google.com>
 Mime-Version: 1.0
 References: <20221219191855.2010466-1-allenwebb@google.com> <20221219204619.2205248-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221219204619.2205248-8-allenwebb@google.com>
-Subject: [PATCH v9 07/10] modpost: Add -b option for emitting built-in aliases
+Message-ID: <20221219204619.2205248-11-allenwebb@google.com>
+Subject: [PATCH v9 10/10] docs: Include modules.builtin.alias
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -68,80 +68,31 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This adds an unimplemented command line flag for writing the built-in
-aliases to a file.
+Update the documentation to include the presense and use case of
+modules.builtin.alias.
 
 Signed-off-by: Allen Webb <allenwebb@google.com>
 ---
- scripts/mod/modpost.c | 23 +++++++++++++++++++++--
- scripts/mod/modpost.h |  1 +
- 2 files changed, 22 insertions(+), 2 deletions(-)
+ Documentation/kbuild/kbuild.rst | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 2c80da0220c3..e38d6b2ceea4 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -2165,6 +2165,19 @@ static void write_if_changed(struct buffer *b, const char *fname)
- 	write_buf(b, fname);
- }
+diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
+index 08f575e6236c..1c7c02040a54 100644
+--- a/Documentation/kbuild/kbuild.rst
++++ b/Documentation/kbuild/kbuild.rst
+@@ -17,6 +17,12 @@ modules.builtin
+ This file lists all modules that are built into the kernel. This is used
+ by modprobe to not fail when trying to load something builtin.
  
-+/* Write the builtin aliases to the specified file. */
-+static void write_builtin(const char *fname)
-+{
-+	struct buffer buf = { };
-+	struct module *mod;
++modules.builtin.alias
++---------------------
++This file lists all match-id based aliases for modules built into the kernel.
++These are intended to enable userspace to make authorization decisions based
++on which modules are likely to be bound to a device after it is authorized.
 +
-+	list_for_each_entry(mod, &modules, list)
-+		buf_write(&buf, mod->modalias_buf.p, mod->modalias_buf.pos);
-+
-+	write_if_changed(&buf, fname);
-+	free(buf.p);
-+}
-+
- static void write_vmlinux_export_c_file(struct module *mod)
- {
- 	struct buffer buf = { };
-@@ -2321,13 +2334,16 @@ int main(int argc, char **argv)
- {
- 	struct module *mod;
- 	char *missing_namespace_deps = NULL;
--	char *dump_write = NULL, *files_source = NULL;
-+	char *builtin_write = NULL, *dump_write = NULL, *files_source = NULL;
- 	int opt;
- 	LIST_HEAD(dump_lists);
- 	struct dump_list *dl, *dl2;
- 
--	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
-+	while ((opt = getopt(argc, argv, "b:ei:mnT:o:awENd:")) != -1) {
- 		switch (opt) {
-+		case 'b':
-+			builtin_write = optarg;
-+			break;
- 		case 'e':
- 			external_module = true;
- 			break;
-@@ -2390,6 +2406,9 @@ int main(int argc, char **argv)
- 			write_mod_c_file(mod);
- 	}
- 
-+	if (builtin_write)
-+		write_builtin(builtin_write);
-+
- 	if (missing_namespace_deps)
- 		write_namespace_deps_files(missing_namespace_deps);
- 
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 34fe5fc0b02c..c55a6aeb46bf 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -123,6 +123,7 @@ struct module {
- 	bool has_init;
- 	bool has_cleanup;
- 	struct buffer dev_table_buf;
-+	struct buffer modalias_buf;
- 	char	     srcversion[25];
- 	// Missing namespace dependencies
- 	struct list_head missing_namespaces;
+ modules.builtin.modinfo
+ -----------------------
+ This file contains modinfo from all modules that are built into the kernel.
 -- 
 2.37.3
 
