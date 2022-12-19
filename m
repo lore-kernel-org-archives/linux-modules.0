@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC0C9C4332F
-	for <linux-modules@archiver.kernel.org>; Mon, 19 Dec 2022 20:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A41C001B2
+	for <linux-modules@archiver.kernel.org>; Mon, 19 Dec 2022 20:47:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbiLSUrM (ORCPT
+        id S232713AbiLSUrN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 19 Dec 2022 15:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
+        Mon, 19 Dec 2022 15:47:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiLSUql (ORCPT
+        with ESMTP id S232710AbiLSUqn (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 19 Dec 2022 15:46:41 -0500
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC42A12D29
-        for <linux-modules@vger.kernel.org>; Mon, 19 Dec 2022 12:46:30 -0800 (PST)
-Received: by mail-il1-x14a.google.com with SMTP id a10-20020a056e02180a00b0030bc09c6b94so900106ilv.6
-        for <linux-modules@vger.kernel.org>; Mon, 19 Dec 2022 12:46:30 -0800 (PST)
+        Mon, 19 Dec 2022 15:46:43 -0500
+Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2BF12ABB
+        for <linux-modules@vger.kernel.org>; Mon, 19 Dec 2022 12:46:32 -0800 (PST)
+Received: by mail-io1-xd49.google.com with SMTP id e15-20020a056602158f00b006e01d8fa493so4614407iow.3
+        for <linux-modules@vger.kernel.org>; Mon, 19 Dec 2022 12:46:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ict2nAybZst9hd7blb/mqnDuFXGRQOU9mJnqBemEDUs=;
-        b=s2ZrfNQOjBrSWOSByiZCQfYB433BmyIy/j3ly5GPI7q7DQSKjQaGWpR8OpY5yqR4up
-         s/oCDPMg27vjwGrwVakCjp4cMNI3bT10VqVyYGG/KXoVAvy3X5gux1hPs+vi4/BDBB3M
-         KwDWb6Jhedtm3NReW57ZGysB4WVkkexx2NoF17pNoEVKe1gWeqybIlgRLnARmU/966fe
-         bfborkGMEPeQtjsE7fqcXAEvOEBGXFtMu9wq8FhFmfhYwwf529//Ho3A8hM019D3duWx
-         jJCLpW3SvyBXZJdHFHUrepQKdzkQiRs1ZiPGq9+tWAKvGfkZODfY5IapcpB2YfBsy2iC
-         GbYA==
+        bh=gekU6kKP7IIk6R91i2D+kYhQ2/5+ZzFfnfqT/fUlpic=;
+        b=irlGYLfrTeZP9BJWrJoWnhdGeWqcT/6M3D430+H48yklmxreMzES9RrMjRQ7R9s5lo
+         HBLGGYcMEHFXWH/mEAkKPbAtckwDjcL7QW1b+QX4AUICKJZH2LI/wh3nklHQHZN0d0LK
+         dSiNzTmkxNr14tIC+jO2mIGbQTDGo0v0w87//seyz99GDAJFm1RAmNfiuuHAWROQZtb1
+         YWk6K9arXkw5/2XZzbRnqRQf6+JyYif9lrBHjpWotBKUYZuGLcSOG+4gQu3c0hP9oyUg
+         v0/wHO/Z7PK56gb2l7g5hwVIiBB5IpFU9iFdp8ZwhbJ0BfX5BxjAoZdVDUrWQH2QB/Cx
+         +K5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ict2nAybZst9hd7blb/mqnDuFXGRQOU9mJnqBemEDUs=;
-        b=qtVWCqzTEKsyzlzyN2yx33wbbVsLTFD3BhF6YmW28WfV82LB0fgcEuT5IumyplQ6Hc
-         JvXMoKwzEiqh18cMS247kPNp2BC4PrZ1dRL+EPdvpdBlqxNxcr+XsDeBo3qkxRPgmiHX
-         rRMdlwXwdwGhTAJKp/OaDlCj8SBh9Xe0sT56n/W82ZjkYmpHUtCPtHoinHQ2BTAeBciA
-         giTR67ke6EOJUwpGFMCDKOviWo5WBYaqKwM2acvuDPn3Mh6WbXdqg3bMVIhpanyYqXYY
-         rWZ+PvkBqVQQjKhC4bIFfWvUjY2/igxpcV8+LmHNMLGtmyHa4npEekACN2DlMGunDpb7
-         d2RA==
-X-Gm-Message-State: ANoB5pkZZR7YRDth+IG4tlKCq24qerT8MWDQJDzdhTLXLn8R/MOdp8NH
-        IRmxXQSDXlQrIQYGk3OMhIXJlmoXxPRnHxt9DtuuGkGh5vJyBPXKAkfg6FGPcjzBjDXUBL25M4C
-        VKHIHccYhtevYEs3Iaxv6TO5fZJBAYIJ8UM0FSnw81EkIMHlo+WhMkj0eRWDieez5ki0FsGsPLv
-        sUch4=
-X-Google-Smtp-Source: AA0mqf4Vg7sPZKoxjDlHwlE7TekSeJ2HLUzyD0Y5TnfKfKOKbyyhiPH5BhZs8OQobjXMnrVrn44Buga/nbkrqDk=
+        bh=gekU6kKP7IIk6R91i2D+kYhQ2/5+ZzFfnfqT/fUlpic=;
+        b=v5XFhoDnAZlDwdj0aJo9s/wQEhVbjMGX6MjwUmT7QBl9jpRncB08tE9kamPx2UL4hj
+         lH8Szp6WI31hyO58hyZvbRk0ZxEVD7j+hTLZtHiyl2PXhFly0ZO9vUN0sbVwI7rw9Ea2
+         ulAyr7F0fpmy80jyDOWpQdd51l7fmJDYJw9LOuHCTMvusXGoilYG/YzwlbHhu94UJtED
+         HEuLMJKsO26zbp5klhW/sOdInVohndyar2tD1AIqaAElX5KufP81Ijoh3vDkrhRq6EEJ
+         XzRM5QW5A5Un8zdgkjSVzcro7uPgEqRrkAivD9OLAHeEWt4ouwowtqZtFoa5jHxlU6jr
+         77wA==
+X-Gm-Message-State: ANoB5placaYg/f7x8G+isgx+bgWtwnPo2JDikj27lsbPRxjoXT3AGTLI
+        wNXQIh4TjKi3G+GLyd/WIwnuvD7ylzA13n09YfMhPgffDNDW7X4g+PZFRUEVUiQADxA+GwHapMM
+        LHSx735YYW3oDCJUYR+zqZWENQns1YnuB1+DhRHyc+uyvm+q0i0yuTgruk4igafKMFCJrgDWhjL
+        8ZJd0=
+X-Google-Smtp-Source: AA0mqf4aN7bGxk42XefP/nBp103XKoDM2Xgp8PcWWbeWtkZkSiF3OLgesagNVAAmy5OIWYOD9DDURkstGs6TMOI=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a05:6e02:c08:b0:303:4e51:e5b2 with SMTP
- id d8-20020a056e020c0800b003034e51e5b2mr11864457ile.285.1671482790594; Mon,
- 19 Dec 2022 12:46:30 -0800 (PST)
-Date:   Mon, 19 Dec 2022 14:46:16 -0600
+ (user=allenwebb job=sendgmr) by 2002:a5e:a711:0:b0:6e3:1926:f46e with SMTP id
+ b17-20020a5ea711000000b006e31926f46emr2270722iod.162.1671482791701; Mon, 19
+ Dec 2022 12:46:31 -0800 (PST)
+Date:   Mon, 19 Dec 2022 14:46:17 -0600
 In-Reply-To: <20221219204619.2205248-1-allenwebb@google.com>
 Mime-Version: 1.0
 References: <20221219191855.2010466-1-allenwebb@google.com> <20221219204619.2205248-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221219204619.2205248-9-allenwebb@google.com>
-Subject: [PATCH v9 08/10] file2alias.c: Implement builtin.alias generation
+Message-ID: <20221219204619.2205248-10-allenwebb@google.com>
+Subject: [PATCH v9 09/10] build: Add modules.builtin.alias
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -68,124 +68,82 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This populates the mod->modalias_buf with aliases for built-in modules
-when modpost is run against vmlinuz.o.
+Generate modules.builtin.alias using modpost and install it with the
+modules.
 
 Signed-off-by: Allen Webb <allenwebb@google.com>
 ---
- scripts/mod/file2alias.c | 55 +++++++++++++++++++++++++++-------------
- 1 file changed, 38 insertions(+), 17 deletions(-)
+ .gitignore               |  1 +
+ Makefile                 |  1 +
+ scripts/Makefile.modpost | 17 ++++++++++++++++-
+ 3 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-index e41ff8de7a87..e840cb51281a 100644
---- a/scripts/mod/file2alias.c
-+++ b/scripts/mod/file2alias.c
-@@ -232,6 +232,8 @@ static void do_usb_entry(void *symval,
- 	add_wildcard(alias);
- 	buf_printf(&mod->dev_table_buf,
- 		   "MODULE_ALIAS(\"%s\");\n", alias);
-+	if (mod->builtin_name)
-+		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
- }
+diff --git a/.gitignore b/.gitignore
+index 47229f98b327..40a90bca8964 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -67,6 +67,7 @@ modules.order
+ /System.map
+ /Module.markers
+ /modules.builtin
++/modules.builtin.alias
+ /modules.builtin.modinfo
+ /modules.nsdeps
  
- /* Handles increment/decrement of BCD formatted integers */
-@@ -376,9 +378,13 @@ static void do_of_entry_multi(void *symval, struct module *mod)
- 			*tmp = '_';
+diff --git a/Makefile b/Makefile
+index 78525ebea876..572f364f4053 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1558,6 +1558,7 @@ __modinst_pre:
+ 	fi
+ 	@sed 's:^:kernel/:' modules.order > $(MODLIB)/modules.order
+ 	@cp -f modules.builtin $(MODLIB)/
++	@cp -f modules.builtin.alias $(MODLIB)/
+ 	@cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
  
- 	buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
-+	if (mod->builtin_name)
-+		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
- 	strcat(alias, "C");
- 	add_wildcard(alias);
- 	buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
-+	if (mod->builtin_name)
-+		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
- }
+ endif # CONFIG_MODULES
+diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+index e41dee64d429..94c1d66c7769 100644
+--- a/scripts/Makefile.modpost
++++ b/scripts/Makefile.modpost
+@@ -15,6 +15,7 @@
+ # 2) modpost is then used to
+ # 3)  create one <module>.mod.c file per module
+ # 4)  create one Module.symvers file with CRC for all exported symbols
++# 5)  create modules.builtin.alias the aliases for built-in modules
  
- static void do_of_table(void *symval, unsigned long size,
-@@ -610,12 +616,18 @@ static void do_pnp_device_entry(void *symval, unsigned long size,
+ # Step 3 is used to place certain information in the module's ELF
+ # section, including information such as:
+@@ -51,6 +52,21 @@ ifneq ($(findstring i,$(filter-out --%,$(MAKEFLAGS))),)
+ modpost-args += -n
+ endif
  
- 		buf_printf(&mod->dev_table_buf,
- 			   "MODULE_ALIAS(\"pnp:d%s*\");\n", *id);
-+		if (mod->builtin_name)
-+			buf_printf(&mod->modalias_buf, "alias pnp:d%s* %s\n",
-+				   *id, mod->builtin_name);
- 
- 		/* fix broken pnp bus lowercasing */
- 		for (j = 0; j < sizeof(acpi_id); j++)
- 			acpi_id[j] = toupper((*id)[j]);
- 		buf_printf(&mod->dev_table_buf,
- 			   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
-+		if (mod->builtin_name)
-+			buf_printf(&mod->modalias_buf, "alias acpi*:%s:* %s\n",
-+				   acpi_id, mod->builtin_name);
- 	}
- }
- 
-@@ -637,6 +649,8 @@ static void do_pnp_card_entries(void *symval, unsigned long size,
- 			const char *id = (char *)(*devs)[j].id;
- 			int i2, j2;
- 			int dup = 0;
-+			char acpi_id[PNP_ID_LEN];
-+			int k;
- 
- 			if (!id[0])
- 				break;
-@@ -662,19 +676,23 @@ static void do_pnp_card_entries(void *symval, unsigned long size,
- 			}
- 
- 			/* add an individual alias for every device entry */
--			if (!dup) {
--				char acpi_id[PNP_ID_LEN];
--				int k;
--
--				buf_printf(&mod->dev_table_buf,
--					   "MODULE_ALIAS(\"pnp:d%s*\");\n", id);
--
--				/* fix broken pnp bus lowercasing */
--				for (k = 0; k < sizeof(acpi_id); k++)
--					acpi_id[k] = toupper(id[k]);
--				buf_printf(&mod->dev_table_buf,
--					   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
--			}
-+			if (dup)
-+				continue;
++vmlinux.o-if-present := $(wildcard vmlinux.o)
++ifneq ($(vmlinux.o-if-present),)
++output-builtin.alias := modules.builtin.alias
++modpost-args += -b .modules.builtin.alias.in
++.modules.builtin.alias.in: $(output-symdump)
++	@# Building $(output-symdump) generates .modules.builtin.alias.in as a
++	@# side effect.
++	@[ -e $@ ] || $(MODPOST) -b .modules.builtin.alias.in $(vmlinux.o-if-present)
 +
-+			buf_printf(&mod->dev_table_buf,
-+				   "MODULE_ALIAS(\"pnp:d%s*\");\n", id);
-+			if (mod->builtin_name)
-+				buf_printf(&mod->modalias_buf, "alias pnp:d%s* %s\n",
-+					   id, mod->builtin_name);
++$(output-builtin.alias): .modules.builtin.alias.in
++	sort -o $@ $^
 +
-+			/* fix broken pnp bus lowercasing */
-+			for (k = 0; k < sizeof(acpi_id); k++)
-+				acpi_id[k] = toupper(id[k]);
-+			buf_printf(&mod->dev_table_buf,
-+				   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
-+			if (mod->builtin_name)
-+				buf_printf(&mod->modalias_buf, "alias acpi*:%s:* %s\n",
-+					   acpi_id, mod->builtin_name);
- 		}
- 	}
- }
-@@ -1476,10 +1494,13 @@ static void do_table(void *symval, unsigned long size,
- 	size -= id_size;
++__modpost: $(output-builtin.alias)
++endif
++
+ ifeq ($(KBUILD_EXTMOD),)
  
- 	for (i = 0; i < size; i += id_size) {
--		if (do_entry(mod->name, symval+i, alias)) {
--			buf_printf(&mod->dev_table_buf,
--				   "MODULE_ALIAS(\"%s\");\n", alias);
--		}
-+		if (!do_entry(mod->name, symval + i, alias))
-+			continue;
-+		buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
-+		if (!mod->builtin_name)
-+			continue;
-+		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias,
-+			   mod->builtin_name);
- 	}
- }
+ # Generate the list of in-tree objects in vmlinux
+@@ -78,7 +94,6 @@ targets += .vmlinux.objs
+ .vmlinux.objs: vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
+ 	$(call if_changed,vmlinux_objs)
  
+-vmlinux.o-if-present := $(wildcard vmlinux.o)
+ output-symdump := vmlinux.symvers
+ 
+ ifdef KBUILD_MODULES
 -- 
 2.37.3
 
