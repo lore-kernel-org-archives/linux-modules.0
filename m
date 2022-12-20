@@ -2,172 +2,92 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DE1BC4332F
-	for <linux-modules@archiver.kernel.org>; Tue, 20 Dec 2022 14:31:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01FBFC4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 20 Dec 2022 14:32:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbiLTObH (ORCPT
+        id S233833AbiLTOc1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 20 Dec 2022 09:31:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        Tue, 20 Dec 2022 09:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233880AbiLTOal (ORCPT
+        with ESMTP id S234140AbiLTOcV (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 20 Dec 2022 09:30:41 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB41E1C125;
-        Tue, 20 Dec 2022 06:29:45 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NbzQG6fCnzHqST;
-        Tue, 20 Dec 2022 22:25:58 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 20 Dec 2022 22:29:43 +0800
-Subject: Re: [PATCH] kallsyms: Fix sleeping function called from invalid
- context when CONFIG_KALLSYMS_SELFTEST=y
-To:     Petr Mladek <pmladek@suse.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tue, 20 Dec 2022 09:32:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E756DDEA9;
+        Tue, 20 Dec 2022 06:32:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DC6A61478;
+        Tue, 20 Dec 2022 14:32:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B91C433EF;
+        Tue, 20 Dec 2022 14:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671546739;
+        bh=I9Cu+kAKzr7nMCJCiEna+C9QzBUQlwXRBtFRhj+AnWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i6ikgmsgRMPQj5I+OkiUddOnkhLld+aADGqP/TPYKPzpZ6Exmj7qfvunajVl8SbaS
+         BwClnc3miLkgwLxgoLdjqCg7/7pVvccQuRisfE4G4cBqLkhv8j7gI6cUC6PxerLH7H
+         O/wxsdusiIWFJl/5DkVzQqiUMAepsFo1sb96DzAk=
+Date:   Tue, 20 Dec 2022 15:32:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-References: <20221220063923.1937-1-thunder.leizhen@huawei.com>
- <df75bb4e-6cf8-7f41-b053-9619c13d1c72@csgroup.eu> <Y6GWInExu2m48K/C@alley>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <c5a04eaa-2b8d-647a-7c70-9262e6147394@huawei.com>
-Date:   Tue, 20 Dec 2022 22:29:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v9 01/10] imx: Fix typo
+Message-ID: <Y6HHb8alGpMHLpM/@kroah.com>
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com>
+ <20221219204619.2205248-2-allenwebb@google.com>
+ <Y6FZWOC1DSHHZNWy@kroah.com>
+ <CAJzde06et8qZPmu=zF13rJt8=v_etMjgTRhv9y75wdrX7doC0g@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Y6GWInExu2m48K/C@alley>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJzde06et8qZPmu=zF13rJt8=v_etMjgTRhv9y75wdrX7doC0g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-
-
-On 2022/12/20 19:01, Petr Mladek wrote:
-> On Tue 2022-12-20 08:15:40, Christophe Leroy wrote:
->>
->>
->> Le 20/12/2022 à 07:39, Zhen Lei a écrit :
->>> [T58] BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
->>> [T58] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 58, name: kallsyms_test
->>> [T58] preempt_count: 0, expected: 0
->>> [T58] RCU nest depth: 0, expected: 0
->>> [T58] no locks held by kallsyms_test/58.
->>> [T58] irq event stamp: 18899904
->>> [T58] hardirqs last enabled at (18899903): finish_task_switch.isra.0 (core.c:?)
->>> [T58] hardirqs last disabled at (18899904): test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
->>> [T58] softirqs last enabled at (18899886): __do_softirq (??:?)
->>> [T58] softirqs last disabled at (18899879): ____do_softirq (irq.c:?)
->>> [T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G T  6.1.0-next-20221215 #2
->>> [T58] Hardware name: linux,dummy-virt (DT)
->>> [T58] Call trace:
->>> [T58] dump_backtrace (??:?)
->>> [T58] show_stack (??:?)
->>> [T58] dump_stack_lvl (??:?)
->>> [T58] dump_stack (??:?)
->>> [T58] __might_resched (??:?)
->>> [T58] kallsyms_on_each_symbol (??:?)
->>> [T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
->>> [T58] test_entry (kallsyms_selftest.c:?)
->>> [T58] kthread (kthread.c:?)
->>> [T58] ret_from_fork (??:?)
->>> [T58] kallsyms_selftest: kallsyms_on_each_symbol() traverse all: 5744310840 ns
->>> [T58] kallsyms_selftest: kallsyms_on_each_match_symbol() traverse all: 1164580 ns
->>> [T58] kallsyms_selftest: finish
->>>
->>> Functions kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
->>> call the user-registered hook function for each symbol that meets the
->>> requirements. Because it is uncertain how long that hook function will
->>> execute, they call cond_resched() to avoid consuming CPU resources for a
->>> long time. However, irqs need to be disabled during the performance test
->>> to ensure the accuracy of test data. Because the performance test hook is
->>> very clear, very simple function, let's do not call cond_resched() when
->>> CONFIG_KALLSYMS_SELFTEST=y.
->>
->> I don't think it is appropriate to change the behaviour of a core 
->> function based on whether a compile time option related to tests is 
->> selected or not, because you will change the behaviour for all users, 
->> not only for the tests.
+On Tue, Dec 20, 2022 at 08:26:06AM -0600, Allen Webb wrote:
+> On Mon, Dec 19, 2022 at 3:23 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
+> > > A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> > > breaks a future patch set, so fix the typo.
+> >
+> > What behaviour is broken here for older kernels? What would not work
+> > that makes this patch worthy of consideration for stable? The commit
+> > log should be clear on that.
+> >
+> > In the future, it may be useful for you to wait at least 1 week or so
+> > before sending a new series becuase just a couple of days is not enough
+> > if you are getting feedback.
+> >
+> > So before sending a v10, please give it at least a few days or a week.
+> >
+> >   Luis
 > 
-> I agree. This is very bad idea. It would change the behavior for
-> the entire system.
-
-It just doesn't look so good, but it doesn't affect the entire system,
-and the proposed changes below will.
-
+> On Tue, Dec 20, 2022 at 12:42 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Dec 19, 2022 at 02:46:09PM -0600, Allen Webb wrote:
+> > > A one character difference in the name supplied to MODULE_DEVICE_TABLE
+> > > breaks a future patch set, so fix the typo.
+> >
+> > Breaking a future change is not worth a stable backport, right?  Doesn't
+> > this fix a real issue now?  If so, please explain that.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
->> If the problem is that IRQs are disabled, maybe the solution is
->>
->> 	if (!irqs_disabled())
->> 		cond_resched();
+> I will update the commit message to say that it breaks compilation
+> when building imx8mp-blk-ctrl as a module (and so forth for the other
+> similar patches).
 
-If irqs is disabled by the upper layer, this error cannot be easily detected.
-
->>
->> Or try to disable the call to cond_resched() in a way or another during 
->> the run of selftests.
-> 
-> If I get it correctly, the problem is this code in kernel/kallsyms_selftest.c:
-
-Yes, another method is to remove the interrupt protection.
-
-> 
-> static int lookup_name(void *data, const char *name, struct module *mod, unsigned long addr)
-> {
-> [...]
-> 	local_irq_save(flags);
-> 	t0 = sched_clock();
-> 	(void)kallsyms_lookup_name(name);
-> 	t1 = sched_clock();
-> 	local_irq_restore(flags);
-> [...]
-> 
-> and IRQs are disabled to measure the time spent in this function
-> without interruption and rescheduling.
-> 
-> I am sure that there are better ways how to measure the time.
-> Even the "time" command in userspace is able to show time how much CPU
-> time a command used.
-
-I've got an idea:
-
-local_irq_save(flags);
-//get the count and cputime of interrupts
-t0 = sched_clock();
-local_irq_restore(flags);
-
-(void)kallsyms_lookup_name(name);
-
-local_irq_save(flags);
-t1 = sched_clock();
-//get the count and cputime of interrupts
-local_irq_restore(flags);
-
-minus the cputime of local_irq_save(flags)/local_irq_restore(flags)
-
-if count changed, minus the cputime of interrupts
-
-> 
-> I am not familiar with it. But task_cputime() in
-> kernel/sched/cputime.c looks promising. And there must be
-> the interface how the user space get this information.
-> Some is available via /proc/<PID>/... I am not sure
-> if there is a syscall.
-> 
-> Best Regards,
-> Petr
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+Can that code be built as a module?  Same for the other changes...
