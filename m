@@ -2,63 +2,35 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2C5DC4332F
-	for <linux-modules@archiver.kernel.org>; Tue, 20 Dec 2022 19:49:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9E9FC4167B
+	for <linux-modules@archiver.kernel.org>; Tue, 20 Dec 2022 20:03:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbiLTTtT (ORCPT
+        id S229451AbiLTUDc (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 20 Dec 2022 14:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37324 "EHLO
+        Tue, 20 Dec 2022 15:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiLTTtS (ORCPT
+        with ESMTP id S232195AbiLTUDa (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 20 Dec 2022 14:49:18 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23E7B1C6
-        for <linux-modules@vger.kernel.org>; Tue, 20 Dec 2022 11:49:16 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id l17so6259884vkk.3
-        for <linux-modules@vger.kernel.org>; Tue, 20 Dec 2022 11:49:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RAByKZvDDrKrFssXFC2YQGR5yFY8utJq9oPxGm+d0h8=;
-        b=CIdjQ1guO3BIF5PgGiJMt+aYp0uAR3A95Zy17DSW44MkkEYyzANme2V6BMEPQepNsT
-         DGAEg86POl5epwrGMf6cGx+v1gIamDjQQnXDXm75voQ2iZid6+0gnin4uzA7KVzY493Y
-         RceqeftXE2NnIbiDXsUY9MD++ocFX6Bvgbsf5Nw1IKvnIe+o1v1zeOcH/4HKjK06mF3F
-         W9q/sjY5dkV2jz3SNfzqAUlXSyJFd+U4j3A3v2oNB/FDkr/HEcTNVFZtRIfFbin7r3Ps
-         HB/AuwDCaws7QTWFBZ4LTPWsFAlSJbT1izwV37FMdDhSpMefTxrBNOGo6EQzzzr4qfr8
-         oCmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RAByKZvDDrKrFssXFC2YQGR5yFY8utJq9oPxGm+d0h8=;
-        b=kkyMEkshfErHpf9ik0G18EPDJ8jB3whDTjkmZ1P+oDc2ac+kJ8gck71/DHz6YmA0UP
-         vqk1jwQgIUoIyt3i+SYxpfACRhLVRxo1vq+UjdJNaX2rKC3YsVm/Vtxmpr2JliYQSz29
-         chr9uG7fipT/qUQ8y+XxU86f9Xxa6Nimq3O43h+uTxGB0C7XZnjLi/l9lMRlF1L3KIKI
-         sM1fOTj3QC2g6pTpFewIoUAVM5WM0Kgu9LzB0IWdow+yVoJImTMK8kp5Co3ilKnC8dem
-         opW/Marhb5QkAuvqQMlEeV99+x552Y56Zk7iQTncwlBCEhHa8HTRA/qAVA6SHV35unu3
-         KnLg==
-X-Gm-Message-State: ANoB5pl09E6XSdA4PM4jXCZC7z9x8W5wFK+QVxIuuZumrQgStmFDxPFp
-        dStEDt7FZoWcQuKNeVb5cW95H0w4t8THFYx4lPer9Q==
-X-Google-Smtp-Source: AA0mqf5pGcQirAJi9FEmLiKNkqwZjsDkyvfNeUZKhYNCWWr9WYL4NRhwpyq1yLhmvnhoaP7+0df4yLyRSk6UhFn9PZ8=
-X-Received: by 2002:a1f:9b03:0:b0:3c1:780:3bfe with SMTP id
- d3-20020a1f9b03000000b003c107803bfemr4130089vke.26.1671565755794; Tue, 20 Dec
- 2022 11:49:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20221219191855.2010466-1-allenwebb@google.com>
- <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-3-allenwebb@google.com>
- <Y6FaUynXTrYD6OYT@kroah.com> <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
- <Y6H6/U0w96Z4kpDn@bombadil.infradead.org> <CAJzde04igO0LJ46Hsbcm-hJBFtPdqJC6svaoMkb3WBG0e1fGBw@mail.gmail.com>
- <Y6IDOwxOxZpsdtiu@bombadil.infradead.org>
-In-Reply-To: <Y6IDOwxOxZpsdtiu@bombadil.infradead.org>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Tue, 20 Dec 2022 13:49:04 -0600
-Message-ID: <CAJzde06q3w7CHd8FSs-bwS3EeVv6xrBzCwerQVqps49V=_voQQ@mail.gmail.com>
-Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
-To:     Luis Chamberlain <mcgrof@kernel.org>
+        Tue, 20 Dec 2022 15:03:30 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33A91D321;
+        Tue, 20 Dec 2022 12:03:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UlAEvc5vrzcxeVoggj4bi4wq684c5KQyaWNN4gbqhuI=; b=jyIHu/BsHD4RKeUC+9/gkw5a8x
+        9UhiqjxcN4ZnmrJ6qjyf6nS+b9Mor/YznV+zrh7vcDYRwGXa2T7VT1aSHMH6aA6NXsabAFn1FEkS/
+        acCKvzNcVWH1MdLQFY9b7s9erGWNKtuRpI7sJTej22och5Vhabr9d0uTPRl37LqB2ApTqfhiIogDz
+        llNQBcHXYalrdeRR50pXhOHjY/2oE2AVqQQuPH9VgFy92uzIw1xGVMmYy0lZxupGbJZe+a+9TxTEr
+        QwiE8Os3w9fhkriWNev9KvKa2ZBpaPrj3eoCrE9zcBMo0QkRQHT3UzeO5EFRDGd8ALVHAA0FBSUQO
+        8e8TA4LA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7ipg-003fXB-Vh; Tue, 20 Dec 2022 20:03:24 +0000
+Date:   Tue, 20 Dec 2022 12:03:24 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Allen Webb <allenwebb@google.com>
 Cc:     Nick Alcock <nick.alcock@oracle.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -67,168 +39,85 @@ Cc:     Nick Alcock <nick.alcock@oracle.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
         kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
+Message-ID: <Y6IVDE3NEE6teggy@bombadil.infradead.org>
+References: <20221219191855.2010466-1-allenwebb@google.com>
+ <20221219204619.2205248-1-allenwebb@google.com>
+ <20221219204619.2205248-3-allenwebb@google.com>
+ <Y6FaUynXTrYD6OYT@kroah.com>
+ <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
+ <Y6H6/U0w96Z4kpDn@bombadil.infradead.org>
+ <CAJzde04igO0LJ46Hsbcm-hJBFtPdqJC6svaoMkb3WBG0e1fGBw@mail.gmail.com>
+ <Y6IDOwxOxZpsdtiu@bombadil.infradead.org>
+ <CAJzde06q3w7CHd8FSs-bwS3EeVv6xrBzCwerQVqps49V=_voQQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJzde06q3w7CHd8FSs-bwS3EeVv6xrBzCwerQVqps49V=_voQQ@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Dec 20, 2022 at 12:47 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Tue, Dec 20, 2022 at 12:19:49PM -0600, Allen Webb wrote:
-> > On Tue, Dec 20, 2022 at 12:12 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > >
-> > > On Tue, Dec 20, 2022 at 08:58:36AM -0600, Allen Webb wrote:
-> > > > As mentioned in a different sub-thread this cannot be built as a
-> > > > module so I updated the commit message to:
-> > > >
-> > > > imx: Fix typo
-> > > >
-> > > > A one character difference in the name supplied to MODULE_DEVICE_TABLE
-> > > > breaks compilation for SOC_IMX8M after built-in modules can generate
-> > > > match-id based module aliases, so fix the typo.
-> > >
-> > > Are you saying that it is a typo *now* only, and fixing it does not fix
-> > > compilation now, but that fixing the typo will fix a future compilation
-> > > issue once your patches get merged for built-in module aliases?
-> >
-> > It was always a typo, it just doesn't affect the build because
-> > MODULE_DEVICE_TABLE is not doing anything for built-in modules before
-> > this patch series.
-> >
-> > >
-> > > > This was not caught earlier because SOC_IMX8M can not be built as a
-> > > > module and MODULE_DEVICE_TABLE is a no-op for built-in modules.
-> > >
-> > > Odd, so why did it use MODULE_DEVICE_TABLE then? What was the reason for
-> > > the driver having MODULE_DEVICE_TABLE if it was a no-op?
-> >
-> > That is a good question. I can only speculate as to the answer
->
-> You can use git blame to trace back to the original commit that added
-> it, then  use git blame foo.c commit-id~1  on the file to keep going
-> back until you get to the first commit that added that entry, check out
-> that as a branch and see if the driver was still not a module then
-> (tristate). If so then your speculation is very likely accurate and
-> can be spelled out in the commit log message.
+On Tue, Dec 20, 2022 at 01:49:04PM -0600, Allen Webb wrote:
+> I took another stab at clarifying (and also dropped the ifdev since
+> the same macro works both for separate and built-in modules:
+> 
+> /*
+>  * Creates an alias so file2alias.c can find device table.
+>  *
+>  * Use this in cases where a device table is used to match devices because it
+>  * surfaces match-id based module aliases to userspace for:
+>  *   - Automatic module loading.
+>  *   - Tools like USBGuard which allow or block devices based on policy such as
+>  *     which modules match a device.
+>  *
+>  * The module name is included in the alias for two reasons:
+>  *   - It avoids creating two aliases with the same name for built-in modules.
+>  *     Historically MODULE_DEVICE_TABLE was a no-op for built-in modules, so
+>  *     there was nothing to stop different modules from having the same device
+>  *     table name and consequently the same alias when building as a module.
+>  *   - The module name is needed by files2alias.c to associate a particular
+>  *     device table with its associated module for built-in modules since
+>  *     files2alias would otherwise see the module name as `vmlinuz.o`.
+>  */
 
-All three cases are bool configs.
+This is still weak in light of the questions I had. It does not make it
+easy for a driver developer who is going to support only built-in only
+if they need to define this or not. And it seems we're still discussing
+the merits of this, so I'd wait until this is fleshed out, but I think
+we are on the right track finally.
 
->
-> It begs the inverse question too though, you are finding uses of
-> built-in-always code (never tristate) which uses MODULE_DEVICE_TABLE().
-> Although today that's a no-op, after your changes this becomes useful
-> information, so do you need to scrape to see what built-in-aways code
-> *do* not use MODULE_DEVICE_TABLE() where after your patches it would
-> have become useful?
->
-> Determing if there is value to that endeavour should be easily grasped by
-> reading the description you are adding to MODULE_DEVICE_TABLE() --
-> in your patch 5 "module.h: MODULE_DEVICE_TABLE for built-in modules".
-> Driver developers for built-in-always code should read that description
-> and be able to decide if they should use it or not. But even your latest
-> replies to Greg do not make that clear, *I personally gather* rather that
-> this would in no way shape or form be useful. But is that true?
+> The deciding factor in whether it makes sense to remove these vs fix
+> them seems to be, "How complete do we want modules.builtin.alias to
+> be?"
+> 
+> Arguably we should just drop these in cases where there isn't an
+> "authorized" sysfs attribute but following that logic there is not any
+> reason to generate built-in aliases for anything except USB and
+> thunderbolt.
 
-I took another stab at clarifying (and also dropped the ifdev since
-the same macro works both for separate and built-in modules:
+There we go, now we have a *real* use case for this for built-in stuff
+to consider. Is USBGuard effective even for built-in stuff?
 
-/*
- * Creates an alias so file2alias.c can find device table.
- *
- * Use this in cases where a device table is used to match devices because it
- * surfaces match-id based module aliases to userspace for:
- *   - Automatic module loading.
- *   - Tools like USBGuard which allow or block devices based on policy such as
- *     which modules match a device.
- *
- * The module name is included in the alias for two reasons:
- *   - It avoids creating two aliases with the same name for built-in modules.
- *     Historically MODULE_DEVICE_TABLE was a no-op for built-in modules, so
- *     there was nothing to stop different modules from having the same device
- *     table name and consequently the same alias when building as a module.
- *   - The module name is needed by files2alias.c to associate a particular
- *     device table with its associated module for built-in modules since
- *     files2alias would otherwise see the module name as `vmlinuz.o`.
- */
-#define MODULE_DEVICE_TABLE(type, name) \
-extern void *CONCATENATE( \
-CONCATENATE(__mod_##type##__##name##__, \
-__KBUILD_MODNAME), \
-_device_table) \
-__attribute__ ((unused, alias(__stringify(name))))
+Given everything discussed so far I'd like to get clarification if it
+even help for built-in USB / thunderbolt. Does it? If so how? What could
+userspace do with this information if the driver is already built-in?
 
->
-> So why not just remove MODULE_DEVICE_TABLE() from code we know is
-> built-in-always code instead of fixing a typo just to fix a future
-> compile issue?
->
-> Then your commit log is not about "fix typo", but rather remove a no-op
-> macro as the driver is always built-in and keeping that macro would not
-> help built-in code.
+> On the flip side, if we are going to the effort to make this a generic
+> solution that covers everything, the built-in aliases are only as
+> useful as they are complete, so we would want everything that defines
+> a device table to call the macro correctly.
 
-The deciding factor in whether it makes sense to remove these vs fix
-them seems to be, "How complete do we want modules.builtin.alias to
-be?"
+It is the ambiguity which is terrible to add. If the only use case is
+for USB and Thunderbolt then we can spell it out, then only those driver
+developers would care to consider it if the driver is bool. And, a
+respective tooling would scrape only those drivers to verify if the
+table is missing for built-in too.
 
-Arguably we should just drop these in cases where there isn't an
-"authorized" sysfs attribute but following that logic there is not any
-reason to generate built-in aliases for anything except USB and
-thunderbolt.
+> It definitely is needed for never-tristate modules that match devices
+> in subsystems that surface the authorized attribute.
 
-On the flip side, if we are going to the effort to make this a generic
-solution that covers everything, the built-in aliases are only as
-useful as they are complete, so we would want everything that defines
-a device table to call the macro correctly.
+What is this "authorized attribute" BTW exactly? Do have some
+documentation reference?
 
->
-> > but it
-> > is plausible people copied a common pattern and since no breakage was
-> > noticed left it as is.
->
-> This level of clarity is important to spell out in the commit log
-> message, specially if you are suggesting it is just a typo fix. Because
-> I will take it for granted that it is just that.
->
-> If it fixes a future use case where the typo would be more of an issue,
-> you can mention that in a secondary paragraph or sentence.
->
-> > It also raises the question how many modules have device tables, but
-> > do not call MODULE_DEVICE_TABLE since they are only ever built-in.
-> > Maybe there should be some build time enforcement mechanism to make
-> > sure that these are consistent.
->
-> Definitely, Nick Alcock is doing some related work where the semantics
-> of built-in modules needs to be clearer, he for instance is now removing
-> a few MODULE_() macros for things which *are never* modules, and this is
-> because after commit 8b41fc4454e ("kbuild: create modules.builtin
-> without Makefile.modbuiltin or tristate.conf") we rely on the module
-> license tag to generate the modules.builtin file. Without that commit
-> we end up traversing the source tree twice. Nick's work builds on
-> that work and futher clarifies these semantics by adding tooling which
-> complains when something which is *never* capable of being a module
-> uses module macros. The macro you are extending, MODULE_DEVICE_TABLE(),
-> today is a no-op for built-in, but you are adding support to extend it
-> for built-in stuff. Nick's work will help with clarifying symbol locality
-> and so he may be interested in your association for the data in
-> MODULE_DEVICE_TABLE and how you associate to a respective would-be
-> module. His work is useful for making tracing more accurate with respect
-> to symbol associations, so the data in MODULE_DEVICE_TABLE() may be
-> useful as well to him.
-
-Thanks, I will look through what I can find.
-
->
-> You folks may want to Cc each other on your patches.
->
-> If we know for certain things *will never* be used or *should not be
-> used*, as in the case of the module license tag, we should certainly
-> have tooling to pick up on that crap to help us tidy it up.
->
-> If you determine MODULE_DEVICE_TABLE() *should* not be used for built-in
-> always code (never tristate) then you and Nick likely have overlap of
-> macros to tidy up and tooling to share to spot these sort of issues.
-
-It definitely is needed for never-tristate modules that match devices
-in subsystems that surface the authorized attribute.
-
->
->   Luis
+  Luis
