@@ -2,126 +2,114 @@ Return-Path: <linux-modules-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC663C4332F
-	for <linux-modules@archiver.kernel.org>; Mon, 19 Dec 2022 22:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 027CBC4332F
+	for <linux-modules@archiver.kernel.org>; Tue, 20 Dec 2022 06:42:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbiLSWvf (ORCPT
+        id S230090AbiLTGmN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 19 Dec 2022 17:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
+        Tue, 20 Dec 2022 01:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLSWvf (ORCPT
+        with ESMTP id S229571AbiLTGmM (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 19 Dec 2022 17:51:35 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB2A12751;
-        Mon, 19 Dec 2022 14:51:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xJMn3SSDJKFszpMyORiiJWCILxdNMFNpaPjY/K6/F2s=; b=fgsrb98mVMothA1lubXWJtS4Oa
-        GMAxUsiio4APIjRa/tjILRGYIn61EKec4ojUKSPoSnVq+ME79R8+hU63BehnC57XTRvK28vXbpsGZ
-        N/nBqOJHJReOa+xu6rEV1xBflktzYljue8uQkvIx/R2QK2gZdBZKor54BBrY5SEcquaxaQ6beVJ0T
-        F5q+Ul8tbdsV1ygbQXLrXkOOS9k65n6NRh/+F1W1usqGuQ8+ZmBk1OQTFyh1Nere57MFjyyPbL30Q
-        j0TkaUBEbwiECM71i2X4h5kApNqEc6PRqsKk76JxnkS15ateu/fVfHcUvvMT8yH+YkjXTdiQiJDEo
-        i3r/Aa/A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p7Oyq-004hRt-0I; Mon, 19 Dec 2022 22:51:32 +0000
-Date:   Mon, 19 Dec 2022 14:51:31 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v9 10/10] docs: Include modules.builtin.alias
-Message-ID: <Y6Dq85hQmkUJBcqA@bombadil.infradead.org>
-References: <20221219191855.2010466-1-allenwebb@google.com>
- <20221219204619.2205248-1-allenwebb@google.com>
- <20221219204619.2205248-11-allenwebb@google.com>
- <Y6DWaODE5F9x+Qq1@bombadil.infradead.org>
- <CAJzde07K0siUs-eKfXxVp7R47hF8TdADGeTEvFtwxHVg9NV7FA@mail.gmail.com>
- <Y6Dgs5WcK2A77ulS@bombadil.infradead.org>
- <CAJzde06qg3FQTO9KrHnScEkvVy1OEwyzbfArqXoLxOKCjr6CWQ@mail.gmail.com>
+        Tue, 20 Dec 2022 01:42:12 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95816633E;
+        Mon, 19 Dec 2022 22:42:10 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Nbn5j2SxqzRq0Y;
+        Tue, 20 Dec 2022 14:40:57 +0800 (CST)
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 20 Dec 2022 14:42:06 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Petr Mladek <pmladek@suse.com>, <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] kallsyms: Fix sleeping function called from invalid context when CONFIG_KALLSYMS_SELFTEST=y
+Date:   Tue, 20 Dec 2022 14:39:23 +0800
+Message-ID: <20221220063923.1937-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJzde06qg3FQTO9KrHnScEkvVy1OEwyzbfArqXoLxOKCjr6CWQ@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Dec 19, 2022 at 04:20:41PM -0600, Allen Webb wrote:
-> On Mon, Dec 19, 2022 at 4:07 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Mon, Dec 19, 2022 at 03:40:42PM -0600, Allen Webb wrote:
-> > > On Mon, Dec 19, 2022 at 3:23 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > >
-> > > > On Mon, Dec 19, 2022 at 02:46:18PM -0600, Allen Webb wrote:
-> > > > > Update the documentation to include the presense and use case of
-> > > > > modules.builtin.alias.
-> > > > >
-> > > > > Signed-off-by: Allen Webb <allenwebb@google.com>
-> > > > > ---
-> > > > >  Documentation/kbuild/kbuild.rst | 6 ++++++
-> > > > >  1 file changed, 6 insertions(+)
-> > > > >
-> > > > > diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-> > > > > index 08f575e6236c..1c7c02040a54 100644
-> > > > > --- a/Documentation/kbuild/kbuild.rst
-> > > > > +++ b/Documentation/kbuild/kbuild.rst
-> > > > > @@ -17,6 +17,12 @@ modules.builtin
-> > > > >  This file lists all modules that are built into the kernel. This is used
-> > > > >  by modprobe to not fail when trying to load something builtin.
-> > > > >
-> > > > > +modules.builtin.alias
-> > > > > +---------------------
-> > > > > +This file lists all match-id based aliases for modules built into the kernel.
-> > > > > +These are intended to enable userspace to make authorization decisions based
-> > > > > +on which modules are likely to be bound to a device after it is authorized.
-> > > >
-> > > > What is an example? This sounds obscure.
-> > >
-> > > Many of the devices that match the usb_storage driver only specify the
-> > > vendor id, product id, and device id (VID:PID:D) and do not match
-> > > against device class, interface class, etc. Here are some examples
-> > > from modules.alias: A grep for wildcards in these fields yields 6136
-> > > matches:
-> > > grep 'dc\*dsc\*dp\*ic\*isc\*ip\*in\*'
-> > > /lib/modules/5.19.11-1rodete1-amd64/modules.alias | wc -l
-> > > 6136
-> > >
-> > > To write USBGuard policy that only authorizes devices that bind to a
-> > > particular module the policy needs to be aware of all these VID:PID:D
-> > > which can change between kernel versions.
-> > >
-> > > This is done at runtime rather than excluding modules from the build
-> > > because some devices are not needed at or before login or when a
-> > > device is locked. By not authorizing new devices that would bind to a
-> > > set of modules, these modules become unreachable to an attacker who
-> > > seeks to exploit kernel bugs in those modules.
-> > >
-> > > I could add this detail to the documentation file, but I was trying to
-> > > keep the description to about the same length as the others around it.
-> >
-> > How about the second sentence you wrote say something like:
-> >
-> > An example usage of the built-in aliases is to enable software such as
-> > USBGuard to enable / disable specific devices outside of just the
-> > vendor, product and device ID. This allows more flexible security policies
-> > in userspace.
-> 
-> I tweaked it a tiny bit, but that makes the whole description:
-> 
-> This file lists all match-id based aliases for modules built into the kernel.
-> An example usage of the built-in aliases is to enable software such as
-> USBGuard to allow or block devices outside of just the vendor, product, and
-> device ID. This enables more flexible security policies in userspace.
+[T58] BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
+[T58] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 58, name: kallsyms_test
+[T58] preempt_count: 0, expected: 0
+[T58] RCU nest depth: 0, expected: 0
+[T58] no locks held by kallsyms_test/58.
+[T58] irq event stamp: 18899904
+[T58] hardirqs last enabled at (18899903): finish_task_switch.isra.0 (core.c:?)
+[T58] hardirqs last disabled at (18899904): test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
+[T58] softirqs last enabled at (18899886): __do_softirq (??:?)
+[T58] softirqs last disabled at (18899879): ____do_softirq (irq.c:?)
+[T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G T  6.1.0-next-20221215 #2
+[T58] Hardware name: linux,dummy-virt (DT)
+[T58] Call trace:
+[T58] dump_backtrace (??:?)
+[T58] show_stack (??:?)
+[T58] dump_stack_lvl (??:?)
+[T58] dump_stack (??:?)
+[T58] __might_resched (??:?)
+[T58] kallsyms_on_each_symbol (??:?)
+[T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
+[T58] test_entry (kallsyms_selftest.c:?)
+[T58] kthread (kthread.c:?)
+[T58] ret_from_fork (??:?)
+[T58] kallsyms_selftest: kallsyms_on_each_symbol() traverse all: 5744310840 ns
+[T58] kallsyms_selftest: kallsyms_on_each_match_symbol() traverse all: 1164580 ns
+[T58] kallsyms_selftest: finish
 
-Now, without ever readng your patchset and intentions I can easily grasp
-what your goals are. Looks good. Feel free to add my Reviewed-by tags
-for this patch.
+Functions kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
+call the user-registered hook function for each symbol that meets the
+requirements. Because it is uncertain how long that hook function will
+execute, they call cond_resched() to avoid consuming CPU resources for a
+long time. However, irqs need to be disabled during the performance test
+to ensure the accuracy of test data. Because the performance test hook is
+very clear, very simple function, let's do not call cond_resched() when
+CONFIG_KALLSYMS_SELFTEST=y.
 
-  Luis
+Fixes: 30f3bb09778d ("kallsyms: Add self-test facility")
+Reported-by: Anders Roxell <anders.roxell@linaro.org>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ kernel/kallsyms.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 83f499182c9aa31..a49e344a686517b 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -302,7 +302,8 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+ 		ret = fn(data, namebuf, NULL, kallsyms_sym_address(i));
+ 		if (ret != 0)
+ 			return ret;
+-		cond_resched();
++		if (!IS_ENABLED(CONFIG_KALLSYMS_SELFTEST))
++			cond_resched();
+ 	}
+ 	return 0;
+ }
+@@ -319,7 +320,8 @@ int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
+ 
+ 	for (i = start; !ret && i <= end; i++) {
+ 		ret = fn(data, kallsyms_sym_address(get_symbol_seq(i)));
+-		cond_resched();
++		if (!IS_ENABLED(CONFIG_KALLSYMS_SELFTEST))
++			cond_resched();
+ 	}
+ 
+ 	return ret;
+-- 
+2.25.1
+
