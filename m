@@ -2,53 +2,98 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0759C4332F
-	for <linux-modules@archiver.kernel.org>; Fri, 23 Dec 2022 15:03:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50306C4167B
+	for <linux-modules@archiver.kernel.org>; Mon, 26 Dec 2022 17:38:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbiLWPDs (ORCPT
+        id S229568AbiLZRiV (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 23 Dec 2022 10:03:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
+        Mon, 26 Dec 2022 12:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236472AbiLWPDq (ORCPT
+        with ESMTP id S229522AbiLZRiU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 23 Dec 2022 10:03:46 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F64A31DCE;
-        Fri, 23 Dec 2022 07:03:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=z0e5IfMg99plUAUdI6uzi1BHGXiNthwW7ZGB4IMQKos=; b=3k8aJZpl85LmCjJqqRvQ1Ffyzs
-        h4rtHe033Xy24gMk4E5EC6NItcyogaTz2IMJRcCeRLXDIpmoVlmnmPbB+Frp+8HwKWJOjiA8Fgv90
-        KX9SqaPgjskW6Lfux6yfNDfjjUg6Kk+COCY085AdHYG1HwoDMRG/oivXt9krKKa+ilCfxhrRhdojd
-        Y/0GR2c7YCCCN+6LjSo4yoZMY59G9AgOVLG694FQDvXJ3dkKE1bS9Y8e+i9CnaImSO1ocRnEQTCBB
-        jQW7f18HEsSOC60SXV2/LHZOYpOJIds7xPkL4W+2Hs16KacSWkbh6aRnnVrHU5YlTsDtO8cfVOMKf
-        vD655liA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p8jaK-009Anr-0Q; Fri, 23 Dec 2022 15:03:44 +0000
-Date:   Fri, 23 Dec 2022 07:03:43 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Li kunyu <kunyu@nfschina.com>
+        Mon, 26 Dec 2022 12:38:20 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3CB1CD;
+        Mon, 26 Dec 2022 09:38:19 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so11147982pjj.4;
+        Mon, 26 Dec 2022 09:38:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NqWgRZhbII3r8RZbZotjyp/UgX3NJwE9v+OMpxa+fL0=;
+        b=A4gCBYZAfoOTYl8PDY0elYtACBf/jY77vWTF1bhIPeb2p5vQZQcRdcYYJfXzLSP7Tp
+         PezJoIobGDjPg72WeWGHGVvIBs+qtsiGlIAm7xDC1qVTQi6OVMfwdbwkbf+/38X4OfWw
+         sKU537ufb6T1RF9r1UVJu0JK1xm9BiFxEEWgyDISrZ2JlhyDZM07cbBu8zDkOVCY0Dn7
+         vZ0QV//YO+zV/xEaBbEUibxtYEM34QeJ39KRWhHsfty3fPfiscNaBNOpGQT4SW+7Mgr/
+         V32fvtvB8FAgOBPiT2pbGmvDw6NmaN7GnTM7Whr15eIK+E2CtXw5Ftbj55Ux5ZqBUXeB
+         z9Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NqWgRZhbII3r8RZbZotjyp/UgX3NJwE9v+OMpxa+fL0=;
+        b=O4ytm8RkMwXkC3Smgq4KK2vPCA7ZYxZC2023YES7cKWfs+LYdW39CjZtID7YTgBfBC
+         xiWSoj/QYPn0+8iDEEJPRhPt3fdFDjFz6dydMiPpZt5xtzAlDwxgUEqibe6FsT8L7PXl
+         CsB/v8DjKUb2aPCwVNvetW9pSnpapabpnVI4ymhDiyLXG2AnDiC75VNBEW1zn02He5fe
+         2W2Wj0UMpwbJJzzUNrxuf6iGnFLz55040r1rsWJm9ncuqsaJJvDz2VoabRUAOccNLxOM
+         TNpqysDtxwUM09DboV0EemBriee/t6gNCYpaWfBTOp7jSVCtt7WQ4OFSzrbVClQe7+UM
+         mFdw==
+X-Gm-Message-State: AFqh2kqPo4xg2HSyjkphu7586uVRpXxSOnVRgGPzmroVe2SHC6KjXS1d
+        sEf+SbhWi7++QC0fpyXpU9ofNLeLkZg=
+X-Google-Smtp-Source: AMrXdXtOfWLNV6UHgCE8tom5ulotErJ9cfOVmX9OtHTMforCICV5J0J/Dk0qFEsGofac9z+IRuC9+w==
+X-Received: by 2002:a05:6a20:8f26:b0:ad:db18:6d0d with SMTP id b38-20020a056a208f2600b000addb186d0dmr30943938pzk.59.1672076298591;
+        Mon, 26 Dec 2022 09:38:18 -0800 (PST)
+Received: from ldmartin-desk2.lan ([50.39.162.59])
+        by smtp.gmail.com with ESMTPSA id v62-20020a626141000000b00576d4c45a22sm7332221pfb.147.2022.12.26.09.38.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Dec 2022 09:38:17 -0800 (PST)
+Date:   Mon, 26 Dec 2022 09:38:16 -0800
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+To:     Florian Weimer <fweimer@redhat.com>
 Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: main: =?utf-8?Q?remove?=
- =?utf-8?B?IHVubmVjZXNzYXJ5IOKAmDDigJk=?= values from err
-Message-ID: <Y6XDTzjzzQl6JnHK@bombadil.infradead.org>
-References: <20221223083232.4189-1-kunyu@nfschina.com>
+Subject: Re: [PATCH] kmod: configure.ac: In _Noreturn check, include
+ <stdlib.h> for exit
+Message-ID: <20221226173816.ii5hf3zt3pg52ww2@ldmartin-desk2.lan>
+References: <877cyq6kh9.fsf@oldenburg.str.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221223083232.4189-1-kunyu@nfschina.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <877cyq6kh9.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Dec 23, 2022 at 04:32:32PM +0800, Li kunyu wrote:
-> err is assigned before use, so it does not need to initialize the
-> assignment.
+On Sat, Dec 17, 2022 at 05:52:34PM +0100, Florian Weimer wrote:
+>Otherwise, an implicit functiona declaration is used, causing
+>a C99 compatibility issue.
+>
+>Signed-off-by: Florian Weimer <fweimer@redhat.com>
 
-Sorry no, for something so simple, it just smells like you are wanting
-to incraese your commit count.
+applied, thanks
 
-  Luis
+Lucas De Marchi
+
+>
+>---
+> configure.ac | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
+>
+>diff --git a/configure.ac b/configure.ac
+>index 6989e93..12e0518 100644
+>--- a/configure.ac
+>+++ b/configure.ac
+>@@ -68,7 +68,8 @@ AC_COMPILE_IFELSE(
+>
+> AC_MSG_CHECKING([whether _Noreturn is supported])
+> AC_COMPILE_IFELSE(
+>-	[AC_LANG_SOURCE([[_Noreturn int foo(void) { exit(0); }]])],
+>+	[AC_LANG_SOURCE([[#include <stdlib.h>
+>+	_Noreturn int foo(void) { exit(0); }]])],
+>         [AC_DEFINE([HAVE_NORETURN], [1], [Define if _Noreturn is available])
+> 	 AC_MSG_RESULT([yes])],
+> 	[AC_MSG_RESULT([no])])
+>
+>base-commit: 6c5f2f13689e6a4668f87171752d7818bed4b602
+>
