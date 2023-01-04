@@ -2,94 +2,93 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81928C3DA7A
-	for <linux-modules@archiver.kernel.org>; Mon,  2 Jan 2023 21:16:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8378EC46467
+	for <linux-modules@archiver.kernel.org>; Wed,  4 Jan 2023 15:36:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjABVQL (ORCPT
+        id S239014AbjADPgd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 2 Jan 2023 16:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
+        Wed, 4 Jan 2023 10:36:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbjABVQJ (ORCPT
+        with ESMTP id S230420AbjADPgc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 2 Jan 2023 16:16:09 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3607A459;
-        Mon,  2 Jan 2023 13:16:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=NHmSI4BAP2aEJ9CMtBuxh4gyI63+HnFkQnS+v2zXqr4=; b=Kje9jnEnCrSwN7EQt+D4Dekx5Q
-        AoxmtlHmh1kilCx/QP7qHnh4H1v7Cu+Gloa1BLUNHyHTrPfIy8dU6Hl0/NygcYHrx3EhOQZZC2Lra
-        fDscfwNgRdxJgpgNp8pEi+KF+tyHa3lTSDCrz2c+8he01kfFThMvlLFn92LDPuneyITRzO4seJB9y
-        oOz/t1TuaVcU8egRUyRVNmlYuPeot8pndJRkgEX5UN+ICvrMBpdYEsID9SRRnZnsG+cnl+jnGPyNI
-        YpEAYInd7enpXKKqZTJVgv9xGKtYNCSgt0PKsKo4NfXLN9MWalxyXa2xmtncu5Y0gK4fbnDnLiEY3
-        DzevHOog==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pCSAA-00EIqL-FI; Mon, 02 Jan 2023 21:16:06 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        Wed, 4 Jan 2023 10:36:32 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C54167EF;
+        Wed,  4 Jan 2023 07:36:31 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4D1873FBE0;
+        Wed,  4 Jan 2023 15:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1672846590; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y3eRToaXVdN3AVocHxVVeVyr8FyHyxT3hbSrQcFTokM=;
+        b=Z8o1DceIPDjGkidYTGzhocEhLkBXzXqqcguZQC+zUMSqmtR1isNtL7jsRs2WGOlbP41GoT
+        Vw2CcOg1XWYvqtEXK0Ge9hfVYay6Fxwdzh8y3d9hs4SusTG8QNm5RshQFPkhA0IfXb2+ZJ
+        7e+oRqulsuvmHTT1QxbrpVaTIsLC3MU=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D36CD2C141;
+        Wed,  4 Jan 2023 15:36:29 +0000 (UTC)
+Date:   Wed, 4 Jan 2023 16:36:28 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
         linux-modules@vger.kernel.org
-Subject: [PATCH] test_kmod: stop kernel-doc warnings
-Date:   Mon,  2 Jan 2023 13:16:05 -0800
-Message-Id: <20230102211605.26058-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.0
+Subject: Re: [PATCH 1/3] livepatch: Improve the search performance of
+ module_kallsyms_on_each_symbol()
+Message-ID: <Y7Wc/G8a+pv6iV7G@alley>
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+ <20221230112729.351-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221230112729.351-2-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Use kernel-doc notation to prevent warnings:
+On Fri 2022-12-30 19:27:27, Zhen Lei wrote:
+> Currently we traverse all symbols of all modules to find the specified
+> function for the specified module. But in reality, we just need to find
+> the given module and then traverse all the symbols in it.
+> 
+> Let's add a new parameter 'const char *modname' to function
+> module_kallsyms_on_each_symbol(), then we can compare the module names
+> directly in this function and call hook 'fn' after matching. If 'modname'
+> is NULL, the symbols of all modules are still traversed for compatibility
+> with other usage cases.
+> 
+> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
+>                 |
+> Phase2:          -->f1-->f2-->f3
+> 
+> Assuming that there are m modules, each module has n symbols on average,
+> then the time complexity is reduced from O(m * n) to O(m) + O(n).
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-lib/test_kmod.c:58: warning: contents before sections
-lib/test_kmod.c:94: warning: cannot understand function prototype: 'struct kmod_test_device_info '
-lib/test_kmod.c:119: warning: cannot understand function prototype: 'struct kmod_test_device '
+Looks good to me:
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org
----
- lib/test_kmod.c |   11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-diff -- a/lib/test_kmod.c b/lib/test_kmod.c
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -51,12 +51,11 @@ static int num_test_devs;
- 
- /**
-  * enum kmod_test_case - linker table test case
-- *
-- * If you add a  test case, please be sure to review if you need to se
-- * @need_mod_put for your tests case.
-- *
-  * @TEST_KMOD_DRIVER: stress tests request_module()
-  * @TEST_KMOD_FS_TYPE: stress tests get_fs_type()
-+ *
-+ * If you add a  test case, please be sure to review if you need to set
-+ * @need_mod_put for your tests case.
-  */
- enum kmod_test_case {
- 	__TEST_KMOD_INVALID = 0,
-@@ -78,7 +77,7 @@ struct test_config {
- struct kmod_test_device;
- 
- /**
-- * kmod_test_device_info - thread info
-+ * struct kmod_test_device_info - thread info
-  *
-  * @ret_sync: return value if request_module() is used, sync request for
-  * 	@TEST_KMOD_DRIVER
-@@ -101,7 +100,7 @@ struct kmod_test_device_info {
- };
- 
- /**
-- * kmod_test_device - test device to help test kmod
-+ * struct kmod_test_device - test device to help test kmod
-  *
-  * @dev_idx: unique ID for test device
-  * @config: configuration for the test
+Best Regards,
+Petr
