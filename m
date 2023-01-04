@@ -2,57 +2,58 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D677AC4332F
-	for <linux-modules@archiver.kernel.org>; Wed,  4 Jan 2023 19:26:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34593C4332F
+	for <linux-modules@archiver.kernel.org>; Wed,  4 Jan 2023 19:54:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239929AbjADT0J (ORCPT
+        id S235088AbjADTx2 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 4 Jan 2023 14:26:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
+        Wed, 4 Jan 2023 14:53:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbjADT0I (ORCPT
+        with ESMTP id S235177AbjADTw7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 4 Jan 2023 14:26:08 -0500
+        Wed, 4 Jan 2023 14:52:59 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EC8140FC;
-        Wed,  4 Jan 2023 11:26:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5462817881;
+        Wed,  4 Jan 2023 11:52:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sKWomM+DcEbhiY0ivILO1StCDQeKSlZpPZFC0Ved5Dk=; b=WeFKEIuFZ83ssPnlgRE8l2wiln
-        /nfl56UD7X8x9yVlyKKCcCFzX1BayGOh1gIiBwBubKvpxVYTE2IH13PQEMvK40zVYJEKwOp+yFjVh
-        2c2NvsMojxklTjgZmsEaiXWB9IxI2CGoa6GqEMntSKlpfQYiZIJf0GRdpEWon+LpAx8GbCdMircVB
-        KQOZ9XVConm6UDSnPSh4DISZnkOrzx1WIYCmuZUqlqv5kvyi2g1ss51M87msMMBM1Q5l0UYNEaW/J
-        uafnaTLf1UG3eokXQQfwzeTiRc9PA/hb5rUxxRUfh+AZAlaFXFPWortEGwZJjNsODH8ybbmTd6n2n
-        V9+DBY7Q==;
+        bh=ByKoxMq+7lwWsQwwtMR38lubpFnmTYGQuFwbs0Lq/Hc=; b=YMRT3QmCM3DHlF782l6j2yyvaO
+        5vzgENshoi/xzDBa5wd23Ve2yxC7AU8+3qW3PeJ+VrjP+tPu9eJHuJ7NyCm5MGEiYZdC8SywTywqv
+        I23Ueokxp42hu9RkpIrsIX6hTmvNef7W3nXclW1vv3rLzJe/l4DOKfvG7uL+nbgtpbZHX7UmFlfQD
+        /wRAYtBQouyRJ0GuGj6uor0c7iQBKNqYyf9++IbqBiue8s7JIO/uAZGD8P54c9uRCrbX5/5c/oXqD
+        dmNlbUcpzjNQOrCEiLjsctD6vWRKYO5dUul6hvM+0SqdzegiOdx/qe+jcvR6ZknLIwNbtMnK8Dnfd
+        DQJ4cT0w==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pD9OQ-00BRFJ-R5; Wed, 04 Jan 2023 19:25:42 +0000
-Date:   Wed, 4 Jan 2023 11:25:42 -0800
+        id 1pD9oj-00Bbse-JW; Wed, 04 Jan 2023 19:52:56 +0000
+Date:   Wed, 4 Jan 2023 11:52:53 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        linux-kbuild@vger.kernel.org, alison.schofield@intel.com,
-        dan.j.williams@intel.com, dave@stgolabs.net,
-        a.manzanares@samsung.com, lucas.de.marchi@gmail.com,
-        linux-cxl@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kbuild: Modify default INSTALL_MOD_DIR from extra to
- updates
-Message-ID: <Y7XStqJcM3wYxUXf@bombadil.infradead.org>
-References: <20221214231718.1002194-1-mcgrof@kernel.org>
- <Y5vvVTwt+FfxTUke@bergen.fjasle.eu>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] test_kmod: stop kernel-doc warnings
+Message-ID: <Y7XZFSJr3hM3tbNQ@bombadil.infradead.org>
+References: <20230102211605.26058-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5vvVTwt+FfxTUke@bergen.fjasle.eu>
+In-Reply-To: <20230102211605.26058-1-rdunlap@infradead.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Dec 16, 2022 at 05:08:53AM +0100, Nicolas Schier wrote:
-> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+On Mon, Jan 02, 2023 at 01:16:05PM -0800, Randy Dunlap wrote:
+> Use kernel-doc notation to prevent warnings:
+> 
+> lib/test_kmod.c:58: warning: contents before sections
+> lib/test_kmod.c:94: warning: cannot understand function prototype: 'struct kmod_test_device_info '
+> lib/test_kmod.c:119: warning: cannot understand function prototype: 'struct kmod_test_device '
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
 
-I've queued this onto modules-next.
+Applied onto modules-next, thanks!
 
   Luis
