@@ -2,77 +2,159 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDC3DC46467
-	for <linux-modules@archiver.kernel.org>; Thu,  5 Jan 2023 02:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3691CC3DA7D
+	for <linux-modules@archiver.kernel.org>; Thu,  5 Jan 2023 07:32:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjAECLs (ORCPT
+        id S231356AbjAEHcN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 4 Jan 2023 21:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
+        Thu, 5 Jan 2023 02:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjAECLr (ORCPT
+        with ESMTP id S231171AbjAEHcH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 4 Jan 2023 21:11:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DD3C3C;
-        Wed,  4 Jan 2023 18:11:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29BD5B818C0;
-        Thu,  5 Jan 2023 02:11:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5123C433F0;
-        Thu,  5 Jan 2023 02:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672884703;
-        bh=WikqvB81sbI4yD5Fle5R/1qidHqXw3OMFbIXoN7Oqu8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sdvwNqfO3gxvtO6ov+cbDxWxHtNWowodmlWLw+5zqfosMBqfvdo5dzJ+dTWaYgpEn
-         EC/mE/AG1TDQeGtr7k1t1wyy1FZtNDc59fRWvaQW3b26We9F5diue3mAgzPkVY8qhz
-         G3LdB6l0/2/+PfPPQ0leQfGPqYdxxMO55bjLPip2OYG0l5DWVAp74gWi/GdxIo5dme
-         5qm7mDtfC6nY4xyuh8IfH/34+4n28dvJ1pcM0uY483u4H2NlZEjp22am6lMUgOMiSf
-         eEiZ4RzR+CYzXtO6/RJb5synkHqcdh2QP9aWZm6eLty5prurYNB5Ilbl56fRHqyqjo
-         chVYhA+1Q2iSQ==
-Received: by mail-oo1-f43.google.com with SMTP id d9-20020a4aa589000000b004af737509f4so6835035oom.11;
-        Wed, 04 Jan 2023 18:11:43 -0800 (PST)
-X-Gm-Message-State: AFqh2kqvEkWSEZFDt7d7Sg9R2ehJm+2J+tu7vXgfGbNlEsauBsY3Q+2P
-        Rj+HRWVRK3tl6IV1sJy6Pznv5vGgY239Vm8ufXc=
-X-Google-Smtp-Source: AMrXdXtRwe4YbedyvtyWU1D/YNQp5PeJWp/CF7Lp1/K7gkRce6kg2VlIC3YWaR6Li7Wg12l00gCAiwYEhsjuC+acWV4=
-X-Received: by 2002:a4a:a34c:0:b0:4a0:31ba:82bb with SMTP id
- u12-20020a4aa34c000000b004a031ba82bbmr2323587ool.96.1672884703251; Wed, 04
- Jan 2023 18:11:43 -0800 (PST)
+        Thu, 5 Jan 2023 02:32:07 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E033544DD;
+        Wed,  4 Jan 2023 23:32:00 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NndMn2yjxzqTbx;
+        Thu,  5 Jan 2023 15:27:17 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 5 Jan 2023 15:31:56 +0800
+Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
+To:     Song Liu <song@kernel.org>, Petr Mladek <pmladek@suse.com>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, <bpf@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+ <20221230112729.351-3-thunder.leizhen@huawei.com> <Y7WoZARt37xGpjXD@alley>
+ <CAPhsuW6sZ9yQvZvKLd0g9m4FoabmUzwn-txX6T_A-_VYgJoXFg@mail.gmail.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <9be7a6a9-9290-5410-0ed7-f48ef3dea285@huawei.com>
+Date:   Thu, 5 Jan 2023 15:31:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20221214231718.1002194-1-mcgrof@kernel.org> <Y5vvVTwt+FfxTUke@bergen.fjasle.eu>
- <Y7XStqJcM3wYxUXf@bombadil.infradead.org>
-In-Reply-To: <Y7XStqJcM3wYxUXf@bombadil.infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 5 Jan 2023 11:11:07 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS4SGV8-tYnfLd3BDvJP_ZVz9_Yx-MWCD3mXBqJ0-jzuw@mail.gmail.com>
-Message-ID: <CAK7LNAS4SGV8-tYnfLd3BDvJP_ZVz9_Yx-MWCD3mXBqJ0-jzuw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Modify default INSTALL_MOD_DIR from extra to updates
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Nicolas Schier <nicolas@fjasle.eu>, nathan@kernel.org,
-        ndesaulniers@google.com, linux-kbuild@vger.kernel.org,
-        alison.schofield@intel.com, dan.j.williams@intel.com,
-        dave@stgolabs.net, a.manzanares@samsung.com,
-        lucas.de.marchi@gmail.com, linux-cxl@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAPhsuW6sZ9yQvZvKLd0g9m4FoabmUzwn-txX6T_A-_VYgJoXFg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jan 5, 2023 at 4:25 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Fri, Dec 16, 2022 at 05:08:53AM +0100, Nicolas Schier wrote:
-> > Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
->
-> I've queued this onto modules-next.
->
->   Luis
 
 
-Acked-by: Masahiro Yamada <masahiroy@kernel.org>
+On 2023/1/5 1:07, Song Liu wrote:
+> On Wed, Jan 4, 2023 at 8:25 AM Petr Mladek <pmladek@suse.com> wrote:
+>>
+>> On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
+>>> Function __module_address() can quickly return the pointer of the module
+>>> to which an address belongs. We do not need to traverse the symbols of all
+>>> modules to check whether each address in addrs[] is the start address of
+>>> the corresponding symbol, because register_fprobe_ips() will do this check
+>>> later.
+>>>
+>>> Assuming that there are m modules, each module has n symbols on average,
+>>> and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
+>>> complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
+>>> and the time complexity of current method is O(K * (log(m) + M)), M <= m.
+>>> (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
+>>> the ratio is still greater than 1. Therefore, the new method will
+>>> generally have better performance.
+>>>
+>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>> ---
+>>>  kernel/trace/bpf_trace.c | 101 ++++++++++++++++-----------------------
+>>>  1 file changed, 40 insertions(+), 61 deletions(-)
+>>>
+>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+>>> index 5f3be4bc16403a5..0ff9037098bd241 100644
+>>> --- a/kernel/trace/bpf_trace.c
+>>> +++ b/kernel/trace/bpf_trace.c
+>>> @@ -2684,69 +2684,55 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
+>>>       }
+>>>  }
+>>>
+>>> -struct module_addr_args {
+>>> -     unsigned long *addrs;
+>>> -     u32 addrs_cnt;
+>>> -     struct module **mods;
+>>> -     int mods_cnt;
+>>> -     int mods_cap;
+>>> -};
+>>> -
+>>> -static int module_callback(void *data, const char *name,
+>>> -                        struct module *mod, unsigned long addr)
+>>> +static int get_modules_for_addrs(struct module ***out_mods, unsigned long *addrs, u32 addrs_cnt)
+>>>  {
+>>> -     struct module_addr_args *args = data;
+>>> -     struct module **mods;
+>>> -
+>>> -     /* We iterate all modules symbols and for each we:
+>>> -      * - search for it in provided addresses array
+>>> -      * - if found we check if we already have the module pointer stored
+>>> -      *   (we iterate modules sequentially, so we can check just the last
+>>> -      *   module pointer)
+>>> -      * - take module reference and store it
+>>> -      */
+>>> -     if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
+>>> -                    bpf_kprobe_multi_addrs_cmp))
+>>> -             return 0;
+>>> +     int i, j, err;
+>>> +     int mods_cnt = 0;
+>>> +     int mods_cap = 0;
+>>> +     struct module *mod;
+>>> +     struct module **mods = NULL;
+>>>
+>>> -     if (args->mods && args->mods[args->mods_cnt - 1] == mod)
+>>> -             return 0;
+>>> +     for (i = 0; i < addrs_cnt; i++) {
+>>> +             mod = __module_address(addrs[i]);
+>>
+>> This must be called under module_mutex to make sure that the module
+>> would not disappear.
+
+Yes, mod needs to be protected, thanks.
+
+> 
+> module_mutex is not available outside kernel/module/. The common
+> practice is to disable preempt before calling __module_address().
+
+Yes, I've looked elsewhere, and all calling preempt_disable() for
+RCU read protection. I will fix it.
+
+> CONFIG_LOCKDEP should catch this.
+> 
+> Thanks,
+> Song
+> 
+> [...]
+> .
+> 
 
 -- 
-Best Regards
-Masahiro Yamada
+Regards,
+  Zhen Lei
