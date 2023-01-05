@@ -2,40 +2,60 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B23FC3DA7D
-	for <linux-modules@archiver.kernel.org>; Thu,  5 Jan 2023 09:40:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51858C3DA7D
+	for <linux-modules@archiver.kernel.org>; Thu,  5 Jan 2023 21:32:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjAEJkO (ORCPT
+        id S235863AbjAEVba (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 5 Jan 2023 04:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        Thu, 5 Jan 2023 16:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjAEJkN (ORCPT
+        with ESMTP id S236000AbjAEVbT (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 5 Jan 2023 04:40:13 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464A9544E1;
-        Thu,  5 Jan 2023 01:40:12 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C97806BCE9;
-        Thu,  5 Jan 2023 09:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1672911154; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GfrBRkojWZ5wSAZVEYUzeElYRu2x1ZaqlGLpQM2iEDg=;
-        b=eJ9EewVVG17Zq1paOFU+Vxn1uYwM+B3pteGCxVy2WDcALlOBGhnSTbR3GqbQ97m9Spqdnf
-        Cr/0sZlPnsEW+W4uakHaFRcBJ+XRd/giFZhLF5b42ID3orqUXqNZDCe4LQrlGvsJpMQxYu
-        srnPtSlsEDFGzX7MrqGO5EOEiM67ew4=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 639952C16E;
-        Thu,  5 Jan 2023 09:32:34 +0000 (UTC)
-Date:   Thu, 5 Jan 2023 10:32:34 +0100
-From:   Petr Mladek <pmladek@suse.com>
+        Thu, 5 Jan 2023 16:31:19 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36E8671BC;
+        Thu,  5 Jan 2023 13:31:16 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id x22so92966227ejs.11;
+        Thu, 05 Jan 2023 13:31:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B+QbiATlPmFrXKy6nPSw6HbywpLiFa74L0gMt+w3HXo=;
+        b=qj5/VhmYMrx458qhW1RtbNfzF0pB8bER0AZvKuyMddO0TpwpwBvdL+Vfwjn3QpYy0m
+         kMKAgUIU5H69cZuJsR0Vu49tuI4u0O9K5b8/BP7qnniAyJh/zDyxsEAZiycNAkkAcyM4
+         IsLFhHauY6y127jhEykj04Eyx4ngJ10p1DOGx/aCUSz+Ky8KRhNbKjJ3gPGe0nFB1U4l
+         clBUPbVzfS6+dqMd3NrdxXpQbaMkuFUjYaFX99bb0G4VcQr7giqoXp3Wp0wq6MzNzHtc
+         TxsPE8x+OD8/d9CknHeaGY2nJCKl3XVh5+/FRCuIVEwZ0xj240JL9dblYgXT0jqaLWfU
+         fSsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B+QbiATlPmFrXKy6nPSw6HbywpLiFa74L0gMt+w3HXo=;
+        b=R9ki2ue50att5qkHJlKWJUqLzZcymcXIQPS3Sddy9aKMHTbm0P2+B6ZeQkkVTcLRsF
+         Vu4zr6uVR9xNn1409KIzrLMUqOApgIzkcSsKoyPPs1Btr3tuDiyP/orRFsSUTe6b6HYO
+         Mno1Fd5z9hZUn0cczGcXzwwK/pB4y9qrpmmZaDkwPP1JlR19D9v9Ze+PiTC3i9sIbikk
+         wPLLqekJk3/m4x+Zyy6ANJ7lltzmt5Fb469CZt0IR77pXAkRAwKvcvBKDlyGpAIKCBQj
+         GYwRoU2pM2iHtRyQU7vwblUEcvVlZP5Nw9mxJuKNP7c+x7PAHYNpS2R0eUghjE3Gh77N
+         gBgw==
+X-Gm-Message-State: AFqh2kpb5QAezeD3vjTrHlxbhX5Gj6fUgI9YvSMSXL3Vmz9O06ueMnQq
+        oz23IHOR1lCjSbaxHilpzh4=
+X-Google-Smtp-Source: AMrXdXvmYnINBuJQtPtPn2mLwtnU7N1wi8jwfdQij6aIk7h717hh+mc372S1TYy8rTIjNfVAJrntuw==
+X-Received: by 2002:a17:907:3ea1:b0:7c1:7f84:10ac with SMTP id hs33-20020a1709073ea100b007c17f8410acmr76492493ejc.33.1672954275287;
+        Thu, 05 Jan 2023 13:31:15 -0800 (PST)
+Received: from krava ([83.240.63.194])
+        by smtp.gmail.com with ESMTPSA id o21-20020a170906769500b007b935641971sm16698031ejm.5.2023.01.05.13.31.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jan 2023 13:31:14 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 5 Jan 2023 22:31:12 +0100
 To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Joe Lawrence <joe.lawrence@redhat.com>,
@@ -47,7 +67,7 @@ Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Hao Luo <haoluo@google.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
@@ -55,7 +75,7 @@ Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
         linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
         linux-modules@vger.kernel.org
 Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
-Message-ID: <Y7aZMkgVgl28Jgmv@alley>
+Message-ID: <Y7dBoII5kZnHGFdL@krava>
 References: <20221230112729.351-1-thunder.leizhen@huawei.com>
  <20221230112729.351-3-thunder.leizhen@huawei.com>
  <Y7WoZARt37xGpjXD@alley>
@@ -66,13 +86,17 @@ In-Reply-To: <Y7WoZARt37xGpjXD@alley>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed 2023-01-04 17:25:08, Petr Mladek wrote:
+On Wed, Jan 04, 2023 at 05:25:08PM +0100, Petr Mladek wrote:
 > On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
 > > Function __module_address() can quickly return the pointer of the module
 > > to which an address belongs. We do not need to traverse the symbols of all
 > > modules to check whether each address in addrs[] is the start address of
 > > the corresponding symbol, because register_fprobe_ips() will do this check
 > > later.
+
+hum, for some reason I can see only replies to this patch and
+not the actual patch.. I'll dig it out of the lore I guess
+
 > > 
 > > Assuming that there are m modules, each module has n symbols on average,
 > > and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
@@ -81,6 +105,15 @@ On Wed 2023-01-04 17:25:08, Petr Mladek wrote:
 > > (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
 > > the ratio is still greater than 1. Therefore, the new method will
 > > generally have better performance.
+
+could you try to benchmark that? I tried something similar but was not
+able to get better performance
+
+I'll review and run my benchmark test tomorrow
+
+thanks,
+jirka
+
 > > 
 > > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 > > ---
@@ -155,9 +188,7 @@ On Wed 2023-01-04 17:25:08, Petr Mladek wrote:
 > My understanding is that the addresses are sorted in "addrs" array.
 > So, the address is either part of the last found module or it belongs
 > to a completely new module.
-
-I thought more about it and I think that I was wrong, see below.
-
+> 
 > 	for (i = 0; i < addrs_cnt; i++) {
 > 		/*
 > 		 * The adresses are sorted. The adress either belongs
@@ -168,20 +199,93 @@ I thought more about it and I think that I was wrong, see below.
 > 		 */
 > 		 if (mods_cnt && within_module(addrs[i], mods[mods_cnt - 1]))
 > 			continue;
-
-within_module() checks two sections (init and core). They are
-allocated separately, see module_alloc() called in move_module().
-
-There might be a section from another modules between the init
-and core section of a module.
-
-The optimization worked in the original code because
-module_kallsyms_on_each_symbol() always iterated over all
-symbols from a module.
-
-That said, I am not sure if bpf trace might be added for
-symbols in the module init section. But it might be
-better to stay on the safe side.
-
-Best Regards,
-Petr
+> 
+> 		mutex_lock(&module_mutex);
+> 		mod = __module_address(addrs[i]);
+> 		if (mod && !try_module_get(mod)) {
+> 			mutex_unlock(&module_mutex);
+> 			goto failed;
+> 		}
+> 		mutex_unlock(&module_mutex);
+> 
+> 		/*
+> 		 * Nope when the address was not from a module.
+> 		 *
+> 		 * Is this correct? What if the module has gone in
+> 		 * the meantime? Anyway, the original code
+> 		 * worked this way.
+> 		 *
+> 		 * FIXME: I would personally make sure that it is part
+> 		 * of vmlinux or so.
+> 		 */
+> 		if (!mod)
+> 			continue;
+> 
+> 		/* store the module into mods array */
+> 		...
+> 
+> 
+> 
+> 
+> > +		if (j < mods_cnt)
+> > +			continue;
+> >  
+> > -	if (!try_module_get(mod))
+> > -		return -EINVAL;
+> > +		if (mods_cnt == mods_cap) {
+> > +			struct module **new_mods;
+> >  
+> > -	args->mods[args->mods_cnt] = mod;
+> > -	args->mods_cnt++;
+> > -	return 0;
+> > -}
+> > +			mods_cap = max(16, mods_cap * 3 / 2);
+> > +			new_mods = krealloc_array(mods, mods_cap, sizeof(*mods), GFP_KERNEL);
+> > +			if (!new_mods) {
+> > +				err = -ENOMEM;
+> > +				goto failed;
+> > +			}
+> > +			mods = new_mods;
+> > +		}
+> >  
+> > -static int get_modules_for_addrs(struct module ***mods, unsigned long *addrs, u32 addrs_cnt)
+> > -{
+> > -	struct module_addr_args args = {
+> > -		.addrs     = addrs,
+> > -		.addrs_cnt = addrs_cnt,
+> > -	};
+> > -	int err;
+> > +		if (!try_module_get(mod)) {
+> > +			err = -EINVAL;
+> > +			goto failed;
+> > +		}
+> >  
+> > -	/* We return either err < 0 in case of error, ... */
+> > -	err = module_kallsyms_on_each_symbol(NULL, module_callback, &args);
+> > -	if (err) {
+> > -		kprobe_multi_put_modules(args.mods, args.mods_cnt);
+> > -		kfree(args.mods);
+> > -		return err;
+> > +		mods[mods_cnt] = mod;
+> > +		mods_cnt++;
+> >  	}
+> >  
+> > -	/* or number of modules found if everything is ok. */
+> > -	*mods = args.mods;
+> > -	return args.mods_cnt;
+> > +	*out_mods = mods;
+> > +	return mods_cnt;
+> > +
+> > +failed:
+> > +	kprobe_multi_put_modules(mods, mods_cnt);
+> > +	kfree(mods);
+> > +	return err;
+> >  }
+> >  
+> >  int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+> 
+> Otherwise, it looks good. IMHO, the new code looks more straightforward
+> than the original one.
+> 
+> Best Regards,
+> Petr
