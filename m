@@ -2,194 +2,137 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C43E8C54E76
-	for <linux-modules@archiver.kernel.org>; Fri,  6 Jan 2023 09:47:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 547D4C3DA7A
+	for <linux-modules@archiver.kernel.org>; Fri,  6 Jan 2023 18:25:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjAFJrJ (ORCPT
+        id S234959AbjAFSZY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 6 Jan 2023 04:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
+        Fri, 6 Jan 2023 13:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233742AbjAFJqT (ORCPT
+        with ESMTP id S231786AbjAFSZX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 6 Jan 2023 04:46:19 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698D869B3B;
-        Fri,  6 Jan 2023 01:45:45 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so3167204wma.1;
-        Fri, 06 Jan 2023 01:45:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PN8//UfAoVwKaLm31eaWicz8hNpiTUFBXEnuGYY6upA=;
-        b=FlwDESQyeNbwEOF9phOaSdZuMcQArQruAlYMTIIZ6+wSGyki259+Z+Sbg2rCI+BVQt
-         sn9X3mES4FYL0nwejFeAt+UGU5KL6LpEanaT9TjhL8UDHNtgsndEgp/y8K1EIX3vxA3n
-         Z4RlkGCMmQa9J5f+NxM8mSeSlbHjY6+DRna3iodggUIwdycTIXd5f1/VV/VOMKpN4dh3
-         4HAHYShdm7RrVrqqnLISKJ9Mp+f0ysYmVu0Q5RJ39oG+0QOQMCFeTmNbH5ljcGBn7WTx
-         nOER6ELX9ikWuNZjskCtbq5SEpXtds8xMJ05K3DiU/V5OZy7YAob2+UaBkXAWzBuQVux
-         bA2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PN8//UfAoVwKaLm31eaWicz8hNpiTUFBXEnuGYY6upA=;
-        b=QRL2oqrjWWXNKZxBt/9+IJ0LvXHs4UYKnoysqqykq+rxLGfbVQGzr7BPZ6NYSWWE4u
-         VvAnLgyrRDrHOlS4derW8ACDjB+1wIAXKM+GgeJWwSLmTpAIzGQNmy1o76R8gN37MW8Q
-         pBgaQkH1qC5NQ6bSoEFuA8HDusjq5tAq8tt/ntqUzIGETfT6c0N4k/HQufEiRjSmYHq6
-         u1tNyHV08dJm67xxCcpBmWno7j2Pih1lRqo4u8DmK8XMbPm/N6PindTP2XmZs0y8KJ91
-         eDa5tSidOIwNXr/ZVSUiFzTeaAtFyGMSW6IIqjDe/t/n4xHcsU1Trl0LGhx6SLMT5nED
-         psdQ==
-X-Gm-Message-State: AFqh2krhoYSkvJPFBC7fQkrVWEKWZQ0THZ3q1l0K7quawcv+Jbp2He6u
-        QgAAS8p6mqZr0IgscFfrMw0=
-X-Google-Smtp-Source: AMrXdXvGEs46DZ+1Nu9hdjrmPn0yZt8DrEET0vDFvTytRbxXI3AghL6OK5+dJLdJNIH2WxrVI2eIew==
-X-Received: by 2002:a05:600c:3ca2:b0:3d9:a5a2:65fa with SMTP id bg34-20020a05600c3ca200b003d9a5a265famr17725332wmb.7.1672998343858;
-        Fri, 06 Jan 2023 01:45:43 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id bg24-20020a05600c3c9800b003cfa3a12660sm13739987wmb.1.2023.01.06.01.45.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 01:45:43 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 6 Jan 2023 10:45:40 +0100
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
-Message-ID: <Y7ftxIiV35Wd75lZ@krava>
-References: <20221230112729.351-1-thunder.leizhen@huawei.com>
- <20221230112729.351-3-thunder.leizhen@huawei.com>
- <Y7WoZARt37xGpjXD@alley>
- <Y7dBoII5kZnHGFdL@krava>
+        Fri, 6 Jan 2023 13:25:23 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9FB2AC0;
+        Fri,  6 Jan 2023 10:25:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8XVbF/9SeIsWaXsMOVuymck+rAOoWnJ7YhcqpRHsuis=; b=rmKYDQkxQwDxVoecxlNhfU4N5B
+        Y0YedWe7zQeVDvZUAseXk8BJctYxpVkSBQ/5reHPtj0pfWgpyHIPr9jc9kNrU0+kG6ml9dwM8M5P7
+        9lup9CARv5eN/C/qZTQaj9fG88K+JHDmQ71k7RzfbHGZ0nyc7KROwenyjWruh2Rj5Y5r/7K5l9B/u
+        0UhFt7CXKxgGjPzSlpPDSXFo46sZwfVzT1D5IAAB87ZSQ979NSo4nAiFR5EO0WvcViSMqSQ+5gVBG
+        Oel9vO2X01LhNHGkgVBjqIJLHdv1rQl/6Z47ux9Y++4AGpB4Wzs5rw21P4TFa3aRdx/x5pwD6kajs
+        kZWxi2jA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pDrP3-00EMCV-H2; Fri, 06 Jan 2023 18:25:17 +0000
+Date:   Fri, 6 Jan 2023 10:25:17 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH v2] kallsyms: Fix sleeping function called from invalid
+ context when CONFIG_KALLSYMS_SELFTEST=y
+Message-ID: <Y7hnjVftrszW8V2E@bombadil.infradead.org>
+References: <20221228014511.328-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y7dBoII5kZnHGFdL@krava>
+In-Reply-To: <20221228014511.328-1-thunder.leizhen@huawei.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jan 05, 2023 at 10:31:12PM +0100, Jiri Olsa wrote:
-> On Wed, Jan 04, 2023 at 05:25:08PM +0100, Petr Mladek wrote:
-> > On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
-> > > Function __module_address() can quickly return the pointer of the module
-> > > to which an address belongs. We do not need to traverse the symbols of all
-> > > modules to check whether each address in addrs[] is the start address of
-> > > the corresponding symbol, because register_fprobe_ips() will do this check
-> > > later.
+On Wed, Dec 28, 2022 at 09:45:11AM +0800, Zhen Lei wrote:
+> [T58] BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
+> [T58] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 58, name: kallsyms_test
+> [T58] preempt_count: 0, expected: 0
+> [T58] RCU nest depth: 0, expected: 0
+> [T58] no locks held by kallsyms_test/58.
+> [T58] irq event stamp: 18899904
+> [T58] hardirqs last enabled at (18899903): finish_task_switch.isra.0 (core.c:?)
+> [T58] hardirqs last disabled at (18899904): test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
+> [T58] softirqs last enabled at (18899886): __do_softirq (??:?)
+> [T58] softirqs last disabled at (18899879): ____do_softirq (irq.c:?)
+> [T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G T  6.1.0-next-20221215 #2
+> [T58] Hardware name: linux,dummy-virt (DT)
+> [T58] Call trace:
+> [T58] dump_backtrace (??:?)
+> [T58] show_stack (??:?)
+> [T58] dump_stack_lvl (??:?)
+> [T58] dump_stack (??:?)
+> [T58] __might_resched (??:?)
+> [T58] kallsyms_on_each_symbol (??:?)
+> [T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
+> [T58] test_entry (kallsyms_selftest.c:?)
+> [T58] kthread (kthread.c:?)
+> [T58] ret_from_fork (??:?)
+> [T58] kallsyms_selftest: kallsyms_on_each_symbol() traverse all: 5744310840 ns
+> [T58] kallsyms_selftest: kallsyms_on_each_match_symbol() traverse all: 1164580 ns
+> [T58] kallsyms_selftest: finish
 > 
-> hum, for some reason I can see only replies to this patch and
-> not the actual patch.. I'll dig it out of the lore I guess
+> The execution time of function kallsyms_on_each_match_symbol() is very
+> short, about ten microseconds, the probability of this process being
+> interrupted is very small. And even if it happens, we just have to try
+> again.
 > 
-> > > 
-> > > Assuming that there are m modules, each module has n symbols on average,
-> > > and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
-> > > complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
-> > > and the time complexity of current method is O(K * (log(m) + M)), M <= m.
-> > > (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
-> > > the ratio is still greater than 1. Therefore, the new method will
-> > > generally have better performance.
+> The execution time of function kallsyms_on_each_symbol() is very long,
+> it takes tens of milliseconds, context switches is likely occur during
+> this period. If the time obtained by task_cputime() is accurate, it is
+> preferred. Otherwise, use local_clock() directly, and the time taken by
+> irqs and high-priority tasks is not deducted because they are always
+> running for a short time.
 > 
-> could you try to benchmark that? I tried something similar but was not
-> able to get better performance
+> Fixes: 30f3bb09778d ("kallsyms: Add self-test facility")
+> Reported-by: Anders Roxell <anders.roxell@linaro.org>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  kernel/kallsyms_selftest.c | 52 +++++++++++++++++++++++++++-----------
+>  1 file changed, 37 insertions(+), 15 deletions(-)
+> 
+> v1 --> v2:
+> 1. Keep calling cond_resched() when CONFIG_KALLSYMS_SELFTEST=y. Instead,
+>    function kallsyms_on_each_match_symbol() and kallsyms_on_each_symbol()
+>    are not protected by local_irq_save() in kallsyms_selftest.c.
+> 
+> diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
+> @@ -270,17 +283,26 @@ static int match_symbol(void *data, unsigned long addr)
+>  static void test_perf_kallsyms_on_each_match_symbol(void)
+>  {
+>  	u64 t0, t1;
+> -	unsigned long flags;
+> +	int cpu = smp_processor_id();
+> +	unsigned long nr_irqs;
+>  	struct test_stat stat;
+>  
+>  	memset(&stat, 0, sizeof(stat));
+>  	stat.max = INT_MAX;
+>  	stat.name = stub_name;
+> -	local_irq_save(flags);
+> -	t0 = sched_clock();
+> -	kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
+> -	t1 = sched_clock();
+> -	local_irq_restore(flags);
+> +
+> +	/*
+> +	 * The test thread has been bound to a fixed CPU in advance. If the
+> +	 * number of irqs does not change, no new scheduling request will be
+> +	 * generated. That is, the performance test process is atomic.
+> +	 */
+> +	do {
+> +		nr_irqs = kstat_cpu_irqs_sum(cpu);
+> +		cond_resched();
+> +		t0 = local_clock();
+> +		kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
+> +		t1 = local_clock();
+> +	} while (nr_irqs != kstat_cpu_irqs_sum(cpu));
+>  	pr_info("kallsyms_on_each_match_symbol() traverse all: %lld ns\n", t1 - t0);
 
-hm looks like I tried the smilar thing (below) like you did,
-but wasn't able to get better performace
+But can't we bump the number of IRQs, preempt, handle the IRQ and come
+back to the same CPU with the same IRQ count and end up with a very very
+false positive on delta?
 
-I guess your goal is to get rid of the module arg in
-module_kallsyms_on_each_symbol callback that we use?
-I'm ok with the change if the performace is not worse
-
-jirka
-
-
----
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 5b9008bc597b..3280c22009f1 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2692,23 +2692,16 @@ struct module_addr_args {
- 	int mods_cap;
- };
- 
--static int module_callback(void *data, const char *name,
--			   struct module *mod, unsigned long addr)
-+static int add_module(struct module_addr_args *args, struct module *mod)
- {
--	struct module_addr_args *args = data;
- 	struct module **mods;
- 
--	/* We iterate all modules symbols and for each we:
--	 * - search for it in provided addresses array
--	 * - if found we check if we already have the module pointer stored
--	 *   (we iterate modules sequentially, so we can check just the last
--	 *   module pointer)
-+	/* We iterate sorted addresses and for each within module we:
-+	 * - check if we already have the module pointer stored for it
-+	 *   (we iterate sorted addresses sequentially, so we can check
-+	 *   just the last module pointer)
- 	 * - take module reference and store it
- 	 */
--	if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
--		       bpf_kprobe_multi_addrs_cmp))
--		return 0;
--
- 	if (args->mods && args->mods[args->mods_cnt - 1] == mod)
- 		return 0;
- 
-@@ -2734,10 +2727,24 @@ static int get_modules_for_addrs(struct module ***mods, unsigned long *addrs, u3
- 		.addrs     = addrs,
- 		.addrs_cnt = addrs_cnt,
- 	};
--	int err;
-+	u32 i, err = 0;
-+
-+	for (i = 0; !err && i < addrs_cnt; i++) {
-+		struct module *mod;
-+		bool found = false;
-+
-+		preempt_disable();
-+		mod = __module_text_address(addrs[i]);
-+		found = mod && try_module_get(mod);
-+		preempt_enable();
-+
-+		if (found) {
-+			err = add_module(&args, mod);
-+			module_put(mod);
-+		}
-+	}
- 
- 	/* We return either err < 0 in case of error, ... */
--	err = module_kallsyms_on_each_symbol(module_callback, &args);
- 	if (err) {
- 		kprobe_multi_put_modules(args.mods, args.mods_cnt);
- 		kfree(args.mods);
-@@ -2862,7 +2869,8 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 	} else {
- 		/*
- 		 * We need to sort addrs array even if there are no cookies
--		 * provided, to allow bsearch in get_modules_for_addrs.
-+		 * provided, to allow sequential address walk in
-+		 * get_modules_for_addrs.
- 		 */
- 		sort(addrs, cnt, sizeof(*addrs),
- 		       bpf_kprobe_multi_addrs_cmp, NULL);
+  Luis
