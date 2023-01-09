@@ -2,251 +2,190 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E1C8C54EBE
-	for <linux-modules@archiver.kernel.org>; Mon,  9 Jan 2023 13:42:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C077C678D6
+	for <linux-modules@archiver.kernel.org>; Mon,  9 Jan 2023 13:49:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234915AbjAINmD (ORCPT
+        id S234105AbjAINs6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 9 Jan 2023 08:42:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        Mon, 9 Jan 2023 08:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237001AbjAINlH (ORCPT
+        with ESMTP id S237087AbjAINso (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 9 Jan 2023 08:41:07 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35453271B0;
-        Mon,  9 Jan 2023 05:40:31 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 73A0175BD5;
-        Mon,  9 Jan 2023 13:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673271630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nZIh1mGADQOMi8JgdiZ4LhP9Cd71hCNn0DllffPOEAI=;
-        b=imcwR1BBHpKuGLCnsp0AnTJZrGwOhJiO9rZ9ckM/vvsEABuBKLZtPVJ4Hep5SsC/hnTWq1
-        Tn2eeAqAx1Q4Nd4i1NI46vUswapom9oqGYOoOellzJai48fOvzannAybWg6fMvL3vqscf8
-        44awmnYpwxNe5l8ncJso/us4yi4x25Q=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4FE662C141;
-        Mon,  9 Jan 2023 13:40:30 +0000 (UTC)
-Date:   Mon, 9 Jan 2023 14:40:27 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH v2] kallsyms: Fix sleeping function called from invalid
- context when CONFIG_KALLSYMS_SELFTEST=y
-Message-ID: <Y7wZSxw+Ys5MNf8g@alley>
-References: <20221228014511.328-1-thunder.leizhen@huawei.com>
+        Mon, 9 Jan 2023 08:48:44 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD9E1EECC;
+        Mon,  9 Jan 2023 05:48:43 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id ay12-20020a05600c1e0c00b003d9ea12bafcso3658721wmb.3;
+        Mon, 09 Jan 2023 05:48:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sjM8hOV94cypu49wh5dstQmAlWS++C//GRjTU4M89js=;
+        b=kuF0jPfU1UAscJ/zjoV4o3aiOyJLdHX8uCTjK8Y3fTHphmKuozDbGagrYmLT3cRScU
+         UHfV4CZnHOHXDIqslfQNrQ24aVJBjA8OGcDD2Ga0FxfOAE1USvznKgqLGFyKgOnaEl1N
+         piLhdt3d46Gnc25HPCt8Nv//q5Pi64evsmTyjTl3hguDqAhrpYg7hLyLvS83tiPm3NgU
+         jiJXcFkxJ5jEZ9fnnRhoum2vQAOFIfKonm70FVb/lEm9GDpl3FPMwb/9E69tDxuR73DC
+         2nrhjNQc22VSchGsdm/gDvllkeUdGF8rY5QLjjCZsidONJ8KzmNIjGVhJpDkV7InQwR5
+         xahQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sjM8hOV94cypu49wh5dstQmAlWS++C//GRjTU4M89js=;
+        b=iDqGKmRQ8tIqMPb7sRewaxbf3KWuzy+Nl0+ofMy/iHNctPvPz7UAzSKTIXjBlL6KpY
+         S1fFVahqgrn0/gC72XXMA+AIy4sP4xySIgsFEUYweR8H9S49C9tbiTm4cbEmvOaEZ9sD
+         HsmzYtU+3GVXpm6r+Anac2+JcWpwVdN0ZzOj/Rwz45GCWuPFKW8nIkxqORnhf34O6Zk7
+         ltYkzUhiRx2d81+EAGviHeb+NxBIw68oCDHjdiz0mc8I6ZygAAZYnaN7n0POMxWgvhF1
+         llP6j9l34Z4B5xlu2TDFRt1U+Xk3GicJE0XuSvX0RRekL2AigiUgnF4e0nCvMnYJWvTH
+         7S0w==
+X-Gm-Message-State: AFqh2krkjbVrlDhwyOUO5QTc1t3IiVaepAOnLcfSmGYzSiCfOzCCcOnd
+        qpL6VCh3RK1m1d8zzyiLdZs=
+X-Google-Smtp-Source: AMrXdXt0DAoCSuzsNaAgux29pMWEu5IX5Y7NgvCBZaVgMQKZl1rKa1+RRfp3V+X3kTpEb2gF5gwWXg==
+X-Received: by 2002:a1c:4c12:0:b0:3c6:e63e:89a6 with SMTP id z18-20020a1c4c12000000b003c6e63e89a6mr46312893wmf.2.1673272121828;
+        Mon, 09 Jan 2023 05:48:41 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b003b4ff30e566sm25387847wms.3.2023.01.09.05.48.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 05:48:40 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 9 Jan 2023 14:48:38 +0100
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Petr Mladek <pmladek@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
+Message-ID: <Y7wbNinAXM6O62ZF@krava>
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+ <20221230112729.351-3-thunder.leizhen@huawei.com>
+ <Y7WoZARt37xGpjXD@alley>
+ <Y7dBoII5kZnHGFdL@krava>
+ <Y7ftxIiV35Wd75lZ@krava>
+ <652e0eea-1ab2-a4fd-151a-e634bcb4e1da@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221228014511.328-1-thunder.leizhen@huawei.com>
+In-Reply-To: <652e0eea-1ab2-a4fd-151a-e634bcb4e1da@huawei.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed 2022-12-28 09:45:11, Zhen Lei wrote:
-> [T58] BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
-> [T58] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 58, name: kallsyms_test
-> [T58] preempt_count: 0, expected: 0
-> [T58] RCU nest depth: 0, expected: 0
-> [T58] no locks held by kallsyms_test/58.
-> [T58] irq event stamp: 18899904
-> [T58] hardirqs last enabled at (18899903): finish_task_switch.isra.0 (core.c:?)
-> [T58] hardirqs last disabled at (18899904): test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
-> [T58] softirqs last enabled at (18899886): __do_softirq (??:?)
-> [T58] softirqs last disabled at (18899879): ____do_softirq (irq.c:?)
-> [T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G T  6.1.0-next-20221215 #2
-> [T58] Hardware name: linux,dummy-virt (DT)
-> [T58] Call trace:
-> [T58] dump_backtrace (??:?)
-> [T58] show_stack (??:?)
-> [T58] dump_stack_lvl (??:?)
-> [T58] dump_stack (??:?)
-> [T58] __might_resched (??:?)
-> [T58] kallsyms_on_each_symbol (??:?)
-> [T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
-> [T58] test_entry (kallsyms_selftest.c:?)
-> [T58] kthread (kthread.c:?)
-> [T58] ret_from_fork (??:?)
-> [T58] kallsyms_selftest: kallsyms_on_each_symbol() traverse all: 5744310840 ns
-> [T58] kallsyms_selftest: kallsyms_on_each_match_symbol() traverse all: 1164580 ns
-> [T58] kallsyms_selftest: finish
+On Mon, Jan 09, 2023 at 04:51:37PM +0800, Leizhen (ThunderTown) wrote:
 > 
-> The execution time of function kallsyms_on_each_match_symbol() is very
-> short, about ten microseconds, the probability of this process being
-> interrupted is very small. And even if it happens, we just have to try
-> again.
 > 
-> The execution time of function kallsyms_on_each_symbol() is very long,
-> it takes tens of milliseconds, context switches is likely occur during
-> this period. If the time obtained by task_cputime() is accurate, it is
-> preferred. Otherwise, use local_clock() directly, and the time taken by
-> irqs and high-priority tasks is not deducted because they are always
-> running for a short time.
+> On 2023/1/6 17:45, Jiri Olsa wrote:
+> > On Thu, Jan 05, 2023 at 10:31:12PM +0100, Jiri Olsa wrote:
+> >> On Wed, Jan 04, 2023 at 05:25:08PM +0100, Petr Mladek wrote:
+> >>> On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
+> >>>> Function __module_address() can quickly return the pointer of the module
+> >>>> to which an address belongs. We do not need to traverse the symbols of all
+> >>>> modules to check whether each address in addrs[] is the start address of
+> >>>> the corresponding symbol, because register_fprobe_ips() will do this check
+> >>>> later.
+> >>
+> >> hum, for some reason I can see only replies to this patch and
+> >> not the actual patch.. I'll dig it out of the lore I guess
+> >>
+> >>>>
+> >>>> Assuming that there are m modules, each module has n symbols on average,
+> >>>> and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
+> >>>> complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
+> >>>> and the time complexity of current method is O(K * (log(m) + M)), M <= m.
+> >>>> (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
+> >>>> the ratio is still greater than 1. Therefore, the new method will
+> >>>> generally have better performance.
+> >>
+> >> could you try to benchmark that? I tried something similar but was not
+> >> able to get better performance
+> > 
+> > hm looks like I tried the smilar thing (below) like you did,
 > 
-> Fixes: 30f3bb09778d ("kallsyms: Add self-test facility")
-> Reported-by: Anders Roxell <anders.roxell@linaro.org>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  kernel/kallsyms_selftest.c | 52 +++++++++++++++++++++++++++-----------
->  1 file changed, 37 insertions(+), 15 deletions(-)
+> Yes. I just found out you're working on this improvement, too.
 > 
-> v1 --> v2:
-> 1. Keep calling cond_resched() when CONFIG_KALLSYMS_SELFTEST=y. Instead,
->    function kallsyms_on_each_match_symbol() and kallsyms_on_each_symbol()
->    are not protected by local_irq_save() in kallsyms_selftest.c.
+> > but wasn't able to get better performace
 > 
-> diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
-> index f35d9cc1aab1544..9c94f06aa951971 100644
-> --- a/kernel/kallsyms_selftest.c
-> +++ b/kernel/kallsyms_selftest.c
-> @@ -12,9 +12,11 @@
->  #include <linux/init.h>
->  #include <linux/module.h>
->  #include <linux/kallsyms.h>
-> +#include <linux/kernel_stat.h>
-> +#include <linux/kthread.h>
->  #include <linux/random.h>
->  #include <linux/sched/clock.h>
-> -#include <linux/kthread.h>
-> +#include <linux/sched/cputime.h>
->  #include <linux/vmalloc.h>
->  
->  #include "kallsyms_internal.h"
-> @@ -161,9 +163,9 @@ static int lookup_name(void *data, const char *name, struct module *mod, unsigne
->  	struct test_stat *stat = (struct test_stat *)data;
->  
->  	local_irq_save(flags);
-> -	t0 = sched_clock();
-> +	t0 = local_clock();
->  	(void)kallsyms_lookup_name(name);
-> -	t1 = sched_clock();
-> +	t1 = local_clock();
->  	local_irq_restore(flags);
->  
->  	t = t1 - t0;
-> @@ -233,19 +235,30 @@ static int find_symbol(void *data, const char *name, struct module *mod, unsigne
->  
->  static void test_perf_kallsyms_on_each_symbol(void)
->  {
-> -	u64 t0, t1;
-> -	unsigned long flags;
-> +	bool accurate;
-> +	u64 utime, t0, t1;
->  	struct test_stat stat;
->  
->  	memset(&stat, 0, sizeof(stat));
->  	stat.max = INT_MAX;
->  	stat.name = stub_name;
->  	stat.perf = 1;
-> -	local_irq_save(flags);
-> -	t0 = sched_clock();
-> +
-> +	/*
-> +	 * This test process takes tens of milliseconds, context switches may
-> +	 * occur during this period. If task_cputime() returns true, it is
-> +	 * accurate enough. Otherwise, use local_clock() directly. This is
-> +	 * based on the assumption that irqs and high-priority tasks are always
-> +	 * running for a short time, they may cause less error.
-> +	 */
-> +	accurate = task_cputime(current, &utime, &t0);
-> +	if (!accurate)
-> +		t0 = local_clock();
->  	kallsyms_on_each_symbol(find_symbol, &stat);
-> -	t1 = sched_clock();
-> -	local_irq_restore(flags);
-> +	if (accurate)
-> +		task_cputime(current, &utime, &t1);
-> +	else
-> +		t1 = local_clock();
->  	pr_info("kallsyms_on_each_symbol() traverse all: %lld ns\n", t1 - t0);
->  }
->  
-> @@ -270,17 +283,26 @@ static int match_symbol(void *data, unsigned long addr)
->  static void test_perf_kallsyms_on_each_match_symbol(void)
->  {
->  	u64 t0, t1;
-> -	unsigned long flags;
-> +	int cpu = smp_processor_id();
-> +	unsigned long nr_irqs;
->  	struct test_stat stat;
->  
->  	memset(&stat, 0, sizeof(stat));
->  	stat.max = INT_MAX;
->  	stat.name = stub_name;
-> -	local_irq_save(flags);
-> -	t0 = sched_clock();
-> -	kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
-> -	t1 = sched_clock();
-> -	local_irq_restore(flags);
-> +
-> +	/*
-> +	 * The test thread has been bound to a fixed CPU in advance. If the
-> +	 * number of irqs does not change, no new scheduling request will be
-> +	 * generated. That is, the performance test process is atomic.
-> +	 */
-> +	do {
-> +		nr_irqs = kstat_cpu_irqs_sum(cpu);
-> +		cond_resched();
-> +		t0 = local_clock();
-> +		kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
-> +		t1 = local_clock();
-> +	} while (nr_irqs != kstat_cpu_irqs_sum(cpu));
+> Your implementation below is already the limit that can be optimized.
+> If the performance is not improved, it indicates that this place is
+> not the bottleneck.
+> 
+> > 
+> > I guess your goal is to get rid of the module arg in
+> > module_kallsyms_on_each_symbol callback that we use?
+> 
+> It's not a bad thing to keep argument 'mod' for function
+> module_kallsyms_on_each_symbol(), but for kallsyms_on_each_symbol(),
+> it's completely redundant. Now these two functions often use the
+> same hook function. So I carefully analyzed get_modules_for_addrs(),
+> which is the only place that involves the use of parameter 'mod'.
+> Looks like there's a possibility of eliminating parameter 'mod'.
+> 
+> > I'm ok with the change if the performace is not worse
+> 
+> OK, thanks.
+> 
+> > 
+> > jirka
+> > 
+> > 
+> > ---
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index 5b9008bc597b..3280c22009f1 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -2692,23 +2692,16 @@ struct module_addr_args {
+> >  	int mods_cap;
+> >  };
+> >  
+> > -static int module_callback(void *data, const char *name,
+> > -			   struct module *mod, unsigned long addr)
+> > +static int add_module(struct module_addr_args *args, struct module *mod)
+> >  {
+> > -	struct module_addr_args *args = data;
+> >  	struct module **mods;
+> >  
+> > -	/* We iterate all modules symbols and for each we:
+> > -	 * - search for it in provided addresses array
+> > -	 * - if found we check if we already have the module pointer stored
+> > -	 *   (we iterate modules sequentially, so we can check just the last
+> > -	 *   module pointer)
+> > +	/* We iterate sorted addresses and for each within module we:
+> > +	 * - check if we already have the module pointer stored for it
+> > +	 *   (we iterate sorted addresses sequentially, so we can check
+> > +	 *   just the last module pointer)
+> >  	 * - take module reference and store it
+> >  	 */
+> > -	if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
+> > -		       bpf_kprobe_multi_addrs_cmp))
+> > -		return 0;
+> > -
+> >  	if (args->mods && args->mods[args->mods_cnt - 1] == mod)
+> >  		return 0;
+> 
+> There'll be problems Petr mentioned.
+> 
+> https://lkml.org/lkml/2023/1/5/191
 
-Huh, is this guaranteed to ever finish?
+ok, makes sense.. I guess we could just search args->mods in here?
+are you going to send new version, or should I update my patch with that?
 
-What if there is a regression and kallsyms_on_each_match_symbol()
-never finishes without rescheduling?
-
-This is yet another unreliable hack.
-
-
-Use standard solution:
-
-I did the homework for you and checked how the "time" command
-measures the time spend in the system. It actually uses more methods.
-
-One is times() syscall. It uses thread_group_cputime_adjusted(), see
-do_sys_times() in kernel/sys.c
-
-Or it uses wait4() syscall to get struct rusage that provides this
-information.
-
-Please, stop inventing crazy hacks, and use these standard methods.
-If the "time" tool is enough for userspace performance tests
-then it must be enough in this case as well.
-
-
-Or remove this test:
-
-Seriously, what is the value of this test?
-Is anyone going to use it at all in the future?
-
-The code was useful when developing the optimization.
-But it is really questionable as a selftest.
-
-Selftests usually check if the code works as expected.
-This test provides some number that is hardly comparable.
-
-
-Why are try hardly comparable?
-
-1. The speed depends on the number of loaded modules
-   and number of symbols. It highly depends on the configuration
-   that was used to build the kernel.
-
-2. The test runs only once. As a result it is hard to judge
-   how big is the noise.
-
-3. The noise might depend on the size and state of CPU caches.
-
-
-I personally vote for removing this selftest!
-
-Best Regards,
-Petr
+thanks,
+jirka
