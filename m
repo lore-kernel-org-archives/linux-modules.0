@@ -2,47 +2,65 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A79C54EBD
-	for <linux-modules@archiver.kernel.org>; Mon,  9 Jan 2023 03:08:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E332C54EBD
+	for <linux-modules@archiver.kernel.org>; Mon,  9 Jan 2023 04:02:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234217AbjAIDIT (ORCPT
+        id S236294AbjAIECU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 8 Jan 2023 22:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
+        Sun, 8 Jan 2023 23:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbjAIDIQ (ORCPT
+        with ESMTP id S236253AbjAIECT (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 8 Jan 2023 22:08:16 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499A3BC92;
-        Sun,  8 Jan 2023 19:08:15 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NqzLH2WKXzJn1g;
-        Mon,  9 Jan 2023 11:04:07 +0800 (CST)
+        Sun, 8 Jan 2023 23:02:19 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD42CE1C;
+        Sun,  8 Jan 2023 20:02:17 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Nr0bv1fszzJrLy;
+        Mon,  9 Jan 2023 12:00:59 +0800 (CST)
 Received: from [10.174.178.55] (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 9 Jan 2023 11:07:37 +0800
-Subject: Re: [PATCH v2] kallsyms: Fix sleeping function called from invalid
- context when CONFIG_KALLSYMS_SELFTEST=y
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Petr Mladek <pmladek@suse.com>, <linux-kernel@vger.kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-References: <20221228014511.328-1-thunder.leizhen@huawei.com>
- <Y7hnjVftrszW8V2E@bombadil.infradead.org>
+ 15.1.2375.34; Mon, 9 Jan 2023 12:02:14 +0800
+Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
+To:     Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, <bpf@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+ <20221230112729.351-3-thunder.leizhen@huawei.com> <Y7WoZARt37xGpjXD@alley>
+ <CAPhsuW6sZ9yQvZvKLd0g9m4FoabmUzwn-txX6T_A-_VYgJoXFg@mail.gmail.com>
+ <Y7aSyb0n4B2aCRZH@alley>
 From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <6f4bc106-2961-254c-717f-d989fca1e94a@huawei.com>
-Date:   Mon, 9 Jan 2023 11:07:37 +0800
+Message-ID: <4447b3b1-8023-3100-da6b-1f399e50005f@huawei.com>
+Date:   Mon, 9 Jan 2023 12:02:13 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <Y7hnjVftrszW8V2E@bombadil.infradead.org>
+In-Reply-To: <Y7aSyb0n4B2aCRZH@alley>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -50,104 +68,97 @@ List-ID: <linux-modules.vger.kernel.org>
 
 
 
-On 2023/1/7 2:25, Luis Chamberlain wrote:
-> On Wed, Dec 28, 2022 at 09:45:11AM +0800, Zhen Lei wrote:
->> [T58] BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
->> [T58] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 58, name: kallsyms_test
->> [T58] preempt_count: 0, expected: 0
->> [T58] RCU nest depth: 0, expected: 0
->> [T58] no locks held by kallsyms_test/58.
->> [T58] irq event stamp: 18899904
->> [T58] hardirqs last enabled at (18899903): finish_task_switch.isra.0 (core.c:?)
->> [T58] hardirqs last disabled at (18899904): test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
->> [T58] softirqs last enabled at (18899886): __do_softirq (??:?)
->> [T58] softirqs last disabled at (18899879): ____do_softirq (irq.c:?)
->> [T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G T  6.1.0-next-20221215 #2
->> [T58] Hardware name: linux,dummy-virt (DT)
->> [T58] Call trace:
->> [T58] dump_backtrace (??:?)
->> [T58] show_stack (??:?)
->> [T58] dump_stack_lvl (??:?)
->> [T58] dump_stack (??:?)
->> [T58] __might_resched (??:?)
->> [T58] kallsyms_on_each_symbol (??:?)
->> [T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
->> [T58] test_entry (kallsyms_selftest.c:?)
->> [T58] kthread (kthread.c:?)
->> [T58] ret_from_fork (??:?)
->> [T58] kallsyms_selftest: kallsyms_on_each_symbol() traverse all: 5744310840 ns
->> [T58] kallsyms_selftest: kallsyms_on_each_match_symbol() traverse all: 1164580 ns
->> [T58] kallsyms_selftest: finish
+On 2023/1/5 17:05, Petr Mladek wrote:
+> On Wed 2023-01-04 09:07:02, Song Liu wrote:
+>> On Wed, Jan 4, 2023 at 8:25 AM Petr Mladek <pmladek@suse.com> wrote:
+>>>
+>>> On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
+>>>> Function __module_address() can quickly return the pointer of the module
+>>>> to which an address belongs. We do not need to traverse the symbols of all
+>>>> modules to check whether each address in addrs[] is the start address of
+>>>> the corresponding symbol, because register_fprobe_ips() will do this check
+>>>> later.
+>>>>
+>>>> Assuming that there are m modules, each module has n symbols on average,
+>>>> and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
+>>>> complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
+>>>> and the time complexity of current method is O(K * (log(m) + M)), M <= m.
+>>>> (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
+>>>> the ratio is still greater than 1. Therefore, the new method will
+>>>> generally have better performance.
+>>>>
+>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>>> ---
+>>>>  kernel/trace/bpf_trace.c | 101 ++++++++++++++++-----------------------
+>>>>  1 file changed, 40 insertions(+), 61 deletions(-)
+>>>>
+>>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+>>>> index 5f3be4bc16403a5..0ff9037098bd241 100644
+>>>> --- a/kernel/trace/bpf_trace.c
+>>>> +++ b/kernel/trace/bpf_trace.c
+>>>> @@ -2684,69 +2684,55 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
+>>>>       }
+>>>>  }
+>>>>
+>>>> -struct module_addr_args {
+>>>> -     unsigned long *addrs;
+>>>> -     u32 addrs_cnt;
+>>>> -     struct module **mods;
+>>>> -     int mods_cnt;
+>>>> -     int mods_cap;
+>>>> -};
+>>>> -
+>>>> -static int module_callback(void *data, const char *name,
+>>>> -                        struct module *mod, unsigned long addr)
+>>>> +static int get_modules_for_addrs(struct module ***out_mods, unsigned long *addrs, u32 addrs_cnt)
+>>>>  {
+>>>> -     struct module_addr_args *args = data;
+>>>> -     struct module **mods;
+>>>> -
+>>>> -     /* We iterate all modules symbols and for each we:
+>>>> -      * - search for it in provided addresses array
+>>>> -      * - if found we check if we already have the module pointer stored
+>>>> -      *   (we iterate modules sequentially, so we can check just the last
+>>>> -      *   module pointer)
+>>>> -      * - take module reference and store it
+>>>> -      */
+>>>> -     if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
+>>>> -                    bpf_kprobe_multi_addrs_cmp))
+>>>> -             return 0;
+>>>> +     int i, j, err;
+>>>> +     int mods_cnt = 0;
+>>>> +     int mods_cap = 0;
+>>>> +     struct module *mod;
+>>>> +     struct module **mods = NULL;
+>>>>
+>>>> -     if (args->mods && args->mods[args->mods_cnt - 1] == mod)
+>>>> -             return 0;
+>>>> +     for (i = 0; i < addrs_cnt; i++) {
+>>>> +             mod = __module_address(addrs[i]);
+>>>
+>>> This must be called under module_mutex to make sure that the module
+>>> would not disappear.
 >>
->> The execution time of function kallsyms_on_each_match_symbol() is very
->> short, about ten microseconds, the probability of this process being
->> interrupted is very small. And even if it happens, we just have to try
->> again.
->>
->> The execution time of function kallsyms_on_each_symbol() is very long,
->> it takes tens of milliseconds, context switches is likely occur during
->> this period. If the time obtained by task_cputime() is accurate, it is
->> preferred. Otherwise, use local_clock() directly, and the time taken by
->> irqs and high-priority tasks is not deducted because they are always
->> running for a short time.
->>
->> Fixes: 30f3bb09778d ("kallsyms: Add self-test facility")
->> Reported-by: Anders Roxell <anders.roxell@linaro.org>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  kernel/kallsyms_selftest.c | 52 +++++++++++++++++++++++++++-----------
->>  1 file changed, 37 insertions(+), 15 deletions(-)
->>
->> v1 --> v2:
->> 1. Keep calling cond_resched() when CONFIG_KALLSYMS_SELFTEST=y. Instead,
->>    function kallsyms_on_each_match_symbol() and kallsyms_on_each_symbol()
->>    are not protected by local_irq_save() in kallsyms_selftest.c.
->>
->> diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
->> @@ -270,17 +283,26 @@ static int match_symbol(void *data, unsigned long addr)
->>  static void test_perf_kallsyms_on_each_match_symbol(void)
->>  {
->>  	u64 t0, t1;
->> -	unsigned long flags;
->> +	int cpu = smp_processor_id();
->> +	unsigned long nr_irqs;
->>  	struct test_stat stat;
->>  
->>  	memset(&stat, 0, sizeof(stat));
->>  	stat.max = INT_MAX;
->>  	stat.name = stub_name;
->> -	local_irq_save(flags);
->> -	t0 = sched_clock();
->> -	kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
->> -	t1 = sched_clock();
->> -	local_irq_restore(flags);
->> +
->> +	/*
->> +	 * The test thread has been bound to a fixed CPU in advance. If the
->> +	 * number of irqs does not change, no new scheduling request will be
->> +	 * generated. That is, the performance test process is atomic.
->> +	 */
->> +	do {
->> +		nr_irqs = kstat_cpu_irqs_sum(cpu);
->> +		cond_resched();
->> +		t0 = local_clock();
->> +		kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
->> +		t1 = local_clock();
->> +	} while (nr_irqs != kstat_cpu_irqs_sum(cpu));
->>  	pr_info("kallsyms_on_each_match_symbol() traverse all: %lld ns\n", t1 - t0);
+>> module_mutex is not available outside kernel/module/. The common
+>> practice is to disable preempt before calling __module_address().
+>> CONFIG_LOCKDEP should catch this.
 > 
-> But can't we bump the number of IRQs, preempt, handle the IRQ and come
-> back to the same CPU with the same IRQ count and end up with a very very
-> false positive on delta?
+> I see. Sigh, it is always better to take mutex than disable
+> preemption. But it might be acceptable in this case. We just need
+> to be careful.
+> 
+> First, the preemption must stay disabled all the time until
+> try_module_get(). Otherwise the returned struct module could
+> disappear in the meantime.
+> 
+> Second, krealloc_array() has to be called with preemption
+> enabled. It is perfectly fine to do it after try_module_get().
 
-Do you mean the total time minus the processing time of interrupts? It seems
-to be a little more complicated to implement. Because soft interrupts and task
-switches may also be happened. Although the current implementation contains a
-while loop, it actually retries at most one more time. And I think it's easier
-to understand, without worrying about the side effects of the corners.
+Okay, thanks for the heads-up.
 
 > 
->   Luis
+> Best Regards,
+> Petr
 > .
 > 
 
