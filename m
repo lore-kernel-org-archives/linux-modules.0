@@ -2,143 +2,104 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A905C678D6
-	for <linux-modules@archiver.kernel.org>; Tue, 10 Jan 2023 18:24:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB3F9C46467
+	for <linux-modules@archiver.kernel.org>; Tue, 10 Jan 2023 18:38:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239092AbjAJSXs (ORCPT
+        id S239391AbjAJSh3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 10 Jan 2023 13:23:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
+        Tue, 10 Jan 2023 13:37:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239226AbjAJSXH (ORCPT
+        with ESMTP id S239572AbjAJShN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 10 Jan 2023 13:23:07 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174472F789
-        for <linux-modules@vger.kernel.org>; Tue, 10 Jan 2023 10:21:09 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id 3so13164634vsq.7
-        for <linux-modules@vger.kernel.org>; Tue, 10 Jan 2023 10:21:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LhqMrGa+5XAAvhdm/qvpg845MSH/5HVvI+D0qxBhnAg=;
-        b=crr5n8812Ux90csqTMCY/9ikO5dYLT3PeVDNtY+owxJs8/cjRLyN1GSEJqAArFKTYb
-         agQgQUwTuvIk9IQJxSP3rIKMlMQQlzgZEm4UGHvaULonPAeeMu73bl3cW6yHbKm/gHnT
-         VqwKyMPjuXBIPRtGhzahm/OC2GLvx+fTbDdII7YqlezLFaEA3Z5yaoD48lRrA6tBlvo+
-         0yxanczW/1ondR9hgf5yumrJMu5vbWR3VjOvdhSx4UFkpxn0npAqkikgciwgs8Gc6Bo+
-         1CXEuVECVkCIhYvgGqzVj79z+0RpAb8DXUwEvEymg6QjPG5b8GCmPVOQaTDukOJjmKOZ
-         uG0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LhqMrGa+5XAAvhdm/qvpg845MSH/5HVvI+D0qxBhnAg=;
-        b=yNsq0OSosBDguq5ZiofEDXWHaz4617lzGONN+DSa2+5w5/tnYnMHP+en70C1qnZcXt
-         R9GXJbQ59/EpYWS1JO+C/V2Rvr/cx9MJ6Qsi6KQSUBfCon8BklTP7xH9e95nv9k+Lrsd
-         R7+9dKOquqW4CbBxm+wPexculRkWgpwAm1XOxi9g5+ON6454uDNNGX6jj0ZPD0nKMJ2U
-         +/uT1pXLOXFZW2+98E2BImR/tXfhmkG4ZOqeITAuDn5LhHtussz6UnEPCl7+bG/Azc4h
-         rxPjs0UVLKd/pWIVCkc3kIrL7H7zI8iO4mcWU/ooZLqg1cKFPMuMREDsMkwLwkUtkk87
-         VeMw==
-X-Gm-Message-State: AFqh2kq3yo1HRIVHPQtVrFvg5c9Y456epmiH1e13HJjVp3m5Kf8JL1Jy
-        VyKS57HXCmUwsDpWbcJk3xkAOm83VOMYbAXF/0xTFQ==
-X-Google-Smtp-Source: AMrXdXulHZB8SHI/FLgkZGq1+rQO1MVRnWBVjyA9v3ohzuwYh+ownssImMjB38Pe8P3yocbk2Q10H0Wvk/BKaCPzyt8=
-X-Received: by 2002:a05:6102:94e:b0:3b5:1de3:19fa with SMTP id
- a14-20020a056102094e00b003b51de319famr8349620vsi.35.1673374867880; Tue, 10
- Jan 2023 10:21:07 -0800 (PST)
+        Tue, 10 Jan 2023 13:37:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF55A59501;
+        Tue, 10 Jan 2023 10:32:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D3CAB81908;
+        Tue, 10 Jan 2023 18:32:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06FAC43398;
+        Tue, 10 Jan 2023 18:32:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673375529;
+        bh=QUdSPSJ1dS3+KOPixtik4EX+QpdImlvJMwhGplzoJI4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CSsqhlGsZ3rRP6uogxNQuvYFRLwxQJkenVKpMsdfhh4VCenx4M2sOzB4c5cubXYVE
+         Zp6PZXsbBcAQ1md7ssc9o/pna7r9YbilGa92ctHfDXSZx4VJWwTMAxcFgNM5KkZ7OD
+         muIFhcHZ9gBcnfvZZHoYeC94JvDCuuOd+Ho1dVM7kZ3vQa4ZZEbmgB2wMP6WnqIxn/
+         Bc/ek0tDQOWVXcxYE2a23jB2+F7ZAldB1W2X5HyuShyfZRgX8aFpGEjOZnknglWsnN
+         MA6E691iXWt2TZ+Lo1D7Tjg7nP9w/IGuS5LFd79fF0HFevblP3Hv5hTeKbSiJr8pWO
+         gr9Ak3EVCOumA==
+Received: by mail-lj1-f179.google.com with SMTP id p25so7278801ljn.12;
+        Tue, 10 Jan 2023 10:32:08 -0800 (PST)
+X-Gm-Message-State: AFqh2krCEq6Gt4vXrHVsM25oXqnEvws13/+kgUBM+qAcokYmtcUSlfOh
+        3IMNJaT6dooknfrooh7ZFygSAAnPr7TihBIaMhM=
+X-Google-Smtp-Source: AMrXdXvIneVTGj9nKfDPo5Fts30vJtsod1nns86BieZcV2ZxuUxvsrycMRszgV2p/ldobc7B5DyW+h59Ev4lN5NOJGE=
+X-Received: by 2002:a2e:bd11:0:b0:280:54b:9ed5 with SMTP id
+ n17-20020a2ebd11000000b00280054b9ed5mr994803ljq.414.1673375526906; Tue, 10
+ Jan 2023 10:32:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20221219191855.2010466-1-allenwebb@google.com>
- <20221219204619.2205248-1-allenwebb@google.com> <20221219204619.2205248-3-allenwebb@google.com>
- <Y6FaUynXTrYD6OYT@kroah.com> <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
- <Y6H6/U0w96Z4kpDn@bombadil.infradead.org> <CAJzde04igO0LJ46Hsbcm-hJBFtPdqJC6svaoMkb3WBG0e1fGBw@mail.gmail.com>
- <Y6IDOwxOxZpsdtiu@bombadil.infradead.org> <87cz7nsz24.fsf@esperi.org.uk>
-In-Reply-To: <87cz7nsz24.fsf@esperi.org.uk>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Tue, 10 Jan 2023 12:20:56 -0600
-Message-ID: <CAJzde05oSJuxSz1dBjxXppu39kcbNvZt1tP6QRxkHAqy94c-9w@mail.gmail.com>
-Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
+References: <20230106220959.3398792-1-song@kernel.org>
+In-Reply-To: <20230106220959.3398792-1-song@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 10 Jan 2023 10:31:54 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
+Message-ID: <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
+Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
+To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+Cc:     songliubraving@fb.com, Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Jan 9, 2023 at 5:54 AM Nick Alcock <nick.alcock@oracle.com> wrote:
->
-> On 20 Dec 2022, Luis Chamberlain uttered the following:
-> >> It also raises the question how many modules have device tables, but
-> >> do not call MODULE_DEVICE_TABLE since they are only ever built-in.
-> >> Maybe there should be some build time enforcement mechanism to make
-> >> sure that these are consistent.
-> >
-> > Definitely, Nick Alcock is doing some related work where the semantics
-> > of built-in modules needs to be clearer, he for instance is now removing
-> > a few MODULE_() macros for things which *are never* modules, and this is
-> > because after commit 8b41fc4454e ("kbuild: create modules.builtin
-> > without Makefile.modbuiltin or tristate.conf") we rely on the module
-> > license tag to generate the modules.builtin file. Without that commit
-> > we end up traversing the source tree twice. Nick's work builds on
-> > that work and futher clarifies these semantics by adding tooling which
-> > complains when something which is *never* capable of being a module
-> > uses module macros. The macro you are extending, MODULE_DEVICE_TABLE(),
-> > today is a no-op for built-in, but you are adding support to extend it
-> > for built-in stuff. Nick's work will help with clarifying symbol locality
-> > and so he may be interested in your association for the data in
-> > MODULE_DEVICE_TABLE and how you associate to a respective would-be
-> > module. His work is useful for making tracing more accurate with respect
-> > to symbol associations, so the data in MODULE_DEVICE_TABLE() may be
-> > useful as well to him.
->
-> The kallmodsyms module info (and, thus, modules.builtin) and
-> MODULE_DEVICE_TABLE do seem interestingly related. I wonder if we can in
-> future reuse at least the module names so we can save a few KiB more
-> space... (in this case, the canonical copy should probably be the one in
-> kallmodsyms, because that lets kallmodsyms reuse strings where modules
-> and their source file have similar names. Something for the future...)
++ Christoph
 
-It appeared to me like the symbols added for MODULE_DEVICE_TABLE are
-only needed temporarily and could be stripped as part of the final
-linking step. This would make space less of a concern, but extern
-variables don't support the visibility attribute and in the build I am
-using the space difference is less than 1MB out of 613MB for the
-uncompressed kernel.
+Hi folks,
 
+Could you please share your comments on this work? If there isn't
+major issue with it, maybe we can ship it in 6.3? (so we don't pile
+too many changes in one big set).
+
+Thanks,
+Song
+
+On Fri, Jan 6, 2023 at 2:10 PM Song Liu <song@kernel.org> wrote:
 >
-> > You folks may want to Cc each other on your patches.
+> module_layout manages different types of memory (text, data, rodata, etc.)
+> in one allocation, which is problematic for some reasons:
 >
-> I'd welcome that.
+> 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
+> 2. It is hard to use huge pages in modules (and not break strict rwx).
+> 3. Many archs uses module_layout for arch-specific data, but it is not
+>    obvious how these data are used (are they RO, RX, or RW?)
 >
-> btw, do you want another kallmodsyms patch series from me just arranging
-> to drop fewer MODULE_ entries from non-modules (just MODULE_LICENSE) or
-> would this be considered noise for now? (Are we deadlocked on each
-> other, or are you still looking at the last series I sent, which I think
-> was v10 in late November?)
-
-For now I just need MODULE_DEVICE_TABLE to stick around for USB and
-thunderbolt related modules (including built-in modules), so if you
-aren't removing it for any then I don't think we are blocking each
-other.
-
-Longer term it makes sense to have MODULE_DEVICE_TABLE for any module
-that makes use of a subsystem that had the authorized attribute. While
-this is currently just USB/thunderbolt it could expand in the future,
-but there are subsystems where it is likely to make no difference.
-
-We might have a tiny amount of redundancy in our patch sets because
-there are some cases of invalid MODULE_DEVICE_TABLE entries I fixed in
-my patch series, but that could be dropped. These have the potential
-for conflicts / blocking each other, but it should be easy to resolve
-them if I change my fixes to a removal of the MODULE_DEVICE_TABLE
-entries.
-
+> Improve the scenario by replacing 2 (or 3) module_layout per module with
+> up to 7 module_memory per module:
 >
-> --
-> NULL && (void)
+>         MOD_MEM_TYPE_TEXT,
+>         MOD_MEM_TYPE_DATA,
+>         MOD_MEM_TYPE_RODATA,
+>         MOD_MEM_TYPE_RO_AFTER_INIT,
+>         MOD_MEM_TYPE_INIT_TEXT,
+>         MOD_MEM_TYPE_INIT_DATA,
+>         MOD_MEM_TYPE_INIT_RODATA,
+>
+> and allocating them separately.
+>
+> Various archs use module_layout for different data. These data are put
+> into different module_memory based on their location in module_layout.
+> IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
+> data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
+>
+> Signed-off-by: Song Liu <song@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+
+[...]
