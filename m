@@ -2,284 +2,180 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A72FBC46467
-	for <linux-modules@archiver.kernel.org>; Tue, 10 Jan 2023 04:05:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84073C54EBE
+	for <linux-modules@archiver.kernel.org>; Tue, 10 Jan 2023 06:31:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjAJEFe (ORCPT
+        id S229700AbjAJGbq (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 9 Jan 2023 23:05:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        Tue, 10 Jan 2023 01:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjAJEF2 (ORCPT
+        with ESMTP id S229727AbjAJGbp (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 9 Jan 2023 23:05:28 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DA330559;
-        Mon,  9 Jan 2023 20:05:26 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NrccY5hQ1zRr2x;
-        Tue, 10 Jan 2023 12:03:41 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 10 Jan 2023 12:05:21 +0800
-Subject: Re: [PATCH v2] kallsyms: Fix sleeping function called from invalid
- context when CONFIG_KALLSYMS_SELFTEST=y
-To:     Petr Mladek <pmladek@suse.com>
-CC:     <linux-kernel@vger.kernel.org>,
+        Tue, 10 Jan 2023 01:31:45 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2042.outbound.protection.outlook.com [40.107.9.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B130D2E4;
+        Mon,  9 Jan 2023 22:31:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AHl785qWtnaewNnFQGlSqBnyMxzGxct/4eod3tXGoUQGUxGqNUzfuvXhxAXG3qfF3RfQUdxbXfLthQ0Lva8vqvNY9VKGepDW2NY5uMO6qRkHn7eEjmfQs90CFZsZg0qyy/XW71ZAObOwXST7iDX95w/Yl1x4+jceikEZMY+Lrw/BkI+eHLYk5EhZJCetgYnDH5hISq6U+l5E+YwAXNVppwVe/bY9fl8nSmgzopJeMVSEXHsEPJ0YzzlJ3Yge1dfY/+PRiwA3nkgLNHoFmz5H1rP+vWV6UiHD3nvd3YLQcMgb7OwcwVyUt6nrW8LElvUc6VBvbMH0t1QJGPqJlYyGiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lwg7JHRbZDvOQ6PoT3ZPpVRl9RI6DEXQorqxg7AR2+A=;
+ b=M8ByxQSZOcretvmD6t2MKs59z3FxBld2FawfogJmsWUwi+LXiOjyaSu9cEq30XObZ80T1WEeDBcjVuWI/fM9BAsi8UurM9rJ2fIsr7LQ0PQTRtTFK5nA4E2qwAre4hz00T6i9r13+9H/rggSLWFuczLU3jVJ2nVLsmuUJwvJWkDJVXtHAcA3dYU2OLHvcTJLVU0qTnrvwu1EMBHBI29mVCv7M7qCeQW3In9b6EKARM7Dil1GQF+Ubg+fHBP6RHHSqHWAmktnL9lHscSxVLtE66Le7cD0YfscRROTXsARBHu6eCVXs/iXOwAuFI2JpPDOXERkmGKJl0RepQNwdgG8+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lwg7JHRbZDvOQ6PoT3ZPpVRl9RI6DEXQorqxg7AR2+A=;
+ b=WJdrYyGywiIv1en0/eFAf2MvyLbAw1tO1aOzIk1ACK/LtMWnginxEze3bg/ZA0CudDG4aW7S6HWiEAQouDGBdHQPtbM8xdww6eNrxAa8rTjwbuCH9yzhL4GaNlR/rzeoGKptZ4rVjnGE2kHfKACNMYe0WYsReU5xW7HUN8baWv7Ra29pAoRaezDuZgR7+M77DegJ3pOquG7qeRIVV3JAQx/0NyjTwkVB8HKWfjwhLEvyEp23vDacVCHTf9aSJnpaf2D9jW/d668EOgiw8ozfHS47v5iSy6PF+fTOT1/yENoUMyctts26fr3eaTFFS5RQzRZE/hWKCLfFKXal06LDxQ==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB3096.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1d7::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
+ 2023 06:31:41 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097%7]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
+ 06:31:41 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Song Liu <song@kernel.org>
+CC:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-References: <20221228014511.328-1-thunder.leizhen@huawei.com>
- <Y7wZSxw+Ys5MNf8g@alley>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <b06140e6-e945-997a-54cb-9c7526d9e419@huawei.com>
-Date:   Tue, 10 Jan 2023 12:05:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <Y7wZSxw+Ys5MNf8g@alley>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
+Thread-Topic: [PATCH/RFC] module: replace module_layout with module_memory
+Thread-Index: AQHZIhvLUt8720RkIEmV5/vANaeHba6WZSyAgAAF1gCAACk1gIAAofYA
+Date:   Tue, 10 Jan 2023 06:31:41 +0000
+Message-ID: <154ed99c-5877-35f6-5e7d-9d7abada7d33@csgroup.eu>
+References: <20230106220959.3398792-1-song@kernel.org>
+ <83941b74-7585-235b-ee54-3b127ca70d9e@csgroup.eu>
+ <CAPhsuW6S8qJWFzSLpVf_4ZpyM0Cxty=-pS2_K=tgF52s95Zhag@mail.gmail.com>
+ <CAPhsuW7+BG9wYaoD6EYH-jnWqX30JdgNr5_733sO-++SzR5v3w@mail.gmail.com>
+In-Reply-To: <CAPhsuW7+BG9wYaoD6EYH-jnWqX30JdgNr5_733sO-++SzR5v3w@mail.gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB3096:EE_
+x-ms-office365-filtering-correlation-id: 0d6a327e-e368-40ac-b836-08daf2d455bf
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: SJ1acRWN5sBLozsmatcbYJkHvZPzG/uRfuLTwcNNBsjQkTlv+9uh+jPmOTtD8gN9W7New/g2qS4pnFugRnyYpp+uvSAZVZmg0rQLgZ3JT4JMAGlQshpxlBDmzCRqEmxuBSKQkvPnScq3dIUD3hp5ib783mPPLwE65HK9VtBbd5fsDhKR1fONS8GKOqYgIXO5gXwkyrvgZj6siFv27WQWUKy19J9YxbJA4Eo6JM6IyeSjqcSxmtz2gG4ayZKGvanVIQzVJiZa/axuEqsYITI35CAmPxx2slXv/iPBubDVpb4KdtEBcyXVmelv/QupWFuVHRAWSADZTs6N7EbnvoyBWh6i+TdWdmYjMujFl0MAP2ZCHzlqKDyoLRNnMMp3BkffHAMeSArkf4WAyc5YdT8vbvJNhdjlPB7zntYJFGRwEnEuUo+az2YJqSuLOcWwIe7bu9b+wyz9OBl7VRgnrc92Qjhtk2m4asCTyH4t/V2kfO5egZfjiYiN+VtuOC5yUGckJ2Mq1gBiuwag1f0kkCeJ7hkf2C5e2ZPsQ9M4K6PRLg+rU66iF29UfH0csKypx81S06KU+47oqpVnZTlVyR8RA1dEDl2nIGISuMnr8VvDWEq74rqh61Q1DR/irJGvAumDCDagP4VPr0dIUCqJfHZYsQlGuGBIuYoEcmoJ5uGc5zHG5elnqn3h9zi9mGz3aWazyX2A6KDAhVY426Vrbzy+/5VVwwmLBP/BGzk57l7yva+sK0gP6IRnhvb4H6PeYqih5AozxHcTbnh6kFrEConpyQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(366004)(376002)(346002)(451199015)(36756003)(8936002)(186003)(26005)(53546011)(122000001)(6506007)(6512007)(2616005)(54906003)(66946007)(5660300002)(66476007)(64756008)(66446008)(66556008)(6916009)(4326008)(316002)(91956017)(38070700005)(86362001)(71200400001)(31696002)(38100700002)(76116006)(478600001)(6486002)(31686004)(41300700001)(8676002)(83380400001)(44832011)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QmFyayszR2U5dk1JbDJIMWZpRXZwbnNzcjM1byt1YkM5REVLMDN6aWZmY3Vm?=
+ =?utf-8?B?VjNYRUY4eU16NStPQXk3Tm93UCtFNUE2L1pWSHBBSGIwQlQyNTJNSmRJN3NW?=
+ =?utf-8?B?c2kzRjFyVWVmWm5Pa1RZUytKeTZ4TUhRTkJNLzllR1NIL1YxTGNJVEhSUEhS?=
+ =?utf-8?B?ZVlJV1dJalZDdjYzckVsVEZESHd0bVBFVkpBbzAvaHdYcDFSUXF5YmwwQVB6?=
+ =?utf-8?B?MHNNWGRmS003aW1PMHdlOUxhMGNaSVFQKzd2KzI0UFg1bURDWkh6VVV4SzJi?=
+ =?utf-8?B?MGxJL2h2cEYrbmtRMzNndlpMRmpGem1aVmNwNmpCcW9YYTI4V1grUjdDRUJ1?=
+ =?utf-8?B?QlhUSXlVMGtzbStrSHJxOFJHYVJFUSszSEZ3Nnh0aS9xaEs4WFRnZUpyOVhw?=
+ =?utf-8?B?Y0FSNTRXRTVZbm5ieU8vMmlETjJhWUFoNEJaVUsvOUk0WHlLV0FVczRFaHpL?=
+ =?utf-8?B?d2pLUU43WEF4aTh6NzFMbkxMZ3RzdGp1VzNadWFnYzhXbTBiSUlkaVJwV3F2?=
+ =?utf-8?B?RmVwQlA1eUo3Z0Rsd1d4a3ViT3lFZlcreUwvWmRMRDhMcUJITnp6Ym94aC8y?=
+ =?utf-8?B?YS8vTXMwb09OYjFMM3hJeGIrQk54TERkaFVhcjBSNjdybjJTTk5tVWtZaG5E?=
+ =?utf-8?B?cFpFQVNqSXAyM2tDS1A5UFEwWEsxQmZ0QTkwN05KcXRLT1Jsbmdydk5zdVBB?=
+ =?utf-8?B?SU1UZndYSSsxNUhSV1k1YkJuSWgvaFhEV1BNdjZNVjRDNFlKcVRPU3Jsc1FH?=
+ =?utf-8?B?eWxnM2s4RmFtbnU2L0RoSXg1RG1RVnJWUE5YUmhEajhWc1RhOXB4bDJPS2cx?=
+ =?utf-8?B?MnF0OTZObWpRK0FDdTlIYVpsRmI1TEh3bWtDNWhFbVkzOEQrVTFqd1pRKzFj?=
+ =?utf-8?B?c3Z3ZDFuVmJlOWUxNUFnMFJQQytGcWxoa1NsOUIzMWwyUTNLai9VL2llRXJX?=
+ =?utf-8?B?NklBVHBWejhvamhIWm4vdlhwM05CVWxVNWJqU3FYVXp5TENwemt3Qld4MzNk?=
+ =?utf-8?B?WGhBbXBSeEI1TjRZeCtJcmNoOUIwRGFjdUIzTnJmbXZwUXJBay9UWEZRaS9P?=
+ =?utf-8?B?S2ppYzB5eVlwTzNodnhKcUMzanc0Vjl3RmpFTnJCSVFBSDgwS3ExdjIvSEh6?=
+ =?utf-8?B?dXNFQ1FZL1lKelhqVjNwNGRLK3dmbXM4U21WbEJyWDltSHFzNUF3MDczcWxH?=
+ =?utf-8?B?c2o0b0grRWZBRVg4bkJ2eXViUlIvRitjU2docEY3M1Nlak1OR3pTYVV1VGJq?=
+ =?utf-8?B?WjFjQjFhQ1gvMzNUTTMvYnFXSVJuUktsYmVsNW5wZHpKUEVKU1FPN0JmYlcy?=
+ =?utf-8?B?c1dtdkJPQ2JxYzlFaW9PclRRd3pwWkR0cGM5bktLV3RzYlppRXJLeWJ5RTNl?=
+ =?utf-8?B?TWsrWXhxWGFYc3YzU2FvSmMzWU1xVWhjRWFXeUkzY2p0QkRmV0FXNlpvSnNY?=
+ =?utf-8?B?RFJJNC9tS21FNWJwU3lTZXRSSmxvNnRNcWdOUkJXRzZROXpGOENnY29TUzR2?=
+ =?utf-8?B?T2FvUjhGQ0tuOXJMUjhSWjM3dzVmSitXUjFXUnJqTk9jL0E4bE9OZVFaaFBD?=
+ =?utf-8?B?R3krSzNTNkdaa0x4UTh0Y0R6ZFBKN3k3eG02NU81R043eUsyQnp6dVhMRTc3?=
+ =?utf-8?B?NWhIbFdndUVmTkJqV215aFIrTUkrZklCSktFbGJzZXhlVmt5ZHhnL3dNY1RX?=
+ =?utf-8?B?RmlGRVY3VFQxZTI0TTFwRURaQkFHRDZDblpoTWV1bTJraUNPNWRRbGFWdXNu?=
+ =?utf-8?B?MXdUMURObENJOGNnUmE0VVNodlJ3WTUwb2RiQisxenZrY3QxcGF4S0dDbGd0?=
+ =?utf-8?B?aVAraXV6WWwxbHhhMUdyc21NelJGQURjdWc5aitZQ2FVTUJsZmJzMW5UWElT?=
+ =?utf-8?B?OUVxZXZHQ3ppaXdTZnVBS1hpamJqcENhc0pmWWFyMWErMTRzSGpSbG4xcFR4?=
+ =?utf-8?B?RzduZkFONzhQZldHNFpQQnV1R0grWHJZbkMwVnpMTDd0QmlqcVd1ejBab2l0?=
+ =?utf-8?B?UDFtWHEraGRiU1FyOExFc0tnVEpvRFdtWjRTRXhvN3phQlFkTXZncDhBakdv?=
+ =?utf-8?B?REFZL040SklkYjNic2xrcXJUYko0QWNxTmhVaU5NNW94b1lYOWZhSXRqaExi?=
+ =?utf-8?B?MlZnTlNLbnkyZHc2eWUrengyaDFzSThkalpIaHJZaWNpc2dFeUlJbDZUTnRN?=
+ =?utf-8?B?M2c9PQ==?=
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-ID: <EDE2482555DE2C4EBAB700635157670A@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d6a327e-e368-40ac-b836-08daf2d455bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2023 06:31:41.1806
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EUo0mVNZRGUemPO3cur49Vxi6Z6cjtjdSug3IdmYseSWmngevGe6Bqo/PphgaWS9Zo0SUS002WUqFSCdtV7gSXtL16xXu64LBNVHQV8VkI8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3096
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-
-
-On 2023/1/9 21:40, Petr Mladek wrote:
-> On Wed 2022-12-28 09:45:11, Zhen Lei wrote:
->> [T58] BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
->> [T58] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 58, name: kallsyms_test
->> [T58] preempt_count: 0, expected: 0
->> [T58] RCU nest depth: 0, expected: 0
->> [T58] no locks held by kallsyms_test/58.
->> [T58] irq event stamp: 18899904
->> [T58] hardirqs last enabled at (18899903): finish_task_switch.isra.0 (core.c:?)
->> [T58] hardirqs last disabled at (18899904): test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
->> [T58] softirqs last enabled at (18899886): __do_softirq (??:?)
->> [T58] softirqs last disabled at (18899879): ____do_softirq (irq.c:?)
->> [T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G T  6.1.0-next-20221215 #2
->> [T58] Hardware name: linux,dummy-virt (DT)
->> [T58] Call trace:
->> [T58] dump_backtrace (??:?)
->> [T58] show_stack (??:?)
->> [T58] dump_stack_lvl (??:?)
->> [T58] dump_stack (??:?)
->> [T58] __might_resched (??:?)
->> [T58] kallsyms_on_each_symbol (??:?)
->> [T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
->> [T58] test_entry (kallsyms_selftest.c:?)
->> [T58] kthread (kthread.c:?)
->> [T58] ret_from_fork (??:?)
->> [T58] kallsyms_selftest: kallsyms_on_each_symbol() traverse all: 5744310840 ns
->> [T58] kallsyms_selftest: kallsyms_on_each_match_symbol() traverse all: 1164580 ns
->> [T58] kallsyms_selftest: finish
->>
->> The execution time of function kallsyms_on_each_match_symbol() is very
->> short, about ten microseconds, the probability of this process being
->> interrupted is very small. And even if it happens, we just have to try
->> again.
->>
->> The execution time of function kallsyms_on_each_symbol() is very long,
->> it takes tens of milliseconds, context switches is likely occur during
->> this period. If the time obtained by task_cputime() is accurate, it is
->> preferred. Otherwise, use local_clock() directly, and the time taken by
->> irqs and high-priority tasks is not deducted because they are always
->> running for a short time.
->>
->> Fixes: 30f3bb09778d ("kallsyms: Add self-test facility")
->> Reported-by: Anders Roxell <anders.roxell@linaro.org>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  kernel/kallsyms_selftest.c | 52 +++++++++++++++++++++++++++-----------
->>  1 file changed, 37 insertions(+), 15 deletions(-)
->>
->> v1 --> v2:
->> 1. Keep calling cond_resched() when CONFIG_KALLSYMS_SELFTEST=y. Instead,
->>    function kallsyms_on_each_match_symbol() and kallsyms_on_each_symbol()
->>    are not protected by local_irq_save() in kallsyms_selftest.c.
->>
->> diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
->> index f35d9cc1aab1544..9c94f06aa951971 100644
->> --- a/kernel/kallsyms_selftest.c
->> +++ b/kernel/kallsyms_selftest.c
->> @@ -12,9 +12,11 @@
->>  #include <linux/init.h>
->>  #include <linux/module.h>
->>  #include <linux/kallsyms.h>
->> +#include <linux/kernel_stat.h>
->> +#include <linux/kthread.h>
->>  #include <linux/random.h>
->>  #include <linux/sched/clock.h>
->> -#include <linux/kthread.h>
->> +#include <linux/sched/cputime.h>
->>  #include <linux/vmalloc.h>
->>  
->>  #include "kallsyms_internal.h"
->> @@ -161,9 +163,9 @@ static int lookup_name(void *data, const char *name, struct module *mod, unsigne
->>  	struct test_stat *stat = (struct test_stat *)data;
->>  
->>  	local_irq_save(flags);
->> -	t0 = sched_clock();
->> +	t0 = local_clock();
->>  	(void)kallsyms_lookup_name(name);
->> -	t1 = sched_clock();
->> +	t1 = local_clock();
->>  	local_irq_restore(flags);
->>  
->>  	t = t1 - t0;
->> @@ -233,19 +235,30 @@ static int find_symbol(void *data, const char *name, struct module *mod, unsigne
->>  
->>  static void test_perf_kallsyms_on_each_symbol(void)
->>  {
->> -	u64 t0, t1;
->> -	unsigned long flags;
->> +	bool accurate;
->> +	u64 utime, t0, t1;
->>  	struct test_stat stat;
->>  
->>  	memset(&stat, 0, sizeof(stat));
->>  	stat.max = INT_MAX;
->>  	stat.name = stub_name;
->>  	stat.perf = 1;
->> -	local_irq_save(flags);
->> -	t0 = sched_clock();
->> +
->> +	/*
->> +	 * This test process takes tens of milliseconds, context switches may
->> +	 * occur during this period. If task_cputime() returns true, it is
->> +	 * accurate enough. Otherwise, use local_clock() directly. This is
->> +	 * based on the assumption that irqs and high-priority tasks are always
->> +	 * running for a short time, they may cause less error.
->> +	 */
->> +	accurate = task_cputime(current, &utime, &t0);
->> +	if (!accurate)
->> +		t0 = local_clock();
->>  	kallsyms_on_each_symbol(find_symbol, &stat);
->> -	t1 = sched_clock();
->> -	local_irq_restore(flags);
->> +	if (accurate)
->> +		task_cputime(current, &utime, &t1);
->> +	else
->> +		t1 = local_clock();
->>  	pr_info("kallsyms_on_each_symbol() traverse all: %lld ns\n", t1 - t0);
->>  }
->>  
->> @@ -270,17 +283,26 @@ static int match_symbol(void *data, unsigned long addr)
->>  static void test_perf_kallsyms_on_each_match_symbol(void)
->>  {
->>  	u64 t0, t1;
->> -	unsigned long flags;
->> +	int cpu = smp_processor_id();
->> +	unsigned long nr_irqs;
->>  	struct test_stat stat;
->>  
->>  	memset(&stat, 0, sizeof(stat));
->>  	stat.max = INT_MAX;
->>  	stat.name = stub_name;
->> -	local_irq_save(flags);
->> -	t0 = sched_clock();
->> -	kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
->> -	t1 = sched_clock();
->> -	local_irq_restore(flags);
->> +
->> +	/*
->> +	 * The test thread has been bound to a fixed CPU in advance. If the
->> +	 * number of irqs does not change, no new scheduling request will be
->> +	 * generated. That is, the performance test process is atomic.
->> +	 */
->> +	do {
->> +		nr_irqs = kstat_cpu_irqs_sum(cpu);
->> +		cond_resched();
->> +		t0 = local_clock();
->> +		kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
->> +		t1 = local_clock();
->> +	} while (nr_irqs != kstat_cpu_irqs_sum(cpu));
-> 
-> Huh, is this guaranteed to ever finish?
-> 
-> What if there is a regression and kallsyms_on_each_match_symbol()
-> never finishes without rescheduling?
-
-The execution time of kallsyms_on_each_match_symbol() does not exceed 10 us.
-Assume that an interrupt is generated every 100 us(10000 interrupts are generated
-per second, it is very high). In this case, interrupts and high-priority tasks need
-to run for more than 90 us each time to cause the loop cannot exit normally.
-However, the CPU usage is 90+%, which is unreasonable.
-
-Function kallsyms_on_each_symbol() takes a long time, about 20 milliseconds, and
-I'm already using task_cputime().
-
-> 
-> This is yet another unreliable hack.
-> 
-> 
-> Use standard solution:
-> 
-> I did the homework for you and checked how the "time" command
-> measures the time spend in the system. It actually uses more methods.
-> 
-> One is times() syscall. It uses thread_group_cputime_adjusted(), see
-> do_sys_times() in kernel/sys.c
-> 
-> Or it uses wait4() syscall to get struct rusage that provides this
-> information.
-> 
-> Please, stop inventing crazy hacks, and use these standard methods.
-> If the "time" tool is enough for userspace performance tests
-> then it must be enough in this case as well.
-
-Okay, I'll study in depth, just worried about the different precision
-requirements.
-
-By the way, we still have to actively embrace new things.
-
-In fact, I've thought of another way, which is to measure nine times,
-sort in ascending order, and take the middle one. Based on probabilistic
-statistics, the intermediate results are reliable.
-
-> 
-> 
-> Or remove this test:
-> 
-> Seriously, what is the value of this test?
-> Is anyone going to use it at all in the future?
-
-There's really someone interested in performance data.
-https://lkml.org/lkml/2022/12/15/134
-
-> 
-> The code was useful when developing the optimization.
-> But it is really questionable as a selftest.
-> 
-> Selftests usually check if the code works as expected.
-> This test provides some number that is hardly comparable.
-> 
-> 
-> Why are try hardly comparable?
-> 
-> 1. The speed depends on the number of loaded modules
->    and number of symbols. It highly depends on the configuration
->    that was used to build the kernel.
-> 
-> 2. The test runs only once. As a result it is hard to judge
->    how big is the noise.
-> 
-> 3. The noise might depend on the size and state of CPU caches.
-> 
-> 
-> I personally vote for removing this selftest!
-> 
-> Best Regards,
-> Petr
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+DQoNCkxlIDA5LzAxLzIwMjMgw6AgMjE6NTEsIFNvbmcgTGl1IGEgw6ljcml0wqA6DQo+IE9uIE1v
+biwgSmFuIDksIDIwMjMgYXQgMTA6MjQgQU0gU29uZyBMaXUgPHNvbmdAa2VybmVsLm9yZz4gd3Jv
+dGU6DQo+Pg0KPj4gT24gTW9uLCBKYW4gOSwgMjAyMyBhdCAxMDowMyBBTSBDaHJpc3RvcGhlIExl
+cm95DQo+PiA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1PiB3cm90ZToNCj4+Pg0KPj4+DQo+
+Pj4NCj4+PiBMZSAwNi8wMS8yMDIzIMOgIDIzOjA5LCBTb25nIExpdSBhIMOpY3JpdCA6DQo+Pj4+
+IG1vZHVsZV9sYXlvdXQgbWFuYWdlcyBkaWZmZXJlbnQgdHlwZXMgb2YgbWVtb3J5ICh0ZXh0LCBk
+YXRhLCByb2RhdGEsIGV0Yy4pDQo+Pj4+IGluIG9uZSBhbGxvY2F0aW9uLCB3aGljaCBpcyBwcm9i
+bGVtYXRpYyBmb3Igc29tZSByZWFzb25zOg0KPj4+Pg0KPj4+PiAxLiBJdCBpcyBoYXJkIHRvIGVu
+YWJsZSBDT05GSUdfU1RSSUNUX01PRFVMRV9SV1guDQo+Pj4+IDIuIEl0IGlzIGhhcmQgdG8gdXNl
+IGh1Z2UgcGFnZXMgaW4gbW9kdWxlcyAoYW5kIG5vdCBicmVhayBzdHJpY3Qgcnd4KS4NCj4+Pj4g
+My4gTWFueSBhcmNocyB1c2VzIG1vZHVsZV9sYXlvdXQgZm9yIGFyY2gtc3BlY2lmaWMgZGF0YSwg
+YnV0IGl0IGlzIG5vdA0KPj4+PiAgICAgIG9idmlvdXMgaG93IHRoZXNlIGRhdGEgYXJlIHVzZWQg
+KGFyZSB0aGV5IFJPLCBSWCwgb3IgUlc/KQ0KPj4+Pg0KPj4+PiBJbXByb3ZlIHRoZSBzY2VuYXJp
+byBieSByZXBsYWNpbmcgMiAob3IgMykgbW9kdWxlX2xheW91dCBwZXIgbW9kdWxlIHdpdGgNCj4+
+Pj4gdXAgdG8gNyBtb2R1bGVfbWVtb3J5IHBlciBtb2R1bGU6DQo+Pj4+DQo+Pj4+ICAgICAgICAg
+ICBNT0RfTUVNX1RZUEVfVEVYVCwNCj4+Pj4gICAgICAgICAgIE1PRF9NRU1fVFlQRV9EQVRBLA0K
+Pj4+PiAgICAgICAgICAgTU9EX01FTV9UWVBFX1JPREFUQSwNCj4+Pj4gICAgICAgICAgIE1PRF9N
+RU1fVFlQRV9ST19BRlRFUl9JTklULA0KPj4+PiAgICAgICAgICAgTU9EX01FTV9UWVBFX0lOSVRf
+VEVYVCwNCj4+Pj4gICAgICAgICAgIE1PRF9NRU1fVFlQRV9JTklUX0RBVEEsDQo+Pj4+ICAgICAg
+ICAgICBNT0RfTUVNX1RZUEVfSU5JVF9ST0RBVEEsDQo+Pj4+DQo+Pj4+IGFuZCBhbGxvY2F0aW5n
+IHRoZW0gc2VwYXJhdGVseS4NCj4+Pj4NCj4+Pj4gVmFyaW91cyBhcmNocyB1c2UgbW9kdWxlX2xh
+eW91dCBmb3IgZGlmZmVyZW50IGRhdGEuIFRoZXNlIGRhdGEgYXJlIHB1dA0KPj4+PiBpbnRvIGRp
+ZmZlcmVudCBtb2R1bGVfbWVtb3J5IGJhc2VkIG9uIHRoZWlyIGxvY2F0aW9uIGluIG1vZHVsZV9s
+YXlvdXQuDQo+Pj4+IElPVywgZGF0YSB0aGF0IHVzZWQgdG8gZ28gd2l0aCB0ZXh0IGlzIGFsbG9j
+YXRlZCB3aXRoIE1PRF9NRU1fVFlQRV9URVhUOw0KPj4+PiBkYXRhIHRoYXQgdXNlZCB0byBnbyB3
+aXRoIGRhdGEgaXMgYWxsb2NhdGVkIHdpdGggTU9EX01FTV9UWVBFX0RBVEEsIGV0Yy4NCj4+Pg0K
+Pj4+IEkgZGlzbGlrZSBob3cgaXQgbG9va3Mgd2l0aCBlbnVtcywgdGhpbmdzIGxpa2UNCj4+PiBt
+b2QtPm1vZF9tZW1bTU9EX01FTV9UWVBFX0lOSVRfVEVYVF0gYXJlIG9kZCBhbmQgZG9uJ3QgcmVh
+ZCBuaWNlbHkuDQo+Pj4gQ291bGQgd2UgaGF2ZSBzb21ldGhpbmcgbmljZXIgbGlrZSBtb2QtPm1v
+ZF9tZW1faW5pdF90ZXh0ID8NCj4+PiBJIGtub3cgaXQgd2lsbCBjb21wbGljYXRlIHlvdXIgZm9y
+X2VhY2hfbW9kX21lbV90eXBlKCkgYnV0IGl0IHdvdWxkIGxvb2sNCj4+PiBuaWNlci4NCj4+DQo+
+PiBIbW0uLiBJIGFtIG5vdCBzdXJlIHdoZXRoZXIgd2Ugd2FudCA3IG1vZHVsZV9tZW1vcnkgaGVy
+ZS4gQnV0IGlmIHdlDQo+PiBhZ3JlZSB0aGF0IGl0IGxvb2tzIGJldHRlciBsaWtlIHRoYXQsIEkg
+YW0gb2sgd2l0aCBpdC4NCj4+DQo+Pj4NCj4+PiBBbHNvLCBjYW4geW91IGV4cGxhaW4gaG93IHlv
+dSBzd2l0Y2ggZnJvbSB0d28gdHJlZXMgdG8gb25seSBvbmUgPw0KPj4+IEFzIGZhciBhcyBJIHJl
+bWVtYmVyLCB0aGUgc2FtZSBxdWVzdGlvbiBhcmlzZWQgd2hlbiBJIGltcGxlbWVudGVkDQo+Pj4g
+Q09ORklHX0FSQ0hfV0FOVFNfTU9EVUxFU19EQVRBX0lOX1ZNQUxMT0MsIGFuZCB0aGUgY29uY2x1
+c2lvbiB3YXMgdGhhdA0KPj4+IHdlIGhhZCB0byBrZWVwIHR3byBpbmRlcGVuZGFudCB0cmVlcywg
+c28gSSdtIGEgYml0IHB1enpsZWQgdGhhdCB5b3UgaGF2ZQ0KPj4+IG5vdyBtZXJnZWQgZXZlcnl0
+aGluZyBpbnRvIGEgc2luZ2xlIHRyZWUuDQo+Pg0KPj4gQUZBSUNULCB3ZSBvbmx5IG5lZWQgX19t
+b2R1bGVfYWRkcmVzcygpIHRvIHdvcms/IFNvIG9uZSB0cmVlIGlzIGVub3VnaC4NCj4+IERpZCBJ
+IG1pc3Mgc29tZXRoaW5nPw0KPiANCj4gRG8geW91IG1lYW4gb25lIHRyZWUgd2lsbCBjYXVzZSBh
+ZGRyX1ttaW58bWF4XSB0byBiZSBpbmFjY3VyYXRlPw0KPiANCg0KWWVzIGF0IGxlYXN0LiBPbiBw
+b3dlcnBjIHlvdSB3aWxsIGhhdmUgbW9kdWxlIHRleHQgYmVsb3cga2VybmVsLCANCnNvbWV3aGVy
+ZSBiZXR3ZWVuIDB4YjAwMDAwMDAgYW5kIDB4Y2ZmZmZmZmYsIGFuZCB5b3Ugd2lsbCBoYXZlIG1v
+ZHVsZSANCmRhdGEgaW4gdm1hbGxvYyBhcmVhLCBzb21ld2hlcmUgYmV0d2VlbiAweGYwMDAwMDAw
+IGFuZCAweGZmZmZmZmZmLg0KDQpJZiB5b3UgaGF2ZSBvbmx5IG9uZSB0cmVlLCBhbnkgYWRkcmVz
+cyBiZXR3ZWVuIDB4YzAwMDAwMDAgYW5kIDB4ZWZmZmZmZmYgDQp3aWxsIHRyaWdnZXIgYSB0cmVl
+IHNlYXJjaC4NCg0KQ2hyaXN0b3BoZQ0K
