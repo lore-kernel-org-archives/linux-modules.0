@@ -2,265 +2,284 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 117F3C54EBE
-	for <linux-modules@archiver.kernel.org>; Tue, 10 Jan 2023 00:26:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A72FBC46467
+	for <linux-modules@archiver.kernel.org>; Tue, 10 Jan 2023 04:05:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234850AbjAJAZ4 (ORCPT
+        id S229609AbjAJEFe (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 9 Jan 2023 19:25:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        Mon, 9 Jan 2023 23:05:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234752AbjAJAZz (ORCPT
+        with ESMTP id S229614AbjAJEF2 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 9 Jan 2023 19:25:55 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4EC2C8;
-        Mon,  9 Jan 2023 16:25:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XxI1FtEOKJucG5Qcym68EofhqpO+/9aBkz/BrBBt+SM=; b=NKH3cMK5Yu6kPQZicJqlX/w/GL
-        8dsJS09R579dALKb3jocaAF0qqfpGJ/gnMz5oCSt8WsSPq99mvHMoq3CJAmQh1G/XVfbsAK1ynLig
-        /sB0HMD8FTOhqKCNWVH5T5e5+VUEjLP82e4zZivHfU0EosdhLayUuNajXaGqajU1KFibqLAgx+p/D
-        kkJxLeF64FJWpQUG6E0p7s5ZIcai85HrDAXOD0t6Fi0TumxH7lwGw16/oyhGbUh8upYTuaXzbasSy
-        D2re3jKDQ/8DGyFpMMqgUSeKhYsU9ZsmUF4R/njlcCKOfI9PSpdHpQGqKTlO/1psBQmbhl5QilTft
-        JWzU6dAg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pF2SY-004kWU-Oy; Tue, 10 Jan 2023 00:25:46 +0000
-Date:   Mon, 9 Jan 2023 16:25:46 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, stable@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Davidlohr Bueso <dave@stgolabs.net>, mcgrof@kernel.org
-Subject: Re: [PATCH v9 02/10] rockchip-mailbox: Fix typo
-Message-ID: <Y7ywiu1fAdrbsxt0@bombadil.infradead.org>
-References: <Y6FaUynXTrYD6OYT@kroah.com>
- <CAJzde04Hbd2+s-Bqog2V81dBEeZD7WWaFCf2BkesQS4yUAKiNA@mail.gmail.com>
- <Y6H6/U0w96Z4kpDn@bombadil.infradead.org>
- <CAJzde04igO0LJ46Hsbcm-hJBFtPdqJC6svaoMkb3WBG0e1fGBw@mail.gmail.com>
- <Y6IDOwxOxZpsdtiu@bombadil.infradead.org>
- <CAJzde06q3w7CHd8FSs-bwS3EeVv6xrBzCwerQVqps49V=_voQQ@mail.gmail.com>
- <Y6IVDE3NEE6teggy@bombadil.infradead.org>
- <CAJzde07U3Y9LZfVHUA-YevRUqA7tDmS=3sBDYpEZM8FSZUTCnA@mail.gmail.com>
- <Y6JAwxvptrMrK353@bombadil.infradead.org>
- <CAJzde04UfPMTxiUaGjSYZBVMfcpVz1S9fTiGWYnCB0_yM0MaQw@mail.gmail.com>
+        Mon, 9 Jan 2023 23:05:28 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DA330559;
+        Mon,  9 Jan 2023 20:05:26 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NrccY5hQ1zRr2x;
+        Tue, 10 Jan 2023 12:03:41 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 10 Jan 2023 12:05:21 +0800
+Subject: Re: [PATCH v2] kallsyms: Fix sleeping function called from invalid
+ context when CONFIG_KALLSYMS_SELFTEST=y
+To:     Petr Mladek <pmladek@suse.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+References: <20221228014511.328-1-thunder.leizhen@huawei.com>
+ <Y7wZSxw+Ys5MNf8g@alley>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <b06140e6-e945-997a-54cb-9c7526d9e419@huawei.com>
+Date:   Tue, 10 Jan 2023 12:05:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJzde04UfPMTxiUaGjSYZBVMfcpVz1S9fTiGWYnCB0_yM0MaQw@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <Y7wZSxw+Ys5MNf8g@alley>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Dec 27, 2022 at 11:42:36AM -0600, Allen Webb wrote:
-> On Tue, Dec 20, 2022 at 5:09 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > I think it would make sense then to be explicit about this for now, even
-> > if it seems we can obsolete this. Right now the justification for having
-> > this for built-in is *very* specific to this feature for USB, which
-> > makes use of special USB sysfs attributes which as you explained, allows
-> > to restrict probe of devices even though the respective driver is already
-> > loaded.
-> 
-> The thing we might obsolete is limiting it to just the USB subsystem.
-> I am fine with expanding the documentation and limiting the scope of
-> the feature to USB/thunderbolt for now.
 
-Great let's do that as otherwise it can leave a few folks scratchign
-their head.
 
-> > > There are sysfs attributes called  authorized and authorized_default
-> > > that together can prevent devices from being fully enumerated and
-> > > probed.
-> >
-> > Although these attributes are USB specfic today it gets me wondering if
-> > other subsystems may benefit from a similar feature.
+On 2023/1/9 21:40, Petr Mladek wrote:
+> On Wed 2022-12-28 09:45:11, Zhen Lei wrote:
+>> [T58] BUG: sleeping function called from invalid context at kernel/kallsyms.c:305
+>> [T58] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 58, name: kallsyms_test
+>> [T58] preempt_count: 0, expected: 0
+>> [T58] RCU nest depth: 0, expected: 0
+>> [T58] no locks held by kallsyms_test/58.
+>> [T58] irq event stamp: 18899904
+>> [T58] hardirqs last enabled at (18899903): finish_task_switch.isra.0 (core.c:?)
+>> [T58] hardirqs last disabled at (18899904): test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
+>> [T58] softirqs last enabled at (18899886): __do_softirq (??:?)
+>> [T58] softirqs last disabled at (18899879): ____do_softirq (irq.c:?)
+>> [T58] CPU: 0 PID: 58 Comm: kallsyms_test Tainted: G T  6.1.0-next-20221215 #2
+>> [T58] Hardware name: linux,dummy-virt (DT)
+>> [T58] Call trace:
+>> [T58] dump_backtrace (??:?)
+>> [T58] show_stack (??:?)
+>> [T58] dump_stack_lvl (??:?)
+>> [T58] dump_stack (??:?)
+>> [T58] __might_resched (??:?)
+>> [T58] kallsyms_on_each_symbol (??:?)
+>> [T58] test_perf_kallsyms_on_each_symbol (kallsyms_selftest.c:?)
+>> [T58] test_entry (kallsyms_selftest.c:?)
+>> [T58] kthread (kthread.c:?)
+>> [T58] ret_from_fork (??:?)
+>> [T58] kallsyms_selftest: kallsyms_on_each_symbol() traverse all: 5744310840 ns
+>> [T58] kallsyms_selftest: kallsyms_on_each_match_symbol() traverse all: 1164580 ns
+>> [T58] kallsyms_selftest: finish
+>>
+>> The execution time of function kallsyms_on_each_match_symbol() is very
+>> short, about ten microseconds, the probability of this process being
+>> interrupted is very small. And even if it happens, we just have to try
+>> again.
+>>
+>> The execution time of function kallsyms_on_each_symbol() is very long,
+>> it takes tens of milliseconds, context switches is likely occur during
+>> this period. If the time obtained by task_cputime() is accurate, it is
+>> preferred. Otherwise, use local_clock() directly, and the time taken by
+>> irqs and high-priority tasks is not deducted because they are always
+>> running for a short time.
+>>
+>> Fixes: 30f3bb09778d ("kallsyms: Add self-test facility")
+>> Reported-by: Anders Roxell <anders.roxell@linaro.org>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  kernel/kallsyms_selftest.c | 52 +++++++++++++++++++++++++++-----------
+>>  1 file changed, 37 insertions(+), 15 deletions(-)
+>>
+>> v1 --> v2:
+>> 1. Keep calling cond_resched() when CONFIG_KALLSYMS_SELFTEST=y. Instead,
+>>    function kallsyms_on_each_match_symbol() and kallsyms_on_each_symbol()
+>>    are not protected by local_irq_save() in kallsyms_selftest.c.
+>>
+>> diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
+>> index f35d9cc1aab1544..9c94f06aa951971 100644
+>> --- a/kernel/kallsyms_selftest.c
+>> +++ b/kernel/kallsyms_selftest.c
+>> @@ -12,9 +12,11 @@
+>>  #include <linux/init.h>
+>>  #include <linux/module.h>
+>>  #include <linux/kallsyms.h>
+>> +#include <linux/kernel_stat.h>
+>> +#include <linux/kthread.h>
+>>  #include <linux/random.h>
+>>  #include <linux/sched/clock.h>
+>> -#include <linux/kthread.h>
+>> +#include <linux/sched/cputime.h>
+>>  #include <linux/vmalloc.h>
+>>  
+>>  #include "kallsyms_internal.h"
+>> @@ -161,9 +163,9 @@ static int lookup_name(void *data, const char *name, struct module *mod, unsigne
+>>  	struct test_stat *stat = (struct test_stat *)data;
+>>  
+>>  	local_irq_save(flags);
+>> -	t0 = sched_clock();
+>> +	t0 = local_clock();
+>>  	(void)kallsyms_lookup_name(name);
+>> -	t1 = sched_clock();
+>> +	t1 = local_clock();
+>>  	local_irq_restore(flags);
+>>  
+>>  	t = t1 - t0;
+>> @@ -233,19 +235,30 @@ static int find_symbol(void *data, const char *name, struct module *mod, unsigne
+>>  
+>>  static void test_perf_kallsyms_on_each_symbol(void)
+>>  {
+>> -	u64 t0, t1;
+>> -	unsigned long flags;
+>> +	bool accurate;
+>> +	u64 utime, t0, t1;
+>>  	struct test_stat stat;
+>>  
+>>  	memset(&stat, 0, sizeof(stat));
+>>  	stat.max = INT_MAX;
+>>  	stat.name = stub_name;
+>>  	stat.perf = 1;
+>> -	local_irq_save(flags);
+>> -	t0 = sched_clock();
+>> +
+>> +	/*
+>> +	 * This test process takes tens of milliseconds, context switches may
+>> +	 * occur during this period. If task_cputime() returns true, it is
+>> +	 * accurate enough. Otherwise, use local_clock() directly. This is
+>> +	 * based on the assumption that irqs and high-priority tasks are always
+>> +	 * running for a short time, they may cause less error.
+>> +	 */
+>> +	accurate = task_cputime(current, &utime, &t0);
+>> +	if (!accurate)
+>> +		t0 = local_clock();
+>>  	kallsyms_on_each_symbol(find_symbol, &stat);
+>> -	t1 = sched_clock();
+>> -	local_irq_restore(flags);
+>> +	if (accurate)
+>> +		task_cputime(current, &utime, &t1);
+>> +	else
+>> +		t1 = local_clock();
+>>  	pr_info("kallsyms_on_each_symbol() traverse all: %lld ns\n", t1 - t0);
+>>  }
+>>  
+>> @@ -270,17 +283,26 @@ static int match_symbol(void *data, unsigned long addr)
+>>  static void test_perf_kallsyms_on_each_match_symbol(void)
+>>  {
+>>  	u64 t0, t1;
+>> -	unsigned long flags;
+>> +	int cpu = smp_processor_id();
+>> +	unsigned long nr_irqs;
+>>  	struct test_stat stat;
+>>  
+>>  	memset(&stat, 0, sizeof(stat));
+>>  	stat.max = INT_MAX;
+>>  	stat.name = stub_name;
+>> -	local_irq_save(flags);
+>> -	t0 = sched_clock();
+>> -	kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
+>> -	t1 = sched_clock();
+>> -	local_irq_restore(flags);
+>> +
+>> +	/*
+>> +	 * The test thread has been bound to a fixed CPU in advance. If the
+>> +	 * number of irqs does not change, no new scheduling request will be
+>> +	 * generated. That is, the performance test process is atomic.
+>> +	 */
+>> +	do {
+>> +		nr_irqs = kstat_cpu_irqs_sum(cpu);
+>> +		cond_resched();
+>> +		t0 = local_clock();
+>> +		kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
+>> +		t1 = local_clock();
+>> +	} while (nr_irqs != kstat_cpu_irqs_sum(cpu));
 > 
-> The subsystems that would likely benefit the most are ones that are
-> externally reachable. 
+> Huh, is this guaranteed to ever finish?
+> 
+> What if there is a regression and kallsyms_on_each_match_symbol()
+> never finishes without rescheduling?
 
-Makes sense.
+The execution time of kallsyms_on_each_match_symbol() does not exceed 10 us.
+Assume that an interrupt is generated every 100 us(10000 interrupts are generated
+per second, it is very high). In this case, interrupts and high-priority tasks need
+to run for more than 90 us each time to cause the loop cannot exit normally.
+However, the CPU usage is 90+%, which is unreasonable.
 
-> The external ports that come to mind are USB /
-> thunderbolt, firewire, PCMCIA / expresscard, eSATA, serial and
-> parallel ports. Supporting PCMCIA / expresscard seems like it would
-> require adding the authorized sysfs attribute to pci. eSATA would be
-> covered by ata.
+Function kallsyms_on_each_symbol() takes a long time, about 20 milliseconds, and
+I'm already using task_cputime().
 
-Makes sense, I'd personally ignore anything legacy such as PCMCIA though.
+> 
+> This is yet another unreliable hack.
+> 
+> 
+> Use standard solution:
+> 
+> I did the homework for you and checked how the "time" command
+> measures the time spend in the system. It actually uses more methods.
+> 
+> One is times() syscall. It uses thread_group_cputime_adjusted(), see
+> do_sys_times() in kernel/sys.c
+> 
+> Or it uses wait4() syscall to get struct rusage that provides this
+> information.
+> 
+> Please, stop inventing crazy hacks, and use these standard methods.
+> If the "time" tool is enough for userspace performance tests
+> then it must be enough in this case as well.
 
-> > > authorized_default gets set to 0 for the hub and any devices
-> > > connected after that will show in sysfs, but not fully enumerate or
-> > > probe until the device's authorized attribute is set to 1. There are
-> > > some edge cases like internal devices which have some extra
-> > > complexity.
-> > >
-> > > As for documentation, I wasn't able to find much other than:
-> > > https://github.com/torvalds/linux/blob/v6.1/drivers/usb/core/hcd.c#L370
-> > > /* authorized_default behaviour:
-> > > * -1 is authorized for all devices except wireless (old behaviour)
-> > > * 0 is unauthorized for all devices
-> > > * 1 is authorized for all devices
-> > > * 2 is authorized for internal devices
-> > > */
-> > > ...
-> > > and
-> > > https://github.com/torvalds/linux/blob/v6.1/Documentation/admin-guide/kernel-parameters.txt#L6424
-> > > usbcore.authorized_default=
-> > >    [USB] Default USB device authorization:
-> > >    (default -1 = authorized except for wireless USB,
-> > >    0 = not authorized, 1 = authorized, 2 = authorized
-> > >    if device connected to internal port)
-> > > ...
-> > > The feature looks like it was originally introduced for wireless USB in:
-> > > https://www.mail-archive.com/linux-usb-devel@lists.sourceforge.net/msg54289.html
-> > > and later adapted for use cases like USBGuard here:
-> > > https://github.com/torvalds/linux/commit/c4fc2342cb611f945fa468e742759e25984005ad
-> >
-> > Thanks for digging all this up. Can you extend the docs on
-> > Documentation/driver-api/usb/ somewhere about this attribute as part of
-> > your changes so its clear the motivation, *then* you make your changes.
-> > The documentation for MODULE_DEVICE_TABLE() can just say:
-> >
-> > The only use-case for built-in drivers today is enable userspace to
-> > prevent / allow probe for devices on certain subsystems even if the
-> > driver is already loaded. An example is the USB subsystem with its
-> > authorized_default sysfs attribute. For more details refer to the
-> > kernel's Documentation for USB about authorized_default.
-> >
-> > That should be clear enough for both USB driver writers and others.
-> >
-> > Please also extend the docs for MODULE_DEVICE_TABLE() on
-> > Documentation/driver-api/usb/writing_usb_driver.rst or where you see
-> > fit for your changes. That can go into depth about the USBGuard stuff.
-> >
-> >   Luis
-> 
-> How do you feel about only having one version of the macro for both
-> cases and merging the documentation so things are kept simple? Here is
-> what I have locally for the macro without the ifdef and the updated
-> documentation:
-> 
-> /*
->  * Creates an alias so file2alias.c can find device table.
->  *
->  * Use this in cases where a device table is used to match devices because it
->  * surfaces match-id based module aliases to userspace for:
->  *   - Automatic module loading through modules.alias.
->  *   - Tools like USBGuard which allow or block devices based on policy such as
-                                 ^ allow to
+Okay, I'll study in depth, just worried about the different precision
+requirements.
 
->  *     which modules match a device.
->  *
->  * The only use-case for built-in drivers today is enable userspace to prevent /
+By the way, we still have to actively embrace new things.
 
-                                                ^ is to
+In fact, I've thought of another way, which is to measure nine times,
+sort in ascending order, and take the middle one. Based on probabilistic
+statistics, the intermediate results are reliable.
 
->  * allow probe for devices on certain subsystems even if the driver is already
->  * loaded. An example is the USB subsystem with its authorized_default sysfs
->  * attribute. For more details refer to the kernel's Documentation for USB about
->  * authorized_default.
->  *
->  * The module name is included in the alias for two reasons:
->  *   - It avoids creating two aliases with the same name for built-in modules.
->  *     Historically MODULE_DEVICE_TABLE was a no-op for built-in modules, so
->  *     there was nothing to stop different modules from having the same device
->  *     table name and consequently the same alias when building as a module.
->  *   - The module name is needed by files2alias.c to associate a particular
->  *     device table with its associated module for built-in modules since
->  *     files2alias would otherwise see the module name as `vmlinuz.o`.
+> 
+> 
+> Or remove this test:
+> 
+> Seriously, what is the value of this test?
+> Is anyone going to use it at all in the future?
 
-Yeah sure this reads much better.
+There's really someone interested in performance data.
+https://lkml.org/lkml/2022/12/15/134
 
->  */
-> #define MODULE_DEVICE_TABLE(type, name) \
-> extern void *CONCATENATE( \
-> CONCATENATE(__mod_##type##__##name##__, \
-> __KBUILD_MODNAME), \
-> _device_table) \
-> __attribute__ ((unused, alias(__stringify(name))))
+> 
+> The code was useful when developing the optimization.
+> But it is really questionable as a selftest.
+> 
+> Selftests usually check if the code works as expected.
+> This test provides some number that is hardly comparable.
 > 
 > 
-> Here is a draft version for an updated to
-> Documentation/driver-api/usb/ (I will add the 80 char line breaks
-> later) in case you have feedback:
+> Why are try hardly comparable?
+> 
+> 1. The speed depends on the number of loaded modules
+>    and number of symbols. It highly depends on the configuration
+>    that was used to build the kernel.
+> 
+> 2. The test runs only once. As a result it is hard to judge
+>    how big is the noise.
+> 
+> 3. The noise might depend on the size and state of CPU caches.
 > 
 > 
-> # Authorization
+> I personally vote for removing this selftest!
 > 
-> Authorization provides userspace a way to allow or block configuring
-> devices early during enumeration before any modules are probed for the
-> device. While it is possible to block a device by not loading the
-> required modules, this also prevents other devices from using the
-> module as well. For example someone might have an unattended computer
-> downloading installation media to a USB drive. Presumably this
-> computer would be locked to make it more difficult for a bad actor to
-> access the computer. Since USB storage devices are not needed to
-> interact with the lock screen, the authorized_default sysfs attribute
-> can be set to not authorize new USB devices by default. A userspace
-> tool like USBGuard can then vet the devices. Mice, keyboards, etc can
-> be allowed by writing to their authorized sysfs attribute so that the
-> lock screen can still be used (this important in cases like
-> suspend+resume or docks) while other devices can be blocked as long as
-> the lock screen is shown.
+> Best Regards,
+> Petr
+> .
 > 
-> ## Sysfs Attributes
-> 
-> Userspace can control USB device authorization through the
-> authorized_default and authorized sysfs attributes.
-> 
-> ### authorized_default
-> 
-> .. kernel-doc:: drivers/usb/core/hcd.c
->    :export:
-> 
-> The authorized_default sysfs attribute is only present for host
-> controllers. It determines the initial state of the authorized sysfs
-> attribute of USB devices newly connected to the corresponding host
-> controller. It can take on the following values:
-> 
-> +---------------------------------------------------+
-> | Value | Behavior                                  |
-> +=======+===========================================+
-> |    -1 | Authorize all devices except wireless USB |
-> +-------+-------------------------------------------+
-> |     0 | Do not authorize new devices              |
-> +-------+-------------------------------------------+
-> |     1 | Authorize new devices                     |
-> +-------+-------------------------------------------+
-> |     2 | Authorize new internal devices only       |
-> +---------------------------------------------------+
-> 
-> Note that firmware platform code determines if a device is internal or
-> not and this is reported as the connect_type sysfs attribute of the
-> USB port. This is currently supported by ACPI, but device tree still
-> needs an implementation. Authorizing new internal devices only can be
-> useful to work around issues with devices that misbehave if there are
-> delays in probing their module.
-> 
-> ### authorized
-> 
-> .. kernel-doc:: drivers/usb/core/sysfs.c
->    :export:
-> 
-> Every USB device has an authorized sysfs attribute which can take the
-> values 0 and 1. When authorized is 0, the device still is present in
-> sysfs, but none of its interfaces can be associated with drivers and
-> modules will not be probed. When authorized is 1 (or set to one) a
-> configuration is chosen for the device and its interfaces are
-> registered allowing drivers to bind to them.
 
-Good stuff!
-
-  Luis
+-- 
+Regards,
+  Zhen Lei
