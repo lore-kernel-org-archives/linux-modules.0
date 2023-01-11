@@ -2,104 +2,197 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB3F9C46467
-	for <linux-modules@archiver.kernel.org>; Tue, 10 Jan 2023 18:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5111EC54EBE
+	for <linux-modules@archiver.kernel.org>; Wed, 11 Jan 2023 08:42:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239391AbjAJSh3 (ORCPT
+        id S230182AbjAKImi (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 10 Jan 2023 13:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
+        Wed, 11 Jan 2023 03:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239572AbjAJShN (ORCPT
+        with ESMTP id S236462AbjAKImD (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 10 Jan 2023 13:37:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF55A59501;
-        Tue, 10 Jan 2023 10:32:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D3CAB81908;
-        Tue, 10 Jan 2023 18:32:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06FAC43398;
-        Tue, 10 Jan 2023 18:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673375529;
-        bh=QUdSPSJ1dS3+KOPixtik4EX+QpdImlvJMwhGplzoJI4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CSsqhlGsZ3rRP6uogxNQuvYFRLwxQJkenVKpMsdfhh4VCenx4M2sOzB4c5cubXYVE
-         Zp6PZXsbBcAQ1md7ssc9o/pna7r9YbilGa92ctHfDXSZx4VJWwTMAxcFgNM5KkZ7OD
-         muIFhcHZ9gBcnfvZZHoYeC94JvDCuuOd+Ho1dVM7kZ3vQa4ZZEbmgB2wMP6WnqIxn/
-         Bc/ek0tDQOWVXcxYE2a23jB2+F7ZAldB1W2X5HyuShyfZRgX8aFpGEjOZnknglWsnN
-         MA6E691iXWt2TZ+Lo1D7Tjg7nP9w/IGuS5LFd79fF0HFevblP3Hv5hTeKbSiJr8pWO
-         gr9Ak3EVCOumA==
-Received: by mail-lj1-f179.google.com with SMTP id p25so7278801ljn.12;
-        Tue, 10 Jan 2023 10:32:08 -0800 (PST)
-X-Gm-Message-State: AFqh2krCEq6Gt4vXrHVsM25oXqnEvws13/+kgUBM+qAcokYmtcUSlfOh
-        3IMNJaT6dooknfrooh7ZFygSAAnPr7TihBIaMhM=
-X-Google-Smtp-Source: AMrXdXvIneVTGj9nKfDPo5Fts30vJtsod1nns86BieZcV2ZxuUxvsrycMRszgV2p/ldobc7B5DyW+h59Ev4lN5NOJGE=
-X-Received: by 2002:a2e:bd11:0:b0:280:54b:9ed5 with SMTP id
- n17-20020a2ebd11000000b00280054b9ed5mr994803ljq.414.1673375526906; Tue, 10
- Jan 2023 10:32:06 -0800 (PST)
+        Wed, 11 Jan 2023 03:42:03 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428328FED;
+        Wed, 11 Jan 2023 00:41:37 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NsLdy2PH5zJq7q;
+        Wed, 11 Jan 2023 16:37:26 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 11 Jan 2023 16:41:32 +0800
+Subject: Re: [PATCH 2/3] bpf: Optimize get_modules_for_addrs()
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Jiri Olsa <olsajiri@gmail.com>
+CC:     Petr Mladek <pmladek@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, <bpf@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
+ <20221230112729.351-3-thunder.leizhen@huawei.com> <Y7WoZARt37xGpjXD@alley>
+ <Y7dBoII5kZnHGFdL@krava> <Y7ftxIiV35Wd75lZ@krava>
+ <652e0eea-1ab2-a4fd-151a-e634bcb4e1da@huawei.com> <Y7wbNinAXM6O62ZF@krava>
+ <78754aee-7c06-cbc3-b68c-d723f09b7f77@huawei.com>
+Message-ID: <1efa9a26-e4d2-756a-ea63-74a2eacd0e2d@huawei.com>
+Date:   Wed, 11 Jan 2023 16:41:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20230106220959.3398792-1-song@kernel.org>
-In-Reply-To: <20230106220959.3398792-1-song@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 10 Jan 2023 10:31:54 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
-Message-ID: <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
-Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Cc:     songliubraving@fb.com, Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <78754aee-7c06-cbc3-b68c-d723f09b7f77@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-+ Christoph
 
-Hi folks,
 
-Could you please share your comments on this work? If there isn't
-major issue with it, maybe we can ship it in 6.3? (so we don't pile
-too many changes in one big set).
+On 2023/1/9 23:11, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2023/1/9 21:48, Jiri Olsa wrote:
+>> On Mon, Jan 09, 2023 at 04:51:37PM +0800, Leizhen (ThunderTown) wrote:
+>>>
+>>>
+>>> On 2023/1/6 17:45, Jiri Olsa wrote:
+>>>> On Thu, Jan 05, 2023 at 10:31:12PM +0100, Jiri Olsa wrote:
+>>>>> On Wed, Jan 04, 2023 at 05:25:08PM +0100, Petr Mladek wrote:
+>>>>>> On Fri 2022-12-30 19:27:28, Zhen Lei wrote:
+>>>>>>> Function __module_address() can quickly return the pointer of the module
+>>>>>>> to which an address belongs. We do not need to traverse the symbols of all
+>>>>>>> modules to check whether each address in addrs[] is the start address of
+>>>>>>> the corresponding symbol, because register_fprobe_ips() will do this check
+>>>>>>> later.
+>>>>>
+>>>>> hum, for some reason I can see only replies to this patch and
+>>>>> not the actual patch.. I'll dig it out of the lore I guess
+>>>>>
+>>>>>>>
+>>>>>>> Assuming that there are m modules, each module has n symbols on average,
+>>>>>>> and the number of addresses 'addrs_cnt' is abbreviated as K. Then the time
+>>>>>>> complexity of the original method is O(K * log(K)) + O(m * n * log(K)),
+>>>>>>> and the time complexity of current method is O(K * (log(m) + M)), M <= m.
+>>>>>>> (m * n * log(K)) / (K * m) ==> n / log2(K). Even if n is 10 and K is 128,
+>>>>>>> the ratio is still greater than 1. Therefore, the new method will
+>>>>>>> generally have better performance.
+>>>>>
+>>>>> could you try to benchmark that? I tried something similar but was not
+>>>>> able to get better performance
+>>>>
+>>>> hm looks like I tried the smilar thing (below) like you did,
+>>>
+>>> Yes. I just found out you're working on this improvement, too.
+>>>
+>>>> but wasn't able to get better performace
+>>>
+>>> Your implementation below is already the limit that can be optimized.
+>>> If the performance is not improved, it indicates that this place is
+>>> not the bottleneck.
+>>>
+>>>>
+>>>> I guess your goal is to get rid of the module arg in
+>>>> module_kallsyms_on_each_symbol callback that we use?
+>>>
+>>> It's not a bad thing to keep argument 'mod' for function
+>>> module_kallsyms_on_each_symbol(), but for kallsyms_on_each_symbol(),
+>>> it's completely redundant. Now these two functions often use the
+>>> same hook function. So I carefully analyzed get_modules_for_addrs(),
+>>> which is the only place that involves the use of parameter 'mod'.
+>>> Looks like there's a possibility of eliminating parameter 'mod'.
+>>>
+>>>> I'm ok with the change if the performace is not worse
+>>>
+>>> OK, thanks.
+>>>
+>>>>
+>>>> jirka
+>>>>
+>>>>
+>>>> ---
+>>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+>>>> index 5b9008bc597b..3280c22009f1 100644
+>>>> --- a/kernel/trace/bpf_trace.c
+>>>> +++ b/kernel/trace/bpf_trace.c
+>>>> @@ -2692,23 +2692,16 @@ struct module_addr_args {
+>>>>  	int mods_cap;
+>>>>  };
+>>>>  
+>>>> -static int module_callback(void *data, const char *name,
+>>>> -			   struct module *mod, unsigned long addr)
+>>>> +static int add_module(struct module_addr_args *args, struct module *mod)
+>>>>  {
+>>>> -	struct module_addr_args *args = data;
+>>>>  	struct module **mods;
+>>>>  
+>>>> -	/* We iterate all modules symbols and for each we:
+>>>> -	 * - search for it in provided addresses array
+>>>> -	 * - if found we check if we already have the module pointer stored
+>>>> -	 *   (we iterate modules sequentially, so we can check just the last
+>>>> -	 *   module pointer)
+>>>> +	/* We iterate sorted addresses and for each within module we:
+>>>> +	 * - check if we already have the module pointer stored for it
+>>>> +	 *   (we iterate sorted addresses sequentially, so we can check
+>>>> +	 *   just the last module pointer)
+>>>>  	 * - take module reference and store it
+>>>>  	 */
+>>>> -	if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
+>>>> -		       bpf_kprobe_multi_addrs_cmp))
+>>>> -		return 0;
+>>>> -
+>>>>  	if (args->mods && args->mods[args->mods_cnt - 1] == mod)
+>>>>  		return 0;
+>>>
+>>> There'll be problems Petr mentioned.
+>>>
+>>> https://lkml.org/lkml/2023/1/5/191
+>>
+>> ok, makes sense.. I guess we could just search args->mods in here?
+>> are you going to send new version, or should I update my patch with that?
+> 
+> It's better for you to update! I'm not familiar with the bpf module.
 
-Thanks,
-Song
+Hi Jiri:
+  Can you attach patch 1/3 when you send the new patch? There's a little
+dependency. Petr has already replied OK to patch 1/3, see [1].
+  Patch 3/3 is just a cleanup, I'll delay updating it after v6.3-rc1, it
+also has a dependency on another patch [2].
 
-On Fri, Jan 6, 2023 at 2:10 PM Song Liu <song@kernel.org> wrote:
->
-> module_layout manages different types of memory (text, data, rodata, etc.)
-> in one allocation, which is problematic for some reasons:
->
-> 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
-> 2. It is hard to use huge pages in modules (and not break strict rwx).
-> 3. Many archs uses module_layout for arch-specific data, but it is not
->    obvious how these data are used (are they RO, RX, or RW?)
->
-> Improve the scenario by replacing 2 (or 3) module_layout per module with
-> up to 7 module_memory per module:
->
->         MOD_MEM_TYPE_TEXT,
->         MOD_MEM_TYPE_DATA,
->         MOD_MEM_TYPE_RODATA,
->         MOD_MEM_TYPE_RO_AFTER_INIT,
->         MOD_MEM_TYPE_INIT_TEXT,
->         MOD_MEM_TYPE_INIT_DATA,
->         MOD_MEM_TYPE_INIT_RODATA,
->
-> and allocating them separately.
->
-> Various archs use module_layout for different data. These data are put
-> into different module_memory based on their location in module_layout.
-> IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
-> data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
->
-> Signed-off-by: Song Liu <song@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
+[1] https://lkml.org/lkml/2023/1/4/627
+[2] https://lkml.org/lkml/2023/1/10/534
 
-[...]
+
+
+> 
+>>
+>> thanks,
+>> jirka
+>> .
+>>
+> 
+
+-- 
+Regards,
+  Zhen Lei
