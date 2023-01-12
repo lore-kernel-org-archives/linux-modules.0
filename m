@@ -2,383 +2,409 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EC32C63797
-	for <linux-modules@archiver.kernel.org>; Thu, 12 Jan 2023 21:48:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2387FC54EBE
+	for <linux-modules@archiver.kernel.org>; Thu, 12 Jan 2023 21:48:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbjALVs4 (ORCPT
+        id S232743AbjALVs5 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 12 Jan 2023 16:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
+        Thu, 12 Jan 2023 16:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240516AbjALVri (ORCPT
+        with ESMTP id S240830AbjALVri (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Thu, 12 Jan 2023 16:47:38 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0490512AC2;
-        Thu, 12 Jan 2023 13:41:10 -0800 (PST)
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7F335918
+        for <linux-modules@vger.kernel.org>; Thu, 12 Jan 2023 13:40:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673559671; x=1705095671;
+  t=1673559630; x=1705095630;
   h=date:from:to:cc:subject:message-id:references:
    in-reply-to:mime-version;
-  bh=j5t8yu+GQdrROqft3QkOtSKlI9+ocI4SIqQXnTOCo9E=;
-  b=KoRnbULc57ZX/6V6hSsx/8O+JIilg+7Ixc+j7WlHhMin7BaAUyEBtHJ7
-   EPQuY6f7WU4I4aHtgq/FSAXb747kwvBCtSEtYCt3YdDNKcJ4S9BRXOz19
-   L81XKUk/5aF7d0HQ6GxcV4ugbm/639z5PhQQSe5b6bl+FahMoDBKF2/4f
-   6EvDq4568bjtRJHfmuaax8EPneOoLRQs2gmikTheM+jMCueqS2VkhJPC+
-   8GN2hzW9ueKCe02Mk+iO0FbNCC7x3eTLbZjNFqUzbEaHkh4JdNxDIxl6B
-   +QXqPk5yOyNZzqgix0e8xCLC/EUMQ7g29F/nrjR+qPMF8ouJCK1SY8vHk
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="386181563"
+  bh=5fU0OMwhTecf8CIXzUnRkDQsxgABBrKaV8lQH9pGh40=;
+  b=OuqrokphDGrsjsy5yd+jeB39wiSEXx7SpYumKt8uZEQXcuNSvPlwFLPl
+   HC+Mw2kVSwauRQRAID1H5nwZ6q7JqAoIYb84Wz1/MUNEGc8D+M9s+Fm6P
+   taiOZrtP71B2ahMkpmcgn7zbgLMbUU1LUDWdbuZtlBlW+ZlweZCQdUj7F
+   g8iUicy2yiEnyKnmnndwsW5LCmDO6j0I3dAaU5OpT8P+y9lFzJnJKujo9
+   sLBHYbM+JuyhXfCd4eWrlflKL1Y2SMn7xt8A2FRz8fSOci5afwUoE7znU
+   bmrFBYoR16ltPnetzAGGQX6EulAhtfqdlz3vykg6mFa/iosFSELpw1xQI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="388330907"
 X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="386181563"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 13:41:10 -0800
+   d="scan'208";a="388330907"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 13:40:26 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="607951671"
+X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="831854825"
 X-IronPort-AV: E=Sophos;i="5.97,212,1669104000"; 
-   d="scan'208";a="607951671"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 12 Jan 2023 13:41:09 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+   d="scan'208";a="831854825"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 12 Jan 2023 13:40:25 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 12 Jan 2023 13:41:08 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ 15.1.2507.16; Thu, 12 Jan 2023 13:40:25 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 12 Jan 2023 13:41:08 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ 15.1.2507.16; Thu, 12 Jan 2023 13:40:24 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 12 Jan 2023 13:40:24 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.106)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 12 Jan 2023 13:41:08 -0800
+ 15.1.2507.16; Thu, 12 Jan 2023 13:40:24 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iQhjJPxfmYOB2kMRWE9r8LUmpGRuCv4EUieQYNCveDd9zp3JqxYXs6SkQ442FpzhkRWfoeaZKO1rwymqEMsQ/gkMGGRRcV3I9gytxxeHFaBOvqhJiG6o6eVre1kQeYfv18OVfJoVMmt6dnsMl4kzYPAtvl9hG5yo0JvK7L8uaZMoBE4NdRfYpCVkaxTz5/Q2AsGGqttj4GA0jPhTfjjQNrUeoGAwGUINXnrqdO7FhqREaWhhFK1yPWGBE6SgGU+Ibej5vqVAB4uUIGLMKkYnS5HKIpWNVKAbACZXGrvgGxYMWCyGBi5r+hFPpsQWR6WHhKVg3h6i+kJMTdm9W1uEww==
+ b=G4W4rd8xU4CC/4NMVVuHsZcnN7X7inNBjzg80uYxEEegskWP/S9rZItRU0at6GisZSB0NsWUcypXKnw8t5vs+2Il9Wvegha/HsLxHIZ8rS55Kep5naY8/WLqJgDvJf99bTiZQOlwG/DXFLqDbtxYOdwiBs/vmprFa45eBct43qGuJNmg6Z2eFollZAd2VPx5lYgmR4I8S0/xJz5pUHucu2k+gpC24lBkN2PyHltGAidJ0aiKr7qvqloVTAbhO1LFB4XpqfJdjqRnSOCfajDhagUoD41ooX2Sr51T+4kzxTgkGb+Aww96bId213TtGgHqynZcvPhqV8qK+ipdcuqTNA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MtAJ8ESXzr+LymDXZJSN4w/4i8jj0Un0Uod5J36/R6c=;
- b=gId0tT3/O39oiN1ZgyymJLv3cl93tJSZl/OvlqmXXmCyhlxVX3Hg5i+P7KGcaY2vBDUpUAdTJHa8BSP4YbGeQEmDA6J8HY5aDbQd/JEX6LOYvYzjdkUuxzhHz8kS0JCa9U2jpD1ge5DdY/O1cNcLFi+vZ1XgRwbyXYQnvVtykU9tAJi/EJhMf5WGwhd2VLpwvP3n3TGok6hCgGY8FxnBNGTcVUeFWQr5GOPu+4FUL3pXvgyJQU9aLACdAweP7zbQx5sakVh2XqibVk5ZfQo4bYDHic0O6onxW2ulLlQrAfVnUon5yJFhlWYr05Ob5oxiStjXvwTSZwCV+MPXYTcdWQ==
+ bh=FWPew8g1N/CpdtNcLD6fbR9c1XBq60wYV/vjHc5/Oww=;
+ b=PzlTvjACynAv+k1vgwfiEjLfrH46zeHOlLRUrAU8ueGt8r0Qty566/eE4wpAVp6b0xRMejPN6Kero6TlzwMd+QJYfSz+tDMXNm0JsoJJ3X4yepPByYGIl/bKQFDrY3Fgelmagj7CIYmgZGPUqAeVRAERtujTcCY/ZORlCOymMGJ/BfR9sogfYFyxfm5TYNDvtfkpnJfsH2VV/qvAlSCUF83RTXoZdPq8UgPJNHiC2cKxQmCg0pJYUkSN3OkImCwaSNUANuzCu4VOc69SazmVp6rI9QNs2ozapDq8czLaOwzvas9woezDvqHwnKEfW/ScY9dJD23jblB0M5qVGZaGuA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by SA0PR11MB4669.namprd11.prod.outlook.com (2603:10b6:806:99::21) with
+ by CY5PR11MB6391.namprd11.prod.outlook.com (2603:10b6:930:38::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 12 Jan
- 2023 21:41:06 +0000
+ 2023 21:40:20 +0000
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::593:877e:dd33:5b7a]) by CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::593:877e:dd33:5b7a%5]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 21:41:05 +0000
-Date:   Thu, 12 Jan 2023 14:40:59 -0700
+ 21:40:20 +0000
+Date:   Thu, 12 Jan 2023 14:40:15 -0700
 From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Gary Guo <gary@garyguo.net>
-CC:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Joel Stanley" <joel@jms.id.au>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <linux-modules@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
-        <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
-Message-ID: <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
-References: <20230111161155.1349375-1-gary@garyguo.net>
+To:     Gustavo Sousa <gustavo.sousa@intel.com>
+CC:     <linux-modules@vger.kernel.org>,
+        Gustavo Sverzut Barbieri <barbieri@profusion.mobi>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>
+Subject: Re: [PATCH 2/2] modprobe: Allow passing path to module
+Message-ID: <20230112214015.pijuvoknq4c4gtsl@ldmartin-desk2>
+References: <20230111152936.101040-1-gustavo.sousa@intel.com>
+ <20230111152936.101040-3-gustavo.sousa@intel.com>
 Content-Type: text/plain; charset="us-ascii"; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20230111161155.1349375-1-gary@garyguo.net>
-X-ClientProxiedBy: BY3PR05CA0054.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::29) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+In-Reply-To: <20230111152936.101040-3-gustavo.sousa@intel.com>
+X-ClientProxiedBy: BYAPR01CA0072.prod.exchangelabs.com (2603:10b6:a03:94::49)
+ To CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SA0PR11MB4669:EE_
-X-MS-Office365-Filtering-Correlation-Id: 65577017-c9a4-4f4b-5212-08daf4e5b557
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|CY5PR11MB6391:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8dbcf2ee-0fc6-4c61-df75-08daf4e59a66
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rBiNWgv8dWs8m8e1HMTKcIwtK/XeWDAnOSNDm+ZqTav+ZFKUeBytL2/NkXgwpmHT8KXndIE7UnEMG6e7vEeB5HoZF+7ZfS77BYyynG/s+JKXyV7IUAphBklVopmofpmPiVQpEh127hIQ+eEFACS84io476CyoblsIgJVlZEx3delJ+9VnrHVNduM8VIWXchiBswelIvzeHG0c5STeQ1Iyllja6MPLirPbAxHFg/3YAkOADOkpXLqbFrNC3mm9pu6BYUGJyB4IVGzyyyMOYj0hzTD4Dk/NFYjVX8hR+QT4zwbjLiPvGomEcL4wuzy3TYKSmdJC6p52GWNBviPmkFyA13ifM0mArswTZ1jD2eNVerPApjn+8C/+3NR1V6511l2UOzx+0hvUKxtJTrBBwkbwlcBwc8l9Ue4GqAR7OxqP/5mXeYBTQETHtGTWFBzx3+0YRJ0Fz2jtgxJvXwWsUI0xH+Id5zq95O3PTqfI4tOrbDsxY/7h/mf7wPrNAKJCyr/e2a/imOvHCAC9juWX6pnmMF1AjhY2pXwS8E26zF0mDwit0niAxzjpOmFihaqmSgBYAU5CbW0YEtTZLb987z0BzWPFmuwupR1igYRPUCG/RS14KfrkzysATohWatDY12afVXz0XNDZPVojW2weXTaEPBybVlcRiqFvx3XrqskIj4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(396003)(346002)(136003)(39860400002)(366004)(451199015)(33716001)(82960400001)(83380400001)(38100700002)(86362001)(66556008)(6916009)(66946007)(41300700001)(4326008)(8676002)(316002)(66476007)(54906003)(8936002)(2906002)(7416002)(186003)(6512007)(1076003)(9686003)(66899015)(6486002)(26005)(966005)(5660300002)(478600001)(6506007)(6666004);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: WsC0u1Z1IRp/xA10HImWNrXxyM3HHr3QRQqetDbo6jotQ+bld/X11HmiIVzDQCJ0ItgC2CA6dcqIFb931R7Uill4ZSpUBdLd3oiGrN+boSPRaWyLZbqcsLSVtc1vYv8Np5uZhz++itmduresuCQTovB0IXeanYo3ckvb6aPFNHv+HJGI1OFwmT/Cjb3qfGxH8d9DDTqt95ZJt+avXdPmOiz+U5QDGauO+ORXc4V+q7LVKpXcwkraTFccD+CYxWW95IJ5pSW3z7ZOjrZkY4O0QrMMR/nsH1xLu8RrncI049nhjpsA0uOdDNPPfmLl52oIo+MN42+wDs8R0eRQLK7UUayO5bY2QpC9Mi5v4dQ1qsMF1Cyps9xRAQuXES8D1miUaF2L2XDgQJZt6IL9D5Fr2/BGRFBAdAMs9Q+dRcLvjwBI2kaPfwiT9f6vMVG8Y5dzAJAJqr2Ny5uPNhRQpiQZ+WnfKyJR3A0+6aNt7NQx0lXz2mm/ozsAi+EvLvK9cR0bZBQIz+BlRCQiFfEVYTMTczZUD4+RnhzYe9dDk5R6bPwest6/M90RRNfVGwp8YQBS7c0Tdr+CaZ/fxC94vuN1d2MZh0SguJ1QHxRal9ycRzlS5BFnw+uDiHSq15DGHgyIz31dCp/hhoZX8bLWy3qHhw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(39860400002)(396003)(366004)(346002)(136003)(451199015)(8676002)(82960400001)(66946007)(66556008)(38100700002)(66476007)(4326008)(186003)(86362001)(6512007)(26005)(9686003)(1076003)(33716001)(316002)(6636002)(6486002)(54906003)(478600001)(5660300002)(2906002)(6666004)(6862004)(41300700001)(30864003)(6506007)(8936002)(83380400001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+suf549FQDMWRiszp3fBlyHS3OxOqR/Hcxt4j2Uhz6wYbSUYKlvWTtvF0fr2?=
- =?us-ascii?Q?sTVhLKfehnIxXYfZRgsub4Km9Fv+pt7fqxPHlKfIw9TQAHNlV/4ixUxB8Rnr?=
- =?us-ascii?Q?Y0fjU1ZohXPzBRz/65r/l2V8z2WR+icUV+shI+y7/zBNo3N/I8n4lIVlZG+q?=
- =?us-ascii?Q?sJ4Zj4K7IV1MqnSW+t6DGJTZ3QL6cLLZn/e1uACwF7iTQjhAPorU1jH89WMD?=
- =?us-ascii?Q?3dBQrh9HRj/H2fKNK9ZryMHgEwGSHIJaL1bxGvckGh+Fss8zK4NgFmwMvNe5?=
- =?us-ascii?Q?8MwCqgjcyHUd1Qae8IQZ6114c6Q7FfyyVo1QZzpV6LY6BpbqbVJ3pAjowpxq?=
- =?us-ascii?Q?apAZ3LXBcoWWmb9r/cFMT8FDLJCOTZBGOc+eNSHzon7Wnv3wTmcyO8D18UtJ?=
- =?us-ascii?Q?M9JkiUdIpu1TIY2MXpyWLkyQb0NtDZjODFuOC92Ptz3LQAPu8QSx+n40DzPf?=
- =?us-ascii?Q?FymOFlA85ZrHKnK6PziPzoepQNoFnHZnZt7z956ar+mhK5BPOI2ltpR0L5L9?=
- =?us-ascii?Q?ASDBWdz//vbByCxBhGun2K77U7HMFj1y1pSSosKflHGhQDl8LRgNQwZnSNlI?=
- =?us-ascii?Q?lBvHcX+wN32ki/ZgjwRwCKVRZggTdsYMnFFGU8R2eIw+DcbHfAAD288pN6h4?=
- =?us-ascii?Q?Ws7um7d42SH3N+wq3N5JDwKOzFn3lPiXSuGDW6nUlyrkoR3cXS1Z4vLSoZJd?=
- =?us-ascii?Q?5738LOrPZNWX38OpL9MJ9qkVxiec/Nvzvn8KSeyzRk6DNvl/fX7IQ51D8eI4?=
- =?us-ascii?Q?0I2P7HPIBqUFuKS6N09hk89YORzDXUtLei3vnJDHqYlb+JRncA+dG85stfbk?=
- =?us-ascii?Q?xpaHBXWLvvr8Raxq2oD/L3br9af/4c7PXtwUaIBuJBPj3DWDP7zeCalZOpk9?=
- =?us-ascii?Q?IdNA8M49oWkfX2oyS5MVf9cMk/oUDhI9RR+5h3EhjIRYllYbBocCXLyO87ko?=
- =?us-ascii?Q?R19UmE98zbDo00yz9d+nhkQ03YStwmOwLTQkm1kZ9LDEpOCQ9HbeKj6ismrQ?=
- =?us-ascii?Q?p7Vy+ZLaQBvMu6pJ6Ji4y8+n+K0o1lK+TlvL5/RhCxv7fjPllbQad+dA+ujA?=
- =?us-ascii?Q?9DKdw3v6vc0pc2VHGO5fie3eF2vps3myqTwaJtmIx1aT3hg5W6p4JOO+rIwP?=
- =?us-ascii?Q?TZUHjs+KVZiGMEafEbeXaWD2s7gaT+zTM8vrMVsP9AvTGCGF5D4cf3+7JdMd?=
- =?us-ascii?Q?r1+GwD8zc4MDkKEECXImEpMBVUS/nYTnJCOi44E0nuD0KsZ4TYZ5PVew0FND?=
- =?us-ascii?Q?F/pTiOnANLaC9DnUVqCl/AettOMYArnSpaGOf3EHKK8R0r6zgh5ymc8ACU6i?=
- =?us-ascii?Q?Z2MeJ8BkZBHaVai1Xcer+mgSLFo7r1Xt7rYSAHN3R+gv+E5JsaXsQiCOq5T+?=
- =?us-ascii?Q?9oa536+3mZbZuSLEuliK9STpQYFa+Cy4oOFEfBS50t1pt+cPvQMJsA71qcUJ?=
- =?us-ascii?Q?cLgZYpwuqNf8LA4jA3Bqi+n1m8wvQNdON4msTmPWyo1piUtP1q9SGPvvQ0+4?=
- =?us-ascii?Q?d5Ow5Y2cav/7cYzkVpt0Dyzcmowk1PSCgPbrvLGcyi5arbDpVfFxYe4659/L?=
- =?us-ascii?Q?2Jx4I/D5usgzz358bmC4pwo6vEci+4T6dD++0qe9e40UASTD5uTEjT1PrNne?=
- =?us-ascii?Q?zQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65577017-c9a4-4f4b-5212-08daf4e5b557
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/0H3Okc3UDktDDLcOZqHjwd6/+7Alo/+MilCZdTRAcqkPFpfSIfzU0k4+ozS?=
+ =?us-ascii?Q?+jDzrvfcQ2ZBy06w6PcE5tqQw8PJeV5YKftNx2AXVCvjz/WML3v2i7MuygJt?=
+ =?us-ascii?Q?9Kky7bRiaGce7129BHRF0bEFWO4WBRQi2qs6f9WDkJN0XdJS420DBOiqLyJn?=
+ =?us-ascii?Q?zbKCTSOA6GG3kQIvsw/4PRWhE9FNUdjxKwt5aVkFB4ZDaZf0kGIrou3Wd797?=
+ =?us-ascii?Q?uEaiXJ8DOMRjazn3qKaYsnDLz35mSDElyGTvfzau0u82PlKU3RDa0Jp/hRkZ?=
+ =?us-ascii?Q?i42QwcRUQNnz7kTeizx8QlwgLTDG/j9YrBlVQFJi6ROwbYeuZUnmyxYpiuRW?=
+ =?us-ascii?Q?xGY2mnmlJIfXmWp3vZpj6zNltOs/wg+XXsyMN4D3VsEJK/A0BVa2DyGgc25L?=
+ =?us-ascii?Q?oPHIBG2QcV2Hma6wemZ8rUx+0K03UpqgqIYRlzExxgH1L4MHmpYzW9H0EK1j?=
+ =?us-ascii?Q?YdyBeYda+jCaF26S5rH+B6AWodVl6aUKmQfWuD3v+0K/wTWYgzpE1sgjQuEs?=
+ =?us-ascii?Q?ULMENo78AuPxLAcOb6CVswySstklHi4RSxWw1jnnE6Pc1ZiiO4/3rGWJ1l5R?=
+ =?us-ascii?Q?p07KMXNPZ/y1T/QY6+4EGaKyllNNHW0UmjuAEzxb+X5ay5uCM3uB6WT4X36V?=
+ =?us-ascii?Q?VWlSYenPacciYI2OJO3fW6TG1J0Su16TFiH4prbC82QIrcASWMfFgQ2I4kNM?=
+ =?us-ascii?Q?B3ouBvXz8LzRxxFjC/CXArpAcoqc/3V2sr06lPfo7i34VhEExvhXoJNiTqyx?=
+ =?us-ascii?Q?UgyU/FrwTjUvKS3PqiRIkzClufNvRt7DVg50VBQLmx1pjokuOt2Z9NPzPKE6?=
+ =?us-ascii?Q?PCP/Y6r72KY2JHw4VM62WvUtCyhArMZP8RODpmJK8J3uAqVdFIflGg3mNf4k?=
+ =?us-ascii?Q?xrR+ksLrEnakd9Yfnr++ZBvM5NxRDdiFsT1srCBn6kIFxFB69ozza1lOdDSJ?=
+ =?us-ascii?Q?dq2VtRa9NIhfVcPLnCK/cEZTZmSjD0Dq9ZEifmo2Cqvv9dgCPC5P5BFAwTJ1?=
+ =?us-ascii?Q?XDUF5djo4AZJ1GGu7sBR2NLxYoAISeQAuVpMP671DaZStBqjJNUgJr8zquw7?=
+ =?us-ascii?Q?ymMLFY674aPi964yk7jHoZxYel/FwuAvHYbh2zSqRvHChL1owyRmKbtgPlfC?=
+ =?us-ascii?Q?Sibo+KjGrHFk3h5h4PJV7oPTL8IKdfZROA8EG475yGYTuQjHaXvEk7Z4ArpM?=
+ =?us-ascii?Q?gZid31cXrAxXwANLkfjqDfyYh1esSYnzhZRE82+xhSnCC2WWZMKRPGVrFE4I?=
+ =?us-ascii?Q?lWVvf88aUIPXUJj+M6tEG481f7mwzovBCl6V9gSV+lpwGdesIszkc5kypQ6c?=
+ =?us-ascii?Q?jdhtg+3r5jgpU/NZqJEsDtxePITfdbpd9KXqT+kHG1aPdqcGLPrVIv5Su+6V?=
+ =?us-ascii?Q?VhCSmzQIWFVSStvhR4gPQSqSf7D3ImR3cTrPRiTj1WcyjQPZu1rysf54DO7r?=
+ =?us-ascii?Q?yjpmPNdcslGPF8RvKfJxxbK2G9Np1Ow/wYwHpM1QjA/iwv+w30kPSKJr34lD?=
+ =?us-ascii?Q?uIx5D6XgwB7fwZ/mQKpSyS6StWQQPmcUo76uuJs3Oziy18qhZXTg/M5WvlJv?=
+ =?us-ascii?Q?8vocCGuuxXff0ue24eG4QQZIvBX4vhsGDD2WFjtvWSPqXNIwWhZUIeVA4Dxy?=
+ =?us-ascii?Q?Mw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8dbcf2ee-0fc6-4c61-df75-08daf4e59a66
 X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 21:41:05.7495
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 21:40:20.3966
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kvAXQhT9cqhRVCfIb9tJV9SRUS5FjPEfpFF9y9dBNcBATd+GTtLHw02EY25DRUYr8XGIU5+Bv4jcxLQ+yC+9uDCWcp7Kk63stRD3RBizLsw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4669
+X-MS-Exchange-CrossTenant-UserPrincipalName: BjcdfZAcBrHJmIqNGLeezQ19Rs3LCfmByqlHBXuLvoap+g3Zdm6IVlNOogfJUhLF1pm+dGmXMXpSub5B6XQF7ZFS7Ut8P/IU2+zzUnlPkec=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6391
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote:
->Currently modversion uses a fixed size array of size (64 - sizeof(long))
->to store symbol names, thus placing a hard limit on length of symbols.
->Rust symbols (which encodes crate and module names) can be quite a bit
->longer. The length limit in kallsyms is increased to 512 for this reason.
+On Wed, Jan 11, 2023 at 12:29:36PM -0300, Gustavo Sousa wrote:
+>This is useful to kernel module developers for testing a just compiled
+>module: instead of using insmod, they can load the module from the path
+>while getting all the benefits of modprobe (e.g. module dependency
+>resolution).
 >
->It's a waste of space to simply expand the fixed array size to 512 in
->modversion info entries. I therefore make it variably sized, with offset
->to the next entry indicated by the initial "next" field.
->
->In addition to supporting longer-than-56/60 byte symbols, this patch also
->reduce the size for short symbols by getting rid of excessive 0 paddings.
->There are still some zero paddings to ensure "next" and "crc" fields are
->properly aligned.
->
->This patch does have a tiny drawback that it makes ".mod.c" files generated
->a bit less easy to read, as code like
->
->	"\x08\x00\x00\x00\x78\x56\x34\x12"
->	"symbol\0\0"
->
->is generated as opposed to
->
->	{ 0x12345678, "symbol" },
->
->because the structure is now variable-length. But hopefully nobody reads
->the generated file :)
->
->Link: b8a94bfb3395 ("kallsyms: increase maximum kernel symbol length to 512")
->Link: https://github.com/Rust-for-Linux/linux/pull/379
->
->Signed-off-by: Gary Guo <gary@garyguo.net>
+>Signed-off-by: Gustavo Sousa <gustavo.sousa@intel.com>
 >---
-> arch/powerpc/kernel/module_64.c |  3 ++-
-> include/linux/module.h          |  6 ++++--
-> kernel/module/version.c         | 21 +++++++++------------
-> scripts/export_report.pl        |  9 +++++----
-> scripts/mod/modpost.c           | 33 +++++++++++++++++++++++----------
-> 5 files changed, 43 insertions(+), 29 deletions(-)
+> man/modprobe.xml                              |   5 +++
+> testsuite/populate-modules.sh                 |   1 +
+> .../lib/modules/4.4.4/modules.alias           |   1 +
+> .../lib/modules/4.4.4/modules.alias.bin       | Bin 0 -> 12 bytes
+> .../lib/modules/4.4.4/modules.builtin.bin     |   0
+> .../lib/modules/4.4.4/modules.dep             |   1 +
+> .../lib/modules/4.4.4/modules.dep.bin         | Bin 0 -> 73 bytes
+> .../lib/modules/4.4.4/modules.devname         |   0
+> .../lib/modules/4.4.4/modules.softdep         |   1 +
+> .../lib/modules/4.4.4/modules.symbols         |   1 +
+> .../lib/modules/4.4.4/modules.symbols.bin     | Bin 0 -> 12 bytes
+> .../module-from-path/proc/modules             |   0
+> testsuite/test-modprobe.c                     |  22 ++++++++++++
+> tools/modprobe.c                              |  34 ++++++++++++------
+> 14 files changed, 56 insertions(+), 10 deletions(-)
+> create mode 100644 testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.alias
+> create mode 100644 testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.alias.bin
+> create mode 100644 testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.builtin.bin
+> create mode 100644 testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.dep
+> create mode 100644 testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.dep.bin
+> create mode 100644 testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.devname
+> create mode 100644 testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.softdep
+> create mode 100644 testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.symbols
+> create mode 100644 testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.symbols.bin
+> create mode 100644 testsuite/rootfs-pristine/test-modprobe/module-from-path/proc/modules
 >
->diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
->index ff045644f13f..eac23c11d579 100644
->--- a/arch/powerpc/kernel/module_64.c
->+++ b/arch/powerpc/kernel/module_64.c
->@@ -236,10 +236,11 @@ static void dedotify_versions(struct modversion_info *vers,
+>diff --git a/man/modprobe.xml b/man/modprobe.xml
+>index db39c7a18bb7..615466977f6a 100644
+>--- a/man/modprobe.xml
+>+++ b/man/modprobe.xml
+>@@ -115,6 +115,11 @@
+>       kernel (in addition to any options listed in the configuration
+>       file).
+>     </para>
+>+    <para>
+>+      When loading modules, <replaceable>modulename</replaceable> can also
+>+      be a path to the module. If the path is relative, it must
+>+      explicitly start with "./".
+
+we may extend this to mention that loading from a random location may fail
+when the depmod database is not updated.  The depmod database is usually
+updated with kernel (or module) installation - the dependencies there may not be
+up-to-date if a random path is used.
+
+
+>+    </para>
+>   </refsect1>
+>
+>   <refsect1><title>OPTIONS</title>
+>diff --git a/testsuite/populate-modules.sh b/testsuite/populate-modules.sh
+>index 099f02669156..652279eda728 100755
+>--- a/testsuite/populate-modules.sh
+>+++ b/testsuite/populate-modules.sh
+>@@ -56,6 +56,7 @@ map=(
+>     ["test-modprobe/alias-to-none/lib/modules/4.4.4/kernel/"]="mod-simple.ko"
+>     ["test-modprobe/module-param-kcmdline/lib/modules/4.4.4/kernel/"]="mod-simple.ko"
+>     ["test-modprobe/external/lib/modules/external/"]="mod-simple.ko"
+>+    ["test-modprobe/module-from-path/home/foo/"]="mod-simple.ko"
+>     ["test-depmod/modules-order-compressed/lib/modules/4.4.4/kernel/drivers/block/cciss.ko"]="mod-fake-cciss.ko"
+>     ["test-depmod/modules-order-compressed/lib/modules/4.4.4/kernel/drivers/scsi/hpsa.ko"]="mod-fake-hpsa.ko"
+>     ["test-depmod/modules-order-compressed/lib/modules/4.4.4/kernel/drivers/scsi/scsi_mod.ko"]="mod-fake-scsi-mod.ko"
+>diff --git a/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.alias b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.alias
+>new file mode 100644
+>index 000000000000..ba76e1815af0
+>--- /dev/null
+>+++ b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.alias
+>@@ -0,0 +1 @@
+>+# Aliases extracted from modules themselves.
+>diff --git a/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.alias.bin b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.alias.bin
+>new file mode 100644
+>index 0000000000000000000000000000000000000000..7075435f6268c4d815aec093d61e26647666ba76
+>GIT binary patch
+>literal 12
+>TcmdnM{w17&iGh)Ufq@4A6;A>Z
+>
+>literal 0
+>HcmV?d00001
+>
+>diff --git a/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.builtin.bin b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.builtin.bin
+>new file mode 100644
+>index 000000000000..e69de29bb2d1
+>diff --git a/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.dep b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.dep
+>new file mode 100644
+>index 000000000000..e612900c5de7
+>--- /dev/null
+>+++ b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.dep
+>@@ -0,0 +1 @@
+>+/lib/modules/external/mod-simple.ko:
+>diff --git a/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.dep.bin b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.dep.bin
+>new file mode 100644
+>index 0000000000000000000000000000000000000000..556e3c8142d5d85dba5b557474907f9f9dd99dcb
+>GIT binary patch
+>literal 73
+>zcmdnM{w17&iGfjpfx$UHCB8T_w;(5#0SFjDgnmwDl74P}N@-4Nv3_brNorAEVh%_^
+>S7ot!vJKu^SH}?Po0}lY-ZWUAj
+>
+>literal 0
+>HcmV?d00001
+>
+>diff --git a/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.devname b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.devname
+>new file mode 100644
+>index 000000000000..e69de29bb2d1
+>diff --git a/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.softdep b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.softdep
+>new file mode 100644
+>index 000000000000..5554ccca7f9e
+>--- /dev/null
+>+++ b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.softdep
+>@@ -0,0 +1 @@
+>+# Soft dependencies extracted from modules themselves.
+>diff --git a/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.symbols b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.symbols
+>new file mode 100644
+>index 000000000000..618c345f7e93
+>--- /dev/null
+>+++ b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.symbols
+>@@ -0,0 +1 @@
+>+# Aliases for symbols, used by symbol_request().
+>diff --git a/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.symbols.bin b/testsuite/rootfs-pristine/test-modprobe/module-from-path/lib/modules/4.4.4/modules.symbols.bin
+>new file mode 100644
+>index 0000000000000000000000000000000000000000..7075435f6268c4d815aec093d61e26647666ba76
+>GIT binary patch
+>literal 12
+>TcmdnM{w17&iGh)Ufq@4A6;A>Z
+>
+>literal 0
+>HcmV?d00001
+>
+>diff --git a/testsuite/rootfs-pristine/test-modprobe/module-from-path/proc/modules b/testsuite/rootfs-pristine/test-modprobe/module-from-path/proc/modules
+>new file mode 100644
+>index 000000000000..e69de29bb2d1
+>diff --git a/testsuite/test-modprobe.c b/testsuite/test-modprobe.c
+>index 0255f1aaccb5..3f8a430c09e4 100644
+>--- a/testsuite/test-modprobe.c
+>+++ b/testsuite/test-modprobe.c
+>@@ -422,4 +422,26 @@ DEFINE_TEST(modprobe_external,
+> 	.modules_loaded = "mod-simple",
+> 	);
+>
+>+static noreturn int modprobe_module_from_path(const struct test *t)
+>+{
+>+	const char *progname = ABS_TOP_BUILDDIR "/tools/modprobe";
+>+	const char *const args[] = {
+>+		progname,
+>+		"/home/foo/mod-simple.ko",
+>+		NULL,
+>+	};
+>+
+>+	test_spawn_prog(progname, args);
+>+	exit(EXIT_FAILURE);
+>+}
+
+missing a test for relative path?
+
+>+DEFINE_TEST(modprobe_module_from_path,
+>+	.description = "check modprobe able to load module given as a direct path",
+>+	.config = {
+>+		[TC_UNAME_R] = "4.4.4",
+>+		[TC_ROOTFS] = TESTSUITE_ROOTFS "test-modprobe/module-from-path",
+>+		[TC_INIT_MODULE_RETCODES] = "",
+>+	},
+>+	.modules_loaded = "mod-simple",
+>+	);
+>+
+> TESTSUITE_MAIN();
+>diff --git a/tools/modprobe.c b/tools/modprobe.c
+>index d4012fab39f8..3b7897c1b8e4 100644
+>--- a/tools/modprobe.c
+>+++ b/tools/modprobe.c
+>@@ -614,14 +614,23 @@ static int insmod(struct kmod_ctx *ctx, const char *alias,
+> 						const char *extra_options)
 > {
-> 	struct modversion_info *end;
+> 	struct kmod_list *l, *list = NULL;
+>+	struct kmod_module *mod = NULL;
+> 	int err, flags = 0;
 >
->-	for (end = (void *)vers + size; vers < end; vers++)
->+	for (end = (void *)vers + size; vers < end; vers = (void *)vers + vers->next) {
-> 		if (vers->name[0] == '.') {
-> 			memmove(vers->name, vers->name+1, strlen(vers->name));
-> 		}
->+	}
-> }
+>-	err = kmod_module_new_from_lookup(ctx, alias, &list);
+>-
+>-	if (list == NULL || err < 0) {
+>-		LOG("Module %s not found in directory %s\n", alias,
+>-			ctx ? kmod_get_dirname(ctx) : "(missing)");
+>-		return -ENOENT;
+>+	if (strncmp(alias, "/", 1) == 0 || strncmp(alias, "./", 2) == 0) {
+
+an alias may start with / or ./, so in theory there could be
+regressions. At least in the kernel we have none:
+
+$ cat /lib/modules/$(uname -r)/modules.alias | grep /
+alias devname:net/tun tun
+alias dmi:bvnIBM:*:pnIBM3850M2/x3950M2-* ibmaem
+alias devname:mapper/control dm_mod
+alias dmi:*:svnMICRO-STARINTERNATIONAL*:pnU90/U100:* msi_laptop
+alias dmi*:svn*SAMSUNGELECTRONICSCO.,LTD.*:pn*300V3Z/300V4Z/300V5Z*: samsung_laptop
+alias dmi*:svn*SAMSUNGELECTRONICSCO.,LTD.*:pn*730U3E/740U3E*: samsung_laptop
+alias dmi*:svn*SAMSUNGELECTRONICSCO.,LTD.*:pn*NC210/NC110*:rn*NC210/NC110*: samsung_laptop
+alias dmi*:svn*SAMSUNGELECTRONICSCO.,LTD.*:pn*NF110/NF210/NF310*:rn*NF110/NF210/NF310*: samsung_laptop
+alias dmi*:svn*SAMSUNGELECTRONICSCO.,LTD.*:pn*N150/N210/N220*:rn*N150/N210/N220*: samsung_laptop
+alias dmi*:svn*SAMSUNGELECTRONICSCO.,LTD.*:pn*N145P/N250P/N260P*:rn*N145P/N250P/N260P*: samsung_laptop
+alias dmi*:svn*SAMSUNGELECTRONICSCO.,LTD.*:pn*R40/R41*:rn*R40/R41*: samsung_laptop
+alias devname:vfio/vfio vfio
+alias devname:snd/timer snd_timer
+alias devname:snd/seq snd_seq
+
+But it could come from user configuration in /etc. Realistically
+speaking I've never seen a "user alias" with /, so I guess we can keep
+it like this. If we see regressions, we may try to use a fallback
+approach to kmod_module_new_from_lookup() if kmod_module_new_from_path()
+fails with ENOENT.
+
+>+		err = kmod_module_new_from_path(ctx, alias, &mod);
+>+		if (err < 0) {
+>+			LOG("Failed to get module from path %s: %s\n", alias,
+>+				strerror(-err));
+>+			return -ENOENT;
+>+		}
+>+	} else {
+>+		err = kmod_module_new_from_lookup(ctx, alias, &list);
+>+		if (list == NULL || err < 0) {
+>+			LOG("Module %s not found in directory %s\n", alias,
+>+				ctx ? kmod_get_dirname(ctx) : "(missing)");
+>+			return -ENOENT;
+>+		}
+> 	}
 >
-> /*
->diff --git a/include/linux/module.h b/include/linux/module.h
->index 8c5909c0076c..37cb25af9099 100644
->--- a/include/linux/module.h
->+++ b/include/linux/module.h
->@@ -34,8 +34,10 @@
-> #define MODULE_NAME_LEN MAX_PARAM_PREFIX_LEN
+> 	if (strip_modversion || force)
+>@@ -642,13 +651,18 @@ static int insmod(struct kmod_ctx *ctx, const char *alias,
+> 	if (first_time)
+> 		flags |= KMOD_PROBE_FAIL_ON_LOADED;
 >
-> struct modversion_info {
->-	unsigned long crc;
->-	char name[MODULE_NAME_LEN];
->+	/* Offset of the next modversion entry in relation to this one. */
->+	u32 next;
->+	u32 crc;
->+	char name[0];
+>-	kmod_list_foreach(l, list) {
+>-		struct kmod_module *mod = kmod_module_get_module(l);
+>+	/* If module is loaded from path */
+>+	if (mod != NULL) {
+> 		err = insmod_insert(mod, flags, extra_options);
+> 		kmod_module_unref(mod);
+>+	} else {
+>+		kmod_list_foreach(l, list) {
+>+			mod = kmod_module_get_module(l);
+>+			err = insmod_insert(mod, flags, extra_options);
+>+			kmod_module_unref(mod);
+>+		}
+>+		kmod_module_unref_list(list);
+> 	}
+>-
+>-	kmod_module_unref_list(list);
 
-although not really exported as uapi, this will break userspace as this is
-used in the  elf file generated for the modules. I think
-this change must be made in a backward compatible way and kmod updated
-to deal with the variable name length:
+feel free to add a Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
+with the changes mentioned above.
 
-kmod $ git grep "\[64"
-libkmod/libkmod-elf.c:  char name[64 - sizeof(uint32_t)];
-libkmod/libkmod-elf.c:  char name[64 - sizeof(uint64_t)];
-
-in kmod we have both 32 and 64 because a 64-bit kmod can read both 32
-and 64 bit module, and vice versa.
-
+thanks
 Lucas De Marchi
 
-> };
->
-> struct module;
->diff --git a/kernel/module/version.c b/kernel/module/version.c
->index 53f43ac5a73e..af7478dcc158 100644
->--- a/kernel/module/version.c
->+++ b/kernel/module/version.c
->@@ -17,32 +17,29 @@ int check_version(const struct load_info *info,
-> {
-> 	Elf_Shdr *sechdrs = info->sechdrs;
-> 	unsigned int versindex = info->index.vers;
->-	unsigned int i, num_versions;
->-	struct modversion_info *versions;
->+	struct modversion_info *versions, *end;
->+	u32 crcval;
->
-> 	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
-> 	if (!crc)
-> 		return 1;
->+	crcval = *crc;
->
-> 	/* No versions at all?  modprobe --force does this. */
-> 	if (versindex == 0)
-> 		return try_to_force_load(mod, symname) == 0;
->
-> 	versions = (void *)sechdrs[versindex].sh_addr;
->-	num_versions = sechdrs[versindex].sh_size
->-		/ sizeof(struct modversion_info);
->+	end = (void *)versions + sechdrs[versindex].sh_size;
->
->-	for (i = 0; i < num_versions; i++) {
->-		u32 crcval;
->-
->-		if (strcmp(versions[i].name, symname) != 0)
->+	for (; versions < end; versions = (void *)versions + versions->next) {
->+		if (strcmp(versions->name, symname) != 0)
-> 			continue;
->
->-		crcval = *crc;
->-		if (versions[i].crc == crcval)
->+		if (versions->crc == crcval)
-> 			return 1;
->-		pr_debug("Found checksum %X vs module %lX\n",
->-			 crcval, versions[i].crc);
->+		pr_debug("Found checksum %X vs module %X\n",
->+			 crcval, versions->crc);
-> 		goto bad_version;
-> 	}
->
->diff --git a/scripts/export_report.pl b/scripts/export_report.pl
->index feb3d5542a62..1117646f3141 100755
->--- a/scripts/export_report.pl
->+++ b/scripts/export_report.pl
->@@ -116,18 +116,19 @@ foreach my $thismod (@allcfiles) {
-> 	while ( <$module> ) {
-> 		chomp;
-> 		if ($state == 0) {
->-			$state = 1 if ($_ =~ /static const struct modversion_info/);
->+			$state = 1 if ($_ =~ /static const char ____versions/);
-> 			next;
-> 		}
-> 		if ($state == 1) {
->-			$state = 2 if ($_ =~ /__attribute__\(\(section\("__versions"\)\)\)/);
->+			$state = 2 if ($_ =~ /__used __section\("__versions"\)/);
-> 			next;
-> 		}
-> 		if ($state == 2) {
->-			if ( $_ !~ /0x[0-9a-f]+,/ ) {
->+			if ( $_ !~ /\\0"/ ) {
->+				last if ($_ =~ /;/);
-> 				next;
-> 			}
->-			my $sym = (split /([,"])/,)[4];
->+			my $sym = (split /(["\\])/,)[2];
-> 			my ($module, $value, $symbol, $gpl) = @{$SYMBOL{$sym}};
-> 			$SYMBOL{ $sym } =  [ $module, $value+1, $symbol, $gpl];
-> 			push(@{$MODULE{$thismod}} , $sym);
->diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
->index efff8078e395..334d170de31f 100644
->--- a/scripts/mod/modpost.c
->+++ b/scripts/mod/modpost.c
->@@ -2046,13 +2046,17 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
-> static void add_versions(struct buffer *b, struct module *mod)
-> {
-> 	struct symbol *s;
->+	unsigned int name_len;
->+	unsigned int name_len_padded;
->+	unsigned int tmp;
->+	unsigned char *tmp_view = (unsigned char *)&tmp;
->
-> 	if (!modversions)
-> 		return;
->
-> 	buf_printf(b, "\n");
->-	buf_printf(b, "static const struct modversion_info ____versions[]\n");
->-	buf_printf(b, "__used __section(\"__versions\") = {\n");
->+	buf_printf(b, "static const char ____versions[]\n");
->+	buf_printf(b, "__used __section(\"__versions\") =\n");
->
-> 	list_for_each_entry(s, &mod->unresolved_symbols, list) {
-> 		if (!s->module)
->@@ -2062,16 +2066,25 @@ static void add_versions(struct buffer *b, struct module *mod)
-> 				s->name, mod->name);
-> 			continue;
-> 		}
->-		if (strlen(s->name) >= MODULE_NAME_LEN) {
->-			error("too long symbol \"%s\" [%s.ko]\n",
->-			      s->name, mod->name);
->-			break;
->-		}
->-		buf_printf(b, "\t{ %#8x, \"%s\" },\n",
->-			   s->crc, s->name);
->+		name_len = strlen(s->name);
->+		name_len_padded = (name_len + 1 + 3) & ~3;
->+
->+		/* Offset to next entry */
->+		tmp = TO_NATIVE(8 + name_len_padded);
->+		buf_printf(b, "\t\"\\x%02x\\x%02x\\x%02x\\x%02x",
->+			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
->+
->+		tmp = TO_NATIVE(s->crc);
->+		buf_printf(b, "\\x%02x\\x%02x\\x%02x\\x%02x\"\n",
->+			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
->+
->+		buf_printf(b, "\t\"%s", s->name);
->+		for (; name_len < name_len_padded; name_len++)
->+			buf_printf(b, "\\0");
->+		buf_printf(b, "\"\n");
-> 	}
->
->-	buf_printf(b, "};\n");
->+	buf_printf(b, ";\n");
+> 	return err;
 > }
 >
-> static void add_depends(struct buffer *b, struct module *mod)
 >-- 
->2.34.1
+>2.39.0
 >
