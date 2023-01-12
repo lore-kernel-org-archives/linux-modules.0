@@ -2,333 +2,761 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29D44C5479D
-	for <linux-modules@archiver.kernel.org>; Wed, 11 Jan 2023 16:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6261EC54EBD
+	for <linux-modules@archiver.kernel.org>; Thu, 12 Jan 2023 09:08:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjAKQNe (ORCPT
+        id S236775AbjALJI4 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 11 Jan 2023 11:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        Thu, 12 Jan 2023 04:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbjAKQMv (ORCPT
+        with ESMTP id S232408AbjALJIH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 11 Jan 2023 11:12:51 -0500
-Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2122.outbound.protection.outlook.com [40.107.10.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F3B17428;
-        Wed, 11 Jan 2023 08:12:49 -0800 (PST)
+        Thu, 12 Jan 2023 04:08:07 -0500
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2085.outbound.protection.outlook.com [40.107.105.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5602354D92;
+        Thu, 12 Jan 2023 01:03:15 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QC1hqiAJHYH5+bIKXeodj9Icq6eHv6+qeDKz4AOflShcu/3zRFmz0M5za1/AgI5ThUuXoS7gECMK3LmqWfeMZQULc6ucZ+2p6NMaOFWpvmYKLtVsFlQOyykrsWy3ptIXgehUjNnsl2dD4dEpXGaden0rvc31DXjw9ZBe7WGfIeL0RcppzpiuEWdT88D9d82P0tEov19loQKu7t8E7sFhY+MilIIItlyg2nnkXeG+6pBtjkJx3JK7b8VUibrwsCpB/E+JsumQd2HBUDcCGH3lQBmon3Jn7z7CXbm/GUSqNwtkkZ9joT2CjatCJZMpSwklvzazVr6pgkfGIC8nuNYiOw==
+ b=g9y/afsb6sE2r2/wtnmBSrzWg1/q4gyqOktJ7m7/tg0RBdcHvq/voUPL57VgzBz36mZmvFYdPK9BBFrSjzwRYXq6gmfPH5/nBm2j1qAc/OUH7zxBJNsHMddbflRzbKeN9IYYY9jrwhvVpZsJrh9gpmbE20+XnZG+3diBLzbpGUZSJ7bwHU+oGdMkkjWZHCO5AiIq5Ba7kyCSEq6jNJ4dYk3Sb+js6RYwWUq0DkxNqraz4snPMpyfVn6n23+G05Yl9KQdVH9LyjCNLTwjO5DensoL/oGK0+zhwNYgEW+Ts7HG1TKAz8f7TkHNPykzDkjfxyKRgjMtaU9d4nLWL14/kQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L/cq4syBM13khIYt0eqs+Kr3V5n1BlMlzvV04z7ICwk=;
- b=Ujv6Pz/Qqd5/GCBZjWs3dRw0vTNR8aIKpezc3mqYYyBtgU7dU6RVce2ejJzE3XGQVBMOKnppsCtAGnFqcXXntGn/oIAPfe3gRfQkI4hyCl2DWhXecxLPjornP6+0rt303CTTAX2z3GRgDl2lpAy8KeVXtWDTg2H6maxUcmKF/ztm2OGdAaLL1hAdb73x8n3L4eHNHMKFK25sF+OIjU+DhZV/VZPsFM5zZYyz24EGLsFFmAsfWqcA6ByHXJlUBgeS7fpXimvfqDebKc3mCqv8FSex3IwWRLCeDepd8G/k/pijfukh5rf6X4SX3fpM/fBVMZYEKcREq+veqPvudlLUlg==
+ bh=DH7WtKxagz9CPz2HPUJ2ialOVjez0pBI+23lAOajIUs=;
+ b=HWFYwhJSgx6KsAnSt22nAl1vg8mjG/n1zMba6RrYCThMYZ51I2TWnXLHKiNEFEVj8RxeM5qo5BQDZ2znNoYdoKwTVOBCDFQGbkYKSPKzGSgEUqqSHF+D/267aGtPHjcs2s76FbBr2BqDkqu1/KZbV2bmcjqDnqU0pdCXSzWmMRUbogasrykOlxX8jFnfXbtu41HTZllBrXgmR5sXp4Nxx3UEwWN7AuUAhqRPAv3pgVbnXYrQ4YU1THGv/JWNtXC+QiyXAA91A3LEo0YsPlJDUpsw/7waIyJcRt0cUWK9SFeZK13tU/lLbBTOpI85p5lDGC8CmsR1G/2mAWkw7meg2A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L/cq4syBM13khIYt0eqs+Kr3V5n1BlMlzvV04z7ICwk=;
- b=cj6OYVDytQ/whMk8jahTqaTfXoxqdyKmEKNo1p7hYeju24zO48dnKH8pYozPSYOmCub0+/NQBnfdqRrrbnPP+KjPuBhJysPuSHc8rPU6Gi0H6cFBkCKVYAVNLqlNqQBO2w+4p+Z4CEvTmdMG4yGXGC+aiEeUeGC4qWCcpFi7jr8=
+ bh=DH7WtKxagz9CPz2HPUJ2ialOVjez0pBI+23lAOajIUs=;
+ b=3YeGRaDyrjozb+aQLxx8dOXRYxoygdOUjpLWmN/wftH5pTaUhFX6GHrkY8UuYp2GofU7C98bzzXYzmzZxPhj/EVJ89SkLY+mrvpy1BpiYCMzFPWkf47ofdO3rbExmhf5EjzQjG2qgNuXzwkyoRDXWFAM0GbTEkjJwAzMWElloeRffCY8UDydJEv+KuQ+jN5VeAfOBkPgRD//uBxn4U3lE0blcC3EX+oDmwYl6SBHUbgwcK0RvcropN+FitYWXpRbrVyc1ipDoXdM7efkRXTiTZZRf+10RaxrtDFzQiJY11cFwt3x4OlHRJC5+9Z1Zw23pfBhdivpZDDcTJjCTqBf3Q==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CWXP265MB5370.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1bd::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Wed, 11 Jan
- 2023 16:12:47 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f24:8099:5588:8ba8]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f24:8099:5588:8ba8%7]) with mapi id 15.20.5986.018; Wed, 11 Jan 2023
- 16:12:47 +0000
-From:   Gary Guo <gary@garyguo.net>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Wedson Almeida Filho <wedsonaf@google.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        rust-for-linux@vger.kernel.org
-Subject: [PATCH] modpost: support arbitrary symbol length in modversion
-Date:   Wed, 11 Jan 2023 16:11:51 +0000
-Message-Id: <20230111161155.1349375-1-gary@garyguo.net>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0658.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:316::7) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16) by AM0PR04MB7044.eurprd04.prod.outlook.com
+ (2603:10a6:208:191::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Thu, 12 Jan
+ 2023 09:03:12 +0000
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::8f8e:a358:3bc6:48d1]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::8f8e:a358:3bc6:48d1%7]) with mapi id 15.20.6002.013; Thu, 12 Jan 2023
+ 09:03:12 +0000
+Message-ID: <edeee00c-c101-460a-0682-a2fa638b95f4@suse.com>
+Date:   Thu, 12 Jan 2023 10:03:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 4/4] selftests: kmod: Add tests for merging same-name
+ module load requests
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     mcgrof@kernel.org, david@redhat.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221016123031.3963-1-petr.pavlu@suse.com>
+ <20221016123031.3963-5-petr.pavlu@suse.com> <Y01d50Z2DK3f9V+Q@alley>
+From:   Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <Y01d50Z2DK3f9V+Q@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0070.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9a::9) To AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWXP265MB5370:EE_
-X-MS-Office365-Filtering-Correlation-Id: f6811b3c-3412-4454-ece1-08daf3eeadba
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|AM0PR04MB7044:EE_
+X-MS-Office365-Filtering-Correlation-Id: f22dc928-dc40-48e5-acb9-08daf47bd4d5
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /qJs+ZDvWZ9cC0Ut9vOREaRYPAIDJA0HF3Svy983Qc/JSHcYnTlBbudX+deV05fAxoXjNbo3oIM9pwCHim4Hb0AC4/i9lkGVqbqz4fFliIF5XsKe4RV2MZzEjErw1tLFCv85aeDeTbg1DDFlL9AQT/TTXdWSWLn2eTZLb3eF9j96dFxa2shz1D7FvDbOVSbFXE2W+hG3iMPH2uCNNlCmRHLkyM6jFIDnGOtnxmgLXIb4MNBoXEFnyNg2CY4QEuqAGJ0dM+uFIyBdS8bazTQNOVvokaoJYd/oLV6ORzOcQIpX9qSKGOLMQcT1SdGOZGOOHV1uSRhKIpYB1c1NS+QkdkBbrMLmo4ihJSXiYgZYH9V9BG4h7uvohqH+UW3UOQWQONSFWjV0+d5qbNzV5w2/BNWqc5fLG6KcjPvPsjVhKtzmqu+9iTpYMfQ1d8FJ3ITX7b/woHWEgEiqGyUolwzBJ7K47ddZ+nnRPMlG6YRSs8WJvqfv6ze/w6Wycje6xb189pqxRlnKKMeVFl4LRAVTtl0ijjaYRgrxCFBgaxO43k9FSqhcvf9a+I0hYYagqP1kQ8Y9DZZFqJthjHLDsEHbPh5ytBww/DRoN4jiqtzBz1xwFYdAkTBk0iZ+Q4W2iZBFBzlo4zEYXDOoA9rmpV1Mo9Qs7tPS4d1Ple3hBLH4cJBFhApYGl2BCMpK42EY5u+VZw9anvp++K3RvPV4EmHjEQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(39830400003)(366004)(136003)(376002)(451199015)(921005)(6512007)(38100700002)(966005)(478600001)(36756003)(6486002)(6666004)(6506007)(86362001)(186003)(26005)(41300700001)(5660300002)(66556008)(66476007)(8676002)(66946007)(4326008)(8936002)(7416002)(83380400001)(1076003)(2616005)(316002)(110136005)(2906002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: Taa9yDNBV//3YAACxvKLs+nhtYHqklPWWa3CsnL8PEkOPQbqPIrlVR7F8r/TCo4wQoKFDQpGxE/kttwDagdXJ5rWMbOgRvUsp1xPgk+VpZEKrr0YlV7Rw/zTPUWyEtZJVIRFSFlSlzoTppKxVo8t8pthLlkYYRY8fJvkgE+hT7z4wn///uh18Nlz6UPhToj+zcShLC/zRU1HgA9ssQCtI6Ulbkzf+EIFHVR77/tdFKzp7n5mEkjLW+Cfqgp050L43M7kPM8Y4vwQ1nKk98CfXvmbm6kxBTvu/eWgvHcrohSI/ENxx3fDVsaBqedCOQYypnUYwaJG//QAsGbZ52qFA6y95xNNsnAgneuhhRgnh4NAxFBzDd0DXGbZ7TI7jSlSkorPX15IX0r2egcBV3gw0ghKg6XSWBzgIfm4mYJxmYtF61KMAHal3eKdKV07tj2mCPNn6JqDFAj3OgkxoV2WwVyuzwIlStNNyHbCIVPJF0H4BH+GtGF/NCK02oDGSviCLH+JLKeQpWAaazgxgblkKYRPVlVNXCj+ktW2ngNzwwDPM48CclcECrNvzy70yFpTgdozhE634nXJiLx0vgXD6zWoxkp1fh/d98+DveumiE0ykAcTTyl5Pp9WIxpCMT/NjEJJO3dyI45Kn+c3cfYOhh+Gfr6kAextvylr69VEo1FRMuEz/mvn9uy2guGWkFu9o97/tPxWGDoq3uB5drzLz0lpGgLdwkoDnqWYI7haEKg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(396003)(376002)(346002)(39860400002)(451199015)(6862004)(8936002)(5660300002)(83380400001)(41300700001)(38100700002)(86362001)(36756003)(2906002)(4001150100001)(44832011)(31696002)(30864003)(478600001)(31686004)(26005)(186003)(6512007)(6506007)(6486002)(8676002)(4326008)(66476007)(66946007)(53546011)(316002)(37006003)(66556008)(2616005)(6636002)(55236004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P6e9S4wEVC0Cek+xD1IsJLwkPDy4u7I/H768I+2KIeUF4+h+cr2VRtP0aeVK?=
- =?us-ascii?Q?+YGlcgrbqNim+rG5qz3TV4wM7am/90vRrzekI1lyH8R+ZHgRi/7G5krGr+o6?=
- =?us-ascii?Q?2IOvfq0qeUP8jkqRH3cEYUmVgE2Ibcn6/p0qZFeBppOXT3QgmSJomj4P6aKV?=
- =?us-ascii?Q?wYoo06rlZHVqpQHj0GI0Kpeb2aJE+Gu70hgl8UQthkXVUcg33Mqfs8fY4auC?=
- =?us-ascii?Q?+PsfMfVCo9SVKFYDSAsTlZ+/jFOwyt6KUnArwqqKXjNzHljcxsG/Olj+SU+Z?=
- =?us-ascii?Q?ps7hv6uTrG2/pv0BxKfMmiXrJJCtVA2KVp1E+pcJaY6tbCULerNdb1wTneVT?=
- =?us-ascii?Q?08VXK2xpDNWGlcxIxzLgVQtD1x8VsxpH9ZMVGNE9jnaoiSaqzzIfoIwVVXqB?=
- =?us-ascii?Q?JFwHzaEV1VVXt8DQbFRSJz+RzxT8UFwvafdS5d0RqZWubfKYZuW2epIp251b?=
- =?us-ascii?Q?TNZuMklQRufMChX88/mUfKsIQq0WczUSyLpWLn+dgCT/z9eKwHPm6gzYqefX?=
- =?us-ascii?Q?NB4sOmDmPbpAfHNvkHySgXX/1tt4PlLUP6GlriRRKy/w34MDs61CAEL98Fj/?=
- =?us-ascii?Q?vcrUtJcaPL61AkR0rjiJpqSLy7bT8kfv4q9b0zUiypzi7S6gWWu6/qti3dgA?=
- =?us-ascii?Q?YM611XXFf15D8qrFERgsg3uD9Ij8KwX4QroNTlOyfB9HIk2DTptP6qZ/UDQo?=
- =?us-ascii?Q?EZL2+EL38tBzqsC7sGLhlQeurmS3rV6IHfThvG+rq2MFBYlNkkvkk01yaLRO?=
- =?us-ascii?Q?vHhHqEjdKcHnLauSz8wnvnTFZfHebdiSowtQ/2KX0lbAHJluBJJOUZ5W3Bhv?=
- =?us-ascii?Q?HPDpQV4lvHTYj+ZLgfMFM1Z4ihS+gDHLZBVDvv3QDo+edg8qDFdAYS/YXZpX?=
- =?us-ascii?Q?zvq7KLVDc1wyafF2zM+Ydw0Le93peLLWINAkemQPTI6KkY5Vi+rzlsbcNeKt?=
- =?us-ascii?Q?1wwzcVGC5s+NoPNsSYugMf41+qfg4pn2/jRENzYfhgDdQr40oFSHg+7JpeiG?=
- =?us-ascii?Q?OTgk9v626O3ZfroamtDSaQqbvCy5XcOW4a2NYl4iC+HRkYLyvPTZV6vU553s?=
- =?us-ascii?Q?6dl32SrHsrK824xYvUv7g29DEBFENjoumdcJmSYmXOy3gBUPlcb2wexBIEah?=
- =?us-ascii?Q?5Jo25/1nMVz0VXNx7A+YEZoMerRDuBD6JLsmI6Y2Wtrmu38SMDsN6JAhLPzL?=
- =?us-ascii?Q?BgvmOEcOrIwjP10wVnk2v8ZJfohMFS96Y4ALm3OMFSDGQc/3r4X0TlEmkeCr?=
- =?us-ascii?Q?+jMWeJdv4Xl3gZmkbKCZ5fhEwwur8G9szzTht18kGKK6Bh6i3zOuWjSJW642?=
- =?us-ascii?Q?TUCUeS3X4qGyLzbg1G2MMEQNPMNClJXyVXrpNPjzCup9Ov6QlGV4y+MOpnVS?=
- =?us-ascii?Q?DwiV6mUemajCUx9YYUlk4mI/uYE2gCeUhapprKOvaQ4k/8ReEd18O+8qq6Pi?=
- =?us-ascii?Q?GIIhkez0sgqeJ/qFTY741jpUMVDzk7NrlQjlkXYzNRTW3SxHquLg93k59Fto?=
- =?us-ascii?Q?BapOr5YbnpT53JEcUkU62leryBObXGMz9OiIk8rxjT+9maYxuSDxbzrxF/PW?=
- =?us-ascii?Q?5rvypSFAm+1GaPljuRM=3D?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6811b3c-3412-4454-ece1-08daf3eeadba
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Zno5ZDhoZGxrcGNuZFMvOG9XQUxpWUt3SHBBUDg0S1B1L3ZDYUxRRnhSS01O?=
+ =?utf-8?B?U3BjNElpVklMN1lra3ZDZHJSM1Flb3F3RFlwc0FSL1VXM1ZpellXd2FCbVo3?=
+ =?utf-8?B?eTdxb0NpU1lUUGY2bUhFbUxTYXdhUFQ5RDEyUTVjYlRRMEg3VFlOcyszM0R3?=
+ =?utf-8?B?LzF1Z05Mblp5bFdZUnFRK1FjejFENERLdTZOUEdRUEppb2M0UjJkSDJvaXVm?=
+ =?utf-8?B?dVhLSGdPcC9kK1owUUV1aFJYaHI4ZGpSRUlPempXY2RnbVYveldmaVdFQlN3?=
+ =?utf-8?B?K25RbjRCWEl5Y3JWb3FCbE4wbXhkeGUzUzBha1M3UGhSaGk0NUZSTUtWNGpq?=
+ =?utf-8?B?MVUwNXB2TGRSMHN5dnoxT20va0RRdW5Gamtma0NKV3BmNGdzY1UxS1NrQVFS?=
+ =?utf-8?B?emNqTFpuN1dMWlZwNFpDQklFSUNJYUxBWDFlWEZrT0gvaHo1WFM4UkM2Vmt1?=
+ =?utf-8?B?b0FWb2RvU2NBbVpycUtEeEpRTmw4cWhyRG9VdlN1RDFIOTN1WUZzdEphQVNi?=
+ =?utf-8?B?K2V5eTF1dS83amx0WCtkS1JyUmQrQmUvYU1PRkJwZHJORUtoOUpJQzRHc0g4?=
+ =?utf-8?B?UzlhYlkxYVVXOHlYcm1KVFJLTW1SUnFIV0JXMEJraXk4aUg2V0wvbEE3MER4?=
+ =?utf-8?B?RlZMb3pzUjg2OHNCekpwVlFNcERNRmdCZXRVaUNNdXhqeVJNVS8vbE5QWlQy?=
+ =?utf-8?B?MCs2Z1lHeUN1Qk5pMzROU0ZjenorSkU3c3NBaG5jQnVYN0xEa0tDbHFNNHhK?=
+ =?utf-8?B?bVBWZ3JPcHpXa1UyTStGUEcvRUhybFlrTTFXSHl5Q3I2M0szcU52eXFod21r?=
+ =?utf-8?B?YUVIdWZTMmM5STljOHJFb2JEU21vN3l0M0tSbWZaU3l0eUhBeEdBeGFOY0Fh?=
+ =?utf-8?B?enpFRTN4Vzh0V1R3czJFbHhzZStRYS95blVhVmlyRjQ1L3Qzc1RHdzBzYzVz?=
+ =?utf-8?B?TTBWZldwalY2OEtFZzJCQVRoNzM5N25VYWc2eVl1cW9TU3FSNWxwc2FKbWQ1?=
+ =?utf-8?B?dlo3OEpZNHNNR1VsdEtwdTA4NjJtUWVYMkxlNGcweHgvKzlrcUhGd29DL1Ft?=
+ =?utf-8?B?aThieGovRUtRM0c2LzBUQk1jWTcwUGpCSVptRzBmSGF2VGU0d0dkdDMwZzRY?=
+ =?utf-8?B?V1g5NVRHS042cDh6N05rRm83ZkdGb2pXVnJuZDN5R2RBRFNtUVBTY3JUTFJQ?=
+ =?utf-8?B?UVNLZTVqekpwdVB5TTVueG85Q3BYcTN1SWF0NTUvOHNZUVM4YkxyUVlCWW9P?=
+ =?utf-8?B?UHV3UTNHc2hJQm0zY2NzMU1HZU8zcGxJejZ1RHdVVzRhdU45U1NHV2lqem56?=
+ =?utf-8?B?UUdCeGM5d0tFOFJmbXpMSzJodmlHZE1OLzNzQmZNNmY4aGxzR21hQXk4c3FD?=
+ =?utf-8?B?ak1QTHdWY1c4ZFltVGlFeGw3UFFYeDN5eklsbjNuc2lESExSM1I3MFNYUCtm?=
+ =?utf-8?B?K1ovOGxFc0F0bXcxR1JJQ291dEFZSFlvL3RZNkUrN1BIc2k2MnZrdUlLUE9s?=
+ =?utf-8?B?ZUJyeUpNQUlRbWxMbzBPUXhuOWE0V3pOT29HWW5jN0J2eVozbkNpOFd4eUp4?=
+ =?utf-8?B?Tk9qWXNNRUZmaXF2ZncyajY0TUdJQlc0UG14cGgwajNpZFQrb0pjOUZXbUpT?=
+ =?utf-8?B?OHhhNVQ3MmhqejFGM3VKV2xIRDRSblNCNXdpTWZqVFVlK21HOWZIbHRPWG9P?=
+ =?utf-8?B?SlRmNlRIMEdzKzBBY2lETll0SmpKYVJKNGcvWkU3Y3dPeDJma1M5QmRFa2x0?=
+ =?utf-8?B?Q29laEd3QktGd3AyL2ZpV1FSa1lUQmxyOCtaaDRxb1hVaG5PWjRKOG1ZRk5h?=
+ =?utf-8?B?K1RiaUVjQnRiVHM1Vmd3MWo4K1FqK1pkSm9xYkMybkNuT3BYcWQxdEtwbU11?=
+ =?utf-8?B?UDRobmpoODNralZiMW5LQ29EZ05YQkNnVU9CREtuNUlyVjdGY0VrSTRHWm9a?=
+ =?utf-8?B?TzAvaE5tWS8vckM4bkttZWRZRnI3a2RoU3lNa0ovN0kvZTlqdGREb1hMMysv?=
+ =?utf-8?B?S3pYb2s4YW83UFpDQ3JkL20xdm9hUHFqU1pJZktFUzhSc2l0Ym1JaW9XYkJD?=
+ =?utf-8?B?YWxNT1RYRWhNZEJKbGtScndsSjRRN01kVkczUkk1dkRJS1NsTU5FSDc2NW42?=
+ =?utf-8?Q?ioOTAiys2DU1FRLEkdT65f0lD?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f22dc928-dc40-48e5-acb9-08daf47bd4d5
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 16:12:47.3039
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 09:03:11.7149
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: w64zcsaEhjHr1U+lSpEHJyUYIgLmv2PEqn1tUDZwh8vK0coCbJwo3IiWJ7cBGa/iVoOP7H+YYC29qOL7zTmsHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB5370
+X-MS-Exchange-CrossTenant-UserPrincipalName: DUEv+H0d+acQJ25FvC5/ijZGHW6n2itfHNLmFfUDLUKwQLPcMcabS+yKDhdVCxaII/0wCHYP40wKLsXcVdUEiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7044
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Currently modversion uses a fixed size array of size (64 - sizeof(long))
-to store symbol names, thus placing a hard limit on length of symbols.
-Rust symbols (which encodes crate and module names) can be quite a bit
-longer. The length limit in kallsyms is increased to 512 for this reason.
+[A different fix that the one from this thread was selected but it is still
+useful to discuss these test cases and if they should be added in some form.]
 
-It's a waste of space to simply expand the fixed array size to 512 in
-modversion info entries. I therefore make it variably sized, with offset
-to the next entry indicated by the initial "next" field.
+On 10/17/22 15:51, Petr Mladek wrote:
+> On Sun 2022-10-16 14:30:31, Petr Pavlu wrote:
+>> Add two tests to check that loading the same module multiple times in
+>> parallel results only in one real attempt to initialize it.
+>> Synchronization of the loads is done by waiting 1000 ms in the init
+> 
+> I do not have a good experience with this kind of synchronization.
+> It usually is not reliable. The test might be very slow especially when
+> false positives are solved by prolonging the delay.
+> 
+> Alternative solution would be to have two modules:
+> 
+> 1st module would provide a counter, for example:
+> 
+> int modB_load_cnt;
+> module_param(modB_load_cnt, int, 0444);
+> EXPORT_SYMBOL(modB_load_cnt);
+> 
+> EXPORT_SYMBOL() should allow to directly increment the counter
+> from the 2nd module.
+> 
+> module_param() should make the value readable via
+> /sys/module/modA/parameters/modB_load_cnt. It can be
+> checked by kmod_sh.
 
-In addition to supporting longer-than-56/60 byte symbols, this patch also
-reduce the size for short symbols by getting rid of excessive 0 paddings.
-There are still some zero paddings to ensure "next" and "crc" fields are
-properly aligned.
+I agree that it would be best to avoid any synchronization based on timeouts
+in these tests.
 
-This patch does have a tiny drawback that it makes ".mod.c" files generated
-a bit less easy to read, as code like
+My reading is that your idea should allow the tests to remove measuring how
+long it took in total to process all module inserts. It was possible for me to
+implement this change.
 
-	"\x08\x00\x00\x00\x78\x56\x34\x12"
-	"symbol\0\0"
+It unfortunately doesn't help with the 1 second timeout that the
+kmod_test_0014 module (modB in your description) has in its init function. Its
+purpose is to make sure that any parallel loads of the same module which were
+started by kmod.sh manage to reach add_unformed_module(), sleep there and
+therefore hit the updated logic.
 
-is generated as opposed to
+One option how to avoid this timeout is to extend modA to register a kprobe on
+finished_loading() and export via a parameter which loads started by kmod.sh
+reached this point. This approach works ok on my system and a prototype is
+pasted at the end of this mail. Two shortcomings are that it relies on
+internal knowledge of the module loader code and function finished_loading()
+might not be always available for probing as it could get inlined in some
+configurations.
 
-	{ 0x12345678, "symbol" },
+To summarize, I see the following options for these tests:
+* Use a timeout to synchronize the loads.
+* Use the outlined kprobe approach.
+* Don't add these tests at all.
 
-because the structure is now variable-length. But hopefully nobody reads
-the generated file :)
+Any opinions what would be preferred? I'm leaning towards not adding these
+tests as they look fragile to me.
 
-Link: b8a94bfb3395 ("kallsyms: increase maximum kernel symbol length to 512")
-Link: https://github.com/Rust-for-Linux/linux/pull/379
+Thanks,
+Petr
 
-Signed-off-by: Gary Guo <gary@garyguo.net>
 ---
- arch/powerpc/kernel/module_64.c |  3 ++-
- include/linux/module.h          |  6 ++++--
- kernel/module/version.c         | 21 +++++++++------------
- scripts/export_report.pl        |  9 +++++----
- scripts/mod/modpost.c           | 33 +++++++++++++++++++++++----------
- 5 files changed, 43 insertions(+), 29 deletions(-)
 
-diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-index ff045644f13f..eac23c11d579 100644
---- a/arch/powerpc/kernel/module_64.c
-+++ b/arch/powerpc/kernel/module_64.c
-@@ -236,10 +236,11 @@ static void dedotify_versions(struct modversion_info *vers,
- {
- 	struct modversion_info *end;
+diff --git a/tools/testing/selftests/kmod/.gitignore b/tools/testing/selftests/kmod/.gitignore
+new file mode 100644
+index 000000000000..ea3afcaccc79
+--- /dev/null
++++ b/tools/testing/selftests/kmod/.gitignore
+@@ -0,0 +1 @@
++init_module
+diff --git a/tools/testing/selftests/kmod/Makefile b/tools/testing/selftests/kmod/Makefile
+index 5b3e746a0bee..1c684ac700b5 100644
+--- a/tools/testing/selftests/kmod/Makefile
++++ b/tools/testing/selftests/kmod/Makefile
+@@ -1,12 +1,20 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ # Makefile for kmod loading selftests
  
--	for (end = (void *)vers + size; vers < end; vers++)
-+	for (end = (void *)vers + size; vers < end; vers = (void *)vers + vers->next) {
- 		if (vers->name[0] == '.') {
- 			memmove(vers->name, vers->name+1, strlen(vers->name));
- 		}
-+	}
- }
- 
- /*
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 8c5909c0076c..37cb25af9099 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -34,8 +34,10 @@
- #define MODULE_NAME_LEN MAX_PARAM_PREFIX_LEN
- 
- struct modversion_info {
--	unsigned long crc;
--	char name[MODULE_NAME_LEN];
-+	/* Offset of the next modversion entry in relation to this one. */
-+	u32 next;
-+	u32 crc;
-+	char name[0];
- };
- 
- struct module;
-diff --git a/kernel/module/version.c b/kernel/module/version.c
-index 53f43ac5a73e..af7478dcc158 100644
---- a/kernel/module/version.c
-+++ b/kernel/module/version.c
-@@ -17,32 +17,29 @@ int check_version(const struct load_info *info,
- {
- 	Elf_Shdr *sechdrs = info->sechdrs;
- 	unsigned int versindex = info->index.vers;
--	unsigned int i, num_versions;
--	struct modversion_info *versions;
-+	struct modversion_info *versions, *end;
-+	u32 crcval;
- 
- 	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
- 	if (!crc)
- 		return 1;
-+	crcval = *crc;
- 
- 	/* No versions at all?  modprobe --force does this. */
- 	if (versindex == 0)
- 		return try_to_force_load(mod, symname) == 0;
- 
- 	versions = (void *)sechdrs[versindex].sh_addr;
--	num_versions = sechdrs[versindex].sh_size
--		/ sizeof(struct modversion_info);
-+	end = (void *)versions + sechdrs[versindex].sh_size;
- 
--	for (i = 0; i < num_versions; i++) {
--		u32 crcval;
+-# No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
+-all:
 -
--		if (strcmp(versions[i].name, symname) != 0)
-+	for (; versions < end; versions = (void *)versions + versions->next) {
-+		if (strcmp(versions->name, symname) != 0)
- 			continue;
+ TEST_PROGS := kmod.sh
  
--		crcval = *crc;
--		if (versions[i].crc == crcval)
-+		if (versions->crc == crcval)
- 			return 1;
--		pr_debug("Found checksum %X vs module %lX\n",
--			 crcval, versions[i].crc);
-+		pr_debug("Found checksum %X vs module %X\n",
-+			 crcval, versions->crc);
- 		goto bad_version;
- 	}
- 
-diff --git a/scripts/export_report.pl b/scripts/export_report.pl
-index feb3d5542a62..1117646f3141 100755
---- a/scripts/export_report.pl
-+++ b/scripts/export_report.pl
-@@ -116,18 +116,19 @@ foreach my $thismod (@allcfiles) {
- 	while ( <$module> ) {
- 		chomp;
- 		if ($state == 0) {
--			$state = 1 if ($_ =~ /static const struct modversion_info/);
-+			$state = 1 if ($_ =~ /static const char ____versions/);
- 			next;
- 		}
- 		if ($state == 1) {
--			$state = 2 if ($_ =~ /__attribute__\(\(section\("__versions"\)\)\)/);
-+			$state = 2 if ($_ =~ /__used __section\("__versions"\)/);
- 			next;
- 		}
- 		if ($state == 2) {
--			if ( $_ !~ /0x[0-9a-f]+,/ ) {
-+			if ( $_ !~ /\\0"/ ) {
-+				last if ($_ =~ /;/);
- 				next;
- 			}
--			my $sym = (split /([,"])/,)[4];
-+			my $sym = (split /(["\\])/,)[2];
- 			my ($module, $value, $symbol, $gpl) = @{$SYMBOL{$sym}};
- 			$SYMBOL{ $sym } =  [ $module, $value+1, $symbol, $gpl];
- 			push(@{$MODULE{$thismod}} , $sym);
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index efff8078e395..334d170de31f 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -2046,13 +2046,17 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
- static void add_versions(struct buffer *b, struct module *mod)
- {
- 	struct symbol *s;
-+	unsigned int name_len;
-+	unsigned int name_len_padded;
-+	unsigned int tmp;
-+	unsigned char *tmp_view = (unsigned char *)&tmp;
- 
- 	if (!modversions)
- 		return;
- 
- 	buf_printf(b, "\n");
--	buf_printf(b, "static const struct modversion_info ____versions[]\n");
--	buf_printf(b, "__used __section(\"__versions\") = {\n");
-+	buf_printf(b, "static const char ____versions[]\n");
-+	buf_printf(b, "__used __section(\"__versions\") =\n");
- 
- 	list_for_each_entry(s, &mod->unresolved_symbols, list) {
- 		if (!s->module)
-@@ -2062,16 +2066,25 @@ static void add_versions(struct buffer *b, struct module *mod)
- 				s->name, mod->name);
- 			continue;
- 		}
--		if (strlen(s->name) >= MODULE_NAME_LEN) {
--			error("too long symbol \"%s\" [%s.ko]\n",
--			      s->name, mod->name);
--			break;
--		}
--		buf_printf(b, "\t{ %#8x, \"%s\" },\n",
--			   s->crc, s->name);
-+		name_len = strlen(s->name);
-+		name_len_padded = (name_len + 1 + 3) & ~3;
++# compile but not part of 'make run_tests'
++TEST_GEN_PROGS_EXTENDED := \
++	init_module test_kmod_parallel_count.ko test_kmod_parallel_sleep.ko
 +
-+		/* Offset to next entry */
-+		tmp = TO_NATIVE(8 + name_len_padded);
-+		buf_printf(b, "\t\"\\x%02x\\x%02x\\x%02x\\x%02x",
-+			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
++# override lib.mk's default rule
++override define CLEAN
++	$(RM) $(TEST_GEN_PROGS_EXTENDED)
++	$(MAKE) -C test_kmod_parallel clean
++endef
 +
-+		tmp = TO_NATIVE(s->crc);
-+		buf_printf(b, "\\x%02x\\x%02x\\x%02x\\x%02x\"\n",
-+			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
-+
-+		buf_printf(b, "\t\"%s", s->name);
-+		for (; name_len < name_len_padded; name_len++)
-+			buf_printf(b, "\\0");
-+		buf_printf(b, "\"\n");
- 	}
+ include ../lib.mk
  
--	buf_printf(b, "};\n");
-+	buf_printf(b, ";\n");
+-# Nothing to clean up.
+-clean:
++$(OUTPUT)/test_kmod_parallel_count.ko $(OUTPUT)/test_kmod_parallel_sleep.ko: $(wildcard test_kmod_parallel/Makefile test_kmod_parallel/*.[ch])
++	$(MAKE) -C test_kmod_parallel
++	cp test_kmod_parallel/$(notdir $@) $@
+diff --git a/tools/testing/selftests/kmod/config b/tools/testing/selftests/kmod/config
+index 259f4fd6b5e2..704c4735686c 100644
+--- a/tools/testing/selftests/kmod/config
++++ b/tools/testing/selftests/kmod/config
+@@ -5,3 +5,7 @@ CONFIG_XFS_FS=m
+ # For the module parameter force_init_test is used
+ CONFIG_TUN=m
+ CONFIG_BTRFS_FS=m
++
++# For the module test_kmod_parallel
++CONFIG_KALLSYMS=y
++CONFIG_KPROBES=y
+diff --git a/tools/testing/selftests/kmod/init_module.c b/tools/testing/selftests/kmod/init_module.c
+new file mode 100644
+index 000000000000..529abd0a8357
+--- /dev/null
++++ b/tools/testing/selftests/kmod/init_module.c
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/*
++ * Simple program to insert a module, similar to insmod but tailored
++ * specifically for needs of module loader tests.
++ */
++
++#define _GNU_SOURCE
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/syscall.h>
++#include <errno.h>
++
++int main(int argc, char *argv[])
++{
++	const char *filename, *args;
++	int fd, ret;
++
++	if (argc < 2 || argc > 3) {
++		fprintf(stderr, "usage: %s filename [args]\n", argv[0]);
++		return EINVAL;
++	}
++
++	filename = argv[1];
++	args = argc > 2 ? argv[2] : "";
++
++	fd = open(filename, O_RDONLY);
++	if (fd == -1) {
++		ret = errno;
++		fprintf(stderr, "init_module: could not open file %s: %s\n",
++			filename, strerror(ret));
++		return ret;
++	}
++
++	ret = syscall(SYS_finit_module, fd, args, 0);
++	if (ret != 0) {
++		ret = errno;
++		fprintf(stderr, "init_module: could not load module %s: %s\n",
++			filename, strerror(ret));
++	}
++
++	close(fd);
++
++	return ret;
++}
+diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+index afd42387e8b2..8ca82b16f165 100755
+--- a/tools/testing/selftests/kmod/kmod.sh
++++ b/tools/testing/selftests/kmod/kmod.sh
+@@ -65,6 +65,8 @@ ALL_TESTS="$ALL_TESTS 0010:1:1"
+ ALL_TESTS="$ALL_TESTS 0011:1:1"
+ ALL_TESTS="$ALL_TESTS 0012:1:1"
+ ALL_TESTS="$ALL_TESTS 0013:1:1"
++ALL_TESTS="$ALL_TESTS 0014:1:1"
++ALL_TESTS="$ALL_TESTS 0015:1:1"
+ 
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+@@ -171,6 +173,12 @@ errno_name_to_val()
+ 		echo -1;;
+ 	-ENOENT)
+ 		echo -2;;
++	-EBUSY)
++		echo -16;;
++	-EEXIST)
++		echo -17;;
++	-ENODEV)
++		echo -19;;
+ 	-EINVAL)
+ 		echo -22;;
+ 	-ERR_ANY)
+@@ -190,6 +198,12 @@ errno_val_to_name()
+ 		echo -EPERM;;
+ 	-2)
+ 		echo -ENOENT;;
++	-16)
++		echo -EBUSY;;
++	-17)
++		echo -EEXIST;;
++	-19)
++		echo -ENODEV;;
+ 	-22)
+ 		echo -EINVAL;;
+ 	-123456)
+@@ -504,6 +518,135 @@ kmod_test_0013()
+ 		"cat /sys/module/${DEFAULT_KMOD_DRIVER}/sections/.*text | head -n1"
  }
  
- static void add_depends(struct buffer *b, struct module *mod)
--- 
-2.34.1
-
++# Check that loading the same module multiple times in parallel results only in
++# one real attempt to initialize it. The function utilizes two sample modules
++# test_kmod_parallel_count and test_kmod_parallel_sleep:
++# TODO Describe.
++#
++# Cases:
++# * Test 0014 checks a situation when the load is successful. It should result
++#   in one insert returning 0 and remaining inserts returning EEXIST.
++# * Test 0015 checks a situation when the load is failing because the module
++#   init function returns ENODEV. It should result in one insert returning this
++#   error code and remaining inserts returning EBUSY.
++kmod_check_parallel_loads()
++{
++	local test_name="$1"
++	local parallel_loads="$2"
++	local insmod_params="$3"
++	local success_exp="$4"
++	local ebusy_exp="$5"
++	local eexist_exp="$6"
++	local enodev_exp="$7"
++	local other_exp="$8"
++
++	local EBUSY=$(errno_name_to_val -EBUSY)
++	local EEXIST=$(errno_name_to_val -EEXIST)
++	local ENODEV=$(errno_name_to_val -ENODEV)
++	local init_cnt pids hits rc
++	local success_cnt=0 ebusy_cnt=0 eexist_cnt=0 enodev_cnt=0 other_cnt=0
++	local test_ok=true
++
++	# Load the counter module
++	./init_module test_kmod_parallel_count.ko
++
++	# Run the parallel loads.
++	for i in $(seq 0 $(($parallel_loads - 1))); do
++		(echo $BASHPID > /sys/module/test_kmod_parallel_count/parameters/pids_watched;
++		 exec ./init_module test_kmod_parallel_sleep.ko "$insmod_params") &
++		pids[$i]=$!
++	done
++
++	# Wait for all secondary loads to block in add_unformed_module().
++	while true; do
++		hits=( $(cat /sys/module/test_kmod_parallel_count/parameters/pids_hit) )
++		(( ${#hits[@]} >= $parallel_loads - 1 )) && break
++		sleep 0.1
++	done
++	echo > /sys/module/test_kmod_parallel_count/parameters/pids_watched
++
++	# Set the state to 1 which unblocks the init function.
++	echo 1 > /sys/module/test_kmod_parallel_count/parameters/state
++
++	# Collect all results.
++	for pid in ${pids[*]}; do
++		{ wait $pid; let rc=-$?; } || true
++
++		case $rc in
++		0)
++			let success_cnt=$success_cnt+1;;
++		$EBUSY)
++			let ebusy_cnt=$ebusy_cnt+1;;
++		$EEXIST)
++			let eexist_cnt=$eexist_cnt+1;;
++		$ENODEV)
++			let enodev_cnt=$enodev_cnt+1;;
++		*)
++			let other_cnt=$other_cnt+1;;
++		esac
++	done
++
++	if (( $success_cnt > 0 )); then
++		rmmod test_kmod_parallel_sleep
++	fi
++
++	init_cnt=$(cat /sys/module/test_kmod_parallel_count/parameters/init_count)
++	rmmod test_kmod_parallel_count
++
++	# Check the results.
++	if (( $init_cnt != 1 )); then
++		echo "$test_name: FAIL, number of init calls, test expects '1' - got '$init_cnt'" >&2
++		test_ok=false
++	else
++		echo "$test_name: OK! - number of init calls, test expects '1' - got '$init_cnt'" >&2
++	fi
++	if (( $success_cnt != $success_exp )); then
++		echo "$test_name: FAIL, number of successful loads, test expects '$success_exp' - got '$success_cnt'" >&2
++		test_ok=false
++	else
++		echo "$test_name: OK! - number of successful loads, test expects '$success_exp' - got '$success_cnt'" >&2
++	fi
++	if (( $ebusy_cnt != $ebusy_exp )); then
++		echo "$test_name: FAIL, number of loads returning EBUSY, test expects '$ebusy_exp' - got '$ebusy_cnt'" >&2
++		test_ok=false
++	else
++		echo "$test_name: OK! - number of loads returning EBUSY, test expects '$ebusy_exp' - got '$ebusy_cnt'" >&2
++	fi
++	if (( $eexist_cnt != $eexist_exp )); then
++		echo "$test_name: FAIL, number of loads returning EEXIST, test expects '$eexist_exp' - got '$eexist_cnt'" >&2
++		test_ok=false
++	else
++		echo "$test_name: OK! - number of loads returning EEXIST, test expects '$eexist_exp' - got '$eexist_cnt'" >&2
++	fi
++	if (( $enodev_cnt != $enodev_exp )); then
++		echo "$test_name: FAIL, number of loads returning ENODEV, test expects '$enodev_exp' - got '$enodev_cnt'" >&2
++		test_ok=false
++	else
++		echo "$test_name: OK! - number of loads returning ENODEV, test expects '$enodev_exp' - got '$enodev_cnt'" >&2
++	fi
++	if (( $other_cnt != $other_exp )); then
++		echo "$test_name: FAIL, number of loads returning other values, test expects '$other_exp' - got '$other_cnt'" >&2
++		test_ok=false
++	else
++		echo "$test_name: OK! - number of loads returning other values, test expects '$other_exp' - got '$other_cnt'" >&2
++	fi
++
++	[ $test_ok = true ] || exit 1
++}
++
++kmod_test_0014()
++{
++	kmod_check_parallel_loads \
++		"${FUNCNAME[0]}" 4 "sleep_msecs=1000 init_retval=0" 1 0 3 0 0
++}
++
++kmod_test_0015()
++{
++	local ENODEV=$(errno_name_to_val -ENODEV)
++	kmod_check_parallel_loads \
++		"${FUNCNAME[0]}" 4 "sleep_msecs=1000 init_retval=$ENODEV" 0 3 0 1 0
++}
++
+ list_tests()
+ {
+ 	echo "Test ID list:"
+@@ -525,6 +668,8 @@ list_tests()
+ 	echo "0011 x $(get_test_count 0011) - test completely disabling module autoloading"
+ 	echo "0012 x $(get_test_count 0012) - test /proc/modules address visibility under CAP_SYSLOG"
+ 	echo "0013 x $(get_test_count 0013) - test /sys/module/*/sections/* visibility under CAP_SYSLOG"
++	echo "0014 x $(get_test_count 0014) - test handling of parallel loads, success case"
++	echo "0015 x $(get_test_count 0015) - test handling of parallel loads, init returning error"
+ }
+ 
+ usage()
+diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
+new file mode 100644
+index 000000000000..ba4d85f74cd6
+--- /dev/null
++++ b/tools/testing/selftests/kmod/settings
+@@ -0,0 +1 @@
++timeout=90
+diff --git a/tools/testing/selftests/kmod/test_kmod_parallel/Makefile b/tools/testing/selftests/kmod/test_kmod_parallel/Makefile
+new file mode 100644
+index 000000000000..8d2b24aa868f
+--- /dev/null
++++ b/tools/testing/selftests/kmod/test_kmod_parallel/Makefile
+@@ -0,0 +1,12 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++KMOD_TEST_PARALLEL_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
++KDIR ?= $(abspath $(KMOD_TEST_PARALLEL_DIR)/../../../../..)
++
++obj-m := test_kmod_parallel_count.o test_kmod_parallel_sleep.o
++
++all:
++	$(MAKE) -C $(KDIR) M=$(KMOD_TEST_PARALLEL_DIR) modules
++
++clean:
++	$(MAKE) -C $(KDIR) M=$(KMOD_TEST_PARALLEL_DIR) clean
+diff --git a/tools/testing/selftests/kmod/test_kmod_parallel/test_kmod_parallel_count.c b/tools/testing/selftests/kmod/test_kmod_parallel/test_kmod_parallel_count.c
+new file mode 100644
+index 000000000000..8de9351d6df9
+--- /dev/null
++++ b/tools/testing/selftests/kmod/test_kmod_parallel/test_kmod_parallel_count.c
+@@ -0,0 +1,219 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/kprobes.h>
++#include <linux/kstrtox.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/string.h>
++#include <linux/wait.h>
++
++/*
++ * State parameter: value 0 blocks the init function of test_kmod_parallel_sleep
++ * when it invokes test_kmod_parallel_count_wait(), value 1 makes it to proceed.
++ */
++static unsigned int state;
++static DECLARE_WAIT_QUEUE_HEAD(state_wq);
++
++static int state_set(const char *val, const struct kernel_param *kp)
++{
++	int err;
++
++	err = kstrtoint(val, 0, &state);
++	if (err != 0)
++		return err;
++
++	wake_up_interruptible(&state_wq);
++	return 0;
++}
++
++static const struct kernel_param_ops state_ops = {
++	.set = state_set,
++	.get = param_get_uint,
++};
++
++module_param_cb(state, &state_ops, &state, 0644);
++MODULE_PARM_DESC(state, "module state switch, default 0");
++
++/*
++ * Counter to record how many times the init function of
++ * test_kmod_parallel_sleep was invoked.
++ */
++static unsigned int init_count;
++module_param(init_count, uint, 0444);
++MODULE_PARM_DESC(init_count, "counter for test_kmod_parallel_sleep_init()");
++
++int test_kmod_parallel_count_wait(void)
++{
++	kernel_param_lock(THIS_MODULE);
++	init_count++;
++	kernel_param_unlock(THIS_MODULE);
++
++	/* Wait for an external actor to transfer the state from 0 to 1. */
++	return wait_event_interruptible(state_wq, state == 1);
++}
++EXPORT_SYMBOL(test_kmod_parallel_count_wait);
++
++/*
++ * Tasks watched for invocation of finished_loading() and which ones actually
++ * executed the function.
++ */
++static DEFINE_SPINLOCK(pids_lock);
++static pid_t pids_watched[4] = { -1, -1, -1, -1 };
++static pid_t pids_hit[4] = { -1, -1, -1, -1 };
++
++static int format_pids(char *buffer, const pid_t *pids, size_t pids_size)
++{
++	int ret = 0;
++	size_t i;
++
++	for (i = 0; i < pids_size; i++) {
++		if (pids[i] == -1)
++			break;
++		ret += sprintf(buffer + ret, "%s%d", ret != 0 ? " " : "",
++			       pids[i]);
++	}
++
++	ret += sprintf(buffer + ret, "\n");
++	return ret;
++}
++
++static int pids_watched_set(const char *val, const struct kernel_param *kp)
++{
++	int err;
++	size_t i;
++	pid_t pid;
++
++	spin_lock(&pids_lock);
++
++	/* Handle the reset case. */
++	if (sysfs_streq(val, "")) {
++		for (i = 0; i < ARRAY_SIZE(pids_watched); i++) {
++			pids_watched[i] = -1;
++			pids_hit[i] = -1;
++		}
++		goto success;
++	}
++
++	/* Add one PID to the watch set. */
++	err = kstrtoint(val, 0, &pid);
++	if (err != 0)
++		goto err;
++	if (pid < 0) {
++		err = -EINVAL;
++		goto err;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(pids_watched); i++)
++		if (pids_watched[i] == -1) {
++			pids_watched[i] = pid;
++			break;
++		}
++
++	if (i == ARRAY_SIZE(pids_watched)) {
++		err = -EINVAL;
++		goto err;
++	}
++
++success:
++	err = 0;
++err:
++	spin_unlock(&pids_lock);
++	return err;
++}
++
++static int pids_watched_get(char *buffer, const struct kernel_param *kp)
++{
++	int ret;
++
++	spin_lock(&pids_lock);
++	ret = format_pids(buffer, pids_watched, ARRAY_SIZE(pids_watched));
++	spin_unlock(&pids_lock);
++
++	return ret;
++}
++
++static const struct kernel_param_ops pids_watched_ops = {
++	.set = pids_watched_set,
++	.get = pids_watched_get,
++};
++
++module_param_cb(pids_watched, &pids_watched_ops, NULL, 0644);
++MODULE_PARM_DESC(state, "PIDs watched for finished_loading()");
++
++static int pids_hit_get(char *buffer, const struct kernel_param *kp)
++{
++	int ret;
++
++	spin_lock(&pids_lock);
++	ret = format_pids(buffer, pids_hit, ARRAY_SIZE(pids_hit));
++	spin_unlock(&pids_lock);
++
++	return ret;
++}
++
++static const struct kernel_param_ops pids_hit_ops = {
++	.get = pids_hit_get,
++};
++
++module_param_cb(pids_hit, &pids_hit_ops, NULL, 0444);
++MODULE_PARM_DESC(state, "PIDs which hit finished_loading()");
++
++static int __kprobes finished_loading_pre(struct kprobe *p,
++					  struct pt_regs *regs)
++{
++	size_t i;
++
++	spin_lock(&pids_lock);
++
++	/* Check if this task is watched. */
++	for (i = 0; i < ARRAY_SIZE(pids_watched); i++)
++		if (current->pid == pids_watched[i])
++			break;
++	if (i == ARRAY_SIZE(pids_watched))
++		goto out;
++
++	/* Record the hit. */
++	for (i = 0; i < ARRAY_SIZE(pids_hit); i++) {
++		if (current->pid == pids_hit[i])
++			break;
++		if (pids_hit[i] != -1)
++			continue;
++		pids_hit[i] = current->pid;
++		break;
++	}
++
++out:
++	spin_unlock(&pids_lock);
++	return 0;
++}
++
++static struct kprobe finished_loading_kp = {
++	.symbol_name = "finished_loading",
++	.pre_handler = finished_loading_pre,
++};
++
++static int __init test_kmod_parallel_count_init(void)
++{
++	int err;
++
++	err = register_kprobe(&finished_loading_kp);
++	if (err < 0) {
++		pr_err("register_kprobe failed, returned %d\n", err);
++		return err;
++	}
++	return 0;
++}
++
++static void __exit test_kmod_parallel_count_exit(void)
++{
++	unregister_kprobe(&finished_loading_kp);
++}
++
++module_init(test_kmod_parallel_count_init);
++module_exit(test_kmod_parallel_count_exit);
++
++MODULE_AUTHOR("Petr Pavlu <petr.pavlu@suse.com>");
++MODULE_LICENSE("GPL v2");
++MODULE_INFO(test, "Y");
+diff --git a/tools/testing/selftests/kmod/test_kmod_parallel/test_kmod_parallel_sleep.c b/tools/testing/selftests/kmod/test_kmod_parallel/test_kmod_parallel_sleep.c
+new file mode 100644
+index 000000000000..cd1b8184af2a
+--- /dev/null
++++ b/tools/testing/selftests/kmod/test_kmod_parallel/test_kmod_parallel_sleep.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++
++int test_kmod_parallel_count_wait(void);
++
++static int init_retval;
++module_param(init_retval, int, 0644);
++MODULE_PARM_DESC(init_retval, "init return value, default 0");
++
++static int __init test_kmod_parallel_sleep_init(void)
++{
++	int err;
++
++	err = test_kmod_parallel_count_wait();
++	if (err != 0)
++		return err;
++
++	return init_retval;
++}
++
++static void __exit test_kmod_parallel_sleep_exit(void)
++{
++}
++
++module_init(test_kmod_parallel_sleep_init);
++module_exit(test_kmod_parallel_sleep_exit);
++
++MODULE_AUTHOR("Petr Pavlu <petr.pavlu@suse.com>");
++MODULE_LICENSE("GPL v2");
++MODULE_INFO(test, "Y");
