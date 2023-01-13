@@ -2,141 +2,179 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83CE6C61DB3
-	for <linux-modules@archiver.kernel.org>; Fri, 13 Jan 2023 14:58:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E0D0C54EBD
+	for <linux-modules@archiver.kernel.org>; Fri, 13 Jan 2023 18:25:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjAMO6X (ORCPT
+        id S229707AbjAMSZl (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 13 Jan 2023 09:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
+        Fri, 13 Jan 2023 13:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjAMO5w (ORCPT
+        with ESMTP id S229824AbjAMSZJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:57:52 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A5997488;
-        Fri, 13 Jan 2023 06:45:13 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 91F53607B4;
-        Fri, 13 Jan 2023 14:45:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673621112; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oJMxd0NdjDpbFfMPktCneUuO99VYCmKvChtNw4xNjD8=;
-        b=KTRs3d/2ZWAXCFkTJitI4tkBmp0uw59UcO43ZB9gHHeM7TDHaQdukyw+EUZV1KACS7b+96
-        QM97r8d8SXVB+uePAMVDsktuQpK6nfnYObNdSOwooUD/1szsLcvrlemVEdFIAuX4HWlczx
-        bQaqT9viFLxb2fK3r9cAFBrkdkZzFKY=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 743FA2C141;
-        Fri, 13 Jan 2023 14:45:12 +0000 (UTC)
-Date:   Fri, 13 Jan 2023 15:45:10 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     mcgrof@kernel.org, david@redhat.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] selftests: kmod: Add tests for merging same-name
- module load requests
-Message-ID: <Y8Ft7q/NBK5utN+I@alley>
-References: <20221016123031.3963-1-petr.pavlu@suse.com>
- <20221016123031.3963-5-petr.pavlu@suse.com>
- <Y01d50Z2DK3f9V+Q@alley>
- <edeee00c-c101-460a-0682-a2fa638b95f4@suse.com>
+        Fri, 13 Jan 2023 13:25:09 -0500
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2107.outbound.protection.outlook.com [40.107.11.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B75541A6A;
+        Fri, 13 Jan 2023 10:19:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X4tiwesCtz+Njfm7VO4MqGaZ0Fm8GoTqF1Rte4VXUJiP4qE5gufW8csVPZjFyF6Cwo8KsA9wzTpUgduZtYftFBBtEf8+/YW/RyxDAvSAgvMLsqb9xpL0N8jcr0Yeldy3BxVBpGxftmETDlfeQALiuhVwkfxGswovD4AFEnCFGy+YsX4R/KH9OzPeDkr6LnhhkuMeEMopCGUKDofdEqrfOhkVWDvbffMfQJuV9zCZuGaApA0WZHS33X7oWflxu25ga9bI3WYVxyCOzWkiX5sZT0pSqx/nTDxy3sK40AkaNPMD2qlnvGlQCRwYi+Imjgh6tyccUSyMHPrayRyRWV9nTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4M03HqJ6DWROxB/SwZaIPlgw9/1z21JDfb5VsRm59yc=;
+ b=badOGi5HiXzE/Auiz7vibp0BRT+2/Ez3NlH19ZsHE6el9IgNYWU/AY86lYhIaDaGB88sSlyDhUmV0pToYZWK6Hn1AVy2qCxAYP8BPfdmgn9GBU3WATSIF2c03/ljOLTY2xKymvgBlc+yqb27w0B1kErsPUzERQLT08ScPRh4ohF5vkJhAoFROxfOKk1LbgKhuIJyS9Ls3U9ZTrgZJBRJ+b7UbysTXII+Gy5pj93ecuhVF0tJTTmA/T6KKNl3O0/b6Fgcz9Bg3eQUTFPfdzv2Cs3asNmhwwSHgcMokWfK+lHHrRemCUY/wKOKzz3fLDrUZV8xIJhCg9jajkIuJupK8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4M03HqJ6DWROxB/SwZaIPlgw9/1z21JDfb5VsRm59yc=;
+ b=0HXLH4mT5o8yi8ijVzJBNCOqdglEGo3hjMjG2Uzff9cLznGIaOiLdZ7L//A2nwaKqEwuOEj6JnrxXHsYQqDffybBvX8r84K7GPfvrntZh527h04kmnwVnj+P+7qLLEKfBi1AWBp9ed8C7o7HQ6bhRKMC5AfDFuZmr2A7rCBbRCo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:15f::14)
+ by LO4P265MB6462.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2e0::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Fri, 13 Jan
+ 2023 18:19:15 +0000
+Received: from CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::d617:a3c0:4110:bfe]) by CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::d617:a3c0:4110:bfe%4]) with mapi id 15.20.6002.013; Fri, 13 Jan 2023
+ 18:19:15 +0000
+Date:   Fri, 13 Jan 2023 18:18:41 +0000
+From:   Gary Guo <gary@garyguo.net>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        " =?UTF-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Joel Stanley" <joel@jms.id.au>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <linux-modules@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
+        <rust-for-linux@vger.kernel.org>
+Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
+Message-ID: <20230113181841.4d378a24.gary@garyguo.net>
+In-Reply-To: <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
+References: <20230111161155.1349375-1-gary@garyguo.net>
+        <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0035.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2ae::11) To CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:400:15f::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <edeee00c-c101-460a-0682-a2fa638b95f4@suse.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP265MB5186:EE_|LO4P265MB6462:EE_
+X-MS-Office365-Filtering-Correlation-Id: 21713808-c816-4500-e97c-08daf592ad56
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wd+BW2sDytCSAmVs8dJ/vYtHn13Fhfzl1/26G0OJKtfhQ2tDFGnBg6EfsmTXhLg/zm8I6O0CtwGCVovFXNgKTVg3tEFuXvT+hQ83osct6lfA3wsdP5cp/wM8rSz5RJ2yGQGxJY4NFi7Pc0DaNHrOmE3LbzTOvjwwEZBHu6ZPN9zdPPAKoQhqAs8/V/P2M8cMqZnRSjxVxeQZXIWmUzrMGDvLTPhvP37TK5YO4FdIfwFX+KkV9EnwJ7CO04kTyD2abWtvcxV9mzCk6LBiDDgnvEvJ1Png1aQqCo98cxlvU89lhf7Ue7PLBM1ddzhekAetvMEgH/W39sCjJqnlHJQZ7HG7tGVlt31RfJXkx3LhLcYQLFDIcfAx/9eBe9s/jprzQMDEG9pS+YrItP23pi9GZCyUfsooNk1bSDDrXf4erbA8nTnTIWGYfDoylDcA0y93s7U9SRas1iGiYGkkfDXh7Sgncc4UVpqnNvTIgol5LqZe1HOx/PLfyLjFf9vybHHQVi+dvaQdiY1h+aI5wEJpjRD/Sapkk3K5/FPB2oZ1BNkxMSPVVBhtvmIrLb+SUuUFlwt/JByiw6D26UQs6KglqlmwPOdJcox/MlP8tQFKCiemN7gHUlSJQr7D9Cf6rANr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(396003)(39830400003)(346002)(366004)(136003)(376002)(451199015)(6666004)(6486002)(2616005)(1076003)(36756003)(478600001)(7416002)(86362001)(8936002)(5660300002)(38100700002)(2906002)(83380400001)(54906003)(316002)(66946007)(41300700001)(8676002)(6916009)(4326008)(66556008)(66476007)(6506007)(6512007)(66899015)(186003)(26005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?URfMC053dfIAX/Sni3sMvF966UvWtHLbbdvoCH0d5F5uq/3ZvmH4HZ0ryaAH?=
+ =?us-ascii?Q?H8B2LBqIHr4CitEppEmPcVMJk8858iQN6YjH5nZSHZVFnKGthowl5/C30GdN?=
+ =?us-ascii?Q?iAQ5wAEN1T+jCUvjgaE8wfL3YP3SgpQZSAx5HjQBL5iBoXr8oyeqerYMuZk7?=
+ =?us-ascii?Q?uHfIxta6zv2zf+UoqMJKtwz8P0M/rFD1Yg4nalUar/Un0wcafssHrpMCU5We?=
+ =?us-ascii?Q?eM5qBZKCR292WAhkrESn8rYdgQZySTsH62h2qVEwcY6GglqNIC/78RdsgOvV?=
+ =?us-ascii?Q?VNQaG+9NIK6XF5wv9a4NX4emFfdD09BPxspVipUfDBBeA8hcmh7rzyyoHrVU?=
+ =?us-ascii?Q?mgHL+JbdLjlAWoD3/Ts+cAVwRTn4Q/8uZKIJCczfcMjCfn9aOvUAXS/tu/Se?=
+ =?us-ascii?Q?VNUgDv0frXEpGx27ebSq7xDcQY85Xnr6of1nVxXOKSXH2sHGHO3Qufd/nn61?=
+ =?us-ascii?Q?PX2b9v/Uxn6Q8bNZqyszquyQysVEC+/GUFBI2BG1Rz/pAH5ENSE9tmTLCfGm?=
+ =?us-ascii?Q?H7OwyqV466jsj7Wc/N3fbG0wRgBp1yL17Rvvnnm6WrjM5yqFWw6BYlA58guV?=
+ =?us-ascii?Q?3djzDyPlk7BTs4AqZ/WaTxEYeRhm+zATPQz+KqUZMV1JW7IqFM8Y1s8BvRiU?=
+ =?us-ascii?Q?xZ5OYMpxvEfmOaNvbBcAq4D1OS1hbvWHZvpla1dwuFqfIYrtt99SjiC7eHY/?=
+ =?us-ascii?Q?jfLgVbX6XW4LHdr7k1xwBgX32ljyQDNzVn06NBTNv0a5gfxRUKNOUFovt0jJ?=
+ =?us-ascii?Q?acuiPEN4fHxCkEd3tsySTqN1vAPOT+/Y4YHIKPmMI+yYcjucBAaxYnNBi2Uq?=
+ =?us-ascii?Q?3XfC1F0WQPFUqhcOz+qVsqjPSzaTr9cKD719Z4T0rH5G+hr24Bh44hkHp+JQ?=
+ =?us-ascii?Q?AqxmRZql7cYOKJz49KpvvZoT2QzT+oIH7SRIsMsYPDok//AEJF7db+2EYtQD?=
+ =?us-ascii?Q?zRIsb3iBA9CwFAJgi5k5mc7HYiQwCP96hDupfQ6Nfn/69C01QZsBECyqeRU1?=
+ =?us-ascii?Q?sEkVA36HLAA0T36kLTdotlnKwfM1fwvOI7ytMgq5nXpGcYFFOSEC0TFtwZos?=
+ =?us-ascii?Q?LswUJiCxuFU3pRF6pyXSxNe04DWD8f6DVDRGcnC2giHE/Eyee0L0V34rMKqa?=
+ =?us-ascii?Q?98hJFeb1FOZjG7UX2vdaWU/m4OM9D6XM2Wauh8R2A0/vfu3amrD+yR8QXvsK?=
+ =?us-ascii?Q?UZFIux01/C4XThFvFeVlYf67+L1X1G8jz7hricBiKwtVbP8bGYOcjd06gBxA?=
+ =?us-ascii?Q?ZekXFNcZ9PYGMVbOSn+YILkELmq3SVoscgXMkBYoTChRthlclLDKPlRVO1AJ?=
+ =?us-ascii?Q?NLm1dMv0/gLoCyO+8au0A/PM2Vspiz0p5FtADveCbdr/iuqz67ot4AUK2t1D?=
+ =?us-ascii?Q?gXPP2BFDLdb7Fy7ocPs+FpYbHKIlAVJLs/BIK065vaNJEA/QSPwK0MDWZ3R+?=
+ =?us-ascii?Q?LvGG8GWaDJaFkkdIO7dtliPci0jwt2IuTflcb5tbiSSy1K1av/tqE6M66jMv?=
+ =?us-ascii?Q?9hdM/ZLTmlqO0llXIIb8ONXep9Gx73UNQTRTDOwlxFeOaKkztxbjxXFcyeRv?=
+ =?us-ascii?Q?rUPwdYKq4kVoWsGBj7jAfSMYOTq6E9qNRpSI+2+Q?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21713808-c816-4500-e97c-08daf592ad56
+X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB5186.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 18:19:14.9780
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: INsR39Nd1RNWA/FHpYYE1zIMaUmpbjoLKSchGm8X8WbxwD0OmSol0oT7MsQcngKjF2aLM69q5o9Wwa+QoJydxw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO4P265MB6462
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu 2023-01-12 10:03:10, Petr Pavlu wrote:
-> [A different fix that the one from this thread was selected but it is still
-> useful to discuss these test cases and if they should be added in some form.]
+On Thu, 12 Jan 2023 14:40:59 -0700
+Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+
+> On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote:
+> >
+> > struct modversion_info {
+> >-	unsigned long crc;
+> >-	char name[MODULE_NAME_LEN];
+> >+	/* Offset of the next modversion entry in relation to this one. */
+> >+	u32 next;
+> >+	u32 crc;
+> >+	char name[0];  
 > 
-> On 10/17/22 15:51, Petr Mladek wrote:
-> > On Sun 2022-10-16 14:30:31, Petr Pavlu wrote:
-> >> Add two tests to check that loading the same module multiple times in
-> >> parallel results only in one real attempt to initialize it.
-> >> Synchronization of the loads is done by waiting 1000 ms in the init
-> > 
-> > I do not have a good experience with this kind of synchronization.
-> > It usually is not reliable. The test might be very slow especially when
-> > false positives are solved by prolonging the delay.
-> > 
-> > Alternative solution would be to have two modules:
-> > 
-> > 1st module would provide a counter, for example:
-> > 
-> > int modB_load_cnt;
-> > module_param(modB_load_cnt, int, 0444);
-> > EXPORT_SYMBOL(modB_load_cnt);
-> > 
-> > EXPORT_SYMBOL() should allow to directly increment the counter
-> > from the 2nd module.
-> > 
-> > module_param() should make the value readable via
-> > /sys/module/modA/parameters/modB_load_cnt. It can be
-> > checked by kmod_sh.
+> although not really exported as uapi, this will break userspace as this is
+> used in the  elf file generated for the modules. I think
+> this change must be made in a backward compatible way and kmod updated
+> to deal with the variable name length:
 > 
-> I agree that it would be best to avoid any synchronization based on timeouts
-> in these tests.
+> kmod $ git grep "\[64"
+> libkmod/libkmod-elf.c:  char name[64 - sizeof(uint32_t)];
+> libkmod/libkmod-elf.c:  char name[64 - sizeof(uint64_t)];
 > 
-> My reading is that your idea should allow the tests to remove measuring how
-> long it took in total to process all module inserts. It was possible for me to
-> implement this change.
+> in kmod we have both 32 and 64 because a 64-bit kmod can read both 32
+> and 64 bit module, and vice versa.
 > 
-> It unfortunately doesn't help with the 1 second timeout that the
-> kmod_test_0014 module (modB in your description) has in its init function. Its
-> purpose is to make sure that any parallel loads of the same module which were
-> started by kmod.sh manage to reach add_unformed_module(), sleep there and
-> therefore hit the updated logic.
 
-I see.
+Hi Lucas,
 
-> One option how to avoid this timeout is to extend modA to register a kprobe on
-> finished_loading() and export via a parameter which loads started by kmod.sh
-> reached this point. This approach works ok on my system and a prototype is
-> pasted at the end of this mail. Two shortcomings are that it relies on
-> internal knowledge of the module loader code and function finished_loading()
-> might not be always available for probing as it could get inlined in some
-> configurations.
+Thanks for the information.
 
-Yeah, it is a bit fragile as well.
+The change can't be "truly" backward compatible, in a sense that
+regardless of the new format we choose, kmod would not be able to decode
+symbols longer than "64 - sizeof(long)" bytes. So the list it retrieves
+is going to be incomplete, isn't it?
 
-> To summarize, I see the following options for these tests:
-> * Use a timeout to synchronize the loads.
-> * Use the outlined kprobe approach.
-> * Don't add these tests at all.
+What kind of backward compatibility should be expected? It could be:
+* short symbols can still be found by old versions of kmod, but not
+  long symbols;
+* or, no symbols are found by old versions of kmod, but it does not
+  fail;
+* or, old versions of kmod would fail gracefully for not able to
+  recognise the format of __versions section, but it didn't do anything
+  crazy (e.g. decode it as old format).
 
-Yet another solution would be to add a support for this test into
-the module loaded code. I mean that add_unformed_module() might
-increment a global counter when a certain module is waiting there.
-The global counter then might be used to unblock the init()
-callback.
+Also, do you think the current modversion format should stick forever
+or would we be able to migrate away from it eventually and fail old
+versions of modprobe given enough time?
 
-The test module might be distinguished, for example, by a test
-specific module info string. For example, see
-check_modinfo_livepatch(). It looks for the info string defined
-in the livepatch modules, see MODULE_INFO(livepatch, "Y"); in
-samples/livepatch/livepatch-sample.c.
-
-That said, I do not like this much either. I am not sure if it is
-more or less crazy than the kprobe approach.
-
-
-> Any opinions what would be preferred? I'm leaning towards not adding these
-> tests as they look fragile to me.
-
-I do not have strong opinion.
-
-My experience is that some tests are not worth the effort. The
-maintenance or false positives might add more harm than good.
-
-My feeling is that this one belongs into this category.
-We could keep the timeout and make it error prone.
-Or we could use some hacks and make it hard to maintain.
-
-Best Regards,
-Petr
+Best,
+Gary
