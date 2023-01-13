@@ -2,37 +2,37 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D385FC54EBE
-	for <linux-modules@archiver.kernel.org>; Fri, 13 Jan 2023 14:43:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 685CDC61DB3
+	for <linux-modules@archiver.kernel.org>; Fri, 13 Jan 2023 14:44:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjAMOnF (ORCPT
+        id S229483AbjAMOoM (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 13 Jan 2023 09:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
+        Fri, 13 Jan 2023 09:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjAMOmb (ORCPT
+        with ESMTP id S229778AbjAMOm7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:42:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE7440C36;
-        Fri, 13 Jan 2023 06:33:24 -0800 (PST)
+        Fri, 13 Jan 2023 09:42:59 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19D590E7A;
+        Fri, 13 Jan 2023 06:33:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5812461F9C;
-        Fri, 13 Jan 2023 14:33:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74176C433EF;
-        Fri, 13 Jan 2023 14:33:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 676E0CE20DE;
+        Fri, 13 Jan 2023 14:33:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C7FC4339B;
+        Fri, 13 Jan 2023 14:33:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673620403;
-        bh=gAJEQszHKaHIUyIQsDXXTvd6GfLQ4tayOwCBx3eLEko=;
+        s=k20201202; t=1673620429;
+        bh=uKdLtu+rCQLafQsfl2r5dCRH8oFNCeZWLd9/++XfXss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E6/C2TQpf0TLDyCCfLIq6N0kG6uD4Ynzr8wKfWFyqt8Q+EADIJ8P19E0ZHffFa45S
-         rmwWiVUR03qMSoq6+G5CMyPjEgMlF0PdZ6LVKSLXzMb0ywbKvYX1kdK5wIAWXbUmp8
-         bLe6JkV7FzPqNQgk9+u6CUrsgTHeRYq0xkg2FiGpdo1y+f0kCaA9FLEo5sLV/OX2yr
-         7v94yXzmK1qoTAjUWofR2/lH1K7rhXcFRj37y44iPU1xc19LsvRcWNtdpH7olQ9jOX
-         TGwQO+Qkajss6pXCJxZ97eg/kHFZckFwRfW6BPl6VkrPEAh8aLDSI5A68pn+GmEbQ7
-         U9i/5XTzcZkXg==
+        b=vFlLI//ZEt3VvIWbEqzvFVnP/65DQMrjhmkbLxFFlnnxxDpJLpGdT/muuTOHmekQA
+         Xib7ADIAJwrjDjfI4RwqtiSe2Jldqq8ecv0NVO+8IBISsohQrFjPEEuBEQnKFEZg/n
+         b0pgEUwqFcppMOZBePHNj4IJG+vK44y24Uhvr5mK5jxzbXoSDuXUFY8YPp90LxcN7I
+         gk0ppH3xEpiUJxkZYfuRG+hUvCOQpUQTmZwEhg9Saq3qgZQt5i9na6iBDrQ+r4pj8i
+         vKWjY97zENxv6nSgeoavkCTO6Emsj4NXTrTfLO0iiDORL9QvWl0NBjhy4CWrSOEOLE
+         uoYEvuoMmlI3Q==
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -54,9 +54,9 @@ Cc:     bpf@vger.kernel.org, live-patching@vger.kernel.org,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCHv2 bpf-next 1/3] livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
-Date:   Fri, 13 Jan 2023 15:33:01 +0100
-Message-Id: <20230113143303.867580-2-jolsa@kernel.org>
+Subject: [PATCHv2 bpf-next 3/3] bpf: Change modules resolving for kprobe multi link
+Date:   Fri, 13 Jan 2023 15:33:03 +0100
+Message-Id: <20230113143303.867580-4-jolsa@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230113143303.867580-1-jolsa@kernel.org>
 References: <20230113143303.867580-1-jolsa@kernel.org>
@@ -65,165 +65,176 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Zhen Lei <thunder.leizhen@huawei.com>
+We currently use module_kallsyms_on_each_symbol that iterates all
+modules/symbols and we try to lookup each such address in user
+provided symbols/addresses to get list of used modules.
 
-Currently we traverse all symbols of all modules to find the specified
-function for the specified module. But in reality, we just need to find
-the given module and then traverse all the symbols in it.
+This fix instead only iterates provided kprobe addresses and calls
+__module_address on each to get list of used modules. This turned
+out to be simpler and also bit faster.
 
-Let's add a new parameter 'const char *modname' to function
-module_kallsyms_on_each_symbol(), then we can compare the module names
-directly in this function and call hook 'fn' after matching. If 'modname'
-is NULL, the symbols of all modules are still traversed for compatibility
-with other usage cases.
+On my setup with workload being (executed 10 times):
 
-Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
-                |
-Phase2:          -->f1-->f2-->f3
+   # test_progs -t kprobe_multi_bench_attach_module
 
-Assuming that there are m modules, each module has n symbols on average,
-then the time complexity is reduced from O(m * n) to O(m) + O(n).
+Current code:
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+ Performance counter stats for './test.sh' (5 runs):
+
+    76,081,161,596      cycles:k                   ( +-  0.47% )
+
+           18.3867 +- 0.0992 seconds time elapsed  ( +-  0.54% )
+
+With the fix:
+
+ Performance counter stats for './test.sh' (5 runs):
+
+    74,079,889,063      cycles:k                   ( +-  0.04% )
+
+           17.8514 +- 0.0218 seconds time elapsed  ( +-  0.12% )
+
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/module.h   |  6 ++++--
- kernel/livepatch/core.c  | 10 +---------
- kernel/module/kallsyms.c | 13 ++++++++++++-
- kernel/trace/bpf_trace.c |  2 +-
- kernel/trace/ftrace.c    |  2 +-
- 5 files changed, 19 insertions(+), 14 deletions(-)
+ kernel/trace/bpf_trace.c | 95 +++++++++++++++++++++-------------------
+ 1 file changed, 49 insertions(+), 46 deletions(-)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 8c5909c0076c..514bc81568c5 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -879,11 +879,13 @@ static inline bool module_sig_ok(struct module *module)
- #endif	/* CONFIG_MODULE_SIG */
- 
- #if defined(CONFIG_MODULES) && defined(CONFIG_KALLSYMS)
--int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
-+int module_kallsyms_on_each_symbol(const char *modname,
-+				   int (*fn)(void *, const char *,
- 					     struct module *, unsigned long),
- 				   void *data);
- #else
--static inline int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
-+static inline int module_kallsyms_on_each_symbol(const char *modname,
-+						 int (*fn)(void *, const char *,
- 						 struct module *, unsigned long),
- 						 void *data)
- {
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 201f0c0482fb..c973ed9e42f8 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -118,7 +118,6 @@ static struct klp_object *klp_find_object(struct klp_patch *patch,
- }
- 
- struct klp_find_arg {
--	const char *objname;
- 	const char *name;
- 	unsigned long addr;
- 	unsigned long count;
-@@ -148,15 +147,9 @@ static int klp_find_callback(void *data, const char *name,
- {
- 	struct klp_find_arg *args = data;
- 
--	if ((mod && !args->objname) || (!mod && args->objname))
--		return 0;
--
- 	if (strcmp(args->name, name))
- 		return 0;
- 
--	if (args->objname && strcmp(args->objname, mod->name))
--		return 0;
--
- 	return klp_match_callback(data, addr);
- }
- 
-@@ -164,7 +157,6 @@ static int klp_find_object_symbol(const char *objname, const char *name,
- 				  unsigned long sympos, unsigned long *addr)
- {
- 	struct klp_find_arg args = {
--		.objname = objname,
- 		.name = name,
- 		.addr = 0,
- 		.count = 0,
-@@ -172,7 +164,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
- 	};
- 
- 	if (objname)
--		module_kallsyms_on_each_symbol(klp_find_callback, &args);
-+		module_kallsyms_on_each_symbol(objname, klp_find_callback, &args);
- 	else
- 		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
- 
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 4523f99b0358..ab2376a1be88 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -494,7 +494,8 @@ unsigned long module_kallsyms_lookup_name(const char *name)
- 	return ret;
- }
- 
--int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
-+int module_kallsyms_on_each_symbol(const char *modname,
-+				   int (*fn)(void *, const char *,
- 					     struct module *, unsigned long),
- 				   void *data)
- {
-@@ -509,6 +510,9 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
- 		if (mod->state == MODULE_STATE_UNFORMED)
- 			continue;
- 
-+		if (modname && strcmp(modname, mod->name))
-+			continue;
-+
- 		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
- 		preempt_disable();
- 		kallsyms = rcu_dereference_sched(mod->kallsyms);
-@@ -525,6 +529,13 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
- 			if (ret != 0)
- 				goto out;
- 		}
-+
-+		/*
-+		 * The given module is found, the subsequent modules do not
-+		 * need to be compared.
-+		 */
-+		if (modname)
-+			break;
- 	}
- out:
- 	mutex_unlock(&module_mutex);
 diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 23ce498bca97..095f7f8d34a1 100644
+index 095f7f8d34a1..90c5d5026831 100644
 --- a/kernel/trace/bpf_trace.c
 +++ b/kernel/trace/bpf_trace.c
-@@ -2735,7 +2735,7 @@ static int get_modules_for_addrs(struct module ***mods, unsigned long *addrs, u3
- 	int err;
- 
- 	/* We return either err < 0 in case of error, ... */
--	err = module_kallsyms_on_each_symbol(module_callback, &args);
-+	err = module_kallsyms_on_each_symbol(NULL, module_callback, &args);
- 	if (err) {
- 		kprobe_multi_put_modules(args.mods, args.mods_cnt);
- 		kfree(args.mods);
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 442438b93fe9..d249a55d9005 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -8324,7 +8324,7 @@ int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *a
- 	found_all = kallsyms_on_each_symbol(kallsyms_callback, &args);
- 	if (found_all)
- 		return 0;
--	found_all = module_kallsyms_on_each_symbol(kallsyms_callback, &args);
-+	found_all = module_kallsyms_on_each_symbol(NULL, kallsyms_callback, &args);
- 	return found_all ? 0 : -ESRCH;
+@@ -2682,69 +2682,79 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
+ 	}
  }
  
+-struct module_addr_args {
+-	unsigned long *addrs;
+-	u32 addrs_cnt;
++struct modules_array {
+ 	struct module **mods;
+ 	int mods_cnt;
+ 	int mods_cap;
+ };
+ 
+-static int module_callback(void *data, const char *name,
+-			   struct module *mod, unsigned long addr)
++static int add_module(struct modules_array *arr, struct module *mod)
+ {
+-	struct module_addr_args *args = data;
+ 	struct module **mods;
+ 
+-	/* We iterate all modules symbols and for each we:
+-	 * - search for it in provided addresses array
+-	 * - if found we check if we already have the module pointer stored
+-	 *   (we iterate modules sequentially, so we can check just the last
+-	 *   module pointer)
+-	 * - take module reference and store it
+-	 */
+-	if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
+-		       bpf_kprobe_multi_addrs_cmp))
+-		return 0;
+-
+-	if (args->mods && args->mods[args->mods_cnt - 1] == mod)
+-		return 0;
+-
+-	if (args->mods_cnt == args->mods_cap) {
+-		args->mods_cap = max(16, args->mods_cap * 3 / 2);
+-		mods = krealloc_array(args->mods, args->mods_cap, sizeof(*mods), GFP_KERNEL);
++	if (arr->mods_cnt == arr->mods_cap) {
++		arr->mods_cap = max(16, arr->mods_cap * 3 / 2);
++		mods = krealloc_array(arr->mods, arr->mods_cap, sizeof(*mods), GFP_KERNEL);
+ 		if (!mods)
+ 			return -ENOMEM;
+-		args->mods = mods;
++		arr->mods = mods;
+ 	}
+ 
+-	if (!try_module_get(mod))
+-		return -EINVAL;
+-
+-	args->mods[args->mods_cnt] = mod;
+-	args->mods_cnt++;
++	arr->mods[arr->mods_cnt] = mod;
++	arr->mods_cnt++;
+ 	return 0;
+ }
+ 
++static bool has_module(struct modules_array *arr, struct module *mod)
++{
++	int i;
++
++	if (!arr->mods)
++		return false;
++	for (i = arr->mods_cnt; i >= 0; i--) {
++		if (arr->mods[i] == mod)
++			return true;
++	}
++	return false;
++}
++
+ static int get_modules_for_addrs(struct module ***mods, unsigned long *addrs, u32 addrs_cnt)
+ {
+-	struct module_addr_args args = {
+-		.addrs     = addrs,
+-		.addrs_cnt = addrs_cnt,
+-	};
+-	int err;
++	struct modules_array arr = {};
++	u32 i, err = 0;
++
++	for (i = 0; i < addrs_cnt; i++) {
++		struct module *mod;
++
++		preempt_disable();
++		mod = __module_address(addrs[i]);
++		/* Either no module or we it's already stored  */
++		if (!mod || (mod && has_module(&arr, mod))) {
++			preempt_enable();
++			continue;
++		}
++		if (!try_module_get(mod))
++			err = -EINVAL;
++		preempt_enable();
++		if (err)
++			break;
++		err = add_module(&arr, mod);
++		if (err) {
++			module_put(mod);
++			break;
++		}
++	}
+ 
+ 	/* We return either err < 0 in case of error, ... */
+-	err = module_kallsyms_on_each_symbol(NULL, module_callback, &args);
+ 	if (err) {
+-		kprobe_multi_put_modules(args.mods, args.mods_cnt);
+-		kfree(args.mods);
++		kprobe_multi_put_modules(arr.mods, arr.mods_cnt);
++		kfree(arr.mods);
+ 		return err;
+ 	}
+ 
+ 	/* or number of modules found if everything is ok. */
+-	*mods = args.mods;
+-	return args.mods_cnt;
++	*mods = arr.mods;
++	return arr.mods_cnt;
+ }
+ 
+ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+@@ -2857,13 +2867,6 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+ 		       bpf_kprobe_multi_cookie_cmp,
+ 		       bpf_kprobe_multi_cookie_swap,
+ 		       link);
+-	} else {
+-		/*
+-		 * We need to sort addrs array even if there are no cookies
+-		 * provided, to allow bsearch in get_modules_for_addrs.
+-		 */
+-		sort(addrs, cnt, sizeof(*addrs),
+-		       bpf_kprobe_multi_addrs_cmp, NULL);
+ 	}
+ 
+ 	err = get_modules_for_addrs(&link->mods, addrs, cnt);
 -- 
 2.39.0
 
