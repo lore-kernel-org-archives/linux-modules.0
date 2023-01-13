@@ -2,157 +2,70 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19F7CC3DA78
-	for <linux-modules@archiver.kernel.org>; Fri, 13 Jan 2023 23:07:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A779C3DA78
+	for <linux-modules@archiver.kernel.org>; Fri, 13 Jan 2023 23:22:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjAMXHC (ORCPT
+        id S231184AbjAMXWO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 13 Jan 2023 18:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
+        Fri, 13 Jan 2023 18:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjAMXHB (ORCPT
+        with ESMTP id S231245AbjAMXWN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 13 Jan 2023 18:07:01 -0500
+        Fri, 13 Jan 2023 18:22:13 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FB02AE6;
-        Fri, 13 Jan 2023 15:06:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DBF5E082;
+        Fri, 13 Jan 2023 15:22:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=iwz7mFj6BnnAFkpB1WWVGVKEvGEgqsYMT8OTDqMBOOc=; b=S5supkgbtZvpM5usiJROXh2SMd
-        Y1hgUhSckjLRWnEj5HAZ28xKY2/jO40aad8NX8SKFWSCGAGe9KDs1BwfBsuo5kkXW+s94bGtLGHLI
-        tCwn3nTKTH6Y54z00u1h2FEamqJJ9FozrXUhLCT+bbmOAPmvO4MpU3yC4BZZPuqCJuQpnxv4XE4ri
-        i/ADfdDAjavLauay0iZr1J1GtFopf3WPbsKebPod2u5+ZdkCp2KfKD1UgttFwmQjf6xHk24kVgjeO
-        ydAAQcarw67L37NRtPQlurvEl5LBfoxJmbuhhgEvzjMnppCsrL1pAdipAe6/gxO2dsi8h/TCCtzjr
-        jxA615hw==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=vYlWrOT2wbl+1XrOQHwKvxZ0eERdfUj+qHqDYknHSZY=; b=pzOKZixl6ev/B7z+3tiPyMwTP1
+        F8Un0V34b8EUDeblpIVIJOZbT4/p2b7fSczn/ptaLA9A9t+bQfvweJal42xCfaywwwFQOs4CfCtbM
+        OuIy1D6ugIvj85maZwDEBzJR8unxCqOTdR6dOGC/+Rc0WeTAF6wQtgfN4HkIjXmmzoOPD2idok20m
+        tX8o6Ns4N8ZOyoXgtu9bd9fKovuOdsAzZlmCU/n7sDYOPv2KS0j+R4Sw4RggzvURAgGDJKKmdhdzA
+        4SbdiAHhuysTv/+ssMKR41hNrabVNZQyBHRs0wqTyrcVIAur1jnosWtcunViEpt3eLcutMw75kpUU
+        z7LWDG4w==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGT8N-004mqa-Md; Fri, 13 Jan 2023 23:06:51 +0000
-Date:   Fri, 13 Jan 2023 15:06:51 -0800
+        id 1pGTN3-004oMs-H4; Fri, 13 Jan 2023 23:22:01 +0000
+Date:   Fri, 13 Jan 2023 15:22:01 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Vegard Nossum <vegard.nossum@oracle.com>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>, Petr Mladek <pmladek@suse.com>,
-        prarit@redhat.com, david@redhat.com, mwilck@suse.com,
-        linux-kernel@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, linux-modules@vger.kernel.org,
-        John Haxby <john.haxby@oracle.com>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH v3] kmod: harden user namespaces with new
- kernel.ns_modules_allowed sysctl
-Message-ID: <Y8HkC1re3Fo46Ne3@bombadil.infradead.org>
-References: <20230112131911.7684-1-vegard.nossum@oracle.com>
- <Y8BVNihCrKOeY/FO@bombadil.infradead.org>
- <e88d9189-317c-6431-7fe0-08b82f13a81c@oracle.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     thunder.leizhen@huawei.com, swboyd@chromium.org,
+        yang.lee@linux.alibaba.com, linux@rasmusvillemoes.dk,
+        petr.pavlu@suse.com, mwilck@suse.com, pmladek@suse.com,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mcgrof@kernel.org
+Subject: [GIT PULL] modules changes for v6.2-rc4
+Message-ID: <Y8HnmbSvgli7fbQI@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e88d9189-317c-6431-7fe0-08b82f13a81c@oracle.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jan 12, 2023 at 10:53:07PM +0100, Vegard Nossum wrote:
-> On 1/12/23 19:45, Luis Chamberlain wrote:
-> > On Thu, Jan 12, 2023 at 02:19:11PM +0100, Vegard Nossum wrote:
-> > > +ns_modules_allowed
-> > > +==================
-> > > +
-> > > +Control whether processes may trigger module loading inside a user namespace.
-> > 
-> > This is false documentation. The place it is trying to protect simply
-> > prevents trying to call modprobe for auto-loading within the kernel.
-> 
-> I don't think this is false -- but yes, this only protects module
-> auto-loading in user namespaces; all auto-loading calls within the
-> kernel should be going through this __request_module() -> modprobe path.
-> 
-> init_module()/finit_module(), the mechanism used by modprobe, are
-> themselves already restricted inside user namespaces, see below.
+The following changes since commit 88603b6dc419445847923fcb7fe5080067a30f98:
 
-The documentation should be clear about the exact nature of what
-mechanism is prevented to load.
+  Linux 6.2-rc2 (2023-01-01 13:53:16 -0800)
 
-> > > +	/*
-> > > +	 * Disallow module loading if we're in a user namespace.
-> > > +	 */
-> > > +	if (current_user_ns() != &init_user_ns &&
-> > > +	    !sysctl_ns_modules_allowed) {
-> > > +		pr_warn_ratelimited("request_module: pid %d (%s) in user namespace requested kernel module %s; denied due to kernel.ns_modules_allowed sysctl\n",
-> > > +			task_pid_nr(current), current->comm, module_name);
-> > > +		return -EPERM;
-> > > +	}
-> > > +
-> > >   	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
-> > >   		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
-> > >   				    atomic_read(&kmod_concurrent_max),
-> > 
-> > Have you seen what call_modprobe() does?
-> 
-> Yes.
-> 
-> > This is just a limitting the auto-loading through calling modprobe.
-> > If the concern is to load modules wouldn't you be better off just
-> > putting a stop gap at finit_module() which actually receives the
-> > load attempt from modprobe? Ie, an evil namespace, if it has access
-> > to /sbin/modprobe could simply just try calling /sbin/modprobe on its
-> > own.
-> 
-> No.
-> 
-> Root inside a user namespace can't call finit_module() as it won't have
-> the necessary capabilities in the init namespace, see may_init_module().
+are available in the Git repository at:
 
-I think the documentation to this knob you are adding should explain
-this as well to give a bette context as to why it is useful.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc4
 
-And if may_init_module() suffices, why not just add a may_init_module()
-instead of your check? Why would we allow a successful call to modprobe
-with your sysctl but end up having it ignored in the end by
-finit_module()? If what is being allowed here is to overcome may_init_module()
-CAP_SYS_MODULE check by using call_modprobe() on the user namespace
-the commit log should just mention this, and mention that by design
-user namespaces have never been intended to allow loading modules, even if
-they somehow end up triggering auto-loading of modules via request_module().
+for you to fetch changes up to da35048f2600633a7f9ba5fa7d6e3b1d0195938b:
 
-If this is true then currently we are enabling auto-loading as a
-mistake, and the sysctl is only valuable to prevent regressions with
-existing behaviour which should have been disabled from the start.
+  kallsyms: Fix scheduling with interrupts disabled in self-test (2023-01-13 15:09:08 -0800)
 
-Is there an example successful exploit which takes avantage of having
-a user namespace auto-load a kernel module and that triggers a security
-flaw? What's an example of one?
+----------------------------------------------------------------
+modules-6.2-rc4
 
-> > What this *could* do is race to force a failure on some other *real*
-> > modprobe request we do wish to honor when the above kmod kmod_concurrent_max
-> > is triggered.
-> 
-> How? My new check is done before the kmod_concurrent_max check/critical
-> section... the check doesn't cause any more modprobe requests to happen
-> in the first place, the only thing it can do is make them exit early.
-> There is no way my patch can make this worse.
+Just one fix for modules by Nick.
 
-You are missing my point. My point is that abuse in general over having
-a user namespace calling modprobe could cause harm that it can possibly
-Denial-of-Service valid requests.
+----------------------------------------------------------------
+Nicholas Piggin (1):
+      kallsyms: Fix scheduling with interrupts disabled in self-test
 
-If user namespaces should never have been allowed to even auto-load the
-commit log should mention that.
-
-> > So in terms of justification, this commit log needs a bit more work as I
-> > just can't see how this alone is fixing any CVE.
-> 
-> [...]
-> 
-> > So let's take a step back and think this through. What exaclty and why
-> > would this commit fix *any* security issue? Itemizing CVEs won't cut it.
-> 
-> I can include my explanations above in the changelog if you think that
-> will help.
-
-Answering the above questions would help.
-
-  Luis
+ kernel/kallsyms_selftest.c | 21 ++++++---------------
+ 1 file changed, 6 insertions(+), 15 deletions(-)
