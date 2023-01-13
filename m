@@ -2,239 +2,141 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 685CDC61DB3
-	for <linux-modules@archiver.kernel.org>; Fri, 13 Jan 2023 14:44:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83CE6C61DB3
+	for <linux-modules@archiver.kernel.org>; Fri, 13 Jan 2023 14:58:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjAMOoM (ORCPT
+        id S229653AbjAMO6X (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 13 Jan 2023 09:44:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
+        Fri, 13 Jan 2023 09:58:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjAMOm7 (ORCPT
+        with ESMTP id S229763AbjAMO5w (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:42:59 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19D590E7A;
-        Fri, 13 Jan 2023 06:33:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 13 Jan 2023 09:57:52 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A5997488;
+        Fri, 13 Jan 2023 06:45:13 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 91F53607B4;
+        Fri, 13 Jan 2023 14:45:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673621112; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oJMxd0NdjDpbFfMPktCneUuO99VYCmKvChtNw4xNjD8=;
+        b=KTRs3d/2ZWAXCFkTJitI4tkBmp0uw59UcO43ZB9gHHeM7TDHaQdukyw+EUZV1KACS7b+96
+        QM97r8d8SXVB+uePAMVDsktuQpK6nfnYObNdSOwooUD/1szsLcvrlemVEdFIAuX4HWlczx
+        bQaqT9viFLxb2fK3r9cAFBrkdkZzFKY=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 676E0CE20DE;
-        Fri, 13 Jan 2023 14:33:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C7FC4339B;
-        Fri, 13 Jan 2023 14:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673620429;
-        bh=uKdLtu+rCQLafQsfl2r5dCRH8oFNCeZWLd9/++XfXss=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vFlLI//ZEt3VvIWbEqzvFVnP/65DQMrjhmkbLxFFlnnxxDpJLpGdT/muuTOHmekQA
-         Xib7ADIAJwrjDjfI4RwqtiSe2Jldqq8ecv0NVO+8IBISsohQrFjPEEuBEQnKFEZg/n
-         b0pgEUwqFcppMOZBePHNj4IJG+vK44y24Uhvr5mK5jxzbXoSDuXUFY8YPp90LxcN7I
-         gk0ppH3xEpiUJxkZYfuRG+hUvCOQpUQTmZwEhg9Saq3qgZQt5i9na6iBDrQ+r4pj8i
-         vKWjY97zENxv6nSgeoavkCTO6Emsj4NXTrTfLO0iiDORL9QvWl0NBjhy4CWrSOEOLE
-         uoYEvuoMmlI3Q==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     bpf@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-modules@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCHv2 bpf-next 3/3] bpf: Change modules resolving for kprobe multi link
-Date:   Fri, 13 Jan 2023 15:33:03 +0100
-Message-Id: <20230113143303.867580-4-jolsa@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230113143303.867580-1-jolsa@kernel.org>
-References: <20230113143303.867580-1-jolsa@kernel.org>
+        by relay2.suse.de (Postfix) with ESMTPS id 743FA2C141;
+        Fri, 13 Jan 2023 14:45:12 +0000 (UTC)
+Date:   Fri, 13 Jan 2023 15:45:10 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     mcgrof@kernel.org, david@redhat.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] selftests: kmod: Add tests for merging same-name
+ module load requests
+Message-ID: <Y8Ft7q/NBK5utN+I@alley>
+References: <20221016123031.3963-1-petr.pavlu@suse.com>
+ <20221016123031.3963-5-petr.pavlu@suse.com>
+ <Y01d50Z2DK3f9V+Q@alley>
+ <edeee00c-c101-460a-0682-a2fa638b95f4@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <edeee00c-c101-460a-0682-a2fa638b95f4@suse.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-We currently use module_kallsyms_on_each_symbol that iterates all
-modules/symbols and we try to lookup each such address in user
-provided symbols/addresses to get list of used modules.
+On Thu 2023-01-12 10:03:10, Petr Pavlu wrote:
+> [A different fix that the one from this thread was selected but it is still
+> useful to discuss these test cases and if they should be added in some form.]
+> 
+> On 10/17/22 15:51, Petr Mladek wrote:
+> > On Sun 2022-10-16 14:30:31, Petr Pavlu wrote:
+> >> Add two tests to check that loading the same module multiple times in
+> >> parallel results only in one real attempt to initialize it.
+> >> Synchronization of the loads is done by waiting 1000 ms in the init
+> > 
+> > I do not have a good experience with this kind of synchronization.
+> > It usually is not reliable. The test might be very slow especially when
+> > false positives are solved by prolonging the delay.
+> > 
+> > Alternative solution would be to have two modules:
+> > 
+> > 1st module would provide a counter, for example:
+> > 
+> > int modB_load_cnt;
+> > module_param(modB_load_cnt, int, 0444);
+> > EXPORT_SYMBOL(modB_load_cnt);
+> > 
+> > EXPORT_SYMBOL() should allow to directly increment the counter
+> > from the 2nd module.
+> > 
+> > module_param() should make the value readable via
+> > /sys/module/modA/parameters/modB_load_cnt. It can be
+> > checked by kmod_sh.
+> 
+> I agree that it would be best to avoid any synchronization based on timeouts
+> in these tests.
+> 
+> My reading is that your idea should allow the tests to remove measuring how
+> long it took in total to process all module inserts. It was possible for me to
+> implement this change.
+> 
+> It unfortunately doesn't help with the 1 second timeout that the
+> kmod_test_0014 module (modB in your description) has in its init function. Its
+> purpose is to make sure that any parallel loads of the same module which were
+> started by kmod.sh manage to reach add_unformed_module(), sleep there and
+> therefore hit the updated logic.
 
-This fix instead only iterates provided kprobe addresses and calls
-__module_address on each to get list of used modules. This turned
-out to be simpler and also bit faster.
+I see.
 
-On my setup with workload being (executed 10 times):
+> One option how to avoid this timeout is to extend modA to register a kprobe on
+> finished_loading() and export via a parameter which loads started by kmod.sh
+> reached this point. This approach works ok on my system and a prototype is
+> pasted at the end of this mail. Two shortcomings are that it relies on
+> internal knowledge of the module loader code and function finished_loading()
+> might not be always available for probing as it could get inlined in some
+> configurations.
 
-   # test_progs -t kprobe_multi_bench_attach_module
+Yeah, it is a bit fragile as well.
 
-Current code:
+> To summarize, I see the following options for these tests:
+> * Use a timeout to synchronize the loads.
+> * Use the outlined kprobe approach.
+> * Don't add these tests at all.
 
- Performance counter stats for './test.sh' (5 runs):
+Yet another solution would be to add a support for this test into
+the module loaded code. I mean that add_unformed_module() might
+increment a global counter when a certain module is waiting there.
+The global counter then might be used to unblock the init()
+callback.
 
-    76,081,161,596      cycles:k                   ( +-  0.47% )
+The test module might be distinguished, for example, by a test
+specific module info string. For example, see
+check_modinfo_livepatch(). It looks for the info string defined
+in the livepatch modules, see MODULE_INFO(livepatch, "Y"); in
+samples/livepatch/livepatch-sample.c.
 
-           18.3867 +- 0.0992 seconds time elapsed  ( +-  0.54% )
+That said, I do not like this much either. I am not sure if it is
+more or less crazy than the kprobe approach.
 
-With the fix:
 
- Performance counter stats for './test.sh' (5 runs):
+> Any opinions what would be preferred? I'm leaning towards not adding these
+> tests as they look fragile to me.
 
-    74,079,889,063      cycles:k                   ( +-  0.04% )
+I do not have strong opinion.
 
-           17.8514 +- 0.0218 seconds time elapsed  ( +-  0.12% )
+My experience is that some tests are not worth the effort. The
+maintenance or false positives might add more harm than good.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- kernel/trace/bpf_trace.c | 95 +++++++++++++++++++++-------------------
- 1 file changed, 49 insertions(+), 46 deletions(-)
+My feeling is that this one belongs into this category.
+We could keep the timeout and make it error prone.
+Or we could use some hacks and make it hard to maintain.
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 095f7f8d34a1..90c5d5026831 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2682,69 +2682,79 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
- 	}
- }
- 
--struct module_addr_args {
--	unsigned long *addrs;
--	u32 addrs_cnt;
-+struct modules_array {
- 	struct module **mods;
- 	int mods_cnt;
- 	int mods_cap;
- };
- 
--static int module_callback(void *data, const char *name,
--			   struct module *mod, unsigned long addr)
-+static int add_module(struct modules_array *arr, struct module *mod)
- {
--	struct module_addr_args *args = data;
- 	struct module **mods;
- 
--	/* We iterate all modules symbols and for each we:
--	 * - search for it in provided addresses array
--	 * - if found we check if we already have the module pointer stored
--	 *   (we iterate modules sequentially, so we can check just the last
--	 *   module pointer)
--	 * - take module reference and store it
--	 */
--	if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
--		       bpf_kprobe_multi_addrs_cmp))
--		return 0;
--
--	if (args->mods && args->mods[args->mods_cnt - 1] == mod)
--		return 0;
--
--	if (args->mods_cnt == args->mods_cap) {
--		args->mods_cap = max(16, args->mods_cap * 3 / 2);
--		mods = krealloc_array(args->mods, args->mods_cap, sizeof(*mods), GFP_KERNEL);
-+	if (arr->mods_cnt == arr->mods_cap) {
-+		arr->mods_cap = max(16, arr->mods_cap * 3 / 2);
-+		mods = krealloc_array(arr->mods, arr->mods_cap, sizeof(*mods), GFP_KERNEL);
- 		if (!mods)
- 			return -ENOMEM;
--		args->mods = mods;
-+		arr->mods = mods;
- 	}
- 
--	if (!try_module_get(mod))
--		return -EINVAL;
--
--	args->mods[args->mods_cnt] = mod;
--	args->mods_cnt++;
-+	arr->mods[arr->mods_cnt] = mod;
-+	arr->mods_cnt++;
- 	return 0;
- }
- 
-+static bool has_module(struct modules_array *arr, struct module *mod)
-+{
-+	int i;
-+
-+	if (!arr->mods)
-+		return false;
-+	for (i = arr->mods_cnt; i >= 0; i--) {
-+		if (arr->mods[i] == mod)
-+			return true;
-+	}
-+	return false;
-+}
-+
- static int get_modules_for_addrs(struct module ***mods, unsigned long *addrs, u32 addrs_cnt)
- {
--	struct module_addr_args args = {
--		.addrs     = addrs,
--		.addrs_cnt = addrs_cnt,
--	};
--	int err;
-+	struct modules_array arr = {};
-+	u32 i, err = 0;
-+
-+	for (i = 0; i < addrs_cnt; i++) {
-+		struct module *mod;
-+
-+		preempt_disable();
-+		mod = __module_address(addrs[i]);
-+		/* Either no module or we it's already stored  */
-+		if (!mod || (mod && has_module(&arr, mod))) {
-+			preempt_enable();
-+			continue;
-+		}
-+		if (!try_module_get(mod))
-+			err = -EINVAL;
-+		preempt_enable();
-+		if (err)
-+			break;
-+		err = add_module(&arr, mod);
-+		if (err) {
-+			module_put(mod);
-+			break;
-+		}
-+	}
- 
- 	/* We return either err < 0 in case of error, ... */
--	err = module_kallsyms_on_each_symbol(NULL, module_callback, &args);
- 	if (err) {
--		kprobe_multi_put_modules(args.mods, args.mods_cnt);
--		kfree(args.mods);
-+		kprobe_multi_put_modules(arr.mods, arr.mods_cnt);
-+		kfree(arr.mods);
- 		return err;
- 	}
- 
- 	/* or number of modules found if everything is ok. */
--	*mods = args.mods;
--	return args.mods_cnt;
-+	*mods = arr.mods;
-+	return arr.mods_cnt;
- }
- 
- int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-@@ -2857,13 +2867,6 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 		       bpf_kprobe_multi_cookie_cmp,
- 		       bpf_kprobe_multi_cookie_swap,
- 		       link);
--	} else {
--		/*
--		 * We need to sort addrs array even if there are no cookies
--		 * provided, to allow bsearch in get_modules_for_addrs.
--		 */
--		sort(addrs, cnt, sizeof(*addrs),
--		       bpf_kprobe_multi_addrs_cmp, NULL);
- 	}
- 
- 	err = get_modules_for_addrs(&link->mods, addrs, cnt);
--- 
-2.39.0
-
+Best Regards,
+Petr
