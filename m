@@ -2,37 +2,37 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45135C61DB3
-	for <linux-modules@archiver.kernel.org>; Fri, 13 Jan 2023 14:43:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11BA7C678D4
+	for <linux-modules@archiver.kernel.org>; Fri, 13 Jan 2023 14:43:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjAMOm5 (ORCPT
+        id S229618AbjAMOnJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 13 Jan 2023 09:42:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        Fri, 13 Jan 2023 09:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjAMOmU (ORCPT
+        with ESMTP id S229682AbjAMOmn (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 13 Jan 2023 09:42:20 -0500
+        Fri, 13 Jan 2023 09:42:43 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014E640C17;
-        Fri, 13 Jan 2023 06:33:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC59D42E2D;
+        Fri, 13 Jan 2023 06:33:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F4C361F41;
-        Fri, 13 Jan 2023 14:33:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00873C433EF;
-        Fri, 13 Jan 2023 14:33:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5743561E1B;
+        Fri, 13 Jan 2023 14:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6394DC433EF;
+        Fri, 13 Jan 2023 14:33:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673620391;
-        bh=c2/eHOeJ8hv3rN2sbMnI77LITuYi0ZOFIxjM3mxMwEU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Egl0gYzczrT8rdS8sgWZPKkHm1tNJZFUMyWA3MoqyTv4XoHm1mbc3j5eXm4N16ylJ
-         0V5p+bvgG4SQXvLa8PizJPnzPcgVaeefV1INYDeYp4pfNns/07i6TR6Pqz9/rXK795
-         I1byl0+/OtxplnDtpzYsidxcl+FH3c7tTqLLo36VRWHsAtIOATNsL5bn/JVcRbfmQK
-         jFjrDTSe+xD0uPR/nlPyFH1yPiD9eoEGRtM2jh0odnl2HUYnRZffFx0qLRTFpdHFNW
-         zDtapmP4S7vU25JryqqOD5Jf9S/zb7eUOyXKt97yQojUZL/7UJOmgieFjMoEMnDn1Q
-         Q9atmDJi90SmA==
+        s=k20201202; t=1673620416;
+        bh=2J0aMTFCQbEQOHeAHIEVXW0hTFVGR9Cw2MSUZwhnyFk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SKjs3HRUwC3u9jl5Nn4KbCsxxMWZSEcl7ptvQ+HtkDjIG2Ux6jEP7vCZYnu9X4lFD
+         QTkwdDlijt/80oeVdP78lFdyET6NpyGVoi2SKPaU4vSAJ5X9qRfi4P3EKJVsGYx0fh
+         VMWwyawjVMBZBLxlIoS0ra3xs8MvNGb5GsVey1bGXilwlo88xnfGU7vzwg6FKMJPMU
+         EQiae7/6gwpDWWSRgbx+N8p1U7DsZ6F3FnbVmXGeO5NMO8llxGm8VLTSkjzOjxftEK
+         a1t3HE/UtXOeB1BhCWmaVpxxPvtyLofV+Uh3Fq2puPVOYdiNww/I+ZtXKtfHaYCKEO
+         CdqwG+sK0G5sg==
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -54,43 +54,100 @@ Cc:     bpf@vger.kernel.org, live-patching@vger.kernel.org,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCHv2 bpf-next 0/3] kallsyms: Optimize the search for module symbols by livepatch and bpf
-Date:   Fri, 13 Jan 2023 15:33:00 +0100
-Message-Id: <20230113143303.867580-1-jolsa@kernel.org>
+Subject: [PATCHv2 bpf-next 2/3] selftests/bpf: Add serial_test_kprobe_multi_bench_attach_kernel/module tests
+Date:   Fri, 13 Jan 2023 15:33:02 +0100
+Message-Id: <20230113143303.867580-3-jolsa@kernel.org>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230113143303.867580-1-jolsa@kernel.org>
+References: <20230113143303.867580-1-jolsa@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-hi,
-sending new version of [1] patchset posted originally by Zhen Lei.
-It contains 2 changes that improove search performance for livepatch
-and bpf.
+Add bench test for module portion of the symbols as well.
 
-v2 changes:
-  - reworked the bpf change and meassured the performance
-  - adding new selftest to benchmark kprobe multi module attachment
-  - skipping patch 3 as requested by Zhen Lei
-  - added Reviewed-by for patch 1 [Petr Mladek]
+  # ./test_progs -v -t kprobe_multi_bench_attach_module
+  bpf_testmod.ko is already unloaded.
+  Loading bpf_testmod.ko...
+  Successfully loaded bpf_testmod.ko.
+  test_kprobe_multi_bench_attach:PASS:get_syms 0 nsec
+  test_kprobe_multi_bench_attach:PASS:kprobe_multi_empty__open_and_load 0 nsec
+  test_kprobe_multi_bench_attach:PASS:bpf_program__attach_kprobe_multi_opts 0 nsec
+  test_kprobe_multi_bench_attach: found 26620 functions
+  test_kprobe_multi_bench_attach: attached in   0.182s
+  test_kprobe_multi_bench_attach: detached in   0.082s
+  #96      kprobe_multi_bench_attach_module:OK
+  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+  Successfully unloaded bpf_testmod.ko.
 
-thanks,
-jirka
+It's useful for testing kprobe multi link modules resolving.
 
-
-[1] https://lore.kernel.org/bpf/20221230112729.351-1-thunder.leizhen@huawei.com/
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (2):
-      selftests/bpf: Add serial_test_kprobe_multi_bench_attach_kernel/module tests
-      bpf: Change modules resolving for kprobe multi link
+ .../bpf/prog_tests/kprobe_multi_test.c        | 21 ++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-Zhen Lei (1):
-      livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index c6f37e825f11..017a6996f3fa 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -322,7 +322,7 @@ static bool symbol_equal(long key1, long key2, void *ctx __maybe_unused)
+ 	return strcmp((const char *) key1, (const char *) key2) == 0;
+ }
+ 
+-static int get_syms(char ***symsp, size_t *cntp)
++static int get_syms(char ***symsp, size_t *cntp, bool kernel)
+ {
+ 	size_t cap = 0, cnt = 0, i;
+ 	char *name = NULL, **syms = NULL;
+@@ -349,8 +349,9 @@ static int get_syms(char ***symsp, size_t *cntp)
+ 	}
+ 
+ 	while (fgets(buf, sizeof(buf), f)) {
+-		/* skip modules */
+-		if (strchr(buf, '['))
++		if (kernel && strchr(buf, '['))
++			continue;
++		if (!kernel && !strchr(buf, '['))
+ 			continue;
+ 
+ 		free(name);
+@@ -404,7 +405,7 @@ static int get_syms(char ***symsp, size_t *cntp)
+ 	return err;
+ }
+ 
+-void serial_test_kprobe_multi_bench_attach(void)
++static void test_kprobe_multi_bench_attach(bool kernel)
+ {
+ 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
+ 	struct kprobe_multi_empty *skel = NULL;
+@@ -415,7 +416,7 @@ void serial_test_kprobe_multi_bench_attach(void)
+ 	char **syms = NULL;
+ 	size_t cnt = 0, i;
+ 
+-	if (!ASSERT_OK(get_syms(&syms, &cnt), "get_syms"))
++	if (!ASSERT_OK(get_syms(&syms, &cnt, kernel), "get_syms"))
+ 		return;
+ 
+ 	skel = kprobe_multi_empty__open_and_load();
+@@ -453,6 +454,16 @@ void serial_test_kprobe_multi_bench_attach(void)
+ 	}
+ }
+ 
++void serial_test_kprobe_multi_bench_attach_kernel(void)
++{
++	test_kprobe_multi_bench_attach(true);
++}
++
++void serial_test_kprobe_multi_bench_attach_module(void)
++{
++	test_kprobe_multi_bench_attach(false);
++}
++
+ void test_kprobe_multi_test(void)
+ {
+ 	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
+-- 
+2.39.0
 
- include/linux/module.h                                     |  6 ++++--
- kernel/livepatch/core.c                                    | 10 +---------
- kernel/module/kallsyms.c                                   | 13 ++++++++++++-
- kernel/trace/bpf_trace.c                                   | 95 ++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------------------
- kernel/trace/ftrace.c                                      |  2 +-
- tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 21 ++++++++++++++++-----
- 6 files changed, 83 insertions(+), 64 deletions(-)
