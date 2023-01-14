@@ -2,73 +2,73 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36FCAC3DA78
-	for <linux-modules@archiver.kernel.org>; Sat, 14 Jan 2023 13:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0710BC46467
+	for <linux-modules@archiver.kernel.org>; Sat, 14 Jan 2023 16:21:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjANNkR (ORCPT
+        id S230003AbjANQVH (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 14 Jan 2023 08:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
+        Sat, 14 Jan 2023 11:21:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjANNkQ (ORCPT
+        with ESMTP id S229565AbjANQVG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 14 Jan 2023 08:40:16 -0500
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 14 Jan 2023 05:40:15 PST
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89CFC524E
-        for <linux-modules@vger.kernel.org>; Sat, 14 Jan 2023 05:40:15 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id GgeIpQmdRVDZbGgeJpIxxi; Sat, 14 Jan 2023 14:32:43 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 14 Jan 2023 14:32:43 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <7677faba-bd82-d49a-ad06-c42179b456cc@wanadoo.fr>
-Date:   Sat, 14 Jan 2023 14:32:42 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 18/30] module: Use kstrtobool() instead of strtobool()
-Content-Language: fr
-To:     Luis Chamberlain <mcgrof@kernel.org>, atomlin@redhat.com
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-modules@vger.kernel.org
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
- <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
- <Y2K5v08yIDNk7sNW@bombadil.infradead.org>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <Y2K5v08yIDNk7sNW@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Sat, 14 Jan 2023 11:21:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81054699;
+        Sat, 14 Jan 2023 08:21:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E63760B8B;
+        Sat, 14 Jan 2023 16:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B3D1EC433EF;
+        Sat, 14 Jan 2023 16:21:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673713264;
+        bh=w0VDn70wqRnCrd4MDALS1fxv+kQFjGJT3MpwbTane9c=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=BwEDmAOtURXbI48eqa/hZmHhBEApiudO8rwUO8hS/uzlZa6SPKCohZ8HuNdJzqQ/N
+         vGY5nTSFnBQnmuUtACz2ME9vQLgKr3wU22hqImv5L1JGVdAyclSBR7lKR763/Et7wL
+         YoomSm7t1aB9WUIFOzZ3oAXd4WlkcU51Qip/Ya+VBVmBM3Go34ry+R40YotygkmpeV
+         ww9s/GNajHPFkMUlECLyDThNf+bpOBWliqX0wEXpo1W6Bpiv2ql6+Vu4LHkMC2QWcb
+         IB5uz9JwYAX/f1ZKrrCe1ge1PUH1x5/XFJ+tCkhNOZmwePpVQZ5aPOzBPlGBfMD/hV
+         hgAkQf2P+m+4g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8BA3CC395C8;
+        Sat, 14 Jan 2023 16:21:04 +0000 (UTC)
+Subject: Re: [GIT PULL] modules changes for v6.2-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y8HnmbSvgli7fbQI@bombadil.infradead.org>
+References: <Y8HnmbSvgli7fbQI@bombadil.infradead.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y8HnmbSvgli7fbQI@bombadil.infradead.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc4
+X-PR-Tracked-Commit-Id: da35048f2600633a7f9ba5fa7d6e3b1d0195938b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8b7be52f3f0d0c24ee147ba7cab6c7fa4f9bcfbb
+Message-Id: <167371326438.7515.4993088341393310829.pr-tracker-bot@kernel.org>
+Date:   Sat, 14 Jan 2023 16:21:04 +0000
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        thunder.leizhen@huawei.com, swboyd@chromium.org,
+        yang.lee@linux.alibaba.com, linux@rasmusvillemoes.dk,
+        petr.pavlu@suse.com, mwilck@suse.com, pmladek@suse.com,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mcgrof@kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Le 02/11/2022 à 19:41, Luis Chamberlain a écrit :
-> On Tue, Nov 01, 2022 at 10:14:06PM +0100, Christophe JAILLET wrote:
->> strtobool() is the same as kstrtobool().
->> However, the latter is more used within the kernel.
->>
->> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
->> the other function name.
->>
->> While at it, include the corresponding header file (<linux/kstrtox.h>)
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> 
->    Luis
-> 
+The pull request you sent on Fri, 13 Jan 2023 15:22:01 -0800:
 
-Hi,
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc4
 
-This has been R-b 2 months ago by 2 persons, and I've just resent 
-patches in this serie that have neither been merged in -next, nor A-b or 
-R-b.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8b7be52f3f0d0c24ee147ba7cab6c7fa4f9bcfbb
 
-So for this one, it is just a polite reminder. 😄
+Thank you!
 
-Do you have visibility on when it should be merged?
-
-CJ
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
