@@ -2,73 +2,179 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0710BC46467
-	for <linux-modules@archiver.kernel.org>; Sat, 14 Jan 2023 16:21:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9564CC3DA78
+	for <linux-modules@archiver.kernel.org>; Sun, 15 Jan 2023 21:49:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjANQVH (ORCPT
+        id S231610AbjAOVtO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 14 Jan 2023 11:21:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        Sun, 15 Jan 2023 16:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjANQVG (ORCPT
+        with ESMTP id S231320AbjAOVtN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 14 Jan 2023 11:21:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81054699;
-        Sat, 14 Jan 2023 08:21:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E63760B8B;
-        Sat, 14 Jan 2023 16:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3D1EC433EF;
-        Sat, 14 Jan 2023 16:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673713264;
-        bh=w0VDn70wqRnCrd4MDALS1fxv+kQFjGJT3MpwbTane9c=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=BwEDmAOtURXbI48eqa/hZmHhBEApiudO8rwUO8hS/uzlZa6SPKCohZ8HuNdJzqQ/N
-         vGY5nTSFnBQnmuUtACz2ME9vQLgKr3wU22hqImv5L1JGVdAyclSBR7lKR763/Et7wL
-         YoomSm7t1aB9WUIFOzZ3oAXd4WlkcU51Qip/Ya+VBVmBM3Go34ry+R40YotygkmpeV
-         ww9s/GNajHPFkMUlECLyDThNf+bpOBWliqX0wEXpo1W6Bpiv2ql6+Vu4LHkMC2QWcb
-         IB5uz9JwYAX/f1ZKrrCe1ge1PUH1x5/XFJ+tCkhNOZmwePpVQZ5aPOzBPlGBfMD/hV
-         hgAkQf2P+m+4g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8BA3CC395C8;
-        Sat, 14 Jan 2023 16:21:04 +0000 (UTC)
-Subject: Re: [GIT PULL] modules changes for v6.2-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y8HnmbSvgli7fbQI@bombadil.infradead.org>
-References: <Y8HnmbSvgli7fbQI@bombadil.infradead.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y8HnmbSvgli7fbQI@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc4
-X-PR-Tracked-Commit-Id: da35048f2600633a7f9ba5fa7d6e3b1d0195938b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8b7be52f3f0d0c24ee147ba7cab6c7fa4f9bcfbb
-Message-Id: <167371326438.7515.4993088341393310829.pr-tracker-bot@kernel.org>
-Date:   Sat, 14 Jan 2023 16:21:04 +0000
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        thunder.leizhen@huawei.com, swboyd@chromium.org,
-        yang.lee@linux.alibaba.com, linux@rasmusvillemoes.dk,
-        petr.pavlu@suse.com, mwilck@suse.com, pmladek@suse.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mcgrof@kernel.org
+        Sun, 15 Jan 2023 16:49:13 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE6B18152;
+        Sun, 15 Jan 2023 13:49:11 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so20951308wms.4;
+        Sun, 15 Jan 2023 13:49:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gd7Ow2nPrEWd6lZ2zmUT7J4z0TLG/anTssBGwzt00Nc=;
+        b=UIl9Gprhiq5HCUZZup59Kkv+RXKDVsYOAXEAxEes7WEAImXJ2xVcxAdKA0R98q3nKh
+         inuXNmPXwE0hs+3pjZ24JVPIht4gbMfjpH8U0TRyJvlyDWWMgsAOYzR+KYS3OXd0soiC
+         ArPUNwYD2T082+UFZaB2/AE6EwAe3EmIDVZTWESaBcKExPjcznHRKuRFYp9a4tIMcF5V
+         P0bSPQEhc2VOnYgws+qrhbc1nkx53RPpBe+9fO02kDUjEc9db9KGc4UYSiASB5oXeRMp
+         HiIO3rzuKxqbP1dZojGal/Fp9+DK5oeb0g1sS6IPzDsZepgIguxjSn7NS1iq7B1i2hrW
+         n5eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gd7Ow2nPrEWd6lZ2zmUT7J4z0TLG/anTssBGwzt00Nc=;
+        b=ALVfZU9i8hpurt/tN2BM8ucvd27cOU1kJYVS9YyIshTB4PTKAKVpjUNqxsGtF3s7p2
+         RKIrsCxAOY8sCy9pVSmTEBKcfSKACWcHgsNjd6x7u5tIwlh0GKrtzNrLo1BqF9XtkIMo
+         t2UGG/LuWoyEviKXMUlPOst3EmIewQFFZ6A2YmHA0Z2gcIRMgx04sk28D/cgd7TWlFTr
+         +PItWqOPD2PBtdVCiKeyUGgxr/yhoS9OXWzZ+sGmpsZkq/3TQurNMEcGuII4Wg+gQQJM
+         /bwsE3RJ0ONCAWGqb4gBy+vCt43hvJAj048WezQ4mBIqF47a9oUQBEhpnYxRFfG/sX8N
+         mW2g==
+X-Gm-Message-State: AFqh2kq0JKbbUaQLF+bcQxsEoC8SQtupqeBpU9/Ivrw/HVhPb/KGW41m
+        EGnc8dmtFJ8P+27KngTiytA=
+X-Google-Smtp-Source: AMrXdXuwLlvobMgpyjk0yf7rfKUiaQcWvz2pRA5JHlX/iVn9xPH66Ik3FuDSLw1s9XtZiGUFB7Yh0w==
+X-Received: by 2002:a05:600c:4d11:b0:3da:f97b:2a95 with SMTP id u17-20020a05600c4d1100b003daf97b2a95mr2143498wmp.36.1673819349645;
+        Sun, 15 Jan 2023 13:49:09 -0800 (PST)
+Received: from krava ([83.240.63.124])
+        by smtp.gmail.com with ESMTPSA id z22-20020a7bc7d6000000b003cfa81e2eb4sm4441311wmk.38.2023.01.15.13.49.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jan 2023 13:49:08 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sun, 15 Jan 2023 22:49:06 +0100
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>, bpf@vger.kernel.org,
+        live-patching@vger.kernel.org, linux-modules@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCHv2 bpf-next 2/3] selftests/bpf: Add
+ serial_test_kprobe_multi_bench_attach_kernel/module tests
+Message-ID: <Y8R00sRwznbKlJV3@krava>
+References: <20230113143303.867580-1-jolsa@kernel.org>
+ <20230113143303.867580-3-jolsa@kernel.org>
+ <CAEf4BzZSzM0NznnEH0oD9y6Zdd6YDZWEp4HyL1+2hLBrWk=j1w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZSzM0NznnEH0oD9y6Zdd6YDZWEp4HyL1+2hLBrWk=j1w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The pull request you sent on Fri, 13 Jan 2023 15:22:01 -0800:
+On Fri, Jan 13, 2023 at 02:43:47PM -0800, Andrii Nakryiko wrote:
+> On Fri, Jan 13, 2023 at 6:33 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Add bench test for module portion of the symbols as well.
+> >
+> >   # ./test_progs -v -t kprobe_multi_bench_attach_module
+> >   bpf_testmod.ko is already unloaded.
+> >   Loading bpf_testmod.ko...
+> >   Successfully loaded bpf_testmod.ko.
+> >   test_kprobe_multi_bench_attach:PASS:get_syms 0 nsec
+> >   test_kprobe_multi_bench_attach:PASS:kprobe_multi_empty__open_and_load 0 nsec
+> >   test_kprobe_multi_bench_attach:PASS:bpf_program__attach_kprobe_multi_opts 0 nsec
+> >   test_kprobe_multi_bench_attach: found 26620 functions
+> >   test_kprobe_multi_bench_attach: attached in   0.182s
+> >   test_kprobe_multi_bench_attach: detached in   0.082s
+> >   #96      kprobe_multi_bench_attach_module:OK
+> >   Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> >   Successfully unloaded bpf_testmod.ko.
+> >
+> > It's useful for testing kprobe multi link modules resolving.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  .../bpf/prog_tests/kprobe_multi_test.c        | 21 ++++++++++++++-----
+> >  1 file changed, 16 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > index c6f37e825f11..017a6996f3fa 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > @@ -322,7 +322,7 @@ static bool symbol_equal(long key1, long key2, void *ctx __maybe_unused)
+> >         return strcmp((const char *) key1, (const char *) key2) == 0;
+> >  }
+> >
+> > -static int get_syms(char ***symsp, size_t *cntp)
+> > +static int get_syms(char ***symsp, size_t *cntp, bool kernel)
+> >  {
+> >         size_t cap = 0, cnt = 0, i;
+> >         char *name = NULL, **syms = NULL;
+> > @@ -349,8 +349,9 @@ static int get_syms(char ***symsp, size_t *cntp)
+> >         }
+> >
+> >         while (fgets(buf, sizeof(buf), f)) {
+> > -               /* skip modules */
+> > -               if (strchr(buf, '['))
+> > +               if (kernel && strchr(buf, '['))
+> > +                       continue;
+> > +               if (!kernel && !strchr(buf, '['))
+> >                         continue;
+> >
+> >                 free(name);
+> > @@ -404,7 +405,7 @@ static int get_syms(char ***symsp, size_t *cntp)
+> >         return err;
+> >  }
+> >
+> > -void serial_test_kprobe_multi_bench_attach(void)
+> > +static void test_kprobe_multi_bench_attach(bool kernel)
+> >  {
+> >         LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
+> >         struct kprobe_multi_empty *skel = NULL;
+> > @@ -415,7 +416,7 @@ void serial_test_kprobe_multi_bench_attach(void)
+> >         char **syms = NULL;
+> >         size_t cnt = 0, i;
+> >
+> > -       if (!ASSERT_OK(get_syms(&syms, &cnt), "get_syms"))
+> > +       if (!ASSERT_OK(get_syms(&syms, &cnt, kernel), "get_syms"))
+> >                 return;
+> >
+> >         skel = kprobe_multi_empty__open_and_load();
+> > @@ -453,6 +454,16 @@ void serial_test_kprobe_multi_bench_attach(void)
+> >         }
+> >  }
+> >
+> > +void serial_test_kprobe_multi_bench_attach_kernel(void)
+> > +{
+> > +       test_kprobe_multi_bench_attach(true);
+> > +}
+> > +
+> > +void serial_test_kprobe_multi_bench_attach_module(void)
+> > +{
+> > +       test_kprobe_multi_bench_attach(false);
+> > +}
+> > +
+> 
+> minor nit: probably would be better to make kernel and module variants
+> into subtests?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc4
+ok, will change that
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8b7be52f3f0d0c24ee147ba7cab6c7fa4f9bcfbb
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+thanks,
+jirka
