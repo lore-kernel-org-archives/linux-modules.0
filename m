@@ -2,100 +2,71 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1909C63797
-	for <linux-modules@archiver.kernel.org>; Tue, 17 Jan 2023 15:27:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A4BEC3DA78
+	for <linux-modules@archiver.kernel.org>; Tue, 17 Jan 2023 15:43:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbjAQP07 (ORCPT
+        id S233766AbjAQPnY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 17 Jan 2023 10:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
+        Tue, 17 Jan 2023 10:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjAQP0c (ORCPT
+        with ESMTP id S232871AbjAQPm5 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:26:32 -0500
+        Tue, 17 Jan 2023 10:42:57 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F1A18B06;
-        Tue, 17 Jan 2023 07:26:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FC146718;
+        Tue, 17 Jan 2023 07:39:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AdfhMBHeMwqJ/0dxxUz0xAVieltp/cTdRJic3FjxtmE=; b=mrFqOh+cqxf8iA3ihVi6uWM1lx
-        Fc35EJUigPnSMC4Hb6D09QrghXWcOeBN6dDZQIUDRVVcDSkswoQuqwrWgiDWEaZ4HuDfN7KI5Ux+b
-        IT5abUv11uBw9QOcG4PbPik50Ea6mMQhdy6/vKced6srgB9v4iP6Q/Lpw70By4p4wLh5bPS9mp3VX
-        l/RcHOr0NhVI21SpflgPah/8ar9U6hfBOd7nGOyNIbddw5ZGNitD7yu1Sv3wlnCn50uZiFQak3dip
-        fq5VNxXLbrj2enViNQy7/ZxH6Ofu+nOP7dcfV4hq1U6txEuOqsFV4bJKy5QJ2Ma1+zH44ZhN3EGqq
-        jmueSH6A==;
+        bh=Kom6on8j6mSNlJKtIXaCMnBU1kbmwG1jw9oAyKkQ8ns=; b=0iiZ3N7aFYhkbvtWJZx5cdptZS
+        yb4woqkr/28SlChyuHssCvO+LdsYqwYMCR2KlpWDwgmjj2sGMuJ/1ZlV/ZEfOZFtyjNjL1VL/IrwN
+        v1SuDbSLbyxR34UrffovTlISRU/haUH1EExpP577jpfmPn2jxCepaOuwgJY4FyyV2FT+8E7irqrDQ
+        gjeBMOw3aaNA7s3VmYYiSyGoECcK+Q2fxYa3zRNjdcREhFW9BCh/gO/CxuFjTV26rhuLDJJnWiZiC
+        hdj49a074N0AC5/Y25Mm/bfEoigKL0XIdK0/rpPSw1H2n46K+U8vZ7JcmHCz9ypQ9z46RxJy0C7aJ
+        XuwroYCw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHnqt-00EpY5-HX; Tue, 17 Jan 2023 15:26:19 +0000
-Date:   Tue, 17 Jan 2023 07:26:19 -0800
+        id 1pHo3i-00EsoZ-1G; Tue, 17 Jan 2023 15:39:34 +0000
+Date:   Tue, 17 Jan 2023 07:39:33 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>, Petr Mladek <pmladek@suse.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Song Liu <song@kernel.org>, bpf@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-modules@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCHv3 bpf-next 1/3] livepatch: Improve the search performance
- of module_kallsyms_on_each_symbol()
-Message-ID: <Y8a+G6QoK/KTbP+s@bombadil.infradead.org>
-References: <20230116101009.23694-1-jolsa@kernel.org>
- <20230116101009.23694-2-jolsa@kernel.org>
- <alpine.LSU.2.21.2301171546520.24433@pobox.suse.cz>
- <Y8a99kCXd7XL8UaK@bombadil.infradead.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH 18/30] module: Use kstrtobool() instead of strtobool()
+Message-ID: <Y8bBNcWZ9gZDk+LR@bombadil.infradead.org>
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8a99kCXd7XL8UaK@bombadil.infradead.org>
+In-Reply-To: <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jan 17, 2023 at 07:25:42AM -0800, Luis Chamberlain wrote:
-> On Tue, Jan 17, 2023 at 03:47:15PM +0100, Miroslav Benes wrote:
-> > On Mon, 16 Jan 2023, Jiri Olsa wrote:
-> > 
-> > > From: Zhen Lei <thunder.leizhen@huawei.com>
-> > > 
-> > > Currently we traverse all symbols of all modules to find the specified
-> > > function for the specified module. But in reality, we just need to find
-> > > the given module and then traverse all the symbols in it.
-> > > 
-> > > Let's add a new parameter 'const char *modname' to function
-> > > module_kallsyms_on_each_symbol(), then we can compare the module names
-> > > directly in this function and call hook 'fn' after matching. If 'modname'
-> > > is NULL, the symbols of all modules are still traversed for compatibility
-> > > with other usage cases.
-> > > 
-> > > Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
-> > >                 |
-> > > Phase2:          -->f1-->f2-->f3
-> > > 
-> > > Assuming that there are m modules, each module has n symbols on average,
-> > > then the time complexity is reduced from O(m * n) to O(m) + O(n).
-> > > 
-> > > Reviewed-by: Petr Mladek <pmladek@suse.com>
-> > > Acked-by: Song Liu <song@kernel.org>
-> > > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > 
-> > Acked-by: Miroslav Benes <mbenes@suse.cz>
+On Tue, Nov 01, 2022 at 10:14:06PM +0100, Christophe JAILLET wrote:
+> strtobool() is the same as kstrtobool().
+> However, the latter is more used within the kernel.
 > 
-> Yes, queued up, thanks!
+> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
+> the other function name.
+> 
+> While at it, include the corresponding header file (<linux/kstrtox.h>)
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This patch is part of a serie that axes all usages of strtobool().
+> Each patch can be applied independently from the other ones.
+> 
+> The last patch of the serie removes the definition of strtobool().
+> 
+> You may not be in copy of the cover letter. So, if needed, it is available
+> at [1].
+> 
+> [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
+> ---
 
-Sorry that was a reply to a wrong thread, ignore my reply.
+Queued up to modules-next.
 
   Luis
