@@ -2,48 +2,36 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DB11C677F1
-	for <linux-modules@archiver.kernel.org>; Tue, 17 Jan 2023 14:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE18C677F1
+	for <linux-modules@archiver.kernel.org>; Tue, 17 Jan 2023 15:26:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbjAQOrP (ORCPT
+        id S231552AbjAQP0a (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 17 Jan 2023 09:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        Tue, 17 Jan 2023 10:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbjAQOrO (ORCPT
+        with ESMTP id S232258AbjAQP0A (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 17 Jan 2023 09:47:14 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AD56A6C;
-        Tue, 17 Jan 2023 06:47:12 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 939CD688A3;
-        Tue, 17 Jan 2023 14:47:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1673966831; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X+KmcDJ3VMYAKIgRCSMWLz60BmNCLcIoLMlIb31IIdg=;
-        b=Yyeuba8Sn41i5l7DHG5FOkV9L3Jb2zofXMy5w/U42ojgqZeEP5baYXL4g/dFZBlT46TrDF
-        zssj9x7LrekODEDZGjEgAirHmQM11WpSp8XaHTRgvV8lJfrAoOEz5k+9ty+HC0u9QxMdsu
-        Av5lpu2BPFFpvTg5O7OPDv78SZMWL/c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1673966831;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X+KmcDJ3VMYAKIgRCSMWLz60BmNCLcIoLMlIb31IIdg=;
-        b=1Qt8sfGMaaEn8rqaJzLxBUigNExU7McMqhn+hh8wmGwpLDIt2Z0ub0UZxlbM5hj/0GQpXh
-        YkuUHwPSx2regxAA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D16282C141;
-        Tue, 17 Jan 2023 14:47:10 +0000 (UTC)
-Date:   Tue, 17 Jan 2023 15:47:15 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Jiri Olsa <jolsa@kernel.org>
-cc:     Alexei Starovoitov <ast@kernel.org>,
+        Tue, 17 Jan 2023 10:26:00 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD4242BD2;
+        Tue, 17 Jan 2023 07:25:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ncBv23GBOtVznu5V8yi8Fc2pb7QmZGyIJBgsXfrjyek=; b=KJCkWqqMZy63Yo91dHyY2RQzHo
+        w872tiYCR/EYTCrC95EHnwhStO1BlLYn/Eg+B+1WrkB1t+yqmuhGs4NOl4ReTT4mwDre2snbodNQD
+        E8B0U4FlRFtmbnwR+l1NT6ocueYvW6v4y0jP7DRJB9NsaWcyBb9gLz5vkPxnmk9yfANmBF3sS/rF4
+        N1LTKU7gwdn5pINdk+eyvGP/TCFWQAzg9UyboKd2pRwcpkdbZizwpJ7FKsLp+ilAoCP37wX73Yzpy
+        qsoxuyvfdSqZdaBGoHhABOtnMdt3MLTeEMpFyMwGkivb0UsyOSG7pjkpL8F72uoRoULlCmLQzD2c5
+        vojvzhPg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHnqI-00EpSF-Sk; Tue, 17 Jan 2023 15:25:42 +0000
+Date:   Tue, 17 Jan 2023 07:25:42 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
@@ -60,45 +48,50 @@ cc:     Alexei Starovoitov <ast@kernel.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
+        Mark Rutland <mark.rutland@arm.com>
 Subject: Re: [PATCHv3 bpf-next 1/3] livepatch: Improve the search performance
  of module_kallsyms_on_each_symbol()
-In-Reply-To: <20230116101009.23694-2-jolsa@kernel.org>
-Message-ID: <alpine.LSU.2.21.2301171546520.24433@pobox.suse.cz>
-References: <20230116101009.23694-1-jolsa@kernel.org> <20230116101009.23694-2-jolsa@kernel.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+Message-ID: <Y8a99kCXd7XL8UaK@bombadil.infradead.org>
+References: <20230116101009.23694-1-jolsa@kernel.org>
+ <20230116101009.23694-2-jolsa@kernel.org>
+ <alpine.LSU.2.21.2301171546520.24433@pobox.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LSU.2.21.2301171546520.24433@pobox.suse.cz>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, 16 Jan 2023, Jiri Olsa wrote:
+On Tue, Jan 17, 2023 at 03:47:15PM +0100, Miroslav Benes wrote:
+> On Mon, 16 Jan 2023, Jiri Olsa wrote:
+> 
+> > From: Zhen Lei <thunder.leizhen@huawei.com>
+> > 
+> > Currently we traverse all symbols of all modules to find the specified
+> > function for the specified module. But in reality, we just need to find
+> > the given module and then traverse all the symbols in it.
+> > 
+> > Let's add a new parameter 'const char *modname' to function
+> > module_kallsyms_on_each_symbol(), then we can compare the module names
+> > directly in this function and call hook 'fn' after matching. If 'modname'
+> > is NULL, the symbols of all modules are still traversed for compatibility
+> > with other usage cases.
+> > 
+> > Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
+> >                 |
+> > Phase2:          -->f1-->f2-->f3
+> > 
+> > Assuming that there are m modules, each module has n symbols on average,
+> > then the time complexity is reduced from O(m * n) to O(m) + O(n).
+> > 
+> > Reviewed-by: Petr Mladek <pmladek@suse.com>
+> > Acked-by: Song Liu <song@kernel.org>
+> > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> 
+> Acked-by: Miroslav Benes <mbenes@suse.cz>
 
-> From: Zhen Lei <thunder.leizhen@huawei.com>
-> 
-> Currently we traverse all symbols of all modules to find the specified
-> function for the specified module. But in reality, we just need to find
-> the given module and then traverse all the symbols in it.
-> 
-> Let's add a new parameter 'const char *modname' to function
-> module_kallsyms_on_each_symbol(), then we can compare the module names
-> directly in this function and call hook 'fn' after matching. If 'modname'
-> is NULL, the symbols of all modules are still traversed for compatibility
-> with other usage cases.
-> 
-> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
->                 |
-> Phase2:          -->f1-->f2-->f3
-> 
-> Assuming that there are m modules, each module has n symbols on average,
-> then the time complexity is reduced from O(m * n) to O(m) + O(n).
-> 
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> Acked-by: Song Liu <song@kernel.org>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Yes, queued up, thanks!
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
-
-M
+  Luis
