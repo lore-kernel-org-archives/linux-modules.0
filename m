@@ -2,71 +2,126 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A4BEC3DA78
-	for <linux-modules@archiver.kernel.org>; Tue, 17 Jan 2023 15:43:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF832C54E76
+	for <linux-modules@archiver.kernel.org>; Tue, 17 Jan 2023 18:14:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbjAQPnY (ORCPT
+        id S230449AbjAQSOj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 17 Jan 2023 10:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        Tue, 17 Jan 2023 13:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232871AbjAQPm5 (ORCPT
+        with ESMTP id S231373AbjAQSKD (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 17 Jan 2023 10:42:57 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FC146718;
-        Tue, 17 Jan 2023 07:39:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Kom6on8j6mSNlJKtIXaCMnBU1kbmwG1jw9oAyKkQ8ns=; b=0iiZ3N7aFYhkbvtWJZx5cdptZS
-        yb4woqkr/28SlChyuHssCvO+LdsYqwYMCR2KlpWDwgmjj2sGMuJ/1ZlV/ZEfOZFtyjNjL1VL/IrwN
-        v1SuDbSLbyxR34UrffovTlISRU/haUH1EExpP577jpfmPn2jxCepaOuwgJY4FyyV2FT+8E7irqrDQ
-        gjeBMOw3aaNA7s3VmYYiSyGoECcK+Q2fxYa3zRNjdcREhFW9BCh/gO/CxuFjTV26rhuLDJJnWiZiC
-        hdj49a074N0AC5/Y25Mm/bfEoigKL0XIdK0/rpPSw1H2n46K+U8vZ7JcmHCz9ypQ9z46RxJy0C7aJ
-        XuwroYCw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHo3i-00EsoZ-1G; Tue, 17 Jan 2023 15:39:34 +0000
-Date:   Tue, 17 Jan 2023 07:39:33 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH 18/30] module: Use kstrtobool() instead of strtobool()
-Message-ID: <Y8bBNcWZ9gZDk+LR@bombadil.infradead.org>
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
- <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
+        Tue, 17 Jan 2023 13:10:03 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41F92F79C;
+        Tue, 17 Jan 2023 09:51:48 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4B4041FDFA;
+        Tue, 17 Jan 2023 17:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673977907; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+ui+DpA4uYzbJrZtpkX4ynzy8LeaDmV2iXupOmboLrA=;
+        b=vmoY6QJ9eEJqQyMmOf6QfAgloGfXzzJ/zwfK9lwtdzGuCRh5YpXsohAeclcaU3Eyxcxjew
+        TdydqJxTei+gzIoGP6DAIkAwkySplX/BluY/tfNekcg7k5Mu/GjSnX8i5sljTX0u9JC4Yx
+        L7Wel8eQMiG9xfucQS61iHADszTqMQk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673977907;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+ui+DpA4uYzbJrZtpkX4ynzy8LeaDmV2iXupOmboLrA=;
+        b=oWZjCNrIKeYjG/fPpuDiypVh9VLb3/HXaWVq5m7En7pReUgVBCoeqN6FlnL22/eLfxrTeY
+        nDjvu1Vz2/XrZbAQ==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id CF0B62C141;
+        Tue, 17 Jan 2023 17:51:45 +0000 (UTC)
+Date:   Tue, 17 Jan 2023 18:51:44 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Gary Guo <gary@garyguo.net>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        rust-for-linux@vger.kernel.org,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
+Message-ID: <20230117175144.GI16547@kitsune.suse.cz>
+References: <20230111161155.1349375-1-gary@garyguo.net>
+ <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
+ <20230113181841.4d378a24.gary@garyguo.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <20230113181841.4d378a24.gary@garyguo.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Nov 01, 2022 at 10:14:06PM +0100, Christophe JAILLET wrote:
-> strtobool() is the same as kstrtobool().
-> However, the latter is more used within the kernel.
-> 
-> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-> the other function name.
-> 
-> While at it, include the corresponding header file (<linux/kstrtox.h>)
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This patch is part of a serie that axes all usages of strtobool().
-> Each patch can be applied independently from the other ones.
-> 
-> The last patch of the serie removes the definition of strtobool().
-> 
-> You may not be in copy of the cover letter. So, if needed, it is available
-> at [1].
-> 
-> [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
-> ---
+Hello,
 
-Queued up to modules-next.
+On Fri, Jan 13, 2023 at 06:18:41PM +0000, Gary Guo wrote:
+> On Thu, 12 Jan 2023 14:40:59 -0700
+> Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+> 
+> > On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote:
+> > >
+> > > struct modversion_info {
+> > >-	unsigned long crc;
+> > >-	char name[MODULE_NAME_LEN];
+> > >+	/* Offset of the next modversion entry in relation to this one. */
+> > >+	u32 next;
+> > >+	u32 crc;
+> > >+	char name[0];  
+> > 
+> > although not really exported as uapi, this will break userspace as this is
+> > used in the  elf file generated for the modules. I think
+> > this change must be made in a backward compatible way and kmod updated
+> > to deal with the variable name length:
+> > 
+> > kmod $ git grep "\[64"
+> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint32_t)];
+> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint64_t)];
+> > 
+> > in kmod we have both 32 and 64 because a 64-bit kmod can read both 32
+> > and 64 bit module, and vice versa.
+> > 
+> 
+> Hi Lucas,
+> 
+> Thanks for the information.
+> 
+> The change can't be "truly" backward compatible, in a sense that
+> regardless of the new format we choose, kmod would not be able to decode
+> symbols longer than "64 - sizeof(long)" bytes. So the list it retrieves
+> is going to be incomplete, isn't it?
+> 
+> What kind of backward compatibility should be expected? It could be:
+> * short symbols can still be found by old versions of kmod, but not
+>   long symbols;
 
-  Luis
+That sounds good. Not everyone is using rust, and with this option
+people who do will need to upgrade tooling, and people who don't care
+don't need to do anything.
+
+Thanks
+
+Michal
