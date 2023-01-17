@@ -2,126 +2,123 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF832C54E76
-	for <linux-modules@archiver.kernel.org>; Tue, 17 Jan 2023 18:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B5DFC54E76
+	for <linux-modules@archiver.kernel.org>; Tue, 17 Jan 2023 20:00:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbjAQSOj (ORCPT
+        id S231419AbjAQUAY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 17 Jan 2023 13:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        Tue, 17 Jan 2023 15:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjAQSKD (ORCPT
+        with ESMTP id S233904AbjAQT6Q (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 17 Jan 2023 13:10:03 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41F92F79C;
-        Tue, 17 Jan 2023 09:51:48 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4B4041FDFA;
-        Tue, 17 Jan 2023 17:51:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673977907; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+ui+DpA4uYzbJrZtpkX4ynzy8LeaDmV2iXupOmboLrA=;
-        b=vmoY6QJ9eEJqQyMmOf6QfAgloGfXzzJ/zwfK9lwtdzGuCRh5YpXsohAeclcaU3Eyxcxjew
-        TdydqJxTei+gzIoGP6DAIkAwkySplX/BluY/tfNekcg7k5Mu/GjSnX8i5sljTX0u9JC4Yx
-        L7Wel8eQMiG9xfucQS61iHADszTqMQk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673977907;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+ui+DpA4uYzbJrZtpkX4ynzy8LeaDmV2iXupOmboLrA=;
-        b=oWZjCNrIKeYjG/fPpuDiypVh9VLb3/HXaWVq5m7En7pReUgVBCoeqN6FlnL22/eLfxrTeY
-        nDjvu1Vz2/XrZbAQ==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        Tue, 17 Jan 2023 14:58:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315CD1E2B2;
+        Tue, 17 Jan 2023 10:51:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CF0B62C141;
-        Tue, 17 Jan 2023 17:51:45 +0000 (UTC)
-Date:   Tue, 17 Jan 2023 18:51:44 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Gary Guo <gary@garyguo.net>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
-Message-ID: <20230117175144.GI16547@kitsune.suse.cz>
-References: <20230111161155.1349375-1-gary@garyguo.net>
- <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
- <20230113181841.4d378a24.gary@garyguo.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2047461502;
+        Tue, 17 Jan 2023 18:51:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84ED6C43396;
+        Tue, 17 Jan 2023 18:51:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673981469;
+        bh=gd6R4XluMPB27r6LRcEsEEMwkleNjaoutuHbO7D0GHA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hJ3VpHNAGVQLfHfCQw6iz4bsXMbG+3VG9IOv0Yeo0GklHd7TUgHoDf3T4QV6oYO/V
+         LeQhJBQImYjldHG8NkhTtMmSUklOh3/25QuAHnWC1Bik0aeOwUMPcUtRtLOidQFgzA
+         y5c+4UCcdSPlihYBD1Ky9vewXXUtO5DEEpNysVeung5A0DTyOEgjFEHLm07Q8JMRWL
+         iSPx1Rx8ZoIIAkDzKoIKU6793lAfZ0FbLkGBb7LITBdyPDnGfdmQkmRDZ62Q4X05ga
+         0G40nZXW8snZ+cAqQjKukHasEp7VMpTdl+bmd3zYa6+WruW5+yoZ5agffsU7Gr17sZ
+         gBYuwNiYQ/Z6A==
+Received: by mail-lj1-f169.google.com with SMTP id q2so34144867ljp.6;
+        Tue, 17 Jan 2023 10:51:09 -0800 (PST)
+X-Gm-Message-State: AFqh2krJRJ8bMj8C5W8jAKgnIpBkw0ohHzKQpwwFU27VsxL+qP3kWjRW
+        1xEj9QjaomVnbSIkkAK+fTHXfI/s9Y/vStylUlU=
+X-Google-Smtp-Source: AMrXdXvQFn1OJOI8BCI6E1NnIneOX1k2nFbTJrW83pBXfodpFFEGBJa32CrPe4b21KUJtpNBDt+8RNt/dk+fPHFf9YE=
+X-Received: by 2002:a2e:b166:0:b0:284:b05a:9e82 with SMTP id
+ a6-20020a2eb166000000b00284b05a9e82mr303044ljm.479.1673981467417; Tue, 17 Jan
+ 2023 10:51:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113181841.4d378a24.gary@garyguo.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20230106220959.3398792-1-song@kernel.org> <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
+In-Reply-To: <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 17 Jan 2023 10:50:55 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
+Message-ID: <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
+Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     songliubraving@fb.com, Peter Zijlstra <peterz@infradead.org>,
+        Christoph Hellwig <hch@lst.de>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello,
+Hi Thomas and Luis,
 
-On Fri, Jan 13, 2023 at 06:18:41PM +0000, Gary Guo wrote:
-> On Thu, 12 Jan 2023 14:40:59 -0700
-> Lucas De Marchi <lucas.demarchi@intel.com> wrote:
-> 
-> > On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote:
-> > >
-> > > struct modversion_info {
-> > >-	unsigned long crc;
-> > >-	char name[MODULE_NAME_LEN];
-> > >+	/* Offset of the next modversion entry in relation to this one. */
-> > >+	u32 next;
-> > >+	u32 crc;
-> > >+	char name[0];  
-> > 
-> > although not really exported as uapi, this will break userspace as this is
-> > used in the  elf file generated for the modules. I think
-> > this change must be made in a backward compatible way and kmod updated
-> > to deal with the variable name length:
-> > 
-> > kmod $ git grep "\[64"
-> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint32_t)];
-> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint64_t)];
-> > 
-> > in kmod we have both 32 and 64 because a 64-bit kmod can read both 32
-> > and 64 bit module, and vice versa.
-> > 
-> 
-> Hi Lucas,
-> 
-> Thanks for the information.
-> 
-> The change can't be "truly" backward compatible, in a sense that
-> regardless of the new format we choose, kmod would not be able to decode
-> symbols longer than "64 - sizeof(long)" bytes. So the list it retrieves
-> is going to be incomplete, isn't it?
-> 
-> What kind of backward compatibility should be expected? It could be:
-> * short symbols can still be found by old versions of kmod, but not
->   long symbols;
+Could you please share your comments on this? Specifically, is this on
+the right direction? And, what's your preference with Christophe's
+suggestions?
 
-That sounds good. Not everyone is using rust, and with this option
-people who do will need to upgrade tooling, and people who don't care
-don't need to do anything.
+"I dislike how it looks with enums, things like
+mod->mod_mem[MOD_MEM_TYPE_INIT
+_TEXT] are odd and don't read nicely.
+Could we have something nicer like mod->mod_mem_init_text ?
+I know it will complicate your for_each_mod_mem_type() but it would look
+nicer."
 
-Thanks
+Thanks,
+Song
 
-Michal
+On Tue, Jan 10, 2023 at 10:31 AM Song Liu <song@kernel.org> wrote:
+>
+> + Christoph
+>
+> Hi folks,
+>
+> Could you please share your comments on this work? If there isn't
+> major issue with it, maybe we can ship it in 6.3? (so we don't pile
+> too many changes in one big set).
+>
+> Thanks,
+> Song
+>
+> On Fri, Jan 6, 2023 at 2:10 PM Song Liu <song@kernel.org> wrote:
+> >
+> > module_layout manages different types of memory (text, data, rodata, etc.)
+> > in one allocation, which is problematic for some reasons:
+> >
+> > 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
+> > 2. It is hard to use huge pages in modules (and not break strict rwx).
+> > 3. Many archs uses module_layout for arch-specific data, but it is not
+> >    obvious how these data are used (are they RO, RX, or RW?)
+> >
+> > Improve the scenario by replacing 2 (or 3) module_layout per module with
+> > up to 7 module_memory per module:
+> >
+> >         MOD_MEM_TYPE_TEXT,
+> >         MOD_MEM_TYPE_DATA,
+> >         MOD_MEM_TYPE_RODATA,
+> >         MOD_MEM_TYPE_RO_AFTER_INIT,
+> >         MOD_MEM_TYPE_INIT_TEXT,
+> >         MOD_MEM_TYPE_INIT_DATA,
+> >         MOD_MEM_TYPE_INIT_RODATA,
+> >
+> > and allocating them separately.
+> >
+> > Various archs use module_layout for different data. These data are put
+> > into different module_memory based on their location in module_layout.
+> > IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
+> > data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
+> >
+> > Signed-off-by: Song Liu <song@kernel.org>
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+>
+> [...]
