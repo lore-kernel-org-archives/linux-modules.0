@@ -2,286 +2,303 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC6F6C54E76
-	for <linux-modules@archiver.kernel.org>; Tue, 17 Jan 2023 21:29:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2F4AC00A5A
+	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 00:36:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjAQV3k (ORCPT
+        id S229455AbjARAgz (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 17 Jan 2023 16:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
+        Tue, 17 Jan 2023 19:36:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjAQV3M (ORCPT
+        with ESMTP id S229748AbjARAgW (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 17 Jan 2023 16:29:12 -0500
+        Tue, 17 Jan 2023 19:36:22 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC3650852;
-        Tue, 17 Jan 2023 11:51:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AD363E09;
+        Tue, 17 Jan 2023 16:04:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NJtx9k7zK7osmEbmFZPuHNLZSNqdsxL4Z7HMD3kHJnA=; b=uZMimG9QEF0kVnMGdSX6KPtkbg
-        uZiLjTYNTFaR/UnUO4QLzLIX2INtuaM6Pwu5l8wdfWmKNb+IVTN/hI+wWOawFjOckGTojwhso+hJi
-        QPfDlyG/pRBwrGJkTRpH2tjua65eeCJnsJx1KBV655NdMcJzWWwbL4rC0rkak7uLGP8cc696zJ2VX
-        XLUg2r6qZdL58QQflxpUbiReNnt/QvDhcSJr23y50FMa/0YkVTc7Dmi3pZ+FT21ehVhMOUhMF7oCS
-        BtOYxQOtlnIXHZ/YROjZ6S9mR2rbL+tR+D1RLe5kAFFZ47KAJRG62PrQO43EetH10z6FmwLxdafW3
-        orVmlt+g==;
+        bh=ZR/zKwfuyZJZgDgsd6BVo1jA66dvTFg1Bvt4qava1GI=; b=UVsJC/C/0DlAjRBsSx0O4LO/9K
+        zfqrBGJVi+zP+o2CiMGAUhwfudn1gdDNr1lthRcO6QzWO3AYPIjxnMQJYSQwSsP3Mdnypxa+bk1Mx
+        DjBGJWQjcjz/vSU5viO1PykJOQBy9L3ej3vr3npvlr/dhXa8Ea2+liFQwKo5WelkfDnnXjh95w6ZK
+        J/hVMFZBSCwfXXw+rDLENPtXqGpWCFhyDueqtdTNhHlnDkVp8zGRQjtVc6Xbifj2XoFZtGpGGmgbD
+        cmFFPPHAEwTYhVN9bdGY7Wjm3yL/WSh94cc+IJrOzauxbvcAt/IYf0jUWKpr+DtXPDlMy6I2wqR8F
+        wY5aU8Jw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHrzh-00Fg7t-0H; Tue, 17 Jan 2023 19:51:41 +0000
-Date:   Tue, 17 Jan 2023 11:51:40 -0800
+        id 1pHvwE-00GJGD-Mn; Wed, 18 Jan 2023 00:04:22 +0000
+Date:   Tue, 17 Jan 2023 16:04:22 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Allen Webb <allenwebb@google.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Jeff Mahoney <jeffm@suse.com>, Omar Sandoval <osandov@fb.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Quentin Perret <qperret@google.com>
-Cc:     masahiroy@kernel.org, linux-modules@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
-        kris.van.hees@oracle.com
-Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
- symbol->address lookup with /proc/kallmodsyms
-Message-ID: <Y8b8TOJzd/RZXR8z@bombadil.infradead.org>
-References: <20221205163157.269335-1-nick.alcock@oracle.com>
+To:     Petr Mladek <pmladek@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>, david@redhat.com,
+        mwilck@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
+References: <20221205103557.18363-1-petr.pavlu@suse.com>
+ <Y5gI/3crANzRv22J@bombadil.infradead.org>
+ <Y5hRRnBGYaPby/RS@alley>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221205163157.269335-1-nick.alcock@oracle.com>
+In-Reply-To: <Y5hRRnBGYaPby/RS@alley>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Dec 05, 2022 at 04:31:44PM +0000, Nick Alcock wrote:
-> The kallmodsyms patch series was originally posted in Nov 2019, and the thread
-> (https://lore.kernel.org/linux-kbuild/20191114223036.9359-1-eugene.loh@oracle.com/t/#u)
-> shows review comments, questions, and feedback from interested parties.
-> Most recent posting: <https://lore.kernel.org/linux-modules/20221109134132.9052-1-nick.alcock@oracle.com/T/#t>.
+On Tue, Dec 13, 2022 at 11:17:42AM +0100, Petr Mladek wrote:
+> On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
+> > On Mon, Dec 05, 2022 at 11:35:57AM +0100, Petr Pavlu wrote:
+> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > > index d02d39c7174e..7a627345d4fd 100644
+> > > --- a/kernel/module/main.c
+> > > +++ b/kernel/module/main.c
+> > > @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
+> > >  	sched_annotate_sleep();
+> > >  	mutex_lock(&module_mutex);
+> > >  	mod = find_module_all(name, strlen(name), true);
+> > > -	ret = !mod || mod->state == MODULE_STATE_LIVE;
+> > > +	ret = !mod || mod->state == MODULE_STATE_LIVE
+> > > +		|| mod->state == MODULE_STATE_GOING;
+> > >  	mutex_unlock(&module_mutex);
+> > >  
+> > >  	return ret;
+> > > @@ -2562,20 +2563,35 @@ static int add_unformed_module(struct module *mod)
+> > >  
+> > >  	mod->state = MODULE_STATE_UNFORMED;
+> > >  
+> > > -again:
+> > 
+> > So this is part of my biggest concern for regression, the removal of
+> > this tag and its use.
+> > 
+> > Before this we always looped back to trying again and again.
 > 
-> All review comments have been satisfied, as far as I know:
+> Just to be sure that we are on the same page.
+> 
+> The loop was _not_ infinite. It serialized all attempts to load
+> the same module. In our case, it serialized all failures and
+> prolonged the pain.
 
-No, not really. I have asked before to trim this cover letter down and
-make each patch make sense atomically. You have not done so. I have also
-asked you to get users of what you are suggesting to add to kernel to
-vouch for this, and for you to make that clear and I feel that falls
-short too. I have even suggested folks who likely could help review your
-patches for other things they may need or are working on.
+That's fair yes. The loop happens so long as an already existing module is
+present with the same name.
 
-So no, this is patch review is slow moving but I'd like to clarify as to why.
-It is not that I am ignoring this patch set, it is that each time I come
-back to it I see only a slight step forward with the suggestions made.
+> > >  	mutex_lock(&module_mutex);
+> > >  	old = find_module_all(mod->name, strlen(mod->name), true);
+> > >  	if (old != NULL) {
+> > > -		if (old->state != MODULE_STATE_LIVE) {
+> > > +		if (old->state == MODULE_STATE_COMING
+> > > +		    || old->state == MODULE_STATE_UNFORMED) {
+> > >  			/* Wait in case it fails to load. */
+> > >  			mutex_unlock(&module_mutex);
+> > >  			err = wait_event_interruptible(module_wq,
+> > >  					       finished_loading(mod->name));
+> > >  			if (err)
+> > >  				goto out_unlocked;
+> > > -			goto again;
+> > 
+> > We essentially bound this now, and before we didn't.
+> > 
+> > Yes we we wait for finished_loading() of the module -- but if udev is
+> > hammering tons of same requests, well, we *will* surely hit this, as
+> > many requests managed to get in before userspace saw the module present.
+> > 
+> > While this typically can be useful, it means *quite a bit* of conditions which
+> > definitely *did* happen before will now *bail out* fast, to the extent
+> > that I'm not even sure why we just re-try once now.
+> 
+> I do not understand this. We do _not_ re-try the load in the new
+> version. We just wait for the result of the parallel attempt to
+> load the module.
+> 
+> Maybe, you are confused that we repeat find_module_all(). But it is
+> the way how to find the result of the parallel load.
 
-> A kernel tree containing this series alone:
->    https://github.com/oracle/dtrace-linux-kernel kallmodsyms/6.1-rc4-modules-next
+My point is that prior to the buggy commit 6e6de3dee51a ("kernel/module.c: Only
+return -EEXIST for modules that have finished loading") and even after that
+commit it we 'goto again' if an old request is found. We now simply bound this
+right away. Yes, the loop was not infinite, but in theory at least a few
+iterations were possible before whereas now immediately return -EBUSY
+and I don't think all use cases may be ready yet.
+
+> > If we're going to 
+> > just re-check *once* why not do something graceful like *at least*
+> > cond_resched() to let the system breathe for a *tiny bit*.
+> 
+> We must check the result under module_mutex. We have to take this
+> sleeping lock. There is actually a rescheduling. I do not think that
+> cond_resched() would do any difference.
+
+Makes sense.
+
+> > > +
+> > > +			/* The module might have gone in the meantime. */
+> > > +			mutex_lock(&module_mutex);
+> > > +			old = find_module_all(mod->name, strlen(mod->name),
+> > > +					      true);
+> > >  		}
+> > > -		err = -EEXIST;
+> > > +
+> > > +		/*
+> > > +		 * We are here only when the same module was being loaded. Do
+> > > +		 * not try to load it again right now. It prevents long delays
+> > > +		 * caused by serialized module load failures. It might happen
+> > > +		 * when more devices of the same type trigger load of
+> > > +		 * a particular module.
+> > > +		 */
+> > > +		if (old && old->state == MODULE_STATE_LIVE)
+> > > +			err = -EEXIST;
+> > > +		else
+> > > +			err = -EBUSY;
+> > 
+> > And for all those use cases we end up here now, with -EBUSY. So udev
+> > before was not bounded, and kept busy-looping on the retry in-kernel,
+> > and we now immediately bound its condition to just 2 tries to see if the
+> > old module existed and now *return* a new value to userspace.
+> > 
+> > My main concerns are:
+> > 
+> > 0) Why not use cond_resched() if we're just going to check twice?
+> 
+> We take module_mutex. It should cause even bigger delay than cond_resched().
+
+ACK.
+
+> > 1) How are we sure we are not regressing userspace by removing the boundless
+> > loop there? (even if the endless loop was stupid)
+> 
+> We could not be sure. On the other hand, if more attempts help to load
+> the module then it is racy and not reliable. The new approach would
+> make it better reproducible and fix the race.
+
+Yes, but the short cut it is a userspace visible change.
+
+> > 2) How is it we expect that we won't resgress userspace now by bounding
+> > that check and pretty much returning -EBUSY right away? This last part
+> > seems dangerous, in that if userspace did not expect -EBUSY and if an
+> > error before caused a module to fail and fail boot, why wouldn't we fail
+> > boot now by bailing out faster??
+> 
+> Same answer as for 1)
 > 
 > 
-> The whole point of symbols is that their names are unique: you can look up a
-> symbol and get back a unique address, and vice versa.  Alas, because
-> /proc/kallsyms (rightly) reports all symbols, even hidden ones, it does not
-> really satisfy this requirement.
-
-You make it sound that's would imply there's bug in kallsyms but its not. We
-would have bug reports and I just don't see them associated to what you say.
-
-kallsyms support was added first by Ingo Molnar on 2.5.38 kernel [0] and the
-goal was to just to be able to print out symbolic crash information and symbolic
-stack backtraces. Rusty Russel later extended support for modules [2] and Kai
-Germaschewski finally decreased the speed to generate the file by writing a C
-program for it [2]. To this day CONFIG_KALLSYMS is described to relfect that
-this is just for oops traces and stack traces.
-
-In that sense getting mapping of addresses to symbols for oops or stack
-traces seems kallsyms is successful.
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=218af2f340009e624603253ca8a35c884f31ab5a
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=a5508ddcd000a435baa37f61ef1bdfb490fcf3c0
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=6802d702761dfdd910e37da40ba95fa71fd06dd7
-
-> Large numbers of symbols are duplicated
-> many times (just search for __list_del_entry!), and while usually these are
-> just out-of-lined things defined in header files and thus all have the same
-> implementation, it does make it needlessly hard to figure out which one is
-> which in stack dumps, when tracing, and such things.
-
-Here is the problem you have in your cover letter: you first try to
-state that kallsyms is falling short for your use case and then skim through
-the actual use case where you need a unique mapping.
-
-> Some configuration
-> options make things much worse: my test make allyesconfig runs introduced
-> thousands of text symbols named _sub_I_65535_1, one per compiler-generated
-> object file, and it was fairly easy to make them appear in ftrace output.
+> > 3) *Fixing* a kernel regression by adding new expected API for testing
+> > against -EBUSY seems not ideal.
 > 
-> Right now the kernel has no way at all to tell such symbols apart, and nor
-> has the user: their address differs and that's all. 
+> IMHO, the right solution is to fix the subsystems so that they send
+> only one uevent.
 
-You need to explain who would care and why this is an issue.
+Makes sense, but that can take time and some folks are stuck on old kernels
+and perhaps porting fixes for this on subsystems may take time to land
+to some enterprisy kernels. And then there is also systemd that issues
+the requests too, at least that was reflected in commit 6e6de3dee51a
+("kernel/module.c: Only return -EEXIST for modules that have finished loading")
+that commit claims it was systemd issueing the requests which I mean to
+interpret finit_module(), not calling modprobe.
 
-> Which module did they
-> come from?  Which object file?  We don't know.  Figuring out which is which
-> when tracing 
+The rationale for making a regression fix with a new userspace return value
+is fair given the old fix made things even much worse the point some kernel
+boots would fail. So the rationale to suggest we *must* short-cut
+parallel loads as effectively as possible seems sensible *iff* that
+could not make things worse too but sadly I've found an isssue
+proactively with this fix, or at least that this issue is also not fixed:
 
-For the very *first* time in the cover letter do I see the first
-description of a use case where someone might care.
+./tools/testing/selftests/kmod/kmod.sh -t 0006
+Tue Jan 17 23:18:13 UTC 2023
+Running test: kmod_test_0006 - run #0
+kmod_test_0006: OK! - loading kmod test
+kmod_test_0006: FAIL, test expects SUCCESS (0) - got -EINVAL (-22)
+----------------------------------------------------
+Custom trigger configuration for: test_kmod0
+Number of threads:      50
+Test_case:      TEST_KMOD_FS_TYPE (2)
+driver: test_module
+fs:     xfs
+----------------------------------------------------
+Test completed
 
-> needs a combination of guesswork and luck, and if there are
-> thousands of them that's not a pleasant prospect.  In discussions at LPC it
-> became clear that this is not just annoying me but Steve Rostedt and others,
-> so it's probably desirable to fix this.
+When can multiple get_fs_type() calls be issued on a system? When
+mounting a large number of filesystems. Sadly though this issue seems
+to have gone unnoticed for a while now. Even reverting commit
+6e6de3dee51a doesn't fix it, and I've run into issues with trying
+to bisect, first due to missing Kees' patch which fixes a compiler
+failure on older kernel [0] and now I'm seeing this while trying to
+build v5.1:
 
-You can just summarize this to say tracing folks care and you need to
-explain why. Why this falls short. Why is this limitting tracing folks?
+ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple definition of `__force_order';
+arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
+ld: warning: arch/x86/boot/compressed/efi_thunk_64.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: arch/x86/boot/compressed/head_64.o: warning: relocation in read-only section `.head.text'
+ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with RWX permissions
+ld: warning: creating DT_TEXTREL in a PIE
+make[2]: *** [arch/x86/boot/compressed/Makefile:118: arch/x86/boot/compressed/vmlinux] Error 1
+make[1]: *** [arch/x86/boot/Makefile:112: arch/x86/boot/compressed/vmlinux] Error 2
+make: *** [arch/x86/Makefile:283: bzImage] Error 2
 
-Other than tracing too, wouldn't folks who work on things like crash
-care too (Jeff, Omar)? Wouldn't this help them or their teams which
-rely on tooling around this?
+[0] http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
 
-> It turns out that the linker, and the kernel build system, can be made to
-> give us everything we need to resolve this once and for all.  This series
-> provides a new /proc/kallmodsyms which is like /proc/kallsyms except that it
-> annotates every (textual) symbol which comes from a built-in kernel module
-> with the module's name, in square brackets: if a symbol is used by multiple
-> modules, it gets [multiple] [names]; if a symbol is still ambiguous it gets
-> a cut-down {object file name}; the combination of symbol, [module] [names]
-> and {object file name} is unique 
+But we should try to bisect to see what cauased the above kmod test 0006
+to start failing.
 
-If this is about tracing and issues with a symbol name being mapped to
-multiple objects why would this enhancement only involve what are
-possibly modules? If the main motivation for the work you are
-introducing is to help tracers get a better bearing when working with
-a symbols, yes I can see the value in knowing if a symbol was part of
-a module, but I'd likely would want to care about in-kernel symbols
-too. Is the reason a new file is being introduced because you can
-already get 1-1 mapping for symbols only used for built-in stuff?
-Ie, is the semantic requirements for fidelity for pure built-in symbols
-already satisfied by kallsyms? And do modules then introduce a new
-semantic gap, which make it difficult to know what object file thinggs
-map to?
-
-Regardless, if tracing is the main use case and the goal here is to map
-symbols to object files, I can't think of a reason why a symbol map
-filename which also spits out built-in object files needs to be associated with
-modules.
-
-/proc/kallmodsyms seems to imply modules need to be involved somehow,
-but it does not seem that's the reason for the file. Rather, you seem to
-want to just be able to tell users if the symbol came from an object
-file only assocaited to a module.
-
-And if this new feature is being tucked away under a new kconfig symbol,
-why not just extend the existing /proc/kallsyms when folks want the new
-information?
-
-> (with one minor exception: the arm64 nvhe
-> module is pre-linked with ld -r, causing all symbols in it to appear to come
-> from the same object file: if it was reworked to use thin archives this
-> problem would go away).
-
-OK so ARM64 nVHE folks might care, but perhaps other architectures might
-be limitted with this feature. Could you express this via Kconfig so
-that the feature cannot be selected by these architectures if they use
-'ld -r'?
-
-Please work with Guenter Roeck so to have a new branch for your work
-tested on some of the oddball archs he has access to. That should help
-proactively find odd arch issues we'd otherwise find out during testing
-once merged.
-
-> The object file names are cut down to save space: we store only the shortest
-> suffix needed to distinguish symbols from each other.
-
-If the information for tracers was so valuable, why trim this? And how
-much space does that save you? Is the idea that CONFIG_KALLMODSYMS
-would be enabled on production kernels?
-
-> It's fairly rare even
-> to see two/level names, let alone three/level/ones.
-
-What does one level mean? What does two levels mean? What does three
-levels mean here?
-
-> We also save even more
-> space by annotating every symbol in a given object file with the object file
-> name if we annotate any of them.
+> The question is how the module loader would deal with "broken"
+> subsystems. Petr Pavlu, please, fixme. I think that there are
+> more subsystems doing this ugly thing.
 > 
-> We also add new fields that let you get at this new info in the kallsyms
-> iterator.
-> 
-> In brief we do this by mapping from address ranges to object files (with
-> assistance from the linker map file), then mapping from those object files
-> to built-in kernel modules and object file names.  Because the number of
-> object files is much smaller than the number of symbols, because we fuse
-> address range and object file entries together if possible, and because we
-> don't even store object file names unless we need to, this is a fairly
-> efficient representation, even with a bit of extra complexity to allow
-> object files to be in more than one module at once.
-> 
-> The size impact of all of this is minimal: in testing, vmlinux grew by 16632
-> bytes, and the compressed vmlinux only grew by 12544 bytes (about .1% of a
-> 10MiB kernel): though this is very configuration-dependent, it seems likely
-> to scale roughly with the kernel as a whole.
-> 
-> This is all controlled by a new config parameter CONFIG_KALLMODSYMS, which when
-> set results in output in /proc/kallmodsyms that looks like this:
-> 
-> ffffffff97606e50 t not_visible
-> ffffffff97606e70 T perf_msr_probe
-> ffffffff97606f80 t test_msr     [rapl]
-> ffffffffa6007350 t rapl_pmu_event_stop  [rapl]
-> ffffffffa6007440 t rapl_pmu_event_del   [rapl]
-> ffffffffa6007460 t rapl_hrtimer_handle  [rapl]
-> ffffffffa6007500 t rapl_pmu_event_read  [rapl]
-> ffffffffa6007520 t rapl_pmu_event_init  [rapl]
-> ffffffffa6007630 t rapl_cpu_offline     [rapl]
+> I personally thing that returning -EBUSY is better than serializing
+> all the loads. It makes eventual problem easier to reproduce and fix.
 
-My /proc/kallsyms already has something like:
+I agree with this assessment, however given the multiple get_fs_type()
+calls as an example, I am not sure if there are other areas which rely on the
+old busy-wait mechanism.
 
-ffffffffc04c7940 t show_shost_eh_deadline       [scsi_mod]
-ffffffffc04c7990 t show_shost_active_mode       [scsi_mod]
-ffffffffc04c79d0 t sdev_show_preferred_path     [scsi_mod]
+*If* we knew this issue was not so common I'd go so far as to say we
+should pr_warn_once() on failure, but at this point in time I think it'd
+be pretty chatty.
 
-So why is that falling short vs /proc/kallmodsyms ?
+I don't yet have confidence that the new fast track to -EXIST or -EBUSY may
+not create regressions, so the below I think would be too chatty. If it
+wasn't true, I'd say we should keep record of these uses so we fix the
+callers.
 
-> Differences from v9, early November 2022:
-> 
->  - Rework to use Luis Chamberlain's modules.builtin.objs rather than a
->    tristate-generated "modules_thick.builtin".  Keep the iterator over
->    modules_thick.builtin, but rename it to scripts/modules_builtin.c and
->    make it more robust against strange lines in modules.builtin.objs,
->    such as lines with no colon in.
-
-Please extend the commit log to describe that subsequent patches would
-use that information, as otherwise the commit log seems to just
-introduce something for new user. My patch was simply a proof of concept
-which denied what you claimed was not possible. You can describe also *why*
-this information is useful, ie if your use cas is traces, then mention that
-and why. The point to my patch also was to show you don't have to re-intrdouce
-the tristate stuff, ie your effect revert of commit 8b41fc4454e36fbf ("kbuild:
-create modules.builtin without Makefile.modbuiltin or tristate.conf")
-and so I am extremely surprised you are still keeeping that patch and
-using that suff in this v10 series! The point was to simplify your
-patch series.
-
-The semantics of the module license should suffice.
-
-And please split out the driver conversions to remove module license per
-subsystem, and a new thread. The justification should be simple, commit
-8b41fc4454e36fbf ("kbuild: create modules.builtin without Makefile.modbuiltin or
-tristate.conf") now relies on the module license tag to do simplify the
-build system. And as part of follow up work to that patch we want to
-correct false positives for modules.builtin where userspace may try to
-load a module which is built-in but such module can never be built in.
-You can add Suggested-by me to that set.
-
-The same applies to your other Makefile patch (except to the
-Suggested-by as I don't understand the goal there yet), I don't know what it is
-trying to do, but it should be a separate effort. You can feel free to
-Cc me on that too.
-
-And lastly users. This cover letter should reflect clearly who are the
-new users who are dying for this feature, Cc them and hope to have them be
-actively engaged during review.
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index d3be89de706d..d1ad0b510cb8 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2589,13 +2589,6 @@ static int add_unformed_module(struct module *mod)
+ 					      true);
+ 		}
+ 
+-		/*
+-		 * We are here only when the same module was being loaded. Do
+-		 * not try to load it again right now. It prevents long delays
+-		 * caused by serialized module load failures. It might happen
+-		 * when more devices of the same type trigger load of
+-		 * a particular module.
+-		 */
+ 		if (old && old->state == MODULE_STATE_LIVE)
+ 			err = -EEXIST;
+ 		else
+@@ -2610,6 +2603,15 @@ static int add_unformed_module(struct module *mod)
+ out:
+ 	mutex_unlock(&module_mutex);
+ out_unlocked:
++	/*
++	 * We get an error here only when there is an attempt to load the
++	 * same module. Subsystems should strive to only issue one request
++	 * for a needed module. Multiple requests might happen when more devices
++	 * of the same type trigger load of a particular module.
++	 */
++	if (err)
++		pr_warn_once("%: dropping duplicate module request, err: %d\n",
++			     mod->name, err);
+ 	return err;
+ }
+ 
 
   Luis
