@@ -2,116 +2,119 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED910C32793
-	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 17:52:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6A58C32793
+	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 18:42:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjARRww (ORCPT
+        id S229721AbjARSmm (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 18 Jan 2023 12:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        Wed, 18 Jan 2023 13:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjARRwu (ORCPT
+        with ESMTP id S229813AbjARSml (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:52:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658D54B49C;
-        Wed, 18 Jan 2023 09:52:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16813B81E69;
-        Wed, 18 Jan 2023 17:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D82C43396;
-        Wed, 18 Jan 2023 17:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674064364;
-        bh=/Gzr/WR95XMtTWMDsej0/0zxfcG/BPllZVyCwX0lM6g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fp574ofBRl53RryS+r3YEUQmBy2MWwMXjhG7vQtUhrJf6LKDt67DX8BUISkoG2Uti
-         WoBCyuJEOz3podTg4r4Kphc8ssJgU4ND0pwm6Dzch+HfBVkTsZHOW9RwBAHGi/3Ytp
-         IoCOOuUslmdW+dRxJs1BoTn4PjIFpIzkaDEdJz1pxXzfK0DbIUI48OlS7YMuW9gTiQ
-         YZIyQ0ejF8YuQCvPXsabh99XYmQu0V8i8neWI47Q6qAcj+s7fA+gfBD8jygCBTtqlo
-         blXPaDNdc4lnWgwR+NeRB+MGgfP0SyHUKJoakjeh16zyGTFfjmb8QRMmUkoaGKIZRE
-         HG37jgpgijwCw==
-Received: by mail-lf1-f53.google.com with SMTP id bp15so52786765lfb.13;
-        Wed, 18 Jan 2023 09:52:44 -0800 (PST)
-X-Gm-Message-State: AFqh2kpx5yuivhUR3FZK7l0fxyFJHQ7hUH5nnHXAqXufhK/YwGrOOLeX
-        E26YGx7LB+YjAF4Y21y2dKT0KqTzaDyTqC5voDU=
-X-Google-Smtp-Source: AMrXdXsz3DFc0OfRs+agT2c4zNuyTjg7T6vN1ft7TBpReHglOHBeqGsmrSwT3VPQxp0zw2d14zoZpRBoF2VVObWLE1I=
-X-Received: by 2002:ac2:48b7:0:b0:4b6:e71d:94a6 with SMTP id
- u23-20020ac248b7000000b004b6e71d94a6mr586014lfg.476.1674064362704; Wed, 18
- Jan 2023 09:52:42 -0800 (PST)
+        Wed, 18 Jan 2023 13:42:41 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287CD36687;
+        Wed, 18 Jan 2023 10:42:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5ArG0GpJf+HULjLl2ntj9EQBFMeEY8HNHyMbNuCq+oo=; b=QnP+ckqNsIodyu08ivxR2vxDFu
+        +8MO3UpwZdxlR2jjtHxrMNmvCW4yX+Xo3rJWUKJxPlF23M9tgiJdoRXhENXCJ3I1zK7vfdO8n07Qr
+        tHkt/MNv4vyKVI6HQLHH/N6KQZNPNqyiPhH+thoj7eA0H1Fc8RZuSy5AkXvU2FLKclPiwblrd3dl4
+        w1egtA/4sdUKn+dg9q/xiuMAT/dXqx5t3en2wwY4Br6/aSxLt+/rggo42weXJLoLq9kNJr1yogwFV
+        HM/yzAeMTwFIsHt89QZi6kjMHTtO4b8PBs/pbdhORvh6vG3uKa+XWAilOBObOqXHwiOnm1kmq00bF
+        wW5k+U8g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pIDOH-002Mdd-9w; Wed, 18 Jan 2023 18:42:29 +0000
+Date:   Wed, 18 Jan 2023 10:42:29 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
+        mwilck@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <Y8g9lTBnCgB7g08/@bombadil.infradead.org>
+References: <20221205103557.18363-1-petr.pavlu@suse.com>
+ <Y5gI/3crANzRv22J@bombadil.infradead.org>
+ <Y5hRRnBGYaPby/RS@alley>
+ <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
+ <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
 MIME-Version: 1.0
-References: <20230106220959.3398792-1-song@kernel.org> <83941b74-7585-235b-ee54-3b127ca70d9e@csgroup.eu>
- <CAPhsuW6S8qJWFzSLpVf_4ZpyM0Cxty=-pS2_K=tgF52s95Zhag@mail.gmail.com>
- <CAPhsuW7+BG9wYaoD6EYH-jnWqX30JdgNr5_733sO-++SzR5v3w@mail.gmail.com>
- <154ed99c-5877-35f6-5e7d-9d7abada7d33@csgroup.eu> <Y8gLJYA3ibA8De58@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y8gLJYA3ibA8De58@hirez.programming.kicks-ass.net>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 18 Jan 2023 09:52:29 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6AR9CorYPL88-92_VBn-7uZoXj4SfWXn5N_bRC_SXSKQ@mail.gmail.com>
-Message-ID: <CAPhsuW6AR9CorYPL88-92_VBn-7uZoXj4SfWXn5N_bRC_SXSKQ@mail.gmail.com>
-Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jan 18, 2023 at 7:07 AM Peter Zijlstra <peterz@infradead.org> wrote=
-:
->
-> On Tue, Jan 10, 2023 at 06:31:41AM +0000, Christophe Leroy wrote:
-> > Le 09/01/2023 =C4=85 21:51, Song Liu a =C3=A9crit :
->
-> > > Do you mean one tree will cause addr_[min|max] to be inaccurate?
-> > >
-> >
-> > Yes at least. On powerpc you will have module text below kernel,
-> > somewhere between 0xb0000000 and 0xcfffffff, and you will have module
-> > data in vmalloc area, somewhere between 0xf0000000 and 0xffffffff.
-> >
-> > If you have only one tree, any address between 0xc0000000 and 0xeffffff=
-f
-> > will trigger a tree search.
->
-> The current min/max thing is tied to the tree because of easy update on
-> remove, but module-insert/remove is not a performance critical path.
->
-> So I think it should be possible to have {min,max}[TYPES] pairs.  Either
-> brute force the removal -- using a linear scan of the mod->list to find
-> the new bounds on removal.
+On Wed, Jan 18, 2023 at 04:12:05PM +0100, Petr Pavlu wrote:
+> On 1/18/23 01:04, Luis Chamberlain wrote:
+> > The rationale for making a regression fix with a new userspace return value
+> > is fair given the old fix made things even much worse the point some kernel
+> > boots would fail. So the rationale to suggest we *must* short-cut
+> > parallel loads as effectively as possible seems sensible *iff* that
+> > could not make things worse too but sadly I've found an isssue
+> > proactively with this fix, or at least that this issue is also not fixed:
+> > 
+> > ./tools/testing/selftests/kmod/kmod.sh -t 0006
+> > Tue Jan 17 23:18:13 UTC 2023
+> > Running test: kmod_test_0006 - run #0
+> > kmod_test_0006: OK! - loading kmod test
+> > kmod_test_0006: FAIL, test expects SUCCESS (0) - got -EINVAL (-22)
+> > ----------------------------------------------------
+> > Custom trigger configuration for: test_kmod0
+> > Number of threads:      50
+> > Test_case:      TEST_KMOD_FS_TYPE (2)
+> > driver: test_module
+> > fs:     xfs
+> > ----------------------------------------------------
+> > Test completed
+> > 
+> > When can multiple get_fs_type() calls be issued on a system? When
+> > mounting a large number of filesystems. Sadly though this issue seems
+> > to have gone unnoticed for a while now. Even reverting commit
+> > 6e6de3dee51a doesn't fix it, and I've run into issues with trying
+> > to bisect, first due to missing Kees' patch which fixes a compiler
+> > failure on older kernel [0] and now I'm seeing this while trying to
+> > build v5.1:
+> > 
+> > ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple definition of `__force_order';
+> > arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
+> > ld: warning: arch/x86/boot/compressed/efi_thunk_64.o: missing .note.GNU-stack section implies executable stack
+> > ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+> > ld: arch/x86/boot/compressed/head_64.o: warning: relocation in read-only section `.head.text'
+> > ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with RWX permissions
+> > ld: warning: creating DT_TEXTREL in a PIE
+> > make[2]: *** [arch/x86/boot/compressed/Makefile:118: arch/x86/boot/compressed/vmlinux] Error 1
+> > make[1]: *** [arch/x86/boot/Makefile:112: arch/x86/boot/compressed/vmlinux] Error 2
+> > make: *** [arch/x86/Makefile:283: bzImage] Error 2
+> > 
+> > [0] http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
+> > 
+> > But we should try to bisect to see what cauased the above kmod test 0006
+> > to start failing.
+> 
+> It is not clear to me from your description if the observed failure of
+> kmod_test_0006 is related to the fix in this thread.
 
-I think keeping an array of min/max pairs is an overkill.
-w/o CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, all the
-types will be allocated in the same range (MODULES_VADDR, MODULES_END),
-so one min/max pair should be enough.
-w/ CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, there
-is a big gap between text allocation and data allocation. I think a second
-min/max pair will be useful here.
+The issue happens with and without the patch in this thread, I'd just hate to
+exacerbate the issue further.
 
->
-> Or overengineer the whole thing and use an augmented tree to keep that
-> many heaps in sync during the update -- but this seems total overkill.
->
-> The only consideration is testing that many ranges in
-> __module_address(), this is already 2 cachelines worth of range-checks
-> -- which seems a little excessive.
+> The problem was not possible for me to reproduce on my system. My test was on
+> an 8-CPU x86_64 machine using v6.2-rc4 with "defconfig + kvm_guest.config +
+> tools/testing/selftests/kmod/config".
 
-Currently, min/max are updated on module load, but not on module unload.
-I guess we won't really need __module_address() to be that fast.
+With the patch?
 
-If there are no objections or suggestions. I will update the patches with a
-second min/max pair with CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC.
+> Could you perhaps trace the test to determine where the EINVAL value comes
+> from?
 
-Thanks,
-Song
+Sure, it'll take a bit.
 
->
-> (also, I note that module_addr_{min,max} are unused these days)
+  Luis
