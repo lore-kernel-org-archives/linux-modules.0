@@ -2,244 +2,203 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A16C00A5A
-	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 02:16:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8260C004D4
+	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 07:41:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjARCQp (ORCPT
+        id S229657AbjARHlP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 17 Jan 2023 21:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        Wed, 18 Jan 2023 02:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjARCQk (ORCPT
+        with ESMTP id S230049AbjARHjK (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 17 Jan 2023 21:16:40 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B793C51C66;
-        Tue, 17 Jan 2023 18:16:35 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NxTqd3wWCzJrVT;
-        Wed, 18 Jan 2023 10:15:09 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 18 Jan 2023 10:16:32 +0800
-Subject: Re: [PATCHv3 bpf-next 3/3] bpf: Change modules resolving for kprobe
- multi link
-To:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-CC:     <bpf@vger.kernel.org>, <live-patching@vger.kernel.org>,
-        <linux-modules@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-References: <20230116101009.23694-1-jolsa@kernel.org>
- <20230116101009.23694-4-jolsa@kernel.org>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <85fedce4-cd27-02f4-7f8b-7aa7c0fb0780@huawei.com>
-Date:   Wed, 18 Jan 2023 10:16:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 18 Jan 2023 02:39:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90CD2ED76;
+        Tue, 17 Jan 2023 23:02:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95DBBB81B7B;
+        Wed, 18 Jan 2023 07:02:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 379B0C433A0;
+        Wed, 18 Jan 2023 07:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674025327;
+        bh=hpCZZmsqf4/6Mxu3Z+UTxXvwuRL1LaW+0KrqiGLzrlw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DSgHVawM2Lsbp1jqLhhrzzbXJt2A/+zta9eAwgCv3451lTKsCGx3Xy0LDIRX49ICc
+         NK+gQKeOG47zXzt54pg53kZEJ0P+rQrFot+WzXi/WdNiD/QGHjAVcP6LhEYXIuneX7
+         aV8/FNmafMuswBPQHR2WAe4H+Ii+7BaO5BA3DNheJdnY+dpib9ZU1WdrN9gxvSo6a6
+         i7suaS0Ta2qvPrl2vJf/2GkourBl7CrW5Tb9VSF1uGS0nGGIbKyFchzA8bVZhYYyaE
+         SqkgWJM/vhO98tSNVK2vAX4kmmPVlGuM3Cvzjjgc8pmU5wNZPIC2PJxGWK4P2z/JhW
+         TwZ8CbFBzGKyA==
+Received: by mail-oi1-f171.google.com with SMTP id s124so11106094oif.1;
+        Tue, 17 Jan 2023 23:02:07 -0800 (PST)
+X-Gm-Message-State: AFqh2krB0e2Yg9EkSs5F4kHXsYDKi39pYpFCp2/ZNvkwUGdZmMqs1ofB
+        qtS53meYXd3KWvAxaGmgU+5c9HOtFnDuGrH45/o=
+X-Google-Smtp-Source: AMrXdXsA6TO3KoaA5mmSLZluzpXf4b6ZeQmXmJvwyWq+RJVZeL/soOW8ymGGgGshJhB/twbLBiGcGi2bdeQkWA3W1WE=
+X-Received: by 2002:aca:acd5:0:b0:364:5d10:7202 with SMTP id
+ v204-20020acaacd5000000b003645d107202mr275302oie.194.1674025326155; Tue, 17
+ Jan 2023 23:02:06 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20230116101009.23694-4-jolsa@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+References: <20230111161155.1349375-1-gary@garyguo.net> <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
+ <20230113181841.4d378a24.gary@garyguo.net> <20230117175144.GI16547@kitsune.suse.cz>
+ <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan>
+In-Reply-To: <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 18 Jan 2023 16:01:29 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATsuszFR7JB5ZkqVS1W=hWr9=E7bTf+MvgJ+NXT3aZNwg@mail.gmail.com>
+Message-ID: <CAK7LNATsuszFR7JB5ZkqVS1W=hWr9=E7bTf+MvgJ+NXT3aZNwg@mail.gmail.com>
+Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>,
+        Gary Guo <gary@garyguo.net>, Kees Cook <keescook@chromium.org>,
+        linux-kbuild@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        rust-for-linux@vger.kernel.org,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+On Wed, Jan 18, 2023 at 4:23 AM Lucas De Marchi
+<lucas.demarchi@intel.com> wrote:
+>
+> On Tue, Jan 17, 2023 at 06:51:44PM +0100, Michal Such=C3=A1nek wrote:
+> >Hello,
+> >
+> >On Fri, Jan 13, 2023 at 06:18:41PM +0000, Gary Guo wrote:
+> >> On Thu, 12 Jan 2023 14:40:59 -0700
+> >> Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+> >>
+> >> > On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote:
+> >> > >
+> >> > > struct modversion_info {
+> >> > >- unsigned long crc;
+> >> > >- char name[MODULE_NAME_LEN];
+> >> > >+ /* Offset of the next modversion entry in relation to this one. *=
+/
+> >> > >+ u32 next;
+> >> > >+ u32 crc;
+> >> > >+ char name[0];
+> >> >
+> >> > although not really exported as uapi, this will break userspace as t=
+his is
+> >> > used in the  elf file generated for the modules. I think
+> >> > this change must be made in a backward compatible way and kmod updat=
+ed
+> >> > to deal with the variable name length:
+> >> >
+> >> > kmod $ git grep "\[64"
+> >> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint32_t)];
+> >> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint64_t)];
+> >> >
+> >> > in kmod we have both 32 and 64 because a 64-bit kmod can read both 3=
+2
+> >> > and 64 bit module, and vice versa.
+> >> >
+> >>
+> >> Hi Lucas,
+> >>
+> >> Thanks for the information.
+> >>
+> >> The change can't be "truly" backward compatible, in a sense that
+> >> regardless of the new format we choose, kmod would not be able to deco=
+de
+> >> symbols longer than "64 - sizeof(long)" bytes. So the list it retrieve=
+s
+> >> is going to be incomplete, isn't it?
+> >>
+> >> What kind of backward compatibility should be expected? It could be:
+> >> * short symbols can still be found by old versions of kmod, but not
+> >>   long symbols;
+> >
+> >That sounds good. Not everyone is using rust, and with this option
+> >people who do will need to upgrade tooling, and people who don't care
+> >don't need to do anything.
+>
+> that could be it indeed. My main worry here is:
+>
+> "After the support is added in kmod, kmod needs to be able to output the
+> correct information regardless if the module is from before/after the
+> change in the kernel and also without relying on kernel version."
+> Just changing the struct modversion_info doesn't make that possible.
+>
+> Maybe adding the long symbols in another section? Or ble
+> just increase to 512 and add the size to a
+> "__versions_hdr" section. If we then output a max size per module,
+> this would offset a little bit the additional size gained for the
+> modules using rust. And the additional 0's should compress well
+> so I'm not sure the additional size is that much relevant here.
 
 
-On 2023/1/16 18:10, Jiri Olsa wrote:
-> We currently use module_kallsyms_on_each_symbol that iterates all
-> modules/symbols and we try to lookup each such address in user
-> provided symbols/addresses to get list of used modules.
-> 
-> This fix instead only iterates provided kprobe addresses and calls
-> __module_address on each to get list of used modules. This turned
-> out ot be simpler and also bit faster.
 
-ot --> to
 
-Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-> 
-> On my setup with workload (executed 10 times):
-> 
->    # test_progs -t kprobe_multi_bench_attach/modules
-> 
-> Current code:
-> 
->  Performance counter stats for './test.sh' (5 runs):
-> 
->     76,081,161,596      cycles:k                   ( +-  0.47% )
-> 
->            18.3867 +- 0.0992 seconds time elapsed  ( +-  0.54% )
-> 
-> With the fix:
-> 
->  Performance counter stats for './test.sh' (5 runs):
-> 
->     74,079,889,063      cycles:k                   ( +-  0.04% )
-> 
->            17.8514 +- 0.0218 seconds time elapsed  ( +-  0.12% )
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  kernel/trace/bpf_trace.c | 93 ++++++++++++++++++++--------------------
->  1 file changed, 47 insertions(+), 46 deletions(-)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 095f7f8d34a1..8124f1ad0d4a 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2682,69 +2682,77 @@ static void symbols_swap_r(void *a, void *b, int size, const void *priv)
->  	}
->  }
->  
-> -struct module_addr_args {
-> -	unsigned long *addrs;
-> -	u32 addrs_cnt;
-> +struct modules_array {
->  	struct module **mods;
->  	int mods_cnt;
->  	int mods_cap;
->  };
->  
-> -static int module_callback(void *data, const char *name,
-> -			   struct module *mod, unsigned long addr)
-> +static int add_module(struct modules_array *arr, struct module *mod)
->  {
-> -	struct module_addr_args *args = data;
->  	struct module **mods;
->  
-> -	/* We iterate all modules symbols and for each we:
-> -	 * - search for it in provided addresses array
-> -	 * - if found we check if we already have the module pointer stored
-> -	 *   (we iterate modules sequentially, so we can check just the last
-> -	 *   module pointer)
-> -	 * - take module reference and store it
-> -	 */
-> -	if (!bsearch(&addr, args->addrs, args->addrs_cnt, sizeof(addr),
-> -		       bpf_kprobe_multi_addrs_cmp))
-> -		return 0;
-> -
-> -	if (args->mods && args->mods[args->mods_cnt - 1] == mod)
-> -		return 0;
-> -
-> -	if (args->mods_cnt == args->mods_cap) {
-> -		args->mods_cap = max(16, args->mods_cap * 3 / 2);
-> -		mods = krealloc_array(args->mods, args->mods_cap, sizeof(*mods), GFP_KERNEL);
-> +	if (arr->mods_cnt == arr->mods_cap) {
-> +		arr->mods_cap = max(16, arr->mods_cap * 3 / 2);
-> +		mods = krealloc_array(arr->mods, arr->mods_cap, sizeof(*mods), GFP_KERNEL);
->  		if (!mods)
->  			return -ENOMEM;
-> -		args->mods = mods;
-> +		arr->mods = mods;
->  	}
->  
-> -	if (!try_module_get(mod))
-> -		return -EINVAL;
-> -
-> -	args->mods[args->mods_cnt] = mod;
-> -	args->mods_cnt++;
-> +	arr->mods[arr->mods_cnt] = mod;
-> +	arr->mods_cnt++;
->  	return 0;
->  }
->  
-> +static bool has_module(struct modules_array *arr, struct module *mod)
-> +{
-> +	int i;
-> +
-> +	for (i = arr->mods_cnt - 1; i >= 0; i--) {
-> +		if (arr->mods[i] == mod)
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +
->  static int get_modules_for_addrs(struct module ***mods, unsigned long *addrs, u32 addrs_cnt)
->  {
-> -	struct module_addr_args args = {
-> -		.addrs     = addrs,
-> -		.addrs_cnt = addrs_cnt,
-> -	};
-> -	int err;
-> +	struct modules_array arr = {};
-> +	u32 i, err = 0;
-> +
-> +	for (i = 0; i < addrs_cnt; i++) {
-> +		struct module *mod;
-> +
-> +		preempt_disable();
-> +		mod = __module_address(addrs[i]);
-> +		/* Either no module or we it's already stored  */
-> +		if (!mod || has_module(&arr, mod)) {
-> +			preempt_enable();
-> +			continue;
-> +		}
-> +		if (!try_module_get(mod))
-> +			err = -EINVAL;
-> +		preempt_enable();
-> +		if (err)
-> +			break;
-> +		err = add_module(&arr, mod);
-> +		if (err) {
-> +			module_put(mod);
-> +			break;
-> +		}
-> +	}
->  
->  	/* We return either err < 0 in case of error, ... */
-> -	err = module_kallsyms_on_each_symbol(NULL, module_callback, &args);
->  	if (err) {
-> -		kprobe_multi_put_modules(args.mods, args.mods_cnt);
-> -		kfree(args.mods);
-> +		kprobe_multi_put_modules(arr.mods, arr.mods_cnt);
-> +		kfree(arr.mods);
->  		return err;
->  	}
->  
->  	/* or number of modules found if everything is ok. */
-> -	*mods = args.mods;
-> -	return args.mods_cnt;
-> +	*mods = arr.mods;
-> +	return arr.mods_cnt;
->  }
->  
->  int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-> @@ -2857,13 +2865,6 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->  		       bpf_kprobe_multi_cookie_cmp,
->  		       bpf_kprobe_multi_cookie_swap,
->  		       link);
-> -	} else {
-> -		/*
-> -		 * We need to sort addrs array even if there are no cookies
-> -		 * provided, to allow bsearch in get_modules_for_addrs.
-> -		 */
-> -		sort(addrs, cnt, sizeof(*addrs),
-> -		       bpf_kprobe_multi_addrs_cmp, NULL);
->  	}
->  
->  	err = get_modules_for_addrs(&link->mods, addrs, cnt);
-> 
+I also thought of new section(s) for long symbols.
 
--- 
-Regards,
-  Zhen Lei
+
+
+One idea is to have separate sections for CRCs and symbol names.
+
+
+
+
+section __version_crc:
+   0x12345678
+   0x23456789
+   0x34567890
+
+
+section __version_sym:
+  "very_very_very_very_long_symbol"
+  "another_very_very_very_very_very_long_symbol"
+  "yet_another_very_very_very_very_very_long_symbol"
+
+
+
+
+You can iterate in each section with this:
+
+   crc +=3D sizeof(u32);
+   name +=3D strlen(name) + 1;
+
+
+Benefits:
+  - No next pointer
+  - No padding
+    - *.mod.c is kept human readable.
+
+
+
+
+
+BTW, the following is impossible
+because the pointer reference to .rodata
+is not available at this point?
+
+struct modversion_info {
+     u32 crc;
+     const char *name:
+};
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
