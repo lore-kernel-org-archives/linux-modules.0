@@ -2,99 +2,96 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BD4AC38142
-	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 00:41:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CE95C00A5A
+	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 00:42:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjARAlt (ORCPT
+        id S229790AbjARAmB (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 17 Jan 2023 19:41:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        Tue, 17 Jan 2023 19:42:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjARAlJ (ORCPT
+        with ESMTP id S229785AbjARAlb (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 17 Jan 2023 19:41:09 -0500
+        Tue, 17 Jan 2023 19:41:31 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CC7366BD;
-        Tue, 17 Jan 2023 16:17:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89893CE01;
+        Tue, 17 Jan 2023 16:18:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=utRFnR99NxpzDHlLUBWhedA5Z4Qq6S0lgjsdASsjQgw=; b=gLiHq7h9ZLBOPUCCcIFpEOUKme
-        G9Ezvqeq3LqMLnnKcumYSR9pJ5akTuu8CjhiUuTR25iQZOQ+woIQSjYTRJI/z/MFNA8cG7dMdpY/U
-        XUAbrdYMJwChjFf0WqZKDPJj6FOXZ0iwBejJVB6AJfFbLiqQPwluE5ObI06U6b9/Cd928fUWRhMAF
-        +0HpMcrHGNVbN4DeT06Q/s2jxahuNXnKegsqJgcdjNhKn2T1TGAMndDowJuGppFwPfA59qY69BW61
-        6li5vAr8fJJswsydGnqYHt/8WTEwAih4YzfmbUycdszkAdmx7r21yfp+yzRuw8P4pjET8T7YgT+EO
-        hcrqaZwg==;
+        bh=HHnUDmeU0abCJ7K1eaIuJ1LiMmq1mJinxP4XhHWb9LA=; b=apwku60VJAkz4oX0uxzKIueYkV
+        Q0WK3ctzgQMMC0m3BhBIDfycxRH5jklswx5A8m6aHDCGkxaioWHI3NwLemWtgJfRS3od2LrZM+Qr5
+        CMq3wPORGlgpPeJ2UYHc4amHzPrN4GdLrMzD4jWmrvfyZoNwF2WmFGEWEE4Jf8XTNzSV9ElyAEXzi
+        cfYYmTSKfRZ7aqWIn2Ln52yXAZOpKHeU0L9LA3pFGNNBk5fAii1XxOjFFmma5CqKDlGE/SzN+l9DZ
+        1591XMd5fuTOw/xf6btYReTAsqwpNcsdPEfc+uS6nkbZZvtgZjOuq70xsp9hQ2fm82i3zbSzsstWi
+        O8E5QQkQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHw8b-00GKCk-PD; Wed, 18 Jan 2023 00:17:09 +0000
-Date:   Tue, 17 Jan 2023 16:17:09 -0800
+        id 1pHwAB-00GKKJ-JB; Wed, 18 Jan 2023 00:18:47 +0000
+Date:   Tue, 17 Jan 2023 16:18:47 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Song Liu <song@kernel.org>, bpf@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-modules@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nick Alcock <nick.alcock@oracle.com>
-Subject: Re: [PATCHv3 bpf-next 1/3] livepatch: Improve the search performance
- of module_kallsyms_on_each_symbol()
-Message-ID: <Y8c6hUswpwg7g83v@bombadil.infradead.org>
-References: <20230116101009.23694-1-jolsa@kernel.org>
- <20230116101009.23694-2-jolsa@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>
+Cc:     Petr Pavlu <petr.pavlu@suse.com>, david@redhat.com,
+        mwilck@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <Y8c652Dlbc9yarFx@bombadil.infradead.org>
+References: <20221205103557.18363-1-petr.pavlu@suse.com>
+ <Y5gI/3crANzRv22J@bombadil.infradead.org>
+ <Y5hRRnBGYaPby/RS@alley>
+ <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230116101009.23694-2-jolsa@kernel.org>
+In-Reply-To: <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Jan 16, 2023 at 11:10:07AM +0100, Jiri Olsa wrote:
-> From: Zhen Lei <thunder.leizhen@huawei.com>
+On Tue, Jan 17, 2023 at 04:04:22PM -0800, Luis Chamberlain wrote:
+> ./tools/testing/selftests/kmod/kmod.sh -t 0006
+> Tue Jan 17 23:18:13 UTC 2023
+> Running test: kmod_test_0006 - run #0
+> kmod_test_0006: OK! - loading kmod test
+> kmod_test_0006: FAIL, test expects SUCCESS (0) - got -EINVAL (-22)
+> ----------------------------------------------------
+> Custom trigger configuration for: test_kmod0
+> Number of threads:      50
+> Test_case:      TEST_KMOD_FS_TYPE (2)
+> driver: test_module
+> fs:     xfs
+> ----------------------------------------------------
+> Test completed
 > 
-> Currently we traverse all symbols of all modules to find the specified
-> function for the specified module. But in reality, we just need to find
-> the given module and then traverse all the symbols in it.
+> When can multiple get_fs_type() calls be issued on a system? When
+> mounting a large number of filesystems. Sadly though this issue seems
+> to have gone unnoticed for a while now. Even reverting commit
+> 6e6de3dee51a doesn't fix it, and I've run into issues with trying
+> to bisect, first due to missing Kees' patch which fixes a compiler
+> failure on older kernel [0] and now I'm seeing this while trying to
+> build v5.1:
 > 
-> Let's add a new parameter 'const char *modname' to function
-> module_kallsyms_on_each_symbol(), then we can compare the module names
-> directly in this function and call hook 'fn' after matching. If 'modname'
-> is NULL, the symbols of all modules are still traversed for compatibility
-> with other usage cases.
+> ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple definition of `__force_order';
+> arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
+> ld: warning: arch/x86/boot/compressed/efi_thunk_64.o: missing .note.GNU-stack section implies executable stack
+> ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+> ld: arch/x86/boot/compressed/head_64.o: warning: relocation in read-only section `.head.text'
+> ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with RWX permissions
+> ld: warning: creating DT_TEXTREL in a PIE
+> make[2]: *** [arch/x86/boot/compressed/Makefile:118: arch/x86/boot/compressed/vmlinux] Error 1
+> make[1]: *** [arch/x86/boot/Makefile:112: arch/x86/boot/compressed/vmlinux] Error 2
+> make: *** [arch/x86/Makefile:283: bzImage] Error 2
 > 
-> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
->                 |
-> Phase2:          -->f1-->f2-->f3
+> [0] http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
 > 
-> Assuming that there are m modules, each module has n symbols on average,
-> then the time complexity is reduced from O(m * n) to O(m) + O(n).
-> 
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> Acked-by: Song Liu <song@kernel.org>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> But we should try to bisect to see what cauased the above kmod test 0006
+> to start failing.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-
-I'm happy for folks to take this through another tree. I was merging
-kallsysm stuff on the modules tree to avoid conflicts with Nick Alcock's
-work but after reviewing his v10 series it is quite clear that's no where near
-ready now and I don't expect much conflicts even if it was.
+BTW if someone beats me to bisecting the above it would be appreciated.
+I have a feeling having old gcc / linker, etc would be easier.
 
   Luis
