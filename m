@@ -2,55 +2,104 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBDC1C004D4
-	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 08:11:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED67C38147
+	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 14:26:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjARIL0 (ORCPT
+        id S231183AbjARO0p (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 18 Jan 2023 03:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        Wed, 18 Jan 2023 09:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjARIKQ (ORCPT
+        with ESMTP id S231239AbjARO02 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:10:16 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B07667944;
-        Tue, 17 Jan 2023 23:40:52 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 9A32A68D13; Wed, 18 Jan 2023 08:40:47 +0100 (CET)
-Date:   Wed, 18 Jan 2023 08:40:47 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Song Liu <song@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        songliubraving@fb.com, Peter Zijlstra <peterz@infradead.org>,
-        Christoph Hellwig <hch@lst.de>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-Message-ID: <20230118074047.GA27385@lst.de>
-References: <20230106220959.3398792-1-song@kernel.org> <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com> <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
+        Wed, 18 Jan 2023 09:26:28 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD2F302A8;
+        Wed, 18 Jan 2023 06:10:35 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id BD0193EF47;
+        Wed, 18 Jan 2023 14:10:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674051033; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GGYhHqk9lAfnC0oeawDzo48jNfxg1s75ZFbKqNg+POw=;
+        b=OVjneds/B14mHveueZZ//I+0ccc7E/FG+o+Z/xavu7kdORWyymsAQ4k5ZRUMlTdzqy9Gtd
+        Ck4aM3Jh/AQmgwjPBpNTMVJQj3rJNEmf/3S/7zBfWZZwkjwMjDbafT8s8Y5bNHmltmG0hv
+        1rusI+rrQ37oKvcuNeAaJEq/XblG+oQ=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 032772C141;
+        Wed, 18 Jan 2023 14:10:33 +0000 (UTC)
+Date:   Wed, 18 Jan 2023 15:10:32 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Zhen Lei <thunder.leizhen@huawei.com>, bpf@vger.kernel.org,
+        live-patching@vger.kernel.org, linux-modules@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCHv3 bpf-next 3/3] bpf: Change modules resolving for kprobe
+ multi link
+Message-ID: <Y8f92N1AjLM0hYis@alley>
+References: <20230116101009.23694-1-jolsa@kernel.org>
+ <20230116101009.23694-4-jolsa@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20230116101009.23694-4-jolsa@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jan 17, 2023 at 10:50:55AM -0800, Song Liu wrote:
-> Hi Thomas and Luis,
+On Mon 2023-01-16 11:10:09, Jiri Olsa wrote:
+> We currently use module_kallsyms_on_each_symbol that iterates all
+> modules/symbols and we try to lookup each such address in user
+> provided symbols/addresses to get list of used modules.
 > 
-> Could you please share your comments on this? Specifically, is this on
-> the right direction? And, what's your preference with Christophe's
-> suggestions?
+> This fix instead only iterates provided kprobe addresses and calls
+> __module_address on each to get list of used modules. This turned
+> out ot be simpler and also bit faster.
 > 
-> "I dislike how it looks with enums, things like
-> mod->mod_mem[MOD_MEM_TYPE_INIT
-> _TEXT] are odd and don't read nicely.
-> Could we have something nicer like mod->mod_mem_init_text ?
-> I know it will complicate your for_each_mod_mem_type() but it would look
-> nicer."
+> On my setup with workload (executed 10 times):
+> 
+>    # test_progs -t kprobe_multi_bench_attach/modules
+> 
+> Current code:
+> 
+>  Performance counter stats for './test.sh' (5 runs):
+> 
+>     76,081,161,596      cycles:k                   ( +-  0.47% )
+> 
+>            18.3867 +- 0.0992 seconds time elapsed  ( +-  0.54% )
+> 
+> With the fix:
+> 
+>  Performance counter stats for './test.sh' (5 runs):
+> 
+>     74,079,889,063      cycles:k                   ( +-  0.04% )
+> 
+>            17.8514 +- 0.0218 seconds time elapsed  ( +-  0.12% )
+> 
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-FYI, I don't particularly like the array either.  But if it makes
-the code much simpler I can live with it.
+The change looks good to me:
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+Best Regards,
+Petr
