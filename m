@@ -2,84 +2,116 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E90AC54EBE
-	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 17:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED910C32793
+	for <linux-modules@archiver.kernel.org>; Wed, 18 Jan 2023 17:52:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjARRiQ (ORCPT
+        id S230106AbjARRww (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 18 Jan 2023 12:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
+        Wed, 18 Jan 2023 12:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjARRiO (ORCPT
+        with ESMTP id S230033AbjARRwu (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:38:14 -0500
+        Wed, 18 Jan 2023 12:52:50 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075A73B0DE;
-        Wed, 18 Jan 2023 09:38:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658D54B49C;
+        Wed, 18 Jan 2023 09:52:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADA1AB81E15;
-        Wed, 18 Jan 2023 17:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64801C433D2;
-        Wed, 18 Jan 2023 17:38:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16813B81E69;
+        Wed, 18 Jan 2023 17:52:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D82C43396;
+        Wed, 18 Jan 2023 17:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674063491;
-        bh=6dUq+W2mqEx0g4Or3chy+W983T739CIoWnzDTGhRhGs=;
+        s=k20201202; t=1674064364;
+        bh=/Gzr/WR95XMtTWMDsej0/0zxfcG/BPllZVyCwX0lM6g=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nf7sfxZq9tl8Nzgn+ro+WGZ8uO2szublwfHlp+L0eBc5tLiwUnnG9Fw+ndDTCaEr1
-         P2xV/udYU8BBDEfcaAmB1ojLhwFpRSt9TIwMz4/gwzZANoUkahj3krVKzB1I6Pm1KA
-         RQG7DSFkgS1Mw4ZK2x/8zv2wAJAnHLklny3KF4OSQojiJMpqXEbjOOxGSnnDTu5m0M
-         fiF+cdOLKSlVEUIEaLk2Lwdy17KRwn1CRZ6l7v/C8Tak+VNv2EQU5JvF8oUWeuGgcn
-         5ppc/lGY4spSCuSPjzefpesdCoqfxqIwzwdiWInPS2N15QjfplRhSgjHQbsZmJTPNy
-         BHViU1AW31d6g==
-Received: by mail-lf1-f52.google.com with SMTP id a11so12630253lfg.0;
-        Wed, 18 Jan 2023 09:38:11 -0800 (PST)
-X-Gm-Message-State: AFqh2kq/j9XUDFJYmKplH9CAouZ4OduTm2e9+WEpgj/fxVWzZbnCQZXP
-        lnoDuIY9KBvNLiUWUpqAavIq6KARGj3c0u4Oy+g=
-X-Google-Smtp-Source: AMrXdXsXJT800vKamK8IsZv9B2ch+q+KajiuJpC8TbalLVf3MdSaxmfsYmd/o2VA6AcCEPP9zk1pQEK3GKaiPjbUeVU=
-X-Received: by 2002:a05:6512:3c8a:b0:4d5:8d49:569c with SMTP id
- h10-20020a0565123c8a00b004d58d49569cmr550359lfv.643.1674063489432; Wed, 18
- Jan 2023 09:38:09 -0800 (PST)
+        b=fp574ofBRl53RryS+r3YEUQmBy2MWwMXjhG7vQtUhrJf6LKDt67DX8BUISkoG2Uti
+         WoBCyuJEOz3podTg4r4Kphc8ssJgU4ND0pwm6Dzch+HfBVkTsZHOW9RwBAHGi/3Ytp
+         IoCOOuUslmdW+dRxJs1BoTn4PjIFpIzkaDEdJz1pxXzfK0DbIUI48OlS7YMuW9gTiQ
+         YZIyQ0ejF8YuQCvPXsabh99XYmQu0V8i8neWI47Q6qAcj+s7fA+gfBD8jygCBTtqlo
+         blXPaDNdc4lnWgwR+NeRB+MGgfP0SyHUKJoakjeh16zyGTFfjmb8QRMmUkoaGKIZRE
+         HG37jgpgijwCw==
+Received: by mail-lf1-f53.google.com with SMTP id bp15so52786765lfb.13;
+        Wed, 18 Jan 2023 09:52:44 -0800 (PST)
+X-Gm-Message-State: AFqh2kpx5yuivhUR3FZK7l0fxyFJHQ7hUH5nnHXAqXufhK/YwGrOOLeX
+        E26YGx7LB+YjAF4Y21y2dKT0KqTzaDyTqC5voDU=
+X-Google-Smtp-Source: AMrXdXsz3DFc0OfRs+agT2c4zNuyTjg7T6vN1ft7TBpReHglOHBeqGsmrSwT3VPQxp0zw2d14zoZpRBoF2VVObWLE1I=
+X-Received: by 2002:ac2:48b7:0:b0:4b6:e71d:94a6 with SMTP id
+ u23-20020ac248b7000000b004b6e71d94a6mr586014lfg.476.1674064362704; Wed, 18
+ Jan 2023 09:52:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20230106220959.3398792-1-song@kernel.org> <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
- <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com> <20230118074047.GA27385@lst.de>
-In-Reply-To: <20230118074047.GA27385@lst.de>
+References: <20230106220959.3398792-1-song@kernel.org> <83941b74-7585-235b-ee54-3b127ca70d9e@csgroup.eu>
+ <CAPhsuW6S8qJWFzSLpVf_4ZpyM0Cxty=-pS2_K=tgF52s95Zhag@mail.gmail.com>
+ <CAPhsuW7+BG9wYaoD6EYH-jnWqX30JdgNr5_733sO-++SzR5v3w@mail.gmail.com>
+ <154ed99c-5877-35f6-5e7d-9d7abada7d33@csgroup.eu> <Y8gLJYA3ibA8De58@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y8gLJYA3ibA8De58@hirez.programming.kicks-ass.net>
 From:   Song Liu <song@kernel.org>
-Date:   Wed, 18 Jan 2023 09:37:57 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5rRgcW7DocBVpqGoEgnHmXHffOD0uByWk64s8PCV8yZg@mail.gmail.com>
-Message-ID: <CAPhsuW5rRgcW7DocBVpqGoEgnHmXHffOD0uByWk64s8PCV8yZg@mail.gmail.com>
+Date:   Wed, 18 Jan 2023 09:52:29 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW6AR9CorYPL88-92_VBn-7uZoXj4SfWXn5N_bRC_SXSKQ@mail.gmail.com>
+Message-ID: <CAPhsuW6AR9CorYPL88-92_VBn-7uZoXj4SfWXn5N_bRC_SXSKQ@mail.gmail.com>
 Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        songliubraving@fb.com, Peter Zijlstra <peterz@infradead.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+        Thomas Gleixner <tglx@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jan 17, 2023 at 11:40 PM Christoph Hellwig <hch@lst.de> wrote:
+On Wed, Jan 18, 2023 at 7:07 AM Peter Zijlstra <peterz@infradead.org> wrote=
+:
 >
-> On Tue, Jan 17, 2023 at 10:50:55AM -0800, Song Liu wrote:
-> > Hi Thomas and Luis,
-> >
-> > Could you please share your comments on this? Specifically, is this on
-> > the right direction? And, what's your preference with Christophe's
-> > suggestions?
-> >
-> > "I dislike how it looks with enums, things like
-> > mod->mod_mem[MOD_MEM_TYPE_INIT
-> > _TEXT] are odd and don't read nicely.
-> > Could we have something nicer like mod->mod_mem_init_text ?
-> > I know it will complicate your for_each_mod_mem_type() but it would look
-> > nicer."
+> On Tue, Jan 10, 2023 at 06:31:41AM +0000, Christophe Leroy wrote:
+> > Le 09/01/2023 =C4=85 21:51, Song Liu a =C3=A9crit :
 >
-> FYI, I don't particularly like the array either.  But if it makes
-> the code much simpler I can live with it.
+> > > Do you mean one tree will cause addr_[min|max] to be inaccurate?
+> > >
+> >
+> > Yes at least. On powerpc you will have module text below kernel,
+> > somewhere between 0xb0000000 and 0xcfffffff, and you will have module
+> > data in vmalloc area, somewhere between 0xf0000000 and 0xffffffff.
+> >
+> > If you have only one tree, any address between 0xc0000000 and 0xeffffff=
+f
+> > will trigger a tree search.
+>
+> The current min/max thing is tied to the tree because of easy update on
+> remove, but module-insert/remove is not a performance critical path.
+>
+> So I think it should be possible to have {min,max}[TYPES] pairs.  Either
+> brute force the removal -- using a linear scan of the mod->list to find
+> the new bounds on removal.
 
-Thanks for the feedback! Let me see whether I can make the
-code clean without the array.
+I think keeping an array of min/max pairs is an overkill.
+w/o CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, all the
+types will be allocated in the same range (MODULES_VADDR, MODULES_END),
+so one min/max pair should be enough.
+w/ CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC, there
+is a big gap between text allocation and data allocation. I think a second
+min/max pair will be useful here.
 
+>
+> Or overengineer the whole thing and use an augmented tree to keep that
+> many heaps in sync during the update -- but this seems total overkill.
+>
+> The only consideration is testing that many ranges in
+> __module_address(), this is already 2 cachelines worth of range-checks
+> -- which seems a little excessive.
+
+Currently, min/max are updated on module load, but not on module unload.
+I guess we won't really need __module_address() to be that fast.
+
+If there are no objections or suggestions. I will update the patches with a
+second min/max pair with CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC.
+
+Thanks,
 Song
+
+>
+> (also, I note that module_addr_{min,max} are unused these days)
