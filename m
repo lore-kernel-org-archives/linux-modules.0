@@ -2,90 +2,96 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D60C6C004D4
-	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 01:30:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A97BAC678D6
+	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 04:28:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjATBaV (ORCPT
+        id S229992AbjATE2h (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 19 Jan 2023 20:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        Thu, 19 Jan 2023 23:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjATBaT (ORCPT
+        with ESMTP id S229938AbjATE2a (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 19 Jan 2023 20:30:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB904F355;
-        Thu, 19 Jan 2023 17:30:18 -0800 (PST)
+        Thu, 19 Jan 2023 23:28:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F282CB1ECF;
+        Thu, 19 Jan 2023 20:28:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 982FA61DD3;
-        Fri, 20 Jan 2023 01:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E7C21C433F1;
-        Fri, 20 Jan 2023 01:30:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B5E8B82135;
+        Thu, 19 Jan 2023 08:29:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A543FC433D2;
+        Thu, 19 Jan 2023 08:29:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674178217;
-        bh=y0WMSXaWfNZ1D7CpsRFRbTx5lwlDTZw1fj+Z3txRgkw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=EleMx3DOl0FetT8mhi7z3gEb0AhNJOh7HRMuz6rlrkO9/3rzHlsbIuoZUP4JBUl1z
-         lX7nBh/R+fAFVWHZJIUKor97VmJVy5eLnYxFW9LwFkfdJbimKEtWd9y7JnQHVF+euO
-         KEE+nWyQPGdUvonR7G/RqClJup0gUBdWJiOYO8lm8juzF7aX4kAZZesggP9+pH3y8p
-         iOSlSZwAM9JEEQwOsJhJi3YH4MlvbQ/Mr4Z3dCO39ciS61iHjmuEfAbUnBCs1yI7HS
-         mN+x/uhdcLSwPecci2e4WTFzIea+M7t2j+r//qzriZ1KQTlxDQfOJuT9Tx4bo5Fz2N
-         n4e3okeV1wBmA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C9CC8C4314C;
-        Fri, 20 Jan 2023 01:30:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1674116991;
+        bh=wiIwzJ1J9iz0naLuw7+n0CgUx6j+UpqtC2oWoSfJfc0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qwUegg87DEOi/Wj+waB+iMZarjqP2Pfzov442nwZ0wm6u2wc1eQhCqdJ/9qhwbxr8
+         cbtLWwv6HL4ZwZlpE6h8dQ1Q+xT22AYflOifZ6C6/L3yYWrRpFqlumuuaJxCY6PH/N
+         TIjp1f+/4YkOOhCjWYuMcnWNUvmCKFb2OWsqkw9FQ7EL2PRK9EEBN1UaOJtu20gAE9
+         ruTLifWMtafnXEpnXg99nGvO1DNnQboiV/2ea3VXmSQxtG29VliC5exrl/6n3/T2CJ
+         xHzOHh6BE2T3DjJHKSGmxq6xisILxxMOTohSeKb/sPAifCLXkhvsCFqiZkV71ANAQp
+         o2e7SC4lHpdFA==
+Received: by mail-lf1-f52.google.com with SMTP id g13so2139839lfv.7;
+        Thu, 19 Jan 2023 00:29:51 -0800 (PST)
+X-Gm-Message-State: AFqh2kpYAT5RKgoUJAJ2h8NXNjlU714Fcmloxkg3AxbgF/QUq5C7y1EM
+        CGZ+uq02eL6IXRLfRwXM99fBlfHmpKUWRz6Xeqc=
+X-Google-Smtp-Source: AMrXdXtv4mp0PXcDo9ZDkHrj+7QhEher1afjbD7W9N7lNoxMQo/TrO/llB4c4E3n7IN/pxlJJ4KOeYqAnvBdr76zgrY=
+X-Received: by 2002:a05:6512:308a:b0:4d1:3e32:5436 with SMTP id
+ z10-20020a056512308a00b004d13e325436mr1044480lfd.215.1674116989690; Thu, 19
+ Jan 2023 00:29:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv3 bpf-next 0/3] kallsyms: Optimize the search for module
- symbols by livepatch and bpf
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167417821682.1146.2462134173211926226.git-patchwork-notify@kernel.org>
-Date:   Fri, 20 Jan 2023 01:30:16 +0000
-References: <20230116101009.23694-1-jolsa@kernel.org>
-In-Reply-To: <20230116101009.23694-1-jolsa@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-        pmladek@suse.com, thunder.leizhen@huawei.com, bpf@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-modules@vger.kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org, sdf@google.com,
-        haoluo@google.com, joe.lawrence@redhat.com, rostedt@goodmis.org,
-        mhiramat@kernel.org, mark.rutland@arm.com, mcgrof@kernel.org
+References: <20230106220959.3398792-1-song@kernel.org> <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
+ <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
+ <20230118074047.GA27385@lst.de> <CAPhsuW7zqYgLcWoG1Wr_tBBLt-yiNYq3FLVWYMpMj=6TJawQEg@mail.gmail.com>
+ <20230119053545.GA16775@lst.de>
+In-Reply-To: <20230119053545.GA16775@lst.de>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 19 Jan 2023 00:29:36 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5WFEHfGrSW5nYRRohmLMAfWoZiOCBgCdgzOCmn+Q_vVA@mail.gmail.com>
+Message-ID: <CAPhsuW5WFEHfGrSW5nYRRohmLMAfWoZiOCBgCdgzOCmn+Q_vVA@mail.gmail.com>
+Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        songliubraving@fb.com, Peter Zijlstra <peterz@infradead.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello:
+On Wed, Jan 18, 2023 at 9:35 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Wed, Jan 18, 2023 at 01:52:51PM -0800, Song Liu wrote:
+> > In this way we can use the array in the for loops, and use mod->core_text,
+> > etc. when we only need to access one of them.
+>
+> Just use the array please instead of making it too ugly.  If that
+> is the only sensible way to iterate we have a good argument for the
+> array and can live with it.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Hmm.. I think it won't be ugly outside of the struct definition...
+Alternatively, how about use something like
 
-On Mon, 16 Jan 2023 11:10:06 +0100 you wrote:
-> hi,
-> sending new version of [1] patchset posted originally by Zhen Lei.
-> It contains 2 changes that improove search performance for livepatch
-> and bpf.
-> 
-> v3 changes:
->   - fixed off by 1 issue, simplified condition, added acks [Song]
->   - added module attach as subtest [Andrii]
-> 
-> [...]
+#define core_text mod_mem[MOD_MEM_TYPE_TEXT]
+...
 
-Here is the summary with links:
-  - [PATCHv3,bpf-next,1/3] livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
-    https://git.kernel.org/bpf/bpf-next/c/07cc2c931e8e
-  - [PATCHv3,bpf-next,2/3] selftests/bpf: Add serial_test_kprobe_multi_bench_attach_kernel/module tests
-    https://git.kernel.org/bpf/bpf-next/c/edac4b5b185e
-  - [PATCHv3,bpf-next,3/3] bpf: Change modules resolving for kprobe multi link
-    https://git.kernel.org/bpf/bpf-next/c/6a5f2d6ee8d5
+which is similar to
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+struct sock {
+        /*
+         * Now struct inet_timewait_sock also uses sock_common, so please just
+         * don't add nothing before this first member (__sk_common) --acme
+         */
+        struct sock_common      __sk_common;
+#define sk_node                 __sk_common.skc_node
+#define sk_nulls_node           __sk_common.skc_nulls_node
+...
+};
 
+?
 
+Thanks,
+Song
