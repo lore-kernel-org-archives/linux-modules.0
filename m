@@ -2,186 +2,164 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57F38C00A5A
-	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 15:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E76A4C6379F
+	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 15:57:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjASPsO (ORCPT
+        id S231351AbjASP5m (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 19 Jan 2023 10:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        Thu, 19 Jan 2023 10:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbjASPrz (ORCPT
+        with ESMTP id S231326AbjASP5j (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:47:55 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5428875A;
-        Thu, 19 Jan 2023 07:47:10 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A54C05CFD5;
-        Thu, 19 Jan 2023 15:47:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674143228; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hHqpVN9DzGS4tivxMt2BcVTb/csx+XiOhf00+x8+hOQ=;
-        b=pVn6jVVMaKAA8cvLkiEttUC+gaYWNhHFk/VjjM8sry2zNYG7bwASTceiNcUgn+lGP5nVuu
-        4yGoDUB6axJxsGzBzfPOmOJ1f1Xay943KMsd3DPHdKJ5zh4oZWRmlSNal9sFlvqAk7fzrA
-        oT0Xnau8jEhtnQnqxYhsWkpcIwXIW6Q=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2C1D52C141;
-        Thu, 19 Jan 2023 15:47:08 +0000 (UTC)
-Date:   Thu, 19 Jan 2023 16:47:05 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y8ll+eP+fb0TzFUh@alley>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
- <Y5hRRnBGYaPby/RS@alley>
- <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
- <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
+        Thu, 19 Jan 2023 10:57:39 -0500
+Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2105.outbound.protection.outlook.com [40.107.10.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9812C4B76A;
+        Thu, 19 Jan 2023 07:57:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YCpZimKjjzCJ882+ayOGXASWtzBiloouAFpzmdCkcGFcjV5luTcQVWExglqz3tnA1egN6FRomzW9cHhqls3w8lExlmbWKSyXNMHLDPSFV/wTPsGvq/TSqnoz+8S4udybTkc+2F0PPdMqdCw9BNv2nQucmAbdXYxrZ6fr3tgQ8Don8MkAsqTBgYoN8WvLT3o7WYVma0vqQfE8AjkY92sTIpgNhpvEboKWYZsgluGl/BWjDORpctd0KBdnqLpqC9g4VMiw0P1zbJ4TRR2WGpuzvZiriTWQxCWXV5SCRzyOisqT48/3YjFvjx2Ji4lyrRrXGE3oTSMjgSn4pgmRUJ5pSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vvdexPKqAlnDOQR64kzagGxbfyQqNF9vqgufLekoCnA=;
+ b=ZbzGNywgeUIM5pbBr4dppBB71JU/ErbGkDm6i48dN/Hdgq49xg+c9Dmv2KaFdMKaznfBe6Mfq37vRDMrGj718sOR5KQB4c7mE81bc+W/WU/a6obE0X0nJSqiPTzhH6bV+7N+IxvFvbzCjRzqejTtzZ/DVINGwhdSuvD560LDeVilosTxi5vl518ZYblcoJx0fnMX3rTzZlq7gpp80D0mH7shLtLDxTcoqXUcwUkc+zy2gqmXznj42VGLvdviOL+7T6QdwGEQMtSriVuwSFvO4JC3m0leTXL5lfym8sAFqeomaOFwzhCMVe5OGNlyhQw3Njof0ZjWfOTKNAgZr8gPrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vvdexPKqAlnDOQR64kzagGxbfyQqNF9vqgufLekoCnA=;
+ b=QSG5lTW65n83udJZuZRUi0/grQDJbn28CzJYc1Ra2q3HM+QNWhfmZZ2P5lDZkr6jqnVg9G9InUnOQjTvb6iW6S0eGSLgk2RajKZG+vtUaf01D6YWgYnwHwExTUrIiNxxK6eTwBsGpufnJwgApl+qOhZyVUFzDNYvpPI1v6JzCMI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO3P265MB2121.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:102::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
+ 2023 15:57:36 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f24:8099:5588:8ba8]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f24:8099:5588:8ba8%8]) with mapi id 15.20.6002.025; Thu, 19 Jan 2023
+ 15:57:36 +0000
+Date:   Thu, 19 Jan 2023 15:57:09 +0000
+From:   Gary Guo <gary@garyguo.net>
+To:     Michal =?UTF-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        rust-for-linux@vger.kernel.org,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
+Message-ID: <20230119155709.20d87e35.gary@garyguo.net>
+In-Reply-To: <20230119151857.GQ16547@kitsune.suse.cz>
+References: <20230111161155.1349375-1-gary@garyguo.net>
+        <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
+        <20230113181841.4d378a24.gary@garyguo.net>
+        <20230117175144.GI16547@kitsune.suse.cz>
+        <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan>
+        <20230119150936.30811312.gary@garyguo.net>
+        <20230119151857.GQ16547@kitsune.suse.cz>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: LO4P123CA0263.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:194::16) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO3P265MB2121:EE_
+X-MS-Office365-Filtering-Correlation-Id: 32d0c7f1-88a5-4901-940e-08dafa35e21e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CDaMijWSZvXYx0c9vmbfZaLZBXzAPMPUx4AxjCWANUu5vy/rIIwgZoUekprvby8LPYDUjuYLkBytPxKsBzKf8+WiOI64EJ/p+vFddfMdogdDbz0rReDI0vgIbe7BTYKiBIyJQwAQW40H9ThokBg6dZ5DtsVK1Rafn2ssN83U3jCt5qE2oFdUEGLL/idPCdKOxm8USTRtAzo2gYKIC2YDf7zKiytZPRpS4ZgqAdqOrL3KrV68ss7AcNBaxAYxLQjBweskD55FmRqLudOAN8fxvgDHRUfJtIs0Nr+XgrtN/wO0vzWjyWr63QcXZHAtS+bB0FTiSgml32280Jg61jd1Dj6DSPbwKGVfHK0fysUAogYQivMRDRyhWsFskyU3QVxTYm0TSYqD4Shk+IUSurWSNTrSvtvI94mjaL9rU4PMprZmlkFiXNdBBphJP4swo+g0g+gP4ZENZ/PCZVe2SCRd+/mb/lpDKbUosHum6sy+jOcvRvKXvRTdVFIMSuKhZLv6dqJU/EyB3lohWGNg+hTMEHyWTQanuyaQmUGAhXGXkwC+RImGXhYdYWEEzmSOwuftpOT18lgRMpizjjxwUGsCBwCw8i0EOXJ+rjCmaQI4E6lLPIXNDn+9f1NWI0HKBpdbG0Wq9ofqIPzY9li6sXo9JA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(346002)(396003)(376002)(39830400003)(451199015)(316002)(6506007)(38100700002)(54906003)(2906002)(2616005)(6666004)(1076003)(66556008)(66476007)(66946007)(26005)(4326008)(6512007)(478600001)(6916009)(8676002)(8936002)(7416002)(186003)(5660300002)(36756003)(86362001)(41300700001)(4744005)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cWZJQUs3NDdSMXoyMS9BbW5BK0xnQW1WWkNqRFU4NHA3dkR2NHJKOEhrRmNv?=
+ =?utf-8?B?Mm14bG5rTUtBN2VYbGpBQ25VT3k0bEtNV2NFanAzeFk3WDJzZU9EeWJ3V1Zw?=
+ =?utf-8?B?Q2x1eEdIQit4K2NMUGV3VlRndkRHZmpMOU55T0IvTmNwSUJ4eWZ4V09FT1RU?=
+ =?utf-8?B?bUhsbFdaWGp4aTQyY1Z2UWx2QWNnbFNjS1FiRWJCT1E4MXdkVTVjeUtmK3JW?=
+ =?utf-8?B?VDBXNTdzNHpRSWJUejN6K1U4b003RXB2UmJ4WmFmaE5CK0Rxa2g4QjMyQnpR?=
+ =?utf-8?B?NDluNVdseTFheHk3Q2dTdmdVKzZaMGJhZExjOGxmTmM4UWVTS3NrRURkRC9t?=
+ =?utf-8?B?dFdWSjBCTjlTbC9kYjNDUE91Rm9XS05oMEV2VGNnOC8vK2VnbFpqakFicUta?=
+ =?utf-8?B?VUxLWDlMVjBsdGVqSTIzZWRDQURMeTRLVHFVaytrbkNacEg4RUJRbWNxUURo?=
+ =?utf-8?B?NFB5Vy9zNGdXWXRGNnc0bmpsZit3dEduak4rUFlTa0p1OW5jK1VSWEZ6MXlB?=
+ =?utf-8?B?ZUFqV3VuOWtLejM0UEJqOHd6VU9XYU93c0tVUTFQanBPeklIR1FVeWFTay9s?=
+ =?utf-8?B?Y3V2SlBaWHBrNWVCVkdUSDJlVzVzeGdyU285b2w2aG81Z3lRdlJFaUF1cmhV?=
+ =?utf-8?B?cllsTk84MlQxLzNnOG5lSzlOSjN1TzJYK2gyRkZVeTdpTEhDcFlKTzN6ZHp2?=
+ =?utf-8?B?REZIWGZDMG1yek1mWEY4V3p2ZzFyQTJpQ29HZmd0YkRXWHhMdEdoWVozZ3J0?=
+ =?utf-8?B?NDJFd1BRSTdxVi9WL2RXTFlLOWF3MWxGWFRFRWJmUS9HWk9vQkxRRnI4TXdB?=
+ =?utf-8?B?TFpiQUVIaVZRRDl4WTM2VWdZdkpxaCszVE5YZmhERHNGdm9NR1R2WkdFekx3?=
+ =?utf-8?B?dnNQRmFJcGNJWW16SjI1bjd6dElhUXVzcjFXNVRkanBHNmk1TTdyTDVrSHc0?=
+ =?utf-8?B?OHE3V3lHYnliNWNoanAzYUttUkx0ZXJvYlI0SGd0clhDdlMvekM1cDZkdHY3?=
+ =?utf-8?B?cVEza056cktXbmQ2U2VLVXJ6MXM0L0RUd3Y2RXd4QUQrc0l0bHU2cnBUZFgr?=
+ =?utf-8?B?bWFwbTdhYmxNeC95ZWkwRmZXaElQOVBzaFUwQmdHakZlZmV0MzdSZE5GZUNO?=
+ =?utf-8?B?N0RzZ1d4WVpyMXVpZkdlZi8vd3cwMTY2WS9KVUlBZlo2TVY0TFR2bTczOGtH?=
+ =?utf-8?B?TWVaZUZ5Z201Z1ZtS2lubEpWVGVaSktZVWk3dFduL2tQd1Zxemc0a3BCUzcx?=
+ =?utf-8?B?Nmw0N0RXM0hVTzJmL2lkUkkzdUpNbVhFbWpaa1RtaUsxak5lUGlJM2txQ0xU?=
+ =?utf-8?B?a1JXeE9IUW9XM1pKVTRGQjFUeWgzNW9MYytlWk5MSDJld3BFTEhNQTJsOExC?=
+ =?utf-8?B?TTcwaGR3SG42NVdnODRGTExnUlVocUFOOUJhVFhjeVlQTEtMclNkT01BMXFJ?=
+ =?utf-8?B?Z0Y0YW1YSjBmMGtQL2M3NytZVlE5L1ZQNmZpb00xU2lPdTJiMGNqcmRYRGNW?=
+ =?utf-8?B?SlVRajdOZ2lsY1FQeGhHb3dvVXZ3a0ZEZkpEYlhWWTFHbElndXQ4amVYSmFo?=
+ =?utf-8?B?OEZ4Rmp6R29sSW5pVWJtdmdUQWhkdzhZWExUYkc3NE9lRXVsbGViakZTSXJi?=
+ =?utf-8?B?TlF1dFRZTEVnaFdDMUxWQUF2YTVYRnF0Mng4dFRyMStwMkxZSXQxSmlwcExn?=
+ =?utf-8?B?NURFdXFIWHBDdk41cnVuaVpmNFFyOURPaVBpYmFWMU4wL0hpM2ltaFM4VmZk?=
+ =?utf-8?B?T3dZNWgyQkszV1BwcmR5L2lOYW04Z0U0bElDZERxNzV2M3hxck92MWhySHdE?=
+ =?utf-8?B?aWsveUZFTTB5VkY0SGZRdi8zMFJyR2xTUEVnNVhKZnlWQmZFM012ZUhTS1Ro?=
+ =?utf-8?B?M1FFU1pTZUxBZ0lUTFJnbVZUK2kzTTJ4QkRiQStnZUFsZjJId0xiTUJZSU1h?=
+ =?utf-8?B?WjFMU3V4NEwvS3I1ZXlva3dmK0JsVmpCajk1djMwVDFzRDJMRXpiZFl0Q29W?=
+ =?utf-8?B?WThvV2VVcTBPS2xldUVwczRoK3V6M1R3aGFmUlRmdWtVdTVFRitwTHpiTGpM?=
+ =?utf-8?B?YkE1NklvcEpTNWhDZkFoeGpSd0xWdHpRQklmZWJKaEd2ZVY2UkFuektGRzlH?=
+ =?utf-8?Q?EgjNG4rjpcoYHCdE/87hFFofn?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32d0c7f1-88a5-4901-940e-08dafa35e21e
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 15:57:36.1930
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +ux8dbOhukzNnyC8FDBADwBe/1FYhDU2U8xXo/Ogjgxub8Yq6yFSnr49SfjWD1te7M4EdSyr2kqo9g9spEiH9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO3P265MB2121
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed 2023-01-18 16:12:05, Petr Pavlu wrote:
-> On 1/18/23 01:04, Luis Chamberlain wrote:
-> > On Tue, Dec 13, 2022 at 11:17:42AM +0100, Petr Mladek wrote:
-> >> On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
-> >>> 3) *Fixing* a kernel regression by adding new expected API for testing
-> >>> against -EBUSY seems not ideal.
-> >>
-> >> IMHO, the right solution is to fix the subsystems so that they send
-> >> only one uevent.
-> > 
-> > Makes sense, but that can take time and some folks are stuck on old kernels
-> > and perhaps porting fixes for this on subsystems may take time to land
-> > to some enterprisy kernels. And then there is also systemd that issues
-> > the requests too, at least that was reflected in commit 6e6de3dee51a
-> > ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
-> > that commit claims it was systemd issueing the requests which I mean to
-> > interpret finit_module(), not calling modprobe.
-> > 
-> > The rationale for making a regression fix with a new userspace return value
-> > is fair given the old fix made things even much worse the point some kernel
-> > boots would fail. So the rationale to suggest we *must* short-cut
-> > parallel loads as effectively as possible seems sensible *iff* that
-> > could not make things worse too but sadly I've found an isssue
-> > proactively with this fix, or at least that this issue is also not fixed:
-> > 
-> > ./tools/testing/selftests/kmod/kmod.sh -t 0006
-> > Tue Jan 17 23:18:13 UTC 2023
-> > Running test: kmod_test_0006 - run #0
-> > kmod_test_0006: OK! - loading kmod test
-> > kmod_test_0006: FAIL, test expects SUCCESS (0) - got -EINVAL (-22)
-> > ----------------------------------------------------
-> > Custom trigger configuration for: test_kmod0
-> > Number of threads:      50
-> > Test_case:      TEST_KMOD_FS_TYPE (2)
-> > driver: test_module
-> > fs:     xfs
-> > ----------------------------------------------------
-> > Test completed
-> > 
-> > When can multiple get_fs_type() calls be issued on a system? When
-> > mounting a large number of filesystems.
+On Thu, 19 Jan 2023 16:18:57 +0100
+Michal Such=C3=A1nek <msuchanek@suse.de> wrote:
 
-This patch should not change the behavior that much. The parallel
-load still waits until the pending one finishes.
+> On Thu, Jan 19, 2023 at 03:09:36PM +0000, Gary Guo wrote:
+> > On Tue, 17 Jan 2023 11:22:45 -0800
+> > Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+> >  =20
+> > > And the additional 0's should compress well
+> > > so I'm not sure the additional size is that much relevant here. =20
+> >=20
+> > I am not sure why compression is mentioned here. I don't think section
+> > in .ko files are compressed. =20
+>=20
+> There is the option to compress the whole .ko files, and it's commonly
+> used.
 
-The difference is that it does not try to load it once again.
-But when the first load fails then something is broken anyway.
+Hi Michal,
 
-I could imagine that this could cause regression from the user POV
-when the first failure is not important from some reasons. But
-it means that the things work only by chance and the problem
-might hit the user later anyway.
+I am aware that there is an option but I am surprised to hear that it's
+commonly used. I don't think that's enabled by default, and certainly
+Debian/Ubuntu does not have it enabled.
 
-Another difference is that the parallel load finishes immediately
-also when it sees a going module. But it should not affect that
-much the multiple get_fs_type() calls. They are all trying
-to load the module.
-
-
-> Sadly though this issue seems
-> > to have gone unnoticed for a while now. Even reverting commit
-> > 6e6de3dee51a doesn't fix it, and I've run into issues with trying
-> > to bisect, first due to missing Kees' patch which fixes a compiler
-> > failure on older kernel [0] and now I'm seeing this while trying to
-> > build v5.1:
-> > 
-> > ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple definition of `__force_order';
-> > arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
-> > ld: warning: arch/x86/boot/compressed/efi_thunk_64.o: missing .note.GNU-stack section implies executable stack
-> > ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> > ld: arch/x86/boot/compressed/head_64.o: warning: relocation in read-only section `.head.text'
-> > ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with RWX permissions
-> > ld: warning: creating DT_TEXTREL in a PIE
-> > make[2]: *** [arch/x86/boot/compressed/Makefile:118: arch/x86/boot/compressed/vmlinux] Error 1
-> > make[1]: *** [arch/x86/boot/Makefile:112: arch/x86/boot/compressed/vmlinux] Error 2
-> > make: *** [arch/x86/Makefile:283: bzImage] Error 2
-> > 
-> > [0] http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
-> > 
-> > But we should try to bisect to see what cauased the above kmod test 0006
-> > to start failing.
-> 
-> It is not clear to me from your description if the observed failure of
-> kmod_test_0006 is related to the fix in this thread.
-> 
-> The problem was not possible for me to reproduce on my system. My test was on
-> an 8-CPU x86_64 machine using v6.2-rc4 with "defconfig + kvm_guest.config +
-> tools/testing/selftests/kmod/config".
-
-I can't reproduce it either. I guess that it needs some "good" timing,
-probably more CPUs or so.
-
-I wonder if it races with module -r that removes the module before
-it tries to load it multiple times in parallel.
-
-Does the test pass when you add sleep after the module -r, like this:
-
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index 7189715d7960..8a020f90a3f6 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -322,6 +322,7 @@ kmod_defaults_fs()
- {
- 	config_reset
- 	modprobe -r $DEFAULT_KMOD_FS
-+	sleep 1
- 	config_set_fs $DEFAULT_KMOD_FS
- 	config_set_test_case_fs
- }
-
-
-
-> Could you perhaps trace the test to determine where the EINVAL value comes
-> from?
-
-Yes, the -EINVAL error is strange. It is returned also in
-kernel/module/main.c on few locations. But neither of them
-looks like a good candidate.
-
-My assumption is that it is more likely returned by the module_init()
-callback from the loaded module. But it is just a guess and I might be wrong.
-
-I wonder if it is cause by a delayed release of some resources,
-when the module is removed, e.g. sysfs or so. It might theoretically
-cause conflict when they still exist and the reloaded module
-tries to create them again.
-
-Best Regards,
-Petr
+Best,
+Gary
