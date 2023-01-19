@@ -2,95 +2,95 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60895C6379F
-	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 19:09:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C5EBC46467
+	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 19:21:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjASTJB (ORCPT
+        id S231493AbjASTVZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 19 Jan 2023 14:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
+        Thu, 19 Jan 2023 14:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjASTIa (ORCPT
+        with ESMTP id S229771AbjASTU6 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:08:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163EF9B113;
-        Thu, 19 Jan 2023 11:07:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02F9661D55;
-        Thu, 19 Jan 2023 19:06:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F1C7C433D2;
-        Thu, 19 Jan 2023 19:06:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674155210;
-        bh=84wFksc5y+vkdlmosNddXFXLVddcPsdJwTu1PkhnkU8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rGc04UbpBVmqi4/ZK3APXtn4XV5D6LVQvU5RmTz2mq3BvwJJ2wfIck5SiJlkcj8i9
-         gRwZswiTyCJH9xIjrW5ribwgXDEa2YOm41YsWsuXwUuVDw6ArG0raUEAEf8NtydewE
-         ELcISv52HkMP7nJrPcEboD5Zzn9Na84AiJEOyPWa7DMsB4z5aCSO3ndGfOMersTGR0
-         wS7DKxawLsq1ae1i5hm6FZOrGYWV0ls1R0VaKZ91ReiTKDFgXpGo96g6G8oKXFme/o
-         dFUVq2JjpBG+cd/wQBIyZXRTNKtwOdsA5iDDEo4pmYtj3sddeBg2IJfk78O2a4Uumx
-         MK+KhVRryRK9w==
-Received: by mail-lf1-f44.google.com with SMTP id br9so4643809lfb.4;
-        Thu, 19 Jan 2023 11:06:50 -0800 (PST)
-X-Gm-Message-State: AFqh2kqtqdgOWTaA+m1wB3Cz3AMlZWAlJHQfJFn6rpGYflI6n46M0KzD
-        B2tfKuI6ZgP7re5DWa++0hZCRYjTrIBB7SOpkKY=
-X-Google-Smtp-Source: AMrXdXt64nUndEGLEDNBdyLij2TTHj/NBNidtKszrhl2R18XJNVEtWClhk8lZ2xXjFti1dqNiqV01TaLB8p/5CE/i34=
-X-Received: by 2002:ac2:48b7:0:b0:4b6:e71d:94a6 with SMTP id
- u23-20020ac248b7000000b004b6e71d94a6mr901375lfg.476.1674155208380; Thu, 19
- Jan 2023 11:06:48 -0800 (PST)
+        Thu, 19 Jan 2023 14:20:58 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5388F9CBB5;
+        Thu, 19 Jan 2023 11:20:08 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-4fda31c3351so12357377b3.11;
+        Thu, 19 Jan 2023 11:20:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2y96hSgZOdNiQi3iVUDGW1zmbq/2ZeqfDpIjbWl/+AM=;
+        b=ReQBSuZnjQ/Hzn9MjrayyI00pkEWhj7Djpqlg/g38iGqjIo4Sq7re3LPR5NKsWo9Nm
+         rmijSW7CCq1C2Qdp7/ky7GCkKbPD6xEDKXk305vsRjjmvhP21tX3QKgIjkm4F3ckbHnU
+         3rsLopUK6HQfuzAeTV8Gfeem6hCoLYXkKH10aIMTpV67Itec0/0QpXWGecCbZyWvBxWi
+         HMb29GK2QtB8DekCsdq6oAVcEzk4KtxgxCvfmYU+Dt+rTUuSwLkYqHnEr/te+cjWSrxM
+         NZ3B4MJ4fDhLb0uqTI/T9CcOhWI9zQWWGgQxqW0IustVc/+u90vkW/tlIPMHHewHNDmv
+         Ynbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2y96hSgZOdNiQi3iVUDGW1zmbq/2ZeqfDpIjbWl/+AM=;
+        b=s47YwG/hj2TSxc9ceJNIXtcSGSptBOHvndYZieGB6XQmaQtL3z/iBAbCTWu1cWNkum
+         dzmceLzNiNz7kJc40IwB8wp/olu7YWJq0RvM5dPbLrsa8V82ZlKln+i6PvA5k122KlMm
+         3LR62dN8D52KwrKalMlVe66mibNGcV6PyFalaPTLT26DvPW+iLxaGK3gpG8HB4cn7qnL
+         sKDaOULv4x36GF4IYvmKHpXgpNx91IdVBowJ9uYuahtyhrYqCw+fnhGDlWfbGUSdz1NB
+         Umw51BHSkdm7RhCb1X2waM0uS3dbnU63eHq0WaC5D6zlLk5IdD34c6QFVX8Qof+y6T3U
+         KzlQ==
+X-Gm-Message-State: AFqh2kpnDO9Js3SdTficsXztiMDjDC+y7PGzoWHV4O8uHpI9K5PIciwP
+        7G/ZV0Jednc9CQukPTFuKMo9q1rMS09n0SViP1w=
+X-Google-Smtp-Source: AMrXdXuhMbeLfhMzO3dNO8FM0BS93W/XkG/FHlqBpBtG6GK7C62jMILFqgYHbTQjwIRvsrMCEslAihTwcRRHs+ouDnU=
+X-Received: by 2002:a81:5402:0:b0:3d8:8c0e:6d48 with SMTP id
+ i2-20020a815402000000b003d88c0e6d48mr1018356ywb.462.1674156007567; Thu, 19
+ Jan 2023 11:20:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118204728.1876249-1-song@kernel.org> <20230118220812.dvztwhlmliypefha@treble>
-In-Reply-To: <20230118220812.dvztwhlmliypefha@treble>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 19 Jan 2023 11:06:35 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
-Message-ID: <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
-Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module removal
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
-        pmladek@suse.com, joe.lawrence@redhat.com,
-        Miroslav Benes <mbenes@suse.cz>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
+References: <20230111161155.1349375-1-gary@garyguo.net> <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
+ <20230113181841.4d378a24.gary@garyguo.net> <20230117175144.GI16547@kitsune.suse.cz>
+ <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan> <CAK7LNATsuszFR7JB5ZkqVS1W=hWr9=E7bTf+MvgJ+NXT3aZNwg@mail.gmail.com>
+In-Reply-To: <CAK7LNATsuszFR7JB5ZkqVS1W=hWr9=E7bTf+MvgJ+NXT3aZNwg@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 19 Jan 2023 20:19:56 +0100
+Message-ID: <CANiq72n4MbR+AE7eHfVQZOu26FeSttQnEEMT3Jpft+CcGwk9jw@mail.gmail.com>
+Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>,
+        Gary Guo <gary@garyguo.net>, Kees Cook <keescook@chromium.org>,
+        linux-kbuild@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        rust-for-linux@vger.kernel.org,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-modules@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jan 18, 2023 at 2:08 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+On Wed, Jan 18, 2023 at 8:02 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
-> > From: Miroslav Benes <mbenes@suse.cz>
-> >
-> > Josh reported a bug:
-> >
-> >   When the object to be patched is a module, and that module is
-> >   rmmod'ed and reloaded, it fails to load with:
-> >
-> >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-> >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> >
-> >   The livepatch module has a relocation which references a symbol
-> >   in the _previous_ loading of nfsd. When apply_relocate_add()
-> >   tries to replace the old relocation with a new one, it sees that
-> >   the previous one is nonzero and it errors out.
-> >
-> >   On ppc64le, we have a similar issue:
-> >
-> >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
-> >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
->
-> Shouldn't there also be a fix for this powerpc issue?
+>     - *.mod.c is kept human readable.
 
-There was a working version, but it was not very clean. We couldn't agree
-on the path forward for powerpc, so we are hoping to ship the fix to x86 (and
-s390?) first [1].
+On the topic of `.mod.c` readability: for approaches that may be less
+readable, we could improve that by adding some extra comments or
+rearrange things in a different way (it is a generated file, after
+all!).
 
-Thanks,
-Song
+For instance, for the original approach: https://godbolt.org/z/6oh45axnc
 
-[1] https://lore.kernel.org/live-patching/Y7hLvpHqgY0oJ4GY@alley/#t
+Cheers,
+Miguel
