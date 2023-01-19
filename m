@@ -2,308 +2,199 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3103AC38159
-	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 01:19:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 883B5C38159
+	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 01:29:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjASBS6 (ORCPT
+        id S229983AbjASB30 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 18 Jan 2023 20:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
+        Wed, 18 Jan 2023 20:29:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjASBQ4 (ORCPT
+        with ESMTP id S230196AbjASB2u (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 18 Jan 2023 20:16:56 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DC26B9AE;
-        Wed, 18 Jan 2023 17:15:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674090914; x=1705626914;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=F3j4WYUKtjwAusS3UzBuLRWoUhMz7lT7SpNon4azC+s=;
-  b=BgVz6+x1RzUBD70VQWFRTnSPWpm4PzV3bq5LJmOu6qQnFdUiNoYErcDN
-   02Wifxe5MFPq2Adk4yZ4ljoS6r3PK6jfO4OmOeHEbaBuZYNZ/3r19ELFf
-   CAtFYq6Li6XMh2mUklt3O83+6JJAYcbcO6uUxorIbIvnIIpADh47wx31j
-   Iceac8zYXnA9qrXyTYkEQho8I5xlwLeR501f/wOq6/zhuICXRRD2jJKDz
-   ecxpGoFWrR7q8Q8b9uckeLmdgyfMwLHKAyH9yAf1Ja160mU5fWh5jVE3e
-   ltWrgYpqREJ3xZhVo5wAuM/uvSn1UClwEbCR0LvYdYXaV5K9Wh0v3C9j9
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="322845615"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="322845615"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 17:15:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="767992839"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="767992839"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Jan 2023 17:15:11 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 18 Jan 2023 17:15:10 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 18 Jan 2023 17:15:10 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 18 Jan 2023 17:15:10 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q/ut/yAw0v4SdK2TNc7ycQd0YsceWpg4RKMKsjwq67isCB0ANA81yJOdbuBnYzfYRavXPwj2bvDIR8lddrqot78qwIC49hiT4DKEve9LZyNPVoYIs8MRuAarVcFZrunQnDx5DaAIpJcfKaLXnzrayzlb8YzJSwc2xFCPCZDfodRR6Q9RgJVDKxF4IQvkP96HWnO8N6QZndVcjklvA/Am0daEJPzWV7kHBj3gnHs4VRogzMwe6VpHDHaSYM9AJ/Z7SkmJQMy84BfDzlZ5lVXY2CyWyYYNUEtbFjjPi2E+w+f6pbL3cUpQLdmVn0qEPOHPWv/ckGd/z8ohiDT2uuMWWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UHtAoOg2JOPjEm2Q+baBVSetLZrz/Vd8SDfZNy88ilA=;
- b=Vr32sHYO/Rvi97FO5OqeTSqHe0jTQBAZbLrMPpOQ9imwT6Qjfo0YMMrrTz3PbvIYPpuZHDTSHnsOcrXg3ASIXv8QsslmqRzA6y0O3bKipUDiKoM3KH1CKk636WPYBhehlXaDDtzYpyxXEDwvbl0aGCAaTVRpujt7KTItodkrqKQh4c53HWE80Us6QCqc61QPZ6zU3NAlkXkOFUOvX7d6LG9pdCEr8QHblTbOR1UAxQpZFWyHuMh1AV1Ynjd6VuuaZeLZhFm/m9vqFJUcvY5fzEVB3Yrvu2jGEIwe1PSsd5UHhpiV9XIM4Gio+FMBWOYPc5lQnaZd6LgAbJhEEWW7mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by BL1PR11MB6025.namprd11.prod.outlook.com (2603:10b6:208:390::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 19 Jan
- 2023 01:15:08 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::593:877e:dd33:5b7a]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::593:877e:dd33:5b7a%5]) with mapi id 15.20.6002.024; Thu, 19 Jan 2023
- 01:15:07 +0000
-Date:   Wed, 18 Jan 2023 17:15:04 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Petr Mladek <pmladek@suse.com>,
+        Wed, 18 Jan 2023 20:28:50 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4700674966;
+        Wed, 18 Jan 2023 17:23:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oe4r0h3mpIvSN47ii4zylZ1rmQUYgFQS1O0MgSApTpg=; b=ZPzHVZ3QuopuhW4TEcYQ8OENg9
+        tEYRvyc+DhETJOQ/EKWH0HCPJMDqdBi3k5U0T5gWJL81Z126vnIMF3JHI/ChBbV0pleEN3ZwmZ5pz
+        pYMx5lTBxPgpkvnPVldSX9ax+ZEO2/ZiqsKfk8sj3TQojiQ4zFyWcq2fAxCZpdXIOINUxYykKd3h+
+        RTah/8IcyI8/0xxjoTC/KF7JyqSzR4RDdek8CPpmIfPbZ1IInjKuClBCU5TIYYt8k7YhUUh+w6eoy
+        md5lonxAZqRVDvJMD7rRJBWrGNwT+/hxl8hpkUmqdz0q1+c9yOnnkF2iOckxNNGx9BUImKKn7TZOD
+        Kf/oXJAQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pIJe7-00383m-QX; Thu, 19 Jan 2023 01:23:15 +0000
+Date:   Wed, 18 Jan 2023 17:23:15 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
         Prarit Bhargava <prarit@redhat.com>,
         Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, <david@redhat.com>,
-        <mwilck@suse.com>, <linux-modules@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+        NeilBrown <neilb@suse.de>, Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, david@redhat.com,
+        mwilck@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <20230119011504.q23askbtbwzwmica@ldmartin-desk2.lan>
+Message-ID: <Y8ibg2cB4gB2gQ8f@bombadil.infradead.org>
 References: <20221205103557.18363-1-petr.pavlu@suse.com>
  <Y5gI/3crANzRv22J@bombadil.infradead.org>
  <Y5hRRnBGYaPby/RS@alley>
  <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
-X-ClientProxiedBy: BYAPR08CA0024.namprd08.prod.outlook.com
- (2603:10b6:a03:100::37) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+ <Y8hQbC3wvu1S+uZ5@zn.tnic>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|BL1PR11MB6025:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a00358b-7543-4f39-3f44-08daf9ba99ed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0WSnBq3bMKIYlq0H8inbTGNZByBcOrQeDQ4Pp4fzeQ2cqTr+VhRvAhmcaRqi2u08koqVmyGnv9LFjUkpFWJsawkXRJBlxkOMQG/+SJZCPcbewosmiY5+R5OhYWECHtHnDA826Sjd0T/kbNRTNW3K+hNZiN9ivlOURclD/1GXdnQiIZ2fYeYpzculWjc2mUcOJ09yJ2iBNu3i6tdxeSmgTgQMU0vOTf9m3R10hXQ3EnJfy+8x0gCX/VtSxAiev4s84YArXfNKhG8s46q1YGgRcB9V33JKAYJ5gwtiR2eJvsD1PtA6gXaS4jbn2g4zqiqmrHBN6tqvxNpdhOfwokfHYyz9WNLJuPkDlrtkA2VHT1Kjp+fI0H9697Q6mi/o0Q8GHumoCba+Xp3YM2o3neOPaRxlwXylnIHQwbyk8d7cADn++rFTygajVw39KamKuVlpMwvJO0Q1T0zyG/3drqfkEf3Qaypf+GUTTAX/WMXMCnm2/kekKnH4vXtMUtiEjdYE6uDy7IYAnuGIcDqANbuUkhH704Wm5vyOf+uVE74n4MBZgp3jGmiMh3osDB31MnErV4z+YpF68V/zzbOvo9L0Af+KPkxdiu4pMmnIquDwjKrBxH52RuAXXVf3ysWriA5IjAVTN0YRF/Vo7GxcjYek8A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39860400002)(376002)(346002)(136003)(396003)(451199015)(26005)(82960400001)(66556008)(6486002)(41300700001)(478600001)(6512007)(186003)(1076003)(86362001)(316002)(54906003)(38100700002)(66476007)(66946007)(66899015)(36756003)(6506007)(2906002)(4001150100001)(5660300002)(6666004)(7416002)(4326008)(9686003)(6916009)(83380400001)(8936002)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cTjgFOULhw7Z8n1RDfLNFS/74ZPYAgctGqRkD9YYEFoNbeFyLhOhPHF48/gD?=
- =?us-ascii?Q?ZTp9La5UYwa2U+hWlmXwApA5Ue/NLB0+IApjD4XumYr5od3xzl7/Yksd7fyv?=
- =?us-ascii?Q?WrShtB9GooDKDOavMplUg+ihszW59vf0SS+uz/Y+vYhv+l5XIOkWizeFu2F4?=
- =?us-ascii?Q?yjM5mHGncLBBENMftU4zBEnyRIrs1dfAPTHzlKlNSjkgxf29c93lDiqlZIYZ?=
- =?us-ascii?Q?l6I/owHUbBMGFVOIrirdfCG+ibz7kiLNVdTpuvY1YyWC5SSpJxWNnvSYe+qC?=
- =?us-ascii?Q?9y/phzG8XL9C6vxEu95RjutuLnd2QKXCPdheCbeXXTpLLdTVCYTQilckZ0mB?=
- =?us-ascii?Q?bJzOwdZcU+qwyQNNPezPxmHlfnGMqbR+o7s7UG7K5C5EQFAM3U+og8hRSTIP?=
- =?us-ascii?Q?ptDNWG0E59Akr/2uJjbCtqvYe7LHHLx/ibmEoH9LDVLvdnbm9qGY84JR5W1o?=
- =?us-ascii?Q?1qsABZ+s5hDfdeR4kq+YxG3bhii48irF7ST6hLCSkrlt05q77X1fov0MTbDI?=
- =?us-ascii?Q?MWJrLK7cl2XevtptRfkhe+iRPT7qwHTBI50DVl9XkkIzzfdYfaAGSAepFaQ9?=
- =?us-ascii?Q?kfSkZ6iqSzUQbBQTj0gdD5aSyLcD2jhttXTmS8APcBrwNqK1Wz4QFONNzDzF?=
- =?us-ascii?Q?h8Hhd3CQAkeDwCF+vGv25rIRxabvtDv+k6LL8DKzH65WbCTOgt8AV/x+/+k/?=
- =?us-ascii?Q?43bUfXgvZU9+/9WtFqQ2ec3WEPv1pYFtVEgaa3I43uyexoOTiEfPBweoANNw?=
- =?us-ascii?Q?Vn34SvKAHyuwDvX/UVqIBndvO3M6lSH1MH+Vny0Cwsu7i9yZ3aAxP6zkHSxL?=
- =?us-ascii?Q?8dQDmMp9IfKtrL8JGvE9SePhSAxZRIP154MOP8ryVy5CbLx3qjNlGnPCaFXD?=
- =?us-ascii?Q?ofDAxQ7OI1HfjefkdHAwbSIUkBIfyWjwGn2/5Fy0pJ61EP1Mt8iXzydjIoHY?=
- =?us-ascii?Q?GHXuVoW6k6VuwRd5fh+xCcXPDQh+m0jCSy+jBWcICRwmuVn/R9C82NkURPqY?=
- =?us-ascii?Q?NUGJn6pniSjVi3e2lkGIdb2+u3EQSam/il39NK7imiJ4nyAYX3L5W1p/NLhe?=
- =?us-ascii?Q?sPxGhqALVSDB3E3nI/sRtD4ArXw6vu3iOQ3NxK6RNgFKc2by6yf1jq4r0/Bf?=
- =?us-ascii?Q?oSUeY6zmcKVTCFXr1+LVHJrMvkLQlVK6+wi0k7o6JggwLxJEOcaSANNThRix?=
- =?us-ascii?Q?xj7I2jnry5eHUXeG8i4VNExgk3Hi7RzrOgJ/AoW3Luum2KMNEsdReITgB0Oj?=
- =?us-ascii?Q?Y2oC7krydx69dIz/0ABi6UUo0lEdM3xu7e/lY8Q+csqL/akdX2jfCjJz5OSc?=
- =?us-ascii?Q?VLdyTcJWoaOT8/GGIJ53rlOxnxxcVTklk7wx2ijoFGbCxkB0PRcDjxeln20C?=
- =?us-ascii?Q?/3kl42HG4cWcqMD/r+4/FRMiYB6xUBCAytBE7BEeLjc6lAlV89bd6Y+neQvq?=
- =?us-ascii?Q?DmQX2dSwMxaWflUG3yZZtGnHsckEk1HOIPTjqlic7E6jqAiu5jaBu3M1T8k6?=
- =?us-ascii?Q?N6uPZgWQfF98aqBAoWuQLCNoho93lX1jWkvvHn25/7lH+GS9pe26WWqRa0Gf?=
- =?us-ascii?Q?v7GV01TGr+27vc/AzvpnjKfo5ExoCzN+IgpBnF1eOZFbpMgph5LHVrXWEZai?=
- =?us-ascii?Q?xg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a00358b-7543-4f39-3f44-08daf9ba99ed
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 01:15:07.4336
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YdKpcwpBks35TDa+lQ5lZ+ewTFsXC6ypS9k280CBr49Ov4USWX6d6FJf0tWFI0q3XOoQ3hkX9ZC0/TruOzB44CbDaviydJuN5T1CLlRqD5c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB6025
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8hQbC3wvu1S+uZ5@zn.tnic>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jan 17, 2023 at 04:04:22PM -0800, Luis Chamberlain wrote:
->On Tue, Dec 13, 2022 at 11:17:42AM +0100, Petr Mladek wrote:
->> On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
->> > On Mon, Dec 05, 2022 at 11:35:57AM +0100, Petr Pavlu wrote:
->> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
->> > > index d02d39c7174e..7a627345d4fd 100644
->> > > --- a/kernel/module/main.c
->> > > +++ b/kernel/module/main.c
->> > > @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
->> > >  	sched_annotate_sleep();
->> > >  	mutex_lock(&module_mutex);
->> > >  	mod = find_module_all(name, strlen(name), true);
->> > > -	ret = !mod || mod->state == MODULE_STATE_LIVE;
->> > > +	ret = !mod || mod->state == MODULE_STATE_LIVE
->> > > +		|| mod->state == MODULE_STATE_GOING;
->> > >  	mutex_unlock(&module_mutex);
->> > >
->> > >  	return ret;
->> > > @@ -2562,20 +2563,35 @@ static int add_unformed_module(struct module *mod)
->> > >
->> > >  	mod->state = MODULE_STATE_UNFORMED;
->> > >
->> > > -again:
->> >
->> > So this is part of my biggest concern for regression, the removal of
->> > this tag and its use.
->> >
->> > Before this we always looped back to trying again and again.
->>
->> Just to be sure that we are on the same page.
->>
->> The loop was _not_ infinite. It serialized all attempts to load
->> the same module. In our case, it serialized all failures and
->> prolonged the pain.
->
->That's fair yes. The loop happens so long as an already existing module is
->present with the same name.
->
->> > >  	mutex_lock(&module_mutex);
->> > >  	old = find_module_all(mod->name, strlen(mod->name), true);
->> > >  	if (old != NULL) {
->> > > -		if (old->state != MODULE_STATE_LIVE) {
->> > > +		if (old->state == MODULE_STATE_COMING
->> > > +		    || old->state == MODULE_STATE_UNFORMED) {
->> > >  			/* Wait in case it fails to load. */
->> > >  			mutex_unlock(&module_mutex);
->> > >  			err = wait_event_interruptible(module_wq,
->> > >  					       finished_loading(mod->name));
->> > >  			if (err)
->> > >  				goto out_unlocked;
->> > > -			goto again;
->> >
->> > We essentially bound this now, and before we didn't.
->> >
->> > Yes we we wait for finished_loading() of the module -- but if udev is
->> > hammering tons of same requests, well, we *will* surely hit this, as
->> > many requests managed to get in before userspace saw the module present.
->> >
->> > While this typically can be useful, it means *quite a bit* of conditions which
->> > definitely *did* happen before will now *bail out* fast, to the extent
->> > that I'm not even sure why we just re-try once now.
->>
->> I do not understand this. We do _not_ re-try the load in the new
->> version. We just wait for the result of the parallel attempt to
->> load the module.
->>
->> Maybe, you are confused that we repeat find_module_all(). But it is
->> the way how to find the result of the parallel load.
->
->My point is that prior to the buggy commit 6e6de3dee51a ("kernel/module.c: Only
->return -EEXIST for modules that have finished loading") and even after that
->commit it we 'goto again' if an old request is found. We now simply bound this
->right away. Yes, the loop was not infinite, but in theory at least a few
->iterations were possible before whereas now immediately return -EBUSY
->and I don't think all use cases may be ready yet.
->
->> > If we're going to
->> > just re-check *once* why not do something graceful like *at least*
->> > cond_resched() to let the system breathe for a *tiny bit*.
->>
->> We must check the result under module_mutex. We have to take this
->> sleeping lock. There is actually a rescheduling. I do not think that
->> cond_resched() would do any difference.
->
->Makes sense.
->
->> > > +
->> > > +			/* The module might have gone in the meantime. */
->> > > +			mutex_lock(&module_mutex);
->> > > +			old = find_module_all(mod->name, strlen(mod->name),
->> > > +					      true);
->> > >  		}
->> > > -		err = -EEXIST;
->> > > +
->> > > +		/*
->> > > +		 * We are here only when the same module was being loaded. Do
->> > > +		 * not try to load it again right now. It prevents long delays
->> > > +		 * caused by serialized module load failures. It might happen
->> > > +		 * when more devices of the same type trigger load of
->> > > +		 * a particular module.
->> > > +		 */
->> > > +		if (old && old->state == MODULE_STATE_LIVE)
->> > > +			err = -EEXIST;
->> > > +		else
->> > > +			err = -EBUSY;
->> >
->> > And for all those use cases we end up here now, with -EBUSY. So udev
->> > before was not bounded, and kept busy-looping on the retry in-kernel,
->> > and we now immediately bound its condition to just 2 tries to see if the
->> > old module existed and now *return* a new value to userspace.
->> >
->> > My main concerns are:
->> >
->> > 0) Why not use cond_resched() if we're just going to check twice?
->>
->> We take module_mutex. It should cause even bigger delay than cond_resched().
->
->ACK.
->
->> > 1) How are we sure we are not regressing userspace by removing the boundless
->> > loop there? (even if the endless loop was stupid)
->>
->> We could not be sure. On the other hand, if more attempts help to load
->> the module then it is racy and not reliable. The new approach would
->> make it better reproducible and fix the race.
->
->Yes, but the short cut it is a userspace visible change.
->
->> > 2) How is it we expect that we won't resgress userspace now by bounding
->> > that check and pretty much returning -EBUSY right away? This last part
->> > seems dangerous, in that if userspace did not expect -EBUSY and if an
->> > error before caused a module to fail and fail boot, why wouldn't we fail
->> > boot now by bailing out faster??
->>
->> Same answer as for 1)
->>
->>
->> > 3) *Fixing* a kernel regression by adding new expected API for testing
->> > against -EBUSY seems not ideal.
->>
->> IMHO, the right solution is to fix the subsystems so that they send
->> only one uevent.
->
->Makes sense, but that can take time and some folks are stuck on old kernels
->and perhaps porting fixes for this on subsystems may take time to land
->to some enterprisy kernels. And then there is also systemd that issues
->the requests too, at least that was reflected in commit 6e6de3dee51a
->("kernel/module.c: Only return -EEXIST for modules that have finished loading")
->that commit claims it was systemd issueing the requests which I mean to
->interpret finit_module(), not calling modprobe.
+On Wed, Jan 18, 2023 at 09:02:52PM +0100, Borislav Petkov wrote:
+> On Tue, Jan 17, 2023 at 04:04:22PM -0800, Luis Chamberlain wrote:
+> > and now I'm seeing this while trying to build v5.1:
+> > 
+> > ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple definition of `__force_order';
+> > arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
+> 
+> You need to backport 
+> 
+> aa5cacdc29d7 ("x86/asm: Replace __force_order with a memory clobber")
+> 
+> for that.
+> 
+> Happens when building older kernels with newer toolchain.
 
-just a comment on this, if it helps anything: commit 6e6de3dee51a says
-systemd, but it would be more accurate to say udev or systemd-udev to
-disambiguate with pid 1.
+Thanks that certainly helps. FWIW if someone needs it, I had to remove
+the double colons on write cr0 and cr4 to compile, but this crashed :(
+Any ideas?
 
-udev uses libkmod to load modules so it's pretty much the same logic as
-modprobe.
+diff --git a/arch/x86/boot/compressed/kaslr_64.c b/arch/x86/boot/compressed/kaslr_64.c
+index 748456c365f4..9557c5a15b91 100644
+--- a/arch/x86/boot/compressed/kaslr_64.c
++++ b/arch/x86/boot/compressed/kaslr_64.c
+@@ -29,9 +29,6 @@
+ #define __PAGE_OFFSET __PAGE_OFFSET_BASE
+ #include "../../mm/ident_map.c"
+ 
+-/* Used by pgtable.h asm code to force instruction serialization. */
+-unsigned long __force_order;
+-
+ /* Used to track our page table allocation area. */
+ struct alloc_pgt_data {
+ 	unsigned char *pgt_buf;
+diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
+index f8debf7aeb4c..7471b48524cb 100644
+--- a/arch/x86/boot/compressed/pgtable_64.c
++++ b/arch/x86/boot/compressed/pgtable_64.c
+@@ -5,15 +5,6 @@
+ #include "pgtable.h"
+ #include "../string.h"
+ 
+-/*
+- * __force_order is used by special_insns.h asm code to force instruction
+- * serialization.
+- *
+- * It is not referenced from the code, but GCC < 5 with -fPIE would fail
+- * due to an undefined symbol. Define it to make these ancient GCCs work.
+- */
+-unsigned long __force_order;
+-
+ #define BIOS_START_MIN		0x20000U	/* 128K, less than this is insane */
+ #define BIOS_START_MAX		0x9f000U	/* 640K, absolute maximum */
+ 
+diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+index 0a3c4cab39db..5586e4cf62d3 100644
+--- a/arch/x86/include/asm/special_insns.h
++++ b/arch/x86/include/asm/special_insns.h
+@@ -7,49 +7,50 @@
+ 
+ #include <asm/nops.h>
+ 
++#define __FORCE_ORDER "m"(*(unsigned int *)0x1000UL)
++
+ /*
+- * Volatile isn't enough to prevent the compiler from reordering the
+- * read/write functions for the control registers and messing everything up.
+- * A memory clobber would solve the problem, but would prevent reordering of
+- * all loads stores around it, which can hurt performance. Solution is to
+- * use a variable and mimic reads and writes to it to enforce serialization
++ * The compiler should not reorder volatile asm statements with respect to each
++ * other: they should execute in program order. However GCC 4.9.x and 5.x have
++ * a bug (which was fixed in 8.1, 7.3 and 6.5) where they might reorder
++ * volatile asm. The write functions are not affected since they have memory
++ * clobbers preventing reordering. To prevent reads from being reordered with
++ * respect to writes, use a dummy memory operand
+  */
+-extern unsigned long __force_order;
+-
+ static inline unsigned long native_read_cr0(void)
+ {
+ 	unsigned long val;
+-	asm volatile("mov %%cr0,%0\n\t" : "=r" (val), "=m" (__force_order));
++	asm volatile("mov %%cr0,%0\n\t" : "=r" (val) : __FORCE_ORDER);
+ 	return val;
+ }
+ 
+ static inline void native_write_cr0(unsigned long val)
+ {
+-	asm volatile("mov %0,%%cr0": : "r" (val), "m" (__force_order));
++	asm volatile("mov %0,%%cr0": : "r" (val) : "memory");
+ }
+ 
+ static inline unsigned long native_read_cr2(void)
+ {
+ 	unsigned long val;
+-	asm volatile("mov %%cr2,%0\n\t" : "=r" (val), "=m" (__force_order));
++	asm volatile("mov %%cr2,%0\n\t" : "=r" (val) : __FORCE_ORDER);
+ 	return val;
+ }
+ 
+ static inline void native_write_cr2(unsigned long val)
+ {
+-	asm volatile("mov %0,%%cr2": : "r" (val), "m" (__force_order));
++	asm volatile("mov %0,%%cr2": : "r" (val) : "memory");
+ }
+ 
+ static inline unsigned long __native_read_cr3(void)
+ {
+ 	unsigned long val;
+-	asm volatile("mov %%cr3,%0\n\t" : "=r" (val), "=m" (__force_order));
++	asm volatile("mov %%cr3,%0\n\t" : "=r" (val) : __FORCE_ORDER);
+ 	return val;
+ }
+ 
+ static inline void native_write_cr3(unsigned long val)
+ {
+-	asm volatile("mov %0,%%cr3": : "r" (val), "m" (__force_order));
++	asm volatile("mov %0,%%cr3": : "r" (val) : "memory");
+ }
+ 
+ static inline unsigned long native_read_cr4(void)
+@@ -64,17 +65,17 @@ static inline unsigned long native_read_cr4(void)
+ 	asm volatile("1: mov %%cr4, %0\n"
+ 		     "2:\n"
+ 		     _ASM_EXTABLE(1b, 2b)
+-		     : "=r" (val), "=m" (__force_order) : "0" (0));
++		     : "=r" (val) : "0" (0), __FORCE_ORDER);
+ #else
+ 	/* CR4 always exists on x86_64. */
+-	asm volatile("mov %%cr4,%0\n\t" : "=r" (val), "=m" (__force_order));
++	asm volatile("mov %%cr4,%0\n\t" : "=r" (val) : __FORCE_ORDER);
+ #endif
+ 	return val;
+ }
+ 
+ static inline void native_write_cr4(unsigned long val)
+ {
+-	asm volatile("mov %0,%%cr4": : "r" (val), "m" (__force_order));
++	asm volatile("mov %0,%%cr4": : "r" (val) : "memory");
+ }
+ 
+ #ifdef CONFIG_X86_64
+-- 
+2.35.1
 
-Lucas De Marchi
