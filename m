@@ -2,168 +2,186 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2995AC46467
-	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 15:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57F38C00A5A
+	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 15:48:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjASPTJ (ORCPT
+        id S231520AbjASPsO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 19 Jan 2023 10:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        Thu, 19 Jan 2023 10:48:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjASPTD (ORCPT
+        with ESMTP id S231391AbjASPrz (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 19 Jan 2023 10:19:03 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69228102C;
-        Thu, 19 Jan 2023 07:19:01 -0800 (PST)
+        Thu, 19 Jan 2023 10:47:55 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5428875A;
+        Thu, 19 Jan 2023 07:47:10 -0800 (PST)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 159C13FBA6;
-        Thu, 19 Jan 2023 15:19:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674141540; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out2.suse.de (Postfix) with ESMTP id A54C05CFD5;
+        Thu, 19 Jan 2023 15:47:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674143228; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=blyh4F6YIPd83bc9ZsTz1gC1AOEbrks+HSyE4iFGx9k=;
-        b=MP2LDF3yx8TEIh3fADMhFa+a/auaOINU/0J1rlhw3mzqPqwt3QK6fI7Ucmcs3y9B/UJKXB
-        eMp5Z7mxxODX6k2cUmcH/sxC3RMT7trXy2YVADUDk7T1eBXqjhB2y6F48r9HWG7FuG8sHZ
-        Edlma/sE8KtTqSuBov5qRz/dpMR53RM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674141540;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=blyh4F6YIPd83bc9ZsTz1gC1AOEbrks+HSyE4iFGx9k=;
-        b=BwEy8wu90TO0wfPnVi88AKZO2d3X2n2DpfGeZufKFrGknIf0EVn8zMTjxhFHsxeLLbabqj
-        Q0//Yl8rqHyrGCAA==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        bh=hHqpVN9DzGS4tivxMt2BcVTb/csx+XiOhf00+x8+hOQ=;
+        b=pVn6jVVMaKAA8cvLkiEttUC+gaYWNhHFk/VjjM8sry2zNYG7bwASTceiNcUgn+lGP5nVuu
+        4yGoDUB6axJxsGzBzfPOmOJ1f1Xay943KMsd3DPHdKJ5zh4oZWRmlSNal9sFlvqAk7fzrA
+        oT0Xnau8jEhtnQnqxYhsWkpcIwXIW6Q=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CD2442C141;
-        Thu, 19 Jan 2023 15:18:58 +0000 (UTC)
-Date:   Thu, 19 Jan 2023 16:18:57 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Gary Guo <gary@garyguo.net>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
-Message-ID: <20230119151857.GQ16547@kitsune.suse.cz>
-References: <20230111161155.1349375-1-gary@garyguo.net>
- <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
- <20230113181841.4d378a24.gary@garyguo.net>
- <20230117175144.GI16547@kitsune.suse.cz>
- <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan>
- <20230119150936.30811312.gary@garyguo.net>
+        by relay2.suse.de (Postfix) with ESMTPS id 2C1D52C141;
+        Thu, 19 Jan 2023 15:47:08 +0000 (UTC)
+Date:   Thu, 19 Jan 2023 16:47:05 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
+        mwilck@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <Y8ll+eP+fb0TzFUh@alley>
+References: <20221205103557.18363-1-petr.pavlu@suse.com>
+ <Y5gI/3crANzRv22J@bombadil.infradead.org>
+ <Y5hRRnBGYaPby/RS@alley>
+ <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
+ <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230119150936.30811312.gary@garyguo.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jan 19, 2023 at 03:09:36PM +0000, Gary Guo wrote:
-> On Tue, 17 Jan 2023 11:22:45 -0800
-> Lucas De Marchi <lucas.demarchi@intel.com> wrote:
-> 
-> > On Tue, Jan 17, 2023 at 06:51:44PM +0100, Michal Suchánek wrote:
-> > >Hello,
-> > >
-> > >On Fri, Jan 13, 2023 at 06:18:41PM +0000, Gary Guo wrote:  
-> > >> On Thu, 12 Jan 2023 14:40:59 -0700
-> > >> Lucas De Marchi <lucas.demarchi@intel.com> wrote:
-> > >>  
-> > >> > On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote:  
-> > >> > >
-> > >> > > struct modversion_info {
-> > >> > >-	unsigned long crc;
-> > >> > >-	char name[MODULE_NAME_LEN];
-> > >> > >+	/* Offset of the next modversion entry in relation to this one. */
-> > >> > >+	u32 next;
-> > >> > >+	u32 crc;
-> > >> > >+	char name[0];  
-> > >> >
-> > >> > although not really exported as uapi, this will break userspace as this is
-> > >> > used in the  elf file generated for the modules. I think
-> > >> > this change must be made in a backward compatible way and kmod updated
-> > >> > to deal with the variable name length:
-> > >> >
-> > >> > kmod $ git grep "\[64"
-> > >> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint32_t)];
-> > >> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint64_t)];
-> > >> >
-> > >> > in kmod we have both 32 and 64 because a 64-bit kmod can read both 32
-> > >> > and 64 bit module, and vice versa.
-> > >> >  
-> > >>
-> > >> Hi Lucas,
-> > >>
-> > >> Thanks for the information.
-> > >>
-> > >> The change can't be "truly" backward compatible, in a sense that
-> > >> regardless of the new format we choose, kmod would not be able to decode
-> > >> symbols longer than "64 - sizeof(long)" bytes. So the list it retrieves
-> > >> is going to be incomplete, isn't it?
-> > >>
-> > >> What kind of backward compatibility should be expected? It could be:
-> > >> * short symbols can still be found by old versions of kmod, but not
-> > >>   long symbols;  
-> > >
-> > >That sounds good. Not everyone is using rust, and with this option
-> > >people who do will need to upgrade tooling, and people who don't care
-> > >don't need to do anything.  
+On Wed 2023-01-18 16:12:05, Petr Pavlu wrote:
+> On 1/18/23 01:04, Luis Chamberlain wrote:
+> > On Tue, Dec 13, 2022 at 11:17:42AM +0100, Petr Mladek wrote:
+> >> On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
+> >>> 3) *Fixing* a kernel regression by adding new expected API for testing
+> >>> against -EBUSY seems not ideal.
+> >>
+> >> IMHO, the right solution is to fix the subsystems so that they send
+> >> only one uevent.
 > > 
-> > that could be it indeed. My main worry here is:
+> > Makes sense, but that can take time and some folks are stuck on old kernels
+> > and perhaps porting fixes for this on subsystems may take time to land
+> > to some enterprisy kernels. And then there is also systemd that issues
+> > the requests too, at least that was reflected in commit 6e6de3dee51a
+> > ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
+> > that commit claims it was systemd issueing the requests which I mean to
+> > interpret finit_module(), not calling modprobe.
 > > 
-> > "After the support is added in kmod, kmod needs to be able to output the
-> > correct information regardless if the module is from before/after the
-> > change in the kernel and also without relying on kernel version."
-> > Just changing the struct modversion_info doesn't make that possible.
+> > The rationale for making a regression fix with a new userspace return value
+> > is fair given the old fix made things even much worse the point some kernel
+> > boots would fail. So the rationale to suggest we *must* short-cut
+> > parallel loads as effectively as possible seems sensible *iff* that
+> > could not make things worse too but sadly I've found an isssue
+> > proactively with this fix, or at least that this issue is also not fixed:
 > > 
-> > Maybe adding the long symbols in another section?
-> 
-> Yeah, that's what I imagined how it could be implemented when I said
-> "short symbols can still be found by old versions of kmod, but not long
-> symbols".
-> 
-> > Or ble just increase to 512 and add the size to a
-> > "__versions_hdr" section. If we then output a max size per module,
-> > this would offset a little bit the additional size gained for the
-> > modules using rust.
-> 
-> That format isn't really elegant IMO. And symbol length can vary a lot,
-> having all symbols dictated by the longest symbol doesn't sound a good
-> approach.
-> 
-> > And the additional 0's should compress well
-> > so I'm not sure the additional size is that much relevant here.
-> 
-> I am not sure why compression is mentioned here. I don't think section
-> in .ko files are compressed.
+> > ./tools/testing/selftests/kmod/kmod.sh -t 0006
+> > Tue Jan 17 23:18:13 UTC 2023
+> > Running test: kmod_test_0006 - run #0
+> > kmod_test_0006: OK! - loading kmod test
+> > kmod_test_0006: FAIL, test expects SUCCESS (0) - got -EINVAL (-22)
+> > ----------------------------------------------------
+> > Custom trigger configuration for: test_kmod0
+> > Number of threads:      50
+> > Test_case:      TEST_KMOD_FS_TYPE (2)
+> > driver: test_module
+> > fs:     xfs
+> > ----------------------------------------------------
+> > Test completed
+> > 
+> > When can multiple get_fs_type() calls be issued on a system? When
+> > mounting a large number of filesystems.
 
-There is the option to compress the whole .ko files, and it's commonly
-used.
+This patch should not change the behavior that much. The parallel
+load still waits until the pending one finishes.
 
-Thanks
+The difference is that it does not try to load it once again.
+But when the first load fails then something is broken anyway.
 
-Michal
+I could imagine that this could cause regression from the user POV
+when the first failure is not important from some reasons. But
+it means that the things work only by chance and the problem
+might hit the user later anyway.
+
+Another difference is that the parallel load finishes immediately
+also when it sees a going module. But it should not affect that
+much the multiple get_fs_type() calls. They are all trying
+to load the module.
+
+
+> Sadly though this issue seems
+> > to have gone unnoticed for a while now. Even reverting commit
+> > 6e6de3dee51a doesn't fix it, and I've run into issues with trying
+> > to bisect, first due to missing Kees' patch which fixes a compiler
+> > failure on older kernel [0] and now I'm seeing this while trying to
+> > build v5.1:
+> > 
+> > ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple definition of `__force_order';
+> > arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
+> > ld: warning: arch/x86/boot/compressed/efi_thunk_64.o: missing .note.GNU-stack section implies executable stack
+> > ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+> > ld: arch/x86/boot/compressed/head_64.o: warning: relocation in read-only section `.head.text'
+> > ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with RWX permissions
+> > ld: warning: creating DT_TEXTREL in a PIE
+> > make[2]: *** [arch/x86/boot/compressed/Makefile:118: arch/x86/boot/compressed/vmlinux] Error 1
+> > make[1]: *** [arch/x86/boot/Makefile:112: arch/x86/boot/compressed/vmlinux] Error 2
+> > make: *** [arch/x86/Makefile:283: bzImage] Error 2
+> > 
+> > [0] http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
+> > 
+> > But we should try to bisect to see what cauased the above kmod test 0006
+> > to start failing.
+> 
+> It is not clear to me from your description if the observed failure of
+> kmod_test_0006 is related to the fix in this thread.
+> 
+> The problem was not possible for me to reproduce on my system. My test was on
+> an 8-CPU x86_64 machine using v6.2-rc4 with "defconfig + kvm_guest.config +
+> tools/testing/selftests/kmod/config".
+
+I can't reproduce it either. I guess that it needs some "good" timing,
+probably more CPUs or so.
+
+I wonder if it races with module -r that removes the module before
+it tries to load it multiple times in parallel.
+
+Does the test pass when you add sleep after the module -r, like this:
+
+diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+index 7189715d7960..8a020f90a3f6 100755
+--- a/tools/testing/selftests/kmod/kmod.sh
++++ b/tools/testing/selftests/kmod/kmod.sh
+@@ -322,6 +322,7 @@ kmod_defaults_fs()
+ {
+ 	config_reset
+ 	modprobe -r $DEFAULT_KMOD_FS
++	sleep 1
+ 	config_set_fs $DEFAULT_KMOD_FS
+ 	config_set_test_case_fs
+ }
+
+
+
+> Could you perhaps trace the test to determine where the EINVAL value comes
+> from?
+
+Yes, the -EINVAL error is strange. It is returned also in
+kernel/module/main.c on few locations. But neither of them
+looks like a good candidate.
+
+My assumption is that it is more likely returned by the module_init()
+callback from the loaded module. But it is just a guess and I might be wrong.
+
+I wonder if it is cause by a delayed release of some resources,
+when the module is removed, e.g. sysfs or so. It might theoretically
+cause conflict when they still exist and the reloaded module
+tries to create them again.
+
+Best Regards,
+Petr
