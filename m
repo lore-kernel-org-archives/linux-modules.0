@@ -2,193 +2,229 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84786C00A5A
-	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 12:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2267C004D4
+	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 15:09:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjASM1E (ORCPT
+        id S229746AbjASPJr (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 19 Jan 2023 07:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
+        Thu, 19 Jan 2023 10:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjASM04 (ORCPT
+        with ESMTP id S230188AbjASPJq (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 19 Jan 2023 07:26:56 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2040.outbound.protection.outlook.com [40.107.8.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516A648A1C;
-        Thu, 19 Jan 2023 04:26:54 -0800 (PST)
+        Thu, 19 Jan 2023 10:09:46 -0500
+Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2123.outbound.protection.outlook.com [40.107.10.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B99D69239;
+        Thu, 19 Jan 2023 07:09:44 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RKC+REdhoRhZkrZUVcZr+lNp+GII810IUXHgSql55YcuPbu5zUp0Qm2Pn6qBey7Qjj7flNhi01ZmV30d6OER5ClKQ0br+6QLi2W8UYlLpFlTwqO3jASNBndRIOI6VFn92xHPProx9hrmHOvgB/Mpppxeo0qdd0FUm6yp+cEaN/9Lb+lRWxugHnyHacqgZ0FvDxMSMR76sU6Ww1/sRFg1HXU/sf/Yp3Dsb/nlO+eK81LE4S5zKTnwCGGUNo6+XxnZVTVVp5n71VDXWv22h7WPuyT6K74YaxNNi9HnysDAmHOLH+2ZHZaCs43RWKarhADNCzU4KN/oNC2zXTHX8vgJew==
+ b=IUGwiuhL7/ESn/i/WUDFkpMbBWIjTQ/XFHZWam/2VkgjpEw1OXo5XuM7jos1J+apU9r4gsbGlgLFxMV6qOdWhQny1WZpYwf72AkjnjMsCAAybqsVyR+g1k5wZzPz58Qoe1gZiMjs0sQcOUNh9M4ekZOctu1R3riohWHFEVbwtWiyJJb5vuSjVVq7t3A4AZnZ62HbetIiOAK8t+ARQlCkrZbNEzwQZRAg0SNaviXtZNBJNDpy0YiqhyQSRB9r/JSO7nL4q2vyktDCDkrv/bBoXP+nbvmiXlg4xiThqgXtA8qhy11xArvKrByF16sO3r7MC57xOgMFzQFMUOK6gun8Tw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WqsjS++UKenO5cZF5ZNBkMX+PMwSA8iDhgaymMj3fdA=;
- b=d6NvcrAHHmiSX1sauO1PkguphEM1XVuC9Y5jodskZXok1sOp0wRztl1yHLuZfcM/qw7tkWoT9VfFxgnXnl5QuSLN3zldgrJmuRasVAKPMdlRvJ50iHs62kcsMF8rQcYV3YGVsp3XYKkfcTmtyXHESZp7gkO1qGvs2U5hwgLn+tBPbTFXzBG0E/fuDJMUYWEUfrDkBFaiu9Kp0JXv0ZUrOYbMNmSsHm795WcVqRYRGa6oz8576dOyboh7FgkRHFmawUxMzWSBdU0htIqBGo5YP+ajBzQ/8ip+l5pVsuITtasAhj3Kk+T2NT1qof4vv5kgHBI3K01/4jDRM3DZvRFX9g==
+ bh=3VOX2/R4y8I8BSBGEGaJUDozJAEVirCrmPNZL89BRJ4=;
+ b=Vs2d4Uc4aPJ637BiSTNhbDXFLA4xgo7YcOql6OZxRCemVWYtFh4ou78TjwlSdVtMwyQt4VB4dzfSmNvrBQmmeU2gWWCb9j8mIk7lWk5cUKv/R28fjXHsKvWslLbacTNJ8lAuqO/cMHdo3b4g7NE5B0+s+O/KUdQMAzBe/RQkU1PQtv335SxkpIVXitZPUfKIdcV+FmMDBiGRqkGn8dt53PFZysXkXsyyQmjaHzAwlxtf4VVq5GC4Xy91CYPtxUvWf8gwUMXLoLxhtSnvl96ThO2i97uvC94ti7LlniaoXw7KvebPnnpaXn5mU6fB2WjkKsLigDyePYu+p0Tjwr0www==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WqsjS++UKenO5cZF5ZNBkMX+PMwSA8iDhgaymMj3fdA=;
- b=s9wNEm33GcdPGUR7p/J3N41ai7y20TtHwBcr++5az+NDPkk4T0iTEuxKf5l6jC1RBZwRFYVNY4tWK8XLSNc2fUaV2hynvABULASdX45dCQVFroYkLLJYLdzeINF9g1qvn90lOLCOiml2U63tex7aUkibGO0Q3yLRvPK+Wz4h47RXq5kL8QuGyjFLfGcWgIiO7RNhcZcp+rcU9fgal1UD4tIiMCnKH7voHCnZcOeG51Y331XeWCi/VW+AfJrdCqPTA5LPtVrrljDm9oLrt12N7S5HU0DmIcrg5JDeUhm8u8oNzUGQVvJ9/hLhY2qMZ7gf1WG322HWzjZ+zzWIJ/qC2Q==
+ bh=3VOX2/R4y8I8BSBGEGaJUDozJAEVirCrmPNZL89BRJ4=;
+ b=o+CX5sP+prnN/TQP5nd0xdAMRDswTGI0eGYhJdLLbjM9qx75TQXe4iLTq83UVDZoInxisegVpV9h5QzJJaMkaSyUXUFNpyqhUaI1c8zUV7upVFrWH4CmBjZbWx/x/hZVSgo2aeGOu+LvXUnjhnuHKY8rLjlGED45HCYwrVgernc=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- (2603:10a6:208:1a::16) by PAXPR04MB8944.eurprd04.prod.outlook.com
- (2603:10a6:102:20f::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
- 2023 12:26:51 +0000
-Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::8f8e:a358:3bc6:48d1]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
- ([fe80::8f8e:a358:3bc6:48d1%7]) with mapi id 15.20.6002.013; Thu, 19 Jan 2023
- 12:26:51 +0000
-Message-ID: <34fc4221-bb17-ab42-282c-e82f344c8a7c@suse.com>
-Date:   Thu, 19 Jan 2023 13:26:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org> <Y5hRRnBGYaPby/RS@alley>
- <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
- <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
- <Y8g9lTBnCgB7g08/@bombadil.infradead.org>
-From:   Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <Y8g9lTBnCgB7g08/@bombadil.infradead.org>
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO0P265MB6947.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2ec::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 19 Jan
+ 2023 15:09:39 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f24:8099:5588:8ba8]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f24:8099:5588:8ba8%8]) with mapi id 15.20.6002.025; Thu, 19 Jan 2023
+ 15:09:39 +0000
+Date:   Thu, 19 Jan 2023 15:09:36 +0000
+From:   Gary Guo <gary@garyguo.net>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     Michal =?UTF-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        <linux-kbuild@vger.kernel.org>,
+        "Wedson Almeida Filho" <wedsonaf@google.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        <rust-for-linux@vger.kernel.org>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        <linux-kernel@vger.kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
+Message-ID: <20230119150936.30811312.gary@garyguo.net>
+In-Reply-To: <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan>
+References: <20230111161155.1349375-1-gary@garyguo.net>
+        <20230112214059.o4vq474c47edjup6@ldmartin-desk2>
+        <20230113181841.4d378a24.gary@garyguo.net>
+        <20230117175144.GI16547@kitsune.suse.cz>
+        <20230117192059.z5v5lfc2bzxk4ad2@ldmartin-desk2.lan>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FRYP281CA0015.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::25)
- To AM0PR0402MB3395.eurprd04.prod.outlook.com (2603:10a6:208:1a::16)
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: LO4P123CA0333.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18c::14) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|PAXPR04MB8944:EE_
-X-MS-Office365-Filtering-Correlation-Id: cbb9ceb4-c3dc-45f3-dc4a-08dafa18708d
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO0P265MB6947:EE_
+X-MS-Office365-Filtering-Correlation-Id: 64797cba-7dbb-4055-ae9e-08dafa2f2f40
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QPp0coCP6EQq0CkKel/WZnITkFupvQFgDS2t6E+db5t+GwDNJzgyFO45nBiwtx1l1VW/9nHwsK/IJR9C5TkqnmAu2eQzfnDlphCJeBUE7qOsFpEk7iqW06iJmpC5eN4OBzjfETQHCnU3fF/fGEkXQLcSUXn4j880C0iB0AX83RBRdhVjTToU5jL6nIg+PCTojT1HVa1moh+LyXkTb+KdmLx4v5EFF8/G0LHCp652RsynYVkMG+k2kkoJ3UXPIp0SshsUs5wOfC415GQl5GGYnJeJtPQLlfvsv3CRQiFnFwibIKVJo39GBoeB7tD4k9BH0DEZ0At8Q/vOBmtpi6ohnw7eqZ4FxgHrH7uJHoMZdpIqKSfvCPFlrPzWO/XGZB5KQ/54pr0If/2t7SAV0/34D5nDogWoOIdtFAZaaogMyEiIuQDn4YeuAo8MVCQd/kpfoU8V+J2nm49e9K92S4H7b3nulbvKSQpK0YEqpTJ7DDDjK0M0U0O4R5i+xmcm3LpkqSxodyWXkjvVwO7EGlleSc/w9zCyfenG2rghcRecbP1Ht7KILGrXsjxYWBEmYA9sz1YuhS8/bDZd3xe/U2ejZNFp6GIiWDd4I9DqqcqwH0uHo7on6lWzt7evWF6lmH06xX0qG/AMqRBnNjoUdF+YvHoMlqgFe5WHJyAp/JQVscJgf4qRatUUmsvw+uTl6gstSBYhXoaCiNK3/uR0qMo4t1klfGk6+o19W7/Y6u1GQZ0HYj8ciDO+uY+w7dNL1WqE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(136003)(39860400002)(396003)(366004)(451199015)(31686004)(2906002)(31696002)(38100700002)(36756003)(2616005)(54906003)(316002)(86362001)(44832011)(83380400001)(41300700001)(5660300002)(6916009)(66556008)(4326008)(66946007)(8676002)(66476007)(53546011)(966005)(55236004)(6506007)(6486002)(6666004)(8936002)(26005)(186003)(6512007)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: jiGj5b4+B+Wfii/chtfcoxAa+EZ5dHOz/Jn7tqqLsaUnYJXiiQBa1CowwanfOjt7XI7QmkYFUHYOtIFNEDRVYLvqkmE7CUONuxCl+cEkBkZ0GDbXzi4cMl7UAeiPJUDIqnq+L8lYWYyRWJO1BQ8a/vPdNToER/OUb7+2UoDhjg/P2yFXoshZwM37VVkOHDrpp5Kh1iHDULkVf1jmP2ay3GhcN+HqdkYEtU971ktE0OFNwL2SVereEsmqaOdw3VsrCL5CJyJmBEmhYo8pZ07g4WwOoU5nAgyYCKHWDUSb2cwIUzHYAV7XhCsylEk5MAbb3NvE6GQCRDP4mg/vKBH1jrBs33IGwKSQGoOtaIkbc1nyCTpHwYgoYVTPr9kW56qB/3LnLFz2EP1VEz5zhjCTuxhYvurTUj2U7vewz+17AKCVDsm7VAk8JVgS9FMO1RV3Xlf3Lb3P3wOhQZz+5D1E3bVs02GhkNB1hxhZjnPCUtuX6l8s7dU5v+iFS6zGu55RFRz1426pvlrGB4X8PkMDsskaLTy4Nudx67DHrEBHSH2utM/xFhDx1nUkUkMmGtMR7jInGizJ+BA20O7CvgduBwu9+jb93rgrpB4cEW8cHiXd9kRkGf5YJyV/COXGqMGkfnXm+QAl7onULBdzdW3J0w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(396003)(346002)(136003)(39830400003)(451199015)(6486002)(26005)(66556008)(478600001)(41300700001)(6512007)(66574015)(1076003)(186003)(86362001)(316002)(54906003)(2616005)(38100700002)(66946007)(66476007)(6506007)(36756003)(6666004)(2906002)(5660300002)(7416002)(4326008)(6916009)(83380400001)(8936002)(8676002)(66899015);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SzZZT0RyUklDWHMwbkVDWkZrRlNqa3JRcktZZUlHQy9sc2hWejc3TVdzVXpD?=
- =?utf-8?B?SS9ndytYakpKY2htaXl5cG91YUhYeXpNZTk1bGlhUmp1MkNZSitGWUF5azhX?=
- =?utf-8?B?OGdUYndsSDJyejZkN0Y3SXZQZVduT0g3YzhnemVMckg4azllV012R3JGNk53?=
- =?utf-8?B?VWp5cmlGZ1BHRG5LbmowYWI0SXhsU2t2cnNsdTJXVCtXQTdDcnJUTm1aSUg3?=
- =?utf-8?B?a0E1cGhCU1p5UlNJY0MwRkhmSVlUckd4ZGFvSVRsaXdISGFBaU1YcU50aER2?=
- =?utf-8?B?dzlWV3BiUDhhMWZaQnZoVEhHQWFZb1UvbktBQXV4c0lPSDlSZ3cvSWpuc01O?=
- =?utf-8?B?ZkNMeGlWdmlLT2NyOU1UTzBwTDg5TUVZcGVXTWlydEo0Y0VzbHhveStXNlBW?=
- =?utf-8?B?ZERvY3JybnhBdkIzbmp0Y3V1WURzbEcwY2VxQnh6ZDl4Y2x1TGk3SEVpSkN3?=
- =?utf-8?B?ZkFRandWMGpHQjNqU1VQNHFuWWdaUGVIUCt4cXdPOHoyMnpmOXZGYzFRbS9z?=
- =?utf-8?B?L2ZFYm1aTGsrQXdXS1F2TEJUWWo5ZzczV2VCZGp6WGhWZVMvV3RlVXJ6eUgr?=
- =?utf-8?B?R0lEamNxS3ZBNmR5dU9Iam9oTUJZMGMzb1hVRUZHM0pUL2hKVDVRdWRoRnJS?=
- =?utf-8?B?YXRnbW0wQTBWdG1sMVFxcFBoU3UrQ3JodGVVYmlUR1VjZERBV2htYmU1U21k?=
- =?utf-8?B?SkMyTDRCRkJISWZGWkJYemZ0aHR5T2lTNnExQjdKSTJjeWdpQ25PSldOVlBa?=
- =?utf-8?B?dnhLT2dlNlpwU2dzREYyeWo2VkdtV24yTDZwRy9xL1FYU0ZaM1lNMzVFNldr?=
- =?utf-8?B?WU9PWkJZVm43YWVlUUxjMllyNzFKakxxZTVxemxiMjFhWUlzbThpamQrVSt2?=
- =?utf-8?B?dmV6aGh1T1VwbEhjTXZmUUFHanRhZVVCTlRZalJGNU0yQ3R2NUxmd05mTk8r?=
- =?utf-8?B?azFrSTdPei9SK2Y2OUhGMmNaNFV2M25iZzUzeVEyM2w3WjdWNE9QV2pTMjUv?=
- =?utf-8?B?ZmdoVkRhUlM2aDkyNnFDTlY5RXY1U2phd054bTh2YTdHSnZnYXlZWkovOW83?=
- =?utf-8?B?WkdxeG9xTzFKOHI3aytVZnRQU1lXb0VOVEZCNHFiaUs3bHR6dVNPdWNQQ21v?=
- =?utf-8?B?N01YaDBScnVOTGpENjhvSWJ0NDdyVXcwYm5YeVpTZzRJSHZhTVRON3JnTGh0?=
- =?utf-8?B?UUpSVkdncDgzZ3E5SEF3OTJDcFJPOVM2QW9uWXZsVC8zTG1RN244OWhVNytB?=
- =?utf-8?B?a1JVTDJtaFp2b3IvNE9MalE0VS91SWZzTWRJQkhna0VSTDdXOWRrRHZBaVhX?=
- =?utf-8?B?b2hvMkpNTC9EcFhPY0t4OXBuWjc4QlBwdG5kZ3F6WmFCY1I3Yy9mUCtKMjlp?=
- =?utf-8?B?ZkFYSmNmWUhHOW5pcVBJbjR2WmtoS2tRYTR3dlZmUzdXOWdkTlZ3R2Zwczdz?=
- =?utf-8?B?RGc5Z2Z2SGRreVZSMVFndHgrdEFJWmx2L3plZjRzbHFVSjl1WjdxcTJwaXJS?=
- =?utf-8?B?WmhFS3hqbkFhUFZsVG95T2t1QXBNbTJSVlYrQmRtUWlNZEhaaHJsNEFrRlow?=
- =?utf-8?B?cXdqQ3FqdE11dU9VNjhGVnRMODU0VDFRVHNVTFB4empRejZWSkJNRmJEa1Ez?=
- =?utf-8?B?NFBaOU1QN1FReHpNb3FxQnJidkZXSXRiRHRValdlTE1SWkJRZlVFUU4xM3po?=
- =?utf-8?B?VmVKdDJyVTRWU2FKQ3RhS3Y5K1k2OSt0bTlDQ2hLaEtGZ25ob0V1SEdIN003?=
- =?utf-8?B?eU5aOW12bW5ESFJ3WjR2bzRac2VRQTZPSU9TYkRsbFg4NFQrR2FFZ2lRbi9X?=
- =?utf-8?B?LzA3UEJuM1doWlZiM2ZUbU84KzdCdlZJY1hoekdxaXZWdEdkU2oxc0xUYTE5?=
- =?utf-8?B?aWdHakVrOTVlaTQrZTdYeG9GTFBtaEVjcXQwUGtjblpGZmJVOUlOZUxOWE9q?=
- =?utf-8?B?ank1a28wS0NtaFB3WFQ2V2dQUFdaNHZSdEMxZ0Foa1J3RjFKTXlETlhYTWJL?=
- =?utf-8?B?SXBqUWFuOTQ3dytQR2tDd3pUV1pwKzJUK0Q1dElkQWZCWjZqTldSRWJRM055?=
- =?utf-8?B?a001dzIyZUh0dXEzN0RVN3NZQ0NEY2VjZDhPWWNSZTZqaUZCUTdsV2VpQ0pv?=
- =?utf-8?Q?M8AatqZ4Mz5KkfhWLWNR2otbu?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbb9ceb4-c3dc-45f3-dc4a-08dafa18708d
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NWo5d1A0Mk1xMkZtWlpXVEU4NnY2dDlZL2pDcEU4Z1BnRTJBVnp6UXdnRWMz?=
+ =?utf-8?B?S0IyRllqMzlzQlk5WUNwQmtYUklKQktNYnR0THlIQTh3VWd5Tlp0dmVmZENR?=
+ =?utf-8?B?V1dyVG5CL3h6c3JwWFhRbElLeVB4YldNVzAzS3dKd2lESmRZVmZZdUxxMlBs?=
+ =?utf-8?B?bURXMU9pSHh6T0dNTmhrTmtkZUxRL2lRNXFhN2k5ck05Q0RCVkRESVZWRTlo?=
+ =?utf-8?B?czE2dy95emtBZHd5U0N6T01VS0V2MGZvazhvTUsvc0wycEJxQ0NFM1pFMlJh?=
+ =?utf-8?B?cjRwRzNZT0JWM2ZYSnQ4TDhkczRUazNjenhaRUNOWlNYTzdPUEx1cnlQM3Er?=
+ =?utf-8?B?bGwwK0hKVU9xcGFvOVFJQkhFNkQ1VWlyOTZHMFBEeU0zY1M4ZUlGbWt4ejBX?=
+ =?utf-8?B?bGZGdmZ6REJDd2sveXlaaE9wcnJ2azZtTHozT1R1V2lqVGg1M0x2Y1loTzE1?=
+ =?utf-8?B?QmU4dTF3elNtZkNqYWZQeWs4a3FnTVhYaHUyZGd4L1RDdUNQWXpSd0tzVkFL?=
+ =?utf-8?B?MkhxdDRKY1E4SThWMytwYkM1UWxiY2VsNmhpR1ErRzJVS25HVUp3Y2lHTkV1?=
+ =?utf-8?B?ZXl0SzFHQVlsbGVLdzFhY3FxczVudWhBYUYzSFhnMDRpOS8va0xBM0FTU2k3?=
+ =?utf-8?B?OGkrTkhpR3hhYjJ5aEpQT2xUZTZSSmJOU2t6NFVVSUNrWlNwdEZTR0dtL3I5?=
+ =?utf-8?B?TUdqZ2xnZ0VCVkZYUzE0YXJaTzJYb0Z0MWRqVGVwTWtzckZYQnBUanN3aXEr?=
+ =?utf-8?B?ODkxZE42Mkc4VkJDV2hMNzNXVlVvWm1HaTZuV3ozWXBkK1VlenQ2d2lyME1O?=
+ =?utf-8?B?MW0vem5Bc0RxaEVoRHBLOUdmSmY0eElod2MzV1JxWElNaHh1U3h0QytwYkNP?=
+ =?utf-8?B?VHdobEZoYzRidjUzQ0Q3NEt5MmdxYmhxYUtFSDZVVk9vNVlYRmFBVFZFa1c0?=
+ =?utf-8?B?eFlPY3h6ZEtOVGVkU1VVMnhNVWV6Tmgvb2JFUXVjQnZYZGNIek1ac3JSSjly?=
+ =?utf-8?B?NXVEVVl2ZDQ2TE9lRDBMeGhBa3dSR25WM1B6SnBJLzN5dGc0RHppYXcvcWQ2?=
+ =?utf-8?B?N2s5R2ZibDlZZ2lUZGczaFoyR2pQaVNpV21ZUnBEbzdOVUx6MU0rQnB6ZU0r?=
+ =?utf-8?B?UTN0U2lYdmY1a2poWS9qdVNzSGY4NHkrQWZpMVJ1UkJjRDFKSmlTZEhFNTZz?=
+ =?utf-8?B?V2YyK21ybk80ZkRCaFFHZDBWQ0h3MjlBRHFkNCtIbGQ4NzhqcEYvRDZBQ1FB?=
+ =?utf-8?B?MjdZZXcvdkZyaUk4QWNvaFVadDVZUTlJaHBuVW9JMVk2T0MzR1V2cHNra1Q0?=
+ =?utf-8?B?cDlXUTMvelpzeDlOQitRcFNNNXp5UXUwSTUyY0dPbklMaUhpZGhoM0xWaGhu?=
+ =?utf-8?B?REJlZWFRbDgvN2hZRXNZUGpsd2tnZ2JvTzJ1MHVTcUllSm9Ub2NMR3d5SW94?=
+ =?utf-8?B?NGN5YnkyemU4aE9JeE0yM1Rld2M1V1JYRmU2WTRwcUhJY2tiMDdDWm80VUUv?=
+ =?utf-8?B?SmNDUWpkUk1mOGNqVWtFZEtESW40UWdJd1ZyRGFKTkptM1NrRXV0aWF0dnFE?=
+ =?utf-8?B?WkJZSzJTbzdRWnFGSngvbmdmc1hjY2VmWmtJR1JsWm5ETThEU1dFT2cvZEFM?=
+ =?utf-8?B?cjR0dWxFdlZmckFibmhXMDJPRm9QbW9uSjBGWTVzbnVuK05XZXI0Vzl6LzRi?=
+ =?utf-8?B?RTV4UGp3YTVGbTJFWnY5a2JxYkNVaGFxYnhtaXF0bU9kOXJrREJHb3lkTmlp?=
+ =?utf-8?B?eWFGZ2Q4NkRqWWlFM3g4bkpWSWMwR2dVQk1MS1U4aGlTSG1sVERQWlVBUE5s?=
+ =?utf-8?B?dnIvUENzRDc4WG5CTWdUamdubEFkSGNsK3lpMExTdDZrWDNjWjRsR2hRQ2or?=
+ =?utf-8?B?Y0VxU3Y3UXU1a1JxRjRmNmM3bWZGdVQ2RXZOMS9EV2NyQm5uWFFGcXZOaGFr?=
+ =?utf-8?B?TWZkczNlUUF0UWltYVlKWFZIT2ZvaHFwYU9CYjlwelRNNzE4SHgwQzhYVkNo?=
+ =?utf-8?B?dG8vKzFDQ3NPcFJucVJndnBDMHc2UFJUNXhYZWVScHp0UURibnBhRFlaQWw5?=
+ =?utf-8?B?YS8vaDJuSlNqOC9xOEJYeEdWUkhvZHhqRy9iekJyZ0F1NTBwMjI2R2xZdVZX?=
+ =?utf-8?Q?jSGVxlfTYcJ+8PzhVeGFnIhG+?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64797cba-7dbb-4055-ae9e-08dafa2f2f40
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 12:26:50.8818
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 15:09:39.1239
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uyx7JFuWrdvLGMLg01sHgBunVlgqDJPXZ7qGIwvZNqhAerRwDUNHY8sTQWEd7pJUBt6dEWpfiuXui749LQawBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8944
+X-MS-Exchange-CrossTenant-UserPrincipalName: IIXzNLvZr7FsHnmF5247Yhn45RpY4VtkAdSpbW/NXgn5t4VgbLE93lGjsIPdYlVlzRP+SRcGgLXsJcBYkKXt/g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB6947
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 1/18/23 19:42, Luis Chamberlain wrote:
-> On Wed, Jan 18, 2023 at 04:12:05PM +0100, Petr Pavlu wrote:
->> On 1/18/23 01:04, Luis Chamberlain wrote:
->>> The rationale for making a regression fix with a new userspace return value
->>> is fair given the old fix made things even much worse the point some kernel
->>> boots would fail. So the rationale to suggest we *must* short-cut
->>> parallel loads as effectively as possible seems sensible *iff* that
->>> could not make things worse too but sadly I've found an isssue
->>> proactively with this fix, or at least that this issue is also not fixed:
->>>
->>> ./tools/testing/selftests/kmod/kmod.sh -t 0006
->>> Tue Jan 17 23:18:13 UTC 2023
->>> Running test: kmod_test_0006 - run #0
->>> kmod_test_0006: OK! - loading kmod test
->>> kmod_test_0006: FAIL, test expects SUCCESS (0) - got -EINVAL (-22)
->>> ----------------------------------------------------
->>> Custom trigger configuration for: test_kmod0
->>> Number of threads:      50
->>> Test_case:      TEST_KMOD_FS_TYPE (2)
->>> driver: test_module
->>> fs:     xfs
->>> ----------------------------------------------------
->>> Test completed
->>>
->>> When can multiple get_fs_type() calls be issued on a system? When
->>> mounting a large number of filesystems. Sadly though this issue seems
->>> to have gone unnoticed for a while now. Even reverting commit
->>> 6e6de3dee51a doesn't fix it, and I've run into issues with trying
->>> to bisect, first due to missing Kees' patch which fixes a compiler
->>> failure on older kernel [0] and now I'm seeing this while trying to
->>> build v5.1:
->>>
->>> ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple definition of `__force_order';
->>> arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
->>> ld: warning: arch/x86/boot/compressed/efi_thunk_64.o: missing .note.GNU-stack section implies executable stack
->>> ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
->>> ld: arch/x86/boot/compressed/head_64.o: warning: relocation in read-only section `.head.text'
->>> ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with RWX permissions
->>> ld: warning: creating DT_TEXTREL in a PIE
->>> make[2]: *** [arch/x86/boot/compressed/Makefile:118: arch/x86/boot/compressed/vmlinux] Error 1
->>> make[1]: *** [arch/x86/boot/Makefile:112: arch/x86/boot/compressed/vmlinux] Error 2
->>> make: *** [arch/x86/Makefile:283: bzImage] Error 2
->>>
->>> [0] http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
->>>
->>> But we should try to bisect to see what cauased the above kmod test 0006
->>> to start failing.
->>
->> It is not clear to me from your description if the observed failure of
->> kmod_test_0006 is related to the fix in this thread.
-> 
-> The issue happens with and without the patch in this thread, I'd just hate to
-> exacerbate the issue further.
-> 
->> The problem was not possible for me to reproduce on my system. My test was on
->> an 8-CPU x86_64 machine using v6.2-rc4 with "defconfig + kvm_guest.config +
->> tools/testing/selftests/kmod/config".
-> 
-> With the patch?
+On Tue, 17 Jan 2023 11:22:45 -0800
+Lucas De Marchi <lucas.demarchi@intel.com> wrote:
 
-It is same for me without and with the patch. The test doesn't produce any
-failure on my test system. The complete kmod.sh selftest passes too.
+> On Tue, Jan 17, 2023 at 06:51:44PM +0100, Michal Such=C3=A1nek wrote:
+> >Hello,
+> >
+> >On Fri, Jan 13, 2023 at 06:18:41PM +0000, Gary Guo wrote: =20
+> >> On Thu, 12 Jan 2023 14:40:59 -0700
+> >> Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+> >> =20
+> >> > On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote: =20
+> >> > >
+> >> > > struct modversion_info {
+> >> > >-	unsigned long crc;
+> >> > >-	char name[MODULE_NAME_LEN];
+> >> > >+	/* Offset of the next modversion entry in relation to this one. *=
+/
+> >> > >+	u32 next;
+> >> > >+	u32 crc;
+> >> > >+	char name[0]; =20
+> >> >
+> >> > although not really exported as uapi, this will break userspace as t=
+his is
+> >> > used in the  elf file generated for the modules. I think
+> >> > this change must be made in a backward compatible way and kmod updat=
+ed
+> >> > to deal with the variable name length:
+> >> >
+> >> > kmod $ git grep "\[64"
+> >> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint32_t)];
+> >> > libkmod/libkmod-elf.c:  char name[64 - sizeof(uint64_t)];
+> >> >
+> >> > in kmod we have both 32 and 64 because a 64-bit kmod can read both 3=
+2
+> >> > and 64 bit module, and vice versa.
+> >> > =20
+> >>
+> >> Hi Lucas,
+> >>
+> >> Thanks for the information.
+> >>
+> >> The change can't be "truly" backward compatible, in a sense that
+> >> regardless of the new format we choose, kmod would not be able to deco=
+de
+> >> symbols longer than "64 - sizeof(long)" bytes. So the list it retrieve=
+s
+> >> is going to be incomplete, isn't it?
+> >>
+> >> What kind of backward compatibility should be expected? It could be:
+> >> * short symbols can still be found by old versions of kmod, but not
+> >>   long symbols; =20
+> >
+> >That sounds good. Not everyone is using rust, and with this option
+> >people who do will need to upgrade tooling, and people who don't care
+> >don't need to do anything. =20
+>=20
+> that could be it indeed. My main worry here is:
+>=20
+> "After the support is added in kmod, kmod needs to be able to output the
+> correct information regardless if the module is from before/after the
+> change in the kernel and also without relying on kernel version."
+> Just changing the struct modversion_info doesn't make that possible.
+>=20
+> Maybe adding the long symbols in another section?
 
-Cheers,
-Petr
+Yeah, that's what I imagined how it could be implemented when I said
+"short symbols can still be found by old versions of kmod, but not long
+symbols".
+
+> Or ble just increase to 512 and add the size to a
+> "__versions_hdr" section. If we then output a max size per module,
+> this would offset a little bit the additional size gained for the
+> modules using rust.
+
+That format isn't really elegant IMO. And symbol length can vary a lot,
+having all symbols dictated by the longest symbol doesn't sound a good
+approach.
+
+> And the additional 0's should compress well
+> so I'm not sure the additional size is that much relevant here.
+
+I am not sure why compression is mentioned here. I don't think section
+in .ko files are compressed.
+
+(sorry forget to reply-all, re-send email to the list)
+
+Best,
+Gary
