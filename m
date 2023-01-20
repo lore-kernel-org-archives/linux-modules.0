@@ -2,96 +2,152 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A97BAC678D6
-	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 04:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D68CC38159
+	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 06:42:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjATE2h (ORCPT
+        id S229725AbjATGmU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 19 Jan 2023 23:28:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
+        Fri, 20 Jan 2023 01:42:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjATE2a (ORCPT
+        with ESMTP id S229475AbjATGmU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:28:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F282CB1ECF;
-        Thu, 19 Jan 2023 20:28:26 -0800 (PST)
+        Fri, 20 Jan 2023 01:42:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6C5442D8;
+        Thu, 19 Jan 2023 22:42:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B5E8B82135;
-        Thu, 19 Jan 2023 08:29:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A543FC433D2;
-        Thu, 19 Jan 2023 08:29:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1E7C61E33;
+        Fri, 20 Jan 2023 06:42:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA584C433D2;
+        Fri, 20 Jan 2023 06:42:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674116991;
-        bh=wiIwzJ1J9iz0naLuw7+n0CgUx6j+UpqtC2oWoSfJfc0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qwUegg87DEOi/Wj+waB+iMZarjqP2Pfzov442nwZ0wm6u2wc1eQhCqdJ/9qhwbxr8
-         cbtLWwv6HL4ZwZlpE6h8dQ1Q+xT22AYflOifZ6C6/L3yYWrRpFqlumuuaJxCY6PH/N
-         TIjp1f+/4YkOOhCjWYuMcnWNUvmCKFb2OWsqkw9FQ7EL2PRK9EEBN1UaOJtu20gAE9
-         ruTLifWMtafnXEpnXg99nGvO1DNnQboiV/2ea3VXmSQxtG29VliC5exrl/6n3/T2CJ
-         xHzOHh6BE2T3DjJHKSGmxq6xisILxxMOTohSeKb/sPAifCLXkhvsCFqiZkV71ANAQp
-         o2e7SC4lHpdFA==
-Received: by mail-lf1-f52.google.com with SMTP id g13so2139839lfv.7;
-        Thu, 19 Jan 2023 00:29:51 -0800 (PST)
-X-Gm-Message-State: AFqh2kpYAT5RKgoUJAJ2h8NXNjlU714Fcmloxkg3AxbgF/QUq5C7y1EM
-        CGZ+uq02eL6IXRLfRwXM99fBlfHmpKUWRz6Xeqc=
-X-Google-Smtp-Source: AMrXdXtv4mp0PXcDo9ZDkHrj+7QhEher1afjbD7W9N7lNoxMQo/TrO/llB4c4E3n7IN/pxlJJ4KOeYqAnvBdr76zgrY=
-X-Received: by 2002:a05:6512:308a:b0:4d1:3e32:5436 with SMTP id
- z10-20020a056512308a00b004d13e325436mr1044480lfd.215.1674116989690; Thu, 19
- Jan 2023 00:29:49 -0800 (PST)
+        s=k20201202; t=1674196938;
+        bh=wwJVcJQUv8XiC8YzqdgOk3HZ74a4rucKStR7XI3+h44=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yl/sFBrH/7b0jehlOlZsG1/AQDxQoNoOJJpgscX+CjP9CpwCGPkeCmRiKw9b3iK11
+         Wp/YzIIdhI8qEPJd4Eyvc2ttlukHAABbJ4PMqxCb73GqeIFdsHW/o5Rq20OD70IEhN
+         X/vYfqypuazJ5tv5Z5VwZfkkJ00qKIb8Mcr65CLGSl01I5iDhK1+PNvJlRHlN/oZTH
+         lSoqjA5YKvCokrLKiAXquwcj/srOEQ75cunKxXsRd/qX0tdyssWrJKfCqV9my9cKT9
+         gtqB+jR/V5fr7gcAWLR5k1gZO3YFP2mWWxf9zQqKaVuUAFhunJE3exOagi2bcgMkY7
+         93E9iSGiSeSpA==
+Date:   Thu, 19 Jan 2023 22:42:15 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
+        pmladek@suse.com, joe.lawrence@redhat.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
+ removal
+Message-ID: <20230120064215.cdyfbjlas5noxam6@treble>
+References: <20230118204728.1876249-1-song@kernel.org>
+ <20230118220812.dvztwhlmliypefha@treble>
+ <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230106220959.3398792-1-song@kernel.org> <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
- <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
- <20230118074047.GA27385@lst.de> <CAPhsuW7zqYgLcWoG1Wr_tBBLt-yiNYq3FLVWYMpMj=6TJawQEg@mail.gmail.com>
- <20230119053545.GA16775@lst.de>
-In-Reply-To: <20230119053545.GA16775@lst.de>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 19 Jan 2023 00:29:36 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5WFEHfGrSW5nYRRohmLMAfWoZiOCBgCdgzOCmn+Q_vVA@mail.gmail.com>
-Message-ID: <CAPhsuW5WFEHfGrSW5nYRRohmLMAfWoZiOCBgCdgzOCmn+Q_vVA@mail.gmail.com>
-Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        songliubraving@fb.com, Peter Zijlstra <peterz@infradead.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jan 18, 2023 at 9:35 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Wed, Jan 18, 2023 at 01:52:51PM -0800, Song Liu wrote:
-> > In this way we can use the array in the for loops, and use mod->core_text,
-> > etc. when we only need to access one of them.
->
-> Just use the array please instead of making it too ugly.  If that
-> is the only sensible way to iterate we have a good argument for the
-> array and can live with it.
+On Thu, Jan 19, 2023 at 11:06:35AM -0800, Song Liu wrote:
+> On Wed, Jan 18, 2023 at 2:08 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+> >
+> > On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
+> > > From: Miroslav Benes <mbenes@suse.cz>
+> > >
+> > > Josh reported a bug:
+> > >
+> > >   When the object to be patched is a module, and that module is
+> > >   rmmod'ed and reloaded, it fails to load with:
+> > >
+> > >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> > >
+> > >   The livepatch module has a relocation which references a symbol
+> > >   in the _previous_ loading of nfsd. When apply_relocate_add()
+> > >   tries to replace the old relocation with a new one, it sees that
+> > >   the previous one is nonzero and it errors out.
+> > >
+> > >   On ppc64le, we have a similar issue:
+> > >
+> > >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> >
+> > Shouldn't there also be a fix for this powerpc issue?
+> 
+> There was a working version, but it was not very clean. We couldn't agree
+> on the path forward for powerpc, so we are hoping to ship the fix to x86 (and
+> s390?) first [1].
 
-Hmm.. I think it won't be ugly outside of the struct definition...
-Alternatively, how about use something like
+Sorry for coming in late, I was on leave so I missed a lot of the
+discussions on previous versions.  The decision to leave powerpc broken
+wasn't clear from reading the commit message.  The bug is mentioned, and
+the fix is implied, but surprisingly there's no fix.
 
-#define core_text mod_mem[MOD_MEM_TYPE_TEXT]
-...
+I agree that the powerpc fix should be in a separate patch, but I still
+don't feel comfortable merging the x86 fix without the corresponding
+powerpc fix.
 
-which is similar to
+powerpc is a major arch and not a second-class citizen.  If we don't fix
+it now then it'll probably never get fixed until it blows up in the real
+world.
 
-struct sock {
-        /*
-         * Now struct inet_timewait_sock also uses sock_common, so please just
-         * don't add nothing before this first member (__sk_common) --acme
-         */
-        struct sock_common      __sk_common;
-#define sk_node                 __sk_common.skc_node
-#define sk_nulls_node           __sk_common.skc_nulls_node
-...
-};
+For powerpc, instead of clearing, how about just "fixing" the warning
+site, something like so (untested)?
 
-?
 
-Thanks,
-Song
+diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+index 1096d6b3a62c..1a12463ba674 100644
+--- a/arch/powerpc/kernel/module_64.c
++++ b/arch/powerpc/kernel/module_64.c
+@@ -499,9 +499,11 @@ static unsigned long stub_for_addr(const Elf64_Shdr *sechdrs,
+ 
+ /* We expect a noop next: if it is, replace it with instruction to
+    restore r2. */
+-static int restore_r2(const char *name, u32 *instruction, struct module *me)
++static int restore_r2(const char *name, u32 *instruction, struct module *me,
++		      bool klp_sym)
+ {
+ 	u32 *prev_insn = instruction - 1;
++	u32 insn_val = *instruction;
+ 
+ 	if (is_mprofile_ftrace_call(name))
+ 		return 1;
+@@ -514,9 +516,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
+ 	if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
+ 		return 1;
+ 
+-	if (*instruction != PPC_RAW_NOP()) {
++	/*
++	 * For a livepatch relocation, the restore r2 instruction might have
++	 * been previously written if the relocation references a symbol in a
++	 * module which was unloaded and is now being reloaded.  In that case,
++	 * skip the warning and instruction write.
++	 */
++	if (klp_sym && insn_val == PPC_INST_LD_TOC)
++		return 0;
++
++	if (insn_val != PPC_RAW_NOP()) {
+ 		pr_err("%s: Expected nop after call, got %08x at %pS\n",
+-			me->name, *instruction, instruction);
++			me->name, insn_val, instruction);
+ 		return 0;
+ 	}
+ 
+@@ -649,7 +660,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+ 				if (!value)
+ 					return -ENOENT;
+ 				if (!restore_r2(strtab + sym->st_name,
+-							(u32 *)location + 1, me))
++						(u32 *)location + 1, me,
++						sym->st_shndx == SHN_LIVEPATCH))
+ 					return -ENOEXEC;
+ 			} else
+ 				value += local_entry_offset(sym);
