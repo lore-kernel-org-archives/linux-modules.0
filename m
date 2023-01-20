@@ -2,111 +2,257 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 513CCC25B4E
-	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 17:42:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D21DC25B4E
+	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 19:16:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjATRmr (ORCPT
+        id S230226AbjATTQs (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 20 Jan 2023 12:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
+        Fri, 20 Jan 2023 14:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjATRmq (ORCPT
+        with ESMTP id S230210AbjATTQq (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 20 Jan 2023 12:42:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164454F849;
-        Fri, 20 Jan 2023 09:42:41 -0800 (PST)
+        Fri, 20 Jan 2023 14:16:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4E890B32;
+        Fri, 20 Jan 2023 11:16:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C69962013;
-        Fri, 20 Jan 2023 17:42:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57C3C433A1;
-        Fri, 20 Jan 2023 17:42:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FCD462071;
+        Fri, 20 Jan 2023 19:16:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C9EFC433A0;
+        Fri, 20 Jan 2023 19:16:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674236560;
-        bh=WMahhW6oUd2zW6eBCstPrXu22SWG93RzbfOHBsyIEW8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=guFUxnOCFuHNzVn+ojSHmkOO6vd50slt/V26hSoreOwzXTTcrXI9Ba69r7cXs4eg7
-         qI/wt/u9gI0+o3i5/eBONpoa0TtTsENloBmouzjnH9raWWt6wxgKBJ+rqbd1pW4l33
-         2oKDcq61uIYNcBCccKZVYUILvcknqp4KXIMIg7aWNa3c3W43+cm+6Z4GQTMvpmnA16
-         EynmVv7buelQO3zfpXHrQDWhWhJm+Xm+dHdjRIKXDZchSTPISoToBdc96R40LKnYro
-         IjDfkblDblozrSMHnwTnJLpuGlxF43gWG7u8Y7C0pyDKBtaEZjuUb/8sFPhTzfBURg
-         Z2NPCOasa/fOg==
-Received: by mail-lj1-f175.google.com with SMTP id e16so6297722ljn.3;
-        Fri, 20 Jan 2023 09:42:40 -0800 (PST)
-X-Gm-Message-State: AFqh2kr3lNF1X/vDmjd21iv+TyhbNw26LgNR/2XaWkj7dpCk5PpI2hYA
-        g0a2X+WuHtBLYQts+BLSfXbDziN7kI3QppQUpKg=
-X-Google-Smtp-Source: AMrXdXt6Tvta5YOpbskhbejsHqM1dM6W6pAAEg9w/RUcutSgRTCoAvGHEmbj0qZW4G/b0Q3iTkPqWtLG32IMzZe4sRg=
-X-Received: by 2002:a2e:a5c4:0:b0:289:1305:680d with SMTP id
- n4-20020a2ea5c4000000b002891305680dmr843375ljp.421.1674236558924; Fri, 20 Jan
- 2023 09:42:38 -0800 (PST)
+        s=k20201202; t=1674242204;
+        bh=2z4Z2qSSZvBh34DFYGzh5B1NSAHujXmyQgat9dcrIKc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p6Ugpr/Ao/kSABXAJYFtS4Ox9t6XjBm9fXVa/5joZruzNarsgK3UYbGso+aznd+Fo
+         VSfMBB9hfHZeoZvQrUDe97xBJF5IbPiiK4R09s7NdkUVj90Q6pNTrtYi2fbvMhn50k
+         MywhCIPlCd7ea6Txu6P8rq5s9C87yL6wE7HbSWIARZT5NSAEe6E2cW0vvUNBSgStCS
+         ZwHBy6mWHkGPaKSutgC8eJQitYDdpp0EUcTpF19H8n9zjqEOvLPm71xoMcqu9EBlnC
+         ZIFKEmJk88UdPAfd0CYzpvBLcXOIqjqtDw3dnCb6R7u94iy76gK87hikmhLxa1jatL
+         18+UmON4aE5ug==
+Date:   Fri, 20 Jan 2023 11:16:42 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
+        pmladek@suse.com, joe.lawrence@redhat.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
+ removal
+Message-ID: <20230120191642.7bmqt6t4qngisqep@treble>
+References: <20230118204728.1876249-1-song@kernel.org>
 MIME-Version: 1.0
-References: <20230106220959.3398792-1-song@kernel.org> <CAPhsuW4oY6Gh2c11AvzoCrv7ZShT0E=zU0OgK8LUq_pYW9=edw@mail.gmail.com>
- <CAPhsuW44n8wzx6Ois4hNRWR9S=kB=LL+DqMTtMjAyGY2FVNoUA@mail.gmail.com>
- <20230118074047.GA27385@lst.de> <CAPhsuW7zqYgLcWoG1Wr_tBBLt-yiNYq3FLVWYMpMj=6TJawQEg@mail.gmail.com>
- <20230119053545.GA16775@lst.de> <CAPhsuW5WFEHfGrSW5nYRRohmLMAfWoZiOCBgCdgzOCmn+Q_vVA@mail.gmail.com>
-In-Reply-To: <CAPhsuW5WFEHfGrSW5nYRRohmLMAfWoZiOCBgCdgzOCmn+Q_vVA@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 20 Jan 2023 09:42:26 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4snf6cBYSDRbALSNM4OE36-dusir8HQQ90Li7u067ZWA@mail.gmail.com>
-Message-ID: <CAPhsuW4snf6cBYSDRbALSNM4OE36-dusir8HQQ90Li7u067ZWA@mail.gmail.com>
-Subject: Re: [PATCH/RFC] module: replace module_layout with module_memory
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        songliubraving@fb.com, Peter Zijlstra <peterz@infradead.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230118204728.1876249-1-song@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jan 19, 2023 at 12:29 AM Song Liu <song@kernel.org> wrote:
->
-> On Wed, Jan 18, 2023 at 9:35 PM Christoph Hellwig <hch@lst.de> wrote:
-> >
-> > On Wed, Jan 18, 2023 at 01:52:51PM -0800, Song Liu wrote:
-> > > In this way we can use the array in the for loops, and use mod->core_text,
-> > > etc. when we only need to access one of them.
-> >
-> > Just use the array please instead of making it too ugly.  If that
-> > is the only sensible way to iterate we have a good argument for the
-> > array and can live with it.
->
-> Hmm.. I think it won't be ugly outside of the struct definition...
-> Alternatively, how about use something like
->
-> #define core_text mod_mem[MOD_MEM_TYPE_TEXT]
-> ...
->
-> which is similar to
->
-> struct sock {
->         /*
->          * Now struct inet_timewait_sock also uses sock_common, so please just
->          * don't add nothing before this first member (__sk_common) --acme
->          */
->         struct sock_common      __sk_common;
-> #define sk_node                 __sk_common.skc_node
-> #define sk_nulls_node           __sk_common.skc_nulls_node
-> ...
-> };
+On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
+> From: Miroslav Benes <mbenes@suse.cz>
+> 
+> Josh reported a bug:
+> 
+>   When the object to be patched is a module, and that module is
+>   rmmod'ed and reloaded, it fails to load with:
+> 
+>   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> 
+>   The livepatch module has a relocation which references a symbol
+>   in the _previous_ loading of nfsd. When apply_relocate_add()
+>   tries to replace the old relocation with a new one, it sees that
+>   the previous one is nonzero and it errors out.
 
-So here are the two versions, both with secondary addr_[min|max] for
-CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC.
+Should we add a selftest to make sure this problem doesn't come back?
 
-v2. Just use mod_mem array:
-https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?h=remotes/song-md/new_module_alloc_build_test_v2
+>   On ppc64le, we have a similar issue:
+> 
+>   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
 
-v3. mod_mem array and the defines:
-#define mod_core_text mod_mem[MOD_MEM_TYPE_TEXT]
-#define mod_core_data mod_mem[MOD_MEM_TYPE_DATA]
-etc.
-https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?h=remotes/song-md/new_module_alloc_build_test_v3
+Just to clarify my previous comment, the reference to the powerpc issue
+should be removed because it'll be fixed in a separate patch.
 
-I personally like the v3 better. Please share you
-comments on this.
+> He also proposed three different solutions. We could remove the error
+> check in apply_relocate_add() introduced by commit eda9cec4c9a1
+> ("x86/module: Detect and skip invalid relocations"). However the check
+> is useful for detecting corrupted modules.
+> 
+> We could also deny the patched modules to be removed. If it proved to be
+> a major drawback for users, we could still implement a different
+> approach. The solution would also complicate the existing code a lot.
+> 
+> We thus decided to reverse the relocation patching (clear all relocation
+> targets on x86_64). The solution is not
+> universal and is too much arch-specific, but it may prove to be simpler
+> in the end.
+> 
+> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+> Signed-off-by: Song Liu <song@kernel.org>
+> Acked-by: Miroslav Benes <mbenes@suse.cz>
+> Co-developed-by: Song Liu <song@kernel.org>
+> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
 
-Thanks,
-Song
+According to submitting-patches.rst the Co-developed-by is supposed to
+be immediately before your Signed-off-by.
+
+Also, other than the commit log, this patch is almost completely
+unrecognizable compared to Miroslav's original patch.  Does it still
+make sense for him to be listed as the author?
+
+In the -tip tree they sometimes use an Originally-by tag, which might be
+relevant here.
+
+> -static int __apply_relocate_add(Elf64_Shdr *sechdrs,
+> +static int __write_relocate_add(Elf64_Shdr *sechdrs,
+>  		   const char *strtab,
+>  		   unsigned int symindex,
+>  		   unsigned int relsec,
+>  		   struct module *me,
+> -		   void *(*write)(void *dest, const void *src, size_t len))
+> +		   void *(*write)(void *dest, const void *src, size_t len),
+> +		   bool apply)
+>  {
+>  	unsigned int i;
+>  	Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
+>  	Elf64_Sym *sym;
+>  	void *loc;
+>  	u64 val;
+> +	u64 zero = 0ULL;
+>  
+> -	DEBUGP("Applying relocate section %u to %u\n",
+> +	DEBUGP("%s relocate section %u to %u\n",
+> +	       (apply) ? "Applying" : "Clearing",
+
+"(apply)" has unnecessary parentheses.
+
+>  	       relsec, sechdrs[relsec].sh_info);
+>  	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
+> +		int write_size = 4;
+
+We already know we're writing, I suggest just calling it 'size' to be
+more consistent with kernel style.
+
+Also, it can be an unsigned value like size_t.
+
+Also, instead of initializing it here with a potentially bogus value
+which may need to be overwritten for a 64-bit reloc, it's better to
+explicitly set the size in each individual case below.  That's makes the
+logic clearer and helps prevent future bugs if new 64-bit relocation
+types are added later.
+
+>  		case R_X86_64_PC32:
+>  		case R_X86_64_PLT32:
+> -			if (*(u32 *)loc != 0)
+> -				goto invalid_relocation;
+>  			val -= (u64)loc;
+> -			write(loc, &val, 4);
+>  #if 0
+> -			if ((s64)val != *(s32 *)loc)
+> +			if ((s64)val != *(s32 *)&val)
+>  				goto overflow;
+>  #endif
+
+Why is the compiled-out code getting changed?  Is it actually fixing a
+hypothetical bug?
+
+This code really needs to be removed anyway, it's been dead for at least
+15 years.
+
+>  			break;
+>  		case R_X86_64_PC64:
+> -			if (*(u64 *)loc != 0)
+> -				goto invalid_relocation;
+>  			val -= (u64)loc;
+> -			write(loc, &val, 8);
+> +			write_size = 8;
+>  			break;
+>  		default:
+>  			pr_err("%s: Unknown rela relocation: %llu\n",
+>  			       me->name, ELF64_R_TYPE(rel[i].r_info));
+>  			return -ENOEXEC;
+>  		}
+> +
+> +		if (apply) {
+> +			if (memcmp(loc, &zero, write_size)) {
+> +				pr_err("x86/modules: Skipping invalid relocation target, existing value is nonzero for type %d, loc %p, val %Lx\n",
+
+It's not just "skipping", it's erroring out completely.  Yes, it's is a
+pre-existing error message but we might as well improve it while
+touching it.
+
+Maybe just remove the "Skipping", i.e. change "Skipping invalid ..." to
+"Invalid ..." ?
+
+> +				       (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
+> +				return -ENOEXEC;
+> +			}
+> +			write(loc, &val, write_size);
+> +		} else {
+> +			if (memcmp(loc, &val, write_size)) {
+> +				pr_warn("x86/modules: Clearing invalid relocation target, existing value does not match expected value for type %d, loc %p, val %Lx\n",
+> +					(int)ELF64_R_TYPE(rel[i].r_info), loc, val);
+> +			}
+> +			write(loc, &zero, write_size);
+
+If the value doesn't match then something has gone badly wrong.  Why go
+ahead with the clearing in that case?
+
+> +#ifdef CONFIG_LIVEPATCH
+> +
+> +void clear_relocate_add(Elf64_Shdr *sechdrs,
+> +			const char *strtab,
+> +			unsigned int symindex,
+> +			unsigned int relsec,
+> +			struct module *me)
+> +{
+> +	write_relocate_add(sechdrs, strtab, symindex, relsec, me, false);
+> +}
+> +#endif
+
+Superflous newline after the '#ifdef CONFIG_LIVEPATCH'.
+
+> +
+>  #endif
+>  
+>  int module_finalize(const Elf_Ehdr *hdr,
+> diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+> index 7b4587a19189..0b54ec9856df 100644
+> --- a/include/linux/moduleloader.h
+> +++ b/include/linux/moduleloader.h
+> @@ -75,6 +75,13 @@ int apply_relocate_add(Elf_Shdr *sechdrs,
+>  		       unsigned int symindex,
+>  		       unsigned int relsec,
+>  		       struct module *mod);
+> +#ifdef CONFIG_LIVEPATCH
+
+This could use a comment explaining the purpose of this function:
+
+/*
+ * Some architectures (namely x86_64 and ppc64) perform sanity checks when
+ * applying relocations.  If a patched module gets unloaded and then later
+ * reloaded (and re-patched), klp re-applies relocations to the replacement
+ * function(s).  Any leftover relocations from the previous loading of the
+ * patched module might trigger the sanity checks.
+ *
+ * To prevent that, when unloading a patched module, clear out any relocations
+ * that might trigger arch-specific sanity checks on a future module reload.
+ */
+
+> +void clear_relocate_add(Elf_Shdr *sechdrs,
+> +		   const char *strtab,
+> +		   unsigned int symindex,
+> +		   unsigned int relsec,
+> +		   struct module *me);
+> +#endif
+
+
+-- 
+Josh
