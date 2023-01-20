@@ -2,260 +2,85 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89A78C6379F
-	for <linux-modules@archiver.kernel.org>; Thu, 19 Jan 2023 23:38:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5DB6C46467
+	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 00:08:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjASXiB (ORCPT
+        id S229478AbjATAIa (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 19 Jan 2023 18:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        Thu, 19 Jan 2023 19:08:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjASXh7 (ORCPT
+        with ESMTP id S229684AbjATAI3 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 19 Jan 2023 18:37:59 -0500
+        Thu, 19 Jan 2023 19:08:29 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7EB37F29;
-        Thu, 19 Jan 2023 15:37:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5D1A25AE
+        for <linux-modules@vger.kernel.org>; Thu, 19 Jan 2023 16:08:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3bFcAmrUNZByWsKADlIMkrUGMQdyY3YOwND5QaxPXD0=; b=sAhZRTjePyXmpkMA+IBZCV/UVi
-        SegprcJoEyJMLbLSphnSfQZGmUSaAFqvF6D272hYtokhTx9wZN2IC8mZB9vaiRMcnGkX8ms1n8yA8
-        wGSt06BQr2VM20FF2l6SndZiKujwlk/0YkcRBWT/1TyevKCQ/uTTDMODRhtcT2XD5N+iEJJePC1Gw
-        NVvM16p15JWzUIOvdc3ltmHVgHQ0Ei4bqXmYxh6rsKZieEYIcunOgBn8nalyrnokHYJ3yzfLe7bg2
-        H45mKXEBkw65k4B1DOUNcpqok4uIh6gr5HeWbEIRrQavxWFIGkS8iClTHrshNmsMs10olKRUR4A9N
-        +EsuNJcw==;
+        bh=ZiDzJJAeQ0EYh88LzIuW6Tw+q3BThMmeAR6UeNi2sKo=; b=XTqaZWaglqiRIG/j7LXCHTi4ZS
+        Qr/NvLA1v90WZUwjfgi12Tp7nVV2NLTLB4pY7dEoNayG2UNQCkkimv9G8KEIKzC9REu6Je/PT7bnw
+        A1pA4krElN5T0j8ZPplajTwCbXfXxoO2r16Ekb809IWfrHElUbf+09p96XQruN+dAZZKcRUgSGZl5
+        7QkMI81V0EyUtbTI28dg222A18s12kw/dsfOISUhcRVk/BIfpgtEl7WMDNglAC4KMuT11QcYQaWP7
+        jyxe3wfQDnWuJ7BwIOFuUHtqeiPup8clXzLoK2sy8xK+Q5SE0hZ50jUo4o70Dk9WyDIz3gLXUPSwA
+        SwaaeSbw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pIeTY-007dU3-La; Thu, 19 Jan 2023 23:37:44 +0000
-Date:   Thu, 19 Jan 2023 15:37:44 -0800
+        id 1pIexD-007hDz-MN; Fri, 20 Jan 2023 00:08:24 +0000
+Date:   Thu, 19 Jan 2023 16:08:23 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        NeilBrown <neilb@suse.de>, Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y8nUSL8VSiDIVYCb@bombadil.infradead.org>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
- <Y5hRRnBGYaPby/RS@alley>
- <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
- <Y8hQbC3wvu1S+uZ5@zn.tnic>
- <Y8ibg2cB4gB2gQ8f@bombadil.infradead.org>
+To:     Chandler Sobel-Sorenson <chandler@genome.arizona.edu>
+Cc:     linux-modules@vger.kernel.org
+Subject: Re: When adding a module, what does "Exec format error" / "Skipping
+ invalid relocation target" mean, and how to fix it?
+Message-ID: <Y8nbdxufr3ysl+wi@bombadil.infradead.org>
+References: <0f95a92e-d898-562e-06d9-8e0456062e36@genome.arizona.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8ibg2cB4gB2gQ8f@bombadil.infradead.org>
+In-Reply-To: <0f95a92e-d898-562e-06d9-8e0456062e36@genome.arizona.edu>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jan 18, 2023 at 05:23:15PM -0800, Luis Chamberlain wrote:
-> On Wed, Jan 18, 2023 at 09:02:52PM +0100, Borislav Petkov wrote:
-> > On Tue, Jan 17, 2023 at 04:04:22PM -0800, Luis Chamberlain wrote:
-> > > and now I'm seeing this while trying to build v5.1:
-> > > 
-> > > ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple definition of `__force_order';
-> > > arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
-> > 
-> > You need to backport 
-> > 
-> > aa5cacdc29d7 ("x86/asm: Replace __force_order with a memory clobber")
-> > 
-> > for that.
-> > 
-> > Happens when building older kernels with newer toolchain.
+On Tue, Jan 17, 2023 at 05:42:38PM -0700, Chandler Sobel-Sorenson wrote:
 > 
-> Thanks that certainly helps. FWIW if someone needs it, I had to remove
-> the double colons on write cr0 and cr4 to compile, but this crashed :(
-> Any ideas?
+> # modprobe -v qat_c62x
+> insmod /lib/modules/4.19.0-5-amd64/updates/drivers/crypto/qat/qat_common/intel_qat.ko
+> modprobe: ERROR: could not insert 'qat_c62x': Exec format error
+> 
+> # modprobe -v intel_qat
+> insmod /lib/modules/4.19.0-5-amd64/updates/drivers/crypto/qat/qat_common/intel_qat.ko
+> modprobe: ERROR: could not insert 'intel_qat': Exec format error
 
-The issue was my write for cr0 and cr4 didn't have r+, so:
+As of v5.10 we now have merged commit 14721add58ef267344bee254bc276c9139b7b665 
+("module: Add more error message for failed kernel module loading")
+which helps expand on this being more friendly:
 
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index 5586e4cf62d3..e4da7248edcf 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -26,7 +26,7 @@ static inline unsigned long native_read_cr0(void)
- 
- static inline void native_write_cr0(unsigned long val)
- {
--	asm volatile("mov %0,%%cr0": : "r" (val) : "memory");
-+	asm volatile("mov %0,%%cr0": "+r" (val) : : "memory");
- }
- 
- static inline unsigned long native_read_cr2(void)
-@@ -75,7 +75,7 @@ static inline unsigned long native_read_cr4(void)
- 
- static inline void native_write_cr4(unsigned long val)
- {
--	asm volatile("mov %0,%%cr4": : "r" (val) : "memory");
-+	asm volatile("mov %0,%%cr4": "+r" (val) : : "memory");
- }
- 
- #ifdef CONFIG_X86_64
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=14721add58ef267344bee254bc276c9139b7b665
 
-The complete patch below now boots on v5.2 however this still ends up in
-a panic, it dies on cpu_startup_entry().
+> #
+> 
+> Meanwhile, the system log shows:
+> 
+> <date> <host> kernel: [<uptime>] module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 1, loc 000000005c09d38d, val ffffffffc09ba2fe
+> <date> <host> kernel: [<uptime>] module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 1, loc 00000000690eef73, val ffffffffc0b572fe
+> <date> <host> kernel: [<uptime>] module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 1, loc 000000007d30ad16, val ffffffffc0c862fe
+> <date> <host> kernel: [<uptime>] module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 1, loc 00000000671d2da7, val ffffffffc0cd82fe
+> <date> <host> kernel: [<uptime>] module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 1, loc 0000000072877855, val ffffffffc0d2a2fe
+> 
+> What are these errors even talking about, what is the cause, and possible solutions?
+> 
+> Thanks so much!
 
-[    0.595694] x86: Booting SMP configuration:
-[    0.596807] .... node  #0, CPUs:      #1
-[    0.264759] kvm-clock: cpu 1, msr 15edff041, secondary cpu clock
-[    0.264759] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_secondary+0x1c6/0x1d0
-[    0.264759] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.2.0+ #5
-[    0.264759] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
-[    0.264759] Call Trace:
-[    0.264759]  dump_stack+0x5c/0x80
-[    0.264759]  panic+0x102/0x2f5
-[    0.264759]  ? start_secondary+0x1c6/0x1d0
-[    0.264759]  __stack_chk_fail+0x15/0x20
-[    0.264759]  start_secondary+0x1c6/0x1d0
-[    0.264759]  secondary_startup_64+0xa4/0xb0
-[    0.264759] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: start_secondary+0x1c6/0x1d0 ]---
+That's from apply_relocate_add(). The locs are supposed to be
+0 and they are not so it bails. That relocation type is 1 so
+R_X86_64_64.
 
-(gdb) l *(start_secondary+0x1c6)
-0xffffffff810506e6 is at arch/x86/kernel/smpboot.c:265.
-260             boot_init_stack_canary();
-261
-262             x86_cpuinit.setup_percpu_clockev();
-263
-264             wmb();
-265             cpu_startup_entry(CPUHP_AP_ONLINE_IDLE);
-266     }
-267
-268     /**
-269      * topology_is_primary_thread - Check whether CPU is the primary SMT thread
+https://en.wikipedia.org/wiki/Relocation_(computing)
 
+Did you really build the module yourself? It doesn't even seem
+you have kernel headers.
 
-The full attempt to backport aa5cacdc29d7 to v5.2:
-
-diff --git a/arch/x86/boot/compressed/kaslr_64.c b/arch/x86/boot/compressed/kaslr_64.c
-index 748456c365f4..9557c5a15b91 100644
---- a/arch/x86/boot/compressed/kaslr_64.c
-+++ b/arch/x86/boot/compressed/kaslr_64.c
-@@ -29,9 +29,6 @@
- #define __PAGE_OFFSET __PAGE_OFFSET_BASE
- #include "../../mm/ident_map.c"
- 
--/* Used by pgtable.h asm code to force instruction serialization. */
--unsigned long __force_order;
--
- /* Used to track our page table allocation area. */
- struct alloc_pgt_data {
- 	unsigned char *pgt_buf;
-diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
-index f8debf7aeb4c..7471b48524cb 100644
---- a/arch/x86/boot/compressed/pgtable_64.c
-+++ b/arch/x86/boot/compressed/pgtable_64.c
-@@ -5,15 +5,6 @@
- #include "pgtable.h"
- #include "../string.h"
- 
--/*
-- * __force_order is used by special_insns.h asm code to force instruction
-- * serialization.
-- *
-- * It is not referenced from the code, but GCC < 5 with -fPIE would fail
-- * due to an undefined symbol. Define it to make these ancient GCCs work.
-- */
--unsigned long __force_order;
--
- #define BIOS_START_MIN		0x20000U	/* 128K, less than this is insane */
- #define BIOS_START_MAX		0x9f000U	/* 640K, absolute maximum */
- 
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index 0a3c4cab39db..e4da7248edcf 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -7,49 +7,50 @@
- 
- #include <asm/nops.h>
- 
-+#define __FORCE_ORDER "m"(*(unsigned int *)0x1000UL)
-+
- /*
-- * Volatile isn't enough to prevent the compiler from reordering the
-- * read/write functions for the control registers and messing everything up.
-- * A memory clobber would solve the problem, but would prevent reordering of
-- * all loads stores around it, which can hurt performance. Solution is to
-- * use a variable and mimic reads and writes to it to enforce serialization
-+ * The compiler should not reorder volatile asm statements with respect to each
-+ * other: they should execute in program order. However GCC 4.9.x and 5.x have
-+ * a bug (which was fixed in 8.1, 7.3 and 6.5) where they might reorder
-+ * volatile asm. The write functions are not affected since they have memory
-+ * clobbers preventing reordering. To prevent reads from being reordered with
-+ * respect to writes, use a dummy memory operand
-  */
--extern unsigned long __force_order;
--
- static inline unsigned long native_read_cr0(void)
- {
- 	unsigned long val;
--	asm volatile("mov %%cr0,%0\n\t" : "=r" (val), "=m" (__force_order));
-+	asm volatile("mov %%cr0,%0\n\t" : "=r" (val) : __FORCE_ORDER);
- 	return val;
- }
- 
- static inline void native_write_cr0(unsigned long val)
- {
--	asm volatile("mov %0,%%cr0": : "r" (val), "m" (__force_order));
-+	asm volatile("mov %0,%%cr0": "+r" (val) : : "memory");
- }
- 
- static inline unsigned long native_read_cr2(void)
- {
- 	unsigned long val;
--	asm volatile("mov %%cr2,%0\n\t" : "=r" (val), "=m" (__force_order));
-+	asm volatile("mov %%cr2,%0\n\t" : "=r" (val) : __FORCE_ORDER);
- 	return val;
- }
- 
- static inline void native_write_cr2(unsigned long val)
- {
--	asm volatile("mov %0,%%cr2": : "r" (val), "m" (__force_order));
-+	asm volatile("mov %0,%%cr2": : "r" (val) : "memory");
- }
- 
- static inline unsigned long __native_read_cr3(void)
- {
- 	unsigned long val;
--	asm volatile("mov %%cr3,%0\n\t" : "=r" (val), "=m" (__force_order));
-+	asm volatile("mov %%cr3,%0\n\t" : "=r" (val) : __FORCE_ORDER);
- 	return val;
- }
- 
- static inline void native_write_cr3(unsigned long val)
- {
--	asm volatile("mov %0,%%cr3": : "r" (val), "m" (__force_order));
-+	asm volatile("mov %0,%%cr3": : "r" (val) : "memory");
- }
- 
- static inline unsigned long native_read_cr4(void)
-@@ -64,17 +65,17 @@ static inline unsigned long native_read_cr4(void)
- 	asm volatile("1: mov %%cr4, %0\n"
- 		     "2:\n"
- 		     _ASM_EXTABLE(1b, 2b)
--		     : "=r" (val), "=m" (__force_order) : "0" (0));
-+		     : "=r" (val) : "0" (0), __FORCE_ORDER);
- #else
- 	/* CR4 always exists on x86_64. */
--	asm volatile("mov %%cr4,%0\n\t" : "=r" (val), "=m" (__force_order));
-+	asm volatile("mov %%cr4,%0\n\t" : "=r" (val) : __FORCE_ORDER);
- #endif
- 	return val;
- }
- 
- static inline void native_write_cr4(unsigned long val)
- {
--	asm volatile("mov %0,%%cr4": : "r" (val), "m" (__force_order));
-+	asm volatile("mov %0,%%cr4": "+r" (val) : : "memory");
- }
- 
- #ifdef CONFIG_X86_64
--- 
-2.35.1
-
+  Luis
