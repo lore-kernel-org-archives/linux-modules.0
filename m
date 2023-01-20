@@ -2,83 +2,90 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F5BFC46467
-	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 00:59:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D60C6C004D4
+	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 01:30:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjATA7J (ORCPT
+        id S229631AbjATBaV (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 19 Jan 2023 19:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        Thu, 19 Jan 2023 20:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjATA7A (ORCPT
+        with ESMTP id S229509AbjATBaT (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 19 Jan 2023 19:59:00 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5D6A1028;
-        Thu, 19 Jan 2023 16:59:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=O0jjZ5OmxPI6bfuCs0idbFiSez3jFaKnyKag6lKe1K0=; b=Il0ksPuIMLNEnUqapwwrniFIOs
-        NsghiibFEhrl4DK0aWija5Yo3kWmNPhTX57hHybQHeS75WdYOlEA52cAEO53vbIDtcbyctXB0Wj6U
-        8Rswx63LxU+IcmZB8KMl8h7OsqgeXrhAJRTdrlyM/lrkQ9exCIMoi8CoN9QuSt5hc5NbUjDLpv/b1
-        5/e4lroUY67x+YNyWSI7X9m7eYxiWKeqFMRYZxvFjxJpX9jXCXHAmIWlLJpcV8YNc+jZd8189xl/2
-        RnQuJppOkC6z4LwiTPWY+0ntxJ2yc1WNWyHngM58IRBgCEqBbXlNWre1yrpsLXbP0HU3de9zycgJd
-        h2mCyieg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pIfk5-007qLY-43; Fri, 20 Jan 2023 00:58:53 +0000
-Date:   Thu, 19 Jan 2023 16:58:53 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
- <Y5hRRnBGYaPby/RS@alley>
- <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
- <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
- <Y8ll+eP+fb0TzFUh@alley>
- <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
+        Thu, 19 Jan 2023 20:30:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB904F355;
+        Thu, 19 Jan 2023 17:30:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 982FA61DD3;
+        Fri, 20 Jan 2023 01:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7C21C433F1;
+        Fri, 20 Jan 2023 01:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674178217;
+        bh=y0WMSXaWfNZ1D7CpsRFRbTx5lwlDTZw1fj+Z3txRgkw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EleMx3DOl0FetT8mhi7z3gEb0AhNJOh7HRMuz6rlrkO9/3rzHlsbIuoZUP4JBUl1z
+         lX7nBh/R+fAFVWHZJIUKor97VmJVy5eLnYxFW9LwFkfdJbimKEtWd9y7JnQHVF+euO
+         KEE+nWyQPGdUvonR7G/RqClJup0gUBdWJiOYO8lm8juzF7aX4kAZZesggP9+pH3y8p
+         iOSlSZwAM9JEEQwOsJhJi3YH4MlvbQ/Mr4Z3dCO39ciS61iHjmuEfAbUnBCs1yI7HS
+         mN+x/uhdcLSwPecci2e4WTFzIea+M7t2j+r//qzriZ1KQTlxDQfOJuT9Tx4bo5Fz2N
+         n4e3okeV1wBmA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C9CC8C4314C;
+        Fri, 20 Jan 2023 01:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCHv3 bpf-next 0/3] kallsyms: Optimize the search for module
+ symbols by livepatch and bpf
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167417821682.1146.2462134173211926226.git-patchwork-notify@kernel.org>
+Date:   Fri, 20 Jan 2023 01:30:16 +0000
+References: <20230116101009.23694-1-jolsa@kernel.org>
+In-Reply-To: <20230116101009.23694-1-jolsa@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+        pmladek@suse.com, thunder.leizhen@huawei.com, bpf@vger.kernel.org,
+        live-patching@vger.kernel.org, linux-modules@vger.kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, sdf@google.com,
+        haoluo@google.com, joe.lawrence@redhat.com, rostedt@goodmis.org,
+        mhiramat@kernel.org, mark.rutland@arm.com, mcgrof@kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jan 19, 2023 at 04:51:27PM -0800, Luis Chamberlain wrote:
-> On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
-> > Yes, the -EINVAL error is strange. It is returned also in
-> > kernel/module/main.c on few locations. But neither of them
-> > looks like a good candidate.
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Mon, 16 Jan 2023 11:10:06 +0100 you wrote:
+> hi,
+> sending new version of [1] patchset posted originally by Zhen Lei.
+> It contains 2 changes that improove search performance for livepatch
+> and bpf.
 > 
-> OK I updated to next-20230119 and I don't see the issue now.
-> Odd. It could have been an issue with next-20221207 which I was
-> on before.
+> v3 changes:
+>   - fixed off by 1 issue, simplified condition, added acks [Song]
+>   - added module attach as subtest [Andrii]
 > 
-> I'll run some more test and if nothing fails I'll send the fix
-> to Linux for rc5.
+> [...]
 
-Jeesh it just occured to me the difference, which I'll have to
-test next, for next-20221207 I had enabled module compression
-on kdevops with zstd.
+Here is the summary with links:
+  - [PATCHv3,bpf-next,1/3] livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
+    https://git.kernel.org/bpf/bpf-next/c/07cc2c931e8e
+  - [PATCHv3,bpf-next,2/3] selftests/bpf: Add serial_test_kprobe_multi_bench_attach_kernel/module tests
+    https://git.kernel.org/bpf/bpf-next/c/edac4b5b185e
+  - [PATCHv3,bpf-next,3/3] bpf: Change modules resolving for kprobe multi link
+    https://git.kernel.org/bpf/bpf-next/c/6a5f2d6ee8d5
 
-You can see the issues on kdevops git log with that... and I finally
-disabled it and the kmod test issue is gone. So it could be that
-but I just am ending my day so will check tomorrow if that was it.
-But if someone else beats me then great.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-With kdevops it should be a matter of just enabling zstd as I
-just bumped support for next-20230119 and that has module decompression
-disabled.
 
-  Luis
