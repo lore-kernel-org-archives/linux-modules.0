@@ -2,152 +2,127 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D68CC38159
-	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 06:42:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B2B0C25B4E
+	for <linux-modules@archiver.kernel.org>; Fri, 20 Jan 2023 16:16:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjATGmU (ORCPT
+        id S229583AbjATQQZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 20 Jan 2023 01:42:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        Fri, 20 Jan 2023 11:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjATGmU (ORCPT
+        with ESMTP id S229529AbjATQQY (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:42:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6C5442D8;
-        Thu, 19 Jan 2023 22:42:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1E7C61E33;
-        Fri, 20 Jan 2023 06:42:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA584C433D2;
-        Fri, 20 Jan 2023 06:42:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674196938;
-        bh=wwJVcJQUv8XiC8YzqdgOk3HZ74a4rucKStR7XI3+h44=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yl/sFBrH/7b0jehlOlZsG1/AQDxQoNoOJJpgscX+CjP9CpwCGPkeCmRiKw9b3iK11
-         Wp/YzIIdhI8qEPJd4Eyvc2ttlukHAABbJ4PMqxCb73GqeIFdsHW/o5Rq20OD70IEhN
-         X/vYfqypuazJ5tv5Z5VwZfkkJ00qKIb8Mcr65CLGSl01I5iDhK1+PNvJlRHlN/oZTH
-         lSoqjA5YKvCokrLKiAXquwcj/srOEQ75cunKxXsRd/qX0tdyssWrJKfCqV9my9cKT9
-         gtqB+jR/V5fr7gcAWLR5k1gZO3YFP2mWWxf9zQqKaVuUAFhunJE3exOagi2bcgMkY7
-         93E9iSGiSeSpA==
-Date:   Thu, 19 Jan 2023 22:42:15 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
-        pmladek@suse.com, joe.lawrence@redhat.com,
-        Miroslav Benes <mbenes@suse.cz>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <20230120064215.cdyfbjlas5noxam6@treble>
-References: <20230118204728.1876249-1-song@kernel.org>
- <20230118220812.dvztwhlmliypefha@treble>
- <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
+        Fri, 20 Jan 2023 11:16:24 -0500
+Received: from esa.hc4604-54.iphmx.com (esa.hc4604-54.iphmx.com [207.54.93.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448C37CCF6
+        for <linux-modules@vger.kernel.org>; Fri, 20 Jan 2023 08:16:23 -0800 (PST)
+X-IPAS-Result: =?us-ascii?q?A2GmAQCCvcpjAIilh5YNTYEJCYFGgzSBWIRPkHEuA51Rg?=
+ =?us-ascii?q?Sw+BgkBAQEPPQcEAQEDBIIMgXOBAAKFHyY3Bg4BAhkBAQEFAQEBAQEBBgIBA?=
+ =?us-ascii?q?QEBAgwBOlKFLzmCRSIZZFM1AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQESAg1SM?=
+ =?us-ascii?q?UcBAQECASMPAQU6BwULCw4MAh8HAgJXBg0IAQGCegGCfzafXAGKIHqBMoEBn?=
+ =?us-ascii?q?0MJgW4GgRQtkSBDgg2BPAwDgj0HMD6CSxcCAgEXgSyDcoJnBIIuAZBih3cKg?=
+ =?us-ascii?q?Tt8gScOgUiBGgIJAhNUJQQOAxkrHUACAQs7Mgo/ATUJAgtKKxMHGweBCCooF?=
+ =?us-ascii?q?QMEBAMCBhMDIgINKDEUBCkTDScmaQkCAyFhBQMDBCgtCT8HFREkPAdWNwEFA?=
+ =?us-ascii?q?g8fNwYDCQMCH09aFgIuERMFAwsVKkcECDYFBhs2EgIIDxIPBiZDDkIhFjQTB?=
+ =?us-ascii?q?lwBHA0LDhEDUDiBFQQvgWcGKSicc4MaBDMIFwp6gS0ykiWRAIEwnheDeotbl?=
+ =?us-ascii?q?HkGDwQuqSqXS41OmkGBeIIAMxoIHRODI1EojiwWFYhPhWpXCTACBwEKAQEDC?=
+ =?us-ascii?q?YwjAQE?=
+IronPort-PHdr: A9a23:Ss4x5h/dQ/fka/9uWXa7ngc9DxPPW53KNwIYoqAql6hJOvz6uci4Y
+ QqGvK8m3ACBdL6YwswHotKei7rnV20E7MTJm1E5W7sIaSU4j94LlRcrGs+PBB6zBvfraysnA
+ JYKDwc9rDm0PkdPBcnxeUDZrGGs4j4OABX/Mhd+KvjoFoLIgMm7yeC/94fObwlVmjaxbrB/I
+ RerpgjNq8cahpdvJak2xhbVuHVDZv5YxXlvJVKdnhb84tm/8Zt++ClOuPwv6tBNX7zic6s3U
+ bJXAjImM3so5MLwrhnMURGP5noHXWoIlBdDHhXI4wv7Xpf1tSv6q/Z91SyHNsD4Ubw4RTKv5
+ LptRRT1iikIKiQ5/XnUhMJ+g61UrhKvqQFhzYPKboGVM/hxcb/Sc94BWWpMXdxcWzBdDo6yb
+ YYCCfcKM+ZCr4n6olsDtQWzBQm2C+Pp1zBIgmH53bcn2Oo8FgHJxxIvH9YXvHrJq9X1LrkdU
+ eauzKnPyzXIcvRb1iv96IfSdBAuvPWMUqxqccfKxkkgCQXFjlKVqYP7JT+azP4Ns2ma7upnU
+ +KgkXQrpB9srTiy38ohjJTCiY0JxF7e7yp53Jo1KsOiSE59edOqH4ZcuiGHOodrQs0vQm9lt
+ To6xLAYpJK2eDYHxIg5yhPDd/GKfZWE7g/iWeuRITl1gGxodK+/iRqv/katyOLyW8+p21hEq
+ SpFl8PDtnEL1xHL6ciIVOF9/kG/1jaLzQzT7ftEIU8smavVKp4hwb8wloINvkveHy/5gl/6j
+ KiMdkUr/OWj9ufpYq3+q5OBN4J4lhvyPrkgl8G/G+g0LwkDUmiB9eih2rDu/Ev0S6hQgPIsi
+ KnWqpXaKNwepq6+HgBazJ4u6w26Dze6yNQYmmQHLE5ddBKHkYfpP1bOLej8Avuin1igiipny
+ v7FM7H7AJjAKmLPnKrucLty7UFQ0AszzdZB6JJIErwNPfL+VlPruNDFABI0Mxa4z/vmBdh9z
+ I8SRGyCD66BPKPXq1CI5+YvI+eWZI8SvTbwM+Qq5/70gn8/hFAdebem3YEMZXC3APtmJUKZY
+ X/yjdsbC2gKpAs+Te3tiF2ESzFffWi9UL8h5j0jDoKpFp/MRpqxj7yZwCe7AppWa3hYBlyUC
+ 3fna52EW+sQaCKVOsJhlyALVbe7S48m2xGjrwz6xKR9LurS5CIYsYjv1N9v5+3cjR0y7yB7D
+ 9yB02GRSGF5hmcIRz4w3KBirk1x01KD0a9ljPxFEdxc+ehJXxwkNZ7T0eN6Ecr+WgHfcdeTT
+ lapXNGmDSs2TtIrzN9dK3p6TvG/jwuL9CqjBrUYjbiCBZp8pqfX0GL2Ke5+xmzA2a1niEMpF
+ JhhL2qj04V//g7fA4PT236enauuMJ8bxiPL72CFhT6FvEheXAp9S43KUHYYY0aQpM749ETER
+ vmjBalxYVgJ8tKLNqYfMo6htl5BXvq2YLzj
+IronPort-Data: A9a23:c2lriKOKU+9zDUnvrR2Cl8FynXyQoLVcMsEvi/4bfWQNrUok3jEBz
+ 2ZJCD+Gbv7eZTOhLYonbdy0/ExQ7J+Dx9NmQQZtpSBmQlt08vbIVI+TRqvS04F+DeWYFR46s
+ J9OAjXkBJppJpMJjk71atANlVEliefTAOK5ULSfUsxIbVcMYD87jh5+kPIOjIdtgNyoayuAo
+ tq3qMDEULOf82cc3lk8tuTS93uDgNyo4GlD5gVkPagR1LPjvyB94Kw3dPnZw0TQGuG4LsbiL
+ 87fwbew+H/u/htFIrtJRZ6iLyXm6paLVeS/oiI+t5qK23CulQRrukoPD8fwXG8M49m/c3Kd/
+ /0W3XC4YV9B0qQhA43xWTEAe811FfQuFLMqvRFTGCFcpqHLWyKE/hlgMK05FaMT3LsvJ15Sz
+ PwnDmE2aQHEhbKskIvuH4GAhux7RCXqFLBG4jc5lmGfUqdgGMyfds0m5/cBgW9235sTW6+AO
+ oxAMmQHgBfoOnWjPn8cCJs4kOOlnFHwfjtfrV/TrLA28W/VxUp83KWF3N/9I43UH58JwhvEz
+ o7A1z2hAQ0rBfai8jqmySy3lsHUnQjqUatHQdVU8dY03wXInDx75ActfV6wruO+hGa9VshZJ
+ khS/TAhxYA29Uq2Xpz4WBGlpHOflgATVsAWEOAg7gyJjK3O7G6k6nMsF2UfLYV46YpvHmFvj
+ wLR2d/4AzVqsbbTQGic5LCSpHW/NTV9wXI+iTEsYwAjvoHFn50Kji3pH+1kAem33selIGSlq
+ 9yVlxTSl4n/nOZSifrnpACe2Gn8znTaZlVvvFiPBQpJ+is8Pdf9NtD1sTA3+N4adN7xc7WXg
+ JQTdyFyBsgyEJqWkyrlrA4lTOz2vqft3NExhTdS83gdG9eFoiDLkXh4um0WGauQGp9slcXVS
+ EHSoxhNw5RYIWGna6R6C6roVZt2lPW7TY+4C6iOBjarXnSXXFTYlM2JTRLJt10BbGB3+U3CE
+ c7HIJv0UR7294w+kmLeqxghPU8DmH9mnjmDLXwK5wmh0KSTfmWUVaZNN1XGZ/o4/qSCqW3oH
+ yV3a6O3J+FkeLCjMkHqHXs7aAlSdRDX87in9JcMHgNCSyI/cFwc5wj5mut7JtY7wPoKzo8lP
+ BiVAydl9bY2vlWfQS3iV5ypQOi0Df6TcVpT0fQQAGuV
+IronPort-HdrOrdr: A9a23:Kok5+KDuS3FkOVvlHegmsceALOsnbusQ8zAXPh9KJCC9I/bzqy
+ nxpp8mPEfP+U0ssHFJo6HiBEDyewKnyXcV2/hYAV7GZmXbUQSTXeZfBOfZogEIXheOjtK1tp
+ 0QOJSWaueAa2SS5PySiGbXLz9j+qj/zEnCv5a9854Zd3APV0gW1XYdNu/0KC1LbTgDIaB8OI
+ uX58JBqTblU28QdN6HCn4MWPWGj8HXlbr9CCR2SiIP2U2rt3eF+bT6Gx+X0lM1SDVU24ov9m
+ DDjkjQ+rijifem0RXRvlWjo6i+2eGRheerNvb8y/T9GQ+cyjpAo74RGIFqiQpF7t1HLmxa0u
+ Uk7S1QeviboEmhA11d6SGdpzUIlgxeoUMKgGXo/kfLsIj3Qik3BNFGgp8cehzF61A4tNU5y6
+ 5T2XmF3qAnei8osR6NkuQgbSsa4nacsD4ni6oennZfWYwRZPtYqpEe5lpcFNMFEDjh4I4qHe
+ FyBIWEjcwmOG+yfjTcpC1i0dasVnM8ElOPRVUDoNWc13xTkGpix0UVycQDljML9Y47SZND++
+ PYW54Y4o1mX4sTd+ZwFe0BScy4BijERg/NKnubJRD9GKQOKxv22uzKCXUOlZKXkbAzvesPcc
+ 76IS1lXEYJCjPTNfE=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.97,232,1669100400"; 
+   d="scan'208";a="196224454"
+Received: from 136-165-135-150.dynamic.arizona.edu (HELO [10.138.79.144]) ([150.135.165.136])
+  by esa6.hc4604-54.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 09:14:16 -0700
+Message-ID: <4401797a-add3-86d8-9283-0ccb3c04f541@genome.arizona.edu>
+Date:   Fri, 20 Jan 2023 09:14:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.0
+From:   Chandler Sobel-Sorenson <chandler@genome.arizona.edu>
+Subject: Re: [EXT]Re: When adding a module, what does "Exec format error" /
+ "Skipping invalid relocation target" mean, and how to fix it?
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-modules@vger.kernel.org
+References: <0f95a92e-d898-562e-06d9-8e0456062e36@genome.arizona.edu>
+ <Y8nbdxufr3ysl+wi@bombadil.infradead.org>
+Content-Language: en-US
+Organization: Arizona Genomics Institute
+In-Reply-To: <Y8nbdxufr3ysl+wi@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jan 19, 2023 at 11:06:35AM -0800, Song Liu wrote:
-> On Wed, Jan 18, 2023 at 2:08 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> >
-> > On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
-> > > From: Miroslav Benes <mbenes@suse.cz>
-> > >
-> > > Josh reported a bug:
-> > >
-> > >   When the object to be patched is a module, and that module is
-> > >   rmmod'ed and reloaded, it fails to load with:
-> > >
-> > >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> > >
-> > >   The livepatch module has a relocation which references a symbol
-> > >   in the _previous_ loading of nfsd. When apply_relocate_add()
-> > >   tries to replace the old relocation with a new one, it sees that
-> > >   the previous one is nonzero and it errors out.
-> > >
-> > >   On ppc64le, we have a similar issue:
-> > >
-> > >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
-> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> >
-> > Shouldn't there also be a fix for this powerpc issue?
-> 
-> There was a working version, but it was not very clean. We couldn't agree
-> on the path forward for powerpc, so we are hoping to ship the fix to x86 (and
-> s390?) first [1].
+Luis Chamberlain wrote on 1/19/23 5:08 PM:
+> As of v5.10 we now have merged commit 14721add58ef267344bee254bc276c9139b7b665
+> ("module: Add more error message for failed kernel module loading")
+> which helps expand on this being more friendly:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=14721add58ef267344bee254bc276c9139b7b665
 
-Sorry for coming in late, I was on leave so I missed a lot of the
-discussions on previous versions.  The decision to leave powerpc broken
-wasn't clear from reading the commit message.  The bug is mentioned, and
-the fix is implied, but surprisingly there's no fix.
-
-I agree that the powerpc fix should be in a separate patch, but I still
-don't feel comfortable merging the x86 fix without the corresponding
-powerpc fix.
-
-powerpc is a major arch and not a second-class citizen.  If we don't fix
-it now then it'll probably never get fixed until it blows up in the real
-world.
-
-For powerpc, instead of clearing, how about just "fixing" the warning
-site, something like so (untested)?
+Thanks Luis!  Can we interpret these commit insertions in relation to this error from 4.19?  So "Exec format error" is really meaning "bad WRITE|EXEC flags"?  or are we still stuck in the dark?
 
 
-diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-index 1096d6b3a62c..1a12463ba674 100644
---- a/arch/powerpc/kernel/module_64.c
-+++ b/arch/powerpc/kernel/module_64.c
-@@ -499,9 +499,11 @@ static unsigned long stub_for_addr(const Elf64_Shdr *sechdrs,
- 
- /* We expect a noop next: if it is, replace it with instruction to
-    restore r2. */
--static int restore_r2(const char *name, u32 *instruction, struct module *me)
-+static int restore_r2(const char *name, u32 *instruction, struct module *me,
-+		      bool klp_sym)
- {
- 	u32 *prev_insn = instruction - 1;
-+	u32 insn_val = *instruction;
- 
- 	if (is_mprofile_ftrace_call(name))
- 		return 1;
-@@ -514,9 +516,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
- 	if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
- 		return 1;
- 
--	if (*instruction != PPC_RAW_NOP()) {
-+	/*
-+	 * For a livepatch relocation, the restore r2 instruction might have
-+	 * been previously written if the relocation references a symbol in a
-+	 * module which was unloaded and is now being reloaded.  In that case,
-+	 * skip the warning and instruction write.
-+	 */
-+	if (klp_sym && insn_val == PPC_INST_LD_TOC)
-+		return 0;
-+
-+	if (insn_val != PPC_RAW_NOP()) {
- 		pr_err("%s: Expected nop after call, got %08x at %pS\n",
--			me->name, *instruction, instruction);
-+			me->name, insn_val, instruction);
- 		return 0;
- 	}
- 
-@@ -649,7 +660,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
- 				if (!value)
- 					return -ENOENT;
- 				if (!restore_r2(strtab + sym->st_name,
--							(u32 *)location + 1, me))
-+						(u32 *)location + 1, me,
-+						sym->st_shndx == SHN_LIVEPATCH))
- 					return -ENOEXEC;
- 			} else
- 				value += local_entry_offset(sym);
+> That's from apply_relocate_add(). The locs are supposed to be
+> 0 and they are not so it bails. That relocation type is 1 so
+> R_X86_64_64.
+>
+> https://en.wikipedia.org/wiki/Relocation_(computing)
+
+I can't say I understand much of this, does it mean anything to you, in relation to these particular errors?
+
+
+> Did you really build the module yourself? It doesn't even seem
+> you have kernel headers.
+
+Well, I have to say that GNU make built the module, after I issued `make` command, is that what you mean? `linux-headers-amd64` package is installed and /usr/src/linux-headers-4.19.0-5-amd64/ and `make /usr/src/linux-headers-4.19.0-5-common/ are there.  Plus `make` is entering "/usr/src/linux-headers-4.19.0-5-amd64" to compile the modules
+
+It would be nice to know the actual cause, probably stemming from me and something I did, since:  The previous version of the modules were loaded and working great, in fact system uptime is 741 days now.  I unloaded/removed those modules and uninstalled the old software, then configured, built, and installed the latest version of the driver/modules.  These new modules were also inserted fine several days ago, producing no errors.  In order to help out another user with some troubleshooting, I removed the new modules
+
