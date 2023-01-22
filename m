@@ -2,116 +2,67 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5386C27C76
-	for <linux-modules@archiver.kernel.org>; Sat, 21 Jan 2023 22:40:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72636C38142
+	for <linux-modules@archiver.kernel.org>; Sun, 22 Jan 2023 19:35:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjAUWke (ORCPT
+        id S230241AbjAVTfF (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 21 Jan 2023 17:40:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        Sun, 22 Jan 2023 14:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjAUWkd (ORCPT
+        with ESMTP id S229807AbjAVTfF (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 21 Jan 2023 17:40:33 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7963623672;
-        Sat, 21 Jan 2023 14:40:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=f1sXpB/ldHPBQkMrWpc9cKM6bbQ1+cEzMMxY2SoT348=; b=trVG+VphLGnzZD2GeyrkAXKlN+
-        l+bjro69F9+NpltjaOM1iA4mDQxjUqF62/ZMIk2FKh1e6Gv8jiXgT+2glgfP2iujDwozmUiEhkCRl
-        3vBBNpPvjKhPYTTLkoUOEJ/Lp9JLfXfgmhKYVxOHfaZXREb37bdXSI7+tMI1NFzluzwWxq8/QH4KG
-        2rttHa1Sz4haee+hwLf3W9lNg6PDxvsUo8bFfzgDU9FxKRt5E0AxpvziZ1IS+yAfVgkVxCiYL4vUe
-        soyiawRq09F0C939BXFdQeMmmcMkPpaPkZYQSZFunynYbIysaVtOvZqm3hi/5JL8ZvsL5MYlhBEIc
-        4v8NUDCA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pJMX6-00EcXk-4M; Sat, 21 Jan 2023 22:40:20 +0000
-Date:   Sat, 21 Jan 2023 14:40:20 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Ben Hutchings <benh@debian.org>,
-        Adam Manzanares <a.manzanares@samsung.com>
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y8xp1HReo+ayHU8G@bombadil.infradead.org>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
- <Y5hRRnBGYaPby/RS@alley>
- <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
- <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
- <Y8ll+eP+fb0TzFUh@alley>
- <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
- <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
+        Sun, 22 Jan 2023 14:35:05 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9CE1A965;
+        Sun, 22 Jan 2023 11:35:02 -0800 (PST)
+Received: (Authenticated sender: didi.debian@cknow.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 33606E0003;
+        Sun, 22 Jan 2023 19:34:59 +0000 (UTC)
+From:   Diederik de Haas <didi.debian@cknow.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org (open list:MODULE SUPPORT),
+        linux-kernel@vger.kernel.org (open list:MODULE SUPPORT)
+Cc:     Diederik de Haas <didi.debian@cknow.org>
+Subject: [PATCH] module.h: Fix full name of the GPL
+Date:   Sun, 22 Jan 2023 20:34:43 +0100
+Message-Id: <20230122193443.60267-1-didi.debian@cknow.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jan 19, 2023 at 04:58:53PM -0800, Luis Chamberlain wrote:
-> On Thu, Jan 19, 2023 at 04:51:27PM -0800, Luis Chamberlain wrote:
-> > On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
-> > > Yes, the -EINVAL error is strange. It is returned also in
-> > > kernel/module/main.c on few locations. But neither of them
-> > > looks like a good candidate.
-> > 
-> > OK I updated to next-20230119 and I don't see the issue now.
-> > Odd. It could have been an issue with next-20221207 which I was
-> > on before.
-> > 
-> > I'll run some more test and if nothing fails I'll send the fix
-> > to Linux for rc5.
-> 
-> Jeesh it just occured to me the difference, which I'll have to
-> test next, for next-20221207 I had enabled module compression
-> on kdevops with zstd.
-> 
-> You can see the issues on kdevops git log with that... and I finally
-> disabled it and the kmod test issue is gone. So it could be that
-> but I just am ending my day so will check tomorrow if that was it.
-> But if someone else beats me then great.
-> 
-> With kdevops it should be a matter of just enabling zstd as I
-> just bumped support for next-20230119 and that has module decompression
-> disabled.
+Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
+---
+ include/linux/module.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-So indeed, my suspcions were correct. There is one bug with
-compression on debian:
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 8c5909c0076c..329fa0b56642 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -186,14 +186,14 @@ extern void cleanup_module(void);
+  * The following license idents are currently accepted as indicating free
+  * software modules
+  *
+- *	"GPL"				[GNU Public License v2]
+- *	"GPL v2"			[GNU Public License v2]
+- *	"GPL and additional rights"	[GNU Public License v2 rights and more]
+- *	"Dual BSD/GPL"			[GNU Public License v2
++ *	"GPL"				[GNU General Public License v2]
++ *	"GPL v2"			[GNU General Public License v2]
++ *	"GPL and additional rights"	[GNU General Public License v2 rights and more]
++ *	"Dual BSD/GPL"			[GNU General Public License v2
+  *					 or BSD license choice]
+- *	"Dual MIT/GPL"			[GNU Public License v2
++ *	"Dual MIT/GPL"			[GNU General Public License v2
+  *					 or MIT license choice]
+- *	"Dual MPL/GPL"			[GNU Public License v2
++ *	"Dual MPL/GPL"			[GNU General Public License v2
+  *					 or Mozilla license choice]
+  *
+  * The following other idents are available
+-- 
+2.39.0
 
- - gzip compressed modules don't end up in the initramfs
-
-There is a generic upstream kmod bug:
-
-  - modprobe --show-depends won't grok compressed modules so initramfs
-    tools that use this as Debian likely are not getting module dependencies
-    installed in their initramfs
-
-But using xz compression reveals 4 GiB memory is not enough for kmod.sh
-test 0004, the -EINVAL is due to an OOM hit on modprobe so the request
-fails. That's a test bug.
-
-But increasing memory (8 GiB seems to do it) still reveals kmod.sh test 0009
-does fail, not all the times, and it is why the test runs 150 times if
-you run the test once. The failure is not deterministic but surely fails
-for me every time at least once out of the 150 runs. Test 0009 tries to
-trigger running kmod_concurrent over max_modprobes for get_fs_type(). 
-
-I'm trying to test to see if I this failure can trigger without module
-compression but I don't see the failure yet.
-
-Reverting the patch on this thread on linux-next does not fix that issue
-and so this has perhaps been broken for a much longer time. And so this
-patch still remains a candidate fix.
-
- Luis
