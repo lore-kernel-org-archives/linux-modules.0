@@ -2,266 +2,207 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D6EC25B50
-	for <linux-modules@archiver.kernel.org>; Tue, 24 Jan 2023 19:59:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECAE6C54EED
+	for <linux-modules@archiver.kernel.org>; Tue, 24 Jan 2023 20:09:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbjAXT7a (ORCPT
+        id S229604AbjAXUJS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 24 Jan 2023 14:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
+        Tue, 24 Jan 2023 15:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjAXT70 (ORCPT
+        with ESMTP id S229590AbjAXUJR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:59:26 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24316199;
-        Tue, 24 Jan 2023 11:59:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qIm8wL36iwpoekk73rrv9Q8YomfdW/WTpB+Pvm9Jxvc=; b=F014UayJlOj/pwPT/DRgjdfDgq
-        TwaOLkTiFaKdBzt4ig39IBADYQ9AgQ9oeT+6Tazls5bs/h4fT95HT94bmyLTD1jzf8hUR3Z3hbzXB
-        toE8TLnsV1TG2S3CuiSb+wir0wEm2bb/b+w/J6m+Oz3/1eY68/PJ9aCih/KEipiM55FRUdAjTnaSH
-        otX5Zl1SGKlt1PVyRuNbjIN5X+YvLTX+Tk4F5e5Kco69ZXEGJENMAvKyCRSBnDI5aV1YutBjU9mMg
-        srvt3F47BMhzjX6ii16t+boiVlkZ5EUIwo9JniFNxEFhTfBFDVFTlCEgvvAjj+SeYqZapL6xNPDyb
-        vkvZ6m9g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKPRW-0057vV-4v; Tue, 24 Jan 2023 19:58:54 +0000
-Date:   Tue, 24 Jan 2023 11:58:54 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        David Hildenbrand <david@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
-        Adam Manzanares <a.manzanares@samsung.com>, mwilck@suse.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y9A4fiobL6IHp//P@bombadil.infradead.org>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
- <Y5hRRnBGYaPby/RS@alley>
- <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
- <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
- <Y8ll+eP+fb0TzFUh@alley>
+        Tue, 24 Jan 2023 15:09:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0F4470B6
+        for <linux-modules@vger.kernel.org>; Tue, 24 Jan 2023 12:08:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674590911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HZlHrisrjivNag8krExh7n8GmeapkJNDFL8v/PEUtvw=;
+        b=fa6krzB01Df8VmTmikgfnJ3zrjqzLJWcyq4WuQeOtyTtVINnOaMtMUuzf1hQLwqy6o9Bqq
+        aQalmS0Gnbe3qmS/+6fgdsyWeJfnBV9FA1dtZgCZlaOwucCFzvB4Zv4RKpqhR5z2y4KlIy
+        93Cnoi4sr+1VbzkQrmIYemOtweQ/Rhs=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-597-Liuxw2LrPO-de2lO5lTeHA-1; Tue, 24 Jan 2023 15:08:29 -0500
+X-MC-Unique: Liuxw2LrPO-de2lO5lTeHA-1
+Received: by mail-qt1-f197.google.com with SMTP id q26-20020ac8735a000000b003b63165d87cso6497796qtp.11
+        for <linux-modules@vger.kernel.org>; Tue, 24 Jan 2023 12:08:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HZlHrisrjivNag8krExh7n8GmeapkJNDFL8v/PEUtvw=;
+        b=VPR3f2/PRV56SJuG5gJEB+PpyvsTH6XE0pVhJUa6b4BY+zAGp/UDBjAt3+XQsXHsFA
+         orYVzZzE3EBrUSY3pbtGavdqyB6SSkF77P+Jnm/N0ecaPLdGBDdnka4VdyP0mZbFe7mm
+         rKfLzZhc/1PNN2rLIseNg2l77lPO3oEahPs4S4wV4u5MGXnX1SqJk3kX1hp8JtUm0zLs
+         KA6VupJOU/NW5tGQ2RA4dsdjs6UKCW4QI0ldGqLizJQcTj2HRnfBzn3WV9W0vpePnGfp
+         psFQmN0XP5rkFakCdSku1TrkOUpLXYwu+nkotFOwNiz6UWdIGRRmBdVLlbgvSKL6ySIz
+         im4w==
+X-Gm-Message-State: AFqh2kqmF8DsVt+l34s+4yMut/VPopfAmIAHRXSQZGtMhkL35QrVF1Jg
+        o0tEaAh40zKLnnnLTWePYrkxL7eaCV6pKJVUl8yM1fSLmQDvKiYunOOy5jU2NdhzAi4rrMDIL9q
+        hvtpsvm0tV7LqjqqaJPde5gDLJg==
+X-Received: by 2002:a05:6214:5d82:b0:534:a801:1131 with SMTP id mf2-20020a0562145d8200b00534a8011131mr45882654qvb.43.1674590909103;
+        Tue, 24 Jan 2023 12:08:29 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuIULrSN5831DcR2bFIY1bRoKCemMhbW8/t5enh1wumovBzWa4Uzgv60OO1MWPaYERPIBafqQ==
+X-Received: by 2002:a05:6214:5d82:b0:534:a801:1131 with SMTP id mf2-20020a0562145d8200b00534a8011131mr45882626qvb.43.1674590908766;
+        Tue, 24 Jan 2023 12:08:28 -0800 (PST)
+Received: from [192.168.1.16] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
+        by smtp.gmail.com with ESMTPSA id 72-20020a370a4b000000b006fcc3858044sm2018287qkk.86.2023.01.24.12.08.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 12:08:28 -0800 (PST)
+Message-ID: <57fa3069-8e7e-d204-4c78-05432156f044@redhat.com>
+Date:   Tue, 24 Jan 2023 15:08:27 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8ll+eP+fb0TzFUh@alley>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
+        pmladek@suse.com, Miroslav Benes <mbenes@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Song Liu <song@kernel.org>
+References: <20230118204728.1876249-1-song@kernel.org>
+ <20230118220812.dvztwhlmliypefha@treble>
+ <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
+ <20230120064215.cdyfbjlas5noxam6@treble>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
+ removal
+In-Reply-To: <20230120064215.cdyfbjlas5noxam6@treble>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
-> I wonder if it races with module -r that removes the module before
-> it tries to load it multiple times in parallel.
+On 1/20/23 01:42, Josh Poimboeuf wrote:
+> On Thu, Jan 19, 2023 at 11:06:35AM -0800, Song Liu wrote:
+>> On Wed, Jan 18, 2023 at 2:08 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>>>
+>>> On Wed, Jan 18, 2023 at 12:47:28PM -0800, Song Liu wrote:
+>>>> From: Miroslav Benes <mbenes@suse.cz>
+>>>>
+>>>> Josh reported a bug:
+>>>>
+>>>>   When the object to be patched is a module, and that module is
+>>>>   rmmod'ed and reloaded, it fails to load with:
+>>>>
+>>>>   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+>>>>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>>>>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+>>>>
+>>>>   The livepatch module has a relocation which references a symbol
+>>>>   in the _previous_ loading of nfsd. When apply_relocate_add()
+>>>>   tries to replace the old relocation with a new one, it sees that
+>>>>   the previous one is nonzero and it errors out.
+>>>>
+>>>>   On ppc64le, we have a similar issue:
+>>>>
+>>>>   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+>>>>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>>>>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+>>>
+>>> Shouldn't there also be a fix for this powerpc issue?
+>>
+>> There was a working version, but it was not very clean. We couldn't agree
+>> on the path forward for powerpc, so we are hoping to ship the fix to x86 (and
+>> s390?) first [1].
 > 
-> Does the test pass when you add sleep after the module -r, like this:
+> Sorry for coming in late, I was on leave so I missed a lot of the
+> discussions on previous versions.  The decision to leave powerpc broken
+> wasn't clear from reading the commit message.  The bug is mentioned, and
+> the fix is implied, but surprisingly there's no fix.
 > 
-> diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-> index 7189715d7960..8a020f90a3f6 100755
-> --- a/tools/testing/selftests/kmod/kmod.sh
-> +++ b/tools/testing/selftests/kmod/kmod.sh
-> @@ -322,6 +322,7 @@ kmod_defaults_fs()
+> I agree that the powerpc fix should be in a separate patch, but I still
+> don't feel comfortable merging the x86 fix without the corresponding
+> powerpc fix.
+> 
+> powerpc is a major arch and not a second-class citizen.  If we don't fix
+> it now then it'll probably never get fixed until it blows up in the real
+> world.
+> 
+> For powerpc, instead of clearing, how about just "fixing" the warning
+> site, something like so (untested)?
+> 
+> 
+> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+> index 1096d6b3a62c..1a12463ba674 100644
+> --- a/arch/powerpc/kernel/module_64.c
+> +++ b/arch/powerpc/kernel/module_64.c
+> @@ -499,9 +499,11 @@ static unsigned long stub_for_addr(const Elf64_Shdr *sechdrs,
+>  
+>  /* We expect a noop next: if it is, replace it with instruction to
+>     restore r2. */
+> -static int restore_r2(const char *name, u32 *instruction, struct module *me)
+> +static int restore_r2(const char *name, u32 *instruction, struct module *me,
+> +		      bool klp_sym)
 >  {
->  	config_reset
->  	modprobe -r $DEFAULT_KMOD_FS
-> +	sleep 1
->  	config_set_fs $DEFAULT_KMOD_FS
->  	config_set_test_case_fs
->  }
+>  	u32 *prev_insn = instruction - 1;
+> +	u32 insn_val = *instruction;
+>  
+>  	if (is_mprofile_ftrace_call(name))
+>  		return 1;
+> @@ -514,9 +516,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
+>  	if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
+>  		return 1;
+>  
+> -	if (*instruction != PPC_RAW_NOP()) {
+> +	/*
+> +	 * For a livepatch relocation, the restore r2 instruction might have
+> +	 * been previously written if the relocation references a symbol in a
+> +	 * module which was unloaded and is now being reloaded.  In that case,
+> +	 * skip the warning and instruction write.
+> +	 */
+> +	if (klp_sym && insn_val == PPC_INST_LD_TOC)
+> +		return 0;
 
-FWIW I was curious if the kmod test 0009.sh now could pass with this
-too, but alas it can sometimes fail too.
+Hi Josh,
 
-[  138.590663] misc test_kmod0: reset
-[  139.729273] misc test_kmod0: Test case: TEST_KMOD_FS_TYPE (2)
-[  139.732874] misc test_kmod0: Test filesystem to load: xfs
-[  139.736230] misc test_kmod0: Number of threads to run: 62
-[  139.739575] misc test_kmod0: Thread IDs will range from 0 - 61
-[  140.402079] __request_module: 2 callbacks suppressed
-[  140.402082] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.418075] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.430124] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.450119] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.478037] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.498080] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.518066] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.530207] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.549949] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.562182] request_module: kmod_concurrent_max (0) close to 0 (max_modprobes: 50), for module fs-xfs, throttling...
-[  140.582342] misc test_kmod0: No errors were found while initializing threads
-[  145.385414] SGI XFS with ACLs, security attributes, realtime, quota, no debug enabled
-[  145.461962] request_module: modprobe fs-xfs cannot be processed, kmod busy with 50 threads for more than 5 seconds now
-[  145.652541] misc test_kmod0: Done: 62 threads have all run now
-[  145.655020] misc test_kmod0: Last thread to run: 39
-[  145.655831] misc test_kmod0: Results:
-[  145.656450] misc test_kmod0: Sync thread 0 fs: xfs
-[  145.657164] misc test_kmod0: Sync thread 1 fs: xfs
-[  145.657875] misc test_kmod0: Sync thread 2 fs: xfs
-[  145.658615] misc test_kmod0: Sync thread 3 fs: xfs
-[  145.659324] misc test_kmod0: Sync thread 4 fs: xfs
-[  145.660026] misc test_kmod0: Sync thread 5 fs: xfs
-[  145.660948] misc test_kmod0: Sync thread 6 fs: xfs
-[  145.661870] misc test_kmod0: Sync thread 7 fs: xfs
-[  145.662625] misc test_kmod0: Sync thread 8 fs: xfs
-[  145.663363] misc test_kmod0: Sync thread 9 fs: xfs
-[  145.664073] misc test_kmod0: Sync thread 10 fs: xfs
-[  145.664791] misc test_kmod0: Sync thread 11 fs: xfs
-[  145.665509] misc test_kmod0: Sync thread 12 fs: xfs
-[  145.666252] misc test_kmod0: Sync thread 13 fs: xfs
-[  145.666971] misc test_kmod0: Sync thread 14 fs: xfs
-[  145.667693] misc test_kmod0: Sync thread 15 fs: xfs
-[  145.668405] misc test_kmod0: Sync thread 16 fs: xfs
-[  145.669113] misc test_kmod0: Sync thread 17 fs: xfs
-[  145.669823] misc test_kmod0: Sync thread 18 fs: xfs
-[  145.670634] misc test_kmod0: Sync thread 19 fs: xfs
-[  145.671390] misc test_kmod0: Sync thread 20 fs: xfs
-[  145.672126] misc test_kmod0: Sync thread 21 fs: xfs
-[  145.672842] misc test_kmod0: Sync thread 22 fs: xfs
-[  145.673561] misc test_kmod0: Sync thread 23 fs: xfs
-[  145.674327] misc test_kmod0: Sync thread 24 fs: xfs
-[  145.675051] misc test_kmod0: Sync thread 25 fs: xfs
-[  145.675772] misc test_kmod0: Sync thread 26 fs: xfs
-[  145.676491] misc test_kmod0: Sync thread 27 fs: xfs
-[  145.677207] misc test_kmod0: Sync thread 28 fs: xfs
-[  145.677920] misc test_kmod0: Sync thread 29 fs: xfs
-[  145.678658] misc test_kmod0: Sync thread 30 fs: xfs
-[  145.679369] misc test_kmod0: Sync thread 31 fs: xfs
-[  145.680075] misc test_kmod0: Sync thread 32 fs: xfs
-[  145.680780] misc test_kmod0: Sync thread 33 fs: xfs
-[  145.681481] misc test_kmod0: Sync thread 34 fs: xfs
-[  145.682211] misc test_kmod0: Sync thread 35 fs: xfs
-[  145.682925] misc test_kmod0: Sync thread 36 fs: xfs
-[  145.683633] misc test_kmod0: Sync thread 37 fs: xfs
-[  145.684363] misc test_kmod0: Sync thread 38 fs: xfs
-[  145.685196] misc test_kmod0: Sync thread 39 fs: xfs
-[  145.685896] misc test_kmod0: Sync thread 40 fs: xfs
-[  145.687009] misc test_kmod0: Sync thread 41 fs: xfs
-[  145.687800] misc test_kmod0: Sync thread 42 fs: xfs
-[  145.688540] misc test_kmod0: Sync thread 43 fs: xfs
-[  145.689227] misc test_kmod0: Sync thread 44 fs: xfs
-[  145.689901] misc test_kmod0: Sync thread 45 fs: xfs
-[  145.690924] misc test_kmod0: Sync thread 46 fs: xfs
-[  145.691721] misc test_kmod0: Sync thread 47 fs: xfs
-[  145.692533] misc test_kmod0: Sync thread 48 fs: xfs
-[  145.693329] misc test_kmod0: Sync thread 49 fs: xfs
-[  145.694140] misc test_kmod0: Sync thread 50 fs: xfs
-[  145.694910] misc test_kmod0: Sync thread 51 fs: xfs
-[  145.695695] misc test_kmod0: Sync thread 52 fs: NULL
-[  145.696461] misc test_kmod0: Sync thread 53 fs: xfs
-[  145.697229] misc test_kmod0: Sync thread 54 fs: xfs
-[  145.698027] misc test_kmod0: Sync thread 55 fs: xfs
-[  145.698898] misc test_kmod0: Sync thread 56 fs: xfs
-[  145.699953] misc test_kmod0: Sync thread 57 fs: xfs
-[  145.700667] misc test_kmod0: Sync thread 58 fs: xfs
-[  145.701362] misc test_kmod0: Sync thread 59 fs: xfs
-[  145.702078] misc test_kmod0: Sync thread 60 fs: xfs
-[  145.702765] misc test_kmod0: Sync thread 61 fs: xfs
-[  145.703456] misc test_kmod0: General test result: -22
+Nit: shouldn't this return 1?
 
-The key here:
+And if you're willing to entertain a small refactor, wouldn't
+restore_r2() be clearer if it returned -ESOMETHING on error?
 
-[  145.461962] request_module: modprobe fs-xfs cannot be processed, kmod busy with 50 threads for more than 5 seconds now
+Maybe converting to a boolean could work, but then I'd suggest a name
+that clearly implies success/fail given true/false return.  Maybe
+replace_nop_with_ld_toc() or replace_nop_to_restore_r2() ... still
+-ESOMETHING is more intuitive to me as there are cases like this where
+the function safely returns w/o replacing anything.
 
-That is not printed when the test iterates and does not fail. That
-comes from kernel/kmod.c:
+> +
+> +	if (insn_val != PPC_RAW_NOP()) {
+>  		pr_err("%s: Expected nop after call, got %08x at %pS\n",
+> -			me->name, *instruction, instruction);
+> +			me->name, insn_val, instruction);
+>  		return 0;
+>  	}
+>  
+> @@ -649,7 +660,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+>  				if (!value)
+>  					return -ENOENT;
+>  				if (!restore_r2(strtab + sym->st_name,
+> -							(u32 *)location + 1, me))
+> +						(u32 *)location + 1, me,
+> +						sym->st_shndx == SHN_LIVEPATCH))
+>  					return -ENOEXEC;
+>  			} else
+>  				value += local_entry_offset(sym);
+> 
 
-	if (!ret) {                                                     
-		pr_warn_ratelimited("request_module: %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
-				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
-		return -ETIME;   
-	} ...
+klp-convert-tree tests* ran OK with this patch (with the nit fixed) on
+top of Song's v10.  LMK if you want me to push a branch with some or all
+of these patches for further testing.
 
-ETIME however is 62 as per include/uapi/asm-generic/errno.h. The loss
-of the value comes from the fact get_fs_type() ignores error types and
-so lib/test_kmod.c just sets err_ret = -EINVAL in tally_work_test() as
-it cannot get more heuristics out of the kernel as to why get_fs_type()
-failed.
+* I removed the tests that check for relocation clearing, only tested
+module reloading
 
-This should mean that the failure observed with test 0009 on kmod is
-very likely not due to module compression but just a timing issue, and
-that compression just increases the probability of having 50 threads
-busy concurrently on modprobe in 5 seconds with that test. I've
-confirmed this by running a test with a modified kmod as follows
-*after* booting into a kernel with no compression:
+-- 
+Joe
 
-diff --git a/tools/modprobe.c b/tools/modprobe.c
-index 3b7897c..0b7574d 100644
---- a/tools/modprobe.c
-+++ b/tools/modprobe.c
-@@ -1012,6 +1012,8 @@ static int do_modprobe(int argc, char **orig_argv)
- 
- 	log_setup_kmod_log(ctx, verbose);
- 
-+	usleep(5000000);
-+
- 	kmod_load_resources(ctx);
- 
- 	if (do_show_config)
-
-Modules don't tend to be large in size but module compression is an
-extrapolation of what could happen without compression if we had huge
-modules often and userspace doing something wild. If you end up with 50
-concurrent threads running modprobe for more than 5 seconds the kernel
-pr_warn_ratelimited() would print though and it surely is a sign userspace
-is doing something stupid. The sad part though is that a filesystem
-mount *can* be triggered in these cases and so can fail to boot.
-
-The above test were run with next-20230119 without the patch on this
-thread, and so as noted before this doesn't create a regression, this is
-a known issue now. And so -- further confirmation I'll move forward with
-this patch for the next rc.
-
-Note kernel/kmod.c in the kernel states:
-
-/*                                                                              
- * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads            
- * running at the same time without returning. When this happens we             
- * believe you've somehow ended up with a recursive module dependency           
- * creating a loop.                                                             
- *                                                                              
- * We have no option but to fail.                                               
- *                                                                              
- * Userspace should proactively try to detect and prevent these.                
- */                                                                             
-#define MAX_KMOD_ALL_BUSY_TIMEOUT 5 
-
-I can update the docs to reflect that this can be triggered by
-the kernel trying to auto-loading DoS or each CPU count triggering
-tons of unecessary duplicate auto-loading module requests. This is a self
-kernel inflicted situation.
-
-As for the DoS Vegard Nossum did report that user namespaces *could*
-trigger / abuse kernel module autoloading and that they shouldn't be allowed
-to do that as they can't load modules directly anyway (finit_module() won't work
-for them). I'm waiting for a proper patch follow up from him, but *that* in
-theory could then be another way to trigger this issue other than kmod test
-0009, abuse user namespaces so to trigger a module failure by going over board on
-auto-module loading. Boot likely can't be compromised unless creation of user
-namespaces is allowed to be exploited early on boot. But post boot
-kernel module auto-loading could be DoS'd with user namespaces.
-
-As for the other case -- each additional CPU causing more module
-auto-loading than before -- this is a real issue to monitor for and likely
-can cause odd boot failures. This thread already dealt with
-cpu-frequency modules as an example of abuse in the kernel for this.
-Folks are working to fix this though but older kernels will have these
-issues.
-
-Since the kernel is the one that *is* dealing with throttling of this
-auto-load situation, fixing these cases in-kernel is the right solution.
-I don't think userspace can do much here as the limit hit is inherent to
-auto-loading.
-
-Perhaps the we should upgrade the pr_warn_ratelimited() to WARN_ONCE()?
-
-[0] https://lore.kernel.org/all/Y8HkC1re3Fo46Ne3@bombadil.infradead.org/T/#u
-
-  Luis
