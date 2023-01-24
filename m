@@ -2,134 +2,138 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B5ACC25B50
-	for <linux-modules@archiver.kernel.org>; Tue, 24 Jan 2023 02:49:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73065C25B50
+	for <linux-modules@archiver.kernel.org>; Tue, 24 Jan 2023 12:25:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbjAXCtQ (ORCPT
+        id S233908AbjAXMZO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 23 Jan 2023 21:49:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        Tue, 24 Jan 2023 07:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbjAXCtO (ORCPT
+        with ESMTP id S233889AbjAXMZN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:49:14 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2083F3B0ED;
-        Mon, 23 Jan 2023 18:49:08 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id o13so13519839pjg.2;
-        Mon, 23 Jan 2023 18:49:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=10WRUmnlj92TgdMfMl0OkfHOZQo7PKllqvBEDgwMaoA=;
-        b=qNN4n8fCMBr5mvxuvA51fnuENMgCADH5ZAipGXnDeMF9zliNUcHKkIyn7BFxvQPqiB
-         uS67h4ikyIowvds75hFlraj92iDgnvpu8+zkBMlbUtNqCjzF0qFuC37eC7NyrxwfQn5w
-         9JWkS/xOHvl55A7OcgKmCYsYIZSTbZKW4eRTjeNF01JpuOpFdhfBnaqkBGbOoIGiANgm
-         xdoZiRJphWTJyihHbPeoGP4LVKaViP+B2OOgtYy7OP61BsaVKa9Wa/OowARrhNTOLaDq
-         qefHuoMcJD8RH1BGI2PPejfhw4ky3eAuqU1FPAXwZmETSY8kBxFM85xlVNFT1md9bcH/
-         rAwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=10WRUmnlj92TgdMfMl0OkfHOZQo7PKllqvBEDgwMaoA=;
-        b=5h2aYzyV4IuCZDifyQNeShHX3A9IbNvhZYcayUiM1XvZf/koq0ogHA832L+BU9RtBJ
-         L9eJY4W97i9+zhp+qSy48A5rjXw5ux2HZ3dCnC9jh0xyxrg+R8gkq1Zyg7Z9jSdcdMRi
-         Ek6JGEM1G17o8kWo+cEiS8z9ROdq4IYASgQUvJNNWVfhyXBb3DILvbs3S251fmkIGRki
-         b/rKa+NphhhQ0fmYmjrMFkRCutyLdJIH7T+Q4qSRjdc8hYP5BYnZ+kDWd21vt43kLZOe
-         MpO8Kmo7xct3+khZSkQ33WEdNtZD4taN0D3bvM4l8fVpP99Bl5FCdk/OLkI6Gnkf2fVz
-         zojQ==
-X-Gm-Message-State: AO0yUKVQYxkn2BMWaUwCVRSSXez659R99lrvDptBt952wAwRJlpK/tOL
-        ADeiEZDWcvMeRcslFgHSst2B1gI2rnPJGQ==
-X-Google-Smtp-Source: AK7set9m3IjRxZKzuMrXof+Y/DSDaTkyiy2DMLr/kJ4OZeoXNLwjzGA63X1gGjYDio4iKgOvqRWBOw==
-X-Received: by 2002:a17:903:2310:b0:196:119e:810c with SMTP id d16-20020a170903231000b00196119e810cmr1431370plh.0.1674528547605;
-        Mon, 23 Jan 2023 18:49:07 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-19.three.co.id. [180.214.232.19])
-        by smtp.gmail.com with ESMTPSA id d24-20020a170902aa9800b00194bda5fe5asm410305plr.115.2023.01.23.18.49.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 18:49:05 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id B1414105170; Tue, 24 Jan 2023 09:49:02 +0700 (WIB)
-Date:   Tue, 24 Jan 2023 09:49:02 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Diederik de Haas <didi.debian@cknow.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
-        "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] module.h: Fix full name of the GPL
-Message-ID: <Y89HHtQQ4/pvsOut@debian.me>
-References: <20230122193443.60267-1-didi.debian@cknow.org>
+        Tue, 24 Jan 2023 07:25:13 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726D53C2A6;
+        Tue, 24 Jan 2023 04:24:36 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 06BAC2188B;
+        Tue, 24 Jan 2023 12:24:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674563058; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LERYfcoY7Br0MatyvmWjDynukO2x4aKPQySf93qqKIo=;
+        b=nIiZa9SAETllTox4m0UfwaOLX6w+mxKxwAjE2q16uaA8yDXcvpo4inB1fMhhwIFjYuOHN0
+        DyH0+Pv7maDk+q3COtFKeeNhntCuIyQrLhuhvEiWstwMTPUNHZSp5Nl9LrCThczRb7xWHF
+        +Zdtp3MmgQjGf78cVU0cG2cMx8IaulM=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D3E172C141;
+        Tue, 24 Jan 2023 12:24:17 +0000 (UTC)
+Date:   Tue, 24 Jan 2023 13:24:15 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, x86@kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH v10 2/2] livepatch,x86: Clear relocation targets on a
+ module removal
+Message-ID: <Y8/N7zMLUnMh259N@alley>
+References: <20230121004945.697003-1-song@kernel.org>
+ <20230121004945.697003-2-song@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BA5YW9TKzNjuM13A"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230122193443.60267-1-didi.debian@cknow.org>
+In-Reply-To: <20230121004945.697003-2-song@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+On Fri 2023-01-20 16:49:45, Song Liu wrote:
+> Josh reported a bug:
+> 
+>   When the object to be patched is a module, and that module is
+>   rmmod'ed and reloaded, it fails to load with:
+> 
+>   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> 
+>   The livepatch module has a relocation which references a symbol
+>   in the _previous_ loading of nfsd. When apply_relocate_add()
+>   tries to replace the old relocation with a new one, it sees that
+>   the previous one is nonzero and it errors out.
+> 
+> He also proposed three different solutions. We could remove the error
+> check in apply_relocate_add() introduced by commit eda9cec4c9a1
+> ("x86/module: Detect and skip invalid relocations"). However the check
+> is useful for detecting corrupted modules.
+> 
+> We could also deny the patched modules to be removed. If it proved to be
+> a major drawback for users, we could still implement a different
+> approach. The solution would also complicate the existing code a lot.
+> 
+> We thus decided to reverse the relocation patching (clear all relocation
+> targets on x86_64). The solution is not
+> universal and is too much arch-specific, but it may prove to be simpler
+> in the end.
+> 
+> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> Originally-by: Miroslav Benes <mbenes@suse.cz>
+> Signed-off-by: Song Liu <song@kernel.org>
+> Acked-by: Miroslav Benes <mbenes@suse.cz>
+> 
+> --- a/arch/x86/kernel/module.c
+> +++ b/arch/x86/kernel/module.c
+> @@ -129,22 +129,27 @@ int apply_relocate(Elf32_Shdr *sechdrs,
+>  	return 0;
+>  }
+>  #else /*X86_64*/
+> -static int __apply_relocate_add(Elf64_Shdr *sechdrs,
+> +static int __write_relocate_add(Elf64_Shdr *sechdrs,
+>  		   const char *strtab,
+>  		   unsigned int symindex,
+>  		   unsigned int relsec,
+>  		   struct module *me,
+> -		   void *(*write)(void *dest, const void *src, size_t len))
+> +		   void *(*write)(void *dest, const void *src, size_t len),
+> +		   bool apply)
+>  {
+>  	unsigned int i;
+>  	Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
+>  	Elf64_Sym *sym;
+>  	void *loc;
+>  	u64 val;
+> +	u64 zero = 0ULL;
+>  
+> -	DEBUGP("Applying relocate section %u to %u\n",
+> +	DEBUGP("%s relocate section %u to %u\n",
+> +	       apply ? "Applying" : "Clearing",
+>  	       relsec, sechdrs[relsec].sh_info);
+>  	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
+> +		int size = 0;
 
---BA5YW9TKzNjuM13A
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The value 0 should never be used. It is better to do not initialize
+it at all so that the compiler would warn when the variable might be
+used uninitialized.
 
-On Sun, Jan 22, 2023 at 08:34:43PM +0100, Diederik de Haas wrote:
-> Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
+Note that this warning is not enabled by default. It can be enabled
+with 
 
-No patch description, really?
+	$> make W=2 arch/x86/kernel/module.o
 
-> ---
->  include/linux/module.h | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->=20
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 8c5909c0076c..329fa0b56642 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -186,14 +186,14 @@ extern void cleanup_module(void);
->   * The following license idents are currently accepted as indicating free
->   * software modules
->   *
-> - *	"GPL"				[GNU Public License v2]
-> - *	"GPL v2"			[GNU Public License v2]
-> - *	"GPL and additional rights"	[GNU Public License v2 rights and more]
-> - *	"Dual BSD/GPL"			[GNU Public License v2
-> + *	"GPL"				[GNU General Public License v2]
-> + *	"GPL v2"			[GNU General Public License v2]
-> + *	"GPL and additional rights"	[GNU General Public License v2 rights and=
- more]
-> + *	"Dual BSD/GPL"			[GNU General Public License v2
->   *					 or BSD license choice]
-> - *	"Dual MIT/GPL"			[GNU Public License v2
-> + *	"Dual MIT/GPL"			[GNU General Public License v2
->   *					 or MIT license choice]
-> - *	"Dual MPL/GPL"			[GNU Public License v2
-> + *	"Dual MPL/GPL"			[GNU General Public License v2
->   *					 or Mozilla license choice]
->   *
->   * The following other idents are available
+> +
+>  		/* This is where to make the change */
+>  		loc = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
+>  			+ rel[i].r_offset;
 
-Why did you do that? Maybe as justification for your other GPL name expansi=
-on
-fix patches?=20
+Otherwise, it looks good.
 
-Anyway, let's see what Linus thinks.
+With the removed initialization, feel free to use:
 
---=20
-An old man doll... just what I always wanted! - Clara
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
---BA5YW9TKzNjuM13A
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY89HFwAKCRD2uYlJVVFO
-o+bKAQCTx68iwlMjlC99zL4xr0lf5527j1ubdYlcXKFVxXKVAwEAwWAHN+VAV+VQ
-GqB6/d6IrpQygRPKuwg3IjCfnaMRHAQ=
-=o/dX
------END PGP SIGNATURE-----
-
---BA5YW9TKzNjuM13A--
+Best Regards,
+Petr
