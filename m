@@ -2,148 +2,127 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C10F9C25B4E
-	for <linux-modules@archiver.kernel.org>; Tue, 24 Jan 2023 14:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72193C54EAA
+	for <linux-modules@archiver.kernel.org>; Tue, 24 Jan 2023 17:23:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbjAXOJH (ORCPT
+        id S233983AbjAXRXY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 24 Jan 2023 09:09:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
+        Tue, 24 Jan 2023 12:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233508AbjAXOJH (ORCPT
+        with ESMTP id S234035AbjAXRXX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 24 Jan 2023 09:09:07 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9ED42BDC;
-        Tue, 24 Jan 2023 06:09:06 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso1740904pju.0;
-        Tue, 24 Jan 2023 06:09:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E4ZXFPQbjBHo1EROCk4SYmBdv33HRf/eYQ7E1Z4yJ6c=;
-        b=B4ewlu/nHDWD1ZdBVb0iqOhNibN1rV5/EZF8TdXGV5XSTQFohtmjemfGZQZcqHPVlp
-         ws1hVP8LuFp22/BrNoxzdwRRgXeuH9nbt4axQmhsCiDnWSb1ARSOGQ37fDVkz5TIEyaJ
-         KsXDCpMoYYBPPjUG30CW1GB5kuNRts9XYS2MKmgARJHkr+T/0WwddSLiXKMoZeqxBh79
-         NO8xioKpXXc0W6yHbGZbsQRUDL1SfjmZmSeR6ML1yON8lXO5dZKj6GaT8n9vi+8mSWEp
-         s5DcWPzDQozMOIUj8cG6IOPBPnoqVXqEo/aooy+q/j/1ExXJ5jErwIaWL59FuFGBzqJa
-         d65g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E4ZXFPQbjBHo1EROCk4SYmBdv33HRf/eYQ7E1Z4yJ6c=;
-        b=TMXygni9+FvcXa5kT3Sg/0hRS993SS6GQ/Rf0NDZa6cKSo4fuNnScqHZJoRAHUf2Wf
-         rlPN5qQX56vU0nVDilPsP/pQvRvkzhFgmiW5tHA1a/fU6P4U4QW74jlnRzWX7ySQ6QSu
-         nBTxCxuPYkbvSnm/V3y8K1Rachv4eov/A8OUhVt/7J5L+XT07oyY2ut2f37TTkj9uwDU
-         WlA8Qn24Tqh7ttAdP0AWUDN5P2TcqQWrlwy0YG/Jy5CrAwb0EtbxBeY18U0rpC0QrN0q
-         CJYDIC5CHQZROY7BedJjjcFtkU2Fe03d7t7fKeRMgnuumaxUm2BVQethP8zdausbcHBC
-         nK0g==
-X-Gm-Message-State: AFqh2krwaYzcA52DKAvoyFOd6fVs7cn0I6AB2ye7qTqM7gp1f2aXzvjg
-        Ycp0FmMxtCc4CqsOWAGkwYNizCm7VXl7aw==
-X-Google-Smtp-Source: AMrXdXvPHzbgF3TWr0WobWk8KmSIuNyKVP8DTLJbWsoK8FphoZRA+kRYiaQxRbLjp7Lh4W3QGMo58g==
-X-Received: by 2002:a05:6a20:8f0f:b0:b8:a0e1:2748 with SMTP id b15-20020a056a208f0f00b000b8a0e12748mr39818074pzk.6.1674569345602;
-        Tue, 24 Jan 2023 06:09:05 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-28.three.co.id. [180.214.232.28])
-        by smtp.gmail.com with ESMTPSA id a3-20020aa78643000000b0056bbeaa82b9sm1631072pfo.113.2023.01.24.06.09.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 06:09:04 -0800 (PST)
-Message-ID: <526ffdf0-3aaa-2ccc-c5b6-ea5582e251a5@gmail.com>
-Date:   Tue, 24 Jan 2023 21:09:01 +0700
+        Tue, 24 Jan 2023 12:23:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED04402FD;
+        Tue, 24 Jan 2023 09:23:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 667B4B81606;
+        Tue, 24 Jan 2023 17:23:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1EEC433D2;
+        Tue, 24 Jan 2023 17:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674580995;
+        bh=CwhLGT4zPksCsBdo0pja2APkkSpmb/azhcS8qSQ8vdU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mgZ64qwjYOgIyo091c6otHRso9I0WRRCRaZYano/+2BgYp9hSi2I5EQ0mKaZLW9wm
+         KsTN2WKLW8bTf/hx+ETOD9EEHLX4MpDdMcX7TPnBBjnHcddDBlXKsWDGaAeeMDYQM3
+         hEifjrjMXQyRtsbis3Mohq004Vt9vyvntuFWWh79t5xZ8fWV5QXyqT3bZk8fuXx0xR
+         GFQwO9TtkdTwVLlNCE5DlZJTqSDNcs9gzbCQlGMRp1JaZvZt/0bQRVz7gs+KZaWQxc
+         rw6kaBiW98asAaNiYd7/9xl8aSzZ2+VeevGllrglHOE+X4gdCN/tqjaUrUNrWpVb7l
+         kOWPuvdO1wcAA==
+Date:   Tue, 24 Jan 2023 09:23:13 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
+        x86@kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH v10 2/2] livepatch,x86: Clear relocation targets on a
+ module removal
+Message-ID: <20230124172313.extovg6ig7dimpgb@treble>
+References: <20230121004945.697003-1-song@kernel.org>
+ <20230121004945.697003-2-song@kernel.org>
+ <Y8/N7zMLUnMh259N@alley>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] module.h: Fix full name of the GPL
-Content-Language: en-US
-To:     Diederik de Haas <didi.debian@cknow.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
-        "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>
-References: <20230122193443.60267-1-didi.debian@cknow.org>
- <Y89HHtQQ4/pvsOut@debian.me> <3145585.5fSG56mABF@bagend>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <3145585.5fSG56mABF@bagend>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y8/N7zMLUnMh259N@alley>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 1/24/23 20:32, Diederik de Haas wrote:
-> *) I made a clusterfsck of similar patch submissions where I replaced "GNU 
-> Public License" with "GNU General Public License", and got the exact same 
-> comment from Bagas to several of them.
-
-That was what I mean: not being word-for-word same, but semantically same
-text. I guess everyone here (and myself) should be immersed more into
-English-speaking idioms...
-
-If you'd like to see what my reviews are, please see (in lore.kernel.org
-search bar) `f:bagasdotme@gmail.com AND s:"Re:"`. Read the whole message.
-
-> I've (now) retracted all of those patches, except this one. In those other 
-> ones, I later realized I would actually be changing the license, not merely 
-> fixing a spelling error.
-> See https://lore.kernel.org/lkml/2281101.Yu7Ql3qPJb@prancing-pony/
+On Tue, Jan 24, 2023 at 01:24:15PM +0100, Petr Mladek wrote:
+> On Fri 2023-01-20 16:49:45, Song Liu wrote:
+> > Josh reported a bug:
+> > 
+> >   When the object to be patched is a module, and that module is
+> >   rmmod'ed and reloaded, it fails to load with:
+> > 
+> >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+> >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> > 
+> >   The livepatch module has a relocation which references a symbol
+> >   in the _previous_ loading of nfsd. When apply_relocate_add()
+> >   tries to replace the old relocation with a new one, it sees that
+> >   the previous one is nonzero and it errors out.
+> > 
+> > He also proposed three different solutions. We could remove the error
+> > check in apply_relocate_add() introduced by commit eda9cec4c9a1
+> > ("x86/module: Detect and skip invalid relocations"). However the check
+> > is useful for detecting corrupted modules.
+> > 
+> > We could also deny the patched modules to be removed. If it proved to be
+> > a major drawback for users, we could still implement a different
+> > approach. The solution would also complicate the existing code a lot.
+> > 
+> > We thus decided to reverse the relocation patching (clear all relocation
+> > targets on x86_64). The solution is not
+> > universal and is too much arch-specific, but it may prove to be simpler
+> > in the end.
+> > 
+> > Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> > Originally-by: Miroslav Benes <mbenes@suse.cz>
+> > Signed-off-by: Song Liu <song@kernel.org>
+> > Acked-by: Miroslav Benes <mbenes@suse.cz>
+> > 
+> > --- a/arch/x86/kernel/module.c
+> > +++ b/arch/x86/kernel/module.c
+> > @@ -129,22 +129,27 @@ int apply_relocate(Elf32_Shdr *sechdrs,
+> >  	return 0;
+> >  }
+> >  #else /*X86_64*/
+> > -static int __apply_relocate_add(Elf64_Shdr *sechdrs,
+> > +static int __write_relocate_add(Elf64_Shdr *sechdrs,
+> >  		   const char *strtab,
+> >  		   unsigned int symindex,
+> >  		   unsigned int relsec,
+> >  		   struct module *me,
+> > -		   void *(*write)(void *dest, const void *src, size_t len))
+> > +		   void *(*write)(void *dest, const void *src, size_t len),
+> > +		   bool apply)
+> >  {
+> >  	unsigned int i;
+> >  	Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
+> >  	Elf64_Sym *sym;
+> >  	void *loc;
+> >  	u64 val;
+> > +	u64 zero = 0ULL;
+> >  
+> > -	DEBUGP("Applying relocate section %u to %u\n",
+> > +	DEBUGP("%s relocate section %u to %u\n",
+> > +	       apply ? "Applying" : "Clearing",
+> >  	       relsec, sechdrs[relsec].sh_info);
+> >  	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
+> > +		int size = 0;
 > 
-> AFAICT, for this patch I'm not changing the actual license, only references to 
-> that license, so that can still be considered spelling fixes.
-> That's why I haven't requested to ignore this patch (too).
-> 
+> The value 0 should never be used. It is better to do not initialize
+> it at all so that the compiler would warn when the variable might be
+> used uninitialized.
 
-OK.
-
->> Why did you do that? Maybe as justification for your other GPL name
->> expansion fix patches?
-> 
-> Debian's lintian tool complained about it and after looking at
-> https://www.gnu.org/licenses/ I concluded that lintian was right.
-> 
-
-Nice.
-
-> As the full/proper name of the GPL is GNU General Public License, I submitted 
-> a patch to fix that.
-> 
-
-OK, I know the reason.
-
->> Anyway, let's see what Linus thinks.
-> 
-> Sorry you all had to see my rant, but after seeing (and ignoring) Bagas' 
-> rather useless and exactly the same comment numerous times yesterday and 
-> getting accused of being a bot (!) and someone else feeling the need to point 
-> out Bagas' less then constructive behavior AND me feeling shitty about my 
-> clusterfsck and spending considerable time fixing that (which is fair) 
-> yesterday, it seemed Bagas went out of their way to find the one patch I hadn't 
-> asked to ignore and add the same useless and bot-like comment to, I had 
-> enough. I'm not a delicate flower which needs to be handled with extreme care, 
-> but everyone does have a breaking point.
-> 
-
-Let's assume that I'm on the subsystem maintainer side. I receive patches from
-many people (and you), including first-time contributors who has just started to
-learn how to submit kernel patches. I may take more care on patch description
-(which would later become commit message in the changelog) and description.
-I may follow Documentation/process/submitting-patches.rst literally and check
-for code correctness/look more (disclaimer: since I'm autistic and had like to
-see all patches having my own quality level, i.e. raise the bar). Good developers
-are expected to addresses any reviews not only from me but also others. Sometimes
-I massage the patch description when I have time and motivation to do so when
-applying, but I may simply want to see the reroll if I'm lazy. Other maintainers
-may or may not have "harsh" requirement as mine did, but that's the life in the
-kernel development: there are idiosyncrasies which can only be understood by
-immersing yourself into them. 
-
-> If this patch is just wrong, please ignore it. If it needs improvement, let me 
-> know and I'll do my best to do so.
-> 
-
-OK, thanks!
+Yes.  Also it can be unsigned, i.e. size_t.
 
 -- 
-An old man doll... just what I always wanted! - Clara
-
+Josh
