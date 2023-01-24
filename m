@@ -2,140 +2,104 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 412A5C54E94
-	for <linux-modules@archiver.kernel.org>; Tue, 24 Jan 2023 17:31:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0853CC54E94
+	for <linux-modules@archiver.kernel.org>; Tue, 24 Jan 2023 17:36:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbjAXRbP (ORCPT
+        id S233990AbjAXRgK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 24 Jan 2023 12:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        Tue, 24 Jan 2023 12:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234109AbjAXRbO (ORCPT
+        with ESMTP id S232166AbjAXRgJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 24 Jan 2023 12:31:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51484DCE4;
-        Tue, 24 Jan 2023 09:30:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74083B81607;
-        Tue, 24 Jan 2023 17:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28194C4339C;
-        Tue, 24 Jan 2023 17:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674581456;
-        bh=0PUujmICPIJ4qI/mGnq+QbTGNX31uN+Dte58FS+GCZk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XiAhhNMTeIwX3Q2ZJ5MAXvgGofkFoj+IiHgGFnGWh1jfJ9C1CezHSCoU8DxkQbfrq
-         PF8HEQj7hbdL68ZVxnN8qn0K+V4EYgh/NDtWKz1uqRHojFW1HBUsUQ7YYdX6hvvsJZ
-         lmvZ2y9UOIZCbnpp8cyqNzRC3E5cb2fqys6b8d4etHLswerrg89yb6wRL0985EMBkw
-         3HQuVYatEIQOe6U2kKqHt9eabenhfVPkNqpbKWFpKi74bUch2o3jY0GaWlRVmIsinn
-         gLBX6RvfaVkQ3gvBvA7ptQjLQ8wxD7Ti1c8p8kpRUWrCi/4odwG+3iE7dof0PHhlMI
-         NfAt3h7vmtabA==
-Received: by mail-lf1-f54.google.com with SMTP id b3so24606091lfv.2;
-        Tue, 24 Jan 2023 09:30:56 -0800 (PST)
-X-Gm-Message-State: AFqh2krVuZTDuZoLI1SzzBbbzNWwclxfcpm1Ebjble6hh3ogqhVhkXuT
-        mq0TLlP3UP9qGzYFFQUcYgBCK5KFa27PLWsC830=
-X-Google-Smtp-Source: AMrXdXurnFIKkuIZZCSXZSkiuJ7u17gWP0ONOMnwETHZLD0mxlFz1B5ZQrOPHPbuj0GWymiipN7xWTL6+dJYcLp7MAg=
-X-Received: by 2002:a05:6512:96d:b0:4c7:6601:e3b1 with SMTP id
- v13-20020a056512096d00b004c76601e3b1mr1323111lft.548.1674581454151; Tue, 24
- Jan 2023 09:30:54 -0800 (PST)
+        Tue, 24 Jan 2023 12:36:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335FC4B776;
+        Tue, 24 Jan 2023 09:36:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=P0UVVZ/T20C+FbphTkl6yWazQ/wHn2ipLQ/Uu2/aGjU=; b=V+zU+rnXkFyARYvB30wRXlaD6k
+        mjgxQYZl8jahXZn+6uSXGFzw8fnxRpQj0BEJxlkV9cT2ZKoGDto+BUZ6AR5i9K5ZYe99rbDkUjAT1
+        SmU3PX7YsUwgTbTVmT/eYAKB+X/hsz3lkZTZf9zng+l1DnZPj+04exZcgb3wZNPodkiTplhsV2dSE
+        DIDtDHcNA8U0ULPUdvwyjldirdcsOtKjxc1bcaccaFgfsZry45/p1INOBK9wNYkmwMOUFtHU6ojHS
+        N4Ti1nsN5vCvl+RpQzeejCCOHDNmo2ksidkalhwCYUYnAHxDDEnubT3dXjXppKuV9tglte4xzK1Gd
+        G1UaJWpw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKNDH-004qKN-J9; Tue, 24 Jan 2023 17:36:03 +0000
+Date:   Tue, 24 Jan 2023 09:36:03 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Diederik de Haas <didi.debian@cknow.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
+        "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH] module.h: Fix full name of the GPL
+Message-ID: <Y9AXA/d+7wK5U5YA@bombadil.infradead.org>
+References: <20230122193443.60267-1-didi.debian@cknow.org>
+ <Y89HHtQQ4/pvsOut@debian.me>
+ <3145585.5fSG56mABF@bagend>
 MIME-Version: 1.0
-References: <20230121004945.697003-1-song@kernel.org> <20230121004945.697003-2-song@kernel.org>
- <Y8/N7zMLUnMh259N@alley> <20230124172313.extovg6ig7dimpgb@treble>
-In-Reply-To: <20230124172313.extovg6ig7dimpgb@treble>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 24 Jan 2023 09:30:41 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7Wo1amPn2fdZHB9MAZB=iUMTQW13gu0Pj=0-N9EkRVvQ@mail.gmail.com>
-Message-ID: <CAPhsuW7Wo1amPn2fdZHB9MAZB=iUMTQW13gu0Pj=0-N9EkRVvQ@mail.gmail.com>
-Subject: Re: [PATCH v10 2/2] livepatch,x86: Clear relocation targets on a
- module removal
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
-        x86@kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <3145585.5fSG56mABF@bagend>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jan 24, 2023 at 9:23 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Tue, Jan 24, 2023 at 01:24:15PM +0100, Petr Mladek wrote:
-> > On Fri 2023-01-20 16:49:45, Song Liu wrote:
-> > > Josh reported a bug:
-> > >
-> > >   When the object to be patched is a module, and that module is
-> > >   rmmod'ed and reloaded, it fails to load with:
-> > >
-> > >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> > >
-> > >   The livepatch module has a relocation which references a symbol
-> > >   in the _previous_ loading of nfsd. When apply_relocate_add()
-> > >   tries to replace the old relocation with a new one, it sees that
-> > >   the previous one is nonzero and it errors out.
-> > >
-> > > He also proposed three different solutions. We could remove the error
-> > > check in apply_relocate_add() introduced by commit eda9cec4c9a1
-> > > ("x86/module: Detect and skip invalid relocations"). However the check
-> > > is useful for detecting corrupted modules.
-> > >
-> > > We could also deny the patched modules to be removed. If it proved to be
-> > > a major drawback for users, we could still implement a different
-> > > approach. The solution would also complicate the existing code a lot.
-> > >
-> > > We thus decided to reverse the relocation patching (clear all relocation
-> > > targets on x86_64). The solution is not
-> > > universal and is too much arch-specific, but it may prove to be simpler
-> > > in the end.
-> > >
-> > > Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> > > Originally-by: Miroslav Benes <mbenes@suse.cz>
-> > > Signed-off-by: Song Liu <song@kernel.org>
-> > > Acked-by: Miroslav Benes <mbenes@suse.cz>
-> > >
-> > > --- a/arch/x86/kernel/module.c
-> > > +++ b/arch/x86/kernel/module.c
-> > > @@ -129,22 +129,27 @@ int apply_relocate(Elf32_Shdr *sechdrs,
-> > >     return 0;
-> > >  }
-> > >  #else /*X86_64*/
-> > > -static int __apply_relocate_add(Elf64_Shdr *sechdrs,
-> > > +static int __write_relocate_add(Elf64_Shdr *sechdrs,
-> > >                const char *strtab,
-> > >                unsigned int symindex,
-> > >                unsigned int relsec,
-> > >                struct module *me,
-> > > -              void *(*write)(void *dest, const void *src, size_t len))
-> > > +              void *(*write)(void *dest, const void *src, size_t len),
-> > > +              bool apply)
-> > >  {
-> > >     unsigned int i;
-> > >     Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
-> > >     Elf64_Sym *sym;
-> > >     void *loc;
-> > >     u64 val;
-> > > +   u64 zero = 0ULL;
-> > >
-> > > -   DEBUGP("Applying relocate section %u to %u\n",
-> > > +   DEBUGP("%s relocate section %u to %u\n",
-> > > +          apply ? "Applying" : "Clearing",
-> > >            relsec, sechdrs[relsec].sh_info);
-> > >     for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
-> > > +           int size = 0;
-> >
-> > The value 0 should never be used. It is better to do not initialize
-> > it at all so that the compiler would warn when the variable might be
-> > used uninitialized.
->
-> Yes.  Also it can be unsigned, i.e. size_t.
+On Tue, Jan 24, 2023 at 02:32:26PM +0100, Diederik de Haas wrote:
+> On Tuesday, 24 January 2023 03:49:02 CET Bagas Sanjaya wrote:
+> > On Sun, Jan 22, 2023 at 08:34:43PM +0100, Diederik de Haas wrote:
+> > > Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
+> >=20
+> > No patch description, really?
+>=20
 
-Will fix this in the next version.
+<some odd rationale to describe why your commit log is empty>
 
-I guess we still need an Acked-by from x86 maintainers.
+> So I could've added "The full name of the GPL is not GNU Public License, =
+but=20
+> GNU *General* Public License." to/as the explanation body, but I didn't=
+=20
+> consider that to provide extra (needed) info which wasn't clear from the=
+=20
+> Subject and diff.
+>=20
+> My only previous patch submission (to the linux kernel) did contain a ful=
+l=20
+> explanation body: 7074b39d83f5d71fa4f0521b28bd4fb3a22152c1
+>=20
+> *) I made a clusterfsck of similar patch submissions where I replaced "GN=
+U=20
+> Public License" with "GNU General Public License", and got the exact same=
+=20
+> comment from Bagas to several of them.
+> I've (now) retracted all of those patches, except this one. In those othe=
+r=20
+> ones, I later realized I would actually be changing the license, not mere=
+ly=20
+> fixing a spelling error.
+> See https://lore.kernel.org/lkml/2281101.Yu7Ql3qPJb@prancing-pony/
 
-Thanks,
-Song
+We use SPDX for precise langauges for the license used. Patches like
+these and the one you just sent are otherwise not adding more.
+
+> AFAICT, for this patch I'm not changing the actual license, only referenc=
+es to=20
+> that license, so that can still be considered spelling fixes.
+> That's why I haven't requested to ignore this patch (too).
+
+The only reference we care for is the SPDX one and that work is already don=
+e.
+As such minor fixes in spelling like yours won't do any good but just
+noise at this point. That's exactly why SPDX license tags were
+embraced, to make this simple and let us move on with life while having
+one simple codified reference to the license so we don't need to deal
+with redundant patches fixing grammar on license many times.
+
+As such this changes is not needed.
+
+  Luis
