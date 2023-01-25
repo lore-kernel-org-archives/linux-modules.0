@@ -2,85 +2,71 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2C8DC61D97
-	for <linux-modules@archiver.kernel.org>; Tue, 24 Jan 2023 22:33:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0183EC61D9D
+	for <linux-modules@archiver.kernel.org>; Wed, 25 Jan 2023 02:23:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbjAXWdL (ORCPT
+        id S233239AbjAYCXJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 24 Jan 2023 17:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        Tue, 24 Jan 2023 21:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233490AbjAXWdA (ORCPT
+        with ESMTP id S233206AbjAYCXI (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:33:00 -0500
+        Tue, 24 Jan 2023 21:23:08 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6395593;
-        Tue, 24 Jan 2023 14:32:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8725D4523B;
+        Tue, 24 Jan 2023 18:23:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79C3CB816E1;
-        Tue, 24 Jan 2023 22:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D82C433EF;
-        Tue, 24 Jan 2023 22:32:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E49BFB817C0;
+        Wed, 25 Jan 2023 02:23:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 952FDC4339E;
+        Wed, 25 Jan 2023 02:23:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674599563;
-        bh=O+TDDdp7SpLSIQghWRuuMhr8V3iv3q3uTu4o8VupFKY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ivDKtTkxMPIyZnXHRYqe88giy94iZBNfT1PPK12c4EddjdYTRGd2diWyoPYIrl1wV
-         UuC80dSL1gTZxwArChhDeFlIobE2dIC2/nf0NsuZOyQV7MwMzzyAwPm2O3G61m6C5H
-         Ske2n2UrZemcmLdD7sCaf/QdtY/5ywjm7Q0wgb96t95JDeZhu61RUs/IO6xiKdxxpl
-         CM8v3VyaV/k/W9oVNyJvIqaL/+FDP+KU2qdfPHvBBafhsC3EbB00q8q6tvsF8TtTuJ
-         DOVRS5113cIpt6KZFYKy/hTBMELFhclgyVfBL5iuEn7SPQK0JLDYSjVAssp9ZInaPd
-         t3UHrto6SSGCg==
-Date:   Tue, 24 Jan 2023 14:32:41 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
-        pmladek@suse.com, Miroslav Benes <mbenes@suse.cz>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Song Liu <song@kernel.org>
-Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <20230124223241.ywbhxdrj26qfgtd6@treble>
-References: <20230118204728.1876249-1-song@kernel.org>
- <20230118220812.dvztwhlmliypefha@treble>
- <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
- <20230120064215.cdyfbjlas5noxam6@treble>
- <57fa3069-8e7e-d204-4c78-05432156f044@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <57fa3069-8e7e-d204-4c78-05432156f044@redhat.com>
+        s=k20201202; t=1674613383;
+        bh=+ooWifrksTp84JgbHTsOjtCxB5xMbsZBir+94IC6RKQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Gp9vFPpxuQJlA6dFjOdGSDKHpaye4bmvR2i4IaV2h3CCqOr/Av/nUKzM3XUsH/lb1
+         qz2mvyU9lMiGJw8lZP6NQmplNlkGCu5FCvmDwBISleiOxe6Ia0e7QC3vc685+C4PPA
+         u7pyK0P9ZRbC9RoSugbI14SsEV/K3rQ6mweyWGIvI1ZqqYhTT5naOm3fcPO5tHe26G
+         e7ZoFcbpx3qPMvdwnkpk3yrgeSAGdd8AAMJb9guZTAZ3bz4BBFhe8D89lulKFlVCuU
+         CdrIV1WbQgrx2mF01NHeA58Yj7y5iDsNMcL0hE4cIoGbocSvC5uyCXlNerniR8GASI
+         XXTnc4zHn/J/Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 78D0DE52508;
+        Wed, 25 Jan 2023 02:23:03 +0000 (UTC)
+Subject: Re: [GIT PULL] modules changes for v6.2-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y9BIU5SGOS6YEdSh@bombadil.infradead.org>
+References: <Y9BIU5SGOS6YEdSh@bombadil.infradead.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y9BIU5SGOS6YEdSh@bombadil.infradead.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc6
+X-PR-Tracked-Commit-Id: 0254127ab977e70798707a7a2b757c9f3c971210
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 948ef7bb70c4acaf74d87420ea3a1190862d4548
+Message-Id: <167461338348.26446.17203566815519029352.pr-tracker-bot@kernel.org>
+Date:   Wed, 25 Jan 2023 02:23:03 +0000
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com, pmladek@suse.com,
+        mwilck@suse.com, vegard.nossum@oracle.com, ebiederm@xmission.com,
+        david@redhat.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Jan 24, 2023 at 03:08:27PM -0500, Joe Lawrence wrote:
-> > +	/*
-> > +	 * For a livepatch relocation, the restore r2 instruction might have
-> > +	 * been previously written if the relocation references a symbol in a
-> > +	 * module which was unloaded and is now being reloaded.  In that case,
-> > +	 * skip the warning and instruction write.
-> > +	 */
-> > +	if (klp_sym && insn_val == PPC_INST_LD_TOC)
-> > +		return 0;
-> 
-> Hi Josh,
-> 
-> Nit: shouldn't this return 1?
-> 
-> And if you're willing to entertain a small refactor, wouldn't
-> restore_r2() be clearer if it returned -ESOMETHING on error?
-> 
-> Maybe converting to a boolean could work, but then I'd suggest a name
-> that clearly implies success/fail given true/false return.  Maybe
-> replace_nop_with_ld_toc() or replace_nop_to_restore_r2() ... still
-> -ESOMETHING is more intuitive to me as there are cases like this where
-> the function safely returns w/o replacing anything.
+The pull request you sent on Tue, 24 Jan 2023 13:06:27 -0800:
 
-Indeed, and I actually already discovered that and made such changes,
-just need to get around to posting the patches.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc6
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/948ef7bb70c4acaf74d87420ea3a1190862d4548
+
+Thank you!
 
 -- 
-Josh
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
