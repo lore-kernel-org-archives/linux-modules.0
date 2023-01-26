@@ -2,92 +2,260 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B016C54E94
-	for <linux-modules@archiver.kernel.org>; Wed, 25 Jan 2023 19:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE141C05027
+	for <linux-modules@archiver.kernel.org>; Thu, 26 Jan 2023 06:06:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235956AbjAYTDm (ORCPT
+        id S235957AbjAZGGM (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 25 Jan 2023 14:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
+        Thu, 26 Jan 2023 01:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjAYTDl (ORCPT
+        with ESMTP id S235678AbjAZGGM (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:03:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C5FDBCB;
-        Wed, 25 Jan 2023 11:03:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94BBC6155F;
-        Wed, 25 Jan 2023 19:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF3CC433EF;
-        Wed, 25 Jan 2023 19:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674673418;
-        bh=XeT3qSPMBwmHYZ4zvlYQg6u5mZJtG0QjkOeNOOP32w4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I3XZcPQfHwnAYUCtYNTwNlpXKTZnXyv7Q0IfVNLD+wYLAMooFQQBKesHIfGyRcIQx
-         trjuWggsnElsdzUdzrBCegOmeCsLwny9v6QHEeeWVO/21G8k9vx4sgxLYri3/QRT2l
-         i0bzshvQIZmJinOGyGOnUk4Nb9ikFMt1QIaeUYUoWzhskId0DONSp2iRB3gG8e0+4b
-         gq45KZrH+P4GHeCRQ8I6zGDvEIhqg0EkNl4rJUJf9i9PVYpxHcCwscZvBmbdNR02Kt
-         HHM5Hx/hOfcYAqVqrK8sCQYs0yOgC541MxtQjufjMjlQL8IFct8LR18DjsAav9I+/7
-         BCm3LT4abGHvA==
-Date:   Wed, 25 Jan 2023 11:03:36 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
+        Thu, 26 Jan 2023 01:06:12 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E0621970;
+        Wed, 25 Jan 2023 22:06:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JQrN3UZl/mHZBH9yHVK69TJgyXOspURdR0VdlwbD4Eg=; b=0XWSI2tdvwlthpgOh9S7JLikrc
+        mY9T4izPEya7VzwoSqdo97+1eVsNWjFkfhriLwIAHL/4DYxsruzwBSqSj/QCCzdtpJ+4bbi+pi3wx
+        4V1GAKmJM689VLJzZBkU4prksD3Dl3RQTyLZ1g5+wBed2aq/TOw3amGsPAiDYZBE2tIfm6w+/U+YO
+        Gmj26micbcDQkInFQfVw/F1PxhXns3G1WDQVsawXqI7TQU7HXdDfeyAcw8EmfUY4rf7TTqBIm/kF8
+        Lf8GSEA9Bjfy5+BQmVO7JZuoq2/Dpk3DRR/UJ/IVU33gM6JA13oQEd7+UKyNz/QR2Vdwh1H/q4tMv
+        Hao/k7Vg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKvOe-009ieL-BM; Thu, 26 Jan 2023 06:06:04 +0000
+Date:   Wed, 25 Jan 2023 22:06:04 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v11 2/2] livepatch,x86: Clear relocation targets on a
- module removal
-Message-ID: <20230125190336.utdb3tvyuy74vnap@treble>
-References: <20230125185401.279042-1-song@kernel.org>
- <20230125185401.279042-2-song@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2] module: replace module_layout with module_memory
+Message-ID: <Y9IYTI3pWuKbJ3bC@bombadil.infradead.org>
+References: <20230125185004.254742-1-song@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125185401.279042-2-song@kernel.org>
+In-Reply-To: <20230125185004.254742-1-song@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jan 25, 2023 at 10:54:01AM -0800, Song Liu wrote:
-> Josh reported a bug:
+On Wed, Jan 25, 2023 at 10:50:04AM -0800, Song Liu wrote:
+> module_layout manages different types of memory (text, data, rodata, etc.)
+> in one allocation, which is problematic for some reasons:
 > 
->   When the object to be patched is a module, and that module is
->   rmmod'ed and reloaded, it fails to load with:
+> 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
+> 2. It is hard to use huge pages in modules (and not break strict rwx).
+> 3. Many archs uses module_layout for arch-specific data, but it is not
+>    obvious how these data are used (are they RO, RX, or RW?)
 > 
->   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
->   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
->   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> Improve the scenario by replacing 2 (or 3) module_layout per module with
+> up to 7 module_memory per module:
 > 
->   The livepatch module has a relocation which references a symbol
->   in the _previous_ loading of nfsd. When apply_relocate_add()
->   tries to replace the old relocation with a new one, it sees that
->   the previous one is nonzero and it errors out.
+>         MOD_MEM_TYPE_TEXT,
+>         MOD_MEM_TYPE_DATA,
+>         MOD_MEM_TYPE_RODATA,
+>         MOD_MEM_TYPE_RO_AFTER_INIT,
+>         MOD_MEM_TYPE_INIT_TEXT,
+>         MOD_MEM_TYPE_INIT_DATA,
+>         MOD_MEM_TYPE_INIT_RODATA,
 > 
-> He also proposed three different solutions. We could remove the error
-> check in apply_relocate_add() introduced by commit eda9cec4c9a1
-> ("x86/module: Detect and skip invalid relocations"). However the check
-> is useful for detecting corrupted modules.
-> 
-> We could also deny the patched modules to be removed. If it proved to be
-> a major drawback for users, we could still implement a different
-> approach. The solution would also complicate the existing code a lot.
-> 
-> We thus decided to reverse the relocation patching (clear all relocation
-> targets on x86_64). The solution is not
-> universal and is too much arch-specific, but it may prove to be simpler
-> in the end.
-> 
-> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Originally-by: Miroslav Benes <mbenes@suse.cz>
+> and allocating them separately.
+
+First thanks for doing this work!
+
+This seems to not acknolwedge the original goal of the first module_layout and
+the latched rb-tree use, and that was was for speeding up __module_address()
+since it *can* even be triggered on NMIs. I say this because the first question
+that comes to me is the impact to performance on __module_address() I can't
+see that changing much here, but mention it as it similar consideration
+should be made in case future changes modify this path.
+
+Microbenching something so trivial as __module_address() may not be as useful
+for an idle system, at the very least being able to compare before and after
+even on idle may be useful *if* you eventually do some more radical changes
+here. Modules-related kernel/kallsyms_selftest.c did that for kallsyms_lookup_name()
+and friend just recently for a minor performance enhancement.
+
+At a high level it is perhaps my only conern so far while reviewing this patch,
+and I am glad it is now clear that addressing modules is a requirement. The rest
+seems like a highly welcomed cleanup even though the diffstat does not reflect
+that.
+
+> Various archs use module_layout for different data. These data are put
+> into different module_memory based on their location in module_layout.
+> IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
+> data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
+
+I think the commit log should document a bit the rationale for why
+ARCH_WANTS_MODULES_DATA_IN_VMALLOC gets *can* tidied up so well here.
+
 > Signed-off-by: Song Liu <song@kernel.org>
-> Acked-by: Miroslav Benes <mbenes@suse.cz>
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> 
+> ---
+> 
+> This is the preparation work for the type aware module_alloc() discussed
+> in [1]. While this work is not covered much in the discussion, it is a
+> critical step of the effort.
+> 
+> As this part grows pretty big (~1000 lines, + and -), I would like get
+> some feedback on it, so that I know it is on the right track.
+> 
+> Please share your comments. Thanks!
+> 
+> Test coverage: Tested on x86_64.
 
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+I will likely merge this onto modules-next soon, not because I think it is
+ready, but just because I think it *is* mostly ready and the next thing
+we need is exposure and testing. rc5 is pretty late to consider this
+for v6.3 and so hopefully for this cycle we can at least settle on
+something which will sit in linux-next since the respective linux-next
+after v6.3-rc1 is released.
 
--- 
-Josh
+> Build tested by kernel test bot in [2]. The only regression in [2] was a
+> typo in parisc, which is also fixed.
+> 
+> [1] https://lore.kernel.org/linux-mm/20221107223921.3451913-1-song@kernel.org/T/#u
+
+You still never addressed my performance suggestions so don't be
+surprised if I insist later. Yes you can use existing performance
+benchmarks, specially now with modules as a hard requirement, to
+show gains. So I'd like to clarify that if I'm reviewing late it is
+because:
+
+a) my modules patch review queue has been high as of late
+b) you seem to not have taken these performance suggestions into consideration
+   before and so I tend to put it at my end of my queue for review.
+
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index d02d39c7174e..c90eb2ba0985 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -925,11 +929,31 @@ static ssize_t store_uevent(struct module_attribute *mattr,
+>  struct module_attribute module_uevent =
+>  	__ATTR(uevent, 0200, NULL, store_uevent);
+>  
+> +#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+> +
+> +static ssize_t show_coresize(struct module_attribute *mattr,
+> +			     struct module_kobject *mk, char *buffer)
+> +{
+> +	enum mod_mem_type type;
+
+This is unused.
+
+> @@ -1389,16 +1466,29 @@ unsigned int __weak arch_mod_section_prepend(struct module *mod,
+>  	return 0;
+>  }
+>  
+> -/* Update size with this section: return offset. */
+> -long module_get_offset(struct module *mod, unsigned int *size,
+> -		       Elf_Shdr *sechdr, unsigned int section)
+> +/*
+> + * Use highest 4 bits of sh_entsize to store the mod_mem_type of this
+> + * section. This leaves 28 bits for offset on 32-bit systems, which is
+> + * about 256 MiB (WARN_ON_ONCE if we exceed that).
+> + */
+> +
+> +#define SH_ENTSIZE_TYPE_BITS	4
+> +#define SH_ENTSIZE_TYPE_SHIFT	(BITS_PER_LONG - SH_ENTSIZE_TYPE_BITS)
+> +#define SH_ENTSIZE_TYPE_MASK	((1UL << SH_ENTSIZE_TYPE_BITS) - 1)
+> +#define SH_ENTSIZE_OFFSET_MASK	((1UL << (BITS_PER_LONG - SH_ENTSIZE_TYPE_BITS)) - 1)
+> +
+> +long module_get_offset_and_type(struct module *mod, enum mod_mem_type type,
+> +				Elf_Shdr *sechdr, unsigned int section)
+>  {
+> -	long ret;
+> +	long offset;
+> +	long mask = ((unsigned long)(type) & SH_ENTSIZE_TYPE_MASK) << SH_ENTSIZE_TYPE_SHIFT;
+>  
+> -	*size += arch_mod_section_prepend(mod, section);
+> -	ret = ALIGN(*size, sechdr->sh_addralign ?: 1);
+> -	*size = ret + sechdr->sh_size;
+> -	return ret;
+> +	mod->mod_mem[type].size += arch_mod_section_prepend(mod, section);
+> +	offset = ALIGN(mod->mod_mem[type].size, sechdr->sh_addralign ?: 1);
+> +	mod->mod_mem[type].size = offset + sechdr->sh_size;
+> +
+> +	WARN_ON_ONCE(offset & mask);
+> +	return offset | mask;
+>  }
+
+Could you split this somehow with the mask stuff up into its own
+non-functional patch first somehow to make this easier to review?
+
+No worries if you can't.
+
+> @@ -2117,74 +2193,45 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+>  
+>  static int move_module(struct module *mod, struct load_info *info)
+>  {
+> +	enum mod_mem_type type;
+>  	int i;
+>  	void *ptr;
+>  
+> -	/* Do the allocs. */
+> -	ptr = module_alloc(mod->core_layout.size);
+> -	/*
+> -	 * The pointer to this block is stored in the module structure
+> -	 * which is inside the block. Just mark it as not being a
+> -	 * leak.
+> -	 */
+> -	kmemleak_not_leak(ptr);
+> -	if (!ptr)
+> -		return -ENOMEM;
+> -
+> -	memset(ptr, 0, mod->core_layout.size);
+> -	mod->core_layout.base = ptr;
+> +	for_each_mod_mem_type(type) {
+> +		if (!mod->mod_mem[type].size) {
+> +			mod->mod_mem[type].base = NULL;
+> +			continue;
+> +		}
+> +		mod->mod_mem[type].size = PAGE_ALIGN(mod->mod_mem[type].size);
+> +		if (mod_mem_use_vmalloc(type))
+> +			ptr = vzalloc(mod->mod_mem[type].size);
+> +		else
+> +			ptr = module_alloc(mod->mod_mem[type].size);
+
+This form to check for mod_mem_use_vmalloc() is used twice, how about
+a helper to just do it one line for us?
+
+> @@ -2195,6 +2242,14 @@ static int move_module(struct module *mod, struct load_info *info)
+>  	}
+>  
+>  	return 0;
+> +out_enomem:
+> +	for (type--; type >= 0; type--) {
+> +		if (mod_mem_use_vmalloc(type))
+> +			vfree(mod->mod_mem[type].base);
+> +		else
+> +			module_memfree(mod->mod_mem[type].base);
+> +	}
+> +	return -ENOMEM;
+>  }
+
+Here's the other user.
+
+> diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+
+This was the hardest file to review and so I ask the same, if a separate
+non-functional change could be done first to make the changes easier
+to review.
+
+No worries if not.
+
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+
+I'll queue this onto modules-testing to see what blows up. After at
+least one more review I'll queue this onto modules-next.
+
+  Luis
