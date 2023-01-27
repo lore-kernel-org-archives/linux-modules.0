@@ -2,94 +2,129 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E072C38142
-	for <linux-modules@archiver.kernel.org>; Fri, 27 Jan 2023 16:59:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 071FDC54EAA
+	for <linux-modules@archiver.kernel.org>; Fri, 27 Jan 2023 20:40:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbjA0Q7q (ORCPT
+        id S231616AbjA0Ukj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 27 Jan 2023 11:59:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
+        Fri, 27 Jan 2023 15:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjA0Q7p (ORCPT
+        with ESMTP id S232548AbjA0UkS (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:59:45 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30470213D;
-        Fri, 27 Jan 2023 08:59:44 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id r132so4673598oif.10;
-        Fri, 27 Jan 2023 08:59:44 -0800 (PST)
+        Fri, 27 Jan 2023 15:40:18 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8037B7A5;
+        Fri, 27 Jan 2023 12:40:14 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-15085b8a2f7so8081387fac.2;
+        Fri, 27 Jan 2023 12:40:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xuc3tclMngpgJkRdKqMDtEnHq9IobDeEAM5VzXHLDtI=;
-        b=j4/PFguW9sg7XvpdGJgv3o0vcxMXINgw9XTS0bPmPDuyJUKeWTb5TvMtzHm86uUPOp
-         Iho4vvr9aUVqwxy/fn7CetIMBh596Hkl2w3nPuFNn8UrUhkDAZi6gFOfQ+9LpqVXeNKU
-         p2pZ2o3cAVgFbnOMbEHVQzJosvQkr6r5AxgrQbYCOm9m6p3KdH/DluTYA6/6Cw3RUAWQ
-         YYy9E0+dgB3tX9r/6/YHycka4jDKb1D85IsA/ZaSdrGj8ivgcRvN7fmu8zy3Ms1Xploj
-         9PNBtlLo47xLok7C3Xkp17bg+r1y6v6fqkqSEZGuAu7XGb4i+T2NQxJrdDZkragU4HYs
-         cOiw==
+        bh=ADNmefQ5ddv9lexJLXvjJOWsX20ypccARIkMWrCDsdU=;
+        b=gnY44xHkFPfQOlfYC48dS7wi533nwZkFFXvIBNI13+J8gG36zBpp3Orb1M9C9Jv1yY
+         WF2vw45dvnkh1E4usbJ1S+kt6fzgrbOlEgZMKVj2OIj23ZgmZ6LntMfH7Cd2F3YTUDAA
+         rCHEyjPT+05UwcnwpNQhSrVTDn8A0bsLFPWdWkdyw6RHYHOwtXGFPQVuAWu7sSys6u5V
+         HgjRn/Zo1Z586bTc/IJrUjtaXJbRvk2+tR66mPwZjGVgrLeDPOZPg2qAxmPh4GQRiyZX
+         mK8vSCKq2Y36vbuD7PbZjO4Mcx1tGF/23lD6ryo9F0OqymCsTQjW3lHjNQeCxtfxZqxg
+         UonQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xuc3tclMngpgJkRdKqMDtEnHq9IobDeEAM5VzXHLDtI=;
-        b=kB36w71Y9EgQdwwqyQd/E+q0NBIoeK/Eixg5KbYZ51QS6rKPWC6GoMNxyjMC7r6+8o
-         Msoluma4OGjrP/SdyhAYh8EyFBaEm/RE22eqmwK/dNPiJ+IIyd+Qco4OYnp+Kbu9zfCL
-         bmy5WE1WQUUGbEO33BAf8KHPzXWSRhpkZe0bOLCuyMFk8Vu9rloHThArV+wJhcOd7ZNf
-         dZoHCXelOtPQeMpwOWedtZx5iFnenQ14NX6vAbb5on36LRd5b7bhwQpD9Kcso3tL5nyz
-         Ip2pvt6OMhOSpKgkZKc+ddM6D3cBXI6vRUaviiohlvoDdAYhvFf1hmuTeg+BsN+aFmfU
-         r3Qg==
-X-Gm-Message-State: AO0yUKWM+Q7j7rjzyR+0dKRyMootZPlRc2Ns1oOu02GLDnXr+RVp80My
-        lDoQkavviYLTkVKM3qGMMjNi3cO5n5c=
-X-Google-Smtp-Source: AK7set+FMo4TV/ejRDS/j54EnWPu1nFjcteSA16DMM+w8OhhaEd5qpIljIkvwOpJ8+M/K9iNfSIc6A==
-X-Received: by 2002:a05:6808:1819:b0:364:a651:38eb with SMTP id bh25-20020a056808181900b00364a65138ebmr3801504oib.17.1674838783491;
-        Fri, 27 Jan 2023 08:59:43 -0800 (PST)
+        bh=ADNmefQ5ddv9lexJLXvjJOWsX20ypccARIkMWrCDsdU=;
+        b=BqLuGijxaiYTxCROmWvbmUrjnHVL0b4E6qzIE5ThpLfVj1BiDvaEBUmPGSHiTKw1sb
+         9CmrW3Y+MUHP3f07HHDJiBygOAKKWp6q9VSjs26ZgY0iF0dCCqo/4WvIiet9WQyUNNVP
+         GRFUljbILnsho7oqa2YdkitTG+YU94ORBRJXLL33ppDICIYmCkXA7NTYjBQp1eR8J45t
+         8liXleFYI7YRYJyMWS5iR8HdfB0GgR14TdKa+nOAyIvkCxHK8vplRZAl93nkET0ltAmp
+         k7bZVBE7vxbkIuyIEsjTYIaoInlet1e8ydSbW39AlRDGyXdRd2B/9NBhJiqpITClWj8I
+         M7jA==
+X-Gm-Message-State: AFqh2kqBy5xcmvgb0aDuUmXhHJTQiZVC7fr8bioHMhfUmOeElfembr+Q
+        3qkhN3UkQ2l18Tru0cd3piY=
+X-Google-Smtp-Source: AMrXdXtIR8tlLDSqPWcZrNvMujYjxJX6tDev+59gX4IU+JfFmw+PqKDqxQTYJSnPyG4tWWP+UevnYw==
+X-Received: by 2002:a05:6871:4497:b0:144:7065:30cf with SMTP id ne23-20020a056871449700b00144706530cfmr21084349oab.24.1674852013436;
+        Fri, 27 Jan 2023 12:40:13 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b67-20020aca3446000000b00364e8f85c08sm1749676oia.21.2023.01.27.08.59.42
+        by smtp.gmail.com with ESMTPSA id n1-20020a056870820100b00163482967e1sm2342635oae.6.2023.01.27.12.40.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 08:59:42 -0800 (PST)
+        Fri, 27 Jan 2023 12:40:12 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 27 Jan 2023 08:59:41 -0800
+Date:   Fri, 27 Jan 2023 12:40:11 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Song Liu <song@kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Thomas Gleixner <tglx@linutronix.de>,
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] module: replace module_layout with module_memory
-Message-ID: <20230127165941.GB3962737@roeck-us.net>
-References: <20230125185004.254742-1-song@kernel.org>
- <Y9IYTI3pWuKbJ3bC@bombadil.infradead.org>
- <CAPhsuW7ipGS=RhowYSp06DBYOY31sYoup7-Je+CEuKCxJsHavQ@mail.gmail.com>
- <Y9Lp+5mqxP0bgvrM@bombadil.infradead.org>
- <20230127131351.GB3911997@roeck-us.net>
- <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
+Subject: Re: [PATCH v3] module: replace module_layout with module_memory
+Message-ID: <20230127204011.GA45594@roeck-us.net>
+References: <20230126233606.1317794-1-song@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
+In-Reply-To: <20230126233606.1317794-1-song@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jan 27, 2023 at 08:42:57AM -0800, Song Liu wrote:
-> Hi Guenter,
+On Thu, Jan 26, 2023 at 03:36:06PM -0800, Song Liu wrote:
+> module_layout manages different types of memory (text, data, rodata, etc.)
+> in one allocation, which is problematic for some reasons:
 > 
-> On Fri, Jan 27, 2023 at 5:13 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Thu, Jan 26, 2023 at 01:00:43PM -0800, Luis Chamberlain wrote:
-> > > Guenter Roeck,
-> > >
-> > > Any chance you can give this branch a good spin on your multi-arch setup
-> > > to see what may below up?
-> > >
-> > I assume I shoud test v3 ?
+> 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
+> 2. It is hard to use huge pages in modules (and not break strict rwx).
+> 3. Many archs uses module_layout for arch-specific data, but it is not
+>    obvious how these data are used (are they RO, RX, or RW?)
 > 
-> Yes, please. The one in the modules-testing [1] branch is already v3.
+> Improve the scenario by replacing 2 (or 3) module_layout per module with
+> up to 7 module_memory per module:
 > 
+>         MOD_MEM_TYPE_TEXT,
+>         MOD_MEM_TYPE_DATA,
+>         MOD_MEM_TYPE_RODATA,
+>         MOD_MEM_TYPE_RO_AFTER_INIT,
+>         MOD_MEM_TYPE_INIT_TEXT,
+>         MOD_MEM_TYPE_INIT_DATA,
+>         MOD_MEM_TYPE_INIT_RODATA,
+> 
+> and allocating them separately. This adds slightly more entries to
+> mod_tree (from up to 3 entries per module, to up to 7 entries per
+> module). However, this at most adds a small constant overhead to
+> __module_address(), which is expected to be fast.
+> 
+> Various archs use module_layout for different data. These data are put
+> into different module_memory based on their location in module_layout.
+> IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
+> data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
+> 
+> module_memory simplifies quite some of the module code. For example,
+> ARCH_WANTS_MODULES_DATA_IN_VMALLOC is a lot cleaner, as it just uses a
+> different allocator for the data. kernel/module/strict_rwx.c is also
+> much cleaner with module_memory.
+> 
+> Signed-off-by: Song Liu <song@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> 
+> ---
 
-I started a test on v6.2-rc5-52-gc96fb00e9ddf.
+Build reference: v6.2-rc5-52-gc96fb00
+Compiler version: powerpc64-linux-gcc (GCC) 11.3.0
+Assembler version: GNU assembler (GNU Binutils) 2.39
+
+Building powerpc:defconfig ... passed
+Building powerpc:allmodconfig ... passed
+Building powerpc:ppc32_allmodconfig ... failed
+--------------
+Error log:
+kernel/module/main.c: In function 'show_coresize':
+kernel/module/main.c:938:22: error: unused variable 'size' [-Werror=unused-variable]
+  938 |         unsigned int size = 0;
+
+That is the only failure reported by my test system.
 
 Guenter
