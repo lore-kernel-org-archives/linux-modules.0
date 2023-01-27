@@ -2,472 +2,79 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 329DCC54EAA
-	for <linux-modules@archiver.kernel.org>; Fri, 27 Jan 2023 13:47:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F846C38142
+	for <linux-modules@archiver.kernel.org>; Fri, 27 Jan 2023 16:43:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjA0Nrr (ORCPT
+        id S229456AbjA0Qn6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 27 Jan 2023 08:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        Fri, 27 Jan 2023 11:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbjA0Nrq (ORCPT
+        with ESMTP id S229711AbjA0Qn5 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:47:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24107410AF
-        for <linux-modules@vger.kernel.org>; Fri, 27 Jan 2023 05:47:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674827219;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aSK25cEHb3gnxXUJdSUuNT8tA/JfjwB0tzogcFkaczc=;
-        b=HOdBKlqYi/s60K/9GPT9MaTstKyQqsbw864Kosa6bBP++KbabHK+avAeuvTdM4HHJ3PYHE
-        DbXpzzv3QtXc1zVx7APTGHLIieFz1MfGNLcgBW3Xjh4nzy3+OdnJtT/SIN77lwy3kieWVO
-        eecMcDZzxllftbGHi3eN6+teH2blbkE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-118-Q9jqAfS3Nt-JJuOwDo6xnw-1; Fri, 27 Jan 2023 08:46:56 -0500
-X-MC-Unique: Q9jqAfS3Nt-JJuOwDo6xnw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 27 Jan 2023 11:43:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEB38D093;
+        Fri, 27 Jan 2023 08:43:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A727C3C01DF6;
-        Fri, 27 Jan 2023 13:46:55 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.33.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2D4DE40C141B;
-        Fri, 27 Jan 2023 13:46:55 +0000 (UTC)
-Date:   Fri, 27 Jan 2023 08:46:53 -0500
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v11 2/2] livepatch,x86: Clear relocation targets on a
- module removal
-Message-ID: <Y9PVzSoBORI2KKyR@redhat.com>
-References: <20230125185401.279042-1-song@kernel.org>
- <20230125185401.279042-2-song@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9514B8211E;
+        Fri, 27 Jan 2023 16:43:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6301DC433EF;
+        Fri, 27 Jan 2023 16:43:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674837791;
+        bh=TfWsIjnpXj9UAEiaerVWeiYol3ufC+0UIEjPrYdaesw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=go9Fo8j18qfSnkxp59u+WDQI5I10RGKfJGEyGGYdnTy1jR5/ovkRthMBZ8VOtNvjh
+         h/s9kRDAgw5opS82jQ0bGP3DdqXvq7KT14SVsfFNstdrjmSwMVj/7JECDo3bJ5ZHdt
+         LcjMddly8bRsg1iT82vcbRA+mSpghIrCEGDF++2/ziK/Tw/44cr4830knQHbO5o43u
+         Ie0QQ1WeH9xBqd7QVtvMa4USWgsyXS4rOr7yqaCLu09rhf9sn7yWNBWrabDuV9X+nX
+         8eI6vsDY1m01D61OsfiMgpcS/lhdg61nw83PpoVeelVl8orXFF3MS+VUAYcjM/okuC
+         3kq5yVvMvb/Eg==
+Received: by mail-lj1-f180.google.com with SMTP id k38so6136389lje.5;
+        Fri, 27 Jan 2023 08:43:11 -0800 (PST)
+X-Gm-Message-State: AFqh2koptC5c54D7GxiqRD2fybIXtE4FZSj6cIvj6bBXflgh9nhtVefA
+        6yzRERl5BgegdV+sYQ0kqg27CvCA9Fa/2VSs2Vg=
+X-Google-Smtp-Source: AMrXdXvrkDQ3Xeyopqiy3GVRgj/q/1qJFaiCTsHSRNxdefODJEls8a0/hNtLqPNTmQL3P05Dk3ZTaIMuNnTzalNKH+o=
+X-Received: by 2002:a2e:bc25:0:b0:28b:663a:168d with SMTP id
+ b37-20020a2ebc25000000b0028b663a168dmr2153457ljf.53.1674837789401; Fri, 27
+ Jan 2023 08:43:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125185401.279042-2-song@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+References: <20230125185004.254742-1-song@kernel.org> <Y9IYTI3pWuKbJ3bC@bombadil.infradead.org>
+ <CAPhsuW7ipGS=RhowYSp06DBYOY31sYoup7-Je+CEuKCxJsHavQ@mail.gmail.com>
+ <Y9Lp+5mqxP0bgvrM@bombadil.infradead.org> <20230127131351.GB3911997@roeck-us.net>
+In-Reply-To: <20230127131351.GB3911997@roeck-us.net>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 27 Jan 2023 08:42:57 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
+Message-ID: <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
+Subject: Re: [PATCH v2] module: replace module_layout with module_memory
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Jan 25, 2023 at 10:54:01AM -0800, Song Liu wrote:
-> Josh reported a bug:
-> 
->   When the object to be patched is a module, and that module is
->   rmmod'ed and reloaded, it fails to load with:
-> 
->   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
->   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
->   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> 
->   The livepatch module has a relocation which references a symbol
->   in the _previous_ loading of nfsd. When apply_relocate_add()
->   tries to replace the old relocation with a new one, it sees that
->   the previous one is nonzero and it errors out.
-> 
-> He also proposed three different solutions. We could remove the error
-> check in apply_relocate_add() introduced by commit eda9cec4c9a1
-> ("x86/module: Detect and skip invalid relocations"). However the check
-> is useful for detecting corrupted modules.
-> 
-> We could also deny the patched modules to be removed. If it proved to be
-> a major drawback for users, we could still implement a different
-> approach. The solution would also complicate the existing code a lot.
-> 
-> We thus decided to reverse the relocation patching (clear all relocation
-> targets on x86_64). The solution is not
-> universal and is too much arch-specific, but it may prove to be simpler
-> in the end.
-> 
-> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Originally-by: Miroslav Benes <mbenes@suse.cz>
-> Signed-off-by: Song Liu <song@kernel.org>
-> Acked-by: Miroslav Benes <mbenes@suse.cz>
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> 
-> ---
-> 
-> NOTE: powerpc32 code is only compile tested.
-> 
-> Changes v10 => v11:
-> 1. Do not initialize "size" in __write_relocate_add(). (Petr Mladek)
-> 2. Use __weak clear_relocate_add(). (Christophe Leroy)
-> 
-> Changes v9 => v10:
-> 1. Revise commit log. (Josh Poimboeuf)
-> 2. Various improvements in code style, comments, etc. (Josh Poimboeuf)
-> 
-> Changes v8 => v9:
-> 1. Fix overflow check for R_X86_64_PC32 and R_X86_64_PLT32. (Petr Mladek)
-> 
-> Changes v7 = v8:
-> 1. Remove the logic in powerpc/kernel/module_64.c, as there is ongoing
->    discussions.
-> 2. For x86_64, add check for expected value during clear_relocate_add().
->    (Petr Mladek)
-> 3. Optimize the logic in klp_write_section_relocs(). (Petr Mladek)
-> 4. Optimize __write_relocate_add (x86_64). (Joe Lawrence)
-> 
-> Changes v6 = v7:
-> 1. Reduce code duplication in livepatch/core.c and x86/kernel/module.c.
-> 2. Add more comments to powerpc/kernel/module_64.c.
-> 3. Added Joe's Tested-by (which I should have added in v6).
-> 
-> Changes v5 = v6:
-> 1. Fix powerpc64.
-> 2. Fix compile for powerpc32.
-> 
-> Changes v4 = v5:
-> 1. Fix compile with powerpc.
-> 
-> Changes v3 = v4:
-> 1. Reuse __apply_relocate_add to make it more reliable in long term.
->    (Josh Poimboeuf)
-> 2. Add back ppc64 logic from v2, with changes to match current code.
->    (Josh Poimboeuf)
-> 
-> Changes v2 => v3:
-> 1. Rewrite x86 changes to match current code style.
-> 2. Remove powerpc changes as there is no test coverage in v3.
-> 3. Only keep 1/3 of v2.
-> 
-> v2: https://lore.kernel.org/all/20190905124514.8944-1-mbenes@suse.cz/T/#u
-> 
-> fix
-> ---
->  arch/x86/kernel/module.c     | 93 +++++++++++++++++++++++-------------
->  include/linux/moduleloader.h | 17 +++++++
->  kernel/livepatch/core.c      | 62 +++++++++++++++++++-----
->  3 files changed, 126 insertions(+), 46 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-> index 1dee3ad82da2..84ad0e61ba6e 100644
-> --- a/arch/x86/kernel/module.c
-> +++ b/arch/x86/kernel/module.c
-> @@ -129,22 +129,27 @@ int apply_relocate(Elf32_Shdr *sechdrs,
->  	return 0;
->  }
->  #else /*X86_64*/
-> -static int __apply_relocate_add(Elf64_Shdr *sechdrs,
-> +static int __write_relocate_add(Elf64_Shdr *sechdrs,
->  		   const char *strtab,
->  		   unsigned int symindex,
->  		   unsigned int relsec,
->  		   struct module *me,
-> -		   void *(*write)(void *dest, const void *src, size_t len))
-> +		   void *(*write)(void *dest, const void *src, size_t len),
-> +		   bool apply)
->  {
->  	unsigned int i;
->  	Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
->  	Elf64_Sym *sym;
->  	void *loc;
->  	u64 val;
-> +	u64 zero = 0ULL;
->  
-> -	DEBUGP("Applying relocate section %u to %u\n",
-> +	DEBUGP("%s relocate section %u to %u\n",
-> +	       apply ? "Applying" : "Clearing",
->  	       relsec, sechdrs[relsec].sh_info);
->  	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
-> +		size_t size;
-> +
->  		/* This is where to make the change */
->  		loc = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
->  			+ rel[i].r_offset;
-> @@ -162,52 +167,53 @@ static int __apply_relocate_add(Elf64_Shdr *sechdrs,
->  
->  		switch (ELF64_R_TYPE(rel[i].r_info)) {
->  		case R_X86_64_NONE:
-> -			break;
-> +			continue;  /* nothing to write */
->  		case R_X86_64_64:
-> -			if (*(u64 *)loc != 0)
-> -				goto invalid_relocation;
-> -			write(loc, &val, 8);
-> +			size = 8;
->  			break;
->  		case R_X86_64_32:
-> -			if (*(u32 *)loc != 0)
-> -				goto invalid_relocation;
-> -			write(loc, &val, 4);
-> -			if (val != *(u32 *)loc)
-> +			if (val != *(u32 *)&val)
->  				goto overflow;
-> +			size = 4;
->  			break;
->  		case R_X86_64_32S:
-> -			if (*(s32 *)loc != 0)
-> -				goto invalid_relocation;
-> -			write(loc, &val, 4);
-> -			if ((s64)val != *(s32 *)loc)
-> +			if ((s64)val != *(s32 *)&val)
->  				goto overflow;
-> +			size = 4;
->  			break;
->  		case R_X86_64_PC32:
->  		case R_X86_64_PLT32:
-> -			if (*(u32 *)loc != 0)
-> -				goto invalid_relocation;
->  			val -= (u64)loc;
-> -			write(loc, &val, 4);
-> +			size = 4;
->  			break;
->  		case R_X86_64_PC64:
-> -			if (*(u64 *)loc != 0)
-> -				goto invalid_relocation;
->  			val -= (u64)loc;
-> -			write(loc, &val, 8);
-> +			size = 8;
->  			break;
->  		default:
->  			pr_err("%s: Unknown rela relocation: %llu\n",
->  			       me->name, ELF64_R_TYPE(rel[i].r_info));
->  			return -ENOEXEC;
->  		}
-> +
-> +		if (apply) {
-> +			if (memcmp(loc, &zero, size)) {
-> +				pr_err("x86/modules: Invalid relocation target, existing value is nonzero for type %d, loc %p, val %Lx\n",
-> +				       (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
-> +				return -ENOEXEC;
-> +			}
-> +			write(loc, &val, size);
-> +		} else {
-> +			if (memcmp(loc, &val, size)) {
-> +				pr_warn("x86/modules: Invalid relocation target, existing value does not match expected value for type %d, loc %p, val %Lx\n",
-> +					(int)ELF64_R_TYPE(rel[i].r_info), loc, val);
-> +				return -ENOEXEC;
-> +			}
-> +			write(loc, &zero, size);
-> +		}
->  	}
->  	return 0;
->  
-> -invalid_relocation:
-> -	pr_err("x86/modules: Skipping invalid relocation target, existing value is nonzero for type %d, loc %p, val %Lx\n",
-> -	       (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
-> -	return -ENOEXEC;
-> -
->  overflow:
->  	pr_err("overflow in relocation type %d val %Lx\n",
->  	       (int)ELF64_R_TYPE(rel[i].r_info), val);
-> @@ -216,11 +222,12 @@ static int __apply_relocate_add(Elf64_Shdr *sechdrs,
->  	return -ENOEXEC;
->  }
->  
-> -int apply_relocate_add(Elf64_Shdr *sechdrs,
-> -		   const char *strtab,
-> -		   unsigned int symindex,
-> -		   unsigned int relsec,
-> -		   struct module *me)
-> +static int write_relocate_add(Elf64_Shdr *sechdrs,
-> +			      const char *strtab,
-> +			      unsigned int symindex,
-> +			      unsigned int relsec,
-> +			      struct module *me,
-> +			      bool apply)
->  {
->  	int ret;
->  	bool early = me->state == MODULE_STATE_UNFORMED;
-> @@ -231,8 +238,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
->  		mutex_lock(&text_mutex);
->  	}
->  
-> -	ret = __apply_relocate_add(sechdrs, strtab, symindex, relsec, me,
-> -				   write);
-> +	ret = __write_relocate_add(sechdrs, strtab, symindex, relsec, me,
-> +				   write, apply);
->  
->  	if (!early) {
->  		text_poke_sync();
-> @@ -242,6 +249,26 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
->  	return ret;
->  }
->  
-> +int apply_relocate_add(Elf64_Shdr *sechdrs,
-> +		   const char *strtab,
-> +		   unsigned int symindex,
-> +		   unsigned int relsec,
-> +		   struct module *me)
-> +{
-> +	return write_relocate_add(sechdrs, strtab, symindex, relsec, me, true);
-> +}
-> +
-> +#ifdef CONFIG_LIVEPATCH
-> +void clear_relocate_add(Elf64_Shdr *sechdrs,
-> +			const char *strtab,
-> +			unsigned int symindex,
-> +			unsigned int relsec,
-> +			struct module *me)
-> +{
-> +	write_relocate_add(sechdrs, strtab, symindex, relsec, me, false);
-> +}
-> +#endif
-> +
->  #endif
->  
->  int module_finalize(const Elf_Ehdr *hdr,
-> diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
-> index 7b4587a19189..03be088fb439 100644
-> --- a/include/linux/moduleloader.h
-> +++ b/include/linux/moduleloader.h
-> @@ -75,6 +75,23 @@ int apply_relocate_add(Elf_Shdr *sechdrs,
->  		       unsigned int symindex,
->  		       unsigned int relsec,
->  		       struct module *mod);
-> +#ifdef CONFIG_LIVEPATCH
-> +/*
-> + * Some architectures (namely x86_64 and ppc64) perform sanity checks when
-> + * applying relocations.  If a patched module gets unloaded and then later
-> + * reloaded (and re-patched), klp re-applies relocations to the replacement
-> + * function(s).  Any leftover relocations from the previous loading of the
-> + * patched module might trigger the sanity checks.
-> + *
-> + * To prevent that, when unloading a patched module, clear out any relocations
-> + * that might trigger arch-specific sanity checks on a future module reload.
-> + */
-> +void clear_relocate_add(Elf_Shdr *sechdrs,
-> +		   const char *strtab,
-> +		   unsigned int symindex,
-> +		   unsigned int relsec,
-> +		   struct module *me);
-> +#endif
->  #else
->  static inline int apply_relocate_add(Elf_Shdr *sechdrs,
->  				     const char *strtab,
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index 201f0c0482fb..140997b36025 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -268,6 +268,14 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
->  	return 0;
->  }
->  
-> +void __weak clear_relocate_add(Elf_Shdr *sechdrs,
-> +		   const char *strtab,
-> +		   unsigned int symindex,
-> +		   unsigned int relsec,
-> +		   struct module *me)
-> +{
-> +}
-> +
->  /*
->   * At a high-level, there are two types of klp relocation sections: those which
->   * reference symbols which live in vmlinux; and those which reference symbols
-> @@ -291,10 +299,10 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
->   *    the to-be-patched module to be loaded and patched sometime *after* the
->   *    klp module is loaded.
->   */
-> -int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
-> -			     const char *shstrtab, const char *strtab,
-> -			     unsigned int symndx, unsigned int secndx,
-> -			     const char *objname)
-> +static int klp_write_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
-> +				    const char *shstrtab, const char *strtab,
-> +				    unsigned int symndx, unsigned int secndx,
-> +				    const char *objname, bool apply)
->  {
->  	int cnt, ret;
->  	char sec_objname[MODULE_NAME_LEN];
-> @@ -316,11 +324,26 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
->  	if (strcmp(objname ? objname : "vmlinux", sec_objname))
->  		return 0;
->  
-> -	ret = klp_resolve_symbols(sechdrs, strtab, symndx, sec, sec_objname);
-> -	if (ret)
-> -		return ret;
-> +	if (apply) {
-> +		ret = klp_resolve_symbols(sechdrs, strtab, symndx,
-> +					  sec, sec_objname);
-> +		if (ret)
-> +			return ret;
-> +
-> +		return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
-> +	}
-> +
-> +	clear_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
-> +	return 0;
-> +}
->  
-> -	return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
-> +int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
-> +			     const char *shstrtab, const char *strtab,
-> +			     unsigned int symndx, unsigned int secndx,
-> +			     const char *objname)
-> +{
-> +	return klp_write_section_relocs(pmod, sechdrs, shstrtab, strtab, symndx,
-> +					secndx, objname, true);
->  }
->  
->  /*
-> @@ -769,8 +792,9 @@ static int klp_init_func(struct klp_object *obj, struct klp_func *func)
->  			   func->old_sympos ? func->old_sympos : 1);
->  }
->  
-> -static int klp_apply_object_relocs(struct klp_patch *patch,
-> -				   struct klp_object *obj)
-> +static int klp_write_object_relocs(struct klp_patch *patch,
-> +				   struct klp_object *obj,
-> +				   bool apply)
->  {
->  	int i, ret;
->  	struct klp_modinfo *info = patch->mod->klp_info;
-> @@ -781,10 +805,10 @@ static int klp_apply_object_relocs(struct klp_patch *patch,
->  		if (!(sec->sh_flags & SHF_RELA_LIVEPATCH))
->  			continue;
->  
-> -		ret = klp_apply_section_relocs(patch->mod, info->sechdrs,
-> +		ret = klp_write_section_relocs(patch->mod, info->sechdrs,
->  					       info->secstrings,
->  					       patch->mod->core_kallsyms.strtab,
-> -					       info->symndx, i, obj->name);
-> +					       info->symndx, i, obj->name, apply);
->  		if (ret)
->  			return ret;
->  	}
-> @@ -792,6 +816,18 @@ static int klp_apply_object_relocs(struct klp_patch *patch,
->  	return 0;
->  }
->  
-> +static int klp_apply_object_relocs(struct klp_patch *patch,
-> +				   struct klp_object *obj)
-> +{
-> +	return klp_write_object_relocs(patch, obj, true);
-> +}
-> +
-> +static void klp_clear_object_relocs(struct klp_patch *patch,
-> +				    struct klp_object *obj)
-> +{
-> +	klp_write_object_relocs(patch, obj, false);
-> +}
-> +
->  /* parts of the initialization that is done only when the object is loaded */
->  static int klp_init_object_loaded(struct klp_patch *patch,
->  				  struct klp_object *obj)
-> @@ -1179,7 +1215,7 @@ static void klp_cleanup_module_patches_limited(struct module *mod,
->  			klp_unpatch_object(obj);
->  
->  			klp_post_unpatch_callback(obj);
-> -
-> +			klp_clear_object_relocs(patch, obj);
->  			klp_free_object_loaded(obj);
->  			break;
->  		}
-> -- 
-> 2.30.2
-> 
+Hi Guenter,
 
-Reviewed-and-tested-by: Joe Lawrence <joe.lawrence@redhat.com>
+On Fri, Jan 27, 2023 at 5:13 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Thu, Jan 26, 2023 at 01:00:43PM -0800, Luis Chamberlain wrote:
+> > Guenter Roeck,
+> >
+> > Any chance you can give this branch a good spin on your multi-arch setup
+> > to see what may below up?
+> >
+> I assume I shoud test v3 ?
 
---
-Joe
+Yes, please. The one in the modules-testing [1] branch is already v3.
 
+Thanks,
+Song
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-testing
