@@ -2,79 +2,94 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F846C38142
-	for <linux-modules@archiver.kernel.org>; Fri, 27 Jan 2023 16:43:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E072C38142
+	for <linux-modules@archiver.kernel.org>; Fri, 27 Jan 2023 16:59:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjA0Qn6 (ORCPT
+        id S233808AbjA0Q7q (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 27 Jan 2023 11:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        Fri, 27 Jan 2023 11:59:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjA0Qn5 (ORCPT
+        with ESMTP id S231342AbjA0Q7p (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:43:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEB38D093;
-        Fri, 27 Jan 2023 08:43:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9514B8211E;
-        Fri, 27 Jan 2023 16:43:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6301DC433EF;
-        Fri, 27 Jan 2023 16:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674837791;
-        bh=TfWsIjnpXj9UAEiaerVWeiYol3ufC+0UIEjPrYdaesw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=go9Fo8j18qfSnkxp59u+WDQI5I10RGKfJGEyGGYdnTy1jR5/ovkRthMBZ8VOtNvjh
-         h/s9kRDAgw5opS82jQ0bGP3DdqXvq7KT14SVsfFNstdrjmSwMVj/7JECDo3bJ5ZHdt
-         LcjMddly8bRsg1iT82vcbRA+mSpghIrCEGDF++2/ziK/Tw/44cr4830knQHbO5o43u
-         Ie0QQ1WeH9xBqd7QVtvMa4USWgsyXS4rOr7yqaCLu09rhf9sn7yWNBWrabDuV9X+nX
-         8eI6vsDY1m01D61OsfiMgpcS/lhdg61nw83PpoVeelVl8orXFF3MS+VUAYcjM/okuC
-         3kq5yVvMvb/Eg==
-Received: by mail-lj1-f180.google.com with SMTP id k38so6136389lje.5;
-        Fri, 27 Jan 2023 08:43:11 -0800 (PST)
-X-Gm-Message-State: AFqh2koptC5c54D7GxiqRD2fybIXtE4FZSj6cIvj6bBXflgh9nhtVefA
-        6yzRERl5BgegdV+sYQ0kqg27CvCA9Fa/2VSs2Vg=
-X-Google-Smtp-Source: AMrXdXvrkDQ3Xeyopqiy3GVRgj/q/1qJFaiCTsHSRNxdefODJEls8a0/hNtLqPNTmQL3P05Dk3ZTaIMuNnTzalNKH+o=
-X-Received: by 2002:a2e:bc25:0:b0:28b:663a:168d with SMTP id
- b37-20020a2ebc25000000b0028b663a168dmr2153457ljf.53.1674837789401; Fri, 27
- Jan 2023 08:43:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20230125185004.254742-1-song@kernel.org> <Y9IYTI3pWuKbJ3bC@bombadil.infradead.org>
- <CAPhsuW7ipGS=RhowYSp06DBYOY31sYoup7-Je+CEuKCxJsHavQ@mail.gmail.com>
- <Y9Lp+5mqxP0bgvrM@bombadil.infradead.org> <20230127131351.GB3911997@roeck-us.net>
-In-Reply-To: <20230127131351.GB3911997@roeck-us.net>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 27 Jan 2023 08:42:57 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
-Message-ID: <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
-Subject: Re: [PATCH v2] module: replace module_layout with module_memory
-To:     Guenter Roeck <linux@roeck-us.net>
+        Fri, 27 Jan 2023 11:59:45 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30470213D;
+        Fri, 27 Jan 2023 08:59:44 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id r132so4673598oif.10;
+        Fri, 27 Jan 2023 08:59:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xuc3tclMngpgJkRdKqMDtEnHq9IobDeEAM5VzXHLDtI=;
+        b=j4/PFguW9sg7XvpdGJgv3o0vcxMXINgw9XTS0bPmPDuyJUKeWTb5TvMtzHm86uUPOp
+         Iho4vvr9aUVqwxy/fn7CetIMBh596Hkl2w3nPuFNn8UrUhkDAZi6gFOfQ+9LpqVXeNKU
+         p2pZ2o3cAVgFbnOMbEHVQzJosvQkr6r5AxgrQbYCOm9m6p3KdH/DluTYA6/6Cw3RUAWQ
+         YYy9E0+dgB3tX9r/6/YHycka4jDKb1D85IsA/ZaSdrGj8ivgcRvN7fmu8zy3Ms1Xploj
+         9PNBtlLo47xLok7C3Xkp17bg+r1y6v6fqkqSEZGuAu7XGb4i+T2NQxJrdDZkragU4HYs
+         cOiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xuc3tclMngpgJkRdKqMDtEnHq9IobDeEAM5VzXHLDtI=;
+        b=kB36w71Y9EgQdwwqyQd/E+q0NBIoeK/Eixg5KbYZ51QS6rKPWC6GoMNxyjMC7r6+8o
+         Msoluma4OGjrP/SdyhAYh8EyFBaEm/RE22eqmwK/dNPiJ+IIyd+Qco4OYnp+Kbu9zfCL
+         bmy5WE1WQUUGbEO33BAf8KHPzXWSRhpkZe0bOLCuyMFk8Vu9rloHThArV+wJhcOd7ZNf
+         dZoHCXelOtPQeMpwOWedtZx5iFnenQ14NX6vAbb5on36LRd5b7bhwQpD9Kcso3tL5nyz
+         Ip2pvt6OMhOSpKgkZKc+ddM6D3cBXI6vRUaviiohlvoDdAYhvFf1hmuTeg+BsN+aFmfU
+         r3Qg==
+X-Gm-Message-State: AO0yUKWM+Q7j7rjzyR+0dKRyMootZPlRc2Ns1oOu02GLDnXr+RVp80My
+        lDoQkavviYLTkVKM3qGMMjNi3cO5n5c=
+X-Google-Smtp-Source: AK7set+FMo4TV/ejRDS/j54EnWPu1nFjcteSA16DMM+w8OhhaEd5qpIljIkvwOpJ8+M/K9iNfSIc6A==
+X-Received: by 2002:a05:6808:1819:b0:364:a651:38eb with SMTP id bh25-20020a056808181900b00364a65138ebmr3801504oib.17.1674838783491;
+        Fri, 27 Jan 2023 08:59:43 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b67-20020aca3446000000b00364e8f85c08sm1749676oia.21.2023.01.27.08.59.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 08:59:42 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 27 Jan 2023 08:59:41 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Song Liu <song@kernel.org>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@meta.com, Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2] module: replace module_layout with module_memory
+Message-ID: <20230127165941.GB3962737@roeck-us.net>
+References: <20230125185004.254742-1-song@kernel.org>
+ <Y9IYTI3pWuKbJ3bC@bombadil.infradead.org>
+ <CAPhsuW7ipGS=RhowYSp06DBYOY31sYoup7-Je+CEuKCxJsHavQ@mail.gmail.com>
+ <Y9Lp+5mqxP0bgvrM@bombadil.infradead.org>
+ <20230127131351.GB3911997@roeck-us.net>
+ <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW5jyo7gHyfojZArWXp5rOMsR9xWJEE62GhABXKSWKK8VA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi Guenter,
-
-On Fri, Jan 27, 2023 at 5:13 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Jan 26, 2023 at 01:00:43PM -0800, Luis Chamberlain wrote:
-> > Guenter Roeck,
+On Fri, Jan 27, 2023 at 08:42:57AM -0800, Song Liu wrote:
+> Hi Guenter,
+> 
+> On Fri, Jan 27, 2023 at 5:13 AM Guenter Roeck <linux@roeck-us.net> wrote:
 > >
-> > Any chance you can give this branch a good spin on your multi-arch setup
-> > to see what may below up?
-> >
-> I assume I shoud test v3 ?
+> > On Thu, Jan 26, 2023 at 01:00:43PM -0800, Luis Chamberlain wrote:
+> > > Guenter Roeck,
+> > >
+> > > Any chance you can give this branch a good spin on your multi-arch setup
+> > > to see what may below up?
+> > >
+> > I assume I shoud test v3 ?
+> 
+> Yes, please. The one in the modules-testing [1] branch is already v3.
+> 
 
-Yes, please. The one in the modules-testing [1] branch is already v3.
+I started a test on v6.2-rc5-52-gc96fb00e9ddf.
 
-Thanks,
-Song
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-testing
+Guenter
