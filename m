@@ -2,149 +2,92 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 553CDC61D97
-	for <linux-modules@archiver.kernel.org>; Sun, 29 Jan 2023 06:04:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFCA7C05027
+	for <linux-modules@archiver.kernel.org>; Sun, 29 Jan 2023 15:35:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbjA2GEe (ORCPT
+        id S234992AbjA2PfG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 29 Jan 2023 01:04:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
+        Sun, 29 Jan 2023 10:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbjA2GEc (ORCPT
+        with ESMTP id S229549AbjA2PfF (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 29 Jan 2023 01:04:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB8E233D5;
-        Sat, 28 Jan 2023 22:04:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0417960C6D;
-        Sun, 29 Jan 2023 06:04:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCEFC4339B;
-        Sun, 29 Jan 2023 06:04:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674972269;
-        bh=QNdt3qe1MNCyxh69O4eYHn6YVUW/zrV6g7w5tVzDr74=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fWXc2SNXXr5lyo38Cs59MAcTh0huVpBMUWd6w5kgDuqbHPSyWaRx+auE9aFWnskay
-         zQQdq+QyqORfcF3NfUykXY7ota+gWVOcLGKFKlmmZZ9vQKvCBmg0HgXtB49A5evXek
-         oXArSjb0+Ie7VCkt/fd5b3folFDx6RB7PpBgbHRZCwI56OevlzExUljspAeraZnltU
-         j+B7AkruYZrOJ7/j8HxR4Rk2Xs30i4imnNrQFCO0bzKDomo2pznDoe3kRYJ8Yr9JEg
-         54DczNCAZoZLL2w7BOiH0+ybbT4GUJJ5jn7t8e6R85m3w0iySYpBgREwq3nWTnXPW1
-         C0mvZ+IopN0Fw==
-Received: by mail-lf1-f48.google.com with SMTP id j17so14591536lfr.3;
-        Sat, 28 Jan 2023 22:04:29 -0800 (PST)
-X-Gm-Message-State: AFqh2kqJvF8pdRF+JPtQT/qOmp9rQ1TaoYBmBnoP188yydnB9tU1w+XW
-        dMdLs9yLUWatadzEghtcILFeqFkXpTQCmIdyE6s=
-X-Google-Smtp-Source: AMrXdXtO1QHIup5WbervvrXo5vWVm+e8+rIV6TCr+zckrfe/ZG2Nu24/02t3KiKp+f3h/3XyAO3bDPaBSD+RAS8jBzE=
-X-Received: by 2002:ac2:4e92:0:b0:4b6:efc1:6d6e with SMTP id
- o18-20020ac24e92000000b004b6efc16d6emr2384115lfr.305.1674972267386; Sat, 28
- Jan 2023 22:04:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20230126233606.1317794-1-song@kernel.org> <ba42ca3d-cbc1-2f2b-846d-e6581e9fa706@csgroup.eu>
-In-Reply-To: <ba42ca3d-cbc1-2f2b-846d-e6581e9fa706@csgroup.eu>
-From:   Song Liu <song@kernel.org>
-Date:   Sat, 28 Jan 2023 22:04:15 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7hVQW_1pG9w89b3wF8qgRdk4ULjRMPM3rVPOKdYe1oWA@mail.gmail.com>
-Message-ID: <CAPhsuW7hVQW_1pG9w89b3wF8qgRdk4ULjRMPM3rVPOKdYe1oWA@mail.gmail.com>
-Subject: Re: [PATCH v3] module: replace module_layout with module_memory
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-team@meta.com" <kernel-team@meta.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        Sun, 29 Jan 2023 10:35:05 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3CD166E0;
+        Sun, 29 Jan 2023 07:35:04 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-15085b8a2f7so12317020fac.2;
+        Sun, 29 Jan 2023 07:35:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SAW/0dKcTw7BVpRe+bs3ROH4E8ys5V9CO0c3+7rucWc=;
+        b=dYxxOYlSai05NFWZcejIX8EQMxqqmwO+agw+UWiI4TnO4z0hDnM+VhwuGG79L3ZAh3
+         8MsDpiOX9xcd5cm6Vmc4m1SKYJRR0s+svr9blyN53jC7tm436aZDIIX67UAru3yZYcq3
+         jMzINfl1ggNJ/dUq+7FVxDFzo3JfMjY2vrDq2Co/Zfochyqsi8F8BsrJXUHBU4CN9Hgo
+         8BHuKdmr1FHBKwK6OIT8ZHmRhOhxfvyjLyt3af8b3aKfaCE3urtLlbuOsRwIluM3EGN8
+         NL0ZvUIC8WBxwgCPIAvyIJlzoOdsg6GkIb0/V/LHKKrR6Gt/hnNZGDF95Z6q1VJ9el6F
+         33nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SAW/0dKcTw7BVpRe+bs3ROH4E8ys5V9CO0c3+7rucWc=;
+        b=7UdmYbk2bOW1iDQb0qJkAZciyxZv8yzuRzW1aVJ2kUqx+aucLlcxfTehwelygq8RV9
+         dF0aDWXAmtFDWXFCYK+GC1JRYsvgbujiIwQBhnGu9WOjG/VdU/bkNH1SXGGcTXWqwMfn
+         yUoMtW1iua553zJ7Na3r1tKK3PzCLeM/LvsaLhZ9j6iWdOJVZxNx5FK1/ASEdRdN4Hgp
+         aanjUMXwLDphJvGeiHq+lTjV+Zf0mqrGR5AYldvhL9OCcRibcD8/FkO0Oz+NCyhTfEk+
+         K6qvbXj1qqJ15sodQfNKkwVrZuNiiW3b99gJ5tNaM9tBjLfux5TVzXR7xv9ff/DMoc/z
+         Od3g==
+X-Gm-Message-State: AO0yUKUZOzuvsZF2Qf+35HeP9/LZiN8d0o0I9OQ7RvTU/ftIcfE+1NkJ
+        NyP2JwHz6XlFOU3SEsXvjbSty8OyW6A=
+X-Google-Smtp-Source: AK7set+cJiNCyBASSKzOQh2xW1ka5voMHGqF9m5B/XtdsTrTh66xTPbOSECC4aa+RcS/8L9DgcecTw==
+X-Received: by 2002:a05:6870:170b:b0:163:7e0a:eec9 with SMTP id h11-20020a056870170b00b001637e0aeec9mr4735094oae.2.1675006503523;
+        Sun, 29 Jan 2023 07:35:03 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id my11-20020a056870698b00b00143ae7d4ccesm4244441oab.45.2023.01.29.07.35.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 07:35:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 29 Jan 2023 07:35:01 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v3] module: replace module_layout with module_memory
+Message-ID: <20230129153501.GA304461@roeck-us.net>
+References: <20230126233606.1317794-1-song@kernel.org>
+ <20230127204011.GA45594@roeck-us.net>
+ <Y9XaVtrNOxTGRJMJ@bombadil.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9XaVtrNOxTGRJMJ@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jan 27, 2023 at 11:43 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-[...]
-> > -struct module_layout {
-> > -     /* The actual code + data. */
-> > +enum mod_mem_type {
-> > +     MOD_MEM_TYPE_TEXT,
-> > +     MOD_MEM_TYPE_DATA,
-> > +     MOD_MEM_TYPE_RODATA,
-> > +     MOD_MEM_TYPE_RO_AFTER_INIT,
-> > +     MOD_MEM_TYPE_INIT_TEXT,
-> > +     MOD_MEM_TYPE_INIT_DATA,
-> > +     MOD_MEM_TYPE_INIT_RODATA,
-> > +
-> > +     MOD_MEM_NUM_TYPES,
-> > +     MOD_MEM_TYPE_INVALID = -1,
-> > +};
->
-> Ok, so we agreed to keep it as a table with enums. Fair enough.
->
-> However, can we try to make it less ugly and more readable ?
->
-> I don't thing the enums needs to be prefixed by MOD_MEM_TYPE_
-> Would be enough with MOD_TEXT, MOD_DATA, MOD_RODATA, MOD_RO_AFTER_INIT,
-> MOD_INIT_TEXT, MOD_INIT_DATA, MOD_INIT_RODATA, MOD_INVALID.
+On Sat, Jan 28, 2023 at 06:30:46PM -0800, Luis Chamberlain wrote:
+> On Fri, Jan 27, 2023 at 12:40:11PM -0800, Guenter Roeck wrote:
+> > That is the only failure reported by my test system.
+> 
+> I thought your rig does some form of boot / runtime tests too?
+> 
 
-[...]
+Here are the detailed results:
 
-> > -     /* Core layout: rbtree is accessed frequently, so keep together. */
-> > -     struct module_layout core_layout __module_layout_align;
-> > -     struct module_layout init_layout;
-> > -#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-> > -     struct module_layout data_layout;
-> > -#endif
-> > +     /* rbtree is accessed frequently, so keep together. */
-> > +     struct module_memory mod_mem[MOD_MEM_NUM_TYPES] __module_memory_align;
->
-> We are already in a struct called module, so the module_memory struct
-> could be called mem[MOD_MEM_NUM_TYPES]
->
-> >
-> >       /* Arch-specific module values */
-> >       struct mod_arch_specific arch;
-> > @@ -573,23 +574,35 @@ bool __is_module_percpu_address(unsigned long addr, unsigned long *can_addr);
-> >   bool is_module_percpu_address(unsigned long addr);
-> >   bool is_module_text_address(unsigned long addr);
-> >
-> > +static inline bool within_module_mem_type(unsigned long addr,
-> > +                                       const struct module *mod,
-> > +                                       enum mod_mem_type type)
-> > +{
-> > +     const struct module_memory *mod_mem;
-> > +
-> > +     if (WARN_ON_ONCE(type < MOD_MEM_TYPE_TEXT || type >= MOD_MEM_NUM_TYPES))
->
-> Here I would rather use 0 instead of  MOD_MEM_TYPE_TEXT because
-> MOD_MEM_TYPE_TEXT may change in the future.
->
-> > +             return false;
-> > +
-> > +     mod_mem = &mod->mod_mem[type];
->
-> I can't see the added value of the mod_ prefix.
->
-> Would read better as
->
->         mem = &mod->mem[type];
->
->         return (unsigned long)mem->base <= addr && addr < (unsigned
-> long)mem->base + mem->size;
->
-> And could be even more readable as:
->
->         unsigned long base, size;
->
->         base = (unsigned long)mod->mod_mem[type].base;
->         size = mod->mod_mem[type].size;
->
->         return base <= addr && addr < base + size;
+Build results:
+	total: 155 pass: 154 fail: 1
+Failed builds:
+	powerpc:ppc32_allmodconfig
+Qemu test results:
+	total: 504 pass: 504 fail: 0
 
-Yeah, the code does look better with shorter names.
+It does run boot tests, but it doesn't test module functionality
+(it doesn't try to load modules).
 
-If there is no objection from folks, I will send v4 with these
-suggestions next week.
-
-Thanks,
-Song
+Guenter
