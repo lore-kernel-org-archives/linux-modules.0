@@ -2,54 +2,149 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9B55C61D97
-	for <linux-modules@archiver.kernel.org>; Sun, 29 Jan 2023 02:30:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 553CDC61D97
+	for <linux-modules@archiver.kernel.org>; Sun, 29 Jan 2023 06:04:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjA2Cay (ORCPT
+        id S231757AbjA2GEe (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 28 Jan 2023 21:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        Sun, 29 Jan 2023 01:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjA2Cax (ORCPT
+        with ESMTP id S231752AbjA2GEc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 28 Jan 2023 21:30:53 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6E5234C3;
-        Sat, 28 Jan 2023 18:30:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zA38YMzjpalk5LMI/syb7IIPcIWJIaeVFFL9YzUdJWw=; b=qaPG+KfCNoXPyS9+3Oy7TM2F04
-        Nejzniaw6RdAeUqJb+GNMGRLTYxevKwY2aUSTIZ4LRR8nWWUa2mYlUBN0Vpc9O3zwWnyMlZxFsJFP
-        w9wTMUYON+g8VezA4cnanlahejw+wDb1zPUVYTCpoPruqc3TvBhZ3Szf+2338yUIZxo/CeIEUVCDy
-        JwUIyavipCfoQIWM3NEG0k1uSEoA/ZKkg3utH0PknOCNwBpnc96VkzETPo2k83bsLvEStlHganyXS
-        X3HOeUltcRcAM34IVNbPpYqeENnKq+zqf2Ogx3zYi7glp1kofFzalRuaS3TyYMKIAfUa4b1vIhShh
-        CB9ZIk4w==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pLxSw-000ucg-5K; Sun, 29 Jan 2023 02:30:46 +0000
-Date:   Sat, 28 Jan 2023 18:30:46 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v3] module: replace module_layout with module_memory
-Message-ID: <Y9XaVtrNOxTGRJMJ@bombadil.infradead.org>
-References: <20230126233606.1317794-1-song@kernel.org>
- <20230127204011.GA45594@roeck-us.net>
+        Sun, 29 Jan 2023 01:04:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB8E233D5;
+        Sat, 28 Jan 2023 22:04:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0417960C6D;
+        Sun, 29 Jan 2023 06:04:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCEFC4339B;
+        Sun, 29 Jan 2023 06:04:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674972269;
+        bh=QNdt3qe1MNCyxh69O4eYHn6YVUW/zrV6g7w5tVzDr74=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fWXc2SNXXr5lyo38Cs59MAcTh0huVpBMUWd6w5kgDuqbHPSyWaRx+auE9aFWnskay
+         zQQdq+QyqORfcF3NfUykXY7ota+gWVOcLGKFKlmmZZ9vQKvCBmg0HgXtB49A5evXek
+         oXArSjb0+Ie7VCkt/fd5b3folFDx6RB7PpBgbHRZCwI56OevlzExUljspAeraZnltU
+         j+B7AkruYZrOJ7/j8HxR4Rk2Xs30i4imnNrQFCO0bzKDomo2pznDoe3kRYJ8Yr9JEg
+         54DczNCAZoZLL2w7BOiH0+ybbT4GUJJ5jn7t8e6R85m3w0iySYpBgREwq3nWTnXPW1
+         C0mvZ+IopN0Fw==
+Received: by mail-lf1-f48.google.com with SMTP id j17so14591536lfr.3;
+        Sat, 28 Jan 2023 22:04:29 -0800 (PST)
+X-Gm-Message-State: AFqh2kqJvF8pdRF+JPtQT/qOmp9rQ1TaoYBmBnoP188yydnB9tU1w+XW
+        dMdLs9yLUWatadzEghtcILFeqFkXpTQCmIdyE6s=
+X-Google-Smtp-Source: AMrXdXtO1QHIup5WbervvrXo5vWVm+e8+rIV6TCr+zckrfe/ZG2Nu24/02t3KiKp+f3h/3XyAO3bDPaBSD+RAS8jBzE=
+X-Received: by 2002:ac2:4e92:0:b0:4b6:efc1:6d6e with SMTP id
+ o18-20020ac24e92000000b004b6efc16d6emr2384115lfr.305.1674972267386; Sat, 28
+ Jan 2023 22:04:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127204011.GA45594@roeck-us.net>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20230126233606.1317794-1-song@kernel.org> <ba42ca3d-cbc1-2f2b-846d-e6581e9fa706@csgroup.eu>
+In-Reply-To: <ba42ca3d-cbc1-2f2b-846d-e6581e9fa706@csgroup.eu>
+From:   Song Liu <song@kernel.org>
+Date:   Sat, 28 Jan 2023 22:04:15 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7hVQW_1pG9w89b3wF8qgRdk4ULjRMPM3rVPOKdYe1oWA@mail.gmail.com>
+Message-ID: <CAPhsuW7hVQW_1pG9w89b3wF8qgRdk4ULjRMPM3rVPOKdYe1oWA@mail.gmail.com>
+Subject: Re: [PATCH v3] module: replace module_layout with module_memory
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-team@meta.com" <kernel-team@meta.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jan 27, 2023 at 12:40:11PM -0800, Guenter Roeck wrote:
-> That is the only failure reported by my test system.
+On Fri, Jan 27, 2023 at 11:43 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+[...]
+> > -struct module_layout {
+> > -     /* The actual code + data. */
+> > +enum mod_mem_type {
+> > +     MOD_MEM_TYPE_TEXT,
+> > +     MOD_MEM_TYPE_DATA,
+> > +     MOD_MEM_TYPE_RODATA,
+> > +     MOD_MEM_TYPE_RO_AFTER_INIT,
+> > +     MOD_MEM_TYPE_INIT_TEXT,
+> > +     MOD_MEM_TYPE_INIT_DATA,
+> > +     MOD_MEM_TYPE_INIT_RODATA,
+> > +
+> > +     MOD_MEM_NUM_TYPES,
+> > +     MOD_MEM_TYPE_INVALID = -1,
+> > +};
+>
+> Ok, so we agreed to keep it as a table with enums. Fair enough.
+>
+> However, can we try to make it less ugly and more readable ?
+>
+> I don't thing the enums needs to be prefixed by MOD_MEM_TYPE_
+> Would be enough with MOD_TEXT, MOD_DATA, MOD_RODATA, MOD_RO_AFTER_INIT,
+> MOD_INIT_TEXT, MOD_INIT_DATA, MOD_INIT_RODATA, MOD_INVALID.
 
-I thought your rig does some form of boot / runtime tests too?
+[...]
 
-  Luis
+> > -     /* Core layout: rbtree is accessed frequently, so keep together. */
+> > -     struct module_layout core_layout __module_layout_align;
+> > -     struct module_layout init_layout;
+> > -#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+> > -     struct module_layout data_layout;
+> > -#endif
+> > +     /* rbtree is accessed frequently, so keep together. */
+> > +     struct module_memory mod_mem[MOD_MEM_NUM_TYPES] __module_memory_align;
+>
+> We are already in a struct called module, so the module_memory struct
+> could be called mem[MOD_MEM_NUM_TYPES]
+>
+> >
+> >       /* Arch-specific module values */
+> >       struct mod_arch_specific arch;
+> > @@ -573,23 +574,35 @@ bool __is_module_percpu_address(unsigned long addr, unsigned long *can_addr);
+> >   bool is_module_percpu_address(unsigned long addr);
+> >   bool is_module_text_address(unsigned long addr);
+> >
+> > +static inline bool within_module_mem_type(unsigned long addr,
+> > +                                       const struct module *mod,
+> > +                                       enum mod_mem_type type)
+> > +{
+> > +     const struct module_memory *mod_mem;
+> > +
+> > +     if (WARN_ON_ONCE(type < MOD_MEM_TYPE_TEXT || type >= MOD_MEM_NUM_TYPES))
+>
+> Here I would rather use 0 instead of  MOD_MEM_TYPE_TEXT because
+> MOD_MEM_TYPE_TEXT may change in the future.
+>
+> > +             return false;
+> > +
+> > +     mod_mem = &mod->mod_mem[type];
+>
+> I can't see the added value of the mod_ prefix.
+>
+> Would read better as
+>
+>         mem = &mod->mem[type];
+>
+>         return (unsigned long)mem->base <= addr && addr < (unsigned
+> long)mem->base + mem->size;
+>
+> And could be even more readable as:
+>
+>         unsigned long base, size;
+>
+>         base = (unsigned long)mod->mod_mem[type].base;
+>         size = mod->mod_mem[type].size;
+>
+>         return base <= addr && addr < base + size;
+
+Yeah, the code does look better with shorter names.
+
+If there is no objection from folks, I will send v4 with these
+suggestions next week.
+
+Thanks,
+Song
