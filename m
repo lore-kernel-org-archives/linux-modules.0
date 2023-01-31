@@ -2,112 +2,131 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BC15C636D3
-	for <linux-modules@archiver.kernel.org>; Tue, 31 Jan 2023 11:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D2AC38142
+	for <linux-modules@archiver.kernel.org>; Tue, 31 Jan 2023 12:04:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjAaLgz (ORCPT
+        id S230521AbjAaMEo (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 31 Jan 2023 06:36:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
+        Tue, 31 Jan 2023 07:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjAaLgv (ORCPT
+        with ESMTP id S230202AbjAaMEk (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 31 Jan 2023 06:36:51 -0500
+        Tue, 31 Jan 2023 07:04:40 -0500
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359757DA2;
-        Tue, 31 Jan 2023 03:36:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473B44DE0A;
+        Tue, 31 Jan 2023 04:04:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZL+Crz10hxNR+pj8dNZ96T3za2U74w03KPhLNLAS+Ds=; b=YR08jCcROeTCb45XeK2Tk7y5GL
-        Pq6aRtclS0Yd31moGLqy3jRj3zUD69JOwcIsyFQt2dFM7WDDtyKhR+n067tn4IEMbpsNEBVLRowen
-        ugSGyKLE34Z6LqyaAYP8GNGYOSdXzn427bZ+HW92LfLAlas2ORXaaPmdwz1t22D/bRfTWJnUk92Ym
-        lLDoM2q9siJ+XueqOm4iOBAD9/ciVCiRJPOUNBqd2Em0FWJqW1V+hmPMnHopQ/xWzeKA9LqxLDTgN
-        nq4gDg4WnyyIwiZoUmeCOV4YFSScYj2AAJCEXM0yRwn3Y/MJ6Ny1ynpqNKSMxL82jvA/ACMlG9hd9
-        LqoOccyQ==;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=nwfnr4oaGL0A6pm/AiOnFComuIifMB1GYDZBfuM6Jrw=; b=cR69uUZtgGx21FvYG6V0lBkbFf
+        Qnu3XhyvsA8RTgM8hIai27D7M2w1vPffyXAxucd+apVyqlxxSf7BdX77G04dpvOumiHHI819d+OZb
+        rf7JjGqYvMuaaQbKBqmrboWEdyBXu4wxEur+N5H8iuDwCJvss8rJbWDxOeuHElR9SC3npJZvIhJlu
+        OMjN2d+5aCyvfkYSYQkTddUr4nfwZWTZMb//Q1QJdNL/iqKdttOUoJ0DQj/oBdgBDO7bYKrNAXEXA
+        Jt6+bhU9jvCsiVfWvs7ukkUWAggORSAqo0PxnmDZG1VytaI3JZVbGH/Wz7WnS22wdOq9sScuHHIjQ
+        xbrIIdQg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pMovo-004Kvq-2p;
-        Tue, 31 Jan 2023 11:36:09 +0000
+        id 1pMpMf-004LOc-1j;
+        Tue, 31 Jan 2023 12:03:53 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 665933002BF;
-        Tue, 31 Jan 2023 12:36:42 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0B190300446;
+        Tue, 31 Jan 2023 13:04:25 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4E88620B506EA; Tue, 31 Jan 2023 12:36:42 +0100 (CET)
-Date:   Tue, 31 Jan 2023 12:36:42 +0100
+        id A3BC820835864; Tue, 31 Jan 2023 13:04:25 +0100 (CET)
+Date:   Tue, 31 Jan 2023 13:04:25 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hch@lst.de, kernel-team@meta.com,
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Song Liu <song@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "kernel-team@meta.com" <kernel-team@meta.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
+        Guenter Roeck <linux@roeck-us.net>
 Subject: Re: [PATCH v4] module: replace module_layout with module_memory
-Message-ID: <Y9j9Svys7eb9E2Mh@hirez.programming.kicks-ass.net>
+Message-ID: <Y9kDyUaOe57IL/yF@hirez.programming.kicks-ass.net>
 References: <20230130182109.3571524-1-song@kernel.org>
+ <Y9jau76YwdCElzZ0@hirez.programming.kicks-ass.net>
+ <1302e2b6-8980-e6e5-7433-6754634c98f3@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230130182109.3571524-1-song@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1302e2b6-8980-e6e5-7433-6754634c98f3@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Jan 30, 2023 at 10:21:09AM -0800, Song Liu wrote:
-> module_layout manages different types of memory (text, data, rodata, etc.)
-> in one allocation, which is problematic for some reasons:
+On Tue, Jan 31, 2023 at 10:58:56AM +0000, Christophe Leroy wrote:
 > 
-> 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
-> 2. It is hard to use huge pages in modules (and not break strict rwx).
-> 3. Many archs uses module_layout for arch-specific data, but it is not
->    obvious how these data are used (are they RO, RX, or RW?)
 > 
-> Improve the scenario by replacing 2 (or 3) module_layout per module with
-> up to 7 module_memory per module:
+> Le 31/01/2023 à 10:09, Peter Zijlstra a écrit :
 > 
->         MOD_MEM_TYPE_TEXT,
->         MOD_MEM_TYPE_DATA,
->         MOD_MEM_TYPE_RODATA,
->         MOD_MEM_TYPE_RO_AFTER_INIT,
->         MOD_MEM_TYPE_INIT_TEXT,
->         MOD_MEM_TYPE_INIT_DATA,
->         MOD_MEM_TYPE_INIT_RODATA,
+> >> @@ -573,23 +574,33 @@ bool __is_module_percpu_address(unsigned long addr, unsigned long *can_addr);
+> >>   bool is_module_percpu_address(unsigned long addr);
+> >>   bool is_module_text_address(unsigned long addr);
+> >>   
+> >> +static inline bool within_module_mem_type(unsigned long addr,
+> >> +					  const struct module *mod,
+> >> +					  enum mod_mem_type type)
+> >> +{
+> >> +	unsigned long base, size;
+> >> +
+> >> +	base = (unsigned long)mod->mem[type].base;
+> >> +	size = mod->mem[type].size;
+> >> +
+> >> +	return base <= addr && addr < base + size;
+> > 
+> > Possible (as inspired by all the above is_{init,core}() etc..
+> > 
+> > 	return addr - base < size;
+> > 
 > 
-> and allocating them separately. This adds slightly more entries to
-> mod_tree (from up to 3 entries per module, to up to 7 entries per
-> module). However, this at most adds a small constant overhead to
-> __module_address(), which is expected to be fast.
-> 
-> Various archs use module_layout for different data. These data are put
-> into different module_memory based on their location in module_layout.
-> IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
-> data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
-> 
-> module_memory simplifies quite some of the module code. For example,
-> ARCH_WANTS_MODULES_DATA_IN_VMALLOC is a lot cleaner, as it just uses a
-> different allocator for the data. kernel/module/strict_rwx.c is also
-> much cleaner with module_memory.
-> 
-> Signed-off-by: Song Liu <song@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> 
-> ---
-> 
-> This is the preparation work for the type aware module_alloc() discussed
-> in [1]. While this work is not covered much in the discussion, it is a
-> critical step of the effort.
-> 
-> As this part grows pretty big (~1000 lines, + and -), I would like get
-> some feedback on it, so that I know it is on the right track.
-> 
-> Please share your comments. Thanks!
+> In kernel/module/main.c we have a function called within(). Maybe that 
+> function could be lifted in module.h and used.
 
-Aside from the things already reported I like where this is going.
+More sharing more good. But I don't think we can lift a 'within'
+function to the global namespace, that's just asking for pain.
+
+> > static inline bool within_module_mem_types(unsigned long addr,
+> > 					   const struct module *mod,
+> > 					   enum mod_mem_type first,
+> > 					   enum mod_mem_type last)
+> > {
+> > 	for (enum mod_mem_type type = first; type <= last; type++) {
+> > 		if (within_module_mem_type(addr, mod, type))
+> > 			return true;
+> > 	}
+> > 	return false;
+> > }
+> 
+> Well, ok but what garanties it will always be contiguous types ?
+> And you can't anymore see at first look what types it is.
+> 
+> I prefer it to be explicit with within_module_mem_type(TYPE1) || 
+> within_module_mem_type(TYPE2) || within_module_mem_type(TYPE3). By the 
+> way we could make the function name shorter, even within() may be a 
+> better name as it is used only inside module code.
+> 
+> Something like
+> 
+> 	return within(addr, mod, MOD_TEXT) || within(addr, mod, MOD_DATA) ||
+> 	       within(addr, mod, MOD_RODATA) || within(addr, mod, 
+> MOD_RO_AFTER_INIT);
+
+Urgh, how about?
+
+	for_each_mod_mem_type(type) {
+		if (!mod_mem_type_is_init(type) && within(addr, mod, type))
+			return true;
+	}
+	return false;
+
+Then you have have a bunch of mod_mem_type_id_foo() filter functions
+that are non-contiguous without having to endlessly repeat stuff
+manually.
