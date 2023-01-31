@@ -2,220 +2,250 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FFD5C54EED
-	for <linux-modules@archiver.kernel.org>; Mon, 30 Jan 2023 18:33:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B75DC38142
+	for <linux-modules@archiver.kernel.org>; Tue, 31 Jan 2023 09:13:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236705AbjA3Sdz (ORCPT
+        id S232494AbjAaJND (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 30 Jan 2023 13:33:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
+        Tue, 31 Jan 2023 04:13:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235960AbjA3Sdt (ORCPT
+        with ESMTP id S232511AbjAaJMr (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:33:49 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9B445F7E
-        for <linux-modules@vger.kernel.org>; Mon, 30 Jan 2023 10:33:27 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so10715308wma.1
-        for <linux-modules@vger.kernel.org>; Mon, 30 Jan 2023 10:33:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0zug2rlvwyAWKoa+kNjU88mCb5iXx0M+VsNfcrzFekc=;
-        b=kJgbRb3J78urA7aRfFmdp8zA08RXf+5x7YjSTWNGkoKqB//UVJIpfUJurqAeiUAtbW
-         yxHe0K+eOGSG8ZYd42+ZTrZ6muW0TlRVbZml00xAgmmlnJ55gb0jlLT+kwdQpdxlkT8D
-         kL+8I3zDQ9E++nO1sUyd3y0xTQfCDNWpWzPLL1lvSuJI4+LdIrDFkx4o9SZE2NXPR8sA
-         Ml/flIWRsvtK2YLNldrYvmcUsoxF2KuU2N4/tPQj4qYQnswaXeptEId1/vuZGPjvHWno
-         9Zt4VEDOQhwM2ZPPny2OGXxOYKAfml1knhzRcX+xQ/ncU89bAXvBoWzzrwwi9HNt8bL6
-         CTlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0zug2rlvwyAWKoa+kNjU88mCb5iXx0M+VsNfcrzFekc=;
-        b=radZOkotbQ3rAzaY+jFb2X7ZHAsiGcvzkx9XX+pj3IV9287jgCRLUMiyLYYOcaW9WU
-         piwMYC1KoFo+CXnUbSDJLQTvs0OtNQzRpOoSUzLhDGDCUeK6OGXmSAihoOVpBTl93nAd
-         7m2mcNPDqNMUrUF5C86tvGvXgfkQSIpvC5jZl8RLDH2FgRu62RQGeTckGwGYouN3yNWx
-         JOupT2NdRoLLELuP83Xx/1ZobtUR6zd7xX7VxmiFuZgh6UfpF/PRreXROuGBqndGRtxV
-         ZSJYcFn8cGCtxTARX2KIrUuikTkccqLXjwjqDVDNvMgs6nQo6DryHEHCIXGdciOujNKw
-         n0mQ==
-X-Gm-Message-State: AO0yUKVE2lCNCgVcnab3Z3hdrNf/mOS+iZ9oomfw4/92E6j3aYDkZRNw
-        uOOKJQPtiTXm8ROPPNBfUzH0d0d9a/k=
-X-Google-Smtp-Source: AK7set+x6oDKsW4TdwnasNcL8qaX4GLuLSmB/K+bvqk8InBuqc7c6Z8SJe1T9tMXLxicYu9igVSBmg==
-X-Received: by 2002:a7b:cbc5:0:b0:3dc:59c3:9020 with SMTP id n5-20020a7bcbc5000000b003dc59c39020mr4444824wmi.8.1675103605804;
-        Mon, 30 Jan 2023 10:33:25 -0800 (PST)
-Received: from localhost ([2a00:5f00:102:0:fd59:3fa:6684:66b])
-        by smtp.gmail.com with UTF8SMTPSA id p7-20020a1c5447000000b003dc433355aasm9975741wmi.18.2023.01.30.10.33.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 10:33:25 -0800 (PST)
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-To:     linux-modules@vger.kernel.org
-Cc:     emil.l.velikov@gmail.com
-Subject: [PATCH] depmod: Introduce a outdir option
-Date:   Mon, 30 Jan 2023 18:33:24 +0000
-Message-Id: <20230130183324.283162-1-emil.l.velikov@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        Tue, 31 Jan 2023 04:12:47 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B4B39CED;
+        Tue, 31 Jan 2023 01:10:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=boxYZ+12IlPevIZLaNuVS7R9UduJnfXiG2COFROhDOM=; b=URFG+830GlCYuXxrigWLa5eSRm
+        Wfyg+c6RbHZexvL2+63NnnLxUTz/bXpgHAi3L7lvl6hK02QkGjLkE77xL3I4Ph904snVEsTSXFgAD
+        VbznkxNdIk45ysmQ+j+w//xSYA8BvZUsxBldrLNWLD94GCYVpVynEfkEHyPU0WgXyyWZkT1vwcKah
+        j3sUdefftVpakorR9CxlUQ/3QFhV+7u5RI8wXhsG4qy4o1MAiEI/zU+qTi/u+jDKaZZPXLcqHUEt7
+        GKQbnJLofVrslrI2n9ErZGqWdQ5tBvHOwrCmJa+QmzrcYAaRVv0cpp9Oho/BjlnjrTMX7z+n5/nXD
+        DLMWyt8A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pMmdf-00BAvd-VL; Tue, 31 Jan 2023 09:09:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 91EC83002BF;
+        Tue, 31 Jan 2023 10:09:15 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4FF71208358FD; Tue, 31 Jan 2023 10:09:15 +0100 (CET)
+Date:   Tue, 31 Jan 2023 10:09:15 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hch@lst.de, kernel-team@meta.com,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v4] module: replace module_layout with module_memory
+Message-ID: <Y9jau76YwdCElzZ0@hirez.programming.kicks-ass.net>
+References: <20230130182109.3571524-1-song@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130182109.3571524-1-song@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Emil Velikov <emil.velikov@collabora.com>
 
-This option is equivalent to basedir, with the small difference being
-that's where the meta-data files are generated. In other words, this
-allows us to have read-only input modules and modules.dep, while still
-being able to generate the meta-data files.
+I'm seeing a lot of the same code repeated over and over..
 
-Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
----
+On Mon, Jan 30, 2023 at 10:21:09AM -0800, Song Liu wrote:
+> diff --git a/arch/arm/kernel/module-plts.c b/arch/arm/kernel/module-plts.c
+> index af7c322ebed6..17fd0978aee8 100644
+> --- a/arch/arm/kernel/module-plts.c
+> +++ b/arch/arm/kernel/module-plts.c
+> @@ -30,7 +30,10 @@ static const u32 fixed_plts[] = {
+>  
+>  static bool in_init(const struct module *mod, unsigned long loc)
+>  {
+> -	return loc - (u32)mod->init_layout.base < mod->init_layout.size;
+> +	const struct module_memory *mod_mem;
+> +
+> +	mod_mem = &mod->mem[MOD_INIT_TEXT];
+> +	return loc - (u32)mod_mem->base < mod_mem->size;
+>  }
 
-Hello team,
+within_module_mem_type(loc, mod, MOD_INIT_TEXT)
 
-Here's a handy feature behind the request at
-https://github.com/kmod-project/kmod/issues/13
+>  
+>  static void prealloc_fixed(struct mod_plt_sec *pltsec, struct plt_entries *plt)
+> diff --git a/arch/arm64/kernel/module-plts.c b/arch/arm64/kernel/module-plts.c
+> index 5a0a8f552a61..2f9f672a7cbb 100644
+> --- a/arch/arm64/kernel/module-plts.c
+> +++ b/arch/arm64/kernel/module-plts.c
+> @@ -67,7 +67,10 @@ static bool plt_entries_equal(const struct plt_entry *a,
+>  
+>  static bool in_init(const struct module *mod, void *loc)
+>  {
+> -	return (u64)loc - (u64)mod->init_layout.base < mod->init_layout.size;
+> +	const struct module_memory *mod_mem;
+> +
+> +	mod_mem = &mod->mem[MOD_INIT_TEXT];
+> +	return (u64)loc - (u64)mod_mem->base < mod_mem->size;
+>  }
+>  
 
-This is my first time hacking on kmod, so hope I didn't make too many
-mistakes :-) There are a few TODO notes below where your input is
-greatly appreciated.
+within_module_mem_type((unsigned long)loc, mod, MOD_INIT_TEXT)
 
-TODO:
- - Add tests - team, any pointers or requests?
- - Split the dirnamelen shorthand tenary operator change - is it worth
-   it?
----
- man/depmod.xml | 19 +++++++++++++++++++
- tools/depmod.c | 25 ++++++++++++++++++++++---
- 2 files changed, 41 insertions(+), 3 deletions(-)
+>  u64 module_emit_plt_entry(struct module *mod, Elf64_Shdr *sechdrs,
+> diff --git a/arch/ia64/kernel/module.c b/arch/ia64/kernel/module.c
+> index 8f62cf97f691..4268ddb54a33 100644
+> --- a/arch/ia64/kernel/module.c
+> +++ b/arch/ia64/kernel/module.c
+> @@ -485,19 +485,25 @@ module_frob_arch_sections (Elf_Ehdr *ehdr, Elf_Shdr *sechdrs, char *secstrings,
+>  	return 0;
+>  }
+>  
+> -static inline int
+> +static inline bool
+>  in_init (const struct module *mod, uint64_t addr)
+>  {
+> -	return addr - (uint64_t) mod->init_layout.base < mod->init_layout.size;
+> +	const struct module_memory *mod_mem;
+> +
+> +	mod_mem = &mod->mem[MOD_INIT_TEXT];
+> +	return addr - (uint64_t)mod_mem->base < mod_mem->size;
+>  }
 
-diff --git a/man/depmod.xml b/man/depmod.xml
-index ea0be27..c53624d 100644
---- a/man/depmod.xml
-+++ b/man/depmod.xml
-@@ -45,6 +45,7 @@
-     <cmdsynopsis>
-       <command>depmod</command>
-       <arg><option>-b <replaceable>basedir</replaceable></option></arg>
-+      <arg><option>-o <replaceable>outdir</replaceable></option></arg>
-       <arg><option>-e</option></arg>
-       <arg><option>-E <replaceable>Module.symvers</replaceable></option></arg>
-       <arg><option>-F <replaceable>System.map</replaceable></option></arg>
-@@ -151,6 +152,24 @@
-           </para>
-         </listitem>
-       </varlistentry>
-+      <varlistentry>
-+        <term>
-+          <option>-o <replaceable>outdir</replaceable></option>
-+        </term>
-+        <term>
-+          <option>--outdir <replaceable>outdir</replaceable></option>
-+        </term>
-+        <listitem>
-+          <para>
-+            If your modules are stored in a read-only location, you may want to
-+            create the output meta-data files in another location. Setting
-+            <replaceable>outdir</replaceable> serves as a root to that location
-+            similar to how we use <replaceable>basedir</replaceable>. Use this
-+            option if you are a distribution vendor who needs to pre-generate
-+            the meta-data files rather than running depmod again later.
-+          </para>
-+        </listitem>
-+      </varlistentry>
-       <varlistentry>
-         <term>
-           <option>-C</option>
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 364b7d4..aaf2327 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -58,11 +58,12 @@ static const char *default_cfg_paths[] = {
- 	NULL
- };
- 
--static const char cmdopts_s[] = "aAb:C:E:F:euqrvnP:wmVh";
-+static const char cmdopts_s[] = "aAb:o:C:E:F:euqrvnP:wmVh";
- static const struct option cmdopts[] = {
- 	{ "all", no_argument, 0, 'a' },
- 	{ "quick", no_argument, 0, 'A' },
- 	{ "basedir", required_argument, 0, 'b' },
-+	{ "outdir", required_argument, 0, 'o' },
- 	{ "config", required_argument, 0, 'C' },
- 	{ "symvers", required_argument, 0, 'E' },
- 	{ "filesyms", required_argument, 0, 'F' },
-@@ -104,6 +105,7 @@ static void help(void)
- 		"\n"
- 		"The following options are useful for people managing distributions:\n"
- 		"\t-b, --basedir=DIR    Use an image of a module tree.\n"
-+		"\t-o, --outdir=DIR     The output equivalent of basedir.\n"
- 		"\t-F, --filesyms=FILE  Use the file instead of the\n"
- 		"\t                     current kernel symbols.\n"
- 		"\t-E, --symvers=FILE   Use Module.symvers file to check\n"
-@@ -467,6 +469,8 @@ struct cfg {
- 	const char *kversion;
- 	char dirname[PATH_MAX];
- 	size_t dirnamelen;
-+	char outdirname[PATH_MAX];
-+	size_t outdirnamelen;
- 	char sym_prefix;
- 	uint8_t check_symvers;
- 	uint8_t print_unknown;
-@@ -2576,7 +2580,7 @@ static int depmod_output(struct depmod *depmod, FILE *out)
- 		{ "modules.devname", output_devname },
- 		{ }
- 	};
--	const char *dname = depmod->cfg->dirname;
-+	const char *dname = depmod->cfg->outdirname;
- 	int dfd, err = 0;
- 	struct timeval tv;
- 
-@@ -2585,6 +2589,11 @@ static int depmod_output(struct depmod *depmod, FILE *out)
- 	if (out != NULL)
- 		dfd = -1;
- 	else {
-+		err = mkdir_p(dname, strlen(dname), 0755);
-+		if (err < 0) {
-+			CRIT("could not create directory %s: %m\n", dname);
-+			return err;
-+		}
- 		dfd = open(dname, O_RDONLY);
- 		if (dfd < 0) {
- 			err = -errno;
-@@ -2898,6 +2907,7 @@ static int do_depmod(int argc, char *argv[])
- 	FILE *out = NULL;
- 	int err = 0, all = 0, maybe_all = 0, n_config_paths = 0;
- 	_cleanup_free_ char *root = NULL;
-+	_cleanup_free_ char *out_root = NULL;
- 	_cleanup_free_ const char **config_paths = NULL;
- 	const char *system_map = NULL;
- 	const char *module_symvers = NULL;
-@@ -2927,6 +2937,11 @@ static int do_depmod(int argc, char *argv[])
- 				free(root);
- 			root = path_make_absolute_cwd(optarg);
- 			break;
-+		case 'o':
-+			if (out_root)
-+				free(out_root);
-+			out_root = path_make_absolute_cwd(optarg);
-+			break;
- 		case 'C': {
- 			size_t bytes = sizeof(char *) * (n_config_paths + 2);
- 			void *tmp = realloc(config_paths, bytes);
-@@ -3009,7 +3024,11 @@ static int do_depmod(int argc, char *argv[])
- 
- 	cfg.dirnamelen = snprintf(cfg.dirname, PATH_MAX,
- 				  "%s/lib/modules/%s",
--				  root == NULL ? "" : root, cfg.kversion);
-+				  root ?: "", cfg.kversion);
-+
-+	cfg.outdirnamelen = snprintf(cfg.outdirname, PATH_MAX,
-+				     "%s/lib/modules/%s",
-+				     out_root ?: (root ?: ""), cfg.kversion);
- 
- 	if (optind == argc)
- 		all = 1;
--- 
-2.39.1
+within_module_mem_type(loc, mod, MOD_INIT_TEXT)
 
+> -static inline int
+> +static inline bool
+>  in_core (const struct module *mod, uint64_t addr)
+>  {
+> -	return addr - (uint64_t) mod->core_layout.base < mod->core_layout.size;
+> +	const struct module_memory *mod_mem;
+> +
+> +	mod_mem = &mod->mem[MOD_TEXT];
+> +	return addr - (uint64_t)mod_mem->base < mod_mem->size;
+>  }
+>  
+
+within_module_mem_type(loc, mod, MOD_TEXT)
+
+> diff --git a/arch/parisc/kernel/module.c b/arch/parisc/kernel/module.c
+> index 7df140545b22..e052a5fdd51b 100644
+> --- a/arch/parisc/kernel/module.c
+> +++ b/arch/parisc/kernel/module.c
+> @@ -76,23 +76,18 @@
+>   * allows us to allocate up to 4095 GOT entries. */
+>  #define MAX_GOTS	4095
+>  
+> +static inline bool in_local(struct module *me, void *loc)
+>  {
+> +	enum mod_mem_type type;
+>  
+> +	for (type = MOD_TEXT; type < MOD_MEM_NUM_TYPES; type++) {
+> +		struct module_memory *mod_mem = &me->mem[type];
+>  
+> +		if (loc >= mod_mem->base &&
+> +		    loc <= (mod_mem->base + mod_mem->size))
+> +			return true;
+> +	}
+> +	return false;
+>  }
+
+(see below)
+
+within_module_mem_types((unsigned long)loc, me, MOD_TEXT, MOD_INIT_RODATA);
+
+>  
+>  #ifndef CONFIG_64BIT
+
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 8c5909c0076c..61b7cff632f9 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -320,17 +320,22 @@ struct mod_tree_node {
+>  	struct latch_tree_node node;
+>  };
+>  
+> -struct module_layout {
+> -	/* The actual code + data. */
+> +enum mod_mem_type {
+> +	MOD_TEXT,
+> +	MOD_DATA,
+> +	MOD_RODATA,
+> +	MOD_RO_AFTER_INIT,
+> +	MOD_INIT_TEXT,
+> +	MOD_INIT_DATA,
+> +	MOD_INIT_RODATA,
+> +
+> +	MOD_MEM_NUM_TYPES,
+> +	MOD_INVALID = -1,
+> +};
+
+> @@ -573,23 +574,33 @@ bool __is_module_percpu_address(unsigned long addr, unsigned long *can_addr);
+>  bool is_module_percpu_address(unsigned long addr);
+>  bool is_module_text_address(unsigned long addr);
+>  
+> +static inline bool within_module_mem_type(unsigned long addr,
+> +					  const struct module *mod,
+> +					  enum mod_mem_type type)
+> +{
+> +	unsigned long base, size;
+> +
+> +	base = (unsigned long)mod->mem[type].base;
+> +	size = mod->mem[type].size;
+> +
+> +	return base <= addr && addr < base + size;
+
+Possible (as inspired by all the above is_{init,core}() etc..
+
+	return addr - base < size;
+
+> +}
+
+
+static inline bool within_module_mem_types(unsigned long addr,
+					   const struct module *mod,
+					   enum mod_mem_type first,
+					   enum mod_mem_type last)
+{
+	for (enum mod_mem_type type = first; type <= last; type++) {
+		if (within_module_mem_type(addr, mod, type))
+			return true;
+	}
+	return false;
+}
+
+> +
+>  static inline bool within_module_core(unsigned long addr,
+>  				      const struct module *mod)
+>  {
+> -#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+> -	if ((unsigned long)mod->data_layout.base <= addr &&
+> -	    addr < (unsigned long)mod->data_layout.base + mod->data_layout.size)
+> -		return true;
+> -#endif
+> -	return (unsigned long)mod->core_layout.base <= addr &&
+> -	       addr < (unsigned long)mod->core_layout.base + mod->core_layout.size;
+> +	return within_module_mem_type(addr, mod, MOD_TEXT) ||
+> +		within_module_mem_type(addr, mod, MOD_DATA) ||
+> +		within_module_mem_type(addr, mod, MOD_RODATA) ||
+> +		within_module_mem_type(addr, mod, MOD_RO_AFTER_INIT);
+>  }
+
+within_module_mem_types(addr, mod, MOD_TEXT, MOD_RO_AFTER_INIT);
+
+>  static inline bool within_module_init(unsigned long addr,
+>  				      const struct module *mod)
+>  {
+> -	return (unsigned long)mod->init_layout.base <= addr &&
+> -	       addr < (unsigned long)mod->init_layout.base + mod->init_layout.size;
+> +	return within_module_mem_type(addr, mod, MOD_INIT_TEXT) ||
+> +		within_module_mem_type(addr, mod, MOD_INIT_DATA) ||
+> +		within_module_mem_type(addr, mod, MOD_INIT_RODATA);
+>  }
+
+within_module_mem_types(addr, mod, MOD_INIT_TEXT, MOD_INIT_RODATA);
