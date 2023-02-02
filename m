@@ -2,75 +2,83 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9D90C05027
-	for <linux-modules@archiver.kernel.org>; Thu,  2 Feb 2023 13:48:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60C97C636D3
+	for <linux-modules@archiver.kernel.org>; Thu,  2 Feb 2023 18:40:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjBBNs4 (ORCPT
+        id S232217AbjBBSkM (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 2 Feb 2023 08:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        Thu, 2 Feb 2023 13:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbjBBNsn (ORCPT
+        with ESMTP id S232102AbjBBSkL (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 2 Feb 2023 08:48:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F0E8F27B
-        for <linux-modules@vger.kernel.org>; Thu,  2 Feb 2023 05:47:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675345663;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=gUF3HpY/q4yhbJZLh1X6sV3/WjUyr6VAgXHCmpsp8gI=;
-        b=LoUQlsJCLwBrKBg33v7g4m0ESHdxUl9rnXUCMKQUJV8mGKkE2R0o1kTthi7JoMC2GpqWs1
-        D0QN4AvSG0gn8xHCmcbdaxI5vTOyz2vG3xp0n0N9/QWlPtr6+/Jcrjdl64tu+Y0cLscpO7
-        uW7v8dJqhpAPF1eV3E98xz92/Z9dV9s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-455-J0SoSKsMN5GSQoJfBkkAVw-1; Thu, 02 Feb 2023 08:47:39 -0500
-X-MC-Unique: J0SoSKsMN5GSQoJfBkkAVw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 2 Feb 2023 13:40:11 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC326778F;
+        Thu,  2 Feb 2023 10:39:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6185185A5A3;
-        Thu,  2 Feb 2023 13:47:39 +0000 (UTC)
-Received: from astarta.redhat.com (unknown [10.39.192.59])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 718A6404BEC0;
-        Thu,  2 Feb 2023 13:47:38 +0000 (UTC)
-From:   Yauheni Kaliuta <ykaliuta@redhat.com>
-To:     linux-modules@vger.kernel.org
-Cc:     lucas.de.marchi@gmail.com, Yauheni Kaliuta <ykaliuta@redhat.com>
-Subject: [PATCH] man/rmmod: explain why modprobe -r is more useful
-Date:   Thu,  2 Feb 2023 15:47:36 +0200
-Message-Id: <20230202134736.405778-1-ykaliuta@redhat.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9DD4533E29;
+        Thu,  2 Feb 2023 18:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675362611; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=G9113WeU1VCYSJZi9oEtZ3+Oiam89PAL+MkdMDPwLfg=;
+        b=UY5r4vu1NVauUoWSTnh1YYk6qQr4oISsGqpR92zda4mPqgQTkrnArnD9+XWFVaf5q6LsSd
+        6RSDlIoX3pdLbNNlx8AsgvYntH5wq+ZsQfyGlMOCz6gvbkHXKwHLF76BHz3cyMxVv6gUsj
+        V1oCZL+YAcbQ2SnYjBaGDQMqMuqMfgg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D72D138E8;
+        Thu,  2 Feb 2023 18:30:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oCgYMTEB3GOQPwAAMHmgww
+        (envelope-from <mpdesouza@suse.com>); Thu, 02 Feb 2023 18:30:09 +0000
+From:   Marcos Paulo de Souza <mpdesouza@suse.com>
+To:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: [PATCH] module.h: Document klp_modinfo struct members
+Date:   Thu,  2 Feb 2023 15:29:50 -0300
+Message-Id: <20230202182950.10471-1-mpdesouza@suse.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Improve user experience by explaining the option so the user may
-not search explanations in other manpages (modprobe).
+The struct members description can be found on
+Documentation/livepatch/module-elf-format.rst, but for a developer it's
+easier to search for such information looking at the struct definition.
 
-Signed-off-by: Yauheni Kaliuta <ykaliuta@redhat.com>
+Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 ---
- man/rmmod.xml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/module.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/man/rmmod.xml b/man/rmmod.xml
-index e7c7e5f9e7dc..67bcbedd972b 100644
---- a/man/rmmod.xml
-+++ b/man/rmmod.xml
-@@ -52,7 +52,8 @@
-       want to use
-       <citerefentry>
-         <refentrytitle>modprobe</refentrytitle><manvolnum>8</manvolnum>
--      </citerefentry> with the <option>-r</option> option instead.
-+      </citerefentry> with the <option>-r</option> option instead
-+      since it removes unused dependent modules as well.
-     </para>
-   </refsect1>
+diff --git a/include/linux/module.h b/include/linux/module.h
+index ec61fb53979a..4fbe06b29b39 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -353,10 +353,10 @@ struct mod_kallsyms {
+ 
+ #ifdef CONFIG_LIVEPATCH
+ struct klp_modinfo {
+-	Elf_Ehdr hdr;
+-	Elf_Shdr *sechdrs;
+-	char *secstrings;
+-	unsigned int symndx;
++	Elf_Ehdr hdr;		/* Elf header */
++	Elf_Shdr *sechdrs;	/* Section header table */
++	char *secstrings;	/* String table for the section headers */
++	unsigned int symndx;	/* The symbol table section index */
+ };
+ #endif
  
 -- 
 2.39.1
