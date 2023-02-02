@@ -2,335 +2,176 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30907C61DA4
-	for <linux-modules@archiver.kernel.org>; Thu,  2 Feb 2023 07:14:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38303C05027
+	for <linux-modules@archiver.kernel.org>; Thu,  2 Feb 2023 07:23:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjBBHOm (ORCPT
+        id S230226AbjBBHX0 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 2 Feb 2023 02:14:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
+        Thu, 2 Feb 2023 02:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBBHOl (ORCPT
+        with ESMTP id S229711AbjBBHXZ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:14:41 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123EA5B5BC
-        for <linux-modules@vger.kernel.org>; Wed,  1 Feb 2023 23:14:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675322080; x=1706858080;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=XSbTwBdNiPMj1CeCJiaiFSh021RQmEJdfbW8cpZ/46o=;
-  b=hBsKjS8MkxmoBaZYOxTFZWqSWwUvzQZKOV7g2c/il10SrsehrTg9SYNi
-   D7PKH4WrhwWgs0hlQChVzpm20r5PtXvnoO/YIq2V4ofPZ2bNZ33j+b4GC
-   l2gRvGBLSkm88ktCNjNnXmKvMCnxSRQ5ab/IUEwe2E3Brt/hUOm1ZkDtK
-   TVhNDiudNReLOInfJAId2lqLsISh4pduaYRWqf7QWwQyE/dX5ikm8R/62
-   J67uVT6GNSfq3rYLDOgnI96yeyhDldKF+PVpfDuKkhEC26T6Pcgfk9LfA
-   HOi83qTrqt4WYV9KAIdWnN4YkiDBGg/vWDEbCV44Nct2C+1NjGTQ9IGPZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="355712251"
-X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="355712251"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 23:14:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="789179757"
-X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="789179757"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga004.jf.intel.com with ESMTP; 01 Feb 2023 23:14:39 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 1 Feb 2023 23:14:39 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 1 Feb 2023 23:14:38 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 1 Feb 2023 23:14:38 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.109)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 1 Feb 2023 23:14:37 -0800
+        Thu, 2 Feb 2023 02:23:25 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2074.outbound.protection.outlook.com [40.107.104.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B3964DBA;
+        Wed,  1 Feb 2023 23:23:23 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WhxhxDowNG6cvn1Xcd1nM9L+yUto2gGBJwUrEpF5c5OcimA3WihdnRkyp7NzeZwvROqgzRuTpcx2VjuWLVYE9XmbijLHViDdm4D98OXxTGmNvTM5BCkADl9bAsrJKNgOrdESzJR95R/eWvs+iGbZWcGj9C/21Pj/i7Na42ys862JWytW9YhC5s6Ra3mRlBKd2SMUxuvmu3I42ygEyr3t34JDU0Wt/4rdufGooe1PxoiDHTPk99guLD39aXrPvQYsU3zlX22298dBg+cpONMm7BzYBrnXgvoJVjSNrsFnvbs9BfeIKF9geYaiUrAQWPgpQXP50lTsJekpx+iyawCHEQ==
+ b=ZxrJ3UlMKUTeUZH1PxuAXblU2fuPotsiv+kVgHSBDrOYXJPNXc+KeitkjB29NUg8qVvkvcaKdQPB7fF2QSq0y33iwuDv0zK1f872yoVy46UObkpj8/FPmL61OYc0YmYNiVcG15gHWXZusMBPztUrhE2kZxC58yjVELwaez7ieoWpvus3RKIQbGDJwVka32UT7N5iP+s/r/TSPeX6b7wlZCHNq0CEFmje35hWPeLj2+MqYnP6+kMeMEeH/Z+JH3qCe1HvhXtMpirBHpj/+u9WCmtqFG8MAVWLPqHVl35JT6kd5JthiP+vckf3caaWk6TbrvNURTPPGHaSwOILsyL/yQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bX82pqPaiIpU3vDL0IoFjRCd3eFHoMsLkowVHg/oSD0=;
- b=GEUdk2uC6OKaA75Uhq0Pz7tTxYyKsnsRmE2qR6bdC0qfn6QShS9cq5pRgmIFcdtVqtYsv7bP4Q7+Xd2T4+ZGlIGhrFa94pgRmMne/1+hWaCqksdjgyfdunzj0OrCPn9KOvD1GonUiU0eb3Vb9aTfM+9G3a2i6BBdc8NDbhBcGryXcMaJfHB92GaMwvDPSU1DuDGEbhw+QW/8pa/uoCCdIRATh5JCYNaTHKmeAucAAXcff4ZlosY/tt9hmdDzX4ecwy1DjoYp6tTpEpXn/HFb8BH8+hp6ApdYnEHThXeweJ1GjQEUe98s4VjlhsNo/DYrGKH/WN+LyVccDwXv4Jay5w==
+ bh=kpXAf4rT0EV/kp49ABgsGgUTTXI/iQzLbh1P70oKpRE=;
+ b=K6Pxq0vjBz+ecDYeBNCJzybpgoSG3ML/9ipfZczLUKxA0QI+crL8qSOspOBw+j6q+dgRH6Yt+bAjdswqC3TbSUQQmyydrdLdK1pE6OwSJER1KAdaoGXhhPjT461WzxmwNlyhBeSHgkm4UcRHKqLX+eebUSft69gXgIS7mBABFMiG/No0yQICn4kvJud9mNdVQ8uVnhA6cc+zaF1o9fdDMIDXFdjw99BENGoMdE4UF3GdNMGWel9JKzd/2G0P0qbOMp4YMMi+nmaWFOtBHgMaClR1szqTNYoeyA89JT9832hWfZroRQVUwhcmI9/F+XZnQ5346MDH//MN0zuNhOhE5Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by PH7PR11MB6476.namprd11.prod.outlook.com (2603:10b6:510:1f0::18) with
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kpXAf4rT0EV/kp49ABgsGgUTTXI/iQzLbh1P70oKpRE=;
+ b=sxe7pkniP6wWLe4xj6F3lfPIeEZyFInekVeXWjPL09ooA8XyqE6kQFtlLYL4Cv7jBjJXKysU7oMLKxD3kIKpEru1kFZ6zaavJaTrV/VRWyJg2+nvKtKJvk9nufOLF289rI7vvLmUFnNcfvvp5MqygSQbQs1gVOfsdazcgDc0mF0hmy0ulmifTaTL+pTXomfboXR7NBfnQMf6BE/lCUBhaid1K6V58gKmOZhUkxQ9E5ASImgziRW5pNSirNikGqgqCoUR98fZemstGvwzmSbRwLEIlmwerqmvh24B3jl2vkgpo52vb8ybB3rrrlTnHNqrBPUqZOZRPguNXigZHjhEGg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PAYP264MB3320.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:11c::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.25; Thu, 2 Feb
- 2023 07:14:36 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::593:877e:dd33:5b7a]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::593:877e:dd33:5b7a%6]) with mapi id 15.20.6043.038; Thu, 2 Feb 2023
- 07:14:36 +0000
-Date:   Wed, 1 Feb 2023 23:14:33 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-CC:     <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH] depmod: Introduce a outdir option
-Message-ID: <20230202071433.fbcha2nwr3tiqqvf@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20230130183324.283162-1-emil.l.velikov@gmail.com>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230130183324.283162-1-emil.l.velikov@gmail.com>
-X-ClientProxiedBy: BYAPR01CA0003.prod.exchangelabs.com (2603:10b6:a02:80::16)
- To CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
+ 2023 07:23:20 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097%5]) with mapi id 15.20.6064.024; Thu, 2 Feb 2023
+ 07:23:20 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Song Liu <song@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "hch@lst.de" <hch@lst.de>,
+        "kernel-team@meta.com" <kernel-team@meta.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v8] module: replace module_layout with module_memory
+Thread-Topic: [PATCH v8] module: replace module_layout with module_memory
+Thread-Index: AQHZNo0Y6b+trPxN0k2Icbg1mllenK67QVkA
+Date:   Thu, 2 Feb 2023 07:23:20 +0000
+Message-ID: <1559bd58-0cc7-e643-ff0f-7be5e39992f1@csgroup.eu>
+References: <20230201223219.355006-1-song@kernel.org>
+In-Reply-To: <20230201223219.355006-1-song@kernel.org>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PAYP264MB3320:EE_
+x-ms-office365-filtering-correlation-id: 20038da4-6574-427f-7508-08db04ee5cb2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hV/CF1LmmL1k6hBiFNCvtiGrwPm7JJZnd3UW9FHOmennc9tBzXcdw5uD3Y94Dae5sn6XzifO77Eexh9z4bpl/PzFJTUuqqhqCESfImjX1Tfj5/kufedh3n75F9QRARMN1Pc2hH1aoBbfo3OypXis4h+a2r3ySmOqGRuIi+qlYyzptuB4xaCyhdd8x7zSmGMi6oZJ3rlpZ5B3O6j8EffdQzr8OA7Jv6Oz5uoDgMReJmDsGJJbZ5ofPdYP2pMmheszSFn3ryNZhOZFk1MiYBQzx1xZ1TMd5T3cmrpvSOXsKPJCdNNJ/1ADxXU7NkmibXKylucevphjsnZBb9MCUIvJNust7JzBCt8tAY7BtVxO/vPrUYixRBVws4E1zYusWwCs6Pgs4jWsG3FT0hdtRVXGc2CHwry1/rxWdLmO8smfQFmA1xEdGtF7mrwFgNTc0rSmXr1q5FoY4TsgmOrOChSFsNwxf9MTH6WLiknw0vZjk8HwkaW9iNpxxpxYZsEQBHEwmRQ8hYGoszi+/IQFDiCWi+xbd/skqq4nR7/L6m00WcoYOAL7SElojdsKl0yOkAGz6lDNG5UUiTlKEfuwALWeK5IH2zrDTLp8kSfsy0Ln9o2ITN+nrU80IRXE+npt8Pc/Ecuoi94guTcCAzFu5rWv3uiAN9SNPoltq4eYWRtBZyL1RvaiZoyZ2lPwOXdjDD6ajXklUAN9yvbOQPLRlj/W1cz4g4gp/UKAEr5oYUKOMuz+0lgzniUAlt2ObwjzCT2vsvYm8RsHFREy6FtE3aE0Qw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(366004)(376002)(39850400004)(396003)(451199018)(31696002)(36756003)(38100700002)(122000001)(38070700005)(86362001)(8676002)(91956017)(4326008)(76116006)(66946007)(66476007)(66556008)(64756008)(66446008)(71200400001)(6486002)(110136005)(54906003)(5660300002)(41300700001)(8936002)(2906002)(44832011)(478600001)(316002)(186003)(6506007)(26005)(6512007)(83380400001)(2616005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z2dDMnBOdkhNeXU3K1laUGlLL2pEc3BhdXRsSzg0V1dLbEUzbTJTRWg0eSsy?=
+ =?utf-8?B?Yk9vYW5uUi9pQjl1elM2eEhRZ3pucjBPZTFkNW45NllCR0NKZ3phNWZTdFEz?=
+ =?utf-8?B?aUNLZ2h0Z0RYbVVCaWJObEJmREpNUFM4bXkvNjNScWZsc3VpN0hMWWF4N2JY?=
+ =?utf-8?B?QlI3WW5QSEN0RnNObk9MMzh4RXdOQndBd3BnUnJlRVFFRVFzR2I2UFozd2o4?=
+ =?utf-8?B?MzBjdm8ydDVDc1NnYUhuWUx5bUgyK1U5UUhYOGtRZSs1bmNLUy9OME85bUZp?=
+ =?utf-8?B?eDJ4Yk5EeGpNMDhvT01rMlE1Y0hGc0tZbzNlNDJEc1J1elRGL25sNkpLb0xl?=
+ =?utf-8?B?cTAyVUw5cUV5VFBscVJPN1l2VWVCV2NGeWpCcmh6L0R6UzZQbmM0akNzdEJP?=
+ =?utf-8?B?RUFCaG0wYmhac0l5azQ1WWdLL2pCNUNPL014N2VXdGZjVHcvcDBiY3RsRjJH?=
+ =?utf-8?B?cUxuc09TMUJSakJoZjVpR1RWN0pTc3BGdm9lRk9UWEUwdmMwbUgzeGxmeHhG?=
+ =?utf-8?B?b0ZXQnJDdG9KWllFWVQvVStFOHRDeEl5SDg2NS9veGwva0lncy9Md3B3QXdz?=
+ =?utf-8?B?aHVyTmRzWEYvblJHV1VQdk1sVzZyZkhYemtvanV1VC9yeUlMdGNUZWR6V3FR?=
+ =?utf-8?B?VXB6RmxuRWFKWTBibEpmbUoyTDBJSHJjOEZpTUR0QUxBcGZERFZhcWVBZmd2?=
+ =?utf-8?B?SDgrMWkxd0dCa0FUZGRESG44eSsrVHZTeEl4R0JtU3l5RXo2eXphSEZSVDdt?=
+ =?utf-8?B?N3k3WjdrOTRkbVZTeDhCVHUrcXFYZzRScEl2anZGNm5JVHJBYzZoNzd4Umpl?=
+ =?utf-8?B?NmpkczZWZ0N5Y1JSazFyZVlFb2hDbWdoZk54RURlazhnLzVBaVBxVjNFYm44?=
+ =?utf-8?B?a3poV0c1NTZ4cEdaVzVjSjVlbEQwWDdGV0sxWUZXOUJxcGplTDlnS0pubUw1?=
+ =?utf-8?B?a3JhNEtTRy8zRlU3dkhGMWovUTNXYWZ6M3h1L3JUcmFnSDZab1RjTkxUQ1lC?=
+ =?utf-8?B?cGZzd0ZQZTlXSTQ4VEZ4SktZNGtEUjJFWmpiWG95V0R5SElqS0hndG9IYWpG?=
+ =?utf-8?B?R0IwZEpQR1NyRzVNUHFDQklGczd2RFdPRENlaisvZm1iT09nbTdRU3FzT0V5?=
+ =?utf-8?B?TXZJQUdoTkRYOGNVeHJzRms0Z3FyZjIzMVQzRG9oV3ZQWGFOcm04Z0htWU9R?=
+ =?utf-8?B?cmo2YWxNaHZFMUxTR0NETTlYblBZQzYzRlp6dHJEVEp0U0FGSVZPaTBqWEdU?=
+ =?utf-8?B?NmJpeXVQUlkzVTNGUElBSHJhTFI5M2hYMHo5SExjWE9tUnkwalh4ajhDWXg3?=
+ =?utf-8?B?emx4QVgwZVNrOXBhTUJJVndQY3VlK291Y0V6RjdKRERLaU95UXFLeWJ1dEFP?=
+ =?utf-8?B?YXc3Yko1Tmd3VzlpcEtNRFdLVXdSd25yZ04rRlZ4eng0em95QTE1aS9QR2NL?=
+ =?utf-8?B?TzNjLytGbTZOVVd5b2hVNDlGUTg1aEZxTk03UnFUR044eFJJTEsyYlg2OU90?=
+ =?utf-8?B?RmhnTEZMY2xqbTJpVDBjNC9sc0V2YzVlemFuNTFraXhMWEl3U3JESk9PR3dw?=
+ =?utf-8?B?bzRmZWcxZ1U3cnRtbWxWN2Z1dzh3dlFQS2NRdjZhTk1BVTlYVVNHQ2JadmZM?=
+ =?utf-8?B?NW9vYllENmx4NkFoOXlrcHNpYytCZkoydjQyRFdrcnFoZUNuZGhQdTZqd2tY?=
+ =?utf-8?B?djB1Vmh5dGRoa3djOUV1LzNGVGlpdEhQQm1OSFA1Qnc2Ti9XTEVHMUIraWdw?=
+ =?utf-8?B?R3NnaEJad0lCalF3MkFLd1RMalU2U3FoVlR6TUdIV0pHZWIwL2tMYUlKVjVN?=
+ =?utf-8?B?MHYzanFqWkN6OTcwUEkvcFJEem9UOWRKWkp0eklOTGUwZkM4VFJtTzJpMHVN?=
+ =?utf-8?B?VVJiMTNmMDZCT2I5eWp1eC9KcG5SVk5pcW5HcHhmWnFUY0RIc2tJY0grM3RL?=
+ =?utf-8?B?SDVac0lHVUdYVGtsK2wzaG5GeU9NdVZRWHoxNU9Bd2d2elFNMS9vRzdZaDl0?=
+ =?utf-8?B?MEREUGovRU1XdkRnMXp3ZTE4R3Z1RTk3U0NWUUcxVlZadnJYSllrRTJYS0Ru?=
+ =?utf-8?B?YXlGZVRiT0M1cHg5OWc2TmVHQms1SmFkNmNQT0FaaDlmazNTdDZWNHlCaTkx?=
+ =?utf-8?B?SjNjNTA4UGVzeFNDRmNWczVXTGExbUdLRGpQZ2NaaTNDaXBzcHBySzN0ZlJY?=
+ =?utf-8?B?UlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9800726DDB57BD4AB30F74D52D2F0553@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|PH7PR11MB6476:EE_
-X-MS-Office365-Filtering-Correlation-Id: a787f50c-6178-4441-2f1f-08db04ed2391
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oYr8EiwQcDGQE1bZf0MLv/YV5l4FQZY2k4C4Lmrv7YVGiwkihE/1jHrvzeyRuSX0oi6vAcmCrc6bmC3+Ni6Ke4LI93dy42FLlvkm3Blgqc8oKsqQzklFlhqQ3QgmrcYEwJUBhu1SyFwEjTlL5+Kuyy6GokPFK2yESBRfAw5JLKfELTsgn9TP+t3h5Qy5jpTVuMrBg5Km1IpHEZgK8BwMH6Y9LAfCacfwnFRtcy4SkIYOjEZl6B/rVCXhb4mG2Ja+ztx5ANnDeQekCkWJUYir4ihLxATrOCdacM+ZPt0k+EiNepV3b6udgYWDjgc2hvT3QuhTs81620DmmJ3ULhJmXxk+sqa2+5Azh64j3czsTX5VOALgtjN9QWyXJukObCpjrvWmfyWcvQRfl1sEyLFm//n8wcMPkq9QJAqNJoWZlAWuOaHIqPlxhwFL4Awpq7qcWoAivm1ggKCp4jf1OLjXOtm0Wz75w0Bkl592V9Zm2wQ92Vrmf+nxh2XKdvczUHPi5eddkAFZwKEIIW7WSVEzzyga1r26BnjFPGXAzfO9s+gq5eHFl4gCAGqxV6VTOcij/pNjc9uY30GvXK3jwbR1AU+SUR0gTBHGqieb4Gf3AlCNiZUKQ7fPFpqnaYjXveKVc2IdTWyGwKahKh28DAkb7QCeZdUTleahS5vtEG/2h9WTo8gipwMgSJ0ag5OIma3R
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(396003)(39860400002)(346002)(376002)(136003)(366004)(451199018)(83380400001)(26005)(86362001)(82960400001)(38100700002)(186003)(33716001)(6512007)(9686003)(6486002)(6506007)(478600001)(1076003)(316002)(6666004)(66946007)(41300700001)(5660300002)(66476007)(4326008)(8676002)(2906002)(6916009)(8936002)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6ltKLm59EFKUxjvRTW0RUs4PRcqu1NopxMVG4FN+gzGLXxWyRz29idzpzRaO?=
- =?us-ascii?Q?IXASKJ+yCT7BvmDMYzTcjbWdirsRRrT6YAR2ANDgpp+/8G3U1h81fbJ56Ptg?=
- =?us-ascii?Q?bL2tJ99cmCe8fmCeD/RksBcVjwa79/eW/Qnl7QjX3dqmwI4fjYoFqmju0u4l?=
- =?us-ascii?Q?T+XXcnjNJpDwEhNWarUDVHd83+5IRNJoYp9VrPgoLo0assrEWaswz/16uO4J?=
- =?us-ascii?Q?vOaCnToxNkb2wZNIbt0CtN4jups94k2jM2A08m9rLyJM3Jdt0bYpj1HBTCiI?=
- =?us-ascii?Q?lMW3yV0iKZ5R8oJWIhLI2MKqtl4AorHj/U+eZaNygig0l+yDbOnkniJJzuvD?=
- =?us-ascii?Q?FBQAAsuv5kLzqTuUaKZ2Sy7iA/yMfS+YfJutjXR7fuaIHDnRnJTizfZu4Kep?=
- =?us-ascii?Q?01zk5lGDVH2O2k/aRhV8aRPWuPFJfaGkF4cnl+7yuZot0mIUtX+3kpe2mj/h?=
- =?us-ascii?Q?EGbD6i+nrjO2zrEoAdC+uKYXIBH98pZi7M8aGUi8zKUk8/6PhNsYUk5vQhGj?=
- =?us-ascii?Q?M94u/raWIhNfInTb5R6tdF5xH5/tAd806uGLnjqNjJxqcicFBphRUOWjqR7L?=
- =?us-ascii?Q?38QXzl3MFhXagfDv0FFe8LXa6s0hyKA99bPgoP35uMrgMSFWNwfPZfl+WJ1K?=
- =?us-ascii?Q?2fb//sCGW20WpV+HWol1GvvERBtrB07jbrPWwga7d9FvKEmWp4yjtdSf+4qW?=
- =?us-ascii?Q?Raih22481QmLZ0GJby2NT5l0ASfBcGgrdIPYyGxHxf2reOmrC+I0+f/VCibH?=
- =?us-ascii?Q?XcMvucMkjV7g159mITR/nSVHSOvBOSOYcBHFyThc60azGqy9EtGpZHYs1CQl?=
- =?us-ascii?Q?3dwqOWuqbn3SC1zi8s1utE0+zBimK2DGpAhfhGBA84XLmuoT5/OdfHZWLGD7?=
- =?us-ascii?Q?MOPuTg2WakUdjPYIqWLtvG+85RyOSQnu+wo2dtzZvF2vP1vCzHlizUtsvB07?=
- =?us-ascii?Q?rLN/1i7tmRGegu19vRI2hzVwPupV8XYL6C8YvWWu0tVVaEsDTDL7a4n2jt/k?=
- =?us-ascii?Q?BLivmeXn2hmiczz64ywQ9PPwdBpzBM2lsj9ds7swFeZfpAmrA3trP/diW/EF?=
- =?us-ascii?Q?qn80kp8vHLouBcgjLVvKLxB02kEvecZVVeavcmPcEWZE/DkL/hZH5w7pYlL/?=
- =?us-ascii?Q?SK/AiMC7IfRbZP55k1+xZ2snUa/at1YkxKwuDU6Nz2BxqE5mHPG6Dx6NZkKJ?=
- =?us-ascii?Q?ZrZZdurnfbDdmY5SLD8NfAKEdqHETHFDY2q4WbtXqNBlsU112JjnAueOo4LQ?=
- =?us-ascii?Q?jCc3HF6Qfxc1ZnfRzs+Nru+JrOUvzaBo4HKOwfgmYdBUu5I2450UD6Re1qP0?=
- =?us-ascii?Q?G8lvCPBI9yH8ufUfQo6FSVSt3NrMRnbL25nLMKfza2DMF5RqYY7sCQ/fepU9?=
- =?us-ascii?Q?CF9iCrVZC8976Mb+D7HZjByPvlYq2HS1WDXtFeOauynCCoDmekbBIG1TueD4?=
- =?us-ascii?Q?X8ASaErLDKz73U6LhvrFqgVAh3vLlPcnY9oxTFIsH82S2ZkMlx6XSChELzyF?=
- =?us-ascii?Q?KxbqFr5FMTluisnvv4x7xRM5XBazX/7plzUc99Xcuez2rLOFbVWnLXJAp4JT?=
- =?us-ascii?Q?1arOeV3OTl2nfyQtfrR0hPUDZBCLP8V3GJBL4nE+zP1D8IdySrwLkazLYfXT?=
- =?us-ascii?Q?Og=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a787f50c-6178-4441-2f1f-08db04ed2391
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-OriginatorOrg: csgroup.eu
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2023 07:14:35.5252
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20038da4-6574-427f-7508-08db04ee5cb2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 07:23:20.6827
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QT0zfw44TpVJR1tUq4NVS83d7ZPBHjFRneo97PCx9XZetQbi4rm0oQo9+jKiMaJ3TZacV69wdL6X+QGAARHVTd8a3WDO/We1bU8dBHZtCsQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6476
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BMBF3ivoX4X9p3opjadQ7mVDzt74MnZcDSN6aDxQYmqWR5C/S6i27ZdHua6SaorTgajKveQgVlLOUi/nSaMmZxSOsG+5YAhpCZa6AXUcyWw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAYP264MB3320
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Jan 30, 2023 at 06:33:24PM +0000, Emil Velikov wrote:
->From: Emil Velikov <emil.velikov@collabora.com>
->
->This option is equivalent to basedir, with the small difference being
->that's where the meta-data files are generated. In other words, this
->allows us to have read-only input modules and modules.dep, while still
->being able to generate the meta-data files.
->
->Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
->---
->
->Hello team,
->
->Here's a handy feature behind the request at
->https://github.com/kmod-project/kmod/issues/13
->
->This is my first time hacking on kmod, so hope I didn't make too many
->mistakes :-) There are a few TODO notes below where your input is
->greatly appreciated.
->
->TODO:
-> - Add tests - team, any pointers or requests?
-
-yep, please add one that calls depmod with this new option.
-Copy and extend one of the tests in testsuite/test-depmod.c
-
-You will have to prepare a "rootfs" under
-testsuite/rootfs-pristine/test-depmod/<name-of-the-test>. Make sure to
-add the normal files coming from kernel and checking for the output in
-the other directory you passed as argument.
-
-> - Split the dirnamelen shorthand tenary operator change - is it worth
->   it?
->---
-> man/depmod.xml | 19 +++++++++++++++++++
-> tools/depmod.c | 25 ++++++++++++++++++++++---
-> 2 files changed, 41 insertions(+), 3 deletions(-)
->
->diff --git a/man/depmod.xml b/man/depmod.xml
->index ea0be27..c53624d 100644
->--- a/man/depmod.xml
->+++ b/man/depmod.xml
->@@ -45,6 +45,7 @@
->     <cmdsynopsis>
->       <command>depmod</command>
->       <arg><option>-b <replaceable>basedir</replaceable></option></arg>
->+      <arg><option>-o <replaceable>outdir</replaceable></option></arg>
->       <arg><option>-e</option></arg>
->       <arg><option>-E <replaceable>Module.symvers</replaceable></option></arg>
->       <arg><option>-F <replaceable>System.map</replaceable></option></arg>
->@@ -151,6 +152,24 @@
->           </para>
->         </listitem>
->       </varlistentry>
->+      <varlistentry>
->+        <term>
->+          <option>-o <replaceable>outdir</replaceable></option>
->+        </term>
->+        <term>
->+          <option>--outdir <replaceable>outdir</replaceable></option>
->+        </term>
->+        <listitem>
->+          <para>
->+            If your modules are stored in a read-only location, you may want to
->+            create the output meta-data files in another location. Setting
-
-that is probably not the only use case, I'd rephrase with something
-like:
-
-Set the output directory where depmod will store any generated file.
-<replaceable>outdir</replaceable> serves as a root to that location,
-similar to how <replaceable>basedir</replaceable> is used. Also this
-setting takes precedence and if used together with
-<replaceable>basedir</replaceable> it will result in the input being
-that directory, but the output being the one set by
-<replaceable>outdir</replaceable>.
-
->+            <replaceable>outdir</replaceable> serves as a root to that location
->+            similar to how we use <replaceable>basedir</replaceable>. Use this
->+            option if you are a distribution vendor who needs to pre-generate
->+            the meta-data files rather than running depmod again later.
->+          </para>
->+        </listitem>
->+      </varlistentry>
->       <varlistentry>
->         <term>
->           <option>-C</option>
->diff --git a/tools/depmod.c b/tools/depmod.c
->index 364b7d4..aaf2327 100644
->--- a/tools/depmod.c
->+++ b/tools/depmod.c
->@@ -58,11 +58,12 @@ static const char *default_cfg_paths[] = {
-> 	NULL
-> };
->
->-static const char cmdopts_s[] = "aAb:C:E:F:euqrvnP:wmVh";
->+static const char cmdopts_s[] = "aAb:o:C:E:F:euqrvnP:wmVh";
-> static const struct option cmdopts[] = {
-> 	{ "all", no_argument, 0, 'a' },
-> 	{ "quick", no_argument, 0, 'A' },
-> 	{ "basedir", required_argument, 0, 'b' },
->+	{ "outdir", required_argument, 0, 'o' },
-> 	{ "config", required_argument, 0, 'C' },
-> 	{ "symvers", required_argument, 0, 'E' },
-> 	{ "filesyms", required_argument, 0, 'F' },
->@@ -104,6 +105,7 @@ static void help(void)
-> 		"\n"
-> 		"The following options are useful for people managing distributions:\n"
-> 		"\t-b, --basedir=DIR    Use an image of a module tree.\n"
->+		"\t-o, --outdir=DIR     The output equivalent of basedir.\n"
-
-Output directory for generated files
-
-<basedir>  is both input and output, so I don't think the comparison is
-good enough.
-
-
-I think making sure this is working as desired with at least one test
-would be good, but overall looks goot to me.
-
-thanks
-Lucas De Marchi
-
-> 		"\t-F, --filesyms=FILE  Use the file instead of the\n"
-> 		"\t                     current kernel symbols.\n"
-> 		"\t-E, --symvers=FILE   Use Module.symvers file to check\n"
->@@ -467,6 +469,8 @@ struct cfg {
-> 	const char *kversion;
-> 	char dirname[PATH_MAX];
-> 	size_t dirnamelen;
->+	char outdirname[PATH_MAX];
->+	size_t outdirnamelen;
-> 	char sym_prefix;
-> 	uint8_t check_symvers;
-> 	uint8_t print_unknown;
->@@ -2576,7 +2580,7 @@ static int depmod_output(struct depmod *depmod, FILE *out)
-> 		{ "modules.devname", output_devname },
-> 		{ }
-> 	};
->-	const char *dname = depmod->cfg->dirname;
->+	const char *dname = depmod->cfg->outdirname;
-> 	int dfd, err = 0;
-> 	struct timeval tv;
->
->@@ -2585,6 +2589,11 @@ static int depmod_output(struct depmod *depmod, FILE *out)
-> 	if (out != NULL)
-> 		dfd = -1;
-> 	else {
->+		err = mkdir_p(dname, strlen(dname), 0755);
->+		if (err < 0) {
->+			CRIT("could not create directory %s: %m\n", dname);
->+			return err;
->+		}
-> 		dfd = open(dname, O_RDONLY);
-> 		if (dfd < 0) {
-> 			err = -errno;
->@@ -2898,6 +2907,7 @@ static int do_depmod(int argc, char *argv[])
-> 	FILE *out = NULL;
-> 	int err = 0, all = 0, maybe_all = 0, n_config_paths = 0;
-> 	_cleanup_free_ char *root = NULL;
->+	_cleanup_free_ char *out_root = NULL;
-> 	_cleanup_free_ const char **config_paths = NULL;
-> 	const char *system_map = NULL;
-> 	const char *module_symvers = NULL;
->@@ -2927,6 +2937,11 @@ static int do_depmod(int argc, char *argv[])
-> 				free(root);
-> 			root = path_make_absolute_cwd(optarg);
-> 			break;
->+		case 'o':
->+			if (out_root)
->+				free(out_root);
->+			out_root = path_make_absolute_cwd(optarg);
->+			break;
-> 		case 'C': {
-> 			size_t bytes = sizeof(char *) * (n_config_paths + 2);
-> 			void *tmp = realloc(config_paths, bytes);
->@@ -3009,7 +3024,11 @@ static int do_depmod(int argc, char *argv[])
->
-> 	cfg.dirnamelen = snprintf(cfg.dirname, PATH_MAX,
-> 				  "%s/lib/modules/%s",
->-				  root == NULL ? "" : root, cfg.kversion);
->+				  root ?: "", cfg.kversion);
->+
->+	cfg.outdirnamelen = snprintf(cfg.outdirname, PATH_MAX,
->+				     "%s/lib/modules/%s",
->+				     out_root ?: (root ?: ""), cfg.kversion);
->
-> 	if (optind == argc)
-> 		all = 1;
->-- 
->2.39.1
->
+DQoNCkxlIDAxLzAyLzIwMjMgw6AgMjM6MzIsIFNvbmcgTGl1IGEgw6ljcml0wqA6DQo+IG1vZHVs
+ZV9sYXlvdXQgbWFuYWdlcyBkaWZmZXJlbnQgdHlwZXMgb2YgbWVtb3J5ICh0ZXh0LCBkYXRhLCBy
+b2RhdGEsIGV0Yy4pDQo+IGluIG9uZSBhbGxvY2F0aW9uLCB3aGljaCBpcyBwcm9ibGVtYXRpYyBm
+b3Igc29tZSByZWFzb25zOg0KPiANCj4gMS4gSXQgaXMgaGFyZCB0byBlbmFibGUgQ09ORklHX1NU
+UklDVF9NT0RVTEVfUldYLg0KPiAyLiBJdCBpcyBoYXJkIHRvIHVzZSBodWdlIHBhZ2VzIGluIG1v
+ZHVsZXMgKGFuZCBub3QgYnJlYWsgc3RyaWN0IHJ3eCkuDQo+IDMuIE1hbnkgYXJjaHMgdXNlcyBt
+b2R1bGVfbGF5b3V0IGZvciBhcmNoLXNwZWNpZmljIGRhdGEsIGJ1dCBpdCBpcyBub3QNCj4gICAg
+IG9idmlvdXMgaG93IHRoZXNlIGRhdGEgYXJlIHVzZWQgKGFyZSB0aGV5IFJPLCBSWCwgb3IgUlc/
+KQ0KPiANCj4gSW1wcm92ZSB0aGUgc2NlbmFyaW8gYnkgcmVwbGFjaW5nIDIgKG9yIDMpIG1vZHVs
+ZV9sYXlvdXQgcGVyIG1vZHVsZSB3aXRoDQo+IHVwIHRvIDcgbW9kdWxlX21lbW9yeSBwZXIgbW9k
+dWxlOg0KPiANCj4gICAgICAgICAgTU9EX1RFWFQsDQo+ICAgICAgICAgIE1PRF9EQVRBLA0KPiAg
+ICAgICAgICBNT0RfUk9EQVRBLA0KPiAgICAgICAgICBNT0RfUk9fQUZURVJfSU5JVCwNCj4gICAg
+ICAgICAgTU9EX0lOSVRfVEVYVCwNCj4gICAgICAgICAgTU9EX0lOSVRfREFUQSwNCj4gICAgICAg
+ICAgTU9EX0lOSVRfUk9EQVRBLA0KPiANCj4gYW5kIGFsbG9jYXRpbmcgdGhlbSBzZXBhcmF0ZWx5
+LiBUaGlzIGFkZHMgc2xpZ2h0bHkgbW9yZSBlbnRyaWVzIHRvDQo+IG1vZF90cmVlIChmcm9tIHVw
+IHRvIDMgZW50cmllcyBwZXIgbW9kdWxlLCB0byB1cCB0byA3IGVudHJpZXMgcGVyDQo+IG1vZHVs
+ZSkuIEhvd2V2ZXIsIHRoaXMgYXQgbW9zdCBhZGRzIGEgc21hbGwgY29uc3RhbnQgb3ZlcmhlYWQg
+dG8NCj4gX19tb2R1bGVfYWRkcmVzcygpLCB3aGljaCBpcyBleHBlY3RlZCB0byBiZSBmYXN0Lg0K
+PiANCj4gVmFyaW91cyBhcmNocyB1c2UgbW9kdWxlX2xheW91dCBmb3IgZGlmZmVyZW50IGRhdGEu
+IFRoZXNlIGRhdGEgYXJlIHB1dA0KPiBpbnRvIGRpZmZlcmVudCBtb2R1bGVfbWVtb3J5IGJhc2Vk
+IG9uIHRoZWlyIGxvY2F0aW9uIGluIG1vZHVsZV9sYXlvdXQuDQo+IElPVywgZGF0YSB0aGF0IHVz
+ZWQgdG8gZ28gd2l0aCB0ZXh0IGlzIGFsbG9jYXRlZCB3aXRoIE1PRF9NRU1fVFlQRV9URVhUOw0K
+PiBkYXRhIHRoYXQgdXNlZCB0byBnbyB3aXRoIGRhdGEgaXMgYWxsb2NhdGVkIHdpdGggTU9EX01F
+TV9UWVBFX0RBVEEsIGV0Yy4NCj4gDQo+IG1vZHVsZV9tZW1vcnkgc2ltcGxpZmllcyBxdWl0ZSBz
+b21lIG9mIHRoZSBtb2R1bGUgY29kZS4gRm9yIGV4YW1wbGUsDQo+IEFSQ0hfV0FOVFNfTU9EVUxF
+U19EQVRBX0lOX1ZNQUxMT0MgaXMgYSBsb3QgY2xlYW5lciwgYXMgaXQganVzdCB1c2VzIGENCj4g
+ZGlmZmVyZW50IGFsbG9jYXRvciBmb3IgdGhlIGRhdGEuIGtlcm5lbC9tb2R1bGUvc3RyaWN0X3J3
+eC5jIGlzIGFsc28NCj4gbXVjaCBjbGVhbmVyIHdpdGggbW9kdWxlX21lbW9yeS4NCj4gDQo+IFNp
+Z25lZC1vZmYtYnk6IFNvbmcgTGl1IDxzb25nQGtlcm5lbC5vcmc+DQo+IENjOiBMdWlzIENoYW1i
+ZXJsYWluIDxtY2dyb2ZAa2VybmVsLm9yZz4NCj4gQ2M6IFRob21hcyBHbGVpeG5lciA8dGdseEBs
+aW51dHJvbml4LmRlPg0KPiBDYzogUGV0ZXIgWmlqbHN0cmEgPHBldGVyekBpbmZyYWRlYWQub3Jn
+Pg0KPiBDYzogR3VlbnRlciBSb2VjayA8bGludXhAcm9lY2stdXMubmV0Pg0KPiBDYzogQ2hyaXN0
+b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KPiANCg0KICAgQ0FMTCAg
+ICBzY3JpcHRzL2NoZWNrc3lzY2FsbHMuc2gNCiAgIENDICAgICAga2VybmVsL21vZHVsZS9tYWlu
+Lm8NCmtlcm5lbC9tb2R1bGUvbWFpbi5jOiBJbiBmdW5jdGlvbiAnbW9kX21lbV91c2Vfdm1hbGxv
+Yyc6DQprZXJuZWwvbW9kdWxlL21haW4uYzoxMTc1OjE2OiBlcnJvcjogaW1wbGljaXQgZGVjbGFy
+YXRpb24gb2YgZnVuY3Rpb24gDQonbW9kX21lbV9pc19jb3JlX2RhdGEnOyBkaWQgeW91IG1lYW4g
+J21vZF9tZW1fdHlwZV9pc19jb3JlX2RhdGEnPyANClstV2Vycm9yPWltcGxpY2l0LWZ1bmN0aW9u
+LWRlY2xhcmF0aW9uXQ0KICAxMTc1IHwgICAgICAgICByZXR1cm4gbW9kX21lbV9pc19jb3JlX2Rh
+dGEodHlwZSk7DQogICAgICAgfCAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fg0K
+ICAgICAgIHwgICAgICAgICAgICAgICAgbW9kX21lbV90eXBlX2lzX2NvcmVfZGF0YQ0KY2MxOiBz
+b21lIHdhcm5pbmdzIGJlaW5nIHRyZWF0ZWQgYXMgZXJyb3JzDQptYWtlWzNdOiAqKiogW3Njcmlw
+dHMvTWFrZWZpbGUuYnVpbGQ6MjUyOiBrZXJuZWwvbW9kdWxlL21haW4ub10gRXJyb3IgMQ0KbWFr
+ZVsyXTogKioqIFtzY3JpcHRzL01ha2VmaWxlLmJ1aWxkOjUwNDoga2VybmVsL21vZHVsZV0gRXJy
+b3IgMg0KbWFrZVsxXTogKioqIFtzY3JpcHRzL01ha2VmaWxlLmJ1aWxkOjUwNDoga2VybmVsXSBF
+cnJvciAyDQptYWtlOiAqKiogW01ha2VmaWxlOjIwMjQ6IC5dIEVycm9yIDINCg==
