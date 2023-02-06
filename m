@@ -2,297 +2,257 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 679CAC05027
-	for <linux-modules@archiver.kernel.org>; Mon,  6 Feb 2023 21:45:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D92EC05027
+	for <linux-modules@archiver.kernel.org>; Mon,  6 Feb 2023 23:27:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjBFVpy (ORCPT
+        id S229571AbjBFX1o (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 6 Feb 2023 16:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
+        Mon, 6 Feb 2023 18:27:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjBFVpx (ORCPT
+        with ESMTP id S229478AbjBFX1n (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 6 Feb 2023 16:45:53 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D792F9ECD;
-        Mon,  6 Feb 2023 13:45:51 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675719949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PrYS8GaXkkLdus6u5BrPz0bpi5mFB5kYn4bxT6s+/fs=;
-        b=4FmyqnElg2UCbR1VEsWCTRvNlskhF1nGQBPVW/wHOyK9vjIs06l4AyeprTGQR4QLDkQQFG
-        aqC5nkXJJ8y8GfkWkKVa9Cr2+F5QRg4zUcKnmPXqDY5K8uYDRmcfM611KowwUyQPB4SMCh
-        snX4f6E2tCJbS3u0dUMIFGsVABO2+hzcOxAO5povLiaD5oZorme37KUgl1+dtNGDCF4b5L
-        cyJcV3ky+LtgftRxeDcmvyhKcVfG2YSnUlQJAixrK77tT8fB4tsvt1jT6L3y3tzIZw/xm1
-        Y+yJxt4OtRvS6m145sLfTjK3hZjHk5wF0xI3O18OC3cYurCCj2V+va+GUOVDbg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675719949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PrYS8GaXkkLdus6u5BrPz0bpi5mFB5kYn4bxT6s+/fs=;
-        b=6PrCS8ocwxIompzADSwq3cubZlA/0J+AvOGDF0LHtY2x79m+a9Pn2niFMiScfOhvj6lWo5
-        ZlPBNMi7cM8TvQBw==
-To:     Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     hch@lst.de, kernel-team@meta.com, Song Liu <song@kernel.org>,
+        Mon, 6 Feb 2023 18:27:43 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18E924484;
+        Mon,  6 Feb 2023 15:27:39 -0800 (PST)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316N8dds002401;
+        Mon, 6 Feb 2023 15:27:39 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : mime-version; s=s2048-2021-q4;
+ bh=mhbu7EJD7HnDo6o+fgNRB48y1kJrwuR4O/XzRwCwIP0=;
+ b=mgO/+Q79yIbT3ekYorn0XswaHWrfGnnyW5P/g0woG3ecCpXxqEaW4nOkUk4lE8W+zyTG
+ kcffX9SPGyPecwk6uzaZCJh4JOTxgoTkjz6ChcUOJVK1JqojLEiXRS818Jt7nUZYgTYA
+ DoTU7N6hOQFBNMSdnUnqZLDBTD8nu33NheVnDXxLZ9IkIXccjvIpFVM4WWeYb73S/aqN
+ L42/kif+AWSySJ1HXkSdBNPlAh/AURla3Tc8JewbGM0kwjNYDd7ZHHwJiJkyy+4WMvEF
+ zwxoeVm+9US50Kxu41AVBeLm4pT90zCEPWP/zUoXkO6i0/5TnjExJvcN1V/ECRcRu7+F Sg== 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nkay703cg-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Feb 2023 15:27:39 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RK9ZfSgrAGjJey/p1AKeeCLsoicHoTHdb2BCeOikJs8CwA64grChaKf0QIH4SWbBczBmjojtwozyf1udXm4iBb3X5QF1H2EzePJyqZxatFuOrVPAqZudD1oHE26gDfaOOuo3QrskJ9U8RWvj58L1nDjQbfZmxpYKtw8Z2tN4cUtYXQk5hIkJYvG/AN3i0sAIAHKXZV7d0KYmIJsH4ZOrljYewnV15IJ+XtISyJ838BqYxfFsV3lW6k4dgVzhcw2U5ea+0sQqdejxoOqbU+nWMWplhIy4dvZv3JaEIu6y3qeA4ZktCLMH5CK7D8ErgnPvQ6Sql3KZpD4GgF67QCmKQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mhbu7EJD7HnDo6o+fgNRB48y1kJrwuR4O/XzRwCwIP0=;
+ b=R8fHb+kyXyuqpEnWWjG+ZzsTO4T8so+1UvD1uW51r/dsUtU73RLZ42AeWnRtnTOobbkBInAqOQ2BC9iespJH5v4B7K9cNeihoSSSj9ts+4QSrB4pVjSgUWyH+zsZm6Dg6UOWwWTYbzrri6Zqg/Tt7Hw68nQbNalBVme5y05/fiBVXGVMdOWAUTyyLMQcPxJjFIL9bD5C1ABvQXMKrNYjtqs7exIP6FJSgUO8yHj8kp6I8VAtTXMK6V5m0t9QJ9A6h7F/Ec8Eyrmaz6FzhspsqRBjO6bLXNChHyWZDjoiE5IzgpkdrWqM/D2tOIzeVfXUZLysJkoJYs3Dt/cU4rCLEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by SA1PR15MB4338.namprd15.prod.outlook.com (2603:10b6:806:1ad::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Mon, 6 Feb
+ 2023 23:27:36 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::7b61:8691:5b41:ecf8]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::7b61:8691:5b41:ecf8%4]) with mapi id 15.20.6064.035; Mon, 6 Feb 2023
+ 23:27:36 +0000
+From:   Song Liu <songliubraving@meta.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     Song Liu <song@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Kernel Team <kernel-team@meta.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Christophe Leroy <christophe.leroy@csgroup.eu>
 Subject: Re: [PATCH v9] module: replace module_layout with module_memory
-In-Reply-To: <20230203214500.745276-1-song@kernel.org>
-References: <20230203214500.745276-1-song@kernel.org>
-Date:   Mon, 06 Feb 2023 22:45:48 +0100
-Message-ID: <87cz6mxyb7.ffs@tglx>
+Thread-Topic: [PATCH v9] module: replace module_layout with module_memory
+Thread-Index: AQHZOBjM9Um86gAGJEyMnpzD+3mYlq7CeI0AgAAcZIA=
+Date:   Mon, 6 Feb 2023 23:27:36 +0000
+Message-ID: <09C6F0A2-5AE5-4D8D-87DE-BFEC2C642A49@fb.com>
+References: <20230203214500.745276-1-song@kernel.org> <87cz6mxyb7.ffs@tglx>
+In-Reply-To: <87cz6mxyb7.ffs@tglx>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.300.101.1.3)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|SA1PR15MB4338:EE_
+x-ms-office365-filtering-correlation-id: 390ea087-c496-47ba-6dff-08db0899bafe
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VeNsKQsdVXkLAZ3uchW/TUpFZb4QP1hXWDCRbOn7vF/9GZa4jAMjjixwRooqQuxFL2lGhk6IGvZHs8t+ltAEHKDMWaEPOe+btV5yv8nSAG7c1XOhjWFtfqM/zk9F6PUjzkH0i/dRn3aCdrww4F2aWa/sscYRsv6MlfQdyLq4SwcTANeEK+YDAuFAeec1hTQOBo3aeyzsMYkhawYsjfLlkummp4MN23Q34LMJwGssy5a91PnsgKQCxmrf1p4p+q5Ir47OFj+2FUxWpNf9ieHsywKlWbKLEqPki/XPlCYOh1WdMvgx+L1iIUnxihl76zc5duCs7kiXikVxGDFYrJ0bZLc7NSAwClzNQIxs97mSf071Bee1tE3DHE2sUrpz6WbrL2N2NQLeyzpXf5DVtbL4QT9hvSXiUTyDfVbKYR2kOHwMKE2M4eg82BpC1J83mbi2WTCYZqKQzAe1YjC+keSIPwTcFp4zZe/WciQgcA8wqugoG2hKvIz94ueAEsO1Oe0g93vSowx9xNcez7TNPtGksO5Xp1PQ7Xy7Nt8m0O7TuQPc2tPqpprVyo8xPl0dQAKI/t0vLU5QNP/IuFp82kTGL5PRhhEuXx6yIXkbZrPWEKsT02nDGApBYBR9DlvdbxVrGaoPeUwNOAJsDKuMtZRbAs0GtiD2G/OU5deZv5Q528auL88xIyw9ti7rC2tMh8SJa01eV87NnUW6/GOI0xLfgg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(396003)(366004)(39860400002)(376002)(451199018)(54906003)(8936002)(316002)(71200400001)(86362001)(186003)(122000001)(478600001)(6486002)(33656002)(6506007)(53546011)(38100700002)(38070700005)(9686003)(6512007)(5660300002)(36756003)(2906002)(91956017)(83380400001)(66899018)(41300700001)(8676002)(66446008)(64756008)(6916009)(76116006)(66476007)(66556008)(66946007)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ueDxwttg/d2EjmgPZ8hYm6xhxaEfEAcLr3KLuEJtt1IXA98iYAZjW7Hi8ZOl?=
+ =?us-ascii?Q?95rbQiOrQjNpS47tEm4j1btSFkRghKKUCVuTIXCisEgC9zQlIGrH9fOyfsF6?=
+ =?us-ascii?Q?fi1U+7bETT4e+YQshBS2oZwlrC3OGrYBDGrLEiloHZJTlj72Rgmq4ip5yqaL?=
+ =?us-ascii?Q?dLhm1UDWlclaMB4lNDCA53Qj9dyzxj2JNmgDfLov3bJ7ckLy/BqQCckURra3?=
+ =?us-ascii?Q?hxgUUK0gYyI8DvHsKEa4p8VU6qIHnu3VIhZNw543kFK1Y4yO1ZEOc477bUh1?=
+ =?us-ascii?Q?ceEJ6luJqwri3tn3ybbfX4zGpjOVO9KHUC2Nyfa1lBKVmtgcu/ac7HIPDNIM?=
+ =?us-ascii?Q?HNP4/gbjt9UAMbARFCWsyqlj8Q1nwI0icHxLjE6BwYN1n6GJEsoKcPFYXUVH?=
+ =?us-ascii?Q?iUgGZsZ73e0RVVxFGxsvhlp3sCUAEW4EMkxkJzEARgmwgCDDnj+P/+8EpvNb?=
+ =?us-ascii?Q?bZPHdCAd5XVNfazKY21IGC92KXf+eLeuuuf9VFolcedn1euMmZ3e0RrLdxII?=
+ =?us-ascii?Q?57/o5YAvJMaUwRLAKY3RAo7opvfyX8RtSkB8V68o8JEs/a7qPOVtQI8ovarA?=
+ =?us-ascii?Q?tUkmuOhvuJm8KbCNsyQaIFh5dThCkjkH2ODPbi2RxHTw5zFioRT4bVmq+Ted?=
+ =?us-ascii?Q?wnnGrghfiI7jCDc76UGMtjzClYFEQu8o2wv8PrmHt+/3Rwcgzc7o6/GVARyu?=
+ =?us-ascii?Q?QskD1R8kJur873uilnURWZiRci450qhzQzQvLZkSPvYBNCPWvkaK9vYQ7HfP?=
+ =?us-ascii?Q?vAZZxdaRQgRujJyAeq6ejo23918p4s/QqxxyrUPGclU+VRhGvQHe3t+DmSz2?=
+ =?us-ascii?Q?JZ2krAOnuQ6YK6YbeCm1zkcB/hLqoKOjwKcn/LXyhq2hZYaBUcz5aW482Wzx?=
+ =?us-ascii?Q?OSvZBEOxzWmJfs+/4oxlW4CiOaG4Wo+pSFWeU4rNTiiwMzuUkCHxgaHoAtAd?=
+ =?us-ascii?Q?T2XbN9mFdbVnCtKw3wOTiHO3FtoZdt3IJfEaMc2+9F6JTvFsBHZjats5faCp?=
+ =?us-ascii?Q?YN4bbOP3dAMhUGUEp8mESVJTfNt1b5aUrMYY2uP26u9rV5iUQjFTjWVo5dMs?=
+ =?us-ascii?Q?uvDROp2/Bluy4GUGX8Cnd/TbqbmbcI+CoCq99vy23fubEohxgRnhrUCWA+E/?=
+ =?us-ascii?Q?VX/ohEEMzCIdNP752FwAtvCgGtXzh7usP61cTA2yN4ZagZf1YKG2Sbng0i3g?=
+ =?us-ascii?Q?RwUhJUEEb/iHPWEo6v5PWtMNiukDKNGiq4uefyLs0DFD9NTbNYoxCdqAKjcV?=
+ =?us-ascii?Q?jHpkbAOdsTsFlHbfLWWGwPL2ffdK4V9lACbPU27uFcz3YJOWr5ciupS6mdyK?=
+ =?us-ascii?Q?0z8H1XFD/q4eqHurtieCNnw899lrXU0Oq+ZgBPqPSucBurLm4mSq3SEsi8pt?=
+ =?us-ascii?Q?R4as0OouDP3NMkqhdLq28Ywu8ZJmisyHVD5ofnTStikzn0RpaHjtRiWBCo0w?=
+ =?us-ascii?Q?DE/3gQ8KzAugfFSG1tAZ6Rd0D2wOKO2fDlpOfmw1Sz+QbrM16e+5rmErmEXM?=
+ =?us-ascii?Q?mtB8YlPk5REN4dZbnjG/Ku3Rz5Jpeq4ASIu8Dc2tPjzCRmPLpqcVTUBc7yTv?=
+ =?us-ascii?Q?RMRo5DeNOe3N345ZzxxjJwP1XMblPWFX+tlOYpTSN2luuaeMa/7gyOYUCOIY?=
+ =?us-ascii?Q?gaC/OYWG1UrY0dDwqQdiySVzxd+9dPSYUN5dgHbCeBrz?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E8E12BADFEBDF547AE6911E70978D293@namprd15.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 390ea087-c496-47ba-6dff-08db0899bafe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Feb 2023 23:27:36.3155
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CPbta0iy7BWXN0CMTekqjy7D6y5ZeMQJGMdQkTKOqKvysOaJ5BlFgTTjUMoiMVAv1b4MxHfWVN4tVgf/IjCUKw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4338
+X-Proofpoint-ORIG-GUID: EHwukFP3tkTgXOWGOSzBgKmg88HQ6knv
+X-Proofpoint-GUID: EHwukFP3tkTgXOWGOSzBgKmg88HQ6knv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Song!
 
-On Fri, Feb 03 2023 at 13:45, Song Liu wrote:
-> diff --git a/arch/arm/kernel/module-plts.c b/arch/arm/kernel/module-plts.c
-> index af7c322ebed6..9d4ecb6b1412 100644
-> --- a/arch/arm/kernel/module-plts.c
-> +++ b/arch/arm/kernel/module-plts.c
-> @@ -30,7 +30,7 @@ static const u32 fixed_plts[] = {
->  
->  static bool in_init(const struct module *mod, unsigned long loc)
->  {
-> -	return loc - (u32)mod->init_layout.base < mod->init_layout.size;
-> +	return within_module_init(loc, mod);
->  }
->  
->  static void prealloc_fixed(struct mod_plt_sec *pltsec, struct plt_entries *plt)
-> diff --git a/arch/arm64/kernel/module-plts.c b/arch/arm64/kernel/module-plts.c
-> index 5a0a8f552a61..4bf94de272cb 100644
-> --- a/arch/arm64/kernel/module-plts.c
-> +++ b/arch/arm64/kernel/module-plts.c
-> @@ -67,7 +67,7 @@ static bool plt_entries_equal(const struct plt_entry *a,
->  
->  static bool in_init(const struct module *mod, void *loc)
->  {
-> -	return (u64)loc - (u64)mod->init_layout.base < mod->init_layout.size;
-> +	return within_module_init((unsigned long)loc, mod);
->  }
 
-Wouldn't it make sense to get rid of these indirections in arm[64]
-completely ?
-  
->  struct mod_kallsyms {
-> @@ -418,12 +448,8 @@ struct module {
->  	/* Startup function. */
->  	int (*init)(void);
->  
-> -	/* Core layout: rbtree is accessed frequently, so keep together. */
-> -	struct module_layout core_layout __module_layout_align;
-> -	struct module_layout init_layout;
-> -#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-> -	struct module_layout data_layout;
-> -#endif
-> +	/* rbtree is accessed frequently, so keep together. */
+> On Feb 6, 2023, at 1:45 PM, Thomas Gleixner <tglx@linutronix.de> wrote:
+[...]
+>> @@ -67,7 +67,7 @@ static bool plt_entries_equal(const struct plt_entry *a,
+>> 
+>> static bool in_init(const struct module *mod, void *loc)
+>> {
+>> - return (u64)loc - (u64)mod->init_layout.base < mod->init_layout.size;
+>> + return within_module_init((unsigned long)loc, mod);
+>> }
+> 
+> Wouldn't it make sense to get rid of these indirections in arm[64]
+> completely ?
 
-I'm confused about the rbtree comment here.
+Yeah, we can remove them. 
 
-> +	struct module_memory mem[MOD_MEM_NUM_TYPES] __module_memory_align;
->  
->  	/* Arch-specific module values */
->  	struct mod_arch_specific arch;
-> @@ -573,23 +599,33 @@ bool __is_module_percpu_address(unsigned long addr, unsigned long *can_addr);
->  bool is_module_percpu_address(unsigned long addr);
->  bool is_module_text_address(unsigned long addr);
->  
-> +static inline bool within_module_mem_type(unsigned long addr,
-> +					  const struct module *mod,
-> +					  enum mod_mem_type type)
-> +{
-> +	unsigned long base, size;
-> +
-> +	base = (unsigned long)mod->mem[type].base;
-> +	size = mod->mem[type].size;
-> +	return addr - base < size;
-> +}
-> +
->  static inline bool within_module_core(unsigned long addr,
->  				      const struct module *mod)
->  {
-> -#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-> -	if ((unsigned long)mod->data_layout.base <= addr &&
-> -	    addr < (unsigned long)mod->data_layout.base + mod->data_layout.size)
-> -		return true;
-> -#endif
-> -	return (unsigned long)mod->core_layout.base <= addr &&
-> -	       addr < (unsigned long)mod->core_layout.base + mod->core_layout.size;
-> +	for_class_mod_mem_type(type, core)
-> +		if (within_module_mem_type(addr, mod, type))
-> +			return true;
+> 
+>> struct mod_kallsyms {
+>> @@ -418,12 +448,8 @@ struct module {
+>> /* Startup function. */
+>> int (*init)(void);
+>> 
+>> - /* Core layout: rbtree is accessed frequently, so keep together. */
+>> - struct module_layout core_layout __module_layout_align;
+>> - struct module_layout init_layout;
+>> -#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+>> - struct module_layout data_layout;
+>> -#endif
+>> + /* rbtree is accessed frequently, so keep together. */
+> 
+> I'm confused about the rbtree comment here.
 
-	for_class_mod_mem_type(type, core) {
-		if (within_module_mem_type(addr, mod, type))
-			return true;
-	}
+Let me remove it in v10. 
 
-Please. It's not required by the language, but it makes the code simpler
-to read. We omit the brackets when there is a true one-line statement
-after the iterator() or condition().
+> 
+>> + struct module_memory mem[MOD_MEM_NUM_TYPES] __module_memory_align;
 
-> +static void free_mod_mem(struct module *mod)
-> +{
-> +	/* free the memory in the right order to avoid use-after-free */
+[...]
 
-How do we end up with a UAF when the ordering is different?
+>> +static void free_mod_mem(struct module *mod)
+>> +{
+>> + /* free the memory in the right order to avoid use-after-free */
+> 
+> How do we end up with a UAF when the ordering is different?
 
-> +	static enum mod_mem_type mod_mem_free_order[MOD_MEM_NUM_TYPES] = {
-> +		/* first free init sections */
-> +		MOD_INIT_TEXT,
-> +		MOD_INIT_DATA,
-> +		MOD_INIT_RODATA,
-> +
-> +		/* then core sections, except rw data */
-> +		MOD_TEXT,
-> +		MOD_RODATA,
-> +		MOD_RO_AFTER_INIT,
-> +
-> +		/* last, rw data */
-> +		MOD_DATA,
-> +	};
+IIUC, we need remove MOD_DATA at last, which hosts "mod".
 
-That's fragile when we ever add a new section type.
+> 
+>> + static enum mod_mem_type mod_mem_free_order[MOD_MEM_NUM_TYPES] = {
+>> + /* first free init sections */
+>> + MOD_INIT_TEXT,
+>> + MOD_INIT_DATA,
+>> + MOD_INIT_RODATA,
+>> +
+>> + /* then core sections, except rw data */
+>> + MOD_TEXT,
+>> + MOD_RODATA,
+>> + MOD_RO_AFTER_INIT,
+>> +
+>> + /* last, rw data */
+>> + MOD_DATA,
+>> + };
+> 
+> That's fragile when we ever add a new section type.
+> 
+> static const enum mod_mem_type mod_mem_free_order[] = {
+>               ....
+>        };
+> 
+>        BUILD_BUG_ON(ARRAY_SIZE(mod_mem_free_order) != MOD_MEM_NUM_TYPES);
+> 
+> Hmm?
 
-	static const enum mod_mem_type mod_mem_free_order[] = {
-               ....
-        };
+Will add this in v10. 
 
-        BUILD_BUG_ON(ARRAY_SIZE(mod_mem_free_order) != MOD_MEM_NUM_TYPES);
+> 
+>> 
+>> static bool module_init_layout_section(const char *sname)
+>> @@ -1428,6 +1506,20 @@ static void layout_sections(struct module *mod, struct load_info *info)
+>> { SHF_WRITE | SHF_ALLOC, ARCH_SHF_SMALL },
+>> { ARCH_SHF_SMALL | SHF_ALLOC, 0 }
+>> };
+>> + static int core_m_to_mem_type[] = {
+> 
+> const?
+> 
+>> + MOD_TEXT,
+>> + MOD_RODATA,
+>> + MOD_RO_AFTER_INIT,
+>> + MOD_DATA,
+>> + MOD_INVALID,
+> 
+> What's the point of this MOD_INVALID here?
+> 
+>> + };
+>> + static int init_m_to_mem_type[] = {
+>> + MOD_INIT_TEXT,
+>> + MOD_INIT_RODATA,
+>> + MOD_INVALID,
+>> + MOD_INIT_DATA,
+>> + MOD_INVALID,
+>> + };
+>> unsigned int m, i;
+>> 
+>> for (i = 0; i < info->hdr->e_shnum; i++)
+>> @@ -1435,41 +1527,30 @@ static void layout_sections(struct module *mod, struct load_info *info)
+>> 
+>> pr_debug("Core section allocation order:\n");
+>> for (m = 0; m < ARRAY_SIZE(masks); ++m) {
+>> + enum mod_mem_type type = core_m_to_mem_type[m];
+> 
+> Oh. This deals with ARRAY_SIZE(masks) being larger than the
+> *_to_mem_type[] ones. A comment on the *to_mem_type arrays would be
+> appreciated.
 
-Hmm?
-
->  
->  static bool module_init_layout_section(const char *sname)
-> @@ -1428,6 +1506,20 @@ static void layout_sections(struct module *mod, struct load_info *info)
->  		{ SHF_WRITE | SHF_ALLOC, ARCH_SHF_SMALL },
->  		{ ARCH_SHF_SMALL | SHF_ALLOC, 0 }
->  	};
-> +	static int core_m_to_mem_type[] = {
-
-const?
-
-> +		MOD_TEXT,
-> +		MOD_RODATA,
-> +		MOD_RO_AFTER_INIT,
-> +		MOD_DATA,
-> +		MOD_INVALID,
-
-What's the point of this MOD_INVALID here?
-
-> +	};
-> +	static int init_m_to_mem_type[] = {
-> +		MOD_INIT_TEXT,
-> +		MOD_INIT_RODATA,
-> +		MOD_INVALID,
-> +		MOD_INIT_DATA,
-> +		MOD_INVALID,
-> +	};
->  	unsigned int m, i;
->  
->  	for (i = 0; i < info->hdr->e_shnum; i++)
-> @@ -1435,41 +1527,30 @@ static void layout_sections(struct module *mod, struct load_info *info)
->  
->  	pr_debug("Core section allocation order:\n");
->  	for (m = 0; m < ARRAY_SIZE(masks); ++m) {
-> +		enum mod_mem_type type = core_m_to_mem_type[m];
-
-Oh. This deals with ARRAY_SIZE(masks) being larger than the
-*_to_mem_type[] ones. A comment on the *to_mem_type arrays would be
-appreciated.
-
->  
->  	pr_debug("Init section allocation order:\n");
->  	for (m = 0; m < ARRAY_SIZE(masks); ++m) {
-> +		enum mod_mem_type type = init_m_to_mem_type[m];
-> +
->  		for (i = 0; i < info->hdr->e_shnum; ++i) {
->  			Elf_Shdr *s = &info->sechdrs[i];
->  			const char *sname = info->secstrings + s->sh_name;
-> @@ -1479,30 +1560,13 @@ static void layout_sections(struct module *mod, struct load_info *info)
->  			    || s->sh_entsize != ~0UL
->  			    || !module_init_layout_section(sname))
->  				continue;
-> -			s->sh_entsize = (module_get_offset(mod, &mod->init_layout.size, s, i)
-> -					 | INIT_OFFSET_MASK);
-> +
-> +			if (WARN_ON_ONCE(type == MOD_INVALID))
-> +				continue;
-> +
-> +			s->sh_entsize = module_get_offset_and_type(mod, type, s, i);
->  			pr_debug("\t%s\n", sname);
-
-Now that the explicit layout members are gone the only difference
-between the core and the init part aside of the seperate _to_mem_type[]
-array is:
-
--  			    || module_init_layout_section(sname))
-+  			    || !module_init_layout_section(sname))
-                               continue;
-
-Which means the loop can be moved into a separate function which takes
-an @is_init argument which then selects the right _to_mem_type[] array
-and tweaks the condition accordingly. Can be a follow up patch.
-
-> +	for_each_mod_mem_type(type) {
-> +		const struct module_memory *mod_mem = &mod->mem[type];
-> +
-> +		if (mod_mem->size)
-> +			flush_icache_range((unsigned long)mod_mem->base,
-> +					   (unsigned long)mod_mem->base + mod_mem->size);
-
-Brackets here too, please                                   
-
-> diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-> index 14fbea66f12f..2e79a77f40eb 100644
-> --- a/kernel/module/strict_rwx.c
-> +++ b/kernel/module/strict_rwx.c
-> @@ -11,82 +11,26 @@
->  #include <linux/set_memory.h>
->  #include "internal.h"
->  
-> -/*
-> - * LKM RO/NX protection: protect module's text/ro-data
-> - * from modification and any data from execution.
-> - *
-> - * General layout of module is:
-> - *          [text] [read-only-data] [ro-after-init] [writable data]
-> - * text_size -----^                ^               ^               ^
-> - * ro_size ------------------------|               |               |
-> - * ro_after_init_size -----------------------------|               |
-> - * size -----------------------------------------------------------|
-> - *
-> - * These values are always page-aligned (as is base) when
-> - * CONFIG_STRICT_MODULE_RWX is set.
-> - */
-> +static void module_set_memory(
-> +	const struct module *mod, enum mod_mem_type type,
-> +	int (*set_memory)(unsigned long start, int num_pages))
-
-Please don't use this horrible formatting.
-
-static void module_set_memory(const struct module *mod, enum mod_mem_type type,
-                              int (*set_memory)(unsigned long start, int num_pages))
-
-We lifted the 80 character limit long ago.
-
-> +{
-> +	const struct module_memory *mod_mem = &mod->mem[type];
-
-Other than those nits, this looks great!
+Will add this in v10. 
 
 Thanks,
+Song
 
-        tglx
-
-
+[...]
