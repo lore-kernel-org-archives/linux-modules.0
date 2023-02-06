@@ -2,110 +2,297 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C87AC636D3
-	for <linux-modules@archiver.kernel.org>; Mon,  6 Feb 2023 17:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 679CAC05027
+	for <linux-modules@archiver.kernel.org>; Mon,  6 Feb 2023 21:45:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjBFR4Q (ORCPT
+        id S229806AbjBFVpy (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 6 Feb 2023 12:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        Mon, 6 Feb 2023 16:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjBFR4P (ORCPT
+        with ESMTP id S229731AbjBFVpx (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:56:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD682E0E0;
-        Mon,  6 Feb 2023 09:56:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6016AB815BA;
-        Mon,  6 Feb 2023 17:55:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA3A2C4339B;
-        Mon,  6 Feb 2023 17:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675706140;
-        bh=Ae8ahgrXCjguoyjKP55HCIgm3aCLf8flqpkKfxRi2UE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=i3MQ4jguZX3O/24lIfurL6OHr2x/g+Nzr5gyj3DHF7br3GjFUnrdnw05Jadt2X7IC
-         L+I8kx2OWxzXI78cN5AmKhEZvkT5MqPyrE3j44s/lkJwegzVk55mug+J6ALpBSE6Ur
-         NAS654e0WMfnOBkIn3cVG0NYpeoibJqfzHAN56IZzfDi4w0iUprue0xaupzL0vtCfU
-         iWwd6N3AMD8slVZyGj9lptSgY8fh7yG1/NqghZs1e7RM9SSy3rKlqQ0QIECUV1vwG5
-         3QxkP+JAD5yJquiDDftw+qggr4C6eAsPk+QhG/1ZPei9kngFoHGwI/sdb/qznO0ywi
-         xFK5NkpFXFfOQ==
-Received: by mail-lj1-f179.google.com with SMTP id b13so12876791ljf.8;
-        Mon, 06 Feb 2023 09:55:39 -0800 (PST)
-X-Gm-Message-State: AO0yUKWM7vul4XHQSzw0Hh+TIkp+JaqEo2rMiCjei+y1WrhQJgCBKopE
-        R1ClgZO6L3JL0cczk3uRVhyOHvGFknwZKMyP0Eg=
-X-Google-Smtp-Source: AK7set99WtGxzi4v3ZIly20BIVKCHLH1EkVF7rLJBssDy9UdrGrh6Wh7TQovW6dTzTvx5N78sdVgE3tHfXLU1CymD50=
-X-Received: by 2002:a2e:9254:0:b0:290:7c03:a98 with SMTP id
- v20-20020a2e9254000000b002907c030a98mr5901ljg.74.1675706137989; Mon, 06 Feb
- 2023 09:55:37 -0800 (PST)
-MIME-Version: 1.0
-References: <20230203214500.745276-1-song@kernel.org>
-In-Reply-To: <20230203214500.745276-1-song@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 6 Feb 2023 09:55:23 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6KyaqHHXzFCfd9TBWkt-393Z7=SmQswTaYpifcKTd8tg@mail.gmail.com>
-Message-ID: <CAPhsuW6KyaqHHXzFCfd9TBWkt-393Z7=SmQswTaYpifcKTd8tg@mail.gmail.com>
-Subject: Re: [PATCH v9] module: replace module_layout with module_memory
-To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     hch@lst.de, kernel-team@meta.com,
+        Mon, 6 Feb 2023 16:45:53 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D792F9ECD;
+        Mon,  6 Feb 2023 13:45:51 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675719949;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PrYS8GaXkkLdus6u5BrPz0bpi5mFB5kYn4bxT6s+/fs=;
+        b=4FmyqnElg2UCbR1VEsWCTRvNlskhF1nGQBPVW/wHOyK9vjIs06l4AyeprTGQR4QLDkQQFG
+        aqC5nkXJJ8y8GfkWkKVa9Cr2+F5QRg4zUcKnmPXqDY5K8uYDRmcfM611KowwUyQPB4SMCh
+        snX4f6E2tCJbS3u0dUMIFGsVABO2+hzcOxAO5povLiaD5oZorme37KUgl1+dtNGDCF4b5L
+        cyJcV3ky+LtgftRxeDcmvyhKcVfG2YSnUlQJAixrK77tT8fB4tsvt1jT6L3y3tzIZw/xm1
+        Y+yJxt4OtRvS6m145sLfTjK3hZjHk5wF0xI3O18OC3cYurCCj2V+va+GUOVDbg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675719949;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PrYS8GaXkkLdus6u5BrPz0bpi5mFB5kYn4bxT6s+/fs=;
+        b=6PrCS8ocwxIompzADSwq3cubZlA/0J+AvOGDF0LHtY2x79m+a9Pn2niFMiScfOhvj6lWo5
+        ZlPBNMi7cM8TvQBw==
+To:     Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     hch@lst.de, kernel-team@meta.com, Song Liu <song@kernel.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v9] module: replace module_layout with module_memory
+In-Reply-To: <20230203214500.745276-1-song@kernel.org>
+References: <20230203214500.745276-1-song@kernel.org>
+Date:   Mon, 06 Feb 2023 22:45:48 +0100
+Message-ID: <87cz6mxyb7.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Feb 3, 2023 at 1:45 PM Song Liu <song@kernel.org> wrote:
->
-> module_layout manages different types of memory (text, data, rodata, etc.)
-> in one allocation, which is problematic for some reasons:
->
-> 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
-> 2. It is hard to use huge pages in modules (and not break strict rwx).
-> 3. Many archs uses module_layout for arch-specific data, but it is not
->    obvious how these data are used (are they RO, RX, or RW?)
->
-> Improve the scenario by replacing 2 (or 3) module_layout per module with
-> up to 7 module_memory per module:
->
->         MOD_TEXT,
->         MOD_DATA,
->         MOD_RODATA,
->         MOD_RO_AFTER_INIT,
->         MOD_INIT_TEXT,
->         MOD_INIT_DATA,
->         MOD_INIT_RODATA,
->
-> and allocating them separately. This adds slightly more entries to
-> mod_tree (from up to 3 entries per module, to up to 7 entries per
-> module). However, this at most adds a small constant overhead to
-> __module_address(), which is expected to be fast.
->
-> Various archs use module_layout for different data. These data are put
-> into different module_memory based on their location in module_layout.
-> IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
-> data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
->
-> module_memory simplifies quite some of the module code. For example,
-> ARCH_WANTS_MODULES_DATA_IN_VMALLOC is a lot cleaner, as it just uses a
-> different allocator for the data. kernel/module/strict_rwx.c is also
-> much cleaner with module_memory.
+Song!
 
-This version passed build test by kernel test bot:
+On Fri, Feb 03 2023 at 13:45, Song Liu wrote:
+> diff --git a/arch/arm/kernel/module-plts.c b/arch/arm/kernel/module-plts.c
+> index af7c322ebed6..9d4ecb6b1412 100644
+> --- a/arch/arm/kernel/module-plts.c
+> +++ b/arch/arm/kernel/module-plts.c
+> @@ -30,7 +30,7 @@ static const u32 fixed_plts[] = {
+>  
+>  static bool in_init(const struct module *mod, unsigned long loc)
+>  {
+> -	return loc - (u32)mod->init_layout.base < mod->init_layout.size;
+> +	return within_module_init(loc, mod);
+>  }
+>  
+>  static void prealloc_fixed(struct mod_plt_sec *pltsec, struct plt_entries *plt)
+> diff --git a/arch/arm64/kernel/module-plts.c b/arch/arm64/kernel/module-plts.c
+> index 5a0a8f552a61..4bf94de272cb 100644
+> --- a/arch/arm64/kernel/module-plts.c
+> +++ b/arch/arm64/kernel/module-plts.c
+> @@ -67,7 +67,7 @@ static bool plt_entries_equal(const struct plt_entry *a,
+>  
+>  static bool in_init(const struct module *mod, void *loc)
+>  {
+> -	return (u64)loc - (u64)mod->init_layout.base < mod->init_layout.size;
+> +	return within_module_init((unsigned long)loc, mod);
+>  }
 
-https://lore.kernel.org/linux-raid/63df0daa.eKYOEelTitBUzF+e%25lkp@intel.com/T/#u
+Wouldn't it make sense to get rid of these indirections in arm[64]
+completely ?
+  
+>  struct mod_kallsyms {
+> @@ -418,12 +448,8 @@ struct module {
+>  	/* Startup function. */
+>  	int (*init)(void);
+>  
+> -	/* Core layout: rbtree is accessed frequently, so keep together. */
+> -	struct module_layout core_layout __module_layout_align;
+> -	struct module_layout init_layout;
+> -#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+> -	struct module_layout data_layout;
+> -#endif
+> +	/* rbtree is accessed frequently, so keep together. */
 
->
-> Signed-off-by: Song Liu <song@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>>
+I'm confused about the rbtree comment here.
 
-[...]
+> +	struct module_memory mem[MOD_MEM_NUM_TYPES] __module_memory_align;
+>  
+>  	/* Arch-specific module values */
+>  	struct mod_arch_specific arch;
+> @@ -573,23 +599,33 @@ bool __is_module_percpu_address(unsigned long addr, unsigned long *can_addr);
+>  bool is_module_percpu_address(unsigned long addr);
+>  bool is_module_text_address(unsigned long addr);
+>  
+> +static inline bool within_module_mem_type(unsigned long addr,
+> +					  const struct module *mod,
+> +					  enum mod_mem_type type)
+> +{
+> +	unsigned long base, size;
+> +
+> +	base = (unsigned long)mod->mem[type].base;
+> +	size = mod->mem[type].size;
+> +	return addr - base < size;
+> +}
+> +
+>  static inline bool within_module_core(unsigned long addr,
+>  				      const struct module *mod)
+>  {
+> -#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+> -	if ((unsigned long)mod->data_layout.base <= addr &&
+> -	    addr < (unsigned long)mod->data_layout.base + mod->data_layout.size)
+> -		return true;
+> -#endif
+> -	return (unsigned long)mod->core_layout.base <= addr &&
+> -	       addr < (unsigned long)mod->core_layout.base + mod->core_layout.size;
+> +	for_class_mod_mem_type(type, core)
+> +		if (within_module_mem_type(addr, mod, type))
+> +			return true;
+
+	for_class_mod_mem_type(type, core) {
+		if (within_module_mem_type(addr, mod, type))
+			return true;
+	}
+
+Please. It's not required by the language, but it makes the code simpler
+to read. We omit the brackets when there is a true one-line statement
+after the iterator() or condition().
+
+> +static void free_mod_mem(struct module *mod)
+> +{
+> +	/* free the memory in the right order to avoid use-after-free */
+
+How do we end up with a UAF when the ordering is different?
+
+> +	static enum mod_mem_type mod_mem_free_order[MOD_MEM_NUM_TYPES] = {
+> +		/* first free init sections */
+> +		MOD_INIT_TEXT,
+> +		MOD_INIT_DATA,
+> +		MOD_INIT_RODATA,
+> +
+> +		/* then core sections, except rw data */
+> +		MOD_TEXT,
+> +		MOD_RODATA,
+> +		MOD_RO_AFTER_INIT,
+> +
+> +		/* last, rw data */
+> +		MOD_DATA,
+> +	};
+
+That's fragile when we ever add a new section type.
+
+	static const enum mod_mem_type mod_mem_free_order[] = {
+               ....
+        };
+
+        BUILD_BUG_ON(ARRAY_SIZE(mod_mem_free_order) != MOD_MEM_NUM_TYPES);
+
+Hmm?
+
+>  
+>  static bool module_init_layout_section(const char *sname)
+> @@ -1428,6 +1506,20 @@ static void layout_sections(struct module *mod, struct load_info *info)
+>  		{ SHF_WRITE | SHF_ALLOC, ARCH_SHF_SMALL },
+>  		{ ARCH_SHF_SMALL | SHF_ALLOC, 0 }
+>  	};
+> +	static int core_m_to_mem_type[] = {
+
+const?
+
+> +		MOD_TEXT,
+> +		MOD_RODATA,
+> +		MOD_RO_AFTER_INIT,
+> +		MOD_DATA,
+> +		MOD_INVALID,
+
+What's the point of this MOD_INVALID here?
+
+> +	};
+> +	static int init_m_to_mem_type[] = {
+> +		MOD_INIT_TEXT,
+> +		MOD_INIT_RODATA,
+> +		MOD_INVALID,
+> +		MOD_INIT_DATA,
+> +		MOD_INVALID,
+> +	};
+>  	unsigned int m, i;
+>  
+>  	for (i = 0; i < info->hdr->e_shnum; i++)
+> @@ -1435,41 +1527,30 @@ static void layout_sections(struct module *mod, struct load_info *info)
+>  
+>  	pr_debug("Core section allocation order:\n");
+>  	for (m = 0; m < ARRAY_SIZE(masks); ++m) {
+> +		enum mod_mem_type type = core_m_to_mem_type[m];
+
+Oh. This deals with ARRAY_SIZE(masks) being larger than the
+*_to_mem_type[] ones. A comment on the *to_mem_type arrays would be
+appreciated.
+
+>  
+>  	pr_debug("Init section allocation order:\n");
+>  	for (m = 0; m < ARRAY_SIZE(masks); ++m) {
+> +		enum mod_mem_type type = init_m_to_mem_type[m];
+> +
+>  		for (i = 0; i < info->hdr->e_shnum; ++i) {
+>  			Elf_Shdr *s = &info->sechdrs[i];
+>  			const char *sname = info->secstrings + s->sh_name;
+> @@ -1479,30 +1560,13 @@ static void layout_sections(struct module *mod, struct load_info *info)
+>  			    || s->sh_entsize != ~0UL
+>  			    || !module_init_layout_section(sname))
+>  				continue;
+> -			s->sh_entsize = (module_get_offset(mod, &mod->init_layout.size, s, i)
+> -					 | INIT_OFFSET_MASK);
+> +
+> +			if (WARN_ON_ONCE(type == MOD_INVALID))
+> +				continue;
+> +
+> +			s->sh_entsize = module_get_offset_and_type(mod, type, s, i);
+>  			pr_debug("\t%s\n", sname);
+
+Now that the explicit layout members are gone the only difference
+between the core and the init part aside of the seperate _to_mem_type[]
+array is:
+
+-  			    || module_init_layout_section(sname))
++  			    || !module_init_layout_section(sname))
+                               continue;
+
+Which means the loop can be moved into a separate function which takes
+an @is_init argument which then selects the right _to_mem_type[] array
+and tweaks the condition accordingly. Can be a follow up patch.
+
+> +	for_each_mod_mem_type(type) {
+> +		const struct module_memory *mod_mem = &mod->mem[type];
+> +
+> +		if (mod_mem->size)
+> +			flush_icache_range((unsigned long)mod_mem->base,
+> +					   (unsigned long)mod_mem->base + mod_mem->size);
+
+Brackets here too, please                                   
+
+> diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+> index 14fbea66f12f..2e79a77f40eb 100644
+> --- a/kernel/module/strict_rwx.c
+> +++ b/kernel/module/strict_rwx.c
+> @@ -11,82 +11,26 @@
+>  #include <linux/set_memory.h>
+>  #include "internal.h"
+>  
+> -/*
+> - * LKM RO/NX protection: protect module's text/ro-data
+> - * from modification and any data from execution.
+> - *
+> - * General layout of module is:
+> - *          [text] [read-only-data] [ro-after-init] [writable data]
+> - * text_size -----^                ^               ^               ^
+> - * ro_size ------------------------|               |               |
+> - * ro_after_init_size -----------------------------|               |
+> - * size -----------------------------------------------------------|
+> - *
+> - * These values are always page-aligned (as is base) when
+> - * CONFIG_STRICT_MODULE_RWX is set.
+> - */
+> +static void module_set_memory(
+> +	const struct module *mod, enum mod_mem_type type,
+> +	int (*set_memory)(unsigned long start, int num_pages))
+
+Please don't use this horrible formatting.
+
+static void module_set_memory(const struct module *mod, enum mod_mem_type type,
+                              int (*set_memory)(unsigned long start, int num_pages))
+
+We lifted the 80 character limit long ago.
+
+> +{
+> +	const struct module_memory *mod_mem = &mod->mem[type];
+
+Other than those nits, this looks great!
+
+Thanks,
+
+        tglx
+
+
