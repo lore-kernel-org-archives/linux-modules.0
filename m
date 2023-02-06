@@ -2,69 +2,110 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF6FC63797
-	for <linux-modules@archiver.kernel.org>; Mon,  6 Feb 2023 17:09:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C87AC636D3
+	for <linux-modules@archiver.kernel.org>; Mon,  6 Feb 2023 17:56:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjBFRJQ (ORCPT
+        id S229548AbjBFR4Q (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 6 Feb 2023 12:09:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
+        Mon, 6 Feb 2023 12:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBFRJP (ORCPT
+        with ESMTP id S229571AbjBFR4P (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:09:15 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE93D1BACF;
-        Mon,  6 Feb 2023 09:09:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=32vtgbq8zPko9/qH1J3/ZYdeAeDZRWME+xnhuEVllJA=; b=Xh68/Bl8YWMExxK9DNKOH3Rysg
-        dv0BEb/w0C5Fg+t2mkXcxRT4U+0iF1I6LE2RCiH+S5oHr87XjVzD12crGqyVVVOo1zUEuUAaBzWHY
-        xpQC598R6PtoLGXZ/ZWmTFV8gVa1S7Z4lNKDRUiRqIG73YuZmNcMx6ZF9OOQw3pJbWNXornv4y105
-        SWoPk5SMNUO6KWLm1NZg6Xi8RMHCiiwdO9skabmKdw3zZKBJe563gd9GhFMozrBcl3+MaMmBjAaru
-        JeRIk8K64DeTAeVEmK3fhaixOadLstSzVixRChLcFe5ZaSiTFGVwBN+2Bugq5MJJ7owV8l51FNXyK
-        X1cLGzOw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pP4zQ-009PeC-Vb; Mon, 06 Feb 2023 17:09:12 +0000
-Date:   Mon, 6 Feb 2023 09:09:12 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-doc@vger.kernel.org,
-        jpoimboe@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
-        corbet@lwn.net, pmladek@suse.com
-Subject: Re: [PATCH v2] Document klp_modinfo using kdoc
-Message-ID: <Y+E0OKpt1I5pLA8C@bombadil.infradead.org>
-References: <20230203122222.1907-1-mpdesouza@suse.com>
+        Mon, 6 Feb 2023 12:56:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD682E0E0;
+        Mon,  6 Feb 2023 09:56:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6016AB815BA;
+        Mon,  6 Feb 2023 17:55:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA3A2C4339B;
+        Mon,  6 Feb 2023 17:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675706140;
+        bh=Ae8ahgrXCjguoyjKP55HCIgm3aCLf8flqpkKfxRi2UE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=i3MQ4jguZX3O/24lIfurL6OHr2x/g+Nzr5gyj3DHF7br3GjFUnrdnw05Jadt2X7IC
+         L+I8kx2OWxzXI78cN5AmKhEZvkT5MqPyrE3j44s/lkJwegzVk55mug+J6ALpBSE6Ur
+         NAS654e0WMfnOBkIn3cVG0NYpeoibJqfzHAN56IZzfDi4w0iUprue0xaupzL0vtCfU
+         iWwd6N3AMD8slVZyGj9lptSgY8fh7yG1/NqghZs1e7RM9SSy3rKlqQ0QIECUV1vwG5
+         3QxkP+JAD5yJquiDDftw+qggr4C6eAsPk+QhG/1ZPei9kngFoHGwI/sdb/qznO0ywi
+         xFK5NkpFXFfOQ==
+Received: by mail-lj1-f179.google.com with SMTP id b13so12876791ljf.8;
+        Mon, 06 Feb 2023 09:55:39 -0800 (PST)
+X-Gm-Message-State: AO0yUKWM7vul4XHQSzw0Hh+TIkp+JaqEo2rMiCjei+y1WrhQJgCBKopE
+        R1ClgZO6L3JL0cczk3uRVhyOHvGFknwZKMyP0Eg=
+X-Google-Smtp-Source: AK7set99WtGxzi4v3ZIly20BIVKCHLH1EkVF7rLJBssDy9UdrGrh6Wh7TQovW6dTzTvx5N78sdVgE3tHfXLU1CymD50=
+X-Received: by 2002:a2e:9254:0:b0:290:7c03:a98 with SMTP id
+ v20-20020a2e9254000000b002907c030a98mr5901ljg.74.1675706137989; Mon, 06 Feb
+ 2023 09:55:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203122222.1907-1-mpdesouza@suse.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20230203214500.745276-1-song@kernel.org>
+In-Reply-To: <20230203214500.745276-1-song@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 6 Feb 2023 09:55:23 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW6KyaqHHXzFCfd9TBWkt-393Z7=SmQswTaYpifcKTd8tg@mail.gmail.com>
+Message-ID: <CAPhsuW6KyaqHHXzFCfd9TBWkt-393Z7=SmQswTaYpifcKTd8tg@mail.gmail.com>
+Subject: Re: [PATCH v9] module: replace module_layout with module_memory
+To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     hch@lst.de, kernel-team@meta.com,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Feb 03, 2023 at 09:22:20AM -0300, Marcos Paulo de Souza wrote:
-> Originally it was only one patch, but it was divided in two. The second one
-> removed the local declaration to klp_modinfo and also refers to it using kdoc
-> format.
-> 
-> Changes from v1:
-> * Use kdoc (Luis)
-> 
-> Original commit message:
-> The struct members description can be found on
-> Documentation/livepatch/module-elf-format.rst, but for a developer it's
-> easier to search for such information looking at the struct definition.
-> 
-> Marcos Paulo de Souza (2):
->   module.h: Document klp_modinfo struct using kdoc
->   Documentation: livepatch: module-elf-format: Remove local klp_modinfo
->     definition
+On Fri, Feb 3, 2023 at 1:45 PM Song Liu <song@kernel.org> wrote:
+>
+> module_layout manages different types of memory (text, data, rodata, etc.)
+> in one allocation, which is problematic for some reasons:
+>
+> 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
+> 2. It is hard to use huge pages in modules (and not break strict rwx).
+> 3. Many archs uses module_layout for arch-specific data, but it is not
+>    obvious how these data are used (are they RO, RX, or RW?)
+>
+> Improve the scenario by replacing 2 (or 3) module_layout per module with
+> up to 7 module_memory per module:
+>
+>         MOD_TEXT,
+>         MOD_DATA,
+>         MOD_RODATA,
+>         MOD_RO_AFTER_INIT,
+>         MOD_INIT_TEXT,
+>         MOD_INIT_DATA,
+>         MOD_INIT_RODATA,
+>
+> and allocating them separately. This adds slightly more entries to
+> mod_tree (from up to 3 entries per module, to up to 7 entries per
+> module). However, this at most adds a small constant overhead to
+> __module_address(), which is expected to be fast.
+>
+> Various archs use module_layout for different data. These data are put
+> into different module_memory based on their location in module_layout.
+> IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
+> data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
+>
+> module_memory simplifies quite some of the module code. For example,
+> ARCH_WANTS_MODULES_DATA_IN_VMALLOC is a lot cleaner, as it just uses a
+> different allocator for the data. kernel/module/strict_rwx.c is also
+> much cleaner with module_memory.
 
-Thanks! Merged and pushed onto modules-next! If you can get more modules
-stuff into kdoc that would be appreciated!
+This version passed build test by kernel test bot:
 
-  Luis
+https://lore.kernel.org/linux-raid/63df0daa.eKYOEelTitBUzF+e%25lkp@intel.com/T/#u
+
+>
+> Signed-off-by: Song Liu <song@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>>
+
+[...]
