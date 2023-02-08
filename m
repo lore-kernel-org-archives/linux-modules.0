@@ -2,104 +2,83 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30262C636CC
-	for <linux-modules@archiver.kernel.org>; Wed,  8 Feb 2023 16:07:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8EB5C636CC
+	for <linux-modules@archiver.kernel.org>; Wed,  8 Feb 2023 17:16:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjBHQHE (ORCPT
+        id S230290AbjBHRQK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 8 Feb 2023 11:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        Wed, 8 Feb 2023 12:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBHQHD (ORCPT
+        with ESMTP id S231549AbjBHRQJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:07:03 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB7B460BB;
-        Wed,  8 Feb 2023 08:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=I+8/zUoQiK+vQy80qJDNf+yWTBzPHdJgShoFpq1p2MA=; b=SoJIEnEY/Cemy5seqHZ9JFmTMd
-        a06i0nD26pTQDw/xDS5VYYD4VB5/YEA534bCu0v3imj+4+yu8Q98hf06hGLZ7rBCDv3N45I6TFWiN
-        arYFsB7TZ6IlE+CpG++ifMttPiyqx2wZilomoPoGFWjliol1lVl0nf8l+qk9KmQu4wH85R2MStxLx
-        IDR7+yQ2uBY0S81kINNTtEN9vnxJuyk+iYJCrsOAZA4uWQtEDsC+sSc4eFLTxLlM9Fc0hFmicAz1z
-        /ezAS+1NDGAcCEhnKsigJh7cPV3oxqu6cvVga0wHNAslyuI9o4u8aOPDvaYs4DnGEC2ZEsxViLCBI
-        vnDNxmsA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pPmyI-00GChE-QD; Wed, 08 Feb 2023 16:06:58 +0000
-Date:   Wed, 8 Feb 2023 08:06:58 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hch@lst.de, kernel-team@meta.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v10] module: replace module_layout with module_memory
-Message-ID: <Y+PIohsycXjJpdr5@bombadil.infradead.org>
-References: <20230207002802.2514802-1-song@kernel.org>
- <87357gv9ha.ffs@tglx>
+        Wed, 8 Feb 2023 12:16:09 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EB128D03
+        for <linux-modules@vger.kernel.org>; Wed,  8 Feb 2023 09:16:06 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id u22so8228535ejj.10
+        for <linux-modules@vger.kernel.org>; Wed, 08 Feb 2023 09:16:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9z8p3hFtepK2wzolx/E7JmHRshbs4JfB8maq8B1ADqo=;
+        b=knpuUZt3ZAXjn1MxuT0whBLwZ8Lh5l2ZXF2C1HBnR8oUVyUhFe4zDi/qwAjGYJJnv3
+         cngVRxwbVEAKsyyA4jrwcwJWFbrBU+nrHRKD2gAUTeJkbz88HMRwzY10J0RPoalsYimi
+         Q0w/xHvwNU+ljZ1aoxrbH4Yuq4A2o8sBfj94YYylb+im/pTDWBZzuuLWEr7i8wvoUczE
+         05onYW56XJvVjy/gT5INBpRHdBFDevyVpmZ2zWj6C2QKyw/mQeTIrsBdAjVWol4IYitA
+         MfzJmGxwRqDeAU+0GJgGYymgaIlJXWYq25xP1liiUhsoOzY3K9ITNg+eA1POyD2ScpTb
+         111Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9z8p3hFtepK2wzolx/E7JmHRshbs4JfB8maq8B1ADqo=;
+        b=I+BvVaaAQIGgcQFHgcKsLLc3A5PFSevPJagZDY2cs5ckCfQvzO4EEgCSuRJAgO7A1F
+         tZYX/21L3orZlIBC2cUTU16IhkI6RK9JhjXkmmSC2WxL4OjXmRtCCNfuV/IJwm2mKref
+         yEONdUBWmmnLCxGA5Gg8ALwZRHMj1BAi/qvWVBK/QJlreSW76TUsqfZXM35aukOrLCdC
+         CsfE6Q9vVEXzaOXytaxvJ3o0iEtcfZf0hEBj85XWCaxsNfVbhmFriHIK8k1xIeuqS1Zl
+         UFDuzX919oxtoOrVdadi9z1kUIuF2RAwH9IAmBKIDuGj7vdqaSg36su3Ikgm2Ia0ReC+
+         dSVg==
+X-Gm-Message-State: AO0yUKXBMBKKHoNYg7GfhB8BoZxEk4SBntLEgWyiP4bwhLy3ij79Afmi
+        t5ccuTuPDafpWbLk/rhjTr2AJWaGtBs=
+X-Google-Smtp-Source: AK7set+neyY5O1oDhZlaiGKmma7VsMqXoJp2P97pQWBvl7ei2eqag8woSC8Pk8j2ugB3a0cpJjiC0Q==
+X-Received: by 2002:a17:906:29cb:b0:87f:5d0a:c610 with SMTP id y11-20020a17090629cb00b0087f5d0ac610mr8675523eje.32.1675876563805;
+        Wed, 08 Feb 2023 09:16:03 -0800 (PST)
+Received: from ldmartin-desk2.lan ([134.134.139.71])
+        by smtp.gmail.com with ESMTPSA id kx13-20020a170907774d00b0087bcda2b07bsm8404190ejc.202.2023.02.08.09.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 09:16:02 -0800 (PST)
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+To:     linux-modules@vger.kernel.org,
+        Yauheni Kaliuta <ykaliuta@redhat.com>
+Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>
+Subject: Re: [PATCH] man/rmmod: explain why modprobe -r is more useful
+Date:   Wed,  8 Feb 2023 09:15:56 -0800
+Message-Id: <167587649253.40388.9645887581385634542.b4-ty@gmail.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230202134736.405778-1-ykaliuta@redhat.com>
+References: <20230202134736.405778-1-ykaliuta@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87357gv9ha.ffs@tglx>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Feb 08, 2023 at 09:37:21AM +0100, Thomas Gleixner wrote:
-> On Mon, Feb 06 2023 at 16:28, Song Liu wrote:
-> > module_layout manages different types of memory (text, data, rodata, etc.)
-> > in one allocation, which is problematic for some reasons:
-> >
-> > 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
-> > 2. It is hard to use huge pages in modules (and not break strict rwx).
-> > 3. Many archs uses module_layout for arch-specific data, but it is not
-> >    obvious how these data are used (are they RO, RX, or RW?)
-> >
-> > Improve the scenario by replacing 2 (or 3) module_layout per module with
-> > up to 7 module_memory per module:
-> >
-> >         MOD_TEXT,
-> >         MOD_DATA,
-> >         MOD_RODATA,
-> >         MOD_RO_AFTER_INIT,
-> >         MOD_INIT_TEXT,
-> >         MOD_INIT_DATA,
-> >         MOD_INIT_RODATA,
-> >
-> > and allocating them separately. This adds slightly more entries to
-> > mod_tree (from up to 3 entries per module, to up to 7 entries per
-> > module). However, this at most adds a small constant overhead to
-> > __module_address(), which is expected to be fast.
-> >
-> > Various archs use module_layout for different data. These data are put
-> > into different module_memory based on their location in module_layout.
-> > IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
-> > data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
-> >
-> > module_memory simplifies quite some of the module code. For example,
-> > ARCH_WANTS_MODULES_DATA_IN_VMALLOC is a lot cleaner, as it just uses a
-> > different allocator for the data. kernel/module/strict_rwx.c is also
-> > much cleaner with module_memory.
-> >
-> > Signed-off-by: Song Liu <song@kernel.org>
-> > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+
+On Thu, 02 Feb 2023 15:47:36 +0200, Yauheni Kaliuta wrote:
+> Improve user experience by explaining the option so the user may
+> not search explanations in other manpages (modprobe).
 > 
-> With the comment update folded in:
 > 
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 
-Thanks! I've merged this onto modules-next for winder testing.
-It is too late for v6.2 as we're on rc7 but this just means we'll
-get testing on linux-next for a good while for v6.3.
+Applied, thanks!
 
-If other folks do complete review please send your Reviewed-by
-annotation so I can ammend the commit log as we go.
+[1/1] man/rmmod: explain why modprobe -r is more useful
+      commit: 06fadcc6b17c3b9a534540dd6d74b0c5fb1d948d
 
-  Luis
+Best regards,
+-- 
+Lucas De Marchi <lucas.de.marchi@gmail.com>
