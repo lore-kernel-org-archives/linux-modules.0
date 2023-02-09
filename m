@@ -2,369 +2,238 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84C46C61DA4
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Feb 2023 19:20:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7E82C61DA4
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Feb 2023 19:43:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjBITUv (ORCPT
+        id S229538AbjBITn3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Feb 2023 14:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        Thu, 9 Feb 2023 14:43:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjBITUo (ORCPT
+        with ESMTP id S229728AbjBITn2 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:20:44 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553B06ADE2
-        for <linux-modules@vger.kernel.org>; Thu,  9 Feb 2023 11:20:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675970432; x=1707506432;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=ONkZlFvu8lGQ3U5k3aCT2FPNRmiTx0K8itXjeBg6lNo=;
-  b=hNscjU+Jh3J9+kqaSologxMYzyzS2Zd0T+yJUeKMe6epVXOflOtXDodZ
-   RZ1n+dCQGSoktTZw795Rz9driOdxOwJy33RXUkRgPUqpIRvD5Ma0EL6JI
-   LTsdp77GTVSgsebVvnPReG/flfwjmJnaaLrNJDfpb33pDOWzwaoeV50C+
-   APo84ka5zIiLFPm0wn61mAlJewr8UWgi5wyulAQkcny61+aCCToDxG4d+
-   TE+Z9wg9csppUiQSIoD+Rqx0f7S8aSKjO0YCNpYndYcWEtb8+DvRujea7
-   Ud0lez3UY52cRzqfcruwYC9ZNxcjROFVDCEAO3qF+NJZ/qCJCn83ITiuj
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="310579612"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="310579612"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 11:20:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="667792772"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="667792772"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga002.jf.intel.com with ESMTP; 09 Feb 2023 11:20:19 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 9 Feb 2023 11:20:19 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 9 Feb 2023 11:20:19 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 9 Feb 2023 11:20:18 -0800
+        Thu, 9 Feb 2023 14:43:28 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2084.outbound.protection.outlook.com [40.107.22.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B935AB1D;
+        Thu,  9 Feb 2023 11:43:26 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aeh3IFz+I+NLnQdsECB2qNSjiNGZjFnUBdTXhm3Ip+2QgfrVcQ/zvwBSqD5yQXRSz5qcBhVAxMh1hTAlGbR39EyFj5C2m7Bnk3uhC4gozV/0oSGq6zUz2QBPl7CJ33NQRtbzumg8ctXaaX6MRHDfDg1ntBoZsyXU4ccy5qZ8GN4HJo//tEk+8GWAPIkAusZaXr83AWwELOHv80HBCgg0YWy8T5Asp70rVKuft0CWrIRZE+6nIw2BU++6/ORvxnBfM7uPOucdGXEHuVoERy+/CHx8aiuo+qQ9pPZVn3wh73RFPYs4d6yo1DBy1NUAZtgyLHfhnydPZO+GHdEHi0LxdQ==
+ b=ZPR2BGAedoCRr6pWGT4h9qrprGUie0eGG/wJB8StfDxl90Juczv41Z/lCl9ditEog3HVMmvIcOE0/qkPS3rrcrbX2aVrvVF+pQZiuuAiH8jXzz0h8ShE4Vj3eznOlHMUpaLFlb0AvJUfPOnTf6gqof2OvvPZUtVYRW7Pmw2zXsiLIDWh3/OM0FwFwegw9768gnBhraLjWJtXYflT4+YR5enJzi/UAH8bM9eWI8g7jfmBmWzD+mAuK01ANSZ1slwXOH4WJoWSYTQusCl+lrkMsIGM10G+tKi8C8C+INBqtMnLFaHqgugKpOjY+t9L8ldtdSC5SWze59b+Rk750dM3UQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5ofr1CDhiOekO6W/8KMHQ4ArSu1mOtBug2QttVwSENA=;
- b=WrRN8ysoCh6DlXPSzRgmO+VJxBFgsx+ZRdViy6rLZT+AfmSPtVct2ajm5LsFCY9hKP4gc9OL1kFtizu1j/ViwgvFh/RQ8nhotXzqPrX59OY5UyLlbhjpB6vg3DlmW7BzifRKF2bgqDskDLCchtBtf2AObSvTL4W7dl0ldFDQcaf2RI7YxqAZ+lVk1fI+WKP5ZBopLvo9+IZjFJ71ZdlYH4izcPOpTcRrp5uTGwkxuFC1nk6Q6XkbyNrPLC+RmG2SMabnZr++pWQYmvcFG/Fx4X3ZgRfa4ktH+9A64QdYndNUyc1VJP1gYuDtOAOMYRWWXPIfaZNBB/2HQn2e3HmoDw==
+ bh=inxu91t7eZ8M9/rd1K2ThXllCewieUQFAXzrgHgec/w=;
+ b=SJusKqloBKDl3lmToIjEIHL5nbLCE5ROovRIRXqlRlpgmPObIiziNZ1sl3PKs5pwrXl8VnSCApnqUpiZGuwnTfL6KNtv/3zYBnzYJryZbWEGquvDjJiKkoWM7LFJUuZk65OTdqFvb4CFgChUXE2s6KOlBQN4+u3gk0UvyvwcLVXB6yJL8xBuCKZDU1Jvus0TftP7wMqx5Vl5x7s3rxQpibMk0kMTGbVd2h1ZdpMnK4kqsGMm7vLkFr6NZoiIkLBZQc/3jo92dt+ZJx16kV1MZj/6M0AvvG4ZEd35mH41T7F4QqckERo+PRytqwharJtmYSreQ5+48xp0opGATxF0oA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by SA2PR11MB5177.namprd11.prod.outlook.com (2603:10b6:806:11c::10) with
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=inxu91t7eZ8M9/rd1K2ThXllCewieUQFAXzrgHgec/w=;
+ b=q1E78oHajfcR/dh3BSVeg/3gDDPi4qtIEgaVBoecvrSM454nj2TiZd1AVRFz/4V2D6XZxtyDcl4uuMGKR2LriIalhtrr6iegaws2ovk2eHJIE+YLkUje2OnL/hV+z+twbE9FFKR0ujBHfHhPkeii0XTX/QsZeTQK3QYqhlpYKWB42YSm4JJWhBzlRihsYSwHZamM+tmS/6w4L759WNYMWnn3m20oeWdDTSrhHhjoeLm5+lc6ZAW8uVzJpG0FlQ/+ojtMIfuLAmYYESIl4llexoCDysh8HSnvZ6hhcXNd5Yso75nZmK/Eh6Tz1OaXMewRzyUg38jaCGqUbBO0dAE0lQ==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB2062.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:193::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Thu, 9 Feb
- 2023 19:20:16 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::593:877e:dd33:5b7a]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::593:877e:dd33:5b7a%6]) with mapi id 15.20.6086.017; Thu, 9 Feb 2023
- 19:20:16 +0000
-Date:   Thu, 9 Feb 2023 11:20:13 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-CC:     <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH 3/4] testsuite: fixup KMOD_SYSCONFDIR_NOT_ETC tests
-Message-ID: <20230209192013.gp43gprura7agfen@ldmartin-desk2.lan>
-X-Patchwork-Hint: comment
-References: <20230206140449.574631-1-emil.l.velikov@gmail.com>
- <20230206140449.574631-4-emil.l.velikov@gmail.com>
- <20230209152521.ppntkfsyxsfdxcg4@ldmartin-desk2.lan>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230209152521.ppntkfsyxsfdxcg4@ldmartin-desk2.lan>
-X-ClientProxiedBy: BYAPR02CA0007.namprd02.prod.outlook.com
- (2603:10b6:a02:ee::20) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+ 2023 19:43:23 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097%4]) with mapi id 15.20.6086.019; Thu, 9 Feb 2023
+ 19:43:23 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Song Liu <song@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "hch@lst.de" <hch@lst.de>,
+        "kernel-team@meta.com" <kernel-team@meta.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] module: clean-up for module_memory
+Thread-Topic: [PATCH] module: clean-up for module_memory
+Thread-Index: AQHZPK/uwrnOYdpYckSdgu5yh6Ojt67HBCgA
+Date:   Thu, 9 Feb 2023 19:43:23 +0000
+Message-ID: <a89af714-b9ee-1efa-d21d-92ffc690a7e7@csgroup.eu>
+References: <20230209175653.2275559-1-song@kernel.org>
+In-Reply-To: <20230209175653.2275559-1-song@kernel.org>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB2062:EE_
+x-ms-office365-filtering-correlation-id: 8aa0e708-8793-47fa-fc35-08db0ad5e7b4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 4089LUFPJPcyDBHxA6Ag8LHjIjIAg32z0ao1tGS/xT/Z7d3cuTyNCCS8aw9Q23JCenYy8RULM/mfl8ewkc+RRwPXYIhtAstBCCF+DET5+Oj1z/D4PmIIYBrG2jFwTUZ/SF/H1ryC3gMo6jW3TVoFCFhGOijRRXghRQiD4BsqYdlQmoJLIXWEHyfC4aSX0ROswzA4lnSyT90rDMkP7jPHjf3ObmgL4nln62IEVUdy0F0TOr4JO+tAU8ecXt4KAxMIlm1oUOMmUg5yLv5rfoRy6lB08kB6Xo1IFAFQ4GtzI3pKckh0wWq5YxDQShnZkP7glnm1fTL6Iql3Pp+LOUHVVSt6g/HN4HRdV6uk/nnBxFn7GpUyZjQYqUmSfVaP5utKjqXTq4fc5m0BOJAh2mn2wgykwjMkzdK8e5ZZtNzIry1I5dZHc5K+uam2P4UfT1NKOZVo/1fCKy8Gw2YkryDaY7XCXIgnrD3z7OEdAzaBT8EiPjLYKUY5HPuiDZDMBYqu6n8KopN9eBOfEz8R8/i9LVuqDQuZMqSbCmey3iWZUNsRDmC1p/RlznLFRFI5Qe2paQDWcVRZ06VBSlDxXOU1IwIWzDOa0lZGHGDrNwhNNjnnTiAj1Dk2nMveQ7VgimZFDZ5QinBtwBv2GZDur3p5W2skOaezy7d+C9DYvyoys/9JLW1vPToSM9ji7TldTiI1awcN09XsrHeAVgOquQWb9SA9IYvheLrbTBqZaqnu0YfmpQPE746NvspYmcQseh0oJbE8CbPScZzOfu/sMBmQz5KoZ3qshbamXdiESC+DUb0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(136003)(39850400004)(396003)(366004)(451199018)(31686004)(478600001)(6486002)(966005)(36756003)(2906002)(38100700002)(122000001)(316002)(38070700005)(5660300002)(8936002)(86362001)(110136005)(54906003)(26005)(186003)(83380400001)(8676002)(6506007)(71200400001)(2616005)(31696002)(91956017)(76116006)(66446008)(44832011)(6512007)(66556008)(4326008)(66574015)(66476007)(66946007)(64756008)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y3JCb0pLTkwxWkprbGtZQmRFZlBnVGtjMXdjZWlOT0ZYNEpWeHJFSGtUMG9T?=
+ =?utf-8?B?WElKVDBKWUJ6d0w4WCtNODlWd1NURmxEWVIzdE8yZTBlSzdoTzJ0SXNkTTgw?=
+ =?utf-8?B?Ynh0cHh0TW5URkRpY2ZoMEE3d0RhMWV2WkpacUxSZ2xMOVRJRjJMQ1R4SkR0?=
+ =?utf-8?B?ait2ek5HU1RZcnkvMDFpUHUyWEJSTGFvaWhuNytXS2dDTkllbFlQcVo3RDh0?=
+ =?utf-8?B?TzhaL3RzbDhxVEpkU2FTdUNmTFNud0lLMkg3RUEraHE0YXhzOWVTdjRrQlVN?=
+ =?utf-8?B?Qmt2Wk9OVmNaK0k3VFY1WWdXbzJNUmIzeUorY3l0SGlwYU8rdzZpYWRvT1Fm?=
+ =?utf-8?B?dUxVdzBoak9QdkNwcG93TWJ0VVBlNjBnTVZXcUtqZDk3QTVPV3JmTi9WdFJz?=
+ =?utf-8?B?ck54VHdmdFhOVm5pRW5qRHcxSUpHdWJCRStmYjNDSWRLSTc0NDFCUDRjTFA2?=
+ =?utf-8?B?OERaN29uMFNKMHpiaWw4Y0hFQWl0TnczTGVvNDBiVnh2cG15ODNKUUlCTFcz?=
+ =?utf-8?B?SkpyS2VqTVd4UjloaDNpYXY3M0IxazlHUmlpSkdEQXVGRUZYczQrQ09tVk5p?=
+ =?utf-8?B?VzR6MzRZc29LanREbFNkMG1vMnJMSTNTNkJoSSt0dWNiangyZHowVDZtRTRp?=
+ =?utf-8?B?bi9TWHh2RlBxWmtmZVNaaktUMm9wZldrRXIyVThseXVvRFYwcHVtUDU3UDhq?=
+ =?utf-8?B?T0NyVDZJcVlXOFplUlc4VlcxSU0ydFcxczk1M0FyeGNaVVpGemt2MkxJSHg5?=
+ =?utf-8?B?alNYbDZ2VHRXUG40VVB4YmVWL3pHakNjelNaN0hmRTNoY0N1dVppUlpvM2xj?=
+ =?utf-8?B?aUlCaC8xWU5wUnI0eUR5b2FmUXMwSjVaSVR6bldEUFo5SDYvckJjRDhwUXB0?=
+ =?utf-8?B?d0pYWCtKVWdXWUJ1U2duTWhIZHErSkk3Y043RUZXcWwvd2J6bHBHcXgxVFBr?=
+ =?utf-8?B?QXE4amIvKzVrN2ZZSWVKRndTaHhndElIWjlYMFpVTHc0NnQ1TCtjNUFiUmRo?=
+ =?utf-8?B?cFR4M0M0TERZYmdxUmEybEZiRjlrWmxsYWNUWEhqbmoxcUt6ZmtKemVPNmZn?=
+ =?utf-8?B?aHZlYjZRbkNrenNMYmNSTEdoSi9MOFc2MzNDMmQzTnQ5cEhPc014ZTkwWnF3?=
+ =?utf-8?B?NDZDRUVVSm8yWjBwQjgwSHRpZU5QL29QRnVvQVU5YWk1RSs1cEFCTldJam5C?=
+ =?utf-8?B?TnhWajBDNGgzMlBLQ0g2TWxsMWdxMU9QQjBFUmdHcFBBaDErMm53aXUycGYy?=
+ =?utf-8?B?bDU3VDVNQjhFMDJ4RVNJbXpveEpXMi9CWkYxdFo1bHBuMzUzUENrQUJobURQ?=
+ =?utf-8?B?VkFoWExHR3hnb3VwTlNDUjVHcWx6Sk9tSGIwNjdFV0xPdUhVbVJqNVlDd3Qy?=
+ =?utf-8?B?KzNDeGV6Q2RVQmZwVFZ6SFVad3FTS0RnQ2QxNzdtM21pcFhHTWxKYTNHMkJm?=
+ =?utf-8?B?dzNiUU1xdnF3TmVsekR6N2JUUEh2WlVBNFdEMkcwNW1MUE5uZU40empTTWs3?=
+ =?utf-8?B?NGUyZjhIMEJUQlgrVmYycisxTVQvQ1J6byt6a016T1psZE1jYnRxTEpvU2dn?=
+ =?utf-8?B?eEZVSDNHMjVYNWhLbmo0bWFvSE9zdm5yb2Zzb29ZSFZyc0hSNnJXOS9WM2xW?=
+ =?utf-8?B?SVovajNNVGxXZkQ1SkxqNzhqZDZBcVZFbjZkeVpWdTVFVzlzWG5EVWtXbWpp?=
+ =?utf-8?B?WU9QWGJxZTJHWjV2ZlB6clpoSVY5RUkzQ01IUzRkOEN4ajNkSVF1Yk1RbW1h?=
+ =?utf-8?B?ekNiKzFPN0YvQW5ZcjdSV1pCWndvc2MxNzNpZkZ4dEN4S0pYNmZtazhxYW43?=
+ =?utf-8?B?bW03L050Yk9jRU5OV1d0bVE4WXlrSFJOVkxSSFo3d3FlWTN2czlqOUVrd3M0?=
+ =?utf-8?B?dE9BUnphQjlralhTMVJUb2tSaWt3WVo5T0lLbnRmQStLR2JjWDRJL3RTOURO?=
+ =?utf-8?B?T1dOZkpTN2NvVzBmNmpwczVFcUZYSUpoTzQyOWZ4NGJDcnMwaWVTc2lUaXNO?=
+ =?utf-8?B?cEVTSlBkUjNrcHNlaFo3Y2l6VkplVVZxbDBDSk9KcVgzODhwSUQxM3pSb0l2?=
+ =?utf-8?B?ekNxTzM5Q3pQQnNrNkVUR0hmSjhxbGt3YURwSnhLYmMyK0pSZDlVNExkVUN6?=
+ =?utf-8?B?c0ErRU00ODVQT0hybGJvckZqQUpDTDZTajI5aGNHVGJpaWxGYjBxN0MrVnMv?=
+ =?utf-8?B?WGc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4B4113BBC026D3439C40C414919D45F6@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SA2PR11MB5177:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0f59c4c-ef83-4dd0-f066-08db0ad2ac98
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xMQFl1J64ZBCdtxQHwtCqTsRrAVmoqB+ZiXhqpeGPWtyZF4d/a2hgKIOTuFm86PluZuK9lUEIKpsRiqKd3kb0KqiFXqYYVvPsq1GNWbPd4UWFvzFSeY8j34aLRx+Cl2uXTYY8XcriC8lHRINwrwwf/XgIVrDJaswfhjWr9bjEQ3IbhxO2kfOGyJ5z3POBwzmBkP1yzrNF6+ifJOFJI/umkJyFObTFA+xkDYFWppvubHTzMpw6ijo2THsKVy6eqvyxudYh/rEYcylNOYF7EzhbZ8VRAQh7Kg2/lsfZhgWDf14Kg75hlFFsLJMfCH5casZKc+cvHc24A+6gyaAhMCjiEnDaCJJKlH+o3QGgqbr9qRfZ4QptN5PSj5Jh1gMs5/3fRDpRcweQSr76bhYhQOTBmmyrGYpZGTDGC0H14R34q9q+XpykE/CpKgWz01FLchQBXMSDkAuSMMJZln8HoaqYs36fhmNRf8WiHJKR2dm0DuNmwus8S85/8BB+b7NT9OsyBmuRsiF40mpCVQdrAMsN8n+MkAx50nzL1wYVdy/c4D2v7TdeILQ/ONfMWV82F+8B5m+77AvRusCZoYPus5yTS3Y/QLZaAgluXzhknpU1ZgU3I32jwFvy5kboc9mQu8xlvgnQxlI6sHrHa2ftJv3dA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(39860400002)(376002)(396003)(346002)(136003)(451199018)(1076003)(2906002)(66556008)(4326008)(66476007)(86362001)(6486002)(36756003)(478600001)(82960400001)(186003)(316002)(38100700002)(9686003)(6512007)(26005)(66946007)(6506007)(6916009)(8676002)(8936002)(83380400001)(5660300002)(6666004)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/PiAepWVlmIx9vrsAGTgfWHBr3bqKxesgKgkXppTI+RhMGrvfKuWQvSGKcJi?=
- =?us-ascii?Q?UaqQ2mXmHrQq0F5LkvNFy6RSJS8hcuMIclqyyXXH6ewl30ttCebtccPQYTjU?=
- =?us-ascii?Q?1f6PP0jN7kcJL1AcTouwKNusHx15eTsoSKRH77zuxsV9UcCDmZTwd/27R9Zx?=
- =?us-ascii?Q?b0S7IbLnKko83IteUJTD4p7UggpBp3XF/NTmMl6sLId5AqhVLj8WdmulFbL5?=
- =?us-ascii?Q?7gF7FHGvfZf2nD/tXG2CBVjIaxJUB8liJ+985un5i4AmBXJsSUgRFX+R65UI?=
- =?us-ascii?Q?WakOXMsAFQM67YVzUGAft1+hUskyMdJ47E+VMizmKlhTB1R++oHCynZ0eOfm?=
- =?us-ascii?Q?B8eHj0ciwyGeFQoMqSmTcj6KIkEB8VOpGI0JGqfYDd6+dekEkPSVAfX43wz8?=
- =?us-ascii?Q?MVJNwmZfGLvk8U9m6z48Bl0MvDvfUYOPC88aQaGZIKDIsBuGq3k+4OMPE8bK?=
- =?us-ascii?Q?DF4NMkDLwl2PVVVvYdUQBSMmDRR8Mg8ByGJMSmHSmMXeuWdyEHjKAncsMID7?=
- =?us-ascii?Q?550f3KWz7Elr0nupspQ6l0OR3jPnrwQAH6YDdgC344a1Lx67FFKe2jskhV5b?=
- =?us-ascii?Q?A0VGsWa5F8RpZ4xSAbUFVZc8m9uyR/4musG7mFKn1xx88vUGB5PCr+96AjlJ?=
- =?us-ascii?Q?efAyhjf1IHk8HkM5gIVC12v51uSXlOsodkzcyzHgLoEreG35SxJEyoN/dhZP?=
- =?us-ascii?Q?tN44t9VT0Uzt096N+5n1oRtahvh5e6TMxlxgz8PfKeXDsJtyILNyOVWTurea?=
- =?us-ascii?Q?ZZ2YUe+efP2Cx2TVJjA1r+ZoZ2p0l+Wd6VqGKu3jCSyjUSZQWhryZ8+Tmble?=
- =?us-ascii?Q?rr0ZzeumqFRo/GqgbsXqs9zoptLEVscvls50Gq7nHANu/iBMHXe1oFhJCWKr?=
- =?us-ascii?Q?8bdpY/pf8K6627nwzS+/Hvcvi16k0JNkXQGIYd31/mkmTj5BPUUtPTPvJyb4?=
- =?us-ascii?Q?1P/NqCdudYUuKlwTpkfXoaJl4AlrfbosuCgkLVFqNik1wnxUUNYX2NtRLemx?=
- =?us-ascii?Q?1Xg2j35I0T3IaG+pYQbiL6m+xOragzneoF6Rd0FjBCAz7ItYWNCKINPaftYB?=
- =?us-ascii?Q?SKLaAtDTiJC4iQ0ZtoYh1MJoD23ENMcweedH4FVCiFdCBUCOKhfOGttLkwY2?=
- =?us-ascii?Q?GESTKNgmxZ7cO1e1KxWWnDFNqFjaoUhAIB27UQkagpz3vH1Rin6TiW79lSf3?=
- =?us-ascii?Q?uyIfHKKaTpw/6O29RkaHCd7kYgRDK2KAEYsEeAt8cyo/JbK7Yj1cMK0ZTNs1?=
- =?us-ascii?Q?qGxl2ScxmqdXeSpBhByyXET8pUbBqMdpb22VD3oWq6hTYnCg50fbdl7EvLp1?=
- =?us-ascii?Q?ovWWNpmAI03Z7mBgQAInrAtCbz148/ltM/LmzYVECF+8fhE/R/t7e0Rce+qq?=
- =?us-ascii?Q?fXHiweIs4jN4bb9wsOHuVlqzCrLLgs0vbQUQ9LWoAswGZDmD21k2WCnW+Ehc?=
- =?us-ascii?Q?tOzuPC4Geqs5oIQsXM85cRhC1tdMWRhcUhDRhnmbvy2kBVoBwn0MTuG4pKDa?=
- =?us-ascii?Q?R1dua8IzSASaOsSNo/enHgJyJXoruOlijTf05iqsXQ4VQFnwQtyJP9mPalui?=
- =?us-ascii?Q?1ydsWwRSmjtfiTUxFX4BCkEgq2ryjOvVvEQBw3prphPCP1ppUcLfswj3pnJh?=
- =?us-ascii?Q?EA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0f59c4c-ef83-4dd0-f066-08db0ad2ac98
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-OriginatorOrg: csgroup.eu
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 19:20:16.0670
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8aa0e708-8793-47fa-fc35-08db0ad5e7b4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2023 19:43:23.4454
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4XAGdZcyQwUE+68xa3tGIVqgzGw1EU7+xNKwLJm1OZGOlifIKISBKnLfqVqkcYxMrjCoIs18jbLAYkey1FG+z11BXEMEpLOXCoR9po6NZIc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5177
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Chb3W6zRpi9x8LPYND6cHshh0awREeVMe+M7k52KCJIyeu/Sdo4+/3+sfHs1xhRmIs8w3BixUM5HZqNbF6uVWs2XqpK49VLmUYhRl5Q7Z+Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2062
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Feb 09, 2023 at 07:25:21AM -0800, Lucas De Marchi wrote:
->On Mon, Feb 06, 2023 at 02:04:48PM +0000, Emil Velikov wrote:
->>From: Emil Velikov <emil.velikov@collabora.com>
->>
->>Currently some tests lack a config segment in `.../etc`, yet they're
->>skipped when KMOD_SYSCONFDIR_NOT_ETC is set. Inversely - some tests have
->>a config snippet, yet are not skipped.
->>
->>Go through the lot and fix them all. While there make sure we use tab
->>for code indentation, as per the style guide.
->>
->>Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
->
->$ cat testsuite/test-depmod.log
->depmod: WARNING: could not open modules.order at /lib/modules/4.4.4: No such file or directory
->depmod: WARNING: could not open modules.order at /lib/modules/4.4.4: No such file or directory
->depmod: WARNING: could not open modules.builtin at /lib/modules/4.4.4: No such file or directory
->depmod: WARNING: could not open modules.builtin.modinfo at /lib/modules/4.4.4: No such file or directory
->depmod: WARNING: could not open modules.builtin at /lib/modules/4.4.4: No such file or directory
->depmod: WARNING: could not open modules.builtin.modinfo at /lib/modules/4.4.4: No such file or directory
->depmod: WARNING: could not open modules.order at /lib/modules/4.4.4: No such file or directory
->TESTSUITE: running depmod_search_order_override, in forked context
->TESTSUITE: SKIPPED: depmod_search_order_override
->TESTSUITE: ------
->TESTSUITE: running depmod_search_order_external_last, in forked context
->TESTSUITE: SKIPPED: depmod_search_order_external_last
->TESTSUITE: ------
->TESTSUITE: running depmod_search_order_external_first, in forked context
->TESTSUITE: SKIPPED: depmod_search_order_external_first
->TESTSUITE: ------
->TESTSUITE: running depmod_detect_loop, in forked context
->TESTSUITE: 'depmod_detect_loop' [127296] exited with return code 0
->TESTSUITE: ERR: UNEXPECTED PASS: exit with 0: depmod_detect_loop
->TESTSUITE: ------
->depmod: WARNING: could not open modules.builtin at /lib/modules/4.4.4: No such file or directory
->depmod: WARNING: could not open modules.builtin.modinfo at /lib/modules/4.4.4: No such file or directory
->FAIL testsuite/test-depmod (exit status: 1)
->
->I needed this:
->----8<-----
->diff --git a/testsuite/test-depmod.c b/testsuite/test-depmod.c
->index 2bc2e90..2d55b5d 100644
->--- a/testsuite/test-depmod.c
->+++ b/testsuite/test-depmod.c
->@@ -159,6 +159,9 @@ static noreturn int depmod_detect_loop(const struct test *t)
-> 	exit(EXIT_FAILURE);
-> }
-> DEFINE_TEST(depmod_detect_loop,
->+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->+	.skip = true,
->+#endif
-> 	.description = "check if depmod detects module loops correctly",
-> 	.config = {
-> 		[TC_UNAME_R] = MODULES_UNAME,
->----8<-----
-
-
-ok, I'm going to skip this patch and take the other 3. I solved this
-differently, by just making the testsuite compatible with
-sysconfdir != /etc. I will send that patch to the mailing list, I'd
-appreciate if you could review it.
-
-
-Applied patches 1, 2 and 4.
-
-thanks
-Lucas De Marchi
-
->
->
->
->Lucas De Marchi
->
->>---
->>NOTE: this is based off my earlier patch adding outdir. If this patch is
->>applied prior the depmod_modules_outdir hunk should be dropped.
->>---
->>testsuite/test-blacklist.c  |  2 +-
->>testsuite/test-depmod.c     | 22 +++++++++++-----------
->>testsuite/test-modprobe.c   |  7 +++++--
->>testsuite/test-new-module.c |  3 +++
->>4 files changed, 20 insertions(+), 14 deletions(-)
->>
->>diff --git a/testsuite/test-blacklist.c b/testsuite/test-blacklist.c
->>index d03eedb..6531fa2 100644
->>--- a/testsuite/test-blacklist.c
->>+++ b/testsuite/test-blacklist.c
->>@@ -96,7 +96,7 @@ fail_lookup:
->>
->>DEFINE_TEST(blacklist_1,
->>#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>-        .skip = true,
->>+	.skip = true,
->>#endif
->>	.description = "check if modules are correctly blacklisted",
->>	.config = {
->>diff --git a/testsuite/test-depmod.c b/testsuite/test-depmod.c
->>index 6465230..010f259 100644
->>--- a/testsuite/test-depmod.c
->>+++ b/testsuite/test-depmod.c
->>@@ -41,9 +41,6 @@ static noreturn int depmod_modules_order_for_compressed(const struct test *t)
->>}
->>
->>DEFINE_TEST(depmod_modules_order_for_compressed,
->>-#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>-        .skip = true,
->>-#endif
->>	.description = "check if depmod let aliases in right order when using compressed modules",
->>	.config = {
->>		[TC_UNAME_R] = MODULES_ORDER_UNAME,
->>@@ -75,9 +72,6 @@ static noreturn int depmod_modules_outdir(const struct test *t)
->>}
->>
->>DEFINE_TEST(depmod_modules_outdir,
->>-#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>-        .skip = true,
->>-#endif
->>	.description = "check if depmod honours the outdir option",
->>	.config = {
->>		[TC_UNAME_R] = MODULES_OUTDIR_UNAME,
->>@@ -104,6 +98,9 @@ static noreturn int depmod_search_order_simple(const struct test *t)
->>	exit(EXIT_FAILURE);
->>}
->>DEFINE_TEST(depmod_search_order_simple,
->>+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>+	.skip = true,
->>+#endif
->>	.description = "check if depmod honor search order in config",
->>	.config = {
->>		[TC_UNAME_R] = "4.4.4",
->>@@ -130,6 +127,9 @@ static noreturn int depmod_search_order_same_prefix(const struct test *t)
->>	exit(EXIT_FAILURE);
->>}
->>DEFINE_TEST(depmod_search_order_same_prefix,
->>+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>+	.skip = true,
->>+#endif
->>	.description = "check if depmod honor search order in config with same prefix",
->>	.config = {
->>		[TC_UNAME_R] = "4.4.4",
->>@@ -156,9 +156,6 @@ static noreturn int depmod_detect_loop(const struct test *t)
->>	exit(EXIT_FAILURE);
->>}
->>DEFINE_TEST(depmod_detect_loop,
->>-#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>-        .skip = true,
->>-#endif
->>	.description = "check if depmod detects module loops correctly",
->>	.config = {
->>		[TC_UNAME_R] = "4.4.4",
->>@@ -183,7 +180,7 @@ static noreturn int depmod_search_order_external_first(const struct test *t)
->>}
->>DEFINE_TEST(depmod_search_order_external_first,
->>#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>-        .skip = true,
->>+	.skip = true,
->>#endif
->>	.description = "check if depmod honor external keyword with higher priority",
->>	.config = {
->>@@ -211,6 +208,9 @@ static noreturn int depmod_search_order_external_last(const struct test *t)
->>	exit(EXIT_FAILURE);
->>}
->>DEFINE_TEST(depmod_search_order_external_last,
->>+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>+	.skip = true,
->>+#endif
->>	.description = "check if depmod honor external keyword with lower priority",
->>	.config = {
->>		[TC_UNAME_R] = "4.4.4",
->>@@ -238,7 +238,7 @@ static noreturn int depmod_search_order_override(const struct test *t)
->>}
->>DEFINE_TEST(depmod_search_order_override,
->>#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>-        .skip = true,
->>+	.skip = true,
->>#endif
->>	.description = "check if depmod honor override keyword",
->>	.config = {
->>diff --git a/testsuite/test-modprobe.c b/testsuite/test-modprobe.c
->>index 3ddb976..6b763d8 100644
->>--- a/testsuite/test-modprobe.c
->>+++ b/testsuite/test-modprobe.c
->>@@ -84,7 +84,7 @@ static noreturn int modprobe_show_alias_to_none(const struct test *t)
->>}
->>DEFINE_TEST(modprobe_show_alias_to_none,
->>#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>-        .skip = true,
->>+	.skip = true,
->>#endif
->>	.description = "check if modprobe --show-depends doesn't explode with an alias to nothing",
->>	.config = {
->>@@ -176,7 +176,7 @@ static noreturn int modprobe_softdep_loop(const struct test *t)
->>}
->>DEFINE_TEST(modprobe_softdep_loop,
->>#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>-        .skip = true,
->>+	.skip = true,
->>#endif
->>	.description = "check if modprobe breaks softdep loop",
->>	.config = {
->>@@ -200,6 +200,9 @@ static noreturn int modprobe_install_cmd_loop(const struct test *t)
->>	exit(EXIT_FAILURE);
->>}
->>DEFINE_TEST(modprobe_install_cmd_loop,
->>+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>+	.skip = true,
->>+#endif
->>	.description = "check if modprobe breaks install-commands loop",
->>	.config = {
->>		[TC_UNAME_R] = "4.4.4",
->>diff --git a/testsuite/test-new-module.c b/testsuite/test-new-module.c
->>index 9872b78..dcb9934 100644
->>--- a/testsuite/test-new-module.c
->>+++ b/testsuite/test-new-module.c
->>@@ -106,6 +106,9 @@ static int from_alias(const struct test *t)
->>	return EXIT_SUCCESS;
->>}
->>DEFINE_TEST(from_alias,
->>+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->>+	.skip = true,
->>+#endif
->>	.description = "check if aliases are parsed correctly",
->>	.config = {
->>		[TC_ROOTFS] = TESTSUITE_ROOTFS "test-new-module/from_alias/",
->>-- 
->>2.39.1
->>
+DQoNCkxlIDA5LzAyLzIwMjMgw6AgMTg6NTYsIFNvbmcgTGl1IGEgw6ljcml0wqA6DQo+IFRocmVl
+IGNoYW5nZXMgaGVyZToNCj4gDQo+IDEuIFNob3J0ZXIgdmFyaWFibGUgbmFtZXMgaW4gYXJjaC9h
+cmMva2VybmVsL3Vud2luZC5jOnVud2luZF9hZGRfdGFibGUsIHRvDQo+ICAgICBtYWtlIGl0IGVh
+c2llciB0byByZWFkLg0KPiAyLiBSZXdyaXRlIGZyZWVfbW9kX21lbSgpIHNvIGl0IGlzIG1vcmUg
+b2J2aW91cyB0aGF0IE1PRF9EQVRBIG5lZWQgdG8gYmUNCj4gICAgIGZyZWVkIGxhc3QuDQo+IDMu
+IENsZWFuIHVwIHRoZSB1c2Ugb2YgQ09ORklHX0FSQ0hfV0FOVFNfTU9EVUxFU19EQVRBX0lOX1ZN
+QUxMT0MuDQo+IA0KPiBDYzogTHVpcyBDaGFtYmVybGFpbiA8bWNncm9mQGtlcm5lbC5vcmc+DQo+
+IENjOiBUaG9tYXMgR2xlaXhuZXIgPHRnbHhAbGludXRyb25peC5kZT4NCj4gQ2M6IFBldGVyIFpp
+amxzdHJhIDxwZXRlcnpAaW5mcmFkZWFkLm9yZz4NCj4gQ2M6IEd1ZW50ZXIgUm9lY2sgPGxpbnV4
+QHJvZWNrLXVzLm5ldD4NCj4gQ2M6IENocmlzdG9waGUgTGVyb3kgPGNocmlzdG9waGUubGVyb3lA
+Y3Nncm91cC5ldT4NCj4gU2lnbmVkLW9mZi1ieTogU29uZyBMaXUgPHNvbmdAa2VybmVsLm9yZz4N
+Cj4gDQo+IC0tLQ0KPiANCj4gVGhpcyBpcyB0aGUgZm9sbG93IHVwIHBhdGNoIG9uIHRvcCBvZiBb
+MV0uIEkgd291bGQgcmVjb21tZW5kIGZvbGQgdGhpcw0KPiBpbnRvIFsxXS4NCg0KV2l0aCB0aGlz
+IHBhdGNoIGZvbGRlZCBpbnRvIFsxXSwNCg0KUmV2aWV3ZWQtYnk6IENocmlzdG9waGUgTGVyb3kg
+PGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4NCg0KPiANCj4gWzFdIGh0dHBzOi8vbG9yZS5r
+ZXJuZWwub3JnL2xpbnV4LW1vZHVsZXMvMjAyMzAyMDcwMDI4MDIuMjUxNDgwMi0xLXNvbmdAa2Vy
+bmVsLm9yZy9ULyN1DQo+IC0tLQ0KPiAgIGFyY2gvYXJjL2tlcm5lbC91bndpbmQuYyB8IDE1ICsr
+KystLS0tLS0NCj4gICBrZXJuZWwvbW9kdWxlL21haW4uYyAgICAgfCA2MSArKysrKysrKysrKy0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCAyMiBpbnNl
+cnRpb25zKCspLCA1NCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL2FyYy9r
+ZXJuZWwvdW53aW5kLmMgYi9hcmNoL2FyYy9rZXJuZWwvdW53aW5kLmMNCj4gaW5kZXggOTMzNDUx
+ZjQ0OTRmLi45MjcwZDBhNzEzYzMgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJjL2tlcm5lbC91bndp
+bmQuYw0KPiArKysgYi9hcmNoL2FyYy9rZXJuZWwvdW53aW5kLmMNCj4gQEAgLTM2OSw4ICszNjks
+OCBAQCB2b2lkICp1bndpbmRfYWRkX3RhYmxlKHN0cnVjdCBtb2R1bGUgKm1vZHVsZSwgY29uc3Qg
+dm9pZCAqdGFibGVfc3RhcnQsDQo+ICAgCQkgICAgICAgdW5zaWduZWQgbG9uZyB0YWJsZV9zaXpl
+KQ0KPiAgIHsNCj4gICAJc3RydWN0IHVud2luZF90YWJsZSAqdGFibGU7DQo+IC0Jc3RydWN0IG1v
+ZHVsZV9tZW1vcnkgKm1vZF9tZW1fY29yZV90ZXh0Ow0KPiAtCXN0cnVjdCBtb2R1bGVfbWVtb3J5
+ICptb2RfbWVtX2luaXRfdGV4dDsNCj4gKwlzdHJ1Y3QgbW9kdWxlX21lbW9yeSAqY29yZV90ZXh0
+Ow0KPiArCXN0cnVjdCBtb2R1bGVfbWVtb3J5ICppbml0X3RleHQ7DQo+ICAgDQo+ICAgCWlmICh0
+YWJsZV9zaXplIDw9IDApDQo+ICAgCQlyZXR1cm4gTlVMTDsNCj4gQEAgLTM3OSwxNCArMzc5LDEx
+IEBAIHZvaWQgKnVud2luZF9hZGRfdGFibGUoc3RydWN0IG1vZHVsZSAqbW9kdWxlLCBjb25zdCB2
+b2lkICp0YWJsZV9zdGFydCwNCj4gICAJaWYgKCF0YWJsZSkNCj4gICAJCXJldHVybiBOVUxMOw0K
+PiAgIA0KPiAtCW1vZF9tZW1fY29yZV90ZXh0ID0gJm1vZHVsZS0+bWVtW01PRF9URVhUXTsNCj4g
+LQltb2RfbWVtX2luaXRfdGV4dCA9ICZtb2R1bGUtPm1lbVtNT0RfSU5JVF9URVhUXTsNCj4gKwlj
+b3JlX3RleHQgPSAmbW9kdWxlLT5tZW1bTU9EX1RFWFRdOw0KPiArCWluaXRfdGV4dCA9ICZtb2R1
+bGUtPm1lbVtNT0RfSU5JVF9URVhUXTsNCj4gICANCj4gLQlpbml0X3Vud2luZF90YWJsZSh0YWJs
+ZSwgbW9kdWxlLT5uYW1lLA0KPiAtCQkJICBtb2RfbWVtX2NvcmVfdGV4dC0+YmFzZSwgbW9kX21l
+bV9jb3JlX3RleHQtPnNpemUsDQo+IC0JCQkgIG1vZF9tZW1faW5pdF90ZXh0LT5iYXNlLCBtb2Rf
+bWVtX2luaXRfdGV4dC0+c2l6ZSwNCj4gLQkJCSAgdGFibGVfc3RhcnQsIHRhYmxlX3NpemUsDQo+
+IC0JCQkgIE5VTEwsIDApOw0KPiArCWluaXRfdW53aW5kX3RhYmxlKHRhYmxlLCBtb2R1bGUtPm5h
+bWUsIGNvcmVfdGV4dC0+YmFzZSwgY29yZV90ZXh0LT5zaXplLA0KPiArCQkJICBpbml0X3RleHQt
+PmJhc2UsIGluaXRfdGV4dC0+c2l6ZSwgdGFibGVfc3RhcnQsIHRhYmxlX3NpemUsIE5VTEwsIDAp
+Ow0KPiAgIA0KPiAgIAlpbml0X3Vud2luZF9oZHIodGFibGUsIHVud19oZHJfYWxsb2MpOw0KPiAg
+IA0KPiBkaWZmIC0tZ2l0IGEva2VybmVsL21vZHVsZS9tYWluLmMgYi9rZXJuZWwvbW9kdWxlL21h
+aW4uYw0KPiBpbmRleCBjNTk4ZjExZTcwMTYuLjI3MjRiYzFiOWE5MCAxMDA2NDQNCj4gLS0tIGEv
+a2VybmVsL21vZHVsZS9tYWluLmMNCj4gKysrIGIva2VybmVsL21vZHVsZS9tYWluLmMNCj4gQEAg
+LTkyNywyNiArOTI3LDE3IEBAIHN0YXRpYyBzc2l6ZV90IHN0b3JlX3VldmVudChzdHJ1Y3QgbW9k
+dWxlX2F0dHJpYnV0ZSAqbWF0dHIsDQo+ICAgc3RydWN0IG1vZHVsZV9hdHRyaWJ1dGUgbW9kdWxl
+X3VldmVudCA9DQo+ICAgCV9fQVRUUih1ZXZlbnQsIDAyMDAsIE5VTEwsIHN0b3JlX3VldmVudCk7
+DQo+ICAgDQo+IC0jaWZkZWYgQ09ORklHX0FSQ0hfV0FOVFNfTU9EVUxFU19EQVRBX0lOX1ZNQUxM
+T0MNCj4gLQ0KPiAtc3RhdGljIHNzaXplX3Qgc2hvd19jb3Jlc2l6ZShzdHJ1Y3QgbW9kdWxlX2F0
+dHJpYnV0ZSAqbWF0dHIsDQo+IC0JCQkgICAgIHN0cnVjdCBtb2R1bGVfa29iamVjdCAqbWssIGNo
+YXIgKmJ1ZmZlcikNCj4gLXsNCj4gLQlyZXR1cm4gc3ByaW50ZihidWZmZXIsICIldVxuIiwgbWst
+Pm1vZC0+bWVtW01PRF9URVhUXS5zaXplKTsNCj4gLX0NCj4gLQ0KPiAtI2Vsc2UNCj4gLQ0KPiAg
+IHN0YXRpYyBzc2l6ZV90IHNob3dfY29yZXNpemUoc3RydWN0IG1vZHVsZV9hdHRyaWJ1dGUgKm1h
+dHRyLA0KPiAgIAkJCSAgICAgc3RydWN0IG1vZHVsZV9rb2JqZWN0ICptaywgY2hhciAqYnVmZmVy
+KQ0KPiAgIHsNCj4gLQl1bnNpZ25lZCBpbnQgc2l6ZSA9IDA7DQo+ICsJdW5zaWduZWQgaW50IHNp
+emUgPSBtay0+bW9kLT5tZW1bTU9EX1RFWFRdLnNpemU7DQo+ICAgDQo+IC0JZm9yX2NsYXNzX21v
+ZF9tZW1fdHlwZSh0eXBlLCBjb3JlKQ0KPiAtCQlzaXplICs9IG1rLT5tb2QtPm1lbVt0eXBlXS5z
+aXplOw0KPiArCWlmICghSVNfRU5BQkxFRChDT05GSUdfQVJDSF9XQU5UU19NT0RVTEVTX0RBVEFf
+SU5fVk1BTExPQykpIHsNCj4gKwkJZm9yX2NsYXNzX21vZF9tZW1fdHlwZSh0eXBlLCBjb3JlX2Rh
+dGEpDQo+ICsJCQlzaXplICs9IG1rLT5tb2QtPm1lbVt0eXBlXS5zaXplOw0KPiArCX0NCj4gICAJ
+cmV0dXJuIHNwcmludGYoYnVmZmVyLCAiJXVcbiIsIHNpemUpOw0KPiAgIH0NCj4gLSNlbmRpZg0K
+PiAgIA0KPiAgIHN0YXRpYyBzdHJ1Y3QgbW9kdWxlX2F0dHJpYnV0ZSBtb2RpbmZvX2NvcmVzaXpl
+ID0NCj4gICAJX19BVFRSKGNvcmVzaXplLCAwNDQ0LCBzaG93X2NvcmVzaXplLCBOVUxMKTsNCj4g
+QEAgLTExNzAsMTcgKzExNjEsMTEgQEAgdm9pZCBfX3dlYWsgbW9kdWxlX2FyY2hfZnJlZWluZ19p
+bml0KHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gICB7DQo+ICAgfQ0KPiAgIA0KPiAtI2lmZGVmIENP
+TkZJR19BUkNIX1dBTlRTX01PRFVMRVNfREFUQV9JTl9WTUFMTE9DDQo+ICAgc3RhdGljIGJvb2wg
+bW9kX21lbV91c2Vfdm1hbGxvYyhlbnVtIG1vZF9tZW1fdHlwZSB0eXBlKQ0KPiAgIHsNCj4gLQly
+ZXR1cm4gbW9kX21lbV90eXBlX2lzX2NvcmVfZGF0YSh0eXBlKTsNCj4gLX0NCj4gLSNlbHNlDQo+
+IC1zdGF0aWMgYm9vbCBtb2RfbWVtX3VzZV92bWFsbG9jKGVudW0gbW9kX21lbV90eXBlIHR5cGUp
+DQo+IC17DQo+IC0JcmV0dXJuIGZhbHNlOw0KPiArCXJldHVybiBJU19FTkFCTEVEKENPTkZJR19B
+UkNIX1dBTlRTX01PRFVMRVNfREFUQV9JTl9WTUFMTE9DKSAmJg0KPiArCQltb2RfbWVtX3R5cGVf
+aXNfY29yZV9kYXRhKHR5cGUpOw0KPiAgIH0NCj4gLSNlbmRpZg0KPiAgIA0KPiAgIHN0YXRpYyB2
+b2lkICptb2R1bGVfbWVtb3J5X2FsbG9jKHVuc2lnbmVkIGludCBzaXplLCBlbnVtIG1vZF9tZW1f
+dHlwZSB0eXBlKQ0KPiAgIHsNCj4gQEAgLTExOTksMzQgKzExODQsMjEgQEAgc3RhdGljIHZvaWQg
+bW9kdWxlX21lbW9yeV9mcmVlKHZvaWQgKnB0ciwgZW51bSBtb2RfbWVtX3R5cGUgdHlwZSkNCj4g
+ICANCj4gICBzdGF0aWMgdm9pZCBmcmVlX21vZF9tZW0oc3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAg
+IHsNCj4gLQkvKiBmcmVlIHRoZSBtZW1vcnkgaW4gdGhlIHJpZ2h0IG9yZGVyIHRvIGF2b2lkIHVz
+ZS1hZnRlci1mcmVlICovDQo+IC0Jc3RhdGljIGVudW0gbW9kX21lbV90eXBlIG1vZF9tZW1fZnJl
+ZV9vcmRlcltNT0RfTUVNX05VTV9UWVBFU10gPSB7DQo+IC0JCS8qIGZpcnN0IGZyZWUgaW5pdCBz
+ZWN0aW9ucyAqLw0KPiAtCQlNT0RfSU5JVF9URVhULA0KPiAtCQlNT0RfSU5JVF9EQVRBLA0KPiAt
+CQlNT0RfSU5JVF9ST0RBVEEsDQo+IC0NCj4gLQkJLyogdGhlbiBjb3JlIHNlY3Rpb25zLCBleGNl
+cHQgcncgZGF0YSAqLw0KPiAtCQlNT0RfVEVYVCwNCj4gLQkJTU9EX1JPREFUQSwNCj4gLQkJTU9E
+X1JPX0FGVEVSX0lOSVQsDQo+IC0NCj4gLQkJLyogcncgZGF0YSBuZWVkIHRvIGJlIGZyZWVkIGxh
+c3QsIGFzIGl0IGhvc3RzIG1vZCAqLw0KPiAtCQlNT0RfREFUQSwNCj4gLQl9Ow0KPiAtCWludCBp
+Ow0KPiAtDQo+IC0JQlVJTERfQlVHX09OKEFSUkFZX1NJWkUobW9kX21lbV9mcmVlX29yZGVyKSAh
+PSBNT0RfTUVNX05VTV9UWVBFUyk7DQo+IC0NCj4gLQlmb3IgKGkgPSAwOyBpIDwgTU9EX01FTV9O
+VU1fVFlQRVM7IGkrKykgew0KPiAtCQllbnVtIG1vZF9tZW1fdHlwZSB0eXBlID0gbW9kX21lbV9m
+cmVlX29yZGVyW2ldOw0KPiArCWZvcl9lYWNoX21vZF9tZW1fdHlwZSh0eXBlKSB7DQo+ICAgCQlz
+dHJ1Y3QgbW9kdWxlX21lbW9yeSAqbW9kX21lbSA9ICZtb2QtPm1lbVt0eXBlXTsNCj4gICANCj4g
+KwkJaWYgKHR5cGUgPT0gTU9EX0RBVEEpDQo+ICsJCQljb250aW51ZTsNCj4gKw0KPiAgIAkJLyog
+RnJlZSBsb2NrLWNsYXNzZXM7IHJlbGllcyBvbiB0aGUgcHJlY2VkaW5nIHN5bmNfcmN1KCkuICov
+DQo+ICAgCQlsb2NrZGVwX2ZyZWVfa2V5X3JhbmdlKG1vZF9tZW0tPmJhc2UsIG1vZF9tZW0tPnNp
+emUpOw0KPiAgIAkJaWYgKG1vZF9tZW0tPnNpemUpDQo+ICAgCQkJbW9kdWxlX21lbW9yeV9mcmVl
+KG1vZF9tZW0tPmJhc2UsIHR5cGUpOw0KPiAgIAl9DQo+ICsNCj4gKwkvKiBNT0RfREFUQSBob3N0
+cyBtb2QsIHNvIGZyZWUgaXQgYXQgbGFzdCAqLw0KPiArCWxvY2tkZXBfZnJlZV9rZXlfcmFuZ2Uo
+bW9kLT5tZW1bTU9EX0RBVEFdLmJhc2UsIG1vZC0+bWVtW01PRF9EQVRBXS5zaXplKTsNCj4gKwlt
+b2R1bGVfbWVtb3J5X2ZyZWUobW9kLT5tZW1bTU9EX0RBVEFdLmJhc2UsIE1PRF9EQVRBKTsNCj4g
+ICB9DQo+ICAgDQo+ICAgLyogRnJlZSBhIG1vZHVsZSwgcmVtb3ZlIGZyb20gbGlzdHMsIGV0Yy4g
+Ki8NCj4gQEAgLTIyMTEsOCArMjE4Myw3IEBAIHN0YXRpYyBpbnQgbW92ZV9tb2R1bGUoc3RydWN0
+IG1vZHVsZSAqbW9kLCBzdHJ1Y3QgbG9hZF9pbmZvICppbmZvKQ0KPiAgIAkJaWYgKCEoc2hkci0+
+c2hfZmxhZ3MgJiBTSEZfQUxMT0MpKQ0KPiAgIAkJCWNvbnRpbnVlOw0KPiAgIA0KPiAtCQlkZXN0
+ID0gbW9kLT5tZW1bdHlwZV0uYmFzZSArDQo+IC0JCQkoc2hkci0+c2hfZW50c2l6ZSAmIFNIX0VO
+VFNJWkVfT0ZGU0VUX01BU0spOw0KPiArCQlkZXN0ID0gbW9kLT5tZW1bdHlwZV0uYmFzZSArIChz
+aGRyLT5zaF9lbnRzaXplICYgU0hfRU5UU0laRV9PRkZTRVRfTUFTSyk7DQo+ICAgDQo+ICAgCQlp
+ZiAoc2hkci0+c2hfdHlwZSAhPSBTSFRfTk9CSVRTKQ0KPiAgIAkJCW1lbWNweShkZXN0LCAodm9p
+ZCAqKXNoZHItPnNoX2FkZHIsIHNoZHItPnNoX3NpemUpOw0K
