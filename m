@@ -2,354 +2,228 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9176EC61DA4
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Feb 2023 15:29:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0053CC636D7
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Feb 2023 17:12:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjBIP3p (ORCPT
+        id S229723AbjBIRMz (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Feb 2023 10:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
+        Thu, 9 Feb 2023 12:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjBIP3o (ORCPT
+        with ESMTP id S229501AbjBIRMy (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:29:44 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6261238B55
-        for <linux-modules@vger.kernel.org>; Thu,  9 Feb 2023 07:29:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675956583; x=1707492583;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=H95pCwfPxDY2E6DR+gjzEmpI3ak2E5ZZZ7e9oIC49SI=;
-  b=CW/cVHgiRtN80FZBxtdm5L7xdh0mehxeWL7DRkH7Z7QDzM46jvlv2GfB
-   H90noPr69m5qItnc3ONyybyeH/OTdYyg6mui958/DerTOA1Jmw9KMtABm
-   JNmzjLAJRqTcB/0VorVLljZ8eyNtaZjysDDahiffYOKZ0EPTwRKTvWTnY
-   Ta6wuzAxn7JTjZBq4ZnvXel2EFEu9lQXRioZ4U9ibjzHVaOQrsqe5kOx0
-   l7V/ScZyID/jbukRexb/qnz9d7QedsP5hSm5Gmx3/aF8BmODQPzuLhSmg
-   tmjhUDjFFi/1spP9BqdhJF1fGR/F2z37wqs4N3yjSXVuAr0h36K3pIn9d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="328774584"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="328774584"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 07:25:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="913161925"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="913161925"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Feb 2023 07:25:26 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 9 Feb 2023 07:25:26 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 9 Feb 2023 07:25:26 -0800
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.43) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 9 Feb 2023 07:25:26 -0800
+        Thu, 9 Feb 2023 12:12:54 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5158A60B88;
+        Thu,  9 Feb 2023 09:12:52 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319Ghvea021899;
+        Thu, 9 Feb 2023 17:12:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=TSUhDtVL2yMSJukKj0p5wj3hEDAvoQ6hPux2ZqtfhN4=;
+ b=QqcJ7a3bRXWFMwj+y+0kJCqIZD3dY4n8BdnQYrLjZMbLFKnVOjwmD4gCMXQVykJi4miq
+ o10zdlN2cpuOgZDC7pgb1ZQ0vD6hxh5oQQAOE+dfdH/mUAWDELD/d8N6BOABWmQ0xXWG
+ Azc/FlURq+lUQmMtAEk1+CEzC6iusE/EuJVuqK5kgcY44eyP5CWJrFd/hAEIOkuFfKYD
+ ptB76YxYRRwnvBQWJq589Y6BwYWxKY8KMMPWGBpx0Y3fNsSDBlimQJfvfw+3n1aKfB9d
+ 83sYbflfX+RHCvuX3V/7EEsyhV/sbT0NodIpjck0vN/MD+R7qnJyYiFspeiCc/HdOcH3 NQ== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhe53ka7f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 09 Feb 2023 17:12:15 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 319GjGsf015194;
+        Thu, 9 Feb 2023 17:12:14 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3njrbdmen7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 09 Feb 2023 17:12:14 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FhVJRxzDajZGfo3+mpLjUjTluAeYhJH4G1A5JaGCQWBx25Wg9ylL2ZyO2/3/oD9O3wDKDevjJQ/Txtiaku9IthoPRNvlaB8tzzPkv5K+I0IIBYhJOmg6FMaljiouoLr5n9b5OADM+RxDa3aDiHn8ezolyn/rdM2J/ML6t82Xw+kwP75sf/UV+yw+E4FEG8AJXCV/dz8DZVmkEl+S2MpgPR7B1Xin1o+ae1J5bO4fWUpZM26rR9YDlL1JU91j9h/3kjSYT8r2TjQT7rShlhhohQHA2bjlUpvsX3ldiwOlgYic4a+t25HaA+a7WvnI9MrOe9Np/W2YW6wO6cut/DZ2HA==
+ b=lTUK6f3JxPWHktLYOVYsc28erEKUhK/94MhXQgUJZAwiE0UBCYBHsr0euLc/caUuMH73mTZUY/wYjQBL30WdlmB0Obs2dHund9icPcHnvleTeFP2cBQ/vs/ruDAwSBRZAuPkumgsMNDPaJd2Axlk9axOrtfVOWIvLC6BeFteWuSHcFNb/bip2b5icj/MpUocqsOhGqFuaLIiaCd/OGlDGysDVt7xeo4QVzqH3b1s9cmRIKbb9bgTFE39sb6zLsjFzXuNqTTIZ5F3IknXhSrIUdac47FwfmQoSIhpTD0JTZA2tWCl1znWkIi8y4y85NFnUHfcpMWf2Dc6HIjli4SunQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q4NERjphqedWChirnueLUQOx3UF7wqaC7hHfz5NGnLs=;
- b=djokjYFLCcYOWoU4ae2RzRjESYE9FrlrXt4DSB004OydxYrLZBgBWx4TV9MZjdKhQiXJNyWN1EH80A6/zkZmqzBR4aHAZMdK07BSAN9TGVbQluho6Xd4BS9YkQEc4WZayI/UUvsQ8Nu6qSD1c3Q0G9iKx7ITxY12A1ZGtI9FRM55gnkALzuCksqIJmuUfEHtPnQD3rUiCbaYeoQFdkrX82Xv3UXxBCPpW2Skq5OmpYYEx0Dh8bRu7arWvkQ47LWGmZ7daKZlrsT85wqu1NhKa920YHM3UtsdbLCaDBSxcmTo+ubW84OxKBX09b3F+PI3DZ9NO966a+DPfLe4hO/YdA==
+ bh=TSUhDtVL2yMSJukKj0p5wj3hEDAvoQ6hPux2ZqtfhN4=;
+ b=ir5qhJjZP4T+vYPL4DcgII9HjmM7xWiitYm0hPbNRln7ZIH5lNNv/DOJd6xwCs4rAKIYQHbfwIM835SG4dJ/fFo30Vd0YY8zddrEWhdlsZ/tEpNnKZPTweky9ywWJfj7Eh0I9O1QqRQBjPmtIX+he2a1kpjKrXh9EiLMH3lRozofghuUFuox40lwU21/P9cX6J+ANwF/8xPLgz85T/FfgbyJ9MkNCaP3b0jpTPb4252xTM+Wu9NI0MD1lO4vdX5SuTvxTnTpKrLjLUa0dmz19sONC+SjiHVESE06iQ1D5Z/K5M72M5ySqmgRwaIxv0b0RdbKmvLOnHzcDeOmwzpcSw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by SN7PR11MB7139.namprd11.prod.outlook.com (2603:10b6:806:2a2::14) with
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TSUhDtVL2yMSJukKj0p5wj3hEDAvoQ6hPux2ZqtfhN4=;
+ b=zrWIUh4ZFVprEI+phPTSBX1NeSncLlFsHKe/PPHit23UTtlTsbsoOcmtOxOPdBDozPr7evNY0bW2DnsCbLCFRfKBkOWDUmSaIkWa9ew5sZL8PSeCm3JyzOoTTRpVqPxTh2CpXgebg/OFCoqCloGRdWqHDDGJ4t9rCp6kbr+p4/0=
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
+ by PH0PR10MB5729.namprd10.prod.outlook.com (2603:10b6:510:146::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 9 Feb
- 2023 15:25:24 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::593:877e:dd33:5b7a]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::593:877e:dd33:5b7a%6]) with mapi id 15.20.6086.017; Thu, 9 Feb 2023
- 15:25:24 +0000
-Date:   Thu, 9 Feb 2023 07:25:21 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-CC:     <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH 3/4] testsuite: fixup KMOD_SYSCONFDIR_NOT_ETC tests
-Message-ID: <20230209152521.ppntkfsyxsfdxcg4@ldmartin-desk2.lan>
-X-Patchwork-Hint: comment
-References: <20230206140449.574631-1-emil.l.velikov@gmail.com>
- <20230206140449.574631-4-emil.l.velikov@gmail.com>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230206140449.574631-4-emil.l.velikov@gmail.com>
-X-ClientProxiedBy: MW4PR04CA0326.namprd04.prod.outlook.com
- (2603:10b6:303:82::31) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Thu, 9 Feb
+ 2023 17:12:12 +0000
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::b30f:e3aa:6ba:5c8d]) by DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::b30f:e3aa:6ba:5c8d%5]) with mapi id 15.20.6086.019; Thu, 9 Feb 2023
+ 17:12:12 +0000
+From:   Nick Alcock <nick.alcock@oracle.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, Allen Webb <allenwebb@google.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Jeff Mahoney <jeffm@suse.com>, Omar Sandoval <osandov@fb.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Quentin Perret <qperret@google.com>, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com, elena.zannoni@oracle.com
+Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
+ symbol->address lookup with /proc/kallmodsyms
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+        <Y8b8TOJzd/RZXR8z@bombadil.infradead.org>
+Emacs:  the answer to the world surplus of CPU cycles.
+Date:   Thu, 09 Feb 2023 16:54:23 +0000
+In-Reply-To: <Y8b8TOJzd/RZXR8z@bombadil.infradead.org> (Luis Chamberlain's
+        message of "Tue, 17 Jan 2023 11:51:40 -0800")
+Message-ID: <87r0uy3hkw.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P265CA0093.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2bc::18) To DS0PR10MB6798.namprd10.prod.outlook.com
+ (2603:10b6:8:13c::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SN7PR11MB7139:EE_
-X-MS-Office365-Filtering-Correlation-Id: 37e1c4e1-2f93-4085-687e-08db0ab1dd04
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|PH0PR10MB5729:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9235215f-9e51-491b-1f50-08db0ac0c889
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mW9ALbSbst7lbiPlOvJLc76+Yvti0lwqZ0fOsHXWe4/J8aHyU6vGOdDVwUsvENiqXYvQVwWnUFABjSVacew/TwdjOfIKxYfOHDx35nq0NKv6DBNHFJ58f9jnlVxwejIkVap4/OHskizbBPHW5roUOCpve3d6OlKFg3dhxldF8it6mPfMIHGYb/fmd7iviDypWc2nRyjrog3JPTBqzuqU4y5zyzyv3hLJ03TPCCwsPH8z5edQOF3Pk3dIZErshIae1oZ9GW5uq/S6rvEsYQTWcrsyB5riCY1SoIrvjL2iCBJcme/Vx/TTY6M25plsjWPu7lYSL0QQk32wa3U0c39T8GwRvsco3L0l7vUjQY+ikNF8Ja9bDWAfKdVrxjqI9Wp0ca31OVbuXY+GKpFNx11NngpviTMSs5o/mzq8a+OmDxtmqExvCLRGeZJVEpIsN8HTjgRlJ5ZWsxRugohFJ6eJCSf+OqZjXm3nYaSn84s0CgHG27M8/5jBy4JB3axxOTqb6TBbafK+CMXY3wpV0Q5QErqLimp41ZxX7vaVjWUIKqkY1Qbs3yjbx5luft/6Vw7MkWBYh23Obs8srNU3El+l6KaA6oNLYfsWidgXeJzMLUrhvez7WnCtEJHuA2dZ5VFeK4cnBM4JR0u2Ej38QsK9ZA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(39860400002)(396003)(376002)(366004)(451199018)(38100700002)(82960400001)(4326008)(41300700001)(26005)(186003)(6916009)(8936002)(8676002)(66476007)(6506007)(66946007)(66556008)(1076003)(5660300002)(36756003)(9686003)(316002)(86362001)(6666004)(6512007)(478600001)(6486002)(2906002)(83380400001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 5L0Wb6CmhQfYM1N+zMsJvC0W2CUJrNFX6otwrp9K4shjpedWvjXSUmIqdjk9k++cFrMqIJJmduLK1RPkqjzPRovwODrssP0Yg4WihsDYqRvCGui2085vF0cSkN/pAWk6Nw1s8UrYJKqBgpg9u+gFuauSs2Npj0US9dWGFTOi1bzHpIO8nimOfsZSBLbb4CwtH45U9+zXXcK8kMST6QUsEB9GGS635V8d3Uaahq4K50ROGurHDRmgbjC2M2IpH1e17ToxKhlYeecMGOA2YOQWmGx/VCAwq2Q5IbBEMGGp0e1ZUeHWPb4RWwyCmFLBsWN/DOB9C/U3mDjvKkeR0/F3aT7CuxiMv9Wcafth5naFncY/91A8n9wVc51GCSxaZHJKsc9mb3d8aMuEEWBMp5MOVK81UHEDb2csMvxQavOrvbF0Vn5T786pPkZWafIcurCQsPlOrG5sfM0kAFUf4iFj+0m8mtMHxgPbRQNeUwZwRn5sdPEYAtQg9pn4rN9VPSP1+ekZrUATdjsHzyV5ix0Cg19G06vZ1kWasVoFnCOqU4KIUgvKk5EIvp7JcHeYb3Tpb1VdWAPb/9C3VDeMi1RLqhH25EObX3Pv3UKeu5aJ8d43AuhKER13ufumRI2I+47beMf17SsjwdXFHzq/hGY0JQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(39860400002)(366004)(346002)(376002)(396003)(451199018)(107886003)(6666004)(2906002)(38100700002)(6506007)(6486002)(186003)(26005)(9686003)(478600001)(6512007)(44832011)(5660300002)(7416002)(8936002)(316002)(41300700001)(86362001)(83380400001)(54906003)(6916009)(66946007)(4326008)(8676002)(66476007)(66556008)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nnSxCT589gi4sNbbXL3M5zCpH5BhwbPZyFueHgoZqO6a7b44OJhjpln6srsr?=
- =?us-ascii?Q?8uUJTNRH+TN0Jwd2wQ4QxGrMUConvH6namwOjEb6xGrvB5ant62QHUWpy2hP?=
- =?us-ascii?Q?a9VAPKuKWfFdJfQQYdcAf1fsZzUtsUN5Ipp6KnlO+5Jl4AzX/jyKvzLkujxU?=
- =?us-ascii?Q?QERGUcWzvXelzfMCHM+fC3LYknZydNpDtM3ABpFIu79NuYT6Gu1CJ5+UnWDD?=
- =?us-ascii?Q?gnYSCT/ZIEWZyv+Vs+DwLq/JIiiDRUMrynrKCU1P+MMxTidOiCypm/n7Dbtu?=
- =?us-ascii?Q?s1DBRLrZsvFhHZjNab9NzRwmQwZF9GiOgxGMCaufNuWMEkbs+ajobR8dL9gF?=
- =?us-ascii?Q?TQTA82+2cnxA1ebmu5Se+0XzAm7ijcyYtxoktoxI2W0JFJyVafZ16NhwMVw1?=
- =?us-ascii?Q?AJCkub6VPgwkz7WOm3bN06GpwU1qqk3/OxdDZd17inDWFgTGkGYzMemAyc/q?=
- =?us-ascii?Q?YQZHFNNk0mYfuQ8tcignVCPqZtw4TkX2PnHZjuvpntYXkAjj//P78982kzUz?=
- =?us-ascii?Q?osMWzFgQRhQbkHi9yciXHRaq3ImQRqimOxksOhVeSccDoLiwszBsV8hKxfME?=
- =?us-ascii?Q?jfqCQRCi1F6NlCU4/0BwahM4hlflg/QZncRTZkDHuyc+LUdWWE+XfHAQneEz?=
- =?us-ascii?Q?JqChvvPYFdRVbovXCiQIi3A7XJnjZV+kuKEMjPd7FcwbLnjbptT3+bX0Ag9r?=
- =?us-ascii?Q?Ry+8Z9xDStpC9dTbtujwGh722gwwgGplyXzYaj73lzli13htBc6Lrx77Bmf2?=
- =?us-ascii?Q?aPnSZmGMZyt30qvBLA34ueVrItczHQVO4Jg8XDwrKCFuCIxTSVJ7dynrxduS?=
- =?us-ascii?Q?gAV2c4hgGHrf4k5oxjPmG5WCvZPEz/IJAoghzGy7rtpastj2r2HzvPfq0BXA?=
- =?us-ascii?Q?+QjB//BgLEVDm51SbAG4Zy53VsOu0MVfjHS2s2Te+zU1VYIxTUTvKSic1UPO?=
- =?us-ascii?Q?jQA3/CgRwpyaXbyniA8M6l98GG/65AGs2K1HJr4SP6n4tY5bFk7YZNb85t87?=
- =?us-ascii?Q?aC8Ije84AndWHK5TikCgqKbf39i+2ww9uO21gvEMvt9iKwIGgxuraAF0yNVx?=
- =?us-ascii?Q?GNIPlMTfuToe/5JVv31UgF+9qvIqqCTPLjfMO5HarhpWY6mWmZScE3w/+DDz?=
- =?us-ascii?Q?KVZcn3Z7Qizq7gLRYBcqZ8JH+XKAl/q0wCmXCUhy5ZnAIFgELkPbdkAMyoWr?=
- =?us-ascii?Q?wwknXEjAi4SLTWWfZNN8WT561P+xePxhal1TUthVwP7QAWqiaafDOCgJr1PC?=
- =?us-ascii?Q?G9PwmwQFnau62IB1zej1yoz75POYlUhgyIpT+xz9o8g79iPm4MQmouuVfRUj?=
- =?us-ascii?Q?LWjD5ongkdvpLVIdB62OyZ3ud4SJrQxlYeWEHsZAMhwvjLwzI3rDxzRi/XV2?=
- =?us-ascii?Q?/cKshNEzSgQNmCPLzdOXkc17Qv0wZnFeYLL9hJ3wAvFIXhz3x+prwmGHSrZe?=
- =?us-ascii?Q?GwPcnlwpbOtwzo9IfYRfylpooIu99u/9FlxxabIANxpEgPm0SF6h1MnprDU9?=
- =?us-ascii?Q?a6uAI38C2a4hYReVd6q/QCIDJP2dO8tLKFm2mh3BipslUmlh5vy9VlC1mWkR?=
- =?us-ascii?Q?DU+uL7oIssRWMeZebFkpHSKvjruiEGb22IPzYI30ocotXVnwzY2vRkRdJDSd?=
- =?us-ascii?Q?sw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37e1c4e1-2f93-4085-687e-08db0ab1dd04
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Yr3Q/HnEh9/SaVSq1HwQRYx4AlR/6Pzgne7KIc8H8A3QQ52M0GfFU0WfZo3X?=
+ =?us-ascii?Q?9NRDCTZXC3PehTYmPA+QDO7qUmgZ8QRMAu6MOY5e6EI56NmHvm+139ZWBtKh?=
+ =?us-ascii?Q?AOv1Oo6sQIi+07mSj0YOWsEtSpdEuCy5J63ZwhhgwBssy9OiwX/KqOKVAb43?=
+ =?us-ascii?Q?0gMgORp8gyzfFK2oVjuEMTdK9gWsKOEZj5aXNxgxIPx7jYZJSLm7FFKvLaFV?=
+ =?us-ascii?Q?Vufx8rCs+BZUPgZcfvJoQV32c5QHHoutBIh+DJN8ff3cVVSpJ3jPIerxOdBO?=
+ =?us-ascii?Q?nnSe9Teblv1UT7GuT9g6qHAe6HJQMKAbWcy2blT9iYEexyEX55mI92eY4I47?=
+ =?us-ascii?Q?HJe6lpXHb4vy/abO8qPOdYvvhiWl+8Y43LPdbn73X0+pnbs8AWpJ57n4vWMc?=
+ =?us-ascii?Q?ZoBhszl+r0JWYHiVhjJ8XNZ6VnVJJZKBBc1kLdrGsRVo9iXUs5OuO9yusElo?=
+ =?us-ascii?Q?JajQzraMBZF8uMlkFLg0LAOSVXbWVlmE3HOSBNSAiAhBEO6Rr+fERaZ+ANiC?=
+ =?us-ascii?Q?jDiuiCCqiHUnGChtVBrhGZjdT/2KO3mw80AYnLHBHXNuYPBZg0z4lhK5povN?=
+ =?us-ascii?Q?Lz5MHjIqA+b290KljsSOBfFtzVKVEzALAGZsOx3cQT4Xlb7ucNm728UvDHWY?=
+ =?us-ascii?Q?NmW2bG082Ag0mS186o1XiaxjIh84bxOEKF8S5GcE5JNTkuQmbRlbSbL5Mxqk?=
+ =?us-ascii?Q?ha35JJHI5FWf0sdw5CwhgTk8gHWxPJdy5OoK3Lm+3Vlvwznkxnv92l9TZ9uu?=
+ =?us-ascii?Q?lmGje6QeDCoDLh0IW9N+MK8LG66RazzeDUX2WnKgfsPUsmH65KIqZTxKjbMG?=
+ =?us-ascii?Q?TC94OIlsGV7LQzzXJQ31XsHEsGuk125nt+z/HL/HZPl2tHnT8RzM3/HF9Z0b?=
+ =?us-ascii?Q?RlHy/b9fSSKy4h4uezWIwjIJS0jap6ywULdfbUXwqx7XgVnWf1WCgkVk6qPk?=
+ =?us-ascii?Q?M3hh9eIhDXYFt/cEAu0JiRcX0zsKet2UUOrCX3gDDOahCc44w7PfZesdbBpp?=
+ =?us-ascii?Q?F3nUjfl+IIxwfKt20X0xZT5uXakx5KFCXh6ifaC3JeFr1Lp+0XohnY1jGpV/?=
+ =?us-ascii?Q?CynDVooYy7Mr90np/CQv6obt+IBPz6ODDOAmZV2ACuA6t15g8RZJ94X+Ks6J?=
+ =?us-ascii?Q?Obl5ZBTyXDm+5pFF9423KcSmwYPP7TLU9CTYzKX9eotd44JXFcfY6Gh8JMaK?=
+ =?us-ascii?Q?XMvtlqF3kYXroxTT6KOAH1Ttd7D6mLEz+MthRZ8sQIzsDDQ2tpENIglT3TvB?=
+ =?us-ascii?Q?tVovyYNTV6dA11F/xxUefOdGy+COnTrea+bwrd/h8mVsd/69IUzoB4NplzLr?=
+ =?us-ascii?Q?kInbU+PlPbwAES+rICBaAY0odF4O+ydnW9MxeWvUy78KNAeVDWE2ng6sW2AK?=
+ =?us-ascii?Q?dVliilXIrOf/JA0NWb8PzE95egaHMU9IHEYkI4XvfFbRxraJBg+mXL+U57ZY?=
+ =?us-ascii?Q?IO83TraHnzE8xAXgbzOiDu3tkF7bj1qFEcI1WJkuzGZZ/bL2xjyTpd+/1bsw?=
+ =?us-ascii?Q?T+HKskPkQNwq/5tq05JAg3CAr4OtYlkETiQM2TesednMvG8FjA3RpRqWYBmq?=
+ =?us-ascii?Q?aBOfNNv2OU8cmpXgwxBA89gBqSSc8QdM9WY0Tk47a0Ah3QvkWYhWuv63GfBm?=
+ =?us-ascii?Q?Zw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?uRztMohRZRRzxWD+wUbkjAuKxoE4Odjl3YuZ7/7p8z4AV++S8JlJ6KEGrvLW?=
+ =?us-ascii?Q?2F3WysHGuR0LNgIpKzfaX1xqcrJ+WXXXCOL91Do0e77juppRRZMDGiP8tvXv?=
+ =?us-ascii?Q?r354mZkaJg58Nbq5e4k0eI+zMz2eTBX0qoKEhTw0FgLtI+dcOrahGIXm/BEH?=
+ =?us-ascii?Q?UVE+LWwMHGBF3owhQ3rp11eu4RFawRUyVxgg+cBDKohgPVsmPDYZfpN+vuZu?=
+ =?us-ascii?Q?7gbGyswobeAtApuh/fWwENQS4in2MbuhgChgg2nJmCutlJlMo5A/CN0vQ15c?=
+ =?us-ascii?Q?5mShIwKMmuagff4qCDq5P2EJ0/2BtVMr6LzEn2XOu3reYE18hHEuf7OJrf+X?=
+ =?us-ascii?Q?982RYROMi9HJYhBNbdGvZGA5JuQRGNScquVdDuj756QLMPYQq9Axlc17Cd/K?=
+ =?us-ascii?Q?bLL1wAKytGuJ3QExTOk1rkOJBJIDoXGwLtSjklklMK5hBVq+m70cp2UQT+ST?=
+ =?us-ascii?Q?H19YXVcJPDCaMAu9NXp2ada19w873u+GtonqyVR/+PwAvCQ9ACR3BEkmEUwQ?=
+ =?us-ascii?Q?Di/oBpwEV9RGFdmGnw9XXk2wrXv9xAxVAoRFcu2mBTYzQq47uNecwZe10be4?=
+ =?us-ascii?Q?gS4HAdYYZ9S+JGcyu/CgxyLcX/YQgl9iOpoINf7As6Lnv1JUDTnEB/eUrdQo?=
+ =?us-ascii?Q?pRGnFhfO20kR8j4/NvrNHlLrjzuHBQq7eYbA/1jSsovImjUEkTRK1x1FvzW3?=
+ =?us-ascii?Q?laQbDC9lPhuz0LDi6FUtS3ULAPjhqNAK/BP66/iGRyFZW9B25FkGP7b5YTHo?=
+ =?us-ascii?Q?50nUTciyrqiqUo/VzZirHjADn2xJs4esEK+MaQ48it1xi7Zec0fXLRnRl6fL?=
+ =?us-ascii?Q?yvAxS5e/Jx7pHE8f2iu4V9VjKteaiKRHdrCAd2WMgIZfP2ZesZqESlFPbIOW?=
+ =?us-ascii?Q?uajFf+kl4rElySwhiLIBYwEfVCyhAwhj07nUbMP7fGpCmpxEGfPrfICYXj9l?=
+ =?us-ascii?Q?wX+NipXLMCJ8LN+u2s/nXcAJSs9lCVIrDPsMHLfQ2IynkMLJ5dtoI/z48qR3?=
+ =?us-ascii?Q?y9ejGZLJ+ciRT9+vlNvUoh69zf+wC0fSMhYIaDSAPMTjyME=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9235215f-9e51-491b-1f50-08db0ac0c889
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 15:25:23.9411
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 17:12:12.0610
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: q4MQ7t2MSs0O+L1O2I4voro9AfpRt90sV4lhK4sQeMPcsikzX7GfiCco3+DU+9YNuQaAA2t50A75Xm+rFjvE+koAmqo9qv+KF1Z/AzRi6ug=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7139
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-UserPrincipalName: mNYedBfgPkFMh5TpyDx15AT1EG1qswkcqIMCXnfgykwrxc1WXMOdekPBiug6rhPimCMIc2p8eiZ6jR0vSOiR2A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5729
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-09_13,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302090163
+X-Proofpoint-ORIG-GUID: uLrX4aO532ZEqDlq3Yv4lOov5GC-m_xe
+X-Proofpoint-GUID: uLrX4aO532ZEqDlq3Yv4lOov5GC-m_xe
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Feb 06, 2023 at 02:04:48PM +0000, Emil Velikov wrote:
->From: Emil Velikov <emil.velikov@collabora.com>
->
->Currently some tests lack a config segment in `.../etc`, yet they're
->skipped when KMOD_SYSCONFDIR_NOT_ETC is set. Inversely - some tests have
->a config snippet, yet are not skipped.
->
->Go through the lot and fix them all. While there make sure we use tab
->for code indentation, as per the style guide.
->
->Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
+On 17 Jan 2023, Luis Chamberlain uttered the following:
+[...]
+> And please split out the driver conversions to remove module license per
+> subsystem, and a new thread. The justification should be simple, commit
+> 8b41fc4454e36fbf ("kbuild: create modules.builtin without Makefile.modbuiltin or
+> tristate.conf") now relies on the module license tag to do simplify the
+> build system. And as part of follow up work to that patch we want to
+> correct false positives for modules.builtin where userspace may try to
+> load a module which is built-in but such module can never be built in.
+> You can add Suggested-by me to that set.
 
-$ cat testsuite/test-depmod.log
-depmod: WARNING: could not open modules.order at /lib/modules/4.4.4: No such file or directory
-depmod: WARNING: could not open modules.order at /lib/modules/4.4.4: No such file or directory
-depmod: WARNING: could not open modules.builtin at /lib/modules/4.4.4: No such file or directory
-depmod: WARNING: could not open modules.builtin.modinfo at /lib/modules/4.4.4: No such file or directory
-depmod: WARNING: could not open modules.builtin at /lib/modules/4.4.4: No such file or directory
-depmod: WARNING: could not open modules.builtin.modinfo at /lib/modules/4.4.4: No such file or directory
-depmod: WARNING: could not open modules.order at /lib/modules/4.4.4: No such file or directory
-TESTSUITE: running depmod_search_order_override, in forked context
-TESTSUITE: SKIPPED: depmod_search_order_override
-TESTSUITE: ------
-TESTSUITE: running depmod_search_order_external_last, in forked context
-TESTSUITE: SKIPPED: depmod_search_order_external_last
-TESTSUITE: ------
-TESTSUITE: running depmod_search_order_external_first, in forked context
-TESTSUITE: SKIPPED: depmod_search_order_external_first
-TESTSUITE: ------
-TESTSUITE: running depmod_detect_loop, in forked context
-TESTSUITE: 'depmod_detect_loop' [127296] exited with return code 0
-TESTSUITE: ERR: UNEXPECTED PASS: exit with 0: depmod_detect_loop
-TESTSUITE: ------
-depmod: WARNING: could not open modules.builtin at /lib/modules/4.4.4: No such file or directory
-depmod: WARNING: could not open modules.builtin.modinfo at /lib/modules/4.4.4: No such file or directory
-FAIL testsuite/test-depmod (exit status: 1)
+I understand what you are saying, and I have been working on this.
 
-I needed this:
-----8<-----
-diff --git a/testsuite/test-depmod.c b/testsuite/test-depmod.c
-index 2bc2e90..2d55b5d 100644
---- a/testsuite/test-depmod.c
-+++ b/testsuite/test-depmod.c
-@@ -159,6 +159,9 @@ static noreturn int depmod_detect_loop(const struct test *t)
-  	exit(EXIT_FAILURE);
-  }
-  DEFINE_TEST(depmod_detect_loop,
-+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
-+	.skip = true,
-+#endif
-  	.description = "check if depmod detects module loops correctly",
-  	.config = {
-  		[TC_UNAME_R] = MODULES_UNAME,
-----8<-----
+I am going to split this whole series into:
 
+1. A series of patches (123 of them at present) Cc:ed to subsystem
+maintainers as well as you, to comment out the MODULE_LICENSE usage.
+These patches will have Suggested-by you. This series is rebased against
+the latest modules-next and revalidated, and is ready to be mailed out;
+will do so shortly.
 
+2. A series of patches adding your new modules.builtin.objs and
+kallmodsyms (with revised cover letter, etc, as you request). As part of
+the second series I will make sure to involve the tracing maintainers
+more and provide an example of usage with perf and hopefully ftrace.
+(Note that the name "kallmodsym" is not something I am wedded to. We can
+find a better one, if we can come up with one: it's more about
+unambiguous symbol resolution now, and maximizing the number of module
+names is largely a mechanism to accomplish that, so maybe /proc/ksym?)
 
-Lucas De Marchi
+This second series is not going out quite yet: I'm working on the perf
+support now.
 
->---
->NOTE: this is based off my earlier patch adding outdir. If this patch is
->applied prior the depmod_modules_outdir hunk should be dropped.
->---
-> testsuite/test-blacklist.c  |  2 +-
-> testsuite/test-depmod.c     | 22 +++++++++++-----------
-> testsuite/test-modprobe.c   |  7 +++++--
-> testsuite/test-new-module.c |  3 +++
-> 4 files changed, 20 insertions(+), 14 deletions(-)
->
->diff --git a/testsuite/test-blacklist.c b/testsuite/test-blacklist.c
->index d03eedb..6531fa2 100644
->--- a/testsuite/test-blacklist.c
->+++ b/testsuite/test-blacklist.c
->@@ -96,7 +96,7 @@ fail_lookup:
->
-> DEFINE_TEST(blacklist_1,
-> #if defined(KMOD_SYSCONFDIR_NOT_ETC)
->-        .skip = true,
->+	.skip = true,
-> #endif
-> 	.description = "check if modules are correctly blacklisted",
-> 	.config = {
->diff --git a/testsuite/test-depmod.c b/testsuite/test-depmod.c
->index 6465230..010f259 100644
->--- a/testsuite/test-depmod.c
->+++ b/testsuite/test-depmod.c
->@@ -41,9 +41,6 @@ static noreturn int depmod_modules_order_for_compressed(const struct test *t)
-> }
->
-> DEFINE_TEST(depmod_modules_order_for_compressed,
->-#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->-        .skip = true,
->-#endif
-> 	.description = "check if depmod let aliases in right order when using compressed modules",
-> 	.config = {
-> 		[TC_UNAME_R] = MODULES_ORDER_UNAME,
->@@ -75,9 +72,6 @@ static noreturn int depmod_modules_outdir(const struct test *t)
-> }
->
-> DEFINE_TEST(depmod_modules_outdir,
->-#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->-        .skip = true,
->-#endif
-> 	.description = "check if depmod honours the outdir option",
-> 	.config = {
-> 		[TC_UNAME_R] = MODULES_OUTDIR_UNAME,
->@@ -104,6 +98,9 @@ static noreturn int depmod_search_order_simple(const struct test *t)
-> 	exit(EXIT_FAILURE);
-> }
-> DEFINE_TEST(depmod_search_order_simple,
->+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->+	.skip = true,
->+#endif
-> 	.description = "check if depmod honor search order in config",
-> 	.config = {
-> 		[TC_UNAME_R] = "4.4.4",
->@@ -130,6 +127,9 @@ static noreturn int depmod_search_order_same_prefix(const struct test *t)
-> 	exit(EXIT_FAILURE);
-> }
-> DEFINE_TEST(depmod_search_order_same_prefix,
->+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->+	.skip = true,
->+#endif
-> 	.description = "check if depmod honor search order in config with same prefix",
-> 	.config = {
-> 		[TC_UNAME_R] = "4.4.4",
->@@ -156,9 +156,6 @@ static noreturn int depmod_detect_loop(const struct test *t)
-> 	exit(EXIT_FAILURE);
-> }
-> DEFINE_TEST(depmod_detect_loop,
->-#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->-        .skip = true,
->-#endif
-> 	.description = "check if depmod detects module loops correctly",
-> 	.config = {
-> 		[TC_UNAME_R] = "4.4.4",
->@@ -183,7 +180,7 @@ static noreturn int depmod_search_order_external_first(const struct test *t)
-> }
-> DEFINE_TEST(depmod_search_order_external_first,
-> #if defined(KMOD_SYSCONFDIR_NOT_ETC)
->-        .skip = true,
->+	.skip = true,
-> #endif
-> 	.description = "check if depmod honor external keyword with higher priority",
-> 	.config = {
->@@ -211,6 +208,9 @@ static noreturn int depmod_search_order_external_last(const struct test *t)
-> 	exit(EXIT_FAILURE);
-> }
-> DEFINE_TEST(depmod_search_order_external_last,
->+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->+	.skip = true,
->+#endif
-> 	.description = "check if depmod honor external keyword with lower priority",
-> 	.config = {
-> 		[TC_UNAME_R] = "4.4.4",
->@@ -238,7 +238,7 @@ static noreturn int depmod_search_order_override(const struct test *t)
-> }
-> DEFINE_TEST(depmod_search_order_override,
-> #if defined(KMOD_SYSCONFDIR_NOT_ETC)
->-        .skip = true,
->+	.skip = true,
-> #endif
-> 	.description = "check if depmod honor override keyword",
-> 	.config = {
->diff --git a/testsuite/test-modprobe.c b/testsuite/test-modprobe.c
->index 3ddb976..6b763d8 100644
->--- a/testsuite/test-modprobe.c
->+++ b/testsuite/test-modprobe.c
->@@ -84,7 +84,7 @@ static noreturn int modprobe_show_alias_to_none(const struct test *t)
-> }
-> DEFINE_TEST(modprobe_show_alias_to_none,
-> #if defined(KMOD_SYSCONFDIR_NOT_ETC)
->-        .skip = true,
->+	.skip = true,
-> #endif
-> 	.description = "check if modprobe --show-depends doesn't explode with an alias to nothing",
-> 	.config = {
->@@ -176,7 +176,7 @@ static noreturn int modprobe_softdep_loop(const struct test *t)
-> }
-> DEFINE_TEST(modprobe_softdep_loop,
-> #if defined(KMOD_SYSCONFDIR_NOT_ETC)
->-        .skip = true,
->+	.skip = true,
-> #endif
-> 	.description = "check if modprobe breaks softdep loop",
-> 	.config = {
->@@ -200,6 +200,9 @@ static noreturn int modprobe_install_cmd_loop(const struct test *t)
-> 	exit(EXIT_FAILURE);
-> }
-> DEFINE_TEST(modprobe_install_cmd_loop,
->+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->+	.skip = true,
->+#endif
-> 	.description = "check if modprobe breaks install-commands loop",
-> 	.config = {
-> 		[TC_UNAME_R] = "4.4.4",
->diff --git a/testsuite/test-new-module.c b/testsuite/test-new-module.c
->index 9872b78..dcb9934 100644
->--- a/testsuite/test-new-module.c
->+++ b/testsuite/test-new-module.c
->@@ -106,6 +106,9 @@ static int from_alias(const struct test *t)
-> 	return EXIT_SUCCESS;
-> }
-> DEFINE_TEST(from_alias,
->+#if defined(KMOD_SYSCONFDIR_NOT_ETC)
->+	.skip = true,
->+#endif
-> 	.description = "check if aliases are parsed correctly",
-> 	.config = {
-> 		[TC_ROOTFS] = TESTSUITE_ROOTFS "test-new-module/from_alias/",
->-- 
->2.39.1
->
+> The same applies to your other Makefile patch (except to the
+> Suggested-by as I don't understand the goal there yet), I don't know what it is
+> trying to do, but it should be a separate effort. You can feel free to
+> Cc me on that too.
+
+I have decided not to submit the tristate checker at this time, as it is
+not essential and it made things too confused. The Makefile patch you
+refer to and the tristate.conf reintroduction were only needed for the
+checker, so are dropped, with nothing more than a reference to a branch
+containing the checker in the kallmodsyms cover letter. (The checker
+does need periodic rerunning to make sure that spurious MODULE_LICENSE
+usages don't creep back in -- reintroductions seem to be running at
+about one a month -- but that's easy to do ad-hoc and it doesn't need to
+be upstream for that.)
+
+> And lastly users. This cover letter should reflect clearly who are the
+> new users who are dying for this feature, Cc them and hope to have them be
+> actively engaged during review.
+
+I do hope that adding some proof-of-concept usage of this in perf and
+ftrace (emitting symbol names formatted like 'symbol@objname:module'
+where possible rather than just unadorned symbols) might show the perf
+and ftrace maintainers that this is not useless.
+
+Thanks for your patience and feedback.
