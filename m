@@ -2,89 +2,80 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4211C636D4
-	for <linux-modules@archiver.kernel.org>; Mon, 13 Feb 2023 19:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0817EC636D4
+	for <linux-modules@archiver.kernel.org>; Mon, 13 Feb 2023 22:57:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjBMTYL (ORCPT
+        id S230232AbjBMW5a (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 13 Feb 2023 14:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        Mon, 13 Feb 2023 17:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjBMTYK (ORCPT
+        with ESMTP id S229558AbjBMW52 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:24:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83DD20069;
-        Mon, 13 Feb 2023 11:24:00 -0800 (PST)
+        Mon, 13 Feb 2023 17:57:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B06A1DBB9;
+        Mon, 13 Feb 2023 14:57:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C78B6128D;
-        Mon, 13 Feb 2023 19:24:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E535EC433D2;
-        Mon, 13 Feb 2023 19:23:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24ACAB815DE;
+        Mon, 13 Feb 2023 22:57:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B84DFC433D2;
+        Mon, 13 Feb 2023 22:57:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676316239;
-        bh=CTSdoKNWKzxTWibhjYR8Qm7nmbkyRBxtlTLLuU1/FFk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pa1RVCe3GAt898JqU32CzMCwYqHhf1d10eRmGfBfJeq3gqxchYweQo2CMC0o0dtMP
-         hgEw4nae9wWqGH6ylurzbyfnly7TLBtJ9a+ttl2+bqKsAQd0AarDsaoXgfbqT3f+Q8
-         jdxh2LTeaOGkRCvXAHqBBNG66etha5szFJlWBj7Uxok2l72hsYNke3HQ2MGcytCcjm
-         Axe8GY+dF1B1cGxnQtz8qSgjujARGYZ0jxKNEkpADo9zrjVfLWyRC4Hb2RqXH4Wt2h
-         aXTOhc48WPSA9CcKRz9+9n3q8JBsWx5l8BmSBmIq+UsEwcB+RqZHFHlRcVH+1OQjYl
-         ozC4JJ9JI/xXg==
-Date:   Mon, 13 Feb 2023 21:23:55 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Nick Alcock <nick.alcock@oracle.com>,
-        Conor Dooley <conor@kernel.org>, mcgrof@kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 8/8] kbuild, PCI: microchip: comment out MODULE_LICENSE
- in non-modules
-Message-ID: <Y+qOS9fx9B3Y3gd6@unreal>
-References: <20230210164749.368998-1-nick.alcock@oracle.com>
- <20230210164749.368998-9-nick.alcock@oracle.com>
- <Y+aMh5e9bWaTphiZ@spud>
- <871qmx1fv5.fsf@esperi.org.uk>
- <Y+akw9VBjg9oZ7QV@spud>
- <Y+kx3fb2Lzlg+u5+@unreal>
- <87ilg5mq0r.fsf@meer.lwn.net>
+        s=k20201202; t=1676329044;
+        bh=6B74k2/9qoR7D5Y3uyBNWCUwY/n8BT4T+JeDx0KNIXE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=f3wYtIAg3DxNfUnDnm0X/pWYI0y83wxQTitkXRK6dqcedIMDfdNHPwCF4EEgfTdbU
+         KcEx7Lmqm31hk/JKTYTwXE0TjCDOZbX3WpvRAjD91UD1t9tP7aXQgkHKcUHiOLA2i9
+         8x+qC919a3RrSzB8/vbepPYd/xekMKpaD0KAzWYOFUnDcwV0wFd00arf3ywQP+M9ja
+         UKz0KsEcCyHJSbo3qwVjzxCN5qUnjnICshiBfwztBKADD3+u6nzFa0X/9Knhw6Jqy7
+         348KeZdLxIUtDsjIBiR5fkzMmN1yq9lFKal94PtmQZuzclAc1EgD9dcmdNEWIPBBIo
+         RNdHpPkyh8Mrw==
+Date:   Mon, 13 Feb 2023 16:57:23 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/8] kbuild, PCI: generic,versatile: comment out
+ MODULE_LICENSE in non-modules
+Message-ID: <20230213225723.GA2941414@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87ilg5mq0r.fsf@meer.lwn.net>
+In-Reply-To: <20230210164749.368998-2-nick.alcock@oracle.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Feb 13, 2023 at 10:30:44AM -0700, Jonathan Corbet wrote:
-> Leon Romanovsky <leon@kernel.org> writes:
+On Fri, Feb 10, 2023 at 04:47:42PM +0000, Nick Alcock wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
 > 
-> > It looks odd to me too. Please add SPDX tag in modules which don't have
-> > it already, instead of commenting code.
-> 
-> So I'm just a bystander here and should probably be ignored, but ...
-> 
-> From what I can see, Nick is attempting one of those cross-tree cleanups
-> that's painful enough to do on its own.  This request is asking him to
-> perform a different, unrelated, and potentially fraught cleanup that the
-> maintainers of the code in question have not yet managed to get around
-> to taking care of.  This will impede an already prolonged process and,
-> IMO, unnecessarily so.
-> 
-> Wouldn't it be better to let this work proceed while making a note
-> of the files still needing SPDX tags?
+> So comment out all uses of MODULE_LICENSE that are not in real modules
+> (the license declaration is left in as documentation).
 
-Please see a note from Nick, who said that these tags were already
-in-place for most of the files. If it is hard for him, he can skip
-adding new tags. However, the proposed solution is to comment code
-and leave dead code is not a right solution.
+Weird that all the patches are for drivers/pci/, but the cover letter
+didn't go to linux-pci@vger.kernel.org.
 
-Thanks
+  - Please drop "kbuild," from the subject; I don't think it's really
+    relevant.
 
-> 
-> I'll shut up now :)
-> 
-> Thanks,
-> 
-> jon
+  - Please follow the subject line convention for each file.  They're
+    mostly there after dropping "kbuild", but do capitalize the
+    sentence that follows the prefix.  The prefix should always be
+    "PCI/<driver-tag>: "
+
+  - Remove the MODULE_LICENSE instead of commenting it out.
+
+  - I think every file in drivers/pci that needs one already has SPDX.
+
+  - AFAICT, SPDX is the dispositive license and MODULE_LICENSE just
+    determines which interfaces are available to the module, so
+    dropping MODULE_LICENSE shouldn't be a problem as far as legal
+    issues.
