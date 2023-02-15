@@ -2,101 +2,92 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FD8EC636D4
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Feb 2023 16:47:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B8D2C636CC
+	for <linux-modules@archiver.kernel.org>; Wed, 15 Feb 2023 17:01:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjBOQrv (ORCPT
+        id S229870AbjBORBK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Feb 2023 11:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        Wed, 15 Feb 2023 12:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjBOQru (ORCPT
+        with ESMTP id S229946AbjBORBI (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Feb 2023 11:47:50 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C2C211FE
-        for <linux-modules@vger.kernel.org>; Wed, 15 Feb 2023 08:47:47 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso2030392wms.5
-        for <linux-modules@vger.kernel.org>; Wed, 15 Feb 2023 08:47:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fWHjfdnMXLnQeONF9Y7BIQMZus7HNyosrdlc0gUe7+g=;
-        b=J/jK7AjKWop+Rl0aFS17ZsocQqSdyG1w5Ph6rCrHVj4dfmwrZUj8WVXY9XDg7gZMrA
-         vQoxexjnBVZU3MSWcWeLbtkg2EZd+EK5hpBv70HKajGab90wUbTNbtZ4/GxnC+G+f+EG
-         zOl45XKkBDDTN2JXq1NTuwEWpb1h3RC5w+bug=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fWHjfdnMXLnQeONF9Y7BIQMZus7HNyosrdlc0gUe7+g=;
-        b=M8p/vksUWHllTKfaZU1lJAYjovNvkHdSNUqKDW8DFPZvkD0HU3FNDJZE/G8JL2g7K+
-         baIRSWskkBiKVuwdXXnZ/ZR1BCsj3mZUEzuSVFwDoEm428iTJlb/T676FLoZbgj+cG5T
-         zOYXiufxcwUJPNB26u4D+zz0/dR54qbfScJT9SoRPVTwTSgWod1y1kO8vTqFh45WkXWW
-         pTCm+23F5ufcYyhaiYtzmG9hKXT44+g6sES3ypGO3vhHVnSC/qhHUmcFx62dmDtSkvTx
-         zyqxLSKIJkMNMV+PYmYPbMq72oRwWk6Xd3gRplroCd0gLWI8xKM5zNgbz0TBGQw7mSxn
-         8Dow==
-X-Gm-Message-State: AO0yUKWHZvvayp7Z2N2EIDOEABvLV0Mq2yL6IltAu0GAw+EO5YbwN/sc
-        o5ziA/r4Ggfzz3erPZm8du6HEw==
-X-Google-Smtp-Source: AK7set+MohFiDvkgUEA4Wr16OZCzBJtedjE0Hptcz9oaS3aTwTVVgZk8Ofwc7gmlHvDYCR8plie/NA==
-X-Received: by 2002:a05:600c:4747:b0:3dc:4042:5c21 with SMTP id w7-20020a05600c474700b003dc40425c21mr2562744wmo.6.1676479666061;
-        Wed, 15 Feb 2023 08:47:46 -0800 (PST)
-Received: from localhost ([2620:10d:c092:500::4:270c])
-        by smtp.gmail.com with ESMTPSA id he8-20020a05600c540800b003e208cec49bsm566397wmb.3.2023.02.15.08.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 08:47:45 -0800 (PST)
-Date:   Wed, 15 Feb 2023 16:47:44 +0000
-From:   Chris Down <chris@chrisdown.name>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     mcgrof@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        llvm@lists.linux.dev, Abaci Robot <abaci@linux.alibaba.com>
+        Wed, 15 Feb 2023 12:01:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B563B303FB;
+        Wed, 15 Feb 2023 09:01:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6588FB8225F;
+        Wed, 15 Feb 2023 17:01:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F248C433D2;
+        Wed, 15 Feb 2023 17:01:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676480465;
+        bh=7NDzIefEbXiIJCEib3sr7gh8/H2KcWsCHwSr/TU1F/Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a4CMP6ci0CdBOLo61RbH7msCByorysRMQT3XacNFmZxBVNn13P0YBA55+Me8718LR
+         MjhlwFdtHhCSCp7P2mrAUoMjqq6+wFMMt+EB2LQ7rr7wo4PVq0YilbODEqJITiBV+z
+         zXdi5HOpF7mTI1DXK+QeTWSIr2HUVQx83rASNGuK1DdkLLO+6zcIxcxPvyEbX8puD3
+         cOvy9O5Yq4LdWQ1YMP4/CQ0KZgu16x4tgvy9hrUCS1xMr1JhO3SpJuWK1ZlmufGfNA
+         YghVak6aTAD9SSZG/BiZnKEvJKt+QCIzDhCXsRdFBOJha++g9k6AIZlgRHWyFwNHkR
+         N3Z4Ih9RVJPTA==
+Date:   Wed, 15 Feb 2023 10:01:02 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Chris Down <chris@chrisdown.name>
+Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, mcgrof@kernel.org,
+        ndesaulniers@google.com, trix@redhat.com,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev,
+        Abaci Robot <abaci@linux.alibaba.com>
 Subject: Re: [PATCH] module: Remove the unused function within
-Message-ID: <Y+0MsMomkcDBdjNI@chrisdown.name>
+Message-ID: <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X>
 References: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
+ <Y+0MsMomkcDBdjNI@chrisdown.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+In-Reply-To: <Y+0MsMomkcDBdjNI@chrisdown.name>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Jiapeng Chong writes:
->The function within is defined in the main.c file, but not called
->elsewhere, so remove this unused function.
+On Wed, Feb 15, 2023 at 04:47:44PM +0000, Chris Down wrote:
+> Jiapeng Chong writes:
+> > The function within is defined in the main.c file, but not called
+> > elsewhere, so remove this unused function.
+> 
+> Huh? It's used by __module_text_address(), no?
 
-Huh? It's used by __module_text_address(), no?
+Not after commit 2ece476a2346 ("module: replace module_layout with
+module_memory") in -next. This patch should have a fixes tag, even if
+the warning is currently hidden behind W=1.
 
->kernel/module/main.c:3007:19: warning: unused function 'within'.
->
->Reported-by: Abaci Robot <abaci@linux.alibaba.com>
->Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4035
->Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
->---
-> kernel/module/main.c | 5 -----
-> 1 file changed, 5 deletions(-)
->
->diff --git a/kernel/module/main.c b/kernel/module/main.c
->index c598f11e7016..062065568b40 100644
->--- a/kernel/module/main.c
->+++ b/kernel/module/main.c
->@@ -3004,11 +3004,6 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
-> 	return load_module(&info, uargs, flags);
-> }
->
->-static inline int within(unsigned long addr, void *start, unsigned long size)
->-{
->-	return ((void *)addr >= start && (void *)addr < start + size);
->-}
->-
-> /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
-> char *module_flags(struct module *mod, char *buf, bool show_state)
-> {
->-- 
->2.20.1.7.g153144c
->
+> > kernel/module/main.c:3007:19: warning: unused function 'within'.
+> > 
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4035
+> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > ---
+> > kernel/module/main.c | 5 -----
+> > 1 file changed, 5 deletions(-)
+> > 
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index c598f11e7016..062065568b40 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -3004,11 +3004,6 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+> > 	return load_module(&info, uargs, flags);
+> > }
+> > 
+> > -static inline int within(unsigned long addr, void *start, unsigned long size)
+> > -{
+> > -	return ((void *)addr >= start && (void *)addr < start + size);
+> > -}
+> > -
+> > /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
+> > char *module_flags(struct module *mod, char *buf, bool show_state)
+> > {
+> > -- 
+> > 2.20.1.7.g153144c
+> > 
