@@ -2,92 +2,94 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B8D2C636CC
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Feb 2023 17:01:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75F5EC636CC
+	for <linux-modules@archiver.kernel.org>; Wed, 15 Feb 2023 17:23:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjBORBK (ORCPT
+        id S229888AbjBORXW (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Feb 2023 12:01:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        Wed, 15 Feb 2023 12:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjBORBI (ORCPT
+        with ESMTP id S229573AbjBORXV (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Feb 2023 12:01:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B563B303FB;
-        Wed, 15 Feb 2023 09:01:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6588FB8225F;
-        Wed, 15 Feb 2023 17:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F248C433D2;
-        Wed, 15 Feb 2023 17:01:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676480465;
-        bh=7NDzIefEbXiIJCEib3sr7gh8/H2KcWsCHwSr/TU1F/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a4CMP6ci0CdBOLo61RbH7msCByorysRMQT3XacNFmZxBVNn13P0YBA55+Me8718LR
-         MjhlwFdtHhCSCp7P2mrAUoMjqq6+wFMMt+EB2LQ7rr7wo4PVq0YilbODEqJITiBV+z
-         zXdi5HOpF7mTI1DXK+QeTWSIr2HUVQx83rASNGuK1DdkLLO+6zcIxcxPvyEbX8puD3
-         cOvy9O5Yq4LdWQ1YMP4/CQ0KZgu16x4tgvy9hrUCS1xMr1JhO3SpJuWK1ZlmufGfNA
-         YghVak6aTAD9SSZG/BiZnKEvJKt+QCIzDhCXsRdFBOJha++g9k6AIZlgRHWyFwNHkR
-         N3Z4Ih9RVJPTA==
-Date:   Wed, 15 Feb 2023 10:01:02 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Chris Down <chris@chrisdown.name>
+        Wed, 15 Feb 2023 12:23:21 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FE011662
+        for <linux-modules@vger.kernel.org>; Wed, 15 Feb 2023 09:23:17 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id co8so16166819wrb.1
+        for <linux-modules@vger.kernel.org>; Wed, 15 Feb 2023 09:23:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QqtBdN+1ppp8e/CSn0vupSzwChby4224H0BfpXodQLA=;
+        b=KUjhCHq/IyaBxJIaBshTwK5EQy/ynz7jLapyf7e2pN9XEQE1moQhCOl/Mj+qbRrfSy
+         3q+6cXGQF/jwUKdmo8XEUZ4a+Eho+aCAZT0nMGYMZVwCmsArr96yhUZfmXcjOqgInGRt
+         eLPd7AuccY2D8L6b90YVy5eIQAO1JxPA82NVs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QqtBdN+1ppp8e/CSn0vupSzwChby4224H0BfpXodQLA=;
+        b=WJ8oEcmuERCbzBqQHaBwYxR2qTZ6RQ1Fhsmpi/Mt2qHtJZ5b91m+2om4Kbl+nHBYqo
+         YH5xg/0B0NvgCO7EwVToxlT2lOU+Ls+IWjJf8YSOCsdXFpY9t3VKL7+pjlS15lVKeQni
+         8Lkq+3aZJAXxYKYBdg+5Ffsa3wkPYMiDZ3HufI728Dvn/kQgb9e7CcxLSNCLm+fwjXPS
+         NjhTOmZtJYv9Tqmz9/h/9yMS+kYInkX6OhE+jNVzmz6eELcf0GhEGbJSE0JVpCgIwIq8
+         NDoQtCrsPi/nLWp8QMaTdHf5vnNMRCyTZ/YspvuK8C5r69q8Wf2loVaWtIYV8n8Aiz79
+         CP7g==
+X-Gm-Message-State: AO0yUKUF7Qon8urxacuvsii5qlujaIyY5KuJpOQaJ0SdvZAhvgIH1Ax3
+        qu9/OLeyiHRboHZT6X/aXIVVWg==
+X-Google-Smtp-Source: AK7set9OHudQqPkdfMrIhN61SvMXrhUrNNXk+iAP3BJDjiL/w2O5ZVFfBlp2c3m/PeRCYgaHEFmw1w==
+X-Received: by 2002:adf:f30d:0:b0:2c5:4cf1:a57b with SMTP id i13-20020adff30d000000b002c54cf1a57bmr2257952wro.35.1676481795981;
+        Wed, 15 Feb 2023 09:23:15 -0800 (PST)
+Received: from localhost ([2620:10d:c092:500::4:270c])
+        by smtp.gmail.com with ESMTPSA id n27-20020a05600c3b9b00b003e206cc7237sm1211706wms.24.2023.02.15.09.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 09:23:15 -0800 (PST)
+Date:   Wed, 15 Feb 2023 17:23:14 +0000
+From:   Chris Down <chris@chrisdown.name>
+To:     Nathan Chancellor <nathan@kernel.org>
 Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, mcgrof@kernel.org,
         ndesaulniers@google.com, trix@redhat.com,
         linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         bpf@vger.kernel.org, llvm@lists.linux.dev,
-        Abaci Robot <abaci@linux.alibaba.com>
+        Abaci Robot <abaci@linux.alibaba.com>,
+        Song Liu <song@kernel.org>
 Subject: Re: [PATCH] module: Remove the unused function within
-Message-ID: <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X>
+Message-ID: <Y+0VAr21hlIdrxyp@chrisdown.name>
 References: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
  <Y+0MsMomkcDBdjNI@chrisdown.name>
+ <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <Y+0MsMomkcDBdjNI@chrisdown.name>
+In-Reply-To: <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Feb 15, 2023 at 04:47:44PM +0000, Chris Down wrote:
-> Jiapeng Chong writes:
-> > The function within is defined in the main.c file, but not called
-> > elsewhere, so remove this unused function.
-> 
-> Huh? It's used by __module_text_address(), no?
++Cc: Song
 
-Not after commit 2ece476a2346 ("module: replace module_layout with
-module_memory") in -next. This patch should have a fixes tag, even if
-the warning is currently hidden behind W=1.
+Nathan Chancellor writes:
+>On Wed, Feb 15, 2023 at 04:47:44PM +0000, Chris Down wrote:
+>> Jiapeng Chong writes:
+>> > The function within is defined in the main.c file, but not called
+>> > elsewhere, so remove this unused function.
+>>
+>> Huh? It's used by __module_text_address(), no?
+>
+>Not after commit 2ece476a2346 ("module: replace module_layout with
+>module_memory") in -next. This patch should have a fixes tag, even if
+>the warning is currently hidden behind W=1.
 
-> > kernel/module/main.c:3007:19: warning: unused function 'within'.
-> > 
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4035
-> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> > ---
-> > kernel/module/main.c | 5 -----
-> > 1 file changed, 5 deletions(-)
-> > 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index c598f11e7016..062065568b40 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -3004,11 +3004,6 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
-> > 	return load_module(&info, uargs, flags);
-> > }
-> > 
-> > -static inline int within(unsigned long addr, void *start, unsigned long size)
-> > -{
-> > -	return ((void *)addr >= start && (void *)addr < start + size);
-> > -}
-> > -
-> > /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
-> > char *module_flags(struct module *mod, char *buf, bool show_state)
-> > {
-> > -- 
-> > 2.20.1.7.g153144c
-> > 
+Huh, I thought I had checked out latest -next, but must have not done so 
+somehow :-) Mea culpa.
+
+If it's only in -next then no Fixes needed, since there's no stable rev yet.
+
+Jiapeng, in future, please make sure to cc the author of related commits when 
+reporting stuff like this :-) It helps people to update their patches.
+
+Song, you probably want to update your patch.
