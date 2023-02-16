@@ -2,42 +2,42 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04BB6C61DA4
-	for <linux-modules@archiver.kernel.org>; Thu, 16 Feb 2023 17:43:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CC46C61DA4
+	for <linux-modules@archiver.kernel.org>; Thu, 16 Feb 2023 18:01:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBPRni (ORCPT
+        id S230199AbjBPSBb (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 16 Feb 2023 12:43:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        Thu, 16 Feb 2023 13:01:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBPRnh (ORCPT
+        with ESMTP id S230190AbjBPSBb (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 16 Feb 2023 12:43:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECC24C3D2;
-        Thu, 16 Feb 2023 09:43:36 -0800 (PST)
+        Thu, 16 Feb 2023 13:01:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3494B37737;
+        Thu, 16 Feb 2023 10:01:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 887ED61760;
-        Thu, 16 Feb 2023 17:43:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D63CC433EF;
-        Thu, 16 Feb 2023 17:43:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A98556206A;
+        Thu, 16 Feb 2023 18:01:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C3AC433A0;
+        Thu, 16 Feb 2023 18:01:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676569414;
-        bh=yjFdrf5URuxKcfaupImQzlljUh6WAuRwcY13YuisMos=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Q8E4zEPwDhpgojNgSf+AYlmRQ+QP3bSPX071+UzN4sndY9zHvIg/NQI3sSg+/W0J7
-         QKV5G+uvwbOryR6v/fyOGlttXn4t+0cZ2+4bzX2L7bR8AzQkzsmbf7JtuLe1DkT9MK
-         Ms/CeYNe5Pr6WkDGjbVmKDBOzsmaz/MQZgaBmMqUFObsGHhHjA7A+apcnLFD7jqyLU
-         0os6U9znvDfvDboIEsbAAcG8OadYp/Qo4/FFAvqImPgvjls0aCcaoIsJQ+cEs4KA1Z
-         akIU2JwIoK08hPpvXlP/A8U/bPp+Lcyfn/qa70Xw1fbqvvuP0npOLflUQ6lhvD3m/A
-         nM3c8ywXNOVJQ==
-Date:   Thu, 16 Feb 2023 11:43:33 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        s=k20201202; t=1676570489;
+        bh=SzjWMharL5BVkMeITsO0QpFnp+xa7N7JpLQmTdJjQvE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JOyk6NcFlRjqOvc6teiOBsWYFMj1Z/x9mQypLNRlwYamJ2+25VbmwtVSyzZZXklIa
+         1XJSU7zsCinkDvmcod8XhNdSE35L807Viv2mmcGb0QBnOYtj4ohg1sogZtOkAI+HVn
+         /3h654Q5dawnRVZVJUbeUMFdcgMLXvb/lJvXl2MxIFTGX/e5Lq2u2KxddSBHnxAmAV
+         3r201OvTDzKJEC8M+aJ+OyNcjZZ/Qtn+7ghHxo0Np3LlkmV5UnSQOzs+nfNNqrDXaT
+         Jfr3/3pqYWOs9ZO/oJFGaiVTR+PKawMQ19qY411QUbDq/ADEyWZ2opb20JXM8l4GH8
+         neL4hkUaWMkMw==
+Date:   Thu, 16 Feb 2023 18:01:23 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
@@ -48,216 +48,117 @@ Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
         Thierry Reding <thierry.reding@gmail.com>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
         Leon Romanovsky <leon@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
 Subject: Re: [PATCH v2 0/7] MODULE_LICENSE removals, first tranche
-Message-ID: <20230216174333.GA3313434@bhelgaas>
+Message-ID: <Y+5vczghnTF5nUut@spud>
+References: <20230216152410.4312-1-nick.alcock@oracle.com>
+ <20230216174333.GA3313434@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="a5mFg0TScSQyp1V2"
 Content-Disposition: inline
-In-Reply-To: <20230216152410.4312-1-nick.alcock@oracle.com>
+In-Reply-To: <20230216174333.GA3313434@bhelgaas>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-[+cc PCI folks, who got the patches but not this cover letter, and
-participants from the v1 posting]
 
-On Thu, Feb 16, 2023 at 03:24:03PM +0000, Nick Alcock wrote:
-> This series, based on current modules-next, is part of a treewide cleanup
-> suggested by Luis Chamberlain, to remove the LICENSE_MODULE usage from
-> files/objects that are not tristate.  Due to recent changes to kbuild, these
-> uses are now problematic.  See the commit logs for more details.
-> 
-> (The commit log prefixes and Cc lists are automatically determined using
-> the script mentioned below.  I've eyeballed them, and they seem reasonable:
-> my apologies if they are not.)
-> 
-> This is a small initial tranche to see if the general approach is valid:
-> larger tranches can follow if desired and if these patches seem OK.
-> I'll be sending a second 24-patch tranche in a few hours if this
-> one meets with general approval.
-> 
-> (In total, there are 121 patches in this series.)
-> 
-> 
-> Differences from v1:
->  - just remove MODULE_LICENSE, don't comment it out
->  - Cc: paid maintainers as well as unpaid ones
->  - improvements to the prefix determination code (notable in
->    PCI: versatile in particular)
-> 
-> The series at a whole can be found here:
->   https://github.com/nickalcock/linux module-license
-> 
-> The patch splitter (not for upstreaming!) used to prepare these
-> commits can be found here:
->   https://github.com/nickalcock/linux mass-split
-> 
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Nick Alcock (7):
->   kbuild, PCI: versatile: remove MODULE_LICENSE in non-modules
->   kbuild, PCI: mobiveil: remove MODULE_LICENSE in non-modules
->   kbuild, PCI: tegra: remove MODULE_LICENSE in non-modules
->   kbuild, PCI: endpoint: remove MODULE_LICENSE in non-modules
->   kbuild, PCI: hip: remove MODULE_LICENSE in non-modules
->   kbuild, shpchp: remove MODULE_LICENSE in non-modules
->   kbuild, PCI: dwc: remove MODULE_LICENSE in non-modules
-> 
->  drivers/pci/controller/dwc/pcie-histb.c              | 1 -
->  drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c | 1 -
->  drivers/pci/controller/pci-tegra.c                   | 1 -
->  drivers/pci/controller/pci-versatile.c               | 1 -
->  drivers/pci/controller/pcie-hisi-error.c             | 1 -
->  drivers/pci/endpoint/pci-ep-cfs.c                    | 1 -
->  drivers/pci/endpoint/pci-epc-core.c                  | 1 -
->  drivers/pci/endpoint/pci-epc-mem.c                   | 1 -
->  drivers/pci/endpoint/pci-epf-core.c                  | 1 -
->  drivers/pci/hotplug/shpchp_core.c                    | 1 -
->  10 files changed, 10 deletions(-)
+--a5mFg0TScSQyp1V2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I squashed these and applied to pci/kbuild for v6.3, thanks!
+On Thu, Feb 16, 2023 at 11:43:33AM -0600, Bjorn Helgaas wrote:
+> [+cc PCI folks, who got the patches but not this cover letter, and
+> participants from the v1 posting]
 
-I added examples from the v1 posting to the commit log; let me know if
-I got anything wrong:
+Thanks Bjorn..
 
-commit 84cee45bafcb ("PCI: Remove MODULE_LICENSE so boolean drivers don't look like modules")
-Author: Nick Alcock <nick.alcock@oracle.com>
-Date:   Thu Feb 16 15:24:04 2023 +0000
+> On Thu, Feb 16, 2023 at 03:24:03PM +0000, Nick Alcock wrote:
+> > This series, based on current modules-next, is part of a treewide clean=
+up
+> > suggested by Luis Chamberlain, to remove the LICENSE_MODULE usage from
+> > files/objects that are not tristate.  Due to recent changes to kbuild, =
+these
+> > uses are now problematic.  See the commit logs for more details.
+> >=20
+> > (The commit log prefixes and Cc lists are automatically determined using
+> > the script mentioned below.  I've eyeballed them, and they seem reasona=
+ble:
+> > my apologies if they are not.)
+> >=20
+> > This is a small initial tranche to see if the general approach is valid:
+> > larger tranches can follow if desired and if these patches seem OK.
+> > I'll be sending a second 24-patch tranche in a few hours if this
+> > one meets with general approval.
+> >=20
+> > (In total, there are 121 patches in this series.)
+> >=20
+> >=20
+> > Differences from v1:
+> >  - just remove MODULE_LICENSE, don't comment it out
+> >  - Cc: paid maintainers as well as unpaid ones
+> >  - improvements to the prefix determination code (notable in
+> >    PCI: versatile in particular)
+> >=20
+> > The series at a whole can be found here:
+> >   https://github.com/nickalcock/linux module-license
+> >=20
+> > The patch splitter (not for upstreaming!) used to prepare these
+> > commits can be found here:
+> >   https://github.com/nickalcock/linux mass-split
+> >=20
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: linux-modules@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> >=20
+> > Nick Alcock (7):
+> >   kbuild, PCI: versatile: remove MODULE_LICENSE in non-modules
+> >   kbuild, PCI: mobiveil: remove MODULE_LICENSE in non-modules
+> >   kbuild, PCI: tegra: remove MODULE_LICENSE in non-modules
+> >   kbuild, PCI: endpoint: remove MODULE_LICENSE in non-modules
+> >   kbuild, PCI: hip: remove MODULE_LICENSE in non-modules
+> >   kbuild, shpchp: remove MODULE_LICENSE in non-modules
+> >   kbuild, PCI: dwc: remove MODULE_LICENSE in non-modules
+> >=20
+> >  drivers/pci/controller/dwc/pcie-histb.c              | 1 -
+> >  drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c | 1 -
+> >  drivers/pci/controller/pci-tegra.c                   | 1 -
+> >  drivers/pci/controller/pci-versatile.c               | 1 -
+> >  drivers/pci/controller/pcie-hisi-error.c             | 1 -
+> >  drivers/pci/endpoint/pci-ep-cfs.c                    | 1 -
+> >  drivers/pci/endpoint/pci-epc-core.c                  | 1 -
+> >  drivers/pci/endpoint/pci-epc-mem.c                   | 1 -
+> >  drivers/pci/endpoint/pci-epf-core.c                  | 1 -
+> >  drivers/pci/hotplug/shpchp_core.c                    | 1 -
+> >  10 files changed, 10 deletions(-)
+>=20
+> I squashed these and applied to pci/kbuild for v6.3, thanks!
+>=20
+> I added examples from the v1 posting to the commit log; let me know if
+> I got anything wrong:
 
-    PCI: Remove MODULE_LICENSE so boolean drivers don't look like modules
-    
-    Since 8b41fc4454e3 ("kbuild: create modules.builtin without
-    Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations are
-    used to identify modules. As a consequence, MODULE_LICENSE in non-modules
-    causes modprobe to misidentify the object file as a module when it is not,
-    and modprobe might succeed rather than failing with a suitable error
-    message.
-    
-    For tristate modules that can be either built-in or loaded at runtime,
-    modprobe succeeds in both cases:
-    
-      # modprobe ext4
-      [exit status zero if CONFIG_EXT4_FS=y or =m]
-    
-    For boolean modules like the Standard Hot Plug Controller driver (shpchp)
-    that cannot be loaded at runtime, modprobe should always fail like this:
-    
-      # modprobe shpchp
-      modprobe: FATAL: Module shpchp not found in directory /lib/modules/...
-      [exit status non-zero regardless of CONFIG_HOTPLUG_PCI_SHPC]
-    
-    but prior to this commit, shpchp_core.c contained MODULE_LICENSE, so
-    "modprobe shpchp" silently succeeded when it should have failed.
-    
-    Remove MODULE_LICENSE in files that cannot be built as modules.
-    
-    [bhelgaas: commit log, squash]
-    Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-    Link: https://lore.kernel.org/r/20230216152410.4312-1-nick.alcock@oracle.com/
-    Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-    Cc: Luis Chamberlain <mcgrof@kernel.org>
-    Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-    Cc: Rob Herring <robh@kernel.org>
-    Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+I noticed that (as requested!) Nick dropped the change to the microchip
+driver.
+Would you like me to resend patch 3/11 of [1] to clear the decks of
+"incorrect" MODULE_LICENSE usage?
 
-diff --git a/drivers/pci/controller/dwc/pcie-histb.c b/drivers/pci/controller/dwc/pcie-histb.c
-index 43c27812dd6d..927ae05dc920 100644
---- a/drivers/pci/controller/dwc/pcie-histb.c
-+++ b/drivers/pci/controller/dwc/pcie-histb.c
-@@ -450,4 +450,3 @@ static struct platform_driver histb_pcie_platform_driver = {
- module_platform_driver(histb_pcie_platform_driver);
- 
- MODULE_DESCRIPTION("HiSilicon STB PCIe host controller driver");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c b/drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c
-index f6fcd95c2bf5..c5bb87ff6d9a 100644
---- a/drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c
-+++ b/drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c
-@@ -56,6 +56,5 @@ static struct platform_driver mobiveil_pcie_driver = {
- 
- builtin_platform_driver(mobiveil_pcie_driver);
- 
--MODULE_LICENSE("GPL v2");
- MODULE_DESCRIPTION("Mobiveil PCIe host controller driver");
- MODULE_AUTHOR("Subrahmanya Lingappa <l.subrahmanya@mobiveil.co.in>");
-diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
-index 929f9363e94b..5bb05564d6f8 100644
---- a/drivers/pci/controller/pci-tegra.c
-+++ b/drivers/pci/controller/pci-tegra.c
-@@ -2814,4 +2814,3 @@ static struct platform_driver tegra_pcie_driver = {
- 	.remove = tegra_pcie_remove,
- };
- module_platform_driver(tegra_pcie_driver);
--MODULE_LICENSE("GPL");
-diff --git a/drivers/pci/controller/pci-versatile.c b/drivers/pci/controller/pci-versatile.c
-index 7991d334e0f1..e9a6758fe2c1 100644
---- a/drivers/pci/controller/pci-versatile.c
-+++ b/drivers/pci/controller/pci-versatile.c
-@@ -169,4 +169,3 @@ static struct platform_driver versatile_pci_driver = {
- module_platform_driver(versatile_pci_driver);
- 
- MODULE_DESCRIPTION("Versatile PCI driver");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/controller/pcie-hisi-error.c b/drivers/pci/controller/pcie-hisi-error.c
-index 7959c9c8d2bc..7d88eb696b06 100644
---- a/drivers/pci/controller/pcie-hisi-error.c
-+++ b/drivers/pci/controller/pcie-hisi-error.c
-@@ -324,4 +324,3 @@ static struct platform_driver hisi_pcie_error_handler_driver = {
- module_platform_driver(hisi_pcie_error_handler_driver);
- 
- MODULE_DESCRIPTION("HiSilicon HIP PCIe controller error handling driver");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/endpoint/pci-ep-cfs.c b/drivers/pci/endpoint/pci-ep-cfs.c
-index d4850bdd837f..4b8ac0ac84d5 100644
---- a/drivers/pci/endpoint/pci-ep-cfs.c
-+++ b/drivers/pci/endpoint/pci-ep-cfs.c
-@@ -728,4 +728,3 @@ module_exit(pci_ep_cfs_exit);
- 
- MODULE_DESCRIPTION("PCI EP CONFIGFS");
- MODULE_AUTHOR("Kishon Vijay Abraham I <kishon@ti.com>");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-index 2542196e8c3d..dd750ad29485 100644
---- a/drivers/pci/endpoint/pci-epc-core.c
-+++ b/drivers/pci/endpoint/pci-epc-core.c
-@@ -861,4 +861,3 @@ module_exit(pci_epc_exit);
- 
- MODULE_DESCRIPTION("PCI EPC Library");
- MODULE_AUTHOR("Kishon Vijay Abraham I <kishon@ti.com>");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/endpoint/pci-epc-mem.c b/drivers/pci/endpoint/pci-epc-mem.c
-index a97b56a6d2db..7dcf6f480b82 100644
---- a/drivers/pci/endpoint/pci-epc-mem.c
-+++ b/drivers/pci/endpoint/pci-epc-mem.c
-@@ -260,4 +260,3 @@ EXPORT_SYMBOL_GPL(pci_epc_mem_free_addr);
- 
- MODULE_DESCRIPTION("PCI EPC Address Space Management");
- MODULE_AUTHOR("Kishon Vijay Abraham I <kishon@ti.com>");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
-index 9ed556936f48..2036e38be093 100644
---- a/drivers/pci/endpoint/pci-epf-core.c
-+++ b/drivers/pci/endpoint/pci-epf-core.c
-@@ -568,4 +568,3 @@ module_exit(pci_epf_exit);
- 
- MODULE_DESCRIPTION("PCI EPF Library");
- MODULE_AUTHOR("Kishon Vijay Abraham I <kishon@ti.com>");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/pci/hotplug/shpchp_core.c b/drivers/pci/hotplug/shpchp_core.c
-index 53692b048301..56c7795ed890 100644
---- a/drivers/pci/hotplug/shpchp_core.c
-+++ b/drivers/pci/hotplug/shpchp_core.c
-@@ -32,7 +32,6 @@ int shpchp_poll_time;
- 
- MODULE_AUTHOR(DRIVER_AUTHOR);
- MODULE_DESCRIPTION(DRIVER_DESC);
--MODULE_LICENSE("GPL");
- 
- module_param(shpchp_debug, bool, 0644);
- module_param(shpchp_poll_mode, bool, 0644);
+Thanks,
+Conor.
+
+1 - https://lore.kernel.org/linux-pci/20230111125323.1911373-4-daire.mcnama=
+ra@microchip.com/
+
+--a5mFg0TScSQyp1V2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+5vXwAKCRB4tDGHoIJi
+0vAXAP9wqH8kAZKEp4gF7i5IvSwidaBjokwtxIxYEfYUq2wFjgD+KmMseKK3OoCk
+1VsDBH0Q+s4Ok7vTRdd4Vj1l4ZFj1Qo=
+=nNB3
+-----END PGP SIGNATURE-----
+
+--a5mFg0TScSQyp1V2--
