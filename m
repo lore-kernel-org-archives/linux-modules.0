@@ -2,161 +2,112 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3719EC636CC
-	for <linux-modules@archiver.kernel.org>; Thu, 16 Feb 2023 19:21:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38763C636CC
+	for <linux-modules@archiver.kernel.org>; Thu, 16 Feb 2023 23:38:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjBPTVM (ORCPT
+        id S229558AbjBPXic (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 16 Feb 2023 14:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        Thu, 16 Feb 2023 18:38:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjBPTVL (ORCPT
+        with ESMTP id S229525AbjBPXib (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 16 Feb 2023 14:21:11 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110158A42;
-        Thu, 16 Feb 2023 11:21:09 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31GIxBIt029524;
-        Thu, 16 Feb 2023 19:21:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : references : date : in-reply-to : message-id : content-type :
- mime-version; s=corp-2022-7-12;
- bh=rGd+aLW4wwBO7FLOsN3tauX0nO7C+pR1xf3bvnWmMOU=;
- b=W3DlwUc2Cu2trIKtawneUs0dAffrn9lJ1Pg7N61zt0OCRNxL2HnApCI8IZt6EH/vhOKj
- q+52DQZ4IzIUlD+Qv+gm7dK7VADnIww1qcBPZy1jXquUYoHFwq0QmvCP7ehVcYlpJe1n
- R1QqcnQXno6tdQ+xn6xWGVdIzuslwfOi2Am4X3Hi+etlLDG7Px5rsq75rBZGoDNElGPA
- 4HXeqkTOS6IoIv2Cc9eYANP/jOVs5JgG/Yvwj/bP1C7UCC95sLNLZ8yLNcywiVeGU+4Z
- 8WoKOpSbS5HXsNTzkplC0cNyv+R3sORmmkDWYx+MVJ9wNOBk3Ao+VtFy0pDF7zONCGws Jw== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np1t3m2wv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Feb 2023 19:21:05 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31GHq6hZ013889;
-        Thu, 16 Feb 2023 19:21:04 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3np1f8shh9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Feb 2023 19:21:04 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CcG9RYkE5LTefJA/tRHqmpTKQMLZMAiTNqvYl3CRbBA9tMMurW2pNWwVlu20K0QZn9k+PnEOc4z+Ejij4TwfwGENB1jZr6I+pw17naLHaj/Byn93Q7JS1prhcaTlAPWfw7PVaQ7wsJjaGDrk6psIaJ1B6ffNs7n2ca7btKBwPZj4eU0pTPECiUaqaRiAPzETmMyiYeMTu2ZDVNcTPMDdfRqN9g4FowQkt29BB6SZCccYOrb5C5NhkTRdzFquQwgbR0Os+P+bbZxDo9Q820XUUrFiQlXQ7XughD8+yTU0EbpDpWHrWdb+0c6yG6n1AXdda5rVr2xg5rpjocBOz80mNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rGd+aLW4wwBO7FLOsN3tauX0nO7C+pR1xf3bvnWmMOU=;
- b=hEUB6GH2GRGcMMSITGRCXcKktc08ka9xv3sohBTDwJ00rqpE9iW9IwPJkXhBlBVJao9J3LHAbOoKMxXN4GbuKWV7jyJAAlIqpyYZ/RPpUeYEgxoioXWOKs8f/tWtCrdqF9UKRzj+OKtOK4cr7bKK2N7iY6Y9fUlOu3NdURfXIB2U7q7gooGkGNLiKUlzF6+H5vP4KlpSBqfBAGZ5OfniRmS4FA+DlqH39TJtF/Y+Dm8H6KproPAzB+dZNg1fZIiwZoyJlRRIV9B6wRrzphZ0hlQLTwu/ePuK3JbojgRpZx4jz3WZEDAqfskoKdh6gbg12eq5Ud3HMuzgpGhcpFyiyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rGd+aLW4wwBO7FLOsN3tauX0nO7C+pR1xf3bvnWmMOU=;
- b=mvP4D2p6dz+NdU1LEJP4LqKuX9qQVYEVxBrChf3G/FCId/5MvgksPTseN5IYVHpj7+ZJk4AmiLGQUmkGGIOUI+a3v3kOi8aC13XeXlTW1CY3DaoJHNmLXukv/akIjim4PoguwOZPdhUOFl0HtPKstwP4kNfSskf00alxi3n1L+E=
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
- by DS7PR10MB5087.namprd10.prod.outlook.com (2603:10b6:5:3b0::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.6; Thu, 16 Feb
- 2023 19:21:02 +0000
-Received: from DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760]) by DS0PR10MB6798.namprd10.prod.outlook.com
- ([fe80::d0f7:e4fd:bd4:b760%3]) with mapi id 15.20.6134.006; Thu, 16 Feb 2023
- 19:21:02 +0000
-From:   Nick Alcock <nick.alcock@oracle.com>
+        Thu, 16 Feb 2023 18:38:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABBE50358;
+        Thu, 16 Feb 2023 15:38:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2432611A9;
+        Thu, 16 Feb 2023 23:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0CB3C4339C;
+        Thu, 16 Feb 2023 23:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676590709;
+        bh=jVUoz8hTKqk5/k7Dxb/+B4XO7xlnmBaryxiFTIp1qEc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pLHohTEQPjGNatQu1M1UM62ut4M2goLfnKgdGSWYZB9mDi0moGaGYFV2DpK4frfEg
+         BCIcds6sD9kLm5YteQ8ehDCB0WHN6+MxB7nfc6Yn4wBiJm7pfW2nMSgnTg1PbPiI/N
+         yIfIYbYyQG97L2X8eDR/t6ssUZ8DOiRVT9JDeVNFioXiDXG6Gwfbao77kaLrmcL3nd
+         jL6qzzekyD07HlQ1QsmANrlmWFJlnlRtT7IVA4CUGKi9OT21YJoGiUJr3w9NhBAlGr
+         KQACbGPe1Sz+cc8MsjdrZEihsJRo0Y+3riW/iZwD2+AwQuRHyuG67A2MDwBfT94u4i
+         CvX18s7LsIjvg==
+Date:   Thu, 16 Feb 2023 23:38:23 +0000
+From:   Conor Dooley <conor@kernel.org>
 To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Cc:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Karthikeyan Mitran <m.karthikeyan@mobiveil.co.in>,
+        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
 Subject: Re: [PATCH v2 0/7] MODULE_LICENSE removals, first tranche
-References: <20230216174333.GA3313434@bhelgaas>
-Emacs:  the answer to the world surplus of CPU cycles.
-Date:   Thu, 16 Feb 2023 19:20:56 +0000
-In-Reply-To: <20230216174333.GA3313434@bhelgaas> (Bjorn Helgaas's message of
-        "Thu, 16 Feb 2023 11:43:33 -0600")
-Message-ID: <87edqpv2lj.fsf@esperi.org.uk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0317.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:197::16) To DS0PR10MB6798.namprd10.prod.outlook.com
- (2603:10b6:8:13c::20)
+Message-ID: <Y+6+bwLqqCsgwjjX@spud>
+References: <Y+5vczghnTF5nUut@spud>
+ <20230216191632.GA3325180@bhelgaas>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|DS7PR10MB5087:EE_
-X-MS-Office365-Filtering-Correlation-Id: ad3f133d-9fd9-4808-1d58-08db1052f128
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OsqHpPpC8iy+Z0RpY7cXee2dvTTm3mUVHPS+0WiiCDZ8gaCZb3Z1bznqkeM+urVAoWMZ7xSwDzCuAKEPhn403eavg9+UoBYT9ydUYAwURm/pg/muX8kloycOAV2qXSKEzzRFHI2x9yZkEwBF2iYKw3MvtCH4UTB3vHnCfY0TzprY5TITToE2HhP4NGo5SIkuVxJdUNK6vubt3OjzZDEiQ8kW8hV2hN+e9LbHP+MOPGjbObAUlZ1jn5CDktmtKjaTwHl/nhq+B75lDOAVxMq5JCHg0lzRFnnXi1xIlLTx4EDVfddhPTufeprgx3PSNhkVfGWU3BQtRaX4GswNjEQE24PnUP8vdkXPBYJ7+oQ4xSp1i1CoSpVdl81NWi8wV/x20sceDiPkzIs6N293tBEe/V5ISIJV24+CaBjbwNnP0Bpj+RIRbXJ4QGqzij9v2UCzJbd6s27sdat43GUVHJXuVDB1BYXSq3wgIfqA9CJP6YuiQxnv0WUQEyDki6eSHsxVTB+ohfudrjOan28tK/Wbpv1gtOXSSE0w3TO+lJp7hrhYG+PQiS2nRnWEGMcSHzshCPlOdmK9+aSXogzGruskWnmF27D9Ljgy9oDFUkqGOJe6ueEwYly3erCn4RvEr45iId2nXy4sBXKixNY14YbShA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(136003)(39860400002)(346002)(366004)(376002)(451199018)(86362001)(2906002)(44832011)(36756003)(478600001)(6486002)(6666004)(6506007)(6512007)(9686003)(186003)(38100700002)(4744005)(41300700001)(6916009)(4326008)(8936002)(5660300002)(66556008)(8676002)(66476007)(66946007)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FgDVZtviGo/lmVGwFG0B7nUf8YH+RJwt1c5Kxx4Ba1C9Dx6YhcGypZ3gTKwy?=
- =?us-ascii?Q?yTkP09D4EFXDOD2Hy7Hp9YMy7UTawym/95usQoCbo0ewyeUw1jybeUPAmQzu?=
- =?us-ascii?Q?/thZwzOdMnH4S/TqLFRGF/qr0Pc9nRRnR+g5jJNioCXsGVfc867e2vc3KChO?=
- =?us-ascii?Q?eud4ZMV6aj0alXQKE8g71mmHxgLkBgY7phh8LTeRAF/M40z7zIPzeT5WpTO+?=
- =?us-ascii?Q?p46SyrbqONhrX61zS578KVn0PxNWv5bP0fERr/zjSN0Qmf0wvCJwoqAG0qvU?=
- =?us-ascii?Q?4z3SGdNOYGUGmFkKUcsf0VuL1S9kc6KumShyGpq0UNkoSEy7O2Eu8SHZJq77?=
- =?us-ascii?Q?IZujWY1LRpsxdKNw3Jgy8oOm9Siq5AhOMmyoNnnWS2id1dPWjnOfdASLDrVO?=
- =?us-ascii?Q?qpUnqMtteTWyLRjy0PZtAJplccYcTqaqCatvovqsq+J6gMW7lEe2RbMPSR/N?=
- =?us-ascii?Q?E6x795ZbpeFTi5KLw5EFwQmosyOZx8Gv+P3umez8xNBEG68m7K48gIe+gohx?=
- =?us-ascii?Q?RZoLiUnGMxa3OBe1AozVssFeNYzc0xo0WMgHZ7cFpQ4xDN/WNn/DMvDr1OjI?=
- =?us-ascii?Q?u6KnoIcL3z1yfKLJSZLWxnaMKSiU6RVWDElYoQKIKMjHR+T5AKSphOieBc0M?=
- =?us-ascii?Q?ypqF1kBA3ImpPjFn9J+7o8N9GYdwijqxfteNUa3MSLdKsK92XzjymbT0NLJO?=
- =?us-ascii?Q?SVV7e2XzfZrmFQ4mWOX8PfXW/zonYS6CC6lsESNqgfUPEXcyoAciFU/szf0u?=
- =?us-ascii?Q?R2nhpO0K35CAPX4pvP8RKKnRA++km3j2I2oPxKvAY690vw9F4gcoSmR57cGN?=
- =?us-ascii?Q?iDNPppq8cJKapArb7CI7O1z/vbeuq6R53zQ1/Nbp51zBamZ303TKyaeqpLaD?=
- =?us-ascii?Q?SC8W2M5SkgQYb2FBmoCjmCrptDa9Q+CsPTQ9s/G0sgZHTexSOMKZR9Tai4iO?=
- =?us-ascii?Q?YEKWBFrzx8oeEwYuc/r2ml4YcmnWSz4RzYdH2QqUeM/znttfV8iEU1zivaLS?=
- =?us-ascii?Q?OXdaP1nlOhDj+0GZ+QWDyBdev0/qP1qOXwVZ0QaO+bvLLxlCvy0tIwAXjjIz?=
- =?us-ascii?Q?a7tb1142Ny1Y/Kd5hW22JDz20uxq7c0tkaH09h8/UDLAJ1cSf2XPKn4j+M7z?=
- =?us-ascii?Q?FgjGzIG4zwurICKeCCHWdOnU7cUvhNpyhGxr0DqH2xl7SQRMgK6I6bjeGfyO?=
- =?us-ascii?Q?74LVJO01suPRt+g+TRmxm+ETIxYIFVMFjxMbt/2hJFyolDye3tX/pHhReFM0?=
- =?us-ascii?Q?gH9/18h+W20oLwVn12yAiVXbaPphjgrzNX98+AjaXyPkj08tdFsjV1P+D33b?=
- =?us-ascii?Q?2u0uN4ZTGXvU3MfVDXy5mgLnJtbTLpG3wzvPPaxgbrAN5k2/GhbJioLDdLD7?=
- =?us-ascii?Q?AqnJR4o9+WeVf0grnEcAX1tm0UgpX9ZT+zdPNagQQGnFHDreeAtNNZ6ElOAL?=
- =?us-ascii?Q?pF3mFnNuVSHCU7bDsbXLmlEMauPI0Y8u2pgupisfDUV5QszHfilRq9PZEM5l?=
- =?us-ascii?Q?/2YYKiiRgLT62Ig1joH22FBJbgribHhMAQMUfpLapd4v9gX8Tu2cI/z/c4bb?=
- =?us-ascii?Q?wx9gVSHESE8y5mhsX1zFVT7OJKa/rgkO5thXAG4Pkw9c5jNu8pi8slKutRfK?=
- =?us-ascii?Q?PzKRWoaO7njqRgF06IRkRbE=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: ae4uw9uWM0sTqI4D9vtJapJHw3JNniiJce61v0b8eHrBYhEH7lrEeQ4D3iaTuTDALTk2vMSn9nh3XH7xA6bdCI+AHdFyKoUhwdVX4xmZZs5RVHNHcgXi5wlAlGYlHUGTqbNZ4elLa9jW8bWX33PCcJoRVQLxyMLZ1GwRvE6zKJ+7xWSH6e/AR8Olwrdn1j0DIV6MrBWDsJYzZRERF2qAwlFApAYnH6t0AwNNt+69wJhHkwWp4M+tOBxnYCQv5xXSVvkw4HixOpJZ6imrIkceqAsXZqfX3sHNS7NRzTYHlCFCG0lXcypABl9FwyJNrig6r2yVKdqBoFZ1h8cKNr+872Prka4CE0MxMQFlrOtynFNwfFpI4BJGHoF05bS0I3bNIFPcgYf7TEMkyFZxEO0oPDS1ukb12KsA6mEoZGdc5TsgUbw7vfp0bnYkJ37pKdWxIdoiladxq8DMJG1l8AkuUge5j1KV6FccNBkrS0fvRV8d25zkvz9Npzd7fmJU2rbGV0nLOmtvuhH+zk0kh237wY8XAGJYv6f21S0HmTeaXN8ePiZ8NyG4SA4ojBx21VBEvWS7XAhzkUcSmf/oAAKrH4BpxSbs/vOgOVCTInL/+JvKB3G8PWNMvZOa7b52D2hepIHXYeUTKeubkeIRV0v7GQZB06xbWMAuWsv225h8vzA+sBt0wZAKOC/HBJ6+bcFg/v//wzJw4M9EVKQirqH/kQj79iG6wS9fbuXjqd0QUoWmIsKpgdZWX2LVRMVkffxJ5l1mQjjuMa/HRCdMlufcRk8ZcBbjOaxEfWYZMwqXiPU=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ad3f133d-9fd9-4808-1d58-08db1052f128
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 19:21:02.3607
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jSTrCoJRmgg/mmXMv4f+yP8vsyxaWAbeFLD3r08/F9IoXCkeEEciBXoxIkX73eJeMCE41tw+of4jGORJOx1Suw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5087
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-16_15,2023-02-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
- phishscore=0 spamscore=0 bulkscore=0 mlxlogscore=840 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302160166
-X-Proofpoint-GUID: QfmR68CXoJh_HIQlptxZTE5TSaSG_H3H
-X-Proofpoint-ORIG-GUID: QfmR68CXoJh_HIQlptxZTE5TSaSG_H3H
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="cVG82M06RkxZIBEi"
+Content-Disposition: inline
+In-Reply-To: <20230216191632.GA3325180@bhelgaas>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-[Cc: slashed]
 
-On 16 Feb 2023, Bjorn Helgaas said:
+--cVG82M06RkxZIBEi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> [+cc PCI folks, who got the patches but not this cover letter, and
-> participants from the v1 posting]
+On Thu, Feb 16, 2023 at 01:16:32PM -0600, Bjorn Helgaas wrote:
+> On Thu, Feb 16, 2023 at 06:01:23PM +0000, Conor Dooley wrote:
+> > On Thu, Feb 16, 2023 at 11:43:33AM -0600, Bjorn Helgaas wrote:
+>=20
+> > ...
+> > I noticed that (as requested!) Nick dropped the change to the microchip
+> > driver.
+> > Would you like me to resend patch 3/11 of [1] to clear the decks of
+> > "incorrect" MODULE_LICENSE usage?
+>=20
+> Thanks for noticing that.  I removed MODULE_LICENSE from
+> pcie-microchip-host.c for now.  We can easily add it back when [1] is
+> merged.
+>=20
+> I haven't talked to Lorenzo about the series [1] is part of, but just
+> from the mailing list traffic, it looks like there are a couple open
+> questions (MSI config probing [2], "ranges" and address translation
+> stuff [3,4]), so that will likely miss this merge window.
 
-Oh I'm sorry! I think I need to arrange to augment the cover letter with
-Cc:s too, to add all the mailing lists to it. This is extra-hard if (as
-here) I'm splitting up the original patch series into pieces...
+Yah, I know the series itself is going to miss the mw, which is why I
+mentioned resending 3/11 specifically. It's grand though, will just have
+to add the license back when the series gets respun.
 
-... or just try to do without a cover letter, and put all the stuff
-which should be in the cover letter into the bit after the commit log
-text. That might be simpler, since I could just stuff it unconditionally
-into every mail without alteration.
+> > 1 - https://lore.kernel.org/linux-pci/20230111125323.1911373-4-daire.mc=
+namara@microchip.com/
+>=20
+> [2] https://lore.kernel.org/r/Y9uiWscjKQpD7JvE@lpieralisi
+> [3] https://lore.kernel.org/r/Y9uebWEvuJYO31j1@lpieralisi
+> [4] https://lore.kernel.org/r/8dfc14be-a978-d84b-52e4-d421599fc783@arm.com
 
--- 
-NULL && (void)
+--cVG82M06RkxZIBEi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+6+bwAKCRB4tDGHoIJi
+0tZmAQComWSerbIi81ZZzLrEqxzrF83yEBkSIlcd908CoX6wAQEAkpZ3G/oM7Ps1
+7wGotiMYdvlClrmYv8gG0AAAVWBtOQY=
+=XdlY
+-----END PGP SIGNATURE-----
+
+--cVG82M06RkxZIBEi--
