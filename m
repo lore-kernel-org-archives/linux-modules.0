@@ -2,88 +2,79 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37FCEC636CC
-	for <linux-modules@archiver.kernel.org>; Sun, 19 Feb 2023 12:39:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33E1EC636D6
+	for <linux-modules@archiver.kernel.org>; Mon, 20 Feb 2023 05:01:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjBSMjZ (ORCPT
+        id S229736AbjBTFBv (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 19 Feb 2023 07:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
+        Mon, 20 Feb 2023 00:01:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjBSMjY (ORCPT
+        with ESMTP id S229451AbjBTFBu (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 19 Feb 2023 07:39:24 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC22510271;
-        Sun, 19 Feb 2023 04:39:23 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id BC6DF32000EB;
-        Sun, 19 Feb 2023 07:39:22 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute5.internal (MEProxy); Sun, 19 Feb 2023 07:39:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1676810362; x=1676896762; bh=k8
-        3A+g7S3ByBVaUJPvDn2um16R3lzsxqFfSEQC5A0ls=; b=oDNhtv0DuSXXtQpIKc
-        aQlBh+GfGOy8X3rS+YYGpM1PX0Hzt4LDfXmpGGxAYFj7BLQkDKv9KbOlZBjlxfaC
-        myRo6/nSwB7dh2Y+vfb3o8PgSSMnslP0KA9ei6aEnKhDipeOq4BYsaVTF+b6ki6f
-        TzZUrWVkvmWMxn9nhAivHiGv98z3WIlZcYFogFN68gWwu5KlsIqk5gTzftaU8V2r
-        QdUC2Fk9f8v1RVmVA07v3SG0S2XKLdvwQI/nlAxGAY67ova5aNyzCaGbAees4fv1
-        hD+jCwlykJXBpW4AOkz7JHCNpsjneSBMlbepZrFABlicKMoZRFgI7kaZ0H6kd0Ic
-        nNcQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676810362; x=1676896762; bh=k83A+g7S3ByBVaUJPvDn2um16R3l
-        zsxqFfSEQC5A0ls=; b=XnlDmCRzSEgzBbxfME0H9Ry2dnYZzJ5OQA1p1VIi0TAE
-        sZp/Ynij3iqEWylE8StrhX6KCGgtjA2xISN9t2BET9KNcYM4yVlVAsBetqb/qJRB
-        IYa6WyWVvI9AW1sd7syCMqXQKQRSRemZ7AfQImii4kMXaVV6fxLZRxrd0eiB4Lyj
-        l6AjekA2jlr5mVBumSkBj5y+4tPg8llhTdSLsvoXwUUV6jY0QoJc2e5YqNaDmO3C
-        ugKc1JmVc1vIZMWvzemavp4HWSf3vUoohuk4RK2KzaRjVSeoORMmfbMsaooCtvDj
-        MxuIwr1qanzLPtts+IgX+iB3b0P5PCIoRBRc1J8oew==
-X-ME-Sender: <xms:eRjyYxtRmrPRpXv2IOcrMkHTxIk7bum9qoPtiN6TyzYsi53oqt6qug>
-    <xme:eRjyY6fmbJRJM9KuqYWBP4RzyHbRFMpjJA4-IIUZZ_0UTDnxCvOpgF0x9PhHxiq40
-    cPQgWMxfsSbrCTRZhw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejfedggeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
-    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
-    grthhtvghrnhepleevgfegffehvedtieevhfekheeftedtjeetudevieehveevieelgffh
-    ieevieeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:eRjyY0yX7HTYdp9fBhazdF28JzrOj0IkDoPMblzZaqicXdismFON9Q>
-    <xmx:eRjyY4Mfnv-kasoqKCYIMHmJ6vRqsj1Y2S0_2CTrJA2K_WDiIJTdzQ>
-    <xmx:eRjyYx_hqsmnGFnMW47HsasywQBOCMRVFF2V3Y0KmFfuFZ_9jjwj5A>
-    <xmx:ehjyYxwzelqr5DfRfmZX9pthVMqRZEEYvBBAj8xaDTrqwOwnmRNzzg>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 38341A6007C; Sun, 19 Feb 2023 07:39:21 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <0f49c43d-c6e0-47a9-871b-6fbe4daaa37e@app.fastmail.com>
+        Mon, 20 Feb 2023 00:01:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDB4C657
+        for <linux-modules@vger.kernel.org>; Sun, 19 Feb 2023 21:00:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676869245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Iz5/XJcUnQF/LFQxvol9TqG2b7RW1QrWjYsgCVHX3XQ=;
+        b=MaTAwLsTV4fz8yHDggqrNXI3HztrJOYA/JClU/6U0vKGOrOUyvJ5f/IEKRpdEIAZRBoMLu
+        8cLZ0C+lSJr9gvhuLzn6agIZPmxP3toVYBKrkkY6Ic9r4ZzIdPQ3imFOAyEXEYuj3BfkSh
+        PxiC4nyBzVCUAcSUuN/5QNZBJ6W4JYw=
+Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
+ [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-66-FpKqfZA-Om2x6fARpLQ9yw-1; Mon, 20 Feb 2023 00:00:42 -0500
+X-MC-Unique: FpKqfZA-Om2x6fARpLQ9yw-1
+Received: by mail-vk1-f199.google.com with SMTP id 9-20020a0561220b4900b00406400ed454so155866vko.13
+        for <linux-modules@vger.kernel.org>; Sun, 19 Feb 2023 21:00:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Iz5/XJcUnQF/LFQxvol9TqG2b7RW1QrWjYsgCVHX3XQ=;
+        b=Q2h7pEkR448QrpE0Q1xSLkk8UI0prai7h71bG+bbdZiWoQ5TaxymYA7NjLeJqyx1AE
+         P5R5RnyzanWQXILn9NTxSPiAfiXxxos0p6PpGT5Sf00ru0MD04MvGrYU/F8ndl+WvT6S
+         CWtnuHkIQDUYLuV3JC8rTIJ7xDDG1qXQa6bjQxDFr5Devof4fRkjh9M/j1LJ8wTDyGJ5
+         BZuBSZmTy1093r2+zkNhUDlKkl/nnB4/LQgXRfEsG1xh4t8MbX8R2+/MbVHw0A/1N2jr
+         jpZ9dGAXgb2giDns8dtePhFx5IFDQ50gNcJEcqvUMC2/D3n5gDwMlQmTGXCWGbptwZzR
+         f0Pw==
+X-Gm-Message-State: AO0yUKV0zDEPKNLMj3f+peKWSRbpXc3hpCP9wzwZtboM1VDh5IzxYhKC
+        mihdGfggw42xwGPV8UWPbno1wxheo3MfbLfPfPd7Wv0U4WRx/MUtfD3OdcG52ONKDOmwI70zxKs
+        zdrT3BO9VLTBEUZNq5gBs2CNH8ag6nHURL68epWJFpKac0558nEAw
+X-Received: by 2002:a05:6102:f0a:b0:411:bd2e:11ac with SMTP id v10-20020a0561020f0a00b00411bd2e11acmr165954vss.75.1676869241594;
+        Sun, 19 Feb 2023 21:00:41 -0800 (PST)
+X-Google-Smtp-Source: AK7set9f9ox6vr3CX95NfKEGX65cBproFKTgZSzrIfnLLXYRXGGY0eODN/Gl2kUycvwizSjQfY+ldPdK2BDBA0MyKSw=
+X-Received: by 2002:a05:6102:f0a:b0:411:bd2e:11ac with SMTP id
+ v10-20020a0561020f0a00b00411bd2e11acmr165950vss.75.1676869241338; Sun, 19 Feb
+ 2023 21:00:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20230217141059.392471-1-nick.alcock@oracle.com> <20230217141059.392471-12-nick.alcock@oracle.com>
 In-Reply-To: <20230217141059.392471-12-nick.alcock@oracle.com>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
- <20230217141059.392471-12-nick.alcock@oracle.com>
-Date:   Sun, 19 Feb 2023 13:38:54 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Nick Alcock" <nick.alcock@oracle.com>, mcgrof@kernel.org
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Mon, 20 Feb 2023 05:00:25 +0000
+Message-ID: <CAOgh=Fyak7mxqva0qkUtrqBnsBbhMtP+AsHpOz3TNhwp4wPaAQ@mail.gmail.com>
 Subject: Re: [PATCH 11/24] kbuild, soc: apple: apple-pmgr-pwrstate: remove
  MODULE_LICENSE in non-modules
-Content-Type: text/plain
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Philipp Zabel <p.zabel@pengutronix.de>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Feb 17, 2023, at 15:10, Nick Alcock wrote:
+On Fri, 17 Feb 2023 at 14:20, Nick Alcock <nick.alcock@oracle.com> wrote:
+>
 > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
 > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
 > are used to identify modules. As a consequence, uses of the macro
@@ -107,27 +98,28 @@ On Fri, Feb 17, 2023, at 15:10, Nick Alcock wrote:
 > Cc: linux-arm-kernel@lists.infradead.org
 > ---
 
-Acked-by: Sven Peter <sven@svenpeter.dev>
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
 
+Is mise le meas/Regards,
 
-Sven
-
+Eric Curtin
 
 >  drivers/soc/apple/apple-pmgr-pwrstate.c | 1 -
 >  1 file changed, 1 deletion(-)
 >
-> diff --git a/drivers/soc/apple/apple-pmgr-pwrstate.c 
-> b/drivers/soc/apple/apple-pmgr-pwrstate.c
+> diff --git a/drivers/soc/apple/apple-pmgr-pwrstate.c b/drivers/soc/apple/apple-pmgr-pwrstate.c
 > index e1122288409a..2c15474c7b53 100644
 > --- a/drivers/soc/apple/apple-pmgr-pwrstate.c
 > +++ b/drivers/soc/apple/apple-pmgr-pwrstate.c
-> @@ -319,6 +319,5 @@ static struct platform_driver apple_pmgr_ps_driver 
-> = {
-> 
+> @@ -319,6 +319,5 @@ static struct platform_driver apple_pmgr_ps_driver = {
+>
 >  MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
 >  MODULE_DESCRIPTION("PMGR power state driver for Apple SoCs");
 > -MODULE_LICENSE("GPL v2");
-> 
+>
 >  module_platform_driver(apple_pmgr_ps_driver);
-> -- 
+> --
 > 2.39.1.268.g9de2f9a303
+>
+>
+
