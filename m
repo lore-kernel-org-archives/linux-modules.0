@@ -2,61 +2,61 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA3EFC64EC4
-	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 13:19:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AEC0C6379F
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 13:19:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbjBUNTh (ORCPT
+        id S233732AbjBUNTj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 21 Feb 2023 08:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        Tue, 21 Feb 2023 08:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233430AbjBUNTg (ORCPT
+        with ESMTP id S233430AbjBUNTi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:19:36 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43314690
-        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:35 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id l2-20020a05600c1d0200b003e1f6dff952so3511772wms.1
-        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:35 -0800 (PST)
+        Tue, 21 Feb 2023 08:19:38 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217C54690
+        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:37 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id l7-20020a05600c4f0700b003e79fa98ce1so1177063wmq.2
+        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ckoGnYi/g9fzY1+nZePCJNaLc7j6vS+121w8xKnkYZ0=;
-        b=Sv2IZm1JwLnk4PJT5FB5nBThj++2o37H5ZqAeRYtQcRmyzONQqm/nPQrPr26lgbedp
-         B3o/YTmebfH7Gy9tQH2e8N2Ex1pCu/jvrzuFCN1ZzON49Y/YKYL18JWPxqB65Ky9wc9B
-         2xkE+lk5ea4dU0MfRUgWFxRNW0Go54g/wgpocCoWEj/djUf4dbG0llgOawgNiSQUAPiN
-         h6lRkMqjeThPgSxui0XVzTq+O2B2a2eIhGyG1kRytuS6JlglyKLxTWpBPwxDdUT0ofbx
-         zsAMpWiPANhcmYIQvaXLeTywoeYkBna1QTPDvnRQ21QSvgpfPMdl+zIuAoFOaQZXaniS
-         DSyw==
+        bh=71h8EqTR38D1vU1Ns7pR/Fzm/P/c2WawQeO6hO0xei8=;
+        b=iVilA8RTW6Ro/2mdnTeQ39UFTavVkNB6L0KcJuo7dO5RAVUYIeRNItIy8UP4ewRxSF
+         lRNUnyt3LTGBBpIhIIGSF9+dovxWjD6NDN3c9KKXpXav7r5T7dTEGzoz9yDXeq5cAChe
+         75/oJP7DJUuwfq+s6et+JO+Hgv2gdKWHUMxM7Rt2FGzpD9WuCpRSRLIhYeV391sZsyPh
+         FoFAB+QYH8XcY3KZDod1QVHl8oEu9Q2SbR4ZFcnnaIamr+7xcpVECttTlqEMLpy3AAYS
+         08ZZgM3sNnmDb3whWe4qEC3m66gxiMXreNF+bUjnov1VQvfmap7XWMpkoyz7ewv3Jar/
+         xiew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ckoGnYi/g9fzY1+nZePCJNaLc7j6vS+121w8xKnkYZ0=;
-        b=gb3hs2Bl7jaQDWXQYd+oofpjDv9t9VD/xBD7M7d58zDrXiRhGiWnJt8SDiqvhPFVZV
-         qkeZPuRg/1Afmmgq/GC4PP4UqsIBz4XuT96/ibZ9HSl5yoG7tLMmX74v56XBherfSSu1
-         uzj4A/jxmFBU3ZEed9ANWAVUwZZftle7vMnFR4oP1iPDdoLPlzDg7x/kBuzVuEgYKRTa
-         ouwS4DPsD4wdCgnraY8hRiCt32bfEuVxN6RDemKiewwDjrib8UNH0npLlNUCYPTEoWFx
-         4lK3abZZBcMLx49f6LPVbKmkyyDZ9S2cvOnaciAXEtujI4dO86cEsP/GS+yc7l13K6SD
-         L84A==
-X-Gm-Message-State: AO0yUKU4oIfQZ+jxZodC0VT4eMrvCdQTHuWjbwslwCHtXi7qoo2pVpN2
-        XGPJDoMe6q+Bv2XbBTlmAEEJm7ftiDY=
-X-Google-Smtp-Source: AK7set/vVTl7IrdVVNyd9no9gUytwxUMVo4fIc7Us1lxxa1iR79FldzXF6Ih1F8IWKXTa16aeiaN9g==
-X-Received: by 2002:a05:600c:331b:b0:3dc:4318:d00d with SMTP id q27-20020a05600c331b00b003dc4318d00dmr3086528wmp.11.1676985573834;
-        Tue, 21 Feb 2023 05:19:33 -0800 (PST)
+        bh=71h8EqTR38D1vU1Ns7pR/Fzm/P/c2WawQeO6hO0xei8=;
+        b=DcS7P3xfoienC6a7H5fvfKM0SAi2qyQa3QgfttK7XuFrzBHs3wyxV1Aq2+8vbi0mEf
+         6a7fyj+MFlIqIgkE8FrHliDN8kx8zRochPD+6vMSUTYmzCAhmv/5Gannu/odz3/CPVYc
+         CiN/sDfpHQsLkVlbswPUX2KDGhYTIeuVpTEa7xA7a/g5U1Nd/WeHMGoH+Jep7WSvdKpl
+         nbfwNSWRCEN853OH06PwxK/6YxTNwfj5vLS4HAHjAeZBjjFjIHSt3LI9MLuAHH28mtx1
+         Etm5MS7U7GIFcsE9QJ7epqvVW/rHdtU+MXMRbuE0YTTYmpzy3LCsyta2QM+s+kG99ZPo
+         IaoQ==
+X-Gm-Message-State: AO0yUKW3GzM9+r+KSwMD7aGSEhqLnO9RDrKdqocINvXWKl9l683b7ZdX
+        GiwwC1qP5Eq4dOG8RXaByVD14aH+0YI=
+X-Google-Smtp-Source: AK7set+UF9G1qiAaEj546724MKGrU6rH6gbv2SmWLJ1c1z2N0fxGjRmGmdePUIErse/EeWZxoQsdfQ==
+X-Received: by 2002:a05:600c:2ac8:b0:3e0:114:62ee with SMTP id t8-20020a05600c2ac800b003e0011462eemr3277645wme.8.1676985575197;
+        Tue, 21 Feb 2023 05:19:35 -0800 (PST)
 Received: from localhost (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net. [82.24.248.100])
-        by smtp.gmail.com with UTF8SMTPSA id o17-20020a05600c379100b003e70a7c1b73sm3015097wmr.16.2023.02.21.05.19.33
+        by smtp.gmail.com with UTF8SMTPSA id k17-20020a7bc411000000b003dfee43863fsm3963613wmi.26.2023.02.21.05.19.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 05:19:33 -0800 (PST)
+        Tue, 21 Feb 2023 05:19:34 -0800 (PST)
 From:   Emil Velikov <emil.l.velikov@gmail.com>
 To:     linux-modules@vger.kernel.org
 Cc:     emil.l.velikov@gmail.com
-Subject: [PATCH 2/4] libkmod: annotate kmod_builtin_iter API as static
-Date:   Tue, 21 Feb 2023 13:19:27 +0000
-Message-Id: <20230221131929.106951-3-emil.l.velikov@gmail.com>
+Subject: [PATCH 3/4] shared: annotate local API as static
+Date:   Tue, 21 Feb 2023 13:19:28 +0000
+Message-Id: <20230221131929.106951-4-emil.l.velikov@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230221131929.106951-1-emil.l.velikov@gmail.com>
 References: <20230221131929.106951-1-emil.l.velikov@gmail.com>
@@ -67,68 +67,64 @@ List-ID: <linux-modules.vger.kernel.org>
 
 From: Emil Velikov <emil.velikov@collabora.com>
 
-It's no longer used outside the compilation unit, as of last commit.
+None of the API is used outside of the compilation unit.
 
 Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
 ---
- libkmod/libkmod-builtin.c  | 8 ++++----
- libkmod/libkmod-internal.h | 5 -----
- 2 files changed, 4 insertions(+), 9 deletions(-)
+ shared/util.c | 6 +++---
+ shared/util.h | 3 ---
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/libkmod/libkmod-builtin.c b/libkmod/libkmod-builtin.c
-index a002cb5..65334a8 100644
---- a/libkmod/libkmod-builtin.c
-+++ b/libkmod/libkmod-builtin.c
-@@ -54,7 +54,7 @@ struct kmod_builtin_iter {
- 	char *buf;
- };
+diff --git a/shared/util.c b/shared/util.c
+index 4b547ff..e2bab83 100644
+--- a/shared/util.c
++++ b/shared/util.c
+@@ -354,7 +354,7 @@ char *freadline_wrapped(FILE *fp, unsigned int *linenum)
+ /* path handling functions                                                  */
+ /* ************************************************************************ */
  
--struct kmod_builtin_iter *kmod_builtin_iter_new(struct kmod_ctx *ctx)
-+static struct kmod_builtin_iter *kmod_builtin_iter_new(struct kmod_ctx *ctx)
+-bool path_is_absolute(const char *p)
++static bool path_is_absolute(const char *p)
  {
- 	char path[PATH_MAX];
- 	int file, sv_errno;
-@@ -108,7 +108,7 @@ fail:
- 	return iter;
+ 	assert(p != NULL);
+ 
+@@ -460,13 +460,13 @@ int mkdir_parents(const char *path, mode_t mode)
+ 	return mkdir_p(path, end - path, mode);
  }
  
--void kmod_builtin_iter_free(struct kmod_builtin_iter *iter)
-+static void kmod_builtin_iter_free(struct kmod_builtin_iter *iter)
+-unsigned long long ts_usec(const struct timespec *ts)
++static unsigned long long ts_usec(const struct timespec *ts)
  {
- 	close(iter->file);
- 	free(iter->buf);
-@@ -165,7 +165,7 @@ fail:
- 	return -1;
+ 	return (unsigned long long) ts->tv_sec * USEC_PER_SEC +
+ 	       (unsigned long long) ts->tv_nsec / NSEC_PER_USEC;
  }
  
--bool kmod_builtin_iter_next(struct kmod_builtin_iter *iter)
-+static bool kmod_builtin_iter_next(struct kmod_builtin_iter *iter)
+-unsigned long long ts_msec(const struct timespec *ts)
++static unsigned long long ts_msec(const struct timespec *ts)
  {
- 	char *line,  *modname;
- 	size_t linesz;
-@@ -216,7 +216,7 @@ bool kmod_builtin_iter_next(struct kmod_builtin_iter *iter)
- 	return (iter->pos < iter->size);
- }
+ 	return (unsigned long long) ts->tv_sec * MSEC_PER_SEC +
+ 	       (unsigned long long) ts->tv_nsec / NSEC_PER_MSEC;
+diff --git a/shared/util.h b/shared/util.h
+index 7030653..c4a3916 100644
+--- a/shared/util.h
++++ b/shared/util.h
+@@ -38,7 +38,6 @@ char *freadline_wrapped(FILE *fp, unsigned int *linenum) __attribute__((nonnull(
  
--bool kmod_builtin_iter_get_modname(struct kmod_builtin_iter *iter,
-+static bool kmod_builtin_iter_get_modname(struct kmod_builtin_iter *iter,
- 				char modname[static PATH_MAX])
- {
- 	int sv_errno;
-diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
-index 95c0377..4a4af58 100644
---- a/libkmod/libkmod-internal.h
-+++ b/libkmod/libkmod-internal.h
-@@ -198,9 +198,4 @@ bool kmod_module_signature_info(const struct kmod_file *file, struct kmod_signat
- void kmod_module_signature_info_free(struct kmod_signature_info *sig_info) __attribute__((nonnull));
+ /* path handling functions                                                  */
+ /* ************************************************************************ */
+-bool path_is_absolute(const char *p) _must_check_ __attribute__((nonnull(1)));
+ char *path_make_absolute_cwd(const char *p) _must_check_ __attribute__((nonnull(1)));
+ int mkdir_p(const char *path, int len, mode_t mode);
+ int mkdir_parents(const char *path, mode_t mode);
+@@ -51,8 +50,6 @@ unsigned long long stat_mstamp(const struct stat *st);
+ #define MSEC_PER_SEC	1000ULL
+ #define NSEC_PER_MSEC	1000000ULL
  
- /* libkmod-builtin.c */
--struct kmod_builtin_iter;
--struct kmod_builtin_iter *kmod_builtin_iter_new(struct kmod_ctx *ctx) __attribute__((nonnull(1)));
--void kmod_builtin_iter_free(struct kmod_builtin_iter *iter) __attribute__((nonnull(1)));
--bool kmod_builtin_iter_next(struct kmod_builtin_iter *iter) __attribute__((nonnull(1)));
--bool kmod_builtin_iter_get_modname(struct kmod_builtin_iter *iter, char modname[static PATH_MAX]) __attribute__((nonnull(1, 2)));
- ssize_t kmod_builtin_get_modinfo(struct kmod_ctx *ctx, const char *modname, char ***modinfo) __attribute__((nonnull(1, 2, 3)));
+-unsigned long long ts_usec(const struct timespec *ts);
+-unsigned long long ts_msec(const struct timespec *ts);
+ unsigned long long now_usec(void);
+ unsigned long long now_msec(void);
+ int sleep_until_msec(unsigned long long msec);
 -- 
 2.39.2
 
