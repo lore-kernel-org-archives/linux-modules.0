@@ -2,93 +2,72 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 170FDC636D7
-	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 21:22:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA925C64EC4
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 21:48:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjBUVWA (ORCPT
+        id S230176AbjBUVsg (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 21 Feb 2023 16:22:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
+        Tue, 21 Feb 2023 16:48:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjBUVV7 (ORCPT
+        with ESMTP id S230163AbjBUVsg (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 21 Feb 2023 16:21:59 -0500
+        Tue, 21 Feb 2023 16:48:36 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9854B2DE79;
-        Tue, 21 Feb 2023 13:21:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E419279B9;
+        Tue, 21 Feb 2023 13:48:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3wwgaOAtJyQ/6lKVyvGMkGGUg0khszmE+NnlRtfyRGE=; b=ptOJRKvmkM6BsAfGjOho3V0KSD
-        PN9bW/0hw1WvnmlM3NjqciRIXTJTc59BWzQnmnE8GIyLRQltT85VeeHdTEiffLHiT3OG28WGusWQm
-        +K5f4pKq0vaKOl6d0sEQ20jjWvPkt9DUeUFDU1iQQuaSg9hhFzm9K5nlbKTlQetFe5B9tS8+R/KP5
-        TfzHlNxYeyq2/u3F15gbnMgKTY/8PgoYquEVK4bqssGLSmyUDg/3aho7RsTNyZRWbCIezVJGqP/9P
-        30rwfqKxhGpsftch7ckJRyTmlNh419NDz0MbRU1uVk5oMwn2p+rX8kqXQ/ntokx4q2B3g4U5SKFID
-        5DsS0L1g==;
+        bh=9wRyTrQMV/JTg5YpVENMGjnZWekiNX6igp9A3xduDzA=; b=Wk0SNPEDQo4F/o1PXV9LRYRXkD
+        yYE1HvlqaAYQgMElqRyy38wHa3mUpZChD2YsHuwAk4W66my+56RsNZGV17/f2MStXnznyjmfYky2z
+        GozltbUHR+P7mj9QmsKx2IB0Bkn8w7He77sd66RvJeAqIiYIjC5jtq+nJWTxP22FvSeJkCACvSE3/
+        1tMr/o0K7pemJlzvhKx4x+BYqjE/1L7wiBwgdlu5cHhGGFwiO4Tg/nWKCqueZTG4i4DxwMHFVITdB
+        +jvAlpzQTySYkjZlUsjkwZ+Fh9uopueEOEXQ2LbI21NggxnEvKClUWIin/gBKH52EJbUaq5NEz+tA
+        Gf+rkPUA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pUa5A-009nyA-S1; Tue, 21 Feb 2023 21:21:52 +0000
-Date:   Tue, 21 Feb 2023 13:21:52 -0800
+        id 1pUaV0-009sOz-7D; Tue, 21 Feb 2023 21:48:34 +0000
+Date:   Tue, 21 Feb 2023 13:48:34 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     Chris Down <chris@chrisdown.name>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        ndesaulniers@google.com, trix@redhat.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] module: Remove the unused function within
-Message-ID: <Y/U18FlTNVhwb6+q@bombadil.infradead.org>
-References: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
- <Y+0MsMomkcDBdjNI@chrisdown.name>
- <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X>
- <Y+0VAr21hlIdrxyp@chrisdown.name>
- <CAPhsuW5U2qXa_O46_v-hzWqq5L7bRs6bQe5QGGnMOMzX3y4KgA@mail.gmail.com>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, elena.zannoni@oracle.com
+Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
+ symbol->address lookup with /proc/kallmodsyms
+Message-ID: <Y/U8MuL24OZzbIIp@bombadil.infradead.org>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+ <Y8b8TOJzd/RZXR8z@bombadil.infradead.org>
+ <87r0uy3hkw.fsf@esperi.org.uk>
+ <87bkm22y6e.fsf@esperi.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPhsuW5U2qXa_O46_v-hzWqq5L7bRs6bQe5QGGnMOMzX3y4KgA@mail.gmail.com>
+In-Reply-To: <87bkm22y6e.fsf@esperi.org.uk>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Feb 15, 2023 at 10:57:09AM -0800, Song Liu wrote:
-> Hi Chris,
+On Thu, Feb 09, 2023 at 11:53:29PM +0000, Nick Alcock wrote:
+> [most people trimmed from the Cc: list for this procedural question]
 > 
-> On Wed, Feb 15, 2023 at 9:23 AM Chris Down <chris@chrisdown.name> wrote:
+> On 9 Feb 2023, Nick Alcock outgrape:
+> > I am going to split this whole series into:
 > >
-> > +Cc: Song
+> > 1. A series of patches (123 of them at present) Cc:ed to subsystem
+> > maintainers as well as you, to comment out the MODULE_LICENSE usage.
+> > These patches will have Suggested-by you. This series is rebased against
+> > the latest modules-next and revalidated, and is ready to be mailed out;
+> > will do so shortly.
 > 
-> Thanks for the CC!
-> 
-> >
-> > Nathan Chancellor writes:
-> > >On Wed, Feb 15, 2023 at 04:47:44PM +0000, Chris Down wrote:
-> > >> Jiapeng Chong writes:
-> > >> > The function within is defined in the main.c file, but not called
-> > >> > elsewhere, so remove this unused function.
-> > >>
-> > >> Huh? It's used by __module_text_address(), no?
-> > >
-> > >Not after commit 2ece476a2346 ("module: replace module_layout with
-> > >module_memory") in -next. This patch should have a fixes tag, even if
-> > >the warning is currently hidden behind W=1.
-> >
-> > Huh, I thought I had checked out latest -next, but must have not done so
-> > somehow :-) Mea culpa.
-> >
-> > If it's only in -next then no Fixes needed, since there's no stable rev yet.
-> >
-> > Jiapeng, in future, please make sure to cc the author of related commits when
-> > reporting stuff like this :-) It helps people to update their patches.
-> >
-> > Song, you probably want to update your patch.
-> 
-> Luis, would you prefer a new patch with everything folded in? Or would
-> you apply the patches on your end?
+> One quick question: if/when you're happy with this series, are you
+> planning to take it yourself via modules-next?
 
-I've merged this patch separately onto modules-next and enhanced the
-commit log to explain its needed after your patch.
+It seems some maintainers are already taking patches in, so let's see
+what folks take in, then if there are not takers I can just take what is
+not merged on linux-next through modules-next.
+
+So try to get them into each subsystem tree, and around rc3 send the
+ones that are not merged and I'll just take them into modules-next.
 
   Luis
