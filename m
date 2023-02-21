@@ -2,153 +2,103 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AC67C61DA3
-	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 13:19:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64347C61DA3
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 18:24:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjBUNTk (ORCPT
+        id S229567AbjBUSYd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 21 Feb 2023 08:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
+        Tue, 21 Feb 2023 13:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233785AbjBUNTj (ORCPT
+        with ESMTP id S229497AbjBUSYd (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:19:39 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D70D1C313
-        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:38 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id l6so3194655wms.3
-        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:38 -0800 (PST)
+        Tue, 21 Feb 2023 13:24:33 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C0CCDFA;
+        Tue, 21 Feb 2023 10:24:31 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id da10so22134680edb.3;
+        Tue, 21 Feb 2023 10:24:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U+p/Ow+d6DG7aJa2PdxbCzb6KsbOEOmJVCwwyvTASPU=;
-        b=feSvGV0LKdd3WoGhoiZwynCuxNpEw1qllhJjKsFw3hkb/x5U5tRC8DN4HhoBbve85u
-         0vpkp/6hOOFrME/wZKR824dQdrc9lxT5ncBuWc9LDDgd1vMVpggoJMokNLuvgg/BpNHe
-         Sij3kWsuy9gBrPAxyirZGV4izHOV/vzJAMzOwHEXC/a5XNF+mccIDFwZHsfauhdgLRQi
-         gANpPz/+Y6W5+dowBnsBQcu49pGvsxbCU/mbXZroFZvkTmQexSGhLCetq6C5SWEoqQ9c
-         QOWvsfrVtG7TyJg1te4n0177YUWTj2p0qJ8oKIhXRIMU40uCj+mBQgpD4HKH3QZTow6o
-         5oLQ==
+        bh=XicgGxxpxnjWOAupqddiOjOjwVHxq+BPEsx44HPQNeA=;
+        b=QTWnOKsaUPUp0dN+ok26p/p57wnxvJ9zQNA6WvOCq+B/Uapg2fsAXqfhwhl7w3rLke
+         rRrjl5DSzfrxFyW17QzrpY76Zu8pfQmHuMNkIvA8D646a44f/0fxPAlFZ8Iott9td/W0
+         z9mTNzn3g2QsUvMJKgAxhanOriMDvvbQojevqwKFjC/OI2XzqMdu4OKwRzwi6uskvdBT
+         h8sYPbKs4yAwPO2lMlWajxaw87LYxJYlHMSJ41nMDLCMNSYziBpaDc4pA5/CXPLdCbRv
+         fxQ+uRGTlPVKiW3hs8F7GAwcFK0cbOvR/KFCoWFpPLooZdfwgNPJTa++FKuva+RJnaHX
+         bunQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U+p/Ow+d6DG7aJa2PdxbCzb6KsbOEOmJVCwwyvTASPU=;
-        b=K0XJMstECjCVQjZQCB66L8nT6CafnfjE8XIo0hwtZqwoHC/h5mxZcAVtmNLvr1vlAJ
-         3/hwpPqgnNNhXlinCdCZmNDxKsD4QcjWAlYZ0WVayhFWFdVKYsEPKid1M30tu2BbrXUq
-         6mMWVVEQTGnmWjN6yXKrSUx19DOCj34/HhkoE/jBa3w12EDIG9QmqQJpTQJSuwGIH8ey
-         25pqbi+pjclY/YswgzKA5ak+aKju3dCr06/5O2zcElPZSsCsJBBhKMoogIypyL+GihUE
-         J5VJif6cce+b4jPJeU3u32zPcMgMyDiFAx7busMXCG054yY3eglf/asdAOtq8qqnt7K9
-         idnw==
-X-Gm-Message-State: AO0yUKXHSLf/MUvrv/8cGJtojITomM2jNBz8J5NcaKuQHrI4QVp4/ut7
-        YdbnLfsMgK1aEABOfsKiD6dCxUTcge0=
-X-Google-Smtp-Source: AK7set96VYpsxsN2KbuRLFpQ80sp/EdiJ68356W6yn0mHwu1/oHtAgJuw2+P2lK1poZkYcxlBex/UA==
-X-Received: by 2002:a05:600c:1887:b0:3e2:918:ecd4 with SMTP id x7-20020a05600c188700b003e20918ecd4mr3367366wmp.37.1676985576605;
-        Tue, 21 Feb 2023 05:19:36 -0800 (PST)
-Received: from localhost (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net. [82.24.248.100])
-        by smtp.gmail.com with UTF8SMTPSA id y14-20020a7bcd8e000000b003e118684d56sm3610422wmj.45.2023.02.21.05.19.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 05:19:36 -0800 (PST)
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-To:     linux-modules@vger.kernel.org
-Cc:     emil.l.velikov@gmail.com
-Subject: [PATCH 4/4] configure: manage libkmod.pc.in and version.py.in via AC_CONFIG_FILES
-Date:   Tue, 21 Feb 2023 13:19:29 +0000
-Message-Id: <20230221131929.106951-5-emil.l.velikov@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230221131929.106951-1-emil.l.velikov@gmail.com>
-References: <20230221131929.106951-1-emil.l.velikov@gmail.com>
+        bh=XicgGxxpxnjWOAupqddiOjOjwVHxq+BPEsx44HPQNeA=;
+        b=Vepd8bSi8ahSW5n5p5PXu/52m/iC+E19F7FxHI1/ibwppdjMTiIDCqnz5wd2QPl8aQ
+         hpYcaLu4a3g0QhYIvCEoosv25oRhKrrCkZhjIQG94R8zuLR3o/e6fX1mRI5d89XCrjQk
+         vvDnZMCmAQ/FQIoAN6iNOLgDIJsRNdVh8TEELV8XLE19bjxfZuYjwODaD9nfxzlqnqK1
+         qMU6p4Aly7lhikhjMbgKV2zOQwgfhj6aaCv4qe2DAONFaFRZkrRqOWaepJLze7kZn/PN
+         oxt/XqaAB1Fn3yfkNVx/ag9Jtn+T7gJJcqsAn66KIQO6fobW+kuwuiQOlK80Va48S546
+         xESg==
+X-Gm-Message-State: AO0yUKVcMf0MxYzJtrEj4I5uFTQpCDHhL7JGJvi4YAtg1YgIz+TT7yLM
+        c8gNJWYvdbyMo40t+uZ1nfM=
+X-Google-Smtp-Source: AK7set9eFaA2C9JxaxHcQzx5t2aKoqYrMobeqSCJao7DFH76N6d16pI6tn+/FVWlT/bRyhwL+KxCKw==
+X-Received: by 2002:a17:907:1dd9:b0:89e:8c3d:bb87 with SMTP id og25-20020a1709071dd900b0089e8c3dbb87mr14788646ejc.71.1677003870083;
+        Tue, 21 Feb 2023 10:24:30 -0800 (PST)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id kw24-20020a170907771800b008cd1f773754sm3500642ejc.5.2023.02.21.10.24.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 10:24:29 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     mcgrof@kernel.org, Nick Alcock <nick.alcock@oracle.com>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 12/24] kbuild,
+ soc: sunxi: sram: remove MODULE_LICENSE in non-modules
+Date:   Tue, 21 Feb 2023 19:24:28 +0100
+Message-ID: <4779930.GXAFRqVoOG@jernej-laptop>
+In-Reply-To: <20230217141059.392471-13-nick.alcock@oracle.com>
+References: <20230217141059.392471-1-nick.alcock@oracle.com>
+ <20230217141059.392471-13-nick.alcock@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Emil Velikov <emil.velikov@collabora.com>
+Dne petek, 17. februar 2023 ob 15:10:47 CET je Nick Alcock napisal(a):
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+> 
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+> 
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Samuel Holland <samuel@sholland.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-sunxi@lists.linux.dev
 
-Replace the manual sed command, build rules and dist/clean for using
-AC_CONFIG_FILES. It does the exact same thing, with an added bonus...
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Currently we're missing version.py.in in the EXTRA_DIST. Thus a simple
-"touch Makefile" should retrigger the regeneration of version.py. Which
-would presumably fail, since the input file isn't in the distribution
-tarball.
+Best regards,
+Jernej
 
-Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
----
-Feel free to compare the diff between the old/new "make distcheck".
-Cannot realistically add that here as it seemingly confuses the hell out
-of git am.
----
- Makefile.am  | 25 -------------------------
- configure.ac |  2 ++
- 2 files changed, 2 insertions(+), 25 deletions(-)
 
-diff --git a/Makefile.am b/Makefile.am
-index 61dbdf0..8ba85c9 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -24,26 +24,6 @@ AM_CPPFLAGS = \
- AM_CFLAGS = $(OUR_CFLAGS)
- AM_LDFLAGS = $(OUR_LDFLAGS)
- 
--SED_PROCESS = \
--	$(AM_V_GEN)$(MKDIR_P) $(dir $@) && $(SED) \
--	-e 's,@VERSION\@,$(VERSION),g' \
--	-e 's,@prefix\@,$(prefix),g' \
--	-e 's,@exec_prefix\@,$(exec_prefix),g' \
--	-e 's,@libdir\@,$(libdir),g' \
--	-e 's,@includedir\@,$(includedir),g' \
--	-e 's,@libzstd_CFLAGS\@,${libzstd_CFLAGS},g' \
--	-e 's,@libzstd_LIBS\@,${libzstd_LIBS},g' \
--	-e 's,@liblzma_CFLAGS\@,${liblzma_CFLAGS},g' \
--	-e 's,@liblzma_LIBS\@,${liblzma_LIBS},g' \
--	-e 's,@zlib_CFLAGS\@,${zlib_CFLAGS},g' \
--	-e 's,@zlib_LIBS\@,${zlib_LIBS},g' \
--	-e 's,@libcrypto_CFLAGS\@,${libcrypto_CFLAGS},g' \
--	-e 's,@libcrypto_LIBS\@,${libcrypto_LIBS},g' \
--	< $< > $@ || rm $@
--
--%.pc: %.pc.in Makefile
--	$(SED_PROCESS)
--
- # Rules for libtool versioning (from https://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html)
- # 1. Start with version information of ‘0:0:0’ for each libtool library.
- # 2. Update the version information only immediately before a public release of
-@@ -116,8 +96,6 @@ libkmod_libkmod_internal_la_LIBADD = $(libkmod_libkmod_la_LIBADD)
- 
- pkgconfigdir = $(libdir)/pkgconfig
- pkgconfig_DATA = libkmod/libkmod.pc
--EXTRA_DIST += libkmod/libkmod.pc.in
--CLEANFILES += libkmod/libkmod.pc
- 
- bashcompletiondir=@bashcompletiondir@
- dist_bashcompletion_DATA = \
-@@ -179,9 +157,6 @@ am__v_CYTHON_0 = @echo "  CYTHON " $@;
- .pyx.c:
- 	$(AM_V_CYTHON)$(CYTHON) -o $@ $<
- 
--%.py: %.py.in Makefile
--	$(SED_PROCESS)
--
- # Remove some warnings for generated code
- PYTHON_NOWARN = -Wno-redundant-decls -Wno-shadow -Wno-strict-aliasing
- 
-diff --git a/configure.ac b/configure.ac
-index 892f5d9..65902d1 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -292,6 +292,8 @@ AC_CONFIG_FILES([
- 	man/Makefile
- 	libkmod/docs/Makefile
- 	libkmod/docs/version.xml
-+	libkmod/libkmod.pc
-+	libkmod/python/kmod/version.py
- ])
- 
- 
--- 
-2.39.2
+
 
