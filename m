@@ -2,103 +2,86 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64347C61DA3
-	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 18:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8892C61DA3
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 21:16:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjBUSYd (ORCPT
+        id S229530AbjBUVQC (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 21 Feb 2023 13:24:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
+        Tue, 21 Feb 2023 16:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjBUSYd (ORCPT
+        with ESMTP id S229468AbjBUVPw (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:24:33 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C0CCDFA;
-        Tue, 21 Feb 2023 10:24:31 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id da10so22134680edb.3;
-        Tue, 21 Feb 2023 10:24:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XicgGxxpxnjWOAupqddiOjOjwVHxq+BPEsx44HPQNeA=;
-        b=QTWnOKsaUPUp0dN+ok26p/p57wnxvJ9zQNA6WvOCq+B/Uapg2fsAXqfhwhl7w3rLke
-         rRrjl5DSzfrxFyW17QzrpY76Zu8pfQmHuMNkIvA8D646a44f/0fxPAlFZ8Iott9td/W0
-         z9mTNzn3g2QsUvMJKgAxhanOriMDvvbQojevqwKFjC/OI2XzqMdu4OKwRzwi6uskvdBT
-         h8sYPbKs4yAwPO2lMlWajxaw87LYxJYlHMSJ41nMDLCMNSYziBpaDc4pA5/CXPLdCbRv
-         fxQ+uRGTlPVKiW3hs8F7GAwcFK0cbOvR/KFCoWFpPLooZdfwgNPJTa++FKuva+RJnaHX
-         bunQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XicgGxxpxnjWOAupqddiOjOjwVHxq+BPEsx44HPQNeA=;
-        b=Vepd8bSi8ahSW5n5p5PXu/52m/iC+E19F7FxHI1/ibwppdjMTiIDCqnz5wd2QPl8aQ
-         hpYcaLu4a3g0QhYIvCEoosv25oRhKrrCkZhjIQG94R8zuLR3o/e6fX1mRI5d89XCrjQk
-         vvDnZMCmAQ/FQIoAN6iNOLgDIJsRNdVh8TEELV8XLE19bjxfZuYjwODaD9nfxzlqnqK1
-         qMU6p4Aly7lhikhjMbgKV2zOQwgfhj6aaCv4qe2DAONFaFRZkrRqOWaepJLze7kZn/PN
-         oxt/XqaAB1Fn3yfkNVx/ag9Jtn+T7gJJcqsAn66KIQO6fobW+kuwuiQOlK80Va48S546
-         xESg==
-X-Gm-Message-State: AO0yUKVcMf0MxYzJtrEj4I5uFTQpCDHhL7JGJvi4YAtg1YgIz+TT7yLM
-        c8gNJWYvdbyMo40t+uZ1nfM=
-X-Google-Smtp-Source: AK7set9eFaA2C9JxaxHcQzx5t2aKoqYrMobeqSCJao7DFH76N6d16pI6tn+/FVWlT/bRyhwL+KxCKw==
-X-Received: by 2002:a17:907:1dd9:b0:89e:8c3d:bb87 with SMTP id og25-20020a1709071dd900b0089e8c3dbb87mr14788646ejc.71.1677003870083;
-        Tue, 21 Feb 2023 10:24:30 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id kw24-20020a170907771800b008cd1f773754sm3500642ejc.5.2023.02.21.10.24.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Feb 2023 10:24:29 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mcgrof@kernel.org, Nick Alcock <nick.alcock@oracle.com>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 12/24] kbuild,
- soc: sunxi: sram: remove MODULE_LICENSE in non-modules
-Date:   Tue, 21 Feb 2023 19:24:28 +0100
-Message-ID: <4779930.GXAFRqVoOG@jernej-laptop>
-In-Reply-To: <20230217141059.392471-13-nick.alcock@oracle.com>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
- <20230217141059.392471-13-nick.alcock@oracle.com>
+        Tue, 21 Feb 2023 16:15:52 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E933E902C;
+        Tue, 21 Feb 2023 13:15:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=fX7hqjeUd0YzfAq3xRrkecSpMHe7OU08C0EZ3+Rklzs=; b=XoTM0PsPJR2mQk4wVdx++GTVcr
+        oJbaz1o/QiDf9cWsNNfTq9jw47lc5RkKzDvc+II3K8DFKVAR3Ulo5F1Z38khdoMIAd5yYtmUmAy/g
+        Tx/wNs7dbVqPRA+/qd5cTPILlgU/Wr3/lyzhtaTzbqTFVG4CYsn9DHC7Ds6tb1YnGEsvqlVT00t+6
+        6Mn3Jnj3LOrzhnryUm0wZFv5OSZPXrzjPQg3QuvdoGIjSKtCjy4PNgq+iLXyoRp0o6ePxoTxKTecS
+        zz9Bz+j2x9VkYGxKDKVOZMfleWdJBI793CDISBu8EWRHqJiREAa1bsQhLqrYZVwg/GZMA6B/6ve0Y
+        KiKfGEtQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUZyj-009nHM-M5; Tue, 21 Feb 2023 21:15:13 +0000
+Date:   Tue, 21 Feb 2023 13:15:13 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Song Liu <song@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "kernel-team@meta.com" <kernel-team@meta.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] module: clean-up for module_memory
+Message-ID: <Y/U0YfGH44dRpkXp@bombadil.infradead.org>
+References: <20230209175653.2275559-1-song@kernel.org>
+ <a89af714-b9ee-1efa-d21d-92ffc690a7e7@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a89af714-b9ee-1efa-d21d-92ffc690a7e7@csgroup.eu>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Dne petek, 17. februar 2023 ob 15:10:47 CET je Nick Alcock napisal(a):
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
+On Thu, Feb 09, 2023 at 07:43:23PM +0000, Christophe Leroy wrote:
 > 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
 > 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Samuel Holland <samuel@sholland.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-sunxi@lists.linux.dev
+> Le 09/02/2023 à 18:56, Song Liu a écrit :
+> > Three changes here:
+> > 
+> > 1. Shorter variable names in arch/arc/kernel/unwind.c:unwind_add_table, to
+> >     make it easier to read.
+> > 2. Rewrite free_mod_mem() so it is more obvious that MOD_DATA need to be
+> >     freed last.
+> > 3. Clean up the use of CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC.
+> > 
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > Signed-off-by: Song Liu <song@kernel.org>
+> > 
+> > ---
+> > 
+> > This is the follow up patch on top of [1]. I would recommend fold this
+> > into [1].
+> 
+> With this patch folded into [1],
+> 
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+I've squashed this into the last patch from Song and added your
+Reviewed-by tag, and pushed to modules-next. That'll sit there
+for a full cycle for testing.
 
-Best regards,
-Jernej
-
-
-
-
+  Luis
