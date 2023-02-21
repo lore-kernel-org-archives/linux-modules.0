@@ -2,124 +2,96 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33E1EC636D6
-	for <linux-modules@archiver.kernel.org>; Mon, 20 Feb 2023 05:01:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F117C61DA3
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 13:19:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjBTFBv (ORCPT
+        id S233355AbjBUNTf (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 20 Feb 2023 00:01:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
+        Tue, 21 Feb 2023 08:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBTFBu (ORCPT
+        with ESMTP id S232116AbjBUNTe (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 20 Feb 2023 00:01:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDB4C657
-        for <linux-modules@vger.kernel.org>; Sun, 19 Feb 2023 21:00:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676869245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Iz5/XJcUnQF/LFQxvol9TqG2b7RW1QrWjYsgCVHX3XQ=;
-        b=MaTAwLsTV4fz8yHDggqrNXI3HztrJOYA/JClU/6U0vKGOrOUyvJ5f/IEKRpdEIAZRBoMLu
-        8cLZ0C+lSJr9gvhuLzn6agIZPmxP3toVYBKrkkY6Ic9r4ZzIdPQ3imFOAyEXEYuj3BfkSh
-        PxiC4nyBzVCUAcSUuN/5QNZBJ6W4JYw=
-Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
- [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-66-FpKqfZA-Om2x6fARpLQ9yw-1; Mon, 20 Feb 2023 00:00:42 -0500
-X-MC-Unique: FpKqfZA-Om2x6fARpLQ9yw-1
-Received: by mail-vk1-f199.google.com with SMTP id 9-20020a0561220b4900b00406400ed454so155866vko.13
-        for <linux-modules@vger.kernel.org>; Sun, 19 Feb 2023 21:00:42 -0800 (PST)
+        Tue, 21 Feb 2023 08:19:34 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A834690
+        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:32 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id v3so4326631wrp.2
+        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WDGM6WYCa8vmuROeOh4IMBfBrmiF10MWhaezPThqG9E=;
+        b=LrudY0TMHF2mF0HF8Y6ZLYC3mdse49WAwNOv2NAQe+EBKMU2vyr6Csa8EkjZ/ye8bF
+         PQO7FNbG2B7+XNN6EdY3DSOXUDROAQj82jWIkbjih0hw/1nb1AGUUXbAPLY1DDa1DsrF
+         Ro22G5RZubJiEZUJy0K+rcN6myfQdWAT76ItzjSE2j2q6Y4u6qQCcjPEoDPj5K8kYLZj
+         xVfV5k3i+DmXT5wbpoUYsMkGf6na9FbEUHXOIoYdy1NA7q2Zn0iXbcTH971XmkdpyfGR
+         mciOYyZknl9sQuzuF3bVgtgIypB1iVEt9Z0yuBaS8r+w75Bd04zvFOhi1+3YQehVVPWJ
+         ORBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Iz5/XJcUnQF/LFQxvol9TqG2b7RW1QrWjYsgCVHX3XQ=;
-        b=Q2h7pEkR448QrpE0Q1xSLkk8UI0prai7h71bG+bbdZiWoQ5TaxymYA7NjLeJqyx1AE
-         P5R5RnyzanWQXILn9NTxSPiAfiXxxos0p6PpGT5Sf00ru0MD04MvGrYU/F8ndl+WvT6S
-         CWtnuHkIQDUYLuV3JC8rTIJ7xDDG1qXQa6bjQxDFr5Devof4fRkjh9M/j1LJ8wTDyGJ5
-         BZuBSZmTy1093r2+zkNhUDlKkl/nnB4/LQgXRfEsG1xh4t8MbX8R2+/MbVHw0A/1N2jr
-         jpZ9dGAXgb2giDns8dtePhFx5IFDQ50gNcJEcqvUMC2/D3n5gDwMlQmTGXCWGbptwZzR
-         f0Pw==
-X-Gm-Message-State: AO0yUKV0zDEPKNLMj3f+peKWSRbpXc3hpCP9wzwZtboM1VDh5IzxYhKC
-        mihdGfggw42xwGPV8UWPbno1wxheo3MfbLfPfPd7Wv0U4WRx/MUtfD3OdcG52ONKDOmwI70zxKs
-        zdrT3BO9VLTBEUZNq5gBs2CNH8ag6nHURL68epWJFpKac0558nEAw
-X-Received: by 2002:a05:6102:f0a:b0:411:bd2e:11ac with SMTP id v10-20020a0561020f0a00b00411bd2e11acmr165954vss.75.1676869241594;
-        Sun, 19 Feb 2023 21:00:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set9f9ox6vr3CX95NfKEGX65cBproFKTgZSzrIfnLLXYRXGGY0eODN/Gl2kUycvwizSjQfY+ldPdK2BDBA0MyKSw=
-X-Received: by 2002:a05:6102:f0a:b0:411:bd2e:11ac with SMTP id
- v10-20020a0561020f0a00b00411bd2e11acmr165950vss.75.1676869241338; Sun, 19 Feb
- 2023 21:00:41 -0800 (PST)
+        bh=WDGM6WYCa8vmuROeOh4IMBfBrmiF10MWhaezPThqG9E=;
+        b=uq06xFHHCshiroIb8IsgtbWUwpyayi1RVNqJgMLeoiIrdsYFPh6+hHtJpzC2p4cQFk
+         7g8i4K4cDQo0Mq9JTCWlULOy25OazugIi1AUhTI2uXb5kwKvNWKWnYuQx+bcsrTjXROB
+         e5DjFG1leftZA0WpQq0On4vkJYRFoogoEWSrZNpwdETe+lnlNtzHVEtDq6fUKSR2rizt
+         DQv30WGtbyEOuDOYJlYdCe2Gh3YX6GW6SuaOpDYjiH6UUz6VzDIrS+Qct1kfME7nqOYR
+         R9jBspl7dzbn0bkwiHFR4zjTlv/8ktgEFpV2AayQF0rFBoQWVXbRYH+wAw1f7CdKv8P1
+         6qqQ==
+X-Gm-Message-State: AO0yUKVBE90KXpchqrMcS9va2A32x+6kMWp0n8T32qkDuPZuXVj7rpRs
+        J7Uy5y2gUmb9Xvbn3bIrYhA2tNfsNoY=
+X-Google-Smtp-Source: AK7set8DBcnG8R3/2O60rpeauTdZ5BqUpicMmWiP3O2mxOm+Fl/VxswtDVeIeUxAMRbPnRR8mxl7Ag==
+X-Received: by 2002:a5d:4ccf:0:b0:2c6:5972:cd13 with SMTP id c15-20020a5d4ccf000000b002c65972cd13mr4973774wrt.26.1676985570940;
+        Tue, 21 Feb 2023 05:19:30 -0800 (PST)
+Received: from localhost (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net. [82.24.248.100])
+        by smtp.gmail.com with UTF8SMTPSA id o18-20020a5d4752000000b002c3f9404c45sm3468267wrs.7.2023.02.21.05.19.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 05:19:30 -0800 (PST)
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+To:     linux-modules@vger.kernel.org
+Cc:     emil.l.velikov@gmail.com
+Subject: [PATCH 0/4] kmod: Paper cuts - dead code removal, don't SED manually
+Date:   Tue, 21 Feb 2023 13:19:25 +0000
+Message-Id: <20230221131929.106951-1-emil.l.velikov@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230217141059.392471-1-nick.alcock@oracle.com> <20230217141059.392471-12-nick.alcock@oracle.com>
-In-Reply-To: <20230217141059.392471-12-nick.alcock@oracle.com>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Mon, 20 Feb 2023 05:00:25 +0000
-Message-ID: <CAOgh=Fyak7mxqva0qkUtrqBnsBbhMtP+AsHpOz3TNhwp4wPaAQ@mail.gmail.com>
-Subject: Re: [PATCH 11/24] kbuild, soc: apple: apple-pmgr-pwrstate: remove
- MODULE_LICENSE in non-modules
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Philipp Zabel <p.zabel@pengutronix.de>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, 17 Feb 2023 at 14:20, Nick Alcock <nick.alcock@oracle.com> wrote:
->
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
->
-> So remove it in the files in this commit, none of which can be built as
-> modules.
->
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Hector Martin <marcan@marcan.st>
-> Cc: Sven Peter <sven@svenpeter.dev>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: asahi@lists.linux.dev
-> Cc: linux-arm-kernel@lists.infradead.org
-> ---
+Greetings everyone,
 
-Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+Here's another, final, round of paper cuts while browsing through the project.
 
-Is mise le meas/Regards,
+Note that despite the enabled linker garbage collector, the first few cleanup
+patches result in detectable improvement in the final binaries.
 
-Eric Curtin
+The last patch, removes the open-coded replacement and by doing so fixes a
+genuine bug - albeit one that is uncommon to hit.
 
->  drivers/soc/apple/apple-pmgr-pwrstate.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/soc/apple/apple-pmgr-pwrstate.c b/drivers/soc/apple/apple-pmgr-pwrstate.c
-> index e1122288409a..2c15474c7b53 100644
-> --- a/drivers/soc/apple/apple-pmgr-pwrstate.c
-> +++ b/drivers/soc/apple/apple-pmgr-pwrstate.c
-> @@ -319,6 +319,5 @@ static struct platform_driver apple_pmgr_ps_driver = {
->
->  MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
->  MODULE_DESCRIPTION("PMGR power state driver for Apple SoCs");
-> -MODULE_LICENSE("GPL v2");
->
->  module_platform_driver(apple_pmgr_ps_driver);
-> --
-> 2.39.1.268.g9de2f9a303
->
->
+As always, feel free to pick any bits that seem suitable.
+
+Thanks
+Emil
+
+Emil Velikov (4):
+  libkmod: remove unused kmod_module_get_builtin
+  libkmod: annotate kmod_builtin_iter API as static
+  shared: annotate local API as static
+  configure: manage libkmod.pc.in and version.py.in via AC_CONFIG_FILES
+
+ Makefile.am                | 25 ----------------------
+ configure.ac               |  2 ++
+ libkmod/libkmod-builtin.c  |  8 +++----
+ libkmod/libkmod-internal.h |  6 ------
+ libkmod/libkmod-module.c   | 43 --------------------------------------
+ shared/util.c              |  6 +++---
+ shared/util.h              |  3 ---
+ 7 files changed, 9 insertions(+), 84 deletions(-)
+
+-- 
+2.39.2
 
