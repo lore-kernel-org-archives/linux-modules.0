@@ -2,61 +2,61 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9E18C6379F
-	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 13:19:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA3EFC64EC4
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Feb 2023 13:19:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjBUNTg (ORCPT
+        id S233721AbjBUNTh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 21 Feb 2023 08:19:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
+        Tue, 21 Feb 2023 08:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233430AbjBUNTf (ORCPT
+        with ESMTP id S233430AbjBUNTg (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 21 Feb 2023 08:19:35 -0500
+        Tue, 21 Feb 2023 08:19:36 -0500
 Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5B41ADC3
-        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:34 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id iv11-20020a05600c548b00b003dc52fed235so3036435wmb.1
-        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43314690
+        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:35 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id l2-20020a05600c1d0200b003e1f6dff952so3511772wms.1
+        for <linux-modules@vger.kernel.org>; Tue, 21 Feb 2023 05:19:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Jx8bse47PfJtv3OhMIw1BoYoCIVWADStrE71XZeBTMs=;
-        b=nRWmGyWCztjAVyPBelo0N08grmwkmjw7A+l0zVuqsN/V1rFafxkp3KlfExBZzQ5zfL
-         EMEaVFzo6e015QrGzS/V+3PH46JHfgXHlpNx9lW+OWKFqB5DglU6eFesbIMbb7Fvczl7
-         X+SAM7EobP7h0G5g/nmsLbvDQ7/7Zz0hh7Y6R59ApzpeX1oaY3TK3ux919uu1kx1/pmQ
-         VaUaj96i22Qe6/1PMSqM2gO8g7T5KjDWILLqpOsPyLuGvUHevf61EBFR2rJH1yskFOXb
-         rD1QhEfzrbu2MZXnz7MPioFQdwddMvlfjSyqGK5JMdwjM5p0mnL3NtbB7vQ+uapKEWFK
-         Ww6Q==
+        bh=ckoGnYi/g9fzY1+nZePCJNaLc7j6vS+121w8xKnkYZ0=;
+        b=Sv2IZm1JwLnk4PJT5FB5nBThj++2o37H5ZqAeRYtQcRmyzONQqm/nPQrPr26lgbedp
+         B3o/YTmebfH7Gy9tQH2e8N2Ex1pCu/jvrzuFCN1ZzON49Y/YKYL18JWPxqB65Ky9wc9B
+         2xkE+lk5ea4dU0MfRUgWFxRNW0Go54g/wgpocCoWEj/djUf4dbG0llgOawgNiSQUAPiN
+         h6lRkMqjeThPgSxui0XVzTq+O2B2a2eIhGyG1kRytuS6JlglyKLxTWpBPwxDdUT0ofbx
+         zsAMpWiPANhcmYIQvaXLeTywoeYkBna1QTPDvnRQ21QSvgpfPMdl+zIuAoFOaQZXaniS
+         DSyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Jx8bse47PfJtv3OhMIw1BoYoCIVWADStrE71XZeBTMs=;
-        b=oqldtbMs+MIvqAzsgRAF0ujVOZoAkQ6yUiq3PgS1HZNySe51MkCbrN/qyo7oZ0O5y8
-         5ru0u0uET46jSHJeeohDz85lUtydkj3AIEHyMp6QrU3NVXa0T6Ky/0pOiFMUhcO5ACEh
-         Nh7DSxp7YxEgpppP+DHXOEF6CfYjSwBsoySafDuS0MWfnCf9Zp0bA5G6JCWV6lGM9v1F
-         CrE+8J3Vvy181UFh2VXsS/tBcNWb1/jZscMTp1wW7bOefFZ5mkDOxmPCzNhK4yQ6Gw97
-         t7FEw6ogJyVxhjgnfX4OA5KR1/4FFBXWUNtP/NuYofpLVXkbli+IEncM4J6E4jN41oke
-         5F4A==
-X-Gm-Message-State: AO0yUKV1iP7kKkxReZWt9Y5Ifakpqh/v/HAvhF61UgGLOxZUYaPikbZv
-        gLvR6NzDdsbAYh2Scjx2Ielgn6KFoJw=
-X-Google-Smtp-Source: AK7set+5xeCVxvUt5qu3of79Ix7EUWWe9XObRkhS395G4njqiilo4qyqML6FeqMpbKMbh8WWl3GNxw==
-X-Received: by 2002:a05:600c:2ed3:b0:3dc:2137:d67d with SMTP id q19-20020a05600c2ed300b003dc2137d67dmr3498061wmn.16.1676985572371;
-        Tue, 21 Feb 2023 05:19:32 -0800 (PST)
+        bh=ckoGnYi/g9fzY1+nZePCJNaLc7j6vS+121w8xKnkYZ0=;
+        b=gb3hs2Bl7jaQDWXQYd+oofpjDv9t9VD/xBD7M7d58zDrXiRhGiWnJt8SDiqvhPFVZV
+         qkeZPuRg/1Afmmgq/GC4PP4UqsIBz4XuT96/ibZ9HSl5yoG7tLMmX74v56XBherfSSu1
+         uzj4A/jxmFBU3ZEed9ANWAVUwZZftle7vMnFR4oP1iPDdoLPlzDg7x/kBuzVuEgYKRTa
+         ouwS4DPsD4wdCgnraY8hRiCt32bfEuVxN6RDemKiewwDjrib8UNH0npLlNUCYPTEoWFx
+         4lK3abZZBcMLx49f6LPVbKmkyyDZ9S2cvOnaciAXEtujI4dO86cEsP/GS+yc7l13K6SD
+         L84A==
+X-Gm-Message-State: AO0yUKU4oIfQZ+jxZodC0VT4eMrvCdQTHuWjbwslwCHtXi7qoo2pVpN2
+        XGPJDoMe6q+Bv2XbBTlmAEEJm7ftiDY=
+X-Google-Smtp-Source: AK7set/vVTl7IrdVVNyd9no9gUytwxUMVo4fIc7Us1lxxa1iR79FldzXF6Ih1F8IWKXTa16aeiaN9g==
+X-Received: by 2002:a05:600c:331b:b0:3dc:4318:d00d with SMTP id q27-20020a05600c331b00b003dc4318d00dmr3086528wmp.11.1676985573834;
+        Tue, 21 Feb 2023 05:19:33 -0800 (PST)
 Received: from localhost (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net. [82.24.248.100])
-        by smtp.gmail.com with UTF8SMTPSA id 20-20020a05600c025400b003e71a6be279sm3064277wmj.37.2023.02.21.05.19.31
+        by smtp.gmail.com with UTF8SMTPSA id o17-20020a05600c379100b003e70a7c1b73sm3015097wmr.16.2023.02.21.05.19.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 05:19:31 -0800 (PST)
+        Tue, 21 Feb 2023 05:19:33 -0800 (PST)
 From:   Emil Velikov <emil.l.velikov@gmail.com>
 To:     linux-modules@vger.kernel.org
 Cc:     emil.l.velikov@gmail.com
-Subject: [PATCH 1/4] libkmod: remove unused kmod_module_get_builtin
-Date:   Tue, 21 Feb 2023 13:19:26 +0000
-Message-Id: <20230221131929.106951-2-emil.l.velikov@gmail.com>
+Subject: [PATCH 2/4] libkmod: annotate kmod_builtin_iter API as static
+Date:   Tue, 21 Feb 2023 13:19:27 +0000
+Message-Id: <20230221131929.106951-3-emil.l.velikov@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230221131929.106951-1-emil.l.velikov@gmail.com>
 References: <20230221131929.106951-1-emil.l.velikov@gmail.com>
@@ -67,78 +67,68 @@ List-ID: <linux-modules.vger.kernel.org>
 
 From: Emil Velikov <emil.velikov@collabora.com>
 
-The last and only user was removed with commit 0246e06 ("depmod: Stop
-opening modules.modinfo once per module")
+It's no longer used outside the compilation unit, as of last commit.
 
 Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
 ---
- libkmod/libkmod-internal.h |  1 -
- libkmod/libkmod-module.c   | 43 --------------------------------------
- 2 files changed, 44 deletions(-)
+ libkmod/libkmod-builtin.c  | 8 ++++----
+ libkmod/libkmod-internal.h | 5 -----
+ 2 files changed, 4 insertions(+), 9 deletions(-)
 
+diff --git a/libkmod/libkmod-builtin.c b/libkmod/libkmod-builtin.c
+index a002cb5..65334a8 100644
+--- a/libkmod/libkmod-builtin.c
++++ b/libkmod/libkmod-builtin.c
+@@ -54,7 +54,7 @@ struct kmod_builtin_iter {
+ 	char *buf;
+ };
+ 
+-struct kmod_builtin_iter *kmod_builtin_iter_new(struct kmod_ctx *ctx)
++static struct kmod_builtin_iter *kmod_builtin_iter_new(struct kmod_ctx *ctx)
+ {
+ 	char path[PATH_MAX];
+ 	int file, sv_errno;
+@@ -108,7 +108,7 @@ fail:
+ 	return iter;
+ }
+ 
+-void kmod_builtin_iter_free(struct kmod_builtin_iter *iter)
++static void kmod_builtin_iter_free(struct kmod_builtin_iter *iter)
+ {
+ 	close(iter->file);
+ 	free(iter->buf);
+@@ -165,7 +165,7 @@ fail:
+ 	return -1;
+ }
+ 
+-bool kmod_builtin_iter_next(struct kmod_builtin_iter *iter)
++static bool kmod_builtin_iter_next(struct kmod_builtin_iter *iter)
+ {
+ 	char *line,  *modname;
+ 	size_t linesz;
+@@ -216,7 +216,7 @@ bool kmod_builtin_iter_next(struct kmod_builtin_iter *iter)
+ 	return (iter->pos < iter->size);
+ }
+ 
+-bool kmod_builtin_iter_get_modname(struct kmod_builtin_iter *iter,
++static bool kmod_builtin_iter_get_modname(struct kmod_builtin_iter *iter,
+ 				char modname[static PATH_MAX])
+ {
+ 	int sv_errno;
 diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
-index c22644a..95c0377 100644
+index 95c0377..4a4af58 100644
 --- a/libkmod/libkmod-internal.h
 +++ b/libkmod/libkmod-internal.h
-@@ -148,7 +148,6 @@ void kmod_module_set_visited(struct kmod_module *mod, bool visited) __attribute_
- void kmod_module_set_builtin(struct kmod_module *mod, bool builtin) __attribute__((nonnull((1))));
- void kmod_module_set_required(struct kmod_module *mod, bool required) __attribute__((nonnull(1)));
- bool kmod_module_is_builtin(struct kmod_module *mod) __attribute__((nonnull(1)));
--int kmod_module_get_builtin(struct kmod_ctx *ctx, struct kmod_list **list) __attribute__((nonnull(1, 2)));
+@@ -198,9 +198,4 @@ bool kmod_module_signature_info(const struct kmod_file *file, struct kmod_signat
+ void kmod_module_signature_info_free(struct kmod_signature_info *sig_info) __attribute__((nonnull));
  
- /* libkmod-file.c */
- struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx, const char *filename) _must_check_ __attribute__((nonnull(1,2)));
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index c7232e0..1da64b3 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -2943,46 +2943,3 @@ KMOD_EXPORT void kmod_module_dependency_symbols_free_list(struct kmod_list *list
- 		list = kmod_list_remove(list);
- 	}
- }
--
--/**
-- * kmod_module_get_builtin:
-- * @ctx: kmod library context
-- * @list: where to save the builtin module list
-- *
-- * Returns: 0 on success or < 0 otherwise.
-- */
--int kmod_module_get_builtin(struct kmod_ctx *ctx, struct kmod_list **list)
--{
--	struct kmod_builtin_iter *iter;
--	int err = 0;
--
--	iter = kmod_builtin_iter_new(ctx);
--	if (!iter)
--		return -errno;
--
--	while (kmod_builtin_iter_next(iter)) {
--		struct kmod_module *mod = NULL;
--		char modname[PATH_MAX];
--
--		if (!kmod_builtin_iter_get_modname(iter, modname)) {
--			err = -errno;
--			goto fail;
--		}
--
--		err = kmod_module_new_from_name(ctx, modname, &mod);
--		if (err < 0)
--			goto fail;
--
--		kmod_module_set_builtin(mod, true);
--
--		*list = kmod_list_append(*list, mod);
--	}
--
--	kmod_builtin_iter_free(iter);
--	return err;
--fail:
--	kmod_builtin_iter_free(iter);
--	kmod_module_unref_list(*list);
--	*list = NULL;
--	return err;
--}
+ /* libkmod-builtin.c */
+-struct kmod_builtin_iter;
+-struct kmod_builtin_iter *kmod_builtin_iter_new(struct kmod_ctx *ctx) __attribute__((nonnull(1)));
+-void kmod_builtin_iter_free(struct kmod_builtin_iter *iter) __attribute__((nonnull(1)));
+-bool kmod_builtin_iter_next(struct kmod_builtin_iter *iter) __attribute__((nonnull(1)));
+-bool kmod_builtin_iter_get_modname(struct kmod_builtin_iter *iter, char modname[static PATH_MAX]) __attribute__((nonnull(1, 2)));
+ ssize_t kmod_builtin_get_modinfo(struct kmod_ctx *ctx, const char *modname, char ***modinfo) __attribute__((nonnull(1, 2, 3)));
 -- 
 2.39.2
 
