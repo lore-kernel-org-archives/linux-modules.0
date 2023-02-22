@@ -2,52 +2,95 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EC28C61DA4
-	for <linux-modules@archiver.kernel.org>; Wed, 22 Feb 2023 14:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C76FFC6379F
+	for <linux-modules@archiver.kernel.org>; Wed, 22 Feb 2023 22:25:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbjBVOue (ORCPT
+        id S232880AbjBVWZa (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 22 Feb 2023 09:50:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
+        Wed, 22 Feb 2023 17:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjBVOuT (ORCPT
+        with ESMTP id S232817AbjBVWZ0 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 22 Feb 2023 09:50:19 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5B355A8;
-        Wed, 22 Feb 2023 06:49:47 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 5EF19227AA8; Wed, 22 Feb 2023 15:48:57 +0100 (CET)
-Date:   Wed, 22 Feb 2023 15:48:56 +0100
-From:   Christoph Hellwig <hch@lst.de>
+        Wed, 22 Feb 2023 17:25:26 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7DD41B57;
+        Wed, 22 Feb 2023 14:25:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L3thRE4eX8buSCZPs0bA9NvffhgYCEzUstyMSlWVQD0=; b=GntIox46Bim6bb6wBspzGRIGNv
+        sVv8CifGU+deMJGnTQRtHGjCahRLKszq7hnLyXd9mTpc5Y2yU0w+kz1cS6/yuX5UC/na1hxObERUP
+        umdcD70GPfLDwexs2OgxSF5ffpkp8bG5dq/jne4D6jAIbmDJ7S0SKhNayY5frmIgje+Kw7kl0tjie
+        q8rr4iPj/fXpXYnFnKW719VhpUoUrrDHBJf9wwVOIvHr5GNzX9kUchWiyjDv3rgyf3fzAofuA33qc
+        pj55hnm1o3IZaZdJPiZRtHZnVhxreRTmfDVDBWacEgojr5ECZM5Lr4XypDN2BL2Dp6SId9RhcQ0Oo
+        tfEW0WtQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pUxYB-00EId5-IQ; Wed, 22 Feb 2023 22:25:23 +0000
+Date:   Wed, 22 Feb 2023 14:25:23 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        iommu@lists.linux.dev
-Subject: Re: [PATCH 21/27] kbuild, dma-mapping: benchmark: remove
- MODULE_LICENSE in non-modules
-Message-ID: <20230222144856.GA14220@lst.de>
-References: <20230222121453.91915-1-nick.alcock@oracle.com> <20230222121453.91915-22-nick.alcock@oracle.com>
+Cc:     linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, elena.zannoni@oracle.com
+Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
+ symbol->address lookup with /proc/kallmodsyms
+Message-ID: <Y/aWU9VzkZcRyf/k@bombadil.infradead.org>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+ <Y8b8TOJzd/RZXR8z@bombadil.infradead.org>
+ <87r0uy3hkw.fsf@esperi.org.uk>
+ <87bkm22y6e.fsf@esperi.org.uk>
+ <Y/U8MuL24OZzbIIp@bombadil.infradead.org>
+ <87edqhsy1f.fsf@esperi.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230222121453.91915-22-nick.alcock@oracle.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <87edqhsy1f.fsf@esperi.org.uk>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Looks good:
+On Wed, Feb 22, 2023 at 12:08:12PM +0000, Nick Alcock wrote:
+> On 21 Feb 2023, Luis Chamberlain stated:
+> 
+> > On Thu, Feb 09, 2023 at 11:53:29PM +0000, Nick Alcock wrote:
+> >> [most people trimmed from the Cc: list for this procedural question]
+> >> 
+> >> On 9 Feb 2023, Nick Alcock outgrape:
+> >> > I am going to split this whole series into:
+> >> >
+> >> > 1. A series of patches (123 of them at present) Cc:ed to subsystem
+> >> > maintainers as well as you, to comment out the MODULE_LICENSE usage.
+> >> > These patches will have Suggested-by you. This series is rebased against
+> >> > the latest modules-next and revalidated, and is ready to be mailed out;
+> >> > will do so shortly.
+> >> 
+> >> One quick question: if/when you're happy with this series, are you
+> >> planning to take it yourself via modules-next?
+> >
+> > It seems some maintainers are already taking patches in, so let's see
+> > what folks take in, then if there are not takers I can just take what is
+> > not merged on linux-next through modules-next.
+> > 
+> > So try to get them into each subsystem tree, and around rc3 send the
+> > ones that are not merged and I'll just take them into modules-next.
+> 
+> Sounds good! I can trivially regenerate a new patch series containing
+> only the still-missing bits without needing to do anything like track
+> who took things, because nearly all of this is automated anyway.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Fantastic.
 
-On Wed, Feb 22, 2023 at 12:14:47PM +0000, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules.
+> ... at least I can if I can figure out where all the subsystem trees
+> that people took them into are (not everyone might mention when they
+> take one).
 
-.. but this seems like a really odd design.  How is this going to
-continue working once we can autogenerate the module license section
-from the SPDX tags, which we eventually really should?
+This is why I use linux-next. It represents all the latest trees merged.
+
+> I might miss a few, but I suspect that's not a problem:
+> taking the same commit by two different routes does not constitute a
+> conflict, at least on its own.
+
+Right.
+
+  Luis
