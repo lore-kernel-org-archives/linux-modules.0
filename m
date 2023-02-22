@@ -2,123 +2,75 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48749C61DA4
-	for <linux-modules@archiver.kernel.org>; Fri, 24 Feb 2023 15:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A783C636D6
+	for <linux-modules@archiver.kernel.org>; Wed, 22 Feb 2023 23:44:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjBXPc6 (ORCPT
+        id S232867AbjBVXoX (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 24 Feb 2023 10:32:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
+        Wed, 22 Feb 2023 18:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjBXPc5 (ORCPT
+        with ESMTP id S232823AbjBVXoM (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 24 Feb 2023 10:32:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F052D421A;
-        Fri, 24 Feb 2023 07:32:55 -0800 (PST)
+        Wed, 22 Feb 2023 18:44:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34A8298CC;
+        Wed, 22 Feb 2023 15:43:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BDE061910;
-        Fri, 24 Feb 2023 15:32:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98DFBC433EF;
-        Fri, 24 Feb 2023 15:32:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8ECBB817C2;
+        Wed, 22 Feb 2023 23:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B87C4339B;
+        Wed, 22 Feb 2023 23:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677252774;
-        bh=M8s/+ue2tUYnD3EP7X5f/z9MZy+gJoke2cX2xDeSggY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M7/pTPZmz+YiZQxZL4Jy5FZg0LXU+pp0N/WR1wQRBHQKT31IOrViwMKCY9CVsR1JI
-         68VIT+sZNamK/7OF0/JiX9RfSrSBmVT09A1VZ3Z379TVokDmZZd4E7kE/2g4UBLHZc
-         rpdOB+leJs0ctADlZo8sedWDa8kRfDj0pbgmllVTucWNcoOISjcizfKv1EcjchhpOM
-         sOy3NoOf0kl/HIZEfEBhe+/Yg4fJajLlSLJF/AxgNCjU6p9LzPE0kIX8rd2Jq72HPV
-         nYQ0GxTb/jbqKqPtQI4xkZh1hYZmld+KRwyXHkv+V7LqpcDV5iE1lc+/xZvUqtmxHW
-         l/a8RSXEA6a4g==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pVa43-00Cuwd-I2;
-        Fri, 24 Feb 2023 15:32:52 +0000
-Date:   Fri, 24 Feb 2023 15:32:51 +0000
-Message-ID: <86y1onw02k.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        s=k20201202; t=1677109436;
+        bh=05zuIHUF2Jxq95BD3FXQmm8A1Va+9D4oc5j0eOsqeqA=;
+        h=In-Reply-To:References:From:Cc:To:Date:From;
+        b=GY9/KgHF+h9kBqfhUIkifXPZGMMzLXOxSO4GCaH+oCYE6msOoKyI7twbkamyiGU9w
+         kZOPaQvoReuQQL4+xjFyQE5CqsxEHz1HwYmFNxI2Yo0SES9cEpVez0gvGxXVtC0Ruj
+         vFNAiuoUu0kr3X0GJSTLfA/BwcMR5+SC8ia2t+Einn8H95x4rK/XesVSNh+yR/8Oow
+         73bmS5gIsRCqhTn3EiPN5IYnwBAsGpsqpfcnb+4+QsuE61mnYPSktf60AE4m6I0kO7
+         0l+3CzLlX55MgPpyUkttDKlAuryHIrdL2coPrJcrQOjR1FIfHoDbSTf9/vWBeGMs/H
+         1/29LHn56q+PA==
+Message-ID: <494290a9c80db9976fa8943210cd0cd5.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230222121453.91915-13-nick.alcock@oracle.com>
+References: <20230222121453.91915-1-nick.alcock@oracle.com> <20230222121453.91915-13-nick.alcock@oracle.com>
+@ubject: Re: [PATCH 12/27] kbuild, clk: remove MODULE_LICENSE in non-modules
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH 09/27] irqchip: remove MODULE_LICENSE in non-modules
-In-Reply-To: <20230224150811.80316-10-nick.alcock@oracle.com>
-References: <20230224150811.80316-1-nick.alcock@oracle.com>
-        <20230224150811.80316-10-nick.alcock@oracle.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: nick.alcock@oracle.com, mcgrof@kernel.org, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, hasegawa-hitomi@fujitsu.com, tglx@linutronix.de, p.zabel@pengutronix.de
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org
+To:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org
+Date:   Wed, 22 Feb 2023 15:43:54 -0800
+User-Agent: alot/0.10
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, 24 Feb 2023 15:07:53 +0000,
-Nick Alcock <nick.alcock@oracle.com> wrote:
-> 
+Quoting Nick Alcock (2023-02-22 04:14:38)
 > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
 > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
 > are used to identify modules. As a consequence, uses of the macro
 > in non-modules will cause modprobe to misidentify their containing
 > object file as a module when it is not (false positives), and modprobe
 > might succeed rather than failing with a suitable error message.
-> 
+>=20
 > So remove it in the files in this commit, none of which can be built as
 > modules.
-> 
+>=20
 > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
 > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
 > Cc: Luis Chamberlain <mcgrof@kernel.org>
 > Cc: linux-modules@vger.kernel.org
 > Cc: linux-kernel@vger.kernel.org
 > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
 > ---
->  drivers/irqchip/irq-renesas-rzg2l.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
-> index 25fd8ee66565..4bbfa2b0a4df 100644
-> --- a/drivers/irqchip/irq-renesas-rzg2l.c
-> +++ b/drivers/irqchip/irq-renesas-rzg2l.c
-> @@ -390,4 +390,3 @@ IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irqc_init)
->  IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
->  MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
->  MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
-> -MODULE_LICENSE("GPL");
 
-I'm probably missing some context here, but I find it odd to drop
-something that is a important piece of information because of what
-looks like a tooling regression.
-
-It also means that once a random driver gets enabled as a module, it
-won't load because it is now missing a MODULE_LICENSE() annotation.
-
-It feels like MODULE_LICENSE should instead degrade to an empty
-statement when MODULE isn't defined. Why isn't this approach the
-correct one?
-
-I expect the cover letter would have some pretty good information on
-this, but lore.kernel.org doesn't seem to have it at the time I write
-this ("Message-ID <20230224150811.80316-1-nick.alcock@oracle.com> not
-found").
-
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+Acked-by: Stephen Boyd <sboyd@kernel.org>
