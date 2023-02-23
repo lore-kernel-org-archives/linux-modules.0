@@ -2,64 +2,77 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA7F9C636D6
-	for <linux-modules@archiver.kernel.org>; Thu, 23 Feb 2023 10:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C766CC61DA4
+	for <linux-modules@archiver.kernel.org>; Thu, 23 Feb 2023 13:49:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233372AbjBWKWh (ORCPT
+        id S234272AbjBWNtU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 23 Feb 2023 05:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
+        Thu, 23 Feb 2023 08:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbjBWKWY (ORCPT
+        with ESMTP id S234456AbjBWNtM (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 23 Feb 2023 05:22:24 -0500
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A794113E8;
-        Thu, 23 Feb 2023 02:22:23 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pV8jT-00EqEy-Na; Thu, 23 Feb 2023 18:21:48 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 23 Feb 2023 18:21:47 +0800
-Date:   Thu, 23 Feb 2023 18:21:47 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        Thu, 23 Feb 2023 08:49:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3644A7EC0;
+        Thu, 23 Feb 2023 05:49:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D359BB81A31;
+        Thu, 23 Feb 2023 13:49:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 186A5C433D2;
+        Thu, 23 Feb 2023 13:48:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677160139;
+        bh=+4NgEZ8mAdoQDhPz3j1fX24tUR15mbCKEWNXYntsbOM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sjfehBPqzasSQzWXD1898Y99whAAV7G+63b1liHDeL1qWllf73hsRgTv0PSikAClC
+         gMaCnpriyleLxnBlFY/sRJq/1axUuNGxjhr5hwoZjYZehpLs+rsAaa5MSe2bW4gjQP
+         HUDoSkDSi8XZ9Y5dW3VdJOo8osILapiFfDdrsaB20KblnPJgsxcZ2i2ptlsxmFv+8E
+         Y5BcNDzbt+a7w2L/eRR93LNPynctIrzOkW9MzNpRoveZVcXomFaIafcQe6P8n6XQsa
+         37gwxvPtXQ1OOHZ4aCvaEVtlYotbnXjhGJD/eCqx1R3zCyK7PztbEYWqbiSP0XrtRq
+         vG2W2A6eFDYlA==
+Date:   Thu, 23 Feb 2023 13:48:54 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
+Cc:     Nick Alcock <nick.alcock@oracle.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH 17/27] kbuild, crypto: remove MODULE_LICENSE in
- non-modules
-Message-ID: <Y/c+O0+xHFh8wo4m@gondor.apana.org.au>
+        Support Opensource <support.opensource@diasemi.com>
+Subject: Re: [PATCH 18/27] kbuild, mfd: remove MODULE_LICENSE in non-modules
+Message-ID: <Y/duxo1aKFibuZtF@google.com>
 References: <20230222121453.91915-1-nick.alcock@oracle.com>
- <20230222121453.91915-18-nick.alcock@oracle.com>
+ <20230222121453.91915-19-nick.alcock@oracle.com>
+ <OS3PR01MB8460D00B7C988DCC13173CAAC2AA9@OS3PR01MB8460.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230222121453.91915-18-nick.alcock@oracle.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <OS3PR01MB8460D00B7C988DCC13173CAAC2AA9@OS3PR01MB8460.jpnprd01.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Feb 22, 2023 at 12:14:43PM +0000, Nick Alcock wrote:
+On Wed, 22 Feb 2023, DLG Adam Ward wrote:
+
+> On 22/02/2023 12:15, Nick Alcock wrote:
+> >Since commit 8b41fc4454e ("kbuild: create modules.builtin without Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations are used to identify modules. As a consequence, uses of the macro in non-modules will cause modprobe to misidentify their containing object file as a module when it is not (false positives), and modprobe might succeed rather than failing with a suitable error message.
+> >
+> >So remove it in the files in this commit, none of which can be built as modules.
 > 
-> diff --git a/arch/x86/crypto/blake2s-glue.c b/arch/x86/crypto/blake2s-glue.c
-> index aaba21230528..0df9ec15643a 100644
-> --- a/arch/x86/crypto/blake2s-glue.c
-> +++ b/arch/x86/crypto/blake2s-glue.c
-> @@ -74,4 +74,3 @@ static int __init blake2s_mod_init(void)
->  
->  module_init(blake2s_mod_init);
->  
-> -MODULE_LICENSE("GPL v2");
+> Makes sense - but if you need to do a V2, would you mind removing the erroneous claim on DA9055 at the same time?
 
-Please change the module_init as well and remove module.h from
-this file.
+Could you do this anyway please.  While you're at it, please remove the
+'kbuild' reference from the subject line, thanks.
 
-Thanks,
+> https://elixir.bootlin.com/linux/latest/source/drivers/mfd/Kconfig#L364 
+> Strangely, seems it was always there, yet always bool...
+> 
+> Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
+ 
+ Thanks Adam.
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Lee Jones [李琼斯]
