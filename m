@@ -2,98 +2,74 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8358C61DA4
-	for <linux-modules@archiver.kernel.org>; Thu, 23 Feb 2023 20:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7578AC64ED8
+	for <linux-modules@archiver.kernel.org>; Thu, 23 Feb 2023 22:20:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjBWUvg (ORCPT
+        id S229530AbjBWWUP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 23 Feb 2023 15:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        Thu, 23 Feb 2023 17:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBWUvf (ORCPT
+        with ESMTP id S229595AbjBWWUN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 23 Feb 2023 15:51:35 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F58215540;
-        Thu, 23 Feb 2023 12:51:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7DGlfUnvfYwWSCguIE8WPkrvQTnToMa0+8F0V8cNuK4=; b=SSJshkyAK6myKyRuj/x4FeypBG
-        bOOgui2oKkxOQjbvkfDpyqI6t6jR6wKjOlCisEHEKbXk6T3tvNpJrr00V5LSDQNWQVzOBVse4g8Hj
-        KG8ZVeu8hoxbaU3SdL3fI1D1iFnHOil7jkHZQxtgfTZ7+6TtPin0pVbFevZoKqDGwpqElKRakJdSG
-        u8jeBOI94RgPzxlfFOxk4T7SJQxITvCaDwq6BgW8MbcE68XBs88+EToJmEeASSyBk8DMncP+D2sOz
-        bDs6xzdXUVfUGa0eGdXM3t4Zr1OiBacm1JDZcY+42+JNIebkHUjSBvRNhjexJuLDsmQ0iNJqD7cMJ
-        y3Qa2Txw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pVIYq-000JbX-G5; Thu, 23 Feb 2023 20:51:28 +0000
-Date:   Thu, 23 Feb 2023 12:51:28 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        iommu@lists.linux.dev
-Subject: Re: [PATCH 21/27] kbuild, dma-mapping: benchmark: remove
- MODULE_LICENSE in non-modules
-Message-ID: <Y/fR0KnxKP2rF3Da@bombadil.infradead.org>
-References: <20230222121453.91915-1-nick.alcock@oracle.com>
- <20230222121453.91915-22-nick.alcock@oracle.com>
- <20230222144856.GA14220@lst.de>
- <Y/acoc6MDKNnrG+g@bombadil.infradead.org>
- <878rgopfdl.fsf@esperi.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <878rgopfdl.fsf@esperi.org.uk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+        Thu, 23 Feb 2023 17:20:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01705C155;
+        Thu, 23 Feb 2023 14:20:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33B9AB81B49;
+        Thu, 23 Feb 2023 22:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DE4DBC433A8;
+        Thu, 23 Feb 2023 22:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677190808;
+        bh=vRtO5KIGuYGogw2M3+Xwqv/ZntKLkIo3ODp1eVXZrqQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=iIFenXHh1Qe/0tKVaWYwUunhFOemQOaQjU+2u7uNzL7XSSRwq4mt5mFsOQIsxounG
+         nr3Pg1L+kswWNGr2LSXYUx9HzUqyzJlzUOmaMVnbHQNkommYPrshrlCyLqJALyaWQm
+         QoRbcn0P2i+iOW1HJnsSOTfzvkLX4qUcmG9JsGqtmT+KSE8C7En2oKR4Mq8ja/7fa+
+         R7dj+j8P8myK/6rdLbR2vgAYwtPxbt5omZUQtGG9WlMux4NOhNhv2D0NcGmGg497NP
+         eOPI8tWcJ8evlouqgQNstnggt6Ro3PE6xMtR/XDjCmPChGUA8u0hidfS3yvCBIjyTX
+         sowMDadYxdJyw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C92AEC43157;
+        Thu, 23 Feb 2023 22:20:08 +0000 (UTC)
+Subject: Re: [GIT PULL] modules changes for v6.3-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y/VLCgqeWIvzfiAj@bombadil.infradead.org>
+References: <Y/VLCgqeWIvzfiAj@bombadil.infradead.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y/VLCgqeWIvzfiAj@bombadil.infradead.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.3-rc1
+X-PR-Tracked-Commit-Id: f412eef03938d3a40d4f6f5a79d0f98ed89b596d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c538944d8efb14e9809b685608490b017bfc2d48
+Message-Id: <167719080881.29288.10772156348000939230.pr-tracker-bot@kernel.org>
+Date:   Thu, 23 Feb 2023 22:20:08 +0000
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, mpdesouza@suse.com,
+        masahiroy@kernel.org, christophe.jaillet@wanadoo.fr,
+        rdunlap@infradead.org, dan.j.williams@intel.com, nicolas@fjasle.eu,
+        nick.alcock@oracle.com, tglx@linutronix.de, peterz@infradead.org,
+        linux@weissschuh.net, jiapeng.chong@linux.alibaba.com,
+        p.raghav@samsung.com, dave@stgolabs.net, linux@roeck-us.net,
+        hch@infradead.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mcgrof@kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Feb 23, 2023 at 03:31:50PM +0000, Nick Alcock wrote:
-> On 22 Feb 2023, Luis Chamberlain spake thusly:
-> > Then we look for an optimal way to address the final step:
-> >
-> >  * remove all MODULE_LICENSE() and autogenerate them from SPDX
-> 
-> Ooh that would be nice!
-> 
-> > The difficulty in this will be that we want to upkeep existing build
-> > heuristics and avoid to have to traverse the tree twice (see details
-> > on commit 8b41fc4454e). I can't think of an easy way to do this that
-> > does not involve using kconfig tristate somehow.
-> 
-> Nor can I -- and more generally I can't figure out a way to get from the
-> Kconfig symbols to the source files that constitute them without
-> retraversing the tree, since the only place the relationship is recorded
-> is in makefiles, and those makefiles use a lot of make functionality
-> (including more or less arbitrary make functions).
+The pull request you sent on Tue, 21 Feb 2023 14:51:54 -0800:
 
-$ grep "_MODULE 1" ./include/generated/autoconf.h| wc -l
-560
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.3-rc1
 
-$ grep "_MODULE 1" ./include/generated/autoconf.h| grep XFS
-#define CONFIG_XFS_FS_MODULE 1
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c538944d8efb14e9809b685608490b017bfc2d48
 
-I *think* the trick will likely be to have new a possibilities.h or just
-agument autoconf.h with POSSIBLE_MODULE for each module.
+Thank you!
 
-The next complexity lies in inferring the license and doing the license
-output given a combination. I *think* you already figured out the objs
-from the module, and in fact your new kallsyms extension I think prints
-these out right (which I find highly useful)? If so then we use these as
-input source for an SPDX license lookup. Instead of having this
-relationship grep'd after at build time, I wonder if might be good to
-just collect all license associates to all files in a header file
-similar to _MODULE prefix so maybe SPDX_$(file_path)_LICENSE_$license
-which creates a header file 1-1 mapping.
-
-Not sure if that's too much noise.
-
-Just a thought, to get the wheels spinning.
-
-  Luis
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
