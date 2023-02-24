@@ -2,108 +2,137 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 122BCC7EE23
-	for <linux-modules@archiver.kernel.org>; Fri, 24 Feb 2023 17:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32A7EC6FA8E
+	for <linux-modules@archiver.kernel.org>; Fri, 24 Feb 2023 17:35:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjBXRVp (ORCPT
+        id S229549AbjBXRfl (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 24 Feb 2023 12:21:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        Fri, 24 Feb 2023 12:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBXRVo (ORCPT
+        with ESMTP id S229448AbjBXRfk (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:21:44 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792AF158BF;
-        Fri, 24 Feb 2023 09:21:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hVqtr9A69/Si/EFagr+5HgP7SHagZOhLbSWzYrGADwQ=; b=LItUNW0Trf6fcGd6hJBbRaRstL
-        stwDEmjolZnMfJzKOvSKW4DYjOQF4M9ihtyDTW+NSO9muiwINc+qKp872YxbNmSXZOtBbp1jPzWcB
-        0QKG0gY2bl8FGPKU3bXzncEox6oIacRQXz4OstV3ASwysT0lZYHGHauRQWVNETlwEvZKVwQEVJTrj
-        fzp41hf3DDTpzvH0y2TMv7beyY2/99ZbK9lvVM5jc5aOZXZRfXoBvL1fk1d/rqM0aIy8ZoRYIt01f
-        7vIP7ZAsmkxsZ1+eqBnNo2w98KzuUK/F5XODOSBdoC36nrd4g4F21l6kJsjuhg/aT6loCGblVeZE6
-        9WFxINYQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pVblM-003IPG-2u; Fri, 24 Feb 2023 17:21:40 +0000
-Date:   Fri, 24 Feb 2023 09:21:40 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
+        Fri, 24 Feb 2023 12:35:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3308A6A78A;
+        Fri, 24 Feb 2023 09:35:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8181A61923;
+        Fri, 24 Feb 2023 17:35:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D04C4C433EF;
+        Fri, 24 Feb 2023 17:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677260137;
+        bh=tXN44/G0tGrQT+vcSuRwVPCBdAOKX4j6QHDhteSZeHo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Kb9Ya395PCdFxoVXSSdZjUJyRo8DgvFD6HZlFtCIYzaiNv2VLF356uTusEl2pWAkL
+         u4We/6A7wW8kQLxLbDP/GAiJQJxRBF+jX0PCydfM4mDuMyTria8tMm5ubcOyl/SJnX
+         Rm/XV8YtATcmqjvOI+88sbBcLSNNjI+gHZGqISsK56S7b7zahXxMDJlBC3l7F/rkgP
+         GYZaSTKgUJD3xb9fjLXwSWAXtBE/MkGODwGh/I1H2yyDGIarRUY3/yegvwSwth1/IZ
+         FUBS7zbK2zXG9F2Kk3BGewzHf4LPHw1hb0+zclKC+t+MUu3P17ecMqD6zfL1nmg1Ox
+         Y1BO+QEtk3Msg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pVbyp-00CwWB-GV;
+        Fri, 24 Feb 2023 17:35:35 +0000
+Date:   Fri, 24 Feb 2023 17:35:34 +0000
+Message-ID: <86wn47vue1.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
 Cc:     Nick Alcock <nick.alcock@oracle.com>,
         linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Philipp Zabel <p.zabel@pengutronix.de>
 Subject: Re: [PATCH 09/27] irqchip: remove MODULE_LICENSE in non-modules
-Message-ID: <Y/jyJFXqlj9DlX9z@bombadil.infradead.org>
+In-Reply-To: <Y/jyJFXqlj9DlX9z@bombadil.infradead.org>
 References: <20230224150811.80316-1-nick.alcock@oracle.com>
- <20230224150811.80316-10-nick.alcock@oracle.com>
- <86y1onw02k.wl-maz@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86y1onw02k.wl-maz@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+        <20230224150811.80316-10-nick.alcock@oracle.com>
+        <86y1onw02k.wl-maz@kernel.org>
+        <Y/jyJFXqlj9DlX9z@bombadil.infradead.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mcgrof@kernel.org, nick.alcock@oracle.com, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, hasegawa-hitomi@fujitsu.com, tglx@linutronix.de, p.zabel@pengutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Feb 24, 2023 at 03:32:51PM +0000, Marc Zyngier wrote:
-> On Fri, 24 Feb 2023 15:07:53 +0000,
-> Nick Alcock <nick.alcock@oracle.com> wrote:
-> > 
-> > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> > are used to identify modules. As a consequence, uses of the macro
-> > in non-modules will cause modprobe to misidentify their containing
-> > object file as a module when it is not (false positives), and modprobe
-> > might succeed rather than failing with a suitable error message.
-> > 
-> > So remove it in the files in this commit, none of which can be built as
-> > modules.
-> > 
-> > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > Cc: linux-modules@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Marc Zyngier <maz@kernel.org>
-> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> > ---
-> >  drivers/irqchip/irq-renesas-rzg2l.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> > diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
-> > index 25fd8ee66565..4bbfa2b0a4df 100644
-> > --- a/drivers/irqchip/irq-renesas-rzg2l.c
-> > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
-> > @@ -390,4 +390,3 @@ IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irqc_init)
-> >  IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
-> >  MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
-> >  MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
-> > -MODULE_LICENSE("GPL");
+On Fri, 24 Feb 2023 17:21:40 +0000,
+Luis Chamberlain <mcgrof@kernel.org> wrote:
 > 
-> I'm probably missing some context here, but I find it odd to drop
-> something that is a important piece of information because of what
-> looks like a tooling regression.
+> On Fri, Feb 24, 2023 at 03:32:51PM +0000, Marc Zyngier wrote:
+> > On Fri, 24 Feb 2023 15:07:53 +0000,
+> > Nick Alcock <nick.alcock@oracle.com> wrote:
+> > > 
+> > > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> > > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> > > are used to identify modules. As a consequence, uses of the macro
+> > > in non-modules will cause modprobe to misidentify their containing
+> > > object file as a module when it is not (false positives), and modprobe
+> > > might succeed rather than failing with a suitable error message.
+> > > 
+> > > So remove it in the files in this commit, none of which can be built as
+> > > modules.
+> > > 
+> > > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> > > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> > > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > > Cc: linux-modules@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Marc Zyngier <maz@kernel.org>
+> > > Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> > > ---
+> > >  drivers/irqchip/irq-renesas-rzg2l.c | 1 -
+> > >  1 file changed, 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
+> > > index 25fd8ee66565..4bbfa2b0a4df 100644
+> > > --- a/drivers/irqchip/irq-renesas-rzg2l.c
+> > > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+> > > @@ -390,4 +390,3 @@ IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irqc_init)
+> > >  IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
+> > >  MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
+> > >  MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
+> > > -MODULE_LICENSE("GPL");
+> > 
+> > I'm probably missing some context here, but I find it odd to drop
+> > something that is a important piece of information because of what
+> > looks like a tooling regression.
+> > 
+> > It also means that once a random driver gets enabled as a module, it
+> > won't load because it is now missing a MODULE_LICENSE() annotation.
+> > 
+> > It feels like MODULE_LICENSE should instead degrade to an empty
+> > statement when MODULE isn't defined. Why isn't this approach the
+> > correct one?
+> > 
+> > I expect the cover letter would have some pretty good information on
+> > this, but lore.kernel.org doesn't seem to have it at the time I write
+> > this ("Message-ID <20230224150811.80316-1-nick.alcock@oracle.com> not
+> > found").
 > 
-> It also means that once a random driver gets enabled as a module, it
-> won't load because it is now missing a MODULE_LICENSE() annotation.
-> 
-> It feels like MODULE_LICENSE should instead degrade to an empty
-> statement when MODULE isn't defined. Why isn't this approach the
-> correct one?
-> 
-> I expect the cover letter would have some pretty good information on
-> this, but lore.kernel.org doesn't seem to have it at the time I write
-> this ("Message-ID <20230224150811.80316-1-nick.alcock@oracle.com> not
-> found").
+> The right thing is to not even have this and have the module license
+> inferred from the SPDX tag. But for now we want to remove the tag from
+> things we know for sure are not modules.
 
-The right thing is to not even have this and have the module license
-inferred from the SPDX tag. But for now we want to remove the tag from
-things we know for sure are not modules.
+I understand that you want to remove it. I don't get why this is the
+right solution. Can you please assume that, in this particular
+instance, I am a complete idiot and spell it out for me?
 
-  Luis
+Why isn't that a problem for modules that are compiled-in?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
