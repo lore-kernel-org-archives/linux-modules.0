@@ -2,73 +2,71 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EDA9C61DA3
-	for <linux-modules@archiver.kernel.org>; Fri, 24 Feb 2023 15:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48749C61DA4
+	for <linux-modules@archiver.kernel.org>; Fri, 24 Feb 2023 15:32:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjBXPWU (ORCPT
+        id S230055AbjBXPc6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 24 Feb 2023 10:22:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        Fri, 24 Feb 2023 10:32:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjBXPWT (ORCPT
+        with ESMTP id S229637AbjBXPc5 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 24 Feb 2023 10:22:19 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468AC69AE6;
-        Fri, 24 Feb 2023 07:22:18 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id j3so9677155wms.2;
-        Fri, 24 Feb 2023 07:22:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dPU7obtAHP0j+i6BVBTm256HJzPDdg/f2QDMD3fsybc=;
-        b=qFqjN0tGOa/CffmdzVtFfP8BURkLu0ILQld82UQxVn/3vkvExcg8I+NiSUATN8ZJJW
-         6nfnOGAWjHIoJfBgFDmAx7zQlds+ip9xI8ndqAgsmFWQ2nl4i0scFyzpOXwMUNQrlI9d
-         6DrMizcpKMNSa+/K3+pTyYwqkpdGfRp09CsiR5LxIDSOvZuVc6jJknrEB5Vq5jbcwKPI
-         QUnamK9fPPttauz8Qiy0mcaO/OTtKd77L6JasGKIwRbDYPGGAFzj5FNdC2QoKvRaP99z
-         IamDLYWWSCLv7UXiEnMBtDLEP4H9EvqFP++HJ93jFzddrsxq0bbW+ImN2C0TcJPcugWi
-         Cwxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dPU7obtAHP0j+i6BVBTm256HJzPDdg/f2QDMD3fsybc=;
-        b=XIcn08NYcASUilM9BajRlG42KNUTDv5ApCpEQoYHn9LHfqPK0RrCZgcUT1I3W2e/GU
-         3bxHAY1wycfSmYe3sMH/H9dilszUqQv4wIhWwy/2YW7TAF6wE6/YeMPhDge/Nvo0PjTU
-         BgGmfPkJIG2SKBnSz7kS30hCLMFJ5/d1AU5pVokMUI0Nc/aB2DxU8mdf8kbCs0sOmdKE
-         613P1TXGIWfK5NO70vs4hHeHh4HMvD74s50Id9AjzPeGi6fXuz35icjoeV+Zx3CNVjjL
-         vD17pxDvhU0xIYOnxu1Ty5MThh3NNPkDfttvYRSg7NYBxAFlYNE3LR6GF2JLXK5bdcrh
-         tVCg==
-X-Gm-Message-State: AO0yUKUcpwr3RxyN4NROsRJVvyOv8saoAAZQvjTiL4yQ3kR/F1DDvbSE
-        dzyCIQKO7PH9Dx5OHqSGVuQ=
-X-Google-Smtp-Source: AK7set9oJ3vs562AAGzj/rc6M2xZoLHToKsKthDDFfee4SOYI5rSWoOFYNDUBhfoE8g/mW/bSqmZuA==
-X-Received: by 2002:a05:600c:331b:b0:3dc:4318:d00d with SMTP id q27-20020a05600c331b00b003dc4318d00dmr12068491wmp.11.1677252136554;
-        Fri, 24 Feb 2023 07:22:16 -0800 (PST)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id f22-20020a7bcd16000000b003e21638c0edsm3064935wmj.45.2023.02.24.07.22.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 07:22:16 -0800 (PST)
-Date:   Fri, 24 Feb 2023 17:22:14 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
+        Fri, 24 Feb 2023 10:32:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F052D421A;
+        Fri, 24 Feb 2023 07:32:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BDE061910;
+        Fri, 24 Feb 2023 15:32:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98DFBC433EF;
+        Fri, 24 Feb 2023 15:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677252774;
+        bh=M8s/+ue2tUYnD3EP7X5f/z9MZy+gJoke2cX2xDeSggY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=M7/pTPZmz+YiZQxZL4Jy5FZg0LXU+pp0N/WR1wQRBHQKT31IOrViwMKCY9CVsR1JI
+         68VIT+sZNamK/7OF0/JiX9RfSrSBmVT09A1VZ3Z379TVokDmZZd4E7kE/2g4UBLHZc
+         rpdOB+leJs0ctADlZo8sedWDa8kRfDj0pbgmllVTucWNcoOISjcizfKv1EcjchhpOM
+         sOy3NoOf0kl/HIZEfEBhe+/Yg4fJajLlSLJF/AxgNCjU6p9LzPE0kIX8rd2Jq72HPV
+         nYQ0GxTb/jbqKqPtQI4xkZh1hYZmld+KRwyXHkv+V7LqpcDV5iE1lc+/xZvUqtmxHW
+         l/a8RSXEA6a4g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pVa43-00Cuwd-I2;
+        Fri, 24 Feb 2023 15:32:52 +0000
+Date:   Fri, 24 Feb 2023 15:32:51 +0000
+Message-ID: <86y1onw02k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
 To:     Nick Alcock <nick.alcock@oracle.com>
 Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 27/27] lib: packing: remove MODULE_LICENSE in non-modules
-Message-ID: <20230224152214.qb2ro3uvf7th5ctj@skbuf>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH 09/27] irqchip: remove MODULE_LICENSE in non-modules
+In-Reply-To: <20230224150811.80316-10-nick.alcock@oracle.com>
 References: <20230224150811.80316-1-nick.alcock@oracle.com>
- <20230224150811.80316-28-nick.alcock@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224150811.80316-28-nick.alcock@oracle.com>
+        <20230224150811.80316-10-nick.alcock@oracle.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nick.alcock@oracle.com, mcgrof@kernel.org, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, hasegawa-hitomi@fujitsu.com, tglx@linutronix.de, p.zabel@pengutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Feb 24, 2023 at 03:08:11PM +0000, Nick Alcock wrote:
+On Fri, 24 Feb 2023 15:07:53 +0000,
+Nick Alcock <nick.alcock@oracle.com> wrote:
+> 
 > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
 > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
 > are used to identify modules. As a consequence, uses of the macro
@@ -85,29 +83,42 @@ On Fri, Feb 24, 2023 at 03:08:11PM +0000, Nick Alcock wrote:
 > Cc: linux-modules@vger.kernel.org
 > Cc: linux-kernel@vger.kernel.org
 > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Vladimir Oltean <olteanv@gmail.com>
-> Cc: netdev@vger.kernel.org
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
 > ---
->  lib/packing.c | 1 -
+>  drivers/irqchip/irq-renesas-rzg2l.c | 1 -
 >  1 file changed, 1 deletion(-)
 > 
-> diff --git a/lib/packing.c b/lib/packing.c
-> index a96169237ae6..3f656167c17e 100644
-> --- a/lib/packing.c
-> +++ b/lib/packing.c
-> @@ -198,5 +198,4 @@ int packing(void *pbuf, u64 *uval, int startbit, int endbit, size_t pbuflen,
->  }
->  EXPORT_SYMBOL(packing);
->  
-> -MODULE_LICENSE("GPL v2");
->  MODULE_DESCRIPTION("Generic bitfield packing and unpacking");
-> -- 
-> 2.39.1.268.g9de2f9a303
-> 
+> diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
+> index 25fd8ee66565..4bbfa2b0a4df 100644
+> --- a/drivers/irqchip/irq-renesas-rzg2l.c
+> +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+> @@ -390,4 +390,3 @@ IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irqc_init)
+>  IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
+>  MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
+>  MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
+> -MODULE_LICENSE("GPL");
 
-Is this a bug fix? Does it need a Fixes: tag? How is it supposed to be
-merged? lib/packing.c is maintained by netdev, and I believe that netdev
-maintainers would prefer netdev patches to be submitted separately.
+I'm probably missing some context here, but I find it odd to drop
+something that is a important piece of information because of what
+looks like a tooling regression.
 
-Note that I was copied only on this patch, I haven't read the cover
-letter if that exists.
+It also means that once a random driver gets enabled as a module, it
+won't load because it is now missing a MODULE_LICENSE() annotation.
+
+It feels like MODULE_LICENSE should instead degrade to an empty
+statement when MODULE isn't defined. Why isn't this approach the
+correct one?
+
+I expect the cover letter would have some pretty good information on
+this, but lore.kernel.org doesn't seem to have it at the time I write
+this ("Message-ID <20230224150811.80316-1-nick.alcock@oracle.com> not
+found").
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
