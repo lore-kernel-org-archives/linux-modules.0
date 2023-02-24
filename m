@@ -2,191 +2,182 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E184C64ED8
-	for <linux-modules@archiver.kernel.org>; Fri, 24 Feb 2023 19:59:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE003C64ED8
+	for <linux-modules@archiver.kernel.org>; Fri, 24 Feb 2023 20:15:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjBXT7m (ORCPT
+        id S229532AbjBXUP1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 24 Feb 2023 14:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
+        Fri, 24 Feb 2023 15:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjBXT7m (ORCPT
+        with ESMTP id S229496AbjBXUP0 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 24 Feb 2023 14:59:42 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9974231F4;
-        Fri, 24 Feb 2023 11:59:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9Yz6Cnikfbag3U4katUAdKyQvzzXHB/McbEaDU0MXMQ=; b=PQCst6uXd1ZyWdZ/o4hnPdgbkz
-        SBe5DQBHfcSyutB2kJLQL6Z4L08f0WOLCFgkl6Kg72I0TJoyQTfbniQ7eSPYadJqR6+jRJ/FRfPam
-        DbWHrx5mOGc7I9jak9my+ODizCM4r4jsB5aUcSAIbgxMQiPTazj3NGx4mkZsrbBKyf9SgRTQl/e+J
-        EJpCjQqMDbyw9v/bZK640N2P+OrtOfAKQa4nPzMoZAYywRtEHA4zaeH/fV4mz72dvqkpR8KVz+KSp
-        /NQnPCgrXFhIyI/02oVScnppS+0/nSocIXYJOY1k1DodrUWFNijkGGr4mlNqx32BF1WGTuYzMqcvb
-        PF/RjIxQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pVeDm-003jZF-2p; Fri, 24 Feb 2023 19:59:10 +0000
-Date:   Fri, 24 Feb 2023 11:59:10 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Nick Alcock <nick.alcock@oracle.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fri, 24 Feb 2023 15:15:26 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53C31B2D6;
+        Fri, 24 Feb 2023 12:15:25 -0800 (PST)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OEoAeA008499;
+        Fri, 24 Feb 2023 15:09:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
+ bh=MGl4RSJiWlJzRgpVI595JOFNc04yw6U1cud/BgTdOxc=;
+ b=mKc37L3ni8LK3ydi+W4Ph0dSHr+2TOsN/XMEQtxNlRFR2cF6hUl96xdUDNMNJmjODH2R
+ hEyt6Z5ontGIqCdw/pdDd1MKPsVQey5iKK2OndgSlbny5hBl8BeSI6WHLw9hEpxDIe3V
+ VEKfplhP4NkH1aDz6UqHRsTaSasxt7LVSUtyJq/TG9fC23f7rG3BG61/jAC0tU52uGZR
+ g4xD6WCMEWa54QfSQQ4nosT6eHsbw/ELemgKSuhLHwZYJyglD7yv3FDwBC49XTsYBaen
+ zT1kRFJcOG4Kxyvh4b1lKMtJPKkZUtVJzXt4sgI2hdaExBvSdby5qu1cl9IJeURSb1XU Sw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ntnkbw72u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Feb 2023 15:09:36 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31ODmmuC030302;
+        Fri, 24 Feb 2023 15:09:35 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2106.outbound.protection.outlook.com [104.47.58.106])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ntn49kx2m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Feb 2023 15:09:35 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B5G962tct5zn0gau38y4oVRswkak15tmoJbfTBTIbOt0VAJBN0V1F4Sq6BHwNv7uHsmpoV36x/YCcbsL+giv5YKqwUf4wXJopwW63OZIDuymewxYDZg4GkXMeYdEBRl9SRYrHKTvdgIt0P4lN0YTgZDRW05rZgCY14J0RoZDH+2xiyeM9ewata7CRT4Q0XIXqbEVtQQTubY0R6PuIxVj9USuiLQYfwECJ3tVOvd9GuuW+bHBNHbaQDf1ocFZPvxOFgaqRLBxUoVmLjgci1/2EVjKhhscYnINCMwDxCT9dsCoHrA+8qecY7MwG6uc57bIz82lAR3YkVBtAqh0CkesJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MGl4RSJiWlJzRgpVI595JOFNc04yw6U1cud/BgTdOxc=;
+ b=d7kg0vmZ20wak1sxkubtfhnDESw3nGle5u1W+vev66PzgevfZV8Q5YXhNK+xJKPh0CInbaNlQkMQhgSLcPeMTJL3Di5hlFrt6ElwEKS2L0QtTrmB48rf6eSeF59FV+ntH1v9UHEL0kq1OfTN9OI8gBlk3UZngnKMOGePUaSSozEK4uqIwI7busLHO//siYH1MeVQB7fXd0sT9NaM3HUPfFoxI5aGtMe+Ikq1cvRn4I2Zvue/N7NNiHpZs7tIGISrJ/9fZSB1lW5Xvk3sWBBlXUyzs+ZFjlWucDsTNoMGr3SHe6e8dAVxc02d/vu/1kyOJnVPR8tqC1IuPTLpVRIpVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MGl4RSJiWlJzRgpVI595JOFNc04yw6U1cud/BgTdOxc=;
+ b=CpSyELF4zJ4sEvDOaVcemc0DFk9FJ6bKsgXnG22khwKPhqQZG1/cIA+11lrgc3ptj9w+ytz/4DirB8SnhSuwKJUkoeK7MxfC7xroiQLohgKtfEjKCbdm8s30BeyPiSklVtTE6g6pp6nNok2gLg0RDDUwNZRUJswl/sArTTxLXQA=
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
+ by PH0PR10MB5610.namprd10.prod.outlook.com (2603:10b6:510:f8::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.11; Fri, 24 Feb
+ 2023 15:09:33 +0000
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::d0f7:e4fd:bd4:b760]) by DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::d0f7:e4fd:bd4:b760%3]) with mapi id 15.20.6134.019; Fri, 24 Feb 2023
+ 15:09:33 +0000
+From:   Nick Alcock <nick.alcock@oracle.com>
+To:     mcgrof@kernel.org
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH 09/27] irqchip: remove MODULE_LICENSE in non-modules
-Message-ID: <Y/kXDqW+7d71C4wz@bombadil.infradead.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH 15/27] memory: tegra: remove MODULE_LICENSE in non-modules
+Date:   Fri, 24 Feb 2023 15:07:59 +0000
+Message-Id: <20230224150811.80316-16-nick.alcock@oracle.com>
+X-Mailer: git-send-email 2.39.1.268.g9de2f9a303
+In-Reply-To: <20230224150811.80316-1-nick.alcock@oracle.com>
 References: <20230224150811.80316-1-nick.alcock@oracle.com>
- <20230224150811.80316-10-nick.alcock@oracle.com>
- <86y1onw02k.wl-maz@kernel.org>
- <Y/jyJFXqlj9DlX9z@bombadil.infradead.org>
- <86wn47vue1.wl-maz@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO6P123CA0033.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:2fe::6) To DS0PR10MB6798.namprd10.prod.outlook.com
+ (2603:10b6:8:13c::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86wn47vue1.wl-maz@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|PH0PR10MB5610:EE_
+X-MS-Office365-Filtering-Correlation-Id: a4886d32-9795-4b54-9f0e-08db167922e6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7BVW7xxzl2aj6CV486icERbi0AI0j/7Dbw9AVwFGYol36TlzigjtZGPYSrTwPbAyVg+X6zy3foD8HnvEWs7l70O0oXytXguRybtKRxt7gTFyzrNUVGhblzw/yGo367Scx21xdWx8sFVV3nlSeIfK8v41jopRLYCYi5IUJOaRj1n4V1cKJ4Ae7W2B7yR0pq4c7MZUS3qEi73NCWiPVSiHGWkI4UlsrYldhR+gmWqo/YWOmrqeX/pKgNOoJuY8nbSxzOQ6byWIYIxGuz+N/21Jcb76h7FrvQdXsCYWsZi5BPiV9ykkg8Uc0P5KCsHcXbFKj1aeCRD/qxesmrfI+aajgH+E9NJyT39GNJqxP1HFlD4tgXARgEwpmgGoEmTLsGeoDM1ufRS+0Q6HLMtJXllg3WU8TwUDK01eqNtTm5JUFMZ7t08fI95wkQTU9pz1rBqvxjpbu7dC3G3My7sjvY4LxhVAcijkIhrSRJs47M1RroYt7lIe/GKUZ37TujNemsV4+o21XwoKN/DuZR3E86zkPJXN9un54wsdpUd+E+dj01B8oRoVkh9tc5oplLumWgu0T1ZhTEZCDtrH7CkGpXu8T8DrhlaHRiL3h6o+LLj/zQ13wZqxhTGP7PWkyX66fM/e5PQavAYGi1SJYey/JvOCHQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(376002)(136003)(346002)(39860400002)(451199018)(6486002)(86362001)(38100700002)(83380400001)(6512007)(6506007)(1076003)(6666004)(36756003)(186003)(2616005)(5660300002)(54906003)(478600001)(44832011)(8936002)(316002)(41300700001)(6916009)(8676002)(66476007)(66946007)(66556008)(4326008)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dPEUpwTjT6mSVyE1M2U3ZzHXA6WxkvB1sWkblwra0GxgcM6iLi6rVHlx+NBk?=
+ =?us-ascii?Q?L5hgCSr9RHDpJBvJT0FDILEjz5kAvOqEB3v6cNYmDutzP6i0mim7v7mTQRTp?=
+ =?us-ascii?Q?BOzdoeO0qH+PrQ2ufbtvBN2nvunJPYjvyFH0czYkv20Vh0JjSB3SUJkfB1yC?=
+ =?us-ascii?Q?DDeadJrq9YsGmBc5F5/Le+qBiWWqQhVb/Y7+0QwGpl0/sB//+wtSfUZO012U?=
+ =?us-ascii?Q?UiJxLnihT/OuTtrM2Zcgt+Xl4vRH49G9ibeKaLd3QhrPiKZu8CtOyBOjPTsZ?=
+ =?us-ascii?Q?3DRPjjDVYd66LypFZwx7cpVJTC2fI/CMz1M1JtKclHjtL5P8DA1yl+4ba3jl?=
+ =?us-ascii?Q?H5qSL/ZdWhcQNAlVhNZfo/eCdmFCVs0pqjFwGcymBxUtS6AzZ71nGqeEzdU2?=
+ =?us-ascii?Q?oJ9S7mbTysSdFHCQVI0Ee//ZAmLInSb7V1K0Da0F/jZsqtOng8JYttp+nuSA?=
+ =?us-ascii?Q?0iloUG8xsKPiX4Yi3is6AA3nLreAT3yC4UIwxWkbhrTGcmCw9Y5hHh1UWqvi?=
+ =?us-ascii?Q?y1xrg9QUBufXbEvQ+QebMfJKYrrfBZYBBFVf1GjlFDZPB0iy+O/PlO5h4IL1?=
+ =?us-ascii?Q?k1kg2J5IpC9MCt5QZxjyb701CS5uNHs23VMNb1yLr/PqY35LLTJwreLypUJX?=
+ =?us-ascii?Q?eVTa/CbPNIclTeoe6cjM1vwccOjWSmliaAua6qPgpG2KnkxxXPYV0QmiRVwu?=
+ =?us-ascii?Q?gSwFs+mB8GQiQaya83IVYGUSthW+QM5uRwx0BszEGnQTr8CDKu2+QvKMOftm?=
+ =?us-ascii?Q?Yw1PsHM+BMWByAnt6w+9A/PC4Pe0+YtgTav/C/276GotPbOps1UT2hku0wrP?=
+ =?us-ascii?Q?k/SfVzSuPI+kJwHc+HXRLrHiB8UViHTqQjtdzNYeCHRRs/f42NWh2NQMe2zy?=
+ =?us-ascii?Q?uqxhLTT2Ec+W4xv5yhc0sMbXtemBA49vtgTDouCPV+XhO+xS7VDmV4VNgK3S?=
+ =?us-ascii?Q?x3qNyrqBhVMmqq6P8oGsyKUKxPzIlHL4VuJySaM2nzGObufa3TzZQPxrMW4H?=
+ =?us-ascii?Q?lp9Yd/iZz211I6kUpFjLJhwcSbfLR9fV0Dy7w8qqDSr7ApMhgE1OxomAs37y?=
+ =?us-ascii?Q?9vXZYabeHpLhjN0C+C3/Aj96kx7ab0BmqxLj8OtLNGN5YzASDHU11d9GtGK6?=
+ =?us-ascii?Q?mNAQEpwQ+gTCJy95RgClyPdQGW75RXYXDCHq388KnSTi676yOOwWhtG8d3xI?=
+ =?us-ascii?Q?IjyVEf9uKea91HE970vNPJ57NA6Q+ELrEfUThaeftKeD0MSvPmM1aVPu41DF?=
+ =?us-ascii?Q?qM5fJChaRDnfEIClheUhV9Y2leCt/rxWK53urZiXdL0IxW6JDw+06X8PxpOU?=
+ =?us-ascii?Q?vIaOQENTrk52kOujF/QTblxOm3TBMNSappru+GPhoHOqGvblVtRSDGx5HdUa?=
+ =?us-ascii?Q?mXGhsJGiOlamYOE7ddA1leTMfOLdX7K6p0NHU7WZIkIPS/zOY+hCYfKWPsPO?=
+ =?us-ascii?Q?HCAdICR8fkE9u/7ykGqhq7pDgIIsfWI0VTSv8xdeVRvBqpCyQS52eBHTHphT?=
+ =?us-ascii?Q?8y2cWwxmhWiSu/d7YjwK1FyK/OlG85SGDhOMgJupMlg1rUmnkTBqM/mV53/y?=
+ =?us-ascii?Q?GubAbhfgcSTIdKhodo60kaFa2HWZvl+9Nb7/OWuV/CAugbdI9oDwTbcPJpbJ?=
+ =?us-ascii?Q?Q4tZUriVNAEqgEnckK0dh5E=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 1ZI5qXmrZ9DA7Vq/P0gpVd9nqfFCNmYnW3aKDE5QfTKaTWTjDdaJQrLSazmHy25ZkKENVjrb6WBhbGqDTl5S5N7kv7kku9y6hGs+xRau0X6lC7eVj9CSSvnWNvG0qP5TVegTpyu8gjBIbdMii6+xZYw5chpS7bPKJXrQExT+1kC0Xm5uo36cvpypu29t63v1CSG8zqHt+dzWAXXeUfGjcWbm0sQLk3/tOulKCpyOzWqTgm2ARqvnOGnSduhoijOYW9Q4Zyrwv+JIxWVMh81KhIcMWlm817Tm+h+/WhM1OBGo0yB8CA1G+msCvUTBLj57SfRn0bow9JJ8/7stVdwEQUMX8qzH/CEmILU36/BQqFIEjRSV4G2uJWEeMTrgG5Gdgv7A2u7HYDShvVHzfxPR8f/qOegp7TRpuqp3eQzR5izJ3y/GOL2DPIOurJnaR4QdZilveD50beIxAyEptDmYq+TeWiIT95OWDeTzD2OhYN4FYVGtLhFhlldn1deWBYbulFZZYj3yO/ctrQpuNh6RVvR7Mvr2BDjUtfT3zArKnSIHUVTlTH5W+cEpKkZUnDmViThzJv+uOKBPo5D8m89eau4elZV9yQw6rxr6sg/Y4kMgR2wkuK8FQ8R2y1URGsuceLYwFHuWrCseSi3k9c916B7PVxnMCiMnJcffahA4BHfDdecbo3coWHcBSArHzgqn+WLnV4ttnhlronMvDN7PyYbtwfk06m8zmPlWo5fuFkKOj4RWMzQrMP3+JTBqokFCAvTfO13o4JzxRLTFIIm7KKnEHUEC9wbkf7s7zAICRqmc0bNLRyBcNR3UzftqOrlboaKpmuS/l317JrISY3zaHjYhjAagceT+BvP/CBp72uLgoKpMxFyH8jK3oiifMheJCkcjPYUItfSOzvT1v119zA==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4886d32-9795-4b54-9f0e-08db167922e6
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 15:09:33.6388
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nIsElfCF+jVNY1MOhkF3rXY+hXVxA4YXJ3lDJwdNN4QPgtXLQCwWXmzhe4Gi8UKIZgFiFEQA5fdweeU+kMY03g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5610
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-24_10,2023-02-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302240118
+X-Proofpoint-GUID: jCquhhr6AzPZwWJvjb1EAzi8xg-tcyGt
+X-Proofpoint-ORIG-GUID: jCquhhr6AzPZwWJvjb1EAzi8xg-tcyGt
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Feb 24, 2023 at 05:35:34PM +0000, Marc Zyngier wrote:
-> On Fri, 24 Feb 2023 17:21:40 +0000,
-> Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > 
-> > On Fri, Feb 24, 2023 at 03:32:51PM +0000, Marc Zyngier wrote:
-> > > On Fri, 24 Feb 2023 15:07:53 +0000,
-> > > Nick Alcock <nick.alcock@oracle.com> wrote:
-> > > > 
-> > > > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> > > > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> > > > are used to identify modules. As a consequence, uses of the macro
-> > > > in non-modules will cause modprobe to misidentify their containing
-> > > > object file as a module when it is not (false positives), and modprobe
-> > > > might succeed rather than failing with a suitable error message.
-> > > > 
-> > > > So remove it in the files in this commit, none of which can be built as
-> > > > modules.
-> > > > 
-> > > > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> > > > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > > > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > > > Cc: linux-modules@vger.kernel.org
-> > > > Cc: linux-kernel@vger.kernel.org
-> > > > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > > Cc: Marc Zyngier <maz@kernel.org>
-> > > > Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> > > > ---
-> > > >  drivers/irqchip/irq-renesas-rzg2l.c | 1 -
-> > > >  1 file changed, 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
-> > > > index 25fd8ee66565..4bbfa2b0a4df 100644
-> > > > --- a/drivers/irqchip/irq-renesas-rzg2l.c
-> > > > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
-> > > > @@ -390,4 +390,3 @@ IRQCHIP_MATCH("renesas,rzg2l-irqc", rzg2l_irqc_init)
-> > > >  IRQCHIP_PLATFORM_DRIVER_END(rzg2l_irqc)
-> > > >  MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
-> > > >  MODULE_DESCRIPTION("Renesas RZ/G2L IRQC Driver");
-> > > > -MODULE_LICENSE("GPL");
-> > > 
-> > > I'm probably missing some context here, but I find it odd to drop
-> > > something that is a important piece of information because of what
-> > > looks like a tooling regression.
-> > > 
-> > > It also means that once a random driver gets enabled as a module, it
-> > > won't load because it is now missing a MODULE_LICENSE() annotation.
-> > > 
-> > > It feels like MODULE_LICENSE should instead degrade to an empty
-> > > statement when MODULE isn't defined. Why isn't this approach the
-> > > correct one?
-> > > 
-> > > I expect the cover letter would have some pretty good information on
-> > > this, but lore.kernel.org doesn't seem to have it at the time I write
-> > > this ("Message-ID <20230224150811.80316-1-nick.alcock@oracle.com> not
-> > > found").
-> > 
-> > The right thing is to not even have this and have the module license
-> > inferred from the SPDX tag. But for now we want to remove the tag from
-> > things we know for sure are not modules.
-> 
-> I understand that you want to remove it. I don't get why this is the
-> right solution. Can you please assume that, in this particular
-> instance, I am a complete idiot and spell it out for me?
-> 
-> Why isn't that a problem for modules that are compiled-in?
+Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+are used to identify modules. As a consequence, uses of the macro
+in non-modules will cause modprobe to misidentify their containing
+object file as a module when it is not (false positives), and modprobe
+might succeed rather than failing with a suitable error message.
 
-Modules that are compiled in should succeed with a modprobe call as its
-already loaded. The construct we're looking for is a way to detect
-things which are built-in but *could* be modules. The annotation today
-is done at build time for something built-in using a file path using
-modinfo.
+So remove it in the files in this commit, none of which can be built as
+modules.
 
-All of the module macros which peg .modinfo section information for
-built-in code can be extracted from vmlinux using objcopy -j .modinfo, and
-that's exactly how modules.builtin.modinfo is built:
+Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-modules@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: linux-tegra@vger.kernel.org
+---
+ drivers/memory/tegra/tegra186-emc.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-objcopy -j .modinfo -O binary vmlinux.o modules.builtin.modinfo
-
-From this we grep out the "file:" and sed it with a ^kernel prefix.
-You can look at the commit 8b41fc4454e ("kbuild: create modules.builtin
-without Makefile.modbuiltin or tristate.conf") which did that.
-
-If a module is built-in then MODULE_FILE() is used we and we add a
-MODULE_INFO(file, KBUILD_MODFILE), and so the modinfo exists for the
-"file:" tag for it. At build time we sed for all those with a kernel prefix
-to build the modules.builtin file. That file is used by modprobe to tell
-us "yes your module is loaded as its built-in".
-
-So the thing we wish to not have present is when built-in code is being
-compiled but *cannot possibly* be module, and we have no way to verify that.
-
-So one way to go about this is to simply *not* use the MODULE_LICENSE()
-which cannot possibly be modules so to simplfy the build process. I
-think the alternative would be to have a kconfig tristate add a new define for
-the case where the tristate was y.
-
-So something like this:
-
-diff --git a/Makefile b/Makefile
-index 197dcb83b2e1..f825d0546a7f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -574,6 +574,7 @@ KBUILD_CFLAGS_KERNEL :=
- KBUILD_RUSTFLAGS_KERNEL :=
- KBUILD_AFLAGS_MODULE  := -DMODULE
- KBUILD_CFLAGS_MODULE  := -DMODULE
-+KBUILD_CFLAGS_MODULE_POSSIBLE  := -DMODULE_POSSIBLE
- KBUILD_RUSTFLAGS_MODULE := --cfg MODULE
- KBUILD_LDFLAGS_MODULE :=
- KBUILD_LDFLAGS :=
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 100a386fcd71..13f31766eee3 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -211,12 +211,15 @@ endif
- endif
+diff --git a/drivers/memory/tegra/tegra186-emc.c b/drivers/memory/tegra/tegra186-emc.c
+index 26e763bde92a..e935ad4e95b6 100644
+--- a/drivers/memory/tegra/tegra186-emc.c
++++ b/drivers/memory/tegra/tegra186-emc.c
+@@ -280,4 +280,3 @@ module_platform_driver(tegra186_emc_driver);
  
- part-of-module = $(if $(filter $(basename $@).o, $(real-obj-m)),y)
-+could-be-module = $(if $(filter $(basename $@).o, $(possible-obj-m)),y)
- quiet_modtag = $(if $(part-of-module),[M],   )
- 
- modkern_cflags =                                          \
- 	$(if $(part-of-module),                           \
- 		$(KBUILD_CFLAGS_MODULE) $(CFLAGS_MODULE), \
--		$(KBUILD_CFLAGS_KERNEL) $(CFLAGS_KERNEL) $(modfile_flags))
-+		$(KBUILD_CFLAGS_KERNEL) $(CFLAGS_KERNEL) $(modfile_flags)) \
-+	$(if $(could-be-module),, \
-+		$(KBUILD_CFLAGS_MODULE_POSSIBLE)
- 
- modkern_rustflags =                                              \
- 	$(if $(part-of-module),                                   \
+ MODULE_AUTHOR("Thierry Reding <treding@nvidia.com>");
+ MODULE_DESCRIPTION("NVIDIA Tegra186 External Memory Controller driver");
+-MODULE_LICENSE("GPL v2");
+-- 
+2.39.1.268.g9de2f9a303
 
-The difficulty would be the possible-obj-m, to do it without incurring
-a huge slow down on the build process.
-
-  Luis
