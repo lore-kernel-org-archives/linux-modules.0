@@ -2,118 +2,135 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F0C0C7EE2E
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Feb 2023 13:35:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FF44C7EE2E
+	for <linux-modules@archiver.kernel.org>; Tue, 28 Feb 2023 13:47:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjB1Nfs (ORCPT
+        id S229686AbjB1Nr3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Feb 2023 08:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        Tue, 28 Feb 2023 08:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjB1Nfs (ORCPT
+        with ESMTP id S229668AbjB1Nr1 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Feb 2023 08:35:48 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34F0196AB;
-        Tue, 28 Feb 2023 05:35:46 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S7QTQ9017835;
-        Tue, 28 Feb 2023 13:35:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=tsUfXmQDNYr6ASvuTFr+KKzEQmpBqjlfN2tgGFpkf7A=;
- b=Yy2YXisuU5VdUXX84FoQImYNuxWfRHM+7BtitcryRBHv4QtjOSBOeGjLCsCsMVvqgMf3
- MyPdNGipjLLJyDP0VzHSVf9PLYLKEBmxX907ER99t4SsIU3OS9jdKJrGlC2wfLV5vqVc
- bPJmdV/Tq1Agz4q3DVi83uXjW3f27V6SYK0ckN9JtsdGheVc7WP3ToOvZrbTMiychB+o
- zpoh1+dyX5hZ1lmSbi+LvKd+XRDAciXhNeVFAis1PYEsx1UWKxPzTYVQCeQq0ebdx07A
- IaTwV9hsAG9r9b72vrBSgvjScw3trkI/HFPH3OzwDNlqs0WzQJM5WwVWLL/B83oMSfom Uw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p0u3jusue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 13:35:40 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31SDZdUG004218
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 13:35:39 GMT
-Received: from [10.216.42.110] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Feb
- 2023 05:35:35 -0800
-Message-ID: <f819a73c-ba92-3106-cd25-2ce5cb85064c@quicinc.com>
-Date:   Tue, 28 Feb 2023 19:05:31 +0530
+        Tue, 28 Feb 2023 08:47:27 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AFF305EE;
+        Tue, 28 Feb 2023 05:47:07 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id cf14so10361816qtb.10;
+        Tue, 28 Feb 2023 05:47:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sH0Va/LXi8AO46HXNHI3MHsJcYt1lVFeI6M84VU58Fs=;
+        b=gbADfJ9UFEzzdnZxTjqIji5Zw6fgs7FP2NXBKRaLhl8xCpsPF8vpelKwReurl8zn9L
+         DhMxMeJ+5OUBNyHYnUTPv2tu0PEB7yxF02ZC/WS5DaF2V6prnWVNH3CjCl3tgOK14Wa3
+         CuVmZeOBP160kdqjqpFk1OS0g7MvCUtRcRXYAy2aYWXD2MZab/kARFfmjcz4fvvbAIgW
+         7v9XdRfJXQN8KclCCH21q6Ymt0wQFnmb9Ac7I1C5g/axOTioIjGOfB1r3r9CFI5ZzQMk
+         q+bPBVtDAETjqt0VE70stn90/TktnQFRMVRr0Gyau8aKpE9GiPUIagK8aE3b7P7HliFz
+         Ds8A==
+X-Gm-Message-State: AO0yUKV0FarFYJ9hseoI3mg/qOb8pYwkaZs2lk1gZr61AB3mIRx/aNYd
+        In/82+Md/t9/O27pRoy2mC8mC2jBOsU+kg==
+X-Google-Smtp-Source: AK7set935ofrRTTnHfHci3VyCLN6r/PTDJt07XKUPLx7nFBC3dzjRJ9bX1LYdQOur+4hGVqYRz/ZMA==
+X-Received: by 2002:ac8:5fce:0:b0:3bd:1a07:2063 with SMTP id k14-20020ac85fce000000b003bd1a072063mr4341537qta.45.1677591965437;
+        Tue, 28 Feb 2023 05:46:05 -0800 (PST)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id s13-20020a05622a018d00b003bfa8e1b7d1sm6540855qtw.32.2023.02.28.05.46.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 05:46:05 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5384ff97993so274202127b3.2;
+        Tue, 28 Feb 2023 05:46:04 -0800 (PST)
+X-Received: by 2002:a5b:8b:0:b0:a48:4a16:d85e with SMTP id b11-20020a5b008b000000b00a484a16d85emr1422172ybp.7.1677591964737;
+ Tue, 28 Feb 2023 05:46:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 08/20] remoteproc: remove MODULE_LICENSE in non-modules
-Content-Language: en-US
-To:     Nick Alcock <nick.alcock@oracle.com>, <mcgrof@kernel.org>
-CC:     <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+References: <20230228130215.289081-1-nick.alcock@oracle.com> <20230228130215.289081-10-nick.alcock@oracle.com>
+In-Reply-To: <20230228130215.289081-10-nick.alcock@oracle.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 28 Feb 2023 14:45:51 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUFePvbBk7ELH3s8QrTiqEoC0xwQN_YCr9brSaFede-ig@mail.gmail.com>
+Message-ID: <CAMuHMdUFePvbBk7ELH3s8QrTiqEoC0xwQN_YCr9brSaFede-ig@mail.gmail.com>
+Subject: Re: [PATCH 09/20] clk: renesas: remove MODULE_LICENSE in non-modules
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>
-References: <20230228130215.289081-1-nick.alcock@oracle.com>
- <20230228130215.289081-9-nick.alcock@oracle.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230228130215.289081-9-nick.alcock@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: QN2qm9qIKtWCADb_Eb-GsxJqUTed7YYL
-X-Proofpoint-GUID: QN2qm9qIKtWCADb_Eb-GsxJqUTed7YYL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-02-28_09,2023-02-28_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- bulkscore=0 impostorscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
- spamscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1011 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302280109
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Adam Ford <aford173@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+Hi Nick,
 
-
-On 2/28/2023 6:32 PM, Nick Alcock wrote:
+On Tue, Feb 28, 2023 at 2:03 PM Nick Alcock <nick.alcock@oracle.com> wrote:
 > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
 > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
 > are used to identify modules. As a consequence, uses of the macro
 > in non-modules will cause modprobe to misidentify their containing
 > object file as a module when it is not (false positives), and modprobe
 > might succeed rather than failing with a suitable error message.
-> 
+>
 > So remove it in the files in this commit, none of which can be built as
 > modules.
-> 
+>
 > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
 > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: linux-remoteproc@vger.kernel.org
 
-Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Thanks for your patch!
 
--Mukesh
-> ---
->   drivers/remoteproc/remoteproc_core.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 1cd4815a6dd19..de1ace44cb57b 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -2765,5 +2765,4 @@ static void __exit remoteproc_exit(void)
->   }
->   module_exit(remoteproc_exit);
->   
+>  drivers/clk/renesas/rcar-usb2-clock-sel.c | 1 -
+
+I think it would make sense to make CLK_RCAR_USB2_CLOCK_SEL
+tristate. Shimoda-san?
+The Beacon Renesom seems to be the only board where this
+is wired up, Adam?
+
+>  drivers/clk/renesas/renesas-cpg-mssr.c    | 1 -
+>  drivers/clk/renesas/rzg2l-cpg.c           | 1 -
+>  3 files changed, 3 deletions(-)
+>
+> diff --git a/drivers/clk/renesas/rcar-usb2-clock-sel.c b/drivers/clk/renesas/rcar-usb2-clock-sel.c
+> index 684d8937965e0..ba6b5bd67786f 100644
+> --- a/drivers/clk/renesas/rcar-usb2-clock-sel.c
+> +++ b/drivers/clk/renesas/rcar-usb2-clock-sel.c
+> @@ -220,4 +220,3 @@ static struct platform_driver rcar_usb2_clock_sel_driver = {
+>  builtin_platform_driver(rcar_usb2_clock_sel_driver);
+>
+>  MODULE_DESCRIPTION("Renesas R-Car USB2 clock selector Driver");
 > -MODULE_LICENSE("GPL v2");
->   MODULE_DESCRIPTION("Generic Remote Processor Framework");
+> diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
+> index 1a0cdf001b2f2..bfe5dc9a2e36b 100644
+> --- a/drivers/clk/renesas/renesas-cpg-mssr.c
+> +++ b/drivers/clk/renesas/renesas-cpg-mssr.c
+> @@ -1154,4 +1154,3 @@ void __init mssr_mod_reparent(struct mssr_mod_clk *mod_clks,
+>  }
+>
+>  MODULE_DESCRIPTION("Renesas CPG/MSSR Driver");
+> -MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/clk/renesas/rzg2l-cpg.c b/drivers/clk/renesas/rzg2l-cpg.c
+> index 4bf40f6ccd1d1..93b02cdc98c25 100644
+> --- a/drivers/clk/renesas/rzg2l-cpg.c
+> +++ b/drivers/clk/renesas/rzg2l-cpg.c
+> @@ -1440,4 +1440,3 @@ static int __init rzg2l_cpg_init(void)
+>  subsys_initcall(rzg2l_cpg_init);
+>
+>  MODULE_DESCRIPTION("Renesas RZ/G2L CPG Driver");
+> -MODULE_LICENSE("GPL v2");
+> --
+> 2.39.1.268.g9de2f9a303
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
