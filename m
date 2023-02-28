@@ -2,128 +2,96 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7DFAC64EC7
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Feb 2023 20:29:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7CDDC64EC4
+	for <linux-modules@archiver.kernel.org>; Tue, 28 Feb 2023 20:30:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjB1U3O (ORCPT
+        id S229515AbjB1Uag (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Feb 2023 15:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        Tue, 28 Feb 2023 15:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjB1U3O (ORCPT
+        with ESMTP id S229481AbjB1Uaf (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:29:14 -0500
-Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [IPv6:2620:100:9005:57f::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052F513DCB;
-        Tue, 28 Feb 2023 12:29:11 -0800 (PST)
-Received: from pps.filterd (m0122330.ppops.net [127.0.0.1])
-        by mx0b-00190b01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31SJqEA4027037;
-        Tue, 28 Feb 2023 20:29:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=jan2016.eng;
- bh=mTg/dH4ekf3J1ZLQ/mdEbLG/NeaT5kadx8gHaQruoac=;
- b=FBDYs0N8lo3jtO2TqZknQbD69jPDh4o7x0XisVYdNTZGfSVm1q/9sYQec41Hn+aUqRiE
- Nfe4kktuJPB8ZGUys3aU3W67/cXJR0yeI+MCmBCQVFX802aSriACLgwy/UugDRMxvS7q
- cVz9WBS8ty7zrJ5NZmMYBSaoySjJ5ZixWo/FpoKOX9J258r2cYCuWhSryndsKAAXkzJo
- F98KIUU+XbsvGvD/PG1++Em16jRpVG8cwOy28dwOTTaXZdvNTr+cmUFESZoiflR5z4Wx
- je2jMZTWyHg02v8LnLjR6j90ER6XR/l6BDa10cllV/vLvfJH/EgEnAZxgT7DEWxBe93E Yg== 
-Received: from prod-mail-ppoint5 (prod-mail-ppoint5.akamai.com [184.51.33.60] (may be forged))
-        by mx0b-00190b01.pphosted.com (PPS) with ESMTPS id 3nyav71a9m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Feb 2023 20:29:00 +0000
-Received: from pps.filterd (prod-mail-ppoint5.akamai.com [127.0.0.1])
-        by prod-mail-ppoint5.akamai.com (8.17.1.19/8.17.1.19) with ESMTP id 31SG9sjJ032046;
-        Tue, 28 Feb 2023 12:28:08 -0800
-Received: from prod-mail-relay10.akamai.com ([172.27.118.251])
-        by prod-mail-ppoint5.akamai.com (PPS) with ESMTP id 3nyh6fpt0c-1;
-        Tue, 28 Feb 2023 12:28:08 -0800
-Received: from [172.19.33.208] (bos-lpa4700a.bos01.corp.akamai.com [172.19.33.208])
-        by prod-mail-relay10.akamai.com (Postfix) with ESMTP id 3039F54504;
-        Tue, 28 Feb 2023 20:28:08 +0000 (GMT)
-Message-ID: <757793a7-6b05-f81d-e1e7-55878c47377c@akamai.com>
-Date:   Tue, 28 Feb 2023 15:28:08 -0500
+        Tue, 28 Feb 2023 15:30:35 -0500
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D763332E64;
+        Tue, 28 Feb 2023 12:30:34 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id ee7so45331293edb.2;
+        Tue, 28 Feb 2023 12:30:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677616233;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TO0UqDEdNc0UYMM3lLiT6qUY68t+NUFmoAALBWAzxLs=;
+        b=yop9XxhN1SUB9UIM4pC3d17b4S3h/Pc14p8LtwErzBxAfrHbQ7kZyEPZZ1QHdwymq9
+         8B4Muss58ux4Bs0xTvzD2zr7Op4m3la3qrFtMnSJDyxxuaSD7IZ2xfb4DGZjTDW6zK+D
+         7V1mddwRIzUGBTP+Nrb71XnaRR0TUQsk/icK4wg4KZDaAlCbonWvfTm2S4qd2afAbs7a
+         K8wGmAjGT0K/3XAwppKSvXftoycK5sJHw1yYYYPPx2TRZtLnV5qb2H5rUzHqW/OGfksQ
+         lMZMtzZqcVD4CY9OqLVHZ448Z6mxuCGQn1Uwvl36cIo+w5mxpgZBCiMX4H+YsJvcfeLs
+         07Vw==
+X-Gm-Message-State: AO0yUKXc+lcXqVBhxP3pU7CCR53uAw6H4qofI1r/zPfJcnLWO/ZxvsFr
+        1+HXnx3UZsgOZOcViLkEvlHQLYI0A0ZKLy9Be4A=
+X-Google-Smtp-Source: AK7set8zuZrvSq++2p4EHSf4m6hn99SNIS9+wXIMduUvr3S/WvcjLtx9vAl4VRYq6tyNYFhcYQZQefDKuVc6ifuS/0g=
+X-Received: by 2002:a50:c007:0:b0:4ab:4933:225b with SMTP id
+ r7-20020a50c007000000b004ab4933225bmr2478922edb.6.1677616233240; Tue, 28 Feb
+ 2023 12:30:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 0/2] dyndbg: let's use the module notifier callback
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     jim.cromie@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-References: <cover.1677612539.git.jbaron@akamai.com>
- <Y/5hkFJsRnAuoRBN@bombadil.infradead.org>
-From:   Jason Baron <jbaron@akamai.com>
-In-Reply-To: <Y/5hkFJsRnAuoRBN@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
- suspectscore=0 adultscore=0 bulkscore=0 mlxlogscore=283 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302280168
-X-Proofpoint-ORIG-GUID: pLiJHWVCCaQU89k02NeGUmwO0kxqG-aM
-X-Proofpoint-GUID: pLiJHWVCCaQU89k02NeGUmwO0kxqG-aM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
- mlxlogscore=244 phishscore=0 impostorscore=0 spamscore=0 suspectscore=0
- priorityscore=1501 clxscore=1015 adultscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302280169
+References: <20230224150811.80316-1-nick.alcock@oracle.com> <20230224150811.80316-6-nick.alcock@oracle.com>
+In-Reply-To: <20230224150811.80316-6-nick.alcock@oracle.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 28 Feb 2023 21:30:21 +0100
+Message-ID: <CAJZ5v0gTmjUsZ_cLdmOm473V8Jn7EaMNy-1Z8_JQK9S1NUVsMQ@mail.gmail.com>
+Subject: Re: [PATCH 05/27] cpufreq: intel_pstate: remove MODULE_LICENSE in non-modules
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+On Fri, Feb 24, 2023 at 4:09 PM Nick Alcock <nick.alcock@oracle.com> wrote:
+>
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> ---
+>  drivers/cpufreq/intel_pstate.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index fd73d6d2b808..0f3e1a1aab4c 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -3530,4 +3530,3 @@ early_param("intel_pstate", intel_pstate_setup);
+>
+>  MODULE_AUTHOR("Dirk Brandewie <dirk.j.brandewie@intel.com>");
+>  MODULE_DESCRIPTION("'intel_pstate' - P state driver Intel Core processors");
+> -MODULE_LICENSE("GPL");
+> --
 
-
-On 2/28/23 3:18 PM, Luis Chamberlain wrote:
-> On Tue, Feb 28, 2023 at 02:34:20PM -0500, Jason Baron wrote:
->> Hi,
->>
->> Jim Cromie hit a BUG() while toggling jump label branches in a module
->> before they were properly initialized. This isn't currently an issue,
->> but will be as part of his pending classmap series. Seems like we
->> should covert to using module callback notifier for dynamic debug
->> anyways. First patch is just a cleanup.
->>
->> Link: https://urldefense.com/v3/__https://lore.kernel.org/lkml/20230113193016.749791-21-jim.cromie@xxxxxxxxx/__;!!GjvTz_vk!RcYAOcwdnCTVPf9WgS4GmmVwClimlsK1BfnLrRh4Oxlf1fJeOfBHa7zgCXDFiV8gw3YCGIbcdiYG$
->>
->> Thanks,
->>
->> -Jason
->>
->> v2:
->> -Fix: error: field 'dyndbg_info' has incomplete type
->>   Reported-by: kernel test robot <lkp@intel.com>
->>   Link: https://urldefense.com/v3/__https://lore.kernel.org/oe-kbuild-all/202302190427.9iIK2NfJ-lkp@intel.com/__;!!GjvTz_vk!RcYAOcwdnCTVPf9WgS4GmmVwClimlsK1BfnLrRh4Oxlf1fJeOfBHa7zgCXDFiV8gw3YCGJKpcyr8$
->> -make ddebug_remove_module() static
-> 
-> Do you have tests to ensure no regressions have occurred? If so what
-> are they? If there are no tests, can you come up with some basic ones?
-> 
->    Luis
-
-
-Hi Luis,
-
-Yes, I've run the test case that prompted this series here:
-
-https://lore.kernel.org/lkml/20230125203743.564009-20-jim.cromie@gmail.com/
-
-Note that this is for new functionality that Jim is working on and he 
-plan to include this series when he re-posts his series. And thus I've 
-added Jim's Tested-by: in patches 1 and 2.
-
-There is also a 'test_dynamic_debug' module which I've run as follows:
-
-# modprobe test_dynamic_debug dyndbg
-
-And confirmed the appropriate prints to the log. This exercises the code 
-paths that were changed here.
-
-Thanks,
-
--Jason
+Applied as 6.3-rc material, thanks!
