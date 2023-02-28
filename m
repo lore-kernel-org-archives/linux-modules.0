@@ -2,70 +2,128 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61DCAC64EC7
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Feb 2023 20:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7DFAC64EC7
+	for <linux-modules@archiver.kernel.org>; Tue, 28 Feb 2023 20:29:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjB1US3 (ORCPT
+        id S229619AbjB1U3O (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Feb 2023 15:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        Tue, 28 Feb 2023 15:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjB1US2 (ORCPT
+        with ESMTP id S229515AbjB1U3O (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:18:28 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0699C14E97;
-        Tue, 28 Feb 2023 12:18:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Md9JrtUu3xnfZLvaIIJNt8/gwSPrEeVyF+t3AXsCqrM=; b=hPOpvUmwE+GwgMNIE3/72oaneU
-        p43UVVetRqWVxdG5BNG/nc9ExKYmcf/IqZVYIROwQVC/Hl5pnCcquA3qFbzyeJbKC89Esdwpo2q4E
-        c7gE+L4mmYidlsG90i97Ux3sLGRGcp5ft3bYrgTvIc69W2Iugj2zTW8uZ8VPrq0EfHbwa5WJy37JN
-        Czj3riJGPq8P48oxwo1OpxHBJU+biqO/Pd0JsdzGPSY7jf7iNlzmafWcc+9Jw10lPbz9cM6eEglgl
-        fs+syII0Uubs+WtkTLny7PnA2Fhnoelboo4ZllTBrxNrtKwRNSzbv20WxUA+gPsxUlthoFNx0uUgj
-        IQ+IhUNA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pX6Qa-00EBCk-UE; Tue, 28 Feb 2023 20:18:24 +0000
-Date:   Tue, 28 Feb 2023 12:18:24 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Jason Baron <jbaron@akamai.com>
+        Tue, 28 Feb 2023 15:29:14 -0500
+Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [IPv6:2620:100:9005:57f::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052F513DCB;
+        Tue, 28 Feb 2023 12:29:11 -0800 (PST)
+Received: from pps.filterd (m0122330.ppops.net [127.0.0.1])
+        by mx0b-00190b01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31SJqEA4027037;
+        Tue, 28 Feb 2023 20:29:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=jan2016.eng;
+ bh=mTg/dH4ekf3J1ZLQ/mdEbLG/NeaT5kadx8gHaQruoac=;
+ b=FBDYs0N8lo3jtO2TqZknQbD69jPDh4o7x0XisVYdNTZGfSVm1q/9sYQec41Hn+aUqRiE
+ Nfe4kktuJPB8ZGUys3aU3W67/cXJR0yeI+MCmBCQVFX802aSriACLgwy/UugDRMxvS7q
+ cVz9WBS8ty7zrJ5NZmMYBSaoySjJ5ZixWo/FpoKOX9J258r2cYCuWhSryndsKAAXkzJo
+ F98KIUU+XbsvGvD/PG1++Em16jRpVG8cwOy28dwOTTaXZdvNTr+cmUFESZoiflR5z4Wx
+ je2jMZTWyHg02v8LnLjR6j90ER6XR/l6BDa10cllV/vLvfJH/EgEnAZxgT7DEWxBe93E Yg== 
+Received: from prod-mail-ppoint5 (prod-mail-ppoint5.akamai.com [184.51.33.60] (may be forged))
+        by mx0b-00190b01.pphosted.com (PPS) with ESMTPS id 3nyav71a9m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 20:29:00 +0000
+Received: from pps.filterd (prod-mail-ppoint5.akamai.com [127.0.0.1])
+        by prod-mail-ppoint5.akamai.com (8.17.1.19/8.17.1.19) with ESMTP id 31SG9sjJ032046;
+        Tue, 28 Feb 2023 12:28:08 -0800
+Received: from prod-mail-relay10.akamai.com ([172.27.118.251])
+        by prod-mail-ppoint5.akamai.com (PPS) with ESMTP id 3nyh6fpt0c-1;
+        Tue, 28 Feb 2023 12:28:08 -0800
+Received: from [172.19.33.208] (bos-lpa4700a.bos01.corp.akamai.com [172.19.33.208])
+        by prod-mail-relay10.akamai.com (Postfix) with ESMTP id 3039F54504;
+        Tue, 28 Feb 2023 20:28:08 +0000 (GMT)
+Message-ID: <757793a7-6b05-f81d-e1e7-55878c47377c@akamai.com>
+Date:   Tue, 28 Feb 2023 15:28:08 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 0/2] dyndbg: let's use the module notifier callback
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
 Cc:     jim.cromie@gmail.com, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] dyndbg: let's use the module notifier callback
-Message-ID: <Y/5hkFJsRnAuoRBN@bombadil.infradead.org>
 References: <cover.1677612539.git.jbaron@akamai.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1677612539.git.jbaron@akamai.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+ <Y/5hkFJsRnAuoRBN@bombadil.infradead.org>
+From:   Jason Baron <jbaron@akamai.com>
+In-Reply-To: <Y/5hkFJsRnAuoRBN@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
+ suspectscore=0 adultscore=0 bulkscore=0 mlxlogscore=283 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302280168
+X-Proofpoint-ORIG-GUID: pLiJHWVCCaQU89k02NeGUmwO0kxqG-aM
+X-Proofpoint-GUID: pLiJHWVCCaQU89k02NeGUmwO0kxqG-aM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-02-28_17,2023-02-28_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
+ mlxlogscore=244 phishscore=0 impostorscore=0 spamscore=0 suspectscore=0
+ priorityscore=1501 clxscore=1015 adultscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302280169
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Feb 28, 2023 at 02:34:20PM -0500, Jason Baron wrote:
-> Hi,
-> 
-> Jim Cromie hit a BUG() while toggling jump label branches in a module
-> before they were properly initialized. This isn't currently an issue,
-> but will be as part of his pending classmap series. Seems like we
-> should covert to using module callback notifier for dynamic debug
-> anyways. First patch is just a cleanup.
-> 
-> Link: https://lore.kernel.org/lkml/20230113193016.749791-21-jim.cromie@xxxxxxxxx/
-> 
-> Thanks,
-> 
-> -Jason
-> 
-> v2:
-> -Fix: error: field 'dyndbg_info' has incomplete type
->  Reported-by: kernel test robot <lkp@intel.com>
->  Link: https://lore.kernel.org/oe-kbuild-all/202302190427.9iIK2NfJ-lkp@intel.com/
-> -make ddebug_remove_module() static
 
-Do you have tests to ensure no regressions have occurred? If so what
-are they? If there are no tests, can you come up with some basic ones?
 
-  Luis
+On 2/28/23 3:18 PM, Luis Chamberlain wrote:
+> On Tue, Feb 28, 2023 at 02:34:20PM -0500, Jason Baron wrote:
+>> Hi,
+>>
+>> Jim Cromie hit a BUG() while toggling jump label branches in a module
+>> before they were properly initialized. This isn't currently an issue,
+>> but will be as part of his pending classmap series. Seems like we
+>> should covert to using module callback notifier for dynamic debug
+>> anyways. First patch is just a cleanup.
+>>
+>> Link: https://urldefense.com/v3/__https://lore.kernel.org/lkml/20230113193016.749791-21-jim.cromie@xxxxxxxxx/__;!!GjvTz_vk!RcYAOcwdnCTVPf9WgS4GmmVwClimlsK1BfnLrRh4Oxlf1fJeOfBHa7zgCXDFiV8gw3YCGIbcdiYG$
+>>
+>> Thanks,
+>>
+>> -Jason
+>>
+>> v2:
+>> -Fix: error: field 'dyndbg_info' has incomplete type
+>>   Reported-by: kernel test robot <lkp@intel.com>
+>>   Link: https://urldefense.com/v3/__https://lore.kernel.org/oe-kbuild-all/202302190427.9iIK2NfJ-lkp@intel.com/__;!!GjvTz_vk!RcYAOcwdnCTVPf9WgS4GmmVwClimlsK1BfnLrRh4Oxlf1fJeOfBHa7zgCXDFiV8gw3YCGJKpcyr8$
+>> -make ddebug_remove_module() static
+> 
+> Do you have tests to ensure no regressions have occurred? If so what
+> are they? If there are no tests, can you come up with some basic ones?
+> 
+>    Luis
+
+
+Hi Luis,
+
+Yes, I've run the test case that prompted this series here:
+
+https://lore.kernel.org/lkml/20230125203743.564009-20-jim.cromie@gmail.com/
+
+Note that this is for new functionality that Jim is working on and he 
+plan to include this series when he re-posts his series. And thus I've 
+added Jim's Tested-by: in patches 1 and 2.
+
+There is also a 'test_dynamic_debug' module which I've run as follows:
+
+# modprobe test_dynamic_debug dyndbg
+
+And confirmed the appropriate prints to the log. This exercises the code 
+paths that were changed here.
+
+Thanks,
+
+-Jason
