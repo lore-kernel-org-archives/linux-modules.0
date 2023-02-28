@@ -2,89 +2,54 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2A35C64EC4
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Feb 2023 20:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 788A5C64EC7
+	for <linux-modules@archiver.kernel.org>; Tue, 28 Feb 2023 20:38:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjB1UeB (ORCPT
+        id S229651AbjB1Uit (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Feb 2023 15:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
+        Tue, 28 Feb 2023 15:38:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjB1UeA (ORCPT
+        with ESMTP id S229557AbjB1Uis (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Feb 2023 15:34:00 -0500
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB33B15891;
-        Tue, 28 Feb 2023 12:33:56 -0800 (PST)
-Received: by mail-ed1-f48.google.com with SMTP id ee7so45370015edb.2;
-        Tue, 28 Feb 2023 12:33:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677616435;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3NbNBo0Ls3oKuJjUOllfEZ1/w9byTGW4gyiykg0SP6Q=;
-        b=Z4vsJA1VMiKQyoGdIR61SR6ISj8waZD6/Vq5j17hvUfiDTdToqbcCQrSgVCztRdAAI
-         SxKXH2Kr06gIey+kMMB/ZIgs8bUbIvMG6YRUD8flf/tiTjEDhWPZqIC0suZs+N2HbPHX
-         VKh5G4cHEZOTahQ/Fo4pPM9llto6KXnIj626Pihh1A6lWs8YCrtoWrH2ZM3TKC+ntmKM
-         5mAFkUsedl535XnKFgMNTQ0HWSqUsk4fnbPX0gToRF4HTyt9MFMUIQMrb04aMt2Dn4qy
-         Njc/HxSkka8Xv6yFPwoJneoQjpS3hWuD3jtasnoRTigylWKwHQ8Pv3rqG7a/pXDLglQ0
-         3sPQ==
-X-Gm-Message-State: AO0yUKWfzVeima3F8qZdV/S76pV1QEr1jdDTkoX0/7BDkE4PQUPzvc1B
-        5d8MRb5UvfVn+q7zdi+1n+5Sl8PAZYJAu8EqZg0=
-X-Google-Smtp-Source: AK7set/sWo26Ng/Rx1w9Od31hmcehJvkRAfvh64BBS0QvfL7sdibRTgDJtiw9DKjXL2LHxawLrU8gXDJ9xWNAz1zeI0=
-X-Received: by 2002:a50:875e:0:b0:4ac:b7c1:9109 with SMTP id
- 30-20020a50875e000000b004acb7c19109mr2442283edv.6.1677616435284; Tue, 28 Feb
- 2023 12:33:55 -0800 (PST)
+        Tue, 28 Feb 2023 15:38:48 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2003D12F11;
+        Tue, 28 Feb 2023 12:38:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rjmB08qSudLVy5Oxuak4SVT499NNZ/1U705pw44O6iE=; b=vg9fQ3uflWT52xvz1H2rIYukn/
+        DHBuAKB8FQO09JyJC1EiRllcuNa0girL/GvIKEl3yimfCpJryD/1RDUWUQqiENzwy+BtPp8QVKjdA
+        BsRgN/idbzGFoIMoYUsJRrFZCuqQPfdJF/2pHbLhMXC9xxDjFi1gcooSvTU/paxhqU7rBC7kLGqvy
+        sqPJ2xa36Z0Zk4xJ4j6H3/Iy3r9TC45RvJNiRIURa7vtMOJ52h+9ErUZTOlvDXUJGuQykzvCHVTYs
+        gt20QMNscDJO46o4aDH7RYmHAxSycerTAY0x+Hxm5jdMX+YiNF9itFx8clmluCjo6jHc8irjIrVxe
+        LuoBm7+w==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pX6kH-00EDro-Gy; Tue, 28 Feb 2023 20:38:45 +0000
+Date:   Tue, 28 Feb 2023 12:38:45 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Jason Baron <jbaron@akamai.com>
+Cc:     jim.cromie@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dyndbg: remove unused 'base' arg from
+ __ddebug_add_module()
+Message-ID: <Y/5mVe3NErpZj45n@bombadil.infradead.org>
+References: <cover.1677612539.git.jbaron@akamai.com>
+ <855201dc0204a1428a79d415c97df2b6e11c95c3.1677612539.git.jbaron@akamai.com>
 MIME-Version: 1.0
-References: <20230228130215.289081-1-nick.alcock@oracle.com> <20230228130215.289081-7-nick.alcock@oracle.com>
-In-Reply-To: <20230228130215.289081-7-nick.alcock@oracle.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 28 Feb 2023 21:33:44 +0100
-Message-ID: <CAJZ5v0iBzs_DdVLH3j2EX1jk=6N3bzUipnRZX-_Apgmu2f0gCA@mail.gmail.com>
-Subject: Re: [PATCH 06/20] powercap: remove MODULE_LICENSE in non-modules
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <855201dc0204a1428a79d415c97df2b6e11c95c3.1677612539.git.jbaron@akamai.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Feb 28, 2023 at 2:03 PM Nick Alcock <nick.alcock@oracle.com> wrote:
->
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
->
-> So remove it in the files in this commit, none of which can be built as
-> modules.
->
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> ---
->  drivers/powercap/powercap_sys.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
-> index 1f968353d4799..df806a788a02d 100644
-> --- a/drivers/powercap/powercap_sys.c
-> +++ b/drivers/powercap/powercap_sys.c
-> @@ -675,4 +675,3 @@ fs_initcall(powercap_init);
->
->  MODULE_DESCRIPTION("PowerCap sysfs Driver");
->  MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
-> -MODULE_LICENSE("GPL v2");
-> --
+On Tue, Feb 28, 2023 at 02:34:21PM -0500, Jason Baron wrote:
+> __ddebug_add_module() doesn't use the 'base' arg. Remove it.
 
-Applied as 6.3-rc material, thanks!
+It would be good if the commit log explains why the base became unused.
+What commit removed its use? As of what kernel?
+
+  Luis
