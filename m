@@ -2,60 +2,129 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ED56C64EC7
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Feb 2023 23:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4938BC64EC7
+	for <linux-modules@archiver.kernel.org>; Wed,  1 Mar 2023 02:13:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjB1XeF (ORCPT
+        id S229523AbjCACNG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Feb 2023 18:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50836 "EHLO
+        Tue, 28 Feb 2023 21:13:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjB1XeF (ORCPT
+        with ESMTP id S229451AbjCACNF (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Feb 2023 18:34:05 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3509522DE2;
-        Tue, 28 Feb 2023 15:34:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eYRPbolxvul9yxCvDcoLXgPD+xvpcvLk1UIxf5oQw38=; b=CdjuAwCupgJ0HlY9J701DbnCrc
-        qV4D5k++WihGzn715poV0tBkFmDGbOp7ANAnD02v2ZZ4KuqJU0GQm8QCtMoiypqCFcEk5n6REAcLq
-        oCh8gAxM3adhbUUeCfJ154pDUUvBxS55DbAiCqvyDBfi2UyzjFNHhJhVqSb26r45b45pXo8Jz8UKz
-        pjMgPQzISd5o0T3kqmVnD/QLx/DKX0tYkKTHMUMGXu/tHKAUbuWDyWyDLLct+Eelvk9kCGwaUtTO2
-        sddWQZnTdnoWUn/pSFrNWvBmWeRw25DN/dq7cvD0Li4ryKhuCfQx88gCiOeAAlzp3BQiqyAEwafiK
-        dE86TzhQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pX9Ts-00Ea2J-Lz; Tue, 28 Feb 2023 23:34:00 +0000
-Date:   Tue, 28 Feb 2023 15:34:00 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Jason Baron <jbaron@akamai.com>
-Cc:     jim.cromie@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 2/2] dyndbg: use the module notifier callbacks
-Message-ID: <Y/6PaKLz1HlbQm/o@bombadil.infradead.org>
-References: <cover.1677612539.git.jbaron@akamai.com>
- <a775dcc14a10d0b3df34e087ee29ddb1d62fb517.1677612539.git.jbaron@akamai.com>
- <Y/5ntkYoKHvfU9S8@bombadil.infradead.org>
- <c0c38c08-a329-9d0a-ca75-0519b589731e@akamai.com>
+        Tue, 28 Feb 2023 21:13:05 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4353768F;
+        Tue, 28 Feb 2023 18:13:01 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id o32so17718437vsv.12;
+        Tue, 28 Feb 2023 18:13:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677636780;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JVqhmTk5l6ti9SvNkNnXSprP913yBJDavUcvFDqr63U=;
+        b=luMdgw16IXUVS3Wtk8sxZll7Vgq6OZfg/WwEv3Ub/PZEtlQ2ikwgTLXdGVtNsukuM8
+         zLwidQTHuvyxaOFYoARwfjOwkUu2Zku3kxAv6h5K22NH0zBkRYPV5ebiKLaORRqOtK1O
+         oguHnh+hZToRzW7f4tZZDGbNcfGgabuQRw7l62ytfmnDBa5elQA6cliaT7st8BiHa48W
+         n8qQ6ASftITquk0bmg0xFP2Do1gqhk6IAf/6p5TRkf1B26ncMFZE5WiKsInB5OT+BobD
+         QYebbmbRgf1B1O380Zs32sme64+8SFh+6aY7zONsi6zFgMJ9gJb2KHXMphAXTUqvhWut
+         jj0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677636780;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JVqhmTk5l6ti9SvNkNnXSprP913yBJDavUcvFDqr63U=;
+        b=O9H1xrYsGdouU+Mhhd9hD/vw9popNfeg8zJz4ETCM+KnK8QJrlx2w0+1HDIuG3SDG/
+         c6RxiyWuoZQdUZSqpn9u5aPvRVgRcYjJ7HZ5dp10l/KZiqHhngAf/FD05JeY9YDL0ZZ1
+         Qupt1LQcTTX6BvtkOLQe4fDrMyZlkIHdvQsnJBxO6ChLFztBGpMuxSx0PsOjVAS+Xwu6
+         w7wsJxcv5e9cN3ztbPFuZ1UljCmjrrmXQ7xAo5iDe7kERSM3in662PieSUSxNkBXThfq
+         I0Q5APfZjgX04Jix52rvzO9zcJVLR/etOFZ78fKzayv97Ligar+YLVbcQWX7/+O0aL/R
+         FKFw==
+X-Gm-Message-State: AO0yUKVERgoIFIV8dK2k6844dzpuC7e07AX3FT1xtLtT/gTkbqS1hq7Z
+        Ks0IQzZ9bpNIoih4jSjCmpOLvt1QGB6XCsm/15H1wfLTuf8=
+X-Google-Smtp-Source: AK7set805bRYjrmPrAp34SqgSxGraeFIz/okS7NOBfzN+CH4vL4cnbnwFtk7OBl4NFqJSH2Xu83mcM8h6wGT6eFE/l8=
+X-Received: by 2002:a67:d30a:0:b0:415:74b4:6067 with SMTP id
+ a10-20020a67d30a000000b0041574b46067mr3533620vsj.6.1677636780564; Tue, 28 Feb
+ 2023 18:13:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0c38c08-a329-9d0a-ca75-0519b589731e@akamai.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <cover.1677612539.git.jbaron@akamai.com> <855201dc0204a1428a79d415c97df2b6e11c95c3.1677612539.git.jbaron@akamai.com>
+ <Y/5mVe3NErpZj45n@bombadil.infradead.org>
+In-Reply-To: <Y/5mVe3NErpZj45n@bombadil.infradead.org>
+From:   jim.cromie@gmail.com
+Date:   Tue, 28 Feb 2023 19:12:34 -0700
+Message-ID: <CAJfuBxwqO8xgenBHXiKS6MRfZ9t=TZx+TFPUgGA7hwYEoCSr0A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dyndbg: remove unused 'base' arg from __ddebug_add_module()
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Jason Baron <jbaron@akamai.com>, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Feb 28, 2023 at 04:56:59PM -0500, Jason Baron wrote:
-> Ok, I can fix up the commit message and re-post. I'm thinking maybe we
-> should separate these patches as they are independent. The 2nd one I think
-> makes sense to go through modules-next, but the first one is internal to
-> dynamic debug and can be a part of Jim's series. Make sense?
+On Tue, Feb 28, 2023 at 1:38=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
+> wrote:
+>
+> On Tue, Feb 28, 2023 at 02:34:21PM -0500, Jason Baron wrote:
+> > __ddebug_add_module() doesn't use the 'base' arg. Remove it.
+>
+> It would be good if the commit log explains why the base became unused.
+> What commit removed its use? As of what kernel?
+>
+>   Luis
 
-Sure but you may want to take a look at modules-next, does that patch
-apply without any issues there? I have yet to rebase as v6.3-rc1 is not
-out yet.
+the base arg became obsolete with this.
+I had the same patch on-deck, but Jason did it 1st.
 
-  Luis
+
+commit b7b4eebdba7b6aea6b34dc29691b71c39d1dbd6a
+Author: Jim Cromie <jim.cromie@gmail.com>
+Date:   Sun Sep 4 15:40:48 2022 -0600
+
+    dyndbg: gather __dyndbg[] state into struct _ddebug_info
+
+    This new struct composes the linker provided (vector,len) section,
+    and provides a place to add other __dyndbg[] state-data later:
+
+      descs - the vector of descriptors in __dyndbg section.
+      num_descs - length of the data/section.
+
+    Use it, in several different ways, as follows:
+
+    In lib/dynamic_debug.c:
+
+    ddebug_add_module(): Alter params-list, replacing 2 args (array,index)
+    with a struct _ddebug_info * containing them both, with room for
+    expansion.  This helps future-proof the function prototype against the
+    looming addition of class-map info into the dyndbg-state, by providing
+    a place to add more member fields later.
+
+    NB: later add static struct _ddebug_info builtins_state declaration,
+    not needed yet.
+
+    ddebug_add_module() is called in 2 contexts:
+
+    In dynamic_debug_init(), declare, init a struct _ddebug_info di
+    auto-var to use as a cursor.  Then iterate over the prdbg blocks of
+    the builtin modules, and update the di cursor before calling
+    _add_module for each.
+
+    Its called from kernel/module/main.c:load_info() for each loaded
+    module:
+
+    In internal.h, alter struct load_info, replacing the dyndbg array,len
+    fields with an embedded _ddebug_info containing them both; and
+    populate its members in find_module_sections().
+
+    The 2 calling contexts differ in that _init deals with contiguous
+    subranges of __dyndbgs[] section, packed together, while loadable
+    modules are added one at a time.
+
+    So rename ddebug_add_module() into outer/__inner fns, call __inner
+    from _init, and provide the offset into the builtin __dyndbgs[] where
+    the module's prdbgs reside.  The cursor provides start, len of the
+    subrange for each.  The offset will be used later to pack the results
+    of builtin __dyndbg_sites[] de-duplication, and is 0 and unneeded for
+    loadable modules,
