@@ -2,129 +2,194 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4938BC64EC7
-	for <linux-modules@archiver.kernel.org>; Wed,  1 Mar 2023 02:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDDAFC64EC7
+	for <linux-modules@archiver.kernel.org>; Wed,  1 Mar 2023 09:05:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjCACNG (ORCPT
+        id S229779AbjCAJE7 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Feb 2023 21:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        Wed, 1 Mar 2023 04:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjCACNF (ORCPT
+        with ESMTP id S229632AbjCAJEy (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Feb 2023 21:13:05 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4353768F;
-        Tue, 28 Feb 2023 18:13:01 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id o32so17718437vsv.12;
-        Tue, 28 Feb 2023 18:13:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677636780;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JVqhmTk5l6ti9SvNkNnXSprP913yBJDavUcvFDqr63U=;
-        b=luMdgw16IXUVS3Wtk8sxZll7Vgq6OZfg/WwEv3Ub/PZEtlQ2ikwgTLXdGVtNsukuM8
-         zLwidQTHuvyxaOFYoARwfjOwkUu2Zku3kxAv6h5K22NH0zBkRYPV5ebiKLaORRqOtK1O
-         oguHnh+hZToRzW7f4tZZDGbNcfGgabuQRw7l62ytfmnDBa5elQA6cliaT7st8BiHa48W
-         n8qQ6ASftITquk0bmg0xFP2Do1gqhk6IAf/6p5TRkf1B26ncMFZE5WiKsInB5OT+BobD
-         QYebbmbRgf1B1O380Zs32sme64+8SFh+6aY7zONsi6zFgMJ9gJb2KHXMphAXTUqvhWut
-         jj0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677636780;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JVqhmTk5l6ti9SvNkNnXSprP913yBJDavUcvFDqr63U=;
-        b=O9H1xrYsGdouU+Mhhd9hD/vw9popNfeg8zJz4ETCM+KnK8QJrlx2w0+1HDIuG3SDG/
-         c6RxiyWuoZQdUZSqpn9u5aPvRVgRcYjJ7HZ5dp10l/KZiqHhngAf/FD05JeY9YDL0ZZ1
-         Qupt1LQcTTX6BvtkOLQe4fDrMyZlkIHdvQsnJBxO6ChLFztBGpMuxSx0PsOjVAS+Xwu6
-         w7wsJxcv5e9cN3ztbPFuZ1UljCmjrrmXQ7xAo5iDe7kERSM3in662PieSUSxNkBXThfq
-         I0Q5APfZjgX04Jix52rvzO9zcJVLR/etOFZ78fKzayv97Ligar+YLVbcQWX7/+O0aL/R
-         FKFw==
-X-Gm-Message-State: AO0yUKVERgoIFIV8dK2k6844dzpuC7e07AX3FT1xtLtT/gTkbqS1hq7Z
-        Ks0IQzZ9bpNIoih4jSjCmpOLvt1QGB6XCsm/15H1wfLTuf8=
-X-Google-Smtp-Source: AK7set805bRYjrmPrAp34SqgSxGraeFIz/okS7NOBfzN+CH4vL4cnbnwFtk7OBl4NFqJSH2Xu83mcM8h6wGT6eFE/l8=
-X-Received: by 2002:a67:d30a:0:b0:415:74b4:6067 with SMTP id
- a10-20020a67d30a000000b0041574b46067mr3533620vsj.6.1677636780564; Tue, 28 Feb
- 2023 18:13:00 -0800 (PST)
+        Wed, 1 Mar 2023 04:04:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FBF15566;
+        Wed,  1 Mar 2023 01:04:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E5FDB80EFA;
+        Wed,  1 Mar 2023 09:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA3E8C433EF;
+        Wed,  1 Mar 2023 09:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677661490;
+        bh=nnWBYCpOWlTZ5z+s2bo2GClbIpIKpWepFx5Lp7X+MMk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xy575dxmp7KOEPQ3dRySjV+t9rt0HRXVkPTFFpVCD9CgtqTHolOJL2p3Yg1u1pA83
+         OBwCGNc6C8k3ZL3bdW1Uhqv2v3ifGqzl6HklCpkt16Hks0getdsvDYN42FK5Qa18bU
+         9SVa1TpG/t0MwmsBGcVToLrVf/pIMRkMRVPnCrbXcUlKXj11bBbCNOqRknSb0A+s1O
+         604+VCCzga2yw/BJ2+Dpvxupxvh4HFViJdbGk6xVceprBanHBTbyZNmCcaJNjoi8aW
+         rbRg0e1eOOIG6mcXcpu3hK9ZsS+IbtOq5GRbwQcdYQtMxbbS3FITc//PHL63fuXIe+
+         l3VosKQKL7GgQ==
+Date:   Wed, 1 Mar 2023 09:04:45 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     DLG Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Support Opensource <support.opensource@diasemi.com>
+Subject: Re: [PATCH 18/27] kbuild, mfd: remove MODULE_LICENSE in non-modules
+Message-ID: <Y/8VLcMlojbFmhZy@google.com>
+References: <20230222121453.91915-1-nick.alcock@oracle.com>
+ <20230222121453.91915-19-nick.alcock@oracle.com>
+ <OS3PR01MB8460D00B7C988DCC13173CAAC2AA9@OS3PR01MB8460.jpnprd01.prod.outlook.com>
+ <Y/duxo1aKFibuZtF@google.com>
+ <87ttzcmbgu.fsf@esperi.org.uk>
+ <OS3PR01MB8460AA34CBDD0C2BBE6F2399C2A89@OS3PR01MB8460.jpnprd01.prod.outlook.com>
+ <87zg8zi71g.fsf@esperi.org.uk>
 MIME-Version: 1.0
-References: <cover.1677612539.git.jbaron@akamai.com> <855201dc0204a1428a79d415c97df2b6e11c95c3.1677612539.git.jbaron@akamai.com>
- <Y/5mVe3NErpZj45n@bombadil.infradead.org>
-In-Reply-To: <Y/5mVe3NErpZj45n@bombadil.infradead.org>
-From:   jim.cromie@gmail.com
-Date:   Tue, 28 Feb 2023 19:12:34 -0700
-Message-ID: <CAJfuBxwqO8xgenBHXiKS6MRfZ9t=TZx+TFPUgGA7hwYEoCSr0A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dyndbg: remove unused 'base' arg from __ddebug_add_module()
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Jason Baron <jbaron@akamai.com>, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87zg8zi71g.fsf@esperi.org.uk>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Feb 28, 2023 at 1:38=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
->
-> On Tue, Feb 28, 2023 at 02:34:21PM -0500, Jason Baron wrote:
-> > __ddebug_add_module() doesn't use the 'base' arg. Remove it.
->
-> It would be good if the commit log explains why the base became unused.
-> What commit removed its use? As of what kernel?
->
->   Luis
+On Mon, 27 Feb 2023, Nick Alcock wrote:
 
-the base arg became obsolete with this.
-I had the same patch on-deck, but Jason did it 1st.
+> On 24 Feb 2023, DLG Adam Ward told this:
+> 
+> > On 23/02/2023 19:25, Nick Alcock wrote:
+> >
+> >>> Makes sense - but if you need to do a V2, would you mind removing the erroneous claim on DA9055 at the same time?
+> >
+> >>I don't know what this means. There are two references to DA9055 in this patch, both in context (not in modified lines), one in drivers/mfd/da9055-core.c, the other in rivers/mfd/da9055-i2c.c. To me these both seem likely to be DA9055-related. Are you saying that one of them isn't?
+> >
+> > The comment was followed by this link - https://elixir.bootlin.com/linux/latest/source/drivers/mfd/Kconfig#L36
+> > This files talks about the driver being a module, but, as you correctly point out, it is not.
+> > And never has been.
+> > So it is worth removing.
+> 
+> Ah! I never even thought of auditing the Kconfigs for erroneous
+> statements of modularity: that's a much harder-to-automate job.
+> 
+> I'm not planning to do this in general any time soon (because I'd have
+> to soup up Kconfig parsers and maybe write my own just for this), but
+> here's a reroll of this one patch that drops the erroneous Kconfig help
+> text:
+> 
+> -- >8 --
 
+Can you submit this as an orthogonal v2 please?
+ 
+> From 06d491176513f9fcd699871cb6815534068b664a Mon Sep 17 00:00:00 2001
+> From: Nick Alcock <nick.alcock@oracle.com>
+> Date: Thu, 23 Feb 2023 19:10:03 +0000
+> Subject: [PATCH v2 18/27] mfd: remove MODULE_LICENSE in non-modules
+> 
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+> 
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+> 
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Support Opensource <support.opensource@diasemi.com>
+> Cc: Lee Jones <lee@kernel.org>
+> ---
+>  drivers/mfd/Kconfig       | 3 ---
+>  drivers/mfd/da903x.c      | 1 -
+>  drivers/mfd/da9052-core.c | 1 -
+>  drivers/mfd/da9052-i2c.c  | 1 -
+>  drivers/mfd/da9052-spi.c  | 1 -
+>  drivers/mfd/da9055-core.c | 1 -
+>  drivers/mfd/da9055-i2c.c  | 1 -
+>  7 files changed, 9 deletions(-)
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 30db49f318668..751d38b30bb1f 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -361,9 +361,6 @@ config MFD_DA9055
+>  	  Additional drivers must be enabled in order to use the functionality
+>  	  of the device.
+>  
+> -	  This driver can be built as a module. If built as a module it will be
+> -	  called "da9055"
+> -
+>  config MFD_DA9062
+>  	tristate "Dialog Semiconductor DA9062/61 PMIC Support"
+>  	select MFD_CORE
+> diff --git a/drivers/mfd/da903x.c b/drivers/mfd/da903x.c
+> index 44a25d642ce94..6570b33a5a77b 100644
+> --- a/drivers/mfd/da903x.c
+> +++ b/drivers/mfd/da903x.c
+> @@ -563,4 +563,3 @@ module_exit(da903x_exit);
+>  MODULE_DESCRIPTION("PMIC Driver for Dialog Semiconductor DA9034");
+>  MODULE_AUTHOR("Eric Miao <eric.miao@marvell.com>");
+>  MODULE_AUTHOR("Mike Rapoport <mike@compulab.co.il>");
+> -MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/mfd/da9052-core.c b/drivers/mfd/da9052-core.c
+> index 8b42d2f7024f5..150448cd2eb08 100644
+> --- a/drivers/mfd/da9052-core.c
+> +++ b/drivers/mfd/da9052-core.c
+> @@ -653,4 +653,3 @@ void da9052_device_exit(struct da9052 *da9052)
+>  
+>  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
+>  MODULE_DESCRIPTION("DA9052 MFD Core");
+> -MODULE_LICENSE("GPL");
+> diff --git a/drivers/mfd/da9052-i2c.c b/drivers/mfd/da9052-i2c.c
+> index ecb8077cdaaf9..03db7a2ccf7a0 100644
+> --- a/drivers/mfd/da9052-i2c.c
+> +++ b/drivers/mfd/da9052-i2c.c
+> @@ -209,4 +209,3 @@ module_exit(da9052_i2c_exit);
+>  
+>  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
+>  MODULE_DESCRIPTION("I2C driver for Dialog DA9052 PMIC");
+> -MODULE_LICENSE("GPL");
+> diff --git a/drivers/mfd/da9052-spi.c b/drivers/mfd/da9052-spi.c
+> index b79a57b45c1e8..be5f2b34e18ae 100644
+> --- a/drivers/mfd/da9052-spi.c
+> +++ b/drivers/mfd/da9052-spi.c
+> @@ -102,4 +102,3 @@ module_exit(da9052_spi_exit);
+>  
+>  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
+>  MODULE_DESCRIPTION("SPI driver for Dialog DA9052 PMIC");
+> -MODULE_LICENSE("GPL");
+> diff --git a/drivers/mfd/da9055-core.c b/drivers/mfd/da9055-core.c
+> index c3bcbd8905c6c..768302e05baa1 100644
+> --- a/drivers/mfd/da9055-core.c
+> +++ b/drivers/mfd/da9055-core.c
+> @@ -398,5 +398,4 @@ void da9055_device_exit(struct da9055 *da9055)
+>  }
+>  
+>  MODULE_DESCRIPTION("Core support for the DA9055 PMIC");
+> -MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
+> diff --git a/drivers/mfd/da9055-i2c.c b/drivers/mfd/da9055-i2c.c
+> index 702abff506a1a..537fd5de3e6d4 100644
+> --- a/drivers/mfd/da9055-i2c.c
+> +++ b/drivers/mfd/da9055-i2c.c
+> @@ -97,4 +97,3 @@ module_exit(da9055_i2c_exit);
+>  
+>  MODULE_AUTHOR("David Dajun Chen <dchen@diasemi.com>");
+>  MODULE_DESCRIPTION("I2C driver for Dialog DA9055 PMIC");
+> -MODULE_LICENSE("GPL");
+> -- 
+> 2.39.1.268.g9de2f9a303
 
-commit b7b4eebdba7b6aea6b34dc29691b71c39d1dbd6a
-Author: Jim Cromie <jim.cromie@gmail.com>
-Date:   Sun Sep 4 15:40:48 2022 -0600
-
-    dyndbg: gather __dyndbg[] state into struct _ddebug_info
-
-    This new struct composes the linker provided (vector,len) section,
-    and provides a place to add other __dyndbg[] state-data later:
-
-      descs - the vector of descriptors in __dyndbg section.
-      num_descs - length of the data/section.
-
-    Use it, in several different ways, as follows:
-
-    In lib/dynamic_debug.c:
-
-    ddebug_add_module(): Alter params-list, replacing 2 args (array,index)
-    with a struct _ddebug_info * containing them both, with room for
-    expansion.  This helps future-proof the function prototype against the
-    looming addition of class-map info into the dyndbg-state, by providing
-    a place to add more member fields later.
-
-    NB: later add static struct _ddebug_info builtins_state declaration,
-    not needed yet.
-
-    ddebug_add_module() is called in 2 contexts:
-
-    In dynamic_debug_init(), declare, init a struct _ddebug_info di
-    auto-var to use as a cursor.  Then iterate over the prdbg blocks of
-    the builtin modules, and update the di cursor before calling
-    _add_module for each.
-
-    Its called from kernel/module/main.c:load_info() for each loaded
-    module:
-
-    In internal.h, alter struct load_info, replacing the dyndbg array,len
-    fields with an embedded _ddebug_info containing them both; and
-    populate its members in find_module_sections().
-
-    The 2 calling contexts differ in that _init deals with contiguous
-    subranges of __dyndbgs[] section, packed together, while loadable
-    modules are added one at a time.
-
-    So rename ddebug_add_module() into outer/__inner fns, call __inner
-    from _init, and provide the offset into the builtin __dyndbgs[] where
-    the module's prdbgs reside.  The cursor provides start, len of the
-    subrange for each.  The offset will be used later to pack the results
-    of builtin __dyndbg_sites[] de-duplication, and is 0 and unneeded for
-    loadable modules,
+-- 
+Lee Jones [李琼斯]
