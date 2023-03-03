@@ -2,97 +2,102 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 469B0C6FA8E
-	for <linux-modules@archiver.kernel.org>; Fri,  3 Mar 2023 00:34:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A8DAC64EC4
+	for <linux-modules@archiver.kernel.org>; Fri,  3 Mar 2023 07:52:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjCCAeR (ORCPT
+        id S229686AbjCCHwp convert rfc822-to-8bit (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 2 Mar 2023 19:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
+        Fri, 3 Mar 2023 02:52:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCCAeQ (ORCPT
+        with ESMTP id S229662AbjCCHwo (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 2 Mar 2023 19:34:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F04F3A8E;
-        Thu,  2 Mar 2023 16:33:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3932861650;
-        Fri,  3 Mar 2023 00:31:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 226B3C4339B;
-        Fri,  3 Mar 2023 00:31:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677803517;
-        bh=PZRHS2ZDdyUW2dpnwGHL8YvvYRiGH5FDvsJ/j7DwmM8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uzSDzBpz4fmFCbf3D1QuAA5mncF/iT7AlnCAoZTPzzGNhp27+T4uKk4/KA/29d6AH
-         jZBdTdlj3JWWwgY5NOnDk8eQpPrDqadh4vzzjPIYuhl1sjAL+WCT6NZUHXlNvnGaKa
-         rT/xQVNO4Crgsog3RwPmMYlkyOTTjXCvuX9hR5/dOSFjdDazNueZcw9qtC57sIBWxZ
-         9BccpcAHYbx+GY2bnb//I8GR4j4jbVutCEh9k5Sdj0HYBbCXVPQbbWwcN+MxNLuvOD
-         EDZJJp3NZ7uvzmaPhp4Ueb8mGepRj7+vgXZP24rYw7ZGfgE8Mun91CBpVK/buHDyuD
-         1hzS1G8SEfvCw==
-Date:   Fri, 3 Mar 2023 00:31:58 +0000
-From:   Mark Brown <broonie@kernel.org>
+        Fri, 3 Mar 2023 02:52:44 -0500
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E48155511;
+        Thu,  2 Mar 2023 23:52:43 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id nv15so1227030qvb.7;
+        Thu, 02 Mar 2023 23:52:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677829962;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=swIYUUiwEVljh3zvvJtD0QY2HuHSKEbKGNleKmwU12g=;
+        b=3vEsHs5IyMPmaeK/q2TXYykq/QeB9mc0BPvEFJuAl8TLmfp+uChNYQg/NPDadxqBV6
+         4Il26ewnq09lMMnoyvLZjhXFTK/1GEOVF2WufSt5EeriDK1yw5/863Fn7hXF5FpBo7Pr
+         ewFY7zhmfHOq4e1kv/5p7aH3sbDFTQzXl4buxEVjx+TVGxmA6LA67gGIkkgkbL0OW6zP
+         2A4XUVIoUo5eBmvW4/yN8N6NJaMAHg08aEZmYaY2wLPmifnwHHx4m3nsLo6btwbAIWjc
+         LO57/sSr39E97cbLEBxuTRFgOdt4WE9XOnyXtBUuhfXP/Vl8SrsA0yaKepcmrj6d1j5p
+         Szmg==
+X-Gm-Message-State: AO0yUKXIZRYNCh4vyEUdi/7HyO46CoyOa0BfDfk7hN0gqBBftq7QYfw3
+        qjMV9ZGTauVKVwCeEzevShAz+CoF7WUlmw==
+X-Google-Smtp-Source: AK7set+7g0wulw85k9CLOZqYAN0gFV9TS5ftFIpT3DSAgN4lxM90Az0reELwnv3MKsRcjnJmntVecg==
+X-Received: by 2002:a05:6214:b66:b0:56e:fbd5:8dda with SMTP id ey6-20020a0562140b6600b0056efbd58ddamr1708316qvb.44.1677829962577;
+        Thu, 02 Mar 2023 23:52:42 -0800 (PST)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id 74-20020a370a4d000000b0073b878e3f30sm1238948qkk.59.2023.03.02.23.52.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 23:52:42 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id v101so1175837ybi.2;
+        Thu, 02 Mar 2023 23:52:42 -0800 (PST)
+X-Received: by 2002:a05:6902:d2:b0:a8f:a6cc:9657 with SMTP id
+ i18-20020a05690200d200b00a8fa6cc9657mr356391ybs.7.1677829961948; Thu, 02 Mar
+ 2023 23:52:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20230302211759.30135-1-nick.alcock@oracle.com> <20230302211759.30135-6-nick.alcock@oracle.com>
+In-Reply-To: <20230302211759.30135-6-nick.alcock@oracle.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 3 Mar 2023 08:52:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU2pCbOngWpeQOFYOmyLgSyMD-GCzsU4fQoafAvZchX1w@mail.gmail.com>
+Message-ID: <CAMuHMdU2pCbOngWpeQOFYOmyLgSyMD-GCzsU4fQoafAvZchX1w@mail.gmail.com>
+Subject: Re: [PATCH 05/17] drivers: bus: simple-pm-bus: remove MODULE_LICENSE
+ in non-modules
 To:     Nick Alcock <nick.alcock@oracle.com>
 Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 13/17] regulator: stm32-pwr: remove MODULE_LICENSE in
- non-modules
-Message-ID: <ZAE//jJ0GHvLN1m2@sirena.org.uk>
-References: <20230302211759.30135-1-nick.alcock@oracle.com>
- <20230302211759.30135-14-nick.alcock@oracle.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZDUqYhnMhlBcRxOs"
-Content-Disposition: inline
-In-Reply-To: <20230302211759.30135-14-nick.alcock@oracle.com>
-X-Cookie: Single tasking: Just Say No.
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+Hi Nick,
 
---ZDUqYhnMhlBcRxOs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Mar 02, 2023 at 09:17:55PM +0000, Nick Alcock wrote:
+On Thu, Mar 2, 2023 at 11:25 PM Nick Alcock <nick.alcock@oracle.com> wrote:
 > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
 > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
 > are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
 
-You've not copied me on the rest of the series so I'm not sure
-what's going on with dependencies.  What's the story here?
+Thanks for your patch!
 
-When sending a patch series it is important to ensure that all
-the various maintainers understand what the relationship between
-the patches as the expecation is that there will be
-interdependencies.  Either copy everyone on the whole series or
-at least copy them on the cover letter and explain what's going
-on.  If there are no strong interdependencies then it's generally
-simplest to just send the patches separately to avoid any
-possible confusion.
+> --- a/drivers/bus/simple-pm-bus.c
+> +++ b/drivers/bus/simple-pm-bus.c
+> @@ -92,4 +92,3 @@ module_platform_driver(simple_pm_bus_driver);
+>
+>  MODULE_DESCRIPTION("Simple Power-Managed Bus Driver");
+>  MODULE_AUTHOR("Geert Uytterhoeven <geert+renesas@glider.be>");
+> -MODULE_LICENSE("GPL v2");
 
---ZDUqYhnMhlBcRxOs
-Content-Type: application/pgp-signature; name="signature.asc"
+Please do not remove this line as long as the file has no SPDX-License
+tag.
 
------BEGIN PGP SIGNATURE-----
+Gr{oetje,eeting}s,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQBP/oACgkQJNaLcl1U
-h9DY3gf/Ri+5vS1m3/yKzksHQgSn4OR0nHC4qjB5n39Me0giqfbnkLhJvJ3Zs8dd
-36YSWsKIE6IszlJcJO097L7r/O6Nb5tct7Gwhw5HJFC7KZ63CbLjl/1mQ2YNc23w
-TwCYthOfm4cLjStFjxkTCBZtKuuaI9yqZnYwIX79+hAzPQ16RgUsna9SEYI0LxtK
-jPS9KUw0FIBXKmxXvaybwQJFVBHPDwPlHx2+HidUJ4s3zpvzJWlvB9pUc8FkjZoY
-MGoy3/CiZnDy/05osLyb4UdmKRlg5+D+8ehNWQWrxGMy6Gdzm+0g2WeRFjkwHopf
-+VwWGTp7AlMQIdV9r9yxknKPZzbZiA==
-=mlc0
------END PGP SIGNATURE-----
+                        Geert
 
---ZDUqYhnMhlBcRxOs--
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
