@@ -2,106 +2,82 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52EBBC64EC4
-	for <linux-modules@archiver.kernel.org>; Fri,  3 Mar 2023 11:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74D6AC64EC4
+	for <linux-modules@archiver.kernel.org>; Fri,  3 Mar 2023 11:03:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjCCLCE (ORCPT
+        id S230181AbjCCLDA (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 3 Mar 2023 06:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        Fri, 3 Mar 2023 06:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjCCLCD (ORCPT
+        with ESMTP id S230230AbjCCLC7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:02:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E045F6D1;
-        Fri,  3 Mar 2023 03:02:00 -0800 (PST)
+        Fri, 3 Mar 2023 06:02:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D010261B0;
+        Fri,  3 Mar 2023 03:02:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E301617ED;
-        Fri,  3 Mar 2023 11:02:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9514DC433EF;
-        Fri,  3 Mar 2023 11:01:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84AA4B8184E;
+        Fri,  3 Mar 2023 11:02:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE227C433D2;
+        Fri,  3 Mar 2023 11:02:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677841319;
-        bh=FIRwj8HGUMB0w7zX1cOSIoPalGx7LYpTQXTv6H51pTs=;
+        s=k20201202; t=1677841375;
+        bh=fPg3BkGyz7GB00IKDcCnzFu2MV8lEc0YT73oEOUPxlM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gK7qtsDeZIFWGoDzCStnzybJ2DQ6uz/fnJ/gEDEh6lFgKoNMwOKen37TsgrluXcTb
-         PYzWvzuX5VUqJoV0hcNfzQWTSo2wqrxcr1axL5nd5aCT2QdqO8jd6yVQWWycPn2I3t
-         KaW3ul5uYLgSdmH8XAx1/97E7tmCvHFxxdwGE6yj8kI/Uwxsb8KUJuQlpz9Cdm37vF
-         +UOK+0bS8F6r+sfnvvxOckbeljIuKNR9JFETajGJ58Qy0005fhccDLSH9R9myXxZDC
-         wcHbdC2rBD0/NXV2fHLlK+h1whr3qFSJpeyKEYvmO0r3AyB4GFEu8T9XbcS3A8RBa5
-         UYC6Rvyszp6QQ==
-Date:   Fri, 3 Mar 2023 11:01:55 +0000
+        b=aYQGBLyXC3Ebzg4Yi5XDrXv+b8jyw0jNykLqHjPRYVEPklncnNOmursSWmrlFATr1
+         Z4qKzXUtLjBydZaz3EN6HLI5dU/WAYDKF0qsiSppUgCpWZcgA4fH2Obfb8/PFhpaOc
+         5ypBiBE4LaIGQzoqmxiKBo8IPUrT/4UOyAFwOCH5qd+5p6ETPIq1p4bAKNODW8Z6Qg
+         tCNzWpFeMzYGbUEi/gQYnLd09AlwlAIVFr9wS2XX3DQQEAJxzov8554Y994c3/17xT
+         Jh9B/ighF1VRr5GpqLa5f2XVjlpeRLbwmHN6Z/h6d4JcjfVcodTqM0eD1eZBlDtbsr
+         ohmc75PMXiBJA==
+Date:   Fri, 3 Mar 2023 11:02:50 +0000
 From:   Lee Jones <lee@kernel.org>
-To:     Andy Shevchenko <andy@kernel.org>
-Cc:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Andy Shevchenko <andy@kernel.org>
 Subject: Re: [PATCH 04/27] mfd: intel_soc_pmic_crc: remove MODULE_LICENSE in
  non-modules
-Message-ID: <20230303110155.GD2420672@google.com>
+Message-ID: <20230303110250.GE2420672@google.com>
 References: <20230224150811.80316-1-nick.alcock@oracle.com>
  <20230224150811.80316-5-nick.alcock@oracle.com>
- <Y/joT9FM5Q8Fz7Hw@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y/joT9FM5Q8Fz7Hw@smile.fi.intel.com>
+In-Reply-To: <20230224150811.80316-5-nick.alcock@oracle.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, 24 Feb 2023, Andy Shevchenko wrote:
+On Fri, 24 Feb 2023, Nick Alcock wrote:
 
-> On Fri, Feb 24, 2023 at 03:07:48PM +0000, Nick Alcock wrote:
-> > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> > are used to identify modules. As a consequence, uses of the macro
-> > in non-modules will cause modprobe to misidentify their containing
-> > object file as a module when it is not (false positives), and modprobe
-> > might succeed rather than failing with a suitable error message.
-> > 
-> > So remove it in the files in this commit, none of which can be built as
-> > modules.
-> > 
-> > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
 > 
-> > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > Cc: linux-modules@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> > Cc: Andy Shevchenko <andy@kernel.org>
-> > Cc: Lee Jones <lee@kernel.org>
+> So remove it in the files in this commit, none of which can be built as
+> modules.
 > 
-> Please, use --cc parameter instead of polluting commit message.
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Andy Shevchenko <andy@kernel.org>
+> Cc: Lee Jones <lee@kernel.org>
+> ---
+>  drivers/mfd/intel_soc_pmic_crc.c | 1 -
+>  1 file changed, 1 deletion(-)
 
-I personally use this a lot.  It's better for scripting.
-
-It's okay, I will remove this when applying.
- 
-> With this addressed,
-> Reviewed-by: Andy Shevchenko <andy@kernel.org>
-> 
-> > diff --git a/drivers/mfd/intel_soc_pmic_crc.c b/drivers/mfd/intel_soc_pmic_crc.c
-> > index b1548a933dc3..b745ace46e5b 100644
-> > --- a/drivers/mfd/intel_soc_pmic_crc.c
-> > +++ b/drivers/mfd/intel_soc_pmic_crc.c
-> > @@ -271,6 +271,5 @@ static struct i2c_driver crystal_cove_i2c_driver = {
-> >  module_i2c_driver(crystal_cove_i2c_driver);
-> >  
-> >  MODULE_DESCRIPTION("I2C driver for Intel SoC PMIC");
-> > -MODULE_LICENSE("GPL v2");
-> >  MODULE_AUTHOR("Yang, Bin <bin.yang@intel.com>");
-> >  MODULE_AUTHOR("Zhu, Lejun <lejun.zhu@linux.intel.com>");
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+Applied, thanks
 
 -- 
 Lee Jones [李琼斯]
