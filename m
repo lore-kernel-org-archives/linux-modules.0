@@ -2,113 +2,130 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8312BC7EE2D
-	for <linux-modules@archiver.kernel.org>; Fri,  3 Mar 2023 16:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C3C2C7EE2D
+	for <linux-modules@archiver.kernel.org>; Fri,  3 Mar 2023 16:52:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjCCQvr (ORCPT
+        id S231483AbjCCQwE (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 3 Mar 2023 11:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
+        Fri, 3 Mar 2023 11:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjCCQvo (ORCPT
+        with ESMTP id S231405AbjCCQvp (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 3 Mar 2023 11:51:44 -0500
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [IPv6:2620:100:9001:583::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A625D8A7;
-        Fri,  3 Mar 2023 08:51:13 -0800 (PST)
-Received: from pps.filterd (m0050095.ppops.net [127.0.0.1])
-        by m0050095.ppops.net-00190b01. (8.17.1.19/8.17.1.19) with ESMTP id 323EbLtY022308;
-        Fri, 3 Mar 2023 16:51:03 GMT
+        Fri, 3 Mar 2023 11:51:45 -0500
+Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [IPv6:2620:100:9005:57f::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FED5D77C;
+        Fri,  3 Mar 2023 08:51:17 -0800 (PST)
+Received: from pps.filterd (m0122331.ppops.net [127.0.0.1])
+        by mx0b-00190b01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323FI5sD031066;
+        Fri, 3 Mar 2023 16:51:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=from : to : cc :
- subject : date : message-id; s=jan2016.eng;
- bh=omV0RcD+XUO/iuy4Vn60S5kx5v713oNFs3+FN2JhR+0=;
- b=NRK0lIAQbm38322h+6PVLGRlzYUU7SHNhOU2lQ9TmK6iju8hc5hjHb2Bx8tpBK4lwcaY
- 955+QyKffaaXpMDcsZMfSqcp62+12tTwPLT8lOTbnbfVgno0WXmLIsQQJSXyOdOukKBM
- bzpSPnUjVv8CWBbhrgZPg8vZKb01JjnxyMd5+mu1mGWIv0341LNTY/iY/AENjL64E2CB
- Todo9+OWOqisaIgjoc+ZYt9YStmCsNytuorcFGyZAXEbHWOjRbbhqegOkNxUOCMxNl4U
- o45rO7FTde++KI/6DZBVxUwnXv2AEdMvxHkCKZIksb5PuCt6tTz+ceoBEkJ0TND0uFNV yQ== 
-Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18] (may be forged))
-        by m0050095.ppops.net-00190b01. (PPS) with ESMTPS id 3nyarj19f5-1
+ subject : date : message-id : in-reply-to : references : in-reply-to :
+ references; s=jan2016.eng;
+ bh=J7y7gcoRtlbwLnRX2gMH1qPJetJEk+6THOduYolRlDc=;
+ b=BzHXQdgHjVRHi6qCyQ+EK/dGxq5Lmwlj2wst8ME791NRS2IRNvEFHUgL2rxTHXi5vyp0
+ Bt8mAMTGJWsEkJi24Mug0a/d2hwTIqx6IgYsCjQNv03Y/CiZ2IFwpIZV5RyggpE3U8y/
+ EBgKBOu29nMVxSsRHbt3pGaLr9M/rTzGpkKkmj5J02O+/LD/cizAn5cmTNr5xQXpkIhg
+ bxvtw1+7O0ROYZx9YgSjvv+sOrE4/e+RhKOGDw/GFH6w9u0HMVLft055ms2J1jqH09Bq
+ kBU3JnBIdWcibLuCauT2HLxT4bLnZs5dekht91ueYfbzmDdeMdPX0oQJd6ukcxurDnWd XA== 
+Received: from prod-mail-ppoint2 (prod-mail-ppoint2.akamai.com [184.51.33.19] (may be forged))
+        by mx0b-00190b01.pphosted.com (PPS) with ESMTPS id 3ny835qj65-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 16:51:03 +0000
-Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
-        by prod-mail-ppoint1.akamai.com (8.17.1.19/8.17.1.19) with ESMTP id 323FCKnm028605;
-        Fri, 3 Mar 2023 11:51:02 -0500
+        Fri, 03 Mar 2023 16:51:08 +0000
+Received: from pps.filterd (prod-mail-ppoint2.akamai.com [127.0.0.1])
+        by prod-mail-ppoint2.akamai.com (8.17.1.19/8.17.1.19) with ESMTP id 323FmoGp031521;
+        Fri, 3 Mar 2023 11:51:07 -0500
 Received: from prod-mail-relay11.akamai.com ([172.27.118.250])
-        by prod-mail-ppoint1.akamai.com (PPS) with ESMTP id 3nyej4d5m8-1;
-        Fri, 03 Mar 2023 11:51:02 -0500
+        by prod-mail-ppoint2.akamai.com (PPS) with ESMTP id 3nyej457e3-1;
+        Fri, 03 Mar 2023 11:51:07 -0500
 Received: from bos-lhv9ol.bos01.corp.akamai.com (bos-lhv9ol.bos01.corp.akamai.com [172.28.222.101])
-        by prod-mail-relay11.akamai.com (Postfix) with ESMTP id 500773095A;
-        Fri,  3 Mar 2023 16:51:02 +0000 (GMT)
+        by prod-mail-relay11.akamai.com (Postfix) with ESMTP id 42A523095A;
+        Fri,  3 Mar 2023 16:51:07 +0000 (GMT)
 From:   Jason Baron <jbaron@akamai.com>
 To:     mcgrof@kernel.org
 Cc:     jim.cromie@gmail.com, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: [PATCH v3 0/2] dyndbg: let's use the module notifier callback
-Date:   Fri,  3 Mar 2023 11:50:54 -0500
-Message-Id: <cover.1677861177.git.jbaron@akamai.com>
+Subject: [PATCH v3 1/2] dyndbg: remove unused 'base' arg from __ddebug_add_module()
+Date:   Fri,  3 Mar 2023 11:50:55 -0500
+Message-Id: <16bcadc508cae9c93249d16a499fb714edb1f64d.1677861177.git.jbaron@akamai.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1677861177.git.jbaron@akamai.com>
+References: <cover.1677861177.git.jbaron@akamai.com>
+In-Reply-To: <cover.1677861177.git.jbaron@akamai.com>
+References: <cover.1677861177.git.jbaron@akamai.com>
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-03_03,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0
- mlxlogscore=376 adultscore=0 spamscore=0 malwarescore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303030146
-X-Proofpoint-GUID: B_Q6P7jJvauwpo7s1WbD08NB8Bm0zI-O
-X-Proofpoint-ORIG-GUID: B_Q6P7jJvauwpo7s1WbD08NB8Bm0zI-O
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303030146
+X-Proofpoint-ORIG-GUID: 0RevVWFJRA62dXoibb_j8wEH0tO6J9ab
+X-Proofpoint-GUID: 0RevVWFJRA62dXoibb_j8wEH0tO6J9ab
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-03_03,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 clxscore=1015
- adultscore=0 mlxlogscore=364 impostorscore=0 phishscore=0
- lowpriorityscore=0 spamscore=0 priorityscore=1501 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303030145
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 spamscore=0 bulkscore=0 suspectscore=0
+ priorityscore=1501 clxscore=1015 malwarescore=0 phishscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303030145
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi,
+The 'base' parameter to __ddebug_add_module() is no longer in use
+after: Commit b7b4eebdba7b ("dyndbg: gather __dyndbg[] state into
+struct _ddebug_info").
 
-Jim Cromie hit a BUG() while toggling jump label branches in a module
-before they were properly initialized. This isn't currently an issue,
-but will be as part of his pending classmap series. Seems like we
-should covert to using module callback notifier for dynamic debug
-anyways to match other subsystems and remove core module code.
-First patch is just a cleanup.
+Cc: Jim Cromie <jim.cromie@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested-by: Jim Cromie <jim.cromie@gmail.com>
+Signed-off-by: Jason Baron <jbaron@akamai.com>
+---
+ lib/dynamic_debug.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Link: https://lore.kernel.org/lkml/20230113193016.749791-21-jim.cromie@xxxxxxxxx/
-
-I've rebased this series onto modules-next tree. Although the first patch
-is a cleanup entirely internal to dynamic debug I think it's a nice cleanup
-to have as part of this series.
-
-Thanks,
-
--Jason
-
-v3:
--rebased to modules-next tree
--updated changelog as per Luis Chamberlain's suggestions
-
-v2:
--Fix: error: field 'dyndbg_info' has incomplete type
- Reported-by: kernel test robot <lkp@intel.com>
- Link: https://lore.kernel.org/oe-kbuild-all/202302190427.9iIK2NfJ-lkp@intel.com/
--make ddebug_remove_module() static
-
-
-Jason Baron (2):
-  dyndbg: remove unused 'base' arg from __ddebug_add_module()
-  dyndbg: use the module notifier callbacks
-
- include/linux/dynamic_debug.h | 13 ---------
- include/linux/module.h        |  4 +++
- kernel/module/internal.h      |  2 --
- kernel/module/main.c          | 30 ++++++---------------
- lib/dynamic_debug.c           | 51 ++++++++++++++++++++++++++++-------
- 5 files changed, 53 insertions(+), 47 deletions(-)
-
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index 009f2ead09c1..8136e5236b7b 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -1223,8 +1223,7 @@ static void ddebug_attach_module_classes(struct ddebug_table *dt,
+  * Allocate a new ddebug_table for the given module
+  * and add it to the global list.
+  */
+-static int __ddebug_add_module(struct _ddebug_info *di, unsigned int base,
+-			       const char *modname)
++static int __ddebug_add_module(struct _ddebug_info *di, const char *modname)
+ {
+ 	struct ddebug_table *dt;
+ 
+@@ -1265,7 +1264,7 @@ static int __ddebug_add_module(struct _ddebug_info *di, unsigned int base,
+ 
+ int ddebug_add_module(struct _ddebug_info *di, const char *modname)
+ {
+-	return __ddebug_add_module(di, 0, modname);
++	return __ddebug_add_module(di, modname);
+ }
+ 
+ /* helper for ddebug_dyndbg_(boot|module)_param_cb */
+@@ -1408,7 +1407,7 @@ static int __init dynamic_debug_init(void)
+ 			mod_ct++;
+ 			di.num_descs = mod_sites;
+ 			di.descs = iter_mod_start;
+-			ret = __ddebug_add_module(&di, i - mod_sites, modname);
++			ret = __ddebug_add_module(&di, modname);
+ 			if (ret)
+ 				goto out_err;
+ 
+@@ -1419,7 +1418,7 @@ static int __init dynamic_debug_init(void)
+ 	}
+ 	di.num_descs = mod_sites;
+ 	di.descs = iter_mod_start;
+-	ret = __ddebug_add_module(&di, i - mod_sites, modname);
++	ret = __ddebug_add_module(&di, modname);
+ 	if (ret)
+ 		goto out_err;
+ 
 -- 
 2.17.1
 
