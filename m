@@ -2,102 +2,135 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A8DAC64EC4
-	for <linux-modules@archiver.kernel.org>; Fri,  3 Mar 2023 07:52:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F6CDC64EC4
+	for <linux-modules@archiver.kernel.org>; Fri,  3 Mar 2023 10:52:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjCCHwp convert rfc822-to-8bit (ORCPT
+        id S229925AbjCCKwR (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 3 Mar 2023 02:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        Fri, 3 Mar 2023 05:52:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjCCHwo (ORCPT
+        with ESMTP id S229714AbjCCKwP (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 3 Mar 2023 02:52:44 -0500
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E48155511;
-        Thu,  2 Mar 2023 23:52:43 -0800 (PST)
-Received: by mail-qv1-f46.google.com with SMTP id nv15so1227030qvb.7;
-        Thu, 02 Mar 2023 23:52:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677829962;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=swIYUUiwEVljh3zvvJtD0QY2HuHSKEbKGNleKmwU12g=;
-        b=3vEsHs5IyMPmaeK/q2TXYykq/QeB9mc0BPvEFJuAl8TLmfp+uChNYQg/NPDadxqBV6
-         4Il26ewnq09lMMnoyvLZjhXFTK/1GEOVF2WufSt5EeriDK1yw5/863Fn7hXF5FpBo7Pr
-         ewFY7zhmfHOq4e1kv/5p7aH3sbDFTQzXl4buxEVjx+TVGxmA6LA67gGIkkgkbL0OW6zP
-         2A4XUVIoUo5eBmvW4/yN8N6NJaMAHg08aEZmYaY2wLPmifnwHHx4m3nsLo6btwbAIWjc
-         LO57/sSr39E97cbLEBxuTRFgOdt4WE9XOnyXtBUuhfXP/Vl8SrsA0yaKepcmrj6d1j5p
-         Szmg==
-X-Gm-Message-State: AO0yUKXIZRYNCh4vyEUdi/7HyO46CoyOa0BfDfk7hN0gqBBftq7QYfw3
-        qjMV9ZGTauVKVwCeEzevShAz+CoF7WUlmw==
-X-Google-Smtp-Source: AK7set+7g0wulw85k9CLOZqYAN0gFV9TS5ftFIpT3DSAgN4lxM90Az0reELwnv3MKsRcjnJmntVecg==
-X-Received: by 2002:a05:6214:b66:b0:56e:fbd5:8dda with SMTP id ey6-20020a0562140b6600b0056efbd58ddamr1708316qvb.44.1677829962577;
-        Thu, 02 Mar 2023 23:52:42 -0800 (PST)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id 74-20020a370a4d000000b0073b878e3f30sm1238948qkk.59.2023.03.02.23.52.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 23:52:42 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id v101so1175837ybi.2;
-        Thu, 02 Mar 2023 23:52:42 -0800 (PST)
-X-Received: by 2002:a05:6902:d2:b0:a8f:a6cc:9657 with SMTP id
- i18-20020a05690200d200b00a8fa6cc9657mr356391ybs.7.1677829961948; Thu, 02 Mar
- 2023 23:52:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20230302211759.30135-1-nick.alcock@oracle.com> <20230302211759.30135-6-nick.alcock@oracle.com>
-In-Reply-To: <20230302211759.30135-6-nick.alcock@oracle.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 3 Mar 2023 08:52:30 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU2pCbOngWpeQOFYOmyLgSyMD-GCzsU4fQoafAvZchX1w@mail.gmail.com>
-Message-ID: <CAMuHMdU2pCbOngWpeQOFYOmyLgSyMD-GCzsU4fQoafAvZchX1w@mail.gmail.com>
-Subject: Re: [PATCH 05/17] drivers: bus: simple-pm-bus: remove MODULE_LICENSE
- in non-modules
+        Fri, 3 Mar 2023 05:52:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD43B5CC2E;
+        Fri,  3 Mar 2023 02:52:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C91A8CE210D;
+        Fri,  3 Mar 2023 10:52:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A72C433D2;
+        Fri,  3 Mar 2023 10:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677840728;
+        bh=Sh1lIVBe9d7qycBK73lEYNcJit9sdcVlFnNQEz+J6LA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KNJHdPnWbI5zSuYmAJXqBKn7xALTP8bvRw53WmYyL1WQKQG4EZq22+S/oS4vnZJQf
+         q+dJFEb3bgSk4s9HMDpCsgNK/17HlWPuyGq8ioDvg50+lGYeHMAR3qtNX78MLYas64
+         FarUWY+AptW3xK3DelqfMdDq/URsJXEcHidgE0g3jL7HriH1m+gz+l2y+SJJrWHp6H
+         vkvJnz1m9SAaFAvMw1J2CzhT2Ba1shsYyY5WFq4cyNwRLUJzpMe5Wz02Ca49yKPCRk
+         FOcUJiFh/Eb/TE5EVHrNNPQnibfL+2vADGgBUEU2hYwgP8d6y282CfQog2TxgxYiHt
+         iUOWYPUfXmaBA==
+Date:   Fri, 3 Mar 2023 10:52:03 +0000
+From:   Lee Jones <lee@kernel.org>
 To:     Nick Alcock <nick.alcock@oracle.com>
 Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org
+Subject: Re: [PATCH 26/27] mfd: remove MODULE_LICENSE in non-modules
+Message-ID: <20230303105203.GA2420672@google.com>
+References: <20230224150811.80316-1-nick.alcock@oracle.com>
+ <20230224150811.80316-27-nick.alcock@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230224150811.80316-27-nick.alcock@oracle.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi Nick,
+On Fri, 24 Feb 2023, Nick Alcock wrote:
 
-On Thu, Mar 2, 2023 at 11:25 PM Nick Alcock <nick.alcock@oracle.com> wrote:
 > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
 > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
 > are used to identify modules. As a consequence, uses of the macro
 > in non-modules will cause modprobe to misidentify their containing
 > object file as a module when it is not (false positives), and modprobe
 > might succeed rather than failing with a suitable error message.
->
+> 
 > So remove it in the files in this commit, none of which can be built as
 > modules.
->
+> 
 > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
 > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: linux-omap@vger.kernel.org
+> ---
+>  drivers/mfd/omap-usb-host.c | 1 -
+>  drivers/mfd/omap-usb-tll.c  | 1 -
+>  drivers/mfd/twl4030-audio.c | 1 -
+>  drivers/mfd/twl6040.c       | 1 -
+>  4 files changed, 4 deletions(-)
 
-Thanks for your patch!
+Please adapt the subject line(s) to include the drivers changed.  It might
+also make sense to separate out changes to cover one driver per patch.
 
-> --- a/drivers/bus/simple-pm-bus.c
-> +++ b/drivers/bus/simple-pm-bus.c
-> @@ -92,4 +92,3 @@ module_platform_driver(simple_pm_bus_driver);
->
->  MODULE_DESCRIPTION("Simple Power-Managed Bus Driver");
->  MODULE_AUTHOR("Geert Uytterhoeven <geert+renesas@glider.be>");
+mfd: <device>: Succinct subject-line describing changes
+
+> diff --git a/drivers/mfd/omap-usb-host.c b/drivers/mfd/omap-usb-host.c
+> index 787d2ae86375..7f5775109593 100644
+> --- a/drivers/mfd/omap-usb-host.c
+> +++ b/drivers/mfd/omap-usb-host.c
+> @@ -853,7 +853,6 @@ static struct platform_driver usbhs_omap_driver = {
+>  MODULE_AUTHOR("Keshava Munegowda <keshava_mgowda@ti.com>");
+>  MODULE_AUTHOR("Roger Quadros <rogerq@ti.com>");
+>  MODULE_ALIAS("platform:" USBHS_DRIVER_NAME);
 > -MODULE_LICENSE("GPL v2");
-
-Please do not remove this line as long as the file has no SPDX-License
-tag.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+>  MODULE_DESCRIPTION("usb host common core driver for omap EHCI and OHCI");
+>  
+>  static int omap_usbhs_drvinit(void)
+> diff --git a/drivers/mfd/omap-usb-tll.c b/drivers/mfd/omap-usb-tll.c
+> index 080d7970a377..8ca4067da6cd 100644
+> --- a/drivers/mfd/omap-usb-tll.c
+> +++ b/drivers/mfd/omap-usb-tll.c
+> @@ -450,7 +450,6 @@ EXPORT_SYMBOL_GPL(omap_tll_disable);
+>  
+>  MODULE_AUTHOR("Keshava Munegowda <keshava_mgowda@ti.com>");
+>  MODULE_AUTHOR("Roger Quadros <rogerq@ti.com>");
+> -MODULE_LICENSE("GPL v2");
+>  MODULE_DESCRIPTION("usb tll driver for TI OMAP EHCI and OHCI controllers");
+>  
+>  static int __init omap_usbtll_drvinit(void)
+> diff --git a/drivers/mfd/twl4030-audio.c b/drivers/mfd/twl4030-audio.c
+> index 4536d829b43e..88002f8941e5 100644
+> --- a/drivers/mfd/twl4030-audio.c
+> +++ b/drivers/mfd/twl4030-audio.c
+> @@ -285,5 +285,4 @@ module_platform_driver(twl4030_audio_driver);
+>  
+>  MODULE_AUTHOR("Peter Ujfalusi <peter.ujfalusi@ti.com>");
+>  MODULE_DESCRIPTION("TWL4030 audio block MFD driver");
+> -MODULE_LICENSE("GPL");
+>  MODULE_ALIAS("platform:twl4030-audio");
+> diff --git a/drivers/mfd/twl6040.c b/drivers/mfd/twl6040.c
+> index fc97fa5a2d0c..e982119bbefa 100644
+> --- a/drivers/mfd/twl6040.c
+> +++ b/drivers/mfd/twl6040.c
+> @@ -839,4 +839,3 @@ module_i2c_driver(twl6040_driver);
+>  MODULE_DESCRIPTION("TWL6040 MFD");
+>  MODULE_AUTHOR("Misael Lopez Cruz <misael.lopez@ti.com>");
+>  MODULE_AUTHOR("Jorge Eduardo Candelaria <jorge.candelaria@ti.com>");
+> -MODULE_LICENSE("GPL");
+> -- 
+> 2.39.1.268.g9de2f9a303
+> 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Lee Jones [李琼斯]
