@@ -2,123 +2,165 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 171BBC678D5
-	for <linux-modules@archiver.kernel.org>; Sat,  4 Mar 2023 20:12:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2522FC6FA9E
+	for <linux-modules@archiver.kernel.org>; Sun,  5 Mar 2023 08:10:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjCDUMo (ORCPT
+        id S229604AbjCEIKW (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 4 Mar 2023 15:12:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        Sun, 5 Mar 2023 03:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCDUMn (ORCPT
+        with ESMTP id S229379AbjCEIKV (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 4 Mar 2023 15:12:43 -0500
+        Sun, 5 Mar 2023 03:10:21 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BB818157;
-        Sat,  4 Mar 2023 12:12:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3238D51A;
+        Sun,  5 Mar 2023 00:10:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1127A60A3B;
-        Sat,  4 Mar 2023 20:12:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB187C433D2;
-        Sat,  4 Mar 2023 20:12:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BD1560AB1;
+        Sun,  5 Mar 2023 08:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B801C433A1;
+        Sun,  5 Mar 2023 08:10:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677960760;
-        bh=lh2zO/N+K/8gqFuO7G82Vx4lZLxCoX2cMJOhzYzwZ0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FQiHuJcefAgrXBRuLlQEyxF2GAJ9TV0inkBwtGDr42z5WoTBFqXP2sJv8GoggRn/Q
-         nWWVKAT43TyuBqloAGT71bqjI0bnexQp5y2lcBy0hl1TECfadEKi4g019Dm3YmzRp5
-         6EbBxD9R9Sn4fF2W3/x0rLXg+GwoojkyDbP21htNG0+iQCORAOKZOX/ZYJXVI/DZQg
-         UICpODjGOz10byXZOLxeg9x3z6oXTwMo01vBQJhiKko0TGIk9yJvn2CL/1ClA5TSDv
-         ZMoNGJ+z7faXYfTuP0DESVtBen/5xlVk+TYjq3f16/YaRBvNcyA6CByaeEVbgcEZHz
-         MEO4KMnpHqd7Q==
-Date:   Sat, 4 Mar 2023 20:12:36 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 13/17] regulator: stm32-pwr: remove MODULE_LICENSE in
- non-modules
-Message-ID: <ZAOmNCVtEIgXYhJ9@sirena.org.uk>
-References: <20230302211759.30135-1-nick.alcock@oracle.com>
- <20230302211759.30135-14-nick.alcock@oracle.com>
- <ZAE//jJ0GHvLN1m2@sirena.org.uk>
- <87fsalbsd1.fsf@esperi.org.uk>
+        s=k20201202; t=1678003819;
+        bh=JAXEBqW4smtYeSra+h8Nm3kI8Izhu6NtyGNvHt5ilE4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KknQR0/oo0F0pi92V8Wt8RkAaJoMUHmO4qfAGTx0O12EKkObYzbpzFVPEmv1E3GDN
+         P78MfXN00gHhxus4lbONKjGJS8+JyDGsRS8C/iGe0txgpcPc2CbX0LzKA5XJFX9owx
+         Jlw3eOFB/cjgIo4sRi2O+iXa4EXrXB9zvv69XVbzagtgl/NvB1+jiEHtT9e1Z10v1c
+         te8HCoXlMq2EOL4ASFXQQPmGPSr01hdvhEcj34gbD536BdDAOa0R6eFMfsV4CKmZtu
+         0vy5ze8AotdmTRKa2ndv52ZzcdfdKfzyLHd5BhOBJr3qyiSRZ1fh7M7477gdTRWpJt
+         8JT3zQ9hWlJ5A==
+Received: by mail-oi1-f174.google.com with SMTP id q15so4873075oiw.11;
+        Sun, 05 Mar 2023 00:10:19 -0800 (PST)
+X-Gm-Message-State: AO0yUKWs4o1ANa5xdcw1if8FC9+bOAX3pDVVFm9uUEOJ7nbC0csxr/B3
+        WT7Stm+35F3ncjCCQRn9UubCF5JyqL1q4ZoNx3k=
+X-Google-Smtp-Source: AK7set9avGdsdRmrXutmkIsGYqUw6NbhJrqqbjs5VWAzWE+FerfQH4m4SBWAqOkOOGaJQ06gZOWh1lw/vokJLe0DPRo=
+X-Received: by 2002:aca:1a0d:0:b0:36e:f6f5:66a2 with SMTP id
+ a13-20020aca1a0d000000b0036ef6f566a2mr2270094oia.8.1678003818692; Sun, 05 Mar
+ 2023 00:10:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FF2iHxi4V67JT3nv"
-Content-Disposition: inline
-In-Reply-To: <87fsalbsd1.fsf@esperi.org.uk>
-X-Cookie: Single tasking: Just Say No.
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+ <20221205163157.269335-6-nick.alcock@oracle.com> <CAMuHMdVrP1sLGRS999q=2L-5JhxXwcjBLkQREdcJhDerg70OtA@mail.gmail.com>
+ <87mt80l2py.fsf@esperi.org.uk> <5f0a5ea7-2d48-435f-aaa0-82b6ef8cfcc5@app.fastmail.com>
+ <Y5AeuI4RD0tpzlp5@bombadil.infradead.org>
+In-Reply-To: <Y5AeuI4RD0tpzlp5@bombadil.infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 5 Mar 2023 17:09:42 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASL7_RgfASstBvN6AzhR=nMU=HsQvODf5q13Xud8tBWRQ@mail.gmail.com>
+Message-ID: <CAK7LNASL7_RgfASstBvN6AzhR=nMU=HsQvODf5q13Xud8tBWRQ@mail.gmail.com>
+Subject: Re: [PATCH v10 05/13] kbuild: remove MODULE_LICENSE/AUTHOR/DESCRIPTION
+ in non-modules
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Nick Alcock <nick.alcock@oracle.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        eugene.loh@oracle.com, kris.van.hees@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+On Wed, Dec 7, 2022 at 2:04=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org>=
+ wrote:
+>
+> On Tue, Dec 06, 2022 at 10:02:30PM +0100, Arnd Bergmann wrote:
+> > On Tue, Dec 6, 2022, at 21:03, Nick Alcock wrote:
+> > > On 6 Dec 2022, Geert Uytterhoeven uttered the following:
+> > > Only MODULE_LICENSE invokes MODULE_FILE and thus ends up introducing =
+a
+> > > KBUILD_MODOBJS entry that triggers things going wrong iff not a modul=
+e:
+> > > so only it needs to go out (or be replaced with a variant that doesn'=
+t
+> > > invoke MODULE_FILE, if you want to keep the license in too --
+> >
+> > That sounds like a better alternative
+> >
+> > > but if the thing is no longer a standalone entity at all I'm not sure
+> > > what meaning it could possibly have).
+> >
+> > As far as I can tell, the general trend is to make more things modules,
+> > so there is a good chance that these come back eventually. If the
+> > information in the MODULE_LICENSE field isn't wrong, I would just
+> > leave it in there.
+>
+> Tooling today uses it though to make a deterministic call on if something
+> *can* be a module. In particular after commit 8b41fc4454e ("kbuild: creat=
+e
+> modules.builtin without Makefile.modbuiltin or tristate.conf") we rely on
+> the module license tag to generate the modules.builtin file. This in
+> turn is used to allow modprobe to *not* fail when trying to load a module
+> which is built-in.
 
---FF2iHxi4V67JT3nv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Mar 03, 2023 at 06:30:02PM +0000, Nick Alcock wrote:
-> On 3 Mar 2023, Mark Brown outgrape:
 
-> > on.  If there are no strong interdependencies then it's generally
-> > simplest to just send the patches separately to avoid any
-> > possible confusion.
+If we have a bool driver 'foo.ko' in modules.builtin,
+'modprobe foo' will not fail where you expect it will fail.
 
-> The cover letter was sent to every related mailing list (or at least it
-> was for patch series 2 and 5+: scripting problems blocked 3 and 4,
-> sorry), which is what the LWN article on big patch series which I'm
-> following recommended: <https://lwn.net/Articles/585782/>. I didn't want
-> to spam actual maintainers with more info than that, since presumably
-> they follow related-according-to-maintainer.pl lists anyway.
+Is it so important to make this strict?
 
-> As for copying everyone on a 121-patch monster like this... well, I
-> think everyone would have wanted to throttle me, and I'm not sure they'd
-> have been wrong.
+I do not think so.
 
-So given that there's no depenencies between the patches this
-seems like a good candidate for not sending as a series in the
-first place.
 
-> I don't think anyone has previously suggested making it 121 individual
-> patches with no cover letter whatsoever. As it is, those series that
-> accidentally went out without cover letters properly Cc:ed confused some
-> maintainers because of the lack of the cover letter. My apologies.
+What is a point for a user to realize
+"Oh, I did not know foo cannot be compiled as a module"
 
-It's really quite common for people to just send lots of
-individual patches when there's no interdependencies - a lot of
-the generated cleanups do that.
 
-> It does seem this is an area where I can't please everyone. Some people
-> don't want to be Cc:ed, others want everyone Cc:ed on all of them: some
-> people want series, others want individual patches for everyone. I can't
-> do both. Sorry about that.
+Re-read the commit description of
+bc081dd6e9f622c73334dc465359168543ccaabf
 
-The important thing isn't so much the specific thing as making it
-clear what's going on - if you send a series with no information
-about the how the series should be handled it's unclear what's
-going on.
+The motivation of module.builtin is to know the functionality 'foo'
+is available (via built-in or module, whatever).
 
---FF2iHxi4V67JT3nv
-Content-Type: application/pgp-signature; name="signature.asc"
+In this sense, having always-builtin entries in module.builtin is OK.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQDpjQACgkQJNaLcl1U
-h9BpQAf/cwTCDQoO3DJHbW+V3KN7lXab63nPmzx8YLsOCN08E6dkxqkKu/k3gYfP
-zycpsR1Fh/IlAxGnXkl9WxADQv939kf/JB3DOWZYucpIu9WxjNb2993Bh8O3RsWw
-Mza2stTJNGeSr5CeOoim/tUHJW57nLz+9JkTgFzvf+bX62WMiBzCoXukhvoO46D5
-qMvNkZcqd9Ukt2yacBkopxOJWgSlgBkvZ9rzqZCoCtJCEvReRuDtb+etI9xGwtBO
-G/AYa1+jOm/8QvxGlxfBNAPHlOMaC9pTa759pYX+mL1vd6+ffO2WRM7s5ykm9FZj
-Q9POomT2hjl0i2SwYXYBVsrva5MbWQ==
-=Psnl
------END PGP SIGNATURE-----
+I do not see any sense in the tooling mess in this patch set.
 
---FF2iHxi4V67JT3nv--
+
+
+
+
+
+
+
+> So we can't just disable the tag for when the code is built-in as *want*
+> to carry it when modules are built-in, that is the point, to help
+> userspace with this determination.
+>
+> I don't think we want to revert 8b41fc4454e as it means we'd force Kbuild=
+ to
+> traverse the source tree twice.
+
+
+I do not want to revert it.
+
+and I do not want this series in the mainline.
+
+
+
+
+>
+> Geert's point was not keeping MODULE_LICENSE() but instead the other
+> MODULE_*() crap for things which are not modules in case in the future
+> code becomes a module...
+>
+> But I don't see the point in keeping things around just in case, if we
+> want to keep things simple. Just use the SPDX license tag for the license=
+.
+>
+>   Luis
+
+
+
+--
+Best Regards
+Masahiro Yamada
