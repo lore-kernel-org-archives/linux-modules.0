@@ -2,174 +2,185 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66D09C61DA4
-	for <linux-modules@archiver.kernel.org>; Mon,  6 Mar 2023 16:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABCBEC61DA4
+	for <linux-modules@archiver.kernel.org>; Mon,  6 Mar 2023 17:05:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjCFQVd (ORCPT
+        id S229509AbjCFRF4 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 6 Mar 2023 11:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        Mon, 6 Mar 2023 12:05:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCFQVP (ORCPT
+        with ESMTP id S229643AbjCFRFp (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:21:15 -0500
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADC238663
-        for <linux-modules@vger.kernel.org>; Mon,  6 Mar 2023 08:19:04 -0800 (PST)
-Received: by mail-pl1-f171.google.com with SMTP id i10so10936133plr.9
-        for <linux-modules@vger.kernel.org>; Mon, 06 Mar 2023 08:19:04 -0800 (PST)
+        Mon, 6 Mar 2023 12:05:45 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8ED741B44;
+        Mon,  6 Mar 2023 09:05:15 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326Gwm4q000602;
+        Mon, 6 Mar 2023 17:05:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=vLmm0aXXjffzDvD5zXW3QdcU42GbOpyZYLtE9luqVrs=;
+ b=sxcYG7dbvvWtOACgxasRIfATiEG30F7hyprafqMua2a1MzSLEri7wHkeUhnCEIQMDPPW
+ hqOMt5EJMKyeigHg9J2/XX7P4w+buouFSITv9IPo66CjEkMqPPrPE5rJh9q8kAJXZNXy
+ wXALfPcQpLdui/EeHVIwzh9OXImkGnBuurDZjVxYzskRPrg3/EX78RNXLAJKTqe7QftU
+ ag0ICA+CZqbPvS85h5pr39BuU9UakkjHdAdSsOBwA7cfFibt2BjGqgB7QTH3zUog9SLU
+ Cqp8Wpx5MXjD+JTxksoxXDgP4xNw6XqlkOLxMlhtoulu5PaeZ/xCkvZsOOPTApIrlNej lQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p4180udn9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 06 Mar 2023 17:05:03 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 326G048Z037009;
+        Mon, 6 Mar 2023 17:05:02 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p4txd91pr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 06 Mar 2023 17:05:02 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C1eJqDYQaOs/MgP3CkgBgdkROfkyl/V7aST0/2CYArFYR1RJN5w5mnojRUZ9cJrFB3Y2eB0TEQkmQhZ2RsiIi7oKr3viNQ75vb1q7XRrkN0LG87KiD3ESLNfEx6FeAEKBMwp6jndbTuiPAPkau+Vr0ALX/XaBxKmxI6mfIMFNGf8j/v691EVGdalGz8cdU63J902VOqV8ixsw38fiAiTi+OBNWXg82H+aSakJQ0p0rJkuuE1GS3ukIcTCa+FsZNowkkXAqwsuL7ddahmNlMYgOCWNLxRK+OY7smSmRaBrz9GZcLOe95tFUc82gBwRMdVZUh82T3DKSGvQcN4bI/l0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vLmm0aXXjffzDvD5zXW3QdcU42GbOpyZYLtE9luqVrs=;
+ b=C0+rRVFbk8GNmEhwAFcQrs6cdu3bgi5duf3XYOe1HLDkjCJaDkzYGZkObc7icr+JGTLr11G1Hzm/ujqLxNNdBTH4jwvFUUuctEyt3WMhTlEyBWR9IAjERGq6S1IE6HSuX54JEk1bKA5vmQHfG7mw5YiZ4dd8TX9zdAchOfzMf3r9Oo2f+2EyefHIHnfAHbQ4CmCQK/1yv9FppFIC93tMdGPuc1tPLnLkEs1iLttWwofYWes9uI7IxxQWhTSn11P6eD/K5xJiq82hDKG5JqF0ER486VK1J6Wa7ymnnrIgYu/gcZozWT/WZIGtcxH0WQbC4JYVAn46/5zHfekE10+CPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1678119406;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e7dAgDboD1nwP5+XX6Gpi6cj6HuqQDphe3J0S8kZqwA=;
-        b=cj17U2DzOgvZNN+iTtE0LcTA7l75q1a5INBj0ckk9l7QbgfWVAhuMsCnI0UOuh+drY
-         UCgUPHOgGgJ80pxTKvfKmuhymLU4/cYFiwD85aLfGjVxPCg78730vkX76IU+skW5pnzb
-         RVVKi6wqdBLXjvc/aBOXRfFStwEhN//7WyHzg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678119406;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e7dAgDboD1nwP5+XX6Gpi6cj6HuqQDphe3J0S8kZqwA=;
-        b=pt9vHKuzdm+2UCOYMNx9BdlDpjJ0Ep0bTAKU8hq4tnKtG1TgaPYvnqwJmYv8AtcTq8
-         axFwLkrHzQWTAEqWwIjjMfR/x9ZDCDkQkbYPU/VLzKwTnyyUz2G7u+CyjZiqmlMUPFvE
-         3PtNv0CvUeCYASqZJ4xvE2yykOdQXBKRI9gmRK+kfBYpVW0w4mWbWTbnx3l5hHkvgo60
-         V9yPbittI9zas//MIEW3I8T+UJiMgqeHrMpMrtL4+s8fhGls8RTRpFmYgd+wOXjL7e6x
-         pa7GhLSzIbpL2gsvD7VYXFp+zxRI7+6mkbvSENZdR+cZId0tNpPa5a5Xb4uB9CQF/7aH
-         rNRA==
-X-Gm-Message-State: AO0yUKV+Q6F6kvNR7RbBYeen3czksPKhZjoJaDHcaJmQOCswCyg6BcJ8
-        vF46eSPlrDHYoICGGDmmRzvoAwlISwMAWhnUClJWlQ==
-X-Google-Smtp-Source: AK7set/5wMHvgBGYNORNTLIQc8lg5UH9pESn3evMck0I8U2TUY+aFX1R4Mnp6ivgn4D8wf8+cM17Hw==
-X-Received: by 2002:a6b:5a0e:0:b0:72c:f57a:a37b with SMTP id o14-20020a6b5a0e000000b0072cf57aa37bmr6270225iob.2.1678118802712;
-        Mon, 06 Mar 2023 08:06:42 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y6-20020a6bc406000000b00743fe29dd56sm3442423ioa.4.2023.03.06.08.06.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 08:06:42 -0800 (PST)
-Message-ID: <9a0e7062-2d16-3743-ffb6-a6b56bfbbd20@linuxfoundation.org>
-Date:   Mon, 6 Mar 2023 09:06:41 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
- 165
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, keescook@chromium.org,
-        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vLmm0aXXjffzDvD5zXW3QdcU42GbOpyZYLtE9luqVrs=;
+ b=Xba7CEBaRSxthl+9Q1Bl+33bbo2ZxCqNltK6RpZE4OT2wVn/tqGLlyKm22pinu6Z2Ku6gcdk18Eguqqr6N2KNazR0jyYUhYqfM2fONGW+j0U5mTccRtD1sAdQCeb8FMgyLcaNp6LirkwxLB2iSzhASxIsAUjuJE5ku20v3mRhm4=
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
+ by SA1PR10MB6589.namprd10.prod.outlook.com (2603:10b6:806:2bf::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.26; Mon, 6 Mar
+ 2023 17:05:00 +0000
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::d0f7:e4fd:bd4:b760]) by DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::d0f7:e4fd:bd4:b760%4]) with mapi id 15.20.6156.027; Mon, 6 Mar 2023
+ 17:05:00 +0000
+From:   Nick Alcock <nick.alcock@oracle.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Andy Shevchenko <andy@kernel.org>, mcgrof@kernel.org,
         linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230206234344.2433950-1-mcgrof@kernel.org>
- <20230206234344.2433950-2-mcgrof@kernel.org>
- <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
- <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
- <537d3d3d-9ecc-bdd9-f703-708f6826d1f2@linuxfoundation.org>
- <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+Subject: Re: [PATCH 04/27] mfd: intel_soc_pmic_crc: remove MODULE_LICENSE in
+ non-modules
+References: <20230224150811.80316-1-nick.alcock@oracle.com>
+        <20230224150811.80316-5-nick.alcock@oracle.com>
+        <Y/joT9FM5Q8Fz7Hw@smile.fi.intel.com>
+        <20230303110155.GD2420672@google.com>
+Emacs:  the Swiss Army of Editors.
+Date:   Mon, 06 Mar 2023 17:04:55 +0000
+In-Reply-To: <20230303110155.GD2420672@google.com> (Lee Jones's message of
+        "Fri, 3 Mar 2023 11:01:55 +0000")
+Message-ID: <87lek97qvc.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0252.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a7::23) To DS0PR10MB6798.namprd10.prod.outlook.com
+ (2603:10b6:8:13c::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|SA1PR10MB6589:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95fd963b-f919-411c-a5ed-08db1e64eb94
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LblDXfsVAbrMhak50qX8yOvZU+PvkGg5jni9ugRhtC5a6QbqJrqyAQ3vRLtYFqPM6vxTphlkRV5GiBJ7TP8bLhR1A0VesopmuEmaO1+eruW14R54JSzbolsUpa85cHAtijC+wJR85ygUS6XF49JdmXNyG0tzjl37hqFgSd7kDjF1fLAsbGONLvTu2uHWBspKaX73jXCATPH/SsgEdYjKOhJIGhpUG/1sXlUfHFOiBKWO6DXQGuiJvgZQfuEMjbcthtSKFiJ3f5rfV0gPaLc1H0gJc3ZAiMeSylWNkIliaCNe1kHEePzscCg8cdWshC7DsNt0h02CykKVofNSj4zIX86zyU7PA5Glg9yzUMXLWUmv4zAZ90yY3htzy/+35f9H7oWI191GdRgOR+S5HVF9CD3VwOKA9Y/3YDBRUMBoZ0pvDAir3GQLQlPW3OSiVjPDm73LYqc5Cp6iR1gbMsJedBbRQtPCckendOufz2pNrAuFzJJO7oI1ygcntwVaWuOnxu+uYkXb7K/VrYDljinVvibLee03xFmCakzXLThs1k9TRtxp6v9HGKdmXUYsY/ld/tzkeJulPwAFKYd6JiWWMeO5g1v3GmS3OGyTsH1POfGJfo6XUvEvdOezyUB9ym0j+nEYdZXj1ActOW1EE//aRg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(376002)(366004)(396003)(39860400002)(451199018)(66946007)(66556008)(4326008)(6916009)(8676002)(54906003)(316002)(41300700001)(5660300002)(8936002)(2906002)(66476007)(83380400001)(86362001)(38100700002)(478600001)(36756003)(6486002)(44832011)(9686003)(6666004)(6506007)(6512007)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YSRIcg3yqSqf9gH7GQ4qTSG9eHmZ+4GpBEysMtxqw2ZiX1/x892a/oN1iOlO?=
+ =?us-ascii?Q?NjArUMX4ntRNXc/VmU7dNtkXyWMt6AApTSmm3yDROMZ5GtKvLQSyYkq3wf00?=
+ =?us-ascii?Q?ozpklebvHI58cCJEIQFjrAjGRp9cd3kOvNvlrdoe7lEf0Vgqaaau/w8yB498?=
+ =?us-ascii?Q?KNePvozrgh9JtO5VX/PdW0r5ylDmz30epNW0gYpKk0uVnM3TwpvUPyVRA6vP?=
+ =?us-ascii?Q?8KJX+V6PFrTPuWiRzqkP+JEgkSscKqQEB97itKdnHzZWqtVmNR90tk0TAwMm?=
+ =?us-ascii?Q?SfMcC0qz9pzuRJ71CXY+Z4t1e+9JVYI4EnWKG3TwWifaMjl7WMze7ad7cy+9?=
+ =?us-ascii?Q?L6UGkcvWHWseslkLVhcC6Iq5pAdy7SEkqkhoCrXrmXX1msjBrr9xW0cke47D?=
+ =?us-ascii?Q?Hkv+wsT8FDjCQqcW1poNN1za55OtmjRajgQzQDhLpPXAArNXn+g2B/QUACH7?=
+ =?us-ascii?Q?ZyQvOMdRJjs94WK2BxRMt8XjTtlgcpAZBM4ims0Kjjin7oCu4hcgi5Ewqfcr?=
+ =?us-ascii?Q?MRnlZEGymYXG3GI4zuOmTlPR9HHmcClZNRwdW7T9jjqN11MsIplJGpQossUZ?=
+ =?us-ascii?Q?L6sp92S6nsyWBo98XIQJHPDJ33/yWCaj6Dmho9InW41/C7bo8wCZUKZFH84Z?=
+ =?us-ascii?Q?8Ir5nvgIxDwzFvEmtl0l2LYlpk5dFjfrIynJ084W7DLQFIDVcjC7FO7IkB19?=
+ =?us-ascii?Q?T6VthWpPWjisyqQnFYziZ4efT9wQdfHNPJTvD7S8qs8B7VIkdhv5FoDSn/hf?=
+ =?us-ascii?Q?PJ9748gWJGTeXcNYlxTfBE/+wKGN0ANu0V0eyHrLUaAsB+s5pZ7CetOhAnj6?=
+ =?us-ascii?Q?eC4hECLuN5/HFdGtbasqVKwaPm41Nr+wclDmQDO//T6+CqEvU6P5le/L6y/K?=
+ =?us-ascii?Q?9dZGXdVBeKF62CekI+It7WOG/YPztH8XE9urwG3EjR+AHeM8nJLXRzIW5TM2?=
+ =?us-ascii?Q?c26lTXq2JU1SxV+3nD/dH+P1KdJLv0HP/3H3MJW8nG8Dgb5nkgXm/SmGtxW9?=
+ =?us-ascii?Q?C8dzhcp+1yWKvs4NGvXB3aktiXenR+3ECnh9mdDLQ9LEb0iv2UlToUoZR/qj?=
+ =?us-ascii?Q?o/bm4YKUGy3qdGtn8ASadvDg+eK3qmcHHQKAQtC+ysWUyda4CRlU2FXtrsSV?=
+ =?us-ascii?Q?Z9tj5Motye3CFP3Cyk8RrwgRyxr6GMERdhcqzlzZRkZE58PLla8HWwAaMKZG?=
+ =?us-ascii?Q?Ved9GbiTqirthXImdsUAKgOSxBsJUmqTDh8kuebd1a7COx4UtJEGW7FcQ+Dh?=
+ =?us-ascii?Q?pDpvNfpeE7XDGKSmxN5HfXgxE9pfLbhT8LneKcKqaIeBMjqrONl8jlk+aY0Y?=
+ =?us-ascii?Q?OFH9+g8LitRJN+ej7gH4PBO7TT9fNYYUi5qjCssfaMkhEWMvCa7Dbdz4eMAP?=
+ =?us-ascii?Q?T9ES3HlXPf+GyLlfxFyg5cauetzoXxumM5tp48L+Kdg47QSqjhC++3Q9m012?=
+ =?us-ascii?Q?ykGoqfbOmJAcY2AVgxCOa2TMo+I6qLvO/ctp19x8EAZSD1LJtM1SSUAsdSTH?=
+ =?us-ascii?Q?L4VNGCNKM2q5LEb9KZ5RyxxCQZCxCZlr/AlhcLR+V6OXq1yEQ+odmZvF7XXi?=
+ =?us-ascii?Q?udDakxbdgndFgpTik1hDlHLS6a2Jwa8/vh6M5v9tigndeOnUUsiy390AejNB?=
+ =?us-ascii?Q?PA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: YB1Z3bFCSXhvEuc5Lc68dVav07Rqv9WVYFL51XK8XmcEs6auPTKO1oeLJN7wdBmGY5EqIsvkpaDQO7XniJTmeyIgCAlDkAdHiBDVegFXN6bV1rK88Cl7WBpbt8HQsbXQAcd4CgWdOd7MUKW91L09NFUktrthbekH/7eSJ6gOLopVKgUYRt6k+x8oYlAEVB7POk/tXIpsNYZjX3bYpaDuG7jxx/Ul2N0REU7c55M0S6fdNjhf31vERXftFivuEKwPfp283+864SGRZckkUfsIHpRCZXXgE9RggYtnjFQEvRV6gRWM3DFkM5SzYysI1jOJqFJhQWoR9kOUZchuI8uzidlnEqi4eIB+h3GJPbC2x2HkT9E3gZZlJwDFEJFvUD4lC8k8chfhM765oAWZnkr7A+8kocL6oktU7F0z1svwnBCyskRSoUU3lj0uB8TbEX0wzUH839TOAKItpsW62GedKThcK986zfUqXZmNyqH/sK4hOolWRemsR8jVh+TCl/LSWBj2YOHyzkx1ptgEDPgy+nBnWYZF8C0xxHfTMOA8rxv1OJB23Og8zh6CYXr1Wg2D2fliSi8HVNqIi6Tf6FoYg8jvPDkk8ao2NkTZlq299WZhxl4BpoptTUKyZPwWpPM2nMhGYWZ5ABxvii3qjYvrd7R5j8MXRhcdakrqXUaeZ/em+5+gV0dGVA7n8L4UZpH3mB1w8P8FjnLvBm3yca9o/lRWr/XK+lRDHKwlXy64FwVNrTxPpP+bae7J0XkVsqQfgwiNeG+PPeOwrt6ndXPesi7qCY6kXMs4s/s+MXZ+r52OFU4j+Q8f3wRnQxAdiXLy
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95fd963b-f919-411c-a5ed-08db1e64eb94
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2023 17:05:00.2271
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l3IoHkgyLBTAOshy+V/R0yR9LXl5UmbUIgH/Z2QjdUNh4hEg/Gi0Ne2t0iWAXiMe+iS6JvuESBrnqaQ3w2Mrlg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6589
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_10,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 adultscore=0
+ spamscore=0 suspectscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303060151
+X-Proofpoint-ORIG-GUID: ixnNvs6fwVjzFPnoKh5CtbwSNTSgsb16
+X-Proofpoint-GUID: ixnNvs6fwVjzFPnoKh5CtbwSNTSgsb16
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 3/3/23 14:48, Luis Chamberlain wrote:
-> On Fri, Mar 03, 2023 at 01:35:10PM -0700, Shuah Khan wrote:
->> On 2/27/23 15:42, Luis Chamberlain wrote:
->>> On Mon, Feb 27, 2023 at 03:32:50PM -0700, Shuah Khan wrote:
->>>> On 2/6/23 16:43, Luis Chamberlain wrote:
->>>>> The default sefltests timeout is 45 seconds. If you run the kmod
->>>>> selftests on your own with say:
->>>>>
->>>>> ./tools/testings/selftests/kmod.sh
->>>>>
->>>>> Then the default timeout won't be in effect.
->>>>>
->>>>> I've never ran kmod selftests using the generic make wrapper
->>>>> (./tools/testing/selftests/run_kselftest.sh -s) util now
->>>>> that I have support for it on kdevops [0]. And with that the
->>>>> test is limitted to the default timeout which we quickly run
->>>>> into. Bump this up to what I see is required on 8GiB / 8 vcpu
->>>>> libvirt q35 guest as can be easily created now with kdevops.
->>>>>
->>>>> To run selftests with kdevops:
->>>>>
->>>>> make menuconfig # enable dedicated selftests and kmod test
->>>>> make
->>>>> make bringup
->>>>> make linux
->>>>> make selftests-kmod
->>>>>
->>>>> This ends up taking about 280 seconds now, give or take add
->>>>> 50 seconds more more and we end up with 350. Document the
->>>>> rationale.
->>>>>
->>>>> [0] https://github.com/linux-kdevops/kdevops
->>>>> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
->>>>> ---
->>>>>     tools/testing/selftests/kmod/settings | 4 ++++
->>>>>     1 file changed, 4 insertions(+)
->>>>>     create mode 100644 tools/testing/selftests/kmod/settings
->>>>>
->>>>> diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
->>>>> new file mode 100644
->>>>> index 000000000000..6fca0f1a4594
->>>>> --- /dev/null
->>>>> +++ b/tools/testing/selftests/kmod/settings
->>>>> @@ -0,0 +1,4 @@
->>>>> +# measured from a manual run:
->>>>> +# time ./tools/testing/selftests/kmod/kmod.sh
->>>>> +# Then add ~50 seconds more gracetime.
->>>>> +timeout=350
->>>>
->>>> Adding timeouts like this for individual tests increases the overall kselftest
->>>> run-time. I am not in favor of adding timeouts.
->>>>
->>>> We have to find a better way to do this.
->>>
->>> Well if folks don't have this the test will fail, and so a false
->>> positive. If the goal is to have a low time timeout for "do not run
->>> tests past this time and do not fail if we stopped the test" then
->>> that seems to be likely one way to go and each test may need to be
->>> modified to not fail fatally in case of a special signal.
->>>
->>
->> We are finding more and more that timeout values are requiring
->> tweaks. I am in favor of coming up a way to exit the test with
->> a timeout condition.
-> 
-> OK so do we use the existing timeout as a "optional, I don't want my
-> test to take longer than this" or "if this test takes longer than
-> this amount this is a fatal issue"?
+On 3 Mar 2023, Lee Jones spake thusly:
 
-It isn't a fatal issue. So I wouldn't call it one. I would add a
-message saying test timed out.
+> On Fri, 24 Feb 2023, Andy Shevchenko wrote:
+>
+>> On Fri, Feb 24, 2023 at 03:07:48PM +0000, Nick Alcock wrote:
+>> > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+>> > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+>> > are used to identify modules. As a consequence, uses of the macro
+>> > in non-modules will cause modprobe to misidentify their containing
+>> > object file as a module when it is not (false positives), and modprobe
+>> > might succeed rather than failing with a suitable error message.
+>> > 
+>> > So remove it in the files in this commit, none of which can be built as
+>> > modules.
+>> > 
+>> > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+>> > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+>> 
+>> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+>> > Cc: linux-modules@vger.kernel.org
+>> > Cc: linux-kernel@vger.kernel.org
+>> > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+>> > Cc: Andy Shevchenko <andy@kernel.org>
+>> > Cc: Lee Jones <lee@kernel.org>
+>> 
+>> Please, use --cc parameter instead of polluting commit message.
+>
+> I personally use this a lot.  It's better for scripting.
 
-One way to handle this is:
-- Add a test run-time option and have user tune it as needed.
+Yeah.
 
-Make the timeout an option so users can set it based on their
-environments.
-
-> 
-> I ask because right now we can't override it even with an environment
-> variable. If we had such support we can let test runners (like kdevops)
-> use selftests with its own set of qualified / verified timeouts for the
-> VMs it uses.
-> 
-> For instance, Iw ant to soon start asking 0day to enable my kdevops
-> 0-day tests for the subsystems I maintain, but I can't do that yet as
-> the timeout is not correct.
-
-This test isn't part of the default run, so day has to run this as a
-special case and it would make prefect sense to provide a tunable
-timeout option.
-
-thanks,
--- Shuah
-> 
->    Luis
-
+If this is generally annoying I guess I can rejig things to use --cc-cmd
+instead, somehow, but it was very convenient because it meant the
+machinery which split up the commits could also compute the Cc list at
+the same time without having to record it separately, but I assumed it
+was routinely done from the number of Cc: trailers already in the kernel
+tree...
