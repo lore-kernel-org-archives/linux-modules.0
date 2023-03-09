@@ -2,53 +2,57 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95B67C61DA4
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 16:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6134AC742A7
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 16:32:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCIQ0Q (ORCPT
+        id S230139AbjCIQcQ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Mar 2023 11:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        Thu, 9 Mar 2023 11:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjCIQ0B (ORCPT
+        with ESMTP id S230153AbjCIQbt (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:26:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FE2FCF38;
-        Thu,  9 Mar 2023 08:17:35 -0800 (PST)
+        Thu, 9 Mar 2023 11:31:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EF9E20FC;
+        Thu,  9 Mar 2023 08:23:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B96D061BE2;
-        Thu,  9 Mar 2023 16:15:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 947C6C433D2;
-        Thu,  9 Mar 2023 16:15:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9563661C31;
+        Thu,  9 Mar 2023 16:17:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B060C433EF;
+        Thu,  9 Mar 2023 16:17:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678378545;
-        bh=jEtyFn2FXZA3T9nw4E7CtwAet6YXrxhbrziBkJKEJ2U=;
+        s=korg; t=1678378664;
+        bh=q9RjBZs+ERaxIV0omkTJ1hSNgg0RjEI7/KoY1XKuSyU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=in3yu6IUuw8WLAUv4tdD3nlUL9qgJpyamatBw0+Pf24w1iCEYkAlLF9Ko6xv53aUw
-         COJQeaHYJ1SczIynlj4jcoO1BNWziEA2cPYJV6V9mJ6ZXDTVq87bLzNW15lB1CBAXb
-         CF5MvdxpwbSdshwq2wRy7tlve+XGpbhCH+vsstLU=
-Date:   Thu, 9 Mar 2023 17:15:42 +0100
+        b=jVhVYbvVqbdH2W69+wx8yTauEYWo0avO97NQe507F8tsK4F2Hte8WTtGIKAVkVf23
+         dis1Kce8ox34FbnT/tTE/5/8ozmdX88XWnaNdteMxf4stuKuUWqaYHxQfm6E3eWspg
+         anntKbMr0SzOEEfAU8A2wj3O+z2O90FDKm1SELV8=
+Date:   Thu, 9 Mar 2023 17:17:41 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Nick Alcock <nick.alcock@oracle.com>
 Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
-Message-ID: <ZAoGLhRpTr5f7AD/@kroah.com>
-References: <20230302211759.30135-1-nick.alcock@oracle.com>
- <20230302211759.30135-11-nick.alcock@oracle.com>
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-unisoc@lists.infradead.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH 21/24] kbuild, serial: remove MODULE_LICENSE in
+ non-modules
+Message-ID: <ZAoGpW+TnpRPMRdR@kroah.com>
+References: <20230217141059.392471-1-nick.alcock@oracle.com>
+ <20230217141059.392471-22-nick.alcock@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230302211759.30135-11-nick.alcock@oracle.com>
+In-Reply-To: <20230217141059.392471-22-nick.alcock@oracle.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Mar 02, 2023 at 09:17:52PM +0000, Nick Alcock wrote:
+On Fri, Feb 17, 2023 at 02:10:56PM +0000, Nick Alcock wrote:
 > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
 > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
 > are used to identify modules. As a consequence, uses of the macro
@@ -65,30 +69,28 @@ On Thu, Mar 02, 2023 at 09:17:52PM +0000, Nick Alcock wrote:
 > Cc: linux-modules@vger.kernel.org
 > Cc: linux-kernel@vger.kernel.org
 > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Manivannan Sadhasivam <mani@kernel.org>
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Cc: Jiri Slaby <jirislaby@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-unisoc@lists.infradead.org
+> Cc: linux-serial@vger.kernel.org
 > ---
->  drivers/tty/n_null.c | 1 -
+>  drivers/tty/serial/rda-uart.c | 1 -
 >  1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
-> index f913b665af725..c24f75942c49d 100644
-> --- a/drivers/tty/n_null.c
-> +++ b/drivers/tty/n_null.c
-> @@ -63,7 +63,6 @@ static void __exit n_null_exit(void)
->  module_init(n_null_init);
->  module_exit(n_null_exit);
+> diff --git a/drivers/tty/serial/rda-uart.c b/drivers/tty/serial/rda-uart.c
+> index be5c842b5ba9..c3b29d124759 100644
+> --- a/drivers/tty/serial/rda-uart.c
+> +++ b/drivers/tty/serial/rda-uart.c
+> @@ -825,4 +825,3 @@ module_exit(rda_uart_exit);
 >  
+>  MODULE_AUTHOR("Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>");
+>  MODULE_DESCRIPTION("RDA8810PL serial device driver");
 > -MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Alan Cox");
->  MODULE_ALIAS_LDISC(N_NULL);
->  MODULE_DESCRIPTION("Null ldisc driver");
-> -- 
-> 2.39.1.268.g9de2f9a303
-> 
 
-Nope, sorry, this is not good to do, please fix kbuild instead of
-forcing a tree-wide change like this.
+No, this should be fine, either force remove all MODULE_* macros from
+built-in code, or none.
 
 thanks,
 
