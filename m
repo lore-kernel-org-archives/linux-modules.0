@@ -2,68 +2,78 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75CF6C6FD19
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 16:39:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E2AEC6FD19
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 18:29:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjCIQjC (ORCPT
+        id S230394AbjCIS3Y (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Mar 2023 11:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        Thu, 9 Mar 2023 13:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjCIQi2 (ORCPT
+        with ESMTP id S229873AbjCIS3X (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Mar 2023 11:38:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B623D23D95;
-        Thu,  9 Mar 2023 08:28:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F07B2B81FB1;
-        Thu,  9 Mar 2023 16:15:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0031AC433EF;
-        Thu,  9 Mar 2023 16:15:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678378501;
-        bh=HcwHDBfFsKMC1NScBUvgLRXeM273n/hMohRdHJg+Xh4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fBn4ORoJgJ9/ZDEE2QDPdiUpLhPiB3wJmlLoxIWFeUqajPrUSr+S11Zigs2yTXH96
-         kkTgc+dwJ7CKAesmoXOXwMrbASlFFyuTfSDrlvwyXnsqF/QuP52I3WFxRH+4uBmUWi
-         HrYhjtJs4yCrPkjhHWFvi6esIdYgZGPSUpxPcNjQ=
-Date:   Thu, 9 Mar 2023 17:14:58 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/20] MODULE_LICENSE removals, fifth tranche
-Message-ID: <ZAoGAj3sRXKYzwc2@kroah.com>
-References: <20230228130215.289081-1-nick.alcock@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228130215.289081-1-nick.alcock@oracle.com>
+        Thu, 9 Mar 2023 13:29:23 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB573E9CED;
+        Thu,  9 Mar 2023 10:29:19 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id u9so10783757edd.2;
+        Thu, 09 Mar 2023 10:29:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678386558;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GgC3HDaEpmFyb9DAxDUkQOQXcep6v1nc1CwMKps2T+o=;
+        b=bGY7djHpyJ7ZwaqMVFVM2S1b/x07wAdwn7rja1U0PCijLYqoed6L+GUz9eZ13SSViF
+         li3g4wvKzrbA82E9mHy2p+v4FOPRJVClxMNzOtSz1KlfgM7TeSgRf9UWONZQzsVpphWe
+         ILKXQ0CAB0SmchYGh1rGf/2Sl1AnMQ6UjiVIIhF88nDnMuYdahGBFchQJPANuGLV7T4l
+         BHQoRnBb0yF1TYV766Dd3dTmwvj5J4A9GUe42nHNoCnA17IuBYHB/Xy4PNvFlDzlmBVP
+         mC/yYYpobCHyQaNmQm3QdX5OOrbyawPOF28oj8b5dB9fobR++yA2S5qAMCDL7Gz1jBP6
+         lxFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678386558;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GgC3HDaEpmFyb9DAxDUkQOQXcep6v1nc1CwMKps2T+o=;
+        b=lPlrgJHWD9bNKfOiMCOZt991qRlZWeRwkrav7pxeGLn6ZrGHjtdpOcYLDJv4z8f9uR
+         FHHiJGHZWoZOyOq9svA83Oc7mFuVC0Sf/SR0ql2crmrzcs86GyeSNjjYymGy760mW79S
+         OaOEwWxGRGS57faHe1LpxcagS7uci3M8RLp3NKMj5/JXE3qqlD9/CKsMI1xC2Hlmms2l
+         7emLkSA9YW06/XZQ8XxGCJS9hLYr/jqkTkC0nywfP+nRTtn/lF8I5degBF9S9zcJCnOB
+         nYbjN+G7aOjbTsdJhio3IUPJcjGeVS+ycqauQqamV0vTpXmR6zbscv351KUHMevDo1VY
+         vOWA==
+X-Gm-Message-State: AO0yUKUPOm8eFLXmLTSnp0Ol2ocYsHAKyYgVoJdYIFtqmMRCGwdk5Rho
+        CSajU+NEdhfACu2bJrAwiBg=
+X-Google-Smtp-Source: AK7set8ACfzLsWFpKM3jLkWMhsKGJ2+zm21sGRpeKiJGGPgCQXzThQL5D30LYKf74epYpgKXO4eGlg==
+X-Received: by 2002:a17:907:c689:b0:914:4164:658a with SMTP id ue9-20020a170907c68900b009144164658amr11842570ejc.42.1678386558363;
+        Thu, 09 Mar 2023 10:29:18 -0800 (PST)
+Received: from localhost ([2001:b07:5d37:537d:5e25:9ef5:7977:d60c])
+        by smtp.gmail.com with ESMTPSA id h23-20020a170906719700b008c673cd9ba2sm9071713ejk.126.2023.03.09.10.29.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Mar 2023 10:29:17 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 09 Mar 2023 19:29:17 +0100
+Message-Id: <CR22DNZPIO70.3917L1ALY2HDV@vincent-arch>
+To:     "Nick Alcock" <nick.alcock@oracle.com>, <lee@kernel.org>
+Cc:     <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 10/18] mfd: da9055: do not cite as modular
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+References: <20230308194307.374789-1-nick.alcock@oracle.com>
+ <20230308194307.374789-10-nick.alcock@oracle.com>
+In-Reply-To: <20230308194307.374789-10-nick.alcock@oracle.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Feb 28, 2023 at 01:01:55PM +0000, Nick Alcock wrote:
-> This series, based on current modules-next, is part of a treewide cleanup
-> suggested by Luis Chamberlain, to remove the LICENSE_MODULE usage from
-> files/objects that are not tristate.  Due to recent changes to kbuild, these
-> uses are now problematic.  See the commit logs for more details.
+> This driver cannot be built as a module, so don't suggest otherwise
+> in Kconfig help.
+>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Lee Jones <lee@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Lee Jones <lee@kernel.org>
+> ---
 
-Why isn't kbuild fixed instead?  These files can have MODULE_AUTHOR()
-and other macros when built into the kernel, what is so special about
-MODULE_LICENSE() that prevents this from working properly?
-
-There should not be a need to remove these markings in my opinion, why
-treat one MODULE_* macro more special than others?
-
-thanks,
-
-greg k-h
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
