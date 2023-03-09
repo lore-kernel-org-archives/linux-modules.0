@@ -2,78 +2,77 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 164E3C61DA4
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 06:19:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84CE7C61DA4
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 14:24:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjCIGTp (ORCPT
+        id S231847AbjCIOYG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Mar 2023 01:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
+        Thu, 9 Mar 2023 09:24:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCIGTn (ORCPT
+        with ESMTP id S231793AbjCIOXU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Mar 2023 01:19:43 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD73562FD7
-        for <linux-modules@vger.kernel.org>; Wed,  8 Mar 2023 22:19:40 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id cw28so2823848edb.5
-        for <linux-modules@vger.kernel.org>; Wed, 08 Mar 2023 22:19:40 -0800 (PST)
+        Thu, 9 Mar 2023 09:23:20 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FE982A8B
+        for <linux-modules@vger.kernel.org>; Thu,  9 Mar 2023 06:23:17 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id s11so7629877edy.8
+        for <linux-modules@vger.kernel.org>; Thu, 09 Mar 2023 06:23:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678342779;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sTSUJLkYwADUhDqJdsPSx+O0Bg0vs7LmomPrh+7nD5M=;
-        b=zUNWW2NpATq4qfxVXdMtQ4RhOhtbz2rtTWM3WDoeIFhGvSz62hQRPHUnnJ7Wgrnj99
-         qjNQOUEIl1w2hXHsW6OPjvMraUrfSJA5Edyi3BkPUmLdSiNE1HR9CgKRLPCHS3VJ56ur
-         SFrW+XGBYJoP9rtmDjNP3VLPpKuEpwVhiEihXKSwz75GivwZns5wFsUqsc/ui9VYsrzx
-         G7L8Vg2SHpzCyYiscOC43r4BdcZKhf1w7e6nfdDrXUBijv4aql6ZHCkKZLd8CJLWf1E1
-         +68ybzcx2TAXMd4FSZf+pDcbL6EUnQ1ydrQ2Ou6pncjVKDdVaqO1TRvTnkSiCIQJ9Wcu
-         cGww==
+        d=linaro.org; s=google; t=1678371796;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jh5aPM7+Dw6V3HOON0YvwJwGKWnyCSyvceZb9F+qd44=;
+        b=td3t1M6V5gDMd/hAACSOmU5P79sX4O5qe6W9Nd/LYQJRki6vOwrmKj5BFpQyYS3RAE
+         BTH3sb+HRbW2fkukzHdHMwN8Mr1sU8HC9R9fhF9M81B34jN/OGvmUqBwyhowPYBSlRiK
+         tZNh9BH96EzVjiTmoX3Osw6ASak54rgg8fZmviNMyH6Q5jdESAT0LV7ZCgOXsnwAPvjF
+         4FWS5CL1MxZAOLzk0J74jtHlTTm+CRqjFBEVTQdrkIBXGTOrht83H9TiMBfwYRyNviRL
+         qUnqXzIHaCzngA/ycg6Lhf7Fd6mG4J2Pk7dC7J1k6Vy5jQhYumWXa4c5SdMYLN0rjreg
+         21Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678342779;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sTSUJLkYwADUhDqJdsPSx+O0Bg0vs7LmomPrh+7nD5M=;
-        b=R2qjjJe8ZQ3CoaY+c2ekozvTMiV7Y6AoldLWkppvg/eAD6Ek/SRLDrwysVlWCDk78g
-         wDouvRxul8/8ZOskfw0dKB8GNdNEMhYunAmyLFMXYmjwCKI8gL5WjayMVVggiF10PGth
-         6a3n8B8e2fM4dOzF01KvqXHOTHs2gGDM1Z6rZ6mSr1OQ5/FOpHiZXe6dda1RVr/8Q2g8
-         XLGwxaWu6wTwPPRtcgBFTxaNsePRTyJNVFOfxwVS5a3Z5xyKnvqfAD1xrufKYhcItBq5
-         KrsD7nUli1nto+q8vBHouPC8flntFrmUP96WWCQjcst7OFuHJ8a+SlpgwCgCFvZCl/2+
-         UIIw==
-X-Gm-Message-State: AO0yUKW1kJAhTKiyZXX0Z2HT+XMRwOngM7Qva7l1ApHqCwTTlE20bhEv
-        IcUDWz3EVJjcTEXn3hWgtezceg==
-X-Google-Smtp-Source: AK7set//dU0C0Fr1BBWmciFTYcPyUq6KoCEt2AQ2CfkYl1mZSM1YZTKYvB+dYe4GO320HryqYflVQA==
-X-Received: by 2002:a05:6402:1208:b0:4ac:c81d:149e with SMTP id c8-20020a056402120800b004acc81d149emr17928538edw.40.1678342778974;
-        Wed, 08 Mar 2023 22:19:38 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
-        by smtp.gmail.com with ESMTPSA id w21-20020a50d795000000b004d8287c775fsm7097764edi.8.2023.03.08.22.19.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 22:19:38 -0800 (PST)
-Message-ID: <b4e07fa9-16c3-917f-5820-8a0f2f215ea3@linaro.org>
-Date:   Thu, 9 Mar 2023 07:19:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] memory: tegra: remove MODULE_LICENSE in non-modules
-Content-Language: en-US
-To:     Nick Alcock <nick.alcock@oracle.com>, lee@kernel.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org
-References: <20230308202117.426808-1-nick.alcock@oracle.com>
+        d=1e100.net; s=20210112; t=1678371796;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jh5aPM7+Dw6V3HOON0YvwJwGKWnyCSyvceZb9F+qd44=;
+        b=yt2Ch8ak5ajDZvk9ahEB5Qiqm+n0n9OYfbFEW0iGtjAUH1mKRVtyb4fxzknTo+m5Qm
+         olLGoslyxRtQJfGa8v86NNHIqDzxwX9QiXkoanhS/8KLxXUc386akTU3FqQQUHccgFW1
+         RGt/otvGTi9J9jh9EIiuf5Gz8j0/lvldT45MkBRd6YIuZLB8ZX9EZgYfMzAEP6pJXHQS
+         I78kbj627pzM4GU2e2GSFDvND6eYtQX/NMV+XdDNlbcSrI8WH2Yyph1VZzPOXNXhLFlH
+         VeDa92eRXaFGuNIZ5MQo+4mGX52C4Smmj6D6RvsxH/yYUq2qdex4SaVsFr/FrJl84Cqn
+         8Ddw==
+X-Gm-Message-State: AO0yUKWpU9ThrFTFoMCDGfYJZHDBmCrnmOmGXgG28EFF00h5f3PDTQJf
+        cvwO2xs4pMzKsOGUBKxK9R+TjA==
+X-Google-Smtp-Source: AK7set+icoju+UnfarONFjF/sNDObZvo0VNeXFlRTb4Bgubd0olVyinNrL/jEWKS4FhRJixO5j80nA==
+X-Received: by 2002:a17:907:9948:b0:8aa:a9fe:a3fc with SMTP id kl8-20020a170907994800b008aaa9fea3fcmr24302953ejc.8.1678371796294;
+        Thu, 09 Mar 2023 06:23:16 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
+        by smtp.gmail.com with ESMTPSA id u15-20020a1709064acf00b0090766deae98sm8795269ejt.166.2023.03.09.06.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 06:23:15 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     lee@kernel.org, Nick Alcock <nick.alcock@oracle.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        linux-tegra@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-modules@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH 1/2] memory: tegra: remove MODULE_LICENSE in non-modules
+Date:   Thu,  9 Mar 2023 15:23:08 +0100
+Message-Id: <167837171022.467499.6836316604855383208.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230308202117.426808-1-nick.alcock@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230308202117.426808-1-nick.alcock@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 08/03/2023 21:21, Nick Alcock wrote:
+On Wed, 8 Mar 2023 20:21:16 +0000, Nick Alcock wrote:
 > Since commit 8b41fc4454e3 ("kbuild: create modules.builtin without
 > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
 > are used to identify modules. As a consequence, uses of the macro
@@ -81,29 +80,15 @@ On 08/03/2023 21:21, Nick Alcock wrote:
 > object file as a module when it is not (false positives), and modprobe
 > might succeed rather than failing with a suitable error message.
 > 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
-> 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: linux-tegra@vger.kernel.org
-> ---
->  drivers/memory/tegra/mc.c           | 1 -
->  drivers/memory/tegra/tegra186-emc.c | 1 -
->  2 files changed, 2 deletions(-)
-> 
-> checkpatch-clean and fused together now.
+> [...]
 
-This is v2, not v1. Version the patches, always.
+Applied, thanks!
 
+[1/2] memory: tegra: remove MODULE_LICENSE in non-modules
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/e63b0663f0028b265201798d74de163140ac124e
+[2/2] memory: remove MODULE_LICENSE in non-modules
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/d2456ddb2e7e1b89ed637e8190fcbbeadc7ea8a7
 
 Best regards,
-Krzysztof
-
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
