@@ -2,83 +2,146 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E24AC64EC4
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 20:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE98BC6FD1F
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 22:40:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjCIU7E (ORCPT
+        id S229716AbjCIWkE (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Mar 2023 15:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        Thu, 9 Mar 2023 17:40:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjCIU7D (ORCPT
+        with ESMTP id S231561AbjCIWjZ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Mar 2023 15:59:03 -0500
+        Thu, 9 Mar 2023 17:39:25 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4033FF2F9E;
-        Thu,  9 Mar 2023 12:59:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A25FAEFB;
+        Thu,  9 Mar 2023 14:38:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=owJaMoMtxEN64DUlKy7PO9Hs/EgMQqVwePryYhex8+M=; b=AlG12XrZF7/pfY0fL8Cj/K1xqm
-        Pcab2Qyy/DB+KXZB4DBls0BRUIYBNb3ShVEe+wnnIe+tepbPjwAn6vIpQximhi4f0uxRfQ1KrhwBx
-        OkK4h4NI4fUA5ynSJ1M6MRXbEPkgLQ5+8MuT9qbQAJuNBTCxMDXsehP4N+ulEr6bm3aEsDWh/C0FM
-        LUg7RssiWE+DBI6Y2rMmzGQYOPKL0FOyZVF5nMqMhEIllzuc/d0twBGYAHmZEKgBZo7uSIp47AVQ3
-        oMv0iHbkeKYct8PtUOBY487j/esWARGFvm8R3L3qpxxrt+FchEkfQ0Apvtdepo0P1S8B1O+bBHAuh
-        MN0xgj3Q==;
+        bh=1PvKmwZcyksJ2SYGDMFjiDpKB95k8a9eLSUB6squPR0=; b=e+XG5W33Iv56l/VtXIFplLKSnZ
+        d82PzigQYiiLbpPJwLWpUzu2PRbKFhAR5erVIz/43/1qpvjnMYdsXBlklyehdvzjGQDrOV0FM0JTQ
+        lkS5kw7lWQBnwy1DDpxFKB/qNQeR7J9sUmj51XIqfhU6zYvDod7vH+GBwyMpWakVZfq0MdYYFNYCY
+        Lz706Sgj+1myU4dubM/sXVt7gBF8IcEaEpQmZr2vKDy8jWU7zMUquef0Wa8zeCp7HDkmNm+Wkr6Fo
+        sbqubBSB0uy2vs3FHuLWCKqPHSBR/zx2ZK8E9nCMq+PZ6p6l3Tq8Mjo/mux+fu6BFuK+LoXSHw51Z
+        VlHbB+mQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1paNLn-00BuAy-Gy; Thu, 09 Mar 2023 20:58:59 +0000
-Date:   Thu, 9 Mar 2023 12:58:59 -0800
+        id 1paOtm-00CBrd-QA; Thu, 09 Mar 2023 22:38:10 +0000
+Date:   Thu, 9 Mar 2023 14:38:10 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Cc:     Jason Baron <jbaron@akamai.com>, jim.cromie@gmail.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v3 2/2] dyndbg: use the module notifier callbacks
-Message-ID: <ZApIk1aY/OnDfpOM@bombadil.infradead.org>
-References: <cover.1677861177.git.jbaron@akamai.com>
- <5884c688d10c9703fb0457f8839d6becc8657f8f.1677861177.git.jbaron@akamai.com>
- <CQZHTJDTRJXM.3OF3W3WAZBLAK@vincent-arch>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Nick Alcock <nick.alcock@oracle.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
+Message-ID: <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
+References: <20230302211759.30135-1-nick.alcock@oracle.com>
+ <20230302211759.30135-11-nick.alcock@oracle.com>
+ <ZAoGLhRpTr5f7AD/@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CQZHTJDTRJXM.3OF3W3WAZBLAK@vincent-arch>
+In-Reply-To: <ZAoGLhRpTr5f7AD/@kroah.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Mar 06, 2023 at 06:57:17PM +0100, Vincenzo Palazzo wrote:
-> > Bring dynamic debug in line with other subsystems by using the module
-> > notifier callbacks. This results in a net decrease in core module
-> > code.
-> >
-> > Additionally, Jim Cromie has a new dynamic debug classmap feature,
-> > which requires that jump labels be initialized prior to dynamic debug.
-> > Specifically, the new feature toggles a jump label from the existing
-> > dynamic_debug_setup() function. However, this does not currently work
-> > properly, because jump labels are initialized via the
-> > 'module_notify_list' notifier chain, which is invoked after the
-> > current call to dynamic_debug_setup(). Thus, this patch ensures that
-> > jump labels are initialized prior to dynamic debug by setting the
-> > dynamic debug notifier priority to 0, while jump labels have the
-> > higher priority of 1.
-> >
-> > Tested by Jim using his new test case, and I've verfied the correct
-> > printing via: # modprobe test_dynamic_debug dyndbg.
-> >
-> > Link: https://lore.kernel.org/lkml/20230113193016.749791-21-jim.cromie@gmail.com/
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Link: https://lore.kernel.org/oe-kbuild-all/202302190427.9iIK2NfJ-lkp@intel.com/
-> > Tested-by: Jim Cromie <jim.cromie@gmail.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > CC: Jim Cromie <jim.cromie@gmail.com>
+On Thu, Mar 09, 2023 at 05:15:42PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Mar 02, 2023 at 09:17:52PM +0000, Nick Alcock wrote:
+> > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> > are used to identify modules. As a consequence, uses of the macro
+> > in non-modules will cause modprobe to misidentify their containing
+> > object file as a module when it is not (false positives), and modprobe
+> > might succeed rather than failing with a suitable error message.
+> > 
+> > So remove it in the files in this commit, none of which can be built as
+> > modules.
+> > 
+> > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
 > > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: linux-modules@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
 > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Signed-off-by: Jason Baron <jbaron@akamai.com>
+> > Cc: Jiri Slaby <jirislaby@kernel.org>
+> > ---
+> >  drivers/tty/n_null.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
+> > index f913b665af725..c24f75942c49d 100644
+> > --- a/drivers/tty/n_null.c
+> > +++ b/drivers/tty/n_null.c
+> > @@ -63,7 +63,6 @@ static void __exit n_null_exit(void)
+> >  module_init(n_null_init);
+> >  module_exit(n_null_exit);
+> >  
+> > -MODULE_LICENSE("GPL");
+> >  MODULE_AUTHOR("Alan Cox");
+> >  MODULE_ALIAS_LDISC(N_NULL);
+> >  MODULE_DESCRIPTION("Null ldisc driver");
+> > -- 
+> > 2.39.1.268.g9de2f9a303
+> > 
 > 
-> Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+> Nope, sorry, this is not good to do, please fix kbuild instead of
+> forcing a tree-wide change like this.
 
-Tag applied too thanks.
+Masahiro Yamada already NACK'd it such effort:
+
+https://lkml.kernel.org/r/CAK7LNAQLttPD=Ae==e0CYeQtS78=o_JZFK+zxa29JnUYio52Ug@mail.gmail.com
+
+And his descriptiuon of the reasoning and logic is explained here:              
+
+https://lore.kernel.org/all/CAK7LNASL7_RgfASstBvN6AzhR=nMU=HsQvODf5q13Xud8tBWRQ@mail.gmail.com/
+
+Let me summarize it though with a few quotes from him:
+
+"Having false-positives in modules.builtin should be OK"
+"In this sense, having always-builtin entries in module.builtin is OK."
+
+The reason Nick wants to do this work is that his future patches
+(which have been under review for years and I'm starting to chew on
+it and provide guidance on now) extend our ability to have more
+elaborate symbol to address mapping with more metdata, which does
+include information such as if something came from a module. So
+long term *I* certainly am interested in a deterministic way to
+determine if something could be a module.
+
+For a more elaborate attempt on my part to try to describe the problem
+and some side ideas I had if we wanted an alternative:
+
+https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
+
+I should also mention Christoph has also suggested we eventually move
+towards automatically generating the module license tag from the SPDX
+tag:
+
+https://lore.kernel.org/all/Y5BNCbFyvNA1Xp%2FX@infradead.org
+
+I agree with Christoph and I think we should get there. For now we want
+1-1 mapping of real modules to the tag for both reasons of us not going
+to revert 8b41fc4454e and of later us wanting to do the full swoop
+automation of the module license tag.
+
+Although having modprobe not fail even if your module listed cannot be
+a module is non-fatal, the long term goal of cleaning this up is
+desirable anyway.
+
+If you have constructive ways to provide an alternative for this in kbuild,
+and help with the long term goals Nick has, patches or suggestions to
+are greatly welcomed.
+
+The simplest alternative I've come up with is the -DMODULE_POSSIBLE I
+mentioned in the thread above. But as I mentioned in that same thread
+the difficulty is in gathering the possible-obj-m without incurring a
+slow down on the build.
 
   Luis
