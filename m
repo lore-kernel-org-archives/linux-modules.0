@@ -2,86 +2,78 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C378C6FD19
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 18:30:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0027BC61DA4
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 18:31:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjCISag (ORCPT
+        id S230408AbjCISba (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Mar 2023 13:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        Thu, 9 Mar 2023 13:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjCISaf (ORCPT
+        with ESMTP id S229933AbjCISb3 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Mar 2023 13:30:35 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10F6EABBF;
-        Thu,  9 Mar 2023 10:30:33 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id j11so10756164edq.4;
-        Thu, 09 Mar 2023 10:30:33 -0800 (PST)
+        Thu, 9 Mar 2023 13:31:29 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7CEFCBCA;
+        Thu,  9 Mar 2023 10:31:24 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id da10so10805719edb.3;
+        Thu, 09 Mar 2023 10:31:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678386632;
-        h=in-reply-to:references:subject:to:from:message-id:date
+        d=gmail.com; s=20210112; t=1678386683;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V4urQlGXr8lLq17WGtaGhswXCBsX5EW+r3M6mgsqTyI=;
-        b=ovjWDmv4Ap8nOOitMzjcklX07UedzlN+7WXWqXR9oikjmjmvid0fHdowugb7+bueHH
-         mD54YPL3axZRFnLh4lUi/5vc+XMAHWq3gHsfllVWH87PYOmEwG+4/BWeQ+4fGjqSwkCP
-         qYVxazf5vuXsG21NTuC9WJFOt2BgsfK9MqIwDlWdkagLBYPgvKCIMuFASgYiPnFiJ6vS
-         AIj46g46tiYOk14KkbQ3vV8LUhKPZPVy8m7SbCxJF3SwSqkGTf/f+kKpdhHYs5ZKT6Of
-         d17sM08iHg3loOe26HSjGlSOZadrO13Y8NT5VQ2brpBm6YfbeQv+jv5zYPkz0QG5TH1I
-         borg==
+        bh=DL3vJQLMwvrFPZuvcGQteeoAwE6uQDEGn/ryjX0udFs=;
+        b=c/ayMgaTqA7KmwLm3w+8MifM19qRJgJZjzhw01kpuloVxckvEvz/VFpmdgz9xoBQaN
+         nX0AhgC1diWxOizDCuiDcw8L+1N/gtuqtAmLOpZt67sG3F4g//upnLtp6l0FPILGZs+G
+         0abwxTXP4MUYCb5aM+J2VMVb/BHkvOuqY9I19j+nzHxZj3hkw6D5H/Y02ZE/31Jn0QwW
+         Hbzh/ClZCjW3nngo6FcplR1fOs13qwITiXAw/Jd0R/Eg7ijrWUup98tn7uKPj49Z9Y6j
+         0mseloTiy3FHtlw5CcPbViS3yf18jaylCQYm+hRtA5V9T1uEiSz7cQ3+b43heStLS0nt
+         jA9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678386632;
-        h=in-reply-to:references:subject:to:from:message-id:date
+        d=1e100.net; s=20210112; t=1678386683;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=V4urQlGXr8lLq17WGtaGhswXCBsX5EW+r3M6mgsqTyI=;
-        b=gD1vsMoG7lMVNW3clcuOsALFgG6qM0Cc+p+4TXN0EkNz3BNehp5cSBIqQdmXWKNfqP
-         0tX6Nn+fWu3dCMCyE8ylofTvdM/v7BX0O35FOevoFWr9GESvA7t3eQ+pYPI8cP3EByuH
-         SgA4ZCMwFFqfukhg/p/AXYWMpkLOoLbtO47COvHK8IVib4E7cAL8lZL9hu0IMcWv+j1+
-         rkUOt/yv9smk7tUYTsYFoMu5ehY3sSoeYDeuz5rhUWca/kNcufR6YBFr12/s+sdfHbWu
-         ZkLNcw29L/oIbglCE+CwTw6GvKgrTXpi88cQ/bVlEEVgZF4lx1eTcRiUuPiSKBWsvzdP
-         JJgA==
-X-Gm-Message-State: AO0yUKWJtbVKKU/D2h0dRQ87hskOPBvTB2blCL6JHZVQMZfIXv+aZZlp
-        Nw9OhLb/ERKuXl4IvyEBjDE=
-X-Google-Smtp-Source: AK7set/CL7WxyYZfbx/czNNe8zzv7/nvtiCTsyGmkEqu68TNOIIpf/5nzg8TcPZ5HtIF31S3BeDoVg==
-X-Received: by 2002:a17:906:5ca:b0:8f6:ad32:cd51 with SMTP id t10-20020a17090605ca00b008f6ad32cd51mr26136198ejt.62.1678386632294;
-        Thu, 09 Mar 2023 10:30:32 -0800 (PST)
+        bh=DL3vJQLMwvrFPZuvcGQteeoAwE6uQDEGn/ryjX0udFs=;
+        b=bZj5ZVFnWZykc7bB23kiG94MAL6mlLsWV93uGdkUGlXsEEm83qSYtiEc3dQ1v89OhE
+         OS3vOHdbW5LBjZPqfq8+B/+ukDEmvi75ySxbwgR0mYlc6atU0nwgkSsxSub8DLl5bGkm
+         nt7saTz5J7yhXZjtXJ1+Mo1S8OJGvTj9NWuLrcb/15G4DE9+o/T+6f/ujQsdEmXkJYFL
+         mrNj0PdhlAfnLZFqolcy115SoWDgRrbZZGkT4qeUwlh9dMzaImCxjwM0XMhSEnrmbQnl
+         nEuI8Odv5c+oUbVRZCSnMPC68D9h4nMo5i6iVQr3DL4YUgoRkGt+Ru10L4eKXzYSPssp
+         bu9g==
+X-Gm-Message-State: AO0yUKVWV8j2+6qRP0mPhmFHpgSh9h2DhNR+tHEmqLzEwbmSMJW3QqEZ
+        mjwYlOCar+ON0w1/9Pz8P/I=
+X-Google-Smtp-Source: AK7set93LX8u8C2K/QXC31rjkLzGQHb9164p5fyPr/+MiCfzM84OLN7njAKXluPAiku1Kf/IFgh8AA==
+X-Received: by 2002:aa7:d74b:0:b0:4bb:e249:f1d1 with SMTP id a11-20020aa7d74b000000b004bbe249f1d1mr18950788eds.33.1678386683242;
+        Thu, 09 Mar 2023 10:31:23 -0800 (PST)
 Received: from localhost ([2001:b07:5d37:537d:5e25:9ef5:7977:d60c])
-        by smtp.gmail.com with ESMTPSA id f3-20020a170906738300b008cf377e8795sm9167547ejl.199.2023.03.09.10.30.30
+        by smtp.gmail.com with ESMTPSA id gv26-20020a1709072bda00b008e93991c034sm9134088ejc.46.2023.03.09.10.31.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 10:30:31 -0800 (PST)
+        Thu, 09 Mar 2023 10:31:22 -0800 (PST)
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 09 Mar 2023 19:30:30 +0100
-Message-Id: <CR22ELPAP7ZX.TVASVAQNUS6S@vincent-arch>
-From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
-To:     "Zhen Lei" <thunder.leizhen@huawei.com>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Josh Poimboeuf" <jpoimboe@kernel.org>,
-        "Jiri Kosina" <jikos@kernel.org>,
-        "Miroslav Benes" <mbenes@suse.cz>,
-        "Petr Mladek" <pmladek@suse.com>,
-        "Joe Lawrence" <joe.lawrence@redhat.com>,
-        "Jiri Olsa" <jolsa@kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+Date:   Thu, 09 Mar 2023 19:31:21 +0100
+Message-Id: <CR22F969CUPF.1MU6YEMD6OE7W@vincent-arch>
+Cc:     <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
         <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH] kallsyms: Delete an unused parameter related to
- {module_}kallsyms_on_each_symbol()
-References: <20230308073846.1882-1-thunder.leizhen@huawei.com>
-In-Reply-To: <20230308073846.1882-1-thunder.leizhen@huawei.com>
+Subject: Re: [PATCH v2 1/2] dyndbg: remove unused 'base' arg from
+ __ddebug_add_module()
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Jason Baron" <jbaron@akamai.com>, <jim.cromie@gmail.com>
+References: <cover.1677612539.git.jbaron@akamai.com>
+ <855201dc0204a1428a79d415c97df2b6e11c95c3.1677612539.git.jbaron@akamai.com>
+In-Reply-To: <855201dc0204a1428a79d415c97df2b6e11c95c3.1677612539.git.jbaron@akamai.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-> The parameter 'struct module *' in the hook function associated with
-> {module_}kallsyms_on_each_symbol() is no longer used. Delete it.
+> __ddebug_add_module() doesn't use the 'base' arg. Remove it.
 >
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> Cc: Jim Cromie <jim.cromie@gmail.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Tested-by: Jim Cromie <jim.cromie@gmail.com>
+> Signed-off-by: Jason Baron <jbaron@akamai.com>
+> ---
 
 Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
