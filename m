@@ -2,168 +2,121 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B663BC678D5
-	for <linux-modules@archiver.kernel.org>; Wed,  8 Mar 2023 20:30:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB4BC61DA4
+	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 06:19:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjCHUaF (ORCPT
+        id S229926AbjCIGTW (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 8 Mar 2023 15:30:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
+        Thu, 9 Mar 2023 01:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbjCHU34 (ORCPT
+        with ESMTP id S229580AbjCIGTU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:29:56 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3A1C7098;
-        Wed,  8 Mar 2023 12:29:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dvCkjjYwO17HVXXGgXGIfvRQwtfB+tdv9ar+/qRdD60=; b=mbYG4wipENwBxUMDMPCi6fD1OS
-        NXf7fDtDwsknzveTVzfIIOu68tlpxAoRUth8S8IUxso0P4BRdhbYsjzdfV2B27j2R1scEtv067fZM
-        l3yNdfSZ4YEDvoHjNqgR+k2Oe64i7DosZbzt6kgJm3ZvEz4G1IuWeDA+8XPr6OT3NXh7p5mabpozu
-        XE2UJqSvjN0/tkBjfmEa+GOZE1L0jiRwQr91cAIQECf74yxrA4Gk/pPUf+VqX+ooVYYqEAGCNmpyz
-        iZKpgc2Q4WMlMi4NjKn+VOQHdlVcFdIy3JWsjzBjBZej6D+8ECzwrjaSAcDXxXh9UAaODzEsfZoM9
-        BpNwGBNQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pa0Q4-006g1H-Tg; Wed, 08 Mar 2023 20:29:52 +0000
-Date:   Wed, 8 Mar 2023 12:29:52 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, keescook@chromium.org,
-        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
- 165
-Message-ID: <ZAjwQKwZgT+UcZHq@bombadil.infradead.org>
-References: <20230206234344.2433950-1-mcgrof@kernel.org>
- <20230206234344.2433950-2-mcgrof@kernel.org>
- <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
- <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
- <537d3d3d-9ecc-bdd9-f703-708f6826d1f2@linuxfoundation.org>
- <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
- <9a0e7062-2d16-3743-ffb6-a6b56bfbbd20@linuxfoundation.org>
+        Thu, 9 Mar 2023 01:19:20 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820276151F
+        for <linux-modules@vger.kernel.org>; Wed,  8 Mar 2023 22:19:19 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id cw28so2821598edb.5
+        for <linux-modules@vger.kernel.org>; Wed, 08 Mar 2023 22:19:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678342758;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CaH9HgCkr+9a67bT+ARgwdxkpOnUI9ns6L7TKcqObjA=;
+        b=ITYlrvXAQLkr9QYr1uTCWBKzOrLNsyrcRMdCfQF2bEVm4JURTwpxCHksdjne9ihFco
+         J5xoCX5SiafVXk7aSYW07LIEXekSkTvf2ApeU+LAEsBxjH013L3k+REjlBuG3qY18Hyg
+         lp3rsilFOxYh2QWQr1V1zCydwIbkoKLRbWLhe12ba/ajHG6O37Du8mUT7kVeUZYMv6Uj
+         z6i86Esqsj5exC/16OVSS27SGKn1LtIOin3fU20BtzHFtCcCTIibZaDY5eMF96fyZto/
+         joVxPKzYuabMFvKftG26KNL5e0f3j7ClC4ZXqorP0+beQxg7iHTHhlUZgwXvEM5eFfIl
+         3H+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678342758;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CaH9HgCkr+9a67bT+ARgwdxkpOnUI9ns6L7TKcqObjA=;
+        b=2zLKiB06DRBvanNRnW2MHLVAVV4z7d/rFZFulTIJjNdWFoZrQo2EUI1FgqWMJuV4GG
+         g9loFLMjqYgXkaMK1Loz9fJF3idzGuMHbxfExcfpIjsZhifFVM7hg0dvXAKrPExzinBF
+         7QCYHN8BOymCbXbYKoG3gsyZzTo9zgUqsmicnFgDLS635DEZgRbmtj6FJpctbKpihmxR
+         LOgvifPucmgHAfYSb5KXSwfrTeyXuy2ribBPuhLDF0X8eG6Holvj+FbLmKpnpHXdkxcN
+         5IkQQ2ZlYA24B101TLfNKkV00BNW7rFLuaF9nCp2kcyasTB3eqWf1M6DVOhReKxE2ncJ
+         gYnw==
+X-Gm-Message-State: AO0yUKXNUIJjfYDNZdVAagz+KqCikNYTh3suqNf82DAsjA4k9eWCCB7B
+        Mh7AK0WISe1XrSQ72wiebUJfmg==
+X-Google-Smtp-Source: AK7set++RSnbc8tC8rKkU11kVGIsuUGK4PI5hIF5Cgcmt0cLqiB0DIPHKMSe/Sjp2IIJN46+60HzYw==
+X-Received: by 2002:aa7:c544:0:b0:4ab:cb8c:932b with SMTP id s4-20020aa7c544000000b004abcb8c932bmr16778604edr.40.1678342757997;
+        Wed, 08 Mar 2023 22:19:17 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:7ee2:e73e:802e:45c1? ([2a02:810d:15c0:828:7ee2:e73e:802e:45c1])
+        by smtp.gmail.com with ESMTPSA id 13-20020a508e0d000000b004af59c07495sm9118572edw.45.2023.03.08.22.19.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 22:19:17 -0800 (PST)
+Message-ID: <49f21605-46f8-8a53-cde3-3d8270ea576a@linaro.org>
+Date:   Thu, 9 Mar 2023 07:19:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a0e7062-2d16-3743-ffb6-a6b56bfbbd20@linuxfoundation.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 15/27] memory: tegra: remove MODULE_LICENSE in non-modules
+Content-Language: en-US
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org
+References: <20230224150811.80316-1-nick.alcock@oracle.com>
+ <20230224150811.80316-16-nick.alcock@oracle.com>
+ <c6f39365-e840-d782-8ec0-e34ec3681b98@linaro.org>
+ <acc27e8f-73ce-39ee-3666-461f5c72d39d@linaro.org>
+ <87h6ux7qhp.fsf@esperi.org.uk>
+ <16bee433-0088-d651-9592-96a2bb827b7f@linaro.org>
+ <87zg8n3s9m.fsf@esperi.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <87zg8n3s9m.fsf@esperi.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Mar 06, 2023 at 09:06:41AM -0700, Shuah Khan wrote:
-> On 3/3/23 14:48, Luis Chamberlain wrote:
-> > On Fri, Mar 03, 2023 at 01:35:10PM -0700, Shuah Khan wrote:
-> > > On 2/27/23 15:42, Luis Chamberlain wrote:
-> > > > On Mon, Feb 27, 2023 at 03:32:50PM -0700, Shuah Khan wrote:
-> > > > > On 2/6/23 16:43, Luis Chamberlain wrote:
-> > > > > > The default sefltests timeout is 45 seconds. If you run the kmod
-> > > > > > selftests on your own with say:
-> > > > > > 
-> > > > > > ./tools/testings/selftests/kmod.sh
-> > > > > > 
-> > > > > > Then the default timeout won't be in effect.
-> > > > > > 
-> > > > > > I've never ran kmod selftests using the generic make wrapper
-> > > > > > (./tools/testing/selftests/run_kselftest.sh -s) util now
-> > > > > > that I have support for it on kdevops [0]. And with that the
-> > > > > > test is limitted to the default timeout which we quickly run
-> > > > > > into. Bump this up to what I see is required on 8GiB / 8 vcpu
-> > > > > > libvirt q35 guest as can be easily created now with kdevops.
-> > > > > > 
-> > > > > > To run selftests with kdevops:
-> > > > > > 
-> > > > > > make menuconfig # enable dedicated selftests and kmod test
-> > > > > > make
-> > > > > > make bringup
-> > > > > > make linux
-> > > > > > make selftests-kmod
-> > > > > > 
-> > > > > > This ends up taking about 280 seconds now, give or take add
-> > > > > > 50 seconds more more and we end up with 350. Document the
-> > > > > > rationale.
-> > > > > > 
-> > > > > > [0] https://github.com/linux-kdevops/kdevops
-> > > > > > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > > > > > ---
-> > > > > >     tools/testing/selftests/kmod/settings | 4 ++++
-> > > > > >     1 file changed, 4 insertions(+)
-> > > > > >     create mode 100644 tools/testing/selftests/kmod/settings
-> > > > > > 
-> > > > > > diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
-> > > > > > new file mode 100644
-> > > > > > index 000000000000..6fca0f1a4594
-> > > > > > --- /dev/null
-> > > > > > +++ b/tools/testing/selftests/kmod/settings
-> > > > > > @@ -0,0 +1,4 @@
-> > > > > > +# measured from a manual run:
-> > > > > > +# time ./tools/testing/selftests/kmod/kmod.sh
-> > > > > > +# Then add ~50 seconds more gracetime.
-> > > > > > +timeout=350
-> > > > > 
-> > > > > Adding timeouts like this for individual tests increases the overall kselftest
-> > > > > run-time. I am not in favor of adding timeouts.
-> > > > > 
-> > > > > We have to find a better way to do this.
-> > > > 
-> > > > Well if folks don't have this the test will fail, and so a false
-> > > > positive. If the goal is to have a low time timeout for "do not run
-> > > > tests past this time and do not fail if we stopped the test" then
-> > > > that seems to be likely one way to go and each test may need to be
-> > > > modified to not fail fatally in case of a special signal.
-> > > > 
-> > > 
-> > > We are finding more and more that timeout values are requiring
-> > > tweaks. I am in favor of coming up a way to exit the test with
-> > > a timeout condition.
-> > 
-> > OK so do we use the existing timeout as a "optional, I don't want my
-> > test to take longer than this" or "if this test takes longer than
-> > this amount this is a fatal issue"?
+On 08/03/2023 21:25, Nick Alcock wrote:
+> On 6 Mar 2023, Krzysztof Kozlowski stated:
 > 
-> It isn't a fatal issue. So I wouldn't call it one. I would add a
-> message saying test timed out.
+>> On 06/03/2023 18:13, Nick Alcock wrote:
+>>> On 6 Mar 2023, Krzysztof Kozlowski told this:
+>>>
+>>>> On 06/03/2023 15:30, Krzysztof Kozlowski wrote:
+>>>>> On 24/02/2023 16:07, Nick Alcock wrote:
+>>>>>> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+>>>>>> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+>>>>>> are used to identify modules. As a consequence, uses of the macro
+>>>>>> in non-modules will cause modprobe to misidentify their containing
+>>>>>> object file as a module when it is not (false positives), and modprobe
+>>>>>> might succeed rather than failing with a suitable error message.
+>>>>>>
+>>>>>> So remove it in the files in this commit, none of which can be built as
+>>>>>> modules.
+>>>>>
+>>>>> Applied as well. Squashed with next one. Same subject messes with b4, so
+>>>>> prefix should be corrected if these were to stay as separate patches.
+>>>>
+>>>> And all dropped. Run checkpatch before sending patches.
+>>>
+>>> So... which of the 27 patches n this series is being dropped? It would
+>>> also be nice to know what the checkpatch problems were, because all I
+>>> can see from checkpatch is one error per patch, an apparent false
+>>
+>> The ones I responded that I applied - so the memory controller ones.
 > 
-> One way to handle this is:
-> - Add a test run-time option and have user tune it as needed.
+> OK, resent those three (now two), checkpatch-clean and fused identical
+> subjects together. (Not adjusted non-memory-controller patch commit
+> logs, to avoid causing disruption with those that are already flowing
+> into the tree.)
 > 
-> Make the timeout an option so users can set it based on their
-> environments.
-> 
-> > 
-> > I ask because right now we can't override it even with an environment
-> > variable. If we had such support we can let test runners (like kdevops)
-> > use selftests with its own set of qualified / verified timeouts for the
-> > VMs it uses.
-> > 
-> > For instance, Iw ant to soon start asking 0day to enable my kdevops
-> > 0-day tests for the subsystems I maintain, but I can't do that yet as
-> > the timeout is not correct.
-> 
-> This test isn't part of the default run, so day has to run this as a
-> special case and it would make prefect sense to provide a tunable
-> timeout option.
+> Hope this is better :)
 
-That's the thing, I *want* it to be part of *my runs* for my git trees
-on git.kernel.org for modules-testing and modules-next. That allows me
-to have 0day run whatever things I need. Long term it will be through
-kdevops with just:
+If you send a new patch, mark it appropriately and include changelog.
 
-make linux
-make selftests-kmod
-make kmod
-make kmod-check
+Best regards,
+Krzysztof
 
-Vincenzo expressed interest to help, I think he may be interested in
-helping with this configurable timeout for selftests as some initial
-low hanging fruit.
-
-Then on the kdevops front we'd set what we know is right for a typical
-libvirt use case for our current default VM target.
-
-  Luis
