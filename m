@@ -2,140 +2,196 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0433C6FD19
-	for <linux-modules@archiver.kernel.org>; Fri, 10 Mar 2023 19:16:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4522C6FD19
+	for <linux-modules@archiver.kernel.org>; Fri, 10 Mar 2023 19:33:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjCJTQW (ORCPT
+        id S229469AbjCJTdr (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 10 Mar 2023 14:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        Fri, 10 Mar 2023 14:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjCJTQU (ORCPT
+        with ESMTP id S230060AbjCJTdq (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 10 Mar 2023 14:16:20 -0500
+        Fri, 10 Mar 2023 14:33:46 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391EC12DDF3;
-        Fri, 10 Mar 2023 11:16:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A45077E1A;
+        Fri, 10 Mar 2023 11:33:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LHHbjScou7+C6E6wHBUk/ygGHeDh8h+eFwprnuKb46I=; b=M4Lgts/FsW4hhTDyN3qMaj2lQR
-        DExVzAT+/3cC2Hgb4JruiB5WyNqFOwA8vXLHfYCLxpVt6UVKpqp6dc4IKTU/ARJ7w2XyyseKrzToz
-        nwR893BYe5G28IyCAf96eKdkdLYYuJr/BUuZaxsF19EvsbTssANba8dJ5SZxZ1NvdTCfGKL+D12cO
-        XwfjGcFZQ/nRgFEIOuoUCWF1zYVh0InTFIgxXrmaR0+upPn/HPWtm2Ht3Cl7teR6vGTpqQHzqrS7A
-        PeickofgSAydEooMpcx3Pb94M3zDDYmnAZXSkHnzeBbvSegQI7LdbfbVK/fXwfIb3XwEl22SCrs2N
-        St64Popw==;
+        bh=K9Cygl7DA9aU5qKOixWj1nX9PAr6z1jX+jUPuASkdwQ=; b=UMje3y6RljHfke/W4Z/YIe/+N3
+        8MGZQ1bjoZZRDzU8TrmwLHbr+WAuGH12ryyAb6Yr8R5ZMTgPO+OveoVOsWKuk9Sep7daxWSd/FNOS
+        qP/GwG/JRedHVF8grkIOK5RUxOJsFmRqnge1PBKrYyppbG+1ejcnBQMhhdPRhnkXMzTofiKkImB4g
+        6p1r/jwWlfQ1RwChzi81v1cEqmdZxW//rOGzopFjXfv0r/Tkaw6io4AqsuLOA0ScqjMACJcO0EPMZ
+        TfxvpUELIXyy0IoT4qz3nH9YxeP3uh8xSEpqL6imIqT+Apy65yPRE9MMTlTV4a5lzebVYYdOhxMbT
+        jigdMl3g==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1paiDt-00FtEc-6c; Fri, 10 Mar 2023 19:16:13 +0000
-Date:   Fri, 10 Mar 2023 11:16:13 -0800
+        id 1paiUl-00Fuzn-5g; Fri, 10 Mar 2023 19:33:39 +0000
+Date:   Fri, 10 Mar 2023 11:33:39 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Viktor Malik <vmalik@redhat.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        linux-modules@vger.kernel.org,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH bpf-next v10 1/2] bpf: Fix attaching
- fentry/fexit/fmod_ret/lsm to modules
-Message-ID: <ZAuB/cnEsPt0f0vb@bombadil.infradead.org>
-References: <cover.1678432753.git.vmalik@redhat.com>
- <3f6a9d8ae850532b5ef864ef16327b0f7a669063.1678432753.git.vmalik@redhat.com>
+        Christoph Hellwig <hch@infradead.org>,
+        Nick Alcock <nick.alcock@oracle.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
+Message-ID: <ZAuGE2ay3q0MT4Yi@bombadil.infradead.org>
+References: <20230302211759.30135-1-nick.alcock@oracle.com>
+ <20230302211759.30135-11-nick.alcock@oracle.com>
+ <ZAoGLhRpTr5f7AD/@kroah.com>
+ <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
+ <ZArc0ib697JIwKou@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3f6a9d8ae850532b5ef864ef16327b0f7a669063.1678432753.git.vmalik@redhat.com>
+In-Reply-To: <ZArc0ib697JIwKou@kroah.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Please add linux-modules in the future. My review below.
-
-On Fri, Mar 10, 2023 at 08:40:59AM +0100, Viktor Malik wrote:
-> This resolves two problems with attachment of fentry/fexit/fmod_ret/lsm
-> to functions located in modules:
+On Fri, Mar 10, 2023 at 08:31:30AM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Mar 09, 2023 at 02:38:10PM -0800, Luis Chamberlain wrote:
+> > On Thu, Mar 09, 2023 at 05:15:42PM +0100, Greg Kroah-Hartman wrote:
+> > > On Thu, Mar 02, 2023 at 09:17:52PM +0000, Nick Alcock wrote:
+> > > > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> > > > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> > > > are used to identify modules. As a consequence, uses of the macro
+> > > > in non-modules will cause modprobe to misidentify their containing
+> > > > object file as a module when it is not (false positives), and modprobe
+> > > > might succeed rather than failing with a suitable error message.
+> > > > 
+> > > > So remove it in the files in this commit, none of which can be built as
+> > > > modules.
+> > > > 
+> > > > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> > > > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> > > > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > > > Cc: linux-modules@vger.kernel.org
+> > > > Cc: linux-kernel@vger.kernel.org
+> > > > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > Cc: Jiri Slaby <jirislaby@kernel.org>
+> > > > ---
+> > > >  drivers/tty/n_null.c | 1 -
+> > > >  1 file changed, 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
+> > > > index f913b665af725..c24f75942c49d 100644
+> > > > --- a/drivers/tty/n_null.c
+> > > > +++ b/drivers/tty/n_null.c
+> > > > @@ -63,7 +63,6 @@ static void __exit n_null_exit(void)
+> > > >  module_init(n_null_init);
+> > > >  module_exit(n_null_exit);
+> > > >  
+> > > > -MODULE_LICENSE("GPL");
+> > > >  MODULE_AUTHOR("Alan Cox");
+> > > >  MODULE_ALIAS_LDISC(N_NULL);
+> > > >  MODULE_DESCRIPTION("Null ldisc driver");
+> > > > -- 
+> > > > 2.39.1.268.g9de2f9a303
+> > > > 
+> > > 
+> > > Nope, sorry, this is not good to do, please fix kbuild instead of
+> > > forcing a tree-wide change like this.
+> > 
+> > Masahiro Yamada already NACK'd it such effort:
+> > 
+> > https://lkml.kernel.org/r/CAK7LNAQLttPD=Ae==e0CYeQtS78=o_JZFK+zxa29JnUYio52Ug@mail.gmail.com
+> > 
+> > And his descriptiuon of the reasoning and logic is explained here:              
+> > 
+> > https://lore.kernel.org/all/CAK7LNASL7_RgfASstBvN6AzhR=nMU=HsQvODf5q13Xud8tBWRQ@mail.gmail.com/
+> > 
+> > Let me summarize it though with a few quotes from him:
+> > 
+> > "Having false-positives in modules.builtin should be OK"
+> > "In this sense, having always-builtin entries in module.builtin is OK."
 > 
-> 1. The verifier tries to find the address to attach to in kallsyms. This
->    is always done by searching the entire kallsyms, not respecting the
->    module in which the function is located. Such approach causes an
->    incorrect attachment address to be computed if the function to attach
->    to is shadowed by a function of the same name located earlier in
->    kallsyms.
-
-Just a heads up, I realize you have tried to fix the issue here using
-semantics to get the module in other ways, but Nick's future work
-expands kallsyms to allow symbols for modules to be looked for, even
-if there are duplicates in kallsysms. He is working on that to help
-with tooling for tracing, but here seems to be an example use case
-which may be in-kernel. But you seem to indicate you've found an alternative
-solution anyway.
-
-Jiri, does live patching hunt for symbols in such opaque way too?
-Or does it resolve it using something similar as the technique here
-with a module notifier / its own linked list?
-
-> 2. If the address to attach to is located in a module, the module
->    reference is only acquired in register_fentry. If the module is
->    unloaded between the place where the address is found
->    (bpf_check_attach_target in the verifier) and register_fentry, it is
->    possible that another module is loaded to the same address which may
->    lead to potential errors.
+> None of that matters, sorry.
 > 
-> Since the attachment must contain the BTF of the program to attach to,
-> we extract the module from it and search for the function address in the
-> correct module (resolving problem no. 1). Then, the module reference is
-> taken directly in bpf_check_attach_target and stored in the bpf program
-> (in bpf_prog_aux). The reference is only released when the program is
-> unloaded (resolving problem no. 2).
+> Again, all I am saying is that you can not have some MODULE_() macros
+> that are ok for code that is built in, and some that are not, for
+> "reasons" that have to do how you all are treating the build system
+> infrastructure as you are now putting arbritrary requirements for all
+> driver authors (of which there are thousands) to know this.
+
+As noted once again, it is not putting hard requirement. Future tooling
+not yet added would just not benefit from distinguishing symbols for
+your modules.
+
+I'm happy to live with module authors not wanting to remove the module
+license tag from their modules if they can never actually be modules
+from not benefitting from the above tooling gains as its just cherry
+on top tooling gains.
+
+Solving this in way that does not impeed on current build system
+improvements is a challenge and I'm happy to punt that out to future
+work.
+
+> Just change the macros to work properly in both cases, I can't believe
+> this is all that hard as obviously all of the other macros work both
+> ways, right?  That should not require any kbuild changes.
+
+Patches are welcomed.
+
+> > The reason Nick wants to do this work is that his future patches
+> > (which have been under review for years and I'm starting to chew on
+> > it and provide guidance on now) extend our ability to have more
+> > elaborate symbol to address mapping with more metdata, which does
+> > include information such as if something came from a module. So
+> > long term *I* certainly am interested in a deterministic way to
+> > determine if something could be a module.
+> > 
+> > For a more elaborate attempt on my part to try to describe the problem
+> > and some side ideas I had if we wanted an alternative:
+> > 
+> > https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
+> > 
+> > I should also mention Christoph has also suggested we eventually move
+> > towards automatically generating the module license tag from the SPDX
+> > tag:
+> > 
+> > https://lore.kernel.org/all/Y5BNCbFyvNA1Xp%2FX@infradead.org
 > 
-> Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
-> ---
+> That too would be wonderful, and I would love to see that, but it does
+> not remove the base problem here that you are somehow forcing all driver
+> authors to change their code for the build system changes which should
+> not be affecting them at all at this point in time.
 
-My review of the critical part below.
+By you, you mean Masahiro Yamada's patch. That is just collateral for
+tooling being built upon by Nick.  And as Masahiro has pointed out
+more than once already, this is not a regression / fatal issue.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 45a082284464..3905bb20b9a1 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -18432,8 +18434,17 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->  			else
->  				addr = (long) tgt_prog->aux->func[subprog]->bpf_func;
->  		} else {
-> -			addr = kallsyms_lookup_name(tname);
-> +			if (btf_is_module(btf)) {
-> +				mod = btf_try_get_module(btf);
-> +				if (mod)
-> +					addr = find_kallsyms_symbol_value(mod, tname);
-> +				else
-> +					addr = 0;
-> +			} else {
-> +				addr = kallsyms_lookup_name(tname);
-> +			}
->  			if (!addr) {
-> +				module_put(mod);
->  				bpf_log(log,
->  					"The address of function %s cannot be found\n",
->  					tname);
+> If you all do trigger off of the SPDX tags, then the removal of all
+> MODULE_LICENSE() instances would be great too, but I don't think you are
+> there yet (and it also wouldn't require removal all at once as you could
+> just stub out that macro to be nothing.)  But this is not the real issue
+> here...
 
-If btf_modules linked list is ensured to not remove the btf module
-during this operation, sure this is safe, as per the new guidelines I've
-posted for try_module_get() this seems to be using try_module_get()
-using the implied protection.
+That's future work.
 
-Please review the docs. *If* it respects that usage then feel free to
-add:
+> Maybe the solution is to stop triggering on MODULE_LICENSE() as
+> something magic for the build, as obviously that is the root problem
+> here.  Or something else, I don't know, but what you all are doing here
+> does not seem correct at all, sorry, and is only going to cause more
+> long-term problems with maintenance and headaches for driver authors.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+I already suggested what I think *could* be done as an alternative and
+the problem is not easy to resolve.
+
+Feel free to ignore the patches for your drivers which remove the module
+macros even if they are not modules. In lieu of alternative suggestions,
+that's what we have now, and it is much better than what Nick was suggesting
+before which Masahiro NACK'd.
+
+Most other module developers seem happy with the change, and this has also
+helped fix SPDX tags where there wasn't some too.
+
+So if you don't take the patches it is not the end of the world and Nick
+can move on with that effort for folks who do want to clarify this.
 
   Luis
