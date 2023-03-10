@@ -2,162 +2,155 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66D39C64EC4
-	for <linux-modules@archiver.kernel.org>; Fri, 10 Mar 2023 07:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B0A3C6FD19
+	for <linux-modules@archiver.kernel.org>; Fri, 10 Mar 2023 19:05:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjCJHcE (ORCPT
+        id S230039AbjCJTFC (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 10 Mar 2023 02:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        Fri, 10 Mar 2023 14:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjCJHbl (ORCPT
+        with ESMTP id S229937AbjCJTFC (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:31:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54549F2229;
-        Thu,  9 Mar 2023 23:31:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2E7860EC7;
-        Fri, 10 Mar 2023 07:31:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEA3C433D2;
-        Fri, 10 Mar 2023 07:31:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678433493;
-        bh=Zd/t5z51QCYiE1nCPk5YdpBtLOJWZ/cFSHGaMEyK61M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UhQ0oq4Tqo1bIqORlFuA6bq5TlxV+s84ekSjfkbPbbM6QhavxRfRBPbpyG0f0uWgx
-         WCmKY8NhZ6OWzL8Kzwqrc929Ep/aaU9OyrBL76V4H8VPlN8ef4wskPol1irOjOzyLl
-         2lbpdMZK1VHNBlQuugGPZSoS2jvoI4YkkhsGPxI0=
-Date:   Fri, 10 Mar 2023 08:31:30 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
-Message-ID: <ZArc0ib697JIwKou@kroah.com>
-References: <20230302211759.30135-1-nick.alcock@oracle.com>
- <20230302211759.30135-11-nick.alcock@oracle.com>
- <ZAoGLhRpTr5f7AD/@kroah.com>
- <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
+        Fri, 10 Mar 2023 14:05:02 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC9A12FD12;
+        Fri, 10 Mar 2023 11:05:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=++rrP4Cjvo+1VSixc4iffAuUXXF57XYeVVXnpi7PUsQ=; b=wcwiBo/YXzmFufYjQZ8tPGifRA
+        bqFH2boUZlsZ1VB6Pfgs6uIR4eLHhU4jNvgaGsbfmcq0otSj7NVqpHzHS3qaB0E8AGsK5A/G2k9+1
+        lbHgtA+tzkBl3fB7jTTfBbJUtMpCKZN1qWjQJeOyOtCnz9KZWdkLZj8lMcqdc/DMrWg2uRVlmdkmZ
+        LOprCwegknRPdeWMYQw3yGkqBzVg3E0e7jhCAtkZWNJuVMtX7kabqflB0l4nia6tuS2bIja+fbkkO
+        E/F/JHq/Zb3bgwrLr4lRKzXIHCHCAjRUaMKT2GSKLZ5dkcTnO22q7DPFA18AYJW/ZTHzNWZqZOvif
+        fcNgomdQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pai30-00FrCm-07; Fri, 10 Mar 2023 19:04:58 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tj@kernel.org, bpf@vger.kernel.org
+Cc:     christophe.leroy@csgroup.eu, jolsa@kernel.org, vmalik@redhat.com,
+        john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, nick.alcock@oracle.com, keescook@chromium.org,
+        gregkh@linuxfoundation.org, tglx@linutronix.de, mcgrof@kernel.org
+Subject: [PATCH] kernel/module: add documentation for try_module_get()
+Date:   Fri, 10 Mar 2023 11:04:57 -0800
+Message-Id: <20230310190457.3779415-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Mar 09, 2023 at 02:38:10PM -0800, Luis Chamberlain wrote:
-> On Thu, Mar 09, 2023 at 05:15:42PM +0100, Greg Kroah-Hartman wrote:
-> > On Thu, Mar 02, 2023 at 09:17:52PM +0000, Nick Alcock wrote:
-> > > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> > > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> > > are used to identify modules. As a consequence, uses of the macro
-> > > in non-modules will cause modprobe to misidentify their containing
-> > > object file as a module when it is not (false positives), and modprobe
-> > > might succeed rather than failing with a suitable error message.
-> > > 
-> > > So remove it in the files in this commit, none of which can be built as
-> > > modules.
-> > > 
-> > > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> > > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > > Cc: linux-modules@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Jiri Slaby <jirislaby@kernel.org>
-> > > ---
-> > >  drivers/tty/n_null.c | 1 -
-> > >  1 file changed, 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
-> > > index f913b665af725..c24f75942c49d 100644
-> > > --- a/drivers/tty/n_null.c
-> > > +++ b/drivers/tty/n_null.c
-> > > @@ -63,7 +63,6 @@ static void __exit n_null_exit(void)
-> > >  module_init(n_null_init);
-> > >  module_exit(n_null_exit);
-> > >  
-> > > -MODULE_LICENSE("GPL");
-> > >  MODULE_AUTHOR("Alan Cox");
-> > >  MODULE_ALIAS_LDISC(N_NULL);
-> > >  MODULE_DESCRIPTION("Null ldisc driver");
-> > > -- 
-> > > 2.39.1.268.g9de2f9a303
-> > > 
-> > 
-> > Nope, sorry, this is not good to do, please fix kbuild instead of
-> > forcing a tree-wide change like this.
-> 
-> Masahiro Yamada already NACK'd it such effort:
-> 
-> https://lkml.kernel.org/r/CAK7LNAQLttPD=Ae==e0CYeQtS78=o_JZFK+zxa29JnUYio52Ug@mail.gmail.com
-> 
-> And his descriptiuon of the reasoning and logic is explained here:              
-> 
-> https://lore.kernel.org/all/CAK7LNASL7_RgfASstBvN6AzhR=nMU=HsQvODf5q13Xud8tBWRQ@mail.gmail.com/
-> 
-> Let me summarize it though with a few quotes from him:
-> 
-> "Having false-positives in modules.builtin should be OK"
-> "In this sense, having always-builtin entries in module.builtin is OK."
+There is quite a bit of tribal knowledge around proper use of try_module_get()
+and requiring *somehow* the module to still exist to use this call in a way
+that is safe. Document this bit of tribal knowledge. To be clear, you should
+only use try_module_get() *iff* you are 100% sure the module already does
+exist and is not on its way out.
 
-None of that matters, sorry.
+You can be sure the module still exists and is alive through:
 
-Again, all I am saying is that you can not have some MODULE_() macros
-that are ok for code that is built in, and some that are not, for
-"reasons" that have to do how you all are treating the build system
-infrastructure as you are now putting arbritrary requirements for all
-driver authors (of which there are thousands) to know this.
+1) Direct protection with its refcount: you know some earlier caller called
+   __module_get() safely
+2) Implied protection: there is an implied protection against module removal
 
-Just change the macros to work properly in both cases, I can't believe
-this is all that hard as obviously all of the other macros work both
-ways, right?  That should not require any kbuild changes.
+Having an idea of when you are sure __module_get() might be called earlier is
+easy to understand however the implied protection requires an example. We use
+sysfs an an example for implied protection without a direct module reference
+count bump. kernfs / sysfs uses its own internal reference counting for files
+being actively used, when such file are active they completely prevent
+the module from being removed. kernfs protects this with its kernfs_active().
+Effort has been put into verifying the kernfs implied protection works by
+using a currently out-of-tree test_sysfs selftest test #32 [0]:
 
-> The reason Nick wants to do this work is that his future patches
-> (which have been under review for years and I'm starting to chew on
-> it and provide guidance on now) extend our ability to have more
-> elaborate symbol to address mapping with more metdata, which does
-> include information such as if something came from a module. So
-> long term *I* certainly am interested in a deterministic way to
-> determine if something could be a module.
-> 
-> For a more elaborate attempt on my part to try to describe the problem
-> and some side ideas I had if we wanted an alternative:
-> 
-> https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
-> 
-> I should also mention Christoph has also suggested we eventually move
-> towards automatically generating the module license tag from the SPDX
-> tag:
-> 
-> https://lore.kernel.org/all/Y5BNCbFyvNA1Xp%2FX@infradead.org
+./tools/testing/selftests/sysfs/sysfs.sh -t 0032
 
-That too would be wonderful, and I would love to see that, but it does
-not remove the base problem here that you are somehow forcing all driver
-authors to change their code for the build system changes which should
-not be affecting them at all at this point in time.
+Without kernfs / sysfs preventing module removal through its active reference
+count (kernfs_active()) the write would fail or worse, a crash would happen in
+this test and it does not.
 
-If you all do trigger off of the SPDX tags, then the removal of all
-MODULE_LICENSE() instances would be great too, but I don't think you are
-there yet (and it also wouldn't require removal all at once as you could
-just stub out that macro to be nothing.)  But this is not the real issue
-here...
+Similar safeguards are required for other users of try_module_get() *iff*
+they are not ensuring the above rule 1) is followed.
 
-Maybe the solution is to stop triggering on MODULE_LICENSE() as
-something magic for the build, as obviously that is the root problem
-here.  Or something else, I don't know, but what you all are doing here
-does not seem correct at all, sorry, and is only going to cause more
-long-term problems with maintenance and headaches for driver authors.
+[0] https://lore.kernel.org/lkml/20211029184500.2821444-4-mcgrof@kernel.org/
 
-thanks,
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
 
-greg k-h
+I had actually written an initial version of these docs [0] *two years* ago
+through my test_sysfs patches [1]. Back then the only pushback I got to get this
+test upstream was Greg's opposition to me using copyleft-next for my test driver.
+Upon feedback from the comunity, we've now have passed that hurtle, and we
+have proper SPDX tags for copyleft-next driver upstream. Before I follow up
+again with that test_sysfs driver though *this* patch in particular seems
+important enough to get upstream and so sending this separately because
+I see some folks might still be in high need of these docs.
+
+I'll reply to the thread / patch in question next.
+
+[0] https://lore.kernel.org/all/20211029184500.2821444-7-mcgrof@kernel.org/
+[1] https://lore.kernel.org/all/20211029184500.2821444-1-mcgrof@kernel.org/
+
+ include/linux/module.h | 40 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 38 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 91726444d55f..c3b357196470 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -671,10 +671,46 @@ void symbol_put_addr(void *addr);
+    to handle the error case (which only happens with rmmod --wait). */
+ extern void __module_get(struct module *module);
+ 
+-/* This is the Right Way to get a module: if it fails, it's being removed,
+- * so pretend it's not there. */
++/**
++ * try_module_get() - take module refcount unless module is being removed
++ * @module: the module we should check for
++ *
++ * Only try to get a module reference count if the module is not being removed.
++ * This call will fail if the module is already being removed.
++ *
++ * Care must also be taken to ensure the module exists and is alive prior to
++ * usage of this call. This can be gauranteed through two means:
++ *
++ * 1) Direct protection: you know an earlier caller must have increased the
++ *    module reference through __module_get(). This can typically be achieved
++ *    by having another entity other than the module itself increment the
++ *    module reference count.
++ *
++ * 2) Implied protection: there is an implied protection against module
++ *    removal. An example of this is the implied protection used by kernfs /
++ *    sysfs. The sysfs store / read file operations are guaranteed to exist
++ *    through the use of kernfs's active reference (see kernfs_active()) and a
++ *    sysfs / kernfs file removal cannot happen unless the same file is not
++ *    active. Therefore, if a sysfs file is being read or written to the module
++ *    which created it must still exist. It is therefore safe to use
++ *    try_module_get() on module sysfs store / read ops.
++ *
++ * One of the real values to try_module_get() is the module_is_live() check
++ * which ensures that the caller of try_module_get() can yield to userspace
++ * module removal requests and gracefully fail if the module is on its way out.
++ *
++ * Returns true if the reference count was successfully incremented.
++ */
+ extern bool try_module_get(struct module *module);
+ 
++/**
++ * module_put() - release a reference count to a module
++ * @module: the module we should release a reference count for
++ *
++ * If you successfully bump a reference count to a module with try_module_get(),
++ * when you are finished you must call module_put() to release that reference
++ * count.
++ */
+ extern void module_put(struct module *module);
+ 
+ #else /*!CONFIG_MODULE_UNLOAD*/
+-- 
+2.39.1
+
