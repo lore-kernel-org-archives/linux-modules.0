@@ -2,146 +2,80 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE98BC6FD1F
-	for <linux-modules@archiver.kernel.org>; Thu,  9 Mar 2023 22:40:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93179C6FA99
+	for <linux-modules@archiver.kernel.org>; Fri, 10 Mar 2023 07:11:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCIWkE (ORCPT
+        id S230193AbjCJHLQ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 9 Mar 2023 17:40:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        Fri, 10 Mar 2023 02:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjCIWjZ (ORCPT
+        with ESMTP id S229878AbjCJHLL (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:39:25 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A25FAEFB;
-        Thu,  9 Mar 2023 14:38:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1PvKmwZcyksJ2SYGDMFjiDpKB95k8a9eLSUB6squPR0=; b=e+XG5W33Iv56l/VtXIFplLKSnZ
-        d82PzigQYiiLbpPJwLWpUzu2PRbKFhAR5erVIz/43/1qpvjnMYdsXBlklyehdvzjGQDrOV0FM0JTQ
-        lkS5kw7lWQBnwy1DDpxFKB/qNQeR7J9sUmj51XIqfhU6zYvDod7vH+GBwyMpWakVZfq0MdYYFNYCY
-        Lz706Sgj+1myU4dubM/sXVt7gBF8IcEaEpQmZr2vKDy8jWU7zMUquef0Wa8zeCp7HDkmNm+Wkr6Fo
-        sbqubBSB0uy2vs3FHuLWCKqPHSBR/zx2ZK8E9nCMq+PZ6p6l3Tq8Mjo/mux+fu6BFuK+LoXSHw51Z
-        VlHbB+mQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1paOtm-00CBrd-QA; Thu, 09 Mar 2023 22:38:10 +0000
-Date:   Thu, 9 Mar 2023 14:38:10 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Nick Alcock <nick.alcock@oracle.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
-Message-ID: <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
-References: <20230302211759.30135-1-nick.alcock@oracle.com>
- <20230302211759.30135-11-nick.alcock@oracle.com>
- <ZAoGLhRpTr5f7AD/@kroah.com>
+        Fri, 10 Mar 2023 02:11:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD683107D4A;
+        Thu,  9 Mar 2023 23:11:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2023860EBC;
+        Fri, 10 Mar 2023 07:11:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D993C4339E;
+        Fri, 10 Mar 2023 07:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678432264;
+        bh=h40/Zux2k/DrUDrrmXSlT/UAMegOunLYFbe8FbJm+Hc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=IRa8s5LkCJiHw6JI+NIgdbW9uH0TLsU0b4vONePExNn17RVlta/lb9COqPSRWE7AY
+         8yi8QxSTHohEUMAvEZUEkYZ+mHxPPt2/pnlQAcBvSFR4Y7P+KaRwSmGlmCvqFCf1Pk
+         K9tTKN6grvhthUEOydGZqOPiYFfrxzvpomroeUtTDPvLICBtomQx26amBCzBdpD7aH
+         eshGX7l8N8l3/FJws1B56xuyk/75pBCWac7XDPNocJrGfwxdnVW2XeYTLkjuNI1CVP
+         XR9Ou0lHcYkm4FFzDnjMzDGmvbqg5n4amStn3a17R8rxxTlna4sWWHblMXVLkhA528
+         p9CTrlYMQnFaQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 64C04E61B66;
+        Fri, 10 Mar 2023 07:11:04 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAoGLhRpTr5f7AD/@kroah.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] mctp: remove MODULE_LICENSE in non-modules
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167843226440.11704.9102499483871080842.git-patchwork-notify@kernel.org>
+Date:   Fri, 10 Mar 2023 07:11:04 +0000
+References: <20230308121230.5354-2-nick.alcock@oracle.com>
+In-Reply-To: <20230308121230.5354-2-nick.alcock@oracle.com>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     netdev@vger.kernel.org, mcgrof@kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hasegawa-hitomi@fujitsu.com, jk@codeconstruct.com.au,
+        matt@codeconstruct.com.au, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Mar 09, 2023 at 05:15:42PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Mar 02, 2023 at 09:17:52PM +0000, Nick Alcock wrote:
-> > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> > are used to identify modules. As a consequence, uses of the macro
-> > in non-modules will cause modprobe to misidentify their containing
-> > object file as a module when it is not (false positives), and modprobe
-> > might succeed rather than failing with a suitable error message.
-> > 
-> > So remove it in the files in this commit, none of which can be built as
-> > modules.
-> > 
-> > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > Cc: linux-modules@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Jiri Slaby <jirislaby@kernel.org>
-> > ---
-> >  drivers/tty/n_null.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> > diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
-> > index f913b665af725..c24f75942c49d 100644
-> > --- a/drivers/tty/n_null.c
-> > +++ b/drivers/tty/n_null.c
-> > @@ -63,7 +63,6 @@ static void __exit n_null_exit(void)
-> >  module_init(n_null_init);
-> >  module_exit(n_null_exit);
-> >  
-> > -MODULE_LICENSE("GPL");
-> >  MODULE_AUTHOR("Alan Cox");
-> >  MODULE_ALIAS_LDISC(N_NULL);
-> >  MODULE_DESCRIPTION("Null ldisc driver");
-> > -- 
-> > 2.39.1.268.g9de2f9a303
-> > 
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed,  8 Mar 2023 12:12:30 +0000 you wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
 > 
-> Nope, sorry, this is not good to do, please fix kbuild instead of
-> forcing a tree-wide change like this.
+> [...]
 
-Masahiro Yamada already NACK'd it such effort:
+Here is the summary with links:
+  - mctp: remove MODULE_LICENSE in non-modules
+    https://git.kernel.org/netdev/net-next/c/14296c7d72ec
 
-https://lkml.kernel.org/r/CAK7LNAQLttPD=Ae==e0CYeQtS78=o_JZFK+zxa29JnUYio52Ug@mail.gmail.com
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-And his descriptiuon of the reasoning and logic is explained here:              
 
-https://lore.kernel.org/all/CAK7LNASL7_RgfASstBvN6AzhR=nMU=HsQvODf5q13Xud8tBWRQ@mail.gmail.com/
-
-Let me summarize it though with a few quotes from him:
-
-"Having false-positives in modules.builtin should be OK"
-"In this sense, having always-builtin entries in module.builtin is OK."
-
-The reason Nick wants to do this work is that his future patches
-(which have been under review for years and I'm starting to chew on
-it and provide guidance on now) extend our ability to have more
-elaborate symbol to address mapping with more metdata, which does
-include information such as if something came from a module. So
-long term *I* certainly am interested in a deterministic way to
-determine if something could be a module.
-
-For a more elaborate attempt on my part to try to describe the problem
-and some side ideas I had if we wanted an alternative:
-
-https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
-
-I should also mention Christoph has also suggested we eventually move
-towards automatically generating the module license tag from the SPDX
-tag:
-
-https://lore.kernel.org/all/Y5BNCbFyvNA1Xp%2FX@infradead.org
-
-I agree with Christoph and I think we should get there. For now we want
-1-1 mapping of real modules to the tag for both reasons of us not going
-to revert 8b41fc4454e and of later us wanting to do the full swoop
-automation of the module license tag.
-
-Although having modprobe not fail even if your module listed cannot be
-a module is non-fatal, the long term goal of cleaning this up is
-desirable anyway.
-
-If you have constructive ways to provide an alternative for this in kbuild,
-and help with the long term goals Nick has, patches or suggestions to
-are greatly welcomed.
-
-The simplest alternative I've come up with is the -DMODULE_POSSIBLE I
-mentioned in the thread above. But as I mentioned in that same thread
-the difficulty is in gathering the possible-obj-m without incurring a
-slow down on the build.
-
-  Luis
