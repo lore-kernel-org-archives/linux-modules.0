@@ -2,41 +2,41 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C58FC61DA4
-	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E02FC74A4B
+	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjCKFRf (ORCPT
+        id S229997AbjCKFRj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 11 Mar 2023 00:17:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        Sat, 11 Mar 2023 00:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjCKFRc (ORCPT
+        with ESMTP id S229768AbjCKFRc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Sat, 11 Mar 2023 00:17:32 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788F8140520;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7841714050D;
         Fri, 10 Mar 2023 21:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=fgKIaEVFe3ZJ+AptWb/si2HEmzuXwtpAjqPKXFiEzog=; b=mc+03uC4v46xoHgDKwIy/jRxpa
-        VXDyh/U/I4ik/2yepzo5eX4By8jC4lxxcVTLAhquivmKGobv0wOcjEMdwLCJM4WEpcWrqeOY7O13j
-        h27DatHPMaYlZfMXrvuJSzcxKYo7uZlT3ax0I9pEJHkPwhWfaqgzKbPmVyaaquBxpVeI0b3iDMC0O
-        5tGKhUeCbVGJo+jnK8WdTpCECyDy4PgEd5SSLzlDyORHXX9wcO4QJt9APOwDWcOcJojq8AAHB4Hu8
-        b2he0Fi7jHmXy1uFF6m2sXhSDkGD7oDLrLFewiwKHerM3g7bWGdM1vOx8ZklpVcfnbHt+k+uCnZuj
-        K3/injQA==;
+        bh=WsfRRtm6UalI9L41GZ3NbpGQ5o56fXzEWOq/MZtycqM=; b=TYZmpPogBKWjK0SvC5ljLiPSLg
+        avytpGS9084TZtpFLSKLx6XDeAES3WmNrEQY+rsGV06rM43+H1p5XC/W+K+nRI9lbPWL00Qx3G8Pe
+        oDDjmDFBO8KWYJGQJf976ZCM4Cskip1Q6xIEO7mY1wKndTC1c27BQMBHXewTUJYnhHWISm1HOcrM7
+        c/ULk9O6absN+9pj6GHXjw6bGZSYna0sqnj2Hl+XQHYy3ydHZPSchsgJ+GfewDpdsHHIvg84hcHhX
+        MR5SxEegoEK/qnkVUJlvy1HigaYMynjguVQWf28GX7JIjz6ObqcF+oj4JL7c+/xv6gszjcuOHpLVY
+        dcardj8A==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1parbj-00HBMo-1Z; Sat, 11 Mar 2023 05:17:27 +0000
+        id 1parbj-00HBN9-Dj; Sat, 11 Mar 2023 05:17:27 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org,
         torvalds@linux-foundation.org
-Subject: [RFC 01/12] module: use goto errors on check_modinfo() and layout_and_allocate()
-Date:   Fri, 10 Mar 2023 21:17:01 -0800
-Message-Id: <20230311051712.4095040-2-mcgrof@kernel.org>
+Subject: [RFC 09/12] module: extract patient module check into helper
+Date:   Fri, 10 Mar 2023 21:17:09 -0800
+Message-Id: <20230311051712.4095040-10-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230311051712.4095040-1-mcgrof@kernel.org>
 References: <20230311051712.4095040-1-mcgrof@kernel.org>
@@ -46,69 +46,118 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Although both routines don't have much complex errors paths we
-will expand on these routine in the future, setting up error lables
-now for both will make subsequent changes easier to review. This
-changes has no functional changes.
+The patient module check inside add_unformed_module() is large
+enough as we need it. It is a bit hard to read too, so just
+move it to a helper and do the inverse checks first to help
+shift the code and make it easier to read. The new helper then
+is module_patient_check_exists().
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/main.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ kernel/module/main.c | 71 +++++++++++++++++++++++++-------------------
+ 1 file changed, 40 insertions(+), 31 deletions(-)
 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index b4759f1695b7..5f1473eb34e0 100644
+index c3e5076c0436..e24323e2c499 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1998,7 +1998,7 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
- 
- 	err = check_modinfo_livepatch(mod, info);
- 	if (err)
--		return err;
-+		goto err_out;
- 
- 	/* Set up license info based on the info section */
- 	set_license(mod, get_modinfo(info, "license"));
-@@ -2011,6 +2011,8 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
- 	}
- 
- 	return 0;
-+err_out:
-+	return err;
+@@ -2554,6 +2554,43 @@ static bool finished_loading(const char *name)
+ 	return ret;
  }
  
- static int find_module_sections(struct module *mod, struct load_info *info)
-@@ -2288,12 +2290,12 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
- 	err = module_frob_arch_sections(info->hdr, info->sechdrs,
- 					info->secstrings, info->mod);
- 	if (err < 0)
--		return ERR_PTR(err);
-+		goto err_out;
++/* Must be called with module_mutex held */
++static int module_patient_check_exists(const char *name)
++{
++	struct module *old;
++	int err = 0;
++
++	old = find_module_all(name, strlen(name), true);
++	if (old == NULL)
++		return 0;
++
++	if (old->state == MODULE_STATE_COMING
++	    || old->state == MODULE_STATE_UNFORMED) {
++		/* Wait in case it fails to load. */
++		mutex_unlock(&module_mutex);
++		err = wait_event_interruptible(module_wq,
++				       finished_loading(name));
++		if (err)
++			return err;
++
++		/* The module might have gone in the meantime. */
++		mutex_lock(&module_mutex);
++		old = find_module_all(name, strlen(name), true);
++	}
++
++	/*
++	 * We are here only when the same module was being loaded. Do
++	 * not try to load it again right now. It prevents long delays
++	 * caused by serialized module load failures. It might happen
++	 * when more devices of the same type trigger load of
++	 * a particular module.
++	 */
++	if (old && old->state == MODULE_STATE_LIVE)
++		return -EEXIST;
++	else
++		return -EBUSY;
++}
++
+ /*
+  * We try to place it in the list now to make sure it's unique before
+  * we dedicate too many resources.  In particular, temporary percpu
+@@ -2562,41 +2599,14 @@ static bool finished_loading(const char *name)
+ static int add_unformed_module(struct module *mod)
+ {
+ 	int err;
+-	struct module *old;
  
- 	err = module_enforce_rwx_sections(info->hdr, info->sechdrs,
- 					  info->secstrings, info->mod);
- 	if (err < 0)
--		return ERR_PTR(err);
-+		goto err_out;
+ 	mod->state = MODULE_STATE_UNFORMED;
  
- 	/* We will do a special allocation for per-cpu sections later. */
- 	info->sechdrs[info->index.pcpu].sh_flags &= ~(unsigned long)SHF_ALLOC;
-@@ -2327,12 +2329,14 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
- 	/* Allocate and move to the final place */
- 	err = move_module(info->mod, info);
- 	if (err)
--		return ERR_PTR(err);
-+		goto err_out;
+ 	mutex_lock(&module_mutex);
+-	old = find_module_all(mod->name, strlen(mod->name), true);
+-	if (old != NULL) {
+-		if (old->state == MODULE_STATE_COMING
+-		    || old->state == MODULE_STATE_UNFORMED) {
+-			/* Wait in case it fails to load. */
+-			mutex_unlock(&module_mutex);
+-			err = wait_event_interruptible(module_wq,
+-					       finished_loading(mod->name));
+-			if (err)
+-				goto out_unlocked;
+-
+-			/* The module might have gone in the meantime. */
+-			mutex_lock(&module_mutex);
+-			old = find_module_all(mod->name, strlen(mod->name),
+-					      true);
+-		}
+-
+-		/*
+-		 * We are here only when the same module was being loaded. Do
+-		 * not try to load it again right now. It prevents long delays
+-		 * caused by serialized module load failures. It might happen
+-		 * when more devices of the same type trigger load of
+-		 * a particular module.
+-		 */
+-		if (old && old->state == MODULE_STATE_LIVE)
+-			err = -EEXIST;
+-		else
+-			err = -EBUSY;
++	err = module_patient_check_exists(mod->name);
++	if (err)
+ 		goto out;
+-	}
++
+ 	mod_update_bounds(mod);
+ 	list_add_rcu(&mod->list, &modules);
+ 	mod_tree_insert(mod);
+@@ -2604,7 +2614,6 @@ static int add_unformed_module(struct module *mod)
  
- 	/* Module has been copied to its final place now: return it. */
- 	mod = (void *)info->sechdrs[info->index.mod].sh_addr;
- 	kmemleak_load_module(mod, info);
- 	return mod;
-+err_out:
-+	return ERR_PTR(err);
+ out:
+ 	mutex_unlock(&module_mutex);
+-out_unlocked:
+ 	return err;
  }
  
- /* mod is no longer valid after this! */
 -- 
 2.39.1
 
