@@ -2,41 +2,41 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 947BFC61DA4
-	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F6A9C6FD1C
+	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjCKFRl (ORCPT
+        id S229514AbjCKFRm (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 11 Mar 2023 00:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
+        Sat, 11 Mar 2023 00:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjCKFRd (ORCPT
+        with ESMTP id S229933AbjCKFRd (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Sat, 11 Mar 2023 00:17:33 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B9914052B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7836114050B;
         Fri, 10 Mar 2023 21:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=8q3uBRgYTBxQf0UmjMKtoxjIBw/L6feX+juCAJ35hgI=; b=Oyl71dYJ9qFUi+q5p2VcJul0tM
-        ZBRmlGLKJ9mymmLjGW0bRvUMzDGuBPGDHYlWhQ4hltD+UY91QtkhPBSb27F3nWCgDHgir99wU6EVa
-        omTLv4RMHJT64CTjVKUVPwcXuxi/dLXuBK48JXPFoWtVbA93wXRcwc0XEDQg5mD0fK/ZkVfzgdxK3
-        Ay1098NxnT9gK5Ts644ycAPgJosGfyWxUe9Ujcg9cDKWvZ/kx3AfyUsXjdYbmJ6wz9bms39qWravQ
-        We7GU1A12qC/VgpXNhXViIkK6PIikLijeOmWN4w9/1eLThfvnNBiT7NCI7Nxz8y7SYY4nzjQGJcNr
-        P1B/4h5g==;
+        bh=pxTUOVx9i1JFOyCPATR0il1cHRcDZ89gN6jPm1YO3X8=; b=1KBw30U8YggjwHFTZnlXveoHDd
+        GHJ64T+dUK7GtsvB5Dhia8zLF/jfDFwlRiLp+6PdSDaNqL3UFUTQR7u6gcYa4F+8LfXZjmD7Ulzr8
+        g6+S+A0gCudBGun8jhkiKPTyR5Tk4dr3G0WXRF7ecWP459aKYrZt48opPxV52Y5p7744catjlqhom
+        d8O4k7pfZau8Q2dolG+oPgU38RF+RfkFOcedICrOivuPfNbAQ8LQ/nZeELimz6nxUbQMHgobvTO/V
+        tPjs9Eum+aCYa+t7ti/qhZYwJaFuxOaB+k4rOkRXNDz1dE0MP0n2ijgLpk/L3iisEIl1miJmvHIl0
+        AXbqfwAQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1parbj-00HBN0-93; Sat, 11 Mar 2023 05:17:27 +0000
+        id 1parbj-00HBNG-JB; Sat, 11 Mar 2023 05:17:27 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org,
         torvalds@linux-foundation.org
-Subject: [RFC 06/12] module: move early sanity checks into a helper
-Date:   Fri, 10 Mar 2023 21:17:06 -0800
-Message-Id: <20230311051712.4095040-7-mcgrof@kernel.org>
+Subject: [RFC 12/12] module: use aliases to find module on find_module_all()
+Date:   Fri, 10 Mar 2023 21:17:12 -0800
+Message-Id: <20230311051712.4095040-13-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230311051712.4095040-1-mcgrof@kernel.org>
 References: <20230311051712.4095040-1-mcgrof@kernel.org>
@@ -46,82 +46,115 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Move early sanity checkers for the module into a helper.
-This let's us make it clear when we are working with the
-local copy of the module prior to allocation.
+Modules can have a series of aliases, but we don't currently use
+them to check if a module is already loaded. Part of this is because
+load_module() will stick to checking for already loaded modules using
+the actual module name, not an alias. Its however desriable to also
+check for aliases on find_module_all() for existing callers and future
+callers. The curent gain to using aliases on find_module_all() will
+simply be to be able to support unloading modules using the alias using
+the delete_module() syscall.
 
-This produces no functional changes, it just makes subsequent
-changes easier to read.
+You can debug this with dynamic debug:
 
+GRUB_CMDLINE_LINUX_DEFAULT="dyndbg=\"func module_process_aliases +p; func module_name_match +p; \" "
+
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/main.c | 43 ++++++++++++++++++++++++++-----------------
- 1 file changed, 26 insertions(+), 17 deletions(-)
+ kernel/module/aliases.c  | 17 +++++++++++++++++
+ kernel/module/internal.h |  5 +++++
+ kernel/module/main.c     | 24 +++++++++++++++++++++++-
+ 3 files changed, 45 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 16770942f33a..32c92fb69c05 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2682,6 +2682,31 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
- 	return 0;
- }
+diff --git a/kernel/module/aliases.c b/kernel/module/aliases.c
+index 2f30c9d4c765..69518bc5169a 100644
+--- a/kernel/module/aliases.c
++++ b/kernel/module/aliases.c
+@@ -90,3 +90,20 @@ int module_process_aliases(struct module *mod, struct load_info *info)
  
-+/* Module within temporary copy, this doesn't do any allocation  */
-+static int early_mod_check(struct load_info *info, int flags)
-+{
-+	int err;
+ 	return -ENOMEM;
+ }
 +
-+	/*
-+	 * Now that we know we have the correct module name, check
-+	 * if it's blacklisted.
-+	 */
-+	if (blacklisted(info->name)) {
-+		pr_err("Module %s is blacklisted\n", info->name);
-+		return -EPERM;
++bool module_name_match_aliases(struct module *mod, const char *name, size_t len)
++{
++	unsigned int i;
++	const char *alias;
++
++	for (i=0; i < mod->num_aliases; i++) {
++		alias = mod->aliases[i];
++		if (strlen(alias) == len && !memcmp(alias, name, len)) {
++			pr_debug("module %s alias matched: alias[%u] = %s\n",
++				 mod->name, i, alias);
++			return true;
++		}
 +	}
 +
-+	err = rewrite_section_headers(info, flags);
-+	if (err)
-+		return err;
++	return false;
++}
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 40bb80ed21e2..78aaad74f4ca 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -306,6 +306,7 @@ static inline int same_magic(const char *amagic, const char *bmagic, bool has_cr
+ #ifdef CONFIG_MODULE_KERNEL_ALIAS
+ void free_mod_aliases(struct module *mod);
+ int module_process_aliases(struct module *mod, struct load_info *info);
++bool module_name_match_aliases(struct module *mod, const char *name, size_t len);
+ #else
+ static void free_mod_aliases(struct module *mod)
+ {
+@@ -314,4 +315,8 @@ static int module_process_aliases(struct module *mod, struct load_info *info)
+ {
+ 	return 0;
+ }
++static bool module_name_match_aliases(struct module *mod, const char *name, size_t len)
++{
++	return false;
++}
+ #endif /* CONFIG_MODULE_KERNEL_ALIAS */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index bc9202b60d55..cf044329da3c 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -338,6 +338,28 @@ bool find_symbol(struct find_symbol_arg *fsa)
+ 	return false;
+ }
+ 
++static bool module_name_match(struct module *mod, const char *name, size_t len)
++{
++	unsigned int i;
++	const char *alias;
 +
-+	/* Check module struct version now, before we try to use module. */
-+	if (!check_modstruct_version(info, info->mod))
-+		return ENOEXEC;
++	if (strlen(mod->name) == len && !memcmp(mod->name, name, len))
++		return true;
 +
-+	return 0;
++	return module_name_match_aliases(mod, name, len);
++
++	for (i=0; i < mod->num_aliases; i++) {
++		alias = mod->aliases[i];
++		if (strlen(alias) == len && !memcmp(alias, name, len)) {
++			pr_debug("module %s alias matched: alias[%u] = %s\n",
++				 mod->name, i, alias);
++			return true;
++		}
++	}
++
++	return false;
 +}
 +
  /*
-  * Allocate and load the module: note that size of section 0 is always
-  * zero, and we rely on this for optional sections.
-@@ -2725,26 +2750,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	if (err)
- 		goto free_copy;
- 
--	/*
--	 * Now that we know we have the correct module name, check
--	 * if it's blacklisted.
--	 */
--	if (blacklisted(info->name)) {
--		err = -EPERM;
--		pr_err("Module %s is blacklisted\n", info->name);
--		goto free_copy;
--	}
--
--	err = rewrite_section_headers(info, flags);
-+	err = early_mod_check(info, flags);
- 	if (err)
- 		goto free_copy;
- 
--	/* Check module struct version now, before we try to use module. */
--	if (!check_modstruct_version(info, info->mod)) {
--		err = -ENOEXEC;
--		goto free_copy;
--	}
--
- 	/* Figure out module layout, and allocate all the memory. */
- 	mod = layout_and_allocate(info, flags);
- 	if (IS_ERR(mod)) {
+  * Search for module by name: must hold module_mutex (or preempt disabled
+  * for read-only access).
+@@ -353,7 +375,7 @@ struct module *find_module_all(const char *name, size_t len,
+ 				lockdep_is_held(&module_mutex)) {
+ 		if (!even_unformed && mod->state == MODULE_STATE_UNFORMED)
+ 			continue;
+-		if (strlen(mod->name) == len && !memcmp(mod->name, name, len))
++		if (module_name_match(mod, name, len))
+ 			return mod;
+ 	}
+ 	return NULL;
 -- 
 2.39.1
 
