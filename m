@@ -2,41 +2,41 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E02FC74A4B
-	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7B02C6FD1C
+	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCKFRj (ORCPT
+        id S229984AbjCKFRi (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 11 Mar 2023 00:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        Sat, 11 Mar 2023 00:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjCKFRc (ORCPT
+        with ESMTP id S229817AbjCKFRc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Sat, 11 Mar 2023 00:17:32 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7841714050D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A2E140526;
         Fri, 10 Mar 2023 21:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=WsfRRtm6UalI9L41GZ3NbpGQ5o56fXzEWOq/MZtycqM=; b=TYZmpPogBKWjK0SvC5ljLiPSLg
-        avytpGS9084TZtpFLSKLx6XDeAES3WmNrEQY+rsGV06rM43+H1p5XC/W+K+nRI9lbPWL00Qx3G8Pe
-        oDDjmDFBO8KWYJGQJf976ZCM4Cskip1Q6xIEO7mY1wKndTC1c27BQMBHXewTUJYnhHWISm1HOcrM7
-        c/ULk9O6absN+9pj6GHXjw6bGZSYna0sqnj2Hl+XQHYy3ydHZPSchsgJ+GfewDpdsHHIvg84hcHhX
-        MR5SxEegoEK/qnkVUJlvy1HigaYMynjguVQWf28GX7JIjz6ObqcF+oj4JL7c+/xv6gszjcuOHpLVY
-        dcardj8A==;
+        bh=Qx3kvl1TA4Gbwo8RtYmlV05hbgAF2Z4QTvWxKXzU3KI=; b=Lx0vzaE2gzcfyPXU87+uHWfN+Y
+        90v1y+KP0yZoxipqzRWBcWtgoRuSG83wO1BXpUk1NK/kBtsO0laf1BZabvPqgtVOf3RMAPWe2R+3S
+        ihr/nhf+EDH14m4AnAY8ODpFxgmxMi3hl8dYTSTGXXZphiVH3PrFzA3Dc62GK1WCF/goMx6N8cjOX
+        9qs2v8ReG3OG7mma51jBbkP99UJ+wGadbYmhhv0vkCmpaQ26vjH4w8/IAUi7eR58yADoCIgCwHfrW
+        +66lnZSBe+u3N7fn5MY1wjGUbsuknXjgRa5fpJ/ytxd3lPEePTHhuHwX7xW9T9SDVxkEVFbyV879u
+        1EeSfW5g==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1parbj-00HBN9-Dj; Sat, 11 Mar 2023 05:17:27 +0000
+        id 1parbj-00HBMq-37; Sat, 11 Mar 2023 05:17:27 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org,
         torvalds@linux-foundation.org
-Subject: [RFC 09/12] module: extract patient module check into helper
-Date:   Fri, 10 Mar 2023 21:17:09 -0800
-Message-Id: <20230311051712.4095040-10-mcgrof@kernel.org>
+Subject: [RFC 02/12] module: move get_modinfo() helpers all above
+Date:   Fri, 10 Mar 2023 21:17:02 -0800
+Message-Id: <20230311051712.4095040-3-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230311051712.4095040-1-mcgrof@kernel.org>
 References: <20230311051712.4095040-1-mcgrof@kernel.org>
@@ -46,118 +46,133 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The patient module check inside add_unformed_module() is large
-enough as we need it. It is a bit hard to read too, so just
-move it to a helper and do the inverse checks first to help
-shift the code and make it easier to read. The new helper then
-is module_patient_check_exists().
+Instead of forward declaring routines for get_modinfo() just move
+everything up. This makes no functional changes.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/main.c | 71 +++++++++++++++++++++++++-------------------
- 1 file changed, 40 insertions(+), 31 deletions(-)
+ kernel/module/main.c | 100 +++++++++++++++++++++----------------------
+ 1 file changed, 48 insertions(+), 52 deletions(-)
 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c3e5076c0436..e24323e2c499 100644
+index 5f1473eb34e0..6d6e6a6184b5 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -2554,6 +2554,43 @@ static bool finished_loading(const char *name)
- 	return ret;
+@@ -1016,9 +1016,55 @@ int try_to_force_load(struct module *mod, const char *reason)
+ #endif
  }
  
-+/* Must be called with module_mutex held */
-+static int module_patient_check_exists(const char *name)
+-static char *get_modinfo(const struct load_info *info, const char *tag);
++/* Parse tag=value strings from .modinfo section */
++static char *next_string(char *string, unsigned long *secsize)
 +{
-+	struct module *old;
-+	int err = 0;
-+
-+	old = find_module_all(name, strlen(name), true);
-+	if (old == NULL)
-+		return 0;
-+
-+	if (old->state == MODULE_STATE_COMING
-+	    || old->state == MODULE_STATE_UNFORMED) {
-+		/* Wait in case it fails to load. */
-+		mutex_unlock(&module_mutex);
-+		err = wait_event_interruptible(module_wq,
-+				       finished_loading(name));
-+		if (err)
-+			return err;
-+
-+		/* The module might have gone in the meantime. */
-+		mutex_lock(&module_mutex);
-+		old = find_module_all(name, strlen(name), true);
++	/* Skip non-zero chars */
++	while (string[0]) {
++		string++;
++		if ((*secsize)-- <= 1)
++			return NULL;
 +	}
 +
-+	/*
-+	 * We are here only when the same module was being loaded. Do
-+	 * not try to load it again right now. It prevents long delays
-+	 * caused by serialized module load failures. It might happen
-+	 * when more devices of the same type trigger load of
-+	 * a particular module.
-+	 */
-+	if (old && old->state == MODULE_STATE_LIVE)
-+		return -EEXIST;
-+	else
-+		return -EBUSY;
++	/* Skip any zero padding. */
++	while (!string[0]) {
++		string++;
++		if ((*secsize)-- <= 1)
++			return NULL;
++	}
++	return string;
 +}
 +
- /*
-  * We try to place it in the list now to make sure it's unique before
-  * we dedicate too many resources.  In particular, temporary percpu
-@@ -2562,41 +2599,14 @@ static bool finished_loading(const char *name)
- static int add_unformed_module(struct module *mod)
- {
- 	int err;
--	struct module *old;
- 
- 	mod->state = MODULE_STATE_UNFORMED;
- 
- 	mutex_lock(&module_mutex);
--	old = find_module_all(mod->name, strlen(mod->name), true);
--	if (old != NULL) {
--		if (old->state == MODULE_STATE_COMING
--		    || old->state == MODULE_STATE_UNFORMED) {
--			/* Wait in case it fails to load. */
--			mutex_unlock(&module_mutex);
--			err = wait_event_interruptible(module_wq,
--					       finished_loading(mod->name));
--			if (err)
--				goto out_unlocked;
--
--			/* The module might have gone in the meantime. */
--			mutex_lock(&module_mutex);
--			old = find_module_all(mod->name, strlen(mod->name),
--					      true);
--		}
--
--		/*
--		 * We are here only when the same module was being loaded. Do
--		 * not try to load it again right now. It prevents long delays
--		 * caused by serialized module load failures. It might happen
--		 * when more devices of the same type trigger load of
--		 * a particular module.
--		 */
--		if (old && old->state == MODULE_STATE_LIVE)
--			err = -EEXIST;
--		else
--			err = -EBUSY;
-+	err = module_patient_check_exists(mod->name);
-+	if (err)
- 		goto out;
--	}
+ static char *get_next_modinfo(const struct load_info *info, const char *tag,
+-			      char *prev);
++			      char *prev)
++{
++	char *p;
++	unsigned int taglen = strlen(tag);
++	Elf_Shdr *infosec = &info->sechdrs[info->index.info];
++	unsigned long size = infosec->sh_size;
 +
- 	mod_update_bounds(mod);
- 	list_add_rcu(&mod->list, &modules);
- 	mod_tree_insert(mod);
-@@ -2604,7 +2614,6 @@ static int add_unformed_module(struct module *mod)
++	/*
++	 * get_modinfo() calls made before rewrite_section_headers()
++	 * must use sh_offset, as sh_addr isn't set!
++	 */
++	char *modinfo = (char *)info->hdr + infosec->sh_offset;
++
++	if (prev) {
++		size -= prev - modinfo;
++		modinfo = next_string(prev, &size);
++	}
++
++	for (p = modinfo; p; p = next_string(p, &size)) {
++		if (strncmp(p, tag, taglen) == 0 && p[taglen] == '=')
++			return p + taglen + 1;
++	}
++	return NULL;
++}
++
++static char *get_modinfo(const struct load_info *info, const char *tag)
++{
++	return get_next_modinfo(info, tag, NULL);
++}
  
- out:
- 	mutex_unlock(&module_mutex);
--out_unlocked:
- 	return err;
+ static int verify_namespace_is_imported(const struct load_info *info,
+ 					const struct kernel_symbol *sym,
+@@ -1544,56 +1590,6 @@ static void set_license(struct module *mod, const char *license)
+ 	}
  }
  
+-/* Parse tag=value strings from .modinfo section */
+-static char *next_string(char *string, unsigned long *secsize)
+-{
+-	/* Skip non-zero chars */
+-	while (string[0]) {
+-		string++;
+-		if ((*secsize)-- <= 1)
+-			return NULL;
+-	}
+-
+-	/* Skip any zero padding. */
+-	while (!string[0]) {
+-		string++;
+-		if ((*secsize)-- <= 1)
+-			return NULL;
+-	}
+-	return string;
+-}
+-
+-static char *get_next_modinfo(const struct load_info *info, const char *tag,
+-			      char *prev)
+-{
+-	char *p;
+-	unsigned int taglen = strlen(tag);
+-	Elf_Shdr *infosec = &info->sechdrs[info->index.info];
+-	unsigned long size = infosec->sh_size;
+-
+-	/*
+-	 * get_modinfo() calls made before rewrite_section_headers()
+-	 * must use sh_offset, as sh_addr isn't set!
+-	 */
+-	char *modinfo = (char *)info->hdr + infosec->sh_offset;
+-
+-	if (prev) {
+-		size -= prev - modinfo;
+-		modinfo = next_string(prev, &size);
+-	}
+-
+-	for (p = modinfo; p; p = next_string(p, &size)) {
+-		if (strncmp(p, tag, taglen) == 0 && p[taglen] == '=')
+-			return p + taglen + 1;
+-	}
+-	return NULL;
+-}
+-
+-static char *get_modinfo(const struct load_info *info, const char *tag)
+-{
+-	return get_next_modinfo(info, tag, NULL);
+-}
+-
+ static void setup_modinfo(struct module *mod, struct load_info *info)
+ {
+ 	struct module_attribute *attr;
 -- 
 2.39.1
 
