@@ -2,41 +2,41 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EBC7C678D5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C58FC61DA4
 	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjCKFRg (ORCPT
+        id S229928AbjCKFRf (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 11 Mar 2023 00:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        Sat, 11 Mar 2023 00:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjCKFRc (ORCPT
+        with ESMTP id S229764AbjCKFRc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Sat, 11 Mar 2023 00:17:32 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78806140518;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788F8140520;
         Fri, 10 Mar 2023 21:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=0Kfz9ManWhljt3gWTtQeON0UUzOKjwUIYWv5h32VpPw=; b=MnN1/ZLHgS6/DusPEn8slWDfHS
-        2uYR5J1cw9XFTdAxvBmp0T5H3IjRvJslb+CP2mKFbo4Jx6ze3QIy9GK6ejC+7gm+vr6Rwl4BA/IF/
-        CTjsgTvrAnLnbGCRzKyc55zFZBahioLHJTb/YTef1kDF/JVtOpMFjx4uROYEG8atCZn6TnzhFzWjD
-        G1tzhbd1LDFijal17jC4m7Sg67t48rBywMqQ1jREijt4+mGhqmXEvbw7gIYFxzDYKk2gxMspbqVyV
-        GNN8wTC/YOp+zEc5RWU2NOAfs2TdO3hT7vBt0jWaBKenj7UII01CdlQ+2ZNZowVyyiEEVP5WuXKbs
-        yAAe/NIw==;
+        bh=fgKIaEVFe3ZJ+AptWb/si2HEmzuXwtpAjqPKXFiEzog=; b=mc+03uC4v46xoHgDKwIy/jRxpa
+        VXDyh/U/I4ik/2yepzo5eX4By8jC4lxxcVTLAhquivmKGobv0wOcjEMdwLCJM4WEpcWrqeOY7O13j
+        h27DatHPMaYlZfMXrvuJSzcxKYo7uZlT3ax0I9pEJHkPwhWfaqgzKbPmVyaaquBxpVeI0b3iDMC0O
+        5tGKhUeCbVGJo+jnK8WdTpCECyDy4PgEd5SSLzlDyORHXX9wcO4QJt9APOwDWcOcJojq8AAHB4Hu8
+        b2he0Fi7jHmXy1uFF6m2sXhSDkGD7oDLrLFewiwKHerM3g7bWGdM1vOx8ZklpVcfnbHt+k+uCnZuj
+        K3/injQA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1parbj-00HBN4-Bs; Sat, 11 Mar 2023 05:17:27 +0000
+        id 1parbj-00HBMo-1Z; Sat, 11 Mar 2023 05:17:27 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org,
         torvalds@linux-foundation.org
-Subject: [RFC 08/12] module: move finished_loading()
-Date:   Fri, 10 Mar 2023 21:17:08 -0800
-Message-Id: <20230311051712.4095040-9-mcgrof@kernel.org>
+Subject: [RFC 01/12] module: use goto errors on check_modinfo() and layout_and_allocate()
+Date:   Fri, 10 Mar 2023 21:17:01 -0800
+Message-Id: <20230311051712.4095040-2-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230311051712.4095040-1-mcgrof@kernel.org>
 References: <20230311051712.4095040-1-mcgrof@kernel.org>
@@ -46,74 +46,69 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This has no functional change, just moves a routine earlier
-as we'll make use of it next.
+Although both routines don't have much complex errors paths we
+will expand on these routine in the future, setting up error lables
+now for both will make subsequent changes easier to review. This
+changes has no functional changes.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/main.c | 42 +++++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+ kernel/module/main.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index e9c7eb827f0d..c3e5076c0436 100644
+index b4759f1695b7..5f1473eb34e0 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -2370,27 +2370,6 @@ static int post_relocation(struct module *mod, const struct load_info *info)
- 	return module_finalize(info->hdr, info->sechdrs, mod);
- }
+@@ -1998,7 +1998,7 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
  
--/* Is this module of this name done loading?  No locks held. */
--static bool finished_loading(const char *name)
--{
--	struct module *mod;
--	bool ret;
--
--	/*
--	 * The module_mutex should not be a heavily contended lock;
--	 * if we get the occasional sleep here, we'll go an extra iteration
--	 * in the wait_event_interruptible(), which is harmless.
--	 */
--	sched_annotate_sleep();
--	mutex_lock(&module_mutex);
--	mod = find_module_all(name, strlen(name), true);
--	ret = !mod || mod->state == MODULE_STATE_LIVE
--		|| mod->state == MODULE_STATE_GOING;
--	mutex_unlock(&module_mutex);
--
--	return ret;
--}
--
- /* Call module constructors. */
- static void do_mod_ctors(struct module *mod)
- {
-@@ -2554,6 +2533,27 @@ static int may_init_module(void)
+ 	err = check_modinfo_livepatch(mod, info);
+ 	if (err)
+-		return err;
++		goto err_out;
+ 
+ 	/* Set up license info based on the info section */
+ 	set_license(mod, get_modinfo(info, "license"));
+@@ -2011,6 +2011,8 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
+ 	}
+ 
  	return 0;
++err_out:
++	return err;
  }
  
-+/* Is this module of this name done loading?  No locks held. */
-+static bool finished_loading(const char *name)
-+{
-+	struct module *mod;
-+	bool ret;
-+
-+	/*
-+	 * The module_mutex should not be a heavily contended lock;
-+	 * if we get the occasional sleep here, we'll go an extra iteration
-+	 * in the wait_event_interruptible(), which is harmless.
-+	 */
-+	sched_annotate_sleep();
-+	mutex_lock(&module_mutex);
-+	mod = find_module_all(name, strlen(name), true);
-+	ret = !mod || mod->state == MODULE_STATE_LIVE
-+		|| mod->state == MODULE_STATE_GOING;
-+	mutex_unlock(&module_mutex);
-+
-+	return ret;
-+}
-+
- /*
-  * We try to place it in the list now to make sure it's unique before
-  * we dedicate too many resources.  In particular, temporary percpu
+ static int find_module_sections(struct module *mod, struct load_info *info)
+@@ -2288,12 +2290,12 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
+ 	err = module_frob_arch_sections(info->hdr, info->sechdrs,
+ 					info->secstrings, info->mod);
+ 	if (err < 0)
+-		return ERR_PTR(err);
++		goto err_out;
+ 
+ 	err = module_enforce_rwx_sections(info->hdr, info->sechdrs,
+ 					  info->secstrings, info->mod);
+ 	if (err < 0)
+-		return ERR_PTR(err);
++		goto err_out;
+ 
+ 	/* We will do a special allocation for per-cpu sections later. */
+ 	info->sechdrs[info->index.pcpu].sh_flags &= ~(unsigned long)SHF_ALLOC;
+@@ -2327,12 +2329,14 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
+ 	/* Allocate and move to the final place */
+ 	err = move_module(info->mod, info);
+ 	if (err)
+-		return ERR_PTR(err);
++		goto err_out;
+ 
+ 	/* Module has been copied to its final place now: return it. */
+ 	mod = (void *)info->sechdrs[info->index.mod].sh_addr;
+ 	kmemleak_load_module(mod, info);
+ 	return mod;
++err_out:
++	return ERR_PTR(err);
+ }
+ 
+ /* mod is no longer valid after this! */
 -- 
 2.39.1
 
