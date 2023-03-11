@@ -2,41 +2,41 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7F2FC678D5
-	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33C5EC6FD1C
+	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjCKFRd (ORCPT
+        id S229922AbjCKFRc (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 11 Mar 2023 00:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjCKFRc (ORCPT
-        <rfc822;linux-modules@vger.kernel.org>);
         Sat, 11 Mar 2023 00:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229685AbjCKFRb (ORCPT
+        <rfc822;linux-modules@vger.kernel.org>);
+        Sat, 11 Mar 2023 00:17:31 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791E5140530;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7776A14050A;
         Fri, 10 Mar 2023 21:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=Ulzd+B0GQOyWFcFb7AVNe7XdcgPMcGdt6XRGjoo6VBo=; b=36lENrK/S8KQeyMPt8RDa26cJW
-        e0ZCzwSKXfwQcJX3aQHLJRvNrlkunyHS+BEIj3jLisOjsWQUxn7/RJPW5TkxFAFV/4fBxu6a1KsO+
-        fl2LpAmwD+Xo2ql/6C4ZDdXVw5b1G+bJgamCh1ARmD1yuyqe8uO/niy3MZYCDJ3MBt8QI8pm+Nl8C
-        QCmj2+IkOSXLYi0dFZSQPEBTvYUe1pTQfFFjXJWEd8397ntsh9LQZwa8INM85ItwblZRIi3APSu4A
-        rTvnkQx7+/EG19UAuFao7c5MxTbXkVYBAivtXjxSV9mgEpq9Tl3S0DgzbGCT0huWAo3Fj+X0I3CnR
-        hXAcAh+g==;
+        bh=qzqBEKCC2vC00pN2R7hc5pPU3nToqryyRx5JQLW/z9M=; b=TEsvSmfSDwpaf+lGKHbExgRkTY
+        RaHoiv1xaoskdj4IYejWfTgE11m/GKkwy0mCL3C/iim1GxE7OHZfJbdGACeRKMTkBEF1ZQjf4ghVI
+        BXdJ+uQp3ez6TA8qFVJf6LAts/cEkpfQK4LSLYn0Q+fqX0udUrWRZolJ2wtqDf/YPUVFAINZcjPMa
+        lSagEX7ap2lUAKGMLSq9bMBtYjo3ecSjlRcnwqLZDxWFq8HgpjcIP2SIBsC4m5lNVqpOdB2a8xyad
+        mGzUpQLZ/awK8V3YUlAH4MrmXxxqVpl+EHQher4RL+RFEFuQ4sLN68G+qdPlKYzu6AK+az2Mq8icF
+        NQl4r/Sw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1parbj-00HBMs-4W; Sat, 11 Mar 2023 05:17:27 +0000
+        id 1parbj-00HBN2-AK; Sat, 11 Mar 2023 05:17:27 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org,
         torvalds@linux-foundation.org
-Subject: [RFC 03/12] module: rename next_string() to module_next_tag_pair()
-Date:   Fri, 10 Mar 2023 21:17:03 -0800
-Message-Id: <20230311051712.4095040-4-mcgrof@kernel.org>
+Subject: [RFC 07/12] module: move check_modinfo() early to early_mod_check()
+Date:   Fri, 10 Mar 2023 21:17:07 -0800
+Message-Id: <20230311051712.4095040-8-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230311051712.4095040-1-mcgrof@kernel.org>
 References: <20230311051712.4095040-1-mcgrof@kernel.org>
@@ -46,56 +46,46 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This makes it clearer what it is doing. While at it,
-make it available to other code other than main.c.
-This will be used in the subsequent patch and make
-the changes easier to read.
+This moves check_modinfo() to early_mod_check(). This
+doesn't make any functional changes either, as check_modinfo()
+was the first call on layout_and_allocate(), so we're just
+moving it back one routine and at the end.
+
+This let's us keep separate the checkers from the allocater.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/internal.h | 2 ++
- kernel/module/main.c     | 6 +++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ kernel/module/main.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index e3883b7d4840..1fa2328636ec 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -96,6 +96,8 @@ long module_get_offset_and_type(struct module *mod, enum mod_mem_type type,
- char *module_flags(struct module *mod, char *buf, bool show_state);
- size_t module_flags_taint(unsigned long taints, char *buf);
- 
-+char *module_next_tag_pair(char *string, unsigned long *secsize);
-+
- static inline void module_assert_mutex_or_preempt(void)
- {
- #ifdef CONFIG_LOCKDEP
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 6d6e6a6184b5..50364707c0cd 100644
+index 32c92fb69c05..e9c7eb827f0d 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1017,7 +1017,7 @@ int try_to_force_load(struct module *mod, const char *reason)
+@@ -2284,10 +2284,6 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
+ 	unsigned int ndx;
+ 	int err;
+ 
+-	err = check_modinfo(info->mod, info, flags);
+-	if (err)
+-		return ERR_PTR(err);
+-
+ 	/* Allow arches to frob section contents and sizes.  */
+ 	err = module_frob_arch_sections(info->hdr, info->sechdrs,
+ 					info->secstrings, info->mod);
+@@ -2702,7 +2698,11 @@ static int early_mod_check(struct load_info *info, int flags)
+ 
+ 	/* Check module struct version now, before we try to use module. */
+ 	if (!check_modstruct_version(info, info->mod))
+-		return ENOEXEC;
++		return -ENOEXEC;
++
++	err = check_modinfo(info->mod, info, flags);
++	if (err)
++		return err;
+ 
+ 	return 0;
  }
- 
- /* Parse tag=value strings from .modinfo section */
--static char *next_string(char *string, unsigned long *secsize)
-+char *module_next_tag_pair(char *string, unsigned long *secsize)
- {
- 	/* Skip non-zero chars */
- 	while (string[0]) {
-@@ -1051,10 +1051,10 @@ static char *get_next_modinfo(const struct load_info *info, const char *tag,
- 
- 	if (prev) {
- 		size -= prev - modinfo;
--		modinfo = next_string(prev, &size);
-+		modinfo = module_next_tag_pair(prev, &size);
- 	}
- 
--	for (p = modinfo; p; p = next_string(p, &size)) {
-+	for (p = modinfo; p; p = module_next_tag_pair(p, &size)) {
- 		if (strncmp(p, tag, taglen) == 0 && p[taglen] == '=')
- 			return p + taglen + 1;
- 	}
 -- 
 2.39.1
 
