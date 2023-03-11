@@ -2,41 +2,41 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7B02C6FD1C
-	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18D76C74A44
+	for <linux-modules@archiver.kernel.org>; Sat, 11 Mar 2023 05:17:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjCKFRi (ORCPT
+        id S229999AbjCKFRk (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 11 Mar 2023 00:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        Sat, 11 Mar 2023 00:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjCKFRc (ORCPT
+        with ESMTP id S229835AbjCKFRc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Sat, 11 Mar 2023 00:17:32 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A2E140526;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790A014052F;
         Fri, 10 Mar 2023 21:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=Qx3kvl1TA4Gbwo8RtYmlV05hbgAF2Z4QTvWxKXzU3KI=; b=Lx0vzaE2gzcfyPXU87+uHWfN+Y
-        90v1y+KP0yZoxipqzRWBcWtgoRuSG83wO1BXpUk1NK/kBtsO0laf1BZabvPqgtVOf3RMAPWe2R+3S
-        ihr/nhf+EDH14m4AnAY8ODpFxgmxMi3hl8dYTSTGXXZphiVH3PrFzA3Dc62GK1WCF/goMx6N8cjOX
-        9qs2v8ReG3OG7mma51jBbkP99UJ+wGadbYmhhv0vkCmpaQ26vjH4w8/IAUi7eR58yADoCIgCwHfrW
-        +66lnZSBe+u3N7fn5MY1wjGUbsuknXjgRa5fpJ/ytxd3lPEePTHhuHwX7xW9T9SDVxkEVFbyV879u
-        1EeSfW5g==;
+        bh=tYsj98dWQ7w+RJ5JNa62BDiT7Z3rKk0MlMBfrIGdxVY=; b=KjPfOGTgevjwLnMl9fuTdtaJLb
+        ftgYM18+ET3KUP9eosnUMPh+6AtxB8M6zo0mtQYUOT88TQbms+gSscSKreWOtqz2j6++2VRhlDlKM
+        L6dterrWwyq0g4OmKpXS/ERbg2iXBjEBZLDUGyK2BJrFA15ME0/f/WiHaVpT9NxjlPL35lZZUjcOB
+        WfLIA7mrOgtIWsep+L8b7MfiJqIJJU681vZi3vub1yKmvMfkKkMjTpv0+khSTuOGD7gNxiQTD1OCd
+        pY2jxjqUY5rg3EIarrHaWUnvA0USxDTE19qFJeMl9/ksZ23Sa/pgf6H5+HpP1xyMR3biD5rLupr9s
+        c2sKkmHg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1parbj-00HBMq-37; Sat, 11 Mar 2023 05:17:27 +0000
+        id 1parbj-00HBMu-5p; Sat, 11 Mar 2023 05:17:27 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org,
         torvalds@linux-foundation.org
-Subject: [RFC 02/12] module: move get_modinfo() helpers all above
-Date:   Fri, 10 Mar 2023 21:17:02 -0800
-Message-Id: <20230311051712.4095040-3-mcgrof@kernel.org>
+Subject: [RFC 04/12] module: add a for_each_modinfo_entry()
+Date:   Fri, 10 Mar 2023 21:17:04 -0800
+Message-Id: <20230311051712.4095040-5-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230311051712.4095040-1-mcgrof@kernel.org>
 References: <20230311051712.4095040-1-mcgrof@kernel.org>
@@ -46,133 +46,49 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Instead of forward declaring routines for get_modinfo() just move
-everything up. This makes no functional changes.
+Add a for_each_modinfo_entry() to make it easier to read and use.
+This produces no functional changes but makes this code easiert
+to read as we are used to with loops in the kernel and trims more
+lines of code.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/main.c | 100 +++++++++++++++++++++----------------------
- 1 file changed, 48 insertions(+), 52 deletions(-)
+ kernel/module/internal.h | 3 +++
+ kernel/module/main.c     | 5 +----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 1fa2328636ec..6ae29bb8836f 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -98,6 +98,9 @@ size_t module_flags_taint(unsigned long taints, char *buf);
+ 
+ char *module_next_tag_pair(char *string, unsigned long *secsize);
+ 
++#define for_each_modinfo_entry(entry, info, name) \
++	for (entry = get_modinfo(info, name); entry; entry = get_next_modinfo(info, name, entry))
++
+ static inline void module_assert_mutex_or_preempt(void)
+ {
+ #ifdef CONFIG_LOCKDEP
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 5f1473eb34e0..6d6e6a6184b5 100644
+index 50364707c0cd..3f7c8634cf06 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1016,9 +1016,55 @@ int try_to_force_load(struct module *mod, const char *reason)
- #endif
- }
+@@ -1075,12 +1075,9 @@ static int verify_namespace_is_imported(const struct load_info *info,
  
--static char *get_modinfo(const struct load_info *info, const char *tag);
-+/* Parse tag=value strings from .modinfo section */
-+static char *next_string(char *string, unsigned long *secsize)
-+{
-+	/* Skip non-zero chars */
-+	while (string[0]) {
-+		string++;
-+		if ((*secsize)-- <= 1)
-+			return NULL;
-+	}
-+
-+	/* Skip any zero padding. */
-+	while (!string[0]) {
-+		string++;
-+		if ((*secsize)-- <= 1)
-+			return NULL;
-+	}
-+	return string;
-+}
-+
- static char *get_next_modinfo(const struct load_info *info, const char *tag,
--			      char *prev);
-+			      char *prev)
-+{
-+	char *p;
-+	unsigned int taglen = strlen(tag);
-+	Elf_Shdr *infosec = &info->sechdrs[info->index.info];
-+	unsigned long size = infosec->sh_size;
-+
-+	/*
-+	 * get_modinfo() calls made before rewrite_section_headers()
-+	 * must use sh_offset, as sh_addr isn't set!
-+	 */
-+	char *modinfo = (char *)info->hdr + infosec->sh_offset;
-+
-+	if (prev) {
-+		size -= prev - modinfo;
-+		modinfo = next_string(prev, &size);
-+	}
-+
-+	for (p = modinfo; p; p = next_string(p, &size)) {
-+		if (strncmp(p, tag, taglen) == 0 && p[taglen] == '=')
-+			return p + taglen + 1;
-+	}
-+	return NULL;
-+}
-+
-+static char *get_modinfo(const struct load_info *info, const char *tag)
-+{
-+	return get_next_modinfo(info, tag, NULL);
-+}
- 
- static int verify_namespace_is_imported(const struct load_info *info,
- 					const struct kernel_symbol *sym,
-@@ -1544,56 +1590,6 @@ static void set_license(struct module *mod, const char *license)
- 	}
- }
- 
--/* Parse tag=value strings from .modinfo section */
--static char *next_string(char *string, unsigned long *secsize)
--{
--	/* Skip non-zero chars */
--	while (string[0]) {
--		string++;
--		if ((*secsize)-- <= 1)
--			return NULL;
--	}
--
--	/* Skip any zero padding. */
--	while (!string[0]) {
--		string++;
--		if ((*secsize)-- <= 1)
--			return NULL;
--	}
--	return string;
--}
--
--static char *get_next_modinfo(const struct load_info *info, const char *tag,
--			      char *prev)
--{
--	char *p;
--	unsigned int taglen = strlen(tag);
--	Elf_Shdr *infosec = &info->sechdrs[info->index.info];
--	unsigned long size = infosec->sh_size;
--
--	/*
--	 * get_modinfo() calls made before rewrite_section_headers()
--	 * must use sh_offset, as sh_addr isn't set!
--	 */
--	char *modinfo = (char *)info->hdr + infosec->sh_offset;
--
--	if (prev) {
--		size -= prev - modinfo;
--		modinfo = next_string(prev, &size);
--	}
--
--	for (p = modinfo; p; p = next_string(p, &size)) {
--		if (strncmp(p, tag, taglen) == 0 && p[taglen] == '=')
--			return p + taglen + 1;
--	}
--	return NULL;
--}
--
--static char *get_modinfo(const struct load_info *info, const char *tag)
--{
--	return get_next_modinfo(info, tag, NULL);
--}
--
- static void setup_modinfo(struct module *mod, struct load_info *info)
- {
- 	struct module_attribute *attr;
+ 	namespace = kernel_symbol_namespace(sym);
+ 	if (namespace && namespace[0]) {
+-		imported_namespace = get_modinfo(info, "import_ns");
+-		while (imported_namespace) {
++		for_each_modinfo_entry(imported_namespace, info, "import_ns") {
+ 			if (strcmp(namespace, imported_namespace) == 0)
+ 				return 0;
+-			imported_namespace = get_next_modinfo(
+-				info, "import_ns", imported_namespace);
+ 		}
+ #ifdef CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
+ 		pr_warn(
 -- 
 2.39.1
 
