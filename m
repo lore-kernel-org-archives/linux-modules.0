@@ -2,154 +2,436 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 679F4C61DA4
-	for <linux-modules@archiver.kernel.org>; Mon, 13 Mar 2023 07:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DC28C61DA4
+	for <linux-modules@archiver.kernel.org>; Mon, 13 Mar 2023 10:39:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbjCMHRd (ORCPT
+        id S230097AbjCMKjI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 13 Mar 2023 03:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
+        Mon, 13 Mar 2023 06:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjCMHRc (ORCPT
+        with ESMTP id S230092AbjCMKjF (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 13 Mar 2023 03:17:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4D234C35
-        for <linux-modules@vger.kernel.org>; Mon, 13 Mar 2023 00:16:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678691801;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZS47TiD/MGgVp/mbScCggZptTv/f6Vp5N1B2fdXqpIQ=;
-        b=cZqgvTcU8UNK0AVTwrfgHgkjh+WhGY/V9+Kxi/n641ylTEwZUXiffsBMJsVHtj3/B7Bj82
-        XthQ1PX/RdL7IETyf9SlMt9/x+wxucUWm+f/3SJi00YWqOKmmVn0XcuKSQiY1vCIK4enc2
-        NnVD32GjAWDLah49jMGGSN9pZnNB6Ko=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-607-H2MkuVe4NAyTr2ub9rmsEA-1; Mon, 13 Mar 2023 03:16:32 -0400
-X-MC-Unique: H2MkuVe4NAyTr2ub9rmsEA-1
-Received: by mail-ed1-f72.google.com with SMTP id z14-20020a05640235ce00b004e07ddbc2f8so15380413edc.7
-        for <linux-modules@vger.kernel.org>; Mon, 13 Mar 2023 00:16:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678691791;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZS47TiD/MGgVp/mbScCggZptTv/f6Vp5N1B2fdXqpIQ=;
-        b=JjoWcBszm04G3KpVSa8/fSotuyi8AbpvUXngY0gkJnyNIRIjqqQQuWSP9XWl8DmfAk
-         ieNmHVU1ihs3KWUVEbFYtHX/GH3fy3vXRJ5JBVDt/xqbAE8yA4KVHq5JqO5HdbNJ3jr9
-         xeYUv520BN7oJaH/dQYsrKqK4/NSkNMCyGnkaXvEK3vr+jKJp0EbnpKNeJhmKxnSoOlH
-         tTWp1Rnqn/ctPJ3ie/0PQwSjPSLMLdoLdkxCEVKyCAM/JN2XkD3MTq0tFh5Fm2pCx2ji
-         gaY04TfzsmoDIQad5XnsxP/K4mZVT2N2FyfrbMLY8g2tRxzYSwolHun5a19mWHEBq0yq
-         HLMw==
-X-Gm-Message-State: AO0yUKVCIaZBCMjEEyfTGGqCaOAibs5l3kCH8nC50dY5FSgjNQZ+xApg
-        E46atseDEy5TmTLraiGxH0jV2Bh9WVT2w92KVzbpM8IirBp8Rv6e9PXpMdhpFeCPdB7Ui0C/OpH
-        6faX+j1xILe0vwwtC9Uwp4v+I
-X-Received: by 2002:a17:906:3044:b0:8af:2f5e:93e3 with SMTP id d4-20020a170906304400b008af2f5e93e3mr10186577ejd.29.1678691791611;
-        Mon, 13 Mar 2023 00:16:31 -0700 (PDT)
-X-Google-Smtp-Source: AK7set90kZRAgbUuuodrlErpD1jVyGtOjnJwjnuEStRA9ZVXVURvGGzZzx24xJhbJzi6gHgZIaqNzw==
-X-Received: by 2002:a17:906:3044:b0:8af:2f5e:93e3 with SMTP id d4-20020a170906304400b008af2f5e93e3mr10186564ejd.29.1678691791329;
-        Mon, 13 Mar 2023 00:16:31 -0700 (PDT)
-Received: from [192.168.0.159] (185-219-167-205-static.vivo.cz. [185.219.167.205])
-        by smtp.gmail.com with ESMTPSA id hv14-20020a17090760ce00b0092973e209f2sm884816ejc.109.2023.03.13.00.16.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 00:16:31 -0700 (PDT)
-Message-ID: <70b77670-43d5-ff38-abfe-3379cc54a82e@redhat.com>
-Date:   Mon, 13 Mar 2023 08:16:30 +0100
+        Mon, 13 Mar 2023 06:39:05 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD94DBC9;
+        Mon, 13 Mar 2023 03:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=ysjw2zASi2TN/sEh3AgZLlcqDNtBqR4JUmN2mmSl7tQ=; b=HAvudky9j4TSTsClvuImR7P2k7
+        A/lZZbwJGo0VKLL3hAtlxVyb1Uc3SGhVWF6VwjlndJPbdYYBsYkx76x8ConLISCR3PRmGH1fdaDzN
+        lM9Qa//ivj4ryY7R5zY4B68uiVEDSs4vGv051dlcBGhfm1/SiKWbZHmtJ2fIBGYWu/uFP89KU3307
+        qhmhHuF+vkvy5oM+aM8X4JuNJ8UHTAxxc7H/lCxaR+GccVqlmDOjKerDa8oUHgTseMntK3x0xME/0
+        cINmLJT+XASddwh6YFhdo+DP5NbvFjLi4ljzU/VfPDy1lRqOcdZI3vpQt9usDCbttu4OSmQ7sJt6K
+        XCWS30/g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pbfVt-005BYJ-Tc; Mon, 13 Mar 2023 10:34:46 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     colin.i.king@gmail.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
+        prarit@redhat.com
+Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org
+Subject: [PATCH] stress-module: stress finit_module() and delete_module()
+Date:   Mon, 13 Mar 2023 03:34:38 -0700
+Message-Id: <20230313103439.1235909-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH bpf-next v10 1/2] bpf: Fix attaching
- fentry/fexit/fmod_ret/lsm to modules
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        linux-modules@vger.kernel.org,
-        Nick Alcock <nick.alcock@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>
-References: <cover.1678432753.git.vmalik@redhat.com>
- <3f6a9d8ae850532b5ef864ef16327b0f7a669063.1678432753.git.vmalik@redhat.com>
- <ZAuB/cnEsPt0f0vb@bombadil.infradead.org>
-From:   Viktor Malik <vmalik@redhat.com>
-In-Reply-To: <ZAuB/cnEsPt0f0vb@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 3/10/23 20:16, Luis Chamberlain wrote:
-> Please add linux-modules in the future. My review below.
+There are different ways to test loading modules:
 
-Sorry for missing that, I'll add it next time.
+  * modprobe calls
+  * kernel module autoloader
 
-> 
-> On Fri, Mar 10, 2023 at 08:40:59AM +0100, Viktor Malik wrote:
+To stress tests modprobe we can simply run modprobe in a loop. To stress
+test the kernel module autoloader we can stress tests using the upstream
+kernel tools/testing/selftests/kmod/kmod.sh. This ends up calling
+modprobe in the end, and it has its own caps built-in to self protect
+the kernel from too many requests at the same time.
 
-[snip]
+The userspace modprobe call will also prevent calls if the same module
+exists already.
 
-> My review of the critical part below.
-> 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 45a082284464..3905bb20b9a1 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -18432,8 +18434,17 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
->>   			else
->>   				addr = (long) tgt_prog->aux->func[subprog]->bpf_func;
->>   		} else {
->> -			addr = kallsyms_lookup_name(tname);
->> +			if (btf_is_module(btf)) {
->> +				mod = btf_try_get_module(btf);
->> +				if (mod)
->> +					addr = find_kallsyms_symbol_value(mod, tname);
->> +				else
->> +					addr = 0;
->> +			} else {
->> +				addr = kallsyms_lookup_name(tname);
->> +			}
->>   			if (!addr) {
->> +				module_put(mod);
->>   				bpf_log(log,
->>   					"The address of function %s cannot be found\n",
->>   					tname);
-> 
-> If btf_modules linked list is ensured to not remove the btf module
-> during this operation, sure this is safe, as per the new guidelines I've
-> posted for try_module_get() this seems to be using try_module_get()
-> using the implied protection.
+This stress-ng modules stressor is designed to help stress test the
+finit_module() system call even if the module is already loaded, letting
+us tests things which are hard to reproduce.
 
-I believe that is the case. btf_try_get_module checks the
-BTF_F_MODULE_LIVE flag before calling try_module_get and the flag is set
-only when the module notifier callback is called with MODULE_STATE_LIVE.
-In addition, all BTF module operations are called under the same mutex,
-so the module cannot be removed in-between.
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
 
-> 
-> Please review the docs. *If* it respects that usage then feel free to
-> add:
-> 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+This is a patch for stress-ng to help stress module races with
+finit_module() and system memory pressure when userspace is being
+raced to see if a module is present and it fails to see the module
+already loaded, so stresses the system memory.
 
-Thanks for the review. Unless there are more change requests, I'll leave
-it up to the maintainers to add the tag.
+We can later add support to make the default module be saught after
+using uname and the /lib/modules/$(uname -r)/kernel/lib/$hello.ko.
 
-Viktor
+But this should be enough to get us playing ball.
 
-> 
->    Luis
-> 
+ Makefile         |   1 +
+ core-shim.c      |  35 ++++++++++
+ core-stressors.h |   1 +
+ stress-module.c  | 168 +++++++++++++++++++++++++++++++++++++++++++++++
+ stress-ng.1      |  27 ++++++++
+ stress-ng.c      |   6 ++
+ stress-ng.h      |   9 +++
+ syscalls.txt     |   2 +-
+ 8 files changed, 248 insertions(+), 1 deletion(-)
+ create mode 100644 stress-module.c
+
+diff --git a/Makefile b/Makefile
+index be46f656..f4ac7b63 100644
+--- a/Makefile
++++ b/Makefile
+@@ -316,6 +316,7 @@ STRESS_SRC = \
+ 	stress-mmapfork.c \
+ 	stress-mmaphuge.c \
+ 	stress-mmapmany.c \
++	stress-module.c \
+ 	stress-mprotect.c \
+ 	stress-mq.c \
+ 	stress-mremap.c \
+diff --git a/core-shim.c b/core-shim.c
+index 4ef97a1e..262883e8 100644
+--- a/core-shim.c
++++ b/core-shim.c
+@@ -95,6 +95,41 @@ UNEXPECTED
+ #define shim_rusage_who_t	int
+ #endif
+ 
++#ifdef HAVE_LINUX_MODULE_H
++#include <linux/module.h>
++#endif
++
++#ifndef HAVE_FINIT_MODULE
++#include <errno.h>
++#endif
++
++#ifndef __NR_finit_module
++# define __NR_finit_module -1
++#endif
++
++int shim_finit_module(int fd, const char *uargs, int flags)
++{
++#ifdef HAVE_FINIT_MODULE
++	return finit_module(fd, uargs, flags);
++#else
++	if (__NR_finit_module == -1) {
++		errno = ENOSYS;
++		return -1;
++	}
++
++	return syscall(__NR_finit_module, fd, uargs, flags);
++#endif
++}
++
++int shim_delete_module(const char *name, unsigned int flags)
++{
++#ifdef HAVE_DELETE_MODULE
++	return delete_module(name, flags);
++#else
++	return syscall(__NR_delete_module, name, flags);
++#endif
++}
++
+ #if defined(__sun__)
+ #if defined(HAVE_GETDOMAINNAME)
+ extern int getdomainname(char *name, size_t len);
+diff --git a/core-stressors.h b/core-stressors.h
+index fe5ac70a..d22ef7f2 100644
+--- a/core-stressors.h
++++ b/core-stressors.h
+@@ -166,6 +166,7 @@
+ 	MACRO(mmapfork)		\
+ 	MACRO(mmaphuge)		\
+ 	MACRO(mmapmany)		\
++	MACRO(module)		\
+ 	MACRO(mprotect)		\
+ 	MACRO(mq)		\
+ 	MACRO(mremap)		\
+diff --git a/stress-module.c b/stress-module.c
+new file mode 100644
+index 00000000..f9cab300
+--- /dev/null
++++ b/stress-module.c
+@@ -0,0 +1,168 @@
++/*
++ * Copyright (C) 2023 Luis Chamberlain <mcgrof@kernel.org>
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
++ *
++ */
++#include "stress-ng.h"
++
++#if defined(HAVE_LINUX_MODULE_H)
++#include <linux/module.h>
++#else
++UNEXPECTED
++#endif
++
++#if defined(HAVE_LIBGEN_H)
++#include <libgen.h>
++#endif
++
++#ifndef MODULE_INIT_IGNORE_MODVERSIONS
++# define MODULE_INIT_IGNORE_MODVERSIONS 1
++#endif
++
++#ifndef MODULE_INIT_IGNORE_VERMAGIC
++# define MODULE_INIT_IGNORE_VERMAGIC 2
++#endif
++
++static const stress_help_t help[] = {
++	{ NULL,	"module N",	    "start N workers performing module requests" },
++	{ NULL,	"module-path F",    "use the specified module name F to load." },
++	{ NULL,	"module-unload",    "unload the module after module load" },
++	{ NULL,	"module-nomodver",  "ignore symbol version hashes" },
++	{ NULL,	"module-novermag",  "ignore kernel version magic" },
++	{ NULL,	"module-ops N",     "stop after N module bogo operations" },
++	{ NULL,	NULL,		NULL }
++};
++
++static int stress_set_module_unload(const char *opt)
++{
++	return stress_set_setting_true("module-unload", opt);
++}
++
++static int stress_set_module_nomodver(const char *opt)
++{
++	return stress_set_setting_true("module-nomodver", opt);
++}
++
++static int stress_set_module_novermag(const char *opt)
++{
++	return stress_set_setting_true("module-novermag", opt);
++}
++
++static int stress_set_module_path(const char *name)
++{
++	return stress_set_setting("module-path", TYPE_ID_STR, name);
++}
++
++/*
++ *  stress_module
++ *	stress by heavy module ops
++ */
++static int stress_module(const stress_args_t *args)
++{
++	int fd;
++	bool module_unload = false;
++	bool ignore_vermagic = false;
++	bool ignore_modversions = false;
++	char *module_path = NULL;
++	char *module_name;
++	char *default_module = "hello";
++	const char *finit_args1 = "";
++	unsigned int kernel_flags = 0;
++	const pid_t mypid = getpid();
++	struct stat statbuf;
++
++	(void)stress_get_setting("module-path", &module_path);
++	(void)stress_get_setting("module-novermag", &ignore_vermagic);
++	(void)stress_get_setting("module-nomodver", &ignore_modversions);
++	(void)stress_get_setting("module-unload", &module_unload);
++
++	if (ignore_vermagic)
++		kernel_flags |= MODULE_INIT_IGNORE_VERMAGIC;
++	if (ignore_modversions)
++		kernel_flags |= MODULE_INIT_IGNORE_MODVERSIONS;
++
++	if (!module_path)
++		module_path = default_module;
++
++	if (stat(module_path, &statbuf) < 0)
++		return EXIT_FAILURE;
++	if (!S_ISREG(statbuf.st_mode))
++		return EXIT_FAILURE;
++
++	module_name = basename(module_path);
++
++	stress_set_proc_state(args->name, STRESS_STATE_RUN);
++
++	do {
++		int ret;
++
++		if (!keep_stressing(args)) {
++			if (mypid > 1)
++				(void)kill(mypid, SIGKILL);
++			goto out;
++		}
++
++		fd = open(module_path, O_RDONLY|O_CLOEXEC);
++
++		if (fd < 0) {
++			/* Check if we hit the open file limit */
++			if ((errno == EMFILE) || (errno == ENFILE)) {
++				if (mypid > 1)
++					(void)kill(mypid, SIGKILL);
++				goto out;
++			}
++			/* Ignore other errors */
++			continue;
++		}
++
++		if (module_unload)
++			shim_delete_module(module_name, 0);
++		ret = shim_finit_module(fd, finit_args1, kernel_flags);
++		if (ret == 0) {
++			if (module_unload)
++				shim_delete_module(module_name, 0);
++		}
++		(void)close(fd);
++
++out:
++	} while (keep_stressing(args));
++
++	stress_set_proc_state(args->name, STRESS_STATE_DEINIT);
++
++	if (mypid > 1) {
++		int status;
++
++		(void)kill(mypid, SIGKILL);
++		(void)waitpid(mypid, &status, 0);
++	}
++
++	return EXIT_SUCCESS;
++}
++
++static const stress_opt_set_func_t opt_set_funcs[] = {
++	{ OPT_module_path,	stress_set_module_path },
++	{ OPT_module_nomodver,	stress_set_module_nomodver },
++	{ OPT_module_novermag,	stress_set_module_novermag },
++	{ OPT_module_unload,	stress_set_module_unload },
++	{ 0,					NULL }
++};
++
++stressor_info_t stress_module_info = {
++	.stressor = stress_module,
++	.class = CLASS_OS | CLASS_FILESYSTEM | CLASS_MEMORY,
++	.opt_set_funcs = opt_set_funcs,
++	.help = help
++};
+diff --git a/stress-ng.1 b/stress-ng.1
+index 959649a8..24dc5783 100644
+--- a/stress-ng.1
++++ b/stress-ng.1
+@@ -3402,6 +3402,33 @@ the maximum allowed mappings or a maximum of 262144 mappings are made.
+ .B \-\-mmapmany\-ops N
+ stop after N mmapmany bogo operations
+ .TP
++.B \-\-module N
++start N workers that will use finit_module() to load the module specified
++or the hello test module, if you've compiled that. There are different ways
++to test loading modules. Using modprobe calls in a loop, using the kernel
++kernel module autoloader, and this stress-ng module stressor. To stress tests
++modprobe we can simply run the userspace modprobe program in a loop. To stress
++test the kernel module autoloader we can stress tests using the upstream
++kernel tools/testing/selftests/kmod/kmod.sh. This ends up calling modprobe
++in the end, and it has its own caps built-in to self protect the kernel from
++too many requests at the same time. The userspace modprobe call will also
++prevent calls if the same module exists already. The stress-ng modules
++stressor is designed to help stress test the finit_module() system call
++even if the module is already loaded, letting us tests races which are
++otherwise hard to reproduce.
++.TP
++.B \-\-module\-path PATH
++PATH of the module to use. You must use a full path.
++.TP
++.B \-\-module\-ignore\-modversions
++Ignore module modversions when using finit_module().
++.TP
++.B \-\-module\-ignore\-vermagic
++Ignore module versions when using finit_module().
++.TP
++.B \-\-module\-unload
++Unload the module right after loading it with finit_module().
++.TP
+ .B \-\-mprotect N
+ start N workers that exercise changing page protection settings and access
+ memory after each change. 8 processes per worker contend with each other
+diff --git a/stress-ng.c b/stress-ng.c
+index 034d7440..1fe65011 100644
+--- a/stress-ng.c
++++ b/stress-ng.c
+@@ -686,6 +686,12 @@ static const struct option long_options[] = {
+ 	{ "mmaphuge-ops",	1,	0,	OPT_mmaphuge_ops },
+ 	{ "mmapmany",		1,	0,	OPT_mmapmany },
+ 	{ "mmapmany-ops",	1,	0,	OPT_mmapmany_ops },
++	{ "module",		1,	0,	OPT_module},
++	{ "module-ops",		1,	0,	OPT_module_ops },
++	{ "module-path",	1,	0,	OPT_module_path},
++	{ "module-nomodver",	1,	0,	OPT_module_nomodver},
++	{ "module-novermag",	1,	0,	OPT_module_novermag,},
++	{ "module-unload",	0,	0,	OPT_module_unload},
+ 	{ "mprotect",		1,	0,	OPT_mprotect },
+ 	{ "mprotect-ops",	1,	0,	OPT_mprotect_ops },
+ 	{ "mq",			1,	0,	OPT_mq },
+diff --git a/stress-ng.h b/stress-ng.h
+index c93654ac..be89cdba 100644
+--- a/stress-ng.h
++++ b/stress-ng.h
+@@ -1614,6 +1614,13 @@ typedef enum {
+ 	OPT_mmapmany,
+ 	OPT_mmapmany_ops,
+ 
++	OPT_module,
++	OPT_module_path,
++	OPT_module_nomodver,
++	OPT_module_novermag,
++	OPT_module_unload,
++	OPT_module_ops,
++
+ 	OPT_mprotect,
+ 	OPT_mprotect_ops,
+ 
+@@ -2914,6 +2921,7 @@ extern int shim_clone3(struct shim_clone_args *cl_args, size_t size);
+ extern int shim_close_range(unsigned int fd, unsigned int max_fd, unsigned int flags);
+ extern ssize_t shim_copy_file_range(int fd_in, shim_loff_t *off_in,
+ 	int fd_out, shim_loff_t *off_out, size_t len, unsigned int flags);
++extern int shim_delete_module(const char *name, unsigned int flags);
+ extern int shim_dup3(int oldfd, int newfd, int flags);
+ extern int shim_execveat(int dir_fd, const char *pathname, char *const argv[],
+ 	char *const envp[], int flags);
+@@ -2921,6 +2929,7 @@ extern void shim_exit_group(int status);
+ extern int shim_fallocate(int fd, int mode, off_t offset, off_t len);
+ extern int shim_fdatasync(int fd);
+ extern ssize_t shim_fgetxattr(int fd, const char *name, void *value, size_t size);
++extern int shim_finit_module(int fd, const char *uargs, int flags);
+ extern ssize_t shim_flistxattr(int fd, char *list, size_t size);
+ extern int shim_fsconfig(int fd, unsigned int cmd, const char *key,
+ 	const void *value, int aux);
+diff --git a/syscalls.txt b/syscalls.txt
+index 2952a46c..69471a9f 100644
+--- a/syscalls.txt
++++ b/syscalls.txt
+@@ -82,7 +82,7 @@ fchownat			close
+ fcntl				open, lockf, fcntl
+ fdatasync			hdd
+ fgetxattr			xattr
+-finit_module
++finit_module			module
+ flistxattr			xattr
+ flock				flock
+ fork				fork
+-- 
+2.39.2
 
