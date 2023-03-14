@@ -2,77 +2,76 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 797D5C05027
-	for <linux-modules@archiver.kernel.org>; Tue, 14 Mar 2023 20:15:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 829A8C05027
+	for <linux-modules@archiver.kernel.org>; Tue, 14 Mar 2023 20:40:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjCNUP1 (ORCPT
+        id S229735AbjCNUkL (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 14 Mar 2023 16:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        Tue, 14 Mar 2023 16:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCNUP0 (ORCPT
+        with ESMTP id S229720AbjCNUkJ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:15:26 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC19192;
-        Tue, 14 Mar 2023 13:15:22 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id eg48so7735451edb.13;
-        Tue, 14 Mar 2023 13:15:22 -0700 (PDT)
+        Tue, 14 Mar 2023 16:40:09 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6529052932;
+        Tue, 14 Mar 2023 13:39:40 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ek18so36069681edb.6;
+        Tue, 14 Mar 2023 13:39:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678824921;
+        d=gmail.com; s=20210112; t=1678826379;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iOERF+jCyt6cMLRNcuzDfYHf9edQe6iKfmTk13evlgE=;
-        b=AAj+e5IIgIccY1twGYsHPNoORZcdlYW3Rx1rQW/alPuaVuGooEwW2bykJEcIYTbFGt
-         OyDOEmDWuHvVGB9cCPI+DaKdclt+pSBfPRV0/zunyYa6S4bA36AT0jO63wQtE+Ihd87D
-         GLW5eq4pfVTn86QBtqYQVneVgR3McQ0YWojYD+LTg0WT5Kzl327rg8J6EUSUMqaeLNPI
-         y/JKNIHsDqZmeoT8u4/7Rjp+W1pzZy1sIaotANbKBGHnXRzJMA4a36FYaXszRB8a2+QL
-         3YYZhyyQ1Mkhcw1d/dcKfu+ggNpjRMdN4eXPIUSOSzh44CgJfNtwTC+XYAvm9LBXKeQO
-         QTDw==
+        bh=eyGDngrrwWPIxM672XPjRQ30S2ESLoP5nSFza+5+EjM=;
+        b=ira9xGzR5hc5JCLwYudB3eScpSTpIR1m3fFtid/a4uiUsh60E5TccV9mT9GqIRGvTA
+         ZBC1Ve9rKaJugz4BN1xuyUIYbqCsu+fR4bZaGy4jCKHjTynqS8xBQJcmRtmfgu+vJhkW
+         9Umxj5WlrcDEdj7qkWWgwSWB8WnSKU/jl0x60hhm53DRKG3WDCJuahcZ60B+SXC+UnJ9
+         hg39wRIM+p9zIGrQr/rAsKckTzjddFwa31DvnGkKx5A1c+O3ow9Jf4OGFnpbuYrzhrRl
+         QEvNLRub4WjHnlZAvWWR1Az7UUJZsr0EGN5eyiFNzg03S3JeoQaVprddoOZoY89Ijm51
+         oucA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678824921;
+        d=1e100.net; s=20210112; t=1678826379;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iOERF+jCyt6cMLRNcuzDfYHf9edQe6iKfmTk13evlgE=;
-        b=Zgali90QWzpT986sGkdjRRSsJxltPeKZvVsSnb7f92tDkKiOdnwyD22MiSGhYNBVDi
-         qEbvykKVd2KCPXoN8v6Ga19tbGGIhsrB53S75iml8bXUI5Dcvx4xz9sqv5l0o4eFTxdq
-         gsmfmdFdVrWOAwjRZaIG6gxNaJHw/RUU8RokxCC/iOaKcp3fJfrxPjByXD5nxCirD8p3
-         QkeTK0v/P7nhd4AUXegcAlQh6UDCn4ARlEMvNvwkeBYIVp8p55CcAvT/EY1p8sB5teG1
-         7e9icgeoyALanKW24e8PUeot96iIafeh+17I/N2G4Sj9jRRt29D6F6lq5pQ5cn/OJlBB
-         Ea/g==
-X-Gm-Message-State: AO0yUKVLyjov3snFfqMT36Le9VVz807wHcrKk16R0EBjPpb+zP9tagED
-        PMKmN6cT3eGWSvlRQm7HUbg=
-X-Google-Smtp-Source: AK7set/sMm0YjG7LDT1uBapw5l8BoDwtxlSY3JrUw3fv9um7gVJMKXwWuCWON77Fb1UYIhJnPAPx3w==
-X-Received: by 2002:a17:907:76ea:b0:928:9add:3f20 with SMTP id kg10-20020a17090776ea00b009289add3f20mr3871873ejc.61.1678824921286;
-        Tue, 14 Mar 2023 13:15:21 -0700 (PDT)
+        bh=eyGDngrrwWPIxM672XPjRQ30S2ESLoP5nSFza+5+EjM=;
+        b=7USjHcW4i+2pHNMb9sUkZo0wvF2O4lMiHn95+H/caJXDhA4dv8952vP4yTQ4oI1pqx
+         chB8VXNQJzB5WQ1akGZrlGq/PFOYZvSHCxpPEV6R3alW6UY2ArSFqClS9Je/3sqS4elb
+         gVoZwOzAAmHiPV1HnhIlFsZMF8P6wZ48eiKH1/GYfBSRAfJUz/JZN3wE8EVi1ElBYczA
+         aJg0H0S5UvFt/D8IW9IfJoW3ILdf2umUNxLPrV7VLpWWwCXmJLZB81zHkLZBO4pn3p6x
+         MIOOFgBlftXMA6DJNOB3G6h+0Fl7hBZD+rwbekdtysywXdndN1WQ/0NpTu0PD5AzOwI9
+         1oBg==
+X-Gm-Message-State: AO0yUKVyUOKHIJ4hAT2XesI3lSEQvftnWU/2x1AX4jpB2etGZ/6bthh0
+        f2N8Jg3ztoyFjdx/3uxuNoM=
+X-Google-Smtp-Source: AK7set+jrinMC6MRWeB656rnwC53S5/VJ5Q9JOypzJTH2TzWrlXJpiKs0oeno7Fxr9N470ge1c/y+g==
+X-Received: by 2002:a17:906:8506:b0:87b:1be:a8c2 with SMTP id i6-20020a170906850600b0087b01bea8c2mr3420089ejx.73.1678826378788;
+        Tue, 14 Mar 2023 13:39:38 -0700 (PDT)
 Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id jz14-20020a17090775ee00b00926f89e2213sm1527267ejc.190.2023.03.14.13.15.20
+        by smtp.gmail.com with ESMTPSA id mh19-20020a170906eb9300b009200601ea12sm1552934ejb.208.2023.03.14.13.39.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 13:15:20 -0700 (PDT)
+        Tue, 14 Mar 2023 13:39:38 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     mcgrof@kernel.org, Nick Alcock <nick.alcock@oracle.com>
 Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Samuel Holland <samuel@sholland.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, iommu@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 07/27] iommu/sun50i: remove MODULE_LICENSE in non-modules
-Date:   Tue, 14 Mar 2023 21:15:16 +0100
-Message-ID: <22999869.6Emhk5qWAg@jernej-laptop>
-In-Reply-To: <20230224150811.80316-8-nick.alcock@oracle.com>
-References: <20230224150811.80316-1-nick.alcock@oracle.com>
- <20230224150811.80316-8-nick.alcock@oracle.com>
+Subject: Re: [PATCH 12/24] kbuild,
+ soc: sunxi: sram: remove MODULE_LICENSE in non-modules
+Date:   Tue, 14 Mar 2023 21:39:37 +0100
+Message-ID: <45375953.fMDQidcC6G@jernej-laptop>
+In-Reply-To: <20230217141059.392471-13-nick.alcock@oracle.com>
+References: <20230217141059.392471-1-nick.alcock@oracle.com>
+ <20230217141059.392471-13-nick.alcock@oracle.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Dne petek, 24. februar 2023 ob 16:07:51 CET je Nick Alcock napisal(a):
+Dne petek, 17. februar 2023 ob 15:10:47 CET je Nick Alcock napisal(a):
 > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
 > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
 > are used to identify modules. As a consequence, uses of the macro
@@ -89,33 +88,32 @@ Dne petek, 24. februar 2023 ob 16:07:51 CET je Nick Alcock napisal(a):
 > Cc: linux-modules@vger.kernel.org
 > Cc: linux-kernel@vger.kernel.org
 > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Will Deacon <will@kernel.org>
 > Cc: Chen-Yu Tsai <wens@csie.org>
 > Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
 > Cc: Samuel Holland <samuel@sholland.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: iommu@lists.linux.dev
 > Cc: linux-arm-kernel@lists.infradead.org
 > Cc: linux-sunxi@lists.linux.dev
-> ---
->  drivers/iommu/sun50i-iommu.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
-> index 5b585eace3d4..63ac9d15b859 100644
-> --- a/drivers/iommu/sun50i-iommu.c
-> +++ b/drivers/iommu/sun50i-iommu.c
-> @@ -1077,4 +1077,3 @@ builtin_platform_driver_probe(sun50i_iommu_driver,
-> sun50i_iommu_probe); MODULE_DESCRIPTION("Allwinner H6 IOMMU driver");
->  MODULE_AUTHOR("Maxime Ripard <maxime@cerno.tech>");
->  MODULE_AUTHOR("zhuxianbin <zhuxianbin@allwinnertech.com>");
-> -MODULE_LICENSE("Dual BSD/GPL");
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Applied, thanks!
 
 Best regards,
 Jernej
+
+> ---
+>  drivers/soc/sunxi/sunxi_sram.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
+> index 92f9186c1c42..21116d47d26d 100644
+> --- a/drivers/soc/sunxi/sunxi_sram.c
+> +++ b/drivers/soc/sunxi/sunxi_sram.c
+> @@ -421,4 +421,3 @@ builtin_platform_driver_probe(sunxi_sram_driver,
+> sunxi_sram_probe);
+> 
+>  MODULE_AUTHOR("Maxime Ripard <maxime.ripard@free-electrons.com>");
+>  MODULE_DESCRIPTION("Allwinner sunXi SRAM Controller Driver");
+> -MODULE_LICENSE("GPL");
+
 
 
 
