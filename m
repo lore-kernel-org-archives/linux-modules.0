@@ -2,400 +2,120 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39871C6FD1C
-	for <linux-modules@archiver.kernel.org>; Tue, 14 Mar 2023 14:59:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 797D5C05027
+	for <linux-modules@archiver.kernel.org>; Tue, 14 Mar 2023 20:15:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbjCNO7j (ORCPT
+        id S229950AbjCNUP1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 14 Mar 2023 10:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        Tue, 14 Mar 2023 16:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjCNO7j (ORCPT
+        with ESMTP id S229627AbjCNUP0 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:59:39 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE680DBF6
-        for <linux-modules@vger.kernel.org>; Tue, 14 Mar 2023 07:59:35 -0700 (PDT)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7AA0E445B9
-        for <linux-modules@vger.kernel.org>; Tue, 14 Mar 2023 14:59:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678805974;
-        bh=nF+ggmBWwds1ZYP2z1dvsdxQUR9vO8d2eE2ZJ19uHDk=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=CtR3VRxPb6pTtLPP+je5fSDlYNnnHLwdLXaU96a86oMoj5Z3UMC6zyOSXu8x+Mreg
-         WDSuqxvP+TC5Q3FUdsxTGRhmyCA11VSIGkRPyRk2hpUH3wawKzuGn37WhQt8OR/HEr
-         M1YN7ISynn4rPs78B//Jtx2LiAlZmjLYuxtF8zedTm8GqhOaPOVoMfEEz3za8kELMY
-         p6DWjGuyOBPMlNsvFJPy456MK3b0aG2N22VwqAM41JPFSheFwuFKNpJvBtB4+ht4bX
-         j1alHZLch3WDD4F/LNXwfXC84sOsin2RWoFJZBQn3Xd841BjHuXG80iDPNkMczLv7T
-         k5tF8lkZdiEgg==
-Received: by mail-ed1-f70.google.com with SMTP id z14-20020a05640235ce00b004e07ddbc2f8so22188172edc.7
-        for <linux-modules@vger.kernel.org>; Tue, 14 Mar 2023 07:59:34 -0700 (PDT)
+        Tue, 14 Mar 2023 16:15:26 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC19192;
+        Tue, 14 Mar 2023 13:15:22 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id eg48so7735451edb.13;
+        Tue, 14 Mar 2023 13:15:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678824921;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iOERF+jCyt6cMLRNcuzDfYHf9edQe6iKfmTk13evlgE=;
+        b=AAj+e5IIgIccY1twGYsHPNoORZcdlYW3Rx1rQW/alPuaVuGooEwW2bykJEcIYTbFGt
+         OyDOEmDWuHvVGB9cCPI+DaKdclt+pSBfPRV0/zunyYa6S4bA36AT0jO63wQtE+Ihd87D
+         GLW5eq4pfVTn86QBtqYQVneVgR3McQ0YWojYD+LTg0WT5Kzl327rg8J6EUSUMqaeLNPI
+         y/JKNIHsDqZmeoT8u4/7Rjp+W1pzZy1sIaotANbKBGHnXRzJMA4a36FYaXszRB8a2+QL
+         3YYZhyyQ1Mkhcw1d/dcKfu+ggNpjRMdN4eXPIUSOSzh44CgJfNtwTC+XYAvm9LBXKeQO
+         QTDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678805974;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nF+ggmBWwds1ZYP2z1dvsdxQUR9vO8d2eE2ZJ19uHDk=;
-        b=QmWSMWWqKJJNH47bt2qW0r3XblaiFu8WLI/Mp2Xqpi+/oMQVxSg203OhsDyPWUabaQ
-         bWlqzkHguKHxpUbIGAyD2U6jqEdI2aZ7mDAO9806CyUBMdr432fCw28X2tttKYFHgEBd
-         f03z3jV1Z6sPMYhGiuuLEUz3s8/kwDEYtL5RckQDjOhsdb+l/NMmnWSlbMnoaeXUunkL
-         044UQIqt0U0GJV+39tdSDu5hR61lh4kPIjr/4STWOj4HJABMoiEYRupci3bTnPCeNWac
-         NVv2sRqcAJrMHV94FwB8kwZq+c4ZTLEtxnH8oumf9sFhvBx1g80zlByxr1Nek+9cmn+M
-         Qizg==
-X-Gm-Message-State: AO0yUKWiUK1HHS/0d+G2ddXjBjlGmfAVNbzj073Vpd2F1n1vTdjDHWfg
-        I2UYfB479eZ6nr2ZqCUECPSRJszgEHDadOUAu7cJ/kmzFelscZT5+TrS3PMQAeOb8L3bFDOOajD
-        TfDYqUWpzsmMmW06P8N8nZxU2A+lFm93Urxbe3pDAR2I=
-X-Received: by 2002:a17:906:b0cb:b0:8b1:2d0e:281 with SMTP id bk11-20020a170906b0cb00b008b12d0e0281mr2788831ejb.18.1678805973752;
-        Tue, 14 Mar 2023 07:59:33 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/XTw24LCqFGNaFcrwMcuz5Qf9nJ1bmKJZIJY68sG3doUud9PbveOC4IeN89bxtmEsy9saBSQ==
-X-Received: by 2002:a17:906:b0cb:b0:8b1:2d0e:281 with SMTP id bk11-20020a170906b0cb00b008b12d0e0281mr2788791ejb.18.1678805973363;
-        Tue, 14 Mar 2023 07:59:33 -0700 (PDT)
-Received: from localhost (host-79-53-23-214.retail.telecomitalia.it. [79.53.23.214])
-        by smtp.gmail.com with ESMTPSA id z4-20020a170906714400b008e53874f8d8sm1235863ejj.180.2023.03.14.07.59.33
+        d=1e100.net; s=20210112; t=1678824921;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iOERF+jCyt6cMLRNcuzDfYHf9edQe6iKfmTk13evlgE=;
+        b=Zgali90QWzpT986sGkdjRRSsJxltPeKZvVsSnb7f92tDkKiOdnwyD22MiSGhYNBVDi
+         qEbvykKVd2KCPXoN8v6Ga19tbGGIhsrB53S75iml8bXUI5Dcvx4xz9sqv5l0o4eFTxdq
+         gsmfmdFdVrWOAwjRZaIG6gxNaJHw/RUU8RokxCC/iOaKcp3fJfrxPjByXD5nxCirD8p3
+         QkeTK0v/P7nhd4AUXegcAlQh6UDCn4ARlEMvNvwkeBYIVp8p55CcAvT/EY1p8sB5teG1
+         7e9icgeoyALanKW24e8PUeot96iIafeh+17I/N2G4Sj9jRRt29D6F6lq5pQ5cn/OJlBB
+         Ea/g==
+X-Gm-Message-State: AO0yUKVLyjov3snFfqMT36Le9VVz807wHcrKk16R0EBjPpb+zP9tagED
+        PMKmN6cT3eGWSvlRQm7HUbg=
+X-Google-Smtp-Source: AK7set/sMm0YjG7LDT1uBapw5l8BoDwtxlSY3JrUw3fv9um7gVJMKXwWuCWON77Fb1UYIhJnPAPx3w==
+X-Received: by 2002:a17:907:76ea:b0:928:9add:3f20 with SMTP id kg10-20020a17090776ea00b009289add3f20mr3871873ejc.61.1678824921286;
+        Tue, 14 Mar 2023 13:15:21 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id jz14-20020a17090775ee00b00926f89e2213sm1527267ejc.190.2023.03.14.13.15.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 07:59:33 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 15:59:32 +0100
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-Cc:     Gary Guo <gary@garyguo.net>, Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
-Message-ID: <ZBCL1G+8z8c6zLI0@righiandr-XPS-13-7390>
-References: <20230111161155.1349375-1-gary@garyguo.net>
- <ZA+IUIOAgrWH2oZ0@righiandr-XPS-13-7390>
- <20230313214853.GY19419@kitsune.suse.cz>
- <ZA+bXi0o27XPx3nz@righiandr-XPS-13-7390>
- <20230313220234.GZ19419@kitsune.suse.cz>
- <ZA+fGpAdnvB5VwKW@righiandr-XPS-13-7390>
- <ZBCG3ykG1q4GEcIf@righiandr-XPS-13-7390>
+        Tue, 14 Mar 2023 13:15:20 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     mcgrof@kernel.org, Nick Alcock <nick.alcock@oracle.com>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 07/27] iommu/sun50i: remove MODULE_LICENSE in non-modules
+Date:   Tue, 14 Mar 2023 21:15:16 +0100
+Message-ID: <22999869.6Emhk5qWAg@jernej-laptop>
+In-Reply-To: <20230224150811.80316-8-nick.alcock@oracle.com>
+References: <20230224150811.80316-1-nick.alcock@oracle.com>
+ <20230224150811.80316-8-nick.alcock@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZBCG3ykG1q4GEcIf@righiandr-XPS-13-7390>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Mar 14, 2023 at 03:38:24PM +0100, Andrea Righi wrote:
-> On Mon, Mar 13, 2023 at 11:09:31PM +0100, Andrea Righi wrote:
-> > On Mon, Mar 13, 2023 at 11:02:34PM +0100, Michal Suchánek wrote:
-> > > On Mon, Mar 13, 2023 at 10:53:34PM +0100, Andrea Righi wrote:
-> > > > On Mon, Mar 13, 2023 at 10:48:53PM +0100, Michal Suchánek wrote:
-> > > > > Hello,
-> > > > > 
-> > > > > On Mon, Mar 13, 2023 at 09:32:16PM +0100, Andrea Righi wrote:
-> > > > > > On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote:
-> > > > > > > Currently modversion uses a fixed size array of size (64 - sizeof(long))
-> > > > > > > to store symbol names, thus placing a hard limit on length of symbols.
-> > > > > > > Rust symbols (which encodes crate and module names) can be quite a bit
-> > > > > > > longer. The length limit in kallsyms is increased to 512 for this reason.
-> > > > > > > 
-> > > > > > > It's a waste of space to simply expand the fixed array size to 512 in
-> > > > > > > modversion info entries. I therefore make it variably sized, with offset
-> > > > > > > to the next entry indicated by the initial "next" field.
-> > > > > > > 
-> > > > > > > In addition to supporting longer-than-56/60 byte symbols, this patch also
-> > > > > > > reduce the size for short symbols by getting rid of excessive 0 paddings.
-> > > > > > > There are still some zero paddings to ensure "next" and "crc" fields are
-> > > > > > > properly aligned.
-> > > > > > > 
-> > > > > > > This patch does have a tiny drawback that it makes ".mod.c" files generated
-> > > > > > > a bit less easy to read, as code like
-> > > > > > > 
-> > > > > > > 	"\x08\x00\x00\x00\x78\x56\x34\x12"
-> > > > > > > 	"symbol\0\0"
-> > > > > > > 
-> > > > > > > is generated as opposed to
-> > > > > > > 
-> > > > > > > 	{ 0x12345678, "symbol" },
-> > > > > > > 
-> > > > > > > because the structure is now variable-length. But hopefully nobody reads
-> > > > > > > the generated file :)
-> > > > > > > 
-> > > > > > > Link: b8a94bfb3395 ("kallsyms: increase maximum kernel symbol length to 512")
-> > > > > > > Link: https://github.com/Rust-for-Linux/linux/pull/379
-> > > > > > > 
-> > > > > > > Signed-off-by: Gary Guo <gary@garyguo.net>
-> > > > > > 
-> > > > > > Is there any newer version of this patch?
-> > > > > > 
-> > > > > > I'm doing some tests with it, but I'm getting boot failures on ppc64
-> > > > > > with this applied (at boot kernel is spitting out lots of oops'es and
-> > > > > > unfortunately it's really hard to copy paste or just read them from the
-> > > > > > console).
-> > > > > 
-> > > > > Are you using the ELF ABI v1 or v2?
-> > > > > 
-> > > > > v1 may have some additional issues when it comes to these symbol tables.
-> > > > > 
-> > > > > Thanks
-> > > > > 
-> > > > > Michal
-> > > > 
-> > > > I have CONFIG_PPC64_ELF_ABI_V2=y in my .config, so I guess I'm using v2.
-> > > > 
-> > > > BTW, the issue seems to be in dedotify_versions(), as a silly test I
-> > > > tried to comment out this function completely to be a no-op and now my
-> > > > system boots fine (but I guess I'm probably breaking something else).
-> > > 
-> > > Probably not. You should not have the extra leading dot on ABI v2. So if
-> > > dedotify does something that means something generates and then expects
-> > > back symbols with a leading dot, and this workaround for ABI v1 breaks
-> > > that. Or maybe it is called when it shouldn't.
-> > 
-> > Hm.. I'll add some debugging to this function to see what happens exactly.
+Dne petek, 24. februar 2023 ob 16:07:51 CET je Nick Alcock napisal(a):
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
 > 
-> Alright I've done more tests across different architectures. My problem
-> with ppc64 is that this architecture is evaluating sechdrs[i].sh_size
-> using get_stubs_size(), that apparently can add some extra padding, so
-> doing (vers + vers->next < end) isn't a reliable check to determine the
-> end of the variable array, because sometimes "end" can be greater than
-> the last "vers + vers->next" entry.
+> So remove it in the files in this commit, none of which can be built as
+> modules.
 > 
-> In general I think it'd be more reliable to add a dummy NULL entry at
-> the end of the modversion array.
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Samuel Holland <samuel@sholland.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: iommu@lists.linux.dev
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-sunxi@lists.linux.dev
+> ---
+>  drivers/iommu/sun50i-iommu.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> Moreover, I think we also need to enforce struct modversion_info to be
-> __packed, just to make sure that no extra padding is added (otherwise it
-> may break our logic to determine the offset of the next entry).
-> 
-> > @@ -2062,16 +2066,25 @@ static void add_versions(struct buffer *b, struct module *mod)
-> >  				s->name, mod->name);
-> >  			continue;
-> >  		}
-> > -		if (strlen(s->name) >= MODULE_NAME_LEN) {
-> > -			error("too long symbol \"%s\" [%s.ko]\n",
-> > -			      s->name, mod->name);
-> > -			break;
-> > -		}
-> > -		buf_printf(b, "\t{ %#8x, \"%s\" },\n",
-> > -			   s->crc, s->name);
-> > +		name_len = strlen(s->name);
-> > +		name_len_padded = (name_len + 1 + 3) & ~3;
-> > +
-> > +		/* Offset to next entry */
-> > +		tmp = TO_NATIVE(8 + name_len_padded);
-> 
-> ^ Here's another issue that I found, you can't use TO_NATIVE() in this
-> way, some compilers are complaining (like on s390x this doesn't build).
-> 
-> So we need to do something like:
-> 
-> 	/* Offset to next entry */
-> 	tmp = 8 + name_len_padded
-> 	tmp = TO_NATIVE(tmp);
-> 
-> I'll do some additional tests with these changes and send an updated
-> patch (for those that are interested).
-> 
-> -Andrea
+> diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
+> index 5b585eace3d4..63ac9d15b859 100644
+> --- a/drivers/iommu/sun50i-iommu.c
+> +++ b/drivers/iommu/sun50i-iommu.c
+> @@ -1077,4 +1077,3 @@ builtin_platform_driver_probe(sun50i_iommu_driver,
+> sun50i_iommu_probe); MODULE_DESCRIPTION("Allwinner H6 IOMMU driver");
+>  MODULE_AUTHOR("Maxime Ripard <maxime@cerno.tech>");
+>  MODULE_AUTHOR("zhuxianbin <zhuxianbin@allwinnertech.com>");
+> -MODULE_LICENSE("Dual BSD/GPL");
 
-In practice, this is what I'm testing at the moment:
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
----
- arch/powerpc/kernel/module_64.c |  5 +++--
- include/linux/module.h          |  8 +++++---
- kernel/module/version.c         | 22 ++++++++++-----------
- scripts/export_report.pl        |  9 +++++----
- scripts/mod/modpost.c           | 35 +++++++++++++++++++++++----------
- 5 files changed, 48 insertions(+), 31 deletions(-)
+Best regards,
+Jernej
 
-diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-index ff045644f13f..ea6c830ed1e7 100644
---- a/arch/powerpc/kernel/module_64.c
-+++ b/arch/powerpc/kernel/module_64.c
-@@ -234,12 +234,13 @@ static unsigned long get_stubs_size(const Elf64_Ehdr *hdr,
- static void dedotify_versions(struct modversion_info *vers,
- 			      unsigned long size)
- {
--	struct modversion_info *end;
-+	struct modversion_info *end = (void *)vers + size;
- 
--	for (end = (void *)vers + size; vers < end; vers++)
-+	for (; vers < end && vers->next; vers = (void *)vers + vers->next) {
- 		if (vers->name[0] == '.') {
- 			memmove(vers->name, vers->name+1, strlen(vers->name));
- 		}
-+	}
- }
- 
- /*
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 8c5909c0076c..4744901bdf63 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -34,9 +34,11 @@
- #define MODULE_NAME_LEN MAX_PARAM_PREFIX_LEN
- 
- struct modversion_info {
--	unsigned long crc;
--	char name[MODULE_NAME_LEN];
--};
-+	/* Offset of the next modversion entry in relation to this one. */
-+	u32 next;
-+	u32 crc;
-+	char name[0];
-+} __packed;
- 
- struct module;
- struct exception_table_entry;
-diff --git a/kernel/module/version.c b/kernel/module/version.c
-index 53f43ac5a73e..5528f98c42dc 100644
---- a/kernel/module/version.c
-+++ b/kernel/module/version.c
-@@ -17,32 +17,30 @@ int check_version(const struct load_info *info,
- {
- 	Elf_Shdr *sechdrs = info->sechdrs;
- 	unsigned int versindex = info->index.vers;
--	unsigned int i, num_versions;
--	struct modversion_info *versions;
-+	struct modversion_info *versions, *end;
-+	u32 crcval;
- 
- 	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
- 	if (!crc)
- 		return 1;
-+	crcval = *crc;
- 
- 	/* No versions at all?  modprobe --force does this. */
- 	if (versindex == 0)
- 		return try_to_force_load(mod, symname) == 0;
- 
- 	versions = (void *)sechdrs[versindex].sh_addr;
--	num_versions = sechdrs[versindex].sh_size
--		/ sizeof(struct modversion_info);
-+	end = (void *)versions + sechdrs[versindex].sh_size;
- 
--	for (i = 0; i < num_versions; i++) {
--		u32 crcval;
--
--		if (strcmp(versions[i].name, symname) != 0)
-+	for (; versions < end && versions->next;
-+	       versions = (void *)versions + versions->next) {
-+		if (strcmp(versions->name, symname) != 0)
- 			continue;
- 
--		crcval = *crc;
--		if (versions[i].crc == crcval)
-+		if (versions->crc == crcval)
- 			return 1;
--		pr_debug("Found checksum %X vs module %lX\n",
--			 crcval, versions[i].crc);
-+		pr_debug("Found checksum %X vs module %X\n",
-+			 crcval, versions->crc);
- 		goto bad_version;
- 	}
- 
-diff --git a/scripts/export_report.pl b/scripts/export_report.pl
-index feb3d5542a62..1117646f3141 100755
---- a/scripts/export_report.pl
-+++ b/scripts/export_report.pl
-@@ -116,18 +116,19 @@ foreach my $thismod (@allcfiles) {
- 	while ( <$module> ) {
- 		chomp;
- 		if ($state == 0) {
--			$state = 1 if ($_ =~ /static const struct modversion_info/);
-+			$state = 1 if ($_ =~ /static const char ____versions/);
- 			next;
- 		}
- 		if ($state == 1) {
--			$state = 2 if ($_ =~ /__attribute__\(\(section\("__versions"\)\)\)/);
-+			$state = 2 if ($_ =~ /__used __section\("__versions"\)/);
- 			next;
- 		}
- 		if ($state == 2) {
--			if ( $_ !~ /0x[0-9a-f]+,/ ) {
-+			if ( $_ !~ /\\0"/ ) {
-+				last if ($_ =~ /;/);
- 				next;
- 			}
--			my $sym = (split /([,"])/,)[4];
-+			my $sym = (split /(["\\])/,)[2];
- 			my ($module, $value, $symbol, $gpl) = @{$SYMBOL{$sym}};
- 			$SYMBOL{ $sym } =  [ $module, $value+1, $symbol, $gpl];
- 			push(@{$MODULE{$thismod}} , $sym);
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index efff8078e395..55335ae98f4f 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -2046,13 +2046,17 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
- static void add_versions(struct buffer *b, struct module *mod)
- {
- 	struct symbol *s;
-+	unsigned int name_len;
-+	unsigned int name_len_padded;
-+	unsigned int tmp;
-+	unsigned char *tmp_view = (unsigned char *)&tmp;
- 
- 	if (!modversions)
- 		return;
- 
- 	buf_printf(b, "\n");
--	buf_printf(b, "static const struct modversion_info ____versions[]\n");
--	buf_printf(b, "__used __section(\"__versions\") = {\n");
-+	buf_printf(b, "static const char ____versions[]\n");
-+	buf_printf(b, "__used __section(\"__versions\") =\n");
- 
- 	list_for_each_entry(s, &mod->unresolved_symbols, list) {
- 		if (!s->module)
-@@ -2062,16 +2066,27 @@ static void add_versions(struct buffer *b, struct module *mod)
- 				s->name, mod->name);
- 			continue;
- 		}
--		if (strlen(s->name) >= MODULE_NAME_LEN) {
--			error("too long symbol \"%s\" [%s.ko]\n",
--			      s->name, mod->name);
--			break;
--		}
--		buf_printf(b, "\t{ %#8x, \"%s\" },\n",
--			   s->crc, s->name);
-+		name_len = strlen(s->name);
-+		name_len_padded = (name_len + 1 + 3) & ~3;
-+
-+		/* Offset to next entry */
-+		tmp = 8 + name_len_padded;
-+		tmp = TO_NATIVE(tmp);
-+		buf_printf(b, "\t\"\\x%02x\\x%02x\\x%02x\\x%02x",
-+			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
-+
-+		tmp = TO_NATIVE(s->crc);
-+		buf_printf(b, "\\x%02x\\x%02x\\x%02x\\x%02x\"\n",
-+			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
-+
-+		buf_printf(b, "\t\"%s", s->name);
-+		for (; name_len < name_len_padded; name_len++)
-+			buf_printf(b, "\\0");
-+		buf_printf(b, "\"\n");
- 	}
- 
--	buf_printf(b, "};\n");
-+	/* Always end with a dummy NULL entry */
-+	buf_printf(b, "\t\"\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\";\n");
- }
- 
- static void add_depends(struct buffer *b, struct module *mod)
--- 
-2.39.2
+
 
