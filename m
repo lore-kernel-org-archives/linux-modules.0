@@ -2,222 +2,148 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3859C61DA4
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Mar 2023 13:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 638D2C6FD1D
+	for <linux-modules@archiver.kernel.org>; Wed, 15 Mar 2023 14:44:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjCONze (ORCPT
+        id S232283AbjCOOoO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Mar 2023 09:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
+        Wed, 15 Mar 2023 10:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbjCONzZ (ORCPT
+        with ESMTP id S232245AbjCOOoM (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:55:25 -0400
-X-Greylist: delayed 406 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 06:55:20 PDT
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C17CA06
-        for <linux-modules@vger.kernel.org>; Wed, 15 Mar 2023 06:55:19 -0700 (PDT)
-Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Wed, 15 Mar 2023 14:48:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1678888108; bh=SHZgYSYyEpfoS4k1RwAmcpWd4VhASHB3Z1a/z0dZ5fw=;
-        h=From:Date:Subject:To:Cc:From;
-        b=FYzMQ8nii1wd45Hl62iesOd+5SZCgBUOK42sYTpVEtrJbrLQVf5F8zhQYqjmZQ4Ne
-         QPHTgkg6i8+o6gthPvhwR2LmS6kEdvnvRwRelvxIylDd4nl/W9ppIyR8nt8HsVO4iE
-         W2/CDzNrPA/uDNhDMq4ye/OHafSqpCDmMKStH734=
-From:   Nicolas Schier <nschier-oss@avm.de>
-Date:   Wed, 15 Mar 2023 14:48:16 +0100
-Subject: [PATCH] kmod: modprobe: Remove holders recursively
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Wed, 15 Mar 2023 10:44:12 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2054.outbound.protection.outlook.com [40.107.13.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F61305EA;
+        Wed, 15 Mar 2023 07:43:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X5CiISJOr8dRe1uCR6X02hTrFwrPG6G6x73CNYwVV93u9spdRicSP6ugWBns8xGys9skXauXKtvhAocUBQdxRAeoSOXZuQ1LOYRUEqJil6MEqBkZBdVCVEuhJ4RYznkWlmMGrm+hJn/Y3varXfypAuB+zvsIa7KqtE2xRo7rEkHrlqY/C+ajacguo4T4Kw0qFgnIplEejAh5UdZ0v7mtbmNefd+tQV5BhvAU2Uh933Tox80N+kmvPTaQiFrmvxmpN34YELbLSWyXNCud0aT8zudxl+mN3tzlvE3dGP/FC/sT9XFgeky6Jqe611xslfdzVW9tOXzytJeHWvq7P5NJ3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sw/O7G3vr86lmK7Rht1WsHlEP9j1hh2kZdVYD6+kwrg=;
+ b=espzktzU1wthaqfmeiHMWTqQRQW0nwkS18+QZfxBQlGeMeAyhtvuGwL9N8C9uw53n6ra8c9/2MgJtRaR62ivdua+TtFG3q5rV1dvz4qXUJtDngsh4aUoHMTZB8PgqHGlp6DfpLeMxo/5TYq9ttZZ20WE4ztOnlvvFWjItsT25b7K377cEbbJj2xcDfCPSq4h4+xBYKoly0NUnHr6Pgw2N4qE4SwyTydTTvrMWxBjp/zuWIYZnzXPUc6yADaGfgtfQajwHKtfygj8d3bag7LtqCpf+1x9fqvSQThiq9sGDD/+pQcSlTXf9KAceUpp40yEo+T6Y8z2BmHoICaC5D1Yow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sw/O7G3vr86lmK7Rht1WsHlEP9j1hh2kZdVYD6+kwrg=;
+ b=VHa6B7cKjP1qsRALnNnQRBapbJnZPPAg7xiHn8e/KFMdgejmaVDWulrvSw1Tm3C4PkvrQk+UY5b27eiFwFeNycOrgm4TYZntVXefUmCeQPRafsIQe8ksK9hMnbxS+9PyKL5rZA+uxYL5VKmx9u30SqKdNFUxqDEFfNnS+rRhFx2zsRCXp7haOE01zvnrGPq4YvDMDsDV0QJArtzK380iJSwxNSoA9IySsV/LG1XnFVdN/BpCv8dxxfZAlKKKN6zG5z3l8FTGPAbDYOC4JhvVLHACDviqkoZBk1Dak0sp579a1qC8bf9CJT88RmPwQo6KEi45OvkZwD9Pewf2xkpliA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16) by DB9PR04MB8282.eurprd04.prod.outlook.com
+ (2603:10a6:10:24a::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Wed, 15 Mar
+ 2023 14:43:57 +0000
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::34da:496c:c4b1:9929]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::34da:496c:c4b1:9929%3]) with mapi id 15.20.6178.029; Wed, 15 Mar 2023
+ 14:43:56 +0000
+Message-ID: <18363c7d-ddec-df1a-8a8e-dd5321499545@suse.com>
+Date:   Wed, 15 Mar 2023 15:43:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC 12/12] module: use aliases to find module on
+ find_module_all()
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        christophe.leroy@csgroup.eu, song@kernel.org,
+        torvalds@linux-foundation.org, pmladek@suse.com, david@redhat.com,
+        prarit@redhat.com
+References: <20230311051712.4095040-1-mcgrof@kernel.org>
+ <20230311051712.4095040-13-mcgrof@kernel.org>
+From:   Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20230311051712.4095040-13-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230309-remove-holders-recursively-v1-1-c27cdba1edbf@avm.de>
-X-B4-Tracking: v=1; b=H4sIAJ/MEWQC/xXMQQrDIBAF0KuEWXfAKiS0tzH6UwcShZlWKCF3r
- 12+zTvJoAKj53SSootJqwP320SpxPoCSx4m73xwwT1YcbQOLm3PUBtMHzXp2L+8zfOyBQ8fl0w
- jWKOBV401lX9xRHtD6bp+m5wZBnUAAAA=
-To:     linux-modules@vger.kernel.org
-Cc:     Nicolas Schier <n.schier@avm.de>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4767; i=n.schier@avm.de;
- h=from:subject:message-id; bh=2SXHWU9ZymUduQ87zzHbuyS6m44mKj7cgeOalyYOuzg=;
- b=owEBbQKS/ZANAwAIAYjGvJyImm24AcsmYgBkEcyr2qvtRgIOb3h6mwBWUakLp4HBX0tDgTUS0
- zZsN03DtVSJAjMEAAEIAB0WIQQO/4WJ63TpgecLpGmIxryciJptuAUCZBHMqwAKCRCIxryciJpt
- uKSKD/9HYBcc555TYjEK/EHIVrQ4r0ferTRESKbAzx66BVHTg57zMpXA4mIHspp6uCU+mQk3Oqa
- s5VTyuZYc6ctDG0rUWcQHgBCK9HBBxaXUaaMBQ4KfBKG1L2MlC2rgglurncjbbgt9xoQLNixKlu
- H/aRpdupLhzEZidbA3sJGVXfSFfwpjoQ3V7QQ8BJE94NMtSZi/iSuPmajQcY9HdQYCTFOjTaJib
- EAelrJiCgu6u3l4W3oY5dix9NuX5MFBWC8Ga67Fd8mCDvi8xaqY/FCAXF/Ff6uFIG+LJ6HwQNkt
- cK/E9G7j12xsG5dDocma3DknvyfLG6EHvO+/bMyBWVCKFIfIBTKTbdpdi6oalHXkK1YZD+ZSLIV
- JQs8PCT/73isD4QJGus+8psegg005xgLiMo46IbUBydQ9yULYJZ1XpZ0uzJ3Cc37B1xAzRJW++w
- As+790DkidBhXxaVrtHYCDacrViIfSipiQS01nYl7ASPtjswvAkyG6Hf3wFqJ8cHHjir0LLd7cF
- RkpIAWRZXUp6jQF9sQ0yzcmgCgL6Y6a+gGYqfv1h5e2NY5+tNZ+UojtvGCp8ds3lO6wAZr+/TrS
- NtxaxeXLsgnXpc7HGVMj27e58h/pu0C+zwKmwod+XX31zKXGMS/Y3zMM8RenCwFLu/ScZL0SdSE
- 7zmubN+KjthUlMg==
-X-Developer-Key: i=n.schier@avm.de; a=openpgp;
- fpr=7CF67EF8868721AFE53D73FDBDE3A6CC4E333CC8
-X-purgate-ID: 149429::1678888107-C5DCF088-8485FE09/0/0
-X-purgate-type: clean
-X-purgate-size: 4811
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
+X-ClientProxiedBy: FR3P281CA0203.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a5::11) To AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|DB9PR04MB8282:EE_
+X-MS-Office365-Filtering-Correlation-Id: cd541198-e6b5-4351-82d1-08db2563b463
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: APrMxr/R80d5dr5I/qw7BHLWN6d6yMyq0b9pgc6vpN3/QNIBfE0lyN8RBcisbcxbF9VShdyIDTssPSluS2zOpyUxeRvhGHrUXPHGXOm4vCSqwLfsFaYmPw9nmB9xx8hvrNiGSC1tLtv6663rNisiW9DusHbbKbaZQ7LcM5TPAwgZrw/1mcF01EiRbtaR/5nu2zsY4+/uGfixv5wYIUCiDryqV/RnKit8Zm0YVUgPgd7E2XLSPBUYa17vzDLK3ztKw88SQB+GZNhPoslSPHVpUBP9bmZorQI1C2+1Yat8p99Xo5M0FACghQkJ7OXsVE+TxeAshyC8Q0kG3OuQ+aw299H4ahISlG8LMrvRdxr4xLtY7/p0DxRTBPUJokHBAOCx2E6LE1gIgYOY9+qPHXOAPdkqNSRQLwZw792QgT7m7LCKqqZShDiMVOhTD34Zx3kaOk56S8idMrz4bQJn+A+wypu8j9lH24raOklYpJPYcCyLHv2dnWOvWu9psMuQvEYWRgasNToucIG68cjq0S/YJcLxi6h9FPUlkR/KjJshEDmwrMe3zQN1fEpPUfw1NdHVpj9anWKFlk81+cUBzoz4vtSe9s64WKDLz0trNAHU11bqTuoSll50249C6+eBbn0viJBx3zngLsU6VQugsMgtEmUKLQ2Tj/XmWhEoR/xuItmyjpe/tYgAFIr5Tk6l1rbxrrcAYeqMJGodiU9TodgJw8ww/pyi+t/BTuIzWwDzhpp8BGbG1KLs1rNAxTCYP1I4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(396003)(39860400002)(366004)(376002)(346002)(451199018)(478600001)(4326008)(36756003)(6916009)(66946007)(66556008)(66476007)(8676002)(38100700002)(83380400001)(44832011)(2616005)(6486002)(41300700001)(2906002)(86362001)(186003)(5660300002)(8936002)(31696002)(26005)(6512007)(6506007)(53546011)(55236004)(31686004)(316002)(37363002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UHVhYWtZK2I0MTFpNG85aXNPRDdVUTFNcWFaK3oxZHdSK1FQWHJ0b3ZSUytu?=
+ =?utf-8?B?NDVlNlJ3Y3QvTnRPMnBmVnp1N20rbjJQNTJuTlM5dlNVU0cwY2ZGMFNYVFJY?=
+ =?utf-8?B?RWNrYjVWOFkwSkpqS3VZN2NGRGJTUGVLUjl4d2kwdTcveW43YUlYNXBIYjk3?=
+ =?utf-8?B?V1Z1TkpHaGthZ0x3bjNCVGZNbVA5dUVkQnN3WnFxcWFnbEVYaG1JelBqa2lZ?=
+ =?utf-8?B?NEhhOGtQMnAvQTN6S0JTY0R6SGdXY1hkM0JLeEluaGovcWsyYmR2eld5MkVp?=
+ =?utf-8?B?M2xPdWVvVzd3a2hhOUhnbS80dXRWNjNSU2k5a1FXVTlVeFVNRGpLOVJHMXU2?=
+ =?utf-8?B?Vml1UGo4SnVIbzUweDcyMjBEWDc5MCtqbDU1ZmpCbWFmZGRiUVZRZFBKKzd1?=
+ =?utf-8?B?UmszeXl6aWc4UW9MMTFSVXBQcGFzWnJwa0UwZlphR0poanVWM3ZrM0kyNnps?=
+ =?utf-8?B?NkVrdDNXcWpKODJCTmpoMFNEMkU2K1gzQWw4YUpjQytVZHRMamx4OHcxOHhQ?=
+ =?utf-8?B?NkpHTmd5U3N1YWFIZWtsOUF1OG84Q3Z6NFJvbDRnMDhTSUNvQTFzMHA0Mm1t?=
+ =?utf-8?B?ZlVmU0tuTXowL2p0dGFQSmxoa0FvcCtmRU5XUGRXcWxLNVZpZWxBa3NuRUZk?=
+ =?utf-8?B?endxWlNZQVhVeEw5cGtUc3c2akloU1Fka1JyaVE3R2ZhenF5cTBMOXdVY0Zu?=
+ =?utf-8?B?WHY5T3FPeXI5ZkpqbHYrbDQvMjgwMTRyT05ENnJNNXlJS2ZId29lOXc1anpJ?=
+ =?utf-8?B?cG9OcVhCS1pLSXU2MENmMUdhcm1HTThsQ25MaXJmYjMrVHdIMitGd1lFOHEw?=
+ =?utf-8?B?djFPV2hTNmxYVzYwMGtIWlNETExTWmI4OHRIYjlQTmRkbnlRcGdiZnlieFRY?=
+ =?utf-8?B?cVBlZFdXRzhSUDZjaG5FUWRNMHk5TnVsMEdZSGNBSHBPS1c1UW55c1dyWUdT?=
+ =?utf-8?B?aThFU1hOa05xcWxLT0JrazI2YnA1eHh4enVEbU5uczEzVHE1U2l2NmZuc2JP?=
+ =?utf-8?B?dTBpUFRITjliWHpJOFFVdStCbVQ0SGNUQlkyRk10bkh5YzRiSDNCeFlXNE5P?=
+ =?utf-8?B?UjQ5SzZmQzRsOTdlVmpVWWJhZklQVjh3eHVJbXlVanhXb3dkWVMzaFpaOTRt?=
+ =?utf-8?B?QUhHemgwZXVPWW1ZNW11N2xBdFpQcmNUeU5SM0FHTzlHOVdCZHBLQ2k2aVZG?=
+ =?utf-8?B?bDFnU3JUejM0Y2cwT3ZHSjlZN2twU01ScWVoQ2JyRGk1Y01CN2k1b2hWdVZH?=
+ =?utf-8?B?NWFuVmU5L01OZ0l6WGZVdjBINVc1RENpUU51bkZoK0dlT0E5Q2RMTVpPV2hW?=
+ =?utf-8?B?dG4xb3N5Ull0THgwWEFCdERXRklRTnBCTWV3YXFVMUtQeU5odXFDRjlRd3Nv?=
+ =?utf-8?B?ZE05WXhuRGdGeEY5VTBIYWZ2T1FDd09HVTdnYTB5Mk5mSFJNMWxkMTlqU0F3?=
+ =?utf-8?B?aXE2akVpTE1wR2dGZUwyODNNQWhwdFJmWFFhVXZNUURZMEluOThYNnU5T0ZM?=
+ =?utf-8?B?T2lpUE8xM0RYMWhtbFdiOTIxNEg4aThRZmVuMHNqdFJ6NlY2ejVKVUVDeW9X?=
+ =?utf-8?B?UHovNzZyRllvUzZONUZKY2RuVXJDS0ZZL0lGR3ljOWZOUHZvczVOWVVCY0Rt?=
+ =?utf-8?B?NnZtSHp4QWMvWVZvZlF6aXpZaUp5Y1lyQUZVcFVJbDJUZUVDdWE1K2NoNmNv?=
+ =?utf-8?B?YUJaWUtOM2wzTWJqRnI0ZVI3dUVlNzVWTXZnaUlOa2RtRWlwRkZqbmVrdzB5?=
+ =?utf-8?B?WnF0TFI3SzNOc1UyQjN5VVhJZWxZTXQxWHRMVjNkWVRhYXo3S0JEK1kvSkJC?=
+ =?utf-8?B?cHN1MWFDQ1RSZUYzWjhKMWpRUTcycDVBVWdPQzQ2WkZja3FRZkJWYTlJSmpV?=
+ =?utf-8?B?bmJ1NzJ6RWs0NGx2K2dyempOS2h2MHJzOEV4SDg3WjlNVnQwTTE1bHZ5SlBn?=
+ =?utf-8?B?UCtLUENlTExMa1dZTW9GZHdFcEdOOFoyc2JpTGpkNjJxUmJLRHZxaWhBV2w2?=
+ =?utf-8?B?UnlYaU44WDduTXBXWmNPOURsbmhWTFI3NHExK0phNDZ4USsrRktPY01WOEdH?=
+ =?utf-8?B?K00veEJOOVJzU3c2Z3d0c294NDlmVy9HeVZIT3RuS2ZQeVV2SUNjSFc0d0hO?=
+ =?utf-8?Q?6lA3Du/yVHYXOeSQeoJzG1Uf3?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd541198-e6b5-4351-82d1-08db2563b463
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 14:43:56.4279
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: D2//nq6yocW++NC+O2J9Pmoh05b7JNT83aDh3zFm2WieQgV9X8DCEQ5QtLwzmhlnYu+0l7Zr19ZtemsotDzAVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8282
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Nicolas Schier <n.schier@avm.de>
+On 3/11/23 06:17, Luis Chamberlain wrote:
+> Modules can have a series of aliases, but we don't currently use
+> them to check if a module is already loaded. Part of this is because
+> load_module() will stick to checking for already loaded modules using
+> the actual module name, not an alias. Its however desriable to also
+> check for aliases on find_module_all() for existing callers and future
+> callers. The curent gain to using aliases on find_module_all() will
+> simply be to be able to support unloading modules using the alias using
+> the delete_module() syscall.
 
-Remove holders recursively when removal of module holders is requested.
+Different modules can have same aliases. Running
+'sort modules.alias | cut -d' ' -f2 | uniq -dc' shows a list of them.
+When a modprobe load of such an alias is requested, my reading is that this
+new find_module_all() logic (if enabled) causes that only the first matched
+module is inserted and others get recognized as duplicates, which doesn't look
+right to me.
 
-Extend commit 42b32d30c38e ("modprobe: Fix holders removal") by removing
-also indirect holders if --remove-holders is set.  For a simple module
-dependency chain like
+In general, I'm not sure that I understand motivation to keep track of these
+aliases in the kernel. Do you have links to previous discussions that I could
+perhaps read?
 
-  module3 depends on module2
-  module2 depends on module1
-
-'modprobe -r --remove-holders module1' will remove module3, module2 and
-module1 in correct order:
-
-  $ modprobe -r --remove-holders module1 --verbose
-  rmmod module3
-  rmmod module2
-  rmmod module1
-
-(Actually, it will do the same when specifying module2 or module3 for
-removal instead of module1.)
-
-As a side-effect, 'modprobe -r module3' (w/o --remove-holders) will also
-remove all three modules, as after removal of module3, module2 does not
-have any holders and the same holds for module1 after removal of
-module2:
-
-  $ modprobe -r module3 --verbose
-  rmmod module3
-  rmmod module2
-  rmmod module1
-
-Without recursive evaluation of holders, modprobe leaves module1 loaded.
-
-Unfortunately, '--dry-run --remove-holders' breaks with indirect
-dependencies.
-
-Signed-off-by: Nicolas Schier <n.schier@avm.de>
----
-While commit 42b32d30c38e ("modprobe: Fix holders removal", 2022-03-29) already
-implements removing first-level holders, indirect holders were not evaluated.
-In a simple module dependency chain like
-
-      module3 depends on module2
-      module2 depends on module1
-
-'modprobe -r --remove-holders module1' was only considering module2 and module1
-and thus had to fail as module3 was still loaded and blocking removal of
-module2.
-
-By doing recursive depth-first removal this can be fixed for such simple
-dependency.
----
-To: linux-modules@vger.kernel.org
-Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
----
-I am a bit unhappy about the introduction of the 'recursive' parameter
-to rmmod_do_modlist() as it always holds the same value as
-stop_on_errors; is re-using (and renaming) possibly a better option?
----
- tools/modprobe.c | 37 ++++++++++++++++++++++++++++---------
- 1 file changed, 28 insertions(+), 9 deletions(-)
-
-diff --git a/tools/modprobe.c b/tools/modprobe.c
-index 3b7897c..9cbb236 100644
---- a/tools/modprobe.c
-+++ b/tools/modprobe.c
-@@ -390,13 +390,25 @@ static int rmmod_do_remove_module(struct kmod_module *mod)
- static int rmmod_do_module(struct kmod_module *mod, int flags);
- 
- /* Remove modules in reverse order */
--static int rmmod_do_modlist(struct kmod_list *list, bool stop_on_errors)
-+static int rmmod_do_modlist(struct kmod_list *list, bool stop_on_errors,
-+			    bool recursive)
- {
- 	struct kmod_list *l;
- 
- 	kmod_list_foreach_reverse(l, list) {
- 		struct kmod_module *m = kmod_module_get_module(l);
--		int r = rmmod_do_module(m, RMMOD_FLAG_IGNORE_BUILTIN);
-+		int r = 0;
-+
-+		if (recursive) {
-+			struct kmod_list *holders = kmod_module_get_holders(m);
-+
-+			r = rmmod_do_modlist(holders, stop_on_errors,
-+					     recursive);
-+		}
-+
-+		if (!r)
-+			r = rmmod_do_module(m, RMMOD_FLAG_IGNORE_BUILTIN);
-+
- 		kmod_module_unref(m);
- 
- 		if (r < 0 && stop_on_errors)
-@@ -448,13 +460,13 @@ static int rmmod_do_module(struct kmod_module *mod, int flags)
- 	}
- 
- 	/* 1. @mod's post-softdeps in reverse order */
--	rmmod_do_modlist(post, false);
-+	rmmod_do_modlist(post, false, false);
- 
- 	/* 2. Other modules holding @mod */
- 	if (flags & RMMOD_FLAG_REMOVE_HOLDERS) {
- 		struct kmod_list *holders = kmod_module_get_holders(mod);
- 
--		err = rmmod_do_modlist(holders, true);
-+		err = rmmod_do_modlist(holders, true, true);
- 		if (err < 0)
- 			goto error;
- 	}
-@@ -472,9 +484,16 @@ static int rmmod_do_module(struct kmod_module *mod, int flags)
- 		}
- 	}
- 
--	if (!cmd)
--		err = rmmod_do_remove_module(mod);
--	else
-+	if (!cmd) {
-+		int state = kmod_module_get_initstate(mod);
-+
-+		if (state < 0) {
-+			/* Module was removed during recursive holder removal */
-+			err = 0;
-+		} else {
-+			err = rmmod_do_remove_module(mod);
-+		}
-+	} else
- 		err = command_do(mod, "remove", cmd, NULL);
- 
- 	if (err < 0)
-@@ -488,14 +507,14 @@ static int rmmod_do_module(struct kmod_module *mod, int flags)
- 		kmod_list_foreach(itr, deps) {
- 			struct kmod_module *dep = kmod_module_get_module(itr);
- 			if (kmod_module_get_refcnt(dep) == 0)
--				rmmod_do_remove_module(dep);
-+				rmmod_do_module(dep, flags);
- 			kmod_module_unref(dep);
- 		}
- 		kmod_module_unref_list(deps);
- 	}
- 
- 	/* 5. @mod's pre-softdeps in reverse order: errors are non-fatal */
--	rmmod_do_modlist(pre, false);
-+	rmmod_do_modlist(pre, false, false);
- 
- error:
- 	kmod_module_unref_list(pre);
-
----
-base-commit: 3d1bd339ab942ea47e60f053f4b11b0c47ff082b
-change-id: 20230309-remove-holders-recursively-f667f32e2a7d
-
-Best regards,
--- 
-Nicolas Schier
+Thanks,
+Petr
 
