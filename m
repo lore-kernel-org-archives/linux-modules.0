@@ -2,117 +2,119 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FF13C61DA4
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Mar 2023 12:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D5FAC7618A
+	for <linux-modules@archiver.kernel.org>; Wed, 15 Mar 2023 12:53:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjCOM1T (ORCPT
+        id S233128AbjCOMxP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Mar 2023 08:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        Wed, 15 Mar 2023 08:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232474AbjCOM1C (ORCPT
+        with ESMTP id S233105AbjCOMxK (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:27:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21469AFC6
-        for <linux-modules@vger.kernel.org>; Wed, 15 Mar 2023 05:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678883085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fO3xvWEOxLtGfBjQzTV1j3rg9kZXhnrlyWqpPgmzUR0=;
-        b=F6CfKZAB2VxCEr+peRwc19VJXlVOMwusSSZkSXW9IeOj9hOmsKvY9smQQiRSgf/3/HRGR7
-        ANwHKaxVQPfd1Yq8SWQ0ObMCffQ5Z7nSOVirsk7/DquWbjdcl/7kLSFtHTLmydVXI5J8Ez
-        ZlFqul/dZEiWvaN26S8MbdA436lCqR8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-634-q6rVfiMQP8uRNe65s96HTw-1; Wed, 15 Mar 2023 08:24:44 -0400
-X-MC-Unique: q6rVfiMQP8uRNe65s96HTw-1
-Received: by mail-wm1-f71.google.com with SMTP id 1-20020a05600c024100b003ec8023ac4eso705613wmj.0
-        for <linux-modules@vger.kernel.org>; Wed, 15 Mar 2023 05:24:44 -0700 (PDT)
+        Wed, 15 Mar 2023 08:53:10 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CFA99268;
+        Wed, 15 Mar 2023 05:53:03 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id c8-20020a05600c0ac800b003ed2f97a63eso1015224wmr.3;
+        Wed, 15 Mar 2023 05:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678884782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmyRdtH3qiSO5QWPBLWz/8v2lIwyybKSmrlaokl//yI=;
+        b=IKjEROzVMXRIH2jmXhG0/7c8b2IOHgUL6F+2j+hWDlKOJt/JE1CMxqsmVUaTSZ/ZII
+         dKxHynYor0Co5ohMyb3jBPd3zTrvQxj0esnBH5bKxoki7lGTb2Pkw+/vx901t66bJvUM
+         loxVftu+i7vhzZJi4xrspTeYOoe1S1Fms95gRioUAdgmxAhGxEFQQ3t2kw3Lox6vAFSR
+         NL9aWBYFpdcq5c/DpZbhv6wECLhIiyxvF0A1juR88OjXaQAM2DEcGIudZwH3c1pLWPCj
+         pTpj9gmfbneGj4wRu8aPNV6Kr5SIcTiI87VPALaqWD3/U818FxvX8qsZnfVBC/hs2hAE
+         AeEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678883083;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678884782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fO3xvWEOxLtGfBjQzTV1j3rg9kZXhnrlyWqpPgmzUR0=;
-        b=KwHfsmlV7ooHJ2+yJ8CP/zpALy6j6WP3fXMxiA6sD3/bv135xESQdY99fKBh66hyP6
-         abKL2rQWka0C5WJtsR9dbzkXuizqYKVIKkAxGNobHy8CgbomL6ncSzAkoeknNPH/8xxw
-         Cs10L6+pGB+q+YiYhpRPP+dZDAGjuw3LYmdpDwavMORhwb+1fVwSg6yIT+HOtnHw4sZy
-         GmyUjX+Id5q232drS0wu5VOu5UAyuVgCZwoZh+2b8k2AibBRszvqrpUh9SuBWlilmDWN
-         0ZQ0H7Qv7wRPAAISJMaGdfIERY8AgPsqbxbLsTArnV9Y3vRuTmk128Vxk9Ya0NPSmqGS
-         67MA==
-X-Gm-Message-State: AO0yUKXB5qBK/fq5MaphIPXKy0SNCZpzEsPAEvwjNoyE8qANejvzon0q
-        2nBsx8b+SrtdRQo7ByiEVPYKBfcNNfDBMexPmBZ+hYLINNxwhI4fbEgEbR6t2tFDUEgga3aRze5
-        1R6IBDF2uQKSsqs6GRmnwoOl/Qg==
-X-Received: by 2002:a05:600c:458f:b0:3eb:4162:7344 with SMTP id r15-20020a05600c458f00b003eb41627344mr18437503wmo.22.1678883083146;
-        Wed, 15 Mar 2023 05:24:43 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8fqujSiAvEVS1OAzs9541Izlj/1kOWdRv6q66LMMnewVwESOzM8VL2rQfJ44GE6WjeMsCyzA==
-X-Received: by 2002:a05:600c:458f:b0:3eb:4162:7344 with SMTP id r15-20020a05600c458f00b003eb41627344mr18437482wmo.22.1678883082847;
-        Wed, 15 Mar 2023 05:24:42 -0700 (PDT)
-Received: from [192.168.3.108] (p5b0c6936.dip0.t-ipconnect.de. [91.12.105.54])
-        by smtp.gmail.com with ESMTPSA id iz11-20020a05600c554b00b003ed201ddef2sm1796689wmb.2.2023.03.15.05.24.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 05:24:42 -0700 (PDT)
-Message-ID: <3b25ed5c-8fb9-82d3-2296-fadbbb4db7e4@redhat.com>
-Date:   Wed, 15 Mar 2023 13:24:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Content-Language: en-US
+        bh=OmyRdtH3qiSO5QWPBLWz/8v2lIwyybKSmrlaokl//yI=;
+        b=OT9O4AoJDAw6T4/8u3SUE1c4+2zBH+nKpe+rjF1mW6akYwdaz79C0b6bnohF1Xy0IM
+         xudEcl3F+KFroX60sGj33QPjz7xP+kL5ctLt+by+RwAnEvM0X+8bc559bbCfDua4/m7r
+         yHnxSGwTDWv3yW1/cKVCBTuPaJjJ+4pzK5IVVyZcvtCVTAz+kqx/ly6nyuhCFinJWQDI
+         153S8vgbqMpDi+6Y4T8xvMfKRfj9MyMzvwPsCVI4rdCUKkfbcr8lPROYHuWGDJZcaALM
+         +eE1BarMK+iMhjFX/6mNNF6MfOvRyaSNbsBaG3Qw0wYtVdtNi3hyPh9Bv/Gfk4DxXiCL
+         UF+w==
+X-Gm-Message-State: AO0yUKUTeho28MfYGct6VJW+II/SPGr0fmo/rcN6W4z7pSO6Gtz/sxz3
+        Jqt72ro58rSK4v6dReSQQXY=
+X-Google-Smtp-Source: AK7set99tKxZBFxqdMlw/6z3DNaJbvpo8WlRdBy5s/IULVxadkVRlZINUgSsb6joz/S+1AnBv0uW2g==
+X-Received: by 2002:a05:600c:198f:b0:3ea:f6c4:5f26 with SMTP id t15-20020a05600c198f00b003eaf6c45f26mr17240294wmq.17.1678884782269;
+        Wed, 15 Mar 2023 05:53:02 -0700 (PDT)
+Received: from localhost.localdomain (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id k26-20020a7bc31a000000b003eb596cbc54sm1936761wmj.0.2023.03.15.05.52.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 05:53:01 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com
-Cc:     christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org
-References: <20230311051712.4095040-1-mcgrof@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230311051712.4095040-1-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Chris Down <chris@chrisdown.name>,
+        Nick Terrell <terrelln@fb.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+        live-patching@vger.kernel.org, bpf@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Piotr Gorski <piotrgorski@cachyos.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] module/decompress: Never use kunmap() for local un-mappings
+Date:   Wed, 15 Mar 2023 13:52:56 +0100
+Message-Id: <20230315125256.22772-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 11.03.23 06:17, Luis Chamberlain wrote:
-> A long time ago we had some issues with userspace doing stupid stuff.
-> Well, it turns out even the kernel and do stupid stuff too, as we're
-> learning with the ACPI modules aliaes and that hammering tons of loads.
-> 
-> So add a bit of code which gets us a bit more in the defensive about
-> these situations.
-> 
-> To experiment, this also adds in-kernel alias support to see if this helps
-> with some larger systems.
-> 
-> This is all based on some old code which tried to add defensive
-> mechanisms the last of which was here and I had dropped the ball:
-> 
-> https://lore.kernel.org/all/20171208001540.23696-1-mcgrof@kernel.org/
-> 
-> I've only compile tested this for now. Will need to stress to test
-> with kmod tests 0008 and 0009 to see if there's any differences.
-> I'll have to re-test and re-gnuplot stuff there. But early feedback
-> is appreciated, hence the RFC.
-> 
-> David Hildenbrand had reported a while ago issues with userspace
-> doing insane things with allocations bringing a system down to
-> its knees. This is part of the motivation for this series.
+Use kunmap_local() to unmap pages locally mapped with kmap_local_page().
 
+kunmap_local() must be called on the kernel virtual address returned by
+kmap_local_page(), differently from how we use kunmap() which instead
+expects the mapped page as its argument.
 
-I'll try to grab a system where I can reproduce the issue and give your 
-patches a churn.
+In module_zstd_decompress() we currently map with kmap_local_page() and
+unmap with kunmap(). This breaks the code and so it should be fixed.
 
-Thanks!
+Cc: Piotr Gorski <piotrgorski@cachyos.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Stephen Boyd <swboyd@chromium.org>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Fixes: 169a58ad824d ("module/decompress: Support zstd in-kernel decompression")
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ kernel/module/decompress.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+index bb79ac1a6d8f..7ddc87bee274 100644
+--- a/kernel/module/decompress.c
++++ b/kernel/module/decompress.c
+@@ -267,7 +267,7 @@ static ssize_t module_zstd_decompress(struct load_info *info,
+ 		zstd_dec.size = PAGE_SIZE;
+ 
+ 		ret = zstd_decompress_stream(dstream, &zstd_dec, &zstd_buf);
+-		kunmap(page);
++		kunmap_local(zstd_dec.dst);
+ 		retval = zstd_get_error_code(ret);
+ 		if (retval)
+ 			break;
 -- 
-Thanks,
-
-David / dhildenb
+2.39.2
 
