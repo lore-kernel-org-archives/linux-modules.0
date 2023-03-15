@@ -2,296 +2,117 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A37BC7618D
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Mar 2023 06:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FF13C61DA4
+	for <linux-modules@archiver.kernel.org>; Wed, 15 Mar 2023 12:27:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCOGHZ (ORCPT
+        id S232523AbjCOM1T (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Mar 2023 02:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        Wed, 15 Mar 2023 08:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCOGHY (ORCPT
+        with ESMTP id S232474AbjCOM1C (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Mar 2023 02:07:24 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A83B5A197
-        for <linux-modules@vger.kernel.org>; Tue, 14 Mar 2023 23:07:21 -0700 (PDT)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E1FB53F0E1
-        for <linux-modules@vger.kernel.org>; Wed, 15 Mar 2023 06:07:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678860439;
-        bh=AVU4kb/QR1tulNQD4T4kJea28Mw4MLstFyCkcQW4+m8=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=KP7ateozFjXl03KCkQHNOANkDxA74oUh7FWfhm15TVJcdJYRB7hY1+WlrlVV/5NLj
-         4jSVnxevXAVDRKKsfQI3yFIHBPk6UDrm6SZaH1C6/k6HYoZxgQqutbupZnE/4PGHlU
-         nzs7kmk9IeXmPxz8AJ6k6rRFHmjI4Fgazdy+eXx4Vq4CdIk7txO2gtYq3rpRgPX6gu
-         yzyq18wiOQZUDadzcgguyz30lFUef0PosHeUCn8QHuKgJ4yDF2PqMO+tY2WGrSt/c7
-         BmaOjLCN5d3Ac3WMcA2m3IKyWDbkF0/9hpOa+OpEsGKZe/Af/FVGPVonGWHBFOrz0B
-         MuEWriziXcqWg==
-Received: by mail-ed1-f70.google.com with SMTP id z14-20020a05640235ce00b004e07ddbc2f8so25021689edc.7
-        for <linux-modules@vger.kernel.org>; Tue, 14 Mar 2023 23:07:19 -0700 (PDT)
+        Wed, 15 Mar 2023 08:27:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21469AFC6
+        for <linux-modules@vger.kernel.org>; Wed, 15 Mar 2023 05:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678883085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fO3xvWEOxLtGfBjQzTV1j3rg9kZXhnrlyWqpPgmzUR0=;
+        b=F6CfKZAB2VxCEr+peRwc19VJXlVOMwusSSZkSXW9IeOj9hOmsKvY9smQQiRSgf/3/HRGR7
+        ANwHKaxVQPfd1Yq8SWQ0ObMCffQ5Z7nSOVirsk7/DquWbjdcl/7kLSFtHTLmydVXI5J8Ez
+        ZlFqul/dZEiWvaN26S8MbdA436lCqR8=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-634-q6rVfiMQP8uRNe65s96HTw-1; Wed, 15 Mar 2023 08:24:44 -0400
+X-MC-Unique: q6rVfiMQP8uRNe65s96HTw-1
+Received: by mail-wm1-f71.google.com with SMTP id 1-20020a05600c024100b003ec8023ac4eso705613wmj.0
+        for <linux-modules@vger.kernel.org>; Wed, 15 Mar 2023 05:24:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678860439;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AVU4kb/QR1tulNQD4T4kJea28Mw4MLstFyCkcQW4+m8=;
-        b=ZJGxyHNoOFPm4EO8aqBg6pALuAh4kgXMHLLRY1xDzMXY/DbKExSnH2VFYVrKoGDORB
-         qbeIhNjsCNLZlANqJpGwKMF/smHMRG7MAf5Cu8w/mktLsiLpfdyeicZWqK1CEMmYqJtJ
-         /cMV/FUiJGqI8qHuRKne3MEWDHBByVwyefjIVxgqHvtjH+z7VMOg7FJGXSePGvdujvYf
-         9O++Jb6rWehkfMaPymeuH7LxlQTK9USCoZ+7azN3gu8EhmRNqf73+bLJh9lGQ45kT3rw
-         UhF+QCvuQV2d2pyblQnbCEnwBPjsSZlzpmxyE78svrrtVqEWb8AbVoXecgYEQ7CA8rl7
-         uAng==
-X-Gm-Message-State: AO0yUKVTpwdYVZvfYD1RcMEAeYXwk+0ESP2ynXcGFltY0o9HtHVimy/6
-        vXlN+UJcDZHe3H9PcXQtxuobW2taO51jIWD2Y8fyU3Inm9Ajl+qH3qJVvQoanL/iyEtmtbMHcz+
-        LnPN/vPgFBQtzbFJvcsFg8JqlXqxIneYJ3TqeLBlWN3c=
-X-Received: by 2002:a17:906:2603:b0:8b2:8876:6a3c with SMTP id h3-20020a170906260300b008b288766a3cmr5905363ejc.29.1678860439518;
-        Tue, 14 Mar 2023 23:07:19 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9MBRbsoEastfAfOs1NQLpqt3qQ+WHZ9sata8X/oRby9nHjDitGRVuHm6+gZUtsuTsG2uZPaQ==
-X-Received: by 2002:a17:906:2603:b0:8b2:8876:6a3c with SMTP id h3-20020a170906260300b008b288766a3cmr5905342ejc.29.1678860439197;
-        Tue, 14 Mar 2023 23:07:19 -0700 (PDT)
-Received: from localhost (host-79-53-23-214.retail.telecomitalia.it. [79.53.23.214])
-        by smtp.gmail.com with ESMTPSA id rq4-20020a17090788c400b00927341bf69dsm2009205ejc.88.2023.03.14.23.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 23:07:18 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 07:07:17 +0100
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Cc:     Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
-        Gary Guo <gary@garyguo.net>, Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
-Message-ID: <ZBFglTYuKeAT8dBX@righiandr-XPS-13-7390>
-References: <20230111161155.1349375-1-gary@garyguo.net>
- <ZA+IUIOAgrWH2oZ0@righiandr-XPS-13-7390>
- <20230313214853.GY19419@kitsune.suse.cz>
- <ZA+bXi0o27XPx3nz@righiandr-XPS-13-7390>
- <20230313220234.GZ19419@kitsune.suse.cz>
- <ZA+fGpAdnvB5VwKW@righiandr-XPS-13-7390>
- <ZBCG3ykG1q4GEcIf@righiandr-XPS-13-7390>
- <ZBCL1G+8z8c6zLI0@righiandr-XPS-13-7390>
- <CR6IV4NTEN8Z.1V1RNR667SWJ7@vincent-arch>
+        d=1e100.net; s=20210112; t=1678883083;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fO3xvWEOxLtGfBjQzTV1j3rg9kZXhnrlyWqpPgmzUR0=;
+        b=KwHfsmlV7ooHJ2+yJ8CP/zpALy6j6WP3fXMxiA6sD3/bv135xESQdY99fKBh66hyP6
+         abKL2rQWka0C5WJtsR9dbzkXuizqYKVIKkAxGNobHy8CgbomL6ncSzAkoeknNPH/8xxw
+         Cs10L6+pGB+q+YiYhpRPP+dZDAGjuw3LYmdpDwavMORhwb+1fVwSg6yIT+HOtnHw4sZy
+         GmyUjX+Id5q232drS0wu5VOu5UAyuVgCZwoZh+2b8k2AibBRszvqrpUh9SuBWlilmDWN
+         0ZQ0H7Qv7wRPAAISJMaGdfIERY8AgPsqbxbLsTArnV9Y3vRuTmk128Vxk9Ya0NPSmqGS
+         67MA==
+X-Gm-Message-State: AO0yUKXB5qBK/fq5MaphIPXKy0SNCZpzEsPAEvwjNoyE8qANejvzon0q
+        2nBsx8b+SrtdRQo7ByiEVPYKBfcNNfDBMexPmBZ+hYLINNxwhI4fbEgEbR6t2tFDUEgga3aRze5
+        1R6IBDF2uQKSsqs6GRmnwoOl/Qg==
+X-Received: by 2002:a05:600c:458f:b0:3eb:4162:7344 with SMTP id r15-20020a05600c458f00b003eb41627344mr18437503wmo.22.1678883083146;
+        Wed, 15 Mar 2023 05:24:43 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8fqujSiAvEVS1OAzs9541Izlj/1kOWdRv6q66LMMnewVwESOzM8VL2rQfJ44GE6WjeMsCyzA==
+X-Received: by 2002:a05:600c:458f:b0:3eb:4162:7344 with SMTP id r15-20020a05600c458f00b003eb41627344mr18437482wmo.22.1678883082847;
+        Wed, 15 Mar 2023 05:24:42 -0700 (PDT)
+Received: from [192.168.3.108] (p5b0c6936.dip0.t-ipconnect.de. [91.12.105.54])
+        by smtp.gmail.com with ESMTPSA id iz11-20020a05600c554b00b003ed201ddef2sm1796689wmb.2.2023.03.15.05.24.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 05:24:42 -0700 (PDT)
+Message-ID: <3b25ed5c-8fb9-82d3-2296-fadbbb4db7e4@redhat.com>
+Date:   Wed, 15 Mar 2023 13:24:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CR6IV4NTEN8Z.1V1RNR667SWJ7@vincent-arch>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
+ allocations
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com
+Cc:     christophe.leroy@csgroup.eu, song@kernel.org,
+        torvalds@linux-foundation.org
+References: <20230311051712.4095040-1-mcgrof@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230311051712.4095040-1-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Mar 15, 2023 at 01:15:03AM +0100, Vincenzo Palazzo wrote:
-> > In practice, this is what I'm testing at the moment:
-> >
-> > ---
-> > diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-> > index ff045644f13f..ea6c830ed1e7 100644
-> > --- a/arch/powerpc/kernel/module_64.c
-> > +++ b/arch/powerpc/kernel/module_64.c
-> > @@ -234,12 +234,13 @@ static unsigned long get_stubs_size(const Elf64_Ehdr *hdr,
-> >  static void dedotify_versions(struct modversion_info *vers,
-> >  			      unsigned long size)
-> >  {
-> > -	struct modversion_info *end;
-> > +	struct modversion_info *end = (void *)vers + size;
-> >  
-> > -	for (end = (void *)vers + size; vers < end; vers++)
-> > +	for (; vers < end && vers->next; vers = (void *)vers + vers->next) {
-> >  		if (vers->name[0] == '.') {
-> >  			memmove(vers->name, vers->name+1, strlen(vers->name));
-> >  		}
-> > +	}
-> >  }
-> >  
-> >  /*
-> > diff --git a/include/linux/module.h b/include/linux/module.h
-> > index 8c5909c0076c..4744901bdf63 100644
-> > --- a/include/linux/module.h
-> > +++ b/include/linux/module.h
-> > @@ -34,9 +34,11 @@
-> >  #define MODULE_NAME_LEN MAX_PARAM_PREFIX_LEN
-> >  
-> >  struct modversion_info {
-> > -	unsigned long crc;
-> > -	char name[MODULE_NAME_LEN];
-> > -};
-> > +	/* Offset of the next modversion entry in relation to this one. */
-> > +	u32 next;
-> > +	u32 crc;
-> > +	char name[0];
-> > +} __packed;
-> >  
-> >  struct module;
-> >  struct exception_table_entry;
-> > diff --git a/kernel/module/version.c b/kernel/module/version.c
-> > index 53f43ac5a73e..5528f98c42dc 100644
-> > --- a/kernel/module/version.c
-> > +++ b/kernel/module/version.c
-> > @@ -17,32 +17,30 @@ int check_version(const struct load_info *info,
-> >  {
-> >  	Elf_Shdr *sechdrs = info->sechdrs;
-> >  	unsigned int versindex = info->index.vers;
-> > -	unsigned int i, num_versions;
-> > -	struct modversion_info *versions;
-> > +	struct modversion_info *versions, *end;
-> > +	u32 crcval;
-> >  
-> >  	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
-> >  	if (!crc)
-> >  		return 1;
-> > +	crcval = *crc;
-> >  
-> >  	/* No versions at all?  modprobe --force does this. */
-> >  	if (versindex == 0)
-> >  		return try_to_force_load(mod, symname) == 0;
-> >  
-> >  	versions = (void *)sechdrs[versindex].sh_addr;
-> > -	num_versions = sechdrs[versindex].sh_size
-> > -		/ sizeof(struct modversion_info);
-> > +	end = (void *)versions + sechdrs[versindex].sh_size;
-> >  
-> > -	for (i = 0; i < num_versions; i++) {
-> > -		u32 crcval;
-> > -
-> > -		if (strcmp(versions[i].name, symname) != 0)
-> > +	for (; versions < end && versions->next;
-> > +	       versions = (void *)versions + versions->next) {
-> > +		if (strcmp(versions->name, symname) != 0)
-> >  			continue;
-> >  
-> > -		crcval = *crc;
-> > -		if (versions[i].crc == crcval)
-> > +		if (versions->crc == crcval)
-> >  			return 1;
-> > -		pr_debug("Found checksum %X vs module %lX\n",
-> > -			 crcval, versions[i].crc);
-> > +		pr_debug("Found checksum %X vs module %X\n",
-> > +			 crcval, versions->crc);
-> >  		goto bad_version;
-> >  	}
-> >  
-> > diff --git a/scripts/export_report.pl b/scripts/export_report.pl
-> > index feb3d5542a62..1117646f3141 100755
-> > --- a/scripts/export_report.pl
-> > +++ b/scripts/export_report.pl
-> > @@ -116,18 +116,19 @@ foreach my $thismod (@allcfiles) {
-> >  	while ( <$module> ) {
-> >  		chomp;
-> >  		if ($state == 0) {
-> > -			$state = 1 if ($_ =~ /static const struct modversion_info/);
-> > +			$state = 1 if ($_ =~ /static const char ____versions/);
-> >  			next;
-> >  		}
-> >  		if ($state == 1) {
-> > -			$state = 2 if ($_ =~ /__attribute__\(\(section\("__versions"\)\)\)/);
-> > +			$state = 2 if ($_ =~ /__used __section\("__versions"\)/);
-> >  			next;
-> >  		}
-> >  		if ($state == 2) {
-> > -			if ( $_ !~ /0x[0-9a-f]+,/ ) {
-> > +			if ( $_ !~ /\\0"/ ) {
-> > +				last if ($_ =~ /;/);
-> >  				next;
-> >  			}
-> > -			my $sym = (split /([,"])/,)[4];
-> > +			my $sym = (split /(["\\])/,)[2];
-> >  			my ($module, $value, $symbol, $gpl) = @{$SYMBOL{$sym}};
-> >  			$SYMBOL{ $sym } =  [ $module, $value+1, $symbol, $gpl];
-> >  			push(@{$MODULE{$thismod}} , $sym);
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index efff8078e395..55335ae98f4f 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -2046,13 +2046,17 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
-> >  static void add_versions(struct buffer *b, struct module *mod)
-> >  {
-> >  	struct symbol *s;
-> > +	unsigned int name_len;
-> > +	unsigned int name_len_padded;
-> > +	unsigned int tmp;
-> > +	unsigned char *tmp_view = (unsigned char *)&tmp;
-> >  
-> >  	if (!modversions)
-> >  		return;
-> >  
-> >  	buf_printf(b, "\n");
-> > -	buf_printf(b, "static const struct modversion_info ____versions[]\n");
-> > -	buf_printf(b, "__used __section(\"__versions\") = {\n");
-> > +	buf_printf(b, "static const char ____versions[]\n");
-> > +	buf_printf(b, "__used __section(\"__versions\") =\n");
-> >  
-> >  	list_for_each_entry(s, &mod->unresolved_symbols, list) {
-> >  		if (!s->module)
-> > @@ -2062,16 +2066,27 @@ static void add_versions(struct buffer *b, struct module *mod)
-> >  				s->name, mod->name);
-> >  			continue;
-> >  		}
-> > -		if (strlen(s->name) >= MODULE_NAME_LEN) {
-> > -			error("too long symbol \"%s\" [%s.ko]\n",
-> > -			      s->name, mod->name);
-> > -			break;
-> > -		}
-> > -		buf_printf(b, "\t{ %#8x, \"%s\" },\n",
-> > -			   s->crc, s->name);
-> > +		name_len = strlen(s->name);
-> > +		name_len_padded = (name_len + 1 + 3) & ~3;
-> > +
-> > +		/* Offset to next entry */
-> > +		tmp = 8 + name_len_padded;
-> > +		tmp = TO_NATIVE(tmp);
-> > +		buf_printf(b, "\t\"\\x%02x\\x%02x\\x%02x\\x%02x",
-> > +			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
-> > +
-> > +		tmp = TO_NATIVE(s->crc);
-> > +		buf_printf(b, "\\x%02x\\x%02x\\x%02x\\x%02x\"\n",
-> > +			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
-> > +
-> > +		buf_printf(b, "\t\"%s", s->name);
-> > +		for (; name_len < name_len_padded; name_len++)
-> > +			buf_printf(b, "\\0");
-> > +		buf_printf(b, "\"\n");
-> >  	}
-> >  
-> > -	buf_printf(b, "};\n");
-> > +	/* Always end with a dummy NULL entry */
-> > +	buf_printf(b, "\t\"\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\";\n");
-> >  }
-> >  
-> >  static void add_depends(struct buffer *b, struct module *mod)
-> This looks promissing, do you had a small reproducer to this just to
-> make the code a little bit clearn to the reader?
+On 11.03.23 06:17, Luis Chamberlain wrote:
+> A long time ago we had some issues with userspace doing stupid stuff.
+> Well, it turns out even the kernel and do stupid stuff too, as we're
+> learning with the ACPI modules aliaes and that hammering tons of loads.
+> 
+> So add a bit of code which gets us a bit more in the defensive about
+> these situations.
+> 
+> To experiment, this also adds in-kernel alias support to see if this helps
+> with some larger systems.
+> 
+> This is all based on some old code which tried to add defensive
+> mechanisms the last of which was here and I had dropped the ball:
+> 
+> https://lore.kernel.org/all/20171208001540.23696-1-mcgrof@kernel.org/
+> 
+> I've only compile tested this for now. Will need to stress to test
+> with kmod tests 0008 and 0009 to see if there's any differences.
+> I'll have to re-test and re-gnuplot stuff there. But early feedback
+> is appreciated, hence the RFC.
+> 
+> David Hildenbrand had reported a while ago issues with userspace
+> doing insane things with allocations bringing a system down to
+> its knees. This is part of the motivation for this series.
 
-My reproducer was to simply boot the latest 6.2 kernel with this patch
-appplied on top on a ppc64 server (without the additional changes the
-system just fails to boot as soon as the first module is loaded,
-spitting random errors/oops to the console, due to random memory
-accesses). I don't have a smaller reproducer than this, maybe I can
-clarify a bit more the purpose of the last dummy entry in the comment to
-help the reader understand why we need this empty entry (if I understand
-your request correctly).
 
-For the TO_NATIVE(tmp) change, instead, it's enough to build the kernel
-with a recent gcc (I'm using gcc 12.2.0-17ubuntu1) and the build just
-fails.
+I'll try to grab a system where I can reproduce the issue and give your 
+patches a churn.
 
--Andrea
+Thanks!
+
+-- 
+Thanks,
+
+David / dhildenb
+
