@@ -2,72 +2,70 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C228C6FD1D
-	for <linux-modules@archiver.kernel.org>; Wed, 15 Mar 2023 20:42:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A46BEC61DA4
+	for <linux-modules@archiver.kernel.org>; Wed, 15 Mar 2023 20:56:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjCOUmq (ORCPT
+        id S230266AbjCOU46 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 15 Mar 2023 16:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
+        Wed, 15 Mar 2023 16:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjCOUmp (ORCPT
+        with ESMTP id S229659AbjCOU45 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 15 Mar 2023 16:42:45 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4966770D
-        for <linux-modules@vger.kernel.org>; Wed, 15 Mar 2023 13:42:44 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-17786581fe1so15109271fac.10
-        for <linux-modules@vger.kernel.org>; Wed, 15 Mar 2023 13:42:44 -0700 (PDT)
+        Wed, 15 Mar 2023 16:56:57 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734156FFE3
+        for <linux-modules@vger.kernel.org>; Wed, 15 Mar 2023 13:56:56 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id bp19so15147920oib.4
+        for <linux-modules@vger.kernel.org>; Wed, 15 Mar 2023 13:56:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678912964;
+        d=gmail.com; s=20210112; t=1678913816;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sTJ2WQqzCp342VzXKKxKrb6Tcop1tbY216MnndJN7sQ=;
-        b=hWgmkRx8RZmNnPKBjbZ3vIInOgxqUkG1Nli4lVeXL5nTKOCfHgWydHCGHT77yqdP2X
-         MCaMMT8pGdJBc3FZS8SG6HpIFozsrOGGRKq5L7Kt5rmqKutwucBQXV1SJH4tQ8W5lIRR
-         onHgFUXxvpBQstIBiFZNzfLlYd1zCe77tN1gCYOLeRuy9CLKEKzirEogPd0i1gnYDRxo
-         w/IqIAYRcw/36WYC/Gw98J+NVF+8HwkE1mST+UlAvOZoar0Nd+r+3xhCl/uWIDUnNiPk
-         OpO3sq+Kq2OXpaWeFtrTTIwwqUfY8Bn2ift/OMHZ1pyRYQP+4bhrWJH5oC2b/wxoDpO4
-         gdkQ==
+        bh=L5nQ/qpzt0oaqB3uXUI9DghvbDHZxBYtU4vb8xaNMZg=;
+        b=BBJzoCdlv2m4yAlxDru7UMmXGx0atT8eNve/djKAdP6JF0Pa0fln3nteM7CtcXH7ge
+         7tmEDx30QfS2rFzhb5xSSzZ8XdD/qL8u55PncGJs0N2KGgOQnvHVJkCsVGOezF8pLCQJ
+         3Taol/hTDlr5vJ3tGpHQHEldYK1W+YQ8VMqUJGQsFsOyskArA+AUEVf9B3c/QXjTobM8
+         EeEpn+50MYeDI1J22FNfrpHShSeHcSC/s5U8H4tMdiLTq3aPLND/BFpMCXxnMGw7Fp0O
+         EwLEC+p1oY/cu+jGyZUT19Z9r0ioMWIj8XZ3YGzGixCIiLcQZyWDueLBVBbkhyh1wDiO
+         9Fpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678912964;
+        d=1e100.net; s=20210112; t=1678913816;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sTJ2WQqzCp342VzXKKxKrb6Tcop1tbY216MnndJN7sQ=;
-        b=QJgtKqQrOQq9f8Tk20gEzb7twmEKirBLvuHt094+uaBuDhoxR2WkqZqCx3LjkaMrIf
-         6zdtHIS4dcsKWWPlgdRaZvod0uElxBqlfkwcQXAQqolV/HN8pgMOig7oL0On4D0prOuy
-         giHVl6+F+QoVEuYfQTjX98jYRwTdF/EhkuSFLEfsdpS6EzMNEcx4bns44cHdf/6QrRGc
-         bIWCGVpODSXyxCjA/pJpTlgcdo1m6/jxQlnDo4T82YIL8ttKp2bZaI2QL0ZckWErpA6V
-         opWDfStr2fGpSMzHg5dtB+J92n0oPnqjbWb3mUi2/lupKRVzbb5dxTKTRYQl5JVzcPOt
-         z7XA==
-X-Gm-Message-State: AO0yUKWJhU+/IARVpncNIZ4qJaZU8HqXg24iQF/sW/tXye1ggXcCzZnI
-        6KePfuoYz6qnHtYGS6b9r/smhw5B5HOyArwYjcRk5lbdleU=
-X-Google-Smtp-Source: AK7set+FReR4XqbWnaRh930lCwNBx9FyHBIZTL6tblJ8yZ1fzNHd3HKWtbe1Xzi8G8WU3RzY9o0cqnRBhGX1FAXRI74=
-X-Received: by 2002:a05:6870:7f84:b0:17a:d7c7:a19d with SMTP id
- aw4-20020a0568707f8400b0017ad7c7a19dmr771163oac.5.1678912963104; Wed, 15 Mar
- 2023 13:42:43 -0700 (PDT)
+        bh=L5nQ/qpzt0oaqB3uXUI9DghvbDHZxBYtU4vb8xaNMZg=;
+        b=TAlquKvhXjOfrq9L7o8kL5FW6L6SeYjgtiAiT8BDigEyXXPMz7r01BNq4N5tzffCBx
+         lmEBFcOPbIZbgmN01DEGmJUJXrN1kNjs1bkPwePDvaqcIjQDxfyh9hiQbxyhsCl2vfro
+         8PODImHvZKiCS/5cYiB8JCSopaAyzC7nu+n4dVPST9wLH4rqQ1dwmam5I+6TDLAr/kj5
+         oPpowqeIbZ9tsEMkQjTCw5PzUecmWmM/IsPjtRQTYabWMNHd97WM7Vl37FMvTB7WnPpm
+         rbpF06J7RWT4vrbUGOjP0Omasjna27YB0VmOE3B8Pxx8zby28blEyVFE/LwqleSkmqzK
+         8S5w==
+X-Gm-Message-State: AO0yUKWL+ik+nGgkIslBQ/Z4QiiXLBR/gSpPOzWAixo6Ckkl4qRdlID4
+        2b4QHBRJ7Z7Y6Je8LQNN4fB3ZnRftppAtIV+Xzo=
+X-Google-Smtp-Source: AK7set/frHFe10zRlzzkYZdrBNvEStbLGdbm1JDTXvS4gaJeZWDN0ckW8LGWeG0vDfE3Sinfoewb0jUzmpK7Fy1UPjE=
+X-Received: by 2002:a05:6808:354:b0:384:23ed:1ff6 with SMTP id
+ j20-20020a056808035400b0038423ed1ff6mr1201172oie.3.1678913815757; Wed, 15 Mar
+ 2023 13:56:55 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAPM=9txaQfHkjs6nWcwBtnYQXtr996dyht7wasJ7QOovjepmAw@mail.gmail.com>
 In-Reply-To: <CAPM=9txaQfHkjs6nWcwBtnYQXtr996dyht7wasJ7QOovjepmAw@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 15 Mar 2023 13:42:31 -0700
-Message-ID: <CAF6AEGtHLwUMU71bciM3HbmRePYYgiW8c07yzu5FXymOfemWjQ@mail.gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 15 Mar 2023 16:56:43 -0400
+Message-ID: <CADnq5_PdxFdvVwVnQ2n4vXXPYKe0ZOVYBPT0Kf+6aPuQLc960g@mail.gmail.com>
 Subject: Re: enhancing module info to allow grouping of firmwares
 To:     Dave Airlie <airlied@gmail.com>
 Cc:     "Luis R. Rodriguez" <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-modules@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+        dri-devel <dri-devel@lists.freedesktop.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Mar 15, 2023 at 1:35=E2=80=AFPM Dave Airlie <airlied@gmail.com> wro=
+On Wed, Mar 15, 2023 at 4:35=E2=80=AFPM Dave Airlie <airlied@gmail.com> wro=
 te:
 >
 > Hey moduly/firmware people,
@@ -94,13 +92,19 @@ te:
 > feedback on whether this was something that anyone has ever considered
 > before now.
 
-We have a kind of similar problem with drm/msm and various other SoC
-drivers that need fw which is signed with a device or vendor specific
-tree.  We've partially solved that with using firmware-name from
-devicetree to specify the correct device specific fw needs to be
-loaded (ie. something like "qcom/LENOVO/81JL/qcdxkmsuc850.mbn") but
-I've no idea how dracut should figure out what fw files should end up
-in an initrd
+What about bundling the compatible FWs together into one big FW
+package and tag it with some sort of common metadata header that the
+driver can parse.  That would keep all cross FW compatibilities
+together.  Then on the driver side, change the firmware name specified
+in the kernel to match whatever is required for that kernel version.
+E.g., one kernel could specify nv_fw_1_0.bin and another could specify
+nv_fw_2_1.bin, etc.  It's pretty ugly and not a great user experience
+if there is no backwards compat, but it should work as only the
+compatible FW would be copied to the initrd.
 
-BR,
--R
+Alex
+
+
+>
+> Thanks,
+> Dave.
