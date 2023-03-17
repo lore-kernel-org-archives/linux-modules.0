@@ -2,74 +2,159 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19787C74A5B
-	for <linux-modules@archiver.kernel.org>; Thu, 16 Mar 2023 23:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8A41C6FD1D
+	for <linux-modules@archiver.kernel.org>; Fri, 17 Mar 2023 09:57:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbjCPX46 (ORCPT
+        id S230144AbjCQJ5Y (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 16 Mar 2023 19:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        Fri, 17 Mar 2023 05:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjCPX45 (ORCPT
+        with ESMTP id S229826AbjCQJ5W (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 16 Mar 2023 19:56:57 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4303E2747;
-        Thu, 16 Mar 2023 16:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=32FKTXbYQ8r+yPB7drjz07EGlswDQyUktTskL54MxVQ=; b=Cx1kOSvEAH4Exgvlm+Z9DpnM+N
-        5fc72SPkhOqWLxDuiiulDj1j67c9X2zb8+HDsXu8aEpuh6QBEYtp3gmn1pIzoVsECxFDrz+O6CsnM
-        448PstZh1OqARUUr5CBZnXuw3mT9JqMmdVEnamoDwZ0/nEBhHL+AkeWSscEmZNzXNUrLQji6vPqlp
-        EX829ybSAi9MNv+flvrpCPr9VMbqM/m0Dd6MwrkTS20hLxy3UjM5xdrD44B+N48M1ygF94CJ9R+QA
-        kZFE/VG4M/PTpbcjuZI6MBVI2MXOXoscNhVvOfmXeyBm7PaL7ZwwRaugfwr6VpY4TNb7aQqOJpL1P
-        D6tdEo6Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pcxSq-000NHM-0b;
-        Thu, 16 Mar 2023 23:56:56 +0000
-Date:   Thu, 16 Mar 2023 16:56:56 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Message-ID: <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
-References: <20230311051712.4095040-1-mcgrof@kernel.org>
- <3b25ed5c-8fb9-82d3-2296-fadbbb4db7e4@redhat.com>
- <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
- <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
- <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
+        Fri, 17 Mar 2023 05:57:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3407E63E4
+        for <linux-modules@vger.kernel.org>; Fri, 17 Mar 2023 02:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679046979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=c8I+qykTI74Ab/VGldPB2UipRn0pmrBXTGeZi/iZopU=;
+        b=Q2vfd2AASj1d9/KFo5lNNrAGAFUvBW5oK3qQCZcgvCHWA0OHpflBw2IhiGNGz3HUN4+F2G
+        PDR9tWzbgdCL4RwuefHxUn2z9QRS/FzLQbC8khgdKIgMR9O6+roVyj5p8kFvfeJYTiObv+
+        a9IngosL8aptL208bbJ0hny28qFywmQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-207-Ig_oibI_OreWsZwzXHgosg-1; Fri, 17 Mar 2023 05:56:16 -0400
+X-MC-Unique: Ig_oibI_OreWsZwzXHgosg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 56D4F185A78B;
+        Fri, 17 Mar 2023 09:56:15 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.45.226.150])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D0C60483EC0;
+        Fri, 17 Mar 2023 09:56:11 +0000 (UTC)
+From:   Viktor Malik <vmalik@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Viktor Malik <vmalik@redhat.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH bpf-next] kallsyms: move find_kallsyms_symbol_value out of internal header
+Date:   Fri, 17 Mar 2023 10:56:01 +0100
+Message-Id: <20230317095601.386738-1-vmalik@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Mar 16, 2023 at 04:55:31PM -0700, Luis Chamberlain wrote:
-> On Wed, Mar 15, 2023 at 05:41:53PM +0100, David Hildenbrand wrote:
-> > I expect to have a machine (with a crazy number of CPUs/devices) available
-> > in a couple of days (1-2), so no need to rush.
-> > 
-> > The original machine I was able to reproduce with is blocked for a little
-> > bit longer; so I hope the alternative I looked up will similarly trigger the
-> > issue easily.
-> 
-> OK give this a spin:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230316-module-alloc-opts
-> 
-> I'm seeing about ~86 MiB saving on the upper bound on memory usage
-> while hammering on kmod test 0008, and this is on a small system.
-> 
-> Probably won't help *that* much but am curious... if it helps somewhat.
+Moving find_kallsyms_symbol_value from kernel/module/internal.h to
+include/linux/module.h. The reason is that internal.h is not prepared to
+be included when CONFIG_MODULES=n. find_kallsyms_symbol_value is used by
+kernel/bpf/verifier.c and including internal.h from it (without modules)
+leads into a compilation error:
 
-How much cpu count BTW?
+In file included from ../include/linux/container_of.h:5,
+                 from ../include/linux/list.h:5,
+                 from ../include/linux/timer.h:5,
+                 from ../include/linux/workqueue.h:9,
+                 from ../include/linux/bpf.h:10,
+                 from ../include/linux/bpf-cgroup.h:5,
+                 from ../kernel/bpf/verifier.c:7:
+../kernel/bpf/../module/internal.h: In function 'mod_find':
+../include/linux/container_of.h:20:54: error: invalid use of undefined type 'struct module'
+   20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+      |                                                      ^~
+[...]
 
-  Luis
+This patch fixes the above error.
+
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202303161404.OrmfCy09-lkp@intel.com/
+---
+ include/linux/module.h   | 8 ++++++++
+ kernel/bpf/verifier.c    | 2 +-
+ kernel/module/internal.h | 6 ------
+ 3 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 4435ad9439ab..41cfd3be57e5 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -616,6 +616,8 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+ /* Look for this name: can be of form module:name. */
+ unsigned long module_kallsyms_lookup_name(const char *name);
+ 
++unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
++
+ extern void __noreturn __module_put_and_kthread_exit(struct module *mod,
+ 			long code);
+ #define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
+@@ -796,6 +798,12 @@ static inline unsigned long module_kallsyms_lookup_name(const char *name)
+ 	return 0;
+ }
+ 
++static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
++						       const char *name)
++{
++	return 0;
++}
++
+ static inline int register_module_notifier(struct notifier_block *nb)
+ {
+ 	/* no events will happen anyway, so this can always succeed */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d62b7127ff2a..99394a2f7ee4 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -24,7 +24,7 @@
+ #include <linux/bpf_lsm.h>
+ #include <linux/btf_ids.h>
+ #include <linux/poison.h>
+-#include "../module/internal.h"
++#include <linux/module.h>
+ 
+ #include "disasm.h"
+ 
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 5c9170f9135c..1c877561a7d2 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -246,7 +246,6 @@ static inline void kmemleak_load_module(const struct module *mod,
+ void init_build_id(struct module *mod, const struct load_info *info);
+ void layout_symtab(struct module *mod, struct load_info *info);
+ void add_kallsyms(struct module *mod, const struct load_info *info);
+-unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
+ 
+ static inline bool sect_empty(const Elf_Shdr *sect)
+ {
+@@ -256,11 +255,6 @@ static inline bool sect_empty(const Elf_Shdr *sect)
+ static inline void init_build_id(struct module *mod, const struct load_info *info) { }
+ static inline void layout_symtab(struct module *mod, struct load_info *info) { }
+ static inline void add_kallsyms(struct module *mod, const struct load_info *info) { }
+-static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
+-						       const char *name)
+-{
+-	return 0;
+-}
+ #endif /* CONFIG_KALLSYMS */
+ 
+ #ifdef CONFIG_SYSFS
+-- 
+2.39.2
+
