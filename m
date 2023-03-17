@@ -2,159 +2,94 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8A41C6FD1D
-	for <linux-modules@archiver.kernel.org>; Fri, 17 Mar 2023 09:57:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E1FBC74A5B
+	for <linux-modules@archiver.kernel.org>; Fri, 17 Mar 2023 12:50:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbjCQJ5Y (ORCPT
+        id S230372AbjCQMur (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 17 Mar 2023 05:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
+        Fri, 17 Mar 2023 08:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjCQJ5W (ORCPT
+        with ESMTP id S230379AbjCQMum (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:57:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3407E63E4
-        for <linux-modules@vger.kernel.org>; Fri, 17 Mar 2023 02:56:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679046979;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=c8I+qykTI74Ab/VGldPB2UipRn0pmrBXTGeZi/iZopU=;
-        b=Q2vfd2AASj1d9/KFo5lNNrAGAFUvBW5oK3qQCZcgvCHWA0OHpflBw2IhiGNGz3HUN4+F2G
-        PDR9tWzbgdCL4RwuefHxUn2z9QRS/FzLQbC8khgdKIgMR9O6+roVyj5p8kFvfeJYTiObv+
-        a9IngosL8aptL208bbJ0hny28qFywmQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-207-Ig_oibI_OreWsZwzXHgosg-1; Fri, 17 Mar 2023 05:56:16 -0400
-X-MC-Unique: Ig_oibI_OreWsZwzXHgosg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 17 Mar 2023 08:50:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768ACBAD16;
+        Fri, 17 Mar 2023 05:50:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 56D4F185A78B;
-        Fri, 17 Mar 2023 09:56:15 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.45.226.150])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D0C60483EC0;
-        Fri, 17 Mar 2023 09:56:11 +0000 (UTC)
-From:   Viktor Malik <vmalik@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Viktor Malik <vmalik@redhat.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH bpf-next] kallsyms: move find_kallsyms_symbol_value out of internal header
-Date:   Fri, 17 Mar 2023 10:56:01 +0100
-Message-Id: <20230317095601.386738-1-vmalik@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78626B825A7;
+        Fri, 17 Mar 2023 12:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27D6CC4339E;
+        Fri, 17 Mar 2023 12:50:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679057418;
+        bh=4Kco3SZN1tyzESjQTfolhWtYEc5u7BLKs8kvlYoAnaE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=m16W0VvEqZ8F5p8x/hIU+oM5OmaZsI5zZngyCVx/El3i1+fTTxRXh8h57okxoCf7x
+         aciG6+t1zSg/eNNAWT267OpjAv/+Q6slYHG3cmDn739zgFaut3x3FDyJGWz3TcYuNq
+         nl5V5f5NX/a8bKjukDp04keI+AisHufWYyKJOk0OgRB8f1DhyYytIttzacR2udFoXc
+         /eXwKPL4FfIunlzyVQh5JE0GQjarvoDc9XOa920NTp7iu7xpyUcqqA4SvtzfQE9QmE
+         jhZ3QZsFSMzPvFX3OBK4uCJcz6w2Q+sdnt3w3VxxfUdlWSH5jGJen8K+rtihhm5148
+         ieZN+KreFGc4Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 112FAE21EE8;
+        Fri, 17 Mar 2023 12:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Subject: Re: [PATCH bpf-next] kallsyms: move find_kallsyms_symbol_value out of
+ internal header
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167905741806.12724.17197641552332492380.git-patchwork-notify@kernel.org>
+Date:   Fri, 17 Mar 2023 12:50:18 +0000
+References: <20230317095601.386738-1-vmalik@redhat.com>
+In-Reply-To: <20230317095601.386738-1-vmalik@redhat.com>
+To:     Viktor Malik <vmalik@redhat.com>
+Cc:     bpf@vger.kernel.org, mcgrof@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Moving find_kallsyms_symbol_value from kernel/module/internal.h to
-include/linux/module.h. The reason is that internal.h is not prepared to
-be included when CONFIG_MODULES=n. find_kallsyms_symbol_value is used by
-kernel/bpf/verifier.c and including internal.h from it (without modules)
-leads into a compilation error:
+Hello:
 
-In file included from ../include/linux/container_of.h:5,
-                 from ../include/linux/list.h:5,
-                 from ../include/linux/timer.h:5,
-                 from ../include/linux/workqueue.h:9,
-                 from ../include/linux/bpf.h:10,
-                 from ../include/linux/bpf-cgroup.h:5,
-                 from ../kernel/bpf/verifier.c:7:
-../kernel/bpf/../module/internal.h: In function 'mod_find':
-../include/linux/container_of.h:20:54: error: invalid use of undefined type 'struct module'
-   20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-      |                                                      ^~
-[...]
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-This patch fixes the above error.
+On Fri, 17 Mar 2023 10:56:01 +0100 you wrote:
+> Moving find_kallsyms_symbol_value from kernel/module/internal.h to
+> include/linux/module.h. The reason is that internal.h is not prepared to
+> be included when CONFIG_MODULES=n. find_kallsyms_symbol_value is used by
+> kernel/bpf/verifier.c and including internal.h from it (without modules)
+> leads into a compilation error:
+> 
+> In file included from ../include/linux/container_of.h:5,
+>                  from ../include/linux/list.h:5,
+>                  from ../include/linux/timer.h:5,
+>                  from ../include/linux/workqueue.h:9,
+>                  from ../include/linux/bpf.h:10,
+>                  from ../include/linux/bpf-cgroup.h:5,
+>                  from ../kernel/bpf/verifier.c:7:
+> ../kernel/bpf/../module/internal.h: In function 'mod_find':
+> ../include/linux/container_of.h:20:54: error: invalid use of undefined type 'struct module'
+>    20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+>       |                                                      ^~
+> [...]
+> 
+> [...]
 
-Signed-off-by: Viktor Malik <vmalik@redhat.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202303161404.OrmfCy09-lkp@intel.com/
----
- include/linux/module.h   | 8 ++++++++
- kernel/bpf/verifier.c    | 2 +-
- kernel/module/internal.h | 6 ------
- 3 files changed, 9 insertions(+), 7 deletions(-)
+Here is the summary with links:
+  - [bpf-next] kallsyms: move find_kallsyms_symbol_value out of internal header
+    https://git.kernel.org/bpf/bpf-next/c/bd5314f8dd2d
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 4435ad9439ab..41cfd3be57e5 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -616,6 +616,8 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- /* Look for this name: can be of form module:name. */
- unsigned long module_kallsyms_lookup_name(const char *name);
- 
-+unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
-+
- extern void __noreturn __module_put_and_kthread_exit(struct module *mod,
- 			long code);
- #define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
-@@ -796,6 +798,12 @@ static inline unsigned long module_kallsyms_lookup_name(const char *name)
- 	return 0;
- }
- 
-+static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
-+						       const char *name)
-+{
-+	return 0;
-+}
-+
- static inline int register_module_notifier(struct notifier_block *nb)
- {
- 	/* no events will happen anyway, so this can always succeed */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d62b7127ff2a..99394a2f7ee4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -24,7 +24,7 @@
- #include <linux/bpf_lsm.h>
- #include <linux/btf_ids.h>
- #include <linux/poison.h>
--#include "../module/internal.h"
-+#include <linux/module.h>
- 
- #include "disasm.h"
- 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 5c9170f9135c..1c877561a7d2 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -246,7 +246,6 @@ static inline void kmemleak_load_module(const struct module *mod,
- void init_build_id(struct module *mod, const struct load_info *info);
- void layout_symtab(struct module *mod, struct load_info *info);
- void add_kallsyms(struct module *mod, const struct load_info *info);
--unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
- 
- static inline bool sect_empty(const Elf_Shdr *sect)
- {
-@@ -256,11 +255,6 @@ static inline bool sect_empty(const Elf_Shdr *sect)
- static inline void init_build_id(struct module *mod, const struct load_info *info) { }
- static inline void layout_symtab(struct module *mod, struct load_info *info) { }
- static inline void add_kallsyms(struct module *mod, const struct load_info *info) { }
--static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
--						       const char *name)
--{
--	return 0;
--}
- #endif /* CONFIG_KALLSYMS */
- 
- #ifdef CONFIG_SYSFS
+You are awesome, thank you!
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
