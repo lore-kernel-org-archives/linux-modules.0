@@ -2,100 +2,93 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A55DC74A5B
-	for <linux-modules@archiver.kernel.org>; Fri, 17 Mar 2023 19:04:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45B46C76195
+	for <linux-modules@archiver.kernel.org>; Fri, 17 Mar 2023 23:31:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjCQTEL (ORCPT
+        id S229799AbjCQXb1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 17 Mar 2023 15:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
+        Fri, 17 Mar 2023 19:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCQTEL (ORCPT
+        with ESMTP id S229478AbjCQXb0 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 17 Mar 2023 15:04:11 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F0CA5D6
-        for <linux-modules@vger.kernel.org>; Fri, 17 Mar 2023 12:04:08 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id b13so6121345ljf.6
-        for <linux-modules@vger.kernel.org>; Fri, 17 Mar 2023 12:04:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679079847;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vxWwhYtYMhTKLT+t03kqT9HvUsxnKyYicVxmtWlKd/U=;
-        b=VaLCQLvTCM70AHROG4xz4tfrBF639waWz4KoWP8AzwXYthDGomNGp1T7jkmLSYG6ZL
-         sQFvXnCJrqBICSwPvMM6a5OUdp9euuNEyXtvS6swIWpNLZtX+94mUEIdzi0vOzHTeDjh
-         3JTXIbCJnfWdIZvosOOvSj9i6QeMcdMqZQro0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679079847;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vxWwhYtYMhTKLT+t03kqT9HvUsxnKyYicVxmtWlKd/U=;
-        b=DiVPndlg9r2MmX8kOMnK9GmsdAoI1FX1wAEwqMFgNjoD7ukOew+ROn1OdgD46B4jYj
-         kvLxWzVjPq7g9KWqB/MkrtU2nqyZsO7yiS3dk1bHAWgQ15WBrdNJ3Y0CYtnJExb28D0T
-         Z0i5KBDTB2LfaCFACA4FAH3N8A1hW8a7GVhy8OXiAKy6IBnce3X5QYitXlbxwdn1SQa6
-         TnCVqeJ8eY8imKpPYOTJ6Ou4LncyYo7ErL4Px1naoz8u5wMlTmMjrvdhE7KoMt7EE0F6
-         sNSjjshxNERMCVhH7kUY1HXhb2XF/NnTKr++KfGokU6puQ2ML4e7tP9uhcUe0aF0wr2B
-         UiOQ==
-X-Gm-Message-State: AO0yUKWNeDc1l8xPjhbe20TtDrKDMin+PWOZXb1lBGito61gCm4bJj9o
-        qnXtGeDQYAa81t/stfDh7VyRb0nuP8V9zcsdvUi9BQ==
-X-Google-Smtp-Source: AK7set9HiEa6enkw+O8v0nH+vyluNOZUiaCR0NVYDozZkTby7pa60VguxOSXhQJyn+UdyYOLblrB7egT3k0I/PkyvWw=
-X-Received: by 2002:a05:651c:48e:b0:295:95a8:c6a3 with SMTP id
- s14-20020a05651c048e00b0029595a8c6a3mr3635392ljc.10.1679079847107; Fri, 17
- Mar 2023 12:04:07 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 17 Mar 2023 12:04:06 -0700
+        Fri, 17 Mar 2023 19:31:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D74151FB0;
+        Fri, 17 Mar 2023 16:31:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24FD960B81;
+        Fri, 17 Mar 2023 23:31:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 316C3C433D2;
+        Fri, 17 Mar 2023 23:31:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679095884;
+        bh=BKv2lCgkapt88k5JeE6qHL3HDvWVl7vxGoYxVYQNE6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AZS77oFPc8vjt+NncTCzc4g5EY3J3gWnYeRoc2YSm+RS4YyFYLI8uZALE3Il4OSIU
+         COeo5BuUNlxyKdh0no6EKsx2h4/O0mGmXcBvUmxaUZLvoOtD8eaFEg4e+xcWb+9gfm
+         +EHeTbpFPV0M4xhcfEJZnAmfSMySgJcJaleWErkL5z3WfJPk6ZOBss195aDbL4PWB/
+         F3vCgvtdSe1u3WQyzINZxVvaRYchT7RtdfGlFn0+Dfcfwad73hANwBkKmsMv82e7AE
+         pFpqMhEjKrwMzkKdx72bZ1aUri4xedhOHvtzxG3wpo775n2w2TN/jF27Hz0+lbLEY4
+         oHKObMRWSyJ1Q==
+Date:   Fri, 17 Mar 2023 16:31:22 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>,
+        patches@lists.linux.dev, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: mod->klp set on copy ok ?
+Message-ID: <20230317233122.4vsewgrb3nq574fs@treble>
+References: <CAB=NE6Vo4AXVrn1GPEoZWVF3NkXRoPwWOuUEJqJ35S9VMGTM2Q@mail.gmail.com>
+ <ZA8NBuXbVP+PRPp0@alley>
+ <ZBOPP4YWWhJRk2yn@bombadil.infradead.org>
+ <20230317161639.3de7yeek6ia4y7ul@treble>
+ <ZBS42Lid+CX0h0fk@bombadil.infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20230315125256.22772-1-fmdefrancesco@gmail.com>
-References: <20230315125256.22772-1-fmdefrancesco@gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 17 Mar 2023 12:04:06 -0700
-Message-ID: <CAE-0n50=j=GPQA=wQa5wE=P2T0ipOoOn6ekhPVAJhr5nMkiVnw@mail.gmail.com>
-Subject: Re: [PATCH] module/decompress: Never use kunmap() for local un-mappings
-To:     Chris Down <chris@chrisdown.name>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>, Petr Mladek <pmladek@suse.com>,
-        Tom Rix <trix@redhat.com>, bpf@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc:     Piotr Gorski <piotrgorski@cachyos.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZBS42Lid+CX0h0fk@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Quoting Fabio M. De Francesco (2023-03-15 05:52:56)
-> Use kunmap_local() to unmap pages locally mapped with kmap_local_page().
->
-> kunmap_local() must be called on the kernel virtual address returned by
-> kmap_local_page(), differently from how we use kunmap() which instead
-> expects the mapped page as its argument.
->
-> In module_zstd_decompress() we currently map with kmap_local_page() and
-> unmap with kunmap(). This breaks the code and so it should be fixed.
->
-> Cc: Piotr Gorski <piotrgorski@cachyos.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Stephen Boyd <swboyd@chromium.org>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Fixes: 169a58ad824d ("module/decompress: Support zstd in-kernel decompression")
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
+On Fri, Mar 17, 2023 at 12:00:40PM -0700, Luis Chamberlain wrote:
+> > I dug into that code years ago, and the above sounds right.
+> > 
+> > The .ko file has a .gnu.linkonce.this_module section whose data is just
+> > the original "struct module __this_module" which is created by the
+> > module build (from foo.mod.c).
+> > 
+> > At the beginning of the finit_module() syscall, the .ko file's ELF
+> > sections get copied (and optionally decompressed) into kernel memory.
+> > Then 'mod' just points to the copied __this_module struct.
+> > 
+> > Then mod->klp (and possibly mod->taint) get set.
+> > 
+> > Then in layout_and_allocate(), that 'mod' gets memcpy'd into the second
+> > (and final) in-kernel copy of 'struct module':
+> > 
+> >  		if (shdr->sh_type != SHT_NOBITS)
+> >  			memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
+> >  		/* Update sh_addr to point to copy in image. */
+> >  		shdr->sh_addr = (unsigned long)dest;
+> > 
+> > I suspect you don't see the size changing when you add to 'struct
+> > module' because it's ____cacheline_aligned.
+> > 
+> > It's all rather obtuse, but working as designed as far as I can tell.
+> 
+> Ah, well it is beyond a ____cacheline_aligned issue! It would seem our build
+> system does not incur a full re-build of $foo.mod.c if the size of struct module
+> changes. Doing a full rebuild does get the right drift size change in
+> struct module:
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Ah, ok.  It sounds like build dependencies are broken for *.mod.c.
+
+The added validations in the patch look reasonable, though the broken
+build dependencies should also get fixed.
+
+-- 
+Josh
