@@ -2,76 +2,73 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61BB1C6FD1D
-	for <linux-modules@archiver.kernel.org>; Sat, 18 Mar 2023 00:11:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A140C74A5B
+	for <linux-modules@archiver.kernel.org>; Sat, 18 Mar 2023 19:30:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCRALc (ORCPT
+        id S229502AbjCRTaG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 17 Mar 2023 20:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
+        Sat, 18 Mar 2023 15:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCRALb (ORCPT
+        with ESMTP id S229550AbjCRTaF (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 17 Mar 2023 20:11:31 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDEBBD4F0;
-        Fri, 17 Mar 2023 17:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qjh02ll/N6tXv37eQ7ysFaXY+FLlkp6Qi3KhauBMak0=; b=HhmS5T3wRT/J2KDrPg5jWlYDiP
-        3JABPNwZtBwbpf0MVm6NWDSFwqubVEuj+7PMqv+/YFsjb6Kohb2pGVYZ4Ezd6Iqqh2fJUmAuJBBYV
-        2k4DvLEcbwDRVBa+pbWZZ2r3f6SBg2vBjDSwsLtLyEDwNd+09mVUtv0ruHyQZjFqzVCkiSuCt+VXB
-        6ZnqqYYg6JVe6nWjbinwu/MA0839IUIPvp7iAgBSYfu9+MiZr6OTtX6KlNbc2VqOxPVHUHY/6wrsk
-        KSCaV5bfY7x2ViXWLSZ+10WCc94JKsnWCB+8wTaZYnd/NsHscCbKNGFhTEIAvXHGONTw0hc3F7OsX
-        DRQJr9iQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pdKAT-003kwi-18;
-        Sat, 18 Mar 2023 00:11:29 +0000
-Date:   Fri, 17 Mar 2023 17:11:29 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Message-ID: <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
-References: <20230311051712.4095040-1-mcgrof@kernel.org>
- <3b25ed5c-8fb9-82d3-2296-fadbbb4db7e4@redhat.com>
- <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
- <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
- <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
- <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
+        Sat, 18 Mar 2023 15:30:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13605BB0;
+        Sat, 18 Mar 2023 12:30:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6635B60EEE;
+        Sat, 18 Mar 2023 19:30:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E99B9C4339C;
+        Sat, 18 Mar 2023 19:29:59 +0000 (UTC)
+Date:   Sat, 18 Mar 2023 15:29:58 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] kallsyms: Delete an unused parameter related to
+ {module_}kallsyms_on_each_symbol()
+Message-ID: <20230318152958.16055098@rorschach.local.home>
+In-Reply-To: <20230308073846.1882-1-thunder.leizhen@huawei.com>
+References: <20230308073846.1882-1-thunder.leizhen@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Mar 16, 2023 at 04:56:56PM -0700, Luis Chamberlain wrote:
-> On Thu, Mar 16, 2023 at 04:55:31PM -0700, Luis Chamberlain wrote:
-> > On Wed, Mar 15, 2023 at 05:41:53PM +0100, David Hildenbrand wrote:
-> > > I expect to have a machine (with a crazy number of CPUs/devices) available
-> > > in a couple of days (1-2), so no need to rush.
-> > > 
-> > > The original machine I was able to reproduce with is blocked for a little
-> > > bit longer; so I hope the alternative I looked up will similarly trigger the
-> > > issue easily.
-> > 
-> > OK give this a spin:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230316-module-alloc-opts
+On Wed, 8 Mar 2023 15:38:46 +0800
+Zhen Lei <thunder.leizhen@huawei.com> wrote:
 
-Today I am up to here:
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 29baa97d0d53428..76caca8f496aaed 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -8391,8 +8391,7 @@ struct kallsyms_data {
+>   * and returns 1 in case we resolved all the requested symbols,
+>   * 0 otherwise.
+>   */
+> -static int kallsyms_callback(void *data, const char *name,
+> -			     struct module *mod, unsigned long addr)
+> +static int kallsyms_callback(void *data, const char *name, unsigned long addr)
+>  {
+>  	struct kallsyms_data *args = data;
+>  	const char **sym;
+> -- 
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230317-module-alloc-opts
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-The last patch really would have no justification yet at all unless it
-does help your case.
-
-  Luis
+-- Steve
