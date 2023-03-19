@@ -2,88 +2,206 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5111C6FD1F
-	for <linux-modules@archiver.kernel.org>; Sun, 19 Mar 2023 21:35:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5A51C761A6
+	for <linux-modules@archiver.kernel.org>; Sun, 19 Mar 2023 21:35:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjCSVfs (ORCPT
+        id S230157AbjCSVfu (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 19 Mar 2023 17:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
+        Sun, 19 Mar 2023 17:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjCSVfq (ORCPT
+        with ESMTP id S229916AbjCSVfr (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 19 Mar 2023 17:35:46 -0400
+        Sun, 19 Mar 2023 17:35:47 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3FD11653;
-        Sun, 19 Mar 2023 14:35:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0574B113F1;
+        Sun, 19 Mar 2023 14:35:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=4+NzyS15tvE5FVGnxGqo+lPc7QVVkfAfgOyCb7VB/XM=; b=2fCknlgWTdi0+x9lnrIeEbLIVF
-        55fk6OZVI/R/W4zkljEDBoMJYWXrtaJ3bomUUBCust/KBP/LbuyJcwRnpNwLj0fQwv3ctcAgiL7ir
-        7mqnmJkl2YYlTf7C/WvinuYJjuwQGhiGkj7+xfoIwfwhouTy4Vo8s07Ov7Ld+b82o4+peoc7s6kSF
-        eVlDDuVqWNfzedPSw1AdAom95xddzlX/HSzVVsDfjrgjASpA8GPd59FXRWzIGaMkVqkxYi9FR+GwN
-        JhuiVJdpgVggFx07x3Hwl1lkviNdIpBJRQs/r2zbxlaEy/53Iw5ybzma1Vl20ybB8e58/rbIEJtX1
-        KA0KCVnw==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=HF9NF/yBwymtSuL/hDrmdyOKiRi1h3O7H2O+TxiSARc=; b=ZQQBxuuR02y60vCB+7GBdnQXcX
+        YdbX8jiMZJZuVMw7Rvoc5g1FkMgeWyy8JbIeN348nQo2UHbjPs0Y1Zyx5K7182GpJ5LXFvYHBWL2W
+        3D/z8MZxcV6eTDd7Lct1y3nMwXGG+/RaKZeP1DbsZsOa7BxfjMS4Z+YveurMORBVdbh0lh1UPJK0m
+        DK2LdFz3gPnrJ8zRyQmLf5VzouZqycTGLDQcWhg3WUgrAgjDUvy9UQeVL9mQWwVo8i98/WIbibUlh
+        6xsvX9HmyX0vc/asrGqOWfG+OAKffnE1O4OrekexWRkcFlBsREWOut5cuuXDuaB7hoFvvCLrP2bFg
+        K8vhEKcQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pe0gp-007Vmp-1H;
+        id 1pe0gp-007Vmv-1d;
         Sun, 19 Mar 2023 21:35:43 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org
-Subject: [PATCH 0/5] module: ELF validation enhancement and cleanups
-Date:   Sun, 19 Mar 2023 14:35:37 -0700
-Message-Id: <20230319213542.1790479-1-mcgrof@kernel.org>
+Subject: [PATCH 3/5] module: move more elf validity checks to elf_validity_check()
+Date:   Sun, 19 Mar 2023 14:35:40 -0700
+Message-Id: <20230319213542.1790479-4-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230319213542.1790479-1-mcgrof@kernel.org>
+References: <20230319213542.1790479-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-While doing a cleanup of load_module() to do less work before we allocate [0],
-one of the undocumented tricks we pull off is memcpy'ing the struct module
-from the module.mod.c into the kernel, with the modifications we've made
-to it on load_module(). This puts a bit of love to make the clearer, and
-extends our ELF validity checker to ensure we verify this before allowing
-us to even process a module.
+The symbol and strings section validation currently happen in
+setup_load_info() but since they are also doing validity checks
+move this to elf_validity_check().
 
-This effort has discovered a new possible build issue we have to fix:
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ kernel/module/main.c | 79 ++++++++++++++++++++++++--------------------
+ 1 file changed, 44 insertions(+), 35 deletions(-)
 
-It is in theory possible today to modify the module struct module size,
-let a kernel developer lazily just build the module (say make fs/xfs/)
-and then try to insert that module without ensuring the module size
-expected should have grown. You can verify the size with:
-
-nm --print-size --size-sort fs/xfs/xfs.ko | grep __this_module
-0000000000000000 0000000000000500 D __this_module
-
-The struct module size will be different per each kernel configuration,
-and so this is system build dependent. The new ELF check put in place
-prevents this situation and also make the use case of memcpying the
-struct module very clear, along with ensuring we keep all modifications
-we've made to it.
-
-[0] https://lkml.kernel.org/r/20230311051712.4095040-1-mcgrof@kernel.org
-
-Luis Chamberlain (5):
-  module: add sanity check for ELF module section
-  module: add stop-grap sanity check on module memcpy()
-  module: move more elf validity checks to elf_validity_check()
-  module: merge remnants of setup_load_info() to elf validation
-  module: fold usermode helper kmod into modules directory
-
- MAINTAINERS                |  13 +--
- kernel/Makefile            |   1 -
- kernel/module/Makefile     |   4 +-
- kernel/{ => module}/kmod.c |   0
- kernel/module/main.c       | 219 ++++++++++++++++++++++++-------------
- 5 files changed, 148 insertions(+), 89 deletions(-)
- rename kernel/{ => module}/kmod.c (100%)
-
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index fbe62d1625bc..84a7f96cf35a 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1658,6 +1658,8 @@ static int elf_validity_check(struct load_info *info)
+ 	Elf_Shdr *shdr, *strhdr;
+ 	int err;
+ 	unsigned int num_mod_secs = 0, mod_idx;
++	unsigned int num_info_secs = 0, info_idx;
++	unsigned int num_sym_secs = 0, sym_idx;
+ 
+ 	if (info->len < sizeof(*(info->hdr))) {
+ 		pr_err("Invalid ELF header len %lu\n", info->len);
+@@ -1761,6 +1763,8 @@ static int elf_validity_check(struct load_info *info)
+ 				       info->hdr->e_shnum);
+ 				goto no_exec;
+ 			}
++			num_sym_secs++;
++			sym_idx = i;
+ 			fallthrough;
+ 		default:
+ 			err = validate_section_offset(info, shdr);
+@@ -1773,6 +1777,10 @@ static int elf_validity_check(struct load_info *info)
+ 				   ".gnu.linkonce.this_module") == 0) {
+ 				num_mod_secs++;
+ 				mod_idx = i;
++			} else if (strcmp(info->secstrings + shdr->sh_name,
++				   ".modinfo") == 0) {
++				num_info_secs++;
++				info_idx = i;
+ 			}
+ 
+ 			if (shdr->sh_flags & SHF_ALLOC) {
+@@ -1786,6 +1794,27 @@ static int elf_validity_check(struct load_info *info)
+ 		}
+ 	}
+ 
++	if (num_info_secs > 1) {
++		pr_err("Only one .modinfo section must exist.\n");
++		goto no_exec;
++	} else if (num_info_secs == 1) {
++		/* Try to find a name early so we can log errors with a module name */
++		info->index.info = info_idx;
++		info->name = get_modinfo(info, "name");
++	}
++
++	if (num_sym_secs != 1) {
++		pr_warn("%s: module has no symbols (stripped?)\n",
++			info->name ?: "(missing .modinfo section or name field)");
++		goto no_exec;
++	}
++
++	/* Sets internal symbols and strings. */
++	info->index.sym = sym_idx;
++	shdr = &info->sechdrs[sym_idx];
++	info->index.str = shdr->sh_link;
++	info->strtab = (char *)info->hdr + info->sechdrs[info->index.str].sh_offset;
++
+ 	/*
+ 	 * The ".gnu.linkonce.this_module" ELF section is special. It is
+ 	 * what modpost uses to refer to __this_module and let's use rely
+@@ -1802,7 +1831,8 @@ static int elf_validity_check(struct load_info *info)
+ 	 *     size
+ 	 */
+ 	if (num_mod_secs != 1) {
+-		pr_err("Only one .gnu.linkonce.this_module section must exist.\n");
++		pr_err("module %s: Only one .gnu.linkonce.this_module section must exist.\n",
++		       info->name ?: "(missing .modinfo section or name field)");
+ 		goto no_exec;
+ 	}
+ 
+@@ -1813,17 +1843,20 @@ static int elf_validity_check(struct load_info *info)
+ 	 * pedantic about it.
+ 	 */
+ 	if (shdr->sh_type == SHT_NOBITS) {
+-		pr_err(".gnu.linkonce.this_module section must have a size set\n");
++		pr_err("module %s: .gnu.linkonce.this_module section must have a size set\n",
++		       info->name ?: "(missing .modinfo section or name field)");
+ 		goto no_exec;
+ 	}
+ 
+ 	if (!(shdr->sh_flags & SHF_ALLOC)) {
+-		pr_err(".gnu.linkonce.this_module must occupy memory during process execution\n");
++		pr_err("module %s: .gnu.linkonce.this_module must occupy memory during process execution\n",
++		       info->name ?: "(missing .modinfo section or name field)");
+ 		goto no_exec;
+ 	}
+ 
+ 	if (shdr->sh_size != sizeof(struct module)) {
+-		pr_err(".gnu.linkonce.this_module section size must match the kernel's built struct module size at run time\n");
++		pr_err("module %s: .gnu.linkonce.this_module section size must match the kernel's built struct module size at run time\n",
++		       info->name ?: "(missing .modinfo section or name field)");
+ 		goto no_exec;
+ 	}
+ 
+@@ -1832,6 +1865,13 @@ static int elf_validity_check(struct load_info *info)
+ 	/* This is temporary: point mod into copy of data. */
+ 	info->mod = (void *)info->hdr + shdr->sh_offset;
+ 
++	/*
++	 * If we didn't load the .modinfo 'name' field earlier, fall back to
++	 * on-disk struct mod 'name' field.
++	 */
++	if (!info->name)
++		info->name = info->mod->name;
++
+ 	return 0;
+ 
+ no_exec:
+@@ -1954,37 +1994,6 @@ static int rewrite_section_headers(struct load_info *info, int flags)
+  */
+ static int setup_load_info(struct load_info *info, int flags)
+ {
+-	unsigned int i;
+-
+-	/* Try to find a name early so we can log errors with a module name */
+-	info->index.info = find_sec(info, ".modinfo");
+-	if (info->index.info)
+-		info->name = get_modinfo(info, "name");
+-
+-	/* Find internal symbols and strings. */
+-	for (i = 1; i < info->hdr->e_shnum; i++) {
+-		if (info->sechdrs[i].sh_type == SHT_SYMTAB) {
+-			info->index.sym = i;
+-			info->index.str = info->sechdrs[i].sh_link;
+-			info->strtab = (char *)info->hdr
+-				+ info->sechdrs[info->index.str].sh_offset;
+-			break;
+-		}
+-	}
+-
+-	if (info->index.sym == 0) {
+-		pr_warn("%s: module has no symbols (stripped?)\n",
+-			info->name ?: "(missing .modinfo section or name field)");
+-		return -ENOEXEC;
+-	}
+-
+-	/*
+-	 * If we didn't load the .modinfo 'name' field earlier, fall back to
+-	 * on-disk struct mod 'name' field.
+-	 */
+-	if (!info->name)
+-		info->name = info->mod->name;
+-
+ 	if (flags & MODULE_INIT_IGNORE_MODVERSIONS)
+ 		info->index.vers = 0; /* Pretend no __versions section! */
+ 	else
 -- 
 2.39.1
 
