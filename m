@@ -2,41 +2,41 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EC6C7618A
-	for <linux-modules@archiver.kernel.org>; Sun, 19 Mar 2023 21:35:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 837A3C76195
+	for <linux-modules@archiver.kernel.org>; Sun, 19 Mar 2023 21:35:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjCSVfr (ORCPT
+        id S230137AbjCSVfs (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 19 Mar 2023 17:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
+        Sun, 19 Mar 2023 17:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjCSVfp (ORCPT
+        with ESMTP id S229734AbjCSVfp (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Sun, 19 Mar 2023 17:35:45 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2F11164B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0591111648;
         Sun, 19 Mar 2023 14:35:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=o7Go1puxe90FGMktwOjmsLknRJd3vVFjG7iQj4FUx+M=; b=XqMEHnA1Jxvrrb245/gV9tQJgM
-        CKTzB8jqsj/Mrc4jQJulJjjvW6eSvvhDRJQbLLthWWGxdgzs8e4f8/HMftBfDxSu3htw9yjyqzbdn
-        MR52AsAZ+FOCvqmkf3us3iGzPp8CH+PEQK+DCAV8CtKbtMXpwUtFC3Q5RqOOhcf6fmJpRuP60BIwR
-        ibr7FJGZ1bxgKq3OkApLjLhfFPS9w9R58snlxbcBxwgpL2XLyrlavSNCIGS39tMMMP4bvuhMAGk2D
-        fCdcpy95A7nX+nt+i6POnJs0gt71a61x82dcm/xEwhub3LSs3OSQbCghkvUjXi9XJIEmxXQC8b/jA
-        MjmDTuVg==;
+        bh=neDHB/WWg2awqij4jXWtBpsjGCoiwuHAl9xglimyywE=; b=303stu8OCdpqCRilISbltHeAbN
+        LpTSgDaE73qLea6KutAQ3oKdfbr8JPNYVogqTx3IOrthWjMROrxivKnnu1cUVPu9BTvOlIKg2gOEv
+        q9vnUiOcxcaPRFIEiSg2L7Yzc2cdJ9USoj0KkKNxiLbxAZBrs6z9vtHbR3YNUYRsnHIBZmowoRpfK
+        ZonETc28eQOqhVd0MonM8f6CF6ZoZebs6j5WKq9Dxovs7FzAXDEDcDzS4CNaf70R0GsZ4rzobZmfi
+        64OCq5KvbAUXf079T14gUbGkW3QfwOeUHyKynwIr4BDOyUOgAc9JhaUPEarUTOJYBk+dLAQypb8tW
+        /8JxAy9w==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pe0gp-007Vmz-1r;
+        id 1pe0gp-007Vmt-1W;
         Sun, 19 Mar 2023 21:35:43 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org
-Subject: [PATCH 5/5] module: fold usermode helper kmod into modules directory
-Date:   Sun, 19 Mar 2023 14:35:42 -0700
-Message-Id: <20230319213542.1790479-6-mcgrof@kernel.org>
+Subject: [PATCH 2/5] module: add stop-grap sanity check on module memcpy()
+Date:   Sun, 19 Mar 2023 14:35:39 -0700
+Message-Id: <20230319213542.1790479-3-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230319213542.1790479-1-mcgrof@kernel.org>
 References: <20230319213542.1790479-1-mcgrof@kernel.org>
@@ -46,83 +46,71 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The kernel/kmod.c is already only built if we enabled modules, so
-just stuff it under kernel/module/kmod.c and unify the MAINTAINERS
-file for it.
+The integrity of the struct module we load is important, and although
+our ELF validator already checks that the module section must match
+struct module, add a stop-gap check before we memcpy() the final minted
+module. This also makes those inspecting the code what the goal is.
+
+While at it, clarify the goal behind updating the sh_addr address.
+The current comment is pretty misleading.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- MAINTAINERS                | 13 +++----------
- kernel/Makefile            |  1 -
- kernel/module/Makefile     |  4 +++-
- kernel/{ => module}/kmod.c |  0
- 4 files changed, 6 insertions(+), 12 deletions(-)
- rename kernel/{ => module}/kmod.c (100%)
+ kernel/module/main.c | 26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d5bc223f305..1ca0e26aa9f8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11522,16 +11522,6 @@ F:	include/linux/kmemleak.h
- F:	mm/kmemleak.c
- F:	samples/kmemleak/kmemleak-test.c
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index e1a9dd51c036..fbe62d1625bc 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2213,7 +2213,8 @@ static int move_module(struct module *mod, struct load_info *info)
+ {
+ 	int i;
+ 	void *ptr;
+-	enum mod_mem_type t;
++	enum mod_mem_type t = 0;
++	int ret = -ENOMEM;
  
--KMOD KERNEL MODULE LOADER - USERMODE HELPER
--M:	Luis Chamberlain <mcgrof@kernel.org>
--L:	linux-kernel@vger.kernel.org
--L:	linux-modules@vger.kernel.org
--S:	Maintained
--F:	include/linux/kmod.h
--F:	kernel/kmod.c
--F:	lib/test_kmod.c
--F:	tools/testing/selftests/kmod/
--
- KMSAN
- M:	Alexander Potapenko <glider@google.com>
- R:	Marco Elver <elver@google.com>
-@@ -14083,8 +14073,11 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
- F:	include/linux/module.h
-+F:	include/linux/kmod.h
- F:	kernel/module/
- F:	scripts/module*
-+F:	lib/test_kmod.c
-+F:	tools/testing/selftests/kmod/
+ 	for_each_mod_mem_type(type) {
+ 		if (!mod->mem[type].size) {
+@@ -2249,9 +2250,26 @@ static int move_module(struct module *mod, struct load_info *info)
  
- MONOLITHIC POWER SYSTEM PMIC DRIVER
- M:	Saravanan Sekar <sravanhome@gmail.com>
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 10ef068f598d..3dd4ea433ee9 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -13,7 +13,6 @@ obj-y     = fork.o exec_domain.o panic.o \
- 	    async.o range.o smpboot.o ucount.o regset.o
+ 		dest = mod->mem[type].base + (shdr->sh_entsize & SH_ENTSIZE_OFFSET_MASK);
  
- obj-$(CONFIG_USERMODE_DRIVER) += usermode_driver.o
--obj-$(CONFIG_MODULES) += kmod.o
- obj-$(CONFIG_MULTIUSER) += groups.o
+-		if (shdr->sh_type != SHT_NOBITS)
++		if (shdr->sh_type != SHT_NOBITS) {
++			/*
++			 * Our ELF checker already validated this, but let's
++			 * be pedantic and make the goal clearer. We actually
++			 * end up copying over all modifications made to the
++			 * userspace copy of the entire struct module.
++			 */
++			if (i == info->index.mod &&
++			   (WARN_ON_ONCE(shdr->sh_size != sizeof(struct module)))) {
++				ret = -ENOEXEC;
++				goto out_enomem;
++			}
+ 			memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
+-		/* Update sh_addr to point to copy in image. */
++		}
++		/*
++		 * Update the userspace copy's ELF section address to point to
++		 * our newly allocated memory as a pure convenience so that
++		 * users of info can keep taking advantage and using the newly
++		 * minted official memory area.
++		 */
+ 		shdr->sh_addr = (unsigned long)dest;
+ 		pr_debug("\t0x%lx %s\n",
+ 			 (long)shdr->sh_addr, info->secstrings + shdr->sh_name);
+@@ -2261,7 +2279,7 @@ static int move_module(struct module *mod, struct load_info *info)
+ out_enomem:
+ 	for (t--; t >= 0; t--)
+ 		module_memory_free(mod->mem[t].base, t);
+-	return -ENOMEM;
++	return ret;
+ }
  
- ifdef CONFIG_FUNCTION_TRACER
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index 948efea81e85..5b1d26b53b8d 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -7,7 +7,9 @@
- # and produce insane amounts of uninteresting coverage.
- KCOV_INSTRUMENT_module.o := n
- 
--obj-y += main.o strict_rwx.o
-+obj-y += main.o
-+obj-y += strict_rwx.o
-+obj-y += kmod.o
- obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
- obj-$(CONFIG_MODULE_SIG) += signing.o
- obj-$(CONFIG_LIVEPATCH) += livepatch.o
-diff --git a/kernel/kmod.c b/kernel/module/kmod.c
-similarity index 100%
-rename from kernel/kmod.c
-rename to kernel/module/kmod.c
+ static int check_export_symbol_versions(struct module *mod)
 -- 
 2.39.1
 
