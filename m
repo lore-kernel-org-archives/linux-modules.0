@@ -2,41 +2,41 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5437C7618A
-	for <linux-modules@archiver.kernel.org>; Sun, 19 Mar 2023 21:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDBA9C76196
+	for <linux-modules@archiver.kernel.org>; Sun, 19 Mar 2023 21:27:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjCSV15 (ORCPT
+        id S229842AbjCSV16 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 19 Mar 2023 17:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
+        Sun, 19 Mar 2023 17:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjCSV1x (ORCPT
+        with ESMTP id S230267AbjCSV1x (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Sun, 19 Mar 2023 17:27:53 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E8D1B2DF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488581B2D5;
         Sun, 19 Mar 2023 14:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=obTOkYQMALUPVKZh8hnISC5FrxebItRSovwj5DZ33rg=; b=flXntIUHiZmULb/iZiq/1sUZ64
-        Dt0xEwtDqtrtwPkSei2UCYR5CtIQ7qK2cSLmOscjBRNn1eyzMs8WsQTbyMUTt8QoA2w7B5czTFcVg
-        CAMtpdAHzOvVcin/O3G8618cLimOyKr9l/iBEFkppYvrrlBGjb+vd9OxN0WBeuRrlaIwmbYoQQ8bc
-        P3WHWHhJqvevgP05PnoUe+uJVEmkR5Ri9GO0BwD7xjsApPaOyANa0dWFi4VWsfmQ5c2ZnJnzoBNvA
-        F6uvG7eJUrmNWb5ZLQpRetXnc1f2G4C9zV7wL/xyE6WP8z5H5nZ3BzU92tQhYVbpb6mQh24FS59Ia
-        SJbvMI3Q==;
+        bh=DmmClILS1g6mcg7ANVU+N9GnQBvI3D3ynSwuLGeWqeI=; b=JOGTvYtqYTaBIKjuf0MlJsEXU6
+        ih7Dq5oCMS6MzKn1cNg2MRQqtbCPpb8OHPM2QQs1KwUoSSI63TpttvQnqXLXN+9IRQqPN44SrtjY/
+        gwPnKkV4vnY+EfQmaDmGJcyd80GRNNttTdbopL45wvuoEvK1MMdPR4nf0QXYF/ZIHpLlFfMkkebTq
+        UqWNaLzQP3DnpQUD1w6khRg1IRSBRIaOyMExY27eU3Zeu+leW3RaAMFtXoP1hSRcynevgfFAG/rtS
+        jiwRUVQss5VQULenHs23VzmWBwGzAOC3OpLCFxv24ySpRLSIubTpscFDzHD5CIPYGXDjf3g4qBHDO
+        7GLbR8Dw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pe0Z9-007Tqz-2B;
+        id 1pe0Z9-007TrF-35;
         Sun, 19 Mar 2023 21:27:47 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org
-Subject: [PATCH 01/12] module: move get_modinfo() helpers all above
-Date:   Sun, 19 Mar 2023 14:27:35 -0700
-Message-Id: <20230319212746.1783033-2-mcgrof@kernel.org>
+Subject: [PATCH 09/12] module: move tainting until after a module hits our linked list
+Date:   Sun, 19 Mar 2023 14:27:43 -0700
+Message-Id: <20230319212746.1783033-10-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230319212746.1783033-1-mcgrof@kernel.org>
 References: <20230319212746.1783033-1-mcgrof@kernel.org>
@@ -46,133 +46,56 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Instead of forward declaring routines for get_modinfo() just move
-everything up. This makes no functional changes.
+It is silly to have taints spread out all over, we can just compromise
+and add them if the module ever hit our linked list. Our sanity checkers
+should just prevent crappy drivers / bogus ELF modules / etc and kconfig
+options should be enough to let you *not* load things you don't want.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/main.c | 100 +++++++++++++++++++++----------------------
- 1 file changed, 48 insertions(+), 52 deletions(-)
+ kernel/module/main.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index b4759f1695b7..1e739f534100 100644
+index a3953ca18090..1aa71f82aca2 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1016,9 +1016,55 @@ int try_to_force_load(struct module *mod, const char *reason)
- #endif
- }
+@@ -2009,18 +2009,6 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
+ 	if (err)
+ 		return err;
  
--static char *get_modinfo(const struct load_info *info, const char *tag);
-+/* Parse tag=value strings from .modinfo section */
-+static char *next_string(char *string, unsigned long *secsize)
-+{
-+	/* Skip non-zero chars */
-+	while (string[0]) {
-+		string++;
-+		if ((*secsize)-- <= 1)
-+			return NULL;
-+	}
-+
-+	/* Skip any zero padding. */
-+	while (!string[0]) {
-+		string++;
-+		if ((*secsize)-- <= 1)
-+			return NULL;
-+	}
-+	return string;
-+}
-+
- static char *get_next_modinfo(const struct load_info *info, const char *tag,
--			      char *prev);
-+			      char *prev)
-+{
-+	char *p;
-+	unsigned int taglen = strlen(tag);
-+	Elf_Shdr *infosec = &info->sechdrs[info->index.info];
-+	unsigned long size = infosec->sh_size;
-+
-+	/*
-+	 * get_modinfo() calls made before rewrite_section_headers()
-+	 * must use sh_offset, as sh_addr isn't set!
-+	 */
-+	char *modinfo = (char *)info->hdr + infosec->sh_offset;
-+
-+	if (prev) {
-+		size -= prev - modinfo;
-+		modinfo = next_string(prev, &size);
-+	}
-+
-+	for (p = modinfo; p; p = next_string(p, &size)) {
-+		if (strncmp(p, tag, taglen) == 0 && p[taglen] == '=')
-+			return p + taglen + 1;
-+	}
-+	return NULL;
-+}
-+
-+static char *get_modinfo(const struct load_info *info, const char *tag)
-+{
-+	return get_next_modinfo(info, tag, NULL);
-+}
- 
- static int verify_namespace_is_imported(const struct load_info *info,
- 					const struct kernel_symbol *sym,
-@@ -1544,56 +1590,6 @@ static void set_license(struct module *mod, const char *license)
- 	}
- }
- 
--/* Parse tag=value strings from .modinfo section */
--static char *next_string(char *string, unsigned long *secsize)
--{
--	/* Skip non-zero chars */
--	while (string[0]) {
--		string++;
--		if ((*secsize)-- <= 1)
--			return NULL;
--	}
--
--	/* Skip any zero padding. */
--	while (!string[0]) {
--		string++;
--		if ((*secsize)-- <= 1)
--			return NULL;
--	}
--	return string;
--}
--
--static char *get_next_modinfo(const struct load_info *info, const char *tag,
--			      char *prev)
--{
--	char *p;
--	unsigned int taglen = strlen(tag);
--	Elf_Shdr *infosec = &info->sechdrs[info->index.info];
--	unsigned long size = infosec->sh_size;
--
 -	/*
--	 * get_modinfo() calls made before rewrite_section_headers()
--	 * must use sh_offset, as sh_addr isn't set!
+-	 * We are tainting your kernel *even* if you try to load
+-	 * modules with possible taints and we fail to load these
+-	 * modules for other reasons.
+-	 *
+-	 * We have a descrepancy though, see the other taints for
+-	 * signature and those in check_module_license_and_versions().
+-	 *
+-	 * We should compromise and converge.
 -	 */
--	char *modinfo = (char *)info->hdr + infosec->sh_offset;
+-	module_augment_kernel_taints(mod, info);
 -
--	if (prev) {
--		size -= prev - modinfo;
--		modinfo = next_string(prev, &size);
--	}
--
--	for (p = modinfo; p; p = next_string(p, &size)) {
--		if (strncmp(p, tag, taglen) == 0 && p[taglen] == '=')
--			return p + taglen + 1;
--	}
--	return NULL;
--}
--
--static char *get_modinfo(const struct load_info *info, const char *tag)
--{
--	return get_next_modinfo(info, tag, NULL);
--}
--
- static void setup_modinfo(struct module *mod, struct load_info *info)
- {
- 	struct module_attribute *attr;
+ 	return 0;
+ }
+ 
+@@ -2772,6 +2760,16 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	if (err)
+ 		goto free_module;
+ 
++	/*
++	 * We are tainting your kernel if your module gets into
++	 * the modules linked list somehow.
++	 *
++	 * We have a descrepancy though, see the other taints for
++	 * signature and those in check_module_license_and_versions().
++	 *
++	 * We should compromise and converge.
++	 */
++	module_augment_kernel_taints(mod, info);
+ #ifdef CONFIG_MODULE_SIG
+ 	mod->sig_ok = info->sig_ok;
+ 	if (!mod->sig_ok) {
 -- 
 2.39.1
 
