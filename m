@@ -2,41 +2,41 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C980CC6FD1F
-	for <linux-modules@archiver.kernel.org>; Sun, 19 Mar 2023 21:49:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A189C76195
+	for <linux-modules@archiver.kernel.org>; Sun, 19 Mar 2023 21:49:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjCSVtq (ORCPT
+        id S229877AbjCSVtr (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 19 Mar 2023 17:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        Sun, 19 Mar 2023 17:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjCSVta (ORCPT
+        with ESMTP id S229862AbjCSVtb (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 19 Mar 2023 17:49:30 -0400
+        Sun, 19 Mar 2023 17:49:31 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56D51287D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE4712BE8;
         Sun, 19 Mar 2023 14:49:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=SpoMKXqIXTbAoX8SsquPbYaqmeShuOVFsw+coEwE9Sc=; b=o+tz2jWFMhZJyPTK8dgGqD2cfI
-        riYUa2UHNQr0IFbnFP93Rui1gzk9MAB3K+zNkRz9V6qGUdpT5jXhPaMs4OflNi6Az0GkLAIeV/0Af
-        xr4/3DThd6AJtnh8yUO7O0O5GLlCveswIUZO5cRSEaD2kZhibkMJmVr67qH7QyCoV98krEpwOnY3b
-        N5KSbPG79zdLB6zhs22WA1R3zfN+LQHMCC3qtuUj863AKJs2cD4mpFzK9IMsi41WTpSrr6MYO8IGt
-        gOaF/nVbxk/x7MnmJiphaB7IbbReFV6PTiyQs3qxvGDePJELqHeRk6wcw/UV9p7CDVL6ZzjY93knL
-        gL9gmLOw==;
+        bh=/I7PkqiaJ7cvsv6QfoYBZBie1XYAgt8HAKL9Z+MGT0c=; b=XaW6cprtXgJZd5vp0qZa6RgAQ8
+        qXGqeTLagGV8UADCUbSDQtkGocZaShmHOpfJuUowrxqMYfPffLDm5h8IUU8ShyDzbHY1c9+00nDWf
+        oUHl88nu2u1+Y+gvlw480489v7vVvr5GfKXUQ5FQeKLc+gh87iSvaAa0EsSKk9E2FsivrdU1lK9M7
+        wZXk0X5j/JbcXzXUo86TRmfIhRT3SbZm+iACvwEd5uQeLClpE/taaOmj0+N+dpzTKAwnCKBh47MgF
+        PfoRm8Uds7+obrvS5oAjTP2nHb/LNASGqMIgH+xKrQ2IfgZRivo0V3yHS2zRRLhRS9lxdqMQeoMd3
+        uVxCa8IQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pe0u8-007WjY-0i;
+        id 1pe0u8-007WjS-0N;
         Sun, 19 Mar 2023 21:49:28 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org
-Subject: [RFT 5/5] module: add a sanity check prior to allowing kernel module auto-loading
-Date:   Sun, 19 Mar 2023 14:49:26 -0700
-Message-Id: <20230319214926.1794108-6-mcgrof@kernel.org>
+Subject: [RFT 2/5] module: extract patient module check into helper
+Date:   Sun, 19 Mar 2023 14:49:23 -0700
+Message-Id: <20230319214926.1794108-3-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230319214926.1794108-1-mcgrof@kernel.org>
 References: <20230319214926.1794108-1-mcgrof@kernel.org>
@@ -46,100 +46,118 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-request_module() is what we use for kernel-module autoloading. But
-this today is pretty stupid, it just requests for the module without
-even checking if its needed. And so we bounce to userspace and hope
-for the best.
-
-We can instead do a simple check to see if the module is already
-present. This will however contend the module_mutex, but it should
-never be heavily contended. However, module auto-loading is a special
-use case in the kernel and kernel/kmod already limits the amount of
-concurrent requests from the kernel to 50 so we know the kernel can
-only contend on the module_mutex for querying if a module exists 50
-times at any single point in time.
-
-This work is only valuable if it proves useful for booting up large
-systems where a lot of current kernel heuristics use many kernel
-module auto-loading features and they could benefit from this. There
-are no metrics yet to show, but at least this doesn't penalize much
-existing systems.
+The patient module check inside add_unformed_module() is large
+enough as we need it. It is a bit hard to read too, so just
+move it to a helper and do the inverse checks first to help
+shift the code and make it easier to read. The new helper then
+is module_patient_check_exists().
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/internal.h |  1 +
- kernel/module/kmod.c     |  7 +++++++
- kernel/module/main.c     | 18 ++++++++++++++++++
- 3 files changed, 26 insertions(+)
+ kernel/module/main.c | 71 +++++++++++++++++++++++++-------------------
+ 1 file changed, 40 insertions(+), 31 deletions(-)
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 6ae29bb8836f..cb00555780bd 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -86,6 +86,7 @@ struct find_symbol_arg {
- 	enum mod_license license;
- };
- 
-+bool module_autoload_proceed(const char *name);
- int mod_verify_sig(const void *mod, struct load_info *info);
- int try_to_force_load(struct module *mod, const char *reason);
- bool find_symbol(struct find_symbol_arg *fsa);
-diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
-index b717134ebe17..67efc6de902f 100644
---- a/kernel/module/kmod.c
-+++ b/kernel/module/kmod.c
-@@ -28,6 +28,8 @@
- 
- #include <trace/events/module.h>
- 
-+#include "internal.h"
-+
- /*
-  * Assuming:
-  *
-@@ -167,8 +169,13 @@ int __request_module(bool wait, const char *fmt, ...)
- 
- 	trace_module_request(module_name, wait, _RET_IP_);
- 
-+	if (!module_autoload_proceed(module_name)) {
-+		ret = 0;
-+		goto out;
-+	}
- 	ret = call_modprobe(module_name, wait ? UMH_WAIT_PROC : UMH_WAIT_EXEC);
- 
-+out:
- 	atomic_inc(&kmod_concurrent_max);
- 	wake_up(&kmod_wq);
- 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 32955b7819b3..2a84d747865a 100644
+index 560d00e60744..3644438ff96e 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -2665,6 +2665,24 @@ static int module_patient_check_exists(const char *name)
- 		return -EBUSY;
+@@ -2628,6 +2628,43 @@ static bool finished_loading(const char *name)
+ 	return ret;
  }
  
-+/*
-+ * We allow contention of the module_mutex here because kernel module
-+ * auto-loading a special feature *and* because we are only allowing
-+ * MAX_KMOD_CONCURRENT possible checks at a time for a module.
-+ */
-+bool module_autoload_proceed(const char *name)
++/* Must be called with module_mutex held */
++static int module_patient_check_exists(const char *name)
 +{
-+	int err;
++	struct module *old;
++	int err = 0;
 +
-+	mutex_lock(&module_mutex);
-+	err = module_patient_check_exists(name);
-+	mutex_unlock(&module_mutex);
++	old = find_module_all(name, strlen(name), true);
++	if (old == NULL)
++		return 0;
 +
-+	if (err == -EEXIST)
-+		return false;
-+	return true;
++	if (old->state == MODULE_STATE_COMING
++	    || old->state == MODULE_STATE_UNFORMED) {
++		/* Wait in case it fails to load. */
++		mutex_unlock(&module_mutex);
++		err = wait_event_interruptible(module_wq,
++				       finished_loading(name));
++		if (err)
++			return err;
++
++		/* The module might have gone in the meantime. */
++		mutex_lock(&module_mutex);
++		old = find_module_all(name, strlen(name), true);
++	}
++
++	/*
++	 * We are here only when the same module was being loaded. Do
++	 * not try to load it again right now. It prevents long delays
++	 * caused by serialized module load failures. It might happen
++	 * when more devices of the same type trigger load of
++	 * a particular module.
++	 */
++	if (old && old->state == MODULE_STATE_LIVE)
++		return -EEXIST;
++	else
++		return -EBUSY;
 +}
 +
  /*
   * We try to place it in the list now to make sure it's unique before
   * we dedicate too many resources.  In particular, temporary percpu
+@@ -2636,41 +2673,14 @@ static bool finished_loading(const char *name)
+ static int add_unformed_module(struct module *mod)
+ {
+ 	int err;
+-	struct module *old;
+ 
+ 	mod->state = MODULE_STATE_UNFORMED;
+ 
+ 	mutex_lock(&module_mutex);
+-	old = find_module_all(mod->name, strlen(mod->name), true);
+-	if (old != NULL) {
+-		if (old->state == MODULE_STATE_COMING
+-		    || old->state == MODULE_STATE_UNFORMED) {
+-			/* Wait in case it fails to load. */
+-			mutex_unlock(&module_mutex);
+-			err = wait_event_interruptible(module_wq,
+-					       finished_loading(mod->name));
+-			if (err)
+-				goto out_unlocked;
+-
+-			/* The module might have gone in the meantime. */
+-			mutex_lock(&module_mutex);
+-			old = find_module_all(mod->name, strlen(mod->name),
+-					      true);
+-		}
+-
+-		/*
+-		 * We are here only when the same module was being loaded. Do
+-		 * not try to load it again right now. It prevents long delays
+-		 * caused by serialized module load failures. It might happen
+-		 * when more devices of the same type trigger load of
+-		 * a particular module.
+-		 */
+-		if (old && old->state == MODULE_STATE_LIVE)
+-			err = -EEXIST;
+-		else
+-			err = -EBUSY;
++	err = module_patient_check_exists(mod->name);
++	if (err)
+ 		goto out;
+-	}
++
+ 	mod_update_bounds(mod);
+ 	list_add_rcu(&mod->list, &modules);
+ 	mod_tree_insert(mod);
+@@ -2678,7 +2688,6 @@ static int add_unformed_module(struct module *mod)
+ 
+ out:
+ 	mutex_unlock(&module_mutex);
+-out_unlocked:
+ 	return err;
+ }
+ 
 -- 
 2.39.1
 
