@@ -2,100 +2,160 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 132E7C6FD1F
-	for <linux-modules@archiver.kernel.org>; Sun, 19 Mar 2023 21:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F517C6FD1F
+	for <linux-modules@archiver.kernel.org>; Sun, 19 Mar 2023 21:35:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjCSV2C (ORCPT
+        id S229755AbjCSVfp (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 19 Mar 2023 17:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
+        Sun, 19 Mar 2023 17:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjCSV1y (ORCPT
+        with ESMTP id S229655AbjCSVfp (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 19 Mar 2023 17:27:54 -0400
+        Sun, 19 Mar 2023 17:35:45 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8591B2FF;
-        Sun, 19 Mar 2023 14:27:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35CC6584;
+        Sun, 19 Mar 2023 14:35:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=J+/Q2DOgs8vLCa0HCsTGz7EjcxV00x9bDse9i1PpR1s=; b=CePS1LwRJyuk+mkqKdjf8aIOmS
-        FrhfJ1Wk3YFgAnxvw2mIuv1lFtVQ0yOzMUjwUjJ6+k4kYoIbr73SxK99lOYnNygKn9WVQW4sq16Tx
-        KCpoV0Z0juvqUek64GwK2lp0AQvRbwNqo/n5JhwNblKtSxOStv2JRRA/LdHcZJmm8DjPpLVewxHuT
-        4ssQNmJsTtmWllfpBp5anKbmmVQifx3xpoHinbk2l+aEsCPPH1Rmz5LDy0e74s1kneUteJQKSGlVl
-        +cVTxGrzRDBKDCcI+f8z0/RtCZY6WuCrQRsr2dXT65xjtOvfkukjMUgK4ytyOlSgef58ks0mDq+Ik
-        rHW3CN7w==;
+        bh=8m8F125vs28BNQfwZCFnodLMrX3W0w1T4J8QWupY5ig=; b=GTtlsuGbgsuAp8vwH33WEU2s/U
+        4y007i5AhtjQCDMMtVpRq/ANNqlTYRm/yBTZa2fHfP+0O6GR957zE8L6ey3wWPLxdqRQFzmlrGxtG
+        KwOXw5mehMbNhyhAnDViSSCSVNfQMuuD1Jxd40ZzYorqEd+4WSrx8fCcM4MVpmU+UiBK3oUJTEKTF
+        C9P8phKz1aHFKqBeYgDPbfQYJrBftrMxsoWNNPpySFQCbznQ8wXwu+v4y+IutVMqcnFTLFGKA6w6y
+        wooGsJZOBEzoGC9NbtzupCQrRV4ugwEqHRLyYMdTOSo7Jd7qO5rX+Bx9o5L4oPhs0obg/nUtxl4+3
+        34RDozdg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pe0Z9-007Tr1-2I;
-        Sun, 19 Mar 2023 21:27:47 +0000
+        id 1pe0gp-007Vmx-1k;
+        Sun, 19 Mar 2023 21:35:43 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org
-Subject: [PATCH 02/12] module: rename next_string() to module_next_tag_pair()
-Date:   Sun, 19 Mar 2023 14:27:36 -0700
-Message-Id: <20230319212746.1783033-3-mcgrof@kernel.org>
+Subject: [PATCH 4/5] module: merge remnants of setup_load_info() to elf validation
+Date:   Sun, 19 Mar 2023 14:35:41 -0700
+Message-Id: <20230319213542.1790479-5-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230319212746.1783033-1-mcgrof@kernel.org>
-References: <20230319212746.1783033-1-mcgrof@kernel.org>
+In-Reply-To: <20230319213542.1790479-1-mcgrof@kernel.org>
+References: <20230319213542.1790479-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This makes it clearer what it is doing. While at it,
-make it available to other code other than main.c.
-This will be used in the subsequent patch and make
-the changes easier to read.
+The setup_load_info() was actually had ELF validation checks of its
+own. To later cache useful variables as an secondary step just means
+looping again over the ELF sections we just validated. We can simply
+keep tabs of the key sections of interest as we validate the module
+ELF section in one swoop, so do that and merge the two routines
+together.
+
+Expand a bit on the documentation / intent / goals.
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/internal.h | 2 ++
- kernel/module/main.c     | 6 +++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ kernel/module/main.c | 60 ++++++++++++++++++++------------------------
+ 1 file changed, 27 insertions(+), 33 deletions(-)
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index e3883b7d4840..1fa2328636ec 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -96,6 +96,8 @@ long module_get_offset_and_type(struct module *mod, enum mod_mem_type type,
- char *module_flags(struct module *mod, char *buf, bool show_state);
- size_t module_flags_taint(unsigned long taints, char *buf);
- 
-+char *module_next_tag_pair(char *string, unsigned long *secsize);
-+
- static inline void module_assert_mutex_or_preempt(void)
- {
- #ifdef CONFIG_LOCKDEP
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 1e739f534100..ebb5e6b92a48 100644
+index 84a7f96cf35a..929644d79d38 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1017,7 +1017,7 @@ int try_to_force_load(struct module *mod, const char *reason)
+@@ -1647,12 +1647,26 @@ static int validate_section_offset(struct load_info *info, Elf_Shdr *shdr)
  }
  
- /* Parse tag=value strings from .modinfo section */
--static char *next_string(char *string, unsigned long *secsize)
-+char *module_next_tag_pair(char *string, unsigned long *secsize)
+ /*
+- * Sanity checks against invalid binaries, wrong arch, weird elf version.
++ * Check userspace passed ELF module against our expectations, and cache
++ * useful variables for further processing as we go.
+  *
+- * Also do basic validity checks against section offsets and sizes, the
++ * This does basic validity checks against section offsets and sizes, the
+  * section name string table, and the indices used for it (sh_name).
++ *
++ * As a last step, since we're already checking the ELF sections we cache
++ * useful variables which will be used later for our convenience:
++ *
++ * 	o pointers to section headers
++ * 	o cache the modinfo symbol section
++ * 	o cache the string symbol section
++ * 	o cache the module section
++ *
++ * As a last step we set info->mod to the temporary copy of the module in
++ * info->hdr. The final one will be allocated in move_module(). Any
++ * modifications we make to our copy of the module will be carried over
++ * to the final minted module.
+  */
+-static int elf_validity_check(struct load_info *info)
++static int elf_validity_cache_copy(struct load_info *info, int flags)
  {
- 	/* Skip non-zero chars */
- 	while (string[0]) {
-@@ -1051,10 +1051,10 @@ static char *get_next_modinfo(const struct load_info *info, const char *tag,
+ 	unsigned int i;
+ 	Elf_Shdr *shdr, *strhdr;
+@@ -1872,6 +1886,13 @@ static int elf_validity_check(struct load_info *info)
+ 	if (!info->name)
+ 		info->name = info->mod->name;
  
- 	if (prev) {
- 		size -= prev - modinfo;
--		modinfo = next_string(prev, &size);
-+		modinfo = module_next_tag_pair(prev, &size);
- 	}
++	if (flags & MODULE_INIT_IGNORE_MODVERSIONS)
++		info->index.vers = 0; /* Pretend no __versions section! */
++	else
++		info->index.vers = find_sec(info, "__versions");
++
++	info->index.pcpu = find_pcpusec(info);
++
+ 	return 0;
  
--	for (p = modinfo; p; p = next_string(p, &size)) {
-+	for (p = modinfo; p; p = module_next_tag_pair(p, &size)) {
- 		if (strncmp(p, tag, taglen) == 0 && p[taglen] == '=')
- 			return p + taglen + 1;
- 	}
+ no_exec:
+@@ -1984,26 +2005,6 @@ static int rewrite_section_headers(struct load_info *info, int flags)
+ 	return 0;
+ }
+ 
+-/*
+- * Set up our basic convenience variables (pointers to section headers,
+- * search for module section index etc), and do some basic section
+- * verification.
+- *
+- * Set info->mod to the temporary copy of the module in info->hdr. The final one
+- * will be allocated in move_module().
+- */
+-static int setup_load_info(struct load_info *info, int flags)
+-{
+-	if (flags & MODULE_INIT_IGNORE_MODVERSIONS)
+-		info->index.vers = 0; /* Pretend no __versions section! */
+-	else
+-		info->index.vers = find_sec(info, "__versions");
+-
+-	info->index.pcpu = find_pcpusec(info);
+-
+-	return 0;
+-}
+-
+ /*
+  * These calls taint the kernel depending certain module circumstances */
+ static void module_augment_kernel_taints(struct module *mod, struct load_info *info)
+@@ -2809,17 +2810,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 
+ 	/*
+ 	 * Do basic sanity checks against the ELF header and
+-	 * sections.
+-	 */
+-	err = elf_validity_check(info);
+-	if (err)
+-		goto free_copy;
+-
+-	/*
+-	 * Everything checks out, so set up the section info
+-	 * in the info structure.
++	 * sections. Cache useful sections and set the
++	 * info->mod to the userspace passed struct module.
+ 	 */
+-	err = setup_load_info(info, flags);
++	err = elf_validity_cache_copy(info, flags);
+ 	if (err)
+ 		goto free_copy;
+ 
 -- 
 2.39.1
 
