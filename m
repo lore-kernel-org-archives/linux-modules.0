@@ -2,81 +2,92 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F4C2C6FD1C
-	for <linux-modules@archiver.kernel.org>; Mon, 20 Mar 2023 21:29:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E00CC6FD1C
+	for <linux-modules@archiver.kernel.org>; Mon, 20 Mar 2023 21:43:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjCTV3Q (ORCPT
+        id S229772AbjCTVnQ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 20 Mar 2023 17:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
+        Mon, 20 Mar 2023 17:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjCTV3P (ORCPT
+        with ESMTP id S229523AbjCTVnP (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:29:15 -0400
+        Mon, 20 Mar 2023 17:43:15 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2416A46;
-        Mon, 20 Mar 2023 14:28:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AD524BF2;
+        Mon, 20 Mar 2023 14:42:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7+GIdFmD772nNedNSRkfi5ehiQ4I311T7kzgXJ4QrMI=; b=sdd+uQCb3+gOEFA3jSVzOgU6wv
-        r451TRpy2eQjyp394rh+54wTxOC6aLhl0S6J6sSsU0PCS5zhjDUxBFHfVcbdVv+Q623IBv174WKiO
-        x3L592ne+u4C4CH9TRoCQh3s/cmaeNvMLM10N9jWD5LxoUWHeK5nRsEjlzJ2p6pThTdAHtie+oJYU
-        DA0fdvptbbwpgow7G9Hhgs6kAUakCHhIhQJEuWyNon7uFu96TjLPKDkpw/rAiiScV7/QIb724sA96
-        fGxw6LmJu/RXsb1b4qMtNbBsypPwzM7FvRnMnwAAANlki5VtvkX/ZYE59h6O5q5CIf9tBLtfOrRu+
-        hqPqzFmA==;
+        bh=gzQ0IRamnabVhoWBY7vcKUhwOr44R6rpO7XXkU2CMqw=; b=WIqpGufgrnpO14KtvYsvaMDF1y
+        gqW6Z0Q33pfwYf6gMZXEVPmcVkrz0EwzSRYbBJsfq8x6XRthCD8Xf2twg5JfahBAkwTuWnAnPdGgb
+        aiHATtQwvmG+xlvY8X26x4/S+69qpbdb23wvTuKrZSY/BzNMJuB/W2WN0DoSKML+quyObNACTWx08
+        sMiurTfwjz7qNdWy3YOREbe71U5G2oPNikQgc0jJ/D5EPvjpjqfyqxOfFCX/xgwm2xajxcwgvjOnt
+        mpEgQYK14xFZsbEoVbm9HBAB+Ck1H7VmmaFJQ6qx7AVy6C7Li3Xdl4K9YxLOjgZpzqODZmoiz32Hi
+        nnagA1Uw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1peN2D-00AXVD-1m;
-        Mon, 20 Mar 2023 21:27:17 +0000
-Date:   Mon, 20 Mar 2023 14:27:17 -0700
+        id 1peNGW-00AZ3O-0H;
+        Mon, 20 Mar 2023 21:42:04 +0000
+Date:   Mon, 20 Mar 2023 14:42:04 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>,
-        Adam Manzanares <a.manzanares@samsung.com>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Message-ID: <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
-References: <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
- <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
- <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
- <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
- <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
- <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
- <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
- <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
- <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
- <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+To:     Nick Alcock <nick.alcock@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 14/24] kbuild, firmware: imx: remove MODULE_LICENSE in
+ non-modules
+Message-ID: <ZBjTLGhohFlbO4xr@bombadil.infradead.org>
+References: <20230217141059.392471-1-nick.alcock@oracle.com>
+ <20230217141059.392471-15-nick.alcock@oracle.com>
+ <20230314013539.GA143566@dragon>
+ <874jqfvheo.fsf@esperi.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+In-Reply-To: <874jqfvheo.fsf@esperi.org.uk>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Mar 20, 2023 at 02:23:36PM -0700, Luis Chamberlain wrote:
-> On Mon, Mar 20, 2023 at 10:15:23PM +0100, David Hildenbrand wrote:
-> > Not able to reproduce with 20230319-module-alloc-opts so far (2 tries).
+On Mon, Mar 20, 2023 at 10:36:15AM +0000, Nick Alcock wrote:
+> On 14 Mar 2023, Shawn Guo verbalised:
 > 
-> Oh wow, so to clarify, it boots OK?
-> 
+> > On Fri, Feb 17, 2023 at 02:10:49PM +0000, Nick Alcock wrote:
+> >> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> >> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> >> are used to identify modules. As a consequence, uses of the macro
+> >> in non-modules will cause modprobe to misidentify their containing
+> >> object file as a module when it is not (false positives), and modprobe
+> >> might succeed rather than failing with a suitable error message.
+> >> 
+> >> So remove it in the files in this commit, none of which can be built as
+> >> modules.
+> >> 
+> >> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> >> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> >
+> > Should I apply it as a fix for 6.3-rc with Cc stable tag, or can it be
+> > a material for -next?
 
-Now that we know that tree works, I'm curious also now if you can
-confirm just re-ordering the patches still works (it should)
+These are not stable critical patches.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230319-module-alloc-opts-adjust
+> This is currently built against -next, but Luis has indicated an intent
+> to pull the lot in via -rc3 (hence my scrambling to get the series
+> polished up for him, tags attached etc now). So, er... yes? :)
 
-And although it's *probably* just noise, but I'm very curious how much,
-if any difference there is if you just revert "module: use
-list_add_tail_rcu() when adding module".
+Those patches which don't get this simply can't benefit from future
+tooling enhancements which Nick is working on which will leverage
+correct mapping.
 
-The data on that commit log is pretty small as I have a low end system,
-and I'm not yet done beating the hell out of a system with stress-ng,
-but getting some data froma  pretty large system would be great.
-Specially if this series seems to prove fixing boot on them.
+So yes, my goal is to pull up straggler patches except where some
+maintainer explicitly don't want them. For instance, I will not be
+taking in the patches for trees that Greg KH maintains as he would
+prefer an alternative, but yet hasn't recommended an alternative
+strategy to help with Nick's work.
 
   Luis
