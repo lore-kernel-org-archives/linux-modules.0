@@ -2,129 +2,134 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E3A4C761AF
-	for <linux-modules@archiver.kernel.org>; Mon, 20 Mar 2023 19:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10575C6FD1D
+	for <linux-modules@archiver.kernel.org>; Mon, 20 Mar 2023 21:04:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjCTTpZ (ORCPT
+        id S230129AbjCTVE5 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 20 Mar 2023 15:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
+        Mon, 20 Mar 2023 17:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbjCTToz (ORCPT
+        with ESMTP id S230063AbjCTVE4 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 20 Mar 2023 15:44:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC743270F
-        for <linux-modules@vger.kernel.org>; Mon, 20 Mar 2023 12:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679341211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JX45utUIC7hI1qYbp3xg6KRxTGUFDZZZdRkQSxIo/4s=;
-        b=LOMPpeTQNGw6tSQie8SuGYc+WBKcVZFO2ymTT/9L++p634yLTNuuRSOq1N1pRuJTyLrm0O
-        abgmU4q3vjvB3honeXcFvQMWR1rj2npC7AGG0g6cuZ376NQyqMPUA9t1zfs4hz/8GCedv6
-        aBPLMHAgSgp0dbxpfJs+iMY7F45ms+0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-377-3dAx7DIWOtqXptXnBO8RFg-1; Mon, 20 Mar 2023 15:40:10 -0400
-X-MC-Unique: 3dAx7DIWOtqXptXnBO8RFg-1
-Received: by mail-wr1-f70.google.com with SMTP id h18-20020adfa4d2000000b002cea098a651so1553578wrb.3
-        for <linux-modules@vger.kernel.org>; Mon, 20 Mar 2023 12:40:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679341209;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JX45utUIC7hI1qYbp3xg6KRxTGUFDZZZdRkQSxIo/4s=;
-        b=ABQTWLoACKin82qIt8XY4MMezZAofbmLbr587XgZRfjbgU2MfPo2QVtb8ytS47xlR4
-         B7NhtvN36CntUS1oXYiigU1U7+MvGz3pHHfV7IKC7etmSAXtNMaRUiTx3FVscVzqRmST
-         ZlLsns5XubaVmHY4E0NQ3i838TqF/JY9JDp+SyqQIR+nuLLveIucrQzn50ORo6pcU6AD
-         2wS/SIAp6oruyfy5PfIqj8Xv00NYB4iooL3tg+BjdF4TNvcs/gl84pRFYqjhBGSGzTgJ
-         RKip/5C8lJfzHOeqiURz+s8xzGXQcc8DjeyT/2YmRfOb1/kNwgQNrnvftbYcqznXKzfb
-         0DBw==
-X-Gm-Message-State: AO0yUKUArdylHcr5mwnWdDEhRMTB5TdJ/CmpQJdTpS7T3umbb8nnVhLQ
-        FtxmQ4GH1rShAvOyUjd555pKxVm+/NH2AO8HoflDFx3QbR2J3swAoQhglUCg1OHmE53wXVOgjoV
-        /sAaXkQZms/DtZc9ruOiJWmPDqg==
-X-Received: by 2002:a1c:f718:0:b0:3eb:389d:156c with SMTP id v24-20020a1cf718000000b003eb389d156cmr436946wmh.37.1679341209443;
-        Mon, 20 Mar 2023 12:40:09 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9nsShGK8n5z0GUDsaUOWY/sI3LQt6u5/RPo38YRxXb+8+DHrB0HpAf6jJ5DEhNevfct5XXdg==
-X-Received: by 2002:a1c:f718:0:b0:3eb:389d:156c with SMTP id v24-20020a1cf718000000b003eb389d156cmr436937wmh.37.1679341209147;
-        Mon, 20 Mar 2023 12:40:09 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id q2-20020a1ce902000000b003ed1fa34bd3sm11332380wmc.13.2023.03.20.12.40.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 12:40:08 -0700 (PDT)
-Message-ID: <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
-Date:   Mon, 20 Mar 2023 20:40:07 +0100
+        Mon, 20 Mar 2023 17:04:56 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F301C14EAE;
+        Mon, 20 Mar 2023 14:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=D3BVyr7z3/LsIQimIZFRzV1o+ANkI7efYBNPjgbxhxE=; b=Qwks+KfSLjSC93jiDkvXvM5s1g
+        FELkk7XGy7ASSd8+E5MZ1ZcvQL32BvP9NDspwFchEPteUGLldNsF6p0NIRX+cM/eJovlJCy3WAYs3
+        3eHk0fkuOeUin3W6P++64JJlztACRqDj7BmuXFhbV5B26VbDU6/w6SBfeV2SEM6KVZOHvsXW9fFSJ
+        7rjqA79+baoD96P3QkF0G05R52ljjuv/VuS7GY+8JzdyknmO9zwspY/U3vaYb8tbI9dBIMF1d1Pmt
+        /EZmS5oUwDwEQ+RN5j/INenbGTCR/xd2TK3VCuY2GitAiGkMTzyvPrRhS1GCsQjKpiozgMO5MwWTH
+        4Gt4QMTA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1peMgR-00AUlB-2r;
+        Mon, 20 Mar 2023 21:04:47 +0000
+Date:   Mon, 20 Mar 2023 14:04:47 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     jim.cromie@gmail.com, linux-modules@vger.kernel.org,
+        Nick Alcock <nick.alcock@oracle.com>,
+        Aaron Tomlin <atomlin@redhat.com>
+Cc:     Jason Baron <jbaron@akamai.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kbuild@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: RFC - KBUILD_MODNAME is misleading in builtins, as seen in
+ /proc/dynamic_debug/control
+Message-ID: <ZBjKb8fXHOxnHuHD@bombadil.infradead.org>
+References: <CAJfuBxyeKz3bsc=WfjJZDKgAHScC80_irQvmsecxPukjM-J8gw@mail.gmail.com>
+ <6af9da81-7a7b-9f47-acb1-d0350bae7f3f@akamai.com>
+ <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org
-References: <20230311051712.4095040-1-mcgrof@kernel.org>
- <3b25ed5c-8fb9-82d3-2296-fadbbb4db7e4@redhat.com>
- <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
- <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
- <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
- <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
- <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
- <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
-Organization: Red Hat
-In-Reply-To: <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 20.03.23 10:38, David Hildenbrand wrote:
-> On 18.03.23 01:11, Luis Chamberlain wrote:
->> On Thu, Mar 16, 2023 at 04:56:56PM -0700, Luis Chamberlain wrote:
->>> On Thu, Mar 16, 2023 at 04:55:31PM -0700, Luis Chamberlain wrote:
->>>> On Wed, Mar 15, 2023 at 05:41:53PM +0100, David Hildenbrand wrote:
->>>>> I expect to have a machine (with a crazy number of CPUs/devices) available
->>>>> in a couple of days (1-2), so no need to rush.
->>>>>
->>>>> The original machine I was able to reproduce with is blocked for a little
->>>>> bit longer; so I hope the alternative I looked up will similarly trigger the
->>>>> issue easily.
->>>>
->>>> OK give this a spin:
->>>>
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230316-module-alloc-opts
->>
->> Today I am up to here:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230317-module-alloc-opts
->>
->> The last patch really would have no justification yet at all unless it
->> does help your case.
+On Mon, Mar 20, 2023 at 01:59:28PM -0600, jim.cromie@gmail.com wrote:
+> On Mon, Mar 20, 2023 at 12:35 PM Jason Baron <jbaron@akamai.com> wrote:
+> >
+> >
+> >
+> > On 3/20/23 1:05 AM, jim.cromie@gmail.com wrote:
+> > > dynamic-debug METADATA uses KBUILD_MODNAME as:
+> > >
+> > > #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
+> > >          static struct _ddebug  __aligned(8)                     \
+> > >          __section("__dyndbg") name = {                          \
+> > >                  .modname = KBUILD_MODNAME,                      \
+> > >
+> > > This is going amiss for some builtins, ie those enabled here, by:
+> > >
+> > >      echo module main +pmf > /proc/dynamic_debug_control
+> > >      grep =pmf /proc/dynamic_debug/control
+> > >
+> > > init/main.c:1187 [main]initcall_blacklist =pmf "blacklisting initcall %s\n"
+> > > init/main.c:1226 [main]initcall_blacklisted =pmf "initcall %s blacklisted\n"
+> > > init/main.c:1432 [main]run_init_process =pmf "  with arguments:\n"
+> > > init/main.c:1434 [main]run_init_process =pmf "    %s\n"
+> > > init/main.c:1435 [main]run_init_process =pmf "  with environment:\n"
+> > > init/main.c:1437 [main]run_init_process =pmf "    %s\n"
+> >
+> >
+> > Hi Jim,
+> >
+> > So if I'm following correctly, this is not a new issue, the 'module'
+> > name for dynamic debug has always been this way for builtin.
 > 
-> Still waiting on the system (the replacement system I was able to grab
-> broke ...).
+> It is not a new issue - both PM and init-main have been in [main] for some time.
 > 
-> I'll let you know once I succeeded in reproducing + testing your fixes.
+> I believe that with
+> cfc1d277891e module: Move all into module/
+> 
+> module's module-name joined them, changing from [module] to [main]
 
-Okay, I have a system where I can reproduce.
+If there was a regression due to this, we'd be very interested in
+hearing about it. Aaron he did the work to move the code to its own directory. 
 
-Should I give
+> We could do
+> > something simple and just normalize it when we initially create the
+> > table, but setting the 'module name' to 'core' or 'builtin' or something
+> > for all these?
+> 
+> core and builtin would both lump all those separate modules together,
+> making it less meaningful.
+> 
+> having stable names independent of M vs Y config choices is imperative, ISTM.
+> 
+> Also, I dont think "only builtins are affected" captures the whole problem.
+> I dont recall amdgpu or other modules changing when built with =y
+> 
+> Theres some subtlety in how KBUILD_MODNAME is set,
+> and probably many current users who like its current behavior.
+> A new var ?
+> 
+> 1st, I think that anything tristate gets a sensible value,
+> but at least some of the builtin-only "modules" get basenames, by default.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230319-module-alloc-opts
+In general we could all benefit from an enhancement for a shortname for
+things which could be modules being built-in. We're now seeing requests
+for dynamic debug, but it could also be usefulf for Nick's future work
+to help userspace tools / tracing map kallsysms to specific modules when
+built-in.
 
-from yesterday a churn?
+To that end I had suggested the current state of affairs & current difficulty
+in trying to get us a name for this here:
 
--- 
-Thanks,
+https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
 
-David / dhildenb
+I ended up suggesting perhaps we need a -DPOSSIBLE_MODULE then if we
+could *somehow* pull that off perhaps then we could instead use
+-DPOSSIBLE_KBUILD_MODNAME which would ensure a consistent symbol when
+a module is built-in as well.
 
+That still leaves the difficulty in trying to gather possible-obj-m as
+a future challenge.
+
+  Luis
