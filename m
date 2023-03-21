@@ -2,92 +2,63 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E00CC6FD1C
-	for <linux-modules@archiver.kernel.org>; Mon, 20 Mar 2023 21:43:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43BFAC6FD1C
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Mar 2023 01:05:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjCTVnQ (ORCPT
+        id S229606AbjCUBFj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 20 Mar 2023 17:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
+        Mon, 20 Mar 2023 21:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCTVnP (ORCPT
+        with ESMTP id S229670AbjCUBFi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 20 Mar 2023 17:43:15 -0400
+        Mon, 20 Mar 2023 21:05:38 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AD524BF2;
-        Mon, 20 Mar 2023 14:42:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11072D7C;
+        Mon, 20 Mar 2023 18:04:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gzQ0IRamnabVhoWBY7vcKUhwOr44R6rpO7XXkU2CMqw=; b=WIqpGufgrnpO14KtvYsvaMDF1y
-        gqW6Z0Q33pfwYf6gMZXEVPmcVkrz0EwzSRYbBJsfq8x6XRthCD8Xf2twg5JfahBAkwTuWnAnPdGgb
-        aiHATtQwvmG+xlvY8X26x4/S+69qpbdb23wvTuKrZSY/BzNMJuB/W2WN0DoSKML+quyObNACTWx08
-        sMiurTfwjz7qNdWy3YOREbe71U5G2oPNikQgc0jJ/D5EPvjpjqfyqxOfFCX/xgwm2xajxcwgvjOnt
-        mpEgQYK14xFZsbEoVbm9HBAB+Ck1H7VmmaFJQ6qx7AVy6C7Li3Xdl4K9YxLOjgZpzqODZmoiz32Hi
-        nnagA1Uw==;
+        bh=SkDOq+hVqkKXkhf0jfq2Q2uknXMxqTESy/4finPiMSg=; b=K5rWtRwy9tx+8UE96OJRFamwKe
+        b5uDIw4Dy5VnQwvKXwl2nTUGxdD+SEwF7a9TZBm1A0gA+x8UqKmhgjp02+gsUjMK6d+cPbK3C1SZS
+        nZL5LLyhv8YEtjaADUL/QHOuokC9+RIST8Hz4IwpRcamqcMdNOW5MA9R9gPARxwjtmavliuRgAysx
+        hgy3S8gewrBsYWvSUDkSfiDzW6Q9tdzx4h5guXdJasGXWHrU/r+giblhqaW5Tnu58v+Wa9R52DV0d
+        oaCTrC/vgfvonQWImKcSVgeL36U/5k/HHQ3fHtLQXKChbitjPKXKicrVtFZpb+cdk0nSuIPDigV8a
+        94+zci3Q==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1peNGW-00AZ3O-0H;
-        Mon, 20 Mar 2023 21:42:04 +0000
-Date:   Mon, 20 Mar 2023 14:42:04 -0700
+        id 1peQQH-00Auho-0a;
+        Tue, 21 Mar 2023 01:04:21 +0000
+Date:   Mon, 20 Mar 2023 18:04:21 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 14/24] kbuild, firmware: imx: remove MODULE_LICENSE in
- non-modules
-Message-ID: <ZBjTLGhohFlbO4xr@bombadil.infradead.org>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
- <20230217141059.392471-15-nick.alcock@oracle.com>
- <20230314013539.GA143566@dragon>
- <874jqfvheo.fsf@esperi.org.uk>
+To:     "Colin King (gmail)" <colin.i.king@gmail.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     patches@lists.linux.dev, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, david@redhat.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org
+Subject: Re: [PATCH v2] stress-module: stress finit_module() and
+ delete_module()
+Message-ID: <ZBkClVqkTp5b+gut@bombadil.infradead.org>
+References: <ZBUA6E3kYh0Xuu/c@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <874jqfvheo.fsf@esperi.org.uk>
+In-Reply-To: <ZBUA6E3kYh0Xuu/c@bombadil.infradead.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Mar 20, 2023 at 10:36:15AM +0000, Nick Alcock wrote:
-> On 14 Mar 2023, Shawn Guo verbalised:
-> 
-> > On Fri, Feb 17, 2023 at 02:10:49PM +0000, Nick Alcock wrote:
-> >> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> >> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> >> are used to identify modules. As a consequence, uses of the macro
-> >> in non-modules will cause modprobe to misidentify their containing
-> >> object file as a module when it is not (false positives), and modprobe
-> >> might succeed rather than failing with a suitable error message.
-> >> 
-> >> So remove it in the files in this commit, none of which can be built as
-> >> modules.
-> >> 
-> >> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> >> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> >
-> > Should I apply it as a fix for 6.3-rc with Cc stable tag, or can it be
-> > a material for -next?
+On Fri, Mar 17, 2023 at 05:08:08PM -0700, Luis Chamberlain wrote:
+> I'm not sure yet why we don't see the module delete work, I guess
+> because it's refcnt is still not 0 and so the unload probably won't
+> help at all unless we have a loop just dedicated to that.
 
-These are not stable critical patches.
+<insert self deprecating humor>
+The reason was because the module_name is the full path, and the system
+call wants just the module name.
+</end self deprecating humor>
 
-> This is currently built against -next, but Luis has indicated an intent
-> to pull the lot in via -rc3 (hence my scrambling to get the series
-> polished up for him, tags attached etc now). So, er... yes? :)
-
-Those patches which don't get this simply can't benefit from future
-tooling enhancements which Nick is working on which will leverage
-correct mapping.
-
-So yes, my goal is to pull up straggler patches except where some
-maintainer explicitly don't want them. For instance, I will not be
-taking in the patches for trees that Greg KH maintains as he would
-prefer an alternative, but yet hasn't recommended an alternative
-strategy to help with Nick's work.
+I'll fix.
 
   Luis
