@@ -2,339 +2,204 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ED42C77B61
-	for <linux-modules@archiver.kernel.org>; Tue, 21 Mar 2023 16:01:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B239C7619A
+	for <linux-modules@archiver.kernel.org>; Tue, 21 Mar 2023 16:31:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbjCUQA7 (ORCPT
+        id S229847AbjCUQbh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 21 Mar 2023 12:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
+        Tue, 21 Mar 2023 12:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbjCUQA5 (ORCPT
+        with ESMTP id S229475AbjCUQbg (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:00:57 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075821A7;
-        Tue, 21 Mar 2023 09:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679414451; x=1710950451;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wR+qOUFezBzfBJcOKdG10nv4u1T4zv+Wyk0SxjOOgKo=;
-  b=PSfJYPrDMPv+xP7VxzHbDq3yu/dwSZAPbl34RnnHX7NQFmGxfs2zj7eT
-   z/Gv/Az8ePZT5aBmbaeNIfyFvoK2jQRcebKnV8KjgM990CWsKi9oi1DYN
-   i421K0kv0ex8Zl4jdhQSjgvsm1pWM9xBwK4KwRZFBvMx8gKUXimaMetbG
-   1i9p7GsDgueupJh8FVduuxRT+eP6RRsh7j7KpUFRLoetAZnQ0FuzWm5GW
-   eS/18/oG4KSRs+GzoFwG2QWI1ZHRj6Ll+FFyma9hqvu/htbLN6Xhdvahw
-   b7I3NkQHsGdg82Trib8qjpRkczY8G4znwuDZf5NFcTHSPcH7+Hh9R67ro
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="339018618"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="339018618"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 09:00:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="825003199"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="825003199"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Mar 2023 09:00:43 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peePd-000C79-1U;
-        Tue, 21 Mar 2023 16:00:37 +0000
-Date:   Wed, 22 Mar 2023 00:00:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     rcu@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-wireless@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        io-uring@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- f3594f0204b756638267242e26d9de611435c3ba
-Message-ID: <6419d481.N8bGPVo0VkImpoue%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 21 Mar 2023 12:31:36 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B6738013;
+        Tue, 21 Mar 2023 09:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=t/rjQKj0LE5FASB99J7K94aXzuyufuTX7nhjjJbOPx0=; b=xMD124U37+hdXe76lN/nnDHzvC
+        ryK4I1DLu4Tw7Ww8JSVhGQ4R6MW71Rm/VdAf4AQdhKE/U4s/lhgg6sYzKb+eaT2JyhOAEj8OpVxcx
+        y5ycYrURhqEgkP7WgLxgiORLSWdL23Wy8ueOaj5I9Q/+1BRGMgsxQXZI/k8+jN9q/BkK1rL1gdiO8
+        pDZWdfGI6szRWjfBne6YyqHTVTx8oRUIEPbeBO67kqFi22io5QGAgqYy6EsqyvQyh6r6QQbxgbS6R
+        uExLFGbRYwtrwKP0uIdXRyCOKD8XTlp/npRqqZcSl/Wc17gTHKMKxc8GPj9i6yDlXURmAY5PjrVN8
+        /LXSVLFw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1peetU-00D5F1-2C;
+        Tue, 21 Mar 2023 16:31:28 +0000
+Date:   Tue, 21 Mar 2023 09:31:28 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     jim.cromie@gmail.com, linux-modules@vger.kernel.org,
+        Nick Alcock <nick.alcock@oracle.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Jason Baron <jbaron@akamai.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kbuild@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: RFC - KBUILD_MODNAME is misleading in builtins, as seen in
+ /proc/dynamic_debug/control
+Message-ID: <ZBnb4KVdx26tMDLO@bombadil.infradead.org>
+References: <CAJfuBxyeKz3bsc=WfjJZDKgAHScC80_irQvmsecxPukjM-J8gw@mail.gmail.com>
+ <6af9da81-7a7b-9f47-acb1-d0350bae7f3f@akamai.com>
+ <CAJfuBxyoeuurDoUe2tLs=JbX=BbxGdYpf2yBEP6bkhtFh2XTtQ@mail.gmail.com>
+ <ZBjKb8fXHOxnHuHD@bombadil.infradead.org>
+ <CAK7LNASVpBih3iSHd=RXkKNZQ-v5LVzEOuZG3H_i3fcZfsGhDA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNASVpBih3iSHd=RXkKNZQ-v5LVzEOuZG3H_i3fcZfsGhDA@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: f3594f0204b756638267242e26d9de611435c3ba  Add linux-next specific files for 20230321
+On Tue, Mar 21, 2023 at 06:03:01PM +0900, Masahiro Yamada wrote:
+> On Tue, Mar 21, 2023 at 6:04 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Mon, Mar 20, 2023 at 01:59:28PM -0600, jim.cromie@gmail.com wrote:
+> > > On Mon, Mar 20, 2023 at 12:35 PM Jason Baron <jbaron@akamai.com> wrote:
+> > > >
+> > > >
+> > > >
+> > > > On 3/20/23 1:05 AM, jim.cromie@gmail.com wrote:
+> > > > > dynamic-debug METADATA uses KBUILD_MODNAME as:
+> > > > >
+> > > > > #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)       \
+> > > > >          static struct _ddebug  __aligned(8)                     \
+> > > > >          __section("__dyndbg") name = {                          \
+> > > > >                  .modname = KBUILD_MODNAME,                      \
+> > > > >
+> > > > > This is going amiss for some builtins, ie those enabled here, by:
+> > > > >
+> > > > >      echo module main +pmf > /proc/dynamic_debug_control
+> > > > >      grep =pmf /proc/dynamic_debug/control
+> > > > >
+> > > > > init/main.c:1187 [main]initcall_blacklist =pmf "blacklisting initcall %s\n"
+> > > > > init/main.c:1226 [main]initcall_blacklisted =pmf "initcall %s blacklisted\n"
+> > > > > init/main.c:1432 [main]run_init_process =pmf "  with arguments:\n"
+> > > > > init/main.c:1434 [main]run_init_process =pmf "    %s\n"
+> > > > > init/main.c:1435 [main]run_init_process =pmf "  with environment:\n"
+> > > > > init/main.c:1437 [main]run_init_process =pmf "    %s\n"
+> > > >
+> > > >
+> > > > Hi Jim,
+> > > >
+> > > > So if I'm following correctly, this is not a new issue, the 'module'
+> > > > name for dynamic debug has always been this way for builtin.
+> > >
+> > > It is not a new issue - both PM and init-main have been in [main] for some time.
+> > >
+> > > I believe that with
+> > > cfc1d277891e module: Move all into module/
+> > >
+> > > module's module-name joined them, changing from [module] to [main]
+> >
+> > If there was a regression due to this, we'd be very interested in
+> > hearing about it. Aaron he did the work to move the code to its own directory.
+> >
+> > > We could do
+> > > > something simple and just normalize it when we initially create the
+> > > > table, but setting the 'module name' to 'core' or 'builtin' or something
+> > > > for all these?
+> > >
+> > > core and builtin would both lump all those separate modules together,
+> > > making it less meaningful.
+> > >
+> > > having stable names independent of M vs Y config choices is imperative, ISTM.
+> > >
+> > > Also, I dont think "only builtins are affected" captures the whole problem.
+> > > I dont recall amdgpu or other modules changing when built with =y
+> > >
+> > > Theres some subtlety in how KBUILD_MODNAME is set,
+> > > and probably many current users who like its current behavior.
+> > > A new var ?
+> > >
+> > > 1st, I think that anything tristate gets a sensible value,
+> > > but at least some of the builtin-only "modules" get basenames, by default.
+> >
+> > In general we could all benefit from an enhancement for a shortname for
+> > things which could be modules being built-in. We're now seeing requests
+> > for dynamic debug, but it could also be usefulf for Nick's future work
+> > to help userspace tools / tracing map kallsysms to specific modules when
+> > built-in.
+> 
+> 
+> 
+> I think I rejected it some years ago.
 
-Error/Warning reports:
+Good to know.
 
-https://lore.kernel.org/oe-kbuild-all/202303082135.NjdX1Bij-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303161521.jbGbaFjJ-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303190142.TjYYpbba-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303211332.MILzGUKQ-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303212204.3G5mRatJ-lkp@intel.com
+> He comes back again and again with almost the same approaches,
+> until he finds a "sponsor" (it's you) who will get it in.
 
-Error/Warning: (recently discovered and may have been fixed)
+Actually I also rejected the same approach too.
 
-Warning: MAINTAINERS references a file that doesn't exist: Documentation/ABI/obsolete/sysfs-selinux-checkreqprot
-Warning: MAINTAINERS references a file that doesn't exist: Documentation/ABI/obsolete/sysfs-selinux-disable
-drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:309:17: sparse:    int
-drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:309:17: sparse:    void
-drivers/gpu/drm/imx/lcdc/imx-lcdc.c:411:11: error: call to undeclared function 'devm_drm_of_get_bridge'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-drivers/gpu/drm/imx/lcdc/imx-lcdc.c:411:18: error: implicit declaration of function 'devm_drm_of_get_bridge' [-Werror=implicit-function-declaration]
-drivers/gpu/drm/imx/lcdc/imx-lcdc.c:411:9: error: incompatible integer to pointer conversion assigning to 'struct drm_bridge *' from 'int' [-Wint-conversion]
-drivers/gpu/drm/imx/lcdc/imx-lcdc.c:449:15: error: implicit declaration of function 'drm_bridge_attach' [-Werror=implicit-function-declaration]
-drivers/gpu/drm/imx/lcdc/imx-lcdc.c:449:61: error: use of undeclared identifier 'DRM_BRIDGE_ATTACH_NO_CONNECTOR'
-drivers/gpu/drm/imx/lcdc/imx-lcdc.c:449:68: error: 'DRM_BRIDGE_ATTACH_NO_CONNECTOR' undeclared (first use in this function)
-drivers/gpu/drm/imx/lcdc/imx-lcdc.c:449:8: error: call to undeclared function 'drm_bridge_attach'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-drivers/net/wireless/legacy/ray_cs.c:628:17: warning: 'strncpy' specified bound 32 equals destination size [-Wstringop-truncation]
-include/linux/compiler_types.h:338:27: error: expression in static assertion is not an integer
-include/linux/container_of.h:20:54: error: invalid use of undefined type 'struct module'
-include/linux/rculist.h:392:21: error: invalid use of undefined type 'struct module'
-include/linux/stddef.h:16:33: error: invalid use of undefined type 'struct module'
-kernel/bpf/../module/internal.h:205:2: error: assigning to 'struct module *' from incompatible type 'void'
-kernel/bpf/../module/internal.h:205:2: error: incomplete definition of type 'struct module'
-kernel/bpf/../module/internal.h:205:2: error: offsetof of incomplete type 'typeof (*mod)' (aka 'struct module')
-kernel/bpf/../module/internal.h:205:2: error: operand of type 'void' where arithmetic or pointer type is required
+> Recently, I rejected the Kbuild changes again.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+Yes I saw.
 
-drivers/iommu/iommufd/selftest.c:295:21: sparse: sparse: symbol 'mock_iommu_device' was not declared. Should it be static?
-drivers/soc/fsl/qe/tsa.c:140:26: sparse: sparse: incorrect type in argument 2 (different address spaces)
-drivers/soc/fsl/qe/tsa.c:150:27: sparse: sparse: incorrect type in argument 1 (different address spaces)
-drivers/soc/fsl/qe/tsa.c:189:26: sparse: sparse: dereference of noderef expression
-drivers/soc/fsl/qe/tsa.c:663:22: sparse: sparse: incorrect type in assignment (different address spaces)
-drivers/soc/fsl/qe/tsa.c:673:21: sparse: sparse: incorrect type in assignment (different address spaces)
-drivers/watchdog/imx2_wdt.c:442:22: sparse: sparse: symbol 'imx_wdt' was not declared. Should it be static?
-drivers/watchdog/imx2_wdt.c:446:22: sparse: sparse: symbol 'imx_wdt_legacy' was not declared. Should it be static?
-io_uring/io_uring.c:432 io_prep_async_work() error: we previously assumed 'req->file' could be null (see line 425)
-io_uring/kbuf.c:221 __io_remove_buffers() warn: variable dereferenced before check 'bl->buf_ring' (see line 219)
+> > To that end I had suggested the current state of affairs & current difficulty
+> > in trying to get us a name for this here:
+> >
+> > https://lore.kernel.org/all/Y/kXDqW+7d71C4wz@bombadil.infradead.org/
+> >
+> > I ended up suggesting perhaps we need a -DPOSSIBLE_MODULE then if we
+> > could *somehow* pull that off perhaps then we could instead use
+> > -DPOSSIBLE_KBUILD_MODNAME which would ensure a consistent symbol when
+> > a module is built-in as well.
+> >
+> > That still leaves the difficulty in trying to gather possible-obj-m as
+> > a future challenge.
+> 
+> I do not understand your point.
+> 
+> Why is it important to achieve "precisely-exactly-possible-obj-m" instead of
+> "perhaps-possible-obj-m"?
+> 
+> When "modprobe foo" succeeds, the user is sure that the kernel
+> provides the feature "foo" (but he does not care if
+> "foo" is built-in or modular).
 
-Error/Warning ids grouped by kconfigs:
+You are thinking about the modprobe situation. That is in no way shape
+or form the end goal. Nick suggests he has tooling enhancements which
+allow userspace to disambiguate symbols from kallsyms which are built-in
+to come things which are modules. His hacks bring back the tristate crap
+which both you and I have rejected. The alternative is to live with what
+we *do* have. What do *do* have is to rely on the module license tag to
+see if something could possibly be a module.
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-net-wireless-legacy-ray_cs.c:warning:strncpy-specified-bound-equals-destination-size
-|-- arc-randconfig-r043-20230319
-|   |-- include-linux-compiler_types.h:error:expression-in-static-assertion-is-not-an-integer
-|   |-- include-linux-container_of.h:error:invalid-use-of-undefined-type-struct-module
-|   |-- include-linux-rculist.h:error:invalid-use-of-undefined-type-struct-module
-|   `-- include-linux-stddef.h:error:invalid-use-of-undefined-type-struct-module
-|-- arm64-randconfig-r035-20230319
-|   |-- include-linux-compiler_types.h:error:expression-in-static-assertion-is-not-an-integer
-|   |-- include-linux-container_of.h:error:invalid-use-of-undefined-type-struct-module
-|   |-- include-linux-rculist.h:error:invalid-use-of-undefined-type-struct-module
-|   `-- include-linux-stddef.h:error:invalid-use-of-undefined-type-struct-module
-|-- ia64-allmodconfig
-|   `-- drivers-net-wireless-legacy-ray_cs.c:warning:strncpy-specified-bound-equals-destination-size
-|-- m68k-randconfig-r026-20230319
-|   |-- drivers-gpu-drm-imx-lcdc-imx-lcdc.c:error:DRM_BRIDGE_ATTACH_NO_CONNECTOR-undeclared-(first-use-in-this-function)
-|   |-- drivers-gpu-drm-imx-lcdc-imx-lcdc.c:error:implicit-declaration-of-function-devm_drm_of_get_bridge
-|   `-- drivers-gpu-drm-imx-lcdc-imx-lcdc.c:error:implicit-declaration-of-function-drm_bridge_attach
-|-- nios2-randconfig-r025-20230319
-|   |-- include-linux-compiler_types.h:error:expression-in-static-assertion-is-not-an-integer
-|   |-- include-linux-container_of.h:error:invalid-use-of-undefined-type-struct-module
-|   |-- include-linux-rculist.h:error:invalid-use-of-undefined-type-struct-module
-|   `-- include-linux-stddef.h:error:invalid-use-of-undefined-type-struct-module
-|-- openrisc-randconfig-r031-20230319
-|   |-- include-linux-compiler_types.h:error:expression-in-static-assertion-is-not-an-integer
-|   |-- include-linux-container_of.h:error:invalid-use-of-undefined-type-struct-module
-|   |-- include-linux-rculist.h:error:invalid-use-of-undefined-type-struct-module
-|   `-- include-linux-stddef.h:error:invalid-use-of-undefined-type-struct-module
-|-- parisc-randconfig-r022-20230319
-|   |-- include-linux-compiler_types.h:error:expression-in-static-assertion-is-not-an-integer
-|   |-- include-linux-container_of.h:error:invalid-use-of-undefined-type-struct-module
-|   |-- include-linux-rculist.h:error:invalid-use-of-undefined-type-struct-module
-|   `-- include-linux-stddef.h:error:invalid-use-of-undefined-type-struct-module
-|-- parisc64-allmodconfig
-|   `-- drivers-net-wireless-legacy-ray_cs.c:warning:strncpy-specified-bound-equals-destination-size
-|-- powerpc-randconfig-r013-20230320
-|   |-- include-linux-compiler_types.h:error:expression-in-static-assertion-is-not-an-integer
-|   |-- include-linux-container_of.h:error:invalid-use-of-undefined-type-struct-module
-|   |-- include-linux-rculist.h:error:invalid-use-of-undefined-type-struct-module
-|   `-- include-linux-stddef.h:error:invalid-use-of-undefined-type-struct-module
-|-- powerpc-randconfig-r015-20230320
-|   |-- include-linux-compiler_types.h:error:expression-in-static-assertion-is-not-an-integer
-|   |-- include-linux-container_of.h:error:invalid-use-of-undefined-type-struct-module
-|   |-- include-linux-rculist.h:error:invalid-use-of-undefined-type-struct-module
-|   `-- include-linux-stddef.h:error:invalid-use-of-undefined-type-struct-module
-|-- powerpc-randconfig-s033-20230319
-|   |-- drivers-soc-fsl-qe-tsa.c:sparse:sparse:dereference-of-noderef-expression
-|   |-- drivers-soc-fsl-qe-tsa.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-const-noderef-__iomem-addr-got-void-noderef-__iomem-addr
-|   |-- drivers-soc-fsl-qe-tsa.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__iomem-addr-got-void-noderef-__iomem-addr
-|   |-- drivers-soc-fsl-qe-tsa.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-noderef-si_ram-got-void-noderef-__iomem
-clang_recent_errors
-|-- arm-randconfig-r003-20230319
-|   |-- kernel-bpf-..-module-internal.h:error:assigning-to-struct-module-from-incompatible-type-void
-|   |-- kernel-bpf-..-module-internal.h:error:incomplete-definition-of-type-struct-module
-|   |-- kernel-bpf-..-module-internal.h:error:offsetof-of-incomplete-type-typeof-(-mod)-(aka-struct-module-)
-|   `-- kernel-bpf-..-module-internal.h:error:operand-of-type-void-where-arithmetic-or-pointer-type-is-required
-|-- hexagon-buildonly-randconfig-r006-20230319
-|   |-- kernel-bpf-..-module-internal.h:error:assigning-to-struct-module-from-incompatible-type-void
-|   |-- kernel-bpf-..-module-internal.h:error:incomplete-definition-of-type-struct-module
-|   |-- kernel-bpf-..-module-internal.h:error:offsetof-of-incomplete-type-typeof-(-mod)-(aka-struct-module-)
-|   `-- kernel-bpf-..-module-internal.h:error:operand-of-type-void-where-arithmetic-or-pointer-type-is-required
-|-- mips-randconfig-r005-20230319
-|   |-- kernel-bpf-..-module-internal.h:error:assigning-to-struct-module-from-incompatible-type-void
-|   |-- kernel-bpf-..-module-internal.h:error:incomplete-definition-of-type-struct-module
-|   |-- kernel-bpf-..-module-internal.h:error:offsetof-of-incomplete-type-typeof-(-mod)-(aka-struct-module-)
-|   `-- kernel-bpf-..-module-internal.h:error:operand-of-type-void-where-arithmetic-or-pointer-type-is-required
-|-- s390-randconfig-r044-20230319
-|   |-- drivers-gpu-drm-imx-lcdc-imx-lcdc.c:error:call-to-undeclared-function-devm_drm_of_get_bridge-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   |-- drivers-gpu-drm-imx-lcdc-imx-lcdc.c:error:call-to-undeclared-function-drm_bridge_attach-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   |-- drivers-gpu-drm-imx-lcdc-imx-lcdc.c:error:incompatible-integer-to-pointer-conversion-assigning-to-struct-drm_bridge-from-int
-|   `-- drivers-gpu-drm-imx-lcdc-imx-lcdc.c:error:use-of-undeclared-identifier-DRM_BRIDGE_ATTACH_NO_CONNECTOR
-`-- x86_64-buildonly-randconfig-r001-20230320
-    |-- kernel-bpf-..-module-internal.h:error:assigning-to-struct-module-from-incompatible-type-void
-    |-- kernel-bpf-..-module-internal.h:error:incomplete-definition-of-type-struct-module
-    |-- kernel-bpf-..-module-internal.h:error:offsetof-of-incomplete-type-typeof-(-mod)-(aka-struct-module-)
-    `-- kernel-bpf-..-module-internal.h:error:operand-of-type-void-where-arithmetic-or-pointer-type-is-required
+The module license cleanup is motivated by the fact that relying on the
+fact that a module license tag does not always mean something can be a
+module. Having something which could never be a module still use
+MODULE_LICENSE() and have modprobe succeed is not fatal. However, if
+future tooling *is* going to be relied upon to display to tracer /
+debuggers where symbols come from, it becomes more useful if that
+information is a bit more deterministic.
 
-elapsed time: 728m
+We eventually want to actually see if we can just infer the
+MODULE_LICENSE() from the SPDX tag, how we go about that remains
+to be seen, but if we *at least* had MODULE_LICENSE only in places
+that *were really* modules this reduces the scope.
 
-configs tested: 138
-configs skipped: 11
+While we don't *need* to "fix" code which is using MODULE_LICENSE()
+which can *never* be modules, removing that cruft *can* still be useful
+from a driver maintainer perspective.
 
-tested configs:
-alpha                            alldefconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r024-20230320   gcc  
-alpha                randconfig-r032-20230319   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r005-20230319   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r012-20230319   gcc  
-arc                  randconfig-r016-20230319   gcc  
-arc                  randconfig-r043-20230319   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                      integrator_defconfig   gcc  
-arm                         orion5x_defconfig   clang
-arm                  randconfig-r003-20230319   clang
-arm                  randconfig-r046-20230319   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230320   clang
-arm64                randconfig-r035-20230319   gcc  
-csky         buildonly-randconfig-r003-20230319   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r002-20230320   gcc  
-csky                 randconfig-r026-20230319   gcc  
-hexagon      buildonly-randconfig-r006-20230319   clang
-hexagon              randconfig-r041-20230319   clang
-hexagon              randconfig-r045-20230319   clang
-i386                             allyesconfig   gcc  
-i386                         debian-10.3-func   gcc  
-i386                   debian-10.3-kselftests   gcc  
-i386                        debian-10.3-kunit   gcc  
-i386                          debian-10.3-kvm   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                 randconfig-a011-20230320   gcc  
-i386                 randconfig-a012-20230320   gcc  
-i386                 randconfig-a013-20230320   gcc  
-i386                 randconfig-a014-20230320   gcc  
-i386                 randconfig-a015-20230320   gcc  
-i386                 randconfig-a016-20230320   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r011-20230320   gcc  
-ia64                 randconfig-r024-20230319   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r006-20230319   gcc  
-loongarch            randconfig-r021-20230320   gcc  
-loongarch            randconfig-r034-20230319   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r003-20230320   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r001-20230319   clang
-mips                            gpr_defconfig   gcc  
-mips                 randconfig-r005-20230319   clang
-mips                 randconfig-r005-20230320   gcc  
-mips                           xway_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r012-20230320   gcc  
-nios2                randconfig-r014-20230319   gcc  
-nios2                randconfig-r025-20230319   gcc  
-nios2                randconfig-r033-20230319   gcc  
-nios2                randconfig-r036-20230319   gcc  
-openrisc     buildonly-randconfig-r004-20230319   gcc  
-openrisc             randconfig-r016-20230320   gcc  
-openrisc             randconfig-r031-20230319   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r022-20230319   gcc  
-parisc               randconfig-r025-20230320   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r006-20230320   gcc  
-powerpc                        fsp2_defconfig   clang
-powerpc                mpc7448_hpc2_defconfig   gcc  
-powerpc              randconfig-r013-20230320   gcc  
-powerpc              randconfig-r015-20230320   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r001-20230320   clang
-riscv                randconfig-r042-20230319   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r004-20230320   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r004-20230320   clang
-s390                 randconfig-r006-20230320   clang
-s390                 randconfig-r044-20230319   clang
-sh                               alldefconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                         ecovec24_defconfig   gcc  
-sh                   randconfig-r013-20230319   gcc  
-sh                   randconfig-r014-20230320   gcc  
-sh                   randconfig-r023-20230319   gcc  
-sh                          rsk7269_defconfig   gcc  
-sh                          sdk7786_defconfig   gcc  
-sh                             sh03_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r002-20230319   gcc  
-sparc64              randconfig-r015-20230319   gcc  
-sparc64              randconfig-r026-20230320   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230320   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230320   clang
-x86_64               randconfig-a002-20230320   clang
-x86_64               randconfig-a003-20230320   clang
-x86_64               randconfig-a004-20230320   clang
-x86_64               randconfig-a005-20230320   clang
-x86_64               randconfig-a006-20230320   clang
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-k001   clang
-x86_64               randconfig-r023-20230320   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r001-20230319   gcc  
-xtensa                    smp_lx200_defconfig   gcc  
+> He spams with MODULE_LICENSE removal with no justification.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+If we don't want Nick to rely on the old tristate crap then the only
+tooling available he has today at his disposal to map symbols to
+possible modules is the MODULE_LICENSE tag.
+
+Part of the issue with Nick's patches all along has been proper
+justification / documentation. Try to take a step back and think about
+the possible *value-add* of userspace having more concrete information
+for traces / debugging. Again, value of his patches are separate, but
+*if* someone wanted to bring such tooling which *did* want to help map
+symbols more closely to possible modules *relying* on module-license is
+one of the cheap ways to do it today without incurring a build system
+slowdown.
+
+  Luis
