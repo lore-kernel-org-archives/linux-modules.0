@@ -2,261 +2,118 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF3BCC6FD1D
-	for <linux-modules@archiver.kernel.org>; Tue, 21 Mar 2023 19:36:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD913C6FD20
+	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 01:37:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjCUTg2 (ORCPT
+        id S229611AbjCVBhE (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 21 Mar 2023 15:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        Tue, 21 Mar 2023 21:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjCUTgQ (ORCPT
+        with ESMTP id S230107AbjCVBgx (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:36:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2DC10AA1
-        for <linux-modules@vger.kernel.org>; Tue, 21 Mar 2023 12:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679427190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VlcJ/9nn8ownmv4J/wmbt9Hf0T3kk7qnfpp2BxFkXmI=;
-        b=GPJvKYB9qiEiu4v3jimsGKOsAmw0q4b8nY0cqBpk1Q3AmmUPeW6CuCjSpgvvZbqiPHLv8O
-        MSKS05YR0+H8jLjKEnxTcs+M6Fw0D/u+sDrZqiUQCODkkNSGSBnKGxP/5n1xt4Z84opJJS
-        4dNIYuZlcrdT13bdSLfgMspG39AKMaU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-511-cSxFB5arMMW6ZKe1Wqd3Xw-1; Tue, 21 Mar 2023 15:33:04 -0400
-X-MC-Unique: cSxFB5arMMW6ZKe1Wqd3Xw-1
-Received: by mail-wm1-f69.google.com with SMTP id v8-20020a05600c470800b003ed3b575374so7577223wmo.7
-        for <linux-modules@vger.kernel.org>; Tue, 21 Mar 2023 12:33:04 -0700 (PDT)
+        Tue, 21 Mar 2023 21:36:53 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871AC5A907;
+        Tue, 21 Mar 2023 18:36:36 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id o12so7822949iow.6;
+        Tue, 21 Mar 2023 18:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679448989;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NlRSaRqbqzhoGg4Jq8gRsfnnZpa65cXo7tlmnX5urfA=;
+        b=O+/SJZ+ivzsHj5rlJsSUra77tQb9DLQwIlY7gTF3V4YFvPDUm3qjs/Riaj6tEht9nI
+         PrtTFHoHaOc3RBNzdLWMZuX1SJCg6iPrXxVQAsXsWcgX79l9Q7DTwRcuaDYQZdJ0l23P
+         XI6ql0AOe6nLzqfJXjfTuEvhBIPFxgrgrf4mP4czYR/sI6xrOs+VUT55eSurjoG+gF1E
+         kEQ0FN1mL3zQxTcOJ8XwHq7Gkw0dtjJmq8jZLMefuDBA/lvvAVrlASLQvnBvS/dgRAM7
+         aUzTtIWOy+vc0uUl1yYCSavP5q7SwOcRbErwOMixtuGjCET+f/EBa6L+v49Ibji87p2Q
+         FawQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679427182;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1679448989;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VlcJ/9nn8ownmv4J/wmbt9Hf0T3kk7qnfpp2BxFkXmI=;
-        b=OgtJ5dpFsBiHnK+Lk4AxVbIilHtTjGzBJkTvBfi1ejcrfg0nGAhBVlX9xZLprHiloA
-         3NvHE+7NFTfe++AKo70LR6WzRfhvt+sMB9bqMzvcqAOkFjTk95IiSdOM8SOgQ1VSHhNe
-         VlAiVoxToZ8/eERDPkGxbsxwrxNA1BGREvtg6K3cLONbTJNS2mHxMcc3WyrNr8ekAzKN
-         ceyCqE0i7VEplz5GgCW/T34370IxBp3t1t0cXlqb3pea5Ywr6X7vPwCVBT4bhCEYT/4j
-         os9ozcfpMSf7aO2d0l+eTEXcjJzkydywvOv6ku9jL6CoZmRg9trmhVMFam04Cf3eFv2H
-         xifg==
-X-Gm-Message-State: AO0yUKVwNWfwEgEm99728d0T+/iQ8eOc/WkBoQEFbpv0enNq+exq+tsw
-        EhyBWEHDuxd4OamCt8LAbkyUvC8yrtIrTXb789vw6V5Y9v9eWlbhHMMjktkrdm3oUOlDhenjJp9
-        sUv1pb+3Huf08yCqpr75NgN312I9zMC4k4g==
-X-Received: by 2002:a5d:6342:0:b0:2ce:6f5a:c3b8 with SMTP id b2-20020a5d6342000000b002ce6f5ac3b8mr3174861wrw.31.1679427182335;
-        Tue, 21 Mar 2023 12:33:02 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8hqzWIYGDx/4XSP+DFg9wdkTY8zHze064b4aAkbIOEgoWyVs8q2VMLeElJD2tI+sMeG4GgaQ==
-X-Received: by 2002:a5d:6342:0:b0:2ce:6f5a:c3b8 with SMTP id b2-20020a5d6342000000b002ce6f5ac3b8mr3174847wrw.31.1679427181955;
-        Tue, 21 Mar 2023 12:33:01 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:7f00:8245:d031:7f8b:e004? (p200300cbc7057f008245d0317f8be004.dip0.t-ipconnect.de. [2003:cb:c705:7f00:8245:d031:7f8b:e004])
-        by smtp.gmail.com with ESMTPSA id u8-20020adfdb88000000b002cff06039d7sm12024045wri.39.2023.03.21.12.33.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 12:33:01 -0700 (PDT)
-Message-ID: <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
-Date:   Tue, 21 Mar 2023 20:32:58 +0100
+        bh=NlRSaRqbqzhoGg4Jq8gRsfnnZpa65cXo7tlmnX5urfA=;
+        b=Uv9mnteWCjD6koDrliB8WENW7B2JbOC3U4ZzIt4zkyDh3Pjw/rdJEpzfsbvAFXMGin
+         zPFSKmXy57oocp9lwG2z0r0K4+6Pbn/+Mt0Bwh+e/t3LDPslA01cez8l21/oRPapmyBO
+         BuUQK5f8qTrsfEFJg52eiRH489yGEDUZGbR8BP8XDRFa1xZWGMZ4W5TM/cPT7qcHjiAl
+         k3urH3SXtq22Z2NEr0nAFIZasOpLsXBiZ2UBiAE1eN2rk5n5tclsrxHoAcZjMR+u1gGp
+         0OhY7H7cB6ByR7MmR2m1CvzK2Eu7RUCLs6gQeW7HUyjDCTeTrUCGAPS+Dw4oezDHyt3d
+         5Yhw==
+X-Gm-Message-State: AO0yUKUoDrEjsoOtFfhI0Jj/lktrjuxJJL7jGkDRhbX09/qN7GEE/6e3
+        Fh+5y5I7/hRhSog/ZUXVeZ0sckA9TI4=
+X-Google-Smtp-Source: AK7set9Db1WvzoN4PnrAWIIVXIYw5XbzF7FlCM8p1pbuDZ89SMu4djSF4YTHXqh1pGKzZAwc3GjeXA==
+X-Received: by 2002:a6b:ee0c:0:b0:74e:6f06:d5f5 with SMTP id i12-20020a6bee0c000000b0074e6f06d5f5mr2921702ioh.8.1679448989429;
+        Tue, 21 Mar 2023 18:36:29 -0700 (PDT)
+Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
+        by smtp.googlemail.com with ESMTPSA id a22-20020a6b6616000000b007530bbfa577sm3925058ioc.18.2023.03.21.18.36.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 18:36:29 -0700 (PDT)
+From:   Jim Cromie <jim.cromie@gmail.com>
+To:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH 0/4] cosmetic fixes to module pr_debugs
+Date:   Tue, 21 Mar 2023 19:36:19 -0600
+Message-Id: <20230322013623.251401-1-jim.cromie@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org
-References: <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
- <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
- <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
- <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
- <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
- <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
- <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
- <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
- <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
- <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
- <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-In-Reply-To: <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 20.03.23 22:27, Luis Chamberlain wrote:
-> On Mon, Mar 20, 2023 at 02:23:36PM -0700, Luis Chamberlain wrote:
->> On Mon, Mar 20, 2023 at 10:15:23PM +0100, David Hildenbrand wrote:
->>> Not able to reproduce with 20230319-module-alloc-opts so far (2 tries).
->>
->> Oh wow, so to clarify, it boots OK?
->>
-> 
-> Now that we know that tree works, I'm curious also now if you can
-> confirm just re-ordering the patches still works (it should)
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230319-module-alloc-opts-adjust
-> 
+Hi Luis,
 
-So far no vmap errors booting the debug/kasan kernel (2 tries).
+These 4 patches alter pr_debug() messages for more info, and less
+log-spam.
 
-> And although it's *probably* just noise, but I'm very curious how much,
-> if any difference there is if you just revert "module: use
-> list_add_tail_rcu() when adding module".
+* add "for $modname:" to banners
+  helpful for finding one of many
 
-Dito, no vmap errors booting the debug/kasan kernel (2 tries).
+[   40.885922] main:layout_sections: Core section allocation order for test_dynamic_debug:
+    	       ~20 lines of output
+[   40.885967] main:move_module: Final section addresses for test_dynamic_debug:
+    	       ~2 lines - .init.text/data
 
-> 
-> The data on that commit log is pretty small as I have a low end system,
-> and I'm not yet done beating the hell out of a system with stress-ng,
-> but getting some data froma  pretty large system would be great.
-> Specially if this series seems to prove fixing boot on them.
+* add symbol name to "Absolute symbol: <value>"
+  val ~== 0 - less interesting than name
 
-2x booting RHEL9.1 on a !debug kernel. Something went wrong with kdump in 2 runs (think I
-had to delete the kdump initrd to make space for another kernel), but we can just mostly
-ignore that. I wanted to rerun with kdump disabled completely, but I'm out of time for today.
+[   40.886006] main:simplify_symbols: Absolute symbol: 0x00000000 test_dynamic_debug.c
+[   40.886008] main:simplify_symbols: Absolute symbol: 0x00000000 test_dynamic_debug.mod.c
 
+* add size to section report. gives more info.
 
-1) v6.3-rc1:
+[   40.885968] main:move_module: 	0xffffffffc0249000 0x0000035d .text
+[   40.885971] main:move_module: 	0xffffffffc0252000 0x0000003c .init.text
 
-#1
+* drop already_uses: pr_debug("$ uses $b!") messages
 
-Startup finished in 25.354s (kernel) + 7.662s (initrd) + 1min 8.805s (userspace) = 1min 41.822s
-multi-user.target reached after 29.186s in userspace
+  echo module main +pmf >/proc/dynamic_debug/control
+  modprobe i915
 
-47.178s kdump.service
-14.898s tuned.service
-11.394s chrony-wait.service
-  7.486s systemd-udev-settle.service
-  7.334s NetworkManager-wait-online.service
-  2.908s initrd-switch-root.service
-  2.451s smartd.service
-  2.316s dracut-initqueue.service
-  2.057s polkit.service
-  1.290s NetworkManager.service
-  1.046s cups.service
-  ...
+before:
+  dmesg | grep already_uses | cut -c15- | wc
+    673    2722   28641
+  dmesg | grep already_uses | cut -c15- | sort -u | wc
+     26     134    1237
 
-#2
-
-Startup finished in 25.375s (kernel) + 7.497s (initrd) + 29.428s (userspace) = 1min 2.301s
-multi-user.target reached after 29.392s in userspace
-
-14.552s tuned.service
-  9.410s chrony-wait.service
-  8.126s systemd-udev-settle.service
-  7.502s NetworkManager-wait-online.service
-  2.871s initrd-switch-root.service
-  2.401s kdump.service
-  2.297s polkit.service
-  2.116s dracut-initqueue.service
-  2.027s smartd.service
-  1.262s NetworkManager.service
-  1.102s cups.service
-  1.011s sshd.service
-  ...
+after:
+  dmesg | grep already_uses | cut -c15- | wc
+     15      90     756
+  dmesg | grep already_uses | cut -c15- | sort -u | wc
+     15      90     756
 
 
-2) 20230319-module-alloc-opts-adjust + revert of list_add_tail_rcu():
+Jim Cromie (4):
+  module: in layout_sections, move_module: add the modname
+  module: add symbol-name to pr_debug Absolute symbol
+  module: add section-size to move_module pr_debug
+  module: already_uses() - reduce pr_debug output volume
 
-#1
-
-Startup finished in 25.441s (kernel) + 7.285s (initrd) + 1min 7.644s (userspace) = 1min 40.371s
-multi-user.target reached after 27.213s in userspace
-
-47.232s kdump.service
-14.235s tuned.service
-  8.220s chrony-wait.service
-  7.444s NetworkManager-wait-online.service
-  5.986s systemd-udev-settle.service
-  2.881s initrd-switch-root.service
-  2.236s smartd.service
-  1.899s dracut-initqueue.service
-  1.812s polkit.service
-  1.554s NetworkManager.service
-  1.140s ModemManager.service
-  ...
-
-#2
-
-Startup finished in 25.377s (kernel) + 7.271s (initrd) + 28.247s (userspace) = 1min 897ms
-multi-user.target reached after 28.210s in userspace
-
-15.435s tuned.service
-11.365s chrony-wait.service
-  7.512s NetworkManager-wait-online.service
-  5.962s systemd-udev-settle.service
-  2.889s initrd-switch-root.service
-  2.846s smartd.service
-  2.819s kdump.service
-  2.228s polkit.service
-  1.872s dracut-initqueue.service
-  1.312s NetworkManager.service
-  1.152s ModemManager.service
-  1.011s sshd.service
-  ...
-
-3) 20230319-module-alloc-opts-adjust:
-
-
-#1
-
-Startup finished in 25.320s (kernel) + 7.192s (initrd) + 1min 6.511s (userspace) = 1min 39.024s
-multi-user.target reached after 28.205s in userspace
-
-46.307s kdump.service
-14.199s tuned.service
-13.358s chrony-wait.service
-  7.468s NetworkManager-wait-online.service
-  6.329s systemd-udev-settle.service
-  2.910s initrd-switch-root.service
-  2.752s smartd.service
-  2.142s polkit.service
-  1.909s dracut-initqueue.service
-  1.210s NetworkManager.service
-  1.041s ModemManager.service
-   925ms sshd.service
-  ...
-
-#2
-
-Startup finished in 25.368s (kernel) + 7.303s (initrd) + 1min 6.897s (userspace) = 1min 39.569s
-multi-user.target reached after 27.326s in userspace
-
-45.626s kdump.service
-14.707s tuned.service
-13.246s chrony-wait.service
-  7.428s NetworkManager-wait-online.service
-  6.507s systemd-udev-settle.service
-  3.038s initrd-switch-root.service
-  3.001s smartd.service
-  2.057s polkit.service
-  1.746s dracut-initqueue.service
-  1.221s NetworkManager.service
-  ...
-
-
-I think we primarily only care about systemd-udev-settle.service.
-
-That is fastest without the rcu patch (~6s), compared to with the rcu
-patch (~6.5s) and with stock (~7.5s -- 8s).
-
-Looks like dracut-initqueue also might be a bit faster with your changes, but
-maybe it's mostly noise (would have to do more runs).
-
-So maybe drop that rcu patch? But of course, there could be other scenarios where it's
-helpful ...
-
+ kernel/module/main.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.39.2
 
