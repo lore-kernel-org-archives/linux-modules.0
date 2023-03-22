@@ -2,75 +2,78 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76F33C6FD1F
-	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 23:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E81AC6FD1F
+	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 23:43:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjCVXk1 (ORCPT
+        id S230078AbjCVXnZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 22 Mar 2023 19:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
+        Wed, 22 Mar 2023 19:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjCVXkN (ORCPT
+        with ESMTP id S230213AbjCVXnR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:40:13 -0400
+        Wed, 22 Mar 2023 19:43:17 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5A02B9E1;
-        Wed, 22 Mar 2023 16:39:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C075031E0B;
+        Wed, 22 Mar 2023 16:42:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
-        To:From:Reply-To:Content-ID:Content-Description;
-        bh=mQhebhj0ErIIe2B+tMJaRXg9lTK+szPIe3mCV0swbA0=; b=E5BBwMiJhWzwIOYFr//zUzlBj1
-        scZXkgeH62TUicvPPjHG1IZSV6SGMuGDycbYv/uvfBHm4jLoysNQfSH+QjWT1/bgWOTEo4fmlGvLq
-        qqhxtxb/jjyKogzpv7vP8Rsxs04puiSSYJz5K5bamvpvljIRvoAH7QwS+vPuNenDdhCreHBxr9bOs
-        usv+wn+oWwn6J0GRx4o+1ATJbFuTvTgdQZiqdxV60V9/FZhTf7O650WeOVuHkWXv1xc2wOUkknH5T
-        xuyYfrdAMLi0GG1rpu4IV+ThIvnai6MyTstUJR+onMPVLRmIyzTYQByRTSaA1k4QQisHRE0CqOrey
-        T+d1OrYw==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=J8OoOjpB2nOX7ZmeYEDkMXx+SeBdKnEhP1gUiVZouMw=; b=rrj9l+bQV8+426DL9CGMVi4ozL
+        fqvlcHfrMw9/mqKKRSdGOEWKTC2HhlOfVqQRjPVfFznB7w4wEvIDXT7mVA4RK+X0YPsfP7r8nsf/b
+        0O/zlHV2DGMXdxpXqAZEWYEvbEBcQdvMwHK1KGcLLEuiMuezNOwGg1cvUCmH1eQ6D43BY0FmBMr0V
+        CgBwb9RMz2ET0uQNI1CpxZvst3GlIYY5kZPBBrg8l9y8fWnkZmuXfdjvtxclp3WEEMXTFeNaEGo/4
+        tUytcHOnXfKW8HggmuVoCzajhGEY+8iuDCMbN/aQzL5cg0YO0dsmGJD4gNo0YxG27lDa8vlRKKoLM
+        A+YoJkmA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pf83I-000B0W-1o;
-        Wed, 22 Mar 2023 23:39:32 +0000
-From:   Luis Chamberlain <mcgrof@bombadil.infradead.org>
+        id 1pf86E-000BpP-1n;
+        Wed, 22 Mar 2023 23:42:34 +0000
+Date:   Wed, 22 Mar 2023 16:42:34 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jim.cromie@gmail.com
-Cc:     Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH 0/4] cosmetic fixes to module pr_debugs
-Date:   Wed, 22 Mar 2023 16:38:59 -0700
-Message-Id: <167952830755.2267106.14602423112302281916.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230322013623.251401-1-jim.cromie@gmail.com>
-References: <20230322013623.251401-1-jim.cromie@gmail.com>
+        pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
+        prarit@redhat.com
+Cc:     christophe.leroy@csgroup.eu, song@kernel.org
+Subject: Re: [PATCH 00/12] module: cleanup and call taints after is inserted
+Message-ID: <ZBuSajbkt7Ylah2j@bombadil.infradead.org>
+References: <20230319212746.1783033-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319212746.1783033-1-mcgrof@kernel.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Luis Chamberlain <mcgrof@kernel.org>
-
-On Tue, 21 Mar 2023 19:36:19 -0600, Jim Cromie wrote:
-> These 4 patches alter pr_debug() messages for more info, and less
-> log-spam.
+On Sun, Mar 19, 2023 at 02:27:34PM -0700, Luis Chamberlain wrote:
+> After posting my first RFC for "module: avoid userspace pressure on unwanted
+> allocations" [0] I ended up doing much more cleanup on the module loading path.
+> One of the things that became evident while ensuring we do *less* work before
+> kmalloc all the things we need for the final module is we are doing a lot of
+> work before we even add a module onto our linked list, once its accepted for
+> loading and running init. We even *taint* the kernel even before we accept
+> a module. We also do some tainting after kernel loading.
 > 
-> * add "for $modname:" to banners
->   helpful for finding one of many
+> This converges both to one point -- right as soon as we accept module
+> into our linked list. That is, the module is valid as per our kernel
+> config and we're ready to go. Most of this is just tidying code up. The
+> biggest functional changes is under the patch "converge taint work together".
 > 
-> [   40.885922] main:layout_sections: Core section allocation order for test_dynamic_debug:
->     	       ~20 lines of output
-> [   40.885967] main:move_module: Final section addresses for test_dynamic_debug:
->     	       ~2 lines - .init.text/data
+> I'll post the other functional changes in two other patch sets. This is
+> mostly cleanup, the next one is the new ELF checks / sanity / cleanup,
+> and I'm waiting to hear back from David Hildenbrand on the worthiness of
+> some clutches for allocation. That last part would go in the last patch
+> series.
 > 
-> [...]
+> In this series I've dropped completely the idea of using aliasing since
+> different modules can share the same alias, so using that to check if
+> a module is already loaded turns out not to be useful in any way.
+> 
+> [0] https://lkml.kernel.org/r/20230311051712.4095040-1-mcgrof@kernel.org
 
-Applied, thanks!
-
-[1/4] module: in layout_sections, move_module: add the modname
-      commit: 4ab9c7dca82f215fa596fb61192384e4c922bf9c
-[2/4] module: add symbol-name to pr_debug Absolute symbol
-      commit: 9f5d69a7852db158bc9f5c5afa105ce12058afc3
-[3/4] module: add section-size to move_module pr_debug
-      commit: 8cf2cfac04e4b24dfc4371306e202b09ab574a80
-[4/4] module: already_uses() - reduce pr_debug output volume
-      commit: 6e82310365bade624ff38dd11a8467739adab6cc
+I've taken these into modules-next for more testing. If folks spot
+issues in them though let me know and I can yank them before the merge
+window.
 
   Luis
