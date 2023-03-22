@@ -2,76 +2,73 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96143C6FD1F
-	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 23:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9053C74A5B
+	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 23:33:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjCVXYs (ORCPT
+        id S229942AbjCVXdP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 22 Mar 2023 19:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        Wed, 22 Mar 2023 19:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCVXYr (ORCPT
+        with ESMTP id S229990AbjCVXdO (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:24:47 -0400
+        Wed, 22 Mar 2023 19:33:14 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E581BEC;
-        Wed, 22 Mar 2023 16:24:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308381EFFB
+        for <linux-modules@vger.kernel.org>; Wed, 22 Mar 2023 16:33:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
-        To:From:Reply-To:Content-ID:Content-Description;
-        bh=z950tHfh6EL30Ry68ryUuE9SKuNl3wJnJXXGFZcnt9Q=; b=UFtsNZLqrpJZnIPJsNmouu7sPP
-        BHHKxTqGFj2St8yKQFa9kHJDTZN+YbsXupvmBWsR4HFCDADBO4/6O8hi8MtnhIpSscbw53dGBsX15
-        iPGRkwMr1f8UOY8di2PEqvcW2M+HsLcd8TfLjtRZ8etVPLRdYjd7/i+9WAKfUEmvqwdkS/no4BEzH
-        f3FMNvfwfTMvIgOyNqxO6nLzZ4TTG1G9kVE1zsw7ac7V3nVry62uI9xZ4sV+eVmjeb3ufzSx344sl
-        aRjMjSY1UsMjcIg/vV+fihRMFAWSNn92m2ekPWsnUZZNh6VqCO7F5h3Ir/9QbvuMHfjAqnmhSPKf1
-        wINWkjAw==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0Ay6mu3D3SXmMbb4vHiX/YPNK8iEGezCM/EVJg6pHPk=; b=dJUF8lQYcm7mF8b9K0AbPJc2NQ
+        QCj+bUP9TtU+v03krBeePWaZTvkj5t6Kj95QkI0W5ZKfk0I4wIkOEsdJnypMptBTx2sXHm2SxL7LC
+        xI0IFlq7d+8yvPO5zFUbX4p7/cNX2rLdj/TcJhgndZeiqIa2i9cPx/Ke68im9PAvx6MgSQJKJLhy2
+        GJk+x6f8l+5HeV41Puf/fWv6HjTHqfg6FVc9BHra2lsiIUiunLMO/uIEaEqMrotx7Q0pyBShrVV1u
+        UHvd1yuS1yzj4VitNSI2+850n6spqfJ9SFU0+Nyzlt3JKev54IDK6ZcDRyuYKL6LRP/qAauXc4Ikd
+        b2ls88nA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pf7ot-0007fT-26;
-        Wed, 22 Mar 2023 23:24:39 +0000
-From:   Luis Chamberlain <mcgrof@bombadil.infradead.org>
-To:     jason.wessel@windriver.com, joe.lawrence@redhat.com,
-        daniel.thompson@linaro.org, jikos@kernel.org,
-        linux-modules@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, trix@redhat.com, chris@chrisdown.name,
-        linux-kernel@vger.kernel.org, mbenes@suse.cz, terrelln@fb.com,
-        kgdb-bugreport@lists.sourceforge.net,
-        live-patching@vger.kernel.org, fmdefrancesco@gmail.com,
-        dianders@chromium.org, pmladek@suse.com, jpoimboe@kernel.org,
-        ndesaulniers@google.com, bpf@vger.kernel.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, ira.weiny@intel.com,
-        dmitry.torokhov@gmail.com, swboyd@chromium.org,
-        piotrgorski@cachyos.org
-Subject: Re: [PATCH] module/decompress: Never use kunmap() for local un-mappings
-Date:   Wed, 22 Mar 2023 16:24:33 -0700
-Message-Id: <167952705567.2263470.18228933182686895553.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230315125256.22772-1-fmdefrancesco@gmail.com>
-References: <20230315125256.22772-1-fmdefrancesco@gmail.com>
+        id 1pf7xB-0009Wi-2W;
+        Wed, 22 Mar 2023 23:33:13 +0000
+Date:   Wed, 22 Mar 2023 16:33:13 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     linux-modules <linux-modules@vger.kernel.org>
+Subject: Re: module_license tree refreshed against linux-next
+Message-ID: <ZBuQOXi+my7bnXzR@bombadil.infradead.org>
+References: <87mt46s8i3.fsf@esperi.org.uk>
+ <ZBncDHaZfKEHAjGu@bombadil.infradead.org>
+ <87r0tiqc6z.fsf@esperi.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87r0tiqc6z.fsf@esperi.org.uk>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Luis Chamberlain <mcgrof@kernel.org>
-
-On Wed, 15 Mar 2023 13:52:56 +0100, Fabio M. De Francesco wrote:
-> Use kunmap_local() to unmap pages locally mapped with kmap_local_page().
+On Tue, Mar 21, 2023 at 04:52:20PM +0000, Nick Alcock wrote:
+> On 21 Mar 2023, Luis Chamberlain verbalised:
 > 
-> kunmap_local() must be called on the kernel virtual address returned by
-> kmap_local_page(), differently from how we use kunmap() which instead
-> expects the mapped page as its argument.
+> > On Tue, Mar 21, 2023 at 10:29:08AM +0000, Nick Alcock wrote:
+> >> I have not dropped commits with Greg K-H as maintainer simply because I
+> >> kept on oscillating on doing that, so I thought I'd leave the commits in
+> >> so you have the option to do either.
+> >
+> > No, I don't want to do that work, please drop Greg's drivers.
 > 
-> In module_zstd_decompress() we currently map with kmap_local_page() and
-> unmap with kunmap(). This breaks the code and so it should be fixed.
+> OK! Repushed to the same branch, sans what I *think* is the relevant set:
 > 
-> [...]
+> binder: remove MODULE_LICENSE in non-modules
+> serial: remove MODULE_LICENSE in non-modules
+> vgacon: remove MODULE_LICENSE in non-modules
+> tty: serial: imx: remove MODULE_LICENSE in non-modules
+> tty: remove MODULE_LICENSE in non-modules
+> 
+> I hope that's right -- it's all the patches he was directly Cc:ed on.
+> 
+> (other branches containing kallmodsyms as a whole, etc, have not yet
+> been refreshed at all and are old: I'll get to it).
 
-Applied, thanks!
-
-[1/1] module/decompress: Never use kunmap() for local un-mappings
-      commit: 3c17655ab13704582fe25e8ea3200a9b2f8bf20a
+OK I merged this set onto modules-next. Thanks.
 
   Luis
