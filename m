@@ -2,120 +2,129 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 323D5C6FD1F
-	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 18:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29B84C6FD1F
+	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 22:32:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjCVSL4 (ORCPT
+        id S229554AbjCVWcL (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 22 Mar 2023 14:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        Wed, 22 Mar 2023 18:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjCVSLz (ORCPT
+        with ESMTP id S229487AbjCVWcK (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:11:55 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8499464A81;
-        Wed, 22 Mar 2023 11:11:54 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id n19so1833175wms.0;
-        Wed, 22 Mar 2023 11:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679508713;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wH9gz+uMM82vCmnLttArcGg6W9CwxF2l6yihMvMNQwM=;
-        b=YiGAJ1zflo1QS4PsNbTOmua7Q+uSsVMaUMSruW1QNVW1ikgt8HoUCgM8TgXWoAjSBz
-         FkL//ytmdorCrCfmGGMAkpehPWjmBppCxEWT4THazv+EkThGuiQLkkfkTjUfO39bwgcf
-         8XrRTiLW5IIf40t70D9LqOdJhc8+H+WHtZQILMZQuUYIS+6mQMVIeqKlGvbxr5Zh6+f1
-         7wTM69agtP8cuJPg5e3wlINEU5elWzpPHiemwicZ7mX5BHPLlHfwh5i0OQlVmRuPZTiS
-         xbyAj3+1k7ehqU6HQfCtxs1NA2pckKqidsjJgVbkOcG4M+/d2Xa9+ZuIuNRVLp1KvdGu
-         T/Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679508713;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wH9gz+uMM82vCmnLttArcGg6W9CwxF2l6yihMvMNQwM=;
-        b=oKffFLIB3qWrBqQN/kYQO5Kamg8piGwb8tYdPXhlBzz0tAx3+7yijX1TBTQpANb7O0
-         R+7NLO8SahgMDdYT2DG8Ptw1UZJyQoM9a54Wz8xIaL00pzlbg+zktmhszzNmefQO6/jW
-         qszI5HShF6lO8P2o77EbDf4Pf8UgpAr1JHi9nX6Pd/7RoT3f7yM/OLxLMJxa9TvmAlsh
-         b4OEx3HCFt68NFdKwXE+FIEYe7V154mfmC///CvObc0X3F6cyAL0eaMglWaUfkTtS5Yp
-         Pl57cHppdjujXunGAQLnLFBgNln47670Cg9BP/efeFnnPFsm53t57S9kJ7A3oNmcw9/T
-         nOjg==
-X-Gm-Message-State: AO0yUKUT1E4T5h9h2ZMh4c0p5OF3fyozjozt0eUP2aUpNnp5YaK33BMu
-        YL+qXYC/ItyX9YSzg2GYt/thfT2fNVjN+A==
-X-Google-Smtp-Source: AK7set+GDmjksRoXYfoH2H1YV/xncp5rkqdyO6qld78vYYrfz0Lza0R/8Wk31rvQzQmWq2hAM4OjkA==
-X-Received: by 2002:a1c:f709:0:b0:3ed:c763:2765 with SMTP id v9-20020a1cf709000000b003edc7632765mr354755wmh.7.1679508712828;
-        Wed, 22 Mar 2023 11:11:52 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id f9-20020a05600c154900b003ede03e4369sm12070729wmg.33.2023.03.22.11.11.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 11:11:51 -0700 (PDT)
-Message-ID: <bf1c475c-b98c-7381-33c0-602c2ab6349a@gmail.com>
-Date:   Wed, 22 Mar 2023 18:11:50 +0000
+        Wed, 22 Mar 2023 18:32:10 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F038109;
+        Wed, 22 Mar 2023 15:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Y18HpSiK9r4CIVZcGz/4BaB0bggYzqBPYlKsvJvl+es=; b=IifB+OzpXgXxmiuDlLET67Z3UM
+        1QM6QUa0h8F2sLCSGjfa0acgk4Tyy8jfxBbAY6LliDeFrIgiFHwzr1EqZlE/WjfSPHoEJz0MhQalb
+        d4AwwtLlgnOQmfKYcFyIrExrIg/ArPkZ9O+FuL9bzsMM3gHj6sg+deubfTmQbUINIqmzOfjelV2zI
+        HZ/BZwsQhlQ9iSL7KHINbvtWZ+CenTjwJySoA0DHPtcGXS3R2l7KcjhK5ChINU/7DoBdHMnJDc5v7
+        0cu1lMNL03MXloC6aWoerjuFyi7LjsIfEn0s9XTqIY+bbyR50a7CiW+IXWYNt2XRicuuc2UmHjGcN
+        qxYYAg7Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pf6zv-00018h-11;
+        Wed, 22 Mar 2023 22:31:59 +0000
+Date:   Wed, 22 Mar 2023 15:31:59 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Cc:     Petr Mladek <pmladek@suse.com>, Petr Pavlu <petr.pavlu@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
+        mwilck@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Ben Hutchings <benh@debian.org>,
+        Adam Manzanares <a.manzanares@samsung.com>
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <ZBuB3+cN4BK6woKZ@bombadil.infradead.org>
+References: <20221205103557.18363-1-petr.pavlu@suse.com>
+ <Y5gI/3crANzRv22J@bombadil.infradead.org>
+ <Y5hRRnBGYaPby/RS@alley>
+ <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
+ <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
+ <Y8ll+eP+fb0TzFUh@alley>
+ <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
+ <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
+ <Y8xp1HReo+ayHU8G@bombadil.infradead.org>
+ <20230312062505.man5h4oo6mjbiov6@ldmartin-desk2.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3] stress-module: stress finit_module() and
- delete_module()
-To:     Luis Chamberlain <mcgrof@kernel.org>, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
-        prarit@redhat.com
-Cc:     christophe.leroy@csgroup.eu, song@kernel.org, dave@stgolabs.net,
-        a.manzanares@samsung.com, fan.ni@samsung.com,
-        vincent.fu@samsung.com
-References: <20230322032350.3439056-1-mcgrof@kernel.org>
- <ZBtDSh6f+rWqFLtC@bombadil.infradead.org>
-Content-Language: en-US
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <ZBtDSh6f+rWqFLtC@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230312062505.man5h4oo6mjbiov6@ldmartin-desk2.lan>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 22/03/2023 18:04, Luis Chamberlain wrote:
-> On Tue, Mar 21, 2023 at 08:23:50PM -0700, Luis Chamberlain wrote:
->> Example uses:
->>
->> sudo ./stress-ng --module 1 --module-name xfs
->> sudo ./stress-ng --module 1 --module-name xfs --module-sharedfd
+On Sat, Mar 11, 2023 at 10:25:05PM -0800, Lucas De Marchi wrote:
+> On Sat, Jan 21, 2023 at 02:40:20PM -0800, Luis Chamberlain wrote:
+> > On Thu, Jan 19, 2023 at 04:58:53PM -0800, Luis Chamberlain wrote:
+> > > On Thu, Jan 19, 2023 at 04:51:27PM -0800, Luis Chamberlain wrote:
+> > > > On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
+> > > > > Yes, the -EINVAL error is strange. It is returned also in
+> > > > > kernel/module/main.c on few locations. But neither of them
+> > > > > looks like a good candidate.
+> > > >
+> > > > OK I updated to next-20230119 and I don't see the issue now.
+> > > > Odd. It could have been an issue with next-20221207 which I was
+> > > > on before.
+> > > >
+> > > > I'll run some more test and if nothing fails I'll send the fix
+> > > > to Linux for rc5.
+> > > 
+> > > Jeesh it just occured to me the difference, which I'll have to
+> > > test next, for next-20221207 I had enabled module compression
+> > > on kdevops with zstd.
+> > > 
+> > > You can see the issues on kdevops git log with that... and I finally
+> > > disabled it and the kmod test issue is gone. So it could be that
+> > > but I just am ending my day so will check tomorrow if that was it.
+> > > But if someone else beats me then great.
+> > > 
+> > > With kdevops it should be a matter of just enabling zstd as I
+> > > just bumped support for next-20230119 and that has module decompression
+> > > disabled.
+> > 
+> > So indeed, my suspcions were correct. There is one bug with
+> > compression on debian:
+> > 
+> > - gzip compressed modules don't end up in the initramfs
+> > 
+> > There is a generic upstream kmod bug:
+> > 
+> >  - modprobe --show-depends won't grok compressed modules so initramfs
+> >    tools that use this as Debian likely are not getting module dependencies
+> >    installed in their initramfs
 > 
-> The use case with --module 8192 was causing some errors from
-> stress-ng having unexpected bail out messages before ramp up.
+> are you sure you have the relevant compression setting enabled
+> in kmod?
 > 
->> diff --git a/stress-module.c b/stress-module.c
->> new file mode 100644
->> index 00000000..cee581bd
->> --- /dev/null
->> +++ b/stress-module.c
->> +			//snprintf(module_path, strlen(module_path), "%s/%s/%s",
->> +			snprintf(module_path, PATH_MAX*2, "%s/%s/%s",
->> +				 dirname_default_prefix,
->> +				 u.release, module);
->> +			ret = 0;
-> 
-> I forgot to remove this stray comment.
+> $ kmod --version
+> kmod version 30
+> +ZSTD +XZ +ZLIB +LIBCRYPTO -EXPERIMENTAL
 
-No worries, I can fix that up when I apply the patch.
+Debian has:
 
-> 
->> +	/*
->> +	 * We're not stressing the modules.dep --> module path lookup,
->> +	 * just the finit_module() calls and so only do the lookup once.
->> +	 */
->> +	if (args->instance != 0) {
->> +		if (!module_path_found)
->> +			return EXIT_SUCCESS;
->> +	}
-> 
-> So here was the reason for the complaints, Although changing this to
-> return just EXIT_NO_RESOURCE cures the warning, I don't think the
-> non instance 0 workers are doing anything then. Is that right Colin?
+kmod version 30
++ZSTD +XZ -ZLIB +LIBCRYPTO -EXPERIMENTAL
 
-I'll have a look at that when I test this out later tonight.
+> $ modprobe --show-depends ext4
+> insmod /lib/modules/6.1.12-1-MANJARO/kernel/fs/jbd2/jbd2.ko.zst insmod
+> /lib/modules/6.1.12-1-MANJARO/kernel/fs/mbcache.ko.zst insmod
+> /lib/modules/6.1.12-1-MANJARO/kernel/lib/crc16.ko.zst insmod
+> /lib/modules/6.1.12-1-MANJARO/kernel/arch/x86/crypto/crc32c-intel.ko.zst
+> insmod /lib/modules/6.1.12-1-MANJARO/kernel/crypto/crc32c_generic.ko.zst
+> insmod /lib/modules/6.1.12-1-MANJARO/kernel/fs/ext4/ext4.ko.zst
 
-> 
->    Luis
+Perhaps this was related to the above gzip issue in debian then.
 
+I'm hoping will have a bit more time than me to verify.
+
+  Luis
