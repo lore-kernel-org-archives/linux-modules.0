@@ -2,78 +2,78 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E81AC6FD1F
-	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 23:43:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ECFBC6FD1C
+	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 23:43:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjCVXnZ (ORCPT
+        id S230213AbjCVXnv (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 22 Mar 2023 19:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        Wed, 22 Mar 2023 19:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjCVXnR (ORCPT
+        with ESMTP id S230258AbjCVXn2 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:43:17 -0400
+        Wed, 22 Mar 2023 19:43:28 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C075031E0B;
-        Wed, 22 Mar 2023 16:42:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDB231E15;
+        Wed, 22 Mar 2023 16:43:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=J8OoOjpB2nOX7ZmeYEDkMXx+SeBdKnEhP1gUiVZouMw=; b=rrj9l+bQV8+426DL9CGMVi4ozL
-        fqvlcHfrMw9/mqKKRSdGOEWKTC2HhlOfVqQRjPVfFznB7w4wEvIDXT7mVA4RK+X0YPsfP7r8nsf/b
-        0O/zlHV2DGMXdxpXqAZEWYEvbEBcQdvMwHK1KGcLLEuiMuezNOwGg1cvUCmH1eQ6D43BY0FmBMr0V
-        CgBwb9RMz2ET0uQNI1CpxZvst3GlIYY5kZPBBrg8l9y8fWnkZmuXfdjvtxclp3WEEMXTFeNaEGo/4
-        tUytcHOnXfKW8HggmuVoCzajhGEY+8iuDCMbN/aQzL5cg0YO0dsmGJD4gNo0YxG27lDa8vlRKKoLM
-        A+YoJkmA==;
+        bh=1k27qB2kPnk4X5H75z968d6xQhaksZU9LGt7xqBOfIY=; b=OeiV9RLui/uqQFjVMtvOvhlPwh
+        Z+VjaBqQv5esdbsbpgh7yGG/ApfyaW2xfegh6CnU4X7LLRLaIRXFqd6tgfpOed3J5JG6M75h9kyo+
+        tXbVsSI2TzQuOCo8vLC+47p197rI43QLawz61uk1TVoafq4shvb7vDOX+WQIVxJL6vl4LcriMiclX
+        NHL4VMngzDTN32spVJ72YFbBemal6RPJqTgZ+nKmGwlCiMchdjGHZq5yfhDekxgCR8r1qiU1H2DlK
+        t5r2xTkk3g1Kktfkt2aWElNvHrMdri3YlWZXcVYKL/Tcu6gbNo63HQaO28rmLXJZZPGaAaxpowuuZ
+        dlBvxrWw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pf86E-000BpP-1n;
-        Wed, 22 Mar 2023 23:42:34 +0000
-Date:   Wed, 22 Mar 2023 16:42:34 -0700
+        id 1pf86g-000Btz-38;
+        Wed, 22 Mar 2023 23:43:02 +0000
+Date:   Wed, 22 Mar 2023 16:43:02 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org
-Subject: Re: [PATCH 00/12] module: cleanup and call taints after is inserted
-Message-ID: <ZBuSajbkt7Ylah2j@bombadil.infradead.org>
-References: <20230319212746.1783033-1-mcgrof@kernel.org>
+Subject: Re: [PATCH 0/5] module: ELF validation enhancement and cleanups
+Message-ID: <ZBuShv1hx03WmzH4@bombadil.infradead.org>
+References: <20230319213542.1790479-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230319212746.1783033-1-mcgrof@kernel.org>
+In-Reply-To: <20230319213542.1790479-1-mcgrof@kernel.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, Mar 19, 2023 at 02:27:34PM -0700, Luis Chamberlain wrote:
-> After posting my first RFC for "module: avoid userspace pressure on unwanted
-> allocations" [0] I ended up doing much more cleanup on the module loading path.
-> One of the things that became evident while ensuring we do *less* work before
-> kmalloc all the things we need for the final module is we are doing a lot of
-> work before we even add a module onto our linked list, once its accepted for
-> loading and running init. We even *taint* the kernel even before we accept
-> a module. We also do some tainting after kernel loading.
+On Sun, Mar 19, 2023 at 02:35:37PM -0700, Luis Chamberlain wrote:
+> While doing a cleanup of load_module() to do less work before we allocate [0],
+> one of the undocumented tricks we pull off is memcpy'ing the struct module
+> from the module.mod.c into the kernel, with the modifications we've made
+> to it on load_module(). This puts a bit of love to make the clearer, and
+> extends our ELF validity checker to ensure we verify this before allowing
+> us to even process a module.
 > 
-> This converges both to one point -- right as soon as we accept module
-> into our linked list. That is, the module is valid as per our kernel
-> config and we're ready to go. Most of this is just tidying code up. The
-> biggest functional changes is under the patch "converge taint work together".
+> This effort has discovered a new possible build issue we have to fix:
 > 
-> I'll post the other functional changes in two other patch sets. This is
-> mostly cleanup, the next one is the new ELF checks / sanity / cleanup,
-> and I'm waiting to hear back from David Hildenbrand on the worthiness of
-> some clutches for allocation. That last part would go in the last patch
-> series.
+> It is in theory possible today to modify the module struct module size,
+> let a kernel developer lazily just build the module (say make fs/xfs/)
+> and then try to insert that module without ensuring the module size
+> expected should have grown. You can verify the size with:
 > 
-> In this series I've dropped completely the idea of using aliasing since
-> different modules can share the same alias, so using that to check if
-> a module is already loaded turns out not to be useful in any way.
+> nm --print-size --size-sort fs/xfs/xfs.ko | grep __this_module
+> 0000000000000000 0000000000000500 D __this_module
+> 
+> The struct module size will be different per each kernel configuration,
+> and so this is system build dependent. The new ELF check put in place
+> prevents this situation and also make the use case of memcpying the
+> struct module very clear, along with ensuring we keep all modifications
+> we've made to it.
 > 
 > [0] https://lkml.kernel.org/r/20230311051712.4095040-1-mcgrof@kernel.org
 
-I've taken these into modules-next for more testing. If folks spot
-issues in them though let me know and I can yank them before the merge
+I've taken these into modules-next for more testing. If folks spot                                                                                                                            
+issues in them though let me know and I can yank them before the merge                                                                                                                        
 window.
 
   Luis
