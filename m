@@ -2,60 +2,87 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E2C4C6FD1C
-	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 13:27:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0641C6FD1F
+	for <linux-modules@archiver.kernel.org>; Wed, 22 Mar 2023 18:05:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCVN1O (ORCPT
+        id S229487AbjCVSFB (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 22 Mar 2023 09:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
+        Wed, 22 Mar 2023 14:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVN1O (ORCPT
+        with ESMTP id S229484AbjCVSFA (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:27:14 -0400
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C253B58B60;
-        Wed, 22 Mar 2023 06:27:12 -0700 (PDT)
-Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id E3C57242DA5;
-        Wed, 22 Mar 2023 14:27:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1679491632;
-        bh=/6m5yG9DudYmkEEdukc2oCkTOzjwQANZcn2PD4YI7Rw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gq7SER5KnPf3lzcNvuz2FDcun3p0eWoQq4/iIIrySyx/MduM8NPNIockrvRSMF+N+
-         9RFlVlb8xn/L0h037ZGvoecf92g2pErnVqMm7cgSW9Ij2UIXifQ1uyZXYzeyc1C2Ho
-         aOx77XYV1ome7bSYxg0BrEjFrrB/UX3k7KiX8yI6PeaoZ9rLYFfUimzZIgajgUrAGT
-         I7k5fMjcwCb1qgSVJ8YUja7MbQlT6s7VSqfu6AVoJRtyqP8AXANcpfU7gwP7F38Nvv
-         sGL9dpXrR+eNpYNZI4//nq49Iz46a7mCAO7W2shYvcQ+SfBIcWuVNaDNQr99Iii1yU
-         M5AKfR9ZrwBqg==
-Date:   Wed, 22 Mar 2023 14:27:10 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Will Deacon <will@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 07/27] iommu/sun50i: remove MODULE_LICENSE in non-modules
-Message-ID: <ZBsCLiCnZFGbZG0r@8bytes.org>
-References: <20230224150811.80316-1-nick.alcock@oracle.com>
- <20230224150811.80316-8-nick.alcock@oracle.com>
+        Wed, 22 Mar 2023 14:05:00 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0970392A9;
+        Wed, 22 Mar 2023 11:04:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=pneM1iKBldwm07CiyE2tReaQ4kBY/JdcBsq7MfQvOl0=; b=dfhdcJmmA9LPV0Q6VSEifeeuBi
+        3sIu352OsPIwgGuf4hkJ6WqcaRnTDtxGNMr6RiT520TD3OvsNbSknwDkdxufBa31SUmbY1bNKPvbn
+        mNIv4vzGKw/KjJe/FxrAu4MHtYxviDbL0MdvMH9mtk8yzRkGPXUFq7ipnr78DoivZfylCmBpQFM1F
+        czoADtwM3JV/0v4Zf74uSDKnC7/qJ5sI+H6QmbMAe7GcOYLiZ2juJYE9F45FVU3Yw6dG3m0Fzh/lh
+        pHTqn/Ds6EnqglkcZi08kehpIWEz4kX7XSIupFLZo7yK88BFsbjOYXj6lURNY55CtS/qJ6J5BI3TQ
+        CkX3kY8Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pf2pW-00Gx8K-0g;
+        Wed, 22 Mar 2023 18:04:58 +0000
+Date:   Wed, 22 Mar 2023 11:04:58 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     colin.i.king@gmail.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
+        prarit@redhat.com
+Cc:     christophe.leroy@csgroup.eu, song@kernel.org, dave@stgolabs.net,
+        a.manzanares@samsung.com, fan.ni@samsung.com,
+        vincent.fu@samsung.com
+Subject: Re: [PATCH v3] stress-module: stress finit_module() and
+ delete_module()
+Message-ID: <ZBtDSh6f+rWqFLtC@bombadil.infradead.org>
+References: <20230322032350.3439056-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230224150811.80316-8-nick.alcock@oracle.com>
+In-Reply-To: <20230322032350.3439056-1-mcgrof@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Feb 24, 2023 at 03:07:51PM +0000, Nick Alcock wrote:
->  drivers/iommu/sun50i-iommu.c | 1 -
->  1 file changed, 1 deletion(-)
+On Tue, Mar 21, 2023 at 08:23:50PM -0700, Luis Chamberlain wrote:
+> Example uses:
+> 
+> sudo ./stress-ng --module 1 --module-name xfs
+> sudo ./stress-ng --module 1 --module-name xfs --module-sharedfd
 
-Applied, thanks.
+The use case with --module 8192 was causing some errors from
+stress-ng having unexpected bail out messages before ramp up.
+
+> diff --git a/stress-module.c b/stress-module.c
+> new file mode 100644
+> index 00000000..cee581bd
+> --- /dev/null
+> +++ b/stress-module.c
+> +			//snprintf(module_path, strlen(module_path), "%s/%s/%s",
+> +			snprintf(module_path, PATH_MAX*2, "%s/%s/%s",
+> +				 dirname_default_prefix,
+> +				 u.release, module);
+> +			ret = 0;
+
+I forgot to remove this stray comment.
+
+> +	/*
+> +	 * We're not stressing the modules.dep --> module path lookup,
+> +	 * just the finit_module() calls and so only do the lookup once.
+> +	 */
+> +	if (args->instance != 0) {
+> +		if (!module_path_found)
+> +			return EXIT_SUCCESS;
+> +	}
+
+So here was the reason for the complaints, Although changing this to
+return just EXIT_NO_RESOURCE cures the warning, I don't think the
+non instance 0 workers are doing anything then. Is that right Collin?
+
+  Luis
