@@ -2,101 +2,139 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1DA8C6FD20
-	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 18:34:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9833FC6FD20
+	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 18:47:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjCXSeQ (ORCPT
+        id S231274AbjCXSrX (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 24 Mar 2023 14:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        Fri, 24 Mar 2023 14:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjCXSdy (ORCPT
+        with ESMTP id S229943AbjCXSrW (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:33:54 -0400
+        Fri, 24 Mar 2023 14:47:22 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A00021974;
-        Fri, 24 Mar 2023 11:33:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A82F1;
+        Fri, 24 Mar 2023 11:47:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=02cnyqnaBRGJYxnh7ZSFXvWj6btW47f9AiZCeVuZ/Rk=; b=R26mIW3QoIbL53bM2/5dxMFu6y
-        j2NgQUpK0QcAJPYCSRVn97Ez9pu5YnSwUPZK/Npk0aFiAl8Fr/nbymDIEFPH0sHf2VrRGy6bmzOiE
-        CXrWCJo2psL1IwTIPymLY4huLxYTzS9ZerytelYcgx3cUux/QteJoOn0F3ToD2llHMiyuCVgpFL1H
-        EiDggCINc77IwZKqxN6r5d4C16KhT62J3Pdqc3qRfYCLTiYRsW6HDCoOumWeUttxAMbFm9M9FGzbe
-        ZUmvzNzJJrfHg6l4Bax54yCfm+t0w0T/87p9nzUzLOfZZKR+djBSpN8AvS6ZVzW9ccxapBQb4Bquy
-        2AhLNENg==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=8dtrVZxItauX11UB4f80WXUPADDXCAOcUF0i9BW2H9k=; b=qR47UVnFHk2OHyqfEV+Qna+ckx
+        jA3BDaASobqqDwuqyNstDsyKTX0e13ny5NGVfC4LFlxqXnS3C3yzyf52GlzF1A/nS0srl31uqmUnc
+        x86PGqWttWtZ0CFzoVXT5oc8DzXJBFocXsiPr5wfiaGUXYyzZPfjtLRQOA/GKldsKkN0Tf8mDhDpB
+        JwyRS6NVDRh8t9jjE6cjWsd6sgllbORAvRJkI/E5ejLRAMa5jA/ePzyqqMgV9U1w1QS90LmoyGp3q
+        qs8pMu2cTd3pP+jiXnDpnIxJIoo57is2icg9rKJnfveuIDs3jhomTJGg9pMUZn8eDyhSDMyOoyz6b
+        W2Pz7mGA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfmEC-005KSB-2H;
-        Fri, 24 Mar 2023 18:33:28 +0000
-Date:   Fri, 24 Mar 2023 11:33:28 -0700
+        id 1pfmRW-005Lhh-0H;
+        Fri, 24 Mar 2023 18:47:14 +0000
+Date:   Fri, 24 Mar 2023 11:47:14 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     christophe.leroy@csgroup.eu, song@kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, david@redhat.com, prarit@redhat.com
-Subject: Re: [PATCH 04/12] module: move early sanity checks into a helper
-Message-ID: <ZB3s+Hn2j6HMIe+m@bombadil.infradead.org>
-References: <20230319212746.1783033-1-mcgrof@kernel.org>
- <20230319212746.1783033-5-mcgrof@kernel.org>
- <71176c99-cacb-9a7a-0b4a-9e2c5cb1c3b5@suse.com>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Petr Pavlu <petr.pavlu@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
+        mwilck@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Ben Hutchings <benh@debian.org>,
+        Adam Manzanares <a.manzanares@samsung.com>
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <ZB3wMuynKnQ1IFjb@bombadil.infradead.org>
+References: <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
+ <Y8ll+eP+fb0TzFUh@alley>
+ <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
+ <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
+ <Y8xp1HReo+ayHU8G@bombadil.infradead.org>
+ <20230312062505.man5h4oo6mjbiov6@ldmartin-desk2.lan>
+ <ZBuB3+cN4BK6woKZ@bombadil.infradead.org>
+ <20230323150125.35e5nwtrez46dv4b@ldmartin-desk2.lan>
+ <CAB=NE6VtAn8tew723y77KAN_w-UYE+naMaVrKsLjxpJgAkwDXw@mail.gmail.com>
+ <20230324060321.c2szz34n6zggvubj@ldmartin-desk2.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <71176c99-cacb-9a7a-0b4a-9e2c5cb1c3b5@suse.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230324060321.c2szz34n6zggvubj@ldmartin-desk2.lan>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Mar 24, 2023 at 02:02:06PM +0100, Petr Pavlu wrote:
-> On 3/19/23 22:27, Luis Chamberlain wrote:
-> > Move early sanity checkers for the module into a helper.
-> > This let's us make it clear when we are working with the
-> > local copy of the module prior to allocation.
+On Thu, Mar 23, 2023 at 11:03:21PM -0700, Lucas De Marchi wrote:
+> On Thu, Mar 23, 2023 at 08:08:49AM -0700, Luis Chamberlain wrote:
+> > On Thu, Mar 23, 2023 at 8:02 AM Lucas De Marchi
+> > <lucas.demarchi@intel.com> wrote:
+> > > 
+> > > On Wed, Mar 22, 2023 at 03:31:59PM -0700, Luis Chamberlain wrote:
+> > > >On Sat, Mar 11, 2023 at 10:25:05PM -0800, Lucas De Marchi wrote:
+> > > >> On Sat, Jan 21, 2023 at 02:40:20PM -0800, Luis Chamberlain wrote:
+> > > >> > On Thu, Jan 19, 2023 at 04:58:53PM -0800, Luis Chamberlain wrote:
+> > > >> > > On Thu, Jan 19, 2023 at 04:51:27PM -0800, Luis Chamberlain wrote:
+> > > >> > > > On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
+> > > >> > > > > Yes, the -EINVAL error is strange. It is returned also in
+> > > >> > > > > kernel/module/main.c on few locations. But neither of them
+> > > >> > > > > looks like a good candidate.
+> > > >> > > >
+> > > >> > > > OK I updated to next-20230119 and I don't see the issue now.
+> > > >> > > > Odd. It could have been an issue with next-20221207 which I was
+> > > >> > > > on before.
+> > > >> > > >
+> > > >> > > > I'll run some more test and if nothing fails I'll send the fix
+> > > >> > > > to Linux for rc5.
+> > > >> > >
+> > > >> > > Jeesh it just occured to me the difference, which I'll have to
+> > > >> > > test next, for next-20221207 I had enabled module compression
+> > > >> > > on kdevops with zstd.
+> > > >> > >
+> > > >> > > You can see the issues on kdevops git log with that... and I finally
+> > > >> > > disabled it and the kmod test issue is gone. So it could be that
+> > > >> > > but I just am ending my day so will check tomorrow if that was it.
+> > > >> > > But if someone else beats me then great.
+> > > >> > >
+> > > >> > > With kdevops it should be a matter of just enabling zstd as I
+> > > >> > > just bumped support for next-20230119 and that has module decompression
+> > > >> > > disabled.
+> > > >> >
+> > > >> > So indeed, my suspcions were correct. There is one bug with
+> > > >> > compression on debian:
+> > > >> >
+> > > >> > - gzip compressed modules don't end up in the initramfs
+> > > >> >
+> > > >> > There is a generic upstream kmod bug:
+> > > >> >
+> > > >> >  - modprobe --show-depends won't grok compressed modules so initramfs
+> > > >> >    tools that use this as Debian likely are not getting module dependencies
+> > > >> >    installed in their initramfs
+> > > >>
+> > > >> are you sure you have the relevant compression setting enabled
+> > > >> in kmod?
+> > > >>
+> > > >> $ kmod --version
+> > > >> kmod version 30
+> > > >> +ZSTD +XZ +ZLIB +LIBCRYPTO -EXPERIMENTAL
+> > > >
+> > > >Debian has:
+> > > >
+> > > >kmod version 30
+> > > >+ZSTD +XZ -ZLIB +LIBCRYPTO -EXPERIMENTAL
+> > > 
+> > >            ^ so... mind the minus :). It doesn't support zlib.
+> > > 
+> > > Change your kernel config to either compress the modules as xz or zstd.
 > > 
-> > This produces no functional changes, it just makes subsequent
-> > changes easier to read.
-> > 
-> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > ---
-> >  kernel/module/main.c | 43 ++++++++++++++++++++++++++-----------------
-> >  1 file changed, 26 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index 427284ab31f1..933cef72ae13 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -2668,6 +2668,31 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
-> >  	return 0;
-> >  }
-> >  
-> > +/* Module within temporary copy, this doesn't do any allocation  */
-> > +static int early_mod_check(struct load_info *info, int flags)
-> > +{
-> > +	int err;
-> > +
-> > +	/*
-> > +	 * Now that we know we have the correct module name, check
-> > +	 * if it's blacklisted.
-> > +	 */
-> > +	if (blacklisted(info->name)) {
-> > +		pr_err("Module %s is blacklisted\n", info->name);
-> > +		return -EPERM;
-> > +	}
-> > +
-> > +	err = rewrite_section_headers(info, flags);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	/* Check module struct version now, before we try to use module. */
-> > +	if (!check_modstruct_version(info, info->mod))
-> > +		return ENOEXEC;
+> > Oh so then we should complain about these things if an initramfs is
+> > detected with modules compressed using a compression algorithm which
+> > modprobe installed does not support. What tool would do that?
 > 
-> The error value when check_modstruct_version() fails is changed in this patch
-> from -ENOEXEC to ENOEXEC and updated back again in the next patch. It would be
-> good to avoid introducing this temporary problem and keep the value throughout
-> as -ENOEXEC.
+> I guess we could add that in depmod side as a dummy handler for when
+> that config is off. Thoughts?
 
-Fixed, thanks.
+That sounds like a good solution, better than and complain before
+allowing someone to boot and *not* be able to.
 
   Luis
