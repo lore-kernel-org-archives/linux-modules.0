@@ -2,72 +2,36 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 088FAC6FD1C
-	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 19:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 663B7C6FD1C
+	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 20:00:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjCXTL3 (ORCPT
+        id S231984AbjCXUAO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 24 Mar 2023 15:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        Fri, 24 Mar 2023 16:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCXTL2 (ORCPT
+        with ESMTP id S232011AbjCXUAM (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 24 Mar 2023 15:11:28 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A401B2D0
-        for <linux-modules@vger.kernel.org>; Fri, 24 Mar 2023 12:11:27 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id cn12so11826103edb.4
-        for <linux-modules@vger.kernel.org>; Fri, 24 Mar 2023 12:11:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679685085;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+qCK54soErGy7EGQQweZ79LKMpldqIoIIr3maQfIWTI=;
-        b=hRn/Z0izsUiNdQXow5plGyOYBJetP8//fT0D0swRfMc/xTXgsiRPPSCsFSQ5EQHduX
-         rQvuWGtz2Pwi+TbTLu+6cXbehDGmmmcNg/5AM0XIYF77yWFyh0G4goyYXaidajQmNt6F
-         CbBiBwLIIK7vdsy7iRL46tjB4r9IvgYLulKtc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679685085;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+qCK54soErGy7EGQQweZ79LKMpldqIoIIr3maQfIWTI=;
-        b=r2NZnkBhqn3uCukxtZaNHz+ZEfEDYzjA8tLprOIeli+iSCwrA7ZGROzmBh540uklj+
-         N8ojMJ3Q+Gh9ACDPIm6RYRM/85Ezr8O461/NbeyW0I8ycF0UHOkJZYoD+3o3pDnl2gpA
-         0mwZ9uv74L5hIR7axHUQfUDO6ychP2TNhjnWjAaLwlhfolBzFl243/f1uMGkMRo0T5pG
-         cHiG4iO/V8PXfo9jgbLB4tqL0SV73Yyj9awAUJRoCXR7bPyOa2Dfr0HqiAVHcfOsNU1+
-         5sjdEv1b+3A1S1XBpa0oZLZ34Wljgmqm1RCojEdcqfwlNyxR8JI5QjTUemOfPUKQhgrO
-         AlMA==
-X-Gm-Message-State: AAQBX9cFiMYEoBwj/5F5xGM3SRI0fCpE+JIvSL37YwOvvlP/fUYegBGC
-        XELGHCByQChJ3Or4Ijm/vfbhOZWJxuCZQlUIjfFdNg==
-X-Google-Smtp-Source: AKy350YXTEgHx2vTt27tC2ptthbEAyv5J1vp7vHMGZPZ/TNkjzvorGQL7wJqMY0KImdHaN+nf35esw==
-X-Received: by 2002:a17:906:bcd1:b0:921:5cce:6599 with SMTP id lw17-20020a170906bcd100b009215cce6599mr4215671ejb.41.1679685085760;
-        Fri, 24 Mar 2023 12:11:25 -0700 (PDT)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id c16-20020a170906925000b009327f9a397csm10086982ejx.145.2023.03.24.12.11.24
-        for <linux-modules@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 12:11:24 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id i5so12001059eda.0
-        for <linux-modules@vger.kernel.org>; Fri, 24 Mar 2023 12:11:24 -0700 (PDT)
-X-Received: by 2002:a17:906:eec7:b0:93e:186f:ea0d with SMTP id
- wu7-20020a170906eec700b0093e186fea0dmr1585791ejb.15.1679685084132; Fri, 24
- Mar 2023 12:11:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <ZBOsyBu68d4vh6yU@bombadil.infradead.org> <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
- <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com> <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
- <ZBjLp4YvN1m/cR4G@bombadil.infradead.org> <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
- <ZBjO2LqBkayxG+Sd@bombadil.infradead.org> <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
- <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com> <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
- <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
-In-Reply-To: <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 24 Mar 2023 12:11:07 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com>
-Message-ID: <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com>
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted allocations
-To:     Luis Chamberlain <mcgrof@kernel.org>
+        Fri, 24 Mar 2023 16:00:12 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C961EBFE;
+        Fri, 24 Mar 2023 13:00:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=135fv2f4kM2qso2NGzM8eNW0zX5oqguesMQfHWAJojU=; b=BqOlIbPEM48OJumyLLa/yNGycP
+        MiyWKa/DAo5tHhP3X4u/7Q0h0EVk/8NCvoZnTHGWIxVxpbrNPkH3jUmxHU8eU01LKzQ0Yp9aFCtzl
+        rWJGik+pSQd1P0bUfum1+cjnZyDLRAwz1KjsOyxGdUTe5MwTDMPV4CfIxBZTrjhOOydKWklsz1H/H
+        XYZPZiFd7mJMiHEfHo2nyXUhaDMmkLt8LO8Vzb0bIoZkeJl3M/436fIqJCAOZsXtd+a1CvkmRaIvP
+        iUuE42mr6lgYsXagFskU67wNBtqjaPzj7g8T1aXGAXLncTvimMM/Rlwas0l2rchYLTHVIGXLWkBWv
+        tfs0oFXg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pfnZv-005UVz-0b;
+        Fri, 24 Mar 2023 19:59:59 +0000
+Date:   Fri, 24 Mar 2023 12:59:59 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     David Hildenbrand <david@redhat.com>,
         Kees Cook <keescook@chromium.org>,
         linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -75,36 +39,157 @@ Cc:     David Hildenbrand <david@redhat.com>,
         christophe.leroy@csgroup.eu, song@kernel.org, dave@stgolabs.net,
         fan.ni@samsung.com, vincent.fu@samsung.com,
         a.manzanares@samsung.com, colin.i.king@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
+ allocations
+Message-ID: <ZB4BP0ZgxNirBNOJ@bombadil.infradead.org>
+References: <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
+ <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
+ <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
+ <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
+ <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+ <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
+ <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
+ <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
+ <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
+ <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Mar 24, 2023 at 10:54=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.or=
-g> wrote:
->
-> +/*
-> + * This clutch ensures we only allow a certain number concurrent threads=
- at a
+On Fri, Mar 24, 2023 at 12:11:07PM -0700, Linus Torvalds wrote:
+> On Fri, Mar 24, 2023 at 10:54 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > +/*
+> > + * This clutch ensures we only allow a certain number concurrent threads at a
+> 
+> kludge, not clutch.
+> 
+> And it's much worse than a kludge. It's just wrong and disgusting.
 
-kludge, not clutch.
+I wasn't happy with it either...
 
-And it's much worse than a kludge. It's just wrong and disgusting.
+> > +               pr_warn_ratelimited("kread_concurrent_max (%u) close to 0 (max_loads: %u), throttling...",
+> > +                                   atomic_read(&kread_concurrent_max),
+> > +                                   MAX_KREAD_CONCURRENT);
+> 
+> This is also wrong, since it's not kernel_read_file() that is the
+> problem, but whatever broken caller.
+> 
+> Yeah, yeah, in practice it's presumably always just finit_module()
+> doing kernel_read_file_from_fd(), but it's still *completely* wrong to
+> just say "function X is throttling" when "X" isn't the problem, and
+> doesn't tell what the _real_ problem is.
 
-> +               pr_warn_ratelimited("kread_concurrent_max (%u) close to 0=
- (max_loads: %u), throttling...",
-> +                                   atomic_read(&kread_concurrent_max),
-> +                                   MAX_KREAD_CONCURRENT);
+True.
 
-This is also wrong, since it's not kernel_read_file() that is the
-problem, but whatever broken caller.
+> I really think this all needs some core fixing at the module layer,
+> not these kinds of horrific hacks.
 
-Yeah, yeah, in practice it's presumably always just finit_module()
-doing kernel_read_file_from_fd(), but it's still *completely* wrong to
-just say "function X is throttling" when "X" isn't the problem, and
-doesn't tell what the _real_ problem is.
+On the modules side of things we can be super defensive on the second
+vmalloc allocation defensive [0] but other than this the initial kread
+also needs care too.
 
-I really think this all needs some core fixing at the module layer,
-not these kinds of horrific hacks.
+To address the kread abuse within finit_module we could just move the
+kludge to the modules side of things until each free happens as in the
+below alternative. That just means any easy user interfacing call with
+kernel_read*() would likely have to be as careful. Untested below.
 
-          Linus
+[0] https://lkml.kernel.org/r/20230319214926.1794108-4-mcgrof@kernel.org
+
+  Luis
+
+From 3c3f7e597ab35b4482ccb4064bb897eefa449071 Mon Sep 17 00:00:00 2001
+From: Luis Chamberlain <mcgrof@kernel.org>
+Date: Fri, 24 Mar 2023 12:51:44 -0700
+Subject: [PATCH] module: kludge
+
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ kernel/module/main.c | 45 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 44 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 145e15f19576..a96de989532a 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -62,6 +62,16 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/module.h>
+ 
++#define MAX_INITMOD_CONCURRENT 50
++static atomic_t initmod_concurrent_max = ATOMIC_INIT(MAX_INITMOD_CONCURRENT);
++static DECLARE_WAIT_QUEUE_HEAD(initmod_wq);
++
++/*
++ * How much time to wait for *all*  MAX_INITMOD_CONCURRENT threads running
++ * at the same time without returning.
++ */
++#define MAX_INITMOD_ALL_BUSY_TIMEOUT 5
++
+ /*
+  * Mutex protects:
+  * 1) List of modules (also safely readable with preempt_disable),
+@@ -3015,6 +3025,30 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
+ 	return load_module(&info, uargs, 0);
+ }
+ 
++static int module_kread_concurrent(void)
++{
++	int err;
++
++	if (atomic_dec_if_positive(&initmod_concurrent_max) < 0) {
++		pr_warn_ratelimited("finit_module: initkmod_concurrent_max (%u) close to 0 (max_loads: %u), throttling...",
++				    atomic_read(&initmod_concurrent_max),
++				    MAX_INITMOD_CONCURRENT);
++		err = wait_event_killable_timeout(initmod_wq,
++						  atomic_dec_if_positive(&initmod_concurrent_max) >= 0,
++						  MAX_INITMOD_ALL_BUSY_TIMEOUT * HZ);
++		if (!err) {
++			pr_warn_ratelimited("finit_module: loading module cannot be processed, kernel busy with %d threads loading modules now for more than %d seconds",
++					    MAX_INITMOD_CONCURRENT, MAX_INITMOD_ALL_BUSY_TIMEOUT);
++			return -ETIME;
++		} else if (err == -ERESTARTSYS) {
++			pr_warn_ratelimited("finit_module: sigkill sent for load_module giving up");
++			return err;
++		}
++	}
++
++	return 0;
++}
++
+ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+ {
+ 	struct load_info info = { };
+@@ -3033,6 +3067,10 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+ 		      |MODULE_INIT_COMPRESSED_FILE))
+ 		return -EINVAL;
+ 
++	err = module_kread_concurrent();
++	if (err)
++		return err;
++
+ 	len = kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
+ 				       READING_MODULE);
+ 	if (len < 0)
+@@ -3048,7 +3086,12 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+ 		info.len = len;
+ 	}
+ 
+-	return load_module(&info, uargs, flags);
++	err = load_module(&info, uargs, flags);
++
++	atomic_inc(&initmod_concurrent_max);
++	wake_up(&initmod_wq);
++
++	return err;
+ }
+ 
+ /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
+-- 
+2.39.2
+
