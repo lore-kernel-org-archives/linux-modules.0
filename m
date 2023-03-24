@@ -2,87 +2,101 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDFA2C6FD1C
-	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 18:08:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1DA8C6FD20
+	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 18:34:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbjCXSIJ (ORCPT
+        id S231636AbjCXSeQ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 24 Mar 2023 14:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        Fri, 24 Mar 2023 14:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbjCXSHh (ORCPT
+        with ESMTP id S231897AbjCXSdy (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:07:37 -0400
+        Fri, 24 Mar 2023 14:33:54 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715D4271F;
-        Fri, 24 Mar 2023 11:07:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A00021974;
+        Fri, 24 Mar 2023 11:33:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wzvqTaj0sJDg6M/9ZjKpciY9FiONvjYfn1KEyYVkY0Y=; b=vbGGL4KNT9ISqGGPR25foYHUxA
-        Uv+xyp+0ZB4y4P/10HX/N7IXUWCYObKQOy1K5RJ8qKejyL3gyaq6ArEauif6Bh9sMT/cZTKt1ZB1J
-        5YmiZwdOl4k5tdyUcbBwbkEut5vRzJAe5NMl4T6lA+x1jXudimarhwxy4oidpBfcZkTIRCWrVzKjg
-        3VZQsFnjo3jfIkoeZ5tTHApEY2+1M7BRuH949I6dgnCnpeUJG4rz5CQJz7rtko80vqUOMzeRVbsZn
-        3MDo/q5jE8TLtuAVWtztTimqQW023fhZKBp4DeC6VLdPNbv8ZUqZkRRfEHDXoP3aF54X0azm4hzrc
-        mvYsLgoQ==;
+        bh=02cnyqnaBRGJYxnh7ZSFXvWj6btW47f9AiZCeVuZ/Rk=; b=R26mIW3QoIbL53bM2/5dxMFu6y
+        j2NgQUpK0QcAJPYCSRVn97Ez9pu5YnSwUPZK/Npk0aFiAl8Fr/nbymDIEFPH0sHf2VrRGy6bmzOiE
+        CXrWCJo2psL1IwTIPymLY4huLxYTzS9ZerytelYcgx3cUux/QteJoOn0F3ToD2llHMiyuCVgpFL1H
+        EiDggCINc77IwZKqxN6r5d4C16KhT62J3Pdqc3qRfYCLTiYRsW6HDCoOumWeUttxAMbFm9M9FGzbe
+        ZUmvzNzJJrfHg6l4Bax54yCfm+t0w0T/87p9nzUzLOfZZKR+djBSpN8AvS6ZVzW9ccxapBQb4Bquy
+        2AhLNENg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfloZ-005Fm7-17;
-        Fri, 24 Mar 2023 18:06:59 +0000
-Date:   Fri, 24 Mar 2023 11:06:59 -0700
+        id 1pfmEC-005KSB-2H;
+        Fri, 24 Mar 2023 18:33:28 +0000
+Date:   Fri, 24 Mar 2023 11:33:28 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nick Alcock <nick.alcock@oracle.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@infradead.org>,
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     christophe.leroy@csgroup.eu, song@kernel.org,
         linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
-Message-ID: <ZB3mw4G8GdGwSP41@bombadil.infradead.org>
-References: <20230302211759.30135-11-nick.alcock@oracle.com>
- <ZAoGLhRpTr5f7AD/@kroah.com>
- <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
- <ZArc0ib697JIwKou@kroah.com>
- <ZAuGE2ay3q0MT4Yi@bombadil.infradead.org>
- <CAMuHMdVZODAr77KSp3Yicoyjz=y8OqQB+z6zTLbxO1HMKoJMSA@mail.gmail.com>
- <ZB1p5zRp7rlGGuCP@kroah.com>
- <CAMuHMdVRXQupFEoU0EbSkBnS21QXGJQ4ZOYVy-Ntwjnw7er0nA@mail.gmail.com>
- <87h6uamdzw.fsf@esperi.org.uk>
- <ZB2zrHSzmi8FXABI@kroah.com>
+        pmladek@suse.com, david@redhat.com, prarit@redhat.com
+Subject: Re: [PATCH 04/12] module: move early sanity checks into a helper
+Message-ID: <ZB3s+Hn2j6HMIe+m@bombadil.infradead.org>
+References: <20230319212746.1783033-1-mcgrof@kernel.org>
+ <20230319212746.1783033-5-mcgrof@kernel.org>
+ <71176c99-cacb-9a7a-0b4a-9e2c5cb1c3b5@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZB2zrHSzmi8FXABI@kroah.com>
+In-Reply-To: <71176c99-cacb-9a7a-0b4a-9e2c5cb1c3b5@suse.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Mar 24, 2023 at 03:29:00PM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Mar 24, 2023 at 02:16:03PM +0000, Nick Alcock wrote:
-> > On 24 Mar 2023, Geert Uytterhoeven uttered the following:
-> > > I (still) agree with that, and I saw similar comments from others as well.
-> > > Unfortunately these comments are spread across tens of threads :-(
+On Fri, Mar 24, 2023 at 02:02:06PM +0100, Petr Pavlu wrote:
+> On 3/19/23 22:27, Luis Chamberlain wrote:
+> > Move early sanity checkers for the module into a helper.
+> > This let's us make it clear when we are working with the
+> > local copy of the module prior to allocation.
 > > 
-> > Ugh. Should I do this sort of thing in one big commit next time? That
-> > would fix that problem, but at the cost of others. Lumping seems to me
-> > to be troublesome because it makes it harder to accept/reject different
-> > bits, but would it be *as* troublesome as this much splitting?
+> > This produces no functional changes, it just makes subsequent
+> > changes easier to read.
+> > 
+> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > ---
+> >  kernel/module/main.c | 43 ++++++++++++++++++++++++++-----------------
+> >  1 file changed, 26 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index 427284ab31f1..933cef72ae13 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -2668,6 +2668,31 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
+> >  	return 0;
+> >  }
+> >  
+> > +/* Module within temporary copy, this doesn't do any allocation  */
+> > +static int early_mod_check(struct load_info *info, int flags)
+> > +{
+> > +	int err;
+> > +
+> > +	/*
+> > +	 * Now that we know we have the correct module name, check
+> > +	 * if it's blacklisted.
+> > +	 */
+> > +	if (blacklisted(info->name)) {
+> > +		pr_err("Module %s is blacklisted\n", info->name);
+> > +		return -EPERM;
+> > +	}
+> > +
+> > +	err = rewrite_section_headers(info, flags);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	/* Check module struct version now, before we try to use module. */
+> > +	if (!check_modstruct_version(info, info->mod))
+> > +		return ENOEXEC;
 > 
-> The problem is, some of us disagree that this should be done at all, so
-> reverting all of the individual parts is going to be hard now.
-> 
-> Please put back the license bits that you removed, as it is not a good
-> idea to remove that if the file does not have a SPDX entry at the very
-> least.
+> The error value when check_modstruct_version() fails is changed in this patch
+> from -ENOEXEC to ENOEXEC and updated back again in the next patch. It would be
+> good to avoid introducing this temporary problem and keep the value throughout
+> as -ENOEXEC.
 
-Nick, I've just dropped your series. Please only re-submit only for
-files where the license is clear. The effort of clarifying licenses
-on files where one doesn't have an SPDX tag is welcomed but can take
-time and we'll need this anyway in the future to help later strive to
-see if we can automatically generate the MODULE_LICENSE() from the
-SPDX tags.
+Fixed, thanks.
 
   Luis
