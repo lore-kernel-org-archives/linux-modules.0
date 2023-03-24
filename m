@@ -2,139 +2,109 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9833FC6FD20
-	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 18:47:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 088FAC6FD1C
+	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 19:11:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjCXSrX (ORCPT
+        id S231300AbjCXTL3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 24 Mar 2023 14:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        Fri, 24 Mar 2023 15:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjCXSrW (ORCPT
+        with ESMTP id S229729AbjCXTL2 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:47:22 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A82F1;
-        Fri, 24 Mar 2023 11:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=8dtrVZxItauX11UB4f80WXUPADDXCAOcUF0i9BW2H9k=; b=qR47UVnFHk2OHyqfEV+Qna+ckx
-        jA3BDaASobqqDwuqyNstDsyKTX0e13ny5NGVfC4LFlxqXnS3C3yzyf52GlzF1A/nS0srl31uqmUnc
-        x86PGqWttWtZ0CFzoVXT5oc8DzXJBFocXsiPr5wfiaGUXYyzZPfjtLRQOA/GKldsKkN0Tf8mDhDpB
-        JwyRS6NVDRh8t9jjE6cjWsd6sgllbORAvRJkI/E5ejLRAMa5jA/ePzyqqMgV9U1w1QS90LmoyGp3q
-        qs8pMu2cTd3pP+jiXnDpnIxJIoo57is2icg9rKJnfveuIDs3jhomTJGg9pMUZn8eDyhSDMyOoyz6b
-        W2Pz7mGA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfmRW-005Lhh-0H;
-        Fri, 24 Mar 2023 18:47:14 +0000
-Date:   Fri, 24 Mar 2023 11:47:14 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Petr Pavlu <petr.pavlu@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Ben Hutchings <benh@debian.org>,
-        Adam Manzanares <a.manzanares@samsung.com>
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <ZB3wMuynKnQ1IFjb@bombadil.infradead.org>
-References: <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
- <Y8ll+eP+fb0TzFUh@alley>
- <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
- <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
- <Y8xp1HReo+ayHU8G@bombadil.infradead.org>
- <20230312062505.man5h4oo6mjbiov6@ldmartin-desk2.lan>
- <ZBuB3+cN4BK6woKZ@bombadil.infradead.org>
- <20230323150125.35e5nwtrez46dv4b@ldmartin-desk2.lan>
- <CAB=NE6VtAn8tew723y77KAN_w-UYE+naMaVrKsLjxpJgAkwDXw@mail.gmail.com>
- <20230324060321.c2szz34n6zggvubj@ldmartin-desk2.lan>
+        Fri, 24 Mar 2023 15:11:28 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A401B2D0
+        for <linux-modules@vger.kernel.org>; Fri, 24 Mar 2023 12:11:27 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id cn12so11826103edb.4
+        for <linux-modules@vger.kernel.org>; Fri, 24 Mar 2023 12:11:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679685085;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+qCK54soErGy7EGQQweZ79LKMpldqIoIIr3maQfIWTI=;
+        b=hRn/Z0izsUiNdQXow5plGyOYBJetP8//fT0D0swRfMc/xTXgsiRPPSCsFSQ5EQHduX
+         rQvuWGtz2Pwi+TbTLu+6cXbehDGmmmcNg/5AM0XIYF77yWFyh0G4goyYXaidajQmNt6F
+         CbBiBwLIIK7vdsy7iRL46tjB4r9IvgYLulKtc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679685085;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+qCK54soErGy7EGQQweZ79LKMpldqIoIIr3maQfIWTI=;
+        b=r2NZnkBhqn3uCukxtZaNHz+ZEfEDYzjA8tLprOIeli+iSCwrA7ZGROzmBh540uklj+
+         N8ojMJ3Q+Gh9ACDPIm6RYRM/85Ezr8O461/NbeyW0I8ycF0UHOkJZYoD+3o3pDnl2gpA
+         0mwZ9uv74L5hIR7axHUQfUDO6ychP2TNhjnWjAaLwlhfolBzFl243/f1uMGkMRo0T5pG
+         cHiG4iO/V8PXfo9jgbLB4tqL0SV73Yyj9awAUJRoCXR7bPyOa2Dfr0HqiAVHcfOsNU1+
+         5sjdEv1b+3A1S1XBpa0oZLZ34Wljgmqm1RCojEdcqfwlNyxR8JI5QjTUemOfPUKQhgrO
+         AlMA==
+X-Gm-Message-State: AAQBX9cFiMYEoBwj/5F5xGM3SRI0fCpE+JIvSL37YwOvvlP/fUYegBGC
+        XELGHCByQChJ3Or4Ijm/vfbhOZWJxuCZQlUIjfFdNg==
+X-Google-Smtp-Source: AKy350YXTEgHx2vTt27tC2ptthbEAyv5J1vp7vHMGZPZ/TNkjzvorGQL7wJqMY0KImdHaN+nf35esw==
+X-Received: by 2002:a17:906:bcd1:b0:921:5cce:6599 with SMTP id lw17-20020a170906bcd100b009215cce6599mr4215671ejb.41.1679685085760;
+        Fri, 24 Mar 2023 12:11:25 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id c16-20020a170906925000b009327f9a397csm10086982ejx.145.2023.03.24.12.11.24
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 12:11:24 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id i5so12001059eda.0
+        for <linux-modules@vger.kernel.org>; Fri, 24 Mar 2023 12:11:24 -0700 (PDT)
+X-Received: by 2002:a17:906:eec7:b0:93e:186f:ea0d with SMTP id
+ wu7-20020a170906eec700b0093e186fea0dmr1585791ejb.15.1679685084132; Fri, 24
+ Mar 2023 12:11:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230324060321.c2szz34n6zggvubj@ldmartin-desk2.lan>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <ZBOsyBu68d4vh6yU@bombadil.infradead.org> <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
+ <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com> <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
+ <ZBjLp4YvN1m/cR4G@bombadil.infradead.org> <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
+ <ZBjO2LqBkayxG+Sd@bombadil.infradead.org> <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
+ <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com> <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
+ <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
+In-Reply-To: <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 24 Mar 2023 12:11:07 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com>
+Message-ID: <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com>
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted allocations
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org, dave@stgolabs.net,
+        fan.ni@samsung.com, vincent.fu@samsung.com,
+        a.manzanares@samsung.com, colin.i.king@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Mar 23, 2023 at 11:03:21PM -0700, Lucas De Marchi wrote:
-> On Thu, Mar 23, 2023 at 08:08:49AM -0700, Luis Chamberlain wrote:
-> > On Thu, Mar 23, 2023 at 8:02 AM Lucas De Marchi
-> > <lucas.demarchi@intel.com> wrote:
-> > > 
-> > > On Wed, Mar 22, 2023 at 03:31:59PM -0700, Luis Chamberlain wrote:
-> > > >On Sat, Mar 11, 2023 at 10:25:05PM -0800, Lucas De Marchi wrote:
-> > > >> On Sat, Jan 21, 2023 at 02:40:20PM -0800, Luis Chamberlain wrote:
-> > > >> > On Thu, Jan 19, 2023 at 04:58:53PM -0800, Luis Chamberlain wrote:
-> > > >> > > On Thu, Jan 19, 2023 at 04:51:27PM -0800, Luis Chamberlain wrote:
-> > > >> > > > On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
-> > > >> > > > > Yes, the -EINVAL error is strange. It is returned also in
-> > > >> > > > > kernel/module/main.c on few locations. But neither of them
-> > > >> > > > > looks like a good candidate.
-> > > >> > > >
-> > > >> > > > OK I updated to next-20230119 and I don't see the issue now.
-> > > >> > > > Odd. It could have been an issue with next-20221207 which I was
-> > > >> > > > on before.
-> > > >> > > >
-> > > >> > > > I'll run some more test and if nothing fails I'll send the fix
-> > > >> > > > to Linux for rc5.
-> > > >> > >
-> > > >> > > Jeesh it just occured to me the difference, which I'll have to
-> > > >> > > test next, for next-20221207 I had enabled module compression
-> > > >> > > on kdevops with zstd.
-> > > >> > >
-> > > >> > > You can see the issues on kdevops git log with that... and I finally
-> > > >> > > disabled it and the kmod test issue is gone. So it could be that
-> > > >> > > but I just am ending my day so will check tomorrow if that was it.
-> > > >> > > But if someone else beats me then great.
-> > > >> > >
-> > > >> > > With kdevops it should be a matter of just enabling zstd as I
-> > > >> > > just bumped support for next-20230119 and that has module decompression
-> > > >> > > disabled.
-> > > >> >
-> > > >> > So indeed, my suspcions were correct. There is one bug with
-> > > >> > compression on debian:
-> > > >> >
-> > > >> > - gzip compressed modules don't end up in the initramfs
-> > > >> >
-> > > >> > There is a generic upstream kmod bug:
-> > > >> >
-> > > >> >  - modprobe --show-depends won't grok compressed modules so initramfs
-> > > >> >    tools that use this as Debian likely are not getting module dependencies
-> > > >> >    installed in their initramfs
-> > > >>
-> > > >> are you sure you have the relevant compression setting enabled
-> > > >> in kmod?
-> > > >>
-> > > >> $ kmod --version
-> > > >> kmod version 30
-> > > >> +ZSTD +XZ +ZLIB +LIBCRYPTO -EXPERIMENTAL
-> > > >
-> > > >Debian has:
-> > > >
-> > > >kmod version 30
-> > > >+ZSTD +XZ -ZLIB +LIBCRYPTO -EXPERIMENTAL
-> > > 
-> > >            ^ so... mind the minus :). It doesn't support zlib.
-> > > 
-> > > Change your kernel config to either compress the modules as xz or zstd.
-> > 
-> > Oh so then we should complain about these things if an initramfs is
-> > detected with modules compressed using a compression algorithm which
-> > modprobe installed does not support. What tool would do that?
-> 
-> I guess we could add that in depmod side as a dummy handler for when
-> that config is off. Thoughts?
+On Fri, Mar 24, 2023 at 10:54=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.or=
+g> wrote:
+>
+> +/*
+> + * This clutch ensures we only allow a certain number concurrent threads=
+ at a
 
-That sounds like a good solution, better than and complain before
-allowing someone to boot and *not* be able to.
+kludge, not clutch.
 
-  Luis
+And it's much worse than a kludge. It's just wrong and disgusting.
+
+> +               pr_warn_ratelimited("kread_concurrent_max (%u) close to 0=
+ (max_loads: %u), throttling...",
+> +                                   atomic_read(&kread_concurrent_max),
+> +                                   MAX_KREAD_CONCURRENT);
+
+This is also wrong, since it's not kernel_read_file() that is the
+problem, but whatever broken caller.
+
+Yeah, yeah, in practice it's presumably always just finit_module()
+doing kernel_read_file_from_fd(), but it's still *completely* wrong to
+just say "function X is throttling" when "X" isn't the problem, and
+doesn't tell what the _real_ problem is.
+
+I really think this all needs some core fixing at the module layer,
+not these kinds of horrific hacks.
+
+          Linus
