@@ -2,194 +2,265 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64141C6FD20
-	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 09:16:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3006C6FD20
+	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 09:28:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjCXJQo convert rfc822-to-8bit (ORCPT
+        id S231491AbjCXJ2G (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 24 Mar 2023 05:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
+        Fri, 24 Mar 2023 05:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjCXJQo (ORCPT
+        with ESMTP id S231874AbjCXJ2G (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:16:44 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3D122789;
-        Fri, 24 Mar 2023 02:16:42 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5447d217bc6so22246857b3.7;
-        Fri, 24 Mar 2023 02:16:42 -0700 (PDT)
+        Fri, 24 Mar 2023 05:28:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E498ADBE8
+        for <linux-modules@vger.kernel.org>; Fri, 24 Mar 2023 02:27:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679650039;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XWhXTP1kYEnMLAa75VOBYDvRlIhdjbL3EM4hrj/3sgg=;
+        b=KTMFKVNfs5kZs1wywwbT6/qEgrFF4xkjwlvhGsn1xZiHmRld2yXf2q0Bv/LrK37LkKR2cr
+        mQE/+z0kORiz8mpgF12AmlTihHkswK6OTwzqy18gRFETX+D12TqGhOFWw9k2UlDRdTq4Yt
+        ArMqz+Ko46xVErmJ/VefyuLUaOjp8Zs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-191-ZIGSyRgSNjiNw7lZ1IjieQ-1; Fri, 24 Mar 2023 05:27:17 -0400
+X-MC-Unique: ZIGSyRgSNjiNw7lZ1IjieQ-1
+Received: by mail-wm1-f71.google.com with SMTP id d11-20020a05600c34cb00b003ee89ce8cc3so749311wmq.7
+        for <linux-modules@vger.kernel.org>; Fri, 24 Mar 2023 02:27:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679649401;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LDNPjwsegaDfMUliMA6TpiS3Kuq+LAgqyHSjqAMs0rE=;
-        b=NEwj40PxM5upHr9KTGqYQdFWObGWO1f+9UmcW4aB2iKcctPhREwZAMyDnoT+KKV22n
-         mvw2f1lpV0kjy6+OHaZ5UlPqXUZ9bgjhFq2HmkA2sgr2TUW9jtsFZGML4pxJ6aO2USf3
-         Drh3TLNepqvwLKfFwGEGXjA5OaXgu1gHRMPO9Ay+xlSrz9xY6Cx0fFRSD7XTeZ6keE2F
-         pBc1a2sTvFzM1GQ+TE/Ue/M/1Wzfg8lHNbdBH8fJ+K7qy4iZBjwApF2qGNV+tl4PF3K9
-         dAGpNi43BZq/Z9FSgO7Nae1Xkf2ibt2sON/91p9+uZF1uEnojpK2Ln9d+xc9VCQeqlek
-         H72g==
-X-Gm-Message-State: AAQBX9c3YFMIF9tNvhbZZ4CSQshci7i3ZTU8Eq4eZ5nemt93e6K/nI+v
-        DEv4+5LMgkGs7ITAeNIcvz08i4izCj0kOg==
-X-Google-Smtp-Source: AKy350YeAx+ME4HsKnNl10R9WPgVetV0/4omX7vYtT5kKSvfdt7EJRX54NLpt2+XpmDb1p+IsDXG7g==
-X-Received: by 2002:a81:4ed0:0:b0:535:aff2:d264 with SMTP id c199-20020a814ed0000000b00535aff2d264mr1655307ywb.1.1679649401139;
-        Fri, 24 Mar 2023 02:16:41 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id cn24-20020a05690c0d1800b00545a08184e7sm313771ywb.119.2023.03.24.02.16.40
+        d=1e100.net; s=20210112; t=1679650036;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XWhXTP1kYEnMLAa75VOBYDvRlIhdjbL3EM4hrj/3sgg=;
+        b=RCya2cXk5/uZv1x+AkX508srtTvzlxBo9yiiIXwKQolgM1RizmvoPFvgiPOvigCkuz
+         kL0GwN1xZ6Y8B2HtVcZL+X+MXGU4fxieLBarCJnRimleNLlz2KT7/ioJTkdhquJL9oW5
+         Xu63CW7kHlyne4fx47LurQKBKbIETNCnlmTiiGX4TJ3wNLYh/bMhYNYaQkSWzB/d+O6G
+         jIMxIqyFKzMEc2U9rBPzcfltwDE3LOu2ftf2MeVqWJu4s/lNI8KsEuynWLxZ+dvYX4r8
+         w7eu5MQJt1nyPoOGgHnXFJnKHrnJ8sew8n2aA5hA68EW9K0dkXSVcauEEM2xK9jT9V0B
+         sIXw==
+X-Gm-Message-State: AAQBX9c2r1yGJJAo31fQQC8qFMOX3fJHs453VwXNsI4mnPKwDDtBtCwM
+        Snr5DgQWoE0yCoVtxxKPyQxY94qagikE+OEWgPZZpWbVA2BqajeLcwk4XwRABbN3GwUZyECwfGq
+        uiR8oKPtCYzDvQS1Nx+jeMbTijA==
+X-Received: by 2002:a5d:5392:0:b0:2db:9ccf:f9f5 with SMTP id d18-20020a5d5392000000b002db9ccff9f5mr1682371wrv.0.1679650036526;
+        Fri, 24 Mar 2023 02:27:16 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YTEBLA2pJyv5qJNa1J//kezB8wWdhXgbC095qkzO9M7Qq7+vT94McBR17Ctk+RTTaNNFGsyg==
+X-Received: by 2002:a5d:5392:0:b0:2db:9ccf:f9f5 with SMTP id d18-20020a5d5392000000b002db9ccff9f5mr1682356wrv.0.1679650036197;
+        Fri, 24 Mar 2023 02:27:16 -0700 (PDT)
+Received: from [10.105.158.254] ([88.128.92.189])
+        by smtp.gmail.com with ESMTPSA id fk6-20020a05600c0cc600b003ee7169d57dsm4286316wmb.40.2023.03.24.02.27.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 02:16:40 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id i6so1352895ybu.8;
-        Fri, 24 Mar 2023 02:16:40 -0700 (PDT)
-X-Received: by 2002:a05:6902:722:b0:a09:314f:a3ef with SMTP id
- l2-20020a056902072200b00a09314fa3efmr901470ybt.12.1679649400404; Fri, 24 Mar
- 2023 02:16:40 -0700 (PDT)
+        Fri, 24 Mar 2023 02:27:15 -0700 (PDT)
+Message-ID: <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
+Date:   Fri, 24 Mar 2023 10:27:14 +0100
 MIME-Version: 1.0
-References: <20230302211759.30135-1-nick.alcock@oracle.com>
- <20230302211759.30135-11-nick.alcock@oracle.com> <ZAoGLhRpTr5f7AD/@kroah.com>
- <ZApf0iNOsSAUbhMz@bombadil.infradead.org> <ZArc0ib697JIwKou@kroah.com>
- <ZAuGE2ay3q0MT4Yi@bombadil.infradead.org> <CAMuHMdVZODAr77KSp3Yicoyjz=y8OqQB+z6zTLbxO1HMKoJMSA@mail.gmail.com>
- <ZB1p5zRp7rlGGuCP@kroah.com>
-In-Reply-To: <ZB1p5zRp7rlGGuCP@kroah.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 24 Mar 2023 10:16:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVRXQupFEoU0EbSkBnS21QXGJQ4ZOYVy-Ntwjnw7er0nA@mail.gmail.com>
-Message-ID: <CAMuHMdVRXQupFEoU0EbSkBnS21QXGJQ4ZOYVy-Ntwjnw7er0nA@mail.gmail.com>
-Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
+ allocations
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Adam Manzanares <a.manzanares@samsung.com>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org,
+        torvalds@linux-foundation.org
+References: <ZBHuBgUQFbsd6l+J@bombadil.infradead.org>
+ <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
+ <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
+ <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
+ <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
+ <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
+ <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
+ <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
+ <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
+ <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+ <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
+ <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
+Organization: Red Hat
+In-Reply-To: <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi Greg,
+On 21.03.23 20:32, David Hildenbrand wrote:
+> On 20.03.23 22:27, Luis Chamberlain wrote:
+>> On Mon, Mar 20, 2023 at 02:23:36PM -0700, Luis Chamberlain wrote:
+>>> On Mon, Mar 20, 2023 at 10:15:23PM +0100, David Hildenbrand wrote:
+>>>> Not able to reproduce with 20230319-module-alloc-opts so far (2 tries).
+>>>
+>>> Oh wow, so to clarify, it boots OK?
+>>>
+>>
+>> Now that we know that tree works, I'm curious also now if you can
+>> confirm just re-ordering the patches still works (it should)
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230319-module-alloc-opts-adjust
+>>
+> 
+> So far no vmap errors booting the debug/kasan kernel (2 tries).
+> 
+>> And although it's *probably* just noise, but I'm very curious how much,
+>> if any difference there is if you just revert "module: use
+>> list_add_tail_rcu() when adding module".
+> 
+> Dito, no vmap errors booting the debug/kasan kernel (2 tries).
+> 
+>>
+>> The data on that commit log is pretty small as I have a low end system,
+>> and I'm not yet done beating the hell out of a system with stress-ng,
+>> but getting some data froma  pretty large system would be great.
+>> Specially if this series seems to prove fixing boot on them.
+> 
+> 2x booting RHEL9.1 on a !debug kernel. Something went wrong with kdump in 2 runs (think I
+> had to delete the kdump initrd to make space for another kernel), but we can just mostly
+> ignore that. I wanted to rerun with kdump disabled completely, but I'm out of time for today.
+> 
+> 
+> 1) v6.3-rc1:
+> 
+> #1
+> 
+> Startup finished in 25.354s (kernel) + 7.662s (initrd) + 1min 8.805s (userspace) = 1min 41.822s
+> multi-user.target reached after 29.186s in userspace
+> 
+> 47.178s kdump.service
+> 14.898s tuned.service
+> 11.394s chrony-wait.service
+>    7.486s systemd-udev-settle.service
+>    7.334s NetworkManager-wait-online.service
+>    2.908s initrd-switch-root.service
+>    2.451s smartd.service
+>    2.316s dracut-initqueue.service
+>    2.057s polkit.service
+>    1.290s NetworkManager.service
+>    1.046s cups.service
+>    ...
+> 
+> #2
+> 
+> Startup finished in 25.375s (kernel) + 7.497s (initrd) + 29.428s (userspace) = 1min 2.301s
+> multi-user.target reached after 29.392s in userspace
+> 
+> 14.552s tuned.service
+>    9.410s chrony-wait.service
+>    8.126s systemd-udev-settle.service
+>    7.502s NetworkManager-wait-online.service
+>    2.871s initrd-switch-root.service
+>    2.401s kdump.service
+>    2.297s polkit.service
+>    2.116s dracut-initqueue.service
+>    2.027s smartd.service
+>    1.262s NetworkManager.service
+>    1.102s cups.service
+>    1.011s sshd.service
+>    ...
+> 
+> 
+> 2) 20230319-module-alloc-opts-adjust + revert of list_add_tail_rcu():
+> 
+> #1
+> 
+> Startup finished in 25.441s (kernel) + 7.285s (initrd) + 1min 7.644s (userspace) = 1min 40.371s
+> multi-user.target reached after 27.213s in userspace
+> 
+> 47.232s kdump.service
+> 14.235s tuned.service
+>    8.220s chrony-wait.service
+>    7.444s NetworkManager-wait-online.service
+>    5.986s systemd-udev-settle.service
+>    2.881s initrd-switch-root.service
+>    2.236s smartd.service
+>    1.899s dracut-initqueue.service
+>    1.812s polkit.service
+>    1.554s NetworkManager.service
+>    1.140s ModemManager.service
+>    ...
+> 
+> #2
+> 
+> Startup finished in 25.377s (kernel) + 7.271s (initrd) + 28.247s (userspace) = 1min 897ms
+> multi-user.target reached after 28.210s in userspace
+> 
+> 15.435s tuned.service
+> 11.365s chrony-wait.service
+>    7.512s NetworkManager-wait-online.service
+>    5.962s systemd-udev-settle.service
+>    2.889s initrd-switch-root.service
+>    2.846s smartd.service
+>    2.819s kdump.service
+>    2.228s polkit.service
+>    1.872s dracut-initqueue.service
+>    1.312s NetworkManager.service
+>    1.152s ModemManager.service
+>    1.011s sshd.service
+>    ...
+> 
+> 3) 20230319-module-alloc-opts-adjust:
+> 
+> 
+> #1
+> 
+> Startup finished in 25.320s (kernel) + 7.192s (initrd) + 1min 6.511s (userspace) = 1min 39.024s
+> multi-user.target reached after 28.205s in userspace
+> 
+> 46.307s kdump.service
+> 14.199s tuned.service
+> 13.358s chrony-wait.service
+>    7.468s NetworkManager-wait-online.service
+>    6.329s systemd-udev-settle.service
+>    2.910s initrd-switch-root.service
+>    2.752s smartd.service
+>    2.142s polkit.service
+>    1.909s dracut-initqueue.service
+>    1.210s NetworkManager.service
+>    1.041s ModemManager.service
+>     925ms sshd.service
+>    ...
+> 
+> #2
+> 
+> Startup finished in 25.368s (kernel) + 7.303s (initrd) + 1min 6.897s (userspace) = 1min 39.569s
+> multi-user.target reached after 27.326s in userspace
+> 
+> 45.626s kdump.service
+> 14.707s tuned.service
+> 13.246s chrony-wait.service
+>    7.428s NetworkManager-wait-online.service
+>    6.507s systemd-udev-settle.service
+>    3.038s initrd-switch-root.service
+>    3.001s smartd.service
+>    2.057s polkit.service
+>    1.746s dracut-initqueue.service
+>    1.221s NetworkManager.service
+>    ...
+> 
+> 
+> I think we primarily only care about systemd-udev-settle.service.
+> 
+> That is fastest without the rcu patch (~6s), compared to with the rcu
+> patch (~6.5s) and with stock (~7.5s -- 8s).
+> 
+> Looks like dracut-initqueue also might be a bit faster with your changes, but
+> maybe it's mostly noise (would have to do more runs).
+> 
+> So maybe drop that rcu patch? But of course, there could be other scenarios where it's
+> helpful ...
 
-On Fri, Mar 24, 2023 at 10:14 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Fri, Mar 24, 2023 at 10:08:17AM +0100, Geert Uytterhoeven wrote:
-> > On Fri, Mar 10, 2023 at 8:42 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > On Fri, Mar 10, 2023 at 08:31:30AM +0100, Greg Kroah-Hartman wrote:
-> > > > On Thu, Mar 09, 2023 at 02:38:10PM -0800, Luis Chamberlain wrote:
-> > > > > On Thu, Mar 09, 2023 at 05:15:42PM +0100, Greg Kroah-Hartman wrote:
-> > > > > > On Thu, Mar 02, 2023 at 09:17:52PM +0000, Nick Alcock wrote:
-> > > > > > > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> > > > > > > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> > > > > > > are used to identify modules. As a consequence, uses of the macro
-> > > > > > > in non-modules will cause modprobe to misidentify their containing
-> > > > > > > object file as a module when it is not (false positives), and modprobe
-> > > > > > > might succeed rather than failing with a suitable error message.
-> > > > > > >
-> > > > > > > So remove it in the files in this commit, none of which can be built as
-> > > > > > > modules.
-> > > > > > >
-> > > > > > > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> > > > > > > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > > > > > > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > > > > > > Cc: linux-modules@vger.kernel.org
-> > > > > > > Cc: linux-kernel@vger.kernel.org
-> > > > > > > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> > > > > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > > > > Cc: Jiri Slaby <jirislaby@kernel.org>
-> > > > > > > ---
-> > > > > > >  drivers/tty/n_null.c | 1 -
-> > > > > > >  1 file changed, 1 deletion(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
-> > > > > > > index f913b665af725..c24f75942c49d 100644
-> > > > > > > --- a/drivers/tty/n_null.c
-> > > > > > > +++ b/drivers/tty/n_null.c
-> > > > > > > @@ -63,7 +63,6 @@ static void __exit n_null_exit(void)
-> > > > > > >  module_init(n_null_init);
-> > > > > > >  module_exit(n_null_exit);
-> > > > > > >
-> > > > > > > -MODULE_LICENSE("GPL");
-> > > > > > >  MODULE_AUTHOR("Alan Cox");
-> > > > > > >  MODULE_ALIAS_LDISC(N_NULL);
-> > > > > > >  MODULE_DESCRIPTION("Null ldisc driver");
-> > > > > > > --
-> > > > > > > 2.39.1.268.g9de2f9a303
-> > > > > > >
-> > > > > >
-> > > > > > Nope, sorry, this is not good to do, please fix kbuild instead of
-> > > > > > forcing a tree-wide change like this.
-> > > > >
-> > > > > Masahiro Yamada already NACK'd it such effort:
-> > > > >
-> > > > > https://lkml.kernel.org/r/CAK7LNAQLttPD=Ae==e0CYeQtS78=o_JZFK+zxa29JnUYio52Ug@mail.gmail.com
-> > > > >
-> > > > > And his descriptiuon of the reasoning and logic is explained here:
-> > > > >
-> > > > > https://lore.kernel.org/all/CAK7LNASL7_RgfASstBvN6AzhR=nMU=HsQvODf5q13Xud8tBWRQ@mail.gmail.com/
-> > > > >
-> > > > > Let me summarize it though with a few quotes from him:
-> > > > >
-> > > > > "Having false-positives in modules.builtin should be OK"
-> > > > > "In this sense, having always-builtin entries in module.builtin is OK."
-> > > >
-> > > > None of that matters, sorry.
-> > > >
-> > > > Again, all I am saying is that you can not have some MODULE_() macros
-> > > > that are ok for code that is built in, and some that are not, for
-> > > > "reasons" that have to do how you all are treating the build system
-> > > > infrastructure as you are now putting arbritrary requirements for all
-> > > > driver authors (of which there are thousands) to know this.
-> > >
-> > > As noted once again, it is not putting hard requirement. Future tooling
-> > > not yet added would just not benefit from distinguishing symbols for
-> > > your modules.
-> > >
-> > > I'm happy to live with module authors not wanting to remove the module
-> > > license tag from their modules if they can never actually be modules
-> > > from not benefitting from the above tooling gains as its just cherry
-> > > on top tooling gains.
-> >
-> > Apparently lots of these patches have not arrived in linux-next
-> > without Acks (we're still discussing about this, right???).
-> >
-> > And some of the modified files have no SPDX-License-Identifier
-> > lines yet, so we are losing important licensing information:
-> >
-> > $ git grep -L SPDX-License-Identifier -- $(git show $(git log
-> > --oneline v6.3-rc1..linux-next/master | grep "remove MODULE_LICENSE in
-> > non-modules" | cut -d " " -f 1) | lsdiff --strip=1)
-> > drivers/bus/arm-cci.c
-> > drivers/bus/imx-weim.c
-> > drivers/bus/simple-pm-bus.c
-> > drivers/gpu/drm/drm_mipi_dsi.c
-> > drivers/irqchip/irq-mvebu-pic.c
-> > drivers/reset/reset-axs10x.c
-> > drivers/reset/reset-hsdk.c
-> > drivers/soc/sunxi/sunxi_sram.c
-> > drivers/video/fbdev/asiliantfb.c
-> > drivers/video/fbdev/gbefb.c
-> > drivers/video/fbdev/imsttfb.c
-> > drivers/xen/xenbus/xenbus_probe.c
-> > lib/glob.c
->
-> Ick, that's not ok at all.
->
-> Again, I strongly feel that removing MODULE_LICENSE() lines from files
-> that just don't happen to be built as a module is not ok as no other
-> MODULE_*() macro has this arbitrary restriction.
-
-I (still) agree with that, and I saw similar comments from others as well.
-Unfortunately these comments are spread across tens of threads :-(
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Are there any other things you would like me to measure/test? I'll have 
+to hand back that test machine soonish.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Thanks,
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+David / dhildenb
+
