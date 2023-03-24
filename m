@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9704C76196
-	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 21:14:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F47BC76195
+	for <linux-modules@archiver.kernel.org>; Fri, 24 Mar 2023 23:27:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjCXVOT (ORCPT
+        id S230190AbjCXX1l (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 24 Mar 2023 17:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        Fri, 24 Mar 2023 19:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjCXVOT (ORCPT
+        with ESMTP id S229441AbjCXX1l (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 24 Mar 2023 17:14:19 -0400
+        Fri, 24 Mar 2023 19:27:41 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E71CDDA;
-        Fri, 24 Mar 2023 14:14:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFB91AC;
+        Fri, 24 Mar 2023 16:27:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=UqmSnaARsVlunnEmxrrJ9WDls/RPk2SXuv1lTe4E1dw=; b=uhM3XUaVQ+S23qekRBBOLWrA+j
-        dNC0QsDIew21OU/LKUx/LzASKD30+9j0q7dyI4o9n6px/5HyeK9lw3a8//U/aQNRbLC+t7D8f3jKs
-        2s4rSJAkR5Ez6XNUZaayOEkiQLEhNf6A3yM3Ts4N6bzzdPKIXLusJ41XEsal9VPBwSLFE+uF7yGpi
-        J20/atqKBNbRpY5kNskg7TBnSJ7V32NzJVRiSKT4CNQlYT++yc5momtkiV1Am/xMbAAjD0gUCRDue
-        FerXlrrIMsLcHIi0coq7sPxgRaKhEbAPo9qHa7M2LQNoYRG5VPFI2rPRksbWxvSTcogbZCCrWfuAI
-        H3bKglow==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JaEl4CGqZIMSgWvz/T/A/cVf4WLWQZP2LxPznCrkLQo=; b=gWss8CoWOZ13Zq8BKRsZlvP0qQ
+        ulS9o/uxfHo6ibBT6+6cwFxN2+XhXtprAGEFW7T2okWYVXnb3X79IzgY/j5qO/BgPye5+MR+vlYtT
+        jctZVdHdrIdoNfsUYCyKT/AgpC32ow8K7liVIA8ejwnbEpCwcZBIkrbNq4Obka6Zca3qV4KKThM6p
+        FViAai1egcAPsjZagtTXMsiBEUUa0/YeSfFCOoNZ4xvbNNkvYsI41EZsAAMwo1fSeBx7OHz5mVOw1
+        Z/ljKmj9dtZux9zqPRQXq7zCUY1P03cqfSGxIGPD0tBdhv2rqmr/tvmT8I+haeBTDif8rwFDSIVgS
+        ouzI7O6w==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfojj-005cuz-2k;
-        Fri, 24 Mar 2023 21:14:11 +0000
-Date:   Fri, 24 Mar 2023 14:14:11 -0700
+        id 1pfqoq-005otG-13;
+        Fri, 24 Mar 2023 23:27:36 +0000
+Date:   Fri, 24 Mar 2023 16:27:36 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -41,9 +41,8 @@ Cc:     David Hildenbrand <david@redhat.com>,
         a.manzanares@samsung.com, colin.i.king@gmail.com
 Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
  allocations
-Message-ID: <ZB4SoxgM6vydrxrj@bombadil.infradead.org>
-References: <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
- <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
+Message-ID: <ZB4x6IY/8P1Xam7d@bombadil.infradead.org>
+References: <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
  <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
  <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
  <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
@@ -52,97 +51,31 @@ References: <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
  <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com>
  <ZB4BP0ZgxNirBNOJ@bombadil.infradead.org>
  <CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com>
+ <ZB4SoxgM6vydrxrj@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com>
+In-Reply-To: <ZB4SoxgM6vydrxrj@bombadil.infradead.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Mar 24, 2023 at 01:28:51PM -0700, Linus Torvalds wrote:
-> On Fri, Mar 24, 2023 at 1:00 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On the modules side of things we can be super defensive on the second
-> > vmalloc allocation defensive [0] but other than this the initial kread
-> > also needs care too.
-> 
-> Please don't re-implement semaphores. They are a *classic* concurrency limiter.
-> 
-> In fact, probably *THE* classic one.
-> 
-> So just do something like this instead:
-> 
->    --- a/kernel/module/main.c
->    +++ b/kernel/module/main.c
->    @@ -2937,6 +2937,11 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
->         return load_module(&info, uargs, 0);
->     }
-> 
->    +#define CONCURRENCY_LIMITER(name, n) \
->    +    struct semaphore name = __SEMAPHORE_INITIALIZER(name, n)
->    +
->    +static CONCURRENCY_LIMITER(module_loading_concurrency, 50);
->    +
->     SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs,
-> int, flags)
->     {
->         struct load_info info = { };
->    @@ -2955,8 +2960,12 @@ SYSCALL_DEFINE3(finit_module, int, fd, const
-> char __user *, uargs, int, flags)
->                       |MODULE_INIT_COMPRESSED_FILE))
->                 return -EINVAL;
-> 
->    +    err = down_killable(&module_loading_concurrency);
->    +    if (err)
->    +            return err;
->         len = kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
->                                        READING_MODULE);
->    +    up(&module_loading_concurrency);
->         if (len < 0)
->                 return len;
-> 
-> NOTE! Entirely untested. Surprise surprise.
+On Fri, Mar 24, 2023 at 02:14:11PM -0700, Luis Chamberlain wrote:
+> On Fri, Mar 24, 2023 at 01:28:51PM -0700, Linus Torvalds wrote:
+> >    +static CONCURRENCY_LIMITER(module_loading_concurrency, 50);
+> I'll give it a good wack thanks.
 
-I'll give it a good wack thanks.
+Using a value of 20 above matches what I to get up to 100 stress-ng
+module ops without any OOM (which seems to mimick a 400 CPU environment):
 
-But it still begs the question if *other* vmalloc user-interfacing
-places need similar practices. It's not just system calls that use it
-willy nilly but anything that could in the end use it. Surely a lot of
-"issues" could only happen in an insane pathological use case, but it's
-a generic thing to keep in mind in the end.
+echo 0 > /proc/sys/vm/oom_dump_tasks
+./stress-ng --module 100 --module-name xfs
 
-> I'm a tiny bit worried about deadlocks here, so somebody needs to make
-> sure that the kernel_read_file_from_fd() case cannot possibly in turn
-> cause a "request_module()" recursion.
+I'll go with that and evaluate max memory usage as well, but this is
+still inviting us to consider other users interfacing areas with an
+implicated vmalloc and the scale of this as we grow number of CPU
+counts.
 
-Automount on a path where the module lies in a path for a modue not
-loaded yet triggering a kernel module autoload is the only thing
-I can think of that could cause that, but that just calls userspace
-modprobe. And I think that'd be an insane setup.
-
-> We most definitely have had module recursion before, but I *think*
-> it's always just in the module init function (ie one module requests
-> another when ithe mod->init() function is called).
-
-Since you up() right after the kernel_read_file_from_fd() we would not
-be racing module inits with this. If however we place the up() after
-the load_module() then that does incur that recurssion possibilty.
-
-> I think by the time we have opened the module file descriptors and are
-> just reading the data, we should be ok and the above would never
-> deadlock, but I want people to at least think about it.
-> 
-> Of course, with that "max 50 concurrent loaders" limit, maybe it's
-> never an issue anyway. Even if you get a recursion a few deep, at most
-> you just wait for somebody else to get out of their loaders. Unless
-> *everybody* ends up waiting on some progress.
-
-Yeah, these certainly are pathalogical corner cases. I'm more interested
-in solving doing something sane for 1000 CPUs or 2000 CPUs for now, even
-if the issue was the kernel (not userspace) to blame (and even if those
-use cases are being fixed now like the queued up linux-next ACPI
-CPU frequency modules per CPU).
+A magic values of 20 is completely empirical.
 
   Luis
