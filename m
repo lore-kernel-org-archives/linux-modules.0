@@ -2,82 +2,286 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4657DC6FD1D
-	for <linux-modules@archiver.kernel.org>; Mon, 27 Mar 2023 15:01:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4AC1C76195
+	for <linux-modules@archiver.kernel.org>; Mon, 27 Mar 2023 16:14:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbjC0PBl (ORCPT
+        id S232799AbjC0QOH (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 27 Mar 2023 11:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
+        Mon, 27 Mar 2023 12:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbjC0PBi (ORCPT
+        with ESMTP id S232904AbjC0QOG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:01:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E84D4483;
-        Mon, 27 Mar 2023 08:01:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 27 Mar 2023 12:14:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5D430EF
+        for <linux-modules@vger.kernel.org>; Mon, 27 Mar 2023 09:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679933605;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2AxP1O7sml6Z95M//KVYu3KPUF5AM2A4gmOVSjfr8v8=;
+        b=cuBzNM8QXAxPmpzT1e9C71XATtoL+s5Z7oWY9+MZ6LhyhFSnVcRGBeWtiOSNpz6puSWFM3
+        0yryce4dsMzeLstpi6aeVV5La5BZIwsMf86Up3eH7NA2QaD2wqHkV4fDxzyfMLouii6qXV
+        teE+kOo9RXJd5uFfg0RisPYnl5xpQy0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-185-4Mti2eS0MwSGgsjZ8kg3LA-1; Mon, 27 Mar 2023 12:13:19 -0400
+X-MC-Unique: 4Mti2eS0MwSGgsjZ8kg3LA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE6061303;
-        Mon, 27 Mar 2023 15:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FC4C4339E;
-        Mon, 27 Mar 2023 15:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679929296;
-        bh=dsoVd3bOkZ1/OXyt+ZP8t5ze5tdgtMoUGRvUuV6EukM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SHPAMbr7ynIEkq5oNWhug9hIbn4LJ0wlRJ6JgemhXBguNbBUPRRDeUdVcqazMWkWC
-         dk9d8QHtU103JjtWCjNwzZLwSakTbYVoyyZMPznbW2kNkDFCK+lV/7pj97e//rbFdB
-         KAcjBslm3nZ5BD8UOtzQgE313X4qN68GC8CjlYGQyBtCbPdHgVt918IpKotLwM74ca
-         Zn52WHW55dJ8f6+KX/RVedxJw0EkqlPTOL1x9rcwK7iDgIZU3Ce79U8tYgcWxannLX
-         MEStSzPPRTj0snsGEx0UFdc0kYSX/e0hXkgCvgkTLp0pcdTYZYHGlYYERA/m/ZwxGN
-         9en6lprtJ6hkQ==
-From:   Will Deacon <will@kernel.org>
-To:     mcgrof@kernel.org, Nick Alcock <nick.alcock@oracle.com>
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-modules@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, asahi@lists.linux.dev,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 00/24] MODULE_LICENSE removals, second tranche
-Date:   Mon, 27 Mar 2023 16:01:15 +0100
-Message-Id: <167992609868.3834946.4831319626649638477.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230217141059.392471-1-nick.alcock@oracle.com>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5CED93C18342;
+        Mon, 27 Mar 2023 16:13:18 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.45.224.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6D22B140E949;
+        Mon, 27 Mar 2023 16:13:13 +0000 (UTC)
+From:   Viktor Malik <vmalik@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Viktor Malik <vmalik@redhat.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH bpf-next] kallsyms: move module-related functions under correct configs
+Date:   Mon, 27 Mar 2023 18:12:51 +0200
+Message-Id: <20230327161251.1129511-1-vmalik@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, 17 Feb 2023 14:10:35 +0000, Nick Alcock wrote:
-> This series, based on current modules-next, is part of a treewide cleanup
-> suggested by Luis Chamberlain, to remove the LICENSE_MODULE usage from
-> files/objects that are not tristate.  Due to recent changes to kbuild, these
-> uses are now problematic.  See the commit logs for more details.
-> 
-> (The commit log prefixes and Cc lists are automatically determined using
-> the script mentioned below.  I've eyeballed them, and they seem reasonable:
-> my apologies if they are not.)
-> 
-> [...]
+Functions for searching module kallsyms should have non-empty
+definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
+only CONFIG_MODULES check was used for many of these, which may have
+caused complilation errors on some configs.
 
-Applied drivers/perf patch to will (for-next/perf), thanks!
+This patch moves all relevant functions under the correct configs.
 
-[08/24] kbuild, drivers/perf: remove MODULE_LICENSE in non-modules
-        https://git.kernel.org/will/c/a64021d3726a
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
+---
+ include/linux/module.h | 155 ++++++++++++++++++++++-------------------
+ 1 file changed, 84 insertions(+), 71 deletions(-)
 
-Cheers,
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 41cfd3be57e5..eaad4b7a3788 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -608,16 +608,6 @@ static inline bool within_module(unsigned long addr, const struct module *mod)
+ /* Search for module by name: must be in a RCU-sched critical section. */
+ struct module *find_module(const char *name);
+ 
+-/* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
+-   symnum out of range. */
+-int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+-			char *name, char *module_name, int *exported);
+-
+-/* Look for this name: can be of form module:name. */
+-unsigned long module_kallsyms_lookup_name(const char *name);
+-
+-unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
+-
+ extern void __noreturn __module_put_and_kthread_exit(struct module *mod,
+ 			long code);
+ #define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
+@@ -661,20 +651,6 @@ static inline void __module_get(struct module *module)
+ 	__mod ? __mod->name : "kernel";		\
+ })
+ 
+-/* Dereference module function descriptor */
+-void *dereference_module_function_descriptor(struct module *mod, void *ptr);
+-
+-/* For kallsyms to ask for address resolution.  namebuf should be at
+- * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
+- * found, otherwise NULL. */
+-const char *module_address_lookup(unsigned long addr,
+-			    unsigned long *symbolsize,
+-			    unsigned long *offset,
+-			    char **modname, const unsigned char **modbuildid,
+-			    char *namebuf);
+-int lookup_module_symbol_name(unsigned long addr, char *symname);
+-int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
+-
+ int register_module_notifier(struct notifier_block *nb);
+ int unregister_module_notifier(struct notifier_block *nb);
+ 
+@@ -765,45 +741,6 @@ static inline void module_put(struct module *module)
+ 
+ #define module_name(mod) "kernel"
+ 
+-/* For kallsyms to ask for address resolution.  NULL means not found. */
+-static inline const char *module_address_lookup(unsigned long addr,
+-					  unsigned long *symbolsize,
+-					  unsigned long *offset,
+-					  char **modname,
+-					  const unsigned char **modbuildid,
+-					  char *namebuf)
+-{
+-	return NULL;
+-}
+-
+-static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
+-{
+-	return -ERANGE;
+-}
+-
+-static inline int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name)
+-{
+-	return -ERANGE;
+-}
+-
+-static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
+-					char *type, char *name,
+-					char *module_name, int *exported)
+-{
+-	return -ERANGE;
+-}
+-
+-static inline unsigned long module_kallsyms_lookup_name(const char *name)
+-{
+-	return 0;
+-}
+-
+-static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
+-						       const char *name)
+-{
+-	return 0;
+-}
+-
+ static inline int register_module_notifier(struct notifier_block *nb)
+ {
+ 	/* no events will happen anyway, so this can always succeed */
+@@ -831,13 +768,6 @@ static inline void set_module_sig_enforced(void)
+ {
+ }
+ 
+-/* Dereference module function descriptor */
+-static inline
+-void *dereference_module_function_descriptor(struct module *mod, void *ptr)
+-{
+-	return ptr;
+-}
+-
+ #endif /* CONFIG_MODULES */
+ 
+ #ifdef CONFIG_SYSFS
+@@ -899,7 +829,39 @@ int module_kallsyms_on_each_symbol(const char *modname,
+ 				   int (*fn)(void *, const char *,
+ 					     struct module *, unsigned long),
+ 				   void *data);
+-#else
++
++/* Dereference module function descriptor */
++void *dereference_module_function_descriptor(struct module *mod, void *ptr);
++
++/* For kallsyms to ask for address resolution.  namebuf should be at
++ * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
++ * found, otherwise NULL.
++ */
++const char *module_address_lookup(unsigned long addr,
++			    unsigned long *symbolsize,
++			    unsigned long *offset,
++			    char **modname, const unsigned char **modbuildid,
++			    char *namebuf);
++int lookup_module_symbol_name(unsigned long addr, char *symname);
++int lookup_module_symbol_attrs(unsigned long addr,
++			       unsigned long *size,
++			       unsigned long *offset,
++			       char *modname,
++			       char *name);
++
++/* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
++ * symnum out of range.
++ */
++int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
++			char *name, char *module_name, int *exported);
++
++/* Look for this name: can be of form module:name. */
++unsigned long module_kallsyms_lookup_name(const char *name);
++
++unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
++
++#else	/* CONFIG_MODULES && CONFIG_KALLSYMS */
++
+ static inline int module_kallsyms_on_each_symbol(const char *modname,
+ 						 int (*fn)(void *, const char *,
+ 						 struct module *, unsigned long),
+@@ -907,6 +869,57 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
+ {
+ 	return -EOPNOTSUPP;
+ }
++
++/* Dereference module function descriptor */
++static inline
++void *dereference_module_function_descriptor(struct module *mod, void *ptr)
++{
++	return ptr;
++}
++
++/* For kallsyms to ask for address resolution.  NULL means not found. */
++static inline const char *module_address_lookup(unsigned long addr,
++					  unsigned long *symbolsize,
++					  unsigned long *offset,
++					  char **modname,
++					  const unsigned char **modbuildid,
++					  char *namebuf)
++{
++	return NULL;
++}
++
++static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
++{
++	return -ERANGE;
++}
++
++static inline int lookup_module_symbol_attrs(unsigned long addr,
++					     unsigned long *size,
++					     unsigned long *offset,
++					     char *modname,
++					     char *name)
++{
++	return -ERANGE;
++}
++
++static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
++					char *type, char *name,
++					char *module_name, int *exported)
++{
++	return -ERANGE;
++}
++
++static inline unsigned long module_kallsyms_lookup_name(const char *name)
++{
++	return 0;
++}
++
++static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
++						       const char *name)
++{
++	return 0;
++}
++
+ #endif  /* CONFIG_MODULES && CONFIG_KALLSYMS */
+ 
+ #endif /* _LINUX_MODULE_H */
 -- 
-Will
+2.39.2
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
