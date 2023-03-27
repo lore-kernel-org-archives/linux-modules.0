@@ -2,144 +2,82 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03A56C7619A
-	for <linux-modules@archiver.kernel.org>; Mon, 27 Mar 2023 11:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4657DC6FD1D
+	for <linux-modules@archiver.kernel.org>; Mon, 27 Mar 2023 15:01:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjC0LoK (ORCPT
+        id S233125AbjC0PBl (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 27 Mar 2023 07:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        Mon, 27 Mar 2023 11:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232479AbjC0LoJ (ORCPT
+        with ESMTP id S232782AbjC0PBi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:44:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA02270E;
-        Mon, 27 Mar 2023 04:44:08 -0700 (PDT)
+        Mon, 27 Mar 2023 11:01:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E84D4483;
+        Mon, 27 Mar 2023 08:01:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8A54B80B7E;
-        Mon, 27 Mar 2023 11:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5985C433D2;
-        Mon, 27 Mar 2023 11:44:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679917445;
-        bh=39dMlcm9dz8DHNPorL7lH7wJe0iuw2BjZ6ty9Z48GHs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T9C2RVcQrn1x/Y1E4n4IcP/nwoRpfeMXmrftTche9bo5eSdefMUJypOw/ZI5srZiO
-         kfGlv+vns8AyOG0vJBQO71KL0WHdKh6HZNZaTmYMLsdgAipBj5WhmKVEPuQr32AW38
-         I63Cf09Qa/ZxWO8jCmVO1G53QVEDqPo8pbek+GYk=
-Date:   Mon, 27 Mar 2023 13:43:57 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
-Message-ID: <ZCGBfbZztfBpgIXf@kroah.com>
-References: <ZApf0iNOsSAUbhMz@bombadil.infradead.org>
- <ZArc0ib697JIwKou@kroah.com>
- <ZAuGE2ay3q0MT4Yi@bombadil.infradead.org>
- <CAMuHMdVZODAr77KSp3Yicoyjz=y8OqQB+z6zTLbxO1HMKoJMSA@mail.gmail.com>
- <ZB1p5zRp7rlGGuCP@kroah.com>
- <CAMuHMdVRXQupFEoU0EbSkBnS21QXGJQ4ZOYVy-Ntwjnw7er0nA@mail.gmail.com>
- <87h6uamdzw.fsf@esperi.org.uk>
- <ZB2zrHSzmi8FXABI@kroah.com>
- <ZB3mw4G8GdGwSP41@bombadil.infradead.org>
- <87tty6lbed.fsf@esperi.org.uk>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE6061303;
+        Mon, 27 Mar 2023 15:01:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FC4C4339E;
+        Mon, 27 Mar 2023 15:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679929296;
+        bh=dsoVd3bOkZ1/OXyt+ZP8t5ze5tdgtMoUGRvUuV6EukM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SHPAMbr7ynIEkq5oNWhug9hIbn4LJ0wlRJ6JgemhXBguNbBUPRRDeUdVcqazMWkWC
+         dk9d8QHtU103JjtWCjNwzZLwSakTbYVoyyZMPznbW2kNkDFCK+lV/7pj97e//rbFdB
+         KAcjBslm3nZ5BD8UOtzQgE313X4qN68GC8CjlYGQyBtCbPdHgVt918IpKotLwM74ca
+         Zn52WHW55dJ8f6+KX/RVedxJw0EkqlPTOL1x9rcwK7iDgIZU3Ce79U8tYgcWxannLX
+         MEStSzPPRTj0snsGEx0UFdc0kYSX/e0hXkgCvgkTLp0pcdTYZYHGlYYERA/m/ZwxGN
+         9en6lprtJ6hkQ==
+From:   Will Deacon <will@kernel.org>
+To:     mcgrof@kernel.org, Nick Alcock <nick.alcock@oracle.com>
+Cc:     catalin.marinas@arm.com, kernel-team@android.com,
+        Will Deacon <will@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-modules@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, asahi@lists.linux.dev,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 00/24] MODULE_LICENSE removals, second tranche
+Date:   Mon, 27 Mar 2023 16:01:15 +0100
+Message-Id: <167992609868.3834946.4831319626649638477.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230217141059.392471-1-nick.alcock@oracle.com>
+References: <20230217141059.392471-1-nick.alcock@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tty6lbed.fsf@esperi.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Mar 27, 2023 at 11:46:34AM +0100, Nick Alcock wrote:
-> On 24 Mar 2023, Luis Chamberlain spake thusly:
+On Fri, 17 Feb 2023 14:10:35 +0000, Nick Alcock wrote:
+> This series, based on current modules-next, is part of a treewide cleanup
+> suggested by Luis Chamberlain, to remove the LICENSE_MODULE usage from
+> files/objects that are not tristate.  Due to recent changes to kbuild, these
+> uses are now problematic.  See the commit logs for more details.
 > 
-> > On Fri, Mar 24, 2023 at 03:29:00PM +0100, Greg Kroah-Hartman wrote:
-> >> Please put back the license bits that you removed, as it is not a good
-> >> idea to remove that if the file does not have a SPDX entry at the very
-> >> least.
-> >
-> > Nick, I've just dropped your series.
+> (The commit log prefixes and Cc lists are automatically determined using
+> the script mentioned below.  I've eyeballed them, and they seem reasonable:
+> my apologies if they are not.)
 > 
-> Thanks, that's much easier than getting all those reverts in.
-> (Presumably the bits taken by other people can all stay.)
-> 
-> >                                      Please only re-submit only for
-> > files where the license is clear. The effort of clarifying licenses
-> > on files where one doesn't have an SPDX tag is welcomed but can take
-> > time and we'll need this anyway in the future to help later strive to
-> > see if we can automatically generate the MODULE_LICENSE() from the
-> > SPDX tags.
-> 
-> For now, I have an alternative that might be acceptable. I did a bit of
-> an audit and it's all a right mess (see below), with wild divergence
-> even when SPDX is present, GPL versus -only or GPL-2.0+ apparently
-> applied almost at random and some things being completely different (in
-> some cases they were both committed simultaneously and were inconsistent
-> from the moment the module was written). So many things are inconsistent
-> that kallmodsyms would call a lot of things modules that really aren't:
-> there is enough error that there probably be noticeable mistakes in
-> quite a high percentage of kernels.
+> [...]
 
-As you have found out, there is a difference that matters in the SPDX
-lines vs the MODULE_LICENSE lines when it comes to GPL vs GPLv2+ stuff.
-The SPDX lines are correct for the code itself, while the MODULE_LICENSE
-lines are correct from a "this is the license of this binary" point of
-view.
+Applied drivers/perf patch to will (for-next/perf), thanks!
 
-So don't get confused here, if you all can figure out a way to generate
-the MODULE_LICENSE() lines from SPDX, that would be great, but in my
-quick look I think it's going to be very difficult (think about how
-multiple files make up a single module binary...)
+[08/24] kbuild, drivers/perf: remove MODULE_LICENSE in non-modules
+        https://git.kernel.org/will/c/a64021d3726a
 
-good luck!
+Cheers,
+-- 
+Will
 
-> But... for our purposes, we don't actually *mind* if non-modules list
-> things like licenses inconsistently in two different places. Removing
-> MODULE_LICENSE was a means, not an end. What we're actually interested
-> in doing is removing .modinfo in things that can't possibly be modules,
-> and since a .modinfo in a guaranteed-non-module is at best entirely
-> useless I don't think anyone could reasonably be opposed to that end
-> goal (though they might reasonably be unhappy about all the churn
-> involved in getting there). They object to the removal of the visible
-> MODULE_LICENSE() argument text string, not to the useless compile-time
-> effect of a MODULE_LICENSE in a non-module.
-
-there are other things that create .modinfo lines, so I'm confused why
-you picked the license line to trigger all of this.
-
-> So how about, for the first three groups below (the groups where
-> MODULE_LICENSE and SPDX are inconsistent, or where a SPDX simply doesn't
-> exist), instead of removing the MODULE_LICENSE we replace it with an
-> identical call to a new macro named perhaps NONMODULE_LICENSE(), which
-> is defined in module.h as simply expanding to nothing, except possibly
-> emitting a compile-time error if it's ever used in a module? This more
-> clearly denotes what's going on, keeps the license string in the source
-> file on a nearly identical line (for whatever purpose it serves), drops
-> the spurious .modinfo that's causing trouble, and probably makes fewer
-> people unhappy?
-
-Again, no, why aren't you just stubbing out MODULE_LICENSE() in the
-build if it's not being built as a module like the other MODULE_*()
-macros are?  Why is the license so special here yet the device list or
-module authors not?
-
-Don't treat this macro as somehow special where authors have to remember
-to not use it (or to use it), while the other MODULE_* macros do not
-have the issue?
-
-That's my main objection here.  Don't get confused by the license stuff,
-that's secondary.
-
-thanks,
-
-greg k-h
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
