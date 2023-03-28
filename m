@@ -2,119 +2,118 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4932FC76196
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Mar 2023 06:16:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B579C76195
+	for <linux-modules@archiver.kernel.org>; Tue, 28 Mar 2023 08:23:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjC1GQL (ORCPT
+        id S230104AbjC1IXd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Mar 2023 02:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
+        Tue, 28 Mar 2023 04:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjC1GQJ (ORCPT
+        with ESMTP id S229459AbjC1IXc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Mar 2023 02:16:09 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B4930F0;
-        Mon, 27 Mar 2023 23:16:08 -0700 (PDT)
+        Tue, 28 Mar 2023 04:23:32 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EF744A2;
+        Tue, 28 Mar 2023 01:23:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jWHxcHGl2RwP2n+s+NBN1zECkQwgjOLaxOC18f4eWog=; b=UyqocMwwogZUsIzbdm8m7Lbf+D
-        sCq20hgJ2jdtRJ9jRy7Z0ZVKQbXQnB9pvkdLe+6CiEemTmNenKXIAQLOLgbSiSYPcbylHAzdDOA7z
-        WKRmsJrRZlRueJT00mB2YqAvcwnZszcPnm551TU2nnK8Z5Vgx3H70A6ceIFO9MTTGmukyf3fQXcpm
-        Scvb2cBjqaJm8MlRld4eYSWGo5d1kn5hzjQDrVYTbVcGq8bHlJqBYJxZemEDi7xUimAShNynlfDoK
-        pfb0bs6cB/d9tWo8lXmqQywRvqbvf9LqoNfZKgw44ycUu+zpSEhcvhTEAenhxEn4fc3HXwA05UBKX
-        ZEI0TNAA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ph2cl-00DH7i-0a;
-        Tue, 28 Mar 2023 06:16:03 +0000
-Date:   Mon, 27 Mar 2023 23:16:03 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org, dave@stgolabs.net,
-        fan.ni@samsung.com, vincent.fu@samsung.com,
-        a.manzanares@samsung.com, colin.i.king@gmail.com
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-Message-ID: <ZCKGI1LxktS7pKS9@bombadil.infradead.org>
-References: <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
- <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
- <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
- <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
- <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
- <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
- <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
- <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
- <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
- <e5c2183a-f62a-6ca9-eec6-a7fab7ce4c91@redhat.com>
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=v68PtqY53cBqGu08f6wYN/a5E1D7BK1+ERrIL89e9Js=; b=GbzzZs6uNlXrSFOYAe5eE8kg4X
+        PT3e/Xrq11Ey3IcSRBPJF1Gr+tuVeflaCKoReFgRrF3w3LyS8ig+UCcVGtOuz2O21ciwyFhuF0RVX
+        p53vHw9evnXen+EgEdwXqMqXSf1gM3U43TmDLkxOVf9lX8adKyF0AC4hDmqsKDm/YwaM6dHs4147+
+        OnOmpKb98HaowZkXQyj4XMxb8opZLCuQfVelgfALrq8k+tQapRW/EjenboHNmhLy21NHQkfbXbs/v
+        hMCbw2ORmnzAtwzyfwJlKGVjS7jiw9JKo5VdBWmxAQM48E2Tt6do/z2OZZUMp54Gsms7SM4YirbH0
+        7MUhS+mg==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ph4bz-000DfI-25; Tue, 28 Mar 2023 10:23:23 +0200
+Received: from [219.59.88.22] (helo=localhost.localdomain)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ph4by-000EJ3-3o; Tue, 28 Mar 2023 10:23:22 +0200
+Subject: Re: [PATCH bpf-next] kallsyms: move module-related functions under
+ correct configs
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Viktor Malik <vmalik@redhat.com>
+Cc:     bpf@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
+References: <20230327161251.1129511-1-vmalik@redhat.com>
+ <ZCHWtptOwPPtUe+u@bombadil.infradead.org>
+ <c076e249-705a-e1bb-c657-f80cd4f2145b@redhat.com>
+ <ZCHuU4Wui7Dwmdm2@bombadil.infradead.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <bfaefad6-692f-e687-ad55-05a43aa54883@iogearbox.net>
+Date:   Tue, 28 Mar 2023 10:23:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e5c2183a-f62a-6ca9-eec6-a7fab7ce4c91@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <ZCHuU4Wui7Dwmdm2@bombadil.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26857/Tue Mar 28 09:23:39 2023)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Mar 28, 2023 at 05:44:40AM +0200, David Hildenbrand wrote:
-> ... do you have an updated patch/branch that includes the feedback from
-> Linus so I can give it a churn tomorrow?
+On 3/27/23 9:28 PM, Luis Chamberlain wrote:
+> On Mon, Mar 27, 2023 at 08:20:56PM +0200, Viktor Malik wrote:
+>> On 3/27/23 19:47, Luis Chamberlain wrote:
+>>> On Mon, Mar 27, 2023 at 06:12:51PM +0200, Viktor Malik wrote:
+>>>> Functions for searching module kallsyms should have non-empty
+>>>> definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
+>>>> only CONFIG_MODULES check was used for many of these, which may have
+>>>> caused complilation errors on some configs.
+>>>>
+>>>> This patch moves all relevant functions under the correct configs.
+>>>>
+>>>> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>> Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
+>>>
+>>> Thanks Viktor!  Does this fix something from an existing commit? If so
+>>> which one?  The commit log should mention it.
+>>
+>> Ah, right, I forgot about that. The commit log is missing:
+>>
+>> Fixes: bd5314f8dd2d ("kallsyms, bpf: Move find_kallsyms_symbol_value out of internal header")
+>>
+>> I can post v2 but I'm also fine with maintainers applying the tag.
+> 
+> That patch went through the bpf tree so its fix can go throug that tree.
+> So up to Daniel if he wants a new patch.
 
-Yeah sure:
+Fixing up is fine with me. Viktor, which config combinations did you test for this
+patch and under which architectures?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230327-module-alloc-opts
+I suspect kbuild bot might still complain. For example, your patch moves
+dereference_module_function_descriptor() stub definition under !CONFIG_MODULES ||
+!CONFIG_KALLSYMS. Looking at ppc's dereference_module_function_descriptor()
+implementation (!CONFIG_PPC64_ELF_ABI_V2 case), it's build under CONFIG_MODULES,
+so you'll have two different implementations of the functions, the generic one
+then w/o __weak attribute.
 
-The commit log needs updateing to reflect the results I just collected:
+Also small nit, please fix the patch up wrt indentation to align with kernel coding
+style.
 
-With the alloc patch ("module: avoid allocation if module is already
-present and ready") I see 145 MiB in memory difference in comparison
-to its last patch, "module: extract patient module check into helper".
-So I think that's a clear keeper and should help large CPU count boots.
-
-The patch "module: add concurrency limiter" which puts the concurency
-delimiter on the kread only saves about 2 MiB with 100 stress-ng ops,
-which seems to be what I needed to reproduce your 400 CPU count original
-issue.
-
-The program used to reproduce is stress-ng with the new module option:
-
-echo 0 > /proc/sys/vm/oom_dump_tasks
-./stress-ng --module 100 --module-name xfs
-
-To see how much max memory I use, I just use:
-
-free -k -s 1 -c 40 | grep Mem | awk '{print $3}' > foo.log
-
-Run the test in another window, CTRL-C the test when above
-finishes after 40 seconds and then:
-
-sort -n -r foo.log  | head -1
-
-If you have xfs loaded already you probably wanna pick module just as big
-that you don't have loaded. You must have dependencies loaded already as
-it doesn't call modprobe, it just finit_module's the module.
-
-The last patch "modules/kmod: replace implementation with a sempahore"
-just takes Linus' simplification suggestion to replace kmod's solution.
-I tested it with:
-
-tools/testing/selftests/kmod/kmod.sh -t 0008
-
-This stress tests the kmod autoloading. Using time, the timing is
-similar, perhaps mildly slower, but I like the simplification. I'm still
-not happy with the "module: add concurrency limiter", specially it
-doesn't seem to really buy us much, 2 MiB seems like within noise. 
-But stress-ng clearly shows it is a possible source of issue as we
-grow the ops. So it may make sense to just use the idea to replace the
-delimiter for kmod for now, unless you see different results.
-
-The stress-ng module test can at least be used now to replicate insane setups
-at bootup.
-
-Let me know if you get other useful results.
-
-  Luis
+Thanks,
+Daniel
