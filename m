@@ -2,36 +2,38 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22646C6FD18
-	for <linux-modules@archiver.kernel.org>; Tue, 28 Mar 2023 17:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 607BCC76196
+	for <linux-modules@archiver.kernel.org>; Tue, 28 Mar 2023 17:56:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjC1RxH (ORCPT
+        id S229641AbjC1R4G (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Mar 2023 13:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        Tue, 28 Mar 2023 13:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjC1Rwv (ORCPT
+        with ESMTP id S229539AbjC1R4G (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Mar 2023 13:52:51 -0400
+        Tue, 28 Mar 2023 13:56:06 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C9D10ABE;
-        Tue, 28 Mar 2023 10:52:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87491BBA8;
+        Tue, 28 Mar 2023 10:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Wb/aIRtlfC2C3jG+RF0MsyFF/Fo2UynqeVSoO8JS/Z0=; b=BDH7Jj9zHHGqSkhzkUwbaaJTaW
-        zZy0Vq0AElAfWug2nRqiMnGVybq1k70DD/aaH6okrYWFkTIv58te1zfU4gbF8VBfWiWOxlQXLEQM8
-        tX8GW/0V0/YTCadI4GWiZ3y3NH59ZkeHPwCIEp5wYvVpI84TYiueVZZcCclEJ+Qevtd5/PZBxwNmN
-        MKI68BLlJBNkZxDJiWdTMuy/+QSHYMnHJm8vnEe3gQFrrwkhrxAjmrrLIBvicGUDRJk3uYNor1zJT
-        /jscjKxMdGcJzWdEOi68Vi+mwxb9uli63bpK9iF2Ygt/i08hqTWhLnn8LqDyU1MbfhdqFztuKM3yP
-        HQBq/oSQ==;
+        bh=mF44mTcQDxi32SHw5oS+hBomZQPJLxNczN7gzosvezE=; b=y0TFmUPknQKAfD9dwyLjsgdaED
+        XgLLqy5ZHDwzF4g/tlxv6M/rpKW6NB0Bx2ITjzBzuybM65sgwYr13eKwHVZVqfaRBhW4g+0QlHksX
+        RLfqpGVYMm3c/QiP+EwB5QFm41QTg2/ZaukbmG/ReovW0muWrP/1yEqzI3Ertj/O05CL7oDqIj3Gv
+        Cjq+1cbyHwksimH75ezvlCkjFoCIG94wLIKsK7A4lzQf9DwkaxZGnHq3zr2xWgHt7hxox7pErzp1S
+        ktUyn2DraEcxedanXjc8L6/36fJ9l4AiF+04u/Dsk4Zn7iYxWDa6egToAOkX5V3VBgyxQAHDz8bW6
+        enIB5zxw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1phDUO-00FNLk-0Q;
-        Tue, 28 Mar 2023 17:52:08 +0000
-Date:   Tue, 28 Mar 2023 10:52:08 -0700
+        id 1phDY0-00FNsr-1z;
+        Tue, 28 Mar 2023 17:55:52 +0000
+Date:   Tue, 28 Mar 2023 10:55:52 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>
 Cc:     Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
         linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
@@ -48,9 +50,8 @@ Cc:     Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
         Adam Manzanares <a.manzanares@samsung.com>,
         Kees Cook <keescook@chromium.org>
 Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-Message-ID: <ZCMpSJzXg/+JSHNY@bombadil.infradead.org>
-References: <20230308094106.227365-1-rppt@kernel.org>
- <20230308094106.227365-2-rppt@kernel.org>
+Message-ID: <ZCMqKKhHWISu8eTz@bombadil.infradead.org>
+References: <20230308094106.227365-2-rppt@kernel.org>
  <ZB1hS9lBabp1K7XN@dhcp22.suse.cz>
  <ZB6W1C88TU6CcjJH@kernel.org>
  <ZCGdf95RvXB1RivU@dhcp22.suse.cz>
@@ -59,47 +60,60 @@ References: <20230308094106.227365-1-rppt@kernel.org>
  <ZCMDmHSqOeCj1EIo@kernel.org>
  <CAB=NE6UTC4VkNM57GGJ3XkG_PWLkMfXv2e2=yQJhtM6Fc-uMsQ@mail.gmail.com>
  <ZCMlyUewrAjTBb5i@casper.infradead.org>
+ <ZCMpSJzXg/+JSHNY@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZCMlyUewrAjTBb5i@casper.infradead.org>
+In-Reply-To: <ZCMpSJzXg/+JSHNY@bombadil.infradead.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Mar 28, 2023 at 06:37:13PM +0100, Matthew Wilcox wrote:
-> On Tue, Mar 28, 2023 at 10:18:50AM -0700, Luis Chamberlain wrote:
-> > differences with eBPF programs is that modules *can* be rather large
-> > in size. What is the average size of modules? Well let's take a look:
+On Tue, Mar 28, 2023 at 10:52:08AM -0700, Luis Chamberlain wrote:
+> On Tue, Mar 28, 2023 at 06:37:13PM +0100, Matthew Wilcox wrote:
+> > On Tue, Mar 28, 2023 at 10:18:50AM -0700, Luis Chamberlain wrote:
+> > > differences with eBPF programs is that modules *can* be rather large
+> > > in size. What is the average size of modules? Well let's take a look:
+> > > 
+> > > mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+> > > -name \*.ko| wc -l
+> > > 9173
 > > 
-> > mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
-> > -name \*.ko| wc -l
-> > 9173
+> > ummm ... wc -c, surely?
 > 
-> ummm ... wc -c, surely?
-
-That's the number of allmodconfig modules found.
-
-mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2
-./arch/x86/crypto/twofish-x86_64.ko
-./arch/x86/crypto/serpent-avx2.ko
-mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2 |
-wc -l
-2
-mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2 |
-wc -c
-70
-
-wc -c would give a lot more. wc -l gives me the module count.
-
-> > mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
-> > -name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
-> > -$((9173-5)) | awk 'BEGIN {sum=0} {sum+=$1} END {print sum/NR/1024}'
-> > 160.54
+> That's the number of allmodconfig modules found.
 > 
-> ... which invalidates all of these.
+> mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2
+> ./arch/x86/crypto/twofish-x86_64.ko
+> ./arch/x86/crypto/serpent-avx2.ko
+> mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2 |
+> wc -l
+> 2
+> mcgrof@fulton ~/linux (git::sysctl-next)$ find ./ -name \*.ko| head -2 |
+> wc -c
+> 70
+> 
+> wc -c would give a lot more. wc -l gives me the module count.
+> 
+> > > mcgrof@bigtwin /mirror/code/mcgrof/linux-next (git::master)$ find ./
+> > > -name \*.ko|  xargs stat -c "%s - %n" | sort -n -k 1 -r | tail
+> > > -$((9173-5)) | awk 'BEGIN {sum=0} {sum+=$1} END {print sum/NR/1024}'
+> > > 160.54
+> > 
+> > ... which invalidates all of these.
+> 
+> Not sure ? But regardless the *.text* lookup is what we care for though
+> which was later.
 
-Not sure ? But regardless the *.text* lookup is what we care for though
-which was later.
+Which gets me thinking it'd be super nice if kmod tools supported
+querying this for us, then no fat finger could mess up the math:
+
+For all modules available:
+ * Average module size
+ * Average .text module size
+
+For only modules loaded:
+ * Average module size
+ * Average .text module size
 
   Luis
