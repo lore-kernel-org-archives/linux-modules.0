@@ -2,92 +2,104 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEF76C76196
-	for <linux-modules@archiver.kernel.org>; Wed, 29 Mar 2023 02:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45554C6FD18
+	for <linux-modules@archiver.kernel.org>; Wed, 29 Mar 2023 05:30:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjC2Cuv (ORCPT
+        id S229675AbjC2FaE (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 28 Mar 2023 22:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
+        Wed, 29 Mar 2023 01:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjC2Cuv (ORCPT
+        with ESMTP id S229531AbjC2FaD (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 28 Mar 2023 22:50:51 -0400
+        Wed, 29 Mar 2023 01:30:03 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F040185;
-        Tue, 28 Mar 2023 19:50:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E1F30FF;
+        Tue, 28 Mar 2023 22:30:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PhL1kNeyCbsXGb4SeDXDXhtAbmiDiUTVtDQLjcpbgL8=; b=ByPI8v16Mxms00CZNkxaxTLwIO
-        f3WKuIpyJBAPiSfJQFGAjhpqxPHsQ12g1R8wnCwJOekk1EGd2y3kb+9gORn5UVS6YCFmiFKUQmXMr
-        dp3/UmaROYiJWJvSYfKqhNvCFTa0ademCOy2+e1e03BaTkv4AO40044el+GHWYNXHB0TUTq8Dgm0m
-        wNEWR3TLq76HO4bryuNbo9D9nTvwU/8fOw40T7nRi/6V6nTBfhQ4RLZMb6EH2BmC8o+O+E+pz3rDc
-        e1YJ4YdU6zXgx+laFc5/4wVt4R/tiLdn2Ili/TwKa6idwFsMG2xSZgoyHffi5UyWJotJvVodjE4On
-        c+rDosew==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=KLOfytIcH4rEmrgbqWZrqXW6JlCkVbvgRIm3hytVuTY=; b=ROoiZKyehNzSjwkNI60IK7yKO7
+        fOShguZIG/ospXSSDk5eEl2XgDhWH+t3YLln9yz3Eu+U+U0PnmCImMTsaMdd2gqKmkEW97UnW2LzB
+        bXtZoyCMVOZFDnQVwJW/nNFXK31HjX08x/i16yhJH/PNXN4v8qlY5kNCny/oS4h4XLM4PplwVPd9S
+        wsOdcAB0JV/FWLrUYOn5xtbiBHV1n77NaYnB9+Mi/J+ypZMgFY3GQ9pa9c1Jm3VppJYgx2HIlxJic
+        kUXFPGW30t+0wt5vVEepKimb/zrDGgRwkJTUauNwO1EARsVUF20ln+ylwOC35REIYqDbAnk4toKD8
+        kNlGQwnA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1phLtc-00GP4j-1Q;
-        Wed, 29 Mar 2023 02:50:44 +0000
-Date:   Tue, 28 Mar 2023 19:50:44 -0700
+        id 1phONf-00Gfy0-2S;
+        Wed, 29 Mar 2023 05:29:55 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
-Message-ID: <ZCOnhIiU2w2+Txxm@bombadil.infradead.org>
-References: <CAMuHMdVZODAr77KSp3Yicoyjz=y8OqQB+z6zTLbxO1HMKoJMSA@mail.gmail.com>
- <ZB1p5zRp7rlGGuCP@kroah.com>
- <CAMuHMdVRXQupFEoU0EbSkBnS21QXGJQ4ZOYVy-Ntwjnw7er0nA@mail.gmail.com>
- <87h6uamdzw.fsf@esperi.org.uk>
- <ZB2zrHSzmi8FXABI@kroah.com>
- <ZB3mw4G8GdGwSP41@bombadil.infradead.org>
- <87tty6lbed.fsf@esperi.org.uk>
- <ZCGBfbZztfBpgIXf@kroah.com>
- <87355qnt27.fsf@esperi.org.uk>
- <87wn32m4sm.fsf@esperi.org.uk>
+To:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
+        dave.hansen@linux.intel.com, mcgrof@kernel.org
+Subject: [PATCH 0/7] module: avoid userspace pressure on unwanted allocations
+Date:   Tue, 28 Mar 2023 22:29:54 -0700
+Message-Id: <20230329052954.3974542-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wn32m4sm.fsf@esperi.org.uk>
+Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Nick, you *need* something we *want* but the form requires work.
-Removing the module license tag and all that other module boiler
-plate from modules which cannot possibly be modules is obviously
-welcomed. But there's a few issues, one of them is when we don't
-have SPDX license pegged on files. We *all* want SPDX files properly
-annotated on files. We *want* to automate the module license from
-the SPDX tag.
+This patch set addresses a fix to the vmap allocation presure issues which
+David Hildenbrand had reported last year in October. While at it,
+I've simplified the kmod concurrency delimiter using Linus' suggestion,
+and added debugfs stats to help us keep sane in doing analysis for memory
+pressure issues on the finit_module() side of things. That should *also*
+help do an empirical evaluation of module .text sizes *actually* present
+on systems, given userspace makes it a bit tricky to get that right.
 
-It sounds hard but let's go for the long shot of striving to automate
-the module license from the SPDX tags.
+All this would not have been possible without stress-ng and Colin Ian King's
+help to getting a modules ops in shape so to reproduce a situation only
+reported so far on a system with over 400 CPUs.
 
-Let's break this down into a few steps that also benefit your goals:
+I *think* the degugfs stats *should* probably be used to help identify
+areas where we perhaps need *more work* to try to mitigate vmalloc()
+space, as in the worst case we can end up using vmap space 3 times for
+a single module, two just as big as the module, and if you are enabling
+compression one with the compressed module size. That's significant memory
+pressure on vmalloc() / vmap() space.
 
-1) Fix all all code which use the module license tag but cannot possibly
-be modules to ensure they all have proper SPDX tags. This is a welcomed
-effort.
+If you'd like to give this a spin this is available on my branch based on
+modules-next 20230328-module-alloc-opts [2].
 
-2) Create an an association of existing module licenses from mod-objs object
-lists.
+[0] https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
+[1] https://github.com/ColinIanKing/stress-ng
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230328-module-alloc-opts
 
-3) Verify these make sense with us.
+Luis Chamberlain (7):
+  module: move finished_loading()
+  module: extract patient module check into helper
+  module: avoid allocation if module is already present and ready
+  sempahore: add a helper for a concurrency limiter
+  modules/kmod: replace implementation with a sempahore
+  debugfs: add debugfs_create_atomic64_t for atomic64_t
+  module: add debug stats to help identify memory pressure
 
-4) With that list we can then infer a module license from things which
-*can* be modules.
+ fs/debugfs/file.c         |  36 +++++++
+ include/linux/debugfs.h   |   2 +
+ include/linux/semaphore.h |   3 +
+ kernel/module/Kconfig     |  32 ++++++
+ kernel/module/Makefile    |   4 +
+ kernel/module/debug.c     |  16 +++
+ kernel/module/internal.h  |  35 +++++++
+ kernel/module/kmod.c      |  26 ++---
+ kernel/module/main.c      | 164 ++++++++++++++++++++-----------
+ kernel/module/stats.c     | 200 ++++++++++++++++++++++++++++++++++++++
+ kernel/module/tracking.c  |   7 +-
+ 11 files changed, 445 insertions(+), 80 deletions(-)
+ create mode 100644 kernel/module/debug.c
+ create mode 100644 kernel/module/stats.c
 
-The trick is today we use the module license *for* that inference,
-however, look at the tristate, and see if you can add a POSSIBLE_MODULE
-as I noted and hinted before. That get's you a module license
-replacement. The final nail to all this is use that to replace all
-module licenses and have this done automatically.
+-- 
+2.39.2
 
-  Luis
