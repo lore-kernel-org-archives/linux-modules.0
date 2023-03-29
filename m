@@ -2,32 +2,32 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE1BEC77B61
-	for <linux-modules@archiver.kernel.org>; Wed, 29 Mar 2023 05:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 191ACC74A5B
+	for <linux-modules@archiver.kernel.org>; Wed, 29 Mar 2023 05:32:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjC2FcI (ORCPT
+        id S229750AbjC2FcJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 29 Mar 2023 01:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        Wed, 29 Mar 2023 01:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjC2FcF (ORCPT
+        with ESMTP id S229759AbjC2FcF (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Wed, 29 Mar 2023 01:32:05 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536603C29;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEBB3C2B;
         Tue, 28 Mar 2023 22:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=9aCwO6lydcYrtyg5yPLXnIQyE+LoOte6FX6HU5bmimM=; b=wRqNpi2g15Ano4d7S1D1Se8pFe
-        rx5M2O1Oylzh0O3wIDwg5BZf5hYJHEZ4wPOlQT1a/cw9WGV4lbuzzH3WstC9eh95IXhDd/nqi7S+S
-        SFQFG/EjhJzTx7CJXXzo8zx4qEijzU2qxBpNccJBe709o2dplGwgg3D94qIg+svDQ1qh/h/Qv4HuW
-        VxbOuAJqab03K+uJZLBZZzHPknX+5nXLKzGD7VI9droyfDnQ8ZfZ5YS/sPGgUYNx6lCil+4rNyXfd
-        5PlNA67XBZ4kedjsm+pbkJ7idlMJ0AYK1mNpQyGKJNfsQhIm3llHEAfEAMvgImFfmCkuNtHVzGrJh
-        NWs6awpQ==;
+        bh=C7tEOVKbmd31kJKkSCr8L6PeUYpxvjj7kEhb9lxj2lU=; b=Hq7MpAhblc40y8k1Y4Pqo/enTW
+        SslWm7fO+exvvf3HZRxh+bgxhZOS3P1IYnAydKJ5ZTarr8GhRDhxNEnxrSNR8qTIPYRQkgU3YNnx+
+        +hKEQpyCrK+p5tnt4YfYVc53F88QARD2q7d7/0iy49zIQ53fg9qMpgODyjglcWGSsnuydP/xVL3Pf
+        FSVm+HQx1wkfASdfb4mN3vTxsgy2DNRu5unP+d8hu1QfAr3UlqH/JXn0cVkRXiLoYO4YS6swQky9l
+        OqFeYbHv1S5N2op7xH0OmscjuK1xIZLjsk8AFnOHnf/yFLpseFdNdJMXGHqpmE5FhbNXRa3cLgGxL
+        JBMH5C3A==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1phOPW-00GgRq-2i;
+        id 1phOPW-00GgRW-23;
         Wed, 29 Mar 2023 05:31:50 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     david@redhat.com, patches@lists.linux.dev,
@@ -40,9 +40,9 @@ Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
         peterz@infradead.org, song@kernel.org, rppt@kernel.org,
         willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
         dave.hansen@linux.intel.com, mcgrof@kernel.org
-Subject: [PATCH 6/7] debugfs: add debugfs_create_atomic64_t for atomic64_t
-Date:   Tue, 28 Mar 2023 22:31:48 -0700
-Message-Id: <20230329053149.3976378-7-mcgrof@kernel.org>
+Subject: [PATCH 2/7] module: extract patient module check into helper
+Date:   Tue, 28 Mar 2023 22:31:44 -0700
+Message-Id: <20230329053149.3976378-3-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230329053149.3976378-1-mcgrof@kernel.org>
 References: <20230329053149.3976378-1-mcgrof@kernel.org>
@@ -52,75 +52,118 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Sometimes you want to add debugfs entries for atomic counters which
-can be pretty large using atomic64_t. Add support for these.
+The patient module check inside add_unformed_module() is large
+enough as we need it. It is a bit hard to read too, so just
+move it to a helper and do the inverse checks first to help
+shift the code and make it easier to read. The new helper then
+is module_patient_check_exists().
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- fs/debugfs/file.c       | 36 ++++++++++++++++++++++++++++++++++++
- include/linux/debugfs.h |  2 ++
- 2 files changed, 38 insertions(+)
+ kernel/module/main.c | 71 +++++++++++++++++++++++++-------------------
+ 1 file changed, 40 insertions(+), 31 deletions(-)
 
-diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-index 1f971c880dde..76d923503861 100644
---- a/fs/debugfs/file.c
-+++ b/fs/debugfs/file.c
-@@ -780,6 +780,42 @@ void debugfs_create_atomic_t(const char *name, umode_t mode,
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index af58e63e5daf..77c2e7a60f2e 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2626,6 +2626,43 @@ static bool finished_loading(const char *name)
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(debugfs_create_atomic_t);
  
-+static int debugfs_atomic64_t_set(void *data, u64 val)
++/* Must be called with module_mutex held */
++static int module_patient_check_exists(const char *name)
 +{
-+	atomic64_set((atomic64_t *)data, val);
-+	return 0;
-+}
-+static int debugfs_atomic64_t_get(void *data, u64 *val)
-+{
-+	*val = atomic64_read((atomic64_t *)data);
-+	return 0;
-+}
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t, debugfs_atomic64_t_get,
-+			debugfs_atomic64_t_set, "%lld\n");
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t_ro, debugfs_atomic64_t_get, NULL,
-+			"%lld\n");
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t_wo, NULL, debugfs_atomic64_t_set,
-+			"%lld\n");
++	struct module *old;
++	int err = 0;
 +
-+/**
-+ * debugfs_create_atomic64_t - create a debugfs file that is used to read and
-+ * write an atomic64_t value
-+ * @name: a pointer to a string containing the name of the file to create.
-+ * @mode: the permission that the file should have
-+ * @parent: a pointer to the parent dentry for this file.  This should be a
-+ *          directory dentry if set.  If this parameter is %NULL, then the
-+ *          file will be created in the root of the debugfs filesystem.
-+ * @value: a pointer to the variable that the file should read to and write
-+ *         from.
-+ */
-+void debugfs_create_atomic64_t(const char *name, umode_t mode,
-+			     struct dentry *parent, atomic64_t *value)
-+{
-+	debugfs_create_mode_unsafe(name, mode, parent, value, &fops_atomic64_t,
-+				   &fops_atomic64_t_ro, &fops_atomic64_t_wo);
-+}
-+EXPORT_SYMBOL_GPL(debugfs_create_atomic64_t);
++	old = find_module_all(name, strlen(name), true);
++	if (old == NULL)
++		return 0;
 +
- ssize_t debugfs_read_file_bool(struct file *file, char __user *user_buf,
- 			       size_t count, loff_t *ppos)
++	if (old->state == MODULE_STATE_COMING
++	    || old->state == MODULE_STATE_UNFORMED) {
++		/* Wait in case it fails to load. */
++		mutex_unlock(&module_mutex);
++		err = wait_event_interruptible(module_wq,
++				       finished_loading(name));
++		if (err)
++			return err;
++
++		/* The module might have gone in the meantime. */
++		mutex_lock(&module_mutex);
++		old = find_module_all(name, strlen(name), true);
++	}
++
++	/*
++	 * We are here only when the same module was being loaded. Do
++	 * not try to load it again right now. It prevents long delays
++	 * caused by serialized module load failures. It might happen
++	 * when more devices of the same type trigger load of
++	 * a particular module.
++	 */
++	if (old && old->state == MODULE_STATE_LIVE)
++		return -EEXIST;
++	else
++		return -EBUSY;
++}
++
+ /*
+  * We try to place it in the list now to make sure it's unique before
+  * we dedicate too many resources.  In particular, temporary percpu
+@@ -2634,41 +2671,14 @@ static bool finished_loading(const char *name)
+ static int add_unformed_module(struct module *mod)
  {
-diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
-index ea2d919fd9c7..f5cc613a545e 100644
---- a/include/linux/debugfs.h
-+++ b/include/linux/debugfs.h
-@@ -136,6 +136,8 @@ void debugfs_create_size_t(const char *name, umode_t mode,
- 			   struct dentry *parent, size_t *value);
- void debugfs_create_atomic_t(const char *name, umode_t mode,
- 			     struct dentry *parent, atomic_t *value);
-+void debugfs_create_atomic64_t(const char *name, umode_t mode,
-+			       struct dentry *parent, atomic64_t *value);
- void debugfs_create_bool(const char *name, umode_t mode, struct dentry *parent,
- 			 bool *value);
- void debugfs_create_str(const char *name, umode_t mode,
+ 	int err;
+-	struct module *old;
+ 
+ 	mod->state = MODULE_STATE_UNFORMED;
+ 
+ 	mutex_lock(&module_mutex);
+-	old = find_module_all(mod->name, strlen(mod->name), true);
+-	if (old != NULL) {
+-		if (old->state == MODULE_STATE_COMING
+-		    || old->state == MODULE_STATE_UNFORMED) {
+-			/* Wait in case it fails to load. */
+-			mutex_unlock(&module_mutex);
+-			err = wait_event_interruptible(module_wq,
+-					       finished_loading(mod->name));
+-			if (err)
+-				goto out_unlocked;
+-
+-			/* The module might have gone in the meantime. */
+-			mutex_lock(&module_mutex);
+-			old = find_module_all(mod->name, strlen(mod->name),
+-					      true);
+-		}
+-
+-		/*
+-		 * We are here only when the same module was being loaded. Do
+-		 * not try to load it again right now. It prevents long delays
+-		 * caused by serialized module load failures. It might happen
+-		 * when more devices of the same type trigger load of
+-		 * a particular module.
+-		 */
+-		if (old && old->state == MODULE_STATE_LIVE)
+-			err = -EEXIST;
+-		else
+-			err = -EBUSY;
++	err = module_patient_check_exists(mod->name);
++	if (err)
+ 		goto out;
+-	}
++
+ 	mod_update_bounds(mod);
+ 	list_add_rcu(&mod->list, &modules);
+ 	mod_tree_insert(mod);
+@@ -2676,7 +2686,6 @@ static int add_unformed_module(struct module *mod)
+ 
+ out:
+ 	mutex_unlock(&module_mutex);
+-out_unlocked:
+ 	return err;
+ }
+ 
 -- 
 2.39.2
 
