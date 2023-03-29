@@ -2,224 +2,131 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 317DDC761A6
-	for <linux-modules@archiver.kernel.org>; Wed, 29 Mar 2023 13:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DEE6C761AF
+	for <linux-modules@archiver.kernel.org>; Wed, 29 Mar 2023 16:51:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjC2N6f (ORCPT
+        id S230421AbjC2QvT (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 29 Mar 2023 09:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        Wed, 29 Mar 2023 12:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjC2N6c (ORCPT
+        with ESMTP id S230395AbjC2QvS (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:58:32 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112EC449A
-        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 06:58:22 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.96.253]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N7iT4-1qUaHc07Jy-014gOO; Wed, 29 Mar 2023 15:58:14 +0200
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id 7D4673C1C5; Wed, 29 Mar 2023 15:58:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1680098292; bh=h7Nd2Mi6vc6PN+rCmD5vTezFDtRMSlime6jIJkm28Ek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YSgs+7vdb/oBIUDVh9D8d81uHd8lgqOIccfXnM5AufFvf3vH+1uAU3Uz4zhd4ylEU
-         SDVtE7mUlvslZk6xcXi88cemfMqROxZxvK1J4Ux8m388KCTDzEz+ehFA78bu3mv/Jr
-         JV8YK9MImYS8AtohKInTUAFt9zSsnBJSX1JsBfmI=
-Date:   Wed, 29 Mar 2023 15:58:12 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Nicolas Schier <n.schier@avm.de>
-Cc:     linux-modules@vger.kernel.org,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: Re: [PATCH v2 1/3] kmod: modprobe: Remove holders recursively
-Message-ID: <ZCRD9CadxfBDLe5t@fjasle.eu>
-References: <20230309-remove-holders-recursively-v2-0-8a8120269cc1@avm.de>
- <20230309-remove-holders-recursively-v2-1-8a8120269cc1@avm.de>
+        Wed, 29 Mar 2023 12:51:18 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C218658D
+        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 09:51:00 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id ek18so65957174edb.6
+        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 09:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1680108658; x=1682700658;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fuabhBI/cJhvDusEUPo+YOaR3W7tGSIZ44NN+9mu0w0=;
+        b=WPU7CQZXsHT2W6o+O27Wpj5VLxahEGVYuFGJ09lWVVUb6Uog7j2W3oCfdskI6i1Ubk
+         gOKt3sOlvhKigmmF1pAoCh6e/zApTuFMSDe/1Ogb06wgZ5eTbVWDjmqb/YOcqB8hVtud
+         n9GOwJeinQ3x7aNVLHZ7ZSgZ/qGs4xL/xImVo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680108658; x=1682700658;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fuabhBI/cJhvDusEUPo+YOaR3W7tGSIZ44NN+9mu0w0=;
+        b=rOWauXWUhn3MpAYkXbJ5CjQf8I59xwauXsFKaP9jDaHTMbpXT8YpceoPRbzXi5hQfp
+         mmXN/rsJsw1rRzr1qx6xkaHNDMHqRDbZ7BV2s6ZoSI2h0Ui6f1IRZN3de/OST9iGg6Nm
+         XqFZogQZ86ZZNsmtrqtOwqZIGSVgS/5pCfHxyL0PjCZOiKw7mRnFnCBVQkBkQAbIWZEY
+         H3iq0gGV1KILTxJ3jAT//fpq21TqtmRWRCsB9g9XuMsk9tNLYC6t4Tnb1IhLFu0A4FLF
+         vf+3REQp+I//i3SIijRgVQmqw/Vz6mvczGTIlWrhd/9JrlAmGh5QXquI1Y6f15xow0dk
+         ji3Q==
+X-Gm-Message-State: AAQBX9eqOeshoXPQ1ECPAU0u26cnLOBL9wISlwJKEtR7ZSYHnVlqMo/E
+        v6pXVfM9JVAbXuCGA7J2jVCr3Fnc5/a6VGD8Sm0qgA==
+X-Google-Smtp-Source: AKy350YbzQhpJUj5JHsGh+IkYTKPHXH2Ui85xNApYzKbYV3ySJVH07qjdL4Li6WtYXJEw/kkg3LRjA==
+X-Received: by 2002:a05:6402:34c7:b0:500:2a9d:1870 with SMTP id w7-20020a05640234c700b005002a9d1870mr3235403edc.13.1680108658185;
+        Wed, 29 Mar 2023 09:50:58 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id m1-20020a50c181000000b005024faae65esm2287023edf.10.2023.03.29.09.50.56
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 09:50:56 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id t10so65790896edd.12
+        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 09:50:56 -0700 (PDT)
+X-Received: by 2002:a17:906:eec7:b0:93e:186f:ea0d with SMTP id
+ wu7-20020a170906eec700b0093e186fea0dmr9808123ejb.15.1680108655974; Wed, 29
+ Mar 2023 09:50:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309-remove-holders-recursively-v2-1-8a8120269cc1@avm.de>
-X-Provags-ID: V03:K1:CwmgQe9M5Kh/ikO5R7mF/92OQvWvEbPpmZ6uAh+bUYoSb/3QHTN
- tsTXdX3jekRVIFLOgDiPG+wkeFxOIlPq2gpE/aC0H1NwtglvCmn6Ru+2JFYwl0qQdi8/WDk
- FUFi4XoOycmhQfsvG9FG2v9amdTcFpXah557DL2wQaMydOBbsshiM8YC4bni4TB7uk/xFFJ
- ftrjDF1553i0Stt8VL5DA==
-UI-OutboundReport: notjunk:1;M01:P0:tVG6bljqQlk=;UGYoGwLO2r+rMJb6XL8y8lXtftc
- +Gh8uUs2QIoSN1f/iX2S3VvutwukJICBg2Fn37nSxO/3r7u26Cc9bniJ6Ow19LF04gUF0TYjH
- FHA5e/BQRGI0ayXpuKgLQChDn22Ey54qxAdoK65dnbQ+6ROu4IRox0GiPvgBKDjJBQUFj/bZY
- G8T4Jfi51lYSbNA03sx4gilYJzHBfuR8zMhoRhFEB8nm9TlpCvHU84qoK+iIqQZ9UYKYrgNom
- pbvf5SVdLLWRum7UbKovq8m3xd1OegwQAa4UILMxlLwzI2W0/EoUI+e6oXG5cDqOpIWX0WBat
- s3G6SuD9/fZ5wYyBw0ZJ1yY6I9vtAHvjB8NCkGEUuj+6S6auKx+Aj9fDxMGLOSTMtHow0aJ+e
- YI2HmoXXOO1QKRXRFbVssLwQpnWlOCF7QzxNX/NKbRJ0AmNm42yYFMxkAhbIgvJgTG3a2GBWH
- TmcnMPUKAEhOR580nfFODaFZ4ZsCZk9ZlDppu8Dh9cEAYk/b5IgcQDqUu/JH2Cx0zYMci6QVl
- E/NvhNQVP2ts48DAII8yFEiiYQgLjOmsqsnGNoMZEDx7J0qTtq56nJ0UbgB4ZpwjS3eFiu82B
- L8hB5340jwggWbro1hU9qUODLyrt/eXqdHrUl9Lf5Kg1aMT8M8B4csJu+dmLWGns0FN6F8P1j
- yjGpRFgzbzqEAzVp9HTp4xqMHovr1p9qHBrr0WY/yQ==
+References: <20230329053149.3976378-1-mcgrof@kernel.org> <20230329053149.3976378-5-mcgrof@kernel.org>
+ <20230329072112.GG4253@hirez.programming.kicks-ass.net> <ZCPuFLDgU5fBFtug@bombadil.infradead.org>
+ <20230329091935.GP4253@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230329091935.GP4253@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 29 Mar 2023 09:50:39 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whF6Ta_KcJP2eC78+Mstv+vAku8ATRMbv98sf9VhdvySQ@mail.gmail.com>
+Message-ID: <CAHk-=whF6Ta_KcJP2eC78+Mstv+vAku8ATRMbv98sf9VhdvySQ@mail.gmail.com>
+Subject: Re: [PATCH 4/7] sempahore: add a helper for a concurrency limiter
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, david@redhat.com,
+        patches@lists.linux.dev, linux-modules@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        song@kernel.org, rppt@kernel.org, willy@infradead.org,
+        vbabka@suse.cz, mhocko@suse.com, dave.hansen@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Mar 29, 2023 at 03:51:35PM +0200 Nicolas Schier wrote:
-> Remove holders recursively when removal of module holders is requested.
-> 
-> Extend commit 42b32d30c38e ("modprobe: Fix holders removal") by removing
-> also indirect holders if --remove-holders is set.  For a simple module
-> dependency chain like
-> 
->   module3 depends on module2
->   module2 depends on module1
-> 
-> 'modprobe -r --remove-holders module1' will remove module3, module2 and
-> module1 in correct order:
-> 
->   $ modprobe -r --remove-holders module1 --verbose
->   rmmod module3
->   rmmod module2
->   rmmod module1
-> 
-> (Actually, it will do the same when specifying module2 or module3 for
-> removal instead of module1.)
-> 
-> As a side-effect, 'modprobe -r module3' (w/o --remove-holders) will also
-> remove all three modules from the example above, as after removal of
-> module3, module2 does not have any holders and the same holds for
-> module1 after removal of module2:
-> 
->   $ modprobe -r module3 --verbose
->   rmmod module3
->   rmmod module2
->   rmmod module1
-> 
-> Without recursive evaluation of holders, modprobe leaves module1 loaded.
-> 
-> Unfortunately, '--dry-run --remove-holders' breaks with indirect
-> dependencies.
+On Wed, Mar 29, 2023 at 2:19=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> Arguably DEFINE_SEMAPHORE() should have the argument, as binary
+> semaphores are a special case, but then we gotta go and fix up all
+> users.
 
-Ups.  This is not true anymore, I forgot to remove this sentence from the
-commit message.
+Using semaphores for just pure mutual exclusion used to be *the* most
+common use of it, which is why we didn't have an argument.
 
-Kind regards,
-Nicolas
+Then we got the mutexes, and now semaphores are almost entirely a legacy th=
+ing.
 
+I think we should just make DEFINE_SEMAPHORE() take the number, and
+people who want a mutex should either put in the "1", or they should
+just use a mutex.
 
-> 
-> Signed-off-by: Nicolas Schier <n.schier@avm.de>
-> ---
-> I am a bit unhappy about the introduction of the 'recursive' parameter
-> to rmmod_do_modlist() as it always holds the same value as
-> stop_on_errors; is re-using (and renaming) possibly a better option?
-> 
-> modprobe --remove --remove-holders --dry-run now ignores current
-> refcounts of loaded modules when simulating removal of holders.
-> 
-> Changes in v2:
->   * Handle modules that have just been removed, gently
->   * Fix --dry-run by ignoring module refcounts (_only_ for --dry-run)
->   * Add missing kmod_module_unref_list() calls
-> ---
->  tools/modprobe.c | 44 +++++++++++++++++++++++++++++++++++---------
->  1 file changed, 35 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/modprobe.c b/tools/modprobe.c
-> index 3b7897c..a705f88 100644
-> --- a/tools/modprobe.c
-> +++ b/tools/modprobe.c
-> @@ -390,13 +390,27 @@ static int rmmod_do_remove_module(struct kmod_module *mod)
->  static int rmmod_do_module(struct kmod_module *mod, int flags);
->  
->  /* Remove modules in reverse order */
-> -static int rmmod_do_modlist(struct kmod_list *list, bool stop_on_errors)
-> +static int rmmod_do_modlist(struct kmod_list *list, bool stop_on_errors,
-> +			    bool recursive)
->  {
->  	struct kmod_list *l;
->  
->  	kmod_list_foreach_reverse(l, list) {
->  		struct kmod_module *m = kmod_module_get_module(l);
-> -		int r = rmmod_do_module(m, RMMOD_FLAG_IGNORE_BUILTIN);
-> +		int r = 0;
-> +
-> +		if (recursive && kmod_module_get_initstate(m) >= 0) {
-> +			struct kmod_list *holders = kmod_module_get_holders(m);
-> +
-> +			r = rmmod_do_modlist(holders, stop_on_errors,
-> +					     recursive);
-> +
-> +			kmod_module_unref_list(holders);
-> +		}
-> +
-> +		if (!r)
-> +			r = rmmod_do_module(m, RMMOD_FLAG_IGNORE_BUILTIN);
-> +
->  		kmod_module_unref(m);
->  
->  		if (r < 0 && stop_on_errors)
-> @@ -448,15 +462,17 @@ static int rmmod_do_module(struct kmod_module *mod, int flags)
->  	}
->  
->  	/* 1. @mod's post-softdeps in reverse order */
-> -	rmmod_do_modlist(post, false);
-> +	rmmod_do_modlist(post, false, false);
->  
->  	/* 2. Other modules holding @mod */
->  	if (flags & RMMOD_FLAG_REMOVE_HOLDERS) {
->  		struct kmod_list *holders = kmod_module_get_holders(mod);
->  
-> -		err = rmmod_do_modlist(holders, true);
-> +		err = rmmod_do_modlist(holders, true, true);
->  		if (err < 0)
->  			goto error;
-> +
-> +		kmod_module_unref_list(holders);
->  	}
->  
->  	/* 3. @mod itself, but check for refcnt first */
-> @@ -472,9 +488,16 @@ static int rmmod_do_module(struct kmod_module *mod, int flags)
->  		}
->  	}
->  
-> -	if (!cmd)
-> -		err = rmmod_do_remove_module(mod);
-> -	else
-> +	if (!cmd) {
-> +		int state = kmod_module_get_initstate(mod);
-> +
-> +		if (state < 0) {
-> +			/* Module was removed during recursive holder removal */
-> +			err = 0;
-> +		} else {
-> +			err = rmmod_do_remove_module(mod);
-> +		}
-> +	} else
->  		err = command_do(mod, "remove", cmd, NULL);
->  
->  	if (err < 0)
-> @@ -488,14 +511,14 @@ static int rmmod_do_module(struct kmod_module *mod, int flags)
->  		kmod_list_foreach(itr, deps) {
->  			struct kmod_module *dep = kmod_module_get_module(itr);
->  			if (kmod_module_get_refcnt(dep) == 0)
-> -				rmmod_do_remove_module(dep);
-> +				rmmod_do_module(dep, flags);
->  			kmod_module_unref(dep);
->  		}
->  		kmod_module_unref_list(deps);
->  	}
->  
->  	/* 5. @mod's pre-softdeps in reverse order: errors are non-fatal */
-> -	rmmod_do_modlist(pre, false);
-> +	rmmod_do_modlist(pre, false, false);
->  
->  error:
->  	kmod_module_unref_list(pre);
-> @@ -975,6 +998,9 @@ static int do_modprobe(int argc, char **orig_argv)
->  	     fstat(fileno(stderr), &stat_buf)))
->  		use_syslog = 1;
->  
-> +	if (remove_holders && dry_run)
-> +		ignore_loaded = 1;
-> +
->  	log_open(use_syslog);
->  
->  	if (!do_show_config) {
-> 
-> -- 
-> 2.40.0
+> /me git-greps a little.. Hmm, not too bad.
+>
+> How's this?
+
+I'd actually prefer to not have that DEFINE_BINARY_SEMAPHORE() at all.
+It really shouldn't exist in this day and age.
+
+It's not even less typing, ie
+
+    static DEFINE_SEMAPHORE(efivars_lock, 1);
+
+is actually shorter than
+
+    static DEFINE_BINARY_SEMAPHORE(efivars_lock);
+
+And what you actually *want* is
+
+    static DEFINE_MUTEX(efivars_lock);
+
+and converting the up/down to mutex_unlock/mutex_lock.
+
+So let's just make it clear that the only reason to use semaphores
+these days is for counting semaphores, and just make
+DEFINE_SEMAPHORE() take the number.
+
+Strangely, sema_init() already does that, but I guess that's because
+some people really *do* use semaphores for concurrency control (ie I
+see things like
+
+        sema_init(&dc->in_flight, 64);
+
+which is clearly using a semaphore in that very traditional way).
+
+So ack on your patch, but don't bother with DEFINE_BINARY_SEMAPHORE().
+
+               Linus
