@@ -2,294 +2,266 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E935C74A5B
-	for <linux-modules@archiver.kernel.org>; Thu, 30 Mar 2023 04:44:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36AE3C761A6
+	for <linux-modules@archiver.kernel.org>; Thu, 30 Mar 2023 10:21:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjC3Eo1 (ORCPT
+        id S231289AbjC3KVI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 30 Mar 2023 00:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
+        Thu, 30 Mar 2023 06:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjC3EoZ (ORCPT
+        with ESMTP id S231304AbjC3KVG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 30 Mar 2023 00:44:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596965B92
-        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 21:43:13 -0700 (PDT)
+        Thu, 30 Mar 2023 06:21:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8614772A7
+        for <linux-modules@vger.kernel.org>; Thu, 30 Mar 2023 03:20:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680151338;
+        s=mimecast20190719; t=1680171616;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LC32CzxNEi0UHq3EF126Vl3LWEH+Ja2D8JcygdUTSF0=;
-        b=d/g9sddz7nc65Ob7oUTTahBVZhVmw77rTwsOH+EhcPD5ig3ScjoZ7jfxA+zSkiwgAp8t6F
-        eFN9+Vd5sGpkbZk7LyX2NE8o775UDBGVTQaqulsuxqFfycoQYR9njJz43zHIX2acojEIBZ
-        7rYmPRzSoyN4r3HdCZvEz6SH8wji/Rg=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-117-vX9d9us9M3u4S3FDUk-bWQ-1; Thu, 30 Mar 2023 00:42:16 -0400
-X-MC-Unique: vX9d9us9M3u4S3FDUk-bWQ-1
-Received: by mail-pj1-f72.google.com with SMTP id e8-20020a17090a118800b0023d35ae431eso5367888pja.8
-        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 21:42:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680151335;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LC32CzxNEi0UHq3EF126Vl3LWEH+Ja2D8JcygdUTSF0=;
-        b=4XiKDhxd8Rv22WMWd8yfms3MNoPVZzenSDSuuGfMfkWZoKgBqwI6UEH1LFjK8HMHsE
-         hUSnNyXzuCnJV8fslE4/FMG4Ctvs86OfN8uUxcxTI6SsA5n111emZNfket7YhKwwxd1b
-         HuUpJNDzQumtxDlWlWwo7eM+CcqpDiwpkXUvQDcfgk9/U8SG8+UIULYkYE0eTI2DtIn+
-         aQMcylPjiTwydMuRGpLeISdqTuDCnkwMmfQBKgKVjdOiRzp7iX27yTSHuG7Ku6ZYIb/m
-         /b+wL5sfN9ASq0tYuQlv7QwDBUaD3keGc37Jxpbq3ZAUNBPhAP9Jox915/srziXqC5g5
-         vvxw==
-X-Gm-Message-State: AAQBX9cjnYoWkN7TU5uW8BAF4ZUNi+VlawNGWraGtYJeOjhqamYag58a
-        ADziBrA/En6Bfnu4fjsaTqXhkG3+aL44z1KZPvgxlseEfGHelBumzPhdvZJe4vB3d0sKb1wBES3
-        zXlUTn6tq4p1s9HJfaXSySHITiw==
-X-Received: by 2002:aa7:9f82:0:b0:626:658:c998 with SMTP id z2-20020aa79f82000000b006260658c998mr19255208pfr.10.1680151335571;
-        Wed, 29 Mar 2023 21:42:15 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZbaXZJAxR6+SahDxpVIV0UnbkptaPuaQZqyLAa7ksLapMGp18XFWxKyQYYcjHE5Vmnrjnzsg==
-X-Received: by 2002:aa7:9f82:0:b0:626:658:c998 with SMTP id z2-20020aa79f82000000b006260658c998mr19255189pfr.10.1680151335148;
-        Wed, 29 Mar 2023 21:42:15 -0700 (PDT)
-Received: from [192.168.35.160] ([64.114.255.114])
-        by smtp.gmail.com with ESMTPSA id x5-20020aa784c5000000b006262520ac59sm23591164pfn.127.2023.03.29.21.42.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 21:42:14 -0700 (PDT)
-Message-ID: <4fa825ac-707d-ad38-0af7-937a2c1e75b7@redhat.com>
-Date:   Thu, 30 Mar 2023 06:42:14 +0200
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Pfge3RhdSXeiKxAh+OaaSFWWizy9sFj72RKo7NiLqdc=;
+        b=RtPyXkvX4pGnNhnnH7ibhgol2KQjFBqnuD9723Kwh5+pX86B7Q3b5RapaosrUHzrdO+IRn
+        dzMiynbwr+VBmA2PLDUMGRPohyjsuggDZsx/AeUgWTI4xgWmCn1iQ1WHsLEaRL0ns8Exrc
+        QkmufK9/DzH+qlx1ULL/uwf3dRv4+kE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-546-JqmxZjgbOpW7pxXpy1e5Ww-1; Thu, 30 Mar 2023 06:20:13 -0400
+X-MC-Unique: JqmxZjgbOpW7pxXpy1e5Ww-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83B0A886461;
+        Thu, 30 Mar 2023 10:20:12 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.45.225.103])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1BDD12166B34;
+        Thu, 30 Mar 2023 10:20:07 +0000 (UTC)
+From:   Viktor Malik <vmalik@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Viktor Malik <vmalik@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
+Subject: [PATCH bpf-next v2] kallsyms: move module-related functions under correct configs
+Date:   Thu, 30 Mar 2023 12:20:01 +0200
+Message-Id: <20230330102001.2183693-1-vmalik@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        christophe.leroy@csgroup.eu, song@kernel.org,
-        torvalds@linux-foundation.org, dave@stgolabs.net,
-        fan.ni@samsung.com, vincent.fu@samsung.com,
-        a.manzanares@samsung.com, colin.i.king@gmail.com
-References: <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
- <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
- <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
- <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
- <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
- <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
- <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
- <e5c2183a-f62a-6ca9-eec6-a7fab7ce4c91@redhat.com>
- <ZCKGI1LxktS7pKS9@bombadil.infradead.org>
- <5aceccdf-d268-7872-abb5-c14e9aa8b7b7@redhat.com>
- <ZCPNONX3O3bp2Om1@bombadil.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
- allocations
-In-Reply-To: <ZCPNONX3O3bp2Om1@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 29.03.23 07:31, Luis Chamberlain wrote:
-> On Tue, Mar 28, 2023 at 11:02:49PM +0200, David Hildenbrand wrote:
->>
->> So we're a bit faster (0.2 -- 0.7s) than the original version without the
->> rcu patch (~6s).
-> 
-> Groovy.
+Functions for searching module kallsyms should have non-empty
+definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
+only CONFIG_MODULES check was used for many of these, which may have
+caused complilation errors on some configs.
 
-Just to clarify, it was up to 0.7s faster (I phrased it in a confusing way).
+This patch moves all relevant functions under the correct configs.
 
-> 
->>> The commit log needs updateing to reflect the results I just collected:
->>>
->>> With the alloc patch ("module: avoid allocation if module is already
->>> present and ready") I see 145 MiB in memory difference in comparison
->>> to its last patch, "module: extract patient module check into helper".
->>> So I think that's a clear keeper and should help large CPU count boots.
->>>
->>> The patch "module: add concurrency limiter" which puts the concurency
->>> delimiter on the kread only saves about 2 MiB with 100 stress-ng ops,
->>> which seems to be what I needed to reproduce your 400 CPU count original
->>> issue.
->>>
->>> The program used to reproduce is stress-ng with the new module option:
->>>
->>> echo 0 > /proc/sys/vm/oom_dump_tasks
->>> ./stress-ng --module 100 --module-name xfs
->>
->> Above command fills for me with nfs (but also ext4) the kernel log with:
->>
->> ...
->> [  883.036035] nfs: Unknown symbol xdr_reserve_space (err -2)
->> [  883.042221] nfs: Unknown symbol rpc_init_wait_queue (err -2)
->> [  883.048549] nfs: Unknown symbol put_rpccred (err -2)
->> [  883.054104] nfs: Unknown symbol __fscache_invalidate (err -2)
->> [  883.060540] nfs: Unknown symbol __fscache_use_cookie (err -2)
->> [  883.066969] nfs: Unknown symbol rpc_clnt_xprt_switch_has_addr (err -2)
->> [  883.074264] nfs: Unknown symbol __fscache_begin_write_operation (err -2)
->> [  883.081743] nfs: Unknown symbol nlmclnt_init (err -2)
->> [  883.087396] nfs: Unknown symbol nlmclnt_done (err -2)
->> [  883.093074] nfs: Unknown symbol nfs_debug (err -2)
->> [  883.098429] nfs: Unknown symbol rpc_wait_for_completion_task (err -2)
->> [  883.105640] nfs: Unknown symbol __fscache_acquire_cookie (err -2)
->> [  883.163764] nfs: Unknown symbol rpc_put_task (err -2)
->> [  883.169461] nfs: Unknown symbol __fscache_acquire_volume (err -2)
->> [  883.176297] nfs: Unknown symbol rpc_proc_register (err -2)
->> [  883.182430] nfs: Unknown symbol rpc_shutdown_client (err -2)
->> [  883.188765] nfs: Unknown symbol rpc_clnt_show_stats (err -2)
->> [  883.195097] nfs: Unknown symbol __fscache_begin_read_operation (err -2)
->> ...
->>
->>
->> I do *not* get these errors on manual morprobe/rmmod. BUG in concurrent
->> handling or just side-effect of the concurrent loading?
-> 
-> It is just because modprobe deals with module dependencies, stress-ng
-> modprobe doesn't, it just calls finit_module() and expects dependencies
-> to be loaded first.
+Fixes: bd5314f8dd2d ("kallsyms, bpf: Move find_kallsyms_symbol_value out of internal header")
+Signed-off-by: Viktor Malik <vmalik@redhat.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
+---
+v2:
+- keep dereference_module_function_descriptor() in original place to
+  avoid compilation errors
+- fix indentation
+- add the "Fixes" tag
 
-Oh, right. That makes sense.
+ include/linux/module.h | 135 ++++++++++++++++++++++-------------------
+ 1 file changed, 74 insertions(+), 61 deletions(-)
 
-> 
->>> To see how much max memory I use, I just use:
->>>
->>> free -k -s 1 -c 40 | grep Mem | awk '{print $3}' > foo.log
->>>
->>> Run the test in another window, CTRL-C the test when above
->>> finishes after 40 seconds and then:
->>>
->>> sort -n -r foo.log  | head -1
->>
->> [root@lenovo-sr950-01 fs]# sort -n -r foo.log  | head -1
->> 14254024
->> [root@lenovo-sr950-01 fs]# sort -n -r foo.log  | tail -1
->> 12862528
->>
->> So 1391496 (KiB I assume, so 1.3 GiB !?)
-> 
-> That is sadly correct.
-> 
->> difference compared to before the
->> test (I first start capturing and then run stress-ng).
-> 
-> That's a good chunk :-D
-> 
-> On a recent thread I do a full analysis of average module sizes [0], you
-> can use that to also get an average size estimate of your currently
-> loaded modules. Do a bit of math and that could give you the average
-> memory pressure on real vmap allocations. For a synthentic test as with
-> stress-ng modules we'd be doing twice the memory for a success load, and
-> only one time allocation due to kread for a failed allocation, since we
-> always allocate memory even for bogus modules on the kread side.
-> 
-> My xfs.ko is 42M on my test guest system, with 100 concurrent threads
-> doing two allocations each that puts the expected vmap allocation at
-> around:
-> 
-> 42*2*100
-> 8400
-> 8400/1024
-> 8.20312500000000000000
-> 
-> 8.2 GiB
-> 
-> So on the worst case that's what we'd see. Since I saw seeing the
-> patches helped overall around 145 MiB in difference let's see what
-> that means. Let me re-test:
-> 
-> Idle memory: (note free -k uses kibibytes, KiB.
-> 
-> root@kmod ~ # free -k -s 1 -c 3 | grep Mem | awk '{print $3}' | sort -n -r  | head -1
-> 416452
-> 
-> So while idle, the system is using up 416452 KiB, so 406 MiB.
-> 
-> While running stress-ng with 100 module ops
-> 
-> free -k -s 1 -c 40 | grep Mem | awk '{print $3}' > 2023-03-28-kmodsem-stress-ng-v1.txt
-> echo 0 > /proc/sys/vm/oom_dump_tasks
-> ./stress-ng --module 100 --module-name xfs
-> root@kmod ~ # sort -n -r 2023-03-28-kmodsem-stress-ng-v1.txt | head -1
-> 4886492
-> 
-> 4886492/1024
-> 4771.96484375000000000000
-> 4886492/1024/1024
-> 4.66012191772460937500
-> 
-> So during the stress test we see memory highest usage was about
-> 4771.96 MiB or ~4.66 GiB.
-> 
-> What's the difference between idle and after the stress test:
-> 
-> 4886492 - 416452
-> 4470040
-> 4470040/1024
-> 4365.27343750000000000000
-> 4470040/1024/1024
-> 4.26296234130859375000
-> 
-> So about 4365.27 MiB or 4.26 GiB.
-> 
-> Now, the upper limit for the test should have been a delta of 8.2 GiB
-> and we get about 4.26, so it means we're rejecting more than half of
-> the requests. Why half not just half? I only see 40 successful loads
-> of XFS during a 40 second window:
-> 
->    dmesg -c > /dev/null
->    # run tests
->    dmesg -c | grep XFS | wc -l
-> 
-> At 100 ops all running finit_module for 40 seconds those successful
-> loads only should have consumed about 40 * 2 * size of XFS (42 MiB):
-> 3360 MiB or 3.28 GiB. But at any point in time only one module could
-> be loaded at a time, so in the *worst* consumption point a XFS in this
-> test should only be consuming 2*size_of_XFS(42 MiB) so 84 MiB.
-> 
-> 4365.27 - 84
-> 4281.27
-> 
-> So about 4281.27 MiB (4.18 GiB) are consumed by the 98.07% of the
-> failed module loads due to the kread*() calls from finit_module().
-> 
-> And get this... *if* you use module compression that also uses vmap()
-> *after* the kernel_read*() call which uses vmalloc(). *At least* in
-> that case we immediately free the buffer for the compressed module,
-> but *still* -- that is 3 possible vmap space allocations for every
-> module!
-
-:/
-
-> 
-> It'd be hard, but not impossible to collect stats for failed
-> finit_modules(). *That* could be indicative of areas in the kernel
-> we need to brush up on to stop doing stupid things, like we learned
-> about for the CPU frequency scaling modules. As I wrote this paragraph
-> I realized -- that this *is*  what we really have wanted all along to
-> help us debug these stupid things, so we can slowly learn where to
-> point fingers at to help optimize things. Altough I recently did some
-> tool scraping to collect stats and *wished* for this from userspace [0],
-> it wasn't hard to just a debug option for this to help us debug these
-> failures. So I added support for that and sent finally a new patch
-> series.
-
-Makes sense to me.
-
-
-I didn't have time to look at the code yet (currently traveling), I hope 
-that the kasan vmap issues are at least history.
-
-I'll do another test with debug kernels using your latest version on 
-that machine before I have to hand it back.
-
-Thanks!
-
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 41cfd3be57e5..886d24877c7c 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -608,16 +608,6 @@ static inline bool within_module(unsigned long addr, const struct module *mod)
+ /* Search for module by name: must be in a RCU-sched critical section. */
+ struct module *find_module(const char *name);
+ 
+-/* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
+-   symnum out of range. */
+-int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+-			char *name, char *module_name, int *exported);
+-
+-/* Look for this name: can be of form module:name. */
+-unsigned long module_kallsyms_lookup_name(const char *name);
+-
+-unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
+-
+ extern void __noreturn __module_put_and_kthread_exit(struct module *mod,
+ 			long code);
+ #define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
+@@ -664,17 +654,6 @@ static inline void __module_get(struct module *module)
+ /* Dereference module function descriptor */
+ void *dereference_module_function_descriptor(struct module *mod, void *ptr);
+ 
+-/* For kallsyms to ask for address resolution.  namebuf should be at
+- * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
+- * found, otherwise NULL. */
+-const char *module_address_lookup(unsigned long addr,
+-			    unsigned long *symbolsize,
+-			    unsigned long *offset,
+-			    char **modname, const unsigned char **modbuildid,
+-			    char *namebuf);
+-int lookup_module_symbol_name(unsigned long addr, char *symname);
+-int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
+-
+ int register_module_notifier(struct notifier_block *nb);
+ int unregister_module_notifier(struct notifier_block *nb);
+ 
+@@ -765,45 +744,6 @@ static inline void module_put(struct module *module)
+ 
+ #define module_name(mod) "kernel"
+ 
+-/* For kallsyms to ask for address resolution.  NULL means not found. */
+-static inline const char *module_address_lookup(unsigned long addr,
+-					  unsigned long *symbolsize,
+-					  unsigned long *offset,
+-					  char **modname,
+-					  const unsigned char **modbuildid,
+-					  char *namebuf)
+-{
+-	return NULL;
+-}
+-
+-static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
+-{
+-	return -ERANGE;
+-}
+-
+-static inline int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name)
+-{
+-	return -ERANGE;
+-}
+-
+-static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
+-					char *type, char *name,
+-					char *module_name, int *exported)
+-{
+-	return -ERANGE;
+-}
+-
+-static inline unsigned long module_kallsyms_lookup_name(const char *name)
+-{
+-	return 0;
+-}
+-
+-static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
+-						       const char *name)
+-{
+-	return 0;
+-}
+-
+ static inline int register_module_notifier(struct notifier_block *nb)
+ {
+ 	/* no events will happen anyway, so this can always succeed */
+@@ -899,7 +839,36 @@ int module_kallsyms_on_each_symbol(const char *modname,
+ 				   int (*fn)(void *, const char *,
+ 					     struct module *, unsigned long),
+ 				   void *data);
+-#else
++
++/* For kallsyms to ask for address resolution.  namebuf should be at
++ * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
++ * found, otherwise NULL.
++ */
++const char *module_address_lookup(unsigned long addr,
++				  unsigned long *symbolsize,
++				  unsigned long *offset,
++				  char **modname, const unsigned char **modbuildid,
++				  char *namebuf);
++int lookup_module_symbol_name(unsigned long addr, char *symname);
++int lookup_module_symbol_attrs(unsigned long addr,
++			       unsigned long *size,
++			       unsigned long *offset,
++			       char *modname,
++			       char *name);
++
++/* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
++ * symnum out of range.
++ */
++int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
++		       char *name, char *module_name, int *exported);
++
++/* Look for this name: can be of form module:name. */
++unsigned long module_kallsyms_lookup_name(const char *name);
++
++unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
++
++#else	/* CONFIG_MODULES && CONFIG_KALLSYMS */
++
+ static inline int module_kallsyms_on_each_symbol(const char *modname,
+ 						 int (*fn)(void *, const char *,
+ 						 struct module *, unsigned long),
+@@ -907,6 +876,50 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
+ {
+ 	return -EOPNOTSUPP;
+ }
++
++/* For kallsyms to ask for address resolution.  NULL means not found. */
++static inline const char *module_address_lookup(unsigned long addr,
++						unsigned long *symbolsize,
++						unsigned long *offset,
++						char **modname,
++						const unsigned char **modbuildid,
++						char *namebuf)
++{
++	return NULL;
++}
++
++static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
++{
++	return -ERANGE;
++}
++
++static inline int lookup_module_symbol_attrs(unsigned long addr,
++					     unsigned long *size,
++					     unsigned long *offset,
++					     char *modname,
++					     char *name)
++{
++	return -ERANGE;
++}
++
++static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
++				     char *type, char *name,
++				     char *module_name, int *exported)
++{
++	return -ERANGE;
++}
++
++static inline unsigned long module_kallsyms_lookup_name(const char *name)
++{
++	return 0;
++}
++
++static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
++						       const char *name)
++{
++	return 0;
++}
++
+ #endif  /* CONFIG_MODULES && CONFIG_KALLSYMS */
+ 
+ #endif /* _LINUX_MODULE_H */
 -- 
-Thanks,
-
-David / dhildenb
+2.39.2
 
