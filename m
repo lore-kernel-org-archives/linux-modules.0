@@ -2,266 +2,235 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36AE3C761A6
-	for <linux-modules@archiver.kernel.org>; Thu, 30 Mar 2023 10:21:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8556C761A6
+	for <linux-modules@archiver.kernel.org>; Thu, 30 Mar 2023 11:57:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjC3KVI (ORCPT
+        id S231234AbjC3L5V (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 30 Mar 2023 06:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
+        Thu, 30 Mar 2023 07:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjC3KVG (ORCPT
+        with ESMTP id S230397AbjC3L5U (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:21:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8614772A7
-        for <linux-modules@vger.kernel.org>; Thu, 30 Mar 2023 03:20:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680171616;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Pfge3RhdSXeiKxAh+OaaSFWWizy9sFj72RKo7NiLqdc=;
-        b=RtPyXkvX4pGnNhnnH7ibhgol2KQjFBqnuD9723Kwh5+pX86B7Q3b5RapaosrUHzrdO+IRn
-        dzMiynbwr+VBmA2PLDUMGRPohyjsuggDZsx/AeUgWTI4xgWmCn1iQ1WHsLEaRL0ns8Exrc
-        QkmufK9/DzH+qlx1ULL/uwf3dRv4+kE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-546-JqmxZjgbOpW7pxXpy1e5Ww-1; Thu, 30 Mar 2023 06:20:13 -0400
-X-MC-Unique: JqmxZjgbOpW7pxXpy1e5Ww-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83B0A886461;
-        Thu, 30 Mar 2023 10:20:12 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.45.225.103])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1BDD12166B34;
-        Thu, 30 Mar 2023 10:20:07 +0000 (UTC)
-From:   Viktor Malik <vmalik@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Viktor Malik <vmalik@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
-Subject: [PATCH bpf-next v2] kallsyms: move module-related functions under correct configs
-Date:   Thu, 30 Mar 2023 12:20:01 +0200
-Message-Id: <20230330102001.2183693-1-vmalik@redhat.com>
+        Thu, 30 Mar 2023 07:57:20 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C94797;
+        Thu, 30 Mar 2023 04:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=k7uaT+sMnmeDWcjQU/N6p9lwO5v20LsnKAG8porccmM=; b=bKGHblLxGK5HyB9nqT1iZNN8IZ
+        Jwito8ISCxvONnPiJog41gh0/xiv7+Jr9a+RNjRX4fIvDUXNpAMXuDzjdxZiPH2bE/T4GiOyJZuEz
+        uPstI2+e99KjsP8XnUsWohuERcczDzOwwKt85tANyMCCTzf4P2WcXR5K5Kc5SDj/xuXwWlqDKKQDl
+        WxkhhKhMVFQUzSOY5HgmDQdmi03mOHGJHcMvCRQqUgbgVlC9s87CMizLxdEwF5NCmvCCN0zsFn08W
+        DwR9NDzy3fkGdpNS93mHwCzMZNuQr0v1MoLUc2UAjnU3AGEUlmie7i/MhPkLNAXcK+XHxw2ux0G2k
+        Vdeh4uuQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1phqtJ-007B4v-2x;
+        Thu, 30 Mar 2023 11:56:30 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AD71E3002A3;
+        Thu, 30 Mar 2023 13:56:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5B9402421D7A0; Thu, 30 Mar 2023 13:56:26 +0200 (CEST)
+Date:   Thu, 30 Mar 2023 13:56:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, david@redhat.com,
+        patches@lists.linux.dev, linux-modules@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        song@kernel.org, rppt@kernel.org, willy@infradead.org,
+        vbabka@suse.cz, mhocko@suse.com, dave.hansen@linux.intel.com
+Subject: Re: [PATCH 4/7] sempahore: add a helper for a concurrency limiter
+Message-ID: <20230330115626.GA124812@hirez.programming.kicks-ass.net>
+References: <20230329053149.3976378-1-mcgrof@kernel.org>
+ <20230329053149.3976378-5-mcgrof@kernel.org>
+ <20230329072112.GG4253@hirez.programming.kicks-ass.net>
+ <ZCPuFLDgU5fBFtug@bombadil.infradead.org>
+ <20230329091935.GP4253@hirez.programming.kicks-ass.net>
+ <CAHk-=whF6Ta_KcJP2eC78+Mstv+vAku8ATRMbv98sf9VhdvySQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whF6Ta_KcJP2eC78+Mstv+vAku8ATRMbv98sf9VhdvySQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Functions for searching module kallsyms should have non-empty
-definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
-only CONFIG_MODULES check was used for many of these, which may have
-caused complilation errors on some configs.
+On Wed, Mar 29, 2023 at 09:50:39AM -0700, Linus Torvalds wrote:
+> So ack on your patch, but don't bother with DEFINE_BINARY_SEMAPHORE().
 
-This patch moves all relevant functions under the correct configs.
+Sure thing; still completely untested...
 
-Fixes: bd5314f8dd2d ("kallsyms, bpf: Move find_kallsyms_symbol_value out of internal header")
-Signed-off-by: Viktor Malik <vmalik@redhat.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202303181535.RFDCnz3E-lkp@intel.com/
 ---
-v2:
-- keep dereference_module_function_descriptor() in original place to
-  avoid compilation errors
-- fix indentation
-- add the "Fixes" tag
+Subject: Change DEFINE_SEMAPHORE() to take a number argument
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Wed, 29 Mar 2023 12:14:42 +0200
 
- include/linux/module.h | 135 ++++++++++++++++++++++-------------------
- 1 file changed, 74 insertions(+), 61 deletions(-)
+Fundamentally semaphores are a counted primitive, but
+DEFINE_SEMAPHORE() does not expose this and explicitly creates a
+binary semaphore.
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 41cfd3be57e5..886d24877c7c 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -608,16 +608,6 @@ static inline bool within_module(unsigned long addr, const struct module *mod)
- /* Search for module by name: must be in a RCU-sched critical section. */
- struct module *find_module(const char *name);
+Change DEFINE_SEMAPHORE() to take a number argument and use that in the
+few places that open-coded it using __SEMAPHORE_INITIALIZER().
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/mips/cavium-octeon/setup.c                               |    2 +-
+ arch/x86/kernel/cpu/intel.c                                   |    2 +-
+ drivers/firmware/efi/runtime-wrappers.c                       |    2 +-
+ drivers/firmware/efi/vars.c                                   |    2 +-
+ drivers/macintosh/adb.c                                       |    2 +-
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c              |    2 +-
+ drivers/platform/x86/intel/ifs/sysfs.c                        |    2 +-
+ drivers/scsi/esas2r/esas2r_ioctl.c                            |    2 +-
+ drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c |    2 +-
+ include/linux/semaphore.h                                     |    4 ++--
+ kernel/printk/printk.c                                        |    2 +-
+ net/rxrpc/call_object.c                                       |    6 ++----
+ 12 files changed, 14 insertions(+), 16 deletions(-)
+
+--- a/arch/mips/cavium-octeon/setup.c
++++ b/arch/mips/cavium-octeon/setup.c
+@@ -72,7 +72,7 @@ extern void pci_console_init(const char
+ static unsigned long long max_memory = ULLONG_MAX;
+ static unsigned long long reserve_low_mem;
  
--/* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
--   symnum out of range. */
--int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
--			char *name, char *module_name, int *exported);
--
--/* Look for this name: can be of form module:name. */
--unsigned long module_kallsyms_lookup_name(const char *name);
--
--unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
--
- extern void __noreturn __module_put_and_kthread_exit(struct module *mod,
- 			long code);
- #define module_put_and_kthread_exit(code) __module_put_and_kthread_exit(THIS_MODULE, code)
-@@ -664,17 +654,6 @@ static inline void __module_get(struct module *module)
- /* Dereference module function descriptor */
- void *dereference_module_function_descriptor(struct module *mod, void *ptr);
+-DEFINE_SEMAPHORE(octeon_bootbus_sem);
++DEFINE_SEMAPHORE(octeon_bootbus_sem, 1);
+ EXPORT_SYMBOL(octeon_bootbus_sem);
  
--/* For kallsyms to ask for address resolution.  namebuf should be at
-- * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
-- * found, otherwise NULL. */
--const char *module_address_lookup(unsigned long addr,
--			    unsigned long *symbolsize,
--			    unsigned long *offset,
--			    char **modname, const unsigned char **modbuildid,
--			    char *namebuf);
--int lookup_module_symbol_name(unsigned long addr, char *symname);
--int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
--
- int register_module_notifier(struct notifier_block *nb);
- int unregister_module_notifier(struct notifier_block *nb);
+ static struct octeon_boot_descriptor *octeon_boot_desc_ptr;
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -1177,7 +1177,7 @@ static const struct {
+ static struct ratelimit_state bld_ratelimit;
  
-@@ -765,45 +744,6 @@ static inline void module_put(struct module *module)
+ static unsigned int sysctl_sld_mitigate = 1;
+-static DEFINE_SEMAPHORE(buslock_sem);
++static DEFINE_SEMAPHORE(buslock_sem, 1);
  
- #define module_name(mod) "kernel"
+ #ifdef CONFIG_PROC_SYSCTL
+ static struct ctl_table sld_sysctls[] = {
+--- a/drivers/firmware/efi/runtime-wrappers.c
++++ b/drivers/firmware/efi/runtime-wrappers.c
+@@ -158,7 +158,7 @@ void efi_call_virt_check_flags(unsigned
+  * none of the remaining functions are actually ever called at runtime.
+  * So let's just use a single lock to serialize all Runtime Services calls.
+  */
+-static DEFINE_SEMAPHORE(efi_runtime_lock);
++static DEFINE_SEMAPHORE(efi_runtime_lock, 1);
  
--/* For kallsyms to ask for address resolution.  NULL means not found. */
--static inline const char *module_address_lookup(unsigned long addr,
--					  unsigned long *symbolsize,
--					  unsigned long *offset,
--					  char **modname,
--					  const unsigned char **modbuildid,
--					  char *namebuf)
--{
--	return NULL;
--}
--
--static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
--{
--	return -ERANGE;
--}
--
--static inline int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name)
--{
--	return -ERANGE;
--}
--
--static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
--					char *type, char *name,
--					char *module_name, int *exported)
--{
--	return -ERANGE;
--}
--
--static inline unsigned long module_kallsyms_lookup_name(const char *name)
--{
--	return 0;
--}
--
--static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
--						       const char *name)
--{
--	return 0;
--}
--
- static inline int register_module_notifier(struct notifier_block *nb)
- {
- 	/* no events will happen anyway, so this can always succeed */
-@@ -899,7 +839,36 @@ int module_kallsyms_on_each_symbol(const char *modname,
- 				   int (*fn)(void *, const char *,
- 					     struct module *, unsigned long),
- 				   void *data);
--#else
-+
-+/* For kallsyms to ask for address resolution.  namebuf should be at
-+ * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
-+ * found, otherwise NULL.
-+ */
-+const char *module_address_lookup(unsigned long addr,
-+				  unsigned long *symbolsize,
-+				  unsigned long *offset,
-+				  char **modname, const unsigned char **modbuildid,
-+				  char *namebuf);
-+int lookup_module_symbol_name(unsigned long addr, char *symname);
-+int lookup_module_symbol_attrs(unsigned long addr,
-+			       unsigned long *size,
-+			       unsigned long *offset,
-+			       char *modname,
-+			       char *name);
-+
-+/* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
-+ * symnum out of range.
-+ */
-+int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
-+		       char *name, char *module_name, int *exported);
-+
-+/* Look for this name: can be of form module:name. */
-+unsigned long module_kallsyms_lookup_name(const char *name);
-+
-+unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
-+
-+#else	/* CONFIG_MODULES && CONFIG_KALLSYMS */
-+
- static inline int module_kallsyms_on_each_symbol(const char *modname,
- 						 int (*fn)(void *, const char *,
- 						 struct module *, unsigned long),
-@@ -907,6 +876,50 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
- {
- 	return -EOPNOTSUPP;
+ /*
+  * Expose the EFI runtime lock to the UV platform
+--- a/drivers/firmware/efi/vars.c
++++ b/drivers/firmware/efi/vars.c
+@@ -21,7 +21,7 @@
+ /* Private pointer to registered efivars */
+ static struct efivars *__efivars;
+ 
+-static DEFINE_SEMAPHORE(efivars_lock);
++static DEFINE_SEMAPHORE(efivars_lock, 1);
+ 
+ static efi_status_t check_var_size(bool nonblocking, u32 attributes,
+ 				   unsigned long size)
+--- a/drivers/macintosh/adb.c
++++ b/drivers/macintosh/adb.c
+@@ -80,7 +80,7 @@ static struct adb_driver *adb_controller
+ BLOCKING_NOTIFIER_HEAD(adb_client_list);
+ static int adb_got_sleep;
+ static int adb_inited;
+-static DEFINE_SEMAPHORE(adb_probe_mutex);
++static DEFINE_SEMAPHORE(adb_probe_mutex, 1);
+ static int sleepy_trackpad;
+ static int autopoll_devs;
+ int __adb_probe_sync;
+--- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
++++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
+@@ -298,7 +298,7 @@ const u32 dmae_reg_go_c[] = {
+ 
+ /* Global resources for unloading a previously loaded device */
+ #define BNX2X_PREV_WAIT_NEEDED 1
+-static DEFINE_SEMAPHORE(bnx2x_prev_sem);
++static DEFINE_SEMAPHORE(bnx2x_prev_sem, 1);
+ static LIST_HEAD(bnx2x_prev_list);
+ 
+ /* Forward declaration */
+--- a/drivers/platform/x86/intel/ifs/sysfs.c
++++ b/drivers/platform/x86/intel/ifs/sysfs.c
+@@ -13,7 +13,7 @@
+  * Protects against simultaneous tests on multiple cores, or
+  * reloading can file while a test is in progress
+  */
+-static DEFINE_SEMAPHORE(ifs_sem);
++static DEFINE_SEMAPHORE(ifs_sem, 1);
+ 
+ /*
+  * The sysfs interface to check additional details of last test
+--- a/drivers/scsi/esas2r/esas2r_ioctl.c
++++ b/drivers/scsi/esas2r/esas2r_ioctl.c
+@@ -56,7 +56,7 @@ dma_addr_t esas2r_buffered_ioctl_addr;
+ u32 esas2r_buffered_ioctl_size;
+ struct pci_dev *esas2r_buffered_ioctl_pcid;
+ 
+-static DEFINE_SEMAPHORE(buffered_ioctl_semaphore);
++static DEFINE_SEMAPHORE(buffered_ioctl_semaphore, 1);
+ typedef int (*BUFFERED_IOCTL_CALLBACK)(struct esas2r_adapter *,
+ 				       struct esas2r_request *,
+ 				       struct esas2r_sg_context *,
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+@@ -149,7 +149,7 @@ static char *g_fragments_base;
+ static char *g_free_fragments;
+ static struct semaphore g_free_fragments_sema;
+ 
+-static DEFINE_SEMAPHORE(g_free_fragments_mutex);
++static DEFINE_SEMAPHORE(g_free_fragments_mutex, 1);
+ 
+ static int
+ vchiq_blocking_bulk_transfer(struct vchiq_instance *instance, unsigned int handle, void *data,
+--- a/include/linux/semaphore.h
++++ b/include/linux/semaphore.h
+@@ -25,8 +25,8 @@ struct semaphore {
+ 	.wait_list	= LIST_HEAD_INIT((name).wait_list),		\
  }
-+
-+/* For kallsyms to ask for address resolution.  NULL means not found. */
-+static inline const char *module_address_lookup(unsigned long addr,
-+						unsigned long *symbolsize,
-+						unsigned long *offset,
-+						char **modname,
-+						const unsigned char **modbuildid,
-+						char *namebuf)
-+{
-+	return NULL;
-+}
-+
-+static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
-+{
-+	return -ERANGE;
-+}
-+
-+static inline int lookup_module_symbol_attrs(unsigned long addr,
-+					     unsigned long *size,
-+					     unsigned long *offset,
-+					     char *modname,
-+					     char *name)
-+{
-+	return -ERANGE;
-+}
-+
-+static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
-+				     char *type, char *name,
-+				     char *module_name, int *exported)
-+{
-+	return -ERANGE;
-+}
-+
-+static inline unsigned long module_kallsyms_lookup_name(const char *name)
-+{
-+	return 0;
-+}
-+
-+static inline unsigned long find_kallsyms_symbol_value(struct module *mod,
-+						       const char *name)
-+{
-+	return 0;
-+}
-+
- #endif  /* CONFIG_MODULES && CONFIG_KALLSYMS */
  
- #endif /* _LINUX_MODULE_H */
--- 
-2.39.2
-
+-#define DEFINE_SEMAPHORE(name)	\
+-	struct semaphore name = __SEMAPHORE_INITIALIZER(name, 1)
++#define DEFINE_SEMAPHORE(_name, _n)	\
++	struct semaphore _name = __SEMAPHORE_INITIALIZER(_name, _n)
+ 
+ static inline void sema_init(struct semaphore *sem, int val)
+ {
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -89,7 +89,7 @@ static DEFINE_MUTEX(console_mutex);
+  * console_sem protects updates to console->seq and console_suspended,
+  * and also provides serialization for console printing.
+  */
+-static DEFINE_SEMAPHORE(console_sem);
++static DEFINE_SEMAPHORE(console_sem, 1);
+ HLIST_HEAD(console_list);
+ EXPORT_SYMBOL_GPL(console_list);
+ DEFINE_STATIC_SRCU(console_srcu);
+--- a/net/rxrpc/call_object.c
++++ b/net/rxrpc/call_object.c
+@@ -40,10 +40,8 @@ const char *const rxrpc_call_completions
+ 
+ struct kmem_cache *rxrpc_call_jar;
+ 
+-static struct semaphore rxrpc_call_limiter =
+-	__SEMAPHORE_INITIALIZER(rxrpc_call_limiter, 1000);
+-static struct semaphore rxrpc_kernel_call_limiter =
+-	__SEMAPHORE_INITIALIZER(rxrpc_kernel_call_limiter, 1000);
++static DEFINE_SEMAPHORE(rxrpc_call_limiter, 1000);
++static DEFINE_SEMAPHORE(rxrpc_kernel_call_limiter, 1000);
+ 
+ void rxrpc_poke_call(struct rxrpc_call *call, enum rxrpc_call_poke_trace what)
+ {
