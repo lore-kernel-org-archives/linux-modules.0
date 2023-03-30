@@ -2,131 +2,294 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DEE6C761AF
-	for <linux-modules@archiver.kernel.org>; Wed, 29 Mar 2023 16:51:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E935C74A5B
+	for <linux-modules@archiver.kernel.org>; Thu, 30 Mar 2023 04:44:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjC2QvT (ORCPT
+        id S229919AbjC3Eo1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 29 Mar 2023 12:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        Thu, 30 Mar 2023 00:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbjC2QvS (ORCPT
+        with ESMTP id S229795AbjC3EoZ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 29 Mar 2023 12:51:18 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C218658D
-        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 09:51:00 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id ek18so65957174edb.6
-        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 09:50:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1680108658; x=1682700658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fuabhBI/cJhvDusEUPo+YOaR3W7tGSIZ44NN+9mu0w0=;
-        b=WPU7CQZXsHT2W6o+O27Wpj5VLxahEGVYuFGJ09lWVVUb6Uog7j2W3oCfdskI6i1Ubk
-         gOKt3sOlvhKigmmF1pAoCh6e/zApTuFMSDe/1Ogb06wgZ5eTbVWDjmqb/YOcqB8hVtud
-         n9GOwJeinQ3x7aNVLHZ7ZSgZ/qGs4xL/xImVo=
+        Thu, 30 Mar 2023 00:44:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596965B92
+        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 21:43:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680151338;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LC32CzxNEi0UHq3EF126Vl3LWEH+Ja2D8JcygdUTSF0=;
+        b=d/g9sddz7nc65Ob7oUTTahBVZhVmw77rTwsOH+EhcPD5ig3ScjoZ7jfxA+zSkiwgAp8t6F
+        eFN9+Vd5sGpkbZk7LyX2NE8o775UDBGVTQaqulsuxqFfycoQYR9njJz43zHIX2acojEIBZ
+        7rYmPRzSoyN4r3HdCZvEz6SH8wji/Rg=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-117-vX9d9us9M3u4S3FDUk-bWQ-1; Thu, 30 Mar 2023 00:42:16 -0400
+X-MC-Unique: vX9d9us9M3u4S3FDUk-bWQ-1
+Received: by mail-pj1-f72.google.com with SMTP id e8-20020a17090a118800b0023d35ae431eso5367888pja.8
+        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 21:42:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680108658; x=1682700658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fuabhBI/cJhvDusEUPo+YOaR3W7tGSIZ44NN+9mu0w0=;
-        b=rOWauXWUhn3MpAYkXbJ5CjQf8I59xwauXsFKaP9jDaHTMbpXT8YpceoPRbzXi5hQfp
-         mmXN/rsJsw1rRzr1qx6xkaHNDMHqRDbZ7BV2s6ZoSI2h0Ui6f1IRZN3de/OST9iGg6Nm
-         XqFZogQZ86ZZNsmtrqtOwqZIGSVgS/5pCfHxyL0PjCZOiKw7mRnFnCBVQkBkQAbIWZEY
-         H3iq0gGV1KILTxJ3jAT//fpq21TqtmRWRCsB9g9XuMsk9tNLYC6t4Tnb1IhLFu0A4FLF
-         vf+3REQp+I//i3SIijRgVQmqw/Vz6mvczGTIlWrhd/9JrlAmGh5QXquI1Y6f15xow0dk
-         ji3Q==
-X-Gm-Message-State: AAQBX9eqOeshoXPQ1ECPAU0u26cnLOBL9wISlwJKEtR7ZSYHnVlqMo/E
-        v6pXVfM9JVAbXuCGA7J2jVCr3Fnc5/a6VGD8Sm0qgA==
-X-Google-Smtp-Source: AKy350YbzQhpJUj5JHsGh+IkYTKPHXH2Ui85xNApYzKbYV3ySJVH07qjdL4Li6WtYXJEw/kkg3LRjA==
-X-Received: by 2002:a05:6402:34c7:b0:500:2a9d:1870 with SMTP id w7-20020a05640234c700b005002a9d1870mr3235403edc.13.1680108658185;
-        Wed, 29 Mar 2023 09:50:58 -0700 (PDT)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
-        by smtp.gmail.com with ESMTPSA id m1-20020a50c181000000b005024faae65esm2287023edf.10.2023.03.29.09.50.56
-        for <linux-modules@vger.kernel.org>
+        d=1e100.net; s=20210112; t=1680151335;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LC32CzxNEi0UHq3EF126Vl3LWEH+Ja2D8JcygdUTSF0=;
+        b=4XiKDhxd8Rv22WMWd8yfms3MNoPVZzenSDSuuGfMfkWZoKgBqwI6UEH1LFjK8HMHsE
+         hUSnNyXzuCnJV8fslE4/FMG4Ctvs86OfN8uUxcxTI6SsA5n111emZNfket7YhKwwxd1b
+         HuUpJNDzQumtxDlWlWwo7eM+CcqpDiwpkXUvQDcfgk9/U8SG8+UIULYkYE0eTI2DtIn+
+         aQMcylPjiTwydMuRGpLeISdqTuDCnkwMmfQBKgKVjdOiRzp7iX27yTSHuG7Ku6ZYIb/m
+         /b+wL5sfN9ASq0tYuQlv7QwDBUaD3keGc37Jxpbq3ZAUNBPhAP9Jox915/srziXqC5g5
+         vvxw==
+X-Gm-Message-State: AAQBX9cjnYoWkN7TU5uW8BAF4ZUNi+VlawNGWraGtYJeOjhqamYag58a
+        ADziBrA/En6Bfnu4fjsaTqXhkG3+aL44z1KZPvgxlseEfGHelBumzPhdvZJe4vB3d0sKb1wBES3
+        zXlUTn6tq4p1s9HJfaXSySHITiw==
+X-Received: by 2002:aa7:9f82:0:b0:626:658:c998 with SMTP id z2-20020aa79f82000000b006260658c998mr19255208pfr.10.1680151335571;
+        Wed, 29 Mar 2023 21:42:15 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZbaXZJAxR6+SahDxpVIV0UnbkptaPuaQZqyLAa7ksLapMGp18XFWxKyQYYcjHE5Vmnrjnzsg==
+X-Received: by 2002:aa7:9f82:0:b0:626:658:c998 with SMTP id z2-20020aa79f82000000b006260658c998mr19255189pfr.10.1680151335148;
+        Wed, 29 Mar 2023 21:42:15 -0700 (PDT)
+Received: from [192.168.35.160] ([64.114.255.114])
+        by smtp.gmail.com with ESMTPSA id x5-20020aa784c5000000b006262520ac59sm23591164pfn.127.2023.03.29.21.42.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 09:50:56 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id t10so65790896edd.12
-        for <linux-modules@vger.kernel.org>; Wed, 29 Mar 2023 09:50:56 -0700 (PDT)
-X-Received: by 2002:a17:906:eec7:b0:93e:186f:ea0d with SMTP id
- wu7-20020a170906eec700b0093e186fea0dmr9808123ejb.15.1680108655974; Wed, 29
- Mar 2023 09:50:55 -0700 (PDT)
+        Wed, 29 Mar 2023 21:42:14 -0700 (PDT)
+Message-ID: <4fa825ac-707d-ad38-0af7-937a2c1e75b7@redhat.com>
+Date:   Thu, 30 Mar 2023 06:42:14 +0200
 MIME-Version: 1.0
-References: <20230329053149.3976378-1-mcgrof@kernel.org> <20230329053149.3976378-5-mcgrof@kernel.org>
- <20230329072112.GG4253@hirez.programming.kicks-ass.net> <ZCPuFLDgU5fBFtug@bombadil.infradead.org>
- <20230329091935.GP4253@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230329091935.GP4253@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 29 Mar 2023 09:50:39 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whF6Ta_KcJP2eC78+Mstv+vAku8ATRMbv98sf9VhdvySQ@mail.gmail.com>
-Message-ID: <CAHk-=whF6Ta_KcJP2eC78+Mstv+vAku8ATRMbv98sf9VhdvySQ@mail.gmail.com>
-Subject: Re: [PATCH 4/7] sempahore: add a helper for a concurrency limiter
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, david@redhat.com,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        song@kernel.org, rppt@kernel.org, willy@infradead.org,
-        vbabka@suse.cz, mhocko@suse.com, dave.hansen@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org,
+        torvalds@linux-foundation.org, dave@stgolabs.net,
+        fan.ni@samsung.com, vincent.fu@samsung.com,
+        a.manzanares@samsung.com, colin.i.king@gmail.com
+References: <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
+ <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
+ <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+ <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
+ <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
+ <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
+ <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
+ <e5c2183a-f62a-6ca9-eec6-a7fab7ce4c91@redhat.com>
+ <ZCKGI1LxktS7pKS9@bombadil.infradead.org>
+ <5aceccdf-d268-7872-abb5-c14e9aa8b7b7@redhat.com>
+ <ZCPNONX3O3bp2Om1@bombadil.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
+ allocations
+In-Reply-To: <ZCPNONX3O3bp2Om1@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Mar 29, 2023 at 2:19=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> Arguably DEFINE_SEMAPHORE() should have the argument, as binary
-> semaphores are a special case, but then we gotta go and fix up all
-> users.
+On 29.03.23 07:31, Luis Chamberlain wrote:
+> On Tue, Mar 28, 2023 at 11:02:49PM +0200, David Hildenbrand wrote:
+>>
+>> So we're a bit faster (0.2 -- 0.7s) than the original version without the
+>> rcu patch (~6s).
+> 
+> Groovy.
 
-Using semaphores for just pure mutual exclusion used to be *the* most
-common use of it, which is why we didn't have an argument.
+Just to clarify, it was up to 0.7s faster (I phrased it in a confusing way).
 
-Then we got the mutexes, and now semaphores are almost entirely a legacy th=
-ing.
+> 
+>>> The commit log needs updateing to reflect the results I just collected:
+>>>
+>>> With the alloc patch ("module: avoid allocation if module is already
+>>> present and ready") I see 145 MiB in memory difference in comparison
+>>> to its last patch, "module: extract patient module check into helper".
+>>> So I think that's a clear keeper and should help large CPU count boots.
+>>>
+>>> The patch "module: add concurrency limiter" which puts the concurency
+>>> delimiter on the kread only saves about 2 MiB with 100 stress-ng ops,
+>>> which seems to be what I needed to reproduce your 400 CPU count original
+>>> issue.
+>>>
+>>> The program used to reproduce is stress-ng with the new module option:
+>>>
+>>> echo 0 > /proc/sys/vm/oom_dump_tasks
+>>> ./stress-ng --module 100 --module-name xfs
+>>
+>> Above command fills for me with nfs (but also ext4) the kernel log with:
+>>
+>> ...
+>> [  883.036035] nfs: Unknown symbol xdr_reserve_space (err -2)
+>> [  883.042221] nfs: Unknown symbol rpc_init_wait_queue (err -2)
+>> [  883.048549] nfs: Unknown symbol put_rpccred (err -2)
+>> [  883.054104] nfs: Unknown symbol __fscache_invalidate (err -2)
+>> [  883.060540] nfs: Unknown symbol __fscache_use_cookie (err -2)
+>> [  883.066969] nfs: Unknown symbol rpc_clnt_xprt_switch_has_addr (err -2)
+>> [  883.074264] nfs: Unknown symbol __fscache_begin_write_operation (err -2)
+>> [  883.081743] nfs: Unknown symbol nlmclnt_init (err -2)
+>> [  883.087396] nfs: Unknown symbol nlmclnt_done (err -2)
+>> [  883.093074] nfs: Unknown symbol nfs_debug (err -2)
+>> [  883.098429] nfs: Unknown symbol rpc_wait_for_completion_task (err -2)
+>> [  883.105640] nfs: Unknown symbol __fscache_acquire_cookie (err -2)
+>> [  883.163764] nfs: Unknown symbol rpc_put_task (err -2)
+>> [  883.169461] nfs: Unknown symbol __fscache_acquire_volume (err -2)
+>> [  883.176297] nfs: Unknown symbol rpc_proc_register (err -2)
+>> [  883.182430] nfs: Unknown symbol rpc_shutdown_client (err -2)
+>> [  883.188765] nfs: Unknown symbol rpc_clnt_show_stats (err -2)
+>> [  883.195097] nfs: Unknown symbol __fscache_begin_read_operation (err -2)
+>> ...
+>>
+>>
+>> I do *not* get these errors on manual morprobe/rmmod. BUG in concurrent
+>> handling or just side-effect of the concurrent loading?
+> 
+> It is just because modprobe deals with module dependencies, stress-ng
+> modprobe doesn't, it just calls finit_module() and expects dependencies
+> to be loaded first.
 
-I think we should just make DEFINE_SEMAPHORE() take the number, and
-people who want a mutex should either put in the "1", or they should
-just use a mutex.
+Oh, right. That makes sense.
 
-> /me git-greps a little.. Hmm, not too bad.
->
-> How's this?
+> 
+>>> To see how much max memory I use, I just use:
+>>>
+>>> free -k -s 1 -c 40 | grep Mem | awk '{print $3}' > foo.log
+>>>
+>>> Run the test in another window, CTRL-C the test when above
+>>> finishes after 40 seconds and then:
+>>>
+>>> sort -n -r foo.log  | head -1
+>>
+>> [root@lenovo-sr950-01 fs]# sort -n -r foo.log  | head -1
+>> 14254024
+>> [root@lenovo-sr950-01 fs]# sort -n -r foo.log  | tail -1
+>> 12862528
+>>
+>> So 1391496 (KiB I assume, so 1.3 GiB !?)
+> 
+> That is sadly correct.
+> 
+>> difference compared to before the
+>> test (I first start capturing and then run stress-ng).
+> 
+> That's a good chunk :-D
+> 
+> On a recent thread I do a full analysis of average module sizes [0], you
+> can use that to also get an average size estimate of your currently
+> loaded modules. Do a bit of math and that could give you the average
+> memory pressure on real vmap allocations. For a synthentic test as with
+> stress-ng modules we'd be doing twice the memory for a success load, and
+> only one time allocation due to kread for a failed allocation, since we
+> always allocate memory even for bogus modules on the kread side.
+> 
+> My xfs.ko is 42M on my test guest system, with 100 concurrent threads
+> doing two allocations each that puts the expected vmap allocation at
+> around:
+> 
+> 42*2*100
+> 8400
+> 8400/1024
+> 8.20312500000000000000
+> 
+> 8.2 GiB
+> 
+> So on the worst case that's what we'd see. Since I saw seeing the
+> patches helped overall around 145 MiB in difference let's see what
+> that means. Let me re-test:
+> 
+> Idle memory: (note free -k uses kibibytes, KiB.
+> 
+> root@kmod ~ # free -k -s 1 -c 3 | grep Mem | awk '{print $3}' | sort -n -r  | head -1
+> 416452
+> 
+> So while idle, the system is using up 416452 KiB, so 406 MiB.
+> 
+> While running stress-ng with 100 module ops
+> 
+> free -k -s 1 -c 40 | grep Mem | awk '{print $3}' > 2023-03-28-kmodsem-stress-ng-v1.txt
+> echo 0 > /proc/sys/vm/oom_dump_tasks
+> ./stress-ng --module 100 --module-name xfs
+> root@kmod ~ # sort -n -r 2023-03-28-kmodsem-stress-ng-v1.txt | head -1
+> 4886492
+> 
+> 4886492/1024
+> 4771.96484375000000000000
+> 4886492/1024/1024
+> 4.66012191772460937500
+> 
+> So during the stress test we see memory highest usage was about
+> 4771.96 MiB or ~4.66 GiB.
+> 
+> What's the difference between idle and after the stress test:
+> 
+> 4886492 - 416452
+> 4470040
+> 4470040/1024
+> 4365.27343750000000000000
+> 4470040/1024/1024
+> 4.26296234130859375000
+> 
+> So about 4365.27 MiB or 4.26 GiB.
+> 
+> Now, the upper limit for the test should have been a delta of 8.2 GiB
+> and we get about 4.26, so it means we're rejecting more than half of
+> the requests. Why half not just half? I only see 40 successful loads
+> of XFS during a 40 second window:
+> 
+>    dmesg -c > /dev/null
+>    # run tests
+>    dmesg -c | grep XFS | wc -l
+> 
+> At 100 ops all running finit_module for 40 seconds those successful
+> loads only should have consumed about 40 * 2 * size of XFS (42 MiB):
+> 3360 MiB or 3.28 GiB. But at any point in time only one module could
+> be loaded at a time, so in the *worst* consumption point a XFS in this
+> test should only be consuming 2*size_of_XFS(42 MiB) so 84 MiB.
+> 
+> 4365.27 - 84
+> 4281.27
+> 
+> So about 4281.27 MiB (4.18 GiB) are consumed by the 98.07% of the
+> failed module loads due to the kread*() calls from finit_module().
+> 
+> And get this... *if* you use module compression that also uses vmap()
+> *after* the kernel_read*() call which uses vmalloc(). *At least* in
+> that case we immediately free the buffer for the compressed module,
+> but *still* -- that is 3 possible vmap space allocations for every
+> module!
 
-I'd actually prefer to not have that DEFINE_BINARY_SEMAPHORE() at all.
-It really shouldn't exist in this day and age.
+:/
 
-It's not even less typing, ie
+> 
+> It'd be hard, but not impossible to collect stats for failed
+> finit_modules(). *That* could be indicative of areas in the kernel
+> we need to brush up on to stop doing stupid things, like we learned
+> about for the CPU frequency scaling modules. As I wrote this paragraph
+> I realized -- that this *is*  what we really have wanted all along to
+> help us debug these stupid things, so we can slowly learn where to
+> point fingers at to help optimize things. Altough I recently did some
+> tool scraping to collect stats and *wished* for this from userspace [0],
+> it wasn't hard to just a debug option for this to help us debug these
+> failures. So I added support for that and sent finally a new patch
+> series.
 
-    static DEFINE_SEMAPHORE(efivars_lock, 1);
+Makes sense to me.
 
-is actually shorter than
 
-    static DEFINE_BINARY_SEMAPHORE(efivars_lock);
+I didn't have time to look at the code yet (currently traveling), I hope 
+that the kasan vmap issues are at least history.
 
-And what you actually *want* is
+I'll do another test with debug kernels using your latest version on 
+that machine before I have to hand it back.
 
-    static DEFINE_MUTEX(efivars_lock);
+Thanks!
 
-and converting the up/down to mutex_unlock/mutex_lock.
+-- 
+Thanks,
 
-So let's just make it clear that the only reason to use semaphores
-these days is for counting semaphores, and just make
-DEFINE_SEMAPHORE() take the number.
+David / dhildenb
 
-Strangely, sema_init() already does that, but I guess that's because
-some people really *do* use semaphores for concurrency control (ie I
-see things like
-
-        sema_init(&dc->in_flight, 64);
-
-which is clearly using a semaphore in that very traditional way).
-
-So ack on your patch, but don't bother with DEFINE_BINARY_SEMAPHORE().
-
-               Linus
