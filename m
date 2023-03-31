@@ -2,116 +2,64 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47457C76196
-	for <linux-modules@archiver.kernel.org>; Fri, 31 Mar 2023 19:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3572C761A6
+	for <linux-modules@archiver.kernel.org>; Fri, 31 Mar 2023 20:02:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjCaTMU (ORCPT
+        id S232996AbjCaUCc (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 31 Mar 2023 15:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
+        Fri, 31 Mar 2023 16:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCaTMU (ORCPT
+        with ESMTP id S233037AbjCaUCQ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 31 Mar 2023 15:12:20 -0400
+        Fri, 31 Mar 2023 16:02:16 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB9E1D937;
-        Fri, 31 Mar 2023 12:12:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A08E23FF4;
+        Fri, 31 Mar 2023 13:01:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aIr2vtxWZXcVvuolWsECaIGNyyoIH0TKmMFQt2ZHtZ4=; b=HNVQNzemSOiE9ckS8FRhSJdp0B
-        8uSSZZmucZQ0WC2FbkL2MzlHIdavSFgKfeyYJY/ccrIo6hwn6pCXD6GGV/fWZ7Jq9de78TOqC+BoV
-        RShWmVWiP90j1Focjbn9XB9eI6Zr8/LwPab2DoUO7X15vAznOgu92JqwtENFhevTaCY4Lf71LxMW8
-        mjwZ4JfvO6WRUSX/07K96KYoJEW13NBtC2sDMTHmk0pUrukfBPH0gEO8Q94QQeiIg1cP/jS5Pf3Br
-        r0pe6yUJcX2SZLdnclvrCSofF+2TV8s2gB3++lQz2kq8xCybGzHB47tdnuyXXetZ42JXdqUV2JXZs
-        BPYuTC3w==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=O9v/o+LL35F39YCf85iRZwB52pys/g9pBnyqwNmlF9Y=; b=xj5j/DbnOE+bLqw399ZLnj5nOH
+        nUvyiUYUWv3zAuiluYlq3l1r/m8PJz5pHclXKP3g0UaO5Wdba9rBEovo9lqrdhLwe2+j7cSjaleNA
+        uU/uPff2IzKQwH8jYf+MEmTxOgZUu7Rxs/ODZoiNxBNNZc9i2Z0drTrIJ1Z64n8zc5J6/f/1UnGIf
+        UD0q2u6zePcWgzHZ+VzkUnIXRqzKRK0xlsLjn0IhCyo8LvGFpasoZ5tSUZ6Lx5UkhquKb4a+jQLHq
+        0D2Qp10SthXDc95beHKe2z9W2iicw4geJmwyKNk8sBbf43gyvPpecUCLJGMUIhSHQcxLIoompGkcD
+        usbwLA0A==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1piKAa-008aZa-27;
-        Fri, 31 Mar 2023 19:12:16 +0000
-Date:   Fri, 31 Mar 2023 12:12:16 -0700
+        id 1piKwR-008hY3-0y;
+        Fri, 31 Mar 2023 20:01:43 +0000
+Date:   Fri, 31 Mar 2023 13:01:43 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     jim.cromie@gmail.com
-Cc:     linux-modules@vger.kernel.org, song@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with
- module_memory")
-Message-ID: <ZCcwkCBgyxOgROVu@bombadil.infradead.org>
-References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
- <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
- <CAJfuBxwng_fB5XH5LEWAWwN29fitGLBZ8hpdW3+4HjO_MDK1Eg@mail.gmail.com>
+To:     Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
+        "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KEYS: Make use of platform keyring for module signature
+ verification
+Message-ID: <ZCc8J6wS1EpXrLQW@bombadil.infradead.org>
+References: <qvgp2il2co4iyxkzxvcs4p2bpyilqsbfgcprtpfrsajwae2etc@3z2s2o52i3xg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJfuBxwng_fB5XH5LEWAWwN29fitGLBZ8hpdW3+4HjO_MDK1Eg@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <qvgp2il2co4iyxkzxvcs4p2bpyilqsbfgcprtpfrsajwae2etc@3z2s2o52i3xg>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Mar 31, 2023 at 11:08:23AM -0600, jim.cromie@gmail.com wrote:
-> :#> uptime
->  09:45:32 up 1 day, 23:07,  0 users,  load average: 0.07, 0.04, 0.01
-> :#> uname -a
-> Linux (none) 6.3.0-rc1-f2-00001-gac3b43283923 #359 SMP PREEMPT_DYNAMIC
-> Wed Mar 29 09:33:11 MDT 2023 x86_64 x86_64 x86_64 GNU/Linux
-> 
-> the leaks I sent previously might be from/on a different commit,
-> heres the relevant one
-> 
-> fwiw, the config is unremarkable.  it started with
-> CONFIG_BUILD_SALT="5.16.8-200.fc35.x86_64"
-> then `make localmodconfig` to drop anything I dont have hw for
-> then `virtme-configkernel --update` to pick up the 9p,etc config options
-> And some extra DEBUG_* options
-> If you'd like to see runs with others, or see the config itself, please ask.
+On Fri, Mar 31, 2023 at 04:30:21PM +0200, Ahelenia Ziemia=C5=84ska wrote:
+> This allows a cert in DB to be used to sign modules,
+> in addition to certs in the MoK and built-in keyrings.
+>=20
+> This key policy matches what's used for kexec.
+>=20
+> Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xy=
+z>
 
-If you wanna see things explode
+Before I nose dive, the commit log should explain why this patch never
+was sent upstream, if it was, why it was rejected. What makes it good now?
 
-echo 0 > /proc/sys/vm/oom_dump_tasks
-./stress-ng --module 20 --module-name xfs
-
-This assumes xfs is not already loaded, and has all dependencies already
-loaded. What would test the load_module() path.
-
-If you wanna see if the test is earlier, you can try a module which
-is already loaded on your system.
-
-> :#> uname -a
-> Linux (none) 6.3.0-rc1-f2-00001-gac3b43283923 #359 SMP PREEMPT_DYNAMIC
-> Wed Mar 29 09:33:11 MDT 2023 x86_64 x86_64 x86_64 GNU/Linux
-> :#> ./grok_kmemleak -n
-> not: bless( {
->   'backtraces' => {
->     '[<0000000058fb276d>] __kmalloc_node_track_caller+0x4a/0x140
->     [<00000000a2f80203>] memdup_user+0x26/0x90
->     [<00000000f7cd3624>] strndup_user+0x3f/0x60
->     [<0000000098fd26c5>] load_module+0x188b/0x20e0
-
-Can you do:
-
-gdb vmlinux
-l *(load_module+0x188b)
-
-And provide the output?
-
-> }, 'LeakSet' )
-> mods: bless( {
->   'backtraces' => {
->     '[<0000000058fb276d>] __kmalloc_node_track_caller+0x4a/0x140
->     [<00000000ab7b01fd>] kstrdup+0x32/0x60
->     [<000000005ed25b98>] kobject_set_name_vargs+0x1c/0x90
->     [<0000000090fe19ca>] kobject_init_and_add+0x4d/0x90
->     [<0000000045666935>] mod_sysfs_setup+0xa9/0x6e0
-
-Ok that is a specific enough hint. I'll take a review of this sysfs
-path see what changed that could break.
-
->     [<00000000d6f7187b>] load_module+0x1de3/0x20e0
->     [<0000000074361279>] __do_sys_finit_module+0x93/0xf0
->     [<000000004caeb948>] do_syscall_64+0x34/0x80
->     [<000000009f5d036c>] entry_SYSCALL_64_after_hwframe+0x46/0xb0' => 16
->   },
+Who is using it? What are other distributions doing about it?
 
   Luis
