@@ -2,83 +2,67 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F03FAC6FD18
-	for <linux-modules@archiver.kernel.org>; Fri, 31 Mar 2023 08:06:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD569C77B60
+	for <linux-modules@archiver.kernel.org>; Fri, 31 Mar 2023 09:16:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjCaIGN (ORCPT
+        id S230526AbjCaJQ1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 31 Mar 2023 04:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
+        Fri, 31 Mar 2023 05:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjCaIGJ (ORCPT
+        with ESMTP id S231782AbjCaJQO (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:06:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C219191CE;
-        Fri, 31 Mar 2023 01:05:53 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 8F0681FE3F;
-        Fri, 31 Mar 2023 08:05:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680249952; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+yE/ElG/1JpRXabfjyDkXIDLPL4NCS4hNuektaT+pZc=;
-        b=pBGRzBhCwblY4cH5PfbPazP0AAH8fDx/EeOAVNkAAR9AfzJF0UKffpv6nfN8JLc0wKK8nq
-        MdioBBmsdz4Tlk/WdgrZG6RgICd9lF91+9CXZtjciNUwCZ71K9WM2BWqZdu8KA6OKRjhxR
-        HY18hGaovwsWjLT5L3MM5FgmY+idds0=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A179D2C141;
-        Fri, 31 Mar 2023 08:05:51 +0000 (UTC)
-Date:   Fri, 31 Mar 2023 10:05:48 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>, david@redhat.com,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        petr.pavlu@suse.com, prarit@redhat.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        song@kernel.org, rppt@kernel.org, willy@infradead.org,
-        vbabka@suse.cz, mhocko@suse.com, dave.hansen@linux.intel.com
-Subject: Re: [PATCH 4/7] sempahore: add a helper for a concurrency limiter
-Message-ID: <ZCaUXHxYiPolI/lu@alley>
-References: <20230329053149.3976378-1-mcgrof@kernel.org>
- <20230329053149.3976378-5-mcgrof@kernel.org>
- <20230329072112.GG4253@hirez.programming.kicks-ass.net>
- <ZCPuFLDgU5fBFtug@bombadil.infradead.org>
- <20230329091935.GP4253@hirez.programming.kicks-ass.net>
- <CAHk-=whF6Ta_KcJP2eC78+Mstv+vAku8ATRMbv98sf9VhdvySQ@mail.gmail.com>
- <20230330115626.GA124812@hirez.programming.kicks-ass.net>
- <CAHk-=wgF34MkhZnM_Kc1zggTWCAQ=BzEgAaAbE5wDM07bWiYeg@mail.gmail.com>
- <20230331034209.GA12892@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230331034209.GA12892@google.com>
+        Fri, 31 Mar 2023 05:16:14 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A987576AD;
+        Fri, 31 Mar 2023 02:16:02 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxUU_RpCZkuOQUAA--.20662S3;
+        Fri, 31 Mar 2023 17:16:01 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxC77OpCZkVfMRAA--.14538S2;
+        Fri, 31 Mar 2023 17:15:59 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH 0/3] Modify is_arm_mapping_symbol() related code
+Date:   Fri, 31 Mar 2023 17:15:50 +0800
+Message-Id: <1680254153-14582-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8DxC77OpCZkVfMRAA--.14538S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
+        67AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2
+        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20x
+        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-e5UUUUU==
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri 2023-03-31 12:42:09, Sergey Senozhatsky wrote:
-> On (23/03/30 09:23), Linus Torvalds wrote:
-> > Although we also do have some other issues - I think down_trylock() is
-> > ok in irq contexts, but mutex_trylock() is not. Maybe that's why
-> > printk uses semaphores? I forget.
-> 
-> Yes, correct. IIRC we also cannot safely call mutex_unlock() from IRQ
-> context because it takes some internal mutex spin_lock in a non-IRQ-safe
-> manner. Semaphore is OK in this regard, both semaphore try_lock() and
-> unlock() can be called from IRQ.
+Based on "MODULE SUPPORT" tree:
+git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
 
-One more reason is that mutex must be released in the same context
-that took it. And printk() tries to pass console_sem() to another context.
+Tiezhu Yang (3):
+  module: Sync code of is_arm_mapping_symbol()
+  module: Move is_arm_mapping_symbol() to module_symbol.h
+  module: Ignore L0 and rename is_arm_mapping_symbol()
 
-It was added by the commit dbdda842fe96 ("printk: Add console owner
-and waiter logic to load balance console writes"). It was relatively
-effective in reducing the risk of soft lockups.
+ include/linux/module_symbol.h | 17 +++++++++++++++++
+ kernel/module/kallsyms.c      | 15 ++-------------
+ scripts/mod/modpost.c         | 12 +++---------
+ 3 files changed, 22 insertions(+), 22 deletions(-)
+ create mode 100644 include/linux/module_symbol.h
 
-Best Regards,
-Petr
+-- 
+2.1.0
+
