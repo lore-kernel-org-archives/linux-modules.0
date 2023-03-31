@@ -2,186 +2,113 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 262D2C77B60
-	for <linux-modules@archiver.kernel.org>; Fri, 31 Mar 2023 21:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F534C761A6
+	for <linux-modules@archiver.kernel.org>; Fri, 31 Mar 2023 21:53:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjCaVnV (ORCPT
+        id S233179AbjCaVxZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 31 Mar 2023 17:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
+        Fri, 31 Mar 2023 17:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCaVnU (ORCPT
+        with ESMTP id S233190AbjCaVxX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 31 Mar 2023 17:43:20 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219C518F9A;
-        Fri, 31 Mar 2023 14:43:18 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id 89so17145901uao.0;
-        Fri, 31 Mar 2023 14:43:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680298996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h5CSgtedxihi2QZcr+Ghagbg1u9AWPYWX/Bwef/bbyo=;
-        b=ZY/og5wWRWYU0c+i+G/s5X9D3y6gf3ry2Ktx6KHUiQ0zDAsweH1K786Z3ls3IGnP1a
-         e1T38nQdWO1zotYVYYD2d0U3rRoRkoo6hXjhZnKjqYb/Y87uuRduhOeuO4gq1RbxMWRT
-         Z9O7YBsa8XH5Bygu/+oh8liZ7vGdlyd3a3CFyEUl4UtgPFX1qjOZbqTFVf2Ce77bsE/f
-         EjfJZfGmE2gwH4k6Ygs1QovRxLD5l3+wqHJQZ/S+yn+S82fUSOy+ikatTWqz6lD6y462
-         NVij3HpXqQAjaVMJRiLBpXZnmynXeW5cdx8xRfykYz+D8p8sXlaRk7I8FGY4GeItYLZD
-         orQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680298996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h5CSgtedxihi2QZcr+Ghagbg1u9AWPYWX/Bwef/bbyo=;
-        b=AoRsYrqLDfT/AppdEUsFxBFDrHELE1nxAvTOi4y3PbqMwX9BhGhiGetPFcfEpPgVmk
-         48FL3j7FcYWRz088uLbT13OaqdBNAZ/YILEemOR5oyQfu0Ds5urcZ8IJAeIquhDTnOgj
-         DmzQaiVmO7QEtHdWMBhfgBIGP78ZL9IsY10RsxuXlmZx8mMKuGOw7QkA1UioYTYXHXkX
-         JclnLkXujui7CY8KXBkLIJNtVmTJ+5LZgY2qWorhar0AYGmi8Q1t2i5g1XoFEFcQQrWt
-         qhmCz+faUjk8qSqcGUqwhMzabkN/DB2BxRJuCTHgvJFrZxCgT8OYtlnL3FXvdkcyJGIp
-         ST6Q==
-X-Gm-Message-State: AAQBX9fmLBYJHHKD6M2B1F9aMvGv7L3CmvkdQK20EI2Mh570CrR9HJod
-        h3JXbhUzHmMN518pgLk/B64pDxO/XkgCy5IKRCM=
-X-Google-Smtp-Source: AKy350aH4QV+sBvoDO7KIHxo3oosn6j3G4EBfrsHcHJMBbdepjtCofOfSW8O8oCDEEzPcAB1W5J/l8k3ypJAmk4aUiA=
-X-Received: by 2002:ab0:5b45:0:b0:73f:f15b:d9e3 with SMTP id
- v5-20020ab05b45000000b0073ff15bd9e3mr3279106uae.0.1680298996597; Fri, 31 Mar
- 2023 14:43:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
- <ZCaE71aPvvQ/L05L@bombadil.infradead.org> <CAJfuBxwng_fB5XH5LEWAWwN29fitGLBZ8hpdW3+4HjO_MDK1Eg@mail.gmail.com>
- <ZCcwkCBgyxOgROVu@bombadil.infradead.org>
-In-Reply-To: <ZCcwkCBgyxOgROVu@bombadil.infradead.org>
-From:   jim.cromie@gmail.com
-Date:   Fri, 31 Mar 2023 15:42:50 -0600
-Message-ID: <CAJfuBxzP0-sk59H6DTkkng+mFa0WWJdr7fVj=iKsaLT_J1YXuQ@mail.gmail.com>
-Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with module_memory")
+        Fri, 31 Mar 2023 17:53:23 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B33DE390;
+        Fri, 31 Mar 2023 14:52:49 -0700 (PDT)
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 1D1064E20;
+        Fri, 31 Mar 2023 23:52:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202211; t=1680299529;
+        bh=mIgvKEKbsdZdXYnK/e8dLN1n1nIAYWBRaa+ZNUH6xrs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DrRFKoQVTwergRVKrlX2xaQEw0ars3VTGJcr48H7Lyj7osqsJvg0pjG3kXE3zD2Zg
+         hHpG99/ZJ2sTn8TYyBDEXfiLwv7zRpHkTyCxxHLYkbrwHZSrC+JR/ENpVEsmzBRuMN
+         TJ0D8QBPp9+ok7QNCLl8qCNSqIGYlaIN9pBlg3Wsuah8xs9zEBxLgMcWOowc8Asij6
+         H1T1Jg8Weip9F4WktmMae2YH33YE/jHZ7m3lSFHZmafwje9YJtG4OPtyP9Iv7Ebp3e
+         pJSKvNzcA462iWC0atau7Vunue4dNQt+D0vFjdBANExk8aGlpvxqihAJZhkt96DxM0
+         aiVSRD1Sktm4g==
+Date:   Fri, 31 Mar 2023 23:52:07 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
 To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-modules@vger.kernel.org, song@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc:     "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
+        "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KEYS: Make use of platform keyring for module signature
+ verification
+Message-ID: <oyf37idsgn3qgonracgtoj6k5lshzt37j5bulnqgigy4t3iy4q@nxy53nmnzuud>
+References: <qvgp2il2co4iyxkzxvcs4p2bpyilqsbfgcprtpfrsajwae2etc@3z2s2o52i3xg>
+ <ZCc8J6wS1EpXrLQW@bombadil.infradead.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ctfue7uj2awdz525"
+Content-Disposition: inline
+In-Reply-To: <ZCc8J6wS1EpXrLQW@bombadil.infradead.org>
+User-Agent: NeoMutt/20230322
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Mar 31, 2023 at 1:12=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
->
-> On Fri, Mar 31, 2023 at 11:08:23AM -0600, jim.cromie@gmail.com wrote:
-> > :#> uptime
-> >  09:45:32 up 1 day, 23:07,  0 users,  load average: 0.07, 0.04, 0.01
-> > :#> uname -a
-> > Linux (none) 6.3.0-rc1-f2-00001-gac3b43283923 #359 SMP PREEMPT_DYNAMIC
-> > Wed Mar 29 09:33:11 MDT 2023 x86_64 x86_64 x86_64 GNU/Linux
-> >
-> > the leaks I sent previously might be from/on a different commit,
-> > heres the relevant one
-> >
-> > fwiw, the config is unremarkable.  it started with
-> > CONFIG_BUILD_SALT=3D"5.16.8-200.fc35.x86_64"
-> > then `make localmodconfig` to drop anything I dont have hw for
-> > then `virtme-configkernel --update` to pick up the 9p,etc config option=
-s
-> > And some extra DEBUG_* options
-> > If you'd like to see runs with others, or see the config itself, please=
- ask.
->
-> If you wanna see things explode
->
-> echo 0 > /proc/sys/vm/oom_dump_tasks
-> ./stress-ng --module 20 --module-name xfs
->
-> This assumes xfs is not already loaded, and has all dependencies already
-> loaded. What would test the load_module() path.
->
-> If you wanna see if the test is earlier, you can try a module which
-> is already loaded on your system.
->
-> > :#> uname -a
-> > Linux (none) 6.3.0-rc1-f2-00001-gac3b43283923 #359 SMP PREEMPT_DYNAMIC
-> > Wed Mar 29 09:33:11 MDT 2023 x86_64 x86_64 x86_64 GNU/Linux
-> > :#> ./grok_kmemleak -n
-> > not: bless( {
-> >   'backtraces' =3D> {
-> >     '[<0000000058fb276d>] __kmalloc_node_track_caller+0x4a/0x140
-> >     [<00000000a2f80203>] memdup_user+0x26/0x90
-> >     [<00000000f7cd3624>] strndup_user+0x3f/0x60
-> >     [<0000000098fd26c5>] load_module+0x188b/0x20e0
->
-> Can you do:
->
-> gdb vmlinux
-> l *(load_module+0x188b)
->
-> And provide the output?
 
-(gdb) l *(load_module+0x188b)
-0xffffffff8122a4bb is in load_module
-(/home/jimc/projects/lx/wk-next/kernel/module/main.c:2820).
-2815 goto free_modinfo;
-2816
-2817 flush_module_icache(mod);
-2818
-2819 /* Now copy in args */
-2820 mod->args =3D strndup_user(uargs, ~0UL >> 1);
-2821 if (IS_ERR(mod->args)) {
-2822 err =3D PTR_ERR(mod->args);
-2823 goto free_arch_cleanup;
-2824 }
+--ctfue7uj2awdz525
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> > }, 'LeakSet' )
-> > mods: bless( {
-> >   'backtraces' =3D> {
-> >     '[<0000000058fb276d>] __kmalloc_node_track_caller+0x4a/0x140
-> >     [<00000000ab7b01fd>] kstrdup+0x32/0x60
-> >     [<000000005ed25b98>] kobject_set_name_vargs+0x1c/0x90
-> >     [<0000000090fe19ca>] kobject_init_and_add+0x4d/0x90
-> >     [<0000000045666935>] mod_sysfs_setup+0xa9/0x6e0
->
-> Ok that is a specific enough hint. I'll take a review of this sysfs
-> path see what changed that could break.
+On Fri, Mar 31, 2023 at 01:01:43PM -0700, Luis Chamberlain wrote:
+> On Fri, Mar 31, 2023 at 04:30:21PM +0200, Ahelenia Ziemia=C5=84ska wrote:
+> > This allows a cert in DB to be used to sign modules,
+> > in addition to certs in the MoK and built-in keyrings.
+> >=20
+> > This key policy matches what's used for kexec.
+> Before I nose dive, the commit log should explain why this patch never
+> was sent upstream, if it was, why it was rejected.=20
+How would I know that?
 
-(gdb) l *(mod_sysfs_setup+0xa9)
-0xffffffff8122d2d9 is in mod_sysfs_setup
-(/home/jimc/projects/lx/wk-next/kernel/module/sysfs.c:361).
-356
-357 mod->mkobj.mod =3D mod;
-358
-359 memset(&mod->mkobj.kobj, 0, sizeof(mod->mkobj.kobj));
-360 mod->mkobj.kobj.kset =3D module_kset;
-361 err =3D kobject_init_and_add(&mod->mkobj.kobj, &module_ktype, NULL,
-362    "%s", mod->name);
-363 if (err)
-364 mod_kobject_put(mod);
-365
-(gdb)
+Searching around on the list, I found an equivalent 2022-02-15 patch:
+  https://lore.kernel.org/linux-kernel/840433bc93a58d6dfc4d96c34c0c3b158a0e=
+669d.1644953683.git.msuchanek@suse.de/t/#u
+and there's even a reply from you in there.
 
->
-> >     [<00000000d6f7187b>] load_module+0x1de3/0x20e0
+The discussion appears to boil down to
+".platform is restricted to kexec",
+"there are common setups in which it'd make much more sense to allow
+ this, and also it's prety equivalent security-policy-wise",
+(this repeats).
 
-(gdb) l *(load_module+0x1de3)
-0xffffffff8122aa13 is in load_module
-(/home/jimc/projects/lx/wk-next/kernel/module/main.c:2856).
-2851 pr_warn("%s: parameters '%s' after `--' ignored\n",
-2852        mod->name, after_dashes);
-2853 }
-2854
-2855 /* Link in to sysfs. */
-2856 err =3D mod_sysfs_setup(mod, info, mod->kp, mod->num_kp);
-2857 if (err < 0)
-2858 goto coming_cleanup;
-2859
-2860 if (is_livepatch_module(mod)) {
+MoK/shim is also mentioned, for some reason, even though that solves a
+different problem.
 
+> What makes it good now?
+Debian and Fedora are using it, and it's what users expect to work.
 
+> Who is using it?
+Debian (since 5.3.9-1, #935945) and Fedora (since the time of that bug
+ at the very least, as Debian imported from there, so 2019-11-09).
 
-> >     [<0000000074361279>] __do_sys_finit_module+0x93/0xf0
-> >     [<000000004caeb948>] do_syscall_64+0x34/0x80
-> >     [<000000009f5d036c>] entry_SYSCALL_64_after_hwframe+0x46/0xb0' =3D>=
- 16
-> >   },
->>   Luis
+> What are other distributions doing about it?
+What does that mean, and also how would I know that?
+
+Best,
+
+--ctfue7uj2awdz525
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmQnVgQACgkQvP0LAY0m
+WPHbrw//SBTenWvEm3w9KT+/Tf5ZMHvPzqWyHK7Gk4S2x2ivRamjAQY0Y/fRpFU3
+PknBjiApowWa8Y8DKi1Q3SOZe55QGssZL4SXRhFsRPH5Mh+Kp7PfBtuRrtSqxd6s
+ZS9cRR5HbzdNtieqkOV1G3k+FgTiL9Aj+g49h7wkdpg5wfmsGElVM3dadzG6xUc4
+laUhdmds98iWOIGb8gdaUtb0c9ybJpH/h5IyxvkMPui54C2hOoGc8/0XAvjLiItk
+PyH7Mw8j4dMA59zMOU+4qel7FhQF0mY24hBa1raEgxmD5x1SBPekplsKnpRxd2Zk
+xK4RowUcErTCOGwnwanDJH2EYERKvHeXm87tPENI9FUXGpZFvX773Cr52QadN0iu
+k/zDzresRxhdnKrcAzO3gkTYVVIZuA3mx3Sg+9ZYJ5yXVGdaIYhVKrV24VCmuAER
+U2i/H4HApPaX368SPNSCVXulXrYYuApSPKRfuWo6Oarx4BLOUeUk3OcYWKH38RCi
+A4kjw8eT38fkcbKYN5/PqlYIoRFnDG8NfHUjvnprGw2wVrfGjFUCUNXvDKEqw2X8
+Y7IS0oTF/QoatchfqLumkmAS/tozduFAeIhAvIS9tJ6t6Ss3Twt7SzZ2gROtl5JG
+a+zVNTcHajZQSFYeb2BJ/wv/djOxpGJKDJ2IYQQwHXEQ8tv7WLM=
+=et90
+-----END PGP SIGNATURE-----
+
+--ctfue7uj2awdz525--
