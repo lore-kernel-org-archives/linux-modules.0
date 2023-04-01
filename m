@@ -2,86 +2,96 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B7AFC761A6
-	for <linux-modules@archiver.kernel.org>; Sat,  1 Apr 2023 00:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E5F6C6FD1D
+	for <linux-modules@archiver.kernel.org>; Sat,  1 Apr 2023 11:57:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbjDAA1W (ORCPT
+        id S229937AbjDAL52 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 31 Mar 2023 20:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        Sat, 1 Apr 2023 07:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233488AbjDAA1V (ORCPT
+        with ESMTP id S229942AbjDAL5K (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 31 Mar 2023 20:27:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CB91D2ED;
-        Fri, 31 Mar 2023 17:27:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sat, 1 Apr 2023 07:57:10 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B6724413;
+        Sat,  1 Apr 2023 04:56:41 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8F7AB832C9;
-        Sat,  1 Apr 2023 00:27:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C577C4339C;
-        Sat,  1 Apr 2023 00:27:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680308838;
-        bh=7jzReH1q9CRmvwL2uyfg2ERH5Qy9V7KrZ1wL21mKO3o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bKmB6pi5MGQPJG0P2ovIQFUXPFD/tQqM5fIOL9JPhw5ssGeY3/kcknBSl0u7ZJdaK
-         dyZmU6zW/Vi4SLhs90/RDlIuBt/R28ac1CJnV9bBBQs70rwnNHrybOPwZFww9pthhf
-         1rDcUQDBqeEdb0w7ff6NPmU73UQo6U/rDt0qhbzBT2DgaFldG2fV0+VGOp/lM5E73g
-         a3g69Ie2Y66J5tVpAiUIpvBhtOCg53L9JMzwIQYlgdyeX5ZUBkqdxs2cAUxs9FYcgE
-         kvJqvu/RejN3twj+aSDCx60KrA3JroA9mCDQQC/TTIapfbVjBesYbZBWOdkYmkmy56
-         GPW2bcJSsrRog==
-Received: by mail-lf1-f45.google.com with SMTP id g19so17905188lfr.9;
-        Fri, 31 Mar 2023 17:27:18 -0700 (PDT)
-X-Gm-Message-State: AAQBX9ca9LtuhKMvFYTqpDaWspHPHZzaPvl08uI11GPPlpd4qhZ3NzG/
-        qdlcQeJUp8oz5Hcx7AJXp2Wh+ES1lAUIGCbmBwE=
-X-Google-Smtp-Source: AKy350a9yA6FOkVUeOQKc+dL58DDGuR3rZfb22m/S97w40D1BtWLf0DV/PorjGix/gOyn8yggqK4BhGEzqtmSqJVGts=
-X-Received: by 2002:ac2:44a6:0:b0:4eb:d25:8686 with SMTP id
- c6-20020ac244a6000000b004eb0d258686mr6719045lfm.3.1680308836566; Fri, 31 Mar
- 2023 17:27:16 -0700 (PDT)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8E4591EC0420;
+        Sat,  1 Apr 2023 13:56:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1680350186;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BRoEIkIG+7eAVhs9duV3p3lIy/wXARVavujoy8JQa7o=;
+        b=OCWazxffDgwyQU8bVPdKGu4Zw3dZA3N5/z1oKXVCZXRotfDERE9Xg2dIWiZx/sEu5F+seO
+        PAqFKHBg+lqfXA6aXejznrl5r2BS/d/lQVd7/F7O02876bTo5oOqCJjlidLgrRTctSp535
+        DeXPuEz3b9ikdIvVwMQSRF3CtoYCdPY=
+Date:   Sat, 1 Apr 2023 13:56:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org
+Subject: Re: [PATCH 23/24] kbuild, EDAC, altera: remove MODULE_LICENSE in
+ non-modules
+Message-ID: <20230401115623.GBZCgb50aBhMs/nUlO@fat_crate.local>
+References: <20230217141059.392471-1-nick.alcock@oracle.com>
+ <20230217141059.392471-24-nick.alcock@oracle.com>
 MIME-Version: 1.0
-References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
- <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
-In-Reply-To: <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 31 Mar 2023 17:27:04 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
-Message-ID: <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
-Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with module_memory")
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     jim.cromie@gmail.com, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230217141059.392471-24-nick.alcock@oracle.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Mar 31, 2023 at 12:00=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.or=
-g> wrote:
->
-> On Thu, Mar 30, 2023 at 04:45:43PM -0600, jim.cromie@gmail.com wrote:
-> > hi Luis, etal
-> >
-> > kmemleak is reporting 19 leaks during boot
-> >
-> > because the hexdumps appeared to have module-names,
-> > and Ive been hacking nearby, and see the same names
-> > every time I boot my test-vm, I needed a clearer picture
-> > Jason corroborated and bisected.
-> >
-> > the 19 leaks split into 2 groups,
-> > 9 with names of builtin modules in the hexdump,
-> > all with the same backtrace
-> > 9 without module-names (with a shared backtrace)
-> > +1 wo name-ish and a separate backtrace
->
-> Song, please take a look.
+On Fri, Feb 17, 2023 at 02:10:58PM +0000, Nick Alcock wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+> 
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+> 
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: linux-edac@vger.kernel.org
+> ---
+>  drivers/edac/altera_edac.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> index e7e8e624a436..ba325d4c5e83 100644
+> --- a/drivers/edac/altera_edac.c
+> +++ b/drivers/edac/altera_edac.c
+> @@ -2226,6 +2226,5 @@ static struct platform_driver altr_edac_a10_driver = {
+>  };
+>  module_platform_driver(altr_edac_a10_driver);
+>  
+> -MODULE_LICENSE("GPL v2");
+>  MODULE_AUTHOR("Thor Thayer");
+>  MODULE_DESCRIPTION("EDAC Driver for Altera Memories");
+> -- 
 
-I will look into this next week.
+Applied, thanks.
 
-Thanks,
-Song
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
