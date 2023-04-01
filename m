@@ -2,113 +2,86 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F534C761A6
-	for <linux-modules@archiver.kernel.org>; Fri, 31 Mar 2023 21:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B7AFC761A6
+	for <linux-modules@archiver.kernel.org>; Sat,  1 Apr 2023 00:27:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbjCaVxZ (ORCPT
+        id S233494AbjDAA1W (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 31 Mar 2023 17:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
+        Fri, 31 Mar 2023 20:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233190AbjCaVxX (ORCPT
+        with ESMTP id S233488AbjDAA1V (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 31 Mar 2023 17:53:23 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B33DE390;
-        Fri, 31 Mar 2023 14:52:49 -0700 (PDT)
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 1D1064E20;
-        Fri, 31 Mar 2023 23:52:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202211; t=1680299529;
-        bh=mIgvKEKbsdZdXYnK/e8dLN1n1nIAYWBRaa+ZNUH6xrs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DrRFKoQVTwergRVKrlX2xaQEw0ars3VTGJcr48H7Lyj7osqsJvg0pjG3kXE3zD2Zg
-         hHpG99/ZJ2sTn8TYyBDEXfiLwv7zRpHkTyCxxHLYkbrwHZSrC+JR/ENpVEsmzBRuMN
-         TJ0D8QBPp9+ok7QNCLl8qCNSqIGYlaIN9pBlg3Wsuah8xs9zEBxLgMcWOowc8Asij6
-         H1T1Jg8Weip9F4WktmMae2YH33YE/jHZ7m3lSFHZmafwje9YJtG4OPtyP9Iv7Ebp3e
-         pJSKvNzcA462iWC0atau7Vunue4dNQt+D0vFjdBANExk8aGlpvxqihAJZhkt96DxM0
-         aiVSRD1Sktm4g==
-Date:   Fri, 31 Mar 2023 23:52:07 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
-        "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KEYS: Make use of platform keyring for module signature
- verification
-Message-ID: <oyf37idsgn3qgonracgtoj6k5lshzt37j5bulnqgigy4t3iy4q@nxy53nmnzuud>
-References: <qvgp2il2co4iyxkzxvcs4p2bpyilqsbfgcprtpfrsajwae2etc@3z2s2o52i3xg>
- <ZCc8J6wS1EpXrLQW@bombadil.infradead.org>
+        Fri, 31 Mar 2023 20:27:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CB91D2ED;
+        Fri, 31 Mar 2023 17:27:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8F7AB832C9;
+        Sat,  1 Apr 2023 00:27:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C577C4339C;
+        Sat,  1 Apr 2023 00:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680308838;
+        bh=7jzReH1q9CRmvwL2uyfg2ERH5Qy9V7KrZ1wL21mKO3o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bKmB6pi5MGQPJG0P2ovIQFUXPFD/tQqM5fIOL9JPhw5ssGeY3/kcknBSl0u7ZJdaK
+         dyZmU6zW/Vi4SLhs90/RDlIuBt/R28ac1CJnV9bBBQs70rwnNHrybOPwZFww9pthhf
+         1rDcUQDBqeEdb0w7ff6NPmU73UQo6U/rDt0qhbzBT2DgaFldG2fV0+VGOp/lM5E73g
+         a3g69Ie2Y66J5tVpAiUIpvBhtOCg53L9JMzwIQYlgdyeX5ZUBkqdxs2cAUxs9FYcgE
+         kvJqvu/RejN3twj+aSDCx60KrA3JroA9mCDQQC/TTIapfbVjBesYbZBWOdkYmkmy56
+         GPW2bcJSsrRog==
+Received: by mail-lf1-f45.google.com with SMTP id g19so17905188lfr.9;
+        Fri, 31 Mar 2023 17:27:18 -0700 (PDT)
+X-Gm-Message-State: AAQBX9ca9LtuhKMvFYTqpDaWspHPHZzaPvl08uI11GPPlpd4qhZ3NzG/
+        qdlcQeJUp8oz5Hcx7AJXp2Wh+ES1lAUIGCbmBwE=
+X-Google-Smtp-Source: AKy350a9yA6FOkVUeOQKc+dL58DDGuR3rZfb22m/S97w40D1BtWLf0DV/PorjGix/gOyn8yggqK4BhGEzqtmSqJVGts=
+X-Received: by 2002:ac2:44a6:0:b0:4eb:d25:8686 with SMTP id
+ c6-20020ac244a6000000b004eb0d258686mr6719045lfm.3.1680308836566; Fri, 31 Mar
+ 2023 17:27:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ctfue7uj2awdz525"
-Content-Disposition: inline
-In-Reply-To: <ZCc8J6wS1EpXrLQW@bombadil.infradead.org>
-User-Agent: NeoMutt/20230322
+References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
+ <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
+In-Reply-To: <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 31 Mar 2023 17:27:04 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
+Message-ID: <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
+Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with module_memory")
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     jim.cromie@gmail.com, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+On Fri, Mar 31, 2023 at 12:00=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.or=
+g> wrote:
+>
+> On Thu, Mar 30, 2023 at 04:45:43PM -0600, jim.cromie@gmail.com wrote:
+> > hi Luis, etal
+> >
+> > kmemleak is reporting 19 leaks during boot
+> >
+> > because the hexdumps appeared to have module-names,
+> > and Ive been hacking nearby, and see the same names
+> > every time I boot my test-vm, I needed a clearer picture
+> > Jason corroborated and bisected.
+> >
+> > the 19 leaks split into 2 groups,
+> > 9 with names of builtin modules in the hexdump,
+> > all with the same backtrace
+> > 9 without module-names (with a shared backtrace)
+> > +1 wo name-ish and a separate backtrace
+>
+> Song, please take a look.
 
---ctfue7uj2awdz525
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I will look into this next week.
 
-On Fri, Mar 31, 2023 at 01:01:43PM -0700, Luis Chamberlain wrote:
-> On Fri, Mar 31, 2023 at 04:30:21PM +0200, Ahelenia Ziemia=C5=84ska wrote:
-> > This allows a cert in DB to be used to sign modules,
-> > in addition to certs in the MoK and built-in keyrings.
-> >=20
-> > This key policy matches what's used for kexec.
-> Before I nose dive, the commit log should explain why this patch never
-> was sent upstream, if it was, why it was rejected.=20
-How would I know that?
-
-Searching around on the list, I found an equivalent 2022-02-15 patch:
-  https://lore.kernel.org/linux-kernel/840433bc93a58d6dfc4d96c34c0c3b158a0e=
-669d.1644953683.git.msuchanek@suse.de/t/#u
-and there's even a reply from you in there.
-
-The discussion appears to boil down to
-".platform is restricted to kexec",
-"there are common setups in which it'd make much more sense to allow
- this, and also it's prety equivalent security-policy-wise",
-(this repeats).
-
-MoK/shim is also mentioned, for some reason, even though that solves a
-different problem.
-
-> What makes it good now?
-Debian and Fedora are using it, and it's what users expect to work.
-
-> Who is using it?
-Debian (since 5.3.9-1, #935945) and Fedora (since the time of that bug
- at the very least, as Debian imported from there, so 2019-11-09).
-
-> What are other distributions doing about it?
-What does that mean, and also how would I know that?
-
-Best,
-
---ctfue7uj2awdz525
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmQnVgQACgkQvP0LAY0m
-WPHbrw//SBTenWvEm3w9KT+/Tf5ZMHvPzqWyHK7Gk4S2x2ivRamjAQY0Y/fRpFU3
-PknBjiApowWa8Y8DKi1Q3SOZe55QGssZL4SXRhFsRPH5Mh+Kp7PfBtuRrtSqxd6s
-ZS9cRR5HbzdNtieqkOV1G3k+FgTiL9Aj+g49h7wkdpg5wfmsGElVM3dadzG6xUc4
-laUhdmds98iWOIGb8gdaUtb0c9ybJpH/h5IyxvkMPui54C2hOoGc8/0XAvjLiItk
-PyH7Mw8j4dMA59zMOU+4qel7FhQF0mY24hBa1raEgxmD5x1SBPekplsKnpRxd2Zk
-xK4RowUcErTCOGwnwanDJH2EYERKvHeXm87tPENI9FUXGpZFvX773Cr52QadN0iu
-k/zDzresRxhdnKrcAzO3gkTYVVIZuA3mx3Sg+9ZYJ5yXVGdaIYhVKrV24VCmuAER
-U2i/H4HApPaX368SPNSCVXulXrYYuApSPKRfuWo6Oarx4BLOUeUk3OcYWKH38RCi
-A4kjw8eT38fkcbKYN5/PqlYIoRFnDG8NfHUjvnprGw2wVrfGjFUCUNXvDKEqw2X8
-Y7IS0oTF/QoatchfqLumkmAS/tozduFAeIhAvIS9tJ6t6Ss3Twt7SzZ2gROtl5JG
-a+zVNTcHajZQSFYeb2BJ/wv/djOxpGJKDJ2IYQQwHXEQ8tv7WLM=
-=et90
------END PGP SIGNATURE-----
-
---ctfue7uj2awdz525--
+Thanks,
+Song
