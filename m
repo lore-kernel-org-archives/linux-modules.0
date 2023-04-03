@@ -2,86 +2,67 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14412C76188
-	for <linux-modules@archiver.kernel.org>; Mon,  3 Apr 2023 21:10:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D17BC76196
+	for <linux-modules@archiver.kernel.org>; Mon,  3 Apr 2023 21:21:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbjDCVKp (ORCPT
+        id S233114AbjDCVVI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 3 Apr 2023 17:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
+        Mon, 3 Apr 2023 17:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233591AbjDCVKm (ORCPT
+        with ESMTP id S231788AbjDCVVH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 3 Apr 2023 17:10:42 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4897C19AC
-        for <linux-modules@vger.kernel.org>; Mon,  3 Apr 2023 14:10:37 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id cj15so22267811qtb.5
-        for <linux-modules@vger.kernel.org>; Mon, 03 Apr 2023 14:10:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1680556236;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GEedN3bFTKzplQihfI4j8rnbysKd1Yj2PDXKX4P7kwM=;
-        b=h7rvXuVkFrIWxst6mbUhJE+VbY1rJ8L65pGKWRq8GoSZpg2yrgLOLQCv55XgjMt9TR
-         Ypq+O4BolZT5cd6jNbBstEdaWNZjiT/a+I1TOruXvCFDPwu7kjqbcGvbYTVadTnlxPqc
-         63NeASk/DV37iGvmjBLnIIaYXIvy6lKhUgQhc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680556236;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GEedN3bFTKzplQihfI4j8rnbysKd1Yj2PDXKX4P7kwM=;
-        b=W8fyj3Nw1Uybr9rHYwz++i6SmZmX7iDP0f/nAcc+BT5kug6V5GvB60iHNAKczvkEJc
-         KPQ90gHPBBic1NTR6SMhaQdwp+8AChe3BLSG+qU8j0HGUaednEbfLgw0SUKpLXz+tSoj
-         RUd6pJp7fnw/swDgrV1zxZc9XvQO8EjAzOReOreUrelgLWP3eDcIQRodGqrs48YvEMTj
-         BPBZsF79yeeTGwyo+0E7a7EETSRsRHoATSZpz/DEzKhsY8sEOJ3rQsigvE3WEfZJnjnF
-         Z0yIOiAYiJ9+712orwBKN4cEd9w5x+cAB3TUoM19T/Ab5U2bbhUyN5yo7wy8zOhg5BFz
-         3jPQ==
-X-Gm-Message-State: AAQBX9fpmBgrfxt9neVdOL8PBb/5gQIjz1ZuRq75s4JZWroM/5DNGWCf
-        yxDXH8smUVN+J4jQ0BGOtOBmsQ==
-X-Google-Smtp-Source: AKy350Y6NdhYwxVrVxkuUuzyHSSC6NmaiEYhkuwzo+WXtqbGB8fRbMVe6dS7atcWdSTUYrUZ8bolmA==
-X-Received: by 2002:ac8:7d81:0:b0:3e6:469b:85df with SMTP id c1-20020ac87d81000000b003e6469b85dfmr16802971qtd.18.1680556236394;
-        Mon, 03 Apr 2023 14:10:36 -0700 (PDT)
-Received: from nitro.local (bras-base-mtrlpq5031w-grc-30-209-226-106-7.dsl.bell.ca. [209.226.106.7])
-        by smtp.gmail.com with ESMTPSA id r9-20020ae9d609000000b0074a29c9d8b7sm2301008qkk.134.2023.04.03.14.10.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 14:10:35 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 17:10:33 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     jim.cromie@gmail.com
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, song@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>
+        Mon, 3 Apr 2023 17:21:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE53940C7;
+        Mon,  3 Apr 2023 14:20:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CE8862B19;
+        Mon,  3 Apr 2023 21:20:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E2994C433EF;
+        Mon,  3 Apr 2023 21:20:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680556840;
+        bh=szIfHF2gzcvGyxGWpacrc5AJ1h4Xmv5fWIWGVXSVy4k=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=hyK9LzxiwpZAk0ES5/xctJgiuI7l3A6QCuaPQT5NjA6qCj1jJl1sptAx0XsVfx07B
+         jYTSQTDhiAdoRaqcxrUsO4dOm3npvYwEq7E7mOngPbrqTF73GwUebq6htWTTZ3PlVC
+         Ox5hdFWUEatqsGWp+xLHK6P5hmxuZPApFMNMh0gy/+Y2fqTnTILge6rlt/tCWrIhH2
+         LknggoNMPtniWY7B6IdfjKGawORMkOphrwXUFcOYFkXntYrAv6Mp1uwb3BtOw+S1qZ
+         CDz6ouK1FKyy18wQSA1FtnCQGPDOMztAEAE7vvPfnuv7AxXRvd9WBgEN3pT2eDEPkD
+         FWMJUjjxL9GHA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C494DE5EA88;
+        Mon,  3 Apr 2023 21:20:39 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+From:   "Kernel.org Bugbot" <bugbot@kernel.org>
+To:     song@kernel.org, jbaron@akamai.com, bugs@lists.linux.dev,
+        mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        jim.cromie@gmail.com, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Message-ID: <20230403-b217296-67d45b5fbc27@bugzilla.kernel.org>
+In-Reply-To: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
+References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
 Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with
  module_memory")
-Message-ID: <owkyirqlrkdwvlmd4vlivgahd5uycolsdii3kvwbvakj5222mh@nydsfzk7uqtz>
-References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
+X-Bugzilla-Product: Linux
+X-Bugzilla-Component: Kernel
+X-Mailer: peebz 0.1
+Date:   Mon,  3 Apr 2023 21:20:39 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Mar 30, 2023 at 04:45:43PM -0600, jim.cromie@gmail.com wrote:
-> hi Luis, etal
-> 
-> kmemleak is reporting 19 leaks during boot
+Hello:
 
-Hi, all:
+This conversation is now tracked by Kernel.org Bugzilla:
+https://bugzilla.kernel.org/show_bug.cgi?id=217296
 
-I'm going to use this thread to test out bugbot. You can just ignore it and
-let it do its thing behind the scenes -- if it explodes, I'll take care of it.
+There is no need to do anything else, just keep talking.
+-- 
+Deet-doot-dot, I am a bot.
+Kernel.org Bugzilla (peebz 0.1)
 
-It should just send a single follow-up telling us that it's tracking the
-thread, but otherwise stay entirely out of everyone's hair.
-
-bugbot on
-
-Sorry for interrupting and thank you for your patience -- this is for a good
-cause, I promise. :)
-
--K
