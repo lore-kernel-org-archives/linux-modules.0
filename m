@@ -2,96 +2,105 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E5F6C6FD1D
-	for <linux-modules@archiver.kernel.org>; Sat,  1 Apr 2023 11:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F6FEC76188
+	for <linux-modules@archiver.kernel.org>; Mon,  3 Apr 2023 20:44:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjDAL52 (ORCPT
+        id S232329AbjDCUoC (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 1 Apr 2023 07:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
+        Mon, 3 Apr 2023 16:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjDAL5K (ORCPT
+        with ESMTP id S232647AbjDCUoB (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 1 Apr 2023 07:57:10 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B6724413;
-        Sat,  1 Apr 2023 04:56:41 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8E4591EC0420;
-        Sat,  1 Apr 2023 13:56:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680350186;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=BRoEIkIG+7eAVhs9duV3p3lIy/wXARVavujoy8JQa7o=;
-        b=OCWazxffDgwyQU8bVPdKGu4Zw3dZA3N5/z1oKXVCZXRotfDERE9Xg2dIWiZx/sEu5F+seO
-        PAqFKHBg+lqfXA6aXejznrl5r2BS/d/lQVd7/F7O02876bTo5oOqCJjlidLgrRTctSp535
-        DeXPuEz3b9ikdIvVwMQSRF3CtoYCdPY=
-Date:   Sat, 1 Apr 2023 13:56:23 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org
-Subject: Re: [PATCH 23/24] kbuild, EDAC, altera: remove MODULE_LICENSE in
- non-modules
-Message-ID: <20230401115623.GBZCgb50aBhMs/nUlO@fat_crate.local>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
- <20230217141059.392471-24-nick.alcock@oracle.com>
+        Mon, 3 Apr 2023 16:44:01 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D731E7D;
+        Mon,  3 Apr 2023 13:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=6qyEuD0xFDbKlhpCP+K3Vg2WfeKEXiheWnpkOWpngBk=; b=Kvanm6zHyoXgdkODNgNvtnkB0K
+        D2Oh+XMoXo8xXJbCd1qw1hUewBUB63RSeXzSu39wdWk4u0RJmCbEn524AokJY5kQ/sLm4HJV2nQPY
+        yajOmmKKbIaYCH08L72k7V17JeXV5xSvDL1L6udlr/Pc0UJtmnFcmaO6lTTtEDyftgXm2865uiWK/
+        eIUlwO4GWoPEBbn+PSh4thN08EMfX2sSI9dSqc+HNFOSwjVvoxAc+To0TnYYabzHaCAiurvHkkRSi
+        8/VV2yguC4ngkJERZI+gJQqRAyxgJrRn0flgFGWV25nJl+CFDffm0QvJDebcU0YwcmE5ZIvwCWX/w
+        jeUL+1Nw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjR1y-00GiMj-24;
+        Mon, 03 Apr 2023 20:43:58 +0000
+Date:   Mon, 3 Apr 2023 13:43:58 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <song@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     jim.cromie@gmail.com, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with
+ module_memory")
+Message-ID: <ZCs6jpo1nYe1Wm08@bombadil.infradead.org>
+References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
+ <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
+ <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230217141059.392471-24-nick.alcock@oracle.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Feb 17, 2023 at 02:10:58PM +0000, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
+On Fri, Mar 31, 2023 at 05:27:04PM -0700, Song Liu wrote:
+> On Fri, Mar 31, 2023 at 12:00 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Thu, Mar 30, 2023 at 04:45:43PM -0600, jim.cromie@gmail.com wrote:
+> > > hi Luis, etal
+> > >
+> > > kmemleak is reporting 19 leaks during boot
+> > >
+> > > because the hexdumps appeared to have module-names,
+> > > and Ive been hacking nearby, and see the same names
+> > > every time I boot my test-vm, I needed a clearer picture
+> > > Jason corroborated and bisected.
+> > >
+> > > the 19 leaks split into 2 groups,
+> > > 9 with names of builtin modules in the hexdump,
+> > > all with the same backtrace
+> > > 9 without module-names (with a shared backtrace)
+> > > +1 wo name-ish and a separate backtrace
+> >
+> > Song, please take a look.
 > 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
-> 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: linux-edac@vger.kernel.org
-> ---
->  drivers/edac/altera_edac.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index e7e8e624a436..ba325d4c5e83 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -2226,6 +2226,5 @@ static struct platform_driver altr_edac_a10_driver = {
->  };
->  module_platform_driver(altr_edac_a10_driver);
->  
-> -MODULE_LICENSE("GPL v2");
->  MODULE_AUTHOR("Thor Thayer");
->  MODULE_DESCRIPTION("EDAC Driver for Altera Memories");
-> -- 
+> I will look into this next week.
 
-Applied, thanks.
+I'm thinking this may be it, at least this gets us to what we used to do
+as per original Catalinas' 4f2294b6dc88d ("kmemleak: Add modules
+support") and right before Song's patch.
 
--- 
-Regards/Gruss,
-    Boris.
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 6b6da80f363f..3b9c71fa6096 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2240,7 +2240,10 @@ static int move_module(struct module *mod, struct load_info *info)
+ 		 * which is inside the block. Just mark it as not being a
+ 		 * leak.
+ 		 */
+-		kmemleak_ignore(ptr);
++		if (type == MOD_INIT_TEXT)
++			kmemleak_ignore(ptr);
++		else
++			kmemleak_not_leak(ptr);
+ 		if (!ptr) {
+ 			t = type;
+ 			goto out_enomem;
 
-https://people.kernel.org/tglx/notes-about-netiquette
+We used to use the grey area for the TEXT but the original commit
+doesn't explain too well why we grey out init but not the others. Ie
+why kmemleak_ignore() on init and kmemleak_not_leak() on the others.
+
+Catalinas, any thoughts / suggestions? Should we just stick to
+kmemleak_not_leak() for both now?
+
+  Luis
