@@ -2,140 +2,60 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1C46C6FD1D
-	for <linux-modules@archiver.kernel.org>; Tue,  4 Apr 2023 06:57:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9955C6FD1D
+	for <linux-modules@archiver.kernel.org>; Tue,  4 Apr 2023 11:04:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbjDDG5x (ORCPT
+        id S234890AbjDDLEh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 4 Apr 2023 02:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
+        Tue, 4 Apr 2023 07:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjDDG5w (ORCPT
+        with ESMTP id S234538AbjDDLEY (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 4 Apr 2023 02:57:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4708E2688
-        for <linux-modules@vger.kernel.org>; Mon,  3 Apr 2023 23:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680591428;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LSRkfOPeLraZ1digkXy1EqUeeZ7Fh1tnyaIa8yiX/LA=;
-        b=aNZQu1smRv/Gv3xb/VTVO5+2ZU6NevsSOJD9KNCYM933TkRtnGiESOYsuCnKGm+fldb4Q3
-        zld4fooUfo52wuiD3MLCL16Q197OEUcEJCimysiYV81MWR/QitJjmOLb3xLm3sSnC0UNC2
-        vhcR4eEOj34WDeNSyOikUMUheNXpNh0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-UxXSv8agMdOeKsvCztLYdQ-1; Tue, 04 Apr 2023 02:57:05 -0400
-X-MC-Unique: UxXSv8agMdOeKsvCztLYdQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 41824185A78F;
-        Tue,  4 Apr 2023 06:57:04 +0000 (UTC)
-Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B9ED4492C13;
-        Tue,  4 Apr 2023 06:57:01 +0000 (UTC)
-Date:   Tue, 4 Apr 2023 08:56:59 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Petr Mladek <pmladek@suse.com>,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCH bpf-next] kallsyms: Disable preemption for
- find_kallsyms_symbol_value
-Message-ID: <20230404065659.GA56712@samus.usersys.redhat.com>
-References: <20230403220254.2191240-1-jolsa@kernel.org>
+        Tue, 4 Apr 2023 07:04:24 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A7604C00;
+        Tue,  4 Apr 2023 04:02:04 -0700 (PDT)
+Received: from loongson.cn (unknown [192.168.200.1])
+        by gateway (Coremail) with SMTP id _____8Dxldh2AyxkVGUWAA--.39556S3;
+        Tue, 04 Apr 2023 19:01:10 +0800 (CST)
+Received: from [0.0.0.0] (unknown [192.168.200.1])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx+711Ayxk_SwVAA--.19499S3;
+        Tue, 04 Apr 2023 19:01:09 +0800 (CST)
+To:     yangtiezhu@loongson.cn
+References: <1680254153-14582-4-git-send-email-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH 3/3] module: Ignore L0 and rename is_arm_mapping_symbol()
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn, mcgrof@kernel.org
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <16869b48-28f0-28e4-bafb-cb1fa7f69660@loongson.cn>
+Date:   Tue, 4 Apr 2023 19:01:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230403220254.2191240-1-jolsa@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+In-Reply-To: <1680254153-14582-4-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Cx+711Ayxk_SwVAA--.19499S3
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUgq1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK0I
+        I2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0
+        Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84
+        ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc80
+        4VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY2
+        0_WwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
+        8wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvj
+        DU0xZFpf9x0zRVWlkUUUUU=
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Apr 04, 2023 at 12:02:54AM +0200, Jiri Olsa wrote:
-> Artem reported suspicious RCU usage [1]. The reason is that verifier
-> calls find_kallsyms_symbol_value with preemption enabled which will
-> trigger suspicious RCU usage warning in rcu_dereference_sched call.
-> 
-> Disabling preemption in find_kallsyms_symbol_value and adding
-> __find_kallsyms_symbol_value function.
+LGTM.
 
-Tested-by: Artem Savkov <asavkov@redhat.com>
-
-> Fixes: 31bf1dbccfb0 ("bpf: Fix attaching fentry/fexit/fmod_ret/lsm to modules")
-> [1] https://lore.kernel.org/bpf/ZBrPMkv8YVRiWwCR@samus.usersys.redhat.com/
-> Reported-by: Artem Savkov <asavkov@redhat.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  kernel/module/kallsyms.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> index ab2376a1be88..bdc911dbcde5 100644
-> --- a/kernel/module/kallsyms.c
-> +++ b/kernel/module/kallsyms.c
-> @@ -442,7 +442,7 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
->  }
->  
->  /* Given a module and name of symbol, find and return the symbol's value */
-> -unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
-> +static unsigned long __find_kallsyms_symbol_value(struct module *mod, const char *name)
->  {
->  	unsigned int i;
->  	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
-> @@ -466,7 +466,7 @@ static unsigned long __module_kallsyms_lookup_name(const char *name)
->  	if (colon) {
->  		mod = find_module_all(name, colon - name, false);
->  		if (mod)
-> -			return find_kallsyms_symbol_value(mod, colon + 1);
-> +			return __find_kallsyms_symbol_value(mod, colon + 1);
->  		return 0;
->  	}
->  
-> @@ -475,7 +475,7 @@ static unsigned long __module_kallsyms_lookup_name(const char *name)
->  
->  		if (mod->state == MODULE_STATE_UNFORMED)
->  			continue;
-> -		ret = find_kallsyms_symbol_value(mod, name);
-> +		ret = __find_kallsyms_symbol_value(mod, name);
->  		if (ret)
->  			return ret;
->  	}
-> @@ -494,6 +494,16 @@ unsigned long module_kallsyms_lookup_name(const char *name)
->  	return ret;
->  }
->  
-> +unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
-> +{
-> +	unsigned long ret;
-> +
-> +	preempt_disable();
-> +	ret = __find_kallsyms_symbol_value(mod, name);
-> +	preempt_enable();
-> +	return ret;
-> +}
-> +
->  int module_kallsyms_on_each_symbol(const char *modname,
->  				   int (*fn)(void *, const char *,
->  					     struct module *, unsigned long),
-> -- 
-> 2.39.2
-> 
-
--- 
- Artem
+Tested-by: Youling Tang <tangyouling@loongson.cn> # for LoongArch
 
