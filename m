@@ -2,60 +2,108 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9955C6FD1D
-	for <linux-modules@archiver.kernel.org>; Tue,  4 Apr 2023 11:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 710A8C761A6
+	for <linux-modules@archiver.kernel.org>; Tue,  4 Apr 2023 17:22:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbjDDLEh (ORCPT
+        id S235975AbjDDRW5 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 4 Apr 2023 07:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
+        Tue, 4 Apr 2023 13:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234538AbjDDLEY (ORCPT
+        with ESMTP id S236015AbjDDRWn (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:04:24 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A7604C00;
-        Tue,  4 Apr 2023 04:02:04 -0700 (PDT)
-Received: from loongson.cn (unknown [192.168.200.1])
-        by gateway (Coremail) with SMTP id _____8Dxldh2AyxkVGUWAA--.39556S3;
-        Tue, 04 Apr 2023 19:01:10 +0800 (CST)
-Received: from [0.0.0.0] (unknown [192.168.200.1])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx+711Ayxk_SwVAA--.19499S3;
-        Tue, 04 Apr 2023 19:01:09 +0800 (CST)
-To:     yangtiezhu@loongson.cn
-References: <1680254153-14582-4-git-send-email-yangtiezhu@loongson.cn>
-Subject: Re: [PATCH 3/3] module: Ignore L0 and rename is_arm_mapping_symbol()
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn, mcgrof@kernel.org
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <16869b48-28f0-28e4-bafb-cb1fa7f69660@loongson.cn>
-Date:   Tue, 4 Apr 2023 19:01:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 4 Apr 2023 13:22:43 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A561BCE
+        for <linux-modules@vger.kernel.org>; Tue,  4 Apr 2023 10:22:26 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id t10so133431181edd.12
+        for <linux-modules@vger.kernel.org>; Tue, 04 Apr 2023 10:22:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680628944;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HO2ovPp2g8BY9KhfdMQrBMTwegDXLLj5jKc/ptyrY30=;
+        b=tjhO1KpfHhc+1lR2iyt1Hk/rwcxama/wjJ7OZ99SJ9iE5PvvnClZooJL0nqUXPFW4w
+         8PzRygBzo62hR6aADvLBLh5zaUc9K6iHxsjI8GhSstvvF0Lj0mjG16K1nLIAgvpe3lCO
+         IfvpySSB2i8q6tkhKqZxiq+I1G7MxQ6gEgFpY8mVOIr605DfgxdCPoHlgKjdf+DkmH7q
+         m79NFghwh84Eqf8YGE3vMjyxAXLo15cRhi2jqwO8XbxtMGQwFbaEvZyF60IAZAT2Uukn
+         Xy3tyVnLskveOBXY8K6of7oF+MzTS1kEAy6H9E5JdXU9fI0rQ5mTzNQBPzovDarbqu1z
+         whUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680628944;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HO2ovPp2g8BY9KhfdMQrBMTwegDXLLj5jKc/ptyrY30=;
+        b=QqyhWO7gnwjPo7oOWebXdH5YmFBt25H0JXIwIOnBYRMe/Wc1yGmR3V8t01Dipu1JhC
+         AVppkI8fE4JFDpqYyDGqtpELKS9Ij55MYGpmKmig2jbK9b6VJEkvaQIenyQoMHYTYJeD
+         bdJHxvXy7KCl6RLDebhEQ1mINn/tESVytPcuRJcbuzdxMzEfsZhx/cg7bi9Jw6Kuvpjo
+         GIYjB+FEliEfOVvx9eqnbGR2wJA2X7bM13tS4yzNvkUYIxiOk/G0GOMGDTJ61dcEI5S/
+         +fKn5Hq67+yCkOc5oO5M7pUAoWrj9XZkqpar/i8RzU4oEBAyBh/NLZbzzFx4EiRwG9NZ
+         6UHA==
+X-Gm-Message-State: AAQBX9ct7VHJMAyT9qolispRGBtt4s+N3WZsV2eqMVP/Tm6AwqvtEAli
+        b1Gq5Q2KpMR+GfJ6PtMmFqzE7g==
+X-Google-Smtp-Source: AKy350Y26vq43+a2Aqrtc3D+K5XSDWstIaaK2jDuDL/irBvuLfTWCLG7XAeAr7fcVbJqkjEUOP1U2w==
+X-Received: by 2002:a17:906:f1d5:b0:870:d9a:9ebb with SMTP id gx21-20020a170906f1d500b008700d9a9ebbmr302300ejb.38.1680628944564;
+        Tue, 04 Apr 2023 10:22:24 -0700 (PDT)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id bv20-20020a170906b1d400b009447277c2aasm6208333ejb.39.2023.04.04.10.22.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 10:22:23 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Nick Alcock <nick.alcock@oracle.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 03/40] nvmem: xilinx: zynqmp: make modular
+Date:   Tue,  4 Apr 2023 18:21:11 +0100
+Message-Id: <20230404172148.82422-4-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
+References: <20230404172148.82422-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <1680254153-14582-4-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Cx+711Ayxk_SwVAA--.19499S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUUgq1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK0I
-        I2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0
-        Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84
-        ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc80
-        4VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY2
-        0_WwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
-        8wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvj
-        DU0xZFpf9x0zRVWlkUUUUU=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-LGTM.
+From: Nick Alcock <nick.alcock@oracle.com>
 
-Tested-by: Youling Tang <tangyouling@loongson.cn> # for LoongArch
+This driver has a MODULE_LICENSE but is not tristate so cannot be
+built as a module, unlike all its peers: make it modular to match.
+
+Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+Suggested-by: Michal Simek <michal.simek@amd.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-modules@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Michal Simek <michal.simek@xilinx.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ drivers/nvmem/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+index 6dec38805041..3b3832f4dfad 100644
+--- a/drivers/nvmem/Kconfig
++++ b/drivers/nvmem/Kconfig
+@@ -368,7 +368,7 @@ config NVMEM_VF610_OCOTP
+ 	  be called nvmem-vf610-ocotp.
+ 
+ config NVMEM_ZYNQMP
+-	bool "Xilinx ZYNQMP SoC nvmem firmware support"
++	tristate "Xilinx ZYNQMP SoC nvmem firmware support"
+ 	depends on ARCH_ZYNQMP
+ 	help
+ 	  This is a driver to access hardware related data like
+-- 
+2.25.1
 
