@@ -2,91 +2,117 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3D5EC77B70
-	for <linux-modules@archiver.kernel.org>; Wed,  5 Apr 2023 13:10:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A3D7C76188
+	for <linux-modules@archiver.kernel.org>; Wed,  5 Apr 2023 15:26:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238219AbjDENKB (ORCPT
+        id S238227AbjDEP0p (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 5 Apr 2023 09:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
+        Wed, 5 Apr 2023 11:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238159AbjDENKA (ORCPT
+        with ESMTP id S238223AbjDEP0n (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 5 Apr 2023 09:10:00 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227D71FEC;
-        Wed,  5 Apr 2023 06:09:59 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id ek18so140992747edb.6;
-        Wed, 05 Apr 2023 06:09:59 -0700 (PDT)
+        Wed, 5 Apr 2023 11:26:43 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF8C4C31
+        for <linux-modules@vger.kernel.org>; Wed,  5 Apr 2023 08:26:40 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id ew6so141929329edb.7
+        for <linux-modules@vger.kernel.org>; Wed, 05 Apr 2023 08:26:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680700197;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linux-foundation.org; s=google; t=1680708398; x=1683300398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Vc6lpfSkhCFjZHegYgPH2xzL1XMSoHFdPSi+Hb5EdvY=;
-        b=qpg7ZYCUnkTeF3b6x6kbrQyX2BavDizjxk/2XDA79QURowrQ2TbSVfnW9rhylzBJVT
-         1Bh7GPohy51Twy9gO++ipoy3Npo7zP1qFrfSpDxjTnCVtD0G5EX3k9J7mtmLF6TiOyZ/
-         jp9R9bZUq8O6it5kb8HhTDsI7smP/fK4rrUanIziLOjI+po+bbPTwt+LMQC5lv7AOsx4
-         KBmXD+yTXr/wx0/LyNF95sugOW7ylL2LzW/eXYXM6HRABFbuzCGAP+vMVli8IPh6XCXi
-         fk5aupAgTSlvSPViPo6Qb9TaBnB3Sqhia0EzRbKYCp3ctOmKWf2/s5tFu6WhrXooniJm
-         U11g==
+        bh=SiNSMmn4P5V1jwJhNPZuiJRsbJQ57AhnJVTBbX8pgZo=;
+        b=NSoOjhoaVJ30e5PphrSukeB/G2v7DuMPOO2t5SabWWaGhavl0xfhxz0DYH8NUGuXbq
+         iMT3QA4D9glPde1jx+NRYc8+RO/WQk6HfomFOrKRPVeweDhkiix+sLVAHAWS3c75EQud
+         OcT5h++l1ropGhkanYmM5XQ20yzWKHMTFH0CM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680700197;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680708398; x=1683300398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Vc6lpfSkhCFjZHegYgPH2xzL1XMSoHFdPSi+Hb5EdvY=;
-        b=1Dxk7Ea000htkesDgE8R4v47psAGTCi+v+sXc9HyozFKMQrqF57u+67I2xZ4oya/kq
-         1wUCOMOr0/FK+MgOw78O6bjejwqlKpjzUef6/wViicxYF1sGPnVTApT5LubkB9POhnC1
-         BM59SlKzDSJjJqY7loEfHW5hg9UgHtDPzdTgfxpcMVpTbAnZEn07Z1nXZDdzQAkA1B5q
-         m4KafNb/jsxT74yj2gcx8yN8vW2ofaRK79dkOTMP+GV1ng2Kiiv1nQCaR1lRL/iaydEp
-         6Bg58cdq7PjCZlXRWJ9m9jQyq9SGFyCEOrhWR6DhCC1ARTH71OBBK7hFznAvLFpD+zID
-         2ktQ==
-X-Gm-Message-State: AAQBX9fCpMNlgDrjJuhcsxhLFgtANkPoOSmmYBskOWvGOS4YEMsvC1Iq
-        z1JjSLjZbr6JnzEO3IhzoIc=
-X-Google-Smtp-Source: AKy350alzGXioav9KKWdOSGxp9WUWI3K1jkYkHhw8Tueh9auQSnW3kxrsPw/x7HQfCybtSFuZaTkmQ==
-X-Received: by 2002:a17:906:2b0d:b0:93f:fbe:c389 with SMTP id a13-20020a1709062b0d00b0093f0fbec389mr2911447ejg.13.1680700197494;
-        Wed, 05 Apr 2023 06:09:57 -0700 (PDT)
-Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id h23-20020a170906261700b008e0bb004976sm7311267ejc.134.2023.04.05.06.09.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 06:09:57 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org
-Cc:     Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-tegra@vger.kernel.org
-Subject: Re: (subset) [PATCH 20/20] soc/tegra: cbb: remove MODULE_LICENSE in non-modules
-Date:   Wed,  5 Apr 2023 15:09:50 +0200
-Message-Id: <168070017411.4044223.332660591498857046.b4-ty@nvidia.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230228130215.289081-21-nick.alcock@oracle.com>
-References: <20230228130215.289081-1-nick.alcock@oracle.com> <20230228130215.289081-21-nick.alcock@oracle.com>
+        bh=SiNSMmn4P5V1jwJhNPZuiJRsbJQ57AhnJVTBbX8pgZo=;
+        b=Do2OXB/ubrbMw0dnp19tiDozuHscSHrYF2hg7axi8fOJy4cP80jDiVTWXiJwbkLs4A
+         //bIMqsJGQZDLbTrHNjtpViFDxYaCO/vq37DW96Eo+FSTEtHGJ/4BHs6JekQT7HWZK7C
+         08LlPn0mTRSpUmYk02inb4BVEuPDE0k14HBdXaKLKvTIniZsJUG49518T2TL5U2KIriq
+         VoUWZMBlUztXUETi/4/+go7+FmMCbUt6W/6fm8j6ImwBrSQKR97JEKZiZKMONt5v40Wy
+         AyodYdF920OIkFI3y0Oqc69F3OPQWfHgELc/ulKxjrlMKdt872nSBB5s0/HfkhVKjiRH
+         VOnw==
+X-Gm-Message-State: AAQBX9dj50dseCzxgBtfhrbn42Tp5aXvcoQfoVoWVVq24P3jeV100wi/
+        w+4o8aVvs7jSktcogp0sZ3doiiEwPjp6ZYaoUWxMlA==
+X-Google-Smtp-Source: AKy350a/S1vy04+YbfTF2W6iTF/EHMabrHSy6f8Xg/AqwMHooxZvubHmsqF7eqMfq6btAvQAjcdZaQ==
+X-Received: by 2002:a17:906:94d7:b0:92b:846d:8928 with SMTP id d23-20020a17090694d700b0092b846d8928mr3067903ejy.65.1680708398439;
+        Wed, 05 Apr 2023 08:26:38 -0700 (PDT)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id u1-20020a170906950100b00939faf4be97sm7473774ejx.215.2023.04.05.08.26.36
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 08:26:37 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id r11so142052730edd.5
+        for <linux-modules@vger.kernel.org>; Wed, 05 Apr 2023 08:26:36 -0700 (PDT)
+X-Received: by 2002:a17:907:2075:b0:947:72cd:9325 with SMTP id
+ qp21-20020a170907207500b0094772cd9325mr1890350ejb.15.1680708395703; Wed, 05
+ Apr 2023 08:26:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20230405022702.753323-1-mcgrof@kernel.org> <20230405022702.753323-6-mcgrof@kernel.org>
+In-Reply-To: <20230405022702.753323-6-mcgrof@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 5 Apr 2023 08:26:18 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whH+OsAY+9qLc9Hz+-W8u=dvD3NLWHemOQpZPcgZa52fA@mail.gmail.com>
+Message-ID: <CAHk-=whH+OsAY+9qLc9Hz+-W8u=dvD3NLWHemOQpZPcgZa52fA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] debugfs: add debugfs_create_atomic64_t for atomic64_t
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Thierry Reding <treding@nvidia.com>
+On Tue, Apr 4, 2023 at 7:27=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org>=
+ wrote:
+>
+> Sometimes you want to add debugfs entries for atomic counters which
+> can be pretty large using atomic64_t. Add support for these.
 
-On Tue, 28 Feb 2023 13:02:15 +0000, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
-> 
-> [...]
+So I realize why you use atomic64, but I really suspect you'd be
+better off with just the regular "atomic_long".
 
-Applied, thanks!
+This is not some debug stat that we care deeply about on 32-bit, and
+"atomic64" is often really really nasty on 32-bit architectures.
 
-[20/20] soc/tegra: cbb: remove MODULE_LICENSE in non-modules
-        (no commit info)
+For example, on x86, instead of being a single instruction, it ends up
+being a cmpxchg loop. In fact, even a single atomic read is a cmpxchg
+(admittedly without the need for looping).
 
-Best regards,
--- 
-Thierry Reding <treding@nvidia.com>
+And yeah, I realize that we don't have a "atomic_long" debugfs
+interface either. But I think we could just use atomic_long for the
+module code (avoiding all the horrors of 64-bit atomics on 32-bit
+architectures), and then using just 'var->counter' for the value. It's
+not like the debugfs stuff actually does any truly atomic updates.
+
+So something like
+
+        debugfs_create_ulong(... &val->counter ..);
+
+instead of
+
+        debugfs_create_atomic64(... &val ..);
+
+Hmm?
+
+I dunno. I just think this is not something that may be worth
+introducing a new thing for, when it is *so* painful on 32-bit, and
+doesn't seem worth it.
+
+                   Linus
