@@ -2,32 +2,32 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8B78C76188
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5CB7C761A6
 	for <linux-modules@archiver.kernel.org>; Wed,  5 Apr 2023 02:27:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236733AbjDEC1R (ORCPT
+        id S236738AbjDEC1R (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
         Tue, 4 Apr 2023 22:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236548AbjDEC1Q (ORCPT
+        with ESMTP id S236671AbjDEC1Q (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Tue, 4 Apr 2023 22:27:16 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821241FE3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CB926A4;
         Tue,  4 Apr 2023 19:27:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=g3xEUG+GeiNt8COYV9iOFWQdMbRf7j0U/HejYbLvBNc=; b=P3/p5oxlg67BaA9syMKtlCOWxa
-        zYmjIpVx3QEiOmEABFzXo2pysW+8lq+nqFFDLk+WjISclD2WN2FmtQq1NVkWL7yrqK1/NAb5xuYqT
-        5BCderbYd+4Dk5Jajn2kXgFQxjFDBogHY2rRTnYs+AoSk8Xy27dt5WdFgc9GE84/6qD1y2Ys1vp3u
-        2zuKwg4YkPfQBhusX/yQJOadceV9l9egFgrt0amv2UEqxSl8X3XUqPBmbn0ji815gBc2qqklHj1gs
-        4lB4IiM8fJzkNk4ngNVDgAV+54FujVshmckISckIVcb2l3w9SGfGFIvqVRVsQZDbDxtm5/v2LcDDu
-        CuXsxSGw==;
+        bh=Uqmhy/9B7e+b9++KAwscH/EUKyozA37q6pM2lTfdg70=; b=Fdz2wgwVgvdRKm6Kqj5WWQtJhA
+        Nr1fqb2X4v2AY1i9kpKnf8cC7l+kYK/BFJTZPMjM/cFEx9jprMFVQ+FeMRZ5jUn2FmJRPgw00k/1C
+        QCCZh/fUboJuUiuLlPl5wPHbkMMOTiloaemmfC8O5qmlxX39PnvQNHpa1R1Wvtk5tg28SmlJopNKC
+        XhB1USGVZC5MbSb0RT98TXoDFNuFIur5f7FfMS1Laba7pQL7MLi9xYEu3L2qvCbQwr1kDT8pEepmO
+        3pmUtldAXo4ND8BROJDvFJqbbWxGNZBaHAXTFIOmv8pmlmwz2y/fPaUnh5u/DbH4qDCa9qTxjoR1E
+        RawITC0A==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pjsrb-003A0Y-29;
+        id 1pjsrb-003A0L-1g;
         Wed, 05 Apr 2023 02:27:07 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     david@redhat.com, patches@lists.linux.dev,
@@ -43,9 +43,9 @@ Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
         colin.i.king@gmail.com, jim.cromie@gmail.com,
         catalin.marinas@arm.com, jbaron@akamai.com,
         rick.p.edgecombe@intel.com, mcgrof@kernel.org
-Subject: [PATCH v2 5/6] debugfs: add debugfs_create_atomic64_t for atomic64_t
-Date:   Tue,  4 Apr 2023 19:27:01 -0700
-Message-Id: <20230405022702.753323-6-mcgrof@kernel.org>
+Subject: [PATCH v2 2/6] module: move finished_loading()
+Date:   Tue,  4 Apr 2023 19:26:58 -0700
+Message-Id: <20230405022702.753323-3-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230405022702.753323-1-mcgrof@kernel.org>
 References: <20230405022702.753323-1-mcgrof@kernel.org>
@@ -55,76 +55,74 @@ Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Sometimes you want to add debugfs entries for atomic counters which
-can be pretty large using atomic64_t. Add support for these.
+This has no functional change, just moves a routine earlier
+as we'll make use of it next.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- fs/debugfs/file.c       | 36 ++++++++++++++++++++++++++++++++++++
- include/linux/debugfs.h |  2 ++
- 2 files changed, 38 insertions(+)
+ kernel/module/main.c | 42 +++++++++++++++++++++---------------------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
 
-diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-index 1f971c880dde..76d923503861 100644
---- a/fs/debugfs/file.c
-+++ b/fs/debugfs/file.c
-@@ -780,6 +780,42 @@ void debugfs_create_atomic_t(const char *name, umode_t mode,
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index d8bb23fa6989..98c261928325 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2454,27 +2454,6 @@ static int post_relocation(struct module *mod, const struct load_info *info)
+ 	return module_finalize(info->hdr, info->sechdrs, mod);
  }
- EXPORT_SYMBOL_GPL(debugfs_create_atomic_t);
  
-+static int debugfs_atomic64_t_set(void *data, u64 val)
-+{
-+	atomic64_set((atomic64_t *)data, val);
-+	return 0;
-+}
-+static int debugfs_atomic64_t_get(void *data, u64 *val)
-+{
-+	*val = atomic64_read((atomic64_t *)data);
-+	return 0;
-+}
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t, debugfs_atomic64_t_get,
-+			debugfs_atomic64_t_set, "%lld\n");
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t_ro, debugfs_atomic64_t_get, NULL,
-+			"%lld\n");
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t_wo, NULL, debugfs_atomic64_t_set,
-+			"%lld\n");
-+
-+/**
-+ * debugfs_create_atomic64_t - create a debugfs file that is used to read and
-+ * write an atomic64_t value
-+ * @name: a pointer to a string containing the name of the file to create.
-+ * @mode: the permission that the file should have
-+ * @parent: a pointer to the parent dentry for this file.  This should be a
-+ *          directory dentry if set.  If this parameter is %NULL, then the
-+ *          file will be created in the root of the debugfs filesystem.
-+ * @value: a pointer to the variable that the file should read to and write
-+ *         from.
-+ */
-+void debugfs_create_atomic64_t(const char *name, umode_t mode,
-+			     struct dentry *parent, atomic64_t *value)
-+{
-+	debugfs_create_mode_unsafe(name, mode, parent, value, &fops_atomic64_t,
-+				   &fops_atomic64_t_ro, &fops_atomic64_t_wo);
-+}
-+EXPORT_SYMBOL_GPL(debugfs_create_atomic64_t);
-+
- ssize_t debugfs_read_file_bool(struct file *file, char __user *user_buf,
- 			       size_t count, loff_t *ppos)
+-/* Is this module of this name done loading?  No locks held. */
+-static bool finished_loading(const char *name)
+-{
+-	struct module *mod;
+-	bool ret;
+-
+-	/*
+-	 * The module_mutex should not be a heavily contended lock;
+-	 * if we get the occasional sleep here, we'll go an extra iteration
+-	 * in the wait_event_interruptible(), which is harmless.
+-	 */
+-	sched_annotate_sleep();
+-	mutex_lock(&module_mutex);
+-	mod = find_module_all(name, strlen(name), true);
+-	ret = !mod || mod->state == MODULE_STATE_LIVE
+-		|| mod->state == MODULE_STATE_GOING;
+-	mutex_unlock(&module_mutex);
+-
+-	return ret;
+-}
+-
+ /* Call module constructors. */
+ static void do_mod_ctors(struct module *mod)
  {
-diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
-index ea2d919fd9c7..f5cc613a545e 100644
---- a/include/linux/debugfs.h
-+++ b/include/linux/debugfs.h
-@@ -136,6 +136,8 @@ void debugfs_create_size_t(const char *name, umode_t mode,
- 			   struct dentry *parent, size_t *value);
- void debugfs_create_atomic_t(const char *name, umode_t mode,
- 			     struct dentry *parent, atomic_t *value);
-+void debugfs_create_atomic64_t(const char *name, umode_t mode,
-+			       struct dentry *parent, atomic64_t *value);
- void debugfs_create_bool(const char *name, umode_t mode, struct dentry *parent,
- 			 bool *value);
- void debugfs_create_str(const char *name, umode_t mode,
+@@ -2638,6 +2617,27 @@ static int may_init_module(void)
+ 	return 0;
+ }
+ 
++/* Is this module of this name done loading?  No locks held. */
++static bool finished_loading(const char *name)
++{
++	struct module *mod;
++	bool ret;
++
++	/*
++	 * The module_mutex should not be a heavily contended lock;
++	 * if we get the occasional sleep here, we'll go an extra iteration
++	 * in the wait_event_interruptible(), which is harmless.
++	 */
++	sched_annotate_sleep();
++	mutex_lock(&module_mutex);
++	mod = find_module_all(name, strlen(name), true);
++	ret = !mod || mod->state == MODULE_STATE_LIVE
++		|| mod->state == MODULE_STATE_GOING;
++	mutex_unlock(&module_mutex);
++
++	return ret;
++}
++
+ /*
+  * We try to place it in the list now to make sure it's unique before
+  * we dedicate too many resources.  In particular, temporary percpu
 -- 
 2.39.2
 
