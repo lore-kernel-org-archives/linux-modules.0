@@ -2,179 +2,129 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71F61C6FD1D
-	for <linux-modules@archiver.kernel.org>; Wed,  5 Apr 2023 02:01:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8B78C76188
+	for <linux-modules@archiver.kernel.org>; Wed,  5 Apr 2023 02:27:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233678AbjDECBa (ORCPT
+        id S236733AbjDEC1R (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 4 Apr 2023 22:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        Tue, 4 Apr 2023 22:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbjDECB3 (ORCPT
+        with ESMTP id S236548AbjDEC1Q (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 4 Apr 2023 22:01:29 -0400
+        Tue, 4 Apr 2023 22:27:16 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DE33ABC;
-        Tue,  4 Apr 2023 19:01:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821241FE3;
+        Tue,  4 Apr 2023 19:27:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=bnij7B0KBrBY34+9pqfeC1+5qwU+6Gl1IMo8qKh3a0w=; b=sLskrmc3H71rRgY//Xwu9rGo7X
-        aP4mZe/iMJJUITsQCbgmmLjhL0J5B6WIAdIFTVxffAeFdNIiHKUHzc35OnXRMQJGMs/HbiIkmbQbA
-        Oi/LUv26ON/XEbYsGEbrNZJ7Tk+ohjnsLW32+jHrRkkB3aTjqwoz/ub8m7KmvZHXNeloOE7Fr0mzh
-        vijvMUpKsKJGjjgL+yiEAjlaI5bX0lqfmbMRVkYfJXpnZzptixH4lBIRWIAKWimLFodTQFXGseosL
-        7djeMmKOIhVXuLOaejB3zI9u3BAdUbcDP64LJ5cQ6lX6DT1H/iLMrqbjtQ5Ts9n9h1sUg9B4LP2s2
-        ZZl4whzA==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=g3xEUG+GeiNt8COYV9iOFWQdMbRf7j0U/HejYbLvBNc=; b=P3/p5oxlg67BaA9syMKtlCOWxa
+        zYmjIpVx3QEiOmEABFzXo2pysW+8lq+nqFFDLk+WjISclD2WN2FmtQq1NVkWL7yrqK1/NAb5xuYqT
+        5BCderbYd+4Dk5Jajn2kXgFQxjFDBogHY2rRTnYs+AoSk8Xy27dt5WdFgc9GE84/6qD1y2Ys1vp3u
+        2zuKwg4YkPfQBhusX/yQJOadceV9l9egFgrt0amv2UEqxSl8X3XUqPBmbn0ji815gBc2qqklHj1gs
+        4lB4IiM8fJzkNk4ngNVDgAV+54FujVshmckISckIVcb2l3w9SGfGFIvqVRVsQZDbDxtm5/v2LcDDu
+        CuXsxSGw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pjsSi-0038fI-1W;
-        Wed, 05 Apr 2023 02:01:24 +0000
-Date:   Tue, 4 Apr 2023 19:01:24 -0700
+        id 1pjsrb-003A0Y-29;
+        Wed, 05 Apr 2023 02:27:07 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     jim.cromie@gmail.com
-Cc:     Song Liu <song@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with
- module_memory")
-Message-ID: <ZCzWdLOg1i2p1Q67@bombadil.infradead.org>
-References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
- <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
- <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
- <ZCs6jpo1nYe1Wm08@bombadil.infradead.org>
- <CAJfuBxzGJvrJo9nTXxZ3xZ7QmdSb6YxBw-bojZjQTpACBeK_sQ@mail.gmail.com>
+To:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, mcgrof@kernel.org
+Subject: [PATCH v2 5/6] debugfs: add debugfs_create_atomic64_t for atomic64_t
+Date:   Tue,  4 Apr 2023 19:27:01 -0700
+Message-Id: <20230405022702.753323-6-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230405022702.753323-1-mcgrof@kernel.org>
+References: <20230405022702.753323-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJfuBxzGJvrJo9nTXxZ3xZ7QmdSb6YxBw-bojZjQTpACBeK_sQ@mail.gmail.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Apr 04, 2023 at 07:38:41PM -0600, jim.cromie@gmail.com wrote:
-> On Mon, Apr 3, 2023 at 2:44 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Fri, Mar 31, 2023 at 05:27:04PM -0700, Song Liu wrote:
-> > > On Fri, Mar 31, 2023 at 12:00 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > >
-> > > > On Thu, Mar 30, 2023 at 04:45:43PM -0600, jim.cromie@gmail.com wrote:
-> > > > > hi Luis, etal
-> > > > >
-> > > > > kmemleak is reporting 19 leaks during boot
-> > > > >
-> > > > > because the hexdumps appeared to have module-names,
-> > > > > and Ive been hacking nearby, and see the same names
-> > > > > every time I boot my test-vm, I needed a clearer picture
-> > > > > Jason corroborated and bisected.
-> > > > >
-> > > > > the 19 leaks split into 2 groups,
-> > > > > 9 with names of builtin modules in the hexdump,
-> > > > > all with the same backtrace
-> > > > > 9 without module-names (with a shared backtrace)
-> > > > > +1 wo name-ish and a separate backtrace
-> > > >
-> > > > Song, please take a look.
-> > >
-> > > I will look into this next week.
-> >
-> > I'm thinking this may be it, at least this gets us to what we used to do
-> > as per original Catalinas' 4f2294b6dc88d ("kmemleak: Add modules
-> > support") and right before Song's patch.
-> >
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index 6b6da80f363f..3b9c71fa6096 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -2240,7 +2240,10 @@ static int move_module(struct module *mod, struct load_info *info)
-> >                  * which is inside the block. Just mark it as not being a
-> >                  * leak.
-> >                  */
-> > -               kmemleak_ignore(ptr);
-> > +               if (type == MOD_INIT_TEXT)
-> > +                       kmemleak_ignore(ptr);
-> > +               else
-> > +                       kmemleak_not_leak(ptr);
-> >                 if (!ptr) {
-> >                         t = type;
-> >                         goto out_enomem;
-> >
-> > We used to use the grey area for the TEXT but the original commit
-> > doesn't explain too well why we grey out init but not the others. Ie
-> > why kmemleak_ignore() on init and kmemleak_not_leak() on the others.
-> >
-> > Catalinas, any thoughts / suggestions? Should we just stick to
-> > kmemleak_not_leak() for both now?
-> >
-> >   Luis
-> 
-> So I have mixed results.
-> 
-> your patch fixed the 19 leaks on my worktree / branch where I found them.
-> 
-> on top of
-> ac3b43283923 module: replace module_layout with module_memory
-> 
-> it fixed the (same) 19, but gets a few new ones.
-> whats weird is that once they report, they disappear from
-> /sys/kernel/debug/kmemleak
+Sometimes you want to add debugfs entries for atomic counters which
+can be pretty large using atomic64_t. Add support for these.
 
-I think I missed the MOD_INIT_DATA and MOD_INIT_RODATA. Can you try the
-patch below instead:
-
-From 6890bd43866c40e1b58a832361812cdc5d965e4c Mon Sep 17 00:00:00 2001
-From: Luis Chamberlain <mcgrof@kernel.org>
-Date: Tue, 4 Apr 2023 18:52:47 -0700
-Subject: [PATCH] module: fix kmemleak annotations for non init ELF sections
-
-Commit ac3b43283923 ("module: replace module_layout with module_memory")
-reworked the way to handle memory allocations to make it clearer. But it
-lost in translation how we handle kmemleak_ignore() or kmemleak_not_leak()
-for these sections.
-
-Fix this and clarify the comments a bit more.
-
-Fixes: ac3b43283923 ("module: replace module_layout with module_memory")
-Reported-by: Jim Cromie <jim.cromie@gmail.com>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/main.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ fs/debugfs/file.c       | 36 ++++++++++++++++++++++++++++++++++++
+ include/linux/debugfs.h |  2 ++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 5cc21083af04..fe0f3b8fd3a8 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2233,11 +2233,23 @@ static int move_module(struct module *mod, struct load_info *info)
- 		ptr = module_memory_alloc(mod->mem[type].size, type);
+diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
+index 1f971c880dde..76d923503861 100644
+--- a/fs/debugfs/file.c
++++ b/fs/debugfs/file.c
+@@ -780,6 +780,42 @@ void debugfs_create_atomic_t(const char *name, umode_t mode,
+ }
+ EXPORT_SYMBOL_GPL(debugfs_create_atomic_t);
  
- 		/*
--		 * The pointer to this block is stored in the module structure
--		 * which is inside the block. Just mark it as not being a
--		 * leak.
-+		 * The pointer to these blocks of memory are stored on the module
-+		 * structure and we keep that around so long as the module is
-+		 * around. We only free that memory when we unload the module.
-+		 * Just mark them as not being a leak then. The .init* ELF
-+		 * sections *do* get freed after boot so we treat them slightly
-+		 * differently and only grey them out as they work as typical
-+		 * memory allocations which *do* get eventually get freed.
- 		 */
--		kmemleak_ignore(ptr);
-+		switch (type) {
-+		case MOD_INIT_TEXT: /* fallthrough */
-+		case MOD_INIT_DATA: /* fallthrough */
-+		case MOD_INIT_RODATA: /* fallthrough */
-+			kmemleak_ignore(ptr);
-+			break;
-+		default:
-+			kmemleak_not_leak(ptr);
-+		}
- 		if (!ptr) {
- 			t = type;
- 			goto out_enomem;
++static int debugfs_atomic64_t_set(void *data, u64 val)
++{
++	atomic64_set((atomic64_t *)data, val);
++	return 0;
++}
++static int debugfs_atomic64_t_get(void *data, u64 *val)
++{
++	*val = atomic64_read((atomic64_t *)data);
++	return 0;
++}
++DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t, debugfs_atomic64_t_get,
++			debugfs_atomic64_t_set, "%lld\n");
++DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t_ro, debugfs_atomic64_t_get, NULL,
++			"%lld\n");
++DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic64_t_wo, NULL, debugfs_atomic64_t_set,
++			"%lld\n");
++
++/**
++ * debugfs_create_atomic64_t - create a debugfs file that is used to read and
++ * write an atomic64_t value
++ * @name: a pointer to a string containing the name of the file to create.
++ * @mode: the permission that the file should have
++ * @parent: a pointer to the parent dentry for this file.  This should be a
++ *          directory dentry if set.  If this parameter is %NULL, then the
++ *          file will be created in the root of the debugfs filesystem.
++ * @value: a pointer to the variable that the file should read to and write
++ *         from.
++ */
++void debugfs_create_atomic64_t(const char *name, umode_t mode,
++			     struct dentry *parent, atomic64_t *value)
++{
++	debugfs_create_mode_unsafe(name, mode, parent, value, &fops_atomic64_t,
++				   &fops_atomic64_t_ro, &fops_atomic64_t_wo);
++}
++EXPORT_SYMBOL_GPL(debugfs_create_atomic64_t);
++
+ ssize_t debugfs_read_file_bool(struct file *file, char __user *user_buf,
+ 			       size_t count, loff_t *ppos)
+ {
+diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
+index ea2d919fd9c7..f5cc613a545e 100644
+--- a/include/linux/debugfs.h
++++ b/include/linux/debugfs.h
+@@ -136,6 +136,8 @@ void debugfs_create_size_t(const char *name, umode_t mode,
+ 			   struct dentry *parent, size_t *value);
+ void debugfs_create_atomic_t(const char *name, umode_t mode,
+ 			     struct dentry *parent, atomic_t *value);
++void debugfs_create_atomic64_t(const char *name, umode_t mode,
++			       struct dentry *parent, atomic64_t *value);
+ void debugfs_create_bool(const char *name, umode_t mode, struct dentry *parent,
+ 			 bool *value);
+ void debugfs_create_str(const char *name, umode_t mode,
 -- 
 2.39.2
 
