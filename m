@@ -2,32 +2,32 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A894C77B6C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C71D5C77B72
 	for <linux-modules@archiver.kernel.org>; Wed,  5 Apr 2023 02:27:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236745AbjDEC1T (ORCPT
+        id S236548AbjDEC1T (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
         Tue, 4 Apr 2023 22:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236695AbjDEC1Q (ORCPT
+        with ESMTP id S235802AbjDEC1R (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 4 Apr 2023 22:27:16 -0400
+        Tue, 4 Apr 2023 22:27:17 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DB22106;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB7626AD;
         Tue,  4 Apr 2023 19:27:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=/RMOkeKZ0zVnNikzMHEWN3HnVKsZywedzJcQnE8Kj9M=; b=RLyp7bYttyumVn+murwrwhvi31
-        +3qkWhkJ2kI9TmWM3OKE6f5ChpxuTHEngDcjji12T/IMnYSN+IXGy8sKTSPy5hCGF68Lo/Vc520DH
-        j3tTHdMa1Y4rknjvne+vNfg+V0dXlw0eW1JTCL/3IQ5EWPinq+y4MUR/txof0vH11hmX9VY48q6vq
-        2qoC+9lWZKHk6rz98twbsy9s1ZgpnQXM3J1XmwGiqF2I4mSWMiqNiJuT7K8/JgnUUFPQuhYH6vPog
-        V5O6r1hoFTeLN5Ps5ndgGpbEXRrCQLmZuH9R4vuPl64r7iT2D5RWHmSgYHjkpHDcmagyJeI4CTunX
-        7k7+GZgg==;
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=liwfgRAmKok6/KSZncO+fQ8xOc+1qIirOvQozJbmQE8=; b=4BmqmFWLry1SHUJ0Tq5b7pp92/
+        feseonXDmF3CWCJJacVakhyupfia8MqOB/G11JJDU0m6r+ttpBtfyureiWgDEOZ5IlHPzOSqtn5Ic
+        M3tUevN407qt5DsaER/bqP4Ys/NfkBMmn5FxJLa2COKVDrM9LxO38rNJEPArux++t3y9zb3vzKPYl
+        kykHR0/z0lMkZDVbZrNjDgI6ReCPxSXLocqTyrhX43Uqdcy93IWtlwejhfyWRgoIv1ikwcCNaWtUI
+        FBzRL9GvDH4XJ0L+dahhBVs778M0834muN7f/xPaOYV+1h8KJJe1MFKdz3C5xqfRvV6C1pVJA9o21
+        CAJZ9pVA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pjsrb-003A0U-1r;
+        id 1pjsrb-003A03-1M;
         Wed, 05 Apr 2023 02:27:07 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     david@redhat.com, patches@lists.linux.dev,
@@ -43,130 +43,64 @@ Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
         colin.i.king@gmail.com, jim.cromie@gmail.com,
         catalin.marinas@arm.com, jbaron@akamai.com,
         rick.p.edgecombe@intel.com, mcgrof@kernel.org
-Subject: [PATCH v2 3/6] module: extract patient module check into helper
-Date:   Tue,  4 Apr 2023 19:26:59 -0700
-Message-Id: <20230405022702.753323-4-mcgrof@kernel.org>
+Subject: [PATCH v2 0/6] module: avoid userspace pressure on unwanted allocations
+Date:   Tue,  4 Apr 2023 19:26:56 -0700
+Message-Id: <20230405022702.753323-1-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230405022702.753323-1-mcgrof@kernel.org>
-References: <20230405022702.753323-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The patient module check inside add_unformed_module() is large
-enough as we need it. It is a bit hard to read too, so just
-move it to a helper and do the inverse checks first to help
-shift the code and make it easier to read. The new helper then
-is module_patient_check_exists().
+This v2 series follows up on the first iteration of these patches [0].
+They have the following changes made:
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- kernel/module/main.c | 71 +++++++++++++++++++++++++-------------------
- 1 file changed, 40 insertions(+), 31 deletions(-)
+  o Rolled in fix for an kmemleak issue reported by Jim Cromie
+  o Dropped from this series all the semaphore & and simplifications
+    on kmod.c as that should just be sent as a separate bike-shedding
+    opporunity patch series and it does not in any way address the
+    the unwanted allocations.
+  o The rest of the feedback was just from Greg KH and I've addressed
+    all his feedback. I decided to do away with the debug.c as a
+    separate file and leave the #ifdef CONFIG_MODULE_DEBUG eyesore
+    at the end of main.c. I guess it's not so bad there.
+  o *Tons* of fixes and enhancements to my counters, including tons
+    of documentation to help ensure we don't loose track of some of
+    the tribal knowledge and so to help ensure we have references to
+    what our accounting looks like. Those large wasted virtual memory
+    allocations on a simple qemu idle boring boot are simply rediculous, I
+    am quite baffled we had not spotted this before, and so it all reveals
+    we have quite a bit of optimizations left to do to make loading modules
+    an even more smoother experience at bootup.
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 98c261928325..8f382580195b 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2638,6 +2638,43 @@ static bool finished_loading(const char *name)
- 	return ret;
- }
- 
-+/* Must be called with module_mutex held */
-+static int module_patient_check_exists(const char *name)
-+{
-+	struct module *old;
-+	int err = 0;
-+
-+	old = find_module_all(name, strlen(name), true);
-+	if (old == NULL)
-+		return 0;
-+
-+	if (old->state == MODULE_STATE_COMING
-+	    || old->state == MODULE_STATE_UNFORMED) {
-+		/* Wait in case it fails to load. */
-+		mutex_unlock(&module_mutex);
-+		err = wait_event_interruptible(module_wq,
-+				       finished_loading(name));
-+		if (err)
-+			return err;
-+
-+		/* The module might have gone in the meantime. */
-+		mutex_lock(&module_mutex);
-+		old = find_module_all(name, strlen(name), true);
-+	}
-+
-+	/*
-+	 * We are here only when the same module was being loaded. Do
-+	 * not try to load it again right now. It prevents long delays
-+	 * caused by serialized module load failures. It might happen
-+	 * when more devices of the same type trigger load of
-+	 * a particular module.
-+	 */
-+	if (old && old->state == MODULE_STATE_LIVE)
-+		return -EEXIST;
-+	else
-+		return -EBUSY;
-+}
-+
- /*
-  * We try to place it in the list now to make sure it's unique before
-  * we dedicate too many resources.  In particular, temporary percpu
-@@ -2646,41 +2683,14 @@ static bool finished_loading(const char *name)
- static int add_unformed_module(struct module *mod)
- {
- 	int err;
--	struct module *old;
- 
- 	mod->state = MODULE_STATE_UNFORMED;
- 
- 	mutex_lock(&module_mutex);
--	old = find_module_all(mod->name, strlen(mod->name), true);
--	if (old != NULL) {
--		if (old->state == MODULE_STATE_COMING
--		    || old->state == MODULE_STATE_UNFORMED) {
--			/* Wait in case it fails to load. */
--			mutex_unlock(&module_mutex);
--			err = wait_event_interruptible(module_wq,
--					       finished_loading(mod->name));
--			if (err)
--				goto out_unlocked;
--
--			/* The module might have gone in the meantime. */
--			mutex_lock(&module_mutex);
--			old = find_module_all(mod->name, strlen(mod->name),
--					      true);
--		}
--
--		/*
--		 * We are here only when the same module was being loaded. Do
--		 * not try to load it again right now. It prevents long delays
--		 * caused by serialized module load failures. It might happen
--		 * when more devices of the same type trigger load of
--		 * a particular module.
--		 */
--		if (old && old->state == MODULE_STATE_LIVE)
--			err = -EEXIST;
--		else
--			err = -EBUSY;
-+	err = module_patient_check_exists(mod->name);
-+	if (err)
- 		goto out;
--	}
-+
- 	mod_update_bounds(mod);
- 	list_add_rcu(&mod->list, &modules);
- 	mod_tree_insert(mod);
-@@ -2688,7 +2698,6 @@ static int add_unformed_module(struct module *mod)
- 
- out:
- 	mutex_unlock(&module_mutex);
--out_unlocked:
- 	return err;
- }
- 
+If you'd like a tree this is on my 20230404-module-alloc-opts branch based
+on modules-next [1].
+
+[0] https://lkml.kernel.org/r/20230329053149.3976378-1-mcgrof@kernel.org
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230404-module-alloc-opts
+
+Luis Chamberlain (6):
+  module: fix kmemleak annotations for non init ELF sections
+  module: move finished_loading()
+  module: extract patient module check into helper
+  module: avoid allocation if module is already present and ready
+  debugfs: add debugfs_create_atomic64_t for atomic64_t
+  module: add debug stats to help identify memory pressure
+
+ Documentation/core-api/kernel-api.rst |  22 +-
+ fs/debugfs/file.c                     |  36 +++
+ include/linux/debugfs.h               |   2 +
+ kernel/module/Kconfig                 |  37 +++
+ kernel/module/Makefile                |   1 +
+ kernel/module/decompress.c            |   4 +
+ kernel/module/internal.h              |  74 +++++
+ kernel/module/main.c                  | 198 ++++++++----
+ kernel/module/stats.c                 | 428 ++++++++++++++++++++++++++
+ kernel/module/tracking.c              |   7 +-
+ 10 files changed, 742 insertions(+), 67 deletions(-)
+ create mode 100644 kernel/module/stats.c
+
 -- 
 2.39.2
 
