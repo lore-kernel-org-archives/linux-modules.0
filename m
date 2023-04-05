@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D46BC761AF
-	for <linux-modules@archiver.kernel.org>; Wed,  5 Apr 2023 19:46:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39439C761AF
+	for <linux-modules@archiver.kernel.org>; Wed,  5 Apr 2023 19:55:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjDETqF (ORCPT
+        id S229707AbjDETz6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 5 Apr 2023 15:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        Wed, 5 Apr 2023 15:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjDETqE (ORCPT
+        with ESMTP id S231767AbjDETz5 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:46:04 -0400
+        Wed, 5 Apr 2023 15:55:57 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2FE109;
-        Wed,  5 Apr 2023 12:46:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA69892;
+        Wed,  5 Apr 2023 12:55:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gRyDGkNXA8X/Ou+wCx5J0rIg1wyfF74j9vjMPvDUruY=; b=tYXt24Fo50ltUGZjPjw2lPjPeF
-        nzY6+MQSkeHE/QQynKGgV5VV5lcwL+HdN/7sVQPA/lOJowkAzVPwlrGZdP5RRyOlT9x5Or6Jud0RF
-        rpjK/rHLoylED/BxIlOYor/5xjtmHNdH+Y92VoG8pEM6QJ410A2J6xQX2X5xzmPmm/sGx7GMD57/H
-        fR/YNVwFPAg+dxxkHyps6vNJA6hvv+J2zaH3tcW+KrzQYlvD0Ai74boZq12pBdFycMCoY9rcMLD6N
-        NZbanhKGgMn2inBPxugV6qcnRU6qemPwa/xBWnjEvce+TByP4Cq4QdDBhTfOmx8vzZ0Us5rav4nxk
-        3NLOOFdg==;
+        bh=oxyebGN4w9Tc2bUcUmGtLbWmMd7cSv90tfCn7BeaNE4=; b=bylkG3luwr4nDuqdrcTmlfI+IL
+        IwkxblxNXhMeSPF7vjlklPRQBNqK90YVcnKYN+VzRZ+Lb77rq0Aw+y6atIGqqbdPrZNbul0bieJHZ
+        4cvINOtWp2iddJixjhz5WvyJ1F0IrWsyrOwsRqzdyJ8hAWT515k/6eWze/g2Y16wVLKZ1MPH7QHIh
+        lZL+WOjZ0F0KHwJLoQ+54NgXqbsHeDlIsq+zf1rKDUlpugnMvP4qBKM+VVFWw3ZCSY0Sv/7Xjn+6n
+        VODGc34U2klGE/zQmMiCKdRWrdb+Ydh0vYs1zlW7MI3pqv3vltzx7GWURHtp/AaU4idrGRZ886lG0
+        Tmk62b6A==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pk94s-005Wvv-0J;
-        Wed, 05 Apr 2023 19:45:54 +0000
-Date:   Wed, 5 Apr 2023 12:45:54 -0700
+        id 1pk9ER-005YBk-20;
+        Wed, 05 Apr 2023 19:55:47 +0000
+Date:   Wed, 5 Apr 2023 12:55:47 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     David Hildenbrand <david@redhat.com>
 Cc:     patches@lists.linux.dev, linux-modules@vger.kernel.org,
@@ -43,89 +43,41 @@ Cc:     patches@lists.linux.dev, linux-modules@vger.kernel.org,
         colin.i.king@gmail.com, jim.cromie@gmail.com,
         catalin.marinas@arm.com, jbaron@akamai.com,
         rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v2 3/6] module: extract patient module check into helper
-Message-ID: <ZC3P8m1AN5XZNjrP@bombadil.infradead.org>
+Subject: Re: [PATCH v2 2/6] module: move finished_loading()
+Message-ID: <ZC3SQ5GcRiP6iky3@bombadil.infradead.org>
 References: <20230405022702.753323-1-mcgrof@kernel.org>
- <20230405022702.753323-4-mcgrof@kernel.org>
- <b069b2b0-05fd-5c32-23c7-fbdd513681de@redhat.com>
+ <20230405022702.753323-3-mcgrof@kernel.org>
+ <d6f6f4a5-2b6d-d3d6-0806-8c41ac5dcdf0@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b069b2b0-05fd-5c32-23c7-fbdd513681de@redhat.com>
+In-Reply-To: <d6f6f4a5-2b6d-d3d6-0806-8c41ac5dcdf0@redhat.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, Apr 05, 2023 at 07:11:24PM +0200, David Hildenbrand wrote:
+On Wed, Apr 05, 2023 at 07:06:35PM +0200, David Hildenbrand wrote:
 > On 05.04.23 04:26, Luis Chamberlain wrote:
-> > The patient module check inside add_unformed_module() is large
-> > enough as we need it. It is a bit hard to read too, so just
-> > move it to a helper and do the inverse checks first to help
-> > shift the code and make it easier to read. The new helper then
-> > is module_patient_check_exists().
+> > This has no functional change, just moves a routine earlier
+> > as we'll make use of it next.
 > > 
 > > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 > > ---
-> >   kernel/module/main.c | 71 +++++++++++++++++++++++++-------------------
-> >   1 file changed, 40 insertions(+), 31 deletions(-)
-> > 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index 98c261928325..8f382580195b 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -2638,6 +2638,43 @@ static bool finished_loading(const char *name)
-> >   	return ret;
-> >   }
-> > +/* Must be called with module_mutex held */
-> > +static int module_patient_check_exists(const char *name)
-> > +{
-> > +	struct module *old;
-> > +	int err = 0;
-> > +
-> > +	old = find_module_all(name, strlen(name), true);
-> > +	if (old == NULL)
-> > +		return 0;
-> > +
-> > +	if (old->state == MODULE_STATE_COMING
-> > +	    || old->state == MODULE_STATE_UNFORMED) {
 > 
-> I never understood why people prefer to prefix the || on a newline. But it
-> seems to be a thing in the module/ world :)
+> I'd simply squash into #3, as that's short enough that the move doesn't add
+> significant noise. Anyhow:
 
-Yeah the other way seems better, I'll make it pretty.
+I'll fold that, thanks.
 
-> > +		/* Wait in case it fails to load. */
-> > +		mutex_unlock(&module_mutex);
-> > +		err = wait_event_interruptible(module_wq,
-> > +				       finished_loading(name));
-> > +		if (err)
-> > +			return err;
-> 
-> You return with the mutex unlocked. The caller will unlock again ...
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Fixed now by moving the mutex below up after the wait_event_interruptible(),
-thanks.
+What would be *really* nice, if you can, is an output of the new module
+debugfs stats on your big system. It would be nice to also see the stats
+if you revert the patch "module: avoid allocation if module is already present
+and ready".
 
-> > +
-> > +		/* The module might have gone in the meantime. */
-> > +		mutex_lock(&module_mutex);
-> > +		old = find_module_all(name, strlen(name), true);
-> > +	}
-> > +
-> > +	/*
-> > +	 * We are here only when the same module was being loaded. Do
-> > +	 * not try to load it again right now. It prevents long delays
-> > +	 * caused by serialized module load failures. It might happen
-> > +	 * when more devices of the same type trigger load of
-> > +	 * a particular module.
-> > +	 */
-> > +	if (old && old->state == MODULE_STATE_LIVE)
-> > +		return -EEXIST;
-> > +	else
-> > +		return -EBUSY;
-> 
-> You can drop the else and return right away.
-
-Will make it pretty like that, thanks.
+The delta between those stats should give us a more realistic analysis
+of probable savings due to that patch on virtual memory on bootup on a
+large system. In particular the delta between "Virtual mem wasted bytes".
 
   Luis
