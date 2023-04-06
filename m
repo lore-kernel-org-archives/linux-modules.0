@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F64BC7618D
-	for <linux-modules@archiver.kernel.org>; Thu,  6 Apr 2023 19:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94EECC77B6C
+	for <linux-modules@archiver.kernel.org>; Thu,  6 Apr 2023 19:01:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240453AbjDFTBc (ORCPT
+        id S240477AbjDFTBf (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 6 Apr 2023 15:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        Thu, 6 Apr 2023 15:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240389AbjDFTBX (ORCPT
+        with ESMTP id S240376AbjDFTB2 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:01:23 -0400
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8922735
-        for <linux-modules@vger.kernel.org>; Thu,  6 Apr 2023 12:01:04 -0700 (PDT)
-Received: by mail-il1-x14a.google.com with SMTP id q17-20020a056e020c3100b003245df8be9fso26453034ilg.14
-        for <linux-modules@vger.kernel.org>; Thu, 06 Apr 2023 12:01:04 -0700 (PDT)
+        Thu, 6 Apr 2023 15:01:28 -0400
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23B89EFF
+        for <linux-modules@vger.kernel.org>; Thu,  6 Apr 2023 12:01:05 -0700 (PDT)
+Received: by mail-io1-xd4a.google.com with SMTP id v126-20020a6bac84000000b007587234a54cso24648852ioe.6
+        for <linux-modules@vger.kernel.org>; Thu, 06 Apr 2023 12:01:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680807664;
+        d=google.com; s=20210112; t=1680807665;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lPtoJrKBH3N2nk7pm0WBiOte1w3zyXs+2rCz5/qKsmI=;
-        b=X+v0xVsX9ePu+gtwgv1xggQ+b9AWSfR2kutza91lJ4sEaRsWLI9aUai/oOu71s6gex
-         085PISyP11GQiy5TpHe2KqUiiMys2wj6F3LZKs5fY+J3Euxw/MW+oV/FzVW5akzVCEWr
-         Qu5KuDjMRCJLNQE2PQELcL1qsl5c3UE5cppY4EeC0WUbfohnh8Rb91QCTO2vr1Jum8eD
-         IL/nYTUBqV+289xqR3EbtbZO4r6o2gkaZ9oSaqJyrcQ7KjYOFHXumoiW5Zkfb4k1DmEx
-         p7lyo49HTkd6WcC1RTXvZKvH4Mp3QBWwR7HpWyThE8NkxJ8/AodWw2njEC2lbvvSLDEg
-         XUIg==
+        bh=Bt77I86eFgSbNaHK2t0i9/m/bTrUBRuYsHv7CbhjIr4=;
+        b=gGaKPKflAxPJskJy8MYWIZ1zGy8JetUF3tcjeHXdaxT9RttPBdGV08CwKIrPIo+1+v
+         GdrlN+UenxsaTd6j37BEg+IeE8RAXAb1nZvuujxF1SDejaQ6L5VlOT1mPFNxmzdShJ42
+         jWDSXooi1wn60L0/ZPaJqCSHCabEVM5k2IuBzu+3e1Bjl45I1n69jie8qj9ZKPhH3FAv
+         6nUSYGmVucJp1xtsyijza3z9sodintasi2zjYpdAdjOZjD04JaBOCzqMbvksTqMA21+e
+         HsOsDewz6OvWSPAX4YEGOl6qFQS4nhG23kRhNad8SEYLTI9+httLSlZo5osesgMiNws/
+         7fhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680807664;
+        d=1e100.net; s=20210112; t=1680807665;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lPtoJrKBH3N2nk7pm0WBiOte1w3zyXs+2rCz5/qKsmI=;
-        b=GF5BsIHjcKiAVgBFvzv3b1XLsfMhT5H2M1QrGktdWZR374ZiP+6Ap+UpTPqHchqECr
-         UB5hKqbPFeveMZu9+H/KLYwtkX4GdF9nlT2GWvyNOlI7R5QRKugh/inA7ClKu2x5/NjE
-         /5iBnUSpjuqA7czJ17Q1zhgVKj/U1WJBIrfhX66CVwFssagqP5zuWBfAUnDN39YwolGs
-         brVke5fww6lao2xQNPSlrWOvcDCCtWXJwXuu6cVl3wFeo4pfHESIIbdZxkgDvN2rMfa/
-         ORzqWlGQmi+88JjDEOvV/NEr4ivUl9XJPaYgdPks4X66YVYlBlGyeqLxTMJJoI8xOd48
-         1d6A==
-X-Gm-Message-State: AAQBX9f0SX6Hu79c5sL7/l0QIcDv6duk9M0rj+itB8H3/Y1ZFCaSuH+1
-        FQ+k42MYqQmfuM8vI0cH8i2EDT/R7a+AGQfqGIOgIZMEQyycQQ0yt7FIc2yViHj3pUKFhyRI7TC
-        +zA71nDZwY3yU5aKihnmoNLP1CZPEwrO0cRsYkPHCfE3h4h7KAaVI303tSbMEmXybbn1B6F1juH
-        1dmko=
-X-Google-Smtp-Source: AKy350b3ywgYGOuNRaHCfri+YC25Y0XY6ETeOx4MfHOdbQbf18wi5MjpLqXr6pg04A8qD1H12AIVIIUEY6rzGOQ=
+        bh=Bt77I86eFgSbNaHK2t0i9/m/bTrUBRuYsHv7CbhjIr4=;
+        b=jscFQeu1UmH0PH5GUam6+oR6Qfj6h6ahakRkDGKjhfowXTBb1d8OB6yZQ/LDVR+DHW
+         B/SQ8/jwtyJOfxBbKFzlBttT/T1dvmNjtNDSng9pehAXSwinTir3iKSe08xZo0YeYfEe
+         d5V3biN091wBn4PTInx9WnVvVRMqTjOc59TZq2SvFsd0HNGjC1pLC20lhD/BvoPCrjsr
+         x3G8cQgsOHsavumd7RAYfu0ia/ML05UA86meHOQG4wte9lsczTKuINNuYpH0r2L1acXa
+         FrcFbl2F+GefGXFzUXHUFF206c9SYW2OO0JfJQLxvOrgHO2AMRBlZxE+8A2Y/B67BGb/
+         tAVw==
+X-Gm-Message-State: AAQBX9fZg+VCfiq9HN0N0riUBCMkTKSG6ZpwKBiYglN38j0xOhsh+0es
+        NnUnrD9MLItCrMbYO1oI+GrqVjVrgzszqacew10ywOy9jxmlfPIwyD9p6Bwo/4Dtcpp6hidBFHz
+        gIN09nqw4LG/XuqyX6QVrZGGqojGzjdqOBNqRgH2lMQnzsyoy8VPDR/YY6o/G82uw6QH6JpaSjC
+        nxb0c=
+X-Google-Smtp-Source: AKy350YvGrGN4n61kxqDKxiBKleyueyiQrPvC6O+CnLmm0EGLHXB3+GJdstqxviJ7IrnooMhhcchZlrK/+eB4BI=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a02:85ae:0:b0:3ec:dc1f:12dd with SMTP id
- d43-20020a0285ae000000b003ecdc1f12ddmr6262286jai.6.1680807663728; Thu, 06 Apr
- 2023 12:01:03 -0700 (PDT)
-Date:   Thu,  6 Apr 2023 14:00:25 -0500
+ (user=allenwebb job=sendgmr) by 2002:a02:848e:0:b0:408:f9aa:a54d with SMTP id
+ f14-20020a02848e000000b00408f9aaa54dmr5772053jai.6.1680807664892; Thu, 06 Apr
+ 2023 12:01:04 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 14:00:26 -0500
 In-Reply-To: <20230406190030.968972-1-allenwebb@google.com>
 Mime-Version: 1.0
 References: <20221219204619.2205248-1-allenwebb@google.com> <20230406190030.968972-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230406190030.968972-7-allenwebb@google.com>
-Subject: [PATCH v10 06/11] modpost: Add -b option for emitting built-in aliases
+Message-ID: <20230406190030.968972-8-allenwebb@google.com>
+Subject: [PATCH v10 07/11] file2alias.c: Implement builtin.alias generation
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -67,91 +67,137 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This adds a command line option for writing the match-id based built-in
-aliases to a file. A future patch extends file2alias.c to support this
-command.
-
-The -b option accepts the output path as a parameter and requires
-vmlinuz.o to be one of the input files for the aliases to be found.
+This populates the mod->modalias_buf with aliases for built-in modules
+when modpost is run against vmlinuz.o.
 
 Signed-off-by: Allen Webb <allenwebb@google.com>
 ---
- scripts/mod/modpost.c | 30 ++++++++++++++++++++++++++++--
- scripts/mod/modpost.h |  1 +
- 2 files changed, 29 insertions(+), 2 deletions(-)
+ scripts/mod/file2alias.c | 61 ++++++++++++++++++++++++++--------------
+ 1 file changed, 40 insertions(+), 21 deletions(-)
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index efff8078e395..2e452aec0fc6 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -2173,6 +2173,19 @@ static void write_if_changed(struct buffer *b, const char *fname)
- 	write_buf(b, fname);
+diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+index b392d51c3b06..3793d4632b94 100644
+--- a/scripts/mod/file2alias.c
++++ b/scripts/mod/file2alias.c
+@@ -233,6 +233,8 @@ static void do_usb_entry(void *symval,
+ 	add_wildcard(alias);
+ 	buf_printf(&mod->dev_table_buf,
+ 		   "MODULE_ALIAS(\"%s\");\n", alias);
++	if (mod->builtin_name)
++		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
  }
  
-+/* Write the builtin aliases to the specified file. */
-+static void write_builtin(const char *fname)
-+{
-+	struct buffer buf = { };
-+	struct module *mod;
-+
-+	list_for_each_entry(mod, &modules, list)
-+		buf_write(&buf, mod->modalias_buf.p, mod->modalias_buf.pos);
-+
-+	write_if_changed(&buf, fname);
-+	free(buf.p);
-+}
-+
- static void write_vmlinux_export_c_file(struct module *mod)
- {
- 	struct buffer buf = { };
-@@ -2329,13 +2342,23 @@ int main(int argc, char **argv)
- {
- 	struct module *mod;
- 	char *missing_namespace_deps = NULL;
--	char *dump_write = NULL, *files_source = NULL;
-+	char *builtin_write = NULL, *dump_write = NULL, *files_source = NULL;
- 	int opt;
- 	LIST_HEAD(dump_lists);
- 	struct dump_list *dl, *dl2;
+ /* Handles increment/decrement of BCD formatted integers */
+@@ -377,9 +379,13 @@ static void do_of_entry_multi(void *symval, struct module *mod)
+ 			*tmp = '_';
  
--	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
-+	while ((opt = getopt(argc, argv, "b:ei:mnT:o:awENd:")) != -1) {
- 		switch (opt) {
-+		case 'b':
-+			/*
-+			 * Writes the match-id based built-in module aliases to
-+			 * the specified path.
-+			 *
-+			 * vmlinuz.o needs to be one of the input files for the
-+			 * aliases to be found.
-+			 */
-+			builtin_write = optarg;
-+			break;
- 		case 'e':
- 			external_module = true;
- 			break;
-@@ -2398,6 +2421,9 @@ int main(int argc, char **argv)
- 			write_mod_c_file(mod);
+ 	buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
++	if (mod->builtin_name)
++		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
+ 	strcat(alias, "C");
+ 	add_wildcard(alias);
+ 	buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
++	if (mod->builtin_name)
++		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
+ }
+ 
+ static void do_of_table(void *symval, unsigned long size,
+@@ -611,12 +617,18 @@ static void do_pnp_device_entry(void *symval, unsigned long size,
+ 
+ 		buf_printf(&mod->dev_table_buf,
+ 			   "MODULE_ALIAS(\"pnp:d%s*\");\n", *id);
++		if (mod->builtin_name)
++			buf_printf(&mod->modalias_buf, "alias pnp:d%s* %s\n",
++				   *id, mod->builtin_name);
+ 
+ 		/* fix broken pnp bus lowercasing */
+ 		for (j = 0; j < sizeof(acpi_id); j++)
+ 			acpi_id[j] = toupper((*id)[j]);
+ 		buf_printf(&mod->dev_table_buf,
+ 			   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
++		if (mod->builtin_name)
++			buf_printf(&mod->modalias_buf, "alias acpi*:%s:* %s\n",
++				   acpi_id, mod->builtin_name);
  	}
+ }
  
-+	if (builtin_write)
-+		write_builtin(builtin_write);
+@@ -638,6 +650,8 @@ static void do_pnp_card_entries(void *symval, unsigned long size,
+ 			const char *id = (char *)(*devs)[j].id;
+ 			int i2, j2;
+ 			int dup = 0;
++			char acpi_id[PNP_ID_LEN];
++			int k;
+ 
+ 			if (!id[0])
+ 				break;
+@@ -663,19 +677,23 @@ static void do_pnp_card_entries(void *symval, unsigned long size,
+ 			}
+ 
+ 			/* add an individual alias for every device entry */
+-			if (!dup) {
+-				char acpi_id[PNP_ID_LEN];
+-				int k;
+-
+-				buf_printf(&mod->dev_table_buf,
+-					   "MODULE_ALIAS(\"pnp:d%s*\");\n", id);
+-
+-				/* fix broken pnp bus lowercasing */
+-				for (k = 0; k < sizeof(acpi_id); k++)
+-					acpi_id[k] = toupper(id[k]);
+-				buf_printf(&mod->dev_table_buf,
+-					   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
+-			}
++			if (dup)
++				continue;
 +
- 	if (missing_namespace_deps)
- 		write_namespace_deps_files(missing_namespace_deps);
++			buf_printf(&mod->dev_table_buf,
++				   "MODULE_ALIAS(\"pnp:d%s*\");\n", id);
++			if (mod->builtin_name)
++				buf_printf(&mod->modalias_buf, "alias pnp:d%s* %s\n",
++					   id, mod->builtin_name);
++
++			/* fix broken pnp bus lowercasing */
++			for (k = 0; k < sizeof(acpi_id); k++)
++				acpi_id[k] = toupper(id[k]);
++			buf_printf(&mod->dev_table_buf,
++				   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
++			if (mod->builtin_name)
++				buf_printf(&mod->modalias_buf, "alias acpi*:%s:* %s\n",
++					   acpi_id, mod->builtin_name);
+ 		}
+ 	}
+ }
+@@ -1476,10 +1494,13 @@ static void do_table(void *symval, unsigned long size,
+ 	size -= id_size;
  
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 34fe5fc0b02c..c55a6aeb46bf 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -123,6 +123,7 @@ struct module {
- 	bool has_init;
- 	bool has_cleanup;
- 	struct buffer dev_table_buf;
-+	struct buffer modalias_buf;
- 	char	     srcversion[25];
- 	// Missing namespace dependencies
- 	struct list_head missing_namespaces;
+ 	for (i = 0; i < size; i += id_size) {
+-		if (do_entry(mod->name, symval+i, alias)) {
+-			buf_printf(&mod->dev_table_buf,
+-				   "MODULE_ALIAS(\"%s\");\n", alias);
+-		}
++		if (!do_entry(mod->name, symval + i, alias))
++			continue;
++		buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
++		if (!mod->builtin_name)
++			continue;
++		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias,
++			   mod->builtin_name);
+ 	}
+ }
+ 
+@@ -1554,10 +1575,8 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+ 		return;
+ 
+ 	/*
+-	 * All our symbols are either of form
+-	 *   __mod_<name>__<identifier>_device_table
+-	 * or
+-	 *   __mod_<name>__<identifier>__kmod_<builtin-name>_device_table
++	 * All our symbols are of form
++	 *   __mod_<name>__<identifier>__kmod_<modname>_device_table
+ 	 */
+ 	if (strncmp(symname, "__mod_", strlen("__mod_")))
+ 		return;
 -- 
 2.39.2
 
