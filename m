@@ -2,84 +2,123 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA28AC7618D
-	for <linux-modules@archiver.kernel.org>; Thu,  6 Apr 2023 04:40:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D674CC7618D
+	for <linux-modules@archiver.kernel.org>; Thu,  6 Apr 2023 08:16:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbjDFEkV (ORCPT
+        id S233624AbjDFIQS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 6 Apr 2023 00:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
+        Thu, 6 Apr 2023 04:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjDFEkU (ORCPT
+        with ESMTP id S233235AbjDFIP6 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 6 Apr 2023 00:40:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D23A86B0;
-        Wed,  5 Apr 2023 21:40:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80E8F642AB;
-        Thu,  6 Apr 2023 04:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C5387C4339B;
-        Thu,  6 Apr 2023 04:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680756018;
-        bh=KovWrG/4iyTPO4xu7Gs3LeZHG6KgCCbmr54VIlegrUQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gY90QfEHoJe40H32tpkysWMTk6vHwdEd7/oZs6++hzpmKJDdDFH9ZGilq7D+obqle
-         FNgoO8LH0EqwntzS/7mFzLWybCBHlcGTaHyC1jx/CWG93jBtnDd04mYj2Br30cAuFj
-         LyHgXlNxxMVZ7gqS5tV+nUirLLy9J+R+dTdUHtxpVildrKvzVsETyZ64aKXzdWqVkN
-         /kDe7Ci4b//na0+xMmoAM2nIGUd+qapAj/rCavMEv8TGl0rLM94enmTl8JmYIvRuEE
-         gQ7esdvpz2DNdGmi792RuAV4l0/+XB+FRIaFhmc5ataztDRKENmbzIyQ20epE4CQLX
-         gPZlTdIrkMALg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A448FE29F4E;
-        Thu,  6 Apr 2023 04:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 6 Apr 2023 04:15:58 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6660D5276
+        for <linux-modules@vger.kernel.org>; Thu,  6 Apr 2023 01:15:56 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mtapsc-7-YVjMLhzINku5loDUzSosnA-1; Thu, 06 Apr 2023 09:15:53 +0100
+X-MC-Unique: YVjMLhzINku5loDUzSosnA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 6 Apr
+ 2023 09:15:51 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 6 Apr 2023 09:15:51 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Luis Chamberlain' <mcgrof@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     "david@redhat.com" <david@redhat.com>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "petr.pavlu@suse.com" <petr.pavlu@suse.com>,
+        "prarit@redhat.com" <prarit@redhat.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "mhocko@suse.com" <mhocko@suse.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
+        "jim.cromie@gmail.com" <jim.cromie@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "jbaron@akamai.com" <jbaron@akamai.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>
+Subject: RE: [PATCH v2 5/6] debugfs: add debugfs_create_atomic64_t for
+ atomic64_t
+Thread-Topic: [PATCH v2 5/6] debugfs: add debugfs_create_atomic64_t for
+ atomic64_t
+Thread-Index: AQHZZ98c6jprfqRD8kOXCEPd17f6W68d7Shg
+Date:   Thu, 6 Apr 2023 08:15:51 +0000
+Message-ID: <979c8cf9ab2d4fcba811adc0c563b8bb@AcuMS.aculab.com>
+References: <20230405022702.753323-1-mcgrof@kernel.org>
+ <20230405022702.753323-6-mcgrof@kernel.org>
+ <CAHk-=whH+OsAY+9qLc9Hz+-W8u=dvD3NLWHemOQpZPcgZa52fA@mail.gmail.com>
+ <ZC2cC+I1KTyD8UcC@bombadil.infradead.org>
+ <ZC2dtI02ZIbjte2l@bombadil.infradead.org>
+ <CAHk-=wiGhHk4u2RRZmJinA4Apb47pXXJPW9cOZ_2-yUqOvaC7Q@mail.gmail.com>
+ <ZC2nbiarELlUVcSj@bombadil.infradead.org>
+In-Reply-To: <ZC2nbiarELlUVcSj@bombadil.infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] kallsyms: move module-related functions under
- correct configs
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168075601866.17428.2889245679074422058.git-patchwork-notify@kernel.org>
-Date:   Thu, 06 Apr 2023 04:40:18 +0000
-References: <20230330102001.2183693-1-vmalik@redhat.com>
-In-Reply-To: <20230330102001.2183693-1-vmalik@redhat.com>
-To:     Viktor Malik <vmalik@redhat.com>
-Cc:     bpf@vger.kernel.org, mcgrof@kernel.org, daniel@iogearbox.net,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ast@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com, lkp@intel.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Thu, 30 Mar 2023 12:20:01 +0200 you wrote:
-> Functions for searching module kallsyms should have non-empty
-> definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
-> only CONFIG_MODULES check was used for many of these, which may have
-> caused complilation errors on some configs.
-> 
-> This patch moves all relevant functions under the correct configs.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2] kallsyms: move module-related functions under correct configs
-    https://git.kernel.org/bpf/bpf-next/c/34bf93472f8f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+RnJvbTogTHVpcyBDaGFtYmVybGFpbiAgTHVpcyBDaGFtYmVybGFpbg0KPiBTZW50OiAwNSBBcHJp
+bCAyMDIzIDE3OjUzDQo+IA0KPiBPbiBXZWQsIEFwciAwNSwgMjAyMyBhdCAwOToyMzowOUFNIC0w
+NzAwLCBMaW51cyBUb3J2YWxkcyB3cm90ZToNCj4gPiBPbiBXZWQsIEFwciA1LCAyMDIzIGF0IDk6
+MTHigK9BTSBMdWlzIENoYW1iZXJsYWluIDxtY2dyb2ZAa2VybmVsLm9yZz4gd3JvdGU6DQo+ID4g
+Pg0KPiA+ID4gT2ggYnV0IEkgZG9uJ3QgZ2V0IHRoZSBhdG9taWMgaW5jcywgc28gd2UnZCBuZWVk
+IGRlYnVnZnNfY3JlYXRlX2F0b21pY19sb25nX3QoKS4NCj4gPg0KPiA+ICAgZGVidWdmc19jcmVh
+dGVfdWxvbmcoInRvdGFsX21vZF9zaXplIiwNCj4gPiAgICAgICAgMDQwMCwgbW9kX2RlYnVnZnNf
+cm9vdCwNCj4gPiAgICAgICAgJnRvdGFsX21vZF9zaXplLmNvdW50ZXIpOw0KPiA+DQo+ID4gYnV0
+IEkgZGlkbid0IGFjdHVhbGx5IHRyeSB0byBjb21waWxlIHRoYXQga2luZCBvZiB2ZXJzaW9uLg0K
+PiA+DQo+ID4gKEkgdGhpbmsgImNvdW50ZXIiIGlzIGFjdHVhbGx5IGEgX3NpZ25lZF8gbG9uZywg
+c28gbWF5YmUgdGhlIHR5cGVzIGRvbid0IG1hdGNoKS4NCj4gDQo+IEkgc2VlIHllcywgc2FkbHkg
+d2UnZCBoYXZlIHRvIGNhc3QgdG8gKHVuc2lnbmVkIGxvbmcgKikgdG8gbWFrZSB0aGF0DQo+IHdv
+cmsgYXMgYXRvbWljX2xvbmcgY291bnRlcnMgYXJlIGxvbmcgbG9uZyBpbnQ6DQo+IA0KPiAgICBk
+ZWJ1Z2ZzX2NyZWF0ZV91bG9uZygidG90YWxfbW9kX3NpemUiLA0KPiAgICAgICAgIDA0MDAsIG1v
+ZF9kZWJ1Z2ZzX3Jvb3QsDQo+IC0gICAgICAgICZ0b3RhbF9tb2Rfc2l6ZS5jb3VudGVyKTsNCj4g
+KyAgICAgICAgKHVuc2lnbmVkIGxvbmcgKikmdG90YWxfbW9kX3NpemUuY291bnRlcik7DQo+IA0K
+PiBUaGF0J3M6DQo+IA0KPiB1bnNpZ25lZCBsb25nIG1pbiBiaXRzIDMyDQo+IGxvbmcgbG9uZyAg
+ICAgbWluIGJpdHMgNjQNCj4gDQo+IEJ1dCBzaW5jZSB3ZSdkIGJlIGRvaW5nIG91ciBhY2NvdW50
+aW5nIGluIGF0b21pY19sb25nIGFuZCBqdXN0IHVzZQ0KPiBkZWJ1Z2ZzIGZvciBwcmludHMgSSB0
+aGluayB0aGF0J3MgZmluZS4gSnVzdCBhIGJpdCB1Z2x5Lg0KDQpUaGF0IGlzbid0IGdvaW5nIHRv
+IHdvcmsuDQpJdCBpcyBwcmV0dHkgbXVjaCBuZXZlciByaWdodCB0byBkbyAqKGludGVnZXJfdHlw
+ZSAqKSZpbnRlZ2VyX3ZhcmlhYmxlLg0KDQpCdXQgYXJlIHlvdSByZWFsbHkgc3VyZSAnYXRvbWlj
+X2xvbmcnIGlzICdsb25nIGxvbmcnDQpkb2Vzbid0IHNvdW5kIHJpZ2h0IGF0IGFsbC4NCidsb25n
+IGxvbmcnIGlzIDEyOGJpdCBvbiA2NGJpdCBhbmQgNjRiaXQgb24gMzJiaXQgLSBzbyBpcyBhbHdh
+eXMNCmEgZG91YmxlLXJlZ2lzdGVyIGFjY2Vzcy4NClRoaXMgaXMgd29yc2UgdGhhbiBhdG9taWNf
+dTY0Lg0KDQpJIHNob3VsZCBwcm9iYWJseSB0cnkgdG8gbG9va3VwIGFuZC9vciBtZWFzdXJlIHRo
+ZSBwZXJmb3JtYW5jZQ0Kb2YgYXRvbWljIG9wZXJhdGlvbnMgKGVzcC4gY21weGNoZykgb24geDg2
+Lg0KSGlzdG9yaWNhbGx5IHRoZXkgd2VyZSBhIHNlcGFyYXRlIHJlYWQgYW5kIHdyaXRlIGJ1cyBj
+eWNsZXMgd2l0aA0KdGhlICdsb2NrJyBzaWduYWwgYXNzZXJ0ZWQgKGFuZCBzdGlsbCBhcmUgaWYg
+dGhleSBjcm9zcyBjYWNoZQ0KbGluZSBib3VuZGFyaWVzKS4NCkJ1dCBpdCBpcyBwb3NzaWJsZSB0
+aGF0IGF0IGxlYXN0IHNvbWUgb2YgdGhlIGxvY2tlZCBvcGVyYXRpb25zDQooZXNwLiB0aGUgeGNo
+ZyBvbmVzKSBhcmUgaW1wbGVtZW50ZWQgd2l0aGluIHRoZSBjYWNoZSBpdHNlbGYNCnNvIGFyZSBq
+dXN0IGEgc2luZ2xlIGNwdSAtPiBjYWNoZSBvcGVyYXRpb24uDQpJZiBub3QgaXQgaXMgYWN0dWFs
+bHkgcG9zc2libGUgdGhhdCB0aGUgX2xvY2FsIHZhcmlhbnRzIHRoYXQNCnNlZW0gdG8gaGF2ZSBi
+ZWVuIGFkZGVkIHNob3VsZCBub3QgdXNlIHRoZSBsb2NrZWQgaW5zdHJ1Y3Rpb25zIQ0KDQoJRGF2
+aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50
+IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTcz
+ODYgKFdhbGVzKQ0K
 
