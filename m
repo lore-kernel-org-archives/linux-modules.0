@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A569BC77B6C
-	for <linux-modules@archiver.kernel.org>; Thu,  6 Apr 2023 19:01:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F64BC7618D
+	for <linux-modules@archiver.kernel.org>; Thu,  6 Apr 2023 19:01:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240165AbjDFTBb (ORCPT
+        id S240453AbjDFTBc (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 6 Apr 2023 15:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        Thu, 6 Apr 2023 15:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjDFTBW (ORCPT
+        with ESMTP id S240389AbjDFTBX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:01:22 -0400
+        Thu, 6 Apr 2023 15:01:23 -0400
 Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0439C9767
-        for <linux-modules@vger.kernel.org>; Thu,  6 Apr 2023 12:01:03 -0700 (PDT)
-Received: by mail-il1-x14a.google.com with SMTP id z7-20020a921a47000000b0032600db79f7so22908056ill.18
-        for <linux-modules@vger.kernel.org>; Thu, 06 Apr 2023 12:01:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8922735
+        for <linux-modules@vger.kernel.org>; Thu,  6 Apr 2023 12:01:04 -0700 (PDT)
+Received: by mail-il1-x14a.google.com with SMTP id q17-20020a056e020c3100b003245df8be9fso26453034ilg.14
+        for <linux-modules@vger.kernel.org>; Thu, 06 Apr 2023 12:01:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680807663;
+        d=google.com; s=20210112; t=1680807664;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FEZbsR+WTyUtWxubualsRcS33WiF75x8OXTLlDIM76E=;
-        b=D81pJQDCQ+OdL291Z2IZ2aoLcZ9JSdF//vAX5266oVAnQZPAsb2ROsi95KVjKK3wKl
-         XbpTpcSS49IV425LJMR5r61TCIqtP2EcrXEcJYbsOu8cFWo+BVrf6iH+dJ58GpAVEbGn
-         Ob0KC9VY5azkYE4xJEOA4ueXQijtPJP+hpJhW/YwaW4aQyUwR3vMc7NqkaFbDsODU7Nw
-         /7C7nADEmWmY3+IZXHXTYCeVpPUBnR7rp5s6E1NNNGgXR1+Bt8XYVSPcNp7Zl8/rSVHw
-         Qsi4OfLOzlOEZEGuq+ld/NjtkVhfX4p3akpLLAcW1NwdJOuSYjjL4pHgWvhxnmu7Be9V
-         Pzag==
+        bh=lPtoJrKBH3N2nk7pm0WBiOte1w3zyXs+2rCz5/qKsmI=;
+        b=X+v0xVsX9ePu+gtwgv1xggQ+b9AWSfR2kutza91lJ4sEaRsWLI9aUai/oOu71s6gex
+         085PISyP11GQiy5TpHe2KqUiiMys2wj6F3LZKs5fY+J3Euxw/MW+oV/FzVW5akzVCEWr
+         Qu5KuDjMRCJLNQE2PQELcL1qsl5c3UE5cppY4EeC0WUbfohnh8Rb91QCTO2vr1Jum8eD
+         IL/nYTUBqV+289xqR3EbtbZO4r6o2gkaZ9oSaqJyrcQ7KjYOFHXumoiW5Zkfb4k1DmEx
+         p7lyo49HTkd6WcC1RTXvZKvH4Mp3QBWwR7HpWyThE8NkxJ8/AodWw2njEC2lbvvSLDEg
+         XUIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680807663;
+        d=1e100.net; s=20210112; t=1680807664;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FEZbsR+WTyUtWxubualsRcS33WiF75x8OXTLlDIM76E=;
-        b=FwZMZxDKy1MGp8hXz3uQPfWMHNE0jdM4lbMpFcB+eLCJC5f+hrj658xIDCdYsKJGYV
-         FC1VKlSb8c7WDgvpLu+tjFXatT1z53y+js6XFYN4PpeKOK+SOM2fZkM1OpDYLmX2LNcy
-         sbXfkstp8ozEx4zx9E0/5EBzwuFouDNnABPAuxjelWEhPaIrx9aT8ko2OEIbxDeumoYn
-         +u4icLCzpo1MhVemodCxarINmWGXmaNr9MxNAMbKWJiP5ssIJDbn2kPEnMMlJFycrzZb
-         TSat1HJu6AlAmgYt8PpjV0RNEWU/PwcsXj2qHmmFcwGhLDnEb7OfsDsLat/ENKzEf7BV
-         KX3Q==
-X-Gm-Message-State: AAQBX9eKYmH/kRw5eq+GW/q2vdv5yNqh+9b1nfWbpnbGgNGFBsc14hWN
-        bnnGnIF1GE5tj/T5OsyvOQCYKxLwKK2/PkcTx+qy2Fz2L6DP2Jyy1g0bnSVIXvREkWWgXjj8+1I
-        SvZI92xTB1JPt7EN4CLAgXoT0TG4l9Q2JGnlQuXwd4a4zAevpJObW2EiWQX82shnxMjD12VdN97
-        5bBzA=
-X-Google-Smtp-Source: AKy350bmElFuE1Xid/gxRe2zw6r7kNsu5GgybFoCIrVluA8w6qJgsdQVeebMx1wlwhideMS0TE7hnev66x532k0=
+        bh=lPtoJrKBH3N2nk7pm0WBiOte1w3zyXs+2rCz5/qKsmI=;
+        b=GF5BsIHjcKiAVgBFvzv3b1XLsfMhT5H2M1QrGktdWZR374ZiP+6Ap+UpTPqHchqECr
+         UB5hKqbPFeveMZu9+H/KLYwtkX4GdF9nlT2GWvyNOlI7R5QRKugh/inA7ClKu2x5/NjE
+         /5iBnUSpjuqA7czJ17Q1zhgVKj/U1WJBIrfhX66CVwFssagqP5zuWBfAUnDN39YwolGs
+         brVke5fww6lao2xQNPSlrWOvcDCCtWXJwXuu6cVl3wFeo4pfHESIIbdZxkgDvN2rMfa/
+         ORzqWlGQmi+88JjDEOvV/NEr4ivUl9XJPaYgdPks4X66YVYlBlGyeqLxTMJJoI8xOd48
+         1d6A==
+X-Gm-Message-State: AAQBX9f0SX6Hu79c5sL7/l0QIcDv6duk9M0rj+itB8H3/Y1ZFCaSuH+1
+        FQ+k42MYqQmfuM8vI0cH8i2EDT/R7a+AGQfqGIOgIZMEQyycQQ0yt7FIc2yViHj3pUKFhyRI7TC
+        +zA71nDZwY3yU5aKihnmoNLP1CZPEwrO0cRsYkPHCfE3h4h7KAaVI303tSbMEmXybbn1B6F1juH
+        1dmko=
+X-Google-Smtp-Source: AKy350b3ywgYGOuNRaHCfri+YC25Y0XY6ETeOx4MfHOdbQbf18wi5MjpLqXr6pg04A8qD1H12AIVIIUEY6rzGOQ=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a02:2a45:0:b0:406:c43f:6320 with SMTP id
- w66-20020a022a45000000b00406c43f6320mr4089761jaw.0.1680807662877; Thu, 06 Apr
- 2023 12:01:02 -0700 (PDT)
-Date:   Thu,  6 Apr 2023 14:00:24 -0500
+ (user=allenwebb job=sendgmr) by 2002:a02:85ae:0:b0:3ec:dc1f:12dd with SMTP id
+ d43-20020a0285ae000000b003ecdc1f12ddmr6262286jai.6.1680807663728; Thu, 06 Apr
+ 2023 12:01:03 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 14:00:25 -0500
 In-Reply-To: <20230406190030.968972-1-allenwebb@google.com>
 Mime-Version: 1.0
 References: <20221219204619.2205248-1-allenwebb@google.com> <20230406190030.968972-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230406190030.968972-6-allenwebb@google.com>
-Subject: [PATCH v10 05/11] modpost: Track module name for built-in modules
+Message-ID: <20230406190030.968972-7-allenwebb@google.com>
+Subject: [PATCH v10 06/11] modpost: Add -b option for emitting built-in aliases
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -67,106 +67,91 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Keep track of the module name when processing match table symbols.
+This adds a command line option for writing the match-id based built-in
+aliases to a file. A future patch extends file2alias.c to support this
+command.
+
+The -b option accepts the output path as a parameter and requires
+vmlinuz.o to be one of the input files for the aliases to be found.
 
 Signed-off-by: Allen Webb <allenwebb@google.com>
 ---
- scripts/mod/file2alias.c | 39 +++++++++++++++++++++++++++++++++++----
- scripts/mod/modpost.h    |  1 +
- 2 files changed, 36 insertions(+), 4 deletions(-)
+ scripts/mod/modpost.c | 30 ++++++++++++++++++++++++++++--
+ scripts/mod/modpost.h |  1 +
+ 2 files changed, 29 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-index 91c2e7ba5e52..b392d51c3b06 100644
---- a/scripts/mod/file2alias.c
-+++ b/scripts/mod/file2alias.c
-@@ -28,6 +28,7 @@ typedef Elf64_Addr	kernel_ulong_t;
- #include <stdint.h>
- #endif
- 
-+#include <assert.h>
- #include <ctype.h>
- #include <stdbool.h>
- 
-@@ -1540,9 +1541,9 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
- 			Elf_Sym *sym, const char *symname)
- {
- 	void *symval;
--	char *zeros = NULL;
--	const char *name, *identifier;
--	unsigned int namelen;
-+	char *zeros = NULL, *modname_str = NULL;
-+	const char *name, *identifier, *modname;
-+	unsigned int namelen, modnamelen;
- 
- 	/* We're looking for a section relative symbol */
- 	if (!sym->st_shndx || get_secindex(info, sym) >= info->num_sections)
-@@ -1552,7 +1553,12 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
- 	if (ELF_ST_TYPE(sym->st_info) != STT_OBJECT)
- 		return;
- 
--	/* All our symbols are of form __mod_<name>__<identifier>_device_table. */
-+	/*
-+	 * All our symbols are either of form
-+	 *   __mod_<name>__<identifier>_device_table
-+	 * or
-+	 *   __mod_<name>__<identifier>__kmod_<builtin-name>_device_table
-+	 */
- 	if (strncmp(symname, "__mod_", strlen("__mod_")))
- 		return;
- 	name = symname + strlen("__mod_");
-@@ -1564,8 +1570,30 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
- 	identifier = strstr(name, "__");
- 	if (!identifier)
- 		return;
-+	modnamelen = namelen;
- 	namelen = identifier - name;
- 
-+	/*
-+	 * In the vmlinuz.o case we want to handle __kmod_ so aliases from
-+	 * builtin modules are attributed correctly.
-+	 */
-+	modname = strstr(identifier + 2, "__kmod_");
-+	if (modname) {
-+		modname += strlen("__kmod_");
-+		modnamelen -= (modname - name) + strlen("_device_table");
-+		modname_str = malloc(modnamelen + 1);
-+		/* We don't want to continue if the allocation fails. */
-+		assert(modname_str);
-+		memcpy(modname_str, modname, modnamelen);
-+		modname_str[modnamelen] = '\0';
-+	}
-+
-+	if (modname_str)
-+		modname = modname_str;
-+	else
-+		modname = mod->name;
-+	mod->builtin_name = modname;
-+
- 	/* Handle all-NULL symbols allocated into .bss */
- 	if (info->sechdrs[get_secindex(info, sym)].sh_type & SHT_NOBITS) {
- 		zeros = calloc(1, sym->st_size);
-@@ -1597,6 +1625,9 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
- 		}
- 	}
- 	free(zeros);
-+	mod->builtin_name = NULL;
-+	if (modname_str)
-+		free(modname_str);
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index efff8078e395..2e452aec0fc6 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -2173,6 +2173,19 @@ static void write_if_changed(struct buffer *b, const char *fname)
+ 	write_buf(b, fname);
  }
  
- /* Now add out buffered information to the generated C source */
++/* Write the builtin aliases to the specified file. */
++static void write_builtin(const char *fname)
++{
++	struct buffer buf = { };
++	struct module *mod;
++
++	list_for_each_entry(mod, &modules, list)
++		buf_write(&buf, mod->modalias_buf.p, mod->modalias_buf.pos);
++
++	write_if_changed(&buf, fname);
++	free(buf.p);
++}
++
+ static void write_vmlinux_export_c_file(struct module *mod)
+ {
+ 	struct buffer buf = { };
+@@ -2329,13 +2342,23 @@ int main(int argc, char **argv)
+ {
+ 	struct module *mod;
+ 	char *missing_namespace_deps = NULL;
+-	char *dump_write = NULL, *files_source = NULL;
++	char *builtin_write = NULL, *dump_write = NULL, *files_source = NULL;
+ 	int opt;
+ 	LIST_HEAD(dump_lists);
+ 	struct dump_list *dl, *dl2;
+ 
+-	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
++	while ((opt = getopt(argc, argv, "b:ei:mnT:o:awENd:")) != -1) {
+ 		switch (opt) {
++		case 'b':
++			/*
++			 * Writes the match-id based built-in module aliases to
++			 * the specified path.
++			 *
++			 * vmlinuz.o needs to be one of the input files for the
++			 * aliases to be found.
++			 */
++			builtin_write = optarg;
++			break;
+ 		case 'e':
+ 			external_module = true;
+ 			break;
+@@ -2398,6 +2421,9 @@ int main(int argc, char **argv)
+ 			write_mod_c_file(mod);
+ 	}
+ 
++	if (builtin_write)
++		write_builtin(builtin_write);
++
+ 	if (missing_namespace_deps)
+ 		write_namespace_deps_files(missing_namespace_deps);
+ 
 diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 1178f40a73f3..34fe5fc0b02c 100644
+index 34fe5fc0b02c..c55a6aeb46bf 100644
 --- a/scripts/mod/modpost.h
 +++ b/scripts/mod/modpost.h
-@@ -128,6 +128,7 @@ struct module {
+@@ -123,6 +123,7 @@ struct module {
+ 	bool has_init;
+ 	bool has_cleanup;
+ 	struct buffer dev_table_buf;
++	struct buffer modalias_buf;
+ 	char	     srcversion[25];
+ 	// Missing namespace dependencies
  	struct list_head missing_namespaces;
- 	// Actual imported namespaces
- 	struct list_head imported_namespaces;
-+	const char *builtin_name;
- 	char name[];
- };
- 
 -- 
 2.39.2
 
