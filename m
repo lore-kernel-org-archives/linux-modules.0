@@ -2,111 +2,161 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E86EC6FD1D
-	for <linux-modules@archiver.kernel.org>; Fri,  7 Apr 2023 21:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30C4CC76196
+	for <linux-modules@archiver.kernel.org>; Fri,  7 Apr 2023 23:21:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbjDGVA5 (ORCPT
+        id S229567AbjDGXVY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 7 Apr 2023 17:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        Fri, 7 Apr 2023 19:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbjDGVAx (ORCPT
+        with ESMTP id S229457AbjDGXVX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:00:53 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09701CC2F
-        for <linux-modules@vger.kernel.org>; Fri,  7 Apr 2023 14:00:47 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id j22so10868422ejv.1
-        for <linux-modules@vger.kernel.org>; Fri, 07 Apr 2023 14:00:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1680901246; x=1683493246;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g8xM6r6/rOzbRR11rE4PPyc0SA/I8K68bLshe2lzvT4=;
-        b=DvNwgJJRCQjPWo5ZkeKlsCaGjqWk+g4KX4qk1GyR6qkVMpmEdLiy6ZbC0fB+N7I7gg
-         WeapifDg4odGu8z8t6PA1ZGsx9N8UsgjrbKl7c1ijH2FsypDCvAS6A63VTNcv48TdRM2
-         p94p6QPt9X/BxeDe7ICQLdarD5tbFxLAsTr/o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680901246; x=1683493246;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g8xM6r6/rOzbRR11rE4PPyc0SA/I8K68bLshe2lzvT4=;
-        b=39tgo/uQnlljQsruSJ3ruZuY0/iQhx02h86PW2iL1eJqZ5iXYe8k/u6k9DeNmwLOKk
-         Err9tntBKH7i503etuumoExZjo9wWc8Vl2ULuPHJmkzy9xYtHrcNgh5JJ/B6HoxIVoEb
-         k9zVY8hixFtZZ5CwB8OiyQ/n4v45XctSSv6INSJzUDJyJuFZY04mD3uDocKcRBZVsUzL
-         PPK3HI0Wxpj/h3FYImLBPhwpJKyItFjmpoRVvOUp45q9elF/TstCHHqN78OkDrXjkVQw
-         z8LhIbpQ+nTQf8y5NZIifvDuU6M8BuIPP6THo8m8ERcNzkNWk3SlNrv4usyz5/ejQKBa
-         qboA==
-X-Gm-Message-State: AAQBX9fee+dvw4/+dXqRc4P8uFT0QXTruyhpnnzqbTatdnYx1lbTPOSf
-        OUio4pQfE6v+XV3+hbZKAcvchGOfVKY1A3GQWR300+gA
-X-Google-Smtp-Source: AKy350YIOHFwQCoj8pWCGOoo8Y0W3LuE7SYamxiQeEfM5X2AYPcFi0JTz4rPhLX64ekB5tN+uMJRGw==
-X-Received: by 2002:a17:906:53d8:b0:8b1:820a:7b60 with SMTP id p24-20020a17090653d800b008b1820a7b60mr615633ejo.6.1680901246122;
-        Fri, 07 Apr 2023 14:00:46 -0700 (PDT)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id d23-20020a1709064c5700b009353047c02dsm2390495ejw.167.2023.04.07.14.00.45
-        for <linux-modules@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 14:00:45 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id k5so12952wms.1
-        for <linux-modules@vger.kernel.org>; Fri, 07 Apr 2023 14:00:45 -0700 (PDT)
-X-Received: by 2002:a17:907:b687:b0:947:72cd:9325 with SMTP id
- vm7-20020a170907b68700b0094772cd9325mr310007ejc.15.1680900776633; Fri, 07 Apr
- 2023 13:52:56 -0700 (PDT)
+        Fri, 7 Apr 2023 19:21:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF3B7ED0;
+        Fri,  7 Apr 2023 16:21:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB36564A2C;
+        Fri,  7 Apr 2023 23:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92007C433EF;
+        Fri,  7 Apr 2023 23:21:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680909681;
+        bh=GR8ZHhZhrWLr8Jm6fEQrZIKxqS1sTyT0Tzdp4I7epEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fEwtIYaw7cjDKNLJtyxb1V9S9w87KlRmoLbJbhzd4IPYOed2hd2iLyrfoRJ04cRUy
+         q3Q1xDiGjPyThljSwASVEoEVXPX9HtejY+xkJqWPc8sDGAz0A/JcaQ2rRtJtEguYmF
+         ACvFFegwTDPN9APkiMH8vPTOwhF2Q+j7YjGwbTWW484mjBAnu3Kjh8SzmKID8FaIyb
+         GfBUL99QphgLyOUe6Ed6j39SLR3FX1pdhlm/GiPrb69vfNwwfj6AJQDQQvWS+qusAM
+         QCYBbUVHQvwAFcZnqi8M2RSNZ2qv8RH/IMCqSDg0vxA5qdDdDWM5Mxld4hHRYsbxXp
+         vat39tzq4gaJw==
+Date:   Fri, 7 Apr 2023 16:21:18 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com, live-patching@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
+ symbol->address lookup with /proc/kallmodsyms
+Message-ID: <20230407232118.o2x5lakfgyzy56gz@treble>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
 MIME-Version: 1.0
-References: <20230405203505.1343562-1-mcgrof@kernel.org> <20230405203505.1343562-2-mcgrof@kernel.org>
- <ZDB+zn3X4sac9DFU@casper.infradead.org>
-In-Reply-To: <ZDB+zn3X4sac9DFU@casper.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 7 Apr 2023 13:52:39 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgYFGyy9jBmwEJHtdtdaEbqiyFn7GtMN6jP2ZFw92zYDA@mail.gmail.com>
-Message-ID: <CAHk-=wgYFGyy9jBmwEJHtdtdaEbqiyFn7GtMN6jP2ZFw92zYDA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] Change DEFINE_SEMAPHORE() to take a number argument
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, david@redhat.com,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        dave@stgolabs.net, vbabka@suse.cz, mhocko@suse.com,
-        dave.hansen@linux.intel.com, colin.i.king@gmail.com,
-        jim.cromie@gmail.com, catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221205163157.269335-1-nick.alcock@oracle.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Apr 7, 2023 at 1:37=E2=80=AFPM Matthew Wilcox <willy@infradead.org>=
- wrote:
->
-> I'd like to mention completions as an alternative to semaphores, but
-> can't figure out a nice way to fit that in.
+On Mon, Dec 05, 2022 at 04:31:44PM +0000, Nick Alcock wrote:
+> The whole point of symbols is that their names are unique: you can look up a
+> symbol and get back a unique address, and vice versa.  Alas, because
+> /proc/kallsyms (rightly) reports all symbols, even hidden ones, it does not
+> really satisfy this requirement.  Large numbers of symbols are duplicated
+> many times (just search for __list_del_entry!), and while usually these are
+> just out-of-lined things defined in header files and thus all have the same
+> implementation, it does make it needlessly hard to figure out which one is
+> which in stack dumps, when tracing, and such things.  Some configuration
+> options make things much worse: my test make allyesconfig runs introduced
+> thousands of text symbols named _sub_I_65535_1, one per compiler-generated
+> object file, and it was fairly easy to make them appear in ftrace output.
+> 
+> Right now the kernel has no way at all to tell such symbols apart, and nor
+> has the user: their address differs and that's all.  Which module did they
+> come from?  Which object file?  We don't know.  Figuring out which is which
+> when tracing needs a combination of guesswork and luck, and if there are
+> thousands of them that's not a pleasant prospect.  In discussions at LPC it
+> became clear that this is not just annoying me but Steve Rostedt and others,
+> so it's probably desirable to fix this.
+> 
+> It turns out that the linker, and the kernel build system, can be made to
+> give us everything we need to resolve this once and for all.  This series
+> provides a new /proc/kallmodsyms which is like /proc/kallsyms except that it
+> annotates every (textual) symbol which comes from a built-in kernel module
+> with the module's name, in square brackets: if a symbol is used by multiple
+> modules, it gets [multiple] [names]; if a symbol is still ambiguous it gets
+> a cut-down {object file name}; the combination of symbol, [module] [names]
+> and {object file name} is unique (with one minor exception: the arm64 nvhe
+> module is pre-linked with ld -r, causing all symbols in it to appear to come
+> from the same object file: if it was reworked to use thin archives this
+> problem would go away).
 
-I'm personally a bit sorry completions ever became a thing.
+Hi Nick,
 
-There's a real reason for having them, but they have been used and
-mis-used in so many confusing ways that I am worried every time I see
-a completion. We've had some nasty use of 'init_completion()' in
-particular.
+Sorry for jumping in late on an old patch set.  I just saw the LWN
+article about the MODULE_LICENSE() patches and I have some comments
+about duplicate symbols and a question about the motivation for this
+patch set.
 
-There are many obvious uses of completions, and they have nice strict
-semantics wrt last-use etc (so that you can put them on the stack and
-know that you're the last user when you return, which is not
-necessarily true of locking in general).
+For livepatch we have a solution for disambiguating duplicate local
+symbols called "sympos".  It works (for now) but there are some cases
+(like LTO) where it falls apart and it may not be the best long term
+solution.
 
-But there are several less-than-obvious uses too, and any use of
-reinit_completion() ends up just making me go "Uhh".  The
-serialization needed for that to actually work right often means that
-you might as well have used a "wait_event()" with a
-"smp_store_release()" variable instead and made the code more obvious.
+The function granularity KASLR (fgkaslr) patches proposed a potentially
+better option: use the GNU linker -zunique_symbols flag which renames
+all duplicates to have unique names across the entire linked object.
 
-I dunno. I might have had a few bad experiences and it's just rare
-enough to be one of those things that I feel wasn't worth the
-abstraction cost.
+There are other components which also struggle with duplicate symbols:
+ftrace, kprobes, BPF, etc.  It would be good to come up with a kallsyms
+solution that works for everybody.
 
-And I can't even blame anybody else. I think I'm to blame for that horror.
+Anyway, I was nodding along with the above cover letter until I got to
+the third paragraph.
 
-              Linus
+A "built-in kernel module" is not actually a module, as it's built in to
+vmlinux.  I suspect the point is that if you rebuild with a different
+config, it might become a module.  But many other changes could also
+occur with a changed config, including changed inlining decisions and
+GCC IPA optimization function renaming, in which case the symbol might
+no longer exist with the new config.
+
+Also I'm confused what it means for a symbol to be "used by multiple
+modules".  If the same TU or inline symbol is linked into two modules,
+it will be loaded twice at two different addresses, and the
+implementations could even differ.
+
+It sounds like there are two problems being conflated:
+
+  1) how to uniquely identify symbols in the current kernel
+
+     For this, all we really need is file+sym.
+
+     Or, enable -zunique-symbols in the linker.
+
+  2) how to uniquely identify symbols across multiple kernels/configs
+
+     This seems much trickier, as much can change across kernels and
+     configs, including compiler inlining and naming decisions, not to
+     mention actual code changes.
+
+The problems are related, but distinct.
+
+#2 seems significantly harder to implement properly.
+
+Would solving #1 give you most of what you need?
+
+Based on the difficulty of #2, it really needs a proper justification.
+I didn't see that in either of the patch sets.
+
+Can you share more details about what specific problem needs solved and
+why?  And how this would be used?  Examples would be helpful.
+
+The article linked to this brief explanation [1], but that doesn't
+clarify why "distinct notation used by users for things in named
+modules" would be important.
+
+Is there a reason the user can't just use whatever notation is
+appropriate for their specific kernel?  Or, once we have #1, couldn't
+tooling do an intermediate translation?
+
+[1] https://lwn.net/ml/linux-kernel/87h6z5wqlk.fsf@esperi.org.uk/
+
+-- 
+Josh
