@@ -2,161 +2,86 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30C4CC76196
-	for <linux-modules@archiver.kernel.org>; Fri,  7 Apr 2023 23:21:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E31DC77B61
+	for <linux-modules@archiver.kernel.org>; Sat,  8 Apr 2023 08:22:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjDGXVY (ORCPT
+        id S230139AbjDHIW6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 7 Apr 2023 19:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
+        Sat, 8 Apr 2023 04:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDGXVX (ORCPT
+        with ESMTP id S230160AbjDHIWx (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:21:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF3B7ED0;
-        Fri,  7 Apr 2023 16:21:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB36564A2C;
-        Fri,  7 Apr 2023 23:21:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92007C433EF;
-        Fri,  7 Apr 2023 23:21:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680909681;
-        bh=GR8ZHhZhrWLr8Jm6fEQrZIKxqS1sTyT0Tzdp4I7epEs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fEwtIYaw7cjDKNLJtyxb1V9S9w87KlRmoLbJbhzd4IPYOed2hd2iLyrfoRJ04cRUy
-         q3Q1xDiGjPyThljSwASVEoEVXPX9HtejY+xkJqWPc8sDGAz0A/JcaQ2rRtJtEguYmF
-         ACvFFegwTDPN9APkiMH8vPTOwhF2Q+j7YjGwbTWW484mjBAnu3Kjh8SzmKID8FaIyb
-         GfBUL99QphgLyOUe6Ed6j39SLR3FX1pdhlm/GiPrb69vfNwwfj6AJQDQQvWS+qusAM
-         QCYBbUVHQvwAFcZnqi8M2RSNZ2qv8RH/IMCqSDg0vxA5qdDdDWM5Mxld4hHRYsbxXp
-         vat39tzq4gaJw==
-Date:   Fri, 7 Apr 2023 16:21:18 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, masahiroy@kernel.org,
-        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        akpm@linux-foundation.org, eugene.loh@oracle.com,
-        kris.van.hees@oracle.com, live-patching@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
- symbol->address lookup with /proc/kallmodsyms
-Message-ID: <20230407232118.o2x5lakfgyzy56gz@treble>
-References: <20221205163157.269335-1-nick.alcock@oracle.com>
+        Sat, 8 Apr 2023 04:22:53 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EB6EFBF
+        for <linux-modules@vger.kernel.org>; Sat,  8 Apr 2023 01:22:49 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id q2so5580484pll.7
+        for <linux-modules@vger.kernel.org>; Sat, 08 Apr 2023 01:22:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680942169; x=1683534169;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GltkJScZYSX+gCVv8fDFnm+4Lcp2TEGrI4CsgsLokKY=;
+        b=hBybsKOi8iTMHwZ9Ikc0Cmt6Xe3w4OGcCWqYQIE2fC+MbNbxTarOitAGi2P0ZWwSeh
+         iKPtVkSsN3nS0z43OhQRzLzc3JbxJdoNpZOSnkAe3eIiszDGzlx6bdrj8uK5D/3K86IA
+         C43fnJLHf24T36c7gg8tfpMjvXDJMaohzqUhw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680942169; x=1683534169;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GltkJScZYSX+gCVv8fDFnm+4Lcp2TEGrI4CsgsLokKY=;
+        b=qMQ/Lh/SAHp+48pCxjTxaFmJ3X17BRd5Puf/YmmeeZJB6ufz0p6qo2HJvFV/gSW5FF
+         /y/9ylzIzI4P76AHnkmgjNX/QFuReEAE1qBxCTReJmAEQRIAhHwVZoU7s6h4CGUWqp6I
+         miibRmoFy5cTrIU9LvXf9QOf3gxkMDjITORfPqcVOHkOIBgEkc01fQgq+xQ8IyoGe3cD
+         rYFc4lZWTqddEsnJpmKCxUSHhXZj7XOdJDghGY7q8ydCzWesqaFY4bbpvoWCmeWquCsP
+         iGse0/0yeesBNXTrFUwv0WVmTAS/pIOMkjIrUxTrsoIM2Uhg/qG/R4VFZLidCTs2Sm9I
+         Ez0Q==
+X-Gm-Message-State: AAQBX9cldajIRbtLX4R+9zTfktmRN7dnhdgyBE7QIFQEmo+/TJ5dEurl
+        YjEJdbeAn9b6s1L1nsvDYNY5AQ==
+X-Google-Smtp-Source: AKy350YUW70L/4lbimyDIKZoumBSIx5N8MLRIqbM+/F7jMO+dCl4QxdIyqtRfp3NsLC5KYpYQe4X4w==
+X-Received: by 2002:a17:90a:4f01:b0:23d:1a5c:ff3d with SMTP id p1-20020a17090a4f0100b0023d1a5cff3dmr5920279pjh.37.1680942168989;
+        Sat, 08 Apr 2023 01:22:48 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id g5-20020a170902868500b001a0667822c8sm4041197plo.94.2023.04.08.01.22.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Apr 2023 01:22:48 -0700 (PDT)
+Date:   Sat, 8 Apr 2023 17:22:41 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+Subject: Re: [PATCH v2 1/2] Change DEFINE_SEMAPHORE() to take a number
+ argument
+Message-ID: <20230408082241.GA12866@google.com>
+References: <20230405203505.1343562-1-mcgrof@kernel.org>
+ <20230405203505.1343562-2-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221205163157.269335-1-nick.alcock@oracle.com>
+In-Reply-To: <20230405203505.1343562-2-mcgrof@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Dec 05, 2022 at 04:31:44PM +0000, Nick Alcock wrote:
-> The whole point of symbols is that their names are unique: you can look up a
-> symbol and get back a unique address, and vice versa.  Alas, because
-> /proc/kallsyms (rightly) reports all symbols, even hidden ones, it does not
-> really satisfy this requirement.  Large numbers of symbols are duplicated
-> many times (just search for __list_del_entry!), and while usually these are
-> just out-of-lined things defined in header files and thus all have the same
-> implementation, it does make it needlessly hard to figure out which one is
-> which in stack dumps, when tracing, and such things.  Some configuration
-> options make things much worse: my test make allyesconfig runs introduced
-> thousands of text symbols named _sub_I_65535_1, one per compiler-generated
-> object file, and it was fairly easy to make them appear in ftrace output.
-> 
-> Right now the kernel has no way at all to tell such symbols apart, and nor
-> has the user: their address differs and that's all.  Which module did they
-> come from?  Which object file?  We don't know.  Figuring out which is which
-> when tracing needs a combination of guesswork and luck, and if there are
-> thousands of them that's not a pleasant prospect.  In discussions at LPC it
-> became clear that this is not just annoying me but Steve Rostedt and others,
-> so it's probably desirable to fix this.
-> 
-> It turns out that the linker, and the kernel build system, can be made to
-> give us everything we need to resolve this once and for all.  This series
-> provides a new /proc/kallmodsyms which is like /proc/kallsyms except that it
-> annotates every (textual) symbol which comes from a built-in kernel module
-> with the module's name, in square brackets: if a symbol is used by multiple
-> modules, it gets [multiple] [names]; if a symbol is still ambiguous it gets
-> a cut-down {object file name}; the combination of symbol, [module] [names]
-> and {object file name} is unique (with one minor exception: the arm64 nvhe
-> module is pre-linked with ld -r, causing all symbols in it to appear to come
-> from the same object file: if it was reworked to use thin archives this
-> problem would go away).
+On (23/04/05 13:35), Luis Chamberlain wrote:
+> +++ b/kernel/printk/printk.c
+> @@ -89,7 +89,7 @@ static DEFINE_MUTEX(console_mutex);
+>   * console_sem protects updates to console->seq and console_suspended,
+>   * and also provides serialization for console printing.
+>   */
+> -static DEFINE_SEMAPHORE(console_sem);
+> +static DEFINE_SEMAPHORE(console_sem, 1);
 
-Hi Nick,
-
-Sorry for jumping in late on an old patch set.  I just saw the LWN
-article about the MODULE_LICENSE() patches and I have some comments
-about duplicate symbols and a question about the motivation for this
-patch set.
-
-For livepatch we have a solution for disambiguating duplicate local
-symbols called "sympos".  It works (for now) but there are some cases
-(like LTO) where it falls apart and it may not be the best long term
-solution.
-
-The function granularity KASLR (fgkaslr) patches proposed a potentially
-better option: use the GNU linker -zunique_symbols flag which renames
-all duplicates to have unique names across the entire linked object.
-
-There are other components which also struggle with duplicate symbols:
-ftrace, kprobes, BPF, etc.  It would be good to come up with a kallsyms
-solution that works for everybody.
-
-Anyway, I was nodding along with the above cover letter until I got to
-the third paragraph.
-
-A "built-in kernel module" is not actually a module, as it's built in to
-vmlinux.  I suspect the point is that if you rebuild with a different
-config, it might become a module.  But many other changes could also
-occur with a changed config, including changed inlining decisions and
-GCC IPA optimization function renaming, in which case the symbol might
-no longer exist with the new config.
-
-Also I'm confused what it means for a symbol to be "used by multiple
-modules".  If the same TU or inline symbol is linked into two modules,
-it will be loaded twice at two different addresses, and the
-implementations could even differ.
-
-It sounds like there are two problems being conflated:
-
-  1) how to uniquely identify symbols in the current kernel
-
-     For this, all we really need is file+sym.
-
-     Or, enable -zunique-symbols in the linker.
-
-  2) how to uniquely identify symbols across multiple kernels/configs
-
-     This seems much trickier, as much can change across kernels and
-     configs, including compiler inlining and naming decisions, not to
-     mention actual code changes.
-
-The problems are related, but distinct.
-
-#2 seems significantly harder to implement properly.
-
-Would solving #1 give you most of what you need?
-
-Based on the difficulty of #2, it really needs a proper justification.
-I didn't see that in either of the patch sets.
-
-Can you share more details about what specific problem needs solved and
-why?  And how this would be used?  Examples would be helpful.
-
-The article linked to this brief explanation [1], but that doesn't
-clarify why "distinct notation used by users for things in named
-modules" would be important.
-
-Is there a reason the user can't just use whatever notation is
-appropriate for their specific kernel?  Or, once we have #1, couldn't
-tooling do an intermediate translation?
-
-[1] https://lwn.net/ml/linux-kernel/87h6z5wqlk.fsf@esperi.org.uk/
-
--- 
-Josh
+FWIW,
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org> # printk
