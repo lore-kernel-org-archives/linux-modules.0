@@ -2,204 +2,101 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60219C76196
-	for <linux-modules@archiver.kernel.org>; Mon, 10 Apr 2023 13:09:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15B17C76196
+	for <linux-modules@archiver.kernel.org>; Mon, 10 Apr 2023 13:36:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjDJNJx (ORCPT
+        id S229664AbjDJNgZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 10 Apr 2023 09:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        Mon, 10 Apr 2023 09:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjDJNJw (ORCPT
+        with ESMTP id S229536AbjDJNgY (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 10 Apr 2023 09:09:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA0A2D49
-        for <linux-modules@vger.kernel.org>; Mon, 10 Apr 2023 06:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681132143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=motyMZYGjG8ZpzgKBhQCp3NlNr2re4z0Ma0gRtL0ojg=;
-        b=FSR9cc4qkSIDDGS6KBNgwORyCBg1ly4y76wA4S1QQ0fvNSIjAOehK7V6pHc4jP/D21qEwJ
-        2NIR1/OnWGnwVg/tC+j1YcnVLP6zdV/rNZHQFeRMX2H9662ZqdyqIFexS2KeNSwPikw3LH
-        bQCOZ0I6fMU7/ePDRgUrZG4vypxAHVE=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-531-LxHSaKjQMkiny4VnylC3tQ-1; Mon, 10 Apr 2023 09:09:02 -0400
-X-MC-Unique: LxHSaKjQMkiny4VnylC3tQ-1
-Received: by mail-qt1-f197.google.com with SMTP id f36-20020a05622a1a2400b003deb2fa544bso4364858qtb.0
-        for <linux-modules@vger.kernel.org>; Mon, 10 Apr 2023 06:09:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681132141;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=motyMZYGjG8ZpzgKBhQCp3NlNr2re4z0Ma0gRtL0ojg=;
-        b=lAIuyR6YYXjOKHpgPv8y9SVZiokI7Oq42w3PV2/21BcsM1nhVjbJdrG3WLG0iSlaAb
-         ARJND79irmdg8TMTfU95ViAvXIOdMFC7JZvmBDGM+8HqvLj4QkX67pcg0iKBQCmQZvfF
-         /pEM6UH0jKr6j6EaQtVFXAsadMJLkjYwd7qv8sraMhQ/LX+N95kBebIDfe1DUwnpqtJy
-         UOAl48XJFkXNa8mgtiXYrtujEjxk9dZx/b7jWkqT2DVoFtchkkRwU4pmAv8tRgqwXPRI
-         YTfl6yD8nz+OAuKPEDnBnr220d4KPMFHpTK+Y3GFju+jnhF7yvjEC9pwMzCEEJ8ilCyH
-         mlWA==
-X-Gm-Message-State: AAQBX9cDZO8aPHwYfRqtDWxFwUuc8saqqsPyu+GxYhpNr/7y+M/kgRiC
-        dyJ+bZ6e2Ypy5P68r8q3z/ROsovBBPrMN2OMAxUno0DqxHNZlsHtxTLtTjM66gIiBTDC8url2y8
-        jUlt5UbDee2dtfK2QkDE8WCm8FA==
-X-Received: by 2002:a05:622a:51:b0:3e6:9e18:73ee with SMTP id y17-20020a05622a005100b003e69e1873eemr8542959qtw.15.1681132141307;
-        Mon, 10 Apr 2023 06:09:01 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZzjirNzSjNF5jT1Ah5Inm/x9IabKjpY5EYEIDyrRcBFwpvL0tmr37y9R10Y3VXQD6dUgFKPg==
-X-Received: by 2002:a05:622a:51:b0:3e6:9e18:73ee with SMTP id y17-20020a05622a005100b003e69e1873eemr8542922qtw.15.1681132140968;
-        Mon, 10 Apr 2023 06:09:00 -0700 (PDT)
-Received: from [192.168.1.14] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
-        by smtp.gmail.com with ESMTPSA id z63-20020a376542000000b007417e60f621sm3239007qkb.126.2023.04.10.06.08.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 06:09:00 -0700 (PDT)
-Message-ID: <025f2151-ce7c-5630-9b90-98742c97ac65@redhat.com>
-Date:   Mon, 10 Apr 2023 09:08:58 -0400
+        Mon, 10 Apr 2023 09:36:24 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4733E4EF2;
+        Mon, 10 Apr 2023 06:36:23 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 99A0A5C00E1;
+        Mon, 10 Apr 2023 09:36:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 10 Apr 2023 09:36:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1681133780; x=1681220180; bh=Hc
+        /zM6us12owjQAwpTXjH6fFrHxn+l06I2QCZ7puQjY=; b=ih5xW5HVZfx0inArLx
+        gJQkJ13yTugobR+WROEywTumHayolrlDRYJKjropWd3y0tLePPVN7V3f3fX+lSal
+        NnIdAjYw0Zg/Ggl6wewFyBgw6eUjRVs0ZvbJc8n68Pga2vkFGrW8HJWer0nYonMc
+        /HwgYKt+uODdl1mkGyCxb/Fk8SvETH/EoN8VIhwQhwRHmLr3ZTpvYpARNIOUCdWQ
+        F6qi0w3sY6Gl+gCzRpMpymNtR2h+8pDwzGNyhLN06BRnd3eN3FOf3+THuk4JRyMk
+        VmP/COMlDl7e3SHa+6FWq+bt7O5SCdZLuOiRtdvNQDJQQpqlYtjQ8NPY6eaxgH+N
+        3vGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1681133780; x=1681220180; bh=Hc/zM6us12owj
+        QAwpTXjH6fFrHxn+l06I2QCZ7puQjY=; b=VY3fCXC65WhFf5bteDH8gYKFF1ayu
+        NGWJja8KgJW3dImeDFBrR7E7m5p95VnDNHXCoiU+6R+Tp5H3cWPKL105TkwoF1CY
+        1NaGrZB0VcDk036R9aYkysxITDncwWV9IQrVjLUo4G1JcXOYxnTpUX/onfXIC7bV
+        9EKqk8nErZhIkplSwqYBdW1eCeYGbDljSlXfideJglsK+rtegZyi2UImKM9nTP1v
+        is92FYJxT6xg/JkUWv8746i7bSqrOD56ZzPaPPPtWRMN81v4HlWzMlgedeBnnK9d
+        VWrDkXToaywBdyx6KbLVYwW4kkyh7XSrKgimrbLjnGFm9ARJZkED1bj3A==
+X-ME-Sender: <xms:1BA0ZNa51HxaUNXasLhbIvo-R3FBAzbJBXStorJvUVRjultDkVrntQ>
+    <xme:1BA0ZEaAx3IDtWzbc0-YVyEEetvpmVEjHUjijBZDS1nizmhafiimYv8IPrTrWDmM0
+    -qXCzT5_F4mWfqBXvE>
+X-ME-Received: <xmr:1BA0ZP_ZGAjG8osL1hk2sraMVAFpVfKYOeOBUGgk_w1asrcVFYy-ZgmYtrLwrw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekvddgieeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
+    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
+    grthhtvghrnhepueettdetgfejfeffheffffekjeeuveeifeduleegjedutdefffetkeel
+    hfelleetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epthihtghhohesthihtghhohdrphhiiiiirg
+X-ME-Proxy: <xmx:1BA0ZLpXZyQCW5q4spEkOQYz6jcBGa3Xz0i8cKDgFdLO6qgXedFXmQ>
+    <xmx:1BA0ZIo6jcA_hf407eeluHwset_GZlOq4yIhVavNDNU-YsYHCBGdMQ>
+    <xmx:1BA0ZBSF2ALMnkv-giKnNhNVyNW0Go67hgCVldClyfKWYmiNcG3AAQ>
+    <xmx:1BA0ZDX5HGZXK4eSuEzBf2jjs5ct8928lPxS4WAkpcD_SwISI3fi5w>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 10 Apr 2023 09:36:18 -0400 (EDT)
+Date:   Mon, 10 Apr 2023 07:36:16 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Topi Miettinen <toiwoton@gmail.com>
+Cc:     linux-modules <linux-modules@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Per-process flag set via prctl() to deny module loading?
+Message-ID: <ZDQQ0B35NcYwQMyy@tycho.pizza>
+References: <640c4327-0b40-f964-0b5b-c978683ac9ba@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, masahiroy@kernel.org,
-        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        akpm@linux-foundation.org, eugene.loh@oracle.com,
-        kris.van.hees@oracle.com, live-patching@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-References: <20221205163157.269335-1-nick.alcock@oracle.com>
- <20230407232118.o2x5lakfgyzy56gz@treble>
-Content-Language: en-US
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable symbol->address
- lookup with /proc/kallmodsyms
-In-Reply-To: <20230407232118.o2x5lakfgyzy56gz@treble>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <640c4327-0b40-f964-0b5b-c978683ac9ba@gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 4/7/23 19:21, Josh Poimboeuf wrote:
-> On Mon, Dec 05, 2022 at 04:31:44PM +0000, Nick Alcock wrote:
->> The whole point of symbols is that their names are unique: you can look up a
->> symbol and get back a unique address, and vice versa.  Alas, because
->> /proc/kallsyms (rightly) reports all symbols, even hidden ones, it does not
->> really satisfy this requirement.  Large numbers of symbols are duplicated
->> many times (just search for __list_del_entry!), and while usually these are
->> just out-of-lined things defined in header files and thus all have the same
->> implementation, it does make it needlessly hard to figure out which one is
->> which in stack dumps, when tracing, and such things.  Some configuration
->> options make things much worse: my test make allyesconfig runs introduced
->> thousands of text symbols named _sub_I_65535_1, one per compiler-generated
->> object file, and it was fairly easy to make them appear in ftrace output.
->>
->> Right now the kernel has no way at all to tell such symbols apart, and nor
->> has the user: their address differs and that's all.  Which module did they
->> come from?  Which object file?  We don't know.  Figuring out which is which
->> when tracing needs a combination of guesswork and luck, and if there are
->> thousands of them that's not a pleasant prospect.  In discussions at LPC it
->> became clear that this is not just annoying me but Steve Rostedt and others,
->> so it's probably desirable to fix this.
->>
->> It turns out that the linker, and the kernel build system, can be made to
->> give us everything we need to resolve this once and for all.  This series
->> provides a new /proc/kallmodsyms which is like /proc/kallsyms except that it
->> annotates every (textual) symbol which comes from a built-in kernel module
->> with the module's name, in square brackets: if a symbol is used by multiple
->> modules, it gets [multiple] [names]; if a symbol is still ambiguous it gets
->> a cut-down {object file name}; the combination of symbol, [module] [names]
->> and {object file name} is unique (with one minor exception: the arm64 nvhe
->> module is pre-linked with ld -r, causing all symbols in it to appear to come
->> from the same object file: if it was reworked to use thin archives this
->> problem would go away).
+On Mon, Apr 10, 2023 at 01:06:00PM +0300, Topi Miettinen wrote:
+> I'd propose to add a per-process flag to irrevocably deny any loading of
+> kernel modules for the process and its children. The flag could be set (but
+> not unset) via prctl() and for unprivileged processes, only when
+> NoNewPrivileges is also set. This would be similar to CAP_SYS_MODULE, but
+> unlike capabilities, there would be no issues with namespaces since the flag
+> isn't namespaced.
 > 
-> Hi Nick,
+> The implementation should be very simple.
 > 
-> Sorry for jumping in late on an old patch set.  I just saw the LWN
-> article about the MODULE_LICENSE() patches and I have some comments
-> about duplicate symbols and a question about the motivation for this
-> patch set.
-> 
-> For livepatch we have a solution for disambiguating duplicate local
-> symbols called "sympos".  It works (for now) but there are some cases
-> (like LTO) where it falls apart and it may not be the best long term
-> solution.
-> 
-> The function granularity KASLR (fgkaslr) patches proposed a potentially
-> better option: use the GNU linker -zunique_symbols flag which renames
-> all duplicates to have unique names across the entire linked object.
-> 
+> Preferably the flag, when configured, would be set by systemd, Firejail and
+> maybe also container managers. The expectation would be that the permission
+> to load modules would be retained only by udev and where SUID needs to be
+> allowed (NoNewPrivileges unset).
 
-And IIRC, that idea was eventually dropped.  Fāng-ruì Sòng posted a few
-reasons why -zunique-symbols wouldn't be a great solution [1]
+You can do something like this today via STATIC_USERMODEHELPER without
+the need for kernel patches. It is a bit heavyweight for a
+general-purpose system though.
 
-[1]
-https://lore.kernel.org/lkml/CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com/
-
-<file + symbol> was suggested instead, but I'm not 100% if that ever
-became the preferred solution.
-
-> There are other components which also struggle with duplicate symbols:
-> ftrace, kprobes, BPF, etc.  It would be good to come up with a kallsyms
-> solution that works for everybody.
-> 
-> Anyway, I was nodding along with the above cover letter until I got to
-> the third paragraph.
-> 
-> A "built-in kernel module" is not actually a module, as it's built in to
-> vmlinux.  I suspect the point is that if you rebuild with a different
-> config, it might become a module.  But many other changes could also
-> occur with a changed config, including changed inlining decisions and
-> GCC IPA optimization function renaming, in which case the symbol might
-> no longer exist with the new config.
-> 
-> Also I'm confused what it means for a symbol to be "used by multiple
-> modules".  If the same TU or inline symbol is linked into two modules,
-> it will be loaded twice at two different addresses, and the
-> implementations could even differ.
-> 
-> It sounds like there are two problems being conflated:
-> 
->   1) how to uniquely identify symbols in the current kernel
-> 
->      For this, all we really need is file+sym.
-> 
->      Or, enable -zunique-symbols in the linker.
-> 
->   2) how to uniquely identify symbols across multiple kernels/configs
-> 
->      This seems much trickier, as much can change across kernels and
->      configs, including compiler inlining and naming decisions, not to
->      mention actual code changes.
-> 
-> The problems are related, but distinct.
-> 
-> #2 seems significantly harder to implement properly.
-> 
-> Would solving #1 give you most of what you need?
-> 
-> Based on the difficulty of #2, it really needs a proper justification.
-> I didn't see that in either of the patch sets.
-> 
-> Can you share more details about what specific problem needs solved and
-> why?  And how this would be used?  Examples would be helpful.
-> 
-> The article linked to this brief explanation [1], but that doesn't
-> clarify why "distinct notation used by users for things in named
-> modules" would be important.
-> 
-> Is there a reason the user can't just use whatever notation is
-> appropriate for their specific kernel?  Or, once we have #1, couldn't
-> tooling do an intermediate translation?
-> 
-> [1] https://lwn.net/ml/linux-kernel/87h6z5wqlk.fsf@esperi.org.uk/
-> 
-
--- 
-Joe
-
+Tycho
