@@ -2,118 +2,172 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12491C77B61
-	for <linux-modules@archiver.kernel.org>; Mon, 10 Apr 2023 21:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A328AC76196
+	for <linux-modules@archiver.kernel.org>; Tue, 11 Apr 2023 08:43:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjDJV0B (ORCPT
+        id S230266AbjDKInQ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 10 Apr 2023 17:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        Tue, 11 Apr 2023 04:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDJV0A (ORCPT
+        with ESMTP id S229491AbjDKInP (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 10 Apr 2023 17:26:00 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63FD1724;
-        Mon, 10 Apr 2023 14:25:58 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 47996320005D;
-        Mon, 10 Apr 2023 17:25:56 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 10 Apr 2023 17:25:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1681161955; x=1681248355; bh=cr
-        TAf9yOGTm4ffk3dkC8Fr9jQPKpoUJV7Nw6WJRp4fI=; b=ZMWHI6FKcSv0sCDgFi
-        uPZrQ1mKE6+TX8kfNP7LfiZnT3/NpXwJU0rxlPterjMJmKoQpmBr05aSjwjSW0Nw
-        wZ8Nd+FwosARAgsTybYy547MeXFcpnoaK0bWMwV6pXKPDObgoSFbaN+3rcQZ3jVu
-        bqgLDARwkwRY+lpPsLJ4hJiCBeumV9+rEOBOFnEnR1111j8qxfwurz6hl0x6C+8S
-        gxUWCaMe4cunKcEBtuGdFpb4/BQ4nibFosDd/YmDJdzGol3ZUJbBHpSN9FcgppuC
-        aCfSkoLD1Lgn5yHPaQdMGPJtaxSBMFZwiAfdwmiNrQYYJZcm5wyp8EjIFIqN6j1n
-        nV5g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1681161955; x=1681248355; bh=crTAf9yOGTm4f
-        fk3dkC8Fr9jQPKpoUJV7Nw6WJRp4fI=; b=GGuMnoQcq0Yms+h3gZFnXpEAtQSmf
-        hS8hh1TlPT22Or3+Lsz6ZeIwgXOtPBsHnPEIKKhIsStZwA6yQp9QtlFEwPCX1Mir
-        ajopvaLPpy3R1hnH8fdVl62MO3qfIyTBYXa9iNOR8jozv0AbfBLY7DV8auBX55KQ
-        RnLemdDzFStISulRMlPg1hizZcPm4y683TKTUbC6Mjun5BcsLF/RVWofaSfNj11P
-        ZPgNRCYVB+jja74ymrqVP96NOQRlkotqNkDC5gUWFzTfhz6/F73mXAEk3MGMW4vN
-        UOnVP9Ce00fD1emrHq9UZukPwxgQulpMkYVDgyqaoQKWT99AoF0uVnwGQ==
-X-ME-Sender: <xms:4340ZGoSPHbEjgF66C53lpbVX0885I86ngifQnhgCrQYSX1w2LJOHg>
-    <xme:4340ZEovzX2jd3yslFO-0IPCCEsO9FguqrCQ8KpCvjNdjYEjOsGXbcvVJriQ0Vk1J
-    -w7TgnGo98HJ66pwiM>
-X-ME-Received: <xmr:4340ZLP2caSw_jwecVD8gkLNSLMStsztUI1M_Le_Jmst3sDIC0XN8xGI1vojIQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekvddgudeitdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvhigt
-    hhhoucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtf
-    frrghtthgvrhhnpeeutedttefgjeefffehffffkeejueevieefudelgeejuddtfeffteek
-    lefhleelteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehthigthhhosehthigthhhordhpihiiiigr
-X-ME-Proxy: <xmx:4340ZF5IElT4BWljqMlWfF2mXm7ADpwfR0Qsd-RPiAGQ3lcjnoo63g>
-    <xmx:4340ZF4Iua-nECCv6X9y4NnNcwr0J41QIIUTEwLVY1kkM4w3pRFhBQ>
-    <xmx:4340ZFig28qwYamX-F2CUlnSAY_HbBTZIJPzj48QhyhPJReu3C5qUQ>
-    <xmx:4340ZPm4RknNUuIvm7ZHQW4f9SxRLKj5531W9iXktcFZxkd5Pz8iGg>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Apr 2023 17:25:54 -0400 (EDT)
-Date:   Mon, 10 Apr 2023 15:25:53 -0600
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Topi Miettinen <toiwoton@gmail.com>
-Cc:     linux-modules <linux-modules@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: Per-process flag set via prctl() to deny module loading?
-Message-ID: <ZDR+4R4AKfnBcMOu@tycho.pizza>
-References: <640c4327-0b40-f964-0b5b-c978683ac9ba@gmail.com>
- <ZDQQ0B35NcYwQMyy@tycho.pizza>
- <4017c904-9918-3e0c-b687-f55cfc5c4f4d@gmail.com>
+        Tue, 11 Apr 2023 04:43:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7B5171F
+        for <linux-modules@vger.kernel.org>; Tue, 11 Apr 2023 01:42:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681202550;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f0G40HMMtqNusZREMWnmDmOZTULsZQjdvFBX6d0j6nM=;
+        b=c04WVj0XM27mqf4xvNVOFE6/UlYYdSiHVbtCmaDokTe0mMOmTi6h9mpijcu7x3niLnFtSX
+        1XMmyTgp2FNpdvTiDt28eRYHskQCXMf6+1ej+EAf4aBKub+E1UYIXMMz9odrzo/TdTxus9
+        be+oy5nIyV0N3QtYcyaILky98N4ZWiw=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-515-qP7CRp5UPrKdc91CaoPOfQ-1; Tue, 11 Apr 2023 04:42:26 -0400
+X-MC-Unique: qP7CRp5UPrKdc91CaoPOfQ-1
+Received: by mail-wr1-f70.google.com with SMTP id r4-20020adfa144000000b002db44581302so978894wrr.7
+        for <linux-modules@vger.kernel.org>; Tue, 11 Apr 2023 01:42:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681202545; x=1683794545;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f0G40HMMtqNusZREMWnmDmOZTULsZQjdvFBX6d0j6nM=;
+        b=t2TNyHMH7bVIdD4ubdhj9A6HxBd5q01skf/St8AIy21a+zNv+iCwOctFRgY79CzijP
+         As6wiOWo9jJ7zYZIQ8ujSjR9BsKJnJoIUkjLReQqEFJXm23BRhYplDx/52m/HWtqTx9E
+         AnOckV7mTgNGgrw+1U20DrVWeA6RLtuHV3RWdRkcDqSddvUz7kUAE/rgwL8ft1Qk+Bz1
+         ZCVkban+Ak47l6CE3qmf5Lk3pBXDh4pJBv23Uv5mN/Fte7xq5qJnVn5qPmjAaNM99Cyp
+         RIBIqzzGwA3tRFAeHmZm5Z2QqJT73/r7BKnh7Eamqs4i3QdeaiDkIO8U7ydxMc5YjouD
+         LoEQ==
+X-Gm-Message-State: AAQBX9d0ahRQ+k8joPzK6fQZXw8BW9GqG4q8iUzWrsumHOtHAJ2u/QU4
+        p1uEjSx9TRScsMXueyG3gQ7RuUVdQWReTTnuOMhBMQy3+9o35pTVFKtn2RvohSsXVHkuXXHBDQf
+        bi6BR4sHEPrneh2qrJM0S9HfyYQ==
+X-Received: by 2002:a7b:cb81:0:b0:3ee:1acd:b039 with SMTP id m1-20020a7bcb81000000b003ee1acdb039mr9362616wmi.34.1681202545138;
+        Tue, 11 Apr 2023 01:42:25 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y0ozkUapL4MwnXUftzJoDwFRIUNHeFl1HSv1T0LtFvCqpcIZ1xQSSekp/uyzdWD3ViMfmTvg==
+X-Received: by 2002:a7b:cb81:0:b0:3ee:1acd:b039 with SMTP id m1-20020a7bcb81000000b003ee1acdb039mr9362604wmi.34.1681202544706;
+        Tue, 11 Apr 2023 01:42:24 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:1300:6f08:1748:eba7:b2a9? (p200300cbc70613006f081748eba7b2a9.dip0.t-ipconnect.de. [2003:cb:c706:1300:6f08:1748:eba7:b2a9])
+        by smtp.gmail.com with ESMTPSA id 22-20020a05600c021600b003dc522dd25esm16326602wmi.30.2023.04.11.01.42.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 01:42:24 -0700 (PDT)
+Message-ID: <3132a8ca-49a3-3d6a-09fe-984293116d76@redhat.com>
+Date:   Tue, 11 Apr 2023 10:42:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4017c904-9918-3e0c-b687-f55cfc5c4f4d@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 2/2] modules/kmod: replace implementation with a
+ sempahore
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+References: <20230405203505.1343562-1-mcgrof@kernel.org>
+ <20230405203505.1343562-3-mcgrof@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230405203505.1343562-3-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Apr 10, 2023 at 11:47:16PM +0300, Topi Miettinen wrote:
-> On 10.4.2023 16.36, Tycho Andersen wrote:
-> > On Mon, Apr 10, 2023 at 01:06:00PM +0300, Topi Miettinen wrote:
-> > > I'd propose to add a per-process flag to irrevocably deny any loading of
-> > > kernel modules for the process and its children. The flag could be set (but
-> > > not unset) via prctl() and for unprivileged processes, only when
-> > > NoNewPrivileges is also set. This would be similar to CAP_SYS_MODULE, but
-> > > unlike capabilities, there would be no issues with namespaces since the flag
-> > > isn't namespaced.
-> > > 
-> > > The implementation should be very simple.
-> > > 
-> > > Preferably the flag, when configured, would be set by systemd, Firejail and
-> > > maybe also container managers. The expectation would be that the permission
-> > > to load modules would be retained only by udev and where SUID needs to be
-> > > allowed (NoNewPrivileges unset).
-> > 
-> > You can do something like this today via STATIC_USERMODEHELPER without
-> > the need for kernel patches. It is a bit heavyweight for a
-> > general-purpose system though.
+On 05.04.23 22:35, Luis Chamberlain wrote:
+> Simplfy the concurrency delimiter we user for kmod with the semaphore.
+> I had used the kmod strategy to try to implement a similar concurrency
+> delimiter for the kernel_read*() calls from the finit_module() path
+> so to reduce vmalloc() memory pressure. That effort didn't provid yet
+> conclusive results, but one thing that did became clear is we can use
+> the suggested alternative solution with semaphores which Linus hinted
+> at instead of using the atomic / wait strategy.
 > 
-> So the user mode helper would be launched whenever there is a module request
-> and it would check whether the process is allowed to load modules or not?
+> I've stress tested this with kmod test 0008:
+> 
+> time /data/linux-next/tools/testing/selftests/kmod/kmod.sh -t 0008
+> 
+> And I get only a *slight* delay. That delay however is small, a few
+> seconds for a full test loop run that runs 150 times, for about ~30-40
+> seconds. The small delay is worth the simplfication IMHO.
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>   kernel/module/kmod.c | 26 +++++++-------------------
+>   1 file changed, 7 insertions(+), 19 deletions(-)
+> 
+> diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
+> index b717134ebe17..925eb85b8346 100644
+> --- a/kernel/module/kmod.c
+> +++ b/kernel/module/kmod.c
+> @@ -40,8 +40,7 @@
+>    * effect. Systems like these are very unlikely if modules are enabled.
+>    */
+>   #define MAX_KMOD_CONCURRENT 50
+> -static atomic_t kmod_concurrent_max = ATOMIC_INIT(MAX_KMOD_CONCURRENT);
+> -static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
+> +static DEFINE_SEMAPHORE(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
+>   
+>   /*
+>    * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads
+> @@ -148,29 +147,18 @@ int __request_module(bool wait, const char *fmt, ...)
+>   	if (ret)
+>   		return ret;
+>   
+> -	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
+> -		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
+> -				    atomic_read(&kmod_concurrent_max),
+> -				    MAX_KMOD_CONCURRENT, module_name);
+> -		ret = wait_event_killable_timeout(kmod_wq,
+> -						  atomic_dec_if_positive(&kmod_concurrent_max) >= 0,
+> -						  MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
+> -		if (!ret) {
+> -			pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
+> -					    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
+> -			return -ETIME;
+> -		} else if (ret == -ERESTARTSYS) {
+> -			pr_warn_ratelimited("request_module: sigkill sent for modprobe %s, giving up", module_name);
+> -			return ret;
+> -		}
+> +	ret = down_timeout(&kmod_concurrent_max, MAX_KMOD_ALL_BUSY_TIMEOUT);
+> +	if (ret) {
+> +		pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
+> +				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
+> +		return ret;
+>   	}
+>   
+>   	trace_module_request(module_name, wait, _RET_IP_);
+>   
+>   	ret = call_modprobe(module_name, wait ? UMH_WAIT_PROC : UMH_WAIT_EXEC);
+>   
+> -	atomic_inc(&kmod_concurrent_max);
+> -	wake_up(&kmod_wq);
+> +	up(&kmod_concurrent_max);
+>   
+>   	return ret;
+>   }
 
-Yes, exactly.
+Much cleaner
 
-> Does it know which process caused the module to be loaded and what were its
-> credentials at that time?
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-It doesn't know which process caused the module load, which is kind of
-unfortunate. It looks like you could stick it in the environment in
-kernel/kmod.c:call_modprobe() without breaking too many things,
-though.
+-- 
+Thanks,
 
-Tycho
+David / dhildenb
+
