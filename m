@@ -2,100 +2,87 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83CA8C76196
-	for <linux-modules@archiver.kernel.org>; Tue, 11 Apr 2023 15:10:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04C00C76196
+	for <linux-modules@archiver.kernel.org>; Tue, 11 Apr 2023 15:21:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjDKPKu (ORCPT
+        id S229488AbjDKPVS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 11 Apr 2023 11:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
+        Tue, 11 Apr 2023 11:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjDKPKq (ORCPT
+        with ESMTP id S229616AbjDKPVQ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:10:46 -0400
+        Tue, 11 Apr 2023 11:21:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC415254;
-        Tue, 11 Apr 2023 08:10:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465053C26;
+        Tue, 11 Apr 2023 08:20:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3512A61F6C;
-        Tue, 11 Apr 2023 15:10:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36DACC43443;
-        Tue, 11 Apr 2023 15:10:27 +0000 (UTC)
-Date:   Tue, 11 Apr 2023 16:10:24 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4E29625BE;
+        Tue, 11 Apr 2023 15:17:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0237DC433EF;
+        Tue, 11 Apr 2023 15:17:38 +0000 (UTC)
+Date:   Tue, 11 Apr 2023 16:17:35 +0100
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Song Liu <song@kernel.org>, jim.cromie@gmail.com,
-        linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with
- module_memory")
-Message-ID: <ZDV4YGjRpuqcI7F3@arm.com>
-References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
- <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
- <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
- <ZCs6jpo1nYe1Wm08@bombadil.infradead.org>
+Cc:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+Subject: Re: [PATCH v2 1/6] module: fix kmemleak annotations for non init ELF
+ sections
+Message-ID: <ZDV6DzePHI3KLISY@arm.com>
+References: <20230405022702.753323-1-mcgrof@kernel.org>
+ <20230405022702.753323-2-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCs6jpo1nYe1Wm08@bombadil.infradead.org>
+In-Reply-To: <20230405022702.753323-2-mcgrof@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Apr 03, 2023 at 01:43:58PM -0700, Luis Chamberlain wrote:
-> On Fri, Mar 31, 2023 at 05:27:04PM -0700, Song Liu wrote:
-> > On Fri, Mar 31, 2023 at 12:00 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > On Thu, Mar 30, 2023 at 04:45:43PM -0600, jim.cromie@gmail.com wrote:
-> > > > kmemleak is reporting 19 leaks during boot
-> > > >
-> > > > because the hexdumps appeared to have module-names,
-> > > > and Ive been hacking nearby, and see the same names
-> > > > every time I boot my test-vm, I needed a clearer picture
-> > > > Jason corroborated and bisected.
-> > > >
-> > > > the 19 leaks split into 2 groups,
-> > > > 9 with names of builtin modules in the hexdump,
-> > > > all with the same backtrace
-> > > > 9 without module-names (with a shared backtrace)
-> > > > +1 wo name-ish and a separate backtrace
-> > >
-> > > Song, please take a look.
-> > 
-> > I will look into this next week.
-> 
-> I'm thinking this may be it, at least this gets us to what we used to do
-> as per original Catalinas' 4f2294b6dc88d ("kmemleak: Add modules
-> support") and right before Song's patch.
-> 
+On Tue, Apr 04, 2023 at 07:26:57PM -0700, Luis Chamberlain wrote:
 > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 6b6da80f363f..3b9c71fa6096 100644
+> index 5cc21083af04..d8bb23fa6989 100644
 > --- a/kernel/module/main.c
 > +++ b/kernel/module/main.c
-> @@ -2240,7 +2240,10 @@ static int move_module(struct module *mod, struct load_info *info)
->  		 * which is inside the block. Just mark it as not being a
->  		 * leak.
+> @@ -2233,11 +2233,23 @@ static int move_module(struct module *mod, struct load_info *info)
+>  		ptr = module_memory_alloc(mod->mem[type].size, type);
+>  
+>  		/*
+> -		 * The pointer to this block is stored in the module structure
+> -		 * which is inside the block. Just mark it as not being a
+> -		 * leak.
+> +		 * The pointer to these blocks of memory are stored on the module
+> +		 * structure and we keep that around so long as the module is
+> +		 * around. We only free that memory when we unload the module.
+> +		 * Just mark them as not being a leak then. The .init* ELF
+> +		 * sections *do* get freed after boot so we treat them slightly
+> +		 * differently and only grey them out -- they work as typical
+> +		 * memory allocations which *do* eventually get freed.
 >  		 */
 > -		kmemleak_ignore(ptr);
-> +		if (type == MOD_INIT_TEXT)
+> +		switch (type) {
+> +		case MOD_INIT_TEXT: /* fallthrough */
+> +		case MOD_INIT_DATA: /* fallthrough */
+> +		case MOD_INIT_RODATA: /* fallthrough */
 > +			kmemleak_ignore(ptr);
-> +		else
+> +			break;
+> +		default:
 > +			kmemleak_not_leak(ptr);
->  		if (!ptr) {
->  			t = type;
->  			goto out_enomem;
-> 
-> We used to use the grey area for the TEXT but the original commit
-> doesn't explain too well why we grey out init but not the others. Ie
-> why kmemleak_ignore() on init and kmemleak_not_leak() on the others.
+> +		}
 
-It's safe to use the 'grey' colour in all cases. For text sections that
-don't need scanning, there's a slight chance of increasing the false
-negatives, so marking it 'black' ignores the scanning. For the init
-section, if it gets discarded anyway, just going with
-kmemleak_not_leak() is fine. It simplifies the logic above.
+This works as well but if you want to keep it simple, just call
+kmemleak_not_leak() in all cases. When freeing the init sections, they
+would be removed from the kmemleak tracing anyway.
 
 -- 
 Catalin
