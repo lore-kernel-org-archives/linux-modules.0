@@ -2,71 +2,67 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DF71C7619A
-	for <linux-modules@archiver.kernel.org>; Wed, 12 Apr 2023 04:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FA3CC7619A
+	for <linux-modules@archiver.kernel.org>; Wed, 12 Apr 2023 07:37:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbjDLEFZ (ORCPT
+        id S229802AbjDLHhm (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 12 Apr 2023 00:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
+        Wed, 12 Apr 2023 03:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjDLEFX (ORCPT
+        with ESMTP id S229932AbjDLHhh (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:05:23 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DAD4EE8;
-        Tue, 11 Apr 2023 21:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jaf8TVcaCoY+gXRI/VJ8dcjLvYvyn0Wf6eDT01i5qTU=; b=gV/Q8PhBJfKEwrm7QUc3Nj/RkV
-        SdSL5cwKeC0Plg0b6mwejcTDoMjZarfDiNAgQplXpqYWFesGNsx9Ly1iS6lsQsOGJ+pmFjNCyYBZf
-        iTxAWnMJJISxhizo+817ILIZ4QnD9GsCTv7+ptWdl3GhN2mkaCUshKhLgpYXIWL6hRXulCkBhdaqR
-        xAasSAx0b9s9kawlt7zz92GU+EBueFmLjNPSh92Ny2DYBUxQ8C626EYy8rD6dI2n+LAlqcCd2bwnj
-        qtaTHNNsdcvpr+FmnPzCRFCLdstHHWMLyCna3D7TkKLo6UwdqvD2aTrs6jMv7YKU2iQnB2ZHFHxEy
-        KNQzlAXw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pmRjM-001jmc-1R;
-        Wed, 12 Apr 2023 04:05:12 +0000
-Date:   Tue, 11 Apr 2023 21:05:12 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     david@redhat.com, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        dave@stgolabs.net, vbabka@suse.cz, mhocko@suse.com,
-        dave.hansen@linux.intel.com, colin.i.king@gmail.com,
-        jim.cromie@gmail.com, catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v2 1/2] Change DEFINE_SEMAPHORE() to take a number
- argument
-Message-ID: <ZDYt+PwRjr+BzeBz@bombadil.infradead.org>
-References: <20230405203505.1343562-1-mcgrof@kernel.org>
- <20230405203505.1343562-2-mcgrof@kernel.org>
- <ZDB+zn3X4sac9DFU@casper.infradead.org>
+        Wed, 12 Apr 2023 03:37:37 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31A321BDA;
+        Wed, 12 Apr 2023 00:37:34 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Cxjdq9XzZknRsbAA--.30551S3;
+        Wed, 12 Apr 2023 15:37:33 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxyr23XzZksY0gAA--.35787S3;
+        Wed, 12 Apr 2023 15:37:29 +0800 (CST)
+To:     yangtiezhu@loongson.cn
+References: <1680254153-14582-1-git-send-email-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH 0/3] Modify is_arm_mapping_symbol() related code
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn, mcgrof@kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <ca51bd24-77de-54ed-c263-3eadd9c07fba@loongson.cn>
+Date:   Wed, 12 Apr 2023 15:37:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDB+zn3X4sac9DFU@casper.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <1680254153-14582-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Dxyr23XzZksY0gAA--.35787S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
+        67AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
+        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF
+        0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvE
+        c7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+        v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7I
+        U8czVUUUUUU==
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Apr 07, 2023 at 09:36:30PM +0100, Matthew Wilcox wrote:
-> Or this:
-> 
-> /*
->  * Unlike mutexes, binary semaphores do not have an owner, so up() can
->  * be called in a different thread from the one which called down().
->  * It is also safe to call down_trylock() and up() from interrupt
->  * context.
->  */
+Hi Luis,
 
-I went with that. Thanks for helping me paint this shed!
+Are you OK with this change?
+Any comments will be much appreciated.
 
-  Luis
+https://lore.kernel.org/lkml/1680254153-14582-1-git-send-email-yangtiezhu@loongson.cn/
+
+Thanks,
+Tiezhu
+
