@@ -2,48 +2,37 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77D5AC77B61
-	for <linux-modules@archiver.kernel.org>; Thu, 13 Apr 2023 09:44:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB4BC77B6E
+	for <linux-modules@archiver.kernel.org>; Thu, 13 Apr 2023 16:38:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjDMJo4 (ORCPT
+        id S229908AbjDMQih (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 13 Apr 2023 05:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        Thu, 13 Apr 2023 12:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDMJo4 (ORCPT
+        with ESMTP id S229828AbjDMQig (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 13 Apr 2023 05:44:56 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2292D40;
-        Thu, 13 Apr 2023 02:44:54 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id E70C3218D6;
-        Thu, 13 Apr 2023 09:44:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1681379092; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=keCaqqSGY7ha37QXjnvDv9stJXEl1mM4kkMWKs/qtKg=;
-        b=zSa1cr4s1WR105cxP6zR9ClgYoWxDTq+/BT6CSI5psaOSWiv/5BqJUWzaA4uPv6VR7lWiN
-        GG+UqT5EAZjAiTGibcjMvZPjabuEjF9qKs0mBm7cn6aq8WlToYpY0eciwgWSZZOxcYrOaN
-        kNwLNjHLA+VTXkRSzct5jEOPOqbkAc8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1681379092;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=keCaqqSGY7ha37QXjnvDv9stJXEl1mM4kkMWKs/qtKg=;
-        b=PdJKFTmluzOfhClBwYxHt/cSdzaO+l9cxRLUhryKUtANzOAdjfwf+/ClBUVVdctzOg2gUI
-        JN4o39+beXxaz5Aw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A75982C143;
-        Thu, 13 Apr 2023 09:44:51 +0000 (UTC)
-Date:   Thu, 13 Apr 2023 11:44:51 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-cc:     david@redhat.com, patches@lists.linux.dev,
+        Thu, 13 Apr 2023 12:38:36 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE2A8A6A;
+        Thu, 13 Apr 2023 09:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SiAvXIwUCiDRn7X/zVCIOWNEa8hkl/f6/T4KHDaYrfA=; b=AtpOvMGl59YlIWsPr0KJLB/Rs/
+        Arvbb+ogkRT7S8QPT5azeBWIJF6S6JAk4Sg6qh7aXkb8D4DncrDNgtMURvYpzWf0yLlbo6TzsLva9
+        e9vln472OX3I384SfaVucMChr3bBar26vxbBbN5sDyUVCwA2OkV567jp4LbMXIelFK7c7YJfX9uRd
+        MF5dqN82Lp2ZxYnBixPh8GQWEOL3435gzxRrLUQMnwaCkI4udtS6CkEv6FB4ZhdRnsuYH5skULX5y
+        zD0METmT3EFAodInUnRrZpl52sYbjXFbyGkXPmhFPR5+IUyS5X9HLLrEDjov6F4p+jXCP1kIT/aYR
+        Wn8Ind0g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pmzxq-006hJo-1o;
+        Thu, 13 Apr 2023 16:38:26 +0000
+Date:   Thu, 13 Apr 2023 09:38:26 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     david@redhat.com, patches@lists.linux.dev,
         linux-modules@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, pmladek@suse.com,
         petr.pavlu@suse.com, prarit@redhat.com,
@@ -57,90 +46,27 @@ cc:     david@redhat.com, patches@lists.linux.dev,
         rick.p.edgecombe@intel.com
 Subject: Re: [PATCH v2 2/2] modules/kmod: replace implementation with a
  sempahore
-In-Reply-To: <20230405203505.1343562-3-mcgrof@kernel.org>
-Message-ID: <alpine.LSU.2.21.2304131136580.27633@pobox.suse.cz>
-References: <20230405203505.1343562-1-mcgrof@kernel.org> <20230405203505.1343562-3-mcgrof@kernel.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+Message-ID: <ZDgwAiayuj0lCId5@bombadil.infradead.org>
+References: <20230405203505.1343562-1-mcgrof@kernel.org>
+ <20230405203505.1343562-3-mcgrof@kernel.org>
+ <alpine.LSU.2.21.2304131136580.27633@pobox.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LSU.2.21.2304131136580.27633@pobox.suse.cz>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi,
+On Thu, Apr 13, 2023 at 11:44:51AM +0200, Miroslav Benes wrote:
+> Hi,
 
-On Wed, 5 Apr 2023, Luis Chamberlain wrote:
+<spell checks>
 
-s/sempahore/semaphore/ in the subject
+Thanks, fixed!
 
-> Simplfy the concurrency delimiter we user for kmod with the semaphore.
+> MAX_KMOD_ALL_BUSY_TIMEOUT * HZ ?
 
-"Simplify the concurrency delimiter we use for kmod with the semaphore."
+Yes! In the end schedule_timeout() is used so yup, thanks!
 
-(two typos)
-
-> I had used the kmod strategy to try to implement a similar concurrency
-> delimiter for the kernel_read*() calls from the finit_module() path
-> so to reduce vmalloc() memory pressure. That effort didn't provid yet
-
-s/provid/provide/
-
-> conclusive results, but one thing that did became clear is we can use
-
-s/did // (or s/became/become/)
-
-> the suggested alternative solution with semaphores which Linus hinted
-> at instead of using the atomic / wait strategy.
-> 
-> I've stress tested this with kmod test 0008:
-> 
-> time /data/linux-next/tools/testing/selftests/kmod/kmod.sh -t 0008
-> 
-> And I get only a *slight* delay. That delay however is small, a few
-> seconds for a full test loop run that runs 150 times, for about ~30-40
-> seconds. The small delay is worth the simplfication IMHO.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
->  kernel/module/kmod.c | 26 +++++++-------------------
->  1 file changed, 7 insertions(+), 19 deletions(-)
-> 
-> diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
-> index b717134ebe17..925eb85b8346 100644
-> --- a/kernel/module/kmod.c
-> +++ b/kernel/module/kmod.c
-> @@ -40,8 +40,7 @@
->   * effect. Systems like these are very unlikely if modules are enabled.
->   */
->  #define MAX_KMOD_CONCURRENT 50
-> -static atomic_t kmod_concurrent_max = ATOMIC_INIT(MAX_KMOD_CONCURRENT);
-> -static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
-> +static DEFINE_SEMAPHORE(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
->  
->  /*
->   * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads
-> @@ -148,29 +147,18 @@ int __request_module(bool wait, const char *fmt, ...)
->  	if (ret)
->  		return ret;
->  
-> -	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
-> -		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
-> -				    atomic_read(&kmod_concurrent_max),
-> -				    MAX_KMOD_CONCURRENT, module_name);
-> -		ret = wait_event_killable_timeout(kmod_wq,
-> -						  atomic_dec_if_positive(&kmod_concurrent_max) >= 0,
-> -						  MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
-> -		if (!ret) {
-> -			pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
-> -					    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
-> -			return -ETIME;
-> -		} else if (ret == -ERESTARTSYS) {
-> -			pr_warn_ratelimited("request_module: sigkill sent for modprobe %s, giving up", module_name);
-> -			return ret;
-> -		}
-> +	ret = down_timeout(&kmod_concurrent_max, MAX_KMOD_ALL_BUSY_TIMEOUT);
-
-MAX_KMOD_ALL_BUSY_TIMEOUT * HZ ?
-
-The simplification is very nice.
-
-Miroslav
+  Luis
