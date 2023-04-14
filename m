@@ -2,33 +2,33 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36C9AC77B6E
-	for <linux-modules@archiver.kernel.org>; Fri, 14 Apr 2023 05:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E62BC77B70
+	for <linux-modules@archiver.kernel.org>; Fri, 14 Apr 2023 05:29:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjDNFOR (ORCPT
+        id S229567AbjDNF3T (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 14 Apr 2023 01:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
+        Fri, 14 Apr 2023 01:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjDNFN7 (ORCPT
+        with ESMTP id S229484AbjDNF3S (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 14 Apr 2023 01:13:59 -0400
+        Fri, 14 Apr 2023 01:29:18 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BFF5271;
-        Thu, 13 Apr 2023 22:13:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5617F1FFE;
+        Thu, 13 Apr 2023 22:28:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=TqXpp0mGR6pbQr82UrkZafoUwwcLEWn2SwPyhW5ccH4=; b=BULy9RaW0sKW34wI3U/nRTevOf
-        V0tgtZ290N5EdoMsGO+8NDiJVaASzqH6NnwzHjt+znHVdAzMWAQviQWj7W0Eh+bybvF7e6318lbaZ
-        47SMRm6aT4/b8vm6PNa5qB1IL61I28sOPN59euF6eERPv5v8MEOEQ8DEAeN2KmXBCIhVlrI0ampgU
-        TRujx2Cb1m/mFuRfnmbwKsAnEETCoICQ3LJmrbZgH+Rji3h77gXLKwHMvJF1WSP3StQpy3vqLVet/
-        jLTd/xj4oEWZOr0ci4I/LWQnwf9vNmcdFRPImQKN+Qv/8d4yCsy+ay5wqn8Xg7+76VTJ3TEwXZQRk
-        T0WrQzPg==;
+        bh=iHqXveUS6IchndxGgVtwZgcMZJ63gxl6r7jEFf+BmmQ=; b=pyZpQs+2xUZDAnoUe91m55tZ9q
+        kcL7s7vIi+nON6Qz7z6OecQophFoBQ/0SkX1pNpLz4trrf2w/feIZd+VfsAVN+ZV0O/xJzjhaZR4b
+        VaIMJHAYptwtfbcf8Ui0qNGgQ/XCgwu/OM0sA7PtnI2J0kK/UtJ++8WzTKOpK5dtERQievV63UQkg
+        lbYYuEiB9vd/qfXl58xqd7G28Y8QO17HxGr79uEpA9XuaOJG+3DK+Fa3YhHEQqdeB8Znji1Uhnb4s
+        8+MK1f7MkPtDth6H6pQ6smxGuoM/mUFf7Dg4DrANgOgaPOfoxupyKUr9kfIdAnED7La6RhoP17+nP
+        3hZPX9Jw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pnBks-008KqV-1k;
-        Fri, 14 Apr 2023 05:13:50 +0000
+        id 1pnBzK-008Msj-0u;
+        Fri, 14 Apr 2023 05:28:46 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     david@redhat.com, patches@lists.linux.dev,
         linux-modules@vger.kernel.org, linux-mm@kvack.org,
@@ -43,215 +43,222 @@ Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
         colin.i.king@gmail.com, jim.cromie@gmail.com,
         catalin.marinas@arm.com, jbaron@akamai.com,
         rick.p.edgecombe@intel.com, mcgrof@kernel.org
-Subject: [PATCH v3 1/2] Change DEFINE_SEMAPHORE() to take a number argument
-Date:   Thu, 13 Apr 2023 22:13:48 -0700
-Message-Id: <20230414051349.1986744-2-mcgrof@kernel.org>
+Subject: [RFC 2/2] kread: avoid duplicates
+Date:   Thu, 13 Apr 2023 22:28:40 -0700
+Message-Id: <20230414052840.1994456-3-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230414051349.1986744-1-mcgrof@kernel.org>
-References: <20230414051349.1986744-1-mcgrof@kernel.org>
+In-Reply-To: <20230414052840.1994456-1-mcgrof@kernel.org>
+References: <20230414052840.1994456-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Peter Zijlstra <peterz@infradead.org>
+With this we run into 0 wasted virtual memory bytes.
 
-Fundamentally semaphores are a counted primitive, but
-DEFINE_SEMAPHORE() does not expose this and explicitly creates a
-binary semaphore.
-
-Change DEFINE_SEMAPHORE() to take a number argument and use that in the
-few places that open-coded it using __SEMAPHORE_INITIALIZER().
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-[mcgrof: add some tribal knowledge about why some folks prefer
- binary sempahores over mutexes]
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- arch/mips/cavium-octeon/setup.c                       |  2 +-
- arch/x86/kernel/cpu/intel.c                           |  2 +-
- drivers/firmware/efi/runtime-wrappers.c               |  2 +-
- drivers/firmware/efi/vars.c                           |  2 +-
- drivers/macintosh/adb.c                               |  2 +-
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c      |  2 +-
- drivers/platform/x86/intel/ifs/sysfs.c                |  2 +-
- drivers/scsi/esas2r/esas2r_ioctl.c                    |  2 +-
- .../vc04_services/interface/vchiq_arm/vchiq_arm.c     |  2 +-
- include/linux/semaphore.h                             | 11 +++++++++--
- kernel/printk/printk.c                                |  2 +-
- net/rxrpc/call_object.c                               |  6 ++----
- 12 files changed, 21 insertions(+), 16 deletions(-)
+ fs/kernel_read_file.c | 150 ++++++++++++++++++++++++++++++++++++++++++
+ kernel/module/main.c  |   6 +-
+ 2 files changed, 154 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
-index a71727f7a608..c5561016f577 100644
---- a/arch/mips/cavium-octeon/setup.c
-+++ b/arch/mips/cavium-octeon/setup.c
-@@ -72,7 +72,7 @@ extern void pci_console_init(const char *arg);
- static unsigned long long max_memory = ULLONG_MAX;
- static unsigned long long reserve_low_mem;
+diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
+index 5d826274570c..209c56764442 100644
+--- a/fs/kernel_read_file.c
++++ b/fs/kernel_read_file.c
+@@ -4,6 +4,7 @@
+ #include <linux/kernel_read_file.h>
+ #include <linux/security.h>
+ #include <linux/vmalloc.h>
++#include <linux/fdtable.h>
  
--DEFINE_SEMAPHORE(octeon_bootbus_sem);
-+DEFINE_SEMAPHORE(octeon_bootbus_sem, 1);
- EXPORT_SYMBOL(octeon_bootbus_sem);
- 
- static struct octeon_boot_descriptor *octeon_boot_desc_ptr;
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 291d4167fab8..12bad63822f0 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -1177,7 +1177,7 @@ static const struct {
- static struct ratelimit_state bld_ratelimit;
- 
- static unsigned int sysctl_sld_mitigate = 1;
--static DEFINE_SEMAPHORE(buslock_sem);
-+static DEFINE_SEMAPHORE(buslock_sem, 1);
- 
- #ifdef CONFIG_PROC_SYSCTL
- static struct ctl_table sld_sysctls[] = {
-diff --git a/drivers/firmware/efi/runtime-wrappers.c b/drivers/firmware/efi/runtime-wrappers.c
-index 1fba4e09cdcf..a400c4312c82 100644
---- a/drivers/firmware/efi/runtime-wrappers.c
-+++ b/drivers/firmware/efi/runtime-wrappers.c
-@@ -158,7 +158,7 @@ void efi_call_virt_check_flags(unsigned long flags, const char *call)
-  * none of the remaining functions are actually ever called at runtime.
-  * So let's just use a single lock to serialize all Runtime Services calls.
-  */
--static DEFINE_SEMAPHORE(efi_runtime_lock);
-+static DEFINE_SEMAPHORE(efi_runtime_lock, 1);
- 
- /*
-  * Expose the EFI runtime lock to the UV platform
-diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
-index bd75b87f5fc1..bfc5fa6aa47b 100644
---- a/drivers/firmware/efi/vars.c
-+++ b/drivers/firmware/efi/vars.c
-@@ -21,7 +21,7 @@
- /* Private pointer to registered efivars */
- static struct efivars *__efivars;
- 
--static DEFINE_SEMAPHORE(efivars_lock);
-+static DEFINE_SEMAPHORE(efivars_lock, 1);
- 
- static efi_status_t check_var_size(bool nonblocking, u32 attributes,
- 				   unsigned long size)
-diff --git a/drivers/macintosh/adb.c b/drivers/macintosh/adb.c
-index 23bd0c77ac1a..56599515d51a 100644
---- a/drivers/macintosh/adb.c
-+++ b/drivers/macintosh/adb.c
-@@ -80,7 +80,7 @@ static struct adb_driver *adb_controller;
- BLOCKING_NOTIFIER_HEAD(adb_client_list);
- static int adb_got_sleep;
- static int adb_inited;
--static DEFINE_SEMAPHORE(adb_probe_mutex);
-+static DEFINE_SEMAPHORE(adb_probe_mutex, 1);
- static int sleepy_trackpad;
- static int autopoll_devs;
- int __adb_probe_sync;
-diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-index 5d1e4fe335aa..5a105bab4387 100644
---- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-+++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
-@@ -298,7 +298,7 @@ const u32 dmae_reg_go_c[] = {
- 
- /* Global resources for unloading a previously loaded device */
- #define BNX2X_PREV_WAIT_NEEDED 1
--static DEFINE_SEMAPHORE(bnx2x_prev_sem);
-+static DEFINE_SEMAPHORE(bnx2x_prev_sem, 1);
- static LIST_HEAD(bnx2x_prev_list);
- 
- /* Forward declaration */
-diff --git a/drivers/platform/x86/intel/ifs/sysfs.c b/drivers/platform/x86/intel/ifs/sysfs.c
-index ee636a76b083..4c3c642ee19a 100644
---- a/drivers/platform/x86/intel/ifs/sysfs.c
-+++ b/drivers/platform/x86/intel/ifs/sysfs.c
-@@ -13,7 +13,7 @@
-  * Protects against simultaneous tests on multiple cores, or
-  * reloading can file while a test is in progress
-  */
--static DEFINE_SEMAPHORE(ifs_sem);
-+static DEFINE_SEMAPHORE(ifs_sem, 1);
- 
- /*
-  * The sysfs interface to check additional details of last test
-diff --git a/drivers/scsi/esas2r/esas2r_ioctl.c b/drivers/scsi/esas2r/esas2r_ioctl.c
-index e003d923acbf..055d2e87a2c8 100644
---- a/drivers/scsi/esas2r/esas2r_ioctl.c
-+++ b/drivers/scsi/esas2r/esas2r_ioctl.c
-@@ -56,7 +56,7 @@ dma_addr_t esas2r_buffered_ioctl_addr;
- u32 esas2r_buffered_ioctl_size;
- struct pci_dev *esas2r_buffered_ioctl_pcid;
- 
--static DEFINE_SEMAPHORE(buffered_ioctl_semaphore);
-+static DEFINE_SEMAPHORE(buffered_ioctl_semaphore, 1);
- typedef int (*BUFFERED_IOCTL_CALLBACK)(struct esas2r_adapter *,
- 				       struct esas2r_request *,
- 				       struct esas2r_sg_context *,
-diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-index cddcd3c596c9..1a656fdc9445 100644
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-@@ -149,7 +149,7 @@ static char *g_fragments_base;
- static char *g_free_fragments;
- static struct semaphore g_free_fragments_sema;
- 
--static DEFINE_SEMAPHORE(g_free_fragments_mutex);
-+static DEFINE_SEMAPHORE(g_free_fragments_mutex, 1);
- 
- static int
- vchiq_blocking_bulk_transfer(struct vchiq_instance *instance, unsigned int handle, void *data,
-diff --git a/include/linux/semaphore.h b/include/linux/semaphore.h
-index 6694d0019a68..2d6aa3fd7861 100644
---- a/include/linux/semaphore.h
-+++ b/include/linux/semaphore.h
-@@ -25,8 +25,15 @@ struct semaphore {
- 	.wait_list	= LIST_HEAD_INIT((name).wait_list),		\
+ /**
+  * kernel_read_file() - read file contents into a kernel buffer
+@@ -171,17 +172,166 @@ ssize_t kernel_read_file_from_path_initns(const char *path, loff_t offset,
  }
+ EXPORT_SYMBOL_GPL(kernel_read_file_from_path_initns);
  
--#define DEFINE_SEMAPHORE(name)	\
--	struct semaphore name = __SEMAPHORE_INITIALIZER(name, 1)
-+/*
-+ * There is a big difference between a binary semaphore and a mutex.
-+ * You cannot call mutex_unlock() from IRQ context because it takes an
-+ * internal mutex spin_lock in a non-IRQ-safe manner. Both try_lock()
-+ * and unlock() can be called from IRQ context. A mutex must also be
-+ * released in the same context that locked it.
-+ */
-+#define DEFINE_SEMAPHORE(_name, _n)	\
-+	struct semaphore _name = __SEMAPHORE_INITIALIZER(_name, _n)
- 
- static inline void sema_init(struct semaphore *sem, int val)
++DEFINE_MUTEX(kread_dup_mutex);
++static LIST_HEAD(kread_dup_reqs);
++
++struct kread_dup_req {
++	struct list_head list;
++	char name[PATH_MAX];
++	struct completion first_req_done;
++	struct work_struct complete_work;
++	struct delayed_work delete_work;
++	int dup_ret;
++};
++
++static struct kread_dup_req *kread_dup_request_lookup(char *name)
++{
++	struct kread_dup_req *kread_req;
++
++	list_for_each_entry_rcu(kread_req, &kread_dup_reqs, list,
++				lockdep_is_held(&kread_dup_mutex)) {
++		if (strlen(kread_req->name) == strlen(name) &&
++		    !memcmp(kread_req->name, name, strlen(name))) {
++			return kread_req;
++                }
++        }
++
++	return NULL;
++}
++
++static void kread_dup_request_delete(struct work_struct *work)
++{
++	struct kread_dup_req *kread_req;
++	kread_req = container_of(to_delayed_work(work), struct kread_dup_req, delete_work);
++
++	mutex_lock(&kread_dup_mutex);
++	list_del_rcu(&kread_req->list);
++	synchronize_rcu();
++	mutex_unlock(&kread_dup_mutex);
++	kfree(kread_req);
++}
++
++static void kread_dup_request_complete(struct work_struct *work)
++{
++	struct kread_dup_req *kread_req;
++
++	kread_req = container_of(work, struct kread_dup_req, complete_work);
++
++	complete_all(&kread_req->first_req_done);
++	queue_delayed_work(system_wq, &kread_req->delete_work, 60 * HZ);
++}
++
++static bool kread_dup_request_exists_wait(char *name, int *dup_ret)
++{
++	struct kread_dup_req *kread_req, *new_kread_req;
++	int ret;
++
++	/*
++	 * Pre-allocate the entry in case we have to use it later
++	 * to avoid contention with the mutex.
++	 */
++	new_kread_req = kzalloc(sizeof(*new_kread_req), GFP_KERNEL);
++	if (!new_kread_req)
++		return false;
++
++	memcpy(new_kread_req->name, name, strlen(name));
++	INIT_WORK(&new_kread_req->complete_work, kread_dup_request_complete);
++	INIT_DELAYED_WORK(&new_kread_req->delete_work, kread_dup_request_delete);
++	init_completion(&new_kread_req->first_req_done);
++
++	mutex_lock(&kread_dup_mutex);
++
++	kread_req = kread_dup_request_lookup(name);
++	if (!kread_req) {
++		/*
++		 * There was no duplicate, just add the request so we can
++		 * keep tab on duplicates later.
++		 */
++		//pr_info("New kread request for %s\n", name);
++		list_add_rcu(&new_kread_req->list, &kread_dup_reqs);
++		mutex_unlock(&kread_dup_mutex);
++		return false;
++	}
++	mutex_unlock(&kread_dup_mutex);
++
++	/* We are dealing with a duplicate request now */
++
++	kfree(new_kread_req);
++
++	//pr_warn("kread: duplicate request for file %s\n", name);
++
++	ret = wait_for_completion_state(&kread_req->first_req_done,
++					TASK_UNINTERRUPTIBLE | TASK_KILLABLE);
++	if (ret) {
++		*dup_ret = ret;
++		return true;
++	}
++
++	/* breath */
++	schedule_timeout(2*HZ);
++
++	*dup_ret = kread_req->dup_ret;
++
++	return true;
++}
++
++void kread_dup_request_announce(char *name, int ret)
++{
++	struct kread_dup_req *kread_req;
++
++	mutex_lock(&kread_dup_mutex);
++
++	kread_req = kread_dup_request_lookup(name);
++	if (!kread_req)
++		goto out;
++
++	kread_req->dup_ret = ret;
++
++	/*
++	 * If we complete() here we may allow duplicate threads
++	 * to continue before the first one that submitted the
++	 * request. We're in no rush but avoid boot delays caused
++	 * by these threads waiting too long.
++	 */
++	queue_work(system_wq, &kread_req->complete_work);
++
++out:
++	mutex_unlock(&kread_dup_mutex);
++}
++
+ ssize_t kernel_read_file_from_fd(int fd, loff_t offset, void **buf,
+ 				 size_t buf_size, size_t *file_size,
+ 				 enum kernel_read_file_id id)
  {
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index fd0c9f913940..76987aaa5a45 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -89,7 +89,7 @@ static DEFINE_MUTEX(console_mutex);
-  * console_sem protects updates to console->seq and console_suspended,
-  * and also provides serialization for console printing.
-  */
--static DEFINE_SEMAPHORE(console_sem);
-+static DEFINE_SEMAPHORE(console_sem, 1);
- HLIST_HEAD(console_list);
- EXPORT_SYMBOL_GPL(console_list);
- DEFINE_STATIC_SRCU(console_srcu);
-diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
-index e9f1f49d18c2..3e5cc70884dd 100644
---- a/net/rxrpc/call_object.c
-+++ b/net/rxrpc/call_object.c
-@@ -40,10 +40,8 @@ const char *const rxrpc_call_completions[NR__RXRPC_CALL_COMPLETIONS] = {
+ 	struct fd f = fdget(fd);
+ 	ssize_t ret = -EBADF;
++	char *name, *path;
++	int dup_ret;
  
- struct kmem_cache *rxrpc_call_jar;
+ 	if (!f.file || !(f.file->f_mode & FMODE_READ))
+ 		goto out;
  
--static struct semaphore rxrpc_call_limiter =
--	__SEMAPHORE_INITIALIZER(rxrpc_call_limiter, 1000);
--static struct semaphore rxrpc_kernel_call_limiter =
--	__SEMAPHORE_INITIALIZER(rxrpc_kernel_call_limiter, 1000);
-+static DEFINE_SEMAPHORE(rxrpc_call_limiter, 1000);
-+static DEFINE_SEMAPHORE(rxrpc_kernel_call_limiter, 1000);
++	path = kzalloc(PATH_MAX, GFP_KERNEL);
++	if (!path)
++		return -ENOMEM;
++
++	name = file_path(f.file, path, PATH_MAX);
++	if (IS_ERR(name)) {
++		ret = PTR_ERR(name);
++		goto out_mem;
++	}
++
++	if (kread_dup_request_exists_wait(name, &dup_ret)) {
++		ret = -EBUSY;
++		goto out_mem;
++	}
++
+ 	ret = kernel_read_file(f.file, offset, buf, buf_size, file_size, id);
++
++	kread_dup_request_announce(name, ret);
++
++out_mem:
++	kfree(path);
+ out:
+ 	fdput(f);
+ 	return ret;
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 1ed373145278..e99419b4d85c 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3080,8 +3080,10 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+ 	len = kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
+ 				       READING_MODULE);
+ 	if (len < 0) {
+-		mod_stat_inc(&failed_kreads);
+-		mod_stat_add_long(len, &invalid_kread_bytes);
++		if (len != -EBUSY) {
++			mod_stat_inc(&failed_kreads);
++			mod_stat_add_long(len, &invalid_kread_bytes);
++		}
+ 		return len;
+ 	}
  
- void rxrpc_poke_call(struct rxrpc_call *call, enum rxrpc_call_poke_trace what)
- {
 -- 
 2.39.2
 
