@@ -2,34 +2,33 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B17DC77B71
-	for <linux-modules@archiver.kernel.org>; Fri, 14 Apr 2023 17:10:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FE90C77B6E
+	for <linux-modules@archiver.kernel.org>; Fri, 14 Apr 2023 17:17:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjDNRKq (ORCPT
+        id S229846AbjDNRRI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 14 Apr 2023 13:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
+        Fri, 14 Apr 2023 13:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjDNRKp (ORCPT
+        with ESMTP id S229479AbjDNRRH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 14 Apr 2023 13:10:45 -0400
+        Fri, 14 Apr 2023 13:17:07 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C915B4;
-        Fri, 14 Apr 2023 10:10:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4CC26BE;
+        Fri, 14 Apr 2023 10:17:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ti6cYdcZoKEE42acSDYdLZZ8XvUjNJ9ejinmTKxANOc=; b=4InsRRvRPC1aGBxCPZpgSSoMPY
-        OAvGUEm0s8N1CDjsOEQHbh4bxagIo50k+E8anop6y8pKG+Bkpwx+4kHHZ2MW987Jop7xaBluBUFPz
-        4qb765rlUELgMKnjJZkWPbez/wg9DHFF7O5WlAEFX1BFr8V33oIr+Au9sW4Lp8krQRKZBLpL7gRvz
-        HDVgLqcQsjCHeUd2fFhNFmz8hYgFh2ABxoJr6rRkAjk2U5GRtv2kv31AENQtFecfQ9+iP/fyt3+Gy
-        qbSh9X+mRUSGC+Hl/7I4OtP9k5tjcnJCb3jctZH4E+76SyPlxnGbLNQECO9pL/BmCvZ9/1wlNOwdR
-        VVRHeevA==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=IkMdZ0kdtkZIOyES16KmIOxLSIavc8A1X3TaLcRG7x0=; b=Nn3dXunCruznm9rKwZ+cpfkvoP
+        FhdNnmTCPqGi6a2xr0yyhArQui+wPgx5qJNA2gXyzJn1Bhn+JGarU0Tmz+WWN3pm7hpw7ed04mhwM
+        ysh2LmCgfjqBSczPV7mjQtxJAVR/Gg7D9XSYkOKoaSH21UeYmjdtku6XHTA89TE7cO781bCBw5QIu
+        arImrYrJHrn6I2psg7QSnMsHgjQIJqdc7g1ikBePhJ7mRdI3jOcJERavtmCYsNKtuXrFVRKEdz3Pl
+        X6Y/g03mRkhRUBLiCZAfnr2MK/XPp+WCHQ7Prvx6RFuHVS3ZxL41tVc1GP1UcoHtzYX8WWiECcv0E
+        E5xuSgoA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pnMwY-00ACgB-2N;
-        Fri, 14 Apr 2023 17:10:38 +0000
-Date:   Fri, 14 Apr 2023 10:10:38 -0700
+        id 1pnN2k-00ADLb-2p;
+        Fri, 14 Apr 2023 17:17:02 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     david@redhat.com, patches@lists.linux.dev,
         linux-modules@vger.kernel.org, linux-mm@kvack.org,
@@ -43,26 +42,94 @@ Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
         mhocko@suse.com, dave.hansen@linux.intel.com,
         colin.i.king@gmail.com, jim.cromie@gmail.com,
         catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v3 1/2] Change DEFINE_SEMAPHORE() to take a number
- argument
-Message-ID: <ZDmJDq/9qU52TgMd@bombadil.infradead.org>
-References: <20230414051349.1986744-1-mcgrof@kernel.org>
- <20230414051349.1986744-2-mcgrof@kernel.org>
+        rick.p.edgecombe@intel.com, mcgrof@kernel.org,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: [PATCH v4 2/2] modules/kmod: replace implementation with a semaphore
+Date:   Fri, 14 Apr 2023 10:16:44 -0700
+Message-Id: <20230414171644.2434448-3-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230414171644.2434448-1-mcgrof@kernel.org>
+References: <20230414171644.2434448-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414051349.1986744-2-mcgrof@kernel.org>
+Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Apr 13, 2023 at 10:13:48PM -0700, Luis Chamberlain wrote:
-> From: Peter Zijlstra <peterz@infradead.org>
-> [mcgrof: add some tribal knowledge about why some folks prefer
->  binary sempahores over mutexes]
+Simplify the concurrency delimiter we use for kmod with the semaphore.
+I had used the kmod strategy to try to implement a similar concurrency
+delimiter for the kernel_read*() calls from the finit_module() path
+so to reduce vmalloc() memory pressure. That effort didn't provide yet
+conclusive results, but one thing that became clear is we can use
+the suggested alternative solution with semaphores which Linus hinted
+at instead of using the atomic / wait strategy.
 
-Jeesh, sorry I thought I had replaced the tribal knowledge tibit with
-what Matthew had suggested before, will do that in v4.
+I've stress tested this with kmod test 0008:
 
-  Luis
+time /data/linux-next/tools/testing/selftests/kmod/kmod.sh -t 0008
+
+And I get only a *slight* delay. That delay however is small, a few
+seconds for a full test loop run that runs 150 times, for about ~30-40
+seconds. The small delay is worth the simplfication IMHO.
+
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Reviewed-by: Miroslav Benes <mbenes@suse.cz>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ kernel/module/kmod.c | 26 +++++++-------------------
+ 1 file changed, 7 insertions(+), 19 deletions(-)
+
+diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
+index b717134ebe17..5899083436a3 100644
+--- a/kernel/module/kmod.c
++++ b/kernel/module/kmod.c
+@@ -40,8 +40,7 @@
+  * effect. Systems like these are very unlikely if modules are enabled.
+  */
+ #define MAX_KMOD_CONCURRENT 50
+-static atomic_t kmod_concurrent_max = ATOMIC_INIT(MAX_KMOD_CONCURRENT);
+-static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
++static DEFINE_SEMAPHORE(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
+ 
+ /*
+  * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads
+@@ -148,29 +147,18 @@ int __request_module(bool wait, const char *fmt, ...)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
+-		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
+-				    atomic_read(&kmod_concurrent_max),
+-				    MAX_KMOD_CONCURRENT, module_name);
+-		ret = wait_event_killable_timeout(kmod_wq,
+-						  atomic_dec_if_positive(&kmod_concurrent_max) >= 0,
+-						  MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
+-		if (!ret) {
+-			pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
+-					    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
+-			return -ETIME;
+-		} else if (ret == -ERESTARTSYS) {
+-			pr_warn_ratelimited("request_module: sigkill sent for modprobe %s, giving up", module_name);
+-			return ret;
+-		}
++	ret = down_timeout(&kmod_concurrent_max, MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
++	if (ret) {
++		pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
++				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
++		return ret;
+ 	}
+ 
+ 	trace_module_request(module_name, wait, _RET_IP_);
+ 
+ 	ret = call_modprobe(module_name, wait ? UMH_WAIT_PROC : UMH_WAIT_EXEC);
+ 
+-	atomic_inc(&kmod_concurrent_max);
+-	wake_up(&kmod_wq);
++	up(&kmod_concurrent_max);
+ 
+ 	return ret;
+ }
+-- 
+2.39.2
+
