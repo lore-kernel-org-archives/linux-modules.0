@@ -2,32 +2,32 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6C75C77B6E
-	for <linux-modules@archiver.kernel.org>; Fri, 14 Apr 2023 05:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C45B6C77B70
+	for <linux-modules@archiver.kernel.org>; Fri, 14 Apr 2023 05:14:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjDNFOO (ORCPT
+        id S229765AbjDNFOP (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 14 Apr 2023 01:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
+        Fri, 14 Apr 2023 01:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbjDNFN6 (ORCPT
+        with ESMTP id S229922AbjDNFOA (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 14 Apr 2023 01:13:58 -0400
+        Fri, 14 Apr 2023 01:14:00 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511105260;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C795B59E7;
         Thu, 13 Apr 2023 22:13:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=rAZqO82F1I0YGFsgUNXQwTj+e9P8wOwZV9QtPxI6P38=; b=bc/u6WCFQZojSgMvyIiz3X7lyZ
-        rFHkuz0ynpTeAyRE+/Jk5/cNm1npCGKkZgFqljcPNe9qAAzTX8WLMu4nPRwfQuT5LywMLCs7ld35+
-        7Jd9sQIbyPJVlKs16pkNqs6ZP/bjiP4Ui9n24Y1/zPcuRF2nP9nSDlBaNBO7D0JHePLMbBu3s4+A8
-        JgLwuN02OniU1Z8SOy+zln93sZ50GAhgw/IJXmQ3LjgDiwydbnYHr6D+JeXKQyBGce5epEa4WF+W3
-        BDEIqRchJS7HEKn8unwFyD1nCdbyoCbKUmqdr8adj49tDFNG+Tk+BxUgxXe+9qEKtgb8d3kzRDggu
-        zf7VaypQ==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=E0LjocQZXclRQB8l3IvaHDmnaUKbJERLnQeMcmNYaaY=; b=DAZ/9FV+DD7XCMmi7Ry/72YGZA
+        hStOFcdNHpzcexPjDdDvn4/I3GzlDg3xmazuaJyrD8MDVpXMlJQGDprz6SaDCVp9+OF6Zh+kIOk0L
+        DVTpi5+W658yOpIzK2D7xQd6BPHUZ86qlyKhB4VRDhUaVcEi4F2xNwt1tZob++B0ed6NMJxJO8Yeq
+        I1D+uJZgTaJeh+2fwBbp2/0RB78r9GhkOL0LJzdu+WBD0Qpb9Pan//1/QzRqloeBRkj4SgEoHqnWN
+        q48Bc4ZQoHCCOn+Er3owoW6C7EWltqr7ULK1OlQjTs6+aZi+Sgm1BXgUx1wNDg6K7SP38lypvLfOx
+        WHW5aWkg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pnBks-008KqT-1X;
+        id 1pnBks-008KqY-1v;
         Fri, 14 Apr 2023 05:13:50 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     david@redhat.com, patches@lists.linux.dev,
@@ -43,46 +43,89 @@ Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
         colin.i.king@gmail.com, jim.cromie@gmail.com,
         catalin.marinas@arm.com, jbaron@akamai.com,
         rick.p.edgecombe@intel.com, mcgrof@kernel.org
-Subject: [PATCH v3 0/2] modules/kmod: replace implementation with a sempahore
-Date:   Thu, 13 Apr 2023 22:13:47 -0700
-Message-Id: <20230414051349.1986744-1-mcgrof@kernel.org>
+Subject: [PATCH v3 2/2] modules/kmod: replace implementation with a semaphore
+Date:   Thu, 13 Apr 2023 22:13:49 -0700
+Message-Id: <20230414051349.1986744-3-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230414051349.1986744-1-mcgrof@kernel.org>
+References: <20230414051349.1986744-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On this v3:
+Simplify the concurrency delimiter we use for kmod with the semaphore.
+I had used the kmod strategy to try to implement a similar concurrency
+delimiter for the kernel_read*() calls from the finit_module() path
+so to reduce vmalloc() memory pressure. That effort didn't provide yet
+conclusive results, but one thing that became clear is we can use
+the suggested alternative solution with semaphores which Linus hinted
+at instead of using the atomic / wait strategy.
 
-  o Tons of spell checks thanks to Miroslav Benes
-  o Fixed a stupid bug where I was using the timeout without HZ as
-    reported by Miroslav Benes
-  o Enanced the tribal knowledge docs for the semaphore Vs mutex
-    considerations folks might make as suggested by Matthew Wilcox
-  o Added tags for patches
+I've stress tested this with kmod test 0008:
 
-Luis Chamberlain (1):
-  modules/kmod: replace implementation with a semaphore
+time /data/linux-next/tools/testing/selftests/kmod/kmod.sh -t 0008
 
-Peter Zijlstra (1):
-  Change DEFINE_SEMAPHORE() to take a number argument
+And I get only a *slight* delay. That delay however is small, a few
+seconds for a full test loop run that runs 150 times, for about ~30-40
+seconds. The small delay is worth the simplfication IMHO.
 
- arch/mips/cavium-octeon/setup.c               |  2 +-
- arch/x86/kernel/cpu/intel.c                   |  2 +-
- drivers/firmware/efi/runtime-wrappers.c       |  2 +-
- drivers/firmware/efi/vars.c                   |  2 +-
- drivers/macintosh/adb.c                       |  2 +-
- .../net/ethernet/broadcom/bnx2x/bnx2x_main.c  |  2 +-
- drivers/platform/x86/intel/ifs/sysfs.c        |  2 +-
- drivers/scsi/esas2r/esas2r_ioctl.c            |  2 +-
- .../interface/vchiq_arm/vchiq_arm.c           |  2 +-
- include/linux/semaphore.h                     | 11 ++++++--
- kernel/module/kmod.c                          | 26 +++++--------------
- kernel/printk/printk.c                        |  2 +-
- net/rxrpc/call_object.c                       |  6 ++---
- 13 files changed, 28 insertions(+), 35 deletions(-)
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ kernel/module/kmod.c | 26 +++++++-------------------
+ 1 file changed, 7 insertions(+), 19 deletions(-)
 
+diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
+index b717134ebe17..5899083436a3 100644
+--- a/kernel/module/kmod.c
++++ b/kernel/module/kmod.c
+@@ -40,8 +40,7 @@
+  * effect. Systems like these are very unlikely if modules are enabled.
+  */
+ #define MAX_KMOD_CONCURRENT 50
+-static atomic_t kmod_concurrent_max = ATOMIC_INIT(MAX_KMOD_CONCURRENT);
+-static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
++static DEFINE_SEMAPHORE(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
+ 
+ /*
+  * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads
+@@ -148,29 +147,18 @@ int __request_module(bool wait, const char *fmt, ...)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
+-		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
+-				    atomic_read(&kmod_concurrent_max),
+-				    MAX_KMOD_CONCURRENT, module_name);
+-		ret = wait_event_killable_timeout(kmod_wq,
+-						  atomic_dec_if_positive(&kmod_concurrent_max) >= 0,
+-						  MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
+-		if (!ret) {
+-			pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
+-					    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
+-			return -ETIME;
+-		} else if (ret == -ERESTARTSYS) {
+-			pr_warn_ratelimited("request_module: sigkill sent for modprobe %s, giving up", module_name);
+-			return ret;
+-		}
++	ret = down_timeout(&kmod_concurrent_max, MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
++	if (ret) {
++		pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
++				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
++		return ret;
+ 	}
+ 
+ 	trace_module_request(module_name, wait, _RET_IP_);
+ 
+ 	ret = call_modprobe(module_name, wait ? UMH_WAIT_PROC : UMH_WAIT_EXEC);
+ 
+-	atomic_inc(&kmod_concurrent_max);
+-	wake_up(&kmod_wq);
++	up(&kmod_concurrent_max);
+ 
+ 	return ret;
+ }
 -- 
 2.39.2
 
