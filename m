@@ -2,123 +2,320 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6513EC77B76
-	for <linux-modules@archiver.kernel.org>; Mon, 17 Apr 2023 22:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99AA4C77B76
+	for <linux-modules@archiver.kernel.org>; Mon, 17 Apr 2023 22:15:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjDQWIq (ORCPT
+        id S229523AbjDQWPc (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 17 Apr 2023 18:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
+        Mon, 17 Apr 2023 18:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjDQWIq (ORCPT
+        with ESMTP id S229461AbjDQWPa (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 17 Apr 2023 18:08:46 -0400
+        Mon, 17 Apr 2023 18:15:30 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108DA1B4;
-        Mon, 17 Apr 2023 15:08:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BE45275;
+        Mon, 17 Apr 2023 15:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=Cl/KOggIUYwh125y+9YwbpbwhMMF2Br/gvzyehMp5l4=; b=oeViYi4RB8m0SpCud7goSGJLhY
-        p9mePiQHwRTyX2C9LAmhxB6gnq7TJJIDRzwaAKAeDCt8WsuoaEVbjrwb1G3OIFH9HsUtWwnTCEVi8
-        3xHbCv2+vpPhAahrADkj0pPHkhPXmTvr/uf2Cof/fVZAMBSe/Fe8/FyHnxKQGuZzy081Yan/kdI2W
-        wAN2iF6yC2b9JekfZ8nftG5JzEJisniUBvCNvaD7cKVxg8ctSATi682rFhbTjAdRWelfJYesO1AaN
-        HEz9Gwcrgw1WyOaMMIDblI+04xI67UexrokU28LEWBtVKVzn3yLnErnYVGk8BXNI6dXZGBqxNmNr9
-        a3K6ijWA==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JDQzZLMFJDW5Lkfe1LxMQV8f8XQI7ptxaDWypTR6ENw=; b=aoKysKwocvLQSxSr8k6YPuhx1T
+        TpfprTvFoskLH4J1OC5XkCLUQYmYrS8OK2bRUbEYgqWoRLUxoK3cQIM+TK9fbiKFzLehx5//x0q4N
+        BqPl7tzAmWGK7zzvyZddo7lHkZB4hicgpRzc5LhiJHIK4S7E1iO69kKn0OsefyaPyyi1iEPE22Rnb
+        52INLLlyQR26JLT7X9XL519lVVbr2YaeztBIGDIbYzdmebdDlafjdXWZK4abe7LypyWrTBWp9+1G/
+        sLRNsGFQkdRJOieGwxlDoxuR0H5XxXpsJj1eKfTB6bI8iFKXKptA05d5YC4q/zoRYzPrYNPupxoL0
+        nLALzLrw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1poX1W-000Emt-2k;
-        Mon, 17 Apr 2023 22:08:34 +0000
-Date:   Mon, 17 Apr 2023 15:08:34 -0700
+        id 1poX84-000FNP-2U;
+        Mon, 17 Apr 2023 22:15:20 +0000
+Date:   Mon, 17 Apr 2023 15:15:20 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "keescook@chromium.org" <keescook@chromium.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "prarit@redhat.com" <prarit@redhat.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "jim.cromie@gmail.com" <jim.cromie@gmail.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "jbaron@akamai.com" <jbaron@akamai.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "petr.pavlu@suse.com" <petr.pavlu@suse.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "Hocko, Michal" <mhocko@suse.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>
-Subject: Re: [RFC 2/2] kread: avoid duplicates
-Message-ID: <ZD3DYqYE4DOiJQaS@bombadil.infradead.org>
-References: <20230414052840.1994456-1-mcgrof@kernel.org>
- <20230414052840.1994456-3-mcgrof@kernel.org>
- <ZDuP3OCzN3x4NxRZ@infradead.org>
- <ZDuYmPB5oqKQLcQd@bombadil.infradead.org>
- <be5182b65384f6a7667c239134037649a468033d.camel@intel.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Aaron Tomlin <atomlin@redhat.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Viktor Malik <vmalik@redhat.com>,
+        Jason Baron <jbaron@akamai.com>, Song Liu <song@kernel.org>,
+        Jim Cromie <jim.cromie@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] module: fix building stats for 32-bit targets
+Message-ID: <ZD3E+AYPzq/EO2Gs@bombadil.infradead.org>
+References: <20230417220254.3215576-1-arnd@kernel.org>
+ <20230417220254.3215576-2-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <be5182b65384f6a7667c239134037649a468033d.camel@intel.com>
+In-Reply-To: <20230417220254.3215576-2-arnd@kernel.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Apr 17, 2023 at 05:33:49PM +0000, Edgecombe, Rick P wrote:
-> On Sat, 2023-04-15 at 23:41 -0700, Luis Chamberlain wrote:
-> > On Sat, Apr 15, 2023 at 11:04:12PM -0700, Christoph Hellwig wrote:
-> > > On Thu, Apr 13, 2023 at 10:28:40PM -0700, Luis Chamberlain wrote:
-> > > > With this we run into 0 wasted virtual memory bytes.
-> > > 
-> > > Avoid what duplicates?
-> > 
-> > David Hildenbrand had reported that with over 400 CPUs vmap space
-> > runs out and it seems it was related to module loading. I took a
-> > look and confirmed it. Module loading ends up requiring in the
-> > worst case 3 vmalloc allocations, so typically at least twice
-> > the size of the module size and in the worst case just add
-> > the decompressed module size:
-> > 
-> > a) initial kernel_read*() call
-> > b) optional module decompression
-> > c) the actual module data copy we will keep
-> > 
-> > Duplicate module requests that come from userspace end up being
-> > thrown
-> > in the trash bin, as only one module will be allocated.  Although
-> > there
-> > are checks for a module prior to requesting a module udev still
-> > doesn't
-> > do the best of a job to avoid that and so we end up with tons of
-> > duplicate module requests. We're talking about gigabytes of vmalloc
-> > bytes just lost because of this for large systems and megabytes for
-> > average systems. So for example with just 255 CPUs we can loose about
-> > 13.58 GiB, and for 8 CPUs about 226.53 MiB.
-> > 
-> > I have patches to curtail 1/2 of that space by doing a check in
-> > kernel
-> > before we do the allocation in c) if the module is already present.
-> > For
-> > a) it is harder because userspace just passes a file descriptor. But
-> > since we can get the file path without the vmalloc this RFC suggest
-> > maybe we can add a new kernel_read*() for module loading where it
-> > makes
-> > sense to have only one read happen at a time.
+On Tue, Apr 18, 2023 at 12:02:47AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> I'm wondering how difficult it would be to just try to remove the
-> vmallocs in (a) and (b) and operate on a list of pages.
+> The new module statistics code mixes 64-bit types and wordsized 'long'
+> variables, which leads to build failures on 32-bit architectures:
 
-Yes I think it's worth long term to do that, if possible with seq reads.
+Doh. 0-day had not complained!
+
+> kernel/module/stats.c: In function 'read_file_mod_stats':
+> kernel/module/stats.c:291:29: error: passing argument 1 of 'atomic64_read' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>   291 |  total_size = atomic64_read(&total_mod_size);
+> x86_64-linux-ld: kernel/module/stats.o: in function `read_file_mod_stats':
+> stats.c:(.text+0x2b2): undefined reference to `__udivdi3'
+> 
+> To fix this, the code has to use one of the two types consistently.
+> 
+> Change them all to fixed-size 64-bit ones here.
+> 
+> Fixes: 0d4ab68ce983 ("module: add debug stats to help identify memory pressure")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> I have no idea if there is a risk of these variables actually
+> overflowing 'long' on 32-bit machines. If they provably can't, it
+> would be better to do the opposite patch.
+
+I had originally used atomic64_t and added a debugfs knob for it but
+Linus had advised against it because its not a stat we care too much
+on 32-bit and atomic64 is nasty on 32-bit [0].
+
+So I went with atomic_long and the cast becuase we're just reading.
+ 
+Is there a way to fix this without doing the fully jump? If not oh well.
+
+[0] https://lkml.kernel.org/r/CAHk-=whH+OsAY+9qLc9Hz+-W8u=dvD3NLWHemOQpZPcgZa52fA@mail.gmail.com
 
   Luis
+
+> ---
+>  kernel/module/internal.h | 14 +++++------
+>  kernel/module/main.c     | 10 ++++----
+>  kernel/module/stats.c    | 50 ++++++++++++++++++++--------------------
+>  3 files changed, 37 insertions(+), 37 deletions(-)
+> 
+> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> index 9ba5f8df15bc..c1710b74027c 100644
+> --- a/kernel/module/internal.h
+> +++ b/kernel/module/internal.h
+> @@ -175,13 +175,13 @@ enum fail_dup_mod_reason {
+>  
+>  #ifdef CONFIG_MODULE_STATS
+>  
+> -#define mod_stat_add_long(count, var) atomic_long_add(count, var)
+> +#define mod_stat_add_64(count, var) atomic64_add(count, var)
+>  #define mod_stat_inc(name) atomic_inc(name)
+>  
+> -extern atomic_long_t total_mod_size;
+> -extern atomic_long_t total_text_size;
+> -extern atomic_long_t invalid_kread_bytes;
+> -extern atomic_long_t invalid_decompress_bytes;
+> +extern atomic64_t total_mod_size;
+> +extern atomic64_t total_text_size;
+> +extern atomic64_t invalid_kread_bytes;
+> +extern atomic64_t invalid_decompress_bytes;
+>  
+>  extern atomic_t modcount;
+>  extern atomic_t failed_kreads;
+> @@ -189,7 +189,7 @@ extern atomic_t failed_decompress;
+>  struct mod_fail_load {
+>  	struct list_head list;
+>  	char name[MODULE_NAME_LEN];
+> -	atomic_long_t count;
+> +	atomic64_t count;
+>  	unsigned long dup_fail_mask;
+>  };
+>  
+> @@ -199,7 +199,7 @@ void mod_stat_bump_becoming(struct load_info *info, int flags);
+>  
+>  #else
+>  
+> -#define mod_stat_add_long(name, var)
+> +#define mod_stat_add_64(name, var)
+>  #define mod_stat_inc(name)
+>  
+>  static inline int try_add_failed_module(const char *name, size_t len,
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 1ed373145278..d1b213310e4b 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2600,8 +2600,8 @@ static noinline int do_init_module(struct module *mod)
+>  	mutex_unlock(&module_mutex);
+>  	wake_up_all(&module_wq);
+>  
+> -	mod_stat_add_long(text_size, &total_text_size);
+> -	mod_stat_add_long(total_size, &total_mod_size);
+> +	mod_stat_add_64(text_size, &total_text_size);
+> +	mod_stat_add_64(total_size, &total_mod_size);
+>  
+>  	mod_stat_inc(&modcount);
+>  
+> @@ -3052,7 +3052,7 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
+>  	err = copy_module_from_user(umod, len, &info);
+>  	if (err) {
+>  		mod_stat_inc(&failed_kreads);
+> -		mod_stat_add_long(len, &invalid_kread_bytes);
+> +		mod_stat_add_64(len, &invalid_kread_bytes);
+>  		return err;
+>  	}
+>  
+> @@ -3081,7 +3081,7 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+>  				       READING_MODULE);
+>  	if (len < 0) {
+>  		mod_stat_inc(&failed_kreads);
+> -		mod_stat_add_long(len, &invalid_kread_bytes);
+> +		mod_stat_add_64(len, &invalid_kread_bytes);
+>  		return len;
+>  	}
+>  
+> @@ -3090,7 +3090,7 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+>  		vfree(buf); /* compressed data is no longer needed */
+>  		if (err) {
+>  			mod_stat_inc(&failed_decompress);
+> -			mod_stat_add_long(len, &invalid_decompress_bytes);
+> +			mod_stat_add_64(len, &invalid_decompress_bytes);
+>  			return err;
+>  		}
+>  	} else {
+> diff --git a/kernel/module/stats.c b/kernel/module/stats.c
+> index bbf90190a3fe..c4db7f64cdae 100644
+> --- a/kernel/module/stats.c
+> +++ b/kernel/module/stats.c
+> @@ -196,12 +196,12 @@ static LIST_HEAD(dup_failed_modules);
+>   *    a separate module request was being issued for each CPU on a system.
+>   */
+>  
+> -atomic_long_t total_mod_size;
+> -atomic_long_t total_text_size;
+> -atomic_long_t invalid_kread_bytes;
+> -atomic_long_t invalid_decompress_bytes;
+> -static atomic_long_t invalid_becoming_bytes;
+> -static atomic_long_t invalid_mod_bytes;
+> +atomic64_t total_mod_size;
+> +atomic64_t total_text_size;
+> +atomic64_t invalid_kread_bytes;
+> +atomic64_t invalid_decompress_bytes;
+> +static atomic64_t invalid_becoming_bytes;
+> +static atomic64_t invalid_mod_bytes;
+>  atomic_t modcount;
+>  atomic_t failed_kreads;
+>  atomic_t failed_decompress;
+> @@ -222,21 +222,21 @@ static const char *mod_fail_to_str(struct mod_fail_load *mod_fail)
+>  
+>  void mod_stat_bump_invalid(struct load_info *info, int flags)
+>  {
+> -	atomic_long_add(info->len * 2, &invalid_mod_bytes);
+> +	atomic64_add(info->len * 2, &invalid_mod_bytes);
+>  	atomic_inc(&failed_load_modules);
+>  #if defined(CONFIG_MODULE_DECOMPRESS)
+>  	if (flags & MODULE_INIT_COMPRESSED_FILE)
+> -		atomic_long_add(info->compressed_len, &invalid_mod_byte);
+> +		atomic64_add(info->compressed_len, &invalid_mod_bytes);
+>  #endif
+>  }
+>  
+>  void mod_stat_bump_becoming(struct load_info *info, int flags)
+>  {
+>  	atomic_inc(&failed_becoming);
+> -	atomic_long_add(info->len, &invalid_becoming_bytes);
+> +	atomic64_add(info->len, &invalid_becoming_bytes);
+>  #if defined(CONFIG_MODULE_DECOMPRESS)
+>  	if (flags & MODULE_INIT_COMPRESSED_FILE)
+> -		atomic_long_add(info->compressed_len, &invalid_becoming_bytes);
+> +		atomic64_add(info->compressed_len, &invalid_becoming_bytes);
+>  #endif
+>  }
+>  
+> @@ -247,7 +247,7 @@ int try_add_failed_module(const char *name, size_t len, enum fail_dup_mod_reason
+>  	list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list,
+>  				lockdep_is_held(&module_mutex)) {
+>  		if (strlen(mod_fail->name) == len && !memcmp(mod_fail->name, name, len)) {
+> -                        atomic_long_inc(&mod_fail->count);
+> +                        atomic64_inc(&mod_fail->count);
+>  			__set_bit(reason, &mod_fail->dup_fail_mask);
+>                          goto out;
+>                  }
+> @@ -258,7 +258,7 @@ int try_add_failed_module(const char *name, size_t len, enum fail_dup_mod_reason
+>  		return -ENOMEM;
+>  	memcpy(mod_fail->name, name, len);
+>  	__set_bit(reason, &mod_fail->dup_fail_mask);
+> -        atomic_long_inc(&mod_fail->count);
+> +        atomic64_inc(&mod_fail->count);
+>          list_add_rcu(&mod_fail->list, &dup_failed_modules);
+>  out:
+>  	return 0;
+> @@ -331,12 +331,12 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
+>  
+>  	if (live_mod_count && total_size) {
+>  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod size",
+> -				 DIV_ROUND_UP(total_size, live_mod_count));
+> +				 DIV64_U64_ROUND_UP(total_size, live_mod_count));
+>  	}
+>  
+>  	if (live_mod_count && text_size) {
+>  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod text size",
+> -				 DIV_ROUND_UP(text_size, live_mod_count));
+> +				 DIV64_U64_ROUND_UP(text_size, live_mod_count));
+>  	}
+>  
+>  	/*
+> @@ -349,25 +349,25 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
+>  	WARN_ON_ONCE(ikread_bytes && !fkreads);
+>  	if (fkreads && ikread_bytes) {
+>  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail kread bytes",
+> -				 DIV_ROUND_UP(ikread_bytes, fkreads));
+> +				 DIV64_U64_ROUND_UP(ikread_bytes, fkreads));
+>  	}
+>  
+>  	WARN_ON_ONCE(ibecoming_bytes && !fbecoming);
+>  	if (fbecoming && ibecoming_bytes) {
+>  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail becoming bytes",
+> -				 DIV_ROUND_UP(ibecoming_bytes, fbecoming));
+> +				 DIV64_U64_ROUND_UP(ibecoming_bytes, fbecoming));
+>  	}
+>  
+>  	WARN_ON_ONCE(idecompress_bytes && !fdecompress);
+>  	if (fdecompress && idecompress_bytes) {
+>  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail decomp bytes",
+> -				 DIV_ROUND_UP(idecompress_bytes, fdecompress));
+> +				 DIV64_U64_ROUND_UP(idecompress_bytes, fdecompress));
+>  	}
+>  
+>  	WARN_ON_ONCE(imod_bytes && !floads);
+>  	if (floads && imod_bytes) {
+>  		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average fail load bytes",
+> -				 DIV_ROUND_UP(imod_bytes, floads));
+> +				 DIV64_U64_ROUND_UP(imod_bytes, floads));
+>  	}
+>  
+>  	/* End of our debug preamble header. */
+> @@ -407,16 +407,16 @@ static const struct file_operations fops_mod_stats = {
+>  	.llseek = default_llseek,
+>  };
+>  
+> -#define mod_debug_add_ulong(name) debugfs_create_ulong(#name, 0400, mod_debugfs_root, (unsigned long *) &name.counter)
+> +#define mod_debug_add_u64(name) debugfs_create_u64(#name, 0400, mod_debugfs_root, (s64 *)&name.counter)
+>  #define mod_debug_add_atomic(name) debugfs_create_atomic_t(#name, 0400, mod_debugfs_root, &name)
+>  static int __init module_stats_init(void)
+>  {
+> -	mod_debug_add_ulong(total_mod_size);
+> -	mod_debug_add_ulong(total_text_size);
+> -	mod_debug_add_ulong(invalid_kread_bytes);
+> -	mod_debug_add_ulong(invalid_decompress_bytes);
+> -	mod_debug_add_ulong(invalid_becoming_bytes);
+> -	mod_debug_add_ulong(invalid_mod_bytes);
+> +	mod_debug_add_u64(total_mod_size);
+> +	mod_debug_add_u64(total_text_size);
+> +	mod_debug_add_u64(invalid_kread_bytes);
+> +	mod_debug_add_u64(invalid_decompress_bytes);
+> +	mod_debug_add_u64(invalid_becoming_bytes);
+> +	mod_debug_add_u64(invalid_mod_bytes);
+>  
+>  	mod_debug_add_atomic(modcount);
+>  	mod_debug_add_atomic(failed_kreads);
+> -- 
+> 2.39.2
+> 
