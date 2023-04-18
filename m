@@ -2,70 +2,148 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2A72C77B75
-	for <linux-modules@archiver.kernel.org>; Tue, 18 Apr 2023 15:40:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81896C77B75
+	for <linux-modules@archiver.kernel.org>; Tue, 18 Apr 2023 18:30:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjDRPkk (ORCPT
+        id S232624AbjDRSaw (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 18 Apr 2023 11:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        Tue, 18 Apr 2023 14:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjDRPkj (ORCPT
+        with ESMTP id S232604AbjDRSav (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:40:39 -0400
+        Tue, 18 Apr 2023 14:30:51 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B492E8A5B;
-        Tue, 18 Apr 2023 08:40:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE389031;
+        Tue, 18 Apr 2023 11:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EaV6BCKY1eHprx658JRQYuaDaXxztmLKpGEqHHbfQes=; b=j/uxjMv+w5mKyDnpSN7EqIg0RH
-        fLFpt2aQ4PUPPtGMGRkkgrtFTuVF014Y/WG1g/b7O05IZOY6DYiZasAwCOrLvTdmM6SPFdyL98WU8
-        qRDfQh9y77R7cZtb7Y6EaQll606VG/ONrnhK0zZa6H5nfuQmnbtFHnilwNHw551148cfBj83tjyos
-        aj4ni3a2jExlg8VB6EsXxd9oYmZkeufBwPHLhQcvYVhZSWjyoz5GWriZbTZ/J0Hzj3b4SxyaL/JGN
-        j6Ah7mz5w420WdCjWXGQbGujigK7hbXI1dVasr5mTj1GXuwF2+qxlAaTUAHICOeFh6mf83TNmWTSj
-        TWQfGhTw==;
+        bh=Y/wE/R9Dcq9B6NYciIuhBA/N45s6bRLmpBHThTjOxQg=; b=jc0q0X/Stu0gCYHzxjw2YLMSYK
+        g+4WCw/KVSVM7FtcywTLV3RGc6XplWnEgKfSo1u2tqgex5fiqgYrAgUQ7yeeveB70AXx3fWbE9wS0
+        T6EdB8GrRaz7IhwZ7cl23Z1grJoRtjp96PL8oV63XpK/YTv/FWlwuH4KCE/iljkVQZEkEL+eBMDxC
+        IhSL0b8zBkUVqVFgqg7N+saruwD3wcr0/6rswZ+fGmL6Y7YoFwZp6NIy1V/+aMxMyz3nOnZLORiv3
+        hhkyTmjiFTwA/qjEub0if7Bj/1PwzybfOo1akaTMPztJAYfzrwYTHL9mSop0tEsiUt+vRVOHTZOdg
+        VcXV7aeA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ponRc-002erH-2B;
-        Tue, 18 Apr 2023 15:40:36 +0000
-Date:   Tue, 18 Apr 2023 08:40:36 -0700
+        id 1poq68-0034Zx-1b;
+        Tue, 18 Apr 2023 18:30:36 +0000
+Date:   Tue, 18 Apr 2023 11:30:36 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: stats: fix invalid_mod_bytes typo
-Message-ID: <ZD659BcowP46i6Sr@bombadil.infradead.org>
-References: <20230418071758.3163529-1-arnd@kernel.org>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, david@redhat.com,
+        patches@lists.linux.dev, linux-modules@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
+        prarit@redhat.com, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org
+Subject: Re: [PATCH v3 3/4] module: add debug stats to help identify memory
+ pressure
+Message-ID: <ZD7hzIvJxFNDnzpU@bombadil.infradead.org>
+References: <20230414050836.1984746-1-mcgrof@kernel.org>
+ <20230414050836.1984746-4-mcgrof@kernel.org>
+ <6110982a-bb68-c88b-6fd1-24d2c49d9fd7@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230418071758.3163529-1-arnd@kernel.org>
+In-Reply-To: <6110982a-bb68-c88b-6fd1-24d2c49d9fd7@suse.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Apr 18, 2023 at 09:17:51AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> This was caught by randconfig builds but does not show up in
-> build testing without CONFIG_MODULE_DECOMPRESS:
-> 
-> kernel/module/stats.c: In function 'mod_stat_bump_invalid':
-> kernel/module/stats.c:229:42: error: 'invalid_mod_byte' undeclared (first use in this function); did you mean 'invalid_mod_bytes'?
->   229 |   atomic_long_add(info->compressed_len, &invalid_mod_byte);
->       |                                          ^~~~~~~~~~~~~~~~
->       |                                          invalid_mod_bytes
-> 
-> Fixes: 0d4ab68ce983 ("module: add debug stats to help identify memory pressure")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> This was probably already reported, sending the fix just in case everyone
-> else else missed it so far.
+On Mon, Apr 17, 2023 at 01:18:14PM +0200, Petr Pavlu wrote:
+> On 4/14/23 07:08, Luis Chamberlain wrote:
 
-Oh it was a decompression ifdef, that's why I didn't catch it! But also
-I guess 0-day isn't running tests with it enabled either!
+<-- Petr's spell checking -->
 
-Thanks! Applied and pushed!
+> Note that there are plenty of other typos in the added comments and
+> documentation. Please review them with a spell checker.
+
+Yes I am terrible at that, I've now integrated a spell checker into
+my workflow. Fixed all these, thanks.
+
+> > @@ -2500,6 +2503,18 @@ static noinline int do_init_module(struct module *mod)
+> >  {
+> >  	int ret = 0;
+> >  	struct mod_initfree *freeinit;
+> > +#if defined(CONFIG_MODULE_STATS)
+> > +	unsigned int text_size = 0, total_size = 0;
+> > +
+> > +	for_each_mod_mem_type(type) {
+> > +		const struct module_memory *mod_mem = &mod->mem[type];
+> > +		if (mod_mem->size) {
+> > +			total_size += mod_mem->size;
+> > +			if (type == MOD_TEXT || type == MOD_INIT_TEXT)
+> > +				text_size += mod->mem[type].size;
+> 
+> 'text_size += mod_mem->size;' would be simpler.
+
+Sure.
+
+> > +extern struct dentry *mod_debugfs_root;
+> 
+> Files kernel/module/stats.c and kernel/module/tracking.c both add this extern
+> declaration. Can it be moved to kernel/module/internal.h?
+
+Sure.
+
+> > +#if defined(CONFIG_MODULE_DECOMPRESS)
+> > +	if (flags & MODULE_INIT_COMPRESSED_FILE)
+> > +		atomic_long_add(info->compressed_len, &invalid_mod_byte);
+> 
+> Variable invalid_mod_byte is not declared, should be invalid_mod_bytes.
+
+Arnd already sent a fix for that, thanks.
+
+> > +int try_add_failed_module(const char *name, size_t len, enum fail_dup_mod_reason reason)
+> 
+> Function try_add_failed_module() is only called from
+> module_patient_check_exists() which always passes in a NUL-terminated string.
+> The len parameter could be then dropped and the comparison in
+> try_add_failed_module() could simply use strcmp().
+
+Sure, did that.
+
+> Indentation in try_add_failed_module() uses spaces instead of tabs in a few
+> places.
+
+Fixed.
+
+> > +	size = MAX_PREAMBLE + min((unsigned int)(floads + fbecoming) * MAX_BYTES_PER_MOD,
+> > +			  (unsigned int) MAX_FAILED_MOD_PRINT * MAX_BYTES_PER_MOD);
+> 
+> Using
+> 'size = MAX_PREAMBLE + min((unsigned int)(floads + fbecoming), (unsigned int)MAX_FAILED_MOD_PRINT) * MAX_BYTES_PER_MOD;'
+> is a bit simpler and avoids any theoretical overflow of
+> '(floads + fbecoming) * MAX_BYTES_PER_MOD'.
+
+Sure.
+
+> > +	len += scnprintf(buf + len, size - len, "%25s\t%15s\t%25s\n",
+> > +			 "module-name", "How-many-times", "Reason");
+> 
+> "module-name" -> "Module-name"
+
+OK sure.
+
+> Function module_stats_init() requires mod_debugfs_root being initialized which
+> is done in module_debugfs_init(). Both functions are recorded to be called via
+> module_init(). Just to make sure, is their ordering guaranteed in some way?
+
+Link order takes care of that and main.o goes first.
+
+> mod_debugfs_root is initialized in module_debugfs_init() only if
+> CONFIG_MODULE_DEBUG is set. However, my reading is that feature
+> CONFIG_MODULE_UNLOAD_TAINT_TRACKING is orthogonal to it and doesn't require
+> CONFIG_MODULE_DEBUG, so it looks this change breaks this tracking?
+
+Ah yes We need a bool CONFIG_MODULE_DEBUGFS which is selected by those
+that need it. Added.
 
   Luis
