@@ -2,83 +2,83 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCBE2C77B75
-	for <linux-modules@archiver.kernel.org>; Tue, 18 Apr 2023 07:18:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9350FC77B75
+	for <linux-modules@archiver.kernel.org>; Tue, 18 Apr 2023 08:52:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjDRHSO (ORCPT
+        id S229710AbjDRIwt (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 18 Apr 2023 03:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        Tue, 18 Apr 2023 04:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjDRHSN (ORCPT
+        with ESMTP id S229520AbjDRIwt (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 18 Apr 2023 03:18:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12384C28;
-        Tue, 18 Apr 2023 00:18:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A81262D7F;
-        Tue, 18 Apr 2023 07:18:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8266AC433EF;
-        Tue, 18 Apr 2023 07:18:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681802283;
-        bh=SBkw+Rl/R2V6yVsXQAH0zMIyTFbmLbUrynptNaG25HE=;
+        Tue, 18 Apr 2023 04:52:49 -0400
+Received: from mail.avm.de (mail.avm.de [212.42.244.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C928A1726
+        for <linux-modules@vger.kernel.org>; Tue, 18 Apr 2023 01:52:47 -0700 (PDT)
+Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Tue, 18 Apr 2023 10:52:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1681807962; bh=IOcTw37QP+4ZqqLXfIdALFpI4DaRwAb76ftj+8kXkxo=;
         h=From:To:Cc:Subject:Date:From;
-        b=JoJopI2hLvvz45LqFEsYWB0LavG63McovtFt7vl4iutbwrt/EuhjRfKpEdwsgfOxb
-         hlSuumS7K//WJmEs7+jYi/xHmMWWVcdWxlqu9ZrcEsjzayRDCzd8+Dt3k1nLMp9EDR
-         0cibxuJkuIbD0r3CqZfb/rOKwP4XiqLVc7yHWW2S6tLgTiomZS5kr37qqhSVfUuvif
-         vHBgiO2umshsip0Am6wfzmM8JCbJCQA9rhU7WEuqfdrKDCmKOv9oS3uaEirfp6vXIq
-         ZbRhPnqkpoG6S0yc56nyiGs6s2hqkTEctrI+3nE1AYgaXHp3X7msA5iyVEvMIBTHNu
-         jfCqp/pnicsVw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] module: stats: fix invalid_mod_bytes typo
-Date:   Tue, 18 Apr 2023 09:17:51 +0200
-Message-Id: <20230418071758.3163529-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        b=EAF6VLVWVVyv++br68gZ54vPgEWn7+rSkIsWc38DJO3x0uFmj9MjWJCt49lbtxrNf
+         mYt1I8U5fVs+mmowsG38XvwADKD9VEY8Vem5JXGHTzGP32/Z5WlyPNdwjKwy4aJ0QX
+         SYRTkT+VB9DriV1WYMSrysforl4XNauKvef7SqPg=
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+        by mail-auth.avm.de (Postfix) with ESMTPA id B59CD8234D;
+        Tue, 18 Apr 2023 10:52:42 +0200 (CEST)
+Received: from d-nsc-z2.avm.de. (unknown [IPv6:fde4:4c1b:acd5:7792::1])
+        by buildd.core.avm.de (Postfix) with ESMTP id AAAD0180F16;
+        Tue, 18 Apr 2023 10:52:42 +0200 (CEST)
+From:   Nicolas Schier <n.schier@avm.de>
+To:     linux-modules@vger.kernel.org,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     Nicolas Schier <nicolas@fjasle.eu>,
+        Nicolas Schier <n.schier@avm.de>
+Subject: [PATCH] modprobe: rmmod_do_module: Free kmod list of holders
+Date:   Tue, 18 Apr 2023 10:52:38 +0200
+Message-Id: <20230418-add-missing-kmod_module_unref_list-v1-1-ab5b554f15ee@avm.de>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-purgate-ID: 149429::1681807961-BA76ED8F-8390DAC4/0/0
+X-purgate-type: clean
+X-purgate-size: 938
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Arnd Bergmann <arnd@arndb.de>
+Add a missing kmod_module_unref_list() to fix a memory leak.
 
-This was caught by randconfig builds but does not show up in
-build testing without CONFIG_MODULE_DECOMPRESS:
-
-kernel/module/stats.c: In function 'mod_stat_bump_invalid':
-kernel/module/stats.c:229:42: error: 'invalid_mod_byte' undeclared (first use in this function); did you mean 'invalid_mod_bytes'?
-  229 |   atomic_long_add(info->compressed_len, &invalid_mod_byte);
-      |                                          ^~~~~~~~~~~~~~~~
-      |                                          invalid_mod_bytes
-
-Fixes: 0d4ab68ce983 ("module: add debug stats to help identify memory pressure")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 42b32d30c38e ("modprobe: Fix holders removal")
+Signed-off-by: Nicolas Schier <n.schier@avm.de>
 ---
-This was probably already reported, sending the fix just in case everyone
-else else missed it so far.
+Resend as a separate patch as suggested in https://lore.kernel.org/linux-modules/20230412192151.jbbcltmcwwamhlm6@ldmartin-desk2.lan/
 ---
- kernel/module/stats.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/modprobe.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-index cdcd60695399..32959ec9581f 100644
---- a/kernel/module/stats.c
-+++ b/kernel/module/stats.c
-@@ -226,7 +226,7 @@ void mod_stat_bump_invalid(struct load_info *info, int flags)
- 	atomic_inc(&failed_load_modules);
- #if defined(CONFIG_MODULE_DECOMPRESS)
- 	if (flags & MODULE_INIT_COMPRESSED_FILE)
--		atomic_long_add(info->compressed_len, &invalid_mod_byte);
-+		atomic_long_add(info->compressed_len, &invalid_mod_bytes);
- #endif
- }
+diff --git a/tools/modprobe.c b/tools/modprobe.c
+index 3b7897c..e891028 100644
+--- a/tools/modprobe.c
++++ b/tools/modprobe.c
+@@ -455,6 +455,7 @@ static int rmmod_do_module(struct kmod_module *mod, int flags)
+ 		struct kmod_list *holders = kmod_module_get_holders(mod);
  
--- 
-2.39.2
+ 		err = rmmod_do_modlist(holders, true);
++		kmod_module_unref_list(holders);
+ 		if (err < 0)
+ 			goto error;
+ 	}
 
+---
+base-commit: 3d1bd339ab942ea47e60f053f4b11b0c47ff082b
+change-id: 20230418-add-missing-kmod_module_unref_list-e7c4dd5b6625
+
+Best regards,
+-- 
+Nicolas Schier
