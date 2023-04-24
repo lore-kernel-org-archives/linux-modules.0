@@ -2,155 +2,110 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C07D5C77B76
-	for <linux-modules@archiver.kernel.org>; Fri, 21 Apr 2023 18:45:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02B67C77B61
+	for <linux-modules@archiver.kernel.org>; Mon, 24 Apr 2023 05:44:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbjDUSpg (ORCPT
+        id S229476AbjDXFoh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 21 Apr 2023 14:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
+        Mon, 24 Apr 2023 01:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjDUSpf (ORCPT
+        with ESMTP id S230384AbjDXFog (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:45:35 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ACCE6D;
-        Fri, 21 Apr 2023 11:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=F45bDSwjMQFBIyyPup/mzrLU83zDLKudjeMCgm+n9uU=; b=osGw+QeXAhyfhx4s/aSHya/bVu
-        4MjNm8ps5IYkBaiFFjBjwFyRkjHsdsqH1ofkZhYknco9iUWB8pYz9fZtT1FPwofmLmMafJguE/eGm
-        AKAc0eHxwCgQRgCy377BMO4Lv5EY3zGM5M61Wv3KiEqQtl+6X3Jizlaclq/O3X0LMTCmxsI5gjXtR
-        T0JNl67yNMfvAmKM+h8MGGRjhSb9zhYOxSmLaz7wv60fNVFQpAKg3hncCtonVN/9HhR650Npsrwuc
-        Z4das1bJxPpMFfZsyvr11CkamiHmCBLxaaa+KTvP9OJoXrgYYwe/uNwohNG0PxAMFI0697PKiFzw5
-        lLVeDllQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ppvl4-00BeWM-1x;
-        Fri, 21 Apr 2023 18:45:22 +0000
-Date:   Fri, 21 Apr 2023 11:45:22 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, david@redhat.com,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, rafael@kernel.org,
-        christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, j.granados@samsung.com
-Subject: Re: [PATCH] module: add debugging auto-load duplicate module support
-Message-ID: <ZELZwms4wrc419gt@bombadil.infradead.org>
-References: <20230418204636.791699-1-mcgrof@kernel.org>
- <2023041951-evolution-unwitting-1791@gregkh>
- <ZEB6DmF+l3LVrpFI@bombadil.infradead.org>
- <ZEDOWi8ifghwmOjp@kroah.com>
- <ZEGopJ8VAYnE7LQ2@bombadil.infradead.org>
- <ZEKn89wPH19r2bM4@kroah.com>
- <bnhskcp6hy6liwlefyjcxumlnvmkmyvhvatkq7ve3kb2zecyxl@c3jq2apjqlcy>
- <ZELKKVJ11LdFsBYo@bombadil.infradead.org>
- <wjgsfhr642ec2ly24tsdqb5a3hlhvsyxknyajqql4zziqemrwh@w5rdsmxuownn>
+        Mon, 24 Apr 2023 01:44:36 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD3AE58
+        for <linux-modules@vger.kernel.org>; Sun, 23 Apr 2023 22:44:32 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-94f3cd32799so721501666b.0
+        for <linux-modules@vger.kernel.org>; Sun, 23 Apr 2023 22:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682315071; x=1684907071;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XuBLmH9wIVGljuXNxlXx2kx1aQjm7l2qZRs0CCmzFU0=;
+        b=BkQpLJxPVZbt8K/usXRUG9BTVGVJttaIn+sysrwihymnlnPXrl10vWvaoS2g3qOJbP
+         xdodjtOiXIJSmZp9srXNy50zlJejBqNa5Z31PDlVLG/lN0adkvTnvgYubHe36r0oRg+j
+         aGOibcmLzgp0X6UhuzCz6J93We95yUpRphvrMyGJtngCroEcJ5bUoTzVr/Jafp6g0WNE
+         JyCN3/ddRrzVfkCp7jUKIQwHSLwCphme8Ziwr8swOqSdY2h45QUg9I++YcnYOd3kdeAz
+         HzcPcLK2EGmwy+9M8Y1kEssp9CACtbsSzgaSICSniar8PUnT8THug3YBOo9aLTTEFF0t
+         0aug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682315071; x=1684907071;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XuBLmH9wIVGljuXNxlXx2kx1aQjm7l2qZRs0CCmzFU0=;
+        b=hp2hpogDkw51JgogZSVnOGfwPIoUYc88sQ/D/puW20J2WAb6MuvAzn4qVTNfDLdIOY
+         8bjqsuuISmFeN612a25n0HZPbw6jZF39OkRw59nUD9Mly8VchmG1BlmAcWsYBsDaFBEf
+         I9DDxXgJQYgz5jHB4evV8thnBEFg0/J9l6p4jS7lBk4bC3U+ceulipMrq9sbkh23f1Aq
+         r+OTcrk/cc0fSiexWGL+7i/g2ldRy8azZEvMtlzEcsfry/uvUPgZMz9lcjogrh+iRzgO
+         yY+9XBgp71o0CRpGny+oGBJl7ReWM2pyu8TAtLmVFKL9V9EfVkL/PisYgc+4bTN/LLbN
+         gbsA==
+X-Gm-Message-State: AAQBX9fvtuUCxmsgCU9cZqtlklNfzEAHrRAmsmUlhuEPqksx59PlbkWU
+        pAU772ezliTOSgK+n4DDyyczDXPdpikYjvTTKoo=
+X-Google-Smtp-Source: AKy350aMRrBUUkTWn4LBYHNN1r9vxHhQQVm8fy9SBS4lGtMSXBj8TbAdYOE8x462sM1w0uChnaVM1xGGZrWMobWfUAo=
+X-Received: by 2002:a17:906:2646:b0:94f:31da:8c37 with SMTP id
+ i6-20020a170906264600b0094f31da8c37mr9064847ejc.52.1682315070450; Sun, 23 Apr
+ 2023 22:44:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <wjgsfhr642ec2ly24tsdqb5a3hlhvsyxknyajqql4zziqemrwh@w5rdsmxuownn>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20230419043652.1773413-1-airlied@gmail.com> <ck2dzxvllhhh74oa3vjlacutc7rdmgl7cfrfq7vgx4w3jcufrz@7jbgxcat42yn>
+In-Reply-To: <ck2dzxvllhhh74oa3vjlacutc7rdmgl7cfrfq7vgx4w3jcufrz@7jbgxcat42yn>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Mon, 24 Apr 2023 15:44:18 +1000
+Message-ID: <CAPM=9tw0Y2A4DvuTHT_yd58Eit+tUmo63pbEOHwRJ66LeqznEQ@mail.gmail.com>
+Subject: Re: [PATCH] modules/firmware: add a new option to denote a firmware
+ group to choose one.
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-modules@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Apr 21, 2023 at 11:31:03AM -0700, Lucas De Marchi wrote:
-> On Fri, Apr 21, 2023 at 10:38:49AM -0700, Luis Chamberlain wrote:
-> > Just as with the kludge-of-concept I posted for kread [0], userspace
-> > also should have similar issues in mapping module name to arbitrary
-> > file names given:
-> > 
-> >  o a module can be in different paths and libkmod could for
-> >     example at one point load a module in one path, then userspace
-> >     removes it, and the next path is used.
-> 
-> no, it can't. Unless you are doing out of tree modules and loading them
-> manually by path. There can only be one module with the same name in kmod's
-> database. If you have duplicate modules, depmod will use the dir
-> priority configured by the distro (see depmod.d(5)).
-> 
-> Since we are talking about *udev* it's not a real possibility as
-> 1) the udev requests are serialized
-> 2) there is only 1 kmod ctx, so they use the same configuration, no
-> funky kmod_new("/another-rootfs", ...) type of thing.
-> 
-> >  o module names may differ from the filename slightly (in the kernel
-> >    we replace dash with "_", refer to KBUILD_MODNAME
-> 
-> this is taken care by depmod/libkmod too. All the aliases are mapped to
-> module names and then normalized. See modname_normalize() in kmod.
+On Fri, 21 Apr 2023 at 05:09, Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+>
+> On Wed, Apr 19, 2023 at 02:36:52PM +1000, Dave Airlie wrote:
+> >From: Dave Airlie <airlied@redhat.com>
+> >
+> >This adds a tag that will go into the module info, only one firmware from
+> >the group given needs to be available for this driver to work. This allows
+> >dracut to avoid adding in firmware that aren't needed.
+> >
+> >This just brackets a module list in the modinfo, the modules in the list
+> >will get entries in reversed order so the last module in the list is the
+> >preferred one.
+> >
+> >The corresponding dracut code it at:
+> >https://github.com/dracutdevs/dracut/pull/2309
+>
+> it would be good to have the example usage in the commit message here so
+> it can be easily checked as reference for other drivers.
 
-Great! So this should be much simpler in userspace.
+Good point.
 
-> > [1] https://lore.kernel.org/all/ZDmAvwi+KNvie+OI@bombadil.infradead.org/T/#md172510af8fdf7e0f76f6caafee9c99f7a8b6de7
-> > 
-> > > libkmod only skips the call if the module is already in
-> > > the live state.
-> > 
-> > It can do better, it can converge requests to avoid a kernel_read*()
-> > from using vmalloc space. Note that this was not well known before,
-> > but now it is clear.
-> 
-> in userspace, if using the same context and using init_module() rather
-> than finit_module(), I **guess** we would have a similar thing due to
-> the memory pool for modules: we don't read the module again. That is not
-> true for finit_module() though as we just open and pass the fd.
+>
+> I don't think we ever had any ordering in modinfo being relevant for
+> other things. Considering the use case and that we could also use a
+> similar thing for i915 / xe modules wrt to the major version,
+> couldn't we do something like below?
+>
+>         MODULE_FIRMWARE_GROUP("nvidia/ga106/gsp/gsp");
+>         MODULE_FIRMWARE("nvidia/ga106/gsp/gsp-5258902.bin");
+>         MODULE_FIRMWARE("nvidia/ga106/gsp/gsp-5303002.bin");
+>
+> so the group is created by startswith() rather than by the order the
+> modinfo appears in the elf section. In i915 we'd have:
 
-I think we could not not care about init_module() races for now.
+The way userspace parses these is reverse order, and it doesn't see
+the GROUP until after the FIRMWARE, so this can't work, as it already
+will have included all the ones below, hence why I bracketed top and
+bottom with a group.
 
-> > I realize though that this could mean sharing a context between all
-> > loads thoughs in udev, and such a change could take significant time
-> > and review to complete.
-> 
-> But there is only one context. There aren't multiple paralell requests
-> from multiple sources. Probably need to Cc someone still changing
-> udev's builtin...  but from a quick look, from what I remember about
-> that the last time I touched it and without data to prove me wrong,
-> it seems we are not looking at the right problem space to come up with a
-> solution.
+>
+> MODULE_FIRMWARE_GROUP("i915/tgl_guc")
+>
+> There is still an order the kernel would probably like: latest version.
+> But then it's an order only among things with the same key.
 
-Data seems to indicate that somehow this might not be true.
-
-> > If we *wanted* to do this in kernel instead, I have already shown it's
-> > not hard.
-> > 
-> > > It seems systemd-udev also duplicates the check
-> > > in src/shared/module-util.c:module_load_and_warn()
-> > 
-> > Evidence is showing that does not suffice for the races which are
-> > currently possible.
-> 
-> can you raise the udev verbosity and share?
-
-How do I do that?
-
-> All the kmod-builtin
-> calls will already be logged there. See
-> src/udev/udev-event.c:udev_event_execute_run() leading to
-> 
-> 	log_device_debug(event->dev, "Running built-in command \"%s\"", command);
-> 	r = udev_builtin_run(event->dev, &event->rtnl, builtin_cmd, command, false);
-> 
-> if you are rather seeing "Running command", ohh... then your udev was
-> built without libkmod and it will just fork/exec. Not what we want.
-
-I'm using debian testing everything vanilla packages except the kernel,
-using modules-next.
-
-> so it seems the easiest thing to do is collect the udev log.
-> 
-> hopefully you don't have CONFIG_UEVENT_HELPER_PATH set or anything
-> mucking /sys/kernel/uevent_helper. Right?
-
-No.
-
-  Luis
+Dave.
