@@ -2,143 +2,82 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23F70C7618E
-	for <linux-modules@archiver.kernel.org>; Mon, 24 Apr 2023 22:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22732C77B61
+	for <linux-modules@archiver.kernel.org>; Tue, 25 Apr 2023 08:28:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232290AbjDXW5A (ORCPT
+        id S233629AbjDYI16 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 24 Apr 2023 18:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
+        Tue, 25 Apr 2023 04:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbjDXW47 (ORCPT
+        with ESMTP id S233592AbjDYI14 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 24 Apr 2023 18:56:59 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5E8658F
-        for <linux-modules@vger.kernel.org>; Mon, 24 Apr 2023 15:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HzgjvK0ubj+ERQ1LfdXCjji6k+DvtKZctwDhlZRvBX8=; b=h7dfZeFWODQdL55Xv4rMJoQ0VU
-        8Auf/8mLAQebtblG9YCG/QgnwvOTGYf23iClnaJQNnNmq261w85lu3/nMIqiK3TV9XpNyPJi03LAh
-        eJs/i9l9HdvYLmI7L0kW7imDFKxKt4J/TH4QjDCUH9QmcbxKfnonbbbvJSN0k7pmrkKZy9PFQsSyu
-        2CJmyfYIv1KAzMQ7bkq641c1+6AhMZh9Fgmt7LekAdidEw0dJB5GdzkOxZgJ2Q5RrgO7udxQk510/
-        ZjzKo7XLo4G0YSJP4lCoEoSqq+ZUwC3JrGZWj7oqnKKPeszpdAbobsudxNF6B7baegH5O/h70Tr31
-        tXo3HbjQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pr577-00HJon-2V;
-        Mon, 24 Apr 2023 22:56:53 +0000
-Date:   Mon, 24 Apr 2023 15:56:53 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Dave Airlie <airlied@gmail.com>, Dave Airlie <airlied@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] modules/firmware: add a new option to denote a firmware
- group to choose one.
-Message-ID: <ZEcJNcz+ArLfUSJ1@bombadil.infradead.org>
-References: <20230419043652.1773413-1-airlied@gmail.com>
- <ck2dzxvllhhh74oa3vjlacutc7rdmgl7cfrfq7vgx4w3jcufrz@7jbgxcat42yn>
- <CAPM=9tw0Y2A4DvuTHT_yd58Eit+tUmo63pbEOHwRJ66LeqznEQ@mail.gmail.com>
- <fsleccud43leoioli6bj4xoydwbdcjb5qr4denuf6morhgtqki@t6xya2mygon5>
+        Tue, 25 Apr 2023 04:27:56 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053FD49C3;
+        Tue, 25 Apr 2023 01:27:49 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 187F31FDA6;
+        Tue, 25 Apr 2023 08:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1682411267; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JLB7kXBwD6M3L2ptdlJ1RgiEVolFGhSHXNJBDXePmiQ=;
+        b=tKqQdtrPgsQzoBCwf1xVC9ezD0o09G725durIPriNpoWDj+KTM+R3Yn6rphCy+nrdhpCmP
+        e53k/de1aXflSQalIJ9h0q4ZCkmLRSDLUauYiqngel4Q3qvvj21mZsMo8lIqIxzHGh4pUS
+        Gso8q3PreoZelIC87zLP1oo7AeBGD3k=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 616EB2C141;
+        Tue, 25 Apr 2023 08:27:45 +0000 (UTC)
+Date:   Tue, 25 Apr 2023 10:27:42 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Nick Alcock <nick.alcock@oracle.com>, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com, live-patching@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
+ symbol->address lookup with /proc/kallmodsyms
+Message-ID: <ZEeO_rWL4bDh5vui@alley>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+ <20230407232118.o2x5lakfgyzy56gz@treble>
+ <ZEbc20oRFR0f8Qj6@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fsleccud43leoioli6bj4xoydwbdcjb5qr4denuf6morhgtqki@t6xya2mygon5>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <ZEbc20oRFR0f8Qj6@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Apr 24, 2023 at 10:01:13AM -0700, Lucas De Marchi wrote:
-> On Mon, Apr 24, 2023 at 03:44:18PM +1000, Dave Airlie wrote:
-> > On Fri, 21 Apr 2023 at 05:09, Lucas De Marchi <lucas.demarchi@intel.com> wrote:
-> > > 
-> > > On Wed, Apr 19, 2023 at 02:36:52PM +1000, Dave Airlie wrote:
-> > > >From: Dave Airlie <airlied@redhat.com>
-> > > >
-> > > >This adds a tag that will go into the module info, only one firmware from
-> > > >the group given needs to be available for this driver to work. This allows
-> > > >dracut to avoid adding in firmware that aren't needed.
-> > > >
-> > > >This just brackets a module list in the modinfo, the modules in the list
-> > > >will get entries in reversed order so the last module in the list is the
-> > > >preferred one.
-> > > >
-> > > >The corresponding dracut code it at:
-> > > >https://github.com/dracutdevs/dracut/pull/2309
-> > > 
-> > > it would be good to have the example usage in the commit message here so
-> > > it can be easily checked as reference for other drivers.
+On Mon 2023-04-24 12:47:39, Luis Chamberlain wrote:
+> On Fri, Apr 07, 2023 at 04:21:18PM -0700, Josh Poimboeuf wrote:
+> > Anyway, I was nodding along with the above cover letter until I got to
+> > the third paragraph.
 > > 
-> > Good point.
-> > 
-> > > 
-> > > I don't think we ever had any ordering in modinfo being relevant for
-> > > other things. Considering the use case and that we could also use a
-> > > similar thing for i915 / xe modules wrt to the major version,
-> > > couldn't we do something like below?
-> > > 
-> > >         MODULE_FIRMWARE_GROUP("nvidia/ga106/gsp/gsp");
-> > >         MODULE_FIRMWARE("nvidia/ga106/gsp/gsp-5258902.bin");
-> > >         MODULE_FIRMWARE("nvidia/ga106/gsp/gsp-5303002.bin");
-> > > 
-> > > so the group is created by startswith() rather than by the order the
-> > > modinfo appears in the elf section. In i915 we'd have:
-> > 
-> > The way userspace parses these is reverse order, and it doesn't see
+> > A "built-in kernel module" is not actually a module, as it's built in to
+> > vmlinux.  I suspect the point is that if you rebuild with a different
+> > config, it might become a module.  But many other changes could also
+> > occur with a changed config, including changed inlining decisions and
+> > GCC IPA optimization function renaming, in which case the symbol might
+> > no longer exist with the new config.
 > 
-> the main issue I have with it is that it relies on a order that is
-> implicit rather than intended. The order comes from how the .modinfo ELF
-> section is assembled together... so the fact that your call to
-> kmod_module_get_info() returns a list with the keys in the reverse order
-> of the MODULE_FIRMWARE() definitions, is basically because the compiler
-> toolchain did it did that way.
-> 
-> It's worse when those sections come from different compilation units as
-> the order then is not predictable and can easily break with changes to
-> the build infra if the files are linked in different order.
-> 
-> I think the grouping thing here would only be supported with firmware
-> defined on the same compilation unit, but it's something to keep in mind
-> and document.
+> Yes it does not matter, for his tooling effort it was just to be able
+> to map a possible module to a symbol so tooling can display this to
+> disambiguate.
 
-I had provided a simple API to help with explicit linker order years ago:
+Note that the same symbol name might be used many times even within
+one module. The module might be linked from more .o files. And
+more .o files might have a local symbol with the same name.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20170620-linker-tables-v8
+I think that the best solution is to associate the symbol with
+the file name and line. These is very useful information in general.
 
-Other than that you have to rely on the order in the Makefile or way
-in which they are declared.
-
-> > the GROUP until after the FIRMWARE, so this can't work, as it already
-> > will have included all the ones below, hence why I bracketed top and
-> > bottom with a group.
-> 
-> well... that is something that can be adapted easily by using a 2 pass
-> approach, filtering out the list based on the groups.
-> 
-> I agree that yours is simpler though.  If we can rely on the
-> order produced by the compiler and we document the expectations of
-> MODULE_FIRMWARE_GROUP_ONLY_ONE, then I believe we can stay with the
-> simpler approach.
-> 
-> Luis, any thoughts here?
-
-I see the Dracut code indicates that the order says now that you should
-put the preferred firmware last, and that seems to match most coding
-conventions, ie, new firmwares likely get added last, so it's a nice
-coincidence. Will this always work? I don't know. But if you like to
-hedge, then this seems fine so long as I'm folks follow up to fix issues
-later. I think it should and the simplicity is preferred, worth a shot
-I think.
-
-But the examples on both sides are pretty terrible. I'd just like to ask
-all this gets extended in proper kdoc form and we are able to get users
-and developers to read this under "Module support" in:
-
-https://docs.kernel.org/core-api/kernel-api.html
-
-So go to town with a new section for:
-
-Documentation/core-api/kernel-api.rst
-
-  Luis
+Best Regards,
+Petr
