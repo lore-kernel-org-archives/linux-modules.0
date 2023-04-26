@@ -2,42 +2,43 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37DE7C77B60
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Apr 2023 04:29:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B160C7618E
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Apr 2023 04:29:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239371AbjDZE3S convert rfc822-to-8bit (ORCPT
+        id S239385AbjDZE3u convert rfc822-to-8bit (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 26 Apr 2023 00:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
+        Wed, 26 Apr 2023 00:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239146AbjDZE3R (ORCPT
+        with ESMTP id S239347AbjDZE3t (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 26 Apr 2023 00:29:17 -0400
+        Wed, 26 Apr 2023 00:29:49 -0400
 Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD60210A
-        for <linux-modules@vger.kernel.org>; Tue, 25 Apr 2023 21:29:15 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79D42735
+        for <linux-modules@vger.kernel.org>; Tue, 25 Apr 2023 21:29:42 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-106-jtyXA9uGN4G54fFbdg1izQ-1; Wed, 26 Apr 2023 00:29:11 -0400
-X-MC-Unique: jtyXA9uGN4G54fFbdg1izQ-1
+ us-mta-260-wCLorNtLOJyk2a5pb64drg-1; Wed, 26 Apr 2023 00:29:38 -0400
+X-MC-Unique: wCLorNtLOJyk2a5pb64drg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55311A0F381;
-        Wed, 26 Apr 2023 04:29:11 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6CD0438123A2;
+        Wed, 26 Apr 2023 04:29:38 +0000 (UTC)
 Received: from nomad.redhat.com (vpn2-54-28.bne.redhat.com [10.64.54.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3205840C2064;
-        Wed, 26 Apr 2023 04:29:08 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DD01440C2064;
+        Wed, 26 Apr 2023 04:29:36 +0000 (UTC)
 From:   Dave Airlie <airlied@gmail.com>
 To:     dri-devel@lists.freedesktop.org
-Cc:     Dave Airlie <airlied@redhat.com>, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
+Cc:     Dave Airlie <airlied@redhat.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
         linux-modules@vger.kernel.org
-Subject: [PATCH 1/2] docs: module: start adding some docs for MODULE_ macros.
-Date:   Wed, 26 Apr 2023 14:29:05 +1000
-Message-Id: <20230426042906.724352-1-airlied@gmail.com>
+Subject: [PATCH 2/2] modules/firmware: add a new option to denote a firmware group to choose one.
+Date:   Wed, 26 Apr 2023 14:29:06 +1000
+Message-Id: <20230426042906.724352-2-airlied@gmail.com>
+In-Reply-To: <20230426042906.724352-1-airlied@gmail.com>
+References: <20230426042906.724352-1-airlied@gmail.com>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 X-Mimecast-Spam-Score: 0
@@ -49,181 +50,58 @@ List-ID: <linux-modules.vger.kernel.org>
 
 From: Dave Airlie <airlied@redhat.com>
 
-In order to add a new macro, Luis suggested converting some docs
-for the new ones.
+This adds a tag that will go into the module info, only one firmware from
+the group given needs to be available for this driver to work. This allows
+dracut to avoid adding in firmware that aren't needed.
 
-This tries to keep exisiting module_init, module_exit where they are,
-and adds the new docs to the module section.
+This just brackets a module list in the modinfo, the modules in the list
+will get entries in reversed order so the last module in the list is the
+preferred one.
 
-Cc: linux-doc@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>
+The corresponding dracut code it at:
+https://github.com/dracutdevs/dracut/pull/2309
+
 Cc: Luis Chamberlain <mcgrof@kernel.org>
 Cc: linux-modules@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
 Signed-off-by: Dave Airlie <airlied@redhat.com>
 ---
- Documentation/core-api/kernel-api.rst |  3 ++
- Documentation/driver-api/basics.rst   |  2 +-
- include/linux/module.h                | 76 ++++++++++++++++++---------
- 3 files changed, 54 insertions(+), 27 deletions(-)
+ include/linux/module.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
-index 62f961610773..0b78b1a3e8a2 100644
---- a/Documentation/core-api/kernel-api.rst
-+++ b/Documentation/core-api/kernel-api.rst
-@@ -226,6 +226,9 @@ Module Loading
- .. kernel-doc:: kernel/kmod.c
-    :export:
- 
-+.. kernel-doc:: include/linux/module.h
-+   :no-identifiers: module_init module_exit klp_modinfo
-+
- Inter Module support
- --------------------
- 
-diff --git a/Documentation/driver-api/basics.rst b/Documentation/driver-api/basics.rst
-index 4b4d8e28d3be..fea42d6cad80 100644
---- a/Documentation/driver-api/basics.rst
-+++ b/Documentation/driver-api/basics.rst
-@@ -5,7 +5,7 @@ Driver Entry and Exit points
- ----------------------------
- 
- .. kernel-doc:: include/linux/module.h
--   :internal:
-+   :identifiers: module_init module_exit
- 
- Driver device table
- -------------------
 diff --git a/include/linux/module.h b/include/linux/module.h
-index 4435ad9439ab..f9d072a7e198 100644
+index f9d072a7e198..d3e7085cedd0 100644
 --- a/include/linux/module.h
 +++ b/include/linux/module.h
-@@ -182,23 +182,27 @@ extern void cleanup_module(void);
- #define MODULE_FILE	MODULE_INFO(file, KBUILD_MODFILE);
- #endif
- 
--/*
-+/**
-+ * MODULE_LICENSE - module license
-+ * @_license: license covering this module.
-+ *
-  * The following license idents are currently accepted as indicating free
-  * software modules
-  *
-- *	"GPL"				[GNU Public License v2]
-- *	"GPL v2"			[GNU Public License v2]
-- *	"GPL and additional rights"	[GNU Public License v2 rights and more]
-- *	"Dual BSD/GPL"			[GNU Public License v2
-- *					 or BSD license choice]
-- *	"Dual MIT/GPL"			[GNU Public License v2
-- *					 or MIT license choice]
-- *	"Dual MPL/GPL"			[GNU Public License v2
-- *					 or Mozilla license choice]
-+ *    "GPL"                        [GNU Public License v2]
-  *
-- * The following other idents are available
-+ *    "GPL v2"                     [GNU Public License v2]
-  *
-- *	"Proprietary"			[Non free products]
-+ *    "GPL and additional rights"  [GNU Public License v2 rights and more]
-+ *
-+ *    "Dual BSD/GPL"               [GNU Public License v2 or BSD license choice]
-+ *
-+ *    "Dual MIT/GPL"               [GNU Public License v2 or MIT license choice]
-+ *
-+ *    "Dual MPL/GPL"               [GNU Public License v2 or Mozilla license choice]
-+ *
-+ * The following other idents are available
-+ *    "Proprietary"                [Non free products]
-  *
-  * Both "GPL v2" and "GPL" (the latter also in dual licensed strings) are
-  * merely stating that the module is licensed under the GPL v2, but are not
-@@ -221,20 +225,26 @@ extern void cleanup_module(void);
-  * is a GPL combined work.
-  *
-  * This exists for several reasons
-- * 1.	So modinfo can show license info for users wanting to vet their setup
-- *	is free
-+ *
-+ * 1.	So modinfo can show license info for users wanting to vet their setup is free
-+ *
-  * 2.	So the community can ignore bug reports including proprietary modules
-+ *
-  * 3.	So vendors can do likewise based on their own policies
+@@ -306,6 +306,28 @@ extern typeof(name) __mod_##type##__##name##_device_table		\
   */
- #define MODULE_LICENSE(_license) MODULE_FILE MODULE_INFO(license, _license)
- 
--/*
-- * Author(s), use "Name <email>" or just "Name", for multiple
-- * authors use multiple MODULE_AUTHOR() statements/lines.
-+/**
-+ * MODULE_AUTHOR - Module author
-+ * @_author: Author(s), use "Name <email>" or just "Name", for multiple
-+ *           authors use multiple MODULE_AUTHOR() statements/lines.
-  */
- #define MODULE_AUTHOR(_author) MODULE_INFO(author, _author)
- 
--/* What your module does. */
-+/**
-+ * MODULE_DESCRIPTION - Module description
-+ * @_description: What your module does.
-+ */
- #define MODULE_DESCRIPTION(_description) MODULE_INFO(description, _description)
- 
- #ifdef MODULE
-@@ -246,19 +256,23 @@ extern typeof(name) __mod_##type##__##name##_device_table		\
- #define MODULE_DEVICE_TABLE(type, name)
- #endif
- 
--/* Version of form [<epoch>:]<version>[-<extra-version>].
-+/**
-+ * MODULE_VERSION: version of module
-+ * @_version: version in the form below
-+ *
-+ * Version of form [<epoch>:]<version>[-<extra-version>].
-  * Or for CVS/RCS ID version, everything but the number is stripped.
-  * <epoch>: A (small) unsigned integer which allows you to start versions
-  * anew. If not mentioned, it's zero.  eg. "2:1.0" is after
-  * "1:2.0".
--
-+ *
-  * <version>: The <version> may contain only alphanumerics and the
-- * character `.'.  Ordered by numeric sort for numeric parts,
-+ * character '.'.  Ordered by numeric sort for numeric parts,
-  * ascii sort for ascii parts (as per RPM or DEB algorithm).
--
-+ *
-  * <extraversion>: Like <version>, but inserted for local
-  * customizations, eg "rh3" or "rusty1".
--
-+ *
-  * Using this automatically adds a checksum of the .c files and the
-  * local headers in "srcversion".
-  */
-@@ -284,11 +298,21 @@ extern typeof(name) __mod_##type##__##name##_device_table		\
- 		}
- #endif
- 
--/* Optional firmware file (or files) needed by the module
-- * format is simply firmware file name.  Multiple firmware
-- * files require multiple MODULE_FIRMWARE() specifiers */
-+/**
-+ * MODULE_FIRMWARE - Optional firmware files needed by the module
-+ * @_firmware: firmware file name
-+ *
-+ * Multiple firmware files require multiple MODULE_FIRMWARE() specifiers.
-+ */
  #define MODULE_FIRMWARE(_firmware) MODULE_INFO(firmware, _firmware)
  
 +/**
-+ * MODULE_IMPORT_NS - Set the symbol namespace for the module.
-+ * @ns: symbol namespace to import the module into.
++ * MODULE_FIRMWARE_GROUP_ONLY_ONE - Create a need only one firmware group
++ * @_grpname: group name
 + *
-+ * This adds a modinfo tag 'import_ns' to the module. This is observed
-+ * by userspace at module loading time.
++ * This creates a group of which the driver only needs one firmware installed.
++ * This is to allow dracut to limit the number of firmwares in the initramfs.
++ * This just creates a new entry in the modinfo section, there should be one
++ * of these entries bracketing the group of MODULE_INFO lines.
++ * Due to how modinfo is constructed the ordering of the modinfo means the
++ * last module info in the group will end up being the first one dracut will
++ * search for, so place the newest firmware last.
++ *
++ * ``MODULE_FIRMWARE_GROUP_ONLY_ONE("mygroup")``
++ *
++ * ``MODULE_FIRMWARE("firmwarev1")``
++ *
++ * ``MODULE_FIRMWARE("firmwarev2")``
++ *
++ * ``MODULE_FIRMWARE_GROUP_ONLY_ONE("mygroup")``
 + */
- #define MODULE_IMPORT_NS(ns)	MODULE_INFO(import_ns, __stringify(ns))
- 
- struct notifier_block;
++#define MODULE_FIRMWARE_GROUP_ONLY_ONE(_grpname) MODULE_INFO(firmware_group_only_one, _grpname)
++
+ /**
+  * MODULE_IMPORT_NS - Set the symbol namespace for the module.
+  * @ns: symbol namespace to import the module into.
 -- 
 2.39.2
 
