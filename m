@@ -2,110 +2,180 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2BBFC77B60
-	for <linux-modules@archiver.kernel.org>; Fri, 28 Apr 2023 05:59:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CD59C77B7E
+	for <linux-modules@archiver.kernel.org>; Fri, 28 Apr 2023 08:33:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjD1F75 (ORCPT
+        id S229980AbjD1Id5 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 28 Apr 2023 01:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
+        Fri, 28 Apr 2023 04:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjD1F75 (ORCPT
+        with ESMTP id S229532AbjD1Id4 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 28 Apr 2023 01:59:57 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCA62689;
-        Thu, 27 Apr 2023 22:59:55 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RKPCrD031856;
-        Fri, 28 Apr 2023 05:59:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-03-30; bh=fUeCGzF2E/MJpwwWsgeCABFqdUqiBLxFGm1C7ZyiMnU=;
- b=CRVuBVELEk0nDpCg8ePKt3xe+lEoLxsuSnoHdkmKLnsG7OkE0+zM85dghSwtfjeH8Shq
- s/QonyhCHF4I+XCh9MJjYUHl2UEQ/iB7/zifzVvaS3mcBosBS2hdObzRZxlk07QNbD8r
- gPfwVAAiqzSW67NalW8304EbrjkbKnLiVK/10D3Grkl3zMzNcly7lLyVepyfWJjYw9Pk
- kDkA3F+/5mqSLo/hNUpCGcnmiFkvEgNmULzuIXfJXNmOy7qm3N2gqxVLpya7wsDFCntF
- ALRalrrV7eZ/w8VExUBJGZLb60N/UhCjF1F32MXAcxLZfYfcDKw1teNoslohauPMUXWD HA== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q476u5e9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Apr 2023 05:59:52 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33S4XU2E008644;
-        Fri, 28 Apr 2023 05:59:51 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q461ahpm8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Apr 2023 05:59:51 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33S5v0aN014799;
-        Fri, 28 Apr 2023 05:59:50 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3q461ahpm4-1;
-        Fri, 28 Apr 2023 05:59:50 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To:     mcgrof@kernel.org, linux-modules@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, error27@gmail.com,
-        kernel-janitors@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH] module: Fix use-after-free bug in read_file_mod_stats()
-Date:   Thu, 27 Apr 2023 22:59:33 -0700
-Message-Id: <20230428055933.2699308-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.40.0
+        Fri, 28 Apr 2023 04:33:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39252137;
+        Fri, 28 Apr 2023 01:33:54 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [39.37.187.173])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A80C366032C3;
+        Fri, 28 Apr 2023 09:33:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682670833;
+        bh=ir1Fq3uvoRAzkpEu3qzisZDRI+fbR3pp9k7e7t7Jnlg=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=eqQB6yF14qtI1nS1cgjNeuTEw87ASsYJrnf9+kAW9cRltgYK7YcgMsgW2nRBkfiSl
+         UMDL9sHVzC7RjLR3rlt6ZwjlDqZlinuwEn5Sr4kRsSbBl7WgvytlmEhSVQXZOQZvdK
+         bAiJOOTfQIzekGpqt1N3KGs9tEF5Pmg68iMhR8OpW550vIl1K58uMgs9Mp+SD1e8x6
+         gbWzQ35n4MjHhYTwv/oQ0G4XEbeMunu7GHMNLNhiCey1zDw42gc3whDyb+SRyMfw91
+         +SwXLZ+2GU8SbBQ5E+bw4MB0aDONYLMea2dAtSc2qUhMON0KeX1Wy29cK3hCkOyQVX
+         5lL8TepI9y/ow==
+Message-ID: <3f5c5c28-3814-3fea-dfbb-a3c7604e0edc@collabora.com>
+Date:   Fri, 28 Apr 2023 13:33:45 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, keescook@chromium.org,
+        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
+        vincenzopalazzodev@gmail.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests: allow runners to override the timeout
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20230414193845.2494120-1-mcgrof@kernel.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230414193845.2494120-1-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_02,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- malwarescore=0 mlxscore=0 adultscore=0 suspectscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304280048
-X-Proofpoint-GUID: _VFUwZeukZMWnvtc5VMW4LkaK160HGLs
-X-Proofpoint-ORIG-GUID: _VFUwZeukZMWnvtc5VMW4LkaK160HGLs
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Smatch warns:
-	kernel/module/stats.c:394 read_file_mod_stats()
-	warn: passing freed memory 'buf'
+On 4/15/23 12:38 AM, Luis Chamberlain wrote:
+> The default timeout for selftests tests is 45 seconds. Although
+> we already have 13 settings for tests of about 96 sefltests which
+> use a timeout greater than this, we want to try to avoid encouraging
+> more tests to forcing a higher test timeout as selftests strives to
+> run all tests quickly. Selftests also uses the timeout as a non-fatal
+> error. Only tests runners which have control over a system would know
+> if to treat a timeout as fatal or not.
+> 
+> To help with all this:
+> 
+>   o Enhance documentation to avoid future increases of insane timeouts
+>   o Add the option to allow overriding the default timeout with test
+>     runners with a command line option
+> 
+> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Tested-by:Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-We are passing 'buf' to simple_read_from_buffer() after freeing it.
+> ---
+>  Documentation/dev-tools/kselftest.rst       | 22 +++++++++++++++++++++
+>  tools/testing/selftests/kselftest/runner.sh | 11 ++++++++++-
+>  tools/testing/selftests/run_kselftest.sh    |  5 +++++
+>  3 files changed, 37 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+> index 12b575b76b20..dd214af7b7ff 100644
+> --- a/Documentation/dev-tools/kselftest.rst
+> +++ b/Documentation/dev-tools/kselftest.rst
+> @@ -168,6 +168,28 @@ the `-t` option for specific single tests. Either can be used multiple times::
+>  
+>  For other features see the script usage output, seen with the `-h` option.
+>  
+> +Timeout for selftests
+> +=====================
+> +
+> +Selftests are designed to be quick and so a default timeout is used of 45
+> +seconds for each test. Tests can override the default timeout by adding
+> +a settings file in their directory and set a timeout variable there to the
+> +configured a desired upper timeout for the test. Only a few tests override
+> +the timeout with a value higher than 45 seconds, selftests strives to keep
+> +it that way. Timeouts in selftests are not considered fatal because the
+> +system under which a test runs may change and this can also modify the
+> +expected time it takes to run a test. If you have control over the systems
+> +which will run the tests you can configure a test runner on those systems to
+> +use a greater or lower timeout on the command line as with the `-o` or
+> +the `--override-timeout` argument. For example to use 165 seconds instead
+> +one would use:
+> +
+> +   $ ./run_kselftest.sh --override-timeout 165
+> +
+> +You can look at the TAP output to see if you ran into the timeout. Test
+> +runners which know a test must run under a specific time can then optionally
+> +treat these timeouts then as fatal.
+> +
+>  Packaging selftests
+>  ===================
+>  
+> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+> index 294619ade49f..1c952d1401d4 100644
+> --- a/tools/testing/selftests/kselftest/runner.sh
+> +++ b/tools/testing/selftests/kselftest/runner.sh
+> @@ -8,7 +8,8 @@ export logfile=/dev/stdout
+>  export per_test_logging=
+>  
+>  # Defaults for "settings" file fields:
+> -# "timeout" how many seconds to let each test run before failing.
+> +# "timeout" how many seconds to let each test run before running
+> +# over our soft timeout limit.
+>  export kselftest_default_timeout=45
+>  
+>  # There isn't a shell-agnostic way to find the path of a sourced file,
+> @@ -90,6 +91,14 @@ run_one()
+>  		done < "$settings"
+>  	fi
+>  
+> +	# Command line timeout overrides the settings file
+> +	if [ -n "$kselftest_override_timeout" ]; then
+> +		kselftest_timeout="$kselftest_override_timeout"
+> +		echo "# overriding timeout to $kselftest_timeout" >> "$logfile"
+> +	else
+> +		echo "# timeout set to $kselftest_timeout" >> "$logfile"
+> +	fi
+> +
+>  	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
+>  	echo "# $TEST_HDR_MSG"
+>  	if [ ! -e "$TEST" ]; then
+> diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
+> index 97165a83df63..9a981b36bd7f 100755
+> --- a/tools/testing/selftests/run_kselftest.sh
+> +++ b/tools/testing/selftests/run_kselftest.sh
+> @@ -26,6 +26,7 @@ Usage: $0 [OPTIONS]
+>    -l | --list			List the available collection:test entries
+>    -d | --dry-run		Don't actually run any tests
+>    -h | --help			Show this usage info
+> +  -o | --override-timeout	Number of seconds after which we timeout
+>  EOF
+>  	exit $1
+>  }
+> @@ -33,6 +34,7 @@ EOF
+>  COLLECTIONS=""
+>  TESTS=""
+>  dryrun=""
+> +kselftest_override_timeout=""
+>  while true; do
+>  	case "$1" in
+>  		-s | --summary)
+> @@ -51,6 +53,9 @@ while true; do
+>  		-d | --dry-run)
+>  			dryrun="echo"
+>  			shift ;;
+> +		-o | --override-timeout)
+> +			kselftest_override_timeout="$2"
+> +			shift 2 ;;
+>  		-h | --help)
+>  			usage 0 ;;
+>  		"")
 
-Fix this by changing the order of 'simple_read_from_buffer' and 'kfree'.
-
-Fixes: df3e764d8e5c ("module: add debug stats to help identify memory pressure")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-Found with statis analysis, only compile tested.
----
- kernel/module/stats.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-index ad7b6ada29f2..6ab2c94d6bc3 100644
---- a/kernel/module/stats.c
-+++ b/kernel/module/stats.c
-@@ -276,6 +276,7 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- 	struct mod_fail_load *mod_fail;
- 	unsigned int len, size, count_failed = 0;
- 	char *buf;
-+	int ret;
- 	u32 live_mod_count, fkreads, fdecompress, fbecoming, floads;
- 	unsigned long total_size, text_size, ikread_bytes, ibecoming_bytes,
- 		idecompress_bytes, imod_bytes, total_virtual_lost;
-@@ -390,8 +391,9 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- out_unlock:
- 	mutex_unlock(&module_mutex);
- out:
-+	ret = simple_read_from_buffer(user_buf, count, ppos, buf, len);
- 	kfree(buf);
--        return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-+	return ret;
- }
- #undef MAX_PREAMBLE
- #undef MAX_FAILED_MOD_PRINT
 -- 
-2.40.0
-
+BR,
+Muhammad Usama Anjum
