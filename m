@@ -2,58 +2,58 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBBDBC7EE29
-	for <linux-modules@archiver.kernel.org>; Mon,  1 May 2023 16:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03659C7EE25
+	for <linux-modules@archiver.kernel.org>; Mon,  1 May 2023 16:55:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbjEAQzd (ORCPT
+        id S232680AbjEAQzi (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 1 May 2023 12:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        Mon, 1 May 2023 12:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbjEAQza (ORCPT
+        with ESMTP id S232617AbjEAQza (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
         Mon, 1 May 2023 12:55:30 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D359D1700
-        for <linux-modules@vger.kernel.org>; Mon,  1 May 2023 09:55:12 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-52855ba7539so1413424a12.3
-        for <linux-modules@vger.kernel.org>; Mon, 01 May 2023 09:55:12 -0700 (PDT)
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED89173F
+        for <linux-modules@vger.kernel.org>; Mon,  1 May 2023 09:55:15 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-559e55b8766so38359167b3.1
+        for <linux-modules@vger.kernel.org>; Mon, 01 May 2023 09:55:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960112; x=1685552112;
+        d=google.com; s=20221208; t=1682960114; x=1685552114;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OgbhlQnm6N3CIqx+6EXURMMvow4S1KQvuNCpohSnl08=;
-        b=ym8bWqOddRKLLCHNc+7Y2IQs+szb6DlXVMA8aGLldE3slVUGdWc6AeUaj2cctynpb7
-         /42bu00/rNI9NmOjux118bETqQ9xSRBpI0DlCMlMXfD5dyA5fGqmz9wEGRomBF9wE3qi
-         RRE1kSFRttrNPJ5gUqGivtomoZ/CkHpvdtT+8kMIwh52/Lg8aqiW8D9XXtWx1rDhFoLd
-         bIJ0Jt1xQTF7bUEViJLE2KzQyVYsdDW/+ihFxINfhU+/Rq1Q5G2PY50HQQ7ppVzde88x
-         xSaqGzF/rOMvs2lVTYEukIGUCSWj1ys72INhoG28un8pv0+7d++N9bkCwOHBDc2Mepzd
-         xe8g==
+        bh=bGdFaZ9yLSvpkzL04e/VHNU0a1vWusSmGZaxEHf2wm8=;
+        b=kNURb9oRoWKMv7g0yo2L8rW1EcO17+d5GcAx/UcGQY6Nq04eWDbD4SbdCNOLXgOYzq
+         iIefzjvXI4Snk9VN4a44AHM12D0iuNdtL0q3JhvnQXzZtf429k8SdHQyNq1DhIH3u3D/
+         vgRvJtIdIGprvSKRamhSV8bn0NWTicrhYnvBvcVO6D5qUdO+wBWr5u0wD0Nu7LbQQb+M
+         IIs2pzxiZlPELIg9+H7fv7z/PKPu/SB3zB+CWnrv1/57UJqzRl/3C3lgPuiSCXQkCpOG
+         4JQ2sAFEorBhte2EmAzube4SlGlrch2L/NYmCg7/2eMQe55a1P+zlu78IrB4haHDMTMn
+         h3Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960112; x=1685552112;
+        d=1e100.net; s=20221208; t=1682960114; x=1685552114;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OgbhlQnm6N3CIqx+6EXURMMvow4S1KQvuNCpohSnl08=;
-        b=D9DV6a5ovsYIdP/HcoRIlQrWio+QbGCNfX+JGGUMaOfatpgS8KpSevH+5+wKmOkZxA
-         GmA3VCp5qibHF8s6mEomZv+d2nmR7t3mUQTd8MF8s2rrVJXRAY7QXyUuMd4Ov8MCvtt+
-         yFWF7GwJfvYTUyz26Gd7myEaivWrEfrLdxKGG1WuCcgFCDXfFQHxPa6OEK9+jsKZ29pJ
-         mjffW0ON8a097XtRoX8mHq1+KxTyY239vGaPRkZGG1J3juvgSFYxAH7Wk+cfMXvwslw9
-         eo6eaxl3JYA4JIsy/pz04ajUaTx9LIpc5v5dNZ+xd1yhrLCSg5EDq3RSqAv7FuVLjr0j
-         8ElQ==
-X-Gm-Message-State: AC+VfDyTaVDdFdSfDXjtvDdPw4xUWbJfoq+Z/CRac9F53Ml9yx8/eoMG
-        3kDojiauxvBBbnhYiewhYJNles2TSo0=
-X-Google-Smtp-Source: ACHHUZ5b/dFHDo+PuE3NWONWxlaUnbiu4qgjE2QFFJKcdOrghbUOD/toAldYYzf7QRUKjILKXa170Oj8yTI=
+        bh=bGdFaZ9yLSvpkzL04e/VHNU0a1vWusSmGZaxEHf2wm8=;
+        b=bQKqVZ+6NRgM7qSq7oLfBUm5mGlOuIde40D2r5i6Czrgrd/W6xIW8q+2WJ4HWvkw//
+         A8KLoCrK2LK3mmYLmcSnQbSslme+c+bk/JJMW7QSkhcabXE9Z2hehGtHUUK4dzNxxIju
+         d/71YvPTtFTEu68vc1DDNLJh2mj+A/BK88WoyaCX9EWd1K0mDBK6tzO7zuaImC51Ra+V
+         CbQZ9D99UT2UYhxFNZaGp/am1RdmFZK7yZJiHsWbIZ7AcCQnQnyRSI1JhTvkpUGCu9QW
+         eianc3QOiIC6A82nnv6WTQz8OSgrqmrnRWT+aUZ1/4bV14IYlQsWENgop1horyXTusPg
+         yZXg==
+X-Gm-Message-State: AC+VfDyNAFG0kY/eARFPpxvvkotHkhdXhtqR9i2CIqWM+DK+Rjg5CmXO
+        mFLNq1V3fOYHRFSh6O3RgenRjPM6LL4=
+X-Google-Smtp-Source: ACHHUZ54ReoLXFk1oTaYjmLVtkkNt2jRchxoRiCx8rxY23YjrphJueyeWWbM6qC2nW3CU7hKMZM9JkpwZiA=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a63:24f:0:b0:520:60ac:fb30 with SMTP id
- 76-20020a63024f000000b0052060acfb30mr3551005pgc.1.1682960112196; Mon, 01 May
- 2023 09:55:12 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:12 -0700
+ (user=surenb job=sendgmr) by 2002:a05:690c:723:b0:54f:68a1:b406 with SMTP id
+ bt3-20020a05690c072300b0054f68a1b406mr8285886ywb.2.1682960114403; Mon, 01 May
+ 2023 09:55:14 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:13 -0700
 In-Reply-To: <20230501165450.15352-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230501165450.15352-1-surenb@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-3-surenb@google.com>
-Subject: [PATCH 02/40] scripts/kallysms: Always include __start and __stop symbols
+Message-ID: <20230501165450.15352-4-surenb@google.com>
+Subject: [PATCH 03/40] fs: Convert alloc_inode_sb() to a macro
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -83,54 +83,41 @@ Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
         iommu@lists.linux.dev, linux-arch@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-        cgroups@vger.kernel.org
+        cgroups@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-These symbols are used to denote section boundaries: by always including
-them we can unify loading sections from modules with loading built-in
-sections, which leads to some significant cleanup.
+We're introducing alloc tagging, which tracks memory allocations by
+callsite. Converting alloc_inode_sb() to a macro means allocations will
+be tracked by its caller, which is a bit more useful.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
 ---
- scripts/kallsyms.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ include/linux/fs.h | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 0d2db41177b2..7b7dbeb5bd6e 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -203,6 +203,11 @@ static int symbol_in_range(const struct sym_entry *s,
- 	return 0;
- }
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 21a981680856..4905ce14db0b 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2699,11 +2699,7 @@ int setattr_should_drop_sgid(struct mnt_idmap *idmap,
+  * This must be used for allocating filesystems specific inodes to set
+  * up the inode reclaim context correctly.
+  */
+-static inline void *
+-alloc_inode_sb(struct super_block *sb, struct kmem_cache *cache, gfp_t gfp)
+-{
+-	return kmem_cache_alloc_lru(cache, &sb->s_inode_lru, gfp);
+-}
++#define alloc_inode_sb(_sb, _cache, _gfp) kmem_cache_alloc_lru(_cache, &_sb->s_inode_lru, _gfp)
  
-+static bool string_starts_with(const char *s, const char *prefix)
-+{
-+	return strncmp(s, prefix, strlen(prefix)) == 0;
-+}
-+
- static int symbol_valid(const struct sym_entry *s)
- {
- 	const char *name = sym_name(s);
-@@ -210,6 +215,14 @@ static int symbol_valid(const struct sym_entry *s)
- 	/* if --all-symbols is not specified, then symbols outside the text
- 	 * and inittext sections are discarded */
- 	if (!all_symbols) {
-+		/*
-+		 * Symbols starting with __start and __stop are used to denote
-+		 * section boundaries, and should always be included:
-+		 */
-+		if (string_starts_with(name, "__start_") ||
-+		    string_starts_with(name, "__stop_"))
-+			return 1;
-+
- 		if (symbol_in_range(s, text_ranges,
- 				    ARRAY_SIZE(text_ranges)) == 0)
- 			return 0;
+ extern void __insert_inode_hash(struct inode *, unsigned long hashval);
+ static inline void insert_inode_hash(struct inode *inode)
 -- 
 2.40.1.495.gc816e09b53d-goog
 
