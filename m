@@ -2,58 +2,58 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72ED2C77B7C
-	for <linux-modules@archiver.kernel.org>; Mon,  1 May 2023 16:58:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64563C77B61
+	for <linux-modules@archiver.kernel.org>; Mon,  1 May 2023 16:58:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbjEAQ61 (ORCPT
+        id S233030AbjEAQ66 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 1 May 2023 12:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        Mon, 1 May 2023 12:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232775AbjEAQ5Y (ORCPT
+        with ESMTP id S232936AbjEAQ5p (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 1 May 2023 12:57:24 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F174210B
-        for <linux-modules@vger.kernel.org>; Mon,  1 May 2023 09:55:51 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-552f2f940edso53193617b3.0
-        for <linux-modules@vger.kernel.org>; Mon, 01 May 2023 09:55:51 -0700 (PDT)
+        Mon, 1 May 2023 12:57:45 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E51E2D43
+        for <linux-modules@vger.kernel.org>; Mon,  1 May 2023 09:56:01 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a77926afbso5337306276.3
+        for <linux-modules@vger.kernel.org>; Mon, 01 May 2023 09:56:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960143; x=1685552143;
+        d=google.com; s=20221208; t=1682960160; x=1685552160;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KlR34XlXux9ljlJXPX99aK4k/cmOetFB9Q46atx2T7Y=;
-        b=QWt5E67jzX3Q9n5FFMEQTPcgcYXDs3S4iywG6hR5j3a3JlBUkYCc4DtOpxxkkjLFnu
-         4D+SF9vM2W+aSyyk8kJjTG69VNYflbotzNlQqwEogeuQynY5M8r1b7VoJRcfxutnecbL
-         LuU9GuJRo0TkDfrLBSlYcY4SPMYXeI4QMPcJoAM+FNu7Tta0lyhA6wvriGeN5RlC9+S0
-         iffTz/pkSCC3kF9yyYctejaCym7L71sJ6nP1Y94qsXlQPHEO6LhbQR95ce2BCueglN+Q
-         qfFo6LHwZ424yz+z+s5ncB2VWclW4myqX2EcpXj3e8kJr6XkScT1PFtCKYGoTWUopffl
-         ivjw==
+        bh=3JQAU/dBFDp2j3prOKpx9pu61B2aRzHMn5ijo1mj0wk=;
+        b=Nr4QXyj/etzJlAh8i4e3XnDFrHrok+4KAhChzrGdGYpNpzqnTzNz+b7TDzIFPvjVWJ
+         9m6bX+drGU9A6fH4AYp0HUvbrb0fCoSPBmCg7BeIb7knPz8EfEfG9cPbzcBJ5VX+RXOe
+         xKxhA1OiVlh84AEwzHBh+cMUHvzUPF37NpWH9RACZgYBnn9nhrwQ+ZtD6LOD5aF3vQAg
+         h9QGbAMavYpJls9fxf3kDm4J6+Qn0mT0BuRWWAvY6omxOHY3anv02SbqbukFuexGdvmI
+         uLtak6s/1IGom0RtuY8qFrrhQXG4Ym0F7I61Qiqk5+0EJAXYPW/dDKZJd/GArGchifG6
+         ytrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960143; x=1685552143;
+        d=1e100.net; s=20221208; t=1682960160; x=1685552160;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KlR34XlXux9ljlJXPX99aK4k/cmOetFB9Q46atx2T7Y=;
-        b=jB3HgoflsWPn8EmfeJD3+9yVl1olagqaOtdJF60c8qNI3og11MKN1dRcVJdzNi5TyX
-         6odP+hLgWa9zndkLmDk4JPlSc4vFmpikwKWCq7bJ+D0iomRgJIT+Hf9R3yHLig5zIKTj
-         GI2QsvhLSCWKqmO8AckaT2mM4NB42TeVL+CTUa7jXgTQk2Ys0F1mEj6j3+PyijVxIZOK
-         22gqTPQrQTYKdYggs1scawI5t7im9yErP34jRmddwcTRH4+NkDdMA8G/a5Vde0pqRycl
-         1zXHeTcOdSfg0H4GZNUcPL2l/XTIjXxRRZMFAHGvLyAbvrc9zyBX6UyDXnVpIhT/lzqd
-         9iUw==
-X-Gm-Message-State: AC+VfDzzFjCruCj5fr5nAeEEe/tLXNQcbeUUD8kQCtMYbzQrI8EWVwKZ
-        876e/idOgurMJc/ZVVMa7DWCXNgAUA8=
-X-Google-Smtp-Source: ACHHUZ4HzBM+CNluGDUwOIwZDncQGZjVanEzUdQYw0pkU2rekMEn9D+HYHGjdxqKqeVKj47azkDUlaXgHqg=
+        bh=3JQAU/dBFDp2j3prOKpx9pu61B2aRzHMn5ijo1mj0wk=;
+        b=CbfGz2Vc+kSQ0EMameVUtGlg+DXbkooaYZMvz0v9e39QKUmE3YAYNrb72edSHMrqbm
+         FFYcvW7Xk6yplCHpJUCbrPoNRgJmGKdxuEgtttwxbmEetp9P1ldiLOdQQRqXgIBrmg8M
+         jj58AqXi3DZjgAJhtn3WWkd981zxboqUgiVZSooRDoVz2Cc7iFBolq80pKcumt69ixRS
+         SWa1F1+M/xDBpgG+0sMuzAV91YYcU4gFhHOOl++VMXg9+wGUK9J4QwULciw3+ouLwvRh
+         LNwA1zPco4M8mzYkJmnkMQJa0iBOPRcqfnwnl/nbaL+iTQddYdeXVslvGDtTiA2MIZXc
+         OOjw==
+X-Gm-Message-State: AC+VfDzOuPPgAlE0S7A6aOeWw2YscflawWxghH35eygu+y9sZKM7Fmfd
+        dKMmHJ9ZuDV4v6m8OC5wPRgLv3w9bH4=
+X-Google-Smtp-Source: ACHHUZ5flxShenE/t9NPL/moLDuNx9TkwM/Lf/8wW54V2Eq3VJ/wRhfgfjc0frmw2aZZoQxo3iYMAN5xHBU=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a81:b3c8:0:b0:559:e792:4e87 with SMTP id
- r191-20020a81b3c8000000b00559e7924e87mr4661945ywh.7.1682960142770; Mon, 01
- May 2023 09:55:42 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:25 -0700
+ (user=surenb job=sendgmr) by 2002:a25:2484:0:b0:b95:e649:34b6 with SMTP id
+ k126-20020a252484000000b00b95e64934b6mr8454589ybk.1.1682960160542; Mon, 01
+ May 2023 09:56:00 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:33 -0700
 In-Reply-To: <20230501165450.15352-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230501165450.15352-1-surenb@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-16-surenb@google.com>
-Subject: [PATCH 15/40] lib: prevent module unloading if memory is not freed
+Message-ID: <20230501165450.15352-24-surenb@google.com>
+Subject: [PATCH 23/40] lib: add codetag reference into slabobj_ext
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -88,168 +88,62 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Skip freeing module's data section if there are non-zero allocation tags
-because otherwise, once these allocations are freed, the access to their
-code tag would cause UAF.
+To store code tag for every slab object, a codetag reference is embedded
+into slabobj_ext when CONFIG_MEM_ALLOC_PROFILING=y.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
+Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 ---
- include/linux/codetag.h |  6 +++---
- kernel/module/main.c    | 23 +++++++++++++++--------
- lib/codetag.c           | 11 ++++++++---
- 3 files changed, 26 insertions(+), 14 deletions(-)
+ include/linux/memcontrol.h | 5 +++++
+ lib/Kconfig.debug          | 1 +
+ mm/slab.h                  | 4 ++++
+ 3 files changed, 10 insertions(+)
 
-diff --git a/include/linux/codetag.h b/include/linux/codetag.h
-index 386733e89b31..d98e4c8e86f0 100644
---- a/include/linux/codetag.h
-+++ b/include/linux/codetag.h
-@@ -44,7 +44,7 @@ struct codetag_type_desc {
- 	size_t tag_size;
- 	void (*module_load)(struct codetag_type *cttype,
- 			    struct codetag_module *cmod);
--	void (*module_unload)(struct codetag_type *cttype,
-+	bool (*module_unload)(struct codetag_type *cttype,
- 			      struct codetag_module *cmod);
- };
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 5e2da63c525f..c7f21b15b540 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1626,7 +1626,12 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t *pgdat, int order,
+  * if MEMCG_DATA_OBJEXTS is set.
+  */
+ struct slabobj_ext {
++#ifdef CONFIG_MEMCG_KMEM
+ 	struct obj_cgroup *objcg;
++#endif
++#ifdef CONFIG_MEM_ALLOC_PROFILING
++	union codetag_ref ref;
++#endif
+ } __aligned(8);
  
-@@ -74,10 +74,10 @@ codetag_register_type(const struct codetag_type_desc *desc);
+ static inline void __inc_lruvec_kmem_state(void *p, enum node_stat_item idx)
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index d3aa5ee0bf0d..4157c2251b07 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -968,6 +968,7 @@ config MEM_ALLOC_PROFILING
+ 	select CODE_TAGGING
+ 	select LAZY_PERCPU_COUNTER
+ 	select PAGE_EXTENSION
++	select SLAB_OBJ_EXT
+ 	help
+ 	  Track allocation source code and record total allocation size
+ 	  initiated at that code location. The mechanism can be used to track
+diff --git a/mm/slab.h b/mm/slab.h
+index bec202bdcfb8..f953e7c81e98 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -418,6 +418,10 @@ int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
  
- #ifdef CONFIG_CODE_TAGGING
- void codetag_load_module(struct module *mod);
--void codetag_unload_module(struct module *mod);
-+bool codetag_unload_module(struct module *mod);
- #else
- static inline void codetag_load_module(struct module *mod) {}
--static inline void codetag_unload_module(struct module *mod) {}
-+static inline bool codetag_unload_module(struct module *mod) { return true; }
- #endif
- 
- #endif /* _LINUX_CODETAG_H */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 4232e7bff549..9ff56f2bb09d 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1218,15 +1218,19 @@ static void *module_memory_alloc(unsigned int size, enum mod_mem_type type)
- 	return module_alloc(size);
- }
- 
--static void module_memory_free(void *ptr, enum mod_mem_type type)
-+static void module_memory_free(void *ptr, enum mod_mem_type type,
-+			       bool unload_codetags)
+ static inline bool need_slab_obj_ext(void)
  {
-+	if (!unload_codetags && mod_mem_type_is_core_data(type))
-+		return;
-+
- 	if (mod_mem_use_vmalloc(type))
- 		vfree(ptr);
- 	else
- 		module_memfree(ptr);
- }
- 
--static void free_mod_mem(struct module *mod)
-+static void free_mod_mem(struct module *mod, bool unload_codetags)
- {
- 	for_each_mod_mem_type(type) {
- 		struct module_memory *mod_mem = &mod->mem[type];
-@@ -1237,20 +1241,23 @@ static void free_mod_mem(struct module *mod)
- 		/* Free lock-classes; relies on the preceding sync_rcu(). */
- 		lockdep_free_key_range(mod_mem->base, mod_mem->size);
- 		if (mod_mem->size)
--			module_memory_free(mod_mem->base, type);
-+			module_memory_free(mod_mem->base, type,
-+					   unload_codetags);
- 	}
- 
- 	/* MOD_DATA hosts mod, so free it at last */
- 	lockdep_free_key_range(mod->mem[MOD_DATA].base, mod->mem[MOD_DATA].size);
--	module_memory_free(mod->mem[MOD_DATA].base, MOD_DATA);
-+	module_memory_free(mod->mem[MOD_DATA].base, MOD_DATA, unload_codetags);
- }
- 
- /* Free a module, remove from lists, etc. */
- static void free_module(struct module *mod)
- {
-+	bool unload_codetags;
-+
- 	trace_module_free(mod);
- 
--	codetag_unload_module(mod);
-+	unload_codetags = codetag_unload_module(mod);
- 	mod_sysfs_teardown(mod);
- 
- 	/*
-@@ -1292,7 +1299,7 @@ static void free_module(struct module *mod)
- 	kfree(mod->args);
- 	percpu_modfree(mod);
- 
--	free_mod_mem(mod);
-+	free_mod_mem(mod, unload_codetags);
- }
- 
- void *__symbol_get(const char *symbol)
-@@ -2294,7 +2301,7 @@ static int move_module(struct module *mod, struct load_info *info)
- 	return 0;
- out_enomem:
- 	for (t--; t >= 0; t--)
--		module_memory_free(mod->mem[t].base, t);
-+		module_memory_free(mod->mem[t].base, t, true);
- 	return ret;
- }
- 
-@@ -2424,7 +2431,7 @@ static void module_deallocate(struct module *mod, struct load_info *info)
- 	percpu_modfree(mod);
- 	module_arch_freeing_init(mod);
- 
--	free_mod_mem(mod);
-+	free_mod_mem(mod, true);
- }
- 
- int __weak module_finalize(const Elf_Ehdr *hdr,
-diff --git a/lib/codetag.c b/lib/codetag.c
-index 4ea57fb37346..0ad4ea66c769 100644
---- a/lib/codetag.c
-+++ b/lib/codetag.c
-@@ -5,6 +5,7 @@
- #include <linux/module.h>
- #include <linux/seq_buf.h>
- #include <linux/slab.h>
-+#include <linux/vmalloc.h>
- 
- struct codetag_type {
- 	struct list_head link;
-@@ -219,12 +220,13 @@ void codetag_load_module(struct module *mod)
- 	mutex_unlock(&codetag_lock);
- }
- 
--void codetag_unload_module(struct module *mod)
-+bool codetag_unload_module(struct module *mod)
- {
- 	struct codetag_type *cttype;
-+	bool unload_ok = true;
- 
- 	if (!mod)
--		return;
++#ifdef CONFIG_MEM_ALLOC_PROFILING
++	if (mem_alloc_profiling_enabled())
 +		return true;
- 
- 	mutex_lock(&codetag_lock);
- 	list_for_each_entry(cttype, &codetag_types, link) {
-@@ -241,7 +243,8 @@ void codetag_unload_module(struct module *mod)
- 		}
- 		if (found) {
- 			if (cttype->desc.module_unload)
--				cttype->desc.module_unload(cttype, cmod);
-+				if (!cttype->desc.module_unload(cttype, cmod))
-+					unload_ok = false;
- 
- 			cttype->count -= range_size(cttype, &cmod->range);
- 			idr_remove(&cttype->mod_idr, mod_id);
-@@ -250,4 +253,6 @@ void codetag_unload_module(struct module *mod)
- 		up_write(&cttype->mod_lock);
- 	}
- 	mutex_unlock(&codetag_lock);
-+
-+	return unload_ok;
- }
++#endif
+ 	/*
+ 	 * CONFIG_MEMCG_KMEM creates vector of obj_cgroup objects conditionally
+ 	 * inside memcg_slab_post_alloc_hook. No other users for now.
 -- 
 2.40.1.495.gc816e09b53d-goog
 
