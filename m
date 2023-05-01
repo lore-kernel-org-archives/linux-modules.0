@@ -2,58 +2,58 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03659C7EE25
-	for <linux-modules@archiver.kernel.org>; Mon,  1 May 2023 16:55:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2730FC77B7C
+	for <linux-modules@archiver.kernel.org>; Mon,  1 May 2023 16:56:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbjEAQzi (ORCPT
+        id S232558AbjEAQ4I (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 1 May 2023 12:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
+        Mon, 1 May 2023 12:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232617AbjEAQza (ORCPT
+        with ESMTP id S232513AbjEAQzc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 1 May 2023 12:55:30 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED89173F
-        for <linux-modules@vger.kernel.org>; Mon,  1 May 2023 09:55:15 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-559e55b8766so38359167b3.1
-        for <linux-modules@vger.kernel.org>; Mon, 01 May 2023 09:55:15 -0700 (PDT)
+        Mon, 1 May 2023 12:55:32 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD63619AF
+        for <linux-modules@vger.kernel.org>; Mon,  1 May 2023 09:55:17 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b9a75194eebso3278341276.1
+        for <linux-modules@vger.kernel.org>; Mon, 01 May 2023 09:55:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960114; x=1685552114;
+        d=google.com; s=20221208; t=1682960117; x=1685552117;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bGdFaZ9yLSvpkzL04e/VHNU0a1vWusSmGZaxEHf2wm8=;
-        b=kNURb9oRoWKMv7g0yo2L8rW1EcO17+d5GcAx/UcGQY6Nq04eWDbD4SbdCNOLXgOYzq
-         iIefzjvXI4Snk9VN4a44AHM12D0iuNdtL0q3JhvnQXzZtf429k8SdHQyNq1DhIH3u3D/
-         vgRvJtIdIGprvSKRamhSV8bn0NWTicrhYnvBvcVO6D5qUdO+wBWr5u0wD0Nu7LbQQb+M
-         IIs2pzxiZlPELIg9+H7fv7z/PKPu/SB3zB+CWnrv1/57UJqzRl/3C3lgPuiSCXQkCpOG
-         4JQ2sAFEorBhte2EmAzube4SlGlrch2L/NYmCg7/2eMQe55a1P+zlu78IrB4haHDMTMn
-         h3Fg==
+        bh=MvglFAc23/TKNtr0bbBz1MPaCPYCHObzjBdGSdfY+dE=;
+        b=yKDBPh22/4OVp0gpJ5U5nHWMn8h04FMW1WN9f98nVkyHZSwAOs9UEKf2haMvXBbR8k
+         I5P7Dha4Pldrj64han5IvUTFfOCUHNGUrIJIAXAHFHlzCILjwJdK3NkqJaf+mFjOWY9Y
+         anqwu1P80ScHesP8cB9KZprrz91t4RxUXEXNi1EU3gVLZoQD/8xloHC2gL9j3TfYF6sZ
+         YkdPXTXoXUqQoMaiXzOvgnurLH12U1odpmtI/6y+T+w0FuxiB/jPfmQMFC3YfiI9xt9g
+         5K5Lvs6m9I2be6QJ0QLu+uaPSHjNUlPR4Y/We8WulcHXa/trNfBWstA095DBG1XNwXOI
+         RnBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960114; x=1685552114;
+        d=1e100.net; s=20221208; t=1682960117; x=1685552117;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bGdFaZ9yLSvpkzL04e/VHNU0a1vWusSmGZaxEHf2wm8=;
-        b=bQKqVZ+6NRgM7qSq7oLfBUm5mGlOuIde40D2r5i6Czrgrd/W6xIW8q+2WJ4HWvkw//
-         A8KLoCrK2LK3mmYLmcSnQbSslme+c+bk/JJMW7QSkhcabXE9Z2hehGtHUUK4dzNxxIju
-         d/71YvPTtFTEu68vc1DDNLJh2mj+A/BK88WoyaCX9EWd1K0mDBK6tzO7zuaImC51Ra+V
-         CbQZ9D99UT2UYhxFNZaGp/am1RdmFZK7yZJiHsWbIZ7AcCQnQnyRSI1JhTvkpUGCu9QW
-         eianc3QOiIC6A82nnv6WTQz8OSgrqmrnRWT+aUZ1/4bV14IYlQsWENgop1horyXTusPg
-         yZXg==
-X-Gm-Message-State: AC+VfDyNAFG0kY/eARFPpxvvkotHkhdXhtqR9i2CIqWM+DK+Rjg5CmXO
-        mFLNq1V3fOYHRFSh6O3RgenRjPM6LL4=
-X-Google-Smtp-Source: ACHHUZ54ReoLXFk1oTaYjmLVtkkNt2jRchxoRiCx8rxY23YjrphJueyeWWbM6qC2nW3CU7hKMZM9JkpwZiA=
+        bh=MvglFAc23/TKNtr0bbBz1MPaCPYCHObzjBdGSdfY+dE=;
+        b=YekStWInV+dAKtswwnnqJbdaM6r2993IQt+nfE95YKt4BY2ojgCljkdpMxKsnqg9yo
+         Gt6WVNEN4dX42HKpKX8N2RKivT/3AKonJDoFUrIr8JfiqyucHxCXUnVIs3pNw+T+8ztk
+         FZ6rcp/u8RLgyQnrwsOoc+YvQWp4ZCqy/J6Sf9o6N53km6La8MKe7MPBO/2pRYcHrdAu
+         KInlWS1hGgmEQkx+M7jYc2XGRwtbHqnMJ3idcTYS++ENmzUnloqp0zT6/D5f3p0N5JT5
+         lsNC+/iY1qRICKOhy/GbLqQeVK3soDIUcpZo/41Wr/cSFtbIL9hRZ5AVyb+JpZGhdd8n
+         MiEA==
+X-Gm-Message-State: AC+VfDy8wDIGY/4bmPAEF/aQEb5pUd/vh9EVgZkW9usramXAGGiXmm2v
+        RxIQclzJq8S0tXWDSb9GVTmAFAYKi2c=
+X-Google-Smtp-Source: ACHHUZ7zxOn1YY1d+8Zdgat4BhX3SxSXxSfdgQr88v03ITFlUy5XmZz5otkrL0/chwvD7sDfcOf3ssnE7Vo=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a05:690c:723:b0:54f:68a1:b406 with SMTP id
- bt3-20020a05690c072300b0054f68a1b406mr8285886ywb.2.1682960114403; Mon, 01 May
- 2023 09:55:14 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:13 -0700
+ (user=surenb job=sendgmr) by 2002:a25:c54f:0:b0:b8e:fbcb:d6ef with SMTP id
+ v76-20020a25c54f000000b00b8efbcbd6efmr8806787ybe.4.1682960116894; Mon, 01 May
+ 2023 09:55:16 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:14 -0700
 In-Reply-To: <20230501165450.15352-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230501165450.15352-1-surenb@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-4-surenb@google.com>
-Subject: [PATCH 03/40] fs: Convert alloc_inode_sb() to a macro
+Message-ID: <20230501165450.15352-5-surenb@google.com>
+Subject: [PATCH 04/40] nodemask: Split out include/linux/nodemask_types.h
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -83,41 +83,76 @@ Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
         iommu@lists.linux.dev, linux-arch@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-        cgroups@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>
+        cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-We're introducing alloc tagging, which tracks memory allocations by
-callsite. Converting alloc_inode_sb() to a macro means allocations will
-be tracked by its caller, which is a bit more useful.
+sched.h, which defines task_struct, needs nodemask_t - but sched.h is a
+frequently used header and ideally shouldn't be pulling in any more code
+that it needs to.
+
+This splits out nodemask_types.h which has the definition sched.h needs,
+which will avoid a circular header dependency in the alloc tagging patch
+series, and as a bonus should speed up kernel build times.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- include/linux/fs.h | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ include/linux/nodemask.h       | 2 +-
+ include/linux/nodemask_types.h | 9 +++++++++
+ include/linux/sched.h          | 2 +-
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+ create mode 100644 include/linux/nodemask_types.h
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 21a981680856..4905ce14db0b 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2699,11 +2699,7 @@ int setattr_should_drop_sgid(struct mnt_idmap *idmap,
-  * This must be used for allocating filesystems specific inodes to set
-  * up the inode reclaim context correctly.
-  */
--static inline void *
--alloc_inode_sb(struct super_block *sb, struct kmem_cache *cache, gfp_t gfp)
--{
--	return kmem_cache_alloc_lru(cache, &sb->s_inode_lru, gfp);
--}
-+#define alloc_inode_sb(_sb, _cache, _gfp) kmem_cache_alloc_lru(_cache, &_sb->s_inode_lru, _gfp)
+diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
+index bb0ee80526b2..fda37b6df274 100644
+--- a/include/linux/nodemask.h
++++ b/include/linux/nodemask.h
+@@ -93,10 +93,10 @@
+ #include <linux/threads.h>
+ #include <linux/bitmap.h>
+ #include <linux/minmax.h>
++#include <linux/nodemask_types.h>
+ #include <linux/numa.h>
+ #include <linux/random.h>
  
- extern void __insert_inode_hash(struct inode *, unsigned long hashval);
- static inline void insert_inode_hash(struct inode *inode)
+-typedef struct { DECLARE_BITMAP(bits, MAX_NUMNODES); } nodemask_t;
+ extern nodemask_t _unused_nodemask_arg_;
+ 
+ /**
+diff --git a/include/linux/nodemask_types.h b/include/linux/nodemask_types.h
+new file mode 100644
+index 000000000000..84c2f47c4237
+--- /dev/null
++++ b/include/linux/nodemask_types.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __LINUX_NODEMASK_TYPES_H
++#define __LINUX_NODEMASK_TYPES_H
++
++#include <linux/numa.h>
++
++typedef struct { DECLARE_BITMAP(bits, MAX_NUMNODES); } nodemask_t;
++
++#endif /* __LINUX_NODEMASK_TYPES_H */
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index eed5d65b8d1f..35e7efdea2d9 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -20,7 +20,7 @@
+ #include <linux/hrtimer.h>
+ #include <linux/irqflags.h>
+ #include <linux/seccomp.h>
+-#include <linux/nodemask.h>
++#include <linux/nodemask_types.h>
+ #include <linux/rcupdate.h>
+ #include <linux/refcount.h>
+ #include <linux/resource.h>
 -- 
 2.40.1.495.gc816e09b53d-goog
 
