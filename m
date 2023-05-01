@@ -2,58 +2,58 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11CEEC77B73
-	for <linux-modules@archiver.kernel.org>; Mon,  1 May 2023 17:03:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D019FC77B7C
+	for <linux-modules@archiver.kernel.org>; Mon,  1 May 2023 17:03:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbjEARDV (ORCPT
+        id S232916AbjEARDb (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 1 May 2023 13:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
+        Mon, 1 May 2023 13:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232729AbjEARB6 (ORCPT
+        with ESMTP id S232758AbjEARCK (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 1 May 2023 13:01:58 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E88F4207
-        for <linux-modules@vger.kernel.org>; Mon,  1 May 2023 09:57:01 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-559ea6b1065so42728027b3.0
-        for <linux-modules@vger.kernel.org>; Mon, 01 May 2023 09:57:01 -0700 (PDT)
+        Mon, 1 May 2023 13:02:10 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D24A40F3
+        for <linux-modules@vger.kernel.org>; Mon,  1 May 2023 09:57:05 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64115e69e1eso23348158b3a.0
+        for <linux-modules@vger.kernel.org>; Mon, 01 May 2023 09:57:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960190; x=1685552190;
+        d=google.com; s=20221208; t=1682960195; x=1685552195;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5F2YZ+zSEbu/k1s4F5etygangPIkg0EznnOkCCfoew4=;
-        b=y9PADbKNRkycgFljwwW4rqucG3eA68YCKeeZo3WcsU1FmoEQqcIFYkjuX0vuBDZ+Ql
-         NTwaESSbp1RZc7LHc0KY8IZ9ABdUTaz7iD+fqU6hTkv+OjleRGkRYXEn3mmMGDZeb37K
-         RR5c6bta6TNyvXnvanAVd7N5usS73yNUZBprdVddhAocVImGlGKImrhAPkg7FdlsDO1g
-         0/gV7SzEHyQ+UDygmg90PVZ1tDJNusamWgID4ov2qqJT8Mlk7B+3jkcThGeG+RtvCTCf
-         JdDB5SJtODP6opHYk8cvNwCb/U4pdSF9HDKWf6Vbz1ntZy0fwly+Flt/OMhilMEsPt5F
-         Cb4g==
+        bh=uHz3gIMQ14LMAlJH3BHlupoStZ8/+BrUL09pT+1nDVs=;
+        b=cL9ulyr1TZmloHcY9ZAQt2916/Hy8kFnLfCTiFsQOyXG21mKZDk2kVsVGS3swW/o9A
+         lmsPI4V+ni8bJ2cDmSOvMhTe7jiZncm+a+dX+h32N0c6xUNbGxEO59xGx2raskwk+yE+
+         EY40N2q/B5lxnqf+wqKkKUxKcIxmFMWDeQ/MPMZ5UoklVL3SBusyJB6cuGrGjrAev2jt
+         I6daIpOCKx+oNZEO+zjvrtYAnmo4PPKmPdsrXndRo+l1Ieu4A+pt+fjUYtVugs+1Ncqh
+         keNiqCygIJKFaCxV1denDbSpt/uk9T3I2i0PdEP0vYROV8UgAo/d+Ogm15HjT6dg+WeL
+         DFBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960190; x=1685552190;
+        d=1e100.net; s=20221208; t=1682960195; x=1685552195;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5F2YZ+zSEbu/k1s4F5etygangPIkg0EznnOkCCfoew4=;
-        b=I7+ng6/91NNSEgNomr03clB64KtqUlpj6jo2NoiFO1VAg4tWkQ38A251Fq7ObzIcto
-         Yu0Z6FAyscz6CojJXR/T/pmYOI+fbzASVoCdIaO8BLubY6Dl34HGxPCmAG6euyf1rmLG
-         X34+5IdEq5vff+ROOUsoa+fndJjRRQ4vChqaqsaxTge+RtG4t91fn2WvKfAX3DkgIJdE
-         siq3MOjy70acNujZavF36mfyKcEhIDMdRZ+MNgRjiThQmbOdrTXDUrtYw0GTo2+3BMER
-         8KZ1GbpiXBJTNHbDblfld0opFQsYOPnzBWg5g+ET2mxZ5K5OGecUwqiyCadZbSdoAm2Q
-         0wqg==
-X-Gm-Message-State: AC+VfDzNDBtgOzwuwTV+k9RY2CKkmZxu4yw2kOiCzWO+5EfM+r48IpLx
-        2frxCRdyx9IGB8NgaBCRFULgKrGDGp4=
-X-Google-Smtp-Source: ACHHUZ4bAJGviPj6gi0jXXmQNcf1vAdyBJ0X5d7ddmrZp75YBKgThQIRi2xp+pDFZfbHaui7RkEBtZ2XytA=
+        bh=uHz3gIMQ14LMAlJH3BHlupoStZ8/+BrUL09pT+1nDVs=;
+        b=LrNgKrd9ufTV2gyDBZm9xuxVZyV0upRjprkHVqo29PcUoct7QhfvNlhkyjc1AJa28s
+         RnvFLsl4nnYAyUW1BkV1CA8NPJvlwQ0SBlXLbj2I1GSlx2fY65YvUoqpQuN4MEVqlQqW
+         JhwKmfMqGaTuxxup2YWqevRCP3+a5Hkzsv8zD5qVunJ6WH9EkHLzhhNGtvrl3boRHIlE
+         +iJ+P68ZD+EMwPD5RzHnLJozIxXp+X6ZBPXmRI0EoiAryrqiul+7lVtjPdzFTcY+vpm1
+         M6IUfWWAIaYzVabUPr/kz09TV7Yf/+dav6eVr1h0oNEZjmv1MYKJxLRW8kwkyhgC1/Qq
+         eEvg==
+X-Gm-Message-State: AC+VfDzaBfN9o1suure2hDRDz6f4n1mt2lXksPHpzkY2vzAsipCfEsW5
+        iIYjz57ll6ktsxnL9aBtOWfNG4Ft2Vs=
+X-Google-Smtp-Source: ACHHUZ7qtjt6xJv0/W6KanE/G1kJWq4JffXkn4YmB84VAxkpL2X6o57PZ5XdLwRiQeUXxZyrcuCDjEjhXCs=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a81:a8c4:0:b0:54d:3afc:d503 with SMTP id
- f187-20020a81a8c4000000b0054d3afcd503mr8631819ywh.8.1682960190091; Mon, 01
- May 2023 09:56:30 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:46 -0700
+ (user=surenb job=sendgmr) by 2002:a17:90a:5105:b0:244:9620:c114 with SMTP id
+ t5-20020a17090a510500b002449620c114mr3673305pjh.1.1682960194723; Mon, 01 May
+ 2023 09:56:34 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:48 -0700
 In-Reply-To: <20230501165450.15352-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230501165450.15352-1-surenb@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-37-surenb@google.com>
-Subject: [PATCH 36/40] lib: add memory allocations report in show_mem()
+Message-ID: <20230501165450.15352-39-surenb@google.com>
+Subject: [PATCH 38/40] codetag: debug: mark codetags for reserved pages as empty
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -88,140 +88,42 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Include allocations in show_mem reports.
+To avoid debug warnings while freeing reserved pages which were not
+allocated with usual allocators, mark their codetags as empty before
+freeing.
+Maybe we can annotate reserved pages correctly and avoid this?
 
-Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/alloc_tag.h |  2 ++
- lib/alloc_tag.c           | 48 +++++++++++++++++++++++++++++++++++----
- lib/show_mem.c            | 15 ++++++++++++
- 3 files changed, 60 insertions(+), 5 deletions(-)
+ include/linux/mm.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
-index 2a3d248aae10..190ab793f7e5 100644
---- a/include/linux/alloc_tag.h
-+++ b/include/linux/alloc_tag.h
-@@ -23,6 +23,8 @@ struct alloc_tag {
- 
- #ifdef CONFIG_MEM_ALLOC_PROFILING
- 
-+void alloc_tags_show_mem_report(struct seq_buf *s);
-+
- static inline struct alloc_tag *ctc_to_alloc_tag(struct codetag_with_ctx *ctc)
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 27ce77080c79..f5969cb85879 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -5,6 +5,7 @@
+ #include <linux/errno.h>
+ #include <linux/mmdebug.h>
+ #include <linux/gfp.h>
++#include <linux/pgalloc_tag.h>
+ #include <linux/bug.h>
+ #include <linux/list.h>
+ #include <linux/mmzone.h>
+@@ -2920,6 +2921,13 @@ extern void reserve_bootmem_region(phys_addr_t start, phys_addr_t end);
+ /* Free the reserved page into the buddy system, so it gets managed. */
+ static inline void free_reserved_page(struct page *page)
  {
- 	return container_of(ctc, struct alloc_tag, ctc);
-diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
-index 675c7a08e38b..e2ebab8999a9 100644
---- a/lib/alloc_tag.c
-+++ b/lib/alloc_tag.c
-@@ -13,6 +13,8 @@
- 
- #define STACK_BUF_SIZE 1024
- 
-+static struct codetag_type *alloc_tag_cttype;
++	union codetag_ref *ref;
 +
- DEFINE_STATIC_KEY_TRUE(mem_alloc_profiling_key);
- 
- /*
-@@ -133,6 +135,43 @@ static ssize_t allocations_file_read(struct file *file, char __user *ubuf,
- 	return err ? : buf.ret;
- }
- 
-+void alloc_tags_show_mem_report(struct seq_buf *s)
-+{
-+	struct codetag_iterator iter;
-+	struct codetag *ct;
-+	struct {
-+		struct codetag		*tag;
-+		size_t			bytes;
-+	} tags[10], n;
-+	unsigned int i, nr = 0;
-+
-+	codetag_init_iter(&iter, alloc_tag_cttype);
-+
-+	codetag_lock_module_list(alloc_tag_cttype, true);
-+	while ((ct = codetag_next_ct(&iter))) {
-+		n.tag	= ct;
-+		n.bytes = lazy_percpu_counter_read(&ct_to_alloc_tag(ct)->bytes_allocated);
-+
-+		for (i = 0; i < nr; i++)
-+			if (n.bytes > tags[i].bytes)
-+				break;
-+
-+		if (i < ARRAY_SIZE(tags)) {
-+			nr -= nr == ARRAY_SIZE(tags);
-+			memmove(&tags[i + 1],
-+				&tags[i],
-+				sizeof(tags[0]) * (nr - i));
-+			nr++;
-+			tags[i] = n;
-+		}
++	ref = get_page_tag_ref(page);
++	if (ref) {
++		set_codetag_empty(ref);
++		put_page_tag_ref(ref);
 +	}
-+
-+	for (i = 0; i < nr; i++)
-+		alloc_tag_to_text(s, tags[i].tag);
-+
-+	codetag_lock_module_list(alloc_tag_cttype, false);
-+}
-+
- static const struct file_operations allocations_file_ops = {
- 	.owner	= THIS_MODULE,
- 	.open	= allocations_file_open,
-@@ -409,7 +448,6 @@ EXPORT_SYMBOL(page_alloc_tagging_ops);
- 
- static int __init alloc_tag_init(void)
- {
--	struct codetag_type *cttype;
- 	const struct codetag_type_desc desc = {
- 		.section	= "alloc_tags",
- 		.tag_size	= sizeof(struct alloc_tag),
-@@ -417,10 +455,10 @@ static int __init alloc_tag_init(void)
- 		.free_ctx	= alloc_tag_ops_free_ctx,
- 	};
- 
--	cttype = codetag_register_type(&desc);
--	if (IS_ERR_OR_NULL(cttype))
--		return PTR_ERR(cttype);
-+	alloc_tag_cttype = codetag_register_type(&desc);
-+	if (IS_ERR_OR_NULL(alloc_tag_cttype))
-+		return PTR_ERR(alloc_tag_cttype);
- 
--	return dbgfs_init(cttype);
-+	return dbgfs_init(alloc_tag_cttype);
- }
- module_init(alloc_tag_init);
-diff --git a/lib/show_mem.c b/lib/show_mem.c
-index 1485c87be935..5c82f29168e3 100644
---- a/lib/show_mem.c
-+++ b/lib/show_mem.c
-@@ -7,6 +7,7 @@
- 
- #include <linux/mm.h>
- #include <linux/cma.h>
-+#include <linux/seq_buf.h>
- 
- void __show_mem(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
- {
-@@ -34,4 +35,18 @@ void __show_mem(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
- #ifdef CONFIG_MEMORY_FAILURE
- 	printk("%lu pages hwpoisoned\n", atomic_long_read(&num_poisoned_pages));
- #endif
-+#ifdef CONFIG_MEM_ALLOC_PROFILING
-+	{
-+		struct seq_buf s;
-+		char *buf = kmalloc(4096, GFP_ATOMIC);
-+
-+		if (buf) {
-+			printk("Memory allocations:\n");
-+			seq_buf_init(&s, buf, 4096);
-+			alloc_tags_show_mem_report(&s);
-+			printk("%s", buf);
-+			kfree(buf);
-+		}
-+	}
-+#endif
- }
+ 	ClearPageReserved(page);
+ 	init_page_count(page);
+ 	__free_page(page);
 -- 
 2.40.1.495.gc816e09b53d-goog
 
