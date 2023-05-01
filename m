@@ -2,58 +2,58 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ECB6C77B61
-	for <linux-modules@archiver.kernel.org>; Mon,  1 May 2023 16:58:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72ED2C77B7C
+	for <linux-modules@archiver.kernel.org>; Mon,  1 May 2023 16:58:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbjEAQ60 (ORCPT
+        id S232776AbjEAQ61 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 1 May 2023 12:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        Mon, 1 May 2023 12:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjEAQ5Z (ORCPT
+        with ESMTP id S232775AbjEAQ5Y (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 1 May 2023 12:57:25 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154742693
-        for <linux-modules@vger.kernel.org>; Mon,  1 May 2023 09:55:52 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-559de0d40b1so41611387b3.0
-        for <linux-modules@vger.kernel.org>; Mon, 01 May 2023 09:55:52 -0700 (PDT)
+        Mon, 1 May 2023 12:57:24 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F174210B
+        for <linux-modules@vger.kernel.org>; Mon,  1 May 2023 09:55:51 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-552f2f940edso53193617b3.0
+        for <linux-modules@vger.kernel.org>; Mon, 01 May 2023 09:55:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960151; x=1685552151;
+        d=google.com; s=20221208; t=1682960143; x=1685552143;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LeC1gX4P3RQjW1NYELsxA3PFCP+EdMyYyajg3MbW7ME=;
-        b=hhMiGEI+67cfIr24zB7jRNLa5lThUyRZeDPUTiHuwGakXI2KeF15k1Fm45C272zpQV
-         qXSafKQv0FF+5oEv4p+76TG6tqqAwOk8ME5PBGvQt4pav/Pg3OYN+Hq4oMgw3F6ZdSvk
-         RmJQnKNLzSXmDQCmLfbgpYZMfqGB21dxyyqy9AGFiAL7FUCD/QaAfwt7HNGi0uvHJu82
-         6NgN1S+GtTfGCTv2eTqAiK6fBQsiqTLf20nkiQTXY3Jq4fbsHdFYt1d0Idxgqw9T5cZH
-         WVbgLVG1ivKLyqdpAiO34AXCSDhpXsNhycXd99B9WHPgsZw1MFzj6S84fK28jMLqmH9m
-         yXMg==
+        bh=KlR34XlXux9ljlJXPX99aK4k/cmOetFB9Q46atx2T7Y=;
+        b=QWt5E67jzX3Q9n5FFMEQTPcgcYXDs3S4iywG6hR5j3a3JlBUkYCc4DtOpxxkkjLFnu
+         4D+SF9vM2W+aSyyk8kJjTG69VNYflbotzNlQqwEogeuQynY5M8r1b7VoJRcfxutnecbL
+         LuU9GuJRo0TkDfrLBSlYcY4SPMYXeI4QMPcJoAM+FNu7Tta0lyhA6wvriGeN5RlC9+S0
+         iffTz/pkSCC3kF9yyYctejaCym7L71sJ6nP1Y94qsXlQPHEO6LhbQR95ce2BCueglN+Q
+         qfFo6LHwZ424yz+z+s5ncB2VWclW4myqX2EcpXj3e8kJr6XkScT1PFtCKYGoTWUopffl
+         ivjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960151; x=1685552151;
+        d=1e100.net; s=20221208; t=1682960143; x=1685552143;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LeC1gX4P3RQjW1NYELsxA3PFCP+EdMyYyajg3MbW7ME=;
-        b=emmWPYyplTtpTvKp/29sEEk1ntcC3Qr6JLk7H3+p209GwgaWvMti5YRovEJkPcuc7d
-         jI2uWUFeMuCjLLSrsOXUdBUQQr4VLCS0FQV+CyncCp5+7F0xjrsvxSr1GPRyqyNyOQW2
-         mBzrk2FoQCeG4U3GrAW6D6KhCfWiAWYyiFWF2IXOrB5DCwmplyQDrx66GQ2L9y5KlBcJ
-         4KLXSHKGPPugiVL6gZPGbuUOzp8EtomJ3c0pATfMMcvJ2l5oiAZMZ1wSKHKDf8vyg0GZ
-         O4Wpv6yTTz+skuK4+qtLryQNx+09tLcX1kmDgfLBBmyH+57GY+wFAWeY8xJW088AS/q2
-         tPlQ==
-X-Gm-Message-State: AC+VfDz3twVMdorvyHG5EfLPgPobynrC7vPTcsRm5pg/8VBWe8MjPtIm
-        hFAcOjB5dpPiRcrdHMO6m5NSlISI22I=
-X-Google-Smtp-Source: ACHHUZ6D5LZLB8pLCoAY1h4u51zZbpSuAM6Xxjtp7fyAseeyuJw1iO6kg4WYdKeb69llNdIv4RH/p4cKKOU=
+        bh=KlR34XlXux9ljlJXPX99aK4k/cmOetFB9Q46atx2T7Y=;
+        b=jB3HgoflsWPn8EmfeJD3+9yVl1olagqaOtdJF60c8qNI3og11MKN1dRcVJdzNi5TyX
+         6odP+hLgWa9zndkLmDk4JPlSc4vFmpikwKWCq7bJ+D0iomRgJIT+Hf9R3yHLig5zIKTj
+         GI2QsvhLSCWKqmO8AckaT2mM4NB42TeVL+CTUa7jXgTQk2Ys0F1mEj6j3+PyijVxIZOK
+         22gqTPQrQTYKdYggs1scawI5t7im9yErP34jRmddwcTRH4+NkDdMA8G/a5Vde0pqRycl
+         1zXHeTcOdSfg0H4GZNUcPL2l/XTIjXxRRZMFAHGvLyAbvrc9zyBX6UyDXnVpIhT/lzqd
+         9iUw==
+X-Gm-Message-State: AC+VfDzzFjCruCj5fr5nAeEEe/tLXNQcbeUUD8kQCtMYbzQrI8EWVwKZ
+        876e/idOgurMJc/ZVVMa7DWCXNgAUA8=
+X-Google-Smtp-Source: ACHHUZ4HzBM+CNluGDUwOIwZDncQGZjVanEzUdQYw0pkU2rekMEn9D+HYHGjdxqKqeVKj47azkDUlaXgHqg=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a0d:ec4c:0:b0:55a:20a3:5ce3 with SMTP id
- r12-20020a0dec4c000000b0055a20a35ce3mr2799132ywn.3.1682960151497; Mon, 01 May
- 2023 09:55:51 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:29 -0700
+ (user=surenb job=sendgmr) by 2002:a81:b3c8:0:b0:559:e792:4e87 with SMTP id
+ r191-20020a81b3c8000000b00559e7924e87mr4661945ywh.7.1682960142770; Mon, 01
+ May 2023 09:55:42 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:25 -0700
 In-Reply-To: <20230501165450.15352-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230501165450.15352-1-surenb@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-20-surenb@google.com>
-Subject: [PATCH 19/40] change alloc_pages name in dma_map_ops to avoid name conflicts
+Message-ID: <20230501165450.15352-16-surenb@google.com>
+Subject: [PATCH 15/40] lib: prevent module unloading if memory is not freed
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -88,100 +88,168 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-After redefining alloc_pages, all uses of that name are being replaced.
-Change the conflicting names to prevent preprocessor from replacing them
-when it's not intended.
+Skip freeing module's data section if there are non-zero allocation tags
+because otherwise, once these allocations are freed, the access to their
+code tag would cause UAF.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- arch/x86/kernel/amd_gart_64.c | 2 +-
- drivers/iommu/dma-iommu.c     | 2 +-
- drivers/xen/grant-dma-ops.c   | 2 +-
- drivers/xen/swiotlb-xen.c     | 2 +-
- include/linux/dma-map-ops.h   | 2 +-
- kernel/dma/mapping.c          | 4 ++--
- 6 files changed, 7 insertions(+), 7 deletions(-)
+ include/linux/codetag.h |  6 +++---
+ kernel/module/main.c    | 23 +++++++++++++++--------
+ lib/codetag.c           | 11 ++++++++---
+ 3 files changed, 26 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_gart_64.c
-index 56a917df410d..842a0ec5eaa9 100644
---- a/arch/x86/kernel/amd_gart_64.c
-+++ b/arch/x86/kernel/amd_gart_64.c
-@@ -676,7 +676,7 @@ static const struct dma_map_ops gart_dma_ops = {
- 	.get_sgtable			= dma_common_get_sgtable,
- 	.dma_supported			= dma_direct_supported,
- 	.get_required_mask		= dma_direct_get_required_mask,
--	.alloc_pages			= dma_direct_alloc_pages,
-+	.alloc_pages_op			= dma_direct_alloc_pages,
- 	.free_pages			= dma_direct_free_pages,
+diff --git a/include/linux/codetag.h b/include/linux/codetag.h
+index 386733e89b31..d98e4c8e86f0 100644
+--- a/include/linux/codetag.h
++++ b/include/linux/codetag.h
+@@ -44,7 +44,7 @@ struct codetag_type_desc {
+ 	size_t tag_size;
+ 	void (*module_load)(struct codetag_type *cttype,
+ 			    struct codetag_module *cmod);
+-	void (*module_unload)(struct codetag_type *cttype,
++	bool (*module_unload)(struct codetag_type *cttype,
+ 			      struct codetag_module *cmod);
  };
  
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 7a9f0b0bddbd..76a9d5ca4eee 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -1556,7 +1556,7 @@ static const struct dma_map_ops iommu_dma_ops = {
- 	.flags			= DMA_F_PCI_P2PDMA_SUPPORTED,
- 	.alloc			= iommu_dma_alloc,
- 	.free			= iommu_dma_free,
--	.alloc_pages		= dma_common_alloc_pages,
-+	.alloc_pages_op		= dma_common_alloc_pages,
- 	.free_pages		= dma_common_free_pages,
- 	.alloc_noncontiguous	= iommu_dma_alloc_noncontiguous,
- 	.free_noncontiguous	= iommu_dma_free_noncontiguous,
-diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-index 9784a77fa3c9..6c7d984f164d 100644
---- a/drivers/xen/grant-dma-ops.c
-+++ b/drivers/xen/grant-dma-ops.c
-@@ -282,7 +282,7 @@ static int xen_grant_dma_supported(struct device *dev, u64 mask)
- static const struct dma_map_ops xen_grant_dma_ops = {
- 	.alloc = xen_grant_dma_alloc,
- 	.free = xen_grant_dma_free,
--	.alloc_pages = xen_grant_dma_alloc_pages,
-+	.alloc_pages_op = xen_grant_dma_alloc_pages,
- 	.free_pages = xen_grant_dma_free_pages,
- 	.mmap = dma_common_mmap,
- 	.get_sgtable = dma_common_get_sgtable,
-diff --git a/drivers/xen/swiotlb-xen.c b/drivers/xen/swiotlb-xen.c
-index 67aa74d20162..5ab2616153f0 100644
---- a/drivers/xen/swiotlb-xen.c
-+++ b/drivers/xen/swiotlb-xen.c
-@@ -403,6 +403,6 @@ const struct dma_map_ops xen_swiotlb_dma_ops = {
- 	.dma_supported = xen_swiotlb_dma_supported,
- 	.mmap = dma_common_mmap,
- 	.get_sgtable = dma_common_get_sgtable,
--	.alloc_pages = dma_common_alloc_pages,
-+	.alloc_pages_op = dma_common_alloc_pages,
- 	.free_pages = dma_common_free_pages,
- };
-diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-index 31f114f486c4..d741940dcb3b 100644
---- a/include/linux/dma-map-ops.h
-+++ b/include/linux/dma-map-ops.h
-@@ -27,7 +27,7 @@ struct dma_map_ops {
- 			unsigned long attrs);
- 	void (*free)(struct device *dev, size_t size, void *vaddr,
- 			dma_addr_t dma_handle, unsigned long attrs);
--	struct page *(*alloc_pages)(struct device *dev, size_t size,
-+	struct page *(*alloc_pages_op)(struct device *dev, size_t size,
- 			dma_addr_t *dma_handle, enum dma_data_direction dir,
- 			gfp_t gfp);
- 	void (*free_pages)(struct device *dev, size_t size, struct page *vaddr,
-diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-index 9a4db5cce600..fc42930af14b 100644
---- a/kernel/dma/mapping.c
-+++ b/kernel/dma/mapping.c
-@@ -570,9 +570,9 @@ static struct page *__dma_alloc_pages(struct device *dev, size_t size,
- 	size = PAGE_ALIGN(size);
- 	if (dma_alloc_direct(dev, ops))
- 		return dma_direct_alloc_pages(dev, size, dma_handle, dir, gfp);
--	if (!ops->alloc_pages)
-+	if (!ops->alloc_pages_op)
- 		return NULL;
--	return ops->alloc_pages(dev, size, dma_handle, dir, gfp);
-+	return ops->alloc_pages_op(dev, size, dma_handle, dir, gfp);
+@@ -74,10 +74,10 @@ codetag_register_type(const struct codetag_type_desc *desc);
+ 
+ #ifdef CONFIG_CODE_TAGGING
+ void codetag_load_module(struct module *mod);
+-void codetag_unload_module(struct module *mod);
++bool codetag_unload_module(struct module *mod);
+ #else
+ static inline void codetag_load_module(struct module *mod) {}
+-static inline void codetag_unload_module(struct module *mod) {}
++static inline bool codetag_unload_module(struct module *mod) { return true; }
+ #endif
+ 
+ #endif /* _LINUX_CODETAG_H */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 4232e7bff549..9ff56f2bb09d 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1218,15 +1218,19 @@ static void *module_memory_alloc(unsigned int size, enum mod_mem_type type)
+ 	return module_alloc(size);
  }
  
- struct page *dma_alloc_pages(struct device *dev, size_t size,
+-static void module_memory_free(void *ptr, enum mod_mem_type type)
++static void module_memory_free(void *ptr, enum mod_mem_type type,
++			       bool unload_codetags)
+ {
++	if (!unload_codetags && mod_mem_type_is_core_data(type))
++		return;
++
+ 	if (mod_mem_use_vmalloc(type))
+ 		vfree(ptr);
+ 	else
+ 		module_memfree(ptr);
+ }
+ 
+-static void free_mod_mem(struct module *mod)
++static void free_mod_mem(struct module *mod, bool unload_codetags)
+ {
+ 	for_each_mod_mem_type(type) {
+ 		struct module_memory *mod_mem = &mod->mem[type];
+@@ -1237,20 +1241,23 @@ static void free_mod_mem(struct module *mod)
+ 		/* Free lock-classes; relies on the preceding sync_rcu(). */
+ 		lockdep_free_key_range(mod_mem->base, mod_mem->size);
+ 		if (mod_mem->size)
+-			module_memory_free(mod_mem->base, type);
++			module_memory_free(mod_mem->base, type,
++					   unload_codetags);
+ 	}
+ 
+ 	/* MOD_DATA hosts mod, so free it at last */
+ 	lockdep_free_key_range(mod->mem[MOD_DATA].base, mod->mem[MOD_DATA].size);
+-	module_memory_free(mod->mem[MOD_DATA].base, MOD_DATA);
++	module_memory_free(mod->mem[MOD_DATA].base, MOD_DATA, unload_codetags);
+ }
+ 
+ /* Free a module, remove from lists, etc. */
+ static void free_module(struct module *mod)
+ {
++	bool unload_codetags;
++
+ 	trace_module_free(mod);
+ 
+-	codetag_unload_module(mod);
++	unload_codetags = codetag_unload_module(mod);
+ 	mod_sysfs_teardown(mod);
+ 
+ 	/*
+@@ -1292,7 +1299,7 @@ static void free_module(struct module *mod)
+ 	kfree(mod->args);
+ 	percpu_modfree(mod);
+ 
+-	free_mod_mem(mod);
++	free_mod_mem(mod, unload_codetags);
+ }
+ 
+ void *__symbol_get(const char *symbol)
+@@ -2294,7 +2301,7 @@ static int move_module(struct module *mod, struct load_info *info)
+ 	return 0;
+ out_enomem:
+ 	for (t--; t >= 0; t--)
+-		module_memory_free(mod->mem[t].base, t);
++		module_memory_free(mod->mem[t].base, t, true);
+ 	return ret;
+ }
+ 
+@@ -2424,7 +2431,7 @@ static void module_deallocate(struct module *mod, struct load_info *info)
+ 	percpu_modfree(mod);
+ 	module_arch_freeing_init(mod);
+ 
+-	free_mod_mem(mod);
++	free_mod_mem(mod, true);
+ }
+ 
+ int __weak module_finalize(const Elf_Ehdr *hdr,
+diff --git a/lib/codetag.c b/lib/codetag.c
+index 4ea57fb37346..0ad4ea66c769 100644
+--- a/lib/codetag.c
++++ b/lib/codetag.c
+@@ -5,6 +5,7 @@
+ #include <linux/module.h>
+ #include <linux/seq_buf.h>
+ #include <linux/slab.h>
++#include <linux/vmalloc.h>
+ 
+ struct codetag_type {
+ 	struct list_head link;
+@@ -219,12 +220,13 @@ void codetag_load_module(struct module *mod)
+ 	mutex_unlock(&codetag_lock);
+ }
+ 
+-void codetag_unload_module(struct module *mod)
++bool codetag_unload_module(struct module *mod)
+ {
+ 	struct codetag_type *cttype;
++	bool unload_ok = true;
+ 
+ 	if (!mod)
+-		return;
++		return true;
+ 
+ 	mutex_lock(&codetag_lock);
+ 	list_for_each_entry(cttype, &codetag_types, link) {
+@@ -241,7 +243,8 @@ void codetag_unload_module(struct module *mod)
+ 		}
+ 		if (found) {
+ 			if (cttype->desc.module_unload)
+-				cttype->desc.module_unload(cttype, cmod);
++				if (!cttype->desc.module_unload(cttype, cmod))
++					unload_ok = false;
+ 
+ 			cttype->count -= range_size(cttype, &cmod->range);
+ 			idr_remove(&cttype->mod_idr, mod_id);
+@@ -250,4 +253,6 @@ void codetag_unload_module(struct module *mod)
+ 		up_write(&cttype->mod_lock);
+ 	}
+ 	mutex_unlock(&codetag_lock);
++
++	return unload_ok;
+ }
 -- 
 2.40.1.495.gc816e09b53d-goog
 
