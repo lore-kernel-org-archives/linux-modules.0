@@ -2,65 +2,54 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD9B5C7EE21
-	for <linux-modules@archiver.kernel.org>; Tue,  2 May 2023 11:43:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E120AC77B73
+	for <linux-modules@archiver.kernel.org>; Tue,  2 May 2023 12:47:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbjEBLnM (ORCPT
+        id S234072AbjEBMrv (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 2 May 2023 07:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        Tue, 2 May 2023 08:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233618AbjEBLnL (ORCPT
+        with ESMTP id S229533AbjEBMrp (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 2 May 2023 07:43:11 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FBB2123;
-        Tue,  2 May 2023 04:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683027787;
-        bh=VIXlwaAodrWp8Vhxz+WDa3KoUpXUVVhKJac+yTw3JPY=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Jhl+sztrOwEDjtwmne5HQU6aXLKSFxkGsV+GqvMXCULQnVptmMOy46lcJn8TJD2nV
-         Cz4FiICRD0fpyV2EVDrJ/+oCA0F64UjfFbcIL0QFb5f/iutLKwDLAAC08nsVf2C0sW
-         PW2yXp5dIH6OPPlm4jB3q1u314n26v1FRt3YM0EM=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5D7531285DD9;
-        Tue,  2 May 2023 07:43:07 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id WKKGlZO_O65L; Tue,  2 May 2023 07:43:07 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683027787;
-        bh=VIXlwaAodrWp8Vhxz+WDa3KoUpXUVVhKJac+yTw3JPY=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Jhl+sztrOwEDjtwmne5HQU6aXLKSFxkGsV+GqvMXCULQnVptmMOy46lcJn8TJD2nV
-         Cz4FiICRD0fpyV2EVDrJ/+oCA0F64UjfFbcIL0QFb5f/iutLKwDLAAC08nsVf2C0sW
-         PW2yXp5dIH6OPPlm4jB3q1u314n26v1FRt3YM0EM=
-Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
+        Tue, 2 May 2023 08:47:45 -0400
+X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 May 2023 05:47:43 PDT
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E8F469D
+        for <linux-modules@vger.kernel.org>; Tue,  2 May 2023 05:47:43 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 32CE21285C64;
-        Tue,  2 May 2023 07:43:01 -0400 (EDT)
-Message-ID: <2f5ebe8a9ce8471906a85ef092c1e50cfd7ddecd.camel@HansenPartnership.com>
-Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
- string_get_size's output
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 2CF8014D08D;
+        Tue,  2 May 2023 14:37:38 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1683031059; bh=Qr2tHIsVv3G7WfyCHA01MAqL8W2MA7ATI0zo3p6+vZU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IfEosdQDdG0KdbWIE2Mw4kYzXULwRWeCrunMA9KeSj7bgHgVvejlazncQaRUsj4mk
+         cPzKmfMyWBF/pneu0+Wz1Tc79OAteXzmBVIF+laGLG7fMedy5/+rKBRUG4JXa0brek
+         j/mHCba0NDf+g5QrNCJ9oA++o7fZWNj5XJR8Ww/uOsU1/r1cRL+Ym3szeVpEkot+SQ
+         CPmLY5/NwlfZlklEXZtJMyzmEttSqfpVGGYiYbY1oZJU5at7AavuZZVsxFPid36vj1
+         A5riKtEpBa2mW2yWvT3lFoq/3exjrCXn7nmPFY3STEqu5coB+Uro028za0ObQL3JYi
+         4+VPt2d2SqCBg==
+Date:   Tue, 2 May 2023 14:37:37 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
         ndesaulniers@google.com, gregkh@linuxfoundation.org,
         ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
@@ -73,83 +62,57 @@ Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
         linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Noralf =?ISO-8859-1?Q?Tr=EF=BF=BDnnes?= <noralf@tronnes.org>
-Date:   Tue, 02 May 2023 07:42:59 -0400
-In-Reply-To: <ZFCA2FF+9MI8LI5i@moria.home.lan>
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH 06/40] lib/string.c: strsep_no_empty()
+Message-ID: <20230502143737.1e11f1ac@meshulam.tesarici.cz>
+In-Reply-To: <20230501165450.15352-7-surenb@google.com>
 References: <20230501165450.15352-1-surenb@google.com>
-         <20230501165450.15352-2-surenb@google.com>
-         <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
-         <ZFAUj+Q+hP7cWs4w@moria.home.lan>
-         <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
-         <ZFCA2FF+9MI8LI5i@moria.home.lan>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        <20230501165450.15352-7-surenb@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, 2023-05-01 at 23:17 -0400, Kent Overstreet wrote:
-> On Mon, May 01, 2023 at 10:22:18PM -0400, James Bottomley wrote:
-> > It is not used just for debug.  It's used all over the kernel for
-> > printing out device sizes.  The output mostly goes to the kernel
-> > print buffer, so it's anyone's guess as to what, if any, tools are
-> > parsing it, but the concern about breaking log parsers seems to be
-> > a valid one.
+On Mon,  1 May 2023 09:54:16 -0700
+Suren Baghdasaryan <surenb@google.com> wrote:
+
+> From: Kent Overstreet <kent.overstreet@linux.dev>
 > 
-> Ok, there is sd_print_capacity() - but who in their right mind would
-> be trying to scrape device sizes, in human readable units,
-
-If you bother to google "kernel log parser", you'll discover it's quite
-an active area which supports a load of company business models.
-
->  from log messages when it's available in sysfs/procfs (actually, is
-> it in sysfs? if not, that's an oversight) in more reasonable units?
-
-It's not in sysfs, no.  As aren't a lot of things, which is why log
-parsing for system monitoring is big business.
-
-> Correct me if I'm wrong, but I've yet to hear about kernel log
-> messages being consider a stable interface, and this seems a bit out
-> there.
-
-It might not be listed as stable, but when it's known there's a large
-ecosystem out there consuming it we shouldn't break it just because you
-feel like it.  You should have a good reason and the break should be
-unavoidable.  I wanted my output in a particular form so I thought I'd
-change everyone else's output as well isn't a good reason and it only
-costs a couple of lines to avoid.
-
-> But, you did write the code :)
+> This adds a new helper which is like strsep, except that it skips empty
+> tokens.
 > 
-> > > If someone raises a specific objection we'll do something
-> > > different, otherwise I think standardizing on what userspace
-> > > tooling already parses is a good idea.
-> > 
-> > If you want to omit the space, why not simply add your own
-> > variant?  A string_get_size_nospace() which would use most of the
-> > body of this one as a helper function but give its own snprintf
-> > format string at the end.  It's only a couple of lines longer as a
-> > patch and has the bonus that it definitely wouldn't break anything
-> > by altering an existing output.
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  include/linux/string.h |  1 +
+>  lib/string.c           | 19 +++++++++++++++++++
+>  2 files changed, 20 insertions(+)
 > 
-> I'm happy to do that - I just wanted to post this version first to
-> see if we can avoid the fragmentation and do a bit of standardizing
-> with how everything else seems to do that.
+> diff --git a/include/linux/string.h b/include/linux/string.h
+> index c062c581a98b..6cd5451c262c 100644
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -96,6 +96,7 @@ extern char * strpbrk(const char *,const char *);
+>  #ifndef __HAVE_ARCH_STRSEP
+>  extern char * strsep(char **,const char *);
+>  #endif
+> +extern char *strsep_no_empty(char **, const char *);
+>  #ifndef __HAVE_ARCH_STRSPN
+>  extern __kernel_size_t strspn(const char *,const char *);
+>  #endif
+> diff --git a/lib/string.c b/lib/string.c
+> index 3d55ef890106..dd4914baf45a 100644
+> --- a/lib/string.c
+> +++ b/lib/string.c
+> @@ -520,6 +520,25 @@ char *strsep(char **s, const char *ct)
+>  EXPORT_SYMBOL(strsep);
+>  #endif
+>  
+> +/**
+> + * strsep_no_empt - Split a string into tokens, but don't return empty tokens
+                ^^^^
+Typo: strsep_no_empty
 
-What fragmentation?  To do this properly you move the whole of the
-current function to a helper which takes a format sting, say with a
-double underscore prefix, then the existing function and what you want
-become one line additions calling the helper with their specific format
-string.  There's no fragmentation of the base function at all.
-
-James
-
-
+Petr T
