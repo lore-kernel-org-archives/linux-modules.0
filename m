@@ -2,67 +2,60 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9D24C7EE21
-	for <linux-modules@archiver.kernel.org>; Wed,  3 May 2023 20:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AF0DC77B75
+	for <linux-modules@archiver.kernel.org>; Wed,  3 May 2023 20:12:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjECUIz (ORCPT
+        id S230055AbjECUMY (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 3 May 2023 16:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
+        Wed, 3 May 2023 16:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjECUIz (ORCPT
+        with ESMTP id S230050AbjECUMU (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 3 May 2023 16:08:55 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836FB5FDF
-        for <linux-modules@vger.kernel.org>; Wed,  3 May 2023 13:08:53 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so5395636276.1
-        for <linux-modules@vger.kernel.org>; Wed, 03 May 2023 13:08:53 -0700 (PDT)
+        Wed, 3 May 2023 16:12:20 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C1E9005
+        for <linux-modules@vger.kernel.org>; Wed,  3 May 2023 13:11:54 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3ef33f12995so27690221cf.3
+        for <linux-modules@vger.kernel.org>; Wed, 03 May 2023 13:11:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683144532; x=1685736532;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uaEl0+ttAfDVYkQkgOF9inVIlQxPo4MAHa3r5TcHPqs=;
-        b=ZBFmhNUtx4spDPZ2Tc+ao7Umap1oUxGgS6L35zoiaIlLMa3sbvfe1yyzPgLcae3Fty
-         gA+quo34T7AKstKRwlQ7/Ft2WrnkU+rEhs/+hqpbEUBx2dmlPORy4QLjme1jFVo6xrFm
-         5ILD7V5NtcxuXC6YpDb35KI9Z72miAAGUfujh1KI5hzn6IQVZLP/6kKOSaDUuTufQ8Ku
-         q+1OYE8Cg6APTP1NiSWm7QBLpXw9UsuF2OAhdSzB2PChvOsgj7ZoUWNOcF4i8/Nlqo2k
-         4O1C3AV8COhnBUUJ7YqqIWrgXPcexM0yzg0bdV03LGdXCG1g+DB8aKT153Xkp0dZ7AtK
-         Zo3g==
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1683144713; x=1685736713;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6aQuySOZ5f1xPp5M/IH7FdCb3YCBcIXK77oTLJoa1To=;
+        b=B77wj2uaBiAWD8idxLhj65ewWhJv33njFprJjaUykYSV+6Yt7L5dCUa5lIV4RnTCul
+         77+cSySse1ya6C7PyiB0e9SPkdj1lshr0RenyoypDVR8ikg/OEorh8RVaMkmDyZXhpHv
+         oV4cTXFAC8UYttofZrb1JTodalX4rrORDCcsv+1Jx7UbO7bLKPm1QGHzfh1gWH9APa83
+         /Rf/B+R6oZeNNgEfgORGaxElO0hO+QyuC06nrse5RwbHwLMFubuPNkiSJbC3/nSMBWBu
+         ZZk1an8YPsQoRYqubaG4Ci1ht8gXo9iEZqN3Zi7lvLJvcUkK5IQDe48usFI3QGu+5mjm
+         PenQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683144532; x=1685736532;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uaEl0+ttAfDVYkQkgOF9inVIlQxPo4MAHa3r5TcHPqs=;
-        b=Ma9byXUMPpF0jsRIaNHKs8zyBqdH+1JIvJCq5xn1e4FwggsZ46VBfZgQQwhwqS96K8
-         RmB+VqIcdwYsnjpYFGnVXMqp53xDGURJN6vtLcWcHo0MsMicPSXYnpwQiOff7nGyDQbj
-         Gp4vwkbuSwhd07kXyLVI4uRP30uKQzyeEAh161zd1qpN8j2AtEMxRZPuil+eOSst5DaZ
-         +a158bYnPQbgWE3CQTLcZdeDK7k5YFH+hE4RozxKKOEkQrsHBP6i9D8d1QP6MxWGnSuj
-         2mMKKkKyTyp5GSoqDx1gItM08j3xx9jNFEBuXgieidCv3qSKbpKddqc4JNBurdyOiLGJ
-         70cA==
-X-Gm-Message-State: AC+VfDxH7ytqwq2ZWMb5uzf1v3pelDiTk92oETu/GYE0uTlp0QIUIUly
-        J9FrwGezF+VTQ03ZkVBbBzKZsW1ew7/NQ3Q4pGn3FQ==
-X-Google-Smtp-Source: ACHHUZ5Zgn5KmLsK0xUXMtQ1V3cIfppdzeEQFI0bWMD7MbEWCqGn353J4Os9Iuap9y2I3NsIHQCGkXzmHh1rNAt3fns=
-X-Received: by 2002:a25:3450:0:b0:b9d:9f6e:f1d5 with SMTP id
- b77-20020a253450000000b00b9d9f6ef1d5mr3049024yba.16.1683144532379; Wed, 03
- May 2023 13:08:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <ZFISlX+mSx4QJDK6@dhcp22.suse.cz> <ZFIVtB8JyKk0ddA5@moria.home.lan>
- <ZFKNZZwC8EUbOLMv@slm.duckdns.org> <20230503180726.GA196054@cmpxchg.org>
- <ZFKlrP7nLn93iIRf@slm.duckdns.org> <ZFKqh5Dh93UULdse@slm.duckdns.org>
- <ZFKubD/lq7oB4svV@moria.home.lan> <ZFKu6zWA00AzArMF@slm.duckdns.org>
- <ZFKxcfqkUQ60zBB_@slm.duckdns.org> <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
- <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
-In-Reply-To: <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 13:08:40 -0700
-Message-ID: <CAJuCfpG4TmRpT5iU7bJmKcjW2Tghstdo1b=qEG=tDsmtJQYuWA@mail.gmail.com>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
+        d=1e100.net; s=20221208; t=1683144713; x=1685736713;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6aQuySOZ5f1xPp5M/IH7FdCb3YCBcIXK77oTLJoa1To=;
+        b=XCd13NBUbeapVVSD8p65wS+thfIwH3OLRI/4j4kUIV4e2xRhOwmisygSftDo8UvOYE
+         f5yISVydbxPijp94r0Osk/62/PtTHanQvje2w6MxHkAgZqEBZUvXjvasDM+Yj9qbrjAs
+         HHJctf6qdLZsESq4Sy6gdVDQrXMa4eAzGVHTzM19VxrHQvBpMc2TN6P3RhVWQqqsNdiL
+         XMo7Jc1RlMTHhUOmqONAVAnR5lyrt+o8c8eNZsv7iHDu5/qaEqZvFNQlXjDZi0iJWUR0
+         /5FDmu+nPkAzBzYhr6XwAFtoTooJ4f5+lY7OnA80eKPPSp+YIeOK467nY0bgD5GP4oRq
+         f2tw==
+X-Gm-Message-State: AC+VfDyToRg26+dxflFw0iF5SdehM+m4HXdBHDvNIWE/Uh/q4uVK0oGS
+        PugCGOVcISY0ZlELnQjkd1L11A==
+X-Google-Smtp-Source: ACHHUZ5CnnpIpmUeZ/FYpffmDL5OkaJstg4Fl9o3UD/YbGdgvGCcQtxmC6WZwKNTGrttYwJeKB4QiQ==
+X-Received: by 2002:ac8:5e0d:0:b0:3e6:9716:ba58 with SMTP id h13-20020ac85e0d000000b003e69716ba58mr2436956qtx.26.1683144712859;
+        Wed, 03 May 2023 13:11:52 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id ed27-20020a05620a491b00b0074e2da97de4sm10761665qkb.33.2023.05.03.13.11.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 13:11:52 -0700 (PDT)
+Date:   Wed, 3 May 2023 16:11:50 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Tejun Heo <tj@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
         Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
         vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
         dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
@@ -91,107 +84,32 @@ Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <20230503201150.GB197627@cmpxchg.org>
+References: <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
+ <20230503180726.GA196054@cmpxchg.org>
+ <ZFKlrP7nLn93iIRf@slm.duckdns.org>
+ <ZFKqh5Dh93UULdse@slm.duckdns.org>
+ <ZFKubD/lq7oB4svV@moria.home.lan>
+ <ZFKu6zWA00AzArMF@slm.duckdns.org>
+ <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+ <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
+ <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
+ <CAJuCfpG4TmRpT5iU7bJmKcjW2Tghstdo1b=qEG=tDsmtJQYuWA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpG4TmRpT5iU7bJmKcjW2Tghstdo1b=qEG=tDsmtJQYuWA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 3, 2023 at 12:49=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Wed, May 03, 2023 at 12:41:08PM -0700, Suren Baghdasaryan wrote:
-> > On Wed, May 3, 2023 at 12:09=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote=
-:
-> > >
-> > > On Wed, May 03, 2023 at 08:58:51AM -1000, Tejun Heo wrote:
-> > > > On Wed, May 03, 2023 at 02:56:44PM -0400, Kent Overstreet wrote:
-> > > > > On Wed, May 03, 2023 at 08:40:07AM -1000, Tejun Heo wrote:
-> > > > > > > Yeah, easy / default visibility argument does make sense to m=
-e.
-> > > > > >
-> > > > > > So, a bit of addition here. If this is the thrust, the debugfs =
-part seems
-> > > > > > rather redundant, right? That's trivially obtainable with traci=
-ng / bpf and
-> > > > > > in a more flexible and performant manner. Also, are we happy wi=
-th recording
-> > > > > > just single depth for persistent tracking?
-> >
-> > IIUC, by single depth you mean no call stack capturing?
->
-> Yes.
->
-> > If so, that's the idea behind the context capture feature so that we
-> > can enable it on specific allocations only after we determine there is
-> > something interesting there. So, with low-cost persistent tracking we
-> > can determine the suspects and then pay some more to investigate those
-> > suspects in more detail.
->
-> Yeah, I was wondering whether it'd be useful to have that configurable so
-> that it'd be possible for a user to say "I'm okay with the cost, please
-> track more context per allocation".
+On Wed, May 03, 2023 at 01:08:40PM -0700, Suren Baghdasaryan wrote:
+> On Wed, May 3, 2023 at 12:49 PM Tejun Heo <tj@kernel.org> wrote:
+> > * Improving memory allocation visibility makes sense to me. To me, a more
+> >   natural place for that feels like /proc/allocations next to other memory
+> >   info files rather than under debugfs.
+> 
+> TBH I would love that if this approach is acceptable.
 
-I assume by "more context per allocation" you mean for a specific
-allocation, not for all allocations.
-So, in a sense you are asking if the context capture feature can be
-dropped from this series and implemented using some other means. Is
-that right?
-
-> Given that tracking the immediate caller
-> is already a huge improvement and narrowing it down from there using
-> existing tools shouldn't be that difficult, I don't think this is a block=
-er
-> in any way. It just bothers me a bit that the code is structured so that
-> source line is the main abstraction.
->
-> > > > > Not sure what you're envisioning?
-> > > > >
-> > > > > I'd consider the debugfs interface pretty integral; it's much mor=
-e
-> > > > > discoverable for users, and it's hardly any code out of the whole
-> > > > > patchset.
-> > > >
-> > > > You can do the same thing with a bpftrace one liner tho. That's rat=
-her
-> > > > difficult to beat.
-> >
-> > debugfs seemed like a natural choice for such information. If another
-> > interface is more appropriate I'm happy to explore that.
-> >
-> > >
-> > > Ah, shit, I'm an idiot. Sorry. I thought allocations was under /proc =
-and
-> > > allocations.ctx under debugfs. I meant allocations.ctx is redundant.
-> >
-> > Do you mean that we could display allocation context in
-> > debugfs/allocations file (for the allocations which we explicitly
-> > enabled context capturing)?
->
-> Sorry about the fumbled communication. Here's what I mean:
->
-> * Improving memory allocation visibility makes sense to me. To me, a more
->   natural place for that feels like /proc/allocations next to other memor=
-y
->   info files rather than under debugfs.
-
-TBH I would love that if this approach is acceptable.
-
->
-> * The default visibility provided by "allocations" provides something whi=
-ch
->   is more difficult or at least cumbersome to obtain using existing traci=
-ng
->   tools. However, what's provided by "allocations.ctx" can be trivially
->   obtained using kprobe and BPF and seems redundant.
-
-Hmm. That might be a good way forward. Since context capture has
-already high performance overhead, maybe choosing not the most
-performant but more generic solution is the right answer here. I'll
-need to think about it some more but thanks for the idea!
-
->
-> Thanks.
->
-> --
-> tejun
+Ack
