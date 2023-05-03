@@ -2,111 +2,182 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 244C1C7EE2C
-	for <linux-modules@archiver.kernel.org>; Wed,  3 May 2023 02:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DBC5C77B7F
+	for <linux-modules@archiver.kernel.org>; Wed,  3 May 2023 03:19:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjECCHv (ORCPT
+        id S229464AbjECDTs (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 2 May 2023 22:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        Tue, 2 May 2023 23:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjECCHt (ORCPT
+        with ESMTP id S229441AbjECDTr (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 2 May 2023 22:07:49 -0400
-Received: from out-57.mta1.migadu.com (out-57.mta1.migadu.com [IPv6:2001:41d0:203:375::39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB183A84
-        for <linux-modules@vger.kernel.org>; Tue,  2 May 2023 19:07:38 -0700 (PDT)
-Date:   Tue, 2 May 2023 22:07:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683079654;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cpRynykubcluzGzuthbmrNkuNIeg8BzMwNks1+1YuhA=;
-        b=v2LisaB7EAiYUc1+uIQeLvUn9sUnaliIsnvchC6IYmBRNpj565Pcae8UgINnbfoPSrDzf1
-        dhyCKwDr9an9QOzJ3GvxlEwxpH2prnH3+mWfvk7cXKMy3v56CXygiL+SUSayiuSFsOEU6I
-        BkOshCOA3yKQ/GtZDDIOPbmb5F9macw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Noralf =?utf-8?B?VHLDr8K/wr1ubmVz?= <noralf@tronnes.org>
-Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
- string_get_size's output
-Message-ID: <ZFHB2ATrPIsjObm/@moria.home.lan>
-References: <20230501165450.15352-1-surenb@google.com>
- <20230501165450.15352-2-surenb@google.com>
- <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
- <ZFAUj+Q+hP7cWs4w@moria.home.lan>
- <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
- <ZFCA2FF+9MI8LI5i@moria.home.lan>
- <CAHp75VdK2bgU8P+-np7ScVWTEpLrz+muG-R15SXm=ETXnjaiZg@mail.gmail.com>
- <ZFCsAZFMhPWIQIpk@moria.home.lan>
- <CAHp75VdvRshCthpFOjtmajVgCS_8YoJBGbLVukPwU+t79Jgmww@mail.gmail.com>
+        Tue, 2 May 2023 23:19:47 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEC7AD;
+        Tue,  2 May 2023 20:19:45 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso1099069a12.3;
+        Tue, 02 May 2023 20:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683083984; x=1685675984;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OvdbKE2Dtsq8U1gEyTyqa6w0OBoKW/W9/QwTfH31tG8=;
+        b=lR1n8LVn7cbEUHS0RkbnFkMML7LFiYXr+rd0ZDQ4CF++Z2ENHMMnSazaD7yIky39/y
+         gGdltxDz2oecFDPSOS84N8vqQM4jHO8FIdGWvvRPr071t4tnbegSPl98LpAY4eERWY0+
+         TsHPMdCH2LFJItSc/LsuFGxhr33Jwb9bU3RFQZDD7m1ACJCIzOdUjMrC6bhkBC0FeGl3
+         C/YeLk+6Lp/IhN0jgBcDgbEpSM0FKQJfjwI8bcDF/o775NhOjNUIkFJi+QlUekEH6tIB
+         ip316TjsBUicdIpx8z7f5jjj49i95Mp02WWu9hg/CR6LDpgH0FdBLzRVzNFpcnGTTU55
+         8Kbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683083984; x=1685675984;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OvdbKE2Dtsq8U1gEyTyqa6w0OBoKW/W9/QwTfH31tG8=;
+        b=XMp8a0bFr4RCYw1b790nastBC/m27XoN3mvnTmK5OhwoFcUw8oF8F89I3wW8ZbHDkp
+         059n/ekcE9vCXpox2ugPOgvZaKsAyShhCBB9dt+qG+dlj1f5mR7r6TGUyY4SXUS4OxHj
+         DqmuhG+EIlyKgmtMBginnisxgZrvHsNQIHDUXFl3dXKQpt7KsnodSXFFy5cdD2UqNtqI
+         wfw8+PgOsHMxvFQxOtRALqB6Lp24H4SsDlwzP0pJkev5R2nYqcLEL0fRQiwg2B4jHU9g
+         M3KnS40b3d65udEpjki0qjg5ZrnE++1SSOzxWthPDoUr7g3jl4F2FpOQv5zaKmS8+zX5
+         WpSQ==
+X-Gm-Message-State: AC+VfDw8YptkQTLtKOg7QKqLUAW+8MspTUYkXR2ukoHJiKWjWhqUn+82
+        Zoest6CMWU8hDm6u4lzC40uAza1L9MxPPoITeio=
+X-Google-Smtp-Source: ACHHUZ5lJAQu0znDrqojW97LLqgoHhayF3QoCCbg3NBoJzKPAqZCsZxuNLNiVUPisbgVkXRc0R9b4NytCHdTwy4CQIs=
+X-Received: by 2002:a17:907:7b8f:b0:965:5d54:496d with SMTP id
+ ne15-20020a1709077b8f00b009655d54496dmr762960ejc.45.1683083983880; Tue, 02
+ May 2023 20:19:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VdvRshCthpFOjtmajVgCS_8YoJBGbLVukPwU+t79Jgmww@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+References: <20230419043652.1773413-1-airlied@gmail.com> <ck2dzxvllhhh74oa3vjlacutc7rdmgl7cfrfq7vgx4w3jcufrz@7jbgxcat42yn>
+ <CAPM=9tw0Y2A4DvuTHT_yd58Eit+tUmo63pbEOHwRJ66LeqznEQ@mail.gmail.com>
+ <fsleccud43leoioli6bj4xoydwbdcjb5qr4denuf6morhgtqki@t6xya2mygon5>
+ <ZEcJNcz+ArLfUSJ1@bombadil.infradead.org> <n6gwizwt26ucpuva2kt35rprth6iqeibi3inq2qrn5qhs3aa3b@4hjbhgnskutq>
+In-Reply-To: <n6gwizwt26ucpuva2kt35rprth6iqeibi3inq2qrn5qhs3aa3b@4hjbhgnskutq>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Wed, 3 May 2023 13:19:31 +1000
+Message-ID: <CAPM=9txLf2NbuZSM5CLYT4wA5mbQ=+ssm9tdzh6JJ=gtEBeqAA@mail.gmail.com>
+Subject: Re: [PATCH] modules/firmware: add a new option to denote a firmware
+ group to choose one.
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Dave Airlie <airlied@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, May 02, 2023 at 06:19:27PM +0300, Andy Shevchenko wrote:
-> On Tue, May 2, 2023 at 9:22 AM Kent Overstreet
-> <kent.overstreet@linux.dev> wrote:
-> > On Tue, May 02, 2023 at 08:33:57AM +0300, Andy Shevchenko wrote:
-> > > Actually instead of producing zillions of variants, do a %p extension
-> > > to the printf() and that's it. We have, for example, %pt with T and
-> > > with space to follow users that want one or the other variant. Same
-> > > can be done with string_get_size().
+>
 > >
-> > God no.
-> 
-> Any elaboration what's wrong with that?
+> >> > the GROUP until after the FIRMWARE, so this can't work, as it already
+> >> > will have included all the ones below, hence why I bracketed top and
+> >> > bottom with a group.
+> >>
+> >> well... that is something that can be adapted easily by using a 2 pass
+> >> approach, filtering out the list based on the groups.
+> >>
+> >> I agree that yours is simpler though.  If we can rely on the
+> >> order produced by the compiler and we document the expectations of
+> >> MODULE_FIRMWARE_GROUP_ONLY_ONE, then I believe we can stay with the
+> >> simpler approach.
+> >>
+> >> Luis, any thoughts here?
+> >
+> >I see the Dracut code indicates that the order says now that you should
+> >put the preferred firmware last, and that seems to match most coding
+> >conventions, ie, new firmwares likely get added last, so it's a nice
+>
+> not all. i915 for example keeps it newest first so when attempting
+> multiple firmware versions it starts from the preferred version.  It
+> will be harder to convert since it also uses a x-macro to make sure the
+> MODULE_FIRMWARE() and the the platform mapping are actually using the same
+> firmware.
+>
+> >coincidence. Will this always work? I don't know. But if you like to
+>
+> short answer: it depends if your compiler is gcc *and* -O2 is used
+> Longer debug ahead. Simple test with the expansion of MODULE_FIRMWARE
+> baked in:
+>
+>         $ cat /tmp/a.c
+>         static const __attribute__((section("__modinfo_manual"), used, aligned(1))) char foo[] = "modinfo_manual_foo";
+>         static const __attribute__((section("__modinfo_manual"), used, aligned(1))) char bar[] = "modinfo_manual_bar";
+>         $ gcc -c -o /tmp/a.o /tmp/a.c
+>         $ objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual
+>         $ strings /tmp/modinfo_manual
+>         modinfo_manual_foo
+>         modinfo_manual_bar
+>
+> However that doesn't match when building modules. In kmod:
+>
+> diff --git a/testsuite/module-playground/mod-simple.c b/testsuite/module-playground/mod-simple.c
+> index 503e4d8..6dd5771 100644
+> --- a/testsuite/module-playground/mod-simple.c
+> +++ b/testsuite/module-playground/mod-simple.c
+> @@ -30,3 +30,9 @@ module_exit(test_module_exit);
+>
+>   MODULE_AUTHOR("Lucas De Marchi <lucas.demarchi@intel.com>");
+>   MODULE_LICENSE("GPL");
+> +
+> +
+> +static const char __UNIQUE_ID_firmware404[] __attribute__((__used__)) __attribute__((__section__("__modinfo_cpp"))) __attribute__((__aligned__(1))) = "modinfo_cpp_foo";
+> +static const char __UNIQUE_ID_firmware405[] __attribute__((__used__)) __attribute__((__section__("__modinfo_cpp"))) __attribute__((__aligned__(1))) = "modinfo_cpp_bar";
+>
+>         $ make ....
+>         $ objcopy -O binary --only-section=__modinfo_cpp testsuite/module-playground/mod-simple.ko /tmp/modinfo_cpp
+>         $ strings /tmp/modinfo_cpp
+>         modinfo_cpp_bar
+>         modinfo_cpp_foo
+>
+> It doesn't seem to be ./scripts/Makefile.modfinal neither as it's also
+> inverted in testsuite/module-playground/mod-simple.o
+>
+> After checking the options passed to gcc, here is the "culprit": -O2
+>
+>         $ gcc -c -o /tmp/a.o /tmp/a.c && objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual && strings /tmp/modinfo_manual
+>         modinfo_manual_foo
+>         modinfo_manual_bar
+>         $ gcc -O2 -c -o /tmp/a.o /tmp/a.c && objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual && strings /tmp/modinfo_manual
+>         modinfo_manual_bar
+>         modinfo_manual_foo
+>
+> It seems anything but -O0 inverts the section.
+>
+>         $ gcc --version
+>         gcc (GCC) 12.2.1 20230201
+>
+> It doesn't match the behavior described in its man page though. Manually
+> specifying all the options that -O1 turns on doesn't invert it.
+>
+>         $ gcc -fauto-inc-dec -fbranch-count-reg -fcombine-stack-adjustments \
+>                 -fcompare-elim -fcprop-registers -fdce -fdefer-pop -fdelayed-branch
+>                 -fdse -fforward-propagate -fguess-branch-probability -fif-conversion \
+>                 -fif-conversion2 -finline-functions-called-once -fipa-modref \
+>                 -fipa-profile -fipa-pure-const -fipa-reference -fipa-reference-addressable \
+>                 -fmerge-constants -fmove-loop-stores -fomit-frame-pointer -freorder-blocks \
+>                 -fshrink-wrap -fshrink-wrap-separate -fsplit-wide-types -fssa-backprop \
+>                 -fssa-phiopt -ftree-bit-ccp -ftree-ccp -ftree-ch -ftree-coalesce-vars \
+>                 -ftree-copy-prop -ftree-dce -ftree-dominator-opts -ftree-dse -ftree-forwprop \
+>                 -ftree-fre -ftree-phiprop -ftree-pta -ftree-scev-cprop -ftree-sink -ftree-slsr \
+>                 -ftree-sra -ftree-ter -funit-at-a-time -c -o /tmp/a.o /tmp/a.c \
+>                 && objcopy -O binary --only-section=__modinfo_manual /tmp/a.o /tmp/modinfo_manual && strings /tmp/modinfo_manual
+>         cc1: warning: this target machine does not have delayed branches
+>         modinfo_manual_foo
+>         modinfo_manual_bar
+>
 
-I'm really not a fan of %p extensions in general (they are what people
-reach for because we can't standardize on a common string output API),
-but when we'd be passing it bare integers the lack of type safety would
-be a particularly big footgun.
+Thanks Lucas,
 
-> God no for zillion APIs for almost the same. Today you want space,
-> tomorrow some other (special) delimiter.
+-ftoplevel-reorder is the one that does it, now that does mean how
+I've done it isn't going to be robust.
 
-No, I just want to delete the space and output numbers the same way
-everyone else does. And if we are stuck with two string_get_size()
-functions, %p extensions in no way improve the situation.
+I will reconsider but in order to keep backwards compat, it might be
+easier to add firmware groups as an explicit list, but also spit out
+the individual names, but not sure how clean this will end up on
+dracut side.
+
+I'll take a look at the other options, but it does seem like reworking
+dracut is going to be the harder end of this, esp if I still want to
+keep compat with older ones.
+
+Dave.
