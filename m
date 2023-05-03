@@ -2,60 +2,60 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DFC8C77B75
-	for <linux-modules@archiver.kernel.org>; Wed,  3 May 2023 15:19:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1734C77B78
+	for <linux-modules@archiver.kernel.org>; Wed,  3 May 2023 15:24:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjECPS7 (ORCPT
+        id S230313AbjECPYf (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 3 May 2023 11:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
+        Wed, 3 May 2023 11:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjECPSy (ORCPT
+        with ESMTP id S230297AbjECPYe (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 3 May 2023 11:18:54 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C6C6E85
-        for <linux-modules@vger.kernel.org>; Wed,  3 May 2023 08:18:53 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-55a5a830238so34332997b3.3
-        for <linux-modules@vger.kernel.org>; Wed, 03 May 2023 08:18:53 -0700 (PDT)
+        Wed, 3 May 2023 11:24:34 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D18159F0
+        for <linux-modules@vger.kernel.org>; Wed,  3 May 2023 08:24:32 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-55b7630a736so16342347b3.1
+        for <linux-modules@vger.kernel.org>; Wed, 03 May 2023 08:24:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683127132; x=1685719132;
+        d=google.com; s=20221208; t=1683127471; x=1685719471;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i4wxKwRBUKexs/Rpj6bBCWyCDPYyPPHlLlNupBtzYaw=;
-        b=uY9LZ4++hkvUyhbn5c4syfgYI214i342bZOqq7w3PZ5UnX1WOR8kP1Dd5DgdTFpHBZ
-         YFrejpNwEwyVtgjJ2h7DJZZwM3wlarwFrdmlWF4/IbYdcLzhZu9eWfASeY3cBcMIJeWN
-         TmMwBt2giD3P+L/dV8xN4DWdOteVRuLxU576D+QIIYn5IEbMmRqCsDy6wH6RisaS2En+
-         77gau1VuW9LbpE+De59atSjH+/wZB+Rihg2dpbAxr/rgo94K50BySclFMG/5QR1qXpJU
-         YHFq9FmHNI3H6tgkwrY1pQTOJWYJg3qmXEmnIBPxV25YxcUtyGvErDZS2P4I8lHhi3Z5
-         NkBA==
+        bh=3u3xUQKsQtY5MjJU7KWdFVlKdUwGfS6WMFqIdWoJCIo=;
+        b=unFkvF+6wudO45usQ0U6AfJIfqhGP+H5/IVYvEVNkvB69qXh+JOZzYWL6W8iypwR8u
+         WXtxZSQf4t68zEHXsPc28NiwHPUvvwS/M344xQ3tBObhdP7U9FItGEykPkPqu+eEbFFp
+         okusA4UwcrZWf8Z51Zm29/RE04pDrtNIp/vD2aJp+XpBdU2UkRkKKny9uq/isdNkl+oO
+         Skjuy9Oo1eMbcdvkjUdB3P7K+oZHaS/9IHtfkJQayp0An2kmfxp7oACjbZtN8XRdwT2w
+         lxjzvHFT+zOFmdZqKIHE6BDxnTC8QY7tAueSdS/QBzC33/doZv3G/USW3EuK7WLdlbGW
+         qF+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683127132; x=1685719132;
+        d=1e100.net; s=20221208; t=1683127471; x=1685719471;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i4wxKwRBUKexs/Rpj6bBCWyCDPYyPPHlLlNupBtzYaw=;
-        b=WrT53TeGd3NpP36S/KGyE2mBs9niD6rnb0Kqd3P3UN3/aVPfZPHZTwdMNJF9iGcI4K
-         K2KaD7Xpdw3pCN7lx9gUvuH41e3XqbIS7ItWj0Nkc6Wrsr6UJ9q/oQrjzVY0CtwZBNcH
-         mWMzLgrrT8E7/11RhB9KZnCCVs9r5sqZL4HzGkW5xGynIpy53c1GWiVEMxFhr5Qar+ze
-         nSlEVU98LZFXzn/z4XpLGHotcWqNnNY5W5gnXExdu+ymKmJZHl4ohLGUsz2Qe4m2IiD+
-         HtrstLpj+8Jijmj0LCFDfIH+axvLc6te+edeBpZCpa/3UzxgnEeLQamAU+0EFchKPyH5
-         obXg==
-X-Gm-Message-State: AC+VfDzLqwz0/b7wUMMFU44nKt/GyNdYR8x7yh7vUWw/yNHqusTtOMVI
-        cwPzeGRIpnx4qDuxlQT26WSp4qRYaQYP2G1HG2MUYA==
-X-Google-Smtp-Source: ACHHUZ4K+d9eu2MhiXikUKkPbraytc5q+SB8DjlC4OAFlU81ddI4JrxvOKqNrFRbhuXyiN7N0776W6I4xeufDIeaumw=
-X-Received: by 2002:a25:6844:0:b0:b9d:90d1:6301 with SMTP id
- d65-20020a256844000000b00b9d90d16301mr17445969ybc.47.1683127131990; Wed, 03
- May 2023 08:18:51 -0700 (PDT)
+        bh=3u3xUQKsQtY5MjJU7KWdFVlKdUwGfS6WMFqIdWoJCIo=;
+        b=Xk5i5mVK7/WQosOWBIT0FxWoovPy0KfqRmUnD2e7dXRJ517jrFJpFln90u/A/yLMbT
+         xe3Rd7bGtuKJ0Gl7TGgqun+GQvAcc/stAZ35yCcHMXOjjAtBLMI0HmbB/L3kIXl5SNXh
+         8VSjV7Ybnp0oitaHocTPxLMTESHXkRB7HbICEmXU3HadvxduYbVpd6ob/mffRW2D9xUA
+         j38WWrkpcv2rnz7pUsVAlUufKFCF/dQNXhuee/eJdT0/L4pKsDiyRQEy6qOzVaQjQloj
+         sM72JMX3/9wQTH4iaiZlZFF4yNdU4U4Zi22DsG40+oYE8JDcXcgTlbDs7rN2mTjNDU1C
+         nwrA==
+X-Gm-Message-State: AC+VfDwXALHB3Is2Wnz4DoLjoeEbF1p5AyrCIkr4r0po1qpYv0c3vVH7
+        WyuRx2ieH91E+JOu+82Is0hG0/axgRPz9dS+o1J95w==
+X-Google-Smtp-Source: ACHHUZ4QRO+chfCfz5/jv+a2xol9xihN+1wt+nUNWo6jdaruLvTBoFlz5eyhSEYcB7ZOQZ60IsdoPkHuL2yRnd5FS3c=
+X-Received: by 2002:a0d:e296:0:b0:55a:4109:7f5a with SMTP id
+ l144-20020a0de296000000b0055a41097f5amr11315408ywe.12.1683127470672; Wed, 03
+ May 2023 08:24:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-35-surenb@google.com>
- <ZFIO3tXCbmTn53uv@dhcp22.suse.cz>
-In-Reply-To: <ZFIO3tXCbmTn53uv@dhcp22.suse.cz>
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-36-surenb@google.com>
+ <ZFIPmnrSIdJ5yusM@dhcp22.suse.cz>
+In-Reply-To: <ZFIPmnrSIdJ5yusM@dhcp22.suse.cz>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 08:18:39 -0700
-Message-ID: <CAJuCfpHrZ4kWYFPvA3W9J+CmNMuOtGa_ZMXE9fOmKsPQeNt2tg@mail.gmail.com>
-Subject: Re: [PATCH 34/40] lib: code tagging context capture support
+Date:   Wed, 3 May 2023 08:24:19 -0700
+Message-ID: <CAJuCfpGsvWupMbasqvwcMYsOOPxTQqi1ed5+=vyu-yoPQwwybg@mail.gmail.com>
+Subject: Re: [PATCH 35/40] lib: implement context capture support for tagged allocations
 To:     Michal Hocko <mhocko@suse.com>
 Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
@@ -89,53 +89,26 @@ Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 3, 2023 at 12:36=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+On Wed, May 3, 2023 at 12:39=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
 e:
 >
-> On Mon 01-05-23 09:54:44, Suren Baghdasaryan wrote:
+> On Mon 01-05-23 09:54:45, Suren Baghdasaryan wrote:
 > [...]
-> > +static inline void add_ctx(struct codetag_ctx *ctx,
-> > +                        struct codetag_with_ctx *ctc)
+> > +struct codetag_ctx *alloc_tag_create_ctx(struct alloc_tag *tag, size_t=
+ size)
 > > +{
-> > +     kref_init(&ctx->refcount);
-> > +     spin_lock(&ctc->ctx_lock);
-> > +     ctx->flags =3D CTC_FLAG_CTX_PTR;
-> > +     ctx->ctc =3D ctc;
-> > +     list_add_tail(&ctx->node, &ctc->ctx_head);
-> > +     spin_unlock(&ctc->ctx_lock);
->
-> AFAIU every single tracked allocation will get its own codetag_ctx.
-> There is no aggregation per allocation site or anything else. This looks
-> like a scalability and a memory overhead red flag to me.
-
-True. The allocations here would not be limited. We could introduce a
-global limit to the amount of memory that we can use to store contexts
-and maybe reuse the oldest entry (in LRU fashion) when we hit that
-limit?
-
->
-> > +}
+> > +     struct alloc_call_ctx *ac_ctx;
 > > +
-> > +static inline void rem_ctx(struct codetag_ctx *ctx,
-> > +                        void (*free_ctx)(struct kref *refcount))
-> > +{
-> > +     struct codetag_with_ctx *ctc =3D ctx->ctc;
-> > +
-> > +     spin_lock(&ctc->ctx_lock);
+> > +     /* TODO: use a dedicated kmem_cache */
+> > +     ac_ctx =3D kmalloc(sizeof(struct alloc_call_ctx), GFP_KERNEL);
 >
-> This could deadlock when allocator is called from the IRQ context.
+> You cannot really use GFP_KERNEL here. This is post_alloc_hook path and
+> that has its own gfp context.
 
-I see. spin_lock_irqsave() then?
+I missed that. Would it be appropriate to use the gfp_flags parameter
+of post_alloc_hook() here?
 
-Thanks for the feedback!
-Suren.
 
->
-> > +     /* ctx might have been removed while we were using it */
-> > +     if (!list_empty(&ctx->node))
-> > +             list_del_init(&ctx->node);
-> > +     spin_unlock(&ctc->ctx_lock);
-> > +     kref_put(&ctx->refcount, free_ctx);
 > --
 > Michal Hocko
 > SUSE Labs
