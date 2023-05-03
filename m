@@ -2,82 +2,144 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45275C77B75
-	for <linux-modules@archiver.kernel.org>; Wed,  3 May 2023 19:32:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32B0AC7EE23
+	for <linux-modules@archiver.kernel.org>; Wed,  3 May 2023 19:41:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjECTcc (ORCPT
+        id S229950AbjECTlZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 3 May 2023 15:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
+        Wed, 3 May 2023 15:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjECTca (ORCPT
+        with ESMTP id S229939AbjECTlY (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 3 May 2023 15:32:30 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF70B7D98;
-        Wed,  3 May 2023 12:32:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=tMLN9BtaXqxM5JJBBy/1HaXn2nyhid1vnoNwTsVZtoc=; b=gW2xBkf6qTqwn2xuiYWGZlLCsB
-        qj8GQnMoSu12l1WPlrYtAf0vEJg7OD79TI6RCGGtWsCdDqC7sYtnyuWTQcw/bKJJQdptmo+MXnAB8
-        +q0moNCswkFdh1+ZMT2eTfmOtSKDVwE89wbzoUTjZMV8yNQ+kPqaoQBtUIlrhSTJbp/I9FMmjCPCr
-        Lvf8zMXssSMfLSMSGYW7OUnLkmZoFbtoeFeGgV3XylXPGY8BUk5zx74zZqtLZjY4z2cX29s48I4hb
-        UhAYV5VCDO/SOzdaPQaExKEEmDSSfG/oeMT78ETjL4YrvX6M98RZ8ZkYnjEc2NLhAyeVEazSKb/9o
-        TWfdFT2Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1puID8-005bF2-0g;
-        Wed, 03 May 2023 19:32:22 +0000
-Date:   Wed, 3 May 2023 12:32:22 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     torvalds@linux-foundation.org, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
-        mcgrof@kernel.org
-Subject: [GIT PULL] Modules changes for v6.4-rc4 second request
-Message-ID: <ZFK2xmSgFCxtlMm+@bombadil.infradead.org>
+        Wed, 3 May 2023 15:41:24 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84BC7AB6
+        for <linux-modules@vger.kernel.org>; Wed,  3 May 2023 12:41:21 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-b9d8b458e10so7722973276.1
+        for <linux-modules@vger.kernel.org>; Wed, 03 May 2023 12:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683142881; x=1685734881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7eRiiP2JCtlxvX+BHzTjXxhFfE3xb3L5Tko5xVivHIc=;
+        b=njnY9/ZTWcA0YQLoTf3TUMfGQMs6qBR8x/WiO3YJ4m2rgzn9gPgiVmWeEd3meHgQOd
+         veIE13lp/BEBibiOOZUNO+WD2iQQwInbq0mORyd3+wLWSUTFkhmbMs6fl3Tqmd3D0D5p
+         V+y4b3/jKL+G7UEO8JQopzaWcrHdBR+imlq/VrwTOp1569eYFHFfi9pD7I53OyaoPSYd
+         tj72nQLogAXIm5Pv95noTQ1YRpRrtHa+Dymto/1ndku51s0fuH/R0nkRvqq+7WbyeTBe
+         or08gvlkQ55RtNC4M9pq8YNpCVr1Dsrvti1RMiJ42Ynp3MHUq3DPU/4MOuwmbk5VuygM
+         Oy2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683142881; x=1685734881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7eRiiP2JCtlxvX+BHzTjXxhFfE3xb3L5Tko5xVivHIc=;
+        b=CDsXMcVVkuOEIneqTorfkOjhSCQU4vy1siHbqsNxa7kv35V7eahE+U6ZLZbTb44rvf
+         XGz52utl+ava0NzbKkuQ2u7+uBIakHnT/XK8OywJaBoQmoue6Hag/yyF3UYN9Jg4CPA3
+         JBfuvfB2tJDJb3FtflN4cHE21N9HKAvVhQfIhBKqe5d24zckdxe0m8CCHXKBNfyAS64J
+         H+QHCkWSRk3gX7Cf2GvUl5Abh5ta8glZYNgLBseiOu4QYeFUXC99jTJKlstccDo0DE/l
+         Rld3+sLXG2P/eJehCC8Sc7lUCq/7P8dGBoVL+zONhzG8TZuxE/oK5gVFeW9c7tzqkqWP
+         O09g==
+X-Gm-Message-State: AC+VfDzwS1uPHSLU4CvbjpYbZlKgbYKwayuO2uMHFuuALiO9o27TVQzH
+        xW1iuh/yZo/78LjqkOq1FYTX00jKta/kqOKGTcNVbw==
+X-Google-Smtp-Source: ACHHUZ4RFT+eYjp8zpqFQpuduTlyNDeYqB8fD0xjOEnMllgaLgM5ug7v5zBN549JMpsUAooBfYdYqk6S3BpMrYkFeqQ=
+X-Received: by 2002:a25:308a:0:b0:b9a:38b2:8069 with SMTP id
+ w132-20020a25308a000000b00b9a38b28069mr18330170ybw.6.1683142880244; Wed, 03
+ May 2023 12:41:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <ZFIMaflxeHS3uR/A@dhcp22.suse.cz> <ZFIOfb6/jHwLqg6M@moria.home.lan>
+ <ZFISlX+mSx4QJDK6@dhcp22.suse.cz> <ZFIVtB8JyKk0ddA5@moria.home.lan>
+ <ZFKNZZwC8EUbOLMv@slm.duckdns.org> <20230503180726.GA196054@cmpxchg.org>
+ <ZFKlrP7nLn93iIRf@slm.duckdns.org> <ZFKqh5Dh93UULdse@slm.duckdns.org>
+ <ZFKubD/lq7oB4svV@moria.home.lan> <ZFKu6zWA00AzArMF@slm.duckdns.org> <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+In-Reply-To: <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 3 May 2023 12:41:08 -0700
+Message-ID: <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
+        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-I had sent the only patch in patch form but I gather you prefer a pull
-request so sendign thsi instead.
+On Wed, May 3, 2023 at 12:09=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+>
+> On Wed, May 03, 2023 at 08:58:51AM -1000, Tejun Heo wrote:
+> > On Wed, May 03, 2023 at 02:56:44PM -0400, Kent Overstreet wrote:
+> > > On Wed, May 03, 2023 at 08:40:07AM -1000, Tejun Heo wrote:
+> > > > > Yeah, easy / default visibility argument does make sense to me.
+> > > >
+> > > > So, a bit of addition here. If this is the thrust, the debugfs part=
+ seems
+> > > > rather redundant, right? That's trivially obtainable with tracing /=
+ bpf and
+> > > > in a more flexible and performant manner. Also, are we happy with r=
+ecording
+> > > > just single depth for persistent tracking?
 
-I verified and indeed I had quite a bit of 0-day build successes with
-this branch. The issue reported by 0-day came late with an sparc64 allyesconfig
-build. The issue were not found earlier with 0-day allyes config on a few
-other archs.
+IIUC, by single depth you mean no call stack capturing?
+If so, that's the idea behind the context capture feature so that we
+can enable it on specific allocations only after we determine there is
+something interesting there. So, with low-cost persistent tracking we
+can determine the suspects and then pay some more to investigate those
+suspects in more detail.
 
-I'll see I can get more build converage on modules for modules-next so we can
-catch random builds / gcc combos these earlier.
+> > >
+> > > Not sure what you're envisioning?
+> > >
+> > > I'd consider the debugfs interface pretty integral; it's much more
+> > > discoverable for users, and it's hardly any code out of the whole
+> > > patchset.
+> >
+> > You can do the same thing with a bpftrace one liner tho. That's rather
+> > difficult to beat.
 
-The following changes since commit 348551ddaf311c76b01cdcbaf61b6fef06a49144:
+debugfs seemed like a natural choice for such information. If another
+interface is more appropriate I'm happy to explore that.
 
-  Merge tag 'pinctrl-v6.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl (2023-05-02 15:40:41 -0700)
+>
+> Ah, shit, I'm an idiot. Sorry. I thought allocations was under /proc and
+> allocations.ctx under debugfs. I meant allocations.ctx is redundant.
 
-are available in the Git repository at:
+Do you mean that we could display allocation context in
+debugfs/allocations file (for the allocations which we explicitly
+enabled context capturing)?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc1-v2
-
-for you to fetch changes up to 0b891c83d8c54cb70e186456c2191adb5fd98c56:
-
-  module: include internal.h in module/dups.c (2023-05-02 20:33:36 -0700)
-
-----------------------------------------------------------------
-modules-6.4-rc1 v2
-
-There is only one fix by Arnd far for modules pending which came in after
-the first pull request. The issue was found as part of some late compile
-tests with 0-day. I take it 0-day does some secondary late builds with
-after some initial ones.
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      module: include internal.h in module/dups.c
-
- kernel/module/dups.c | 2 ++
- 1 file changed, 2 insertions(+)
+>
+> Thanks.
+>
+> --
+> tejun
