@@ -2,88 +2,143 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EE7C77B75
-	for <linux-modules@archiver.kernel.org>; Wed,  3 May 2023 03:43:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD80C7EE29
+	for <linux-modules@archiver.kernel.org>; Wed,  3 May 2023 06:30:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbjECDns (ORCPT
+        id S229671AbjECGav (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 2 May 2023 23:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        Wed, 3 May 2023 02:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjECDnr (ORCPT
+        with ESMTP id S229544AbjECGau (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 2 May 2023 23:43:47 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793C21FEE;
-        Tue,  2 May 2023 20:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=ZIADMU0Kl928OS/WKfRbeOaDTqGObzNlyLZhin0OEhA=; b=Z6LjI6NPKvxa7F9MQg2+mHEqf6
-        BatQJO2ZLt9WUOwD0Ti+q3lhN7BjZHsoBx4dRIe/3xl8XgC80Z1Yo0i7T9gbB6Uzb5tjBfYAfVccU
-        3e/bvgfRhNQ89Beg7Y24Y3xyTpChATHEmd+GBHxMmcO0x6/gWY3JnN2i+kodjBfWWUFPE8Y4AKB3a
-        HdOCqzoFLE4a1o2xBnN9YqCH+fFKQBfEnyXgJcaABsWQw9XZN9Q5qI/67H4eG9t7S4YZEUJ32FZ8f
-        CV/HasI9G/AuAsIC8o++ybW6z1AN3AtfY0BoalPBLMZh5os6sa0NAktiSfgNo+12PN26+vhourEfs
-        b7oLqKag==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pu3P7-003FF8-11;
-        Wed, 03 May 2023 03:43:45 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     torvalds@linux-foundation.org, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH] module: include internal.h in module/dups.c
-Date:   Tue,  2 May 2023 20:43:44 -0700
-Message-Id: <20230503034344.773568-1-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        Wed, 3 May 2023 02:30:50 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1D61BC1;
+        Tue,  2 May 2023 23:30:49 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-61b6101a166so10036056d6.0;
+        Tue, 02 May 2023 23:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683095448; x=1685687448;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NSWUOSuqVLpIOWgszk2VW3MzVdJnM+9N5Gz+a5oZIik=;
+        b=FwxsWECu6Vmz2nS2N36nqdmqGUy6EtTWCwQbQH8C4yyx7S50D7jj6hwfI3pG4WOWTe
+         J5Ac/nm/4jjf2uonNwEk7kkgqGFkqqOlCnFifWxFhM5HBLHG5/+yNdwPcGRQZD8xyZgY
+         y564jPge77bFOjQ7/C7PbIZo2J/D/9HIgWm1qaK+/JMqtAHJacp7Y7p+jXsMBKVPwiay
+         de3olKWgxT5zQQmgR6+1vlYmLMhp7LATVC+UKYup+7gpwYRYwOXn88552r8N8+SfOO97
+         mz3mbEB+LcrH93Ca5jn3i5g7nB6tCk4YfB1Kz47lyE0ZxPdxng7OE8IRGtE3NBhEpUXq
+         C5Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683095448; x=1685687448;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NSWUOSuqVLpIOWgszk2VW3MzVdJnM+9N5Gz+a5oZIik=;
+        b=LZ8g6qgCasB0UbWpZlTJfNky3m5otbn6PjY6RwXQu+MDJPhx7+b/0cP5iSqjK6IarW
+         XZZ6Yo2SN65wDHuMjjM16QvJ2+F0Oama4XLbqsmBgbyVyvkWa+GbjRg2ZrafvtPXw+Z/
+         a9NkLP43GnHPax/mHAuHxO6hk4oRAyjaoW6R9eCSD54CQjf2aFI9HYvIOnTPhjccKx/x
+         TXlGwwT2c4b3fhUQfL07QIbGsMIoCOJmS6G6f82pg2f+tiplvSY7dt7PSCrH7bUdpx6+
+         HZnaWiPp36SFl1uMrj0pqPL1UyHwE9/TtoiLzMuFN98aPWAMwXQBHkHA/1VnA0a5DaMC
+         a6zw==
+X-Gm-Message-State: AC+VfDwrMV2BdmzmTBrtaoU+npTWUl9khzMIJ+MTGaP9KpuFDjTRlI+4
+        7hvm+PERBQ8vK96Cf/WEU7KB6Dz47imKeYFLZt4=
+X-Google-Smtp-Source: ACHHUZ6mwR/Eb9QNNQC3EY6y0Gd5Rl8C7T1qIt5du/51986iaziD1AevtUJQS/vhAg1zqokn+I2SvW0bGzGu5uBEHP4=
+X-Received: by 2002:a05:6214:1941:b0:61b:5cba:5820 with SMTP id
+ q1-20020a056214194100b0061b5cba5820mr9799913qvk.50.1683095448149; Tue, 02 May
+ 2023 23:30:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-2-surenb@google.com>
+ <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
+ <ZFAUj+Q+hP7cWs4w@moria.home.lan> <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
+ <ZFCA2FF+9MI8LI5i@moria.home.lan> <CAHp75VdK2bgU8P+-np7ScVWTEpLrz+muG-R15SXm=ETXnjaiZg@mail.gmail.com>
+ <ZFCsAZFMhPWIQIpk@moria.home.lan> <CAHp75VdvRshCthpFOjtmajVgCS_8YoJBGbLVukPwU+t79Jgmww@mail.gmail.com>
+ <ZFHB2ATrPIsjObm/@moria.home.lan>
+In-Reply-To: <ZFHB2ATrPIsjObm/@moria.home.lan>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 3 May 2023 09:30:11 +0300
+Message-ID: <CAHp75VdH07gTYCPvp2FRjnWn17BxpJCcFBbFPpjpGxBt1B158A@mail.gmail.com>
+Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in string_get_size's output
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        =?UTF-8?B?Tm9yYWxmIFRyw6/Cv8K9bm5lcw==?= <noralf@tronnes.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Wed, May 3, 2023 at 5:07=E2=80=AFAM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+> On Tue, May 02, 2023 at 06:19:27PM +0300, Andy Shevchenko wrote:
+> > On Tue, May 2, 2023 at 9:22=E2=80=AFAM Kent Overstreet
+> > <kent.overstreet@linux.dev> wrote:
+> > > On Tue, May 02, 2023 at 08:33:57AM +0300, Andy Shevchenko wrote:
+> > > > Actually instead of producing zillions of variants, do a %p extensi=
+on
+> > > > to the printf() and that's it. We have, for example, %pt with T and
+> > > > with space to follow users that want one or the other variant. Same
+> > > > can be done with string_get_size().
+> > >
+> > > God no.
+> >
+> > Any elaboration what's wrong with that?
+>
+> I'm really not a fan of %p extensions in general (they are what people
+> reach for because we can't standardize on a common string output API),
 
-Two newly introduced functions are declared in a header that is not
-included before the definition, causing a warning with sparse or
-'make W=1':
+The whole story behind, for example, %pt is to _standardize_ the
+output of the same stanza in the kernel.
 
-kernel/module/dups.c:118:6: error: no previous prototype for 'kmod_dup_request_exists_wait' [-Werror=missing-prototypes]
-  118 | bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-kernel/module/dups.c:220:6: error: no previous prototype for 'kmod_dup_request_announce' [-Werror=missing-prototypes]
-  220 | void kmod_dup_request_announce(char *module_name, int ret)
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+> but when we'd be passing it bare integers the lack of type safety would
+> be a particularly big footgun.
 
-Add an explicit include to ensure the prototypes match.
+There is no difference to any other place in the kernel where we can
+shoot into our foot.
 
-Fixes: 8660484ed1cf ("module: add debugging auto-load duplicate module support")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304141440.DYO4NAzp-lkp@intel.com/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
+> > God no for zillion APIs for almost the same. Today you want space,
+> > tomorrow some other (special) delimiter.
+>
+> No, I just want to delete the space and output numbers the same way
+> everyone else does. And if we are stuck with two string_get_size()
+> functions, %p extensions in no way improve the situation.
 
- kernel/module/dups.c | 2 ++
- 1 file changed, 2 insertions(+)
+I think it's exactly for the opposite, i.e. standardize that output
+once and for all.
 
-Linus, only one fix so far for modules so might as well send this as a patch.
-
-diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-index aa8e1361fdb5..f3d7ea1e96d8 100644
---- a/kernel/module/dups.c
-+++ b/kernel/module/dups.c
-@@ -32,6 +32,8 @@
- #include <linux/async.h>
- #include <linux/uaccess.h>
- 
-+#include "internal.h"
-+
- #undef MODULE_PARAM_PREFIX
- #define MODULE_PARAM_PREFIX "module."
- static bool enable_dups_trace = IS_ENABLED(CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE);
--- 
-2.39.2
-
+--=20
+With Best Regards,
+Andy Shevchenko
