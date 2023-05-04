@@ -2,143 +2,70 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E577C7EE26
-	for <linux-modules@archiver.kernel.org>; Thu,  4 May 2023 02:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 590A7C77B78
+	for <linux-modules@archiver.kernel.org>; Thu,  4 May 2023 03:13:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjEDCZj (ORCPT
+        id S229829AbjEDDNd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 3 May 2023 22:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
+        Wed, 3 May 2023 23:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjEDCZf (ORCPT
+        with ESMTP id S229822AbjEDDNb (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 3 May 2023 22:25:35 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFE81B1;
-        Wed,  3 May 2023 19:25:34 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1aaf21bb42bso34068115ad.2;
-        Wed, 03 May 2023 19:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683167134; x=1685759134;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X+UY7cUQaVo4x4W0WCSPsCuWeI5BUJEgh7i3Xst55/Y=;
-        b=Rp/D+oug52h2Ti6mXmuImpIIDf60HeMLUvF0iIK2vttPwspm5hYlNosuEHVSrbtxTw
-         U1aaOkS4o4kHX9lqnCC9bE9Qv4BkTepdXgX1eP7e7ih03h1Znb/fBHAFzIs3ZLAdzyf8
-         Bdy+N5QGo07p0OmImH8mBW0eWTxAwcVTxazuYtPxC6BmtMp0/XcbyFMmmZorx8qew2E9
-         Ccf9SafoTVOkRODhvQ6MQpCKPYkFE27/aFmb6+IC+s7J6n+xuSEgUyUsQVp7VEWj1Bkv
-         v88EEfrZMkPXlnUNcgeQfwXyllZK7EU5nBpftptzpU3ovg2Ugby7Q+WZX0I3unGEo1Nj
-         E0SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683167134; x=1685759134;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X+UY7cUQaVo4x4W0WCSPsCuWeI5BUJEgh7i3Xst55/Y=;
-        b=dtbjpX7ia57jjlkDaEKOQsfKP9GGygdKnP69Ub91sMr/qJEl2FhiSuQEnEGGo6ViMk
-         r4iE9FQj5XxXmQzwhIsx50JXWloVnquad3bm7YrQE6A6fbJJ2TkPkK+NcvcjU7magQwF
-         9fhmgJAVN3JmeyWQburIfzoIW9rJLShj/iDzUeqTylXVJ5eAbg6r32KHPH8Qt8jW4Mby
-         g7RRYYj76L3mKrWiTsPRcKwo4R6pI2iXUFYtrhDJ+Z6dYMilUuh7U6LeOCu2IVUmB23N
-         KKgFtDWHN1T7oTsx98S5rfqPh9ODpUcONmXVGAwl2t6qVG55/slTp3SC16HBc81E218t
-         KrUg==
-X-Gm-Message-State: AC+VfDxZbVY3WT/1oPiFscFqewhOob2MqOHLWqLNBrefraxZliH6ZF8H
-        BqTo9EqMqcs3U5cF88boFOI=
-X-Google-Smtp-Source: ACHHUZ50+OLepUnrnAHDGfxFP5Am44d3DN07c8wNpuEHGpwvY2J63vbecqy2vRXUZik9ScPzDJ5gvw==
-X-Received: by 2002:a17:902:c94e:b0:1ab:2758:c8a4 with SMTP id i14-20020a170902c94e00b001ab2758c8a4mr2512871pla.0.1683167133231;
-        Wed, 03 May 2023 19:25:33 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:6454])
-        by smtp.gmail.com with ESMTPSA id w4-20020a170902d70400b0019ac7319ed1sm2987721ply.126.2023.05.03.19.25.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 19:25:32 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 3 May 2023 16:25:30 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
-        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFMXmj9ZhSe5wyaS@slm.duckdns.org>
-References: <20230503180726.GA196054@cmpxchg.org>
- <ZFKlrP7nLn93iIRf@slm.duckdns.org>
- <ZFKqh5Dh93UULdse@slm.duckdns.org>
- <ZFKubD/lq7oB4svV@moria.home.lan>
- <ZFKu6zWA00AzArMF@slm.duckdns.org>
- <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
- <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
- <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
- <ZFK9XMSzOBxIFOHm@slm.duckdns.org>
- <CAJuCfpE4YD_BumqFf2-NC8KS9D+kq0s_o4gRyWAH-WK4SgqUbA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpE4YD_BumqFf2-NC8KS9D+kq0s_o4gRyWAH-WK4SgqUbA@mail.gmail.com>
+        Wed, 3 May 2023 23:13:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62ABDE79;
+        Wed,  3 May 2023 20:13:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D68D763130;
+        Thu,  4 May 2023 03:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 39F59C4339C;
+        Thu,  4 May 2023 03:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683170009;
+        bh=DD5qlPaRjDWWFSDae+T2U4FEP3fQqqRPWCD+8BgKbE8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=OwrXDe9Q7Iso6sqqA5xvkGo3XFnMrvx2ibiDJMfW+xLPoxhM1redjJWAn+p92j2bO
+         fynzulw00YCuG7GlaJwXg/Wa+s3S9NHPzVeQ/cK6oZiRE5b0WvaKVqJjwwE2eMbIfo
+         9Gmb2v9/8mW4v64at6hVVN65645wMidGbhjBt0n6w2U0b4R5ZWaUdkMGFx9o7gpfhG
+         bWWZcsOfSjJY3uUeV4YlOFSgKmOo9voLJuLgxYphmnq7oXedaGG+OpdRc97d/IsqG2
+         cdRnCS5Cme5zY4Sh524JlLYpvd2fDbThSYDhnfTqDnhyuo9ZA5jPulB3c2+a76bnyp
+         C4OvP+DOzl+kQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 24592E5FFC9;
+        Thu,  4 May 2023 03:13:29 +0000 (UTC)
+Subject: Re: [GIT PULL] Modules changes for v6.4-rc4 second request
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZFK2xmSgFCxtlMm+@bombadil.infradead.org>
+References: <ZFK2xmSgFCxtlMm+@bombadil.infradead.org>
+X-PR-Tracked-List-Id: <patches.lists.linux.dev>
+X-PR-Tracked-Message-Id: <ZFK2xmSgFCxtlMm+@bombadil.infradead.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc1-v2
+X-PR-Tracked-Commit-Id: 0b891c83d8c54cb70e186456c2191adb5fd98c56
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b4082428727b58f223661278974527ef9a9661e0
+Message-Id: <168317000914.23861.9133557214005780345.pr-tracker-bot@kernel.org>
+Date:   Thu, 04 May 2023 03:13:29 +0000
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     torvalds@linux-foundation.org, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>, mcgrof@kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello,
+The pull request you sent on Wed, 3 May 2023 12:32:22 -0700:
 
-On Wed, May 03, 2023 at 01:14:57PM -0700, Suren Baghdasaryan wrote:
-> On Wed, May 3, 2023 at 1:00 PM Tejun Heo <tj@kernel.org> wrote:
-> > Another related question. So, the reason for macro'ing stuff is needed is
-> > because you want to print the line directly from kernel, right?
-> 
-> The main reason is because we want to inject a code tag at the
-> location of the call. If we have a code tag injected at every
-> allocation call, then finding the allocation counter (code tag) to
-> operate takes no time.
->
-> > Is that
-> > really necessary? Values from __builtin_return_address() can easily be
-> > printed out as function+offset from kernel which already gives most of the
-> > necessary information for triaging and mapping that back to source line from
-> > userspace isn't difficult. Wouldn't using __builtin_return_address() make
-> > the whole thing a lot simpler?
-> 
-> If we do that we have to associate that address with the allocation
-> counter at runtime on the first allocation and look it up on all
-> following allocations. That introduces the overhead which we are
-> trying to avoid by using macros.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc1-v2
 
-I see. I'm a bit skeptical about the performance angle given that the hot
-path can be probably made really cheap even with lookups. In most cases,
-it's just gonna be an extra pointer deref and a few more arithmetics. That
-can show up in microbenchmarks but it's not gonna be much. The benefit of
-going that route would be the tracking thing being mostly self contained.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b4082428727b58f223661278974527ef9a9661e0
 
-That said, it's nice to not have to worry about allocating tracking slots
-and managing hash table, so no strong opinion.
-
-Thanks.
+Thank you!
 
 -- 
-tejun
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
