@@ -2,70 +2,92 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 590A7C77B78
-	for <linux-modules@archiver.kernel.org>; Thu,  4 May 2023 03:13:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BE51C77B75
+	for <linux-modules@archiver.kernel.org>; Thu,  4 May 2023 03:33:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjEDDNd (ORCPT
+        id S229717AbjEDDd1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 3 May 2023 23:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
+        Wed, 3 May 2023 23:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjEDDNb (ORCPT
+        with ESMTP id S229709AbjEDDd0 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 3 May 2023 23:13:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62ABDE79;
-        Wed,  3 May 2023 20:13:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D68D763130;
-        Thu,  4 May 2023 03:13:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 39F59C4339C;
-        Thu,  4 May 2023 03:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683170009;
-        bh=DD5qlPaRjDWWFSDae+T2U4FEP3fQqqRPWCD+8BgKbE8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=OwrXDe9Q7Iso6sqqA5xvkGo3XFnMrvx2ibiDJMfW+xLPoxhM1redjJWAn+p92j2bO
-         fynzulw00YCuG7GlaJwXg/Wa+s3S9NHPzVeQ/cK6oZiRE5b0WvaKVqJjwwE2eMbIfo
-         9Gmb2v9/8mW4v64at6hVVN65645wMidGbhjBt0n6w2U0b4R5ZWaUdkMGFx9o7gpfhG
-         bWWZcsOfSjJY3uUeV4YlOFSgKmOo9voLJuLgxYphmnq7oXedaGG+OpdRc97d/IsqG2
-         cdRnCS5Cme5zY4Sh524JlLYpvd2fDbThSYDhnfTqDnhyuo9ZA5jPulB3c2+a76bnyp
-         C4OvP+DOzl+kQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 24592E5FFC9;
-        Thu,  4 May 2023 03:13:29 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules changes for v6.4-rc4 second request
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZFK2xmSgFCxtlMm+@bombadil.infradead.org>
-References: <ZFK2xmSgFCxtlMm+@bombadil.infradead.org>
-X-PR-Tracked-List-Id: <patches.lists.linux.dev>
-X-PR-Tracked-Message-Id: <ZFK2xmSgFCxtlMm+@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc1-v2
-X-PR-Tracked-Commit-Id: 0b891c83d8c54cb70e186456c2191adb5fd98c56
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b4082428727b58f223661278974527ef9a9661e0
-Message-Id: <168317000914.23861.9133557214005780345.pr-tracker-bot@kernel.org>
-Date:   Thu, 04 May 2023 03:13:29 +0000
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     torvalds@linux-foundation.org, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>, mcgrof@kernel.org
+        Wed, 3 May 2023 23:33:26 -0400
+Received: from out-59.mta0.migadu.com (out-59.mta0.migadu.com [91.218.175.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F14198E
+        for <linux-modules@vger.kernel.org>; Wed,  3 May 2023 20:33:23 -0700 (PDT)
+Date:   Wed, 3 May 2023 23:33:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683171200;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LHQ0tWOiBXePRONe9lmx+CgLFkYWwKAc8GKV4/q6DkU=;
+        b=l06qAFauAqEclo8mUnMY1YCLzbbmHnEvV+EY2YNo/5E9metuAhrBTLBNyKmDyPjBL96oXJ
+        Sq2/N2krXfhJsoBkaVuwKvWwKl+Fg7w6P6TtEkseIUokAAnEnnzKptcyVqwX1hev7IGajp
+        4Qgb4H7pO+N54e9Aq5/qIaonS9LZ9yQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
+        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <ZFMndF/nnJyYSMuc@moria.home.lan>
+References: <ZFKlrP7nLn93iIRf@slm.duckdns.org>
+ <ZFKqh5Dh93UULdse@slm.duckdns.org>
+ <ZFKubD/lq7oB4svV@moria.home.lan>
+ <ZFKu6zWA00AzArMF@slm.duckdns.org>
+ <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+ <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
+ <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
+ <ZFK9XMSzOBxIFOHm@slm.duckdns.org>
+ <CAJuCfpE4YD_BumqFf2-NC8KS9D+kq0s_o4gRyWAH-WK4SgqUbA@mail.gmail.com>
+ <ZFMXmj9ZhSe5wyaS@slm.duckdns.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFMXmj9ZhSe5wyaS@slm.duckdns.org>
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The pull request you sent on Wed, 3 May 2023 12:32:22 -0700:
+On Wed, May 03, 2023 at 04:25:30PM -1000, Tejun Heo wrote:
+> I see. I'm a bit skeptical about the performance angle given that the hot
+> path can be probably made really cheap even with lookups. In most cases,
+> it's just gonna be an extra pointer deref and a few more arithmetics. That
+> can show up in microbenchmarks but it's not gonna be much. The benefit of
+> going that route would be the tracking thing being mostly self contained.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc1-v2
+The only way to do it with a single additional pointer deref would be
+with a completely statically sized hash table without chaining - it'd
+have to be open addressing.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b4082428727b58f223661278974527ef9a9661e0
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+More realistically you're looking at ~3 dependent loads.
