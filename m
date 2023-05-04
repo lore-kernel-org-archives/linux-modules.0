@@ -2,48 +2,62 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D728C7EE23
-	for <linux-modules@archiver.kernel.org>; Thu,  4 May 2023 09:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14C6BC7EE23
+	for <linux-modules@archiver.kernel.org>; Thu,  4 May 2023 14:31:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjEDJH3 (ORCPT
+        id S231234AbjEDObU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 4 May 2023 05:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        Thu, 4 May 2023 10:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjEDJH1 (ORCPT
+        with ESMTP id S229915AbjEDObT (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 4 May 2023 05:07:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076C78F;
-        Thu,  4 May 2023 02:07:24 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9956B33923;
-        Thu,  4 May 2023 09:07:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683191243; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+qJXmRqw+FfGzaNlkZLDu9Le9CEnkyHeMqv8Le5oQts=;
-        b=ANDPuuGSLrqGeihHM91AJqPDxRdii3XkVbscUjditUheMtvnk8aFBqZLYzfGOSm4Wpep5y
-        MN0JxYMPYvRX9Ro+qxZW6USNL5DsbvnuexjUyhsNUQ1F8AiMfWl8V+BA7+Nj2/Wdmi4sGz
-        dYzHf3+YdyqXWoFquZFW6OeAMIcZ5Gc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6EB8613444;
-        Thu,  4 May 2023 09:07:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zaOgGst1U2SVTAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 04 May 2023 09:07:23 +0000
-Date:   Thu, 4 May 2023 11:07:22 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
+        Thu, 4 May 2023 10:31:19 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392968A6D
+        for <linux-modules@vger.kernel.org>; Thu,  4 May 2023 07:31:18 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-559e317eef1so7112667b3.0
+        for <linux-modules@vger.kernel.org>; Thu, 04 May 2023 07:31:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683210677; x=1685802677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JS6msPuToyJynO3sTVIKpHDiqUqJNNgVeQDo4ExI+FY=;
+        b=B5odhRz5pl82Qodj9r2guUYfauBi1/TsFjLxRQqEz3zjcJjd//DMmZjNJKPPi7+nQ5
+         xuKBZ6j/WQW0W3dcKfsj589Fsc+uJ6BYPO2OLNobtTmF3hvusxOFblAjFzy4VuEOrD27
+         shVv5j4flGfZP5ZKf0oD9z3I5mcfEgazfAAXF3El44hYhX1ZRJaYFp+RYh8KC456HFZc
+         kSCAd/ObzJ2UJVsrp6Z49s4y6jg7flU32RKu03oDmXNXsZW8yRicseUXEdJ33k/uoDns
+         3t9BrSAOH3jBGP78RFzGvpDDNA510GhlcIeVQC/3SRIP7nZ/gPC/uJcOwTrT82pyTD6i
+         AF6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683210677; x=1685802677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JS6msPuToyJynO3sTVIKpHDiqUqJNNgVeQDo4ExI+FY=;
+        b=cln1tKH+8Z5z2WFqBcVLJfzmScwnxvnJ8ALxUQcZ+DiEs2faOwsPAOo0d/bUjRn0UE
+         BoqIYUF+spWBQmI8a9wC6XOt/WAHGP1QJtiq307nxZkyC/wzdcZ4GSt1IJzzHHe9YuZM
+         1z4c21tlC42SnisXpsOwmve3dvGhaeORnqhJTWq0sXgmqX11HHC8cUek/qdhF+s4bORR
+         Ml/AZCGKeYzpTDD5G0ydrHkQ6HiOkkw5+YGkW6DeLGPqdgL7zZK2tletFTqI5cjSZ8z/
+         2I7FNpysx8vWHgqSFWQ7TjBlpO690vYOHy+QOr+yvL6suaT7vIADCSOyfBiefS3VpM++
+         1PVg==
+X-Gm-Message-State: AC+VfDw6gm5GJWPrLLvO61ezby3IK/sD9yF2va/SrxQXcB02tGzdmRKR
+        POM+kofbNfqlIE6C6JSOOT2sxipNC6/0zgsD5qZ/1Q==
+X-Google-Smtp-Source: ACHHUZ5E9WXnTl16LxgdrH+7bPTNFRvDYVSM0w82lR/qVCCtHXAzvUBD8IG8coi/bDLOeNuU/XqnEJgf+6xYt7++7Tk=
+X-Received: by 2002:a25:cec1:0:b0:b99:4ac6:3c75 with SMTP id
+ x184-20020a25cec1000000b00b994ac63c75mr122983ybe.10.1683210677091; Thu, 04
+ May 2023 07:31:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-35-surenb@google.com>
+ <ZFIO3tXCbmTn53uv@dhcp22.suse.cz> <CAJuCfpHrZ4kWYFPvA3W9J+CmNMuOtGa_ZMXE9fOmKsPQeNt2tg@mail.gmail.com>
+ <ZFNnKHR2nCSimjQf@dhcp22.suse.cz>
+In-Reply-To: <ZFNnKHR2nCSimjQf@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 4 May 2023 07:31:05 -0700
+Message-ID: <CAJuCfpF7WeVuJpmZN3KEu=FAUH34xfYG4wPg-YNjxj+GtmdBXQ@mail.gmail.com>
+Subject: Re: [PATCH 34/40] lib: code tagging context capture support
+To:     Michal Hocko <mhocko@suse.com>
 Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
         mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
@@ -71,149 +85,71 @@ Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
-References: <20230501165450.15352-1-surenb@google.com>
- <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed 03-05-23 08:09:28, Suren Baghdasaryan wrote:
-> On Wed, May 3, 2023 at 12:25 AM Michal Hocko <mhocko@suse.com> wrote:
-[...]
-> Thanks for summarizing!
-> 
-> > At least those I find the most important:
-> > - This is a big change and it adds a significant maintenance burden
-> >   because each allocation entry point needs to be handled specifically.
-> >   The cost will grow with the intended coverage especially there when
-> >   allocation is hidden in a library code.
-> 
-> Do you mean with more allocations in the codebase more codetags will
-> be generated? Is that the concern?
+On Thu, May 4, 2023 at 1:04=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
+:
+>
+> On Wed 03-05-23 08:18:39, Suren Baghdasaryan wrote:
+> > On Wed, May 3, 2023 at 12:36=E2=80=AFAM Michal Hocko <mhocko@suse.com> =
+wrote:
+> > >
+> > > On Mon 01-05-23 09:54:44, Suren Baghdasaryan wrote:
+> > > [...]
+> > > > +static inline void add_ctx(struct codetag_ctx *ctx,
+> > > > +                        struct codetag_with_ctx *ctc)
+> > > > +{
+> > > > +     kref_init(&ctx->refcount);
+> > > > +     spin_lock(&ctc->ctx_lock);
+> > > > +     ctx->flags =3D CTC_FLAG_CTX_PTR;
+> > > > +     ctx->ctc =3D ctc;
+> > > > +     list_add_tail(&ctx->node, &ctc->ctx_head);
+> > > > +     spin_unlock(&ctc->ctx_lock);
+> > >
+> > > AFAIU every single tracked allocation will get its own codetag_ctx.
+> > > There is no aggregation per allocation site or anything else. This lo=
+oks
+> > > like a scalability and a memory overhead red flag to me.
+> >
+> > True. The allocations here would not be limited. We could introduce a
+> > global limit to the amount of memory that we can use to store contexts
+> > and maybe reuse the oldest entry (in LRU fashion) when we hit that
+> > limit?
+>
+> Wouldn't it make more sense to aggregate same allocations? Sure pids
+> get recycled but quite honestly I am not sure that information is all
+> that interesting. Precisely because of the recycle and short lived
+> processes reasons. I think there is quite a lot to think about the
+> detailed context tracking.
 
-No. I am mostly concerned about the _maintenance_ overhead. For the
-bare tracking (without profiling and thus stack traces) only those
-allocations that are directly inlined into the consumer are really
-of any use. That increases the code impact of the tracing because any
-relevant allocation location has to go through the micro surgery. 
+That would be a nice optimization. I'll need to look into the
+implementation details. Thanks for the idea.
 
-e.g. is it really interesting to know that there is a likely memory
-leak in seq_file proper doing and allocation? No as it is the specific
-implementation using seq_file that is leaking most likely. There are
-other examples like that See?
+>
+> > >
+> > > > +}
+> > > > +
+> > > > +static inline void rem_ctx(struct codetag_ctx *ctx,
+> > > > +                        void (*free_ctx)(struct kref *refcount))
+> > > > +{
+> > > > +     struct codetag_with_ctx *ctc =3D ctx->ctc;
+> > > > +
+> > > > +     spin_lock(&ctc->ctx_lock);
+> > >
+> > > This could deadlock when allocator is called from the IRQ context.
+> >
+> > I see. spin_lock_irqsave() then?
+>
+> yes. I have checked that the lock is not held over the all list
+> traversal which is good but the changelog could be more explicit about
+> the iterators and lock hold times implications.
 
-> Or maybe as you commented in
-> another patch that context capturing feature does not limit how many
-> stacks will be captured?
+Ack. Will add more information.
 
-That is a memory overhead which can be really huge and it would be nice
-to be more explicit about that in the cover letter. It is a downside for
-sure but not something that has a code maintenance impact and it is an
-opt-in so it can be enabled only when necessary.
-
-Quite honestly, though, the more I look into context capturing part it
-seems to me that there is much more to be reconsidered there and if you
-really want to move forward with the code tagging part then you should
-drop that for now. It would make the whole series smaller and easier to
-digest.
-
-> > - It has been brought up that this is duplicating functionality already
-> >   available via existing tracing infrastructure. You should make it very
-> >   clear why that is not suitable for the job
-> 
-> I experimented with using tracing with _RET_IP_ to implement this
-> accounting. The major issue is the _RET_IP_ to codetag lookup runtime
-> overhead which is orders of magnitude higher than proposed code
-> tagging approach. With code tagging proposal, that link is resolved at
-> compile time. Since we want this mechanism deployed in production, we
-> want to keep the overhead to the absolute minimum.
-> You asked me before how much overhead would be tolerable and the
-> answer will always be "as small as possible". This is especially true
-> for slab allocators which are ridiculously fast and regressing them
-> would be very noticable (due to the frequent use).
-
-It would have been more convincing if you had some numbers at hands.
-E.g. this is a typical workload we are dealing with. With the compile
-time tags we are able to learn this with that much of cost. With a dynamic
-tracing we are able to learn this much with that cost. See? As small as
-possible is a rather vague term that different people will have a very
-different idea about.
-
-> There is another issue, which I think can be solved in a smart way but
-> will either affect performance or would require more memory. With the
-> tracing approach we don't know beforehand how many individual
-> allocation sites exist, so we have to allocate code tags (or similar
-> structures for counting) at runtime vs compile time. We can be smart
-> about it and allocate in batches or even preallocate more than we need
-> beforehand but, as I said, it will require some kind of compromise.
-
-I have tried our usual distribution config (only vmlinux without modules
-so the real impact will be larger as we build a lot of stuff into
-modules) just to get an idea:
-   text    data     bss     dec     hex filename
-28755345        17040322        19845124        65640791        3e99957 vmlinux.before
-28867168        17571838        19386372        65825378        3ec6a62 vmlinux.after
-
-Less than 1% for text 3% for data.  This is not all that terrible
-for an initial submission and a more dynamic approach could be added
-later. E.g. with a smaller pre-allocated hash table that could be
-expanded lazily. Anyway not something I would be losing sleep over. This
-can always be improved later on.
-
-> I understand that code tagging creates additional maintenance burdens
-> but I hope it also produces enough benefits that people will want
-> this. The cost is also hopefully amortized when additional
-> applications like the ones we presented in RFC [1] are built using the
-> same framework.
-
-TBH I am much more concerned about the maintenance burden on the MM side
-than the actual code tagging itslef which is much more self contained. I
-haven't seen other potential applications of the same infrastructure and
-maybe the code impact would be much smaller than in the MM proper. Our
-allocator API is really hairy and convoluted.
-
-> > - We already have page_owner infrastructure that provides allocation
-> >   tracking data. Why it cannot be used/extended?
-> 
-> 1. The overhead.
-
-Do you have any numbers?
-
-> 2. Covers only page allocators.
-
-Yes this sucks.
-> 
-> I didn't think about extending the page_owner approach to slab
-> allocators but I suspect it would not be trivial. I don't see
-> attaching an owner to every slab object to be a scalable solution. The
-> overhead would again be of concern here.
-
-This would have been a nice argument to mention in the changelog so that
-we know that you have considered that option at least. Why should I (as
-a reviewer) wild guess that?
-
-> I should point out that there was one important technical concern
-> about lack of a kill switch for this feature, which was an issue for
-> distributions that can't disable the CONFIG flag. In this series we
-> addressed that concern.
-
-Thanks, that is certainly appreciated. I haven't looked deeper into that
-part but from the cover letter I have understood that CONFIG_MEM_ALLOC_PROFILING
-implies unconditional page_ext and therefore the memory overhead
-assosiated with that. There seems to be a killswitch nomem_profiling but
-from a quick look it doesn't seem to disable page_ext allocations. I
-might be missing something there of course. Having a highlevel
-describtion for that would be really nice as well.
-
-> [1] https://lore.kernel.org/all/20220830214919.53220-1-surenb@google.com/
-
--- 
-Michal Hocko
-SUSE Labs
+>
+> --
+> Michal Hocko
+> SUSE Labs
