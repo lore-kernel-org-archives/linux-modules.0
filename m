@@ -2,47 +2,63 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1190CC77B7D
-	for <linux-modules@archiver.kernel.org>; Fri,  5 May 2023 08:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D696DC77B7C
+	for <linux-modules@archiver.kernel.org>; Fri,  5 May 2023 18:10:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjEEIkZ (ORCPT
+        id S232271AbjEESKk (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 5 May 2023 04:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
+        Fri, 5 May 2023 14:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbjEEIkX (ORCPT
+        with ESMTP id S233048AbjEESKh (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 5 May 2023 04:40:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F44E18868;
-        Fri,  5 May 2023 01:40:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DC8F022A20;
-        Fri,  5 May 2023 08:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683276019; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/0NvfINDngaX81zK/8XuAzfIOyZoSgVhu9auLhp95+8=;
-        b=N7Hh14VsXyzhdip98WZKHL6vi++Ot45f7xe1XG1LXAkD8DEJNNJwpr4HSGIxEz/MZq1bfG
-        KUwErWXXaSTBD69btoSMDYsSKukSj3gDTrJzJv4JPQtavr86N6hSjezAAulivmJwR+mrLN
-        xGzDPAbAKNp+pIZ7BzXA3dFlbRMDVYo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AB98313488;
-        Fri,  5 May 2023 08:40:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VIvmKfPAVGSkQwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 05 May 2023 08:40:19 +0000
-Date:   Fri, 5 May 2023 10:40:19 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
+        Fri, 5 May 2023 14:10:37 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FB617DED
+        for <linux-modules@vger.kernel.org>; Fri,  5 May 2023 11:10:32 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b9ef06cb784so2755448276.0
+        for <linux-modules@vger.kernel.org>; Fri, 05 May 2023 11:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683310232; x=1685902232;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QVZYG1JecNO86jzNV6C/AMNw6VQt+fJvqwCxq5mp/Nc=;
+        b=JuehaV/RJK9Y4fUOdxkcZEuqDGAuEF/acJdDqJ45XbKARUoqq4czDg4ZH8mqWvQs0W
+         C3cMUZ3VtCr6q/eI+6qJp58nulUMjZvQdZpvpUFXRdmOfRfhasZuNayk1xVHyGVy9Mwz
+         ItoP45q/KUOjBJ5HUc+Vlm240zAnqes7cusDh4wsBFNSxkmDsbQVgr1QY7ENaCb2Pf+o
+         stmyjKNibly7r3/lcAzIGX4ZSS4stgbgtYjMfq5c0cI/ZADNQtKt98fqV/f8MiQv11Tt
+         rfeoXeDHmM1lnkcbyLTsW9UrOEazY/VwbfsLiL1Vyfp7oqXyyedjHeSP3hv1vKGbwqQn
+         8juQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683310232; x=1685902232;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QVZYG1JecNO86jzNV6C/AMNw6VQt+fJvqwCxq5mp/Nc=;
+        b=QoA1kJUq4UEppFr5vUNKzEWdGQcpebZ6rlWvw5FaLQDGemmlCmqms2YtjjBwCOCzz5
+         wzFhR/apJ+MRejlO1vfikboj37+D3HCa0yvuGcos7KRN1GdsaLn6nK3V2DFcR1v6dKrj
+         HI+/YPXVQKVz7SnmudUy4xiAe3U41fjcAWzU0s1UhGrx6qN93pDKqWp6t++y+xAHuzRt
+         d8OTU6ZSRVhNKc/ditSuBc5wfzviLGYK2E/PMf0Yur+G08j+9TZR20j7PdEHzN/0arTF
+         XIgf/vbVMq0tUno90ptHVpCsjRDvM5ZTzn4JbFJdl/eseAbMAqc//NSGYGH5oN+E6V3T
+         +lZQ==
+X-Gm-Message-State: AC+VfDz3yrAe4nFlV/L8+HfxVjMpSOBm7EWNHdg06nrjEJGQRFCvh8tC
+        VQqXaXkEXl73SAVzFUz2XLhHlGD1Cg5taCfCu9xLnw==
+X-Google-Smtp-Source: ACHHUZ7QHqfeTFCV6iTpJ174mK2XnlUcdiV6R/LWDFZ2cFLepn3d5BnEaLb2X1/400R6vZerp7fSwFYV9RLQ6kw5Ucs=
+X-Received: by 2002:a25:19d7:0:b0:b97:1e2e:a4e5 with SMTP id
+ 206-20020a2519d7000000b00b971e2ea4e5mr2351347ybz.40.1683310231779; Fri, 05
+ May 2023 11:10:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-36-surenb@google.com>
+ <ZFIPmnrSIdJ5yusM@dhcp22.suse.cz> <CAJuCfpGsvWupMbasqvwcMYsOOPxTQqi1ed5+=vyu-yoPQwwybg@mail.gmail.com>
+ <ZFNoVfb+1W4NAh74@dhcp22.suse.cz> <CAJuCfpGUtw6cbjLsksGJKATZfTV0FEYRXwXT0pZV83XqQydBgg@mail.gmail.com>
+ <ZFTA8xVzxWc345Ug@dhcp22.suse.cz>
+In-Reply-To: <ZFTA8xVzxWc345Ug@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 5 May 2023 11:10:20 -0700
+Message-ID: <CAJuCfpFOLyZKvtqHuukOZvegxGHVUcAtbh3Egt+01yZ9kcEAew@mail.gmail.com>
+Subject: Re: [PATCH 35/40] lib: implement context capture support for tagged allocations
+To:     Michal Hocko <mhocko@suse.com>
 Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
         mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
@@ -70,49 +86,59 @@ Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 35/40] lib: implement context capture support for tagged
- allocations
-Message-ID: <ZFTA8xVzxWc345Ug@dhcp22.suse.cz>
-References: <20230501165450.15352-1-surenb@google.com>
- <20230501165450.15352-36-surenb@google.com>
- <ZFIPmnrSIdJ5yusM@dhcp22.suse.cz>
- <CAJuCfpGsvWupMbasqvwcMYsOOPxTQqi1ed5+=vyu-yoPQwwybg@mail.gmail.com>
- <ZFNoVfb+1W4NAh74@dhcp22.suse.cz>
- <CAJuCfpGUtw6cbjLsksGJKATZfTV0FEYRXwXT0pZV83XqQydBgg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpGUtw6cbjLsksGJKATZfTV0FEYRXwXT0pZV83XqQydBgg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu 04-05-23 09:22:07, Suren Baghdasaryan wrote:
-[...]
-> > But even then I really detest an additional allocation from this context
-> > for every single allocation request. There GFP_NOWAIT allocation for
-> > steckdepot but that is at least cached and generally not allocating.
-> > This will allocate for every single allocation.
-> 
-> A small correction here. alloc_tag_create_ctx() is used only for
-> allocations which we requested to capture the context. So, this last
-> sentence is true for allocations we specifically marked to capture the
-> context, not in general.
+On Fri, May 5, 2023 at 1:40=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
+:
+>
+> On Thu 04-05-23 09:22:07, Suren Baghdasaryan wrote:
+> [...]
+> > > But even then I really detest an additional allocation from this cont=
+ext
+> > > for every single allocation request. There GFP_NOWAIT allocation for
+> > > steckdepot but that is at least cached and generally not allocating.
+> > > This will allocate for every single allocation.
+> >
+> > A small correction here. alloc_tag_create_ctx() is used only for
+> > allocations which we requested to capture the context. So, this last
+> > sentence is true for allocations we specifically marked to capture the
+> > context, not in general.
+>
+> Ohh, right. I have misunderstood that part. Slightly better, still
+> potentially a scalability issue because hard to debug memory leaks
+> usually use a generic caches (for kmalloc). So this might be still a lot
+> of objects to track.
 
-Ohh, right. I have misunderstood that part. Slightly better, still
-potentially a scalability issue because hard to debug memory leaks
-usually use a generic caches (for kmalloc). So this might be still a lot
-of objects to track.
+Yes, generally speaking, if a single code location is allocating very
+frequently then enabling context capture for it will generate many
+callstack buffers.
 
-> > There must be a better way.
-> 
-> Yeah, agree, it would be good to avoid allocations in this path. Any
-> specific ideas on how to improve this? Pooling/caching perhaps? I
-> think kmem_cache does some of that already but maybe something else?
+Your note about use of generic caches makes me think we still have a
+small misunderstanding. We tag at the allocation call site, not based
+on which cache is used. Two kmalloc calls from different code
+locations will have unique codetags for each, so enabling context
+capture for one would not result in context capturing for the other
+one.
 
-The best I can come up with is a preallocated hash table to store
-references to stack depots with some additional data associated. The
-memory overhead could be still quite big but the hash tables could be
-resized lazily.
--- 
-Michal Hocko
-SUSE Labs
+>
+> > > There must be a better way.
+> >
+> > Yeah, agree, it would be good to avoid allocations in this path. Any
+> > specific ideas on how to improve this? Pooling/caching perhaps? I
+> > think kmem_cache does some of that already but maybe something else?
+>
+> The best I can come up with is a preallocated hash table to store
+> references to stack depots with some additional data associated. The
+> memory overhead could be still quite big but the hash tables could be
+> resized lazily.
+
+Ok, that seems like the continuation of you suggestion in another
+thread to combine identical callstack traces. That's an excellent
+idea! I think it would not be hard to implement. Thanks!
+
+> --
+> Michal Hocko
+> SUSE Labs
