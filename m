@@ -2,114 +2,76 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60175C77B7C
-	for <linux-modules@archiver.kernel.org>; Tue,  9 May 2023 13:49:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D984C77B7C
+	for <linux-modules@archiver.kernel.org>; Thu, 11 May 2023 15:25:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235148AbjEINtP (ORCPT
+        id S238149AbjEKPZI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 9 May 2023 09:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
+        Thu, 11 May 2023 11:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234641AbjEINtO (ORCPT
+        with ESMTP id S238356AbjEKPZH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 9 May 2023 09:49:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E1F3C1E
-        for <linux-modules@vger.kernel.org>; Tue,  9 May 2023 06:49:04 -0700 (PDT)
-Date:   Tue, 9 May 2023 15:49:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683640143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=v+DX89zs3pzr9ifTHXskaWPil2fnzXteDPpVzvXKgCM=;
-        b=N/lipH4JgEJohAlsG5QC0B8ZRyM4f0IViacniM8heeGIaNMtU1n3tpGhecncQSocR2W9IN
-        3SoW/gPmvyd8CsPN8t786KVCdWszaNP2R/1s3mMiZHE3cLBhQ7ICIY3CZ14lHOrTGhzurn
-        me9Chh71Gie+R5OK5rpuJw98BtMC76/PIqfPU5JeOwPe2VPP4rX2bcMNEn1z7YjxLTyYJB
-        ujyyr2vGwLM7K24MnMy4LFIfG06QVuhlwASYQB5HjxcG4E3rMbo26kaXoBdyCTqPbtztb7
-        GcijxGvpBfsCv23MmDASnT0a7EcJLHoNHkWMWAyKjhOgBJT3JXAUiKRxcV4gCQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683640143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=v+DX89zs3pzr9ifTHXskaWPil2fnzXteDPpVzvXKgCM=;
-        b=QPEeMNqmJZPkgj/pDukO6Dbr8hySwtUV4nWfKrxT07RVzhXbvoh7K3oA2hTfvKGYoerjHm
-        Q659cSnyVQcvrTCw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     linux-modules@vger.kernel.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH] module: Remove preempt_disable() from module reference
- counting.
-Message-ID: <20230509134902.yQ-EWRpI@linutronix.de>
+        Thu, 11 May 2023 11:25:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC728126
+        for <linux-modules@vger.kernel.org>; Thu, 11 May 2023 08:25:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A13264EEF
+        for <linux-modules@vger.kernel.org>; Thu, 11 May 2023 15:25:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF074C433EF
+        for <linux-modules@vger.kernel.org>; Thu, 11 May 2023 15:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683818705;
+        bh=4Sm0KDitLDD3f/sHoAOACfsJJn/LEWKAOyenQCmPYiw=;
+        h=From:Date:Subject:To:Cc:From;
+        b=bSUggfnBvzLDypA/nMSnFzjnld3PnyDw5FrMBKrGi+JkBxbTSGRste0sO+yXwi4mB
+         gu+odkixkO6DTwjirTNoDCk0lHXD4lUiUprqz1hLeIEDFGYl3kFkcu1CfJKnmtLUwq
+         malhKf5pzj+7qBaJ2699R+ipxxcpN8Mn6oodUSFbW9rqq+3NhsIPI2mgf85WmFNa2l
+         0o3aKBoS3dYFM5zfQ/q72/BDrKbFBulIUruws7yAlzWZPQqPVWFuGFKrCv0hKlw3PN
+         HF2LqqTPDrQJ6eAK6bSbPLEJpyvlefSpuEttALPZ7IcjQf6qvUDapJp44e/zJ5NNqC
+         Dl8WCWa90ulVw==
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-44fa6454576so3119689e0c.0
+        for <linux-modules@vger.kernel.org>; Thu, 11 May 2023 08:25:05 -0700 (PDT)
+X-Gm-Message-State: AC+VfDygPTn0ySV8GJJkYqt6tQNVz3cosz2Ii9MSnGnUYUtbWrIhCyNI
+        i9CF81L1JTHTZp5+AdIlrhRZsOIHxql2w3le9a0=
+X-Google-Smtp-Source: ACHHUZ7Y+YmzmN4919uk8egJOsW3pwC7xJxEJw8G7nkEzoEk/1Lh60O1v1HAv0VcztzQA3+3Aifie/Q3NyxHkKwzeBw=
+X-Received: by 2002:a1f:3f96:0:b0:440:3793:6ab2 with SMTP id
+ m144-20020a1f3f96000000b0044037936ab2mr7036573vka.13.1683818704851; Thu, 11
+ May 2023 08:25:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+From:   Luis Chamberlain <mcgrof@kernel.org>
+Date:   Thu, 11 May 2023 08:24:53 -0700
+X-Gmail-Original-Message-ID: <CAB=NE6VKXO+GnGR8e5m35SGmqM+vRw7YKqty3r-b0_Pyhhg5iA@mail.gmail.com>
+Message-ID: <CAB=NE6VKXO+GnGR8e5m35SGmqM+vRw7YKqty3r-b0_Pyhhg5iA@mail.gmail.com>
+Subject: Taking on patchwork for linux-modules
+To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     Song Liu <song@kernel.org>,
+        Konstantin Ryabitsev <mricon@kernel.org>,
+        linux-modules@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The preempt_disable() section in module_put() was added in commit
-   e1783a240f491 ("module: Use this_cpu_xx to dynamically allocate counters")
+Lucas, Konstantin,
 
-while the per-CPU counter were switched to another API. The API requires
-that during the RMW operation the CPU remained the same.
+I'd like to relive the linux-modules patchwork. It seems to be active
+but I'd like to start using it and making tweaks for it for artifact
+testing so to enable automation of testing for patches posted and so
+forth. How can I claim it ?
 
-This counting API was later replaced with atomic_t in commit
-   2f35c41f58a97 ("module: Replace module_ref with atomic_t refcnt")
+Motivation behind this is to enable automation of testing with kdevops
+for Linux modules both for the sefftests and then also the userspace
+kmod tools. Then eventually I want to work with Song on performance
+metrics to keep track of future changes as in the future we expect to
+get patches which may alter performance aspects of Linux due to this.
 
-Since this atomic_t replacement there is no need to keep preemption
-disabled while the reference counter is modified.
+This will all allow us to review proactively the effects / breakage of
+patches posted. My hope is that if we're successful we can document
+this to leverage similar strategies to help maintenance of other
+complex subsystems which require more complex testing.
 
-Remove preempt_disable() from module_put(), __module_get() and
-try_module_get().
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- kernel/module/main.c | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 044aa2c9e3cb0..ea7d0c7f3e60d 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -820,10 +820,8 @@ static struct module_attribute modinfo_refcnt =
- void __module_get(struct module *module)
- {
- 	if (module) {
--		preempt_disable();
- 		atomic_inc(&module->refcnt);
- 		trace_module_get(module, _RET_IP_);
--		preempt_enable();
- 	}
- }
- EXPORT_SYMBOL(__module_get);
-@@ -833,15 +831,12 @@ bool try_module_get(struct module *module)
- 	bool ret = true;
- 
- 	if (module) {
--		preempt_disable();
- 		/* Note: here, we can fail to get a reference */
- 		if (likely(module_is_live(module) &&
- 			   atomic_inc_not_zero(&module->refcnt) != 0))
- 			trace_module_get(module, _RET_IP_);
- 		else
- 			ret = false;
--
--		preempt_enable();
- 	}
- 	return ret;
- }
-@@ -852,11 +847,9 @@ void module_put(struct module *module)
- 	int ret;
- 
- 	if (module) {
--		preempt_disable();
- 		ret = atomic_dec_if_positive(&module->refcnt);
- 		WARN_ON(ret < 0);	/* Failed to put refcount */
- 		trace_module_put(module, _RET_IP_);
--		preempt_enable();
- 	}
- }
- EXPORT_SYMBOL(module_put);
--- 
-2.40.1
-
+  Luis
