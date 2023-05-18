@@ -2,133 +2,94 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37425C77B75
-	for <linux-modules@archiver.kernel.org>; Wed, 17 May 2023 13:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86E98C77B7D
+	for <linux-modules@archiver.kernel.org>; Thu, 18 May 2023 05:53:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjEQNSi (ORCPT
+        id S229563AbjERFxC (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 17 May 2023 09:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        Thu, 18 May 2023 01:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbjEQNSh (ORCPT
+        with ESMTP id S229622AbjERFxB (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 17 May 2023 09:18:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC7D5580;
-        Wed, 17 May 2023 06:18:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6918D646FD;
-        Wed, 17 May 2023 13:18:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32B14C433EF;
-        Wed, 17 May 2023 13:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684329505;
-        bh=fFaBhSlTcMJjI8CnUH0C+qCZq/vTg7EvCm12mEBrjAY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=n8MkuYef3+BHDNckeyaUgqc5b2L54WprOPLVQQ4Sy4FSWFX6SVa5c0IHQ4TQsUlML
-         skyxSOiOqHcGbBXeq8XDDfC1ndeivE0CMdm39/hkih5011ohB7MwoFrlrE9K3lWJkN
-         XVXX+kbld2p7EDaALZ4k9CNEqSVAtlHqpN79T1qINQaqtL3dQEDrUsBp4b3aLlzY1W
-         6MQ0W2X26bJugHIdCkulIrHOKky5rd5p2Wx9tk8vx+MwHrkhPyILNSReZ7Ae/4m7uG
-         a6rCdMuQXCYEWMRE3aOKtzcRtWIFTiR467gshJtgOEn/NOcIrbA8zr6pT1rs2gK5Ay
-         SkX0gSRUcPgBQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-modules@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
-Date:   Wed, 17 May 2023 15:18:07 +0200
-Message-Id: <20230517131820.936553-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Thu, 18 May 2023 01:53:01 -0400
+X-Greylist: delayed 311 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 May 2023 22:52:59 PDT
+Received: from forward206c.mail.yandex.net (forward206c.mail.yandex.net [178.154.239.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3066510CE
+        for <linux-modules@vger.kernel.org>; Wed, 17 May 2023 22:52:59 -0700 (PDT)
+Received: from forward103c.mail.yandex.net (forward103c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d103])
+        by forward206c.mail.yandex.net (Yandex) with ESMTP id 8937F6954D
+        for <linux-modules@vger.kernel.org>; Thu, 18 May 2023 08:47:50 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-24.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-24.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:779c:0:640:7d74:0])
+        by forward103c.mail.yandex.net (Yandex) with ESMTP id C91106005B
+        for <linux-modules@vger.kernel.org>; Thu, 18 May 2023 08:47:46 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-24.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id blVtTnKWu8c0-3FAYXLuL;
+        Thu, 18 May 2023 08:47:46 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1684388866;
+        bh=ynUfNCxxSoct2DId3riTnuYJQWakG8msv6wWITNg6Sc=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=PVIvP85+QoU3tQ5YYv8s5E6gnCkAZDTUqfkpo/p98nd7ceS7QR+uHurxdRd4NHXit
+         eN+Nx7lAZBd59lLq4v78hC/3oEjbikE6Oh1olee0b0r7XJEx6ZVzA0iHhB0WfoVRlj
+         52uZ7YglDxzYg1gf+A1c0cdJOKVQ1Mohd5UCPVQM=
+Authentication-Results: mail-nwsmtp-smtp-production-main-24.iva.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Dmitry Antipov <dmantipov@yandex.ru>
+To:     linux-modules@vger.kernel.org
+Cc:     Dmitry Antipov <dmantipov@yandex.ru>
+Subject: [PATCH] modprobe: prefer -ENODATA over -ENOENT if no section found
+Date:   Thu, 18 May 2023 08:47:30 +0300
+Message-Id: <20230518054730.11237-1-dmantipov@yandex.ru>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Arnd Bergmann <arnd@arndb.de>
+When the module is definitely present but CONFIG_MODVERSIONS is
+disabled, the following error message may be somewhat confusing:
 
-The arch_get_kallsym() function was introduced so that x86 could override
-it, but that override was removed in bf904d2762ee ("x86/pti/64: Remove
-the SYSCALL64 entry trampoline"), so now this does nothing except causing
-a warning about a missing prototype:
+modprobe --dump-modversions /path/to/module.ko.xz
+modprobe: FATAL: could not get modversions of /path/to/module/ko.xz: No such file or directory
 
-kernel/kallsyms.c:662:12: error: no previous prototype for 'arch_get_kallsym' [-Werror=missing-prototypes]
-  662 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+Choosing among the convenient errno values, I would suggest to use ENODATA
+when the module lacks a particular ELF section (and vermagic as well).
 
-Restore the old behavior before d83212d5dd67 ("kallsyms, x86: Export
-addresses of PTI entry trampolines") to simplify the code and avoid
-the warning.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
 ---
- kernel/kallsyms.c | 28 +---------------------------
- 1 file changed, 1 insertion(+), 27 deletions(-)
+ libkmod/libkmod-elf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index e01c435595f9..dac13659601f 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -646,7 +646,6 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
- /* To avoid using get_symbol_offset for every symbol, we carry prefix along. */
- struct kallsym_iter {
- 	loff_t pos;
--	loff_t pos_arch_end;
- 	loff_t pos_mod_end;
- 	loff_t pos_ftrace_mod_end;
- 	loff_t pos_bpf_end;
-@@ -659,29 +658,9 @@ struct kallsym_iter {
- 	int show_value;
- };
+diff --git a/libkmod/libkmod-elf.c b/libkmod/libkmod-elf.c
+index ef4a8a3..fb2e3d9 100644
+--- a/libkmod/libkmod-elf.c
++++ b/libkmod/libkmod-elf.c
+@@ -392,7 +392,7 @@ static int elf_find_section(const struct kmod_elf *elf, const char *section)
+ 		return i;
+ 	}
  
--int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
--			    char *type, char *name)
--{
--	return -EINVAL;
--}
--
--static int get_ksymbol_arch(struct kallsym_iter *iter)
--{
--	int ret = arch_get_kallsym(iter->pos - kallsyms_num_syms,
--				   &iter->value, &iter->type,
--				   iter->name);
--
--	if (ret < 0) {
--		iter->pos_arch_end = iter->pos;
--		return 0;
--	}
--
--	return 1;
--}
--
- static int get_ksymbol_mod(struct kallsym_iter *iter)
- {
--	int ret = module_get_kallsym(iter->pos - iter->pos_arch_end,
-+	int ret = module_get_kallsym(iter->pos - kallsyms_num_syms,
- 				     &iter->value, &iter->type,
- 				     iter->name, iter->module_name,
- 				     &iter->exported);
-@@ -764,7 +743,6 @@ static void reset_iter(struct kallsym_iter *iter, loff_t new_pos)
- 	iter->nameoff = get_symbol_offset(new_pos);
- 	iter->pos = new_pos;
- 	if (new_pos == 0) {
--		iter->pos_arch_end = 0;
- 		iter->pos_mod_end = 0;
- 		iter->pos_ftrace_mod_end = 0;
- 		iter->pos_bpf_end = 0;
-@@ -780,10 +758,6 @@ static int update_iter_mod(struct kallsym_iter *iter, loff_t pos)
- {
- 	iter->pos = pos;
+-	return -ENOENT;
++	return -ENODATA;
+ }
  
--	if ((!iter->pos_arch_end || iter->pos_arch_end > pos) &&
--	    get_ksymbol_arch(iter))
--		return 1;
--
- 	if ((!iter->pos_mod_end || iter->pos_mod_end > pos) &&
- 	    get_ksymbol_mod(iter))
- 		return 1;
+ int kmod_elf_get_section(const struct kmod_elf *elf, const char *section, const void **buf, uint64_t *buf_size)
+@@ -422,7 +422,7 @@ int kmod_elf_get_section(const struct kmod_elf *elf, const char *section, const
+ 		return 0;
+ 	}
+ 
+-	return -ENOENT;
++	return -ENODATA;
+ }
+ 
+ /* array will be allocated with strings in a single malloc, just free *array */
+@@ -653,7 +653,7 @@ int kmod_elf_strip_vermagic(struct kmod_elf *elf)
+ 	}
+ 
+ 	ELFDBG(elf, "no vermagic found in .modinfo\n");
+-	return -ENOENT;
++	return -ENODATA;
+ }
+ 
+ 
 -- 
-2.39.2
+2.40.1
 
