@@ -2,98 +2,82 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81241C77B75
-	for <linux-modules@archiver.kernel.org>; Fri, 19 May 2023 07:28:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 623F8C77B7A
+	for <linux-modules@archiver.kernel.org>; Fri, 19 May 2023 07:41:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjESH2e (ORCPT
+        id S229436AbjESHlX (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 19 May 2023 03:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
+        Fri, 19 May 2023 03:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjESH2d (ORCPT
+        with ESMTP id S230262AbjESHlW (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 19 May 2023 03:28:33 -0400
-X-Greylist: delayed 92441 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 19 May 2023 00:28:31 PDT
-Received: from forward102c.mail.yandex.net (forward102c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861A8122
-        for <linux-modules@vger.kernel.org>; Fri, 19 May 2023 00:28:31 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-canary-88.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-canary-88.sas.yp-c.yandex.net [IPv6:2a02:6b8:c08:1d21:0:640:c9e4:0])
-        by forward102c.mail.yandex.net (Yandex) with ESMTP id 81DE46004C;
-        Fri, 19 May 2023 10:28:29 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-canary-88.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id HSYsawWDU4Y0-SABEbqK4;
-        Fri, 19 May 2023 10:28:29 +0300
+        Fri, 19 May 2023 03:41:22 -0400
+Received: from forward102b.mail.yandex.net (forward102b.mail.yandex.net [178.154.239.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC35198
+        for <linux-modules@vger.kernel.org>; Fri, 19 May 2023 00:41:18 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-78.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-78.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:1105:0:640:2966:0])
+        by forward102b.mail.yandex.net (Yandex) with ESMTP id 9275B60038;
+        Fri, 19 May 2023 10:41:16 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-78.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id AfYBPfYDS4Y0-aWS0BRtJ;
+        Fri, 19 May 2023 10:41:16 +0300
 X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1684481309;
-        bh=rBUQlI8bBMJenHVs9JQCmmz+lgdbvOpn+4j7ku/coFA=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1684482076;
+        bh=P8ZSONbeRW+2HPFiCG6C8eaDnSmOiW2W91YDo36A0DQ=;
         h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=OY6Iv72lTckMR+zgsaWLH9LN6ZIqcs5L3POh6azcZ9edtIz6V2tS/Kq9o/VxF6iGX
-         FyyYZgnGmJd39Kd8Be3FyuGXCh1Eu7xT59tGJsCj0pTiP3luWTn6cFOJ+E67FSeQG8
-         rWUounpeeAWMNBwh994t5frnIS0mtV32NR3bTbx4=
-Authentication-Results: mail-nwsmtp-smtp-production-canary-88.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+        b=V4fPqX178jX0LRHAjt2WE8O1ubMhf4B3nYDSoAEPIXbCecY345iMra+mLawMNqgSM
+         K3gFd5kD8PgbLgo8zTYUSoy2iWuFNgBUEmedKjF7UM0z0yn5pg9taf11ZI8aoImPGu
+         jI8co8XJOigwJguABZIvAEFpiuZn6VgF0vEDjSM4=
+Authentication-Results: mail-nwsmtp-smtp-production-main-78.myt.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
 From:   Dmitry Antipov <dmantipov@yandex.ru>
 To:     linux-modules@vger.kernel.org
 Cc:     Dmitry Antipov <dmantipov@yandex.ru>,
         Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH] libkmod: prefer -ENODATA over -ENOENT if no section found
-Date:   Fri, 19 May 2023 10:28:12 +0300
-Message-Id: <20230519072812.400131-1-dmantipov@yandex.ru>
+Subject: [PATCH] shared: avoid passing {NULL, 0} array to bsearch()
+Date:   Fri, 19 May 2023 10:41:08 +0300
+Message-Id: <20230519074108.401180-1-dmantipov@yandex.ru>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <367517d8-5c71-c6e7-b929-2f3a2651de44@csgroup.eu>
-References: <367517d8-5c71-c6e7-b929-2f3a2651de44@csgroup.eu>
+In-Reply-To: <926001fd-34bb-83ee-be77-ccbded164615@csgroup.eu>
+References: <926001fd-34bb-83ee-be77-ccbded164615@csgroup.eu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-When the module is definitely present but CONFIG_MODVERSIONS is
-disabled, the following error message may be somewhat confusing:
+Fix the following warning reported by UBSan (as of gcc-13.1.1):
 
-modprobe --dump-modversions /path/to/module.ko.xz
-modprobe: FATAL: could not get modversions of /path/to/module.ko.xz: No such file or directory
-
-Choosing among the convenient errno values, I would suggest to use
-ENODATA when the module lacks a particular ELF section (and vermagic
-as well). So now it is expected to be:
-
-modprobe: FATAL: could not get modversions of /path/to/module.ko.xz: No data available
+shared/hash.c:244:35: runtime error: null pointer passed as
+argument 2, which is declared to never be null
 
 Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
 ---
- libkmod/libkmod-elf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ shared/hash.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/libkmod/libkmod-elf.c b/libkmod/libkmod-elf.c
-index ef4a8a3..fb2e3d9 100644
---- a/libkmod/libkmod-elf.c
-+++ b/libkmod/libkmod-elf.c
-@@ -392,7 +392,7 @@ static int elf_find_section(const struct kmod_elf *elf, const char *section)
- 		return i;
- 	}
- 
--	return -ENOENT;
-+	return -ENODATA;
+diff --git a/shared/hash.c b/shared/hash.c
+index 7fe3f80..f90e22d 100644
+--- a/shared/hash.c
++++ b/shared/hash.c
+@@ -241,12 +241,13 @@ void *hash_find(const struct hash *hash, const char *key)
+ 		.key = key,
+ 		.value = NULL
+ 	};
+-	const struct hash_entry *entry = bsearch(
+-		&se, bucket->entries, bucket->used,
+-		sizeof(struct hash_entry), hash_entry_cmp);
+-	if (entry == NULL)
++	if (bucket->entries) {
++		const struct hash_entry *entry =
++			bsearch(&se, bucket->entries, bucket->used,
++				sizeof(struct hash_entry), hash_entry_cmp);
++		return entry ? (void *)entry->value : NULL;
++	} else
+ 		return NULL;
+-	return (void *)entry->value;
  }
  
- int kmod_elf_get_section(const struct kmod_elf *elf, const char *section, const void **buf, uint64_t *buf_size)
-@@ -422,7 +422,7 @@ int kmod_elf_get_section(const struct kmod_elf *elf, const char *section, const
- 		return 0;
- 	}
- 
--	return -ENOENT;
-+	return -ENODATA;
- }
- 
- /* array will be allocated with strings in a single malloc, just free *array */
-@@ -653,7 +653,7 @@ int kmod_elf_strip_vermagic(struct kmod_elf *elf)
- 	}
- 
- 	ELFDBG(elf, "no vermagic found in .modinfo\n");
--	return -ENOENT;
-+	return -ENODATA;
- }
- 
- 
+ int hash_del(struct hash *hash, const char *key)
 -- 
 2.40.1
 
