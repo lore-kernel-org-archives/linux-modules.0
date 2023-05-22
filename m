@@ -2,69 +2,73 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DBB8C77B73
-	for <linux-modules@archiver.kernel.org>; Mon, 22 May 2023 21:29:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D1FAC7EE2A
+	for <linux-modules@archiver.kernel.org>; Tue, 23 May 2023 00:24:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjEVV3j (ORCPT
+        id S235183AbjEWAYj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 22 May 2023 17:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        Mon, 22 May 2023 20:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjEVV3i (ORCPT
+        with ESMTP id S235131AbjEVX2A (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 22 May 2023 17:29:38 -0400
+        Mon, 22 May 2023 19:28:00 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D440C6;
-        Mon, 22 May 2023 14:29:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302641705;
+        Mon, 22 May 2023 16:22:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=lgwgkKphjKuNEo7Tr++pS92dVhSi4mt6dhb3zTnc5ZM=; b=Up1fJHA8qOJ/GynsDnyeXvX16c
-        VjQg611vyFCCHXU5pA344acKSQz0Cj/XlM7gVdEbVxoQWatGRlUx78fbvdbO4ziKfxVIWG9Ny5rzS
-        tQxe+HzlFLGrhUJnq70OqXkTUl/aDgYytw5ERk31yg7stNLYMOkeCOM0DfGboqm84MfOusDMFUi1/
-        lyjJYKRMh5co0oNz//pawT6N4lgkylzcRPv804MzjC4NsTOXN4hpdV//CT1CBEPIxc02tSui+BI4Q
-        mortKszM5LV455CnYuRJ1AEQQmgWHVuyrD2xsneSyhVpBf4Z+nhVVwU99wOhHOZQMTV5AOltPhn8W
-        jay2W9Og==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eCUDdFWO/x24L1UQwluZwvwivpq5/on0dcLWvhYbYSU=; b=lZg9alK4iixyEKRz/zYjW0Etft
+        BvpnLZNHaUmP2SjnHqYfUnltKhJ49JkAOUPwY42FcdMxtx+EJinbmnZtqaFnwS8BA+3V5IEg4lcs0
+        wGL+vJqnThSteKOHNraEkFv2tyLCHo1vSq8b72e26b5x3e9i5BrRWAGfcwWHeICXg/th+l4pP19AB
+        L+MnpIoap5fDbWY3MLK8VEG9AOQCQWdqKJ2DfOlHYL5Ad7vcbUAJYuA1JZn5suMVl76QO0zznhRA/
+        kR3YI/opWognhplXq77WASwnqhEZnGn9S4z4tB+DJBIuV9L1dUDh272uQSMQce0mybSg967fxDVr3
+        D1Z8OGvA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1D5z-00866Z-0j;
-        Mon, 22 May 2023 21:29:35 +0000
-Date:   Mon, 22 May 2023 14:29:35 -0700
+        id 1q1Eql-008L8p-23;
+        Mon, 22 May 2023 23:21:59 +0000
+Date:   Mon, 22 May 2023 16:21:59 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     torvalds@linux-foundation.org, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     harshit.m.mogalapalli@oracle.com, song@kernel.org,
-        mcgrof@kernel.org
-Subject: [GIT PULL] Modules fixes for v6.4-rc4
-Message-ID: <ZGvev3uX1SjH+7od@bombadil.infradead.org>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     Nick Alcock <nick.alcock@oracle.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com, bpf@vger.kernel.org,
+        Jiri Olsa <jolsa@redhat.com>
+Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
+ symbol->address lookup with /proc/kallmodsyms
+Message-ID: <ZGv5Fy4nmFxH5bdN@bombadil.infradead.org>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+ <20230508180653.4791819e@rorschach.local.home>
+ <e6662717-61a1-3e3d-5804-66629a1691e2@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <e6662717-61a1-3e3d-5804-66629a1691e2@intel.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
+On Fri, May 19, 2023 at 05:50:35PM +0200, Alexander Lobakin wrote:
+> FYI for devs: I posted RFC of kallsyms with file paths almost a year
+> ago[0], but it went unnoticed =\
+> 
+> `file name + function name` is not a unique pair: in one of FG-KASLR
+> discussions, someone even wrote simple script, which showed around 40
+> collisions in the kernel. My approach was to include file path starting
+> at the kernel root folder, i.e. `net/core/dev.o:register_netdev`.
+> I'm not sure why no comments happened back then tho. Maybe you could
+> take a look, I'm pretty busy with other projects, but if you find
+> anything useful there in the RFC, I could join to a little bit.
+> 
+> [0]
+> https://lore.kernel.org/all/20220818115306.1109642-1-alexandr.lobakin@intel.com
 
-  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
+Petr suggested line number too, that'd fix it too.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc4
-
-for you to fetch changes up to d36f6efbe0cb422fe1e4475717d75f3737088832:
-
-  module: Fix use-after-free bug in read_file_mod_stats() (2023-05-22 14:13:13 -0700)
-
-----------------------------------------------------------------
-modules-6.4-rc4
-
-Only one fix has tricked through by Harshit Mogalapalli found through
-static analysis with smatch.
-
-----------------------------------------------------------------
-Harshit Mogalapalli (1):
-      module: Fix use-after-free bug in read_file_mod_stats()
-
- kernel/module/stats.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+  Luis
