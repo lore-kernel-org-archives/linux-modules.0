@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 721A6C77B7C
-	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 06:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 168B1C77B7A
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 07:00:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239572AbjEXGzh (ORCPT
+        id S239689AbjEXHAJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 24 May 2023 02:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
+        Wed, 24 May 2023 03:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239887AbjEXGy6 (ORCPT
+        with ESMTP id S238980AbjEXHAG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 24 May 2023 02:54:58 -0400
+        Wed, 24 May 2023 03:00:06 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250DDE5B;
-        Tue, 23 May 2023 23:54:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCE4A3;
+        Wed, 24 May 2023 00:00:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8KBb13+iW5lHgISWlXzZrWpkxVTAvgdhmLhAgfS1JSE=; b=qNHrpBwvv/VP2p/XkyGUb2/5Hv
-        go0ooqBYhQhfBNfGjsZXwBrFRYAJgTsUxldrXbKszvEoWKSj6T5y+RxFRNR7F3eyX7RPhulT1tIXE
-        WlLvVgANXsbkGXACNMsQi9fG/rXawxmPc6n4mUMDr+FUGw+J8+tJsqgVNhGerf8BJZVy1OeFa0FfK
-        9AapODxcZR/zp+P14eRsp6Yw6PAMmqYznKEzyc/U6ayZQgr0V8HFoBLE7NjrSfuqVXz84/6643zhO
-        pGstaiKSy2Utlu2tW9o9ITjl3B855xR9FseGTnPcT5ZJvbtgRjacMdO13KIXLVHOlKGeiDnoPIdnx
-        cMjTt6Zw==;
+        bh=LDkj7fx8OszlJ4sR4sf3mfb9f8SxFIoxaxQFs3Jt+lk=; b=5BDnLy4teHwSY8P0YNy3zQo9T/
+        3zfIDQ51x/X8IlNA1Mcm9FwXMXWb3Y2XVySOPVh8+9/PQ7lPY1C+X1SjwTpAsupIZ9Jks87ZFu2aP
+        53aehgDvcHK+bObLO0eeaJd2bmWmbxEOdUStLx0/JKmO3nhQ1dY5yes4jjQ0U72TWVHjRmEwQMoVf
+        V+YVYV36umotfRSFeC2HYo3zAmqCmi6UK7tTfz0J9nRV+eZPgBg916BMTHFZMULhQFCo3l9mhp26s
+        L/tA6xGsqGvTS8gurEs4ya5Xegq8V77lW58bOt1/vT1q239O3cnJeZjfZUmU1QbGEtaX0pyHYG0vn
+        8fgfKdig==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1iNv-00CXY0-1w;
-        Wed, 24 May 2023 06:54:11 +0000
-Date:   Tue, 23 May 2023 23:54:11 -0700
+        id 1q1iTb-00CYJS-2R;
+        Wed, 24 May 2023 07:00:03 +0000
+Date:   Wed, 24 May 2023 00:00:03 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Allen Webb <allenwebb@google.com>
 Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
@@ -37,112 +37,169 @@ Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
         nick.alcock@oracle.com
-Subject: Re: [PATCH v10 06/11] modpost: Add -b option for emitting built-in
- aliases
-Message-ID: <ZG20k5ZtAnlYQiQ2@bombadil.infradead.org>
+Subject: Re: [PATCH v10 07/11] file2alias.c: Implement builtin.alias
+ generation
+Message-ID: <ZG2184mfMX9BCZiO@bombadil.infradead.org>
 References: <20221219204619.2205248-1-allenwebb@google.com>
  <20230406190030.968972-1-allenwebb@google.com>
- <20230406190030.968972-7-allenwebb@google.com>
+ <20230406190030.968972-8-allenwebb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406190030.968972-7-allenwebb@google.com>
+In-Reply-To: <20230406190030.968972-8-allenwebb@google.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Apr 06, 2023 at 02:00:25PM -0500, Allen Webb wrote:
-> This adds a command line option for writing the match-id based 
+On Thu, Apr 06, 2023 at 02:00:26PM -0500, Allen Webb wrote:
+> This populates the mod->modalias_buf with aliases for built-in modules
+> when modpost is run against vmlinuz.o.
 
-Can you explain in your commit log and in code what is "match-id" ?
-Do we not have this documeted anywhere perhaps where we can point to
-what it is?
+The commit log should describe why. And if its not used now why is it
+being introduced separately. If its to make changes eaiser to read it
+shoudl say so.
 
-> built-in
-> aliases to a file. A future patch extends file2alias.c to support this
-> command.
-> 
-> The -b option accepts the output path as a parameter and requires
-> vmlinuz.o to be one of the input files for the aliases to be found.
-> 
+So builtin thing is set but is it used at this point? Does this patch
+make any functional changes? If not why not?
+
 > Signed-off-by: Allen Webb <allenwebb@google.com>
 > ---
->  scripts/mod/modpost.c | 30 ++++++++++++++++++++++++++++--
->  scripts/mod/modpost.h |  1 +
->  2 files changed, 29 insertions(+), 2 deletions(-)
+>  scripts/mod/file2alias.c | 61 ++++++++++++++++++++++++++--------------
+>  1 file changed, 40 insertions(+), 21 deletions(-)
 > 
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index efff8078e395..2e452aec0fc6 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -2173,6 +2173,19 @@ static void write_if_changed(struct buffer *b, const char *fname)
->  	write_buf(b, fname);
+> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+> index b392d51c3b06..3793d4632b94 100644
+> --- a/scripts/mod/file2alias.c
+> +++ b/scripts/mod/file2alias.c
+> @@ -233,6 +233,8 @@ static void do_usb_entry(void *symval,
+>  	add_wildcard(alias);
+>  	buf_printf(&mod->dev_table_buf,
+>  		   "MODULE_ALIAS(\"%s\");\n", alias);
+> +	if (mod->builtin_name)
+> +		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
 >  }
 >  
-> +/* Write the builtin aliases to the specified file. */
-> +static void write_builtin(const char *fname)
-> +{
-> +	struct buffer buf = { };
-> +	struct module *mod;
-> +
-> +	list_for_each_entry(mod, &modules, list)
-> +		buf_write(&buf, mod->modalias_buf.p, mod->modalias_buf.pos);
-> +
-> +	write_if_changed(&buf, fname);
-> +	free(buf.p);
-> +}
-> +
->  static void write_vmlinux_export_c_file(struct module *mod)
->  {
->  	struct buffer buf = { };
-> @@ -2329,13 +2342,23 @@ int main(int argc, char **argv)
->  {
->  	struct module *mod;
->  	char *missing_namespace_deps = NULL;
-> -	char *dump_write = NULL, *files_source = NULL;
-> +	char *builtin_write = NULL, *dump_write = NULL, *files_source = NULL;
->  	int opt;
->  	LIST_HEAD(dump_lists);
->  	struct dump_list *dl, *dl2;
+>  /* Handles increment/decrement of BCD formatted integers */
+> @@ -377,9 +379,13 @@ static void do_of_entry_multi(void *symval, struct module *mod)
+>  			*tmp = '_';
 >  
-> -	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
-> +	while ((opt = getopt(argc, argv, "b:ei:mnT:o:awENd:")) != -1) {
->  		switch (opt) {
-> +		case 'b':
-> +			/*
-> +			 * Writes the match-id based built-in module aliases to
-> +			 * the specified path.
-> +			 *
-> +			 * vmlinuz.o needs to be one of the input files for the
-> +			 * aliases to be found.
-> +			 */
-> +			builtin_write = optarg;
-> +			break;
->  		case 'e':
->  			external_module = true;
->  			break;
-> @@ -2398,6 +2421,9 @@ int main(int argc, char **argv)
->  			write_mod_c_file(mod);
+>  	buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
+> +	if (mod->builtin_name)
+> +		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
+>  	strcat(alias, "C");
+>  	add_wildcard(alias);
+>  	buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
+> +	if (mod->builtin_name)
+> +		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
+>  }
+>  
+>  static void do_of_table(void *symval, unsigned long size,
+> @@ -611,12 +617,18 @@ static void do_pnp_device_entry(void *symval, unsigned long size,
+>  
+>  		buf_printf(&mod->dev_table_buf,
+>  			   "MODULE_ALIAS(\"pnp:d%s*\");\n", *id);
+> +		if (mod->builtin_name)
+> +			buf_printf(&mod->modalias_buf, "alias pnp:d%s* %s\n",
+> +				   *id, mod->builtin_name);
+>  
+>  		/* fix broken pnp bus lowercasing */
+>  		for (j = 0; j < sizeof(acpi_id); j++)
+>  			acpi_id[j] = toupper((*id)[j]);
+>  		buf_printf(&mod->dev_table_buf,
+>  			   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
+> +		if (mod->builtin_name)
+> +			buf_printf(&mod->modalias_buf, "alias acpi*:%s:* %s\n",
+> +				   acpi_id, mod->builtin_name);
 >  	}
+>  }
 >  
-> +	if (builtin_write)
-> +		write_builtin(builtin_write);
+> @@ -638,6 +650,8 @@ static void do_pnp_card_entries(void *symval, unsigned long size,
+>  			const char *id = (char *)(*devs)[j].id;
+>  			int i2, j2;
+>  			int dup = 0;
+> +			char acpi_id[PNP_ID_LEN];
+> +			int k;
+>  
+>  			if (!id[0])
+>  				break;
+> @@ -663,19 +677,23 @@ static void do_pnp_card_entries(void *symval, unsigned long size,
+>  			}
+>  
+>  			/* add an individual alias for every device entry */
+> -			if (!dup) {
+> -				char acpi_id[PNP_ID_LEN];
+> -				int k;
+> -
+> -				buf_printf(&mod->dev_table_buf,
+> -					   "MODULE_ALIAS(\"pnp:d%s*\");\n", id);
+> -
+> -				/* fix broken pnp bus lowercasing */
+> -				for (k = 0; k < sizeof(acpi_id); k++)
+> -					acpi_id[k] = toupper(id[k]);
+> -				buf_printf(&mod->dev_table_buf,
+> -					   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
+> -			}
+> +			if (dup)
+> +				continue;
+
+The change from !dup to (dup) continue makes your changes harder to
+read. It would be good to make that change separately so to make it
+easier to read what you are doing differently.
+
 > +
->  	if (missing_namespace_deps)
->  		write_namespace_deps_files(missing_namespace_deps);
+> +			buf_printf(&mod->dev_table_buf,
+> +				   "MODULE_ALIAS(\"pnp:d%s*\");\n", id);
+> +			if (mod->builtin_name)
+> +				buf_printf(&mod->modalias_buf, "alias pnp:d%s* %s\n",
+> +					   id, mod->builtin_name);
+> +
+> +			/* fix broken pnp bus lowercasing */
+> +			for (k = 0; k < sizeof(acpi_id); k++)
+> +				acpi_id[k] = toupper(id[k]);
+> +			buf_printf(&mod->dev_table_buf,
+> +				   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
+> +			if (mod->builtin_name)
+> +				buf_printf(&mod->modalias_buf, "alias acpi*:%s:* %s\n",
+> +					   acpi_id, mod->builtin_name);
+>  		}
+>  	}
+>  }
+> @@ -1476,10 +1494,13 @@ static void do_table(void *symval, unsigned long size,
+>  	size -= id_size;
 >  
-> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-> index 34fe5fc0b02c..c55a6aeb46bf 100644
-> --- a/scripts/mod/modpost.h
-> +++ b/scripts/mod/modpost.h
-> @@ -123,6 +123,7 @@ struct module {
->  	bool has_init;
->  	bool has_cleanup;
->  	struct buffer dev_table_buf;
-> +	struct buffer modalias_buf;
->  	char	     srcversion[25];
->  	// Missing namespace dependencies
->  	struct list_head missing_namespaces;
+>  	for (i = 0; i < size; i += id_size) {
+> -		if (do_entry(mod->name, symval+i, alias)) {
+> -			buf_printf(&mod->dev_table_buf,
+> -				   "MODULE_ALIAS(\"%s\");\n", alias);
+> -		}
+> +		if (!do_entry(mod->name, symval + i, alias))
+> +			continue;
+
+Same here. You could just fold the changes which negate the check into
+and shif the code into one patch with 0 functional changes. Then a
+second patch with your changes.
+
+> +		buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
+> +		if (!mod->builtin_name)
+> +			continue;
+> +		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias,
+> +			   mod->builtin_name);
+>  	}
+>  }
+>  
+> @@ -1554,10 +1575,8 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+>  		return;
+>  
+>  	/*
+> -	 * All our symbols are either of form
+> -	 *   __mod_<name>__<identifier>_device_table
+> -	 * or
+> -	 *   __mod_<name>__<identifier>__kmod_<builtin-name>_device_table
+> +	 * All our symbols are of form
+> +	 *   __mod_<name>__<identifier>__kmod_<modname>_device_table
+>  	 */
+>  	if (strncmp(symname, "__mod_", strlen("__mod_")))
+>  		return;
 > -- 
 > 2.39.2
 > 
