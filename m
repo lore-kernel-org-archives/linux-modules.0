@@ -2,65 +2,66 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DDF9C77B7C
-	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 21:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D49FC77B7C
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 22:04:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235675AbjEXVxN (ORCPT
+        id S229604AbjEXWEa (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 24 May 2023 17:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        Wed, 24 May 2023 18:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbjEXVxM (ORCPT
+        with ESMTP id S229547AbjEXWE3 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 24 May 2023 17:53:12 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5027912E
-        for <linux-modules@vger.kernel.org>; Wed, 24 May 2023 14:53:10 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-970028cfb6cso268953766b.1
-        for <linux-modules@vger.kernel.org>; Wed, 24 May 2023 14:53:10 -0700 (PDT)
+        Wed, 24 May 2023 18:04:29 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E0C10B
+        for <linux-modules@vger.kernel.org>; Wed, 24 May 2023 15:04:28 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2af1a7d2f6aso18222481fa.1
+        for <linux-modules@vger.kernel.org>; Wed, 24 May 2023 15:04:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684965188; x=1687557188;
+        d=linux-foundation.org; s=google; t=1684965867; x=1687557867;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GmM3xzgdi9y49uPixr7wck0B/tHNIYgDgFJoqWzjkEA=;
-        b=bVqxREpK+03YND31Jh4cEDFPgL8FpJW9NnFeb5mMkzhklvbtJwbW1wbr9S5aL3GkJy
-         Q6jN5x7OX/eP3Vgzcn4H7I7rJd6gqAcvyDKnnba9AaTQLQy8xlESHq9txuYPGC922HHS
-         LaTgptjCKBFG1TmYlmHJcUMn2OfDQnw8+DJRs=
+        bh=BGJNYAB8T/lr+YL5tSEXLDHHn2s+eih/Ya1hsZucDVU=;
+        b=SATUpcur5IGtORuSPldHZecqLQCkofDQdTInHq1pL4I/TJlHliQXom3vIKvWPAJb7x
+         a9veaA5aNY6eEv9qRGqqt7ZW7HAwkRU+Z29v6k4LBgqeQGybundyguFuxTsolQNUXU9+
+         gS3eb59uETRyQ+6WAmdDIXcyoTyZwzpv0f0gA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684965188; x=1687557188;
+        d=1e100.net; s=20221208; t=1684965867; x=1687557867;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GmM3xzgdi9y49uPixr7wck0B/tHNIYgDgFJoqWzjkEA=;
-        b=Y4U/ZN69LvpbX3beQE7VbOjvpDihMUQXaGSYmzTtlHp6J81JSIpYtNGGVrzGwUGgxN
-         7Z8jlIw2M1MBXuYVYBls3/1GZNayLZJTOpcyqcvDMgNzdMBoUKuqwiDi719tD6xPPg6U
-         5S2VJdsDtpyOVmauPJ1zPN276sMRcrFSWRMXX/YbUN78Df8il8OCzbKGHNClSE5cc2zi
-         O0BCH30BJ5WkXWSi/bNPmnRedCSWrMa62OUD7A+ojutdRcoT9Bg/tTTmfsCU5mQg1sKJ
-         10Joq8q1p/AVkBIrUsPoWUaUEDhcc4lMSGdyBKq9utWA0QbPuw31PwZK1Lf+pZ81u1t3
-         1Mzw==
-X-Gm-Message-State: AC+VfDy+O+Mw2SOQESCD+v7rkJG37QSZj1Gb5IjWDCWBuonWfHnhs+1k
-        eiQFLIjAGgcUBFBZquMmgo1O1x+iw33b256KdUY9qL13
-X-Google-Smtp-Source: ACHHUZ6X7QUyJ9I5u+sTSXO3lLRkxde3LddoddQX1NLp3Lzu84BQxg8NLzKi/yO8dlzTE3RtrTfp8w==
-X-Received: by 2002:a17:906:fe45:b0:96a:58a:6cd8 with SMTP id wz5-20020a170906fe4500b0096a058a6cd8mr16717851ejb.9.1684965188690;
-        Wed, 24 May 2023 14:53:08 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id n18-20020a1709065e1200b0096629607bb2sm6251189eju.98.2023.05.24.14.53.07
+        bh=BGJNYAB8T/lr+YL5tSEXLDHHn2s+eih/Ya1hsZucDVU=;
+        b=RYXVc/p+/pNNAA16pwA6ghIi+gygIbGiOk50C/moBxImhcB+EOM9oWFqWaGkHv2o0j
+         pgXX8z/dC9rUFghEBI3bHg/5QW7LP+l6gfZQRHFYIh+iL0mbx1X2cLo0wCkB7T2mLn6+
+         wyj+crItGS5YQnzTFlfL2ilqiv8GkQwAykVT6ZG3aXGD/6OWJoF0Wvb3TDfrS8pMIC5V
+         rbqVAHimPTJVen0vFwsjLsnTU4uyyRQvyXE7sk4VuBk+wuu9SkyncJqEddiUjbKfwkDD
+         2jAP6cHAI16txRUSbQ4V5dhYUl1dO+fbACupfvwJsJiBvhFfaRIhQ0/xkTRrFr0f1eoz
+         hvBA==
+X-Gm-Message-State: AC+VfDzm2Bh5/4pQCtXAVYyDBfsJXeLO5gwUcmqzCUPMCyuBZ2zfFGJe
+        z7r4wKAa3dNUytmrqeAiVn6/T7/3ZTqtgWMH4lKvfTLU
+X-Google-Smtp-Source: ACHHUZ6+ODqBlcxU/u6jHdlOgdsIyyjnvdC6mZfN7iyevhUPBi1uzGA+K7O9u6loS3RWURsz0aQNng==
+X-Received: by 2002:a2e:9647:0:b0:2ac:8283:b67d with SMTP id z7-20020a2e9647000000b002ac8283b67dmr315784ljh.25.1684965866887;
+        Wed, 24 May 2023 15:04:26 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id m4-20020a2e9104000000b002adb10a6620sm2180367ljg.107.2023.05.24.15.04.26
         for <linux-modules@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 14:53:07 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-513fea21228so3038369a12.3
-        for <linux-modules@vger.kernel.org>; Wed, 24 May 2023 14:53:07 -0700 (PDT)
-X-Received: by 2002:a17:907:8a12:b0:93e:fa12:aa1a with SMTP id
- sc18-20020a1709078a1200b0093efa12aa1amr19427794ejc.1.1684965187067; Wed, 24
- May 2023 14:53:07 -0700 (PDT)
+        Wed, 24 May 2023 15:04:26 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4f3b4ed6fdeso1510029e87.3
+        for <linux-modules@vger.kernel.org>; Wed, 24 May 2023 15:04:26 -0700 (PDT)
+X-Received: by 2002:a17:907:268c:b0:96f:65db:d6d2 with SMTP id
+ bn12-20020a170907268c00b0096f65dbd6d2mr16749757ejc.14.1684965423649; Wed, 24
+ May 2023 14:57:03 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230524213620.3509138-1-mcgrof@kernel.org> <20230524213620.3509138-2-mcgrof@kernel.org>
-In-Reply-To: <20230524213620.3509138-2-mcgrof@kernel.org>
+ <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 24 May 2023 14:52:50 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
-Message-ID: <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
+Date:   Wed, 24 May 2023 14:56:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi9oPrxcMK469X0zAueKQ4tqX80SdFqCx9StcL82vuEkw@mail.gmail.com>
+Message-ID: <CAHk-=wi9oPrxcMK469X0zAueKQ4tqX80SdFqCx9StcL82vuEkw@mail.gmail.com>
 Subject: Re: [PATCH 1/2] fs/kernel_read_file: add support for duplicate detection
 To:     Luis Chamberlain <mcgrof@kernel.org>
 Cc:     david@redhat.com, tglx@linutronix.de, hch@lst.de,
@@ -80,16 +81,14 @@ Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 24, 2023 at 2:36=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
+On Wed, May 24, 2023 at 2:52=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Add support for a new call which allows to detect duplicate requests
-> for each inode passed.
+> Stop adding horrific code for some made-up load that isn't real.
 
-No.
+Even if you trigger some "worst case 3x memory use", that is
+_temporary_, and will be free'd in the end.
 
-This is all disgusting.
+The patches to "fix" this are worse than the disease.
 
-Stop adding horrific code for some made-up load that isn't real.
-
-           Linus
+                  Linus
