@@ -2,70 +2,147 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69E97C77B7A
-	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 06:54:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 721A6C77B7C
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 06:55:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239085AbjEXGxk (ORCPT
+        id S239572AbjEXGzh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 24 May 2023 02:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        Wed, 24 May 2023 02:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239727AbjEXGw4 (ORCPT
+        with ESMTP id S239887AbjEXGy6 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 24 May 2023 02:52:56 -0400
+        Wed, 24 May 2023 02:54:58 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F02F1B4;
-        Tue, 23 May 2023 23:52:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250DDE5B;
+        Tue, 23 May 2023 23:54:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YRw9OpJPOYvTEj//3KZeiED/BNHcvsHuScYwpGfneP8=; b=qltV6rhjDIMg/g2XyqByozJe6x
-        5HRs/uboAJULBbyDCoqw+AGZ+IA2sitjTioscw+unolLNXvDijODh2rHe6Ivd1nDBFx0/Pf1Kn5Bk
-        skR0IwWiZ8ytqfMXj7XNmqelqPWQPuV46CBwf03v8GetMkz7sQrPae1fCUMxLCxE4F+zzUUbSL9kx
-        wIF2FxZN57H1Bz9PPJwjorWWgc+DB66ONlw/kRohx2vC5a1m33XAUn/29R0g2E+cAU2AIveIJkc93
-        9i3pr4Rz9mvRGeCOEYN/daFNi6Hunxo54+DZ0vRT6sOkBwBfLQsv/J0vST/BYGhlEYJOemjKNnDht
-        E1Vgilbg==;
+        bh=8KBb13+iW5lHgISWlXzZrWpkxVTAvgdhmLhAgfS1JSE=; b=qNHrpBwvv/VP2p/XkyGUb2/5Hv
+        go0ooqBYhQhfBNfGjsZXwBrFRYAJgTsUxldrXbKszvEoWKSj6T5y+RxFRNR7F3eyX7RPhulT1tIXE
+        WlLvVgANXsbkGXACNMsQi9fG/rXawxmPc6n4mUMDr+FUGw+J8+tJsqgVNhGerf8BJZVy1OeFa0FfK
+        9AapODxcZR/zp+P14eRsp6Yw6PAMmqYznKEzyc/U6ayZQgr0V8HFoBLE7NjrSfuqVXz84/6643zhO
+        pGstaiKSy2Utlu2tW9o9ITjl3B855xR9FseGTnPcT5ZJvbtgRjacMdO13KIXLVHOlKGeiDnoPIdnx
+        cMjTt6Zw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1iMD-00CXNZ-2i;
-        Wed, 24 May 2023 06:52:25 +0000
-Date:   Tue, 23 May 2023 23:52:25 -0700
+        id 1q1iNv-00CXY0-1w;
+        Wed, 24 May 2023 06:54:11 +0000
+Date:   Tue, 23 May 2023 23:54:11 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Allen Webb <allenwebb@google.com>
 Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
-        nick.alcock@oracle.com, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v10 03/11] stmpe-spi: Fix MODULE_DEVICE_TABLE entries
-Message-ID: <ZG20KZ6Quk87zm8l@bombadil.infradead.org>
+        nick.alcock@oracle.com
+Subject: Re: [PATCH v10 06/11] modpost: Add -b option for emitting built-in
+ aliases
+Message-ID: <ZG20k5ZtAnlYQiQ2@bombadil.infradead.org>
 References: <20221219204619.2205248-1-allenwebb@google.com>
  <20230406190030.968972-1-allenwebb@google.com>
- <20230406190030.968972-4-allenwebb@google.com>
+ <20230406190030.968972-7-allenwebb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406190030.968972-4-allenwebb@google.com>
+In-Reply-To: <20230406190030.968972-7-allenwebb@google.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Apr 06, 2023 at 02:00:22PM -0500, Allen Webb wrote:
-> A one character difference in the name supplied to MODULE_DEVICE_TABLE
-> breaks compilation for STMPE_SPI after built-in modules can generate
-> match-id based module aliases. Since this wasn't being used before and
-> builtin aliases aren't needed in this case, remove it.
+On Thu, Apr 06, 2023 at 02:00:25PM -0500, Allen Webb wrote:
+> This adds a command line option for writing the match-id based 
+
+Can you explain in your commit log and in code what is "match-id" ?
+Do we not have this documeted anywhere perhaps where we can point to
+what it is?
+
+> built-in
+> aliases to a file. A future patch extends file2alias.c to support this
+> command.
 > 
-> This was not caught earlier because STMPE_SPI can not be built as a
-> module and MODULE_DEVICE_TABLE is a no-op for built-in modules.
+> The -b option accepts the output path as a parameter and requires
+> vmlinuz.o to be one of the input files for the aliases to be found.
 > 
-> Fixes: e789995d5c61 ("mfd: Add support for STMPE SPI interface")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/lkml/202212171140.NB93eVvI-lkp@intel.com/
 > Signed-off-by: Allen Webb <allenwebb@google.com>
 > ---
-
-Oh feel free to add Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-on patches 1-3.
-
-  Luis
+>  scripts/mod/modpost.c | 30 ++++++++++++++++++++++++++++--
+>  scripts/mod/modpost.h |  1 +
+>  2 files changed, 29 insertions(+), 2 deletions(-)
+> 
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index efff8078e395..2e452aec0fc6 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -2173,6 +2173,19 @@ static void write_if_changed(struct buffer *b, const char *fname)
+>  	write_buf(b, fname);
+>  }
+>  
+> +/* Write the builtin aliases to the specified file. */
+> +static void write_builtin(const char *fname)
+> +{
+> +	struct buffer buf = { };
+> +	struct module *mod;
+> +
+> +	list_for_each_entry(mod, &modules, list)
+> +		buf_write(&buf, mod->modalias_buf.p, mod->modalias_buf.pos);
+> +
+> +	write_if_changed(&buf, fname);
+> +	free(buf.p);
+> +}
+> +
+>  static void write_vmlinux_export_c_file(struct module *mod)
+>  {
+>  	struct buffer buf = { };
+> @@ -2329,13 +2342,23 @@ int main(int argc, char **argv)
+>  {
+>  	struct module *mod;
+>  	char *missing_namespace_deps = NULL;
+> -	char *dump_write = NULL, *files_source = NULL;
+> +	char *builtin_write = NULL, *dump_write = NULL, *files_source = NULL;
+>  	int opt;
+>  	LIST_HEAD(dump_lists);
+>  	struct dump_list *dl, *dl2;
+>  
+> -	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
+> +	while ((opt = getopt(argc, argv, "b:ei:mnT:o:awENd:")) != -1) {
+>  		switch (opt) {
+> +		case 'b':
+> +			/*
+> +			 * Writes the match-id based built-in module aliases to
+> +			 * the specified path.
+> +			 *
+> +			 * vmlinuz.o needs to be one of the input files for the
+> +			 * aliases to be found.
+> +			 */
+> +			builtin_write = optarg;
+> +			break;
+>  		case 'e':
+>  			external_module = true;
+>  			break;
+> @@ -2398,6 +2421,9 @@ int main(int argc, char **argv)
+>  			write_mod_c_file(mod);
+>  	}
+>  
+> +	if (builtin_write)
+> +		write_builtin(builtin_write);
+> +
+>  	if (missing_namespace_deps)
+>  		write_namespace_deps_files(missing_namespace_deps);
+>  
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 34fe5fc0b02c..c55a6aeb46bf 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -123,6 +123,7 @@ struct module {
+>  	bool has_init;
+>  	bool has_cleanup;
+>  	struct buffer dev_table_buf;
+> +	struct buffer modalias_buf;
+>  	char	     srcversion[25];
+>  	// Missing namespace dependencies
+>  	struct list_head missing_namespaces;
+> -- 
+> 2.39.2
+> 
