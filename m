@@ -2,227 +2,87 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68553C77B7A
-	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 17:49:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3503C77B7A
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 21:36:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbjEXRtU (ORCPT
+        id S232861AbjEXVgh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 24 May 2023 13:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
+        Wed, 24 May 2023 17:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbjEXRtT (ORCPT
+        with ESMTP id S229758AbjEXVgg (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 24 May 2023 13:49:19 -0400
+        Wed, 24 May 2023 17:36:36 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0F8D3;
-        Wed, 24 May 2023 10:49:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEEAC5;
+        Wed, 24 May 2023 14:36:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6wNxw+nducg4EyIUz4whyVHInx2gaaIUR5Txh0QLUdM=; b=Ax930C8zsyJklztV6uvrnNZBHy
-        2qM/RnIANtcIKaqE4wABLMFsgYAG96YhxokTN4lGILdq5iMN4uJo0y/pwykuIhfrGULe/4liiBe59
-        YTeM0DtLDc3nS5/ziY431sQcKQFdu7w1S67AX1MK+GdCnqnzaw/GdJ4Da56/ZcVfVD74O1pM6w1J1
-        Ial9Xt818ZsNV/atXzq24OO1HHEqa6mYjkmdhZIolEAu3VOd/s4b1xGNyJ1crDRfW2+YntsRuVihp
-        oufE8A7WzM3obXJXSnpSMtb7UUmKBOW1wyKd95xy1zW8NlRqd4mgQwD0wF/iIXObXjdj91J4/za7e
-        MTO+wqnQ==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=WAKoqUN95n3fVgR2gHhetTOzf1TmlU2sJtM2C/TK2Mc=; b=zZvtruf52Q7ffeHQ5bphR02la/
+        Fn8L4xH0iakr0/r8/YHx/Ep+FALG1qw7qd1rxcWBgVbm4dOIeSSgRBBIUdIjz6vs41eNWIIrErLb4
+        ZCnmzF7lzqL/9kw71rXSrgim2ExYTBDqUqgnxCXwviRyZ+z8w/9ok2+xIi9w6DEV2ahxS6NKUPvVG
+        PHfmLgw0iKB1YoF7VJwKcu2+0TcP605ieh40OgUtVQ9WFSXXFnFwY68mrQw6iC1wv0vGQXFWHabNq
+        3EHp1IRfqwvGBePzAAQ4+hTRD9S3CuT6g4lfyFDFzIZiEzF2MLOiYCj9TfoTjpP67+gQAweqIVpA8
+        OhqWrOjg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1sbp-00EFuy-1R;
-        Wed, 24 May 2023 17:49:13 +0000
-Date:   Wed, 24 May 2023 10:49:13 -0700
+        id 1q1w9d-00EitF-0h;
+        Wed, 24 May 2023 21:36:21 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Yujie Liu <yujie.liu@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [linus:master] [module] 8660484ed1:
- WARNING:at_kernel/module/dups.c:#kmod_dup_request_exists_wait
-Message-ID: <ZG5OGRDfIbMs6sxz@bombadil.infradead.org>
-References: <202305221508.753c7b78-yujie.liu@intel.com>
- <ZG2doZJrCK7Nlrqf@bombadil.infradead.org>
- <ZG3Ho7eK+KqoAdda@yujie-X299>
+To:     david@redhat.com, tglx@linutronix.de, hch@lst.de,
+        patches@lists.linux.dev, linux-modules@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, lennart@poettering.net
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org, song@kernel.org,
+        lucas.de.marchi@gmail.com, lucas.demarchi@intel.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com, mcgrof@kernel.org
+Subject: [PATCH 0/2] module: avoid all memory pressure due to duplicates
+Date:   Wed, 24 May 2023 14:36:18 -0700
+Message-Id: <20230524213620.3509138-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZG3Ho7eK+KqoAdda@yujie-X299>
+Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 24, 2023 at 04:15:31PM +0800, Yujie Liu wrote:
-> Hi Luis,
-> 
-> On Tue, May 23, 2023 at 10:16:17PM -0700, Luis Chamberlain wrote:
-> > On Mon, May 22, 2023 at 03:51:59PM +0800, kernel test robot wrote:
-> > > Hello,
-> > > 
-> > > kernel test robot noticed "WARNING:at_kernel/module/dups.c:#kmod_dup_request_exists_wait" on:
-> > > 
-> > > commit: 8660484ed1cf3261e89e0bad94c6395597e87599 ("module: add debugging auto-load duplicate module support")
-> > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> > > 
-> > > [test failed on linux-next/master 798d276b39e984345d52b933a900a71fa0815928]
-> > > 
-> > > in testcase: boot
-> > > 
-> > > compiler: gcc-11
-> > > test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> > > 
-> > > (please refer to attached dmesg/kmsg for entire log/backtrace)
-> > > 
-> > > 
-> > > We are not sure if this is expected as this patch is for debugging
-> > > duplicate module requests issues, so we are sending this report for
-> > > your information. Thanks.
-> > > 
-> > > 
-> > > If you fix the issue, kindly add following tag
-> > > | Reported-by: kernel test robot <yujie.liu@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-lkp/202305221508.753c7b78-yujie.liu@intel.com
-> > > 
-> > > 
-> > > [   48.705567][    T1] ------------[ cut here ]------------
-> > > [   48.706519][    T1] module-autoload: duplicate request for module intel_qat
-> > > [ 48.707866][ T1] WARNING: CPU: 0 PID: 1 at kernel/module/dups.c:183 kmod_dup_request_exists_wait (kernel/module/dups.c:183 (discriminator 1)) 
-> > 
-> > This is a real issue since CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE was enabled.
-> > If you enable CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE and these warnings
-> > come up a bette detailed report would be better. In this case the goal
-> > was to capture races of request_module() and so the idea for developers
-> > is to identify the module that caused this, in this case intel_qat, and
-> > then see who called the request_module() for it. They could try things
-> > like try_module_get(), but could also ensure that multiple requests
-> > won't be done in the code by using locking schemes or whatever. Only
-> > one request should be issued.
-> > 
-> > The trace below would show possible users but I don't even see
-> > drivers/crypto/qat/qat_c3xxx/adf_drv.c in my kernel tree.
-> > 
-> > If you don't to deal with this reporting you can just disable this
-> > config option.
-> 
-> Thanks a lot for the information. Does this indicate that there is
-> indeed a multiple requests issue in that crypto driver and we could
-> report to its author/owner? Thanks.
+We now know that duplicate kernel module loading can incur considerable
+vmalloc memory pressure on boot. Module loading uses vmalloc space 3 times
+in the worst case. Detecting duplicates early before processing the module
+name was the last mile we had to go and we recently were debating if userspace
+should fix this or the kernel should fix this. We decided to punt the problem
+to userspace.
 
-Not for the crypto driver, there are multiple requests for
-something like:
+At LSFMM 2023 in Vancouver this year I talked to Lennart Poettering about this
+and described the issue with udev. Fixing this in userspace would be complex,
+and it was preferable if we could resolve this in-kernel. And indeed it is
+possible to resolve it relatively easily in-kernel with just the inode. So
+let's do that and be done with the issue.
 
-  request_module("intel_qat")
+Patch #2 has the details on the savings on a 255 CPU system.
 
-the trace shows who it could be. A git grep shows:
+With this we get 0 bytes wasted incurred due to duplicates.
 
-git grep request_module | grep intel_qat
-drivers/crypto/intel/qat/qat_c3xxx/adf_drv.c: request_module("intel_qat");
-drivers/crypto/intel/qat/qat_c3xxxvf/adf_drv.c: request_module("intel_qat");
-drivers/crypto/intel/qat/qat_c62x/adf_drv.c: request_module("intel_qat");
-drivers/crypto/intel/qat/qat_c62xvf/adf_drv.c: request_module("intel_qat");
-drivers/crypto/intel/qat/qat_dh895xcc/adf_drv.c: request_module("intel_qat");
-drivers/crypto/intel/qat/qat_dh895xccvf/adf_drv.c: request_module("intel_qat");
+Luis Chamberlain (2):
+  fs/kernel_read_file: add support for duplicate detection
+  module: add support to avoid duplicates early on load
 
-And so there should be one request issued, ideally.
+ fs/Kconfig                       |   3 +
+ fs/kernel_read_file.c            | 124 +++++++++++++++++++++++++++++++
+ include/linux/kernel_read_file.h |  14 ++++
+ include/linux/module.h           |   1 +
+ kernel/module/Kconfig            |  20 +++++
+ kernel/module/internal.h         |   1 +
+ kernel/module/main.c             |  19 +++--
+ 7 files changed, 175 insertions(+), 7 deletions(-)
 
-Nothing bad happens of multiple request are sent, however duplicate
-requests means that you can end up userspace trying to load multiple
-requests just for one to be freed.
+-- 
+2.39.2
 
-This is not a serious bug.
-
-Soon, I'll implement a solution so that even if duplicate requests get
-to userspace it won't trigger a duplicate load in-kernel, and therefore
-duplicate module loads won't have to free the extra ones. At that point
-this becomes less of an issue.
-
-request_module() just calls to modprobe, and modprobe is supposed to
-check if a module is already loaded before trying finit_module(). If
-two duplicate requests end up calling modprobe though there is a small
-race that two concurrent finit_module() calls will happen as userspace
-would not have seen one load request going in before. The issue is that
-finit_module() uses vmalloc space multiple times for the size of the
-module, even if the module is a duplicate. One vmalloc space is for
-kernel_read*() call, the other is for the copy we want to keep around
-in kernel, the final copy. If module deeecompression is used another
-vmalloc is used. So in the worst case 3 vmallocs.
-
-A duplicate request could end up being failed only to find out a module
-is already loaded, and so about 2-3 times the size of vmalloc space of
-a module size could be free'd just due to a duplicate.
-
-We could avoid memory pressure proactively by trying to issue only one
-request out.
-
-CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS was added to detect these possible
-duplicates when they were triggered by module-autoloading, through the
-request_module() API, directly from the kernel. It turns out that there
-aren't many of these duplicates. That was the point to the exercise.
-To proove the kernel likely wasn't the one causing tons of duplicates.
-
-Because if you enable CONFIG_MODULE_STATS and then cat /sys/kernel/debug/modules/stats
-you will see tons of duplicates. This gets worse  by the number of CPUs
-you have. Seeing little reports of CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS
-proves the issue is elsewhere and at this point I'm certain this is
-coming from udev kmod library usage and it forking and not being able
-to detect the same context for the kmod library for loading modules,
-and so duplicate module request go out for tons of modules for each CPU.
-
-See commit 064f4536d13939 ("module: avoid allocation if module is
-already present and ready") for a graph of this.
-
-That commit also prevents having to do one vmalloc allocation if the
-module is already present. I'm going to work now on one which prevents
-the first, and so duplicates requests coming from either userspace or
-the module-autoloader should be harmless. But that is not merged yet,
-and I still have to post the patch.
-
-So in the meantime CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE should only
-be enabled so to try to help those who wish to be proactive and want
-to enhance the kernel module auto-loader so to only issue one
-request_module() for a module needed by the kernel.
-
-Technically CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS also implements a
-way to unify requests for the same module into one, and they all
-share the same result, but this works only for non-async calls to
-request_module(). That config option is a debug mechanism right now,
-but we could make it default later.
-
-> Not sure if I undertand this correctly: enabling
-> CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE can help detect multiple
-> requests issues in existing code, so we should report to the original
-> author of the modules that have this issue,
-
-It would be an optimization that they could make. It is not a serious
-bug. It would be a more serious bug if we had tons of these reports
-all over. But a few, no.
-
-Come to think of it, at this point in time CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE
-should just be considered informational and debugging, no need to report
-anything to anyone becuase I do think I can get the vmalloc wasted
-space issue figured out for userspace and kernel module-autoloader,
-and so this becomes a non-issue at all. Yes, it would still be nice
-to reduce latencies by having duplicate requests not be issued, but
-the developers keen on that would enable CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE.
-
-So I'd say enable CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE only if
-you want to avoid help avoid duplicates yourself. The kconfig language
-already is a bit clear about that, but we could enhance it to explain
-the gains for developers who may want this. Since we can't talk about
-the future though in kconfig, I think the language now is OK.
-
-The bigger source of duplicates has been determined to come from
-userspace, I'll Cc you on a patch to fix the last vmalloc wasted
-space, so that this would never incur tons of wasted vmalloc space.
-
-I'd recommend for now to just disable CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE
-unless you want to make the reports informational and describe the
-situation as I just did.
-
-Actually, could we talk soon about testing? Because I want to automate
-some more tests for modules with kdevops.
-
-> but shouldn't report on
-> this commit that introduces the CONFIG_MODULE_DEBUG_AUTOLOAD_DUPS_TRACE
-> option?
-
-Not sure I understand this question.
-
-  Luis
