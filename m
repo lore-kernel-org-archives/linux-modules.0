@@ -2,78 +2,118 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97957C77B7C
-	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 05:40:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43C4AC77B73
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 06:25:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjEXFkI (ORCPT
+        id S234783AbjEXGZg (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 24 May 2023 01:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        Wed, 24 May 2023 02:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjEXFkH (ORCPT
+        with ESMTP id S231232AbjEXGZf (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 24 May 2023 01:40:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641EC13E;
-        Tue, 23 May 2023 22:40:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=j7eTfocRDzQqY++vgaOJ0YbWKRTdxK+RfXlC2YJNdAA=; b=Sw1blydRnBpg6bFjUl/lwP9zkD
-        l0fXY92Dk30dQfXspWbpuohKUx8+JqeFG78FyvAxPDQyCxTXMrFelI34wukoJWHpwoSBGM5w6J8Dn
-        GIWtUK0xNC8oMoy3ZlLba2PsH2v3AeRWIXloBbuyk54RAPR8PkJoE6wBqOmHBlWiLw4acDn5If1qx
-        AVnuXsBNadeGFaWo4jAcUoqzll1z0X4aNxDB3VF+AdwR8UGP8CrpH8MLtPYsIQRmqZC0VjUT1lNK1
-        p3MVaHVJgUdAbXQbJz/31YgjKMZSSKagFPf9rh/+0ywFkiIvEa2rCfQzVb8L8qsUqqcoX5MW+0oc/
-        jTX7rhug==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1hEB-00CQ9c-1U;
-        Wed, 24 May 2023 05:40:03 +0000
-Date:   Tue, 23 May 2023 22:40:03 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Airlie <airlied@redhat.com>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] modules/firmware: add a new option to denote a firmware
- group to choose one.
-Message-ID: <ZG2jMx3yo8sHK7Bc@bombadil.infradead.org>
-References: <20230419043652.1773413-1-airlied@gmail.com>
- <ck2dzxvllhhh74oa3vjlacutc7rdmgl7cfrfq7vgx4w3jcufrz@7jbgxcat42yn>
- <CAPM=9tw0Y2A4DvuTHT_yd58Eit+tUmo63pbEOHwRJ66LeqznEQ@mail.gmail.com>
- <fsleccud43leoioli6bj4xoydwbdcjb5qr4denuf6morhgtqki@t6xya2mygon5>
- <ZEcJNcz+ArLfUSJ1@bombadil.infradead.org>
- <n6gwizwt26ucpuva2kt35rprth6iqeibi3inq2qrn5qhs3aa3b@4hjbhgnskutq>
- <CAPM=9txLf2NbuZSM5CLYT4wA5mbQ=+ssm9tdzh6JJ=gtEBeqAA@mail.gmail.com>
- <ZG2gBJbwX73owRYu@bombadil.infradead.org>
- <CAMwc25poqP-S2DSXLZuRA7F20fHsiq7uACbxUvYHCEkpY7BoHA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMwc25poqP-S2DSXLZuRA7F20fHsiq7uACbxUvYHCEkpY7BoHA@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+        Wed, 24 May 2023 02:25:35 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63D911D;
+        Tue, 23 May 2023 23:25:34 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4E41E5C02CF;
+        Wed, 24 May 2023 02:25:34 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 24 May 2023 02:25:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684909534; x=1684995934; bh=Ye
+        sEg3V9xXITA8KOirthGNzurjA/jHvtEbW6BvITgNU=; b=bobCI1Q4P4KI4p9oHc
+        Gy4FqDHNFidk7v6Aulg3WXOxEG+p6txh4G3vsxhyEnY9WJcy0CKURVflPMMU+WHP
+        UNA7zNNdVt2KupM32ofL9XZrKnbkhF8YkA2i/ekEop9baJ7fi3sa9CDKnH4h830h
+        48cDS77Qw9mJAUBqsU3V2IhLwb5RqSvX5qGSGelU0JrAubxmRcfEXQEwRgjfzOFy
+        wOf9O9na7eAGBtE1hyC3tATgKF6YlLiQB+h9jyLAjFp7xYqh3Ao/II1OHJSmJz6Y
+        0dCEoAI/Z5jWY6hbW4wM0BjSFH468xVswhS62kSBk2CqcYvvf08qi9+t5Ifgr0Zt
+        mGQQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684909534; x=1684995934; bh=YesEg3V9xXITA
+        8KOirthGNzurjA/jHvtEbW6BvITgNU=; b=USJRl3mS/nCYJrK3IhiYR7qOFrBGc
+        hJIzpRPmB+cMEV+1xQoT1iPZdaed+E99C7bZxpJT72csYFfSLrLwDKFkrZfgCW5t
+        x1MyOtH9IplQtHNkTXN/0pxnPBwA7ZUJ4REgDwoDbFk0I3hrEv7KDfCd85Myt6Ti
+        SMfhV2C0whdSD73+j6uyGzw1WdV13BmXz6nRdi2NoaOoIHyjGmHzzhTLS28Gc18h
+        ddNu/SWe2mLT4t7+yM2WcKx2axVhmm521nzDyx/qn/y/1X4knquAsiDFR4I+LtWa
+        1EQMtDPHiFfelci9rluIFKWBtaowcxFX5yyhiBOdGLqxa4Y2SOVDhQalw==
+X-ME-Sender: <xms:3a1tZBNyMuMTrKWF_i0rP3p_qEIWTJ239TjTHPCEuAP9UDObaYq3OA>
+    <xme:3a1tZD_AcfpkoMVd1oroNBtURVVmkQZDNUL_ZHE8fbUFF5Ho6UVOOJViBkgpV7fYX
+    Y--WD7iqfKIHrJKzz8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejgedguddthecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:3q1tZATNm6jno_vIeXD6PCLxCL2eHmBMY6bD4XrUU6NPMRLT32uAVg>
+    <xmx:3q1tZNtOG4FrZt7CSFNnlljalLrQDjBa5jyhMqJXxOYUCBdxP1Nwnw>
+    <xmx:3q1tZJcZoVn9_n93AmuwtLX3mZo3WVOhEZTtsjXTVs-kYYrc5hT99g>
+    <xmx:3q1tZDvYVyn8K0b58Hprh5Kb8y79R8wKr4kzwc_cE8IiPUbqz_p_bw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E3C31B60086; Wed, 24 May 2023 02:25:33 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com>
+In-Reply-To: <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
+References: <20230517131820.936553-1-arnd@kernel.org>
+ <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
+Date:   Wed, 24 May 2023 08:25:13 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Luis Chamberlain" <mcgrof@kernel.org>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Andy Lutomirski" <luto@kernel.org>, "Borislav Petkov" <bp@suse.de>
+Cc:     linux-modules@vger.kernel.org,
+        "Zhen Lei" <thunder.leizhen@huawei.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Kees Cook" <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 24, 2023 at 03:35:41PM +1000, David Airlie wrote:
-> On Wed, May 24, 2023 at 3:26 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > Hey Dave, just curious if there was going to be another follow up patch
-> > for this or if it was already posted. I don't see it clearly so just
-> > wanted to double check.
-> 
-> I'm still considering the options here.
-> 
-> I could leave the kernel patch as-is and add explicit sorting in
-> dracut for anything in the groups, but then we have to name/version
-> the firmware in a certain way, another option might be to emit the
-> group bounds and two records, one old, one new per-fw file, then have
-> some sort of explicit versioning by the driver over what order to load
-> them.
+On Wed, May 24, 2023, at 07:07, Luis Chamberlain wrote:
+> On Wed, May 17, 2023 at 03:18:07PM +0200, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> The arch_get_kallsym() function was introduced so that x86 could override
+>> it, but that override was removed in bf904d2762ee ("x86/pti/64: Remove
+>> the SYSCALL64 entry trampoline"), so now this does nothing except causing
+>> a warning about a missing prototype:
+>> 
+>> kernel/kallsyms.c:662:12: error: no previous prototype for 'arch_get_kallsym' [-Werror=missing-prototypes]
+>>   662 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+>> 
+>> Restore the old behavior before d83212d5dd67 ("kallsyms, x86: Export
+>> addresses of PTI entry trampolines") to simplify the code and avoid
+>> the warning.
+>> 
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Shouldn't this go through x86 as this sort of fixesss commit
+> bf904d2762ee ("x86/pti/64: Remove the SYSCALL64 entry trampoline")?
 
-Great thanks, just wanted to make sure I didn't neglect any pending
-patch.
+That works for me as well, as long as someone picks it up. It's
+not really x86 any more though since that commit is five years
+old and removed the last reference from the x86 code.
 
-  Luis
+I sent it to you since you are the one that merged most of
+the kallsyms patches through the module tree, but I guess
+you are not actually maintaining that file (not blaming you,
+I'd also try to stay away from kallsyms).
+
+I can resend it to Andrew for the -mm tree.
+
+     Arnd
