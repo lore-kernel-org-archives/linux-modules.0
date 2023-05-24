@@ -2,70 +2,139 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDA14C7EE29
-	for <linux-modules@archiver.kernel.org>; Tue, 23 May 2023 00:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A283C7EE23
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 05:07:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbjEWAYo (ORCPT
+        id S232128AbjEXFHO (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 22 May 2023 20:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        Wed, 24 May 2023 01:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235144AbjEWAM4 (ORCPT
+        with ESMTP id S234384AbjEXFHN (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 22 May 2023 20:12:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FEDE6C;
-        Mon, 22 May 2023 16:33:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93310619EF;
-        Mon, 22 May 2023 23:33:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0140CC433EF;
-        Mon, 22 May 2023 23:33:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684798438;
-        bh=BoE/AL38pXrSF4StDVPj+q72OKr21YQ0EEfYz+I4tKs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ReG1q9Kz+bFBuuBOfoc9N/MUCprN6w+WHVTvaFk8Mlc23y+9G+l8x3Okr94oWcRUP
-         yg+ypeneQSRfkNt4MVaKRBBQMHHWDabjd/wRi3/TwSMongqqfMnY4Tv5DDHT6ivtet
-         qPk4ZfdRMJJPXTcxSupKOY5WSMkXnp9s/d9C9ZTREZcOxcoKGB54E1jzX3Xe0SjCH+
-         0QFXllXMpbJeC56z8zFu8nD8WMPXM7TVes5YYCH46gXGKc0KhPKiv6mw0lQQx+14j7
-         45ieWvGGCAZqiTrLSASVLY5HNmxF8QomouHqEK0gVFJysa75NrPPT1/+sclrQEzduR
-         1Q7f04FlbJkgQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D925CE22AEB;
-        Mon, 22 May 2023 23:33:57 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules fixes for v6.4-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZGvev3uX1SjH+7od@bombadil.infradead.org>
-References: <ZGvev3uX1SjH+7od@bombadil.infradead.org>
-X-PR-Tracked-List-Id: <patches.lists.linux.dev>
-X-PR-Tracked-Message-Id: <ZGvev3uX1SjH+7od@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc4
-X-PR-Tracked-Commit-Id: d36f6efbe0cb422fe1e4475717d75f3737088832
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1177dcc9637661e05c18aa019a49821bcd6b3dc1
-Message-Id: <168479843788.6623.422001700278816596.pr-tracker-bot@kernel.org>
-Date:   Mon, 22 May 2023 23:33:57 +0000
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     torvalds@linux-foundation.org, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        harshit.m.mogalapalli@oracle.com, song@kernel.org,
-        mcgrof@kernel.org
+        Wed, 24 May 2023 01:07:13 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D4D186;
+        Tue, 23 May 2023 22:07:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sjlVDFCPLE+4lwQnEgEPXV61uw4obZVe0UBJaCWFloI=; b=EwjxuVgRcIHzk7ncH+d2n5azXG
+        +iplFO8wtiw09cEU/n7Zr9UIH5uxFvNyngxkhc/rgxEqrssoIYnrqclCcLbO4QvbfurNsFNj0MQtK
+        Gptr8s9C5+BgQMRDczZkF54NjtjMNDEgUtl3rjhLanVs9vlawLJ+ydIKiuLOuTehihx/ATHh6OGY3
+        h4btws9clssYFywTJ4zq9jwhflDtB4p1by6OlKYqwBl7iXHkxjMtOkxvcyOTz8Y2SKvaMhkDocKaO
+        UcaGEJ7MUZ2cOifYnaCrAmmcfEX3hyBiUBjA3hdY4FJsT+P5MueUh6SWh12RrcJ2kW2vPzxv5DSDv
+        MDEly9LA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1giM-00CNQG-1C;
+        Wed, 24 May 2023 05:07:10 +0000
+Date:   Tue, 23 May 2023 22:07:10 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>
+Cc:     linux-modules@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
+Message-ID: <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
+References: <20230517131820.936553-1-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517131820.936553-1-arnd@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The pull request you sent on Mon, 22 May 2023 14:29:35 -0700:
+On Wed, May 17, 2023 at 03:18:07PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The arch_get_kallsym() function was introduced so that x86 could override
+> it, but that override was removed in bf904d2762ee ("x86/pti/64: Remove
+> the SYSCALL64 entry trampoline"), so now this does nothing except causing
+> a warning about a missing prototype:
+> 
+> kernel/kallsyms.c:662:12: error: no previous prototype for 'arch_get_kallsym' [-Werror=missing-prototypes]
+>   662 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+> 
+> Restore the old behavior before d83212d5dd67 ("kallsyms, x86: Export
+> addresses of PTI entry trampolines") to simplify the code and avoid
+> the warning.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc4
+Shouldn't this go through x86 as this sort of fixesss commit
+bf904d2762ee ("x86/pti/64: Remove the SYSCALL64 entry trampoline")?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1177dcc9637661e05c18aa019a49821bcd6b3dc1
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+  Luis
+> ---
+>  kernel/kallsyms.c | 28 +---------------------------
+>  1 file changed, 1 insertion(+), 27 deletions(-)
+> 
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index e01c435595f9..dac13659601f 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -646,7 +646,6 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
+>  /* To avoid using get_symbol_offset for every symbol, we carry prefix along. */
+>  struct kallsym_iter {
+>  	loff_t pos;
+> -	loff_t pos_arch_end;
+>  	loff_t pos_mod_end;
+>  	loff_t pos_ftrace_mod_end;
+>  	loff_t pos_bpf_end;
+> @@ -659,29 +658,9 @@ struct kallsym_iter {
+>  	int show_value;
+>  };
+>  
+> -int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+> -			    char *type, char *name)
+> -{
+> -	return -EINVAL;
+> -}
+> -
+> -static int get_ksymbol_arch(struct kallsym_iter *iter)
+> -{
+> -	int ret = arch_get_kallsym(iter->pos - kallsyms_num_syms,
+> -				   &iter->value, &iter->type,
+> -				   iter->name);
+> -
+> -	if (ret < 0) {
+> -		iter->pos_arch_end = iter->pos;
+> -		return 0;
+> -	}
+> -
+> -	return 1;
+> -}
+> -
+>  static int get_ksymbol_mod(struct kallsym_iter *iter)
+>  {
+> -	int ret = module_get_kallsym(iter->pos - iter->pos_arch_end,
+> +	int ret = module_get_kallsym(iter->pos - kallsyms_num_syms,
+>  				     &iter->value, &iter->type,
+>  				     iter->name, iter->module_name,
+>  				     &iter->exported);
+> @@ -764,7 +743,6 @@ static void reset_iter(struct kallsym_iter *iter, loff_t new_pos)
+>  	iter->nameoff = get_symbol_offset(new_pos);
+>  	iter->pos = new_pos;
+>  	if (new_pos == 0) {
+> -		iter->pos_arch_end = 0;
+>  		iter->pos_mod_end = 0;
+>  		iter->pos_ftrace_mod_end = 0;
+>  		iter->pos_bpf_end = 0;
+> @@ -780,10 +758,6 @@ static int update_iter_mod(struct kallsym_iter *iter, loff_t pos)
+>  {
+>  	iter->pos = pos;
+>  
+> -	if ((!iter->pos_arch_end || iter->pos_arch_end > pos) &&
+> -	    get_ksymbol_arch(iter))
+> -		return 1;
+> -
+>  	if ((!iter->pos_mod_end || iter->pos_mod_end > pos) &&
+>  	    get_ksymbol_mod(iter))
+>  		return 1;
+> -- 
+> 2.39.2
+> 
