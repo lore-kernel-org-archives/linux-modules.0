@@ -2,77 +2,86 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BCEBC77B7C
-	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 22:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64121C77B73
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 22:58:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235996AbjEXWIH (ORCPT
+        id S238258AbjEXW6f (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 24 May 2023 18:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        Wed, 24 May 2023 18:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233881AbjEXWIH (ORCPT
+        with ESMTP id S233308AbjEXW6e (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 24 May 2023 18:08:07 -0400
+        Wed, 24 May 2023 18:58:34 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBB7122;
-        Wed, 24 May 2023 15:08:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3638BB;
+        Wed, 24 May 2023 15:58:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
         Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
         Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=/JToQHdkxgbDyu1xaJQwVWxSodxYnloGI/u4TaisGIw=; b=c9zMLElgRCGRia6SL8BuLKzB7B
-        Mq+Qz2ZTPnhGMkg0GqFoMp8NImins+kYcs+UlKaemxvTM9avgqVIft1UaVmAM9iPgY6bsqW2N9UcD
-        GitGvwsNHQxiFG9f8hEtykExK9rUUHyTd6y3HFt/7lsJPwgsvGCa2SPXxLfuONcbljL0O7kn/HK/a
-        ujZGfNbX5tv7OqaDvhqDQ3rikEiwcj6GKTPRRcHz0XKhM/FS9p0K7wsuioA/p6BK5z/Kjw8r8SKhY
-        NE6gzr+49AfB4wU6dqYtEyGR/xflH8FHzNBLCEoBJwdnh+rP+Y15Z/R63lCDLuDRK2sjFFjjui8Ga
-        jgjZVgVw==;
+        bh=kJ4Oy2Yrdt9sPa79KIijN8nSLPO32FE6oEphCMooz00=; b=NLhNyk/g75PlT2Vy8EtY+i9Odn
+        zZ2va5B8EA39HX8C8P1rIs28BuCofS6gBUo88Y2C68QA68+cdUtM/X1sJiIm6QHolBK1pGnU6ssmt
+        hC3RtAjCaEAEY32dHq+Alm5rFbqUpvGdH9E2O0vjtJ9rkkXgEbQ/MwOJzmLET6KhQ4T86vVZZ/dSd
+        EiiWPDCZIaVnzkGHpPKyWQERl+aufoelypWlWKlESSS2J979o7eUOvwXuIiqwdZRwxxvk5ld7HXd/
+        bz8bY+beCVerWZ7WgrZo8kSknXOL4yaXSR897XrRKAFp7wNunxJZMntX0MIGBRbIfwl4fT3lZLmw3
+        6MFiZKwg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1weA-00Em4l-06;
-        Wed, 24 May 2023 22:07:54 +0000
-Date:   Wed, 24 May 2023 15:07:53 -0700
+        id 1q1xR7-00EsNL-2V;
+        Wed, 24 May 2023 22:58:29 +0000
+Date:   Wed, 24 May 2023 15:58:29 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     david@redhat.com, tglx@linutronix.de, hch@lst.de,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com, lennart@poettering.net,
-        gregkh@linuxfoundation.org, rafael@kernel.org, song@kernel.org,
-        lucas.de.marchi@gmail.com, lucas.demarchi@intel.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com
-Subject: Re: [PATCH 1/2] fs/kernel_read_file: add support for duplicate
- detection
-Message-ID: <ZG6KueWpHnyPr6YV@bombadil.infradead.org>
-References: <20230524213620.3509138-1-mcgrof@kernel.org>
- <20230524213620.3509138-2-mcgrof@kernel.org>
- <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
- <CAHk-=wi9oPrxcMK469X0zAueKQ4tqX80SdFqCx9StcL82vuEkw@mail.gmail.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
+        tiwai@suse.de, tianfei.zhang@intel.com, russell.h.weight@intel.com,
+        keescook@chromium.org, tweek@google.com, a.manzanares@samsung.com,
+        dave@stgolabs.net, vincenzopalazzodev@gmail.com,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: Re: [PATCH] selftests: allow runners to override the timeout
+Message-ID: <ZG6WlUZZN4etzM2k@bombadil.infradead.org>
+References: <20230414193845.2494120-1-mcgrof@kernel.org>
+ <3f5c5c28-3814-3fea-dfbb-a3c7604e0edc@collabora.com>
+ <CAB=NE6Wx=PQ6n__hdseLzahNdkGoyUXDW4w9B5bBLvg-kVxbXA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wi9oPrxcMK469X0zAueKQ4tqX80SdFqCx9StcL82vuEkw@mail.gmail.com>
+In-Reply-To: <CAB=NE6Wx=PQ6n__hdseLzahNdkGoyUXDW4w9B5bBLvg-kVxbXA@mail.gmail.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 24, 2023 at 02:56:47PM -0700, Linus Torvalds wrote:
-> On Wed, May 24, 2023 at 2:52 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
+On Thu, May 11, 2023 at 08:26:42AM -0700, Luis Chamberlain wrote:
+> On Fri, Apr 28, 2023 at 1:34 AM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
 > >
-> > Stop adding horrific code for some made-up load that isn't real.
+> > On 4/15/23 12:38 AM, Luis Chamberlain wrote:
+> > > The default timeout for selftests tests is 45 seconds. Although
+> > > we already have 13 settings for tests of about 96 sefltests which
+> > > use a timeout greater than this, we want to try to avoid encouraging
+> > > more tests to forcing a higher test timeout as selftests strives to
+> > > run all tests quickly. Selftests also uses the timeout as a non-fatal
+> > > error. Only tests runners which have control over a system would know
+> > > if to treat a timeout as fatal or not.
+> > >
+> > > To help with all this:
+> > >
+> > >   o Enhance documentation to avoid future increases of insane timeouts
+> > >   o Add the option to allow overriding the default timeout with test
+> > >     runners with a command line option
+> > >
+> > > Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+> > > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> > Tested-by:Muhammad Usama Anjum <usama.anjum@collabora.com>
 > 
-> Even if you trigger some "worst case 3x memory use", that is
-> _temporary_, and will be free'd in the end.
-> 
-> The patches to "fix" this are worse than the disease.
+> Shuah, just a friendly poke! This is needed to allow me to enable full
+> automation for kdevops for selftests.
 
-Fine with me, we can punt back and wait and hope udev fixes this.
-No one can tell me I didn't try. Now let's hope userspace will try
-an alternative.
+Shuah, friendly re-poke.
 
   Luis
