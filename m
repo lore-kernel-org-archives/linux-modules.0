@@ -2,136 +2,92 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8C94C77B7A
-	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 07:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32843C77B73
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 07:24:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239849AbjEXHDh (ORCPT
+        id S235635AbjEXHYd (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 24 May 2023 03:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
+        Wed, 24 May 2023 03:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239850AbjEXHCo (ORCPT
+        with ESMTP id S239229AbjEXHYb (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 24 May 2023 03:02:44 -0400
+        Wed, 24 May 2023 03:24:31 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8883BE58;
-        Wed, 24 May 2023 00:02:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8DA196;
+        Wed, 24 May 2023 00:24:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2OaUTp4ZRQUOY55Yg1WPlf0hn1iqC3dU2Mbi8zTI3/k=; b=lX2m2yIkItEs056NYHTBAHhZj8
-        QVvxDU0NrO9dwxgF77pA3pAWrRQ0zDCJKP4xdyXYUW9/MYTojGN6Ke/rZTwxaBFWtCaLT/D9AsAEr
-        NbnKuGNH2AUaCKxPk/IA6GnNsfYCTbY/G4pjZyFT4j/DtbLSt2tyugy3AAg8Zv5Mu+V2+p6qn0E7l
-        v+ZG8LiWsNELPqhyR53dCFmFN1J7oumkL4wWzPM67dE70NyGq7IsSJkQw+z+D5lz6L5clmxFycZ+U
-        dSfdrhkLuF8oA+uVwnvM8DWbXRR0lfjNpoR6H2eHF6IN5WYSka3WR4Vu0EjSOSLAB3uTpSOt3qH4F
-        lKtZ4Kww==;
+        bh=lgMAk4mNAvXRq4u66gUQkOlWUTi4SucZWhG20iHV2qA=; b=IrTas483CVgh9uJT70jaB6SKUR
+        uDt76JhIVBau5lYeKSei7idTwu7kzQxYFYwYXOoi1hfSpZpauqEcYgbX3QY/P1B9oorB+60kEz83O
+        axtRFjakKG5WW6CCoPuYV1ownJCh25YICaHCABIyMJ4j+eo7Er/J6rijDLjt7ciEudNZ5zCf3l0P5
+        gFUcqQq7uPY2GBr8+y65OHReABriQYGWZfJwGmYkdTsoKdE4ntgPU6ccPbwHO8JZ623vpUhuWI/7/
+        PJEk1Gp7bC4CIiCUVOb9Z0Bj2AtuKj+qogH5pJwGATVjd+ZJ5m5tZfdzzyHVecweBHAj2NQj9Wjqt
+        SVa6e/eA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1iW0-00CYa4-1R;
-        Wed, 24 May 2023 07:02:32 +0000
-Date:   Wed, 24 May 2023 00:02:32 -0700
+        id 1q1ir6-00Cb2v-1L;
+        Wed, 24 May 2023 07:24:20 +0000
+Date:   Wed, 24 May 2023 00:24:20 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
-        nick.alcock@oracle.com
-Subject: Re: [PATCH v10 08/11] build: Add modules.builtin.alias
-Message-ID: <ZG22iPLED+SJsEFa@bombadil.infradead.org>
-References: <20221219204619.2205248-1-allenwebb@google.com>
- <20230406190030.968972-1-allenwebb@google.com>
- <20230406190030.968972-9-allenwebb@google.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>, linux-modules@vger.kernel.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
+Message-ID: <ZG27pExhUqFpGexM@bombadil.infradead.org>
+References: <20230517131820.936553-1-arnd@kernel.org>
+ <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
+ <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406190030.968972-9-allenwebb@google.com>
+In-Reply-To: <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Apr 06, 2023 at 02:00:27PM -0500, Allen Webb wrote:
-> Generate modules.builtin.alias using modpost and install it with the
-> modules.
-
-Why? This is probably one of the more important commits and the
-commit log is pretty slim.
-
-> Signed-off-by: Allen Webb <allenwebb@google.com>
-> ---
->  .gitignore               |  1 +
->  Makefile                 |  1 +
->  scripts/Makefile.modpost | 15 +++++++++++++++
->  3 files changed, 17 insertions(+)
+On Wed, May 24, 2023 at 08:25:13AM +0200, Arnd Bergmann wrote:
+> On Wed, May 24, 2023, at 07:07, Luis Chamberlain wrote:
+> > On Wed, May 17, 2023 at 03:18:07PM +0200, Arnd Bergmann wrote:
+> >> From: Arnd Bergmann <arnd@arndb.de>
+> >> 
+> >> The arch_get_kallsym() function was introduced so that x86 could override
+> >> it, but that override was removed in bf904d2762ee ("x86/pti/64: Remove
+> >> the SYSCALL64 entry trampoline"), so now this does nothing except causing
+> >> a warning about a missing prototype:
+> >> 
+> >> kernel/kallsyms.c:662:12: error: no previous prototype for 'arch_get_kallsym' [-Werror=missing-prototypes]
+> >>   662 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+> >> 
+> >> Restore the old behavior before d83212d5dd67 ("kallsyms, x86: Export
+> >> addresses of PTI entry trampolines") to simplify the code and avoid
+> >> the warning.
+> >> 
+> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> >
+> > Shouldn't this go through x86 as this sort of fixesss commit
+> > bf904d2762ee ("x86/pti/64: Remove the SYSCALL64 entry trampoline")?
 > 
-> diff --git a/.gitignore b/.gitignore
-> index 13a7f08a3d73..ddaa622bddac 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -71,6 +71,7 @@ modules.order
->  /System.map
->  /Module.markers
->  /modules.builtin
-> +/modules.builtin.alias
->  /modules.builtin.modinfo
->  /modules.nsdeps
->  
-> diff --git a/Makefile b/Makefile
-> index a2c310df2145..43dcc1ea5fcf 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1578,6 +1578,7 @@ __modinst_pre:
->  	fi
->  	@sed 's:^\(.*\)\.o$$:kernel/\1.ko:' modules.order > $(MODLIB)/modules.order
->  	@cp -f modules.builtin $(MODLIB)/
-> +	@cp -f modules.builtin.alias $(MODLIB)/
->  	@cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
->  
->  endif # CONFIG_MODULES
-> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-> index 0980c58d8afc..e3ecc17a7a19 100644
-> --- a/scripts/Makefile.modpost
-> +++ b/scripts/Makefile.modpost
-> @@ -15,6 +15,7 @@
->  # 2) modpost is then used to
->  # 3)  create one <module>.mod.c file per module
->  # 4)  create one Module.symvers file with CRC for all exported symbols
-> +# 5)  create modules.builtin.alias the aliases for built-in modules
+> That works for me as well, as long as someone picks it up. It's
+> not really x86 any more though since that commit is five years
+> old and removed the last reference from the x86 code.
 
-Does everyone want that file?
+Fair enough.
 
->  # Step 3 is used to place certain information in the module's ELF
->  # section, including information such as:
-> @@ -63,6 +64,20 @@ modpost-args += -T $(MODORDER)
->  modpost-deps += $(MODORDER)
->  endif
->  
-> +ifneq ($(wildcard vmlinux.o),)
-> +output-builtin.alias := modules.builtin.alias
-> +modpost-args += -b .modules.builtin.alias.in
-> +.modules.builtin.alias.in: $(output-symdump)
-> +	@# Building $(output-symdump) generates .modules.builtin.alias.in as a
-> +	@# side effect.
-> +	@[ -e $@ ] || $(MODPOST) -b .modules.builtin.alias.in vmlinux.o
+> I sent it to you since you are the one that merged most of
+> the kallsyms patches through the module tree, but I guess
+> you are not actually maintaining that file (not blaming you,
+> I'd also try to stay away from kallsyms).
+> 
+> I can resend it to Andrew for the -mm tree.
 
-Does using -b create a delay in builds ? What is the effect on build
-time on a typical 4-core or 8-core build? Does everyone want it?
-
-Should we add a new option which lets people decide if they want this
-at build time or not?
+OK, I just took the patch in, it's on the train, better get on before
+it gets lost.
 
   Luis
-
-> +
-> +$(output-builtin.alias): .modules.builtin.alias.in
-> +	sort -o $@ $^
-> +
-> +__modpost: $(output-builtin.alias)
-> +endif
-> +
->  ifeq ($(KBUILD_EXTMOD),)
->  
->  # Generate the list of in-tree objects in vmlinux
-> -- 
-> 2.39.2
-> 
