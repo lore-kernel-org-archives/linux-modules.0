@@ -2,118 +2,115 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43C4AC77B73
-	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 06:25:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6D7EC77B7C
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 06:46:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbjEXGZg (ORCPT
+        id S239303AbjEXGqZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 24 May 2023 02:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
+        Wed, 24 May 2023 02:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjEXGZf (ORCPT
+        with ESMTP id S239614AbjEXGpr (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 24 May 2023 02:25:35 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63D911D;
-        Tue, 23 May 2023 23:25:34 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4E41E5C02CF;
-        Wed, 24 May 2023 02:25:34 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 24 May 2023 02:25:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1684909534; x=1684995934; bh=Ye
-        sEg3V9xXITA8KOirthGNzurjA/jHvtEbW6BvITgNU=; b=bobCI1Q4P4KI4p9oHc
-        Gy4FqDHNFidk7v6Aulg3WXOxEG+p6txh4G3vsxhyEnY9WJcy0CKURVflPMMU+WHP
-        UNA7zNNdVt2KupM32ofL9XZrKnbkhF8YkA2i/ekEop9baJ7fi3sa9CDKnH4h830h
-        48cDS77Qw9mJAUBqsU3V2IhLwb5RqSvX5qGSGelU0JrAubxmRcfEXQEwRgjfzOFy
-        wOf9O9na7eAGBtE1hyC3tATgKF6YlLiQB+h9jyLAjFp7xYqh3Ao/II1OHJSmJz6Y
-        0dCEoAI/Z5jWY6hbW4wM0BjSFH468xVswhS62kSBk2CqcYvvf08qi9+t5Ifgr0Zt
-        mGQQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684909534; x=1684995934; bh=YesEg3V9xXITA
-        8KOirthGNzurjA/jHvtEbW6BvITgNU=; b=USJRl3mS/nCYJrK3IhiYR7qOFrBGc
-        hJIzpRPmB+cMEV+1xQoT1iPZdaed+E99C7bZxpJT72csYFfSLrLwDKFkrZfgCW5t
-        x1MyOtH9IplQtHNkTXN/0pxnPBwA7ZUJ4REgDwoDbFk0I3hrEv7KDfCd85Myt6Ti
-        SMfhV2C0whdSD73+j6uyGzw1WdV13BmXz6nRdi2NoaOoIHyjGmHzzhTLS28Gc18h
-        ddNu/SWe2mLT4t7+yM2WcKx2axVhmm521nzDyx/qn/y/1X4knquAsiDFR4I+LtWa
-        1EQMtDPHiFfelci9rluIFKWBtaowcxFX5yyhiBOdGLqxa4Y2SOVDhQalw==
-X-ME-Sender: <xms:3a1tZBNyMuMTrKWF_i0rP3p_qEIWTJ239TjTHPCEuAP9UDObaYq3OA>
-    <xme:3a1tZD_AcfpkoMVd1oroNBtURVVmkQZDNUL_ZHE8fbUFF5Ho6UVOOJViBkgpV7fYX
-    Y--WD7iqfKIHrJKzz8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejgedguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:3q1tZATNm6jno_vIeXD6PCLxCL2eHmBMY6bD4XrUU6NPMRLT32uAVg>
-    <xmx:3q1tZNtOG4FrZt7CSFNnlljalLrQDjBa5jyhMqJXxOYUCBdxP1Nwnw>
-    <xmx:3q1tZJcZoVn9_n93AmuwtLX3mZo3WVOhEZTtsjXTVs-kYYrc5hT99g>
-    <xmx:3q1tZDvYVyn8K0b58Hprh5Kb8y79R8wKr4kzwc_cE8IiPUbqz_p_bw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E3C31B60086; Wed, 24 May 2023 02:25:33 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com>
-In-Reply-To: <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
-References: <20230517131820.936553-1-arnd@kernel.org>
- <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
-Date:   Wed, 24 May 2023 08:25:13 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Andy Lutomirski" <luto@kernel.org>, "Borislav Petkov" <bp@suse.de>
-Cc:     linux-modules@vger.kernel.org,
-        "Zhen Lei" <thunder.leizhen@huawei.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Kees Cook" <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        "Andrew Morton" <akpm@linux-foundation.org>
-Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
-Content-Type: text/plain
+        Wed, 24 May 2023 02:45:47 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7684172C;
+        Tue, 23 May 2023 23:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8hIfpBZo4uHhlxea9AKSLxE7i5cEVMRbEHxPZhvoC8w=; b=TZ98BR4jenjzt+JKfKBLVFHzQ4
+        TtA0qIDdQ6GMs7qDA/Aw0kUUo359rO13LZdOFfwfafMxs/vWYVX3ojJWgBKo/DlbAuFsGQ1eSu2Os
+        sMq9rUnWIXoZmPUkXki7peoyyAPfMqR9GNeZyUBll065KpgfMUqh3axtpVyc9w24svUdxUNbdXyCK
+        9FeWp+8R3ocZ/oTpvBcMyxsbDf8UrugWWdXXxtMy8Kkoaj97B+hcJwVqHrLwNLqYuJM71CZbj3EyA
+        r8J7nQcssJvyUUtC7WjO0K1AlyXTnuVZPAXKHfKW2+HqgNqHrvYyjA5yuDzJabWSzgwkOPnedU/aG
+        wu/cWq6A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1iEV-00CWTX-1C;
+        Wed, 24 May 2023 06:44:27 +0000
+Date:   Tue, 23 May 2023 23:44:27 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Allen Webb <allenwebb@google.com>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
+        nick.alcock@oracle.com
+Subject: Re: [PATCH v10 04/11] module.h: MODULE_DEVICE_TABLE for built-in
+ modules
+Message-ID: <ZG2yS0sj0EgGoFYf@bombadil.infradead.org>
+References: <20221219204619.2205248-1-allenwebb@google.com>
+ <20230406190030.968972-1-allenwebb@google.com>
+ <20230406190030.968972-5-allenwebb@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406190030.968972-5-allenwebb@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 24, 2023, at 07:07, Luis Chamberlain wrote:
-> On Wed, May 17, 2023 at 03:18:07PM +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> The arch_get_kallsym() function was introduced so that x86 could override
->> it, but that override was removed in bf904d2762ee ("x86/pti/64: Remove
->> the SYSCALL64 entry trampoline"), so now this does nothing except causing
->> a warning about a missing prototype:
->> 
->> kernel/kallsyms.c:662:12: error: no previous prototype for 'arch_get_kallsym' [-Werror=missing-prototypes]
->>   662 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
->> 
->> Restore the old behavior before d83212d5dd67 ("kallsyms, x86: Export
->> addresses of PTI entry trampolines") to simplify the code and avoid
->> the warning.
->> 
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Shouldn't this go through x86 as this sort of fixesss commit
-> bf904d2762ee ("x86/pti/64: Remove the SYSCALL64 entry trampoline")?
+On Thu, Apr 06, 2023 at 02:00:23PM -0500, Allen Webb wrote:
+> Implement MODULE_DEVICE_TABLE for build-in modules to make it possible
+> to generate a builtin.alias file to complement modules.alias.
+> 
+> Signed-off-by: Allen Webb <allenwebb@google.com>
+> ---
+>  include/linux/module.h | 36 +++++++++++++++++++++++++++++-------
+>  1 file changed, 29 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 4435ad9439ab..b1cb12e06996 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -237,14 +237,36 @@ extern void cleanup_module(void);
+>  /* What your module does. */
+>  #define MODULE_DESCRIPTION(_description) MODULE_INFO(description, _description)
+>  
+> -#ifdef MODULE
+> -/* Creates an alias so file2alias.c can find device table. */
+> +/*
+> + * Creates an alias so file2alias.c can find device table.
+> + *
+> + * Use this in cases where a device table is used to match devices because it
+> + * surfaces match-id based module aliases to userspace for:
+> + *   - Automatic module loading through modules.alias.
+> + *   - Tools like USBGuard which block devices based on policy such as which
+> + *     modules match a device.
+> + *
+> + * The only use-case for built-in drivers today is to enable userspace to
+> + * prevent / allow probe for devices on certain subsystems even if the driver is
+> + * already loaded. An example is the USB subsystem with its authorized_default
+> + * sysfs attribute. For more details refer to the kernel's Documentation for USB
+> + * about authorized_default.
+> + *
+> + * The module name is included in the alias for two reasons:
+> + *   - It avoids creating two aliases with the same name for built-in modules.
+> + *     Historically MODULE_DEVICE_TABLE was a no-op for built-in modules, so
+> + *     there was nothing to stop different modules from having the same device
+> + *     table name and consequently the same alias when building as a module.
+> + *   - The module name is needed by files2alias.c to associate a particular
+> + *     device table with its associated module for built-in modules since
+> + *     files2alias would otherwise see the module name as `vmlinuz.o`.
+> + */
+>  #define MODULE_DEVICE_TABLE(type, name)					\
+> -extern typeof(name) __mod_##type##__##name##_device_table		\
+> -  __attribute__ ((unused, alias(__stringify(name))))
+> -#else  /* !MODULE */
+> -#define MODULE_DEVICE_TABLE(type, name)
+> -#endif
+> +extern void *CONCATENATE(						\
+> +	CONCATENATE(__mod_##type##__##name##__,				\
+> +		__KBUILD_MODNAME),					\
+> +	_device_table)							\
+> +	__attribute__ ((unused, alias(__stringify(name))))
 
-That works for me as well, as long as someone picks it up. It's
-not really x86 any more though since that commit is five years
-old and removed the last reference from the x86 code.
+Why does it seem like we're changing extern typeof(name) to a void *?
+Also the addition of CONCATENATE() makes it not clear if you are
+modifying the definition before, so it would be good to first add
+CONCATENATE() to replace the old way without making any functional
+changes first. Then a secondary patch which extends the world for
+built-in.
 
-I sent it to you since you are the one that merged most of
-the kallsyms patches through the module tree, but I guess
-you are not actually maintaining that file (not blaming you,
-I'd also try to stay away from kallsyms).
-
-I can resend it to Andrew for the -mm tree.
-
-     Arnd
+  Luis
