@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 168B1C77B7A
-	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 07:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8C94C77B7A
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 07:03:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239689AbjEXHAJ (ORCPT
+        id S239849AbjEXHDh (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 24 May 2023 03:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
+        Wed, 24 May 2023 03:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238980AbjEXHAG (ORCPT
+        with ESMTP id S239850AbjEXHCo (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 24 May 2023 03:00:06 -0400
+        Wed, 24 May 2023 03:02:44 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCE4A3;
-        Wed, 24 May 2023 00:00:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8883BE58;
+        Wed, 24 May 2023 00:02:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LDkj7fx8OszlJ4sR4sf3mfb9f8SxFIoxaxQFs3Jt+lk=; b=5BDnLy4teHwSY8P0YNy3zQo9T/
-        3zfIDQ51x/X8IlNA1Mcm9FwXMXWb3Y2XVySOPVh8+9/PQ7lPY1C+X1SjwTpAsupIZ9Jks87ZFu2aP
-        53aehgDvcHK+bObLO0eeaJd2bmWmbxEOdUStLx0/JKmO3nhQ1dY5yes4jjQ0U72TWVHjRmEwQMoVf
-        V+YVYV36umotfRSFeC2HYo3zAmqCmi6UK7tTfz0J9nRV+eZPgBg916BMTHFZMULhQFCo3l9mhp26s
-        L/tA6xGsqGvTS8gurEs4ya5Xegq8V77lW58bOt1/vT1q239O3cnJeZjfZUmU1QbGEtaX0pyHYG0vn
-        8fgfKdig==;
+        bh=2OaUTp4ZRQUOY55Yg1WPlf0hn1iqC3dU2Mbi8zTI3/k=; b=lX2m2yIkItEs056NYHTBAHhZj8
+        QVvxDU0NrO9dwxgF77pA3pAWrRQ0zDCJKP4xdyXYUW9/MYTojGN6Ke/rZTwxaBFWtCaLT/D9AsAEr
+        NbnKuGNH2AUaCKxPk/IA6GnNsfYCTbY/G4pjZyFT4j/DtbLSt2tyugy3AAg8Zv5Mu+V2+p6qn0E7l
+        v+ZG8LiWsNELPqhyR53dCFmFN1J7oumkL4wWzPM67dE70NyGq7IsSJkQw+z+D5lz6L5clmxFycZ+U
+        dSfdrhkLuF8oA+uVwnvM8DWbXRR0lfjNpoR6H2eHF6IN5WYSka3WR4Vu0EjSOSLAB3uTpSOt3qH4F
+        lKtZ4Kww==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1iTb-00CYJS-2R;
-        Wed, 24 May 2023 07:00:03 +0000
-Date:   Wed, 24 May 2023 00:00:03 -0700
+        id 1q1iW0-00CYa4-1R;
+        Wed, 24 May 2023 07:02:32 +0000
+Date:   Wed, 24 May 2023 00:02:32 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Allen Webb <allenwebb@google.com>
 Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
@@ -37,169 +37,101 @@ Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
         nick.alcock@oracle.com
-Subject: Re: [PATCH v10 07/11] file2alias.c: Implement builtin.alias
- generation
-Message-ID: <ZG2184mfMX9BCZiO@bombadil.infradead.org>
+Subject: Re: [PATCH v10 08/11] build: Add modules.builtin.alias
+Message-ID: <ZG22iPLED+SJsEFa@bombadil.infradead.org>
 References: <20221219204619.2205248-1-allenwebb@google.com>
  <20230406190030.968972-1-allenwebb@google.com>
- <20230406190030.968972-8-allenwebb@google.com>
+ <20230406190030.968972-9-allenwebb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406190030.968972-8-allenwebb@google.com>
+In-Reply-To: <20230406190030.968972-9-allenwebb@google.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Apr 06, 2023 at 02:00:26PM -0500, Allen Webb wrote:
-> This populates the mod->modalias_buf with aliases for built-in modules
-> when modpost is run against vmlinuz.o.
+On Thu, Apr 06, 2023 at 02:00:27PM -0500, Allen Webb wrote:
+> Generate modules.builtin.alias using modpost and install it with the
+> modules.
 
-The commit log should describe why. And if its not used now why is it
-being introduced separately. If its to make changes eaiser to read it
-shoudl say so.
-
-So builtin thing is set but is it used at this point? Does this patch
-make any functional changes? If not why not?
+Why? This is probably one of the more important commits and the
+commit log is pretty slim.
 
 > Signed-off-by: Allen Webb <allenwebb@google.com>
 > ---
->  scripts/mod/file2alias.c | 61 ++++++++++++++++++++++++++--------------
->  1 file changed, 40 insertions(+), 21 deletions(-)
+>  .gitignore               |  1 +
+>  Makefile                 |  1 +
+>  scripts/Makefile.modpost | 15 +++++++++++++++
+>  3 files changed, 17 insertions(+)
 > 
-> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-> index b392d51c3b06..3793d4632b94 100644
-> --- a/scripts/mod/file2alias.c
-> +++ b/scripts/mod/file2alias.c
-> @@ -233,6 +233,8 @@ static void do_usb_entry(void *symval,
->  	add_wildcard(alias);
->  	buf_printf(&mod->dev_table_buf,
->  		   "MODULE_ALIAS(\"%s\");\n", alias);
-> +	if (mod->builtin_name)
-> +		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
->  }
+> diff --git a/.gitignore b/.gitignore
+> index 13a7f08a3d73..ddaa622bddac 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -71,6 +71,7 @@ modules.order
+>  /System.map
+>  /Module.markers
+>  /modules.builtin
+> +/modules.builtin.alias
+>  /modules.builtin.modinfo
+>  /modules.nsdeps
 >  
->  /* Handles increment/decrement of BCD formatted integers */
-> @@ -377,9 +379,13 @@ static void do_of_entry_multi(void *symval, struct module *mod)
->  			*tmp = '_';
+> diff --git a/Makefile b/Makefile
+> index a2c310df2145..43dcc1ea5fcf 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1578,6 +1578,7 @@ __modinst_pre:
+>  	fi
+>  	@sed 's:^\(.*\)\.o$$:kernel/\1.ko:' modules.order > $(MODLIB)/modules.order
+>  	@cp -f modules.builtin $(MODLIB)/
+> +	@cp -f modules.builtin.alias $(MODLIB)/
+>  	@cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
 >  
->  	buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
-> +	if (mod->builtin_name)
-> +		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
->  	strcat(alias, "C");
->  	add_wildcard(alias);
->  	buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
-> +	if (mod->builtin_name)
-> +		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias, mod->builtin_name);
->  }
->  
->  static void do_of_table(void *symval, unsigned long size,
-> @@ -611,12 +617,18 @@ static void do_pnp_device_entry(void *symval, unsigned long size,
->  
->  		buf_printf(&mod->dev_table_buf,
->  			   "MODULE_ALIAS(\"pnp:d%s*\");\n", *id);
-> +		if (mod->builtin_name)
-> +			buf_printf(&mod->modalias_buf, "alias pnp:d%s* %s\n",
-> +				   *id, mod->builtin_name);
->  
->  		/* fix broken pnp bus lowercasing */
->  		for (j = 0; j < sizeof(acpi_id); j++)
->  			acpi_id[j] = toupper((*id)[j]);
->  		buf_printf(&mod->dev_table_buf,
->  			   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
-> +		if (mod->builtin_name)
-> +			buf_printf(&mod->modalias_buf, "alias acpi*:%s:* %s\n",
-> +				   acpi_id, mod->builtin_name);
->  	}
->  }
->  
-> @@ -638,6 +650,8 @@ static void do_pnp_card_entries(void *symval, unsigned long size,
->  			const char *id = (char *)(*devs)[j].id;
->  			int i2, j2;
->  			int dup = 0;
-> +			char acpi_id[PNP_ID_LEN];
-> +			int k;
->  
->  			if (!id[0])
->  				break;
-> @@ -663,19 +677,23 @@ static void do_pnp_card_entries(void *symval, unsigned long size,
->  			}
->  
->  			/* add an individual alias for every device entry */
-> -			if (!dup) {
-> -				char acpi_id[PNP_ID_LEN];
-> -				int k;
-> -
-> -				buf_printf(&mod->dev_table_buf,
-> -					   "MODULE_ALIAS(\"pnp:d%s*\");\n", id);
-> -
-> -				/* fix broken pnp bus lowercasing */
-> -				for (k = 0; k < sizeof(acpi_id); k++)
-> -					acpi_id[k] = toupper(id[k]);
-> -				buf_printf(&mod->dev_table_buf,
-> -					   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
-> -			}
-> +			if (dup)
-> +				continue;
+>  endif # CONFIG_MODULES
+> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+> index 0980c58d8afc..e3ecc17a7a19 100644
+> --- a/scripts/Makefile.modpost
+> +++ b/scripts/Makefile.modpost
+> @@ -15,6 +15,7 @@
+>  # 2) modpost is then used to
+>  # 3)  create one <module>.mod.c file per module
+>  # 4)  create one Module.symvers file with CRC for all exported symbols
+> +# 5)  create modules.builtin.alias the aliases for built-in modules
 
-The change from !dup to (dup) continue makes your changes harder to
-read. It would be good to make that change separately so to make it
-easier to read what you are doing differently.
+Does everyone want that file?
+
+>  # Step 3 is used to place certain information in the module's ELF
+>  # section, including information such as:
+> @@ -63,6 +64,20 @@ modpost-args += -T $(MODORDER)
+>  modpost-deps += $(MODORDER)
+>  endif
+>  
+> +ifneq ($(wildcard vmlinux.o),)
+> +output-builtin.alias := modules.builtin.alias
+> +modpost-args += -b .modules.builtin.alias.in
+> +.modules.builtin.alias.in: $(output-symdump)
+> +	@# Building $(output-symdump) generates .modules.builtin.alias.in as a
+> +	@# side effect.
+> +	@[ -e $@ ] || $(MODPOST) -b .modules.builtin.alias.in vmlinux.o
+
+Does using -b create a delay in builds ? What is the effect on build
+time on a typical 4-core or 8-core build? Does everyone want it?
+
+Should we add a new option which lets people decide if they want this
+at build time or not?
+
+  Luis
 
 > +
-> +			buf_printf(&mod->dev_table_buf,
-> +				   "MODULE_ALIAS(\"pnp:d%s*\");\n", id);
-> +			if (mod->builtin_name)
-> +				buf_printf(&mod->modalias_buf, "alias pnp:d%s* %s\n",
-> +					   id, mod->builtin_name);
+> +$(output-builtin.alias): .modules.builtin.alias.in
+> +	sort -o $@ $^
 > +
-> +			/* fix broken pnp bus lowercasing */
-> +			for (k = 0; k < sizeof(acpi_id); k++)
-> +				acpi_id[k] = toupper(id[k]);
-> +			buf_printf(&mod->dev_table_buf,
-> +				   "MODULE_ALIAS(\"acpi*:%s:*\");\n", acpi_id);
-> +			if (mod->builtin_name)
-> +				buf_printf(&mod->modalias_buf, "alias acpi*:%s:* %s\n",
-> +					   acpi_id, mod->builtin_name);
->  		}
->  	}
->  }
-> @@ -1476,10 +1494,13 @@ static void do_table(void *symval, unsigned long size,
->  	size -= id_size;
+> +__modpost: $(output-builtin.alias)
+> +endif
+> +
+>  ifeq ($(KBUILD_EXTMOD),)
 >  
->  	for (i = 0; i < size; i += id_size) {
-> -		if (do_entry(mod->name, symval+i, alias)) {
-> -			buf_printf(&mod->dev_table_buf,
-> -				   "MODULE_ALIAS(\"%s\");\n", alias);
-> -		}
-> +		if (!do_entry(mod->name, symval + i, alias))
-> +			continue;
-
-Same here. You could just fold the changes which negate the check into
-and shif the code into one patch with 0 functional changes. Then a
-second patch with your changes.
-
-> +		buf_printf(&mod->dev_table_buf, "MODULE_ALIAS(\"%s\");\n", alias);
-> +		if (!mod->builtin_name)
-> +			continue;
-> +		buf_printf(&mod->modalias_buf, "alias %s %s\n", alias,
-> +			   mod->builtin_name);
->  	}
->  }
->  
-> @@ -1554,10 +1575,8 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
->  		return;
->  
->  	/*
-> -	 * All our symbols are either of form
-> -	 *   __mod_<name>__<identifier>_device_table
-> -	 * or
-> -	 *   __mod_<name>__<identifier>__kmod_<builtin-name>_device_table
-> +	 * All our symbols are of form
-> +	 *   __mod_<name>__<identifier>__kmod_<modname>_device_table
->  	 */
->  	if (strncmp(symname, "__mod_", strlen("__mod_")))
->  		return;
+>  # Generate the list of in-tree objects in vmlinux
 > -- 
 > 2.39.2
 > 
