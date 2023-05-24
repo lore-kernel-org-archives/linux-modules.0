@@ -2,34 +2,34 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6D7EC77B7C
-	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 06:46:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EF89C77B7A
+	for <linux-modules@archiver.kernel.org>; Wed, 24 May 2023 06:51:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239303AbjEXGqZ (ORCPT
+        id S239764AbjEXGv6 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 24 May 2023 02:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
+        Wed, 24 May 2023 02:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239614AbjEXGpr (ORCPT
+        with ESMTP id S239303AbjEXGvg (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 24 May 2023 02:45:47 -0400
+        Wed, 24 May 2023 02:51:36 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7684172C;
-        Tue, 23 May 2023 23:44:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4196C19D;
+        Tue, 23 May 2023 23:50:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8hIfpBZo4uHhlxea9AKSLxE7i5cEVMRbEHxPZhvoC8w=; b=TZ98BR4jenjzt+JKfKBLVFHzQ4
-        TtA0qIDdQ6GMs7qDA/Aw0kUUo359rO13LZdOFfwfafMxs/vWYVX3ojJWgBKo/DlbAuFsGQ1eSu2Os
-        sMq9rUnWIXoZmPUkXki7peoyyAPfMqR9GNeZyUBll065KpgfMUqh3axtpVyc9w24svUdxUNbdXyCK
-        9FeWp+8R3ocZ/oTpvBcMyxsbDf8UrugWWdXXxtMy8Kkoaj97B+hcJwVqHrLwNLqYuJM71CZbj3EyA
-        r8J7nQcssJvyUUtC7WjO0K1AlyXTnuVZPAXKHfKW2+HqgNqHrvYyjA5yuDzJabWSzgwkOPnedU/aG
-        wu/cWq6A==;
+        bh=Q9xln5Of0XYQlLaDuuwF580BoakPCRgS4xq/GOlA84E=; b=c3o4BciiL+/xQbd/mLsJmyHAPP
+        mtv4SAVwob4fiAagaJ1jcMNkIxGuuQpjzAbOfv2ZDFz3uiKjnTjE8erv21tuqPaq76W3Min3PJi2E
+        SsOQwQ4i9DAqXYu/7xa10RVCI+xsBcnhMeVyzXnV0wU+F3yePpkIdbLk2DiPyF1GASrMNJtRygWmy
+        GBWWqKj9Y+/wphkr0zshh+OB7gb45MN3aqvdZT+orgj9++XYFfPGVZ12Dlb09SQFF7ZOZ6HFuN+4d
+        I/icmXrOS25ZuWZ8j2mVOxjvB1BCAtlSkhf6p5/0WmTJ3v6hkuP/fK/f8niS+ZS2x/vC9q9q66l4A
+        PEjwxbjw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1iEV-00CWTX-1C;
-        Wed, 24 May 2023 06:44:27 +0000
-Date:   Tue, 23 May 2023 23:44:27 -0700
+        id 1q1iKW-00CX98-2n;
+        Wed, 24 May 2023 06:50:40 +0000
+Date:   Tue, 23 May 2023 23:50:40 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Allen Webb <allenwebb@google.com>
 Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
@@ -37,80 +37,128 @@ Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
         nick.alcock@oracle.com
-Subject: Re: [PATCH v10 04/11] module.h: MODULE_DEVICE_TABLE for built-in
- modules
-Message-ID: <ZG2yS0sj0EgGoFYf@bombadil.infradead.org>
+Subject: Re: [PATCH v10 05/11] modpost: Track module name for built-in modules
+Message-ID: <ZG2zwMTdJryhGrbU@bombadil.infradead.org>
 References: <20221219204619.2205248-1-allenwebb@google.com>
  <20230406190030.968972-1-allenwebb@google.com>
- <20230406190030.968972-5-allenwebb@google.com>
+ <20230406190030.968972-6-allenwebb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406190030.968972-5-allenwebb@google.com>
+In-Reply-To: <20230406190030.968972-6-allenwebb@google.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Apr 06, 2023 at 02:00:23PM -0500, Allen Webb wrote:
-> Implement MODULE_DEVICE_TABLE for build-in modules to make it possible
-> to generate a builtin.alias file to complement modules.alias.
-> 
-> Signed-off-by: Allen Webb <allenwebb@google.com>
-> ---
->  include/linux/module.h | 36 +++++++++++++++++++++++++++++-------
->  1 file changed, 29 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 4435ad9439ab..b1cb12e06996 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -237,14 +237,36 @@ extern void cleanup_module(void);
->  /* What your module does. */
->  #define MODULE_DESCRIPTION(_description) MODULE_INFO(description, _description)
->  
-> -#ifdef MODULE
-> -/* Creates an alias so file2alias.c can find device table. */
-> +/*
-> + * Creates an alias so file2alias.c can find device table.
-> + *
-> + * Use this in cases where a device table is used to match devices because it
-> + * surfaces match-id based module aliases to userspace for:
-> + *   - Automatic module loading through modules.alias.
-> + *   - Tools like USBGuard which block devices based on policy such as which
-> + *     modules match a device.
-> + *
-> + * The only use-case for built-in drivers today is to enable userspace to
-> + * prevent / allow probe for devices on certain subsystems even if the driver is
-> + * already loaded. An example is the USB subsystem with its authorized_default
-> + * sysfs attribute. For more details refer to the kernel's Documentation for USB
-> + * about authorized_default.
-> + *
-> + * The module name is included in the alias for two reasons:
-> + *   - It avoids creating two aliases with the same name for built-in modules.
-> + *     Historically MODULE_DEVICE_TABLE was a no-op for built-in modules, so
-> + *     there was nothing to stop different modules from having the same device
-> + *     table name and consequently the same alias when building as a module.
-> + *   - The module name is needed by files2alias.c to associate a particular
-> + *     device table with its associated module for built-in modules since
-> + *     files2alias would otherwise see the module name as `vmlinuz.o`.
-> + */
->  #define MODULE_DEVICE_TABLE(type, name)					\
-> -extern typeof(name) __mod_##type##__##name##_device_table		\
-> -  __attribute__ ((unused, alias(__stringify(name))))
-> -#else  /* !MODULE */
-> -#define MODULE_DEVICE_TABLE(type, name)
-> -#endif
-> +extern void *CONCATENATE(						\
-> +	CONCATENATE(__mod_##type##__##name##__,				\
-> +		__KBUILD_MODNAME),					\
-> +	_device_table)							\
-> +	__attribute__ ((unused, alias(__stringify(name))))
+On Thu, Apr 06, 2023 at 02:00:24PM -0500, Allen Webb wrote:
+> Keep track of the module name when processing match table symbols.
 
-Why does it seem like we're changing extern typeof(name) to a void *?
-Also the addition of CONCATENATE() makes it not clear if you are
-modifying the definition before, so it would be good to first add
-CONCATENATE() to replace the old way without making any functional
-changes first. Then a secondary patch which extends the world for
-built-in.
+This should mention why this would be good. Otherwise, think about it,
+ok, it's done but why? If the reason is that it will be needed later
+you need to say that in this commit log entry. If its not used now, it
+also needs to say that in this commit log so it is easier to review
+and set expecataions correctly for the reviewer.
 
   Luis
+
+> Signed-off-by: Allen Webb <allenwebb@google.com>
+> ---
+>  scripts/mod/file2alias.c | 39 +++++++++++++++++++++++++++++++++++----
+>  scripts/mod/modpost.h    |  1 +
+>  2 files changed, 36 insertions(+), 4 deletions(-)
+> 
+> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+> index 91c2e7ba5e52..b392d51c3b06 100644
+> --- a/scripts/mod/file2alias.c
+> +++ b/scripts/mod/file2alias.c
+> @@ -28,6 +28,7 @@ typedef Elf64_Addr	kernel_ulong_t;
+>  #include <stdint.h>
+>  #endif
+>  
+> +#include <assert.h>
+>  #include <ctype.h>
+>  #include <stdbool.h>
+>  
+> @@ -1540,9 +1541,9 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+>  			Elf_Sym *sym, const char *symname)
+>  {
+>  	void *symval;
+> -	char *zeros = NULL;
+> -	const char *name, *identifier;
+> -	unsigned int namelen;
+> +	char *zeros = NULL, *modname_str = NULL;
+> +	const char *name, *identifier, *modname;
+> +	unsigned int namelen, modnamelen;
+>  
+>  	/* We're looking for a section relative symbol */
+>  	if (!sym->st_shndx || get_secindex(info, sym) >= info->num_sections)
+> @@ -1552,7 +1553,12 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+>  	if (ELF_ST_TYPE(sym->st_info) != STT_OBJECT)
+>  		return;
+>  
+> -	/* All our symbols are of form __mod_<name>__<identifier>_device_table. */
+> +	/*
+> +	 * All our symbols are either of form
+> +	 *   __mod_<name>__<identifier>_device_table
+> +	 * or
+> +	 *   __mod_<name>__<identifier>__kmod_<builtin-name>_device_table
+> +	 */
+>  	if (strncmp(symname, "__mod_", strlen("__mod_")))
+>  		return;
+>  	name = symname + strlen("__mod_");
+> @@ -1564,8 +1570,30 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+>  	identifier = strstr(name, "__");
+>  	if (!identifier)
+>  		return;
+> +	modnamelen = namelen;
+>  	namelen = identifier - name;
+>  
+> +	/*
+> +	 * In the vmlinuz.o case we want to handle __kmod_ so aliases from
+> +	 * builtin modules are attributed correctly.
+> +	 */
+> +	modname = strstr(identifier + 2, "__kmod_");
+> +	if (modname) {
+> +		modname += strlen("__kmod_");
+> +		modnamelen -= (modname - name) + strlen("_device_table");
+> +		modname_str = malloc(modnamelen + 1);
+> +		/* We don't want to continue if the allocation fails. */
+> +		assert(modname_str);
+> +		memcpy(modname_str, modname, modnamelen);
+> +		modname_str[modnamelen] = '\0';
+> +	}
+> +
+> +	if (modname_str)
+> +		modname = modname_str;
+> +	else
+> +		modname = mod->name;
+> +	mod->builtin_name = modname;
+> +
+>  	/* Handle all-NULL symbols allocated into .bss */
+>  	if (info->sechdrs[get_secindex(info, sym)].sh_type & SHT_NOBITS) {
+>  		zeros = calloc(1, sym->st_size);
+> @@ -1597,6 +1625,9 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+>  		}
+>  	}
+>  	free(zeros);
+> +	mod->builtin_name = NULL;
+> +	if (modname_str)
+> +		free(modname_str);
+>  }
+>  
+>  /* Now add out buffered information to the generated C source */
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 1178f40a73f3..34fe5fc0b02c 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -128,6 +128,7 @@ struct module {
+>  	struct list_head missing_namespaces;
+>  	// Actual imported namespaces
+>  	struct list_head imported_namespaces;
+> +	const char *builtin_name;
+>  	char name[];
+>  };
+>  
+> -- 
+> 2.39.2
+> 
