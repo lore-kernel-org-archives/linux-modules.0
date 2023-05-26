@@ -2,82 +2,144 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E43A0C7EE2C
-	for <linux-modules@archiver.kernel.org>; Fri, 26 May 2023 16:21:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0862CC77B73
+	for <linux-modules@archiver.kernel.org>; Fri, 26 May 2023 17:39:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjEZQVR (ORCPT
+        id S236867AbjEZRjZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 26 May 2023 12:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        Fri, 26 May 2023 13:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEZQVP (ORCPT
+        with ESMTP id S230085AbjEZRjX (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 26 May 2023 12:21:15 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5BFA4
-        for <linux-modules@vger.kernel.org>; Fri, 26 May 2023 09:21:13 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d30ab1f89so833285b3a.3
-        for <linux-modules@vger.kernel.org>; Fri, 26 May 2023 09:21:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685118073; x=1687710073;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mX5+bjBBZlaoKw7taDUef0eZ0B/7aaJbLLfQ646in4U=;
-        b=dEjqUnr4j4gcR0Vx5ZawmCnVcL1lGxH3zJtPCZiuDv+vUCTSZi4+fTGf+Snya2As5j
-         E1B9A3kXDH5vKZDyHZkz2ycBza3FewyuJM9IfbCvHg8mGReom4T4ydBUpT68aAHMB+36
-         5JwVjDBMWVZQbIi5QwdVaSBHTffYQeIQmaOrM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685118073; x=1687710073;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mX5+bjBBZlaoKw7taDUef0eZ0B/7aaJbLLfQ646in4U=;
-        b=iviMUVYvRAOOe0p1k8t5BgLv/Mg2y5fTjmhZOVm0Vbs2Yj8+TF9Vf8F723Zf8F576F
-         39kWHVEXlqpzdPw9blagEPY+XDTA2HvN07r5FVdn7TmKPVeqthKM7RHZ2vnlR0DPb9sC
-         8doRlAKBIQjKTjKamsEVVICreG0TbYscm7r3FoJ3vGeB9KCxCw5GGzLhiTQxMEdvOujl
-         TxPqT8u9wulIMT6yJc+cG0y3F7bidYDwmZUSwIcqo6euUdFaQJ9usGLjDWf1DRctAz2E
-         owUkbUdzzqobhDmlShZ0pXP1umArrMIhucwVaN4O2hW8aKEgIG+PR5gZmb0gQcjOu2Ck
-         GAOQ==
-X-Gm-Message-State: AC+VfDwXlHnF1r8tynPWffwBpnOJC3+8MW8ByPoawPzYOHawIvNcNaeu
-        WxKvbM8/chramYK8L/lFTtJXqA==
-X-Google-Smtp-Source: ACHHUZ6SThSNDpsJaexFEwJQGQKuvbaxx80fqRKRO38s56UC7FukaoFZxBvofbaE4WeyWP+gyL/mUA==
-X-Received: by 2002:a05:6a20:9146:b0:10c:9773:5e6 with SMTP id x6-20020a056a20914600b0010c977305e6mr3121676pzc.47.1685118072839;
-        Fri, 26 May 2023 09:21:12 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id k17-20020aa78211000000b0064d4d11b8bfsm2916467pfi.59.2023.05.26.09.21.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 09:21:12 -0700 (PDT)
-Date:   Fri, 26 May 2023 09:21:11 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Maninder Singh <maninder1.s@samsung.com>
-Cc:     cai@lca.pw, mcgrof@kernel.org, thunder.leizhen@huawei.com,
-        vincenzopalazzodev@gmail.com, wedsonaf@google.com,
-        pmladek@suse.com, ojeda@kernel.org, peterz@infradead.org,
-        alan.maguire@oracle.com, stephen.s.brennan@oracle.com,
-        samitolvanen@google.com, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, v.narang@samsung.com
-Subject: Re: [PATCH 1/1] kallsyms: remove unsed API lookup_symbol_attrs
-Message-ID: <202305260920.BE175FAD@keescook>
-References: <CGME20230526072134epcas5p12d0971c15890541639b4d2d85db84b43@epcas5p1.samsung.com>
- <20230526072123.807160-1-maninder1.s@samsung.com>
+        Fri, 26 May 2023 13:39:23 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C785AC9;
+        Fri, 26 May 2023 10:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=EVtoXAEMDy6OIa/WgDvWQDrR2tkjZNPgZSP3RRLS+io=; b=iN9yxKbCvPFS+c+eNY+VvRh50C
+        SGuiPHWQpnZRPgc2oRLQqcvKCLzl2LkUiEjDC5lTlo2LALP+Mp95Y5U37s3FQghkj93x9xLuLOUbF
+        6wTzPeeqabzYU1DV/5Mdy8xej21vPVpRX7KgsM8AjZiUJEdvb0nhltHYQKsJVzGYFG/PFBnMLxcuM
+        SJ1B6YPGp6Tr69x4JHzeB996BKGQhMaEmoKivW4unzJ9fsTtNNVcopSgUqT/ReXK4yLkKA5fT+MeN
+        PvB5rixoYCHIBF26Iho3K+Oyi0CI/tpUcSquVjhlSbpejk3PLAev9nNVRS+IbCVSsFcOiDATAmz+7
+        KAI2Ah9Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2bPJ-003KUo-1d;
+        Fri, 26 May 2023 17:39:17 +0000
+Date:   Fri, 26 May 2023 10:39:17 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Song Liu <song@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>, linux-modules@vger.kernel.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
+Message-ID: <ZHDuxYBsaGn7xJBn@bombadil.infradead.org>
+References: <20230517131820.936553-1-arnd@kernel.org>
+ <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
+ <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com>
+ <ZG27pExhUqFpGexM@bombadil.infradead.org>
+ <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
+ <ZHAmYSclm+5QlLcM@bombadil.infradead.org>
+ <2591bdc4-a198-446c-8bfe-37ea39c51964@app.fastmail.com>
+ <872b0c40-651e-6989-cd4c-8ca7f655dc79@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230526072123.807160-1-maninder1.s@samsung.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <872b0c40-651e-6989-cd4c-8ca7f655dc79@oracle.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, May 26, 2023 at 12:51:23PM +0530, Maninder Singh wrote:
-> with commit '7878c231dae0 ("slab: remove /proc/slab_allocators")'
-> lookup_symbol_attrs usage is removed.
+On Fri, May 26, 2023 at 03:39:22PM +0100, Alan Maguire wrote:
+> On 26/05/2023 07:41, Arnd Bergmann wrote:
+> > On Fri, May 26, 2023, at 05:24, Luis Chamberlain wrote:
+> >> On Thu, May 25, 2023 at 06:45:35PM -0700, Song Liu wrote:
+> >>> On Wed, May 24, 2023 at 12:24 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >>>
+> >>> This change broke compilation of BPF selftests in modules-next
+> >>> branch:
+> >>>
+> >>> progs/bpf_iter_ksym.c:62:13: error: no member named 'pos_arch_end' in
+> >>> 'struct kallsym_iter'
+> >>>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+> >>>              ~~~~  ^
+> >>> progs/bpf_iter_ksym.c:62:35: error: no member named 'pos_arch_end' in
+> >>> 'struct kallsym_iter'
+> >>>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+> >>>                                    ~~~~  ^
+> >>>
+> >>> I haven't looked into the proper fix for it yet.
+> >>
+> >> A quick attempt:
+> >>
+> >> Arnd, can you verify?
+> >>
+> >> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c 
+> >> b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+> >> index 5ddcc46fd886..521267818f4d 100644
+> >> --- a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+> >> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+> >> @@ -59,9 +59,7 @@ int dump_ksym(struct bpf_iter__ksym *ctx)
+> >>  	} else {
+> >>  		BPF_SEQ_PRINTF(seq, "0x%llx %c %s ", value, type, iter->name);
+> >>  	}
+> >> -	if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+> >> -		BPF_SEQ_PRINTF(seq, "CORE ");
+> >> -	else if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
+> >> +	if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
+> >>  		BPF_SEQ_PRINTF(seq, "MOD ");
+> >>  	else if (!iter->pos_ftrace_mod_end || iter->pos_ftrace_mod_end > 
+> >> iter->pos)
+> >>  		BPF_SEQ_PRINTF(seq, "FTRACE_MOD ");
+> > 
+> > This looks correct to me, but I'm still failing to cross-build
+> > the selftests on my randconfig build setup, so I can't confirm that
+> > this avoids the build failure, and I don't understand the code well
+> > enough to be sure.
+> >
 > 
-> Thus removing redundant API.
+> Thanks for the fix! The change above works ; maybe having
+> anything less than iter->pos_mod_end marked as a "CORE/MOD " symbol
+> might be worth tweaking, but that's a minor thing.
 > 
-> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+> before:
+> 
+>   CLNG-BPF [test_maps] bpf_iter_ksym.bpf.o
+> progs/bpf_iter_ksym.c:62:13: error: no member named 'pos_arch_end' in
+> 'struct kallsym_iter'
+>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+>              ~~~~  ^
+> progs/bpf_iter_ksym.c:62:35: error: no member named 'pos_arch_end' in
+> 'struct kallsym_iter'
+>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+>                                    ~~~~  ^
+> 2 errors generated.
+> 
+> after the above is applied, bpf selftests build and iter ksym test
+> passes:
+> 
+> $ sudo ./test_progs -t bpf_iter
+> ...
+> #12/37   bpf_iter/ksym:OK
+> ...
+> Summary: 3/39 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> Feel free to add a
+> 
+> Tested-by: Alan Maguire <alan.maguire@oracle.com>
 
-Yeah, looks like this is unused now.
+I just folded this into Arnd's patch and pushed to modules-next.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Thanks!
 
--- 
-Kees Cook
+  Luis
