@@ -2,57 +2,38 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AAF0C77B7E
-	for <linux-modules@archiver.kernel.org>; Fri, 26 May 2023 01:46:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13638C7EE23
+	for <linux-modules@archiver.kernel.org>; Fri, 26 May 2023 03:24:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbjEZBqD (ORCPT
+        id S229689AbjEZDY2 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 25 May 2023 21:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
+        Thu, 25 May 2023 23:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240667AbjEZBpx (ORCPT
+        with ESMTP id S229568AbjEZDY0 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 25 May 2023 21:45:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A29189;
-        Thu, 25 May 2023 18:45:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C97A64C19;
-        Fri, 26 May 2023 01:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29D0C433D2;
-        Fri, 26 May 2023 01:45:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685065549;
-        bh=SfywDgpNkN5IEaAQx3kJcORg1Vipa1edhuqGcW7elzE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WLhGv7yxDbYxWFFp4yUNFtJ7lMvzXYowTM7++JqmBgWi6k6MZ8o2RddeyGaWkZz7d
-         jNOtyilWYfmLRYTecUy1F2axnIjal4XuAdfRBTzELPvpsc1E07fi82tXUx01NZ6YF/
-         pIe9DZsMgZcLjVxioA2pLcQhRSZW1DwFtMGvPH3R4P6M+ph90LNa4dkmTfU4weVm09
-         iLSgD6SS8cW1WH8RI3ch+usacYFeq7QkW7gksGjUCTwvHyn6sI54sm+NlTBsXB2g/V
-         /DNsdogy2Zt6JkJXUX1rvWvSfNEqW5LjSzHWA2J+99Q0dNDFl+FeJ1yzCxgfjs9PP9
-         I04F810tRKK8A==
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2af2db78b38so2061311fa.3;
-        Thu, 25 May 2023 18:45:49 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzgkqOGKRDxyHJOvVe4tvEieYojR+TLnWlt602p69G5ofkoszsk
-        Au+YW3q19vc57lUnHbOEAf+b4NwTO5p3ddSpNUg=
-X-Google-Smtp-Source: ACHHUZ7iExw/Wlf5nZx6NtGxubOcs37XcqxfbWbLz0xDm8IbHfNSgsR88uvVOSYAlpl07Ex0nPRU4Ntj63oxlWa5HDc=
-X-Received: by 2002:ac2:5471:0:b0:4f2:7b65:baf1 with SMTP id
- e17-20020ac25471000000b004f27b65baf1mr25328lfn.23.1685065547892; Thu, 25 May
- 2023 18:45:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517131820.936553-1-arnd@kernel.org> <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
- <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com> <ZG27pExhUqFpGexM@bombadil.infradead.org>
-In-Reply-To: <ZG27pExhUqFpGexM@bombadil.infradead.org>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 25 May 2023 18:45:35 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
-Message-ID: <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
-Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Thu, 25 May 2023 23:24:26 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AC1E6;
+        Thu, 25 May 2023 20:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=FGc2DpRwzN2CfKjvI105cUP9f2PjEF2afGAtgtqFB38=; b=YTvd3rCSPD25KbM3zkOAIlVuR3
+        Y5s+ExS6tTZlXbDqpXmqzSK36KOhFcQlkX6awiu+skf+fogZ0Mcpnu5OYgnCeS3OIT7GxLGDygWoa
+        qmuQ0mRx4ABgpPWVLwjmXhZ9hhPGRpt0FiIdItqNzX/DNA/+o54fZWx1/w2uAXntceixEkzZyrPYP
+        fwZKLmMh/U1qV1o9VDbM3qWnfkydv7jpMGMgoWDk7f2FpzjpUmK00cBNsTez9m/FJPeddt6em4F0s
+        E1znANbwABARAz8t7GPcYarxWvxmj6SSdTYeWGaWacJlDaTvisgIISzBWC+P4bSe6cuqkd/3LHZ9H
+        NOaHeNQA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2O3t-000rME-2a;
+        Fri, 26 May 2023 03:24:17 +0000
+Date:   Thu, 25 May 2023 20:24:17 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
         Andy Lutomirski <luto@kernel.org>,
         Borislav Petkov <bp@suse.de>, linux-modules@vger.kernel.org,
         Zhen Lei <thunder.leizhen@huawei.com>,
@@ -60,72 +41,95 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
+Message-ID: <ZHAmYSclm+5QlLcM@bombadil.infradead.org>
+References: <20230517131820.936553-1-arnd@kernel.org>
+ <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
+ <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com>
+ <ZG27pExhUqFpGexM@bombadil.infradead.org>
+ <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-+ Alan Maguire
-
-On Wed, May 24, 2023 at 12:24=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.or=
-g> wrote:
->
-> On Wed, May 24, 2023 at 08:25:13AM +0200, Arnd Bergmann wrote:
-> > On Wed, May 24, 2023, at 07:07, Luis Chamberlain wrote:
-> > > On Wed, May 17, 2023 at 03:18:07PM +0200, Arnd Bergmann wrote:
-> > >> From: Arnd Bergmann <arnd@arndb.de>
-> > >>
-> > >> The arch_get_kallsym() function was introduced so that x86 could ove=
-rride
-> > >> it, but that override was removed in bf904d2762ee ("x86/pti/64: Remo=
-ve
-> > >> the SYSCALL64 entry trampoline"), so now this does nothing except ca=
-using
-> > >> a warning about a missing prototype:
-> > >>
-> > >> kernel/kallsyms.c:662:12: error: no previous prototype for 'arch_get=
-_kallsym' [-Werror=3Dmissing-prototypes]
-> > >>   662 | int __weak arch_get_kallsym(unsigned int symnum, unsigned lo=
-ng *value,
-> > >>
-> > >> Restore the old behavior before d83212d5dd67 ("kallsyms, x86: Export
-> > >> addresses of PTI entry trampolines") to simplify the code and avoid
-> > >> the warning.
-> > >>
-> > >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Thu, May 25, 2023 at 06:45:35PM -0700, Song Liu wrote:
+> + Alan Maguire
+> 
+> On Wed, May 24, 2023 at 12:24 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Wed, May 24, 2023 at 08:25:13AM +0200, Arnd Bergmann wrote:
+> > > On Wed, May 24, 2023, at 07:07, Luis Chamberlain wrote:
+> > > > On Wed, May 17, 2023 at 03:18:07PM +0200, Arnd Bergmann wrote:
+> > > >> From: Arnd Bergmann <arnd@arndb.de>
+> > > >>
+> > > >> The arch_get_kallsym() function was introduced so that x86 could override
+> > > >> it, but that override was removed in bf904d2762ee ("x86/pti/64: Remove
+> > > >> the SYSCALL64 entry trampoline"), so now this does nothing except causing
+> > > >> a warning about a missing prototype:
+> > > >>
+> > > >> kernel/kallsyms.c:662:12: error: no previous prototype for 'arch_get_kallsym' [-Werror=missing-prototypes]
+> > > >>   662 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+> > > >>
+> > > >> Restore the old behavior before d83212d5dd67 ("kallsyms, x86: Export
+> > > >> addresses of PTI entry trampolines") to simplify the code and avoid
+> > > >> the warning.
+> > > >>
+> > > >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > > >
+> > > > Shouldn't this go through x86 as this sort of fixesss commit
+> > > > bf904d2762ee ("x86/pti/64: Remove the SYSCALL64 entry trampoline")?
 > > >
-> > > Shouldn't this go through x86 as this sort of fixesss commit
-> > > bf904d2762ee ("x86/pti/64: Remove the SYSCALL64 entry trampoline")?
+> > > That works for me as well, as long as someone picks it up. It's
+> > > not really x86 any more though since that commit is five years
+> > > old and removed the last reference from the x86 code.
 > >
-> > That works for me as well, as long as someone picks it up. It's
-> > not really x86 any more though since that commit is five years
-> > old and removed the last reference from the x86 code.
->
-> Fair enough.
->
-> > I sent it to you since you are the one that merged most of
-> > the kallsyms patches through the module tree, but I guess
-> > you are not actually maintaining that file (not blaming you,
-> > I'd also try to stay away from kallsyms).
+> > Fair enough.
 > >
-> > I can resend it to Andrew for the -mm tree.
->
-> OK, I just took the patch in, it's on the train, better get on before
-> it gets lost.
+> > > I sent it to you since you are the one that merged most of
+> > > the kallsyms patches through the module tree, but I guess
+> > > you are not actually maintaining that file (not blaming you,
+> > > I'd also try to stay away from kallsyms).
+> > >
+> > > I can resend it to Andrew for the -mm tree.
+> >
+> > OK, I just took the patch in, it's on the train, better get on before
+> > it gets lost.
+> 
+> This change broke compilation of BPF selftests in modules-next
+> branch:
+> 
+> progs/bpf_iter_ksym.c:62:13: error: no member named 'pos_arch_end' in
+> 'struct kallsym_iter'
+>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+>              ~~~~  ^
+> progs/bpf_iter_ksym.c:62:35: error: no member named 'pos_arch_end' in
+> 'struct kallsym_iter'
+>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+>                                    ~~~~  ^
+> 
+> I haven't looked into the proper fix for it yet.
 
-This change broke compilation of BPF selftests in modules-next
-branch:
+A quick attempt:
 
-progs/bpf_iter_ksym.c:62:13: error: no member named 'pos_arch_end' in
-'struct kallsym_iter'
-        if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
-             ~~~~  ^
-progs/bpf_iter_ksym.c:62:35: error: no member named 'pos_arch_end' in
-'struct kallsym_iter'
-        if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
-                                   ~~~~  ^
+Arnd, can you verify?
 
-I haven't looked into the proper fix for it yet.
-
-Thanks,
-Song
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+index 5ddcc46fd886..521267818f4d 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+@@ -59,9 +59,7 @@ int dump_ksym(struct bpf_iter__ksym *ctx)
+ 	} else {
+ 		BPF_SEQ_PRINTF(seq, "0x%llx %c %s ", value, type, iter->name);
+ 	}
+-	if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+-		BPF_SEQ_PRINTF(seq, "CORE ");
+-	else if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
++	if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
+ 		BPF_SEQ_PRINTF(seq, "MOD ");
+ 	else if (!iter->pos_ftrace_mod_end || iter->pos_ftrace_mod_end > iter->pos)
+ 		BPF_SEQ_PRINTF(seq, "FTRACE_MOD ");
