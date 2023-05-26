@@ -2,245 +2,269 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6535C77B7A
-	for <linux-modules@archiver.kernel.org>; Fri, 26 May 2023 07:30:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19220C77B7A
+	for <linux-modules@archiver.kernel.org>; Fri, 26 May 2023 14:46:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242376AbjEZHaf (ORCPT
+        id S231447AbjEZOqN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 26 May 2023 03:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59514 "EHLO
+        Fri, 26 May 2023 10:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbjEZHad (ORCPT
+        with ESMTP id S237462AbjEZOqM (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 26 May 2023 03:30:33 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09567119
-        for <linux-modules@vger.kernel.org>; Fri, 26 May 2023 00:30:24 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230526073022epoutp02773782a9ed0a387e2c6c86bc7ef8e62d~ioP3FXkdL0106701067epoutp02F
-        for <linux-modules@vger.kernel.org>; Fri, 26 May 2023 07:30:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230526073022epoutp02773782a9ed0a387e2c6c86bc7ef8e62d~ioP3FXkdL0106701067epoutp02F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1685086222;
-        bh=otdeJumuZeizLE5XvOGATbymMIixUp3P2LEWcJSe6UU=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=KFMcKb8EmQ0WekGkeXTTWmU86zyuAGMfOdhZ4FSw11YC2zUQMZPtQXcmOnEnASxUL
-         mphxkeDPDXFSmeLAbNi9blBziUOOdeZbR2G1LkiBKgv3KntVyHp+k5obcwq8zZ8sE3
-         Q2dm+NH0+SoSjzw5Cn0zmEJ4IDp5qOkac5Ae4K+s=
-Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20230526073021epcas5p354caed83c7d3f675b8fc8145d2dc333e~ioP2Nm66I2024320243epcas5p37;
-        Fri, 26 May 2023 07:30:21 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3E.43.04567.D0060746; Fri, 26 May 2023 16:30:21 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230526072134epcas5p12d0971c15890541639b4d2d85db84b43~ioILYJQtE0992309923epcas5p1i;
-        Fri, 26 May 2023 07:21:34 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230526072134epsmtrp1325f4cdf2cade3c0a54fbc69741f77b2~ioILXR53j2203722037epsmtrp1M;
-        Fri, 26 May 2023 07:21:34 +0000 (GMT)
-X-AuditID: b6c32a49-db3fe700000011d7-d7-6470600d2ada
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D5.37.27706.EFD50746; Fri, 26 May 2023 16:21:34 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.109.224.44]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230526072131epsmtip117493cd21f69aa80cb0ecff28945beb5~ioIInLCdJ0355703557epsmtip1B;
-        Fri, 26 May 2023 07:21:31 +0000 (GMT)
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     cai@lca.pw, mcgrof@kernel.org, thunder.leizhen@huawei.com,
-        vincenzopalazzodev@gmail.com, wedsonaf@google.com,
-        pmladek@suse.com, ojeda@kernel.org, peterz@infradead.org,
-        keescook@chromium.org, alan.maguire@oracle.com,
-        stephen.s.brennan@oracle.com, samitolvanen@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        v.narang@samsung.com, Maninder Singh <maninder1.s@samsung.com>
-Subject: [PATCH 1/1] kallsyms: remove unsed API lookup_symbol_attrs
-Date:   Fri, 26 May 2023 12:51:23 +0530
-Message-Id: <20230526072123.807160-1-maninder1.s@samsung.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Fri, 26 May 2023 10:46:12 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8762E10CB;
+        Fri, 26 May 2023 07:45:43 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QEZ0WC014784;
+        Fri, 26 May 2023 14:44:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=rFKKd8GKAjS7g0ULY0ZtA4BZNasssrib1nOm/owsh4E=;
+ b=qPAwb2ezcs4m8aMTHWWxCPHxTPuv6dAOGaZnc41RhW6dtWt88p34CTJdy09r3AwQl2y9
+ OMRoP9I5a+BofvgSj8Lx5VxmKU5Jdy0pDtQkaGvqkCBwYrRdX86eK0W3m4y3LlzN1kXi
+ cTPY6qDmP4sRR6gMsfqDfdFCrW7UyUWq9G2oEj/nXGcuBnDRSLUS0MdKdZ8okndjFffW
+ jy0K+3HMbJGpmdZZb2Xgm21Apcjj0ML6VABAip/qscxZhFCs8JbDO5K22Zapz/TUNeVh
+ RFyhzH8WMrzI5w/kLoOcamjjHQoWox/SpRgNkssDnqTz1OFhIol1hZxOjTGP70pEmtSd Hg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qtxn800ps-8
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 26 May 2023 14:44:13 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34QDQwI3024388;
+        Fri, 26 May 2023 14:40:21 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qqk8yk7cg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 26 May 2023 14:40:20 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nLTZsFI+L7582hPjjr4IEGNua8SuVZ/nakzN1HeiSbWDjdtuNeFdwkmhrWCYNE59yfyD9HugewgXYKRrxQGyB5FRkybeq7Et6t0M1yTtRI/X/Lhvumtzg9Kc6LMbETGCZVjvUxV2nMJ/9A99BufMmjpfj3+5gbqTTkLuOTkLFStEuB9grpFSSAt53LFUnrDUbVSyXsH2gnUKl4NVVrixxofm5iGqM4hbvXmfEDsXpEU2fqJuS5G+HSWVSYx2P6g5YBtHRMEr8mtBfO0XJ6440e9PW8FzSt5eBUrY6GJVPWRt2XpzZL+NVTOdC0u8Aa6YS/rUrLWC+ewz0J1/YOQvWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rFKKd8GKAjS7g0ULY0ZtA4BZNasssrib1nOm/owsh4E=;
+ b=OBs35UhY5Xu4oq9XgX64PgnVxCs0IqhjsPq1Zhi3vBUmuwevINafmJbjv5EVEGK/eGQj5WNkLX8G/gp8rPNTHy8FJf0eX34xCQkYWfrKSbIYfC/yqDjZD/GRGYjnOl20GS0IRsQqKUumF1+L1m8EFyPk3IQNi6pUvHEhBhMKI/91BNbxCWQdO8Yhy46SZ6DlvjwZNlp7mPKNWJ4e80RzqIjhyv6DCPJdzsrPphqhsWYTX9c6eBvY6+UP9lNhRrEQGHgTyt612Y/xVpnMvihtdqVQx2mIVjZWF0ftO3pa55uVmpYCaKbLrRxV8zF1T0F8x9RMrag3QUM2wt/NLhaqyQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rFKKd8GKAjS7g0ULY0ZtA4BZNasssrib1nOm/owsh4E=;
+ b=ng1LALRv6OQ5ZHX8/s/xcBKaQ4TfExk79m/RXXcANCsstwMMU73mmY3AmwJLaL6VT3h06SufO1EL3i30ssfaocxFS244iWMhR7T7mdmYMP1Yk1XcsWmoKVjyMp2qcmgAMC/ymfDoQHR1xP2bW1WK356XkCMWNTvaHnNUwzvaf54=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by DM4PR10MB6254.namprd10.prod.outlook.com (2603:10b6:8:8f::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.29; Fri, 26 May 2023 14:40:18 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::90e:32fb:4292:1ace]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::90e:32fb:4292:1ace%6]) with mapi id 15.20.6433.018; Fri, 26 May 2023
+ 14:40:18 +0000
+Message-ID: <872b0c40-651e-6989-cd4c-8ca7f655dc79@oracle.com>
+Date:   Fri, 26 May 2023 15:39:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Song Liu <song@kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>, linux-modules@vger.kernel.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230517131820.936553-1-arnd@kernel.org>
+ <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
+ <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com>
+ <ZG27pExhUqFpGexM@bombadil.infradead.org>
+ <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
+ <ZHAmYSclm+5QlLcM@bombadil.infradead.org>
+ <2591bdc4-a198-446c-8bfe-37ea39c51964@app.fastmail.com>
+Content-Language: en-GB
+From:   Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <2591bdc4-a198-446c-8bfe-37ea39c51964@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAKsWRmVeSWpSXmKPExsWy7bCmhi5vQkGKwZwN4hY3DjWyWLzc7GFx
-        pjvX4vKuOWwWDbO/s1ocnt/GYnFjwlNGi5XzlzNaHO89wGTx//FXVoulK96yWvw9cpDJ4smv
-        T2wWh07OZbToOxtk0bF4JaODgMfshossHjtn3WX3WLCp1KPlyFtWj80rtDw2repk83izei6r
-        x8ent1g8+rasYvRYv+Uqi8fnTXIB3FFcNimpOZllqUX6dglcGSu37GYsOKNYsXHqfdYGxsnS
-        XYycHBICJhKHvj5i7WLk4hAS2M0osWL/diYI5xOjxLrTN1ggnG+MEu9+72DsYuQAa7l4LQIi
-        vpdR4lPPUTYI5wujxOzvb1lB5rIJ6Ems2rUHrFtEYCaTxKUL89hBHGaBRkaJib0rmECqhAWc
-        JV6efM8GYrMIqEqcezCHGcTmFbCV+PX2ERvEhfISMy99Z4eIC0qcnPmEBcRmBoo3b53NDDJU
-        QmAPh8SnDYtZIBpcJDbv62OGsIUlXh3fwg5hS0m87G9jh/ihXGLrhHqI3hZGif1zpkAts5d4
-        cnEhK0gNs4CmxPpd+hBhWYmpp9YxQezlk+j9/YQJIs4rsWMejK0q0XJzAyuELS3x+eNHqHM8
-        JB7eeQVmCwnEStxftZRxAqP8LCTvzELyziyEzQsYmVcxSqYWFOempxabFhjmpZbrFSfmFpfm
-        pesl5+duYgQnOi3PHYx3H3zQO8TIxMF4iFGCg1lJhHdDTn6KEG9KYmVValF+fFFpTmrxIUZp
-        DhYlcV5125PJQgLpiSWp2ampBalFMFkmDk6pBibPQ8z9dZUq/9ZeT5WRrF89ZZXe/YVrzydc
-        WWfTtd999/o8hiMH+G+Eus0084rhWlD8s7z2W8qECZIPXA4V1IVHGBYffvRJxmd6zpwTunYq
-        m/uXr90mn6X4cOkyj78iQizRvI2f414JTFQvW6oWk/DF/9CEA3HvpyV9352htCjrmrnddO9J
-        2Rzz3jy3vxrEdF0urOet7Idfoj2K/atiOQRb3h0qjdDcz7xWR271N54lzc9dwzsilWoP/3BU
-        Pfn39T6L08s07/1Ok9CpcQpvD7jbzFB/60f04cuJkn3X5h4wOHKpqW6959T7okxKC848t+6d
-        lXmx4+hGN7afIV9OvFyQbNJeIWTVotjJF/m/oVyJpTgj0VCLuag4EQDix9Zu4wMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrGLMWRmVeSWpSXmKPExsWy7bCSnO6/2IIUgys/+SxuHGpksXi52cPi
-        THeuxeVdc9gsGmZ/Z7U4PL+NxeLGhKeMFivnL2e0ON57gMni/+OvrBZLV7xltfh75CCTxZNf
-        n9gsDp2cy2jRdzbIomPxSkYHAY/ZDRdZPHbOusvusWBTqUfLkbesHptXaHlsWtXJ5vFm9VxW
-        j49Pb7F49G1ZxeixfstVFo/Pm+QCuKO4bFJSczLLUov07RK4MlZu2c1YcEaxYuPU+6wNjJOl
-        uxg5OCQETCQuXovoYuTiEBLYzSjxc/Um1i5GTqC4tMTPf+9ZIGxhiZX/nrNDFH1ilJi7bAcz
-        SIJNQE9i1a49LCAJEYHlTBJ/es6CVTELtDJKzLs6gQmkSljAWeLlyfdsIDaLgKrEuQdzwLp5
-        BWwlfr19xAaxQl5i5qXv7BBxQYmTM5+ArWYGijdvnc08gZFvFpLULCSpBYxMqxglUwuKc9Nz
-        iw0LDPNSy/WKE3OLS/PS9ZLzczcxgqNGS3MH4/ZVH/QOMTJxMB5ilOBgVhLh3ZCTnyLEm5JY
-        WZValB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QD0+mEB+VhUX53Flad
-        DJeeahh3b/n0E32R7zTeWTAzLva6rf637AaTadhxS+f6jGXqS+KOsvrLsX+ecijdgjf9cUSI
-        pE0g/5qOo1yd+RLnIry4rLacTP4rkq55+GupxGuT2w+YLzNfC/M5r9jCuqLfL3mJ+b4HE63O
-        K156wW9pOPGdKqd7ziLWBKY/Z+e0ck6fF6LSfj9v5kfGVjY2bamCM7X986b9P+NSdClONZ7p
-        3ZZTdlayJl4NOudSLNW5OHTnLU4QbuA5v0DqQf/yfSrHft05clHwnYO6jS+L3NPb786/fJL5
-        XXHF4pMLEwsClW+IteT1OV67Z1jxdOK57XzrslriBa6cTZxgv2tVXFWCEktxRqKhFnNRcSIA
-        8gEfIwkDAAA=
-X-CMS-MailID: 20230526072134epcas5p12d0971c15890541639b4d2d85db84b43
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20230526072134epcas5p12d0971c15890541639b4d2d85db84b43
-References: <CGME20230526072134epcas5p12d0971c15890541639b4d2d85db84b43@epcas5p1.samsung.com>
+X-ClientProxiedBy: LO4P123CA0507.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:272::17) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|DM4PR10MB6254:EE_
+X-MS-Office365-Filtering-Correlation-Id: e3863cf7-fbf8-4fb3-515d-08db5df7200f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HyhPJGuczq35VzinyfEf7jjSBjKhX6H69owLC3jBS/gW+l67fnjoenbxD23WIih5cea553p0SsCfrbrcK0NtBCLJc9PC2F6vUTYDrM6jiwy6lALcm3xCvqx+bfOZu+KXQNnscnUa+9Kbc4DiTbfI1I5xC+LSYM6gtXvOPEnK6VGdJYReHh9FA3AnCIHBHM+9XB7hlUnhDeshbOdtDfj7XA99vCCWZ0utW4pvKUeEXU5yshW9NShqLdMWNz4bmzfDboFgMUmtalaQgw7HHjdN4PaTWRb2WINSFnCWg6LVMu4d5WCr4GGl5BMuz7A7LidTXsOFB2EvJKwqFhhHY0DgKN5PHzcNPHERJJnWFyt7h2os0gb3vja+u+2qfbr9SdXx+3KR5cn3aYpQQZxwpPmpWh0owCAqqZjgGpfJUotX/hoqvcoDaum9tP0cY0p8lwKgkwQlFSpdW5s2k9QOm7djyniCD3Oj4Pdrs7eS7rSmVH+yZpC3ZyVcrITFYDzXmuZlDhqKkHwnHu3foPagE8KvO0rTnUBX8xGZiB/Vom8sY0ik6BLSKrrbrx+5D3qYJ4Q5/m7zNj3Mm2KBvUSw9Rz3C89T3hwM+Za0Bne3X8mImkfVxMUg0NTcl68GwCzMMDpaMEM19nx6kXTvhewpxygnBw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199021)(86362001)(110136005)(54906003)(83380400001)(2616005)(478600001)(31696002)(186003)(66946007)(66556008)(66476007)(4326008)(31686004)(2906002)(38100700002)(316002)(6512007)(6506007)(6666004)(53546011)(6486002)(44832011)(41300700001)(7416002)(5660300002)(8936002)(36756003)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c1p0K1MyWDFHS2NQaDZpUEErV0lGZHk3VUxhWjhSMFhLUTdVc3BLQXRNN1Fv?=
+ =?utf-8?B?bEprZTMzREd1Sk5nQWlaRGNFc3haaDkxSmhtZC9UN2tmdklEZ2svOXA5bjN2?=
+ =?utf-8?B?UHhiaWVpVXU1bkI1T3BmTzVDZUtxdFZyNHhPbnkyOUJ2Wm9wb1luaDhEWkZL?=
+ =?utf-8?B?SGQvMitMUTdkNVZwUTFDNHIyVnovZFdqajhUSEV5MWhueUZ1b01nMnAxUWVr?=
+ =?utf-8?B?clUvWG83RndpaGVKZlU2MExFR3ZjS1laYTR2SHJKNVdEZkRWNkZlV1NWTWI1?=
+ =?utf-8?B?WkdUcklrVjQyVVZoZlpVQnBJTytQOC9kZ3ZmeEl6Q2FQb2wwQ09GeDI0dGow?=
+ =?utf-8?B?Vys3K3lBcUJrczhvTHN5L3RiVzgvMW8yWVdMREtzRWJWbWpZb2dIZ25SamVa?=
+ =?utf-8?B?eWdSaFVveFdYdU9VYWRLMEkvUVYvOHROdmNCZi9wdzB5a1JTdHUyREpMdkpy?=
+ =?utf-8?B?MnB5dnBMTDRSaWZkd0VxT00xZm5iL3AvME5NcDFDREhUY0NMV1JNQUQrc2hO?=
+ =?utf-8?B?NVozNklDcmk3VWhUWU9CUkxKNVBSb3QreHg1cTFqT2JrSXpFOEp5em5sSFRY?=
+ =?utf-8?B?ZThGNHpTdXBXNldLVmpBb2ZJdm9MUDB4eGl3K3p5MmV4a2lISWRBbm5oUFZl?=
+ =?utf-8?B?Y3ZtaDVxYUxJdW9KZFd4eitOcmV5SVhsRDN3dDZUeGJaRUdKSVZiQ2F6aU9K?=
+ =?utf-8?B?aDBhWWphQVY3ZFBNN2xpaDl4NjFpeEVweExZcFE5c0UyTllBOXNocW9uZVdv?=
+ =?utf-8?B?d2FHVE1RZllJdUMrekhJYXVhSkIxVnZ6YWhKZXB1ZDhLS2h4ek1Nc0FGNFlG?=
+ =?utf-8?B?aFUwV1RkWHJhc2ZSekc3Umw0bU5EVFU2U3ZnWWtIK0JSNFZIV0VzWlVpVCts?=
+ =?utf-8?B?eWRsakdxNSt5dGk5NEtzTlBmbWsxM2szL3htQ0JOc2QwT0c3eTNyWUZEeWQ5?=
+ =?utf-8?B?WDZOc2x4OWlkNy9oK1Y3dWpVdGNKcUFaQVFYVHE3bitEL0pXTlRoMWhCbEpE?=
+ =?utf-8?B?L3VUUkNoQkF5RVk2L3p3am9yQzhIbEZXVXh6b3FLY0dteHNibVlkOWpjSEhG?=
+ =?utf-8?B?MVBtQkVMc2daVnpYZUFrMG9CeXZDV211Q3NXNm9TNGRadld2b0VGYi9PM0R4?=
+ =?utf-8?B?NHA0NVEvTUptYjA3UDUzcnhiSUZuUFprSlNhcWRYeERDdTFkTzB0MlI4L1Zw?=
+ =?utf-8?B?WjFORWU1NU1UM0s5S0ZhVmg0RjNZcmJQZ2xHb0ZoMEw4Nnp6cXZEYTVmMkgw?=
+ =?utf-8?B?N21TSkw0dDFXRW96bmo0NVkzUUpGRDNLamJDcHE0Zlh3TkVISGx6SGlxS3NW?=
+ =?utf-8?B?cWlxY1pHdEdiREpER3BkM0NFL0Q1TDFWRFlNWVRtSHRoRURGS1VWWlZQbXZG?=
+ =?utf-8?B?TXNKUDZPRVF5T1hGdDVrTit2clZMeTNqdjExMS9oVEt3RVVQVjFDTmFXRkNF?=
+ =?utf-8?B?dTU1dnRDN3hsREtCTWhMK1lMSy9FVzk4YU94NzFOYnJGbFpHRmE3S20rR1M5?=
+ =?utf-8?B?ZHNjYWxGUnBnOHFteXZ0bnduNVFtL0ZqSjlFSTlrOXV1S2ZvYjNUdEkzR0R2?=
+ =?utf-8?B?VlplWXZYTkdCa0NKQWpIL0ZYVkVMclNLcGJaVmk0WkpvVm9jdURiRFRYWGdY?=
+ =?utf-8?B?dmJLREhMNXIzeFg2QjB6R0I4S1lPa3RBQUx1dTBuYTVCaXdZejk4ZVR5dlFX?=
+ =?utf-8?B?MzR4N2hoYVhaUFJmWDdIcXBWZUo3NFpEZ1lIWjliaXE0cGFjUmJzQ0FXWmp4?=
+ =?utf-8?B?b1ZGUEI2Y285Z05yVnIyQXhWZSs1Z25Ob01GalhadDFqMXJ4aFl4bjlOSUww?=
+ =?utf-8?B?RjRRanY3ZWpLWHAwZFRUU3FlZG81YkpPMUFpaTg2Zkoxd1JubnhUN25tL2hi?=
+ =?utf-8?B?V25lcE5KYXV0UUdUTWFmbFg0WHIxNW1hbDlRNWRaS29QSjdXZUpPbEFlRkwy?=
+ =?utf-8?B?bE03dTB5OSszVzdXSHhCQVJFWEJDNlFWc0t2eHNvVGdyanloTkdhbFFVRHox?=
+ =?utf-8?B?cVdPMS85ZDBVVTljd2M3eWRjUFJtTW1zd1VWVmx1Q05WWC90RXhqU2hNakxY?=
+ =?utf-8?B?cFRWRDlUMjE0TytJVlliM2h4Mno3aWkzd3hFYXhDd2NJK2xmWXVxU3lSWVMv?=
+ =?utf-8?B?Umg2YmhqY3NEOXVxUG0wVWE5OVdLZVdUbllDWVE4RjJGOUZTUlAvZ2crRno3?=
+ =?utf-8?Q?aKBsPUIcyf6ZFNg/PMq5Rmw=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?L2Y3ZlVabkVtenp0V1E2ODg2ZTBhS1lxbnlqbHBwY0FPTHcxazFsMzRKSUdo?=
+ =?utf-8?B?Z0o2QUZvbmhYVTFaYjJ2Y1hjb1VBNlJRaHd4N0V1eHVvSzJ3VXUxd0NmU2RN?=
+ =?utf-8?B?bzN6SlA1c0VZNTFVWEY2UEZHQktEaGI3TUEralBBQTBrRGlEdEFmd1ZSdFlB?=
+ =?utf-8?B?WjFkRVRqcUg1Z08yRlNEby85Wjl6SWRrSEZXSmtXRFg2dTY1R0hpRlFvZzc0?=
+ =?utf-8?B?cmtZSkJoYkt6eFRjeThFOFZ4TjdlV0lEakhuUkVaZFc1aTBZOFNBdW4vNFFJ?=
+ =?utf-8?B?R3o2cUQxdzZKQUVWTzk4TnliMHhJV0FIajEvYlM1QmNES0oyaWRGRTVRdEg4?=
+ =?utf-8?B?SE16NTViM2NQRmowZ1dVdlV6SWZDY3FYRlNvd0xNOE5Uekk2d2o3cmhabTVO?=
+ =?utf-8?B?Q1RSc3dRTnlTTG93cDRWRlZqdnRWbHh0TzExblh1SzBiUWEvYS9idGl5OTE1?=
+ =?utf-8?B?QngzNUlUOHY5cTRlcWdNNXZSN2Vaemt0RUNDVWx3dFA3NlVlVkFTK3lIeWR0?=
+ =?utf-8?B?U09OeDBYQWRVSXBnNitZcFp1M3E5RjJZajkxMG5ZaWc3TWxRczFDUElJclFI?=
+ =?utf-8?B?SUVBakF6Wnp4SEdDR3FkNEg3VXVFRzNjQ3lsdmk3ZEczTGJlbWp5L3JnT1RU?=
+ =?utf-8?B?OUgybnJva1ZyNXVmNGxPL0F2bWFiNFFDcmVzcVJPL0NWeEtTV3hTdW9ZQVNS?=
+ =?utf-8?B?clMxVkw4Rysxc3dTNTlwY0ovemFBcGdyaU1zeXR4QVpuUllFaFRVUmEwdzJk?=
+ =?utf-8?B?NUlRTEphMDlyWXdXU0lkNldYVVRsN01KYXF2N0FXVGprUjdISVFTb3RGQkVX?=
+ =?utf-8?B?eHpTbDBoYVpVcnV1Y3luQ2ExckFsNGRzbTdxMEhZRC8wQy91d2J3LzdvNURF?=
+ =?utf-8?B?REpMbDFKR3FuL0NjOHJTOUtZWVhKTmlkSE9XU2NsTitVaFZEcUNSbkN4bEpY?=
+ =?utf-8?B?dmhRbnJXUjRvdUF3dnBTRE1Fd2wxcmsrOExzRUlNVm92RGl5aWpnNHFqb2t5?=
+ =?utf-8?B?NFBwa0dNdXhZaFZKOXpQUEoxbFViY3VSTVN2RnlRRnJsRnp5V0R4QlRpa2s0?=
+ =?utf-8?B?bU1nVHV0aWxuejNFM0ZUNnFxNWh5WG1IdC9HTG1XRkRueVpWWDRqZVRQdFp0?=
+ =?utf-8?B?M1Bnak1pczdsRXdUR0NEYlZNZG5lUmI4ZGlhaTczS1dDZHUyTXpPOGtSaWQy?=
+ =?utf-8?B?cHgrdlg2NW9hUm5CS3B3YnhDV0NzYm9IWkoxRGR2QVVtblJ0aXN1dXVuZ2Ex?=
+ =?utf-8?B?VVVqczBFeTBmN2VRd0hRQWJBWE5wcnl3Z0NIOWlEZDV0cGZwWkR5a280TVU3?=
+ =?utf-8?Q?U9hL/dRGrv62ErUZ5FNxZ5QXd3olB5MUDT?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3863cf7-fbf8-4fb3-515d-08db5df7200f
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 14:40:18.1449
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ll68MvpoYVaPVGnraVe3hDozu4LnntLhIkCF+f9aiwIoCpcYTee0MGO2pBIgal+qXMpJ/Xv5tKEUao8/zsr2WQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6254
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-26_05,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305260123
+X-Proofpoint-ORIG-GUID: Mb9dEIPWeB1EptX5FLXucruXpxhuWppi
+X-Proofpoint-GUID: Mb9dEIPWeB1EptX5FLXucruXpxhuWppi
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-with commit '7878c231dae0 ("slab: remove /proc/slab_allocators")'
-lookup_symbol_attrs usage is removed.
+On 26/05/2023 07:41, Arnd Bergmann wrote:
+> On Fri, May 26, 2023, at 05:24, Luis Chamberlain wrote:
+>> On Thu, May 25, 2023 at 06:45:35PM -0700, Song Liu wrote:
+>>> On Wed, May 24, 2023 at 12:24 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>>>
+>>> This change broke compilation of BPF selftests in modules-next
+>>> branch:
+>>>
+>>> progs/bpf_iter_ksym.c:62:13: error: no member named 'pos_arch_end' in
+>>> 'struct kallsym_iter'
+>>>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+>>>              ~~~~  ^
+>>> progs/bpf_iter_ksym.c:62:35: error: no member named 'pos_arch_end' in
+>>> 'struct kallsym_iter'
+>>>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+>>>                                    ~~~~  ^
+>>>
+>>> I haven't looked into the proper fix for it yet.
+>>
+>> A quick attempt:
+>>
+>> Arnd, can you verify?
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c 
+>> b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+>> index 5ddcc46fd886..521267818f4d 100644
+>> --- a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+>> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+>> @@ -59,9 +59,7 @@ int dump_ksym(struct bpf_iter__ksym *ctx)
+>>  	} else {
+>>  		BPF_SEQ_PRINTF(seq, "0x%llx %c %s ", value, type, iter->name);
+>>  	}
+>> -	if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+>> -		BPF_SEQ_PRINTF(seq, "CORE ");
+>> -	else if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
+>> +	if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
+>>  		BPF_SEQ_PRINTF(seq, "MOD ");
+>>  	else if (!iter->pos_ftrace_mod_end || iter->pos_ftrace_mod_end > 
+>> iter->pos)
+>>  		BPF_SEQ_PRINTF(seq, "FTRACE_MOD ");
+> 
+> This looks correct to me, but I'm still failing to cross-build
+> the selftests on my randconfig build setup, so I can't confirm that
+> this avoids the build failure, and I don't understand the code well
+> enough to be sure.
+>
 
-Thus removing redundant API.
+Thanks for the fix! The change above works ; maybe having
+anything less than iter->pos_mod_end marked as a "CORE/MOD " symbol
+might be worth tweaking, but that's a minor thing.
 
-Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
----
- include/linux/kallsyms.h |  6 ------
- include/linux/module.h   |  9 ---------
- kernel/kallsyms.c        | 28 ----------------------------
- kernel/module/kallsyms.c | 28 ----------------------------
- 4 files changed, 71 deletions(-)
+before:
 
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index fe3c9993b5bf..1037f4957caa 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -93,7 +93,6 @@ extern int sprint_backtrace(char *buffer, unsigned long address);
- extern int sprint_backtrace_build_id(char *buffer, unsigned long address);
- 
- int lookup_symbol_name(unsigned long addr, char *symname);
--int lookup_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
- 
- /* How and when do we show kallsyms values? */
- extern bool kallsyms_show_value(const struct cred *cred);
-@@ -155,11 +154,6 @@ static inline int lookup_symbol_name(unsigned long addr, char *symname)
- 	return -ERANGE;
- }
- 
--static inline int lookup_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name)
--{
--	return -ERANGE;
--}
--
- static inline bool kallsyms_show_value(const struct cred *cred)
- {
- 	return false;
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 9e56763dff81..a98e188cf37b 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -968,15 +968,6 @@ static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
- 	return -ERANGE;
- }
- 
--static inline int lookup_module_symbol_attrs(unsigned long addr,
--					     unsigned long *size,
--					     unsigned long *offset,
--					     char *modname,
--					     char *name)
--{
--	return -ERANGE;
--}
--
- static inline int module_get_kallsym(unsigned int symnum, unsigned long *value,
- 				     char *type, char *name,
- 				     char *module_name, int *exported)
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 77747391f49b..d31a1461529e 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -484,34 +484,6 @@ int lookup_symbol_name(unsigned long addr, char *symname)
- 	return 0;
- }
- 
--int lookup_symbol_attrs(unsigned long addr, unsigned long *size,
--			unsigned long *offset, char *modname, char *name)
--{
--	int res;
--
--	name[0] = '\0';
--	name[KSYM_NAME_LEN - 1] = '\0';
--
--	if (is_ksym_addr(addr)) {
--		unsigned long pos;
--
--		pos = get_symbol_pos(addr, size, offset);
--		/* Grab name */
--		kallsyms_expand_symbol(get_symbol_offset(pos),
--				       name, KSYM_NAME_LEN);
--		modname[0] = '\0';
--		goto found;
--	}
--	/* See if it's in a module. */
--	res = lookup_module_symbol_attrs(addr, size, offset, modname, name);
--	if (res)
--		return res;
--
--found:
--	cleanup_symbol_name(name);
--	return 0;
--}
--
- /* Look up a kernel symbol and return it in a text buffer. */
- static int __sprint_symbol(char *buffer, unsigned long address,
- 			   int symbol_offset, int add_offset, int add_buildid)
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index c550d7d45f2f..ef73ae7c8909 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -381,34 +381,6 @@ int lookup_module_symbol_name(unsigned long addr, char *symname)
- 	return -ERANGE;
- }
- 
--int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size,
--			       unsigned long *offset, char *modname, char *name)
--{
--	struct module *mod;
--
--	preempt_disable();
--	list_for_each_entry_rcu(mod, &modules, list) {
--		if (mod->state == MODULE_STATE_UNFORMED)
--			continue;
--		if (within_module(addr, mod)) {
--			const char *sym;
--
--			sym = find_kallsyms_symbol(mod, addr, size, offset);
--			if (!sym)
--				goto out;
--			if (modname)
--				strscpy(modname, mod->name, MODULE_NAME_LEN);
--			if (name)
--				strscpy(name, sym, KSYM_NAME_LEN);
--			preempt_enable();
--			return 0;
--		}
--	}
--out:
--	preempt_enable();
--	return -ERANGE;
--}
--
- int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 		       char *name, char *module_name, int *exported)
- {
--- 
-2.17.1
+  CLNG-BPF [test_maps] bpf_iter_ksym.bpf.o
+progs/bpf_iter_ksym.c:62:13: error: no member named 'pos_arch_end' in
+'struct kallsym_iter'
+        if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+             ~~~~  ^
+progs/bpf_iter_ksym.c:62:35: error: no member named 'pos_arch_end' in
+'struct kallsym_iter'
+        if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+                                   ~~~~  ^
+2 errors generated.
 
+after the above is applied, bpf selftests build and iter ksym test
+passes:
+
+$ sudo ./test_progs -t bpf_iter
+...
+#12/37   bpf_iter/ksym:OK
+...
+Summary: 3/39 PASSED, 0 SKIPPED, 0 FAILED
+
+Feel free to add a
+
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+
+...if needed.
+
+Thanks!
+
+Alan
