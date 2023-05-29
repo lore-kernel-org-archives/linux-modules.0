@@ -2,43 +2,72 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5B87C77B7A
-	for <linux-modules@archiver.kernel.org>; Mon, 29 May 2023 08:58:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7D71C77B7A
+	for <linux-modules@archiver.kernel.org>; Mon, 29 May 2023 11:01:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbjE2I6O (ORCPT
+        id S230518AbjE2LBF (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 29 May 2023 04:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        Mon, 29 May 2023 07:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjE2I6N (ORCPT
+        with ESMTP id S229692AbjE2LBE (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 29 May 2023 04:58:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FA591;
-        Mon, 29 May 2023 01:58:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 364D16137C;
-        Mon, 29 May 2023 08:58:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A396C433EF;
-        Mon, 29 May 2023 08:58:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685350690;
-        bh=t2lj466261TGVeHMuyfw6d01BSLRoZETH0n0ShM8crM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R5FDQfcm8SUNyzpKDat8ojVSi4y8fmhImkdGup3zXnGIsJRsK3eJUlNeQZESjT9Gx
-         S2dvoJ/khyHlknve2mX2V1Pd+pMy1J60DyeL4+/TV+s8kQQcAQmKeKNiqrSN7gDQaS
-         hgO++m+zR2PlpJB45PJF+VWuRIIB2b+rn/ywHnY/ihuutRVOVGCkGtqkRP+ipK1xfF
-         u0TczxO2dm1/bUG6dvdW9R8FcabA/r+zU2FNkhfM/6Q+JY4d8Jh7nG3BkTu628dAwS
-         TP0hw3M2sEqF9b1WVPkJTr4rsf4MFs944By1iyFDCuUPB8MBgBE34BDs8sGeoWwIcT
-         wQkhvy2HfChBg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q3Yhb-0004Ym-74; Mon, 29 May 2023 10:58:07 +0200
-Date:   Mon, 29 May 2023 10:58:07 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        Mon, 29 May 2023 07:01:04 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7028F4
+        for <linux-modules@vger.kernel.org>; Mon, 29 May 2023 04:00:45 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-970028cfb6cso625042166b.1
+        for <linux-modules@vger.kernel.org>; Mon, 29 May 2023 04:00:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1685358044; x=1687950044;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=83jhJNkWMwv2xEBpts8kpySt/1KhQx2X32FHoz9hyjw=;
+        b=OiywrWMOeb+v9DQlE73IRz4YdmiFzkEjsLqXxqF+F9y7IKE4qFJTapiPBXidk5yslL
+         AwlISE/uUvhlbnnWkWaB9w4yfQe+J9tNL/c3DmH8Xwt2Oj0VIFswUdpQgvAqDiPRBULI
+         5+bREM9vA9B9Ln0sZ8mvpvMKlxqNULZ2XoSWc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685358044; x=1687950044;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=83jhJNkWMwv2xEBpts8kpySt/1KhQx2X32FHoz9hyjw=;
+        b=gGHaeXNsvJF+Q8ALad5QqVB+SEJjjjOWpVS2hyBmpZVkJQ2zGF7pJf1O52XRR/wGYt
+         SSHZSMtjB7bdO4qw6gk5MIOMzyyiFQxZRK/ZJxckm2L/PyjFHxTl8mNkDH8EsTdS4M8b
+         S/uekjiVd1RkSD6l7xw6HNuio2+YY000ENn250UtAQOq7q7TZfTenLht0R2dZNOWahPZ
+         UbJGJKElKCzTnXJjD6SCfHgMILxQ84oyQXdfTpLF0AxEgh1YgrPCzEvOLlg82eFZXoV1
+         LKF6JUkwhTZwff9rNI9erpFFOYIBvKbkwmW4tULs2IlG7HRJ6r3D/jyV/iQl8BNWjmQe
+         zrpg==
+X-Gm-Message-State: AC+VfDzuw/XcbdHPWxC0gIYiYYUUU3AMYuhvThDcoxh9RWfrOtFE8Nj2
+        Es3myDTI1dkndajSBss6Vvv4/iCfHRze9uBJv1qrrqPn
+X-Google-Smtp-Source: ACHHUZ5ZrrIwAs5Y5dn59QmVTFEJ7Sq0aUrAuKM7m5tqDMo9cg5Rtf2D1uqr8gLT8w28njVJVPEhnA==
+X-Received: by 2002:a17:907:944a:b0:971:fa86:27e with SMTP id dl10-20020a170907944a00b00971fa86027emr10436984ejc.16.1685358044066;
+        Mon, 29 May 2023 04:00:44 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id m19-20020a1709066d1300b0096f0c8beebbsm5783719ejr.79.2023.05.29.04.00.43
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 04:00:43 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso5696221a12.0
+        for <linux-modules@vger.kernel.org>; Mon, 29 May 2023 04:00:43 -0700 (PDT)
+X-Received: by 2002:a17:907:987:b0:96a:6723:da47 with SMTP id
+ bf7-20020a170907098700b0096a6723da47mr9992607ejc.43.1685358023375; Mon, 29
+ May 2023 04:00:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230524213620.3509138-1-mcgrof@kernel.org> <20230524213620.3509138-3-mcgrof@kernel.org>
+ <8fc5b26b-d2f6-0c8f-34a1-af085dbef155@suse.com> <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
+ <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
+ <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
+ <ZG/a+nrt4/AAUi5z@bombadil.infradead.org> <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+ <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
+In-Reply-To: <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 29 May 2023 07:00:05 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+Message-ID: <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+To:     Johan Hovold <johan@kernel.org>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Lucas De Marchi <lucas.demarchi@intel.com>,
         Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
@@ -53,57 +82,47 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         linux-modules@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
         lennart@poettering.net
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-Message-ID: <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
-References: <20230524213620.3509138-1-mcgrof@kernel.org>
- <20230524213620.3509138-3-mcgrof@kernel.org>
- <8fc5b26b-d2f6-0c8f-34a1-af085dbef155@suse.com>
- <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
- <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
- <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
- <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
- <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, May 25, 2023 at 06:39:52PM -0700, Linus Torvalds wrote:
+On Mon, May 29, 2023 at 4:58=E2=80=AFAM Johan Hovold <johan@kernel.org> wro=
+te:
+>
+> I have not tried to figure out exactly why things break, but it does
+> seem like this one should be reverted.
 
-> Ok, I decided to just move it from my experimental tree to my main tree.
-> 
-> I think I used about three times the time and effort (and lines of
-> text) on writing the commit message compared to what I did on the
-> patch itself.
-> 
-> I tried to lay out the background and the implications of the change -
-> it may be pretty darn simple, but it does have some subtle issues.
-> 
-> Anyway: I've committed it to my tree. This is not necessarily the best
-> time to do that, but let's get this behind us, and in particular,
-> let's get it out and into wider testing asap.
-> 
-> If it causes any problems what-so-ever, I'll just revert it very
-> aggressively (unless the problem is trivially and obviously fixable).
-> It is, after all, not a fix for a _kernel_ bug per se, and whil eI
-> think the patch is very benign, it does change user-visible behavior.
-> Very intentionally so, but still..
+Yes, I have done so.
 
-This change breaks module loading during boot on the Lenovo Thinkpad
-X13s (aarch64).
+However, can I ask you to just verify that it was purely the exclusive
+open part, and it wasn't that I messed up something else. IOW, can you
+replace the
 
-Specifically it results in indefinite probe deferral of the display and
-USB (ethernet) which makes it a pain to debug. Typing in the dark to
-acquire some logs reveals that other modules are missing as well.
+        return exclusive_deny_write_access(file);
 
-Fortunately commit 9828ed3f695a ("module: error out early on concurrent
-load of the same module file") stood out when skimming the changes that
-went into -rc4, and reverting it make all the expected modules be loaded
-again.
+in prepare_file_for_module_load() with just a "return 0", and remove the
 
-I have not tried to figure out exactly why things break, but it does
-seem like this one should be reverted.
+                allow_write_access(f.file);
 
-Johan
+line in finit_module()?
+
+That's obviously _instead_ of the revert that I already pushed out,
+just to verify that "yup, it's that part, not something silly
+elsewhere"
+
+I do wonder what it is that is different in your setup, and maybe you
+could also enable the
+
+        pr_debug("finit_module: fd=3D%d, uargs=3D%p, flags=3D%i\n", fd, uar=
+gs, flags);
+
+in finit_module() while you are at it? Since you'd be editing that
+file anyway for the test, just change the pr_debug() to a printk() and
+then do
+
+    dmesg | grep finit_module
+
+to see what it all results in (on a working kernel, of course).
+
+                    Linus
