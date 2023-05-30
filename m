@@ -2,65 +2,65 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D44D0C77B73
-	for <linux-modules@archiver.kernel.org>; Tue, 30 May 2023 19:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BFC4C77B73
+	for <linux-modules@archiver.kernel.org>; Tue, 30 May 2023 19:58:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjE3T4I (ORCPT
+        id S229920AbjE3T65 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 30 May 2023 15:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        Tue, 30 May 2023 15:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbjE3T4H (ORCPT
+        with ESMTP id S229667AbjE3T64 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 30 May 2023 15:56:07 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D57E8
-        for <linux-modules@vger.kernel.org>; Tue, 30 May 2023 12:56:05 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso938578466b.0
-        for <linux-modules@vger.kernel.org>; Tue, 30 May 2023 12:56:05 -0700 (PDT)
+        Tue, 30 May 2023 15:58:56 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C81CE8
+        for <linux-modules@vger.kernel.org>; Tue, 30 May 2023 12:58:55 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96f818c48fbso892390566b.0
+        for <linux-modules@vger.kernel.org>; Tue, 30 May 2023 12:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685476563; x=1688068563;
+        d=gmail.com; s=20221208; t=1685476733; x=1688068733;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oXbuV/2ZsQefxhemlKCUWmhYBUScNB18jcUVrGBHu40=;
-        b=SY6xca8h91N4K0a0N/zYIhzxynP1XDzMBZoR2e++26s8mdDkVock0jKk9xEJArf202
-         Sl2rqUv6TKb9VHuxf/swacQ/Jkj/eS3KLOEmx9U50bqdY9DeN3jijHbTRosFuIYHPRp8
-         IaJgW2U3KhO2e7lALWW9lKrt0c1sKI1KRl7NPk6hcCBMgj8S5MgtLpXOKh4cfmv/98o7
-         Fk1FdjKpci6HPZKfjZ4OJQXrT+9+yTmpRRnJrSITE91Sj2XJZ4EGbCziPQjQ4N+t5PGl
-         t9STyUMD7J8/1nX7O2FXk6zkcNTil8zj97ROK3GByY1z3VeZ75jWJRhjTFE3q9bJHbPG
-         Jofw==
+        bh=0/GZIYOVPadGBuAha4Oa1euhmTZ5VxFO4RrpEB9lXVk=;
+        b=bByszG5yaD9kj6JgswRPKfZnd7TwdPkFQQV9hZ5zmbwQoRkHQmeOrdOICOTYV7Q7so
+         q9LF4M7xx3wMD+1G5BcaGbvVEuz+mmqpuueKfnQ90cKM3AJTlne/Fz993e+SxEd5JJ6K
+         U/vRPtept5oB3dibVxhb4hFHb5yGheqEdSAKZXUohtWYNFkT8qgC8J5jdH8RN3fXxdUp
+         AetpSoJzOblQ6dkigapSz7Fhe9bh4yEuHBPUmaTtAAkGIJbDVUN1cvk6AynSMQ92dKcC
+         VJKNw3s7H8/h8RC/MpXDye9CnlmQfMyCyOyi2eupLOq/1j9jjmkz7z05uAZq+Ct32rcn
+         fjOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685476563; x=1688068563;
+        d=1e100.net; s=20221208; t=1685476733; x=1688068733;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oXbuV/2ZsQefxhemlKCUWmhYBUScNB18jcUVrGBHu40=;
-        b=R913RJATzSuVv76tt6zVqAvBFAjlH0rYDl6oL+5HGT3j7vxRhTfjRzYvZecVkyl6K6
-         tKTk7OsBYTCKKdre2w2WLVb39ogGvjPtBEoqYrSe/gnHlYgSrxu93N+e3qdTXhkChwfl
-         zDPp7+6uxG0oO5HHaiNF4rvdJqn4X6Qff9788Kyjj+xHhXgQfRbC5cuN8SjS8xOCtDdY
-         ouJbJFd5Z7HypSe4UVodB9nsGAyQSeHJSumBaJcpUe4G0CE3BZf+LLYHZNTyx9omQSuM
-         8khp1iHKYfTcgnGfDjWn6p6hecJMs+ZSloYoFSwfSU/fU0nkTQSiwGnWqK/Qdnc+AUsW
-         uahw==
-X-Gm-Message-State: AC+VfDy9sxcU+6athveraLVqOLCtjE3IJ5M/o9gPIB5H0tlMKKWYxpE4
-        CWAK2nx/QrNpVfjBaqgtJ7YbMqyxvtk=
-X-Google-Smtp-Source: ACHHUZ4RJx6QqOfoTRZWiPuKK/eA+DlLbpQFIDitHHthAgqZt8Hlu1JYesIFFToD1CbeC24biOmgbg==
-X-Received: by 2002:a17:907:928d:b0:966:217c:b383 with SMTP id bw13-20020a170907928d00b00966217cb383mr3694575ejc.75.1685476563186;
-        Tue, 30 May 2023 12:56:03 -0700 (PDT)
+        bh=0/GZIYOVPadGBuAha4Oa1euhmTZ5VxFO4RrpEB9lXVk=;
+        b=WCIlXdAgL9aVqYBAsJ0iUdBKrKKlGNjxN1JXUlYu5gBwoamZmLBRXdI7BTfugc6HCt
+         Eog9kUGAf/Oqo0/pvV6Aol7IJJHRqhwm/xRhoPlfo20dBfv122rjYKCwCCDqM63Ve5xx
+         g5c2EenG0UGrEDfy1OO8cYzlsggLP0PEi11SX0mkCW0hKF570/NSTXJzLMp2zHBy8Fcw
+         sOkiu71zkrEk3psgCAHBmgsu6/OIesURTE8YsO970WAa6uoKwTxcnnx+K3gk8vEjuEtT
+         qlorqvW4TbeTdgYXNpJYnBtu7C6Iy0k+Ypw3dKGJ8cRVTJCsTsmIrh/2IbaREJpwTZpN
+         uQow==
+X-Gm-Message-State: AC+VfDwLl1li6Mgte3vnkaZixaYK8+8WX2jAYZy7U3U9Z6TFvEizQ7du
+        4R3pFOUQ6lo4947oWV2ff+oFQabxjbo=
+X-Google-Smtp-Source: ACHHUZ7TWNbL0P/SLxa8gbfEA4DkrK210vhKf2vkCacjhbKKNcBpOhaxCp1jQKGmsWDjcynLCCn7DA==
+X-Received: by 2002:a17:907:62a1:b0:974:1c98:d38e with SMTP id nd33-20020a17090762a100b009741c98d38emr3264057ejc.2.1685476733013;
+        Tue, 30 May 2023 12:58:53 -0700 (PDT)
 Received: from ldmartin-desk2.jf.intel.com ([134.134.139.85])
-        by smtp.gmail.com with ESMTPSA id s2-20020aa7cb02000000b005105f002fd1sm4777402edt.66.2023.05.30.12.56.00
+        by smtp.gmail.com with ESMTPSA id z4-20020aa7d404000000b0050bc9ffed66sm4708437edq.53.2023.05.30.12.58.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 12:56:01 -0700 (PDT)
+        Tue, 30 May 2023 12:58:52 -0700 (PDT)
 From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
 To:     linux-modules@vger.kernel.org, Dmitry Antipov <dmantipov@yandex.ru>
 Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH] libkmod, depmod: prefer -ENODATA over -ENOENT if no section found
-Date:   Tue, 30 May 2023 12:55:44 -0700
-Message-Id: <168547650089.426113.5608177932648633484.b4-ty@gmail.com>
+Subject: Re: [PATCH] libkmod: fix possible out-of-bounds memory access
+Date:   Tue, 30 May 2023 12:58:25 -0700
+Message-Id: <168547666141.429581.8060561968440690116.b4-ty@gmail.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230519093630.474185-1-dmantipov@yandex.ru>
-References: <20230519072812.400131-1-dmantipov@yandex.ru> <20230519093630.474185-1-dmantipov@yandex.ru>
+In-Reply-To: <20230519074638.402045-1-dmantipov@yandex.ru>
+References: <f95eccca-3eac-5213-6a33-c9ebf1121a7d@csgroup.eu> <20230519074638.402045-1-dmantipov@yandex.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -68,23 +68,24 @@ Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
 
-On Fri, 19 May 2023 12:36:30 +0300, Dmitry Antipov wrote:
-> When the module is definitely present but CONFIG_MODVERSIONS is
-> disabled, the following error message may be somewhat confusing:
+On Fri, 19 May 2023 10:46:38 +0300, Dmitry Antipov wrote:
+> An attempt to pass too long module name to, say, rmmod, may
+> cause an out-of-bounds memory access (as repoted by UBSan):
 > 
-> modprobe --dump-modversions /path/to/module.ko.xz
-> modprobe: FATAL: could not get modversions of /path/to/module.ko.xz: No such file or directory
+> $ rmmod $(for i in $(seq 0 4200); do echo -ne x; done)
+> libkmod/libkmod-module.c:1828:8: runtime error: index 4107 out of bounds for type 'char [4096]'
 > 
-> Choosing among the convenient errno values, I would suggest to use
-> ENODATA when the module lacks a particular ELF section (and vermagic
-> as well). So now it is expected to be:
+> This is because 'snprintf(path, sizeof(path), ...)' may return the
+> value which exceeds 'sizeof(path)' (which happens when an output
+> gets truncated). To play it safe, such a suspicious output is
+> better to be rejected explicitly.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] libkmod, depmod: prefer -ENODATA over -ENOENT if no section found
-      commit: 5c004af29daf38119cc472dc8f1f080f10da6d82
+[1/1] libkmod: fix possible out-of-bounds memory access
+      commit: badacf76e46b3602bc0e99ffc677ccbe53691f62
 
 Best regards,
 -- 
