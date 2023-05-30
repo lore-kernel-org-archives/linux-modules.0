@@ -2,152 +2,148 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6760C7EE2E
-	for <linux-modules@archiver.kernel.org>; Tue, 30 May 2023 08:52:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD8BBC77B7A
+	for <linux-modules@archiver.kernel.org>; Tue, 30 May 2023 09:41:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjE3Iw3 convert rfc822-to-8bit (ORCPT
+        id S229954AbjE3JlU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 30 May 2023 04:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
+        Tue, 30 May 2023 05:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjE3Iw2 (ORCPT
+        with ESMTP id S231162AbjE3Jk7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 30 May 2023 04:52:28 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069F7AB;
-        Tue, 30 May 2023 01:52:26 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1q3v5c-000XjJ-BX; Tue, 30 May 2023 10:52:24 +0200
-Received: from p57bd9d78.dip0.t-ipconnect.de ([87.189.157.120] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1q3v5c-003uII-3z; Tue, 30 May 2023 10:52:24 +0200
-Message-ID: <c4ff8fe412eafd30aaed61a29940ac9527f0f7a3.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH] module: fix module load for ia64
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
-        linux-ia64@vger.kernel.org
-Cc:     debian-ia64@lists.debian.org, mcgrof@kernel.org,
-        Frank Scheiner <frank.scheiner@web.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 30 May 2023 10:52:23 +0200
-In-Reply-To: <20230528230041.2592309-1-song@kernel.org>
-References: <20230528230041.2592309-1-song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.1 
+        Tue, 30 May 2023 05:40:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A78135;
+        Tue, 30 May 2023 02:40:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 718A562C8D;
+        Tue, 30 May 2023 09:40:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6904C433EF;
+        Tue, 30 May 2023 09:40:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685439634;
+        bh=rNtDxPIemUYMFmDRq+2vO1N6CRtzqiO5qUW2YSDslnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fVWCl+PdPozcwC62Y6L97YzJzDzJtHQQMnW9S2GOh4IlKRTtDE1NzxUxWU59ZEc4W
+         iPECpa8+tqxLd3ZkYeYq4ROellwQksMrelI2RSqOljy2x5OT1wolysjDdffhmBms+X
+         /i0tiBcH5MSwvo6em5tPHOA9/QaOytmnBVwVAL+2TtNpSw5fdUiSOX5r9N+Sco7nBI
+         aK0BQsipGmChcVfwRSE9LZXPOaCUVBCizzVlgw1m9mG4bbZdLjkSVTjhlPTfdrGPg+
+         BvRQOXd5jiIRC5GcyHmIgY2+CB1EmpfgwUO+GZnoJRtF0PlfGF/yxDmDEOYNaUxwkL
+         Q+YqAQLhAZs4w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q3vqE-0008S2-F8; Tue, 30 May 2023 11:40:35 +0200
+Date:   Tue, 30 May 2023 11:40:34 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
+        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
+        lennart@poettering.net
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+Message-ID: <ZHXEktFq7NPYLtGn@hovoldconsulting.com>
+References: <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
+ <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
+ <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
+ <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
+ <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+ <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
+ <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+ <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
+ <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
+ <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.157.120
-X-ZEDAT-Hint: PO
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sun, 2023-05-28 at 16:00 -0700, Song Liu wrote:
-> Frank reported boot regression in ia64 as:
+On Mon, May 29, 2023 at 09:55:15PM -0400, Linus Torvalds wrote:
+> On Mon, May 29, 2023 at 11:18 AM Johan Hovold <johan@kernel.org> wrote:
+> >
+> > I took a closer look at some of the modules that failed to load and
+> > noticed a pattern in that they have dependencies that are needed by more
+> > than one device.
 > 
-> ELILO v3.16 for EFI/IA-64
-> ..
-> Uncompressing Linux... done
-> Loading file AC100221.initrd.img...done
-> [    0.000000] Linux version 6.4.0-rc3 (root@x4270) (ia64-linux-gcc
-> (GCC) 12.2.0, GNU ld (GNU Binutils) 2.39) #1 SMP Thu May 25 15:52:20
-> CEST 2023
-> [    0.000000] efi: EFI v1.1 by HP
-> [    0.000000] efi: SALsystab=0x3ee7a000 ACPI 2.0=0x3fe2a000
-> ESI=0x3ee7b000 SMBIOS=0x3ee7c000 HCDP=0x3fe28000
-> [    0.000000] PCDP: v3 at 0x3fe28000
-> [    0.000000] earlycon: uart8250 at MMIO 0x00000000f4050000 (options
-> '9600n8')
-> [    0.000000] printk: bootconsole [uart8250] enabled
-> [    0.000000] ACPI: Early table checksum verification disabled
-> [    0.000000] ACPI: RSDP 0x000000003FE2A000 000028 (v02 HP    )
-> [    0.000000] ACPI: XSDT 0x000000003FE2A02C 0000CC (v01 HP     rx2620
-> 00000000 HP   00000000)
-> [...]
-> [    3.793350] Run /init as init process
-> Loading, please wait...
-> Starting systemd-udevd version 252.6-1
-> [    3.951100] ------------[ cut here ]------------
-> [    3.951100] WARNING: CPU: 6 PID: 140 at kernel/module/main.c:1547
-> __layout_sections+0x370/0x3c0
-> [    3.949512] Unable to handle kernel paging request at virtual address
-> 1000000000000000
-> [    3.951100] Modules linked in:
-> [    3.951100] CPU: 6 PID: 140 Comm: (udev-worker) Not tainted 6.4.0-rc3 #1
-> [    3.956161] (udev-worker)[142]: Oops 11003706212352 [1]
-> [    3.951774] Hardware name: hp server rx2620                   , BIOS
-> 04.29
-> 11/30/2007
-> [    3.951774]
-> [    3.951774] Call Trace:
-> [    3.958339] Unable to handle kernel paging request at virtual address
-> 1000000000000000
-> [    3.956161] Modules linked in:
-> [    3.951774]  [<a0000001000156d0>] show_stack.part.0+0x30/0x60
-> [    3.951774]                                 sp=e000000183a67b20
-> bsp=e000000183a61628
-> [    3.956161]
-> [    3.956161]
+> Ok, this is a "maybe something like this" RFC series of two patches -
+> one trivial one to re-organize things a bit so that we can then do the
+> real one which uses a filter based on the inode pointer to return an
+> "idempotent return value" for module loads that share the same inode.
 > 
-> which bisect to module_memory change [1].
+> It's entirely untested, and since I'm on the road I'm going to not
+> really be able to test it. It compiles for me, and the code looks
+> fairly straightforward, but it's probably buggy.
 > 
-> Debug showed that ia64 uses some special sections:
+> It's very loosely based on Luis' attempt,  but it
+>  (a) is internal to module loading
+>  (b) uses a reliable cookie
+>  (c) doesn't leave the cookie around randomly for later
+>  (d) has seen absolutely no testing
 > 
-> __layout_sections: section .got (sh_flags 10000002) matched to MOD_INVALID
-> __layout_sections: section .sdata (sh_flags 10000003) matched to MOD_INVALID
-> __layout_sections: section .sbss (sh_flags 10000003) matched to MOD_INVALID
-> 
-> All these sections are loaded to module core memory before [1].
-> 
-> Fix ia64 boot by loading these sections to MOD_DATA (core rw data).
-> 
-> [1] commit ac3b43283923 ("module: replace module_layout with module_memory")
-> 
-> Fixes: ac3b43283923 ("module: replace module_layout with module_memory")
-> Reported-by: Frank Scheiner <frank.scheiner@web.de>
-> Closes: https://lists.debian.org/debian-ia64/2023/05/msg00010.html
-> Closes: https://marc.info/?l=linux-ia64&m=168509859125505
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Song Liu <song@kernel.org>
-> ---
->  kernel/module/main.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index b4c7e925fdb0..9da4b551321e 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -1521,14 +1521,14 @@ static void __layout_sections(struct module *mod, struct load_info *info, bool i
->  		MOD_RODATA,
->  		MOD_RO_AFTER_INIT,
->  		MOD_DATA,
-> -		MOD_INVALID,	/* This is needed to match the masks array */
-> +		MOD_DATA,
->  	};
->  	static const int init_m_to_mem_type[] = {
->  		MOD_INIT_TEXT,
->  		MOD_INIT_RODATA,
->  		MOD_INVALID,
->  		MOD_INIT_DATA,
-> -		MOD_INVALID,	/* This is needed to match the masks array */
-> +		MOD_INIT_DATA,
->  	};
->  
->  	for (m = 0; m < ARRAY_SIZE(masks); ++m) {
+> Put another way: if somebody wants to play with this, please treat it
+> as a starting point, not the final thing. You might need to debug
+> things, and fix silly mistakes.
 
-I can confirm that this fixes module loading on my RX2660 with 6.4-rc4.
+With the missing spinlock initialisation fixed:
 
-Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+-static struct spinlock idem_lock;
++static DEFINE_SPINLOCK(idem_lock);
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+this passes basic smoke testing and allows the X13s to boot.
+
+It does not seem to have any significant impact on boot time, but it
+avoids some of the unnecessary load attempts as intended:
+
+Before:
+
+         Mods ever loaded       131
+     Mods failed on kread       0
+Mods failed on decompress       0
+  Mods failed on becoming       24
+      Mods failed on load       14
+        Total module size       12587008
+      Total mod text size       5058560
+       Failed kread bytes       0
+  Failed decompress bytes       0
+    Failed becoming bytes       2437992
+        Failed kmod bytes       1858992
+ Virtual mem wasted bytes       4296984
+         Average mod size       96085
+    Average mod text size       38615
+  Avg fail becoming bytes       101583
+  Average fail load bytes       132786
+
+After:
+
+         Mods ever loaded       131
+     Mods failed on kread       0
+Mods failed on decompress       0
+  Mods failed on becoming       4
+      Mods failed on load       0
+        Total module size       12587008
+      Total mod text size       5058560
+       Failed kread bytes       0
+  Failed decompress bytes       0
+    Failed becoming bytes       109776
+        Failed kmod bytes       0
+ Virtual mem wasted bytes       109776
+         Average mod size       96085
+    Average mod text size       38615
+  Avg fail becoming bytes       27444
+
+Johan
