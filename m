@@ -2,103 +2,90 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5414AC77B7A
-	for <linux-modules@archiver.kernel.org>; Tue, 30 May 2023 19:42:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D44D0C77B73
+	for <linux-modules@archiver.kernel.org>; Tue, 30 May 2023 19:56:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjE3Tmq (ORCPT
+        id S230316AbjE3T4I (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 30 May 2023 15:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        Tue, 30 May 2023 15:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbjE3Tmo (ORCPT
+        with ESMTP id S233001AbjE3T4H (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 30 May 2023 15:42:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D56E8;
-        Tue, 30 May 2023 12:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JADWF5FGfjqal0Tm4srMFuXcLVsdz79srAuWZWBhE0U=; b=h83GzI9GcktWKcxm3mM6r0dFZw
-        gDFov6i/D/ln27TGWCDBsfM8Dp2YSXIPS/PadQ/vuOP1h3KfOXRt/Ai8fqtSLwMPPA12Cqi9fsxx1
-        busls/x8Bbmq5as1k5M4iPcu+jv5Y4OzfZeFCee+0guhE8+nmfE57I6/H7B7Ihh6piFFztXsoWYjP
-        OYAhAjIj5Zrcp5vuE6HXHhK6/EWyS8a9n0RzpJbz+hN84xLsxNNYkNlVBLucSrghgbLJaaYT0asy9
-        fMykJWPxnNC1FQbewSoj16im5rO8ZVWciD6VuY92UqYF/2BExw7xImmCHnXCRQD1CvyE6kA4zoUJp
-        3FXLT1pw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q45Dk-00F0Eb-2F;
-        Tue, 30 May 2023 19:41:28 +0000
-Date:   Tue, 30 May 2023 12:41:28 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-Message-ID: <ZHZRaFWvLEvkoCMA@bombadil.infradead.org>
-References: <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
- <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
- <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
- <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
- <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
- <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
- <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
- <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
- <bav73qu5khl2dxkwpvy2hq34lyi56jn6yp7h5qlennka65kre3@zwwmrr55d2by>
+        Tue, 30 May 2023 15:56:07 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D57E8
+        for <linux-modules@vger.kernel.org>; Tue, 30 May 2023 12:56:05 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso938578466b.0
+        for <linux-modules@vger.kernel.org>; Tue, 30 May 2023 12:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685476563; x=1688068563;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oXbuV/2ZsQefxhemlKCUWmhYBUScNB18jcUVrGBHu40=;
+        b=SY6xca8h91N4K0a0N/zYIhzxynP1XDzMBZoR2e++26s8mdDkVock0jKk9xEJArf202
+         Sl2rqUv6TKb9VHuxf/swacQ/Jkj/eS3KLOEmx9U50bqdY9DeN3jijHbTRosFuIYHPRp8
+         IaJgW2U3KhO2e7lALWW9lKrt0c1sKI1KRl7NPk6hcCBMgj8S5MgtLpXOKh4cfmv/98o7
+         Fk1FdjKpci6HPZKfjZ4OJQXrT+9+yTmpRRnJrSITE91Sj2XJZ4EGbCziPQjQ4N+t5PGl
+         t9STyUMD7J8/1nX7O2FXk6zkcNTil8zj97ROK3GByY1z3VeZ75jWJRhjTFE3q9bJHbPG
+         Jofw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685476563; x=1688068563;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oXbuV/2ZsQefxhemlKCUWmhYBUScNB18jcUVrGBHu40=;
+        b=R913RJATzSuVv76tt6zVqAvBFAjlH0rYDl6oL+5HGT3j7vxRhTfjRzYvZecVkyl6K6
+         tKTk7OsBYTCKKdre2w2WLVb39ogGvjPtBEoqYrSe/gnHlYgSrxu93N+e3qdTXhkChwfl
+         zDPp7+6uxG0oO5HHaiNF4rvdJqn4X6Qff9788Kyjj+xHhXgQfRbC5cuN8SjS8xOCtDdY
+         ouJbJFd5Z7HypSe4UVodB9nsGAyQSeHJSumBaJcpUe4G0CE3BZf+LLYHZNTyx9omQSuM
+         8khp1iHKYfTcgnGfDjWn6p6hecJMs+ZSloYoFSwfSU/fU0nkTQSiwGnWqK/Qdnc+AUsW
+         uahw==
+X-Gm-Message-State: AC+VfDy9sxcU+6athveraLVqOLCtjE3IJ5M/o9gPIB5H0tlMKKWYxpE4
+        CWAK2nx/QrNpVfjBaqgtJ7YbMqyxvtk=
+X-Google-Smtp-Source: ACHHUZ4RJx6QqOfoTRZWiPuKK/eA+DlLbpQFIDitHHthAgqZt8Hlu1JYesIFFToD1CbeC24biOmgbg==
+X-Received: by 2002:a17:907:928d:b0:966:217c:b383 with SMTP id bw13-20020a170907928d00b00966217cb383mr3694575ejc.75.1685476563186;
+        Tue, 30 May 2023 12:56:03 -0700 (PDT)
+Received: from ldmartin-desk2.jf.intel.com ([134.134.139.85])
+        by smtp.gmail.com with ESMTPSA id s2-20020aa7cb02000000b005105f002fd1sm4777402edt.66.2023.05.30.12.56.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 12:56:01 -0700 (PDT)
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+To:     linux-modules@vger.kernel.org, Dmitry Antipov <dmantipov@yandex.ru>
+Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH] libkmod, depmod: prefer -ENODATA over -ENOENT if no section found
+Date:   Tue, 30 May 2023 12:55:44 -0700
+Message-Id: <168547650089.426113.5608177932648633484.b4-ty@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230519093630.474185-1-dmantipov@yandex.ru>
+References: <20230519072812.400131-1-dmantipov@yandex.ru> <20230519093630.474185-1-dmantipov@yandex.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bav73qu5khl2dxkwpvy2hq34lyi56jn6yp7h5qlennka65kre3@zwwmrr55d2by>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, May 30, 2023 at 10:16:22AM -0700, Lucas De Marchi wrote:
-> On Tue, May 30, 2023 at 09:22:14AM -0700, Luis Chamberlain wrote:
-> > Lucas, any thoughts from modules kmod userspace perspective into
-> > supporting anyone likely issuing concurrent modules requests with
-> > differing arguments?
+
+On Fri, 19 May 2023 12:36:30 +0300, Dmitry Antipov wrote:
+> When the module is definitely present but CONFIG_MODVERSIONS is
+> disabled, the following error message may be somewhat confusing:
 > 
-> Changing module params like that without first explicitly removing the
-> module was never supported by kmod or module-init-tools (I'm not digging
-> the history before 2.6 kernel)
+> modprobe --dump-modversions /path/to/module.ko.xz
+> modprobe: FATAL: could not get modversions of /path/to/module.ko.xz: No such file or directory
+> 
+> Choosing among the convenient errno values, I would suggest to use
+> ENODATA when the module lacks a particular ELF section (and vermagic
+> as well). So now it is expected to be:
+> 
+> [...]
 
-That's good enough.
+Applied, thanks!
 
-> During boot, note there is already a shortcut
-> if we have the sysfs node already in the "live" state or if the module is
-> built-in. In that case we will return success or -EEXIST (if the
-> KMOD_PROBE_IGNORE_LOADED flag was passed).
+[1/1] libkmod, depmod: prefer -ENODATA over -ENOENT if no section found
+      commit: 5c004af29daf38119cc472dc8f1f080f10da6d82
 
-Linus' code would make duplicates wait and share the same return value,
-ie, no new odd error code is returned. Or are you suggesting -EEXIST
-should be returned to duplicates if the module succeeded to load
-instead of 0 ?
-
-> The only scenario I can think of during boot in which the module params
-> could change would be when a buggy initrd is created, i.e.
-> /etc/modprobed.d/*.conf is in the rootfs but absent from initrd.
-
-This helps thanks.
-
-> So returning the same error code seems good to me.
-
-OK thanks! So just to confirm, it seems fine to return the same error
-code if duplicates wait, or do you prefer for some reason for there to
-be an exception and return -EEXIST if the module did succeed in the
-duplicate case?
-
-  Luis
+Best regards,
+-- 
+Lucas De Marchi <lucas.de.marchi@gmail.com>
