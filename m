@@ -2,212 +2,230 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43802C77B7C
-	for <linux-modules@archiver.kernel.org>; Wed, 31 May 2023 05:39:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23768C77B7A
+	for <linux-modules@archiver.kernel.org>; Wed, 31 May 2023 07:54:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjEaFjb (ORCPT
+        id S234857AbjEaHyG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 31 May 2023 01:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        Wed, 31 May 2023 03:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjEaFja (ORCPT
+        with ESMTP id S234805AbjEaHxh (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 31 May 2023 01:39:30 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3ED139
-        for <linux-modules@vger.kernel.org>; Tue, 30 May 2023 22:39:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685511554; x=1717047554;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=Eldj88cuydGf3jWoRDSxx+QplAIjS6v3SDpCg7c81tE=;
-  b=bx7b8bAI4uJNKe+X8QpEnYU6MOeeMLXxSqrksAXbx4cNKbORmfHgwY9i
-   QfM9RxrFomkOqcRhJtdn5A1I4TZO601/VlAKHY5RaSsIVEdGR1rr2CBsS
-   MSTZuq8kIHgLvtPjXVFDtnPE5NjP8PEVAn3BK2e9/qXzueJWTOMU4qL3g
-   1B253BxWH/AJWlQuXZ5VmxttL0DX1tS532/9tKsEngyGsao6zQ2OZPgbj
-   7e96c7zwXC8I6dSz7Bahpn50t7qZ8QZyjFieL/sIx6FlIPAiruAmUpEQ0
-   N9XGUdGJ0ZRI3FKpApgiVVH7SruuypUOxiXlr6JWjlwPCAjj8erPCqCnz
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="383402758"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="383402758"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 22:39:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="881038929"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="881038929"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga005.jf.intel.com with ESMTP; 30 May 2023 22:39:14 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 22:39:13 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 22:39:13 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 30 May 2023 22:39:13 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 30 May 2023 22:39:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PqvgV+y0JRxC6E4s4TNxkriUDSq3eU8sdCiy4S2hrwyQpd0k5t8T1uW/nP7OeS87YD3ALDLbCMmwjGwxTcJSf0YXatv6P+Co+Kj8onzMMOOmFAjLc9ttSvj8fHOkhMrBF5ldtrv+xT8k1OqL1TU5zetNXC8Aj8YeWP1XiL/GMnVvKAJMUaUiB8SIEIixi0J0rBZ4f4PDlNB9EI40rylYOUGPvGknxwOxFm92MOUZVQDhgpmi9l8+Ozxliu20ad+4BSyqrljE8K/wr49cmZuxhVcJZgv2hkEbT+s9jdXRNnqET0+RiVP8qr4Xmpf0TCjc1A+4J2qe1ATQJ5/1lXiNiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E6Pwpg4xlxlfvzrVLEaS09aaFmHBeFKQHkfMWpti8Sw=;
- b=AWsLizgTdXPtcEiwXhBnG8s89IGIizxZDdkt73RbKuKh+XhjrHQ5LqoCyjO6Srki44oe0cyFxdVj0/GCz1tskmh0fVAYBMmUolhq0ABfojn7hh1Stci2t36CIx/Bet80BXD1v9AQoFbCw2iMf0ppJjBmjv2eW2DFEzpK0XtneAG1KKvmtfcOXlWvvxtPdPvJzsv5zckCsQpmbdeXlfKxalHCVZE+jfXLW5n5pD8YT0ZNPYAYefAJlFlUf+em3bT6BG+zTGkQ94V1rDJo95iFJ7iSjcwJJbb8Hx7r/1EzlcO4ZcwMo5Wp/NvRZoZZ3j6zHHputvcE1h+6p5B6qEeZhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by SN7PR11MB6874.namprd11.prod.outlook.com (2603:10b6:806:2a5::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Wed, 31 May
- 2023 05:39:10 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::44e7:c479:62f4:3eb4]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::44e7:c479:62f4:3eb4%5]) with mapi id 15.20.6433.022; Wed, 31 May 2023
- 05:39:10 +0000
-Date:   Tue, 30 May 2023 22:39:06 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Dmitry Antipov <dmantipov@yandex.ru>
-CC:     <linux-modules@vger.kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH] shared: avoid passing {NULL, 0} array to bsearch()
-Message-ID: <arn75dwqro43j5cs7a5vmz2tzf2ijzjec5ghnarvtjckeaj4mm@apbrk6dvzdpo>
-X-Patchwork-Hint: comment
-References: <926001fd-34bb-83ee-be77-ccbded164615@csgroup.eu>
- <20230519074108.401180-1-dmantipov@yandex.ru>
- <ry5ekq7cvyugnvo2ykhuktmngqoq5zomtc2zvjwtevtd5s4ueo@7wwzksbprtzu>
- <3720aa5a-e6bc-9829-7d46-17ac65d69877@yandex.ru>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <3720aa5a-e6bc-9829-7d46-17ac65d69877@yandex.ru>
-X-ClientProxiedBy: SJ0PR13CA0025.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::30) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+        Wed, 31 May 2023 03:53:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FF8198
+        for <linux-modules@vger.kernel.org>; Wed, 31 May 2023 00:51:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685519506;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8gzt4NYLA85nb15i+zO3AepaT972sSN8cGl5vcJ610U=;
+        b=VaWpl4YeO7M2mQSo3D0daSaZNMJejhBmN/9Ww1SSkUnxfDhXvHiL87PNPlUjBThlh2TdLy
+        HqPJF4eUDRl4Ptg1kufODvUYWN97/V3Lx8AttUvUz8dIDcpxOFIdJ+PDkoVYX413R/qckW
+        lpKp2JnkD5WAhHcC/d5ZAgdH+Rgz3xg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-479-c8umzc-rMgK30xbPivX_Pw-1; Wed, 31 May 2023 03:51:45 -0400
+X-MC-Unique: c8umzc-rMgK30xbPivX_Pw-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f6fa88a86bso23989595e9.0
+        for <linux-modules@vger.kernel.org>; Wed, 31 May 2023 00:51:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685519504; x=1688111504;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8gzt4NYLA85nb15i+zO3AepaT972sSN8cGl5vcJ610U=;
+        b=l7nIAUIaDdx3V8BuufcAqlVPQxJAmnp7/6Mh3JNj9MeAYNgZDeOnzojEtAODdRk1P2
+         ohcWkF2YFtwzNepcXD1ELHPsNjenCCwdQwoghT13w0hiDc6jVqcx2Sr5zuNFKnHdYQ4v
+         W+WGexiVr8SXBP5tqlBn8s9SyWKygp8gzvkg+5FPul/jVRQoDfQdNyo/sgu+8Kw3hR8k
+         2Orj5GGIc2r4PAbHROW7acz2P5lJTGGZY9endZpUzmnSgcbhexy+CS3jcbSZSVBxsw/v
+         mf7yh4jhzCN4ee8iVkP3jk41d0lRRH3z+Fdg295oT4n+fSBs++i8zkcAtaMbQ0TkSWuB
+         FvnQ==
+X-Gm-Message-State: AC+VfDwcmJQUx3YhUx1xXHw4QaNnQQWsOlZ+VdgyaPRLJ8ikoHcnEJvi
+        c/gPJOYRAtQEDDw/LHvVcoCYI8zBSP7angpW2OT6uxhf3Fv6EnEXWdYl8H002J7vUzvrm0g78C8
+        6qInkAoR0Dwb8BsImBNw0ZpvR1Q==
+X-Received: by 2002:a7b:cd15:0:b0:3f6:787:5e53 with SMTP id f21-20020a7bcd15000000b003f607875e53mr3581117wmj.20.1685519504181;
+        Wed, 31 May 2023 00:51:44 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6bCBqd3WX5AOMaN61sImcYYeJ+NBjDRzwYuiEBhSn/dqrErSjURByTklhdc1d09OgLqsdFwA==
+X-Received: by 2002:a7b:cd15:0:b0:3f6:787:5e53 with SMTP id f21-20020a7bcd15000000b003f607875e53mr3581083wmj.20.1685519503784;
+        Wed, 31 May 2023 00:51:43 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c749:cb00:fc9f:d303:d4cc:9f26? (p200300cbc749cb00fc9fd303d4cc9f26.dip0.t-ipconnect.de. [2003:cb:c749:cb00:fc9f:d303:d4cc:9f26])
+        by smtp.gmail.com with ESMTPSA id y6-20020a05600c364600b003f420667807sm23170451wmq.11.2023.05.31.00.51.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 00:51:43 -0700 (PDT)
+Message-ID: <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
+Date:   Wed, 31 May 2023 09:51:41 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SN7PR11MB6874:EE_
-X-MS-Office365-Filtering-Correlation-Id: f37805af-7d78-4f8d-7453-08db61995bbe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1HFMI/wABhebVfCs31juH4S4q6+SGfly3DB+gZ2WTR0GHufSxcaJ9HaS73KGg26B2SBN1LGmKGTeWbrZV5YWq1/ZT+f772DNL8Efgw7kz+2nfGBauBJoYq8tO1WOF6mcrJECDxuEaKDJis15TumV1I915XM9kq/N7I0qOyk5XJxhCtGQer4WG7BxmMBwYcVVm60hf44/XLMQ0VIEjFiSY7AYoMVekudJPsWerm8WQMR4gOhVa9N+KqNrsCVtjWr9DmcR6TpT/1q4HDCMA7AX5IyC08ioVjb8ItIlfNDVrY0t1ikCDXVvAxYirxABUsQiEH2a3rx9L1hnwzTc4VBZiQH96Z3S1hPWdfo3sX7QF+WdL4rkhYvsm0ehWz3DhKM549FoeizgjCUWt3CEC5aWeXfFcrkLAAFhINgMm/cHkJTGXG9fZjaI0xhcHBNtcGdz94tb73fqwkjR5l0oGoFS5NKVcxTi5x9p+o4Sr13LKHNf8tbJXQCWQpF5rsmpUUB5SfOL5DCz2GPgH/8O5W53Ri8bcMkmBRG+J/vS5mm82GIinYIMiOHpxGhLXfYp/vma
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(39860400002)(366004)(376002)(346002)(396003)(451199021)(41300700001)(478600001)(82960400001)(38100700002)(6916009)(4326008)(66476007)(66556008)(66946007)(33716001)(86362001)(316002)(6666004)(6486002)(6506007)(6512007)(9686003)(26005)(2906002)(186003)(8676002)(5660300002)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QvC+aIVLQmycpKqZlJn6B1k6Pysd4wASKwEIAh7vqzzKVOW+8eUP8JvfnTlY?=
- =?us-ascii?Q?fSySkvj7oIjbiz90vPu9UO3rt4AsQteAEQ8L+Ist60xP4CiZ4OC7H+2q4EC6?=
- =?us-ascii?Q?Qw1LOd+a8wJijvW/0azRsWDdxrUHJZxn5bcvmt79d0dqOvSYKPvuLNPLxcBe?=
- =?us-ascii?Q?Fb3i1qcnwiOEOmkn8hFNOoTOgpubtj5ivkfVUQl+iLuZdFVH1CdVmZvY7+2o?=
- =?us-ascii?Q?B6CfIH56DLM0T/6fJYKQ7GYI1VDSTnYoUWl2ujO4VO+IZ5Nbx68gH5f+vCZY?=
- =?us-ascii?Q?SL/wO7YsEbQoJyDmOmf1iaNHXOUiFUPGT1cAO+JilEm5qv/bgH9JVNf6Old5?=
- =?us-ascii?Q?wdg7i4pFEyuBUVTE5jHWTP5XwN95j0aTq2aD9qGFEPKG/J5hj5/9tQ/YhjZ4?=
- =?us-ascii?Q?DMwa0host/pXbS6hWg9eMQ9w4vJlfPAoxvSxKxIM08mloEf3R1dqry6TmRq5?=
- =?us-ascii?Q?jqSqgOah961D69Y/P8B7wms1BShHl1sW+VpUqQF3MVaiWSaHVETzs0wzluIF?=
- =?us-ascii?Q?zf3dKsLOwAAHz4ChPn/zDIgMmot00cQ6mpL+uUvaKlZDjYrZpvUP2AccKUXH?=
- =?us-ascii?Q?i41og2m6FM0PIW7RpH3JWkWDTur1gryBSbLuV44vVt+9hRxHRdSadYijMW6f?=
- =?us-ascii?Q?BOTogpUBen8UbI/QivcR3qOvn7Qkc8dSF9O4XZlWuXFpuRmM9DQgUWxNY3jb?=
- =?us-ascii?Q?nSZcRd4+0ZqC51EELbolVMderob9TQoXxf/HJh8UmIdBN9z+yubSQgIHEEcx?=
- =?us-ascii?Q?EPKG1M5WHBgfuacg4YuBc7VGGFGyzcYKE4fk7hSS4RYCs4yk+YIjwk/PcQY4?=
- =?us-ascii?Q?3K+dZJ2Kh82iEmjajKlTVVjT4QsFBDABzp8e9G7kmyzNl0+SnDptD6TjJiBr?=
- =?us-ascii?Q?kggOsMP7JVJYvGZfZ3xsL21Db+FBtO8SejoSJqen0awh/fwRjJJ+anGIoyc4?=
- =?us-ascii?Q?31gXs+ydwe+6cytZkaO8swGDPZlBTiPCZsgjbuvr5bu5C/Ew381IvhyQAdFd?=
- =?us-ascii?Q?yQVZo4PPkUj+UFD/IpvzzJN/AHQeEXejWlr92MjQxaQxugPork0gul6Eydr2?=
- =?us-ascii?Q?vrSnGy/D5Fi8P2uDvgQHn6olfimagfJHqPULBuhDW6NYdBv15ILqMDYc8CzW?=
- =?us-ascii?Q?JxyuHl+wL29yIPRNN7YjpnMoJ2fLXIFp4u4E9uP96gXGUeo2COsgMfCyBVSJ?=
- =?us-ascii?Q?Ot28gUfzzwd3JEv0bcDf34D4+uezdNSjmaCaEpIfXkQQh1WtrxF/K2gIkaSV?=
- =?us-ascii?Q?t0nL/qeePDDBlv/qWMsuI3rLf71Rr99cFUSJ4Q49eoW7uC2sXOGB9gH47jbS?=
- =?us-ascii?Q?hU6Nlc28SfMbPOU2tUMwk2sklEjElxARdk+V6yzym/v9zKwaEkthe9JBx+1f?=
- =?us-ascii?Q?bBN/KI62jnQFIYjkshIHsnXdmkk8kZLZW3S5VPPF1ORYtrO+obv5WmoTYcts?=
- =?us-ascii?Q?1hIbHW7TaTpGkVu/Mvc9DrQRA6KiVSrgYgaPPb7XgMXIqCmYFKl1CUep3NRQ?=
- =?us-ascii?Q?Q1O67ZHtVrzUM9oz9kytDz/ojicJeOyHDmWe4iJ8BXXyDKbY1tqgF5eHAzmp?=
- =?us-ascii?Q?9DWg6jKEwITQzHJNtxxHhGJSxZlbvZd8T2nNJ6kTSy8sBW7j9w3LfK8sEf8t?=
- =?us-ascii?Q?Ww=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f37805af-7d78-4f8d-7453-08db61995bbe
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 05:39:10.2598
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HxTqVynEWKCALHn3az8LTrbpq0wub9lGskFpKp1DXhd4XW6eKqn2kF8U0/DRDHrZwloiT/ymssjsbaZa82pUaeqvyXZ8jdc9ftG8BnBfVEE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6874
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
+        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
+        lennart@poettering.net
+References: <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
+ <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
+ <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
+ <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
+ <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+ <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
+ <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+ <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
+ <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
+ <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
+ <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 31, 2023 at 08:01:37AM +0300, Dmitry Antipov wrote:
->On 5/30/23 23:21, Lucas De Marchi wrote:
->
->>I'd avoid the unbalanced brackets and replace the bucket->entries
->>check with a return-early style. Would you be ok with me squashing this
->>into your patch?
->
->Sure as you wish.
->
->>However I'm curious about this *runtime* error you went through. Does it
->>have a backtrace? There are other places we call bsearch() passing
->>bucket->entries, but that should be an imposibble runtime situation
->>since we bail out on context creation if we can't create the hash table.
->
->This one is from something running under 'make check' (note I've added sleep()
->calls to have a time frame to attach gdb, so actual line numbers are shifted):
->
->(gdb) bt
->#0  0x000000000040924a in hash_find (hash=0x1034400, key=0x7fff71657d50 "btusb") at shared/hash.c:246
->#1  0x0000000000405661 in kmod_pool_get_module (ctx=0x10342a0, key=0x7fff71657d50 "btusb")
->    at libkmod/libkmod.c:403
->#2  0x0000000000407cfe in kmod_module_new (ctx=0x10342a0, key=0x7fff71657d50 "btusb",
->    name=0x7fff71657d50 "btusb", namelen=5, alias=0x0, aliaslen=0, mod=0x7fff71658d88)
->    at libkmod/libkmod-module.c:270
->#3  0x0000000000407f3f in kmod_module_new_from_name (ctx=0x10342a0, name=0x7fff71658d90 "btusb",
->    mod=0x7fff71658d88) at libkmod/libkmod-module.c:341
->#4  0x000000000040824b in kmod_module_new_from_loaded (ctx=0x10342a0, list=0x7fff71659df8)
->    at libkmod/libkmod-module.c:1736
->#5  0x000000000040262a in loaded_1 (t=0x40c0b8 <sloaded_10>) at testsuite/test-loaded.c:41
->#6  0x0000000000402be9 in test_run_spawned (t=0x40c0b8 <sloaded_10>) at testsuite/testsuite.c:151
->#7  0x0000000000404d3e in test_run (t=0x40c0b8 <sloaded_10>) at testsuite/testsuite.c:1080
->#8  0x00000000004028ac in main (argc=3, argv=0x7fff7165a038) at testsuite/test-loaded.c:91
+On 30.05.23 18:22, Luis Chamberlain wrote:
+> On Mon, May 29, 2023 at 09:55:15PM -0400, Linus Torvalds wrote:
+>> On Mon, May 29, 2023 at 11:18 AM Johan Hovold <johan@kernel.org> wrote:
+>>>
+>>> I took a closer look at some of the modules that failed to load and
+>>> noticed a pattern in that they have dependencies that are needed by more
+>>> than one device.
+>>
+>> Ok, this is a "maybe something like this" RFC series of two patches -
+>> one trivial one to re-organize things a bit so that we can then do the
+>> real one which uses a filter based on the inode pointer to return an
+>> "idempotent return value" for module loads that share the same inode.
+>>
+>> It's entirely untested, and since I'm on the road I'm going to not
+>> really be able to test it. It compiles for me, and the code looks
+>> fairly straightforward, but it's probably buggy.
+>>
+>> It's very loosely based on Luis' attempt,  but it
+>>   (a) is internal to module loading
+>>   (b) uses a reliable cookie
+>>   (c) doesn't leave the cookie around randomly for later
+>>   (d) has seen absolutely no testing
+>>
+>> Put another way: if somebody wants to play with this, please treat it
+>> as a starting point, not the final thing. You might need to debug
+>> things, and fix silly mistakes.
+>>
+>> The idea is to just have a simple hash list of currently executing
+>> module loads, protected by a trivial spinlock. Every module loader
+>> adds itself to the right hash list, and if they were the *first* one
+>> (ie no other pending module loads for that inode), will actually do
+>> the module load.
+>>
+>> Everybody who *isn't* the first one will just wait for completion and
+>> return the same error code that the first one returned.
+> 
+> That's also a hell much more snazzier MODULE_DEBUG_AUTOLOAD_DUPS if we
+> ever wanted to do something similar there if we wanted to also
+> join request_module() calls, instead of it hiding under debug.
+> 
+>> This is technically bogus. The first one might fail due to arguments.
+> 
+> For boot it's fine, as I can't think of boot wanting to support trying
+> to load a module with different arguments but who knows. But I can't
+> see it sensible to issue concurrent multiple requests for modules
+> with different arguments without waiting in userspace for the first
+> to fail.
+> 
+> Even post-boot, doing that sounds rather insane, but it would certainly
+> be a compromise and should probably be clearly documented. I think just
+> a comment acknolwedging that corner case seems sensible.
+> 
+> Because we won't be able to get the arguments until we process the
+> module, so it would be too late for this optimization on kread. So it is
+> why I had also stuck to the original feature being in kread, as then it
+> provides a uniq kread call and the caller is aware of it. But indeed I
+> had not considered the effects of arguments.
+> 
+> Lucas, any thoughts from modules kmod userspace perspective into
+> supporting anyone likely issuing concurrent modules requests with
+> differing arguments?
+> 
+>> So the cookie shouldn't be just the inode, it should be the inode and
+>> a hash of the arguments or something like that.
+> 
+> Personally I think it's a fine optimization without the arguments.
+> 
+>> But it is what it is,
+>> and apart from possible show-stopper bugs this is no worse than the
+>> failed "exclusive write deny" attempt. IOW - maybe worth trying?
+> 
+> The only thing I can think of is allowing threads other than the
+> first one to complete before the one that actually loaded the
+> module. I thought about this race for module auto-loading, see
+> the comment in kmod_dup_request_announce(), so that just
+> further delays the completion to other thread with a stupid
+> queue_work(). That seems more important for module auto-loading
+> duplicates than for boot finit_module() duplicates. But not sure
+> if odering matters in the end due to a preemtible kernel and maybe
+> that concern is hysteria.
+> 
+>> And if *that* didn't sell people on this patch series, I don't know
+>> what will. I should be in marketing! Two drink minimums, here I come!
+> 
+> Sold:
+> 
+> on 255 vcpus 0 duplicates found with this setup:
+> 
+> root@kmod ~ # cat /sys/kernel/debug/modules/stats
+>           Mods ever loaded       66
+>       Mods failed on kread       0
+> Mods failed on decompress       0
+>    Mods failed on becoming       0
+>        Mods failed on load       0
+>          Total module size       11268096
+>        Total mod text size       4149248
+>         Failed kread bytes       0
+>    Failed decompress bytes       0
+>      Failed becoming bytes       0
+>          Failed kmod bytes       0
+>   Virtual mem wasted bytes       0
+>           Average mod size       170729
+>      Average mod text size       62868
+> 
+> So:
+> 
+> Tested-by: Luis Chamberlain <mcgrof@kernel.org>
+> 
+> In terms of bootup timing:
+> 
+> Before:
+> Startup finished in 41.653s (kernel) + 44.305s (userspace) = 1min 25.958s
+> graphical.target reached after 44.178s in userspace.
+>                                                                                   
+> After:
+> Startup finished in 23.995s (kernel) + 40.350s (userspace) = 1min 4.345s
+> graphical.target reached after 40.226s in userspace.
 
-ok, that makes sense. I had missed that code path.
+I'll try grabbing the system where we saw the KASAN-related issues [1] 
+and give it a churn with and without the two patches. Might take a bit 
+(~1 day), unfortunately.
 
-applied, thanks
+[1] https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
 
-Lucas De Marchi
+-- 
+Thanks,
 
->
->(gdb) bt full
->#0  0x000000000040924a in hash_find (hash=0x1034400, key=0x7fff71657d50 "btusb") at shared/hash.c:246
->        keylen = 5
->        hashval = 2921571348
->        pos = 20
->        bucket = 0x1034558
->        se = {key = 0x7fff71657d50 "btusb", value = 0x0}
->        entry = 0x0
->(More stack frames follow...)
->
->(gdb) p *((struct hash_bucket *)0x1034558)
->$1 = {entries = 0x0, used = 0, total = 0}
->
->That is, the bucket is non-NULL but empty, so bsearch() is called
->as bsearch([whatever], NULL, 0, [some more stuff]). On my system
->(Fedora 38 with glibc 2.37), bsearch() is declared as:
->
->extern void *bsearch (const void *__key, const void *__base,
->                      size_t __nmemb, size_t __size, __compar_fn_t __compar)
->     __nonnull ((1, 2, 5));
->
->So NULL '__base' causes the sanitizer to complain.
->
->Dmitry
+David / dhildenb
+
