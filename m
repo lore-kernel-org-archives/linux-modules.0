@@ -2,248 +2,212 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42773C77B7A
-	for <linux-modules@archiver.kernel.org>; Wed, 31 May 2023 05:30:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43802C77B7C
+	for <linux-modules@archiver.kernel.org>; Wed, 31 May 2023 05:39:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234199AbjEaFau (ORCPT
+        id S230146AbjEaFjb (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 31 May 2023 01:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        Wed, 31 May 2023 01:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234090AbjEaFas (ORCPT
+        with ESMTP id S229904AbjEaFja (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 31 May 2023 01:30:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00623198;
-        Tue, 30 May 2023 22:30:40 -0700 (PDT)
+        Wed, 31 May 2023 01:39:30 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3ED139
+        for <linux-modules@vger.kernel.org>; Tue, 30 May 2023 22:39:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685511041; x=1717047041;
+  t=1685511554; x=1717047554;
   h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=bpEan9cyUjZ9s43AAnRPLJzGnSp9n/vBxRLq9RJxges=;
-  b=I3myhV+K0Obx8r9tt2mt1NV99k4dlCBtt5CyJ8zOwXzd93ktlZW+WMNO
-   28HWaFGt0J3N5OhXxStuwbUUHzur+3zZp+mDT3PHfQtPqnHF6prh4Y/nl
-   4Xu1p7bmv0qJBE372pK/zU5n9TclQ8uSN1bqKr+9ofTel6oMg3P5gWJSe
-   egQ+IABq7Y20oP2BSinRe9ludRVuCwBnKk4aLWX3gFm7GC5OMsPnPJ6K1
-   pMhen1TNhCp6TG98na6/cpyTMZEjUS64/FNgsimny2Ovkj86mCt85aUfc
-   uoMY95nUnku0qhDaFsPLTyDiyF28CKYOyj2r38BKdbw5UnwYt9U+BW4HN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="420906669"
+   in-reply-to:mime-version;
+  bh=Eldj88cuydGf3jWoRDSxx+QplAIjS6v3SDpCg7c81tE=;
+  b=bx7b8bAI4uJNKe+X8QpEnYU6MOeeMLXxSqrksAXbx4cNKbORmfHgwY9i
+   QfM9RxrFomkOqcRhJtdn5A1I4TZO601/VlAKHY5RaSsIVEdGR1rr2CBsS
+   MSTZuq8kIHgLvtPjXVFDtnPE5NjP8PEVAn3BK2e9/qXzueJWTOMU4qL3g
+   1B253BxWH/AJWlQuXZ5VmxttL0DX1tS532/9tKsEngyGsao6zQ2OZPgbj
+   7e96c7zwXC8I6dSz7Bahpn50t7qZ8QZyjFieL/sIx6FlIPAiruAmUpEQ0
+   N9XGUdGJ0ZRI3FKpApgiVVH7SruuypUOxiXlr6JWjlwPCAjj8erPCqCnz
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="383402758"
 X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="420906669"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 22:30:40 -0700
+   d="scan'208";a="383402758"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 22:39:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="776631032"
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="881038929"
 X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="776631032"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga004.fm.intel.com with ESMTP; 30 May 2023 22:30:27 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+   d="scan'208";a="881038929"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga005.jf.intel.com with ESMTP; 30 May 2023 22:39:14 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 22:30:26 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ 15.1.2507.23; Tue, 30 May 2023 22:39:13 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 30 May 2023 22:30:26 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.1.2507.23; Tue, 30 May 2023 22:39:13 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 30 May 2023 22:39:13 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 30 May 2023 22:30:25 -0700
+ 15.1.2507.23; Tue, 30 May 2023 22:39:12 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XEtsqlPrS5aOnxppv3yhSB51InF5DcARGEsR9oo240eCnyNAHE38165FJXee6k/T7VayOL5+ojrLPp2CyGMI+j6E+TmuHu09sCP/5jx7PD82QdXi8YzHqjSetv8sI/7Q4gZOg6fK5IJFDqGjN0hy8629xZsdHcoliPxHcmOQIzQeMDm+V9pOpyTYJIUfZGq0ZNPCj4mpIgChPTJBLcdzK+g1VsjwMzvV8Cl1IDxNJQiLST6e6EF54JBmgaHfKs8JioF5XEdguPEDgqakjp4D/W0GE/gajMNZ3NlrlWx9DhYyHUpqu6riS7gF6OZxNQ18vSP1fzyfUEWYx8j50Lrlfg==
+ b=PqvgV+y0JRxC6E4s4TNxkriUDSq3eU8sdCiy4S2hrwyQpd0k5t8T1uW/nP7OeS87YD3ALDLbCMmwjGwxTcJSf0YXatv6P+Co+Kj8onzMMOOmFAjLc9ttSvj8fHOkhMrBF5ldtrv+xT8k1OqL1TU5zetNXC8Aj8YeWP1XiL/GMnVvKAJMUaUiB8SIEIixi0J0rBZ4f4PDlNB9EI40rylYOUGPvGknxwOxFm92MOUZVQDhgpmi9l8+Ozxliu20ad+4BSyqrljE8K/wr49cmZuxhVcJZgv2hkEbT+s9jdXRNnqET0+RiVP8qr4Xmpf0TCjc1A+4J2qe1ATQJ5/1lXiNiQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eSNJTWxSRdK3NO2V1+aC6vQlJQB/aw0W/n4xkx3k5AM=;
- b=Z+msKNQcv1ZIWbw6AW8g3ge2isXKWv1Qd4jcJHi/KwpZWiyUuiha6XmxT6WwOEMdb/W77kRf96QvLYgPw2PxrqOVMXf6YFPiP0eElseFxhhow8+7OplYiuSVPy2cphchEgOJ9IPRrYQz/jr8FEhfhoo8nEYHuroohE0qFqYrBENjImOX35Hez33LQ5m7xVeNscUFG7QxMWJPnmaKHLzjwaYNxdR/o8t6ZTY9iTG+cOTzeFMLbbPTnwtGnyhWShsR9Z0wMyBAKQq52OYNy1G9JM+dQUgTmu6+z5tOvdn1i0jZhIBTMoDHAW84xwe5bbpCG7Z2dMO9h1geuR0z0ZysyQ==
+ bh=E6Pwpg4xlxlfvzrVLEaS09aaFmHBeFKQHkfMWpti8Sw=;
+ b=AWsLizgTdXPtcEiwXhBnG8s89IGIizxZDdkt73RbKuKh+XhjrHQ5LqoCyjO6Srki44oe0cyFxdVj0/GCz1tskmh0fVAYBMmUolhq0ABfojn7hh1Stci2t36CIx/Bet80BXD1v9AQoFbCw2iMf0ppJjBmjv2eW2DFEzpK0XtneAG1KKvmtfcOXlWvvxtPdPvJzsv5zckCsQpmbdeXlfKxalHCVZE+jfXLW5n5pD8YT0ZNPYAYefAJlFlUf+em3bT6BG+zTGkQ94V1rDJo95iFJ7iSjcwJJbb8Hx7r/1EzlcO4ZcwMo5Wp/NvRZoZZ3j6zHHputvcE1h+6p5B6qEeZhQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by DS7PR11MB6174.namprd11.prod.outlook.com (2603:10b6:8:9a::13) with
+ by SN7PR11MB6874.namprd11.prod.outlook.com (2603:10b6:806:2a5::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
- 2023 05:30:22 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Wed, 31 May
+ 2023 05:39:10 +0000
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::44e7:c479:62f4:3eb4]) by CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::44e7:c479:62f4:3eb4%5]) with mapi id 15.20.6433.022; Wed, 31 May 2023
- 05:30:16 +0000
-Date:   Tue, 30 May 2023 22:30:11 -0700
+ 05:39:10 +0000
+Date:   Tue, 30 May 2023 22:39:06 -0700
 From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Luis Chamberlain <mcgrof@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Petr Pavlu <petr.pavlu@suse.com>, <gregkh@linuxfoundation.org>,
-        <rafael@kernel.org>, <song@kernel.org>,
-        <lucas.de.marchi@gmail.com>, <christophe.leroy@csgroup.eu>,
-        <peterz@infradead.org>, <rppt@kernel.org>, <dave@stgolabs.net>,
-        <willy@infradead.org>, <vbabka@suse.cz>, <mhocko@suse.com>,
-        <dave.hansen@linux.intel.com>, <colin.i.king@gmail.com>,
-        <jim.cromie@gmail.com>, <catalin.marinas@arm.com>,
-        <jbaron@akamai.com>, <rick.p.edgecombe@intel.com>,
-        <yujie.liu@intel.com>, <david@redhat.com>, <tglx@linutronix.de>,
-        <hch@lst.de>, <patches@lists.linux.dev>,
-        <linux-modules@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <pmladek@suse.com>,
-        <prarit@redhat.com>, <lennart@poettering.net>
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-Message-ID: <atfuud5a4zcrs5s6rh7t7eauuofhtwczvzd7r5tsg3ramuqrfq@sxbvdnhaaxgr>
+To:     Dmitry Antipov <dmantipov@yandex.ru>
+CC:     <linux-modules@vger.kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH] shared: avoid passing {NULL, 0} array to bsearch()
+Message-ID: <arn75dwqro43j5cs7a5vmz2tzf2ijzjec5ghnarvtjckeaj4mm@apbrk6dvzdpo>
 X-Patchwork-Hint: comment
-References: <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
- <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
- <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
- <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
- <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
- <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
- <bav73qu5khl2dxkwpvy2hq34lyi56jn6yp7h5qlennka65kre3@zwwmrr55d2by>
- <ZHZRaFWvLEvkoCMA@bombadil.infradead.org>
- <CAHk-=wicgDftP9ogSagxiRNvVTm7+YfQpEBuEsoRbkWzsw=EZw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+References: <926001fd-34bb-83ee-be77-ccbded164615@csgroup.eu>
+ <20230519074108.401180-1-dmantipov@yandex.ru>
+ <ry5ekq7cvyugnvo2ykhuktmngqoq5zomtc2zvjwtevtd5s4ueo@7wwzksbprtzu>
+ <3720aa5a-e6bc-9829-7d46-17ac65d69877@yandex.ru>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wicgDftP9ogSagxiRNvVTm7+YfQpEBuEsoRbkWzsw=EZw@mail.gmail.com>
-X-ClientProxiedBy: SJ0PR03CA0381.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::26) To CY5PR11MB6139.namprd11.prod.outlook.com
+In-Reply-To: <3720aa5a-e6bc-9829-7d46-17ac65d69877@yandex.ru>
+X-ClientProxiedBy: SJ0PR13CA0025.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c0::30) To CY5PR11MB6139.namprd11.prod.outlook.com
  (2603:10b6:930:29::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|DS7PR11MB6174:EE_
-X-MS-Office365-Filtering-Correlation-Id: 89ee4cd6-6ea8-4caf-e415-08db61981d56
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SN7PR11MB6874:EE_
+X-MS-Office365-Filtering-Correlation-Id: f37805af-7d78-4f8d-7453-08db61995bbe
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SJzSsNDX/2+Y5z89AF1fdYhAgX7BMj0ZmLE2RGi98GjVFOgY1sUmNCn8HO29z5e81L1nNcHEOVzlK67nfiKnK29Zr4sRL9i13ciK/voWjM5W5wKXiIUWo8u4QrCZYRMkMRn/A8GVIwM9+fUi1QmU7P3Dn5eR5kcR+1cR1J7/wbutjiMm0U4w2dMU8s7BcZPMNoouLdh9SIRpuXN57RWaVGqfwJzla7GU2pBj9bS8CpnkkJXvR9OTh5DbbZ7D8RwpBSDBZAeNYpkUiIU//B+6gWbutK9/664WXLMr42VC0hNjk0cdUoH776PzKJwI8/QY4iCePpQwmF1CPsHtYqjXWyASnJkMhz1UccUQNwuvTLLMOIzOCvIygtpLwTuDnr5PfVLcSzLmbtXZYgyUY6RHaZdr9dPaL69ujZSwIokBFyKdeIaa73+2KynhhMnwBQkuSzoIKWrERf1NHfuqUNi/PfOWRm64wuRAijJGPH9CQvXI52heiuXNviz75Rx7bDbMGZ7wLtS/0Wnx7D9PVjxWaa1uDzmao7hTc0fEdaCSZRtj7TTbGhq8asnPwggOxM8e1YjbyZ/mmAye9hVrBhuI7v+qyMTrVuZTuTMhjT+Bt/ysXU5oh/+gCMElGH9fHvNN
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(39860400002)(136003)(346002)(376002)(396003)(451199021)(82960400001)(54906003)(38100700002)(478600001)(66946007)(66476007)(66556008)(6486002)(41300700001)(5660300002)(8676002)(8936002)(7406005)(7416002)(86362001)(26005)(2906002)(33716001)(186003)(6512007)(9686003)(6506007)(83380400001)(4326008)(6916009)(66899021)(316002)(6666004)(27256005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 1HFMI/wABhebVfCs31juH4S4q6+SGfly3DB+gZ2WTR0GHufSxcaJ9HaS73KGg26B2SBN1LGmKGTeWbrZV5YWq1/ZT+f772DNL8Efgw7kz+2nfGBauBJoYq8tO1WOF6mcrJECDxuEaKDJis15TumV1I915XM9kq/N7I0qOyk5XJxhCtGQer4WG7BxmMBwYcVVm60hf44/XLMQ0VIEjFiSY7AYoMVekudJPsWerm8WQMR4gOhVa9N+KqNrsCVtjWr9DmcR6TpT/1q4HDCMA7AX5IyC08ioVjb8ItIlfNDVrY0t1ikCDXVvAxYirxABUsQiEH2a3rx9L1hnwzTc4VBZiQH96Z3S1hPWdfo3sX7QF+WdL4rkhYvsm0ehWz3DhKM549FoeizgjCUWt3CEC5aWeXfFcrkLAAFhINgMm/cHkJTGXG9fZjaI0xhcHBNtcGdz94tb73fqwkjR5l0oGoFS5NKVcxTi5x9p+o4Sr13LKHNf8tbJXQCWQpF5rsmpUUB5SfOL5DCz2GPgH/8O5W53Ri8bcMkmBRG+J/vS5mm82GIinYIMiOHpxGhLXfYp/vma
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(39860400002)(366004)(376002)(346002)(396003)(451199021)(41300700001)(478600001)(82960400001)(38100700002)(6916009)(4326008)(66476007)(66556008)(66946007)(33716001)(86362001)(316002)(6666004)(6486002)(6506007)(6512007)(9686003)(26005)(2906002)(186003)(8676002)(5660300002)(8936002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bEFkeGUxRkFmYzVDMytWaGFLdmJRdmZOb2ZicVdYTmNFZzg3bTJreDBKOUJE?=
- =?utf-8?B?dXpxNy9zVm5PbENEQTVIalJRZmFXMExkR21LYnNkTFlJd2tMSnBuMEc4L1Ry?=
- =?utf-8?B?V1lMWWdpZUVCSmJZYlBObzY1a0Y2bFpKOU5sd3BENDh4bm5ESTQ1VmE4dlFx?=
- =?utf-8?B?UHZ3czJRY1BqNjZXUzVBVmN6TTJvZjJuL0xYQUlMZmVnUFdSb0RCYWZhbUtK?=
- =?utf-8?B?MTRocG92N2xtYlMvTE9ER01sbm9RTmRSRVZHdE93U1FjZTBrNm42UjN1L0s2?=
- =?utf-8?B?U1lMbzBDcWl6V0kwSHRZbHBJSlFQM3JGd1B6dVZQV0t6dTBLL0VMSlFNN3lZ?=
- =?utf-8?B?MlpWdVNVY2FRN3BmTllyQVlZK05sWWhhRHNtNnpvZHA1TzVIUDdSdlFLeGhN?=
- =?utf-8?B?Y0Fvb0o3RXdRdjB2UmVDbGp0WTllLzYyM1gvUHJFWnRBcjNRWFU4OVFuRWtw?=
- =?utf-8?B?ckFrWjF2cmNmZnI3d1hRZnpZM2pEQW41aW91eHNWVjFlVlY5bGxsQUdVT0dC?=
- =?utf-8?B?Y2tidUxYNlJzZHJMSUVXSHkrb0FxRkk1M242UWxwMVBmU0VxdnVOMEN6MUF4?=
- =?utf-8?B?aFZ0dm9pd0VQNGpCL1VrUkl6cHdmT0NUeWRiQzAzRmpzaVdqTGpZWmY2ekd4?=
- =?utf-8?B?NUFjMjJFTGYzdzh6R1FUdlF2dXdKcUFROHZaZ3NENDI5WEY0RGFmZnY4OVQx?=
- =?utf-8?B?UmRySzJEZTJTVnJ3WUs4UWlEREphYVhwa044K2l6QmtMM0p2M1lFRUxhWGFv?=
- =?utf-8?B?aCtsUFY2Z2dsM1JrWi9LOHBFRTRWRlY5RkNnRVVoYVRSeEMxUGVEK2Y1Uk1S?=
- =?utf-8?B?b3VHbEFyZjZWcTZZMjB5NEMwSlBhRVNVbm5XOWZ6UFJnRFlzKzIxT1BpSGx6?=
- =?utf-8?B?SzArY0NnY1ZkZmlxK2xUeHdRUWNxOGV5V1VNeUhtR01jbVk4UHc1d0NSQUM0?=
- =?utf-8?B?OGJYWUJHc0RkMVpBaU9XVHNtWWNPRVhBYTZYUnl0UVBMMEQ0eUFMc1lCcHRt?=
- =?utf-8?B?RmZMckdkaCtvRFUwVUN1QjZYUVRnV2t4OTdZZWlPLy9mWm5zcU84QzZXdysy?=
- =?utf-8?B?dUtqRyttcFNtUFNtZXZDd3JvWmYvSFQ1NzM4blRwMEV1ZjBXNHVMOStvL25o?=
- =?utf-8?B?YkRnTy9lRXNQc2c3K0ZFbVdwdmlibmpGM2NwdTVrR1FDbVZPVXpsNHM1Qng4?=
- =?utf-8?B?U2JaTjFkVzJsZEMzZFFYMUxBZGtvOHZxdURPdEZhdzhuckdWUEEvaUd5OEdj?=
- =?utf-8?B?aGFJQnRaUmdZNkJJQWwzVEhEVGU0M0Zka3d3YTdlclVYSGIyaTAzdUo4NHo0?=
- =?utf-8?B?U0VJck8wQWMvK29CejVkL2tlSTA2M0E3bXhTWUw1WHNJSGZ5dmZCYTNIZFE2?=
- =?utf-8?B?WUtOZURzQVYzSk0rd1dJZzFGRGo5M2xmdE5iNmJzRHZSNjhDUzZhK0ZSbWVu?=
- =?utf-8?B?OGFjVXkvZzBvbW1sWm5tdjlrMDBzWk1CQTF2eVVNeVM0VmcrZjY4djZvYWRY?=
- =?utf-8?B?RjIvTXJCY25XVEhIVmZQaEZDRnFFT25GNzFTUHhkOXEzOEVSVnZxUUloWU1Q?=
- =?utf-8?B?dk9nWC94ZTBxdk8vYXhqa1hVYnh1ckFvTGo0ejJJV29xQ29MVE14MFkzUmxo?=
- =?utf-8?B?OEdib3hoNWVlZ0MxMEdZbWJ1Q01YTHhjZWhLajBIVWpETU52cnBrekpTeXpy?=
- =?utf-8?B?RUdwSlZxSFEvN2EwVVB3K0QvaFN5dGg0a0RXWHE5VXFzMVBkZDVyQUp5eDly?=
- =?utf-8?B?ZXdQS2dPODVoTnpmMGg5V01FN2xua0lkSlhER2ZYYS9kZ2E2akFLUjYxa1Z0?=
- =?utf-8?B?Q3Y2VjBkQmIvZE9NdFVDQ3J0bTZSYXozVkVmSTU3TzQvaHM4N2RGM05obFZF?=
- =?utf-8?B?cDdQUFJYMmp6bnp1VHRKWVZManBSYXpsd3dYNDlpejNKaFNFVnlVeGxxSHZF?=
- =?utf-8?B?N3pQSEQ2dmU2YzNjbWVqWW1ZVzJzVGlicTBvTmY3cm9KSTE3enE3cyt2VVlp?=
- =?utf-8?B?RG52TzZqazdDaHFDaUVBQVVMdVRJMUY1ZkZkZFpIMDdUR2FjM2k5M0E1WWwx?=
- =?utf-8?B?WldQdmZ0T2FhbDBQZis1VEVnZ1ZXVjhTYk9BT1o5VGJlOFFxZFJxbCsxa3Iz?=
- =?utf-8?B?R2p4S21VS0pES2tvaWxscmhXMEx1TC9jaWJwclAvL1pGTnczOTZkMTd4NnN3?=
- =?utf-8?B?UVE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89ee4cd6-6ea8-4caf-e415-08db61981d56
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QvC+aIVLQmycpKqZlJn6B1k6Pysd4wASKwEIAh7vqzzKVOW+8eUP8JvfnTlY?=
+ =?us-ascii?Q?fSySkvj7oIjbiz90vPu9UO3rt4AsQteAEQ8L+Ist60xP4CiZ4OC7H+2q4EC6?=
+ =?us-ascii?Q?Qw1LOd+a8wJijvW/0azRsWDdxrUHJZxn5bcvmt79d0dqOvSYKPvuLNPLxcBe?=
+ =?us-ascii?Q?Fb3i1qcnwiOEOmkn8hFNOoTOgpubtj5ivkfVUQl+iLuZdFVH1CdVmZvY7+2o?=
+ =?us-ascii?Q?B6CfIH56DLM0T/6fJYKQ7GYI1VDSTnYoUWl2ujO4VO+IZ5Nbx68gH5f+vCZY?=
+ =?us-ascii?Q?SL/wO7YsEbQoJyDmOmf1iaNHXOUiFUPGT1cAO+JilEm5qv/bgH9JVNf6Old5?=
+ =?us-ascii?Q?wdg7i4pFEyuBUVTE5jHWTP5XwN95j0aTq2aD9qGFEPKG/J5hj5/9tQ/YhjZ4?=
+ =?us-ascii?Q?DMwa0host/pXbS6hWg9eMQ9w4vJlfPAoxvSxKxIM08mloEf3R1dqry6TmRq5?=
+ =?us-ascii?Q?jqSqgOah961D69Y/P8B7wms1BShHl1sW+VpUqQF3MVaiWSaHVETzs0wzluIF?=
+ =?us-ascii?Q?zf3dKsLOwAAHz4ChPn/zDIgMmot00cQ6mpL+uUvaKlZDjYrZpvUP2AccKUXH?=
+ =?us-ascii?Q?i41og2m6FM0PIW7RpH3JWkWDTur1gryBSbLuV44vVt+9hRxHRdSadYijMW6f?=
+ =?us-ascii?Q?BOTogpUBen8UbI/QivcR3qOvn7Qkc8dSF9O4XZlWuXFpuRmM9DQgUWxNY3jb?=
+ =?us-ascii?Q?nSZcRd4+0ZqC51EELbolVMderob9TQoXxf/HJh8UmIdBN9z+yubSQgIHEEcx?=
+ =?us-ascii?Q?EPKG1M5WHBgfuacg4YuBc7VGGFGyzcYKE4fk7hSS4RYCs4yk+YIjwk/PcQY4?=
+ =?us-ascii?Q?3K+dZJ2Kh82iEmjajKlTVVjT4QsFBDABzp8e9G7kmyzNl0+SnDptD6TjJiBr?=
+ =?us-ascii?Q?kggOsMP7JVJYvGZfZ3xsL21Db+FBtO8SejoSJqen0awh/fwRjJJ+anGIoyc4?=
+ =?us-ascii?Q?31gXs+ydwe+6cytZkaO8swGDPZlBTiPCZsgjbuvr5bu5C/Ew381IvhyQAdFd?=
+ =?us-ascii?Q?yQVZo4PPkUj+UFD/IpvzzJN/AHQeEXejWlr92MjQxaQxugPork0gul6Eydr2?=
+ =?us-ascii?Q?vrSnGy/D5Fi8P2uDvgQHn6olfimagfJHqPULBuhDW6NYdBv15ILqMDYc8CzW?=
+ =?us-ascii?Q?JxyuHl+wL29yIPRNN7YjpnMoJ2fLXIFp4u4E9uP96gXGUeo2COsgMfCyBVSJ?=
+ =?us-ascii?Q?Ot28gUfzzwd3JEv0bcDf34D4+uezdNSjmaCaEpIfXkQQh1WtrxF/K2gIkaSV?=
+ =?us-ascii?Q?t0nL/qeePDDBlv/qWMsuI3rLf71Rr99cFUSJ4Q49eoW7uC2sXOGB9gH47jbS?=
+ =?us-ascii?Q?hU6Nlc28SfMbPOU2tUMwk2sklEjElxARdk+V6yzym/v9zKwaEkthe9JBx+1f?=
+ =?us-ascii?Q?bBN/KI62jnQFIYjkshIHsnXdmkk8kZLZW3S5VPPF1ORYtrO+obv5WmoTYcts?=
+ =?us-ascii?Q?1hIbHW7TaTpGkVu/Mvc9DrQRA6KiVSrgYgaPPb7XgMXIqCmYFKl1CUep3NRQ?=
+ =?us-ascii?Q?Q1O67ZHtVrzUM9oz9kytDz/ojicJeOyHDmWe4iJ8BXXyDKbY1tqgF5eHAzmp?=
+ =?us-ascii?Q?9DWg6jKEwITQzHJNtxxHhGJSxZlbvZd8T2nNJ6kTSy8sBW7j9w3LfK8sEf8t?=
+ =?us-ascii?Q?Ww=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f37805af-7d78-4f8d-7453-08db61995bbe
 X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 05:30:16.1069
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 05:39:10.2598
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: z06qJFqqRJ2bHGmGY2i/EWFxxBiYfSIKGXi+kjnfoGZYkPE2Ffk8ZHeBpx/iAoRyQ/Qnf7yOL8yioFAXE0e6ZVyoJmCChnicUar9jn1oiPg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6174
+X-MS-Exchange-CrossTenant-UserPrincipalName: HxTqVynEWKCALHn3az8LTrbpq0wub9lGskFpKp1DXhd4XW6eKqn2kF8U0/DRDHrZwloiT/ymssjsbaZa82pUaeqvyXZ8jdc9ftG8BnBfVEE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6874
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, May 30, 2023 at 06:17:11PM -0400, Linus Torvalds wrote:
->On Tue, May 30, 2023 at 3:41 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->>
->> OK thanks! So just to confirm, it seems fine to return the same error
->> code if duplicates wait, or do you prefer for some reason for there to
->> be an exception and return -EEXIST if the module did succeed in the
->> duplicate case?
+On Wed, May 31, 2023 at 08:01:37AM +0300, Dmitry Antipov wrote:
+>On 5/30/23 23:21, Lucas De Marchi wrote:
 >
->I think either should be fine, since either was possible before.
+>>I'd avoid the unbalanced brackets and replace the bucket->entries
+>>check with a return-early style. Would you be ok with me squashing this
+>>into your patch?
 >
->By definition, these are module loads being done in parallel, and so
->any of them "could" have been the first, and returned success before.
+>Sure as you wish.
 >
->And by extension, any of them could have been not first, and returned
->-EEXIST if somebody else loaded the same module first.
+>>However I'm curious about this *runtime* error you went through. Does it
+>>have a backtrace? There are other places we call bsearch() passing
+>>bucket->entries, but that should be an imposibble runtime situation
+>>since we bail out on context creation if we can't create the hash table.
 >
->So that "somebody else did a load" code:
+>This one is from something running under 'make check' (note I've added sleep()
+>calls to have a time frame to attach gdb, so actual line numbers are shifted):
 >
->        if (idempotent(&idem, file_inode(f))) {
->                wait_for_completion(&idem.complete);
->                return idem.ret;
->        }
->
->could certainly have made the return value be something like
->
->        return idem.ret ? : -EEXIST;
+>(gdb) bt
+>#0  0x000000000040924a in hash_find (hash=0x1034400, key=0x7fff71657d50 "btusb") at shared/hash.c:246
+>#1  0x0000000000405661 in kmod_pool_get_module (ctx=0x10342a0, key=0x7fff71657d50 "btusb")
+>    at libkmod/libkmod.c:403
+>#2  0x0000000000407cfe in kmod_module_new (ctx=0x10342a0, key=0x7fff71657d50 "btusb",
+>    name=0x7fff71657d50 "btusb", namelen=5, alias=0x0, aliaslen=0, mod=0x7fff71658d88)
+>    at libkmod/libkmod-module.c:270
+>#3  0x0000000000407f3f in kmod_module_new_from_name (ctx=0x10342a0, name=0x7fff71658d90 "btusb",
+>    mod=0x7fff71658d88) at libkmod/libkmod-module.c:341
+>#4  0x000000000040824b in kmod_module_new_from_loaded (ctx=0x10342a0, list=0x7fff71659df8)
+>    at libkmod/libkmod-module.c:1736
+>#5  0x000000000040262a in loaded_1 (t=0x40c0b8 <sloaded_10>) at testsuite/test-loaded.c:41
+>#6  0x0000000000402be9 in test_run_spawned (t=0x40c0b8 <sloaded_10>) at testsuite/testsuite.c:151
+>#7  0x0000000000404d3e in test_run (t=0x40c0b8 <sloaded_10>) at testsuite/testsuite.c:1080
+>#8  0x00000000004028ac in main (argc=3, argv=0x7fff7165a038) at testsuite/test-loaded.c:91
 
-yes, this is what I had in mind.
+ok, that makes sense. I had missed that code path.
 
->
->instead of that "return idem.ret".
->
->But it does seem simpler - and more in line with the conceptual
->"loading the same module is an idempotent operation" of the patch -
->to just always return the success value to all of them.
->
->After all, they all did in some sense succeed to get that module
->loaded, even if it was a communal effort, and some threads did more
->than others...
->
->As mentioned, I don't think it can matter either way, since any of the
->callers might as well have been the successful one, and they would
->basically have to act the same way regardless (ie "somebody else
->succeeded" and "you succeeded" are basically equivalent return
+applied, thanks
 
-agreed, it will just be a slightly different behavior if finit_module()
-is called twice and the first call is already in the process of
-initializing the module, i.e. complete_formation() was already called,
-putting the module in the MODULE_STATE_COMING state, as per
-kernel/module/main.c:add_unformed_module():
-
-	/*
-	 * We are here only when the same module was being loaded. Do
-	 * not try to load it again right now. It prevents long delays
-	 * caused by serialized module load failures. It might happen
-	 * when more devices of the same type trigger load of
-	 * a particular module.
-	 */
-	if (old && old->state == MODULE_STATE_LIVE)
-		err = -EEXIST;
-	else
-		err = -EBUSY;
-	goto out;
-
-in userspace we already deal with that in a special way and should be
-compatible with returning 0 for all practical purposes.
-
-thanks
 Lucas De Marchi
 
->values). If the module was a prerequisite for another module being
->loaded, either -EEXIST or 0 _is_ a success case.
 >
->             Linus
+>(gdb) bt full
+>#0  0x000000000040924a in hash_find (hash=0x1034400, key=0x7fff71657d50 "btusb") at shared/hash.c:246
+>        keylen = 5
+>        hashval = 2921571348
+>        pos = 20
+>        bucket = 0x1034558
+>        se = {key = 0x7fff71657d50 "btusb", value = 0x0}
+>        entry = 0x0
+>(More stack frames follow...)
+>
+>(gdb) p *((struct hash_bucket *)0x1034558)
+>$1 = {entries = 0x0, used = 0, total = 0}
+>
+>That is, the bucket is non-NULL but empty, so bsearch() is called
+>as bsearch([whatever], NULL, 0, [some more stuff]). On my system
+>(Fedora 38 with glibc 2.37), bsearch() is declared as:
+>
+>extern void *bsearch (const void *__key, const void *__base,
+>                      size_t __nmemb, size_t __size, __compar_fn_t __compar)
+>     __nonnull ((1, 2, 5));
+>
+>So NULL '__base' causes the sanitizer to complain.
+>
+>Dmitry
