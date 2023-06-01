@@ -2,208 +2,187 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F929C77B73
-	for <linux-modules@archiver.kernel.org>; Wed, 31 May 2023 16:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08569C7EE29
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 10:16:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjEaQ5m (ORCPT
+        id S233293AbjFAKQU (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 31 May 2023 12:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
+        Thu, 1 Jun 2023 06:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjEaQ5l (ORCPT
+        with ESMTP id S233346AbjFAKPw (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 31 May 2023 12:57:41 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837F8134;
-        Wed, 31 May 2023 09:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=sQf6qkA4MEbn8EichAXNjYGf8MDrQBBNv2l2z1zQPA0=; b=tc2HCj6Cn1LdEc84oXW9SaHEtv
-        3siyUr4dMxMBLVDobevnbEEiCz21oQMPxV9VZh6Q9LNtEMcFBYS0/98cfaEVHv8thxxgjG1cmFn4t
-        AcjBb3Ci7Pgy5/CA0pGmkxdp0M6zIjPEWocIqCFxop9tJ1i9uOZAB9ZjTQk5fpLmBNM5NoLqG66ee
-        qQ8q8/a6Rfm3a/iqnYo9R71yfBAtth+4fOyhrcuBFOBpMTxkZC20xc2lkU7XBk0In0NvoBlgaJeRQ
-        8G8wiV1+qXn6rNrksuo1Zi5gsUGzMKxkcYxW2iYrtCLBf78sPNkwEC7a8wXP0dUfjh9zrHddk0v1y
-        UYFFygGg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4P8O-000XDH-2D;
-        Wed, 31 May 2023 16:57:16 +0000
-Date:   Wed, 31 May 2023 09:57:16 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-Message-ID: <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org>
-References: <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
- <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
- <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
- <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
- <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
- <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
- <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
- <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
- <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
+        Thu, 1 Jun 2023 06:15:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32852111;
+        Thu,  1 Jun 2023 03:13:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E691C64300;
+        Thu,  1 Jun 2023 10:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB9EC433EF;
+        Thu,  1 Jun 2023 10:13:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685614396;
+        bh=AFUoVH57IicSC1SUB3rNbSa55KIIf5fvCH3QgG43svk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mW6qnl+Iscw1AVEmuh/+zsjQC3Skvf6tgVrd8H0mW7nk/Q4kR8aZiIus1dGIFP0tu
+         g3rQeS6P4z2sg2eRb4NVK2fSVZyk7O67J0bqoAY5zsHBwd4m5pGbhDwVNj62iw489S
+         WwJRyB2rENdRnYC5sKzXzzMfTG9/RUH5Fq0wJ8oT8tMyy9YYy4BnDsnxhAjT9MeepB
+         H1tV4aCIaB0/6raud9FT8L5dMFEDagbhbs3liHazB+zv7gap/xaJMb6C7mJsHMki13
+         b3RfbDTWSX2rQpcBObYqwwehSGuzsUPwmJr6dpDHZ0JMs7xXA+oJ8tyL/OL1vetfWT
+         OQoViqeiM1NHQ==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: [PATCH 00/13] mm: jit/text allocator
+Date:   Thu,  1 Jun 2023 13:12:44 +0300
+Message-Id: <20230601101257.530867-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, May 31, 2023 at 09:51:41AM +0200, David Hildenbrand wrote:
-> On 30.05.23 18:22, Luis Chamberlain wrote:
-> > On Mon, May 29, 2023 at 09:55:15PM -0400, Linus Torvalds wrote:
-> > > On Mon, May 29, 2023 at 11:18 AM Johan Hovold <johan@kernel.org> wrote:
-> > > > 
-> > > > I took a closer look at some of the modules that failed to load and
-> > > > noticed a pattern in that they have dependencies that are needed by more
-> > > > than one device.
-> > > 
-> > > Ok, this is a "maybe something like this" RFC series of two patches -
-> > > one trivial one to re-organize things a bit so that we can then do the
-> > > real one which uses a filter based on the inode pointer to return an
-> > > "idempotent return value" for module loads that share the same inode.
-> > > 
-> > > It's entirely untested, and since I'm on the road I'm going to not
-> > > really be able to test it. It compiles for me, and the code looks
-> > > fairly straightforward, but it's probably buggy.
-> > > 
-> > > It's very loosely based on Luis' attempt,  but it
-> > >   (a) is internal to module loading
-> > >   (b) uses a reliable cookie
-> > >   (c) doesn't leave the cookie around randomly for later
-> > >   (d) has seen absolutely no testing
-> > > 
-> > > Put another way: if somebody wants to play with this, please treat it
-> > > as a starting point, not the final thing. You might need to debug
-> > > things, and fix silly mistakes.
-> > > 
-> > > The idea is to just have a simple hash list of currently executing
-> > > module loads, protected by a trivial spinlock. Every module loader
-> > > adds itself to the right hash list, and if they were the *first* one
-> > > (ie no other pending module loads for that inode), will actually do
-> > > the module load.
-> > > 
-> > > Everybody who *isn't* the first one will just wait for completion and
-> > > return the same error code that the first one returned.
-> > 
-> > That's also a hell much more snazzier MODULE_DEBUG_AUTOLOAD_DUPS if we
-> > ever wanted to do something similar there if we wanted to also
-> > join request_module() calls, instead of it hiding under debug.
-> > 
-> > > This is technically bogus. The first one might fail due to arguments.
-> > 
-> > For boot it's fine, as I can't think of boot wanting to support trying
-> > to load a module with different arguments but who knows. But I can't
-> > see it sensible to issue concurrent multiple requests for modules
-> > with different arguments without waiting in userspace for the first
-> > to fail.
-> > 
-> > Even post-boot, doing that sounds rather insane, but it would certainly
-> > be a compromise and should probably be clearly documented. I think just
-> > a comment acknolwedging that corner case seems sensible.
-> > 
-> > Because we won't be able to get the arguments until we process the
-> > module, so it would be too late for this optimization on kread. So it is
-> > why I had also stuck to the original feature being in kread, as then it
-> > provides a uniq kread call and the caller is aware of it. But indeed I
-> > had not considered the effects of arguments.
-> > 
-> > Lucas, any thoughts from modules kmod userspace perspective into
-> > supporting anyone likely issuing concurrent modules requests with
-> > differing arguments?
-> > 
-> > > So the cookie shouldn't be just the inode, it should be the inode and
-> > > a hash of the arguments or something like that.
-> > 
-> > Personally I think it's a fine optimization without the arguments.
-> > 
-> > > But it is what it is,
-> > > and apart from possible show-stopper bugs this is no worse than the
-> > > failed "exclusive write deny" attempt. IOW - maybe worth trying?
-> > 
-> > The only thing I can think of is allowing threads other than the
-> > first one to complete before the one that actually loaded the
-> > module. I thought about this race for module auto-loading, see
-> > the comment in kmod_dup_request_announce(), so that just
-> > further delays the completion to other thread with a stupid
-> > queue_work(). That seems more important for module auto-loading
-> > duplicates than for boot finit_module() duplicates. But not sure
-> > if odering matters in the end due to a preemtible kernel and maybe
-> > that concern is hysteria.
-> > 
-> > > And if *that* didn't sell people on this patch series, I don't know
-> > > what will. I should be in marketing! Two drink minimums, here I come!
-> > 
-> > Sold:
-> > 
-> > on 255 vcpus 0 duplicates found with this setup:
-> > 
-> > root@kmod ~ # cat /sys/kernel/debug/modules/stats
-> >           Mods ever loaded       66
-> >       Mods failed on kread       0
-> > Mods failed on decompress       0
-> >    Mods failed on becoming       0
-> >        Mods failed on load       0
-> >          Total module size       11268096
-> >        Total mod text size       4149248
-> >         Failed kread bytes       0
-> >    Failed decompress bytes       0
-> >      Failed becoming bytes       0
-> >          Failed kmod bytes       0
-> >   Virtual mem wasted bytes       0
-> >           Average mod size       170729
-> >      Average mod text size       62868
-> > 
-> > So:
-> > 
-> > Tested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > 
-> > In terms of bootup timing:
-> > 
-> > Before:
-> > Startup finished in 41.653s (kernel) + 44.305s (userspace) = 1min 25.958s
-> > graphical.target reached after 44.178s in userspace.
-> > After:
-> > Startup finished in 23.995s (kernel) + 40.350s (userspace) = 1min 4.345s
-> > graphical.target reached after 40.226s in userspace.
-> 
-> I'll try grabbing the system where we saw the KASAN-related issues [1] and
-> give it a churn with and without the two patches. Might take a bit (~1 day),
-> unfortunately.
-> 
-> [1] https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-Great, don't forget:
+Hi,
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 82b0dcc1fe77..222015093eeb 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3066,7 +3066,7 @@ struct idempotent {
- 
- #define IDEM_HASH_BITS 8
- static struct hlist_head idem_hash[1 << IDEM_HASH_BITS];
--static struct spinlock idem_lock;
-+static DEFINE_SPINLOCK(idem_lock);
- 
- static bool idempotent(struct idempotent *u, const void *cookie)
- {
+module_alloc() is used everywhere as a mean to allocate memory for code.
+
+Beside being semantically wrong, this unnecessarily ties all subsystmes
+that need to allocate code, such as ftrace, kprobes and BPF to modules
+and puts the burden of code allocation to the modules code.
+
+Several architectures override module_alloc() because of various
+constraints where the executable memory can be located and this causes
+additional obstacles for improvements of code allocation.
+
+This set splits code allocation from modules by introducing
+jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
+sites of module_alloc() and module_memfree() with the new APIs and
+implements core text and related allocation in a central place.
+
+Instead of architecture specific overrides for module_alloc(), the
+architectures that require non-default behaviour for text allocation must
+fill jit_alloc_params structure and implement jit_alloc_arch_params() that
+returns a pointer to that structure. If an architecture does not implement
+jit_alloc_arch_params(), the defaults compatible with the current
+modules::module_alloc() are used.
+
+The new jitalloc infrastructure allows decoupling of kprobes and ftrace
+from modules, and most importantly it enables ROX allocations for
+executable memory.
+
+A centralized infrastructure for code allocation allows future
+optimizations for allocations of executable memory, caching large pages for
+better iTLB performance and providing sub-page allocations for users that
+only need small jit code snippets.
+
+patches 1-5: split out the code allocation from modules and arch
+patch 6: add dedicated API for data allocations with constraints similar to
+code allocations
+patches 7-9: decouple dynamic ftrace and kprobes form CONFIG_MODULES
+patches 10-13: enable ROX allocations for executable memory on x86
+
+Mike Rapoport (IBM) (11):
+  nios2: define virtual address space for modules
+  mm: introduce jit_text_alloc() and use it instead of module_alloc()
+  mm/jitalloc, arch: convert simple overrides of module_alloc to jitalloc
+  mm/jitalloc, arch: convert remaining overrides of module_alloc to jitalloc
+  module, jitalloc: drop module_alloc
+  mm/jitalloc: introduce jit_data_alloc()
+  x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
+  arch: make jitalloc setup available regardless of CONFIG_MODULES
+  kprobes: remove dependcy on CONFIG_MODULES
+  modules, jitalloc: prepare to allocate executable memory as ROX
+  x86/jitalloc: make memory allocated for code ROX
+
+Song Liu (2):
+  ftrace: Add swap_func to ftrace_process_locs()
+  x86/jitalloc: prepare to allocate exectuatble memory as ROX
+
+ arch/Kconfig                     |   5 +-
+ arch/arm/kernel/module.c         |  32 ------
+ arch/arm/mm/init.c               |  35 ++++++
+ arch/arm64/kernel/module.c       |  47 --------
+ arch/arm64/mm/init.c             |  42 +++++++
+ arch/loongarch/kernel/module.c   |   6 -
+ arch/loongarch/mm/init.c         |  16 +++
+ arch/mips/kernel/module.c        |   9 --
+ arch/mips/mm/init.c              |  19 ++++
+ arch/nios2/include/asm/pgtable.h |   5 +-
+ arch/nios2/kernel/module.c       |  24 ++--
+ arch/parisc/kernel/module.c      |  11 --
+ arch/parisc/mm/init.c            |  21 +++-
+ arch/powerpc/kernel/kprobes.c    |   4 +-
+ arch/powerpc/kernel/module.c     |  37 -------
+ arch/powerpc/mm/mem.c            |  41 +++++++
+ arch/riscv/kernel/module.c       |  10 --
+ arch/riscv/mm/init.c             |  18 +++
+ arch/s390/kernel/ftrace.c        |   4 +-
+ arch/s390/kernel/kprobes.c       |   4 +-
+ arch/s390/kernel/module.c        |  46 +-------
+ arch/s390/mm/init.c              |  35 ++++++
+ arch/sparc/kernel/module.c       |  34 +-----
+ arch/sparc/mm/Makefile           |   2 +
+ arch/sparc/mm/jitalloc.c         |  21 ++++
+ arch/sparc/net/bpf_jit_comp_32.c |   8 +-
+ arch/x86/Kconfig                 |   2 +
+ arch/x86/kernel/alternative.c    |  43 ++++---
+ arch/x86/kernel/ftrace.c         |  59 +++++-----
+ arch/x86/kernel/kprobes/core.c   |   4 +-
+ arch/x86/kernel/module.c         |  75 +------------
+ arch/x86/kernel/static_call.c    |  10 +-
+ arch/x86/kernel/unwind_orc.c     |  13 ++-
+ arch/x86/mm/init.c               |  52 +++++++++
+ arch/x86/net/bpf_jit_comp.c      |  22 +++-
+ include/linux/ftrace.h           |   2 +
+ include/linux/jitalloc.h         |  69 ++++++++++++
+ include/linux/moduleloader.h     |  15 ---
+ kernel/bpf/core.c                |  14 +--
+ kernel/kprobes.c                 |  51 +++++----
+ kernel/module/Kconfig            |   1 +
+ kernel/module/main.c             |  56 ++++------
+ kernel/trace/ftrace.c            |  13 ++-
+ kernel/trace/trace_kprobe.c      |  11 ++
+ mm/Kconfig                       |   3 +
+ mm/Makefile                      |   1 +
+ mm/jitalloc.c                    | 185 +++++++++++++++++++++++++++++++
+ mm/mm_init.c                     |   2 +
+ 48 files changed, 777 insertions(+), 462 deletions(-)
+ create mode 100644 arch/sparc/mm/jitalloc.c
+ create mode 100644 include/linux/jitalloc.h
+ create mode 100644 mm/jitalloc.c
+
+
+base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+-- 
+2.35.1
+
