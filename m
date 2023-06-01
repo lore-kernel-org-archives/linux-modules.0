@@ -2,141 +2,97 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 033A3C77B7E
-	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 22:36:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05C37C77B7A
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 22:40:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjFAWgI (ORCPT
+        id S231241AbjFAWkS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 1 Jun 2023 18:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        Thu, 1 Jun 2023 18:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjFAWgH (ORCPT
+        with ESMTP id S229781AbjFAWkR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:36:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A623133;
-        Thu,  1 Jun 2023 15:36:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 906E364AA7;
-        Thu,  1 Jun 2023 22:36:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED82AC43443;
-        Thu,  1 Jun 2023 22:36:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685658962;
-        bh=HByQUJENQcDPWiijaDFhYT8jA4bRcfOqcVglu/ddG6U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=re2I/9LpOnn67cRoh6PMZZOHT8vdfHha/bz6wtCDfOYdb5vZzGUctvTnWl4LYy/9m
-         NwPwQViyZ7XqHLQBspSOOwlfhUwQAtJo+yIL5HnTKCCgUiXqtggXTsskTfnNpG7vN9
-         VK+9AhJpq2nZ3mf3rthk6G8xSKwWwiHUzWquyx91XgpIn8z8MdRB3+bYCub3NDdJsU
-         MBXCxXfkbcJxxlc8t1IXtz79Bkfq9TSzEwYW0lg8eC1Maz9RVf0VpdqrZpUNbjK7/t
-         roE+PBwSYAYsytt+Ua6jTizptS+lu0Z7pWJc7cPm4JVKQxLN5o5FZMLtghbCRvoQ8N
-         h5KrxNOdHSCXg==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f3ba703b67so1883166e87.1;
-        Thu, 01 Jun 2023 15:36:01 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwCfcoWvJSmhQPKGLk4na5gWDVfbKoT0+70BSdxCghnn0LsO9eE
-        mHJX70nFS4hM1gSoxd7YkjITBewiMbLpXXglhsE=
-X-Google-Smtp-Source: ACHHUZ5IpAtCBKLINxhk+Z0SWINwbFkPqmi++HI/k6BNegfGNCzvnzTim5Gy3oJJLp9NHmq3+FFn0pl72eGk9Pzb3ws=
-X-Received: by 2002:ac2:48ba:0:b0:4ec:8816:f4fc with SMTP id
- u26-20020ac248ba000000b004ec8816f4fcmr792426lfg.6.1685658959623; Thu, 01 Jun
- 2023 15:35:59 -0700 (PDT)
+        Thu, 1 Jun 2023 18:40:17 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8C412C
+        for <linux-modules@vger.kernel.org>; Thu,  1 Jun 2023 15:40:13 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so2057504a12.2
+        for <linux-modules@vger.kernel.org>; Thu, 01 Jun 2023 15:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685659211; x=1688251211;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rhzebm59EgdBjx+cIsKHCLHGWVLe6lRccxnT0mFxm4A=;
+        b=RySMFwY0IbGDSuO7vr69L1MbAI3n9G8+DCsBIf/NjFDh843rwkTuSR5+w3LXJzOpu9
+         ZWh+F9CnFucMSqI9Y2E0oNwnZsrA7oDp1q5I1WNM7pKofU+gHGOqbIhIebhTJMX83b+R
+         26pWZmNnn+UkMiVAk2W7lQqQ+BaJftzXJ7AlWBzavgMiuNnSvlyWSCIPjOJ8DAhWL+DF
+         dQd/Ht+waJIVWkqjZAJuyihfIvdVrx9TFvYtD/P5CZR/dYh8DY2wcEB0U64ithA9UaJY
+         Ktxv/e5663AVfvAbgRKwfO1G6u5YndyrXSAOTYm/BOT7TtmZQS3qLNVGcgLbIOD4eZ43
+         U3Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685659211; x=1688251211;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rhzebm59EgdBjx+cIsKHCLHGWVLe6lRccxnT0mFxm4A=;
+        b=coAhYVd/NIxfwczJWls/8HfBSj+/Pv6sBgKYAud/KFC4VSdYoNcE/zu10SfMhc6L0r
+         8sjxqQd9G4A2mTfOeYM8BoEFXfdncq3WhCD5exSuG9IG4cmG+WgeTWJRRYYlmT//wJ4S
+         NHAHC7ent5c08dqcqVXrf/rpfifzcIl+TbZ5GJNTCyt+eX8sCgo3gB67ljd5I0kKI1UO
+         O6gGv0d6/UmELWWYTwTGuCogcd6k+tvHom8uhNUnp8YZ0wFKJ8FOT0iLgYh3THZYQuzr
+         mNrm6ve+7DKD3UIXoxMV6anl0cwabOWdOt9r6Rl/UMFZB1MeTi2NC/KllxPymigLZly6
+         Q1kA==
+X-Gm-Message-State: AC+VfDxaFxScW6UT0KKuzMB92d8K3jbB9v5sKIJQqdIgYksb1MjmDhrk
+        vHwatvo+4hJl8OfzApgfB24YFZT9UnE=
+X-Google-Smtp-Source: ACHHUZ5gtvel15CTMDyZCyHQa930Qun5xSbTVEm/8ySp81k6eTLs0f1ZbX3wI1fwIJIhS+QrFtwzVg==
+X-Received: by 2002:a17:907:60cd:b0:974:216f:dc36 with SMTP id hv13-20020a17090760cd00b00974216fdc36mr8459762ejc.17.1685659210705;
+        Thu, 01 Jun 2023 15:40:10 -0700 (PDT)
+Received: from ldmartin-desk2.jf.intel.com ([134.134.137.83])
+        by smtp.gmail.com with ESMTPSA id se24-20020a170906ce5800b009662b4230cesm11253318ejb.148.2023.06.01.15.40.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 15:40:10 -0700 (PDT)
+From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
+To:     linux-modules@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>
+Subject: [PATCH 0/5] libkmod: Use kernel decompression support
+Date:   Thu,  1 Jun 2023 15:39:56 -0700
+Message-Id: <20230601224001.23397-1-lucas.de.marchi@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230601101257.530867-1-rppt@kernel.org> <20230601101257.530867-5-rppt@kernel.org>
-In-Reply-To: <20230601101257.530867-5-rppt@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 1 Jun 2023 15:35:47 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW70o=8QwcNJPx=qxaKoPkOzwYt8xxzjK38dF2tJB-18jQ@mail.gmail.com>
-Message-ID: <CAPhsuW70o=8QwcNJPx=qxaKoPkOzwYt8xxzjK38dF2tJB-18jQ@mail.gmail.com>
-Subject: Re: [PATCH 04/13] mm/jitalloc, arch: convert remaining overrides of
- module_alloc to jitalloc
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jun 1, 2023 at 3:13=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
-e:
->
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> Extend jitalloc parameters to accommodate more complex overrides of
-> module_alloc() by architectures.
->
-> This includes specification of a fallback range required by arm, arm64
-> and powerpc and support for allocation of KASAN shadow required by
-> arm64, s390 and x86.
->
-> The core implementation of jit_alloc() takes care of suppressing warnings
-> when the initial allocation fails but there is a fallback range defined.
->
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+When kernel is built with CONFIG_MODULE_DECOMPRESS=y, it can handle 1
+algorithm for module decompression with finit_module(). When that
+algorithm matches the one used in the module we are trying to load,
+prefer using the in-kernel decompression.  This way the kernel can also
+apply any additional security measures based on where the module is
+coming from.
 
-[...]
+In future, if the kernel supports more algorithms at a time, libkmod
+could even be compiled without them and just let the kernel handle it.
+Since it's likely a distro kernel supports all of them, that would
+seem a good thing to do (on the other hand, tools like modinfo and
+depmod wouldn't be able read the module information).
 
->
-> diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-> index 5af4975caeb5..ecf1f4030317 100644
-> --- a/arch/arm64/kernel/module.c
-> +++ b/arch/arm64/kernel/module.c
-> @@ -17,56 +17,49 @@
->  #include <linux/moduleloader.h>
->  #include <linux/scs.h>
->  #include <linux/vmalloc.h>
-> +#include <linux/jitalloc.h>
->  #include <asm/alternative.h>
->  #include <asm/insn.h>
->  #include <asm/scs.h>
->  #include <asm/sections.h>
->
-> -void *module_alloc(unsigned long size)
-> +static struct jit_alloc_params jit_alloc_params =3D {
-> +       .alignment      =3D MODULE_ALIGN,
-> +       .flags          =3D JIT_ALLOC_KASAN_SHADOW,
-> +};
-> +
-> +struct jit_alloc_params *jit_alloc_arch_params(void)
->  {
->         u64 module_alloc_end =3D module_alloc_base + MODULES_VSIZE;
+For zstd, this needs the following fix on the kernel side:
+https://lore.kernel.org/linux-modules/ZHkQNQK5zrzo4Cq2@bombadil.infradead.org/
 
-module_alloc_base() is initialized in kaslr_init(), which is called after
-mm_core_init(). We will need some special logic for this.
+Lucas De Marchi (5):
+  libkmod: Do not inititialize file->memory on open
+  libkmod: Extract finit_module vs init_module paths
+  libkmod: Keep track of compression type
+  libkmod: Keep track of in-kernel compression support
+  libkmod: Use kernel decompression when available
 
-Thanks,
-Song
+ libkmod/libkmod-elf.c      |   5 ++
+ libkmod/libkmod-file.c     |  46 +++++++++-----
+ libkmod/libkmod-internal.h |  13 +++-
+ libkmod/libkmod-module.c   | 127 ++++++++++++++++++++++++-------------
+ libkmod/libkmod.c          |  42 ++++++++++++
+ 5 files changed, 170 insertions(+), 63 deletions(-)
 
-> -       gfp_t gfp_mask =3D GFP_KERNEL;
-> -       void *p;
-> -
-> -       /* Silence the initial allocation */
-> -       if (IS_ENABLED(CONFIG_ARM64_MODULE_PLTS))
-> -               gfp_mask |=3D __GFP_NOWARN;
->
+-- 
+2.40.1
 
-[...]
