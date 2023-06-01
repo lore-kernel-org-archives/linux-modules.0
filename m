@@ -2,40 +2,29 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43F73C7EE2F
-	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 11:07:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59311C7EE23
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 16:12:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbjFALHz (ORCPT
+        id S229630AbjFAQMR (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 1 Jun 2023 07:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
+        Thu, 1 Jun 2023 12:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjFALHw (ORCPT
+        with ESMTP id S229603AbjFAQMQ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:07:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D04107;
-        Thu,  1 Jun 2023 04:07:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9216B63FCB;
-        Thu,  1 Jun 2023 11:07:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A781FC433D2;
-        Thu,  1 Jun 2023 11:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685617670;
-        bh=+Yjm8puKI4qcOhrAjHQoPXnOlN6+/fj9nQ2KMrVKq+A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RhP2k+/FQSvli7tGw2eOKlboTIMhAX1rWIMmQojkSItsf7Pbu27Voz4XKQfKsJMv+
-         yk64a7+GnLa0AXm5NTg7oxgCbiU/vvM5YtvO42iXWm3c1dvWeuqaT9QYECD04AjLI8
-         +kurm3Gcj765DCLAHDCbNzTJmkHWERuX8j+NWUQrH79TGx2XeQSd0dO1NOebia9EMt
-         dJu6ZE7ylH9284d9jqvK6St/2YUkHNw8jD2OIGo2TbwtTLSoShdT9QABDGhevJVWTD
-         pUczYlcvfwWLpOJgcn012xrthp2r+mfy68euX8CFvo6UC393XjO1m9JQnHYF6C6kEn
-         C9f6ivmZ7x+Ew==
-Date:   Thu, 1 Jun 2023 14:07:13 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
+        Thu, 1 Jun 2023 12:12:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50B4C18F;
+        Thu,  1 Jun 2023 09:12:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 525171063;
+        Thu,  1 Jun 2023 09:12:58 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.36.140])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C47623F663;
+        Thu,  1 Jun 2023 09:12:06 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 17:12:03 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -62,80 +51,163 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
         netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 12/13] x86/jitalloc: prepare to allocate exectuatble
- memory as ROX
-Message-ID: <20230601110713.GE395338@kernel.org>
+Subject: Re: [PATCH 00/13] mm: jit/text allocator
+Message-ID: <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
 References: <20230601101257.530867-1-rppt@kernel.org>
- <20230601101257.530867-13-rppt@kernel.org>
- <20230601103050.GT4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230601103050.GT4253@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230601101257.530867-1-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jun 01, 2023 at 12:30:50PM +0200, Peter Zijlstra wrote:
-> On Thu, Jun 01, 2023 at 01:12:56PM +0300, Mike Rapoport wrote:
+Hi Mike,
+
+On Thu, Jun 01, 2023 at 01:12:44PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> > +static void __init_or_module do_text_poke(void *addr, const void *opcode, size_t len)
-> > +{
-> > +	if (system_state < SYSTEM_RUNNING) {
-> > +		text_poke_early(addr, opcode, len);
-> > +	} else {
-> > +		mutex_lock(&text_mutex);
-> > +		text_poke(addr, opcode, len);
-> > +		mutex_unlock(&text_mutex);
-> > +	}
-> > +}
+> Hi,
 > 
-> So I don't much like do_text_poke(); why?
-
-I believe the idea was to keep memcpy for early boot before the kernel
-image is protected without going and adding if (is_module_text_address())
-all over the place.
-
-I think this can be used instead without updating all the call sites of
-text_poke_early():
-
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 91057de8e6bc..f994e63e9903 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1458,7 +1458,7 @@ void __init_or_module text_poke_early(void *addr, const void *opcode,
- 		 * code cannot be running and speculative code-fetches are
- 		 * prevented. Just change the code.
- 		 */
--		memcpy(addr, opcode, len);
-+		text_poke_copy(addr, opcode, len);
- 	} else {
- 		local_irq_save(flags);
- 		memcpy(addr, opcode, len);
- 
-> > diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-> > index aa99536b824c..d50595f2c1a6 100644
-> > --- a/arch/x86/kernel/ftrace.c
-> > +++ b/arch/x86/kernel/ftrace.c
-> > @@ -118,10 +118,13 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
-> >  		return ret;
-> >  
-> >  	/* replace the text with the new text */
-> > -	if (ftrace_poke_late)
-> > +	if (ftrace_poke_late) {
-> >  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
-> > -	else
-> > -		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
-> > +	} else {
-> > +		mutex_lock(&text_mutex);
-> > +		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
-> > +		mutex_unlock(&text_mutex);
-> > +	}
-> >  	return 0;
-> >  }
+> module_alloc() is used everywhere as a mean to allocate memory for code.
 > 
-> And in the above case it's actively wrong for loosing the _queue()
-> thing.
+> Beside being semantically wrong, this unnecessarily ties all subsystmes
+> that need to allocate code, such as ftrace, kprobes and BPF to modules
+> and puts the burden of code allocation to the modules code.
 
--- 
-Sincerely yours,
-Mike.
+I agree this is a problem, and one key issue here is that these can have
+different requirements. For example, on arm64 we need modules to be placed
+within a 128M or 2G window containing the kernel, whereas it would be safe for
+the kprobes XOL area to be placed arbitrarily far from the kernel image (since
+we don't allow PC-relative insns to be stepped out-of-line). Likewise arm64
+doesn't have ftrace trampolines, and DIRECT_CALL trampolines can safely be
+placed arbitarily far from the kernel image.
+
+For a while I have wanted to give kprobes its own allocator so that it can work
+even with CONFIG_MODULES=n, and so that it doesn't have to waste VA space in
+the modules area.
+
+Given that, I think these should have their own allocator functions that can be
+provided independently, even if those happen to use common infrastructure.
+
+> Several architectures override module_alloc() because of various
+> constraints where the executable memory can be located and this causes
+> additional obstacles for improvements of code allocation.
+> 
+> This set splits code allocation from modules by introducing
+> jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
+> sites of module_alloc() and module_memfree() with the new APIs and
+> implements core text and related allocation in a central place.
+> 
+> Instead of architecture specific overrides for module_alloc(), the
+> architectures that require non-default behaviour for text allocation must
+> fill jit_alloc_params structure and implement jit_alloc_arch_params() that
+> returns a pointer to that structure. If an architecture does not implement
+> jit_alloc_arch_params(), the defaults compatible with the current
+> modules::module_alloc() are used.
+
+As above, I suspect that each of the callsites should probably be using common
+infrastructure, but I don't think that a single jit_alloc_arch_params() makes
+sense, since the parameters for each case may need to be distinct.
+
+> The new jitalloc infrastructure allows decoupling of kprobes and ftrace
+> from modules, and most importantly it enables ROX allocations for
+> executable memory.
+> 
+> A centralized infrastructure for code allocation allows future
+> optimizations for allocations of executable memory, caching large pages for
+> better iTLB performance and providing sub-page allocations for users that
+> only need small jit code snippets.
+
+This sounds interesting, but I think this can be achieved without requiring a
+single jit_alloc_arch_params() shared by all users?
+
+Thanks,
+Mark.
+
+> 
+> patches 1-5: split out the code allocation from modules and arch
+> patch 6: add dedicated API for data allocations with constraints similar to
+> code allocations
+> patches 7-9: decouple dynamic ftrace and kprobes form CONFIG_MODULES
+> patches 10-13: enable ROX allocations for executable memory on x86
+> 
+> Mike Rapoport (IBM) (11):
+>   nios2: define virtual address space for modules
+>   mm: introduce jit_text_alloc() and use it instead of module_alloc()
+>   mm/jitalloc, arch: convert simple overrides of module_alloc to jitalloc
+>   mm/jitalloc, arch: convert remaining overrides of module_alloc to jitalloc
+>   module, jitalloc: drop module_alloc
+>   mm/jitalloc: introduce jit_data_alloc()
+>   x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
+>   arch: make jitalloc setup available regardless of CONFIG_MODULES
+>   kprobes: remove dependcy on CONFIG_MODULES
+>   modules, jitalloc: prepare to allocate executable memory as ROX
+>   x86/jitalloc: make memory allocated for code ROX
+> 
+> Song Liu (2):
+>   ftrace: Add swap_func to ftrace_process_locs()
+>   x86/jitalloc: prepare to allocate exectuatble memory as ROX
+> 
+>  arch/Kconfig                     |   5 +-
+>  arch/arm/kernel/module.c         |  32 ------
+>  arch/arm/mm/init.c               |  35 ++++++
+>  arch/arm64/kernel/module.c       |  47 --------
+>  arch/arm64/mm/init.c             |  42 +++++++
+>  arch/loongarch/kernel/module.c   |   6 -
+>  arch/loongarch/mm/init.c         |  16 +++
+>  arch/mips/kernel/module.c        |   9 --
+>  arch/mips/mm/init.c              |  19 ++++
+>  arch/nios2/include/asm/pgtable.h |   5 +-
+>  arch/nios2/kernel/module.c       |  24 ++--
+>  arch/parisc/kernel/module.c      |  11 --
+>  arch/parisc/mm/init.c            |  21 +++-
+>  arch/powerpc/kernel/kprobes.c    |   4 +-
+>  arch/powerpc/kernel/module.c     |  37 -------
+>  arch/powerpc/mm/mem.c            |  41 +++++++
+>  arch/riscv/kernel/module.c       |  10 --
+>  arch/riscv/mm/init.c             |  18 +++
+>  arch/s390/kernel/ftrace.c        |   4 +-
+>  arch/s390/kernel/kprobes.c       |   4 +-
+>  arch/s390/kernel/module.c        |  46 +-------
+>  arch/s390/mm/init.c              |  35 ++++++
+>  arch/sparc/kernel/module.c       |  34 +-----
+>  arch/sparc/mm/Makefile           |   2 +
+>  arch/sparc/mm/jitalloc.c         |  21 ++++
+>  arch/sparc/net/bpf_jit_comp_32.c |   8 +-
+>  arch/x86/Kconfig                 |   2 +
+>  arch/x86/kernel/alternative.c    |  43 ++++---
+>  arch/x86/kernel/ftrace.c         |  59 +++++-----
+>  arch/x86/kernel/kprobes/core.c   |   4 +-
+>  arch/x86/kernel/module.c         |  75 +------------
+>  arch/x86/kernel/static_call.c    |  10 +-
+>  arch/x86/kernel/unwind_orc.c     |  13 ++-
+>  arch/x86/mm/init.c               |  52 +++++++++
+>  arch/x86/net/bpf_jit_comp.c      |  22 +++-
+>  include/linux/ftrace.h           |   2 +
+>  include/linux/jitalloc.h         |  69 ++++++++++++
+>  include/linux/moduleloader.h     |  15 ---
+>  kernel/bpf/core.c                |  14 +--
+>  kernel/kprobes.c                 |  51 +++++----
+>  kernel/module/Kconfig            |   1 +
+>  kernel/module/main.c             |  56 ++++------
+>  kernel/trace/ftrace.c            |  13 ++-
+>  kernel/trace/trace_kprobe.c      |  11 ++
+>  mm/Kconfig                       |   3 +
+>  mm/Makefile                      |   1 +
+>  mm/jitalloc.c                    | 185 +++++++++++++++++++++++++++++++
+>  mm/mm_init.c                     |   2 +
+>  48 files changed, 777 insertions(+), 462 deletions(-)
+>  create mode 100644 arch/sparc/mm/jitalloc.c
+>  create mode 100644 include/linux/jitalloc.h
+>  create mode 100644 mm/jitalloc.c
+> 
+> 
+> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+> -- 
+> 2.35.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
