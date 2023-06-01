@@ -2,209 +2,138 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85E61C77B7A
-	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 22:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D1F5C7EE2E
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 22:50:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjFAWk1 (ORCPT
+        id S231735AbjFAWt7 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 1 Jun 2023 18:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
+        Thu, 1 Jun 2023 18:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbjFAWk0 (ORCPT
+        with ESMTP id S232579AbjFAWtz (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:40:26 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8504712C
-        for <linux-modules@vger.kernel.org>; Thu,  1 Jun 2023 15:40:24 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b1a6a8e851so12853341fa.2
-        for <linux-modules@vger.kernel.org>; Thu, 01 Jun 2023 15:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685659222; x=1688251222;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FBkV9oYQPFu7USkDL/ITikjBCLxq5r+G6YZDTAlhVT8=;
-        b=Bg4Gnw+kQbHtCTcaxAuNG/+ek6ULfWBV/ClnH3srOBd8BpEewrwJpuGC5I9m8zEXl8
-         R725RSkr9ip+pZ6ja/LYABZECdqOML8CGJhd7LeMo88O/TEcl1kqLjAcBIgWfbdFA38X
-         1FlsvzV4iiRWXTx7sQDQrMnfTCtNFMzilS9lKRk9ut+sRogRwA1GzF+w8Hm7zzkYCgft
-         COSJswxh4Xxtss2eS776AGvDSzA2zMqEfC6FqCZRMJLnzTmofFAXu69ZPJFRu6e+5C/m
-         QU0DGLpa/Gyxq6HNk97Kr9eg5bvjXi9H8wllT75RACgbTsJHXP7esCTlmGiyslvwp4Vi
-         fRSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685659222; x=1688251222;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FBkV9oYQPFu7USkDL/ITikjBCLxq5r+G6YZDTAlhVT8=;
-        b=EqP/Cax+1QiOXvHqVBI3uX1dZSu85bgFmDOKJTu0ESnrNeHSGxgMfpEaxbizUr1PPK
-         D5CfLtCtoyZNWiHmLNmEgjYDY8mTiO2UkJGlv35kGrz3yY+JEIA4r2NwQUJ2/zjUU+4y
-         L2nLPhlYZaRpYKcu3IEOFMh1rnQrTCorZKV/fjJ883pYSjmxsVBFXfuQWBfqd8/Izkz8
-         yp2xq/bVbtOSOsJ+2CYX5MzVqjwvOG/NP7FAGMN79XsqfafFYd2GLSYRMEvgTAgUFgiZ
-         sUACLAch0tZ3VudkSPY6EVHRMtaeYtuw+2Ml2PJjalRJB0ibuGVGa4ID8iDDwlhGHJ78
-         8KEg==
-X-Gm-Message-State: AC+VfDwfNccsvK3NObQjX4qyemqAs8dd+AmJnuxNd+6Xe7cbOKF/pBzy
-        RIi1zglw2NGcEwS19j8YQ54cJWhtpns=
-X-Google-Smtp-Source: ACHHUZ42clg0PX/wg5XsVCyhnnRJdeEPVVfMu912kcjAE4zF9wqcmXEeO51Xosh3iN2aGe76tLPYQw==
-X-Received: by 2002:a2e:9c8b:0:b0:2ad:90c8:7fa3 with SMTP id x11-20020a2e9c8b000000b002ad90c87fa3mr540251lji.29.1685659221698;
-        Thu, 01 Jun 2023 15:40:21 -0700 (PDT)
-Received: from ldmartin-desk2.jf.intel.com ([134.134.137.83])
-        by smtp.gmail.com with ESMTPSA id se24-20020a170906ce5800b009662b4230cesm11253318ejb.148.2023.06.01.15.40.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 15:40:20 -0700 (PDT)
-From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-To:     linux-modules@vger.kernel.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH 5/5] libkmod: Use kernel decompression when available
-Date:   Thu,  1 Jun 2023 15:40:01 -0700
-Message-Id: <20230601224001.23397-6-lucas.de.marchi@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230601224001.23397-1-lucas.de.marchi@gmail.com>
-References: <20230601224001.23397-1-lucas.de.marchi@gmail.com>
+        Thu, 1 Jun 2023 18:49:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B363138;
+        Thu,  1 Jun 2023 15:49:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B91BF64AAF;
+        Thu,  1 Jun 2023 22:49:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 266E3C433A8;
+        Thu,  1 Jun 2023 22:49:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685659793;
+        bh=s5scddDgq8SCu6I0UWPQExKWJjas9UFzehdQi3Sw4tA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=K25ToaEbCp02bMG+wiJikwHyiXiwwQBkm/MmN8qlrLj5yam240H0kFAxxnFa3RlG8
+         bu4BSS/frooyZ20B2VklohnrYULCfishpBQ/wfdUaMkt+oR8gS4E1+AjfNshKja3vS
+         Rv+moH0Y5isDfBQyF8Rj722+0entBKGogJrcfr++cvzRmW73HdsIB35hoxtRn829Ae
+         fyn3i/1QAGvtS1oiJarw65vHM76zJn0jBvddq9Vcz7E6Icr7CQW2U08iG1Oryzm6d3
+         58DCK+DxQNJ2Qn/JWEej+n8GVZwut1/xKU3k6dkfSYsQUQ9uCCopruEXev0WWNFxor
+         G4HpcCwxRlB1w==
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4f5f728c4aaso1458699e87.0;
+        Thu, 01 Jun 2023 15:49:52 -0700 (PDT)
+X-Gm-Message-State: AC+VfDygFaQyEGlCK+cBn5k10kr0LSS4LPF8TjiwLA5nWkYlIg34T11I
+        usjdwtcH1xjP2uCYF0St+hKlyfYIRh4gdi5zNt4=
+X-Google-Smtp-Source: ACHHUZ4uA6ym60CkoL3kD4Xme876wGBHsdD1XRoswJZBV/GnrkgRlI3npJzU+tR131QuPJoGC+7UxG4nzuqJElDeBo4=
+X-Received: by 2002:ac2:4a8b:0:b0:4f3:aa81:2a6e with SMTP id
+ l11-20020ac24a8b000000b004f3aa812a6emr364328lfp.19.1685659791105; Thu, 01 Jun
+ 2023 15:49:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230601101257.530867-1-rppt@kernel.org> <20230601101257.530867-13-rppt@kernel.org>
+In-Reply-To: <20230601101257.530867-13-rppt@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 1 Jun 2023 15:49:39 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4Q2d7=7yBMQLgz+7Bz_q==_F+N3C8O4LStXva73ECCTg@mail.gmail.com>
+Message-ID: <CAPhsuW4Q2d7=7yBMQLgz+7Bz_q==_F+N3C8O4LStXva73ECCTg@mail.gmail.com>
+Subject: Re: [PATCH 12/13] x86/jitalloc: prepare to allocate exectuatble
+ memory as ROX
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-With the recent changes to bypass loading the file it's possible to
-reduce the work in userspace and delegating it to the kernel. Without
-any compression to illustrate:
+On Thu, Jun 1, 2023 at 3:15=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
+e:
+>
+> From: Song Liu <song@kernel.org>
+>
+> Replace direct memory writes to memory allocated for code with text pokin=
+g
+> to allow allocation of executable memory as ROX.
+>
+> The only exception is arch_prepare_bpf_trampoline() that cannot jit
+> directly into module memory yet, so it uses set_memory calls to
+> unprotect the memory before writing to it and to protect memory in the
+> end.
+>
+> Signed-off-by: Song Liu <song@kernel.org>
+> Co-developed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>  arch/x86/kernel/alternative.c | 43 +++++++++++++++++++++++------------
+>  arch/x86/kernel/ftrace.c      | 41 +++++++++++++++++++++------------
+>  arch/x86/kernel/module.c      | 24 +++++--------------
+>  arch/x86/kernel/static_call.c | 10 ++++----
+>  arch/x86/kernel/unwind_orc.c  | 13 +++++++----
+>  arch/x86/net/bpf_jit_comp.c   | 22 +++++++++++++-----
 
-Before:
-	read(3, "\177ELF\2\1", 6)               = 6
-	lseek(3, 0, SEEK_SET)                   = 0
-	newfstatat(3, "", {st_mode=S_IFREG|0644, st_size=238592, ...}, AT_EMPTY_PATH) = 0
-	mmap(NULL, 238592, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7fd85cbd1000
-	finit_module(3, "", 0)                  = 0
-	munmap(0x7fd85cbd1000, 238592)          = 0
-	close(3)                                = 0
+We need the following in this patch (or before this patch).
+Otherwise, the system will crash at the VIRTUAL_BUG_ON()
+in vmalloc_to_page().
 
-After:
-	read(3, "\177ELF\2\1", 6)               = 6
-	lseek(3, 0, SEEK_SET)                   = 0
-	finit_module(3, "", 0)                  = 0
-	close(3)                                = 0
+Thanks,
+Song
 
-When using kernel compression now it's also possible to direct libkmod
-to take the finit_module() path, avoiding the decompression in userspace
-and just delegating it to the kernel.
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index bf954d2721c1..4efa8a795ebc 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1084,7 +1084,7 @@ bpf_jit_binary_pack_alloc(unsigned int proglen,
+u8 **image_ptr,
+                return NULL;
+        }
 
-Before:
-	read(3, "(\265/\375\244\0", 6)          = 6
-	lseek(3, 0, SEEK_SET)                   = 0
-	read(3, "(\265/\375\244", 5)            = 5
-	mmap(NULL, 135168, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f3fa431e000
-	read(3, "\0\244\3\0\\y\6", 7)           = 7
-	mmap(NULL, 372736, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f3fa414f000
-	brk(0x55944c6a1000)                     = 0x55944c6a1000
-	read(3, "\356|\6G\27U\20 \312\260s\211\335\333\263\326\330\336\273O\211\356\306K\360Z\341\374U6\342\221"..., 53038) = 53038
-	mremap(0x7f3fa431e000, 135168, 266240, MREMAP_MAYMOVE) = 0x7f3fa410e000
-	read(3, ",;\3\nqf\311\362\325\211\7\341\375A\355\221\371L\\\5\7\375 \32\246<(\258=K\304"..., 20851) = 20851
-	mremap(0x7f3fa410e000, 266240, 397312, MREMAP_MAYMOVE) = 0x7f3fa40ad000
-	read(3, ")\36\250\213", 4)              = 4
-	read(3, "", 4)                          = 0
-	munmap(0x7f3fa414f000, 372736)          = 0
-	init_module(0x7f3fa40ad010, 238592, "") = 0
-	munmap(0x7f3fa40ad000, 397312)          = 0
-	close(3)                                = 0
+-       *rw_header =3D kvmalloc(size, GFP_KERNEL);
++       *rw_header =3D kvzalloc(size, GFP_KERNEL);
+        if (!*rw_header) {
+                bpf_arch_text_copy(&ro_header->size, &size, sizeof(size));
+                bpf_prog_pack_free(ro_header);
+@@ -1092,8 +1092,6 @@ bpf_jit_binary_pack_alloc(unsigned int proglen,
+u8 **image_ptr,
+                return NULL;
+        }
 
-After:
-	read(3, "(\265/\375\244P", 6)           = 6
-	lseek(3, 0, SEEK_SET)                   = 0
-	finit_module(3, "", 0x4 /* MODULE_INIT_??? */) = 0
-	close(3)                                = 0
+-       /* Fill space with illegal/arch-dep instructions. */
+-       bpf_fill_ill_insns(*rw_header, size);
+        (*rw_header)->size =3D size;
 
-Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
----
- libkmod/libkmod-file.c     |  4 ++--
- libkmod/libkmod-internal.h |  3 ++-
- libkmod/libkmod-module.c   | 17 +++++++++++++----
- libkmod/libkmod.c          |  5 +++++
- 4 files changed, 22 insertions(+), 7 deletions(-)
-
-diff --git a/libkmod/libkmod-file.c b/libkmod/libkmod-file.c
-index 705770a..ffdda92 100644
---- a/libkmod/libkmod-file.c
-+++ b/libkmod/libkmod-file.c
-@@ -513,9 +513,9 @@ off_t kmod_file_get_size(const struct kmod_file *file)
- 	return file->size;
- }
- 
--bool kmod_file_get_direct(const struct kmod_file *file)
-+enum kmod_file_compression_type kmod_file_get_compression(const struct kmod_file *file)
- {
--	return file->compression == KMOD_FILE_COMPRESSION_NONE;
-+	return file->compression;
- }
- 
- int kmod_file_get_fd(const struct kmod_file *file)
-diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
-index 7b8a158..edb4eac 100644
---- a/libkmod/libkmod-internal.h
-+++ b/libkmod/libkmod-internal.h
-@@ -112,6 +112,7 @@ void kmod_pool_add_module(struct kmod_ctx *ctx, struct kmod_module *mod, const c
- void kmod_pool_del_module(struct kmod_ctx *ctx, struct kmod_module *mod, const char *key) __attribute__((nonnull(1, 2, 3)));
- 
- const struct kmod_config *kmod_get_config(const struct kmod_ctx *ctx) __attribute__((nonnull(1)));
-+enum kmod_file_compression_type kmod_get_kernel_compression(const struct kmod_ctx *ctx) __attribute__((nonnull(1)));
- 
- /* libkmod-config.c */
- struct kmod_config_path {
-@@ -162,7 +163,7 @@ struct kmod_elf *kmod_file_get_elf(struct kmod_file *file) __attribute__((nonnul
- int kmod_file_load_contents(struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
- void *kmod_file_get_contents(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
- off_t kmod_file_get_size(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
--bool kmod_file_get_direct(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
-+enum kmod_file_compression_type kmod_file_get_compression(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
- int kmod_file_get_fd(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
- void kmod_file_unref(struct kmod_file *file) __attribute__((nonnull(1)));
- 
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 6ed5ad4..a9e1be8 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -864,15 +864,24 @@ extern long init_module(const void *mem, unsigned long len, const char *args);
- static int do_finit_module(struct kmod_module *mod, unsigned int flags,
- 			   const char *args)
- {
-+	enum kmod_file_compression_type compression, kernel_compression;
- 	unsigned int kernel_flags = 0;
- 	int err;
- 
- 	/*
--	 * Re-use ENOSYS, returned when there is no such syscall, so the
--	 * fallback to init_module applies
-+	 * When module is not compressed or its compression type matches the
-+	 * one in use by the kernel, there is no need to read the file
-+	 * in userspace. Otherwise, re-use ENOSYS to trigger the same fallback
-+	 * as when finit_module() is not supported.
- 	 */
--	if (!kmod_file_get_direct(mod->file))
--		return -ENOSYS;
-+	compression = kmod_file_get_compression(mod->file);
-+	kernel_compression = kmod_get_kernel_compression(mod->ctx);
-+	if (!(compression == KMOD_FILE_COMPRESSION_NONE ||
-+	      compression == kernel_compression))
-+		return ENOSYS;
-+
-+	if (compression != KMOD_FILE_COMPRESSION_NONE)
-+		kernel_flags |= MODULE_INIT_COMPRESSED_FILE;
- 
- 	if (flags & KMOD_INSERT_FORCE_VERMAGIC)
- 		kernel_flags |= MODULE_INIT_IGNORE_VERMAGIC;
-diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
-index 103469e..1b8773c 100644
---- a/libkmod/libkmod.c
-+++ b/libkmod/libkmod.c
-@@ -1016,3 +1016,8 @@ const struct kmod_config *kmod_get_config(const struct kmod_ctx *ctx)
- {
- 	return ctx->config;
- }
-+
-+enum kmod_file_compression_type kmod_get_kernel_compression(const struct kmod_ctx *ctx)
-+{
-+	return ctx->kernel_compression;
-+}
--- 
-2.40.1
-
+        hole =3D min_t(unsigned int, size - (proglen + sizeof(*ro_header)),
