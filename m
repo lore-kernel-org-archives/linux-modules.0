@@ -2,62 +2,62 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89E2DC7EE29
-	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 22:40:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDC7DC7EE23
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 22:40:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjFAWkT (ORCPT
+        id S231429AbjFAWkW (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 1 Jun 2023 18:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
+        Thu, 1 Jun 2023 18:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjFAWkR (ORCPT
+        with ESMTP id S229542AbjFAWkV (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:40:17 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC91136
-        for <linux-modules@vger.kernel.org>; Thu,  1 Jun 2023 15:40:15 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5149aafef44so2092881a12.0
-        for <linux-modules@vger.kernel.org>; Thu, 01 Jun 2023 15:40:15 -0700 (PDT)
+        Thu, 1 Jun 2023 18:40:21 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91B8133
+        for <linux-modules@vger.kernel.org>; Thu,  1 Jun 2023 15:40:19 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-96f5d651170so576998566b.1
+        for <linux-modules@vger.kernel.org>; Thu, 01 Jun 2023 15:40:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685659213; x=1688251213;
+        d=gmail.com; s=20221208; t=1685659217; x=1688251217;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FnDwmBmVGYJiv8QjZrAsENAi8v+nWukYeqS6LJo5B0Y=;
-        b=djAC3hjC2JMZEPYypExL5z1iQGdUysPbxsBt6+AcNIk39cmwaENgD8sdpnX9IrJt8M
-         LnufqxaaPLgJfd2PXB13MioQEmyw6yTUm4OCqyKUohTb5u7aQvt7+phXYwrh5/CfibQn
-         9LwPN/H7LLP7HnrtgR0hsLZdhRP4wQIW+L5k171DaUzgv6MQI+w0jpr8GXUsnXOHR5aS
-         7UvHZ6U9fZfoEd7WEI5ivlOcLDyWCrlMibQjbs4dcg14pOGR1bmGv3GjE9FE70G+ph3M
-         e4bzZ6UpyeJZn7QlQitcq9Pl7C3Jv+FhEuOCNZ6YoRFBwNyqwLx9HyF6WTwSU3Wzz57/
-         quqw==
+        bh=sUIr4zbU6vKwT8OnP+vGUDlU9LfEpC4TuQOUZ+IBSH4=;
+        b=kNLxUsKsG01eA4VF1b8/ytsZouB3bCAT0DrXu4ttx7uTKtC7uBygJ6jnOXJycJHs01
+         81Zd/0S/fDl4Ix2w1oRKbuVPKWq6LGyr8ATLZ2DdKt0G+ih1e9r9Dlh6A6w+yHNoQIcN
+         WGvS4g6WaXL0eWv9AQGpONsLoZ8Ph6Wh6vZ5bBHz498m69AFDTFPu/LoLoF9IQt/9Bc5
+         lkYoFvcTnV/WDdTVSVjE2SPGkqcb59Rw/2zm8pGf85Hs1oOl+fdr6aAycFw4BEFzlS3c
+         Hx0hWskVtpzXfx2CptzFJU9Mpgv2oulSREacj/F+LLvNJCVkzfajP7Ens5qCYYZj3+VH
+         qLsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685659213; x=1688251213;
+        d=1e100.net; s=20221208; t=1685659217; x=1688251217;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FnDwmBmVGYJiv8QjZrAsENAi8v+nWukYeqS6LJo5B0Y=;
-        b=GW/LLuHxQFw4ugRLROnKNdtyRJIPHT5NrOAg8R9f9eArIDagP4pKJDFAVMqgq4r/yU
-         SSt1YaAflo4QrcbixEev9jkrCgHxvU77f2O4KVWB8t0Co7oyTvH1m8NX59D5uCxjxnvT
-         o1SUVoOBRoBtyvO5en2XeixFvlOylKohWxGr9XDkHPbqd0KcR0wKln5SyonwnQ0v3H4r
-         Yoz5E7pL5pTp/8nC+UpsFbjPVTxEIsmOap6phf1uQFRQgCC5xw5hbGLXKItRQvBDrgrv
-         AOOauPZMJnAOt/DK8bGAi1PYxMrq+yySpQ2mnaC1mjOAeAyorwPUct81eD1zAE1of6zw
-         /zoQ==
-X-Gm-Message-State: AC+VfDxb/PHF0nLs7lv8/6u7hNFCwmdf94y1lIpPOAnkLRCa90fj06CV
-        um50CxZu1u9mPv1yQzivfAGccTEgAxA=
-X-Google-Smtp-Source: ACHHUZ7k2uiGKmbQOul1olNoNh+bQcDmkV9TvnxlFsW7CDG+bA42eyQLbrQFIk37GptglxM8HpuE7A==
-X-Received: by 2002:a17:907:9343:b0:96f:afe9:25c4 with SMTP id bv3-20020a170907934300b0096fafe925c4mr8676255ejc.50.1685659213025;
-        Thu, 01 Jun 2023 15:40:13 -0700 (PDT)
+        bh=sUIr4zbU6vKwT8OnP+vGUDlU9LfEpC4TuQOUZ+IBSH4=;
+        b=H8fBd6WJjOWWwKzxxxnDvOE0QnJa6ZIx21e3D3YU2/CdEK4FwANwQyHKTuO5Jj7E0a
+         z9bcgBkky9ScJ2PQe9rYvKFUZDw89rXkuzm44YdKCdVrU9+bUW80JIH2UXQqsWEr9WFt
+         0eCixUrWU5PDzBGNuQtBn6x20l8hRg5w0jgw1w6zBfW6qjfLs1z+y2THkpWHQu31lh7Z
+         8T6dloS6+foPByPuc4kpTxKsd33DFUGaUesTxIHNH/6vkqntHfq1jaJESNeMuXg1fdBJ
+         inMTOxCP9+tspCxmtTO0tm8qBByWc+MqtmXg4AFVlUFRlkD532GU8XNXyNjBCnWmvdWw
+         Z2mg==
+X-Gm-Message-State: AC+VfDyhSQMSOmJalonfX3EatanTPu4/HBQFpXqc5EOGKkL4zvps1R4x
+        ATywjVXKLcRNIXKA7GL5eO1sGa04H+4=
+X-Google-Smtp-Source: ACHHUZ50Rxlp86BkqwZ968gPQx4cUM2JK894O1wRH/cOxTyAAPmYASfbiVAIVRtDTW4YhBXBfINGrA==
+X-Received: by 2002:a17:907:e87:b0:974:5e8b:fc28 with SMTP id ho7-20020a1709070e8700b009745e8bfc28mr484888ejc.9.1685659217437;
+        Thu, 01 Jun 2023 15:40:17 -0700 (PDT)
 Received: from ldmartin-desk2.jf.intel.com ([134.134.137.83])
-        by smtp.gmail.com with ESMTPSA id se24-20020a170906ce5800b009662b4230cesm11253318ejb.148.2023.06.01.15.40.10
+        by smtp.gmail.com with ESMTPSA id se24-20020a170906ce5800b009662b4230cesm11253318ejb.148.2023.06.01.15.40.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 15:40:12 -0700 (PDT)
+        Thu, 01 Jun 2023 15:40:16 -0700 (PDT)
 From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
 To:     linux-modules@vger.kernel.org
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH 1/5] libkmod: Do not inititialize file->memory on open
-Date:   Thu,  1 Jun 2023 15:39:57 -0700
-Message-Id: <20230601224001.23397-2-lucas.de.marchi@gmail.com>
+Subject: [PATCH 3/5] libkmod: Keep track of compression type
+Date:   Thu,  1 Jun 2023 15:39:59 -0700
+Message-Id: <20230601224001.23397-4-lucas.de.marchi@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230601224001.23397-1-lucas.de.marchi@gmail.com>
 References: <20230601224001.23397-1-lucas.de.marchi@gmail.com>
@@ -66,131 +66,121 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Add a separate function to load the file contents when it's needed.
-When it's not needed on the path of loading modules via finit_module(),
-there is no need to mmap the file. This will help support loading
-modules with the in-kernel compression support.
-
-This is done differently than the lazy initialization for
-kmod_file_get_elf() because on the contents case there is also the
-file->size to be updated. It would be a weird API to return the pointer
-and have the size changed as a side-effect.
+Do not only set the type as direct, but also keep track of the
+compression being used. This will allow using the in-kernel compression
+in future.
 
 Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
 ---
- libkmod/libkmod-elf.c      |  5 +++++
- libkmod/libkmod-file.c     | 17 ++++++++++++++---
- libkmod/libkmod-internal.h |  3 ++-
- libkmod/libkmod-module.c   |  2 ++
- 4 files changed, 23 insertions(+), 4 deletions(-)
+ libkmod/libkmod-file.c     | 27 +++++++++++++++------------
+ libkmod/libkmod-internal.h |  7 +++++++
+ 2 files changed, 22 insertions(+), 12 deletions(-)
 
-diff --git a/libkmod/libkmod-elf.c b/libkmod/libkmod-elf.c
-index fb2e3d9..933825b 100644
---- a/libkmod/libkmod-elf.c
-+++ b/libkmod/libkmod-elf.c
-@@ -281,6 +281,11 @@ struct kmod_elf *kmod_elf_new(const void *memory, off_t size)
- 	assert_cc(sizeof(uint32_t) == sizeof(Elf32_Word));
- 	assert_cc(sizeof(uint32_t) == sizeof(Elf64_Word));
- 
-+	if (!memory) {
-+		errno = -EINVAL;
-+		return NULL;
-+	}
-+
- 	class = elf_identify(memory, size);
- 	if (class < 0) {
- 		errno = -class;
 diff --git a/libkmod/libkmod-file.c b/libkmod/libkmod-file.c
-index b6a8cc9..1449c41 100644
+index 1449c41..705770a 100644
 --- a/libkmod/libkmod-file.c
 +++ b/libkmod/libkmod-file.c
-@@ -421,6 +421,7 @@ struct kmod_elf *kmod_file_get_elf(struct kmod_file *file)
- 	if (file->elf)
- 		return file->elf;
+@@ -58,7 +58,7 @@ struct kmod_file {
+ 	gzFile gzf;
+ #endif
+ 	int fd;
+-	bool direct;
++	enum kmod_file_compression_type compression;
+ 	off_t size;
+ 	void *memory;
+ 	const struct file_ops *ops;
+@@ -376,19 +376,20 @@ static const char magic_zlib[] = {0x1f, 0x8b};
  
-+	kmod_file_load_contents(file);
- 	file->elf = kmod_elf_new(file->memory, file->size);
- 	return file->elf;
- }
-@@ -431,7 +432,7 @@ struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx,
- 	struct kmod_file *file = calloc(1, sizeof(struct kmod_file));
- 	const struct comp_type *itr;
- 	size_t magic_size_max = 0;
--	int err;
-+	int err = 0;
- 
- 	if (file == NULL)
- 		return NULL;
-@@ -477,8 +478,8 @@ struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx,
- 	if (file->ops == NULL)
- 		file->ops = &reg_ops;
- 
--	err = file->ops->load(file);
- 	file->ctx = ctx;
-+
- error:
- 	if (err < 0) {
- 		if (file->fd >= 0)
-@@ -491,6 +492,14 @@ error:
- 	return file;
- }
- 
-+int kmod_file_load_contents(struct kmod_file *file)
-+{
-+	if (file->memory)
-+		return 0;
-+
-+	return file->ops->load(file);
-+}
-+
- void *kmod_file_get_contents(const struct kmod_file *file)
- {
- 	return file->memory;
-@@ -516,7 +525,9 @@ void kmod_file_unref(struct kmod_file *file)
- 	if (file->elf)
- 		kmod_elf_unref(file->elf);
- 
--	file->ops->unload(file);
-+	if (file->memory)
-+		file->ops->unload(file);
-+
- 	if (file->fd >= 0)
- 		close(file->fd);
- 	free(file);
-diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
-index 4a4af58..4799ed5 100644
---- a/libkmod/libkmod-internal.h
-+++ b/libkmod/libkmod-internal.h
-@@ -152,6 +152,7 @@ bool kmod_module_is_builtin(struct kmod_module *mod) __attribute__((nonnull(1)))
- /* libkmod-file.c */
- struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx, const char *filename) _must_check_ __attribute__((nonnull(1,2)));
- struct kmod_elf *kmod_file_get_elf(struct kmod_file *file) __attribute__((nonnull(1)));
-+int kmod_file_load_contents(struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
- void *kmod_file_get_contents(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
- off_t kmod_file_get_size(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
- bool kmod_file_get_direct(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
-@@ -166,7 +167,7 @@ struct kmod_modversion {
- 	char *symbol;
+ static const struct comp_type {
+ 	size_t magic_size;
++	enum kmod_file_compression_type compression;
+ 	const char *magic_bytes;
+ 	const struct file_ops ops;
+ } comp_types[] = {
+ #ifdef ENABLE_ZSTD
+-	{sizeof(magic_zstd), magic_zstd, {load_zstd, unload_zstd}},
++	{sizeof(magic_zstd),	KMOD_FILE_COMPRESSION_ZSTD, magic_zstd, {load_zstd, unload_zstd}},
+ #endif
+ #ifdef ENABLE_XZ
+-	{sizeof(magic_xz), magic_xz, {load_xz, unload_xz}},
++	{sizeof(magic_xz),	KMOD_FILE_COMPRESSION_XZ, magic_xz, {load_xz, unload_xz}},
+ #endif
+ #ifdef ENABLE_ZLIB
+-	{sizeof(magic_zlib), magic_zlib, {load_zlib, unload_zlib}},
++	{sizeof(magic_zlib),	KMOD_FILE_COMPRESSION_ZLIB, magic_zlib, {load_zlib, unload_zlib}},
+ #endif
+-	{0, NULL, {NULL, NULL}}
++	{0,			KMOD_FILE_COMPRESSION_NONE, NULL, {NULL, NULL}}
  };
  
--struct kmod_elf *kmod_elf_new(const void *memory, off_t size) _must_check_ __attribute__((nonnull(1)));
-+struct kmod_elf *kmod_elf_new(const void *memory, off_t size) _must_check_;
- void kmod_elf_unref(struct kmod_elf *elf) __attribute__((nonnull(1)));
- const void *kmod_elf_get_memory(const struct kmod_elf *elf) _must_check_ __attribute__((nonnull(1)));
- int kmod_elf_get_strings(const struct kmod_elf *elf, const char *section, char ***array) _must_check_ __attribute__((nonnull(1,2,3)));
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 7736b7e..f352fe1 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -917,6 +917,8 @@ KMOD_EXPORT int kmod_module_insert_module(struct kmod_module *mod,
- 			goto init_finished;
+ static int load_reg(struct kmod_file *file)
+@@ -403,7 +404,7 @@ static int load_reg(struct kmod_file *file)
+ 			    file->fd, 0);
+ 	if (file->memory == MAP_FAILED)
+ 		return -errno;
+-	file->direct = true;
++
+ 	return 0;
+ }
+ 
+@@ -448,7 +449,6 @@ struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx,
+ 			magic_size_max = itr->magic_size;
  	}
  
-+	kmod_file_load_contents(mod->file);
+-	file->direct = false;
+ 	if (magic_size_max > 0) {
+ 		char *buf = alloca(magic_size_max + 1);
+ 		ssize_t sz;
+@@ -468,15 +468,18 @@ struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx,
+ 		}
+ 
+ 		for (itr = comp_types; itr->ops.load != NULL; itr++) {
+-			if (memcmp(buf, itr->magic_bytes, itr->magic_size) == 0)
++			if (memcmp(buf, itr->magic_bytes, itr->magic_size) == 0) {
++				file->ops = &itr->ops;
++				file->compression = itr->compression;
+ 				break;
++			}
+ 		}
+-		if (itr->ops.load != NULL)
+-			file->ops = &itr->ops;
+ 	}
+ 
+-	if (file->ops == NULL)
++	if (file->ops == NULL) {
+ 		file->ops = &reg_ops;
++		file->compression = KMOD_FILE_COMPRESSION_NONE;
++	}
+ 
+ 	file->ctx = ctx;
+ 
+@@ -512,7 +515,7 @@ off_t kmod_file_get_size(const struct kmod_file *file)
+ 
+ bool kmod_file_get_direct(const struct kmod_file *file)
+ {
+-	return file->direct;
++	return file->compression == KMOD_FILE_COMPRESSION_NONE;
+ }
+ 
+ int kmod_file_get_fd(const struct kmod_file *file)
+diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
+index 4799ed5..7b8a158 100644
+--- a/libkmod/libkmod-internal.h
++++ b/libkmod/libkmod-internal.h
+@@ -61,6 +61,13 @@ struct kmod_list {
+ 	void *data;
+ };
+ 
++enum kmod_file_compression_type {
++	KMOD_FILE_COMPRESSION_NONE = 0,
++	KMOD_FILE_COMPRESSION_ZSTD,
++	KMOD_FILE_COMPRESSION_XZ,
++	KMOD_FILE_COMPRESSION_ZLIB,
++};
 +
- 	if (flags & (KMOD_INSERT_FORCE_VERMAGIC | KMOD_INSERT_FORCE_MODVERSION)) {
- 		elf = kmod_file_get_elf(mod->file);
- 		if (elf == NULL) {
+ struct kmod_list *kmod_list_append(struct kmod_list *list, const void *data) _must_check_ __attribute__((nonnull(2)));
+ struct kmod_list *kmod_list_prepend(struct kmod_list *list, const void *data) _must_check_ __attribute__((nonnull(2)));
+ struct kmod_list *kmod_list_remove(struct kmod_list *list) _must_check_;
 -- 
 2.40.1
 
