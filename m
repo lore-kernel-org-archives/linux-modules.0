@@ -2,69 +2,141 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 828FAC7EE23
-	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 21:42:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 033A3C77B7E
+	for <linux-modules@archiver.kernel.org>; Thu,  1 Jun 2023 22:36:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbjFAVmY (ORCPT
+        id S231468AbjFAWgI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 1 Jun 2023 17:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        Thu, 1 Jun 2023 18:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231941AbjFAVmY (ORCPT
+        with ESMTP id S229542AbjFAWgH (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:42:24 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F687184
-        for <linux-modules@vger.kernel.org>; Thu,  1 Jun 2023 14:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=DqUkLCv6bMf9vWIRJfpsSPqgemVjNKqxtMuRW4MP28g=; b=pEN2QhA41jkCQ+jz1yKJxfX+KG
-        6NlO52/x9NLcQ+q9phPEMSmWymkjMc/UumNTnS0buxg4eOgMspheX/pwNCd1If66d1gQbtGzcnvC5
-        SstOIwVrnSEIx08wopqKqOqGy8wk1qtyoAXJc8WxlkSKYljzemhSl3bFIojA+tvbV8T757JLDLbIk
-        9anQOlDnnc5BuLPvHt4HE8PE2W64Gmx3z2a0NRkWmiAYEy5xW3sEu6R45JjzmjNcUyqQYQ0BMBXM9
-        wRooDJJ1EMr4u0IJToPPqY7dkfoOIk9T6JV/KfzVGybhAwKU1NdxdiuuN6qZ2627bxkiZLokXQbRe
-        b7gQ2wQA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4q3r-00523S-1D;
-        Thu, 01 Jun 2023 21:42:23 +0000
-Date:   Thu, 1 Jun 2023 14:42:23 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-modules@vger.kernel.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>, mcgrof@kernel.org
-Subject: [GIT PULL] Modules fixes for v6.4-rc5 second pull request
-Message-ID: <ZHkQvyEdTqJRC3G/@bombadil.infradead.org>
+        Thu, 1 Jun 2023 18:36:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A623133;
+        Thu,  1 Jun 2023 15:36:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 906E364AA7;
+        Thu,  1 Jun 2023 22:36:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED82AC43443;
+        Thu,  1 Jun 2023 22:36:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685658962;
+        bh=HByQUJENQcDPWiijaDFhYT8jA4bRcfOqcVglu/ddG6U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=re2I/9LpOnn67cRoh6PMZZOHT8vdfHha/bz6wtCDfOYdb5vZzGUctvTnWl4LYy/9m
+         NwPwQViyZ7XqHLQBspSOOwlfhUwQAtJo+yIL5HnTKCCgUiXqtggXTsskTfnNpG7vN9
+         VK+9AhJpq2nZ3mf3rthk6G8xSKwWwiHUzWquyx91XgpIn8z8MdRB3+bYCub3NDdJsU
+         MBXCxXfkbcJxxlc8t1IXtz79Bkfq9TSzEwYW0lg8eC1Maz9RVf0VpdqrZpUNbjK7/t
+         roE+PBwSYAYsytt+Ua6jTizptS+lu0Z7pWJc7cPm4JVKQxLN5o5FZMLtghbCRvoQ8N
+         h5KrxNOdHSCXg==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f3ba703b67so1883166e87.1;
+        Thu, 01 Jun 2023 15:36:01 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwCfcoWvJSmhQPKGLk4na5gWDVfbKoT0+70BSdxCghnn0LsO9eE
+        mHJX70nFS4hM1gSoxd7YkjITBewiMbLpXXglhsE=
+X-Google-Smtp-Source: ACHHUZ5IpAtCBKLINxhk+Z0SWINwbFkPqmi++HI/k6BNegfGNCzvnzTim5Gy3oJJLp9NHmq3+FFn0pl72eGk9Pzb3ws=
+X-Received: by 2002:ac2:48ba:0:b0:4ec:8816:f4fc with SMTP id
+ u26-20020ac248ba000000b004ec8816f4fcmr792426lfg.6.1685658959623; Thu, 01 Jun
+ 2023 15:35:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20230601101257.530867-1-rppt@kernel.org> <20230601101257.530867-5-rppt@kernel.org>
+In-Reply-To: <20230601101257.530867-5-rppt@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 1 Jun 2023 15:35:47 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW70o=8QwcNJPx=qxaKoPkOzwYt8xxzjK38dF2tJB-18jQ@mail.gmail.com>
+Message-ID: <CAPhsuW70o=8QwcNJPx=qxaKoPkOzwYt8xxzjK38dF2tJB-18jQ@mail.gmail.com>
+Subject: Re: [PATCH 04/13] mm/jitalloc, arch: convert remaining overrides of
+ module_alloc to jitalloc
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The following changes since commit db3e33dd8bd956f165436afdbdbf1c653fb3c8e6:
+On Thu, Jun 1, 2023 at 3:13=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
+e:
+>
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>
+> Extend jitalloc parameters to accommodate more complex overrides of
+> module_alloc() by architectures.
+>
+> This includes specification of a fallback range required by arm, arm64
+> and powerpc and support for allocation of KASAN shadow required by
+> arm64, s390 and x86.
+>
+> The core implementation of jit_alloc() takes care of suppressing warnings
+> when the initial allocation fails but there is a fallback range defined.
+>
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-  module: fix module load for ia64 (2023-05-30 09:29:40 -0700)
+[...]
 
-are available in the Git repository at:
+>
+> diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
+> index 5af4975caeb5..ecf1f4030317 100644
+> --- a/arch/arm64/kernel/module.c
+> +++ b/arch/arm64/kernel/module.c
+> @@ -17,56 +17,49 @@
+>  #include <linux/moduleloader.h>
+>  #include <linux/scs.h>
+>  #include <linux/vmalloc.h>
+> +#include <linux/jitalloc.h>
+>  #include <asm/alternative.h>
+>  #include <asm/insn.h>
+>  #include <asm/scs.h>
+>  #include <asm/sections.h>
+>
+> -void *module_alloc(unsigned long size)
+> +static struct jit_alloc_params jit_alloc_params =3D {
+> +       .alignment      =3D MODULE_ALIGN,
+> +       .flags          =3D JIT_ALLOC_KASAN_SHADOW,
+> +};
+> +
+> +struct jit_alloc_params *jit_alloc_arch_params(void)
+>  {
+>         u64 module_alloc_end =3D module_alloc_base + MODULES_VSIZE;
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc5-second-pull
+module_alloc_base() is initialized in kaslr_init(), which is called after
+mm_core_init(). We will need some special logic for this.
 
-for you to fetch changes up to fadb74f9f2f609238070c7ca1b04933dc9400e4a:
+Thanks,
+Song
 
-  module/decompress: Fix error checking on zstd decompression (2023-06-01 14:36:46 -0700)
+> -       gfp_t gfp_mask =3D GFP_KERNEL;
+> -       void *p;
+> -
+> -       /* Silence the initial allocation */
+> -       if (IS_ENABLED(CONFIG_ARM64_MODULE_PLTS))
+> -               gfp_mask |=3D __GFP_NOWARN;
+>
 
-----------------------------------------------------------------
-modules-6.4-rc5-second-pull
-
-A zstd fix by lucas as he tested zstd decompression support
-
-----------------------------------------------------------------
-Lucas De Marchi (1):
-      module/decompress: Fix error checking on zstd decompression
-
- kernel/module/decompress.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[...]
