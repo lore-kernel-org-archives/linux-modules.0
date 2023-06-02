@@ -2,73 +2,69 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 594C2C7EE29
-	for <linux-modules@archiver.kernel.org>; Fri,  2 Jun 2023 16:07:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E725C77B7A
+	for <linux-modules@archiver.kernel.org>; Fri,  2 Jun 2023 16:38:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236314AbjFBQHm (ORCPT
+        id S235598AbjFBQiC (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 2 Jun 2023 12:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
+        Fri, 2 Jun 2023 12:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236548AbjFBQHi (ORCPT
+        with ESMTP id S235496AbjFBQiB (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:07:38 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAEBE62
-        for <linux-modules@vger.kernel.org>; Fri,  2 Jun 2023 09:07:33 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-974638ed5c5so138267466b.1
-        for <linux-modules@vger.kernel.org>; Fri, 02 Jun 2023 09:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685722052; x=1688314052;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pSyIWuON41xIpPsAfkdJjA0fkmYqrGMTTzJNJtvl1ho=;
-        b=XKMjRbVuWt6OTQ1+P0PFSz7etjhOuiu9jbqOp/4MxyKzIEfldX34nc8pNpbN3ZFYdK
-         UJKo8oYb7OakkIcanuYA+2Tl57D0UlcpwdTO0eHaCh8g7u8Bi0/7VQ3GwyECQGSxQjf9
-         S9Qb9e9YBZQaBaWSONUt9tKhJpkf9Dymt+qvk=
+        Fri, 2 Jun 2023 12:38:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2261AD
+        for <linux-modules@vger.kernel.org>; Fri,  2 Jun 2023 09:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685723834;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WIPSNWBQXPxxS791JlgpzSYCeZvx3Su3TMXyqeGUJho=;
+        b=FXl2KhN62SLyT5p9u/MnFF6pWrLkIS8/w0/6g9/G+zJW/CxByWBtVp4+QUWzq5t6yDHqfc
+        UuqTqhywOqp0H6JohXhiGVccvcD+8x+ecGGAlipBn6GoUjXz/kuWCedhYzhr2OAMNVLZLN
+        JKU5ZAwnub7hn2VPydn7lfyBIcp0l+A=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-615-4feCFssWPUGdmlOgS4WdIg-1; Fri, 02 Jun 2023 12:37:13 -0400
+X-MC-Unique: 4feCFssWPUGdmlOgS4WdIg-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30ad0812151so1149955f8f.3
+        for <linux-modules@vger.kernel.org>; Fri, 02 Jun 2023 09:37:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685722052; x=1688314052;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pSyIWuON41xIpPsAfkdJjA0fkmYqrGMTTzJNJtvl1ho=;
-        b=hBYeDK0SLaSPEg5tS5prunm7JawUK/H2LNpYWuz+u4O00ZzWidcGwUpPqaexDjHOhB
-         WHWALV2DjisLcst2fqu1rDF8h4pRtDZJeD9kurBWmKwKJH0a1Tg7Db8fq9HI74YSCZ4G
-         KBP7TS7/s2vaP8PyY/l4IasIB+gsnPpq2Xxb6dkp//dypetdmP6jmovuGQn1k2m+v0Jd
-         Skrs5uPo1z0itsCBnM/mOe8EVCRE2Z9ZGuZPWWspZesHrSRvyi8EnhZTEhMqAkTMdpmv
-         psn/dJuGD0k0F0xAVh9US/t988k9YE2GCyC6i/Ae1uMHxiqXuhNpWuQXo8cIwImn2Mhf
-         jxLA==
-X-Gm-Message-State: AC+VfDxWDtgznD5+6qIV5UZ5Bq6q/h3xT5SWUZmEfYM7/MT4nW2RJklr
-        ZFEZ5vd3mnFvBxiNQvpnfMavvPGcnkTvqWXipM2JQGJT
-X-Google-Smtp-Source: ACHHUZ7PugBLa4PQqe9O6vcBm9qF/pd8ZJij7D1+gE+fOJRVoLIXhBXAomBAWUGORGgvwXFO/vsmuA==
-X-Received: by 2002:a17:907:7289:b0:96f:94f1:b0a5 with SMTP id dt9-20020a170907728900b0096f94f1b0a5mr5760710ejc.8.1685722051904;
-        Fri, 02 Jun 2023 09:07:31 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id m19-20020a170906235300b00967a18df1easm901089eja.117.2023.06.02.09.07.31
-        for <linux-modules@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1685723832; x=1688315832;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WIPSNWBQXPxxS791JlgpzSYCeZvx3Su3TMXyqeGUJho=;
+        b=UTibw8SS9o5ym4rdGjCbihFqXz8ZfKGV68/uJftlGzzFY4AMIKxD1T2UElLTQ0UXSC
+         sHG8Q+gfos6EqFd1Qsnh1mVzOxKEBhbJpMxJzwJtZze6b13HPqqkjitYvx6q5EohS2QJ
+         xbLZrXFlSJa0C3z1TLT4oV2U1BuboaxParJacVVITE/qmtz/QThNAPIcsx8x2rctu9UY
+         0uZxE+5WdwMh7PZRBtglH0mJLQzddg0mnQxSStxTWrKky8jyImLlIyqmbDKRPGGVb/sa
+         cTRSvHIXvsKE0NrVmBr2Ny+2DJzwW73bk03LQNU7j84+9LB4Je4p/lxPTOrFg8B2xQGI
+         fDqw==
+X-Gm-Message-State: AC+VfDzloiHIq6Q6ULZisaulOKdGnlxpNdz4xn0JaHxC9DGZc+EZZ/7L
+        PDD7DZKPwNvinzaOMsl/nvlOq+lqZZx/e4xBlLxpAvSX08rmFU3wfxs1hMN15qqm9AFdptsWFUv
+        /RxRKfvet2xSELZPtgYv6uW3J2Q==
+X-Received: by 2002:a5d:440f:0:b0:30a:e647:fc2e with SMTP id z15-20020a5d440f000000b0030ae647fc2emr387294wrq.19.1685723832194;
+        Fri, 02 Jun 2023 09:37:12 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4FLY9lVp/RbHs95OsTWq3deEM5dUJjhfQSHWkPRE6RJLhFVpSAsoCuKdrt8Q/kzIkm3oqtbQ==
+X-Received: by 2002:a5d:440f:0:b0:30a:e647:fc2e with SMTP id z15-20020a5d440f000000b0030ae647fc2emr387266wrq.19.1685723831850;
+        Fri, 02 Jun 2023 09:37:11 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
+        by smtp.gmail.com with ESMTPSA id y5-20020adfd085000000b003095bd71159sm2165442wrh.7.2023.06.02.09.37.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 09:07:31 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96fab30d1e1so482562766b.0
-        for <linux-modules@vger.kernel.org>; Fri, 02 Jun 2023 09:07:31 -0700 (PDT)
-X-Received: by 2002:aa7:c0ce:0:b0:516:2dcf:d027 with SMTP id
- j14-20020aa7c0ce000000b005162dcfd027mr2836164edp.10.1685722030936; Fri, 02
- Jun 2023 09:07:10 -0700 (PDT)
+        Fri, 02 Jun 2023 09:37:11 -0700 (PDT)
+Message-ID: <6711d7ba-1349-de28-6d35-9dce91be7996@redhat.com>
+Date:   Fri, 2 Jun 2023 18:37:09 +0200
 MIME-Version: 1.0
-References: <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
- <ZG/a+nrt4/AAUi5z@bombadil.infradead.org> <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
- <ZHRpH-JXAxA6DnzR@hovoldconsulting.com> <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
- <ZHSeOUpKtyc8VKx5@hovoldconsulting.com> <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
- <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHYitt7P7W+8ZlSB@bombadil.infradead.org> <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
- <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org> <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
-In-Reply-To: <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 2 Jun 2023 12:06:54 -0400
-X-Gmail-Original-Message-ID: <CAHk-=whwFoC30zoTfsQAvkDRvgMCovwKGW_R1PPnqiF+YemcOA@mail.gmail.com>
-Message-ID: <CAHk-=whwFoC30zoTfsQAvkDRvgMCovwKGW_R1PPnqiF+YemcOA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-To:     David Hildenbrand <david@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Johan Hovold <johan@kernel.org>,
         Lucas De Marchi <lucas.demarchi@intel.com>,
@@ -84,29 +80,143 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         linux-modules@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
         lennart@poettering.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
+ <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
+ <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+ <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
+ <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+ <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
+ <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
+ <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
+ <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
+ <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
+ <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org>
+ <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
+ <CAHk-=whwFoC30zoTfsQAvkDRvgMCovwKGW_R1PPnqiF+YemcOA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+In-Reply-To: <CAHk-=whwFoC30zoTfsQAvkDRvgMCovwKGW_R1PPnqiF+YemcOA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jun 2, 2023 at 11:20=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
->
-> What concerns me a bit, is that on the patched kernel we seem to hit more=
- cases where
-> boot takes much longer (in both kernel configs).
+On 02.06.23 18:06, Linus Torvalds wrote:
+> On Fri, Jun 2, 2023 at 11:20 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> What concerns me a bit, is that on the patched kernel we seem to hit more cases where
+>> boot takes much longer (in both kernel configs).
+> 
+> So it potentially serializes the loads to the same file more, but in
+> the process uses much less memory (since the ones waiting will not
+> have done any of the "load file contents and uncompress them"). So
+> it's a bit of a trade-off.
 
-So it potentially serializes the loads to the same file more, but in
-the process uses much less memory (since the ones waiting will not
-have done any of the "load file contents and uncompress them"). So
-it's a bit of a trade-off.
+I have the feeling that -- on this system -- it's some inaccurate 
+accounting of firmware+loader times to the kernel startup time. Combined 
+with some other noise. Especially the firmware loading time seems to be 
+fairly randomized.
 
-We could complicate things a bit, and let other callers return -EEXIST
-a bit earlier, but I'm not convinced it really matters.
+I guess what we care about regarding module loading is the 
+initrd+userspace loading times, and they are fairly stable. But we 
+mostly care about udev.
 
-Honestly, taking too long because user space does something stupid and
-wrong is not a kernel bug. Not booting because we use too much memory
-- that's problematic. But booting slowly because udev does several
-thousand unnecessary module loads is entirely on udev.
+So let's look only at "systemd-udev" services:
 
-                 Linus
+1) !debug
+
+a) master
+
+5.672s systemd-udev-settle.service
+  505ms systemd-udev-trigger.service
+  272ms systemd-udevd.service
+5.418s systemd-udev-settle.service
+  487ms systemd-udev-trigger.service
+  258ms systemd-udevd.service
+5.707s systemd-udev-settle.service
+  527ms systemd-udev-trigger.service
+  273ms systemd-udevd.service
+6.250s systemd-udev-settle.service
+  455ms systemd-udev-trigger.service
+  283ms systemd-udevd.service
+
+
+b) patched
+
+4.652s systemd-udev-settle.service
+  461ms systemd-udev-trigger.service
+  302ms systemd-udevd.service
+4.652s systemd-udev-settle.service
+  461ms systemd-udev-trigger.service
+  302ms systemd-udevd.service
+4.634s systemd-udev-settle.service
+  444ms systemd-udev-trigger.service
+  296ms systemd-udevd.service
+4.745s systemd-udev-settle.service
+  444ms systemd-udev-trigger.service
+  273ms systemd-udevd.service
+
+
+2) debug
+
+a) master
+
+32.806s systemd-udev-settle.service
+  9.584s systemd-udev-trigger.service
+   471ms systemd-udevd.service
+29.901s systemd-udev-settle.service
+  8.914s systemd-udev-trigger.service
+   400ms systemd-udevd.service
+28.640s systemd-udev-settle.service
+  9.260s systemd-udev-trigger.service
+   477ms systemd-udevd.service
+29.498s systemd-udev-settle.service
+  9.073s systemd-udev-trigger.service
+   444ms systemd-udevd.service
+
+
+b) patched
+
+28.765s systemd-udev-settle.service
+  8.898s systemd-udev-trigger.service
+   400ms systemd-udevd.service
+28.292s systemd-udev-settle.service
+  8.903s systemd-udev-trigger.service
+   401ms systemd-udevd.service
+34.588s systemd-udev-settle.service
+  8.959s systemd-udev-trigger.service
+   455ms systemd-udevd.service
+28.641s systemd-udev-settle.service
+  8.953s systemd-udev-trigger.service
+   389ms systemd-udevd.service
+
+
+
+So except some noise, in the general case the patched version seems to 
+be faster just looking at systemd-udev.
+
+> 
+> We could complicate things a bit, and let other callers return -EEXIST
+> a bit earlier, but I'm not convinced it really matters.
+
+Looking at the numbers, agreed.
+
+> 
+> Honestly, taking too long because user space does something stupid and
+> wrong is not a kernel bug. Not booting because we use too much memory
+> - that's problematic. But booting slowly because udev does several
+> thousand unnecessary module loads is entirely on udev.
+
+Yes.
+
+
+I'll do some more experiments, but from what I can tell
+
+Tested-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Cheers,
+
+David / dhildenb
+
