@@ -2,119 +2,71 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70416C7EE2F
-	for <linux-modules@archiver.kernel.org>; Fri,  2 Jun 2023 09:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78A95C77B7A
+	for <linux-modules@archiver.kernel.org>; Fri,  2 Jun 2023 11:29:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234685AbjFBJfh (ORCPT
+        id S235245AbjFBL3f (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 2 Jun 2023 05:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        Fri, 2 Jun 2023 07:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234687AbjFBJff (ORCPT
+        with ESMTP id S235229AbjFBL3e (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:35:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A00EF99;
-        Fri,  2 Jun 2023 02:35:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2ACE41063;
-        Fri,  2 Jun 2023 02:36:05 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.24.167])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF4863F7BD;
-        Fri,  2 Jun 2023 02:35:14 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 10:35:09 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/13] mm: jit/text allocator
-Message-ID: <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
-References: <20230601101257.530867-1-rppt@kernel.org>
- <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
- <ZHjgIH3aX9dCvVZc@moria.home.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHjgIH3aX9dCvVZc@moria.home.lan>
+        Fri, 2 Jun 2023 07:29:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09D118D
+        for <linux-modules@vger.kernel.org>; Fri,  2 Jun 2023 04:29:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CB4B64EF4
+        for <linux-modules@vger.kernel.org>; Fri,  2 Jun 2023 11:29:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C15CAC433D2;
+        Fri,  2 Jun 2023 11:29:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685705372;
+        bh=n7vAGTnCrd43is2+uLpx8FdU9aTJkEgC1DMzVVpPbEA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=F/cWmkBuh1LYpOWtXNKHXnGWHXnmEWmVuUT0ClELR80pazXOV61OzlRjGNtSL5vpW
+         Z1Fk/XU5vkWfQ4mkvxysbr/9CCulzQrmiMoHmjbOKVQfTO4mSnYw2JTGXfx4kkIU1q
+         QlK8Q87sEarJI+2DgUrUlBkxUoPYrSM7jStFq1jD9IMz6OCHSXQPnZwvOBzvn09Trg
+         WynyikvBkHP3wl5253EV8AgQAEi4Ot11em38Y6M0k7hzjd8PUctSXkj2edoEWmIdvV
+         e5ywHTI0XPA7CsGgPOp0CXeudjJX9CCWF0h8ke3GKQJYcutFNvvl9xiVp6/fujbwVH
+         5yYljsnML1n1g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD8C4E52BF5;
+        Fri,  2 Jun 2023 11:29:32 +0000 (UTC)
+Subject: Re: [GIT PULL] Modules fixes for v6.4-rc5 second pull request
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZHkQvyEdTqJRC3G/@bombadil.infradead.org>
+References: <ZHkQvyEdTqJRC3G/@bombadil.infradead.org>
+X-PR-Tracked-List-Id: <linux-modules.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZHkQvyEdTqJRC3G/@bombadil.infradead.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc5-second-pull
+X-PR-Tracked-Commit-Id: fadb74f9f2f609238070c7ca1b04933dc9400e4a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c43a6ff9f93f230cc0f448ebb5d86d277ad7771e
+Message-Id: <168570537270.30896.7569334631442494188.pr-tracker-bot@kernel.org>
+Date:   Fri, 02 Jun 2023 11:29:32 +0000
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-modules@vger.kernel.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>, mcgrof@kernel.org
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jun 01, 2023 at 02:14:56PM -0400, Kent Overstreet wrote:
-> On Thu, Jun 01, 2023 at 05:12:03PM +0100, Mark Rutland wrote:
-> > For a while I have wanted to give kprobes its own allocator so that it can work
-> > even with CONFIG_MODULES=n, and so that it doesn't have to waste VA space in
-> > the modules area.
-> > 
-> > Given that, I think these should have their own allocator functions that can be
-> > provided independently, even if those happen to use common infrastructure.
-> 
-> How much memory can kprobes conceivably use? I think we also want to try
-> to push back on combinatorial new allocators, if we can.
+The pull request you sent on Thu, 1 Jun 2023 14:42:23 -0700:
 
-That depends on who's using it, and how (e.g. via BPF).
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc5-second-pull
 
-To be clear, I'm not necessarily asking for entirely different allocators, but
-I do thinkg that we want wrappers that can at least pass distinct start+end
-parameters to a common allocator, and for arm64's modules code I'd expect that
-we'd keep the range falblack logic out of the common allcoator, and just call
-it twice.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c43a6ff9f93f230cc0f448ebb5d86d277ad7771e
 
-> > > Several architectures override module_alloc() because of various
-> > > constraints where the executable memory can be located and this causes
-> > > additional obstacles for improvements of code allocation.
-> > > 
-> > > This set splits code allocation from modules by introducing
-> > > jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
-> > > sites of module_alloc() and module_memfree() with the new APIs and
-> > > implements core text and related allocation in a central place.
-> > > 
-> > > Instead of architecture specific overrides for module_alloc(), the
-> > > architectures that require non-default behaviour for text allocation must
-> > > fill jit_alloc_params structure and implement jit_alloc_arch_params() that
-> > > returns a pointer to that structure. If an architecture does not implement
-> > > jit_alloc_arch_params(), the defaults compatible with the current
-> > > modules::module_alloc() are used.
-> > 
-> > As above, I suspect that each of the callsites should probably be using common
-> > infrastructure, but I don't think that a single jit_alloc_arch_params() makes
-> > sense, since the parameters for each case may need to be distinct.
-> 
-> I don't see how that follows. The whole point of function parameters is
-> that they may be different :)
+Thank you!
 
-What I mean is that jit_alloc_arch_params() tries to aggregate common
-parameters, but they aren't actually common (e.g. the actual start+end range
-for allocation).
-
-> Can you give more detail on what parameters you need? If the only extra
-> parameter is just "does this allocation need to live close to kernel
-> text", that's not that big of a deal.
-
-My thinking was that we at least need the start + end for each caller. That
-might be it, tbh.
-
-Thanks,
-Mark.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
