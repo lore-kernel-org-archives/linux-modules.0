@@ -2,177 +2,200 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5C1EC7EE2C
-	for <linux-modules@archiver.kernel.org>; Sat,  3 Jun 2023 13:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13E95C7EE2E
+	for <linux-modules@archiver.kernel.org>; Sat,  3 Jun 2023 21:12:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjFCNah (ORCPT
+        id S229518AbjFCVMG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 3 Jun 2023 09:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        Sat, 3 Jun 2023 17:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjFCNag (ORCPT
+        with ESMTP id S229463AbjFCVMF (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 3 Jun 2023 09:30:36 -0400
-Received: from mout.web.de (mout.web.de [212.227.17.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054D7CE;
-        Sat,  3 Jun 2023 06:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
- s=s29768273; t=1685799015; x=1686403815; i=frank.scheiner@web.de;
- bh=phjA+nmNE3l71re7CtGjToIKaQ5hp2OqTxz/uBCnkWg=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=VDws9qe+V2odFUEUykDljSRyPZLunNG+Tk8iz+hUSUyYimvXH3NLoSLTElPOH8JTzA2GD7m
- 99LcslxTV4UsrEJXfm9ZTdnJaT0RnFoGtmMdPIyGEMAdCx5R7WQC8Kq3OMkcqAVCBqciywoVC
- MFnarAiuEnMtzNACKiNfjSi5CisPtJCy21FmwxsEekzNNGoTQMoSUO1ohQkx4TeLMqbTI+JhZ
- 3BxEoiHboo5RDbj6Qzaa44nSF6AbNp1b+qujvv+tDo4o7tGlYSWpOj2u0G+VrvrKMSJmdmJwf
- Nur8o7DPYdd1aRUt6dCjmEzsazydfOsDalxXoIhlbsarPaAJKNww==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.30] ([79.200.215.18]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1Mcpuy-1qeEBY3bvu-00Zkql; Sat, 03
- Jun 2023 15:30:14 +0200
-Message-ID: <5f4a62ad-fc8f-8738-40aa-f97b01898ac5@web.de>
-Date:   Sat, 3 Jun 2023 15:30:13 +0200
+        Sat, 3 Jun 2023 17:12:05 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD72BB;
+        Sat,  3 Jun 2023 14:12:04 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b1adf27823so24651281fa.2;
+        Sat, 03 Jun 2023 14:12:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685826722; x=1688418722;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ywQUs5Fiz0nF2jpbvNI9hUxAw7fBwSlpxtNbhNWOdKQ=;
+        b=RDS3HF6Dzg4udc+gzR1ge+A8FipEjdhBSdULq7dQD2UyV6dgjBvuZgGerD6vUs2YSm
+         VDnqI9KNtr2Dk7Dcagvb3z7MHB6yFn9dZVHE0avEHhNOnZSxu+haoNYcH+DbvcdZqhp2
+         V/2FcSs+Og/LSo+4chvosoksvs7WCJCCw38bmEWjYWWbCKP1NNCl8K5ura9Sf0w8P5PP
+         7V+264OxyeQzdq0h0Oa1oSNUiGbjJiqkYN3172ascXs+vGBmB8K0oc564ajmaECysFRA
+         O+qDRdpmwpV7013SWgjBPZmxYgAbk4/aYxoKzE2wIVyrPNGanFSOTGWVNORuh+LwDAsi
+         f1HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685826722; x=1688418722;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ywQUs5Fiz0nF2jpbvNI9hUxAw7fBwSlpxtNbhNWOdKQ=;
+        b=SZAv6c4aEnU02IE7CLZ8gHKXfgocaKwfYW8xNd2Tg/U1hiMdCbDyTdnyJKJWLdF8ur
+         XOhFxx1ebz7Lr31gpWiQqqRKDaMWm52AIObIoJN6WI1Opuw9KJFVc2+Li0rDlq48b8bj
+         q4NBELVRWYCT1NIASZ5e3PBIM7Rf2BBWdtCUfXfl3okBybupaDrXU6/UwoXgYCIFLW8n
+         c5gBt8WdPpHBwvW0fYwQmpH4BNp4eUDJ9mpGoSC26M+syKgzeu5J3CTrkxbFwK5axm29
+         xLN/1/Zy77TSFQ1jfumRsDF6xf7Ay56Wn3gR09WrHFHVqt/GQfrm/uOUzBdUC3qpDV6p
+         96mg==
+X-Gm-Message-State: AC+VfDyWAOA4NWGVIe6Bpj+KGKL7Pzyu89UrESEMkJhez6irL3NDAsud
+        xfJ/GYLxQIU96go4dlO2vG78Kb1TVV0DCpPgt75j0KwXfjTzXHnjND0=
+X-Google-Smtp-Source: ACHHUZ7QpjsIySl/XiT4DfbanAj3JM5KVAqgA/T1nohoUOzVT96eBA8GwqXTmRgv+kLRpCQJ8cFP5VM7V3QLXDceJ3I=
+X-Received: by 2002:a2e:88d6:0:b0:2a7:b986:3481 with SMTP id
+ a22-20020a2e88d6000000b002a7b9863481mr1909233ljk.41.1685826722179; Sat, 03
+ Jun 2023 14:12:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] module: fix module load for ia64
-Content-Language: en-US
-To:     Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-alpha@vger.kernel.org
-Cc:     debian-ia64@lists.debian.org, mcgrof@kernel.org,
-        glaubitz@physik.fu-berlin.de,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "debian-alpha@lists.debian.org" <debian-alpha@lists.debian.org>
-References: <20230528230041.2592309-1-song@kernel.org>
-From:   Frank Scheiner <frank.scheiner@web.de>
-In-Reply-To: <20230528230041.2592309-1-song@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20230601101257.530867-1-rppt@kernel.org> <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
+ <ZHjgIH3aX9dCvVZc@moria.home.lan> <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N> <CAPhsuW7Euczff_KB70nuH=Hhf2EYHAf=xiQR7mFqVfByhD34XA@mail.gmail.com>
+In-Reply-To: <CAPhsuW7Euczff_KB70nuH=Hhf2EYHAf=xiQR7mFqVfByhD34XA@mail.gmail.com>
+From:   Puranjay Mohan <puranjay12@gmail.com>
+Date:   Sat, 3 Jun 2023 23:11:51 +0200
+Message-ID: <CANk7y0jtFA4sKgh2o2gAydLNzOxfZ0r3LVRuzzTGS8Qv0BuJGg@mail.gmail.com>
+Subject: Re: [PATCH 00/13] mm: jit/text allocator
+To:     Song Liu <song@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:1gPO6+JnLcXvpKB5CZT2YDT8gNSqDq44Bfn7eHujJCs6qgNUsqz
- HylIUclFiEhVauREMaU9F9f8BiehPJlZncm21oO9oCjc8Xfprq49ByB4yjg0/LRroWB8KtP
- TfFMyC50ap0tSPCn3W20ND0JcL/pFOeFhOfx5V9BvvqEkiGVKCYmaK963pv+NC2JRbUlTKQ
- B10VloeIQ6Lwli5u9nSPg==
-UI-OutboundReport: notjunk:1;M01:P0:79u77PvV7tc=;9n0FfIwwwEMAcLhLF7SKbUk+pBP
- kRshBpYO8aNrC215K9XX1SPM+TceYVK9NWL8vLgvoD16gPzp7iclK3LD5/ntNAwX92RBCm573
- BASRyuWokYgl9xn6wrfULi18bCEAYGPy9lwt2EH+7CNPZSkZlqoERatsVYWxvn+2El345Ul1T
- nHy/Qfz1zJ2EbKFicjpqqQLNxVbjfoWtKu/dAvIDNLC31XngjaHATFbctJogdhHCrbFvB3JBi
- 3GYED9S6yyuh5CFGSNY2XHG350nDU6vm13BpItuR4RPjlqPBrk613GgiqGNrubDWipX6w9tJB
- SohzYeTsIJeajmElpVm/8KuI9MJUNaPvw4Q9TubvnIJx72/2KvJZtv40thsPiMSlzGX8vQ/cY
- Yya98v4PQj7v6K+B+KIjUCOG4kM+8nplfCHZKo9CqXLpk5QUkN0dlt/ZRc/75Igj42xQXixJn
- tTr9Ag/CV+ChZvuREKPtEmXOMnt8Y4WeSz9bQxXJJDI6gfK7GsupZgmfRqUPAxxw6L1Llob8V
- waNQkrEEqL7QxlewzAMra9EDxTGBXtZ+dRKwa+jKjG52+fOtPa0tP/QyFdNymsa2PwOIhLWcp
- jLMIeT/s5DroM5vxNyF8CE6+R2oklzxWY8cmV4qyOgy2LixiQ0suHvp2ntvv0FxzZbpWEgKYM
- B1IPpKjMZoTB24h4JPzjH9+ey9/P7tIrxHLwnz2xcQ0oZja+DgtdzNA2sHL4IH7fG8beFuE14
- OXV/dEGwpuB8eCjqLNId/18QDrJX7pHZNCceU6fEPKQ/5IZHvcS00E9YLx9CUgc+zm/X5J8Os
- JXD8AUSQlPYVifdNqzYkVinzh4RrqckeVLxIsvhkh1bFwdltPLUSo3DOL1xA1kopKyIHYRqX0
- FLQAJZrU2g71wQYr0pjsbw2Ig1ndDZS+wpJwmHwkROhTP2/oZnN7KHaneJNzI8F9Ir7uRfPpf
- bpAhGJqnBnnrWd/P0a5JKfJoXMk=
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 29.05.23 01:00, Song Liu wrote:
-> Frank reported boot regression in ia64 as:
+On Fri, Jun 2, 2023 at 8:21=E2=80=AFPM Song Liu <song@kernel.org> wrote:
 >
-> ELILO v3.16 for EFI/IA-64
-> ..
-> Uncompressing Linux... done
-> Loading file AC100221.initrd.img...done
-> [    0.000000] Linux version 6.4.0-rc3 (root@x4270) (ia64-linux-gcc
-> (GCC) 12.2.0, GNU ld (GNU Binutils) 2.39) #1 SMP Thu May 25 15:52:20
-> CEST 2023
-> [    0.000000] efi: EFI v1.1 by HP
-> [    0.000000] efi: SALsystab=3D0x3ee7a000 ACPI 2.0=3D0x3fe2a000
-> ESI=3D0x3ee7b000 SMBIOS=3D0x3ee7c000 HCDP=3D0x3fe28000
-> [    0.000000] PCDP: v3 at 0x3fe28000
-> [    0.000000] earlycon: uart8250 at MMIO 0x00000000f4050000 (options
-> '9600n8')
-> [    0.000000] printk: bootconsole [uart8250] enabled
-> [    0.000000] ACPI: Early table checksum verification disabled
-> [    0.000000] ACPI: RSDP 0x000000003FE2A000 000028 (v02 HP    )
-> [    0.000000] ACPI: XSDT 0x000000003FE2A02C 0000CC (v01 HP     rx2620
-> 00000000 HP   00000000)
-> [...]
-> [    3.793350] Run /init as init process
-> Loading, please wait...
-> Starting systemd-udevd version 252.6-1
-> [    3.951100] ------------[ cut here ]------------
-> [    3.951100] WARNING: CPU: 6 PID: 140 at kernel/module/main.c:1547
-> __layout_sections+0x370/0x3c0
-> [    3.949512] Unable to handle kernel paging request at virtual address
-> 1000000000000000
-> [    3.951100] Modules linked in:
-> [    3.951100] CPU: 6 PID: 140 Comm: (udev-worker) Not tainted 6.4.0-rc3=
- #1
-> [    3.956161] (udev-worker)[142]: Oops 11003706212352 [1]
-> [    3.951774] Hardware name: hp server rx2620                   , BIOS
-> 04.29
-> 11/30/2007
-> [    3.951774]
-> [    3.951774] Call Trace:
-> [    3.958339] Unable to handle kernel paging request at virtual address
-> 1000000000000000
-> [    3.956161] Modules linked in:
-> [    3.951774]  [<a0000001000156d0>] show_stack.part.0+0x30/0x60
-> [    3.951774]                                 sp=3De000000183a67b20
-> bsp=3De000000183a61628
-> [    3.956161]
-> [    3.956161]
+> On Fri, Jun 2, 2023 at 2:35=E2=80=AFAM Mark Rutland <mark.rutland@arm.com=
+> wrote:
+> >
+> > On Thu, Jun 01, 2023 at 02:14:56PM -0400, Kent Overstreet wrote:
+> > > On Thu, Jun 01, 2023 at 05:12:03PM +0100, Mark Rutland wrote:
+> > > > For a while I have wanted to give kprobes its own allocator so that=
+ it can work
+> > > > even with CONFIG_MODULES=3Dn, and so that it doesn't have to waste =
+VA space in
+> > > > the modules area.
+> > > >
+> > > > Given that, I think these should have their own allocator functions=
+ that can be
+> > > > provided independently, even if those happen to use common infrastr=
+ucture.
+> > >
+> > > How much memory can kprobes conceivably use? I think we also want to =
+try
+> > > to push back on combinatorial new allocators, if we can.
+> >
+> > That depends on who's using it, and how (e.g. via BPF).
+> >
+> > To be clear, I'm not necessarily asking for entirely different allocato=
+rs, but
+> > I do thinkg that we want wrappers that can at least pass distinct start=
++end
+> > parameters to a common allocator, and for arm64's modules code I'd expe=
+ct that
+> > we'd keep the range falblack logic out of the common allcoator, and jus=
+t call
+> > it twice.
+> >
+> > > > > Several architectures override module_alloc() because of various
+> > > > > constraints where the executable memory can be located and this c=
+auses
+> > > > > additional obstacles for improvements of code allocation.
+> > > > >
+> > > > > This set splits code allocation from modules by introducing
+> > > > > jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces =
+call
+> > > > > sites of module_alloc() and module_memfree() with the new APIs an=
+d
+> > > > > implements core text and related allocation in a central place.
+> > > > >
+> > > > > Instead of architecture specific overrides for module_alloc(), th=
+e
+> > > > > architectures that require non-default behaviour for text allocat=
+ion must
+> > > > > fill jit_alloc_params structure and implement jit_alloc_arch_para=
+ms() that
+> > > > > returns a pointer to that structure. If an architecture does not =
+implement
+> > > > > jit_alloc_arch_params(), the defaults compatible with the current
+> > > > > modules::module_alloc() are used.
+> > > >
+> > > > As above, I suspect that each of the callsites should probably be u=
+sing common
+> > > > infrastructure, but I don't think that a single jit_alloc_arch_para=
+ms() makes
+> > > > sense, since the parameters for each case may need to be distinct.
+> > >
+> > > I don't see how that follows. The whole point of function parameters =
+is
+> > > that they may be different :)
+> >
+> > What I mean is that jit_alloc_arch_params() tries to aggregate common
+> > parameters, but they aren't actually common (e.g. the actual start+end =
+range
+> > for allocation).
+> >
+> > > Can you give more detail on what parameters you need? If the only ext=
+ra
+> > > parameter is just "does this allocation need to live close to kernel
+> > > text", that's not that big of a deal.
+> >
+> > My thinking was that we at least need the start + end for each caller. =
+That
+> > might be it, tbh.
 >
-> which bisect to module_memory change [1].
->
-> Debug showed that ia64 uses some special sections:
->
-> __layout_sections: section .got (sh_flags 10000002) matched to MOD_INVAL=
-ID
-> __layout_sections: section .sdata (sh_flags 10000003) matched to MOD_INV=
-ALID
-> __layout_sections: section .sbss (sh_flags 10000003) matched to MOD_INVA=
-LID
->
-> All these sections are loaded to module core memory before [1].
->
-> Fix ia64 boot by loading these sections to MOD_DATA (core rw data).
->
-> [1] commit ac3b43283923 ("module: replace module_layout with module_memo=
-ry")
->
-> Fixes: ac3b43283923 ("module: replace module_layout with module_memory")
-> Reported-by: Frank Scheiner <frank.scheiner@web.de>
-> Closes: https://lists.debian.org/debian-ia64/2023/05/msg00010.html
-> Closes: https://marc.info/?l=3Dlinux-ia64&m=3D168509859125505
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Song Liu <song@kernel.org>
-> ---
->   kernel/module/main.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index b4c7e925fdb0..9da4b551321e 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -1521,14 +1521,14 @@ static void __layout_sections(struct module *mod=
-, struct load_info *info, bool i
->   		MOD_RODATA,
->   		MOD_RO_AFTER_INIT,
->   		MOD_DATA,
-> -		MOD_INVALID,	/* This is needed to match the masks array */
-> +		MOD_DATA,
->   	};
->   	static const int init_m_to_mem_type[] =3D {
->   		MOD_INIT_TEXT,
->   		MOD_INIT_RODATA,
->   		MOD_INVALID,
->   		MOD_INIT_DATA,
-> -		MOD_INVALID,	/* This is needed to match the masks array */
-> +		MOD_INIT_DATA,
->   	};
->
->   	for (m =3D 0; m < ARRAY_SIZE(masks); ++m) {
+> IIUC, arm64 uses VMALLOC address space for BPF programs. The reason
+> is each BPF program uses at least 64kB (one page) out of the 128MB
+> address space. Puranjay Mohan (CC'ed) is working on enabling
+> bpf_prog_pack for arm64. Once this work is done, multiple BPF programs
+> will be able to share a page. Will this improvement remove the need to
+> specify a different address range for BPF programs?
 
-Just want to add another observation (though not strictly ia64 but I
-wanted to keep the context):
+Hi,
+Thanks for adding me to the conversation.
 
-Testing showed that this patch also fixes module loading for alpha
-(tested on an AlphaServer DS25 w/v6.4-rc4 w/ and w/o the patch applied).
+The ARM64 BPF JIT used to allocate the memory using module_alloc but it
+was not optimal because BPF programs and modules were sharing the 128 MB
+module region. This was fixed by
+91fc957c9b1d ("arm64/bpf: don't allocate BPF JIT programs in module memory"=
+)
+It created a dedicated 128 MB region set aside for BPF programs.
 
-Cheers,
-Frank
+But 128MB could get exhausted especially where PAGE_SIZE is 64KB - one
+page is needed per program. This restriction was removed by
+b89ddf4cca43 ("arm64/bpf: Remove 128MB limit for BPF JIT programs")
+
+So, currently BPF programs are using a full page from vmalloc (4 KB,
+16 KB, or 64 KB).
+This wastes memory and also causes iTLB pressure. Enabling bpf_prog_pack
+for ARM64 would fix it. I am doing some final tests and will send the patch=
+es in
+1-2 days.
+
+Thanks,
+Puranjay
