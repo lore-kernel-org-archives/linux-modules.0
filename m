@@ -2,122 +2,82 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8029C7EE29
-	for <linux-modules@archiver.kernel.org>; Sun,  4 Jun 2023 14:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD7EDC7EE2F
+	for <linux-modules@archiver.kernel.org>; Sun,  4 Jun 2023 18:03:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjFDO03 (ORCPT
+        id S232269AbjFDSDA (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 4 Jun 2023 10:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        Sun, 4 Jun 2023 14:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjFDO02 (ORCPT
+        with ESMTP id S232244AbjFDSC6 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 4 Jun 2023 10:26:28 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A53D2
-        for <linux-modules@vger.kernel.org>; Sun,  4 Jun 2023 07:26:25 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-653fcd58880so874365b3a.0
-        for <linux-modules@vger.kernel.org>; Sun, 04 Jun 2023 07:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google; t=1685888785; x=1688480785;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HA5YrIYH9MawD+4VRjcWbjHM//DpBE3FGKspT1TvJ+c=;
-        b=CcQtwON+W3n7y7rA9m3IbuMZf1gq/6rWVzSIyiMZaJ9Vp4L7cwZl7Eptdo7f5/JYrH
-         VY96BmCnZdcD+JuKrA0Kjp42bz0LLhrV3VQlkDWcACaWtSQ2lb+QUxFB38AQn87H3lTj
-         U+n4Q9vvxFpFS30gxqxlMKuZ5R50iQVSLSHXU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685888785; x=1688480785;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HA5YrIYH9MawD+4VRjcWbjHM//DpBE3FGKspT1TvJ+c=;
-        b=gHpMbmM3Bkl2mdhjjkrYeuu25BrOi0VX5il9IpzMrHDTjHElsv1Rw3+fdsV5+hsG9s
-         OTqPSHVFVPp16F8eIeDlJDv5axj87TUxzIVpOHgTvRRdE4xveYaQLrE7DJ6GyB95M84I
-         WIf2zmh0CfMGQL7jOUM0M7mUcA26BihbHWGZzkfpNzsxnByOxR6eSeTtZ6HV6EVlb4X1
-         hqopqo2kFTVp3aP5HgIitf09uw21qz1U39bFvUzNNJAT5q7A53Tec8L2G7Eli9mcT75h
-         w6idsgP6jWrUfJbMSGprVH5hknGNBDdeYm8izNNnBKyjGkWjGINA6htOBUH7atx9VC9B
-         IUOg==
-X-Gm-Message-State: AC+VfDwtl3ZqALtY85dyjjtMAAUsOvXuQdo3ZFFOAI8RG4C8IWHzOYxf
-        sz3VuzGeE0jC1vMtzL65b0FkfQ==
-X-Google-Smtp-Source: ACHHUZ5L7kPdWHNyYrkbAXFw/Ud0NVHz/4s8+yRhJJX2mlG+9wCBm0pRDUZD3gxZ8iMp5wqgAPDJQQ==
-X-Received: by 2002:a05:6a20:158b:b0:10c:4c76:e909 with SMTP id h11-20020a056a20158b00b0010c4c76e909mr1573877pzj.8.1685888784842;
-        Sun, 04 Jun 2023 07:26:24 -0700 (PDT)
-Received: from 80e1dc6c40da ([122.199.31.3])
-        by smtp.gmail.com with ESMTPSA id h6-20020a62b406000000b00637b0c719c5sm3657475pfn.201.2023.06.04.07.26.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 07:26:23 -0700 (PDT)
-Date:   Sun, 4 Jun 2023 14:26:12 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Johan Hovold <johan@kernel.org>,
+        Sun, 4 Jun 2023 14:02:58 -0400
+Received: from out-21.mta1.migadu.com (out-21.mta1.migadu.com [IPv6:2001:41d0:203:375::15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF418E0;
+        Sun,  4 Jun 2023 11:02:55 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 14:02:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685901772;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8eVzj7/BTcLqy7wFCwl6xnZsISP/KN6jro+z/mha3Xk=;
+        b=PqQAVjJ04ndqRoRQANhzjXtWIXqTHWREPNCE9YGBCSItM5aGzg9r4emrFDvZxP/xuQ2bpU
+        DTvQnUtepgxbciT5z6M6Z+EoNGC8g2gnKTdxk1x+F2TTQDaLu6DFNHuJfLzV07K3aFkiY5
+        e/eoFzp+TyP07cOwDSzIUjGa6eo5mqQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Song Liu <song@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net, imre.deak@intel.com
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-Message-ID: <ZHyfBLbZCE4cUMdV@80e1dc6c40da>
-References: <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
- <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
- <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
- <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
- <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
- <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
- <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
- <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
- <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
- <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org,
+        Puranjay Mohan <puranjay12@gmail.com>
+Subject: Re: [PATCH 00/13] mm: jit/text allocator
+Message-ID: <ZHzRxE5V6YzGVsHy@moria.home.lan>
+References: <20230601101257.530867-1-rppt@kernel.org>
+ <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
+ <ZHjgIH3aX9dCvVZc@moria.home.lan>
+ <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
+ <CAPhsuW7Euczff_KB70nuH=Hhf2EYHAf=xiQR7mFqVfByhD34XA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW7Euczff_KB70nuH=Hhf2EYHAf=xiQR7mFqVfByhD34XA@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, May 29, 2023 at 09:55:15PM -0400, Linus Torvalds wrote:
-> On Mon, May 29, 2023 at 11:18 AM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > I took a closer look at some of the modules that failed to load and
-> > noticed a pattern in that they have dependencies that are needed by more
-> > than one device.
-> 
-> Ok, this is a "maybe something like this" RFC series of two patches -
-> one trivial one to re-organize things a bit so that we can then do the
-> real one which uses a filter based on the inode pointer to return an
-> "idempotent return value" for module loads that share the same inode.
-> 
-> It's entirely untested, and since I'm on the road I'm going to not
-> really be able to test it. It compiles for me, and the code looks
-> fairly straightforward, but it's probably buggy.
+On Fri, Jun 02, 2023 at 11:20:58AM -0700, Song Liu wrote:
+> IIUC, arm64 uses VMALLOC address space for BPF programs. The reason
+> is each BPF program uses at least 64kB (one page) out of the 128MB
+> address space. Puranjay Mohan (CC'ed) is working on enabling
+> bpf_prog_pack for arm64. Once this work is done, multiple BPF programs
+> will be able to share a page. Will this improvement remove the need to
+> specify a different address range for BPF programs?
 
-The updated patches fix the issue experienced with 6.4-rc4 where the Intel
-NUC12 booted fine, but on media playback resulted in the video stuttering,
-then freezing - and that audio was not coming though.
-
-# diff modules-rc4 modules-rc4-patched
-< snd_hda_codec_hdmi     77824  0
-< snd_hda_codec_realtek   159744  0
----
-> snd_hda_codec_hdmi     77824  1
-> snd_hda_codec_realtek   159744  1
-
- Revert "module: error out early on concurrent load of the same module file"
- module: split up 'finit_module()' into init_module_from_file() helper
- modules: catch concurrent module loads, take two
- Johan's fix:
-  -static struct spinlock idem_lock;
-  +static DEFINE_SPINLOCK(idem_lock);
-
-Tested-by: Rudi Heitbaum <rudi@heitbaum..com>
+Can we please stop working on BPF specific sub page allocation and focus
+on doing this in mm/? This never should have been in BPF in the first
+place.
