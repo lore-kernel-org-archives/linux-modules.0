@@ -2,119 +2,150 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E0C8C77B73
-	for <linux-modules@archiver.kernel.org>; Mon,  5 Jun 2023 12:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98EF3C7EE24
+	for <linux-modules@archiver.kernel.org>; Mon,  5 Jun 2023 15:18:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbjFEMZl (ORCPT
+        id S234037AbjFEPSC (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 5 Jun 2023 08:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
+        Mon, 5 Jun 2023 11:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbjFEMZk (ORCPT
+        with ESMTP id S230503AbjFEPR7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:25:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D8310D;
-        Mon,  5 Jun 2023 05:25:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47D0662354;
-        Mon,  5 Jun 2023 12:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC63C433EF;
-        Mon,  5 Jun 2023 12:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685967931;
-        bh=cZJzFLsF6i4kH324DdxlGdpR2ToC2WJiPoKfYRlxZXo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M/9p+BYjzxF5Im7GiWUbXX303ugAaC3hz6XRX9Beg6GNf1oGQFru/3MxiwhR/P66+
-         5uoN1PuSGAj1dui7u+QS8lV6s6Uf0J0xa+qTQzqgB9Ec7+/hUtNocFtJf8uUC6CYXN
-         UXLhFHDWsbG1ciFt26IfpwQEU8wsfCiIVypx9XaS/LnOtOSJi1lOnmHHmbrW8lKPsO
-         YmiEbcr/DPQxP5xyyK2eVDVSxNZuoYT3N6j5mI68flUmF3A/Aotnx4sHQm8aQRWgX2
-         kocLP8mSJuPLl/hzAPmM9W4Z+/7jhjROxLcIYSVmmhfXEHuWLZtjzYpkUqnmIykiO6
-         za8nwqPGyVoAw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q69HQ-0007fY-0W; Mon, 05 Jun 2023 14:25:48 +0200
-Date:   Mon, 5 Jun 2023 14:25:48 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Mon, 5 Jun 2023 11:17:59 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2EEE8;
+        Mon,  5 Jun 2023 08:17:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Bw8IEae0nViz9T5/tm415WaEBsWa8uqIyLDMVx+BHcE=; b=hK7WwFpKh6iUwrWyy3yi1W86AE
+        FegZ7KAO2JuYf8UhX04OiHpjgUdbWMmX4zr1mLJAk3TLam+w/DABXf1fShloTPiia7YN3ytZVrOqQ
+        jEdc+h88JsV/3odb7gARrcIn9L9x/Oyq6+YEe6zNMgL15dZ8YHpKPYpf3aSNyhIOd+uEFRrTPl2TS
+        hLRIBnmH17Gp16ad2fYUgJ1q678ZIufiRJ+1fPPSuIuA6xS7nXTPxSB24Zl2d9aUWHcm63cIxYKLv
+        e4Q1/IX3yaYwvZjNKCt4xR/OeS74DiiveqQqgHXGfhmVvY8rmdgW8WQH3CdQokE9dUmOGQukjFyFe
+        8L0zSSmA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q6Bxm-00FvjV-1c;
+        Mon, 05 Jun 2023 15:17:42 +0000
+Date:   Mon, 5 Jun 2023 08:17:42 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     David Hildenbrand <david@redhat.com>, song@kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Johan Hovold <johan@kernel.org>,
         Lucas De Marchi <lucas.demarchi@intel.com>,
         Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
+        rafael@kernel.org, lucas.de.marchi@gmail.com,
         christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
         dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
         mhocko@suse.com, dave.hansen@linux.intel.com,
         colin.i.king@gmail.com, jim.cromie@gmail.com,
         catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
         tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
         linux-modules@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
         lennart@poettering.net
 Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-Message-ID: <ZH3UTOaBD7f5KH6Q@hovoldconsulting.com>
-References: <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
- <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
- <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
- <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
- <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
- <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+Message-ID: <ZH38lpTHZ/RISC1v@bombadil.infradead.org>
+References: <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
  <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
  <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
  <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHXEktFq7NPYLtGn@hovoldconsulting.com>
+ <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
+ <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
+ <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org>
+ <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
+ <ZHoTFDkPIgglW0sU@bombadil.infradead.org>
+ <fa3f1a1f-edc6-f13b-cc84-f3264b03b0b1@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZHXEktFq7NPYLtGn@hovoldconsulting.com>
+In-Reply-To: <fa3f1a1f-edc6-f13b-cc84-f3264b03b0b1@redhat.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, May 30, 2023 at 11:40:35AM +0200, Johan Hovold wrote:
-> On Mon, May 29, 2023 at 09:55:15PM -0400, Linus Torvalds wrote:
-> > On Mon, May 29, 2023 at 11:18 AM Johan Hovold <johan@kernel.org> wrote:
-> > >
-> > > I took a closer look at some of the modules that failed to load and
-> > > noticed a pattern in that they have dependencies that are needed by more
-> > > than one device.
-> > 
-> > Ok, this is a "maybe something like this" RFC series of two patches -
-> > one trivial one to re-organize things a bit so that we can then do the
-> > real one which uses a filter based on the inode pointer to return an
-> > "idempotent return value" for module loads that share the same inode.
-> > 
-> > It's entirely untested, and since I'm on the road I'm going to not
-> > really be able to test it. It compiles for me, and the code looks
-> > fairly straightforward, but it's probably buggy.
-> > 
-> > It's very loosely based on Luis' attempt,  but it
-> >  (a) is internal to module loading
-> >  (b) uses a reliable cookie
-> >  (c) doesn't leave the cookie around randomly for later
-> >  (d) has seen absolutely no testing
-> > 
-> > Put another way: if somebody wants to play with this, please treat it
-> > as a starting point, not the final thing. You might need to debug
-> > things, and fix silly mistakes.
+On Mon, Jun 05, 2023 at 01:26:00PM +0200, David Hildenbrand wrote:
+> I only did a single run on each kernel, should be good enough for the purpose here.
 > 
-> With the missing spinlock initialisation fixed:
 > 
-> -static struct spinlock idem_lock;
-> +static DEFINE_SPINLOCK(idem_lock);
+> 1) !debug config (not enabling KASAN)
 > 
-> this passes basic smoke testing and allows the X13s to boot.
+> a) master
 > 
-> It does not seem to have any significant impact on boot time, but it
-> avoids some of the unnecessary load attempts as intended:
+> # cat /sys/kernel/debug/modules/stats
+>  Virtual mem wasted bytes       20358550424
+18 GiB
 
-Took another look at code which modulo some nits like missing spaces
-around a + operator and an "ourselfs" typo looks good to me. So with the
-spinlock initialisation fixed:
+>          Average mod size       217908
+212 KiB
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
-Tested-by: Johan Hovold <johan@kernel.org>
+>     Average mod text size       63570
+62 KiB
 
-Johan
+> b) patched
+> 
+> # cat /sys/kernel/debug/modules/stats
+>  Virtual mem wasted bytes       0
+
+> 2) debug config (enabling KASAN)
+> 
+> a) master
+> 
+> # cat /sys/kernel/debug/modules/stats
+>  Virtual mem wasted bytes       6453862040
+6 GiB
+
+>          Average mod size       430517
+420 KiB, so ballpark kasan pretty much doubles module size.
+
+>     Average mod text size       197592
+192 KiB, and is reflected on module .text too, in fact .text more than doubles.
+
+It would have otherwise been difficult to get some of these stats, so
+thanks! I make note of .text just because of the recent development work
+going on for a new module_alloc(). About 14 MiB required to house a big
+iron kasan enabled module .text, whereas about half is required for !kasan.
+
+> b) patched
+> 
+> # cat /sys/kernel/debug/modules/stats
+>  Virtual mem wasted bytes       6441296
+
+We've gone down from ~6 GiB to ~6 MiB.
+
+> So, with these (helpful) stats,
+
+Extremely useful, yes thanks.
+
+> the improvement is obvious (and explains the ~1s
+> improvement I saw staring at the startup times of the udev services).
+> 
+> There are still some failed module loads with the debug config (only in the
+> becoming state), I did not dive deeply into the actual code changes (-EBUSY),
+
+That's fine, Linus' patch does not keep the lock for the entire life
+of the module, it releases it right away after we're done with the
+kernel_read(), and because of this, there is a small race in between
+a thread the kernel_read() finishing and the module then being processed
+into the modules linked list. During that time, if a new module with the
+same name comes in, we'll have to allow it since the lock was released.
+Those extra modules end up lingering to wait for the first one that made
+it to the modules linked list.
+
+I don't think we need to worry about 6 MiB, this patch alone should
+suffice for a long time until userspace gets its act together and fixes
+this properly. Fixing userspace should reduce some latencies as well on
+bootup so someone who cares about bootup speeds on high end systems
+could likely be encouraged to fix that.
+
+> just spelling it out so we can decide if this is to be expected or some corner
+> case that shouldn't be happening.
+
+It is expected, in fact the fact that the heuristic works so well,
+without keeping the lock forever, and therefore keeping the code changes
+to a minimum is quite an amazing.
+
+  Luis
