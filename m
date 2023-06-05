@@ -2,114 +2,184 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83226C77B73
-	for <linux-modules@archiver.kernel.org>; Mon,  5 Jun 2023 19:01:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 384B6C7EE2E
+	for <linux-modules@archiver.kernel.org>; Mon,  5 Jun 2023 20:43:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbjFETB5 (ORCPT
+        id S233247AbjFEUna (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 5 Jun 2023 15:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
+        Mon, 5 Jun 2023 16:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232598AbjFETBz (ORCPT
+        with ESMTP id S231667AbjFEUn3 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:01:55 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B63ED
-        for <linux-modules@vger.kernel.org>; Mon,  5 Jun 2023 12:01:54 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33db1ad228aso681025ab.1
-        for <linux-modules@vger.kernel.org>; Mon, 05 Jun 2023 12:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1685991713; x=1688583713;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0FCMgag38vfbtUpIaPdfRT+VvGu4ZzQNO5yK+UmTnRY=;
-        b=EwQuPD2pQ2kaXVIUWni8Pav1vNCkU6Kd0pZvWLacIFOdCBQAZCKGuyeVhIh2UvWECm
-         qT6YOau45zjb5CwFEdRx5bvq7WLVXCYuqKV537SctYI9PahwnffAu9Oz/wv4ctrE38Q5
-         kQp585RfDsSBIbkvNWYLAbwQjI1E+6lJ8S4rU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685991713; x=1688583713;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0FCMgag38vfbtUpIaPdfRT+VvGu4ZzQNO5yK+UmTnRY=;
-        b=Hce12iP5bkemQXkCbhU4EKryu58Hy5xhHpuLP1SgUVh7XXlUxntiQSiwaSbfJStbGO
-         w7Nqm1fCe/kGbR/FMBCfrd9T6K8pk+hNI3qGHQYfQqOS179wN1y6CkzXAj6qxEleX/Uv
-         Nht4nZ26fkLQN/ceGuyJXBf8+o9QGuA77RwSIfunrebHRzvVyQEWTEZwyeUrvqAsYd3s
-         DToq/MVtDHjMrnKSqzp2B10HybjXFhnMsw8dRwMV3+lSMoNK7APyahzrpGDorPBIBxtS
-         lJ6Jxbt0wRP1ePjAO/uK80NsGIrpKDxZ7ip/sLvBoJbiAALCNDLVOr2DEhtikoPzZpnA
-         Krvg==
-X-Gm-Message-State: AC+VfDwqub82F12j8odQfOwQQRMH/xpiwboVYly65YRJD0c7zmemOmKh
-        2NXBWecQGzRBhL1ZEL+o1Aq1Kw==
-X-Google-Smtp-Source: ACHHUZ5wxkLAMBl91PlInY7+Du/uZRMCFqCXM1lLMBVvr1Z9AIqxW8ON+rDoVw4WlYRWLJe7u8CfWg==
-X-Received: by 2002:a6b:3f06:0:b0:774:9337:2d4c with SMTP id m6-20020a6b3f06000000b0077493372d4cmr91711ioa.1.1685991713603;
-        Mon, 05 Jun 2023 12:01:53 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c9-20020a02a409000000b0041d73d0a412sm2355812jal.19.2023.06.05.12.01.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 12:01:53 -0700 (PDT)
-Message-ID: <3a9c8407-7ffd-e6c0-74d2-574c99fd739a@linuxfoundation.org>
-Date:   Mon, 5 Jun 2023 13:01:52 -0600
+        Mon, 5 Jun 2023 16:43:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A778F2;
+        Mon,  5 Jun 2023 13:43:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07ABA62AB7;
+        Mon,  5 Jun 2023 20:43:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0414C433D2;
+        Mon,  5 Jun 2023 20:43:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685997807;
+        bh=We5qywEUXFBvYr91+f59TuYCdj8cINMwKn3eQvO6qKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I7xvXQXLM0Tk+V+96RzBdr/UoRB92a3ftHnZrilLQZvr5w3AlNjzmN9wbeCqkkbCl
+         DDUm1W1zxfiZwe+gjXC6K0QMqz8d9USg05gKXvmHLfrAf+FqT+OTOcMK6aGFqzG1zb
+         E86H0paXXm7ihSYO0CbgPPXfw8rIsLX4qwzhB6/StpLTRz6eVNJy8R0u2bcXb5AObl
+         Ay16QdoRp1sSVGG9bP4FMnVsq9x+ifwOZH0isH9pe4CqYdVcIo5Tq1wLxq/sUlyaRg
+         pXJxzrOzrppU5klX4Kcg/mPHvek90M1w/P5hCMfIv1PTbM22Z3AvfuML6Ql3ohsT7Q
+         qhU+5loHIlZWg==
+Date:   Mon, 5 Jun 2023 23:42:56 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH 12/13] x86/jitalloc: prepare to allocate exectuatble
+ memory as ROX
+Message-ID: <20230605204256.GA52412@kernel.org>
+References: <20230601101257.530867-13-rppt@kernel.org>
+ <0f50ac52a5280d924beeb131e6e4717b6ad9fdf7.camel@intel.com>
+ <ZHjcr26YskTm+0EF@moria.home.lan>
+ <a51c041b61e2916d2b91c990349aabc6cb9836aa.camel@intel.com>
+ <ZHjljJfQjhVV/jNS@moria.home.lan>
+ <68b8160454518387c53508717ba5ed5545ff0283.camel@intel.com>
+ <50D768D7-15BF-43B8-A5FD-220B25595336@gmail.com>
+ <20230604225244.65be9103@rorschach.local.home>
+ <20230605081143.GA3460@kernel.org>
+ <88a62f834688ed77d08c778e1e427014cf7d3c1b.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] selftests: allow runners to override the timeout
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
-        tiwai@suse.de, tianfei.zhang@intel.com, russell.h.weight@intel.com,
-        keescook@chromium.org, tweek@google.com, a.manzanares@samsung.com,
-        dave@stgolabs.net, vincenzopalazzodev@gmail.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230414193845.2494120-1-mcgrof@kernel.org>
- <3f5c5c28-3814-3fea-dfbb-a3c7604e0edc@collabora.com>
- <CAB=NE6Wx=PQ6n__hdseLzahNdkGoyUXDW4w9B5bBLvg-kVxbXA@mail.gmail.com>
- <ZG6WlUZZN4etzM2k@bombadil.infradead.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ZG6WlUZZN4etzM2k@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <88a62f834688ed77d08c778e1e427014cf7d3c1b.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 5/24/23 16:58, Luis Chamberlain wrote:
-> On Thu, May 11, 2023 at 08:26:42AM -0700, Luis Chamberlain wrote:
->> On Fri, Apr 28, 2023 at 1:34 AM Muhammad Usama Anjum
->> <usama.anjum@collabora.com> wrote:
->>>
->>> On 4/15/23 12:38 AM, Luis Chamberlain wrote:
->>>> The default timeout for selftests tests is 45 seconds. Although
->>>> we already have 13 settings for tests of about 96 sefltests which
->>>> use a timeout greater than this, we want to try to avoid encouraging
->>>> more tests to forcing a higher test timeout as selftests strives to
->>>> run all tests quickly. Selftests also uses the timeout as a non-fatal
->>>> error. Only tests runners which have control over a system would know
->>>> if to treat a timeout as fatal or not.
->>>>
->>>> To help with all this:
->>>>
->>>>    o Enhance documentation to avoid future increases of insane timeouts
->>>>    o Add the option to allow overriding the default timeout with test
->>>>      runners with a command line option
->>>>
->>>> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
->>>> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
->>> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> Tested-by:Muhammad Usama Anjum <usama.anjum@collabora.com>
->>
->> Shuah, just a friendly poke! This is needed to allow me to enable full
->> automation for kdevops for selftests.
+On Mon, Jun 05, 2023 at 04:10:21PM +0000, Edgecombe, Rick P wrote:
+> On Mon, 2023-06-05 at 11:11 +0300, Mike Rapoport wrote:
+> > On Sun, Jun 04, 2023 at 10:52:44PM -0400, Steven Rostedt wrote:
+> > > On Thu, 1 Jun 2023 16:54:36 -0700
+> > > Nadav Amit <nadav.amit@gmail.com> wrote:
+> > > 
+> > > > > The way text_poke() is used here, it is creating a new writable
+> > > > > alias
+> > > > > and flushing it for *each* write to the module (like for each
+> > > > > write of
+> > > > > an individual relocation, etc). I was just thinking it might
+> > > > > warrant
+> > > > > some batching or something.� 
+> > 
+> > > > I am not advocating to do so, but if you want to have many
+> > > > efficient
+> > > > writes, perhaps you can just disable CR0.WP. Just saying that if
+> > > > you
+> > > > are about to write all over the memory, text_poke() does not
+> > > > provide
+> > > > too much security for the poking thread.
+> > 
+> > Heh, this is definitely and easier hack to implement :)
 > 
-> Shuah, friendly re-poke.
+> I don't know the details, but previously there was some strong dislike
+> of CR0.WP toggling. And now there is also the problem of CET. Setting
+> CR0.WP=0 will #GP if CR4.CET is 1 (as it currently is for kernel IBT).
+> I guess you might get away with toggling them both in some controlled
+> situation, but it might be a lot easier to hack up then to be made
+> fully acceptable. It does sound much more efficient though.
+ 
+I don't think we'd really want that, especially looking at 
+
+		WARN_ONCE(bits_missing, "CR0 WP bit went missing!?\n");
+
+at native_write_cr0().
+ 
+> > > Batching does exist, which is what the text_poke_queue() thing
+> > > does.
+> > 
+> > For module loading text_poke_queue() will still be much slower than a
+> > bunch
+> > of memset()s for no good reason because we don't need all the
+> > complexity of
+> > text_poke_bp_batch() for module initialization because we are sure we
+> > are
+> > not patching live code.
+> > 
+> > What we'd need here is a new batching mode that will create a
+> > writable
+> > alias mapping at the beginning of apply_relocate_*() and
+> > module_finalize(),
+> > then it will use memcpy() to that writable alias and will tear the
+> > mapping
+> > down in the end.
 > 
->    Luis
+> It's probably only a tiny bit faster than keeping a separate writable
+> allocation and text_poking it in at the end.
 
-Thanks. I will apply this for next.
+Right, but it still will be faster than text_poking every relocation.
+ 
+> > Another option is to teach alternatives to update a writable copy
+> > rather
+> > than do in place changes like Song suggested. My feeling is that it
+> > will be
+> > more intrusive change though.
+> 
+> You mean keeping a separate RW allocation and then text_poking() the
+> whole thing in when you are done? That is what I was trying to say at
+> the beginning of this thread. The other benefit is you don't make the
+> intermediate loading states of the module, executable.
+> 
+> I tried this technique previously [0], and I thought it was not too
+> bad. In most of the callers it looks similar to what you have in
+> do_text_poke(). Sometimes less, sometimes more. It might need
+> enlightening of some of the stuff currently using text_poke() during
+> module loading, like jump labels. So that bit is more intrusive, yea.
+> But it sounds so much cleaner and well controlled. Did you have a
+> particular trouble spot in mind?
 
-thanks,
--- Shuah
+Nothing in particular, except the intrusive part. Except the changes in
+modules.c we'd need to teach alternatives to deal with a writable copy.
+ 
+> [0]
+> https://lore.kernel.org/lkml/20201120202426.18009-5-rick.p.edgecombe@intel.com/
+
+-- 
+Sincerely yours,
+Mike.
