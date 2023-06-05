@@ -2,34 +2,33 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEADEC7EE2F
-	for <linux-modules@archiver.kernel.org>; Sun,  4 Jun 2023 21:47:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B693C7EE2E
+	for <linux-modules@archiver.kernel.org>; Mon,  5 Jun 2023 02:52:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjFDVrr (ORCPT
+        id S230437AbjFECwz (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 4 Jun 2023 17:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        Sun, 4 Jun 2023 22:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbjFDVrq (ORCPT
+        with ESMTP id S231705AbjFECwz (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 4 Jun 2023 17:47:46 -0400
-Received: from out-63.mta0.migadu.com (out-63.mta0.migadu.com [91.218.175.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C38CDB
-        for <linux-modules@vger.kernel.org>; Sun,  4 Jun 2023 14:47:44 -0700 (PDT)
-Date:   Sun, 4 Jun 2023 17:47:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685915263;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qZfrqkmOcubtDULoEnOL869saW/gsg6Wix94q7dUars=;
-        b=YfqFINn6izWiCi8X1ga2qGkSX12jQdO6/uM5Z2MbOgTPHwdlRmHzCNo7esPnqeOqp6VsVi
-        zGRvgrd73qlFp6wgP4dPxEdd3I7LdGJRQE1vxQlzZsGHPYkQgfFzvODPb5FpeUGhLw017m
-        /XDOZCuvIcPybXEwvbQdYXtG4WGYHSo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        Sun, 4 Jun 2023 22:52:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A450EBC;
+        Sun,  4 Jun 2023 19:52:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F0BB61D9E;
+        Mon,  5 Jun 2023 02:52:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC71FC433EF;
+        Mon,  5 Jun 2023 02:52:46 +0000 (UTC)
+Date:   Sun, 4 Jun 2023 22:52:44 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        Thomas Gleixner <tglx@linutronix.de>,
         "mcgrof@kernel.org" <mcgrof@kernel.org>,
         "deller@gmx.de" <deller@gmx.de>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
@@ -52,8 +51,7 @@ Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
         <linux-trace-kernel@vger.kernel.org>,
         "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
         "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "will@kernel.org" <will@kernel.org>,
+        Will Deacon <will@kernel.org>,
         "dinguyen@kernel.org" <dinguyen@kernel.org>,
         "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
         "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
@@ -64,40 +62,35 @@ Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
         "song@kernel.org" <song@kernel.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+        Andrew Morton <akpm@linux-foundation.org>
 Subject: Re: [PATCH 12/13] x86/jitalloc: prepare to allocate exectuatble
  memory as ROX
-Message-ID: <ZH0GeKreazeNYmHT@moria.home.lan>
+Message-ID: <20230604225244.65be9103@rorschach.local.home>
+In-Reply-To: <50D768D7-15BF-43B8-A5FD-220B25595336@gmail.com>
 References: <20230601101257.530867-1-rppt@kernel.org>
- <20230601101257.530867-13-rppt@kernel.org>
- <0f50ac52a5280d924beeb131e6e4717b6ad9fdf7.camel@intel.com>
- <ZHjcr26YskTm+0EF@moria.home.lan>
- <a51c041b61e2916d2b91c990349aabc6cb9836aa.camel@intel.com>
- <ZHjljJfQjhVV/jNS@moria.home.lan>
- <68b8160454518387c53508717ba5ed5545ff0283.camel@intel.com>
+        <20230601101257.530867-13-rppt@kernel.org>
+        <0f50ac52a5280d924beeb131e6e4717b6ad9fdf7.camel@intel.com>
+        <ZHjcr26YskTm+0EF@moria.home.lan>
+        <a51c041b61e2916d2b91c990349aabc6cb9836aa.camel@intel.com>
+        <ZHjljJfQjhVV/jNS@moria.home.lan>
+        <68b8160454518387c53508717ba5ed5545ff0283.camel@intel.com>
+        <50D768D7-15BF-43B8-A5FD-220B25595336@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68b8160454518387c53508717ba5ed5545ff0283.camel@intel.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jun 01, 2023 at 08:50:39PM +0000, Edgecombe, Rick P wrote:
-> > Ahh! Thanks for that; perhaps the comment in text_poke() about IPIs
-> > could be a bit clearer.
-> > 
-> > What is it (if anything) you don't like about text_poke() then? It
-> > looks
-> > like it's doing broadly similar things to kmap_local(), so should be
-> > in the same ballpark from a performance POV?
-> 
-> The way text_poke() is used here, it is creating a new writable alias
-> and flushing it for *each* write to the module (like for each write of
-> an individual relocation, etc). I was just thinking it might warrant
-> some batching or something.
+On Thu, 1 Jun 2023 16:54:36 -0700
+Nadav Amit <nadav.amit@gmail.com> wrote:
 
-Ah, I see. A kmap_local type interface might get us that kind of
-batching, if it supported mapping compound pages - currently kmap_local
-still only maps single pages, but with folios getting plumbed around I
-assume someone will make it handle compound pages eventually.
+> > The way text_poke() is used here, it is creating a new writable alias
+> > and flushing it for *each* write to the module (like for each write of
+> > an individual relocation, etc). I was just thinking it might warrant
+> > some batching or something.  
+
+Batching does exist, which is what the text_poke_queue() thing does.
+
+-- Steve
+
