@@ -2,202 +2,511 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AA63C7EE2F
-	for <linux-modules@archiver.kernel.org>; Mon,  5 Jun 2023 10:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1B76C77B73
+	for <linux-modules@archiver.kernel.org>; Mon,  5 Jun 2023 11:26:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjFEKJz (ORCPT
+        id S230374AbjFEL06 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 5 Jun 2023 06:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
+        Mon, 5 Jun 2023 07:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbjFEKJs (ORCPT
+        with ESMTP id S232129AbjFEL0y (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:09:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDA05ED;
-        Mon,  5 Jun 2023 03:09:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B9CBD75;
-        Mon,  5 Jun 2023 03:10:28 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.24.244])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F8793F793;
-        Mon,  5 Jun 2023 03:09:37 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 11:09:34 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/13] mm: jit/text allocator
-Message-ID: <ZH20XkD74prrdN4u@FVFF77S0Q05N>
-References: <20230601101257.530867-1-rppt@kernel.org>
- <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
- <ZHjgIH3aX9dCvVZc@moria.home.lan>
- <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
- <20230605092040.GB3460@kernel.org>
+        Mon, 5 Jun 2023 07:26:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76FCCD
+        for <linux-modules@vger.kernel.org>; Mon,  5 Jun 2023 04:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685964365;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nu9/UJ05GmGMdlY8zv0TMF1pLalxFizp/2Lh8UrDm0s=;
+        b=jJA13n1Xi363hh+yh6JBZjZZchWdK14c6kqi98uN1INc3cGBAddt0oqV3pUQDBsVf4swVu
+        B5iHclXZkx3XQgFKitb4A6vH7E3bIETUJonHzfW76pr7WXEifjg89ReH01BShxTWuDOAmV
+        PatSyfGZrBvGQmy9ChnTybtXJdJL9FI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-308-ERLk7LfJM-6Vd7IKGpKOfA-1; Mon, 05 Jun 2023 07:26:04 -0400
+X-MC-Unique: ERLk7LfJM-6Vd7IKGpKOfA-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f736116989so7315835e9.1
+        for <linux-modules@vger.kernel.org>; Mon, 05 Jun 2023 04:26:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685964363; x=1688556363;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nu9/UJ05GmGMdlY8zv0TMF1pLalxFizp/2Lh8UrDm0s=;
+        b=eylkIx2xKT6thUq1XDxqVWjlFD9Qh+rU09iJ3Ybr67QoLg4qSpHE/D/79nC5y+0miA
+         7QbB3fT5k+KHLja5euOi8d5lTlL8ccjVeUSzMZNaj9qprGN6zEO+KF0IS+RZ5Ca78+P8
+         1yeskdGYFAA7rqxLVbw6uoutyMwycgGaH1iVKhS69bEGDYT448Gvy1pVcUV9tKN/YUAj
+         cam0QYVRbdP3MP+QTpUsF55Wmag3DcNZ/SQtnRBOqr3FGU/i85z83LzW85vgbjqy3nms
+         gqc6H7EQH1gXUQPrF63BM2kG57Lu2TYFESrvJwxoIrxa4bz8enJUNmEUis9OkLo5JhN0
+         vsVA==
+X-Gm-Message-State: AC+VfDxIu9rkVt6WjA9W8hYkkA9mg2w+5gvzLVePlKxCbz6WQN7uveDt
+        F/ECntzfr8v19LgYTn8VYxgR+X0llxrYNgTeIDZ2AQe+IHGVeS3M4q5Srvz8bOaln2eDwDO5fgq
+        Rd2YRGqkWUk5Y62KQ5MSlnLaNkg==
+X-Received: by 2002:a1c:7217:0:b0:3f4:2a69:409 with SMTP id n23-20020a1c7217000000b003f42a690409mr7918733wmc.11.1685964362699;
+        Mon, 05 Jun 2023 04:26:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ52l2nNfYdRL0/tTDYacX5nCUAhQsJ3OdNJg+upRqFfnFrCCP3ViixDPw6m51Xn9fu6HOidgQ==
+X-Received: by 2002:a1c:7217:0:b0:3f4:2a69:409 with SMTP id n23-20020a1c7217000000b003f42a690409mr7918715wmc.11.1685964362268;
+        Mon, 05 Jun 2023 04:26:02 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c737:8f00:ed9:16b8:4e22:5820? (p200300cbc7378f000ed916b84e225820.dip0.t-ipconnect.de. [2003:cb:c737:8f00:ed9:16b8:4e22:5820])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05600c00cc00b003f7678a07c4sm3775227wmm.29.2023.06.05.04.26.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 04:26:01 -0700 (PDT)
+Message-ID: <fa3f1a1f-edc6-f13b-cc84-f3264b03b0b1@redhat.com>
+Date:   Mon, 5 Jun 2023 13:26:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605092040.GB3460@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
+        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
+        lennart@poettering.net
+References: <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+ <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
+ <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+ <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
+ <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
+ <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
+ <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
+ <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
+ <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org>
+ <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
+ <ZHoTFDkPIgglW0sU@bombadil.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+In-Reply-To: <ZHoTFDkPIgglW0sU@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Jun 05, 2023 at 12:20:40PM +0300, Mike Rapoport wrote:
-> On Fri, Jun 02, 2023 at 10:35:09AM +0100, Mark Rutland wrote:
-> > On Thu, Jun 01, 2023 at 02:14:56PM -0400, Kent Overstreet wrote:
-> > > On Thu, Jun 01, 2023 at 05:12:03PM +0100, Mark Rutland wrote:
-> > > > For a while I have wanted to give kprobes its own allocator so that it can work
-> > > > even with CONFIG_MODULES=n, and so that it doesn't have to waste VA space in
-> > > > the modules area.
-> > > > 
-> > > > Given that, I think these should have their own allocator functions that can be
-> > > > provided independently, even if those happen to use common infrastructure.
-> > > 
-> > > How much memory can kprobes conceivably use? I think we also want to try
-> > > to push back on combinatorial new allocators, if we can.
-> > 
-> > That depends on who's using it, and how (e.g. via BPF).
-> > 
-> > To be clear, I'm not necessarily asking for entirely different allocators, but
-> > I do thinkg that we want wrappers that can at least pass distinct start+end
-> > parameters to a common allocator, and for arm64's modules code I'd expect that
-> > we'd keep the range falblack logic out of the common allcoator, and just call
-> > it twice.
-> > 
-> > > > > Several architectures override module_alloc() because of various
-> > > > > constraints where the executable memory can be located and this causes
-> > > > > additional obstacles for improvements of code allocation.
-> > > > > 
-> > > > > This set splits code allocation from modules by introducing
-> > > > > jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
-> > > > > sites of module_alloc() and module_memfree() with the new APIs and
-> > > > > implements core text and related allocation in a central place.
-> > > > > 
-> > > > > Instead of architecture specific overrides for module_alloc(), the
-> > > > > architectures that require non-default behaviour for text allocation must
-> > > > > fill jit_alloc_params structure and implement jit_alloc_arch_params() that
-> > > > > returns a pointer to that structure. If an architecture does not implement
-> > > > > jit_alloc_arch_params(), the defaults compatible with the current
-> > > > > modules::module_alloc() are used.
-> > > > 
-> > > > As above, I suspect that each of the callsites should probably be using common
-> > > > infrastructure, but I don't think that a single jit_alloc_arch_params() makes
-> > > > sense, since the parameters for each case may need to be distinct.
-> > > 
-> > > I don't see how that follows. The whole point of function parameters is
-> > > that they may be different :)
-> > 
-> > What I mean is that jit_alloc_arch_params() tries to aggregate common
-> > parameters, but they aren't actually common (e.g. the actual start+end range
-> > for allocation).
+On 02.06.23 18:04, Luis Chamberlain wrote:
+> On Fri, Jun 02, 2023 at 05:19:58PM +0200, David Hildenbrand wrote:
+>> On 31.05.23 18:57, Luis Chamberlain wrote:
+>>> On Wed, May 31, 2023 at 09:51:41AM +0200, David Hildenbrand wrote:
+>>>> On 30.05.23 18:22, Luis Chamberlain wrote:
+>>>>> On Mon, May 29, 2023 at 09:55:15PM -0400, Linus Torvalds wrote:
+>>>>>> On Mon, May 29, 2023 at 11:18 AM Johan Hovold <johan@kernel.org> wrote:
+>>>>>>>
+>>>>>>> I took a closer look at some of the modules that failed to load and
+>>>>>>> noticed a pattern in that they have dependencies that are needed by more
+>>>>>>> than one device.
+>>>>>>
+>>>>>> Ok, this is a "maybe something like this" RFC series of two patches -
+>>>>>> one trivial one to re-organize things a bit so that we can then do the
+>>>>>> real one which uses a filter based on the inode pointer to return an
+>>>>>> "idempotent return value" for module loads that share the same inode.
+>>>>>>
+>>>>>> It's entirely untested, and since I'm on the road I'm going to not
+>>>>>> really be able to test it. It compiles for me, and the code looks
+>>>>>> fairly straightforward, but it's probably buggy.
+>>>>>>
+>>>>>> It's very loosely based on Luis' attempt,  but it
+>>>>>>     (a) is internal to module loading
+>>>>>>     (b) uses a reliable cookie
+>>>>>>     (c) doesn't leave the cookie around randomly for later
+>>>>>>     (d) has seen absolutely no testing
+>>>>>>
+>>>>>> Put another way: if somebody wants to play with this, please treat it
+>>>>>> as a starting point, not the final thing. You might need to debug
+>>>>>> things, and fix silly mistakes.
+>>>>>>
+>>>>>> The idea is to just have a simple hash list of currently executing
+>>>>>> module loads, protected by a trivial spinlock. Every module loader
+>>>>>> adds itself to the right hash list, and if they were the *first* one
+>>>>>> (ie no other pending module loads for that inode), will actually do
+>>>>>> the module load.
+>>>>>>
+>>>>>> Everybody who *isn't* the first one will just wait for completion and
+>>>>>> return the same error code that the first one returned.
+>>>>>
+>>>>> That's also a hell much more snazzier MODULE_DEBUG_AUTOLOAD_DUPS if we
+>>>>> ever wanted to do something similar there if we wanted to also
+>>>>> join request_module() calls, instead of it hiding under debug.
+>>>>>
+>>>>>> This is technically bogus. The first one might fail due to arguments.
+>>>>>
+>>>>> For boot it's fine, as I can't think of boot wanting to support trying
+>>>>> to load a module with different arguments but who knows. But I can't
+>>>>> see it sensible to issue concurrent multiple requests for modules
+>>>>> with different arguments without waiting in userspace for the first
+>>>>> to fail.
+>>>>>
+>>>>> Even post-boot, doing that sounds rather insane, but it would certainly
+>>>>> be a compromise and should probably be clearly documented. I think just
+>>>>> a comment acknolwedging that corner case seems sensible.
+>>>>>
+>>>>> Because we won't be able to get the arguments until we process the
+>>>>> module, so it would be too late for this optimization on kread. So it is
+>>>>> why I had also stuck to the original feature being in kread, as then it
+>>>>> provides a uniq kread call and the caller is aware of it. But indeed I
+>>>>> had not considered the effects of arguments.
+>>>>>
+>>>>> Lucas, any thoughts from modules kmod userspace perspective into
+>>>>> supporting anyone likely issuing concurrent modules requests with
+>>>>> differing arguments?
+>>>>>
+>>>>>> So the cookie shouldn't be just the inode, it should be the inode and
+>>>>>> a hash of the arguments or something like that.
+>>>>>
+>>>>> Personally I think it's a fine optimization without the arguments.
+>>>>>
+>>>>>> But it is what it is,
+>>>>>> and apart from possible show-stopper bugs this is no worse than the
+>>>>>> failed "exclusive write deny" attempt. IOW - maybe worth trying?
+>>>>>
+>>>>> The only thing I can think of is allowing threads other than the
+>>>>> first one to complete before the one that actually loaded the
+>>>>> module. I thought about this race for module auto-loading, see
+>>>>> the comment in kmod_dup_request_announce(), so that just
+>>>>> further delays the completion to other thread with a stupid
+>>>>> queue_work(). That seems more important for module auto-loading
+>>>>> duplicates than for boot finit_module() duplicates. But not sure
+>>>>> if odering matters in the end due to a preemtible kernel and maybe
+>>>>> that concern is hysteria.
+>>>>>
+>>>>>> And if *that* didn't sell people on this patch series, I don't know
+>>>>>> what will. I should be in marketing! Two drink minimums, here I come!
+>>>>>
+>>>>> Sold:
+>>>>>
+>>>>> on 255 vcpus 0 duplicates found with this setup:
+>>>>>
+>>>>> root@kmod ~ # cat /sys/kernel/debug/modules/stats
+>>>>>             Mods ever loaded       66
+>>>>>         Mods failed on kread       0
+>>>>> Mods failed on decompress       0
+>>>>>      Mods failed on becoming       0
+>>>>>          Mods failed on load       0
+>>>>>            Total module size       11268096
+>>>>>          Total mod text size       4149248
+>>>>>           Failed kread bytes       0
+>>>>>      Failed decompress bytes       0
+>>>>>        Failed becoming bytes       0
+>>>>>            Failed kmod bytes       0
+>>>>>     Virtual mem wasted bytes       0
+>>>>>             Average mod size       170729
+>>>>>        Average mod text size       62868
+>>>>>
+>>>>> So:
+>>>>>
+>>>>> Tested-by: Luis Chamberlain <mcgrof@kernel.org>
+>>>>>
+>>>>> In terms of bootup timing:
+>>>>>
+>>>>> Before:
+>>>>> Startup finished in 41.653s (kernel) + 44.305s (userspace) = 1min 25.958s
+>>>>> graphical.target reached after 44.178s in userspace.
+>>>>> After:
+>>>>> Startup finished in 23.995s (kernel) + 40.350s (userspace) = 1min 4.345s
+>>>>> graphical.target reached after 40.226s in userspace.
+>>>>
+>>>> I'll try grabbing the system where we saw the KASAN-related issues [1] and
+>>>> give it a churn with and without the two patches. Might take a bit (~1 day),
+>>>> unfortunately.
+>>>>
+>>>> [1] https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
+>>>
+>>> Great, don't forget:
+>>>
+>>> diff --git a/kernel/module/main.c b/kernel/module/main.c
+>>> index 82b0dcc1fe77..222015093eeb 100644
+>>> --- a/kernel/module/main.c
+>>> +++ b/kernel/module/main.c
+>>> @@ -3066,7 +3066,7 @@ struct idempotent {
+>>>    #define IDEM_HASH_BITS 8
+>>>    static struct hlist_head idem_hash[1 << IDEM_HASH_BITS];
+>>> -static struct spinlock idem_lock;
+>>> +static DEFINE_SPINLOCK(idem_lock);
+>>>    static bool idempotent(struct idempotent *u, const void *cookie)
+>>>    {
+>>>
+>>
+>> Finally was able to run it on that ThinkSystem SR950 with 8 populated
+>> sockets -> 224 cores and 448 logical CPUs.
+>>
+>> The KASAN vmap issues on that system were already no longer reproducible with your
+>> (Luis) previous work that's already in master.
+>>
+>> I tested a !debug and debug config (both based on corresponding RHEL9 configs), comparing
+>> 929ed21dfdb6 ("master") with 929ed21dfdb6 + Linus' patches ("patched").
+>>
+>>
+>> Unfortunately, boot times vary a lot, and I did not figure out how to reduce
+>> the noise. I captured the "systemd-analyze blame" output as well.
+>>
+>>
+>> 1) !debug config (not enabling KASAN)
+>>
+>> a) master
+>>
+>> Startup finished in 32.225s (kernel) + 7.399s (initrd) + 20.378s (userspace) = 1min 3ms
+>> multi-user.target reached after 20.352s in userspace.
+>> Startup finished in 43.734s (kernel) + 7.288s (initrd) + 19.827s (userspace) = 1min 10.851s
+>> multi-user.target reached after 19.800s in userspace.
+>> Startup finished in 50.514s (kernel) + 7.171s (initrd) + 24.757s (userspace) = 1min 22.443s
+>> multi-user.target reached after 24.734s in userspace.
+>> Startup finished in 26.722s (kernel) + 7.249s (initrd) + 23.923s (userspace) = 57.895s
+>> multi-user.target reached after 23.892s in userspace.
+>>
+>> b) patched
+>>
+>> Startup finished in 36.318s (kernel) + 7.177s (initrd) + 21.383s (userspace) = 1min 4.879s
+>> multi-user.target reached after 21.355s in userspace.
+>> Startup finished in 36.318s (kernel) + 7.177s (initrd) + 21.383s (userspace) = 1min 4.879s
+>> multi-user.target reached after 21.355s in userspace.
+>> Startup finished in 1min 34.678s (kernel) + 7.239s (initrd) + 24.066s (userspace) = 2min 5.985s
+>> multi-user.target reached after 24.040s in userspace.
+>> Startup finished in 25.879s (kernel) + 7.144s (initrd) + 29.665s (userspace) = 1min 2.689s
+>> multi-user.target reached after 29.637s in userspace.
+>>
+>>
+>>
+>> 2) debug config (enabling KASAN)
+>>
+>> a) master
+>>
+>> Startup finished in 2min 12.695s (kernel) + 25.058s (initrd) + 1min 13.012s (userspace) = 3min 50.765s
+>> multi-user.target reached after 1min 12.903s in userspace.
+>> Startup finished in 1min 45.400s (kernel) + 24.294s (initrd) + 1min 8.910s (userspace) = 3min 18.606s
+>> multi-user.target reached after 1min 8.786s in userspace.
+>> Startup finished in 2min 4.857s (kernel) + 24.715s (initrd) + 1min 5.088s (userspace) = 3min 34.660s
+>> multi-user.target reached after 1min 4.967s in userspace.
+>> Startup finished in 3min 20.400s (kernel) + 24.703s (initrd) + 1min 5.469s (userspace) = 4min 50.573s
+>> multi-user.target reached after 1min 5.344s in userspace.
+>>
+>> b) patched
+>>
+>> Startup finished in 2min 5.250s (kernel) + 25.049s (initrd) + 1min 1.961s (userspace) = 3min 32.262s
+>> multi-user.target reached after 1min 1.844s in userspace.
+>> Startup finished in 1min 52.524s (kernel) + 24.897s (initrd) + 1min 5.062s (userspace) = 3min 22.484s
+>> multi-user.target reached after 1min 4.916s in userspace.
+>> Startup finished in 9min 36.817s (kernel) + 24.859s (initrd) + 1min 18.657s (userspace) = 11min 20.335s
+>> multi-user.target reached after 1min 18.455s in userspace.
+>> Startup finished in 30min 20.715s (kernel) + 24.722s (initrd) + 1min 7.039s (userspace) = 31min 52.476s
+>> multi-user.target reached after 1min 6.907s in userspace.
+>>
+>>
+>> What concerns me a bit, is that on the patched kernel we seem to hit more cases where
+>> boot takes much longer (in both kernel configs).
+>>
+>> I'll do some more runs/investigation to see if this is reproducible or just some system oddity.
+>>
+>> Staring just at the udev settle time (systemd-analyze blame), it's very similar between both kernel
+>> versions.
 > 
-> jit_alloc_arch_params() tries to aggregate architecture constraints and
-> requirements for allocations of executable memory and this exactly what
-> the first 6 patches of this set do.
+> Thanks for these tests, having MODULE_STATS enabled +
 > 
-> A while ago Thomas suggested to use a structure that parametrizes
-> architecture constraints by the memory type used in modules [1] and Song
-> implemented the infrastructure for it and x86 part [2].
+> cat /sys/kernel/debug/modules/stats
 > 
-> I liked the idea of defining parameters in a single structure, but I
-> thought that approaching the problem from the arch side rather than from
-> modules perspective will be better starting point, hence these patches.
-> 
-> I don't see a fundamental reason why a single structure cannot describe
-> what is needed for different code allocation cases, be it modules, kprobes
-> or bpf. There is of course an assumption that the core allocations will be
-> the same for all the users, and it seems to me that something like 
-> 
-> * allocate physical memory if allocator caches are empty
-> * map it in vmalloc or modules address space
-> * return memory from the allocator cache to the caller
-> 
-> will work for all usecases.
-> 
-> We might need separate caches for different cases on different
-> architectures, and a way to specify what cache should be used in the
-> allocator API, but that does not contradict a single structure for arch
-> specific parameters, but only makes it more elaborate, e.g. something like
-> 
-> enum jit_type {
-> 	JIT_MODULES_TEXT,
-> 	JIT_MODULES_DATA,
-> 	JIT_KPROBES,
-> 	JIT_FTRACE,
-> 	JIT_BPF,
-> 	JIT_TYPE_MAX,
-> };
-> 
-> struct jit_alloc_params {
-> 	struct jit_range	ranges[JIT_TYPE_MAX];
-> 	/* ... */
-> };
-> 
-> > > Can you give more detail on what parameters you need? If the only extra
-> > > parameter is just "does this allocation need to live close to kernel
-> > > text", that's not that big of a deal.
-> > 
-> > My thinking was that we at least need the start + end for each caller. That
-> > might be it, tbh.
-> 
-> Do you mean that modules will have something like
-> 
-> 	jit_text_alloc(size, MODULES_START, MODULES_END);
-> 
-> and kprobes will have
-> 
-> 	jit_text_alloc(size, KPROBES_START, KPROBES_END);
-> ?
+> would be of huge value, both on master and + patched.
 
-Yes.
+Sure! Sorry for the slight delay, had to recompile the kernels.
 
-> It sill can be achieved with a single jit_alloc_arch_params(), just by
-> adding enum jit_type parameter to jit_text_alloc().
+I only did a single run on each kernel, should be good enough for the purpose here.
 
-That feels backwards to me; it centralizes a bunch of information about
-distinct users to be able to shove that into a static array, when the callsites
-can pass that information. 
 
-What's *actually* common after separating out the ranges? Is it just the
-permissions?
+1) !debug config (not enabling KASAN)
 
-If we want this to be able to share allocations and so on, why can't we do this
-like a kmem_cache, and have the callsite pass a pointer to the allocator data?
-That would make it easy for callsites to share an allocator or use a distinct
-one.
+a) master
 
-Thanks,
-Mark.
+# cat /sys/kernel/debug/modules/stats
+          Mods ever loaded       75
+      Mods failed on kread       0
+Mods failed on decompress       0
+   Mods failed on becoming       8052
+       Mods failed on load       531
+         Total module size       16343040
+       Total mod text size       4767744
+        Failed kread bytes       0
+   Failed decompress bytes       0
+     Failed becoming bytes       19185958488
+         Failed kmod bytes       1172591936
+  Virtual mem wasted bytes       20358550424
+          Average mod size       217908
+     Average mod text size       63570
+   Avg fail becoming bytes       2382757
+   Average fail load bytes       2208272
+Duplicate failed modules:
+               Module-name        How-many-times                    Reason
+         intel_rapl_common                   447                  Becoming
+    intel_uncore_frequency                   447                  Becoming
+intel_uncore_frequency_common               445           Becoming & Load
+          isst_if_mbox_msr                   447                  Becoming
+            isst_if_common                   447           Becoming & Load
+                  skx_edac                   447           Becoming & Load
+                      nfit                   447                  Becoming
+                 libnvdimm                   447                  Becoming
+      x86_pkg_temp_thermal                   447                  Becoming
+          intel_powerclamp                   447                  Becoming
+                  coretemp                   447           Becoming & Load
+                 kvm_intel                   447                  Becoming
+                       kvm                   447           Becoming & Load
+                     irdma                     3                      Load
+                       ice                     3                  Becoming
+                 irqbypass                   447           Becoming & Load
+                      rapl                   393           Becoming & Load
+                      gnss                     2           Becoming & Load
+                   ioatdma                    63           Becoming & Load
+                 ib_uverbs                     3           Becoming & Load
+              intel_cstate                   447           Becoming & Load
+                   ipmi_si                     1                      Load
+              intel_uncore                   447           Becoming & Load
+                   ib_core                     3           Becoming & Load
+              ipmi_devintf                     1                      Load
+           ipmi_msghandler                     1                  Becoming
+                       dca                    63                  Becoming
+                      ahci                     1                  Becoming
+                      i40e                     3                  Becoming
+                   libahci                     1                  Becoming
+          crct10dif_pclmul                   195                  Becoming
+              crc32_pclmul                   262                  Becoming
+              crc32c_intel                   126           Becoming & Load
+                    libata                     1                      Load
+       ghash_clmulni_intel                   297           Becoming & Load
+                      fjes                    11                  Becoming
 
-> [1] https://lore.kernel.org/linux-mm/87v8mndy3y.ffs@tglx/ 
-> [2] https://lore.kernel.org/all/20230526051529.3387103-1-song@kernel.org
-> 
-> > Thanks,
-> > Mark.
-> 
-> -- 
-> Sincerely yours,
-> Mike.
+
+b) patched
+
+# cat /sys/kernel/debug/modules/stats
+          Mods ever loaded       75
+      Mods failed on kread       0
+Mods failed on decompress       0
+   Mods failed on becoming       0
+       Mods failed on load       0
+         Total module size       16343040
+       Total mod text size       4767744
+        Failed kread bytes       0
+   Failed decompress bytes       0
+     Failed becoming bytes       0
+         Failed kmod bytes       0
+  Virtual mem wasted bytes       0
+          Average mod size       217908
+     Average mod text size       63570
+
+
+
+2) debug config (enabling KASAN)
+
+a) master
+
+# cat /sys/kernel/debug/modules/stats
+          Mods ever loaded       75
+      Mods failed on kread       0
+Mods failed on decompress       0
+   Mods failed on becoming       3173
+       Mods failed on load       923
+         Total module size       32288768
+       Total mod text size       14819328
+        Failed kread bytes       0
+   Failed decompress bytes       0
+     Failed becoming bytes       4279728952
+         Failed kmod bytes       2174133088
+  Virtual mem wasted bytes       6453862040
+          Average mod size       430517
+     Average mod text size       197592
+   Avg fail becoming bytes       1348796
+   Average fail load bytes       2355508
+Duplicate failed modules:
+               Module-name        How-many-times                    Reason
+                   ioatdma                    63           Becoming & Load
+         intel_rapl_common                   313                  Becoming
+    intel_uncore_frequency                   136           Becoming & Load
+intel_uncore_frequency_common                38                  Becoming
+          isst_if_mbox_msr                   443           Becoming & Load
+            isst_if_common                   210           Becoming & Load
+                  skx_edac                   257           Becoming & Load
+                      nfit                   180           Becoming & Load
+                 libnvdimm                   294           Becoming & Load
+      x86_pkg_temp_thermal                   321           Becoming & Load
+          intel_powerclamp                   247           Becoming & Load
+                  coretemp                    55           Becoming & Load
+                 kvm_intel                     2                  Becoming
+                       kvm                     3           Becoming & Load
+                 irqbypass                     3                  Becoming
+                      rapl                     1                  Becoming
+              intel_cstate                   444                      Load
+              intel_uncore                   447           Becoming & Load
+                 ib_uverbs                     1                      Load
+                   ib_core                     3           Becoming & Load
+                   ipmi_si                     1                  Becoming
+                       dca                    20           Becoming & Load
+                        sg                     1                  Becoming
+                      i40e                     3           Becoming & Load
+                      ahci                     1                  Becoming
+          crct10dif_pclmul                   160           Becoming & Load
+              crc32_pclmul                   151           Becoming & Load
+              crc32c_intel                   146           Becoming & Load
+       ghash_clmulni_intel                   140                  Becoming
+                    libata                     1                      Load
+                      fjes                    11           Becoming & Load
+
+
+
+b) patched
+
+# cat /sys/kernel/debug/modules/stats
+          Mods ever loaded       75
+      Mods failed on kread       0
+Mods failed on decompress       0
+   Mods failed on becoming       19
+       Mods failed on load       0
+         Total module size       32288768
+       Total mod text size       14819328
+        Failed kread bytes       0
+   Failed decompress bytes       0
+     Failed becoming bytes       6441296
+         Failed kmod bytes       0
+  Virtual mem wasted bytes       6441296
+          Average mod size       430517
+     Average mod text size       197592
+   Avg fail becoming bytes       339016
+Duplicate failed modules:
+               Module-name        How-many-times                    Reason
+         intel_rapl_common                     2                  Becoming
+intel_uncore_frequency_common                 5                  Becoming
+            isst_if_common                     3                  Becoming
+          intel_powerclamp                     2                  Becoming
+                 irqbypass                     5                  Becoming
+          crct10dif_pclmul                     1                  Becoming
+              crc32c_intel                     1                  Becoming
+
+
+
+So, with these (helpful) stats, the improvement is obvious (and explains the ~1s
+improvement I saw staring at the startup times of the udev services).
+
+There are still some failed module loads with the debug config (only in the
+becoming state), I did not dive deeply into the actual code changes (-EBUSY),
+just spelling it out so we can decide if this is to be expected or some corner
+case that shouldn't be happening.
+
+
+Thanks!
+
+-- 
+Cheers,
+
+David / dhildenb
+
