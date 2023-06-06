@@ -2,34 +2,42 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3797C7EE23
-	for <linux-modules@archiver.kernel.org>; Mon,  5 Jun 2023 21:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B86BDC7EE2C
+	for <linux-modules@archiver.kernel.org>; Tue,  6 Jun 2023 10:16:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjFEVNz (ORCPT
+        id S233058AbjFFKQo (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 5 Jun 2023 17:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
+        Tue, 6 Jun 2023 06:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbjFEVNn (ORCPT
+        with ESMTP id S232817AbjFFKQl (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 5 Jun 2023 17:13:43 -0400
-Received: from out-1.mta0.migadu.com (out-1.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E0610A
-        for <linux-modules@vger.kernel.org>; Mon,  5 Jun 2023 14:13:40 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 17:13:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685999618;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oI/D2KsCHwim00FnKX8JEpI3trD4/Ay4oLN6y5jMs+w=;
-        b=Ou0t5k0wdLvYQe4I1KiKwwoZvxsvVwlNJliRyeWssvJBsu1TjLT0R5xnAEF8ghzWl5EIl9
-        wvjRxKwXo9+fHBI+ActLKXfymEdPx4wflBDdlUy8yktx25QJFLEuEOLWYXAN1GppOyjRcm
-        hR70f2tpuOItMjMDbRE2yoaC4QllkuI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+        Tue, 6 Jun 2023 06:16:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A440E47;
+        Tue,  6 Jun 2023 03:16:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 986FB6305D;
+        Tue,  6 Jun 2023 10:16:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16CCDC433EF;
+        Tue,  6 Jun 2023 10:16:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686046599;
+        bh=K3mQNwoT9j+uKtNH0+N5SGAruipqVMe0nyrOVYu8zmA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ex2boOSbFX9F8vILoj2ER6OMGqZieI/qXxa+Cl88F6P5WueebucHT8gXYMljU/UwF
+         W4Vwtw16CB66Ckf8CUcEwiMgsp0Rl7Zp+sWmc7WhCTWF54CsHU5is7Yegd2qZ+FcpB
+         7HYr90xDXGc4Q+jlXpM3iwKf1+z1TAE79jym8dBpk7/sIwryEOoaJwZE+mZ+/dgO9Q
+         jbUZZ/yVspF9cToZ4ExktC3lUSHmqXSahqJcQT5b1PfE/IsSC9GrwIVg8JzQsfRBlA
+         +FWytBECVY5td4H8LIUSl6ZWwnci/X0OdWg6sGet7yNw0Tt3OFZ9/6khP83arPzxeP
+         mpCOpEPlPas8A==
+Date:   Tue, 6 Jun 2023 13:16:08 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
@@ -55,114 +63,69 @@ Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
         netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
 Subject: Re: [PATCH 00/13] mm: jit/text allocator
-Message-ID: <ZH5P+iKOnoqYjbPq@moria.home.lan>
+Message-ID: <20230606101608.GC52412@kernel.org>
 References: <20230601101257.530867-1-rppt@kernel.org>
  <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
  <ZHjgIH3aX9dCvVZc@moria.home.lan>
  <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
  <20230605092040.GB3460@kernel.org>
+ <ZH20XkD74prrdN4u@FVFF77S0Q05N>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230605092040.GB3460@kernel.org>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <ZH20XkD74prrdN4u@FVFF77S0Q05N>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Jun 05, 2023 at 12:20:40PM +0300, Mike Rapoport wrote:
-> On Fri, Jun 02, 2023 at 10:35:09AM +0100, Mark Rutland wrote:
-> > On Thu, Jun 01, 2023 at 02:14:56PM -0400, Kent Overstreet wrote:
-> > > On Thu, Jun 01, 2023 at 05:12:03PM +0100, Mark Rutland wrote:
-> > > > For a while I have wanted to give kprobes its own allocator so that it can work
-> > > > even with CONFIG_MODULES=n, and so that it doesn't have to waste VA space in
-> > > > the modules area.
-> > > > 
-> > > > Given that, I think these should have their own allocator functions that can be
-> > > > provided independently, even if those happen to use common infrastructure.
-> > > 
-> > > How much memory can kprobes conceivably use? I think we also want to try
-> > > to push back on combinatorial new allocators, if we can.
-> > 
-> > That depends on who's using it, and how (e.g. via BPF).
-> > 
-> > To be clear, I'm not necessarily asking for entirely different allocators, but
-> > I do thinkg that we want wrappers that can at least pass distinct start+end
-> > parameters to a common allocator, and for arm64's modules code I'd expect that
-> > we'd keep the range falblack logic out of the common allcoator, and just call
-> > it twice.
-> > 
-> > > > > Several architectures override module_alloc() because of various
-> > > > > constraints where the executable memory can be located and this causes
-> > > > > additional obstacles for improvements of code allocation.
-> > > > > 
-> > > > > This set splits code allocation from modules by introducing
-> > > > > jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
-> > > > > sites of module_alloc() and module_memfree() with the new APIs and
-> > > > > implements core text and related allocation in a central place.
-> > > > > 
-> > > > > Instead of architecture specific overrides for module_alloc(), the
-> > > > > architectures that require non-default behaviour for text allocation must
-> > > > > fill jit_alloc_params structure and implement jit_alloc_arch_params() that
-> > > > > returns a pointer to that structure. If an architecture does not implement
-> > > > > jit_alloc_arch_params(), the defaults compatible with the current
-> > > > > modules::module_alloc() are used.
-> > > > 
-> > > > As above, I suspect that each of the callsites should probably be using common
-> > > > infrastructure, but I don't think that a single jit_alloc_arch_params() makes
-> > > > sense, since the parameters for each case may need to be distinct.
-> > > 
-> > > I don't see how that follows. The whole point of function parameters is
-> > > that they may be different :)
-> > 
-> > What I mean is that jit_alloc_arch_params() tries to aggregate common
-> > parameters, but they aren't actually common (e.g. the actual start+end range
-> > for allocation).
+On Mon, Jun 05, 2023 at 11:09:34AM +0100, Mark Rutland wrote:
+> On Mon, Jun 05, 2023 at 12:20:40PM +0300, Mike Rapoport wrote:
+> > On Fri, Jun 02, 2023 at 10:35:09AM +0100, Mark Rutland wrote:
+> >
+> > It sill can be achieved with a single jit_alloc_arch_params(), just by
+> > adding enum jit_type parameter to jit_text_alloc().
 > 
-> jit_alloc_arch_params() tries to aggregate architecture constraints and
-> requirements for allocations of executable memory and this exactly what
-> the first 6 patches of this set do.
-> 
-> A while ago Thomas suggested to use a structure that parametrizes
-> architecture constraints by the memory type used in modules [1] and Song
-> implemented the infrastructure for it and x86 part [2].
-> 
-> I liked the idea of defining parameters in a single structure, but I
-> thought that approaching the problem from the arch side rather than from
-> modules perspective will be better starting point, hence these patches.
-> 
-> I don't see a fundamental reason why a single structure cannot describe
-> what is needed for different code allocation cases, be it modules, kprobes
-> or bpf. There is of course an assumption that the core allocations will be
-> the same for all the users, and it seems to me that something like 
-> 
-> * allocate physical memory if allocator caches are empty
-> * map it in vmalloc or modules address space
-> * return memory from the allocator cache to the caller
-> 
-> will work for all usecases.
-> 
-> We might need separate caches for different cases on different
-> architectures, and a way to specify what cache should be used in the
-> allocator API, but that does not contradict a single structure for arch
-> specific parameters, but only makes it more elaborate, e.g. something like
-> 
-> enum jit_type {
-> 	JIT_MODULES_TEXT,
-> 	JIT_MODULES_DATA,
-> 	JIT_KPROBES,
-> 	JIT_FTRACE,
-> 	JIT_BPF,
-> 	JIT_TYPE_MAX,
-> };
+> That feels backwards to me; it centralizes a bunch of information about
+> distinct users to be able to shove that into a static array, when the callsites
+> can pass that information. 
 
-Why would we actually need different enums for modules_text, kprobes,
-ftrace and bpf? Why can't we treat all text allocations the same?
+The goal was not to shove everything into an array, but centralize
+architecture requirements for code allocations. The callsites don't have
+that information per se, they get it from the arch code, so having this
+information in a single place per arch is better than spreading
+MODULE_START, KPROBES_START etc all over.
 
-The reason we can't do that currently is because modules need to go in a
-128Mb region on some archs, and without sub page allocation
-bpf/kprobes/etc. burn a full page for each allocation. But we're doing
-sub page allocation - right?
+I'd agree though that having types for jit_text_alloc is ugly and this
+should be handled differently.
+ 
+> What's *actually* common after separating out the ranges? Is it just the
+> permissions?
 
-That leaves module data - which really needs to be split out into rw,
-ro, ro_after_init - but I'm not sure we'd even want the same API for
-those, they need fairly different page permissions handling.
+On x86 everything, on arm64 apparently just the permissions.
+
+I've started to summarize what are the restrictions for code placement for
+modules, kprobes and bpf on different architectures, that's roughly what
+I've got so far:
+
+* x86 and s390 need everything within modules address space because of
+PC-relative
+* arm, arm64, loongarch, sparc64, riscv64, some of mips and
+powerpc32 configurations require a dedicated modules address space; the
+rest just use vmalloc address space
+* all architectures that support kprobes except x86 and s390 don't use
+relative jumps, so they don't care where kprobes insn_page will live
+* not sure yet about BPF. Looks like on arm and arm64 it does not use
+relative jumps, so it can be anywhere, didn't dig enough about the others.
+
+> If we want this to be able to share allocations and so on, why can't we do this
+> like a kmem_cache, and have the callsite pass a pointer to the allocator data?
+> That would make it easy for callsites to share an allocator or use a distinct
+> one.
+
+This maybe something worth exploring.
+ 
+> Thanks,
+> Mark.
+
+-- 
+Sincerely yours,
+Mike.
