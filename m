@@ -2,57 +2,55 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42219C7EE24
-	for <linux-modules@archiver.kernel.org>; Tue,  6 Jun 2023 18:27:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FD8DC77B73
+	for <linux-modules@archiver.kernel.org>; Tue,  6 Jun 2023 18:28:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233910AbjFFS1V (ORCPT
+        id S237837AbjFFS2D (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 6 Jun 2023 14:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
+        Tue, 6 Jun 2023 14:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238524AbjFFS1V (ORCPT
+        with ESMTP id S233653AbjFFS2C (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:27:21 -0400
+        Tue, 6 Jun 2023 14:28:02 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F63D11D
-        for <linux-modules@vger.kernel.org>; Tue,  6 Jun 2023 11:27:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD3011D
+        for <linux-modules@vger.kernel.org>; Tue,  6 Jun 2023 11:28:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hjrTs0TxieL0YNzyDWEPIDruwOv/idGljdXgl+AVQ5s=; b=MJKGhxm9gG1Vp5thR+DB+s950Y
-        LAMKrgYKPfEi6KEA/MHgDXaXkMAZMNGw7nO0shagMM7tyVV4U16iB9F30UUuKbzEX9tnhsdwAWRuX
-        47vhWBXM3C7mobJAkn6o5VLynrz1GyRDrCbs/o9C1mbHBC3CYLRHbRTxls9s0tSHnjIebjbbaIwLy
-        QI+JR9ZoqWe45LRJjOS5dEHEfHrdnZMpfJW9UcErASfT0oPQW+iIyRGSZEZffIHaI91KAF9bL7VSr
-        PWHUFXup+8ud9EAvMxEAj0lB8ofcn3/SIN61okA1zzL83K9Zq8DequJlWRAexSNtxRIW0Q3k6BPKG
-        dBpNm1ow==;
+        bh=A7Dr9GNnbb9MbNBEdzsUPL5BkPUJm0/U5CXY00f7mDs=; b=FM24cEb9UB1k6rAmHjkubB0YYr
+        PbtBO5pl7afbrCaoc1lreCz7qdRulWCZR8akOAOK6x6FIZUnCgeU3FeVVSShk8+9pqu0TnMzoJHJC
+        mxEj4yYzSyyg+/65AcqK4cL7Sn6EQW9mpKF4BOviNehyvQ4S1fErSenaek8Rs3L+eN3KqsmNZdes5
+        I1A2eI71tzxSjVowf7G5N9j48QnQZDN7dclvyJsSJ1lVTiRgkkAnyyaPyz+MJ/oETc/3aBDVpqPlV
+        hD1pU1GcqxYNBdnfcC3GXPPkzFP5BpGyYi2/rcOOe8liDOQws2Cprilm2JK85CU7KV2uY40BDHWrl
+        Jcd4th9A==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q6bOq-002lfq-0T;
-        Tue, 06 Jun 2023 18:27:20 +0000
-Date:   Tue, 6 Jun 2023 11:27:20 -0700
+        id 1q6bPV-002ll3-1K;
+        Tue, 06 Jun 2023 18:28:01 +0000
+Date:   Tue, 6 Jun 2023 11:28:01 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
 Cc:     linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/5] libkmod: Extract finit_module vs init_module paths
-Message-ID: <ZH96iKWhwcQNZvOK@bombadil.infradead.org>
+Subject: Re: [PATCH 3/5] libkmod: Keep track of compression type
+Message-ID: <ZH96sTpb56cE2L69@bombadil.infradead.org>
 References: <20230601224001.23397-1-lucas.de.marchi@gmail.com>
- <20230601224001.23397-3-lucas.de.marchi@gmail.com>
+ <20230601224001.23397-4-lucas.de.marchi@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230601224001.23397-3-lucas.de.marchi@gmail.com>
+In-Reply-To: <20230601224001.23397-4-lucas.de.marchi@gmail.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, Jun 01, 2023 at 03:39:58PM -0700, Lucas De Marchi wrote:
-> Extract 2 functions to handle finit_module vs init_modules differences,
-> with a fallback from the former to the latter.
+On Thu, Jun 01, 2023 at 03:39:59PM -0700, Lucas De Marchi wrote:
+> Do not only set the type as direct, but also keep track of the
+> compression being used. This will allow using the in-kernel compression
+> in future.
 > 
 > Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
-
-Other than not checking for the error for kmod_file_load_contents()
-looks good to me.
 
 Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
