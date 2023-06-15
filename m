@@ -2,144 +2,107 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF11AEB64DA
-	for <linux-modules@archiver.kernel.org>; Tue, 13 Jun 2023 22:16:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 066F8EB64D9
+	for <linux-modules@archiver.kernel.org>; Thu, 15 Jun 2023 09:38:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbjFMWQ2 (ORCPT
+        id S1343509AbjFOJiN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 13 Jun 2023 18:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        Thu, 15 Jun 2023 05:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjFMWQ1 (ORCPT
+        with ESMTP id S1343512AbjFOJhx (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 13 Jun 2023 18:16:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC66B10CC;
-        Tue, 13 Jun 2023 15:16:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E87960A5A;
-        Tue, 13 Jun 2023 22:16:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27C1C433C0;
-        Tue, 13 Jun 2023 22:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686694582;
-        bh=+WIGytSpx4hFIJZtH+suKZCZHkq5JBHItki5+7BFPsc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KvuDR5kbBMLh2VXVzw7NO5wtSshJHEiPMI72MOW96V4/U71ZPwOvtZcgx4igXxMM9
-         em+vyycTpMJAdlxzRDVkQnWhkW0lpSv1w5OfUlveeKzndjtlhfIAlz6KkyJhYm9vAL
-         YeOSX6iUcPzAZQxfDfXnUCMYGVKsXS4ueWqr5sAFUnmWDNkxen775E7afX9ThgAUDG
-         /zY+Rb3OkZn0TBkz1JEvYtOijN22lxlf2MhOYND5RFEYMsncR0Ru0UtWG3QgShOTYr
-         rTOglNLVYb9iCLUk1lIGArlo4nilYPoAaYiuRtfBAW2VjixrTzTJsPA6zdb5t+Q6uZ
-         QAuDp1N4POaTw==
-Message-ID: <032f8239-bb82-e20e-e42b-e7a54754298b@kernel.org>
-Date:   Tue, 13 Jun 2023 17:16:18 -0500
+        Thu, 15 Jun 2023 05:37:53 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3A730FE
+        for <linux-modules@vger.kernel.org>; Thu, 15 Jun 2023 02:36:42 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-56896c77434so17374117b3.0
+        for <linux-modules@vger.kernel.org>; Thu, 15 Jun 2023 02:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686821801; x=1689413801;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=EX2NQ9PLvdiDfuIOKNB9u2VzouUa2IJsIRy4s9EAWJM=;
+        b=jDLV1bL4qqIIkPwjdf3GymON4EgupOyDzp0KprAmdmg+dL0TQqB0X0tIzfEZr9IznP
+         2Qq0081Frlknxd3whBcm/Ako2mpxZRDZPYS2yC/n93amLXxJyLXMihW24DGSefS8k9Ei
+         EMMEIbOoJ5qAP8uLTPoKBU4LzagSDFdqBhUXrhyaZG8gZkTpMTgxT3uJMVvEkpy3bps2
+         okvS3Xvgle+YXQgB0gNRFLyMxNDuugu0qViM8Apm596ME83ippk/aUA3MEkSCnxzNw9x
+         o5w25w7zrKoQuEImbE1wGV/rSeqCiIALwBoXn00BixTlGfCFKpOOr9iBNg2Z3FJn21zO
+         bsrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686821801; x=1689413801;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EX2NQ9PLvdiDfuIOKNB9u2VzouUa2IJsIRy4s9EAWJM=;
+        b=GwzMgu7SSgok/rbP5Kd0w8GDdL9uIuPSYnb+d2V8fz3J+BEkBP30cO5TXXHVxu1os6
+         M3K5xpsQDBF6I7dUsOW4dvII2eVRZ8MuV2I+teShN6L+H6+mAEoHs+6A8UWUZnMIBRSw
+         HC/IlTS46SxQUCjMlGlqdGC14WuZpc5FzJfiUHuluJeMuzjMF8lXG3bQKb5dsazM9jZD
+         t+bjLzRYFbzYV4sw11/z35frV52yocJs4pltPC3IA0i4GdENe51Mn8XpY3Engu9N/PPa
+         CxyUGgZShVmTuzQr2BW4ulyKwc+VU9CH5pyVS/fqu783OEUF+mslKoE2YikM//sPfKLc
+         +Urw==
+X-Gm-Message-State: AC+VfDwvUowHwH+vKFa3djIcPOQtJwKUUpEyBnORyKY03XfK8U0XtOZ7
+        MguJh1A3o619f/v7dxbGXQybvblIG27gJ5MO+9L4NPJowU8=
+X-Google-Smtp-Source: ACHHUZ4AOEIS5TzQccENcpLUsoqfNupcZQpRpMsBoEqL/FI3riXStNfiu7tuUxLdSDsI7PXl1qXpjxJd4g9+c3h4iXk=
+X-Received: by 2002:a25:5050:0:b0:bcc:3522:de8f with SMTP id
+ e77-20020a255050000000b00bcc3522de8fmr3674061ybb.44.1686821801538; Thu, 15
+ Jun 2023 02:36:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 01/13] nios2: define virtual address space for modules
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-References: <20230601101257.530867-1-rppt@kernel.org>
- <20230601101257.530867-2-rppt@kernel.org>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20230601101257.530867-2-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+Date:   Thu, 15 Jun 2023 10:36:31 +0100
+Message-ID: <CACvgo53yHOd964PoQkM_oX3LGcr+qCagz64T+sxcP-eAveS85g@mail.gmail.com>
+Subject: Re: [PATCH 5/5] libkmod: Use kernel decompression when available
+To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc:     linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+Greetings Lucas, list,
 
+I've pulled the email off lore.kernel.org manually (haven't played
+with lei yet), so chances are the following will be "slightly"
+malformed.
 
-On 6/1/23 05:12, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> nios2 uses kmalloc() to implement module_alloc() because CALL26/PCREL26
-> cannot reach all of vmalloc address space.
-> 
-> Define module space as 32MiB below the kernel base and switch nios2 to
-> use vmalloc for module allocations.
-> 
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->   arch/nios2/include/asm/pgtable.h |  5 ++++-
->   arch/nios2/kernel/module.c       | 19 ++++---------------
->   2 files changed, 8 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-> index 0f5c2564e9f5..0073b289c6a4 100644
-> --- a/arch/nios2/include/asm/pgtable.h
-> +++ b/arch/nios2/include/asm/pgtable.h
-> @@ -25,7 +25,10 @@
->   #include <asm-generic/pgtable-nopmd.h>
->   
->   #define VMALLOC_START		CONFIG_NIOS2_KERNEL_MMU_REGION_BASE
-> -#define VMALLOC_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - 1)
-> +#define VMALLOC_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - SZ_32M - 1)
+Above all - hell yeah, thank you for wiring this neat functionality.
+
+Out of curiosity: have you done any measurements - CPU cycles, memory
+or other - how well the kernel decompression performs vs the userspace
+one?
+
+That said, I may have spotted a small bug, namely:
+
+> --- a/libkmod/libkmod-module.c
+> +++ b/libkmod/libkmod-module.c
+> @@ -864,15 +864,24 @@ extern long init_module(const void *mem, unsigned long len, const char *args);
+>  static int do_finit_module(struct kmod_module *mod, unsigned int flags,
+>     const char *args)
+>  {
+> + enum kmod_file_compression_type compression, kernel_compression;
+>  unsigned int kernel_flags = 0;
+>  int err;
+>
+>  /*
+> - * Re-use ENOSYS, returned when there is no such syscall, so the
+> - * fallback to init_module applies
+> + * When module is not compressed or its compression type matches the
+> + * one in use by the kernel, there is no need to read the file
+> + * in userspace. Otherwise, re-use ENOSYS to trigger the same fallback
+> + * as when finit_module() is not supported.
+>  */
+> - if (!kmod_file_get_direct(mod->file))
+> - return -ENOSYS;
+> + compression = kmod_file_get_compression(mod->file);
+> + kernel_compression = kmod_get_kernel_compression(mod->ctx);
+> + if (!(compression == KMOD_FILE_COMPRESSION_NONE ||
+> +       compression == kernel_compression))
+> + return ENOSYS;
 > +
-> +#define MODULES_VADDR		(CONFIG_NIOS2_KERNEL_REGION_BASE - SZ_32M)
-> +#define MODULES_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - 1)
->   
->   struct mm_struct;
->   
-> diff --git a/arch/nios2/kernel/module.c b/arch/nios2/kernel/module.c
-> index 76e0a42d6e36..9c97b7513853 100644
-> --- a/arch/nios2/kernel/module.c
-> +++ b/arch/nios2/kernel/module.c
-> @@ -21,23 +21,12 @@
->   
->   #include <asm/cacheflush.h>
->   
-> -/*
-> - * Modules should NOT be allocated with kmalloc for (obvious) reasons.
-> - * But we do it for now to avoid relocation issues. CALL26/PCREL26 cannot reach
-> - * from 0x80000000 (vmalloc area) to 0xc00000000 (kernel) (kmalloc returns
-> - * addresses in 0xc0000000)
-> - */
->   void *module_alloc(unsigned long size)
->   {
-> -	if (size == 0)
-> -		return NULL;
-> -	return kmalloc(size, GFP_KERNEL);
-> -}
-> -
-> -/* Free memory returned from module_alloc */
-> -void module_memfree(void *module_region)
-> -{
-> -	kfree(module_region);
-> +	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
-> +				    GFP_KERNEL, PAGE_KERNEL_EXEC,
-> +				    VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
-> +				    __builtin_return_address(0));
->   }
->   
->   int apply_relocate_add(Elf32_Shdr *sechdrs, const char *strtab,
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Old code returns negative -ENOSYS (negative), the new one a positive
+ENOSYS. Where the fallback, mentioned in the comment just above,
+triggers on the former negative ENOSYS.
+
+Mind you I'm still sipping coffee, so chances are I'm missing something here.
+
+Thanks again and HTH o/
+Emil
