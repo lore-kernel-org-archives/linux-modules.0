@@ -2,200 +2,143 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17313EB64D7
-	for <linux-modules@archiver.kernel.org>; Fri, 16 Jun 2023 05:01:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECB60EB64D7
+	for <linux-modules@archiver.kernel.org>; Fri, 16 Jun 2023 05:12:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbjFPFA6 (ORCPT
+        id S230015AbjFPFMZ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 16 Jun 2023 01:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
+        Fri, 16 Jun 2023 01:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjFPFA5 (ORCPT
+        with ESMTP id S229613AbjFPFMZ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 16 Jun 2023 01:00:57 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936F7269E
-        for <linux-modules@vger.kernel.org>; Thu, 15 Jun 2023 22:00:55 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-985fd30ef48so37316466b.2
-        for <linux-modules@vger.kernel.org>; Thu, 15 Jun 2023 22:00:55 -0700 (PDT)
+        Fri, 16 Jun 2023 01:12:25 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F017C26B3
+        for <linux-modules@vger.kernel.org>; Thu, 15 Jun 2023 22:12:23 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so3029476a12.1
+        for <linux-modules@vger.kernel.org>; Thu, 15 Jun 2023 22:12:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686891653; x=1689483653;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=66BSL47igSv/IkKHYpP/ijg+JNanI4XVHW+EPNMIuYo=;
-        b=YfvOFqJuAeW1Srn9ngJqKjxYeKBcVvEFc3QN0gAFROLPk+fpfhykCnuYIeYHQZ2fJ8
-         H9IiNokT8BqDiyPkiBTvttSNkEXdQWrM3XvoCZ/+wXJlhTMY7wECwfQRGC0mKiTSP5e+
-         aHwNCmFFswgj8j/a0XNRvYFCwL6paNMCB4OntTxGEzggKYYzA9t97R6lavfjcb+ENyFo
-         3LgD5gQat19r6RpdE4/txpy1y12TMX0iW/A2sDvrvujIjGOaws2nH45LZ45n15A15WeW
-         OAf/6wopmzwWwj3kfea53CiO+o83M9xB/N35DhA0il9Bgp/lUGa2yGnlvEgR91CcmtJn
-         rNYA==
+        d=gmail.com; s=20221208; t=1686892342; x=1689484342;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wOrrcCFvwQH8qhEF8IbHbhb4jspxXrIicKYgnKHzUfE=;
+        b=peQ90CnPCSeGA/C+IXAyjTpXfPg8EC77rvCTE84hXVWIiHuEJBHpd4Z7wY+0LJ1LCg
+         Kwx74NKcozI+L9EHd0/b71Pb9mH9gV2nRfCQgwIKsFyV8jYGzntBvdhWecYVY/GqYajE
+         bfTKiPZZ2eSIisw0mWoG7rLWmuTerD8QQaS+RZu3I4L7Send1JwDepXUIRqlLzjqQflB
+         6N2Q/eTvaCAvcIWkPu7+GT8RYE3+yorFoeHbuvN0pKiZ1zzopP/99jwP94NltGK/hS7W
+         2I+woiiD0gcnTD+jnRlTNfTvv5n6sihVVLsCSp9IFI7Ap9nExJmBGmKhLi+NnAE/4ZOe
+         efcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686891653; x=1689483653;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=66BSL47igSv/IkKHYpP/ijg+JNanI4XVHW+EPNMIuYo=;
-        b=SWGmpStpr9SSoinXi2WETvmobTUxwfbxttgNOe2NhQ9WxuZTRj3B/DL1Dwt8AxR/gV
-         zEQCzebkFuIpmTsZWfUm2DM+rT1OsET36SHAqI2bv6Jc6BcG1LzTELKL3w84jRK72MqA
-         Qb4MqjCmLSmdbJpE2fT4JDQUmTtKwnv9Lkqq8g5SmIwidKZahx+pmq4cb7o/yume4rM4
-         FWx3A7t/tWp7w/nZmo8e2BtUjpkUwL+kgy+qtDSmI6kqbjyTHMa4YbyF6/9y+H3jAWK7
-         jeI7jQ5OfeFGdSNYGgAnr9WrTk1rn5/UiXDfUQ1PVyOqHYKfZG2KSINdhFAvhA1fT9dr
-         JMPQ==
-X-Gm-Message-State: AC+VfDznjGPRcNmrpYI79xgmGNqCVZQWOmQ6RJp/UZevU1sUnkxSWb7y
-        yfJRABsUckFmZsmaZQYDcvFZEYA5UEE=
-X-Google-Smtp-Source: ACHHUZ4TqUaBMrY71WoPyr2Z9igi570MsBjTXYZgteNViY1va2yjAcdgoPLuvIP512kc0zHFKkSOaA==
-X-Received: by 2002:a17:907:3d8e:b0:982:3ee4:7062 with SMTP id he14-20020a1709073d8e00b009823ee47062mr881772ejc.57.1686891652914;
-        Thu, 15 Jun 2023 22:00:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686892342; x=1689484342;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wOrrcCFvwQH8qhEF8IbHbhb4jspxXrIicKYgnKHzUfE=;
+        b=WYpYQsx88d105cn5PJk+qI057qKKHIRg5+x/bC7IsztwlD55TN9/hgyYrGH8tOMvWC
+         4LdzGD7ryruy1V7iRrDAWnMAcRNZwcpJnFLHl6SN8Haap4/j7FMr809HbFy2/kWhFfi/
+         TP3S+/chxdpMym/B2oPMV8idAADyKKcR8+PtSXUMyYH3Xy8XTCjmuDRVx3+H5BZBpQvh
+         lURHGF3aK0du1saQipH9aWWlwRMsOdOA76UWQ/WcFZfuqqb+a2qM3eGun1E5HEwRc7jA
+         QBo0HmWWuG7sGOQEbcR48Xqq4bZvdba0o6hB0BxRf8TfIea67NVdogjRgGn48nq47YWr
+         d6ww==
+X-Gm-Message-State: AC+VfDx1sA8Tw4QGNo/2DpFb1vIabbHcJw8Vv655wiXKMUMHD2NgBIfv
+        czGwtHqitL6aoXiGmW+TybY=
+X-Google-Smtp-Source: ACHHUZ5CV/gBbz8VCvVQhDHhcbOYvOhPqUN+4e33/sUx+NvOGi1P4c2tBtiVY1YhLpfi3rEI5zVOQg==
+X-Received: by 2002:a17:906:5d12:b0:982:7e17:6ea2 with SMTP id g18-20020a1709065d1200b009827e176ea2mr589509ejt.6.1686892342231;
+        Thu, 15 Jun 2023 22:12:22 -0700 (PDT)
 Received: from ldmartin-desk2.lan ([134.134.137.82])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170906494d00b0097461fecc91sm10159337ejt.81.2023.06.15.22.00.50
+        by smtp.gmail.com with ESMTPSA id fi5-20020a170906da0500b00965d294e633sm10281604ejb.58.2023.06.15.22.12.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 22:00:51 -0700 (PDT)
+        Thu, 15 Jun 2023 22:12:21 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 22:12:15 -0700
 From:   Lucas De Marchi <lucas.de.marchi@gmail.com>
-To:     linux-modules@vger.kernel.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH v2] libkmod: Do not inititialize file->memory on open
-Date:   Thu, 15 Jun 2023 22:00:41 -0700
-Message-Id: <20230616050041.99712-1-lucas.de.marchi@gmail.com>
-X-Mailer: git-send-email 2.40.1
+To:     Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linux-modules@vger.kernel.org
+Subject: Re: [PATCH 5/5] libkmod: Use kernel decompression when available
+Message-ID: <fdftww4ijeh5tngo6koko3syzk7ubtb3n5ixdadfc3lutjqrom@r7cjuzf3qm64>
+References: <CACvgo53yHOd964PoQkM_oX3LGcr+qCagz64T+sxcP-eAveS85g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CACvgo53yHOd964PoQkM_oX3LGcr+qCagz64T+sxcP-eAveS85g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Add a separate function to load the file contents when it's needed.
-When it's not needed on the path of loading modules via finit_module(),
-there is no need to mmap the file. This will help support loading
-modules with the in-kernel compression support.
+On Thu, Jun 15, 2023 at 10:36:31AM +0100, Emil Velikov wrote:
+>Greetings Lucas, list,
+>
+>I've pulled the email off lore.kernel.org manually (haven't played
+>with lei yet), so chances are the following will be "slightly"
+>malformed.
 
-This is done differently than the lazy initialization for
-kmod_file_get_elf() because on the contents case there is also the
-file->size to be updated. It would be a weird API to return the pointer
-and have the size changed as a side-effect.
+One easy easy if you want to pick single patch series is to use b4
 
-Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
----
+b4 mbox 20230601224001.23397-1-lucas.de.marchi@gmail.com
+neomut -f ./20230601224001.23397-1-lucas.de.marchi@gmail.com.mbx
 
-v2: change kmod_file_load_contents() to void since the return is
-    actually checked on the file struct
+or instead of neomutt, import the mbox to your favorite email client.
 
- libkmod/libkmod-elf.c      |  5 +++++
- libkmod/libkmod-file.c     | 21 ++++++++++++++++++---
- libkmod/libkmod-internal.h |  3 ++-
- libkmod/libkmod-module.c   |  2 ++
- 4 files changed, 27 insertions(+), 4 deletions(-)
+>
+>Above all - hell yeah, thank you for wiring this neat functionality.
+>
+>Out of curiosity: have you done any measurements - CPU cycles, memory
+>or other - how well the kernel decompression performs vs the userspace
+>one?
 
-diff --git a/libkmod/libkmod-elf.c b/libkmod/libkmod-elf.c
-index fb2e3d9..933825b 100644
---- a/libkmod/libkmod-elf.c
-+++ b/libkmod/libkmod-elf.c
-@@ -281,6 +281,11 @@ struct kmod_elf *kmod_elf_new(const void *memory, off_t size)
- 	assert_cc(sizeof(uint32_t) == sizeof(Elf32_Word));
- 	assert_cc(sizeof(uint32_t) == sizeof(Elf64_Word));
- 
-+	if (!memory) {
-+		errno = -EINVAL;
-+		return NULL;
-+	}
-+
- 	class = elf_identify(memory, size);
- 	if (class < 0) {
- 		errno = -class;
-diff --git a/libkmod/libkmod-file.c b/libkmod/libkmod-file.c
-index b6a8cc9..08adea9 100644
---- a/libkmod/libkmod-file.c
-+++ b/libkmod/libkmod-file.c
-@@ -421,6 +421,7 @@ struct kmod_elf *kmod_file_get_elf(struct kmod_file *file)
- 	if (file->elf)
- 		return file->elf;
- 
-+	kmod_file_load_contents(file);
- 	file->elf = kmod_elf_new(file->memory, file->size);
- 	return file->elf;
- }
-@@ -431,7 +432,7 @@ struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx,
- 	struct kmod_file *file = calloc(1, sizeof(struct kmod_file));
- 	const struct comp_type *itr;
- 	size_t magic_size_max = 0;
--	int err;
-+	int err = 0;
- 
- 	if (file == NULL)
- 		return NULL;
-@@ -477,8 +478,8 @@ struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx,
- 	if (file->ops == NULL)
- 		file->ops = &reg_ops;
- 
--	err = file->ops->load(file);
- 	file->ctx = ctx;
-+
- error:
- 	if (err < 0) {
- 		if (file->fd >= 0)
-@@ -491,6 +492,18 @@ error:
- 	return file;
- }
- 
-+/*
-+ *  Callers should just check file->memory got updated
-+ */
-+void kmod_file_load_contents(struct kmod_file *file)
-+{
-+	if (file->memory)
-+		return;
-+
-+	/*  The load functions already log possible errors. */
-+	file->ops->load(file);
-+}
-+
- void *kmod_file_get_contents(const struct kmod_file *file)
- {
- 	return file->memory;
-@@ -516,7 +529,9 @@ void kmod_file_unref(struct kmod_file *file)
- 	if (file->elf)
- 		kmod_elf_unref(file->elf);
- 
--	file->ops->unload(file);
-+	if (file->memory)
-+		file->ops->unload(file);
-+
- 	if (file->fd >= 0)
- 		close(file->fd);
- 	free(file);
-diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
-index 4a4af58..3275bc5 100644
---- a/libkmod/libkmod-internal.h
-+++ b/libkmod/libkmod-internal.h
-@@ -152,6 +152,7 @@ bool kmod_module_is_builtin(struct kmod_module *mod) __attribute__((nonnull(1)))
- /* libkmod-file.c */
- struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx, const char *filename) _must_check_ __attribute__((nonnull(1,2)));
- struct kmod_elf *kmod_file_get_elf(struct kmod_file *file) __attribute__((nonnull(1)));
-+void kmod_file_load_contents(struct kmod_file *file) __attribute__((nonnull(1)));
- void *kmod_file_get_contents(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
- off_t kmod_file_get_size(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
- bool kmod_file_get_direct(const struct kmod_file *file) _must_check_ __attribute__((nonnull(1)));
-@@ -166,7 +167,7 @@ struct kmod_modversion {
- 	char *symbol;
- };
- 
--struct kmod_elf *kmod_elf_new(const void *memory, off_t size) _must_check_ __attribute__((nonnull(1)));
-+struct kmod_elf *kmod_elf_new(const void *memory, off_t size) _must_check_;
- void kmod_elf_unref(struct kmod_elf *elf) __attribute__((nonnull(1)));
- const void *kmod_elf_get_memory(const struct kmod_elf *elf) _must_check_ __attribute__((nonnull(1)));
- int kmod_elf_get_strings(const struct kmod_elf *elf, const char *section, char ***array) _must_check_ __attribute__((nonnull(1,2,3)));
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 7736b7e..f352fe1 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -917,6 +917,8 @@ KMOD_EXPORT int kmod_module_insert_module(struct kmod_module *mod,
- 			goto init_finished;
- 	}
- 
-+	kmod_file_load_contents(mod->file);
-+
- 	if (flags & (KMOD_INSERT_FORCE_VERMAGIC | KMOD_INSERT_FORCE_MODVERSION)) {
- 		elf = kmod_file_get_elf(mod->file);
- 		if (elf == NULL) {
--- 
-2.40.1
+no, I didn't.  I think one important aspect is when paired with the
+patch to the kernel that deduplicates the module loading. With
+compressed modules, that would be irrelevant as libkmod would go the
+init_module() path rather than finit_module().
 
+A reasonable test would be to create a VM with a bunch of CPUs (so we
+get many parallel requests or the same modules) and then measure
+a) 6.4-rcX
+b) 6.4-rcX + that kernel patch
+c) 6.4-rcX + that kernel patch + this patch series
+
+
+>
+>That said, I may have spotted a small bug, namely:
+>
+>> --- a/libkmod/libkmod-module.c
+>> +++ b/libkmod/libkmod-module.c
+>> @@ -864,15 +864,24 @@ extern long init_module(const void *mem, unsigned long len, const char *args);
+>>  static int do_finit_module(struct kmod_module *mod, unsigned int flags,
+>>     const char *args)
+>>  {
+>> + enum kmod_file_compression_type compression, kernel_compression;
+>>  unsigned int kernel_flags = 0;
+>>  int err;
+>>
+>>  /*
+>> - * Re-use ENOSYS, returned when there is no such syscall, so the
+>> - * fallback to init_module applies
+>> + * When module is not compressed or its compression type matches the
+>> + * one in use by the kernel, there is no need to read the file
+>> + * in userspace. Otherwise, re-use ENOSYS to trigger the same fallback
+>> + * as when finit_module() is not supported.
+>>  */
+>> - if (!kmod_file_get_direct(mod->file))
+>> - return -ENOSYS;
+>> + compression = kmod_file_get_compression(mod->file);
+>> + kernel_compression = kmod_get_kernel_compression(mod->ctx);
+>> + if (!(compression == KMOD_FILE_COMPRESSION_NONE ||
+>> +       compression == kernel_compression))
+>> + return ENOSYS;
+>> +
+>
+>Old code returns negative -ENOSYS (negative), the new one a positive
+>ENOSYS. Where the fallback, mentioned in the comment just above,
+>triggers on the former negative ENOSYS.
+>
+>Mind you I'm still sipping coffee, so chances are I'm missing something here.
+
+no, apparently I didn't have enough coffee when I wrote this.
+I'll fix this up on next version.
+
+thanks
+Lucas De Marchi
+
+>
+>Thanks again and HTH o/
+>Emil
