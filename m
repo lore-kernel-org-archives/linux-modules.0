@@ -2,130 +2,64 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22B4AEB64D9
-	for <linux-modules@archiver.kernel.org>; Thu, 15 Jun 2023 10:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 154E6EB64D9
+	for <linux-modules@archiver.kernel.org>; Fri, 16 Jun 2023 01:51:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243086AbjFOKKM (ORCPT
+        id S230000AbjFPBvi (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 15 Jun 2023 06:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
+        Thu, 15 Jun 2023 21:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343785AbjFOKKL (ORCPT
+        with ESMTP id S229509AbjFPBvi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:10:11 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08222688
-        for <linux-modules@vger.kernel.org>; Thu, 15 Jun 2023 03:10:10 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-bc4e41b7bc9so1547331276.2
-        for <linux-modules@vger.kernel.org>; Thu, 15 Jun 2023 03:10:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686823810; x=1689415810;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dls0/gu95jCtnBSLGmhCVxlAMuscuHOtGNDuUfVQ9+I=;
-        b=ANmqqX9InSzDhtssOnJoSfE+djs8reEW01N3VOo+xFtMJibrW03Tz7LznRVVg9+VH/
-         HKHjV+QxouO5caSeHQS0qpyCFTrYhz+v9Xw+hvZvEu79n4gPatoS3zsi3L0GIHX6GD1R
-         6cVMIfd70MIESBLwjab3Hv2UA50BP2UZMYNEbyt52OhvaoFMPFbE2e0Im0pVQ2zNOSPz
-         2bK2anJIBrlvyFjXyGarQLzjw/FB/0McS1EZbinpsPWR2NVrQEq0D63gYCGOpEH8bGrO
-         ddcpPEe6WdIFRHbAIt6TXRChuGX/9oRf3Fi2euclIHJG6HtGcYcezjybxHoL9BPzzZyk
-         RssQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686823810; x=1689415810;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dls0/gu95jCtnBSLGmhCVxlAMuscuHOtGNDuUfVQ9+I=;
-        b=iTaxDjZZuxYcQxaOtOMly0n6iO8cboBTX1S4gAQSDuN51+OukIYPk0mRrYMCf9Utvp
-         c4INnPdFWQ9kb9Trz+BKygWzMtoBwXHLWrwUF+HWRsHGGz3Btp6rVlo792CMU87ihpwC
-         XwBjNUyIXwrLNUlTqWryCPbc2Ono8RI1VixZYNI/BZtJr+4H54VdEkKbWnSpq0JP5gBv
-         xhEwi6z56fdE/+KPoauNB8pIkAFM5Gib7opgbVqIkZTBD5gwDcSQhHSPWuhN1dxVmCfV
-         2rGlfBuw9so2XEO3o3K/4eILFE/pSoRw97WObfmrZzkloOy2MP6DPLW3tW2c+aooA0PQ
-         kH6w==
-X-Gm-Message-State: AC+VfDzE7JEPwz+vegGAUnQTKiy5dGvf9Tt5zRZEW2SnXekRXJHtFEK/
-        l1gekdGgimGIJuoB7UAZ5yWbJ2CAdKndwNtUgd4uS+K8HmU=
-X-Google-Smtp-Source: ACHHUZ69Xh8x3SKCygCHj9XDugCzrNPifea5R+3t0yCJvIVEb4HnLn++xnuuNK4IdQ7YkkceMwUhCQh8YJ6A+0aRJDQ=
-X-Received: by 2002:a25:4251:0:b0:bca:5dab:1e55 with SMTP id
- p78-20020a254251000000b00bca5dab1e55mr4103323yba.16.1686823809722; Thu, 15
- Jun 2023 03:10:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <CACvgo53yHOd964PoQkM_oX3LGcr+qCagz64T+sxcP-eAveS85g@mail.gmail.com>
-In-Reply-To: <CACvgo53yHOd964PoQkM_oX3LGcr+qCagz64T+sxcP-eAveS85g@mail.gmail.com>
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-Date:   Thu, 15 Jun 2023 11:09:59 +0100
-Message-ID: <CACvgo51chK2SU0an2dD5uYaUdm8sQd6DmRWdUf5bY=2sZnBoNQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] libkmod: Use kernel decompression when available
-To:     Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc:     linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 15 Jun 2023 21:51:38 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DEC010F7;
+        Thu, 15 Jun 2023 18:51:36 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxvOomwItk48kFAA--.12315S3;
+        Fri, 16 Jun 2023 09:51:34 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPMolwItke7wcAA--.6951S2;
+        Fri, 16 Jun 2023 09:51:34 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH 0/2] module: Do some small changes
+Date:   Fri, 16 Jun 2023 09:51:31 +0800
+Message-Id: <1686880293-29594-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8AxPMolwItke7wcAA--.6951S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+        wI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
+        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+        kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j0FALUUUUU=
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Thu, 15 Jun 2023 at 10:36, Emil Velikov <emil.l.velikov@gmail.com> wrote:
->
-> Greetings Lucas, list,
->
-> I've pulled the email off lore.kernel.org manually (haven't played
-> with lei yet), so chances are the following will be "slightly"
-> malformed.
->
-> Above all - hell yeah, thank you for wiring this neat functionality.
->
-> Out of curiosity: have you done any measurements - CPU cycles, memory
-> or other - how well the kernel decompression performs vs the userspace
-> one?
->
-> That said, I may have spotted a small bug, namely:
->
-> > --- a/libkmod/libkmod-module.c
-> > +++ b/libkmod/libkmod-module.c
-> > @@ -864,15 +864,24 @@ extern long init_module(const void *mem, unsigned long len, const char *args);
-> >  static int do_finit_module(struct kmod_module *mod, unsigned int flags,
-> >     const char *args)
-> >  {
-> > + enum kmod_file_compression_type compression, kernel_compression;
-> >  unsigned int kernel_flags = 0;
-> >  int err;
-> >
-> >  /*
-> > - * Re-use ENOSYS, returned when there is no such syscall, so the
-> > - * fallback to init_module applies
-> > + * When module is not compressed or its compression type matches the
-> > + * one in use by the kernel, there is no need to read the file
-> > + * in userspace. Otherwise, re-use ENOSYS to trigger the same fallback
-> > + * as when finit_module() is not supported.
-> >  */
-> > - if (!kmod_file_get_direct(mod->file))
-> > - return -ENOSYS;
-> > + compression = kmod_file_get_compression(mod->file);
-> > + kernel_compression = kmod_get_kernel_compression(mod->ctx);
-> > + if (!(compression == KMOD_FILE_COMPRESSION_NONE ||
-> > +       compression == kernel_compression))
-> > + return ENOSYS;
-> > +
->
-> Old code returns negative -ENOSYS (negative), the new one a positive
-> ENOSYS. Where the fallback, mentioned in the comment just above,
-> triggers on the former negative ENOSYS.
->
-> Mind you I'm still sipping coffee, so chances are I'm missing something here.
->
-> Thanks again and HTH o/
-> Emil
+The first patch is suggested by Xi Zhang <zhangxi@kylinos.cn> offline,
+the second patch is inspired by the first patch, no functional changes.
 
-Somewhat related:
+Tiezhu Yang (2):
+  module: Make is_mapping_symbol() return bool
+  module: Make is_valid_name() return bool
 
-Would it make sense to read /sys/module/compression if it contained
-multiple lines - one for each supported compression. This way, kmod
-will just work when the kernel is updated to advertise them all.
+ include/linux/module_symbol.h | 2 +-
+ scripts/mod/modpost.c         | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-There is about 0.000001% chance that changing the format of the sysfs
-file might cause regression, which can be looked into if an issue.
-After all the sysfs entry is just 1 year old and is undocumented
-(cough) so nobody should be using it, right :-P
+-- 
+2.1.0
 
-I'm really tempted to send a patch tweaking the sysfs file and adding
-documentation. Please let me know if you think that's a bad idea, or
-you have one already queued.
-
-Thanks
-Emil
