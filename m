@@ -2,152 +2,123 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2464EB64DC
-	for <linux-modules@archiver.kernel.org>; Fri, 16 Jun 2023 20:19:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0EB5EB64DB
+	for <linux-modules@archiver.kernel.org>; Sat, 17 Jun 2023 05:53:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjFPUTF (ORCPT
+        id S229993AbjFQFxp (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 16 Jun 2023 16:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        Sat, 17 Jun 2023 01:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjFPUTE (ORCPT
+        with ESMTP id S229493AbjFQFxo (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:19:04 -0400
+        Sat, 17 Jun 2023 01:53:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6278230DD;
-        Fri, 16 Jun 2023 13:19:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A5F1987;
+        Fri, 16 Jun 2023 22:53:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB39063EBA;
-        Fri, 16 Jun 2023 20:19:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 552E8C433B6;
-        Fri, 16 Jun 2023 20:19:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4E2161142;
+        Sat, 17 Jun 2023 05:53:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24536C433C8;
+        Sat, 17 Jun 2023 05:53:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686946742;
-        bh=2gFsvIXhZCi6KoizK2mVR8ubH1d6zKHpuStaPaewE2c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UDI57R+Ac8F87HdvmrIejvjCHM49LTC4REb6jwcTgaWly1GGKsFbDi3ghmDp0sH5F
-         dyADcSB+eIU3pbcZs4WY9WOy0Qfue9ZKueQFrHo6+fN0pFBb6x0I9BFxnKIQnZ0f6m
-         zoeRxS58zso8o8K5cKrj75Ci+DjJ2i0NK5f/ruazAus2+TOpX2RWJhZX7p+ZAwMaoZ
-         7/IjfjgHld/4MT6CtRzHW+8wrzT/BS827SmRNHxio26g9lEtfuPfj6kxYVksHyp6iy
-         q4wBjLvMwutEo9bQbQ0iSwXG+SX0mZCYXiK84cI+EMmphh55ZOB3JRt4P0s1ApMmst
-         2YeyFD5vvx/Xg==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f62b512fe2so1603315e87.1;
-        Fri, 16 Jun 2023 13:19:02 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwBdN/5i5ZPe7QP/+fyvRdbdtsFzl81Kxf4bSrAiARQjtb56+Rd
-        epZMkrKKx0dOwMLjE6cG32JZ4QsNYyOPw+Rrti0=
-X-Google-Smtp-Source: ACHHUZ4xCjWLdj6bUZgrYEqyfT0+mWbIpLp7dl+h+OA2H/SetbsgMpyruMyrfqh6ldv/ey70g6BKmUQ4Jmh+AiNCLf0=
-X-Received: by 2002:a19:5e02:0:b0:4f7:69b9:fa07 with SMTP id
- s2-20020a195e02000000b004f769b9fa07mr2191315lfb.45.1686946740318; Fri, 16 Jun
- 2023 13:19:00 -0700 (PDT)
+        s=k20201202; t=1686981222;
+        bh=TluszqxdgR0a0IwbMuuhT/6JAXY40kPgAznuGjSXri0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lpj2dpfi9Ji3xzZ2kbgOQVYp/ZmysDx8WqNHlHmdTvMZEZsbjfL4hE6m7SXkjz4Zo
+         Mkq0iog3xkwtSwK3WOjB9XwUu05VRpcB0eogiPxG2WXCBK0aumyezzFkPPpZnGtjc7
+         5x++BGdF8JI0RHFvISKKMXQLn7exxg6GH1B4T2YCX3C0Zr0t9A89VOCr3b7IhrP+qG
+         ZzJIZ0zukBYcwghAr54w2jBQdBKljd+YnNYrk8GHhTFw3utqrXxsX2NC3voAWygO8q
+         svafETOLy9nPtmeHj06Y/0ZWzWAt+idrvmT6go/EJzAEpVusozQOwG5k1TndPIMv23
+         z+o01h8acz8Lg==
+Date:   Sat, 17 Jun 2023 08:52:56 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "puranjay12@gmail.com" <puranjay12@gmail.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 01/12] nios2: define virtual address space for modules
+Message-ID: <20230617055256.GM52412@kernel.org>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+ <20230616085038.4121892-2-rppt@kernel.org>
+ <6f9e9c385096bd965e53c49065848953398f5b8e.camel@intel.com>
 MIME-Version: 1.0
-References: <20230616085038.4121892-1-rppt@kernel.org> <20230616085038.4121892-12-rppt@kernel.org>
-In-Reply-To: <20230616085038.4121892-12-rppt@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 16 Jun 2023 13:18:48 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5N3RuBijpyXrzVk_mpAyUQ5TeTuS2jic6Y-ybFVJpBjg@mail.gmail.com>
-Message-ID: <CAPhsuW5N3RuBijpyXrzVk_mpAyUQ5TeTuS2jic6Y-ybFVJpBjg@mail.gmail.com>
-Subject: Re: [PATCH v2 11/12] x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6f9e9c385096bd965e53c49065848953398f5b8e.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Jun 16, 2023 at 1:52=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
-te:
->
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> Dynamic ftrace must allocate memory for code and this was impossible
-> without CONFIG_MODULES.
->
-> With execmem separated from the modules code, execmem_text_alloc() is
-> available regardless of CONFIG_MODULES.
->
-> Remove dependency of dynamic ftrace on CONFIG_MODULES and make
-> CONFIG_DYNAMIC_FTRACE select CONFIG_EXECMEM in Kconfig.
->
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+On Fri, Jun 16, 2023 at 04:00:19PM +0000, Edgecombe, Rick P wrote:
+> On Fri, 2023-06-16 at 11:50 +0300, Mike Rapoport wrote:
+> >  void *module_alloc(unsigned long size)
+> >  {
+> > -       if (size == 0)
+> > -               return NULL;
+> > -       return kmalloc(size, GFP_KERNEL);
+> > -}
+> > -
+> > -/* Free memory returned from module_alloc */
+> > -void module_memfree(void *module_region)
+> > -{
+> > -       kfree(module_region);
+> > +       return __vmalloc_node_range(size, 1, MODULES_VADDR,
+> > MODULES_END,
+> > +                                   GFP_KERNEL, PAGE_KERNEL_EXEC,
+> > +                                   VM_FLUSH_RESET_PERMS,
+> > NUMA_NO_NODE,
+> > +                                   __builtin_return_address(0));
+> >  }
+> >  
+> >  int apply_relocate_add(Elf32_Shdr *sechdrs, const char *s
+> 
+> I wonder if the (size == 0) check is really needed, but
+> __vmalloc_node_range() will WARN on this case where the old code won't.
 
-Acked-by: Song Liu <song@kernel.org>
+module_alloc() should not be called with zero size, so a warning there
+would be appropriate.
+Besides, no other module_alloc() had this check.
 
-> ---
->  arch/x86/Kconfig         |  1 +
->  arch/x86/kernel/ftrace.c | 10 ----------
->  2 files changed, 1 insertion(+), 10 deletions(-)
->
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 53bab123a8ee..ab64bbef9e50 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -35,6 +35,7 @@ config X86_64
->         select SWIOTLB
->         select ARCH_HAS_ELFCORE_COMPAT
->         select ZONE_DMA32
-> +       select EXECMEM if DYNAMIC_FTRACE
->
->  config FORCE_DYNAMIC_FTRACE
->         def_bool y
-> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-> index f77c63bb3203..a824a5d3b129 100644
-> --- a/arch/x86/kernel/ftrace.c
-> +++ b/arch/x86/kernel/ftrace.c
-> @@ -261,8 +261,6 @@ void arch_ftrace_update_code(int command)
->  /* Currently only x86_64 supports dynamic trampolines */
->  #ifdef CONFIG_X86_64
->
-> -#ifdef CONFIG_MODULES
-> -/* Module allocation simplifies allocating memory for code */
->  static inline void *alloc_tramp(unsigned long size)
->  {
->         return execmem_text_alloc(size);
-> @@ -271,14 +269,6 @@ static inline void tramp_free(void *tramp)
->  {
->         execmem_free(tramp);
->  }
-> -#else
-> -/* Trampolines can only be created if modules are supported */
-> -static inline void *alloc_tramp(unsigned long size)
-> -{
-> -       return NULL;
-> -}
-> -static inline void tramp_free(void *tramp) { }
-> -#endif
->
->  /* Defined as markers to the end of the ftrace default trampolines */
->  extern void ftrace_regs_caller_end(void);
-> --
-> 2.35.1
->
+-- 
+Sincerely yours,
+Mike.
