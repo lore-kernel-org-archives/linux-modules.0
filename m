@@ -2,43 +2,42 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B53A5EB64DA
-	for <linux-modules@archiver.kernel.org>; Sun, 18 Jun 2023 08:01:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EABB7EB64DB
+	for <linux-modules@archiver.kernel.org>; Sun, 18 Jun 2023 22:33:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbjFRIBS (ORCPT
+        id S229575AbjFRWdA (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 18 Jun 2023 04:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        Sun, 18 Jun 2023 18:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFRIBR (ORCPT
+        with ESMTP id S229456AbjFRWc7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 18 Jun 2023 04:01:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA0D10D7;
-        Sun, 18 Jun 2023 01:01:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B17EC60F61;
-        Sun, 18 Jun 2023 08:01:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA1EC433C0;
-        Sun, 18 Jun 2023 08:01:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687075275;
-        bh=JOdF7gdXvqBjASqKs6SWBkQKDgB3N69nrNaZPukvaeM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sRSVsUz+8qwPDTD+DbQ8ZGj3oxWbs6Q2yclpQ5oA01FgfO3x99AMq57vy9vTmKGCz
-         zxsNFAk2tsVXc2/ZMKN5WrqHKwwq7cFYa5f3HPOYIxlAVh8JcIK7E8a/4ukOQRZ4nx
-         MkY7brx+YmsqJJOWjKI+esA6758vzynczNeZM28mb8D2036W2Ac3dVaBq4RYIRm2lO
-         UwBKETxVcKwPW5jcSjXTb+3J9p7JSrJABXAw2lEoobsEXKewtbcSu8Iyl/ROefguVb
-         JB6NowqZPjsvgPvrW3+OErG+qxYX7mjk/nhQmoo1FPg/indEYGUiochf7rWuDn85yN
-         s8jpvUG70jw+A==
-Date:   Sun, 18 Jun 2023 11:00:27 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Sun, 18 Jun 2023 18:32:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31AEC6;
+        Sun, 18 Jun 2023 15:32:57 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687127575;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5eocF6oVYznFl/DEwITHqQ7TMn26EFf0pZbwEDCTK84=;
+        b=bdpHhvr9Hn5s8M8pBt6h0RlUGOZ1Lo4/y28rwu0yVR7JZSlAq39/46BcKsilIUinfOPogU
+        qmKwez+jgzyMGsHhHmUjh9dF2vQKfcfzUpnC430yDZMMldnMWI1vYw06jpKeElXhmTcntG
+        yypvYR4iRqVpOziVhZdqJC7qgQJw5KA81XnRrk5f520jV+sacnO/fQhXBIQnrLmfO/2M+r
+        YFxwYhKBguqFcAkoCz4x6FEz5SiwhD5VV9/U1fv8TVeo3fA0XlwfdM8MGzqwB21MFiONgp
+        HFCCVB4X260bSKBTYLft5JXmqXu6l7oYYyLOqT0toHcgXAbIR5XTU+7H5xAo3g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687127575;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5eocF6oVYznFl/DEwITHqQ7TMn26EFf0pZbwEDCTK84=;
+        b=ZuJVVOhsCR9WDQQO84QX2oPc5VTYDEn0agA6nGmpVtt6s52bacZEJ4aPLDh/ary7zlNGrA
+        JmqYVkKOO6bt5CBA==
+To:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         "David S. Miller" <davem@davemloft.net>,
@@ -50,81 +49,160 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@kernel.org>,
         Nadav Amit <nadav.amit@gmail.com>,
         "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Puranjay Mohan <puranjay12@gmail.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Russell King <linux@armlinux.org.uk>,
         Song Liu <song@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and
- jit_text_alloc()
-Message-ID: <20230618080027.GA52412@kernel.org>
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v2 06/12] mm/execmem: introduce execmem_data_alloc()
+In-Reply-To: <20230616085038.4121892-7-rppt@kernel.org>
 References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+ <20230616085038.4121892-7-rppt@kernel.org>
+Date:   Mon, 19 Jun 2023 00:32:55 +0200
+Message-ID: <87jzw0qu3s.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
-> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> >
-> > module_alloc() is used everywhere as a mean to allocate memory for code.
-> >
-> > Beside being semantically wrong, this unnecessarily ties all subsystems
-> > that need to allocate code, such as ftrace, kprobes and BPF to modules
-> > and puts the burden of code allocation to the modules code.
-> >
-> > Several architectures override module_alloc() because of various
-> > constraints where the executable memory can be located and this causes
-> > additional obstacles for improvements of code allocation.
-> >
-> > Start splitting code allocation from modules by introducing
-> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
-> >
-> > Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
-> > module_alloc() and execmem_free() and jit_free() are replacements of
-> > module_memfree() to allow updating all call sites to use the new APIs.
-> >
-> > The intention semantics for new allocation APIs:
-> >
-> > * execmem_text_alloc() should be used to allocate memory that must reside
-> >   close to the kernel image, like loadable kernel modules and generated
-> >   code that is restricted by relative addressing.
-> >
-> > * jit_text_alloc() should be used to allocate memory for generated code
-> >   when there are no restrictions for the code placement. For
-> >   architectures that require that any code is within certain distance
-> >   from the kernel image, jit_text_alloc() will be essentially aliased to
-> >   execmem_text_alloc().
-> >
-> 
-> Is there anything in this series to help users do the appropriate
-> synchronization when the actually populate the allocated memory with
-> code?  See here, for example:
+Mike!
 
-This series only factors out the executable allocations from modules and
-puts them in a central place.
-Anything else would go on top after this lands.
- 
-> https://lore.kernel.org/linux-fsdevel/cb6533c6-cea0-4f04-95cf-b8240c6ab405@app.fastmail.com/T/#u
+Sorry for being late on this ...
 
--- 
-Sincerely yours,
-Mike.
+On Fri, Jun 16 2023 at 11:50, Mike Rapoport wrote:
+>  
+> +void *execmem_data_alloc(size_t size)
+> +{
+> +	unsigned long start = execmem_params.modules.data.start;
+> +	unsigned long end = execmem_params.modules.data.end;
+> +	pgprot_t pgprot = execmem_params.modules.data.pgprot;
+> +	unsigned int align = execmem_params.modules.data.alignment;
+> +	unsigned long fallback_start = execmem_params.modules.data.fallback_start;
+> +	unsigned long fallback_end = execmem_params.modules.data.fallback_end;
+> +	bool kasan = execmem_params.modules.flags & EXECMEM_KASAN_SHADOW;
+
+While I know for sure that you read up on the discussion I had with Song
+about data structures, it seems you completely failed to understand it.
+
+> +	return execmem_alloc(size, start, end, align, pgprot,
+> +			     fallback_start, fallback_end, kasan);
+
+Having _seven_ intermediate variables to fill _eight_ arguments of a
+function instead of handing in @size and a proper struct pointer is
+tasteless and disgusting at best.
+
+Six out of those seven parameters are from:
+
+    execmem_params.module.data
+
+while the KASAN shadow part is retrieved from
+
+    execmem_params.module.flags
+
+So what prevents you from having a uniform data structure, which is
+extensible and decribes _all_ types of allocations?
+
+Absolutely nothing. The flags part can either be in the type dependend
+part or you make the type configs an array as I had suggested originally
+and then execmem_alloc() becomes:
+
+void *execmem_alloc(type, size)
+
+and
+
+static inline void *execmem_data_alloc(size_t size)
+{
+        return execmem_alloc(EXECMEM_TYPE_DATA, size);
+}
+
+which gets the type independent parts from @execmem_param.
+
+Just read through your own series and watch the evolution of
+execmem_alloc():
+
+  static void *execmem_alloc(size_t size)
+
+  static void *execmem_alloc(size_t size, unsigned long start,
+                             unsigned long end, unsigned int align,
+                             pgprot_t pgprot)
+
+  static void *execmem_alloc(size_t len, unsigned long start,
+                             unsigned long end, unsigned int align,
+                             pgprot_t pgprot,
+                             unsigned long fallback_start,
+                             unsigned long fallback_end,
+                             bool kasan)
+
+In a month from now this function will have _ten_ parameters and tons of
+horrible wrappers which convert an already existing data structure into
+individual function arguments.
+
+Seriously?
+
+If you want this function to be [ab]used outside of the exec_param
+configuration space for whatever non-sensical reasons then this still
+can be either:
+
+void *execmem_alloc(params, type, size)
+
+static inline void *execmem_data_alloc(size_t size)
+{
+        return execmem_alloc(&exec_param, EXECMEM_TYPE_DATA, size);
+}
+
+or
+
+void *execmem_alloc(type_params, size);
+
+static inline void *execmem_data_alloc(size_t size)
+{
+        return execmem_alloc(&exec_param.data, size);
+}
+
+which both allows you to provide alternative params, right?
+
+Coming back to my conversation with Song:
+
+   "Bad programmers worry about the code. Good programmers worry about
+    data structures and their relationships."
+
+You might want to reread:
+
+    https://lore.kernel.org/r/87lenuukj0.ffs@tglx
+
+and the subsequent thread.
+
+The fact that my suggestions had a 'mod_' namespace prefix does not make
+any of my points moot.
+
+Song did an extremly good job in abstracting things out, but you decided
+to ditch his ground work instead of building on it and keeping the good
+parts. That's beyond sad.
+
+Worse, you went the full 'not invented here' path with an outcome which is
+even worse than the original hackery from Song which started the above
+referenced thread.
+
+I don't know what caused you to decide that ad hoc hackery is better
+than proper data structure based design patterns. I actually don't want
+to know.
+
+As much as my voice counts:
+
+  NAK-ed-by: Thomas Gleixner <tglx@linutronix.de>
+
+Thanks,
+
+        tglx
