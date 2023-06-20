@@ -2,67 +2,33 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A217EB64DB
-	for <linux-modules@archiver.kernel.org>; Mon, 19 Jun 2023 20:18:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9F26EB64DD
+	for <linux-modules@archiver.kernel.org>; Tue, 20 Jun 2023 14:51:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjFSUSe (ORCPT
+        id S233304AbjFTOvT (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 19 Jun 2023 16:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        Tue, 20 Jun 2023 10:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjFSUSc (ORCPT
+        with ESMTP id S233418AbjFTOvQ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 19 Jun 2023 16:18:32 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A8FD3;
-        Mon, 19 Jun 2023 13:18:30 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso3185177a12.3;
-        Mon, 19 Jun 2023 13:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687205909; x=1689797909;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UmEEut0OCJI0jheFei8v4KFIgPFEx+9Zr0oYZPTVJvw=;
-        b=ML1POuSF5TNYpNiqkU7Wmm/FZLBDFoP32DY+WPylpmv43DoaA/AoXnTGG2wwzhld3j
-         kjkKToRZCKl1S0ycKV+IUNrHAQ8Dvck3h+D7ZuCxy/PFvkOP44vPViwvWsYYl0BBuNgy
-         b/5HPeUCxmK/jPGro6a0V6gtwlQJxSWG+MjbaRDV7mR48t508gCxLWi7cw8WSlTAdLEO
-         3p+win9LgLE5lOsK+rw7eJ7na0iRAHUh7i2pWPNrn0k/YllS2kfgOgB31VmT4hCseChr
-         k2Wm+WLNvD9nhPcsjkRc0OVcXyGOSUiyWGCOpqitL1ReK2kli6NusXAAxFAtCrHDui7k
-         NzgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687205909; x=1689797909;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UmEEut0OCJI0jheFei8v4KFIgPFEx+9Zr0oYZPTVJvw=;
-        b=It+aTU9JCM2y7jL4p7lJlCjfG6o20JcbSLehxu66Jm7q+BrmhwyasusDO7rtoEYi0K
-         NQC42j8tDLAiznlhd9DM+8ji0LNBcwmYv4s6Wd5EYYYOgs2BLMp/9JZJf2MEorJpzz15
-         qYBYq6EcyQwBh68GSgejoX8hbxuwkwUmA5iFIiIo+L9ktPqpHDfCefrQVFH4t5HymodN
-         VMMjSjzQrvwLpQnZk3AFvwIDid3Ym95fETh/4F/BAzBwmlRgfZ+IRx6cYR0NX/uJMgC3
-         VRJi8WxiHl5cSH+u4ZFuCqDwUL4XbrpqAshCkqXHXDL3mBanL547g8fkomBST3m8drWn
-         PKRw==
-X-Gm-Message-State: AC+VfDxw8bplcNLipbtq/ZaFPEuPUKARHC4Hn+6fqHRohKEldkAiOKiB
-        LaBTrPeAOLr9MLpyTpcTXXM=
-X-Google-Smtp-Source: ACHHUZ4MAGz/Bbdlo+4DcmVI4O990mBmojRaVLNYuDWhcs7i7MC/1uf1G62Dkn3iaVvHJNN3c8J+8g==
-X-Received: by 2002:a05:6a21:78a9:b0:10a:cb95:5aa3 with SMTP id bf41-20020a056a2178a900b0010acb955aa3mr14231287pzc.7.1687205909086;
-        Mon, 19 Jun 2023 13:18:29 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id k18-20020a637b52000000b005538bf7e3d6sm87568pgn.88.2023.06.19.13.18.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Jun 2023 13:18:28 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and
- jit_text_alloc()
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
-Date:   Mon, 19 Jun 2023 13:18:15 -0700
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tue, 20 Jun 2023 10:51:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2AD173D;
+        Tue, 20 Jun 2023 07:51:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A2DE6124C;
+        Tue, 20 Jun 2023 14:51:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC9B6C433CA;
+        Tue, 20 Jun 2023 14:51:06 +0000 (UTC)
+Date:   Tue, 20 Jun 2023 10:51:04 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
@@ -71,66 +37,50 @@ Cc:     Mike Rapoport <rppt@kernel.org>,
         Heiko Carstens <hca@linux.ibm.com>,
         Helge Deller <deller@gmx.de>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
         Luis Chamberlain <mcgrof@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
+        Nadav Amit <nadav.amit@gmail.com>,
         "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Puranjay Mohan <puranjay12@gmail.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Song Liu <song@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm <linux-mm@kvack.org>, linux-modules@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
         linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org,
-        the arch/x86 maintainers <x86@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7F566E60-C371-449B-992B-0C435AD6016B@gmail.com>
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v2 06/12] mm/execmem: introduce execmem_data_alloc()
+Message-ID: <20230620105104.60cb64d8@gandalf.local.home>
+In-Reply-To: <87h6r4qo1d.ffs@tglx>
 References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
- <20230618080027.GA52412@kernel.org>
- <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
-To:     Andy Lutomirski <luto@kernel.org>, Song Liu <song@kernel.org>
-X-Mailer: Apple Mail (2.3731.600.7)
+        <20230616085038.4121892-7-rppt@kernel.org>
+        <87jzw0qu3s.ffs@tglx>
+        <20230618231431.4aj3k5ujye22sqai@moria.home.lan>
+        <87h6r4qo1d.ffs@tglx>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+On Mon, 19 Jun 2023 02:43:58 +0200
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
+> Now you might argue that it _is_ a "hotpath" due to the BPF usage, but
+> then even more so as any intermediate wrapper which converts from one
+> data representation to another data representation is not going to
+> increase performance, right?
 
-> On Jun 19, 2023, at 10:09 AM, Andy Lutomirski <luto@kernel.org> wrote:
->=20
-> But jit_text_alloc() can't do this, because the order of operations =
-doesn't match.  With jit_text_alloc(), the executable mapping shows up =
-before the text is populated, so there is no atomic change from =
-not-there to populated-and-executable.  Which means that there is an =
-opportunity for CPUs, speculatively or otherwise, to start filling =
-various caches with intermediate states of the text, which means that =
-various architectures (even x86!) may need serialization.
->=20
-> For eBPF- and module- like use cases, where JITting/code gen is quite =
-coarse-grained, perhaps something vaguely like:
->=20
-> jit_text_alloc() -> returns a handle and an executable virtual =
-address, but does *not* map it there
-> jit_text_write() -> write to that handle
-> jit_text_map() -> map it and synchronize if needed (no sync needed on =
-x86, I think)
+Just as a side note. BPF can not attach its return calling code to
+functions that have more than 6 parameters (3 on 32 bit x86), because of
+the way BPF return path trampoline works. It is a requirement that all
+parameters live in registers, and none on the stack.
 
-Andy, would you mind explaining why you think a sync is not needed? I =
-mean I have a =E2=80=9Cfeeling=E2=80=9D that perhaps TSO can guarantee =
-something based on the order of write and page-table update. Is that the =
-argument?
-
-On this regard, one thing that I clearly do not understand is why =
-*today* it is ok for users of bpf_arch_text_copy() not to call =
-text_poke_sync(). Am I missing something?
-
+-- Steve
