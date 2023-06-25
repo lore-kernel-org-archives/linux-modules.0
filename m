@@ -2,240 +2,226 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04F28EB64DD
-	for <linux-modules@archiver.kernel.org>; Thu, 22 Jun 2023 21:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CA6AC0015E
+	for <linux-modules@archiver.kernel.org>; Sun, 25 Jun 2023 16:15:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjFVVOo (ORCPT
+        id S230458AbjFYQPS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 22 Jun 2023 17:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60646 "EHLO
+        Sun, 25 Jun 2023 12:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbjFVVOm (ORCPT
+        with ESMTP id S230434AbjFYQPR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 22 Jun 2023 17:14:42 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618F31FDF;
-        Thu, 22 Jun 2023 14:14:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=+evnrWvMO11pB2Se6CmXqRpq5vuKB5b/OFz8WvDzXFA=; b=BpqlADxE+aE9eMikiqLg5s5PFW
-        BseEQE5TVR+/CwqHyv131gu84M8Oa3/O1LFzKYdBhKDQ7rY1Ks4211A7yz+YLW0XIVv5YgyRnw94H
-        O1m6D/h/pBcJ6M4qWtJWoy0KVMcaU2z/snhoOGl4aCQeVGkWWSTuC75vG70Ymqxr39+NvbLVfYlWQ
-        wVtzjV9STTLc7AuYLG128apVY5VwdioqiCLEzG77hUOmIoWbHPwlwdnfPmKFAAsFDmOYhNu4Eopj1
-        zd74OewfWSkFMev2BI46DptGQQ8Zv0wkf9zEOdXNohhxiUCsR28qEG1jB+nSjyQ8I8dHqh5OY/GYj
-        ratQ5qgA==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qCRdW-001oSB-37;
-        Thu, 22 Jun 2023 21:14:39 +0000
-Message-ID: <8e68daf3-485a-7def-b382-edc33415265d@infradead.org>
-Date:   Thu, 22 Jun 2023 14:14:38 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] docs: module: start adding some docs for MODULE_
- macros.
-Content-Language: en-US
-To:     Dave Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Dave Airlie <airlied@redhat.com>, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
+        Sun, 25 Jun 2023 12:15:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BB01A5;
+        Sun, 25 Jun 2023 09:15:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0961B60C00;
+        Sun, 25 Jun 2023 16:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E463C433C8;
+        Sun, 25 Jun 2023 16:15:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687709714;
+        bh=4/ubcrsJvqhBH/vtuVerDOnT8cLh0Z8x9NdrY0vOnlQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WstfenfqrQraRy6ufCoglL05809oMSEcRfUfndB4rQcusE2zI6TcMHkeBnayI84XA
+         LeozoS1GxcgX6ngSkoBmbS3qtRRxpB4XJfcJ0UBAlF7QFxeCg91BLDI10maMfpngYE
+         GUM0fRwCgV10clhNpI2PaQ4gob7CHex19G8gRldqPBuUpM78fGkBpM0UXT8ixelGSU
+         z1J5NhvB3QyMnCUu0HFkwD1i+NEXK0yL9AmrFlsQbZjM/QMXh/KkJhf0b8d0tCsjR9
+         O2Kt+FWy9X6r90AuucdbQ5DKiCYwwvRks6UN7t6Eai/BXzXsbKQsTn9de+dLQqBnA/
+         HFT91PEpPBRoA==
+Date:   Sun, 25 Jun 2023 19:14:17 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-References: <20230426042906.724352-1-airlied@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230426042906.724352-1-airlied@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and
+ jit_text_alloc()
+Message-ID: <20230625161417.GK52412@kernel.org>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+ <20230616085038.4121892-3-rppt@kernel.org>
+ <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+ <20230618080027.GA52412@kernel.org>
+ <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-
-
-On 4/25/23 21:29, Dave Airlie wrote:
-> From: Dave Airlie <airlied@redhat.com>
+On Mon, Jun 19, 2023 at 10:09:02AM -0700, Andy Lutomirski wrote:
 > 
-> In order to add a new macro, Luis suggested converting some docs
-> for the new ones.
+> On Sun, Jun 18, 2023, at 1:00 AM, Mike Rapoport wrote:
+> > On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
+> >> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
+> >> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> >> >
+> >> > module_alloc() is used everywhere as a mean to allocate memory for code.
+> >> >
+> >> > Beside being semantically wrong, this unnecessarily ties all subsystems
+> >> > that need to allocate code, such as ftrace, kprobes and BPF to modules
+> >> > and puts the burden of code allocation to the modules code.
+> >> >
+> >> > Several architectures override module_alloc() because of various
+> >> > constraints where the executable memory can be located and this causes
+> >> > additional obstacles for improvements of code allocation.
+> >> >
+> >> > Start splitting code allocation from modules by introducing
+> >> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
+> >> >
+> >> > Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
+> >> > module_alloc() and execmem_free() and jit_free() are replacements of
+> >> > module_memfree() to allow updating all call sites to use the new APIs.
+> >> >
+> >> > The intention semantics for new allocation APIs:
+> >> >
+> >> > * execmem_text_alloc() should be used to allocate memory that must reside
+> >> >   close to the kernel image, like loadable kernel modules and generated
+> >> >   code that is restricted by relative addressing.
+> >> >
+> >> > * jit_text_alloc() should be used to allocate memory for generated code
+> >> >   when there are no restrictions for the code placement. For
+> >> >   architectures that require that any code is within certain distance
+> >> >   from the kernel image, jit_text_alloc() will be essentially aliased to
+> >> >   execmem_text_alloc().
+> >> >
+> >> 
+> >> Is there anything in this series to help users do the appropriate
+> >> synchronization when the actually populate the allocated memory with
+> >> code?  See here, for example:
+> >
+> > This series only factors out the executable allocations from modules and
+> > puts them in a central place.
+> > Anything else would go on top after this lands.
 > 
-> This tries to keep exisiting module_init, module_exit where they are,
-> and adds the new docs to the module section.
+> Hmm.
 > 
-> Cc: linux-doc@vger.kernel.org
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Signed-off-by: Dave Airlie <airlied@redhat.com>
-
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # for the kernel-doc
-
-Thanks.
-
-> ---
->  Documentation/core-api/kernel-api.rst |  3 ++
->  Documentation/driver-api/basics.rst   |  2 +-
->  include/linux/module.h                | 76 ++++++++++++++++++---------
->  3 files changed, 54 insertions(+), 27 deletions(-)
+> On the one hand, there's nothing wrong with factoring out common code. On
+> the other hand, this is probably the right time to at least start
+> thinking about synchronization, at least to the extent that it might make
+> us want to change this API.  (I'm not at all saying that this series
+> should require changes -- I'm just saying that this is a good time to
+> think about how this should work.)
 > 
-> diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
-> index 62f961610773..0b78b1a3e8a2 100644
-> --- a/Documentation/core-api/kernel-api.rst
-> +++ b/Documentation/core-api/kernel-api.rst
-> @@ -226,6 +226,9 @@ Module Loading
->  .. kernel-doc:: kernel/kmod.c
->     :export:
->  
-> +.. kernel-doc:: include/linux/module.h
-> +   :no-identifiers: module_init module_exit klp_modinfo
-> +
->  Inter Module support
->  --------------------
->  
-> diff --git a/Documentation/driver-api/basics.rst b/Documentation/driver-api/basics.rst
-> index 4b4d8e28d3be..fea42d6cad80 100644
-> --- a/Documentation/driver-api/basics.rst
-> +++ b/Documentation/driver-api/basics.rst
-> @@ -5,7 +5,7 @@ Driver Entry and Exit points
->  ----------------------------
->  
->  .. kernel-doc:: include/linux/module.h
-> -   :internal:
-> +   :identifiers: module_init module_exit
->  
->  Driver device table
->  -------------------
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 4435ad9439ab..f9d072a7e198 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -182,23 +182,27 @@ extern void cleanup_module(void);
->  #define MODULE_FILE	MODULE_INFO(file, KBUILD_MODFILE);
->  #endif
->  
-> -/*
-> +/**
-> + * MODULE_LICENSE - module license
-> + * @_license: license covering this module.
-> + *
->   * The following license idents are currently accepted as indicating free
->   * software modules
->   *
-> - *	"GPL"				[GNU Public License v2]
-> - *	"GPL v2"			[GNU Public License v2]
-> - *	"GPL and additional rights"	[GNU Public License v2 rights and more]
-> - *	"Dual BSD/GPL"			[GNU Public License v2
-> - *					 or BSD license choice]
-> - *	"Dual MIT/GPL"			[GNU Public License v2
-> - *					 or MIT license choice]
-> - *	"Dual MPL/GPL"			[GNU Public License v2
-> - *					 or Mozilla license choice]
-> + *    "GPL"                        [GNU Public License v2]
->   *
-> - * The following other idents are available
-> + *    "GPL v2"                     [GNU Public License v2]
->   *
-> - *	"Proprietary"			[Non free products]
-> + *    "GPL and additional rights"  [GNU Public License v2 rights and more]
-> + *
-> + *    "Dual BSD/GPL"               [GNU Public License v2 or BSD license choice]
-> + *
-> + *    "Dual MIT/GPL"               [GNU Public License v2 or MIT license choice]
-> + *
-> + *    "Dual MPL/GPL"               [GNU Public License v2 or Mozilla license choice]
-> + *
-> + * The following other idents are available
-> + *    "Proprietary"                [Non free products]
->   *
->   * Both "GPL v2" and "GPL" (the latter also in dual licensed strings) are
->   * merely stating that the module is licensed under the GPL v2, but are not
-> @@ -221,20 +225,26 @@ extern void cleanup_module(void);
->   * is a GPL combined work.
->   *
->   * This exists for several reasons
-> - * 1.	So modinfo can show license info for users wanting to vet their setup
-> - *	is free
-> + *
-> + * 1.	So modinfo can show license info for users wanting to vet their setup is free
-> + *
->   * 2.	So the community can ignore bug reports including proprietary modules
-> + *
->   * 3.	So vendors can do likewise based on their own policies
->   */
->  #define MODULE_LICENSE(_license) MODULE_FILE MODULE_INFO(license, _license)
->  
-> -/*
-> - * Author(s), use "Name <email>" or just "Name", for multiple
-> - * authors use multiple MODULE_AUTHOR() statements/lines.
-> +/**
-> + * MODULE_AUTHOR - Module author
-> + * @_author: Author(s), use "Name <email>" or just "Name", for multiple
-> + *           authors use multiple MODULE_AUTHOR() statements/lines.
->   */
->  #define MODULE_AUTHOR(_author) MODULE_INFO(author, _author)
->  
-> -/* What your module does. */
-> +/**
-> + * MODULE_DESCRIPTION - Module description
-> + * @_description: What your module does.
-> + */
->  #define MODULE_DESCRIPTION(_description) MODULE_INFO(description, _description)
->  
->  #ifdef MODULE
-> @@ -246,19 +256,23 @@ extern typeof(name) __mod_##type##__##name##_device_table		\
->  #define MODULE_DEVICE_TABLE(type, name)
->  #endif
->  
-> -/* Version of form [<epoch>:]<version>[-<extra-version>].
-> +/**
-> + * MODULE_VERSION: version of module
-> + * @_version: version in the form below
-> + *
-> + * Version of form [<epoch>:]<version>[-<extra-version>].
->   * Or for CVS/RCS ID version, everything but the number is stripped.
->   * <epoch>: A (small) unsigned integer which allows you to start versions
->   * anew. If not mentioned, it's zero.  eg. "2:1.0" is after
->   * "1:2.0".
-> -
-> + *
->   * <version>: The <version> may contain only alphanumerics and the
-> - * character `.'.  Ordered by numeric sort for numeric parts,
-> + * character '.'.  Ordered by numeric sort for numeric parts,
->   * ascii sort for ascii parts (as per RPM or DEB algorithm).
-> -
-> + *
->   * <extraversion>: Like <version>, but inserted for local
->   * customizations, eg "rh3" or "rusty1".
-> -
-> + *
->   * Using this automatically adds a checksum of the .c files and the
->   * local headers in "srcversion".
->   */
-> @@ -284,11 +298,21 @@ extern typeof(name) __mod_##type##__##name##_device_table		\
->  		}
->  #endif
->  
-> -/* Optional firmware file (or files) needed by the module
-> - * format is simply firmware file name.  Multiple firmware
-> - * files require multiple MODULE_FIRMWARE() specifiers */
-> +/**
-> + * MODULE_FIRMWARE - Optional firmware files needed by the module
-> + * @_firmware: firmware file name
-> + *
-> + * Multiple firmware files require multiple MODULE_FIRMWARE() specifiers.
-> + */
->  #define MODULE_FIRMWARE(_firmware) MODULE_INFO(firmware, _firmware)
->  
-> +/**
-> + * MODULE_IMPORT_NS - Set the symbol namespace for the module.
-> + * @ns: symbol namespace to import the module into.
-> + *
-> + * This adds a modinfo tag 'import_ns' to the module. This is observed
-> + * by userspace at module loading time.
-> + */
->  #define MODULE_IMPORT_NS(ns)	MODULE_INFO(import_ns, __stringify(ns))
->  
->  struct notifier_block;
+> The current APIs, *and* the proposed jit_text_alloc() API, don't actually
+> look like the one think in the Linux ecosystem that actually
+> intelligently and efficiently maps new text into an address space:
+> mmap().
+> 
+> On x86, you can mmap() an existing file full of executable code PROT_EXEC
+> and jump to it with minimal synchronization (just the standard implicit
+> ordering in the kernel that populates the pages before setting up the
+> PTEs and whatever user synchronization is needed to avoid jumping into
+> the mapping before mmap() finishes).  It works across CPUs, and the only
+> possible way userspace can screw it up (for a read-only mapping of
+> read-only text, anyway) is to jump to the mapping too early, in which
+> case userspace gets a page fault.  Incoherence is impossible, and no one
+> needs to "serialize" (in the SDM sense).
+> 
+> I think the same sequence (from userspace's perspective) works on other
+> architectures, too, although I think more cache management is needed on
+> the kernel's end.  As far as I know, no Linux SMP architecture needs an
+> IPI to map executable text into usermode, but I could easily be wrong.
+> (IIRC RISC-V has very developer-unfriendly icache management, but I don't
+> remember the details.)
+> 
+> Of course, using ptrace or any other FOLL_FORCE to modify text on x86 is
+> rather fraught, and I bet many things do it wrong when userspace is
+> multithreaded.  But not in production because it's mostly not used in
+> production.)
+> 
+> But jit_text_alloc() can't do this, because the order of operations
+> doesn't match.  With jit_text_alloc(), the executable mapping shows up
+> before the text is populated, so there is no atomic change from not-there
+> to populated-and-executable.  Which means that there is an opportunity
+> for CPUs, speculatively or otherwise, to start filling various caches
+> with intermediate states of the text, which means that various
+> architectures (even x86!) may need serialization.
+> 
+> For eBPF- and module- like use cases, where JITting/code gen is quite
+> coarse-grained, perhaps something vaguely like:
+> 
+> jit_text_alloc() -> returns a handle and an executable virtual address,
+> but does *not* map it there
+> jit_text_write() -> write to that handle
+> jit_text_map() -> map it and synchronize if needed (no sync needed on
+> x86, I think)
+> 
+> could be more efficient and/or safer.
+> 
+> (Modules could use this too.  Getting alternatives right might take some
+> fiddling, because off the top of my head, this doesn't match how it works
+> now.)
+> 
+> To make alternatives easier, this could work, maybe (haven't fully
+> thought it through):
+> 
+> jit_text_alloc()
+> jit_text_map_rw_inplace() -> map at the target address, but RW, !X
+> 
+> write the text and apply alternatives
+> 
+> jit_text_finalize() -> change from RW to RX *and synchronize*
+> 
+> jit_text_finalize() would either need to wait for RCU (possibly extra
+> heavy weight RCU to get "serialization") or send an IPI.
+
+This essentially how modules work now. The memory is allocated RW, written
+and updated with alternatives and then made ROX in the end with set_memory
+APIs.
+
+The issue with not having the memory mapped X when it's written is that we
+cannot use large pages to map it. One of the goals is to have executable
+memory mapped with large pages and make code allocator able to divide that
+page among several callers.
+
+So the idea was that jit_text_alloc() will have a cache of large pages
+mapped ROX, will allocate memory from those caches and there will be
+jit_update() that uses text poking for writing to that memory.
+
+Upon allocation of a large page to increase the cache, that large page will
+be "invalidated" by filling it with breakpoint instructions (e.g int3 on
+x86)
+
+To improve the performance of this process, we can write to !X copy and
+then text_poke it to the actual address in one go. This will require some
+changes to get the alternatives right.
 
 -- 
-~Randy
+Sincerely yours,
+Mike.
