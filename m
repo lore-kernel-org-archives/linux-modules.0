@@ -2,229 +2,163 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EFBFC001B0
-	for <linux-modules@archiver.kernel.org>; Tue,  4 Jul 2023 02:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39474EB64D9
+	for <linux-modules@archiver.kernel.org>; Tue,  4 Jul 2023 10:09:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjGDCzF convert rfc822-to-8bit (ORCPT
+        id S231288AbjGDKJ1 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 3 Jul 2023 22:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
+        Tue, 4 Jul 2023 06:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjGDCzE (ORCPT
+        with ESMTP id S229915AbjGDKJ0 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 3 Jul 2023 22:55:04 -0400
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38CD1B2
-        for <linux-modules@vger.kernel.org>; Mon,  3 Jul 2023 19:55:01 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-wHWhqlMSPwm3HmExVeIYhQ-1; Mon, 03 Jul 2023 22:53:33 -0400
-X-MC-Unique: wHWhqlMSPwm3HmExVeIYhQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F4241C29AE0;
-        Tue,  4 Jul 2023 02:53:32 +0000 (UTC)
-Received: from nomad.redhat.com (vpn2-54-59.bne.redhat.com [10.64.54.59])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 467D740C6CD0;
-        Tue,  4 Jul 2023 02:53:30 +0000 (UTC)
-From:   Dave Airlie <airlied@gmail.com>
-To:     dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org
-Cc:     Dave Airlie <airlied@redhat.com>, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 1/2] docs: module: start adding some docs for MODULE_ macros.
-Date:   Tue,  4 Jul 2023 12:50:49 +1000
-Message-ID: <20230704025322.2623556-2-airlied@gmail.com>
-In-Reply-To: <20230704025322.2623556-1-airlied@gmail.com>
-References: <20230704025322.2623556-1-airlied@gmail.com>
+        Tue, 4 Jul 2023 06:09:26 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CDBEE;
+        Tue,  4 Jul 2023 03:09:25 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3649mxc9009597;
+        Tue, 4 Jul 2023 10:09:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2023-03-30;
+ bh=hIOOORGKchniqO/ljMV0WdlZFmGdCm3uJig2Sk2ciks=;
+ b=aVhFg3VsJFHRyy9NgKUkdw0B8DEGSA2vfQY1RZ9NxAPC6lMACKpla3mPZpT/GdDmM5pn
+ kptqwVnfoiA59H1X4ocwdWCcPEEJSlGNyNm4pwuVSV6kggwS8eRXDbrKaKlUYtow8hOj
+ Wnk4bG0ovS4Bvgj/FXKV750SicT4q5ftWRKDyeCAlxEhU+C9IQ8csAylWrLFJErCEO2a
+ YrtsWTAcko+Xh0nfB2vCy3i1rDV52/NlBCDGjDON4Q/CISRtXtgbo19MHjzTufS5T1al
+ ivpJfKTsGuiX8BcVqrn8GBlXcRH3i8IHGGpt1qm/IhSF+kGPEWX7Y2wUVR/mjhL+pq68 CQ== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rjax3cd8q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 04 Jul 2023 10:09:18 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3648GwoV040268;
+        Tue, 4 Jul 2023 10:09:18 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rjaka7chv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 04 Jul 2023 10:09:17 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 364A9HcN013879;
+        Tue, 4 Jul 2023 10:09:17 GMT
+Received: from t460.home (dhcp-10-175-46-67.vpn.oracle.com [10.175.46.67])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3rjaka7cdp-1;
+        Tue, 04 Jul 2023 10:09:17 +0000
+From:   Vegard Nossum <vegard.nossum@oracle.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     George Kennedy <george.kennedy@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        syzbot+9c2bdc9d24e4a7abe741@syzkaller.appspotmail.com,
+        Johan Hovold <johan@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rudi Heitbaum <rudi@heitbaum.com>,
+        David Hildenbrand <david@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] module: always complete idempotent loads
+Date:   Tue,  4 Jul 2023 12:08:52 +0200
+Message-Id: <20230704100852.23452-1-vegard.nossum@oracle.com>
+X-Mailer: git-send-email 2.35.1.46.g38062e73e0
+In-Reply-To: <20230704092309.22669-1-vegard.nossum@oracle.com>
+References: <20230704092309.22669-1-vegard.nossum@oracle.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: gmail.com
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-04_06,2023-07-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307040084
+X-Proofpoint-GUID: pGNn9Duf_TvizPL9OBKB_r5ogqocdSf7
+X-Proofpoint-ORIG-GUID: pGNn9Duf_TvizPL9OBKB_r5ogqocdSf7
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Dave Airlie <airlied@redhat.com>
+Commit 9b9879fc0327 added a hashtable storing lists of concurrent module
+loads. However, it didn't fix up all the error paths in
+init_module_from_file(); this would lead to leaving the function while an
+on-stack 'struct idempotent' element is still in the hash table, which
+leads to all sorts of badness as spotted by syzkaller:
 
-In order to add a new macro, Luis suggested converting some docs
-for the new ones.
+    BUG: soft lockup in sys_finit_module
+    BUG: unable to handle kernel paging request in init_module_from_file
+    general protection fault in init_module_from_file
+    INFO: task hung in init_module_from_file
+    KASAN: out-of-bounds Read in init_module_from_file
+    KASAN: slab-out-of-bounds Read in init_module_from_file
+    KASAN: slab-use-after-free Read in init_module_from_file
+    KASAN: slab-use-after-free Read in set_powered_sync
+    KASAN: stack-out-of-bounds Read in init_module_from_file
+    KASAN: use-after-free in init_module_from_file
+    KASAN: use-after-free Read in init_module_from_file
 
-This tries to keep exisiting module_init, module_exit where they are,
-and adds the new docs to the module section.
-
-Cc: linux-doc@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>
+Fixes: 9b9879fc0327 ("modules: catch concurrent module loads, treat them as idempotent")
+Reported-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Reported-by: syzbot+9c2bdc9d24e4a7abe741@syzkaller.appspotmail.com
+Tested-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc: Johan Hovold <johan@kernel.org>
+Cc: Johan Hovold <johan@kernel.org>
 Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org
-Signed-off-by: Dave Airlie <airlied@redhat.com>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Rudi Heitbaum <rudi@heitbaum.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
 ---
- Documentation/core-api/kernel-api.rst |  3 ++
- Documentation/driver-api/basics.rst   |  2 +-
- include/linux/module.h                | 76 ++++++++++++++++++---------
- 3 files changed, 54 insertions(+), 27 deletions(-)
+ kernel/module/main.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
-index 9b3f3e5f5a95..5079e48dd58c 100644
---- a/Documentation/core-api/kernel-api.rst
-+++ b/Documentation/core-api/kernel-api.rst
-@@ -226,6 +226,9 @@ Kernel module auto-loading
- .. kernel-doc:: kernel/module/kmod.c
-    :export:
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index d6de66a6a1ac..6100d0373f2f 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3121,39 +3121,42 @@ static void idempotent_complete(struct idempotent *u, int ret)
+ static int init_module_from_file(struct file *f, const char __user * uargs, int flags)
+ {
+ 	struct idempotent idem;
+ 	struct load_info info = { };
+ 	void *buf = NULL;
+ 	int len, ret;
  
-+.. kernel-doc:: include/linux/module.h
-+   :no-identifiers: module_init module_exit klp_modinfo
-+
- Module debugging
- ----------------
+ 	if (!f || !(f->f_mode & FMODE_READ))
+ 		return -EBADF;
  
-diff --git a/Documentation/driver-api/basics.rst b/Documentation/driver-api/basics.rst
-index 4b4d8e28d3be..fea42d6cad80 100644
---- a/Documentation/driver-api/basics.rst
-+++ b/Documentation/driver-api/basics.rst
-@@ -5,7 +5,7 @@ Driver Entry and Exit points
- ----------------------------
+ 	if (idempotent(&idem, file_inode(f))) {
+ 		wait_for_completion(&idem.complete);
+ 		return idem.ret;
+ 	}
  
- .. kernel-doc:: include/linux/module.h
--   :internal:
-+   :identifiers: module_init module_exit
+ 	len = kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_MODULE);
+ 	if (len < 0) {
+ 		mod_stat_inc(&failed_kreads);
+ 		mod_stat_add_long(len, &invalid_kread_bytes);
+-		return len;
++		ret = len;
++		goto out;
+ 	}
  
- Driver device table
- -------------------
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 9e56763dff81..b255db33b40f 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -183,23 +183,27 @@ extern void cleanup_module(void);
- #define MODULE_FILE	MODULE_INFO(file, KBUILD_MODFILE);
- #endif
- 
--/*
-+/**
-+ * MODULE_LICENSE - module license
-+ * @_license: license covering this module.
-+ *
-  * The following license idents are currently accepted as indicating free
-  * software modules
-  *
-- *	"GPL"				[GNU Public License v2]
-- *	"GPL v2"			[GNU Public License v2]
-- *	"GPL and additional rights"	[GNU Public License v2 rights and more]
-- *	"Dual BSD/GPL"			[GNU Public License v2
-- *					 or BSD license choice]
-- *	"Dual MIT/GPL"			[GNU Public License v2
-- *					 or MIT license choice]
-- *	"Dual MPL/GPL"			[GNU Public License v2
-- *					 or Mozilla license choice]
-+ *    "GPL"                        [GNU Public License v2]
-  *
-- * The following other idents are available
-+ *    "GPL v2"                     [GNU Public License v2]
-  *
-- *	"Proprietary"			[Non free products]
-+ *    "GPL and additional rights"  [GNU Public License v2 rights and more]
-+ *
-+ *    "Dual BSD/GPL"               [GNU Public License v2 or BSD license choice]
-+ *
-+ *    "Dual MIT/GPL"               [GNU Public License v2 or MIT license choice]
-+ *
-+ *    "Dual MPL/GPL"               [GNU Public License v2 or Mozilla license choice]
-+ *
-+ * The following other idents are available
-+ *    "Proprietary"                [Non free products]
-  *
-  * Both "GPL v2" and "GPL" (the latter also in dual licensed strings) are
-  * merely stating that the module is licensed under the GPL v2, but are not
-@@ -222,20 +226,26 @@ extern void cleanup_module(void);
-  * is a GPL combined work.
-  *
-  * This exists for several reasons
-- * 1.	So modinfo can show license info for users wanting to vet their setup
-- *	is free
-+ *
-+ * 1.	So modinfo can show license info for users wanting to vet their setup is free
-+ *
-  * 2.	So the community can ignore bug reports including proprietary modules
-+ *
-  * 3.	So vendors can do likewise based on their own policies
-  */
- #define MODULE_LICENSE(_license) MODULE_FILE MODULE_INFO(license, _license)
- 
--/*
-- * Author(s), use "Name <email>" or just "Name", for multiple
-- * authors use multiple MODULE_AUTHOR() statements/lines.
-+/**
-+ * MODULE_AUTHOR - Module author
-+ * @_author: Author(s), use "Name <email>" or just "Name", for multiple
-+ *           authors use multiple MODULE_AUTHOR() statements/lines.
-  */
- #define MODULE_AUTHOR(_author) MODULE_INFO(author, _author)
- 
--/* What your module does. */
-+/**
-+ * MODULE_DESCRIPTION - Module description
-+ * @_description: What your module does.
-+ */
- #define MODULE_DESCRIPTION(_description) MODULE_INFO(description, _description)
- 
- #ifdef MODULE
-@@ -247,19 +257,23 @@ extern typeof(name) __mod_##type##__##name##_device_table		\
- #define MODULE_DEVICE_TABLE(type, name)
- #endif
- 
--/* Version of form [<epoch>:]<version>[-<extra-version>].
-+/**
-+ * MODULE_VERSION: version of module
-+ * @_version: version in the form below
-+ *
-+ * Version of form [<epoch>:]<version>[-<extra-version>].
-  * Or for CVS/RCS ID version, everything but the number is stripped.
-  * <epoch>: A (small) unsigned integer which allows you to start versions
-  * anew. If not mentioned, it's zero.  eg. "2:1.0" is after
-  * "1:2.0".
--
-+ *
-  * <version>: The <version> may contain only alphanumerics and the
-- * character `.'.  Ordered by numeric sort for numeric parts,
-+ * character '.'.  Ordered by numeric sort for numeric parts,
-  * ascii sort for ascii parts (as per RPM or DEB algorithm).
--
-+ *
-  * <extraversion>: Like <version>, but inserted for local
-  * customizations, eg "rh3" or "rusty1".
--
-+ *
-  * Using this automatically adds a checksum of the .c files and the
-  * local headers in "srcversion".
-  */
-@@ -285,11 +299,21 @@ extern typeof(name) __mod_##type##__##name##_device_table		\
+ 	if (flags & MODULE_INIT_COMPRESSED_FILE) {
+ 		int err = module_decompress(&info, buf, len);
+ 		vfree(buf); /* compressed data is no longer needed */
+ 		if (err) {
+ 			mod_stat_inc(&failed_decompress);
+ 			mod_stat_add_long(len, &invalid_decompress_bytes);
+-			return err;
++			ret = err;
++			goto out;
  		}
- #endif
+ 	} else {
+ 		info.hdr = buf;
+ 		info.len = len;
+ 	}
  
--/* Optional firmware file (or files) needed by the module
-- * format is simply firmware file name.  Multiple firmware
-- * files require multiple MODULE_FIRMWARE() specifiers */
-+/**
-+ * MODULE_FIRMWARE - Optional firmware files needed by the module
-+ * @_firmware: firmware file name
-+ *
-+ * Multiple firmware files require multiple MODULE_FIRMWARE() specifiers.
-+ */
- #define MODULE_FIRMWARE(_firmware) MODULE_INFO(firmware, _firmware)
- 
-+/**
-+ * MODULE_IMPORT_NS - Set the symbol namespace for the module.
-+ * @ns: symbol namespace to import the module into.
-+ *
-+ * This adds a modinfo tag 'import_ns' to the module. This is observed
-+ * by userspace at module loading time.
-+ */
- #define MODULE_IMPORT_NS(ns)	MODULE_INFO(import_ns, __stringify(ns))
- 
- struct notifier_block;
+ 	ret = load_module(&info, uargs, flags);
++out:
+ 	idempotent_complete(&idem, ret);
+ 	return ret;
+ }
 -- 
-2.41.0
 
