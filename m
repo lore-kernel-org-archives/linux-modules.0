@@ -2,140 +2,77 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96B4DEB64D9
-	for <linux-modules@archiver.kernel.org>; Tue,  4 Jul 2023 19:20:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CE7BC0015E
+	for <linux-modules@archiver.kernel.org>; Fri,  7 Jul 2023 18:41:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjGDTUH (ORCPT
+        id S229773AbjGGSlz (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 4 Jul 2023 15:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        Fri, 7 Jul 2023 14:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbjGDTUH (ORCPT
+        with ESMTP id S229643AbjGGSlz (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 4 Jul 2023 15:20:07 -0400
-Received: from mail-pj1-f80.google.com (mail-pj1-f80.google.com [209.85.216.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9191A10DA
-        for <linux-modules@vger.kernel.org>; Tue,  4 Jul 2023 12:20:04 -0700 (PDT)
-Received: by mail-pj1-f80.google.com with SMTP id 98e67ed59e1d1-262d8993033so5770101a91.0
-        for <linux-modules@vger.kernel.org>; Tue, 04 Jul 2023 12:20:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688498404; x=1691090404;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V8z37kh0jEmMsrs2uPjnY0ZT+diXbQGQ7dVapIGO4DM=;
-        b=RkYPI+VxnMSl350nBITmtyjAhSSSXWcHFjd/XHDjKJw6tPsDUQYdSQHw2Rh14TSV3P
-         ktFC43OMlXOF78T1bZtQ5CdQDBgUO8eqTfI8EAzYA0dM5W/sgCJ0gqXyqxCydnRb64/H
-         BzNQHajVq51AEl/uo6554cDOdtkw2McAzxN6prq84hFZ9ckTP2dDnJI/dOx1CEuVcmdZ
-         w6AVAOqfum/D+eytbclpxSi2v634bCEPgvgIrLtvAevpMZ+VebBpALB5/bO+ixEPWwx5
-         yry19/K5dTJ1e2z+1geGELeQQJquyzhXg5CaXZW8TGuT6xwsnug5sU7gYiAmF2JAJKMD
-         nzpQ==
-X-Gm-Message-State: ABy/qLahgSV2joD/fxFZ7qHV2FlgjlqyJNCg+8gj+KDXn+pJD1nNItZa
-        pLZ8X1ePVvd6XRFftJyru9J0agfhdH01PuGog6Pg0vjLtqb2
-X-Google-Smtp-Source: APBJJlG9YYe0A7uM8mB8AtPSgQnqfOQAVjw7tR+Ui/9RajSTtuAzEDx/fnnPxE4xrZz0oqnm3iM77B6HgcZzgD6885P6iTdubzsL
+        Fri, 7 Jul 2023 14:41:55 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F7A1FD8
+        for <linux-modules@vger.kernel.org>; Fri,  7 Jul 2023 11:41:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PMlx6JapGPAjsjJ641XTtidFI0B1sEa/zy+3jnNhN2w=; b=A8sVGtbGQzO/pi8pFTvrQjeAzf
+        2aYuiS9EXvwc/gCLs5IlheN/ANzoLIoKMUSnFHRHlcK4yi2DU++Ylv8c14ZJ8v5OdxQrZK85+o6rV
+        nBD+4F2TnURHyjrUYZL2j9lmCcPYekfwma6z5BlKZ9JBu9HZKk5+B/AxhYbfU4M6b5pzvH0mQO/DB
+        6w7K0OfCZ24hc4RpBRs69yJV1heYC/csYHvkOvnWIxcOiY3rzjphonwTJPRyxQghxjym0d5eRmeKJ
+        q88weq27aL8n9aZDe867FkUK3K2tjCa5ASPhxHUti6IYOj78R2roxJM4HN+heX2tuU5d6LHmOMDhl
+        rNeFvgRg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qHqOq-005RX9-2i;
+        Fri, 07 Jul 2023 18:41:48 +0000
+Date:   Fri, 7 Jul 2023 11:41:48 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dave Airlie <airlied@gmail.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
+        Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH 2/2] modules/firmware: add a new option to denote a
+ firmware group to choose one.
+Message-ID: <ZKhcbBHqkEmGtU6I@bombadil.infradead.org>
+References: <20230704025322.2623556-1-airlied@gmail.com>
+ <20230704025322.2623556-3-airlied@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a17:90a:e001:b0:262:ffa8:f49d with SMTP id
- u1-20020a17090ae00100b00262ffa8f49dmr10469123pjy.9.1688498404107; Tue, 04 Jul
- 2023 12:20:04 -0700 (PDT)
-Date:   Tue, 04 Jul 2023 12:20:03 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000094ac8b05ffae2bf2@google.com>
-Subject: [syzbot] [modules?] general protection fault in sys_finit_module
-From:   syzbot <syzbot+9e4e94a2689427009d35@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, chris@chrisdown.name,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        llvm@lists.linux.dev, mcgrof@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230704025322.2623556-3-airlied@gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello,
+On Tue, Jul 04, 2023 at 12:50:50PM +1000, Dave Airlie wrote:
+> From: Dave Airlie <airlied@redhat.com>
+> 
+> This adds two tags that will go into the module info.
+> 
+> The first denotes a group of firmwares, when that tag is present all
+> MODULE_FIRMWARE lines between the tags will be ignored by new versions of
+> dracut.
+> 
+> The second makes an explicitly ordered group of firmwares to search for
+> inside a group setting. New dracut will pick the first available firmware
+> from this to put in the initramfs.
+> 
+> Old dracut will just ignore these tags and fallback to installing all
+> the firmwares.
+> 
+> The corresponding dracut code it at:
+> https://github.com/dracutdevs/dracut/pull/2309
+> 
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Dave Airlie <airlied@redhat.com>
 
-syzbot found the following issue on:
+Lucas, did this end up working for you as well?
 
-HEAD commit:    995b406c7e97 Merge tag 'csky-for-linus-6.5' of https://git..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13db8c0ca80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=71a52faf60231bc7
-dashboard link: https://syzkaller.appspot.com/bug?extid=9e4e94a2689427009d35
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d6670ca80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=103be50b280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d61d1dbcb956/disk-995b406c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f471061e6439/vmlinux-995b406c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9dcd428320a5/bzImage-995b406c.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9e4e94a2689427009d35@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in idempotent kernel/module/main.c:3078 [inline]
-BUG: KASAN: vmalloc-out-of-bounds in init_module_from_file kernel/module/main.c:3124 [inline]
-BUG: KASAN: vmalloc-out-of-bounds in __do_sys_finit_module kernel/module/main.c:3171 [inline]
-BUG: KASAN: vmalloc-out-of-bounds in __se_sys_finit_module+0x371/0x8d0 kernel/module/main.c:3154
-Read of size 8 at addr ffffc90003b1fd60 by task syz-executor680/5015
-
-CPU: 1 PID: 5015 Comm: syz-executor680 Not tainted 6.4.0-syzkaller-10098-g995b406c7e97 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:364 [inline]
- print_report+0x163/0x540 mm/kasan/report.c:475
- kasan_report+0x175/0x1b0 mm/kasan/report.c:588
- idempotent kernel/module/main.c:3078 [inline]
- init_module_from_file kernel/module/main.c:3124 [inline]
- __do_sys_finit_module kernel/module/main.c:3171 [inline]
- __se_sys_finit_module+0x371/0x8d0 kernel/module/main.c:3154
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7faed3af4ce9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcd8021778 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-RAX: ffffffffffffffda RBX: 000000000000da09 RCX: 00007faed3af4ce9
-RDX: 0000000000000001 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007ffcd8021918 R09: 00007ffcd8021918
-R10: 00007ffcd80211f0 R11: 0000000000000246 R12: 00007ffcd802178c
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-Memory state around the buggy address:
- ffffc90003b1fc00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90003b1fc80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90003b1fd00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                                                       ^
- ffffc90003b1fd80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90003b1fe00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+  Luis
