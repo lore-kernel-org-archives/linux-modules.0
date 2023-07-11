@@ -2,142 +2,115 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA2D9EB64D9
-	for <linux-modules@archiver.kernel.org>; Mon, 10 Jul 2023 09:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BCF2C0015E
+	for <linux-modules@archiver.kernel.org>; Tue, 11 Jul 2023 15:32:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjGJJwH (ORCPT
+        id S232359AbjGKPcS (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 10 Jul 2023 05:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
+        Tue, 11 Jul 2023 11:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjGJJv1 (ORCPT
+        with ESMTP id S232243AbjGKPcR (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 10 Jul 2023 05:51:27 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D71012A;
-        Mon, 10 Jul 2023 02:47:34 -0700 (PDT)
-X-UUID: 434e9a661f0411eeb20a276fd37b9834-20230710
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=nb99lc8Wmse35yybNXCud8AjDzpYa3GbyoDtpeuAjOk=;
-        b=SeEG/ioOymc16mHFXLdb9p1jG8VP+wACBtfVuE6iLSwL+9UV6Rn5fxzRrIiXl0oN3iAGnZtjHqyqy/48Fe6wQBlyy602seF/whgm9UJBWa337vEY2nsk7uIiOgZVSilCFbPi1M3fpWUimBYrtE+ZqEYXHEQIRkIFoBWs3GLcF90=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:ed273aa7-c282-45bd-b2e5-f961bde6e64a,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:1,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:101
-X-CID-INFO: VERSION:1.1.27,REQID:ed273aa7-c282-45bd-b2e5-f961bde6e64a,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:1,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:101
-X-CID-META: VersionHash:01c9525,CLOUDID:e87f0f0e-c22b-45ab-8a43-3004e9216b56,B
-        ulkID:2307101729274RT61AAC,BulkQuantity:0,Recheck:0,SF:19|48|38|29|28|17,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-        L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD,TF_CID_SPAM_ULN
-X-UUID: 434e9a661f0411eeb20a276fd37b9834-20230710
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
-        (envelope-from <kuan-ying.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 217616331; Mon, 10 Jul 2023 17:29:26 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 10 Jul 2023 17:29:25 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 10 Jul 2023 17:29:25 +0800
-From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-CC:     <chinwen.chang@mediatek.com>, <qun-wei.lin@mediatek.com>,
-        <linux-mm@kvack.org>, <linux-modules@vger.kernel.org>,
-        <casper.li@mediatek.com>,
-        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2] scripts/gdb: fix 'lx-lsmod' show the wrong size
-Date:   Mon, 10 Jul 2023 17:28:46 +0800
-Message-ID: <20230710092852.31049-1-Kuan-Ying.Lee@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Tue, 11 Jul 2023 11:32:17 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD88ED;
+        Tue, 11 Jul 2023 08:32:16 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 17BB722724;
+        Tue, 11 Jul 2023 15:32:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1689089535; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=WhVOBmTkvX5Yn7jpRUVGFl+hIu6p2Hs/7XqxlXkfIA8=;
+        b=MZjChiLgNZKvQmv0tVIAliYRwhstqe1f31P9kGY8cEew/jlNbN8HnnpLQHWoI4NdfC+UwC
+        e+CdRjvv0zaDMQ1db94BfGFxdGiDDw+HpU43XGI+edaGkzvWaNhE8vrw6CuobRm2EaoiUu
+        k1kqepReQsITyhpEj9gv4EmkCiqXikc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1689089535;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=WhVOBmTkvX5Yn7jpRUVGFl+hIu6p2Hs/7XqxlXkfIA8=;
+        b=7GTOZt4Ni28BiPz+U5RqpkWF8v/p3k1Gq6bQhtzx6gsFk1MjJmd/XxXpV12PIG2JbICQ7f
+        ZfT7YxEHFNz28ZAw==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id AE0312C142;
+        Tue, 11 Jul 2023 15:32:14 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     linux-modules@vger.kernel.org
+Cc:     Michal Suchanek <msuchanek@suse.de>, Takashi Iwai <tiwai@suse.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] kmod /usr support
+Date:   Tue, 11 Jul 2023 17:31:15 +0200
+Message-ID: <20230711153126.28876-1-msuchanek@suse.de>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-'lsmod' shows total core layout size, so we need to
-sum up all the sections in core layout in gdb scripts.
+Hello,
 
-/ # lsmod
-kasan_test 200704 0 - Live 0xffff80007f640000
+with these patches it is possible to install kernel modules under an
+arbitrary prefix - eg. moving the /lib/modules to /usr/lib/modules with
+/usr prefix.
 
-Before patch:
-(gdb) lx-lsmod
-Address            Module                  Size  Used by
-0xffff80007f640000 kasan_test             36864  0
+While the modprobe.d and depmod.d search which already includes multiple
+paths is expanded to also include $(prefix) the module directory still
+supports only one location, only a different one under $(module_prefix).
 
-After patch:
-(gdb) lx-lsmod
-Address            Module                  Size  Used by
-0xffff80007f640000 kasan_test            200704  0
+Having kmod search multiple module locations while only one is supported
+now might break some assumption about relative modulke path
+corresponding to a specific file, would require more invasive changes to
+implement, and is not supportive of the goal of moving the modules away
+from /lib.
 
-Fixes: b4aff7513df3 ("scripts/gdb: use mem instead of core_layout to get the module address")
-Reviewed-by: Pankaj Raghav <p.raghav@samsung.com>
-Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
----
-V1->V2:
-  - Remove special condition
+Both kmod and the kernel need to be patched to make use of this feature.
+Patched kernel is backwards compatible with older kmod.  Patched kmod
+with empty $(module_prefix) is equivalent to unpatched kmod.
 
- scripts/gdb/linux/constants.py.in |  3 +++
- scripts/gdb/linux/modules.py      | 12 +++++++++---
- 2 files changed, 12 insertions(+), 3 deletions(-)
+Thanks
 
-diff --git a/scripts/gdb/linux/constants.py.in b/scripts/gdb/linux/constants.py.in
-index 50a92c4e9984..fab74ca9df6f 100644
---- a/scripts/gdb/linux/constants.py.in
-+++ b/scripts/gdb/linux/constants.py.in
-@@ -64,6 +64,9 @@ LX_GDBPARSED(IRQ_HIDDEN)
- 
- /* linux/module.h */
- LX_GDBPARSED(MOD_TEXT)
-+LX_GDBPARSED(MOD_DATA)
-+LX_GDBPARSED(MOD_RODATA)
-+LX_GDBPARSED(MOD_RO_AFTER_INIT)
- 
- /* linux/mount.h */
- LX_VALUE(MNT_NOSUID)
-diff --git a/scripts/gdb/linux/modules.py b/scripts/gdb/linux/modules.py
-index 261f28640f4c..f76a43bfa15f 100644
---- a/scripts/gdb/linux/modules.py
-+++ b/scripts/gdb/linux/modules.py
-@@ -73,11 +73,17 @@ class LxLsmod(gdb.Command):
-                 "        " if utils.get_long_type().sizeof == 8 else ""))
- 
-         for module in module_list():
--            layout = module['mem'][constants.LX_MOD_TEXT]
-+            text = module['mem'][constants.LX_MOD_TEXT]
-+            text_addr = str(text['base']).split()[0]
-+            total_size = 0
-+
-+            for i in range(constants.LX_MOD_TEXT, constants.LX_MOD_RO_AFTER_INIT + 1):
-+                total_size += module['mem'][i]['size']
-+
-             gdb.write("{address} {name:<19} {size:>8}  {ref}".format(
--                address=str(layout['base']).split()[0],
-+                address=text_addr,
-                 name=module['name'].string(),
--                size=str(layout['size']),
-+                size=str(total_size),
-                 ref=str(module['refcnt']['counter'] - 1)))
- 
-             t = self._module_use_type.get_type().pointer()
+Michal
+
+Link: https://lore.kernel.org/linux-modules/20210112160211.5614-1-msuchanek@suse.de/
+
+Michal Suchanek (4):
+  man/depmod.d: Fix incorrect /usr/lib search path
+  libkmod, depmod: Load modprobe.d, depmod.d from $prefix/lib.
+  kmod: Add config command to show compile time configuration as JSON
+  libkmod, depmod, modprobe: Search for kernel modules under
+    ${module_prefix}
+
+ Makefile.am                          |   4 +-
+ configure.ac                         |   7 ++
+ libkmod/libkmod.c                    |   7 +-
+ man/Makefile.am                      |  10 ++-
+ man/depmod.d.xml                     |   9 ++-
+ man/depmod.xml                       |   4 +-
+ man/kmod.xml                         |   6 ++
+ man/modinfo.xml                      |   2 +-
+ man/modprobe.d.xml                   |   1 +
+ man/modprobe.xml                     |   2 +-
+ man/modules.dep.xml                  |   6 +-
+ testsuite/module-playground/Makefile |   2 +-
+ testsuite/setup-rootfs.sh            | 109 +++++++++++++++------------
+ testsuite/test-depmod.c              |  16 ++--
+ testsuite/test-testsuite.c           |   8 +-
+ tools/depmod.c                       |   7 +-
+ tools/kmod.c                         |  40 ++++++++++
+ tools/modinfo.c                      |   4 +-
+ tools/modprobe.c                     |   4 +-
+ tools/static-nodes.c                 |   6 +-
+ 20 files changed, 166 insertions(+), 88 deletions(-)
+
 -- 
-2.18.0
+2.41.0
 
