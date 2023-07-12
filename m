@@ -2,48 +2,50 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57E20EB64D9
-	for <linux-modules@archiver.kernel.org>; Wed, 12 Jul 2023 05:47:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10EC3EB64D9
+	for <linux-modules@archiver.kernel.org>; Wed, 12 Jul 2023 06:47:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjGLFrT (ORCPT
+        id S231868AbjGLGr3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 12 Jul 2023 01:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        Wed, 12 Jul 2023 02:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjGLFrS (ORCPT
+        with ESMTP id S231219AbjGLGr0 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 12 Jul 2023 01:47:18 -0400
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119C8135;
-        Tue, 11 Jul 2023 22:47:17 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-3fbc0609cd6so66203475e9.1;
-        Tue, 11 Jul 2023 22:47:16 -0700 (PDT)
+        Wed, 12 Jul 2023 02:47:26 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B82F19B;
+        Tue, 11 Jul 2023 23:47:25 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-3fbc63c2e84so71464575e9.3;
+        Tue, 11 Jul 2023 23:47:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689140835; x=1691732835;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1689144444; x=1691736444;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7KhU5Ez9+mJlZdemSaBOe5QuCdwTYr99cQtnBoKdbfQ=;
-        b=PaYe/Jjm9G+Wj+w1Flh2fimxxBZocpUxwhoBzJk6H7yaJGsboZsqhWSl+t4LVyE0Xb
-         G3lm4L3faOTS9Y6AAIQo6/Am6ROEtCHRGcafiVBtQ+w2+i9TUpgEo9hB1MIm8gKhwrea
-         UiKiNA4xoKcutEQgFZvtYY1UMELTnZ1QUIT4PC3chCb628ZCm+AIa21ROB0WHdr9AAye
-         qaOMEismcViepCtgTqDgKT3U/OoO6BeAxeoLe0iYCszEzO1gGwmo/RXvM2fMGpCGDIqV
-         NG/9z5K4Wz71I9USbmeDdwAeYoJXn1FyfM84LUm1M0xkZTd1W/b/cQmBHoWP8k+GHllC
-         yrKQ==
-X-Gm-Message-State: ABy/qLZZI9jIhEsMHPUw5stzIiyWYYSJAbeV2aYXaV6/wdwcw5ErDc7z
-        JYBCNiAWkT7Q+0AcMCcZYuSowG1aUXfNCg==
-X-Google-Smtp-Source: APBJJlGv2XsuPzLypp+ZJLBe+5DhRe1oSQlYjrlgxRLpONLrWAgxIn3TsbyxIaW+JqRPV32PGJqcvA==
-X-Received: by 2002:a7b:c44c:0:b0:3fc:4:a5b5 with SMTP id l12-20020a7bc44c000000b003fc0004a5b5mr13760957wmi.29.1689140835231;
-        Tue, 11 Jul 2023 22:47:15 -0700 (PDT)
+        bh=foHvoBBfPTVQkBVi8mySw1VhQvfle75h/iYshfe3d14=;
+        b=BxAC+Lwyeh7HadVCQqqwfP94xBRq0h4hFmBG0/WqlIYfC5sMeewfo/ba/9R8LyDgJ5
+         tuae13/VVTABxXWeNE0yAHxIjTYmCq4ZBYX6gU6PvkERFr9XjukO4F5hM7f0GcwNv9Bz
+         CITv0eXLwX9k+/sJnEmP8mT2M60ncovJFAZ6Jt0F/id5jpBFbD4U15BEsPN5kOlkYnlW
+         iA4gfjJ0P7HJMPpN7x0l7Zqhi4OCgljO68xUicyHeyZNKYzzvmEBlE5Uvxmc8XOD48i5
+         NBu9R2yfAEji96nLYzncv2+UQSELbg5kB/8B/jNHFqtb+T2Wp4YCUPuaqfCMykfikMhM
+         BrJQ==
+X-Gm-Message-State: ABy/qLawlFqo+lfJfVwRjMLtgQfBFzXVqstDQjMmwtsLGtFVFeiNBHL1
+        1tz/UIRm6XioWwLzezxDRpb9ufFaVCDCzQ==
+X-Google-Smtp-Source: APBJJlF2mTLoSRlIAkqpRMJumEW6a38O3Ms2HJaT0rQkHDPqz/vdPpFML7QEgTNTpNRgutb6Oyw+Ww==
+X-Received: by 2002:a05:600c:253:b0:3fa:984d:7e99 with SMTP id 19-20020a05600c025300b003fa984d7e99mr18235981wmj.22.1689144443692;
+        Tue, 11 Jul 2023 23:47:23 -0700 (PDT)
 Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
-        by smtp.gmail.com with ESMTPSA id a25-20020a1cf019000000b003fbb346279dsm4122031wmb.38.2023.07.11.22.47.14
+        by smtp.gmail.com with ESMTPSA id j2-20020a5d4482000000b003143867d2ebsm4124322wrq.63.2023.07.11.23.47.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 22:47:14 -0700 (PDT)
-Message-ID: <da2fdd15-fae1-2bf6-04e7-568c715372ce@kernel.org>
-Date:   Wed, 12 Jul 2023 07:47:13 +0200
+        Tue, 11 Jul 2023 23:47:22 -0700 (PDT)
+Message-ID: <23779aa4-e1c1-c311-5f6b-8be652826cc7@kernel.org>
+Date:   Wed, 12 Jul 2023 08:47:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
+Subject: Re: [PATCH 2/4] libkmod, depmod: Load modprobe.d, depmod.d from
+ $prefix/lib.
 Content-Language: en-US
 To:     Michal Suchanek <msuchanek@suse.de>, linux-modules@vger.kernel.org
 Cc:     Takashi Iwai <tiwai@suse.com>,
@@ -56,56 +58,47 @@ Cc:     Takashi Iwai <tiwai@suse.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
         linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230711153126.28876-1-msuchanek@suse.de>
- <20230711153457.29497-1-msuchanek@suse.de>
+ <20230711153126.28876-3-msuchanek@suse.de>
 From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH] depmod: Handle installing modules under a prefix
-In-Reply-To: <20230711153457.29497-1-msuchanek@suse.de>
+In-Reply-To: <20230711153126.28876-3-msuchanek@suse.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On 11. 07. 23, 17:34, Michal Suchanek wrote:
-> Some distributions aim at not shipping any files in / ustside of usr.
+On 11. 07. 23, 17:31, Michal Suchanek wrote:
+> There is an ongoing effort to limit use of files outside of /usr (or
+> $prefix on general). Currently all modprobe.d paths are hardcoded to
+> outside of $prefix. Teach kmod to load modprobe.d from $prefix/lib.
 > 
-> The path under which kernel modules are instaleld is hardcoded to /lib
-> which conflicts with this goal.
-> 
-> When kmod provides the config command use it to determine the correct
-> module installation prefix.
-> 
-> On kmod that does not provide the command / is used as before.
-> 
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> ---
->   Makefile          | 4 +++-
->   scripts/depmod.sh | 8 ++++----
->   2 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 47690c28456a..b05d696f06bd 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1165,7 +1165,9 @@ export INSTALL_DTBS_PATH ?= $(INSTALL_PATH)/dtbs/$(KERNELRELEASE)
->   # makefile but the argument can be passed to make if needed.
->   #
+> On some distributions /usr/lib and /lib are the same directory because
+> of a compatibility symlink, and it is possible to craft configuration
+> files with sideeffects that would behave differently when loaded twice.
+> However, the override semantic ensures that one 'overrides' the other,
+> and only one configuration file of the same name is loaded from any of
+> the seach directories.
+
+search
+
+...
+> --- a/man/Makefile.am
+> +++ b/man/Makefile.am
+> @@ -17,9 +17,14 @@ EXTRA_DIST = $(MAN5:%.5=%.xml) $(MAN8:%.8=%.xml)
+>   CLEANFILES = $(dist_man_MANS)
 >   
-> -MODLIB	= $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)
-> +export KERNEL_MODULE_PREFIX := $(shell kmod config | jq -r .module_prefix)
+>   %.5 %.8: %.xml
+> -	$(AM_V_XSLT)$(XSLT) \
+> +	$(AM_V_XSLT)if [ -n '$(prefix)' ] ; then \
+> +		sed -e 's|@PREFIX@|$(prefix)|g' $< ; \
 
-echo -e 'KERNEL_MODULE_PREFIX := $(shell kmod config | jq -r 
-.module_prefix)\nall:'|make -f -
-invalid command 'config'
-parse error: Invalid numeric literal at line 1, column 5
+Hmm, if prefix is empty, this will remove @PREFIX@. So why you need this 
+'if' at all?
 
-I think you should pipe kmod's 2> /dev/null to support older kmod. Ah, 
-but you'd need 2> /dev/null for jq too. That would not be good as jq 
-might not be installed and a user wouldn't see the error. So instead, I 
-would do:
+> +	else \
+> +		sed -e '/@PREFIX@/d' $< ; \
+> +	fi | \
 
-$(shell kmod config &> /dev/null && kmod config | jq -r .module_prefix)
 
-thanks,
 -- 
 js
 suse labs
