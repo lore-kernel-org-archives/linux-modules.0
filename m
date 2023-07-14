@@ -2,94 +2,92 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17E5DEB64DA
-	for <linux-modules@archiver.kernel.org>; Fri, 14 Jul 2023 13:59:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 450DAC001DD
+	for <linux-modules@archiver.kernel.org>; Fri, 14 Jul 2023 14:02:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbjGNN7W (ORCPT
+        id S235876AbjGNOCe (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 14 Jul 2023 09:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        Fri, 14 Jul 2023 10:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235849AbjGNN7V (ORCPT
+        with ESMTP id S235815AbjGNOCd (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 14 Jul 2023 09:59:21 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5CF2708;
-        Fri, 14 Jul 2023 06:59:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 66682220DA;
-        Fri, 14 Jul 2023 13:59:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1689343159; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        Fri, 14 Jul 2023 10:02:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D32F269F;
+        Fri, 14 Jul 2023 07:02:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 445C81F750;
+        Fri, 14 Jul 2023 14:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1689343351; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=971iQ9AGUSNF0XgKLALtIXjvlYcq/Akq7wgISeHEfjI=;
-        b=ahegt4WZRpcUhEtPmf6KV/zPWl0VszIuhyctJuOD8gAXPhuPaXh8+wlj336usPRSRQm7Zk
-        upg+cjimedHbZ6nRFicirXUfgEHhe8s2Ul53c8ohc5ILjbRbWuz/lwan36YnQcZPVyX15q
-        4Y9GHiTN/WXvLgE4NJ38EPGzM9t9h/Q=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=Epn4M12EMMtIKIyIZc7yfNtOd8tKd2U0+jthECcmPvQ=;
+        b=rfT7n0LgxtPmC4nzmdf7Syi+PrKAu8elVuE5rsv7TwOwbDBudf3ui9z6FNQM8DKsmo4W9J
+        +gMmYQI4ZzT1fSue4GAL2h/yhfmly77Qg6+LLDRljkUelt2xzODFjd/WzVsFImunhmArJ2
+        IqFXEsSSAo3G6gfmDJqVdVMHpl67BaM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1689343351;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Epn4M12EMMtIKIyIZc7yfNtOd8tKd2U0+jthECcmPvQ=;
+        b=7gCaZnBOYP7FxVS7nvoijBmJHxjFD+Q1UMxUAcrZxnYex5CIxZj9fSgzkAPMbQb7sawjhb
+        3qfcJ1K6YdP/oDAw==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2E121138F8;
-        Fri, 14 Jul 2023 13:59:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yQVJCrdUsWS6DwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 14 Jul 2023 13:59:19 +0000
-Date:   Fri, 14 Jul 2023 15:59:17 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+        by relay2.suse.de (Postfix) with ESMTPS id DF1102C142;
+        Fri, 14 Jul 2023 14:02:30 +0000 (UTC)
+Date:   Fri, 14 Jul 2023 16:02:29 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
 To:     Jan Engelhardt <jengelh@inai.de>
-Cc:     Michal Suchanek <msuchanek@suse.de>, linux-modules@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
+Cc:     linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
         Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
         Jiri Slaby <jslaby@suse.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
         linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] depmod: Handle installing modules under a prefix
-Message-ID: <mg5c43nynzgrp6mn47shxjobquqjs3klxwwheesjmsotvlalbx@axhwgiehelfx>
-References: <30d8c675-e769-e567-a81f-c1b59c66ad67@suse.com>
- <20230714122111.7528-1-msuchanek@suse.de>
- <s4sr75q4-5120-5sp5-7751-noqs9q67904q@vanv.qr>
+Subject: Re: [PATCH kmod v2 3/4] kmod: Add config command to show compile
+ time configuration as JSON
+Message-ID: <20230714140229.GJ9196@kitsune.suse.cz>
+References: <20230711153126.28876-1-msuchanek@suse.de>
+ <20230712140103.5468-3-msuchanek@suse.de>
+ <429o975-ro63-o94r-qs96-76ro6o28on5@vanv.qr>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7wpvbt37zgrl7ken"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <s4sr75q4-5120-5sp5-7751-noqs9q67904q@vanv.qr>
+In-Reply-To: <429o975-ro63-o94r-qs96-76ro6o28on5@vanv.qr>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+Hello,
 
---7wpvbt37zgrl7ken
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Fri, Jul 14, 2023 at 03:52:05PM +0200, Jan Engelhardt wrote:
+> 
+> On Wednesday 2023-07-12 16:00, Michal Suchanek wrote:
+> 
+> >Show prefix (where configuration files are searched/to be installed),
+> >module compressions, and module signatures supported.
+> 
+> What about doing it like systemd and generate a .pc file instead 
+> that can then be queried like so, e.g.:
+> 
+> $ pkg-config kmod --variable=modulesdir
+> /usr/lib/modules
 
-On Fri, Jul 14, 2023 at 03:38:18PM +0200, Jan Engelhardt <jengelh@inai.de> wrote:
-> Ok, so if the problem statement is that hardcoded paths are bad, then why
-> continue to hardcode the "/lib/modules" fragment? Just make it so that
-> KERNEL_MODULE_PREFIX can be set to the exact string "/usr/lib/modules" and not
-> just "/usr".
+ - AFAICS tools packed with kernel generate but do not consume .pc files
+   while JSON and jq are commonly used througout the kernel ecosystem
+ - .pc files would be shipped with libkmod development package, not the
+   kmod tool in a binary distribution
 
-That sounds cleaner but I'm worried it would be a BC break in setups
-that expect the existing layout under INSTALL_MOD_PATH, wouldn't it?
+Other than that JSON and .pc files are roughly quivalent in usability.
+
+Thanks
 
 Michal
-
---7wpvbt37zgrl7ken
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZLFUswAKCRAGvrMr/1gc
-jq8fAP9QUfy7J0GWTgsdUWNVhpouCUlQBkAT3u/M/BymxjbfHgD+L8w8hVaJPhOv
-MhrghO6GZrd0Ynt/nc/A0csJDBITaQE=
-=zM4P
------END PGP SIGNATURE-----
-
---7wpvbt37zgrl7ken--
