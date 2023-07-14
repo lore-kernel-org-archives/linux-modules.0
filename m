@@ -2,34 +2,47 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC93EEB64DC
-	for <linux-modules@archiver.kernel.org>; Fri, 14 Jul 2023 15:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 955EDC001DC
+	for <linux-modules@archiver.kernel.org>; Fri, 14 Jul 2023 16:58:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236253AbjGNP13 (ORCPT
+        id S235416AbjGNQ6F (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 14 Jul 2023 11:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
+        Fri, 14 Jul 2023 12:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235457AbjGNP12 (ORCPT
+        with ESMTP id S229706AbjGNQ6E (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 14 Jul 2023 11:27:28 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7C22D68;
-        Fri, 14 Jul 2023 08:27:19 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.49.15]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N79ly-1psslm0QVI-017Yy8; Fri, 14 Jul 2023 17:26:46 +0200
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id 13BD13E8B8; Fri, 14 Jul 2023 17:26:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1689348404; bh=w4fRc/ie8uyI+ju21eroczebVyv8KrZnltwBlvcBpv4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1C+qX0vJ10rrMR1HGgPXWjwv2z1KxZt5xutHcYJSsXmjCh0ncrUpREzoisIjP1L81
-         dOA62e++7/8yPos9yD1RzKk3KSXqlR3bgomvrTq/5pFAiA7kzwBfPDLgmADvgA7X7/
-         EQ3WsG6+hibtB0kJ9CerUpYPegrq7fEiJKSExvDk=
-Date:   Fri, 14 Jul 2023 17:26:43 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Michal Suchanek <msuchanek@suse.de>
+        Fri, 14 Jul 2023 12:58:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCE8358E;
+        Fri, 14 Jul 2023 09:58:03 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9EC031F750;
+        Fri, 14 Jul 2023 16:58:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1689353881; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3GpL3SAU4UYjxuI87qVTDXsPz5t7JNfto7bmoN8MBNc=;
+        b=P94IF4rvbaGL6Y0u4KZ1FyLbRjYenZq9wdX/Bo35qp5GuZ6sSXskRyjJSrmYmJQwfaqUs+
+        sXQedZsnImNBOwJfLUqAzzKoOUdQ1keZ7FStY96P+A+Gmmi/WAAgmJrO1VwYlZ9dMmDKe/
+        M+5LxT0odIOqOgYb+Y+Ag6zSldSGMH4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1689353881;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3GpL3SAU4UYjxuI87qVTDXsPz5t7JNfto7bmoN8MBNc=;
+        b=pHz0RJu4wxUdHnoFijoc/IefLA59NKobliL7o5TvzftLGlLdx6+5M0ytBWkubqUFRsRNF4
+        dKSx/mdTS4awYDCA==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 55D8A2C142;
+        Fri, 14 Jul 2023 16:58:01 +0000 (UTC)
+Date:   Fri, 14 Jul 2023 18:58:00 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Nicolas Schier <nicolas@fjasle.eu>
 Cc:     linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
         Lucas De Marchi <lucas.de.marchi@gmail.com>,
         Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
@@ -40,163 +53,132 @@ Cc:     linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
         linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH kmod v2 3/4] kmod: Add config command to show compile
  time configuration as JSON
-Message-ID: <ZLFpM+H2bfkJx65S@fjasle.eu>
+Message-ID: <20230714165800.GO9196@kitsune.suse.cz>
 References: <20230711153126.28876-1-msuchanek@suse.de>
  <20230712140103.5468-3-msuchanek@suse.de>
+ <ZLFpM+H2bfkJx65S@fjasle.eu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="fJQQMulXf8UyxTpY"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230712140103.5468-3-msuchanek@suse.de>
-X-Provags-ID: V03:K1:PGXsAgTlLd3IPcf8lVHUJ+OD1BksbcdYQmYDdQSSKktdepbPWZ4
- rjvBCtMpqp1ip0eP9UERtt8mAp6mv0C6aAeOhqCT2J0EB/JNzbIZHhBvjmnTs5XMPmPzdiu
- fmjnjMEe1Iv1Cb6KLoHq0dch7I4FAgGfJn1rSQnE7XMlYTGtft1jqIlA7zwvc6q+VcINyz3
- 1Kei9tCds5L16Yt6leq2w==
-UI-OutboundReport: notjunk:1;M01:P0:rxmSj38tAwQ=;kTw1vgYOjLXLYwfJYOfRJMk9dUy
- cfHsqZQM5+em12BcYG6GLMa+Ut81myYD26f63c34qREjDh9GkePrGSed/8xGjN0q+f49LJafd
- jkMlJHBhIC6OIOL/AwSU70bBsTPhsOl60C7R0bVJ50vJchGeO/SJKsyWdlmkI++M9t4oBKtsH
- wmir+Q620M1LQZihfXE3+95pIhrXxROM5kst8fNKvMpjbeX4XYH3MKKQhfQqwSYGfx/qaGCUV
- lRvsIe3mTeHrm4Xdu7loAv2su0DWE7zilYnYGmuVeCJ6cj9kDdZ1UI/Mkp5p/KqA8OludvziU
- nWJ28rVQ17lEtRuxv5VHXUTL3FChS3wi7IVh4K50BGVC8g7R3RQ3gXiqXhv011ddDjEZYkcZJ
- 6LitFw+0XS8gnecMWBDQHooGUEacEenX84K6WG0YSpKMDaQFASJbIPQBHFpz5P3JBeKpgqJSS
- dPXwthEljMtYC8SEjQuKTGDBRwJBI6HoAQTGC+C2jG+jJ3InQGOp8srm1spc+h5eR9Y+24e2R
- VKQlXf+29S1mLZpp2qST28QXSF/5ZWdzBxz6L2oGz6wlNpI4VAUlTLNbT9mMN3IA1UVfOg8kj
- Et09iduhcWUcXkSnHQKEf3t1Hn8VTh4wyeeEcQOHoyf2NIbIl9oS0dqfkMIA1vtiUttAmty5K
- JL8i0QElmfUrTpyXZwplVt1NTQpemyyowL/yL9X1rw==
+In-Reply-To: <ZLFpM+H2bfkJx65S@fjasle.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
+On Fri, Jul 14, 2023 at 05:26:43PM +0200, Nicolas Schier wrote:
+> On Wed, Jul 12, 2023 at 04:00:47PM +0200 Michal Suchanek wrote:
+> > Show prefix (where configuration files are searched/to be installed),
+> > module compressions, and module signatures supported.
+> > 
+> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > ---
+> > v2: mention module signature in commit message
+> > ---
+> >  man/kmod.xml |  6 ++++++
+> >  tools/kmod.c | 39 +++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 45 insertions(+)
+> > 
+> > diff --git a/man/kmod.xml b/man/kmod.xml
+> > index 0706ad58c2cc..f992a500f836 100644
+> > --- a/man/kmod.xml
+> > +++ b/man/kmod.xml
+> > @@ -71,6 +71,12 @@
+> >            <para>Show the help message.</para>
+> >          </listitem>
+> >        </varlistentry>
+> > +      <varlistentry>
+> > +        <term><command>config</command></term>
+> > +        <listitem>
+> > +          <para>Show compile time options in JSON.</para>
+> > +        </listitem>
+> > +      </varlistentry>
+> >        <varlistentry>
+> >          <term><command>list</command></term>
+> >          <listitem>
+> > diff --git a/tools/kmod.c b/tools/kmod.c
+> > index 55689c075ab1..5a13716955c1 100644
+> > --- a/tools/kmod.c
+> > +++ b/tools/kmod.c
+> > @@ -37,9 +37,11 @@ static const struct option options[] = {
+> >  };
+> >  
+> >  static const struct kmod_cmd kmod_cmd_help;
+> > +static const struct kmod_cmd kmod_cmd_config;
+> >  
+> >  static const struct kmod_cmd *kmod_cmds[] = {
+> >  	&kmod_cmd_help,
+> > +	&kmod_cmd_config,
+> >  	&kmod_cmd_list,
+> >  	&kmod_cmd_static_nodes,
+> >  
+> > @@ -95,6 +97,43 @@ static const struct kmod_cmd kmod_cmd_help = {
+> >  	.help = "Show help message",
+> >  };
+> >  
+> > +static const char *compressions[] = {
+> > +#ifdef ENABLE_ZSTD
+> > +			"zstd",
+> > +#endif
+> > +#ifdef ENABLE_XZ
+> > +			"xz",
+> > +#endif
+> > +#ifdef ENABLE_ZLIB
+> > +			"gz",
+> > +#endif
+> > +			NULL
+> > +};
+> > +
+> > +static int kmod_config(int argc, char *argv[])
+> > +{
+> > +	unsigned i;
+> > +	printf("{\"prefix\":\"" PREFIX "\""
+> > +			",\"module_signature\":["
+> > +#ifdef ENABLE_OPENSSL
+> > +			"\"PKCS#7\","
+> > +#endif
+> > +			"\"legacy\"]"
+> > +			",\"module_compression\":[");
+> > +	for(i = 0; compressions[i]; i++) {
+> > +		printf("%s\"%s\"", i ? "," : "", compressions[i]);
+> > +	}
+> > +	printf("]}\n");
+> > +
+> > +	return EXIT_SUCCESS;
+> > +}
+> > +
+> > +static const struct kmod_cmd kmod_cmd_config = {
+> > +	.name = "config",
+> > +	.cmd = kmod_config,
+> > +	.help = "Show compile time options in JSON",
+> > +};
+> > +
+> >  static int handle_kmod_commands(int argc, char *argv[])
+> >  {
+> >  	const char *cmd;
+> > -- 
+> > 2.41.0
+> 
+> If kmod could show selected configs without some (JSON) syntax
+> around, it could simplify its proposed use in kbuild. E.g.:
+> 
+>     kmod config prefix 2>/dev/null
+> 
+> instead of
+> 
+>     kmod config &>/dev/null && kmod config | jq -r .prefix
 
---fJQQMulXf8UyxTpY
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Which would no longer hold for whole module directory:
 
-On Wed, Jul 12, 2023 at 04:00:47PM +0200 Michal Suchanek wrote:
-> Show prefix (where configuration files are searched/to be installed),
-> module compressions, and module signatures supported.
->=20
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> ---
-> v2: mention module signature in commit message
-> ---
->  man/kmod.xml |  6 ++++++
->  tools/kmod.c | 39 +++++++++++++++++++++++++++++++++++++++
->  2 files changed, 45 insertions(+)
->=20
-> diff --git a/man/kmod.xml b/man/kmod.xml
-> index 0706ad58c2cc..f992a500f836 100644
-> --- a/man/kmod.xml
-> +++ b/man/kmod.xml
-> @@ -71,6 +71,12 @@
->            <para>Show the help message.</para>
->          </listitem>
->        </varlistentry>
-> +      <varlistentry>
-> +        <term><command>config</command></term>
-> +        <listitem>
-> +          <para>Show compile time options in JSON.</para>
-> +        </listitem>
-> +      </varlistentry>
->        <varlistentry>
->          <term><command>list</command></term>
->          <listitem>
-> diff --git a/tools/kmod.c b/tools/kmod.c
-> index 55689c075ab1..5a13716955c1 100644
-> --- a/tools/kmod.c
-> +++ b/tools/kmod.c
-> @@ -37,9 +37,11 @@ static const struct option options[] =3D {
->  };
-> =20
->  static const struct kmod_cmd kmod_cmd_help;
-> +static const struct kmod_cmd kmod_cmd_config;
-> =20
->  static const struct kmod_cmd *kmod_cmds[] =3D {
->  	&kmod_cmd_help,
-> +	&kmod_cmd_config,
->  	&kmod_cmd_list,
->  	&kmod_cmd_static_nodes,
-> =20
-> @@ -95,6 +97,43 @@ static const struct kmod_cmd kmod_cmd_help =3D {
->  	.help =3D "Show help message",
->  };
-> =20
-> +static const char *compressions[] =3D {
-> +#ifdef ENABLE_ZSTD
-> +			"zstd",
-> +#endif
-> +#ifdef ENABLE_XZ
-> +			"xz",
-> +#endif
-> +#ifdef ENABLE_ZLIB
-> +			"gz",
-> +#endif
-> +			NULL
-> +};
-> +
-> +static int kmod_config(int argc, char *argv[])
-> +{
-> +	unsigned i;
-> +	printf("{\"prefix\":\"" PREFIX "\""
-> +			",\"module_signature\":["
-> +#ifdef ENABLE_OPENSSL
-> +			"\"PKCS#7\","
-> +#endif
-> +			"\"legacy\"]"
-> +			",\"module_compression\":[");
-> +	for(i =3D 0; compressions[i]; i++) {
-> +		printf("%s\"%s\"", i ? "," : "", compressions[i]);
-> +	}
-> +	printf("]}\n");
-> +
-> +	return EXIT_SUCCESS;
-> +}
-> +
-> +static const struct kmod_cmd kmod_cmd_config =3D {
-> +	.name =3D "config",
-> +	.cmd =3D kmod_config,
-> +	.help =3D "Show compile time options in JSON",
-> +};
-> +
->  static int handle_kmod_commands(int argc, char *argv[])
->  {
->  	const char *cmd;
-> --=20
-> 2.41.0
+      kmod config &>/dev/null && kmod config | jq -r .module_directory || echo /lib/modules
 
-If kmod could show selected configs without some (JSON) syntax
-around, it could simplify its proposed use in kbuild. E.g.:
+      vs
 
-    kmod config prefix 2>/dev/null
+      kmod config module_directory &>/dev/null && kmod config module_directory || echo /lib/modules
 
-instead of
+Also JSON has standardized syntax for lists and users that can parse
+JSON directly can load the whole configuration at once without several
+calls to kmod config or pkg-config.
 
-    kmod config &>/dev/null && kmod config | jq -r .prefix
-=2E
+Thanks
 
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
-
---fJQQMulXf8UyxTpY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmSxaTMACgkQB1IKcBYm
-EmlX1g/9Fjx7AiAkqXg4PZl98829BBzPlnBaGjiGGM6tKnKhws312/R4+BdmXTis
-Bp2JFS2Gv2WxbsYnQq389e+xqXNKrvVAGw7E/T3XFyOb58UxrJMr92xNROGS4dq1
-+Y/AySkiSzkqyZB/dffLYQ1yz102OC+okrN6XpQ3AWOr9f/sfji+Ldd32L0jhHRW
-k/Q0yIMOx+LqhpnsTf1TuYKrIrs6iP7+NEPKlYXQGvi5lObH8XGWWMYKAV8skgE/
-A2au3hIxMUwuwuuT+vIMixbPGL95Sws7ZcYWz6CI8p8ATpg76/ODinOSo4+9GBfu
-pb3ni8Bk382vcQnxAnpSqkFdiG9D7WLId2D5Ri61B9ZzVco30Qqdc82Jf3z4U7PU
-3z8gmYf8EcqKBA0BjTTQ+OzM2rRGPgAoWuCcKy5VbFCFznUQ5Yn6pq7K2hKgGW0h
-7l6AspmNRKuxvk3uneuSmoUeXo/Wnl1nyL0ZZR86n5CU5/PkUQZfFtXLwnTvsLR3
-wqmCCD4y7Odpkwz4aSLiSRMEdtoQ244qhIUf6TjsxChbgpaAG5DEDCRe7UNHFYJq
-aKQbf994BZnsNr/qlH9WWGAeKOVBTTZxuNvrZDBTkXUzyauwM+u4dLxziQfag8Yg
-FkVefUWTabrmo9a+WiDyiN+5Ta9N1CmDk0M8o3MXnI3W0EqiBsg=
-=WJb2
------END PGP SIGNATURE-----
-
---fJQQMulXf8UyxTpY--
+Michal
