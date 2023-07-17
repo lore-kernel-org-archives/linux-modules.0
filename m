@@ -2,172 +2,144 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D9F5C0015E
-	for <linux-modules@archiver.kernel.org>; Mon, 17 Jul 2023 10:41:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86523EB64DC
+	for <linux-modules@archiver.kernel.org>; Mon, 17 Jul 2023 15:14:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjGQKld (ORCPT
+        id S230339AbjGQPOc (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 17 Jul 2023 06:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
+        Mon, 17 Jul 2023 11:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjGQKld (ORCPT
+        with ESMTP id S230325AbjGQPOc (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 17 Jul 2023 06:41:33 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787DA173E;
-        Mon, 17 Jul 2023 03:41:04 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0C0591FDA8;
-        Mon, 17 Jul 2023 10:41:03 +0000 (UTC)
+        Mon, 17 Jul 2023 11:14:32 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E3BE6;
+        Mon, 17 Jul 2023 08:14:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BCA761FDB2;
+        Mon, 17 Jul 2023 15:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689590463; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S86dhMRLrCdTR5PKHVfEnd0pvbnS5R7FdSBuvy/YLY0=;
-        b=wc64ghXcNImcIgHyUewvvsxBCNFJdverpvQa3rHIX7eNuIh8m+b3FfVD6h8NVE7wjLMn14
-        Fh+niHB8T3C+iFN/G0Hx7gyOe1HFTjB3qxMs1Ghy1XTCGcSibWta20a781KRY6HBKbto1g
-        Y1w9t3b8dVUqlXzCBg1J5C+zKcGcDcs=
+        t=1689606869; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=N6MW5aW5/tskhoIcmGl6SK2Dnqzk5QXBiM+B1KNWi+M=;
+        b=HFN/G3NO2gGRJM0V2tN23lvvf+p8tEX7BxDFYshfltWNgK5bh5HzXMRSmxFALcdh1Zi7sh
+        J2Y/7w91NF7TztNC0eW2dn3TC+4QOyIrbM6IH9sf5ofCljPKSQ7fVaypeBB04kINyIkJpn
+        o2mrAdIWASJ1s+aP+WH90g+UfPUgiHE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689590463;
+        s=susede2_ed25519; t=1689606869;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S86dhMRLrCdTR5PKHVfEnd0pvbnS5R7FdSBuvy/YLY0=;
-        b=5SPYBpKVIArtLLt5PcPA5Ga6AU2PTo9e1JSYDljiPfUNHbOJbLr8XPamD7vPWv0ryT4pZ2
-        1JWgW8IMinMUKgDQ==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        by relay2.suse.de (Postfix) with ESMTP id 8CFD92C143;
-        Mon, 17 Jul 2023 10:41:02 +0000 (UTC)
-From:   Michal Suchanek <msuchanek@suse.de>
-To:     linux-modules@vger.kernel.org
-Cc:     Michal Suchanek <msuchanek@suse.de>, Takashi Iwai <tiwai@suse.com>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4] depmod: Handle installing modules under a prefix
-Date:   Mon, 17 Jul 2023 12:40:58 +0200
-Message-ID: <20230717104100.6146-1-msuchanek@suse.de>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1689589902.git.msuchanek@suse.de>
-References: <cover.1689589902.git.msuchanek@suse.de>
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=N6MW5aW5/tskhoIcmGl6SK2Dnqzk5QXBiM+B1KNWi+M=;
+        b=6V3NV94KetzMZuh2uY0q2C5Z1CjV5Sz2KS4KKoAkMKKJY8AUWGArLTLVLlzQZugD4Gwu8X
+        VmaXOHFG2cfcnYAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9453513276;
+        Mon, 17 Jul 2023 15:14:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NSioItVatWTACAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 17 Jul 2023 15:14:29 +0000
+Date:   Mon, 17 Jul 2023 17:14:28 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Michal Hocko <mhocko@suse.com>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] module: print module name on refcount error
+Message-ID: <20230717171428.1b229215@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Some distributions aim at shipping all files in /usr.
+If module_put() triggers a refcount error, and the module data is
+still readable, include the culprit module name in the warning
+message, to easy further investigation of the issue.
 
-The path under which kernel modules are installed is hardcoded to /lib
-which conflicts with this goal.
+If the module name can't be read, this means the module has already
+been removed while references to it still exist. This is a
+user-after-free situation, so report it as such.
 
-When kmod provides the config command, use it to determine the correct
-module installation path.
-
-With kmod that does not provide the config command /lib/modules is used
-as before.
-
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Suggested-by: Michal Hocko <mhocko@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
 ---
-v2: Avoid error on systems with kmod that does not support config
-command
-v3: More verbose commit message
-v4:
-  - Document jq requirement
-  - fix bashism
-  - Update to getting full module path, not just additional prefix
----
- Documentation/process/changes.rst | 15 +++++++++++++++
- Makefile                          |  4 +++-
- scripts/depmod.sh                 |  8 ++++----
- 3 files changed, 22 insertions(+), 5 deletions(-)
+Hi Luis, this is a different approach to my initial proposal. We no
+longer assume that struct module is still available and instead check
+that the expected module name string is a valid string before printing
+it.
 
-diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-index 5561dae94f85..f96a867ab85f 100644
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@ -41,6 +41,7 @@ bison                  2.0              bison --version
- pahole                 1.16             pahole --version
- util-linux             2.10o            fdformat --version
- kmod                   13               depmod -V
-+jq                     any              jq --version
- e2fsprogs              1.41.4           e2fsck -V
- jfsutils               1.1.3            fsck.jfs -V
- reiserfsprogs          3.6.3            reiserfsck -V
-@@ -176,6 +177,15 @@ You will need openssl to build kernels 3.7 and higher if module signing is
- enabled.  You will also need openssl development packages to build kernels 4.3
- and higher.
+This is safer, and lets us print a better diagnostics message: include
+the module name if struct module is still there (the most likely case
+IMHO, as rmmod is a relatively rare operation) else explicitly report a
+use after free.
+
+The downside is that this requires more code, but I think it's worth
+it. What do you think?
+
+ kernel/module/main.c |   31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
+
+--- linux-6.3.orig/kernel/module/main.c
++++ linux-6.3/kernel/module/main.c
+@@ -55,6 +55,7 @@
+ #include <linux/dynamic_debug.h>
+ #include <linux/audit.h>
+ #include <linux/cfi.h>
++#include <linux/ctype.h>
+ #include <uapi/linux/module.h>
+ #include "internal.h"
  
+@@ -850,7 +851,35 @@ void module_put(struct module *module)
+ 	if (module) {
+ 		preempt_disable();
+ 		ret = atomic_dec_if_positive(&module->refcnt);
+-		WARN_ON(ret < 0);	/* Failed to put refcount */
++		if (ret < 0) {
++			unsigned char modname_copy[MODULE_NAME_LEN];
++			unsigned char *p, *end;
++			bool sane;
 +
-+Kmod
-+----
++			/*
++			 * Report faulty module if name is still readable.
++			 * We must be careful here as the module may have
++			 * been already freed.
++			 */
++			memcpy(modname_copy, module->name, MODULE_NAME_LEN);
++			end = memchr(modname_copy, '\0', MODULE_NAME_LEN);
++			sane = end != NULL;
++			if (sane) {
++				for (p = modname_copy; p < end; p++)
++					if (!isgraph(*p)) {
++						sane = false;
++						break;
++					}
++			}
 +
-+``depmod`` is needed for building modular kernels. ``jq`` is additionally needed
-+when support for installing modules outside of the default location
-+``/lib/modules`` is required. Missing ``jq`` will result in an error message
-+during build even if the tool is not needed.
-+
- Tar
- ---
- 
-@@ -463,6 +473,11 @@ Kmod
- - <https://www.kernel.org/pub/linux/utils/kernel/kmod/>
- - <https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git>
- 
-+jq
-+--
-+
-+- <https://github.com/jqlang/jq/tags>
-+
- Ksymoops
- --------
- 
-diff --git a/Makefile b/Makefile
-index 47690c28456a..5eb04baaac58 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1165,7 +1165,9 @@ export INSTALL_DTBS_PATH ?= $(INSTALL_PATH)/dtbs/$(KERNELRELEASE)
- # makefile but the argument can be passed to make if needed.
- #
- 
--MODLIB	= $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)
-+export KERNEL_MODULE_DIRECTORY := $(shell kmod config >/dev/null 2>&1 && kmod config | jq -r .module_directory || echo /lib/modules)
-+
-+MODLIB	= $(INSTALL_MOD_PATH)$(KERNEL_MODULE_DIRECTORY)/$(KERNELRELEASE)
- export MODLIB
- 
- PHONY += prepare0
-diff --git a/scripts/depmod.sh b/scripts/depmod.sh
-index 3643b4f896ed..06961f990fcb 100755
---- a/scripts/depmod.sh
-+++ b/scripts/depmod.sh
-@@ -27,16 +27,16 @@ fi
- # numbers, so we cheat with a symlink here
- depmod_hack_needed=true
- tmp_dir=$(mktemp -d ${TMPDIR:-/tmp}/depmod.XXXXXX)
--mkdir -p "$tmp_dir/lib/modules/$KERNELRELEASE"
-+mkdir -p "$tmp_dir$KERNEL_MODULE_DIRECTORY/$KERNELRELEASE"
- if "$DEPMOD" -b "$tmp_dir" $KERNELRELEASE 2>/dev/null; then
--	if test -e "$tmp_dir/lib/modules/$KERNELRELEASE/modules.dep" -o \
--		-e "$tmp_dir/lib/modules/$KERNELRELEASE/modules.dep.bin"; then
-+	if test -e "$tmp_dir$KERNEL_MODULE_DIRECTORY/$KERNELRELEASE/modules.dep" -o \
-+		-e "$tmp_dir$KERNEL_MODULE_DIRECTORY/$KERNELRELEASE/modules.dep.bin"; then
- 		depmod_hack_needed=false
- 	fi
- fi
- rm -rf "$tmp_dir"
- if $depmod_hack_needed; then
--	symlink="$INSTALL_MOD_PATH/lib/modules/99.98.$KERNELRELEASE"
-+	symlink="$INSTALL_MOD_PATH$KERNEL_MODULE_DIRECTORY/99.98.$KERNELRELEASE"
- 	ln -s "$KERNELRELEASE" "$symlink"
- 	KERNELRELEASE=99.98.$KERNELRELEASE
- fi
++			if (sane)
++				WARN(1,
++				     KERN_WARNING "Failed to put refcount for module %s\n",
++				     modname_copy);
++			else
++				WARN(1,
++				     KERN_WARNING "Failed to put refcount, use-after-free detected\n");
++		}
+ 		trace_module_put(module, _RET_IP_);
+ 		preempt_enable();
+ 	}
+
+
 -- 
-2.41.0
-
+Jean Delvare
+SUSE L3 Support
