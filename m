@@ -2,160 +2,249 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 156B6EB64DC
-	for <linux-modules@archiver.kernel.org>; Mon, 17 Jul 2023 17:24:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A04FEC0015E
+	for <linux-modules@archiver.kernel.org>; Mon, 17 Jul 2023 19:14:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjGQRY2 (ORCPT
+        id S230288AbjGQTOj (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 17 Jul 2023 13:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
+        Mon, 17 Jul 2023 15:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjGQRY1 (ORCPT
+        with ESMTP id S230470AbjGQTOi (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 17 Jul 2023 13:24:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87582BD;
-        Mon, 17 Jul 2023 10:24:26 -0700 (PDT)
+        Mon, 17 Jul 2023 15:14:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0E1197;
+        Mon, 17 Jul 2023 12:14:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A1D161193;
-        Mon, 17 Jul 2023 17:24:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 249E2C433C8;
-        Mon, 17 Jul 2023 17:24:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E255061214;
+        Mon, 17 Jul 2023 19:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52DC6C433C9;
+        Mon, 17 Jul 2023 19:14:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689614665;
-        bh=o+WgjDKzf9AD9b+kUzQGRClRYLlDB82OkTDYfv6a3Yk=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=U55TcGyi7YmJyhzLOTZnjrFVWw0H3+af918Yjk8mPHfHD/clSDnn9R44JznF10IRH
-         Z8KK+n6r0jSrVIOFXY3K9zEUwgWJJmDl6U+xcWuKBgzWtStxy8DJ8vdgvW6lkDoW7B
-         HjBUxuU9UxtzkC9l5ApN5DKkzBCr1VsqK7wmYWuXqa2OawFE6M2Oq9WP6fcTzeqAS1
-         oQr1aLD/6waYS1NoUdY5C7XFt1xXn2X7vRDexou/Ye3pmNVTURfyjeGdd/9YrFIH9l
-         MqvAuz5uF3yGQhNR2S/bV8TY4Zn4vPj0wIo0nVHW6MMTPN4UGDgaMVOo3Hl1Lknk4t
-         QarZtUu8s3ucw==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 0594A27C0054;
-        Mon, 17 Jul 2023 13:24:22 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Mon, 17 Jul 2023 13:24:23 -0400
-X-ME-Sender: <xms:RXm1ZG1tVKd235OTAKjb7YgspTMPR-qImOZNagZiOwv_r996Wpl_EA>
-    <xme:RXm1ZJGhtMeEyJx0NHmpmxK7orhG2xuLUV7eaWrGF_5mvemHNiGzAxoeoH8wHPKOx
-    Be-_jfsguKQ7NGLhQY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrgedvgdduuddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeduveffvdegvdefhfegjeejlefgtdffueekudfgkeduvdetvddu
-    ieeluefgjeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:RXm1ZO5oHfgOl5d-JsrWsEmT0wZ8c7lpn-wGY1Pk1MKOwuxnVn3prQ>
-    <xmx:RXm1ZH3tFnXsbSmPTR9ONplP-mkjz9Tn9-KQt1DQXW36vSF4M5jnmA>
-    <xmx:RXm1ZJEwoQUXW2HC-hvtBktlwQpPz6VjPtqSmOfmC010d9JGpLVfQw>
-    <xmx:Rnm1ZFKtTGUhG1K7QB02N33IARC_1h22efMRZVMJvVFaIkzEJg1UPw>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D060531A0064; Mon, 17 Jul 2023 13:24:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
-Mime-Version: 1.0
-Message-Id: <d305b437-9eef-42da-821e-67365aad520b@app.fastmail.com>
-In-Reply-To: <CAPhsuW4pDkd7rCWRM6938ve36rfhGxyu=8t1-GjcKnNajofpQA@mail.gmail.com>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
- <20230618080027.GA52412@kernel.org>
- <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
- <20230625161417.GK52412@kernel.org> <ZJmFFmexl_1GUhIL@FVFF77S0Q05N>
- <CAPhsuW4pDkd7rCWRM6938ve36rfhGxyu=8t1-GjcKnNajofpQA@mail.gmail.com>
-Date:   Mon, 17 Jul 2023 10:23:56 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Song Liu" <song@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>
-Cc:     "Mike Rapoport" <rppt@kernel.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Heiko Carstens" <hca@linux.ibm.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Kent Overstreet" <kent.overstreet@linux.dev>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nadav Amit" <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Puranjay Mohan" <puranjay12@gmail.com>,
-        "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Will Deacon" <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
-Content-Type: text/plain;charset=utf-8
+        s=k20201202; t=1689621275;
+        bh=Nvlf8KPWX09HX4QhaMf3lS/xufvdWYYCeaHJJ535AB4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R6QF7096V1fLqpcSLGWX4f5cWKpOKetDz4bGI37ahqzUPY0lXXbjr8QYgBMrpxjH/
+         7ZsGpzQylnDWV7tyKzS1CZO03keOD0Puyn+5vdBDIADzii2xk8QIx6t2/oEyVXygIg
+         gRfM9+99BuN7+Ox08+DIqVP/PHq1pxUJWyEOe7UwrKS8JP2aIbQ3fmaUWUcUljgCSR
+         V1Qfrum+LK88I4b75FUPzvuCr1Ne5DYvXEzL3+QcBXjtNZBtBA5DxXM/5RcjkIUQy7
+         h4PKy++Ld9CiM47fLBm3sUv7JzgQLbmyIjLxBSjvMmOveKsGTdEPkFMijTyToOUn9j
+         NCUpbOzO8o8EA==
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6b9b835d302so2058177a34.1;
+        Mon, 17 Jul 2023 12:14:35 -0700 (PDT)
+X-Gm-Message-State: ABy/qLadgHP0Dolco0qjs5bonuhjSuJamt6tVZUgdo65gDCrwHyWZ8eh
+        52MivOJLu7TiAP7jYzsJhhpTr5lwrdYkhbKZuHY=
+X-Google-Smtp-Source: APBJJlGl4Y/4hnWobKnAC8fm03tvVl16enrfTelg1VaubIudF38fTQZ9F6V3aDi1IoaOJtepJqg1kU+Y2XsqHPWogb0=
+X-Received: by 2002:aca:bb87:0:b0:3a4:5063:dd94 with SMTP id
+ l129-20020acabb87000000b003a45063dd94mr4133939oif.42.1689621274550; Mon, 17
+ Jul 2023 12:14:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230714143002.GL9196@kitsune.suse.cz> <ZLFhuf95srX2wvJc@fjasle.eu>
+In-Reply-To: <ZLFhuf95srX2wvJc@fjasle.eu>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 18 Jul 2023 04:13:58 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQMs3QBYfWcLkmOQdbbq7cj=7wWbK=AWhdTC2rAsKHXzQ@mail.gmail.com>
+Message-ID: <CAK7LNAQMs3QBYfWcLkmOQdbbq7cj=7wWbK=AWhdTC2rAsKHXzQ@mail.gmail.com>
+Subject: Re: [PATCH v3] depmod: Handle installing modules under a prefix
+To:     Nicolas Schier <nicolas@fjasle.eu>
+Cc:     =?UTF-8?Q?Michal_Such=EF=BF=BDnek?= <msuchanek@suse.de>,
+        linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        =?UTF-8?B?TWljaGFsIEtvdXRu77+9?= <mkoutny@suse.com>,
+        Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-
-
-On Mon, Jun 26, 2023, at 10:48 AM, Song Liu wrote:
-> On Mon, Jun 26, 2023 at 5:31=E2=80=AFAM Mark Rutland <mark.rutland@arm=
-.com> wrote:
->>
-> [...]
->> >
->> > So the idea was that jit_text_alloc() will have a cache of large pa=
-ges
->> > mapped ROX, will allocate memory from those caches and there will be
->> > jit_update() that uses text poking for writing to that memory.
->> >
->> > Upon allocation of a large page to increase the cache, that large p=
-age will
->> > be "invalidated" by filling it with breakpoint instructions (e.g in=
-t3 on
->> > x86)
->>
->> Does that work on x86?
->>
->> That is in no way gauranteed for other architectures; on arm64 you ne=
-ed
->> explicit cache maintenance (with I-cache maintenance at the VA to be =
-executed
->> from) followed by context-synchronization-events (e.g. via ISB instru=
-ctions, or
->> IPIs).
+On Fri, Jul 14, 2023 at 11:55=E2=80=AFPM Nicolas Schier <nicolas@fjasle.eu>=
+ wrote:
 >
-> I guess we need:
-> 1) Invalidate unused part of the huge ROX pages;
-> 2) Do not put two jit users (including module text, bpf, etc.) in the
-> same cache line;
-> 3) Explicit cache maintenance;
-> 4) context-synchronization-events.
+> On Fri, Jul 14, 2023 at 04:30:02PM +0200, Michal Such=EF=BF=BDnek wrote:
+> > Hello,
+> >
+> > On Fri, Jul 14, 2023 at 04:05:10PM +0200, Nicolas Schier wrote:
+> > > On Fri, Jul 14, 2023 at 02:21:08PM +0200 Michal Suchanek wrote:
+> > > > Some distributions aim at not shipping any files in / outside of us=
+r.
+> > >
+> > > For me, preventing negation often makes things easier, e.g.: "... aim=
+ at
+> > > shipping files only below /usr".
+> > >
+> > > >
+> > > > The path under which kernel modules are installed is hardcoded to /=
+lib
+> > > > which conflicts with this goal.
+> > > >
+> > > > When kmod provides the config command, use it to determine the corr=
+ect
+> > > > module installation prefix.
+> > > >
+> > > > This is a prefix under which the modules are searched by kmod on th=
+e
+> > > > system, and is separate from the temporary staging location already
+> > > > supported by INSTALL_MOD_PATH.
+> > > >
+> > > > With kmod that does not provide the config command empty prefix is =
+used
+> > > > as before.
+> > > >
+> > > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > > > ---
+> > > > v2: Avoid error on systems with kmod that does not support config
+> > > > command
+> > > > v3: More verbose commit message
+> > > > ---
+> > > >  Makefile          | 4 +++-
+> > > >  scripts/depmod.sh | 8 ++++----
+> > > >  2 files changed, 7 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/Makefile b/Makefile
+> > > > index 47690c28456a..b1fea135bdec 100644
+> > > > --- a/Makefile
+> > > > +++ b/Makefile
+> > > > @@ -1165,7 +1165,9 @@ export INSTALL_DTBS_PATH ?=3D $(INSTALL_PATH)=
+/dtbs/$(KERNELRELEASE)
+> > > >  # makefile but the argument can be passed to make if needed.
+> > > >  #
+> > > >
+> > > > -MODLIB   =3D $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)
+> > > > +export KERNEL_MODULE_PREFIX :=3D $(shell kmod config &> /dev/null =
+&& kmod config | jq -r .module_prefix)
+> > >
+> > > All other calls of `jq` that I could find are located at tools/; as t=
+his here
+> > > is evaluated on each invocation, this should probably be documented i=
+n
+> > > Documentation/process/changes.rst?
+> > >
+> > > (Absence of `jq` will cause error messages, even with CONFIG_MODULES=
+=3Dn.)
+> >
+> > That's a good point.
+> >
+> > >
+> > > > +
+> > > > +MODLIB   =3D $(INSTALL_MOD_PATH)$(KERNEL_MODULE_PREFIX)/lib/module=
+s/$(KERNELRELEASE)
+> > > >  export MODLIB
+> > > >
+> > > >  PHONY +=3D prepare0
+> > > > diff --git a/scripts/depmod.sh b/scripts/depmod.sh
+> > > > index 3643b4f896ed..88ac79056153 100755
+> > > > --- a/scripts/depmod.sh
+> > > > +++ b/scripts/depmod.sh
+> > > > @@ -27,16 +27,16 @@ fi
+> > > >  # numbers, so we cheat with a symlink here
+> > > >  depmod_hack_needed=3Dtrue
+> > > >  tmp_dir=3D$(mktemp -d ${TMPDIR:-/tmp}/depmod.XXXXXX)
+> > > > -mkdir -p "$tmp_dir/lib/modules/$KERNELRELEASE"
+> > > > +mkdir -p "$tmp_dir$KERNEL_MODULE_PREFIX/lib/modules/$KERNELRELEASE=
+"
+> > > >  if "$DEPMOD" -b "$tmp_dir" $KERNELRELEASE 2>/dev/null; then
+> > > > - if test -e "$tmp_dir/lib/modules/$KERNELRELEASE/modules.dep" -o \
+> > > > -         -e "$tmp_dir/lib/modules/$KERNELRELEASE/modules.dep.bin";=
+ then
+> > > > + if test -e "$tmp_dir$KERNEL_MODULE_PREFIX/lib/modules/$KERNELRELE=
+ASE/modules.dep" -o \
+> > > > +         -e "$tmp_dir$KERNEL_MODULE_PREFIX/lib/modules/$KERNELRELE=
+ASE/modules.dep.bin"; then
+> > > >           depmod_hack_needed=3Dfalse
+> > > >   fi
+> > > >  fi
+> > >
+> > > I'd like to come back to the statement from Masahiro: Is the check ab=
+ove,
+> > > against some very old versions of depmod [1], the only reason for thi=
+s patch?
+> > >
+> > > If we could remove that, would
+> > >
+> > >     make INSTALL_MOD_PATH=3D"$(kmod config | jq -r .module_prefix)" m=
+odules_install
+> > >
+> > > be sufficient?
+> >
+> > No, the INSTALL_MOD_PATH is passed as the -b argument to depmod while
+> > the newly added part is not because it's integral part of where the
+> > modules are installed on the system, and not the staging area path.
 >
-> Would these (or a subset of them) be sufficient to protect us from tor=
-n read?
-
-Maybe?  #4 is sufficiently vague that I can't really interpret it.
-
-I have a half-drafted email asking for official clarification on the rul=
-es that might help shed light on this.  I find that this type of request=
- works best when it's really well written :)
-
+> Ah, thanks.  So just for my understanding, could this be a (non-gentle)
+> alternative version of your patch, w/o modifying top-level Makefile?
 >
-> Thanks,
-> Song
+> diff --git a/scripts/depmod.sh b/scripts/depmod.sh
+> index 3643b4f896ed..72c819de0669 100755
+> --- a/scripts/depmod.sh
+> +++ b/scripts/depmod.sh
+> @@ -1,4 +1,4 @@
+> -#!/bin/sh
+> +#!/bin/bash
+>  # SPDX-License-Identifier: GPL-2.0
+>  #
+>  # A depmod wrapper used by the toplevel Makefile
+> @@ -23,6 +23,8 @@ if [ -z $(command -v $DEPMOD) ]; then
+>         exit 0
+>  fi
+>
+> +kmod_version=3D$(( $(kmod --version | sed -rne 's/^kmod version ([0-9]+)=
+.*$/\1/p') ))
+> +
+>  # older versions of depmod require the version string to start with thre=
+e
+>  # numbers, so we cheat with a symlink here
+>  depmod_hack_needed=3Dtrue
+> @@ -35,6 +37,13 @@ if "$DEPMOD" -b "$tmp_dir" $KERNELRELEASE 2>/dev/null;=
+ then
+>         fi
+>  fi
+>  rm -rf "$tmp_dir"
+> +
+> +if [ "${kmod_version}" -gt 32 ]; then
+> +       kmod_prefix=3D"$(kmod config | jq -r .module_prefix)"
+> +       INSTALL_MOD_PATH=3D"${INSTALL_MOD_PATH#${kmod_prefix}"
+> +       depmod_hack_needed=3Dfalse
+> +fi
+> +
+>  if $depmod_hack_needed; then
+>         symlink=3D"$INSTALL_MOD_PATH/lib/modules/99.98.$KERNELRELEASE"
+>         ln -s "$KERNELRELEASE" "$symlink"
+>
+> (untested, and assuming that kmod module prefix is in kmod >=3D 32)
+>
+> Or are I am still missing something?
+>
+> > Was busybox ever fixed to not require the hack?
+>
+> I haven't checked that, yet.
+
+
+
+I believe we can revert
+
+8fc62e59425389a6d48429b9d146223122743435
+bfe5424a8b31624e7a476f959d552999f931e7c7
+
+There is no good reason to keep such old hacky code.
+
+
+The old module-init-tools project was replaced by kmod.
+I do not know whether busybox fixed the issue or not.
+Anyway, Linux 3.0 was released 12 years ago.
+There was plenty of time to fix the issue if we wanted.
+If busybox is still not able to handle the X.Y version form,
+it is just that nobody is caring about the busybox's depmod.
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
