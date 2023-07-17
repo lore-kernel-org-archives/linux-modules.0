@@ -2,44 +2,44 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA5BEC04A94
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F4ECC04A6A
 	for <linux-modules@archiver.kernel.org>; Mon, 17 Jul 2023 10:40:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjGQKkI (ORCPT
+        id S230059AbjGQKkI (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
         Mon, 17 Jul 2023 06:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjGQKkH (ORCPT
+        with ESMTP id S229973AbjGQKkG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 17 Jul 2023 06:40:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF32C0;
-        Mon, 17 Jul 2023 03:40:05 -0700 (PDT)
+        Mon, 17 Jul 2023 06:40:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D196A83;
+        Mon, 17 Jul 2023 03:40:04 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 8819221958;
-        Mon, 17 Jul 2023 10:40:04 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 83B8821923;
+        Mon, 17 Jul 2023 10:40:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1689590404; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1689590403; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hVsH0ru6iCq/4+npZ6IZoOzlEjBX5Fl88+GmHlp+UOY=;
-        b=GvuChp5d5XY58JX7F9pYSRZqnwHghZNqZaQ1ZAeF8tGVxQwvwOHOu8xM1OMWDUpTlpbpCG
-        c/O1nagNibhnQqO33IgbX/iiIScNqAj6e2nAe0gCQ+P7GkFGUeURBcLciLNZEXjH+ObQKs
-        C7A7Om3VwtQvDbfQ2akmZAVxSuWHFiA=
+        bh=eUec1+EitZahVX/PmsSDqXXCbGH3k6qkThntzyMYwBE=;
+        b=PdA1u9+ezNuB4QcKhWJap3NtjoAlviQRb5xVemfpfO+bu5sHORVeyTdMu/GR8a3RX75r9E
+        2gngUyW3LB3wtjMLgHvY1JYkVLEXI4DhhalmyOZnEzhoxsArrFtHhPL9/l356Cib3QCrWl
+        DeRHojVFtTl5zjZxB0ZN/1yJ6/2+pus=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1689590404;
+        s=susede2_ed25519; t=1689590403;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hVsH0ru6iCq/4+npZ6IZoOzlEjBX5Fl88+GmHlp+UOY=;
-        b=YBjEXmPxNuZj/Nk5drOQURoKWwf6It1X81oQzXQJISZVIBYFe8T+0GZyoY0tlseEa9GTqx
-        Y/RiKiPPPpRS5BCw==
+        bh=eUec1+EitZahVX/PmsSDqXXCbGH3k6qkThntzyMYwBE=;
+        b=zy2RnRLU6aR9cgMn1nERiTadxzietXO1gVmV8OQQ1VFNijHMWwy9iUcdY4mPy46I74P68S
+        oxnMcEfRtVm/JhCg==
 Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        by relay2.suse.de (Postfix) with ESMTP id 2545B2C146;
-        Mon, 17 Jul 2023 10:40:04 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTP id 2512A2C142;
+        Mon, 17 Jul 2023 10:40:03 +0000 (UTC)
 From:   Michal Suchanek <msuchanek@suse.de>
 To:     linux-modules@vger.kernel.org
 Cc:     Michal Suchanek <msuchanek@suse.de>, Takashi Iwai <tiwai@suse.com>,
@@ -51,108 +51,88 @@ Cc:     Michal Suchanek <msuchanek@suse.de>, Takashi Iwai <tiwai@suse.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
         linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH kmod v4 3/4] kmod: Add config command to show compile time configuration as JSON
-Date:   Mon, 17 Jul 2023 12:39:52 +0200
-Message-ID: <eacb691cec6266a22387f6445507de122f5c7afb.1689589902.git.msuchanek@suse.de>
+Subject: [PATCH kmod v4 0/4] kmod /usr support
+Date:   Mon, 17 Jul 2023 12:39:49 +0200
+Message-ID: <cover.1689589902.git.msuchanek@suse.de>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1689589902.git.msuchanek@suse.de>
-References: <20230711153126.28876-1-msuchanek@suse.de> <cover.1689589902.git.msuchanek@suse.de>
+In-Reply-To: <20230711153126.28876-1-msuchanek@suse.de>
+References: <20230711153126.28876-1-msuchanek@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Show prefix (where system configuration files are searched/to be
-installed), sysconfdir (where user configuration files are searched),
-module compressions, and module signatures supported.
+Hello,
 
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
----
-v2: mention module signature in commit message
-v3: add sysconfdir
----
- man/kmod.xml |  6 ++++++
- tools/kmod.c | 40 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+)
+with these patches it is possible to install kernel modules in an arbitrary
+directory - eg. moving the /lib/modules to /usr/lib/modules or /opt/linux.
 
-diff --git a/man/kmod.xml b/man/kmod.xml
-index 0706ad58c2cc..f992a500f836 100644
---- a/man/kmod.xml
-+++ b/man/kmod.xml
-@@ -71,6 +71,12 @@
-           <para>Show the help message.</para>
-         </listitem>
-       </varlistentry>
-+      <varlistentry>
-+        <term><command>config</command></term>
-+        <listitem>
-+          <para>Show compile time options in JSON.</para>
-+        </listitem>
-+      </varlistentry>
-       <varlistentry>
-         <term><command>list</command></term>
-         <listitem>
-diff --git a/tools/kmod.c b/tools/kmod.c
-index 55689c075ab1..a684c1d24284 100644
---- a/tools/kmod.c
-+++ b/tools/kmod.c
-@@ -37,9 +37,11 @@ static const struct option options[] = {
- };
- 
- static const struct kmod_cmd kmod_cmd_help;
-+static const struct kmod_cmd kmod_cmd_config;
- 
- static const struct kmod_cmd *kmod_cmds[] = {
- 	&kmod_cmd_help,
-+	&kmod_cmd_config,
- 	&kmod_cmd_list,
- 	&kmod_cmd_static_nodes,
- 
-@@ -95,6 +97,44 @@ static const struct kmod_cmd kmod_cmd_help = {
- 	.help = "Show help message",
- };
- 
-+static const char *compressions[] = {
-+#ifdef ENABLE_ZSTD
-+			"zstd",
-+#endif
-+#ifdef ENABLE_XZ
-+			"xz",
-+#endif
-+#ifdef ENABLE_ZLIB
-+			"gz",
-+#endif
-+			NULL
-+};
-+
-+static int kmod_config(int argc, char *argv[])
-+{
-+	unsigned i;
-+	printf("{\"prefix\":\"" PREFIX "\""
-+			",\"sysconfdir\":\"" SYSCONFDIR "\""
-+			",\"module_signature\":["
-+#ifdef ENABLE_OPENSSL
-+			"\"PKCS#7\","
-+#endif
-+			"\"legacy\"]"
-+			",\"module_compression\":[");
-+	for(i = 0; compressions[i]; i++) {
-+		printf("%s\"%s\"", i ? "," : "", compressions[i]);
-+	}
-+	printf("]}\n");
-+
-+	return EXIT_SUCCESS;
-+}
-+
-+static const struct kmod_cmd kmod_cmd_config = {
-+	.name = "config",
-+	.cmd = kmod_config,
-+	.help = "Show compile time options in JSON",
-+};
-+
- static int handle_kmod_commands(int argc, char *argv[])
- {
- 	const char *cmd;
+While the modprobe.d and depmod.d search which already includes multiple
+paths is expanded to also include $(prefix) the module directory still
+supports only one location, only a different one under $(module_directory).
+
+Having kmod search multiple module locations while only one is supported now
+might break some assumption about relative module path corresponding to a
+specific file, would require more invasive changes to implement, and is not
+supportive of the goal of moving the modules away from /lib.
+
+Both kmod and the kernel need to be patched to make use of this feature.
+Patched kernel is backwards compatible with older kmod.  Patched kmod
+with $(module_directory) set to /lib/modules is equivalent to unpatched kmod.
+
+With this patch the kmod tool can spit out a JSON with the tool build-time
+configuration, and jq is used for getting a single value out of that.
+
+I opted for this because crating .pc files requires putting the logic into the
+autohell files which is very clumsy. Also pkg-config insists on hiding
+the actual .pc file data and only allowing clumsy queries through its
+commandline interface.
+
+jq has its downsides, too. So far it is not used by kernel build, only
+by other tools shipped with the kernel. This adds another dependency for
+kernel builds.
+
+It turns out that the kernel already does use pkg-config. There are two
+alternate spellings: pkg-config and pkgconfig. Searching for the latter
+gives a few matches in the kernel giving off the impression that it's a
+thing but not really used.
+
+Thanks
+
+Michal
+
+Link: https://lore.kernel.org/linux-modules/20210112160211.5614-1-msuchanek@suse.de/
+
+
+Michal Suchanek (4):
+  man/depmod.d: Fix incorrect /usr/lib search path
+  libkmod, depmod: Load modprobe.d, depmod.d from $prefix/lib.
+  kmod: Add config command to show compile time configuration as JSON
+  libkmod, depmod, modprobe: Make directory for kernel modules
+    configurable
+
+ Makefile.am                          |   4 +-
+ configure.ac                         |   7 ++
+ libkmod/libkmod.c                    |  11 +--
+ man/Makefile.am                      |  10 ++-
+ man/depmod.d.xml                     |   9 ++-
+ man/depmod.xml                       |   4 +-
+ man/kmod.xml                         |   6 ++
+ man/modinfo.xml                      |   2 +-
+ man/modprobe.d.xml                   |   1 +
+ man/modprobe.xml                     |   2 +-
+ man/modules.dep.xml                  |   6 +-
+ testsuite/module-playground/Makefile |   2 +-
+ testsuite/setup-rootfs.sh            | 109 +++++++++++++++------------
+ testsuite/test-depmod.c              |  16 ++--
+ testsuite/test-testsuite.c           |   8 +-
+ tools/depmod.c                       |   7 +-
+ tools/kmod.c                         |  41 ++++++++++
+ tools/modinfo.c                      |   4 +-
+ tools/modprobe.c                     |   4 +-
+ tools/static-nodes.c                 |   6 +-
+ 20 files changed, 169 insertions(+), 90 deletions(-)
+
 -- 
 2.41.0
 
