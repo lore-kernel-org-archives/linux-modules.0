@@ -2,50 +2,50 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A6BEB64DD
-	for <linux-modules@archiver.kernel.org>; Mon, 24 Jul 2023 19:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44442EB64DD
+	for <linux-modules@archiver.kernel.org>; Mon, 24 Jul 2023 19:44:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjGXTn4 (ORCPT
+        id S229552AbjGXToa (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 24 Jul 2023 15:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
+        Mon, 24 Jul 2023 15:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjGXTn4 (ORCPT
+        with ESMTP id S229464AbjGXTo3 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 24 Jul 2023 15:43:56 -0400
+        Mon, 24 Jul 2023 15:44:29 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762A3170E;
-        Mon, 24 Jul 2023 12:43:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E810170E;
+        Mon, 24 Jul 2023 12:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Jt72MNl3swMARzj53k4BB65l+UHgCy67wPWcGfx/NOk=; b=HikHJobVOYJmiv1G3z0sNjBRUC
-        E32VxxdtnfRht167qmJJO18u//Qb1jaDqmUdIGtdOHNkxZKeoBiN2poJrR6f1pEtNJJ0IiBKNr4YF
-        PILWV69/8e/P+rkfrv9wIQY9bblY4CuXo5YdyGUlS4DPpWaOBKBftEVaz/oAE1aizladxWrf7Ygmg
-        cTzQ2nLGBVeKvAz1xjk3sQAe/M/KM0xA866IkiWhizPVbu4bV+Fwo2hGoEEE3TbIfy+suMjjz26gw
-        nVf2XrmgqM3aTaiURwGAUcnIYQ1eANLBPv7FMYgeTIxDs/XLLQzbg9lrTXh9tmmrKjqr+Dq5euc2F
-        f6ng6+qw==;
+        bh=ijMl1Cv9y9enj5ovf4v4qSeTqopWOU/OBedk6+5VrX0=; b=YyikBxOqP4IJ1kWID/9hDC8NVf
+        zOz/gVRaTSMkAGC4NSWDNH3v/k6lQMVblxGnrLI+U+XTZkdxMXporuJykIHv5VMrWBKzB6hbbAM8f
+        oS9M2AVyyV4K2w/Nmo/6FdGvG1rRvvT0HfAxOc3djXxUrjKf3G68o9izAbb/dZoij7msSPx51SkFk
+        8zuAvzqLb6LqIgc+ZlxDYKN1Wr0pA3XD4FMPy8HZ9kib03KSz59iL2jEYhvDrba1B36HdOwAiY+sE
+        naOgOJIHgkxWogEFf8mrT7zKmGNAKy6bnEFRduUydeNJqfSiVLmgQls4RJhRH/zQCy81jYAZHUz9W
+        PRsXugNg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qO1TF-005Jop-1P;
-        Mon, 24 Jul 2023 19:43:53 +0000
-Date:   Mon, 24 Jul 2023 12:43:53 -0700
+        id 1qO1Tp-005JrW-0J;
+        Mon, 24 Jul 2023 19:44:29 +0000
+Date:   Mon, 24 Jul 2023 12:44:29 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     syzbot <syzbot+9c2bdc9d24e4a7abe741@syzkaller.appspotmail.com>
+To:     syzbot <syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com>
 Cc:     bpf@vger.kernel.org, chris@chrisdown.name,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
         llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
         syzkaller-bugs@googlegroups.com, trix@redhat.com
-Subject: Re: [syzbot] [modules?] WARNING in init_module_from_file
-Message-ID: <ZL7UedKQUDAUThHM@bombadil.infradead.org>
-References: <00000000000076961f05ff92d4e0@google.com>
+Subject: Re: [syzbot] [modules?] KASAN: invalid-access Read in
+ init_module_from_file
+Message-ID: <ZL7Una9vhJpX+dkb@bombadil.infradead.org>
+References: <0000000000000e4cc105ff68937b@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00000000000076961f05ff92d4e0@google.com>
+In-Reply-To: <0000000000000e4cc105ff68937b@google.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 910e230d5f1bb72c54532e94fbb1705095c7bab6 
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 910e230d5f1bb72c54532e94fbb1705095c7bab6
