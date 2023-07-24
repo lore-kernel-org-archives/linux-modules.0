@@ -2,103 +2,50 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27927C001DF
-	for <linux-modules@archiver.kernel.org>; Mon, 24 Jul 2023 19:29:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A6BEB64DD
+	for <linux-modules@archiver.kernel.org>; Mon, 24 Jul 2023 19:43:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjGXT3L (ORCPT
+        id S229656AbjGXTn4 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 24 Jul 2023 15:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
+        Mon, 24 Jul 2023 15:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGXT3K (ORCPT
+        with ESMTP id S229464AbjGXTn4 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 24 Jul 2023 15:29:10 -0400
+        Mon, 24 Jul 2023 15:43:56 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C5310E4;
-        Mon, 24 Jul 2023 12:29:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762A3170E;
+        Mon, 24 Jul 2023 12:43:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0FujArfu7E/KTN1mlKzztQlR74xZ/uhX/VqwNimO1ag=; b=dlXIyuHhxR9o3f2zUpEs3clL+2
-        yzn7QTM9lrwYRgpVfZVgAXPrgO1PTsytDOUcOQcMZctsNWdpdIdrqr/05MByXuFHVEy9jlPFzE1Kd
-        TMW3mo7ALcEa3zxVeNNBQ8CT1U/LlD6+Olx9bTkiOzjhFPoyhkZgywCDq9m5dLiiikSRCp61kCCKY
-        oSuPtOTT3Kc0njtJDicDgBtX6q1SyVvaXgbmYJzW7GjEXWz6lL0+9MrlUsH5KqKL0QgtlHLJGTIML
-        kf8FaSWP2NczzlIQFbHHWGX5fHj1xaeZKpwkcaptXSlU2Nr4lOpTS+OndPupkif8/OL3680jPtDUB
-        D8X3p1QQ==;
+        bh=Jt72MNl3swMARzj53k4BB65l+UHgCy67wPWcGfx/NOk=; b=HikHJobVOYJmiv1G3z0sNjBRUC
+        E32VxxdtnfRht167qmJJO18u//Qb1jaDqmUdIGtdOHNkxZKeoBiN2poJrR6f1pEtNJJ0IiBKNr4YF
+        PILWV69/8e/P+rkfrv9wIQY9bblY4CuXo5YdyGUlS4DPpWaOBKBftEVaz/oAE1aizladxWrf7Ygmg
+        cTzQ2nLGBVeKvAz1xjk3sQAe/M/KM0xA866IkiWhizPVbu4bV+Fwo2hGoEEE3TbIfy+suMjjz26gw
+        nVf2XrmgqM3aTaiURwGAUcnIYQ1eANLBPv7FMYgeTIxDs/XLLQzbg9lrTXh9tmmrKjqr+Dq5euc2F
+        f6ng6+qw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qO1Eg-005Itu-1i;
-        Mon, 24 Jul 2023 19:28:50 +0000
-Date:   Mon, 24 Jul 2023 12:28:50 -0700
+        id 1qO1TF-005Jop-1P;
+        Mon, 24 Jul 2023 19:43:53 +0000
+Date:   Mon, 24 Jul 2023 12:43:53 -0700
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/2] [v2] kallsyms: rework symbol lookup return codes
-Message-ID: <ZL7Q8r8L5FY1bFA/@bombadil.infradead.org>
-References: <20230724135327.1173309-1-arnd@kernel.org>
- <20230724135327.1173309-2-arnd@kernel.org>
+To:     syzbot <syzbot+9c2bdc9d24e4a7abe741@syzkaller.appspotmail.com>
+Cc:     bpf@vger.kernel.org, chris@chrisdown.name,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [syzbot] [modules?] WARNING in init_module_from_file
+Message-ID: <ZL7UedKQUDAUThHM@bombadil.infradead.org>
+References: <00000000000076961f05ff92d4e0@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230724135327.1173309-2-arnd@kernel.org>
+In-Reply-To: <00000000000076961f05ff92d4e0@google.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon, Jul 24, 2023 at 03:53:02PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Building with W=1 in some configurations produces a false positive
-> warning for kallsyms:
-> 
-> kernel/kallsyms.c: In function '__sprint_symbol.isra':
-> kernel/kallsyms.c:503:17: error: 'strcpy' source argument is the same as destination [-Werror=restrict]
->   503 |                 strcpy(buffer, name);
->       |                 ^~~~~~~~~~~~~~~~~~~~
-> 
-> This originally showed up while building with -O3, but later started
-> happening in other configurations as well, depending on inlining
-> decisions. The underlying issue is that the local 'name' variable is
-> always initialized to the be the same as 'buffer' in the called functions
-> that fill the buffer, which gcc notices while inlining, though it could
-> see that the address check always skips the copy.
-> 
-> The calling conventions here are rather unusual, as all of the internal
-> lookup functions (bpf_address_lookup, ftrace_mod_address_lookup,
-> ftrace_func_address_lookup, module_address_lookup and
-> kallsyms_lookup_buildid) already use the provided buffer and either return
-> the address of that buffer to indicate success, or NULL for failure,
-> but the callers are written to also expect an arbitrary other buffer
-> to be returned.
-> 
-> Rework the calling conventions to return the length of the filled buffer
-> instead of its address, which is simpler and easier to follow as well
-> as avoiding the warning. Leave only the kallsyms_lookup() calling conventions
-> unchanged, since that is called from 16 different functions and
-> adapting this would be a much bigger change.
-> 
-> Link: https://lore.kernel.org/all/20200107214042.855757-1-arnd@arndb.de/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-For modules side of things:
-
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-
-  Luis
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 910e230d5f1bb72c54532e94fbb1705095c7bab6 
