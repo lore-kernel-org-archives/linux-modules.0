@@ -2,51 +2,51 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB05C0015E
-	for <linux-modules@archiver.kernel.org>; Tue, 25 Jul 2023 09:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93860C0015E
+	for <linux-modules@archiver.kernel.org>; Tue, 25 Jul 2023 09:37:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjGYJhU (ORCPT
+        id S233387AbjGYJhX (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 25 Jul 2023 05:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        Tue, 25 Jul 2023 05:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbjGYJgy (ORCPT
+        with ESMTP id S233389AbjGYJgz (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 25 Jul 2023 05:36:54 -0400
+        Tue, 25 Jul 2023 05:36:55 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7426D3C14;
-        Tue, 25 Jul 2023 02:35:41 -0700 (PDT)
-X-UUID: 9a48d5902ace11eeb20a276fd37b9834-20230725
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504324204;
+        Tue, 25 Jul 2023 02:35:46 -0700 (PDT)
+X-UUID: 9d5124b82ace11eeb20a276fd37b9834-20230725
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=zWmaf8HUjiBQtOZzOG/1ji6SpQFo3ieskxCMqYPRl7U=;
-        b=iyVCfhFxG8yhh66oiPNLUHGlftW4AX9Djze56URNC8KVTK0/oHdhSi0tNajfDbb2Q2/AR0ugApiMKZfcqU3djcJMNZ8x6aTcmwcMqFI6i0rLoKpcHwn0Z881AQvHdWZ95fEACYuoEG7HSmsMHHyOPTXzxN0xyA/eyqclhlRzzN8=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=B4cFIiKaldpqt8iAeXyzYpvyyKq+roukKtWeH38Ouj0=;
+        b=W8VJLrACTybArRirFy9VU8MR4SQaXYTLtFKwDVQo0NfOjVhZI5PItc5rxZkJo6UWdjE931NAtT6QwHWmekBoCPY6tN8lLWQpW1j0vmN2WPlEwTIbLe8FP+earmTJiFug2NhYe+mFQdcelIVW2w/wCZR4+5Qeftc5Yi2G4WLWQ8g=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.29,REQID:53ec15d5-0de2-428f-895f-5a2975f18d25,IP:0,U
+X-CID-O-INFO: VERSION:1.1.29,REQID:ad0db8f0-6840-4425-b330-5afc2772b6ca,IP:0,U
         RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
         :release,TS:95
-X-CID-INFO: VERSION:1.1.29,REQID:53ec15d5-0de2-428f-895f-5a2975f18d25,IP:0,URL
+X-CID-INFO: VERSION:1.1.29,REQID:ad0db8f0-6840-4425-b330-5afc2772b6ca,IP:0,URL
         :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
         :quarantine,TS:95
-X-CID-META: VersionHash:e7562a7,CLOUDID:f3d0c3b3-a467-4aa9-9e04-f584452e3794,B
-        ulkID:230725173535N4B2AS8D,BulkQuantity:1,Recheck:0,SF:29|28|17|19|48|38,T
+X-CID-META: VersionHash:e7562a7,CLOUDID:48d1c3b3-a467-4aa9-9e04-f584452e3794,B
+        ulkID:230725173539PN0JIBG2,BulkQuantity:1,Recheck:0,SF:28|17|19|48|38|29,T
         C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,COL
         :0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD,TF_CID_SPAM_ULN
-X-UUID: 9a48d5902ace11eeb20a276fd37b9834-20230725
-Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULN,TF_CID_SPAM_SNR,
+        TF_CID_SPAM_SDM,TF_CID_SPAM_ASC
+X-UUID: 9d5124b82ace11eeb20a276fd37b9834-20230725
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
         (envelope-from <kuan-ying.lee@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1226752260; Tue, 25 Jul 2023 17:35:33 +0800
+        with ESMTP id 1669215405; Tue, 25 Jul 2023 17:35:38 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 25 Jul 2023 17:35:32 +0800
+ 15.2.1118.26; Tue, 25 Jul 2023 17:35:37 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 25 Jul 2023 17:35:32 +0800
+ 15.2.1118.26 via Frontend Transport; Tue, 25 Jul 2023 17:35:37 +0800
 From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 To:     Jan Kiszka <jan.kiszka@siemens.com>,
         Kieran Bingham <kbingham@kernel.org>,
@@ -60,9 +60,9 @@ CC:     <chinwen.chang@mediatek.com>, <qun-wei.lin@mediatek.com>,
         Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>
-Subject: [PATCH 4/8] scripts/gdb/aarch64: add aarch64 page operation helper commands and configs
-Date:   Tue, 25 Jul 2023 17:34:54 +0800
-Message-ID: <20230725093458.30064-5-Kuan-Ying.Lee@mediatek.com>
+Subject: [PATCH 6/8] scripts/gdb/page_owner: add page owner support
+Date:   Tue, 25 Jul 2023 17:34:56 +0800
+Message-ID: <20230725093458.30064-7-Kuan-Ying.Lee@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230725093458.30064-1-Kuan-Ying.Lee@mediatek.com>
 References: <20230725093458.30064-1-Kuan-Ying.Lee@mediatek.com>
@@ -72,922 +72,279 @@ X-MTK:  N
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-1. Move page table debugging from mm.py to pgtable.py.
+This GDB scripts print page owner information for user to
+analyze the memory usage or memory corruption issue.
 
-2. Add aarch64 kernel config and memory constants value.
+Example output from an aarch64 system:
 
-3. Add below aarch64 page operation helper commands.
-   page_to_pfn, page_to_phys, pfn_to_page, page_address,
-   virt_to_phys, sym_to_pfn, pfn_to_kaddr, virt_to_page.
-
-4. Only support CONFIG_SPARSEMEM_VMEMMAP=y now.
+(gdb) lx-dump-page-owner --pfn 655360
+page_owner tracks the page as allocated
+Page last allocated via order 0, gfp_mask: 0x8, pid: 1, tgid: 1 ("swapper/0\000\000\000\000\000\000"), ts 1295948880 ns, free_ts 1011852016 ns
+PFN: 655360, Flags: 0x3fffc0000000000
+   0xffff8000086ab964 <post_alloc_hook+452>:    ldp     x19, x20, [sp, #16]
+   0xffff80000862e4e0 <split_map_pages+344>:    cbnz    w22, 0xffff80000862e57c <split_map_pages+500>
+   0xffff8000086370c4 <isolate_freepages_range+556>:    mov     x0, x27
+   0xffff8000086bc1cc <alloc_contig_range+808>: mov     x24, x0
+   0xffff80000877d6d8 <cma_alloc+772>:  mov     w1, w0
+   0xffff8000082c8d18 <dma_alloc_from_contiguous+104>:  ldr     x19, [sp, #16]
+   0xffff8000082ce0e8 <atomic_pool_expand+208>: mov     x19, x0
+   0xffff80000c1e41b4 <__dma_atomic_pool_init+172>:     Cannot access memory at address 0xffff80000c1e41b4
+   0xffff80000c1e4298 <dma_atomic_pool_init+92>:        Cannot access memory at address 0xffff80000c1e4298
+   0xffff8000080161d4 <do_one_initcall+176>:    mov     w21, w0
+   0xffff80000c1c1b50 <kernel_init_freeable+952>:       Cannot access memory at address 0xffff80000c1c1b50
+   0xffff80000acf87dc <kernel_init+36>: bl      0xffff8000081ab100 <async_synchronize_full>
+   0xffff800008018d00 <ret_from_fork+16>:       mrs     x28, sp_el0
+page last free stack trace:
+   0xffff8000086a6e8c <free_unref_page_prepare+796>:    mov     w2, w23
+   0xffff8000086aee1c <free_unref_page+96>:     tst     w0, #0xff
+   0xffff8000086af3f8 <__free_pages+292>:       ldp     x19, x20, [sp, #16]
+   0xffff80000c1f3214 <init_cma_reserved_pageblock+220>:        Cannot access memory at address 0xffff80000c1f3214
+   0xffff80000c20363c <cma_init_reserved_areas+1284>:   Cannot access memory at address 0xffff80000c20363c
+   0xffff8000080161d4 <do_one_initcall+176>:    mov     w21, w0
+   0xffff80000c1c1b50 <kernel_init_freeable+952>:       Cannot access memory at address 0xffff80000c1c1b50
+   0xffff80000acf87dc <kernel_init+36>: bl      0xffff8000081ab100 <async_synchronize_full>
+   0xffff800008018d00 <ret_from_fork+16>:       mrs     x28, sp_el0
 
 Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 ---
- scripts/gdb/linux/constants.py.in |  31 ++
- scripts/gdb/linux/mm.py           | 579 +++++++++++++++++++-----------
- scripts/gdb/linux/pgtable.py      | 222 ++++++++++++
- scripts/gdb/vmlinux-gdb.py        |   3 +-
- 4 files changed, 631 insertions(+), 204 deletions(-)
- create mode 100644 scripts/gdb/linux/pgtable.py
+ scripts/gdb/linux/constants.py.in |   6 +
+ scripts/gdb/linux/page_owner.py   | 189 ++++++++++++++++++++++++++++++
+ scripts/gdb/vmlinux-gdb.py        |   1 +
+ 3 files changed, 196 insertions(+)
+ create mode 100644 scripts/gdb/linux/page_owner.py
 
 diff --git a/scripts/gdb/linux/constants.py.in b/scripts/gdb/linux/constants.py.in
-index 50a92c4e9984..7c44222bbf23 100644
+index ec88c9affdd2..7e375b89fb99 100644
 --- a/scripts/gdb/linux/constants.py.in
 +++ b/scripts/gdb/linux/constants.py.in
-@@ -20,6 +20,7 @@
+@@ -18,6 +18,7 @@
+ #include <linux/irq.h>
+ #include <linux/mount.h>
  #include <linux/of_fdt.h>
++#include <linux/page_ext.h>
  #include <linux/radix-tree.h>
  #include <linux/threads.h>
-+#include <asm/memory.h>
+ #include <asm/memory.h>
+@@ -94,6 +95,10 @@ if IS_BUILTIN(CONFIG_ARM64):
+     LX_GDBPARSED(VA_BITS_MIN)
+     LX_GDBPARSED(MODULES_VSIZE)
  
- /* We need to stringify expanded macros so that they can be parsed */
- 
-@@ -86,6 +87,13 @@ LX_GDBPARSED(RADIX_TREE_MAP_SIZE)
- LX_GDBPARSED(RADIX_TREE_MAP_SHIFT)
- LX_GDBPARSED(RADIX_TREE_MAP_MASK)
- 
-+/* asm/memory.h */
-+if IS_BUILTIN(CONFIG_ARM64):
-+    LX_GDBPARSED(PAGE_OFFSET)
-+    LX_GDBPARSED(VA_BITS)
-+    LX_GDBPARSED(VA_BITS_MIN)
-+    LX_GDBPARSED(MODULES_VSIZE)
++/* linux/page_ext.h */
++LX_GDBPARSED(PAGE_EXT_OWNER)
++LX_GDBPARSED(PAGE_EXT_OWNER_ALLOCATED)
 +
  /* Kernel Configs */
  LX_CONFIG(CONFIG_GENERIC_CLOCKEVENTS)
  LX_CONFIG(CONFIG_GENERIC_CLOCKEVENTS_BROADCAST)
-@@ -102,3 +110,26 @@ LX_CONFIG(CONFIG_X86_MCE_AMD)
- LX_CONFIG(CONFIG_X86_MCE)
- LX_CONFIG(CONFIG_X86_IO_APIC)
- LX_CONFIG(CONFIG_HAVE_KVM)
-+LX_CONFIG(CONFIG_NUMA)
-+LX_CONFIG(CONFIG_ARM64)
-+LX_CONFIG(CONFIG_ARM64_4K_PAGES)
-+LX_CONFIG(CONFIG_ARM64_16K_PAGES)
-+LX_CONFIG(CONFIG_ARM64_64K_PAGES)
-+if IS_BUILTIN(CONFIG_ARM64):
-+    LX_VALUE(CONFIG_ARM64_PA_BITS)
-+    LX_VALUE(CONFIG_ARM64_VA_BITS)
-+    LX_VALUE(CONFIG_ARM64_PAGE_SHIFT)
-+    LX_VALUE(CONFIG_ARCH_FORCE_MAX_ORDER)
-+LX_CONFIG(CONFIG_SPARSEMEM)
-+LX_CONFIG(CONFIG_SPARSEMEM_EXTREME)
-+LX_CONFIG(CONFIG_SPARSEMEM_VMEMMAP)
-+LX_CONFIG(CONFIG_KASAN)
-+LX_CONFIG(CONFIG_KASAN_GENERIC)
-+LX_CONFIG(CONFIG_KASAN_SW_TAGS)
-+LX_CONFIG(CONFIG_KASAN_HW_TAGS)
-+if IS_BUILTIN(CONFIG_KASAN_GENERIC) or IS_BUILTIN(CONFIG_KASAN_SW_TAGS):
-+    LX_VALUE(CONFIG_KASAN_SHADOW_OFFSET)
-+LX_CONFIG(CONFIG_VMAP_STACK)
-+if IS_BUILTIN(CONFIG_NUMA):
-+    LX_VALUE(CONFIG_NODES_SHIFT)
-+LX_CONFIG(CONFIG_DEBUG_VIRTUAL)
-diff --git a/scripts/gdb/linux/mm.py b/scripts/gdb/linux/mm.py
-index 30d837f3dfae..3c834c1b71ca 100644
---- a/scripts/gdb/linux/mm.py
-+++ b/scripts/gdb/linux/mm.py
-@@ -1,222 +1,395 @@
--# SPDX-License-Identifier: GPL-2.0-only
-+# SPDX-License-Identifier: GPL-2.0
- #
--# gdb helper commands and functions for Linux kernel debugging
--#
--#  routines to introspect page table
-+# Copyright (c) 2023 MediaTek Inc.
- #
- # Authors:
--#  Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-+#  Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
- #
- 
- import gdb
-+import math
-+from linux import utils, constants
-+
-+def DIV_ROUND_UP(n,d):
-+    return ((n) + (d) - 1) // (d)
- 
--from linux import utils
-+def test_bit(nr, addr):
-+    if addr.dereference() & (0x1 << nr):
-+        return True
-+    else:
-+        return False
- 
--PHYSICAL_ADDRESS_MASK = gdb.parse_and_eval('0xfffffffffffff')
-+class page_ops():
-+    ops = None
-+    def __init__(self):
-+        if not constants.LX_CONFIG_SPARSEMEM_VMEMMAP:
-+            raise gdb.GdbError('Only support CONFIG_SPARSEMEM_VMEMMAP now')
-+        if constants.LX_CONFIG_ARM64 and utils.is_target_arch('aarch64'):
-+            self.ops = aarch64_page_ops()
-+        else:
-+            raise gdb.GdbError('Only support aarch64 now')
- 
-+class aarch64_page_ops():
-+    def __init__(self):
-+        self.SUBSECTION_SHIFT = 21
-+        self.SEBSECTION_SIZE = 1 << self.SUBSECTION_SHIFT
-+        self.MODULES_VSIZE = 128 * 1024 * 1024
- 
--def page_mask(level=1):
--    # 4KB
--    if level == 1:
--        return gdb.parse_and_eval('(u64) ~0xfff')
--    # 2MB
--    elif level == 2:
--        return gdb.parse_and_eval('(u64) ~0x1fffff')
--    # 1GB
--    elif level == 3:
--        return gdb.parse_and_eval('(u64) ~0x3fffffff')
--    else:
--        raise Exception(f'Unknown page level: {level}')
--
--
--#page_offset_base in case CONFIG_DYNAMIC_MEMORY_LAYOUT is disabled
--POB_NO_DYNAMIC_MEM_LAYOUT = '0xffff888000000000'
--def _page_offset_base():
--    pob_symbol = gdb.lookup_global_symbol('page_offset_base')
--    pob = pob_symbol.name if pob_symbol else POB_NO_DYNAMIC_MEM_LAYOUT
--    return gdb.parse_and_eval(pob)
--
--
--def is_bit_defined_tupled(data, offset):
--    return offset, bool(data >> offset & 1)
--
--def content_tupled(data, bit_start, bit_end):
--    return (bit_start, bit_end), data >> bit_start & ((1 << (1 + bit_end - bit_start)) - 1)
--
--def entry_va(level, phys_addr, translating_va):
--        def start_bit(level):
--            if level == 5:
--                return 48
--            elif level == 4:
--                return 39
--            elif level == 3:
--                return 30
--            elif level == 2:
--                return 21
--            elif level == 1:
--                return 12
-+        if constants.LX_CONFIG_ARM64_64K_PAGES:
-+            self.SECTION_SIZE_BITS = 29
-+        else:
-+            self.SECTION_SIZE_BITS = 27
-+        self.MAX_PHYSMEM_BITS = constants.LX_CONFIG_ARM64_VA_BITS
-+
-+        self.PAGE_SHIFT = constants.LX_CONFIG_ARM64_PAGE_SHIFT
-+        self.PAGE_SIZE = 1 << self.PAGE_SHIFT
-+        self.PAGE_MASK = (~(self.PAGE_SIZE - 1)) & ((1 << 64) - 1)
-+
-+        self.VA_BITS = constants.LX_CONFIG_ARM64_VA_BITS
-+        self.VA_BITS_MIN = constants.LX_VA_BITS_MIN
-+        if self.VA_BITS > 48:
-+            self.vabits_actual = gdb.parse_and_eval('vabits_actual')
-+        else:
-+            self.vabits_actual = self.VA_BITS
-+        self.kimage_voffset = gdb.parse_and_eval('kimage_voffset') & ((1 << 64) - 1)
-+
-+        self.SECTIONS_SHIFT = self.MAX_PHYSMEM_BITS - self.SECTION_SIZE_BITS
-+
-+        if str(constants.LX_CONFIG_ARCH_FORCE_MAX_ORDER).isdigit():
-+            self.MAX_ORDER = constants.LX_CONFIG_ARCH_FORCE_MAX_ORDER
-+        else:
-+            self.MAX_ORDER = 11
-+
-+        self.MAX_ORDER_NR_PAGES = 1 << (self.MAX_ORDER - 1)
-+        self.PFN_SECTION_SHIFT = self.SECTION_SIZE_BITS - self.PAGE_SHIFT
-+        self.NR_MEM_SECTIONS = 1 << self.SECTIONS_SHIFT
-+        self.PAGES_PER_SECTION = 1 << self.PFN_SECTION_SHIFT
-+        self.PAGE_SECTION_MASK = (~(self.PAGES_PER_SECTION - 1)) & ((1 << 64) - 1)
-+
-+        if constants.LX_CONFIG_SPARSEMEM_EXTREME:
-+            self.SECTIONS_PER_ROOT = self.PAGE_SIZE // gdb.lookup_type("struct mem_section").sizeof
-+        else:
-+            self.SECTIONS_PER_ROOT = 1
-+
-+        self.NR_SECTION_ROOTS = DIV_ROUND_UP(self.NR_MEM_SECTIONS, self.SECTIONS_PER_ROOT)
-+        self.SECTION_ROOT_MASK = self.SECTIONS_PER_ROOT - 1
-+        self.SUBSECTION_SHIFT = 21
-+        self.SEBSECTION_SIZE = 1 << self.SUBSECTION_SHIFT
-+        self.PFN_SUBSECTION_SHIFT = self.SUBSECTION_SHIFT - self.PAGE_SHIFT
-+        self.PAGES_PER_SUBSECTION = 1 << self.PFN_SUBSECTION_SHIFT
-+
-+        self.SECTION_HAS_MEM_MAP = 1 << int(gdb.parse_and_eval('SECTION_HAS_MEM_MAP_BIT'))
-+        self.SECTION_IS_EARLY = 1 << int(gdb.parse_and_eval('SECTION_IS_EARLY_BIT'))
-+
-+        self.struct_page_size = utils.get_page_type().sizeof
-+        self.STRUCT_PAGE_MAX_SHIFT = (int)(math.log(self.struct_page_size, 2))
-+
-+        self.PAGE_OFFSET = constants.LX_PAGE_OFFSET
-+        self.MODULES_VSIZE = constants.LX_MODULES_VSIZE
-+        self.MODULES_VADDR = self._PAGE_END(self.VA_BITS_MIN)
-+        self.MODULES_END = self.MODULES_VADDR + self.MODULES_VSIZE
-+
-+        self.VMEMMAP_SHIFT = (self.PAGE_SHIFT - self.STRUCT_PAGE_MAX_SHIFT)
-+        self.VMEMMAP_SIZE = ((self._PAGE_END(self.VA_BITS_MIN) - self.PAGE_OFFSET) >> self.VMEMMAP_SHIFT)
-+        self.VMEMMAP_START = (-(1 << (self.VA_BITS - self.VMEMMAP_SHIFT))) & 0xffffffffffffffff
-+        self.VMEMMAP_END = self.VMEMMAP_START + self.VMEMMAP_SIZE
-+
-+        self.VMALLOC_START = self.MODULES_END
-+        self.VMALLOC_END = self.VMEMMAP_START - 256 * 1024 * 1024
-+
-+        self.memstart_addr = gdb.parse_and_eval("memstart_addr")
-+        self.PHYS_OFFSET = self.memstart_addr
-+        self.vmemmap = gdb.Value(self.VMEMMAP_START).cast(utils.get_page_type().pointer()) - (self.memstart_addr >> self.PAGE_SHIFT)
-+
-+        self.KERNEL_START = gdb.parse_and_eval("_text")
-+        self.KERNEL_END = gdb.parse_and_eval("_end")
-+
-+        if constants.LX_CONFIG_KASAN_GENERIC or constants.LX_CONFIG_KASAN_SW_TAGS:
-+            if constants.LX_CONFIG_KASAN_GENERIC:
-+                self.KASAN_SHADOW_SCALE_SHIFT = 3
-             else:
--                raise Exception(f'Unknown level {level}')
--
--        entry_offset =  ((translating_va >> start_bit(level)) & 511) * 8
--        entry_va = _page_offset_base() + phys_addr + entry_offset
--        return entry_va
--
--class Cr3():
--    def __init__(self, cr3, page_levels):
--        self.cr3 = cr3
--        self.page_levels = page_levels
--        self.page_level_write_through = is_bit_defined_tupled(cr3, 3)
--        self.page_level_cache_disabled = is_bit_defined_tupled(cr3, 4)
--        self.next_entry_physical_address = cr3 & PHYSICAL_ADDRESS_MASK & page_mask()
--
--    def next_entry(self, va):
--        next_level = self.page_levels
--        return PageHierarchyEntry(entry_va(next_level, self.next_entry_physical_address, va), next_level)
--
--    def mk_string(self):
--            return f"""\
--cr3:
--    {'cr3 binary data': <30} {hex(self.cr3)}
--    {'next entry physical address': <30} {hex(self.next_entry_physical_address)}
--    ---
--    {'bit' : <4} {self.page_level_write_through[0]: <10} {'page level write through': <30} {self.page_level_write_through[1]}
--    {'bit' : <4} {self.page_level_cache_disabled[0]: <10} {'page level cache disabled': <30} {self.page_level_cache_disabled[1]}
--"""
--
--
--class PageHierarchyEntry():
--    def __init__(self, address, level):
--        data = int.from_bytes(
--            memoryview(gdb.selected_inferior().read_memory(address, 8)),
--            "little"
--        )
--        if level == 1:
--            self.is_page = True
--            self.entry_present = is_bit_defined_tupled(data, 0)
--            self.read_write = is_bit_defined_tupled(data, 1)
--            self.user_access_allowed = is_bit_defined_tupled(data, 2)
--            self.page_level_write_through = is_bit_defined_tupled(data, 3)
--            self.page_level_cache_disabled = is_bit_defined_tupled(data, 4)
--            self.entry_was_accessed = is_bit_defined_tupled(data, 5)
--            self.dirty = is_bit_defined_tupled(data, 6)
--            self.pat = is_bit_defined_tupled(data, 7)
--            self.global_translation = is_bit_defined_tupled(data, 8)
--            self.page_physical_address = data & PHYSICAL_ADDRESS_MASK & page_mask(level)
--            self.next_entry_physical_address = None
--            self.hlat_restart_with_ordinary = is_bit_defined_tupled(data, 11)
--            self.protection_key = content_tupled(data, 59, 62)
--            self.executed_disable = is_bit_defined_tupled(data, 63)
-+                self.KASAN_SHADOW_SCALE_SHIFT = 4
-+            self.KASAN_SHADOW_OFFSET = constants.LX_CONFIG_KASAN_SHADOW_OFFSET
-+            self.KASAN_SHADOW_END = (1 << (64 - self.KASAN_SHADOW_SCALE_SHIFT)) + self.KASAN_SHADOW_OFFSET
-+            self.PAGE_END = self.KASAN_SHADOW_END - (1 << (self.vabits_actual - self.KASAN_SHADOW_SCALE_SHIFT))
-+        else:
-+            self.PAGE_END = self._PAGE_END(self.VA_BITS_MIN)
-+
-+        if constants.LX_CONFIG_NUMA and constants.LX_CONFIG_NODES_SHIFT:
-+            self.NODE_SHIFT = constants.LX_CONFIG_NODES_SHIFT
-+        else:
-+            self.NODE_SHIFT = 0
-+
-+        self.MAX_NUMNODES = 1 << self.NODE_SHIFT
-+
-+    def SECTION_NR_TO_ROOT(self, sec):
-+        return sec // self.SECTIONS_PER_ROOT
-+
-+    def __nr_to_section(self, nr):
-+        root = self.SECTION_NR_TO_ROOT(nr)
-+        mem_section = gdb.parse_and_eval("mem_section")
-+        return mem_section[root][nr & self.SECTION_ROOT_MASK]
-+
-+    def pfn_to_section_nr(self, pfn):
-+        return pfn >> self.PFN_SECTION_SHIFT
-+
-+    def section_nr_to_pfn(self, sec):
-+        return sec << self.PFN_SECTION_SHIFT
-+
-+    def __pfn_to_section(self, pfn):
-+        return self.__nr_to_section(self.pfn_to_section_nr(pfn))
-+
-+    def pfn_to_section(self, pfn):
-+        return self.__pfn_to_section(pfn)
-+
-+    def subsection_map_index(self, pfn):
-+        return (pfn & ~(self.PAGE_SECTION_MASK)) // self.PAGES_PER_SUBSECTION
-+
-+    def pfn_section_valid(self, ms, pfn):
-+        if constants.LX_CONFIG_SPARSEMEM_VMEMMAP:
-+            idx = self.subsection_map_index(pfn)
-+            return test_bit(idx, ms['usage']['subsection_map'])
-         else:
--            page_size = is_bit_defined_tupled(data, 7)
--            page_size_bit = page_size[1]
--            self.is_page = page_size_bit
--            self.entry_present = is_bit_defined_tupled(data, 0)
--            self.read_write = is_bit_defined_tupled(data, 1)
--            self.user_access_allowed = is_bit_defined_tupled(data, 2)
--            self.page_level_write_through = is_bit_defined_tupled(data, 3)
--            self.page_level_cache_disabled = is_bit_defined_tupled(data, 4)
--            self.entry_was_accessed = is_bit_defined_tupled(data, 5)
--            self.page_size = page_size
--            self.dirty = is_bit_defined_tupled(
--                data, 6) if page_size_bit else None
--            self.global_translation = is_bit_defined_tupled(
--                data, 8) if page_size_bit else None
--            self.pat = is_bit_defined_tupled(
--                data, 12) if page_size_bit else None
--            self.page_physical_address = data & PHYSICAL_ADDRESS_MASK & page_mask(level) if page_size_bit else None
--            self.next_entry_physical_address = None if page_size_bit else data & PHYSICAL_ADDRESS_MASK & page_mask()
--            self.hlat_restart_with_ordinary = is_bit_defined_tupled(data, 11)
--            self.protection_key = content_tupled(data, 59, 62) if page_size_bit else None
--            self.executed_disable = is_bit_defined_tupled(data, 63)
--        self.address = address
--        self.page_entry_binary_data = data
--        self.page_hierarchy_level = level
--
--    def next_entry(self, va):
--        if self.is_page or not self.entry_present[1]:
--            return None
--
--        next_level = self.page_hierarchy_level - 1
--        return PageHierarchyEntry(entry_va(next_level, self.next_entry_physical_address, va), next_level)
--
--
--    def mk_string(self):
--        if not self.entry_present[1]:
--            return f"""\
--level {self.page_hierarchy_level}:
--    {'entry address': <30} {hex(self.address)}
--    {'page entry binary data': <30} {hex(self.page_entry_binary_data)}
--    ---
--    PAGE ENTRY IS NOT PRESENT!
--"""
--        elif self.is_page:
--            def page_size_line(ps_bit, ps, level):
--                return "" if level == 1 else f"{'bit': <3} {ps_bit: <5} {'page size': <30} {ps}"
--
--            return f"""\
--level {self.page_hierarchy_level}:
--    {'entry address': <30} {hex(self.address)}
--    {'page entry binary data': <30} {hex(self.page_entry_binary_data)}
--    {'page size': <30} {'1GB' if self.page_hierarchy_level == 3 else '2MB' if self.page_hierarchy_level == 2 else '4KB' if self.page_hierarchy_level == 1 else 'Unknown page size for level:' + self.page_hierarchy_level}
--    {'page physical address': <30} {hex(self.page_physical_address)}
--    ---
--    {'bit': <4} {self.entry_present[0]: <10} {'entry present': <30} {self.entry_present[1]}
--    {'bit': <4} {self.read_write[0]: <10} {'read/write access allowed': <30} {self.read_write[1]}
--    {'bit': <4} {self.user_access_allowed[0]: <10} {'user access allowed': <30} {self.user_access_allowed[1]}
--    {'bit': <4} {self.page_level_write_through[0]: <10} {'page level write through': <30} {self.page_level_write_through[1]}
--    {'bit': <4} {self.page_level_cache_disabled[0]: <10} {'page level cache disabled': <30} {self.page_level_cache_disabled[1]}
--    {'bit': <4} {self.entry_was_accessed[0]: <10} {'entry has been accessed': <30} {self.entry_was_accessed[1]}
--    {"" if self.page_hierarchy_level == 1 else f"{'bit': <4} {self.page_size[0]: <10} {'page size': <30} {self.page_size[1]}"}
--    {'bit': <4} {self.dirty[0]: <10} {'page dirty': <30} {self.dirty[1]}
--    {'bit': <4} {self.global_translation[0]: <10} {'global translation': <30} {self.global_translation[1]}
--    {'bit': <4} {self.hlat_restart_with_ordinary[0]: <10} {'restart to ordinary': <30} {self.hlat_restart_with_ordinary[1]}
--    {'bit': <4} {self.pat[0]: <10} {'pat': <30} {self.pat[1]}
--    {'bits': <4} {str(self.protection_key[0]): <10} {'protection key': <30} {self.protection_key[1]}
--    {'bit': <4} {self.executed_disable[0]: <10} {'execute disable': <30} {self.executed_disable[1]}
--"""
-+            return True
-+
-+    def valid_section(self, mem_section):
-+        if mem_section != None and (mem_section['section_mem_map'] & self.SECTION_HAS_MEM_MAP):
-+            return True
-+        return False
-+
-+    def early_section(self, mem_section):
-+        if mem_section != None and (mem_section['section_mem_map'] & self.SECTION_IS_EARLY):
-+            return True
-+        return False
-+
-+    def pfn_valid(self, pfn):
-+        ms = None
-+        if self.PHYS_PFN(self.PFN_PHYS(pfn)) != pfn:
-+            return False
-+        if self.pfn_to_section_nr(pfn) >= self.NR_MEM_SECTIONS:
-+            return False
-+        ms = self.__pfn_to_section(pfn)
-+
-+        if not self.valid_section(ms):
-+            return False
-+        return self.early_section(ms) or self.pfn_section_valid(ms, pfn)
-+
-+    def _PAGE_END(self, va):
-+        return (-(1 << (va - 1))) & 0xffffffffffffffff
-+
-+    def kasan_reset_tag(self, addr):
-+        if constants.LX_CONFIG_KASAN_SW_TAGS or constants.LX_CONFIG_KASAN_HW_TAGS:
-+            return addr | (0xff << 56)
-         else:
--            return f"""\
--level {self.page_hierarchy_level}:
--    {'entry address': <30} {hex(self.address)}
--    {'page entry binary data': <30} {hex(self.page_entry_binary_data)}
--    {'next entry physical address': <30} {hex(self.next_entry_physical_address)}
--    ---
--    {'bit': <4} {self.entry_present[0]: <10} {'entry present': <30} {self.entry_present[1]}
--    {'bit': <4} {self.read_write[0]: <10} {'read/write access allowed': <30} {self.read_write[1]}
--    {'bit': <4} {self.user_access_allowed[0]: <10} {'user access allowed': <30} {self.user_access_allowed[1]}
--    {'bit': <4} {self.page_level_write_through[0]: <10} {'page level write through': <30} {self.page_level_write_through[1]}
--    {'bit': <4} {self.page_level_cache_disabled[0]: <10} {'page level cache disabled': <30} {self.page_level_cache_disabled[1]}
--    {'bit': <4} {self.entry_was_accessed[0]: <10} {'entry has been accessed': <30} {self.entry_was_accessed[1]}
--    {'bit': <4} {self.page_size[0]: <10} {'page size': <30} {self.page_size[1]}
--    {'bit': <4} {self.hlat_restart_with_ordinary[0]: <10} {'restart to ordinary': <30} {self.hlat_restart_with_ordinary[1]}
--    {'bit': <4} {self.executed_disable[0]: <10} {'execute disable': <30} {self.executed_disable[1]}
--"""
--
--
--class TranslateVM(gdb.Command):
--    """Prints the entire paging structure used to translate a given virtual address.
--
--Having an address space of the currently executed process translates the virtual address
--and prints detailed information of all paging structure levels used for the transaltion.
--Currently supported arch: x86"""
-+            return addr
-+
-+    def __is_lm_address(self, addr):
-+        if (addr - self.PAGE_OFFSET) < (self.PAGE_END - self.PAGE_OFFSET):
-+            return True
-+        else:
-+            return False
-+    def __lm_to_phys(self, addr):
-+        return addr - self.PAGE_OFFSET + self.PHYS_OFFSET
-+
-+    def __kimg_to_phys(self, addr):
-+        return addr - self.kimage_voffset
-+
-+    def __virt_to_phys_nodebug(self, va):
-+        untagged_va = self.kasan_reset_tag(va)
-+        if self.__is_lm_address(untagged_va):
-+            return self.__lm_to_phys(untagged_va)
-+        else:
-+            return self.__kimg_to_phys(untagged_va)
-+
-+    def __virt_to_phys(self, va):
-+        if constants.LX_CONFIG_DEBUG_VIRTUAL:
-+            if not self.__is_lm_address(self.kasan_reset_tag(va)):
-+                raise gdb.GdbError("Warning: virt_to_phys used for non-linear address: 0x%lx\n" % va)
-+        return self.__virt_to_phys_nodebug(va)
-+
-+    def virt_to_phys(self, va):
-+        return self.__virt_to_phys(va)
-+
-+    def PFN_PHYS(self, pfn):
-+        return pfn << self.PAGE_SHIFT
-+
-+    def PHYS_PFN(self, phys):
-+        return phys >> self.PAGE_SHIFT
-+
-+    def __phys_to_virt(self, pa):
-+        return (pa - self.PHYS_OFFSET) | self.PAGE_OFFSET
-+
-+    def __phys_to_pfn(self, pa):
-+        return self.PHYS_PFN(pa)
-+
-+    def __pfn_to_phys(self, pfn):
-+        return self.PFN_PHYS(pfn)
-+
-+    def __pa_symbol_nodebug(self, x):
-+        return self.__kimg_to_phys(x)
-+
-+    def __phys_addr_symbol(self, x):
-+        if constants.LX_CONFIG_DEBUG_VIRTUAL:
-+            if x < self.KERNEL_START or x > self.KERNEL_END:
-+                raise gdb.GdbError("0x%x exceed kernel range" % x)
-+        return self.__pa_symbol_nodebug(x)
-+
-+    def __pa_symbol(self, x):
-+        return self.__phys_addr_symbol(x)
-+
-+    def __va(self, pa):
-+        return self.__phys_to_virt(pa)
-+
-+    def pfn_to_kaddr(self, pfn):
-+        return self.__va(pfn << self.PAGE_SHIFT)
-+
-+    def virt_to_pfn(self, va):
-+        return self.__phys_to_pfn(self.__virt_to_phys(va))
-+
-+    def sym_to_pfn(self, x):
-+        return self.__phys_to_pfn(self.__pa_symbol(x))
-+
-+    def page_to_pfn(self, page):
-+        return int(page.cast(utils.get_page_type().pointer()) - self.vmemmap.cast(utils.get_page_type().pointer()))
-+
-+    def page_to_phys(self, page):
-+        return self.__pfn_to_phys(self.page_to_pfn(page))
-+
-+    def pfn_to_page(self, pfn):
-+        return (self.vmemmap + pfn).cast(utils.get_page_type().pointer())
-+
-+    def page_to_virt(self, page):
-+        if constants.LX_CONFIG_DEBUG_VIRTUAL:
-+            return self.__va(self.page_to_phys(page))
-+        else:
-+            __idx = int((page.cast(gdb.lookup_type("unsigned long")) - self.VMEMMAP_START).cast(utils.get_ulong_type())) // self.struct_page_size
-+            return self.PAGE_OFFSET + (__idx * self.PAGE_SIZE)
-+
-+    def virt_to_page(self, va):
-+        if constants.LX_CONFIG_DEBUG_VIRTUAL:
-+            return self.pfn_to_page(self.virt_to_pfn(va))
-+        else:
-+            __idx = int(self.kasan_reset_tag(va) - self.PAGE_OFFSET) // self.PAGE_SIZE
-+            addr = self.VMEMMAP_START + (__idx * self.struct_page_size)
-+            return gdb.Value(addr).cast(utils.get_page_type().pointer())
-+
-+    def page_address(self, page):
-+        return self.page_to_virt(page)
-+
-+    def folio_address(self, folio):
-+        return self.page_address(folio['page'].address)
-+
-+class LxPFN2Page(gdb.Command):
-+    """PFN to struct page"""
- 
-     def __init__(self):
--        super(TranslateVM, self).__init__('translate-vm', gdb.COMMAND_USER)
-+        super(LxPFN2Page, self).__init__("lx-pfn_to_page", gdb.COMMAND_DATA)
- 
-     def invoke(self, arg, from_tty):
--        if utils.is_target_arch("x86"):
--            vm_address = gdb.parse_and_eval(f'{arg}')
--            cr3_data = gdb.parse_and_eval('$cr3')
--            cr4 = gdb.parse_and_eval('$cr4')
--            page_levels = 5 if cr4 & (1 << 12) else 4
--            page_entry = Cr3(cr3_data, page_levels)
--            while page_entry:
--                gdb.write(page_entry.mk_string())
--                page_entry = page_entry.next_entry(vm_address)
--        else:
--            gdb.GdbError("Virtual address translation is not"
--                         "supported for this arch")
-+        argv = gdb.string_to_argv(arg)
-+        pfn = int(argv[0])
-+        page = page_ops().ops.pfn_to_page(pfn)
-+        gdb.write("pfn_to_page(0x%x) = 0x%x\n" % (pfn, page))
-+
-+LxPFN2Page()
-+
-+class LxPage2PFN(gdb.Command):
-+    """struct page to PFN"""
-+
-+    def __init__(self):
-+        super(LxPage2PFN, self).__init__("lx-page_to_pfn", gdb.COMMAND_DATA)
-+
-+    def invoke(self, arg, from_tty):
-+        argv = gdb.string_to_argv(arg)
-+        struct_page_addr = int(argv[0], 16)
-+        page = gdb.Value(struct_page_addr).cast(utils.get_page_type().pointer())
-+        pfn = page_ops().ops.page_to_pfn(page)
-+        gdb.write("page_to_pfn(0x%x) = 0x%x\n" % (page, pfn))
-+
-+LxPage2PFN()
-+
-+class LxPageAddress(gdb.Command):
-+    """struct page to linear mapping address"""
-+
-+    def __init__(self):
-+        super(LxPageAddress, self).__init__("lx-page_address", gdb.COMMAND_DATA)
-+
-+    def invoke(self, arg, from_tty):
-+        argv = gdb.string_to_argv(arg)
-+        struct_page_addr = int(argv[0], 16)
-+        page = gdb.Value(struct_page_addr).cast(utils.get_page_type().pointer())
-+        addr = page_ops().ops.page_address(page)
-+        gdb.write("page_address(0x%x) = 0x%x\n" % (page, addr))
-+
-+LxPageAddress()
- 
-+class LxPage2Phys(gdb.Command):
-+    """struct page to physical address"""
-+
-+    def __init__(self):
-+        super(LxPage2Phys, self).__init__("lx-page_to_phys", gdb.COMMAND_DATA)
-+
-+    def invoke(self, arg, from_tty):
-+        argv = gdb.string_to_argv(arg)
-+        struct_page_addr = int(argv[0], 16)
-+        page = gdb.Value(struct_page_addr).cast(utils.get_page_type().pointer())
-+        phys_addr = page_ops().ops.page_to_phys(page)
-+        gdb.write("page_to_phys(0x%x) = 0x%x\n" % (page, phys_addr))
-+
-+LxPage2Phys()
-+
-+class LxVirt2Phys(gdb.Command):
-+    """virtual address to physical address"""
-+
-+    def __init__(self):
-+        super(LxVirt2Phys, self).__init__("lx-virt_to_phys", gdb.COMMAND_DATA)
-+
-+    def invoke(self, arg, from_tty):
-+        argv = gdb.string_to_argv(arg)
-+        linear_addr = int(argv[0], 16)
-+        phys_addr = page_ops().ops.virt_to_phys(linear_addr)
-+        gdb.write("virt_to_phys(0x%x) = 0x%x\n" % (linear_addr, phys_addr))
-+
-+LxVirt2Phys()
-+
-+class LxVirt2Page(gdb.Command):
-+    """virtual address to struct page"""
-+
-+    def __init__(self):
-+        super(LxVirt2Page, self).__init__("lx-virt_to_page", gdb.COMMAND_DATA)
-+
-+    def invoke(self, arg, from_tty):
-+        argv = gdb.string_to_argv(arg)
-+        linear_addr = int(argv[0], 16)
-+        page = page_ops().ops.virt_to_page(linear_addr)
-+        gdb.write("virt_to_page(0x%x) = 0x%x\n" % (linear_addr, page))
-+
-+LxVirt2Page()
-+
-+class LxSym2PFN(gdb.Command):
-+    """symbol address to PFN"""
-+
-+    def __init__(self):
-+        super(LxSym2PFN, self).__init__("lx-sym_to_pfn", gdb.COMMAND_DATA)
-+
-+    def invoke(self, arg, from_tty):
-+        argv = gdb.string_to_argv(arg)
-+        sym_addr = int(argv[0], 16)
-+        pfn = page_ops().ops.sym_to_pfn(sym_addr)
-+        gdb.write("sym_to_pfn(0x%x) = %d\n" % (sym_addr, pfn))
-+
-+LxSym2PFN()
-+
-+class LxPFN2Kaddr(gdb.Command):
-+    """PFN to kernel address"""
-+
-+    def __init__(self):
-+        super(LxPFN2Kaddr, self).__init__("lx-pfn_to_kaddr", gdb.COMMAND_DATA)
-+
-+    def invoke(self, arg, from_tty):
-+        argv = gdb.string_to_argv(arg)
-+        pfn = int(argv[0])
-+        kaddr = page_ops().ops.pfn_to_kaddr(pfn)
-+        gdb.write("pfn_to_kaddr(%d) = 0x%x\n" % (pfn, kaddr))
- 
--TranslateVM()
-+LxPFN2Kaddr()
-diff --git a/scripts/gdb/linux/pgtable.py b/scripts/gdb/linux/pgtable.py
+@@ -134,3 +139,4 @@ if IS_BUILTIN(CONFIG_NUMA):
+     LX_VALUE(CONFIG_NODES_SHIFT)
+ LX_CONFIG(CONFIG_DEBUG_VIRTUAL)
+ LX_CONFIG(CONFIG_STACKDEPOT)
++LX_CONFIG(CONFIG_PAGE_OWNER)
+diff --git a/scripts/gdb/linux/page_owner.py b/scripts/gdb/linux/page_owner.py
 new file mode 100644
-index 000000000000..30d837f3dfae
+index 000000000000..8eb619adfa6e
 --- /dev/null
-+++ b/scripts/gdb/linux/pgtable.py
-@@ -0,0 +1,222 @@
-+# SPDX-License-Identifier: GPL-2.0-only
++++ b/scripts/gdb/linux/page_owner.py
+@@ -0,0 +1,189 @@
++# SPDX-License-Identifier: GPL-2.0
 +#
-+# gdb helper commands and functions for Linux kernel debugging
-+#
-+#  routines to introspect page table
++# Copyright (c) 2023 MediaTek Inc.
 +#
 +# Authors:
-+#  Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
++#  Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 +#
 +
 +import gdb
++from linux import utils, stackdepot, constants, mm
 +
-+from linux import utils
++page_ext_t = utils.CachedType('struct page_ext')
++page_owner_t = utils.CachedType('struct page_owner')
 +
-+PHYSICAL_ADDRESS_MASK = gdb.parse_and_eval('0xfffffffffffff')
++PAGE_OWNER_STACK_DEPTH = 16
++PAGE_EXT_OWNER = constants.LX_PAGE_EXT_OWNER
++PAGE_EXT_INVALID = 0x1
++PAGE_EXT_OWNER_ALLOCATED = constants.LX_PAGE_EXT_OWNER_ALLOCATED
 +
++def help():
++    t = """Usage: lx-dump-page-owner [Option]
++    Option:
++        --pfn [Decimal pfn]
++    Example:
++        lx-dump-page-owner --pfn 655360\n"""
++    gdb.write("Unrecognized command\n")
++    raise gdb.GdbError(t)
 +
-+def page_mask(level=1):
-+    # 4KB
-+    if level == 1:
-+        return gdb.parse_and_eval('(u64) ~0xfff')
-+    # 2MB
-+    elif level == 2:
-+        return gdb.parse_and_eval('(u64) ~0x1fffff')
-+    # 1GB
-+    elif level == 3:
-+        return gdb.parse_and_eval('(u64) ~0x3fffffff')
-+    else:
-+        raise Exception(f'Unknown page level: {level}')
++class DumpPageOwner(gdb.Command):
++    """Dump page owner"""
 +
-+
-+#page_offset_base in case CONFIG_DYNAMIC_MEMORY_LAYOUT is disabled
-+POB_NO_DYNAMIC_MEM_LAYOUT = '0xffff888000000000'
-+def _page_offset_base():
-+    pob_symbol = gdb.lookup_global_symbol('page_offset_base')
-+    pob = pob_symbol.name if pob_symbol else POB_NO_DYNAMIC_MEM_LAYOUT
-+    return gdb.parse_and_eval(pob)
-+
-+
-+def is_bit_defined_tupled(data, offset):
-+    return offset, bool(data >> offset & 1)
-+
-+def content_tupled(data, bit_start, bit_end):
-+    return (bit_start, bit_end), data >> bit_start & ((1 << (1 + bit_end - bit_start)) - 1)
-+
-+def entry_va(level, phys_addr, translating_va):
-+        def start_bit(level):
-+            if level == 5:
-+                return 48
-+            elif level == 4:
-+                return 39
-+            elif level == 3:
-+                return 30
-+            elif level == 2:
-+                return 21
-+            elif level == 1:
-+                return 12
-+            else:
-+                raise Exception(f'Unknown level {level}')
-+
-+        entry_offset =  ((translating_va >> start_bit(level)) & 511) * 8
-+        entry_va = _page_offset_base() + phys_addr + entry_offset
-+        return entry_va
-+
-+class Cr3():
-+    def __init__(self, cr3, page_levels):
-+        self.cr3 = cr3
-+        self.page_levels = page_levels
-+        self.page_level_write_through = is_bit_defined_tupled(cr3, 3)
-+        self.page_level_cache_disabled = is_bit_defined_tupled(cr3, 4)
-+        self.next_entry_physical_address = cr3 & PHYSICAL_ADDRESS_MASK & page_mask()
-+
-+    def next_entry(self, va):
-+        next_level = self.page_levels
-+        return PageHierarchyEntry(entry_va(next_level, self.next_entry_physical_address, va), next_level)
-+
-+    def mk_string(self):
-+            return f"""\
-+cr3:
-+    {'cr3 binary data': <30} {hex(self.cr3)}
-+    {'next entry physical address': <30} {hex(self.next_entry_physical_address)}
-+    ---
-+    {'bit' : <4} {self.page_level_write_through[0]: <10} {'page level write through': <30} {self.page_level_write_through[1]}
-+    {'bit' : <4} {self.page_level_cache_disabled[0]: <10} {'page level cache disabled': <30} {self.page_level_cache_disabled[1]}
-+"""
-+
-+
-+class PageHierarchyEntry():
-+    def __init__(self, address, level):
-+        data = int.from_bytes(
-+            memoryview(gdb.selected_inferior().read_memory(address, 8)),
-+            "little"
-+        )
-+        if level == 1:
-+            self.is_page = True
-+            self.entry_present = is_bit_defined_tupled(data, 0)
-+            self.read_write = is_bit_defined_tupled(data, 1)
-+            self.user_access_allowed = is_bit_defined_tupled(data, 2)
-+            self.page_level_write_through = is_bit_defined_tupled(data, 3)
-+            self.page_level_cache_disabled = is_bit_defined_tupled(data, 4)
-+            self.entry_was_accessed = is_bit_defined_tupled(data, 5)
-+            self.dirty = is_bit_defined_tupled(data, 6)
-+            self.pat = is_bit_defined_tupled(data, 7)
-+            self.global_translation = is_bit_defined_tupled(data, 8)
-+            self.page_physical_address = data & PHYSICAL_ADDRESS_MASK & page_mask(level)
-+            self.next_entry_physical_address = None
-+            self.hlat_restart_with_ordinary = is_bit_defined_tupled(data, 11)
-+            self.protection_key = content_tupled(data, 59, 62)
-+            self.executed_disable = is_bit_defined_tupled(data, 63)
-+        else:
-+            page_size = is_bit_defined_tupled(data, 7)
-+            page_size_bit = page_size[1]
-+            self.is_page = page_size_bit
-+            self.entry_present = is_bit_defined_tupled(data, 0)
-+            self.read_write = is_bit_defined_tupled(data, 1)
-+            self.user_access_allowed = is_bit_defined_tupled(data, 2)
-+            self.page_level_write_through = is_bit_defined_tupled(data, 3)
-+            self.page_level_cache_disabled = is_bit_defined_tupled(data, 4)
-+            self.entry_was_accessed = is_bit_defined_tupled(data, 5)
-+            self.page_size = page_size
-+            self.dirty = is_bit_defined_tupled(
-+                data, 6) if page_size_bit else None
-+            self.global_translation = is_bit_defined_tupled(
-+                data, 8) if page_size_bit else None
-+            self.pat = is_bit_defined_tupled(
-+                data, 12) if page_size_bit else None
-+            self.page_physical_address = data & PHYSICAL_ADDRESS_MASK & page_mask(level) if page_size_bit else None
-+            self.next_entry_physical_address = None if page_size_bit else data & PHYSICAL_ADDRESS_MASK & page_mask()
-+            self.hlat_restart_with_ordinary = is_bit_defined_tupled(data, 11)
-+            self.protection_key = content_tupled(data, 59, 62) if page_size_bit else None
-+            self.executed_disable = is_bit_defined_tupled(data, 63)
-+        self.address = address
-+        self.page_entry_binary_data = data
-+        self.page_hierarchy_level = level
-+
-+    def next_entry(self, va):
-+        if self.is_page or not self.entry_present[1]:
-+            return None
-+
-+        next_level = self.page_hierarchy_level - 1
-+        return PageHierarchyEntry(entry_va(next_level, self.next_entry_physical_address, va), next_level)
-+
-+
-+    def mk_string(self):
-+        if not self.entry_present[1]:
-+            return f"""\
-+level {self.page_hierarchy_level}:
-+    {'entry address': <30} {hex(self.address)}
-+    {'page entry binary data': <30} {hex(self.page_entry_binary_data)}
-+    ---
-+    PAGE ENTRY IS NOT PRESENT!
-+"""
-+        elif self.is_page:
-+            def page_size_line(ps_bit, ps, level):
-+                return "" if level == 1 else f"{'bit': <3} {ps_bit: <5} {'page size': <30} {ps}"
-+
-+            return f"""\
-+level {self.page_hierarchy_level}:
-+    {'entry address': <30} {hex(self.address)}
-+    {'page entry binary data': <30} {hex(self.page_entry_binary_data)}
-+    {'page size': <30} {'1GB' if self.page_hierarchy_level == 3 else '2MB' if self.page_hierarchy_level == 2 else '4KB' if self.page_hierarchy_level == 1 else 'Unknown page size for level:' + self.page_hierarchy_level}
-+    {'page physical address': <30} {hex(self.page_physical_address)}
-+    ---
-+    {'bit': <4} {self.entry_present[0]: <10} {'entry present': <30} {self.entry_present[1]}
-+    {'bit': <4} {self.read_write[0]: <10} {'read/write access allowed': <30} {self.read_write[1]}
-+    {'bit': <4} {self.user_access_allowed[0]: <10} {'user access allowed': <30} {self.user_access_allowed[1]}
-+    {'bit': <4} {self.page_level_write_through[0]: <10} {'page level write through': <30} {self.page_level_write_through[1]}
-+    {'bit': <4} {self.page_level_cache_disabled[0]: <10} {'page level cache disabled': <30} {self.page_level_cache_disabled[1]}
-+    {'bit': <4} {self.entry_was_accessed[0]: <10} {'entry has been accessed': <30} {self.entry_was_accessed[1]}
-+    {"" if self.page_hierarchy_level == 1 else f"{'bit': <4} {self.page_size[0]: <10} {'page size': <30} {self.page_size[1]}"}
-+    {'bit': <4} {self.dirty[0]: <10} {'page dirty': <30} {self.dirty[1]}
-+    {'bit': <4} {self.global_translation[0]: <10} {'global translation': <30} {self.global_translation[1]}
-+    {'bit': <4} {self.hlat_restart_with_ordinary[0]: <10} {'restart to ordinary': <30} {self.hlat_restart_with_ordinary[1]}
-+    {'bit': <4} {self.pat[0]: <10} {'pat': <30} {self.pat[1]}
-+    {'bits': <4} {str(self.protection_key[0]): <10} {'protection key': <30} {self.protection_key[1]}
-+    {'bit': <4} {self.executed_disable[0]: <10} {'execute disable': <30} {self.executed_disable[1]}
-+"""
-+        else:
-+            return f"""\
-+level {self.page_hierarchy_level}:
-+    {'entry address': <30} {hex(self.address)}
-+    {'page entry binary data': <30} {hex(self.page_entry_binary_data)}
-+    {'next entry physical address': <30} {hex(self.next_entry_physical_address)}
-+    ---
-+    {'bit': <4} {self.entry_present[0]: <10} {'entry present': <30} {self.entry_present[1]}
-+    {'bit': <4} {self.read_write[0]: <10} {'read/write access allowed': <30} {self.read_write[1]}
-+    {'bit': <4} {self.user_access_allowed[0]: <10} {'user access allowed': <30} {self.user_access_allowed[1]}
-+    {'bit': <4} {self.page_level_write_through[0]: <10} {'page level write through': <30} {self.page_level_write_through[1]}
-+    {'bit': <4} {self.page_level_cache_disabled[0]: <10} {'page level cache disabled': <30} {self.page_level_cache_disabled[1]}
-+    {'bit': <4} {self.entry_was_accessed[0]: <10} {'entry has been accessed': <30} {self.entry_was_accessed[1]}
-+    {'bit': <4} {self.page_size[0]: <10} {'page size': <30} {self.page_size[1]}
-+    {'bit': <4} {self.hlat_restart_with_ordinary[0]: <10} {'restart to ordinary': <30} {self.hlat_restart_with_ordinary[1]}
-+    {'bit': <4} {self.executed_disable[0]: <10} {'execute disable': <30} {self.executed_disable[1]}
-+"""
-+
-+
-+class TranslateVM(gdb.Command):
-+    """Prints the entire paging structure used to translate a given virtual address.
-+
-+Having an address space of the currently executed process translates the virtual address
-+and prints detailed information of all paging structure levels used for the transaltion.
-+Currently supported arch: x86"""
++    min_pfn = None
++    max_pfn = None
++    p_ops = None
++    migrate_reason_names = None
 +
 +    def __init__(self):
-+        super(TranslateVM, self).__init__('translate-vm', gdb.COMMAND_USER)
++        super(DumpPageOwner, self).__init__("lx-dump-page-owner", gdb.COMMAND_SUPPORT)
 +
-+    def invoke(self, arg, from_tty):
-+        if utils.is_target_arch("x86"):
-+            vm_address = gdb.parse_and_eval(f'{arg}')
-+            cr3_data = gdb.parse_and_eval('$cr3')
-+            cr4 = gdb.parse_and_eval('$cr4')
-+            page_levels = 5 if cr4 & (1 << 12) else 4
-+            page_entry = Cr3(cr3_data, page_levels)
-+            while page_entry:
-+                gdb.write(page_entry.mk_string())
-+                page_entry = page_entry.next_entry(vm_address)
++    def invoke(self, args, from_tty):
++        if not constants.LX_CONFIG_PAGE_OWNER:
++            raise gdb.GdbError('CONFIG_PAGE_OWNER does not enable')
++
++        page_owner_inited = gdb.parse_and_eval('page_owner_inited')
++        if page_owner_inited['key']['enabled']['counter'] != 0x1:
++            raise gdb.GdbError('page_owner_inited is not enabled')
++
++        self.p_ops = mm.page_ops().ops
++        self.get_page_owner_info()
++        argv = gdb.string_to_argv(args)
++        if len(argv) == 0:
++              self.read_page_owner()
++        elif len(argv) == 2:
++            if argv[0] == "--pfn":
++                pfn = int(argv[1])
++                self.read_page_owner_by_addr(self.p_ops.pfn_to_page(pfn))
++            else:
++                help()
 +        else:
-+            gdb.GdbError("Virtual address translation is not"
-+                         "supported for this arch")
++            help()
 +
++    def get_page_owner_info(self):
++        self.min_pfn = int(gdb.parse_and_eval("min_low_pfn"))
++        self.max_pfn = int(gdb.parse_and_eval("max_pfn"))
++        self.page_ext_size = int(gdb.parse_and_eval("page_ext_size"))
++        self.migrate_reason_names = gdb.parse_and_eval('migrate_reason_names')
 +
-+TranslateVM()
++    def page_ext_invalid(self, page_ext):
++        if page_ext == gdb.Value(0):
++            return True
++        if page_ext.cast(utils.get_ulong_type()) & PAGE_EXT_INVALID == PAGE_EXT_INVALID:
++            return True
++        return False
++
++    def get_entry(self, base, index):
++        return (base.cast(utils.get_ulong_type()) + self.page_ext_size * index).cast(page_ext_t.get_type().pointer())
++
++    def lookup_page_ext(self, page):
++        pfn = self.p_ops.page_to_pfn(page)
++        section = self.p_ops.pfn_to_section(pfn)
++        page_ext = section["page_ext"]
++        if self.page_ext_invalid(page_ext):
++            return gdb.Value(0)
++        return self.get_entry(page_ext, pfn)
++
++    def page_ext_get(self, page):
++        page_ext = self.lookup_page_ext(page)
++        if page_ext != gdb.Value(0):
++            return page_ext
++        else:
++            return gdb.Value(0)
++
++    def get_page_owner(self, page_ext):
++        addr = page_ext.cast(utils.get_ulong_type()) + gdb.parse_and_eval("page_owner_ops")["offset"].cast(utils.get_ulong_type())
++        return addr.cast(page_owner_t.get_type().pointer())
++
++    def read_page_owner_by_addr(self, struct_page_addr):
++        page = gdb.Value(struct_page_addr).cast(utils.get_page_type().pointer())
++        pfn = self.p_ops.page_to_pfn(page)
++
++        if pfn < self.min_pfn or pfn > self.max_pfn or (not self.p_ops.pfn_valid(pfn)):
++            gdb.write("pfn is invalid\n")
++            return
++
++        page = self.p_ops.pfn_to_page(pfn)
++        page_ext = self.page_ext_get(page)
++
++        if page_ext == gdb.Value(0):
++            gdb.write("page_ext is null\n")
++            return
++
++        if not (page_ext['flags'] & (1 << PAGE_EXT_OWNER)):
++            gdb.write("page_owner flag is invalid\n")
++            raise gdb.GdbError('page_owner info is not present (never set?)\n')
++
++        if mm.test_bit(PAGE_EXT_OWNER_ALLOCATED, page_ext['flags'].address):
++            gdb.write('page_owner tracks the page as allocated\n')
++        else:
++            gdb.write('page_owner tracks the page as freed\n')
++
++        if not (page_ext['flags'] & (1 << PAGE_EXT_OWNER_ALLOCATED)):
++            gdb.write("page_owner is not allocated\n")
++
++        try:
++            page_owner = self.get_page_owner(page_ext)
++            gdb.write("Page last allocated via order %d, gfp_mask: 0x%x, pid: %d, tgid: %d (%s), ts %u ns, free_ts %u ns\n" %\
++                    (page_owner["order"], page_owner["gfp_mask"],\
++                    page_owner["pid"], page_owner["tgid"], page_owner["comm"],\
++                    page_owner["ts_nsec"], page_owner["free_ts_nsec"]))
++            gdb.write("PFN: %d, Flags: 0x%x\n" % (pfn, page['flags']))
++            if page_owner["handle"] == 0:
++                gdb.write('page_owner allocation stack trace missing\n')
++            else:
++                stackdepot.stack_depot_print(page_owner["handle"])
++
++            if page_owner["free_handle"] == 0:
++                gdb.write('page_owner free stack trace missing\n')
++            else:
++                gdb.write('page last free stack trace:\n')
++                stackdepot.stack_depot_print(page_owner["free_handle"])
++            if page_owner['last_migrate_reason'] != -1:
++                gdb.write('page has been migrated, last migrate reason: %s\n' % self.migrate_reason_names[page_owner['last_migrate_reason']])
++        except:
++            gdb.write("\n")
++
++    def read_page_owner(self):
++        pfn = self.min_pfn
++
++        # Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area
++        while ((not self.p_ops.pfn_valid(pfn)) and (pfn & (self.p_ops.MAX_ORDER_NR_PAGES - 1))) != 0:
++            pfn += 1
++
++        while pfn < self.max_pfn:
++            #
++            # If the new page is in a new MAX_ORDER_NR_PAGES area,
++            # validate the area as existing, skip it if not
++            #
++            if ((pfn & (self.p_ops.MAX_ORDER_NR_PAGES - 1)) == 0) and (not self.p_ops.pfn_valid(pfn)):
++                pfn += (self.p_ops.MAX_ORDER_NR_PAGES - 1)
++                continue;
++
++            page = self.p_ops.pfn_to_page(pfn)
++            page_ext = self.page_ext_get(page)
++            if page_ext == gdb.Value(0):
++                pfn += 1
++                continue
++
++            if not (page_ext['flags'] & (1 << PAGE_EXT_OWNER)):
++                pfn += 1
++                continue
++            if not (page_ext['flags'] & (1 << PAGE_EXT_OWNER_ALLOCATED)):
++                pfn += 1
++                continue
++
++            try:
++                page_owner = self.get_page_owner(page_ext)
++                gdb.write("Page allocated via order %d, gfp_mask: 0x%x, pid: %d, tgid: %d (%s), ts %u ns, free_ts %u ns\n" %\
++                        (page_owner["order"], page_owner["gfp_mask"],\
++                        page_owner["pid"], page_owner["tgid"], page_owner["comm"],\
++                        page_owner["ts_nsec"], page_owner["free_ts_nsec"]))
++                gdb.write("PFN: %d, Flags: 0x%x\n" % (pfn, page['flags']))
++                stackdepot.stack_depot_print(page_owner["handle"])
++                pfn += (1 << page_owner["order"])
++                continue
++            except:
++                gdb.write("\n")
++            pfn += 1
++
++DumpPageOwner()
 diff --git a/scripts/gdb/vmlinux-gdb.py b/scripts/gdb/vmlinux-gdb.py
-index 2d32308c3f7a..fd24574bcec9 100644
+index 24f149694b81..89465f0de548 100644
 --- a/scripts/gdb/vmlinux-gdb.py
 +++ b/scripts/gdb/vmlinux-gdb.py
-@@ -41,6 +41,7 @@ else:
-     import linux.genpd
-     import linux.device
-     import linux.vfs
--    import linux.mm
-+    import linux.pgtable
-     import linux.radixtree
+@@ -46,3 +46,4 @@ else:
      import linux.interrupts
-+    import linux.mm
+     import linux.mm
+     import linux.stackdepot
++    import linux.page_owner
 -- 
 2.18.0
 
