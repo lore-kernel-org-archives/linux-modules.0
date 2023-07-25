@@ -2,70 +2,135 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFB77EB64DD
-	for <linux-modules@archiver.kernel.org>; Mon, 24 Jul 2023 21:41:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C33CC001DF
+	for <linux-modules@archiver.kernel.org>; Tue, 25 Jul 2023 09:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbjGXVlr (ORCPT
+        id S233434AbjGYJhC (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 24 Jul 2023 17:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        Tue, 25 Jul 2023 05:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbjGXVlk (ORCPT
+        with ESMTP id S233234AbjGYJgq (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 24 Jul 2023 17:41:40 -0400
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com [209.85.160.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87159120
-        for <linux-modules@vger.kernel.org>; Mon, 24 Jul 2023 14:41:37 -0700 (PDT)
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-187959a901eso9503716fac.0
-        for <linux-modules@vger.kernel.org>; Mon, 24 Jul 2023 14:41:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690234896; x=1690839696;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=di6kLt4kiOi9HIX9Zl3sHUse4426YeJyuKx98IZXml0=;
-        b=D35pxNa+1hknr2T+X39ehgHloLtVYfLXN5UDA/IpeUMX30eVbYRPryZvIxCvNoDTcE
-         klysp4Yqo7aft27Vlqd8TYv5VxNhS3M4ymSUb65g7tm4zZ1SUJT9P1Xgsrcrb//JBuKQ
-         9e8onxxzCOUmlgdjq6OZLfWnc7P+8IqR69WG7WIW7JlsW65koddgqPZwEiubNT7P910P
-         zc8x3Fdr5bf/HM2Lf9qhklfL/pgdklsSwCLm1SqX4bvN5zPz4vFyGJMfgKYHnNExeWJS
-         VQfpt+RddnJTWgk7KDEriC4iF/LJd1IUXS/kJT64RD7IKCVraCQKvczJhECRnoiPdDFi
-         Burg==
-X-Gm-Message-State: ABy/qLakz7M6w+NPfVSY8rN0R7LuymR2r9MBG4GCTXMZRQ86yZLmTrnD
-        CfzqCwK0PsSsPs/Y7PmlaXl340Lb14aA8Tr66qKZ0+rcxQMW
-X-Google-Smtp-Source: APBJJlEHgKxbiRqzAo1p5ExJxSaFpMdx4xL8bTDt7lWT7iVoKpAvcWJPdTYgcDdzSeBNd2JY6Wg309G2oeLjLyHxKN+KQCnnhWMe
+        Tue, 25 Jul 2023 05:36:46 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4242A2707;
+        Tue, 25 Jul 2023 02:35:30 -0700 (PDT)
+X-UUID: 9594c90a2ace11ee9cb5633481061a41-20230725
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=CCTXtSXii4WjoQb/QME4Zdq2bfBGafme2o0RO1nxKt8=;
+        b=pJM25hOGVrtXDyNIDLycc74vFOas6onEsU0S4A1ivop07H6V4rWXdwuiMvo2wOIfW9THQXYjlQ0yRFjPeJcJVDWkt7qwcmbpO2nkQ3BFDozOLVk9Huq9R8j/VEvsyhIaTXlY9W6VuDvNzslvIkKvX++erd21tW01f2M81pJ5uo8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.29,REQID:f8d75b8d-11b2-4524-b50c-34ff117bc1c0,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:e7562a7,CLOUDID:eba081a0-0933-4333-8d4f-6c3c53ebd55b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
+        NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_ULN,TF_CID_SPAM_SNR
+X-UUID: 9594c90a2ace11ee9cb5633481061a41-20230725
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <kuan-ying.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1876787150; Tue, 25 Jul 2023 17:35:25 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 25 Jul 2023 17:35:24 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 25 Jul 2023 17:35:24 +0800
+From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+To:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     <chinwen.chang@mediatek.com>, <qun-wei.lin@mediatek.com>,
+        <linux-mm@kvack.org>, <linux-modules@vger.kernel.org>,
+        <casper.li@mediatek.com>, <akpm@linux-foundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH 1/8] scripts/gdb/symbols: add specific ko module load command
+Date:   Tue, 25 Jul 2023 17:34:51 +0800
+Message-ID: <20230725093458.30064-2-Kuan-Ying.Lee@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20230725093458.30064-1-Kuan-Ying.Lee@mediatek.com>
+References: <20230725093458.30064-1-Kuan-Ying.Lee@mediatek.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6870:c7af:b0:1bb:470c:901c with SMTP id
- dy47-20020a056870c7af00b001bb470c901cmr7990684oab.7.1690234896203; Mon, 24
- Jul 2023 14:41:36 -0700 (PDT)
-Date:   Mon, 24 Jul 2023 14:41:36 -0700
-In-Reply-To: <ZL7fogwmV+JJcrVN@bombadil.infradead.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009347d50601427a92@google.com>
-Subject: Re: [syzbot] [modules?] general protection fault in sys_finit_module
-From:   syzbot <syzbot+9e4e94a2689427009d35@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, chris@chrisdown.name,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        llvm@lists.linux.dev, mcgrof@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello,
+Add lx-symbols <ko_path> command to support add specific
+ko module.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Example output like below:
+(gdb) lx-symbols mm/kasan/kasan_test.ko
+loading @0xffff800002d30000: mm/kasan/kasan_test.ko
 
-Reported-and-tested-by: syzbot+9e4e94a2689427009d35@syzkaller.appspotmail.com
+Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+---
+ scripts/gdb/linux/symbols.py | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-Tested on:
+diff --git a/scripts/gdb/linux/symbols.py b/scripts/gdb/linux/symbols.py
+index fdad3f32c747..b21ae62fdd7d 100644
+--- a/scripts/gdb/linux/symbols.py
++++ b/scripts/gdb/linux/symbols.py
+@@ -107,11 +107,12 @@ lx-symbols command."""
+                     name=section_name, addr=str(address)))
+         return "".join(args)
+ 
+-    def load_module_symbols(self, module):
++    def load_module_symbols(self, module, module_file=None):
+         module_name = module['name'].string()
+         module_addr = str(module['mem'][constants.LX_MOD_TEXT]['base']).split()[0]
+ 
+-        module_file = self._get_module_file(module_name)
++        if not module_file:
++            module_file = self._get_module_file(module_name)
+         if not module_file and not self.module_files_updated:
+             self._update_module_files()
+             module_file = self._get_module_file(module_name)
+@@ -135,6 +136,19 @@ lx-symbols command."""
+         else:
+             gdb.write("no module object found for '{0}'\n".format(module_name))
+ 
++    def load_ko_symbols(self, mod_path):
++        self.loaded_modules = []
++        module_list = modules.module_list()
++
++        for module in module_list:
++            module_name = module['name'].string()
++            module_pattern = ".*/{0}\.ko(?:.debug)?$".format(
++                module_name.replace("_", r"[_\-]"))
++            if re.match(module_pattern, mod_path) and os.path.exists(mod_path):
++                self.load_module_symbols(module, mod_path)
++                return
++        raise gdb.GdbError("%s is not a valid .ko\n" % mod_path)
++
+     def load_all_symbols(self):
+         gdb.write("loading vmlinux\n")
+ 
+@@ -173,6 +187,11 @@ lx-symbols command."""
+         self.module_files = []
+         self.module_files_updated = False
+ 
++        argv = gdb.string_to_argv(arg)
++        if len(argv) == 1:
++            self.load_ko_symbols(argv[0])
++            return
++
+         self.load_all_symbols()
+ 
+         if hasattr(gdb, 'Breakpoint'):
+-- 
+2.18.0
 
-commit:         910e230d samples/hw_breakpoint: Fix kernel BUG 'invali..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=156bed06a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d182f762168e165e
-dashboard link: https://syzkaller.appspot.com/bug?extid=9e4e94a2689427009d35
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
