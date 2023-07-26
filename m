@@ -2,194 +2,137 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31D78C001DF
-	for <linux-modules@archiver.kernel.org>; Tue, 25 Jul 2023 09:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D932C001DC
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Jul 2023 08:10:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbjGYJhq (ORCPT
+        id S232191AbjGZIKE (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 25 Jul 2023 05:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        Wed, 26 Jul 2023 04:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233303AbjGYJhE (ORCPT
+        with ESMTP id S232177AbjGZIJf (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 25 Jul 2023 05:37:04 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8F21BF9;
-        Tue, 25 Jul 2023 02:35:58 -0700 (PDT)
-X-UUID: a1ab4eda2ace11eeb20a276fd37b9834-20230725
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=zBOKlXR9UJkQg3cVyddpTc3TB9/Vh3QFP5WBjAxlAXs=;
-        b=fPlH0fl/qK/fGTOx9MFJrjJiZlR3A0t9YsNDioJvnwp2GO4ZN7QyG5mRwfiuppgStkWVWsu2OL76dJ8x4MWckLGGX9I16baPksfg/73E58elmbBeZeYyoDodYnuyT7sed4sV1NQeRes80jiMrcce7ai/ILCtacwjnsZ1lmgInXk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.29,REQID:f41919c1-4205-4049-b1c0-f0eb2bb054ab,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:e7562a7,CLOUDID:7fd1c3b3-a467-4aa9-9e04-f584452e3794,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-        NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: a1ab4eda2ace11eeb20a276fd37b9834-20230725
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <kuan-ying.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 930015652; Tue, 25 Jul 2023 17:35:45 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 25 Jul 2023 17:35:44 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 25 Jul 2023 17:35:44 +0800
-From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <chinwen.chang@mediatek.com>, <qun-wei.lin@mediatek.com>,
-        <linux-mm@kvack.org>, <linux-modules@vger.kernel.org>,
-        <casper.li@mediatek.com>, <akpm@linux-foundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <bpf@vger.kernel.org>
-Subject: [PATCH 8/8] scripts/gdb/vmalloc: add vmallocinfo support
-Date:   Tue, 25 Jul 2023 17:34:58 +0800
-Message-ID: <20230725093458.30064-9-Kuan-Ying.Lee@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230725093458.30064-1-Kuan-Ying.Lee@mediatek.com>
-References: <20230725093458.30064-1-Kuan-Ying.Lee@mediatek.com>
+        Wed, 26 Jul 2023 04:09:35 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F20C6E82;
+        Wed, 26 Jul 2023 01:02:06 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-986d8332f50so995466466b.0;
+        Wed, 26 Jul 2023 01:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690358525; x=1690963325;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uxYHfTTWC0VbYCKBrhIb3PnqWpEpbOJPVI+cSJ6lXqM=;
+        b=XdoFUAw4biFlh1aW9Tx8YK5TjLabaDk3jclus9v8TlRqMpnmddMDVaohw3/vXv2Ili
+         1GQpj46+WdIQ8EP74ir6gi8o1fAereonW5jeNJdztHcyKygh+HbgXqIcusFT7QMCsXRc
+         FOaZiZrgnG+oTe5dC+Dz/008dsk9vkCMRDN9gz+Q7HgXqzLljN5oohw4x8ZrMcDhwveS
+         jhTJBioXifHwn9xyNmUHnvU52uC6DheA96xWi8rdeK5XxNZtD4AT39gH59/Q5rr6UF8F
+         PkP2mm7W+/NO/6h+WIo0REDSbwwaKN7PVR+bVaRO7Nu0mOw4GrpsaFlNCPukWgpenD0E
+         2tuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690358525; x=1690963325;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uxYHfTTWC0VbYCKBrhIb3PnqWpEpbOJPVI+cSJ6lXqM=;
+        b=hRAdltGW+HhlcSc3+zvzQon6UXMQxt02Cvh0bsygHMraXxTLwAT9Wy1I5+JvfuB0Xm
+         lsLqR8QVRCzqR0wQ7yed4v7Mm5qAt6p3eIyhY4BdsH4p58EYhj39XH9T8UYZLaavTfPs
+         P66uJuYkElajLdUEHzlYdqk5g7WyV4C/t5eLXeCIW9KGGSegExm0hNkT26pv+Cjpnl82
+         IaVWHDn/BfK2j2erGbmz7MCNs8A2yQsvr1GpbJ1VXxUquJqqbMvhjPKh0aWDFhCQatmP
+         s+qRT2s677byKSahudsi5QuZXtM2Nsg79S7LwEVdfMn4wDeBsUzjHfeg9WSEcOGiq9mu
+         T/iw==
+X-Gm-Message-State: ABy/qLbFTvppYnmundEe6vizcP3Ag2vorDINAWG+y1oUHkQGFuiAbaG9
+        naDj7GTS40qOp3zJvpAwkSc=
+X-Google-Smtp-Source: APBJJlH5CXkcSv884ZCnEtxbnf11x/Lo3BDZrMn4lSL1x/rqyUTcQXo4W3Zx/wkfE/GJRI2vqxbPhA==
+X-Received: by 2002:a17:906:5396:b0:993:f6c8:300f with SMTP id g22-20020a170906539600b00993f6c8300fmr1010800ejo.15.1690358524845;
+        Wed, 26 Jul 2023 01:02:04 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id lg23-20020a170906f89700b0098733a40bb7sm9314330ejb.155.2023.07.26.01.02.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jul 2023 01:02:04 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 26 Jul 2023 10:02:02 +0200
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH 2/2] [v2] kallsyms: rework symbol lookup return codes
+Message-ID: <ZMDS+lM/V5t1qD0D@krava>
+References: <20230724135327.1173309-1-arnd@kernel.org>
+ <20230724135327.1173309-2-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230724135327.1173309-2-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-This GDB script shows the vmallocinfo for user to
-analyze the vmalloc memory usage.
+On Mon, Jul 24, 2023 at 03:53:02PM +0200, Arnd Bergmann wrote:
 
-Example output:
-0xffff800008000000-0xffff800008009000      36864 <start_kernel+372> pages=8 vmalloc
-0xffff800008009000-0xffff80000800b000       8192 <gicv2m_init_one+400> phys=0x8020000 ioremap
-0xffff80000800b000-0xffff80000800d000       8192 <bpf_prog_alloc_no_stats+72> pages=1 vmalloc
-0xffff80000800d000-0xffff80000800f000       8192 <bpf_jit_alloc_exec+16> pages=1 vmalloc
-0xffff800008010000-0xffff80000ad30000   47316992 <paging_init+452> phys=0x40210000 vmap
-0xffff80000ad30000-0xffff80000c1c0000   21561344 <paging_init+556> phys=0x42f30000 vmap
-0xffff80000c1c0000-0xffff80000c370000    1769472 <paging_init+592> phys=0x443c0000 vmap
-0xffff80000c370000-0xffff80000de90000   28442624 <paging_init+692> phys=0x44570000 vmap
-0xffff80000de90000-0xffff80000f4c1000   23269376 <paging_init+788> phys=0x46090000 vmap
-0xffff80000f4c1000-0xffff80000f4c3000       8192 <gen_pool_add_owner+112> pages=1 vmalloc
-0xffff80000f4c3000-0xffff80000f4c5000       8192 <gen_pool_add_owner+112> pages=1 vmalloc
-0xffff80000f4c5000-0xffff80000f4c7000       8192 <gen_pool_add_owner+112> pages=1 vmalloc
+SNIP
 
-Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
----
- scripts/gdb/linux/constants.py.in |  8 +++++
- scripts/gdb/linux/vmalloc.py      | 56 +++++++++++++++++++++++++++++++
- scripts/gdb/vmlinux-gdb.py        |  1 +
- 3 files changed, 65 insertions(+)
- create mode 100644 scripts/gdb/linux/vmalloc.py
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 05c0024815bf9..bc0eed24a5873 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -6965,7 +6965,7 @@ allocate_ftrace_mod_map(struct module *mod,
+>  	return mod_map;
+>  }
+>  
+> -static const char *
+> +static int
+>  ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
+>  			   unsigned long addr, unsigned long *size,
+>  			   unsigned long *off, char *sym)
+> @@ -6986,21 +6986,18 @@ ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
+>  			*size = found_func->size;
+>  		if (off)
+>  			*off = addr - found_func->ip;
+> -		if (sym)
+> -			strscpy(sym, found_func->name, KSYM_NAME_LEN);
+> -
+> -		return found_func->name;
+> +		return strlcpy(sym, found_func->name, KSYM_NAME_LEN);
 
-diff --git a/scripts/gdb/linux/constants.py.in b/scripts/gdb/linux/constants.py.in
-index fa23f4e3546a..3cf3c0b9eaea 100644
---- a/scripts/gdb/linux/constants.py.in
-+++ b/scripts/gdb/linux/constants.py.in
-@@ -22,6 +22,7 @@
- #include <linux/radix-tree.h>
- #include <linux/slab.h>
- #include <linux/threads.h>
-+#include <linux/vmalloc.h>
- #include <asm/memory.h>
- 
- /* We need to stringify expanded macros so that they can be parsed */
-@@ -96,6 +97,13 @@ if IS_BUILTIN(CONFIG_ARM64):
-     LX_GDBPARSED(VA_BITS_MIN)
-     LX_GDBPARSED(MODULES_VSIZE)
- 
-+/* linux/vmalloc.h */
-+LX_VALUE(VM_IOREMAP)
-+LX_VALUE(VM_ALLOC)
-+LX_VALUE(VM_MAP)
-+LX_VALUE(VM_USERMAP)
-+LX_VALUE(VM_DMA_COHERENT)
-+
- /* linux/page_ext.h */
- LX_GDBPARSED(PAGE_EXT_OWNER)
- LX_GDBPARSED(PAGE_EXT_OWNER_ALLOCATED)
-diff --git a/scripts/gdb/linux/vmalloc.py b/scripts/gdb/linux/vmalloc.py
-new file mode 100644
-index 000000000000..48e4a4fae7bb
---- /dev/null
-+++ b/scripts/gdb/linux/vmalloc.py
-@@ -0,0 +1,56 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2023 MediaTek Inc.
-+#
-+# Authors:
-+#  Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-+#
-+
-+import gdb
-+import re
-+from linux import lists, utils, stackdepot, constants, mm
-+
-+vmap_area_type = utils.CachedType('struct vmap_area')
-+vmap_area_ptr_type = vmap_area_type.get_type().pointer()
-+
-+def is_vmalloc_addr(x):
-+    pg_ops = mm.page_ops().ops
-+    addr = pg_ops.kasan_reset_tag(x)
-+    return addr >= pg_ops.VMALLOC_START and addr < pg_ops.VMALLOC_END
-+
-+class LxVmallocInfo(gdb.Command):
-+    """Show vmallocinfo"""
-+
-+    def __init__(self):
-+        super(LxVmallocInfo, self).__init__("lx-vmallocinfo", gdb.COMMAND_DATA)
-+
-+    def invoke(self, arg, from_tty):
-+        vmap_area_list = gdb.parse_and_eval('vmap_area_list')
-+        for vmap_area in lists.list_for_each_entry(vmap_area_list, vmap_area_ptr_type, "list"):
-+            if not vmap_area['vm']:
-+                gdb.write("0x%x-0x%x %10d vm_map_ram\n" % (vmap_area['va_start'], vmap_area['va_end'],
-+                    vmap_area['va_end'] - vmap_area['va_start']))
-+                continue
-+            v = vmap_area['vm']
-+            gdb.write("0x%x-0x%x %10d" % (v['addr'], v['addr'] + v['size'], v['size']))
-+            if v['caller']:
-+                gdb.write(" %s" % str(v['caller']).split(' ')[-1])
-+            if v['nr_pages']:
-+                gdb.write(" pages=%d" % v['nr_pages'])
-+            if v['phys_addr']:
-+                gdb.write(" phys=0x%x" % v['phys_addr'])
-+            if v['flags'] & constants.LX_VM_IOREMAP:
-+                gdb.write(" ioremap")
-+            if v['flags'] & constants.LX_VM_ALLOC:
-+                gdb.write(" vmalloc")
-+            if v['flags'] & constants.LX_VM_MAP:
-+                gdb.write(" vmap")
-+            if v['flags'] & constants.LX_VM_USERMAP:
-+                gdb.write(" user")
-+            if v['flags'] & constants.LX_VM_DMA_COHERENT:
-+                gdb.write(" dma-coherent")
-+            if is_vmalloc_addr(v['pages']):
-+                gdb.write(" vpages")
-+            gdb.write("\n")
-+
-+LxVmallocInfo()
-diff --git a/scripts/gdb/vmlinux-gdb.py b/scripts/gdb/vmlinux-gdb.py
-index 2526364f31fd..fc53cdf286f1 100644
---- a/scripts/gdb/vmlinux-gdb.py
-+++ b/scripts/gdb/vmlinux-gdb.py
-@@ -48,3 +48,4 @@ else:
-     import linux.stackdepot
-     import linux.page_owner
-     import linux.slab
-+    import linux.vmalloc
--- 
-2.18.0
+hi,
+any reason not to call the original strscpy in here?
 
+jirka
+
+>  	}
+>  
+> -	return NULL;
+> +	return 0;
+>  }
+>  
+> -const char *
+> +int
+>  ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
+>  		   unsigned long *off, char **modname, char *sym)
+>  {
+>  	struct ftrace_mod_map *mod_map;
+> -	const char *ret = NULL;
+> +	int ret;
+>  
+>  	/* mod_map is freed via call_rcu() */
+>  	preempt_disable();
+> -- 
+> 2.39.2
+> 
