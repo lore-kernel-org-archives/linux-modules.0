@@ -2,410 +2,227 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD28DC41513
-	for <linux-modules@archiver.kernel.org>; Wed, 26 Jul 2023 14:15:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2DC5C001DF
+	for <linux-modules@archiver.kernel.org>; Wed, 26 Jul 2023 18:30:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234489AbjGZOPj (ORCPT
+        id S231825AbjGZSai (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 26 Jul 2023 10:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
+        Wed, 26 Jul 2023 14:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231925AbjGZOPY (ORCPT
+        with ESMTP id S229562AbjGZSah (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 26 Jul 2023 10:15:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3AC3C34;
-        Wed, 26 Jul 2023 07:14:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C038261B0D;
-        Wed, 26 Jul 2023 14:13:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4C0BC433C9;
-        Wed, 26 Jul 2023 14:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690380823;
-        bh=GzxbVUUTlhh89frSeSpipg9l76r/LLT+KqHhHPh7XDo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=scq0wUo8rx3wen1XIXjVQmBdLMRebFkL6gkitjKb5i5KRfQq59Uan3I6df6BAkYjn
-         hnN0Chzk2EivsgSOGezgFksPlOoTj/8PymvLv/zvqvHiBHUUFBXq7ZtYNqhgGkiD+0
-         /6S5lA7iQp3DdxdcFU6JeS0+8e0OPUwy//+dpkjdbcC34/2/FdvuELkZ8V2jnjlCFI
-         6jOVcgK8iEfjyTjfVW1WwfS976IPkWyL7ofVXaLyG6MfSmoIV+mxuWraYynBHv5mWD
-         lauvMbpA4nlUvXpXIAfb3om6g05YD+Urv3sfmPS50RzNBwv/A/hhemTKGZhaMU0e7h
-         rMeVMSuWOPEEA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: [PATCH] [v3] kallsyms: rework symbol lookup return codes
-Date:   Wed, 26 Jul 2023 16:12:23 +0200
-Message-Id: <20230726141333.3992790-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 26 Jul 2023 14:30:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8462926BB;
+        Wed, 26 Jul 2023 11:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=mzVsJrG0gE0klDOerZJOODxVbBgujc+wV5trrlssUd4=; b=BNaC7DKnbIUyv0Zyc3uTSHKjc3
+        z/yB9RC0260AU6ytrL7L0FWXil+CLLM2LAnpLHghxt6keoF57C1UqmZ1i5vc2JmmX2sevTWor576R
+        3ZpWC0MZAeR73mYcaNEFNBicDT/DYQ5NSbET3MHqpJ+MPnEUwwUJoYLgOrTR+Dw5uyPmu4DOSvIYh
+        TmeSeH4Va+1xIRJp03mP8h+kzdJnUgNPQMGUMNPlMcVQnfY/3bXxI2SzGIAWbcg+H4GlZuYKlXabb
+        HQ+gETQw3H5v9kzXVHN5hBd9oCJE+yPTRzSKgHgYRYcepHpCFLO1S9WHT9wPwFTTZs+Egiyzk0vaS
+        MbreCYJA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qOjHJ-00BHUf-1o;
+        Wed, 26 Jul 2023 18:30:29 +0000
+Date:   Wed, 26 Jul 2023 11:30:29 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Allen Webb <allenwebb@google.com>,
+        Nick Alcock <nick.alcock@oracle.com>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Alessandro Carminati <alessandro.carminati@gmail.com>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu
+Subject: Re: [PATCH v10 08/11] build: Add modules.builtin.alias
+Message-ID: <ZMFmRdqZDu/z1WxL@bombadil.infradead.org>
+References: <20221219204619.2205248-1-allenwebb@google.com>
+ <20230406190030.968972-1-allenwebb@google.com>
+ <20230406190030.968972-9-allenwebb@google.com>
+ <ZG22iPLED+SJsEFa@bombadil.infradead.org>
+ <CAJzde04MmfyGeAzQ_7FW-0sATk7TT-MkxCbNPSzb-94wK6nhkA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJzde04MmfyGeAzQ_7FW-0sATk7TT-MkxCbNPSzb-94wK6nhkA@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-From: Arnd Bergmann <arnd@arndb.de>
+Please cc Alexander and Alessandro in future patch series as well,
+as they could likley be interested in your work too.
 
-Building with W=1 in some configurations produces a false positive
-warning for kallsyms:
+On Wed, Jul 19, 2023 at 02:51:48PM -0500, Allen Webb wrote:
+> I finally got a chance to go through the comments and work on a
+> follow-up to this series, but it probably makes sense to get this
+> sorted ahead of the follow-up (if possible).
+> 
+> On Wed, May 24, 2023 at 2:02 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Thu, Apr 06, 2023 at 02:00:27PM -0500, Allen Webb wrote:
+> > > Generate modules.builtin.alias using modpost and install it with the
+> > > modules.
+> >
+> > Why? This is probably one of the more important commits and the
+> > commit log is pretty slim.
+> >
+> > > Signed-off-by: Allen Webb <allenwebb@google.com>
+> > > ---
+> > >  .gitignore               |  1 +
+> > >  Makefile                 |  1 +
+> > >  scripts/Makefile.modpost | 15 +++++++++++++++
+> > >  3 files changed, 17 insertions(+)
+> > >
+> > > diff --git a/.gitignore b/.gitignore
+> > > index 13a7f08a3d73..ddaa622bddac 100644
+> > > --- a/.gitignore
+> > > +++ b/.gitignore
+> > > @@ -71,6 +71,7 @@ modules.order
+> > >  /System.map
+> > >  /Module.markers
+> > >  /modules.builtin
+> > > +/modules.builtin.alias
+> > >  /modules.builtin.modinfo
+> > >  /modules.nsdeps
+> > >
+> > > diff --git a/Makefile b/Makefile
+> > > index a2c310df2145..43dcc1ea5fcf 100644
+> > > --- a/Makefile
+> > > +++ b/Makefile
+> > > @@ -1578,6 +1578,7 @@ __modinst_pre:
+> > >       fi
+> > >       @sed 's:^\(.*\)\.o$$:kernel/\1.ko:' modules.order > $(MODLIB)/modules.order
+> > >       @cp -f modules.builtin $(MODLIB)/
+> > > +     @cp -f modules.builtin.alias $(MODLIB)/
+> > >       @cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
+> > >
+> > >  endif # CONFIG_MODULES
+> > > diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+> > > index 0980c58d8afc..e3ecc17a7a19 100644
+> > > --- a/scripts/Makefile.modpost
+> > > +++ b/scripts/Makefile.modpost
+> > > @@ -15,6 +15,7 @@
+> > >  # 2) modpost is then used to
+> > >  # 3)  create one <module>.mod.c file per module
+> > >  # 4)  create one Module.symvers file with CRC for all exported symbols
+> > > +# 5)  create modules.builtin.alias the aliases for built-in modules
+> >
+> > Does everyone want that file?
+> 
+> Not everyone needs it so we could exclude it, but the cost of adding
+> it isn't that high. I am fine with putting it behind a config, though
+> we would need to decide whether to have it default on/off.
 
-kernel/kallsyms.c: In function '__sprint_symbol.isra':
-kernel/kallsyms.c:503:17: error: 'strcpy' source argument is the same as destination [-Werror=restrict]
-  503 |                 strcpy(buffer, name);
-      |                 ^~~~~~~~~~~~~~~~~~~~
+We didn't know the cost until I asked, it was the point of asking.
+Perhaps Nick, Alessandro or Alexander could use it too later.
 
-This originally showed up while building with -O3, but later started
-happening in other configurations as well, depending on inlining
-decisions. The underlying issue is that the local 'name' variable is
-always initialized to the be the same as 'buffer' in the called functions
-that fill the buffer, which gcc notices while inlining, though it could
-see that the address check always skips the copy.
+> > >  # Step 3 is used to place certain information in the module's ELF
+> > >  # section, including information such as:
+> > > @@ -63,6 +64,20 @@ modpost-args += -T $(MODORDER)
+> > >  modpost-deps += $(MODORDER)
+> > >  endif
+> > >
+> > > +ifneq ($(wildcard vmlinux.o),)
+> > > +output-builtin.alias := modules.builtin.alias
+> > > +modpost-args += -b .modules.builtin.alias.in
+> > > +.modules.builtin.alias.in: $(output-symdump)
+> > > +     @# Building $(output-symdump) generates .modules.builtin.alias.in as a
+> > > +     @# side effect.
+> > > +     @[ -e $@ ] || $(MODPOST) -b .modules.builtin.alias.in vmlinux.o
+> >
+> > Does using -b create a delay in builds ? What is the effect on build
+> > time on a typical 4-core or 8-core build? Does everyone want it?
+> 
+> Here is some data I collected related to build time and memory usage impact:
+> 
+> Without builtin.alias:
+> TIME="real %e\nuser %U\nsys %S\nres-max %M" time scripts/mod/modpost
+> -E -o Module.symvers -T modules.order
+> ERROR: modpost: "__x86_return_thunk"
+> [arch/x86/crypto/chacha-x86_64.ko] undefined!
+> ERROR: modpost: "kernel_fpu_end" [arch/x86/crypto/chacha-x86_64.ko] undefined!
+> ERROR: modpost: "hchacha_block_generic"
+> [arch/x86/crypto/chacha-x86_64.ko] undefined!
+> ERROR: modpost: "boot_cpu_data" [arch/x86/crypto/chacha-x86_64.ko] undefined!
+> ERROR: modpost: "static_key_enable" [arch/x86/crypto/chacha-x86_64.ko]
+> undefined!
+> ERROR: modpost: "cpu_has_xfeatures" [arch/x86/crypto/chacha-x86_64.ko]
+> undefined!
+> ERROR: modpost: "crypto_register_skciphers"
+> [arch/x86/crypto/chacha-x86_64.ko] undefined!
+> ERROR: modpost: "crypto_unregister_skciphers"
+> [arch/x86/crypto/chacha-x86_64.ko] undefined!
+> ERROR: modpost: "__stack_chk_fail" [arch/x86/crypto/chacha-x86_64.ko] undefined!
+> ERROR: modpost: "memset" [arch/x86/crypto/chacha-x86_64.ko] undefined!
+> WARNING: modpost: suppressed 17432 unresolved symbol warnings because
+> there were too many)
+> Command exited with non-zero status 1
+> real 0.44
+> user 0.43
+> sys 0.01
+> res-max 4896
+> 
+> With builtin.alias:
+> TIME="real %e\nuser %U\nsys %S\nres-max %M" time scripts/mod/modpost
+> -E -o Module.symvers -T modules.order -b .modules.builtin.alias.in
+> vmlinux.o
+> real 1.43
+> user 1.38
+> sys 0.05
+> res-max 51920
+> 
+> Notice that modpost only uses a single core, so multicore isn't really
+> as much of a factor here. While it more than triples the time required
+> for the modpost operation the difference is only about one second of
+> CPU time. The memory usage is much larger when generating
+> modules.builtin.alias because of the size of vmlinux.o.
 
-The calling conventions here are rather unusual, as all of the internal
-lookup functions (bpf_address_lookup, ftrace_mod_address_lookup,
-ftrace_func_address_lookup, module_address_lookup and
-kallsyms_lookup_buildid) already use the provided buffer and either return
-the address of that buffer to indicate success, or NULL for failure,
-but the callers are written to also expect an arbitrary other buffer
-to be returned.
+The modpost impact time of about 1 second for a type of config you used
+should be described in your commit log and or kconfig entry to enable
+this.
 
-Rework the calling conventions to return the length of the filled buffer
-instead of its address, which is simpler and easier to follow as well
-as avoiding the warning. Leave only the kallsyms_lookup() calling conventions
-unchanged, since that is called from 16 different functions and
-adapting this would be a much bigger change.
+> My biggest performance related concern is actually the size difference
+> of vmlinux caused by the modules.h changes, but it looks like that is
+> negligible (24KiB):
 
-Link: https://lore.kernel.org/all/20200107214042.855757-1-arnd@arndb.de/
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v3: use strscpy() instead of strlcpy()
-v2: complete rewrite after the first patch was rejected (in 2020). This
-    is now one of only two warnings that are in the way of enabling
-    -Wextra/-Wrestrict by default.
----
- include/linux/filter.h   | 14 +++++++-------
- include/linux/ftrace.h   |  6 +++---
- include/linux/module.h   | 14 +++++++-------
- kernel/bpf/core.c        |  7 +++----
- kernel/kallsyms.c        | 23 ++++++++++++-----------
- kernel/module/kallsyms.c | 26 +++++++++++++-------------
- kernel/trace/ftrace.c    | 13 +++++--------
- 7 files changed, 50 insertions(+), 53 deletions(-)
+And this size too.
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index f69114083ec71..10f2b1acb138b 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1130,17 +1130,17 @@ static inline bool bpf_jit_kallsyms_enabled(void)
- 	return false;
- }
- 
--const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
-+int __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 				 unsigned long *off, char *sym);
- bool is_bpf_text_address(unsigned long addr);
- int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 		    char *sym);
- 
--static inline const char *
-+static inline int
- bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	const char *ret = __bpf_address_lookup(addr, size, off, sym);
-+	int ret = __bpf_address_lookup(addr, size, off, sym);
- 
- 	if (ret && modname)
- 		*modname = NULL;
-@@ -1184,11 +1184,11 @@ static inline bool bpf_jit_kallsyms_enabled(void)
- 	return false;
- }
- 
--static inline const char *
-+static inline int
- __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		     unsigned long *off, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline bool is_bpf_text_address(unsigned long addr)
-@@ -1202,11 +1202,11 @@ static inline int bpf_get_kallsym(unsigned int symnum, unsigned long *value,
- 	return -ERANGE;
- }
- 
--static inline const char *
-+static inline int
- bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline void bpf_prog_kallsyms_add(struct bpf_prog *fp)
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index ce156c7704ee5..50c7ca7125caa 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -87,15 +87,15 @@ struct ftrace_direct_func;
- 
- #if defined(CONFIG_FUNCTION_TRACER) && defined(CONFIG_MODULES) && \
- 	defined(CONFIG_DYNAMIC_FTRACE)
--const char *
-+int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym);
- #else
--static inline const char *
-+static inline int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- #endif
- 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index a98e188cf37b8..76e6104d41ba5 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -920,11 +920,11 @@ int module_kallsyms_on_each_symbol(const char *modname,
-  * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
-  * found, otherwise NULL.
-  */
--const char *module_address_lookup(unsigned long addr,
--				  unsigned long *symbolsize,
--				  unsigned long *offset,
--				  char **modname, const unsigned char **modbuildid,
--				  char *namebuf);
-+int module_address_lookup(unsigned long addr,
-+			  unsigned long *symbolsize,
-+			  unsigned long *offset,
-+			  char **modname, const unsigned char **modbuildid,
-+			  char *namebuf);
- int lookup_module_symbol_name(unsigned long addr, char *symname);
- int lookup_module_symbol_attrs(unsigned long addr,
- 			       unsigned long *size,
-@@ -953,14 +953,14 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
- }
- 
- /* For kallsyms to ask for address resolution.  NULL means not found. */
--static inline const char *module_address_lookup(unsigned long addr,
-+static inline int module_address_lookup(unsigned long addr,
- 						unsigned long *symbolsize,
- 						unsigned long *offset,
- 						char **modname,
- 						const unsigned char **modbuildid,
- 						char *namebuf)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index e3e45b651cd40..bbf1d92f36bd1 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -687,11 +687,11 @@ static struct bpf_ksym *bpf_ksym_find(unsigned long addr)
- 	return n ? container_of(n, struct bpf_ksym, tnode) : NULL;
- }
- 
--const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
-+int __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 				 unsigned long *off, char *sym)
- {
- 	struct bpf_ksym *ksym;
--	char *ret = NULL;
-+	int ret = 0;
- 
- 	rcu_read_lock();
- 	ksym = bpf_ksym_find(addr);
-@@ -699,9 +699,8 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		unsigned long symbol_start = ksym->start;
- 		unsigned long symbol_end = ksym->end;
- 
--		strncpy(sym, ksym->name, KSYM_NAME_LEN);
-+		ret = strscpy(sym, ksym->name, KSYM_NAME_LEN);
- 
--		ret = sym;
- 		if (size)
- 			*size = symbol_end - symbol_start;
- 		if (off)
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 016d997131d43..cd216ebb14cc3 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -399,12 +399,12 @@ int kallsyms_lookup_size_offset(unsigned long addr, unsigned long *symbolsize,
- 	       !!__bpf_address_lookup(addr, symbolsize, offset, namebuf);
- }
- 
--static const char *kallsyms_lookup_buildid(unsigned long addr,
-+static int kallsyms_lookup_buildid(unsigned long addr,
- 			unsigned long *symbolsize,
- 			unsigned long *offset, char **modname,
- 			const unsigned char **modbuildid, char *namebuf)
- {
--	const char *ret;
-+	int ret;
- 
- 	namebuf[KSYM_NAME_LEN - 1] = 0;
- 	namebuf[0] = 0;
-@@ -421,7 +421,7 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
- 		if (modbuildid)
- 			*modbuildid = NULL;
- 
--		ret = namebuf;
-+		ret = strlen(namebuf);
- 		goto found;
- 	}
- 
-@@ -453,8 +453,13 @@ const char *kallsyms_lookup(unsigned long addr,
- 			    unsigned long *offset,
- 			    char **modname, char *namebuf)
- {
--	return kallsyms_lookup_buildid(addr, symbolsize, offset, modname,
--				       NULL, namebuf);
-+	int ret = kallsyms_lookup_buildid(addr, symbolsize, offset, modname,
-+					  NULL, namebuf);
-+
-+	if (!ret)
-+		return NULL;
-+
-+	return namebuf;
- }
- 
- int lookup_symbol_name(unsigned long addr, char *symname)
-@@ -489,19 +494,15 @@ static int __sprint_symbol(char *buffer, unsigned long address,
- {
- 	char *modname;
- 	const unsigned char *buildid;
--	const char *name;
- 	unsigned long offset, size;
- 	int len;
- 
- 	address += symbol_offset;
--	name = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
-+	len = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
- 				       buffer);
--	if (!name)
-+	if (!len)
- 		return sprintf(buffer, "0x%lx", address - symbol_offset);
- 
--	if (name != buffer)
--		strcpy(buffer, name);
--	len = strlen(buffer);
- 	offset -= symbol_offset;
- 
- 	if (add_offset)
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index ef73ae7c89094..c0f0480ec59da 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -321,14 +321,15 @@ void * __weak dereference_module_function_descriptor(struct module *mod,
-  * For kallsyms to ask for address resolution.  NULL means not found.  Careful
-  * not to lock to avoid deadlock on oopses, simply disable preemption.
-  */
--const char *module_address_lookup(unsigned long addr,
--				  unsigned long *size,
--			    unsigned long *offset,
--			    char **modname,
--			    const unsigned char **modbuildid,
--			    char *namebuf)
-+int module_address_lookup(unsigned long addr,
-+			  unsigned long *size,
-+			  unsigned long *offset,
-+			  char **modname,
-+			  const unsigned char **modbuildid,
-+			  char *namebuf)
- {
--	const char *ret = NULL;
-+	const char *sym;
-+	int ret = 0;
- 	struct module *mod;
- 
- 	preempt_disable();
-@@ -344,13 +345,12 @@ const char *module_address_lookup(unsigned long addr,
- #endif
- 		}
- 
--		ret = find_kallsyms_symbol(mod, addr, size, offset);
--	}
--	/* Make a copy in here where it's safe */
--	if (ret) {
--		strncpy(namebuf, ret, KSYM_NAME_LEN - 1);
--		ret = namebuf;
-+		sym = find_kallsyms_symbol(mod, addr, size, offset);
-+
-+		if (sym)
-+			ret = strscpy(namebuf, sym, KSYM_NAME_LEN - 1);
- 	}
-+
- 	preempt_enable();
- 
- 	return ret;
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 05c0024815bf9..a949f903c9e66 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6965,7 +6965,7 @@ allocate_ftrace_mod_map(struct module *mod,
- 	return mod_map;
- }
- 
--static const char *
-+static int
- ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
- 			   unsigned long addr, unsigned long *size,
- 			   unsigned long *off, char *sym)
-@@ -6986,21 +6986,18 @@ ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
- 			*size = found_func->size;
- 		if (off)
- 			*off = addr - found_func->ip;
--		if (sym)
--			strscpy(sym, found_func->name, KSYM_NAME_LEN);
--
--		return found_func->name;
-+		return strscpy(sym, found_func->name, KSYM_NAME_LEN);
- 	}
- 
--	return NULL;
-+	return 0;
- }
- 
--const char *
-+int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
- 	struct ftrace_mod_map *mod_map;
--	const char *ret = NULL;
-+	int ret;
- 
- 	/* mod_map is freed via call_rcu() */
- 	preempt_disable();
--- 
-2.39.2
+24 KiB is not that small, so I'd prefer we kconfig'ize it for now and
+have those who need it to select it. If we later all want it, we can
+default to yes but for now default to no. The default today by
+kconfig is to no so an empty default is fine.
 
+> Without builtin.alias:
+> du vmlinux.o
+> 663048  vmlinux.o
+> 
+> With builtin.alias:
+> du vmlinux.o
+> 663072  vmlinux.o
+
+What type of configuration was used? allyesconfig?
+
+> >
+> > Should we add a new option which lets people decide if they want this
+> > at build time or not?
+> 
+> I don't feel strongly that there should or should not be a config for
+> this. On the side for a config the extra second of CPU time and space
+> taken up by the modules.builtin.alias file would add up across all the
+> builds and machines, so removing it where it isn't used would help
+> mitigate that. On the flip side if it isn't used widely enough, it is
+> more likely that breakages are missed until someone who actually uses
+> it notices.
+> 
+> Please let me know if you feel strongly either way given the data.
+
+For now I'd prefer a kconfig option, it's easy to default to y later,
+but saving 64 KiB seems like a desirable thing for some folks.
+
+  Luis
