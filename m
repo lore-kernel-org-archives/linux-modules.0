@@ -2,79 +2,78 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC6D3C00528
-	for <linux-modules@archiver.kernel.org>; Tue,  1 Aug 2023 17:14:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22F7EC41513
+	for <linux-modules@archiver.kernel.org>; Tue,  1 Aug 2023 17:36:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjHAROw (ORCPT
+        id S232378AbjHARg3 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 1 Aug 2023 13:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        Tue, 1 Aug 2023 13:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234433AbjHAROt (ORCPT
+        with ESMTP id S229542AbjHARg2 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 1 Aug 2023 13:14:49 -0400
+        Tue, 1 Aug 2023 13:36:28 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AD61BCF
-        for <linux-modules@vger.kernel.org>; Tue,  1 Aug 2023 10:14:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97127E53;
+        Tue,  1 Aug 2023 10:36:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GLe6Dvw3VmciE4xi03HjUazMl82XCIQ73+LASqGRUBY=; b=MX3m8kxzjEx6vmln2AKPSp+jH1
-        Fc/dyba/sz0R1UbdP5uPfEbMNt0ywmygCt37GYOPdluU9nLQfFdUBsvTqHXaYI1lYIu1RiJH6hNy+
-        0vVh0Ga4H51Vu1MswGRxJvbQs/pf4l+CeJJ3vLGrPS/VhbN+//ievyWtYYJLXZVaPZSnnq0ry+/Nw
-        LuiX8Q/DifLoDFoCWZxxF/JI+kF6ICZMHyG/M9k7XGtOmGIp79B6i4i52cH1Prk1y0DkSC8URD169
-        edEM66EibqRcy007QM8ki1EnGIfD0QefVVog1pKU4CcFn0zPP+GK6ZtC4n1rzwa19clH5oPeEMn4A
-        Hecp5dHg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qQsxH-002tr4-34;
-        Tue, 01 Aug 2023 17:14:43 +0000
-Date:   Tue, 1 Aug 2023 10:14:43 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-modules@vger.kernel.org,
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=SWqlbekppgSroQPPJP/3qDBApVOhh/NvmKjJyRLwLH0=; b=hiz0RUwVYTZZ6TK5VpMOw0E5XG
+        MtyyC98LVWL7klWbNaqiJNv8Dr3jF9l8F8st3D29nTvE4tneu6UGYOIdP8XFbmpIeYmrMro136Uim
+        +Hf2OzqfQvQUnLelMucaIGsmKKdz6SaLvTH2qWCH8LeDooXF7HXbxVmRKgaKVojUsnAsBoz8Mjeh9
+        f5p/XpET41o9Z9tRY49sSnU1URk9tIX/K1ppO+BBRcDsT+HOMwc+aUvL1o1U8DgiBL0LfeNYjqM8s
+        a5mIsbq2WLwit9MELxipEwnXB7anem87RSKIQWNkZtA3qQdTM+2EZExRXfi6BMxzTpqpGsYp6902i
+        Ux9DcgAg==;
+Received: from 2a02-8389-2341-5b80-39d3-4735-9a3c-88d8.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:39d3:4735:9a3c:88d8] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qQtHe-002w3o-2e;
+        Tue, 01 Aug 2023 17:35:52 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Manuel Lauss <manuel.lauss@gmail.com>,
+        Yangbo Lu <yangbo.lu@nxp.com>, Joshua Kinard <kumba@gentoo.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
         linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Jessica Yu <jeyu@kernel.org>,
-        Adam Johnston <adam.johnston@arm.com>
-Subject: Re: [PATCH 0/3] ARM/arm64: Fix loading of modules with an exit
- section
-Message-ID: <ZMk9g/muvx66HOj4@bombadil.infradead.org>
-References: <20230801145409.8935-1-james.morse@arm.com>
+        linux-kernel@vger.kernel.org (open list),
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: require EXPORT_SYMBOL_GPL symbols for symbol_get v2
+Date:   Tue,  1 Aug 2023 19:35:39 +0200
+Message-Id: <20230801173544.1929519-1-hch@lst.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230801145409.8935-1-james.morse@arm.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Aug 01, 2023 at 02:54:06PM +0000, James Morse wrote:
-> Adam reports that Yocto can't load modules on arm64. This turns out to be due
-> to the arch code disagreeing with the core code when it comes to the layout
-> of the modules exit text, resulting in a shortage of PLTs and a bunch of
-> warnings.
-> 
-> arm and arm64 are unusual here as they are counting the PLTs based on the
-> section name. This series exposes the helper that core code uses to decide
-> the layout.
-> 
-> I've been unable to reproduce the behaviour on 32bit - but it looks like
-> its possible to reach the BUG_ON() in get_module_plt(). To test this, disable
-> CONFIG_MODULE_UNLOAD, and try to load modules with relocations in their exit
-> text.
-> 
-> This series is based on v6.5-rc4, and can be retrieved from:
-> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git arm64/modules/exit_sections/v1
-> 
+Hi all,
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+this series changes symbol_get to only work on EXPORT_SYMBOL_GPL
+as nvidia is abusing the lack of this check to bypass restrictions
+on importing symbols from proprietary modules.
 
-Do you want this to go through the modules tree or do you want to take
-this in your tree? Either way is fine by me, at this point there should
-be no conflicts.
+Changes since v1:
+ - stop using symbol_get for sharpsl_pm.c (Arnd)
+ - stop using symbol_get for au1xmmc platform irq handlers
+ - better (and simpler) error reporting
 
-  Luis
+Diffstat:
+ arch/arm/mach-pxa/sharpsl_pm.c                   |    2 --
+ arch/arm/mach-pxa/spitz.c                        |   14 +-------------
+ arch/mips/alchemy/devboards/db1000.c             |    8 +-------
+ arch/mips/alchemy/devboards/db1200.c             |   19 ++-----------------
+ arch/mips/alchemy/devboards/db1300.c             |   10 +---------
+ drivers/mmc/host/Kconfig                         |    4 ++--
+ drivers/net/ethernet/freescale/enetc/enetc_ptp.c |    2 +-
+ drivers/rtc/rtc-ds1685.c                         |    2 +-
+ kernel/module/main.c                             |   14 +++++++++++---
+ 9 files changed, 20 insertions(+), 55 deletions(-)
