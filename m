@@ -2,108 +2,220 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C6B5C001B0
-	for <linux-modules@archiver.kernel.org>; Tue,  8 Aug 2023 17:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C00BC001B0
+	for <linux-modules@archiver.kernel.org>; Tue,  8 Aug 2023 19:45:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjHHRRK (ORCPT
+        id S235185AbjHHTpG (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 8 Aug 2023 13:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
+        Tue, 8 Aug 2023 15:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbjHHRQg (ORCPT
+        with ESMTP id S235269AbjHHToq (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 8 Aug 2023 13:16:36 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15871D446
-        for <linux-modules@vger.kernel.org>; Tue,  8 Aug 2023 09:06:43 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fe2d620d17so88135e9.0
-        for <linux-modules@vger.kernel.org>; Tue, 08 Aug 2023 09:06:43 -0700 (PDT)
+        Tue, 8 Aug 2023 15:44:46 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EED46FC9
+        for <linux-modules@vger.kernel.org>; Tue,  8 Aug 2023 09:48:06 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1bbb9fcac6bso24403fac.1
+        for <linux-modules@vger.kernel.org>; Tue, 08 Aug 2023 09:48:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691510792; x=1692115592;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=en4BANwXReNJdtVv23CMrzP6JO/+20SEX8H3hOTpv5o=;
-        b=myWSq4lPvBKhbe4+zSbtARG2ka8adzgpdxrGR/PkL7IS+S1OubWLaJ3PjZLNvhJy5F
-         Xxx8J5Do9SX4jKy9jMtYoXQrT2tMTOGGb6tx6htlzAflRvPrEIFTF/Rmk7QkwR5YHGVz
-         JdV8msNkCSWWUevTqzOhoHQTZQ8lZPprWLFxllO+tDH/UFYWNkyGoBNXkX3fHO4R3QoI
-         UPXOREvlo7HlTAfGM9pYpPVCmPupS5fK7rQia78bAJZZd9jL9iiHNDB6uwYHKN2q2Ybo
-         9cJPjGl9yg5d/Rgfc2HxZcto8aGFRA7PmIARN2MFk+wkNjx0zxZ4fN/yRC31aiKkjhas
-         6gLQ==
+        d=linaro.org; s=google; t=1691513285; x=1692118085;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kb4epZ0hVQjvrS5RqNy38MOhVst2cqtQlkC7YBmZyjc=;
+        b=fNv2VsWLWXzrAnrcJBu7Juv9Tez1x0iS2nX174u1/svb4J8tsWl/YypNVXfwENVc9g
+         R1bylUtMDI8J8zgzT9Id7usfHP2VMdW9Ykc0SvWfn7DGJpazOUXSt9XJWYyctjpAp93d
+         eHkDVVTzFPcvbYpxVJbMPkSdpzZJrDheXvcECM8m5no1G25oNk2HioPUr9cNre8tW/Wf
+         BYucLsvEB8tFXH0Vdv1OQncxYoaS9hf9GDsxIaO3vCt+xPMDKYReByjtPypnYQRhjZrI
+         swzGi36xvGi3CXgcQOqNrmROIGDiDRPt7Aac62NG2f0cajTPcHyLYIgfuJlNaaiwLEF3
+         oMcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691510792; x=1692115592;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=en4BANwXReNJdtVv23CMrzP6JO/+20SEX8H3hOTpv5o=;
-        b=IyPF+rMeoswsi87hu+BmUxSHQvt9n1zjMra/zqMEZ6YGuw4p6qVrRju8Bbl3gCgHv3
-         GiEykWJkFMPpe8pEQ9/ItVHSVQCNVLUb6Qof+zZI6kyglXVQM9iedcdVCn6VtRGgugFh
-         yWCWWs+HEMzaFI6RQD0Ge54x9UmfG1fQa2BFHWc7vUgmdmuUMtPRxPq+Vy2XiskF2rps
-         zlYlyjOEJ2eT7v2yZX1FfikD70pQHb7pFL0Jyqs+YsS59cS9pmci+yEiRuPPu1UaDYPZ
-         bJ655AMMjcGU46hnNOKvTzC6XIdVMF/WeCSpLJ6c+cKpq8z2no6zbM/JeKdtTV/7tDMk
-         Nxsg==
-X-Gm-Message-State: AOJu0Yyz2UV0h00wSVi44gafYtj2p/6S6m5DWzLhIlrBLewwqGjDZYIZ
-        kpuPm94t7cjONybsin8vyS/+hULhNpEP2XbqEFvEGw==
-X-Google-Smtp-Source: AGHT+IEyE8ErD7uTJxSl5pOL1gNwgH/rpoc3NrRUJbIX+CCqivojjSoogbdUBi8R44J+rqzNlPOm0e/5+oOFVS4Mew4=
-X-Received: by 2002:a05:600c:6023:b0:3f1:70d1:21a6 with SMTP id
- az35-20020a05600c602300b003f170d121a6mr311208wmb.0.1691510792379; Tue, 08 Aug
- 2023 09:06:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691513285; x=1692118085;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kb4epZ0hVQjvrS5RqNy38MOhVst2cqtQlkC7YBmZyjc=;
+        b=eu9GnAYzVF2Y3jPZMVcCgjRF3akLvjWJIs6OSAWYI9/lDHaG+5TRYn1tPBch2bb8kG
+         FjkilcYkNr2itGgm9wFJCgo+oKNGVsqf3SxGxkA7vGfkGkQuyU8BWYC3z0mCkxC6BgTA
+         POpS/Nunu3tzWYVLvavIvPMQu3GRB1/Pqb9hnarr7okwYgFCfbe7ADxumnNW67oXrPdM
+         vGzcmayQc20Ryt7u3dzyEA233YF6DQleBYXIUmo4DkPJEcDdSw1HKUR8VReBJMGeMqRX
+         AM4gnKqh9DZkRf7sl9yCCNbAoA5v9H70vNL8EsAMk4eeikS18K6gDl7HJIjUDc3nH5Yv
+         HVgA==
+X-Gm-Message-State: AOJu0YxB9gGQ0p5IrcOROpuj83ZaWczn4XAER/LzTrQrCSUgcr9FQSSZ
+        OKEepGfzfy+P7vAArh4KTMx30e0R0UbNpurDTmPLQnVb90KzmSBo
+X-Google-Smtp-Source: AGHT+IF66ZIg71BsvfIXpCtaWYgCcZU8SNpF3fi8QtXBlp/Ozl2bOkN0RcX0VeXVj4YAJiEXbN2H1G1ZyCw5KxmnN8o=
+X-Received: by 2002:a25:aa21:0:b0:d15:3761:3513 with SMTP id
+ s30-20020a25aa21000000b00d1537613513mr9704045ybi.19.1691486159218; Tue, 08
+ Aug 2023 02:15:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <0000000000000e4cc105ff68937b@google.com> <000000000000166f9e06025c8139@google.com>
-In-Reply-To: <000000000000166f9e06025c8139@google.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Tue, 8 Aug 2023 18:06:20 +0200
-Message-ID: <CANp29Y7q49HBoV+_xD1wpztUGDu4ykEFb-2H-d71rZAkY=M67A@mail.gmail.com>
-Subject: Re: [syzbot] [modules?] KASAN: invalid-access Read in init_module_from_file
-To:     syzbot <syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com>
-Cc:     bpf@vger.kernel.org, chris@chrisdown.name, linan122@huawei.com,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        llvm@lists.linux.dev, mcgrof@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
+References: <20230801173544.1929519-1-hch@lst.de> <20230801173544.1929519-3-hch@lst.de>
+In-Reply-To: <20230801173544.1929519-3-hch@lst.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 8 Aug 2023 11:15:23 +0200
+Message-ID: <CAPDyKForXd2GFVmXXM8hsnAYSQcKhp84t1aOunppUY+MFe0qag@mail.gmail.com>
+Subject: Re: [PATCH 2/5] mmc: au1xmmc: force non-modular build and remove
+ symbol_get usage
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Manuel Lauss <manuel.lauss@gmail.com>,
+        Yangbo Lu <yangbo.lu@nxp.com>,
+        Joshua Kinard <kumba@gentoo.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-modules@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Tue, Aug 8, 2023 at 12:09=E2=80=AFAM syzbot
-<syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com> wrote:
+On Tue, 1 Aug 2023 at 19:36, Christoph Hellwig <hch@lst.de> wrote:
 >
-> syzbot suspects this issue was fixed by commit:
+> au1xmmc is split somewhat awkwardly into the main mmc subsystem driver,
+> and callbacks in platform_data that sit under arch/mips/ and are
+> always built in.  The latter than call mmc_detect_change through
+> symbol_get.  Remove the use of symbol_get by requiring the driver
+> to be built in.  In the future the interrupt handlers for card
+> insert/eject detection should probably be moved into the main driver,
+> and which point it can be built modular again.
 >
-> commit 125bfc7cd750e68c99f1d446e2c22abea08c237f
-> Author: Li Nan <linan122@huawei.com>
-> Date:   Fri Jun 9 09:43:20 2023 +0000
->
->     md/raid10: fix the condition to call bio_end_io_acct()
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D15c26ba9a8=
-0000
-> start commit:   a901a3568fd2 Merge tag 'iomap-6.5-merge-1' of git://git.k=
-e..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Df5e1158c5b2f8=
-3bb
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3De3705186451a87f=
-d93b8
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12518548a80=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D124ccf70a8000=
-0
->
-> If the result looks correct, please mark the issue as fixed by replying w=
-ith:
->
-> #syz fix: md/raid10: fix the condition to call bio_end_io_acct()
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-No, that's unrelated.
+If not too late, feel free to add:
 
-Most likely it's due to https://github.com/google/syzkaller/issues/4117
-TL;DR: for bugs that only existed for a very short time syzbot is
-having problems differentiating between revisions where the bug is not
-yet introduced and where it's already fixed.
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
+Kind regards
+Uffe
+
+> ---
+>  arch/mips/alchemy/devboards/db1000.c |  8 +-------
+>  arch/mips/alchemy/devboards/db1200.c | 19 ++-----------------
+>  arch/mips/alchemy/devboards/db1300.c | 10 +---------
+>  drivers/mmc/host/Kconfig             |  4 ++--
+>  4 files changed, 6 insertions(+), 35 deletions(-)
 >
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
-ion
+> diff --git a/arch/mips/alchemy/devboards/db1000.c b/arch/mips/alchemy/devboards/db1000.c
+> index 79d66faa84828d..012da042d0a4f7 100644
+> --- a/arch/mips/alchemy/devboards/db1000.c
+> +++ b/arch/mips/alchemy/devboards/db1000.c
+> @@ -14,7 +14,6 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/leds.h>
+>  #include <linux/mmc/host.h>
+> -#include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm.h>
+>  #include <linux/spi/spi.h>
+> @@ -167,12 +166,7 @@ static struct platform_device db1x00_audio_dev = {
+>
+>  static irqreturn_t db1100_mmc_cd(int irq, void *ptr)
+>  {
+> -       void (*mmc_cd)(struct mmc_host *, unsigned long);
+> -       /* link against CONFIG_MMC=m */
+> -       mmc_cd = symbol_get(mmc_detect_change);
+> -       mmc_cd(ptr, msecs_to_jiffies(500));
+> -       symbol_put(mmc_detect_change);
+> -
+> +       mmc_detect_change(ptr, msecs_to_jiffies(500));
+>         return IRQ_HANDLED;
+>  }
+>
+> diff --git a/arch/mips/alchemy/devboards/db1200.c b/arch/mips/alchemy/devboards/db1200.c
+> index 1864eb935ca57f..76080c71a2a7b6 100644
+> --- a/arch/mips/alchemy/devboards/db1200.c
+> +++ b/arch/mips/alchemy/devboards/db1200.c
+> @@ -10,7 +10,6 @@
+>  #include <linux/gpio.h>
+>  #include <linux/i2c.h>
+>  #include <linux/init.h>
+> -#include <linux/module.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/leds.h>
+> @@ -340,14 +339,7 @@ static irqreturn_t db1200_mmc_cd(int irq, void *ptr)
+>
+>  static irqreturn_t db1200_mmc_cdfn(int irq, void *ptr)
+>  {
+> -       void (*mmc_cd)(struct mmc_host *, unsigned long);
+> -
+> -       /* link against CONFIG_MMC=m */
+> -       mmc_cd = symbol_get(mmc_detect_change);
+> -       if (mmc_cd) {
+> -               mmc_cd(ptr, msecs_to_jiffies(200));
+> -               symbol_put(mmc_detect_change);
+> -       }
+> +       mmc_detect_change(ptr, msecs_to_jiffies(200));
+>
+>         msleep(100);    /* debounce */
+>         if (irq == DB1200_SD0_INSERT_INT)
+> @@ -431,14 +423,7 @@ static irqreturn_t pb1200_mmc1_cd(int irq, void *ptr)
+>
+>  static irqreturn_t pb1200_mmc1_cdfn(int irq, void *ptr)
+>  {
+> -       void (*mmc_cd)(struct mmc_host *, unsigned long);
+> -
+> -       /* link against CONFIG_MMC=m */
+> -       mmc_cd = symbol_get(mmc_detect_change);
+> -       if (mmc_cd) {
+> -               mmc_cd(ptr, msecs_to_jiffies(200));
+> -               symbol_put(mmc_detect_change);
+> -       }
+> +       mmc_detect_change(ptr, msecs_to_jiffies(200));
+>
+>         msleep(100);    /* debounce */
+>         if (irq == PB1200_SD1_INSERT_INT)
+> diff --git a/arch/mips/alchemy/devboards/db1300.c b/arch/mips/alchemy/devboards/db1300.c
+> index e70e529ddd914d..ff61901329c626 100644
+> --- a/arch/mips/alchemy/devboards/db1300.c
+> +++ b/arch/mips/alchemy/devboards/db1300.c
+> @@ -17,7 +17,6 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/ata_platform.h>
+>  #include <linux/mmc/host.h>
+> -#include <linux/module.h>
+>  #include <linux/mtd/mtd.h>
+>  #include <linux/mtd/platnand.h>
+>  #include <linux/platform_device.h>
+> @@ -459,14 +458,7 @@ static irqreturn_t db1300_mmc_cd(int irq, void *ptr)
+>
+>  static irqreturn_t db1300_mmc_cdfn(int irq, void *ptr)
+>  {
+> -       void (*mmc_cd)(struct mmc_host *, unsigned long);
+> -
+> -       /* link against CONFIG_MMC=m.  We can only be called once MMC core has
+> -        * initialized the controller, so symbol_get() should always succeed.
+> -        */
+> -       mmc_cd = symbol_get(mmc_detect_change);
+> -       mmc_cd(ptr, msecs_to_jiffies(200));
+> -       symbol_put(mmc_detect_change);
+> +       mmc_detect_change(ptr, msecs_to_jiffies(200));
+>
+>         msleep(100);    /* debounce */
+>         if (irq == DB1300_SD1_INSERT_INT)
+> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+> index 159a3e9490aed8..f7afd179dd10bf 100644
+> --- a/drivers/mmc/host/Kconfig
+> +++ b/drivers/mmc/host/Kconfig
+> @@ -526,11 +526,11 @@ config MMC_ALCOR
+>           of Alcor Micro PCI-E card reader
+>
+>  config MMC_AU1X
+> -       tristate "Alchemy AU1XX0 MMC Card Interface support"
+> +       bool "Alchemy AU1XX0 MMC Card Interface support"
+>         depends on MIPS_ALCHEMY
+>         help
+>           This selects the AMD Alchemy(R) Multimedia card interface.
+> -         If you have a Alchemy platform with a MMC slot, say Y or M here.
+> +         If you have a Alchemy platform with a MMC slot, say Y here.
+>
+>           If unsure, say N.
+>
+> --
+> 2.39.2
 >
