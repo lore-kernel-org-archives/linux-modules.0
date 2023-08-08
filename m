@@ -2,121 +2,108 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BF26C001B0
-	for <linux-modules@archiver.kernel.org>; Tue,  8 Aug 2023 16:20:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C6B5C001B0
+	for <linux-modules@archiver.kernel.org>; Tue,  8 Aug 2023 17:17:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbjHHQTs (ORCPT
+        id S229623AbjHHRRK (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 8 Aug 2023 12:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        Tue, 8 Aug 2023 13:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjHHQSD (ORCPT
+        with ESMTP id S230318AbjHHRQg (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 8 Aug 2023 12:18:03 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3726A77;
-        Tue,  8 Aug 2023 08:48:36 -0700 (PDT)
-X-UUID: d824fe3c35c511ee9cb5633481061a41-20230808
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=of+Yq84+TCPrRdlX79cImaBtdd9LrIudC8T+juj2xpM=;
-        b=HbqK8pPdZoJOnHhDY/nJ7xMYe/pfAjXTB82e027MUDyFkgfO+wWgJ+EvzpC9v1zDaVSkRP55FrN9UaalAMgz2gbBeNlDxdA/XavIlRb9we9yGSGGcQVuqUjaeZ4jAhupeccHExHXW4LJlIPL7qumh7+SmP+Qkc6YMXKEyu9rMhI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.31,REQID:df494657-af38-46eb-b513-6039c93ef14b,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.31,REQID:df494657-af38-46eb-b513-6039c93ef14b,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:0ad78a4,CLOUDID:d93a04a1-0933-4333-8d4f-6c3c53ebd55b,B
-        ulkID:230808163036TTTRMJO3,BulkQuantity:1,Recheck:0,SF:48|38|29|28|17|19,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,COL
-        :0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_ULN,TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,
-        TF_CID_SPAM_ASC,TF_CID_SPAM_FAS
-X-UUID: d824fe3c35c511ee9cb5633481061a41-20230808
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
-        (envelope-from <kuan-ying.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 53193084; Tue, 08 Aug 2023 16:30:34 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 8 Aug 2023 16:30:33 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 8 Aug 2023 16:30:33 +0800
-From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <chinwen.chang@mediatek.com>, <qun-wei.lin@mediatek.com>,
-        <linux-mm@kvack.org>, <linux-modules@vger.kernel.org>,
-        <casper.li@mediatek.com>, <akpm@linux-foundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2 3/8] scripts/gdb/utils: add common type usage
-Date:   Tue, 8 Aug 2023 16:30:13 +0800
-Message-ID: <20230808083020.22254-4-Kuan-Ying.Lee@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230808083020.22254-1-Kuan-Ying.Lee@mediatek.com>
-References: <20230808083020.22254-1-Kuan-Ying.Lee@mediatek.com>
+        Tue, 8 Aug 2023 13:16:36 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15871D446
+        for <linux-modules@vger.kernel.org>; Tue,  8 Aug 2023 09:06:43 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fe2d620d17so88135e9.0
+        for <linux-modules@vger.kernel.org>; Tue, 08 Aug 2023 09:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691510792; x=1692115592;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=en4BANwXReNJdtVv23CMrzP6JO/+20SEX8H3hOTpv5o=;
+        b=myWSq4lPvBKhbe4+zSbtARG2ka8adzgpdxrGR/PkL7IS+S1OubWLaJ3PjZLNvhJy5F
+         Xxx8J5Do9SX4jKy9jMtYoXQrT2tMTOGGb6tx6htlzAflRvPrEIFTF/Rmk7QkwR5YHGVz
+         JdV8msNkCSWWUevTqzOhoHQTZQ8lZPprWLFxllO+tDH/UFYWNkyGoBNXkX3fHO4R3QoI
+         UPXOREvlo7HlTAfGM9pYpPVCmPupS5fK7rQia78bAJZZd9jL9iiHNDB6uwYHKN2q2Ybo
+         9cJPjGl9yg5d/Rgfc2HxZcto8aGFRA7PmIARN2MFk+wkNjx0zxZ4fN/yRC31aiKkjhas
+         6gLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691510792; x=1692115592;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=en4BANwXReNJdtVv23CMrzP6JO/+20SEX8H3hOTpv5o=;
+        b=IyPF+rMeoswsi87hu+BmUxSHQvt9n1zjMra/zqMEZ6YGuw4p6qVrRju8Bbl3gCgHv3
+         GiEykWJkFMPpe8pEQ9/ItVHSVQCNVLUb6Qof+zZI6kyglXVQM9iedcdVCn6VtRGgugFh
+         yWCWWs+HEMzaFI6RQD0Ge54x9UmfG1fQa2BFHWc7vUgmdmuUMtPRxPq+Vy2XiskF2rps
+         zlYlyjOEJ2eT7v2yZX1FfikD70pQHb7pFL0Jyqs+YsS59cS9pmci+yEiRuPPu1UaDYPZ
+         bJ655AMMjcGU46hnNOKvTzC6XIdVMF/WeCSpLJ6c+cKpq8z2no6zbM/JeKdtTV/7tDMk
+         Nxsg==
+X-Gm-Message-State: AOJu0Yyz2UV0h00wSVi44gafYtj2p/6S6m5DWzLhIlrBLewwqGjDZYIZ
+        kpuPm94t7cjONybsin8vyS/+hULhNpEP2XbqEFvEGw==
+X-Google-Smtp-Source: AGHT+IEyE8ErD7uTJxSl5pOL1gNwgH/rpoc3NrRUJbIX+CCqivojjSoogbdUBi8R44J+rqzNlPOm0e/5+oOFVS4Mew4=
+X-Received: by 2002:a05:600c:6023:b0:3f1:70d1:21a6 with SMTP id
+ az35-20020a05600c602300b003f170d121a6mr311208wmb.0.1691510792379; Tue, 08 Aug
+ 2023 09:06:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <0000000000000e4cc105ff68937b@google.com> <000000000000166f9e06025c8139@google.com>
+In-Reply-To: <000000000000166f9e06025c8139@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Tue, 8 Aug 2023 18:06:20 +0200
+Message-ID: <CANp29Y7q49HBoV+_xD1wpztUGDu4ykEFb-2H-d71rZAkY=M67A@mail.gmail.com>
+Subject: Re: [syzbot] [modules?] KASAN: invalid-access Read in init_module_from_file
+To:     syzbot <syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com>
+Cc:     bpf@vger.kernel.org, chris@chrisdown.name, linan122@huawei.com,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        llvm@lists.linux.dev, mcgrof@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, song@kernel.org,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Since we often use 'unsigned long', 'size_t', 'usigned int'
-and 'struct page', we add these common types to utils.
+On Tue, Aug 8, 2023 at 12:09=E2=80=AFAM syzbot
+<syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 125bfc7cd750e68c99f1d446e2c22abea08c237f
+> Author: Li Nan <linan122@huawei.com>
+> Date:   Fri Jun 9 09:43:20 2023 +0000
+>
+>     md/raid10: fix the condition to call bio_end_io_acct()
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D15c26ba9a8=
+0000
+> start commit:   a901a3568fd2 Merge tag 'iomap-6.5-merge-1' of git://git.k=
+e..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Df5e1158c5b2f8=
+3bb
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3De3705186451a87f=
+d93b8
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12518548a80=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D124ccf70a8000=
+0
+>
+> If the result looks correct, please mark the issue as fixed by replying w=
+ith:
+>
+> #syz fix: md/raid10: fix the condition to call bio_end_io_acct()
 
-Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
----
- scripts/gdb/linux/utils.py | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+No, that's unrelated.
 
-diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
-index 9f44df13761e..7d5278d815fa 100644
---- a/scripts/gdb/linux/utils.py
-+++ b/scripts/gdb/linux/utils.py
-@@ -35,12 +35,32 @@ class CachedType:
- 
- 
- long_type = CachedType("long")
-+ulong_type = CachedType("unsigned long")
-+uint_type = CachedType("unsigned int")
- atomic_long_type = CachedType("atomic_long_t")
-+size_t_type = CachedType("size_t")
-+struct_page_type = CachedType("struct page")
-+
-+def get_uint_type():
-+    global uint_type
-+    return uint_type.get_type()
-+
-+def get_page_type():
-+    global struct_page_type
-+    return struct_page_type.get_type()
- 
- def get_long_type():
-     global long_type
-     return long_type.get_type()
- 
-+def get_ulong_type():
-+    global ulong_type
-+    return ulong_type.get_type()
-+
-+def get_size_t_type():
-+    global size_t_type
-+    return size_t_type.get_type()
-+
- def offset_of(typeobj, field):
-     element = gdb.Value(0).cast(typeobj)
-     return int(str(element[field].address).split()[0], 16)
--- 
-2.18.0
+Most likely it's due to https://github.com/google/syzkaller/issues/4117
+TL;DR: for bugs that only existed for a very short time syzbot is
+having problems differentiating between revisions where the bug is not
+yet introduced and where it's already fixed.
 
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
+>
