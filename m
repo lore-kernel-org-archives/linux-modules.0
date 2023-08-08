@@ -2,74 +2,126 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 406F5C001DE
-	for <linux-modules@archiver.kernel.org>; Mon,  7 Aug 2023 22:12:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7205C0729B
+	for <linux-modules@archiver.kernel.org>; Tue,  8 Aug 2023 16:13:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjHGWMs (ORCPT
+        id S231986AbjHHQNW (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 7 Aug 2023 18:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        Tue, 8 Aug 2023 12:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjHGWMg (ORCPT
+        with ESMTP id S232102AbjHHQL5 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 7 Aug 2023 18:12:36 -0400
-Received: from mail-ot1-x346.google.com (mail-ot1-x346.google.com [IPv6:2607:f8b0:4864:20::346])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE30126A6
-        for <linux-modules@vger.kernel.org>; Mon,  7 Aug 2023 15:11:49 -0700 (PDT)
-Received: by mail-ot1-x346.google.com with SMTP id 46e09a7af769-6bc9d79cbf6so8998263a34.1
-        for <linux-modules@vger.kernel.org>; Mon, 07 Aug 2023 15:11:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691446186; x=1692050986;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IbpbMWxtwQHfKpcdmTM26gLkMYaV2V50D6axm5j5Juw=;
-        b=VUytHKJP7+fO4pCR/nIwsp1WZHInrTEtz4T6K1BFATydmjj6GaUGod9Pv83YCFEyQA
-         uRGfwSKVJYg1K6/OqTyfRR1YNh5otC9YmUMqHfenitzAfVDFnKDP48uM+SgSrZeAchfi
-         /pgKZvmk13eV3xuztCxF3DfWhw/RBY8Z5l9JQyBFd2BZUxhSRpbbFnR0Mkw3PzIMPim1
-         5/Qe28eQjoQbOIK5qK/BgtQTgL4Qnu+oi/eioGZXN3NCIt8COINP2M0TIIrcGxFwV3FU
-         5wTNX72fHEh7/jwDEny7mdrJfrUP2wEtpw7PWuOzSzI6LDsAgk640FmvxCRiXUItUqjm
-         KiBQ==
-X-Gm-Message-State: AOJu0Yxn8FBy5hw2hP/e256gnpZqtJknxCPiKcCyDhCqB3f+QLD4slVX
-        c3EPYNCIzxvTdyLNFbP9oJ5thjrk21oV0GTMiSwBSnQQU+yK
-X-Google-Smtp-Source: AGHT+IEduFwtdxrh+dLlyzbh5NbikP80BVHQF2BeYV5I9pFjtdMLw1auLZ7MNsAr6GJ8o7Xm4UJOf0qu7vj4mp34E3NWMDrQCIWQ
+        Tue, 8 Aug 2023 12:11:57 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4850D7DAA;
+        Tue,  8 Aug 2023 08:46:53 -0700 (PDT)
+X-UUID: d29ef40e35c511eeb20a276fd37b9834-20230808
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=wurtuNfvllp7E5NLBLiT2rgzUIDAAvhWN0jPuBJRcQQ=;
+        b=aPAUPytw2YNqa1NHOGGsRELxV8FqWqFgQ5/hXC5mtSvC/olgL8UUQ0Q/yn0/unYCpNe+x2jEnWm1ylB34AhBURheKbh4/1PT7hFe0oTEQrXQorthIOD8aJrItGfiu5LPofjMAZirhX7n44naC0sbhQ/oXEJyQNZ1nuBL9lRhH4U=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.31,REQID:952c92a6-1d8e-4d95-8ee2-d506ed29b404,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:0ad78a4,CLOUDID:773a04a1-0933-4333-8d4f-6c3c53ebd55b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
+        NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: d29ef40e35c511eeb20a276fd37b9834-20230808
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <kuan-ying.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 912501661; Tue, 08 Aug 2023 16:30:25 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 8 Aug 2023 16:30:24 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 8 Aug 2023 16:30:24 +0800
+From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     <chinwen.chang@mediatek.com>, <qun-wei.lin@mediatek.com>,
+        <linux-mm@kvack.org>, <linux-modules@vger.kernel.org>,
+        <casper.li@mediatek.com>, <akpm@linux-foundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v2 0/8] Add GDB memory helper commands
+Date:   Tue, 8 Aug 2023 16:30:10 +0800
+Message-ID: <20230808083020.22254-1-Kuan-Ying.Lee@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6830:148c:b0:6b8:c631:5c5a with SMTP id
- s12-20020a056830148c00b006b8c6315c5amr12630266otq.4.1691446186238; Mon, 07
- Aug 2023 15:09:46 -0700 (PDT)
-Date:   Mon, 07 Aug 2023 15:09:46 -0700
-In-Reply-To: <0000000000000e4cc105ff68937b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000166f9e06025c8139@google.com>
-Subject: Re: [syzbot] [modules?] KASAN: invalid-access Read in init_module_from_file
-From:   syzbot <syzbot+e3705186451a87fd93b8@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, chris@chrisdown.name, linan122@huawei.com,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        llvm@lists.linux.dev, mcgrof@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-syzbot suspects this issue was fixed by commit:
+Hi all,
 
-commit 125bfc7cd750e68c99f1d446e2c22abea08c237f
-Author: Li Nan <linan122@huawei.com>
-Date:   Fri Jun 9 09:43:20 2023 +0000
+I've created some GDB commands I think useful when I debug
+some memory issues and kernel module issue.
 
-    md/raid10: fix the condition to call bio_end_io_acct()
+For memory issue, we would like to get slabinfo, slabtrace,
+page_owner and vmallocinfo to debug the memory issues.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15c26ba9a80000
-start commit:   a901a3568fd2 Merge tag 'iomap-6.5-merge-1' of git://git.ke..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f5e1158c5b2f83bb
-dashboard link: https://syzkaller.appspot.com/bug?extid=e3705186451a87fd93b8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12518548a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124ccf70a80000
+For module issue, we would like to query kernel module name
+when we get a module text address and load module
+symbol by specific path.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+Patch 1-2:
+ - Add kernel module related command.
+Patch 3-5:
+ - Prepares for the memory-related command.
+Patch 6-8:
+ - Add memory-related commands.
 
-#syz fix: md/raid10: fix the condition to call bio_end_io_acct()
+V1->V2:
+ - Fix s390 build error with defconfig (Stephen)
+ - Use freeptr_t structure for dereference freepointer
+   in slab
+ - Add CONFIG_STACKDEPOT statement to handle stackdepot
+   is disable
+ - Add CONFIG_PAGE_OWNER statement to handle page owner
+   is disable
+ - Rebase to linux-next/next-20230808
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Kuan-Ying Lee (8):
+  scripts/gdb/symbols: add specific ko module load command
+  scripts/gdb/modules: add get module text support
+  scripts/gdb/utils: add common type usage
+  scripts/gdb/aarch64: add aarch64 page operation helper commands and
+    configs
+  scripts/gdb/stackdepot: Add stackdepot support
+  scripts/gdb/page_owner: add page owner support
+  scripts/gdb/slab: Add slab support
+  scripts/gdb/vmalloc: add vmallocinfo support
+
+ scripts/gdb/linux/constants.py.in |  52 +++
+ scripts/gdb/linux/mm.py           | 582 +++++++++++++++++++-----------
+ scripts/gdb/linux/modules.py      |  32 +-
+ scripts/gdb/linux/page_owner.py   | 190 ++++++++++
+ scripts/gdb/linux/pgtable.py      | 222 ++++++++++++
+ scripts/gdb/linux/slab.py         | 326 +++++++++++++++++
+ scripts/gdb/linux/stackdepot.py   |  55 +++
+ scripts/gdb/linux/symbols.py      |  23 +-
+ scripts/gdb/linux/utils.py        |  20 +
+ scripts/gdb/linux/vmalloc.py      |  56 +++
+ scripts/gdb/vmlinux-gdb.py        |   7 +-
+ 11 files changed, 1358 insertions(+), 207 deletions(-)
+ create mode 100644 scripts/gdb/linux/page_owner.py
+ create mode 100644 scripts/gdb/linux/pgtable.py
+ create mode 100644 scripts/gdb/linux/slab.py
+ create mode 100644 scripts/gdb/linux/stackdepot.py
+ create mode 100644 scripts/gdb/linux/vmalloc.py
+
+-- 
+2.18.0
+
