@@ -2,94 +2,96 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 964C3EB64DD
-	for <linux-modules@archiver.kernel.org>; Fri, 11 Aug 2023 03:49:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44838EB64DD
+	for <linux-modules@archiver.kernel.org>; Fri, 11 Aug 2023 03:53:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjHKDtq convert rfc822-to-8bit (ORCPT
+        id S232124AbjHKDxa (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 10 Aug 2023 23:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
+        Thu, 10 Aug 2023 23:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjHKDtq (ORCPT
+        with ESMTP id S233391AbjHKDx2 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 10 Aug 2023 23:49:46 -0400
-X-Greylist: delayed 625 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Aug 2023 20:49:45 PDT
-Received: from smtp-gw.pt.net (smtp-gw.pt.net [206.210.192.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C470A2710
-        for <linux-modules@vger.kernel.org>; Thu, 10 Aug 2023 20:49:45 -0700 (PDT)
-X-ASG-Debug-ID: 1691725159-09411a10a558ef10001-vc2Alt
-Received: from mail.pt.net (mail.pt.net [206.210.194.11]) by smtp-gw.pt.net with ESMTP id B7UHtnhbE0HQRmWo (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO) for <linux-modules@vger.kernel.org>; Thu, 10 Aug 2023 22:39:19 -0500 (CDT)
-X-Barracuda-Envelope-From: lesrhorer@siliconventures.net
-X-Barracuda-Effective-Source-IP: mail.pt.net[206.210.194.11]
-X-Barracuda-Apparent-Source-IP: 206.210.194.11
-Received: from localhost (localhost [IPv6:::1])
-        by mail.pt.net (Postfix) with ESMTP id EEF1C17F22AA
-        for <linux-modules@vger.kernel.org>; Thu, 10 Aug 2023 22:39:18 -0500 (CDT)
-Received: from mail.pt.net ([IPv6:::1])
-        by localhost (mail.pt.net [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id uznONP5mQGpV for <linux-modules@vger.kernel.org>;
-        Thu, 10 Aug 2023 22:39:18 -0500 (CDT)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.pt.net (Postfix) with ESMTP id A90E717F2401
-        for <linux-modules@vger.kernel.org>; Thu, 10 Aug 2023 22:39:18 -0500 (CDT)
-X-Virus-Scanned: amavisd-new at pt.net
-Received: from mail.pt.net ([IPv6:::1])
-        by localhost (mail.pt.net [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id bLJogyefCtku for <linux-modules@vger.kernel.org>;
-        Thu, 10 Aug 2023 22:39:18 -0500 (CDT)
-Received: from [192.168.1.121] (75-15-243-201.lightspeed.snantx.sbcglobal.net [75.15.243.201])
-        (Authenticated sender: lesrhorer@siliconventures.net)
-        by mail.pt.net (Postfix) with ESMTPSA id 937DF17F21FE
-        for <linux-modules@vger.kernel.org>; Thu, 10 Aug 2023 22:39:18 -0500 (CDT)
-Message-ID: <c6d34094-7363-a462-5043-768f688aef66@siliconventures.net>
-Date:   Thu, 10 Aug 2023 22:39:12 -0500
+        Thu, 10 Aug 2023 23:53:28 -0400
+Received: from sonic308-11.consmr.mail.gq1.yahoo.com (sonic308-11.consmr.mail.gq1.yahoo.com [98.137.68.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8A230D8
+        for <linux-modules@vger.kernel.org>; Thu, 10 Aug 2023 20:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1691726000; bh=9amaImanC7wmD7zWEs2r0P2ogPLDW5tnz9w758kttq8=; h=Date:Subject:From:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=BEZOlgo0CoexePSg6OqBgaYrvhU4uxI3v77/4183fV6NMLCIHa2vo5BnGivKxiYMrPMW7hcWUrns77opNcMHo4jY/ufuv5sBW/aphP1ZP7ACiXCkeLN4cOMnDqujeljycOo+UegE6hPPrw/5hRtbZVmhEqdwLJ94h4N1pPJbGuU=
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1691726000; bh=F6/sVHgVtOatwKT61oc4J8nYufmCbZYWWABMZK5WJl+=; h=X-Sonic-MF:Date:Subject:From:To:From:Subject; b=P0LxYbcKB8499YdGZBQOgSFbVfYhhGmk2ZjjtHkIGrXjnSin6jR+K1LGJGA/Iw8s4r58+RGKYhHd4zNv+fa6CnAI1lT00GIIYNJfYW0zS3+Bs/hnG/u1HP4XlBcZhL61DXFAG222YVQVf4T1YPDgZaWrAV1UPu1o8HoUaETK1odC5YNOFLfVmveU0j/xRoDbB8cI8bjQPWGUcjlWQiLNY4O7FJAJwJQnvHwDe0eMUVwq0r+5HMfHvtCEMNyoE12oSKMq/5iqsWdkOB+oiGimXkmy7Ra1EHKCWZA7C/3rSKWo2kzhKueulbegCAaBOxZIEU/3W5E5vCn4leJX0W0fnw==
+X-YMail-OSG: astknmAVM1nqTjkbYvrpdWsuhIJZBUPF088SCvCjlicxL93QhLEOEiP7kP_kgos
+ m5uFSqoRSP9u1UpOj7ppEh3PFWVyABW1zhTsWyvrEXcLviWqOnhjdosvlfjXdQwZ0pTnyCqz62um
+ hEhBOfoARV01Ls2n2QBaDOpTMUhj0igfUP06yycNalt_JBjl4WyjkAO4O9Ok5eT_d.91xDnow7Xd
+ rYGsoFmLFTs0kILOmKaYomTtEVrFf.AE9uOhr2kkEVzoxR2w_SinArMk1tjcFQalyDN6OYXss5WT
+ ORwaJmWMo.mjth349DnBUZa4ljl7vKFIXeq7OzvHlNlNs6cSuBguROYU6gB.MxcjMNfouiKsgb2f
+ 3Hg9IZpzazXhUnBEPueykiKXRRH4AYOQlupVfb0r.Rr0zwr6qK8tzkGXrDWEa9OgHJ69QlnYPR6X
+ vGaq2mxi2Jr6jojR7uEwLs7hdntNJ_UHoWkTXiHScKSlKcrq32yHdwas5NFXOk1E6l2An.ERtJ0n
+ vNCqJr6uFbmWko0M5_3SHRs22wVSqJ9ZIaLmkxhprbabgiyJyY1Kh6KtJ3RY9RF.3X6mlNZi8MFH
+ Uo92plSOtWbTAoVEA55scFLscdWkh6iUmVjAsnarvUIJAk6GhMoQoaxdlV5zujlp8_PVoADJo_uz
+ ophfPBdnzbpkCI.hEA18IcZcxUbqeywUxY1tinp6_LsaFegkduv8Y8v93EkJKAjBkiHg99Gm5_0Z
+ UIzdZ7vKVgh.5A_ewoLeO_7tlGvR71qY34qGceXrUbNUARH5jTpPZqqQZKASqtZAyQz5nRt3mErJ
+ eBV7K1xVAOquLwoOLNrk5aRfy2rO54QLtyBEv8OVHXvtefoIxQjfLWwbUczeD8Bt_94.HQSJy5wI
+ vrq4cbTeSGpBoOkMc9vrUrPJOCu0Q6p.R4FV6c2vrjuAUMlccwR8wFgARqZeBd1wJm0_am44YQx_
+ tRE5v7tFIFttf9UU7iy69WEv9vyJzgmPqgwo8fu2mLyS99YNtF0.gc57Y3VR8H3LuXtuqydsJjLa
+ WotfNRbJy9p1pOpo.lRw1cc6vZfBic2elSuVvoI7p9vg9Ahx73wz3dth2LTGRqop2vzBU2CEVVKO
+ GEHlsGS5_Bjyx8xrxTe7zEo02mIyGwbyZ1hqzoVvAy8cmuyJ_P73DBGxzWc2eZWI6xZiavNbBYTd
+ 3tvOAPEDEqJUm3X.x_vCdCrjLduwNVu4P2Gjz6t.mM.Joadjn4Xia2zs8BS7MXfAqV5zd2lQJuSj
+ 1CmDdI_f6yztTyoNCPrsrHkaskh.w62VuZKNHSa.10fX8xY8i0w5QVOXHxYxuCHeFoqnw467gp1e
+ d6uQAAREj_krT4eJeiv6HgJsgiiJrW2Z3OzG.6UZV8fTV_EsjuVmPTEXWuO7neDRlQnVwZswWKS9
+ Bpg3MU4U6Khd.QhLj5je7AD0dJ.AThYAaBp7jAwWtnUFoqWTOxMMsLE4xx1N2QXVkU_fSNpV16BL
+ Sue8qwjcBu6daVCodG3uCgs0N.amFHFwYWeWroggW4e_XUKzZzq7t2XUgSmw0faDeBFNfyU3AeqQ
+ UteeBsi65oGTEUuvoRl_qBqUoyzHnyG5WOnuEg4mrgswSit2DymLhwHYZF2PEamxArzIeZV4jL50
+ x1mUnbK7BXasevUjjpG1.kQ52cgnNW0dlOnUSSCBm9jbfL1LoVSPvs4H14UsP9zhht02BFAHxmXK
+ NaTvdGmvkgz6RFyvQfPWese5VzJhyA5ZrQ7asNxX9DUoCzcSuUzKvoSmFOBtw7SkiEAOE4_3PkdC
+ AqGDW3fa9.zX77c1mUlzeEtlGoXi8eUiYOypYPT3ryGpG.EK.mvzWgDY0vkaXRUFhtMRmSAi6NK.
+ ssoDaf5DMr0Ym2xTtX.ZbzInBPS4KvfhtZick2si6o_7YcJebtRMjwoOxAau9r4TsvT8NfCr4rjY
+ bUgD7u39u01kwi2Tnn9mHj9h49egoBFDEJWKnQU6HIlpkMG06eG2tfuH6kZhGY_3MD9Pjei5BtEu
+ 2OHZDngpWaq_Ed3IkE2a2yBk53tsVRMdoIXqOxQ4CQJxnizoN5nm2Um0T.oLaeoIPSThKkZQN6hJ
+ odddMtmHMZTYwxn6McS4wH_DFLoQUZZ6O33Yb8MAfYjZHVDuTSsvOb6EYy1dXJ7YPrQl_MHXV3t.
+ o6kTqjyYxah6yG7hmUitV4ZUkifn9veAegWVsmqBFYilzvFVBUucErtxLt3Sm2wqkVfB6JwfqC1_
+ ULVtxwunHgkJl3jAKDCjC5esoIan138VAnR5__eXp3el2bzT5qRY4
+X-Sonic-MF: <lesrhorer@att.net>
+X-Sonic-ID: 8b3df8b4-4638-4e2f-842a-9e870de4cdd2
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.gq1.yahoo.com with HTTP; Fri, 11 Aug 2023 03:53:20 +0000
+Received: by hermes--production-bf1-865889d799-cgv22 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e412af30481515cc8d9f8bb7690bba07;
+          Fri, 11 Aug 2023 03:53:14 +0000 (UTC)
+Message-ID: <38f29379-4a8b-3cb0-c5dc-7cb4c8246fa4@att.net>
+Date:   Thu, 10 Aug 2023 22:53:07 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+Subject: Re: Majordomo not working
 Content-Language: en-US
-From:   Leslie Rhorer <lesrhorer@siliconventures.net>
-Subject: module issues
+From:   Leslie Rhorer <lesrhorer@att.net>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        pmladek@suse.com
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <Y9BIU5SGOS6YEdSh@bombadil.infradead.org>
+ <06bc7efa-c486-f995-a73c-3f1dd6a5ce64@att.net>
+In-Reply-To: <06bc7efa-c486-f995-a73c-3f1dd6a5ce64@att.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-X-ASG-Orig-Subj: module issues
-Content-Transfer-Encoding: 8BIT
-X-Barracuda-Connect: mail.pt.net[206.210.194.11]
-X-Barracuda-Start-Time: 1691725159
-X-Barracuda-Encrypted: TLS_AES_256_GCM_SHA384
-X-Barracuda-URL: https://smtp-gw.pt.net:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at pt.net
-X-Barracuda-Scan-Msg-Size: 1353
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 0.00
-X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.112581
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.21695 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hello all,
+	Update: I finally managed to get a message through from my AT&T address 
+to the linux-modules list.  I am not certain what the issue was before 
+this.  I am still not sure what the issue is with the Majordomo, however.
 
-     About a yer or so ago, I upgraded one of my Debian servers to 
-Bullseye, and it killed the 10G NIC on the server due to issues with the 
-device driver in the Debian repository.  I jumped through all sorts of 
-loops and hoops to try to get it working, but I finally had to give up 
-and resort to using the 1G interface. Recently, I tried upgrading 
-another server to the new Debian Bookworm, and it worked for that 
-server, so apparently the issue has been fixed in Bookworm.
-
-     With that in mind, I went ahead and upgraded the original server to 
-Bookworm, but the NIC remains dead.  Unfortunately, I cannot find ny 
-notes on what I did originally to try to get the 10G interface working 
-and to shut it down in favor of a built-in port.  I do recall I tried 
-compiling what was supposed to be the correct firmware driver and also 
-changing the udev rules, but I do not recall the exact details.  I have 
-tried several things, including re-installing the firmware, but nothing 
-seems to work. The Ethernet interface does not appear on the system in 
-order to be able to specify it in /etc/network/interfaces.  What can I 
-do in order to try to get the 10G card working?
-
-     The card is an Asus MCB-10G_PEB-10G NIC and uses the bnx2x.ko 
-driver. The system uses an Asus AMD-64 motherboard.
-
+On 8/10/2023 10:48 PM, Leslie Rhorer wrote:
+>      I know this is not exactly the right place to post this, but I am 
+> at a complete loss what else to do.  Please forgive me, but I cannot get 
+> the Majordomo at vger.kernel.org to respond to me.  I have tried 
+> everything of which I can think, but the Majordomo will not recognize 
+> when I send it the authorization command in order to try and include my 
+> siliconventures.net address in the linux-modules mailing list.  My 
+> att.net address is supposed to already be a member of the list, but 
+> whenever I send to the linux-modules list from mt AT&T address, the 
+> message bounces.
+> 
+>      Thus , I seem to be having two issues.  The more immediate is I 
+> cannot get any messages through to where they need to go, both to the 
+> Majordomo and to the linux-modules list.  The more important long term 
+> issue is I am having a problem with the NIC card on one of my Debian 
+> Linux servers.
