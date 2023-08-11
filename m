@@ -2,80 +2,91 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BABE1EB64DD
-	for <linux-modules@archiver.kernel.org>; Fri, 11 Aug 2023 16:55:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CFEAC001B0
+	for <linux-modules@archiver.kernel.org>; Fri, 11 Aug 2023 18:46:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233761AbjHKQzx (ORCPT
+        id S233928AbjHKSqJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 11 Aug 2023 12:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
+        Fri, 11 Aug 2023 14:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234853AbjHKQzx (ORCPT
+        with ESMTP id S233418AbjHKSqG (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 11 Aug 2023 12:55:53 -0400
+        Fri, 11 Aug 2023 14:46:06 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69192D7F;
-        Fri, 11 Aug 2023 09:55:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754543580
+        for <linux-modules@vger.kernel.org>; Fri, 11 Aug 2023 11:45:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=BSn+1riio2Wpa2BGBaQccHRcnWuqa9fih+8qtSIWOEI=; b=isTaSHhrJRAiw8NHeJ/9wXdeyz
-        hEiPSbgewBcxmhs44Sag4YfuDoSMIrSmE3jJZt2Hv5qoyascwbLNSnZkuTsm0sYGCIi+3jUNj0Dvf
-        8XKaX+l+GMB6SzgibYrYZ3ara3PPlnrtU4sZCEBx13KPPV/7gYUju4b0MJNM8dDbWqXVbjOhz3nxJ
-        TWqXp+x9ifizEwWwPxcWh02kJjZXD4yGvKMwb/lSo+S3MIXrekASc/vXcdvb0OuDb3X1q7aiGAtKD
-        BC2GKY5ZjIp5EL6Ual6flX+YwRicbvG0iWSHHOzkGF80OHoxoSeCZesXHLuJXWQfUR7robq3TmIP3
-        7FQQv0ww==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qUVQS-00BAXW-0U;
-        Fri, 11 Aug 2023 16:55:48 +0000
-Message-ID: <a50a9929-936d-4b4c-0f37-ea5082b96af9@infradead.org>
-Date:   Fri, 11 Aug 2023 09:55:46 -0700
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=6Qehn4fXg0Ep3vgHeqIM19i1cKEfkMSOZj5FISDniEE=; b=WOaPIWsruBfAfcYq/tWSogv6x/
+        o16JjhCiMhy3JGszZTIwkJpdcHOrx9+5b9F/rX+QwU8cKmGjYVX/LAvSy1vHtaN0o4dqGxLFCYRNQ
+        P78aKGNn1VMLtnJUZRkXJb+CEkjI9fht/4POlTvfc5D2toF45wthF1WXonNszd9a1iXoqfEZh7M3u
+        BBHMASBJZxCQXG+9PdlK0TWmlCGU+44tFEUb23dIiAhWGWgE3+XbtiPHx8u3lXblZzcbzM99cuKQn
+        1zMCj6XFfOITW31WbBwwp1KKdADvpz/wnUZyU5/DEHNozVD7Ue7avLkc9oQCFX7WzKbhXydkFOEQM
+        eYqUbPwg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qUX94-00BO2e-0r;
+        Fri, 11 Aug 2023 18:45:58 +0000
+Date:   Fri, 11 Aug 2023 11:45:58 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Leslie Rhorer <lesrhorer@siliconventures.net>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+Subject: Re: module issues
+Message-ID: <ZNaB5qHAcp1fxmgu@bombadil.infradead.org>
+References: <c6d34094-7363-a462-5043-768f688aef66@siliconventures.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: Majordomo not working
-Content-Language: en-US
-To:     Leslie Rhorer <lesrhorer@att.net>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        pmladek@suse.com
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        postmaster@vger.kernel.org
-References: <Y9BIU5SGOS6YEdSh@bombadil.infradead.org>
- <06bc7efa-c486-f995-a73c-3f1dd6a5ce64@att.net>
- <38f29379-4a8b-3cb0-c5dc-7cb4c8246fa4@att.net>
- <f95da2a4-996c-cd81-5ae1-715d33f577cc@infradead.org>
- <38c4f2b5-4585-c1c6-cc07-fc41b4dbca94@att.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <38c4f2b5-4585-c1c6-cc07-fc41b4dbca94@att.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <c6d34094-7363-a462-5043-768f688aef66@siliconventures.net>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-
-
-On 8/11/23 09:51, Leslie Rhorer wrote:
-> Â Â Â Â I had a friend of mine attempt the same thing using Outlook, and it is also bouncing all the messages.Â  It looks like Majordomo may actually be broken.Â  It seems like it may not have been updated in 20 years.Â  Can anyone else sign up for a conference using Outlook or Thunderbird?
+On Thu, Aug 10, 2023 at 10:39:12PM -0500, Leslie Rhorer wrote:
+> Hello all,
 > 
+>     About a yer or so ago, I upgraded one of my Debian servers to Bullseye,
+> and it killed the 10G NIC on the server due to issues with the device driver
+> in the Debian repository.  I jumped through all sorts of loops and hoops to
+> try to get it working, but I finally had to give up and resort to using the
+> 1G interface. Recently, I tried upgrading another server to the new Debian
+> Bookworm, and it worked for that server, so apparently the issue has been
+> fixed in Bookworm.
+> 
+>     With that in mind, I went ahead and upgraded the original server to
+> Bookworm, but the NIC remains dead.  Unfortunately, I cannot find ny notes
+> on what I did originally to try to get the 10G interface working and to shut
+> it down in favor of a built-in port.  I do recall I tried compiling what was
+> supposed to be the correct firmware driver and also changing the udev rules,
+> but I do not recall the exact details.  I have tried several things,
+> including re-installing the firmware, but nothing seems to work. The
+> Ethernet interface does not appear on the system in order to be able to
+> specify it in /etc/network/interfaces.  What can I do in order to try to get
+> the 10G card working?
+> 
+>     The card is an Asus MCB-10G_PEB-10G NIC and uses the bnx2x.ko driver.
+> The system uses an Asus AMD-64 motherboard.
 
-Hi,
-I don't know what "conference" means here, but I use thunderbird all of the time.
+Sounds like a networking driver issue, not a modules issue. So report
+this to your driver maintainer and you can remove linux-modules from
+the email.
 
-> On 8/10/2023 11:46 PM, Randy Dunlap wrote:
->> Adding postmaster@vger.kernel.org
->>
->>
->> On 8/10/23 20:53, Leslie Rhorer wrote:
->>> Â Â Â Â Â Update: I finally managed to get a message through from my AT&T address to the linux-modules list.Â  I am not certain what the issue was before this.Â  I am still not sure what the issue is with the Majordomo, however.
->>>
->>> On 8/10/2023 10:48 PM, Leslie Rhorer wrote:
->>>> Â Â Â Â Â Â I know this is not exactly the right place to post this, but I am at a complete loss what else to do.Â  Please forgive me, but I cannot get the Majordomo at vger.kernel.org to respond to me.Â  I have tried everything of which I can think, but the Majordomo will not recognize when I send it the authorization command in order to try and include my siliconventures.net address in the linux-modules mailing list.Â  My att.net address is supposed to already be a member of the list, but whenever I send to the linux-modules list from mt AT&T address, the message bounces.
->>>>
->>>> Â Â Â Â Â Â Thus , I seem to be having two issues.Â  The more immediate is I cannot get any messages through to where they need to go, both to the Majordomo and to the linux-modules list.Â  The more important long term issue is I am having a problem with the NIC card on one of my Debian Linux servers.
->>
+./scripts/get_maintainer.pl drivers/net/ethernet/broadcom/bnx2x/
+Ariel Elior <aelior@marvell.com> (supporter:BROADCOM BNX2X 10 GIGABIT ETHERNET DRIVER)
+Sudarsana Kalluru <skalluru@marvell.com> (supporter:BROADCOM BNX2X 10 GIGABIT ETHERNET DRIVER)
+Manish Chopra <manishc@marvell.com> (supporter:BROADCOM BNX2X 10 GIGABIT ETHERNET DRIVER)
 
--- 
-~Randy
+<I'm skipping the generic networking maintainer list here>
+
+netdev@vger.kernel.org (open list:BROADCOM BNX2X 10 GIGABIT ETHERNET DRIVER)
+linux-kernel@vger.kernel.org (open list)
+
+So email these folks, and you should be more specific about your kernel
+version, and what the issue was. If its not an issue today, then you
+need to be more specific about if its a regression present only in older
+kernels.
+
+  Luis
