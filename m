@@ -2,74 +2,87 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13064C04A6A
-	for <linux-modules@archiver.kernel.org>; Sun, 13 Aug 2023 13:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92F6AC001DB
+	for <linux-modules@archiver.kernel.org>; Sun, 13 Aug 2023 16:03:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbjHMNia (ORCPT
+        id S231425AbjHMQDl (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 13 Aug 2023 09:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        Sun, 13 Aug 2023 12:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbjHMNi2 (ORCPT
+        with ESMTP id S232035AbjHMQDY (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 13 Aug 2023 09:38:28 -0400
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0EE1717
-        for <linux-modules@vger.kernel.org>; Sun, 13 Aug 2023 06:38:30 -0700 (PDT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-686baf1c2fbso4403788b3a.0
-        for <linux-modules@vger.kernel.org>; Sun, 13 Aug 2023 06:38:30 -0700 (PDT)
+        Sun, 13 Aug 2023 12:03:24 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F38E2116
+        for <linux-modules@vger.kernel.org>; Sun, 13 Aug 2023 09:02:59 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so9592123a12.0
+        for <linux-modules@vger.kernel.org>; Sun, 13 Aug 2023 09:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1691942549; x=1692547349;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=g5ugHtb+gFLqHmdHj/rIBNWAy0u9pV9CjmqakNJzIxY=;
+        b=Oj0mSsS46jeV/oUT5MAXfcjss6McfNfiKYQrraiQMRL8sTJBw4d8L4S8yxi/lYj7/A
+         7r3S5rxoqAmN6oWXyEodKqbZEwXf6+pND145SyK6r7I//24q0FiBkBdxVi4vJltOF7bT
+         lO4vZDPaKABMHKqKaR3tn6kp7YpOPeVcnRgOc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691933909; x=1692538709;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=neJnpZX6yQ9QkvvT9QAkP8Ws3ecBujJ1QULkPMiV29E=;
-        b=WHF7/JE25XtxlGXxS+W7eI8ZU+/a6LgWViBt+2Bpqldkum/p1iQNHe/t4ECR0aSZWq
-         7QL0FpiYsXSBvYrDgW1rxXbMEAa6t9CbT5XDbr+vkjJx6Z922OXnIBakbCjhfnQ7BFGv
-         Yj3g9+PcZejXTJqPbBAPNfE84CBdIIn9/xKC1WW1l2ZGNOUE3jBcW9YxY+BRrxO3YEXn
-         AWU9vdwmEkNwYC++K4vt+HT5uVvNYtzI3Lgu3W7jjlb8sgI/AXNVrgFwlEXi3U1itsEo
-         gqv/Cu6I2ilaK+RXheZHL66Z0SPlSb3BSoniuKZnn5RDcS2eGUgwMY+AlRlyetPM0g4Q
-         OT/A==
-X-Gm-Message-State: AOJu0YywNPLyxVNQkM3ZIYul2ggFcxPrvFCbP3NOPxa29jG3xkUdijgA
-        PywO78JyppshB+HQZjLIkQbqB6frnU+nyJIx/ZRFfvA1OMpn
-X-Google-Smtp-Source: AGHT+IFvUtqXr76zu2wT3itQvPjtzRoxdBW7cC6qINSUywu2YLhPJ1DCvGf+u/vcRaSITgKK9wNgpHfjYiUe7vo70HM9pGod+tZJ
+        d=1e100.net; s=20221208; t=1691942549; x=1692547349;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g5ugHtb+gFLqHmdHj/rIBNWAy0u9pV9CjmqakNJzIxY=;
+        b=CjnjVL1657k45KFMLAfdy7f7IjPcEqCt3A663L18M9mvuphGY8poiOuGgPOc4cFe+N
+         koF0lwD4bh9j7kADYg3QdAv4Qq70CiHqjzmbftKpLrrTfOfTD5b6Lk+yeTsfNDf/es3l
+         54xyF3jBJuOjkEW1WMxj2nm00VWaBbpv41ANcaT452Apykplptw8jEZjO+sOuOmCgri5
+         FrkDEDpqjdHc+3Hz1wTUI5B7IjwRenMiSKRUb08FHK0jruN15oDNhFNPwSd487HkdRao
+         mDhTmi+dUeJkASQCzSo4XZ5Yzk8E3BgCFi8rqbUrvkw+dxw8A2sXQQp6ZSa7dPCSrW4S
+         BZhg==
+X-Gm-Message-State: AOJu0YzT3Oe0LWuxvd3GLNepjTRpu/duRvVo7FOr/NZf+4m8dMpFQ40a
+        t7V89fANq1O5pXBecc7QSFyNSfZISEGqT1eJGlj2vl/N
+X-Google-Smtp-Source: AGHT+IEJ2Q6XMmCAhi1Nl7q01K1vSc4C0JHzEbnsCKSmmAKseS50mZ17yIMkqFQSb4FNP9WPJnt14Q==
+X-Received: by 2002:a05:6402:293:b0:523:e25:5656 with SMTP id l19-20020a056402029300b005230e255656mr8177546edv.5.1691942549514;
+        Sun, 13 Aug 2023 09:02:29 -0700 (PDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id h9-20020a50ed89000000b0052229d203a4sm4575622edr.36.2023.08.13.09.02.27
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Aug 2023 09:02:28 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so9592086a12.0
+        for <linux-modules@vger.kernel.org>; Sun, 13 Aug 2023 09:02:27 -0700 (PDT)
+X-Received: by 2002:aa7:c683:0:b0:523:3e27:caa7 with SMTP id
+ n3-20020aa7c683000000b005233e27caa7mr6430259edq.20.1691942547533; Sun, 13 Aug
+ 2023 09:02:27 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:d4c4:b0:1bb:a78c:7a3e with SMTP id
- o4-20020a170902d4c400b001bba78c7a3emr2668812plg.3.1691933909651; Sun, 13 Aug
- 2023 06:38:29 -0700 (PDT)
-Date:   Sun, 13 Aug 2023 06:38:29 -0700
-In-Reply-To: <00000000000094ac8b05ffae2bf2@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ab16cf0602ce0f9d@google.com>
+References: <00000000000094ac8b05ffae2bf2@google.com> <000000000000ab16cf0602ce0f9d@google.com>
+In-Reply-To: <000000000000ab16cf0602ce0f9d@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 13 Aug 2023 09:02:10 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjsitvsCyu0+Pu8Hdmzd6XaCjugktE5aQVjUbCRYgQU=Q@mail.gmail.com>
+Message-ID: <CAHk-=wjsitvsCyu0+Pu8Hdmzd6XaCjugktE5aQVjUbCRYgQU=Q@mail.gmail.com>
 Subject: Re: [syzbot] [modules?] general protection fault in sys_finit_module
-From:   syzbot <syzbot+9e4e94a2689427009d35@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, chris@chrisdown.name,
+To:     syzbot <syzbot+9e4e94a2689427009d35@syzkaller.appspotmail.com>
+Cc:     bpf@vger.kernel.org, chris@chrisdown.name,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
         llvm@lists.linux.dev, mcgrof@kernel.org, nathan@kernel.org,
         ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
-        torvalds@linux-foundation.org, trix@redhat.com
+        trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-syzbot suspects this issue was fixed by commit:
+On Sun, 13 Aug 2023 at 06:38, syzbot
+<syzbot+9e4e94a2689427009d35@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit f1962207150c
+> ("module: fix init_module_from_file() error handling")
+>
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9e4e94a2689427009d35
 
-commit f1962207150c8b602e980616f04b37ea4e64bb9f
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue Jul 4 13:37:32 2023 +0000
-
-    module: fix init_module_from_file() error handling
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=148a0a03a80000
-start commit:   995b406c7e97 Merge tag 'csky-for-linus-6.5' of https://git..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=71a52faf60231bc7
-dashboard link: https://syzkaller.appspot.com/bug?extid=9e4e94a2689427009d35
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d6670ca80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=103be50b280000
-
-If the result looks correct, please mark the issue as fixed by replying with:
+Looks right. Apparently syzkaller had two different bugs attributed to
+this. It was already marked as fixing syzbot issue
+x=9c2bdc9d24e4a7abe741
 
 #syz fix: module: fix init_module_from_file() error handling
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+             Linus
