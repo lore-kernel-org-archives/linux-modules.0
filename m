@@ -2,104 +2,143 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBF5CC19F4F
-	for <linux-modules@archiver.kernel.org>; Wed, 16 Aug 2023 19:04:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3C78C3DA50
+	for <linux-modules@archiver.kernel.org>; Thu, 17 Aug 2023 16:38:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345669AbjHPTEU (ORCPT
+        id S1353133AbjHQQiD (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 16 Aug 2023 15:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
+        Thu, 17 Aug 2023 12:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345720AbjHPTEK (ORCPT
+        with ESMTP id S1353207AbjHQQht (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 16 Aug 2023 15:04:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D282270A;
-        Wed, 16 Aug 2023 12:04:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Thu, 17 Aug 2023 12:37:49 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0DAE2;
+        Thu, 17 Aug 2023 09:37:47 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0BCC0210DB;
+        Thu, 17 Aug 2023 16:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1692290266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=td0f7jevWQxBd9vq5zSpNQzHmoLScSheWh9ycl64mF8=;
+        b=qDWmAzp2NMrSIWXAggFQMwzT0ld/nIvwZL+Fx/zU/Hz8RwL1We+jL+4H3WaKbnii41Heja
+        UnjkEWHoyH4LUoPVedEaXhWhNQwyjIhOe5H01JI/hwSbPkuH8gKVbjUMcola935WeNJ6ae
+        mQxguiNaPUqghtjC0Yr39p9qy2hg9Zg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1692290266;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=td0f7jevWQxBd9vq5zSpNQzHmoLScSheWh9ycl64mF8=;
+        b=xtiPNNnJVWFA3MbCAKg66OGsf9nwTY6gEMyc0NRGFme+ZwPtPDWS7PV2Wcbn3bxr2CmIkI
+        zQNefaJYDND7dsDg==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A269E6246F;
-        Wed, 16 Aug 2023 19:04:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F9BC433C7;
-        Wed, 16 Aug 2023 19:04:03 +0000 (UTC)
-Date:   Wed, 16 Aug 2023 15:04:07 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH] [v3] kallsyms: rework symbol lookup return codes
-Message-ID: <20230816150407.3d5dbc40@gandalf.local.home>
-In-Reply-To: <20230726141333.3992790-1-arnd@kernel.org>
-References: <20230726141333.3992790-1-arnd@kernel.org>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by relay2.suse.de (Postfix) with ESMTPS id AA2A42C146;
+        Thu, 17 Aug 2023 16:37:45 +0000 (UTC)
+Date:   Thu, 17 Aug 2023 18:37:44 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     linux-modules@vger.kernel.org
+Cc:     Takashi Iwai <tiwai@suse.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH kmod v5 0/5] kmod /usr support
+Message-ID: <20230817163744.GD8826@kitsune.suse.cz>
+References: <cover.1689589902.git.msuchanek@suse.de>
+ <cover.1689681454.git.msuchanek@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1689681454.git.msuchanek@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Wed, 26 Jul 2023 16:12:23 +0200
-Arnd Bergmann <arnd@kernel.org> wrote:
+Hello,
 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 05c0024815bf9..a949f903c9e66 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -6965,7 +6965,7 @@ allocate_ftrace_mod_map(struct module *mod,
->  	return mod_map;
->  }
->  
-> -static const char *
-> +static int
->  ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
->  			   unsigned long addr, unsigned long *size,
->  			   unsigned long *off, char *sym)
-> @@ -6986,21 +6986,18 @@ ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
->  			*size = found_func->size;
->  		if (off)
->  			*off = addr - found_func->ip;
-> -		if (sym)
-> -			strscpy(sym, found_func->name, KSYM_NAME_LEN);
-> -
-> -		return found_func->name;
-> +		return strscpy(sym, found_func->name, KSYM_NAME_LEN);
->  	}
->  
-> -	return NULL;
-> +	return 0;
->  }
->  
-> -const char *
-> +int
->  ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
->  		   unsigned long *off, char **modname, char *sym)
->  {
->  	struct ftrace_mod_map *mod_map;
-> -	const char *ret = NULL;
-> +	int ret;
->  
->  	/* mod_map is freed via call_rcu() */
->  	preempt_disable();
+On Tue, Jul 18, 2023 at 02:01:51PM +0200, Michal Suchanek wrote:
+> Hello,
+> 
+> with these patches it is possible to install kernel modules in an arbitrary
+> directory - eg. moving the /lib/modules to /usr/lib/modules or /opt/linux.
+> 
+> While the modprobe.d and depmod.d search which already includes multiple
+> paths is expanded to also include $(prefix) the module directory still
+> supports only one location, only a different one under $(module_directory).
+> 
+> Having kmod search multiple module locations while only one is supported now
+> might break some assumption about relative module path corresponding to a
+> specific file, would require more invasive changes to implement, and is not
+> supportive of the goal of moving the modules away from /lib.
+> 
+> Both kmod and the kernel need to be patched to make use of this feature.
+> Patched kernel is backwards compatible with older kmod.  Patched kmod
+> with $(module_directory) set to /lib/modules is equivalent to unpatched kmod.
 
+The patch to kernel to support autodetection of module directory is
+rejected. However, a workaround like
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+make MODLIB='$(INSTALL_MOD_PATH)/usr/lib/modules/$(KERNELRELEASE)'
 
--- Steve
+is suggested.
+
+Can you consider inluding the kmod changes?
+
+Thanks
+
+Michal
+
+> 
+> Thanks
+> 
+> Michal
+> 
+> Link: https://lore.kernel.org/linux-modules/20210112160211.5614-1-msuchanek@suse.de/
+> 
+> v4: set whole path to module directory instead of adding prefix
+> v5: use pkg-config instead of jq, fix build on openssl without sm3 support
+> 
+> 
+> Michal Suchanek (5):
+>   configure: Detect openssl sm3 support
+>   man/depmod.d: Fix incorrect /usr/lib search path
+>   libkmod, depmod: Load modprobe.d, depmod.d from ${prefix}/lib.
+>   kmod: Add pkgconfig file with kmod compile time configuration
+>   libkmod, depmod, modprobe: Make directory for kernel modules
+>     configurable
+> 
+>  Makefile.am                          |   6 +-
+>  configure.ac                         |  30 ++++++++
+>  libkmod/libkmod.c                    |  11 +--
+>  man/Makefile.am                      |  10 ++-
+>  man/depmod.d.xml                     |   9 ++-
+>  man/depmod.xml                       |   4 +-
+>  man/modinfo.xml                      |   2 +-
+>  man/modprobe.d.xml                   |   1 +
+>  man/modprobe.xml                     |   2 +-
+>  man/modules.dep.xml                  |   6 +-
+>  testsuite/module-playground/Makefile |   2 +-
+>  testsuite/setup-rootfs.sh            | 109 +++++++++++++++------------
+>  testsuite/test-depmod.c              |  16 ++--
+>  testsuite/test-testsuite.c           |   8 +-
+>  tools/depmod.c                       |   7 +-
+>  tools/kmod.pc.in                     |  10 +++
+>  tools/modinfo.c                      |   4 +-
+>  tools/modprobe.c                     |   4 +-
+>  tools/static-nodes.c                 |   6 +-
+>  19 files changed, 156 insertions(+), 91 deletions(-)
+>  create mode 100644 tools/kmod.pc.in
+> 
+> -- 
+> 2.41.0
+> 
