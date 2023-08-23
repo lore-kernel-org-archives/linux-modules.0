@@ -2,156 +2,126 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD807EE49A0
-	for <linux-modules@archiver.kernel.org>; Mon, 21 Aug 2023 06:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E119C3DA66
+	for <linux-modules@archiver.kernel.org>; Wed, 23 Aug 2023 17:06:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233440AbjHUGXG (ORCPT
+        id S237618AbjHWRGk (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 21 Aug 2023 02:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
+        Wed, 23 Aug 2023 13:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbjHUGXA (ORCPT
+        with ESMTP id S235478AbjHWRGk (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 21 Aug 2023 02:23:00 -0400
+        Wed, 23 Aug 2023 13:06:40 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2F2D3;
-        Sun, 20 Aug 2023 23:22:56 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1DFD222574;
-        Mon, 21 Aug 2023 06:22:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1692598975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/YrpeDEETVnHXfTqeVfb9lfB9FXNdbEh0fq+0q4dbLg=;
-        b=st6FSY+YuQ+hI2sNx3kAg2syieeUC0UtQnFLXt/TIE8qVfh+q8h9AqExo5OYrwyeLn+F2o
-        YRT+dQWhMvI1t9EQrdgnffJyJ9eVI8BfzCnjyZD/LmycbDh1kMFtqEfrbRYp/MVUdABDjV
-        zb5oNGS+aauCrUBck1YYX3px0eSfvTs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1692598975;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/YrpeDEETVnHXfTqeVfb9lfB9FXNdbEh0fq+0q4dbLg=;
-        b=ye3OaHAF9I6Wl5zZ+8FuQTBwsSvYFJHdG2jgx+6WgNjOv+KJqnNpPIQmToCYC6aFUi2gcZ
-        p2wZKRHyRZtunJAw==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F2BE6D;
+        Wed, 23 Aug 2023 10:06:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2BED02C143;
-        Mon, 21 Aug 2023 06:22:54 +0000 (UTC)
-Date:   Mon, 21 Aug 2023 08:22:52 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH kmod v5 0/5] kmod /usr support
-Message-ID: <20230821062252.GF8826@kitsune.suse.cz>
-References: <cover.1689589902.git.msuchanek@suse.de>
- <cover.1689681454.git.msuchanek@suse.de>
- <20230817163744.GD8826@kitsune.suse.cz>
- <CAK7LNAQy79ZHS0d000XQzC-trRPhOUBFnWsGm03yG0cQAs-rXA@mail.gmail.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 055A0220E8;
+        Wed, 23 Aug 2023 17:06:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1692810395; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=C2bDP+RYe/WMPBfbqXzw2/DSC4K9ktSOPhYda02frvc=;
+        b=Hs21X2I29NMI3Do/56pWK9LOF72bo95cDq8Co47n4wfh9GPtWzrfQ8ZQF1rsl364XyEJZd
+        g/8ulJQBjprOR8g0dFWKg7uGh9ddVCXWsUP0TtbTrQOIpkSZiukhjD+7FGn8oX+MELwD0b
+        +t3GnzuoIA64re5iymUJrCPFUFT3p9A=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DBD821351F;
+        Wed, 23 Aug 2023 17:06:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lkXRNJo85mSUVQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 23 Aug 2023 17:06:34 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        =?UTF-8?q?Michal=20Such=C3=A1nek?= <msuchanek@suse.de>
+Subject: [PATCH] depmod: Remove version parsing hack
+Date:   Wed, 23 Aug 2023 19:06:32 +0200
+Message-ID: <20230823170632.14377-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAQy79ZHS0d000XQzC-trRPhOUBFnWsGm03yG0cQAs-rXA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Sat, Aug 19, 2023 at 08:25:52PM +0900, Masahiro Yamada wrote:
-> On Fri, Aug 18, 2023 at 12:15 PM Michal Suchánek <msuchanek@suse.de> wrote:
-> >
-> > Hello,
-> >
-> > On Tue, Jul 18, 2023 at 02:01:51PM +0200, Michal Suchanek wrote:
-> > > Hello,
-> > >
-> > > with these patches it is possible to install kernel modules in an arbitrary
-> > > directory - eg. moving the /lib/modules to /usr/lib/modules or /opt/linux.
-> > >
-> > > While the modprobe.d and depmod.d search which already includes multiple
-> > > paths is expanded to also include $(prefix) the module directory still
-> > > supports only one location, only a different one under $(module_directory).
-> > >
-> > > Having kmod search multiple module locations while only one is supported now
-> > > might break some assumption about relative module path corresponding to a
-> > > specific file, would require more invasive changes to implement, and is not
-> > > supportive of the goal of moving the modules away from /lib.
-> > >
-> > > Both kmod and the kernel need to be patched to make use of this feature.
-> > > Patched kernel is backwards compatible with older kmod.  Patched kmod
-> > > with $(module_directory) set to /lib/modules is equivalent to unpatched kmod.
-> >
-> > The patch to kernel to support autodetection of module directory is
-> > rejected. However, a workaround like
-> >
-> > make MODLIB='$(INSTALL_MOD_PATH)/usr/lib/modules/$(KERNELRELEASE)'
-> >
-> > is suggested.
-> >
-> > Can you consider inluding the kmod changes?
-> 
-> 
-> Hi.
-> 
-> I have a question about your original patch
-> for the Kbuild change.
-> 
-> In your patch, Kbuild runs 'kmod config' or
-> 'pkg-config --variable=module_directory kmod',
-> then sets the returned string to MODLIB.
-> 
-> 
-> If kmod is configured to use /usr/lib/modules,
-> /opt/modules, or whatever,
-> should we change the installation path of the debug
-> vdso accordingly?
-> 
-> Currently, the debug vdso is always installed
-> to /lib/modules/$(KERNELRELEASE)/vdso/.
-> 
-> However, modules and vdso are unrelated to each other.
-> kmod does not care about vdso.
-> 
-> 
-> The following commits started to install debug vdso.
-> 
-> Commit 8150caad0226 ("[POWERPC] powerpc vDSO: install unstripped
-> copies on disk")
-> Commit f79eb83b3af4 ("x86: Install unstripped copy of 64bit vdso to disk")
-> 
-> 
-> I do not know why they chose $(MODLIB)/vdso as the install destination.
+When kbuild on usr-merged distro like:
 
-It's the only directory that exists per-kernel-release.
+        make INSTALL_MOD_PATH="$BUILD_DIR_C/mods" \
+             MODLIB="$BUILD_DIR_C/mods/usr/lib/modules/$release" \
+             modules_install
 
-While technically vdso has nothing to do with modules there is no other
-place where it can be stored where it would not conflict between kernel
-releases so far.
+(notice the '/usr' insert)
 
-In fact the distro followed the pattern and started dumping other things
-not related to kernel modules into $(MODLIB) for this very reason. Also
-from the distribution point of view $(MODLIB) is listed as owned by the
-kernel package, and additional files that might be there sometimes need
-not be specially handled.
+where
+        release=$(make -s kernelrelease)
 
-Finally any tools that can find vdso today will search for it in
-$(MODLIB), and consequently moving it elsewhere is not practical.
+depmod fails:
 
-If the makefiles grow a VDSOLIB it should default to MODLIB. It may be
-useful for somebody to have this flexibility in the future but I am not
-interested for my use case.
+>   DEPMOD  /var/tmp/build/mods/usr/lib/modules/6.5.0-rc5-default
+> ln: failed to create symbolic link '/var/tmp/build/mods/lib/modules/99.98.6.5.0-rc5-default': No such file or directory
+> depmod: ERROR: could not open directory /var/tmp/build/mods/usr/lib/modules/99.98.6.5.0-rc5-default: No such file or directory
+> depmod: FATAL: could not search modules: No such file or directory
 
-Thanks
+I used kmod-30-8.1.x86_64 (openSUSE Tumbleweed with usr-merge).
 
-Michal
+The explicit MODLIB doesn't cut it because of another path dependency in
+depmod's hack. That provision was added in commit bfe5424a8b31 ("kbuild:
+Hack for depmod not handling X.Y versions") (2011, v3.0).
+It says the hack is needed for module-init-tools < 3.13, 3.13 is from
+2011 too. Actually, it seems to be a cautious action between 2.6.xx
+series and an expected 3.0 but it ended up as 3.0.0 and SUBLEVEL=0
+has been since then (so even the busybox's depmod should work without
+the hack).
+
+Remove the hack to make builds with custom INSTALL_MOD_PATH on
+usr-merged distros possible.
+
+Link: https://lore.kernel.org/r/CAK7LNAT6mQ0EpwmKUCBhv9Acaf_qyGq4hu%3DXvSWRuZ-pNAFWVw@mail.gmail.com/
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+ scripts/depmod.sh | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+diff --git a/scripts/depmod.sh b/scripts/depmod.sh
+index 3643b4f896ed..84311255e4bf 100755
+--- a/scripts/depmod.sh
++++ b/scripts/depmod.sh
+@@ -23,24 +23,6 @@ if [ -z $(command -v $DEPMOD) ]; then
+ 	exit 0
+ fi
+ 
+-# older versions of depmod require the version string to start with three
+-# numbers, so we cheat with a symlink here
+-depmod_hack_needed=true
+-tmp_dir=$(mktemp -d ${TMPDIR:-/tmp}/depmod.XXXXXX)
+-mkdir -p "$tmp_dir/lib/modules/$KERNELRELEASE"
+-if "$DEPMOD" -b "$tmp_dir" $KERNELRELEASE 2>/dev/null; then
+-	if test -e "$tmp_dir/lib/modules/$KERNELRELEASE/modules.dep" -o \
+-		-e "$tmp_dir/lib/modules/$KERNELRELEASE/modules.dep.bin"; then
+-		depmod_hack_needed=false
+-	fi
+-fi
+-rm -rf "$tmp_dir"
+-if $depmod_hack_needed; then
+-	symlink="$INSTALL_MOD_PATH/lib/modules/99.98.$KERNELRELEASE"
+-	ln -s "$KERNELRELEASE" "$symlink"
+-	KERNELRELEASE=99.98.$KERNELRELEASE
+-fi
+-
+ set -- -ae -F System.map
+ if test -n "$INSTALL_MOD_PATH"; then
+ 	set -- "$@" -b "$INSTALL_MOD_PATH"
+-- 
+2.41.0
+
