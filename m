@@ -2,127 +2,142 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA64FC83F17
-	for <linux-modules@archiver.kernel.org>; Mon, 28 Aug 2023 12:19:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7FE8C6FA8F
+	for <linux-modules@archiver.kernel.org>; Tue, 29 Aug 2023 12:05:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbjH1MTE (ORCPT
+        id S233205AbjH2MFR (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Mon, 28 Aug 2023 08:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        Tue, 29 Aug 2023 08:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjH1MSh (ORCPT
+        with ESMTP id S233414AbjH2MFQ (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Mon, 28 Aug 2023 08:18:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434AE123;
-        Mon, 28 Aug 2023 05:18:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Tue, 29 Aug 2023 08:05:16 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EB098
+        for <linux-modules@vger.kernel.org>; Tue, 29 Aug 2023 05:05:13 -0700 (PDT)
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EF24521AD1;
-        Mon, 28 Aug 2023 12:18:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1693225111; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nhHiF9SmtTpwGjjJk9Jp9+qsr93zDTKtaY+5+helRDY=;
-        b=1d0LSyK4vV3rKnQIJfH6T4/q5VTTTaNonU/GwrSKcEDI/1UMTGGi7SUn1kBNtzSVUf+I5i
-        a1KyW9wcYlNCXs3SFqhoRuAgu8jelG++ppMn7CXb2m570T70Bfqb2fvUyzd+f5gevYI8o7
-        vop/KCXCEdyVjkv+jKgbqUfM+dEbo9c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1693225111;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nhHiF9SmtTpwGjjJk9Jp9+qsr93zDTKtaY+5+helRDY=;
-        b=RdnKubZ3yT4OIBS0EaaipJJc1F2ppGCA/edShrjFqRK3bSfvZ7dFN+mmyIzLTYZLSsE1q3
-        ZBc4hdGh/DyCVmCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C711C139CC;
-        Mon, 28 Aug 2023 12:18:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id A3gKL5eQ7GQfEwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 28 Aug 2023 12:18:31 +0000
-Date:   Mon, 28 Aug 2023 14:18:30 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Michal Hocko <mhocko@suse.com>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: print module name on refcount error
-Message-ID: <20230828141830.02de4d90@endymion.delvare>
-In-Reply-To: <ZMGJGlJ7XSG+2vjY@bombadil.infradead.org>
-References: <20230626123252.73dbc139@endymion.delvare>
-        <ZJ9fvQZ4k+zFfXbN@bombadil.infradead.org>
-        <ZKLRaq3pzzE2gfws@dhcp22.suse.cz>
-        <ZKhf8bi/eBDhaihD@bombadil.infradead.org>
-        <ZKuaZepw51Nriqr8@dhcp22.suse.cz>
-        <ZMGJGlJ7XSG+2vjY@bombadil.infradead.org>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0704A3F116
+        for <linux-modules@vger.kernel.org>; Tue, 29 Aug 2023 12:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1693310712;
+        bh=e70L7q75/5WAUdG1jNw50iq9wJAJmZ681cWtE6OE9ms=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=mPxmNXMGjgiZ38M8yhMrUONdA2iH6OEeazZt8LsrESgz2tjCt4kuAJqA6pLXj7CAe
+         YCyqcgarvmwYALpz4owhXU4UnN/KpAdPl7+t6A2c6VxC2sHKp0/oIyraqBH0lu2uYL
+         xdFxVtohYEJ1qfuiMsjjVQKSvhDeDBBq3IHF/yQpL0MpgUUAPqgnolvpjNBRo4Nx+/
+         yUn+oc3mmEzIuiQbOXkZ1eE1fZGz3DCBGq2V9Aj0aM/RLQZAjzEUD5/Zlsv7kRwCFg
+         M6UlZTZFTHwcElZ+m5RrH5eauY4mM96lClOF6+VQimzf7ec8czYIcUXYQmcBG/UNrQ
+         8hRE4Q9VUGr9w==
+Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-5007f3d3293so4754751e87.3
+        for <linux-modules@vger.kernel.org>; Tue, 29 Aug 2023 05:05:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693310711; x=1693915511;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e70L7q75/5WAUdG1jNw50iq9wJAJmZ681cWtE6OE9ms=;
+        b=WjpJhWYrGoI8SdSidSOD0QAuANA5ZydGLH/S8yyjTo/IW0yaThSthpo6v3Ll2aFKA/
+         M4CDhBW1eKzrbsf258vtnULCqbfXkxQ7cIrPflXZ2Pe/vIQYZywZKMz7X92vJjRi6Qcw
+         pn7MMYKcIgvnwUn/G/zw9gFwPk2KoQmlB/oMU04F/dwBWgLWRcpWq29kp2Nid647tHNr
+         3TkU8LlaHBE8JKg1po0s8tOZLgXGuTDMV75X840ioH9Z8RvvlO2rX6RVIZkHPfl832i9
+         gw9JJp/5HSZKlZhhr+uovFWwXyxzDkD5adLqv7F6U0xo9OxSKSwJQ7XLi2RqGg074unS
+         tYTg==
+X-Gm-Message-State: AOJu0YwaO0f3O1nAAPEhiauQUTUMQR8rM9Y3aljXH8kJ+mGnOtEtcn0N
+        HgSuDY2ZQPdDFQZ7TlPV8N0bYhQxTXIgivEOSSTBYLX66RhUzmPFU8wL5gMiEA47fTIFA88FDJy
+        rP2hBGreg+jRBRt9RaUWaJtmQpjXnFL7qelSv2fZX8Lw=
+X-Received: by 2002:a05:6512:759:b0:500:97e4:587e with SMTP id c25-20020a056512075900b0050097e4587emr10936888lfs.44.1693310711399;
+        Tue, 29 Aug 2023 05:05:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEda+04ncnF1Q8MrcWlY/pJUGUXUVbBjQys9oNLFNvCPVL/OooHkzRqK1N6E1fTNQ+Z0Us02w==
+X-Received: by 2002:a05:6512:759:b0:500:97e4:587e with SMTP id c25-20020a056512075900b0050097e4587emr10936869lfs.44.1693310710937;
+        Tue, 29 Aug 2023 05:05:10 -0700 (PDT)
+Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it (host-95-252-65-153.retail.telecomitalia.it. [95.252.65.153])
+        by smtp.gmail.com with ESMTPSA id y16-20020a1709064b1000b009929ab17be0sm5865374eju.162.2023.08.29.05.05.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Aug 2023 05:05:10 -0700 (PDT)
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Nick Terrell <terrelln@fb.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] module/decompress: use vmalloc() for zstd decompression workspace
+Date:   Tue, 29 Aug 2023 14:05:08 +0200
+Message-Id: <20230829120508.317611-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Hi Luis, Michal, 
+Using kmalloc() to allocate the decompression workspace for zstd may
+trigger the following warning when large modules are loaded (i.e., xfs):
 
-On Wed, 26 Jul 2023 13:59:06 -0700, Luis Chamberlain wrote:
-> On Mon, Jul 10, 2023 at 07:43:01AM +0200, Michal Hocko wrote:
-> > On Fri 07-07-23 11:56:49, Luis Chamberlain wrote:  
-> > > On Mon, Jul 03, 2023 at 03:47:22PM +0200, Michal Hocko wrote:  
-> > > > On Fri 30-06-23 16:05:33, Luis Chamberlain wrote:
-> > > > [...]  
-> > > > > What prevents code from racing the free with a random module_put()
-> > > > > called by some other piece of code?  
-> > > > 
-> > > > Wouldn't be ref count a garbage already? How can you race when freeing
-> > > > if module_put fail?  
-> > > 
-> > > It could yes, ie, so this risks at all being junk.  
-> > 
-> > Could you be more specific please? I still do not see a scenario where
-> > module string name would be junk while refcount itself would be a valid
-> > memory.  
-> 
-> That is true, but if refcount is invalid so will the memory for the
-> string.
+[    2.961884] WARNING: CPU: 1 PID: 254 at mm/page_alloc.c:4453 __alloc_pages+0x2c3/0x350
+...
+[    2.989033] Call Trace:
+[    2.989841]  <TASK>
+[    2.990614]  ? show_regs+0x6d/0x80
+[    2.991573]  ? __warn+0x89/0x160
+[    2.992485]  ? __alloc_pages+0x2c3/0x350
+[    2.993520]  ? report_bug+0x17e/0x1b0
+[    2.994506]  ? handle_bug+0x51/0xa0
+[    2.995474]  ? exc_invalid_op+0x18/0x80
+[    2.996469]  ? asm_exc_invalid_op+0x1b/0x20
+[    2.997530]  ? module_zstd_decompress+0xdc/0x2a0
+[    2.998665]  ? __alloc_pages+0x2c3/0x350
+[    2.999695]  ? module_zstd_decompress+0xdc/0x2a0
+[    3.000821]  __kmalloc_large_node+0x7a/0x150
+[    3.001920]  __kmalloc+0xdb/0x170
+[    3.002824]  module_zstd_decompress+0xdc/0x2a0
+[    3.003857]  module_decompress+0x37/0xc0
+[    3.004688]  init_module_from_file+0xd0/0x100
+[    3.005668]  idempotent_init_module+0x11c/0x2b0
+[    3.006632]  __x64_sys_finit_module+0x64/0xd0
+[    3.007568]  do_syscall_64+0x59/0x90
+[    3.008373]  ? ksys_read+0x73/0x100
+[    3.009395]  ? exit_to_user_mode_prepare+0x30/0xb0
+[    3.010531]  ? syscall_exit_to_user_mode+0x37/0x60
+[    3.011662]  ? do_syscall_64+0x68/0x90
+[    3.012511]  ? do_syscall_64+0x68/0x90
+[    3.013364]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
 
-This isn't how I read the code, and this is exactly the reason why I
-submitted this patch in the first place.
+However, continuous physical memory does not seem to be required in
+module_zstd_decompress(), so use vmalloc() instead, to prevent the
+warning and avoid potential failures at loading compressed modules.
 
-As far as I can see, there are 3 possibilities:
+Fixes: 169a58ad824d ("module/decompress: Support zstd in-kernel decompression")
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ kernel/module/decompress.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-1* The refcount is correct, everything is fine.
-2* The refcount is wrong (we are trying to put a ref which was never
-   taken), however the module wasn't unloaded yet, so the module name is
-   still readable.
-3* The refcount is wrong and the module has already been unloaded. The
-   memory may have been reused already, so the module name can't be read.
-
-My patch is only useful in case 2. Although it doesn't cover all cases,
-I think it is relevant because unloading modules is something you
-rarely do in production, so if the refcount goes wrong, we will almost
-always be in case 2.
-
-That being said, if you don't like my proposal for whatever reason, or
-prefer addressing the issue in a different way, no problem at all.
-
-> > It would likely be better to use refcount_t instead of atomic_t.  
-> 
-> Patches welcomed.
-
-Michal, do I understand correctly that this would prevent the case our
-customer had (too many gets), but won't make a difference for actual
-too-many-puts situations?
-
+diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+index 8a5d6d63b06c..87440f714c0c 100644
+--- a/kernel/module/decompress.c
++++ b/kernel/module/decompress.c
+@@ -241,7 +241,7 @@ static ssize_t module_zstd_decompress(struct load_info *info,
+ 	}
+ 
+ 	wksp_size = zstd_dstream_workspace_bound(header.windowSize);
+-	wksp = kmalloc(wksp_size, GFP_KERNEL);
++	wksp = vmalloc(wksp_size);
+ 	if (!wksp) {
+ 		retval = -ENOMEM;
+ 		goto out;
+@@ -284,7 +284,7 @@ static ssize_t module_zstd_decompress(struct load_info *info,
+ 	retval = new_size;
+ 
+  out:
+-	kfree(wksp);
++	vfree(wksp);
+ 	return retval;
+ }
+ #else
 -- 
-Jean Delvare
-SUSE L3 Support
+2.40.1
+
