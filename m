@@ -2,77 +2,127 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75BBDC83F16
-	for <linux-modules@archiver.kernel.org>; Wed, 30 Aug 2023 03:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EFCFC83F15
+	for <linux-modules@archiver.kernel.org>; Wed, 30 Aug 2023 18:57:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241935AbjH3D62 (ORCPT
+        id S245633AbjH3S47 (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Tue, 29 Aug 2023 23:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        Wed, 30 Aug 2023 14:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241856AbjH3D6R (ORCPT
+        with ESMTP id S245716AbjH3P6j (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Tue, 29 Aug 2023 23:58:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B427ECC;
-        Tue, 29 Aug 2023 20:58:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 30 Aug 2023 11:58:39 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28027193
+        for <linux-modules@vger.kernel.org>; Wed, 30 Aug 2023 08:58:35 -0700 (PDT)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5209761849;
-        Wed, 30 Aug 2023 03:58:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ACE4FC433C7;
-        Wed, 30 Aug 2023 03:58:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693367894;
-        bh=8eJm2umkBvn6T+8obX8Fe/8clowchwHQAEIUxR9hPf4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Nh9j1H/EsI0xm+ObwygKrU9tQD9abAxLFn14aY+qFi6QVoQmZS063Mln7i43vE56g
-         dBS8Y+Vi9ceCQIfP1rnyl8GwCDKDBeSEMtDgjunoxUnaUJdOzE/8V75NApSpQ/Cjv5
-         /s6WaJHf1OXY6lcmsMWZZ39uOu9z56VTCOUQWjbwlUOEYKqwvzZw2rp0ek7lEt1Q9P
-         AAvE8NHwMknt22+Y/J+oa0MGYqqSEbVLVHm42VrvunadFlyCcVwLwQNU0j/4cm6bc/
-         wpetxY5B0f1dAoW/pI1N77W8AiViKJTWSbVc+K5LGwfIzS4m5TWjc6NoZiBvQ0iM53
-         blagCdrmNw/NA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9ADD5E29F34;
-        Wed, 30 Aug 2023 03:58:14 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules changes for v6.6-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZO5M45JsJYzNF59H@bombadil.infradead.org>
-References: <ZO5M45JsJYzNF59H@bombadil.infradead.org>
-X-PR-Tracked-List-Id: <linux-modules.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZO5M45JsJYzNF59H@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.6-rc1
-X-PR-Tracked-Commit-Id: a419beac4a070aff63c520f36ebf7cb8a76a8ae5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: daa22f5a78c27412e88d31780c4a6262cda559cd
-Message-Id: <169336789462.6268.1786295356990012160.pr-tracker-bot@kernel.org>
-Date:   Wed, 30 Aug 2023 03:58:14 +0000
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CBCA53F660
+        for <linux-modules@vger.kernel.org>; Wed, 30 Aug 2023 15:58:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1693411113;
+        bh=kNl44J2ZpGtCg94K9UACjS58K5Vqnr8rgjyDZbU7cks=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=AdC/2E0roNN+6OR32B4t1a77YI+T7dEdLwaY/YtJjHsNbRCbwutgfydNyWwx9cMw7
+         C3cgn9uh/JWB4VV13s9VPu7lRgviWTAWjQO0KA/9J8XajPZThsun28T0UJ3QhSBAoI
+         LYr1M4tau/mqI6EEvnBdHqhwKfHujnW8H+T7Sa93AKfBQdvKdiwo1sc/+Z9niINfVQ
+         SA5d7WIaruF3U87h86NM9NsJ8O9fSnkbbA75BhguS6EluLju72GdT4AZiy5FV3KBDz
+         +fCTPjjT1/jQtvS1umb9+ClJGuQ5upKH7LWuOVvJK85uhim6VF4HnJjlfgBJkILCKU
+         qZ93ba0tMWtuw==
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-51bee352ffcso4552648a12.1
+        for <linux-modules@vger.kernel.org>; Wed, 30 Aug 2023 08:58:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693411113; x=1694015913;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kNl44J2ZpGtCg94K9UACjS58K5Vqnr8rgjyDZbU7cks=;
+        b=WEZG73b5Rk3tlEe6gK6gTQNlLzjX7ZIodmWCmiTmk0QGAgEhT7TOnjyHhc+kVV7D79
+         ohUQezhW6h2Gaswyyc99EuyinibR+zLgYMLW0vI9rz3P8T5rsWug6uK/13X+PU9BqVHS
+         cJjg5jsgbeOVHz9F4gT9L3VmnB2tQnEHm71j2bKHVkT2wey98sOK+e15V4sni2LxRxJn
+         p3CxbNpv8/2NIO2OlJGywQxg6DGKyR2vIoVbADWzRHX4cM2cLkBnZWGd/RXua4In4963
+         qtouV2ItD90SqwePWJdW1e1Zynh+5yTQxVwDCKUcnVuhdsmdd9Y0EMTEl+vtt0OKgrav
+         XiGw==
+X-Gm-Message-State: AOJu0YxwP2JtumrFjqNfW8ghk7BpE6ONvQKQNCHHXMZd/osLlxLOcXtq
+        IGj/0eKmWrD/ycvrczYG2sLeENfGIRivpHAfEQ8jbnzFvQHsROgH4TmrrXv2utxQDajOzRGPj0r
+        ECpTrY/3N01sw4rXAWgkOI8Hah+Fr/Qc61tjyemc+nkc=
+X-Received: by 2002:aa7:db54:0:b0:523:b225:701a with SMTP id n20-20020aa7db54000000b00523b225701amr2358939edt.11.1693411113072;
+        Wed, 30 Aug 2023 08:58:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEsdD7OzcrsdeyrB/2Brhvlhgug8gC90+0ErPZscEzGSa0PRuYEokx7nmqzcPnfwSlgGRmjuA==
+X-Received: by 2002:aa7:db54:0:b0:523:b225:701a with SMTP id n20-20020aa7db54000000b00523b225701amr2358915edt.11.1693411112729;
+        Wed, 30 Aug 2023 08:58:32 -0700 (PDT)
+Received: from localhost.localdomain (host-95-252-65-153.retail.telecomitalia.it. [95.252.65.153])
+        by smtp.gmail.com with ESMTPSA id c21-20020aa7d615000000b005256aaa6e7asm6906970edr.78.2023.08.30.08.58.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 08:58:32 -0700 (PDT)
+From:   Andrea Righi <andrea.righi@canonical.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-modules@vger.kernel.org, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hch@lst.de, gregkh@linuxfoundation.org, manuel.lauss@gmail.com,
-        kuba@kernel.org, kumba@gentoo.org, palmer@rivosinc.com,
-        masahiroy@kernel.org, rdunlap@infradead.org, zeming@nfschina.com,
-        rongtao@cestc.cn, arnd@arndb.de, pmladek@suse.com,
-        chenjiahao16@huawei.com, christian@bricart.de,
-        peterz@infradead.org, song@kernel.org, keescook@chromium.org,
-        thunder.leizhen@huawei.com, mcgrof@kernel.org
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] module/decompress: use vmalloc() for gzip decompression workspace
+Date:   Wed, 30 Aug 2023 17:58:20 +0200
+Message-Id: <20230830155820.138178-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-The pull request you sent on Tue, 29 Aug 2023 12:54:11 -0700:
+Use a similar approach as commit a419beac4a07 ("module/decompress: use
+vmalloc() for zstd decompression workspace") and replace kmalloc() with
+vmalloc() also for the gzip module decompression workspace.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.6-rc1
+In this case the workspace is represented by struct inflate_workspace
+that can be fairly large for kmalloc() and it can potentially lead to
+allocation errors on certain systems:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/daa22f5a78c27412e88d31780c4a6262cda559cd
+$ pahole inflate_workspace
+struct inflate_workspace {
+	struct inflate_state       inflate_state;        /*     0  9544 */
+	/* --- cacheline 149 boundary (9536 bytes) was 8 bytes ago --- */
+	unsigned char              working_window[32768]; /*  9544 32768 */
 
-Thank you!
+	/* size: 42312, cachelines: 662, members: 2 */
+	/* last cacheline: 8 bytes */
+};
 
+Considering that there is no need to use continuous physical memory,
+simply switch to vmalloc() to provide a more reliable in-kernel module
+decompression.
+
+Fixes: b1ae6dc41eaa ("module: add in-kernel support for decompressing")
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ kernel/module/decompress.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+index 87440f714c0c..4156d59be440 100644
+--- a/kernel/module/decompress.c
++++ b/kernel/module/decompress.c
+@@ -100,7 +100,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
+ 	s.next_in = buf + gzip_hdr_len;
+ 	s.avail_in = size - gzip_hdr_len;
+ 
+-	s.workspace = kmalloc(zlib_inflate_workspacesize(), GFP_KERNEL);
++	s.workspace = vmalloc(zlib_inflate_workspacesize());
+ 	if (!s.workspace)
+ 		return -ENOMEM;
+ 
+@@ -138,7 +138,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
+ out_inflate_end:
+ 	zlib_inflateEnd(&s);
+ out:
+-	kfree(s.workspace);
++	vfree(s.workspace);
+ 	return retval;
+ }
+ #elif defined(CONFIG_MODULE_COMPRESS_XZ)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.40.1
+
