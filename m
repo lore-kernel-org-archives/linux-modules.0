@@ -2,127 +2,139 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EFCFC83F15
-	for <linux-modules@archiver.kernel.org>; Wed, 30 Aug 2023 18:57:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFFA2CA0FFF
+	for <linux-modules@archiver.kernel.org>; Tue,  5 Sep 2023 19:15:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245633AbjH3S47 (ORCPT
+        id S242068AbjIETPN (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        Tue, 5 Sep 2023 15:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245716AbjH3P6j (ORCPT
+        with ESMTP id S238632AbjIETPM (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:58:39 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28027193
-        for <linux-modules@vger.kernel.org>; Wed, 30 Aug 2023 08:58:35 -0700 (PDT)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CBCA53F660
-        for <linux-modules@vger.kernel.org>; Wed, 30 Aug 2023 15:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1693411113;
-        bh=kNl44J2ZpGtCg94K9UACjS58K5Vqnr8rgjyDZbU7cks=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=AdC/2E0roNN+6OR32B4t1a77YI+T7dEdLwaY/YtJjHsNbRCbwutgfydNyWwx9cMw7
-         C3cgn9uh/JWB4VV13s9VPu7lRgviWTAWjQO0KA/9J8XajPZThsun28T0UJ3QhSBAoI
-         LYr1M4tau/mqI6EEvnBdHqhwKfHujnW8H+T7Sa93AKfBQdvKdiwo1sc/+Z9niINfVQ
-         SA5d7WIaruF3U87h86NM9NsJ8O9fSnkbbA75BhguS6EluLju72GdT4AZiy5FV3KBDz
-         +fCTPjjT1/jQtvS1umb9+ClJGuQ5upKH7LWuOVvJK85uhim6VF4HnJjlfgBJkILCKU
-         qZ93ba0tMWtuw==
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-51bee352ffcso4552648a12.1
-        for <linux-modules@vger.kernel.org>; Wed, 30 Aug 2023 08:58:33 -0700 (PDT)
+        Tue, 5 Sep 2023 15:15:12 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01401A2
+        for <linux-modules@vger.kernel.org>; Tue,  5 Sep 2023 12:14:43 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-573e67cc6eeso535376a12.2
+        for <linux-modules@vger.kernel.org>; Tue, 05 Sep 2023 12:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1693941221; x=1694546021; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4TXgvmJLu+K+I9kZcFR3KfNae3WSDNL4+bYanlcn9kg=;
+        b=EHnvBvBc+85KhToee5+QdAwZlObPsALVVB1emcmJfw6BLjwKbxMGDupm5kWtR48XHc
+         4m50b0JYmtEMqAk1Pe90ppixnQjGn0LEoMPICt0QagNsLA8mr3aNRYC5Yit/Q6Mt3nnN
+         PYQO55kIR5bsfJCCkMm7QXu1CNyzzTQlqi6TU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693411113; x=1694015913;
+        d=1e100.net; s=20221208; t=1693941221; x=1694546021;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kNl44J2ZpGtCg94K9UACjS58K5Vqnr8rgjyDZbU7cks=;
-        b=WEZG73b5Rk3tlEe6gK6gTQNlLzjX7ZIodmWCmiTmk0QGAgEhT7TOnjyHhc+kVV7D79
-         ohUQezhW6h2Gaswyyc99EuyinibR+zLgYMLW0vI9rz3P8T5rsWug6uK/13X+PU9BqVHS
-         cJjg5jsgbeOVHz9F4gT9L3VmnB2tQnEHm71j2bKHVkT2wey98sOK+e15V4sni2LxRxJn
-         p3CxbNpv8/2NIO2OlJGywQxg6DGKyR2vIoVbADWzRHX4cM2cLkBnZWGd/RXua4In4963
-         qtouV2ItD90SqwePWJdW1e1Zynh+5yTQxVwDCKUcnVuhdsmdd9Y0EMTEl+vtt0OKgrav
-         XiGw==
-X-Gm-Message-State: AOJu0YxwP2JtumrFjqNfW8ghk7BpE6ONvQKQNCHHXMZd/osLlxLOcXtq
-        IGj/0eKmWrD/ycvrczYG2sLeENfGIRivpHAfEQ8jbnzFvQHsROgH4TmrrXv2utxQDajOzRGPj0r
-        ECpTrY/3N01sw4rXAWgkOI8Hah+Fr/Qc61tjyemc+nkc=
-X-Received: by 2002:aa7:db54:0:b0:523:b225:701a with SMTP id n20-20020aa7db54000000b00523b225701amr2358939edt.11.1693411113072;
-        Wed, 30 Aug 2023 08:58:33 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEsdD7OzcrsdeyrB/2Brhvlhgug8gC90+0ErPZscEzGSa0PRuYEokx7nmqzcPnfwSlgGRmjuA==
-X-Received: by 2002:aa7:db54:0:b0:523:b225:701a with SMTP id n20-20020aa7db54000000b00523b225701amr2358915edt.11.1693411112729;
-        Wed, 30 Aug 2023 08:58:32 -0700 (PDT)
-Received: from localhost.localdomain (host-95-252-65-153.retail.telecomitalia.it. [95.252.65.153])
-        by smtp.gmail.com with ESMTPSA id c21-20020aa7d615000000b005256aaa6e7asm6906970edr.78.2023.08.30.08.58.31
+        bh=4TXgvmJLu+K+I9kZcFR3KfNae3WSDNL4+bYanlcn9kg=;
+        b=R1rCP5Le7ztY/27bH+XpY/EIkI2UsPNz0Em7s4HdJC0pfhrtrGJ50RJjyZnIuiwKOU
+         qZesqQeze3pRSiPQWzpCsuK4Scb0/exYcADctin1/iInDFU+x3XDsKYWrFFRdPZNH1WT
+         yPdBgcbZbS4GO6xdHn7UmpkZ9Qe5JzLvuQjQchSQR1+Rye7i0fDQot5YFJ1cJBLOzlxS
+         e2RIU7AOLIpF1vs4bUToM9fva7iMJSWqJBmgazAIzyMP3rKi6k+JFQCYdyjuYDDNEMji
+         oQ9gXkSHJtpHiQwJdTEXSqNRF2amEUhFSNWim4DgJqo4IDNq0A3a5dnSUO1xx/uBFOE2
+         YZww==
+X-Gm-Message-State: AOJu0YwnYRk5gMu25psWN0MnWAhZRT6MukXHt1z3mtIl5OCkyUU6aSK0
+        1YF9ZI4zsYwovAeJMjxkt//ZNQ==
+X-Google-Smtp-Source: AGHT+IEUIHzj4gKawoDNkJH8MjO1eQQeCwXX59tDRQILYoHaf4f+zWYoobJ4Rh/dDipZrN1hXry2fQ==
+X-Received: by 2002:a05:6a21:3b46:b0:140:4563:2243 with SMTP id zy6-20020a056a213b4600b0014045632243mr11481977pzb.50.1693941220744;
+        Tue, 05 Sep 2023 12:13:40 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id v23-20020aa78097000000b0063f0068cf6csm9385016pff.198.2023.09.05.12.13.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 08:58:32 -0700 (PDT)
-From:   Andrea Righi <andrea.righi@canonical.com>
+        Tue, 05 Sep 2023 12:13:39 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
 To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] module/decompress: use vmalloc() for gzip decompression workspace
-Date:   Wed, 30 Aug 2023 17:58:20 +0200
-Message-Id: <20230830155820.138178-1-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.40.1
+Cc:     Kees Cook <keescook@chromium.org>, Johan Hovold <johan@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>, Sagi Grimberg <sagi@grimberg.me>,
+        Nick Desaulniers <ndesaulniers@gooogle.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] module: Clarify documentation of module_param_call()
+Date:   Tue,  5 Sep 2023 12:13:37 -0700
+Message-Id: <20230905191333.never.707-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2525; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=2gl+o4SRoHaQVcttgjZhYq0Is37kI1hlnwzbQN5zDGg=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk933hZ3IhiyCBUuiGWz5YX9hla+CnKgiWgcUhX
+ QCafDdP062JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZPd94QAKCRCJcvTf3G3A
+ JoQpEACXWjlYTg6OiUiUpym5wEwvwnUewYnpahiHOhonlgfgSaPT8XpFDWuExVJs40vbV7V5R7Q
+ RcXJBxgn/8VTQXvwk02VLL/RYODT0LWwCxJMlQGCmtoQIHzFoedX748TciV2ThFfW4+nSfg26HL
+ 1vCjvpHtVYotnDFevFoC3H4WUa7BSVI7TPobreLBJ+Lx6CdNqUvjDmKf9fQlaA1TEI6oHYNEojj
+ BCjhzwceuYX67/ulaePn7AaH11onT1C/B5exrHK+RaK21uYxQrf4lvadp+l7rOzfryGGSiZQJ/d
+ NhafNovhIRVs3zfKSW3KJH9cKHg2qH5atIzIcnL1L2BwTcleupVO2kIFqO8Tu3xbDrXFPLc02dp
+ kxUaNSajibzTD5jhRgoicMsUOnfJWgYG/EsHyAP0XtEpCkYa7gizT3WAgryhp/vio6S4u0FD0wg
+ 7e8A0IRcsHUdyjawKOG0lgDZk6Mx0G7zCjYlfsr0NAhbMGL6PvA+/WXdwQhHN020W2SCpbYSqud
+ uPt+95gGr7kgNAB4Xsxbw17ZWrcoplrhc/Eh5TqMNAFrox0zrGzwZgatT+nEyo8jQoFfahC7uiL
+ 6q3XJQuPPl8qLfwo4ediBtsk6aloab94SotaUkjmvsb0tBgWrMQmGZd/ivfkYIxO2zDUtxOr6F3
+ rVzJura wS6eE5Eg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Use a similar approach as commit a419beac4a07 ("module/decompress: use
-vmalloc() for zstd decompression workspace") and replace kmalloc() with
-vmalloc() also for the gzip module decompression workspace.
+Commit 9bbb9e5a3310 ("param: use ops in struct kernel_param, rather than
+get and set fns directly") added the comment that module_param_call()
+was deprecated, during a large scale refactoring to bring sanity to type
+casting back then. In 2017 following more cleanups, it became useful
+against as it wraps a common pattern of creating an ops struct for a
+given get/set pair:
 
-In this case the workspace is represented by struct inflate_workspace
-that can be fairly large for kmalloc() and it can potentially lead to
-allocation errors on certain systems:
+  b2f270e87473 ("module: Prepare to convert all module_param_call() prototypes")
+  ece1996a21ee ("module: Do not paper over type mismatches in module_param_call()")
 
-$ pahole inflate_workspace
-struct inflate_workspace {
-	struct inflate_state       inflate_state;        /*     0  9544 */
-	/* --- cacheline 149 boundary (9536 bytes) was 8 bytes ago --- */
-	unsigned char              working_window[32768]; /*  9544 32768 */
+        static const struct kernel_param_ops __param_ops_##name = \
+                { .flags = 0, .set = _set, .get = _get }; \
+        __module_param_call(MODULE_PARAM_PREFIX, \
+                            name, &__param_ops_##name, arg, perm, -1, 0)
 
-	/* size: 42312, cachelines: 662, members: 2 */
-	/* last cacheline: 8 bytes */
-};
+        __module_param_call(MODULE_PARAM_PREFIX, name, ops, arg, perm, -1, 0)
 
-Considering that there is no need to use continuous physical memory,
-simply switch to vmalloc() to provide a more reliable in-kernel module
-decompression.
+Many users of module_param_cb() appear to be almost universally
+open-coding the same thing that module_param_call() does now. Don't
+discourage[1] people from using module_param_call() but clarifying the
+comment: module_param_cb() is useful if you repeatedly use the same pair
+of get/set functions.
 
-Fixes: b1ae6dc41eaa ("module: add in-kernel support for decompressing")
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+[1] https://lore.kernel.org/lkml/202308301546.5C789E5EC@keescook/
+
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Johan Hovold <johan@kernel.org>
+Cc: Jessica Yu <jeyu@kernel.org>
+Cc: Sagi Grimberg <sagi@grimberg.me>
+Cc: Nick Desaulniers <ndesaulniers@gooogle.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Joe Perches <joe@perches.com>
+Cc: Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc: linux-modules@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- kernel/module/decompress.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Luis, I note that include/linux/moduleparam.h isn't in the MAINTAINERS
+file pattern. Perhaps you want to use include/linux/module*.h?
+---
+ include/linux/moduleparam.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-index 87440f714c0c..4156d59be440 100644
---- a/kernel/module/decompress.c
-+++ b/kernel/module/decompress.c
-@@ -100,7 +100,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
- 	s.next_in = buf + gzip_hdr_len;
- 	s.avail_in = size - gzip_hdr_len;
+diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
+index 962cd41a2cb5..d32450583182 100644
+--- a/include/linux/moduleparam.h
++++ b/include/linux/moduleparam.h
+@@ -293,7 +293,7 @@ struct kparam_array
+ 	= { __param_str_##name, THIS_MODULE, ops,			\
+ 	    VERIFY_OCTAL_PERMISSIONS(perm), level, flags, { arg } }
  
--	s.workspace = kmalloc(zlib_inflate_workspacesize(), GFP_KERNEL);
-+	s.workspace = vmalloc(zlib_inflate_workspacesize());
- 	if (!s.workspace)
- 		return -ENOMEM;
- 
-@@ -138,7 +138,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
- out_inflate_end:
- 	zlib_inflateEnd(&s);
- out:
--	kfree(s.workspace);
-+	vfree(s.workspace);
- 	return retval;
- }
- #elif defined(CONFIG_MODULE_COMPRESS_XZ)
+-/* Obsolete - use module_param_cb() */
++/* For repeated _set & _get usage use module_param_cb() */
+ #define module_param_call(name, _set, _get, arg, perm)			\
+ 	static const struct kernel_param_ops __param_ops_##name =	\
+ 		{ .flags = 0, .set = _set, .get = _get };		\
 -- 
-2.40.1
+2.34.1
 
