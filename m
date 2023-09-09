@@ -2,57 +2,58 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F3E1EEB56E
-	for <linux-modules@archiver.kernel.org>; Fri,  8 Sep 2023 23:09:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AEE5EEB57C
+	for <linux-modules@archiver.kernel.org>; Sat,  9 Sep 2023 10:19:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239530AbjIHXJv (ORCPT
+        id S244529AbjIIKTx (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Fri, 8 Sep 2023 19:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
+        Sat, 9 Sep 2023 06:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbjIHXJv (ORCPT
+        with ESMTP id S236012AbjIIKTw (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Fri, 8 Sep 2023 19:09:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA5B1FE5;
-        Fri,  8 Sep 2023 16:09:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=r7DXMMG8lphyN1UYT/bdqivjwbJYfjhTJFNgrVjQWJQ=; b=MIVUvcTZhlZQmiAIATHfNHIKVO
-        CJhnk788m6vic6dye+YMPr2UEzzGxKosZEX2+BqKuM1BdlPQHPzRQGrzmxqKTMBxHDr+ZJXS97qeQ
-        xHOnlbO/94akhRCatQ2Zc4pKvw0UH3SbzYruUX/iHZ7JvTS3CIk6ibVxkAuEIAR6rNwgGBBkFnaTp
-        l0l/Zx28gD/dgjZ3owAYXUGk99MlNFCC8/XAV4IhQ1vo9bIAiyU33YEAtMy+Y/zEMzzRoqQa5SRuW
-        zI5XMt1bdzbGutzevigArC3YwxvoAtfLqduxeK7zoWa7mx/vtfv4+scIKgHUDxSEcpP8ujhTnAV+K
-        IMz7pbQw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qekbf-00Efj4-2D;
-        Fri, 08 Sep 2023 23:09:43 +0000
-Date:   Fri, 8 Sep 2023 16:09:43 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
+        Sat, 9 Sep 2023 06:19:52 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A859D;
+        Sat,  9 Sep 2023 03:19:48 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77328C433C8;
+        Sat,  9 Sep 2023 10:19:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694254788;
+        bh=6M1owz/Gj9mAJIsLcRR/m5NWPD/hw6rxxJhrE/TdRZU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WkqUonq1rjkzDIyl8Q006qWDlAYU7gNw6r3Uh9rcIpnIMKQJPgz/6e6qMYrZySiU6
+         0CRfcidlspiCdLh910udacTZO61dNe63yn2OXuWE3r5qdtwTgaU5etPpL+RRbSXNTV
+         NhH93N8hw51FPlcprfuxUadnhl1u1jRBHtvQcSIGCDM211TApJuyif3qfqyv61zrAp
+         NeQvQMj1MIDhFoivreiF3QXCa4GYLvHnXyadEyoOhDEfSai0B2zaf//wOoy7PgI3fK
+         ZaIpRjOTJO/dt7v+TjgtzreLcGI8da5493+HrPaPYMCMJ4lMRYZ6M4V9eruJhCEKug
+         p0jUqyooOVVTg==
+Date:   Sat, 9 Sep 2023 12:19:41 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable <stable@kernel.org>,
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+        stable <stable@kernel.org>,
         Stefan Lippers-Hollmann <s.l-h@gmx.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Christoph Hellwig <hch@lst.de>, linux-media@vger.kernel.org,
         linux-modules@vger.kernel.org
 Subject: Re: [PATCH] media: dvb: symbol fixup for dvb_attach()
-Message-ID: <ZPupt66Ue9PutjTK@bombadil.infradead.org>
-References: <20230908092035.3815268-2-gregkh@linuxfoundation.org>
- <ZPtKCc2PLi0wdR2+@bombadil.infradead.org>
- <2023090852-stoppable-jackpot-549f@gregkh>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <20230909121941.30a1b1f0@sal.lan>
 In-Reply-To: <2023090852-stoppable-jackpot-549f@gregkh>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20230908092035.3815268-2-gregkh@linuxfoundation.org>
+        <ZPtKCc2PLi0wdR2+@bombadil.infradead.org>
+        <2023090852-stoppable-jackpot-549f@gregkh>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Fri, Sep 08, 2023 at 05:35:07PM +0100, Greg Kroah-Hartman wrote:
+Em Fri, 8 Sep 2023 17:35:07 +0100
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> escreveu:
+
 > On Fri, Sep 08, 2023 at 09:21:29AM -0700, Luis Chamberlain wrote:
-> > On Fri, Sep 08, 2023 at 10:20:36AM +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Sep 08, 2023 at 10:20:36AM +0100, Greg Kroah-Hartman wrote:  
 > > > In commit 9011e49d54dc ("modules: only allow symbol_get of
 > > > EXPORT_SYMBOL_GPL modules") the use of symbol_get is properly restricted
 > > > to GPL-only marked symbols.  This interacts oddly with the DVB logic
@@ -74,16 +75,19 @@ On Fri, Sep 08, 2023 at 05:35:07PM +0100, Greg Kroah-Hartman wrote:
 > > > ---
 > > > Luis, do you want to take this through your tree?  Or Mauro's?  Or I can
 > > > take it through mine, it should get to Linus soon as this is causing
-> > > regressions in his tree.
+> > > regressions in his tree.  
 > > 
 > > You've done the work so it is up to you, whatever helps you expedite it
-> > as it already hit stable. Feel free to take it through your tree.
+> > as it already hit stable. Feel free to take it through your tree.  
 > 
 > If you ack it, I can take it now through my tree and send it to Linus
 > tomorrow.
 
-Sorry for the delay:
+You can send it via your trees. So:
 
-Acked-by Luis Chamberlain <mcgrof@kernel.org>
+Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-  Luis
+> 
+> thanks,
+> 
+> greg k-h
