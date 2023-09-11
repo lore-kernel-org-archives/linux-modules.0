@@ -2,92 +2,139 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AEE5EEB57C
-	for <linux-modules@archiver.kernel.org>; Sat,  9 Sep 2023 10:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BCF0CA0EC7
+	for <linux-modules@archiver.kernel.org>; Mon, 11 Sep 2023 22:43:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244529AbjIIKTx (ORCPT
+        id S235939AbjIKWdw (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sat, 9 Sep 2023 06:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
+        Mon, 11 Sep 2023 18:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236012AbjIIKTw (ORCPT
+        with ESMTP id S244293AbjIKT4p (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sat, 9 Sep 2023 06:19:52 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A859D;
-        Sat,  9 Sep 2023 03:19:48 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77328C433C8;
-        Sat,  9 Sep 2023 10:19:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694254788;
-        bh=6M1owz/Gj9mAJIsLcRR/m5NWPD/hw6rxxJhrE/TdRZU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WkqUonq1rjkzDIyl8Q006qWDlAYU7gNw6r3Uh9rcIpnIMKQJPgz/6e6qMYrZySiU6
-         0CRfcidlspiCdLh910udacTZO61dNe63yn2OXuWE3r5qdtwTgaU5etPpL+RRbSXNTV
-         NhH93N8hw51FPlcprfuxUadnhl1u1jRBHtvQcSIGCDM211TApJuyif3qfqyv61zrAp
-         NeQvQMj1MIDhFoivreiF3QXCa4GYLvHnXyadEyoOhDEfSai0B2zaf//wOoy7PgI3fK
-         ZaIpRjOTJO/dt7v+TjgtzreLcGI8da5493+HrPaPYMCMJ4lMRYZ6M4V9eruJhCEKug
-         p0jUqyooOVVTg==
-Date:   Sat, 9 Sep 2023 12:19:41 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
-        stable <stable@kernel.org>,
-        Stefan Lippers-Hollmann <s.l-h@gmx.de>,
-        Christoph Hellwig <hch@lst.de>, linux-media@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH] media: dvb: symbol fixup for dvb_attach()
-Message-ID: <20230909121941.30a1b1f0@sal.lan>
-In-Reply-To: <2023090852-stoppable-jackpot-549f@gregkh>
-References: <20230908092035.3815268-2-gregkh@linuxfoundation.org>
-        <ZPtKCc2PLi0wdR2+@bombadil.infradead.org>
-        <2023090852-stoppable-jackpot-549f@gregkh>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Mon, 11 Sep 2023 15:56:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9D41A7;
+        Mon, 11 Sep 2023 12:56:40 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 693161F88C;
+        Mon, 11 Sep 2023 19:56:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1694462199; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f/nZkdclC8N0AmmXEFCRJO8MtC0Z8ZAPugiL8rL00Ks=;
+        b=mvHWRKfFiFdjA+RAqKXUbxbczOMFEUGNmKIv4pgCPbjU+NQjcayZrqHnwQ24ez9LMAkZ5n
+        60VC/RsscTdhpHKoAJIEiGU0Yij2Slr0UbNidGNubILeJYqrxhEczPdptLSPVgDmOgczZ2
+        FrOHhRFt2ooaYPq/ydzs0UGcEY4Iij0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1694462199;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f/nZkdclC8N0AmmXEFCRJO8MtC0Z8ZAPugiL8rL00Ks=;
+        b=jlb2xG4flSJUd9PhiC8ngVWDKpjClKpX+MUcZZ+sInXANl2y52lciL898ZK0jKOBXOcSNw
+        GdL0P8f7cirE6NDQ==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 0F1872C143;
+        Mon, 11 Sep 2023 19:56:39 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Michal Suchanek <msuchanek@suse.de>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH] kbuild: rpm-pkg: Fix build with non-default MODLIB
+Date:   Mon, 11 Sep 2023 21:56:18 +0200
+Message-ID: <20230911195621.15198-1-msuchanek@suse.de>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <CAK7LNAT6mQ0EpwmKUCBhv9Acaf_qyGq4hu=XvSWRuZ-pNAFWVw@mail.gmail.com>
+References: <CAK7LNAT6mQ0EpwmKUCBhv9Acaf_qyGq4hu=XvSWRuZ-pNAFWVw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-Em Fri, 8 Sep 2023 17:35:07 +0100
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> escreveu:
+The default MODLIB value is composed of two variables and the hardcoded
+string '/lib/modules/'.
 
-> On Fri, Sep 08, 2023 at 09:21:29AM -0700, Luis Chamberlain wrote:
-> > On Fri, Sep 08, 2023 at 10:20:36AM +0100, Greg Kroah-Hartman wrote:  
-> > > In commit 9011e49d54dc ("modules: only allow symbol_get of
-> > > EXPORT_SYMBOL_GPL modules") the use of symbol_get is properly restricted
-> > > to GPL-only marked symbols.  This interacts oddly with the DVB logic
-> > > which only uses dvb_attach() to load the dvb driver which then uses
-> > > symbol_get().
-> > > 
-> > > Fix this up by properly marking all of the dvb_attach attach symbols as
-> > > EXPORT_SYMBOL_GPL().
-> > > 
-> > > Fixes: 9011e49d54dc ("modules: only allow symbol_get of EXPORT_SYMBOL_GPL modules")
-> > > Cc: stable <stable@kernel.org>
-> > > Reported-by: Stefan Lippers-Hollmann <s.l-h@gmx.de>
-> > > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > > Cc: Christoph Hellwig <hch@lst.de>
-> > > Cc: linux-media@vger.kernel.org
-> > > Cc: linux-modules@vger.kernel.org
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > ---
-> > > Luis, do you want to take this through your tree?  Or Mauro's?  Or I can
-> > > take it through mine, it should get to Linus soon as this is causing
-> > > regressions in his tree.  
-> > 
-> > You've done the work so it is up to you, whatever helps you expedite it
-> > as it already hit stable. Feel free to take it through your tree.  
-> 
-> If you ack it, I can take it now through my tree and send it to Linus
-> tomorrow.
+MODLIB = $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)
 
-You can send it via your trees. So:
+Defining this middle part as a variable was rejected on the basis that
+users can pass the whole MODLIB to make, such as
 
-Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+make 'MODLIB=$(INSTALL_MOD_PATH)/usr/lib/modules/$(KERNELRELEASE)'
 
-> 
-> thanks,
-> 
-> greg k-h
+However, this middle part of MODLIB is independently hardcoded by
+rpm-pkg, and when the user alters MODLIB this is not reflected when
+building the package.
+
+Given that $(INSTALL_MOD_PATH) is overridden during the rpm package build
+it is likely going to be empty. Then MODLIB can be passed to the rpm
+package, and used in place of the whole
+/usr/lib/modules/$(KERNELRELEASE) part.
+
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+ scripts/package/kernel.spec | 14 +++++++-------
+ scripts/package/mkspec      |  1 +
+ 2 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/scripts/package/kernel.spec b/scripts/package/kernel.spec
+index ac3f2ee6d7a0..1a727f636f67 100644
+--- a/scripts/package/kernel.spec
++++ b/scripts/package/kernel.spec
+@@ -67,8 +67,8 @@ cp $(%{make} %{makeflags} -s image_name) %{buildroot}/boot/vmlinuz-%{KERNELRELEA
+ %{make} %{makeflags} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
+ cp System.map %{buildroot}/boot/System.map-%{KERNELRELEASE}
+ cp .config %{buildroot}/boot/config-%{KERNELRELEASE}
+-ln -fns /usr/src/kernels/%{KERNELRELEASE} %{buildroot}/lib/modules/%{KERNELRELEASE}/build
+-ln -fns /usr/src/kernels/%{KERNELRELEASE} %{buildroot}/lib/modules/%{KERNELRELEASE}/source
++ln -fns /usr/src/kernels/%{KERNELRELEASE} %{buildroot}%{MODLIB}/build
++ln -fns /usr/src/kernels/%{KERNELRELEASE} %{buildroot}%{MODLIB}/source
+ %if %{with_devel}
+ %{make} %{makeflags} run-command KBUILD_RUN_COMMAND='${srctree}/scripts/package/install-extmod-build %{buildroot}/usr/src/kernels/%{KERNELRELEASE}'
+ %endif
+@@ -99,9 +99,9 @@ fi
+ 
+ %files
+ %defattr (-, root, root)
+-/lib/modules/%{KERNELRELEASE}
+-%exclude /lib/modules/%{KERNELRELEASE}/build
+-%exclude /lib/modules/%{KERNELRELEASE}/source
++%{MODLIB}
++%exclude %{MODLIB}/build
++%exclude %{MODLIB}/source
+ /boot/*
+ 
+ %files headers
+@@ -112,6 +112,6 @@ fi
+ %files devel
+ %defattr (-, root, root)
+ /usr/src/kernels/%{KERNELRELEASE}
+-/lib/modules/%{KERNELRELEASE}/build
+-/lib/modules/%{KERNELRELEASE}/source
++%{MODLIB}/build
++%{MODLIB}/source
+ %endif
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index d41608efb747..d41b2e5304ac 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -18,6 +18,7 @@ fi
+ cat<<EOF
+ %define ARCH ${ARCH}
+ %define KERNELRELEASE ${KERNELRELEASE}
++%define MODLIB ${MODLIB}
+ %define pkg_release $("${srctree}/init/build-version")
+ EOF
+ 
+-- 
+2.41.0
+
