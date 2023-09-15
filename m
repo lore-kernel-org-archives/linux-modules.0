@@ -2,80 +2,92 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7D7BEEAA69
-	for <linux-modules@archiver.kernel.org>; Thu, 14 Sep 2023 19:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9799EED60B
+	for <linux-modules@archiver.kernel.org>; Fri, 15 Sep 2023 15:59:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjINTkG (ORCPT
+        id S236312AbjIOP7k (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Thu, 14 Sep 2023 15:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        Fri, 15 Sep 2023 11:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjINTkF (ORCPT
+        with ESMTP id S236474AbjIOP7Y (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Thu, 14 Sep 2023 15:40:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C5726AB;
-        Thu, 14 Sep 2023 12:40:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E52C22185C;
-        Thu, 14 Sep 2023 19:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1694720399; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lYluOBaH1EHWk8SrAv7BsePqVdzKSF7hvQZ8jrr6zOA=;
-        b=hLv8Q2h+K2BGrnxA69yqxfRxRgvWqDBU5/7xCauJ1LNGdVDe0LlDNnAbTNBRZ7vFbt9uwa
-        oaCUGqEHWfh9PcGEm7O76Zd9a0CpWesj/vj2u4+HRY3WIBI+Z/t0zmN9BykdWaQgW0JT/C
-        6vEr4GDHDT5MeJAgSxh5K0GcN+YuyHA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA4E413580;
-        Thu, 14 Sep 2023 19:39:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ifydK49hA2VeBQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 14 Sep 2023 19:39:59 +0000
-Date:   Thu, 14 Sep 2023 21:39:58 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: print module name on refcount error
-Message-ID: <ZQNhjhhpG2aN8Xi6@dhcp22.suse.cz>
-References: <20230626123252.73dbc139@endymion.delvare>
- <ZJ9fvQZ4k+zFfXbN@bombadil.infradead.org>
- <ZKLRaq3pzzE2gfws@dhcp22.suse.cz>
- <ZKhf8bi/eBDhaihD@bombadil.infradead.org>
- <ZKuaZepw51Nriqr8@dhcp22.suse.cz>
- <ZMGJGlJ7XSG+2vjY@bombadil.infradead.org>
- <20230828141830.02de4d90@endymion.delvare>
+        Fri, 15 Sep 2023 11:59:24 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B85D273D;
+        Fri, 15 Sep 2023 08:59:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=SgsTNp3aBQfli6YIFCFMhJWlwcdQKsSE9wrATDvvIN8=; b=ZVMSwci4C8wywN9ZDPExFz2FO7
+        LcPpHRMfW1ni3545nsbTpOeec5tgsLoYedy2ACetkzOPdktuzCoWU2lVxUN3fCaICXsREVYmnkGU8
+        20qg0ZwsHZMU4gtZ6NWw6bzQ8/+tksTS4o9dV42v9QzZShPCcGfUFnhlPMvK/vKKus2ClzV6n//Vp
+        yEl8V0DgSXCNgFNvl3kVpSI74AdDOPGv9teNcVofjmRUu9SFBjQFdIuFuNSCM936gCsPeN7nSZcgr
+        StdpAZGC8StrLZqkqDNRH1obtHQ2I6i8xt2wNAkngv1WeKy/PaMIeZ7psHsCSuTlBtF6IPkHVyZYI
+        XNAAaG+Q==;
+Received: from [2601:1c2:980:9ec0:e65e:37ff:febd:ee53]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qhBDw-00B1cZ-2y;
+        Fri, 15 Sep 2023 15:59:16 +0000
+Message-ID: <287b3755-59a6-40e9-b6cc-f6336f69dd57@infradead.org>
+Date:   Fri, 15 Sep 2023 08:59:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230828141830.02de4d90@endymion.delvare>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 2/2] docs: Update kernel-parameters.txt for signature
+ verification enhancement
+Content-Language: en-US
+To:     "Alessandro Carminati (Red Hat)" <alessandro.carminati@gmail.com>,
+        linux-modules@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+References: <20230914112739.112729-1-alessandro.carminati@gmail.com>
+ <20230914112739.112729-3-alessandro.carminati@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230914112739.112729-3-alessandro.carminati@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-On Mon 28-08-23 14:18:30, Jean Delvare wrote:
-[...]
-> > > It would likely be better to use refcount_t instead of atomic_t.  
-> > 
-> > Patches welcomed.
+
+
+On 9/14/23 04:27, Alessandro Carminati (Red Hat) wrote:
+> Update kernel-parameters.txt to reflect new deferred signature
+> verification.
+> Enhances boot speed by allowing unsigned modules in initrd after
+> bootloader check.
 > 
-> Michal, do I understand correctly that this would prevent the case our
-> customer had (too many gets), but won't make a difference for actual
-> too-many-puts situations?
+> Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 0c38a8af95ce..beec86f0dd05 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -3410,6 +3410,15 @@
+>  			Note that if CONFIG_MODULE_SIG_FORCE is set, that
+>  			is always true, so this option does nothing.
+>  
+> +	module_sig_check_wait=
+> +			This parameter enables delayed activation of module
+> +			signature checks, deferring the process until userspace
+> +			triggers it. Once activated, this setting becomes
+> +			permanent and cannot be reversed. This feature proves
+> +			valuable for incorporating unsigned modules within
+> +			initrd, especially after bootloader verification.
+> +			By employing this option, boot times can be quicker.
+> +
 
+Please keep the entries here in alphabetical order.
+This new entry should be after module_blacklist, not before it.
+Thanks.
 
-yes, refcount_t cannot protect from too-many-puts because there is not
-real way to protect from those AFAICS. At a certain moment you just drop
-to 0 and lose your object and all following that is a UAF. But I do not
-think this is actually the interesting case at all.
+>  	module_blacklist=  [KNL] Do not load a comma-separated list of
+>  			modules.  Useful for debugging problem modules.
+>  
+
 -- 
-Michal Hocko
-SUSE Labs
+~Randy
