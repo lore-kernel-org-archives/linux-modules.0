@@ -2,29 +2,29 @@ Return-Path: <linux-modules-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75613CD37B4
-	for <linux-modules@archiver.kernel.org>; Sun, 17 Sep 2023 19:38:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6D96CD13D1
+	for <linux-modules@archiver.kernel.org>; Sun, 17 Sep 2023 20:34:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239367AbjIQThg (ORCPT
+        id S241085AbjIQUeJ (ORCPT
         <rfc822;linux-modules@archiver.kernel.org>);
-        Sun, 17 Sep 2023 15:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        Sun, 17 Sep 2023 16:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239853AbjIQThX (ORCPT
+        with ESMTP id S239685AbjIQUd7 (ORCPT
         <rfc822;linux-modules@vger.kernel.org>);
-        Sun, 17 Sep 2023 15:37:23 -0400
+        Sun, 17 Sep 2023 16:33:59 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA56E103;
-        Sun, 17 Sep 2023 12:37:14 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD00FC433CD;
-        Sun, 17 Sep 2023 19:37:13 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077FC101;
+        Sun, 17 Sep 2023 13:33:51 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB10CC433C8;
+        Sun, 17 Sep 2023 20:33:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694979434;
-        bh=4TwZHEcg7OWwaq6zNYzZ8xovkF6D4J/cnCZ44LNtYNo=;
+        s=korg; t=1694982830;
+        bh=3D45bCx0htnLxnKLKQKg6sZQymye2X8CvBYKCMT1Olc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kDH+JsEbKKmLTCr8shMSKCxoXuZcBewli5Pi0rS2svEB/TOyLn4pRBn5Pj65WaO0F
-         +FbcncEd42RBRBUodkk8pMsWeqw2Dbp0Y4NVvhZA5iQG0Pqb33l3Pd2inxq4etrDki
-         jD3m4ejUO3GfUgILVZOHja5fX39gBGxNKz2rV19g=
+        b=N2iP8Krcqn7mt8fEn/xB1dAsmsUg5rtJtYfh43DkxlzLts3jc9iWePNQhHoJy5WxN
+         JB69/P8pC+7D2chr3jW8mAefcaJUfG478OVbY9J5gbezmxsfq7WixR6HC/h/AO65ok
+         I4QVJw4up0S8LdkRrsqArof2qEOg3UeXZAbYezC0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,12 +35,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-modules@vger.kernel.org,
         Luis Chamberlain <mcgrof@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 5.10 285/406] media: dvb: symbol fixup for dvb_attach()
-Date:   Sun, 17 Sep 2023 21:12:19 +0200
-Message-ID: <20230917191108.828397336@linuxfoundation.org>
+Subject: [PATCH 5.15 338/511] media: dvb: symbol fixup for dvb_attach()
+Date:   Sun, 17 Sep 2023 21:12:45 +0200
+Message-ID: <20230917191121.975337951@linuxfoundation.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230917191101.035638219@linuxfoundation.org>
-References: <20230917191101.035638219@linuxfoundation.org>
+In-Reply-To: <20230917191113.831992765@linuxfoundation.org>
+References: <20230917191113.831992765@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -49,7 +49,7 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-modules.vger.kernel.org>
 
-5.10-stable review patch.  If anyone has any objections, please let me know.
+5.15-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -182,7 +182,8 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  drivers/media/tuners/tda18218.c                   |    2 +-
  drivers/media/tuners/xc4000.c                     |    2 +-
  drivers/media/tuners/xc5000.c                     |    2 +-
- 104 files changed, 111 insertions(+), 111 deletions(-)
+ drivers/staging/media/av7110/sp8870.c             |    2 +-
+ 105 files changed, 112 insertions(+), 112 deletions(-)
 
 --- a/drivers/media/dvb-frontends/ascot2e.c
 +++ b/drivers/media/dvb-frontends/ascot2e.c
@@ -353,7 +354,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  MODULE_DESCRIPTION("Driver for the DiBcom 0070 base-band RF Tuner");
 --- a/drivers/media/dvb-frontends/dib0090.c
 +++ b/drivers/media/dvb-frontends/dib0090.c
-@@ -2632,7 +2632,7 @@ struct dvb_frontend *dib0090_register(st
+@@ -2634,7 +2634,7 @@ struct dvb_frontend *dib0090_register(st
  	return NULL;
  }
  
@@ -362,7 +363,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
  struct dvb_frontend *dib0090_fw_register(struct dvb_frontend *fe, struct i2c_adapter *i2c, const struct dib0090_config *config)
  {
-@@ -2658,7 +2658,7 @@ free_mem:
+@@ -2660,7 +2660,7 @@ free_mem:
  	fe->tuner_priv = NULL;
  	return NULL;
  }
@@ -436,7 +437,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.delsys = { SYS_DVBT },
 --- a/drivers/media/dvb-frontends/drx39xyj/drxj.c
 +++ b/drivers/media/dvb-frontends/drx39xyj/drxj.c
-@@ -12375,7 +12375,7 @@ error:
+@@ -12368,7 +12368,7 @@ error:
  
  	return NULL;
  }
@@ -447,7 +448,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.delsys = { SYS_ATSC, SYS_DVBC_ANNEX_B },
 --- a/drivers/media/dvb-frontends/drxd_hard.c
 +++ b/drivers/media/dvb-frontends/drxd_hard.c
-@@ -2948,7 +2948,7 @@ error:
+@@ -2947,7 +2947,7 @@ error:
  	kfree(state);
  	return NULL;
  }
@@ -458,7 +459,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  MODULE_AUTHOR("Micronas");
 --- a/drivers/media/dvb-frontends/drxk_hard.c
 +++ b/drivers/media/dvb-frontends/drxk_hard.c
-@@ -6845,7 +6845,7 @@ error:
+@@ -6846,7 +6846,7 @@ error:
  	kfree(state);
  	return NULL;
  }
@@ -618,7 +619,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.delsys = { SYS_ATSC, SYS_DVBC_ANNEX_B },
 --- a/drivers/media/dvb-frontends/lgdt3306a.c
 +++ b/drivers/media/dvb-frontends/lgdt3306a.c
-@@ -1895,7 +1895,7 @@ fail:
+@@ -1859,7 +1859,7 @@ fail:
  	kfree(state);
  	return NULL;
  }
@@ -704,7 +705,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.delsys = {SYS_DVBS, SYS_DVBS2},
 --- a/drivers/media/dvb-frontends/m88rs2000.c
 +++ b/drivers/media/dvb-frontends/m88rs2000.c
-@@ -807,7 +807,7 @@ error:
+@@ -808,7 +808,7 @@ error:
  
  	return NULL;
  }
@@ -755,7 +756,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 +EXPORT_SYMBOL_GPL(mt352_attach);
 --- a/drivers/media/dvb-frontends/nxt200x.c
 +++ b/drivers/media/dvb-frontends/nxt200x.c
-@@ -1232,5 +1232,5 @@ MODULE_DESCRIPTION("NXT200X (ATSC 8VSB &
+@@ -1216,5 +1216,5 @@ MODULE_DESCRIPTION("NXT200X (ATSC 8VSB &
  MODULE_AUTHOR("Kirk Lapray, Michael Krufky, Jean-Francois Thibert, and Taylor Jacob");
  MODULE_LICENSE("GPL");
  
@@ -844,7 +845,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.delsys = { SYS_ISDBT },
 --- a/drivers/media/dvb-frontends/si21xx.c
 +++ b/drivers/media/dvb-frontends/si21xx.c
-@@ -938,7 +938,7 @@ error:
+@@ -936,7 +936,7 @@ error:
  	kfree(state);
  	return NULL;
  }
@@ -1271,7 +1272,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  MODULE_DESCRIPTION("Microtune MT2266 silicon tuner driver");
 --- a/drivers/media/tuners/mxl5005s.c
 +++ b/drivers/media/tuners/mxl5005s.c
-@@ -4114,7 +4114,7 @@ struct dvb_frontend *mxl5005s_attach(str
+@@ -4128,7 +4128,7 @@ struct dvb_frontend *mxl5005s_attach(str
  	fe->tuner_priv = state;
  	return fe;
  }
@@ -1324,5 +1325,13 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
  MODULE_AUTHOR("Steven Toth");
  MODULE_DESCRIPTION("Xceive xc5000 silicon tuner driver");
+--- a/drivers/staging/media/av7110/sp8870.c
++++ b/drivers/staging/media/av7110/sp8870.c
+@@ -606,4 +606,4 @@ MODULE_DESCRIPTION("Spase SP8870 DVB-T D
+ MODULE_AUTHOR("Juergen Peitz");
+ MODULE_LICENSE("GPL");
+ 
+-EXPORT_SYMBOL(sp8870_attach);
++EXPORT_SYMBOL_GPL(sp8870_attach);
 
 
