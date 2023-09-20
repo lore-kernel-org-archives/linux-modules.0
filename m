@@ -1,36 +1,35 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125AA41A80;
-	Wed, 20 Sep 2023 21:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D46D20E0
+	for <linux-modules@vger.kernel.org>; Wed, 20 Sep 2023 21:25:34 +0000 (UTC)
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75BDC9;
-	Wed, 20 Sep 2023 14:11:02 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D0E9E;
+	Wed, 20 Sep 2023 14:25:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
 	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=5mvVkHxDzc75LO4BcLLqzyEg+sz+YO60woTJ/QrfPzs=; b=x9+U0lnTN7uFzW8ZVY63lO9a82
-	Isf1JGhfx/wIb3EUAUfZoXi4xpQG12OHeHUy8PnRKEBhsTfqlBJ0robaURy1dffdphfy2CYX3tjpF
-	A+H/C5R2+O2yyMkwSJ+qGe2CPkgPwn1FrihCkcBQA2uhG1Snd7LjxKwqN/gfZxeFifnztPMmiBoPj
-	vjdMyikJy9YURQI8S7IEGHfaQm6Ggnnl2sOMS28+eFkDg51yer5ST1ween7K/CoIvo0rfHZxbmrxe
-	Nm1fF+1By2vLjqkuU1HT8b/fnHdBRxDBmLKXwu7QoiLZ2MM6nYVPIKo0tGxSznC4MgXne7xSaBWcT
-	Zg2VmFFg==;
+	bh=MZX+Ciar+KiTX86/Y8wrdDvM8UvduQIZHKQ9a5RcgkI=; b=escJjETw0xCHVfESs/zQjQQIiU
+	1e/OpA9K3CYqB3ARetYS/WqM28v1NwUpksqabEHN9YNV/wb1K4CiqE5W/Tp8o4HyVHNLO+v6H5E17
+	HTwdbbP+dSCRhWvVm/os3WjBstr+OtQMdv90xPLnd4HOrotJsvBVQn+IV7esUAl88kPCRjuvP3Naw
+	Zdagat1+1aGe1K9UWgVosU4CFKHrelbOpBpIxAyjvl+A9krpzaLxLZHVPYhLzPapmb9VosHob128j
+	inRgXUUhS1fTXXFwGe7tXsnP73K7qwHpBW7foWxnwEPj33iQfYb4d7MiYrKfc2pQK6fJLVxyukyPe
+	iMicNoEw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1qj4TJ-004Edi-1f;
-	Wed, 20 Sep 2023 21:10:57 +0000
-Date: Wed, 20 Sep 2023 14:10:57 -0700
+	id 1qj4hN-004GAw-0S;
+	Wed, 20 Sep 2023 21:25:29 +0000
+Date: Wed, 20 Sep 2023 14:25:29 -0700
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Johan Hovold <johan@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Nick Desaulniers <ndesaulniers@gooogle.com>,
-	Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] module: Clarify documentation of module_param_call()
-Message-ID: <ZQtf4TqRxaps8Opx@bombadil.infradead.org>
-References: <20230913235407.gonna.817-kees@kernel.org>
+To: Andrea Righi <andrea.righi@canonical.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
+	Nick Terrell <terrelln@fb.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] module/decompress: use vmalloc() for gzip decompression
+ workspace
+Message-ID: <ZQtjSdDUJ88CfOYc@bombadil.infradead.org>
+References: <20230830155820.138178-1-andrea.righi@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -39,7 +38,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230913235407.gonna.817-kees@kernel.org>
+In-Reply-To: <20230830155820.138178-1-andrea.righi@canonical.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -48,49 +47,32 @@ X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Sep 13, 2023 at 04:54:14PM -0700, Kees Cook wrote:
-> Commit 9bbb9e5a3310 ("param: use ops in struct kernel_param, rather than
-> get and set fns directly") added the comment that module_param_call()
-> was deprecated, during a large scale refactoring to bring sanity to type
-> casting back then. In 2017 following more cleanups, it became useful
-> again as it wraps a common pattern of creating an ops struct for a
-> given get/set pair:
+On Wed, Aug 30, 2023 at 05:58:20PM +0200, Andrea Righi wrote:
+> Use a similar approach as commit a419beac4a07 ("module/decompress: use
+> vmalloc() for zstd decompression workspace") and replace kmalloc() with
+> vmalloc() also for the gzip module decompression workspace.
 > 
->   b2f270e87473 ("module: Prepare to convert all module_param_call() prototypes")
->   ece1996a21ee ("module: Do not paper over type mismatches in module_param_call()")
+> In this case the workspace is represented by struct inflate_workspace
+> that can be fairly large for kmalloc() and it can potentially lead to
+> allocation errors on certain systems:
 > 
->         static const struct kernel_param_ops __param_ops_##name = \
->                 { .flags = 0, .set = _set, .get = _get }; \
->         __module_param_call(MODULE_PARAM_PREFIX, \
->                             name, &__param_ops_##name, arg, perm, -1, 0)
+> $ pahole inflate_workspace
+> struct inflate_workspace {
+> 	struct inflate_state       inflate_state;        /*     0  9544 */
+> 	/* --- cacheline 149 boundary (9536 bytes) was 8 bytes ago --- */
+> 	unsigned char              working_window[32768]; /*  9544 32768 */
 > 
->         __module_param_call(MODULE_PARAM_PREFIX, name, ops, arg, perm, -1, 0)
+> 	/* size: 42312, cachelines: 662, members: 2 */
+> 	/* last cacheline: 8 bytes */
+> };
 > 
-> Many users of module_param_cb() appear to be almost universally
-> open-coding the same thing that module_param_call() does now. Don't
-> discourage[1] people from using module_param_call(): clarify the comment
-> to show that module_param_cb() is useful if you repeatedly use the same
-> pair of get/set functions.
+> Considering that there is no need to use continuous physical memory,
+> simply switch to vmalloc() to provide a more reliable in-kernel module
+> decompression.
 > 
-> [1] https://lore.kernel.org/lkml/202308301546.5C789E5EC@keescook/
-> 
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Johan Hovold <johan@kernel.org>
-> Cc: Jessica Yu <jeyu@kernel.org>
-> Cc: Sagi Grimberg <sagi@grimberg.me>
-> Cc: Nick Desaulniers <ndesaulniers@gooogle.com>
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Joe Perches <joe@perches.com>
-> Cc: linux-modules@vger.kernel.org
-> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Fixes: b1ae6dc41eaa ("module: add in-kernel support for decompressing")
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 
-Applied and pushed to modules-next, thanks
-
-> ---
-> Luis, I note that include/linux/moduleparam.h isn't in the MAINTAINERS
-> file pattern. Perhaps you want to use include/linux/module*.h?
-
-Sent patch! Thanks!
+Applied, and pushed, thanks!
 
   Luis
