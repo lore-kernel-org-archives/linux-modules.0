@@ -1,81 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C523BCA6C;
-	Sat, 23 Sep 2023 09:00:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36134C433C8;
-	Sat, 23 Sep 2023 09:00:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500561D544;
+	Sat, 23 Sep 2023 15:39:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2139BC433C8;
+	Sat, 23 Sep 2023 15:38:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695459636;
-	bh=DPfUyGQ+6dasfkt1FqaaCPH41eNMxz10SUv3MLrlYVU=;
+	s=k20201202; t=1695483543;
+	bh=44aW6DcKJaHGXelf02UJMtFK5RbIa4QmGjb00e/7p/A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p6fk7HK2ymgxdtYzNoQl3+kJbplm/i0YMV2jLQAf6N09dSy1rwcrEhuqEr5DgjJUr
-	 5sO9yfGmRCDHT8LvyCqZNZCoUzYeljDz2xvPICUBX6VF9Mp8KoEiKyasE4mGcRAY+2
-	 0k5Jo9TFSvu6rU4VpsqC8+yGmcrkHPOu559FrUz5AfOA1EiG+acjGScC83M1PCzH4w
-	 VsXUVHuN6g/siIUWDaFlnwi/6abym6GyXFrDhIxclPrdbCOrnctQOYgHJfCBJ1LNoO
-	 gH9mXlnIrwfPAyBMm4wpqhu2w81P32P0yZ0zWUBRPcfGxkybXLwmNk5eKlrQHAEdjX
-	 6qdId6HZC/DwA==
-Date: Sat, 23 Sep 2023 11:01:39 -0600
-From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] module: Annotate struct module_notes_attrs with
- __counted_by
-Message-ID: <ZQ8Z80fUaQO/oPWt@work>
-References: <20230922175253.work.237-kees@kernel.org>
+	b=fw2A/tcOcobQiglJay8dvPT5bEfVdzbbmq0FwMYYkRDEvMMNze6l5vdxXC61b2ule
+	 JFCwMCsxrAuMW6D9gVnh2enWSeUtDeXGmVEjWBDuVv9KbPW1MRt9tzybn9NNKJQMj2
+	 y3Lc/W+nmmCK2KsTrqRVvz29GuwFbt1mGULYw6jBfPPwRcYXpuSga9okI5ya4zHkUD
+	 tynDeAbBph8ozw0L4VOesv/AFGSBeSrp7QqXSV98fLRWfSHzHFilN6nNqox4/XsFqb
+	 GBdnrmPrEZw+uXG8gLcDpColobXRcu9WsCK8bgQKX9ms+oqH3fV0ph2eOZh795NWNU
+	 moLZ9gWnlnDaA==
+Date: Sat, 23 Sep 2023 18:38:08 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Song Liu <song@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev, netdev@vger.kernel.org,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 02/13] mm: introduce execmem_text_alloc() and
+ execmem_free()
+Message-ID: <20230923153808.GI3303@kernel.org>
+References: <20230918072955.2507221-1-rppt@kernel.org>
+ <20230918072955.2507221-3-rppt@kernel.org>
+ <CAPhsuW5-=H1V=VXUYxyGnUdJuNUpRt44QmpwjkDUD=9i0itjuw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230922175253.work.237-kees@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW5-=H1V=VXUYxyGnUdJuNUpRt44QmpwjkDUD=9i0itjuw@mail.gmail.com>
 
-On Fri, Sep 22, 2023 at 10:52:53AM -0700, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
+On Thu, Sep 21, 2023 at 03:34:18PM -0700, Song Liu wrote:
+> On Mon, Sep 18, 2023 at 12:30 AM Mike Rapoport <rppt@kernel.org> wrote:
+> >
 > 
-> As found with Coccinelle[1], add __counted_by for struct module_notes_attrs.
+> [...]
 > 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> > diff --git a/arch/s390/kernel/module.c b/arch/s390/kernel/module.c
+> > index 42215f9404af..db5561d0c233 100644
+> > --- a/arch/s390/kernel/module.c
+> > +++ b/arch/s390/kernel/module.c
+> > @@ -21,6 +21,7 @@
+> >  #include <linux/moduleloader.h>
+> >  #include <linux/bug.h>
+> >  #include <linux/memory.h>
+> > +#include <linux/execmem.h>
+> >  #include <asm/alternative.h>
+> >  #include <asm/nospec-branch.h>
+> >  #include <asm/facility.h>
+> > @@ -76,7 +77,7 @@ void *module_alloc(unsigned long size)
+> >  #ifdef CONFIG_FUNCTION_TRACER
+> >  void module_arch_cleanup(struct module *mod)
+> >  {
+> > -       module_memfree(mod->arch.trampolines_start);
+> > +       execmem_free(mod->arch.trampolines_start);
+> >  }
+> >  #endif
+> >
+> > @@ -510,7 +511,7 @@ static int module_alloc_ftrace_hotpatch_trampolines(struct module *me,
+> >
+> >         size = FTRACE_HOTPATCH_TRAMPOLINES_SIZE(s->sh_size);
+> >         numpages = DIV_ROUND_UP(size, PAGE_SIZE);
+> > -       start = module_alloc(numpages * PAGE_SIZE);
+> > +       start = execmem_text_alloc(EXECMEM_FTRACE, numpages * PAGE_SIZE);
 > 
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> This should be EXECMEM_MODULE_TEXT?
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+This is an ftrace trampoline, so I think it should be FTRACE type of
+allocation.
+ 
+> Thanks,
+> Song
+> 
+> >         if (!start)
+> >                 return -ENOMEM;
+> >         set_memory_rox((unsigned long)start, numpages);
+> [...]
 
-Thanks
---
-Gustavo
-
-> ---
->  kernel/module/sysfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-> index c921bf044050..d964167c6658 100644
-> --- a/kernel/module/sysfs.c
-> +++ b/kernel/module/sysfs.c
-> @@ -143,7 +143,7 @@ static void remove_sect_attrs(struct module *mod)
->  struct module_notes_attrs {
->  	struct kobject *dir;
->  	unsigned int notes;
-> -	struct bin_attribute attrs[];
-> +	struct bin_attribute attrs[] __counted_by(notes);
->  };
->  
->  static ssize_t module_notes_read(struct file *filp, struct kobject *kobj,
-> -- 
-> 2.34.1
-> 
-> 
+-- 
+Sincerely yours,
+Mike.
