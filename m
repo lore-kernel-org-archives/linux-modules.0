@@ -1,74 +1,153 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F65FA2A
-	for <linux-modules@vger.kernel.org>; Mon, 25 Sep 2023 01:36:39 +0000 (UTC)
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF2AEE
-	for <linux-modules@vger.kernel.org>; Sun, 24 Sep 2023 18:36:38 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1bd9b4f8e0eso38080775ad.1
-        for <linux-modules@vger.kernel.org>; Sun, 24 Sep 2023 18:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695605797; x=1696210597; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qeR5XrVQCInkFvx4VClyLg8dKxcBVpTRgwbskRCliSE=;
-        b=G943H23MYQ6LXiY0kjYoGISQ003X57VSvAfDkG6KJ/iI0Fdew7u/SXx5CINHeGhkZP
-         imI3UaP+sHq/KJcMAdnPQw9s0nLrI+U9IpQKiy7RcNXVwYfpoAqzvUzLynA7Lkr/23+f
-         s/YhfLm/wvd4U6a/RH73TyJVPuEfd9W6M72Qc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695605797; x=1696210597;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qeR5XrVQCInkFvx4VClyLg8dKxcBVpTRgwbskRCliSE=;
-        b=q+Oexv6Lu8wTr70IV0dCw4P2jJCCt1qOQUBtTnSIqPlsbrVcXo1MMrnFJz5CWPNgNb
-         D9FE8T231vyyKldbhA4j7NbhNHxvgnwJGWyU6bFoAQCFHtureJ+oSsSj4kYuFIgEokA0
-         oq8ik5Q6BMbjkweklK0uE4RlRcTFm+SDQP6R7qY4tGXm+ldcpL0WG9DCpctvtnl53hlt
-         t/HIVL7GOF9oNxgSJjyJAl0vDwYiW3mux6HT9fAugktdoh76Q7fp6k0yG3Ncx/eWj50P
-         mVlZCravYu0TP0vA4Vq76QEB40jOz028i0oQwZJKAT6jOQpUV87t5AH8APCtRt6jb5cK
-         O3cw==
-X-Gm-Message-State: AOJu0YwN6J75UNeB2TU7bgpYb04rZ6jKDPxs8+Ai/ApRPJX3Ap1Dp8+e
-	ejjFGQxKDLT14PQUL2P8SmgHpuGkU73tPw/wc4U=
-X-Google-Smtp-Source: AGHT+IFgP8xAPt84G1p21QIiajeTaaTzy7k0n+4+919AGIdahFuIEHSLkgXwzzsCd+zrFF4P/7jCvw==
-X-Received: by 2002:a17:903:187:b0:1c3:3347:996e with SMTP id z7-20020a170903018700b001c33347996emr4573484plg.23.1695605797563;
-        Sun, 24 Sep 2023 18:36:37 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id jk13-20020a170903330d00b001b9da8b4eb7sm2045534plb.35.2023.09.24.18.36.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Sep 2023 18:36:36 -0700 (PDT)
-Date: Sun, 24 Sep 2023 18:36:36 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: add include/linux/module*.h to modules
-Message-ID: <202309241836.22B5359@keescook>
-References: <20230920211009.1009150-1-mcgrof@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7746AA5;
+	Tue, 26 Sep 2023 07:34:16 +0000 (UTC)
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC05FB;
+	Tue, 26 Sep 2023 00:34:14 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id C07C03200962;
+	Tue, 26 Sep 2023 03:34:10 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 26 Sep 2023 03:34:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm1; t=1695713650; x=1695800050; bh=LB
+	GMXw95teWGAkpYjMD4yl8r6TRMMDISQAqR/M1cGNQ=; b=Rkj4/ro9taZZHblsOD
+	/G8RJaZMr5EoZi3BiBVuPydXcqLBt6JUnEwEBSkbH9zdT7CVUQuwhIR4vjOvrJz7
+	RZ3Epil4/1SvO77nFH1rFPyl9t2f+Q3SRKIN5+S4FzuiUdD22wwkSW/OYnjpuALL
+	HtrICoJLxOpcEVcHu9AQxv5pZ6n5GVT1uDBGpmDdsYnAQw6s5OIHZilwNqnUGPkm
+	4OjsMTRyNEOUw1tZgRF9dlyeKj8s8seL81kM8PIIQFyxX0qyog9Nsf+CDsm3zk8h
+	ezgMFSodT5jl9S32PkpOMs3SS0XWcl664oOOjadAHKGA1Ihbl0lrhFruTxPcgfco
+	mn5w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1695713650; x=1695800050; bh=LBGMXw95teWGA
+	kpYjMD4yl8r6TRMMDISQAqR/M1cGNQ=; b=AUbkuoypa4Wsdj208B6uCagaZC/Xk
+	A1dPx5DaS9T0xX5d79iQJKairrxWJfzJIhsL7KqjrQbLgE5SLde8s6vzO2Sgu7sc
+	06ynHhZftaf9a44gz/tuW8lW6ktE/LPxdi/tVwr9o/giNuQS7K9R78duFOULJVvk
+	1k2A1E6wKGy90242NbwgZjUpS/iNNlAkmDAYcKfQzd00vuPUSehSxxUFVE1h0t2e
+	NLQf14NhEcO8lrG9/A5cKEmPG4gi+I2E+epzgguRRtykOaSiMVKbfBpOOt0GKV+w
+	YvfRUboIrciFszM3IJHagkCio2kLoAGar1HvM8dXPFSk3ZdLkcytutiKA==
+X-ME-Sender: <xms:cYkSZei1SR5UPNNwQIvWckEurLaebETqRWSoe1SREsrLxTVN2cfUEw>
+    <xme:cYkSZfD_pkjEu8dR3QjlqgYUPyj0jlDPXLqqoWtk7WQpD0KW-d24VzNsz6B0lI0R5
+    9d7qW7heI_wXZZFBSw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelhedguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegteeihfejvdfhfeffhfdvvddvfffgtedvteeigfehhfehudffleejuedu
+    vdelgfenucffohhmrghinhepphgrshhtvggsihhnrdgtohhmnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:cYkSZWHxrAFODnyh7EhOUS_cy0g3aKZ0eNP-llshn5XGCVAYyWOqqw>
+    <xmx:cYkSZXRYz_9Vh0d45QZpmlHlsHUwuFMyElJw8MW88YsJw5F9MbDIGQ>
+    <xmx:cYkSZbyl9JOnC5D2_lPQYyAQE2fF3SjTPKuthxvBsWixLxxuu4fNLA>
+    <xmx:cokSZRkGE1pp9XZSFYh5zDGevCl3JsMLQPNoMBE3R8EJIWN1PZZ3Aw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 4513AB60089; Tue, 26 Sep 2023 03:34:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-957-ga1ccdb4cff-fm-20230919.001-ga1ccdb4c
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230920211009.1009150-1-mcgrof@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+Message-Id: <44867c60-db1a-4a0c-8973-c8a03e8da0f3@app.fastmail.com>
+In-Reply-To: <20230918072955.2507221-11-rppt@kernel.org>
+References: <20230918072955.2507221-1-rppt@kernel.org>
+ <20230918072955.2507221-11-rppt@kernel.org>
+Date: Tue, 26 Sep 2023 09:33:48 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mike Rapoport" <rppt@kernel.org>, linux-kernel@vger.kernel.org
+Cc: "Andrew Morton" <akpm@linux-foundation.org>,
+ =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Dinh Nguyen" <dinguyen@kernel.org>,
+ "Heiko Carstens" <hca@linux.ibm.com>, "Helge Deller" <deller@gmx.de>,
+ "Huacai Chen" <chenhuacai@kernel.org>,
+ "Kent Overstreet" <kent.overstreet@linux.dev>,
+ "Luis Chamberlain" <mcgrof@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nadav Amit" <nadav.amit@gmail.com>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Puranjay Mohan" <puranjay12@gmail.com>,
+ "Rick Edgecombe" <rick.p.edgecombe@intel.com>,
+ "Russell King" <linux@armlinux.org.uk>, "Song Liu" <song@kernel.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Will Deacon" <will@kernel.org>,
+ bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ loongarch@lists.linux.dev, Netdev <netdev@vger.kernel.org>,
+ sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 10/13] arch: make execmem setup available regardless of
+ CONFIG_MODULES
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Sep 20, 2023 at 02:10:09PM -0700, Luis Chamberlain wrote:
-> Use glob include/linux/module*.h to capture all module changes.
-> 
-> Suggested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+On Mon, Sep 18, 2023, at 09:29, Mike Rapoport wrote:
+> index a42e4cd11db2..c0b536e398b4 100644
+> --- a/arch/arm/mm/init.c
+> +++ b/arch/arm/mm/init.c
+> +#ifdef CONFIG_XIP_KERNEL
+> +/*
+> + * The XIP kernel text is mapped in the module area for modules and
+> + * some other stuff to work without any indirect relocations.
+> + * MODULES_VADDR is redefined here and not in asm/memory.h to avoid
+> + * recompiling the whole kernel when CONFIG_XIP_KERNEL is turned 
+> on/off.
+> + */
+> +#undef MODULES_VADDR
+> +#define MODULES_VADDR	(((unsigned long)_exiprom + ~PMD_MASK) & 
+> PMD_MASK)
+> +#endif
+> +
+> +#if defined(CONFIG_MMU) && defined(CONFIG_EXECMEM)
+> +static struct execmem_params execmem_params __ro_after_init = {
+> +	.ranges = {
+> +		[EXECMEM_DEFAULT] = {
+> +			.start = MODULES_VADDR,
+> +			.end = MODULES_END,
+> +			.alignment = 1,
+> +		},
 
-Thanks!
+This causes a randconfig build failure for me on linux-next now:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+arch/arm/mm/init.c:499:25: error: initializer element is not constant
+  499 | #define MODULES_VADDR   (((unsigned long)_exiprom + ~PMD_MASK) & PMD_MASK)
+      |                         ^
+arch/arm/mm/init.c:506:34: note: in expansion of macro 'MODULES_VADDR'
+  506 |                         .start = MODULES_VADDR,
+      |                                  ^~~~~~~~~~~~~
+arch/arm/mm/init.c:499:25: note: (near initialization for 'execmem_params.ranges[0].start')
+  499 | #define MODULES_VADDR   (((unsigned long)_exiprom + ~PMD_MASK) & PMD_MASK)
+      |                         ^
+arch/arm/mm/init.c:506:34: note: in expansion of macro 'MODULES_VADDR'
+  506 |                         .start = MODULES_VADDR,
+      |                                  ^~~~~~~~~~~~~
 
--- 
-Kees Cook
+I have not done any analysis on the issue so far, I hope
+you can see the problem directly. See
+https://pastebin.com/raw/xVqAyakH for a .config that runs into
+this problem with gcc-13.2.0.
+
+      Arnd
