@@ -1,168 +1,206 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB67110FA
-	for <linux-modules@vger.kernel.org>; Fri, 29 Sep 2023 02:03:24 +0000 (UTC)
-X-Greylist: delayed 373 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Sep 2023 19:03:22 PDT
-Received: from newman.cs.utexas.edu (newman.cs.utexas.edu [128.83.139.110])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747D0199;
-	Thu, 28 Sep 2023 19:03:22 -0700 (PDT)
-X-AuthUser: acsharma@cs.utexas.edu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cs.utexas.edu;
-	s=default; t=1695952622;
-	bh=IlYtRrMTgyzME3Rj0/G6GUDbMa3aqpuCnIHLljZIIjk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=BoUXTlSSCZJQ6Jg87V9Uz68fnPa3wtlb+nf4e+jbgiJqphIFgmEc2hJcpP+vHkK9h
-	 uttRokH7T6nEcjRcbnb2nG5sYN88HAdvg35948PDHFqXi4WUMYsN2s4znJ78DS5jt9
-	 FOkENR9VZwBcTl59xDUZqCzO2Mx13EvQh/nbxu5w=
-Received: from abhishekcs-nixos.lan (035-146-022-001.res.spectrum.com [35.146.22.1])
-	(authenticated bits=0)
-	by newman.cs.utexas.edu (8.14.4/8.14.4/Debian-4.1ubuntu1.1) with ESMTP id 38T1ulWp022390
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 28 Sep 2023 20:57:02 -0500
-From: Abhishek Sharma <acsharma@cs.utexas.edu>
-To: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Cc: mcgrof@kernel.org, Abhishek Sharma <acsharma@cs.utexas.edu>
-Subject: [PATCH] module: fix oops on loading module with malformed ELF section header
-Date: Thu, 28 Sep 2023 20:38:39 -0500
-Message-Id: <20230929013836.131549-1-acsharma@cs.utexas.edu>
-X-Mailer: git-send-email 2.40.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CB21C26
+	for <linux-modules@vger.kernel.org>; Fri, 29 Sep 2023 14:37:29 +0000 (UTC)
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F43E7;
+	Fri, 29 Sep 2023 07:37:26 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-5043a01ee20so20035126e87.0;
+        Fri, 29 Sep 2023 07:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695998244; x=1696603044; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QUNwvLwFToVAfWcR/28CLGE4Es+QNTF6TkYHUEQHD4s=;
+        b=Rj0NZWFuAOV9iYDo5bsf7fYOWHsvZfk1YRPDc2Wqiqp/n6t+MIV+/IrRpzC+WCjd3j
+         ZIn69Rm8TOArIkVsgSEXm1hqvP6iTyYCxhA/kn56bNwUM3efvIAI2nO0UmBzQn7uwxx1
+         ubnm3KEzzveXNnc1N8NNEraHufwM+qUX1n0LcD+bVK6JFN2/nYuo19i/zNPzS7hxZXW9
+         3ApClifsQBLe4mEBZHJQvfiootTDLTY0NW34OKyw0H7t/4QMO1CrkTZ+/SAijB7WgFpw
+         Mytj4FIwdbv+maBHnWkTv+NdYT48/WEtcTmbt8NodUQVmd1nTXBDREwbIIFsIAyae26B
+         wCsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695998244; x=1696603044;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QUNwvLwFToVAfWcR/28CLGE4Es+QNTF6TkYHUEQHD4s=;
+        b=MmzhfnmZHEl4qGtmEgOaqFhgGmnqHrWVrwyMFSLQ7J0VEc0G+jMxEayfNbIIA7rfac
+         YX27e5zeXUb9Et7QaM6fvCzyY8RBw3goMoz87/YJyPWNbZhkP9czNja+mbxx7cumYJ3O
+         6q9FHH2aXxlk0OSiBPSIF4oF0qTU1XBFczGK2LWaM7CTfDHx0lQf4IiUPlDTl6k4fhV4
+         RgpzwiaZOTz2Szsmp3pJmbePmrY1XeAQMX76aOzb+V2gqZVHrJnJv+8fHSGQ4Ul8q4c8
+         bxI2/r2oq2lrAA0m5zECzl8AOgpvL9k8uhvOHlwkIUH/72UM51gQ9jbv6B0XcaLej2G9
+         hfHw==
+X-Gm-Message-State: AOJu0Yy4hSvCp0Mis8lYzNXOEJauMwVKjciDMBhHHFrxebcoi+9HRGGO
+	AYNltuhk+syU3+RSVzJrsC3GJgz90usDhA==
+X-Google-Smtp-Source: AGHT+IHUHCDBIDPn4259ioRDpJePii5esA4maiNhkyVCdqB3LqMbY1Rg4TgnTMgWvoxlO74gWpxlZw==
+X-Received: by 2002:a05:6512:a95:b0:505:6e21:32e1 with SMTP id m21-20020a0565120a9500b005056e2132e1mr2305416lfu.10.1695998243867;
+        Fri, 29 Sep 2023 07:37:23 -0700 (PDT)
+Received: from ldmartin-desk2.attlocal.net ([192.55.55.53])
+        by smtp.gmail.com with ESMTPSA id l20-20020ac24314000000b00503fb2e5594sm3534066lfh.211.2023.09.29.07.37.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Sep 2023 07:37:23 -0700 (PDT)
+Date: Fri, 29 Sep 2023 09:37:14 -0500
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules <linux-modules@vger.kernel.org>
+Cc: lkml <linux-kernel@vger.kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Adam =?utf-8?B?R2/FgsSZYmlvd3NraQ==?= <adamg@pld-linux.org>, 
+	Dimitri John Ledkov <dimitri.ledkov@canonical.com>, Dmitry Antipov <dmantipov@yandex.ru>, 
+	Emil Velikov <emil.l.velikov@gmail.com>, Emil Velikov <emil.velikov@collabora.com>, 
+	Fabrice Fontaine <fontaine.fabrice@gmail.com>, Florian Weimer <fweimer@redhat.com>, 
+	Gustavo Sousa <gustavo.sousa@intel.com>, Jan Engelhardt <jengelh@inai.de>, 
+	Julien Cristau <jcristau@debian.org>, Mikhail Novosyolov <m.novosyolov@rosalinux.ru>, 
+	Nicolas Schier <n.schier@avm.de>, Quentin Armitage <quentin@armitage.org.uk>, 
+	Yauheni Kaliuta <ykaliuta@redhat.com>
+Subject: [ANNOUNCE] kmod 31
+Message-ID: <lnbkvt5hhvgksgjqko7t6niw6uzr5ewjp32wyy2s26rzwdgh2y@l775iv6f6tkz>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.3.9 (newman.cs.utexas.edu [128.83.139.110]); Thu, 28 Sep 2023 20:57:02 -0500 (CDT)
-X-Virus-Scanned: clamav-milter 0.103.8 at newman
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi,
+kmod 30 is out:
 
-I encountered the following OOPS when loading a kernel module with insmod. It occurs
-when loading a kernel module with an invalid ELF section header - the Section name is
-invalid and out of bounds into the section name table.
+         https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-31.tar.xz
+         https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-31.tar.sign
 
-========================================================================================
-# insmod hello-1-boom.ko
-[41829.405681] BUG: unable to handle page fault for address: ffffc90000c3efa3
-[41829.407111] #PF: supervisor read access in kernel mode
-[41829.408209] #PF: error_code(0x0000) - not-present page
-[41829.409328] PGD 100000067 P4D 100000067 PUD 10012a067 PMD 0
-[41829.410593] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[41829.411592] CPU: 5 PID: 146 Comm: insmod Not tainted 6.6.0-rc2-g8a511e7efc5a #14
-[41829.412944] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.2-0-gea1b7a073390-prebuilt.qemu.org 04/01/2014
-[41829.413686] RIP: 0010:strcmp+0x10/0x40
-[41829.413944] Code: cc cc cc cc cc cc cc cc cc cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 31 c0 66 2e 0f 1f 84 00 00 00 00 003
-[41829.415135] RSP: 0018:ffffc9000039fd50 EFLAGS: 00010246
-[41829.415470] RAX: 0000000000000000 RBX: 0000000000000023 RCX: 0000000000000023
-[41829.415978] RDX: ffffc9000006de40 RSI: ffffffff82ca5bbc RDI: ffffc90000c3efa3
-[41829.416443] RBP: 0000000000bd1163 R08: ffffc9000006d000 R09: 0000000000000fa8
-[41829.416808] R10: 0000000000031b20 R11: ffffffff8148bbe0 R12: 0000000000000001
-[41829.417212] R13: 0000000000000001 R14: ffffc90000c3efa3 R15: ffffc9000006e010
-[41829.417556] FS:  00007ff0c2f31740(0000) GS:ffff88813bd40000(0000) knlGS:0000000000000000
-[41829.417944] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[41829.418219] CR2: ffffc90000c3efa3 CR3: 00000001019d6001 CR4: 0000000000770ee0
-[41829.418560] PKRU: 55555554
-[41829.418693] Call Trace:
-[41829.418827]  <TASK>
-[41829.418935]  ? __die_body+0x75/0xf0
-[41829.419142]  ? page_fault_oops+0x340/0x450
-[41829.419338]  ? do_kern_addr_fault+0xa1/0x140
-[41829.419546]  ? exc_page_fault+0x87/0x180
-[41829.419741]  ? asm_exc_page_fault+0x26/0x30
-[41829.419943]  ? __pfx_ext4_file_read_iter+0x10/0x10
-[41829.420172]  ? strcmp+0x10/0x40
-[41829.420328]  load_module+0x235/0x1a20
-[41829.420506]  __se_sys_finit_module+0x35e/0x4c0
-[41829.420723]  do_syscall_64+0x45/0xa0
-[41829.420902]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-[41829.421145] RIP: 0033:0x7ff0c2ffaf09
-[41829.421320] Code: 8d 3d 03 d4 0b 00 e8 11 23 fa ff 89 e8 5a 5b 5d c3 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 058
-[41829.422193] RSP: 002b:00007ffda4a062b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-[41829.422550] RAX: ffffffffffffffda RBX: 000056194469f2a0 RCX: 00007ff0c2ffaf09
-[41829.422890] RDX: 0000000000000000 RSI: 000056194469f2a0 RDI: 0000000000000003
-[41829.423227] RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000200000
-[41829.423565] R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffda4a07f55
-[41829.423906] R13: 00007ff0c30faac0 R14: 00007ffda4a064d0 R15: 00007ff0c30fb000
-[41829.424246]  </TASK>
-[41829.424355] Modules linked in:
-[41829.424507] CR2: ffffc90000c3efa3
-[41829.424669] ---[ end trace 0000000000000000 ]---
-[41829.424893] RIP: 0010:strcmp+0x10/0x40
-[41829.425076] Code: cc cc cc cc cc cc cc cc cc cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 31 c0 66 2e 0f 1f 84 00 00 00 00 003
-[41829.425948] RSP: 0018:ffffc9000039fd50 EFLAGS: 00010246
-[41829.426196] RAX: 0000000000000000 RBX: 0000000000000023 RCX: 0000000000000023
-[41829.426534] RDX: ffffc9000006de40 RSI: ffffffff82ca5bbc RDI: ffffc90000c3efa3
-[41829.426874] RBP: 0000000000bd1163 R08: ffffc9000006d000 R09: 0000000000000fa8
-[41829.427212] R10: 0000000000031b20 R11: ffffffff8148bbe0 R12: 0000000000000001
-[41829.427551] R13: 0000000000000001 R14: ffffc90000c3efa3 R15: ffffc9000006e010
-[41829.427891] FS:  00007ff0c2f31740(0000) GS:ffff88813bd40000(0000) knlGS:0000000000000000
-[41829.428271] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[41829.428545] CR2: ffffc90000c3efa3 CR3: 00000001019d6001 CR4: 0000000000770ee0
-[41829.428887] PKRU: 55555554
-[41829.429021] note: insmod[146] exited with irqs disabled
-Killed
-======================================================================================================
+Improvements
 
-This happens because elf_validity_cache_copy does not validate the section name index before looking for
-the ".gnu.linkonce.this_module" and ".modinfo" sections while iterating through the section headers. This
-seems to have been introduced in the refactoring done in https://lkml.kernel.org/linux-modules/20230319213542.1790479-2-mcgrof@kernel.org/
-and in the kernel since v6.4.
+         - Allow passing a path to modprobe so the module is loaded from
+           anywhere from the filesystem, but still handling the module
+           dependencies recorded in the indexes. This is mostly intended for kernel
+           developers to speedup testing their kernel modules without having to load the
+           dependencies manually or override the module in /usr/lib/modules/.
+           Now it's possible to do:
 
-My patch below moves the search for the ".gnu.linkonce.this_module" and ".modinfo" sections after the check
-validating the section header name. Since both these sections are SHF_ALLOC, it should be okay to nest the check
-within that if - which is what was happening prior to the refactor too.
+                 # modprobe ./drivers/gpu/drm/i915/i915.ko
 
-I have tested that with the patch, loading a malformed kernel module no longer results in the oops.
+           As long as the dependencies didn't change, this should do the right thing
 
-Signed-off-by: Abhishek Sharma <acsharma@cs.utexas.edu>
----
- kernel/module/main.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+         - Use in-kernel decompression if available. This will check the runtime support
+           in the kernel for decompressing modules and use it through finit_module().
+           Previously kmod would fallback to the older init_module() when using
+           compressed modules since there wasn't a way to instruct the kernel to
+           uncompress it on load or check if the kernel supported it or not.
+           This requires a recent kernel (>= 6.4) to have that support and
+           in-kernel decompression properly working in the kernel.
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 98fedfdb8db5..39f66bb12683 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1787,15 +1787,6 @@ static int elf_validity_cache_copy(struct load_info *info, int flags)
- 					i, shdr->sh_type);
- 				return err;
- 			}
--			if (strcmp(info->secstrings + shdr->sh_name,
--				   ".gnu.linkonce.this_module") == 0) {
--				num_mod_secs++;
--				mod_idx = i;
--			} else if (strcmp(info->secstrings + shdr->sh_name,
--				   ".modinfo") == 0) {
--				num_info_secs++;
--				info_idx = i;
--			}
- 
- 			if (shdr->sh_flags & SHF_ALLOC) {
- 				if (shdr->sh_name >= strhdr->sh_size) {
-@@ -1803,6 +1794,15 @@ static int elf_validity_cache_copy(struct load_info *info, int flags)
- 					       i, shdr->sh_type);
- 					return -ENOEXEC;
- 				}
-+				if (strcmp(info->secstrings + shdr->sh_name,
-+					   ".gnu.linkonce.this_module") == 0) {
-+					num_mod_secs++;
-+					mod_idx = i;
-+				} else if (strcmp(info->secstrings + shdr->sh_name,
-+					   ".modinfo") == 0) {
-+					num_info_secs++;
-+					info_idx = i;
-+				}
- 			}
- 			break;
- 		}
--- 
-2.40.1
+         - Make modprobe fallback to syslog when stderr is not available, as was
+           documented in the man page, but not implemented
 
+         - Better explaing `modprobe -r` and how it differentiates from rmmod
+
+         - depmod learned a `-o <dir>` option to allow using a separate output
+           directory. With this, it's possible to split the output files from
+           the ones used as input from the kernel build system
+
+         - Add compat with glibc >= 2.32.9000 that dropped __xstat
+
+         - Improve testsuite to stop skipping tests when sysconfdir is something
+           other than /etc
+
+         - Build system improvements and updates
+
+         - Change a few return codes from -ENOENT to -ENODATA to avoid confusing output
+           in depmod when the module itself lacks a particular ELF section due to e.g.
+           CONFIG_MODVERSIONS=n in the kernel.
+
+Bug Fixes
+
+         - Fix testsuite using uninitialized memory when testing module removal
+           with --wait
+
+         - Fix testsuite not correctly overriding the stat syscall on 32-bit
+           platforms. For most architectures this was harmless, but for MIPS it
+           was causing some tests to fail.
+
+         - Fix handling unknown signature algorithm
+
+         - Fix linking with a static liblzma, libzstd or zlib
+
+         - Fix memory leak when removing module holders
+
+         - Fix out-of-bounds access when using very long paths as argument to rmmod
+
+         - Fix warnings reported by UBSan
+
+
+Shortlog is below:
+
+Adam Gołębiowski (1):
+       autogen.sh: remove --with-rootprefix, it is gone since kmod-11
+
+Dimitri John Ledkov (1):
+       build: enable building & running tests from a subdir
+
+Dmitry Antipov (3):
+       libkmod, depmod: prefer -ENODATA over -ENOENT if no section found
+       libkmod: fix possible out-of-bounds memory access
+       shared: avoid passing {NULL, 0} array to bsearch()
+
+Emil Velikov (10):
+       depmod: Introduce outdir option
+       treewide: add some static const notations
+       testsuite: add function declarations for __xstat family
+       testsuite/depmod: use defines for the rootfs/lib_modules
+       libkmod: error out on unknown hash algorithm
+       libkmod: remove unused kmod_module_get_builtin
+       libkmod: annotate kmod_builtin_iter API as static
+       shared: annotate local API as static
+       configure: manage libkmod.pc.in and version.py.in via AC_CONFIG_FILES
+       libkmod: add fallback MODULE_INIT_COMPRESSED_FILE define
+
+Fabrice Fontaine (1):
+       configure.ac: fix link with -llzma
+
+Florian Weimer (1):
+       kmod: configure.ac: In _Noreturn check, include <stdlib.h> for exit
+
+Gustavo Sousa (3):
+       testsuite: Wrap chdir()
+       modprobe: Move insertion block into separate function
+       modprobe: Allow passing path to module
+
+Jan Engelhardt (1):
+       testsuite: repair read of uninitialized memory
+
+Julien Cristau (1):
+       testsuite: fix override of `stat` on 32-bit architectures
+
+Lucas De Marchi (8):
+       testsuite: Move setup-rootfs logic from Makefile to script
+       testsuite: Handle different sysconfdir
+       libkmod: Do not inititialize file->memory on open
+       libkmod: Extract finit_module vs init_module paths
+       libkmod: Keep track of compression type
+       libkmod: Keep track of in-kernel compression support
+       libkmod: Use kernel decompression when available
+       kmod 31
+
+Mikhail Novosyolov (1):
+       libkmod: do not crash on unknown signature algorithm
+
+Nicolas Schier (1):
+       modprobe: rmmod_do_module: Free kmod list of holders
+
+Quentin Armitage (1):
+       modprobe: Write error messages to syslog if stderr is unavailable
+
+Yauheni Kaliuta (1):
+       man/rmmod: explain why modprobe -r is more useful
+
+
+Thank y'all for the contributions,
+Lucas De Marchi
