@@ -1,36 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D954B273C5
-	for <linux-modules@vger.kernel.org>; Fri,  6 Oct 2023 16:58:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723FA1FD1;
+	Sat,  7 Oct 2023 11:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QtctmrP7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B1CC433C8;
-	Fri,  6 Oct 2023 16:58:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696611498;
-	bh=W/PV9BEnW7qV8HRBjAeCSKH71F8YRJwxXRxGjI45a6Q=;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="W2pkUPld"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 472E6C433C8;
+	Sat,  7 Oct 2023 11:53:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1696679626;
+	bh=dqUCLf7VJJQ0WmX/MCm12hiJxadk/DBDL9bDj5rTUg0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QtctmrP7HPX723W0dFuw/syZx1G3b4jfABirVj7JKuUFR4u0ANnNX9D9WFqmGsizJ
-	 iomwfbA3VchilnHSRmBdJbSjGjzv5uZ49OeA095CjlXG8M7ItBd8qPL9QMUK/QrZ65
-	 tnkIn0MBo8NLpb3kkkez6smKI0yHnyR3oxGlCH7Tw/BF5baOzK8QzamZtZYZ52UHfJ
-	 yuPotqd/7l+OL/s5ThUw+Zlv1HX02eOtqk4dWMHcHjngAb1dbCohYH2U37ymWy+5oD
-	 qVCziJ7OACmhP86Vhm0WeDvNsTJ8c6ZOUc6cwNYampiMTHyv1l+aZYg0NdiQL/F+lj
-	 fowcyiaLg/Xng==
-Date: Fri, 6 Oct 2023 09:58:15 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Michal Suchanek <msuchanek@suse.de>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Nicolas Schier <nicolas@fjasle.eu>, linux-modules@vger.kernel.org,
-	Takashi Iwai <tiwai@suse.com>,
-	Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH rebased] kbuild: rpm-pkg: Fix build with non-default
- MODLIB
-Message-ID: <20231006165815.GA3359308@dev-arch.thelio-3990X>
-References: <20231005150728.3429-1-msuchanek@suse.de>
+	b=W2pkUPldZaTK/U7f0cFp/yf/G63SlUhl3nWK3cjfVeiNanEE7E9G2CMVFUHlLgvBB
+	 7Vr0vlqLLcAmWY7UkdAVjMhXigqf8FVEPeV1idcOBdEOYz7DSTQ2XOYnJk/+quBebH
+	 G9YW5ejUnFDKPcawvr4tWTQFF3r8BQEUIYsLULnE=
+Date: Sat, 7 Oct 2023 13:53:44 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Ben Hutchings <ben@decadent.org.uk>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev,
+	stable <stable@kernel.org>, Stefan Lippers-Hollmann <s.l-h@gmx.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Christoph Hellwig <hch@lst.de>, linux-media@vger.kernel.org,
+	linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH 4.19 178/273] media: dvb: symbol fixup for dvb_attach()
+Message-ID: <2023100730-imprint-follow-56ec@gregkh>
+References: <20230920112846.440597133@linuxfoundation.org>
+ <20230920112852.017230256@linuxfoundation.org>
+ <b12435b2311ada131db05d3cf195b4b5d87708eb.camel@decadent.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -39,82 +36,35 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231005150728.3429-1-msuchanek@suse.de>
+In-Reply-To: <b12435b2311ada131db05d3cf195b4b5d87708eb.camel@decadent.org.uk>
 
-On Thu, Oct 05, 2023 at 05:07:28PM +0200, Michal Suchanek wrote:
-> The default MODLIB value is composed of two variables and the hardcoded
-> string '/lib/modules/'.
+On Thu, Sep 28, 2023 at 01:36:06AM +0200, Ben Hutchings wrote:
+> On Wed, 2023-09-20 at 13:30 +0200, Greg Kroah-Hartman wrote:
+> > 4.19-stable review patch.  If anyone has any objections, please let me know.
+> > 
+> > ------------------
+> > 
+> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > 
+> > commit 86495af1171e1feec79faa9b64c05c89f46e41d1 upstream.
+> > 
+> > In commit 9011e49d54dc ("modules: only allow symbol_get of
+> > EXPORT_SYMBOL_GPL modules") the use of symbol_get is properly restricted
+> > to GPL-only marked symbols.  This interacts oddly with the DVB logic
+> > which only uses dvb_attach() to load the dvb driver which then uses
+> > symbol_get().
+> > 
+> > Fix this up by properly marking all of the dvb_attach attach symbols as
+> > EXPORT_SYMBOL_GPL().
+> [...]
 > 
-> MODLIB = $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)
+> This (and other) backports missed a couple of affected exports:
 > 
-> Defining this middle part as a variable was rejected on the basis that
-> users can pass the whole MODLIB to make, such as
-> 
-> make 'MODLIB=$(INSTALL_MOD_PATH)/usr/lib/modules/$(KERNELRELEASE)'
-> 
-> However, this middle part of MODLIB is independently hardcoded by
-> rpm-pkg, and when the user alters MODLIB this is not reflected when
-> building the package.
-> 
-> Given that $(INSTALL_MOD_PATH) is overridden during the rpm package build
-> it is likely going to be empty. Then MODLIB can be passed to the rpm
-> package, and used in place of the whole
-> /usr/lib/modules/$(KERNELRELEASE) part.
-> 
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> - sp8870_attach in drivers/media/dvb-frontends/sp8870.c
+>   (renamed to drivers/staging/media/av7110/sp8870.c upstream)
+> - xc2028_attach in drivers/media/tuners/tuner-xc2028.c
+>   (renamed to drivers/media/tuners/xc2028.c upstream)
 
-This appears to work for me.
+Thanks for catching this, fixed up now for 4.14.y and 4.19.y.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  scripts/package/kernel.spec | 8 ++++----
->  scripts/package/mkspec      | 1 +
->  2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/scripts/package/kernel.spec b/scripts/package/kernel.spec
-> index 3eee0143e0c5..15f49c5077db 100644
-> --- a/scripts/package/kernel.spec
-> +++ b/scripts/package/kernel.spec
-> @@ -67,7 +67,7 @@ cp $(%{make} %{makeflags} -s image_name) %{buildroot}/boot/vmlinuz-%{KERNELRELEA
->  %{make} %{makeflags} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
->  cp System.map %{buildroot}/boot/System.map-%{KERNELRELEASE}
->  cp .config %{buildroot}/boot/config-%{KERNELRELEASE}
-> -ln -fns /usr/src/kernels/%{KERNELRELEASE} %{buildroot}/lib/modules/%{KERNELRELEASE}/build
-> +ln -fns /usr/src/kernels/%{KERNELRELEASE} %{buildroot}%{MODLIB}/build
->  %if %{with_devel}
->  %{make} %{makeflags} run-command KBUILD_RUN_COMMAND='${srctree}/scripts/package/install-extmod-build %{buildroot}/usr/src/kernels/%{KERNELRELEASE}'
->  %endif
-> @@ -98,8 +98,8 @@ fi
->  
->  %files
->  %defattr (-, root, root)
-> -/lib/modules/%{KERNELRELEASE}
-> -%exclude /lib/modules/%{KERNELRELEASE}/build
-> +%{MODLIB}
-> +%exclude %{MODLIB}/build
->  /boot/*
->  
->  %files headers
-> @@ -110,5 +110,5 @@ fi
->  %files devel
->  %defattr (-, root, root)
->  /usr/src/kernels/%{KERNELRELEASE}
-> -/lib/modules/%{KERNELRELEASE}/build
-> +%{MODLIB}/build
->  %endif
-> diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-> index d41608efb747..d41b2e5304ac 100755
-> --- a/scripts/package/mkspec
-> +++ b/scripts/package/mkspec
-> @@ -18,6 +18,7 @@ fi
->  cat<<EOF
->  %define ARCH ${ARCH}
->  %define KERNELRELEASE ${KERNELRELEASE}
-> +%define MODLIB ${MODLIB}
->  %define pkg_release $("${srctree}/init/build-version")
->  EOF
->  
-> -- 
-> 2.42.0
-> 
+greg k-h
