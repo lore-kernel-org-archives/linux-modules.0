@@ -1,127 +1,162 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22A49CA4D
-	for <linux-modules@vger.kernel.org>; Mon,  9 Oct 2023 04:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67649156EB
+	for <linux-modules@vger.kernel.org>; Mon,  9 Oct 2023 08:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NXdOkDoc"
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F25A4;
-	Sun,  8 Oct 2023 21:57:15 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3993uw2p001656;
-	Mon, 9 Oct 2023 04:57:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=NndnzouTr0vQ1A/qdctq0nyZX1h8ugvFOWkvpw6Xzpo=;
- b=NXdOkDocEw+tcqJgDypqgk//H0WFdfJQIDH51uDCEsXuy+LRWcL351HJ1eBzcxBv4L1b
- MUhbT6muEcFk68jCv4scOyk1xaH1mAZC3tl49szvJN4s/cjmXenZhmWni8ZMgb7q5mo+
- CCgk5QpCN3UJpFIpzh0uI3qEuDERX1swnUx0H5MvyxY5sGY0RTssCikqqOW6gPTJehwZ
- aBRFktwNzOXAnXsU196GK1KW35ME6mkfQcRWJ+HkYeDoLXpzN/qujHHq2y7WGz2vaQZq
- ZzSH9690MbXWHXIW7IZdBqk4LAK9Zt9bT9A0BKDYWgtmWJbQRjb+R0TitNeHIpkK8Zkp 5g== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tkh6g1j1x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Oct 2023 04:57:09 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3994v8TM006629
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 9 Oct 2023 04:57:08 GMT
-Received: from hu-jiangenj-sha.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Sun, 8 Oct 2023 21:57:07 -0700
-From: Joey Jiao <quic_jiangenj@quicinc.com>
-To: <linux-modules@vger.kernel.org>
-CC: <quic_jiangenj@quicinc.com>, Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] module: Add CONFIG_MODULE_LOAD_IN_SEQUENCE option
-Date: Mon, 9 Oct 2023 10:26:35 +0530
-Message-ID: <20231009045636.4143-1-quic_jiangenj@quicinc.com>
-X-Mailer: git-send-email 2.42.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="guH2wMSM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8368C433C9;
+	Mon,  9 Oct 2023 08:31:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696840299;
+	bh=k+U5O8rSw/WBFMKyCVGOfUbLEx6tf3XN/L5MZF6Uqa8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=guH2wMSMUCza3wYp4jOLA4YfzvWfYqkGW81raiiNvQHQOOEV4YZXjnvxFarx6CHKG
+	 SCkKgmu4jAhc5Pefo7U7YVY4WrYLt4k412V1VX5x8ezqj8LeZ8p7ws1oOHgAE8uRUG
+	 zEia8CD6OGSiQJSFXr7i1OWWN/bVENARFtqkvrm5E51Q/FVvWQ1uvKXbMwOWhFCFMl
+	 N4IzEYECZV6gD3WoOPuyljoD07eSh1WYrsIpqW+aCKqYwAt8vfV18XhKiLpMi/YKxv
+	 GyyKWECp96fexe8ZEQf8DhUmo2mRldh1JSo8MP7X4dQQRrKMBWVvxX3l3SCNQr9fU7
+	 u28yDYbpsWBnw==
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3af64a4c97eso2415831b6e.2;
+        Mon, 09 Oct 2023 01:31:39 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwqJ2qETXzalIgEi5VNjb2GZDnpYW6+jiC1YKj0Wm6dRCN4J7w8
+	HbJ5zT44pKa86miee5r7XyWVPTeNGM6XLX1o2n0=
+X-Google-Smtp-Source: AGHT+IFRkq0Z5e5o/4ftogKUePolTKBpPtT85HqjlKijj4ZEXvwYnMDnF92iO4aDuyOtNzU+UBT5uxn3uoWUnAkBHAM=
+X-Received: by 2002:a05:6870:8a0b:b0:1bf:5b4:4a51 with SMTP id
+ p11-20020a0568708a0b00b001bf05b44a51mr13909865oaq.58.1696840299192; Mon, 09
+ Oct 2023 01:31:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pCHCsWM4CyailXj30Yfb5XxW_VfzdXiR
-X-Proofpoint-ORIG-GUID: pCHCsWM4CyailXj30Yfb5XxW_VfzdXiR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-09_03,2023-10-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- clxscore=1011 mlxlogscore=999 bulkscore=0 lowpriorityscore=0 phishscore=0
- mlxscore=0 adultscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
- definitions=main-2310090043
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+References: <20231005150728.3429-1-msuchanek@suse.de>
+In-Reply-To: <20231005150728.3429-1-msuchanek@suse.de>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 9 Oct 2023 17:31:02 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQh7vCQ859RPkL3SDr2d4ptt5OVCr66fkPKGcvxDUHtkw@mail.gmail.com>
+Message-ID: <CAK7LNAQh7vCQ859RPkL3SDr2d4ptt5OVCr66fkPKGcvxDUHtkw@mail.gmail.com>
+Subject: Re: [PATCH rebased] kbuild: rpm-pkg: Fix build with non-default MODLIB
+To: Michal Suchanek <msuchanek@suse.de>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Nicolas Schier <nicolas@fjasle.eu>, linux-modules@vger.kernel.org, 
+	Takashi Iwai <tiwai@suse.com>, Lucas De Marchi <lucas.de.marchi@gmail.com>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When modprobe cmds are executed one by one, the final loaded modules
-are not in fixed sequence as expected.
+On Fri, Oct 6, 2023 at 12:49=E2=80=AFAM Michal Suchanek <msuchanek@suse.de>=
+ wrote:
+>
+> The default MODLIB value is composed of two variables and the hardcoded
+> string '/lib/modules/'.
+>
+> MODLIB =3D $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)
+>
+> Defining this middle part as a variable was rejected on the basis that
+> users can pass the whole MODLIB to make, such as
 
-Add the option to make sure modules are in fixed sequence across reboot.
 
-Signed-off-by: Joey Jiao <quic_jiangenj@quicinc.com>
----
- kernel/module/Kconfig | 11 +++++++++++
- kernel/module/main.c  |  6 ++++++
- 2 files changed, 17 insertions(+)
+In other words, do you want to say
 
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-index 33a2e991f608..b45a45f31d6d 100644
---- a/kernel/module/Kconfig
-+++ b/kernel/module/Kconfig
-@@ -389,4 +389,15 @@ config MODULES_TREE_LOOKUP
- 	def_bool y
- 	depends on PERF_EVENTS || TRACING || CFI_CLANG
- 
-+config MODULE_LOAD_IN_SEQUENCE
-+	bool "Load module in sequence"
-+	default n
-+	help
-+	  By default, modules are loaded in random sequence depending on when modprobe
-+	  is executed.
-+
-+	  This option allows modules to be loaded in sequence if modprobe cmds are
-+	  executed one by one in sequence. This option is helpful during syzkaller fuzzing
-+	  to make sure module is loaded into fixed address across device reboot.
-+
- endif # MODULES
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 98fedfdb8db5..587fd84083ae 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2593,11 +2593,17 @@ static noinline int do_init_module(struct module *mod)
- 	 * be cleaned up needs to sync with the queued work - ie
- 	 * rcu_barrier()
- 	 */
-+#ifdef CONFIG_MODULE_LOAD_IN_SEQUENCE
-+	llist_add(&freeinit->node, &init_free_list);
-+#else
- 	if (llist_add(&freeinit->node, &init_free_list))
- 		schedule_work(&init_free_wq);
-+#endif
- 
- 	mutex_unlock(&module_mutex);
-+#ifdef CONFIG_MODULE_LOAD_IN_SEQUENCE
- 	wake_up_all(&module_wq);
-+#endif
- 
- 	mod_stat_add_long(text_size, &total_text_size);
- 	mod_stat_add_long(total_size, &total_mod_size);
--- 
-2.42.0
+"If defining this middle part as a variable had been accepted,
+this patch would have been unneeded." ?
 
+
+I do not think so.
+
+
+If your original patch were accepted, how would this patch look like?
+
+kernel.spec needs to know the module directory somehow.
+
+
+Would you add the following in scripts/package/mkspec ?
+
+%define MODLIB $(pkg-config --print-variables kmod 2>/dev/null | grep
+'^module_directory$' >/dev/null && pkg-config
+--variable=3Dmodule_directory kmod || echo /lib/modules)
+
+
+
+
+
+
+
+
+>
+> make 'MODLIB=3D$(INSTALL_MOD_PATH)/usr/lib/modules/$(KERNELRELEASE)'
+>
+> However, this middle part of MODLIB is independently hardcoded by
+> rpm-pkg, and when the user alters MODLIB this is not reflected when
+> building the package.
+>
+> Given that $(INSTALL_MOD_PATH) is overridden during the rpm package build
+> it is likely going to be empty. Then MODLIB can be passed to the rpm
+> package, and used in place of the whole
+> /usr/lib/modules/$(KERNELRELEASE) part.
+>
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> ---
+>  scripts/package/kernel.spec | 8 ++++----
+>  scripts/package/mkspec      | 1 +
+>  2 files changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/scripts/package/kernel.spec b/scripts/package/kernel.spec
+> index 3eee0143e0c5..15f49c5077db 100644
+> --- a/scripts/package/kernel.spec
+> +++ b/scripts/package/kernel.spec
+> @@ -67,7 +67,7 @@ cp $(%{make} %{makeflags} -s image_name) %{buildroot}/b=
+oot/vmlinuz-%{KERNELRELEA
+>  %{make} %{makeflags} INSTALL_HDR_PATH=3D%{buildroot}/usr headers_install
+>  cp System.map %{buildroot}/boot/System.map-%{KERNELRELEASE}
+>  cp .config %{buildroot}/boot/config-%{KERNELRELEASE}
+> -ln -fns /usr/src/kernels/%{KERNELRELEASE} %{buildroot}/lib/modules/%{KER=
+NELRELEASE}/build
+> +ln -fns /usr/src/kernels/%{KERNELRELEASE} %{buildroot}%{MODLIB}/build
+>  %if %{with_devel}
+>  %{make} %{makeflags} run-command KBUILD_RUN_COMMAND=3D'${srctree}/script=
+s/package/install-extmod-build %{buildroot}/usr/src/kernels/%{KERNELRELEASE=
+}'
+>  %endif
+> @@ -98,8 +98,8 @@ fi
+>
+>  %files
+>  %defattr (-, root, root)
+> -/lib/modules/%{KERNELRELEASE}
+> -%exclude /lib/modules/%{KERNELRELEASE}/build
+> +%{MODLIB}
+> +%exclude %{MODLIB}/build
+>  /boot/*
+>
+>  %files headers
+> @@ -110,5 +110,5 @@ fi
+>  %files devel
+>  %defattr (-, root, root)
+>  /usr/src/kernels/%{KERNELRELEASE}
+> -/lib/modules/%{KERNELRELEASE}/build
+> +%{MODLIB}/build
+>  %endif
+> diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+> index d41608efb747..d41b2e5304ac 100755
+> --- a/scripts/package/mkspec
+> +++ b/scripts/package/mkspec
+> @@ -18,6 +18,7 @@ fi
+>  cat<<EOF
+>  %define ARCH ${ARCH}
+>  %define KERNELRELEASE ${KERNELRELEASE}
+> +%define MODLIB ${MODLIB}
+>  %define pkg_release $("${srctree}/init/build-version")
+>  EOF
+>
+> --
+> 2.42.0
+>
+
+
+--
+Best Regards
+Masahiro Yamada
