@@ -1,98 +1,118 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA0212E6A
-	for <linux-modules@vger.kernel.org>; Wed, 11 Oct 2023 19:20:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250C5657
+	for <linux-modules@vger.kernel.org>; Thu, 12 Oct 2023 01:41:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tk93etI1"
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3053B8F;
-	Wed, 11 Oct 2023 12:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=lgjkqHX2tUg8J3lXvm+VQWd9+smBMxN3ogHXgE1zA9U=; b=tk93etI1BLYzTY2MpHDz3iLPJ9
-	5j6SbX9aun+EvVMGxaRioZG4uogoJ2Ar5WLiTMHQyFGLWR2XWHElExKqQ1tWp7IJJT9r19zzZmqGQ
-	zu/dpFriZG0kI48Gf+gfRwZU6HU4iRBlxnUON9hvLZ1sCa7PtY+yyYgv0aWBxxtbTeZGRX5BdUrj0
-	DVsStSBDRlSP/BiB0SdzX2tZ8wwfPniX/5un6X1zS5vFhhR2LPe3xEa1VLZGJ9+nXrdq3bH0aa7fN
-	kkYmJC6dVzvB2Cc6Z/cbZIbW9VVAsaeGJig4XEpxu80EclXpkVRTtmBixPg4EAGHcETbzlS9sp3gC
-	YRJP5SLw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1qqekZ-00GXV9-31;
-	Wed, 11 Oct 2023 19:20:07 +0000
-Date: Wed, 11 Oct 2023 12:20:07 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Joey Jiao <quic_jiangenj@quicinc.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] module: Add CONFIG_MODULE_LOAD_IN_SEQUENCE option
-Message-ID: <ZSb1Z6EcogoUYcOR@bombadil.infradead.org>
-References: <20231011074438.6098-1-quic_jiangenj@quicinc.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZDePl1ky"
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF49C6;
+	Wed, 11 Oct 2023 18:41:23 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39C1FQ3m017544;
+	Thu, 12 Oct 2023 01:41:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=UQIheOsqvn5ZbIDPMFljWaqWRk+AS+WNufhS+BGF2Ls=;
+ b=ZDePl1kyw2b7rxTClv1BRkiG2HuNv0wqsxevYZnPqeEdyhCoxRifjWwiI0LhzL1lPXrH
+ tNV/7JnYtI+mnSXh+NuDOuYI0Lwco25c7uXg9nwMDmel21LBJ5OxOD966dxVfoqyVUFk
+ 46HN3R6C6Hmu1erTrPD3nc5Z4RB0NHVrh/eqxkipCO4/2LhIHZevCwc1Xf9uRAv+dIEw
+ lHz3FlRMi4uFEcYEcbXqhUP/1zCggfJk/Oxl1MXPQAodCa/HhdT280ZkPL/Io/Tu48NM
+ oQJ+Ce+senWzXrOV0RTYHUzQ3JnMtwyJ7Mk0R2PnHTJWvi5h6dAgRTFwYLxeX2E07v5g 7A== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tnkwnjrd5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Oct 2023 01:41:14 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39C1fElE006460
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Oct 2023 01:41:14 GMT
+Received: from hu-jiangenj-sha.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 11 Oct 2023 18:41:12 -0700
+From: Joey Jiao <quic_jiangenj@quicinc.com>
+To: <linux-modules@vger.kernel.org>
+CC: <quic_jiangenj@quicinc.com>, Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] module: Add CONFIG_MODULE_DISABLE_INIT_FREE option
+Date: Thu, 12 Oct 2023 07:10:11 +0530
+Message-ID: <20231012014012.9030-1-quic_jiangenj@quicinc.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231011074438.6098-1-quic_jiangenj@quicinc.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: zGy8rx1h8tt5MnbW9T97Roc3Y23dtCeu
+X-Proofpoint-GUID: zGy8rx1h8tt5MnbW9T97Roc3Y23dtCeu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-12_02,2023-10-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=905
+ lowpriorityscore=0 bulkscore=0 mlxscore=0 suspectscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 adultscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310120012
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Oct 11, 2023 at 01:14:38PM +0530, Joey Jiao wrote:
-> When modprobe cmds are executed one by one, the final loaded modules
-> are not in fixed sequence as expected.
-> 
-> Add the option to make sure modules are in fixed sequence across reboot.
-> 
-> Signed-off-by: Joey Jiao <quic_jiangenj@quicinc.com>
-> ---
->  kernel/module/Kconfig | 11 +++++++++++
->  kernel/module/main.c  |  3 ++-
->  2 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> index 33a2e991f608..b45a45f31d6d 100644
-> --- a/kernel/module/Kconfig
-> +++ b/kernel/module/Kconfig
-> @@ -389,4 +389,15 @@ config MODULES_TREE_LOOKUP
->  	def_bool y
->  	depends on PERF_EVENTS || TRACING || CFI_CLANG
->  
-> +config MODULE_LOAD_IN_SEQUENCE
-> +	bool "Load module in sequence"
-> +	default n
-> +	help
-> +	  By default, modules are loaded in random sequence depending on when modprobe
-> +	  is executed.
-> +
-> +	  This option allows modules to be loaded in sequence if modprobe cmds are
-> +	  executed one by one in sequence. This option is helpful during syzkaller fuzzing
-> +	  to make sure module is loaded into fixed address across device reboot.
-> +
->  endif # MODULES
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 98fedfdb8db5..e238a31d09eb 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2594,7 +2594,8 @@ static noinline int do_init_module(struct module *mod)
->  	 * rcu_barrier()
->  	 */
->  	if (llist_add(&freeinit->node, &init_free_list))
-> -		schedule_work(&init_free_wq);
-> +		if (!IS_ENABLED(CONFIG_MODULE_LOAD_IN_SEQUENCE)) {
-> +			schedule_work(&init_free_wq);
->  
+To facilitate syzkaller test, it's essential for the module to retain the same
+address across reboots. In userspace, the execution of modprobe commands must
+occur sequentially. In the kernel, selecting the CONFIG_MODULE_DISABLE_INIT_FREE
+option disables the asynchronous freeing of init sections.
 
-As Christoph suggested the rationale for something like this needs to be
-clearly spelled out in the commit log and if so valuable it should be
-a default. The commit log and even the Kconfig description do little
-to justify any rationale for this.
+Signed-off-by: Joey Jiao <quic_jiangenj@quicinc.com>
+---
+ kernel/module/Kconfig | 8 ++++++++
+ kernel/module/main.c  | 5 +++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-  Luis
+diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+index 33a2e991f608..1cdbee4c51de 100644
+--- a/kernel/module/Kconfig
++++ b/kernel/module/Kconfig
+@@ -389,4 +389,12 @@ config MODULES_TREE_LOOKUP
+ 	def_bool y
+ 	depends on PERF_EVENTS || TRACING || CFI_CLANG
+ 
++config MODULE_DISABLE_INIT_FREE
++	bool "Disable freeing of init sections"
++	default n
++	help
++	  Allows users to prevent the freeing of init sections. This option is
++	  particularly helpful for syzkaller fuzzing, ensuring that the module
++	  consistently loads into the same address across reboots.
++
+ endif # MODULES
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 98fedfdb8db5..a5210b90c078 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2593,8 +2593,9 @@ static noinline int do_init_module(struct module *mod)
+ 	 * be cleaned up needs to sync with the queued work - ie
+ 	 * rcu_barrier()
+ 	 */
+-	if (llist_add(&freeinit->node, &init_free_list))
+-		schedule_work(&init_free_wq);
++	if (llist_add(&freeinit->node, &init_free_list) &&
++		!IS_ENABLED(CONFIG_MODULE_DISABLE_INIT_FREE))
++			schedule_work(&init_free_wq);
+ 
+ 	mutex_unlock(&module_mutex);
+ 	wake_up_all(&module_wq);
+-- 
+2.42.0
+
