@@ -1,145 +1,170 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F7C5663
-	for <linux-modules@vger.kernel.org>; Fri, 13 Oct 2023 06:27:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749E215E85;
+	Fri, 13 Oct 2023 18:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="PIbhud9Z"
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF0FBB;
-	Thu, 12 Oct 2023 23:27:26 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39D5hPdL032001;
-	Fri, 13 Oct 2023 06:27:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=nZ5lTCInN9V+BiHFhjiwiOZL80UvMAm2wBOPGV3c8hs=;
- b=PIbhud9ZDl14e/CamvI9CVKJeKBZYD2B1OhDt3NACIwA/jLKcq8+52EHtZOjjM+mhzkt
- p9KBXQSOUepHfbjvDl3wkxf3tb/kHcx3ryELFPQgeLvOilSUlFB9gP8VpzssCQAlB3hT
- spyBdYR7cYdAbT2lsn6FZnYyqpGcttnvfPCpMQsqrbMqjkjgElcn1rcukLrkw516QT8A
- LmmYC3JmW4dcFDgU8a7I2ucKvUiQgkvXQ8gSBFsCHUQ2eXJ0j9SC+aG8jGv7c96/PLWD
- 2pNmN6VlDuJdQhoYZxAghPxQjNjtb9EnNSCw1f3aTcuUlAz26N+knoUKqUBUcCeYNRdx +A== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tpt11gkeq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Oct 2023 06:27:24 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39D6RN3I027061
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Oct 2023 06:27:23 GMT
-Received: from hu-jiangenj-sha.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 12 Oct 2023 23:27:21 -0700
-From: Joey Jiao <quic_jiangenj@quicinc.com>
-To: <linux-modules@vger.kernel.org>
-CC: <quic_jiangenj@quicinc.com>, <quic_likaid@quicinc.com>,
-        Luis Chamberlain
-	<mcgrof@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5] module: Add CONFIG_MODULE_DISABLE_INIT_FREE option
-Date: Fri, 13 Oct 2023 11:57:11 +0530
-Message-ID: <20231013062711.28852-1-quic_jiangenj@quicinc.com>
-X-Mailer: git-send-email 2.42.0
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GHy2B436"
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9778983;
+	Fri, 13 Oct 2023 11:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=BX46dNDWacbTLnmiaLVn5n52llMO/qsVCUFz6T6ofcM=; b=GHy2B436bq7f/+P60+nkE0cQOh
+	29Qe3rqIM5Q5KtjRNqFXM+U7iE7WHDENeWxQJQYCmz+MjCGoxM9qqhNitOFrdRYLUEPh6K32vAEyr
+	+G7EzaQOMWL64UtUzpyb72hbqAd7N42EwSiXLY0tfJdctbvgzSUAmAm+3TvBRgQOPAe1BoNWoSLZE
+	WwTrEmHfEEJ5CA+Rm097ca3TlxEmzV/LEnkbhPb6YgzbTgwWWYU+h3tmAtMrLw2WebWgi2FVMfFkU
+	V6DxdCcZrsUrrezsydsLD6htyflcW0j4KDK5PRv4xHL+dJ3RdVMfkg3Xmr5MesRiOFX6qj1kclEbk
+	U69u8slA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1qrNMI-0045wN-1R;
+	Fri, 13 Oct 2023 18:58:02 +0000
+Date: Fri, 13 Oct 2023 11:58:02 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Joey Jiao <quic_jiangenj@quicinc.com>, linux-hardening@vger.kernel.org,
+	syzkaller@googlegroups.com
+Cc: linux-modules@vger.kernel.org, quic_likaid@quicinc.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] module: Add CONFIG_MODULE_DISABLE_INIT_FREE option
+Message-ID: <ZSmTOtp8mKfBSSkD@bombadil.infradead.org>
+References: <20231013062711.28852-1-quic_jiangenj@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Q3BD-YPWkCQJsHYXFN2FbszG-u0t-0kW
-X-Proofpoint-ORIG-GUID: Q3BD-YPWkCQJsHYXFN2FbszG-u0t-0kW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-13_03,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- phishscore=0 mlxlogscore=852 impostorscore=0 suspectscore=0
- priorityscore=1501 spamscore=0 adultscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310130054
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231013062711.28852-1-quic_jiangenj@quicinc.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Syzkaller uses the _RET_IP_ (also known as pc) to decode covered
-file/function/line, and it employs pc ^ hash(prev_pc) (referred to as
-signal) to indicate covered edge. If the pc for the same file/line
-keeps changing across reboots, syzkaller will report incorrect coverage
-data. Additionally, even if kaslr can be disabled, we cannot get the
-same covered edge for module because both pc and prev_pc have changed,
-thus altering pc ^ hash(prev_pc).
+Joey,
 
-To facilitate syzkaller coverage, it is crucial for both the core kernel
-and modules to maintain at the same addresses across reboots.
+Thanks for working hard on expanding on the commit log to try to
+describe the rationale for this. I'd like review from the linux-hardening
+folks and at least one syzkaller developer.
 
-So, the following steps are necessary:
-- In userspace:
-  1) To maintain an uninterrupted loading sequence, it is recommended to
-execute modprobe commands by loading one module at a time, to avoid any
-interference from the scheduler.
-  2) Avoid unloading any module during fuzzing.
-- In kernel:
-  1) Disable CONFIG_RANDOMIZE_BASE to load the core kernel at the same
-address consistently.
-  2) To ensure deterministic module loading at the same address, enabling
-CONFIG_MODULE_DISABLE_INIT_FREE prevents the asynchronous freeing of init
-sections. Without this option, there is a possibility that the next module
-could be loaded into previous freed init pages of a previous loaded module.
+On Fri, Oct 13, 2023 at 11:57:11AM +0530, Joey Jiao wrote:
+> Syzkaller uses the _RET_IP_ (also known as pc) to decode covered
+> file/function/line,
 
-It is important to note that this option is intended for fuzzing tests only
-and should not be set as the default configuration in production builds.
+OK but that seems immediately limited as your Kconfig confirms to
+!CONFIG_RANDOMIZE_BASE and even for things like kaslr.
 
-Signed-off-by: Joey Jiao <quic_jiangenj@quicinc.com>
----
- kernel/module/Kconfig | 13 +++++++++++++
- kernel/module/main.c  |  3 ++-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+> and it employs pc ^ hash(prev_pc) (referred to as
+> signal) to indicate covered edge. If the pc for the same file/line
+> keeps changing across reboots, syzkaller will report incorrect coverage
+> data.
 
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-index 33a2e991f608..d0df0b5997b0 100644
---- a/kernel/module/Kconfig
-+++ b/kernel/module/Kconfig
-@@ -389,4 +389,17 @@ config MODULES_TREE_LOOKUP
- 	def_bool y
- 	depends on PERF_EVENTS || TRACING || CFI_CLANG
- 
-+config MODULE_DISABLE_INIT_FREE
-+	bool "Disable freeing of init sections"
-+	default n
-+	depends on !RANDOMIZE_BASE
-+	help
-+	  By default, the kernel frees init sections after module is fully
-+	  loaded.
-+
-+	  Enabling MODULE_DISABLE_INIT_FREE allows users to prevent the freeing
-+	  of init sections. It is particularly helpful for syzkaller fuzzing,
-+	  ensuring that the module consistently loads at the same address
-+	  across reboots.
-+
- endif # MODULES
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 98fedfdb8db5..d226df3a6cf6 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2593,7 +2593,8 @@ static noinline int do_init_module(struct module *mod)
- 	 * be cleaned up needs to sync with the queued work - ie
- 	 * rcu_barrier()
- 	 */
--	if (llist_add(&freeinit->node, &init_free_list))
-+	if (!IS_ENABLED(CONFIG_MODULE_DISABLE_INIT_FREE) &&
-+	    llist_add(&freeinit->node, &init_free_list))
- 		schedule_work(&init_free_wq);
- 
- 	mutex_unlock(&module_mutex);
--- 
-2.42.0
+Yeah that seems pretty limiting. Why not use something like the
+effort being put forward to map symbols a bit more accurately to
+file / lines as with what Alessandro Carminati is doing for
+scripts/link-vmlinux.sh to kallsyms. Although that effort helps
+tracers differentiate duplicate symbols it would seem to also help
+fuzzers too even if CONFIG_RANDOMIZE_BASE or kaslr are enabled.
 
+[0] https://lore.kernel.org/all/ZSVkRkf3DNyxb7Vw@oracle.com/T/#m465130eb6cdd16a4c187206c69cf6a17960f90a9
+
+> Additionally, even if kaslr can be disabled, we cannot get the
+> same covered edge for module because both pc and prev_pc have changed,
+> thus altering pc ^ hash(prev_pc).
+> 
+> To facilitate syzkaller coverage, it is crucial for both the core kernel
+> and modules to maintain at the same addresses across reboots.
+
+The problem I see with this, is that, even if it does help, the argument
+being put forward here is that the below recipe is completley
+deterministic and it's not obviously clear to me that it truly is.
+
+> So, the following steps are necessary:
+> - In userspace:
+>   1) To maintain an uninterrupted loading sequence, it is recommended to
+> execute modprobe commands by loading one module at a time, to avoid any
+> interference from the scheduler.
+>   2) Avoid unloading any module during fuzzing.
+> - In kernel:
+>   1) Disable CONFIG_RANDOMIZE_BASE to load the core kernel at the same
+> address consistently.
+>   2) To ensure deterministic module loading at the same address, enabling
+> CONFIG_MODULE_DISABLE_INIT_FREE prevents the asynchronous freeing of init
+> sections. Without this option, there is a possibility that the next module
+> could be loaded into previous freed init pages of a previous loaded module.
+
+Is this well documented somewhere as a requirement for kernels running
+syzkaller?
+
+Because clearly CONFIG_MODULE_DISABLE_INIT_FREE is showing that the
+above recipe was *not* deterministic and that there were holes in it.
+Who's to say this completes the determinism?
+
+Now, if the justificaiton is that it helps current *state of the art*
+fuzzing mapping... that's different and then this could just be
+temporary until a more accurate deterministic mechanism is considered.
+
+> It is important to note that this option is intended for fuzzing tests only
+> and should not be set as the default configuration in production builds.
+
+  Luis
+
+> 
+> Signed-off-by: Joey Jiao <quic_jiangenj@quicinc.com>
+> ---
+>  kernel/module/Kconfig | 13 +++++++++++++
+>  kernel/module/main.c  |  3 ++-
+>  2 files changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index 33a2e991f608..d0df0b5997b0 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+> @@ -389,4 +389,17 @@ config MODULES_TREE_LOOKUP
+>  	def_bool y
+>  	depends on PERF_EVENTS || TRACING || CFI_CLANG
+>  
+> +config MODULE_DISABLE_INIT_FREE
+> +	bool "Disable freeing of init sections"
+> +	default n
+> +	depends on !RANDOMIZE_BASE
+> +	help
+> +	  By default, the kernel frees init sections after module is fully
+> +	  loaded.
+> +
+> +	  Enabling MODULE_DISABLE_INIT_FREE allows users to prevent the freeing
+> +	  of init sections. It is particularly helpful for syzkaller fuzzing,
+> +	  ensuring that the module consistently loads at the same address
+> +	  across reboots.
+
+But that seems false, I don't see proof to that yet. Helping it be more
+acurrate, maybe. If the docs for syzkaller clearly spell these
+requirements out then maybe this is valuable upstream for now, but
+in the meantime the assumption above is just a bit too large for me
+to accept to be true.
+
+> +
+>  endif # MODULES
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 98fedfdb8db5..d226df3a6cf6 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2593,7 +2593,8 @@ static noinline int do_init_module(struct module *mod)
+>  	 * be cleaned up needs to sync with the queued work - ie
+>  	 * rcu_barrier()
+>  	 */
+> -	if (llist_add(&freeinit->node, &init_free_list))
+> +	if (!IS_ENABLED(CONFIG_MODULE_DISABLE_INIT_FREE) &&
+> +	    llist_add(&freeinit->node, &init_free_list))
+>  		schedule_work(&init_free_wq);
+>  
+>  	mutex_unlock(&module_mutex);
+> -- 
+> 2.42.0
+> 
