@@ -1,170 +1,217 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749E215E85;
-	Fri, 13 Oct 2023 18:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BA34122A
+	for <linux-modules@vger.kernel.org>; Tue, 17 Oct 2023 10:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GHy2B436"
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9778983;
-	Fri, 13 Oct 2023 11:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=BX46dNDWacbTLnmiaLVn5n52llMO/qsVCUFz6T6ofcM=; b=GHy2B436bq7f/+P60+nkE0cQOh
-	29Qe3rqIM5Q5KtjRNqFXM+U7iE7WHDENeWxQJQYCmz+MjCGoxM9qqhNitOFrdRYLUEPh6K32vAEyr
-	+G7EzaQOMWL64UtUzpyb72hbqAd7N42EwSiXLY0tfJdctbvgzSUAmAm+3TvBRgQOPAe1BoNWoSLZE
-	WwTrEmHfEEJ5CA+Rm097ca3TlxEmzV/LEnkbhPb6YgzbTgwWWYU+h3tmAtMrLw2WebWgi2FVMfFkU
-	V6DxdCcZrsUrrezsydsLD6htyflcW0j4KDK5PRv4xHL+dJ3RdVMfkg3Xmr5MesRiOFX6qj1kclEbk
-	U69u8slA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1qrNMI-0045wN-1R;
-	Fri, 13 Oct 2023 18:58:02 +0000
-Date: Fri, 13 Oct 2023 11:58:02 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Joey Jiao <quic_jiangenj@quicinc.com>, linux-hardening@vger.kernel.org,
-	syzkaller@googlegroups.com
-Cc: linux-modules@vger.kernel.org, quic_likaid@quicinc.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] module: Add CONFIG_MODULE_DISABLE_INIT_FREE option
-Message-ID: <ZSmTOtp8mKfBSSkD@bombadil.infradead.org>
-References: <20231013062711.28852-1-quic_jiangenj@quicinc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gtOnjxYH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21BFC43391;
+	Tue, 17 Oct 2023 10:16:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697537787;
+	bh=swyJ9YtG3EhTopO4DHeUFs2J4cW+GCL7fSY3ViXq+8A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gtOnjxYHs0lGdUOB/P3KsMpYneZXC5tUqcF/aCdso/xCjMCaCBMfRk9qPYw8kcXYO
+	 VJv1EzbpL63YsFC1F3Nk4n6q0/SSEdgjg2c+k7icq0UtBwlfao+0ksSwWR7eLkWT+x
+	 aZEyeL4/lyAOQMY+FWBxkKxly590fnKgeEoTTBVBI5nqdOYIc+NvItjqAOXcNXIwGQ
+	 pg9f0P6Ke1De6pPDEYsxMFWMl9MLTV54MbjPnwWDCL6JSYphCVUFPEvSaeUxHE5cac
+	 tv1OtOQFCqt4tZPsrcHzOgLNdFMkQJeK460QMb+0sbc643hl0MLwtaulCP9//NyR7r
+	 jsrZ1DdSOJl0g==
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6c4f1f0774dso3823727a34.2;
+        Tue, 17 Oct 2023 03:16:27 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yx0u4zyJPLobUHVoEdzXCrn7HbhNqCt57duFSYJMYBf0/MkVNMe
+	1e7LEtacsazZodMgZ3UGK6MOgNLqT9YFqTwZxZ8=
+X-Google-Smtp-Source: AGHT+IG5Pm9ZPhUMcbgBDQ1KvRFJ1BnDq6D287LE9VXt+8p7+OgCUXA3DVQ/ZrLQQmmKI71abhSnJ+RXo2MJIFlQ2aA=
+X-Received: by 2002:a05:6870:2183:b0:1e9:c315:9d66 with SMTP id
+ l3-20020a056870218300b001e9c3159d66mr1951983oae.40.1697537787138; Tue, 17 Oct
+ 2023 03:16:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231013062711.28852-1-quic_jiangenj@quicinc.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=no
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+References: <20231005150728.3429-1-msuchanek@suse.de> <CAK7LNAQh7vCQ859RPkL3SDr2d4ptt5OVCr66fkPKGcvxDUHtkw@mail.gmail.com>
+ <20231009085208.GT6241@kitsune.suse.cz> <CAK7LNASeMEKVi5c0PEow5KSdN7rsm7UYEf2smWOSkYOhr_5fVQ@mail.gmail.com>
+ <20231009140733.GV6241@kitsune.suse.cz> <CAK7LNAQQMFUt4R1m_U8kBY5=BvxD_dMuE4MD4kpd48WK1E+AGA@mail.gmail.com>
+ <20231010101552.GW6241@kitsune.suse.cz>
+In-Reply-To: <20231010101552.GW6241@kitsune.suse.cz>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 17 Oct 2023 19:15:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASX2_-xt3Qvxie_G=Q4fuVYR6eE47QjQ5NZf7QxY-4_tQ@mail.gmail.com>
+Message-ID: <CAK7LNASX2_-xt3Qvxie_G=Q4fuVYR6eE47QjQ5NZf7QxY-4_tQ@mail.gmail.com>
+Subject: Re: [PATCH rebased] kbuild: rpm-pkg: Fix build with non-default MODLIB
+To: =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Nicolas Schier <nicolas@fjasle.eu>, linux-modules@vger.kernel.org, 
+	Takashi Iwai <tiwai@suse.com>, Lucas De Marchi <lucas.de.marchi@gmail.com>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Joey,
+> >
+> > Let me add more context to my question.
+> >
+> >
+> > I am interested in the timing when
+> > 'pkg-config --print-variables kmod | grep module_directory'
+> > is executed.
+> >
+> >
+> >
+> > 1.  Build a SRPM on machine A
+> >
+> > 2.  Copy the SRPM from machine A to machine B
+> >
+> > 3.  Run rpmbuild on machine B to build the SRPM into a RPM
+> >
+> > 4.  Copy the RPM from machine B to machine C
+> >
+> > 5.  Install the RPM to machine C
+>
+> As far as I am aware the typical use case is two step:
+>
+> 1. run make rpm-pkg on machine A
+> 2. install the binary rpm on machine C that might not have build tools
+>    or powerful enough CPU
+>
+> While it's theoretically possible to use the srpm to rebuild the binary
+> rpm independently of the kernel git tree I am not aware of people
+> commonly doing this.
 
-Thanks for working hard on expanding on the commit log to try to
-describe the rationale for this. I'd like review from the linux-hardening
-folks and at least one syzkaller developer.
 
-On Fri, Oct 13, 2023 at 11:57:11AM +0530, Joey Jiao wrote:
-> Syzkaller uses the _RET_IP_ (also known as pc) to decode covered
-> file/function/line,
 
-OK but that seems immediately limited as your Kconfig confirms to
-!CONFIG_RANDOMIZE_BASE and even for things like kaslr.
+If I correctly understand commit
+8818039f959b2efc0d6f2cb101f8061332f0c77e,
+those Redhat guys pack a SRPM on a local machine,
+then send it to their build server called 'koji'.
 
-> and it employs pc ^ hash(prev_pc) (referred to as
-> signal) to indicate covered edge. If the pc for the same file/line
-> keeps changing across reboots, syzkaller will report incorrect coverage
-> data.
+Otherwise, there is no reason
+to have 'make srcrpm-pkg'.
 
-Yeah that seems pretty limiting. Why not use something like the
-effort being put forward to map symbols a bit more accurately to
-file / lines as with what Alessandro Carminati is doing for
-scripts/link-vmlinux.sh to kallsyms. Although that effort helps
-tracers differentiate duplicate symbols it would seem to also help
-fuzzers too even if CONFIG_RANDOMIZE_BASE or kaslr are enabled.
 
-[0] https://lore.kernel.org/all/ZSVkRkf3DNyxb7Vw@oracle.com/T/#m465130eb6cdd16a4c187206c69cf6a17960f90a9
 
-> Additionally, even if kaslr can be disabled, we cannot get the
-> same covered edge for module because both pc and prev_pc have changed,
-> thus altering pc ^ hash(prev_pc).
-> 
-> To facilitate syzkaller coverage, it is crucial for both the core kernel
-> and modules to maintain at the same addresses across reboots.
+I believe "A == B" is not always true,
+but we can assume "distro(A) == distro(B)" is always met
+for simplicity.
 
-The problem I see with this, is that, even if it does help, the argument
-being put forward here is that the below recipe is completley
-deterministic and it's not obviously clear to me that it truly is.
+So, I am OK with configuration at the SRPM time.
 
-> So, the following steps are necessary:
-> - In userspace:
->   1) To maintain an uninterrupted loading sequence, it is recommended to
-> execute modprobe commands by loading one module at a time, to avoid any
-> interference from the scheduler.
->   2) Avoid unloading any module during fuzzing.
-> - In kernel:
->   1) Disable CONFIG_RANDOMIZE_BASE to load the core kernel at the same
-> address consistently.
->   2) To ensure deterministic module loading at the same address, enabling
-> CONFIG_MODULE_DISABLE_INIT_FREE prevents the asynchronous freeing of init
-> sections. Without this option, there is a possibility that the next module
-> could be loaded into previous freed init pages of a previous loaded module.
 
-Is this well documented somewhere as a requirement for kernels running
-syzkaller?
 
-Because clearly CONFIG_MODULE_DISABLE_INIT_FREE is showing that the
-above recipe was *not* deterministic and that there were holes in it.
-Who's to say this completes the determinism?
 
-Now, if the justificaiton is that it helps current *state of the art*
-fuzzing mapping... that's different and then this could just be
-temporary until a more accurate deterministic mechanism is considered.
 
-> It is important to note that this option is intended for fuzzing tests only
-> and should not be set as the default configuration in production builds.
+> If rebuilding the source rpm on a different machine from where the git
+> tree is located, and possibly on a different distribution is desirable
+> then the detection of the KERNEL_MODULE_DIRECTORY should be added in the
+> rpm spec file as well.
+>
+> > Of course, we are most interested in the module path
+> > of machine C, but it is difficult/impossible to
+> > guess it at the time of building.
+> >
+> > We can assume machine B == machine C.
+> >
+> > We are the second most interested in the module
+> > path on machine B.
+> >
+> > The module path of machine A is not important.
+> >
+> > So, I am asking where you would inject
+> > 'pkg-config --print-variables kmod | grep module_directory'.
+>
+> I don't. I don't think there will be a separate machine B.
+>
+> And I can't really either - so far any attempt at adding support for
+> this has been rejected.
+>
+> Technically the KERNEL_MODULE_DIRECTORY could be set in two steps - one
+> giving the script to run, and one running it, and then it could be run
+> independently in the SRPM as well.
 
-  Luis
 
-> 
-> Signed-off-by: Joey Jiao <quic_jiangenj@quicinc.com>
-> ---
->  kernel/module/Kconfig | 13 +++++++++++++
->  kernel/module/main.c  |  3 ++-
->  2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> index 33a2e991f608..d0df0b5997b0 100644
-> --- a/kernel/module/Kconfig
-> +++ b/kernel/module/Kconfig
-> @@ -389,4 +389,17 @@ config MODULES_TREE_LOOKUP
->  	def_bool y
->  	depends on PERF_EVENTS || TRACING || CFI_CLANG
->  
-> +config MODULE_DISABLE_INIT_FREE
-> +	bool "Disable freeing of init sections"
-> +	default n
-> +	depends on !RANDOMIZE_BASE
-> +	help
-> +	  By default, the kernel frees init sections after module is fully
-> +	  loaded.
-> +
-> +	  Enabling MODULE_DISABLE_INIT_FREE allows users to prevent the freeing
-> +	  of init sections. It is particularly helpful for syzkaller fuzzing,
-> +	  ensuring that the module consistently loads at the same address
-> +	  across reboots.
+At first, I thought your patch [1] was very ugly,
+but I do not think it is so ugly if cleanly implemented.
 
-But that seems false, I don't see proof to that yet. Helping it be more
-acurrate, maybe. If the docs for syzkaller clearly spell these
-requirements out then maybe this is valuable upstream for now, but
-in the meantime the assumption above is just a bit too large for me
-to accept to be true.
+It won't hurt to allow users to specify the middle part of MODLIB.
 
-> +
->  endif # MODULES
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 98fedfdb8db5..d226df3a6cf6 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2593,7 +2593,8 @@ static noinline int do_init_module(struct module *mod)
->  	 * be cleaned up needs to sync with the queued work - ie
->  	 * rcu_barrier()
->  	 */
-> -	if (llist_add(&freeinit->node, &init_free_list))
-> +	if (!IS_ENABLED(CONFIG_MODULE_DISABLE_INIT_FREE) &&
-> +	    llist_add(&freeinit->node, &init_free_list))
->  		schedule_work(&init_free_wq);
->  
->  	mutex_unlock(&module_mutex);
-> -- 
-> 2.42.0
-> 
+
+There are two options.
+
+
+
+
+[A]  Add 'MOD_PREFIX' to specify the middle part of MODLIB
+
+
+The top Makefile will look as follows:
+
+
+MODLIB = $(INSTALL_MOD_PATH)$(MOD_PREFIX)/lib/modules/$(KERNELRELEASE)
+export MODLIB
+
+
+It is easier than specifying the entire MODLIB, but you still need
+to manually pass "MOD_PREFIX=/usr" from an env variable or
+the command line.
+
+If MOD_PREFIX is not given, MODLIB is the same as the current one.
+
+
+
+
+[B] Support a dynamic configuration as well
+
+
+
+MOD_PREFIX ?= $(shell pkg-config --variable=module_prefix libkmod 2>/dev/null)
+export MOD_PREFIX
+
+MODLIB = $(INSTALL_MOD_PATH)$(MOD_PREFIX)/lib/modules/$(KERNELRELEASE)
+export MODLIB
+
+
+
+
+If MOD_PREFIX is given from an env variable or from the command line,
+it is respected.
+
+If "pkg-config --variable=module_prefix libkmod" works,
+that configuration is applied.
+
+Otherwise, MOD_PREFIX is empty, i.e. fall back to the current behavior.
+
+
+
+
+
+
+I prefer 'MOD_PREFIX' to 'KERNEL_MODULE_DIRECTORY' in your patch [1]
+because "|| echo /lib/modules" can be omitted.
+
+I do not think we will have such a crazy distro that
+installs modules under /opt/ directory.
+
+
+
+
+I could not understand why you inserted
+"--print-variables kmod 2>/dev/null | grep '^module_directory$$' >/dev/null"
+but I guess the reason is the same.
+"pkg-config --variable=module_directory kmod" always succeeds,
+so "|| echo /lib/modules" is never processed.
+
+
+I do not know why you parsed kmod.pc instead of libkmod.pc [2]
+
+
+
+[1] https://lore.kernel.org/linux-kbuild/20230718120348.383-1-msuchanek@suse.de/
+[2] https://github.com/kmod-project/kmod/blob/v31/configure.ac#L295
+
+
+
+--
+Best Regards
+Masahiro Yamada
