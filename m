@@ -1,62 +1,71 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716BE3C30
-	for <linux-modules@vger.kernel.org>; Sun, 22 Oct 2023 18:09:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B641078C
+	for <linux-modules@vger.kernel.org>; Sun, 22 Oct 2023 18:22:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="JnYWFfzP"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="rsjxDL3C"
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF7FEB
-	for <linux-modules@vger.kernel.org>; Sun, 22 Oct 2023 11:09:43 -0700 (PDT)
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9B810C3
+	for <linux-modules@vger.kernel.org>; Sun, 22 Oct 2023 11:22:49 -0700 (PDT)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A800D3F078
-	for <linux-modules@vger.kernel.org>; Sun, 22 Oct 2023 18:09:40 +0000 (UTC)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4AA873FADC
+	for <linux-modules@vger.kernel.org>; Sun, 22 Oct 2023 18:22:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1697998180;
-	bh=2u2G7y1eDVG1qOgEBPqskI7dFs5YVWHnKqB6hLgPtS0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-	b=JnYWFfzP+HA5L1TWW2gZjveET43ndzN2pKVA93AP3tzmBYg5xHBnrX/IcxePU3Ibf
-	 YOSVTDQGZz5r1m7otgBhdw5EL8d9uwsB3A75iyOFleacq62Na9Tj5zNhucpRTA0rNe
-	 VL6qBTk++6PogL2SVzrSERIHF3aU8N2/Q4iqo2n2cJvlDqvflmq5ZZ6J+QrOOwZG0m
-	 PESXMj/ao+FVES2PunVUzbbrUi39V3n7feQ1jfrpgYBCADsbY5OpW2/3uRHggw6eJn
-	 uJ3GrUD8KRXopFmNrG53TCQVHChzgoUQLVuLTS4PsSxsNzoycITP2OT1E1Fh+IKxvv
-	 tUdVJkwMBlvrw==
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-32d83fd3765so1102404f8f.3
-        for <linux-modules@vger.kernel.org>; Sun, 22 Oct 2023 11:09:40 -0700 (PDT)
+	s=20210705; t=1697998968;
+	bh=IXDb03/nMdyFNBY2tplz4IHYZT3E0MOfqPsaAJS0POs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version;
+	b=rsjxDL3CqaODCfC5sfwR0CiMVRDqBgn2Tulmyo/UKYiBHsqa3X9Jpjk2wjRZlyQF8
+	 s8YlrBFR5cBKri34tEcD4q98WF/o8sNjFSPLWzg38Vh/DkZevlSJT+rWnC5VR0A32M
+	 Id/ZqjQhe6mD+ywMstc81E57Jf9Ix2jqCn0vaXC863i4MwrX1vZDg4tWGpefG/7Cry
+	 kBliVECG0HpLqjeFM29Ng7nDi+fiq+ejJ40gcd/Z0LXVeQwqG0MLj7gWKnv4kAQJiU
+	 Gl8IRdggC6FN6Xi/31lSON1u+5gcOiSY3hxcNBFzTqt5aDq9NXw/yOrPKiCnDpTcHz
+	 YZqIJaQcaNqEA==
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-40768556444so16160595e9.3
+        for <linux-modules@vger.kernel.org>; Sun, 22 Oct 2023 11:22:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697998180; x=1698602980;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2u2G7y1eDVG1qOgEBPqskI7dFs5YVWHnKqB6hLgPtS0=;
-        b=saqUdOjOuK8LLVf9uCH3g+6C7TAUNrGH6D0Y2ShLE8jOx/VlJIjf7g22WrsLa4bl7W
-         SCLzg67rd2I+GmSB4enSpXXk9Dcp6DgdG6P1cVC16B+7ZHxeMg+/OfxQXMKnJ+tpMu3D
-         bV6xXUes6UkzV/HFvJBIec6z8jqA4JMnOdhLUi77Fzoc8Yh2drO2K+uxOOu2PrXCLMLN
-         QwvYLAk2qMy67Yg4UCRfzALL9NNuocUmFKsMq06MM5pe79pRLBqi8EslQNBcAlNm5g8i
-         dMkgD0mPGZIY7fUj4g1q+jvepRJgOQhNhXn2uJNPq57YLaQZrJz4ctH3hLEJ142mU7Ut
-         /oyQ==
-X-Gm-Message-State: AOJu0YxFV0cfydzOGgIriHXJKpyDGCSeCw8J36lqgvjwr/H1wrE4H+05
-	lUVOb0MFGnDkJDINHp2lSRsxyXZJSwZhLC1lZt/2G6l/KOc3HerS4aUZdtXyGRiFLBu9KkEjkB9
-	190Da+EQXqZYIa/QdiE2x2gMDkjgx/Lz+hy5I53fZ6m/rfTpHdUo=
-X-Received: by 2002:adf:eec8:0:b0:32d:a28b:da08 with SMTP id a8-20020adfeec8000000b0032da28bda08mr5061043wrp.62.1697998179947;
-        Sun, 22 Oct 2023 11:09:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFF6+fuKen5t5aCjEjZgy3qEXEYuodjcpENvkNYyWtlK+AEuZVgqjuYUoLyugX/fuwWz8XLxA==
-X-Received: by 2002:adf:eec8:0:b0:32d:a28b:da08 with SMTP id a8-20020adfeec8000000b0032da28bda08mr5061031wrp.62.1697998179549;
-        Sun, 22 Oct 2023 11:09:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697998968; x=1698603768;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IXDb03/nMdyFNBY2tplz4IHYZT3E0MOfqPsaAJS0POs=;
+        b=socnURqYswg/pZfUOP9Z+1QEbG3AnX7vUOrkwcFTPx/1M5m80uMImX6vyK+VWEbs1e
+         hPAacIm5b7M0F6PnUgLquqyGxDtaK1LqWPaL+bfP0gSNudF7QT+P056S4eP+Yy4MhJap
+         lLmUMqQHgcpl4xo2tIh+JxzTLEVIh8DmI6i9+c37/VXPMDAyA4Bd0YVKe/St+lBUL8t4
+         JLi2I+M9GpQbm15jWsi7B7e7qUx67YP4EbPrALLpmkTPMZ4hiRXdwtJJCkd3DIzYVpUI
+         xuktfdVU8XU0XglIvmHHPTqTTwFFGxBcIPxapjYGUb4AG4192vB1G0IDVTVo3u/LuILp
+         26gQ==
+X-Gm-Message-State: AOJu0YyaIB5Rcv6GRzCvwla3yLEkT18/KqPqEpBW951q3OPA+LIynAtj
+	TsJyMQtHhivqWYnDt+orSzCb2J9BQ47uRoPYkKiqFRz2l2XHaKanR/4IDugoxeE/yx4ujH+6PXA
+	eFlbHTm2ZR+wFwAsNdanRHadpL0k6EGVqH1m8JrIaBo4=
+X-Received: by 2002:a5d:560d:0:b0:32d:14a4:ab3 with SMTP id l13-20020a5d560d000000b0032d14a40ab3mr5517341wrv.24.1697998967929;
+        Sun, 22 Oct 2023 11:22:47 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE/0bMnZy9mCLBpToURwimakYan3VdjSehyT8XH+oOQxh7REkiQ/VkF0T8NR4g8/MPoJc/nFg==
+X-Received: by 2002:a5d:560d:0:b0:32d:14a4:ab3 with SMTP id l13-20020a5d560d000000b0032d14a40ab3mr5517338wrv.24.1697998967586;
+        Sun, 22 Oct 2023 11:22:47 -0700 (PDT)
 Received: from localhost ([2001:67c:1560:8007::aac:c15c])
-        by smtp.gmail.com with ESMTPSA id o7-20020a056000010700b003232d122dbfsm6039011wrx.66.2023.10.22.11.09.39
+        by smtp.gmail.com with ESMTPSA id b14-20020a5d550e000000b0032d9caeab0fsm6080826wrv.77.2023.10.22.11.22.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Oct 2023 11:09:39 -0700 (PDT)
+        Sun, 22 Oct 2023 11:22:47 -0700 (PDT)
 From: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-To: linux-modules@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Subject: [PATCH] kmod: Add FIPS 202 SHA-3 support
-Date: Sun, 22 Oct 2023 19:09:28 +0100
-Message-Id: <20231022180928.180437-1-dimitri.ledkov@canonical.com>
+To: herbert@gondor.apana.org.au,
+	David Howells <dhowells@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-modules@vger.kernel.org
+Subject: [PATCH 5/6] crypto: enable automatic module signing with FIPS 202 SHA-3
+Date: Sun, 22 Oct 2023 19:22:07 +0100
+Message-Id: <20231022182208.188714-6-dimitri.ledkov@canonical.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231022182208.188714-1-dimitri.ledkov@canonical.com>
+References: <20231022182208.188714-1-dimitri.ledkov@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -65,52 +74,61 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for parsing FIPS 202 SHA-3 signature hashes. Separately,
-it is not clear why explicit hashes are re-encoded here, instead of
-trying to generically show any digest openssl supports.
+Add Kconfig options to use SHA-3 for kernel module signing. 256 size
+for RSA only, and higher sizes for RSA and NIST P-384.
 
 Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
 ---
- libkmod/libkmod-signature.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ certs/Kconfig         |  2 +-
+ kernel/module/Kconfig | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
-index b749a818f9..a39059cd7c 100644
---- a/libkmod/libkmod-signature.c
-+++ b/libkmod/libkmod-signature.c
-@@ -57,6 +57,9 @@ enum pkey_hash_algo {
- 	PKEY_HASH_SHA512,
- 	PKEY_HASH_SHA224,
- 	PKEY_HASH_SM3,
-+	PKEY_HASH_SHA3_256,
-+	PKEY_HASH_SHA3_384,
-+	PKEY_HASH_SHA3_512,
- 	PKEY_HASH__LAST
- };
+diff --git a/certs/Kconfig b/certs/Kconfig
+index 84582de66b..69d192a32d 100644
+--- a/certs/Kconfig
++++ b/certs/Kconfig
+@@ -30,7 +30,7 @@ config MODULE_SIG_KEY_TYPE_RSA
+ config MODULE_SIG_KEY_TYPE_ECDSA
+ 	bool "ECDSA"
+ 	select CRYPTO_ECDSA
+-	depends on MODULE_SIG_SHA384 || MODULE_SIG_SHA512
++	depends on !(MODULE_SIG_SHA256 || MODULE_SIG_SHA3_256)
+ 	help
+ 	 Use an elliptic curve key (NIST P384) for module signing. Use
+ 	 a strong hash of same or higher bit length, i.e. sha384 or
+diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+index 9d7d45525f..0ea1b2970a 100644
+--- a/kernel/module/Kconfig
++++ b/kernel/module/Kconfig
+@@ -248,6 +248,18 @@ config MODULE_SIG_SHA512
+ 	bool "Sign modules with SHA-512"
+ 	select CRYPTO_SHA512
  
-@@ -70,6 +73,9 @@ const char *const pkey_hash_algo[PKEY_HASH__LAST] = {
- 	[PKEY_HASH_SHA512]	= "sha512",
- 	[PKEY_HASH_SHA224]	= "sha224",
- 	[PKEY_HASH_SM3]		= "sm3",
-+	[PKEY_HASH_SHA3_256]	= "sha3-256",
-+	[PKEY_HASH_SHA3_384]	= "sha3-384",
-+	[PKEY_HASH_SHA3_512]	= "sha3-512",
- };
++config MODULE_SIG_SHA3_256
++	bool "Sign modules with SHA3-256"
++	select CRYPTO_SHA3
++
++config MODULE_SIG_SHA3_384
++	bool "Sign modules with SHA3-384"
++	select CRYPTO_SHA3
++
++config MODULE_SIG_SHA3_512
++	bool "Sign modules with SHA3-512"
++	select CRYPTO_SHA3
++
+ endchoice
  
- enum pkey_id_type {
-@@ -167,6 +173,12 @@ static int obj_to_hash_algo(const ASN1_OBJECT *o)
- 	case NID_sm3:
- 		return PKEY_HASH_SM3;
- # endif
-+	case NID_sha3_256:
-+		return PKEY_HASH_SHA3_256;
-+	case NID_sha3_384:
-+		return PKEY_HASH_SHA3_384;
-+	case NID_sha3_512:
-+		return PKEY_HASH_SHA3_512;
- 	default:
- 		return -1;
- 	}
+ config MODULE_SIG_HASH
+@@ -256,6 +268,9 @@ config MODULE_SIG_HASH
+ 	default "sha256" if MODULE_SIG_SHA256
+ 	default "sha384" if MODULE_SIG_SHA384
+ 	default "sha512" if MODULE_SIG_SHA512
++	default "sha3-256" if MODULE_SIG_SHA3_256
++	default "sha3-384" if MODULE_SIG_SHA3_384
++	default "sha3-512" if MODULE_SIG_SHA3_512
+ 
+ choice
+ 	prompt "Module compression mode"
 -- 
 2.34.1
 
