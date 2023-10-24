@@ -1,45 +1,45 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237C72B74A
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:47:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A852B743
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PFMlCZyO"
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41757D79
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:00 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d9cb10a5d44so2576986276.0
-        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ogBFPLi8"
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E994910F6
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:04 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5a90d6ab944so49799627b3.2
+        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698155219; x=1698760019; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698155224; x=1698760024; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=re9qyJoQbXM1lB3hu8WMyX+cG50piCMxG0UfNqXuCfM=;
-        b=PFMlCZyOq8+KpB/XmnTZ0DpDxuSjhLqcwFl+VBHN9Ed5054PT7eVKG3WYjEca4c/zW
-         QWBiaAZxzb/uK2c5gtOlF3x5y6HTqqa1Kv4b6P/bhkg7rWfWTjZxP09RGlo1sM+6Q77m
-         ed/Lr+tkAnz1LzGsD27+9aEpGE7Uc1BGe/dlcAxXSbdenGElv/uziAiZPbllJFARvhGA
-         jE/6kTKtS+KZY9kaGehb5wj4ImlVjrYmQ4DACnv6JIF/5POUS3JJ9t8r8qwwt/R4JX0B
-         ZWNiwCIaW/LEQ+snxPyRr43dTADnL/urTryizeGebnwDf0s1e3TdjOFbF9ZUurdklRVP
-         bzNg==
+        bh=YHgfLVMScT5H/FxRnxJh+3xP9v/l17ghYQJMJklbWxc=;
+        b=ogBFPLi8fvrnXU6vKCvucgyBHD5/3evNz0uRdyIFs1oqcaBX8qH5RZIeDsGH5V53QY
+         JLd7XMnbQQW4W6PcPFwunDg79vf1GF+pP0ZszfguoLxlNiM6dNl9bhmgYu9aYHXqe5MG
+         y16phkyjP8bmXcYvLbVM7YJLoOIG6SS4BfVuqAGapmdfBrGOrgcKjgu7u44cD8cOm9kE
+         qpUSR4ZpYt1oFZNTpSldByfENNAof0Yda8pAhuvtUGtgQiJ0Lwc5DkLRBOPLUEGZpma7
+         qyjusp0eIOv43YbpV2B02o5Bmw7aBZdYPAM0vGYC3iHwM7a+tawV6Rat4RnOz5U+04yt
+         JClQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698155219; x=1698760019;
+        d=1e100.net; s=20230601; t=1698155224; x=1698760024;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=re9qyJoQbXM1lB3hu8WMyX+cG50piCMxG0UfNqXuCfM=;
-        b=WIfnNhg9DsswDksmrgeXVg/hHVwOIYzGxQdvr415U7UgCNcxFzuyHv6wOVCr/8LOyP
-         B2ydPNGVaDXifxOhmCxP4/u+X9IcAA91mDfusIFO9NFEXanLJkEcs2XS+ilfb8ogyM8h
-         tGGjx1GAFZQ0GBrFOrpvyqZL/BG1JGlt38RuRJNIvNcztb96lNzAhz0yPoXMsKrkm0Lb
-         ETym4+b4Fs65cKpN02EDeSvzHXMcSq52cDJZDcHP2Be7I7hdL2lBmjKBnu7XIrENjuqy
-         Ft4dITIz+3phTwxXeTlBSOWg3hpL6Pf3om/YVhBm4NTQnbDDCkTjsciCChATsPc4vGCb
-         UfHA==
-X-Gm-Message-State: AOJu0YwuX3cgrINubLPCzsZE83ipKQ1peQkW6iaFe5uVOBjpEtBGMOIx
-	wuH1kiM8vEjKSvTyPNZ5Kfkr8L3WHt8=
-X-Google-Smtp-Source: AGHT+IGJ25fW4BnP1NJYhrzH0X+zrhr1/eHne8PBOna8hmvrezOwpbGVvOl7JHFMC4rGhoY/sRPJncXHlfA=
+        bh=YHgfLVMScT5H/FxRnxJh+3xP9v/l17ghYQJMJklbWxc=;
+        b=mJNJXPe38gTh0Keu+SxXViNHw9bxbKVrM1vz/fLJrtNw5kw769h7wmaXrKN9w0KKFH
+         EijrcKucX8/e0xCXpi7FByJdKaIyLtgkWDyhgu8OV1Wk4byRtTZ+nRludynUPuLxgYGn
+         W0wIgEBxM3zgpoCOy3wkku+YZR03PNUJDCc7SY52Fws7xTqUw6K2jWz3P7JIx7AG2TU0
+         S2yXNbR1tLwG2pz0yfzl6mZPj/hTZz4ZHn2RS/bF0kZX9s1RPVUuSYkXawDWSBTRFJxf
+         4pLcYw2qlt4Vo6SZSpNTz2z/m7dczdboDOGN9AmBAOweJIsz/aHe5efPt5YIYD47c1vB
+         UezA==
+X-Gm-Message-State: AOJu0YykGld1xoxc6Qn1F5g8osUkT5P06zpOdGfebH8QEzzcl8nP8Bzy
+	iZNp1JgN2/RHgD8ILld/Cr7Jztkm9BM=
+X-Google-Smtp-Source: AGHT+IHeBKvEZxCc8z4s40S7ha5hgPZX8U0NGngnhsFR9kbksVyPLDfdSNwpUqF/X+vAqjdciG/7nvEnCYM=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:45ba:3318:d7a5:336a])
- (user=surenb job=sendgmr) by 2002:a05:6902:1083:b0:d9a:c946:c18c with SMTP id
- v3-20020a056902108300b00d9ac946c18cmr311395ybu.6.1698155219188; Tue, 24 Oct
- 2023 06:46:59 -0700 (PDT)
-Date: Tue, 24 Oct 2023 06:46:05 -0700
+ (user=surenb job=sendgmr) by 2002:a25:297:0:b0:d9a:4c45:cfd0 with SMTP id
+ 145-20020a250297000000b00d9a4c45cfd0mr213074ybc.2.1698155223878; Tue, 24 Oct
+ 2023 06:47:03 -0700 (PDT)
+Date: Tue, 24 Oct 2023 06:46:07 -0700
 In-Reply-To: <20231024134637.3120277-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -49,9 +49,9 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231024134637.3120277-1-surenb@google.com>
 X-Mailer: git-send-email 2.42.0.758.gaed0368e0e-goog
-Message-ID: <20231024134637.3120277-9-surenb@google.com>
-Subject: [PATCH v2 08/39] mm: introduce __GFP_NO_OBJ_EXT flag to selectively
- prevent slabobj_ext creation
+Message-ID: <20231024134637.3120277-11-surenb@google.com>
+Subject: [PATCH v2 10/39] mm: prevent slabobj_ext allocations for slabobj_ext
+ and kmem_cache objects
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
@@ -81,56 +81,45 @@ Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
 	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Introduce __GFP_NO_OBJ_EXT flag in order to prevent recursive allocations
-when allocating slabobj_ext on a slab.
+Use __GFP_NO_OBJ_EXT to prevent recursions when allocating slabobj_ext
+objects. Also prevent slabobj_ext allocations for kmem_cache objects.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/gfp_types.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ mm/slab.h        | 6 ++++++
+ mm/slab_common.c | 2 ++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
-index 3fbe624763d9..1c6573d69347 100644
---- a/include/linux/gfp_types.h
-+++ b/include/linux/gfp_types.h
-@@ -52,6 +52,9 @@ enum {
- #endif
- #ifdef CONFIG_LOCKDEP
- 	___GFP_NOLOCKDEP_BIT,
-+#endif
-+#ifdef CONFIG_SLAB_OBJ_EXT
-+	___GFP_NO_OBJ_EXT_BIT,
- #endif
- 	___GFP_LAST_BIT
- };
-@@ -93,6 +96,11 @@ enum {
- #else
- #define ___GFP_NOLOCKDEP	0
- #endif
-+#ifdef CONFIG_SLAB_OBJ_EXT
-+#define ___GFP_NO_OBJ_EXT       BIT(___GFP_NO_OBJ_EXT_BIT)
-+#else
-+#define ___GFP_NO_OBJ_EXT       0
-+#endif
+diff --git a/mm/slab.h b/mm/slab.h
+index 5a47125469f1..187acc593397 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -489,6 +489,12 @@ prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void *p)
+ 	if (!need_slab_obj_ext())
+ 		return NULL;
  
- /*
-  * Physical address zone modifiers (see linux/mmzone.h - low four bits)
-@@ -133,12 +141,15 @@ enum {
-  * node with no fallbacks or placement policy enforcements.
-  *
-  * %__GFP_ACCOUNT causes the allocation to be accounted to kmemcg.
-+ *
-+ * %__GFP_NO_OBJ_EXT causes slab allocation to have no object extension.
-  */
- #define __GFP_RECLAIMABLE ((__force gfp_t)___GFP_RECLAIMABLE)
- #define __GFP_WRITE	((__force gfp_t)___GFP_WRITE)
- #define __GFP_HARDWALL   ((__force gfp_t)___GFP_HARDWALL)
- #define __GFP_THISNODE	((__force gfp_t)___GFP_THISNODE)
- #define __GFP_ACCOUNT	((__force gfp_t)___GFP_ACCOUNT)
-+#define __GFP_NO_OBJ_EXT   ((__force gfp_t)___GFP_NO_OBJ_EXT)
++	if (s->flags & SLAB_NO_OBJ_EXT)
++		return NULL;
++
++	if (flags & __GFP_NO_OBJ_EXT)
++		return NULL;
++
+ 	slab = virt_to_slab(p);
+ 	if (!slab_obj_exts(slab) &&
+ 	    WARN(alloc_slab_obj_exts(slab, s, flags, false),
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 2b42a9d2c11c..446f406d2703 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -222,6 +222,8 @@ int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
+ 	void *vec;
  
- /**
-  * DOC: Watermark modifiers
+ 	gfp &= ~OBJCGS_CLEAR_MASK;
++	/* Prevent recursive extension vector allocation */
++	gfp |= __GFP_NO_OBJ_EXT;
+ 	vec = kcalloc_node(objects, sizeof(struct slabobj_ext), gfp,
+ 			   slab_nid(slab));
+ 	if (!vec)
 -- 
 2.42.0.758.gaed0368e0e-goog
 
