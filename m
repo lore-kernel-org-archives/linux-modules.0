@@ -1,45 +1,45 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED092E629
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:47:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806DA38DD1
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:48:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e8MH4gnJ"
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD4D1FD0
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:47 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d9c5708ddbeso5260158276.1
-        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ivsQ+l+u"
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70872128
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:51 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-da03390793fso1013789276.3
+        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698155266; x=1698760066; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698155271; x=1698760071; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QaUscnVR3A9ivKzFSXLwhZ9WVAKd01wEmSHK760WXQ8=;
-        b=e8MH4gnJoAUpsPTyheF3wyTjBPTAOvkvqVsK4m8evYCMDbM6k+SRnEdexKewJMF7/C
-         EB+7Qnca8n5RsAn+fOZdyj4uFlE1s2YGQp4QnyfI9JXhdkE73Nt5gfPaBTfcjTUg3Sd8
-         HR73DgnWHRunS5r+0EAFzWrR12p/qSOSyHva2483Ojt6rdfZF5B2we8JKHfTgq3yhG9a
-         7XPCtBXakeJgYmQV/DyoXGmlJC5ndSrmERPszGYkrWw4D/k7TXi/210ANxAAb0ZUpvkQ
-         JYmaZyCTkTwCEXDflhlWc22d4aZm+PslZre6aCXyTUzv+wm7gMRlLH3VYHGPcYPYvzPv
-         1+KQ==
+        bh=05OHaXyGuLuiu55tV7A0+NfbyrdoqwRt+v2k2i2/xoM=;
+        b=ivsQ+l+uCR4hbw7CsKaruMdGU8D8Kh6tsayABTOTOCVqm8mLvl1qvQGcRZPikWk5dt
+         J52i7BspCufNyTb0GW57hEPwZ1OrBS/LeOcBGL+SJ7lGOxq5OfHTLkewcox0zmAxglLg
+         vvki62em9UPwgytgmF9PDHtvxkuk8XREW4jZF9p91DrsYOKwonvYLAeZHU3xlzu8/Ej1
+         TqDuFQ2Oo1/DtXaefAu0NevrRFezyicJuP5eQBugA2+Pdev0Fu4ekrFNuNIBB3unFOP5
+         /yql0h4n6zkrjPrk+OyBt8PymiDg1xpjncM9M1fsM2r9O1SX7lnRv8fOwtudeMcAqpZg
+         IPVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698155266; x=1698760066;
+        d=1e100.net; s=20230601; t=1698155271; x=1698760071;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QaUscnVR3A9ivKzFSXLwhZ9WVAKd01wEmSHK760WXQ8=;
-        b=fqWduy34xPMaPuTFk3zYf4S+fWGG3FqUHceTU1+gfAnBVpKC+U63iDRyNOiKPgSyYW
-         beXXTyjbtVzMT11arMZdBUO6jZk/TAjiZiDxbkb6AmUbM5GThXFk3c0Aws/wcIeLli4J
-         z8U0rpbuWHWdApsptRuFginvL4zjF+AzW7uOlpRd9FSGOXjqeDKMK4hXLky60FIa0nor
-         Fl5A56TBeoDHf7CFb7lEZwxQwglMJv3M7mhv2Iy0unVEIL6P5uLrgwK/hF6AniChySbg
-         Jch7aukJk0ZRzqro0cMr/nBVYAEZRv8D6q78aUeLwT+dqcgJGrorRtV+PqCor/Dgu5jd
-         5Gjg==
-X-Gm-Message-State: AOJu0YwSPfCJEXkGZQhl9T7CktfZn6g7cuEq+AQIV03cf09KnFF3ZpEy
-	Z+4dKCTAp0xKpW5HdPv4mcTLciUO9Oc=
-X-Google-Smtp-Source: AGHT+IH1Lkjv7kiNBXwNvQL565BH4DAdvvh1g2aWFQE+hKVCSXY8/YuVaym3f5veoHBOTW82zGAoDjJNWeM=
+        bh=05OHaXyGuLuiu55tV7A0+NfbyrdoqwRt+v2k2i2/xoM=;
+        b=qt6Z5huRw6UAg0wOVGgt7ENpeuqMiWdZKQRsiwU/XNBT4ast6u0mCF1zDok3Nmkhuz
+         f4wFUWl24qemj6j/lLVCjDq2LsT3e07HC9o/i6SVthXx7AF93OSlfzqDGtmES8gLKuQ/
+         DUvZc3IpbQx8dEPkDy5+EJsOhq+sWGQsVIky8HFNmlPclz9eYh7hPtR7cz5ceBq6dBrk
+         afXNZ/0bLDNauQA3D7yb9IWKUp4DA/QTOG+AunUSI7jPCaOicSn09378c9+1Z8Z546gP
+         hsSycoDG6HKmmIFHjBUYsShqvCBE+TGYDrltaSJxvxrzBMr4SyE3K1eoFbwy0zyjTmyb
+         5sCg==
+X-Gm-Message-State: AOJu0YxCUf7BisgRiEtZpYW55Hoqa7BFKDBV3h0Pkq+v1Z8zdBNszo0p
+	59RIQ3ag79Elus4x1oeY+v4r25l+/sA=
+X-Google-Smtp-Source: AGHT+IHL3ylyGkPSwgZbZBswail77fdEm5nbxSBwW+rtci5/qxf0YkGsYjEQDGdhz4VxvAtbtJa/uTQClZE=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:45ba:3318:d7a5:336a])
- (user=surenb job=sendgmr) by 2002:a05:6902:105:b0:da0:3da9:ce08 with SMTP id
- o5-20020a056902010500b00da03da9ce08mr35592ybh.10.1698155266214; Tue, 24 Oct
- 2023 06:47:46 -0700 (PDT)
-Date: Tue, 24 Oct 2023 06:46:26 -0700
+ (user=surenb job=sendgmr) by 2002:a25:5008:0:b0:da0:2b01:7215 with SMTP id
+ e8-20020a255008000000b00da02b017215mr55853ybb.10.1698155270752; Tue, 24 Oct
+ 2023 06:47:50 -0700 (PDT)
+Date: Tue, 24 Oct 2023 06:46:28 -0700
 In-Reply-To: <20231024134637.3120277-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -49,8 +49,8 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231024134637.3120277-1-surenb@google.com>
 X-Mailer: git-send-email 2.42.0.758.gaed0368e0e-goog
-Message-ID: <20231024134637.3120277-30-surenb@google.com>
-Subject: [PATCH v2 29/39] mm: percpu: Introduce pcpuobj_ext
+Message-ID: <20231024134637.3120277-32-surenb@google.com>
+Subject: [PATCH v2 31/39] mm: percpu: enable per-cpu allocation tagging
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
@@ -80,154 +80,207 @@ Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
 	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-From: Kent Overstreet <kent.overstreet@linux.dev>
-
-Upcoming alloc tagging patches require a place to stash per-allocation
-metadata.
-
-We already do this when memcg is enabled, so this patch generalizes the
-obj_cgroup * vector in struct pcpu_chunk by creating a pcpu_obj_ext
-type, which we will be adding to in an upcoming patch - similarly to the
-previous slabobj_ext patch.
+Redefine __alloc_percpu, __alloc_percpu_gfp and __alloc_reserved_percpu
+to record allocations and deallocations done by these functions.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Dennis Zhou <dennis@kernel.org>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: linux-mm@kvack.org
 ---
- mm/percpu-internal.h | 19 +++++++++++++++++--
- mm/percpu.c          | 30 +++++++++++++++---------------
- 2 files changed, 32 insertions(+), 17 deletions(-)
+ include/linux/alloc_tag.h | 15 +++++++++
+ include/linux/percpu.h    | 23 +++++++++-----
+ mm/percpu.c               | 64 +++++----------------------------------
+ 3 files changed, 38 insertions(+), 64 deletions(-)
 
-diff --git a/mm/percpu-internal.h b/mm/percpu-internal.h
-index cdd0aa597a81..e62d582f4bf3 100644
---- a/mm/percpu-internal.h
-+++ b/mm/percpu-internal.h
-@@ -32,6 +32,16 @@ struct pcpu_block_md {
- 	int			nr_bits;	/* total bits responsible for */
- };
+diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
+index 6fa8a94d8bc1..3fe51e67e231 100644
+--- a/include/linux/alloc_tag.h
++++ b/include/linux/alloc_tag.h
+@@ -140,4 +140,19 @@ static inline void alloc_tag_add(union codetag_ref *ref, struct alloc_tag *tag,
+ 	_res;								\
+ })
  
-+struct pcpuobj_ext {
-+#ifdef CONFIG_MEMCG_KMEM
-+	struct obj_cgroup	*cgroup;
-+#endif
-+};
++/*
++ * workaround for a sparse bug: it complains about res_type_to_err() when
++ * typeof(_do_alloc) is a __percpu pointer, but gcc won't let us add a separate
++ * __percpu case to res_type_to_err():
++ */
++#define alloc_hooks_pcpu(_do_alloc)					\
++({									\
++	typeof(_do_alloc) _res;						\
++	DEFINE_ALLOC_TAG(_alloc_tag, _old);				\
++									\
++	_res = _do_alloc;						\
++	alloc_tag_restore(&_alloc_tag, _old);				\
++	_res;								\
++})
 +
-+#ifdef CONFIG_MEMCG_KMEM
-+#define NEED_PCPUOBJ_EXT
-+#endif
-+
- struct pcpu_chunk {
- #ifdef CONFIG_PERCPU_STATS
- 	int			nr_alloc;	/* # of allocations */
-@@ -64,8 +74,8 @@ struct pcpu_chunk {
- 	int			end_offset;	/* additional area required to
- 						   have the region end page
- 						   aligned */
--#ifdef CONFIG_MEMCG_KMEM
--	struct obj_cgroup	**obj_cgroups;	/* vector of object cgroups */
-+#ifdef NEED_PCPUOBJ_EXT
-+	struct pcpuobj_ext	*obj_exts;	/* vector of object cgroups */
+ #endif /* _LINUX_ALLOC_TAG_H */
+diff --git a/include/linux/percpu.h b/include/linux/percpu.h
+index 68fac2e7cbe6..338c1ef9c93d 100644
+--- a/include/linux/percpu.h
++++ b/include/linux/percpu.h
+@@ -2,6 +2,7 @@
+ #ifndef __LINUX_PERCPU_H
+ #define __LINUX_PERCPU_H
+ 
++#include <linux/alloc_tag.h>
+ #include <linux/mmdebug.h>
+ #include <linux/preempt.h>
+ #include <linux/smp.h>
+@@ -9,6 +10,7 @@
+ #include <linux/pfn.h>
+ #include <linux/init.h>
+ #include <linux/cleanup.h>
++#include <linux/sched.h>
+ 
+ #include <asm/percpu.h>
+ 
+@@ -121,7 +123,6 @@ extern int __init pcpu_page_first_chunk(size_t reserved_size,
+ 				pcpu_fc_cpu_to_node_fn_t cpu_to_nd_fn);
  #endif
  
- 	int			nr_pages;	/* # of pages served by this chunk */
-@@ -74,6 +84,11 @@ struct pcpu_chunk {
- 	unsigned long		populated[];	/* populated bitmap */
- };
+-extern void __percpu *__alloc_reserved_percpu(size_t size, size_t align) __alloc_size(1);
+ extern bool __is_kernel_percpu_address(unsigned long addr, unsigned long *can_addr);
+ extern bool is_kernel_percpu_address(unsigned long addr);
  
-+static inline bool need_pcpuobj_ext(void)
-+{
-+	return !mem_cgroup_kmem_disabled();
-+}
+@@ -129,13 +130,15 @@ extern bool is_kernel_percpu_address(unsigned long addr);
+ extern void __init setup_per_cpu_areas(void);
+ #endif
+ 
+-extern void __percpu *__alloc_percpu_gfp(size_t size, size_t align, gfp_t gfp) __alloc_size(1);
+-extern void __percpu *__alloc_percpu(size_t size, size_t align) __alloc_size(1);
+-extern void free_percpu(void __percpu *__pdata);
++extern void __percpu *pcpu_alloc_noprof(size_t size, size_t align, bool reserved,
++				   gfp_t gfp) __alloc_size(1);
+ 
+-DEFINE_FREE(free_percpu, void __percpu *, free_percpu(_T))
+-
+-extern phys_addr_t per_cpu_ptr_to_phys(void *addr);
++#define __alloc_percpu_gfp(_size, _align, _gfp)				\
++	alloc_hooks_pcpu(pcpu_alloc_noprof(_size, _align, false, _gfp))
++#define __alloc_percpu(_size, _align)					\
++	alloc_hooks_pcpu(pcpu_alloc_noprof(_size, _align, false, GFP_KERNEL))
++#define __alloc_reserved_percpu(_size, _align)				\
++	alloc_hooks_pcpu(pcpu_alloc_noprof(_size, _align, true, GFP_KERNEL))
+ 
+ #define alloc_percpu_gfp(type, gfp)					\
+ 	(typeof(type) __percpu *)__alloc_percpu_gfp(sizeof(type),	\
+@@ -144,6 +147,12 @@ extern phys_addr_t per_cpu_ptr_to_phys(void *addr);
+ 	(typeof(type) __percpu *)__alloc_percpu(sizeof(type),		\
+ 						__alignof__(type))
+ 
++extern void free_percpu(void __percpu *__pdata);
 +
- extern spinlock_t pcpu_lock;
++DEFINE_FREE(free_percpu, void __percpu *, free_percpu(_T))
++
++extern phys_addr_t per_cpu_ptr_to_phys(void *addr);
++
+ extern unsigned long pcpu_nr_pages(void);
  
- extern struct list_head *pcpu_chunk_lists;
+ #endif /* __LINUX_PERCPU_H */
 diff --git a/mm/percpu.c b/mm/percpu.c
-index a7665de8485f..5a6202acffa3 100644
+index 002ee5d38fd5..328a5b3c943b 100644
 --- a/mm/percpu.c
 +++ b/mm/percpu.c
-@@ -1392,9 +1392,9 @@ static struct pcpu_chunk * __init pcpu_alloc_first_chunk(unsigned long tmp_addr,
- 		panic("%s: Failed to allocate %zu bytes\n", __func__,
- 		      alloc_size);
- 
--#ifdef CONFIG_MEMCG_KMEM
-+#ifdef NEED_PCPUOBJ_EXT
- 	/* first chunk is free to use */
--	chunk->obj_cgroups = NULL;
-+	chunk->obj_exts = NULL;
+@@ -1728,7 +1728,7 @@ static void pcpu_alloc_tag_free_hook(struct pcpu_chunk *chunk, int off, size_t s
  #endif
- 	pcpu_init_md_blocks(chunk);
  
-@@ -1463,12 +1463,12 @@ static struct pcpu_chunk *pcpu_alloc_chunk(gfp_t gfp)
- 	if (!chunk->md_blocks)
- 		goto md_blocks_fail;
- 
--#ifdef CONFIG_MEMCG_KMEM
--	if (!mem_cgroup_kmem_disabled()) {
--		chunk->obj_cgroups =
-+#ifdef NEED_PCPUOBJ_EXT
-+	if (need_pcpuobj_ext()) {
-+		chunk->obj_exts =
- 			pcpu_mem_zalloc(pcpu_chunk_map_bits(chunk) *
--					sizeof(struct obj_cgroup *), gfp);
--		if (!chunk->obj_cgroups)
-+					sizeof(struct pcpuobj_ext), gfp);
-+		if (!chunk->obj_exts)
- 			goto objcg_fail;
- 	}
- #endif
-@@ -1480,7 +1480,7 @@ static struct pcpu_chunk *pcpu_alloc_chunk(gfp_t gfp)
- 
- 	return chunk;
- 
--#ifdef CONFIG_MEMCG_KMEM
-+#ifdef NEED_PCPUOBJ_EXT
- objcg_fail:
- 	pcpu_mem_free(chunk->md_blocks);
- #endif
-@@ -1498,8 +1498,8 @@ static void pcpu_free_chunk(struct pcpu_chunk *chunk)
+ /**
+- * pcpu_alloc - the percpu allocator
++ * pcpu_alloc_noprof - the percpu allocator
+  * @size: size of area to allocate in bytes
+  * @align: alignment of area (max PAGE_SIZE)
+  * @reserved: allocate from the reserved chunk if available
+@@ -1742,7 +1742,7 @@ static void pcpu_alloc_tag_free_hook(struct pcpu_chunk *chunk, int off, size_t s
+  * RETURNS:
+  * Percpu pointer to the allocated area on success, NULL on failure.
+  */
+-static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
++void __percpu *pcpu_alloc_noprof(size_t size, size_t align, bool reserved,
+ 				 gfp_t gfp)
  {
- 	if (!chunk)
- 		return;
--#ifdef CONFIG_MEMCG_KMEM
--	pcpu_mem_free(chunk->obj_cgroups);
-+#ifdef NEED_PCPUOBJ_EXT
-+	pcpu_mem_free(chunk->obj_exts);
- #endif
- 	pcpu_mem_free(chunk->md_blocks);
- 	pcpu_mem_free(chunk->bound_map);
-@@ -1648,8 +1648,8 @@ static void pcpu_memcg_post_alloc_hook(struct obj_cgroup *objcg,
- 	if (!objcg)
- 		return;
+ 	gfp_t pcpu_gfp;
+@@ -1909,6 +1909,8 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
  
--	if (likely(chunk && chunk->obj_cgroups)) {
--		chunk->obj_cgroups[off >> PCPU_MIN_ALLOC_SHIFT] = objcg;
-+	if (likely(chunk && chunk->obj_exts)) {
-+		chunk->obj_exts[off >> PCPU_MIN_ALLOC_SHIFT].cgroup = objcg;
+ 	pcpu_memcg_post_alloc_hook(objcg, chunk, off, size);
  
- 		rcu_read_lock();
- 		mod_memcg_state(obj_cgroup_memcg(objcg), MEMCG_PERCPU_B,
-@@ -1665,13 +1665,13 @@ static void pcpu_memcg_free_hook(struct pcpu_chunk *chunk, int off, size_t size)
- {
- 	struct obj_cgroup *objcg;
++	pcpu_alloc_tag_alloc_hook(chunk, off, size);
++
+ 	return ptr;
  
--	if (unlikely(!chunk->obj_cgroups))
-+	if (unlikely(!chunk->obj_exts))
- 		return;
+ fail_unlock:
+@@ -1937,61 +1939,7 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
  
--	objcg = chunk->obj_cgroups[off >> PCPU_MIN_ALLOC_SHIFT];
-+	objcg = chunk->obj_exts[off >> PCPU_MIN_ALLOC_SHIFT].cgroup;
- 	if (!objcg)
- 		return;
--	chunk->obj_cgroups[off >> PCPU_MIN_ALLOC_SHIFT] = NULL;
-+	chunk->obj_exts[off >> PCPU_MIN_ALLOC_SHIFT].cgroup = NULL;
+ 	return NULL;
+ }
+-
+-/**
+- * __alloc_percpu_gfp - allocate dynamic percpu area
+- * @size: size of area to allocate in bytes
+- * @align: alignment of area (max PAGE_SIZE)
+- * @gfp: allocation flags
+- *
+- * Allocate zero-filled percpu area of @size bytes aligned at @align.  If
+- * @gfp doesn't contain %GFP_KERNEL, the allocation doesn't block and can
+- * be called from any context but is a lot more likely to fail. If @gfp
+- * has __GFP_NOWARN then no warning will be triggered on invalid or failed
+- * allocation requests.
+- *
+- * RETURNS:
+- * Percpu pointer to the allocated area on success, NULL on failure.
+- */
+-void __percpu *__alloc_percpu_gfp(size_t size, size_t align, gfp_t gfp)
+-{
+-	return pcpu_alloc(size, align, false, gfp);
+-}
+-EXPORT_SYMBOL_GPL(__alloc_percpu_gfp);
+-
+-/**
+- * __alloc_percpu - allocate dynamic percpu area
+- * @size: size of area to allocate in bytes
+- * @align: alignment of area (max PAGE_SIZE)
+- *
+- * Equivalent to __alloc_percpu_gfp(size, align, %GFP_KERNEL).
+- */
+-void __percpu *__alloc_percpu(size_t size, size_t align)
+-{
+-	return pcpu_alloc(size, align, false, GFP_KERNEL);
+-}
+-EXPORT_SYMBOL_GPL(__alloc_percpu);
+-
+-/**
+- * __alloc_reserved_percpu - allocate reserved percpu area
+- * @size: size of area to allocate in bytes
+- * @align: alignment of area (max PAGE_SIZE)
+- *
+- * Allocate zero-filled percpu area of @size bytes aligned at @align
+- * from reserved percpu area if arch has set it up; otherwise,
+- * allocation is served from the same dynamic area.  Might sleep.
+- * Might trigger writeouts.
+- *
+- * CONTEXT:
+- * Does GFP_KERNEL allocation.
+- *
+- * RETURNS:
+- * Percpu pointer to the allocated area on success, NULL on failure.
+- */
+-void __percpu *__alloc_reserved_percpu(size_t size, size_t align)
+-{
+-	return pcpu_alloc(size, align, true, GFP_KERNEL);
+-}
++EXPORT_SYMBOL_GPL(pcpu_alloc_noprof);
  
- 	obj_cgroup_uncharge(objcg, pcpu_obj_full_size(size));
+ /**
+  * pcpu_balance_free - manage the amount of free chunks
+@@ -2301,6 +2249,8 @@ void free_percpu(void __percpu *ptr)
  
+ 	size = pcpu_free_area(chunk, off);
+ 
++	pcpu_alloc_tag_free_hook(chunk, off, size);
++
+ 	pcpu_memcg_free_hook(chunk, off, size);
+ 
+ 	/*
 -- 
 2.42.0.758.gaed0368e0e-goog
 
