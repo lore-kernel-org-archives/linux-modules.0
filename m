@@ -1,45 +1,45 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B9230F9B
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEB53A266
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SzE1AUc4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uTuQ+Bei"
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554942118
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:48:09 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-da04776a869so499112276.0
-        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:48:09 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0995610E5
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:48:05 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d9cb4de3bf0so5406016276.0
+        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:48:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698155288; x=1698760088; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698155284; x=1698760084; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5iA9XL/oyX6Tyl0rnn5vdBOVip3jqaNokzkLete42fs=;
-        b=SzE1AUc4BKZmpNvrK36+SD3sWBCP8XLcqDoSN7SaMr2sU/BG1aGfkwvE/f4JQXF1Ni
-         hMF1o0lNDayxObo0C0wjdTZL8vll7r8pHHyLG7ycDypgWlfcaIqRWfAtBLLsA0BrpBju
-         FzAAj+z5fJfNRaY9+A3lV6zqMBZMFytgHluIRpWvQ3sZxRKVk0/VlTAtIhv1vlgDxCFT
-         1X0QR2xi2xN0sadEGLcjq9JrBII48akc5UqV38dawVcqLr033J2tJARubY1zouO5IWW8
-         ObNjzyLUon3FC8l21rKOSCG4nSNGOECtt/Pzik0zSbCvIpn6JtaWo302ot6QhuiBaU7v
-         3hsg==
+        bh=nhDAtTQGKDGtY2/txJr7AfaYGvHf9XTIsotRfIG2XI4=;
+        b=uTuQ+BeipJRSS468RV0J4N/errrKktwdtqAbygziGLINd4pYnX/Wwy/y2hB9kX0K9L
+         Z1mPWbrzmS4w+Ctdw12m0O1wQajoVEKkDB4XdfbwlWyqODEv5prGsg0+8RX7jxlEoW6D
+         zDhluOqX8vDIA0hTaGAy3UC6tSp7I/LMoyf2MIV5evcqrbu5FID7xA5wMlVCt0DoQvTw
+         7ruuskGso+/4+CiI8DoPTgiLs+8zytR60Y6thqFcPea6/oliJnso9DwsjjUCMoxUCZzQ
+         bznQEhc5P48uoia9Xv2z+lAQGinEXYCjLj3vfiUUkpArYnCUglOSQcsW5lViaV2ni8EI
+         OHag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698155288; x=1698760088;
+        d=1e100.net; s=20230601; t=1698155284; x=1698760084;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5iA9XL/oyX6Tyl0rnn5vdBOVip3jqaNokzkLete42fs=;
-        b=w/VooyxWFZhMZHZ+X61R717knSNRWca85MvKlpMgYLhF5OUCHKRVtipMnntJ4SuNDi
-         yFLgxoCVCcyZOctXBg4nHGLSKviTOCjfE289lX2fwkxUj0ItaGbVDjoaj4dawz3jWNG7
-         wTnDgfICTht8JimKMux+xoN9EHaF1suq3/wgzJKtOjvbAOMUsjb4KGVqZ0zW0VlnzchS
-         yJPSg2QtzCcP+OBJQ+2yROFaDJb3lBfvw0BPxQe0HhDbeBC7wSh9ZZQBeDskaFaDa2S6
-         e7h6bExUrduWTy1jxewinU4GPINlah3/OFVRASdujbVX1Rbp3tcLFBp/Gp0TpQaDLKeR
-         +N9A==
-X-Gm-Message-State: AOJu0YylxuzNbdxapMLuq2B1yfRdfkFW6K5vvpdF9PPIeuwNyQ42iN24
-	4F2vN9sG1AnDfSRYpPZx5RT4i5zywRA=
-X-Google-Smtp-Source: AGHT+IG2dGz7nkvTfdEUK5vnzGjBRQVPkaal0DQpTev0jCoT6FkWge7pFcsduGaJ7nCMKZx++nF8KYSK16A=
+        bh=nhDAtTQGKDGtY2/txJr7AfaYGvHf9XTIsotRfIG2XI4=;
+        b=qnkhrw7yp/OholXSwfyLl7hAbYoWwzu79RtmG/i7XbEz4dzM/UEPbohdoWJIAU8TaB
+         lqSHYaPewzM/MysPaovD/139aUent4YeGMsTGWXu/DQpaJ9Np2HKpdA3kSgKaE+v92rg
+         cdkUZD42NS4Kr3g1dsVLLC1prcHiGzvN40FK9KSAnuJtmmSFz3TldBkZbesDkQjnEmoN
+         2cOsWM816a1EnB+/Q9G3eDHZ/bYGKto/Oq1YYsOghdC2bJirra+MOGXUCIUPzgT+WEEa
+         EBFmbAEVP8xxGYEI/37Uk17f1mZZ4Oyi++3onhKJieTkT0Mgs9hiPOuvuD8OvHVGH4y5
+         3foA==
+X-Gm-Message-State: AOJu0Yz4lQDfUmi/bgekcTLnsdO2h0FQOUO5B/u7LWFmwGzMJO8DTs8B
+	09NshOebMBYIPnJx+RT7BX0lTzyHalY=
+X-Google-Smtp-Source: AGHT+IEqWGHLJsK7BvvDJRxELns2H70hhRTn4578toCcoqAqCoHJoeJS8HRj9/dFP0FFd7ukqdr613N1OPo=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:45ba:3318:d7a5:336a])
- (user=surenb job=sendgmr) by 2002:a25:ade8:0:b0:d89:dd12:163d with SMTP id
- d40-20020a25ade8000000b00d89dd12163dmr222107ybe.1.1698155288323; Tue, 24 Oct
- 2023 06:48:08 -0700 (PDT)
-Date: Tue, 24 Oct 2023 06:46:36 -0700
+ (user=surenb job=sendgmr) by 2002:a25:8541:0:b0:d89:b072:d06f with SMTP id
+ f1-20020a258541000000b00d89b072d06fmr231639ybn.7.1698155283973; Tue, 24 Oct
+ 2023 06:48:03 -0700 (PDT)
+Date: Tue, 24 Oct 2023 06:46:34 -0700
 In-Reply-To: <20231024134637.3120277-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -49,9 +49,8 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231024134637.3120277-1-surenb@google.com>
 X-Mailer: git-send-email 2.42.0.758.gaed0368e0e-goog
-Message-ID: <20231024134637.3120277-40-surenb@google.com>
-Subject: [PATCH v2 39/39] MAINTAINERS: Add entries for code tagging and memory
- allocation profiling
+Message-ID: <20231024134637.3120277-38-surenb@google.com>
+Subject: [PATCH v2 37/39] codetag: debug: mark codetags for reserved pages as empty
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
@@ -81,50 +80,77 @@ Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
 	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-From: Kent Overstreet <kent.overstreet@linux.dev>
+To avoid debug warnings while freeing reserved pages which were not
+allocated with usual allocators, mark their codetags as empty before
+freeing.
+Maybe we can annotate reserved pages correctly and avoid this?
 
-The new code & libraries added are being maintained - mark them as such.
-
-Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- MAINTAINERS | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ include/linux/alloc_tag.h   | 2 ++
+ include/linux/mm.h          | 8 ++++++++
+ include/linux/pgalloc_tag.h | 2 ++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2894f0777537..22e51de42131 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5118,6 +5118,13 @@ S:	Supported
- F:	Documentation/process/code-of-conduct-interpretation.rst
- F:	Documentation/process/code-of-conduct.rst
+diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
+index 1f3207097b03..102caf62c2a9 100644
+--- a/include/linux/alloc_tag.h
++++ b/include/linux/alloc_tag.h
+@@ -95,6 +95,7 @@ static inline void set_codetag_empty(union codetag_ref *ref)
+ #else /* CONFIG_MEM_ALLOC_PROFILING_DEBUG */
  
-+CODE TAGGING
-+M:	Suren Baghdasaryan <surenb@google.com>
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	include/linux/codetag.h
-+F:	lib/codetag.c
-+
- COMEDI DRIVERS
- M:	Ian Abbott <abbotti@mev.co.uk>
- M:	H Hartley Sweeten <hsweeten@visionengravers.com>
-@@ -13708,6 +13715,15 @@ F:	mm/memblock.c
- F:	mm/mm_init.c
- F:	tools/testing/memblock/
+ static inline bool is_codetag_empty(union codetag_ref *ref) { return false; }
++static inline void set_codetag_empty(union codetag_ref *ref) {}
  
-+MEMORY ALLOCATION PROFILING
-+M:	Suren Baghdasaryan <surenb@google.com>
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	include/linux/alloc_tag.h
-+F:	include/linux/codetag_ctx.h
-+F:	lib/alloc_tag.c
-+F:	lib/pgalloc_tag.c
+ #endif /* CONFIG_MEM_ALLOC_PROFILING_DEBUG */
+ 
+@@ -155,6 +156,7 @@ static inline void alloc_tag_sub(union codetag_ref *ref, size_t bytes) {}
+ static inline void alloc_tag_sub_noalloc(union codetag_ref *ref, size_t bytes) {}
+ static inline void alloc_tag_add(union codetag_ref *ref, struct alloc_tag *tag,
+ 				 size_t bytes) {}
++static inline void set_codetag_empty(union codetag_ref *ref) {}
+ 
+ #endif
+ 
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index bf5d0b1b16f4..310129414833 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -5,6 +5,7 @@
+ #include <linux/errno.h>
+ #include <linux/mmdebug.h>
+ #include <linux/gfp.h>
++#include <linux/pgalloc_tag.h>
+ #include <linux/bug.h>
+ #include <linux/list.h>
+ #include <linux/mmzone.h>
+@@ -3077,6 +3078,13 @@ extern void reserve_bootmem_region(phys_addr_t start,
+ /* Free the reserved page into the buddy system, so it gets managed. */
+ static inline void free_reserved_page(struct page *page)
+ {
++	union codetag_ref *ref;
 +
- MEMORY CONTROLLER DRIVERS
- M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
- L:	linux-kernel@vger.kernel.org
++	ref = get_page_tag_ref(page);
++	if (ref) {
++		set_codetag_empty(ref);
++		put_page_tag_ref(ref);
++	}
+ 	ClearPageReserved(page);
+ 	init_page_count(page);
+ 	__free_page(page);
+diff --git a/include/linux/pgalloc_tag.h b/include/linux/pgalloc_tag.h
+index 0174aff5e871..ae9b0f359264 100644
+--- a/include/linux/pgalloc_tag.h
++++ b/include/linux/pgalloc_tag.h
+@@ -93,6 +93,8 @@ static inline void pgalloc_tag_split(struct page *page, unsigned int nr)
+ 
+ #else /* CONFIG_MEM_ALLOC_PROFILING */
+ 
++static inline union codetag_ref *get_page_tag_ref(struct page *page) { return NULL; }
++static inline void put_page_tag_ref(union codetag_ref *ref) {}
+ static inline void pgalloc_tag_add(struct page *page, struct task_struct *task,
+ 				   unsigned int order) {}
+ static inline void pgalloc_tag_sub(struct page *page, unsigned int order) {}
 -- 
 2.42.0.758.gaed0368e0e-goog
 
