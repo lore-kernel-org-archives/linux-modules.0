@@ -1,45 +1,45 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B666B2B5E8
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184D82B5F5
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:46:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fvFNewWr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Jqnwgpl+"
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365A110F
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:46:47 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-da03390793fso1012317276.3
-        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:46:47 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B7E10DC
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:46:51 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d9cb10a5d44so2576928276.0
+        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:46:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698155206; x=1698760006; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698155210; x=1698760010; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fObhDXE+DfK48fbfXMStFHtHAmn90M4M91A2l4CxzLM=;
-        b=fvFNewWrJ6myhtkKXKjtJz8cIzAVhMdqhSo1R8XR3dG9lbaEcu40daF7zkrLWvYyQC
-         Q2mL5UdAfr3rTWRWlr7tfdubTPhnHuVlp5zfkMCb4p6DfWKYLDBpBxDlbioDo5ZTgZRX
-         euVcheUfciQ/xmzBww2SzGQeOg/W9/euwxB82yYhQc374RWE0GnNoLePR3bCXEmQF965
-         czbTs9HHTypXYJ2KkiNNw3L6nBcF2t1cFnXO3xI713cVEfoux04p9ykMWFJOpeasDkxe
-         oENd442Qp97odp3mOJiUNzAJ2X+NUsAxZWMiaMCRtwsD93S0RYHH/4mfaXmqRw/S4P2K
-         tOnw==
+        bh=griUcA7GUXZ/C94ijw+khTWkXdhOo9/SkZ3zjzjerBg=;
+        b=Jqnwgpl+iQgBXPyzwBt0Y9Y8w3zvUht2600ZNQUwsUvGgtC5+FTtNIYPEd0CTsQKi1
+         k5rzT4QjzP+sGrlMTVBJdcf2MlS7wm0dRhvz7KMmLgKKLED3QqZTQhJaRxOnRIzdhuJ0
+         Pz6IqSMaKj66GjRXDUUzPuO0/S3KH7tCKtLAFYVTnSrD7Dj/O0JGspre3I9wUFlICaH/
+         D9Llcg1gxL/kpuP5Cf9pEv0t00foYmiEvsdUi456IyngEl+AI6pOmIo5BU4yGsCJVryI
+         WhpiVIWQkegWWs2eCR9huOjYJC5Cjrz1nGoo7LW1qCRFneuvE7GwF4ffuk5p0W+n/xTw
+         3ZOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698155206; x=1698760006;
+        d=1e100.net; s=20230601; t=1698155210; x=1698760010;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fObhDXE+DfK48fbfXMStFHtHAmn90M4M91A2l4CxzLM=;
-        b=OZsih/wnOYiYPTtwxHdzaBmz+MMR3sP6wo1STUlKlpR4xb7oIrpVF9l+JDlRZRiLNM
-         SgsZKO4J7C+JvtMCMMzCergG18IU+LPojI27w8ps6XvlAWlCdXJQjOI9vnub78dfP+aD
-         9SDNo85xt+dxXmogSBP8Grqhwl/WsmrafDjx3Yfe4yDJSwjYXRvVFdojxFkag8S0tO3N
-         WwWO2oZrWR+EBqDb789agL5zK78DN0VVol/v8Ruac0nhhyq6E9zAl3llGGXPPW/cnzJj
-         IUlb+0IZ0qNzijqHwAIaD8lGFb5d/xaso69QuSsz6EJrEapgnqBL5s08WtXxUBRRlVF6
-         l3OA==
-X-Gm-Message-State: AOJu0Yyu93y3F9lrkt0p7v9y++v8wLbutvLILFTXVbk+Das8uOMvEHOV
-	2PcLpDCOC9OXCGXcv4BBEaA6iFCtYS4=
-X-Google-Smtp-Source: AGHT+IGzqDmmVKWAX0qOLCG4zSSOu2XUUgzUKaIXDvA8+3j+t9o+p5RCbsfa+aQ1r6gMSAIrcYIsUr6/0f0=
+        bh=griUcA7GUXZ/C94ijw+khTWkXdhOo9/SkZ3zjzjerBg=;
+        b=s6yZarKEofIZZGeehkgYNA07MqSMJZ1WPnDJsydXAs3lze3+UU93bY3HIoM8+1Tfrt
+         iqi32gu/b7UrjUNr5ohoZWH1hhjml17dd5HH/sSB1AfF069NbQ6imeL65XWp4x5MAr1m
+         6r3+ZavC5ICxMUa9SyFtkuB/M134eKqUX1d2BQdn+chf4DDJ6Jw41+VcjhhBIMZoFFrO
+         H5N6WrpNsnM845t2WvBeVOg4riU9zjKJUDmTj9p9zZZ6vcSwIEFsdc0k4JmVG3XzE0AP
+         zozmvUTmzRe3St6amjn12r4I9cv+KHRqCOiNHMFuc13J6Vk2qXI51g2yGixMrkNk6Lwq
+         I5Tg==
+X-Gm-Message-State: AOJu0YzdoSo08YLCXMBGG4gcJczsq9/cXa0g3vsKcs4+JBpIjwcj7R2d
+	63Y42VQvLU8/Lm3bbvKP0SFCM5Yr5IU=
+X-Google-Smtp-Source: AGHT+IEpwWcHxe3pWwBFpCZZha+IjIrDrruma7abx61pSV1ETO4xUZC89g08mISvSSxLbel6DAK32ekX/R8=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:45ba:3318:d7a5:336a])
- (user=surenb job=sendgmr) by 2002:a25:5008:0:b0:da0:2b01:7215 with SMTP id
- e8-20020a255008000000b00da02b017215mr55818ybb.10.1698155205957; Tue, 24 Oct
- 2023 06:46:45 -0700 (PDT)
-Date: Tue, 24 Oct 2023 06:45:59 -0700
+ (user=surenb job=sendgmr) by 2002:a25:7485:0:b0:d9a:cbf9:1c8d with SMTP id
+ p127-20020a257485000000b00d9acbf91c8dmr216225ybc.12.1698155210387; Tue, 24
+ Oct 2023 06:46:50 -0700 (PDT)
+Date: Tue, 24 Oct 2023 06:46:01 -0700
 In-Reply-To: <20231024134637.3120277-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -49,8 +49,8 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231024134637.3120277-1-surenb@google.com>
 X-Mailer: git-send-email 2.42.0.758.gaed0368e0e-goog
-Message-ID: <20231024134637.3120277-3-surenb@google.com>
-Subject: [PATCH v2 02/39] scripts/kallysms: Always include __start and __stop symbols
+Message-ID: <20231024134637.3120277-5-surenb@google.com>
+Subject: [PATCH v2 04/39] nodemask: Split out include/linux/nodemask_types.h
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
@@ -82,47 +82,69 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-These symbols are used to denote section boundaries: by always including
-them we can unify loading sections from modules with loading built-in
-sections, which leads to some significant cleanup.
+sched.h, which defines task_struct, needs nodemask_t - but sched.h is a
+frequently used header and ideally shouldn't be pulling in any more code
+that it needs to.
+
+This splits out nodemask_types.h which has the definition sched.h needs,
+which will avoid a circular header dependency in the alloc tagging patch
+series, and as a bonus should speed up kernel build times.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- scripts/kallsyms.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ include/linux/nodemask.h       | 2 +-
+ include/linux/nodemask_types.h | 9 +++++++++
+ include/linux/sched.h          | 2 +-
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+ create mode 100644 include/linux/nodemask_types.h
 
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 653b92f6d4c8..47978efe4797 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -204,6 +204,11 @@ static int symbol_in_range(const struct sym_entry *s,
- 	return 0;
- }
+diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
+index 8d07116caaf1..b61438313a73 100644
+--- a/include/linux/nodemask.h
++++ b/include/linux/nodemask.h
+@@ -93,10 +93,10 @@
+ #include <linux/threads.h>
+ #include <linux/bitmap.h>
+ #include <linux/minmax.h>
++#include <linux/nodemask_types.h>
+ #include <linux/numa.h>
+ #include <linux/random.h>
  
-+static bool string_starts_with(const char *s, const char *prefix)
-+{
-+	return strncmp(s, prefix, strlen(prefix)) == 0;
-+}
+-typedef struct { DECLARE_BITMAP(bits, MAX_NUMNODES); } nodemask_t;
+ extern nodemask_t _unused_nodemask_arg_;
+ 
+ /**
+diff --git a/include/linux/nodemask_types.h b/include/linux/nodemask_types.h
+new file mode 100644
+index 000000000000..84c2f47c4237
+--- /dev/null
++++ b/include/linux/nodemask_types.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __LINUX_NODEMASK_TYPES_H
++#define __LINUX_NODEMASK_TYPES_H
 +
- static int symbol_valid(const struct sym_entry *s)
- {
- 	const char *name = sym_name(s);
-@@ -211,6 +216,14 @@ static int symbol_valid(const struct sym_entry *s)
- 	/* if --all-symbols is not specified, then symbols outside the text
- 	 * and inittext sections are discarded */
- 	if (!all_symbols) {
-+		/*
-+		 * Symbols starting with __start and __stop are used to denote
-+		 * section boundaries, and should always be included:
-+		 */
-+		if (string_starts_with(name, "__start_") ||
-+		    string_starts_with(name, "__stop_"))
-+			return 1;
++#include <linux/numa.h>
 +
- 		if (symbol_in_range(s, text_ranges,
- 				    ARRAY_SIZE(text_ranges)) == 0)
- 			return 0;
++typedef struct { DECLARE_BITMAP(bits, MAX_NUMNODES); } nodemask_t;
++
++#endif /* __LINUX_NODEMASK_TYPES_H */
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 77f01ac385f7..12a2554a3164 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -20,7 +20,7 @@
+ #include <linux/hrtimer.h>
+ #include <linux/irqflags.h>
+ #include <linux/seccomp.h>
+-#include <linux/nodemask.h>
++#include <linux/nodemask_types.h>
+ #include <linux/rcupdate.h>
+ #include <linux/refcount.h>
+ #include <linux/resource.h>
 -- 
 2.42.0.758.gaed0368e0e-goog
 
