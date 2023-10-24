@@ -1,45 +1,45 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4130D2C84B
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:47:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D102C860
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uxaCAWty"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="f5vfhoe6"
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B15710E0
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:03 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5a92864859bso39842097b3.0
-        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:03 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D159910E6
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:06 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5a8ead739c3so59304967b3.3
+        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:47:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698155221; x=1698760021; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698155226; x=1698760026; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BlkdsRQXiDN3rg6CmmMqMbDupjvE+Qo4H/i7Q99VP7E=;
-        b=uxaCAWtyIJT6QvIegl8QCczQrkHie5BVYJuqhMS+k5AFm6IyO61Gp74KG1GLSSet+N
-         JVmeRny/hD8P2gA/CBe6rvFAM0vCSu9Kq/EtwTUJHp3UgrzLurZ6sO/lutfjVZ9u3pi4
-         Cwkfh1GCvT+zGqaDj+SlLcQGS5bNbb0kszgGzY58vVxaTUoJvy1FkV70jx8v2H8z539B
-         5rSqX2vCM1UbewVAL58EikUcI8fLRr2Wpv3mohu3gmB0aQ4SMd0OfuqqbLTgZBQQZHt3
-         /FghF91vUsZRzwNe1Ht1nwKQvcy5znGVX2e1DAKFjBKVHUGfiPwWMLU7Ol8qA0TAyWJK
-         GcVg==
+        bh=Qg2lup2zwYWRtm8BAuIZWN5zY45A/qiqWGd2wrDGPpE=;
+        b=f5vfhoe6tNttLZZU7sBETFQ2wPoFBee06WEc9qda46PCdbbO8nH5kvBdj1R4VudGrF
+         bFNGNvYjynSXrwkxVexRIdPtJWHPtZ3RRqi5Yhqp7Spv1+DTW14i8UaVMuTcf0gXHppa
+         u/ZsdQMUL5tIE5p2si9wFKEjHfbGANZ6XyiGCmGsoRd1MM0riwIuyRKvj9hWCigdQh3j
+         od8wrfv0mGzTsv1LZdaWxHRDuHr2Hx9ExwL3u854tpEsDNGfT771LfiNaNqdcVFel1bC
+         JA+6yAAg8kqJ9PqhtUlgXy/BTgR5IHfJK6iBzjV+BcSSrVsDDAYTbSOtXeRHLaaaaeu0
+         ZIfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698155221; x=1698760021;
+        d=1e100.net; s=20230601; t=1698155226; x=1698760026;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BlkdsRQXiDN3rg6CmmMqMbDupjvE+Qo4H/i7Q99VP7E=;
-        b=F5Qv/Y9WuiDvRel00uSdWSWVcubNUbPdCQMsCsJeURJ3PLJ1A51+IZCtFCPZdowpUn
-         lMxfmcIlZi7zuJk2jypCwMvvHSfqjZI8PXstrpCG0Yt08w0VMKvcEf5ndt8BWub28PqT
-         FuT6vnvrBOjjt7jFOdzlpcmfoXg6z5L43B3CuCVJ4Ukt1FUYjOGmhNaEIcy9FTyuaxaN
-         2HrDOby3VQeOzTH+3NQJDQ2/Y22gsX0oW6Wmp5ywg6zmclRI19CxwWOVIZzpY4POTK4q
-         2zz7XQZ66CiC84K3OH83mMYLFEgqnqD2blgPmWgTTXn3+8Zk3RPapqcvKN1UocVvpdKl
-         Mbmw==
-X-Gm-Message-State: AOJu0YwF36xsod3Mp1OQzE7NT+fkRdh8aUaSmAJzqFKn2vIQbw6x/eTg
-	Wbo4xdNFMWsaRSP587n0TxBdFrL2Kos=
-X-Google-Smtp-Source: AGHT+IH4vkQmrXlidCVXKzYYty2ay4HPBInW5lCi3Eqpl3vZeKIQVqiJUvatNMDtWsMNHeDdaowbWxA4kC0=
+        bh=Qg2lup2zwYWRtm8BAuIZWN5zY45A/qiqWGd2wrDGPpE=;
+        b=aLRQ0Lee+5jXSaopwFIPL6nTZ+tBHp7cm8ibPd6GkFCH46bdcRjBjetR5Y+2Oi1mKu
+         LP/LQoAwpmOj+rmeHUKi4+XE0hbnGEjo8IUFbU4KuHICkGheUpR1YaUwKimXjokmL4sB
+         IbZPbbfr4MWR+O3rho7CM1XslXpMBQwgpsLoEFW9BIqJ8OHRpqxapAcET3tuoSQlstJX
+         NXmOqzssvOZJ7yAca0ABn29ESGNwL9wAvuvf/PjlZU2UEbsIi0dWQajwPWKwrxlifcu5
+         92wAzadNuCx/a892a1jITkvqTN5nBsTzEU+ce3d1qtEZFf2NeUO70Cwry6sCNTpOhX0j
+         KIaw==
+X-Gm-Message-State: AOJu0YzDjoQuA+fA7TKqIv0rvI2+u9jc7wBYtTDwFie2/ck04yySew1P
+	LEO6AOsQ2Kb5ecMkRHCfYmzq26d4efI=
+X-Google-Smtp-Source: AGHT+IFbSeYSocyqc9oNK2jC1GEj7y9HsYgl5xw/vFv8t55K0y/nslFyvoCz7IdF8OEyu7ekDQ1W6y46+34=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:45ba:3318:d7a5:336a])
- (user=surenb job=sendgmr) by 2002:a0d:d50f:0:b0:5a7:be3f:159f with SMTP id
- x15-20020a0dd50f000000b005a7be3f159fmr287305ywd.5.1698155221495; Tue, 24 Oct
- 2023 06:47:01 -0700 (PDT)
-Date: Tue, 24 Oct 2023 06:46:06 -0700
+ (user=surenb job=sendgmr) by 2002:a0d:dd02:0:b0:579:f832:74b with SMTP id
+ g2-20020a0ddd02000000b00579f832074bmr286214ywe.10.1698155225916; Tue, 24 Oct
+ 2023 06:47:05 -0700 (PDT)
+Date: Tue, 24 Oct 2023 06:46:08 -0700
 In-Reply-To: <20231024134637.3120277-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -49,8 +49,8 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231024134637.3120277-1-surenb@google.com>
 X-Mailer: git-send-email 2.42.0.758.gaed0368e0e-goog
-Message-ID: <20231024134637.3120277-10-surenb@google.com>
-Subject: [PATCH v2 09/39] mm/slab: introduce SLAB_NO_OBJ_EXT to avoid obj_ext creation
+Message-ID: <20231024134637.3120277-12-surenb@google.com>
+Subject: [PATCH v2 11/39] slab: objext: introduce objext_flags as extension to page_memcg_data_flags
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
@@ -80,74 +80,104 @@ Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
 	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Slab extension objects can't be allocated before slab infrastructure is
-initialized. Some caches, like kmem_cache and kmem_cache_node, are created
-before slab infrastructure is initialized. Objects from these caches can't
-have extension objects. Introduce SLAB_NO_OBJ_EXT slab flag to mark these
-caches and avoid creating extensions for objects allocated from these
-slabs.
+Introduce objext_flags to store additional objext flags unrelated to memcg.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/slab.h | 7 +++++++
- mm/slab.c            | 2 +-
- mm/slub.c            | 5 +++--
- 3 files changed, 11 insertions(+), 3 deletions(-)
+ include/linux/memcontrol.h | 29 ++++++++++++++++++++++-------
+ mm/slab.h                  |  4 +---
+ 2 files changed, 23 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 8228d1276a2f..11ef3d364b2b 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -164,6 +164,13 @@
- #endif
- #define SLAB_TEMPORARY		SLAB_RECLAIM_ACCOUNT	/* Objects are short-lived */
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 4b17ebb7e723..f3ede28b6fa6 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -354,7 +354,22 @@ enum page_memcg_data_flags {
+ 	__NR_MEMCG_DATA_FLAGS  = (1UL << 2),
+ };
  
-+#ifdef CONFIG_SLAB_OBJ_EXT
-+/* Slab created using create_boot_cache */
-+#define SLAB_NO_OBJ_EXT         ((slab_flags_t __force)0x20000000U)
-+#else
-+#define SLAB_NO_OBJ_EXT         0
-+#endif
+-#define MEMCG_DATA_FLAGS_MASK (__NR_MEMCG_DATA_FLAGS - 1)
++#define __FIRST_OBJEXT_FLAG	__NR_MEMCG_DATA_FLAGS
 +
++#else /* CONFIG_MEMCG */
++
++#define __FIRST_OBJEXT_FLAG	(1UL << 0)
++
++#endif /* CONFIG_MEMCG */
++
++enum objext_flags {
++	/* the next bit after the last actual flag */
++	__NR_OBJEXTS_FLAGS  = __FIRST_OBJEXT_FLAG,
++};
++
++#define OBJEXTS_FLAGS_MASK (__NR_OBJEXTS_FLAGS - 1)
++
++#ifdef CONFIG_MEMCG
+ 
+ static inline bool folio_memcg_kmem(struct folio *folio);
+ 
+@@ -388,7 +403,7 @@ static inline struct mem_cgroup *__folio_memcg(struct folio *folio)
+ 	VM_BUG_ON_FOLIO(memcg_data & MEMCG_DATA_OBJEXTS, folio);
+ 	VM_BUG_ON_FOLIO(memcg_data & MEMCG_DATA_KMEM, folio);
+ 
+-	return (struct mem_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
++	return (struct mem_cgroup *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
+ }
+ 
  /*
-  * ZERO_SIZE_PTR will be returned for zero sized kmalloc requests.
-  *
-diff --git a/mm/slab.c b/mm/slab.c
-index 9ad3d0f2d1a5..cefcb7499b6c 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -1232,7 +1232,7 @@ void __init kmem_cache_init(void)
- 	create_boot_cache(kmem_cache, "kmem_cache",
- 		offsetof(struct kmem_cache, node) +
- 				  nr_node_ids * sizeof(struct kmem_cache_node *),
--				  SLAB_HWCACHE_ALIGN, 0, 0);
-+				  SLAB_HWCACHE_ALIGN | SLAB_NO_OBJ_EXT, 0, 0);
- 	list_add(&kmem_cache->list, &slab_caches);
- 	slab_state = PARTIAL;
+@@ -409,7 +424,7 @@ static inline struct obj_cgroup *__folio_objcg(struct folio *folio)
+ 	VM_BUG_ON_FOLIO(memcg_data & MEMCG_DATA_OBJEXTS, folio);
+ 	VM_BUG_ON_FOLIO(!(memcg_data & MEMCG_DATA_KMEM), folio);
  
-diff --git a/mm/slub.c b/mm/slub.c
-index f7940048138c..d16643492320 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5043,7 +5043,8 @@ void __init kmem_cache_init(void)
- 		node_set(node, slab_nodes);
+-	return (struct obj_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
++	return (struct obj_cgroup *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
+ }
  
- 	create_boot_cache(kmem_cache_node, "kmem_cache_node",
--		sizeof(struct kmem_cache_node), SLAB_HWCACHE_ALIGN, 0, 0);
-+			sizeof(struct kmem_cache_node),
-+			SLAB_HWCACHE_ALIGN | SLAB_NO_OBJ_EXT, 0, 0);
+ /*
+@@ -466,11 +481,11 @@ static inline struct mem_cgroup *folio_memcg_rcu(struct folio *folio)
+ 	if (memcg_data & MEMCG_DATA_KMEM) {
+ 		struct obj_cgroup *objcg;
  
- 	hotplug_memory_notifier(slab_memory_callback, SLAB_CALLBACK_PRI);
+-		objcg = (void *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
++		objcg = (void *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
+ 		return obj_cgroup_memcg(objcg);
+ 	}
  
-@@ -5053,7 +5054,7 @@ void __init kmem_cache_init(void)
- 	create_boot_cache(kmem_cache, "kmem_cache",
- 			offsetof(struct kmem_cache, node) +
- 				nr_node_ids * sizeof(struct kmem_cache_node *),
--		       SLAB_HWCACHE_ALIGN, 0, 0);
-+			SLAB_HWCACHE_ALIGN | SLAB_NO_OBJ_EXT, 0, 0);
+-	return (struct mem_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
++	return (struct mem_cgroup *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
+ }
  
- 	kmem_cache = bootstrap(&boot_kmem_cache);
- 	kmem_cache_node = bootstrap(&boot_kmem_cache_node);
+ /*
+@@ -509,11 +524,11 @@ static inline struct mem_cgroup *folio_memcg_check(struct folio *folio)
+ 	if (memcg_data & MEMCG_DATA_KMEM) {
+ 		struct obj_cgroup *objcg;
+ 
+-		objcg = (void *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
++		objcg = (void *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
+ 		return obj_cgroup_memcg(objcg);
+ 	}
+ 
+-	return (struct mem_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
++	return (struct mem_cgroup *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
+ }
+ 
+ static inline struct mem_cgroup *page_memcg_check(struct page *page)
+diff --git a/mm/slab.h b/mm/slab.h
+index 187acc593397..60417fd262ea 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -448,10 +448,8 @@ static inline struct slabobj_ext *slab_obj_exts(struct slab *slab)
+ 							slab_page(slab));
+ 	VM_BUG_ON_PAGE(obj_exts & MEMCG_DATA_KMEM, slab_page(slab));
+ 
+-	return (struct slabobj_ext *)(obj_exts & ~MEMCG_DATA_FLAGS_MASK);
+-#else
+-	return (struct slabobj_ext *)obj_exts;
+ #endif
++	return (struct slabobj_ext *)(obj_exts & ~OBJEXTS_FLAGS_MASK);
+ }
+ 
+ int alloc_slab_obj_exts(struct slab *slab, struct kmem_cache *s,
 -- 
 2.42.0.758.gaed0368e0e-goog
 
