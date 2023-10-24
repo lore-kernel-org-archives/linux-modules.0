@@ -1,156 +1,115 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEB53A266
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 13:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB5330F9D
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 18:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uTuQ+Bei"
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0995610E5
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:48:05 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d9cb4de3bf0so5406016276.0
-        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 06:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698155284; x=1698760084; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nhDAtTQGKDGtY2/txJr7AfaYGvHf9XTIsotRfIG2XI4=;
-        b=uTuQ+BeipJRSS468RV0J4N/errrKktwdtqAbygziGLINd4pYnX/Wwy/y2hB9kX0K9L
-         Z1mPWbrzmS4w+Ctdw12m0O1wQajoVEKkDB4XdfbwlWyqODEv5prGsg0+8RX7jxlEoW6D
-         zDhluOqX8vDIA0hTaGAy3UC6tSp7I/LMoyf2MIV5evcqrbu5FID7xA5wMlVCt0DoQvTw
-         7ruuskGso+/4+CiI8DoPTgiLs+8zytR60Y6thqFcPea6/oliJnso9DwsjjUCMoxUCZzQ
-         bznQEhc5P48uoia9Xv2z+lAQGinEXYCjLj3vfiUUkpArYnCUglOSQcsW5lViaV2ni8EI
-         OHag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698155284; x=1698760084;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nhDAtTQGKDGtY2/txJr7AfaYGvHf9XTIsotRfIG2XI4=;
-        b=qnkhrw7yp/OholXSwfyLl7hAbYoWwzu79RtmG/i7XbEz4dzM/UEPbohdoWJIAU8TaB
-         lqSHYaPewzM/MysPaovD/139aUent4YeGMsTGWXu/DQpaJ9Np2HKpdA3kSgKaE+v92rg
-         cdkUZD42NS4Kr3g1dsVLLC1prcHiGzvN40FK9KSAnuJtmmSFz3TldBkZbesDkQjnEmoN
-         2cOsWM816a1EnB+/Q9G3eDHZ/bYGKto/Oq1YYsOghdC2bJirra+MOGXUCIUPzgT+WEEa
-         EBFmbAEVP8xxGYEI/37Uk17f1mZZ4Oyi++3onhKJieTkT0Mgs9hiPOuvuD8OvHVGH4y5
-         3foA==
-X-Gm-Message-State: AOJu0Yz4lQDfUmi/bgekcTLnsdO2h0FQOUO5B/u7LWFmwGzMJO8DTs8B
-	09NshOebMBYIPnJx+RT7BX0lTzyHalY=
-X-Google-Smtp-Source: AGHT+IEqWGHLJsK7BvvDJRxELns2H70hhRTn4578toCcoqAqCoHJoeJS8HRj9/dFP0FFd7ukqdr613N1OPo=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:45ba:3318:d7a5:336a])
- (user=surenb job=sendgmr) by 2002:a25:8541:0:b0:d89:b072:d06f with SMTP id
- f1-20020a258541000000b00d89b072d06fmr231639ybn.7.1698155283973; Tue, 24 Oct
- 2023 06:48:03 -0700 (PDT)
-Date: Tue, 24 Oct 2023 06:46:34 -0700
-In-Reply-To: <20231024134637.3120277-1-surenb@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qxmyiqZd"
+X-Greylist: delayed 537 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Oct 2023 11:38:31 PDT
+Received: from out-206.mta0.migadu.com (out-206.mta0.migadu.com [91.218.175.206])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C12129
+	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 11:38:31 -0700 (PDT)
+Date: Tue, 24 Oct 2023 11:29:03 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1698172172;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cJvtH1RU485LotJpakrbV9U/UfyKsr5ptSPtEPeho50=;
+	b=qxmyiqZdvUbSc5OX8sJ5B56VRDGRIypt0m2ZexyNmyd2CWJuUlLqxDCgQmiWZxhgLrnEJP
+	Q3PacIpe5vXTiE86jUv2kcvB2COry3b6xKIlN2wW5y2pG9dxxNOj26Rwsg8w9wjXki2GwQ
+	/5zO2TFTFVb+ghWrRC0JLTshCp62Kqo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Roman Gushchin <roman.gushchin@linux.dev>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
+	vbabka@suse.cz, hannes@cmpxchg.org, mgorman@suse.de,
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+	juri.lelli@redhat.com, ldufour@linux.ibm.com,
+	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, peterx@redhat.com, david@redhat.com,
+	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
+	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com,
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+	elver@google.com, dvyukov@google.com, shakeelb@google.com,
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH v2 00/39] Memory allocation profiling
+Message-ID: <ZTgM74EapT9mea2l@P9FQF9L96D.corp.robot.car>
+References: <20231024134637.3120277-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20231024134637.3120277-1-surenb@google.com>
-X-Mailer: git-send-email 2.42.0.758.gaed0368e0e-goog
-Message-ID: <20231024134637.3120277-38-surenb@google.com>
-Subject: [PATCH v2 37/39] codetag: debug: mark codetags for reserved pages as empty
-From: Suren Baghdasaryan <surenb@google.com>
-To: akpm@linux-foundation.org
-Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, ldufour@linux.ibm.com, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
-	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
-	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
-	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
-	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, surenb@google.com, 
-	kernel-team@android.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231024134637.3120277-1-surenb@google.com>
+X-Migadu-Flow: FLOW_OUT
 
-To avoid debug warnings while freeing reserved pages which were not
-allocated with usual allocators, mark their codetags as empty before
-freeing.
-Maybe we can annotate reserved pages correctly and avoid this?
+On Tue, Oct 24, 2023 at 06:45:57AM -0700, Suren Baghdasaryan wrote:
+> Updates since the last version [1]
+> - Simplified allocation tagging macros;
+> - Runtime enable/disable sysctl switch (/proc/sys/vm/mem_profiling)
+> instead of kernel command-line option;
+> - CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT to select default enable state;
+> - Changed the user-facing API from debugfs to procfs (/proc/allocinfo);
+> - Removed context capture support to make patch incremental;
+> - Renamed uninstrumented allocation functions to use _noprof suffix;
+> - Added __GFP_LAST_BIT to make the code cleaner;
+> - Removed lazy per-cpu counters; it turned out the memory savings was
+> minimal and not worth the performance impact;
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- include/linux/alloc_tag.h   | 2 ++
- include/linux/mm.h          | 8 ++++++++
- include/linux/pgalloc_tag.h | 2 ++
- 3 files changed, 12 insertions(+)
+Hello Suren,
 
-diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
-index 1f3207097b03..102caf62c2a9 100644
---- a/include/linux/alloc_tag.h
-+++ b/include/linux/alloc_tag.h
-@@ -95,6 +95,7 @@ static inline void set_codetag_empty(union codetag_ref *ref)
- #else /* CONFIG_MEM_ALLOC_PROFILING_DEBUG */
- 
- static inline bool is_codetag_empty(union codetag_ref *ref) { return false; }
-+static inline void set_codetag_empty(union codetag_ref *ref) {}
- 
- #endif /* CONFIG_MEM_ALLOC_PROFILING_DEBUG */
- 
-@@ -155,6 +156,7 @@ static inline void alloc_tag_sub(union codetag_ref *ref, size_t bytes) {}
- static inline void alloc_tag_sub_noalloc(union codetag_ref *ref, size_t bytes) {}
- static inline void alloc_tag_add(union codetag_ref *ref, struct alloc_tag *tag,
- 				 size_t bytes) {}
-+static inline void set_codetag_empty(union codetag_ref *ref) {}
- 
- #endif
- 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index bf5d0b1b16f4..310129414833 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -5,6 +5,7 @@
- #include <linux/errno.h>
- #include <linux/mmdebug.h>
- #include <linux/gfp.h>
-+#include <linux/pgalloc_tag.h>
- #include <linux/bug.h>
- #include <linux/list.h>
- #include <linux/mmzone.h>
-@@ -3077,6 +3078,13 @@ extern void reserve_bootmem_region(phys_addr_t start,
- /* Free the reserved page into the buddy system, so it gets managed. */
- static inline void free_reserved_page(struct page *page)
- {
-+	union codetag_ref *ref;
-+
-+	ref = get_page_tag_ref(page);
-+	if (ref) {
-+		set_codetag_empty(ref);
-+		put_page_tag_ref(ref);
-+	}
- 	ClearPageReserved(page);
- 	init_page_count(page);
- 	__free_page(page);
-diff --git a/include/linux/pgalloc_tag.h b/include/linux/pgalloc_tag.h
-index 0174aff5e871..ae9b0f359264 100644
---- a/include/linux/pgalloc_tag.h
-+++ b/include/linux/pgalloc_tag.h
-@@ -93,6 +93,8 @@ static inline void pgalloc_tag_split(struct page *page, unsigned int nr)
- 
- #else /* CONFIG_MEM_ALLOC_PROFILING */
- 
-+static inline union codetag_ref *get_page_tag_ref(struct page *page) { return NULL; }
-+static inline void put_page_tag_ref(union codetag_ref *ref) {}
- static inline void pgalloc_tag_add(struct page *page, struct task_struct *task,
- 				   unsigned int order) {}
- static inline void pgalloc_tag_sub(struct page *page, unsigned int order) {}
--- 
-2.42.0.758.gaed0368e0e-goog
+> Performance overhead:
+> To evaluate performance we implemented an in-kernel test executing
+> multiple get_free_page/free_page and kmalloc/kfree calls with allocation
+> sizes growing from 8 to 240 bytes with CPU frequency set to max and CPU
+> affinity set to a specific CPU to minimize the noise. Below is performance
+> comparison between the baseline kernel, profiling when enabled, profiling
+> when disabled and (for comparison purposes) baseline with
+> CONFIG_MEMCG_KMEM enabled and allocations using __GFP_ACCOUNT:
+> 
+>                         kmalloc                 pgalloc
+> (1 baseline)            12.041s                 49.190s
+> (2 default disabled)    14.970s (+24.33%)       49.684s (+1.00%)
+> (3 default enabled)     16.859s (+40.01%)       56.287s (+14.43%)
+> (4 runtime enabled)     16.983s (+41.04%)       55.760s (+13.36%)
+> (5 memcg)               33.831s (+180.96%)      51.433s (+4.56%)
 
+some recent changes [1] to the kmem accounting should have made it quite a bit
+faster. Would be great if you can provide new numbers for the comparison.
+Maybe with the next revision?
+
+And btw thank you (and Kent): your numbers inspired me to do this kmemcg
+performance work. I expect it still to be ~twice more expensive than your
+stuff because on the memcg side we handle separately charge and statistics,
+but hopefully the difference will be lower.
+
+Thank you!
+
+[1]:
+  patches from next tree, so no stable hashes:
+    mm: kmem: reimplement get_obj_cgroup_from_current()
+    percpu: scoped objcg protection
+    mm: kmem: scoped objcg protection
+    mm: kmem: make memcg keep a reference to the original objcg
+    mm: kmem: add direct objcg pointer to task_struct
+    mm: kmem: optimize get_obj_cgroup_from_current()
