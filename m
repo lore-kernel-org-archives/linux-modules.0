@@ -1,134 +1,252 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0065F508
-	for <linux-modules@vger.kernel.org>; Wed, 25 Oct 2023 12:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5D02AB51
+	for <linux-modules@vger.kernel.org>; Wed, 25 Oct 2023 15:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="Nq3lJYRj"
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1058090
-	for <linux-modules@vger.kernel.org>; Wed, 25 Oct 2023 05:57:49 -0700 (PDT)
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A17003FADB
-	for <linux-modules@vger.kernel.org>; Wed, 25 Oct 2023 12:57:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1698238666;
-	bh=YZ12GF+aERDoIF3r6TEMZGT37W8A+JNypJswAaYxRhM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=Nq3lJYRjmvlNFzhC88nKA+acZLBDUj9Ov5G9LL4MuBCW+ekeopmaP6jh1I3O7zSi3
-	 VHcgE4W3aVos+T3jx4sC9AuqdjMKXzFYdSIp7QtXybesE78Tp0Y+I9/UCodeFPk9vy
-	 bhlFQn1hVxFVdvg+jlfaHTMdnjHRibS57BNgxU/3ADQoqprN+STbnIyn84Fqeue9z4
-	 wueAES6fHVy8EtziuEz7fG/7tmbevvB9wpoMp9MhLoHG/JlQYoWmizinkzN1jdNFyW
-	 rMz82xE0dxseXyB0G1AIoOTTCiGq4xJIkoTNpvV6GCnM4v2+Sif16TcizvuwguCX3v
-	 qRT5RAREbrXog==
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-32da215295fso2273076f8f.2
-        for <linux-modules@vger.kernel.org>; Wed, 25 Oct 2023 05:57:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SnobMDA5"
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912E11A1
+	for <linux-modules@vger.kernel.org>; Wed, 25 Oct 2023 08:28:48 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1e9db321ed1so3703028fac.3
+        for <linux-modules@vger.kernel.org>; Wed, 25 Oct 2023 08:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698247728; x=1698852528; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FLJnARkfIBMUfgquTTGlj0tPN4MXFqJ8fdXtHqq+8bA=;
+        b=SnobMDA52fwDMVepUSGlADFtGptIA91nXv6uw9cqu5CCJaFK7VzbmDzzDVOAKODYK/
+         d/fm7DBTA5L+FW0TejILxjb9QeAWxRSsLWCbiaO4xt2W1jdLrMAHHXwxTejLrmvtU+nF
+         eAi6efi2qjGuQsxvxsCWPnou6b4RxGSVWix3lpK/UNCugvM0FjIWFZIYjNRRCsKkqfHV
+         JAFJ7ZAU9fp5DvvCl84J/U+QPZpKFbMOeHSnmneyYmLb1sue1tAwZVptuYkPCCrWBJpp
+         Xatsjt/c+NeQoH5gnnF0X9bQuhNHWJfQeT6uuxTW2OrMcgrYYIZZjY6O4AGgBySy4mUB
+         ldfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698238664; x=1698843464;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YZ12GF+aERDoIF3r6TEMZGT37W8A+JNypJswAaYxRhM=;
-        b=SEVbrcK7FV+jNwGLTMMRvcJrfJd/AElnxxHyf6WeCovGN7BYd8qEf1VIRjovj+6xfM
-         9LnbrPIHPIyvrjubKmnVRi2gH0rj466IgTcaRnAogL2213qUnavm17BNDnNXqi0FjKA7
-         FF+Dppuv+mJ4WWZFSjNZlR4Tlnq18klemhtu652DMPD0BOKiJ2+/9ndPmJL1R5vhFlr1
-         Y7NGWZv0E2S8LqMd9b4CcuMax/veMM42M0gcU3jnwzJOg5825KZW1zFO55iDDEeUa6bC
-         OG6gg3Y0/TJgMND2I0uCelsjJwPL8GwK6QirNMXXlCqcWBAGUlUitYvFMgToWtaspFO+
-         cVDg==
-X-Gm-Message-State: AOJu0YzGg6rDvFXgD3AKwc9Aa+2dZ+sPsnEMbML/2XWl1jh8uDlGXQyC
-	k8nlMDEECvpXv6PRw7OCMhj0UFtd1PAmUpRUjsaVAuqHAiZ3gE10uC280t6h5I9GhCArgYEAG3Z
-	VIoRnqmLFAp3F9CIGX2ASSJfE8dvJ8J1SkOe3SMwfWPjYeYjvfuN2tTdWhJkeK3PAhwZnNJ9kOn
-	4=
-X-Received: by 2002:adf:edc2:0:b0:32d:a57b:8c8d with SMTP id v2-20020adfedc2000000b0032da57b8c8dmr12438000wro.69.1698238664536;
-        Wed, 25 Oct 2023 05:57:44 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHaI9gj2ovxx4sLpIcOCYpedqxIgHFi3Wcs69w/nw0GZB5lBOAnarl0/VEXOqC/394g7rDDa9Lg2WtTwOg2eIM=
-X-Received: by 2002:adf:edc2:0:b0:32d:a57b:8c8d with SMTP id
- v2-20020adfedc2000000b0032da57b8c8dmr12437987wro.69.1698238664182; Wed, 25
- Oct 2023 05:57:44 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698247728; x=1698852528;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FLJnARkfIBMUfgquTTGlj0tPN4MXFqJ8fdXtHqq+8bA=;
+        b=Y7SRQF6sVas2kfEU7mlt6y1Rr+ZeJoW7cR0DOGHcYdP1FqMN5L08q2hu5GLNyqbXjf
+         /odr2gdtBlNJt/zbGRrW9SZeI48fUy4f78ydcVEw1S+iLHC8X4uUCWSK2M7SL1w9E8C+
+         gRU7IGo6dtkq1t7qzd469wvhRpprH3x0pli4TSqo8gME0+/UayxR+Oo3e6wy2XVZ2x2r
+         K38SD6dh7oRRkb+59t9dbIW/fG06U8I3zDwxiT5Eh5J9QqxstYzqEyzAKUFv/FOw44Yq
+         NR6+RvDLVNeS8w7i6Aizr4GRIy+Ozy+Uj0XUFJpFDvHJ8b8EnGGy5mvXBLwLlyJ2Llpz
+         jzpg==
+X-Gm-Message-State: AOJu0YzcidZSHA8ERBC64a3D878wq7nfiMgBqGDgegoq82MOz2mnigea
+	bRvrOv2Mz67i+5FSU/EoJXxcISiOVJW91IBfuKt8zA==
+X-Google-Smtp-Source: AGHT+IHL6UT5V0z1/nV7C2aKZX3u20HQgpTlx8EY9sjj8g+GZ70q4xGtJEt1W/Cng5aHzKMeb5xqOwS2911dC7wfxYg=
+X-Received: by 2002:a05:6870:1157:b0:1da:ed10:bcb with SMTP id
+ 23-20020a056870115700b001daed100bcbmr15750180oag.31.1698247727385; Wed, 25
+ Oct 2023 08:28:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231025104212.12738-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20231025104212.12738-1-lukas.bulwahn@gmail.com>
-From: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-Date: Wed, 25 Oct 2023 13:57:08 +0100
-Message-ID: <CADWks+ZoLs1FUJx0sSg5FBYK5BtD+Po7bRORVT4uBLM6QJxXJQ@mail.gmail.com>
-Subject: Re: [PATCH] docs: module-signing: adjust guide after sha1 and sha224
- support is gone
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>, David Howells <dhowells@redhat.com>, 
-	David Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org, keyrings@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231024134637.3120277-1-surenb@google.com> <20231024134637.3120277-7-surenb@google.com>
+ <20231025074652.44bc0eb4@meshulam.tesarici.cz>
+In-Reply-To: <20231025074652.44bc0eb4@meshulam.tesarici.cz>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 25 Oct 2023 08:28:32 -0700
+Message-ID: <CAJuCfpHS1JTRU69zFDAJjmMYR3K5TAS9+AsA3oYLs2LCs5aTBw@mail.gmail.com>
+Subject: Re: [PATCH v2 06/39] mm: enumerate all gfp flags
+To: =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>
+Cc: Neil Brown <neilb@suse.de>, akpm@linux-foundation.org, kent.overstreet@linux.dev, 
+	mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
+	mgorman@suse.de, dave@stgolabs.net, willy@infradead.org, 
+	liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com, 
+	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, tglx@linutronix.de, 
+	mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org, 
+	peterx@redhat.com, david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, 
+	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org, tj@kernel.org, 
+	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
+	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
+	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
+	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
+	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Wed, 25 Oct 2023 at 11:42, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+On Tue, Oct 24, 2023 at 10:47=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@tesar=
+ici.cz> wrote:
 >
-> Commit 16ab7cb5825f ("crypto: pkcs7 - remove sha1 support") and commit
-> fc3225fd6f1e ("module: Do not offer sha224 for built-in module signing")
-> removes sha1 and sha224 support for kernel module signing.
+> On Tue, 24 Oct 2023 06:46:03 -0700
+> Suren Baghdasaryan <surenb@google.com> wrote:
 >
-> Adjust the module-signing admin guide documentation to those changes.
+> > Introduce GFP bits enumeration to let compiler track the number of used
+> > bits (which depends on the config options) instead of hardcoding them.
+> > That simplifies __GFP_BITS_SHIFT calculation.
+> > Suggested-by: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  include/linux/gfp_types.h | 90 +++++++++++++++++++++++++++------------
+> >  1 file changed, 62 insertions(+), 28 deletions(-)
+> >
+> > diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+> > index 6583a58670c5..3fbe624763d9 100644
+> > --- a/include/linux/gfp_types.h
+> > +++ b/include/linux/gfp_types.h
+> > @@ -21,44 +21,78 @@ typedef unsigned int __bitwise gfp_t;
+> >   * include/trace/events/mmflags.h and tools/perf/builtin-kmem.c
+> >   */
+> >
+> > +enum {
+> > +     ___GFP_DMA_BIT,
+> > +     ___GFP_HIGHMEM_BIT,
+> > +     ___GFP_DMA32_BIT,
+> > +     ___GFP_MOVABLE_BIT,
+> > +     ___GFP_RECLAIMABLE_BIT,
+> > +     ___GFP_HIGH_BIT,
+> > +     ___GFP_IO_BIT,
+> > +     ___GFP_FS_BIT,
+> > +     ___GFP_ZERO_BIT,
+> > +     ___GFP_UNUSED_BIT,      /* 0x200u unused */
+> > +     ___GFP_DIRECT_RECLAIM_BIT,
+> > +     ___GFP_KSWAPD_RECLAIM_BIT,
+> > +     ___GFP_WRITE_BIT,
+> > +     ___GFP_NOWARN_BIT,
+> > +     ___GFP_RETRY_MAYFAIL_BIT,
+> > +     ___GFP_NOFAIL_BIT,
+> > +     ___GFP_NORETRY_BIT,
+> > +     ___GFP_MEMALLOC_BIT,
+> > +     ___GFP_COMP_BIT,
+> > +     ___GFP_NOMEMALLOC_BIT,
+> > +     ___GFP_HARDWALL_BIT,
+> > +     ___GFP_THISNODE_BIT,
+> > +     ___GFP_ACCOUNT_BIT,
+> > +     ___GFP_ZEROTAGS_BIT,
+> > +#ifdef CONFIG_KASAN_HW_TAGS
+> > +     ___GFP_SKIP_ZERO_BIT,
+> > +     ___GFP_SKIP_KASAN_BIT,
+> > +#endif
+> > +#ifdef CONFIG_LOCKDEP
+> > +     ___GFP_NOLOCKDEP_BIT,
+> > +#endif
+> > +     ___GFP_LAST_BIT
+> > +};
+> > +
+> >  /* Plain integer GFP bitmasks. Do not use this directly. */
+> > -#define ___GFP_DMA           0x01u
+> > -#define ___GFP_HIGHMEM               0x02u
+> > -#define ___GFP_DMA32         0x04u
+> > -#define ___GFP_MOVABLE               0x08u
+> > -#define ___GFP_RECLAIMABLE   0x10u
+> > -#define ___GFP_HIGH          0x20u
+> > -#define ___GFP_IO            0x40u
+> > -#define ___GFP_FS            0x80u
+> > -#define ___GFP_ZERO          0x100u
+> > +#define ___GFP_DMA           BIT(___GFP_DMA_BIT)
+> > +#define ___GFP_HIGHMEM               BIT(___GFP_HIGHMEM_BIT)
+> > +#define ___GFP_DMA32         BIT(___GFP_DMA32_BIT)
+> > +#define ___GFP_MOVABLE               BIT(___GFP_MOVABLE_BIT)
+> > +#define ___GFP_RECLAIMABLE   BIT(___GFP_RECLAIMABLE_BIT)
+> > +#define ___GFP_HIGH          BIT(___GFP_HIGH_BIT)
+> > +#define ___GFP_IO            BIT(___GFP_IO_BIT)
+> > +#define ___GFP_FS            BIT(___GFP_FS_BIT)
+> > +#define ___GFP_ZERO          BIT(___GFP_ZERO_BIT)
+> >  /* 0x200u unused */
 >
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> This comment can be also removed here, because it is already stated
+> above with the definition of ___GFP_UNUSED_BIT.
 
-Note I have submitted this change as part of the patch series that
-adds SHA-3 over at
-https://lore.kernel.org/linux-crypto/20231022182208.188714-1-dimitri.ledkov@canonical.com/T/#m81c32a65341a4de39596b72743ba38d46899016f
+Ack.
 
-But indeed, if that patch series doesn't make it into the cryptodev
-tree, then this documentation should go in, and the sha-3 one rebased
-/ adjusted.
-
-Sorry for not patching documentation at the same time as the code
-changes that made documentation out of date.
-
-Acked-by: Dimitri John ledkov <dimitri.ledkov@canonical.com>
-
-> ---
->  Documentation/admin-guide/module-signing.rst | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
 >
-> diff --git a/Documentation/admin-guide/module-signing.rst b/Documentation/admin-guide/module-signing.rst
-> index 2898b2703297..e3ea1def4c0c 100644
-> --- a/Documentation/admin-guide/module-signing.rst
-> +++ b/Documentation/admin-guide/module-signing.rst
-> @@ -30,8 +30,8 @@ This facility uses X.509 ITU-T standard certificates to encode the public keys
->  involved.  The signatures are not themselves encoded in any industrial standard
->  type.  The facility currently only supports the RSA public key encryption
->  standard (though it is pluggable and permits others to be used).  The possible
-> -hash algorithms that can be used are SHA-1, SHA-224, SHA-256, SHA-384, and
-> -SHA-512 (the algorithm is selected by data in the signature).
-> +hash algorithms that can be used are SHA-256, SHA-384, and SHA-512 (the
-> +algorithm is selected by data in the signature).
+> Then again, I think that the GFP bits have never been compacted after
+> Neil Brown removed __GFP_ATOMIC with commit 2973d8229b78 simply because
+> that would mean changing definitions of all subsequent GFP flags. FWIW
+> I am not aware of any code that would depend on the numeric value of
+> ___GFP_* macros, so this patch seems like a good opportunity to change
+> the numbering and get rid of this unused 0x200u altogether.
 >
->
->  ==========================
-> @@ -81,8 +81,6 @@ This has a number of options available:
->       sign the modules with:
->
->          =============================== ==========================================
-> -       ``CONFIG_MODULE_SIG_SHA1``      :menuselection:`Sign modules with SHA-1`
-> -       ``CONFIG_MODULE_SIG_SHA224``    :menuselection:`Sign modules with SHA-224`
->         ``CONFIG_MODULE_SIG_SHA256``    :menuselection:`Sign modules with SHA-256`
->         ``CONFIG_MODULE_SIG_SHA384``    :menuselection:`Sign modules with SHA-384`
->         ``CONFIG_MODULE_SIG_SHA512``    :menuselection:`Sign modules with SHA-512`
-> --
-> 2.17.1
->
+> @Neil: I have added you to the conversation in case you want to correct
+> my understanding of the unused bit.
 
+Hmm. I would prefer to do that in a separate patch even though it
+would be a one-line change. Seems safer to me in case something goes
+wrong and we have to bisect and revert it. If that sounds ok I'll post
+that in the next version.
 
--- 
-okurrr,
+>
+> Other than that LGTM.
 
-Dimitri
+Thanks for the review!
+Suren.
+
+>
+> Petr T
+>
+> > -#define ___GFP_DIRECT_RECLAIM        0x400u
+> > -#define ___GFP_KSWAPD_RECLAIM        0x800u
+> > -#define ___GFP_WRITE         0x1000u
+> > -#define ___GFP_NOWARN                0x2000u
+> > -#define ___GFP_RETRY_MAYFAIL 0x4000u
+> > -#define ___GFP_NOFAIL                0x8000u
+> > -#define ___GFP_NORETRY               0x10000u
+> > -#define ___GFP_MEMALLOC              0x20000u
+> > -#define ___GFP_COMP          0x40000u
+> > -#define ___GFP_NOMEMALLOC    0x80000u
+> > -#define ___GFP_HARDWALL              0x100000u
+> > -#define ___GFP_THISNODE              0x200000u
+> > -#define ___GFP_ACCOUNT               0x400000u
+> > -#define ___GFP_ZEROTAGS              0x800000u
+> > +#define ___GFP_DIRECT_RECLAIM        BIT(___GFP_DIRECT_RECLAIM_BIT)
+> > +#define ___GFP_KSWAPD_RECLAIM        BIT(___GFP_KSWAPD_RECLAIM_BIT)
+> > +#define ___GFP_WRITE         BIT(___GFP_WRITE_BIT)
+> > +#define ___GFP_NOWARN                BIT(___GFP_NOWARN_BIT)
+> > +#define ___GFP_RETRY_MAYFAIL BIT(___GFP_RETRY_MAYFAIL_BIT)
+> > +#define ___GFP_NOFAIL                BIT(___GFP_NOFAIL_BIT)
+> > +#define ___GFP_NORETRY               BIT(___GFP_NORETRY_BIT)
+> > +#define ___GFP_MEMALLOC              BIT(___GFP_MEMALLOC_BIT)
+> > +#define ___GFP_COMP          BIT(___GFP_COMP_BIT)
+> > +#define ___GFP_NOMEMALLOC    BIT(___GFP_NOMEMALLOC_BIT)
+> > +#define ___GFP_HARDWALL              BIT(___GFP_HARDWALL_BIT)
+> > +#define ___GFP_THISNODE              BIT(___GFP_THISNODE_BIT)
+> > +#define ___GFP_ACCOUNT               BIT(___GFP_ACCOUNT_BIT)
+> > +#define ___GFP_ZEROTAGS              BIT(___GFP_ZEROTAGS_BIT)
+> >  #ifdef CONFIG_KASAN_HW_TAGS
+> > -#define ___GFP_SKIP_ZERO     0x1000000u
+> > -#define ___GFP_SKIP_KASAN    0x2000000u
+> > +#define ___GFP_SKIP_ZERO     BIT(___GFP_SKIP_ZERO_BIT)
+> > +#define ___GFP_SKIP_KASAN    BIT(___GFP_SKIP_KASAN_BIT)
+> >  #else
+> >  #define ___GFP_SKIP_ZERO     0
+> >  #define ___GFP_SKIP_KASAN    0
+> >  #endif
+> >  #ifdef CONFIG_LOCKDEP
+> > -#define ___GFP_NOLOCKDEP     0x4000000u
+> > +#define ___GFP_NOLOCKDEP     BIT(___GFP_NOLOCKDEP_BIT)
+> >  #else
+> >  #define ___GFP_NOLOCKDEP     0
+> >  #endif
+> > -/* If the above are modified, __GFP_BITS_SHIFT may need updating */
+> >
+> >  /*
+> >   * Physical address zone modifiers (see linux/mmzone.h - low four bits=
+)
+> > @@ -249,7 +283,7 @@ typedef unsigned int __bitwise gfp_t;
+> >  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+> >
+> >  /* Room for N __GFP_FOO bits */
+> > -#define __GFP_BITS_SHIFT (26 + IS_ENABLED(CONFIG_LOCKDEP))
+> > +#define __GFP_BITS_SHIFT ___GFP_LAST_BIT
+> >  #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
+> >
+> >  /**
+>
+>
