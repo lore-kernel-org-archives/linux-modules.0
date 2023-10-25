@@ -1,148 +1,220 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8388E26E14
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 18:39:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6352D61D;
+	Wed, 25 Oct 2023 05:47:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yCiaZWxX"
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D0110D0
-	for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 11:39:05 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-32d9552d765so3488293f8f.2
-        for <linux-modules@vger.kernel.org>; Tue, 24 Oct 2023 11:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698172744; x=1698777544; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kYl/hPQ1QO/qnjhfpaigT8V90o1Z/zrFBqqxchQb6PA=;
-        b=yCiaZWxXRcnAxiUlTsv9w7FhSeSFqNa67B2b3PjcLp2h/ZumDiW6QSLTrRBQH9RaTj
-         TSV2yfXmYFONRu5NIgMBuA4vev42FP04sO2ZTdbQ+5GgFeSM7tSZaqgxf/GapDfxIfPU
-         9xAikhkPlOFOObe6aupQlpMQT2eBHTGQ3JDVAnhf7oyYdcJ0ktOvvSspdJdesBZZQLuS
-         I5Bc19S1TYS7Hzg8ArNDDgEwv10Rxvtyda7md2HP8tMN1kfkXH+dP2yXhM/n9EetSPXw
-         g1mVoNIpzsaEv/WhfPSK2pnBz8Kc0zRyH92+tmfQvSP5rfw/HF/8XfE6a+/3PjqaZ75d
-         RC5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698172744; x=1698777544;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kYl/hPQ1QO/qnjhfpaigT8V90o1Z/zrFBqqxchQb6PA=;
-        b=jTuWfGcdrr45etT/1kr+5s/Xps0PgDi3pDtvRe+Utg4o4n5MYTk3Ii92yGy+iX24VR
-         M4V+u3KPI2rDSKlyUIurmfRw9C95NTf/yU062VNqzUhhLBeUdBgN8eBwI6B+MWD4ilW+
-         OlzblTy8Dn47ban+tDpDxHI3PV6dQMjjDhxHjL3A+A+qLDcy45yqv1wr2pY/c9vo8xbN
-         rzq/uS4bRSoDW0DXxUD2rO5MjcvZHhSRs1Oj8e3gIHgDL/hSkrXZEpINHQqgKgbgWNRR
-         HjN5Kd8xZLEA5XtMaU8FsZOj+YQJZ7z5htpAG4MWf5jwjTItMdoHxBB9W8Unm3VngURU
-         9G1g==
-X-Gm-Message-State: AOJu0Yx3T/0XsKjOaGWKfIasndP7s5QfiNWnJnJ7jYnEo+f0IdCpSDHc
-	olj/6vNsrt8DYOLSf7fF3Jtja9Ku2T1Dcopx0Jpiqg==
-X-Google-Smtp-Source: AGHT+IEBkrXV9tW6JjjS6KAesMgogqWbIPz6JOX8ffpbsI1yBbmL6peaStLCV8xe25eowD6jRKUcC8TJUMwxtgmJk8k=
-X-Received: by 2002:adf:fe8a:0:b0:32d:ad05:906c with SMTP id
- l10-20020adffe8a000000b0032dad05906cmr10224110wrr.3.1698172743492; Tue, 24
- Oct 2023 11:39:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=tesarici.cz header.i=@tesarici.cz header.b="CtP3+TzS"
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DA6132;
+	Tue, 24 Oct 2023 22:46:58 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by bee.tesarici.cz (Postfix) with ESMTPSA id A2366176EDE;
+	Wed, 25 Oct 2023 07:46:53 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+	t=1698212815; bh=Fzoj7znzln2FKzFSy7EkpghoFnNQo2dDFbO99KLMZ1U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=CtP3+TzS8CkcsgomgnQyRoews1e8kSXl6tIW6PP+WD6S7jUaZvG8SXzQc1jmk8G/E
+	 JVGgfluKh0ZFUK69XkviXYUoLMWoBpqXlVoj+g6o/MkSwFYRcIsZLf2UD15izjtD5O
+	 kIGiSxnG7PwSuFgbt2n28YOlyxAV82uWECuofceWuVNOjzkxb4AaY4+WFBA+e2vMWB
+	 NHze7yHWtky0MHvjo2j/KSUzOPtgQfip6wsqvb/kxwmblgqsZUBvu3YcB7TydoTx/f
+	 od6AL+VJNBPeFBQ+Wl5U3hQwxkVjP/CL3Nje1qTpGnTV0EZy4vR8Cy+BODfM5l08H6
+	 ifCvvmhseikqA==
+Date: Wed, 25 Oct 2023 07:46:52 +0200
+From: Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To: Suren Baghdasaryan <surenb@google.com>, Neil Brown <neilb@suse.de>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
+ vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+ mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+ liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+ peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+ catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+ tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+ x86@kernel.org, peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
+ mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+ dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+ paulmck@kernel.org, pasha.tatashin@soleen.com, yosryahmed@google.com,
+ yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+ andreyknvl@gmail.com, keescook@chromium.org, ndesaulniers@google.com,
+ vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com,
+ ytcoode@gmail.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+ rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+ vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+ iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+ elver@google.com, dvyukov@google.com, shakeelb@google.com,
+ songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+ minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+ cgroups@vger.kernel.org
+Subject: Re: [PATCH v2 06/39] mm: enumerate all gfp flags
+Message-ID: <20231025074652.44bc0eb4@meshulam.tesarici.cz>
+In-Reply-To: <20231024134637.3120277-7-surenb@google.com>
+References: <20231024134637.3120277-1-surenb@google.com>
+	<20231024134637.3120277-7-surenb@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231024134637.3120277-1-surenb@google.com> <ZTgM74EapT9mea2l@P9FQF9L96D.corp.robot.car>
-In-Reply-To: <ZTgM74EapT9mea2l@P9FQF9L96D.corp.robot.car>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 24 Oct 2023 11:38:47 -0700
-Message-ID: <CAJuCfpGNQpFLnUsEpGgiDmOBW17RXJ3B-u2+ogi7NNhfi-gBLQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/39] Memory allocation profiling
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
-	vbabka@suse.cz, hannes@cmpxchg.org, mgorman@suse.de, dave@stgolabs.net, 
-	willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net, 
-	void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com, 
-	ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org, 
-	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
-	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
-	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
-	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
-	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 24, 2023 at 11:29=E2=80=AFAM Roman Gushchin
-<roman.gushchin@linux.dev> wrote:
->
-> On Tue, Oct 24, 2023 at 06:45:57AM -0700, Suren Baghdasaryan wrote:
-> > Updates since the last version [1]
-> > - Simplified allocation tagging macros;
-> > - Runtime enable/disable sysctl switch (/proc/sys/vm/mem_profiling)
-> > instead of kernel command-line option;
-> > - CONFIG_MEM_ALLOC_PROFILING_BY_DEFAULT to select default enable state;
-> > - Changed the user-facing API from debugfs to procfs (/proc/allocinfo);
-> > - Removed context capture support to make patch incremental;
-> > - Renamed uninstrumented allocation functions to use _noprof suffix;
-> > - Added __GFP_LAST_BIT to make the code cleaner;
-> > - Removed lazy per-cpu counters; it turned out the memory savings was
-> > minimal and not worth the performance impact;
->
-> Hello Suren,
->
-> > Performance overhead:
-> > To evaluate performance we implemented an in-kernel test executing
-> > multiple get_free_page/free_page and kmalloc/kfree calls with allocatio=
-n
-> > sizes growing from 8 to 240 bytes with CPU frequency set to max and CPU
-> > affinity set to a specific CPU to minimize the noise. Below is performa=
-nce
-> > comparison between the baseline kernel, profiling when enabled, profili=
-ng
-> > when disabled and (for comparison purposes) baseline with
-> > CONFIG_MEMCG_KMEM enabled and allocations using __GFP_ACCOUNT:
-> >
-> >                         kmalloc                 pgalloc
-> > (1 baseline)            12.041s                 49.190s
-> > (2 default disabled)    14.970s (+24.33%)       49.684s (+1.00%)
-> > (3 default enabled)     16.859s (+40.01%)       56.287s (+14.43%)
-> > (4 runtime enabled)     16.983s (+41.04%)       55.760s (+13.36%)
-> > (5 memcg)               33.831s (+180.96%)      51.433s (+4.56%)
->
-> some recent changes [1] to the kmem accounting should have made it quite =
-a bit
-> faster. Would be great if you can provide new numbers for the comparison.
-> Maybe with the next revision?
->
-> And btw thank you (and Kent): your numbers inspired me to do this kmemcg
-> performance work. I expect it still to be ~twice more expensive than your
-> stuff because on the memcg side we handle separately charge and statistic=
-s,
-> but hopefully the difference will be lower.
+On Tue, 24 Oct 2023 06:46:03 -0700
+Suren Baghdasaryan <surenb@google.com> wrote:
 
-Yes, I saw them! Well done! I'll definitely update my numbers once the
-patches land in their final form.
+> Introduce GFP bits enumeration to let compiler track the number of used
+> bits (which depends on the config options) instead of hardcoding them.
+> That simplifies __GFP_BITS_SHIFT calculation.
+> Suggested-by: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  include/linux/gfp_types.h | 90 +++++++++++++++++++++++++++------------
+>  1 file changed, 62 insertions(+), 28 deletions(-)
+>=20
+> diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+> index 6583a58670c5..3fbe624763d9 100644
+> --- a/include/linux/gfp_types.h
+> +++ b/include/linux/gfp_types.h
+> @@ -21,44 +21,78 @@ typedef unsigned int __bitwise gfp_t;
+>   * include/trace/events/mmflags.h and tools/perf/builtin-kmem.c
+>   */
+> =20
+> +enum {
+> +	___GFP_DMA_BIT,
+> +	___GFP_HIGHMEM_BIT,
+> +	___GFP_DMA32_BIT,
+> +	___GFP_MOVABLE_BIT,
+> +	___GFP_RECLAIMABLE_BIT,
+> +	___GFP_HIGH_BIT,
+> +	___GFP_IO_BIT,
+> +	___GFP_FS_BIT,
+> +	___GFP_ZERO_BIT,
+> +	___GFP_UNUSED_BIT,	/* 0x200u unused */
+> +	___GFP_DIRECT_RECLAIM_BIT,
+> +	___GFP_KSWAPD_RECLAIM_BIT,
+> +	___GFP_WRITE_BIT,
+> +	___GFP_NOWARN_BIT,
+> +	___GFP_RETRY_MAYFAIL_BIT,
+> +	___GFP_NOFAIL_BIT,
+> +	___GFP_NORETRY_BIT,
+> +	___GFP_MEMALLOC_BIT,
+> +	___GFP_COMP_BIT,
+> +	___GFP_NOMEMALLOC_BIT,
+> +	___GFP_HARDWALL_BIT,
+> +	___GFP_THISNODE_BIT,
+> +	___GFP_ACCOUNT_BIT,
+> +	___GFP_ZEROTAGS_BIT,
+> +#ifdef CONFIG_KASAN_HW_TAGS
+> +	___GFP_SKIP_ZERO_BIT,
+> +	___GFP_SKIP_KASAN_BIT,
+> +#endif
+> +#ifdef CONFIG_LOCKDEP
+> +	___GFP_NOLOCKDEP_BIT,
+> +#endif
+> +	___GFP_LAST_BIT
+> +};
+> +
+>  /* Plain integer GFP bitmasks. Do not use this directly. */
+> -#define ___GFP_DMA		0x01u
+> -#define ___GFP_HIGHMEM		0x02u
+> -#define ___GFP_DMA32		0x04u
+> -#define ___GFP_MOVABLE		0x08u
+> -#define ___GFP_RECLAIMABLE	0x10u
+> -#define ___GFP_HIGH		0x20u
+> -#define ___GFP_IO		0x40u
+> -#define ___GFP_FS		0x80u
+> -#define ___GFP_ZERO		0x100u
+> +#define ___GFP_DMA		BIT(___GFP_DMA_BIT)
+> +#define ___GFP_HIGHMEM		BIT(___GFP_HIGHMEM_BIT)
+> +#define ___GFP_DMA32		BIT(___GFP_DMA32_BIT)
+> +#define ___GFP_MOVABLE		BIT(___GFP_MOVABLE_BIT)
+> +#define ___GFP_RECLAIMABLE	BIT(___GFP_RECLAIMABLE_BIT)
+> +#define ___GFP_HIGH		BIT(___GFP_HIGH_BIT)
+> +#define ___GFP_IO		BIT(___GFP_IO_BIT)
+> +#define ___GFP_FS		BIT(___GFP_FS_BIT)
+> +#define ___GFP_ZERO		BIT(___GFP_ZERO_BIT)
+>  /* 0x200u unused */
 
->
-> Thank you!
+This comment can be also removed here, because it is already stated
+above with the definition of ___GFP_UNUSED_BIT.
 
-Thank you for the optimizations!
+Then again, I think that the GFP bits have never been compacted after
+Neil Brown removed __GFP_ATOMIC with commit 2973d8229b78 simply because
+that would mean changing definitions of all subsequent GFP flags. FWIW
+I am not aware of any code that would depend on the numeric value of
+___GFP_* macros, so this patch seems like a good opportunity to change
+the numbering and get rid of this unused 0x200u altogether.
 
->
-> [1]:
->   patches from next tree, so no stable hashes:
->     mm: kmem: reimplement get_obj_cgroup_from_current()
->     percpu: scoped objcg protection
->     mm: kmem: scoped objcg protection
->     mm: kmem: make memcg keep a reference to the original objcg
->     mm: kmem: add direct objcg pointer to task_struct
->     mm: kmem: optimize get_obj_cgroup_from_current()
+@Neil: I have added you to the conversation in case you want to correct
+my understanding of the unused bit.
+
+Other than that LGTM.
+
+Petr T
+
+> -#define ___GFP_DIRECT_RECLAIM	0x400u
+> -#define ___GFP_KSWAPD_RECLAIM	0x800u
+> -#define ___GFP_WRITE		0x1000u
+> -#define ___GFP_NOWARN		0x2000u
+> -#define ___GFP_RETRY_MAYFAIL	0x4000u
+> -#define ___GFP_NOFAIL		0x8000u
+> -#define ___GFP_NORETRY		0x10000u
+> -#define ___GFP_MEMALLOC		0x20000u
+> -#define ___GFP_COMP		0x40000u
+> -#define ___GFP_NOMEMALLOC	0x80000u
+> -#define ___GFP_HARDWALL		0x100000u
+> -#define ___GFP_THISNODE		0x200000u
+> -#define ___GFP_ACCOUNT		0x400000u
+> -#define ___GFP_ZEROTAGS		0x800000u
+> +#define ___GFP_DIRECT_RECLAIM	BIT(___GFP_DIRECT_RECLAIM_BIT)
+> +#define ___GFP_KSWAPD_RECLAIM	BIT(___GFP_KSWAPD_RECLAIM_BIT)
+> +#define ___GFP_WRITE		BIT(___GFP_WRITE_BIT)
+> +#define ___GFP_NOWARN		BIT(___GFP_NOWARN_BIT)
+> +#define ___GFP_RETRY_MAYFAIL	BIT(___GFP_RETRY_MAYFAIL_BIT)
+> +#define ___GFP_NOFAIL		BIT(___GFP_NOFAIL_BIT)
+> +#define ___GFP_NORETRY		BIT(___GFP_NORETRY_BIT)
+> +#define ___GFP_MEMALLOC		BIT(___GFP_MEMALLOC_BIT)
+> +#define ___GFP_COMP		BIT(___GFP_COMP_BIT)
+> +#define ___GFP_NOMEMALLOC	BIT(___GFP_NOMEMALLOC_BIT)
+> +#define ___GFP_HARDWALL		BIT(___GFP_HARDWALL_BIT)
+> +#define ___GFP_THISNODE		BIT(___GFP_THISNODE_BIT)
+> +#define ___GFP_ACCOUNT		BIT(___GFP_ACCOUNT_BIT)
+> +#define ___GFP_ZEROTAGS		BIT(___GFP_ZEROTAGS_BIT)
+>  #ifdef CONFIG_KASAN_HW_TAGS
+> -#define ___GFP_SKIP_ZERO	0x1000000u
+> -#define ___GFP_SKIP_KASAN	0x2000000u
+> +#define ___GFP_SKIP_ZERO	BIT(___GFP_SKIP_ZERO_BIT)
+> +#define ___GFP_SKIP_KASAN	BIT(___GFP_SKIP_KASAN_BIT)
+>  #else
+>  #define ___GFP_SKIP_ZERO	0
+>  #define ___GFP_SKIP_KASAN	0
+>  #endif
+>  #ifdef CONFIG_LOCKDEP
+> -#define ___GFP_NOLOCKDEP	0x4000000u
+> +#define ___GFP_NOLOCKDEP	BIT(___GFP_NOLOCKDEP_BIT)
+>  #else
+>  #define ___GFP_NOLOCKDEP	0
+>  #endif
+> -/* If the above are modified, __GFP_BITS_SHIFT may need updating */
+> =20
+>  /*
+>   * Physical address zone modifiers (see linux/mmzone.h - low four bits)
+> @@ -249,7 +283,7 @@ typedef unsigned int __bitwise gfp_t;
+>  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+> =20
+>  /* Room for N __GFP_FOO bits */
+> -#define __GFP_BITS_SHIFT (26 + IS_ENABLED(CONFIG_LOCKDEP))
+> +#define __GFP_BITS_SHIFT ___GFP_LAST_BIT
+>  #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
+> =20
+>  /**
+
