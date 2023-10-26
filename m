@@ -1,137 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2C12D02B;
-	Thu, 26 Oct 2023 10:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70033AC03
+	for <linux-modules@vger.kernel.org>; Thu, 26 Oct 2023 18:33:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZyX3dszi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1DD8C433C8;
-	Thu, 26 Oct 2023 10:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698315889;
-	bh=WN2YIA4Ghusd7FbmcNZrWw/oKLuywPkap4tOfxaAQ4k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZyX3dsziPkRUXG2UWwCRe9pQvhY4J8EKCi1UMJicG8n+1K8kuqLhkCHInfodKwhzx
-	 IGdZJx3E0WGYfJuhn5slU+daxFVHZfLRqURf8zRCQM4mPgPcJg6TqmPoqs/pWtOypa
-	 aGTSZPjPNBzHwtWONSwhXj/25YMcitUcojHP1kRQ49c14Z4eV6Kpw2ampGhmL7G6Sm
-	 v7J3Ia4FdxDhFLmdhSb20AH9mufPj5bcJmpVjmk+yiUwvbVfd/gsYS5NT3Ej9E93W4
-	 br849v8H22PcC0TOPiwgXMZFArfvyVNNVM97V2kwDBdHjqJI1bEYt3iRHEo7Tm6Bk9
-	 Y3kn5Rw8Exupg==
-Date: Thu, 26 Oct 2023 11:24:39 +0100
-From: Will Deacon <will@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v3 04/13] mm/execmem, arch: convert remaining overrides
- of module_alloc to execmem
-Message-ID: <20231026102438.GA6924@willie-the-truck>
-References: <20230918072955.2507221-1-rppt@kernel.org>
- <20230918072955.2507221-5-rppt@kernel.org>
- <20231023171420.GA4041@willie-the-truck>
- <20231026085800.GK2824@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rTZGeXNS"
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120F410CC
+	for <linux-modules@vger.kernel.org>; Thu, 26 Oct 2023 11:33:24 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d9a58f5f33dso903566276.1
+        for <linux-modules@vger.kernel.org>; Thu, 26 Oct 2023 11:33:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698345203; x=1698950003; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rsh3dPt2/r73NgmaoP1t7gGhxASdUa0L8chPdmn23Qo=;
+        b=rTZGeXNSv39V7CDwWwbTtJTASQ2rK2BoAdrQCuFlLhh8yuAl3n4qHKdjNVN2ZqoB62
+         bEv3SsybLlla5R9YmiMvyzniT1p77RmjoumAu+mZA80D1jsWVuRyL9lby6Oko5k2Brje
+         /B4qDoaVO116OOmgyjlvXUtygLddZRd4pdsIoJpVkuPd2dhnI1sK9hABTLhRYwP90vN9
+         vvo/3fPIqeT7SoYTZjJaaaM9/3Wo9l6c2G+lbJbOfEydg2aB37+ZlEth+zEZEMW5M0Wj
+         iw2AaL5p+eEgxjCqadkYQ7jEbdBumr2S3Tm3OqgexNucK/zd9LFHXauLjpelg8RPBrFk
+         uhiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698345203; x=1698950003;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Rsh3dPt2/r73NgmaoP1t7gGhxASdUa0L8chPdmn23Qo=;
+        b=pJbFWX8IRGs4xQm2Z2V1HSU7oUBCWgaZfG0LFQBLwhdU/JESFWppOInIrXUYh3P0F2
+         q+YRwhKuXom+/HferJi5NhG9ff8PqOD5kAEW4KxVvBsKe6zaD1/O597Oaiy8s5NFai9O
+         s97KT/1oO+QkL2MFs8FifYvxJhXIcKU7XL7CKSrrKx8N7Qf61SZatt9UCXSg3KMIrYUq
+         CLVCHc9xUH93E0YD89uuZt/4TqRei/Jcz6GMMzYQJdeeJsOctKPur8ZfVfXiPWOcYUlK
+         LKbJ5UYbk39vFCmhEZcPeTdIuNO6FDQDWlxABhHQ9LnMO3AivbAL1EQ/+DUgZtHdNi20
+         K69A==
+X-Gm-Message-State: AOJu0Yxw+JfqKGbh8WaWx1oRxB+Lv2mimV1NdSkF5zU4LtY6maCAKCEj
+	wFlUPr8688R8U+1R6cciWOJEQoVlkVyn/z4qXDfZnA==
+X-Google-Smtp-Source: AGHT+IHBtVGuULaTsqSbWWfK0JktN//Yobr+i2oSyvtEqBPvfhvTvIyFXXQYxmpnW+pXruM/MrOawuspY0l3Z4zpy28=
+X-Received: by 2002:a25:74c5:0:b0:da0:46ad:fb46 with SMTP id
+ p188-20020a2574c5000000b00da046adfb46mr114458ybc.41.1698345202763; Thu, 26
+ Oct 2023 11:33:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231026085800.GK2824@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20231024134637.3120277-1-surenb@google.com> <20231024134637.3120277-29-surenb@google.com>
+ <87h6me620j.ffs@tglx>
+In-Reply-To: <87h6me620j.ffs@tglx>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 26 Oct 2023 18:33:09 +0000
+Message-ID: <CAJuCfpH1pG513-FUE_28MfJ7xbX=9O-auYUjkxKLmtve_6rRAw@mail.gmail.com>
+Subject: Re: [PATCH v2 28/39] timekeeping: Fix a circular include dependency
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
+	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, ldufour@linux.ibm.com, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, mingo@redhat.com, dave.hansen@linux.intel.com, 
+	x86@kernel.org, peterx@redhat.com, david@redhat.com, axboe@kernel.dk, 
+	mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org, 
+	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
+	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
+	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
+	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
+	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 26, 2023 at 11:58:00AM +0300, Mike Rapoport wrote:
-> On Mon, Oct 23, 2023 at 06:14:20PM +0100, Will Deacon wrote:
-> > On Mon, Sep 18, 2023 at 10:29:46AM +0300, Mike Rapoport wrote:
-> > > diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-> > > index dd851297596e..cd6320de1c54 100644
-> > > --- a/arch/arm64/kernel/module.c
-> > > +++ b/arch/arm64/kernel/module.c
-> > > @@ -20,6 +20,7 @@
-> > >  #include <linux/random.h>
-> > >  #include <linux/scs.h>
-> > >  #include <linux/vmalloc.h>
-> > > +#include <linux/execmem.h>
-> > >  
-> > >  #include <asm/alternative.h>
-> > >  #include <asm/insn.h>
-> > > @@ -108,46 +109,38 @@ static int __init module_init_limits(void)
-> > >  
-> > >  	return 0;
-> > >  }
-> > > -subsys_initcall(module_init_limits);
-> > >  
-> > > -void *module_alloc(unsigned long size)
-> > > +static struct execmem_params execmem_params __ro_after_init = {
-> > > +	.ranges = {
-> > > +		[EXECMEM_DEFAULT] = {
-> > > +			.flags = EXECMEM_KASAN_SHADOW,
-> > > +			.alignment = MODULE_ALIGN,
-> > > +		},
-> > > +	},
-> > > +};
-> > > +
-> > > +struct execmem_params __init *execmem_arch_params(void)
-> > >  {
-> > > -	void *p = NULL;
-> > > +	struct execmem_range *r = &execmem_params.ranges[EXECMEM_DEFAULT];
-> > >  
-> > > -	/*
-> > > -	 * Where possible, prefer to allocate within direct branch range of the
-> > > -	 * kernel such that no PLTs are necessary.
-> > > -	 */
-> > 
-> > Why are you removing this comment? I think you could just move it next
-> > to the part where we set a 128MiB range.
->  
-> Oops, my bad. Will add it back.
+On Wed, Oct 25, 2023 at 5:33=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
+> wrote:
+>
+> On Tue, Oct 24 2023 at 06:46, Suren Baghdasaryan wrote:
+> > From: Kent Overstreet <kent.overstreet@linux.dev>
+> >
+> > This avoids a circular header dependency in an upcoming patch by only
+> > making hrtimer.h depend on percpu-defs.h
+>
+> What's the actual dependency problem?
 
-Thanks.
+Sorry for the delay.
+When we instrument per-cpu allocations in [1] we need to include
+sched.h in percpu.h to be able to use alloc_tag_save(). sched.h
+includes hrtimer.h. So, without this change we end up with a circular
+inclusion: percpu.h->sched.h->hrtimer.h->percpu.h
 
-> > > -	if (module_direct_base) {
-> > > -		p = __vmalloc_node_range(size, MODULE_ALIGN,
-> > > -					 module_direct_base,
-> > > -					 module_direct_base + SZ_128M,
-> > > -					 GFP_KERNEL | __GFP_NOWARN,
-> > > -					 PAGE_KERNEL, 0, NUMA_NO_NODE,
-> > > -					 __builtin_return_address(0));
-> > > -	}
-> > > +	module_init_limits();
-> > 
-> > Hmm, this used to be run from subsys_initcall(), but now you're running
-> > it _really_ early, before random_init(), so randomization of the module
-> > space is no longer going to be very random if we don't have early entropy
-> > from the firmware or the CPU, which is likely to be the case on most SoCs.
-> 
-> Well, it will be as random as KASLR. Won't that be enough?
+[1] https://lore.kernel.org/all/20231024134637.3120277-32-surenb@google.com=
+/
 
-I don't think that's true -- we have the 'kaslr-seed' property for KASLR,
-but I'm not seeing anything like that for the module randomisation and I
-also don't see why we need to set these limits so early.
-
-Will
+>
