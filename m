@@ -1,94 +1,137 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8147C1A705
-	for <linux-modules@vger.kernel.org>; Fri, 27 Oct 2023 12:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C662374F2
+	for <linux-modules@vger.kernel.org>; Fri, 27 Oct 2023 15:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j7i09mvV"
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792B7121
-	for <linux-modules@vger.kernel.org>; Fri, 27 Oct 2023 05:27:27 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-408382da7f0so15265865e9.0
-        for <linux-modules@vger.kernel.org>; Fri, 27 Oct 2023 05:27:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iRNlwOt/"
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EC0192
+	for <linux-modules@vger.kernel.org>; Fri, 27 Oct 2023 08:28:21 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2c509d5ab43so33255031fa.0
+        for <linux-modules@vger.kernel.org>; Fri, 27 Oct 2023 08:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698409646; x=1699014446; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ShpExnipWNoGHM8TmERMpEvZiu9LbbtWo0359LRRBpg=;
-        b=j7i09mvVrP6uvJKoVM2fT157c9ImZp0ywtrWtWTOUw7oRcJscil1EtyUuTAdtn9PpQ
-         c+9Wkt+wnl0uAIFK1WLrgFIKNLe2j5uRoyDvESvu6G0T/j4FwJCefk8ZsS32eaqdfPXE
-         UEomSITjvCtVi8stGgZEalvBFaxecJYo/hcLShS4d06obLsO7qZMVyUXuaxMBvglF5ZZ
-         RhYDenhtv+sXLUehQXF+0kpi1yeI20nAwQAjcFVFRALb2VOuDxDMGk8NSHjAkZoxAVug
-         2Vf78CuUnofK7HOsB9eGemrf/q/ScbiaEebFetcTspFrHwRDDtfJj1fP0XlGRRMw84Ow
-         DVrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698409646; x=1699014446;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1698420500; x=1699025300; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ShpExnipWNoGHM8TmERMpEvZiu9LbbtWo0359LRRBpg=;
-        b=f6vZZHLTTkeRo2NVXec3sS2oyMXXQl5FfON5F4CbWIPILxdo4CR8Pda8gzIApQ9SVZ
-         t+wKJYRbrtboVNVweU0rZTFZtVxcJ+29JV0KjG9uq3Jmjrww3Tj44MyIYgrXb6+hvK6K
-         XEnh/PC4is0ll0ONHGvvEbjdzCqO6Nvv0h4Dao1YYajMq0j0QU6D2rWsqaByHSLqj0jx
-         9yaQkwaKW0jYdpRSkZhCr+DVEVkAI2ZAcCK0G2C/BFEPcNgAs/WW6zbq412UGWrqaXY+
-         /apL9cH46izjPdFvrnQAVL2/b09BJBRf8WPjuH072mT9y6BtPsDeSWZfosT++xjB1TtW
-         zWnw==
-X-Gm-Message-State: AOJu0Yymj8Nt8OsgNlOHFzyYK2RLY8V47HG5s8df+ER02I+2Jn8sST5f
-	p/MRA957/OhULmg97KU9V1tmTw==
-X-Google-Smtp-Source: AGHT+IGePza+z4TfX66FZcDIf8/JNx8JVqKKHGbjY0Df9benTN6EIO45xrAYlVcVOsPga6unZ62FpA==
-X-Received: by 2002:a05:600c:474f:b0:405:359a:c965 with SMTP id w15-20020a05600c474f00b00405359ac965mr2195472wmo.4.1698409645782;
-        Fri, 27 Oct 2023 05:27:25 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c444a00b00401d8181f8bsm4981081wmn.25.2023.10.27.05.27.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Oct 2023 05:27:25 -0700 (PDT)
-Date: Fri, 27 Oct 2023 15:27:23 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Joey Jiao <quic_jiangenj@quicinc.com>,
-	linux-modules@vger.kernel.org
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, quic_likaid@quicinc.com,
-	Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] module: Add CONFIG_MODULE_DISABLE_INIT_FREE option
-Message-ID: <a57e4eb8-329b-4503-bcd8-892ef44d8194@kadam.mountain>
-References: <20231013062711.28852-1-quic_jiangenj@quicinc.com>
- <b2b20956-d80e-462c-8261-a41802996197@kadam.mountain>
+        bh=pNsl5MInPLJ8RSTN609h9x1G8bOqBML3/WHWrkX2PGU=;
+        b=iRNlwOt/QoKpaCq6XxLrF0wXdv5Jy1DZzQLa+O9FPjAtqhZHpeAsOBBOnJUEpUoHkb
+         jPBdwRVtq7uhfs1DnIMszqyK6ZuqHjlFPbYx6F8YhmKaa9d2zoGdydpWBd8gwTHkktic
+         h+lkMhvRcnwrq1roygwA6d4kVZkWsM8uDzIi5CB1yiBEqlBb7pncDjXeH/gs9oCCyak3
+         oc9GtNzTYGaLv+TTk8G3rKDwbJe+oiQw+X5kMmqLa+J3gvhrUMxO+Auy7P8vDQNE8qIj
+         WNSgZwSxNbvGOF2bWDisnIHP2Yg9nYLvMAfQ6SjzR8dfplstJXuPBV34aoocJw3/k/hj
+         YKgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698420500; x=1699025300;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pNsl5MInPLJ8RSTN609h9x1G8bOqBML3/WHWrkX2PGU=;
+        b=H9yjEoeWLJuRSPMygnXaaWwtcZm3cyof13YFH8x3tVB93ilxc9Ki8BuSZ5LF0drcJ1
+         EI4xR4x2l2OfVNsQYXV7lRcqlIZOj8Fs+B8yZevq9qutH3R/IdbVmOhrOETjhVMYG3l2
+         KYxkRPbEmCO5KGYKEs6vVEQxwEHiWzw9BaEppZ3quzEPBwwvtAlHqamzWTTVoNK6AdiQ
+         0mpswOddo+eYq46b4tabKmiKR+kF12fCYOHkxnUhqhfLSzpcx4ihcUavk970YJT8UFkW
+         vOiDGSK5+5cgJJZQbDVkJEFfBH0k9kb6mdz/ssqY/ky70YFcwFwBCtFElD8WGX+g0gkW
+         t7YQ==
+X-Gm-Message-State: AOJu0YxCC6MzbnfdprEcIC0y+4rEAh4yK8rnSCAS92O3bdfKPl7TLnrO
+	5Yn5XykuwW11MPCL0vC/930Yt+RRtCJ10kf/JACCTg==
+X-Google-Smtp-Source: AGHT+IHhztclk1FNuTavfV09vRrRQcRnx6lXYSGYBX+I6vgMiVsYpEDbYR5+xRzUeW2IFeyne8V1kWZ8Fus2muopy04=
+X-Received: by 2002:a05:651c:1070:b0:2c5:47f:8ff7 with SMTP id
+ y16-20020a05651c107000b002c5047f8ff7mr2161033ljm.18.1698420499387; Fri, 27
+ Oct 2023 08:28:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b2b20956-d80e-462c-8261-a41802996197@kadam.mountain>
+References: <20231024134637.3120277-1-surenb@google.com> <20231024134637.3120277-29-surenb@google.com>
+ <87h6me620j.ffs@tglx> <CAJuCfpH1pG513-FUE_28MfJ7xbX=9O-auYUjkxKLmtve_6rRAw@mail.gmail.com>
+ <87jzr93rxv.ffs@tglx> <20231026235433.yuvxf7opxg74ncmd@moria.home.lan> <b20fe713-28c6-4ca8-b64a-df017f161524@app.fastmail.com>
+In-Reply-To: <b20fe713-28c6-4ca8-b64a-df017f161524@app.fastmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 27 Oct 2023 08:28:08 -0700
+Message-ID: <CAKwvOdnKwGnxZnnDW-miaUO+M5AN_Np1A0fmj18Mz1AV2aQPzg@mail.gmail.com>
+Subject: Re: [PATCH v2 28/39] timekeeping: Fix a circular include dependency
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>, Thomas Gleixner <tglx@linutronix.de>, 
+	Suren Baghdasaryan <surenb@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Mel Gorman <mgorman@suse.de>, 
+	Davidlohr Bueso <dave@stgolabs.net>, Matthew Wilcox <willy@infradead.org>, 
+	"Liam R. Howlett" <liam.howlett@oracle.com>, Jonathan Corbet <corbet@lwn.net>, void@manifault.com, 
+	Peter Zijlstra <peterz@infradead.org>, juri.lelli@redhat.com, ldufour@linux.ibm.com, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	peterx@redhat.com, David Hildenbrand <david@redhat.com>, Jens Axboe <axboe@kernel.dk>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, dennis@kernel.org, Tejun Heo <tj@kernel.org>, 
+	Muchun Song <muchun.song@linux.dev>, Mike Rapoport <rppt@kernel.org>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, pasha.tatashin@soleen.com, yosryahmed@google.com, 
+	Yu Zhao <yuzhao@google.com>, David Howells <dhowells@redhat.com>, Hugh Dickins <hughd@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Kees Cook <keescook@chromium.org>, vvvvvv@google.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Eric Biggers <ebiggers@google.com>, ytcoode@gmail.com, 
+	Vincent Guittot <vincent.guittot@linaro.org>, dietmar.eggemann@arm.com, 
+	Steven Rostedt <rostedt@goodmis.org>, bsegall@google.com, bristot@redhat.com, 
+	vschneid@redhat.com, Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, 
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
+	Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Shakeel Butt <shakeelb@google.com>, Muchun Song <songmuchun@bytedance.com>, 
+	Jason Baron <jbaron@akamai.com>, David Rientjes <rientjes@google.com>, minchan@google.com, 
+	kaleshsingh@google.com, kernel-team@android.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	Linux-Arch <linux-arch@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 27, 2023 at 03:00:00PM +0300, Dan Carpenter wrote:
-> 607c543f939d8c kernel/module.c      Andrii Nakryiko  2020-11-20  2579  #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> 607c543f939d8c kernel/module.c      Andrii Nakryiko  2020-11-20  2580  	/* .BTF is not SHF_ALLOC and will get removed, so sanitize pointer */
-> 607c543f939d8c kernel/module.c      Andrii Nakryiko  2020-11-20  2581  	mod->btf_data = NULL;
-> 607c543f939d8c kernel/module.c      Andrii Nakryiko  2020-11-20  2582  #endif
-> c749637909eea5 kernel/module.c      Rusty Russell    2015-01-20  2583  	/*
-> c749637909eea5 kernel/module.c      Rusty Russell    2015-01-20  2584  	 * We want to free module_init, but be aware that kallsyms may be
-> 0be964be0d4508 kernel/module.c      Peter Zijlstra   2015-05-27  2585  	 * walking this with preempt disabled.  In all the failure paths, we
-> cb2f55369d3a9e kernel/module.c      Paul E. McKenney 2018-11-06  2586  	 * call synchronize_rcu(), but we don't want to slow down the success
-> 1a7b7d9220819a kernel/module.c      Rick Edgecombe   2019-04-25  2587  	 * path. module_memfree() cannot be called in an interrupt, so do the
-> 1a7b7d9220819a kernel/module.c      Rick Edgecombe   2019-04-25  2588  	 * work and call synchronize_rcu() in a work queue.
-> 1a7b7d9220819a kernel/module.c      Rick Edgecombe   2019-04-25  2589  	 *
-> ae646f0b9ca135 kernel/module.c      Jeffrey Hugo     2018-05-11  2590  	 * Note that module_alloc() on most architectures creates W+X page
-> ae646f0b9ca135 kernel/module.c      Jeffrey Hugo     2018-05-11  2591  	 * mappings which won't be cleaned up until do_free_init() runs.  Any
-> ae646f0b9ca135 kernel/module.c      Jeffrey Hugo     2018-05-11  2592  	 * code such as mark_rodata_ro() which depends on those mappings to
-> ae646f0b9ca135 kernel/module.c      Jeffrey Hugo     2018-05-11  2593  	 * be cleaned up needs to sync with the queued work - ie
-> cb2f55369d3a9e kernel/module.c      Paul E. McKenney 2018-11-06  2594  	 * rcu_barrier()
-> c749637909eea5 kernel/module.c      Rusty Russell    2015-01-20  2595  	 */
-> 36022a47582048 kernel/module/main.c Joey Jiao        2023-10-13  2596  	if (!IS_ENABLED(CONFIG_MODULE_DISABLE_INIT_FREE) &&
-> 36022a47582048 kernel/module/main.c Joey Jiao        2023-10-13  2597  	    llist_add(&freeinit->node, &init_free_list))
-> 
-> Let's not allocate freeinit if CONFIG_MODULE_DISABLE_INIT_FREE is not
-> enabled.
+On Thu, Oct 26, 2023 at 11:35=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
+>
+> On Fri, Oct 27, 2023, at 01:54, Kent Overstreet wrote:
+> > On Fri, Oct 27, 2023 at 01:05:48AM +0200, Thomas Gleixner wrote:
+> >> On Thu, Oct 26 2023 at 18:33, Suren Baghdasaryan wrote:
+> >> > On Wed, Oct 25, 2023 at 5:33=E2=80=AFPM Thomas Gleixner <tglx@linutr=
+onix.de> wrote:
+> >> >> > This avoids a circular header dependency in an upcoming patch by =
+only
+> >> >> > making hrtimer.h depend on percpu-defs.h
+> >> >>
+> >> >> What's the actual dependency problem?
+> >> >
+> >> > Sorry for the delay.
+> >> > When we instrument per-cpu allocations in [1] we need to include
+> >> > sched.h in percpu.h to be able to use alloc_tag_save(). sched.h
+> >>
+> >> Including sched.h in percpu.h is fundamentally wrong as sched.h is the
+> >> initial place of all header recursions.
+> >>
+> >> There is a reason why a lot of funtionalitiy has been split out of
+> >> sched.h into seperate headers over time in order to avoid that.
+> >
+> > Yeah, it's definitely unfortunate. The issue here is that
+> > alloc_tag_save() needs task_struct - we have to pull that in for
+> > alloc_tag_save() to be inline, which we really want.
+> >
+> > What if we moved task_struct to its own dedicated header? That might be
+> > good to do anyways...
+>
+> Yes, I agree that is the best way to handle it. I've prototyped
+> a more thorough header cleanup with good results (much improved
+> build speed) in the past, and most of the work to get there is
+> to seperate out structures like task_struct, mm_struct, net_device,
+> etc into headers that only depend on the embedded structure
+> definitions without needing all the inline functions associated
+> with them.
 
-Wait.  It's the other way around actually.  freeinit isn't used if
-CONFIG_MODULE_DISABLE_INIT_FREE is enabled.
-
-regards,
-dan carpenter
-
+This is something I'll add to our automation todos which I plan to
+talk about at plumbers; I feel like it should be possible to write a
+script that given a header and identifier can split whatever
+declaration out into a new header, update the old header, then add the
+necessary includes for the newly created header to each dependent
+(optional).
+--=20
+Thanks,
+~Nick Desaulniers
