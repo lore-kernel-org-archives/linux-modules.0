@@ -1,137 +1,181 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C662374F2
-	for <linux-modules@vger.kernel.org>; Fri, 27 Oct 2023 15:28:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006092595;
+	Sat, 28 Oct 2023 17:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iRNlwOt/"
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EC0192
-	for <linux-modules@vger.kernel.org>; Fri, 27 Oct 2023 08:28:21 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2c509d5ab43so33255031fa.0
-        for <linux-modules@vger.kernel.org>; Fri, 27 Oct 2023 08:28:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698420500; x=1699025300; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pNsl5MInPLJ8RSTN609h9x1G8bOqBML3/WHWrkX2PGU=;
-        b=iRNlwOt/QoKpaCq6XxLrF0wXdv5Jy1DZzQLa+O9FPjAtqhZHpeAsOBBOnJUEpUoHkb
-         jPBdwRVtq7uhfs1DnIMszqyK6ZuqHjlFPbYx6F8YhmKaa9d2zoGdydpWBd8gwTHkktic
-         h+lkMhvRcnwrq1roygwA6d4kVZkWsM8uDzIi5CB1yiBEqlBb7pncDjXeH/gs9oCCyak3
-         oc9GtNzTYGaLv+TTk8G3rKDwbJe+oiQw+X5kMmqLa+J3gvhrUMxO+Auy7P8vDQNE8qIj
-         WNSgZwSxNbvGOF2bWDisnIHP2Yg9nYLvMAfQ6SjzR8dfplstJXuPBV34aoocJw3/k/hj
-         YKgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698420500; x=1699025300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pNsl5MInPLJ8RSTN609h9x1G8bOqBML3/WHWrkX2PGU=;
-        b=H9yjEoeWLJuRSPMygnXaaWwtcZm3cyof13YFH8x3tVB93ilxc9Ki8BuSZ5LF0drcJ1
-         EI4xR4x2l2OfVNsQYXV7lRcqlIZOj8Fs+B8yZevq9qutH3R/IdbVmOhrOETjhVMYG3l2
-         KYxkRPbEmCO5KGYKEs6vVEQxwEHiWzw9BaEppZ3quzEPBwwvtAlHqamzWTTVoNK6AdiQ
-         0mpswOddo+eYq46b4tabKmiKR+kF12fCYOHkxnUhqhfLSzpcx4ihcUavk970YJT8UFkW
-         vOiDGSK5+5cgJJZQbDVkJEFfBH0k9kb6mdz/ssqY/ky70YFcwFwBCtFElD8WGX+g0gkW
-         t7YQ==
-X-Gm-Message-State: AOJu0YxCC6MzbnfdprEcIC0y+4rEAh4yK8rnSCAS92O3bdfKPl7TLnrO
-	5Yn5XykuwW11MPCL0vC/930Yt+RRtCJ10kf/JACCTg==
-X-Google-Smtp-Source: AGHT+IHhztclk1FNuTavfV09vRrRQcRnx6lXYSGYBX+I6vgMiVsYpEDbYR5+xRzUeW2IFeyne8V1kWZ8Fus2muopy04=
-X-Received: by 2002:a05:651c:1070:b0:2c5:47f:8ff7 with SMTP id
- y16-20020a05651c107000b002c5047f8ff7mr2161033ljm.18.1698420499387; Fri, 27
- Oct 2023 08:28:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=tesarici.cz header.i=@tesarici.cz header.b="NEf36SYo"
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E39E1;
+	Sat, 28 Oct 2023 10:21:56 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by bee.tesarici.cz (Postfix) with ESMTPSA id 1794B183AEA;
+	Sat, 28 Oct 2023 19:21:48 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+	t=1698513709; bh=NjpBpPt/yrrzyUMwOnxT0t9fJ7lkHUICaTlDk7VnK5E=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NEf36SYo3kQbCeEsdwZEo5Rs7ubi4rXjiy/HkeByeW5ZFg1NJ7jrkUSgWkxmg2M8k
+	 B0u/D2sCM3DcHuuZDfcPU7EjnH661MAuSS0d/FyxcRCZoz24WCjCK0k1P8odl2097t
+	 ZVT0E+8iYlsOBUWMC4fZaTpedbZzQ/CHY/uHKk5wgB1+rAceIGvg9nE6AeoAR5SMTy
+	 VdPZ/XLtuodw43A4B+h4DkkMi1URAqTCzmC3/qWgJtpSG7UvnNZ/ye9sCmfnJIiYAE
+	 BLpNDIscF2rgwyxelghhqIlUEu7ofl0My0JCMUOvGX60kRL5D6XzWCGs+fAiOUMIG4
+	 77EOtdZarg36A==
+Date: Sat, 28 Oct 2023 19:21:47 +0200
+From: Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Neil Brown <neilb@suse.de>, akpm@linux-foundation.org,
+ kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
+ hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+ dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+ corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+ juri.lelli@redhat.com, ldufour@linux.ibm.com, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+ dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+ david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+ nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev,
+ rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+ yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+ hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+ ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org,
+ ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+ iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+ elver@google.com, dvyukov@google.com, shakeelb@google.com,
+ songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+ minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+ cgroups@vger.kernel.org
+Subject: Re: [PATCH v2 06/39] mm: enumerate all gfp flags
+Message-ID: <20231028192147.2a755c46@meshulam.tesarici.cz>
+In-Reply-To: <CAJuCfpHS1JTRU69zFDAJjmMYR3K5TAS9+AsA3oYLs2LCs5aTBw@mail.gmail.com>
+References: <20231024134637.3120277-1-surenb@google.com>
+	<20231024134637.3120277-7-surenb@google.com>
+	<20231025074652.44bc0eb4@meshulam.tesarici.cz>
+	<CAJuCfpHS1JTRU69zFDAJjmMYR3K5TAS9+AsA3oYLs2LCs5aTBw@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231024134637.3120277-1-surenb@google.com> <20231024134637.3120277-29-surenb@google.com>
- <87h6me620j.ffs@tglx> <CAJuCfpH1pG513-FUE_28MfJ7xbX=9O-auYUjkxKLmtve_6rRAw@mail.gmail.com>
- <87jzr93rxv.ffs@tglx> <20231026235433.yuvxf7opxg74ncmd@moria.home.lan> <b20fe713-28c6-4ca8-b64a-df017f161524@app.fastmail.com>
-In-Reply-To: <b20fe713-28c6-4ca8-b64a-df017f161524@app.fastmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 27 Oct 2023 08:28:08 -0700
-Message-ID: <CAKwvOdnKwGnxZnnDW-miaUO+M5AN_Np1A0fmj18Mz1AV2aQPzg@mail.gmail.com>
-Subject: Re: [PATCH v2 28/39] timekeeping: Fix a circular include dependency
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>, Thomas Gleixner <tglx@linutronix.de>, 
-	Suren Baghdasaryan <surenb@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Mel Gorman <mgorman@suse.de>, 
-	Davidlohr Bueso <dave@stgolabs.net>, Matthew Wilcox <willy@infradead.org>, 
-	"Liam R. Howlett" <liam.howlett@oracle.com>, Jonathan Corbet <corbet@lwn.net>, void@manifault.com, 
-	Peter Zijlstra <peterz@infradead.org>, juri.lelli@redhat.com, ldufour@linux.ibm.com, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	peterx@redhat.com, David Hildenbrand <david@redhat.com>, Jens Axboe <axboe@kernel.dk>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, dennis@kernel.org, Tejun Heo <tj@kernel.org>, 
-	Muchun Song <muchun.song@linux.dev>, Mike Rapoport <rppt@kernel.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, pasha.tatashin@soleen.com, yosryahmed@google.com, 
-	Yu Zhao <yuzhao@google.com>, David Howells <dhowells@redhat.com>, Hugh Dickins <hughd@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Kees Cook <keescook@chromium.org>, vvvvvv@google.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Eric Biggers <ebiggers@google.com>, ytcoode@gmail.com, 
-	Vincent Guittot <vincent.guittot@linaro.org>, dietmar.eggemann@arm.com, 
-	Steven Rostedt <rostedt@goodmis.org>, bsegall@google.com, bristot@redhat.com, 
-	vschneid@redhat.com, Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, 
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
-	Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Shakeel Butt <shakeelb@google.com>, Muchun Song <songmuchun@bytedance.com>, 
-	Jason Baron <jbaron@akamai.com>, David Rientjes <rientjes@google.com>, minchan@google.com, 
-	kaleshsingh@google.com, kernel-team@android.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	Linux-Arch <linux-arch@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 26, 2023 at 11:35=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
->
-> On Fri, Oct 27, 2023, at 01:54, Kent Overstreet wrote:
-> > On Fri, Oct 27, 2023 at 01:05:48AM +0200, Thomas Gleixner wrote:
-> >> On Thu, Oct 26 2023 at 18:33, Suren Baghdasaryan wrote:
-> >> > On Wed, Oct 25, 2023 at 5:33=E2=80=AFPM Thomas Gleixner <tglx@linutr=
-onix.de> wrote:
-> >> >> > This avoids a circular header dependency in an upcoming patch by =
-only
-> >> >> > making hrtimer.h depend on percpu-defs.h
-> >> >>
-> >> >> What's the actual dependency problem?
-> >> >
-> >> > Sorry for the delay.
-> >> > When we instrument per-cpu allocations in [1] we need to include
-> >> > sched.h in percpu.h to be able to use alloc_tag_save(). sched.h
-> >>
-> >> Including sched.h in percpu.h is fundamentally wrong as sched.h is the
-> >> initial place of all header recursions.
-> >>
-> >> There is a reason why a lot of funtionalitiy has been split out of
-> >> sched.h into seperate headers over time in order to avoid that.
-> >
-> > Yeah, it's definitely unfortunate. The issue here is that
-> > alloc_tag_save() needs task_struct - we have to pull that in for
-> > alloc_tag_save() to be inline, which we really want.
-> >
-> > What if we moved task_struct to its own dedicated header? That might be
-> > good to do anyways...
->
-> Yes, I agree that is the best way to handle it. I've prototyped
-> a more thorough header cleanup with good results (much improved
-> build speed) in the past, and most of the work to get there is
-> to seperate out structures like task_struct, mm_struct, net_device,
-> etc into headers that only depend on the embedded structure
-> definitions without needing all the inline functions associated
-> with them.
+On Wed, 25 Oct 2023 08:28:32 -0700
+Suren Baghdasaryan <surenb@google.com> wrote:
 
-This is something I'll add to our automation todos which I plan to
-talk about at plumbers; I feel like it should be possible to write a
-script that given a header and identifier can split whatever
-declaration out into a new header, update the old header, then add the
-necessary includes for the newly created header to each dependent
-(optional).
---=20
-Thanks,
-~Nick Desaulniers
+> On Tue, Oct 24, 2023 at 10:47=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@tes=
+arici.cz> wrote:
+> >
+> > On Tue, 24 Oct 2023 06:46:03 -0700
+> > Suren Baghdasaryan <surenb@google.com> wrote:
+> > =20
+> > > Introduce GFP bits enumeration to let compiler track the number of us=
+ed
+> > > bits (which depends on the config options) instead of hardcoding them.
+> > > That simplifies __GFP_BITS_SHIFT calculation.
+> > > Suggested-by: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > ---
+> > >  include/linux/gfp_types.h | 90 +++++++++++++++++++++++++++----------=
+--
+> > >  1 file changed, 62 insertions(+), 28 deletions(-)
+> > >
+> > > diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+> > > index 6583a58670c5..3fbe624763d9 100644
+> > > --- a/include/linux/gfp_types.h
+> > > +++ b/include/linux/gfp_types.h
+> > > @@ -21,44 +21,78 @@ typedef unsigned int __bitwise gfp_t;
+> > >   * include/trace/events/mmflags.h and tools/perf/builtin-kmem.c
+> > >   */
+> > >
+> > > +enum {
+> > > +     ___GFP_DMA_BIT,
+> > > +     ___GFP_HIGHMEM_BIT,
+> > > +     ___GFP_DMA32_BIT,
+> > > +     ___GFP_MOVABLE_BIT,
+> > > +     ___GFP_RECLAIMABLE_BIT,
+> > > +     ___GFP_HIGH_BIT,
+> > > +     ___GFP_IO_BIT,
+> > > +     ___GFP_FS_BIT,
+> > > +     ___GFP_ZERO_BIT,
+> > > +     ___GFP_UNUSED_BIT,      /* 0x200u unused */
+> > > +     ___GFP_DIRECT_RECLAIM_BIT,
+> > > +     ___GFP_KSWAPD_RECLAIM_BIT,
+> > > +     ___GFP_WRITE_BIT,
+> > > +     ___GFP_NOWARN_BIT,
+> > > +     ___GFP_RETRY_MAYFAIL_BIT,
+> > > +     ___GFP_NOFAIL_BIT,
+> > > +     ___GFP_NORETRY_BIT,
+> > > +     ___GFP_MEMALLOC_BIT,
+> > > +     ___GFP_COMP_BIT,
+> > > +     ___GFP_NOMEMALLOC_BIT,
+> > > +     ___GFP_HARDWALL_BIT,
+> > > +     ___GFP_THISNODE_BIT,
+> > > +     ___GFP_ACCOUNT_BIT,
+> > > +     ___GFP_ZEROTAGS_BIT,
+> > > +#ifdef CONFIG_KASAN_HW_TAGS
+> > > +     ___GFP_SKIP_ZERO_BIT,
+> > > +     ___GFP_SKIP_KASAN_BIT,
+> > > +#endif
+> > > +#ifdef CONFIG_LOCKDEP
+> > > +     ___GFP_NOLOCKDEP_BIT,
+> > > +#endif
+> > > +     ___GFP_LAST_BIT
+> > > +};
+> > > +
+> > >  /* Plain integer GFP bitmasks. Do not use this directly. */
+> > > -#define ___GFP_DMA           0x01u
+> > > -#define ___GFP_HIGHMEM               0x02u
+> > > -#define ___GFP_DMA32         0x04u
+> > > -#define ___GFP_MOVABLE               0x08u
+> > > -#define ___GFP_RECLAIMABLE   0x10u
+> > > -#define ___GFP_HIGH          0x20u
+> > > -#define ___GFP_IO            0x40u
+> > > -#define ___GFP_FS            0x80u
+> > > -#define ___GFP_ZERO          0x100u
+> > > +#define ___GFP_DMA           BIT(___GFP_DMA_BIT)
+> > > +#define ___GFP_HIGHMEM               BIT(___GFP_HIGHMEM_BIT)
+> > > +#define ___GFP_DMA32         BIT(___GFP_DMA32_BIT)
+> > > +#define ___GFP_MOVABLE               BIT(___GFP_MOVABLE_BIT)
+> > > +#define ___GFP_RECLAIMABLE   BIT(___GFP_RECLAIMABLE_BIT)
+> > > +#define ___GFP_HIGH          BIT(___GFP_HIGH_BIT)
+> > > +#define ___GFP_IO            BIT(___GFP_IO_BIT)
+> > > +#define ___GFP_FS            BIT(___GFP_FS_BIT)
+> > > +#define ___GFP_ZERO          BIT(___GFP_ZERO_BIT)
+> > >  /* 0x200u unused */ =20
+> >
+> > This comment can be also removed here, because it is already stated
+> > above with the definition of ___GFP_UNUSED_BIT. =20
+>=20
+> Ack.
+>=20
+> >
+> > Then again, I think that the GFP bits have never been compacted after
+> > Neil Brown removed __GFP_ATOMIC with commit 2973d8229b78 simply because
+> > that would mean changing definitions of all subsequent GFP flags. FWIW
+> > I am not aware of any code that would depend on the numeric value of
+> > ___GFP_* macros, so this patch seems like a good opportunity to change
+> > the numbering and get rid of this unused 0x200u altogether.
+> >
+> > @Neil: I have added you to the conversation in case you want to correct
+> > my understanding of the unused bit. =20
+>=20
+> Hmm. I would prefer to do that in a separate patch even though it
+> would be a one-line change. Seems safer to me in case something goes
+> wrong and we have to bisect and revert it. If that sounds ok I'll post
+> that in the next version.
+
+You're right. If something does go wrong, it will be easier to fix if
+the removal of the unused bit is in a commit of its own.
+
+Petr T
