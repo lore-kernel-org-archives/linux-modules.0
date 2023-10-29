@@ -1,181 +1,212 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006092595;
-	Sat, 28 Oct 2023 17:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B745E194
+	for <linux-modules@vger.kernel.org>; Sun, 29 Oct 2023 01:03:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tesarici.cz header.i=@tesarici.cz header.b="NEf36SYo"
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E39E1;
-	Sat, 28 Oct 2023 10:21:56 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="fHnm17Jn"
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031FEA7
+	for <linux-modules@vger.kernel.org>; Sat, 28 Oct 2023 18:03:36 -0700 (PDT)
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by bee.tesarici.cz (Postfix) with ESMTPSA id 1794B183AEA;
-	Sat, 28 Oct 2023 19:21:48 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-	t=1698513709; bh=NjpBpPt/yrrzyUMwOnxT0t9fJ7lkHUICaTlDk7VnK5E=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NEf36SYo3kQbCeEsdwZEo5Rs7ubi4rXjiy/HkeByeW5ZFg1NJ7jrkUSgWkxmg2M8k
-	 B0u/D2sCM3DcHuuZDfcPU7EjnH661MAuSS0d/FyxcRCZoz24WCjCK0k1P8odl2097t
-	 ZVT0E+8iYlsOBUWMC4fZaTpedbZzQ/CHY/uHKk5wgB1+rAceIGvg9nE6AeoAR5SMTy
-	 VdPZ/XLtuodw43A4B+h4DkkMi1URAqTCzmC3/qWgJtpSG7UvnNZ/ye9sCmfnJIiYAE
-	 BLpNDIscF2rgwyxelghhqIlUEu7ofl0My0JCMUOvGX60kRL5D6XzWCGs+fAiOUMIG4
-	 77EOtdZarg36A==
-Date: Sat, 28 Oct 2023 19:21:47 +0200
-From: Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Neil Brown <neilb@suse.de>, akpm@linux-foundation.org,
- kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
- hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
- dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
- corbet@lwn.net, void@manifault.com, peterz@infradead.org,
- juri.lelli@redhat.com, ldufour@linux.ibm.com, catalin.marinas@arm.com,
- will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
- david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
- nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev,
- rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
- yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
- hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
- ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org,
- ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
- dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
- bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
- iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
- elver@google.com, dvyukov@google.com, shakeelb@google.com,
- songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
- minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- iommu@lists.linux.dev, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
- cgroups@vger.kernel.org
-Subject: Re: [PATCH v2 06/39] mm: enumerate all gfp flags
-Message-ID: <20231028192147.2a755c46@meshulam.tesarici.cz>
-In-Reply-To: <CAJuCfpHS1JTRU69zFDAJjmMYR3K5TAS9+AsA3oYLs2LCs5aTBw@mail.gmail.com>
-References: <20231024134637.3120277-1-surenb@google.com>
-	<20231024134637.3120277-7-surenb@google.com>
-	<20231025074652.44bc0eb4@meshulam.tesarici.cz>
-	<CAJuCfpHS1JTRU69zFDAJjmMYR3K5TAS9+AsA3oYLs2LCs5aTBw@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 209F43F21F
+	for <linux-modules@vger.kernel.org>; Sun, 29 Oct 2023 01:03:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1698541413;
+	bh=UP4x5SnMOmcNkH2hemFjTR3CnnBm8mi1qrZ7+9zlX1U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=fHnm17Jn/VDvJET/wtU8WHH1lUiLmjotIexKX/vBQEvtdiefV6lixudn3KiLwpdnw
+	 OdBojMbHTXTwAKwqn2KZLnABMyeYLVHqqJbC72dnB0NOvLJWDFdYwshhyJNNHpT3S3
+	 Sby7ixpS7KgWBcPTYG/pc43FT4SUeQ8kd9jilW4EWgHoEKrMZdSqAsYMKlEJgwNO8V
+	 2SkyT2q6j6EZinLyZjYbqn+eu7BY6qB0iRHFAxKZDETuA7HR4xRCM4XCydQC6CKacD
+	 G+W1Xqq70wWOFgwxZkVORkF+PLiQD7ZTmoilcuy5zWSFD6sg0XZnfwYrBZdBSGcaHF
+	 0BICJLxXswqZA==
+Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-5090b916b7fso1068582e87.1
+        for <linux-modules@vger.kernel.org>; Sat, 28 Oct 2023 18:03:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698541412; x=1699146212;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UP4x5SnMOmcNkH2hemFjTR3CnnBm8mi1qrZ7+9zlX1U=;
+        b=efH6kpWOa57VKZp/YewgV+pZRrtV2Z54e4drdol4umgXAgPjZf6V9pI6PebedY1+U6
+         KUwxidJgoZpgRPek1Z8/8DTrozIAAgi5rMDmkVMWq8H/sEarX4dZfbo/61bJdvudHeu+
+         whTVjMa47bCae2Oh2dofWWW+j3/0DssW2vU4cVokoTj0kPhxf4caW0MiizQsGQESWWfy
+         0KI+3/YUrD1tHcNeX1+E2TELr4n/KUXGD29t507eJS4jV7Upy8eXonzMwuKzb8AW06ue
+         NXY1nSzS+FShk4i60KBBe5X5X8pcGEju6W8jzqKU+5ktJyF9v84FcFx9Gg37gn/qO4bI
+         +/yQ==
+X-Gm-Message-State: AOJu0YzSwKu+W2Fd5DVeS0+W1J6jbn47kY2xjmqJTZN+q+gUgPqhm5rA
+	chYHTRUa2CQZjMzFjOFyIYJH4nMX1d/FcHbTcnC43ztg6ZyecPxHY36T6wsFIzNPpr8wxDZOMQ7
+	RIPOZaRv9/Am6uFcXLZtDaJOXUbwMQRXDu7VqwSUMcZPN23hsMKsDjg==
+X-Received: by 2002:ac2:446b:0:b0:509:f68:ed8 with SMTP id y11-20020ac2446b000000b005090f680ed8mr1786525lfl.61.1698541412071;
+        Sat, 28 Oct 2023 18:03:32 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH0zxlSxnhosnXYfwFJ0NpreCPIqikJMq7vZaVzhF+egSRGvLFK1Adbhn13rhZZEeIteVpsrg==
+X-Received: by 2002:ac2:446b:0:b0:509:f68:ed8 with SMTP id y11-20020ac2446b000000b005090f680ed8mr1786509lfl.61.1698541411134;
+        Sat, 28 Oct 2023 18:03:31 -0700 (PDT)
+Received: from localhost ([159.148.40.97])
+        by smtp.gmail.com with ESMTPSA id d1-20020a0565123d0100b00507fa091353sm829998lfv.132.2023.10.28.18.03.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Oct 2023 18:03:30 -0700 (PDT)
+From: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+To: linux-modules@vger.kernel.org
+Cc: lucas.de.marchi@gmail.com,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH kmod] libkmod: remove pkcs7 obj_to_hash_algo()
+Date: Sun, 29 Oct 2023 03:03:19 +0200
+Message-Id: <20231029010319.157390-1-dimitri.ledkov@canonical.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, 25 Oct 2023 08:28:32 -0700
-Suren Baghdasaryan <surenb@google.com> wrote:
+Switch to using OBJ_obj2txt() to calculate and print the pkcs7
+signature hash name. This eliminates the need to duplicate libcrypto
+NID to name mapping, detect SM3 openssl compile-time support, and
+enables using any hashes that openssl and kernel know about. For
+example SHA3 are being added for v6.7 and with this patch are
+automatically supported.
 
-> On Tue, Oct 24, 2023 at 10:47=E2=80=AFPM Petr Tesa=C5=99=C3=ADk <petr@tes=
-arici.cz> wrote:
-> >
-> > On Tue, 24 Oct 2023 06:46:03 -0700
-> > Suren Baghdasaryan <surenb@google.com> wrote:
-> > =20
-> > > Introduce GFP bits enumeration to let compiler track the number of us=
-ed
-> > > bits (which depends on the config options) instead of hardcoding them.
-> > > That simplifies __GFP_BITS_SHIFT calculation.
-> > > Suggested-by: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > ---
-> > >  include/linux/gfp_types.h | 90 +++++++++++++++++++++++++++----------=
---
-> > >  1 file changed, 62 insertions(+), 28 deletions(-)
-> > >
-> > > diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
-> > > index 6583a58670c5..3fbe624763d9 100644
-> > > --- a/include/linux/gfp_types.h
-> > > +++ b/include/linux/gfp_types.h
-> > > @@ -21,44 +21,78 @@ typedef unsigned int __bitwise gfp_t;
-> > >   * include/trace/events/mmflags.h and tools/perf/builtin-kmem.c
-> > >   */
-> > >
-> > > +enum {
-> > > +     ___GFP_DMA_BIT,
-> > > +     ___GFP_HIGHMEM_BIT,
-> > > +     ___GFP_DMA32_BIT,
-> > > +     ___GFP_MOVABLE_BIT,
-> > > +     ___GFP_RECLAIMABLE_BIT,
-> > > +     ___GFP_HIGH_BIT,
-> > > +     ___GFP_IO_BIT,
-> > > +     ___GFP_FS_BIT,
-> > > +     ___GFP_ZERO_BIT,
-> > > +     ___GFP_UNUSED_BIT,      /* 0x200u unused */
-> > > +     ___GFP_DIRECT_RECLAIM_BIT,
-> > > +     ___GFP_KSWAPD_RECLAIM_BIT,
-> > > +     ___GFP_WRITE_BIT,
-> > > +     ___GFP_NOWARN_BIT,
-> > > +     ___GFP_RETRY_MAYFAIL_BIT,
-> > > +     ___GFP_NOFAIL_BIT,
-> > > +     ___GFP_NORETRY_BIT,
-> > > +     ___GFP_MEMALLOC_BIT,
-> > > +     ___GFP_COMP_BIT,
-> > > +     ___GFP_NOMEMALLOC_BIT,
-> > > +     ___GFP_HARDWALL_BIT,
-> > > +     ___GFP_THISNODE_BIT,
-> > > +     ___GFP_ACCOUNT_BIT,
-> > > +     ___GFP_ZEROTAGS_BIT,
-> > > +#ifdef CONFIG_KASAN_HW_TAGS
-> > > +     ___GFP_SKIP_ZERO_BIT,
-> > > +     ___GFP_SKIP_KASAN_BIT,
-> > > +#endif
-> > > +#ifdef CONFIG_LOCKDEP
-> > > +     ___GFP_NOLOCKDEP_BIT,
-> > > +#endif
-> > > +     ___GFP_LAST_BIT
-> > > +};
-> > > +
-> > >  /* Plain integer GFP bitmasks. Do not use this directly. */
-> > > -#define ___GFP_DMA           0x01u
-> > > -#define ___GFP_HIGHMEM               0x02u
-> > > -#define ___GFP_DMA32         0x04u
-> > > -#define ___GFP_MOVABLE               0x08u
-> > > -#define ___GFP_RECLAIMABLE   0x10u
-> > > -#define ___GFP_HIGH          0x20u
-> > > -#define ___GFP_IO            0x40u
-> > > -#define ___GFP_FS            0x80u
-> > > -#define ___GFP_ZERO          0x100u
-> > > +#define ___GFP_DMA           BIT(___GFP_DMA_BIT)
-> > > +#define ___GFP_HIGHMEM               BIT(___GFP_HIGHMEM_BIT)
-> > > +#define ___GFP_DMA32         BIT(___GFP_DMA32_BIT)
-> > > +#define ___GFP_MOVABLE               BIT(___GFP_MOVABLE_BIT)
-> > > +#define ___GFP_RECLAIMABLE   BIT(___GFP_RECLAIMABLE_BIT)
-> > > +#define ___GFP_HIGH          BIT(___GFP_HIGH_BIT)
-> > > +#define ___GFP_IO            BIT(___GFP_IO_BIT)
-> > > +#define ___GFP_FS            BIT(___GFP_FS_BIT)
-> > > +#define ___GFP_ZERO          BIT(___GFP_ZERO_BIT)
-> > >  /* 0x200u unused */ =20
-> >
-> > This comment can be also removed here, because it is already stated
-> > above with the definition of ___GFP_UNUSED_BIT. =20
->=20
-> Ack.
->=20
-> >
-> > Then again, I think that the GFP bits have never been compacted after
-> > Neil Brown removed __GFP_ATOMIC with commit 2973d8229b78 simply because
-> > that would mean changing definitions of all subsequent GFP flags. FWIW
-> > I am not aware of any code that would depend on the numeric value of
-> > ___GFP_* macros, so this patch seems like a good opportunity to change
-> > the numbering and get rid of this unused 0x200u altogether.
-> >
-> > @Neil: I have added you to the conversation in case you want to correct
-> > my understanding of the unused bit. =20
->=20
-> Hmm. I would prefer to do that in a separate patch even though it
-> would be a one-line change. Seems safer to me in case something goes
-> wrong and we have to bisect and revert it. If that sounds ok I'll post
-> that in the next version.
+Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+---
+ configure.ac                |  7 -----
+ libkmod/libkmod-signature.c | 59 +++++++++++++------------------------
+ 2 files changed, 20 insertions(+), 46 deletions(-)
 
-You're right. If something does go wrong, it will be easier to fix if
-the removal of the unused bit is in a commit of its own.
+diff --git a/configure.ac b/configure.ac
+index 7bf8d78ca7..a6b8fa0308 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -133,13 +133,6 @@ AC_ARG_WITH([openssl],
+ AS_IF([test "x$with_openssl" != "xno"], [
+ 	PKG_CHECK_MODULES([libcrypto], [libcrypto >= 1.1.0], [LIBS="$LIBS $libcrypto_LIBS"])
+ 	AC_DEFINE([ENABLE_OPENSSL], [1], [Enable openssl for modinfo.])
+-	AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <openssl/ssl.h>
+-		int nid = NID_sm3;]])], [
+-		AC_MSG_NOTICE([openssl supports sm3])
+-	], [
+-		AC_MSG_NOTICE([openssl sm3 support not detected])
+-		CPPFLAGS="$CPPFLAGS -DOPENSSL_NO_SM3"
+-	])
+ 	module_signatures="PKCS7 $module_signatures"
+ ], [
+ 	AC_MSG_NOTICE([openssl support not requested])
+diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+index b749a818f9..80f6447bce 100644
+--- a/libkmod/libkmod-signature.c
++++ b/libkmod/libkmod-signature.c
+@@ -127,6 +127,7 @@ struct pkcs7_private {
+ 	PKCS7 *pkcs7;
+ 	unsigned char *key_id;
+ 	BIGNUM *sno;
++	char *hash_algo;
+ };
+ 
+ static void pkcs7_free(void *s)
+@@ -137,42 +138,11 @@ static void pkcs7_free(void *s)
+ 	PKCS7_free(pvt->pkcs7);
+ 	BN_free(pvt->sno);
+ 	free(pvt->key_id);
++	free(pvt->hash_algo);
+ 	free(pvt);
+ 	si->private = NULL;
+ }
+ 
+-static int obj_to_hash_algo(const ASN1_OBJECT *o)
+-{
+-	int nid;
+-
+-	nid = OBJ_obj2nid(o);
+-	switch (nid) {
+-	case NID_md4:
+-		return PKEY_HASH_MD4;
+-	case NID_md5:
+-		return PKEY_HASH_MD5;
+-	case NID_sha1:
+-		return PKEY_HASH_SHA1;
+-	case NID_ripemd160:
+-		return PKEY_HASH_RIPE_MD_160;
+-	case NID_sha256:
+-		return PKEY_HASH_SHA256;
+-	case NID_sha384:
+-		return PKEY_HASH_SHA384;
+-	case NID_sha512:
+-		return PKEY_HASH_SHA512;
+-	case NID_sha224:
+-		return PKEY_HASH_SHA224;
+-# ifndef OPENSSL_NO_SM3
+-	case NID_sm3:
+-		return PKEY_HASH_SM3;
+-# endif
+-	default:
+-		return -1;
+-	}
+-	return -1;
+-}
+-
+ static const char *x509_name_to_str(X509_NAME *name)
+ {
+ 	int i;
+@@ -219,7 +189,8 @@ static bool fill_pkcs7(const char *mem, off_t size,
+ 	unsigned char *key_id_str;
+ 	struct pkcs7_private *pvt;
+ 	const char *issuer_str;
+-	int hash_algo;
++	char *hash_algo;
++	int hash_algo_len;
+ 
+ 	size -= sig_len;
+ 	pkcs7_raw = mem + size;
+@@ -278,27 +249,37 @@ static bool fill_pkcs7(const char *mem, off_t size,
+ 
+ 	X509_ALGOR_get0(&o, NULL, NULL, dig_alg);
+ 
+-	hash_algo = obj_to_hash_algo(o);
+-	if (hash_algo < 0)
++	// Use OBJ_obj2txt to calculate string length
++	hash_algo_len = OBJ_obj2txt(NULL, 0, o, 0);
++	if (hash_algo_len < 0)
+ 		goto err3;
+-	sig_info->hash_algo = pkey_hash_algo[hash_algo];
+-	// hash algo has not been recognized
+-	if (sig_info->hash_algo == NULL)
++	hash_algo = malloc(hash_algo_len + 1);
++	if (hash_algo == NULL)
+ 		goto err3;
++	hash_algo_len = OBJ_obj2txt(hash_algo, hash_algo_len + 1, o, 0);
++	if (hash_algo_len < 0)
++		goto err4;
++
++	// Assign libcrypto hash algo string or number
++	sig_info->hash_algo = hash_algo;
++
+ 	sig_info->id_type = pkey_id_type[modsig->id_type];
+ 
+ 	pvt = malloc(sizeof(*pvt));
+ 	if (pvt == NULL)
+-		goto err3;
++		goto err4;
+ 
+ 	pvt->pkcs7 = pkcs7;
+ 	pvt->key_id = key_id_str;
+ 	pvt->sno = sno_bn;
++	pvt->hash_algo = hash_algo;
+ 	sig_info->private = pvt;
+ 
+ 	sig_info->free = pkcs7_free;
+ 
+ 	return true;
++err4:
++	free(hash_algo);
+ err3:
+ 	free(key_id_str);
+ err2:
+-- 
+2.34.1
 
-Petr T
