@@ -1,212 +1,110 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B745E194
-	for <linux-modules@vger.kernel.org>; Sun, 29 Oct 2023 01:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9196A3FE4;
+	Mon, 30 Oct 2023 07:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="fHnm17Jn"
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031FEA7
-	for <linux-modules@vger.kernel.org>; Sat, 28 Oct 2023 18:03:36 -0700 (PDT)
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 209F43F21F
-	for <linux-modules@vger.kernel.org>; Sun, 29 Oct 2023 01:03:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1698541413;
-	bh=UP4x5SnMOmcNkH2hemFjTR3CnnBm8mi1qrZ7+9zlX1U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-	b=fHnm17Jn/VDvJET/wtU8WHH1lUiLmjotIexKX/vBQEvtdiefV6lixudn3KiLwpdnw
-	 OdBojMbHTXTwAKwqn2KZLnABMyeYLVHqqJbC72dnB0NOvLJWDFdYwshhyJNNHpT3S3
-	 Sby7ixpS7KgWBcPTYG/pc43FT4SUeQ8kd9jilW4EWgHoEKrMZdSqAsYMKlEJgwNO8V
-	 2SkyT2q6j6EZinLyZjYbqn+eu7BY6qB0iRHFAxKZDETuA7HR4xRCM4XCydQC6CKacD
-	 G+W1Xqq70wWOFgwxZkVORkF+PLiQD7ZTmoilcuy5zWSFD6sg0XZnfwYrBZdBSGcaHF
-	 0BICJLxXswqZA==
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-5090b916b7fso1068582e87.1
-        for <linux-modules@vger.kernel.org>; Sat, 28 Oct 2023 18:03:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698541412; x=1699146212;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UP4x5SnMOmcNkH2hemFjTR3CnnBm8mi1qrZ7+9zlX1U=;
-        b=efH6kpWOa57VKZp/YewgV+pZRrtV2Z54e4drdol4umgXAgPjZf6V9pI6PebedY1+U6
-         KUwxidJgoZpgRPek1Z8/8DTrozIAAgi5rMDmkVMWq8H/sEarX4dZfbo/61bJdvudHeu+
-         whTVjMa47bCae2Oh2dofWWW+j3/0DssW2vU4cVokoTj0kPhxf4caW0MiizQsGQESWWfy
-         0KI+3/YUrD1tHcNeX1+E2TELr4n/KUXGD29t507eJS4jV7Upy8eXonzMwuKzb8AW06ue
-         NXY1nSzS+FShk4i60KBBe5X5X8pcGEju6W8jzqKU+5ktJyF9v84FcFx9Gg37gn/qO4bI
-         +/yQ==
-X-Gm-Message-State: AOJu0YzSwKu+W2Fd5DVeS0+W1J6jbn47kY2xjmqJTZN+q+gUgPqhm5rA
-	chYHTRUa2CQZjMzFjOFyIYJH4nMX1d/FcHbTcnC43ztg6ZyecPxHY36T6wsFIzNPpr8wxDZOMQ7
-	RIPOZaRv9/Am6uFcXLZtDaJOXUbwMQRXDu7VqwSUMcZPN23hsMKsDjg==
-X-Received: by 2002:ac2:446b:0:b0:509:f68:ed8 with SMTP id y11-20020ac2446b000000b005090f680ed8mr1786525lfl.61.1698541412071;
-        Sat, 28 Oct 2023 18:03:32 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH0zxlSxnhosnXYfwFJ0NpreCPIqikJMq7vZaVzhF+egSRGvLFK1Adbhn13rhZZEeIteVpsrg==
-X-Received: by 2002:ac2:446b:0:b0:509:f68:ed8 with SMTP id y11-20020ac2446b000000b005090f680ed8mr1786509lfl.61.1698541411134;
-        Sat, 28 Oct 2023 18:03:31 -0700 (PDT)
-Received: from localhost ([159.148.40.97])
-        by smtp.gmail.com with ESMTPSA id d1-20020a0565123d0100b00507fa091353sm829998lfv.132.2023.10.28.18.03.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Oct 2023 18:03:30 -0700 (PDT)
-From: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-To: linux-modules@vger.kernel.org
-Cc: lucas.de.marchi@gmail.com,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH kmod] libkmod: remove pkcs7 obj_to_hash_algo()
-Date: Sun, 29 Oct 2023 03:03:19 +0200
-Message-Id: <20231029010319.157390-1-dimitri.ledkov@canonical.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fyer+0uy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B1CC433C7;
+	Mon, 30 Oct 2023 07:01:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698649274;
+	bh=EmJn7V2xcCxlebppxaDAhU12OFutDZWRBy0vMaSrWuA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fyer+0uyv1jhu2jxdwK+n1O2/sIgGI7ezOwxQC871hHJ3Cd/JKl9lBlO3pXltUpO2
+	 tybWUbFkw8nG3yYnKj5NWsk/KsMeh5cYt2Zf06cFoE4cK0SwwSOQ0meQsCZJmwrLES
+	 ZjfIwnoeXu/25/54cCJrG0ThSOL/VsSYVOr1W/9QTaMgDvrgblTvcHPZrDSbxEy8fw
+	 AT95UrDI+b348FRlIe6JpCkizTZtGaE3kNe+nAOZWv5ZyGWJevSARlVxf0OsNjI/Uk
+	 BM7kNTKVl9T3dS3d/hE9ctd5XEbBUeRh4TuIA6DuyqF/4ni+SgBncpCAAQy/vXTAcB
+	 87xr+yc2RIXWg==
+Date: Mon, 30 Oct 2023 09:00:53 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Will Deacon <will@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 04/13] mm/execmem, arch: convert remaining overrides
+ of module_alloc to execmem
+Message-ID: <20231030070053.GL2824@kernel.org>
+References: <20230918072955.2507221-1-rppt@kernel.org>
+ <20230918072955.2507221-5-rppt@kernel.org>
+ <20231023171420.GA4041@willie-the-truck>
+ <20231026085800.GK2824@kernel.org>
+ <20231026102438.GA6924@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231026102438.GA6924@willie-the-truck>
 
-Switch to using OBJ_obj2txt() to calculate and print the pkcs7
-signature hash name. This eliminates the need to duplicate libcrypto
-NID to name mapping, detect SM3 openssl compile-time support, and
-enables using any hashes that openssl and kernel know about. For
-example SHA3 are being added for v6.7 and with this patch are
-automatically supported.
+On Thu, Oct 26, 2023 at 11:24:39AM +0100, Will Deacon wrote:
+> On Thu, Oct 26, 2023 at 11:58:00AM +0300, Mike Rapoport wrote:
+> > On Mon, Oct 23, 2023 at 06:14:20PM +0100, Will Deacon wrote:
+> > > On Mon, Sep 18, 2023 at 10:29:46AM +0300, Mike Rapoport wrote:
+> > > > diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
+> > > > index dd851297596e..cd6320de1c54 100644
+> > > > --- a/arch/arm64/kernel/module.c
+> > > > +++ b/arch/arm64/kernel/module.c
 
-Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
----
- configure.ac                |  7 -----
- libkmod/libkmod-signature.c | 59 +++++++++++++------------------------
- 2 files changed, 20 insertions(+), 46 deletions(-)
+...
 
-diff --git a/configure.ac b/configure.ac
-index 7bf8d78ca7..a6b8fa0308 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -133,13 +133,6 @@ AC_ARG_WITH([openssl],
- AS_IF([test "x$with_openssl" != "xno"], [
- 	PKG_CHECK_MODULES([libcrypto], [libcrypto >= 1.1.0], [LIBS="$LIBS $libcrypto_LIBS"])
- 	AC_DEFINE([ENABLE_OPENSSL], [1], [Enable openssl for modinfo.])
--	AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <openssl/ssl.h>
--		int nid = NID_sm3;]])], [
--		AC_MSG_NOTICE([openssl supports sm3])
--	], [
--		AC_MSG_NOTICE([openssl sm3 support not detected])
--		CPPFLAGS="$CPPFLAGS -DOPENSSL_NO_SM3"
--	])
- 	module_signatures="PKCS7 $module_signatures"
- ], [
- 	AC_MSG_NOTICE([openssl support not requested])
-diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
-index b749a818f9..80f6447bce 100644
---- a/libkmod/libkmod-signature.c
-+++ b/libkmod/libkmod-signature.c
-@@ -127,6 +127,7 @@ struct pkcs7_private {
- 	PKCS7 *pkcs7;
- 	unsigned char *key_id;
- 	BIGNUM *sno;
-+	char *hash_algo;
- };
+> > > > -	if (module_direct_base) {
+> > > > -		p = __vmalloc_node_range(size, MODULE_ALIGN,
+> > > > -					 module_direct_base,
+> > > > -					 module_direct_base + SZ_128M,
+> > > > -					 GFP_KERNEL | __GFP_NOWARN,
+> > > > -					 PAGE_KERNEL, 0, NUMA_NO_NODE,
+> > > > -					 __builtin_return_address(0));
+> > > > -	}
+> > > > +	module_init_limits();
+> > > 
+> > > Hmm, this used to be run from subsys_initcall(), but now you're running
+> > > it _really_ early, before random_init(), so randomization of the module
+> > > space is no longer going to be very random if we don't have early entropy
+> > > from the firmware or the CPU, which is likely to be the case on most SoCs.
+> > 
+> > Well, it will be as random as KASLR. Won't that be enough?
+> 
+> I don't think that's true -- we have the 'kaslr-seed' property for KASLR,
+> but I'm not seeing anything like that for the module randomisation and I
+> also don't see why we need to set these limits so early.
+
+x86 needs execmem initialized before ftrace_init() so I thought it would be
+best to setup execmem along with most of MM in mm_core_init().
+
+I'll move execmem initialization for !x86 to a later point, say
+core_initcall.
  
- static void pkcs7_free(void *s)
-@@ -137,42 +138,11 @@ static void pkcs7_free(void *s)
- 	PKCS7_free(pvt->pkcs7);
- 	BN_free(pvt->sno);
- 	free(pvt->key_id);
-+	free(pvt->hash_algo);
- 	free(pvt);
- 	si->private = NULL;
- }
- 
--static int obj_to_hash_algo(const ASN1_OBJECT *o)
--{
--	int nid;
--
--	nid = OBJ_obj2nid(o);
--	switch (nid) {
--	case NID_md4:
--		return PKEY_HASH_MD4;
--	case NID_md5:
--		return PKEY_HASH_MD5;
--	case NID_sha1:
--		return PKEY_HASH_SHA1;
--	case NID_ripemd160:
--		return PKEY_HASH_RIPE_MD_160;
--	case NID_sha256:
--		return PKEY_HASH_SHA256;
--	case NID_sha384:
--		return PKEY_HASH_SHA384;
--	case NID_sha512:
--		return PKEY_HASH_SHA512;
--	case NID_sha224:
--		return PKEY_HASH_SHA224;
--# ifndef OPENSSL_NO_SM3
--	case NID_sm3:
--		return PKEY_HASH_SM3;
--# endif
--	default:
--		return -1;
--	}
--	return -1;
--}
--
- static const char *x509_name_to_str(X509_NAME *name)
- {
- 	int i;
-@@ -219,7 +189,8 @@ static bool fill_pkcs7(const char *mem, off_t size,
- 	unsigned char *key_id_str;
- 	struct pkcs7_private *pvt;
- 	const char *issuer_str;
--	int hash_algo;
-+	char *hash_algo;
-+	int hash_algo_len;
- 
- 	size -= sig_len;
- 	pkcs7_raw = mem + size;
-@@ -278,27 +249,37 @@ static bool fill_pkcs7(const char *mem, off_t size,
- 
- 	X509_ALGOR_get0(&o, NULL, NULL, dig_alg);
- 
--	hash_algo = obj_to_hash_algo(o);
--	if (hash_algo < 0)
-+	// Use OBJ_obj2txt to calculate string length
-+	hash_algo_len = OBJ_obj2txt(NULL, 0, o, 0);
-+	if (hash_algo_len < 0)
- 		goto err3;
--	sig_info->hash_algo = pkey_hash_algo[hash_algo];
--	// hash algo has not been recognized
--	if (sig_info->hash_algo == NULL)
-+	hash_algo = malloc(hash_algo_len + 1);
-+	if (hash_algo == NULL)
- 		goto err3;
-+	hash_algo_len = OBJ_obj2txt(hash_algo, hash_algo_len + 1, o, 0);
-+	if (hash_algo_len < 0)
-+		goto err4;
-+
-+	// Assign libcrypto hash algo string or number
-+	sig_info->hash_algo = hash_algo;
-+
- 	sig_info->id_type = pkey_id_type[modsig->id_type];
- 
- 	pvt = malloc(sizeof(*pvt));
- 	if (pvt == NULL)
--		goto err3;
-+		goto err4;
- 
- 	pvt->pkcs7 = pkcs7;
- 	pvt->key_id = key_id_str;
- 	pvt->sno = sno_bn;
-+	pvt->hash_algo = hash_algo;
- 	sig_info->private = pvt;
- 
- 	sig_info->free = pkcs7_free;
- 
- 	return true;
-+err4:
-+	free(hash_algo);
- err3:
- 	free(key_id_str);
- err2:
+> Will
+
 -- 
-2.34.1
-
+Sincerely yours,
+Mike.
