@@ -1,60 +1,35 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9196A3FE4;
-	Mon, 30 Oct 2023 07:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF94414AAE
+	for <linux-modules@vger.kernel.org>; Wed,  1 Nov 2023 20:13:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fyer+0uy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B1CC433C7;
-	Mon, 30 Oct 2023 07:01:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698649274;
-	bh=EmJn7V2xcCxlebppxaDAhU12OFutDZWRBy0vMaSrWuA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fyer+0uyv1jhu2jxdwK+n1O2/sIgGI7ezOwxQC871hHJ3Cd/JKl9lBlO3pXltUpO2
-	 tybWUbFkw8nG3yYnKj5NWsk/KsMeh5cYt2Zf06cFoE4cK0SwwSOQ0meQsCZJmwrLES
-	 ZjfIwnoeXu/25/54cCJrG0ThSOL/VsSYVOr1W/9QTaMgDvrgblTvcHPZrDSbxEy8fw
-	 AT95UrDI+b348FRlIe6JpCkizTZtGaE3kNe+nAOZWv5ZyGWJevSARlVxf0OsNjI/Uk
-	 BM7kNTKVl9T3dS3d/hE9ctd5XEbBUeRh4TuIA6DuyqF/4ni+SgBncpCAAQy/vXTAcB
-	 87xr+yc2RIXWg==
-Date: Mon, 30 Oct 2023 09:00:53 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Will Deacon <will@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v3 04/13] mm/execmem, arch: convert remaining overrides
- of module_alloc to execmem
-Message-ID: <20231030070053.GL2824@kernel.org>
-References: <20230918072955.2507221-1-rppt@kernel.org>
- <20230918072955.2507221-5-rppt@kernel.org>
- <20231023171420.GA4041@willie-the-truck>
- <20231026085800.GK2824@kernel.org>
- <20231026102438.GA6924@willie-the-truck>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AXVpfN3j"
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2786D11D;
+	Wed,  1 Nov 2023 13:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=9GbIiVVmtxjeLQGfLovljVUMJ+L+zaLMrxPAsch8AJA=; b=AXVpfN3jrYeH9Mrr/XwXJGquAG
+	vy/vZBAdO/ww8EX58LdE2uPSYEyjEMRLF3k81mSvrvYAyY6ejODqYbCC/uYhvbGVmLUx74gnmiyJm
+	TMKft+OtD6Fb9EVoPv9A8mhQPMN+NDkrTEEGbA4qiOWlEw3PhqGhFOmiDOqE78+4ssukmZmESgFSt
+	zMPzjEugUTcIRK7XwiSwyBFBsblvmgO8LkoUBM4/NVHhlUc0d4LZTu4uaTqO28zL8liQwFMPDh3ce
+	fLHMk32dOTXJOUB2dn254fE24QMaRpqOGJj0Y7ygQuObKqqPD57uesqkTWr9F7DxgWxSRY1KulIDe
+	YnQrkHXA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1qyHaJ-0084wC-16;
+	Wed, 01 Nov 2023 20:13:03 +0000
+Date: Wed, 1 Nov 2023 13:13:03 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-modules@vger.kernel.org
+Cc: patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+	andrea.righi@canonical.com, keescook@chromium.org,
+	zhumao001@208suo.com, yangtiezhu@loongson.cn, ojeda@kernel.org
+Subject: [GIT PULL] Modules changes for v6.7-rc1
+Message-ID: <ZUKxT1CL9/0Dn6NE@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -63,48 +38,52 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231026102438.GA6924@willie-the-truck>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Thu, Oct 26, 2023 at 11:24:39AM +0100, Will Deacon wrote:
-> On Thu, Oct 26, 2023 at 11:58:00AM +0300, Mike Rapoport wrote:
-> > On Mon, Oct 23, 2023 at 06:14:20PM +0100, Will Deacon wrote:
-> > > On Mon, Sep 18, 2023 at 10:29:46AM +0300, Mike Rapoport wrote:
-> > > > diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-> > > > index dd851297596e..cd6320de1c54 100644
-> > > > --- a/arch/arm64/kernel/module.c
-> > > > +++ b/arch/arm64/kernel/module.c
+The following changes since commit 7d461b291e65938f15f56fe58da2303b07578a76:
 
-...
+  Merge tag 'drm-next-2023-10-31-1' of git://anongit.freedesktop.org/drm/drm (2023-11-01 06:28:35 -1000)
 
-> > > > -	if (module_direct_base) {
-> > > > -		p = __vmalloc_node_range(size, MODULE_ALIGN,
-> > > > -					 module_direct_base,
-> > > > -					 module_direct_base + SZ_128M,
-> > > > -					 GFP_KERNEL | __GFP_NOWARN,
-> > > > -					 PAGE_KERNEL, 0, NUMA_NO_NODE,
-> > > > -					 __builtin_return_address(0));
-> > > > -	}
-> > > > +	module_init_limits();
-> > > 
-> > > Hmm, this used to be run from subsys_initcall(), but now you're running
-> > > it _really_ early, before random_init(), so randomization of the module
-> > > space is no longer going to be very random if we don't have early entropy
-> > > from the firmware or the CPU, which is likely to be the case on most SoCs.
-> > 
-> > Well, it will be as random as KASLR. Won't that be enough?
-> 
-> I don't think that's true -- we have the 'kaslr-seed' property for KASLR,
-> but I'm not seeing anything like that for the module randomisation and I
-> also don't see why we need to set these limits so early.
+are available in the Git repository at:
 
-x86 needs execmem initialized before ftrace_init() so I thought it would be
-best to setup execmem along with most of MM in mm_core_init().
+  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.7-rc1
 
-I'll move execmem initialization for !x86 to a later point, say
-core_initcall.
- 
-> Will
+for you to fetch changes up to ea0b0bcef4917a2640ecc100c768b8e785784834:
 
--- 
-Sincerely yours,
-Mike.
+  module: Annotate struct module_notes_attrs with __counted_by (2023-11-01 13:07:32 -0700)
+
+----------------------------------------------------------------
+Modules changes for v6.7-rc1
+
+The only thing worth highligthing is that gzip moves to use vmalloc() instead of
+kmalloc just as we had a fix for this for zstd on v6.6-rc1. The rest is regular
+house keeping, keeping things neat, tidy, and boring.
+
+Oh and this has been on linux-next for over a month.
+
+----------------------------------------------------------------
+Andrea Righi (1):
+      module/decompress: use vmalloc() for gzip decompression workspace
+
+Kees Cook (2):
+      module: Clarify documentation of module_param_call()
+      module: Annotate struct module_notes_attrs with __counted_by
+
+Luis Chamberlain (1):
+      MAINTAINERS: add include/linux/module*.h to modules
+
+Tiezhu Yang (2):
+      module: Make is_mapping_symbol() return bool
+      module: Make is_valid_name() return bool
+
+Zhu Mao (1):
+      module: Fix comment typo
+
+ MAINTAINERS                   | 2 +-
+ include/linux/module_symbol.h | 2 +-
+ include/linux/moduleparam.h   | 6 +++++-
+ kernel/module/decompress.c    | 4 ++--
+ kernel/module/stats.c         | 2 +-
+ kernel/module/sysfs.c         | 2 +-
+ scripts/mod/modpost.c         | 4 ++--
+ 7 files changed, 13 insertions(+), 9 deletions(-)
