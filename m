@@ -1,94 +1,111 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D18715CC
-	for <linux-modules@vger.kernel.org>; Sat,  4 Nov 2023 04:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DAAFBE5;
+	Tue,  7 Nov 2023 10:44:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Nl4ZYr0L"
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11140D44;
-	Fri,  3 Nov 2023 21:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=4xGq+RomEZH3DZvdz2VHIN1h6fcnWJicNhvkTuIdRC8=; b=Nl4ZYr0LZCWCk5uL/pzbkcuRh8
-	vMVseyrI1XyoINQzkJo80DKS3TEeoIEftWLfbc/zbDibdcTNz4SoLTS8jUDkWw6lF7TtzjUzXrWG2
-	BnRqey/L3ADb6SAuOEEmP603GRQQqqcRTffawia+Zl8uG4Adz1G/yFkTtA77nT5qb7w59dJV6wRvh
-	X43i3PqvVGuBD4VJNBhdvUcKVTvFF/w9odc47tMlmpsVKZk6lICUmJLrAQD4a9Z/R8IQaCkeVSrzy
-	f+jwRaGr8TDod+ZW7Ni/UrELu4h/bGx4tvmtzZJBdP+YSnORlBZmgNNH48MQCcyTcf5BSvpf7lU3M
-	/a6tlwwQ==;
-Received: from [50.53.46.231] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1qz89N-00Cbnr-1I;
-	Sat, 04 Nov 2023 04:20:47 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfHMKmIU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF0EC433C7;
+	Tue,  7 Nov 2023 10:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699353896;
+	bh=6KvSSAyHzV1t/xzun1oJg0AqCmYPNZNoG1yjrk+2N5g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EfHMKmIUi7LClGqSTR82uTGSALdsGhooGkAQNBOKzdAx9XrKCS32CwP6rRNlINeJp
+	 fTBcOh2CbrNgz5T9wN8X4IfDIz30xCLXq2htrhQAdC3JQhS9flLyk/+pf5MtKIc1uc
+	 JGySGdYEdfIvLpVTQJXhgpJr9YrJTitMM+csMdn+xILBQI2oGOVjB/sYO87FSSlzde
+	 FSNahA1CtFFCQyIxON1Z1I4OewRIeg1rULpA/yqisw7axPef9I0RY6dTvW/rbObEf0
+	 ODLYbBKyXYy654yF6yL9+/nSFia7MKf5WBhUfT/JXvT2gH/1if2QXy5oq+hmLNVTje
+	 IOMZOtUYIwdeQ==
+Date: Tue, 7 Nov 2023 10:44:47 +0000
+From: Will Deacon <will@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
 	Luis Chamberlain <mcgrof@kernel.org>,
-	linux-modules@vger.kernel.org
-Subject: [PATCH] lib/test_kmod: fix kernel-doc warnings
-Date: Fri,  3 Nov 2023 21:20:44 -0700
-Message-ID: <20231104042044.17807-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.42.0
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 04/13] mm/execmem, arch: convert remaining overrides
+ of module_alloc to execmem
+Message-ID: <20231107104446.GA19133@willie-the-truck>
+References: <20230918072955.2507221-1-rppt@kernel.org>
+ <20230918072955.2507221-5-rppt@kernel.org>
+ <20231023171420.GA4041@willie-the-truck>
+ <20231026085800.GK2824@kernel.org>
+ <20231026102438.GA6924@willie-the-truck>
+ <20231030070053.GL2824@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231030070053.GL2824@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Fix all kernel-doc warnings in test_kmod.c:
-- Mark some enum values as private so that kernel-doc is not needed
-  for them
-- s/thread_mutex/thread_lock/ in a struct's kernel-doc comments
-- add kernel-doc info for @task_sync
+On Mon, Oct 30, 2023 at 09:00:53AM +0200, Mike Rapoport wrote:
+> On Thu, Oct 26, 2023 at 11:24:39AM +0100, Will Deacon wrote:
+> > On Thu, Oct 26, 2023 at 11:58:00AM +0300, Mike Rapoport wrote:
+> > > On Mon, Oct 23, 2023 at 06:14:20PM +0100, Will Deacon wrote:
+> > > > On Mon, Sep 18, 2023 at 10:29:46AM +0300, Mike Rapoport wrote:
+> > > > > diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
+> > > > > index dd851297596e..cd6320de1c54 100644
+> > > > > --- a/arch/arm64/kernel/module.c
+> > > > > +++ b/arch/arm64/kernel/module.c
+> 
+> ...
+> 
+> > > > > -	if (module_direct_base) {
+> > > > > -		p = __vmalloc_node_range(size, MODULE_ALIGN,
+> > > > > -					 module_direct_base,
+> > > > > -					 module_direct_base + SZ_128M,
+> > > > > -					 GFP_KERNEL | __GFP_NOWARN,
+> > > > > -					 PAGE_KERNEL, 0, NUMA_NO_NODE,
+> > > > > -					 __builtin_return_address(0));
+> > > > > -	}
+> > > > > +	module_init_limits();
+> > > > 
+> > > > Hmm, this used to be run from subsys_initcall(), but now you're running
+> > > > it _really_ early, before random_init(), so randomization of the module
+> > > > space is no longer going to be very random if we don't have early entropy
+> > > > from the firmware or the CPU, which is likely to be the case on most SoCs.
+> > > 
+> > > Well, it will be as random as KASLR. Won't that be enough?
+> > 
+> > I don't think that's true -- we have the 'kaslr-seed' property for KASLR,
+> > but I'm not seeing anything like that for the module randomisation and I
+> > also don't see why we need to set these limits so early.
+> 
+> x86 needs execmem initialized before ftrace_init() so I thought it would be
+> best to setup execmem along with most of MM in mm_core_init().
+> 
+> I'll move execmem initialization for !x86 to a later point, say
+> core_initcall.
 
-test_kmod.c:67: warning: Enum value '__TEST_KMOD_INVALID' not described in enum 'kmod_test_case'
-test_kmod.c:67: warning: Enum value '__TEST_KMOD_MAX' not described in enum 'kmod_test_case'
-test_kmod.c:100: warning: Function parameter or member 'task_sync' not described in 'kmod_test_device_info'
-test_kmod.c:134: warning: Function parameter or member 'thread_mutex' not described in 'kmod_test_device'
+Thanks, Mike.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org
----
- lib/test_kmod.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff -- a/lib/test_kmod.c b/lib/test_kmod.c
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -58,11 +58,14 @@ static int num_test_devs;
-  * @need_mod_put for your tests case.
-  */
- enum kmod_test_case {
-+	/* private: */
- 	__TEST_KMOD_INVALID = 0,
-+	/* public: */
- 
- 	TEST_KMOD_DRIVER,
- 	TEST_KMOD_FS_TYPE,
- 
-+	/* private: */
- 	__TEST_KMOD_MAX,
- };
- 
-@@ -82,6 +85,7 @@ struct kmod_test_device;
-  * @ret_sync: return value if request_module() is used, sync request for
-  * 	@TEST_KMOD_DRIVER
-  * @fs_sync: return value of get_fs_type() for @TEST_KMOD_FS_TYPE
-+ * @task_sync: kthread's task_struct or %NULL if not running
-  * @thread_idx: thread ID
-  * @test_dev: test device test is being performed under
-  * @need_mod_put: Some tests (get_fs_type() is one) requires putting the module
-@@ -108,7 +112,7 @@ struct kmod_test_device_info {
-  * @dev: pointer to misc_dev's own struct device
-  * @config_mutex: protects configuration of test
-  * @trigger_mutex: the test trigger can only be fired once at a time
-- * @thread_lock: protects @done count, and the @info per each thread
-+ * @thread_mutex: protects @done count, and the @info per each thread
-  * @done: number of threads which have completed or failed
-  * @test_is_oom: when we run out of memory, use this to halt moving forward
-  * @kthreads_done: completion used to signal when all work is done
+Will
