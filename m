@@ -1,153 +1,157 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADDE37149
-	for <linux-modules@vger.kernel.org>; Tue,  7 Nov 2023 20:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F19A4F
+	for <linux-modules@vger.kernel.org>; Wed,  8 Nov 2023 02:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D8DZElT5"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA0DA2;
-	Tue,  7 Nov 2023 12:33:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699389198; x=1730925198;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=x72g59TJ1u0yNz1XjOUCQ8oQotUzOBCpvTrIUY1EHkM=;
-  b=D8DZElT5ZY0jlBSTs1dN1jiyd2um5sJsw1LaTTJ40WMnH+b/yXH6OVHY
-   dxt79KzzZFRIIMU76ppKz2wZrUwQnJXkk5507QJ6Cl4y6pYvIDD9t4yf7
-   1q//74DrQvG/8ASlkEuwDzCjkxQrlrEyoadTDkNIpbWeYn6EHaLeOl4c0
-   Qa74GYx4t1j/zGQ9NxZZ1EhOImsOeuz7C353Vy9N5YJwGHeP+C+gCECh8
-   pf5P06FUVZ9QhsjnzAKyNJnBu637UBdPlhYUEzvCCI9EwTLR30fByPfj0
-   tJTwaN/oULFZ/BL0Sayr2gUFw3kFdOPa/fI7Sq8BEje+iGpax78SNjoaM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="374661488"
-X-IronPort-AV: E=Sophos;i="6.03,284,1694761200"; 
-   d="scan'208";a="374661488"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2023 12:28:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="1010027328"
-X-IronPort-AV: E=Sophos;i="6.03,284,1694761200"; 
-   d="scan'208";a="1010027328"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 07 Nov 2023 12:14:10 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 7 Nov 2023 12:14:09 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 7 Nov 2023 12:14:09 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34 via Frontend Transport; Tue, 7 Nov 2023 12:14:09 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.34; Tue, 7 Nov 2023 12:13:27 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RRzeLXF2iy+FnzMwhs4O9Rfgku4EIaJtL8LohhipVmxTTKGRmUqBwkZ1Hluor2lzTNb7VHIBfikcCBQvEZ+tLvKlaRHMOFDTdHlhrQPsb1mKvtsgujtBQOCbuKHwMioWKcj6qf0sQ85CSI4+NV3MByMGyFcTNr0b0frtJux6tLBJCdKTt7+JPEgZPQehB0cY/FzKEydiHNmbe7DyKlgdbF/C+bHS94jdBUYVwJ2ZtQwv9HFQYTGE8b/2m835SWq9IXv8aC1KJrOfbIEzg9tjVCgaWY8BfW+eLZBzTUYc4UuaRyQXU8CVMfrgG9cCm9lUD+OWd2eIbH09Svmlpxm7Tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x72g59TJ1u0yNz1XjOUCQ8oQotUzOBCpvTrIUY1EHkM=;
- b=de3tRwas04y9yCGHRerdA3Clu6+nrIomTgJba2OC0xfQtGo0FgPs+ABzA6JyublQYk0Nyz/duTyIBzJ5G78GUfHvaTNqXMxaP5KyCnZ2WjY39/s4HvqBAT8gul7layN/VFKMLkBMrHQvOmQs9om7imbJdq+zZ+ZFMSGRiTFRVAyIWcI6782veeHWP2V4yo8V1oDn0ekie/CL+QVo1kF+j5hklnAm+MSCn/zi+4IFdJ/euWM79qn3YyX/487wNFnDfMGZaEsTeGxtnOCyLmTXtSj8ERxQSwXcVQCK0+1+gsRShazEvRGWdSgymF/bVzJW0GHV8uvFqZwVJ0DF+nyTTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by IA1PR11MB8150.namprd11.prod.outlook.com (2603:10b6:208:44c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.29; Tue, 7 Nov
- 2023 20:13:19 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::fab8:8ece:c8fe:fc7c]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::fab8:8ece:c8fe:fc7c%4]) with mapi id 15.20.6954.028; Tue, 7 Nov 2023
- 20:13:19 +0000
-Date: Tue, 7 Nov 2023 14:13:17 -0600
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-CC: <linux-modules@vger.kernel.org>, <lucas.de.marchi@gmail.com>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH kmod] libkmod: remove pkcs7 obj_to_hash_algo()
-Message-ID: <xxg4dizkj63kwddmjq2ti5kszwu25yoa3mhotz6expvey53o34@nfmy2xmsexoo>
-References: <20231029010319.157390-1-dimitri.ledkov@canonical.com>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20231029010319.157390-1-dimitri.ledkov@canonical.com>
-X-ClientProxiedBy: SJ0PR03CA0069.namprd03.prod.outlook.com
- (2603:10b6:a03:331::14) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sCmUhvrN"
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D8F10F8
+	for <linux-modules@vger.kernel.org>; Tue,  7 Nov 2023 18:27:54 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-da04776a869so6504166276.0
+        for <linux-modules@vger.kernel.org>; Tue, 07 Nov 2023 18:27:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699410474; x=1700015274; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j+pXCzJsltO32Q6Q6QKytaM4r4O4ehr4GGX/b31TdaA=;
+        b=sCmUhvrNpDzPvwfh8RXHn+9yWDq50A6xSMsWdxAJI7IiczvMBtv0jmW5ILjOzLbW5P
+         Gw1dXMLJmyeUFBF23SORgYdvH8k2tg6IF7fr0oZk7oB2oADwupiVqg4ZwreU4UCCZpi3
+         vw3hkSdyklMFS+h21jiab7GCp5cuft82X8W+PJ3Th6GrhXKDi4T8nQe0+ESwGZurE6Ep
+         kwX14C40DYRgu/QC28UQktSn7MiWKJETWqVyYRNNqJhXUcWAUCIVZ76vK8UoXwtVOSuQ
+         pZ+FOy5DYKvDKTkakDE0wAfrwiIceAro0CGzULyIuDi4R4YeuXIJ3ixTsSoT+3Bmq/te
+         CdUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699410474; x=1700015274;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j+pXCzJsltO32Q6Q6QKytaM4r4O4ehr4GGX/b31TdaA=;
+        b=lFGRD9kqpqZsrsWKa9LPZJh5idvs3r/hSiQqWlE6p/iCBQh3cmKWkinP9GYARXr00e
+         9N1vGkIU/UvoqnbIiABdhd94bHcTQC4IzYKHGWBxt63ieRYkAmisyrsIHHildhUVIPOn
+         7xHskrSLc9dKFyaOn9HM4DFjf6XcFLp42kZEO8enFSnOPOSVf5J2XKeSEUTkiSq4iJ2f
+         7PU0QDTxzf3UHHWVsbinjrqUUQt/81I3OKZCcdlhxa27LfPKY2bD9T0gESOlonx4jMV1
+         H/KYo9NYXlKuUeURmTNKblhW2eh6+bkLckNRSYqR1MHJsq6MjxQRL/8RnP5chUcKH/fK
+         4Ptg==
+X-Gm-Message-State: AOJu0YxuGNVgUzHPIeQusKRMftqi5QqE9GJoHgUVv64mEXB1N1hCzKzV
+	h5z4rVlP4/btI7Rbq9GvO7OVvcYrvmHp
+X-Google-Smtp-Source: AGHT+IEStJ9CSqrdAUJC0EXXJkXE33qO2K7wb06zQcU3w37tWljEEI+W9gKdDO6RYrRaincap25EZASrHFME
+X-Received: from anyblade.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1791])
+ (user=mmaurer job=sendgmr) by 2002:a05:6902:102:b0:da3:723b:b2a4 with SMTP id
+ o2-20020a056902010200b00da3723bb2a4mr8048ybh.7.1699410474120; Tue, 07 Nov
+ 2023 18:27:54 -0800 (PST)
+Date: Wed,  8 Nov 2023 02:26:25 +0000
+In-Reply-To: <20231108022651.645950-2-mmaurer@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|IA1PR11MB8150:EE_
-X-MS-Office365-Filtering-Correlation-Id: a90c05ab-158d-4b61-2eda-08dbdfcdfc27
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Dd73lMQAdym8xbeiZyXzS1Y5gNbIUX5oHw/kiGpL4hmJ2R2Y/Pm0NkOvpBpxyU6ZCqNquKxVz0EMxSg0QYBtV//LLmgny41Mobi5C+nji7YsopFnfKXpcHD5in6cHiIovr2p7pxfQl5MGhImC4VVRLcOzZU4uel1JSNUkZbJZP7ntKLGI45+FGEvaAHfsPvpZ8GRHdHUAzbCJrRCRiwHt04SR1tU4O5tYkx5S0s79setiUhr9jy4dvdYfDIKiZTuSw2BndPtrTMQi4PfwhGCZ/tHWLOufkN8uW0uc27Ri6ASpprAhkD6LdzKA9ZrNZvXHan1XLDmXqmUZU+8Xoz9H90mCtUnap+gwTB7N7g+56Ge3sqAA65VE6vjoyk1Lvaa2EXlfeeFzx/fryNXdJduQsmufXS33SiWNAtE2Gvg9rPhqGsCytlIFBdxxNo0fiPlppN/yupx/IEMHCnC/2v4PO+V/uVgN4TWB2ydGSl8NLS4XGY2ybSrj9iNSXBPgGkYC1wAgeWBzV8xAOpdksbVRCX0c7WbvW7yN4HWZnaeekZ41RMp9B+0j4S933otQ20/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(39860400002)(366004)(376002)(136003)(396003)(346002)(230922051799003)(186009)(1800799009)(64100799003)(451199024)(478600001)(6486002)(66946007)(66476007)(9686003)(316002)(6512007)(41300700001)(66556008)(4326008)(2906002)(26005)(8936002)(33716001)(6506007)(6916009)(8676002)(4744005)(5660300002)(82960400001)(86362001)(83380400001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eocY6A/pr3DL7aTvBWbqSXaigXTddsGHPPEoOarQdbjiGyfKn5uPNJYaKPJK?=
- =?us-ascii?Q?i5zo/isBPShHsU5quezpcvyIUOr1jDvJQCbON4NOoqfajk/gj6Jocf8m5v3d?=
- =?us-ascii?Q?/TGq8TP8keVNngXXjkyJ1dqQGppPO5CwWiXZm5ZkafgBS5/jLv1woRLI+myZ?=
- =?us-ascii?Q?jcRoYRICoO4L0B++CViA/SEkz+A2wDKlccUVVY/F9n6MIwyJp762HEYVQBvR?=
- =?us-ascii?Q?v0CRZTYr+o8JQhDb2cNSgZE9XxSerAHfgH6SMAKa9H0Axjh+MfykxBz2MvG0?=
- =?us-ascii?Q?Jutik18Z6jmzK8hDW06MiAPB3eFEmkCqmiSZU5lkjxZ48Zt7vtcD9oZLvTs3?=
- =?us-ascii?Q?JEMQmlmrxTFu6QmJaYtnsMkWgZpRrWl1smtlp3qTevJUGk/Qp2Gu4hug+jX8?=
- =?us-ascii?Q?nZsnqMaLYBnSN4xxIYuSJE7iTbWjnXrFfrvHLhbIpHozsKLxYXJxwdFXBoEk?=
- =?us-ascii?Q?rmAa5MEJBGAAGoI0IGKnLuRfSd5p5uTw50rHiPeXfpyv8xMw70A1WQZC0RQS?=
- =?us-ascii?Q?68UyU1jAjAtmBe6qq1jFh4O9/Mc/ejmgtvNylGqVmPVQoSl6QLJ2LbTDeGuC?=
- =?us-ascii?Q?+YiaUHlgFFP0vFlpPaqrONIGD/xL+5VMvbDLnCpI8r6m1VtlJx60DyQt6r8u?=
- =?us-ascii?Q?+9CLPlmxVCQdQqDw5L/GTq0hTwQhiHgBwvhm5PXgxewqbE/PFa2CA12iErkO?=
- =?us-ascii?Q?uGlRX3ElMqToB47B9ZiR31OgaRUSeC2eKsK+2ujWiRaTg5/IIaFA6hb/iYOv?=
- =?us-ascii?Q?EnW4A43/yHcrur59lKBb9xolfNR3X25RwINir+sZ60b4VAFuaj5umZrHAP7j?=
- =?us-ascii?Q?OuzYVrtnNXrYmyAZR86xVqB7pbLLekQmtv7AR9gZAfCU2Tlit3fE1kg748kJ?=
- =?us-ascii?Q?JqbSyCWYdSOAN0NDtGNQWXJTAqf2tpIC2Th6x4qza3krxG5spVhx/KgBQVBb?=
- =?us-ascii?Q?WmksJPNGoxbkVA/+m6YaDahqgZLuIZymzjonkRnC2vP2u6cK7XxyoLBZL0R0?=
- =?us-ascii?Q?OxaJxEPzhne73id3h4//87hW3bhB5JbQkf80UUNSGiOIUfjd3InfSdwJAdv/?=
- =?us-ascii?Q?giPVtGhihEI0kkW5in6hyZFQheqVXFmeQpqqbQHI1kWX62Sc7mnVF8Q8ygsY?=
- =?us-ascii?Q?b+K3pSBvjGbV5kptPTIoNS0zK8aGOwcje0AZnmH3qHKixRA0t2JVhj1sPUSx?=
- =?us-ascii?Q?AoIJGklNhPa63Hse4YGgxpdSnQN+Rhx4Q4WkRqz3u03t47N+qtoaaLI3tOG+?=
- =?us-ascii?Q?3gSAF0Z+KRfsckz3xyedrzteXBJNEojDk571DEf3DBE9nAR1nvt7Rl03MJ4F?=
- =?us-ascii?Q?nObpwUXESFbF4MsEIzEC67BOCdMy4CtWy1zbz+s5HsSEPrIbfm/K1UAev2/m?=
- =?us-ascii?Q?1fUN+GBV2ymcZWxha6afLLnHi380nvh7Bg/cfUfC+gH9oq+FtaN8UkHedpnh?=
- =?us-ascii?Q?ln0erHZKQ7Er7ogJqyzZwe4ZkH4wGh6s49FML59/95ubwQ5ZgF6fh1/LjPoW?=
- =?us-ascii?Q?cf5MKAWUvFtI9/YXXJKnhefHTZ1Yu0LcdOHvvqlxkvPpkqSGEeUs4X4up5Pp?=
- =?us-ascii?Q?V2RmPzIF+c64p3SPPRpRzJEisLa/eMw81NuBLICeRXHDTzeIvA8TLB1cmn4D?=
- =?us-ascii?Q?8w=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a90c05ab-158d-4b61-2eda-08dbdfcdfc27
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2023 20:13:19.8206
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GttIBPGbScIbknEoWelBM1MEv/P61IpXrLpKqIkBLI/OQMcdcces4tO6b1lWXCG5uyEjjN91Ijgc8qsnBYFL7x+ec2jdYk6DZkEdbUVxo90=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8150
-X-OriginatorOrg: intel.com
+Mime-Version: 1.0
+References: <20231108022651.645950-2-mmaurer@google.com>
+X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
+Message-ID: <20231108022651.645950-6-mmaurer@google.com>
+Subject: [PATCH 3/3] rust: Require RUST_MODULES for module support
+From: Matthew Maurer <mmaurer@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	John Ogness <john.ogness@linutronix.de>, Randy Dunlap <rdunlap@infradead.org>, 
+	Matthew Maurer <mmaurer@google.com>, Zhen Lei <thunder.leizhen@huawei.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"=?UTF-8?q?Marc=20Aur=C3=A8le=20La=20France?=" <tsi@tuyoix.net>
+Cc: linux-kbuild@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, 
+	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Oct 29, 2023 at 03:03:19AM +0200, Dimitri John Ledkov wrote:
->Switch to using OBJ_obj2txt() to calculate and print the pkcs7
->signature hash name. This eliminates the need to duplicate libcrypto
->NID to name mapping, detect SM3 openssl compile-time support, and
->enables using any hashes that openssl and kernel know about. For
->example SHA3 are being added for v6.7 and with this patch are
->automatically supported.
->
->Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+Currently, we don't support MODVERSIONS for Rust symbols. For users that
+want to use Rust in the kernel but for whom MODVERSIONS is required,
+this allows the use of built-in Rust code even with MODVERSIONS enabled.
+It may additionally allow code-size reduction by avoiding exporting
+symbols that won't be used without Rust modules.
 
-Applied, thanks
+Signed-off-by: Matthew Maurer <mmaurer@google.com>
+---
+ init/Kconfig          | 21 +++++++++++++++++----
+ kernel/module/Kconfig |  1 +
+ rust/exports.c        |  4 ++++
+ 3 files changed, 22 insertions(+), 4 deletions(-)
 
-Lucas De Marchi
+diff --git a/init/Kconfig b/init/Kconfig
+index 9ffb103fc927..6912dbbee3f1 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1885,7 +1885,6 @@ config RUST
+ 	bool "Rust support"
+ 	depends on HAVE_RUST
+ 	depends on RUST_IS_AVAILABLE
+-	depends on !MODVERSIONS
+ 	depends on !GCC_PLUGINS
+ 	depends on !RANDSTRUCT
+ 	depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
+@@ -1896,13 +1895,27 @@ config RUST
+ 	  This allows other Rust-related options, like drivers written in Rust,
+ 	  to be selected.
+ 
+-	  It is also required to be able to load external kernel modules
+-	  written in Rust.
+-
+ 	  See Documentation/rust/ for more information.
+ 
+ 	  If unsure, say N.
+ 
++config RUST_MODULES
++	bool "Rust Module Support"
++	depends on RUST
++	depends on MODULES
++	rust_modules
++	help
++	  Enables support for Rust Modules in the kernel.
++
++	  This is required to load external kernel modules written in Rust.
++
++	  The two primary reasons to consider disabling this are:
++	  * Allow MODVERSIONS support
++	  * Allow additional code to be optimized out by the compiler if you
++	    know that you'll only be using built-in Rust code.
++
++	  If unsure, say Y.
++
+ config RUSTC_VERSION_TEXT
+ 	string
+ 	depends on RUST
+diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+index 0ea1b2970a23..a76128887618 100644
+--- a/kernel/module/Kconfig
++++ b/kernel/module/Kconfig
+@@ -158,6 +158,7 @@ config MODULE_UNLOAD_TAINT_TRACKING
+ 	  shown. If unsure, say N.
+ 
+ config MODVERSIONS
++	depends on !RUST_MODULES
+ 	bool "Module versioning support"
+ 	help
+ 	  Usually, you have to use modules compiled with your kernel.
+diff --git a/rust/exports.c b/rust/exports.c
+index 83e2a7070cae..96b706048ed4 100644
+--- a/rust/exports.c
++++ b/rust/exports.c
+@@ -13,7 +13,11 @@
+ 
+ #include <linux/module.h>
+ 
++#ifdef CONFIG_RUST_MODULES
+ #define EXPORT_SYMBOL_RUST_GPL(sym) extern int sym; EXPORT_SYMBOL_GPL(sym)
++#else
++#define EXPORT_SYMBOL_RUST_GPL(sym)
++#endif
+ 
+ #include "exports_core_generated.h"
+ #include "exports_alloc_generated.h"
+-- 
+2.42.0.869.gea05f2083d-goog
+
