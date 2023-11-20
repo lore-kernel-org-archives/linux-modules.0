@@ -1,108 +1,159 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TTXH5gfB"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C30CF;
-	Mon, 20 Nov 2023 07:14:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700493268; x=1732029268;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=y9bZb8ktHeC1feBWDiNoTxs7R/QFBZGG8vwsdkn9s4k=;
-  b=TTXH5gfBU6HN76cK/JdeYleIU6HF77yBnCevWYcQH+U9c0NkNbj97UVQ
-   MOsI7luJL0V8M/sxx/tukwtu6/JfMsgKZALe4gyyFPfvwyygRe20hFA1+
-   1nzNygcosW5IxZ+1G7vd9NJsS/A2YQO4MbNaGeo3vTgQxRA/BiSoYh36C
-   xRANSxQjeJZ1i3bnBWrgkgPDf3585qFIE5WOSvXUtUnz8TWxnKB1D474G
-   oAT9XHMh+9mKsf7EJP06z6K2CGkZFT8T5WYN7w9ly9r0bsuesPVv25b9V
-   nd4FSn/AYIez2tWW/InnQFX7PJoiKhKSvRWgvGZ7+N7GbNoGTQ/WzNen6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="394486350"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="394486350"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 07:14:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="801209746"
-X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="801209746"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 20 Nov 2023 07:14:25 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 7E2491D9; Mon, 20 Nov 2023 17:14:21 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 5/5] params: Fix multi-line comment style
-Date: Mon, 20 Nov 2023 17:11:46 +0200
-Message-ID: <20231120151419.1661807-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
-In-Reply-To: <20231120151419.1661807-1-andriy.shevchenko@linux.intel.com>
-References: <20231120151419.1661807-1-andriy.shevchenko@linux.intel.com>
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4666FAA;
+	Mon, 20 Nov 2023 11:43:22 -0800 (PST)
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2c875207626so29253871fa.1;
+        Mon, 20 Nov 2023 11:43:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700509400; x=1701114200;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WoDQY8tzkpHkEpiRQUrc2MUWOLDGwsPrZjscsfAC4Bc=;
+        b=CKHLB+rrRCzojZxK4AcIAcau8Paa9nu+nEb0zXnC6qjIp56sKh8Rp2sHcGE+wn25mN
+         BTJMyfzx2bWiDUweOEX2/By00autxZHw1jFN9p06cXMKrvyq184XWHxor5QIclEbQfzt
+         8cSV1VBL3ebMbeKUN1WfdkzfGoOHYJGkgYLyMNhch0E/XbXhJF9pqQK8yhmyO938oF7E
+         sfIAwCqcBgcSgvn3PFEoIxEDTKXNKIISvC6EMnsyQsIKYlAxkv2y6lqbZokKQZwiSyek
+         /lOpQUUYbh3jJotY6Q3m9M3oEiraZKLIvZyX4snSM4YS7fgc3LO8c/pCdBZuqusWc17G
+         ZaRw==
+X-Gm-Message-State: AOJu0YxeNMj+THOLWAeuRjGg/aGXMe9KV/D+1S0m0Ocvr4Mj4uRWSYZ3
+	WsZsF8y26WKDyoVTkbs+ga8=
+X-Google-Smtp-Source: AGHT+IFgP9xwbAn+TkemJm6kqzasJzlvxUci/1NJbwtda3ur0jxfbWqOdV5Xw2lCvTNCnJ7Bf2qfkA==
+X-Received: by 2002:a2e:9015:0:b0:2c8:3613:d071 with SMTP id h21-20020a2e9015000000b002c83613d071mr5751720ljg.36.1700509400076;
+        Mon, 20 Nov 2023 11:43:20 -0800 (PST)
+Received: from localhost ([137.220.119.58])
+        by smtp.gmail.com with ESMTPSA id j33-20020a05600c1c2100b0040772934b12sm19201399wms.7.2023.11.20.11.43.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Nov 2023 11:43:19 -0800 (PST)
+Message-ID: <ea1a678bdbfe5c492aa494d93476bb18e6dfec5e.camel@debian.org>
+Subject: Re: [RFC PATCH 1/2] Modules: Introduce boot-time module signature
+ flexibility
+From: Luca Boccassi <bluca@debian.org>
+To: Luis Chamberlain <mcgrof@kernel.org>, Alessandro Carminati
+	 <alessandro.carminati@gmail.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, Jonathan
+ Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+ linux-security-module@vger.kernel.org,  jan.setjeeilers@oracle.com,
+ linux-efi@vger.kernel.org, ardb@kernel.org
+Date: Mon, 20 Nov 2023 19:43:17 +0000
+In-Reply-To: <ZVeyDDLe9B+Aij2O@bombadil.infradead.org>
+References: <20230914112739.112729-1-alessandro.carminati@gmail.com>
+	 <20230914112739.112729-2-alessandro.carminati@gmail.com>
+	 <ZVZS4hw5dGB4aPz3@bombadil.infradead.org>
+	 <CAPp5cGTcRGp3z=xbA1svxLYz1LC74_AQrTPSXNmACPRYrpporg@mail.gmail.com>
+	 <ZVeyDDLe9B+Aij2O@bombadil.infradead.org>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-WhGM6ktWMElK5x6aVvyJ"
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The multi-line comment style in the file is rather arbitrary.
-Make it follow the standard one.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- kernel/params.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+--=-WhGM6ktWMElK5x6aVvyJ
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/kernel/params.c b/kernel/params.c
-index eb55b32399b4..2e447f8ae183 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -1,8 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
--/* Helpers for initial module or kernel cmdline parsing
--   Copyright (C) 2001 Rusty Russell.
--
--*/
-+/*
-+ * Helpers for initial module or kernel cmdline parsing
-+ * Copyright (C) 2001 Rusty Russell.
-+ */
- #include <linux/ctype.h>
- #include <linux/device.h>
- #include <linux/err.h>
-@@ -271,8 +271,10 @@ int param_set_charp(const char *val, const struct kernel_param *kp)
- 
- 	maybe_kfree_parameter(*(char **)kp->arg);
- 
--	/* This is a hack.  We can't kmalloc in early boot, and we
--	 * don't need to; this mangled commandline is preserved. */
-+	/*
-+	 * This is a hack. We can't kmalloc() in early boot, and we
-+	 * don't need to; this mangled commandline is preserved.
-+	 */
- 	if (slab_is_available()) {
- 		*(char **)kp->arg = kmalloc_parameter(len + 1);
- 		if (!*(char **)kp->arg)
-@@ -743,8 +745,10 @@ void module_param_sysfs_remove(struct module *mod)
- {
- 	if (mod->mkobj.mp) {
- 		sysfs_remove_group(&mod->mkobj.kobj, &mod->mkobj.mp->grp);
--		/* We are positive that no one is using any param
--		 * attrs at this point.  Deallocate immediately. */
-+		/*
-+		 * We are positive that no one is using any param
-+		 * attrs at this point. Deallocate immediately.
-+		 */
- 		free_module_param_attrs(&mod->mkobj);
- 	}
- }
--- 
-2.43.0.rc1.1.gbec44491f096
+On Fri, 2023-11-17 at 10:33 -0800, Luis Chamberlain wrote:
+> On Fri, Nov 17, 2023 at 02:56:53PM +0100, Alessandro Carminati wrote:
+> > Il giorno gio 16 nov 2023 alle ore 18:35 Luis Chamberlain
+> > <mcgrof@kernel.org> ha scritto:
+> > >=20
+> > > I see the code which skips module signature verification and the knob=
+s
+> > > but I don't see the code which complete the promise to do the actual
+> > > signature verification post initrd / initramfs state. What gives?
+> >=20
+> > My initial intention wasn't centered around providing an automated solu=
+tion.
+>=20
+> It is not even an automated solution, it's *any* solution. So to be
+> clear your patch simply disables module verification, it has no
+> solution.
+>=20
+> > Instead, I envisioned a design where users could manually restore modul=
+e
+> > verification during a specific point in their init scripts.
+> >=20
+> > It might be plausible to restore module verification when the rootfs is
+> > remounted. However, this seems limiting rather than advantageous.
+>=20
+> The patch as-is describes a lofty world and does nothing other than
+> disables module verification. If a patch disables module verification
+> it should just do that and describe that. Nothing else. The subject
+> of the patch tends to suggest some flexibility it provided but does
+> nothing of being flexible, it outright disables module signature
+> verification. The commit log and the patch subject description are
+> describing something completely different than what the code actually
+> does, and it gives me to the concern, to the point that if you didn't
+> have a few commit logs in the kernel I would have thought your intent
+> was test kernel developers with some AI type of code that does something
+> stupid and very carefully crafted commit log.
+>=20
+> Nacked-by: Luis Chamberlain <mcgrof@kernel.org>
+>=20
+>   Luis
 
+Hi,
+
+On top of that, this change would go counter to the security posture
+that is established by the Lockdown LSM, especially when UEFI Secure
+Boot is used. While it would be great if initrds were only ever read-
+only, signed, and verified, the reality is that on all general purpose
+distributions in use today the initrd is writable by root, and the
+kernel command line is also writable by root.
+
+E.g.: on Debian, one just has to edit /etc/default/grub, run a command
+and at the next reboot arbitrary kernel command line parameters will be
+applied, including this one, and combined with adding an arbitrary
+kernel module to the appropriate path this becomes, de-facto, a uid0-
+to-ring0 privilege escalation avenue, which is something the secure
+boot + shim + lockdown workflow tries very hard to avoid.
+
+While there might be room for such features (e.g.:
+https://docs.kernel.org/admin-guide/LSM/LoadPin.html ) in very specific
+and defined environment or use cases, at the very least there needs to
+be:
+
+- the mechanism to lock it down again very early at boot as indicated
+in the cover letter, which is missing as pointed out by Luis
+- a kconfig governing the availability of the new kernel cmdline
+option, disabled by default
+- ideally a check or hook into the Lockdown LSM, so that it can stop
+the new kernel command line option, if enabled at build time and if
+specified, from actually working when secure boot is enabled, or at the
+very, very minimum taint it
+
+Then users wanting to use such a performance optimization will be able
+to do so in their own special purpose builds, without negatively
+affecting the security story of generalist distributions.
+
+--=20
+Kind regards,
+Luca Boccassi
+
+--=-WhGM6ktWMElK5x6aVvyJ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCSqx93EIPGOymuRKGv37813JB4FAmVbttUACgkQKGv37813
+JB5Zyw//Z6kmw2oyyN3baObMYxcX7XlurZnC+rfom0nnnEsICtoxiQb/6o7AOhOh
+5yvG7/I31HacifkXgGRsVc6dowjawZqz5KI92pRrix4tO0O4zmJ43CaKWMvdO0mU
+5i38sc7vrzMKjlKmyqbKNSxmlfpgnbrGi8lMbm/Jh4QIFvUSv94RuNgvdiDW/OP+
+bIrdf55UlS3TdUznrbA8BEAePravcDY8f0KYUIpL2ESau0MWig+n9PUhe5nvsD0E
+j857IH6u9UfEsO6ZbbQnoHnzHxGMJJB3fH5ALOyu5NvDnab5wHtLarSwQneLasUw
+I3bxlUihdwuQIEKTDwNlRFcMwigCh0rww4MeEHUdaleLkHnyxdLWop748L/oBAhI
+60cEb5eUjRomA8K4Eewd0YNgk2ipToHiTiaDW/3coxhCdiLhEOFOAMAGT4Z0wEi1
+Icc/rGOG9lnRDRbjkjBHxFXCZG8rKnfQydnCW1bPQ+ieZ5EnG39DwWbY6cZoUST4
+ggCy063nKyhFu7RYSbXMAbllLkNhOK/LIPOjA08PuZknAQFDryYJh4SyPMK9uVBp
+4431vs3sANoXi9u2rSzwEWJqcBC8CpO8B/94+Gg2bzXFKB0YkOLLqwKWKs377rYT
+FjK8cCylT7OHwAVjMTaMszJViUfABVXg2sPLYaUnQGesRE7U/Yc=
+=50E8
+-----END PGP SIGNATURE-----
+
+--=-WhGM6ktWMElK5x6aVvyJ--
