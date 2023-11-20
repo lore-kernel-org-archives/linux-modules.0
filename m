@@ -1,34 +1,34 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kcKTvZvw"
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B3FA4;
-	Mon, 20 Nov 2023 07:14:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TTXH5gfB"
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C30CF;
+	Mon, 20 Nov 2023 07:14:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700493265; x=1732029265;
+  t=1700493268; x=1732029268;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=D5Ir1Vj8OLtklsn72GYygYA1+G2UYfWZWZVSidHq6PI=;
-  b=kcKTvZvwVGtGylf8gdQDbV6eMPUKloNWG8khdyNa0a2vCPMKl/VR/fcJ
-   weRdhwkgBnA/hhMzWTwx4D6sIOHvf/avkufbI3LXmF+q45/r/Te0pf5Wr
-   ha61WZfBYjpkrEwVA6OVuZLKR6RKmGBaWXjx9nURxwQQzF7llUPiF3+j3
-   AvMfVPLFBlMnGVa9+a1BfC1bB/SLCUnLLusBxGngAratzb4ivnWBJvcR9
-   72cu+s/+dLZd1AImLm6I1OP0MA+6FX8hi2TvUWESXZhEV/iHMn/POWOSD
-   8U4pXSToIu5teX6CpdGlaYFjxADvuN3FxptSvtq5RXhIifBzknypmqDuk
+  bh=y9bZb8ktHeC1feBWDiNoTxs7R/QFBZGG8vwsdkn9s4k=;
+  b=TTXH5gfBU6HN76cK/JdeYleIU6HF77yBnCevWYcQH+U9c0NkNbj97UVQ
+   MOsI7luJL0V8M/sxx/tukwtu6/JfMsgKZALe4gyyFPfvwyygRe20hFA1+
+   1nzNygcosW5IxZ+1G7vd9NJsS/A2YQO4MbNaGeo3vTgQxRA/BiSoYh36C
+   xRANSxQjeJZ1i3bnBWrgkgPDf3585qFIE5WOSvXUtUnz8TWxnKB1D474G
+   oAT9XHMh+9mKsf7EJP06z6K2CGkZFT8T5WYN7w9ly9r0bsuesPVv25b9V
+   nd4FSn/AYIez2tWW/InnQFX7PJoiKhKSvRWgvGZ7+N7GbNoGTQ/WzNen6
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="422730970"
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="394486350"
 X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="422730970"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 07:14:24 -0800
+   d="scan'208";a="394486350"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 07:14:27 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="1097766557"
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="801209746"
 X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="1097766557"
+   d="scan'208";a="801209746"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Nov 2023 07:14:22 -0800
+  by orsmga001.jf.intel.com with ESMTP; 20 Nov 2023 07:14:25 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 6093C12A; Mon, 20 Nov 2023 17:14:21 +0200 (EET)
+	id 7E2491D9; Mon, 20 Nov 2023 17:14:21 +0200 (EET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Kees Cook <keescook@chromium.org>,
@@ -36,9 +36,9 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 3/5] params: Use size_add() for kmalloc()
-Date: Mon, 20 Nov 2023 17:11:44 +0200
-Message-ID: <20231120151419.1661807-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 5/5] params: Fix multi-line comment style
+Date: Mon, 20 Nov 2023 17:11:46 +0200
+Message-ID: <20231120151419.1661807-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 In-Reply-To: <20231120151419.1661807-1-andriy.shevchenko@linux.intel.com>
 References: <20231120151419.1661807-1-andriy.shevchenko@linux.intel.com>
@@ -50,36 +50,59 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Prevent allocations from integer overflow by using size_add().
+The multi-line comment style in the file is rather arbitrary.
+Make it follow the standard one.
 
 Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- kernel/params.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/params.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/params.c b/kernel/params.c
-index f8e3c4139854..c3a029fe183d 100644
+index eb55b32399b4..2e447f8ae183 100644
 --- a/kernel/params.c
 +++ b/kernel/params.c
-@@ -11,6 +11,7 @@
- #include <linux/moduleparam.h>
+@@ -1,8 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+-/* Helpers for initial module or kernel cmdline parsing
+-   Copyright (C) 2001 Rusty Russell.
+-
+-*/
++/*
++ * Helpers for initial module or kernel cmdline parsing
++ * Copyright (C) 2001 Rusty Russell.
++ */
+ #include <linux/ctype.h>
  #include <linux/device.h>
  #include <linux/err.h>
-+#include <linux/overflow.h>
- #include <linux/slab.h>
- #include <linux/ctype.h>
- #include <linux/security.h>
-@@ -48,7 +49,7 @@ static void *kmalloc_parameter(unsigned int size)
+@@ -271,8 +271,10 @@ int param_set_charp(const char *val, const struct kernel_param *kp)
+ 
+ 	maybe_kfree_parameter(*(char **)kp->arg);
+ 
+-	/* This is a hack.  We can't kmalloc in early boot, and we
+-	 * don't need to; this mangled commandline is preserved. */
++	/*
++	 * This is a hack. We can't kmalloc() in early boot, and we
++	 * don't need to; this mangled commandline is preserved.
++	 */
+ 	if (slab_is_available()) {
+ 		*(char **)kp->arg = kmalloc_parameter(len + 1);
+ 		if (!*(char **)kp->arg)
+@@ -743,8 +745,10 @@ void module_param_sysfs_remove(struct module *mod)
  {
- 	struct kmalloced_param *p;
- 
--	p = kmalloc(sizeof(*p) + size, GFP_KERNEL);
-+	p = kmalloc(size_add(sizeof(*p), size), GFP_KERNEL);
- 	if (!p)
- 		return NULL;
- 
+ 	if (mod->mkobj.mp) {
+ 		sysfs_remove_group(&mod->mkobj.kobj, &mod->mkobj.mp->grp);
+-		/* We are positive that no one is using any param
+-		 * attrs at this point.  Deallocate immediately. */
++		/*
++		 * We are positive that no one is using any param
++		 * attrs at this point. Deallocate immediately.
++		 */
+ 		free_module_param_attrs(&mod->mkobj);
+ 	}
+ }
 -- 
 2.43.0.rc1.1.gbec44491f096
 
