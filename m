@@ -1,34 +1,34 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AGmk7sbN"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547C7CB;
-	Mon, 20 Nov 2023 07:14:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j+lQmsP0"
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB24DC8;
+	Mon, 20 Nov 2023 07:14:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700493266; x=1732029266;
+  t=1700493265; x=1732029265;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=22qKIvbrgULxlxyf3xmSTybLyjjW9aZHEYq6pWfjelQ=;
-  b=AGmk7sbNCl0eKA72nse3rxU4lhYhOHzM38LOICvGzy98xo1JPBNoscua
-   7z2qjMB6W/DWRZZqBvH93TXkn3QBMtRPt3ZyaVvCEFF5RgbAaCmcvILb6
-   plmZkTK9OyOdJzmZvHdASBryKcS1YuwfwhtRQXwnvwF96nKpeDRziPLCP
-   viaIqX4PmGTy+2htEGAgoIc8hvr1cmjTm34Oeeo6D+a5lEZWAFKJEHmzE
-   3z5zX5Vw110J+u3vkp+FqJ0xZVt3Jam6ye5vCo/1KVESy2grt49gzpZUL
-   Qbx2XCTITmxtNZPrwCwOcWdD2OsNBkkRcfSopi+BoolcHnG+hDHjdmT5A
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="394486347"
+  bh=egBySuvnF1rs3mSn+o1fYvDyEOWxN6cCjTLiLa9cCxU=;
+  b=j+lQmsP0OFnU3mXi9p//7Mpo/mOBDSWqI0bI53+keG7c4PzFpGPcqNF2
+   BtxOdQ6AGwNUc2A8Yj/wPGRqpDKVdnwLMw8is5ZUfpNyb3p6hZp4UFcOS
+   5s6kk9C9kqpJRtsfVeEYMPNsaguogESD0OMBNlR3EiI87V928CctZJlk/
+   sM8h87IplghpF4twTOTNR6qpXuuZh6IpL4qrjxBPECnZM7EbXctKmv5IQ
+   g6wL5gfPGuFuMNV+502iBKFyr8TE1TxNxYpQsgN7fVdJj2vnF06LOjcHk
+   EHbuAYUT8NkHNZ3SUZV3pw1qATMDxth7BYrQ9KOV6BnhCs8+R7bkiFNdw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="422730966"
 X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="394486347"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 07:14:24 -0800
+   d="scan'208";a="422730966"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 07:14:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="801209698"
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="1097766556"
 X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
-   d="scan'208";a="801209698"
+   d="scan'208";a="1097766556"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 20 Nov 2023 07:14:22 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 20 Nov 2023 07:14:22 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 5240C9F; Mon, 20 Nov 2023 17:14:21 +0200 (EET)
+	id 69CAD118; Mon, 20 Nov 2023 17:14:21 +0200 (EET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Kees Cook <keescook@chromium.org>,
@@ -36,9 +36,9 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 2/5] params: Do not go over the limit when getting the string length
-Date: Mon, 20 Nov 2023 17:11:43 +0200
-Message-ID: <20231120151419.1661807-3-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 4/5] params: Sort headers
+Date: Mon, 20 Nov 2023 17:11:45 +0200
+Message-ID: <20231120151419.1661807-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 In-Reply-To: <20231120151419.1661807-1-andriy.shevchenko@linux.intel.com>
 References: <20231120151419.1661807-1-andriy.shevchenko@linux.intel.com>
@@ -50,50 +50,47 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We can use strnlen() even on early stages and it prevents from
-going over the string boundaries in case it's already too long.
+Sort the headers in alphabetic order in order to ease
+the maintenance for this part.
 
 Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- kernel/params.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ kernel/params.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/params.c b/kernel/params.c
-index 626fa8265932..f8e3c4139854 100644
+index c3a029fe183d..eb55b32399b4 100644
 --- a/kernel/params.c
 +++ b/kernel/params.c
-@@ -260,7 +260,10 @@ EXPORT_SYMBOL_GPL(param_set_uint_minmax);
+@@ -3,18 +3,18 @@
+    Copyright (C) 2001 Rusty Russell.
  
- int param_set_charp(const char *val, const struct kernel_param *kp)
- {
--	if (strlen(val) > 1024) {
-+	size_t len, maxlen = 1024;
-+
-+	len = strnlen(val, maxlen + 1);
-+	if (len == maxlen + 1) {
- 		pr_err("%s: string parameter too long\n", kp->name);
- 		return -ENOSPC;
- 	}
-@@ -270,7 +273,7 @@ int param_set_charp(const char *val, const struct kernel_param *kp)
- 	/* This is a hack.  We can't kmalloc in early boot, and we
- 	 * don't need to; this mangled commandline is preserved. */
- 	if (slab_is_available()) {
--		*(char **)kp->arg = kmalloc_parameter(strlen(val)+1);
-+		*(char **)kp->arg = kmalloc_parameter(len + 1);
- 		if (!*(char **)kp->arg)
- 			return -ENOMEM;
- 		strcpy(*(char **)kp->arg, val);
-@@ -508,7 +511,7 @@ int param_set_copystring(const char *val, const struct kernel_param *kp)
- {
- 	const struct kparam_string *kps = kp->str;
+ */
+-#include <linux/kernel.h>
+-#include <linux/kstrtox.h>
+-#include <linux/string.h>
+-#include <linux/errno.h>
+-#include <linux/module.h>
+-#include <linux/moduleparam.h>
++#include <linux/ctype.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
++#include <linux/errno.h>
++#include <linux/kernel.h>
++#include <linux/kstrtox.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
+ #include <linux/overflow.h>
+-#include <linux/slab.h>
+-#include <linux/ctype.h>
+ #include <linux/security.h>
++#include <linux/slab.h>
++#include <linux/string.h>
  
--	if (strlen(val)+1 > kps->maxlen) {
-+	if (strnlen(val, kps->maxlen) == kps->maxlen) {
- 		pr_err("%s: string doesn't fit in %u chars.\n",
- 		       kp->name, kps->maxlen-1);
- 		return -ENOSPC;
+ #ifdef CONFIG_SYSFS
+ /* Protects all built-in parameters, modules use their own param_lock */
 -- 
 2.43.0.rc1.1.gbec44491f096
 
