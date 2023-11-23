@@ -1,67 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A824319BDE;
-	Wed, 22 Nov 2023 22:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1508F5C;
+	Thu, 23 Nov 2023 09:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="laW49S+9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02699C433C9;
-	Wed, 22 Nov 2023 22:18:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700691506;
-	bh=z8B55/ejcoe2WW+RVahNts4dxuwsQAuxIT3oPjNu21M=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=laW49S+9ECP9y1T3wKde/cIOj+JYD94ZcV2pI72RtAoICnQozqPsFxDWdxqSrefDs
-	 ZjJqCBW5+z6y6DzbG/csYQ6qH+PKfJG30uVSgEA5HoqOs885iuMwXWhUKNjPsAwbdw
-	 XxvuGpQBeGw7woppvooV/6F5QcCuM+r8430xkQV5fEQ3z29cskCKuvxCiK6dt3ldAO
-	 qaVCT/uPkCtPeBI2ntkUjI5j8N8ms+wmJIo8CjN8FD9esa5RfFYHm3KKeJJfq4DzBB
-	 ppL8aFHiNtClGNGSAJOItlB/hWNweuQwonVMF7Ot9M2RAfSPlcInsxxZjHopGYk+fw
-	 Q2mrXvH3TOBDQ==
-From: deller@kernel.org
-To: linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-modules@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 4/4] modules: Add missing entry for __ex_table
-Date: Wed, 22 Nov 2023 23:18:14 +0100
-Message-ID: <20231122221814.139916-5-deller@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231122221814.139916-1-deller@kernel.org>
-References: <20231122221814.139916-1-deller@kernel.org>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gZxE875+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C291C433C8;
+	Thu, 23 Nov 2023 09:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1700730355;
+	bh=Lcd150vAerjkaRvtY0bS83Rte9WRMhTnKhCGePr/mKY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gZxE875+pb5Kx5SdnUy+1qJggwnPSULnHJZNmnyyWU1tZnEKd6+k+CLcxMCdL2SZI
+	 dNU/1oTl+LESlR5MxF2sNxJ8zA+4gVVwUx3CVe6jBu7kI5fW4yMj35sj4acE7tqxMN
+	 KaG2fJSM6oZZxOlC9JU9HsL7YAfrbLxHWJYBYuJ4=
+Date: Thu, 23 Nov 2023 09:05:52 +0000
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Matthew Maurer <mmaurer@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	Laura Abbott <laura@labbott.name>
+Subject: Re: [PATCH v2 0/5] MODVERSIONS + RUST Redux
+Message-ID: <2023112314-tubby-eligibly-007a@gregkh>
+References: <20231118025748.2778044-1-mmaurer@google.com>
+ <CAK7LNAQt8fy5+vSwpd1aXfzjzeZ5hiyW7EW9SW7pbG2eTJZAOA@mail.gmail.com>
+ <CAGSQo00hyCTVsqHtrzKBBPvuH38z5yRm_4jzdi00C0RV+8APwQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGSQo00hyCTVsqHtrzKBBPvuH38z5yRm_4jzdi00C0RV+8APwQ@mail.gmail.com>
 
-From: Helge Deller <deller@gmx.de>
+On Wed, Nov 22, 2023 at 01:04:09PM -0800, Matthew Maurer wrote:
+> > So, even if you enable CONFIG_MODVERSIONS,
+> > nothing is checked for Rust.
+> > Genksyms computes a CRC from "int foo", and
+> > the module subsystem confirms it is a "int"
+> > variable.
+> >
+> > We know this check always succeeds.
+> >
+> > Why is this useful?
+> The reason this is immediately useful is that it allows us to have Rust
+> in use with a kernel where C modules are able to benefit from MODVERSIONS
+> checking. The check would effectively be a no-op for now, as you have correctly
+> determined, but we could refine it to make it more restrictive later.
+> Since the
+> existing C approach errs on the side of "it could work" rather than "it will
+> work", I thought being more permissive was the correct initial solution.
 
-The entry for __ex_table was missing, which may make __ex_table
-become 1- or 2-byte aligned in modules.
-Add the entry to ensure it gets 32-bit aligned.
+But it's just providing "fake" information to the CRC checker, which
+means that the guarantee of a ABI check is not true at all.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: <stable@vger.kernel.org> # v6.0+
----
- scripts/module.lds.S | 1 +
- 1 file changed, 1 insertion(+)
+So the ask for the user of "ensure that the ABI checking is correct" is
+being circumvented here, and any change in the rust side can not be
+detected at all.
 
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index b00415a9ff27..488f61b156b2 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -26,6 +26,7 @@ SECTIONS {
- 	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
- 	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
- 	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
-+	__ex_table		0 : ALIGN(4) { KEEP(*(__ex_table)) }
- 
- 	__patchable_function_entries : { *(__patchable_function_entries) }
- 
--- 
-2.41.0
+The kernel is a "whole", either an option works for it, or it doesn't,
+and you are splitting that guarantee here by saying "modversions will
+only work for a portion of the kernel, not the whole thing" which is
+going to cause problems for when people expect it to actually work
+properly.
 
+So, I'd strongly recommend fixing this for the rust code if you wish to
+allow modversions to be enabled at all.
+
+> With regards to future directions that likely won't work for loosening it:
+> Unfortunately, the .rmeta format itself is not stable, so I wouldn't want to
+> teach genksyms to open it up and split out the pieces for specific functions.
+> Extending genksyms to parse Rust would also not solve the situation -
+> layouts are allowed to differ across compiler versions or even (in rare
+> cases) seemingly unrelated code changes.
+
+What do you mean by "layout" here?  Yes, the crcs can be different
+across compiler versions and seemingly unrelated code changes (genksyms
+is VERY fragile) but that's ok, that's not what you are checking here.
+You want to know if the rust function signature changes or not from the
+last time you built the code, with the same compiler and options, that's
+all you are verifying.
+
+> Future directions that might work for loosening it:
+> * Generating crcs from debuginfo + compiler + flags
+> * Adding a feature to the rust compiler to dump this information. This
+> is likely to
+>   get pushback because Rust's current stance is that there is no ability to load
+>   object code built against a different library.
+
+Why not parse the function signature like we do for C?
+
+> Would setting up Rust symbols so that they have a crc built out of .rmeta be
+> sufficient for you to consider this useful? If not, can you help me understand
+> what level of precision would be required?
+
+What exactly does .rmeta have to do with the function signature?  That's
+all you care about here.
+
+thanks,
+
+greg k-h
