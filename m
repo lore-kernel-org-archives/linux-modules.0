@@ -1,131 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD554241E5;
-	Thu, 23 Nov 2023 12:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA582F41;
+	Sun, 26 Nov 2023 07:19:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UlJdv0lX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30465C433C7;
-	Thu, 23 Nov 2023 12:13:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700741582;
-	bh=42j8yCIGOIsdbYfWKArHt6YgWjhLYwGUak0TSa8oLCU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UlJdv0lXQ6T1VSpJnR8JE9zxFg2rCDgSn8m0Ep2KHp6YA9n8T4Tzs1xiNMSiYdOD/
-	 sRjRA+4T8cyH5auQADLfeXR+nmphrtH+ZVwkl0yhbBinRdYGvhiQ6X4TrC+Kge1Xmf
-	 UiEyAUy5ylyXgPcmIho7+QBePr4SPpzNAbDTpeRM=
-Date: Thu, 23 Nov 2023 12:12:56 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Matthew Maurer <mmaurer@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	Laura Abbott <laura@labbott.name>
-Subject: Re: [PATCH v2 0/5] MODVERSIONS + RUST Redux
-Message-ID: <2023112312-certified-substance-007c@gregkh>
-References: <20231118025748.2778044-1-mmaurer@google.com>
- <CAK7LNAQt8fy5+vSwpd1aXfzjzeZ5hiyW7EW9SW7pbG2eTJZAOA@mail.gmail.com>
- <CAGSQo00hyCTVsqHtrzKBBPvuH38z5yRm_4jzdi00C0RV+8APwQ@mail.gmail.com>
- <2023112314-tubby-eligibly-007a@gregkh>
- <CAK7LNAT-OcaCi6tqPRgZxPXOV6u+YbaO_0RxtfmrVXPzdrio0Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l8eJqj2q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 383C9C433C7;
+	Sun, 26 Nov 2023 07:19:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700983164;
+	bh=8gd0dMckeTvfrJbqiPZ2qHzROw5OCFMp48suO82vyAs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=l8eJqj2qVxYSd0kyCthbRdsjJWwv8BkOprPhHQWVhjZE77suqM6bLD/BiLU/E1itB
+	 nACkUvUzYVBu3EyM6bJxFONeF6hruY82B1HyUWGAqbzqn5EaniAbbi53yeV58r0imt
+	 zT8dHSlB/WuMWZB8tEJRbgv06wvUmqrw/n6IMOcbv0EFj4KG/VELuhXNdO3LOvOoRM
+	 gdEalE+TZ+Hb+Mx2qjdTAU2T1C9ZblxQTHsNWYLM6r0sHpHh3kbiz/wTHdnDO6ixYb
+	 K9QP7W9tZsUkVb6Fgs4bujgAZiZhIiS/CsPQkrcKnTWsgJE3wKIeomXu98uMlhSZYy
+	 FGRtjHj4xOqww==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: Paul Gortmaker <paul.gortmaker@windriver.com>,
+	linux-modules@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] init: move THIS_MODULE from <linux/export.h> to <linux/init.h>
+Date: Sun, 26 Nov 2023 16:19:14 +0900
+Message-Id: <20231126071914.932241-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAT-OcaCi6tqPRgZxPXOV6u+YbaO_0RxtfmrVXPzdrio0Q@mail.gmail.com>
 
-On Thu, Nov 23, 2023 at 08:38:45PM +0900, Masahiro Yamada wrote:
-> On Thu, Nov 23, 2023 at 6:05 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Nov 22, 2023 at 01:04:09PM -0800, Matthew Maurer wrote:
-> > > > So, even if you enable CONFIG_MODVERSIONS,
-> > > > nothing is checked for Rust.
-> > > > Genksyms computes a CRC from "int foo", and
-> > > > the module subsystem confirms it is a "int"
-> > > > variable.
-> > > >
-> > > > We know this check always succeeds.
-> > > >
-> > > > Why is this useful?
-> > > The reason this is immediately useful is that it allows us to have Rust
-> > > in use with a kernel where C modules are able to benefit from MODVERSIONS
-> > > checking. The check would effectively be a no-op for now, as you have correctly
-> > > determined, but we could refine it to make it more restrictive later.
-> > > Since the
-> > > existing C approach errs on the side of "it could work" rather than "it will
-> > > work", I thought being more permissive was the correct initial solution.
-> >
-> > But it's just providing "fake" information to the CRC checker, which
-> > means that the guarantee of a ABI check is not true at all.
-> >
-> > So the ask for the user of "ensure that the ABI checking is correct" is
-> > being circumvented here, and any change in the rust side can not be
-> > detected at all.
-> >
-> > The kernel is a "whole", either an option works for it, or it doesn't,
-> > and you are splitting that guarantee here by saying "modversions will
-> > only work for a portion of the kernel, not the whole thing" which is
-> > going to cause problems for when people expect it to actually work
-> > properly.
-> >
-> > So, I'd strongly recommend fixing this for the rust code if you wish to
-> > allow modversions to be enabled at all.
-> >
-> > > With regards to future directions that likely won't work for loosening it:
-> > > Unfortunately, the .rmeta format itself is not stable, so I wouldn't want to
-> > > teach genksyms to open it up and split out the pieces for specific functions.
-> > > Extending genksyms to parse Rust would also not solve the situation -
-> > > layouts are allowed to differ across compiler versions or even (in rare
-> > > cases) seemingly unrelated code changes.
-> >
-> > What do you mean by "layout" here?  Yes, the crcs can be different
-> > across compiler versions and seemingly unrelated code changes (genksyms
-> > is VERY fragile) but that's ok, that's not what you are checking here.
-> > You want to know if the rust function signature changes or not from the
-> > last time you built the code, with the same compiler and options, that's
-> > all you are verifying.
-> >
-> > > Future directions that might work for loosening it:
-> > > * Generating crcs from debuginfo + compiler + flags
-> > > * Adding a feature to the rust compiler to dump this information. This
-> > > is likely to
-> > >   get pushback because Rust's current stance is that there is no ability to load
-> > >   object code built against a different library.
-> >
-> > Why not parse the function signature like we do for C?
-> >
-> > > Would setting up Rust symbols so that they have a crc built out of .rmeta be
-> > > sufficient for you to consider this useful? If not, can you help me understand
-> > > what level of precision would be required?
-> >
-> > What exactly does .rmeta have to do with the function signature?  That's
-> > all you care about here.
-> 
-> 
-> 
-> 
-> rmeta is generated per crate.
-> 
-> CRC is computed per symbol.
-> 
-> They have different granularity.
-> It is weird to refuse a module for incompatibility
-> of a symbol that it is not using at all.
+Commit f50169324df4 ("module.h: split out the EXPORT_SYMBOL into
+export.h") appropriately separated EXPORT_SYMBOL into <linux/export.h>
+because modules and EXPORT_SYMBOL are orthogonal; modules are symbol
+consumers, while EXPORT_SYMBOL are used by symbol providers, which
+may not be necessarily a module.
 
-I agree, this should be on a per-symbol basis, so the Rust
-infrastructure in the kernel needs to be fixed up to support this
-properly, not just ignored like this patchset does.
+However, that commit also relocated THIS_MODULE. As explained in the
+commit description, the intention was to define THIS_MODULE in a
+lightweight header, but I do not believe <linux/export.h> was the
+suitable location because EXPORT_SYMBOL and THIS_MODULE are unrelated.
 
-thanks,
+Move it to another lightweight header, <linux/init.h>. The reason for
+choosing <linux/init.h> is to make <linux/moduleparam.h> self-contained
+without relying on <linux/linkage.h> incorrectly including
+<linux/export.h>.
 
-greg k-h
+With this adjustment, the role of <linux/export.h> becomes clearer as
+it only defines EXPORT_SYMBOL.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ include/linux/export.h | 18 ------------------
+ include/linux/init.h   |  7 +++++++
+ 2 files changed, 7 insertions(+), 18 deletions(-)
+
+diff --git a/include/linux/export.h b/include/linux/export.h
+index 9911508a9604..0bbd02fd351d 100644
+--- a/include/linux/export.h
++++ b/include/linux/export.h
+@@ -6,15 +6,6 @@
+ #include <linux/linkage.h>
+ #include <linux/stringify.h>
+ 
+-/*
+- * Export symbols from the kernel to modules.  Forked from module.h
+- * to reduce the amount of pointless cruft we feed to gcc when only
+- * exporting a simple symbol or two.
+- *
+- * Try not to add #includes here.  It slows compilation and makes kernel
+- * hackers place grumpy comments in header files.
+- */
+-
+ /*
+  * This comment block is used by fixdep. Please do not remove.
+  *
+@@ -23,15 +14,6 @@
+  * side effect of the *.o build rule.
+  */
+ 
+-#ifndef __ASSEMBLY__
+-#ifdef MODULE
+-extern struct module __this_module;
+-#define THIS_MODULE (&__this_module)
+-#else
+-#define THIS_MODULE ((struct module *)0)
+-#endif
+-#endif /* __ASSEMBLY__ */
+-
+ #ifdef CONFIG_64BIT
+ #define __EXPORT_SYMBOL_REF(sym)			\
+ 	.balign 8				ASM_NL	\
+diff --git a/include/linux/init.h b/include/linux/init.h
+index 01b52c9c7526..3fa3f6241350 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -179,6 +179,13 @@ extern void (*late_time_init)(void);
+ 
+ extern bool initcall_debug;
+ 
++#ifdef MODULE
++extern struct module __this_module;
++#define THIS_MODULE (&__this_module)
++#else
++#define THIS_MODULE ((struct module *)0)
++#endif
++
+ #endif
+   
+ #ifndef MODULE
+-- 
+2.40.1
+
