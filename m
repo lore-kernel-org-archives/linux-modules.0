@@ -1,143 +1,285 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="x6K1kx8C";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="j+qDcBrV"
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2a07:de40:b251:101:10:150:64:2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7720FD3;
-	Wed,  6 Dec 2023 11:48:05 -0800 (PST)
-Received: from kitsune.suse.cz (unknown [10.100.12.127])
-	by smtp-out2.suse.de (Postfix) with ESMTP id D907D1FD38;
-	Wed,  6 Dec 2023 19:48:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1701892083; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WRWb+HJrZK0+DeQKF7G3lI1mi1x+bXsZpMkFr/DHwLo=;
-	b=x6K1kx8CbsvgZuyz896cRajvdVXvkWeCINL7yDq/BxZUEe98u1JRDk1xb8PPi6uOWycEoL
-	90KJAuAYJ/uiPOnRnGZMeya5oQgwkMcu9HXgVUBAcwNyYHfIKnCbBUYryjaDUWAmyYknf6
-	kY5O9TBp88gAI+G4w++EdT8StxRCvp4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1701892083;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WRWb+HJrZK0+DeQKF7G3lI1mi1x+bXsZpMkFr/DHwLo=;
-	b=j+qDcBrV+ldOxKEIHrJohbeQHnGbUd0pXC1tKDZbmZYlmV2mQ9AHlrgMHFNSeMJojaUMfE
-	CkypdC6TgBInaVCg==
-From: Michal Suchanek <msuchanek@suse.de>
-To: linux-modules@vger.kernel.org
-Cc: Michal Suchanek <msuchanek@suse.de>,
-	Takashi Iwai <tiwai@suse.com>,
-	Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Jiri Slaby <jslaby@suse.com>,
-	Jan Engelhardt <jengelh@inai.de>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v6 2/2] kbuild: rpm-pkg: Fix build with non-default MODLIB
-Date: Wed,  6 Dec 2023 20:47:52 +0100
-Message-ID: <baa3224bece94220dfe7173432143a91f7612c09.1701892062.git.msuchanek@suse.de>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <CAK7LNAT3N82cJD3GsF+yUBEfPNOBkhzYPk37q3k0HdU7ukz9vQ@mail.gmail.com>
-References: <CAK7LNAT3N82cJD3GsF+yUBEfPNOBkhzYPk37q3k0HdU7ukz9vQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=nabijaczleweli.xyz header.i=@nabijaczleweli.xyz header.b="MCog+ApG"
+Received: from tarta.nabijaczleweli.xyz (tarta.nabijaczleweli.xyz [139.28.40.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFEEA5
+	for <linux-modules@vger.kernel.org>; Wed,  6 Dec 2023 12:37:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+	s=202305; t=1701895042;
+	bh=QczK4NO5cruQMnXpYWJCk8Q9/BAGnUKBzBvc8hk0TDs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MCog+ApG6bDchDEq/9CP0kxdp6PZ6OaFDZa97zie9IgABrrbJNpquUyWgCupwieU5
+	 QqanT0dq3W0lH+AZyUmryZQSbL+DNhdfQ90jUvzwI+IdsyDFvp66qVqQnPMhO05iIz
+	 a7Eo8MIKeLfOapAX+5aI+wCJlJm8MbGKoqkMrlHXmjumdrT50FZoB2i8x7NW8Y3iOj
+	 DLfGyZOvuyoD/uwAxnyhgPpJdwc7JtfpZiwUUe01p5H6SBSfbCheMF1pMFtqnyM+Je
+	 UmSucarHCpHtWGOM72jyhPRtb4w9M8Zcrj00h9Y5gsyuDkxhHfsxXZdd+MOfzTC/sc
+	 gXDPbFpuLLEVA==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+	by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id F197713118;
+	Wed,  6 Dec 2023 21:37:21 +0100 (CET)
+Date: Wed, 6 Dec 2023 21:37:21 +0100
+From: 
+	Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-modules@vger.kernel.org
+Subject: Re: [PATCH kmod 2/3] Add KMOD_NEW_IGNORE_CMDLINE
+Message-ID: <z3lxzhymtgvvri2uhwylgazzlvg25junsdu4jjtxfhvfwksm3j@tarta.nabijaczleweli.xyz>
+References: <d15ca533d7f50ffd27a11fc2fdbec8aa07659b70.1701791668.git.nabijaczleweli@nabijaczleweli.xyz>
+ <b666b75fa732407e7e390ba27ebacaf663e93f7d.1701791668.git.nabijaczleweli@nabijaczleweli.xyz>
+ <sotwbaob52hnasqhtcz7nkezh3n3t4tnt3fmbllfmsjgi6nqvj@xva63byuafir>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: 3.40
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spamd-Result: default: False [3.40 / 50.00];
-	 ARC_NA(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 R_MISSING_CHARSET(2.50)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 R_RATELIMIT(0.00)[to_ip_from(RLbjsaozyn1c4dqqoh4tzemsye)];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 RCPT_COUNT_TWELVE(0.00)[13];
-	 MID_CONTAINS_FROM(1.00)[];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 RCVD_COUNT_ZERO(0.00)[0];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 FREEMAIL_CC(0.00)[suse.de,suse.com,gmail.com,inai.de,kernel.org,google.com,fjasle.eu,vger.kernel.org];
-	 BAYES_HAM(-3.00)[100.00%];
-	 SUSPICIOUS_RECIPS(1.50)[]
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xehrwray7oxbuskj"
+Content-Disposition: inline
+In-Reply-To: <sotwbaob52hnasqhtcz7nkezh3n3t4tnt3fmbllfmsjgi6nqvj@xva63byuafir>
+User-Agent: NeoMutt/20231103
 
-The default MODLIB value is composed of three variables
 
-MODLIB = $(INSTALL_MOD_PATH)$(KERNEL_MODULE_DIRECTORY)/$(KERNELRELEASE)
+--xehrwray7oxbuskj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-However, the kernel.spec hadcodes the default value of
-$(KERNEL_MODULE_DIRECTORY), and changed value is not reflected when
-building the package.
+On Wed, Dec 06, 2023 at 09:14:55AM -0600, Lucas De Marchi wrote:
+> On Tue, Dec 05, 2023 at 04:55:22PM +0100, Ahelenia Ziemia=C5=84ska wrote:
+> 	touch foo
+> 	sudo mount --bind foo /proc/cmdline
+> This has been what I always used for local/test scenarios.
+This is also what I came up with post factum, but it's clearly not obvious,
+since the responding user did resort to rebooting.
 
-Pass KERNEL_MODULE_DIRECTORY to kernel.spec to fix this problem.
+> I wonder if
+> this really needs a more "official" way like your are doing to be
+> added to the library rather than just the tools.
+I don't disagree; below is a scissor-patch that effectivaly
+canonicalises modprobe -I ... to be
+"unshare -rm sh -c 'mount --bind /dev/null /proc/cmdline; modprobe ...'"
+(the -r is removed if you're already root).
 
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+I've used this approach (exactly this snippet in various arrangements)
+extensively in various test suites to string up fake procfses,
+and it ought to work in all environments you'd be validly running modprobe
+(it won't work if you're non-root in a chroot: unlikely).
+
+Best,
+-- >8 --
+Subject: [PATCH v2] Add modprobe -I/--ignore-cmdline
+
+Previously, if you'd misconfigured the cmdline your system would be
+completely poisoned.
+
+In this real scenario, ixgbe.allow_supported_sfp=3D1,1,1,1 was set.
+This yielded
+  [ 3852.901900] ixgbe: `1,1,1,1' invalid for parameter `allow_unsupported_=
+sfp'
+  [ 3852.904595] ixgbe: unknown parameter 'allow_supported_sfp' ignored
+and
+  # modprobe -r ixgbe
+  # modprobe ixgbe allow_supported_sfp=3D1
+since, indeed,
+  # modprobe -nv ixgbe
+  insmod /lib/modules/5.16.0-1-amd64/kernel/drivers/net/ethernet/intel/ixgb=
+e/ixgbe.ko allow_unsupported_sfp=3D1,1,1,1
+  # modprobe -nv ixgbe allow_supported_sfp=3D1
+  insmod /lib/modules/5.16.0-1-amd64/kernel/drivers/net/ethernet/intel/ixgb=
+e/ixgbe.ko allow_unsupported_sfp=3D1,1,1,1 allow_supported_sfp=3D1
+this leaves you with a tens-of-minutes-long reboot
+(or with an explicit insmod, which no-one came up with at the time,
+ and which requires manual dependency-chasing).
+
+With -I, the module can be correctly loaded since the cmdline-derived
+parameter no longer stops the module loading:
+  # modprobe -nvI ixgbe allow_supported_sfp=3D1
+  insmod /lib/modules/5.16.0-1-amd64/kernel/drivers/net/ethernet/intel/ixgb=
+e/ixgbe.ko allow_supported_sfp=3D1
+  # modprobe -I ixgbe allow_supported_sfp=3D1
+  [ 4497.032342] ixgbe: Intel(R) 10 Gigabit PCI Express Network Driver
+  [ 4497.034624] ixgbe: Copyright (c) 1999-2016 Intel Corporation.
+
+This in many ways mirrors -C /dev/null and -i.
+
+Yes, you could do this manually with
+  unshare -m; mount --bind /dev/null /proc/cmdline
+but if you aren't primed to look for it,
+or aren't familiar with the mechanism in the first place,
+you can't
+
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
-Build on top of the previous patch adding KERNEL_MODULE_DIRECTORY
----
- scripts/package/kernel.spec | 8 ++++----
- scripts/package/mkspec      | 1 +
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ man/modprobe.xml | 16 ++++++++++++++++
+ tools/modprobe.c | 43 ++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 58 insertions(+), 1 deletion(-)
 
-diff --git a/scripts/package/kernel.spec b/scripts/package/kernel.spec
-index 3eee0143e0c5..12996ed365f8 100644
---- a/scripts/package/kernel.spec
-+++ b/scripts/package/kernel.spec
-@@ -67,7 +67,7 @@ cp $(%{make} %{makeflags} -s image_name) %{buildroot}/boot/vmlinuz-%{KERNELRELEA
- %{make} %{makeflags} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
- cp System.map %{buildroot}/boot/System.map-%{KERNELRELEASE}
- cp .config %{buildroot}/boot/config-%{KERNELRELEASE}
--ln -fns /usr/src/kernels/%{KERNELRELEASE} %{buildroot}/lib/modules/%{KERNELRELEASE}/build
-+ln -fns /usr/src/kernels/%{KERNELRELEASE} %{buildroot}%{KERNEL_MODULE_DIRECTORY}/%{KERNELRELEASE}/build
- %if %{with_devel}
- %{make} %{makeflags} run-command KBUILD_RUN_COMMAND='${srctree}/scripts/package/install-extmod-build %{buildroot}/usr/src/kernels/%{KERNELRELEASE}'
- %endif
-@@ -98,8 +98,8 @@ fi
- 
- %files
- %defattr (-, root, root)
--/lib/modules/%{KERNELRELEASE}
--%exclude /lib/modules/%{KERNELRELEASE}/build
-+%{KERNEL_MODULE_DIRECTORY}/%{KERNELRELEASE}
-+%exclude %{KERNEL_MODULE_DIRECTORY}/%{KERNELRELEASE}/build
- /boot/*
- 
- %files headers
-@@ -110,5 +110,5 @@ fi
- %files devel
- %defattr (-, root, root)
- /usr/src/kernels/%{KERNELRELEASE}
--/lib/modules/%{KERNELRELEASE}/build
-+%{KERNEL_MODULE_DIRECTORY}/%{KERNELRELEASE}/build
- %endif
-diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-index ce201bfa8377..e952fa4f2937 100755
---- a/scripts/package/mkspec
-+++ b/scripts/package/mkspec
-@@ -24,6 +24,7 @@ fi
- cat<<EOF
- %define ARCH ${ARCH}
- %define KERNELRELEASE ${KERNELRELEASE}
-+%define KERNEL_MODULE_DIRECTORY ${KERNEL_MODULE_DIRECTORY}
- %define pkg_release $("${srctree}/init/build-version")
- EOF
- 
--- 
-2.42.0
+diff --git a/man/modprobe.xml b/man/modprobe.xml
+index 91f9e27..ab9dbb0 100644
+--- a/man/modprobe.xml
++++ b/man/modprobe.xml
+@@ -47,6 +47,7 @@
+       <arg><option>-C <replaceable>config-file</replaceable></option></arg>
+       <arg><option>-n</option></arg>
+       <arg><option>-i</option></arg>
++      <arg><option>-I</option></arg>
+       <arg><option>-q</option></arg>
+       <arg><option>-b</option></arg>
+       <arg><replaceable>modulename</replaceable></arg>
+@@ -58,6 +59,7 @@
+       <arg><option>-v</option></arg>
+       <arg><option>-n</option></arg>
+       <arg><option>-i</option></arg>
++      <arg><option>-I</option></arg>
+       <arg rep=3D'repeat'><option><replaceable>modulename</replaceable></o=
+ption></arg>
+     </cmdsynopsis>
+     <cmdsynopsis>
+@@ -318,6 +320,20 @@
+           </para>
+         </listitem>
+       </varlistentry>
++      <varlistentry>
++        <term>
++          <option>-I</option>
++        </term>
++        <term>
++          <option>--ignore-cmdline</option>
++        </term>
++        <listitem>
++          <para>
++            This option causes <command>modprobe</command> to ignore
++            any configuration specified via the kernel command line.
++          </para>
++        </listitem>
++      </varlistentry>
+       <varlistentry>
+         <term>
+           <option>-n</option>
+diff --git a/tools/modprobe.c b/tools/modprobe.c
+index e891028..de013b1 100644
+--- a/tools/modprobe.c
++++ b/tools/modprobe.c
+@@ -21,11 +21,13 @@
+ #include <errno.h>
+ #include <getopt.h>
+ #include <limits.h>
++#include <sched.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <sys/mount.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <sys/utsname.h>
+@@ -59,7 +61,7 @@ static int remove_holders =3D 0;
+ static unsigned long long wait_msec =3D 0;
+ static int quiet_inuse =3D 0;
+=20
+-static const char cmdopts_s[] =3D "arw:RibfDcnC:d:S:sqvVh";
++static const char cmdopts_s[] =3D "arw:RiIbfDcnC:d:S:sqvVh";
+ static const struct option cmdopts[] =3D {
+ 	{"all", no_argument, 0, 'a'},
+=20
+@@ -72,6 +74,7 @@ static const struct option cmdopts[] =3D {
+ 	{"first-time", no_argument, 0, 3},
+ 	{"ignore-install", no_argument, 0, 'i'},
+ 	{"ignore-remove", no_argument, 0, 'i'},
++	{"ignore-cmdline", no_argument, 0, 'I'},
+ 	{"use-blacklist", no_argument, 0, 'b'},
+ 	{"force", no_argument, 0, 'f'},
+ 	{"force-modversion", no_argument, 0, 2},
+@@ -825,6 +828,32 @@ static char **prepend_options_from_env(int *p_argc, ch=
+ar **orig_argv)
+ 	return new_argv;
+ }
+=20
++#define UNSHARE_REQ(...) if(!(__VA_ARGS__)) return false;
++#define UNSHARE_FILE(path, ...)   \
++	{                               \
++		FILE * f =3D fopen(path, "we"); \
++		UNSHARE_REQ(f);               \
++		fprintf(f, __VA_ARGS__);      \
++		fclose(f);                    \
++	}
++static bool clear_cmdline(void)
++{
++	int uid =3D geteuid();
++	if(uid) {
++		int gid =3D getegid();
++		UNSHARE_REQ(!unshare(CLONE_NEWUSER));
++		UNSHARE_FILE("/proc/self/setgroups", "deny");
++		UNSHARE_FILE("/proc/self/uid_map", "0 %d 1", uid);
++		UNSHARE_FILE("/proc/self/gid_map", "0 %d 1", gid);
++	}
++
++	UNSHARE_REQ(!unshare(CLONE_NEWNS));
++	UNSHARE_REQ(!mount("none", "/", NULL, MS_REC | MS_PRIVATE, NULL));
++
++	UNSHARE_REQ(!mount("/dev/null", "/proc/cmdline", NULL, MS_BIND, NULL));
++	return true;
++}
++
+ static int do_modprobe(int argc, char **orig_argv)
+ {
+ 	struct kmod_ctx *ctx;
+@@ -835,6 +864,7 @@ static int do_modprobe(int argc, char **orig_argv)
+ 	const char *dirname =3D NULL;
+ 	const char *root =3D NULL;
+ 	const char *kversion =3D NULL;
++	int ignore_cmdline =3D 0;
+ 	int use_all =3D 0;
+ 	int do_remove =3D 0;
+ 	int do_show_config =3D 0;
+@@ -881,6 +911,9 @@ static int do_modprobe(int argc, char **orig_argv)
+ 		case 'i':
+ 			ignore_commands =3D 1;
+ 			break;
++		case 'I':
++			ignore_cmdline =3D 1;
++			break;
+ 		case 'b':
+ 			use_blacklist =3D 1;
+ 			break;
+@@ -1004,6 +1037,14 @@ static int do_modprobe(int argc, char **orig_argv)
+ 		dirname =3D dirname_buf;
+ 	}
+=20
++	if (ignore_cmdline) {
++		if (!clear_cmdline()) {
++			ERR("clear_cmdline() failed!\n");
++			err =3D -1;
++			goto done;
++		}
++	}
++
+ 	ctx =3D kmod_new(dirname, config_paths);
+ 	if (!ctx) {
+ 		ERR("kmod_new() failed!\n");
+--=20
+2.39.2
 
+
+--xehrwray7oxbuskj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmVw234ACgkQvP0LAY0m
+WPENWw/+JX3wuRAZNUdVtIvNTJe17mTu6HbZQ7LSLtWMwU3XaUCPjh54zIGkMljK
+C36U/qoZGzvesSwgjW4YtyBc3elLT57Jt9rGyQW0DR8Ru9/feBwsBGKXeb9ZA5J1
+Cw7gjPu9RmNXUc2yXL5OJcqzAHpxj2fU0bfnAMISjZKNcjfHVn7N0aUKEt+LNQII
+sIRgY8GLVx5xBDqfqiJeYCZq4VoMFMf8G2za5iwJrqhtDbf9tOl++HOGJl3acDjb
+Qn7YICsEMS3O6IFq0XK38fp1o12stQ6IIWifL99DsT3B6mgItuuNYZtke0gfRJNH
+m96JuM9LYMTEdDYz2LiFhjXMarBkhbwP5p39e53xm7SMWnE/5FwT6FzO2Jl4BPYs
+CV5zBd3ktFeT30QujR99oGecwVZcQZ1eZwq9Nvxa3WrfvSkV6ScgdzAmLOYPcyJs
+jLOqfQRY6f39sbpc7+TU+rjoF8dGMciqs7FZVKzbnnjDyDmnogsJZoyruBn8WvBQ
+D2EcQ1PFj4tQ6qPoOCKOonF/hmBYtlMr+b8wOciWgewFZLXjjzGKjL9nuDjk1ZHm
+mu+4B53gnDokE4Pk96Qp+lqe1+v6pR5QKXYAI0DknPUQ8t/iZ9O3JbNh1vBf9uX8
+hrpI8lpJzPofKa2JSSBYYQkMMlFv0aPRcpsJduZBEgcji/n+UJs=
+=RpRK
+-----END PGP SIGNATURE-----
+
+--xehrwray7oxbuskj--
