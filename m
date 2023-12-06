@@ -1,79 +1,76 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yu4MhHkR"
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B7B10CC
-	for <linux-modules@vger.kernel.org>; Wed,  6 Dec 2023 07:15:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ChT85hbq"
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A58DE;
+	Wed,  6 Dec 2023 07:26:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701875707; x=1733411707;
+  t=1701876385; x=1733412385;
   h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=ccg6o6Kh51mJwPgIUdut/BPvdhAAABDEOVV8HlsneS4=;
-  b=Yu4MhHkRyx88cTTitQnD3tI1foHQVPAu+XDjPon5ZAbvNvrFIYIGPZ5i
-   CF/BwI86oT7k4wQcIwDBx8+lspSryUTEBDfkkPZx3U04r5hANAhvmPXHZ
-   8LJm+8K0VSFk16f7TUtjTARvlaCF/gyqhYjRBZnbJ8Crka24tp9D9iPdt
-   V51/3WsDN7IQnDN14/Oa+1ZuiFmreqWgSCUzp8mmVJm5sjpx83jOgpgQk
-   q+veKMQgMhwUB6fGsQI88XWNKwsQPtGgIlwRNXDXeTv9ZW7LxCNwacV4O
-   VJ3u9TmCKT+20ipSmqtkOO1ZnavLCqS3MAjs04JDnHJ6TqZy4SALLzDqF
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="1144311"
+   in-reply-to:mime-version;
+  bh=VYa0ZDlIMVAoQMoxkAf8Y4pXmPf3kmVBe03izWuXRX4=;
+  b=ChT85hbqAUSg2lVX6wcxbUNERwLbnJ+IgYDSj1H65Y1rnB66/SfNCB9p
+   lMulh2OF8XUxk7SLEamwnUzxbOJojR9vZVICmkkhF3pKWak8wFp9zz8nX
+   2H7v09FhDipJsCKyYk4zoYLpajGIDVk4bWWXXgRgu41umbQKjlpT+ESjR
+   NoRYz46Q0LQ0j2q0KCkGRL9AksBbXKJG+CPn/kYddfPaPOrLIg6UuvD3P
+   4w8nhllIfUm/iztK3nDuUtz+WXXc883fikXiYOuGvFCFZ80l9Jhc+HWEb
+   g2468Xoyavhu/Xcqv97g/mxNTVm7WKSWQsVDW8Po8uA+Krki/iJDSf73L
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="460567510"
 X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
-   d="scan'208";a="1144311"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 07:15:06 -0800
+   d="scan'208";a="460567510"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 07:22:19 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="1018596385"
 X-IronPort-AV: E=Sophos;i="6.04,255,1695711600"; 
-   d="scan'208";a="1018596385"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 06 Dec 2023 07:15:05 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+   d="scan'208";a="12739784"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orviesa002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 06 Dec 2023 07:22:18 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 6 Dec 2023 07:15:04 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ 15.1.2507.35; Wed, 6 Dec 2023 07:22:17 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Wed, 6 Dec 2023 07:15:04 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2507.35 via Frontend Transport; Wed, 6 Dec 2023 07:22:17 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Wed, 6 Dec 2023 07:15:04 -0800
+ 15.1.2507.35; Wed, 6 Dec 2023 07:22:17 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WtyVG8vDIsvfTRH5hGezbkTC8ni9HCScX0Jx2JzEmJPHMKjEcyyulo05naUIgs0qx1ScUfH53q+tNC6tlmJIXbAwMAjzQNqHc2yZzuOsdkToayIfT9aK+nVVZZnoWbul6UJIeqjCzu3wFKmbewgopxrbFPiN2smG2aFcAnscQFxw2w2EPPuMtpoO3f42jhu9Urim5O9LtuUxKngeS3GYbk5U2b8egKkJ5prFHWqglxaESR0LXl7N4MbWBXepEFI/Wk2zT8fF+XgYB4nk3SHAEMQMq617t4oNQ+UN+RzFvujNhMCrlfZB8IfGXfcF9hJTbpyS9hO17VOEpC13aITOyw==
+ b=oPM4OfxPn6ZtUhZWhJguBZJKe/GovOswr3Vw2M3cIG2fvgrBsimbPwbSzukm0G9qRFABdUP+KLj7iv3xpS7BIT3iBiTYzQdGuhwMKHD2MeBgsUMh5QBeLbySuS3XuWeWlxoH/ZU3kFyaaY0PGy29lJ/IkRn5jIGtmvuNf9MS3+IfCWcDqlmjCddutHPPHWIroGAIzkm+a4PMok3RCQT/U21sbhZRT/K1TeCs1xAgdtoS8gJd32YeatuXLI62ToOlVXvA1nlaxfJba/xO/GyzStCfOOIB3CM22M0IU3MOFWtdzv2TdOTUUbxafI0UvPUv0nif+B+22r8OTdduQ+ubeQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AxPTV8cosGVZaSl+aVEtOpRHixDsqfjPz/YW3cERVVU=;
- b=EZZMR1CPoxKNm9fpEJzmi0NnliMVIvpgeyomnS2Dn18QD/8TUPVOXdf3xoxAod6fzV1Jy6I+TRGGUcnU5fXlXGoa0Dgcjwd5b3m9vj6293Yt9koAAXY2Zh2hwOedUQxetKGvwvJgi6HXjNSgGbtssJ3AHPIp8GTo3hhxgpjFPqElwbn5sdNIgLOU0RTJt7LkB+TXyEVZveEMozoRYk62FVBjcLZowb9Yq6OfUz7F7wBgZRzuqDhPwS3JYBF9CWkZeNzK8GZcHSJdFXXQVFjLvPrUnt3Y98uLN2oNNSTaTniUoAfc82Ibma4rqwRS8nERqNapiSsR89lLTRr5axU/MA==
+ bh=YRMZYWF2KIy14I0ToVxWVQlhz7FZtV59bKIDbjis2Wk=;
+ b=Ou12rjqoODJRYCEdA6Pco/uxt3u8GdcRv/onVrhfO5OtmvqJT6TXJxepxNZcGKNl63p5GciAmMg+JJAfsWs+3GjfU4vYqFbhn4wpeFyrh+XspDs2yBJTDt3dxnOSQq3ohPq6S2ogrw0TDCR3lzLeQXNY5UuumhnV6DyXzL0D2M8EX+YQi2xiA8qLaZQDrDsIpYUfr0hU1f+TmLKA5XEJCb5JYE9XFJ/3uwrI95TqCOIAErRcHyc+0zilYim4wt72vJKX8RQhcfFewMxH88epXQZooRPKvX7z0OCoFmyrL22LU4BUAspXYUHxRRGkT3jtPFdNsg2hFgXiWYwYiUzjgA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by BY1PR11MB8079.namprd11.prod.outlook.com (2603:10b6:a03:52e::18) with
+ by SA2PR11MB4924.namprd11.prod.outlook.com (2603:10b6:806:113::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.25; Wed, 6 Dec
- 2023 15:14:59 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.37; Wed, 6 Dec
+ 2023 15:22:15 +0000
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::b870:a8ae:c4f1:c39b]) by CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::b870:a8ae:c4f1:c39b%4]) with mapi id 15.20.7046.033; Wed, 6 Dec 2023
- 15:14:59 +0000
-Date: Wed, 6 Dec 2023 09:14:55 -0600
+ 15:22:15 +0000
+Date: Wed, 6 Dec 2023 09:22:13 -0600
 From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>
-CC: <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH kmod 2/3] Add KMOD_NEW_IGNORE_CMDLINE
-Message-ID: <sotwbaob52hnasqhtcz7nkezh3n3t4tnt3fmbllfmsjgi6nqvj@xva63byuafir>
-References: <d15ca533d7f50ffd27a11fc2fdbec8aa07659b70.1701791668.git.nabijaczleweli@nabijaczleweli.xyz>
- <b666b75fa732407e7e390ba27ebacaf663e93f7d.1701791668.git.nabijaczleweli@nabijaczleweli.xyz>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+To: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] kmod: Add FIPS 202 SHA-3 support
+Message-ID: <ltdfl4l32ht2oimlppyml22q7dst35i6m4foklamapoykkl3ql@u7qmh2aa4abh>
+References: <20231022180928.180437-1-dimitri.ledkov@canonical.com>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b666b75fa732407e7e390ba27ebacaf663e93f7d.1701791668.git.nabijaczleweli@nabijaczleweli.xyz>
-X-ClientProxiedBy: SJ0PR13CA0169.namprd13.prod.outlook.com
- (2603:10b6:a03:2c7::24) To CY5PR11MB6139.namprd11.prod.outlook.com
+In-Reply-To: <20231022180928.180437-1-dimitri.ledkov@canonical.com>
+X-ClientProxiedBy: BY5PR03CA0006.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::16) To CY5PR11MB6139.namprd11.prod.outlook.com
  (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -82,142 +79,111 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|BY1PR11MB8079:EE_
-X-MS-Office365-Filtering-Correlation-Id: f3ccba3f-39bf-46f2-149e-08dbf66e1c53
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SA2PR11MB4924:EE_
+X-MS-Office365-Filtering-Correlation-Id: f9fa2e45-8a7a-43ee-e0f7-08dbf66f20ce
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mwvOSqku3Fbkv8ABisA0FQatJgGRurpWzbUGznoQM/RzF4a2UJVFH3hCxp+f8ihmOdVnNd9wda4gacd4DnI2qUaAuLDF6oz1eYCH1c1C0NsHlWuZAuqMmNNirUJPfeyr/mAClO3LKfxZDG9y9io2g1TH4OGrUb8Ou5uznB9uRzOQq86ptL0ZXdvgNMvn4cnGsriDw3oKeF0PVXXYu5ragkBUTk34Rzhvv/i4EfXA3EKHJdcDzTwGp7e0B4sLBvx7EIGpoHV73RcPkZiQiAUhhjXiiwpmUWjCfBmW0HFvQygLjoJw+xUA/U4OamWtZngdZsADax4mtJmZPmPwjeaHdOW5G8mg5urH75/+oB1httfXU3xmYAZ1N1hqc5+yxwFJe+6r8Kad0dSPXq8Q6eBiNF505ahPOWqa7YIByOYNMSU2Rx4L7Z5zf4FQGRNg1y8glq8zsNH2Un6vB02XvqVBf1legVemuosd1fO8yRIoZGuwzCauyaaqrS1whjeohUsIfyKBTW28cpMZW1AdgoYYHaKkv0okjF3OjjPLr+8UXZpmiyjyraB/88Q2XPw0rajo
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(376002)(136003)(346002)(396003)(366004)(39860400002)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(66476007)(66556008)(6916009)(66946007)(83380400001)(82960400001)(6486002)(478600001)(6666004)(6506007)(33716001)(316002)(9686003)(6512007)(8676002)(8936002)(4326008)(26005)(38100700002)(86362001)(5660300002)(41300700001)(2906002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: AMKfPdyfCSiMTEfUqXuIvKbHmHSC6vLqn9WlYN2oO7hfxBvOTU6BpVxnT44V3L6DxNwmsPOyjGZbZtrO5TP19w0rfZiMDYVVOfckQRhtVEBmhmE1wfnZeVld0b/pyszbB9I78AwFKW4Xo4m8GO8VRxmVzCqVHX2/e4X6PGGZzLE/y46imaO1F1Whp7sjuA1vYSzbeE+afLZG4doYBABp8FQeF69qL9+AP4YOeBwTVoOR9jHEDjvbja8PMyhTXqBPwi01aubGEkp5q4JZERgxLCmgLoubdmgTxjhkEsB6oBxCBFCdcODV2ksjjpTgs0gMCxVaAf/x2hgZ9s2P0dm1ywQL+nO8VQ3jvoWVeSuUDbjfVncoJHiiGYvcCmpYwIY0w+luyTiGm7haspv53+IsXxt3QFreXDX25yTAnrx50aVAUJwNaGEu763DB2dE9MBlo9B9nXWe0KBrqIeiCWFF+0EkXhpREbsh2GiKFjQv/N0BR6vPs6KVse9Zc5McKnmoghrSzw4umFMs8mvmSKBow3U/a0xiBO5PrfSmxEZjQ1vvw5LyqlDn472oFv1R4KA6
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(396003)(39860400002)(366004)(346002)(376002)(136003)(230922051799003)(1800799012)(186009)(451199024)(64100799003)(38100700002)(82960400001)(26005)(6506007)(478600001)(6486002)(9686003)(6512007)(33716001)(316002)(66556008)(66476007)(66946007)(6916009)(86362001)(8936002)(4326008)(8676002)(2906002)(5660300002)(41300700001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QlpoM0l6TEJXbDVmMHpsNVVWeGx3SU5qbDMxNXJTSDBmTmZ0UWZTVHY3THVn?=
- =?utf-8?B?enpmZmV4ZTlPd2huMU5TWlhRc05KRHZoaVdiSHRMTmsyam1MUnVCYnpDR3d6?=
- =?utf-8?B?b3VKblZyWGhmbXNRZjlycVpYbnFKYjFyK3AvV2cyK3E3bFRuNXhGU0wyalor?=
- =?utf-8?B?azV6Y2YxcU9CWXJtakZrUHMrRkNhRnEyVlhwMWI2TkVXZEJHTXBOTE1qUERN?=
- =?utf-8?B?NGpOcUswaTJIMHU2cWxBNVVPVlBtMFV1ZDNNemNrNWNxUU5iYTh5ZWI4WGxs?=
- =?utf-8?B?ZlhRTElhU2lXd0lGd1dxek1LckIzcmRvUFdhK28yYm93WXdURi92ekIwb2cy?=
- =?utf-8?B?a0IrVGR3Zld3WnZxMFlMRzdpa3pvMkxxelZZT2hwaWxhOHF6NDZlN2pMZGFw?=
- =?utf-8?B?cHJObkV1ck5MWitmNUk4S05zOXNZdkV0RUdWSHlIL2xNWVEzWUhJRUQ1elB6?=
- =?utf-8?B?ZU1NZ0FZbzNDTUZZbEZoY3NwYTJ0SGRlYTdoclNXR0J6b2VnWG1razNWRGI5?=
- =?utf-8?B?VkxYdFNVZG9VSlIydndZOEM3QjNaa0ZXNnFYUFBqU3BHelFMaEIwYzlmWjEy?=
- =?utf-8?B?TGR1UWlWTFF4d1hNT01UblR3a0pRSWYvWVdKb1RVVEhMR05BaUJoZzBUbUJq?=
- =?utf-8?B?VTdpSkFXMnVrZXIrbE1QZEJrWWE4TE41L3ZjNlNsZERFdmZqUjAzUHFNQ0Mz?=
- =?utf-8?B?QS9JNjU1cFl1SUFpSVpzL0lPajFxcFRCUmMwaXM5Q2hwT2tyNkdCVDNDWmE2?=
- =?utf-8?B?aG9XamRMeDF1YzZCdks2Mmt5V0RtVVNDUG85a1g0T251dHFoNThERkJxSFli?=
- =?utf-8?B?Tkt1aWZCbW44MjhWdVVXZVpRM211bUl3NDNvK2NsWThGemRZdk9GZFdBY0RP?=
- =?utf-8?B?N051SzRaTUZHY0VGeVB5UWxlMVV4VUMrU0E2OWdwVnlDNExUZ09LV2dTMUUr?=
- =?utf-8?B?ekViL3pZd3cxdVR6amFFWCtYazRpSmN0QmlQSkpsa1hRYmswQXlvSEgvNnFW?=
- =?utf-8?B?dnlHZGVLRTFoek03ZGpOWnpRN0ZtSTEyT1F3UW5lMXB3K0xKb0NUQVFkVTF1?=
- =?utf-8?B?T3B4UC9ScDlIM2Mzdm5FK0UrZlR6T2Yra2Jrc0d1djhvN0hOY1ZISGdnN3hn?=
- =?utf-8?B?amhrZ0xTOGVsUkZiQ0c5NzkrN2tRRnNVWDN1Mmp2aVZqdHdYL3FmZlQ4SHZ5?=
- =?utf-8?B?KzZCRWYyL2hpVVZnb0QrekNKeS96SlN1NTdkOVVGc2FFK1dvcTNxbGd6eTNB?=
- =?utf-8?B?dE5vaHJLNjhXU3JITzVYOWZFNDRMNG40UjE1aXVIcVNJQXl3UlpDNjM0Q2JN?=
- =?utf-8?B?ZStYL0tiRzBzRUV0WVNObzZtY0dXM1p5T3pNTXphemJPTHViMFVhdUNTUks1?=
- =?utf-8?B?T3JxU0ZqbmRVbnlwUVlEdzBIVnRxMFllbkRrZ0FtUlJXc0tRYUtlN3FHUkpD?=
- =?utf-8?B?WjVGVEpEMzRwREhETHB2S2N1Zlo4ZGhXOE5GK01oRkV2bFlyVmM2bUY1UUE3?=
- =?utf-8?B?S1NCQzVrVFBHdGlRRFN1VGNsWXRDNnFydCtpRUJEUk1BZTZ4SUR2bzVMYzJ2?=
- =?utf-8?B?dkhBK004c0V2WW02WTdTbVNQaFhQMkcxNFRiUit2TnpGSW56cXZJZWdtdTJM?=
- =?utf-8?B?UGg4V3VFdHZoN1UrWjdKS3Izd0JwSlh1Z0JvRTN6bVBmSjJiZWdISzdld3Zo?=
- =?utf-8?B?bTBuWEQrUWdscklaN1NScEZxRSs5bGxIZXZkcVh2WDVhdGNHaldoVW55OGxT?=
- =?utf-8?B?dUU1M1FvWXNaZlhUMHBjODcvc0JTZ0VKWVpRbWRnV2dmemlVT240S2RRSW93?=
- =?utf-8?B?eml5dDEzakZsT0owcFJUSzNqZmxrL2xvMnl6L1dXdEJrL25hSGZpWUI1YnVN?=
- =?utf-8?B?WTNGL1hGcmxFWWdGVG5IMTFjbFV6L0pURjBkM0xYbFY4WWJPNkFzT0NxelUz?=
- =?utf-8?B?NmF1aUdpY01MSm5Dell3NnpGbUs4SFdxekswVHdQbGs2bGVrOXJoa0JQeDBz?=
- =?utf-8?B?RmE4OUFUdUJVem1aMW9zZWhzeU5YNmUvdFpuQjB1TitNZFR2OVQ3K1JpVkdu?=
- =?utf-8?B?Y2YrTzk3b1orVUhpbXgvMXQweEd1YXJYcVBjRitnbWF1TmdwTDJiVmh5UlpI?=
- =?utf-8?B?TVdwQm5RS0pES2hkTjBCdTFINkgrMG1MTmlHWlNtWmhaOHJKNFo1SitrRmhC?=
- =?utf-8?B?NXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3ccba3f-39bf-46f2-149e-08dbf66e1c53
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+/Y/iAcbvhrX8xe4myc2/G9oVBRF63nnrM35oaZ9eF9iG8CnUlawWPcHr7X3?=
+ =?us-ascii?Q?vfBFEEOi7tqRmtsyFT6BCLtKiyKa639XpUtRytWb8wRUUWjW6CndsYpixyJ8?=
+ =?us-ascii?Q?8vB2bIuxYTigwBDqkqNZYGZwFwa1SRksBPe7Oa9SWevMtpOiXXTU08NS52qd?=
+ =?us-ascii?Q?JX14tz9D2a86DETrsstMoO8KRZ6yzZmQvRulIKq9dlStjGdq1TaJiNfJBag8?=
+ =?us-ascii?Q?LGCJJcKAljED7sUD9m+SN75bCyBlukSqGiCpUnSKoUVpZBLVjqbHKXeied4W?=
+ =?us-ascii?Q?5fls4qcHwhdFdKWM9ODUQZQ1L+x/cX5WwbtjId6TjgyZzpdFLHvfmyvL708I?=
+ =?us-ascii?Q?n2nQOsC6ABPur1Ue4iPEr+CL10ThX3GrYr/LlgcMUE8sgfe5A+ENWzS6se+m?=
+ =?us-ascii?Q?JZ7sCKGNT0EPfs4I1L2Vk8XF7Mu0eSdFm3vAmfDz8cDMqiRh1eDUqauTS4kY?=
+ =?us-ascii?Q?oeBXYYihQiNs+FvrGRDHWdmku6LcEtxxqAKrXD4T3aTDj7Zz8sbm3zDICiKf?=
+ =?us-ascii?Q?fMy6Nf4rFfq1EzBI6FmRjWK6wR2RDKF/CScov5NZpQL14tyBF/yPbXJGQ9XN?=
+ =?us-ascii?Q?2M9/gt1b4UZhuDayyIvvTi3rQytS35e2puQ0jiE5HmVNQp9Lyv9A+gSJdXCe?=
+ =?us-ascii?Q?wUCqLXnLUTW2FI+T+T6J33+ON6jzwcbvQfGbbJZYtm5Hd/UUlJLiHhAIF7+v?=
+ =?us-ascii?Q?24kYKotgVujQRDKnQNPsxnEQ812ZL8mLOEtTOBZSeGXH7JxWe55uo4LUhU/9?=
+ =?us-ascii?Q?C8YPOSeos1NGvfaCGpCnsO5aVRa1Mmsm2bMOxqfhDwgxLjyQo2xW7PCd75Xd?=
+ =?us-ascii?Q?W9IhFN0DxuOqbMSBuA7n3SJvFlgEXkgNh78X0urRGVbglIZ1ZedZtARTrmWb?=
+ =?us-ascii?Q?Rz+/h5VLkDA5bz5VJc5fBQrWS00SfBQ2osveAaseGBXSdzQ/ABwi5hJr63PT?=
+ =?us-ascii?Q?GHytXRY131WF4MyVorjX5wD+cko8IGhQZCEy/WpRl9ZmkGdoj4aqoPvM+wY1?=
+ =?us-ascii?Q?rtVyHCOAdw7M7NqN8t4MnEQ299i47LxBWDq53PbrMxgUqhrhNX2dBEOYKmGo?=
+ =?us-ascii?Q?gW4UFwdXg5Xi5wEbpbhinRjt1Bz2Kko/iAG0KDjS07vus+9zjtimKoYkYK4v?=
+ =?us-ascii?Q?x0I6LrrV61yRy3tLkkkzLVydcZ+65+M5U34FS1il8Gr/8nULnvyq5REV6Hx6?=
+ =?us-ascii?Q?l6FKycmpZw9Qmm5VGffIjH/6dNd3N0pYigBDzce+KtzFxLv415dm68HCAt/4?=
+ =?us-ascii?Q?9P5OwCVRQO9TV/QkWt2I+0C60JkCvUjLgAp/KkTxQEYsiCravOeRaP+LsCo0?=
+ =?us-ascii?Q?am+x/6mllsn9k1N6b/P5Asr8LHCIJ6NFxgxO7mquBblXf9Vt4o9/tBWl2PGs?=
+ =?us-ascii?Q?aZFFRIWflXPI1fsCgQoTEA8AVtCO8NZ8l9eyCR1S9qahUtU0tf9I+0nQ7Hyz?=
+ =?us-ascii?Q?4/If2uN0MnFOyUsDdKOiuWgqUKwvI2bqfW4KEhEMMom/NnuKrm9yGaIIKjxw?=
+ =?us-ascii?Q?ZC5luy/4jubHm1WbmNWUwNCqhOECmuQFTfmDp6JoBNrbZzGjoseVIhPMKJJg?=
+ =?us-ascii?Q?b3+i8u9zZXmQ5/tqVN4bwa36J4bTz9dAhSMIQiIErEJu2ut+FyDdtuh+PtPo?=
+ =?us-ascii?Q?SA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9fa2e45-8a7a-43ee-e0f7-08dbf66f20ce
 X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2023 15:14:58.7723
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2023 15:22:15.7086
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c7dDjOrhoMXYVcyCCUkycRkEDzINUqXbgkEcbe1k8Tzqi5KOSab2sIMujUhsbaMovXknHipGNgSuUHsQVFeclRanNVaX2jC+fHmvMPZHz4c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR11MB8079
+X-MS-Exchange-CrossTenant-UserPrincipalName: M68sVuaZnVQP5ktzOJnSTcGLipVf+NCibqlxiD0PNb41ikMNu2G+MMCfOgIETreTru1/qlFIkrLaUyKozKCdevHzSmGXnKlxkZDBXQ7eRFo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4924
 X-OriginatorOrg: intel.com
 
-On Tue, Dec 05, 2023 at 04:55:22PM +0100, Ahelenia Ziemiańska wrote:
->This can be passed to kmod_new_flags() to disable loading configuration
->from /proc/cmdline
-
-	touch foo
-	sudo mount --bind foo /proc/cmdline
-
-This has been what I always used for local/test scenarios. I wonder if
-this really needs a more "official" way like your are doing to be
-added to the library rather than just the tools.
-
-Lucas De Marchi
-
+On Sun, Oct 22, 2023 at 07:09:28PM +0100, Dimitri John Ledkov wrote:
+>Add support for parsing FIPS 202 SHA-3 signature hashes. Separately,
+>it is not clear why explicit hashes are re-encoded here, instead of
+>trying to generically show any digest openssl supports.
 >
->Signed-off-by: Ahelenia Ziemiańska <nabijaczleweli@nabijaczleweli.xyz>
+>Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
 >---
-> libkmod/libkmod-config.c   | 3 ++-
-> libkmod/libkmod-internal.h | 2 +-
-> libkmod/libkmod.c          | 2 +-
-> libkmod/libkmod.h          | 4 +++-
-> 4 files changed, 7 insertions(+), 4 deletions(-)
+> libkmod/libkmod-signature.c | 12 ++++++++++++
+> 1 file changed, 12 insertions(+)
 >
->diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
->index e24dab1..600d666 100644
->--- a/libkmod/libkmod-config.c
->+++ b/libkmod/libkmod-config.c
->@@ -949,7 +949,8 @@ int kmod_config_new(struct kmod_ctx *ctx, struct kmod_config **p_config,
-> 		free(cf);
-> 	}
->
->-	kmod_config_parse_kcmdline(config);
->+	if (!(options & KMOD_NEW_IGNORE_CMDLINE))
->+		kmod_config_parse_kcmdline(config);
->
-> 	return 0;
->
->diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
->index 26a7e28..1d0bd92 100644
->--- a/libkmod/libkmod-internal.h
->+++ b/libkmod/libkmod-internal.h
->@@ -132,7 +132,7 @@ struct kmod_config {
-> 	struct kmod_list *paths;
+>diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+>index b749a818f9..a39059cd7c 100644
+>--- a/libkmod/libkmod-signature.c
+>+++ b/libkmod/libkmod-signature.c
+>@@ -57,6 +57,9 @@ enum pkey_hash_algo {
+> 	PKEY_HASH_SHA512,
+> 	PKEY_HASH_SHA224,
+> 	PKEY_HASH_SM3,
+>+	PKEY_HASH_SHA3_256,
+>+	PKEY_HASH_SHA3_384,
+>+	PKEY_HASH_SHA3_512,
+> 	PKEY_HASH__LAST
 > };
 >
->-int kmod_config_new(struct kmod_ctx *ctx, struct kmod_config **config, const char * const *config_paths) __attribute__((nonnull(1, 2,3)));
->+int kmod_config_new(struct kmod_ctx *ctx, struct kmod_config **config, const char * const *config_paths, enum kmod_new_flags options) __attribute__((nonnull(1, 2,3)));
-> void kmod_config_free(struct kmod_config *config) __attribute__((nonnull(1)));
-> const char *kmod_blacklist_get_modname(const struct kmod_list *l) __attribute__((nonnull(1)));
-> const char *kmod_alias_get_name(const struct kmod_list *l) __attribute__((nonnull(1)));
->diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
->index 279b35d..126a66c 100644
->--- a/libkmod/libkmod.c
->+++ b/libkmod/libkmod.c
->@@ -317,7 +317,7 @@ KMOD_EXPORT struct kmod_ctx *kmod_new_flags(const char *dirname,
+>@@ -70,6 +73,9 @@ const char *const pkey_hash_algo[PKEY_HASH__LAST] = {
+> 	[PKEY_HASH_SHA512]	= "sha512",
+> 	[PKEY_HASH_SHA224]	= "sha224",
+> 	[PKEY_HASH_SM3]		= "sm3",
+>+	[PKEY_HASH_SHA3_256]	= "sha3-256",
+>+	[PKEY_HASH_SHA3_384]	= "sha3-384",
+>+	[PKEY_HASH_SHA3_512]	= "sha3-512",
+> };
 >
-> 	if (config_paths == NULL)
-> 		config_paths = default_config_paths;
->-	err = kmod_config_new(ctx, &ctx->config, config_paths);
->+	err = kmod_config_new(ctx, &ctx->config, config_paths, options);
-> 	if (err < 0) {
-> 		ERR(ctx, "could not create config\n");
-> 		goto fail;
->diff --git a/libkmod/libkmod.h b/libkmod/libkmod.h
->index 72cd7a2..29637dd 100644
->--- a/libkmod/libkmod.h
->+++ b/libkmod/libkmod.h
->@@ -30,7 +30,9 @@
-> extern "C" {
-> #endif
->
->-enum kmod_new_flags {};
->+enum kmod_new_flags {
->+	KMOD_NEW_IGNORE_CMDLINE = 0x00001,
->+};
->
-> /*
->  * kmod_ctx
+> enum pkey_id_type {
+>@@ -167,6 +173,12 @@ static int obj_to_hash_algo(const ASN1_OBJECT *o)
+> 	case NID_sm3:
+> 		return PKEY_HASH_SM3;
+> # endif
+>+	case NID_sha3_256:
+>+		return PKEY_HASH_SHA3_256;
+>+	case NID_sha3_384:
+>+		return PKEY_HASH_SHA3_384;
+>+	case NID_sha3_512:
+>+		return PKEY_HASH_SHA3_512;
+
+
+with your other patch, libkmod: remove pkcs7 obj_to_hash_algo(), this
+hunk is not needed anymore. Do you want to send a new version of this
+patch?
+
+thanks
+Lucas De Marchi
+
+> 	default:
+> 		return -1;
+> 	}
 >-- 
->2.39.2
+>2.34.1
 >
-
-
+>
