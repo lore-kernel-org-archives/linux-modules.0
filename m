@@ -1,96 +1,179 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDA359160;
-	Fri,  8 Dec 2023 22:59:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8205B17991
+	for <linux-modules@vger.kernel.org>; Sat,  9 Dec 2023 18:18:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iCbKvEhb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEC64C433C9;
-	Fri,  8 Dec 2023 22:59:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gz8aZlmW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13820C433C8;
+	Sat,  9 Dec 2023 18:18:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702076362;
-	bh=ADMPGnG3jf6x58PDxr4hdxMpH14Q1rygtk48rXifLcU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iCbKvEhbQKJx0RsDcnz/MNuZ2h1wzqjanLvPnkSWt9yBI3re8cd5OUlqKLUAWT7cT
-	 kHHJQzxSHT5eT34MufW9CxownYfHbXwfsT53je5RRqdvn+KjeiyjTEEclMbm+EFpL7
-	 ICFOlhGBh22WMT0XuDA0MMAuaDg5iB5Hux1KCCqA16fyNx/2weNCTB2lct5hzR74CU
-	 vDlrtvM63fBnlwluVkewlvEj5Z1OmZnrd0Wt+P7OEZFTEG/GTZ9ANFkNgn1hqqvtoh
-	 NiLjReQ+7sjGk+lVoieQYuCExiCalyJ9yfGKd+eHfqh5AaD28BTpVb83b7gst51SAv
-	 jg9p5mC2f2yww==
-Date: Sat, 9 Dec 2023 07:59:17 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Kris Van Hees <kris.van.hees@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org, Nick
- Alcock <nick.alcock@oracle.com>, Alan Maguire <alan.maguire@oracle.com>,
- Steven Rostedt <rostedt@goodmis.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Masami Hiramatsu <mhiramat@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Jiri Olsa <olsajiri@gmail.com>
-Subject: Re: [PATCH 2/6] module: add CONFIG_BUILTIN_RANGES option
-Message-Id: <20231209075917.833c8f1ae78172dbb1d83b97@kernel.org>
-In-Reply-To: <20231208050752.2787575-3-kris.van.hees@oracle.com>
-References: <20231208050752.2787575-1-kris.van.hees@oracle.com>
-	<20231208050752.2787575-3-kris.van.hees@oracle.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1702145882;
+	bh=R5ZqTIsMDapndSl6oaBUH9DW8tz2s6A2Ngjnci39c9M=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Gz8aZlmWCPHCAktMsTWG3XsRrJRWaPvTnsi7+zJljDjoHtnkLQQvVV6pwvZIsxhOd
+	 A9UpkFMMgfNIxPo3QOeWe+PVRJQKPj7A+RKcbWO9ORNdUNf/sqIOf9J0oUoedDtbjU
+	 2BedZ6ToDA7Po2yWRBEemNi16k8YYtw7c/cculnVrGJ2nK0mlpwM0pcDJBu6ReHVVE
+	 1He84Ddf+eAgN7VWQgSCJDac2A03+E5QjjrOZIF1YOExCQOybPAlw5YF0Domt+jdwy
+	 MsekoHzS1wsozVvGAql6o+9oVTfkfYiRnuiiQZP7QyhICWdTxZEmzvSSJT9zRWPBcZ
+	 G6W99hF9OCsDg==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6d9e2f04f32so1265496a34.1;
+        Sat, 09 Dec 2023 10:18:01 -0800 (PST)
+X-Gm-Message-State: AOJu0YymnBU/w6B6TVveWazqPDQuQ98YmxRPpQlpphUwfTnKUAdGP0In
+	2wtW3K+mOouEnkqRjzrl6xBqdml7+9QRTu3vLm4=
+X-Google-Smtp-Source: AGHT+IEaf0cKHdkciN6jW7bo3skMH9gHfZ3v/7RstDK4kzkOqUuL0iSzr982L2JW49q5sg9OEobLwe6S+bJEm/UztAQ=
+X-Received: by 2002:a05:6358:1e:b0:170:2b33:d77e with SMTP id
+ 30-20020a056358001e00b001702b33d77emr524506rww.55.1702145880374; Sat, 09 Dec
+ 2023 10:18:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <CAFSh4UwYYAOb0YpC=WAL6SD+8jTLuSkhgrgjh8JmogUb10V=zw@mail.gmail.com>
+In-Reply-To: <CAFSh4UwYYAOb0YpC=WAL6SD+8jTLuSkhgrgjh8JmogUb10V=zw@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 10 Dec 2023 03:17:23 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASE6H2GoXzJ1PXWEqsemQ3ny1K34vOxN0uVn1fh7Mmt5A@mail.gmail.com>
+Message-ID: <CAK7LNASE6H2GoXzJ1PXWEqsemQ3ny1K34vOxN0uVn1fh7Mmt5A@mail.gmail.com>
+Subject: Re: Building signed debs
+To: Tom Cook <tom.k.cook@gmail.com>, linux-modules <linux-modules@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri,  8 Dec 2023 00:07:48 -0500
-Kris Van Hees <kris.van.hees@oracle.com> wrote:
-
-> The CONFIG_BUILTIN_RANGES option controls whether offset range data is
-> generated for kernel modules that are built into the kernel image.
-> 
-> Signed-off-by: Kris Van Hees <kris.van.hees@oracle.com>
-> Reviewed-by: Nick Alcock <nick.alcock@oracle.com>
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  kernel/module/Kconfig | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> index 33a2e991f608..0798439b11ac 100644
-> --- a/kernel/module/Kconfig
-> +++ b/kernel/module/Kconfig
-> @@ -389,4 +389,21 @@ config MODULES_TREE_LOOKUP
->  	def_bool y
->  	depends on PERF_EVENTS || TRACING || CFI_CLANG
->  
-> +config BUILTIN_RANGES
-
-BUILTIN_MODULE_RANGES ?
-BTW, even if CONFIG_MODULES=n, we can embed the kernel module code.
-So should this visible if the CONFIG_MODULES=n ?
-
-Thank you,
-
-> +	bool "Generate address range information for builtin modules"
-> +	depends on VMLINUX_MAP
-> +	help
-> +	  When modules are built into the kernel, there will be no module name
-> +	  associated with its symbols in /proc/kallsyms.  Tracers may want to
-> +	  identify symbols by module name and symbol name regardless of whether
-> +	  the module is configured as loadable or not.
-> +
-> +	  This option generates modules.builtin.ranges in the build tree with
-> +	  offset ranges (per ELF section) for the module(s) they belong to.
-> +	  It also records an anchor symbol to determine the load address of the
-> +	  section.
-> +
-> +	  It is fully compatible with CONFIG_RANDOMIZE_BASE and similar late-
-> +	  address-modification options.
-> +
->  endif # MODULES
-> -- 
-> 2.42.0
-> 
+On Fri, Dec 8, 2023 at 8:14=E2=80=AFPM Tom Cook <tom.k.cook@gmail.com> wrot=
+e:
+>
+> I'm trying to build a signed .deb kernel package of
+> https://github.com/torvalds/linux/tree/v6.6.  I've copied
+> certs/default_x509.genkey to certs/x509.genkey.  The .config is the
+> one from Ubuntu 23.10's default kernel with all new options accepted
+> at their default and CONFIG_SYSTEM_TRUSTED_KEYS=3D"" and
+> CONFIG_SYSTEM_REVOCATION_KEYS=3D"".
+>
+> This builds the kernel and modules, signs the modules, compresses the
+> modules and then attempts to sign the modules again.  That fails,
+> because the .ko module files are now .ko.zst files and the file it's
+> trying to sign isn't there.  Full failure is pasted below.
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Modules are signed before the compression.
+
+
+Once you compress modules, you cannot re-sign them again unless
+you decompress modules, sign them, and compress them again.
+
+
+Now, the kernel can directly load compressed modules, so
+perhaps allowing users to sign compressed modules might
+be beneficial.
+(that is, reverse the order of singing and compression)
+
+I am not sure whether it is possible or not, though.
+
+
+I added linux-modules ML.
+
+
+
+
+
+
+
+
+
+
+>
+> Unsetting CONFIG_MODULE_COMPRESS_ZSTD is a workaround (ie disable
+> module compression).
+>
+> Is there a way to build a .deb of a signed kernel with compressed modules=
+?
+>
+> Thanks for any help,
+> Tom
+>
+>   INSTALL debian/linux-libc-dev/usr/include
+>   SIGN    debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/even=
+ts/amd/amd-uncore.ko
+>   SIGN    debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/even=
+ts/intel/intel-cstate.ko
+> At main.c:298:
+> - SSL error:FFFFFFFF80000002:system library::No such file or
+> directory: ../crypto/bio/bss_file.c:67
+> - SSL error:10000080:BIO routines::no such file: ../crypto/bio/bss_file.c=
+:75
+> sign-file: debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/eve=
+nts/amd/amd-uncore.ko
+>   SIGN    debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/even=
+ts/rapl.ko
+> At main.c:298:
+> - SSL error:FFFFFFFF80000002:system library::No such file or
+> directory: ../crypto/bio/bss_file.c:67
+> - SSL error:10000080:BIO routines::no such file: ../crypto/bio/bss_file.c=
+:75
+> sign-file: debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/eve=
+nts/intel/intel-cstate.ko
+>   SIGN    debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/kern=
+el/cpu/mce/mce-inject.ko
+> make[6]: *** [scripts/Makefile.modinst:137:
+> debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/events/amd/amd=
+-uncore.ko]
+> Error 1
+> make[6]: *** Waiting for unfinished jobs....
+> make[6]: *** [scripts/Makefile.modinst:137:
+> debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/events/intel/i=
+ntel-cstate.ko]
+> Error 1
+>   SIGN    debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/kern=
+el/msr.ko
+> At main.c:298:
+> - SSL error:FFFFFFFF80000002:system library::No such file or
+> directory: ../crypto/bio/bss_file.c:67
+> - SSL error:10000080:BIO routines::no such file: ../crypto/bio/bss_file.c=
+:75
+> sign-file: debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/eve=
+nts/rapl.ko
+> make[6]: *** [scripts/Makefile.modinst:137:
+> debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/events/rapl.ko=
+]
+> Error 1
+> At main.c:298:
+> - SSL error:FFFFFFFF80000002:system library::No such file or
+> directory: ../crypto/bio/bss_file.c:67
+> - SSL error:10000080:BIO routines::no such file: ../crypto/bio/bss_file.c=
+:75
+> sign-file: debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/ker=
+nel/cpu/mce/mce-inject.ko
+> make[6]: *** [scripts/Makefile.modinst:137:
+> debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/kernel/cpu/mce=
+/mce-inject.ko]
+> Error 1
+> At main.c:298:
+> - SSL error:FFFFFFFF80000002:system library::No such file or
+> directory: ../crypto/bio/bss_file.c:67
+> - SSL error:10000080:BIO routines::no such file: ../crypto/bio/bss_file.c=
+:75
+> sign-file: debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/ker=
+nel/msr.ko
+> make[6]: *** [scripts/Makefile.modinst:137:
+> debian/linux-image/lib/modules/6.6.0-local/kernel/arch/x86/kernel/msr.ko]
+> Error 1
+> make[5]: *** [Makefile:1821: modules_install] Error 2
+> make[4]: *** [Makefile:2036: run-command] Error 2
+> make[3]: *** [debian/rules:17: binary-arch] Error 2
+> dpkg-buildpackage: error: make -f debian/rules binary subprocess
+> returned exit status 2
+> make[2]: *** [scripts/Makefile.package:146: bindeb-pkg] Error 2
+> make[1]: *** [/home/tkcook/git/linux/v6.6/Makefile:1538: bindeb-pkg] Erro=
+r 2
+> make: *** [Makefile:234: __sub-make] Error 2
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
