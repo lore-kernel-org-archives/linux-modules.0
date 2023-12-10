@@ -1,91 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C960479D0;
-	Sat,  9 Dec 2023 19:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7094228E3;
+	Sun, 10 Dec 2023 18:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oya+JYtn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54063C433C7;
-	Sat,  9 Dec 2023 19:27:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Icrh23fS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA761C43391;
+	Sun, 10 Dec 2023 18:44:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702150028;
-	bh=7eH07NOIg7S8Oed4coNU+KjHoIA9mCHcWUGQlTJkMPE=;
+	s=k20201202; t=1702233861;
+	bh=9SODrnF5mnSkO6mjlA/PnjTFQYLuo6SeN7rFnxhsZrc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Oya+JYtn3Cq/MhxsUXeD3D7IBJkonamRcMfitlmvhGEYsmiLchPHZnlplmY53wqWv
-	 EaoovI5qxTqt1x3zoHJQQr4MIb+FFRtaX2+1XKtZNMnYOuiWrO+ejd/mfDV12UpVrI
-	 gkALHdkxTKFp5umpgnGBJrMrey2WnbuTZ0QyNv7KTwK5U7gD2840J2Iq7j22cvPFdw
-	 WjkD/boNZJV04eAD6SuT6pPGrQ5yzDNRHEkndIcxzl+4QrW+Ud8xGMCvfy1x47G9iS
-	 sBIVDYPWIsf1sqqfBE2hVnyGzWNb7gsYAgVN6wKdX6/Axhb6qKmcL9MeNcP3plK+cv
-	 3IyZj7QjEPYgg==
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6d9d21959aaso1738569a34.2;
-        Sat, 09 Dec 2023 11:27:08 -0800 (PST)
-X-Gm-Message-State: AOJu0YzIZUNiNigIqfrZdI8bD/+RoYSJuc/yAVSQVfERsNHkjEp2u90h
-	eAUbV/lcX3xqf2IAohQbBOHggRMrqbgyzcW0KpM=
-X-Google-Smtp-Source: AGHT+IH5U7uAkrOlN3vsQGa3BZk5t88Q0NfxBahA43BOSk5sfQ9Z4k/bjUIe9Pijg1scldtw7f0I++8XGNlQ8+qcjgc=
-X-Received: by 2002:a05:6870:2008:b0:1fb:2025:e5b2 with SMTP id
- o8-20020a056870200800b001fb2025e5b2mr1212829oab.103.1702150027738; Sat, 09
- Dec 2023 11:27:07 -0800 (PST)
+	b=Icrh23fSCnU25t5zjraKFxz0GFZldNjGdSgApNqZiV7tIVx2PTB436CWxUMlr0IlV
+	 gVJH7LCThW6zZZhE1f7XttM316utHvEBWXX6cUIj+xrCe36gJwyLoxGgCUzpk3M04/
+	 pGLJmkcQxXVHZtnJIZP02XoRUKPPJu5BA+0p6bog0/qLcxyuWsj2DxNNEmfN8Tb4Fh
+	 oLKVIUCEJmXlrdbJBbUqiLv7g52wiB9DNEck9W3TyWuR+c63eYgD9h2JBDjM1wu0D/
+	 lCD/4nr7b9ykOCEpS0wO9NmeyZXk+tMxKhXdyq8f16LiRQ+X/P+Zg+igEPWRLMjcsO
+	 FvVkBcO3swKvA==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1f03d9ad89fso2494364fac.1;
+        Sun, 10 Dec 2023 10:44:21 -0800 (PST)
+X-Gm-Message-State: AOJu0Yybw5QVTtM5j2ImDIbQC8ireAOEFjufxWlzrSdAqLvYVAqFgxGY
+	iIxy0Ku4pLymR258OeMCZcYbWWdbE7E0TzfgBD0=
+X-Google-Smtp-Source: AGHT+IGoxr0Vkbt2EDm1QXzSTyrftWtsLudktB5EsV7+IDJ4suxs/p20O0KYPX4vxXIcWOUv++6Xq7dVVbcRX9ZAC38=
+X-Received: by 2002:a05:6870:c1cc:b0:1fb:75a:6d2b with SMTP id
+ i12-20020a056870c1cc00b001fb075a6d2bmr4139539oad.82.1702233861235; Sun, 10
+ Dec 2023 10:44:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231126071914.932241-1-masahiroy@kernel.org> <ZW67BGhBzh4f3G3T@bombadil.infradead.org>
-In-Reply-To: <ZW67BGhBzh4f3G3T@bombadil.infradead.org>
+References: <CAK7LNAT3N82cJD3GsF+yUBEfPNOBkhzYPk37q3k0HdU7ukz9vQ@mail.gmail.com>
+ <32b332af189bfca8acdb231cee294355aa4af290.1701892062.git.msuchanek@suse.de>
+In-Reply-To: <32b332af189bfca8acdb231cee294355aa4af290.1701892062.git.msuchanek@suse.de>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 10 Dec 2023 04:26:31 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQAckvYsU_mAuGS=pDzUk=-ZmAN9K45iTLQn0wfaYkDfQ@mail.gmail.com>
-Message-ID: <CAK7LNAQAckvYsU_mAuGS=pDzUk=-ZmAN9K45iTLQn0wfaYkDfQ@mail.gmail.com>
-Subject: Re: [PATCH] init: move THIS_MODULE from <linux/export.h> to <linux/init.h>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, 
-	Paul Gortmaker <paul.gortmaker@windriver.com>, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Mon, 11 Dec 2023 03:43:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATPF7baHLXZVgzz=6zOhLx8maX0r0EU3DBFwAEZ6kCeww@mail.gmail.com>
+Message-ID: <CAK7LNATPF7baHLXZVgzz=6zOhLx8maX0r0EU3DBFwAEZ6kCeww@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] depmod: Handle installing modules under a
+ different directory
+To: Michal Suchanek <msuchanek@suse.de>
+Cc: linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>, 
+	Lucas De Marchi <lucas.de.marchi@gmail.com>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 5, 2023 at 2:54=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org>=
- wrote:
+On Thu, Dec 7, 2023 at 4:48=E2=80=AFAM Michal Suchanek <msuchanek@suse.de> =
+wrote:
 >
-> On Sun, Nov 26, 2023 at 04:19:14PM +0900, Masahiro Yamada wrote:
-> > Commit f50169324df4 ("module.h: split out the EXPORT_SYMBOL into
-> > export.h") appropriately separated EXPORT_SYMBOL into <linux/export.h>
-> > because modules and EXPORT_SYMBOL are orthogonal; modules are symbol
-> > consumers, while EXPORT_SYMBOL are used by symbol providers, which
-> > may not be necessarily a module.
-> >
-> > However, that commit also relocated THIS_MODULE. As explained in the
-> > commit description, the intention was to define THIS_MODULE in a
-> > lightweight header, but I do not believe <linux/export.h> was the
-> > suitable location because EXPORT_SYMBOL and THIS_MODULE are unrelated.
-> >
-> > Move it to another lightweight header, <linux/init.h>. The reason for
-> > choosing <linux/init.h> is to make <linux/moduleparam.h> self-contained
-> > without relying on <linux/linkage.h> incorrectly including
-> > <linux/export.h>.
-> >
-> > With this adjustment, the role of <linux/export.h> becomes clearer as
-> > it only defines EXPORT_SYMBOL.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Some distributions aim at shipping all files in /usr.
 >
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-
-
-I will fold your reviewed-by tag.
-
-Thanks.
-
-
+> The path under which kernel modules are installed is hardcoded to /lib
+> which conflicts with this goal.
 >
-> Do you want this this to go through modules-next or your tree? I'm fine
-> it goes either way.
+> When kmod provides kmod.pc, use it to determine the correct module
+> installation path.
 >
->   Luis
+> With kmod that does not provide the config /lib/modules is used as
+> before.
+>
+> While pkg-config does not return an error when a variable does not exist
+> the kmod configure script puts some effort into ensuring that
+> module_directory is non-empty. With that empty module_directory from
+> pkg-config can be used to detect absence of the variable.
+>
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> ---
+> v6:
+>  - use ?=3D instead of :=3D to make it easier to override the value
+
+
+"KERNEL_MODULE_DIRECTORY=3D/local/usr/lib/modules make modules_install"
+will override the install destination, but
+depmod will not be not aware of it.
+
+How to avoid the depmod error?
 
 
 
---=20
+
+
+
+
+
+
+
+
+
+
+
+>  - use shorter expression for determining the module directory assuming
+>    it's non-empty
+> ---
+>  Makefile | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 511b5616aa41..84f32bd563d4 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1081,7 +1081,9 @@ export INSTALL_DTBS_PATH ?=3D $(INSTALL_PATH)/dtbs/=
+$(KERNELRELEASE)
+>  # makefile but the argument can be passed to make if needed.
+>  #
+>
+> -MODLIB =3D $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)
+> +export KERNEL_MODULE_DIRECTORY ?=3D $(or $(shell pkg-config --variable=
+=3Dmodule_directory kmod 2>/dev/null),/lib/modules)
+> +
+> +MODLIB =3D $(INSTALL_MOD_PATH)$(KERNEL_MODULE_DIRECTORY)/$(KERNELRELEASE=
+)
+>  export MODLIB
+>
+>  PHONY +=3D prepare0
+> --
+> 2.42.0
+>
+>
+
+
+--
 Best Regards
 Masahiro Yamada
