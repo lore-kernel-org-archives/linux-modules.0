@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TvRCbxCS";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Y4ppXHF3";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TvRCbxCS";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Y4ppXHF3"
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2a07:de40:b251:101:10:150:64:2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135C795;
-	Tue, 12 Dec 2023 05:03:27 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="DZsd9Sgx";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qB5n7u3q";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="DZsd9Sgx";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qB5n7u3q"
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70CAA8;
+	Tue, 12 Dec 2023 05:12:22 -0800 (PST)
 Received: from kitsune.suse.cz (unknown [10.100.12.127])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 872181FD14;
-	Tue, 12 Dec 2023 13:03:25 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 038511FB45;
+	Tue, 12 Dec 2023 13:12:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1702386205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1702386741; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xVXdFzvQktyLQVIaWnR4yUGDApS7kfx3XEGvF1V5fLE=;
-	b=TvRCbxCStGI5SbuUc0ZDH03srM9Hbq7fjrvtcMNI2TC9KfAxrGfyK7p00Y/4IZPxXVdgnp
-	NPsfXheED+Ze9n+ErxShl1qRxxfOwtf+3eRUIDbjdbDyP6DNlHD0HIx2whHjY7QqQn4UF3
-	lIYLSlzvwSPl5fG0N7UgpvWD71+FQv4=
+	bh=SFfoLmv98r2NNTJcot2GCx6avTvSu3XvUhkt/4Goo/o=;
+	b=DZsd9SgxbHOr1kIQj4Ysq6IB0aUH8X96Xfv1/ho8Wr+UnS6JOqii7w0F3dm+mDIMjXT/p9
+	KFJ1J7P2MA7sKJavr30t4BgPwEed2Ek2r7fT1BY1F1ICRgElTXuV8S6jq+2CzouepLNcN3
+	rnk7h4comPmc5bF3t4gOSjqFXyaKRLU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1702386205;
+	s=susede2_ed25519; t=1702386741;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xVXdFzvQktyLQVIaWnR4yUGDApS7kfx3XEGvF1V5fLE=;
-	b=Y4ppXHF3MfijWBsq8ZAZGig+3uj7vJDPgJwfmzcav60cb1jtGypRuOUR4opT3bSuiIqZ+Y
-	PxnY89hV8RBSH7Cw==
+	bh=SFfoLmv98r2NNTJcot2GCx6avTvSu3XvUhkt/4Goo/o=;
+	b=qB5n7u3qQTlJlDN47X6cQuY0HjP+xNgyuo0UO9evecfzd9gPHG2GQxNQtuqonQU1pRsojD
+	/Ljg6MmkXMRTfsCA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1702386205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1702386741; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xVXdFzvQktyLQVIaWnR4yUGDApS7kfx3XEGvF1V5fLE=;
-	b=TvRCbxCStGI5SbuUc0ZDH03srM9Hbq7fjrvtcMNI2TC9KfAxrGfyK7p00Y/4IZPxXVdgnp
-	NPsfXheED+Ze9n+ErxShl1qRxxfOwtf+3eRUIDbjdbDyP6DNlHD0HIx2whHjY7QqQn4UF3
-	lIYLSlzvwSPl5fG0N7UgpvWD71+FQv4=
+	bh=SFfoLmv98r2NNTJcot2GCx6avTvSu3XvUhkt/4Goo/o=;
+	b=DZsd9SgxbHOr1kIQj4Ysq6IB0aUH8X96Xfv1/ho8Wr+UnS6JOqii7w0F3dm+mDIMjXT/p9
+	KFJ1J7P2MA7sKJavr30t4BgPwEed2Ek2r7fT1BY1F1ICRgElTXuV8S6jq+2CzouepLNcN3
+	rnk7h4comPmc5bF3t4gOSjqFXyaKRLU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1702386205;
+	s=susede2_ed25519; t=1702386741;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xVXdFzvQktyLQVIaWnR4yUGDApS7kfx3XEGvF1V5fLE=;
-	b=Y4ppXHF3MfijWBsq8ZAZGig+3uj7vJDPgJwfmzcav60cb1jtGypRuOUR4opT3bSuiIqZ+Y
-	PxnY89hV8RBSH7Cw==
-Date: Tue, 12 Dec 2023 14:03:24 +0100
+	bh=SFfoLmv98r2NNTJcot2GCx6avTvSu3XvUhkt/4Goo/o=;
+	b=qB5n7u3qQTlJlDN47X6cQuY0HjP+xNgyuo0UO9evecfzd9gPHG2GQxNQtuqonQU1pRsojD
+	/Ljg6MmkXMRTfsCA==
+Date: Tue, 12 Dec 2023 14:12:19 +0100
 From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
@@ -59,14 +59,13 @@ Cc: linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] depmod: Handle installing modules under a
- different directory
-Message-ID: <20231212130324.GP9696@kitsune.suse.cz>
+Subject: Re: [PATCH v6 2/2] kbuild: rpm-pkg: Fix build with non-default MODLIB
+Message-ID: <20231212131219.GQ9696@kitsune.suse.cz>
 References: <CAK7LNAT3N82cJD3GsF+yUBEfPNOBkhzYPk37q3k0HdU7ukz9vQ@mail.gmail.com>
- <32b332af189bfca8acdb231cee294355aa4af290.1701892062.git.msuchanek@suse.de>
- <CAK7LNATPF7baHLXZVgzz=6zOhLx8maX0r0EU3DBFwAEZ6kCeww@mail.gmail.com>
- <20231210210748.GM9696@kitsune.suse.cz>
- <CAK7LNAQQe-fdeKe2RHd5TyYpXa95WJO_-f38o12oewGC3rFTHA@mail.gmail.com>
+ <baa3224bece94220dfe7173432143a91f7612c09.1701892062.git.msuchanek@suse.de>
+ <CAK7LNARdnt0QXn6TRbuS_wzzMVXTY6NrCnu9WOM6PFztnyRmuQ@mail.gmail.com>
+ <20231210210859.GN9696@kitsune.suse.cz>
+ <CAK7LNAQo1p3dmdoqQRM_JxBp78Rxj5YpVqXGzMr5Xs9K-V3BiA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -76,15 +75,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAQQe-fdeKe2RHd5TyYpXa95WJO_-f38o12oewGC3rFTHA@mail.gmail.com>
+In-Reply-To: <CAK7LNAQo1p3dmdoqQRM_JxBp78Rxj5YpVqXGzMr5Xs9K-V3BiA@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Level: 
 X-Spam-Score: -1.60
-X-Spam-Level: 
-X-Spam-Flag: NO
 Authentication-Results: smtp-out2.suse.de;
 	none
-X-Spamd-Result: default: False [-1.60 / 50.00];
+X-Spam-Level: 
+X-Spam-Score: -2.80
+X-Spamd-Result: default: False [-2.80 / 50.00];
 	 ARC_NA(0.00)[];
 	 FROM_HAS_DN(0.00)[];
 	 TO_DN_SOME(0.00)[];
@@ -92,7 +91,9 @@ X-Spamd-Result: default: False [-1.60 / 50.00];
 	 TO_MATCH_ENVRCPT_ALL(0.00)[];
 	 TAGGED_RCPT(0.00)[];
 	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
 	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.20)[-0.996];
 	 RCPT_COUNT_TWELVE(0.00)[12];
 	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email];
 	 FUZZY_BLOCKED(0.00)[rspamd.com];
@@ -102,108 +103,64 @@ X-Spamd-Result: default: False [-1.60 / 50.00];
 	 FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,gmail.com,inai.de,kernel.org,google.com,fjasle.eu];
 	 BAYES_HAM(-3.00)[100.00%];
 	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Score: -1.60
+X-Spam-Flag: NO
 
-On Mon, Dec 11, 2023 at 01:29:15PM +0900, Masahiro Yamada wrote:
-> On Mon, Dec 11, 2023 at 6:07 AM Michal Suchánek <msuchanek@suse.de> wrote:
+On Mon, Dec 11, 2023 at 01:33:23PM +0900, Masahiro Yamada wrote:
+> On Mon, Dec 11, 2023 at 6:09 AM Michal Suchánek <msuchanek@suse.de> wrote:
 > >
-> > Hello!
-> >
-> > On Mon, Dec 11, 2023 at 03:43:44AM +0900, Masahiro Yamada wrote:
+> > On Mon, Dec 11, 2023 at 03:44:35AM +0900, Masahiro Yamada wrote:
 > > > On Thu, Dec 7, 2023 at 4:48 AM Michal Suchanek <msuchanek@suse.de> wrote:
 > > > >
-> > > > Some distributions aim at shipping all files in /usr.
+> > > > The default MODLIB value is composed of three variables
 > > > >
-> > > > The path under which kernel modules are installed is hardcoded to /lib
-> > > > which conflicts with this goal.
+> > > > MODLIB = $(INSTALL_MOD_PATH)$(KERNEL_MODULE_DIRECTORY)/$(KERNELRELEASE)
 > > > >
-> > > > When kmod provides kmod.pc, use it to determine the correct module
-> > > > installation path.
+> > > > However, the kernel.spec hadcodes the default value of
+> > > > $(KERNEL_MODULE_DIRECTORY), and changed value is not reflected when
+> > > > building the package.
 > > > >
-> > > > With kmod that does not provide the config /lib/modules is used as
-> > > > before.
-> > > >
-> > > > While pkg-config does not return an error when a variable does not exist
-> > > > the kmod configure script puts some effort into ensuring that
-> > > > module_directory is non-empty. With that empty module_directory from
-> > > > pkg-config can be used to detect absence of the variable.
+> > > > Pass KERNEL_MODULE_DIRECTORY to kernel.spec to fix this problem.
 > > > >
 > > > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
 > > > > ---
-> > > > v6:
-> > > >  - use ?= instead of := to make it easier to override the value
+> > > > Build on top of the previous patch adding KERNEL_MODULE_DIRECTORY
 > > >
 > > >
-> > > "KERNEL_MODULE_DIRECTORY=/local/usr/lib/modules make modules_install"
-> > > will override the install destination, but
-> > > depmod will not be not aware of it.
+> > > The SRPM package created by 'make srcrpm-pkg' may not work
+> > > if rpmbuild is executed in a different machine.
 > >
-> > At the same time if you know what you are doing you can build a src rpm
-> > for another system that uses a different location.
-> >
-> > > How to avoid the depmod error?
-> >
-> > Not override the variable?
+> > That's why there is an option to override KERNEL_MODULE_DIRECTORY?
 > 
-> You are not answering my question.
-> You intentionally changed := to ?=.
 > 
-> This implies that KERNEL_MODULE_DIRECTORY is an interface to users,
-> and should be documented in Documentation/kbuild/kbuild.rst
+> Yes.
+> But, as I pointed out in 1/2, depmod must follow the packager's decision.
+> 
+> 'make srcrpm-pkg' creates a SRPM on machine A.
+> 'rpmbuild' builds it into binary RPMs on machine B.
+> 
+> If A and B disagree about kmod.pc, depmod will fail
+> because there is no code to force the decision made
+> on machine A.
 
-That's reasonable
+There is. It's the ?= in the top Makefile.
 
-> However, it never works if it is overridden from the env variable
-> or make command line because there is no way to let depmod know
-> the fact that KERNEL_MODULE_DIRECTORY has been overridden.
+Currently the test that determines the module directory uses make logic
+so it's not possible to pass on the shell magic before executing it so
+it could be executed inside the rpm spec file as well.
 
-And there should not. kmod is not aware, kbuild is. That's the
-direction of information flow. kmod defines where it looks for the
-modules, and kbuild shoukld install the modules there.
+OUtsourcing it into an external script would mean that the sources need
+to be unpacked before the script can be executed. That would require
+using dynamically generated file list in the spec file because the
+module location would not be known at spec parse time. Possible but
+convoluted.
 
-If the user knows better (eg. possibility of building src-rpm for a
-different you brought up) they can override the autodetection.
-
-> In my understanding, depmod does not provide an option to
-> specify the module directory from a command line option, does it?
-
-No it does not.
-
-> If not, is it reasonable to add a new option to depmod?
-
-I don't think so. The module directory is intentionally in a fixed
-location. It can be set at compile time, and that's it.
-
-Then when running depmod on the target distribution either kbuild and
-kmod agree on the location or the build fails. That's the intended
-outcome.
-
-kmod recently grew the ability to use modules outside of module
-directory. For that to work internally the path to these out-of-kernel
-modules is stored as absolute path, and the path of modules that are in
-the module directory is stored relative to the module directory.
-
-Setting the module directory location dynamically still should not break
-this but I am not sure it's a great idea. In the end modprobe needs to
-find those modules, and if depmod puts the modules.dep in arbitrary
-location it will not.
-
-> depmod provides the "-b basedir" option, but it only allows
-> adding a prefix to the default "/lib/modules/<version>".
-
-Yes, that's for installation into a staging directory, and there again
-the modules that are inside the module directory are considedred
-'in-kernel'. Not sure how well this even works with 'out-of-kernel'
-modules.
-
-> (My original idea to provide the prefix_part, it would have worked
-> like  -b "${INSTALL_MOD_PATH}${MOD_PREFIX}", which you refused)
-
-It's not clear that adding a prefix covers all use cases. It is an
-arbitrary limitation that the module path must end with '/lib/modules'.
-
-It may allow taking some shortcuts in some places but is unnecessarily
-limiting.
+In the end I do not think this is a problem that needs solving. Most
+distributions that build kernel packages would use their own packaging
+files, not rpm-pkg. That limits rpm-pkg to ad-hoc use when people want
+to build one-off test kernel. It's reasonable to do on the same
+distribution as the target system. The option to do so on a distribution
+with different module directory is available if somebody really needs
+that.
 
 Thanks
 
