@@ -1,167 +1,140 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="DZsd9Sgx";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qB5n7u3q";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="DZsd9Sgx";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qB5n7u3q"
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70CAA8;
-	Tue, 12 Dec 2023 05:12:22 -0800 (PST)
-Received: from kitsune.suse.cz (unknown [10.100.12.127])
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="PIjRD6cP"
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E444BD
+	for <linux-modules@vger.kernel.org>; Tue, 12 Dec 2023 12:11:51 -0800 (PST)
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 038511FB45;
-	Tue, 12 Dec 2023 13:12:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1702386741; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SFfoLmv98r2NNTJcot2GCx6avTvSu3XvUhkt/4Goo/o=;
-	b=DZsd9SgxbHOr1kIQj4Ysq6IB0aUH8X96Xfv1/ho8Wr+UnS6JOqii7w0F3dm+mDIMjXT/p9
-	KFJ1J7P2MA7sKJavr30t4BgPwEed2Ek2r7fT1BY1F1ICRgElTXuV8S6jq+2CzouepLNcN3
-	rnk7h4comPmc5bF3t4gOSjqFXyaKRLU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1702386741;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SFfoLmv98r2NNTJcot2GCx6avTvSu3XvUhkt/4Goo/o=;
-	b=qB5n7u3qQTlJlDN47X6cQuY0HjP+xNgyuo0UO9evecfzd9gPHG2GQxNQtuqonQU1pRsojD
-	/Ljg6MmkXMRTfsCA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1702386741; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SFfoLmv98r2NNTJcot2GCx6avTvSu3XvUhkt/4Goo/o=;
-	b=DZsd9SgxbHOr1kIQj4Ysq6IB0aUH8X96Xfv1/ho8Wr+UnS6JOqii7w0F3dm+mDIMjXT/p9
-	KFJ1J7P2MA7sKJavr30t4BgPwEed2Ek2r7fT1BY1F1ICRgElTXuV8S6jq+2CzouepLNcN3
-	rnk7h4comPmc5bF3t4gOSjqFXyaKRLU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1702386741;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SFfoLmv98r2NNTJcot2GCx6avTvSu3XvUhkt/4Goo/o=;
-	b=qB5n7u3qQTlJlDN47X6cQuY0HjP+xNgyuo0UO9evecfzd9gPHG2GQxNQtuqonQU1pRsojD
-	/Ljg6MmkXMRTfsCA==
-Date: Tue, 12 Dec 2023 14:12:19 +0100
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-	Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] kbuild: rpm-pkg: Fix build with non-default MODLIB
-Message-ID: <20231212131219.GQ9696@kitsune.suse.cz>
-References: <CAK7LNAT3N82cJD3GsF+yUBEfPNOBkhzYPk37q3k0HdU7ukz9vQ@mail.gmail.com>
- <baa3224bece94220dfe7173432143a91f7612c09.1701892062.git.msuchanek@suse.de>
- <CAK7LNARdnt0QXn6TRbuS_wzzMVXTY6NrCnu9WOM6PFztnyRmuQ@mail.gmail.com>
- <20231210210859.GN9696@kitsune.suse.cz>
- <CAK7LNAQo1p3dmdoqQRM_JxBp78Rxj5YpVqXGzMr5Xs9K-V3BiA@mail.gmail.com>
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DE2EE3F182
+	for <linux-modules@vger.kernel.org>; Tue, 12 Dec 2023 20:11:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1702411909;
+	bh=XCa0E1lAm2n9GmItdGOx9YyxXLG2EmQaxBESWwE/rt4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=PIjRD6cPzJqG9dCLUkbVzwpBiiDhsBITKlU+fD6O6dCroqVhYbdTI/Zr/3h452TaI
+	 BbYJLSXe4XHieAJALvkmJJ2Ot8lLWjpG5mGm/bP9/qHO8HzV7yJ00wwR5n4nBBGbdH
+	 /Q/or/NfPMzApL6M+AiD+pKPZY4rh62mn9EGy/3zjCLmcVkky6zihUOJLg6KKzeCR2
+	 g3ZXuLMA8SHQQxU50QTNwT+Qm3gEL5dCqq6e+5M6LvxSCrB6SNWMrRCCZglKqjZO/U
+	 FSouP/smBCCdoTJywzvC4vK/eVwV7D0nAs8ArI+hflhXEDu7oJPm+O5IZZgebyFx28
+	 wslZXQrL0fVkw==
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-33349915da3so5114301f8f.0
+        for <linux-modules@vger.kernel.org>; Tue, 12 Dec 2023 12:11:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702411909; x=1703016709;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XCa0E1lAm2n9GmItdGOx9YyxXLG2EmQaxBESWwE/rt4=;
+        b=Ro31Q7xbH4vBO8y0JQuxTwWT4N+XtkD3fWir/Jdw2x9CP5d6sJb/1PhB6rwHpZT1qG
+         zSIg+xWOU+Gh6DOI+lzQVaBzXYMkHOPRhnAMksZTnfVPW1LrfGv0atrZhZp0SThy33EF
+         DKCqgeRfidtKFCLOuPbrVmpLheQgAMuNcTGZ74dhDA/PnC/865R6byPr12VWZD+c7VNa
+         MeftbtSCy3DdDtKTd9pag93iOWBuoLNZu84O0/QXIKlfccmWdh2DhJGG0W66drkmq+jh
+         t3GKvZPnRIf+ijO1Xj3FIq39CqB/smHaPo05DGkNQ0VwlVXF/mKg/ZdFtMKLTPPfECU5
+         O5/Q==
+X-Gm-Message-State: AOJu0YzlHF6V4pYgpcc4R+TXloXNvtcKhBob43OXn0fJAFHAqDyqu0Yq
+	ha3WQxQdqi8OmvLWCJfT1J9J3RsVCLUN4S2NsFcWTs/IF3IDBEwbuQz1lo+2lol3Me1x90kFV12
+	gQdPAdYdT1i4RH5fi1c24+wCqHFnZ7zvAzRUzcD2OB4IOM2hnzGLEsi8S4OA=
+X-Received: by 2002:adf:a187:0:b0:333:5eea:9217 with SMTP id u7-20020adfa187000000b003335eea9217mr2212526wru.15.1702411909528;
+        Tue, 12 Dec 2023 12:11:49 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGhmKIpLxUdgrrQ7WvAqj9XuAH88VskEZ2vXPeTEaBOCGCHJeypSS9MRtj/seSY7yK88LhhXhmDW9DzgkLYMMQ=
+X-Received: by 2002:adf:a187:0:b0:333:5eea:9217 with SMTP id
+ u7-20020adfa187000000b003335eea9217mr2212524wru.15.1702411909255; Tue, 12 Dec
+ 2023 12:11:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAQo1p3dmdoqQRM_JxBp78Rxj5YpVqXGzMr5Xs9K-V3BiA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Level: 
-X-Spam-Score: -1.60
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spam-Level: 
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	 ARC_NA(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 NEURAL_HAM_SHORT(-0.20)[-0.996];
-	 RCPT_COUNT_TWELVE(0.00)[12];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 RCVD_COUNT_ZERO(0.00)[0];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,gmail.com,inai.de,kernel.org,google.com,fjasle.eu];
-	 BAYES_HAM(-3.00)[100.00%];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Flag: NO
+References: <20231022180928.180437-1-dimitri.ledkov@canonical.com> <ltdfl4l32ht2oimlppyml22q7dst35i6m4foklamapoykkl3ql@u7qmh2aa4abh>
+In-Reply-To: <ltdfl4l32ht2oimlppyml22q7dst35i6m4foklamapoykkl3ql@u7qmh2aa4abh>
+From: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+Date: Tue, 12 Dec 2023 20:11:13 +0000
+Message-ID: <CADWks+b+wVxjE4XL750V9qFWN7PPn0pE_1-sex-ZSHYdcUQJ2Q@mail.gmail.com>
+Subject: Re: [PATCH] kmod: Add FIPS 202 SHA-3 support
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Dec 11, 2023 at 01:33:23PM +0900, Masahiro Yamada wrote:
-> On Mon, Dec 11, 2023 at 6:09 AM Michal Suchánek <msuchanek@suse.de> wrote:
+On Wed, 6 Dec 2023 at 15:26, Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+>
+> On Sun, Oct 22, 2023 at 07:09:28PM +0100, Dimitri John Ledkov wrote:
+> >Add support for parsing FIPS 202 SHA-3 signature hashes. Separately,
+> >it is not clear why explicit hashes are re-encoded here, instead of
+> >trying to generically show any digest openssl supports.
 > >
-> > On Mon, Dec 11, 2023 at 03:44:35AM +0900, Masahiro Yamada wrote:
-> > > On Thu, Dec 7, 2023 at 4:48 AM Michal Suchanek <msuchanek@suse.de> wrote:
-> > > >
-> > > > The default MODLIB value is composed of three variables
-> > > >
-> > > > MODLIB = $(INSTALL_MOD_PATH)$(KERNEL_MODULE_DIRECTORY)/$(KERNELRELEASE)
-> > > >
-> > > > However, the kernel.spec hadcodes the default value of
-> > > > $(KERNEL_MODULE_DIRECTORY), and changed value is not reflected when
-> > > > building the package.
-> > > >
-> > > > Pass KERNEL_MODULE_DIRECTORY to kernel.spec to fix this problem.
-> > > >
-> > > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> > > > ---
-> > > > Build on top of the previous patch adding KERNEL_MODULE_DIRECTORY
-> > >
-> > >
-> > > The SRPM package created by 'make srcrpm-pkg' may not work
-> > > if rpmbuild is executed in a different machine.
+> >Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+
+NACK
+
+> >---
+> > libkmod/libkmod-signature.c | 12 ++++++++++++
+> > 1 file changed, 12 insertions(+)
 > >
-> > That's why there is an option to override KERNEL_MODULE_DIRECTORY?
-> 
-> 
-> Yes.
-> But, as I pointed out in 1/2, depmod must follow the packager's decision.
-> 
-> 'make srcrpm-pkg' creates a SRPM on machine A.
-> 'rpmbuild' builds it into binary RPMs on machine B.
-> 
-> If A and B disagree about kmod.pc, depmod will fail
-> because there is no code to force the decision made
-> on machine A.
+> >diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
+> >index b749a818f9..a39059cd7c 100644
+> >--- a/libkmod/libkmod-signature.c
+> >+++ b/libkmod/libkmod-signature.c
+> >@@ -57,6 +57,9 @@ enum pkey_hash_algo {
+> >       PKEY_HASH_SHA512,
+> >       PKEY_HASH_SHA224,
+> >       PKEY_HASH_SM3,
+> >+      PKEY_HASH_SHA3_256,
+> >+      PKEY_HASH_SHA3_384,
+> >+      PKEY_HASH_SHA3_512,
+> >       PKEY_HASH__LAST
+> > };
+> >
+> >@@ -70,6 +73,9 @@ const char *const pkey_hash_algo[PKEY_HASH__LAST] = {
+> >       [PKEY_HASH_SHA512]      = "sha512",
+> >       [PKEY_HASH_SHA224]      = "sha224",
+> >       [PKEY_HASH_SM3]         = "sm3",
+> >+      [PKEY_HASH_SHA3_256]    = "sha3-256",
+> >+      [PKEY_HASH_SHA3_384]    = "sha3-384",
+> >+      [PKEY_HASH_SHA3_512]    = "sha3-512",
+> > };
+> >
+> > enum pkey_id_type {
+> >@@ -167,6 +173,12 @@ static int obj_to_hash_algo(const ASN1_OBJECT *o)
+> >       case NID_sm3:
+> >               return PKEY_HASH_SM3;
+> > # endif
+> >+      case NID_sha3_256:
+> >+              return PKEY_HASH_SHA3_256;
+> >+      case NID_sha3_384:
+> >+              return PKEY_HASH_SHA3_384;
+> >+      case NID_sha3_512:
+> >+              return PKEY_HASH_SHA3_512;
+>
+>
+> with your other patch, libkmod: remove pkcs7 obj_to_hash_algo(), this
+> hunk is not needed anymore. Do you want to send a new version of this
+> patch?
 
-There is. It's the ?= in the top Makefile.
+This patch is no longer required, given that
+https://lore.kernel.org/all/20231029010319.157390-1-dimitri.ledkov@canonical.com/
+is applied. Upgrade kmod to the one that has at least that patch
+applied, and then pkcs7 signatures are parsed correctly with
+everything that a runtime OpenSSL supports. Thus if you want to see
+SHA3 signatures, ensure your runtime libssl has SHA3 support.
 
-Currently the test that determines the module directory uses make logic
-so it's not possible to pass on the shell magic before executing it so
-it could be executed inside the rpm spec file as well.
+>
+> thanks
+> Lucas De Marchi
+>
+> >       default:
+> >               return -1;
+> >       }
+> >--
+> >2.34.1
+> >
+> >
 
-OUtsourcing it into an external script would mean that the sources need
-to be unpacked before the script can be executed. That would require
-using dynamically generated file list in the spec file because the
-module location would not be known at spec parse time. Possible but
-convoluted.
+-- 
+Dimitri
 
-In the end I do not think this is a problem that needs solving. Most
-distributions that build kernel packages would use their own packaging
-files, not rpm-pkg. That limits rpm-pkg to ad-hoc use when people want
-to build one-off test kernel. It's reasonable to do on the same
-distribution as the target system. The option to do so on a distribution
-with different module directory is available if somebody really needs
-that.
-
-Thanks
-
-Michal
+Sent from Ubuntu Pro
+https://ubuntu.com/pro
