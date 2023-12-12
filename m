@@ -1,117 +1,210 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5115168CF
-	for <linux-modules@vger.kernel.org>; Mon, 11 Dec 2023 18:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yqc8n9Ex"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A5E8C433C8;
-	Mon, 11 Dec 2023 18:16:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702318568;
-	bh=b4SzHYBlBfVYzMKlFytXfg+W32rsjAYh1uFD+VjgDRU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Yqc8n9Exs1us3nbS3F0tNgNMwas7NPcdrqVA4j/66qtrnMWkbUmWFnpdxutMugJw5
-	 Q9JMnvciuMeCJC2VDChDCpIw6zaCTJkEwupG2120YfC2x5gpArp47pUbfx1ZCKjkEX
-	 ei9iUKqVqMawnxxZCAc/Xs3U0l5e0WJLkmZieQ+m1wzSv1bjjse0JWbgGqSE9uPgnm
-	 NK2rj/B00S9RKyVMAnabx9X5SXji3slesIuRW8SXCJjhwVBv6v2mQRk9Nw6UFCyRs7
-	 zxEyG9aYgaFm2zeNVh6g72UTARawd1yJWvo0E0U+X3P3KebBZMTPX3rxgqdbSRWflX
-	 5u4sQrTJumoSw==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1feeea75fbfso3075125fac.3;
-        Mon, 11 Dec 2023 10:16:08 -0800 (PST)
-X-Gm-Message-State: AOJu0Yxrpt7uS4TfkRZH35Gm9v7LyQR255HkcPaalRhd0ybNhFtEtVEZ
-	ibetQCRLvTpsAoM4V3R6DVOPTPEKaQAhv+sfqF8=
-X-Google-Smtp-Source: AGHT+IGrB4LVwOfjwDcEsmCTjO6kZJRWvY77iRWupbzMoVZJH5NslGRTomF3l/+HCr9pN4GLQSUNVrY7qtnVzxOB62o=
-X-Received: by 2002:a05:6870:1699:b0:1fb:75a:c426 with SMTP id
- j25-20020a056870169900b001fb075ac426mr4249250oae.79.1702318567772; Mon, 11
- Dec 2023 10:16:07 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TvRCbxCS";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Y4ppXHF3";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TvRCbxCS";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Y4ppXHF3"
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2a07:de40:b251:101:10:150:64:2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135C795;
+	Tue, 12 Dec 2023 05:03:27 -0800 (PST)
+Received: from kitsune.suse.cz (unknown [10.100.12.127])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 872181FD14;
+	Tue, 12 Dec 2023 13:03:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1702386205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xVXdFzvQktyLQVIaWnR4yUGDApS7kfx3XEGvF1V5fLE=;
+	b=TvRCbxCStGI5SbuUc0ZDH03srM9Hbq7fjrvtcMNI2TC9KfAxrGfyK7p00Y/4IZPxXVdgnp
+	NPsfXheED+Ze9n+ErxShl1qRxxfOwtf+3eRUIDbjdbDyP6DNlHD0HIx2whHjY7QqQn4UF3
+	lIYLSlzvwSPl5fG0N7UgpvWD71+FQv4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1702386205;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xVXdFzvQktyLQVIaWnR4yUGDApS7kfx3XEGvF1V5fLE=;
+	b=Y4ppXHF3MfijWBsq8ZAZGig+3uj7vJDPgJwfmzcav60cb1jtGypRuOUR4opT3bSuiIqZ+Y
+	PxnY89hV8RBSH7Cw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1702386205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xVXdFzvQktyLQVIaWnR4yUGDApS7kfx3XEGvF1V5fLE=;
+	b=TvRCbxCStGI5SbuUc0ZDH03srM9Hbq7fjrvtcMNI2TC9KfAxrGfyK7p00Y/4IZPxXVdgnp
+	NPsfXheED+Ze9n+ErxShl1qRxxfOwtf+3eRUIDbjdbDyP6DNlHD0HIx2whHjY7QqQn4UF3
+	lIYLSlzvwSPl5fG0N7UgpvWD71+FQv4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1702386205;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xVXdFzvQktyLQVIaWnR4yUGDApS7kfx3XEGvF1V5fLE=;
+	b=Y4ppXHF3MfijWBsq8ZAZGig+3uj7vJDPgJwfmzcav60cb1jtGypRuOUR4opT3bSuiIqZ+Y
+	PxnY89hV8RBSH7Cw==
+Date: Tue, 12 Dec 2023 14:03:24 +0100
+From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+	Lucas De Marchi <lucas.de.marchi@gmail.com>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] depmod: Handle installing modules under a
+ different directory
+Message-ID: <20231212130324.GP9696@kitsune.suse.cz>
+References: <CAK7LNAT3N82cJD3GsF+yUBEfPNOBkhzYPk37q3k0HdU7ukz9vQ@mail.gmail.com>
+ <32b332af189bfca8acdb231cee294355aa4af290.1701892062.git.msuchanek@suse.de>
+ <CAK7LNATPF7baHLXZVgzz=6zOhLx8maX0r0EU3DBFwAEZ6kCeww@mail.gmail.com>
+ <20231210210748.GM9696@kitsune.suse.cz>
+ <CAK7LNAQQe-fdeKe2RHd5TyYpXa95WJO_-f38o12oewGC3rFTHA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAFSh4UwYYAOb0YpC=WAL6SD+8jTLuSkhgrgjh8JmogUb10V=zw@mail.gmail.com>
- <CAK7LNASE6H2GoXzJ1PXWEqsemQ3ny1K34vOxN0uVn1fh7Mmt5A@mail.gmail.com> <CAFSh4UwkXyTnECgJBQA4uBqD0QOFiUBvj=aOy7qzXZqAZKYkcQ@mail.gmail.com>
-In-Reply-To: <CAFSh4UwkXyTnECgJBQA4uBqD0QOFiUBvj=aOy7qzXZqAZKYkcQ@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 12 Dec 2023 03:15:31 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQE0vuAEqq+S_9bQ6h12TmyUDut238Q0LmeodfZZxWR+Q@mail.gmail.com>
-Message-ID: <CAK7LNAQE0vuAEqq+S_9bQ6h12TmyUDut238Q0LmeodfZZxWR+Q@mail.gmail.com>
-Subject: Re: Building signed debs
-To: Tom Cook <tom.k.cook@gmail.com>
-Cc: linux-modules <linux-modules@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNAQQe-fdeKe2RHd5TyYpXa95WJO_-f38o12oewGC3rFTHA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Level: 
+X-Spam-Score: -1.60
+X-Spam-Level: 
+X-Spam-Flag: NO
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spamd-Result: default: False [-1.60 / 50.00];
+	 ARC_NA(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 RCPT_COUNT_TWELVE(0.00)[12];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 RCVD_COUNT_ZERO(0.00)[0];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,gmail.com,inai.de,kernel.org,google.com,fjasle.eu];
+	 BAYES_HAM(-3.00)[100.00%];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Score: -1.60
 
-On Mon, Dec 11, 2023 at 7:19=E2=80=AFPM Tom Cook <tom.k.cook@gmail.com> wro=
-te:
->
-> On Sat, Dec 9, 2023 at 6:18=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.=
-org> wrote:
-> > On Fri, Dec 8, 2023 at 8:14=E2=80=AFPM Tom Cook <tom.k.cook@gmail.com> =
-wrote:
+On Mon, Dec 11, 2023 at 01:29:15PM +0900, Masahiro Yamada wrote:
+> On Mon, Dec 11, 2023 at 6:07 AM Michal Suchánek <msuchanek@suse.de> wrote:
+> >
+> > Hello!
+> >
+> > On Mon, Dec 11, 2023 at 03:43:44AM +0900, Masahiro Yamada wrote:
+> > > On Thu, Dec 7, 2023 at 4:48 AM Michal Suchanek <msuchanek@suse.de> wrote:
+> > > >
+> > > > Some distributions aim at shipping all files in /usr.
+> > > >
+> > > > The path under which kernel modules are installed is hardcoded to /lib
+> > > > which conflicts with this goal.
+> > > >
+> > > > When kmod provides kmod.pc, use it to determine the correct module
+> > > > installation path.
+> > > >
+> > > > With kmod that does not provide the config /lib/modules is used as
+> > > > before.
+> > > >
+> > > > While pkg-config does not return an error when a variable does not exist
+> > > > the kmod configure script puts some effort into ensuring that
+> > > > module_directory is non-empty. With that empty module_directory from
+> > > > pkg-config can be used to detect absence of the variable.
+> > > >
+> > > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > > > ---
+> > > > v6:
+> > > >  - use ?= instead of := to make it easier to override the value
 > > >
-> > > I'm trying to build a signed .deb kernel package of
-> > > https://github.com/torvalds/linux/tree/v6.6.  I've copied
-> > > certs/default_x509.genkey to certs/x509.genkey.  The .config is the
-> > > one from Ubuntu 23.10's default kernel with all new options accepted
-> > > at their default and CONFIG_SYSTEM_TRUSTED_KEYS=3D"" and
-> > > CONFIG_SYSTEM_REVOCATION_KEYS=3D"".
 > > >
-> > > This builds the kernel and modules, signs the modules, compresses the
-> > > modules and then attempts to sign the modules again.  That fails,
-> > > because the .ko module files are now .ko.zst files and the file it's
-> > > trying to sign isn't there.  Full failure is pasted below.
+> > > "KERNEL_MODULE_DIRECTORY=/local/usr/lib/modules make modules_install"
+> > > will override the install destination, but
+> > > depmod will not be not aware of it.
 > >
+> > At the same time if you know what you are doing you can build a src rpm
+> > for another system that uses a different location.
 > >
+> > > How to avoid the depmod error?
 > >
-> > Modules are signed before the compression.
->
-> Reading back through my earlier email, I wasn't clear that when I said "T=
-his
-> builds the kernel..." I meant "`make deb-pkg` builds the kernel".  I'm no=
-t
-> doing anything outlandish here, I think, just expecting the build system =
-to
-> work.
->
-> Regards,
-> Tom
+> > Not override the variable?
+> 
+> You are not answering my question.
+> You intentionally changed := to ?=.
+> 
+> This implies that KERNEL_MODULE_DIRECTORY is an interface to users,
+> and should be documented in Documentation/kbuild/kbuild.rst
 
+That's reasonable
 
-OK, I understood.
+> However, it never works if it is overridden from the env variable
+> or make command line because there is no way to let depmod know
+> the fact that KERNEL_MODULE_DIRECTORY has been overridden.
 
+And there should not. kmod is not aware, kbuild is. That's the
+direction of information flow. kmod defines where it looks for the
+modules, and kbuild shoukld install the modules there.
 
+If the user knows better (eg. possibility of building src-rpm for a
+different you brought up) they can override the autodetection.
 
-The error is caused by the following lines
-in scripts/package/builddeb:
+> In my understanding, depmod does not provide an option to
+> specify the module directory from a command line option, does it?
 
+No it does not.
 
-# re-sign stripped modules
-if is_enabled CONFIG_MODULE_SIG_ALL; then
-        ${MAKE} -f ${srctree}/Makefile
-INSTALL_MOD_PATH=3D"${image_pdir}" modules_sign
-fi
+> If not, is it reasonable to add a new option to depmod?
 
+I don't think so. The module directory is intentionally in a fixed
+location. It can be set at compile time, and that's it.
 
+Then when running depmod on the target distribution either kbuild and
+kmod agree on the location or the build fails. That's the intended
+outcome.
 
-The error happens when all of the following three
-are enabled.
+kmod recently grew the ability to use modules outside of module
+directory. For that to work internally the path to these out-of-kernel
+modules is stored as absolute path, and the path of modules that are in
+the module directory is stored relative to the module directory.
 
- - CONFIG_DEBUG_INFO
- - CONFIG_MODULE_SIG_ALL
- - CONFIG_MODULE_COMPRESS_*
+Setting the module directory location dynamically still should not break
+this but I am not sure it's a great idea. In the end modprobe needs to
+find those modules, and if depmod puts the modules.dep in arbitrary
+location it will not.
 
+> depmod provides the "-b basedir" option, but it only allows
+> adding a prefix to the default "/lib/modules/<version>".
 
-If you disable one of them, you can do deb-pkg.
+Yes, that's for installation into a staging directory, and there again
+the modules that are inside the module directory are considedred
+'in-kernel'. Not sure how well this even works with 'out-of-kernel'
+modules.
 
+> (My original idea to provide the prefix_part, it would have worked
+> like  -b "${INSTALL_MOD_PATH}${MOD_PREFIX}", which you refused)
 
+It's not clear that adding a prefix covers all use cases. It is an
+arbitrary limitation that the module path must end with '/lib/modules'.
 
+It may allow taking some shortcuts in some places but is unnecessarily
+limiting.
 
+Thanks
 
-
-
---=20
-Best Regards
-Masahiro Yamada
+Michal
