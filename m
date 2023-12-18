@@ -1,170 +1,216 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C312498A1;
+	Mon, 18 Dec 2023 14:06:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HdSYZ+Rl"
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E1AB0
-	for <linux-modules@vger.kernel.org>; Wed, 13 Dec 2023 11:35:08 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1d35dc7e1bbso5743735ad.1
-        for <linux-modules@vger.kernel.org>; Wed, 13 Dec 2023 11:35:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1702496107; x=1703100907; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ttEJmwOfFPg4dyyo48XQBXEPlFS3JK9/Eb3g52bvV2c=;
-        b=HdSYZ+Rlt1kWmT46bbXaflDm+/1pwDeZwYtfIqLV/dUewHeJQ5Qnb1SQRrNht+qSnd
-         EMRlVkPRcdn5WZ+mPwRYrWdUwpmz7SrILISMDEFW9X5F8rmK0z3voMNUNsxR17asaa5a
-         wTat7gA4fb4PzsekaRA7cXM4pBT/UZp3kL5Ys=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702496107; x=1703100907;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ttEJmwOfFPg4dyyo48XQBXEPlFS3JK9/Eb3g52bvV2c=;
-        b=qgG/Wd2RHqhZ4MNFAlttQFbukURvIqqALivKC99Qgxaz9Wb9v0Og1bSejGVtqFYCEd
-         F4Ltz8hPsTPubFNx/nREE1gu08HPu/L7RY2iZaAgDATPtPFoZwyzXAQJrL2aqXI+1DdI
-         UBCJtJUibl8T6/QpLqVNK7nmsNsbQFumykiFm0ii19pw8D2JBPY6gPP8AXVwXOHxHAwu
-         9IIR/bc2cFOe/w3PifWCXZpsI2fUwAX1111GfKgIjJSIG98eQsTihhnFsnSsI06uQM2r
-         H97bVzzGc6GSTIhfcY4T099e2VHAPTI151+cjPqNeZZV3WQK8ylhKH4EAlhGD3KAUnRY
-         yW9A==
-X-Gm-Message-State: AOJu0YwOG5J86pq8EzkLTTo9AE34GYz+j4mlT9DRDyEM3LWkKUZbVjYt
-	cDXEQvLieUxnTOrNcu7de7HelQ==
-X-Google-Smtp-Source: AGHT+IF4/fKIdL6ujzk6XlIo1i2yhsQEzRVErQDBQru9JHnbSf6YHVNRS6vt2G7Eru9MYelslDEWdQ==
-X-Received: by 2002:a17:902:7e84:b0:1d3:141:cb06 with SMTP id z4-20020a1709027e8400b001d30141cb06mr6392448pla.113.1702496107474;
-        Wed, 13 Dec 2023 11:35:07 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q20-20020a656854000000b005b7dd356f75sm8909940pgt.32.2023.12.13.11.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Dec 2023 11:35:06 -0800 (PST)
-Date: Wed, 13 Dec 2023 11:35:06 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Wang <wanglikun@lixiang.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Aaron Tomlin <atomlin@redhat.com>,
-	Alexander Potapenko <glider@google.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
-	Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
-	Brian Gerst <brgerst@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Changbin Du <changbin.du@intel.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Frederic Weisbecker <frederic@kernel.org>, gcc-patches@gcc.gnu.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	Jiri Olsa <jolsa@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Juergen Gross <jgross@suse.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Marco Elver <elver@google.com>, Mark Brown <broonie@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Roth <michael.roth@amd.com>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Miguel Ojeda <ojeda@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Richard Sandiford <richard.sandiford@arm.com>,
-	Song Liu <song@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Tom Rix <trix@redhat.com>, Uros Bizjak <ubizjak@gmail.com>,
-	Will Deacon <will@kernel.org>, x86@kernel.org,
-	Yuntao Wang <ytcoode@gmail.com>, Yu Zhao <yuzhao@google.com>,
-	Zhen Lei <thunder.leizhen@huawei.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, Dan Li <ashimida.1990@gmail.com>
-Subject: Re: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
-Message-ID: <202312131132.639E8802B@keescook>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <20230325085416.95191-1-ashimida.1990@gmail.com>
- <20230327093016.GB4253@hirez.programming.kicks-ass.net>
- <CABCJKueH6ohH27xCPz9a_ndRR26Na_mo=MGF3eqjwV2=gJy+wQ@mail.gmail.com>
- <CAE+Z0PFZaa2bwtfY5P7ZDYH4JjMxKpJgqz0m+KJ_ks4dctzAKA@mail.gmail.com>
- <4a84af95-6270-6764-6a40-875ec20fc3e1@lixiang.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gnDmNFj2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2874C433CD;
+	Mon, 18 Dec 2023 14:06:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702908373;
+	bh=Z96PU5W2ggJEyQ3xd3FBWcAN+FmQAsXzZYJ/t2N1glI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gnDmNFj2cEVVi/t2swX4NmCVibFEic32MKl+v3vqDnPza2McdbbYvmTNjKPlq/tE8
+	 BRWhX0XU47n+oikJ4Z9JBfurdpkZUbVrq2xMo3GgZzAJEdV2MJ6I0IrYsfCbEZnBrt
+	 y7gTYSZc+4mW3IMN/TGvNfhlI1pW6sJ1KzPQ5K/H8BabE57HKIM6SWkiCpgXAS9+ok
+	 9Kzbq5PCE7LJJbt40U+TtHfxD/bDGUK/IpMM4j1ZfZ4KQ5EtguYwkvMJzYB8nGf0OI
+	 8VK2uA6VyLaqRGsHk9LzyVqmhTpUCWA0yeiDFF+tlFqLzEWt8JDA3YgoRI90BqZVbo
+	 XvA1hlBbMeN7Q==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1ef36a04931so2154500fac.2;
+        Mon, 18 Dec 2023 06:06:13 -0800 (PST)
+X-Gm-Message-State: AOJu0YybYixrtnI72j1CXhCvvC19iR7kLz8WKmEYHQUfKa27MFW/lCf7
+	zs2TYfni8UVE7MoCz/IFl/7wVs8XLUmRvZIrgBw=
+X-Google-Smtp-Source: AGHT+IFMPHHb099Ixeiferh3tHKcPmuSiilVOZQIKs6jzVfIl6knPb8Y3JK7zb9GPxBgjjSEBzLR4AG4KSl/u9yLYR4=
+X-Received: by 2002:a05:6870:4597:b0:1fb:75a:c42e with SMTP id
+ y23-20020a056870459700b001fb075ac42emr15603576oao.87.1702908373023; Mon, 18
+ Dec 2023 06:06:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4a84af95-6270-6764-6a40-875ec20fc3e1@lixiang.com>
+References: <CAK7LNAT3N82cJD3GsF+yUBEfPNOBkhzYPk37q3k0HdU7ukz9vQ@mail.gmail.com>
+ <32b332af189bfca8acdb231cee294355aa4af290.1701892062.git.msuchanek@suse.de>
+ <CAK7LNATPF7baHLXZVgzz=6zOhLx8maX0r0EU3DBFwAEZ6kCeww@mail.gmail.com>
+ <20231210210748.GM9696@kitsune.suse.cz> <CAK7LNAQQe-fdeKe2RHd5TyYpXa95WJO_-f38o12oewGC3rFTHA@mail.gmail.com>
+ <20231212130324.GP9696@kitsune.suse.cz>
+In-Reply-To: <20231212130324.GP9696@kitsune.suse.cz>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 18 Dec 2023 23:05:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS8t5avO8u_3dF9Mb_W-R2AOt2ofHo-7om9eUnraogrkg@mail.gmail.com>
+Message-ID: <CAK7LNAS8t5avO8u_3dF9Mb_W-R2AOt2ofHo-7om9eUnraogrkg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] depmod: Handle installing modules under a
+ different directory
+To: =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
+Cc: linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>, 
+	Lucas De Marchi <lucas.de.marchi@gmail.com>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 13, 2023 at 05:01:07PM +0800, Wang wrote:
-> On 2023/12/13 16:48, Dan Li wrote:
-> > + Likun
+On Tue, Dec 12, 2023 at 10:03=E2=80=AFPM Michal Such=C3=A1nek <msuchanek@su=
+se.de> wrote:
+>
+> On Mon, Dec 11, 2023 at 01:29:15PM +0900, Masahiro Yamada wrote:
+> > On Mon, Dec 11, 2023 at 6:07=E2=80=AFAM Michal Such=C3=A1nek <msuchanek=
+@suse.de> wrote:
+> > >
+> > > Hello!
+> > >
+> > > On Mon, Dec 11, 2023 at 03:43:44AM +0900, Masahiro Yamada wrote:
+> > > > On Thu, Dec 7, 2023 at 4:48=E2=80=AFAM Michal Suchanek <msuchanek@s=
+use.de> wrote:
+> > > > >
+> > > > > Some distributions aim at shipping all files in /usr.
+> > > > >
+> > > > > The path under which kernel modules are installed is hardcoded to=
+ /lib
+> > > > > which conflicts with this goal.
+> > > > >
+> > > > > When kmod provides kmod.pc, use it to determine the correct modul=
+e
+> > > > > installation path.
+> > > > >
+> > > > > With kmod that does not provide the config /lib/modules is used a=
+s
+> > > > > before.
+> > > > >
+> > > > > While pkg-config does not return an error when a variable does no=
+t exist
+> > > > > the kmod configure script puts some effort into ensuring that
+> > > > > module_directory is non-empty. With that empty module_directory f=
+rom
+> > > > > pkg-config can be used to detect absence of the variable.
+> > > > >
+> > > > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > > > > ---
+> > > > > v6:
+> > > > >  - use ?=3D instead of :=3D to make it easier to override the val=
+ue
+> > > >
+> > > >
+> > > > "KERNEL_MODULE_DIRECTORY=3D/local/usr/lib/modules make modules_inst=
+all"
+> > > > will override the install destination, but
+> > > > depmod will not be not aware of it.
+> > >
+> > > At the same time if you know what you are doing you can build a src r=
+pm
+> > > for another system that uses a different location.
+> > >
+> > > > How to avoid the depmod error?
+> > >
+> > > Not override the variable?
 > >
-> > On Tue, 28 Mar 2023 at 06:18, Sami Tolvanen <samitolvanen@google.com> wrote:
-> >> On Mon, Mar 27, 2023 at 2:30 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >>> On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
-> >>>
-> >>>> In the compiler part[4], most of the content is the same as Sami's
-> >>>> implementation[3], except for some minor differences, mainly including:
-> >>>>
-> >>>> 1. The function typeid is calculated differently and it is difficult
-> >>>> to be consistent.
-> >>> This means there is an effective ABI break between the compilers, which
-> >>> is sad :-( Is there really nothing to be done about this?
-> >> I agree, this would be unfortunate, and would also be a compatibility
-> >> issue with rustc where there's ongoing work to support
-> >> clang-compatible CFI type hashes:
-> >>
-> >> https://github.com/rust-lang/rust/pull/105452
-> >>
-> >> Sami
-> 
-> 
-> Hi Peter and Sami
-> 
-> I am Dan Li's colleague, and I will take over and continue the work of CFI.
+> > You are not answering my question.
+> > You intentionally changed :=3D to ?=3D.
+> >
+> > This implies that KERNEL_MODULE_DIRECTORY is an interface to users,
+> > and should be documented in Documentation/kbuild/kbuild.rst
+>
+> That's reasonable
+>
+> > However, it never works if it is overridden from the env variable
+> > or make command line because there is no way to let depmod know
+> > the fact that KERNEL_MODULE_DIRECTORY has been overridden.
+>
+> And there should not. kmod is not aware, kbuild is. That's the
+> direction of information flow. kmod defines where it looks for the
+> modules, and kbuild shoukld install the modules there.
 
-Welcome; this is great news! :) Thanks for picking up the work.
 
-> 
-> Regarding the issue of gcc cfi type id being compatible with clang, we 
-> have analyzed and verified:
-> 
-> 1. clang uses Mangling defined in Itanium C++ ABI to encode the function 
-> prototype, and uses the encoding result as input to generate cfi type id;
-> 2. Currently, gcc only implements mangling for the C++ compiler, and the 
-> function prototype coding generated by these interfaces is compatible 
-> with clang, but gcc's c compiler does not support mangling.;
-> 
-> Adding mangling to gcc's c compiler is a huge and difficult task，because 
-> we have to refactor the mangling of C++, splitting it into basic 
-> mangling and language specific mangling, and adding support for the c 
-> language which requires a deep understanding of the compiler and 
-> language processing parts.
-> 
-> And for the kernel cfi, I suggest separating type compatibility from CFI 
-> basic functions. Type compatibility is independent from CFI basic 
-> funcitons and should be dealt with under another topic. Should we focus 
-> on the main issus of cfi, and  let it work first on linux kernel, and 
-> left the compatible issue to be solved later?
+Then, you cannot explain why KERNEL_MODULE_DIRECTORY should be exposed
+as a user interface.
 
-If you mean keeping the hashes identical between Clang/LLVM and GCC,
-I think this is going to be a requirement due to adding Rust to the
-build environment (which uses the LLVM mangling and hashing).
 
-FWIW, I think the subset of type mangling needed isn't the entirely C++
-language spec, so it shouldn't be hard to add this to GCC.
 
--Kees
+The MODULE_DIRECTORY in depmod is determined when kmod is compiled.
 
--- 
-Kees Cook
+Kbuild takes KERNEL_MODULE_DIRECTORY from pkg-config.
+
+
+If these two do not agree, it never works.
+
+
+
+
+
+> If the user knows better (eg. possibility of building src-rpm for a
+> different you brought up) they can override the autodetection.
+
+
+No, it does not work.
+
+
+The user has no way to override the MODULE_DIRECTORY in depmod.
+
+
+
+
+
+> > In my understanding, depmod does not provide an option to
+> > specify the module directory from a command line option, does it?
+>
+> No it does not.
+>
+> > If not, is it reasonable to add a new option to depmod?
+>
+> I don't think so. The module directory is intentionally in a fixed
+> location. It can be set at compile time, and that's it.
+>
+> Then when running depmod on the target distribution either kbuild and
+> kmod agree on the location or the build fails. That's the intended
+> outcome.
+>
+> kmod recently grew the ability to use modules outside of module
+> directory. For that to work internally the path to these out-of-kernel
+> modules is stored as absolute path, and the path of modules that are in
+> the module directory is stored relative to the module directory.
+>
+> Setting the module directory location dynamically still should not break
+> this but I am not sure it's a great idea. In the end modprobe needs to
+> find those modules, and if depmod puts the modules.dep in arbitrary
+> location it will not.
+
+
+That is true when modules are compiled and installed on the local machine.
+
+
+If you create an SRPM with KERNEL_MODULE_DIRECTORY,
+builders must follow it.
+
+
+
+
+
+>
+> > depmod provides the "-b basedir" option, but it only allows
+> > adding a prefix to the default "/lib/modules/<version>".
+>
+> Yes, that's for installation into a staging directory, and there again
+> the modules that are inside the module directory are considedred
+> 'in-kernel'. Not sure how well this even works with 'out-of-kernel'
+> modules.
+>
+> > (My original idea to provide the prefix_part, it would have worked
+> > like  -b "${INSTALL_MOD_PATH}${MOD_PREFIX}", which you refused)
+>
+> It's not clear that adding a prefix covers all use cases. It is an
+> arbitrary limitation that the module path must end with '/lib/modules'.
+>
+> It may allow taking some shortcuts in some places but is unnecessarily
+> limiting.
+>
+> Thanks
+>
+> Michal
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
