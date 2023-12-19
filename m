@@ -1,160 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB3813ADA;
-	Tue, 19 Dec 2023 08:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HP7l7z+Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF48C433CD;
-	Tue, 19 Dec 2023 08:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702975088;
-	bh=iCFasj7oQ8kELGDaFQzx7jdz0lyUtU1jgfLGIGZWdBc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HP7l7z+Q5SAoL9UkP6fV1d/Nd9MdPl9y/WMAT9sJLJjhqxoU2/tNDK1oVt4tcZ46j
-	 4MPU6V2TYHfyBBY7u/WNWPMN/lQs6MH04sq9h5IPNY03qYTGECf7bg8Czv/LlXm+Cf
-	 A4NR6luTTkuEw3nM5kz2C+aWvHCJu33cdr0phrLudGhhjvOrnVODfc+Cc4zPG0fiiJ
-	 UZIkevRCbl2TSUMR4RBcF/otjNXjcoKg2RDJwv845uFbhQt/q6u4JYRhmnX5yLpt/G
-	 JWS8FS0GWjdebBdt6NmiXweHQfadNeWroH6effeQSOVyNUvFSiDjjIQVQqdnehCRu+
-	 vMrT6zpYlnZWw==
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3ba41c956d5so1651419b6e.0;
-        Tue, 19 Dec 2023 00:38:08 -0800 (PST)
-X-Gm-Message-State: AOJu0YxCQg4K2uqkX9ICqPgAw0erCDkakzrpoEAd20o6Y5Tf+XIW3NiO
-	bWCZqjpyARUZW6y7lLlDOZY26nzQaUh15NQ4wws=
-X-Google-Smtp-Source: AGHT+IETLjoWnYRFsV+CWFf32DZKP/bSmighlfMjPM6uJIaV1VYKgHAj3H+uwNCRzkJSv5AJR1QKyOFk9Gb0t6ptcDg=
-X-Received: by 2002:a05:6808:1a1d:b0:3b8:61ac:2348 with SMTP id
- bk29-20020a0568081a1d00b003b861ac2348mr332846oib.24.1702975088233; Tue, 19
- Dec 2023 00:38:08 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C7B1C694;
+	Tue, 19 Dec 2023 14:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Svdtt6gDSzsS7v;
+	Tue, 19 Dec 2023 22:12:38 +0800 (CST)
+Received: from kwepemd100002.china.huawei.com (unknown [7.221.188.184])
+	by mail.maildlp.com (Postfix) with ESMTPS id D28BF140390;
+	Tue, 19 Dec 2023 22:12:54 +0800 (CST)
+Received: from M910t.huawei.com (10.110.54.157) by
+ kwepemd100002.china.huawei.com (7.221.188.184) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1258.28; Tue, 19 Dec 2023 22:12:53 +0800
+From: Changbin Du <changbin.du@huawei.com>
+To: Luis Chamberlain <mcgrof@kernel.org>, Andrew Morton
+	<akpm@linux-foundation.org>
+CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Hui Wang
+	<hw.huiwang@huawei.com>, Changbin Du <changbin.du@huawei.com>, Xiaoyi Su
+	<suxiaoyi@huawei.com>
+Subject: [PATCH] modules: wait do_free_init correctly
+Date: Tue, 19 Dec 2023 22:12:31 +0800
+Message-ID: <20231219141231.2218215-1-changbin.du@huawei.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <e3yow7ih6af2hxzkmjay2oan3jypmo4hda64vxvpfco66ajcew@i3zewn4nbklf>
- <cover.1699618135.git.msuchanek@suse.de> <xbgto5tttcah4mrtyjih72ubod3qb375ww6e2fd4pi342rg4eg@wipwd57q43cc>
-In-Reply-To: <xbgto5tttcah4mrtyjih72ubod3qb375ww6e2fd4pi342rg4eg@wipwd57q43cc>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 19 Dec 2023 17:37:31 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARYK-xjBS8puEM9xFtmjBNW6KJ2Qd6f7diZkdEEbUgVHA@mail.gmail.com>
-Message-ID: <CAK7LNARYK-xjBS8puEM9xFtmjBNW6KJ2Qd6f7diZkdEEbUgVHA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] kmod /usr support
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: Michal Suchanek <msuchanek@suse.de>, linux-modules@vger.kernel.org, 
-	Takashi Iwai <tiwai@suse.com>, Lucas De Marchi <lucas.de.marchi@gmail.com>, 
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemd100002.china.huawei.com (7.221.188.184)
 
-On Thu, Dec 7, 2023 at 3:37=E2=80=AFAM Lucas De Marchi <lucas.demarchi@inte=
-l.com> wrote:
->
-> On Fri, Nov 10, 2023 at 01:13:53PM +0100, Michal Suchanek wrote:
-> >Hello,
-> >
-> >This is resend of the last patch in the series that adds prefix support
-> >to kernel module location together with additional patch for validating
-> >the user supplied input to options that are interpreted as directories.
-> >
-> >Thanks
->
-> applied, thanks
->
-> Lucas De Marchi
+The commit 1a7b7d922081 ("modules: Use vmalloc special flag") moves
+do_free_init() into a global workqueue instead of call_rcu(). So now
+we should wait it via flush_work().
 
+Fixes: 1a7b7d922081 ("modules: Use vmalloc special flag")
+Signed-off-by: Changbin Du <changbin.du@huawei.com>
+Cc: Xiaoyi Su <suxiaoyi@huawei.com>
+---
+ include/linux/moduleloader.h | 2 ++
+ init/main.c                  | 5 +++--
+ kernel/module/main.c         | 5 +++++
+ 3 files changed, 10 insertions(+), 2 deletions(-)
 
+diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+index 001b2ce83832..f3d445d8ccd0 100644
+--- a/include/linux/moduleloader.h
++++ b/include/linux/moduleloader.h
+@@ -115,6 +115,8 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 		    const Elf_Shdr *sechdrs,
+ 		    struct module *mod);
+ 
++void flush_module_init_free_work(void);
++
+ /* Any cleanup needed when module leaves. */
+ void module_arch_cleanup(struct module *mod);
+ 
+diff --git a/init/main.c b/init/main.c
+index e24b0780fdff..f0b7e21ac67f 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -99,6 +99,7 @@
+ #include <linux/init_syscalls.h>
+ #include <linux/stackdepot.h>
+ #include <linux/randomize_kstack.h>
++#include <linux/moduleloader.h>
+ #include <net/net_namespace.h>
+ 
+ #include <asm/io.h>
+@@ -1402,11 +1403,11 @@ static void mark_readonly(void)
+ 	if (rodata_enabled) {
+ 		/*
+ 		 * load_module() results in W+X mappings, which are cleaned
+-		 * up with call_rcu().  Let's make sure that queued work is
++		 * up with init_free_wq. Let's make sure that queued work is
+ 		 * flushed so that we don't hit false positives looking for
+ 		 * insecure pages which are W+X.
+ 		 */
+-		rcu_barrier();
++		flush_module_init_free_work();
+ 		mark_rodata_ro();
+ 		rodata_test();
+ 	} else
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 98fedfdb8db5..1943ccb7414f 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2486,6 +2486,11 @@ static void do_free_init(struct work_struct *w)
+ 	}
+ }
+ 
++void flush_module_init_free_work(void)
++{
++	flush_work(&init_free_wq);
++}
++
+ #undef MODULE_PARAM_PREFIX
+ #define MODULE_PARAM_PREFIX "module."
+ /* Default value for module->async_probe_requested */
+-- 
+2.25.1
 
-If I understood this correctly, MODULE_DIRECTORY is determined
-by "configure --with-module-directory=3D...", and there is no
-way to change it after that.
-
-
-If so, how to work with cross-building?
-
-Cross-building is typical when building embedded Linux systems.
-
-
-Consider this scenario:
-
-- Your build machine adopts
-    MODULE_DIRECTORY=3D/usr/lib/modules
-- The target embedded system adopts
-    MODULE_DIRECTORY=3D/lib/modules
-
-(or vice a versa)
-
-
-
-
-depmod is used also for cross-building because
-it is executed as a part of "make module_install".
-
-
-The counterpart patch set for Kbuild provides
-KERNEL_MODULE_DIRECTORY, which only changes
-the destination directory to which *.ko are copied.
-
-You cannot change the directory where the
-depmod searches for modules, as it is fixed
-at the compile-time of kmod.
-
-
-
-
-In this case, what we can do is to build another
-instance of kmod configured for the target system,
-and use it for modules_install:
-
-1. In the kmod source directory
-    ./configure --with=3Dmodule-directory=3D/lib/modules
-    make
-
-2. make modules_install INSTALL_MOD_PATH=3D<staging-dir>
-     KERNEL_MODULE_DIRECTORY=3D/lib/modules
-     DEPMOD=3D<new-depmod-you-has-just-built>
-
-
-
-If you use OpenEmbedded etc., this is what you do
-because host tools are built from sources.
-
-But, should it be required all the time?
-Even when the target embedded system uses
-busybox-based modprobe instead of kmod?
-
-
-
-depmod provides --basedir option, which changes
-the prefix part, but there is no way to override
-the stem part, MODULE_DIRECTRY.
-
-In the review of the counter patch set,
-I am suggesting an option to override MODULE_DIRECTRY
-(let's say --moduledir) at least for depmod.
-
-(Perhaps modinfo too, as it also supports --basedir)
-
-
-
-Then, we can change scripts/depmod.sh so that
-Kbuild can propagate KERNEL_MODULE_DIRECTORY
-to depmod.
-
-
-if  <depmod supports --moduledir>; then
-    set -- "$@"  --moduledir "${KERNEL_MODULE_DIRECTORY}"
-fi
-
-
-
-Does it make sense?
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
