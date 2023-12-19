@@ -1,43 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF34639ADE;
-	Tue, 19 Dec 2023 20:51:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AC23A268;
+	Tue, 19 Dec 2023 21:26:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="FvCGhuOh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17AA6C433C8;
-	Tue, 19 Dec 2023 20:51:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1703019112;
-	bh=BKBUXYIBYj+i0f0Vw2LEavJlPrlK8MtTyPPLU6pBIm8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=FvCGhuOhT1VaMyeTfhuDkqPJB7Ad4MWtQp0vOK/dJl783EUuK0cYVZkBHeaGfhtnK
-	 VMrTbERrRljzdgI578umcbKmjGCJ3ke42h8hFe9NFWx4505Z4nPt+eKh2SH7HvK2VL
-	 Hzt7gWOhcNcdR7NiluYs18/1aR0+wfhjtTwh1fTc=
-Date: Tue, 19 Dec 2023 12:51:51 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Changbin Du <changbin.du@huawei.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, <linux-modules@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, Hui Wang <hw.huiwang@huawei.com>, Xiaoyi Su
- <suxiaoyi@huawei.com>
-Subject: Re: [PATCH] modules: wait do_free_init correctly
-Message-Id: <20231219125151.4a042a259edf3c916580ccfe@linux-foundation.org>
-In-Reply-To: <20231219141231.2218215-1-changbin.du@huawei.com>
-References: <20231219141231.2218215-1-changbin.du@huawei.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="eXZqma5S"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=D/sKTtPDAr5iC0AD14IbDBFeKu8tPn0IjS+CSIpmRPg=; b=eXZqma5SpEtW5PR+DeqkGwbNgo
+	Tr+bTZpdqM6yceqzrZ7ODNM2R33dxSpnOAxpY9oShGTFvPwj0XbEcPkI058A8amXOsfGtgL5FLyhM
+	s8cafTfPIHBQT+eFd4wkMaLwXym9YG7UjLPr8cDMDreZuxiJIawwNq5okpI0R8j2fu7SyR9f8aIHH
+	cLlT9Jb5OaNFWwZgD17Ya5FN5N06TDRkdEZOtpLlP1bo2UeIfUn4vMUdtEFDb7KRovXyn6Hrq1DCy
+	tSU5wCl6Uz6oCKw3My2ekgAVBgbgTwm7K2UwLUj23Tf8FrFfjfYyozCPOOh4kmKU0ceTz28CFp2+P
+	gZAIgEJA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rFhc1-00FUrv-2C;
+	Tue, 19 Dec 2023 21:26:49 +0000
+Date: Tue, 19 Dec 2023 13:26:49 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: deller@kernel.org
+Cc: linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: Re: [PATCH 0/4] Section alignment issues?
+Message-ID: <ZYIKmQj0H1YAJWlz@bombadil.infradead.org>
+References: <20231122221814.139916-1-deller@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122221814.139916-1-deller@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Tue, 19 Dec 2023 22:12:31 +0800 Changbin Du <changbin.du@huawei.com> wrote:
+On Wed, Nov 22, 2023 at 11:18:10PM +0100, deller@kernel.org wrote:
+> From: Helge Deller <deller@gmx.de>
+> My questions:
+> - Am I wrong with my analysis?
 
-> The commit 1a7b7d922081 ("modules: Use vmalloc special flag") moves
-> do_free_init() into a global workqueue instead of call_rcu(). So now
-> we should wait it via flush_work().
+This would typically of course depend on the arch, but whether it helps
+is what I would like to see with real numbers rather then speculation.
+Howeer, I don't expect some of these are hot paths except maybe the
+table lookups. So could you look at some perf stat differences
+without / with alignment ? Other than bootup live patching would be
+a good test case. We have selftest for modules, the script in selftests
+tools/testing/selftests/kmod/kmod.sh is pretty aggressive, but the live
+patching tests might be better suited.
 
-What are the runtime effects of this change?
+> - What does people see on other architectures?
+> - Does it make sense to add a compile- and runtime-check, like the patch below, to the kernel?
+
+The chatty aspects really depend on the above results.
+
+Aren't there some archs where an unaligned access would actually crash?
+Why hasn't that happened?
+
+  Luis
