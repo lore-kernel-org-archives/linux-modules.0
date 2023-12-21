@@ -1,86 +1,119 @@
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996274CE11;
-	Thu, 21 Dec 2023 09:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-	by localhost (Postfix) with ESMTP id 4SwkxQ52fPz9vCB;
-	Thu, 21 Dec 2023 10:03:38 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FKlQMyQJLnqX; Thu, 21 Dec 2023 10:03:38 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase1.c-s.fr (Postfix) with ESMTP id 4Swkwm32vqz9v9n;
-	Thu, 21 Dec 2023 10:03:04 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 64C748B788;
-	Thu, 21 Dec 2023 10:03:04 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id EZnoZuYRvcNG; Thu, 21 Dec 2023 10:03:04 +0100 (CET)
-Received: from PO20335.idsi0.si.c-s.fr (PO25106.IDSI0.si.c-s.fr [192.168.232.169])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id E4F228B765;
-	Thu, 21 Dec 2023 10:03:03 +0100 (CET)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Luis Chamberlain <mcgrof@kernel.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-modules@vger.kernel.org
-Subject: [PATCH 3/3] powerpc: Simplify strict_kernel_rwx_enabled()
-Date: Thu, 21 Dec 2023 10:02:48 +0100
-Message-ID: <c54d7059af678e68a44f308b5b7257de1f185593.1703149011.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <7b5df1782e94a755b4a18733af44d17d8dd8b37b.1703149011.git.christophe.leroy@csgroup.eu>
-References: <7b5df1782e94a755b4a18733af44d17d8dd8b37b.1703149011.git.christophe.leroy@csgroup.eu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CA04F203;
+	Thu, 21 Dec 2023 10:22:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JHXejGAb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C148FC433C9;
+	Thu, 21 Dec 2023 10:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703154168;
+	bh=NLQdNdVs2WfO85/N+bwgl3CF/QIMJF8sPAIBnqfHoyE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JHXejGAbJLvIX1eOdwwOFJuPDKanbcOepVaqG+OgyvvDJHLSOBeO0hvWXVEjxN6tT
+	 dY4cSa/6VyYyV78nKvrhu3dBt53Y7+i3hLxeZ99x/Gay4Cnq8Op9uOsyW+ByrLRamF
+	 YdIb2+SJzPNrAMM03DSqndLVhpCgItRgZmzmjlZs6IDpKgGSXBnYRO7xUxzoK9MOiF
+	 /G9/I2JRPfnBPcbF6rHOFxZZIPTVNQC9dGAO/m2U9oX2gN8IXmVCWdfi+olAiaDVax
+	 lOnw/fG950c8sUbB+eT6kwYGg8du/3ER4/qcKt3gBSwvwFc1oBuh1JmTfMpbFCqnS1
+	 QeCDIqvlYW64A==
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-204235d0913so367630fac.1;
+        Thu, 21 Dec 2023 02:22:48 -0800 (PST)
+X-Gm-Message-State: AOJu0Yyc+8TqvNLH4rq+Dks+QlOtmI+dx5P2r30XjiGL7GMHMtVKv+dP
+	HYLGgInI/pcvSqtJrsAA37uTYSxk7i0QLrvH6cY=
+X-Google-Smtp-Source: AGHT+IFD0Wb8eYzesckvtQcgLKNMTZArhr3VRhRy5ctAEtHgOX2tQvUkW1DewMY1lnpONaKv20gyp7IJLHG6Efg7Fgc=
+X-Received: by 2002:a05:6870:1702:b0:203:bcd8:c5c2 with SMTP id
+ h2-20020a056870170200b00203bcd8c5c2mr1469312oae.78.1703154168121; Thu, 21 Dec
+ 2023 02:22:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1703149365; l=975; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=61tIdC869creNbvoUUZwC7sh+5NT+SZdhVBf8LQ7dmo=; b=VM3FCIwO0MJ1zMIjQiNfj86TkrOAgOPhedmsu+HpbdECtBstZmTqjVAlvXBy5YRxmlHpNeXW8 ztSK1PqCA/IB5f4La4LlLFvdZT5vzS7bceDCx4bpcXDmTR98vximFzt
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+References: <20231122221814.139916-1-deller@kernel.org> <20231122221814.139916-2-deller@kernel.org>
+In-Reply-To: <20231122221814.139916-2-deller@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 21 Dec 2023 19:22:11 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ4C66NZpOwM6_pzdFbTx7LHfv40vJsNu3spPCEJKfOFw@mail.gmail.com>
+Message-ID: <CAK7LNAQ4C66NZpOwM6_pzdFbTx7LHfv40vJsNu3spPCEJKfOFw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] linux/export: Fix alignment for 64-bit ksymtab entries
+To: deller@kernel.org
+Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	linux-modules@vger.kernel.org, linux-arch@vger.kernel.org, 
+	Luis Chamberlain <mcgrof@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Now that rodata_enabled is always declared, remove #ifdef
-and define a single version of strict_kernel_rwx_enabled().
+On Thu, Nov 23, 2023 at 7:18=E2=80=AFAM <deller@kernel.org> wrote:
+>
+> From: Helge Deller <deller@gmx.de>
+>
+> An alignment of 4 bytes is wrong for 64-bit platforms which don't define
+> CONFIG_HAVE_ARCH_PREL32_RELOCATIONS (which then store 64-bit pointers).
+> Fix their alignment to 8 bytes.
+>
+> Signed-off-by: Helge Deller <deller@gmx.de>
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/mmu.h | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/mmu.h b/arch/powerpc/include/asm/mmu.h
-index d8b7e246a32f..24241995f740 100644
---- a/arch/powerpc/include/asm/mmu.h
-+++ b/arch/powerpc/include/asm/mmu.h
-@@ -330,17 +330,10 @@ static __always_inline bool early_radix_enabled(void)
- 	return early_mmu_has_feature(MMU_FTR_TYPE_RADIX);
- }
- 
--#ifdef CONFIG_STRICT_KERNEL_RWX
- static inline bool strict_kernel_rwx_enabled(void)
- {
--	return rodata_enabled;
-+	return IS_ENABLED(CONFIG_STRICT_KERNEL_RWX) && rodata_enabled;
- }
--#else
--static inline bool strict_kernel_rwx_enabled(void)
--{
--	return false;
--}
--#endif
- 
- static inline bool strict_module_rwx_enabled(void)
- {
--- 
-2.41.0
+This is correct.
 
+Acked-by: Masahiro Yamada <masahiroy@kernel.org>
+
+Please add
+
+
+Fixes: ddb5cdbafaaa ("kbuild: generate KSYMTAB entries by modpost")
+
+
+
+
+
+> ---
+>  include/linux/export-internal.h | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/export-internal.h b/include/linux/export-inter=
+nal.h
+> index 69501e0ec239..cd253eb51d6c 100644
+> --- a/include/linux/export-internal.h
+> +++ b/include/linux/export-internal.h
+> @@ -16,10 +16,13 @@
+>   * and eliminates the need for absolute relocations that require runtime
+>   * processing on relocatable kernels.
+>   */
+> +#define __KSYM_ALIGN           ".balign 4"
+>  #define __KSYM_REF(sym)                ".long " #sym "- ."
+>  #elif defined(CONFIG_64BIT)
+> +#define __KSYM_ALIGN           ".balign 8"
+>  #define __KSYM_REF(sym)                ".quad " #sym
+>  #else
+> +#define __KSYM_ALIGN           ".balign 4"
+>  #define __KSYM_REF(sym)                ".long " #sym
+>  #endif
+>
+> @@ -42,7 +45,7 @@
+>             "   .asciz \"" ns "\""                                      "=
+\n"    \
+>             "   .previous"                                              "=
+\n"    \
+>             "   .section \"___ksymtab" sec "+" #name "\", \"a\""        "=
+\n"    \
+> -           "   .balign 4"                                              "=
+\n"    \
+> +               __KSYM_ALIGN                                            "=
+\n"    \
+>             "__ksymtab_" #name ":"                                      "=
+\n"    \
+>                 __KSYM_REF(sym)                                         "=
+\n"    \
+>                 __KSYM_REF(__kstrtab_ ##name)                           "=
+\n"    \
+> --
+> 2.41.0
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
