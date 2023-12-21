@@ -1,88 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D8D55E41;
-	Thu, 21 Dec 2023 16:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1285821D
+	for <linux-modules@vger.kernel.org>; Thu, 21 Dec 2023 16:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZCTcv5Cs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 980F8C433CA;
-	Thu, 21 Dec 2023 16:02:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703174520;
-	bh=OKgDkdEnpov+UvfKDBKdQoUoQ4Sl+DaH5TWz6flCPpc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZCTcv5CsPENZkq9JLiDoG/D3fPbO24kgy6hv9Ux6CC/W8s25Yb7EUYXj1ecRmFmnv
-	 8501VKY5VXXSL9r1RfUAtLMhp0c1ZXhALBSt6cF+oes9x046gI3T4V4nabtwBLIpIL
-	 c1fgg/KT37STlAHLZE+0ODftic2H/pe2gJZo+L61AFpofyd6PBZMTkYQ9BPYnCGlMw
-	 2uexQTrk/A2bdZ5Ja/mRfBAYozi4kbAQmdHb5sngNoP0o4YKh9tLwfYGCKnWL26Hgz
-	 wDWzZnKN26y+Uv42jFlHJ9LtO6Dgkj73JVJsA5S6zIFoez0vmBQn3fRtvkWpM8RAQx
-	 VIpgodQNtvYgA==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1f066fc2a2aso404935fac.0;
-        Thu, 21 Dec 2023 08:02:00 -0800 (PST)
-X-Gm-Message-State: AOJu0YzZqhtNmOpzkUpPWilv4YeC7B+Cwx4/N2TUlG8Nle8WtiFObL3G
-	qciuq2/LxoLrf/l9QRXZJIfiZF4PUOzWF4zaXUk=
-X-Google-Smtp-Source: AGHT+IG2GPu24vvuiHnYOK6G8Yb0JYZtPAu9NpeBuY/QQZYyLUBU8KcDqPKMJNfYEoPsh3Y92933hljB3VNlogNMhI4=
-X-Received: by 2002:a05:6871:6a9:b0:203:f580:bd58 with SMTP id
- l41-20020a05687106a900b00203f580bd58mr1280073oao.76.1703174519707; Thu, 21
- Dec 2023 08:01:59 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BaSqGs76"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1703177939;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YfzgPU3MkfaqMkHywTBvwxBqqqhijQZYQX1JEq3yLos=;
+	b=BaSqGs762xxaBKLh8zl0g+GTMPoiR2NxJ6iMau8Kjs2jpGGjNiQrEUSgZtZBxF/bEezK0o
+	4TABIiyLvAROtZsksiIVACQxknv+lfmNaKBCjFZ8qggHtq1E/qh4lo+mP8LvDBX/1BQvsJ
+	Sav72rQdrtmy9p2s5UZu/V6J2c/dvTA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-235-LyKNAesXMImg6FjRBwwrvg-1; Thu, 21 Dec 2023 11:58:57 -0500
+X-MC-Unique: LyKNAesXMImg6FjRBwwrvg-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-33667220256so691846f8f.3
+        for <linux-modules@vger.kernel.org>; Thu, 21 Dec 2023 08:58:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703177936; x=1703782736;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YfzgPU3MkfaqMkHywTBvwxBqqqhijQZYQX1JEq3yLos=;
+        b=qKDMJjPfTpWmmhY5BUBcG53ZM+9970MIABTuvVtSzYdrsbtpwQXgB/WPR/8WcDCWf7
+         jk/Pqct8yJ3j8c9U0ZXohInIVa9UTeKU7WqsN75y5gOg11vDICFKrV7iVfquXGBjVinG
+         5deRA97wlnQzX6SRqFyMoRvrKt/bZjVLjAWL733Y0HWLtg2jaceq2HsOdkNp3KKR7jfd
+         iHJMIzFpU1cwcchdvL4wpZ7cXko1iuEMjBIl+sHGtEz89FfRD9PxpnX7u9RBoL9xyoA+
+         /JLfUydWScUuK4kLQyWZDeI3LVOHzpTdmx0ThijBt2VqGFaNt+Ega06h7TjS+/3ZCTne
+         kjxQ==
+X-Gm-Message-State: AOJu0YxIaJZ5bPPN+GMPl9xrwpjShvGZ8zi9ALFyW0sWpXEvOluP8G2a
+	PtQ8ZEhEQMWMIvVqoK54F9M3l7Yg4a272ubUUBoWYn4Fp/MDswVyyscxjOSF4EctShTKa/eNIpQ
+	X/5IbVhM9QAm1XELX62aOUf8Mm1OyHENG
+X-Received: by 2002:a7b:c8d7:0:b0:40d:3bd1:3dc9 with SMTP id f23-20020a7bc8d7000000b0040d3bd13dc9mr2461wml.219.1703177936729;
+        Thu, 21 Dec 2023 08:58:56 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEbByqWtAWAPFMSK5jVspKSO6YeLOYJty6KrgKSNfnZjI5LmzBWOfBm3dl7JgTsSMglSsII3Q==
+X-Received: by 2002:a7b:c8d7:0:b0:40d:3bd1:3dc9 with SMTP id f23-20020a7bc8d7000000b0040d3bd13dc9mr2454wml.219.1703177936454;
+        Thu, 21 Dec 2023 08:58:56 -0800 (PST)
+Received: from klayman.redhat.com (net-2-34-31-72.cust.vodafonedsl.it. [2.34.31.72])
+        by smtp.gmail.com with ESMTPSA id v14-20020a05600c444e00b0040c58e410a3sm11874745wmn.14.2023.12.21.08.58.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Dec 2023 08:58:56 -0800 (PST)
+From: Marco Pagani <marpagan@redhat.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Marco Pagani <marpagan@redhat.com>,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] kernel/module: improve documentation for try_module_get()
+Date: Thu, 21 Dec 2023 17:58:47 +0100
+Message-ID: <20231221165848.150041-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231122221814.139916-1-deller@kernel.org> <20231122221814.139916-2-deller@kernel.org>
- <CAK7LNAQ4C66NZpOwM6_pzdFbTx7LHfv40vJsNu3spPCEJKfOFw@mail.gmail.com>
-In-Reply-To: <CAK7LNAQ4C66NZpOwM6_pzdFbTx7LHfv40vJsNu3spPCEJKfOFw@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 22 Dec 2023 01:01:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARN985trrbxnCY0+wv5q2ie9PO0TvKet1aLBzDdP-xHPA@mail.gmail.com>
-Message-ID: <CAK7LNARN985trrbxnCY0+wv5q2ie9PO0TvKet1aLBzDdP-xHPA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] linux/export: Fix alignment for 64-bit ksymtab entries
-To: deller@kernel.org
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
-	linux-modules@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Luis Chamberlain <mcgrof@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 21, 2023 at 7:22=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> On Thu, Nov 23, 2023 at 7:18=E2=80=AFAM <deller@kernel.org> wrote:
-> >
-> > From: Helge Deller <deller@gmx.de>
-> >
-> > An alignment of 4 bytes is wrong for 64-bit platforms which don't defin=
-e
-> > CONFIG_HAVE_ARCH_PREL32_RELOCATIONS (which then store 64-bit pointers).
-> > Fix their alignment to 8 bytes.
-> >
-> > Signed-off-by: Helge Deller <deller@gmx.de>
->
->
-> This is correct.
->
-> Acked-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> Please add
->
->
-> Fixes: ddb5cdbafaaa ("kbuild: generate KSYMTAB entries by modpost")
->
->
+The sentence "this call will fail if the module is already being
+removed" is potentially confusing and may contradict the rest of the
+documentation. If one tries to get a module that has already been
+removed using a stale pointer, the kernel will crash.
 
+Signed-off-by: Marco Pagani <marpagan@redhat.com>
+---
+ include/linux/module.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If there is no objection, I will pick this up
-to linux-kbuild/fixes.
+diff --git a/include/linux/module.h b/include/linux/module.h
+index a98e188cf37b..08364d5cbc07 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -668,7 +668,7 @@ extern void __module_get(struct module *module);
+  * @module: the module we should check for
+  *
+  * Only try to get a module reference count if the module is not being removed.
+- * This call will fail if the module is already being removed.
++ * This call will fail if the module is in the process of being removed.
+  *
+  * Care must also be taken to ensure the module exists and is alive prior to
+  * usage of this call. This can be gauranteed through two means:
+-- 
+2.43.0
 
-
-Thanks.
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
