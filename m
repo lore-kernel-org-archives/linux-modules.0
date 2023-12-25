@@ -1,88 +1,122 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78813A34;
-	Mon, 25 Dec 2023 04:07:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F5110FE;
+	Mon, 25 Dec 2023 06:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Sz4941FZ0zvSLb;
-	Mon, 25 Dec 2023 12:06:48 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Sz7121Fjtz1Q70R;
+	Mon, 25 Dec 2023 14:15:02 +0800 (CST)
 Received: from kwepemd100002.china.huawei.com (unknown [7.221.188.184])
-	by mail.maildlp.com (Postfix) with ESMTPS id A974A180076;
-	Mon, 25 Dec 2023 12:07:47 +0800 (CST)
-Received: from M910t (10.110.54.157) by kwepemd100002.china.huawei.com
- (7.221.188.184) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1258.28; Mon, 25 Dec
- 2023 12:07:46 +0800
-Date: Mon, 25 Dec 2023 12:07:36 +0800
+	by mail.maildlp.com (Postfix) with ESMTPS id 4E62B1402E0;
+	Mon, 25 Dec 2023 14:15:25 +0800 (CST)
+Received: from M910t.huawei.com (10.110.54.157) by
+ kwepemd100002.china.huawei.com (7.221.188.184) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1258.28; Mon, 25 Dec 2023 14:15:24 +0800
 From: Changbin Du <changbin.du@huawei.com>
-To: Changbin Du <changbin.du@huawei.com>
-CC: Luis Chamberlain <mcgrof@kernel.org>, Andrew Morton
-	<akpm@linux-foundation.org>, <linux-modules@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Hui Wang <hw.huiwang@huawei.com>, Xiaoyi Su
-	<suxiaoyi@huawei.com>, Jeffrey Hugo <jhugo@codeaurora.org>, Stephen Rothwell
-	<sfr@canb.auug.org.au>
-Subject: Re: [PATCH] modules: wait do_free_init correctly
-Message-ID: <20231225040736.7htp2cfhocbw4hxw@M910t>
-References: <20231219141231.2218215-1-changbin.du@huawei.com>
- <20231219125151.4a042a259edf3c916580ccfe@linux-foundation.org>
- <ZYIQgz+de/JQl10N@bombadil.infradead.org>
- <20231220052751.3zcnsnvjk5vf5t7j@M910t>
- <ZYL7B59dQ6XFtVP8@bombadil.infradead.org>
- <20231221023037.emexvbbnt6tpgcs5@M910t>
+To: Luis Chamberlain <mcgrof@kernel.org>, Andrew Morton
+	<akpm@linux-foundation.org>
+CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Hui Wang
+	<hw.huiwang@huawei.com>, Stephen Rothwell <sfr@canb.auug.org.au>, Changbin Du
+	<changbin.du@huawei.com>, Xiaoyi Su <suxiaoyi@huawei.com>
+Subject: [PATCH v2] modules: wait do_free_init correctly
+Date: Mon, 25 Dec 2023 14:15:13 +0800
+Message-ID: <20231225061513.2984575-1-changbin.du@huawei.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20231221023037.emexvbbnt6tpgcs5@M910t>
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  kwepemd100002.china.huawei.com (7.221.188.184)
 
-On Thu, Dec 21, 2023 at 10:30:37AM +0800, Changbin Du wrote:
-> On Wed, Dec 20, 2023 at 06:32:39AM -0800, Luis Chamberlain wrote:
-> > On Wed, Dec 20, 2023 at 01:27:51PM +0800, Changbin Du wrote:
-> > > On Tue, Dec 19, 2023 at 01:52:03PM -0800, Luis Chamberlain wrote:
-> > > > On Tue, Dec 19, 2023 at 12:51:51PM -0800, Andrew Morton wrote:
-> > > > > On Tue, 19 Dec 2023 22:12:31 +0800 Changbin Du <changbin.du@huawei.com> wrote:
-> > > > > 
-> > > > > > The commit 1a7b7d922081 ("modules: Use vmalloc special flag") moves
-> > > > > > do_free_init() into a global workqueue instead of call_rcu(). So now
-> > > > > > we should wait it via flush_work().
-> > > > > 
-> > > > > What are the runtime effects of this change?
-> > > > 
-> > > > Indeed that's needed given how old this culprit commit is:
-> > > > 
-> > > > git describe --contains 1a7b7d922081
-> > > > v5.2-rc1~192^2~5
-> > > > 
-> > > > Who did this work and for what reason? What triggered this itch?
-> > > >
-> > > Seems the waiting was introduced by commit ae646f0b9ca ("init: fix false positives
-> > > in W+X checking").
-> > > 
-> > > As what I have observed, mark_readonly() is only invoked by the first user mode
-> > > thread function kernel_init(), which is before userspace /init. So is it real
-> > > possible we have loaded modules at this point?
-> > 
-> > Are you saying we don't free any module inits at all then? I asked a lot
-> > of questions and your answers seem slim.
-> >
-> Yes, indeed no module loaded at all before mark_readonly(), at least on my desktop.
-> So I think we can just delete this synchronization. I am not sure whether there are
-> any historical reasons.
->
-I thought about it again, kernel doesn't prevent any drivers from calling
-request_module() before init. So it's possible that some particular modules do
-behave this way.
+The commit 1a7b7d922081 ("modules: Use vmalloc special flag") moves
+do_free_init() into a global workqueue instead of call_rcu(). So now
+rcu_barrier() can not ensure that do_free_init has completed. We should
+wait it via flush_work().
 
-I will send an updated one to fix the compilation issue for no CONFIG_MODULES.
+Without this fix, we still could encounter false positive reports in
+W+X checking.
 
+Fixes: 1a7b7d922081 ("modules: Use vmalloc special flag")
+Signed-off-by: Changbin Du <changbin.du@huawei.com>
+Cc: Xiaoyi Su <suxiaoyi@huawei.com>
+
+---
+v2: fix compilation issue for no CONFIG_MODULES found by 0-DAY.
+---
+ include/linux/moduleloader.h | 8 ++++++++
+ init/main.c                  | 5 +++--
+ kernel/module/main.c         | 5 +++++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+index 001b2ce83832..89b1e0ed9811 100644
+--- a/include/linux/moduleloader.h
++++ b/include/linux/moduleloader.h
+@@ -115,6 +115,14 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 		    const Elf_Shdr *sechdrs,
+ 		    struct module *mod);
+ 
++#ifdef CONFIG_MODULES
++void flush_module_init_free_work(void);
++#else
++static inline void flush_module_init_free_work(void)
++{
++}
++#endif
++
+ /* Any cleanup needed when module leaves. */
+ void module_arch_cleanup(struct module *mod);
+ 
+diff --git a/init/main.c b/init/main.c
+index e24b0780fdff..f0b7e21ac67f 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -99,6 +99,7 @@
+ #include <linux/init_syscalls.h>
+ #include <linux/stackdepot.h>
+ #include <linux/randomize_kstack.h>
++#include <linux/moduleloader.h>
+ #include <net/net_namespace.h>
+ 
+ #include <asm/io.h>
+@@ -1402,11 +1403,11 @@ static void mark_readonly(void)
+ 	if (rodata_enabled) {
+ 		/*
+ 		 * load_module() results in W+X mappings, which are cleaned
+-		 * up with call_rcu().  Let's make sure that queued work is
++		 * up with init_free_wq. Let's make sure that queued work is
+ 		 * flushed so that we don't hit false positives looking for
+ 		 * insecure pages which are W+X.
+ 		 */
+-		rcu_barrier();
++		flush_module_init_free_work();
+ 		mark_rodata_ro();
+ 		rodata_test();
+ 	} else
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 98fedfdb8db5..1943ccb7414f 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2486,6 +2486,11 @@ static void do_free_init(struct work_struct *w)
+ 	}
+ }
+ 
++void flush_module_init_free_work(void)
++{
++	flush_work(&init_free_wq);
++}
++
+ #undef MODULE_PARAM_PREFIX
+ #define MODULE_PARAM_PREFIX "module."
+ /* Default value for module->async_probe_requested */
 -- 
-Cheers,
-Changbin Du
+2.25.1
+
