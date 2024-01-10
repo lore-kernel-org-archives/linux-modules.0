@@ -1,87 +1,140 @@
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E631BE5E
-	for <linux-modules@vger.kernel.org>; Wed, 10 Jan 2024 10:04:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32B844386;
+	Wed, 10 Jan 2024 10:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="NDkT06UG"
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="f+nShup1"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Iu3Be0mgE1pG/GYdicEmaBDJ8GA7/03pFVLQQM4LTJY=; b=NDkT06UG380JztLhQlfkcFA801
-	3TZd+qKwZdYEE4/KJ8lLFwJfT4z8DspPj1AJNwXqhZEseLElFUa4C2ht6dh5mPpQEqTjA4fn4jqMY
-	3wJNvwncb/fd+vN1zmlvUnLNDH1U3YkXlghJNdb8G2N4yGLhnJdpfBS8CWcq9Q9J7zgprDOPyDjvG
-	dYXJRfdnecKXQY6HyEopsEsOhcHLvQR/7x2F6dckCXOYLg4boElE1YyluTvF46lC7ZKaEguhEQRvI
-	VhDFnSMCGhi/1Zf3SRIAqI+NY2ZHmTtLV9/hK+GDQHd0cZE8YsfO6osHF7zABlJk18NCbrXDY+ER0
-	BDWAtf9A==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40718)
+	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
+	:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+	Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=PGoi1VMjYQ3iWmH9FHX5cd3/b6djkMWA8QwUTwtRkqQ=; b=f+nShup1VxEdMWfD/khNQb+6ma
+	pHC86jp2+KVjZjv+z65Al8+Cu/evgvYKFmDWKRQ/pAroYf2H0MQ0cJu9kO0Lt5IpWvqoamzDuCAuC
+	XQl/010pBl/y2+eBgt5uBEKWdZhQ0XZ+Q9yqVJhoCjLo5vHE+3rgh/ruWwiRVGHaW15OoeElWIIdX
+	Pi6dfa/5PqofYcZjfJU81RBhW50/XIAVbpkaZv+KMWi4OZNEbm/b26ip96XiU4a8XsNIeI5Tgb0b5
+	jfGjS42Di3ZShyXpUtZsg2R0hEhZDEejUwEOYeflmPP6QFw02MZ9Jcw58ZleZGtb5paC++nmRdlFI
+	uzcgNzmQ==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:52062 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rNVQM-00056s-28;
-	Wed, 10 Jan 2024 10:03:02 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rNVQK-0005CV-NS; Wed, 10 Jan 2024 10:03:00 +0000
-Date: Wed, 10 Jan 2024 10:03:00 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: artem.kuzin@huawei.com
-Cc: x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
-	peterz@infradead.org, akpm@linux-foundation.org, urezki@gmail.com,
-	hch@infradead.org, lstoakes@gmail.com, mcgrof@kernel.org,
-	nikita.panov@huawei-partners.com, alexander.grubnikov@huawei.com,
-	stepanov.anatoly@huawei.com, guohanjun@huawei.com,
-	weiyongjun1@huawei.com, wangkefeng.wang@huawei.com,
-	judy.chenhui@huawei.com, yusongping@huawei.com, kang.sun@huawei.com,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH RFC 00/12] x86 NUMA-aware kernel replication
-Message-ID: <ZZ5rVJo1Dn9e12vs@shell.armlinux.org.uk>
-References: <20231228131056.602411-1-artem.kuzin@huawei.com>
+	(envelope-from <rmk@armlinux.org.uk>)
+	id 1rNVlI-0005A7-3B;
+	Wed, 10 Jan 2024 10:24:41 +0000
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+	id 1rNVlL-000qDm-Pg; Wed, 10 Jan 2024 10:24:43 +0000
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
+	 Linus Torvalds <torvalds@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org
+Subject: [PATCH] kbuild: detect depmod version to exclude new SHA3 module
+ signing options
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231228131056.602411-1-artem.kuzin@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1rNVlL-000qDm-Pg@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date: Wed, 10 Jan 2024 10:24:43 +0000
 
-On Thu, Dec 28, 2023 at 09:10:44PM +0800, artem.kuzin@huawei.com wrote:
-> There was a work previously published for ARM64 platform
-> by Russell King (arm64 kernel text replication).
-> We hope that it will be possible to push this technology forward together.
+When using the SHA3 module signing options, kmod 28 segfaults during
+"make modules_install" on the build host.
 
-Honestly, I don't think the arm64 kernel text replication is going to
-progress. I had zero feedback on the last posting, which suggests that
-there is very little interest in it.
+When running depmod under gdb, it reports:
 
-With Ard's suggestion to use pKVM for it, that's totally and utterly
-outside of my knowledge realm about how to implement that, and I have
-no idea what the implications of doing so would be - would it prevent
-being able to run KVM guests? How does it interact with the KVM
-hypervisor? Does it require nested virtualisation (which isn't
-supported on the platforms that Oracle are interested in.) Then there
-is now the pKVM hypervisor for kernel text replication would grab the
-memory it needs to replicate the kernel.
+Program received signal SIGSEGV, Segmentation fault.
+__strlen_sse2 () at ../sysdeps/x86_64/multiarch/strlen-vec.S:133
 
-Having been through all the different layers of firmware, boot loader
-etc the conclusion was that it's something that the kernel should be
-doing - and the code that Ard pointed me towards was firmware-based.
+Therefore, SHA3 can't be used on a build system with an old kmod. Add
+a script to retrieve the version of depmod, and use that in the Kconfig
+to determine whether the SHA3 options should be made available.
 
-So, right now I think arm64 kernel text replication is rather dead in
-the water.
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+I don't know what the minimum requirement is for SHA3 to work, so I have
+chosen a minimum of version 29 for the purposes of this patch.
+---
+ kernel/module/Kconfig     |  8 ++++++++
+ scripts/Kconfig.include   |  3 +++
+ scripts/depmod-version.sh | 11 +++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100755 scripts/depmod-version.sh
 
-Honestly, I now utterly regret bringing up this idea inside Oracle.
-It has become something of a millstone around my neck.
-
+diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+index 0ea1b2970a23..d2ba454026a9 100644
+--- a/kernel/module/Kconfig
++++ b/kernel/module/Kconfig
+@@ -223,6 +223,11 @@ config MODULE_SIG_ALL
+ 	  Sign all modules during make modules_install. Without this option,
+ 	  modules must be signed manually, using the scripts/sign-file tool.
+ 
++config DEPMOD_VERSION
++	int
++	default	$(depmod-version)
++	default 0
++
+ comment "Do not forget to sign required modules with scripts/sign-file"
+ 	depends on MODULE_SIG_FORCE && !MODULE_SIG_ALL
+ 
+@@ -250,14 +255,17 @@ config MODULE_SIG_SHA512
+ 
+ config MODULE_SIG_SHA3_256
+ 	bool "Sign modules with SHA3-256"
++	depends on DEPMOD_VERSION > 28
+ 	select CRYPTO_SHA3
+ 
+ config MODULE_SIG_SHA3_384
+ 	bool "Sign modules with SHA3-384"
++	depends on DEPMOD_VERSION > 28
+ 	select CRYPTO_SHA3
+ 
+ config MODULE_SIG_SHA3_512
+ 	bool "Sign modules with SHA3-512"
++	depends on DEPMOD_VERSION > 28
+ 	select CRYPTO_SHA3
+ 
+ endchoice
+diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
+index 5a84b6443875..052f581c86da 100644
+--- a/scripts/Kconfig.include
++++ b/scripts/Kconfig.include
+@@ -63,3 +63,6 @@ ld-version := $(shell,set -- $(ld-info) && echo $2)
+ cc-option-bit = $(if-success,$(CC) -Werror $(1) -E -x c /dev/null -o /dev/null,$(1))
+ m32-flag := $(cc-option-bit,-m32)
+ m64-flag := $(cc-option-bit,-m64)
++
++# depmod version
++depmod-version := $(shell,$(srctree)/scripts/depmod-version.sh)
+diff --git a/scripts/depmod-version.sh b/scripts/depmod-version.sh
+new file mode 100755
+index 000000000000..32a8a6f6b737
+--- /dev/null
++++ b/scripts/depmod-version.sh
+@@ -0,0 +1,11 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++set -e
++
++: ${DEPMOD:=depmod}
++
++# legacy behavior: "depmod" in /sbin, no /sbin in PATH
++PATH="$PATH:/sbin"
++
++LC_ALL=C "$DEPMOD" --version | sed -n '1s/kmod version //p'
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.30.2
+
