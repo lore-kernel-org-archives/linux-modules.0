@@ -1,140 +1,55 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32B844386;
-	Wed, 10 Jan 2024 10:24:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B40807;
+	Thu, 11 Jan 2024 02:24:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="f+nShup1"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:Reply-To:Content-ID
-	:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-	Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=PGoi1VMjYQ3iWmH9FHX5cd3/b6djkMWA8QwUTwtRkqQ=; b=f+nShup1VxEdMWfD/khNQb+6ma
-	pHC86jp2+KVjZjv+z65Al8+Cu/evgvYKFmDWKRQ/pAroYf2H0MQ0cJu9kO0Lt5IpWvqoamzDuCAuC
-	XQl/010pBl/y2+eBgt5uBEKWdZhQ0XZ+Q9yqVJhoCjLo5vHE+3rgh/ruWwiRVGHaW15OoeElWIIdX
-	Pi6dfa/5PqofYcZjfJU81RBhW50/XIAVbpkaZv+KMWi4OZNEbm/b26ip96XiU4a8XsNIeI5Tgb0b5
-	jfGjS42Di3ZShyXpUtZsg2R0hEhZDEejUwEOYeflmPP6QFw02MZ9Jcw58ZleZGtb5paC++nmRdlFI
-	uzcgNzmQ==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:52062 helo=rmk-PC.armlinux.org.uk)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <rmk@armlinux.org.uk>)
-	id 1rNVlI-0005A7-3B;
-	Wed, 10 Jan 2024 10:24:41 +0000
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1rNVlL-000qDm-Pg; Wed, 10 Jan 2024 10:24:43 +0000
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
-	 Linus Torvalds <torvalds@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: [PATCH] kbuild: detect depmod version to exclude new SHA3 module
- signing options
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ez32nPde"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D8DA1C433C7;
+	Thu, 11 Jan 2024 02:24:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704939845;
+	bh=O7VTOKm7FNUqL8mSsAmCNIckS5wZYYFPqfjtKFhhXQE=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=Ez32nPdeHMNF3R39jOZlxfMFIs44XUYqFrAgocGUuHvHrZF0ql2vlSLikmdbpYtHC
+	 IV2Ytw6orjgkWKGm1Z9XfP4ClqCjWbDlHRjNsahXtxxHaNImQlhjh2xJjQ6XhCiX9F
+	 weGFjiOunaYWJjF8FILru/eAoJ/BgKenX1MEOmLQRdorJ9VEHexsarOubwM32fW8ur
+	 3BOgdDDKUddS9n8QQoeOmtHzziGsGE1n1kGToQk2S2yWD8rIKLRM0BxC8xri9Patd+
+	 9PBwdW+mQJWcTOYjBLMFUocjeG4HoMLsH3Q3rEJYxO3bRiC8HToop1cy40fD0w4YMR
+	 GB5yXW6tJaQsA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C75C2D8C979;
+	Thu, 11 Jan 2024 02:24:05 +0000 (UTC)
+Subject: Re: [GIT PULL] Modules changes for v6.8-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZZ1cUcINeJMJNyft@bombadil.infradead.org>
+References: <ZZ1cUcINeJMJNyft@bombadil.infradead.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZZ1cUcINeJMJNyft@bombadil.infradead.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.8-rc1
+X-PR-Tracked-Commit-Id: 4515d08a742c76612b65d2f47a87d12860519842
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4cd083d53108b32f4c8ed92a3f85d7b36133c0c9
+Message-Id: <170493984581.10151.3207641603041958906.pr-tracker-bot@kernel.org>
+Date: Thu, 11 Jan 2024 02:24:05 +0000
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-modules@vger.kernel.org, patches@lists.linux.dev, linux-kernel@vger.kernel.org, Marco Pagani <marpagan@redhat.com>, Kevin Hao <haokexin@gmail.com>, mcgrof@kernel.org
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1rNVlL-000qDm-Pg@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Wed, 10 Jan 2024 10:24:43 +0000
 
-When using the SHA3 module signing options, kmod 28 segfaults during
-"make modules_install" on the build host.
+The pull request you sent on Tue, 9 Jan 2024 06:46:41 -0800:
 
-When running depmod under gdb, it reports:
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.8-rc1
 
-Program received signal SIGSEGV, Segmentation fault.
-__strlen_sse2 () at ../sysdeps/x86_64/multiarch/strlen-vec.S:133
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4cd083d53108b32f4c8ed92a3f85d7b36133c0c9
 
-Therefore, SHA3 can't be used on a build system with an old kmod. Add
-a script to retrieve the version of depmod, and use that in the Kconfig
-to determine whether the SHA3 options should be made available.
+Thank you!
 
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
-I don't know what the minimum requirement is for SHA3 to work, so I have
-chosen a minimum of version 29 for the purposes of this patch.
----
- kernel/module/Kconfig     |  8 ++++++++
- scripts/Kconfig.include   |  3 +++
- scripts/depmod-version.sh | 11 +++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100755 scripts/depmod-version.sh
-
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-index 0ea1b2970a23..d2ba454026a9 100644
---- a/kernel/module/Kconfig
-+++ b/kernel/module/Kconfig
-@@ -223,6 +223,11 @@ config MODULE_SIG_ALL
- 	  Sign all modules during make modules_install. Without this option,
- 	  modules must be signed manually, using the scripts/sign-file tool.
- 
-+config DEPMOD_VERSION
-+	int
-+	default	$(depmod-version)
-+	default 0
-+
- comment "Do not forget to sign required modules with scripts/sign-file"
- 	depends on MODULE_SIG_FORCE && !MODULE_SIG_ALL
- 
-@@ -250,14 +255,17 @@ config MODULE_SIG_SHA512
- 
- config MODULE_SIG_SHA3_256
- 	bool "Sign modules with SHA3-256"
-+	depends on DEPMOD_VERSION > 28
- 	select CRYPTO_SHA3
- 
- config MODULE_SIG_SHA3_384
- 	bool "Sign modules with SHA3-384"
-+	depends on DEPMOD_VERSION > 28
- 	select CRYPTO_SHA3
- 
- config MODULE_SIG_SHA3_512
- 	bool "Sign modules with SHA3-512"
-+	depends on DEPMOD_VERSION > 28
- 	select CRYPTO_SHA3
- 
- endchoice
-diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
-index 5a84b6443875..052f581c86da 100644
---- a/scripts/Kconfig.include
-+++ b/scripts/Kconfig.include
-@@ -63,3 +63,6 @@ ld-version := $(shell,set -- $(ld-info) && echo $2)
- cc-option-bit = $(if-success,$(CC) -Werror $(1) -E -x c /dev/null -o /dev/null,$(1))
- m32-flag := $(cc-option-bit,-m32)
- m64-flag := $(cc-option-bit,-m64)
-+
-+# depmod version
-+depmod-version := $(shell,$(srctree)/scripts/depmod-version.sh)
-diff --git a/scripts/depmod-version.sh b/scripts/depmod-version.sh
-new file mode 100755
-index 000000000000..32a8a6f6b737
---- /dev/null
-+++ b/scripts/depmod-version.sh
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+set -e
-+
-+: ${DEPMOD:=depmod}
-+
-+# legacy behavior: "depmod" in /sbin, no /sbin in PATH
-+PATH="$PATH:/sbin"
-+
-+LC_ALL=C "$DEPMOD" --version | sed -n '1s/kmod version //p'
 -- 
-2.30.2
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
