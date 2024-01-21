@@ -1,121 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3965EB641;
-	Wed, 17 Jan 2024 00:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB7938381
+	for <linux-modules@vger.kernel.org>; Sun, 21 Jan 2024 19:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705450956; cv=none; b=TODutIjh4gr7FqKxhJ0gOB2xrYI64+BFXpl6B+JV38aGQu2Cvj1X2KJ187eugjrFhdZqV3ZlMmxH1E2GepsAI6W2UbPengqwXF7CFf8p451sBPh6zAQzZ7XVfSYjNr/7FAw5tbh21lOVcFwJfuTJqlaVQgfsyzQ11PQ9ZtIAIyI=
+	t=1705866905; cv=none; b=SHPAuLaS/ucT5i9dg5Lxtw7OhWCgpEQedtLIp42jMQ8p1vDT3W3hSXRp3Dp4m/c35Daqh8c9d66kd10LwntYLvA37/qc6dVrsIGN2zfLJEFjmHCtX3D5D6Gt59qUaLmJ0nZtMlULrvn1LGUVSILK5fRp3h2Ete/WLYZe+wklJT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705450956; c=relaxed/simple;
-	bh=e1EAVS0NjhXdvVPSZSo1uqGu9RFrRzGAusUIpBOA2C0=;
-	h=Received:DKIM-Signature:Received:X-Gm-Message-State:
-	 X-Google-Smtp-Source:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gmail-Original-Message-ID:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding; b=Ep07qHBlZGiGRsm9S1roIu1r5X0akSypxOi3LXqIFYzWWDoG//69ImJK60zfDWvjInVbwrsmHgH9UCR5ffffApHqnYflLiMaREzRV2gLjN2rH7LmaJPJVULXah80SoJPTfBUDvUs9AuJCC7vlfaoj+TZJw/wJCBUKLvhf7eQFZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQOe3HaY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1705866905; c=relaxed/simple;
+	bh=GQoIOMmGlZGhERzqT+E6aQH5Sj5SbWki1fytWD9sPGs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SVUYWi07TZ3L55NwVVzia8CBNO1u3oZsxS4qd6BhkRCpP7aRT8r7k248zC3/eQWQ3mPCIHSm31ZKZDhsEvvUYBz2bH2+rCPabe0d3FbdGAOjZVNa4kt8H+BOwPibV2lsENYqDWWGe7MAQYA1YnbYMBWcTj40iEfdkIC4Wi4ywiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=NLCl1p14; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQOe3HaY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF595C433F1;
-	Wed, 17 Jan 2024 00:22:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705450955;
-	bh=e1EAVS0NjhXdvVPSZSo1uqGu9RFrRzGAusUIpBOA2C0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nQOe3HaYLmXpohm8Av05AiLGrtsLzzKoIDdvQ5w4wVVqibgVKe754hTloxZ7YIysr
-	 E1qKU5S8Pwbs9sLkb/71lW2pSYZbhPzdDWR09LzM7BiT7AzbV6adU6TVFFA0wkHkD2
-	 ySVHskdWU5cxxcB3atdlDiVMbaTQ78yfTsfwNCfd9uyK0v8nVQMT72qwXfU/6h14XF
-	 LsaXp73vHfhkeYwCqkZOyFrdeS10y9Dfh6afA8zjG7LQsz0Rpof02OWIRACfdKSqWm
-	 b0ff9il3aqNN5ALiKMX42NqKpjFXWCTJsboKtTecBI8bzjP2iVXVH0FGt9AwXPwRsO
-	 4IKzEIcnxOLhQ==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5989407dd3cso2298944eaf.0;
-        Tue, 16 Jan 2024 16:22:35 -0800 (PST)
-X-Gm-Message-State: AOJu0YygIjvJUO+vedJ9mM3ckewiTPZ2rM/bV1heUaCKXuMtpJlTFZI7
-	vVS9/E8/QDy5QmKeM650gfHxzEKjCk3WizP0ZrY=
-X-Google-Smtp-Source: AGHT+IG5Fwy3pj6UnCb/wfvu0oBqHbX6t/MTS2UwX0Sg4IrOvcfTXzc3FOJwp92eS8vBON/PrXnIOZZk6dTI9usNYDw=
-X-Received: by 2002:a05:6870:1953:b0:205:fd77:f3e9 with SMTP id
- m19-20020a056870195300b00205fd77f3e9mr5778933oak.39.1705450955018; Tue, 16
- Jan 2024 16:22:35 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="NLCl1p14"
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2cd46e7ae8fso26547631fa.1
+        for <linux-modules@vger.kernel.org>; Sun, 21 Jan 2024 11:55:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1705866902; x=1706471702; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PhjJVX3QcOh8OZyy81TIER7JHK4cm7N4BYEGM0PaABA=;
+        b=NLCl1p14Y4P3Lb7FdRy7fHEB/SgXPXxftFv1J90itxs0TRmi9fyxGOaC3/2fCc3Hzr
+         YbuO62gEsI/8f6/PtZ8xpvZy7PD8coqcykc/qJJwqv0VDIk6McKuaySI2CnR3mkSfVd7
+         ozaGSogZGn43MMaAqIgD22WCqSqbGXCFpHN/Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705866902; x=1706471702;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PhjJVX3QcOh8OZyy81TIER7JHK4cm7N4BYEGM0PaABA=;
+        b=TJY9fcoemn4Nml8JegtFEMWVtZHIQ0h7h8wJtRkd60Q2NjyzUsBzexVIGYB1zOvUS3
+         FfOLUVh8UqNlDgQdwIzVQGTf9NR31Txx9e6+z2Vuqpwklqq1t5hIwVdkvIc5eF+iQRbe
+         aBSyR6KkA55wZWzSiGU+wdtqp3pGSl2eNuJbDqTHmrhMp9KZbbvByWa2o+pG/o3E9BDr
+         msxAafOzD2wg2M962PXL9l6dYScuG1Wv4VK3GHgoKsP8EnGRTUMZ4TvTYaFSo2L6eAnW
+         03KpqGasJdgl3NJYch+q9ghSG3qTqiThGUQLEVLM0lK/FvMptk6xh4kRIzsyTatMjAUx
+         dxoA==
+X-Gm-Message-State: AOJu0YxxPvE2N+SpmRQ7loDYxW4LaHlxIfgvR5S5vAaYnbssP3iBAy5R
+	ksLmqZXzvnZ5fnHVceuu4CWSWOWG1QKSoqXLaZFcoXpP8w24+s00rrDhiwWJko4R1rFp1ITVLsM
+	yKHCI3Q==
+X-Google-Smtp-Source: AGHT+IHsho4c1FzA+4Dv0TMYto3NWfjYZZCKYgyu+2p+o/nIjPaRyZL4eLeWdXxPalNd2E8DP0Ej5Q==
+X-Received: by 2002:a05:651c:c95:b0:2ce:dfc:db74 with SMTP id bz21-20020a05651c0c9500b002ce0dfcdb74mr354340ljb.135.1705866901951;
+        Sun, 21 Jan 2024 11:55:01 -0800 (PST)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id b10-20020a2e848a000000b002cdc1beb671sm2246280ljh.12.2024.01.21.11.55.01
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 21 Jan 2024 11:55:01 -0800 (PST)
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2cdf69bb732so24511491fa.3
+        for <linux-modules@vger.kernel.org>; Sun, 21 Jan 2024 11:55:01 -0800 (PST)
+X-Received: by 2002:a2e:bc09:0:b0:2cd:a774:2714 with SMTP id
+ b9-20020a2ebc09000000b002cda7742714mr655928ljf.152.1705866900796; Sun, 21 Jan
+ 2024 11:55:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <E1rNVlL-000qDm-Pg@rmk-PC.armlinux.org.uk> <ZaUo7ctf5H/qqqkG@shell.armlinux.org.uk>
- <CADWks+a7jBSqWZh-MJSp9x8vTUFvzu6c2GTHc8eQaMNE5VDrQg@mail.gmail.com>
- <ZaVAaScCdwpWuAH0@shell.armlinux.org.uk> <p22vxc3uchm35sq3rgwcakydrvdiq7vlkql3s7dj73n7iracwe@dh3qgcpb53sh>
-In-Reply-To: <p22vxc3uchm35sq3rgwcakydrvdiq7vlkql3s7dj73n7iracwe@dh3qgcpb53sh>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 17 Jan 2024 09:21:58 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQKmVUg9SqKvZigyx3A79pzsPVrwZjdq+t9hrxU5X+eZw@mail.gmail.com>
-Message-ID: <CAK7LNAQKmVUg9SqKvZigyx3A79pzsPVrwZjdq+t9hrxU5X+eZw@mail.gmail.com>
-Subject: Re: Re: [PATCH] kbuild: detect depmod version to exclude new SHA3
- module signing options
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>, 
-	Dimitri John Ledkov <dimitri.ledkov@canonical.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+References: <E1rNVlL-000qDm-Pg@rmk-PC.armlinux.org.uk>
+In-Reply-To: <E1rNVlL-000qDm-Pg@rmk-PC.armlinux.org.uk>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sun, 21 Jan 2024 11:54:44 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgUmXuxtbThqBNREhihRJxrDjuOZRUe8DiwJgPOc7d4zw@mail.gmail.com>
+Message-ID: <CAHk-=wgUmXuxtbThqBNREhihRJxrDjuOZRUe8DiwJgPOc7d4zw@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: detect depmod version to exclude new SHA3 module
+ signing options
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, 
+	Dimitri John Ledkov <dimitri.ledkov@canonical.com>, Luis Chamberlain <mcgrof@kernel.org>, 
 	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 17, 2024 at 7:36=E2=80=AFAM Lucas De Marchi
-<lucas.demarchi@intel.com> wrote:
+[ Going through my "this is still pending" list ]
+
+On Wed, 10 Jan 2024 at 02:24, Russell King (Oracle)
+<rmk+kernel@armlinux.org.uk> wrote:
 >
-> On Mon, Jan 15, 2024 at 02:25:45PM +0000, Russell King (Oracle) wrote:
-> >On Mon, Jan 15, 2024 at 01:09:25PM +0000, Dimitri John Ledkov wrote:
-> >> On Mon, 15 Jan 2024 at 12:45, Russell King (Oracle)
-> >> <linux@armlinux.org.uk> wrote:
-> >> >
-> >> > Ping?
-> >> >
-> >>
-> >> The intent is good.
-> >> The implementation is incomplete.
-> >>
-> >> Please respond or address review feedback emailed previously. See
-> >> https://lore.kernel.org/all/CADWks+Z5iZ=3DP_OAanA-PiePFbMpwtRe3_dF8wRT=
-ak8YAi87zvQ@mail.gmail.com/#t
-> >
-> >> Did you test that things are successful wtih kmod 29, 30, 31?
-> >
-> >No I didn't. See my comment below the "---" line:
-> >
-> >"I don't know what the minimum requirement is for SHA3 to work, so I
-> >have chosen a minimum of version 29 for the purposes of this patch."
-> >
-> >> The code to correctly support sha3 in kmod was committed after 31 was
-> >> tagged, and there is no newer tag yet hence the revision that has the
-> >> correct code is v31-6-g510c8b7f74.
-> >
-> >Thanks for the information.
-> >
-> >> If such check is desired, kmod 32 should be tagged and check should
-> >> check for 32.
-> >
-> >"If such a check is desired" ? You mean you prefer systems to segfault
-> >during the installation step when the build system doesn't have a new
-> >enough kmod?
->
-> I don't think we should check the version number at all to workaround
-> bugs like that. It'd better we let distros to port the fix. If we need
-> a 29.1, 30.1, 31.1 kmod releases to make this common for distros,
-> I can help make that happen.
->
-> Lucas De Marchi
+> I don't know what the minimum requirement is for SHA3 to work, so I have
+> chosen a minimum of version 29 for the purposes of this patch.
 
+I see that there is some noise about hopefully just getting depmod fixed.
 
+But if we take this approach and just say "don't allow SHA3 signing
+with a broken depmod", I'd personally be happier with something that
+isn't version-dependent, but is bug-dependent.
 
-I think Russell's comments are sensible.
+IOW, instead of doing "depmod --version" and parsing that,
+particularly since apparently the exact version isn't clear, would it
+be possible to just actually test for the bug itself?
 
-But, if Lucas back-ports a fix-up to older kmod versions,
-that sounds great too, as I do not need to pick up this patch.
+Or, honestly, maybe just extend the depmod wrapper script to write our
+a more descriptive error report. We already have that whole
 
+        echo "Warning: 'make modules_install' requires $DEPMOD. Please
+install it." >&2
 
+thing, so we already have run-time error handling (although I note
+that it does "exit 0" instead of something saner) rather than some
+Kconfig-time case.
 
-
-
---=20
-Best Regards
-Masahiro Yamada
+                Linus
