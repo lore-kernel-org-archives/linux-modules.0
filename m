@@ -1,105 +1,109 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB7938381
-	for <linux-modules@vger.kernel.org>; Sun, 21 Jan 2024 19:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6DD4EB27;
+	Mon, 22 Jan 2024 16:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705866905; cv=none; b=SHPAuLaS/ucT5i9dg5Lxtw7OhWCgpEQedtLIp42jMQ8p1vDT3W3hSXRp3Dp4m/c35Daqh8c9d66kd10LwntYLvA37/qc6dVrsIGN2zfLJEFjmHCtX3D5D6Gt59qUaLmJ0nZtMlULrvn1LGUVSILK5fRp3h2Ete/WLYZe+wklJT8=
+	t=1705939835; cv=none; b=EtXPGB+0Y4mqFEG78HtwVz/Z63eUmUwwRR+d/kp0PpOz23GKN5J9Ie5zG+Zf2EgUWzAZkn8LeIne7bi4HiaPLFRz+WhD/uUM0RgWQVY/8GEpnzC3cgfrTzYO6q+I+DGDhO0qC0A647N6sqme6qw062QhFAOu3utDG5MLqOZeLv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705866905; c=relaxed/simple;
-	bh=GQoIOMmGlZGhERzqT+E6aQH5Sj5SbWki1fytWD9sPGs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SVUYWi07TZ3L55NwVVzia8CBNO1u3oZsxS4qd6BhkRCpP7aRT8r7k248zC3/eQWQ3mPCIHSm31ZKZDhsEvvUYBz2bH2+rCPabe0d3FbdGAOjZVNa4kt8H+BOwPibV2lsENYqDWWGe7MAQYA1YnbYMBWcTj40iEfdkIC4Wi4ywiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=NLCl1p14; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1705939835; c=relaxed/simple;
+	bh=ZGt+C8kuxGgVLMYmXGUjNl+mzXfyON8bvg5n6vThnh0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L+k0+RFYk+aPQyXlt9HTfzaBpKFRUb1sspyg7oYxBiUcNYhzrHRqhnxFkUMPArPtMPO/Wc1JZOj+smV+NUZhKSLZP4jUUn4nR7tcOgnJF1kBEC8RDenkUGchMG48+0b3dqwuQ7BKMDKdpHXUWKk7O/fO+0Q6mOB2HLRxvH/9Oco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ieCSjXXY; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="NLCl1p14"
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2cd46e7ae8fso26547631fa.1
-        for <linux-modules@vger.kernel.org>; Sun, 21 Jan 2024 11:55:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1705866902; x=1706471702; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PhjJVX3QcOh8OZyy81TIER7JHK4cm7N4BYEGM0PaABA=;
-        b=NLCl1p14Y4P3Lb7FdRy7fHEB/SgXPXxftFv1J90itxs0TRmi9fyxGOaC3/2fCc3Hzr
-         YbuO62gEsI/8f6/PtZ8xpvZy7PD8coqcykc/qJJwqv0VDIk6McKuaySI2CnR3mkSfVd7
-         ozaGSogZGn43MMaAqIgD22WCqSqbGXCFpHN/Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705866902; x=1706471702;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PhjJVX3QcOh8OZyy81TIER7JHK4cm7N4BYEGM0PaABA=;
-        b=TJY9fcoemn4Nml8JegtFEMWVtZHIQ0h7h8wJtRkd60Q2NjyzUsBzexVIGYB1zOvUS3
-         FfOLUVh8UqNlDgQdwIzVQGTf9NR31Txx9e6+z2Vuqpwklqq1t5hIwVdkvIc5eF+iQRbe
-         aBSyR6KkA55wZWzSiGU+wdtqp3pGSl2eNuJbDqTHmrhMp9KZbbvByWa2o+pG/o3E9BDr
-         msxAafOzD2wg2M962PXL9l6dYScuG1Wv4VK3GHgoKsP8EnGRTUMZ4TvTYaFSo2L6eAnW
-         03KpqGasJdgl3NJYch+q9ghSG3qTqiThGUQLEVLM0lK/FvMptk6xh4kRIzsyTatMjAUx
-         dxoA==
-X-Gm-Message-State: AOJu0YxxPvE2N+SpmRQ7loDYxW4LaHlxIfgvR5S5vAaYnbssP3iBAy5R
-	ksLmqZXzvnZ5fnHVceuu4CWSWOWG1QKSoqXLaZFcoXpP8w24+s00rrDhiwWJko4R1rFp1ITVLsM
-	yKHCI3Q==
-X-Google-Smtp-Source: AGHT+IHsho4c1FzA+4Dv0TMYto3NWfjYZZCKYgyu+2p+o/nIjPaRyZL4eLeWdXxPalNd2E8DP0Ej5Q==
-X-Received: by 2002:a05:651c:c95:b0:2ce:dfc:db74 with SMTP id bz21-20020a05651c0c9500b002ce0dfcdb74mr354340ljb.135.1705866901951;
-        Sun, 21 Jan 2024 11:55:01 -0800 (PST)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
-        by smtp.gmail.com with ESMTPSA id b10-20020a2e848a000000b002cdc1beb671sm2246280ljh.12.2024.01.21.11.55.01
-        for <linux-modules@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Jan 2024 11:55:01 -0800 (PST)
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2cdf69bb732so24511491fa.3
-        for <linux-modules@vger.kernel.org>; Sun, 21 Jan 2024 11:55:01 -0800 (PST)
-X-Received: by 2002:a2e:bc09:0:b0:2cd:a774:2714 with SMTP id
- b9-20020a2ebc09000000b002cda7742714mr655928ljf.152.1705866900796; Sun, 21 Jan
- 2024 11:55:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ieCSjXXY"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=IUlnu8wi62rcUhXVGusVj8nsgov/bqx6G7ayEgbR6Do=; b=ieCSjXXY7jvvGh6xwiGqNI73/W
+	qe1GyjCUPL4h2XSKuCnHBWT7h7KFV1aC7kF5e8OcTFz3Lsrxj2GCxwmd1uAB9RjaGqZGP9BxkyASl
+	CGOm2v09k5Fsq3jm5LkT5FgkPfhgbYAuN0DzhNMzBdVu+GAlM5uSZTEYXlnsv4bNNSkgw6J6RUZm8
+	QpdMUZa2k5NlnEorqHIg0eCicVFoDRTYvfY/IV3S7kqCL4uzpbZlsuzmTFHZW9WRp0nTUoqE7UUyK
+	VqlwnD4v3vNR3bjQ+41+pQNCO5AwAzySLfQozEP9/YpnG/tepI71cUEC5DxPCkScK8xTrET7wz76p
+	BOnCeoOg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rRwsZ-00Cstp-1Q;
+	Mon, 22 Jan 2024 16:10:31 +0000
+Date: Mon, 22 Jan 2024 08:10:31 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Helge Deller <deller@gmx.de>
+Cc: deller@kernel.org, linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: Re: [PATCH 2/4] modules: Ensure 64-bit alignment on __ksymtab_*
+ sections
+Message-ID: <Za6Td6cx3JbTfnCZ@bombadil.infradead.org>
+References: <20231122221814.139916-1-deller@kernel.org>
+ <20231122221814.139916-3-deller@kernel.org>
+ <ZYUlpxlg/WooxGWZ@bombadil.infradead.org>
+ <1b73bc5a-1948-4e67-9ec5-b238723b3a48@gmx.de>
+ <ZYXtPL7Ds1SUKPLT@bombadil.infradead.org>
+ <59bc81b5-820e-40ff-9159-c03e429af9a6@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <E1rNVlL-000qDm-Pg@rmk-PC.armlinux.org.uk>
-In-Reply-To: <E1rNVlL-000qDm-Pg@rmk-PC.armlinux.org.uk>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 21 Jan 2024 11:54:44 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgUmXuxtbThqBNREhihRJxrDjuOZRUe8DiwJgPOc7d4zw@mail.gmail.com>
-Message-ID: <CAHk-=wgUmXuxtbThqBNREhihRJxrDjuOZRUe8DiwJgPOc7d4zw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: detect depmod version to exclude new SHA3 module
- signing options
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	Dimitri John Ledkov <dimitri.ledkov@canonical.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59bc81b5-820e-40ff-9159-c03e429af9a6@gmx.de>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-[ Going through my "this is still pending" list ]
+On Sat, Dec 30, 2023 at 08:33:24AM +0100, Helge Deller wrote:
+> Your selftest code is based on perf.
+> AFAICS we don't have perf on parisc/hppa, 
 
-On Wed, 10 Jan 2024 at 02:24, Russell King (Oracle)
-<rmk+kernel@armlinux.org.uk> wrote:
->
-> I don't know what the minimum requirement is for SHA3 to work, so I have
-> chosen a minimum of version 29 for the purposes of this patch.
+I see!
 
-I see that there is some noise about hopefully just getting depmod fixed.
+> so I can't test your selftest code
+> on that architecture.
+> I assume you tested on x86, where the CPU will transparently take care of
+> unaligned accesses. This is probably why the results are within
+> the noise.
+> But on some platforms the CPU raises an exception on unaligned accesses
+> and jumps into special exception handler assembler code inside the kernel.
+> This is much more expensive than on x86, which is why we track on parisc
+> in /proc/cpuinfo counters on how often this exception handler is called:
+> IRQ:       CPU0       CPU1
+>   3:       1332          0         SuperIO  ttyS0
+>   7:    1270013          0         SuperIO  pata_ns87415
+>  64:  320023012  320021431             CPU  timer
+>  65:   17080507   20624423             CPU  IPI
+> UAH:   10948640      58104   Unaligned access handler traps
+> 
+> This "UAH" field could theoretically be used to extend your selftest.
 
-But if we take this approach and just say "don't allow SHA3 signing
-with a broken depmod", I'd personally be happier with something that
-isn't version-dependent, but is bug-dependent.
+Nice!
 
-IOW, instead of doing "depmod --version" and parsing that,
-particularly since apparently the exact version isn't clear, would it
-be possible to just actually test for the bug itself?
+> But is it really worth it? The outcome is very much architecture and CPU
+> specific, maybe it's just within the noise as you measured.
 
-Or, honestly, maybe just extend the depmod wrapper script to write our
-a more descriptive error report. We already have that whole
+It's within the noise for x86_64, but given what you suggest
+for parisc where it is much more expensive, we should see a non-noise
+delta. Even just time on loading the module should likely result in
+a considerable delta than on x86_64. You may just need to play a bit
+with the default values at build time.
 
-        echo "Warning: 'make modules_install' requires $DEPMOD. Please
-install it." >&2
+> IMHO we should always try to natively align structures, and if we see
+> we got it wrong in kernel code, we should fix it.
 
-thing, so we already have run-time error handling (although I note
-that it does "exit 0" instead of something saner) rather than some
-Kconfig-time case.
+This was all motivated by the first review criteria of these patches
+as if they were stable worthy or not. Even if we don't consider them
+stable material, given the test is now written and easily extended to
+test on parisc with just timing information and UAH I think it would
+be nice to have this data for a few larger default factor values so we
+can compare against x86_64 while we're at it.
 
-                Linus
+If you don't feel like doing that test that's fine too, we can just
+ignore that. I'll still apply the patches but, I figured I'd ask to
+collect information while the test was already written and it should
+now be easy to compare / contrast differences.
+
+  Luis
