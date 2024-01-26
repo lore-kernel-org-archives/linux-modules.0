@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E771C2AE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DF01BDF8
 	for <linux-modules@vger.kernel.org>; Fri, 26 Jan 2024 14:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706280230; cv=none; b=eOeUDr9c8Va9LiMPmmCHgCZHIKPkYBx2UTa5Bd5S98xkBxnpQ6d3E+pHIlV7wklSZCgHff+NgfAE8lykhHDRglszj6/j4zD/Q5+1wMQeO7qZTKrFvGH5njiXc3EgTJg4AXsI0n2dsnCCMWboki/8t2PwhFKZbhJqGOgxfuRtg/U=
+	t=1706280230; cv=none; b=gZ+iL0ez5Gw+j8vpTk2D1BwSl7fen2GnI5dIq6adc8lpX+HNxj7RBGa2u3YMycAFjcm9pwdFKPvqK++bfP1jKlo/iS9vUybnZOZsDCIF41OWC8/dm8J7J89ftCh1C27uj3dLnlMLTo8Zj+BqiO+8c5RXrIXTcbiXz5bbUG5Mgm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706280230; c=relaxed/simple;
-	bh=Mwkjxdv6ZeI3RiGnQHQaNJvZizkxUrEbM4PzHrmVAGg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KfasZusfbUprLtZUd9x94jjLKYe4y0LzoRBvsuOiFkEeZhOZKgd+haptVFrPu1NDt3tZY3iUxYzXp0MhRxUV4323w/qLuBw79jmLHFBjbrJ+iG2IkbKMgfdhvfY0R4eHZylBrY7rpakQyXr4J2ex8rZOaxVZhjzoW2eJ3oioTn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9r7WpcW; arc=none smtp.client-ip=10.30.226.201
+	bh=iP3YAJTUyB2rRlKlTQsMxA8BAo5WcM+lG3V0XkqEfVM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=qh1m45A7B+btFdYYR/m2Jdkmshg8oscdzACl65hc1CLy2gAGD+IYDPCzzaBz+8I5A5nq/SmMKJueWP/J71cgjDE4LI4uPf2t6oVnItLyq8KoIpVWCVwojwaw7rliyEtV53AhXt+YzInNaZngjeCSWhheIvdxkrcdwBm2hpB06C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WXgJKuKU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9r7WpcW"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E7FAC433B1;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WXgJKuKU"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B3BADC43142;
 	Fri, 26 Jan 2024 14:43:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1706280229;
-	bh=Mwkjxdv6ZeI3RiGnQHQaNJvZizkxUrEbM4PzHrmVAGg=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=Y9r7WpcWmn7DIroDKzL7ufLk/AIsrN4rG7oBOT7ymGQFqsAopdQ1OZvwiKn3v8gyv
-	 QnXJnW4n2xKNTk+/ryuMCtaFbmfYMAPk9W7IykP0t4gWp+XzpdBbk59UIZ70pR0+xK
-	 5k5glQzKVwrcMDLGzzoKccnOWwTJBMBli5WLNeqDVo3vlZ6TfdAsCgIUjQyDm2iRNO
-	 cjmtWzuoOmZ4XJzycppwkozWcEp8CaAddqVBLHA/Y7v+DMlINUjiwIxIOwBC1ade1n
-	 lqlx2POZEMRDlJi6ec0AVk9FRuxa59EYXmZpNoxMh6acQbL7f+FV/c+FhY9179MNPp
-	 0uCZWPesxd9SQ==
+	bh=iP3YAJTUyB2rRlKlTQsMxA8BAo5WcM+lG3V0XkqEfVM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=WXgJKuKUohWN61hUV7jSFiAbJSjNH54GxM+OfzK0IXOavLU87e/l9B2tUHgFxsXK7
+	 BdrfulUpvsc3YstrjCl9oWppcUJ+b7OLSnJw29n+bY6sZjOWCK8qmDhgcd3Dn5rcn5
+	 AI2Fcc1/8Q3+WALHzX4Cy8mfOGcZdeuKQpvFmhvaBXsV8Ncb9rB26wiyw/91fBs6ky
+	 St7b4V5s8otVlpfo9fToPCQNTxuKKIARfJpGqPD18PvnDFd16GZAjcJXjCxyRZV29M
+	 VZgKnM4eBkQNI0iu1bUF3gf03yj4X2EfgBeXNx17R0aSGXrx4vJV6QLsSf8dvbT7Uo
+	 mow6IJvEQc1zA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88282C47DDF;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C2FEC48286;
 	Fri, 26 Jan 2024 14:43:49 +0000 (UTC)
 From: Emil Velikov via B4 Relay <devnull+emil.l.velikov.gmail.com@kernel.org>
-Subject: [PATCH 0/2] Polish module_directory help string, install symlinks
-Date: Fri, 26 Jan 2024 14:43:49 +0000
-Message-Id: <20240126-master-v1-0-6257d039a30a@gmail.com>
+Date: Fri, 26 Jan 2024 14:43:51 +0000
+Subject: [PATCH 2/2] make: install/uninstall tools symlinks to kmod
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -40,17 +40,17 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACXFs2UC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDQyMz3dzE4pLUIl3TpEQjC7MkI7PU1BQloOKCotS0zAqwQdGxtbUAqZF
- WblgAAAA=
+Message-Id: <20240126-master-v1-2-6257d039a30a@gmail.com>
+References: <20240126-master-v1-0-6257d039a30a@gmail.com>
+In-Reply-To: <20240126-master-v1-0-6257d039a30a@gmail.com>
 To: linux-modules@vger.kernel.org
 Cc: Emil Velikov <emil.velikov@collabora.com>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1706280230; l=807;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1706280230; l=1402;
  i=emil.l.velikov@gmail.com; s=20230301; h=from:subject:message-id;
- bh=Mwkjxdv6ZeI3RiGnQHQaNJvZizkxUrEbM4PzHrmVAGg=;
- b=owKXjQXevkD2k1BGeCmO+DPuJb+42URVekX0+uJqqAGxlaTkGo661qCftIJaRPj57Fbr07FD7
- hhY0BmaCUZ/DBUpVWRfoRGUUUZyedan1RNwvsKNrFMRC5vMPR2AqINq
+ bh=N6QdxuIRatl9gn+qNQ/NgGZ033RgojWqbfTqQeySBZI=;
+ b=9YYI/y3zGT94hO2jfDdxyFiWlQf//iiBC1y14zCRLRWd7eog/qpW5Y17kwKa1E9AHWtMUKkuE
+ cCHRtFNsLCHCu2nmC0o96Dms78VVujln/I5K8fjnUxfIhd5oDcd7Wr/
 X-Developer-Key: i=emil.l.velikov@gmail.com; a=ed25519;
  pk=qeUTVTNyI3rcR2CfNNWsloTihgzmtbZo98GdxwZKCkY=
 X-Endpoint-Received:
@@ -58,34 +58,51 @@ X-Endpoint-Received:
 X-Original-From: Emil Velikov <emil.l.velikov@gmail.com>
 Reply-To: <emil.l.velikov@gmail.com>
 
-Hello all,
+From: Emil Velikov <emil.velikov@collabora.com>
 
-I've noticed the recent module_directory work and I'm super hyped to see
-it released. Are there any plans for v32?
+Currently we create symlinks like modprobe (pointing to kmod), during
+the normal `make` build. Although those were never installed.
 
-This tiny series has two patches:
- - tweaks the help string for the module_directory toggle
- - installs the insmod, rmmod, lsmod ... symlinks
+Add a few lines in the install-exec-hook, to ensure they're present at
+`make install` time. Thus one can actually use those without additional
+changes. As an added bonus, distributions can drop the similar hunk from
+their packaging.
 
-The above should be fairly straightforward, but if there's any questions
-or concerns do let me know.
-
-Thanks
-Emil
-
+Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
 ---
-Emil Velikov (2):
-      configure: tweak the module_directory help string
-      make: install/uninstall tools symlinks to kmod
+Out of curiosity: are there any plans about releasing v32? I'm
+interested in the recent /usr/lib/modules (module_directory) patches.
 
- Makefile.am  | 10 ++++++++++
- configure.ac |  2 +-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+Thanks o/
 ---
-base-commit: 48b0c75f79f86140314b9656d3d855a515e18a73
-change-id: 20240126-master-5ba286b26eed
+ Makefile.am | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Best regards,
+diff --git a/Makefile.am b/Makefile.am
+index 4062d81..a22d1b1 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -111,9 +111,19 @@ install-exec-hook:
+ 		ln -sf $$so_img_rel_target_prefix$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/libkmod.so && \
+ 		mv $(DESTDIR)$(libdir)/libkmod.so.* $(DESTDIR)$(rootlibdir); \
+ 	fi
++if BUILD_TOOLS
++	for tool in insmod lsmod rmmod depmod modprobe modinfo; do \
++		$(LN_S) $(bindir)/kmod $(DESTDIR)$(bindir)/$$tool; \
++	done
++endif
+ 
+ uninstall-hook:
+ 	rm -f $(DESTDIR)$(rootlibdir)/libkmod.so*
++if BUILD_TOOLS
++	for tool in insmod lsmod rmmod depmod modprobe modinfo; do \
++		rm -f $(DESTDIR)$(bindir)/$$tool; \
++	done
++endif
+ 
+ if BUILD_TOOLS
+ bin_PROGRAMS = tools/kmod
+
 -- 
-Emil Velikov <emil.l.velikov@gmail.com>
+2.43.0
 
