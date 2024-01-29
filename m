@@ -1,108 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DF01BDF8
-	for <linux-modules@vger.kernel.org>; Fri, 26 Jan 2024 14:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4330DF4E;
+	Mon, 29 Jan 2024 02:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706280230; cv=none; b=gZ+iL0ez5Gw+j8vpTk2D1BwSl7fen2GnI5dIq6adc8lpX+HNxj7RBGa2u3YMycAFjcm9pwdFKPvqK++bfP1jKlo/iS9vUybnZOZsDCIF41OWC8/dm8J7J89ftCh1C27uj3dLnlMLTo8Zj+BqiO+8c5RXrIXTcbiXz5bbUG5Mgm0=
+	t=1706493804; cv=none; b=YZduD7Eg9/binPGq2KBjNMn5ogZ2gARoaYqvvLKksiWpmqIb+DdCekUPub1c/jiS5jhcp99e6v/u7TL5EXuqFi2t0MebH+VKPmLpsr0DalPPQV9D9Ig8vwsGQIei4EPCFbITZ5gBHKiF9BoG5DXnJIFMl1tcRJd2/GQ/qDlJ88M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706280230; c=relaxed/simple;
-	bh=iP3YAJTUyB2rRlKlTQsMxA8BAo5WcM+lG3V0XkqEfVM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qh1m45A7B+btFdYYR/m2Jdkmshg8oscdzACl65hc1CLy2gAGD+IYDPCzzaBz+8I5A5nq/SmMKJueWP/J71cgjDE4LI4uPf2t6oVnItLyq8KoIpVWCVwojwaw7rliyEtV53AhXt+YzInNaZngjeCSWhheIvdxkrcdwBm2hpB06C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WXgJKuKU; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WXgJKuKU"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3BADC43142;
-	Fri, 26 Jan 2024 14:43:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706280229;
-	bh=iP3YAJTUyB2rRlKlTQsMxA8BAo5WcM+lG3V0XkqEfVM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=WXgJKuKUohWN61hUV7jSFiAbJSjNH54GxM+OfzK0IXOavLU87e/l9B2tUHgFxsXK7
-	 BdrfulUpvsc3YstrjCl9oWppcUJ+b7OLSnJw29n+bY6sZjOWCK8qmDhgcd3Dn5rcn5
-	 AI2Fcc1/8Q3+WALHzX4Cy8mfOGcZdeuKQpvFmhvaBXsV8Ncb9rB26wiyw/91fBs6ky
-	 St7b4V5s8otVlpfo9fToPCQNTxuKKIARfJpGqPD18PvnDFd16GZAjcJXjCxyRZV29M
-	 VZgKnM4eBkQNI0iu1bUF3gf03yj4X2EfgBeXNx17R0aSGXrx4vJV6QLsSf8dvbT7Uo
-	 mow6IJvEQc1zA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C2FEC48286;
-	Fri, 26 Jan 2024 14:43:49 +0000 (UTC)
-From: Emil Velikov via B4 Relay <devnull+emil.l.velikov.gmail.com@kernel.org>
-Date: Fri, 26 Jan 2024 14:43:51 +0000
-Subject: [PATCH 2/2] make: install/uninstall tools symlinks to kmod
+	s=arc-20240116; t=1706493804; c=relaxed/simple;
+	bh=IEpmCe8PdULcIZ1iTvoEQFIwogYTVs/aT/6x5pefwHo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=b6qc4G2bP7lA+HSSKefgR0ObO9OFSjgujXJ4Tl6CxXcT1wkLEubId+pfmClTWtS3wHqhNJ0Bt3NdWQeM8h9jUqQasLIlj2P2If2bAH8HuzK1GJrLorJJHubKkRfp+Ae+nANfntmg6v8RfCzb5sQoefMsIpCcFY/4ec9uV1jzB4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4TNWlC6xhSzNllm;
+	Mon, 29 Jan 2024 10:02:15 +0800 (CST)
+Received: from kwepemd100002.china.huawei.com (unknown [7.221.188.184])
+	by mail.maildlp.com (Postfix) with ESMTPS id CA3491400CD;
+	Mon, 29 Jan 2024 10:03:13 +0800 (CST)
+Received: from M910t.huawei.com (10.110.54.157) by
+ kwepemd100002.china.huawei.com (7.221.188.184) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1258.28; Mon, 29 Jan 2024 10:03:12 +0800
+From: Changbin Du <changbin.du@huawei.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain
+	<mcgrof@kernel.org>
+CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Changbin
+ Du <changbin.du@huawei.com>, Xiaoyi Su <suxiaoyi@huawei.com>
+Subject: [RESEND PATCH v2] modules: wait do_free_init correctly
+Date: Mon, 29 Jan 2024 10:03:04 +0800
+Message-ID: <20240129020304.1981372-1-changbin.du@huawei.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240126-master-v1-2-6257d039a30a@gmail.com>
-References: <20240126-master-v1-0-6257d039a30a@gmail.com>
-In-Reply-To: <20240126-master-v1-0-6257d039a30a@gmail.com>
-To: linux-modules@vger.kernel.org
-Cc: Emil Velikov <emil.velikov@collabora.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1706280230; l=1402;
- i=emil.l.velikov@gmail.com; s=20230301; h=from:subject:message-id;
- bh=N6QdxuIRatl9gn+qNQ/NgGZ033RgojWqbfTqQeySBZI=;
- b=9YYI/y3zGT94hO2jfDdxyFiWlQf//iiBC1y14zCRLRWd7eog/qpW5Y17kwKa1E9AHWtMUKkuE
- cCHRtFNsLCHCu2nmC0o96Dms78VVujln/I5K8fjnUxfIhd5oDcd7Wr/
-X-Developer-Key: i=emil.l.velikov@gmail.com; a=ed25519;
- pk=qeUTVTNyI3rcR2CfNNWsloTihgzmtbZo98GdxwZKCkY=
-X-Endpoint-Received:
- by B4 Relay for emil.l.velikov@gmail.com/20230301 with auth_id=35
-X-Original-From: Emil Velikov <emil.l.velikov@gmail.com>
-Reply-To: <emil.l.velikov@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemd100002.china.huawei.com (7.221.188.184)
 
-From: Emil Velikov <emil.velikov@collabora.com>
+The commit 1a7b7d922081 ("modules: Use vmalloc special flag") moves
+do_free_init() into a global workqueue instead of call_rcu(). So now
+rcu_barrier() can not ensure that do_free_init has completed. We should
+wait it via flush_work().
 
-Currently we create symlinks like modprobe (pointing to kmod), during
-the normal `make` build. Although those were never installed.
+Without this fix, we still could encounter false positive reports in
+W+X checking, and rcu synchronization is unnecessary.
 
-Add a few lines in the install-exec-hook, to ensure they're present at
-`make install` time. Thus one can actually use those without additional
-changes. As an added bonus, distributions can drop the similar hunk from
-their packaging.
+Fixes: 1a7b7d922081 ("modules: Use vmalloc special flag")
+Signed-off-by: Changbin Du <changbin.du@huawei.com>
+Cc: Xiaoyi Su <suxiaoyi@huawei.com>
 
-Signed-off-by: Emil Velikov <emil.velikov@collabora.com>
 ---
-Out of curiosity: are there any plans about releasing v32? I'm
-interested in the recent /usr/lib/modules (module_directory) patches.
-
-Thanks o/
+v2: fix compilation issue for no CONFIG_MODULES found by 0-DAY.
 ---
- Makefile.am | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ include/linux/moduleloader.h | 8 ++++++++
+ init/main.c                  | 5 +++--
+ kernel/module/main.c         | 5 +++++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile.am b/Makefile.am
-index 4062d81..a22d1b1 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -111,9 +111,19 @@ install-exec-hook:
- 		ln -sf $$so_img_rel_target_prefix$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/libkmod.so && \
- 		mv $(DESTDIR)$(libdir)/libkmod.so.* $(DESTDIR)$(rootlibdir); \
- 	fi
-+if BUILD_TOOLS
-+	for tool in insmod lsmod rmmod depmod modprobe modinfo; do \
-+		$(LN_S) $(bindir)/kmod $(DESTDIR)$(bindir)/$$tool; \
-+	done
-+endif
+diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+index 001b2ce83832..89b1e0ed9811 100644
+--- a/include/linux/moduleloader.h
++++ b/include/linux/moduleloader.h
+@@ -115,6 +115,14 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 		    const Elf_Shdr *sechdrs,
+ 		    struct module *mod);
  
- uninstall-hook:
- 	rm -f $(DESTDIR)$(rootlibdir)/libkmod.so*
-+if BUILD_TOOLS
-+	for tool in insmod lsmod rmmod depmod modprobe modinfo; do \
-+		rm -f $(DESTDIR)$(bindir)/$$tool; \
-+	done
-+endif
++#ifdef CONFIG_MODULES
++void flush_module_init_free_work(void);
++#else
++static inline void flush_module_init_free_work(void)
++{
++}
++#endif
++
+ /* Any cleanup needed when module leaves. */
+ void module_arch_cleanup(struct module *mod);
  
- if BUILD_TOOLS
- bin_PROGRAMS = tools/kmod
-
+diff --git a/init/main.c b/init/main.c
+index e24b0780fdff..f0b7e21ac67f 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -99,6 +99,7 @@
+ #include <linux/init_syscalls.h>
+ #include <linux/stackdepot.h>
+ #include <linux/randomize_kstack.h>
++#include <linux/moduleloader.h>
+ #include <net/net_namespace.h>
+ 
+ #include <asm/io.h>
+@@ -1402,11 +1403,11 @@ static void mark_readonly(void)
+ 	if (rodata_enabled) {
+ 		/*
+ 		 * load_module() results in W+X mappings, which are cleaned
+-		 * up with call_rcu().  Let's make sure that queued work is
++		 * up with init_free_wq. Let's make sure that queued work is
+ 		 * flushed so that we don't hit false positives looking for
+ 		 * insecure pages which are W+X.
+ 		 */
+-		rcu_barrier();
++		flush_module_init_free_work();
+ 		mark_rodata_ro();
+ 		rodata_test();
+ 	} else
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 36681911c05a..ea66b5c2a2a1 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2489,6 +2489,11 @@ static void do_free_init(struct work_struct *w)
+ 	}
+ }
+ 
++void flush_module_init_free_work(void)
++{
++	flush_work(&init_free_wq);
++}
++
+ #undef MODULE_PARAM_PREFIX
+ #define MODULE_PARAM_PREFIX "module."
+ /* Default value for module->async_probe_requested */
 -- 
-2.43.0
+2.25.1
 
