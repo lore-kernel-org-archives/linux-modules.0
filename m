@@ -1,86 +1,81 @@
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71711101CF;
-	Mon, 29 Jan 2024 18:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FF676020;
+	Mon, 29 Jan 2024 19:26:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706554253; cv=none; b=FcuCFgbeYtECrlkGNQI2eYGBJwMnLFJHyZhQMwNIF52ZRoSJlY3WRoSwNYHo1oeRrjWD9FTDe1FwsCKtjXUU+WjOK/ls5cYAVFDeWnvbfS2+1gkyrccqtv/aC0WljGsOY7PSZu3sxLd2dekt8yAThQU0TX+luF4jkP0jLBMqyPE=
+	t=1706556411; cv=none; b=uhLaagN+k5KoMu8uFjLNusKVQMV/wz3tYAThfJyfADoLx3bs2CILEsmDPSoH+fkfnTrIowzG+4GDyC+lFeiQG9sjiwwXsllUctGUiPHlVohWEYUNh35p0UTdWuey4uM7oYU0wvYrmqhU3KM33lX2IY7YTh9LjTWGzLz8BLAsnBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706554253; c=relaxed/simple;
-	bh=NG8Tyu90tiRom2cpwzM2tkHoEbmUxw/zsK650AzFPm8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gsdJI0AFhmYrFlHRIc0Oc63YWVWWGz6Syq/kqfMGzvOcRgqqvHHXId9NMJ6dTVyJqRn0mkNucF1LseQyI2FkrX9n3LjT2PH5G1+E0uruXe2Uh45RHyhAHnSCyrjCBa4e2wa9EXVSQk8SAAAtnYModRpsCcSK1jek6yDmQqbl7gA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=0zzEmelr; arc=none smtp.client-ip=198.137.202.133
+	s=arc-20240116; t=1706556411; c=relaxed/simple;
+	bh=fWacdajCuKruy4IRIC3PfeCsbekc4brMNN4YQdaTalo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cQRhUiZ1JKMMA29tYtPFQLf2NMso5Xtn2SeDXg1xZSuGoS/iSQGqZRxlNScSzti7Vkw84LUMv7rwURZ9S/kd27Nigp8RxUC7/WVjm6fyq5v1R+IZcnz9nOMSn7kXqDu6gx0osijjjjUcak0WEHZAofqnZtOe9TbnCjxsLs2EbL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=gVyAxVbI; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="0zzEmelr"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gVyAxVbI"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=sKRWq6ksgkPBg9JPG7PmIqtGGw2idUn43y59rAXbEJ4=; b=0zzEmelrVAaPdMLUmxBTBV3z5j
-	sTg5i55dwqZDW96ifCc8EFQl2eruj6lIVS7O9z09rE7JGbiRo16c1HH7SeeLDLGpGs+C0ppnWReyQ
-	0WBVpmPXBZBb7PDbG7aK/uDwDi0LjFz9VbUboNJnl0mRN8R0o+gTtJ7843Viku/5QfW/sse084/0q
-	hkjVxYraiwna/My790drFuDb9zU3EEtA5Ip2W7pWbsbp9MBiWxCqbCWxyi/K41HslwbJKXQN6vILR
-	GmWxAjU5oQ35+TDWcVICaghbBUE2YA4RWUbBMLLwJ6Kg84oCzfjg3svA3tOSNHSrieiFFNR8EGlcW
-	pgCTZwaQ==;
+	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=StcUcdeBhMll4u6Z4i+H51owxL/+smnyRSjHl622094=; b=gVyAxVbI/Cx6Kpl28JvKZOP4tk
+	57nEOoe6Sw4I2IkN5W6psqo4tGP5Gq3ZdR+GkxDCGugiLgnvDXU2pMiFvb80xUU6eXm28Ak5CXA2y
+	G8Lk6q/0KXugythCeLCBYAX00gkMTnjDDGWrZ6sPBA6xaQs7Pr4Ek5NPJRkWIAJ55OwzUwBi22ckc
+	/tVg8mBsT6PWGFCc04CitPe4u1ACSPzDWFFFewYOeE2vv2W7pytKtvYvjy8HTVrDb7WsRC2EwOddt
+	uef/XXchE3++mqs/Oqpx8pexEnLD4kd5VYcxkCKAVhHrJDAfRB+mxjasCSn1z2S1qDpsyYW3Fw++/
+	KLmSJaUw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rUWiY-0000000E1GC-03m7;
-	Mon, 29 Jan 2024 18:50:50 +0000
-Date: Mon, 29 Jan 2024 10:50:49 -0800
+	id 1rUXHN-0000000E67v-2wh9;
+	Mon, 29 Jan 2024 19:26:49 +0000
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: deller@kernel.org
-Cc: linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, linux-modules@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Subject: Re: [PATCH 4/4] modules: Add missing entry for __ex_table
-Message-ID: <ZbfziYbsRtIleZzQ@bombadil.infradead.org>
-References: <20231122221814.139916-1-deller@kernel.org>
- <20231122221814.139916-5-deller@kernel.org>
+To: masahiroy@kernel.org,
+	deller@gmx.de
+Cc: mcgrof@kernel.org,
+	arnd@arndb.de,
+	linux-arch@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/4] vmlinux.lds.h: add missing alignment for symbol CRCs
+Date: Mon, 29 Jan 2024 11:26:42 -0800
+Message-ID: <20240129192644.3359978-4-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240129192644.3359978-1-mcgrof@kernel.org>
+References: <20240129192644.3359978-1-mcgrof@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231122221814.139916-5-deller@kernel.org>
+Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Wed, Nov 22, 2023 at 11:18:14PM +0100, deller@kernel.org wrote:
-> From: Helge Deller <deller@gmx.de>
-> 
-> The entry for __ex_table was missing, which may make __ex_table
-> become 1- or 2-byte aligned in modules.
-> Add the entry to ensure it gets 32-bit aligned.
-> 
-> Signed-off-by: Helge Deller <deller@gmx.de>
-> Cc: <stable@vger.kernel.org> # v6.0+
+Commit f3304ecd7f06 (linux/export: use inline assembler to populate
+symbol CRCs") fixed an issue with unexpected padding  by adding
+asm inline assembly to directly specify the desired data layout.
+It however forgot to add the alignment, fix that.
 
-Cc'ing stable was overkill, I'll remove it.
+Reported-by: Helge Deller <deller@gmx.de>
+Fixes: f3304ecd7f06 ("linux/export: use inline assembler to populate symbol CRCs")
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ include/linux/export-internal.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-  Luis
+diff --git a/include/linux/export-internal.h b/include/linux/export-internal.h
+index 69501e0ec239..51b8cf3f60ef 100644
+--- a/include/linux/export-internal.h
++++ b/include/linux/export-internal.h
+@@ -61,6 +61,7 @@
+ 
+ #define SYMBOL_CRC(sym, crc, sec)   \
+ 	asm(".section \"___kcrctab" sec "+" #sym "\",\"a\""	"\n" \
++	    ".balign 4"						"\n" \
+ 	    "__crc_" #sym ":"					"\n" \
+ 	    ".long " #crc					"\n" \
+ 	    ".previous"						"\n")
+-- 
+2.42.0
 
-> ---
->  scripts/module.lds.S | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-> index b00415a9ff27..488f61b156b2 100644
-> --- a/scripts/module.lds.S
-> +++ b/scripts/module.lds.S
-> @@ -26,6 +26,7 @@ SECTIONS {
->  	.altinstructions	0 : ALIGN(8) { KEEP(*(.altinstructions)) }
->  	__bug_table		0 : ALIGN(8) { KEEP(*(__bug_table)) }
->  	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
-> +	__ex_table		0 : ALIGN(4) { KEEP(*(__ex_table)) }
->  
->  	__patchable_function_entries : { *(__patchable_function_entries) }
->  
-> -- 
-> 2.41.0
-> 
-> 
