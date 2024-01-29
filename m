@@ -1,129 +1,89 @@
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4330DF4E;
-	Mon, 29 Jan 2024 02:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE014C605
+	for <linux-modules@vger.kernel.org>; Mon, 29 Jan 2024 06:38:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706493804; cv=none; b=YZduD7Eg9/binPGq2KBjNMn5ogZ2gARoaYqvvLKksiWpmqIb+DdCekUPub1c/jiS5jhcp99e6v/u7TL5EXuqFi2t0MebH+VKPmLpsr0DalPPQV9D9Ig8vwsGQIei4EPCFbITZ5gBHKiF9BoG5DXnJIFMl1tcRJd2/GQ/qDlJ88M=
+	t=1706510339; cv=none; b=T8OTkbllJf+PAtMVI6SCOnwod1fL3pBG7I6lB9TQMkXHTJboKz9kGtCCxSo6qLUAYXgs5Q2BUs2/P8EVHToHmWIK5HJ7ZXtz+8AeNXj18bfMGIEEWNfUir/QYHuSHVDbFgXiYtuLsVXMYcYufApR/UnmfGCXnZS3wxiYHDor9uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706493804; c=relaxed/simple;
-	bh=IEpmCe8PdULcIZ1iTvoEQFIwogYTVs/aT/6x5pefwHo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=b6qc4G2bP7lA+HSSKefgR0ObO9OFSjgujXJ4Tl6CxXcT1wkLEubId+pfmClTWtS3wHqhNJ0Bt3NdWQeM8h9jUqQasLIlj2P2If2bAH8HuzK1GJrLorJJHubKkRfp+Ae+nANfntmg6v8RfCzb5sQoefMsIpCcFY/4ec9uV1jzB4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+	s=arc-20240116; t=1706510339; c=relaxed/simple;
+	bh=YW2GSfqLb1anPfEjgk1lbUZdv+JlYoKcIHyUfuNsBxk=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=ugfCW2phSCrLR6fVr2L8uR7as4KTUcVh7g1ZEMJAFOboLOXkwymXaN6JWm9zatE0ig77o7nEp3PpU6dbGGh34cDktJDG8oY/NalcoRpQvlTUhpISnwW3ICcy6sQ7GQfCOcZ1D3DsumZ5QjDcNsV9g9nI1EMoL73BK0DvJ+1Kpn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4TNWlC6xhSzNllm;
-	Mon, 29 Jan 2024 10:02:15 +0800 (CST)
-Received: from kwepemd100002.china.huawei.com (unknown [7.221.188.184])
-	by mail.maildlp.com (Postfix) with ESMTPS id CA3491400CD;
-	Mon, 29 Jan 2024 10:03:13 +0800 (CST)
-Received: from M910t.huawei.com (10.110.54.157) by
- kwepemd100002.china.huawei.com (7.221.188.184) with Microsoft SMTP Server
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TNdT34nFHz67pY8;
+	Mon, 29 Jan 2024 14:20:23 +0800 (CST)
+Received: from lhrpeml500001.china.huawei.com (unknown [7.191.163.213])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9DDF7140B55;
+	Mon, 29 Jan 2024 14:23:12 +0800 (CST)
+Received: from [10.123.123.147] (10.123.123.147) by
+ lhrpeml500001.china.huawei.com (7.191.163.213) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1258.28; Mon, 29 Jan 2024 10:03:12 +0800
-From: Changbin Du <changbin.du@huawei.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain
-	<mcgrof@kernel.org>
-CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Changbin
- Du <changbin.du@huawei.com>, Xiaoyi Su <suxiaoyi@huawei.com>
-Subject: [RESEND PATCH v2] modules: wait do_free_init correctly
-Date: Mon, 29 Jan 2024 10:03:04 +0800
-Message-ID: <20240129020304.1981372-1-changbin.du@huawei.com>
-X-Mailer: git-send-email 2.25.1
+ 15.1.2507.35; Mon, 29 Jan 2024 06:23:10 +0000
+Message-ID: <5a7485f8-a070-465d-9e17-e7cd3d2aaa80@huawei.com>
+Date: Mon, 29 Jan 2024 09:22:59 +0300
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemd100002.china.huawei.com (7.221.188.184)
+User-Agent: Mozilla Thunderbird
+From: Artem Kuzin <artem.kuzin@huawei.com>
+Subject: Re: [PATCH RFC 02/12] mm: add config option and per-NUMA node VMS
+ support
+To: Dave Hansen <dave.hansen@intel.com>, "Christoph Lameter (Ampere)"
+	<cl@gentwo.org>
+CC: <x86@kernel.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
+	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+	<luto@kernel.org>, <peterz@infradead.org>, <akpm@linux-foundation.org>,
+	<urezki@gmail.com>, <hch@infradead.org>, <lstoakes@gmail.com>,
+	<mcgrof@kernel.org>, <rmk+kernel@armlinux.org.uk>,
+	<nikita.panov@huawei-partners.com>, <alexander.grubnikov@huawei.com>,
+	<stepanov.anatoly@huawei.com>, <guohanjun@huawei.com>,
+	<weiyongjun1@huawei.com>, <wangkefeng.wang@huawei.com>,
+	<judy.chenhui@huawei.com>, <yusongping@huawei.com>, <kang.sun@huawei.com>,
+	<linux-mm@kvack.org>, <linux-modules@vger.kernel.org>
+References: <20231228131056.602411-1-artem.kuzin@huawei.com>
+ <20231228131056.602411-3-artem.kuzin@huawei.com>
+ <059dc132-af10-fd08-7368-302c765a4269@gentwo.org>
+ <c5c8d372-ee12-4ccc-8080-a2c33301b812@huawei.com>
+ <6c5c72ab-01b1-45b4-9a33-529688e449eb@intel.com>
+Content-Language: en-US
+In-Reply-To: <6c5c72ab-01b1-45b4-9a33-529688e449eb@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: mscpeml100004.china.huawei.com (7.188.51.133) To
+ lhrpeml500001.china.huawei.com (7.191.163.213)
 
-The commit 1a7b7d922081 ("modules: Use vmalloc special flag") moves
-do_free_init() into a global workqueue instead of call_rcu(). So now
-rcu_barrier() can not ensure that do_free_init has completed. We should
-wait it via flush_work().
 
-Without this fix, we still could encounter false positive reports in
-W+X checking, and rcu synchronization is unnecessary.
+On 1/25/2024 6:07 PM, Dave Hansen wrote:
+> On 1/9/24 08:57, Artem Kuzin wrote:
+>> We already have per-NUMA node init_mm, but this is not enough.
+>> We need this array of pointers in the task struct due to the proper pgd 
+>> (per-NUMA node) should be used for threads of process that occupy more 
+>> than one NUMA node.
+> Let me repeat what Christoph said in a bit more forceful way.
+>
+> MAX_NUMNODES can be 1024.  You're adding 1023*8 bytes of overhead for
+> each process ... everywhere, including on my single node laptop.  That's
+> completely unacceptable.  You need to find another way to do this.
+>
+> I'd suggest just ignoring the problem for now.  Do multi-node processes
+> with a later optimization.
 
-Fixes: 1a7b7d922081 ("modules: Use vmalloc special flag")
-Signed-off-by: Changbin Du <changbin.du@huawei.com>
-Cc: Xiaoyi Su <suxiaoyi@huawei.com>
+Hi Dave, thanks to you and Christoph for the comments. I've just gave some details why this is necessary, and didn't want to push the solution with MAX_NUMNODES forward, this is temporarily
+thing and this place should be definitely updated in future.
 
----
-v2: fix compilation issue for no CONFIG_MODULES found by 0-DAY.
----
- include/linux/moduleloader.h | 8 ++++++++
- init/main.c                  | 5 +++--
- kernel/module/main.c         | 5 +++++
- 3 files changed, 16 insertions(+), 2 deletions(-)
+As for possible options, for now I am thinking about two:
+1. additional config option to limit the number of page tables and corresponding replicas
+2. setup per-NUMA node page tables and replicas in a lazy way allocating them on demand
 
-diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
-index 001b2ce83832..89b1e0ed9811 100644
---- a/include/linux/moduleloader.h
-+++ b/include/linux/moduleloader.h
-@@ -115,6 +115,14 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		    const Elf_Shdr *sechdrs,
- 		    struct module *mod);
- 
-+#ifdef CONFIG_MODULES
-+void flush_module_init_free_work(void);
-+#else
-+static inline void flush_module_init_free_work(void)
-+{
-+}
-+#endif
-+
- /* Any cleanup needed when module leaves. */
- void module_arch_cleanup(struct module *mod);
- 
-diff --git a/init/main.c b/init/main.c
-index e24b0780fdff..f0b7e21ac67f 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -99,6 +99,7 @@
- #include <linux/init_syscalls.h>
- #include <linux/stackdepot.h>
- #include <linux/randomize_kstack.h>
-+#include <linux/moduleloader.h>
- #include <net/net_namespace.h>
- 
- #include <asm/io.h>
-@@ -1402,11 +1403,11 @@ static void mark_readonly(void)
- 	if (rodata_enabled) {
- 		/*
- 		 * load_module() results in W+X mappings, which are cleaned
--		 * up with call_rcu().  Let's make sure that queued work is
-+		 * up with init_free_wq. Let's make sure that queued work is
- 		 * flushed so that we don't hit false positives looking for
- 		 * insecure pages which are W+X.
- 		 */
--		rcu_barrier();
-+		flush_module_init_free_work();
- 		mark_rodata_ro();
- 		rodata_test();
- 	} else
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 36681911c05a..ea66b5c2a2a1 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2489,6 +2489,11 @@ static void do_free_init(struct work_struct *w)
- 	}
- }
- 
-+void flush_module_init_free_work(void)
-+{
-+	flush_work(&init_free_wq);
-+}
-+
- #undef MODULE_PARAM_PREFIX
- #define MODULE_PARAM_PREFIX "module."
- /* Default value for module->async_probe_requested */
--- 
-2.25.1
+But here I need to try and test everything.
+
+Thanks!
 
