@@ -1,41 +1,45 @@
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8BB48790;
-	Mon, 29 Jan 2024 20:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B766F08E;
+	Mon, 29 Jan 2024 20:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706558496; cv=none; b=jKzh7XLDkKPY61CBeDqziNsULSYkbInci2nleDVv6k7IF83W5beqwZUXtb5VPg2FbjBk6tfCNQSEu0DqzVfnQsBKygCj7XW2+UJTI3RX4KfQlKjqncs4HdZqdnxMN1PpLsWCwlu/8JXIW7HZqdg5Gh+KczuSuxQ9OgJ/XSWdIAY=
+	t=1706558993; cv=none; b=GvcpCoSJeT5brlBx0kRoPLA8I/LxgdoAb0FVUxPwbZVglO6jtH2EGIy6hItPxUkvAs/eLCpCxyF0TKTB4AE66yYIsFG/Xoxbn+9rBT+y9dpvsOj+0klgEVh6RcsvjsRH16pfIQKwDk0KRs5nyDcJppR3ZdYez3fS76HHa7jPNMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706558496; c=relaxed/simple;
-	bh=ISg0qWcsic3NhSTT26Ik0LHaKUMiqMelriiZGFHLbPU=;
+	s=arc-20240116; t=1706558993; c=relaxed/simple;
+	bh=hOVjeSiNeXA8QVPW59DbtV3sJGuJPnpNfEpKdUb3GXY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VP6+gmzkJwKUSIKQpj2n0uVZQCxDEJ65yJKEUWwzAWr1B28erC+5SFWU9O7RKmD4CTX3Q54cRDJBbwCR79YySZ5mDdSr8bOaeBV93z/5I0SZqMSbpraJxz+0qnmDsslhuEdNz0Fop+ueHNm+cs2ZkjenRMO9nx2wTEscR1PBbos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=X37HBjAl; arc=none smtp.client-ip=198.137.202.133
+	 Content-Type:Content-Disposition:In-Reply-To; b=GUFAgLmQfoBMN5b1sclnAStFJLrKW8Jw4ZrH0QAR2NXeGI80/SNdn4ZM6LACW74OCRtg3MFLqC8NbAtegRa3bA7oL2B0BTXcIuS1cqjx0tEqH7yn8siqA+qslkamIVaoEIv88VXx4t9yWdjybfLfzI7rsqz50iX+Y4gv3R+hgDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=xaSmdo7s; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="X37HBjAl"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="xaSmdo7s"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
 	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=IkjdIBKoiOcpY02ZoVDX9S0wFvKlvTpVElGZtMaUhdk=; b=X37HBjAlM/ZTVyv4M+Ru3y1KCO
-	C6lhWPaBK270WH1qmBnFhd/oyk8xgfveopnpjnJZGxcz8Vf9NtUsiEtSx1FLfBXMiEjRkDivFbkN4
-	4ZdaWE6ueAlWYVSDxGkd5rF7BFDKmH0DPFm/FS5ocfYe1P/NbrZbPklkeBpNWm6CTgLsQJDkN9xM1
-	vG2spEQNGsBVFP/KtCe8Xs+m2MOPvZchqnEpAJls51agfmn5ODO7VCouatGuR1oF/a6OF/NHQaObO
-	ah5h7NOO4RmDHijLwtKXnR+TTKQprLT1hvRHV1Yx8HtceS5aIKZTzmwkXKvHY8MG0gwkG6sZh/r5/
-	pcIK1Asg==;
+	bh=CjXxVViu2m/Opq46i9BO5RAH1W1zGxIwhMJxClwKauE=; b=xaSmdo7sn5dI7eoYOssTyzogFC
+	7pSfzcF0ewY6UsxvkTDmRGlB8Wa4EKlIt2tHWkAmVX5iqyMxRq9LcngsFMzs6UW3c78SeF9JA6pfA
+	ehP3VRDE900eY25bMV15hnBIk4zsnfB4mBLOXErjXw8VZR/BwqLnGE3X2l2KJ8CnHjFV9POxNKl96
+	AKa86I3MkrKav9nOU4eRwtJr4ESDM9Cg/qQ7xAOAvTTMJ4p2VJcq6P9IyiXrJaiFZyzjC8DSkVSJr
+	80EdeREb6GSoWO4JZpWcu3cb+g5JkF6se4h+MN48sQoOTn0yu/u+oMLKk7D4yA5VGtXxuRwhfBioo
+	cNzpNxYw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rUXoz-0000000EBhU-2uy5;
-	Mon, 29 Jan 2024 20:01:33 +0000
-Date: Mon, 29 Jan 2024 12:01:33 -0800
+	id 1rUXx0-0000000ED41-1o6Y;
+	Mon, 29 Jan 2024 20:09:50 +0000
+Date: Mon, 29 Jan 2024 12:09:50 -0800
 From: Luis Chamberlain <mcgrof@kernel.org>
 To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] module: Use set_memory_rox()
-Message-ID: <ZbgEHYe6f4WiIKoU@bombadil.infradead.org>
-References: <98d4db94f19737fe05fd811a4188ff277b83a334.1703143382.git.christophe.leroy@csgroup.eu>
+Cc: Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH 1/3] init: Declare rodata_enabled and mark_rodata_ro() at
+ all time
+Message-ID: <ZbgGDlgrLhB8tcGI@bombadil.infradead.org>
+References: <7b5df1782e94a755b4a18733af44d17d8dd8b37b.1703149011.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -44,20 +48,15 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <98d4db94f19737fe05fd811a4188ff277b83a334.1703143382.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <7b5df1782e94a755b4a18733af44d17d8dd8b37b.1703149011.git.christophe.leroy@csgroup.eu>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Thu, Dec 21, 2023 at 08:24:23AM +0100, Christophe Leroy wrote:
-> A couple of architectures seem concerned about calling set_memory_ro()
-> and set_memory_x() too frequently and have implemented a version of
-> set_memory_rox(), see commit 60463628c9e0 ("x86/mm: Implement native
-> set_memory_rox()") and commit 22e99fa56443 ("s390/mm: implement
-> set_memory_rox()")
-> 
-> Use set_memory_rox() in modules when STRICT_MODULES_RWX is set.
+On Thu, Dec 21, 2023 at 10:02:46AM +0100, Christophe Leroy wrote:
+> Declaring rodata_enabled and mark_rodata_ro() at all time
+> helps removing related #ifdefery in C files.
 > 
 > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Nice simplification. I applied all 3 patches and pushed!
+Very nice cleanup, thanks!, applied and pushed
 
   Luis
