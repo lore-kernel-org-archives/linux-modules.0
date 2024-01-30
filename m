@@ -1,121 +1,132 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4299671B52;
-	Tue, 30 Jan 2024 20:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919BE79943
+	for <linux-modules@vger.kernel.org>; Tue, 30 Jan 2024 23:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706647641; cv=none; b=nGvucdk+dpKTLonQlz+/2gtf5KB1vSGnCZkyJ6jSr0mKyrk7vsq38De5tntNJCHjIgMpDqFJttajji6rk/7C64AggdGQlt4a6yeJPVT1QHtlcA0pqZSdRO9s9xArPNBTPTueLCt2iFRDUi69OgrZeBAKOY474u3p9/3wLWUgVZw=
+	t=1706657806; cv=none; b=KRD7TVzk1TSEUfzTqZhHIlIu9/59lTED9Ykxum9yYcjIu44yUOW6mPLOHIqZYCzG6L/nTPhEkT8VCyeGxjfucK3dZ/CQMcXOpBIoE1xI+hA92Og54iEtVdBr5pmkkz9c4i8EydVbHke/6yosdH+qzwm2omFBXIVBkJFSxbjkaeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706647641; c=relaxed/simple;
-	bh=cHPCGyt+KrZk5VCGXZ1+oIB0HxHmQMG2D925MBo7pRs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LM6/rlyGQ83xxKg1K8gUGavvNzNe+h7DrTNPChw4JFgu0Ssgag/hhlN6GeZLuCGdgtcxwspvM+OuEAWACYBKrcGBxQhWgo2Q1ZgmQ/oHDkVeO0L7dx+KMW2RvFpsy9omM8LrY+/RSRCwpL7m0iNHwH1lSu/JtvaVIBHU6fAkeUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=sMwovpyW; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1706657806; c=relaxed/simple;
+	bh=/IKIojFN18pQ2Fp3nBuLkPOjOGgBxJJZAZykFOmUY0U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GSNuUEvj0h1ToLIkAc9mcfyXO3+qoTd+coLcgmQDKq2WLq6/7IjWC9qLtXkqExz9nfPII4z0hZS1WN5WcAeIoxgnDXsupzxuEVeNr0OicePVo3ADj9TUeKV9ppnsEA8LqOicxZ9FNLSFYgpqKanLpmytnrLnRlZM5/+YbTLpHgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W3qY4/qA; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="sMwovpyW"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=mcM6EuKiC3PBnN3pomFJtPETtxYW50FEofYHj2SjpCE=; b=sMwovpyWAef1DSNFeKhzCxMtZC
-	DoseHGxVC5FLC8iUVL4fsLGlXIFuxcJNt4s09RpCiJ5fddfKScNsWQAlxPbF8xoadTRK8jWt6mqWi
-	uz2cYy+U0UQevsFq2iUx/LNWzNXS1vHP+TCdo9bPItONjmc42bdOYGhaZCn8KRUmYhHVfskzm6f04
-	kqq1frt2oQxIBm0MNLdr01IU50+ZzZaPs7n5iIT6PHtDOdV6G7kfIi7TmFauHo2qh+dZsXZfbBDUg
-	BiC/306Kclpzvmo76haLYjBf5PZdSaEreUPIFIEmCnXBh7Y3wnU6IQ6i6LpxMuPuainWUfBSrNCVf
-	qYlwCjbg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rUv0p-00000000XL3-2vsS;
-	Tue, 30 Jan 2024 20:47:19 +0000
-Date: Tue, 30 Jan 2024 12:47:19 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Marco Pagani <marpagan@redhat.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] kernel/module: add a safer implementation of
- try_module_get()
-Message-ID: <ZblgV0ApD-9cQWwl@bombadil.infradead.org>
-References: <20240130193614.49772-1-marpagan@redhat.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W3qY4/qA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706657804; x=1738193804;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/IKIojFN18pQ2Fp3nBuLkPOjOGgBxJJZAZykFOmUY0U=;
+  b=W3qY4/qA3GRUP7XUW67WJzQk8T2IUAeenSqvjIAF9s8O36caDa1XlRCo
+   dM+kIyzP2TWvpNzg8/nPt8K9a61psNxoFc/vm6TjQ+7YYbQk0N6NRaUDt
+   D8GXS2arNmtQyL238+DzF5OpaRCkyWOfdHpcaQVizugsLs+NGVKQ2Lu9n
+   iSL7DaYA0S6Cc3f/rki7KSEX4QfW7fIntoshLnlM8iAilCiCvHA4q7pC7
+   TKePce6+J8djDRSK4uhBlqiNdtBDO6fM58LqWnJAbXwo7HCVwn18M/cys
+   /Y5YmSXAi5Tts6bt7E4PHqqTQoKuIVdTrN9QlWaGHMWZfWt8t72Qzn0rh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="10811441"
+X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
+   d="scan'208";a="10811441"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 15:36:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,230,1701158400"; 
+   d="scan'208";a="3885863"
+Received: from mustafab-mobl.amr.corp.intel.com (HELO [10.209.90.220]) ([10.209.90.220])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 15:36:41 -0800
+Message-ID: <e453a3c7-1f19-402b-aa62-b8500ca901c4@intel.com>
+Date: Tue, 30 Jan 2024 15:36:40 -0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240130193614.49772-1-marpagan@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 02/12] mm: add config option and per-NUMA node VMS
+ support
+Content-Language: en-US
+To: Artem Kuzin <artem.kuzin@huawei.com>,
+ "Christoph Lameter (Ampere)" <cl@gentwo.org>
+Cc: x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
+ peterz@infradead.org, akpm@linux-foundation.org, urezki@gmail.com,
+ hch@infradead.org, lstoakes@gmail.com, mcgrof@kernel.org,
+ rmk+kernel@armlinux.org.uk, nikita.panov@huawei-partners.com,
+ alexander.grubnikov@huawei.com, stepanov.anatoly@huawei.com,
+ guohanjun@huawei.com, weiyongjun1@huawei.com, wangkefeng.wang@huawei.com,
+ judy.chenhui@huawei.com, yusongping@huawei.com, kang.sun@huawei.com,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org
+References: <20231228131056.602411-1-artem.kuzin@huawei.com>
+ <20231228131056.602411-3-artem.kuzin@huawei.com>
+ <059dc132-af10-fd08-7368-302c765a4269@gentwo.org>
+ <c5c8d372-ee12-4ccc-8080-a2c33301b812@huawei.com>
+ <6c5c72ab-01b1-45b4-9a33-529688e449eb@intel.com>
+ <5a7485f8-a070-465d-9e17-e7cd3d2aaa80@huawei.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <5a7485f8-a070-465d-9e17-e7cd3d2aaa80@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jan 30, 2024 at 08:36:14PM +0100, Marco Pagani wrote:
-> The current implementation of try_module_get() requires the module to
-> exist and be live as a precondition. While this may seem intuitive at
-> first glance, enforcing the precondition can be tricky, considering that
-> modules can be unloaded at any time if not previously taken. For
-> instance, the caller could be preempted just before calling
-> try_module_get(), and while preempted, the module could be unloaded and
-> freed. More subtly, the module could also be unloaded at any point while
-> executing try_module_get() before incrementing the refount with
-> atomic_inc_not_zero().
-> 
-> Neglecting the precondition that the module must exist and be live can
-> cause unexpected race conditions that can lead to crashes. However,
-> ensuring that the precondition is met may require additional locking
-> that increases the complexity of the code and can make it more
-> error-prone.
-> 
-> This patch adds a slower yet safer implementation of try_module_get()
-> that checks if the module is valid by looking into the mod_tree before
-> taking the module's refcount. This new function can be safely called on
-> stale and invalid module pointers, relieving developers from the burden
-> of ensuring that the module exists and is live before attempting to take
-> it.
-> 
-> The tree lookup and refcount increment are executed after taking the
-> module_mutex to prevent the module from being unloaded after looking up
-> the tree.
-> 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+On 1/28/24 22:22, Artem Kuzin wrote:
+> As for possible options, for now I am thinking about two:
+> 1. additional config option to limit the number of page tables and corresponding replicas
 
-It very much sounds like there is a desire to have this but without a
-user, there is no justification.
+This doesn't help.  Everybody runs distro kernels with the same configs
+with MAX_NUMNODES set to 1024.
 
-> +bool try_module_get_safe(struct module *module)
-> +{
-> +	struct module *mod;
-> +	bool ret = true;
-> +
-> +	if (!module)
-> +		goto out;
-> +
-> +	mutex_lock(&module_mutex);
+> 2. setup per-NUMA node page tables and replicas in a lazy way allocating them on demand
 
-If a user comes around then this should be mutex_lock_interruptible(),
-and add might_sleep()
+... and probably shrinking them on demand too (or at least limiting
+their growth).  You don't want to have a random long-lived process
+that's migrated to 50 different nodes having 50 different PGD pages when
+it can only use one at a time.
 
-> +
-> +	/*
-> +	 * Check if the address points to a valid live module and take
-> +	 * the refcount only if it points to the module struct.
-> +	 */
-> +	mod = __module_address((unsigned long)module);
-> +	if (mod && mod == module && module_is_live(mod))
-> +		__module_get(mod);
-> +	else
-> +		ret = false;
-> +
-> +	mutex_unlock(&module_mutex);
-> +
-> +out:
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL(try_module_get_safe);
-
-And EXPORT_SYMBOL_GPL() would need to be used.
-
-I'd also expect selftests to be expanded for this case, but again,
-without a user, this is just trying to resolve a problem which does not
-exist.
-
-  Luis
