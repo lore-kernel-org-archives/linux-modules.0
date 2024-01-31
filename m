@@ -1,61 +1,245 @@
-Received: from attila.bofh.it (attila.bofh.it [85.94.204.146])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CCC8286C
-	for <linux-modules@vger.kernel.org>; Wed, 31 Jan 2024 14:10:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.94.204.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9FEB84A4B
+	for <linux-modules@vger.kernel.org>; Wed, 31 Jan 2024 15:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706710223; cv=none; b=mzujVe64oMoDQX+xYdLuLblMAFnFvEharHYhwEJEnymXZ5hRL46/thAJ0mRKSvMk4+xCSlmEYRV0eCrBaUekIDMxifyGHHsZTNjkUDAAIpzFnQO4F/m+GfUi35Pv3vuT1qrtG9pvvqEHHUKNIgR36hz1iRRU5CTIBi4Kkc3Kozo=
+	t=1706714252; cv=none; b=dFKXtQ0lDVeTdf79X+qdt3Htke0v7ADiBwgkEwG7BxxvELRYTP8OXA+XaBxT3PsP+AG3xZfNLmJiUNGKKTdhH0BPR1w0i+Ycgki1WFLRJmhMlVwGzTFuVxaTsxwJ9KPhnxUl8LIauRx6WYwSnMTmYpiAjk1qwPfr2/kEGXM7GNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706710223; c=relaxed/simple;
-	bh=MP4+kQwmwvV2yLepNQTBcELEedr4e4V8J48y/01XwJE=;
-	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rhpTgguBzmhlrXRTeKm8Y4IKHuzKpOZmOiZBDXozkzNxNgBlpKaY7r1Z0tK0h7/30SQPRqHBmehBQk0W/Moijhqk4G0ftHopCcB+66BD6E/cHIv2MqMEHLyj+YssaqnQbNGz3C6qdx27s4Lmrcpt+CSwdASuxW1yEj5n+jA5wY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.it; spf=fail smtp.mailfrom=linux.it; dkim=pass (1024-bit key) header.d=linux.it header.i=@linux.it header.b=DmfJbM8d; arc=none smtp.client-ip=85.94.204.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.it
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.it
+	s=arc-20240116; t=1706714252; c=relaxed/simple;
+	bh=go2Tk9dnTNQsudjqHQZUVgsKBrOWMQALIsPbF0JTnB0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=FP6NizPgc3aUWJ97Y+kVZZmeE1ZNNrqg6LM9/KvLbCPkfiO9hoOAYSV1iIgXGFAn74g5BxZHTufeoePlVXhKBUnOBifVAqH+PK5xYmQ0hQW4G+RaFYgrM/rJPe2xz24zMpXf3au+FijHLjLjA016GliX8cHh0YSmXwQifLuxsl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Xsu0+3xu; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.it header.i=@linux.it header.b="DmfJbM8d"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.it;
- i=@linux.it; q=dns/txt; s=attila; t=1706709839; h=date : from : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to : from; bh=MP4+kQwmwvV2yLepNQTBcELEedr4e4V8J48y/01XwJE=;
- b=DmfJbM8dtybQQAOEfigFNKGiEutcyR9lDh09SaXe6KfSgUKyXVq9IcRimOYFp2RTP57Mt
- d7ljUmjOHhm85CxIhCqbV09BkRwnfFKXwJ/C2IhRwWaDPeVzyT/4GMBZCZGxQ5RK3wzsqlK
- s7qTFx1W9MojbWd+zd0/EOh5vCaUNNM=
-Received: by attila.bofh.it (Postfix, from userid 10)
-	id AF2C417C1482; Wed, 31 Jan 2024 15:03:59 +0100 (CET)
-Received: by bongo.bofh.it (Postfix, from userid 1000)
-	id B6EB253096C; Wed, 31 Jan 2024 14:52:49 +0100 (CET)
-Date: Wed, 31 Jan 2024 14:52:49 +0100
-From: Marco d'Itri <md@linux.it>
-Cc: linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/2] make: install/uninstall tools symlinks to kmod
-Message-ID: <ZbpQseTjiicQstX3@bongo.bofh.it>
-References: <20240126-master-v1-0-6257d039a30a@gmail.com>
- <20240126-master-v1-2-6257d039a30a@gmail.com>
- <tdvymg3uuvkns4uqvivvvkj7sf6pqr45rpbyqmngaf3jmvqije@fsuvyu3kai54>
- <CACvgo52Eb1MV328RPUPLDq8cPO+7NvHn70q3SQdiTr_apnE5dQ@mail.gmail.com>
- <wqvtxyw6h6mcdnqv3cv4kzorlck3qzcb4p3duq6m3w7lm6isxl@kupxidkj3x3w>
- <CACvgo53aataYSQD6jmz-+sr7s4ZoEv0WAqVM_LDxwzcecN8BwA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Xsu0+3xu"
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240131151721euoutp016cecd84729950526d2c6708709231c1b~vd49zpWMV0518105181euoutp01C
+	for <linux-modules@vger.kernel.org>; Wed, 31 Jan 2024 15:17:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240131151721euoutp016cecd84729950526d2c6708709231c1b~vd49zpWMV0518105181euoutp01C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1706714241;
+	bh=vyZV6sJ+C4Ph/Q7b2FdAoMgA3iIBfoctDx1VoKpawe0=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=Xsu0+3xu7JFe65DllV2fQG+FheZxjvglMQila5Xju0CoIZqx0wuI/+f9g+s0QJ0B5
+	 95ddurlMroQunCY3k0QgJ/gHmVr1+Be8c+y7vQoE7cvysUQSNj1t3nTvj/zjmiziJO
+	 wWg+4io4Y/TCE1tmUQ5uU3fZ3Qotuc9xdYfgVBy8=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20240131151721eucas1p244ec5c2fa138b032dd0a4eca093b601c~vd49ekSzQ0568505685eucas1p2d;
+	Wed, 31 Jan 2024 15:17:21 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges3new.samsung.com (EUCPMTA) with SMTP id 8B.D9.09552.1846AB56; Wed, 31
+	Jan 2024 15:17:21 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20240131151720eucas1p1f168cb17a8e5b5b7792d2b570d13e1ca~vd48-k3mq1073110731eucas1p1f;
+	Wed, 31 Jan 2024 15:17:20 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240131151720eusmtrp125e019057189bda9bfa0d717fa4f2635~vd48_8FXr2218422184eusmtrp1C;
+	Wed, 31 Jan 2024 15:17:20 +0000 (GMT)
+X-AuditID: cbfec7f5-83dff70000002550-3a-65ba6481bb82
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id 8D.7E.09146.0846AB56; Wed, 31
+	Jan 2024 15:17:20 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240131151720eusmtip1bea35847920a57cbd0e168925f4283eb~vd48SIPHd2088220882eusmtip1d;
+	Wed, 31 Jan 2024 15:17:20 +0000 (GMT)
+Message-ID: <2febff4d-26ba-4809-a124-7add25ab3d35@samsung.com>
+Date: Wed, 31 Jan 2024 16:17:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACvgo53aataYSQD6jmz-+sr7s4ZoEv0WAqVM_LDxwzcecN8BwA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] init: Declare rodata_enabled and mark_rodata_ro()
+ at all time
+Content-Language: en-US
+To: Christophe Leroy <christophe.leroy@csgroup.eu>, Chen-Yu Tsai
+	<wenst@chromium.org>, Luis Chamberlain <mcgrof@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
+	<npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <46627d92-976a-4126-b261-a4c6575e5a3e@csgroup.eu>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKKsWRmVeSWpSXmKPExsWy7djP87qNKbtSDV4+E7H4O+kYu8WdSc/Z
+	LS7vmsNm0TD7O6vF7+//WC1uTHjKaLGl4RCbxc8XN1gsZrRdZnXg9Pj9axKjx+yGiyweX2+e
+	Y/JY9LKBxWPnrLvsHptWdbJ5nJ+xkNHj8ya5AI4oLpuU1JzMstQifbsErowF7x6wFPRqVHx/
+	/ZaxgXGjYhcjJ4eEgInEkhkPmboYuTiEBFYwSlz9PIcNJCEk8IVRYtseGYjEZ0aJeRPOscF0
+	HH6wmgmiaDmjxMpfdhBFHxklHn5pYgRJ8ArYSfz5d5gZxGYRUJVofPmLCSIuKHFy5hMWEFtU
+	QF7i/q0Z7CC2sECExJpJ18DqmQXEJW49mQ9WLyJQK3Hr0Wyw85gFtjFJ/Dr9ECzBJmAo0fW2
+	C+wiTqBlB7dsYoFolpdo3jqbGeLSZk6J5klFXYwcQLaLROd7Q4iwsMSr41vYIWwZidOTe1hA
+	5ksItDNKLPh9nwnCmcAo0fD8FiNElbXEnXO/2EAGMQtoSqzfpQ8RdpRY/RikGWQ+n8SNt4IQ
+	J/BJTNo2nRkizCvR0SYEUa0mMev4Ori1By9cYp7AqDQLKVRmIfl+FpJnZiHsXcDIsopRPLW0
+	ODc9tdg4L7Vcrzgxt7g0L10vOT93EyMwZZ3+d/zrDsYVrz7qHWJk4mA8xCjBwawkwrtSbmeq
+	EG9KYmVValF+fFFpTmrxIUZpDhYlcV7VFPlUIYH0xJLU7NTUgtQimCwTB6dUA5N9tN6R9TK+
+	RkHn3x/cfFTKlbuIxT19sdUmjbRXfu/sBRwiz9oabnjy1OHptLAZW59y88278vnQpALPnldd
+	Xl4NXPvN/ofcf+jtlTHjwvpk76NKS4HpbrOYGueeIxmC9nqTt2pxHzyR80H/8Q6vzRnCAQW3
+	6x/vab2mLnHmF9+MZxc7fkSVM7+qtIj8e/pIdw7jiduqWq1vnDLP5V13S4j9fHtL2dp8780/
+	eNn57KRPP3ra2eymv6mK88fUDStENNdzK3zM/CEtmcj4Q0VSnaWrUkQtOfhkAfNZkYzDCjrf
+	ykrXKsqoySQsnGNb9H2KJMO66uu9F/zCZreasl3f9+El0xmlp9f2r9O5fs1jvxJLcUaioRZz
+	UXEiAIMdtTPIAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJIsWRmVeSWpSXmKPExsVy+t/xu7oNKbtSDZ7eNrD4O+kYu8WdSc/Z
+	LS7vmsNm0TD7O6vF7+//WC1uTHjKaLGl4RCbxc8XN1gsZrRdZnXg9Pj9axKjx+yGiyweX2+e
+	Y/JY9LKBxWPnrLvsHptWdbJ5nJ+xkNHj8ya5AI4oPZui/NKSVIWM/OISW6VoQwsjPUNLCz0j
+	E0s9Q2PzWCsjUyV9O5uU1JzMstQifbsEvYwF7x6wFPRqVHx//ZaxgXGjYhcjJ4eEgInE4Qer
+	mboYuTiEBJYySsx9cJEJIiEjcXJaAyuELSzx51oXG0TRe0aJU6+XsIAkeAXsJP78O8wMYrMI
+	qEo0vvzFBBEXlDg58wlYjaiAvMT9WzPYuxg5OIQFIiTW7JYCCTMLiEvcejIfrFxEoFbiUtda
+	Roj4NiaJZ7dyIXYtY5Zoe7gB7Ag2AUOJrrcgR3BycALtPbhlEwtEg5lE19YuqGZ5ieats5kn
+	MArNQnLGLCT7ZiFpmYWkZQEjyypGkdTS4tz03GJDveLE3OLSvHS95PzcTYzAON127OfmHYzz
+	Xn3UO8TIxMF4iFGCg1lJhHel3M5UId6UxMqq1KL8+KLSnNTiQ4ymwLCYyCwlmpwPTBR5JfGG
+	ZgamhiZmlgamlmbGSuK8ngUdiUIC6YklqdmpqQWpRTB9TBycUg1MctX8z5aH2KoybdVo9p0r
+	G+Du2J81I+5USODBTT3ZO66azP+hz+/v27w04u7iGefeTiuZ/X7pH6l53AI6K0osLxzlyOKa
+	ucrVe3ftN9Psj85eW46t3KE0nXfKt5L2nWa7arn/Xsny+LHa/nQV558ZLdb8+f3rf+3J053r
+	8fR00fQJll3fP/oUNe17HFzHsMZjxj0LeXuT7AvuoWttDB89lOTZm1fPe05Nt+f/ixqDW8rl
+	ew8Xa6cf+MduuefPhU+M0+yknjJ+d2W6zXrlfFX/nWKmytvrSxTYkhL47Be/K/ErFwqY8+ED
+	U+WHrKBZOSddFmqzxp094++W4rP+qajinfq0X9e4BVeEf9x0x/WDEktxRqKhFnNRcSIAC6yf
+	m1wDAAA=
+X-CMS-MailID: 20240131151720eucas1p1f168cb17a8e5b5b7792d2b570d13e1ca
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20240130174812eucas1p166f62549457fd188fed6ed72b6b4b9cd
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20240130174812eucas1p166f62549457fd188fed6ed72b6b4b9cd
+References: <7b5df1782e94a755b4a18733af44d17d8dd8b37b.1703149011.git.christophe.leroy@csgroup.eu>
+	<ZbgGDlgrLhB8tcGI@bombadil.infradead.org>
+	<20240130091626.GA3684878@google.com>
+	<9e298fa7-a953-462a-96a4-56a1b4316a17@csgroup.eu>
+	<CGME20240130174812eucas1p166f62549457fd188fed6ed72b6b4b9cd@eucas1p1.samsung.com>
+	<30ddedc9-0829-4a99-9cb1-39190937981c@samsung.com>
+	<46627d92-976a-4126-b261-a4c6575e5a3e@csgroup.eu>
 
-On Jan 31, Emil Velikov <emil.l.velikov@gmail.com> wrote:
+Hi Christophe,
 
-> Debian - installs kmod in /usr/bin and symlinks are split across
-> /usr/bin and /usr/sbin. Cannot find any references if they're aiming
-> to merge /usr/bin and /usr/sbin.
-There are no such plans at this point.
-I definitely will not be pushing for that, but somebody else might.
+On 31.01.2024 12:58, Christophe Leroy wrote:
+> Le 30/01/2024 à 18:48, Marek Szyprowski a écrit :
+>> [Vous ne recevez pas souvent de courriers de m.szyprowski@samsung.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
+>>
+>> On 30.01.2024 12:03, Christophe Leroy wrote:
+>>> Le 30/01/2024 à 10:16, Chen-Yu Tsai a écrit :
+>>>> [Vous ne recevez pas souvent de courriers de wenst@chromium.org. D?couvrez pourquoi ceci est important ? https://aka.ms/LearnAboutSenderIdentification ]
+>>>>
+>>>> On Mon, Jan 29, 2024 at 12:09:50PM -0800, Luis Chamberlain wrote:
+>>>>> On Thu, Dec 21, 2023 at 10:02:46AM +0100, Christophe Leroy wrote:
+>>>>>> Declaring rodata_enabled and mark_rodata_ro() at all time
+>>>>>> helps removing related #ifdefery in C files.
+>>>>>>
+>>>>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>>>> Very nice cleanup, thanks!, applied and pushed
+>>>>>
+>>>>>       Luis
+>>>> On next-20240130, which has your modules-next branch, and thus this
+>>>> series and the other "module: Use set_memory_rox()" series applied,
+>>>> my kernel crashes in some very weird way. Reverting your branch
+>>>> makes the crash go away.
+>>>>
+>>>> I thought I'd report it right away. Maybe you folks would know what's
+>>>> happening here? This is on arm64.
+>>> That's strange, it seems to bug in module_bug_finalize() which is
+>>> _before_ calls to module_enable_ro() and such.
+>>>
+>>> Can you try to revert the 6 patches one by one to see which one
+>>> introduces the problem ?
+>>>
+>>> In reality, only patch 677bfb9db8a3 really change things. Other ones are
+>>> more on less only cleanup.
+>> I've also run into this issue with today's (20240130) linux-next on my
+>> test farm. The issue is not fully reproducible, so it was a bit hard to
+>> bisect it automatically. I've spent some time on manual testing and it
+>> looks that reverting the following 2 commits on top of linux-next fixes
+>> the problem:
+>>
+>> 65929884f868 ("modules: Remove #ifdef CONFIG_STRICT_MODULE_RWX around
+>> rodata_enabled")
+>> 677bfb9db8a3 ("module: Don't ignore errors from set_memory_XX()")
+>>
+>> This in fact means that commit 677bfb9db8a3 is responsible for this
+>> regression, as 65929884f868 has to be reverted only because the latter
+>> depends on it. Let me know what I can do to help debugging this issue.
+>>
+> Thanks for the bisect. I suspect you hit one of the errors and something
+> goes wrong in the error path.
+>
+> To confirm this assumption, could you try with the following change on
+> top of everything ?
 
+
+Yes, this is the problem. I've added printing a mod->name to the log. 
+Here is a log from kernel build from next-20240130 (sometimes it even 
+boots to shell):
+
+# dmesg | grep module_set_memory
+[    8.061525] module_set_memory(6, 0000000000000000, 0) name ipv6 
+returned -22
+[    8.067543] WARNING: CPU: 3 PID: 1 at kernel/module/strict_rwx.c:22 
+module_set_memory+0x9c/0xb8
+[    8.097821] pc : module_set_memory+0x9c/0xb8
+[    8.102068] lr : module_set_memory+0x9c/0xb8
+[    8.183101]  module_set_memory+0x9c/0xb8
+[    8.472862] module_set_memory(6, 0000000000000000, 0) name x_tables 
+returned -22
+[    8.479215] WARNING: CPU: 2 PID: 1 at kernel/module/strict_rwx.c:22 
+module_set_memory+0x9c/0xb8
+[    8.510978] pc : module_set_memory+0x9c/0xb8
+[    8.515225] lr : module_set_memory+0x9c/0xb8
+[    8.596259]  module_set_memory+0x9c/0xb8
+[   10.529879] module_set_memory(6, 0000000000000000, 0) name dm_mod 
+returned -22
+[   10.536087] WARNING: CPU: 3 PID: 127 at kernel/module/strict_rwx.c:22 
+module_set_memory+0x9c/0xb8
+[   10.568254] pc : module_set_memory+0x9c/0xb8
+[   10.572501] lr : module_set_memory+0x9c/0xb8
+[   10.653535]  module_set_memory+0x9c/0xb8
+[   10.853177] module_set_memory(6, 0000000000000000, 0) name fuse 
+returned -22
+[   10.859196] WARNING: CPU: 5 PID: 130 at kernel/module/strict_rwx.c:22 
+module_set_memory+0x9c/0xb8
+[   10.891382] pc : module_set_memory+0x9c/0xb8
+[   10.895629] lr : module_set_memory+0x9c/0xb8
+[   10.976663]  module_set_memory+0x9c/0xb8
+
+
+
+> diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+> index a14df9655dbe..fdf8484154dd 100644
+> --- a/kernel/module/strict_rwx.c
+> +++ b/kernel/module/strict_rwx.c
+> @@ -15,9 +15,12 @@ static int module_set_memory(const struct module
+> *mod, enum mod_mem_type type,
+>    			      int (*set_memory)(unsigned long start, int num_pages))
+>    {
+>    	const struct module_memory *mod_mem = &mod->mem[type];
+> +	int err;
+>
+>    	set_vm_flush_reset_perms(mod_mem->base);
+> -	return set_memory((unsigned long)mod_mem->base, mod_mem->size >>
+> PAGE_SHIFT);
+> +	err = set_memory((unsigned long)mod_mem->base, mod_mem->size >>
+> PAGE_SHIFT);
+> +	WARN(err, "module_set_memory(%d, %px, %x) returned %d\n", type,
+> mod_mem->base, mod_mem->size, err);
+> +	return err;
+>    }
+>
+>    /*
+>
+>
+> Thanks for your help
+> Christophe
+
+Best regards
 -- 
-ciao,
-Marco
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
