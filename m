@@ -1,110 +1,183 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B039015AAB9;
-	Thu,  1 Feb 2024 09:29:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6B85D467
+	for <linux-modules@vger.kernel.org>; Thu,  1 Feb 2024 14:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706779793; cv=none; b=Dd5boGBfVCychg2s2cvNehrSdC2BQ7mJAe/4EMDnKMRgM0mZgKqllhxzX3oR5QEuYaFgd44ISial0B2mGl/XJw4nRvErENhokQRvoH4Z/mT4Cm9jdu9ZpHS9F64zwComNFGobpfk3y3itonGMuX/zNRhMTDB9/gUzBPFhKKCdD4=
+	t=1706797684; cv=none; b=qCV9lO8/GsND1ubRiqqP21xj4Kfyg3yOhThSAZP5eSIOv6+/2qLuuMjGQ4fERy9PMQWlJyTe2ofkis6YnM4BOM2IXBJYu3xqqhJV4AsIbeZsVtdBkFTgCTl4gWcy1bZeRmf6aQ6bVDJfYOF65e+B66uygpOFsyojcflT6NLL2jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706779793; c=relaxed/simple;
-	bh=+NCwuuUEC8gh4wddwJD1ZoXxyVyQK76LQS+PgiYO2+g=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BWF4TTGOLbE2HPkofwtXghHTmELIPH/Y7PU0WIYokOEmYLWpbtl4AGr+H6iIRH01wh4hshWTXryXgREAicAePBN88cET1EDdFj6k2iiR+Et68VDdncrbE7TrBclZne1wIaa+Isf8MUI+GF+UUIcu20RETB0+EeKzszRpgog56TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FHwRg8MB; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1706797684; c=relaxed/simple;
+	bh=xvOyY477R5AaJWaI5WYYMVxT5ndpWlRf/o4MJHBKjZo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OaXRizhI/NYKehlIHBRp6oaQlxExukKbvRTlVv6KVPr0fBzy7uj1T/t+29SFaGGSKtY3G7sx5Cuh+nAcU4+SWAXZIH130VTvHx9uMibyvVDth5lldOxVW1JF1pLUlEqTOXnv/gEEht3FVMumEOM9vRt9T30zSWUWZqDSpJLHEHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NU5zhqya; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FHwRg8MB"
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-51124d86022so1133758e87.0;
-        Thu, 01 Feb 2024 01:29:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706779789; x=1707384589; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=gR2SCc4BIE8sv2cc5ChJ04+ZAy4Os5pvthMcTA+RFl4=;
-        b=FHwRg8MBbZz9LTfqahu/eeaEIoEL2gZun3E5ETN0LDqIh3ssanfBB4adiY4/emZMrQ
-         knFxAwUaA8RfhZTlrgCZVxO7KV3ChwZ3+zk7ArnTNi3akAavIrAD5tSeNKMwtJ26FLge
-         EHgiEZQ2N/TlzlrJynns/8ZjuFXU24/HSDxfMkz+lzOf+nXhTNM7brCALny4BICGY3tD
-         ByXDYXf8WrVgzDhbW3D76T+MVd9e74m3KkL9+9N+cf7qhfwCvTxqkKwlRr0XPOpX7r6k
-         PKnhkxE2I8rp095ta8kFngzPKjGqFB1cCHBpumGmvCG1Ihja35wRyd3Gb8r8jwS4fJ1s
-         E4DQ==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NU5zhqya"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706797681;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uhriPA+e3pr6OImmjGEObkRctf6AV9P0DFfhi2MkV/o=;
+	b=NU5zhqyaqGlB+YOXa1TbOi/uo0Q53tLuKCQHGSA6R92GtpWrTNrHiH9SwKXaQTpVfyNdn9
+	v3SToB4gJqjxY21XVHQgeybd7vZhpJgslcJZQtfbJgyekbdsGH+FEQnSBbKK4pDSR5mtLt
+	1ZY2i0cjIAgFKl56GnNGP5MlXmsoG9I=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-688-90_Uy54POUKjqzyryYb5sg-1; Thu, 01 Feb 2024 09:28:00 -0500
+X-MC-Unique: 90_Uy54POUKjqzyryYb5sg-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7831aaa797aso156191085a.1
+        for <linux-modules@vger.kernel.org>; Thu, 01 Feb 2024 06:28:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706779789; x=1707384589;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gR2SCc4BIE8sv2cc5ChJ04+ZAy4Os5pvthMcTA+RFl4=;
-        b=iTn1SNxFeyHfL7qT2eL8sHAjafTcWZY1bowsL9zOMv1R9BKqPPnH2stft7H4cOEnD2
-         +fXEqyu4xRCvl4VpO8CvFYUoFLOc5IMM2miiX79icew7VETo5tDQDVaKyHVHCZ4QtAM3
-         czoBMqYqvEE1NbdLJ/m746pUUYOKvc6jOa8SFre3UYXi17+sPdCiyk4BFhh8Fw57+lYd
-         3bYt5Uk3pNoz59CpxLjeLsEQQVQPxHd/lariZiv+vBSAkeKatr6px2Y1MX01vXJCygtA
-         P2x+PwbAaaOJnyJtyC1YSQIH6vCkYBw2sFJwayL3reXftQOWlsoBFtyYTyFmP0RkHcZi
-         /jZA==
-X-Gm-Message-State: AOJu0YyVOBGEne3W/V7dZJHe50cFsEkl6ItstmVAxdKCpYNVy0EkUo7D
-	1hZBuAcTq16uGKw8HgMIq4ixyixoMFpBeXKiLpE3sXZUJpTwV5d0
-X-Google-Smtp-Source: AGHT+IFbfqsdGNQ6Wd46t2iNvuziOkb8PC1smvpxI4cq1BjUl4UTFC/HQ0I0EBborC1Ks4Nt1NmrTQ==
-X-Received: by 2002:a05:6512:21c1:b0:50e:6b5d:5976 with SMTP id d1-20020a05651221c100b0050e6b5d5976mr1296346lft.40.1706779789357;
-        Thu, 01 Feb 2024 01:29:49 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWqnYUTtWXGe3JQ3yFJz0StJ0H2XP76LgcJO3yNTUDd3r5jlndDZgz1LhqosHGqFg1UCaI8VuwW7z73Ynx1FhROro2avzqUVaiRi/6RKSKsKqN4ZtOZLRTtIoqO14upwk8SulrX4cdu3+lBVdfrQ+dppF7DHp5BQ1TOmwjZUixp
-Received: from akanner-r14. ([77.222.24.25])
-        by smtp.gmail.com with ESMTPSA id b25-20020a196719000000b0050e74ec73f6sm2177203lfc.124.2024.02.01.01.29.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Feb 2024 01:29:48 -0800 (PST)
-Message-ID: <65bb648c.190a0220.d431d.4f63@mx.google.com>
-X-Google-Original-Message-ID: <ZbtkigG3xRB/hSto@akanner-r14.>
-Date: Thu, 1 Feb 2024 12:29:46 +0300
-From: Andrew Kanner <andrew.kanner@gmail.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: mcgrof@kernel.org, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, mchehab@kernel.org
-Subject: Re: [PATCH v1] module.h: define __symbol_get_gpl() as a regular
- __symbol_get()
-References: <20240131190251.4668-1-andrew.kanner@gmail.com>
- <20240201052958.GA14943@lst.de>
+        d=1e100.net; s=20230601; t=1706797679; x=1707402479;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uhriPA+e3pr6OImmjGEObkRctf6AV9P0DFfhi2MkV/o=;
+        b=qK6XZkkg4j8TKuyIyZWKCiUuzzxrU0mwJdOGQPjMJv6+j+LqKt/8wB2FePI2ftb1RT
+         Ok2cynPlT3E31UB4RLRyamn4Jf86Xikzc9sS0rPlMv9nkQdRIobintmmY/Tsl8bQZ8KT
+         34vnVuADGmou1mnooxfBccHcn9Ur01ZlrdRX92em+J94sKgFivX+Te/uxx5aZB7etcdc
+         K5Bx6BCUgRWnSl6czPZthn3NB+wBYnVhzPOyR01VdUu48pnIZ4CS22n4HwjPy82dLQKY
+         HkOqpVgm1En0mthl2W1vHzfQyjo0RpILmIWxlbwdgYypUt00oQxH4EzNRR7DPFjruRyI
+         9hcw==
+X-Gm-Message-State: AOJu0YxDkX5vhxwIiZyNiPuDDzPo4qi2LrtJ3z7ucOIZfMNW58+HDenE
+	IoshXttBofsJfCYwCV7thY5D7rUAmJX2Vpl77vL6FcCcflWW/HAl7833TD5HCRQolEKjqD8dgVq
+	drmvf5xJ2jNOsfceBLT2u7UYMc1nCIkVgEdrPjRYdvnverDtltmxUYAGvqd8WKhXk6NjeYA==
+X-Received: by 2002:a05:620a:3182:b0:783:6eae:547 with SMTP id bi2-20020a05620a318200b007836eae0547mr4245003qkb.22.1706797679597;
+        Thu, 01 Feb 2024 06:27:59 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHuyCrYMRRmqU1NLxhcE6IYFawk7gjD0GjIF8sKvzAb4++daSvzxgCEO2r1yYtOPj5iMsr0Pg==
+X-Received: by 2002:a05:620a:3182:b0:783:6eae:547 with SMTP id bi2-20020a05620a318200b007836eae0547mr4244972qkb.22.1706797679284;
+        Thu, 01 Feb 2024 06:27:59 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCUpkZk13bonEQp7JKJxcGUrn6x/3W27GczNweVWBULskC+KgkGIds17t4+6lhWrXNT848zZmtjjEauXYHff+Jba9jj2m/vo1ULK83uH
+Received: from [192.168.9.34] (net-2-34-24-75.cust.vodafonedsl.it. [2.34.24.75])
+        by smtp.gmail.com with ESMTPSA id h6-20020ad45446000000b00686a51526fbsm6534568qvt.110.2024.02.01.06.27.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Feb 2024 06:27:59 -0800 (PST)
+Message-ID: <cfa6cb2b-9432-4ed4-87ea-16be499d2806@redhat.com>
+Date: Thu, 1 Feb 2024 15:27:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240201052958.GA14943@lst.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] kernel/module: add a safer implementation of
+ try_module_get()
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240130193614.49772-1-marpagan@redhat.com>
+ <ZblgV0ApD-9cQWwl@bombadil.infradead.org>
+Content-Language: en-US
+From: Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZblgV0ApD-9cQWwl@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 01, 2024 at 06:29:58AM +0100, Christoph Hellwig wrote:
-> On Wed, Jan 31, 2024 at 10:02:52PM +0300, Andrew Kanner wrote:
-> > Prototype for __symbol_get_gpl() was introduced in the initial git
-> > commit 1da177e4c3f4 ("Linux-2.6.12-rc2"), but was not used after that.
-> > 
-> > In commit 9011e49d54dc ("modules: only allow symbol_get of
-> > EXPORT_SYMBOL_GPL modules") Christoph Hellwig switched __symbol_get()
-> > to process GPL symbols only, most likely this is what
-> > __symbol_get_gpl() was designed to do.
-> > 
-> > We might either define __symbol_get_gpl() as __symbol_get() or remove
-> > it completely as suggested by Mauro Carvalho Chehab.
+
+
+On 2024-01-30 21:47, Luis Chamberlain wrote:
+> On Tue, Jan 30, 2024 at 08:36:14PM +0100, Marco Pagani wrote:
+>> The current implementation of try_module_get() requires the module to
+>> exist and be live as a precondition. While this may seem intuitive at
+>> first glance, enforcing the precondition can be tricky, considering that
+>> modules can be unloaded at any time if not previously taken. For
+>> instance, the caller could be preempted just before calling
+>> try_module_get(), and while preempted, the module could be unloaded and
+>> freed. More subtly, the module could also be unloaded at any point while
+>> executing try_module_get() before incrementing the refount with
+>> atomic_inc_not_zero().
+>>
+>> Neglecting the precondition that the module must exist and be live can
+>> cause unexpected race conditions that can lead to crashes. However,
+>> ensuring that the precondition is met may require additional locking
+>> that increases the complexity of the code and can make it more
+>> error-prone.
+>>
+>> This patch adds a slower yet safer implementation of try_module_get()
+>> that checks if the module is valid by looking into the mod_tree before
+>> taking the module's refcount. This new function can be safely called on
+>> stale and invalid module pointers, relieving developers from the burden
+>> of ensuring that the module exists and is live before attempting to take
+>> it.
+>>
+>> The tree lookup and refcount increment are executed after taking the
+>> module_mutex to prevent the module from being unloaded after looking up
+>> the tree.
+>>
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
 > 
-> Just remove it, there is no need to keep unused funtionality around.
+> It very much sounds like there is a desire to have this but without a
+> user, there is no justification.
+
+I was working on a set of patches to fix an issue in the fpga subsystem
+when I came across your commit 557aafac1153 ("kernel/module: add
+documentation for try_module_get()") that made me realize we also had a
+safety problem. 
+
+To solve this problem for the fpga manager, we had to add a mutex to
+ensure the low-level module still exists before calling
+try_module_get(). However, having a safer version of try_module_get()
+would have simplified the code and made it more robust against changes.
+
+https://lore.kernel.org/linux-fpga/20240111160242.149265-1-marpagan@redhat.com/
+
+I suspect there may be other cases where try_module_get() is
+inadvertently called without ensuring that the module still exists
+that may benefit from a safer implementation.
+
+>> +bool try_module_get_safe(struct module *module)
+>> +{
+>> +	struct module *mod;
+>> +	bool ret = true;
+>> +
+>> +	if (!module)
+>> +		goto out;
+>> +
+>> +	mutex_lock(&module_mutex);
 > 
-> Btw, where did the discussion start?  I hope you're not trying to
-> add new symbol_get users?
+> If a user comes around then this should be mutex_lock_interruptible(),
+> and add might_sleep()
+
+Would it be okay to return false if it gets interrupted, or should I
+change the return type to int to propagate -EINTR? My concern with
+changing the signature is that it would be less straightforward to
+use the function in place of try_module_get().
+
+>> +
+>> +	/*
+>> +	 * Check if the address points to a valid live module and take
+>> +	 * the refcount only if it points to the module struct.
+>> +	 */
+>> +	mod = __module_address((unsigned long)module);
+>> +	if (mod && mod == module && module_is_live(mod))
+>> +		__module_get(mod);
+>> +	else
+>> +		ret = false;
+>> +
+>> +	mutex_unlock(&module_mutex);
+>> +
+>> +out:
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL(try_module_get_safe);
 > 
+> And EXPORT_SYMBOL_GPL() would need to be used.
 
-Of course not, no new users needed.
+Okay, I initially used EXPORT_SYMBOL() to be compatible with
+try_module_get().
 
-I haven't discussed it directly. I found the unused __symbol_get_gpl()
-myself, but during investigation of wether it was ever used somewhere
-found the old patch series suggested by Mauro Carvalho Chehab (in Cc).
+> 
+> I'd also expect selftests to be expanded for this case, but again,
+> without a user, this is just trying to resolve a problem which does not
+> exist.
 
-Link: https://lore.kernel.org/lkml/5f001015990a76c0da35a4c3cf08e457ec353ab2.1652113087.git.mchehab@kernel.org/
+I can add selftests in the next versions.
+Thanks,
+Marco
 
-The patch series is from 2022 and not merged. You can take [PATCH v6
-1/4] which removes the unused symbol from the link.
-
-Or I can resend v2 with my commit msg. But not sure about how it works
-in such a case - will adding Suggested-by tag (if no objections from
-Mauro) with the Link be ok?
-
--- 
-Andrew Kanner
