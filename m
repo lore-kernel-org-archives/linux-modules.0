@@ -1,41 +1,43 @@
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D5485275;
-	Thu,  1 Feb 2024 18:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2AD128809;
+	Thu,  1 Feb 2024 18:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706810685; cv=none; b=PxNl/GpVyvelz42NC/s+yOPIKx3LvqIK3HQJfRxOIoJm/r4YJ8Ew3A6I751dqx5mxJfBjTpNCe57/OqTDVmT6VPceNFQmFRT4ZazYkHdiarH+0Nax/B8hCPY3KAOWIb1fy1Old0gl+6Ofj39n3mWpFZdi5hnUz4252HhJSG9kKM=
+	t=1706810735; cv=none; b=ptR0Xv+OOh95qYcKz+VkiUcWinZsZGWVbVR8t1JMsVgMj54WfJuKG79nwe96pES6WdKwDmTeuhMLczrEpUl08jnXKFaz2QOcbvm8c0RwbiG7lJXYnnwkriGmviNoZtGksxPmq9jnPtlAtlCJxe57qHLTIhdt49y/liawHcXyStE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706810685; c=relaxed/simple;
-	bh=rEPnT8Us11qXeFJgOKYx1MG1CW6Fq55hMhCM2wTL6r0=;
+	s=arc-20240116; t=1706810735; c=relaxed/simple;
+	bh=JfeVxZ9QXBYGCIGLV8XksPrBTz+Oq09ud0x6s4kFSSw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=otUN562p86NtMHIt8AWbyKSJLruEY+bBlMChiKbKWpt4soVClx3NSY/ZPH13f1CAkw2so2ArnVGr5cgHB+OugiF2v7ugIYgGaX8oJiXV7NGcoshqrOBbV23Nmd0kvdIUXjxPfFGzTFC3euGhB/S33j0eVQsD6Y1sMriVOOnnrl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ltNvwXQg; arc=none smtp.client-ip=198.137.202.133
+	 Content-Type:Content-Disposition:In-Reply-To; b=fOQO3hAZxqUKa4PrWAH9j543QO3JFxXJw+vL1KUWutHB23zmcFHeneYpNhKEThSZcAg5KOpHXBUjUKtFv73btdpIFzhuOvSCAfi5R6DyXNm+0rfCS4XhGXdz2D1xjPyAnzzOTMEM5mtUxZxkBpNreeouyv8WnwKz7J3Yu3e/i18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JefXNSrB; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ltNvwXQg"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JefXNSrB"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
 	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=7w2qjfviPfksTMRAs8z5Kp6sfX6leF46kq6yvMVfkmc=; b=ltNvwXQgOGMNzhfWt4K43ajbYZ
-	oGwSEr3w6+GGJfzcnAbhDJ2Z4oJl6aHOX4PV+HswHiAud+qlleXOiqv618hOwySCs7mPkJCehSq68
-	skQtZ3MFdaIy4zzeRhnkgh/oeM7eiSSFfn00Cqupfi9JJC5d2mys47WYZPVoiBMJ09fLF+d4k2F3O
-	hqfZ8BMcdCvAZn/r7oCM4JRq7Pp5kYtx2FtJxqfD3+6Eq/W6WB3g+ZHp6XZLX9vXHj4aFmbRkIR0k
-	OapEqVNhA/Qe/ImcH8TJU0b7ib/6jk6syUbSWQHnr+fTfMjbjVRRkIXs+kQBjmWxVi3pTXXhKmjsN
-	4eQd2Rww==;
+	bh=kBzBIT+OwKc/KgOM6TRSOd+0Koav1Y3FPhSbpX2zBBg=; b=JefXNSrBtf/VmcM3GreDAPNGfS
+	K1DwjzfgCb+iQPR3znjOL0WinjE8Rr7KAHTy3kuRFuIdjibhuHw/+nVi5/vVwpmhcHoUri/L7KtsN
+	GO/Zl9jhfzeg58LLL+J/pFPmpuWrca/gnfzqfMkuKaBQ84IivqGOB75oEf9WjG2MJsMfDFAAIYRlq
+	PNhh1dkTlfI8CuusZwQBlc7pQqdy1kOf0DwdtSdfJUNQg9XZyEz8OmbBSU2go+WULGNlGcDV2EORM
+	KMPvQnaEftMyW6EZlHC0Y6tp+4z3a3AVl22ZXBjzIaYA3R/VAPdo1nmau6Vthn0PG3y7UWwoK+PL2
+	xM4+qJ9A==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rVbQY-00000008vhJ-3d7A;
-	Thu, 01 Feb 2024 18:04:42 +0000
-Date: Thu, 1 Feb 2024 10:04:42 -0800
+	id 1rVbRN-00000008vr4-1mff;
+	Thu, 01 Feb 2024 18:05:33 +0000
+Date: Thu, 1 Feb 2024 10:05:33 -0800
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] lib/test_kmod: fix kernel-doc warnings
-Message-ID: <ZbvdOjMNb--7AYjV@bombadil.infradead.org>
-References: <20231104042044.17807-1-rdunlap@infradead.org>
+To: masahiroy@kernel.org, deller@gmx.de
+Cc: arnd@arndb.de, linux-arch@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] modules: few of alignment fixes
+Message-ID: <ZbvdbdxOKZ9FUQuC@bombadil.infradead.org>
+References: <20240129192644.3359978-1-mcgrof@kernel.org>
+ <ZbrFoKUJQ8MIdzXD@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -44,25 +46,16 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231104042044.17807-1-rdunlap@infradead.org>
+In-Reply-To: <ZbrFoKUJQ8MIdzXD@bombadil.infradead.org>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Fri, Nov 03, 2023 at 09:20:44PM -0700, Randy Dunlap wrote:
-> Fix all kernel-doc warnings in test_kmod.c:
-> - Mark some enum values as private so that kernel-doc is not needed
->   for them
-> - s/thread_mutex/thread_lock/ in a struct's kernel-doc comments
-> - add kernel-doc info for @task_sync
+On Wed, Jan 31, 2024 at 02:11:44PM -0800, Luis Chamberlain wrote:
+> On Mon, Jan 29, 2024 at 11:26:39AM -0800, Luis Chamberlain wrote:
+> > Masahiro, if there no issues feel free to take this or I can take them in
+> > too via the modules-next tree. Lemme know!
 > 
-> test_kmod.c:67: warning: Enum value '__TEST_KMOD_INVALID' not described in enum 'kmod_test_case'
-> test_kmod.c:67: warning: Enum value '__TEST_KMOD_MAX' not described in enum 'kmod_test_case'
-> test_kmod.c:100: warning: Function parameter or member 'task_sync' not described in 'kmod_test_device_info'
-> test_kmod.c:134: warning: Function parameter or member 'thread_mutex' not described in 'kmod_test_device'
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
+> I've queued this onto modules-testing to get winder testing [0]
 
-Applied and pushed, thanks!
+I've moved it to modules-next as I've found no issues.
 
   Luis
