@@ -1,183 +1,68 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6B85D467
-	for <linux-modules@vger.kernel.org>; Thu,  1 Feb 2024 14:28:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D5485275;
+	Thu,  1 Feb 2024 18:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706797684; cv=none; b=qCV9lO8/GsND1ubRiqqP21xj4Kfyg3yOhThSAZP5eSIOv6+/2qLuuMjGQ4fERy9PMQWlJyTe2ofkis6YnM4BOM2IXBJYu3xqqhJV4AsIbeZsVtdBkFTgCTl4gWcy1bZeRmf6aQ6bVDJfYOF65e+B66uygpOFsyojcflT6NLL2jk=
+	t=1706810685; cv=none; b=PxNl/GpVyvelz42NC/s+yOPIKx3LvqIK3HQJfRxOIoJm/r4YJ8Ew3A6I751dqx5mxJfBjTpNCe57/OqTDVmT6VPceNFQmFRT4ZazYkHdiarH+0Nax/B8hCPY3KAOWIb1fy1Old0gl+6Ofj39n3mWpFZdi5hnUz4252HhJSG9kKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706797684; c=relaxed/simple;
-	bh=xvOyY477R5AaJWaI5WYYMVxT5ndpWlRf/o4MJHBKjZo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OaXRizhI/NYKehlIHBRp6oaQlxExukKbvRTlVv6KVPr0fBzy7uj1T/t+29SFaGGSKtY3G7sx5Cuh+nAcU4+SWAXZIH130VTvHx9uMibyvVDth5lldOxVW1JF1pLUlEqTOXnv/gEEht3FVMumEOM9vRt9T30zSWUWZqDSpJLHEHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NU5zhqya; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1706810685; c=relaxed/simple;
+	bh=rEPnT8Us11qXeFJgOKYx1MG1CW6Fq55hMhCM2wTL6r0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=otUN562p86NtMHIt8AWbyKSJLruEY+bBlMChiKbKWpt4soVClx3NSY/ZPH13f1CAkw2so2ArnVGr5cgHB+OugiF2v7ugIYgGaX8oJiXV7NGcoshqrOBbV23Nmd0kvdIUXjxPfFGzTFC3euGhB/S33j0eVQsD6Y1sMriVOOnnrl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ltNvwXQg; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NU5zhqya"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706797681;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uhriPA+e3pr6OImmjGEObkRctf6AV9P0DFfhi2MkV/o=;
-	b=NU5zhqyaqGlB+YOXa1TbOi/uo0Q53tLuKCQHGSA6R92GtpWrTNrHiH9SwKXaQTpVfyNdn9
-	v3SToB4gJqjxY21XVHQgeybd7vZhpJgslcJZQtfbJgyekbdsGH+FEQnSBbKK4pDSR5mtLt
-	1ZY2i0cjIAgFKl56GnNGP5MlXmsoG9I=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-688-90_Uy54POUKjqzyryYb5sg-1; Thu, 01 Feb 2024 09:28:00 -0500
-X-MC-Unique: 90_Uy54POUKjqzyryYb5sg-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7831aaa797aso156191085a.1
-        for <linux-modules@vger.kernel.org>; Thu, 01 Feb 2024 06:28:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706797679; x=1707402479;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uhriPA+e3pr6OImmjGEObkRctf6AV9P0DFfhi2MkV/o=;
-        b=qK6XZkkg4j8TKuyIyZWKCiUuzzxrU0mwJdOGQPjMJv6+j+LqKt/8wB2FePI2ftb1RT
-         Ok2cynPlT3E31UB4RLRyamn4Jf86Xikzc9sS0rPlMv9nkQdRIobintmmY/Tsl8bQZ8KT
-         34vnVuADGmou1mnooxfBccHcn9Ur01ZlrdRX92em+J94sKgFivX+Te/uxx5aZB7etcdc
-         K5Bx6BCUgRWnSl6czPZthn3NB+wBYnVhzPOyR01VdUu48pnIZ4CS22n4HwjPy82dLQKY
-         HkOqpVgm1En0mthl2W1vHzfQyjo0RpILmIWxlbwdgYypUt00oQxH4EzNRR7DPFjruRyI
-         9hcw==
-X-Gm-Message-State: AOJu0YxDkX5vhxwIiZyNiPuDDzPo4qi2LrtJ3z7ucOIZfMNW58+HDenE
-	IoshXttBofsJfCYwCV7thY5D7rUAmJX2Vpl77vL6FcCcflWW/HAl7833TD5HCRQolEKjqD8dgVq
-	drmvf5xJ2jNOsfceBLT2u7UYMc1nCIkVgEdrPjRYdvnverDtltmxUYAGvqd8WKhXk6NjeYA==
-X-Received: by 2002:a05:620a:3182:b0:783:6eae:547 with SMTP id bi2-20020a05620a318200b007836eae0547mr4245003qkb.22.1706797679597;
-        Thu, 01 Feb 2024 06:27:59 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHuyCrYMRRmqU1NLxhcE6IYFawk7gjD0GjIF8sKvzAb4++daSvzxgCEO2r1yYtOPj5iMsr0Pg==
-X-Received: by 2002:a05:620a:3182:b0:783:6eae:547 with SMTP id bi2-20020a05620a318200b007836eae0547mr4244972qkb.22.1706797679284;
-        Thu, 01 Feb 2024 06:27:59 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUpkZk13bonEQp7JKJxcGUrn6x/3W27GczNweVWBULskC+KgkGIds17t4+6lhWrXNT848zZmtjjEauXYHff+Jba9jj2m/vo1ULK83uH
-Received: from [192.168.9.34] (net-2-34-24-75.cust.vodafonedsl.it. [2.34.24.75])
-        by smtp.gmail.com with ESMTPSA id h6-20020ad45446000000b00686a51526fbsm6534568qvt.110.2024.02.01.06.27.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 06:27:59 -0800 (PST)
-Message-ID: <cfa6cb2b-9432-4ed4-87ea-16be499d2806@redhat.com>
-Date: Thu, 1 Feb 2024 15:27:54 +0100
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ltNvwXQg"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=7w2qjfviPfksTMRAs8z5Kp6sfX6leF46kq6yvMVfkmc=; b=ltNvwXQgOGMNzhfWt4K43ajbYZ
+	oGwSEr3w6+GGJfzcnAbhDJ2Z4oJl6aHOX4PV+HswHiAud+qlleXOiqv618hOwySCs7mPkJCehSq68
+	skQtZ3MFdaIy4zzeRhnkgh/oeM7eiSSFfn00Cqupfi9JJC5d2mys47WYZPVoiBMJ09fLF+d4k2F3O
+	hqfZ8BMcdCvAZn/r7oCM4JRq7Pp5kYtx2FtJxqfD3+6Eq/W6WB3g+ZHp6XZLX9vXHj4aFmbRkIR0k
+	OapEqVNhA/Qe/ImcH8TJU0b7ib/6jk6syUbSWQHnr+fTfMjbjVRRkIXs+kQBjmWxVi3pTXXhKmjsN
+	4eQd2Rww==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rVbQY-00000008vhJ-3d7A;
+	Thu, 01 Feb 2024 18:04:42 +0000
+Date: Thu, 1 Feb 2024 10:04:42 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] lib/test_kmod: fix kernel-doc warnings
+Message-ID: <ZbvdOjMNb--7AYjV@bombadil.infradead.org>
+References: <20231104042044.17807-1-rdunlap@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] kernel/module: add a safer implementation of
- try_module_get()
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240130193614.49772-1-marpagan@redhat.com>
- <ZblgV0ApD-9cQWwl@bombadil.infradead.org>
-Content-Language: en-US
-From: Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZblgV0ApD-9cQWwl@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231104042044.17807-1-rdunlap@infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-
-
-On 2024-01-30 21:47, Luis Chamberlain wrote:
-> On Tue, Jan 30, 2024 at 08:36:14PM +0100, Marco Pagani wrote:
->> The current implementation of try_module_get() requires the module to
->> exist and be live as a precondition. While this may seem intuitive at
->> first glance, enforcing the precondition can be tricky, considering that
->> modules can be unloaded at any time if not previously taken. For
->> instance, the caller could be preempted just before calling
->> try_module_get(), and while preempted, the module could be unloaded and
->> freed. More subtly, the module could also be unloaded at any point while
->> executing try_module_get() before incrementing the refount with
->> atomic_inc_not_zero().
->>
->> Neglecting the precondition that the module must exist and be live can
->> cause unexpected race conditions that can lead to crashes. However,
->> ensuring that the precondition is met may require additional locking
->> that increases the complexity of the code and can make it more
->> error-prone.
->>
->> This patch adds a slower yet safer implementation of try_module_get()
->> that checks if the module is valid by looking into the mod_tree before
->> taking the module's refcount. This new function can be safely called on
->> stale and invalid module pointers, relieving developers from the burden
->> of ensuring that the module exists and is live before attempting to take
->> it.
->>
->> The tree lookup and refcount increment are executed after taking the
->> module_mutex to prevent the module from being unloaded after looking up
->> the tree.
->>
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+On Fri, Nov 03, 2023 at 09:20:44PM -0700, Randy Dunlap wrote:
+> Fix all kernel-doc warnings in test_kmod.c:
+> - Mark some enum values as private so that kernel-doc is not needed
+>   for them
+> - s/thread_mutex/thread_lock/ in a struct's kernel-doc comments
+> - add kernel-doc info for @task_sync
 > 
-> It very much sounds like there is a desire to have this but without a
-> user, there is no justification.
-
-I was working on a set of patches to fix an issue in the fpga subsystem
-when I came across your commit 557aafac1153 ("kernel/module: add
-documentation for try_module_get()") that made me realize we also had a
-safety problem. 
-
-To solve this problem for the fpga manager, we had to add a mutex to
-ensure the low-level module still exists before calling
-try_module_get(). However, having a safer version of try_module_get()
-would have simplified the code and made it more robust against changes.
-
-https://lore.kernel.org/linux-fpga/20240111160242.149265-1-marpagan@redhat.com/
-
-I suspect there may be other cases where try_module_get() is
-inadvertently called without ensuring that the module still exists
-that may benefit from a safer implementation.
-
->> +bool try_module_get_safe(struct module *module)
->> +{
->> +	struct module *mod;
->> +	bool ret = true;
->> +
->> +	if (!module)
->> +		goto out;
->> +
->> +	mutex_lock(&module_mutex);
+> test_kmod.c:67: warning: Enum value '__TEST_KMOD_INVALID' not described in enum 'kmod_test_case'
+> test_kmod.c:67: warning: Enum value '__TEST_KMOD_MAX' not described in enum 'kmod_test_case'
+> test_kmod.c:100: warning: Function parameter or member 'task_sync' not described in 'kmod_test_device_info'
+> test_kmod.c:134: warning: Function parameter or member 'thread_mutex' not described in 'kmod_test_device'
 > 
-> If a user comes around then this should be mutex_lock_interruptible(),
-> and add might_sleep()
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
 
-Would it be okay to return false if it gets interrupted, or should I
-change the return type to int to propagate -EINTR? My concern with
-changing the signature is that it would be less straightforward to
-use the function in place of try_module_get().
+Applied and pushed, thanks!
 
->> +
->> +	/*
->> +	 * Check if the address points to a valid live module and take
->> +	 * the refcount only if it points to the module struct.
->> +	 */
->> +	mod = __module_address((unsigned long)module);
->> +	if (mod && mod == module && module_is_live(mod))
->> +		__module_get(mod);
->> +	else
->> +		ret = false;
->> +
->> +	mutex_unlock(&module_mutex);
->> +
->> +out:
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL(try_module_get_safe);
-> 
-> And EXPORT_SYMBOL_GPL() would need to be used.
-
-Okay, I initially used EXPORT_SYMBOL() to be compatible with
-try_module_get().
-
-> 
-> I'd also expect selftests to be expanded for this case, but again,
-> without a user, this is just trying to resolve a problem which does not
-> exist.
-
-I can add selftests in the next versions.
-Thanks,
-Marco
-
+  Luis
