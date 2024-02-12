@@ -1,55 +1,55 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C992C4D5BF
-	for <linux-modules@vger.kernel.org>; Mon, 12 Feb 2024 22:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7895A4F211
+	for <linux-modules@vger.kernel.org>; Mon, 12 Feb 2024 22:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707776074; cv=none; b=RDHVTzwZHQj7qxwOeYDhEG9W41uYwBhy5U5WU0fsSlmwVUey+S4b+B6AQwIq12iwyip7/gt4wqPTCK9FrMETbS0lOlDPN/MiMG7V70TearL+JSxvnoDhbEI38VvVI7jzFWqPBphIoMPzxUzkanTPGSQ7yyaAGrCllVvVx6ouvvg=
+	t=1707776099; cv=none; b=XMGOXPkkx2MC1M63aY2Vd/kjATE+ggKOz6KGo/mg/lr/c9vMjIlHY3ZD2i9xztNDvGEHpVml5XYFcIk1n6mKrTEZEGpC9nX3i/KM8yOoIS8mLi4ZtN9A17l+AJY5Jwr43LxE8X4ZyGYgR8hBw8fgmRqpOsN211WPFRbfQzT46Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707776074; c=relaxed/simple;
-	bh=h3lvxY7RwFA2qmllpedkHyA1V2cF2YBOaMy0Y3HF4OQ=;
+	s=arc-20240116; t=1707776099; c=relaxed/simple;
+	bh=dyH1lfHbtvnYqMA2n7qN8NXnHWmrvDNZFQy38SC9y5U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iHYpgVa1EnALkhmF/pfkLFRYvqgayRKB+RvQEAAkFuTERJygsGW7S8GaWCtRyZRSO9gedONv9u8g9gX/pCQ5ulYRRCVGC0zIUb9riagkq+NiK/4KGABGwLX8IphwPWJF48laSOSlBhLNtSrvzdvzqo2knO5PAKl0s+lSbi/zFC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YxoUJYcu; arc=none smtp.client-ip=209.85.216.54
+	 Content-Type:Content-Disposition:In-Reply-To; b=jYnvGCyNHgFs5o4WWdapxCSDjB/QQstNaerswZ5ObOpPxgXAaKpcgs7DLZkHMJVhZkzhUCi3PM3o0nu8XLvOYNaE6jTk3w5zejNMT0ezdd7vJIG/bJSPcWQJQaDXsC1YxXQxjEUXmRdvjmRRQe2qIV7wsVh+v1x0gZ7uVM8+/50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=IeSR7CE8; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YxoUJYcu"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-29080973530so2678358a91.1
-        for <linux-modules@vger.kernel.org>; Mon, 12 Feb 2024 14:14:32 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IeSR7CE8"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6e0ee8e9921so267317b3a.3
+        for <linux-modules@vger.kernel.org>; Mon, 12 Feb 2024 14:14:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1707776072; x=1708380872; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1707776097; x=1708380897; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RIxrgJSE63hrU/LEeVrXgeewq/cIy3PkJ41qNbyzIVA=;
-        b=YxoUJYcu2FANQw0aSKgB63e9dtx3sHo+EHRknIB2cIYTMgemXRjmcjc3vir3t5KVad
-         aJSH6PYizqDnjHhDSmUnzgZcezvQcONFX3lbBCxSerbvr+MVQLvcBv/2v5X95WYry3et
-         lBR/nHNgt84byjcYrbG1aqktz8uUO7dGWXQVA=
+        bh=njQYW+8QUhLVezZTq33SQ25bt0JrLVgtIWx4ItZ5PfU=;
+        b=IeSR7CE86+X05I2QmvdCXJzwE0kKk6hDmPajOHls6UUwBtJEZkj+cskUvkz8Q1qnV1
+         JaeAy0KELzfshPa2E3RoVQ6ybC99UUfVW642FenYbbtUDuLV8LwjnZycyc78D2+Zi6AZ
+         C/4eq4h00xoyJuO2t5cPVcqfycLu0FZYmNOqk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707776072; x=1708380872;
+        d=1e100.net; s=20230601; t=1707776097; x=1708380897;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RIxrgJSE63hrU/LEeVrXgeewq/cIy3PkJ41qNbyzIVA=;
-        b=CDYQzSVAS9qnHljarr8j4zH60PAYByEfbDf/ze/BNGWzaliZJAm/GZQfLnPzE3+R6m
-         3+QuZ4oMmMd1iCqOS3jH4BXMlx65LsfAoGvxe5wIyYRG6YXU2vs9oi13qZRF9tWgTVDN
-         Qi+HvjgLa4KARXSRwT/WHCRPvAnRN7FVuhdSnXPJcRpq6urbbEeefnzTb/7JpU3xHOEq
-         WxyeEyy88vI6RlEsEfLH0/LaANsV9UZqVxGNSHTCiK3c8r3g5zCBRcLGvXCgDTF3Nskp
-         PX+eng+vUzeloeTylWAfb4/qFek7MEY/xthUkJogVzuKjfGPBfcDzL1xz5AcgsoFNoQW
-         6JuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXLfRC47qFPahZgL2BvVwIbNIuO0SxnO9NqIdXuVBMvNF8Jg1kLTnVsb1fSYG67EZ0RTKTkprt9i7sNcfBjBeq6My11RqseQ0/9tIDMfA==
-X-Gm-Message-State: AOJu0YzPMHJYN3aP8VpfOta4Xzay05xwQp8UilVG5uZgpEKWtbM3ALIl
-	zizlRzxzOJ7paWMsW9xr6RY5gIWZd/sofTyZGqKwJ6vBtvmK0gZcOlgjhWjQlg==
-X-Google-Smtp-Source: AGHT+IFiqvYFTcqWnH4OIf/1Dh8kKaLyS7c6HZ8FWCh2Bts+fuw53yU8/1Sv6ViBQjb2otqFVY6FxA==
-X-Received: by 2002:a17:90b:f0a:b0:297:202a:3ba6 with SMTP id br10-20020a17090b0f0a00b00297202a3ba6mr5321895pjb.0.1707776072170;
-        Mon, 12 Feb 2024 14:14:32 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVsNU/8NsDmZt/wglKpjvkWUqHuMmKfr1qDw7hshzseGvRlVn91OWfIWbwPNUldThoFCWHouAaiCcJaR42pa2ZOj+4fu2K/RLpokhW/LHNcfv2bpUoorqtQmMzzcr2uE77OUtmraZBpl3sk2+0JkP3q2aqFPvO8/oCz10/YOwXZph6krxIzkBVwaNb3wv/BrgWTPxyHhkA/nJZtQbzZAwr7loqQ/pCv/14+512lJkj6b5pedTy1UYbPe8fCvkg/xo7qb21F+hs+Z375s58m1Yaqt2RqOXotKP+i3q2TaHpNYX7+Qm1cOW+PXXl0zvf9L5VQfmLrwbCN3rKQhZW/nxd+mxJsLIzrBbjLbMZ0pkF3X38ElFtwskqogWZO17OXKEFqsMjg8CcNd+OrzYfm8i/+GWQ2aoFnvE/VOIsG/Ftpg1X8Xjb9NUgZKHW9NcJAKH9ypNH/EyYK1p4u4VLqY9iriSV6bAxOqn6+QslEU1mHLsLSoMCDXP9iT2o9sZPWgMHL2KdE2sxLxLDrmrAQw82/6vIDTAiOP+gfpX5103QSU+zIn09beoujZ5rXZoEFP2EV4cXNa2fOMDgr7UNTZOyXZY5zdYF8ty4SkdCJI3+tJOtPvCNSgNrNGfOVWTOKs9FTVkNVt8KD/AR23yzqYgL3hH9cLzUNzLgthNx3j8FdaGaJuMjOB+oaxAvuEuwe4ekk5L+mT0ksuIbsY55UWlDcgj1J1Ekfcl8tppAS5UCbJ6oiNYA73Q==
+        bh=njQYW+8QUhLVezZTq33SQ25bt0JrLVgtIWx4ItZ5PfU=;
+        b=LLK6n136u20i8gH4gtMWWR/GibVbgh+3BYvY44XjeZnHE9gUTUi9MYkwY6n4UkL+1r
+         h1t9Sf3rBL8AwSjvewr22Mqg0GMY8lWaYMEg1+dSpWeM6AUgIJyEcvHOOU8vT7aba5op
+         Xgxw1ut+yw9NqoEFnK16XUf5wVjWnFaG8yCJdikeRc+haetMJVZa0E1vcTWWs6KLXffr
+         xc4EBOHJPRPt2QoLwTkxX4vXNTAQx483Umt7+iXKeRcrPGQtChHlexJa+XsaGyYmlcjL
+         JCPuHlFoTH13kaoWhtzSvmt+7dX/IDz91EB3p8klbJyU/P5GJ8awDkPLhAcg/nFBEnzc
+         muPg==
+X-Forwarded-Encrypted: i=1; AJvYcCVDiJE+XT0VXC5kVcauGIDVw1qR/+NiSqH/o58OYleG1dKjd2nxjwIV4GsqT6p/PkFzeDxm/Hj7+uqzeSbbJDU7YM3odT7MpUASP/gSPQ==
+X-Gm-Message-State: AOJu0Yxveto/H4kMfanA7wVm4cva6rzPSngN8wmFpVFG82Ci1874znju
+	UL00IHi/Cu07XFq7MWqtcGFenYcxLFQUK296Bxe/AqVyDduebLvSip+wKu2l6Q==
+X-Google-Smtp-Source: AGHT+IGqHvQOXXe7pc2R8QyHByBXSm0DS/WGlqi3hZkqk8zeoT0i73r83gGpApQJ03KCZsZvt2qMeg==
+X-Received: by 2002:a05:6a00:124d:b0:6e0:4a04:cd1 with SMTP id u13-20020a056a00124d00b006e04a040cd1mr8211556pfi.17.1707776096755;
+        Mon, 12 Feb 2024 14:14:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUawBFhnV5kDrJizR8a00DS7yAvZ2jV8W5VE00vxBHng9Iux9BXaSmyGyDA+k/BmGKhRzKbWgCJlDApB9sU0S29Qs2ATeXIPgNbm4G9/M9kXh/5eYurHo9ba8q5k/E/MRaeOJ3yRafvYhsV53C3qCdd2RmIrydlsVryJ4CdulBga6TAqzPfk3A03BoqE+5noWnQQngO2dUiuB22FMz4yqYpERu2gKGnXcL3qQcPRx8QZK5QYBIuL3QlvVOx1EM1wtNT9Fv3Dirtaw2NsVkJ5Z3zsSNAEgQK6BfuKYvX/hccDt0wHJCJNRMNWj7MEiql8IFjfRIeYCzedAohtWgXbo3DkcfSe/fCdff7co71W0LbEfOUkxXQaXM2E81jCQbqIAvmJkIh1npJ8zhRmHuD8O9LjKD8vz7GT1RPiUu24gXbK16IB7uPEaiQzl3wT2WnbCXgUoNedjXsO9qGAlDAGaPCYADPuBr/7c/JDUry2XcXokowgT8A+Ki9kmQ0pzfUoO4weA6y38ykw/YlDDuGmgTB/CfzmHDMpLBdZBYCV2SJgg7D0dwPX4leQyuezXu7ZhUNW1lMsUUsbzm7q0bPBP+qNxPT4gLqwGcHlRdJIkHxVUG+Qlc1p1gIyYn46L/cukorHtdjTEdsUq+Mo4o66zaSxNyzfL6wuF8lepBEzoCdMzP/Pq9ocXXYi7a4GBGr9c5wXz89P/S/Wy05xXyXJ7vbiEHF7N0v8J5oyvy4CFwX7DrFteqamA==
 Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q31-20020a17090a752200b002970cb0c22dsm1120551pjk.49.2024.02.12.14.14.31
+        by smtp.gmail.com with ESMTPSA id m4-20020a62f204000000b006e0472fd7d1sm5946630pfh.130.2024.02.12.14.14.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Feb 2024 14:14:31 -0800 (PST)
-Date: Mon, 12 Feb 2024 14:14:31 -0800
+        Mon, 12 Feb 2024 14:14:56 -0800 (PST)
+Date: Mon, 12 Feb 2024 14:14:55 -0800
 From: Kees Cook <keescook@chromium.org>
 To: Suren Baghdasaryan <surenb@google.com>
 Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
@@ -79,11 +79,11 @@ Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
 	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
 	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
 	cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 06/35] mm: introduce __GFP_NO_OBJ_EXT flag to
- selectively prevent slabobj_ext creation
-Message-ID: <202402121414.EACBD205@keescook>
+Subject: Re: [PATCH v3 07/35] mm/slab: introduce SLAB_NO_OBJ_EXT to avoid
+ obj_ext creation
+Message-ID: <202402121414.57F185ACC3@keescook>
 References: <20240212213922.783301-1-surenb@google.com>
- <20240212213922.783301-7-surenb@google.com>
+ <20240212213922.783301-8-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -92,11 +92,15 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240212213922.783301-7-surenb@google.com>
+In-Reply-To: <20240212213922.783301-8-surenb@google.com>
 
-On Mon, Feb 12, 2024 at 01:38:52PM -0800, Suren Baghdasaryan wrote:
-> Introduce __GFP_NO_OBJ_EXT flag in order to prevent recursive allocations
-> when allocating slabobj_ext on a slab.
+On Mon, Feb 12, 2024 at 01:38:53PM -0800, Suren Baghdasaryan wrote:
+> Slab extension objects can't be allocated before slab infrastructure is
+> initialized. Some caches, like kmem_cache and kmem_cache_node, are created
+> before slab infrastructure is initialized. Objects from these caches can't
+> have extension objects. Introduce SLAB_NO_OBJ_EXT slab flag to mark these
+> caches and avoid creating extensions for objects allocated from these
+> slabs.
 > 
 > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
