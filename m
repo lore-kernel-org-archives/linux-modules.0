@@ -1,98 +1,129 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDAC1CD14;
-	Tue, 13 Feb 2024 21:36:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A63D69951
+	for <linux-modules@vger.kernel.org>; Tue, 13 Feb 2024 21:58:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707860210; cv=none; b=fhOgUhPtwkmba8M0Ecnoz439QbQCxY7sYDBm5BVGgAa4PhrwEvOou2NwWBBIq0VlZWmYwgdptnZV3nQ4h3kS49Z+TB/iw1ohLYhHap8sUVUAklt6dBBENUbqPVJ1MqE232FtMyF+F6BpS5iGAcP1fkt8yLyK1vHE7PntmbqZD24=
+	t=1707861535; cv=none; b=nigtr1NU2+Yl82O/v144qkmjl96YB9lQT5Vw0SagV9zBqwz4C32TBGcVAJwcEKMyGuq4fBxqsjoQV+OtxA3ZgoqEQWeEghq00vIulJkA5OgiHfezF4u7u7mAYxg83FW9j2EG0ZYCDITJc9nsxxGcYB16C3KJ+sFD3FqyCexRRpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707860210; c=relaxed/simple;
-	bh=nd+n2IqooMYwTtK4GSBRxqQK8ljwF4sk8hd9duAXu7U=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LcYj4aScnB0L0gsS21r3SQPzxbUke3TZmEUIvU1WoDL7jSE5o5pLFXh1Ej0dok+KpqbHDrYXZtefJGdHe7dnVJu0vQHq/4k1G5TiGhwPm/tg1mBAgR++kqQDxs955pMzTG9jtrHtfFPCs7HHAXX+RKvw5ZtlE0cUWejOZbBwfbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lhyj7iMu; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1707861535; c=relaxed/simple;
+	bh=y3mhTelgi0cx53H62n2OpwC2+wJXIbkyAT/UHHyybvM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RkI2Y5rn77E+gQxeYooRsximxGiGSsbnLvj/12Y4TJIVdo2ax/byApFpY1oh+tQqvz+Xz3FKm2ohi220qaajFkATgYCc1OuaqAOO1UWyNaGAIklUPs2NhLWrfVrJ82eJJQ68Xg5Bz1LVcEkGjx9NcfI9e2FjtgvPyQGbloOrw88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Rxb8wS3o; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lhyj7iMu"
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d0aabed735so62847431fa.0;
-        Tue, 13 Feb 2024 13:36:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rxb8wS3o"
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dcc6fc978ddso194391276.0
+        for <linux-modules@vger.kernel.org>; Tue, 13 Feb 2024 13:58:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707860207; x=1708465007; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=rLAWCOLrAAkedLsR0u9g4LdIF/1rQKFqHb/tWlWW+zc=;
-        b=Lhyj7iMucEoZWUsE7xUpcMjlFt5J2flxyMZuTIOjeT4W8TVQwVr6h2M+Yg3Oq1TCPa
-         JwXi2Gc4P9/VfFbWcrBUYLFzofcXt0aqDHq1Qf2jG1a2VqnOnK/WlbQCqPB8H7tyxulM
-         YABz5cMvuOrNlZgvs1DOEi0Vmw/tFlabPsZnrYfU3bmqw0wrlm3LgaiKt3u0Uf8lmggE
-         dUOz0Ko/daY0wUoJXdfv83FV/RXeBAGhli9lKNBMFi4RZxjAVYlnFfIyrbkJmW6RcdOS
-         rGCkNVAUHzYJg6A9+GcvyBNigTZ8CpDMEJxUjPUp9hg9KGdbbDHpRN9ARbdy5ar1oUd5
-         hM2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707860207; x=1708465007;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1707861533; x=1708466333; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rLAWCOLrAAkedLsR0u9g4LdIF/1rQKFqHb/tWlWW+zc=;
-        b=LDPxbxn3nZCDBCrbOukZJNXgjPsEBmMejIyu32mmJgxdwXs+I1ZZ4foaSAsup+r4AY
-         8R4U13gwuYoduCAUpqgfxO/moJEjCJ0wVK2ZRffhEjRnrgzXn6GC4L1c8cL7lL2+BTNL
-         w428Gr8mJANyIrggT8vNdkgwrr3+gUcKqDPVKvenfXadabt6/fIGoaRA0X5zapRGTSOn
-         RBGz0hPZV0E5mrwAkgMYjJaDFIIuuZAUvB0U7H3bN1ty5oIE8h0xJVqQ72ZyO4O28kPE
-         hffeyY6VMP2fNcSDo9nz49Z7CagGqgWNIBAeysZEAquxNawttmx8k7c7bzxx1ErP3NsD
-         5tEA==
-X-Forwarded-Encrypted: i=1; AJvYcCUPa3ocEYvSbbM2Qznxm9Oc3qAEx3iJt1IKiD8C7dsHR4X9bqzxbD2z97Upi6dKMm6lj4G2N93vnVvGq2mrcaXyoMhaKo/LWn8s6aRl3MhNxg4Ow3GvFMej7fURQu5pup+3T+4bW6IAuroOJA==
-X-Gm-Message-State: AOJu0YzqCBAFlaSNs7qV7IIyyFtU7xdEJlM7P67jS25X0VNx7g6pIrQf
-	7BXVD8hODSdW2pZGYWELL9OeKqtuMTxlWjIZZCHlf4H4rsY3K/L/qof1Og6dZu0=
-X-Google-Smtp-Source: AGHT+IEgQ0npxYq3Kv3ApOMUZUzsmL5bSmkug7M/j1UTJ1zlXCWYEUOVW4v8W/ST1UvZQ84ws0v2Rg==
-X-Received: by 2002:ac2:4902:0:b0:511:7c0c:f94a with SMTP id n2-20020ac24902000000b005117c0cf94amr525617lfi.16.1707860206602;
-        Tue, 13 Feb 2024 13:36:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVdaLTGOhggHrGm3PYeN+gRZdZ6PMuXywnXIcjFcYBZoQVJ97k+s7Kgz9wD3FptIVOBsNwFz2VKmTipTK1OcQrE+VGh0vvGccL6qR7dc363h68vtaixcuoWyP0RzLEZY5zSA0xCbqy++yQ8pHCKjMruQkSzbAh3s/5vu8Zsioqo
-Received: from akanner-r14. ([77.222.24.68])
-        by smtp.gmail.com with ESMTPSA id b5-20020a056512024500b00511776d214fsm1420338lfo.269.2024.02.13.13.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 13:36:46 -0800 (PST)
-Message-ID: <65cbe0ee.050a0220.1c11e.d156@mx.google.com>
-X-Google-Original-Message-ID: <ZctONUUasbIeWED2@akanner-r14.>
-Date: Tue, 13 Feb 2024 14:10:45 +0300
-From: Andrew Kanner <andrew.kanner@gmail.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, mchehab@kernel.org
-Subject: Re: [PATCH v1] module.h: define __symbol_get_gpl() as a regular
- __symbol_get()
-References: <20240131190251.4668-1-andrew.kanner@gmail.com>
- <20240201052958.GA14943@lst.de>
- <65bb648c.190a0220.d431d.4f63@mx.google.com>
- <ZbvfYqIKKWkTWLf9@bombadil.infradead.org>
+        bh=Sj6FkWt0IHINoPp252M2H78r73QaJ+UAYuAK2lRmHyc=;
+        b=Rxb8wS3oMHnLIb34yoTtwMfqoD4BcyVNuvNgGPdVHWPCpCIa6nEGYA5xvYOo5c/pvz
+         J2+OGg5pEfmE2ho3y5XIHT7lyPc4URII+matfJ1wGhF8/rZuDswE4lvq0eGNeHmc4d6i
+         1TslSmbu7/OW47V4jOiZ5LOcxgKzmPryQ4zK+pmespbb8vXgJxMG8uIdRMZx91X4F4MZ
+         GLPJ/mSUpVJkzmEWH8AhXqdx7DmmTZO/C6XQK33qFlrmwPlyjLWoDnxwx87d60SE9xih
+         +mW7UIlKhjY11M0oWGgX7klJ3vobUHc6ZLro1BWt6iAV7lHw8VKFBSbHNeQIPKHeeCWG
+         zK8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707861533; x=1708466333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sj6FkWt0IHINoPp252M2H78r73QaJ+UAYuAK2lRmHyc=;
+        b=iXM2F4gTc8OuKGLmuw6GnGw6dMhSa1fjdAezbq+4w2iXyb926/qooUQtgYLNivtdKV
+         DP86F/zJwymq+PjyMkeowVa4mvHGNWIhsw/v6ZQoOS3ECATYtl90a6kpS8PszZUDk2mM
+         3F5YqnChSlUbamArdQ3uM4cF8KDc/MKUJkltt6zbnjCMEf5UhqbTJeVdByaSc4AA14sR
+         evvjNyvy0nu4kxJr2aWkRShNtJNcFTadncjREoJOQhgWIb7tkGuL6rg9orLh7Dt0d1wL
+         egNd6R3ZXbv/nrSfHFG7EoL6n+bw63keEjs3acYV+Y70Jd0U9um5ytRs3/5utQ10PNg2
+         Anfw==
+X-Forwarded-Encrypted: i=1; AJvYcCWN0NIxyTS7Mt+7FbKYtDJY04RS0fyl1jEU1HFkxrvhh1eNxeXv6ED9W5i+DzhJfVBw2phlL/yo3ZWOWRcU0bsACc4BTXQqojMdkabbxA==
+X-Gm-Message-State: AOJu0Yw/z45a905ejLD3SC08nh2KfaNa+UBv0sCaxX8UV6WRSMOE4vgu
+	Hp8AK/oJ1W7HpgAd+KSddcr3Cu9du+KrFmb5fIdBKRkmfZeeKeigZVWkJaQOWFlyqEA4BfxPj4g
+	4g1HIBbTXVJTsRUeg84+WMr60aSDJWE5/lzk/
+X-Google-Smtp-Source: AGHT+IG6l4h8KgCu1mcr/ZMWQbdEFueKYTFVYNMwYlVMCYSQKnQPu8RzycqvNzeYz47HXL5wboAvOGkSQgCimZvCNdM=
+X-Received: by 2002:a25:d815:0:b0:dc6:e7f6:254a with SMTP id
+ p21-20020a25d815000000b00dc6e7f6254amr127954ybg.8.1707861532899; Tue, 13 Feb
+ 2024 13:58:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZbvfYqIKKWkTWLf9@bombadil.infradead.org>
+References: <20240212213922.783301-1-surenb@google.com> <Zctfa2DvmlTYSfe8@tiehlicka>
+In-Reply-To: <Zctfa2DvmlTYSfe8@tiehlicka>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Tue, 13 Feb 2024 13:58:39 -0800
+Message-ID: <CAJuCfpEsWfZnpL1vUB2C=cxRi_WxhxyvgGhUg7WdAxLEqy6oSw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/35] Memory allocation profiling
+To: Michal Hocko <mhocko@suse.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, vbabka@suse.cz, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
+	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
+	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
+	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
+	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
+	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 01, 2024 at 10:13:54AM -0800, Luis Chamberlain wrote:
-> 
-> While you're at it, if you want to try it, you could see if you can
-> improve the situation more by looking at symbol_get() users that remain
-> and seeing if you can instead fix it with proper Kconfig dependency and
-> at build time. Then we can just remove it as well.
-> 
->   Luis
+On Tue, Feb 13, 2024 at 4:24=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+e:
+>
+> On Mon 12-02-24 13:38:46, Suren Baghdasaryan wrote:
+> [...]
+> > We're aiming to get this in the next merge window, for 6.9. The feedbac=
+k
+> > we've gotten has been that even out of tree this patchset has already
+> > been useful, and there's a significant amount of other work gated on th=
+e
+> > code tagging functionality included in this patchset [2].
+>
+> I suspect it will not come as a surprise that I really dislike the
+> implementation proposed here. I will not repeat my arguments, I have
+> done so on several occasions already.
+>
+> Anyway, I didn't go as far as to nak it even though I _strongly_ believe
+> this debugging feature will add a maintenance overhead for a very long
+> time. I can live with all the downsides of the proposed implementation
+> _as long as_ there is a wider agreement from the MM community as this is
+> where the maintenance cost will be payed. So far I have not seen (m)any
+> acks by MM developers so aiming into the next merge window is more than
+> little rushed.
 
-Sorry for the late reply.
+We tried other previously proposed approaches and all have their
+downsides without making maintenance much easier. Your position is
+understandable and I think it's fair. Let's see if others see more
+benefit than cost here.
+Thanks,
+Suren.
 
-Luis, can you give more details of your idea? I re-read it once, then
-came back and still don't understand.
-
-I see that there are ~10 users for symbol_get() currently. Do you want
-to stringify symbol names at build time to completely remove
-symbol_get() from module.h? Correct me if I'm wrong since using of a
-fuction which is not declared anywhere sounds confusing.
-
--- 
-Andrew Kanner
+>
+> >  81 files changed, 2126 insertions(+), 695 deletions(-)
+> --
+> Michal Hocko
+> SUSE Labs
