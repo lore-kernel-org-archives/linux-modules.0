@@ -1,154 +1,107 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9875A3D54D;
-	Tue, 13 Feb 2024 12:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768355FDD6
+	for <linux-modules@vger.kernel.org>; Tue, 13 Feb 2024 16:33:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707827060; cv=none; b=MjomBmL9hWZIn8O0IV04LYrGCrDyNhTyinNP9Lf8fUYMDW1sboG0yAU/9TWOCqtVEmi+9FTYqqQe0hGYL2Xr0gqXbbWZu9kUVI/1leuKyP+8GyKpWYwMZyytwxflaLONH0XC4UYz8n25Dx8mQDV609Rc6JS6/GCv1jtHTcQOC1Q=
+	t=1707842035; cv=none; b=INrdYcfeAED5zjIqapz8JsX8w8KHV0GjHdxChUJIlzWBIU+B1kiK/5ZiL6awJU/ukUMZPrJBmXeEWDAT6aeNcoCT1/zxNEvOokmsIM1d8RAO8kdy2S6+ThRPn5+1jG22/1tR3GkKIDUAVUrBFhQ0c9ulPq4VxL7x9FfakTEbf+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707827060; c=relaxed/simple;
-	bh=KM6zxaaoOFSyFZ5noXN1PyDk4COINjZTnbDT7nk2jc4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nMROOOTTV6lrv4shUBU+r4D0+Omp/kAQe8tHl6VSmKumRzuuypBqZ9ZOKctQVpPmTnPnVfwoTJOJ5a4iBFHAqpupYxocioQPsPh7iNF13zxe0oeieoI+FCx1TROhqYg083xLwv1xMCx5r5qhA2aL+3M0JmgxhIaugBrXSi5KIls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=oPNMu0/3; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=oPNMu0/3; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1707842035; c=relaxed/simple;
+	bh=SlWc9xQMfTrwQXe+wBhBQiNH1Ihf751q05cKxK+WaTU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cPFh8VC3VZxeN66/OkCeqkYECYNzju6coyyM6VusENMHzQzsRvLRj+GmASjfIZKxLc2PB468MQ7GcK/N+b7XG+rwR1UY5S88392Xrxvfc34TK9pnG7nZ7oqUge3HDw48o3L23iKsAmkV03dxZPHGC/9rDDqdQtWlhzyQdydolJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cgqA8Idl; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="oPNMu0/3";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="oPNMu0/3"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id B2D4722206;
-	Tue, 13 Feb 2024 12:24:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1707827056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zXbOiQIN7neMTyajtp5U/4Xc00nM1Z7564QKlnGLw3E=;
-	b=oPNMu0/3kyHrjKXlmWcSVvIaXSDVbOqkAyBWw+GM976X053z77ogsr0EDbHX/7ytpQYyy9
-	SyG7mHOiNYd83sIJtiREPWMY5thldH58zWZvsioUSDVozZuC7lw84nRpXvaSjzQ83Bc875
-	OeMyCboEUx7oHjBoCcViZ4MERhSiPOw=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1707827056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zXbOiQIN7neMTyajtp5U/4Xc00nM1Z7564QKlnGLw3E=;
-	b=oPNMu0/3kyHrjKXlmWcSVvIaXSDVbOqkAyBWw+GM976X053z77ogsr0EDbHX/7ytpQYyy9
-	SyG7mHOiNYd83sIJtiREPWMY5thldH58zWZvsioUSDVozZuC7lw84nRpXvaSjzQ83Bc875
-	OeMyCboEUx7oHjBoCcViZ4MERhSiPOw=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8BA931370C;
-	Tue, 13 Feb 2024 12:24:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 4rhuIXBfy2WUCAAAD6G6ig
-	(envelope-from <mhocko@suse.com>); Tue, 13 Feb 2024 12:24:16 +0000
-Date: Tue, 13 Feb 2024 13:24:11 +0100
-From: Michal Hocko <mhocko@suse.com>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, vbabka@suse.cz,
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
-	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-	paulmck@kernel.org, pasha.tatashin@soleen.com,
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-	ndesaulniers@google.com, vvvvvv@google.com,
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-	elver@google.com, dvyukov@google.com, shakeelb@google.com,
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 00/35] Memory allocation profiling
-Message-ID: <Zctfa2DvmlTYSfe8@tiehlicka>
-References: <20240212213922.783301-1-surenb@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cgqA8Idl"
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dccb1421bdeso733231276.1
+        for <linux-modules@vger.kernel.org>; Tue, 13 Feb 2024 08:33:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707842033; x=1708446833; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SlWc9xQMfTrwQXe+wBhBQiNH1Ihf751q05cKxK+WaTU=;
+        b=cgqA8IdlZpHjAJVGtUUwiAwZP07Jw2uWb1jfgQx0Z+lgEYv6T5uLkZKYllYhHluyyX
+         YfVpn9UK1jbWhgXqaOlb5D7y0uY5Vl3qCZvGMk9Gzwz2O0Wjx52G+00bhrM1V1CXl6iC
+         V5CVcNawkijh/pNmvUxDbx3H6Mk3HCjXwMqov7llWNlsrqLZ4xlaA2wYjonos3/CVgPw
+         dlJfOQLSO2/U9aSkHH/IcQpC9peNCGfaLBKWfMu2pzSX0OXJWynUIf8wRpxFFF4/PCCM
+         rnJ3rBcyFuWYVBOeLz0ePzhAumkKH4wDDimQmGRq6i0LFUp9z2GGS/2nKkp3+j7t8Pam
+         Izpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707842033; x=1708446833;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SlWc9xQMfTrwQXe+wBhBQiNH1Ihf751q05cKxK+WaTU=;
+        b=hHfC0P9dS0l0wG36mcYy616+2BTsC2eSYHcimWZl8t3t4BdWXchqoHiI2spSxpNf5T
+         45v0gghMnV/ENGIG31xa9rfc45Ln37hNOMPir5ufyUkARRDiheHIfrseOX6g+d7JPuzS
+         lov7H18Ve/KntFc7Fb0kzMjR1N/FQ7v29WXjtbZHyY9mTVylptwFE7mu4Ebe98c5+27N
+         rhWxd3nJHbVuM+EReZN9VbtDUeJ+Sw2ezyYTByPxtI0Q0aYQRinPQQrZzEHelsfBGsLa
+         gCfK1/OqNRwfoFoBPgJJzwVrlD6RQiOJbdRzlHJbEFgJC3gAVS+mS6A/8cnJDOt9BYdv
+         sZVw==
+X-Gm-Message-State: AOJu0YwSQN9pHXNf2Bd/cY3PLq16f1rxYfhtn41xCf2RFuT/bF+jLa7K
+	NiB9ZNOyNPEAEwu/HLPRyqcNsNyr3z/eFBnA5ob3FxrlbONS3pG1hKui5gP2r0g4leC9BU1JjpV
+	+HkwUfjSt4oeBUIg6Zn+yPlErSYNdVEtqhQU=
+X-Google-Smtp-Source: AGHT+IEzjdS11lJaFFZBn1XrfAC0Wpd26Fh7AwMedj8bQWW3G1djruCKMXygi1Bq7NL+IVTta0c35TjMTr0CdPv0pDU=
+X-Received: by 2002:a05:6902:2489:b0:dc6:421a:3024 with SMTP id
+ ds9-20020a056902248900b00dc6421a3024mr10122411ybb.43.1707842033354; Tue, 13
+ Feb 2024 08:33:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240212213922.783301-1-surenb@google.com>
-X-Spam-Level: 
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b="oPNMu0/3"
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.07 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	 TO_DN_SOME(0.00)[];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_TRACE(0.00)[suse.com:+];
-	 MX_GOOD(-0.01)[];
-	 RCPT_COUNT_GT_50(0.00)[73];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-0.06)[60.75%];
-	 ARC_NA(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	 RCVD_DKIM_ARC_DNSWL_HI(-1.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 DWL_DNSWL_MED(-2.00)[suse.com:dkim];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	 TO_MATCH_ENVRCPT_SOME(0.00)[];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 FREEMAIL_CC(0.00)[linux-foundation.org,linux.dev,suse.cz,cmpxchg.org,suse.de,stgolabs.net,infradead.org,oracle.com,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,google.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[];
-	 RCVD_IN_DNSWL_HI(-0.50)[2a07:de40:b281:104:10:150:64:97:from]
-X-Spam-Score: -3.07
-X-Rspamd-Queue-Id: B2D4722206
-X-Spam-Flag: NO
+References: <20240212-decompression-fixes-v1-0-06f92ad07985@gmail.com> <20240212-decompression-fixes-v1-8-06f92ad07985@gmail.com>
+In-Reply-To: <20240212-decompression-fixes-v1-8-06f92ad07985@gmail.com>
+From: Emil Velikov <emil.l.velikov@gmail.com>
+Date: Tue, 13 Feb 2024 16:33:42 +0000
+Message-ID: <CACvgo50PDZ9aO_PuUbykxL8Q-LQdjEZjWzH-sZUimYX9itH_nQ@mail.gmail.com>
+Subject: Re: [PATCH kmod 08/13] libkmod: always detect the module compression
+To: emil.l.velikov@gmail.com
+Cc: linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon 12-02-24 13:38:46, Suren Baghdasaryan wrote:
-[...]
-> We're aiming to get this in the next merge window, for 6.9. The feedback
-> we've gotten has been that even out of tree this patchset has already
-> been useful, and there's a significant amount of other work gated on the
-> code tagging functionality included in this patchset [2].
+On Mon, 12 Feb 2024 at 17:23, Emil Velikov via B4 Relay
+<devnull+emil.l.velikov.gmail.com@kernel.org> wrote:
+>
+> From: Emil Velikov <emil.l.velikov@gmail.com>
+>
+> Currently, when built w/o given compression we'll incorrectly report a
+> "compression_none".
+>
+> As we reach do_finit_module(), we'll naively assume that the kernel can
+> handle the compressed module, yet omit the MODULE_INIT_COMPRESSED_FILE
+> flag.
+>
+> As result the kernel will barf at us, do_finit_module will fail with non
+> -ENOSYS and we won't end in the do_init_module codepath (which will also
+> fail).
+>
+> In other words: with this change, you can build kmod without zstd, xz
+> and zlib support and the kernel will load the modules, assuming it
+> supports the format \o/
+>
 
-I suspect it will not come as a surprise that I really dislike the
-implementation proposed here. I will not repeat my arguments, I have
-done so on several occasions already. 
+Important part to note here is that the above is only valid for insmod
+and modprobe.
 
-Anyway, I didn't go as far as to nak it even though I _strongly_ believe
-this debugging feature will add a maintenance overhead for a very long
-time. I can live with all the downsides of the proposed implementation
-_as long as_ there is a wider agreement from the MM community as this is
-where the maintenance cost will be payed. So far I have not seen (m)any
-acks by MM developers so aiming into the next merge window is more than
-little rushed. 
+Tools such as depmod and modinfo, still depend on kmod being built
+with e.g. zstd, in order for `.ko.zstd` modules to be considered valid
+entries.
+I'm not 100% sure about modinfo, at a glance those tools require
+decompression support in order to parse the elfs and extract the
+required module information.
 
->  81 files changed, 2126 insertions(+), 695 deletions(-)
--- 
-Michal Hocko
-SUSE Labs
+Regardless of this caveat I do see value in this series:
+ - it notably simplifies the codebase
+ - You can use different kmod on the build vs target system.
+
+Namely: Yocto recipe with full blown kmod/depmod generates the mutable
+modules.xxx files, yet the target system uses compression-less kmod
+for insmod/modprobe/rmmod/lsmod.
+
+HTH
+Emil
