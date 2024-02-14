@@ -1,115 +1,111 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6340D5FDD5
-	for <linux-modules@vger.kernel.org>; Wed, 14 Feb 2024 16:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A6760EF9
+	for <linux-modules@vger.kernel.org>; Wed, 14 Feb 2024 16:22:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707927455; cv=none; b=Cd+TbzT90DujD5+tTJpR5Aduz3mjNpWHI3xfwvv0DBPAVS2T3GpVUGy4rANS5bEVKnhbQjWtEgrIiR3xWR5LdMyPlPRbcsmZoaz8ZAi7qpAEA9L78UvvwplhNN7AYKlYn7zFUK25UmwgEU65qMdp2cWud2BqtPehxVGCU8ca1aU=
+	t=1707927779; cv=none; b=YIrF5dEtGEMWk/OlSMkqjkEfN6GSOn6qK+rxtJU51BGD28yCl9swp3wdD+dM9C7ckxeeN6uZBXrhl4afxUxpyKoaZ/OD04CryPQhpqPSLorBRlW89BGlbR4VYaWleK3oSG8eWogou32paPabbqRex8dy0IFO4fAVtYw3uPmJqmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707927455; c=relaxed/simple;
-	bh=BMkf3NLk/iLQr+WYsIcfjcR7/4kHgrAc/NsrN13AxP8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fKlo8vDAfWeUikhWaH5kZlzTKliONVxkZcuvbn8Ce3rI7nttKlxKEdq/wmg118x/toqnYJSyfX9S1M30ScS1sTFdFzjtM38S5w7ddKjjbUD6229yoRszvFOu5nLNf7Lx616bmz97Th3MKAXpb7n0BnGUG5S8B1GJGAHld4lBeEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=If7KvAk3; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1707927779; c=relaxed/simple;
+	bh=PbBE9hyrZXBLx5vaksEQqXlxr1hq4xJkJbClqT7prbQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K98EDpgThc4DAJFaQuDYOpSfwXeNexcLHwkyJR5icsCMypYHWJun7f2ulibHBqjUfultPgwNGxTbKBoKZXH5O0NfmFxJnvV/dlyWZIxZq1SyFg4yj7JMkbSWxdzOocGGTQgKHoUhf30V9c/rVIE2zHEsxokXNQykRvB4AlTNo6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mBIeYp+q; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="If7KvAk3"
-Date: Wed, 14 Feb 2024 11:17:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1707927450;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WvW8w5yUCB+T24tws0BE+nRUAXqLznpxXzLB9RssHjE=;
-	b=If7KvAk3S44JHt8xTRFRLZGFB9HhXr9yTjM5WxyEi5xNjIqcYGBYlgszfmKzpB+BaRdtGZ
-	n3N+YeR7XUwHyIMey1lTARWNjfYN024v3AgKYdiCjuLtH6AdMtTaqstAHFyfDaYzOPE5KS
-	nEweGtuqjPMrA6xlO/8Dh+ORbNs02fU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Michal Hocko <mhocko@suse.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, 
-	Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org, vbabka@suse.cz, 
-	roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net, willy@infradead.org, 
-	liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
-	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org, 
-	peterx@redhat.com, david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, 
-	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org, tj@kernel.org, 
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, hughd@google.com, 
-	andreyknvl@gmail.com, keescook@chromium.org, ndesaulniers@google.com, 
-	vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com, 
-	ytcoode@gmail.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com, 
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, 
-	cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
-	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, minchan@google.com, 
-	kaleshsingh@google.com, kernel-team@android.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-modules@vger.kernel.org, 
-	kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 00/35] Memory allocation profiling
-Message-ID: <udgv2gndh4leah734rfp7ydfy5dv65kbqutse6siaewizoooyw@pdd3tcji5yld>
-References: <20240212213922.783301-1-surenb@google.com>
- <20240214062020.GA989328@cmpxchg.org>
- <ZczSSZOWMlqfvDg8@tiehlicka>
- <ifz44lao4dbvvpzt7zha3ho7xnddcdxgp4fkeacqleu5lo43bn@f3dbrmcuticz>
- <ZczkFH1dxUmx6TM3@tiehlicka>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mBIeYp+q"
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dc6d8bd618eso5881259276.3
+        for <linux-modules@vger.kernel.org>; Wed, 14 Feb 2024 08:22:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707927776; x=1708532576; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PfsNH2DDaSZJvv6w9txIObvnzb25cxCRn0oO3AVkfQ0=;
+        b=mBIeYp+q4sXb28baKSCKs127dm6qQwVFlC6pd1ioGqWLikJgx8tzGLqpP6PCYep2/+
+         PuBnbL8ZIDQ2RryZ3Aj2eqITctXb7LSVUSxgtg5AWn+3L++/tTYEMgB8TqlVByh2yUE3
+         3LINSk54n0Ra1CooZaTuv+7OyV949UQXRaRROgDFEzMI7xr1V9UOG8vTYLymc9ObrTdd
+         qa22bJqQgYfQYAmWZpv8zliidrrm9taI6bNAXTE0xnB4h/AssvOQSQ4F9LNztALKqejX
+         Wwz5vaz8hPQIhoar+RSLmk4tFfZ3eZSMbDtxHl9zNVRA4r2EWYpfHePEZ1GwUSgAmbVK
+         eflQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707927776; x=1708532576;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PfsNH2DDaSZJvv6w9txIObvnzb25cxCRn0oO3AVkfQ0=;
+        b=rbLG60IfFkd7GCioMXTqLuLFUdI5rIcWU+rupLRSfW57E0hq9Zv1BDen3Rn8+oJz1Z
+         7pO9RKiOpLiTAhNPialIkWI2mjhx7mcnCQGWqmvicALlzp+zxzeVLcRPJAsA1CNmCw2U
+         wcxKV8YQoBq1cpo4hsC2JLGI0kdQdccv0r63t/jbuLPM+Xh/EbRlRfvNBgSGW1oXR/Bd
+         5DFOFtdblmkqMPThxQoXjpxWmlhDa9Vv8m5kTO5CLtjXOXMkdP1d9x4uUKmhPNq2mJSH
+         2R5j8OWlMrBd/ll/tQFbHoPbuWR7ruxnL+C/WAUaQv9nE5CAQsD7Z2h1FP9EI+O2G5U8
+         W1HA==
+X-Gm-Message-State: AOJu0YyzahSUG3waSLF29FMAEIUVfRzQ7btk+hc04CSiZBAJCtgpgm6d
+	q9cMMg6uP+rFfdnpTvygG1n+SG03Yzp+mTNiLqYY2+o1mp0qxekFZhOceTpRfKmKm9xXSFU3fY4
+	f9c/HmvuuazsCwEowgbkNTwccbIZJfmqy
+X-Google-Smtp-Source: AGHT+IF5HI4XFh+8cY9WwWDHYILEOBBa0oPy7hgvF4B6kze8Nq6XWJIiZ6Y14gymuDQBLE0v1gTomEHaOo6P23mSbN8=
+X-Received: by 2002:a25:ada8:0:b0:dc6:aebb:168e with SMTP id
+ z40-20020a25ada8000000b00dc6aebb168emr2765861ybi.26.1707927776133; Wed, 14
+ Feb 2024 08:22:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZczkFH1dxUmx6TM3@tiehlicka>
-X-Migadu-Flow: FLOW_OUT
+References: <20240126-master-v1-0-6257d039a30a@gmail.com> <20240126-master-v1-2-6257d039a30a@gmail.com>
+ <zeoywwedo4muolir5ietylb6xm2wu66wai77h6rvy2hkmu3u2f@f26b5cb3s6lf>
+ <CACvgo51R=2WTcLma1wPSaDMu4QFtgezhGUKXf9k66Zg=6ZZ3=A@mail.gmail.com>
+ <72ijqdtswcehmfjgodgg6chauou4vjkyh6ieup7osrcxbfwvua@arh6o2k2yddl>
+ <CACvgo50Y1=-+SxLMsHy-Nc66wt1=S7iwjthRU-UVeS_N7o-EGQ@mail.gmail.com> <4on5pkpsatbpp75qocejyrgxg5dzccu5sm43tmujccd2wd4cr7@2lercurz46f5>
+In-Reply-To: <4on5pkpsatbpp75qocejyrgxg5dzccu5sm43tmujccd2wd4cr7@2lercurz46f5>
+From: Emil Velikov <emil.l.velikov@gmail.com>
+Date: Wed, 14 Feb 2024 16:22:44 +0000
+Message-ID: <CACvgo53Y+JQA9A6VdwYyHiAvs8HPssotBbfmdPnPxG83Yq9Ztg@mail.gmail.com>
+Subject: Re: Re: Re: [PATCH 2/2] make: install/uninstall tools symlinks to kmod
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-modules@vger.kernel.org, Emil Velikov <emil.velikov@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Feb 14, 2024 at 05:02:28PM +0100, Michal Hocko wrote:
-> On Wed 14-02-24 10:01:14, Kent Overstreet wrote:
-> > On Wed, Feb 14, 2024 at 03:46:33PM +0100, Michal Hocko wrote:
-> > > On Wed 14-02-24 01:20:20, Johannes Weiner wrote:
-> > > [...]
-> > > > I agree we should discuss how the annotations are implemented on a
-> > > > technical basis, but my take is that we need something like this.
-> > > 
-> > > I do not think there is any disagreement on usefulness of a better
-> > > memory allocation tracking. At least for me the primary problem is the
-> > > implementation. At LFSMM last year we have heard that existing tracing
-> > > infrastructure hasn't really been explored much. Cover letter doesn't
-> > > really talk much about those alternatives so it is really hard to
-> > > evaluate whether the proposed solution is indeed our best way to
-> > > approach this.
-> > 
-> > Michal, we covered this before.
-> 
-> It is a good practice to summarize previous discussions in the cover
-> letter. Especially when there are different approaches discussed over a
-> longer time period or when the topic is controversial.
-> 
-> I do not see anything like that here. Neither for the existing tracing
-> infrastructure, page owner nor performance concerns discussed before
-> etc. Look, I do not want to nit pick or insist on formalisms but having
-> those data points layed out would make any further discussion much more
-> smooth.
+On Tue, 6 Feb 2024 at 16:15, Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+>
+> On Mon, Feb 05, 2024 at 05:50:54PM +0000, Emil Velikov wrote:
+> >On Mon, 5 Feb 2024 at 14:30, Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+> >
+> >[snip]
+> >
+> >> >I'm not a huge fan of using relative symlinks, especially if the tool> >is run as root. In my experience that makes things harder to audit and
+> >> >prevent accidental breakages.
+> >>
+> >> I'm completely in the opposite camp. Relative symlinks actually make
+> >> sure the thing you are running is what you are expecting. Nothing should
+> >> really point outside of $prefix expecting that is mounted on /.
+> >>
+> >
+> >That is true and I fully agree. Yet the contents of DESTDIR are not
+> >meant to be run as-is - it's used for "staging" [1].
+> >
+> >[1] https://www.gnu.org/software/make/manual/html_node/DESTDIR.html
+> >
+> >> Several years back there was also the issue with packaging, which would
+> >> complain when symlinks pointed outside what was being packaged.  It is
+> >> dangerous when using absolute symlinks because if the tool used to copy
+> >> follows the symlinks, it ends up with the wrong binary, copying the host
+> >> bin rather than what was just built.
+> >>
+> >
+> >That sounds like a horrible bug, which can easily break your system
+> >regardless of the project.
+> >
+> >Would you consider dropping the leading `./` aka can we use `$(LN_S)
+> >kmod $(DESTDIR)$(bindir)/$$tool;`?
+> >Seems to be prevailing on my system with over 90% instances.
+>
+> seems good to me. I will squash that and push.
+>
 
-You don't want to nitpick???
+Respectful poke?
 
-Look, you've been consistently sidestepping the technical discussion; it
-seems all you want to talk about is process or "your nack".
-
-If we're going to have a technical discussion, it's incumbent upon all
-of us to /keep the focus on the technical/; that is everyone's
-responsibility.
-
-I'm not going to write a 20 page cover letter and recap every dead end
-that was proposed. That would be a lot of useless crap for eveyone to
-wade through. I'm going to summarize the important stuff, and keep the
-focus on what we're doing and documenting it. If you want to take part
-in a discussion, it's your responsibility to be reading with
-comprehension and finding useful things to say.
-
-You gotta stop with this this derailing garbage.
+Thanks
+Emil
