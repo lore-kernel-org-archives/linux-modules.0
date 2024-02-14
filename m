@@ -1,111 +1,147 @@
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A6760EF9
-	for <linux-modules@vger.kernel.org>; Wed, 14 Feb 2024 16:22:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA39422612;
+	Wed, 14 Feb 2024 16:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707927779; cv=none; b=YIrF5dEtGEMWk/OlSMkqjkEfN6GSOn6qK+rxtJU51BGD28yCl9swp3wdD+dM9C7ckxeeN6uZBXrhl4afxUxpyKoaZ/OD04CryPQhpqPSLorBRlW89BGlbR4VYaWleK3oSG8eWogou32paPabbqRex8dy0IFO4fAVtYw3uPmJqmU=
+	t=1707928279; cv=none; b=d5MgnZU3vvAcMV8jKOuR/ycAYDb3w8vP0KhJ0TgUhRhLOZz5C1gxXKRuGty5pYWV+BTz6WZeMcjMK2dbXwp1PnyIWAALYWduECSrv7BJnVKjo/K0Xo5+T3uvKIoZPrjrgzribH0ZvA9MsfsqNYX/U4TudwTiNC29h+jKWw4JsHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707927779; c=relaxed/simple;
-	bh=PbBE9hyrZXBLx5vaksEQqXlxr1hq4xJkJbClqT7prbQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K98EDpgThc4DAJFaQuDYOpSfwXeNexcLHwkyJR5icsCMypYHWJun7f2ulibHBqjUfultPgwNGxTbKBoKZXH5O0NfmFxJnvV/dlyWZIxZq1SyFg4yj7JMkbSWxdzOocGGTQgKHoUhf30V9c/rVIE2zHEsxokXNQykRvB4AlTNo6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mBIeYp+q; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1707928279; c=relaxed/simple;
+	bh=AEN9u83RBSpT092nOlHGaMxw3Xm6Ki3GQxFfdLs2PRc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n24GCBZe9gvGaS/wnuKAYt+NFb+1Jyvs5X2hHA0+uUOeGQfGuYroeU66ELcw7pHL0q2AlwHBY64O5mjRq0RGKu5uCCtuqyIcVsdFfdpE8N2NXdyLCrWMgOeAnJH/0jTEyNT/Vd2QtSadUhfaBehmt0G4ioD6h1LASKiPqHeAnr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Y87E/4xC; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Y87E/4xC; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mBIeYp+q"
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dc6d8bd618eso5881259276.3
-        for <linux-modules@vger.kernel.org>; Wed, 14 Feb 2024 08:22:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707927776; x=1708532576; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PfsNH2DDaSZJvv6w9txIObvnzb25cxCRn0oO3AVkfQ0=;
-        b=mBIeYp+q4sXb28baKSCKs127dm6qQwVFlC6pd1ioGqWLikJgx8tzGLqpP6PCYep2/+
-         PuBnbL8ZIDQ2RryZ3Aj2eqITctXb7LSVUSxgtg5AWn+3L++/tTYEMgB8TqlVByh2yUE3
-         3LINSk54n0Ra1CooZaTuv+7OyV949UQXRaRROgDFEzMI7xr1V9UOG8vTYLymc9ObrTdd
-         qa22bJqQgYfQYAmWZpv8zliidrrm9taI6bNAXTE0xnB4h/AssvOQSQ4F9LNztALKqejX
-         Wwz5vaz8hPQIhoar+RSLmk4tFfZ3eZSMbDtxHl9zNVRA4r2EWYpfHePEZ1GwUSgAmbVK
-         eflQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707927776; x=1708532576;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PfsNH2DDaSZJvv6w9txIObvnzb25cxCRn0oO3AVkfQ0=;
-        b=rbLG60IfFkd7GCioMXTqLuLFUdI5rIcWU+rupLRSfW57E0hq9Zv1BDen3Rn8+oJz1Z
-         7pO9RKiOpLiTAhNPialIkWI2mjhx7mcnCQGWqmvicALlzp+zxzeVLcRPJAsA1CNmCw2U
-         wcxKV8YQoBq1cpo4hsC2JLGI0kdQdccv0r63t/jbuLPM+Xh/EbRlRfvNBgSGW1oXR/Bd
-         5DFOFtdblmkqMPThxQoXjpxWmlhDa9Vv8m5kTO5CLtjXOXMkdP1d9x4uUKmhPNq2mJSH
-         2R5j8OWlMrBd/ll/tQFbHoPbuWR7ruxnL+C/WAUaQv9nE5CAQsD7Z2h1FP9EI+O2G5U8
-         W1HA==
-X-Gm-Message-State: AOJu0YyzahSUG3waSLF29FMAEIUVfRzQ7btk+hc04CSiZBAJCtgpgm6d
-	q9cMMg6uP+rFfdnpTvygG1n+SG03Yzp+mTNiLqYY2+o1mp0qxekFZhOceTpRfKmKm9xXSFU3fY4
-	f9c/HmvuuazsCwEowgbkNTwccbIZJfmqy
-X-Google-Smtp-Source: AGHT+IF5HI4XFh+8cY9WwWDHYILEOBBa0oPy7hgvF4B6kze8Nq6XWJIiZ6Y14gymuDQBLE0v1gTomEHaOo6P23mSbN8=
-X-Received: by 2002:a25:ada8:0:b0:dc6:aebb:168e with SMTP id
- z40-20020a25ada8000000b00dc6aebb168emr2765861ybi.26.1707927776133; Wed, 14
- Feb 2024 08:22:56 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Y87E/4xC";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Y87E/4xC"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 47A211FD37;
+	Wed, 14 Feb 2024 16:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1707928276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tQsQtF68aCcyiGlksJtNjaSfy5IyP2T46OHdmxlmiHQ=;
+	b=Y87E/4xCqC3YNxjj9bX8puR4XBpxngGO5Ttq3UbF0tGerIPMx2LvAKy4x9tBcghMU93YZr
+	if4opgaKXbUFz78fGCB04Ip3ICfCZqLXf2ioptumwN9Z4JswiQ6hYjFMq701u5hcjIatJS
+	yvOTwrGkLUXKsJlzY85bMt6t6Xv92qI=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1707928276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tQsQtF68aCcyiGlksJtNjaSfy5IyP2T46OHdmxlmiHQ=;
+	b=Y87E/4xCqC3YNxjj9bX8puR4XBpxngGO5Ttq3UbF0tGerIPMx2LvAKy4x9tBcghMU93YZr
+	if4opgaKXbUFz78fGCB04Ip3ICfCZqLXf2ioptumwN9Z4JswiQ6hYjFMq701u5hcjIatJS
+	yvOTwrGkLUXKsJlzY85bMt6t6Xv92qI=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1DE9C13A72;
+	Wed, 14 Feb 2024 16:31:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id pcetBtTqzGW1OAAAD6G6ig
+	(envelope-from <mhocko@suse.com>); Wed, 14 Feb 2024 16:31:16 +0000
+Date: Wed, 14 Feb 2024 17:31:15 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+	vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+	paulmck@kernel.org, pasha.tatashin@soleen.com,
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+	ndesaulniers@google.com, vvvvvv@google.com,
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+	elver@google.com, dvyukov@google.com, shakeelb@google.com,
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH v3 00/35] Memory allocation profiling
+Message-ID: <Zczq02jdZa9L0VKj@tiehlicka>
+References: <20240212213922.783301-1-surenb@google.com>
+ <20240214062020.GA989328@cmpxchg.org>
+ <ZczSSZOWMlqfvDg8@tiehlicka>
+ <ifz44lao4dbvvpzt7zha3ho7xnddcdxgp4fkeacqleu5lo43bn@f3dbrmcuticz>
+ <ZczkFH1dxUmx6TM3@tiehlicka>
+ <udgv2gndh4leah734rfp7ydfy5dv65kbqutse6siaewizoooyw@pdd3tcji5yld>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240126-master-v1-0-6257d039a30a@gmail.com> <20240126-master-v1-2-6257d039a30a@gmail.com>
- <zeoywwedo4muolir5ietylb6xm2wu66wai77h6rvy2hkmu3u2f@f26b5cb3s6lf>
- <CACvgo51R=2WTcLma1wPSaDMu4QFtgezhGUKXf9k66Zg=6ZZ3=A@mail.gmail.com>
- <72ijqdtswcehmfjgodgg6chauou4vjkyh6ieup7osrcxbfwvua@arh6o2k2yddl>
- <CACvgo50Y1=-+SxLMsHy-Nc66wt1=S7iwjthRU-UVeS_N7o-EGQ@mail.gmail.com> <4on5pkpsatbpp75qocejyrgxg5dzccu5sm43tmujccd2wd4cr7@2lercurz46f5>
-In-Reply-To: <4on5pkpsatbpp75qocejyrgxg5dzccu5sm43tmujccd2wd4cr7@2lercurz46f5>
-From: Emil Velikov <emil.l.velikov@gmail.com>
-Date: Wed, 14 Feb 2024 16:22:44 +0000
-Message-ID: <CACvgo53Y+JQA9A6VdwYyHiAvs8HPssotBbfmdPnPxG83Yq9Ztg@mail.gmail.com>
-Subject: Re: Re: Re: [PATCH 2/2] make: install/uninstall tools symlinks to kmod
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: linux-modules@vger.kernel.org, Emil Velikov <emil.velikov@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <udgv2gndh4leah734rfp7ydfy5dv65kbqutse6siaewizoooyw@pdd3tcji5yld>
+X-Spam-Level: 
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b="Y87E/4xC"
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.31 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 TO_DN_SOME(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_TRACE(0.00)[suse.com:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_GT_50(0.00)[73];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 BAYES_HAM(-1.80)[93.78%];
+	 ARC_NA(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	 FROM_HAS_DN(0.00)[];
+	 DWL_DNSWL_MED(-2.00)[suse.com:dkim];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 TO_MATCH_ENVRCPT_SOME(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 FREEMAIL_CC(0.00)[cmpxchg.org,google.com,linux-foundation.org,suse.cz,linux.dev,suse.de,stgolabs.net,infradead.org,oracle.com,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Score: -3.31
+X-Rspamd-Queue-Id: 47A211FD37
+X-Spam-Flag: NO
 
-On Tue, 6 Feb 2024 at 16:15, Lucas De Marchi <lucas.demarchi@intel.com> wrote:
->
-> On Mon, Feb 05, 2024 at 05:50:54PM +0000, Emil Velikov wrote:
-> >On Mon, 5 Feb 2024 at 14:30, Lucas De Marchi <lucas.demarchi@intel.com> wrote:
-> >
-> >[snip]
-> >
-> >> >I'm not a huge fan of using relative symlinks, especially if the tool> >is run as root. In my experience that makes things harder to audit and
-> >> >prevent accidental breakages.
-> >>
-> >> I'm completely in the opposite camp. Relative symlinks actually make
-> >> sure the thing you are running is what you are expecting. Nothing should
-> >> really point outside of $prefix expecting that is mounted on /.
-> >>
-> >
-> >That is true and I fully agree. Yet the contents of DESTDIR are not
-> >meant to be run as-is - it's used for "staging" [1].
-> >
-> >[1] https://www.gnu.org/software/make/manual/html_node/DESTDIR.html
-> >
-> >> Several years back there was also the issue with packaging, which would
-> >> complain when symlinks pointed outside what was being packaged.  It is
-> >> dangerous when using absolute symlinks because if the tool used to copy
-> >> follows the symlinks, it ends up with the wrong binary, copying the host
-> >> bin rather than what was just built.
-> >>
-> >
-> >That sounds like a horrible bug, which can easily break your system
-> >regardless of the project.
-> >
-> >Would you consider dropping the leading `./` aka can we use `$(LN_S)
-> >kmod $(DESTDIR)$(bindir)/$$tool;`?
-> >Seems to be prevailing on my system with over 90% instances.
->
-> seems good to me. I will squash that and push.
->
+On Wed 14-02-24 11:17:20, Kent Overstreet wrote:
+[...]
+> You gotta stop with this this derailing garbage.
 
-Respectful poke?
+It is always pleasure talking to you Kent, but let me give you advice
+(free of charge of course). Let Suren talk, chances for civilized
+and productive discussion are much higher!
 
-Thanks
-Emil
+I do not have much more to add to the discussion. My point stays, find a
+support of the MM community if you want to proceed with this work.
+-- 
+Michal Hocko
+SUSE Labs
