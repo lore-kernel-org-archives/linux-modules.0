@@ -1,164 +1,131 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA30D12EBD4
-	for <linux-modules@vger.kernel.org>; Thu, 15 Feb 2024 14:18:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7EE13246F
+	for <linux-modules@vger.kernel.org>; Thu, 15 Feb 2024 14:58:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708006695; cv=none; b=GubnBY2t/wdAcmOnTt2qJcK3htzt6z3r5xRP2GIsznFmV7kAzqULkT2Ffn0cSBO9ypyP/biJMDz8jzOeB45eHPM3Tw6dc+lKUBHJ5lyt3WcjNB4UUJ2A+CEaMj7Gpkz6T+CPDMZ3PKkRAMovsjk5jJmB53Ms9uhymEI8lX+qhf4=
+	t=1708009138; cv=none; b=IjDDAtEZ5HIwSQVO61bHAcuMPwKQ0Q/V3BSBeIfPpoEXs6gZ7GwNAa/Vin4sxWZguRC71/tgC5EAO0XmhE+5r7pLUj3rCOyiCCmUJPQ59DTnTYjcBVmysGEhV6d/+dxkJ+JPBhKLO9Jj4/kJiN4eDP3zNeYiKjFaXyuXH0tn4us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708006695; c=relaxed/simple;
-	bh=4bponqr+cXqIij1rXjTmt1CR6Ub5f39mO6gYdR7XDjo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mOq/2aMBZK3qKCpc4JZeCsiXSLSDRgVJ2aKlSah6cD14riyIpNMQH/QCKGPn01jXHD8BUNanLfTZc+PtnzHbi8YGNbg1G/Uf2bgjO1z6Wxdm+bF1C7mXlxReFQ2fWg0OF4VXeclEPKzJ5PBOgbFoSpla1W1zoFdCuTZJqNvAoUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KgC1OkQR; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1708009138; c=relaxed/simple;
+	bh=6IMij2aMCDzlI1InstPj/0SjhHnSgb7se0txHOjqYec=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P1v/H9CnwgbcIlreQPtPOt7i+oj8a4D2OWeChEXKNnKGMu9UP+lUjuWNJnM7hsjn0DHz8sMd5v2YqibNVyN458u20SrXD6c1CfdT1bhv7X/zbrEaICCZ2PvHtVTnOirHQWUThOQfCgjsPYWWHraPkPg9TxpAUF7zcF1QRKuXkLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QCSBC1fn; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KgC1OkQR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708006692;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sTgy7CmCplgGNTODQfgNUD/LxhamGxog3zQ/EAXJjp8=;
-	b=KgC1OkQR+8mKEKJJxG03hJFMblII3HR8+oyfOAS97DKv227j6BKWN4NP4wZWJkEjT8DSEX
-	SV4xmgTZlfoxeiK0ThLvHeXcty3XB3F3qoD71SNYkuNLY+NfqosAGuUrEyOQ38HKnaZWpJ
-	aq8yiahVS2VKDvwiGq85CL8InwS0taY=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-437-hwVBIVU_PtGSRVvpfpgxFw-1; Thu, 15 Feb 2024 09:18:11 -0500
-X-MC-Unique: hwVBIVU_PtGSRVvpfpgxFw-1
-Received: by mail-yb1-f198.google.com with SMTP id 3f1490d57ef6-dc743cc50a6so1056595276.2
-        for <linux-modules@vger.kernel.org>; Thu, 15 Feb 2024 06:18:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708006691; x=1708611491;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QCSBC1fn"
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-db3a09e96daso784626276.3
+        for <linux-modules@vger.kernel.org>; Thu, 15 Feb 2024 06:58:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708009135; x=1708613935; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sTgy7CmCplgGNTODQfgNUD/LxhamGxog3zQ/EAXJjp8=;
-        b=pF85Z29psWT+EYQQ2GgaCv9KDpyazpoluKgZlm2VWZhcYliWf83g5UROs++56wY5Vp
-         kKjPrxXOHBBRTRfXOQSHnVAkl7grDMFJshu+2eui5PpSw13P8A98w1ArHmPYccCh7T4z
-         JyJK+FTVbNXQPu14qxZi82sc3gGFD6k1anDeWQ2zMSh/irwATQxslfsD/eWWYIcnyKWn
-         SK1neaO1j+6cnoFev7sLVSXQRIOUxSB6Z8zuoLQWK+T0nN7nHbgHCt7MngUeqIOLHa2d
-         V8am2hs4b1YgfZt9qhYMrAn5z0Hz0OZRE+r7q0QRnkkl8OImYumL1Jc4WX3MmVAMsvuz
-         qNvA==
-X-Forwarded-Encrypted: i=1; AJvYcCVrhsI5uwIXc9fTDZcg6mgl6uOQ8rboy2WefjFokeII7iKE52Z2CdV9QVs1ligN5AkJ7x8haBAfUq7FSZHHgsH3k/yMj4mSUZCAaTLeFQ==
-X-Gm-Message-State: AOJu0Yy3WM2/xoJhSROZR2tfsx3oMG9UQrf7X95GHIHNZ98JdH7npgHE
-	6tyqw4TpHbf2jZHgbJuwhjJHFDHWteuUGHERrybQCWMorxfOj1rv1gXCLdbu4BK3pErCOkPuoaG
-	wKJDYOepO8lPdZBBQ1mkUdLsAkDollpX8jrseMWjeIL2RHb1RH0tzXdkMhWj55JY=
-X-Received: by 2002:a25:db86:0:b0:dc6:ad43:8cf4 with SMTP id g128-20020a25db86000000b00dc6ad438cf4mr1645746ybf.20.1708006690438;
-        Thu, 15 Feb 2024 06:18:10 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG/FgYIb2Y2SWwX4F80y1w/8RsMHS5vvJx3Man/kK6c6YWBouMVWYxGxnUv4WzL7MwYO11v4Q==
-X-Received: by 2002:a25:db86:0:b0:dc6:ad43:8cf4 with SMTP id g128-20020a25db86000000b00dc6ad438cf4mr1645713ybf.20.1708006690076;
-        Thu, 15 Feb 2024 06:18:10 -0800 (PST)
-Received: from localhost (pool-71-184-142-128.bstnma.fios.verizon.net. [71.184.142.128])
-        by smtp.gmail.com with ESMTPSA id a8-20020a05620a16c800b0078721ebcfc8sm628090qkn.65.2024.02.15.06.18.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Feb 2024 06:18:09 -0800 (PST)
-Date: Thu, 15 Feb 2024 09:18:09 -0500
-From: Eric Chanudet <echanude@redhat.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Changbin Du <changbin.du@huawei.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Xiaoyi Su <suxiaoyi@huawei.com>
-Subject: Re: [RESEND PATCH v2] modules: wait do_free_init correctly
-Message-ID: <qrq7emx7zxnmyv6qoakxpaisan2hiophf5lte4ag4di4euqzfi@3kjtbfau6nlm>
-References: <20240129020304.1981372-1-changbin.du@huawei.com>
- <ZbfmNiY52KdAet7_@bombadil.infradead.org>
- <20240130014038.mawqxwoc34v6hztb@M910t>
- <ZbkFz25DtYuhkIEj@bombadil.infradead.org>
+        bh=Tw/wN6EwhF1l4GL2nZ/ht1qejqJOWh5ecVMENBzDBDY=;
+        b=QCSBC1fn1Ka2h7g6fyuo/iR+OmsxJN+44ewMiK7TnEvXLUwE54/Fla7TeargSAD7FL
+         K4XY0N++HOd/XQR20ySjDvDEt4AT0wRqIA6SonOzfFP5z8DdEIZqaTEQUNCb8KPaAgTi
+         KuGZZAXkpnbLQ8uo8Gzowy4mMy4fIf8FjABi8dPX6Dpz9E5EvFoaI1UKe7ERn4Wuu7vW
+         9RpviaBpJWGkU607Q3RTsx1Q9BMnNxYkHWLkp9p4vl9Ttstb/nKLi8MMIMkJ5YhE7prP
+         AqX5xmoXXbk2RV4MOgo4U2hdSmx6j9jUjLVFg+6dNyF4KktkZz5uVsTEJBtCoOEQfFva
+         7uKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708009135; x=1708613935;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tw/wN6EwhF1l4GL2nZ/ht1qejqJOWh5ecVMENBzDBDY=;
+        b=Ua9UADIc96jGoug+Thl4ZqkEi0IvlvjunkcMTQ4zQZb2BWRGX8peudn9aHUplYv0xt
+         idrUcbdEu2VzDjcYgDCkkLeaP0rMaDDqvmKTDbErkEOKfaXnzC5tEaaxh7eBduEMRvtt
+         Ulr1pL884XS7BUmSY2iSYHzvXuFIP9kO8j5aEGz6suQKOP2dUygLku9GNJQZTT8p0bfd
+         gQjteN8OBlHwOUvPYXcTHmUUhn9LLlEaI7xi4Km4JUe0LfEBqoL80bQ2Hdy0FwLn4EOG
+         t4MF++jq2tDni927YTQbiN0C5BG74x02fm25V4mACiOKShlHBnsD9VN9wmZFofkZX0tp
+         qGlA==
+X-Forwarded-Encrypted: i=1; AJvYcCXhAAiFLINjJpgRWLKAEuLAojf0gfxYztgt+T4x+YwWfRh1N3kQoDATz7zcm+7xYlMupMXDtKDLVJM/kOSyZfUxRDqtvENeaIrMVr7/sA==
+X-Gm-Message-State: AOJu0YwE2X0QG9RjTloiWDJRwItEXstkZ6c1oZSBVlqxyKBHls4zl4BF
+	T3dFvfnj44+LsPdpLxDI9rO7iXs5sZ+mFKaXqvO/Pr+ktL7pDp1sR04l5auT+8G0hIIbYDtzE9T
+	68Age7exCknCTjH/YcuTtMhGqCXDeDgVNC02+
+X-Google-Smtp-Source: AGHT+IHbdGXWcfbi3sM7zNcX3xbLXT1pZZDBplduLx68NqKeXRGL2TAUM4SLA4O1Gc053VxRA9U/P0Ad1H3i0YzTDwI=
+X-Received: by 2002:a25:8750:0:b0:dbe:9509:141c with SMTP id
+ e16-20020a258750000000b00dbe9509141cmr1821330ybn.30.1708009135319; Thu, 15
+ Feb 2024 06:58:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZbkFz25DtYuhkIEj@bombadil.infradead.org>
+References: <20240212213922.783301-1-surenb@google.com> <20240212213922.783301-32-surenb@google.com>
+ <Zc3X8XlnrZmh2mgN@tiehlicka>
+In-Reply-To: <Zc3X8XlnrZmh2mgN@tiehlicka>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 15 Feb 2024 06:58:42 -0800
+Message-ID: <CAJuCfpHc2ee_V6SGAc_31O_ikjGGNivhdSG+2XNcc9vVmzO-9g@mail.gmail.com>
+Subject: Re: [PATCH v3 31/35] lib: add memory allocations report in show_mem()
+To: Michal Hocko <mhocko@suse.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, vbabka@suse.cz, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
+	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
+	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
+	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
+	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
+	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 30, 2024 at 06:21:03AM -0800, Luis Chamberlain wrote:
-> On Tue, Jan 30, 2024 at 09:40:38AM +0800, Changbin Du wrote:
-> > On Mon, Jan 29, 2024 at 09:53:58AM -0800, Luis Chamberlain wrote:
-> > > On Mon, Jan 29, 2024 at 10:03:04AM +0800, Changbin Du wrote:
-> > > > The commit 1a7b7d922081 ("modules: Use vmalloc special flag") moves
-> > > > do_free_init() into a global workqueue instead of call_rcu(). So now
-> > > > rcu_barrier() can not ensure that do_free_init has completed. We should
-> > > > wait it via flush_work().
-> > > > 
-> > > > Without this fix, we still could encounter false positive reports in
-> > > > W+X checking, and rcu synchronization is unnecessary.
+On Thu, Feb 15, 2024 at 1:22=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+e:
+>
+> On Mon 12-02-24 13:39:17, Suren Baghdasaryan wrote:
+> [...]
+> > @@ -423,4 +424,18 @@ void __show_mem(unsigned int filter, nodemask_t *n=
+odemask, int max_zone_idx)
+> >  #ifdef CONFIG_MEMORY_FAILURE
+> >       printk("%lu pages hwpoisoned\n", atomic_long_read(&num_poisoned_p=
+ages));
+> >  #endif
+> > +#ifdef CONFIG_MEM_ALLOC_PROFILING
+> > +     {
+> > +             struct seq_buf s;
+> > +             char *buf =3D kmalloc(4096, GFP_ATOMIC);
+> > +
+> > +             if (buf) {
+> > +                     printk("Memory allocations:\n");
+> > +                     seq_buf_init(&s, buf, 4096);
+> > +                     alloc_tags_show_mem_report(&s);
+> > +                     printk("%s", buf);
+> > +                     kfree(buf);
+> > +             }
+> > +     }
+> > +#endif
+>
+> I am pretty sure I have already objected to this. Memory allocations in
+> the oom path are simply no go unless there is absolutely no other way
+> around that. In this case the buffer could be preallocated.
 
-The comment in do_init_module(), just before
-schedule_work(&init_free_wq), mentioning rcu_barrier(), should be
-amended as well.
+Good point. We will change this to a smaller buffer allocated on the
+stack and will print records one-by-one. Thanks!
 
-> > > 
-> > > You didn't answer my question, which should be documented in the commit log.
-> > > 
-> > > Does this mean we never freed modules init because of this? If so then
-> > > your commit log should clearly explain that. It should also explain that
-> > > if true (you have to verify) then it means we were no longer saving
-> > > the memory we wished to save, and that is important for distributions
-> > > which do want to save anything on memory. You may want to do a general
-> > > estimate on how much that means these days on any desktop / server.
-> >
-> > Actually, I have explained it in commit msg. It's not about saving memory. The
-> > synchronization here is just to ensure the module init's been freed before
-> > doing W+X checking. The problem is that the current implementation is wrong,
-> > rcu_barrier() cannot guarantee that. So we can encounter false positive reports.
-> > But anyway, the module init will be freed, and it's just a timing related issue.
-> 
-> Your desciption here is better than the commit log.
-
-I saw this problem using a PREEMPT_RT kernel as well. Setting DEBUG_WX=n
-stills show a significant delay due to the rcu_barrier:
-  [    0.291444] Freeing unused kernel memory: 5568K
-  [    0.402442] Run /sbin/init as init process
-
-The same delay is shorter using linux-next, but still noticeable
-(DEBUG_WX=n):
-  [    0.384362] Freeing unused kernel memory: 14080K
-  [    0.413423] Run /sbin/init as init process
-
-Matching trace_event=rcu:rcu_barrier trace:
-         systemd-1       [002] .....     0.384391: rcu_barrier: rcu_preempt Begin cpu -1 remaining 0 # 4
-         systemd-1       [002] d..1.     0.384394: rcu_barrier: rcu_preempt Inc1 cpu -1 remaining 0 # 1
-         systemd-1       [002] .....     0.384395: rcu_barrier: rcu_preempt NQ cpu 0 remaining 2 # 1
-          <idle>-0       [001] d.h2.     0.384407: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 2 # 1
-         systemd-1       [002] .....     0.384408: rcu_barrier: rcu_preempt OnlineQ cpu 1 remaining 3 # 1
-         systemd-1       [002] .....     0.384409: rcu_barrier: rcu_preempt NQ cpu 2 remaining 3 # 1
-          <idle>-0       [003] d.h2.     0.384416: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 3 # 1
-         systemd-1       [002] .....     0.384418: rcu_barrier: rcu_preempt OnlineQ cpu 3 remaining 4 # 1
-          <idle>-0       [004] d.h2.     0.384428: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 4 # 1
-         systemd-1       [002] .....     0.384430: rcu_barrier: rcu_preempt OnlineQ cpu 4 remaining 5 # 1
-          <idle>-0       [005] d.h2.     0.384438: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 5 # 1
-         systemd-1       [002] .....     0.384441: rcu_barrier: rcu_preempt OnlineQ cpu 5 remaining 6 # 1
-          <idle>-0       [006] d.h2.     0.384450: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 6 # 1
-         systemd-1       [002] .....     0.384452: rcu_barrier: rcu_preempt OnlineQ cpu 6 remaining 7 # 1
-          <idle>-0       [007] d.h2.     0.384461: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 7 # 1
-         systemd-1       [002] .....     0.384463: rcu_barrier: rcu_preempt OnlineQ cpu 7 remaining 8 # 1
-          <idle>-0       [004] ..s1.     0.385339: rcu_barrier: rcu_preempt CB cpu -1 remaining 5 # 1
-          <idle>-0       [007] ..s1.     0.397335: rcu_barrier: rcu_preempt CB cpu -1 remaining 4 # 1
-          <idle>-0       [003] ..s1.     0.397337: rcu_barrier: rcu_preempt CB cpu -1 remaining 3 # 1
-          <idle>-0       [005] ..s1.     0.401336: rcu_barrier: rcu_preempt CB cpu -1 remaining 2 # 1
-          <idle>-0       [006] ..s1.     0.401336: rcu_barrier: rcu_preempt CB cpu -1 remaining 1 # 1
-          <idle>-0       [001] .Ns1.     0.413338: rcu_barrier: rcu_preempt LastCB cpu -1 remaining 0 # 1
-         systemd-1       [002] .....     0.413351: rcu_barrier: rcu_preempt Inc2 cpu -1 remaining 0 # 1
-
-With this patch the delay is no longer there:
-  [    0.377662] Freeing unused kernel memory: 14080K
-  [    0.377767] Run /sbin/init as init process
-
-AFAIU, for the race to happen, module_alloc() needs to create a W+X
-mapping (neither x86 nor arm64 does) and debug_checkwx() has to happen
-before module_enable_nx() in complete_formation(), I didn't get a
-reproducer so far.
-
-Best,
-
--- 
-Eric Chanudet
-
+>
+> --
+> Michal Hocko
+> SUSE Labs
