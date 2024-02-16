@@ -1,498 +1,246 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5665C15491
-	for <linux-modules@vger.kernel.org>; Fri, 16 Feb 2024 07:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEC01B805;
+	Fri, 16 Feb 2024 08:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708068153; cv=none; b=KvNrvnU1a4Kdr5MRyKHdtojrxKiM5XUXaW9mlQZgH7jV0NvxDwHIWD37A0FHl+wOr9RPF2fvvJxpFRkokyAfC6efTdhktKxHCUzbMW1F0YhquM3L9ahEHtPkbEk/RFoKMrrgZ4J8IhKoJ35WGeZ2H3OoA845IAlGYLhHx7aUC3o=
+	t=1708071306; cv=none; b=P7hdsEZ1TM/W8jLnJhX+XpZK0lIndZ3/KqSkVOidjbATztw+HpF2UGfpLXPnG7uxVs/MwNRy/EVrXMCTj8Gbzy3ol1C1BaAg/ZZlhM52Nv4Vmye1Ut8d1Yp5dqGfQ+DqYfEEkaMYQi4MMUHIjY0kKToIfAvixVBC0UwN49PSvpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708068153; c=relaxed/simple;
-	bh=7wkob3Dsl+yKC4YkmO8O5cQpRl9OQycaM2RPLlfolAA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hjnhGxskPYBH1MIm1duu7Yl3jm9hi288dkjSOFJsocWfWRKD5nfrPrjwEB3Z0Jdmd1z98kc0no8P6mpeSxwUHgLVsWDbyupJrG8pipoUTb1Urmgnop64sg74+GuixpbLKXypXuJMWjd4/jcQzTDLiF/YMBv9fJPgu2cjUvOM/do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ieRQ/e07; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ieRQ/e07"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-607f8b96580so3933747b3.0
-        for <linux-modules@vger.kernel.org>; Thu, 15 Feb 2024 23:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708068150; x=1708672950; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+9+B+H3K0W9pJd8bNryL7B75GoSzScPALIXqjy44UEE=;
-        b=ieRQ/e07WGvdivULmKs1tRVoWzf/6tC7Fskx1arcXdHXL6jqi10fZ8UO+yWCqOW5WS
-         VQKcj2jy3OoRIK2N9f3ceWt/TDNsVAyfXe5FR8McehU8sx3udom8JswzXgPqDe12ia69
-         wM5OICCYbSSlTQOpnEzKajAGYymESJwBk69HSPVrGVQgyEjgrihRKmvRIEgluiuE1eVg
-         AeDmhJGHIdPi5IjSiGPwzVZ+tEhkbWnG+D9Ejt/6GfLh3rH0XqYpj1rh4AaFKSNthjvt
-         Wwly+50NiNnO452SjvSSktmO5uEHt3RqBhOulUSEq6Ckksbx/RXQW5JrBbcWoxf6FoQA
-         NN1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708068150; x=1708672950;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+9+B+H3K0W9pJd8bNryL7B75GoSzScPALIXqjy44UEE=;
-        b=tKZCXmv7opflCo8NIOlyp/MO1nTmMwj9bp3HMqKd15qIcxnjxK0/Skx9m89LgQO08B
-         8291iumMDnv2lTrPFjMVjVe7jQJkthiph9vqrEKFLbsp25UKQMxsWms2TokpAErUVkZI
-         sqcd15xrNB93y2bn8vYKgb9I8IQYBZ63nm5Cv8/bvihI1yRoEvhCWFYj+8OqNgUEc2Kd
-         UZEWP/s2OIsDtW2j8rSIvcZgdHtG/ALiUEiRG7Xz+nATm0oz78PdoqLMxhtEpHgw25Jv
-         vKjgv+Wq3YZNWGKD056QojaCudK0/jNoADzteqEFP36LuxijQrOxA+Gin59FasSO4hJL
-         95vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWF8CWPTRBHzYeyE0xhRSAl1o093+pewZw9ylBlHDMTbWrn1/QmyMAL0Bu9X57vj4i1ndJ9cE7Rs/3J++dL4KDqX7rIbNAeG+94PNUTPg==
-X-Gm-Message-State: AOJu0Yz3YwKHnsL+Zcic4W3y4g6XRWT/qOCL2DHKRD+xkyFihWXpcaTJ
-	FwUZCcWAJzb754xrDcZGHD7T4hGHvAk52fEH0SM+yYun9spy022kTgrII4dn2DgZYvkwyXpccUO
-	iNPTgBEUnAFqD5OKBVAhkfmXSrGy2USwS9I67
-X-Google-Smtp-Source: AGHT+IGfhuzMecQLi+9TByo09qAXuYZmPn6jEQ/sIt9UYOpmXa2s1LS2SB61X5cRfaySalDuNypcx8p5p8IuAu0EvA8=
-X-Received: by 2002:a0d:cc81:0:b0:5f6:d447:b85a with SMTP id
- o123-20020a0dcc81000000b005f6d447b85amr4793609ywd.7.1708068149910; Thu, 15
- Feb 2024 23:22:29 -0800 (PST)
+	s=arc-20240116; t=1708071306; c=relaxed/simple;
+	bh=9GN9iBufDM+/oHP89fEYbJjbEjzPtGj8kAlRejRoEWg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fyzYXKJ06v2eu214Gc1gh1/rw1b9QI0VconqyM/YOopKxhkjvEsy0u+7HhOD3sVUUikNxQPQgWgY3WuYjPOi0mgwKZhYsohvHrT518FH794bvyS+j9qm41huA6Sef9rVGogAkU9VZHq3YaD88UdmE4BCiJCInKZ56C7ui4hM+xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+	by localhost (Postfix) with ESMTP id 4Tbl8q6gv6z9tBG;
+	Fri, 16 Feb 2024 09:14:51 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UWwJpXI0bjU3; Fri, 16 Feb 2024 09:14:51 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase1.c-s.fr (Postfix) with ESMTP id 4Tbl8q633Lz9t0b;
+	Fri, 16 Feb 2024 09:14:51 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id CB3308B786;
+	Fri, 16 Feb 2024 09:14:51 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id WuF13jiKnWvS; Fri, 16 Feb 2024 09:14:51 +0100 (CET)
+Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.232.102])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 52ADA8B765;
+	Fri, 16 Feb 2024 09:14:51 +0100 (CET)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	linux-modules@vger.kernel.org
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-kernel@vger.kernel.org,
+	Kees Cook <keescook@chromium.org>,
+	"linux-hardening @ vger . kernel . org" <linux-hardening@vger.kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH v2] module: Don't ignore errors from set_memory_XX()
+Date: Fri, 16 Feb 2024 09:14:27 +0100
+Message-ID: <21037bf38438a285f5dff9501668f1675bc45989.1708070781.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240212213922.783301-1-surenb@google.com> <20240212213922.783301-11-surenb@google.com>
- <202402121419.7C4AAF27ED@keescook> <CAJuCfpFpKKqCtU2EJM28fbYRYUbBLR9XuDONmS21zeTc2Z6nxw@mail.gmail.com>
-In-Reply-To: <CAJuCfpFpKKqCtU2EJM28fbYRYUbBLR9XuDONmS21zeTc2Z6nxw@mail.gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 15 Feb 2024 23:22:16 -0800
-Message-ID: <CAJuCfpF3ZHkuBejRp_2BBcC-Lp8achfaosVu0SfBNAA0Y27+vA@mail.gmail.com>
-Subject: Re: [PATCH v3 10/35] lib: code tagging framework
-To: Kees Cook <keescook@chromium.org>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
-	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, 
-	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
-	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
-	hughd@google.com, andreyknvl@gmail.com, ndesaulniers@google.com, 
-	vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com, 
-	ytcoode@gmail.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com, 
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com, 
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com, 
-	42.hyeyoo@gmail.com, glider@google.com, elver@google.com, dvyukov@google.com, 
-	shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com, 
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	kernel-team@android.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708071268; l=6327; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=9GN9iBufDM+/oHP89fEYbJjbEjzPtGj8kAlRejRoEWg=; b=P3K6GlVBRBPXlxEvy+H6K/9xCzTD9h8+3DfVm6efkKz4SvieMaKF0/Xdr3B//ZCDOUWES9Nu4 EFuABmForTxC7yh5vGIiI6aREv22Jix23WCiyGo4JRXUYwDzWjrxPH7
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 
-On Mon, Feb 12, 2024 at 6:04=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Mon, Feb 12, 2024 at 2:27=E2=80=AFPM Kees Cook <keescook@chromium.org>=
- wrote:
-> >
-> > On Mon, Feb 12, 2024 at 01:38:56PM -0800, Suren Baghdasaryan wrote:
-> > > Add basic infrastructure to support code tagging which stores tag com=
-mon
-> > > information consisting of the module name, function, file name and li=
-ne
-> > > number. Provide functions to register a new code tag type and navigat=
-e
-> > > between code tags.
-> > >
-> > > Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
-> > > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > ---
-> > >  include/linux/codetag.h |  71 ++++++++++++++
-> > >  lib/Kconfig.debug       |   4 +
-> > >  lib/Makefile            |   1 +
-> > >  lib/codetag.c           | 199 ++++++++++++++++++++++++++++++++++++++=
-++
-> > >  4 files changed, 275 insertions(+)
-> > >  create mode 100644 include/linux/codetag.h
-> > >  create mode 100644 lib/codetag.c
-> > >
-> > > diff --git a/include/linux/codetag.h b/include/linux/codetag.h
-> > > new file mode 100644
-> > > index 000000000000..a9d7adecc2a5
-> > > --- /dev/null
-> > > +++ b/include/linux/codetag.h
-> > > @@ -0,0 +1,71 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +/*
-> > > + * code tagging framework
-> > > + */
-> > > +#ifndef _LINUX_CODETAG_H
-> > > +#define _LINUX_CODETAG_H
-> > > +
-> > > +#include <linux/types.h>
-> > > +
-> > > +struct codetag_iterator;
-> > > +struct codetag_type;
-> > > +struct seq_buf;
-> > > +struct module;
-> > > +
-> > > +/*
-> > > + * An instance of this structure is created in a special ELF section=
- at every
-> > > + * code location being tagged.  At runtime, the special section is t=
-reated as
-> > > + * an array of these.
-> > > + */
-> > > +struct codetag {
-> > > +     unsigned int flags; /* used in later patches */
-> > > +     unsigned int lineno;
-> > > +     const char *modname;
-> > > +     const char *function;
-> > > +     const char *filename;
-> > > +} __aligned(8);
-> > > +
-> > > +union codetag_ref {
-> > > +     struct codetag *ct;
-> > > +};
-> > > +
-> > > +struct codetag_range {
-> > > +     struct codetag *start;
-> > > +     struct codetag *stop;
-> > > +};
-> > > +
-> > > +struct codetag_module {
-> > > +     struct module *mod;
-> > > +     struct codetag_range range;
-> > > +};
-> > > +
-> > > +struct codetag_type_desc {
-> > > +     const char *section;
-> > > +     size_t tag_size;
-> > > +};
-> > > +
-> > > +struct codetag_iterator {
-> > > +     struct codetag_type *cttype;
-> > > +     struct codetag_module *cmod;
-> > > +     unsigned long mod_id;
-> > > +     struct codetag *ct;
-> > > +};
-> > > +
-> > > +#define CODE_TAG_INIT {                                      \
-> > > +     .modname        =3D KBUILD_MODNAME,               \
-> > > +     .function       =3D __func__,                     \
-> > > +     .filename       =3D __FILE__,                     \
-> > > +     .lineno         =3D __LINE__,                     \
-> > > +     .flags          =3D 0,                            \
-> > > +}
-> > > +
-> > > +void codetag_lock_module_list(struct codetag_type *cttype, bool lock=
-);
-> > > +struct codetag_iterator codetag_get_ct_iter(struct codetag_type *ctt=
-ype);
-> > > +struct codetag *codetag_next_ct(struct codetag_iterator *iter);
-> > > +
-> > > +void codetag_to_text(struct seq_buf *out, struct codetag *ct);
-> > > +
-> > > +struct codetag_type *
-> > > +codetag_register_type(const struct codetag_type_desc *desc);
-> > > +
-> > > +#endif /* _LINUX_CODETAG_H */
-> > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > > index 975a07f9f1cc..0be2d00c3696 100644
-> > > --- a/lib/Kconfig.debug
-> > > +++ b/lib/Kconfig.debug
-> > > @@ -968,6 +968,10 @@ config DEBUG_STACKOVERFLOW
-> > >
-> > >         If in doubt, say "N".
-> > >
-> > > +config CODE_TAGGING
-> > > +     bool
-> > > +     select KALLSYMS
-> > > +
-> > >  source "lib/Kconfig.kasan"
-> > >  source "lib/Kconfig.kfence"
-> > >  source "lib/Kconfig.kmsan"
-> > > diff --git a/lib/Makefile b/lib/Makefile
-> > > index 6b09731d8e61..6b48b22fdfac 100644
-> > > --- a/lib/Makefile
-> > > +++ b/lib/Makefile
-> > > @@ -235,6 +235,7 @@ obj-$(CONFIG_OF_RECONFIG_NOTIFIER_ERROR_INJECT) +=
-=3D \
-> > >       of-reconfig-notifier-error-inject.o
-> > >  obj-$(CONFIG_FUNCTION_ERROR_INJECTION) +=3D error-inject.o
-> > >
-> > > +obj-$(CONFIG_CODE_TAGGING) +=3D codetag.o
-> > >  lib-$(CONFIG_GENERIC_BUG) +=3D bug.o
-> > >
-> > >  obj-$(CONFIG_HAVE_ARCH_TRACEHOOK) +=3D syscall.o
-> > > diff --git a/lib/codetag.c b/lib/codetag.c
-> > > new file mode 100644
-> > > index 000000000000..7708f8388e55
-> > > --- /dev/null
-> > > +++ b/lib/codetag.c
-> > > @@ -0,0 +1,199 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +#include <linux/codetag.h>
-> > > +#include <linux/idr.h>
-> > > +#include <linux/kallsyms.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/seq_buf.h>
-> > > +#include <linux/slab.h>
-> > > +
-> > > +struct codetag_type {
-> > > +     struct list_head link;
-> > > +     unsigned int count;
-> > > +     struct idr mod_idr;
-> > > +     struct rw_semaphore mod_lock; /* protects mod_idr */
-> > > +     struct codetag_type_desc desc;
-> > > +};
-> > > +
-> > > +static DEFINE_MUTEX(codetag_lock);
-> > > +static LIST_HEAD(codetag_types);
-> > > +
-> > > +void codetag_lock_module_list(struct codetag_type *cttype, bool lock=
-)
-> > > +{
-> > > +     if (lock)
-> > > +             down_read(&cttype->mod_lock);
-> > > +     else
-> > > +             up_read(&cttype->mod_lock);
-> > > +}
-> > > +
-> > > +struct codetag_iterator codetag_get_ct_iter(struct codetag_type *ctt=
-ype)
-> > > +{
-> > > +     struct codetag_iterator iter =3D {
-> > > +             .cttype =3D cttype,
-> > > +             .cmod =3D NULL,
-> > > +             .mod_id =3D 0,
-> > > +             .ct =3D NULL,
-> > > +     };
-> > > +
-> > > +     return iter;
-> > > +}
-> > > +
-> > > +static inline struct codetag *get_first_module_ct(struct codetag_mod=
-ule *cmod)
-> > > +{
-> > > +     return cmod->range.start < cmod->range.stop ? cmod->range.start=
- : NULL;
-> > > +}
-> > > +
-> > > +static inline
-> > > +struct codetag *get_next_module_ct(struct codetag_iterator *iter)
-> > > +{
-> > > +     struct codetag *res =3D (struct codetag *)
-> > > +                     ((char *)iter->ct + iter->cttype->desc.tag_size=
-);
-> > > +
-> > > +     return res < iter->cmod->range.stop ? res : NULL;
-> > > +}
-> > > +
-> > > +struct codetag *codetag_next_ct(struct codetag_iterator *iter)
-> > > +{
-> > > +     struct codetag_type *cttype =3D iter->cttype;
-> > > +     struct codetag_module *cmod;
-> > > +     struct codetag *ct;
-> > > +
-> > > +     lockdep_assert_held(&cttype->mod_lock);
-> > > +
-> > > +     if (unlikely(idr_is_empty(&cttype->mod_idr)))
-> > > +             return NULL;
-> > > +
-> > > +     ct =3D NULL;
-> > > +     while (true) {
-> > > +             cmod =3D idr_find(&cttype->mod_idr, iter->mod_id);
-> > > +
-> > > +             /* If module was removed move to the next one */
-> > > +             if (!cmod)
-> > > +                     cmod =3D idr_get_next_ul(&cttype->mod_idr,
-> > > +                                            &iter->mod_id);
-> > > +
-> > > +             /* Exit if no more modules */
-> > > +             if (!cmod)
-> > > +                     break;
-> > > +
-> > > +             if (cmod !=3D iter->cmod) {
-> > > +                     iter->cmod =3D cmod;
-> > > +                     ct =3D get_first_module_ct(cmod);
-> > > +             } else
-> > > +                     ct =3D get_next_module_ct(iter);
-> > > +
-> > > +             if (ct)
-> > > +                     break;
-> > > +
-> > > +             iter->mod_id++;
-> > > +     }
-> > > +
-> > > +     iter->ct =3D ct;
-> > > +     return ct;
-> > > +}
-> > > +
-> > > +void codetag_to_text(struct seq_buf *out, struct codetag *ct)
-> > > +{
-> > > +     seq_buf_printf(out, "%s:%u module:%s func:%s",
-> > > +                    ct->filename, ct->lineno,
-> > > +                    ct->modname, ct->function);
-> > > +}
-> >
-> > Thank you for using seq_buf here!
-> >
-> > Also, will this need an EXPORT_SYMBOL_GPL()?
+set_memory_ro(), set_memory_nx(), set_memory_x() and other helpers
+can fail and return an error. In that case the memory might not be
+protected as expected and the module loading has to be aborted to
+avoid security issues.
 
-Missed this question. I don't think we need EXPORT_SYMBOL_GPL() here
-at least for now. Modules don't use these functions. The "alloc_tags"
-sections will be generated for each module at compile time but they
-themselves do not use it.
+Check return value of all calls to set_memory_XX() and handle
+error if any.
 
-> >
-> > > +
-> > > +static inline size_t range_size(const struct codetag_type *cttype,
-> > > +                             const struct codetag_range *range)
-> > > +{
-> > > +     return ((char *)range->stop - (char *)range->start) /
-> > > +                     cttype->desc.tag_size;
-> > > +}
-> > > +
-> > > +static void *get_symbol(struct module *mod, const char *prefix, cons=
-t char *name)
-> > > +{
-> > > +     char buf[64];
-> >
-> > Why is 64 enough? I was expecting KSYM_NAME_LEN here, but perhaps this
-> > is specialized enough to section names that it will not be a problem?
->
-> This buffer is being used to hold the name of the section containing
-> codetags appended with "__start_" or "__stop_" and the only current
-> user is alloc_tag_init() which sets the section name to "alloc_tags".
-> So, this buffer currently holds either "alloc_tags__start_" or
-> "alloc_tags__stop_". When more codetag applications are added (like
-> the ones we have shown in the original RFC [1]), there would be more
-> section names. 64 was chosen as a big enough value to reasonably hold
-> the section name with the suffix. But you are right, we should add a
-> check for the section name size to ensure it always fits. Will add
-> into my TODO list.
->
-> [1] https://lore.kernel.org/all/20220830214919.53220-1-surenb@google.com/
-> > If so, please document it clearly with a comment.
->
-> Will do.
->
-> >
-> > > +     int res;
-> > > +
-> > > +     res =3D snprintf(buf, sizeof(buf), "%s%s", prefix, name);
-> > > +     if (WARN_ON(res < 1 || res > sizeof(buf)))
-> > > +             return NULL;
-> >
-> > Please use a seq_buf here instead of snprintf, which we're trying to ge=
-t
-> > rid of.
-> >
-> >         DECLARE_SEQ_BUF(sb, KSYM_NAME_LEN);
-> >         char *buf;
-> >
-> >         seq_buf_printf(sb, "%s%s", prefix, name);
-> >         if (seq_buf_has_overflowed(sb))
-> >                 return NULL;
-> >
-> >         buf =3D seq_buf_str(sb);
->
-> Will do. Thanks!
->
-> >
-> > > +
-> > > +     return mod ?
-> > > +             (void *)find_kallsyms_symbol_value(mod, buf) :
-> > > +             (void *)kallsyms_lookup_name(buf);
-> > > +}
-> > > +
-> > > +static struct codetag_range get_section_range(struct module *mod,
-> > > +                                           const char *section)
-> > > +{
-> > > +     return (struct codetag_range) {
-> > > +             get_symbol(mod, "__start_", section),
-> > > +             get_symbol(mod, "__stop_", section),
-> > > +     };
-> > > +}
-> > > +
-> > > +static int codetag_module_init(struct codetag_type *cttype, struct m=
-odule *mod)
-> > > +{
-> > > +     struct codetag_range range;
-> > > +     struct codetag_module *cmod;
-> > > +     int err;
-> > > +
-> > > +     range =3D get_section_range(mod, cttype->desc.section);
-> > > +     if (!range.start || !range.stop) {
-> > > +             pr_warn("Failed to load code tags of type %s from the m=
-odule %s\n",
-> > > +                     cttype->desc.section,
-> > > +                     mod ? mod->name : "(built-in)");
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> > > +     /* Ignore empty ranges */
-> > > +     if (range.start =3D=3D range.stop)
-> > > +             return 0;
-> > > +
-> > > +     BUG_ON(range.start > range.stop);
-> > > +
-> > > +     cmod =3D kmalloc(sizeof(*cmod), GFP_KERNEL);
-> > > +     if (unlikely(!cmod))
-> > > +             return -ENOMEM;
-> > > +
-> > > +     cmod->mod =3D mod;
-> > > +     cmod->range =3D range;
-> > > +
-> > > +     down_write(&cttype->mod_lock);
-> > > +     err =3D idr_alloc(&cttype->mod_idr, cmod, 0, 0, GFP_KERNEL);
-> > > +     if (err >=3D 0)
-> > > +             cttype->count +=3D range_size(cttype, &range);
-> > > +     up_write(&cttype->mod_lock);
-> > > +
-> > > +     if (err < 0) {
-> > > +             kfree(cmod);
-> > > +             return err;
-> > > +     }
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +struct codetag_type *
-> > > +codetag_register_type(const struct codetag_type_desc *desc)
-> > > +{
-> > > +     struct codetag_type *cttype;
-> > > +     int err;
-> > > +
-> > > +     BUG_ON(desc->tag_size <=3D 0);
-> > > +
-> > > +     cttype =3D kzalloc(sizeof(*cttype), GFP_KERNEL);
-> > > +     if (unlikely(!cttype))
-> > > +             return ERR_PTR(-ENOMEM);
-> > > +
-> > > +     cttype->desc =3D *desc;
-> > > +     idr_init(&cttype->mod_idr);
-> > > +     init_rwsem(&cttype->mod_lock);
-> > > +
-> > > +     err =3D codetag_module_init(cttype, NULL);
-> > > +     if (unlikely(err)) {
-> > > +             kfree(cttype);
-> > > +             return ERR_PTR(err);
-> > > +     }
-> > > +
-> > > +     mutex_lock(&codetag_lock);
-> > > +     list_add_tail(&cttype->link, &codetag_types);
-> > > +     mutex_unlock(&codetag_lock);
-> > > +
-> > > +     return cttype;
-> > > +}
-> > > --
-> > > 2.43.0.687.g38aa6559b0-goog
-> > >
-> >
-> > --
-> > Kees Cook
+Add a check to not call set_memory_XX() on NULL pointers as some
+architectures may not like it allthough numpages is always 0 in that
+case. This also avoid a useless call to set_vm_flush_reset_perms().
+
+Link: https://github.com/KSPP/linux/issues/7
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+v2:
+- Bail out early from module_set_memory() when address is NULL.
+- Properly clear bug list when module_set_memory() fails in complete_formation().
+
+This patch applies on top of modules/modules-next branch
+---
+ kernel/module/internal.h   |  6 ++---
+ kernel/module/main.c       | 20 ++++++++++++---
+ kernel/module/strict_rwx.c | 51 +++++++++++++++++++++++++++-----------
+ 3 files changed, 55 insertions(+), 22 deletions(-)
+
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 4f1b98f011da..2ebece8a789f 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -322,9 +322,9 @@ static inline struct module *mod_find(unsigned long addr, struct mod_tree_root *
+ }
+ #endif /* CONFIG_MODULES_TREE_LOOKUP */
+ 
+-void module_enable_rodata_ro(const struct module *mod, bool after_init);
+-void module_enable_data_nx(const struct module *mod);
+-void module_enable_text_rox(const struct module *mod);
++int module_enable_rodata_ro(const struct module *mod, bool after_init);
++int module_enable_data_nx(const struct module *mod);
++int module_enable_text_rox(const struct module *mod);
+ int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+ 				char *secstrings, struct module *mod);
+ 
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index a9a4a4885102..689def7676c4 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2571,7 +2571,9 @@ static noinline int do_init_module(struct module *mod)
+ 	/* Switch to core kallsyms now init is done: kallsyms may be walking! */
+ 	rcu_assign_pointer(mod->kallsyms, &mod->core_kallsyms);
+ #endif
+-	module_enable_rodata_ro(mod, true);
++	ret = module_enable_rodata_ro(mod, true);
++	if (ret)
++		goto fail_mutex_unlock;
+ 	mod_tree_remove_init(mod);
+ 	module_arch_freeing_init(mod);
+ 	for_class_mod_mem_type(type, init) {
+@@ -2609,6 +2611,8 @@ static noinline int do_init_module(struct module *mod)
+ 
+ 	return 0;
+ 
++fail_mutex_unlock:
++	mutex_unlock(&module_mutex);
+ fail_free_freeinit:
+ 	kfree(freeinit);
+ fail:
+@@ -2736,9 +2740,15 @@ static int complete_formation(struct module *mod, struct load_info *info)
+ 	module_bug_finalize(info->hdr, info->sechdrs, mod);
+ 	module_cfi_finalize(info->hdr, info->sechdrs, mod);
+ 
+-	module_enable_rodata_ro(mod, false);
+-	module_enable_data_nx(mod);
+-	module_enable_text_rox(mod);
++	err = module_enable_rodata_ro(mod, false);
++	if (err)
++		goto out_strict_rwx;
++	err = module_enable_data_nx(mod);
++	if (err)
++		goto out_strict_rwx;
++	err = module_enable_text_rox(mod);
++	if (err)
++		goto out_strict_rwx;
+ 
+ 	/*
+ 	 * Mark state as coming so strong_try_module_get() ignores us,
+@@ -2749,6 +2759,8 @@ static int complete_formation(struct module *mod, struct load_info *info)
+ 
+ 	return 0;
+ 
++out_strict_rwx:
++	module_bug_cleanup(mod);
+ out:
+ 	mutex_unlock(&module_mutex);
+ 	return err;
+diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+index b36d93983465..c45caa4690e5 100644
+--- a/kernel/module/strict_rwx.c
++++ b/kernel/module/strict_rwx.c
+@@ -11,13 +11,16 @@
+ #include <linux/set_memory.h>
+ #include "internal.h"
+ 
+-static void module_set_memory(const struct module *mod, enum mod_mem_type type,
+-			      int (*set_memory)(unsigned long start, int num_pages))
++static int module_set_memory(const struct module *mod, enum mod_mem_type type,
++			     int (*set_memory)(unsigned long start, int num_pages))
+ {
+ 	const struct module_memory *mod_mem = &mod->mem[type];
+ 
++	if (!mod_mem->base)
++		return 0;
++
+ 	set_vm_flush_reset_perms(mod_mem->base);
+-	set_memory((unsigned long)mod_mem->base, mod_mem->size >> PAGE_SHIFT);
++	return set_memory((unsigned long)mod_mem->base, mod_mem->size >> PAGE_SHIFT);
+ }
+ 
+ /*
+@@ -26,35 +29,53 @@ static void module_set_memory(const struct module *mod, enum mod_mem_type type,
+  * CONFIG_STRICT_MODULE_RWX because they are needed regardless of whether we
+  * are strict.
+  */
+-void module_enable_text_rox(const struct module *mod)
++int module_enable_text_rox(const struct module *mod)
+ {
+ 	for_class_mod_mem_type(type, text) {
++		int ret;
++
+ 		if (IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
+-			module_set_memory(mod, type, set_memory_rox);
++			ret = module_set_memory(mod, type, set_memory_rox);
+ 		else
+-			module_set_memory(mod, type, set_memory_x);
++			ret = module_set_memory(mod, type, set_memory_x);
++		if (ret)
++			return ret;
+ 	}
++	return 0;
+ }
+ 
+-void module_enable_rodata_ro(const struct module *mod, bool after_init)
++int module_enable_rodata_ro(const struct module *mod, bool after_init)
+ {
++	int ret;
++
+ 	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX) || !rodata_enabled)
+-		return;
++		return 0;
+ 
+-	module_set_memory(mod, MOD_RODATA, set_memory_ro);
+-	module_set_memory(mod, MOD_INIT_RODATA, set_memory_ro);
++	ret = module_set_memory(mod, MOD_RODATA, set_memory_ro);
++	if (ret)
++		return ret;
++	ret = module_set_memory(mod, MOD_INIT_RODATA, set_memory_ro);
++	if (ret)
++		return ret;
+ 
+ 	if (after_init)
+-		module_set_memory(mod, MOD_RO_AFTER_INIT, set_memory_ro);
++		return module_set_memory(mod, MOD_RO_AFTER_INIT, set_memory_ro);
++
++	return 0;
+ }
+ 
+-void module_enable_data_nx(const struct module *mod)
++int module_enable_data_nx(const struct module *mod)
+ {
+ 	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
+-		return;
++		return 0;
+ 
+-	for_class_mod_mem_type(type, data)
+-		module_set_memory(mod, type, set_memory_nx);
++	for_class_mod_mem_type(type, data) {
++		int ret = module_set_memory(mod, type, set_memory_nx);
++
++		if (ret)
++			return ret;
++	}
++	return 0;
+ }
+ 
+ int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+-- 
+2.43.0
+
