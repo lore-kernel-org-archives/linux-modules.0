@@ -1,57 +1,78 @@
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711DA7690B
-	for <linux-modules@vger.kernel.org>; Fri, 16 Feb 2024 11:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7610101C4;
+	Fri, 16 Feb 2024 14:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708083190; cv=none; b=DmyP5QWaM9mQmIV8wUpt7zOKAouHPpi1fdLPV0P7kxL3SgMfaaO6EB7KgjWJF4rBjDgFnvO5p0XNKcSmyzr0snB18Y6gK5FI63G6wbLx4B30duDwoa+dQ5ec8xebwajRZGUyJUIoQ3HurBNXvlBBZ9iF4cqyP5PnDAgj4aqNRNo=
+	t=1708094010; cv=none; b=LD23S1iaPD01Po7BDffR7EeHsjd93627/4WzSitLhpL54flJE/hcE0UbNb31o885TsSNtcT5i551J5JW7DNdON2dMB8HTMncTBi3Ye2fuIw4J3IeEY+EcGoc8GjAOLi4MyZhtw/B4thuD7b1QphIqYyp0hJXjFnhrSgyPQJUaGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708083190; c=relaxed/simple;
-	bh=ekvMJejM8Q9Rsm8ABH1MCujBINVBhoGUHsSnAiGIfys=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=k/7DpxFYGh19D9S9vsGrR044leGO+4PazzMQUoGETM5SPb2NVoFBUAf+zUU5GqVCZo3+ieZR5u2fJsmiZxlEhOMvAaa0GAQnpK2O1B6QID0/hXFxN499kVs9zKPo6+wnKGTXUt8EZETJdOzie4LoipxGXsCQlpy9Gpu1A9ZQ6RE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=bobwKDm3; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1708094010; c=relaxed/simple;
+	bh=bEShoLEM6tIkuBWHvdvzGbyhOUXhBWDe5D52MyLH2G8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fOynREJH7orM64buXUympHVUdNvLpPykupFQy8i/wJezAQkc/BQadvvfEQZEBkQdCsmMNPJpnkjNuCzfQWpwifv4a5ZlpGEzm68ucDmQc6hT4S0MXpDXHU6BazNkInN7JPpzQ1yERdXe8yQMwP2wGA6fcMlk+lUkGrd39kmHGyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=rbn1NWj2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qRdncZ1q; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=rbn1NWj2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qRdncZ1q; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="bobwKDm3"
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240216113305euoutp01db180d1253d6dd651f380cd0a40761d4~0VJt55Uvm0171601716euoutp01A
-	for <linux-modules@vger.kernel.org>; Fri, 16 Feb 2024 11:33:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240216113305euoutp01db180d1253d6dd651f380cd0a40761d4~0VJt55Uvm0171601716euoutp01A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1708083185;
-	bh=vBj+uB8tvahP4rV/oT29NFzwDEVKTcXGWXsARXzcPvY=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=bobwKDm3eShanxdqtRUTSZ3Rnyu72F84dmVdOdx++VU8jJYu1c8Shw6hugex130XN
-	 /h7jzetrpfw+9i+f3soB9PMBuJWwlXwUzYuM2lcQ5RNwbyBb7gTyKaJcXsM1JGS25L
-	 Qr2/+GMi/4g9qJqHfaCTgHKRQz7MVe2mDqX8D1vw=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20240216113305eucas1p2baf95d9fa84d86ea5c57fc72886ba26c~0VJtrZa7R0290902909eucas1p25;
-	Fri, 16 Feb 2024 11:33:05 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id 10.0B.09539.1F74FC56; Fri, 16
-	Feb 2024 11:33:05 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240216113304eucas1p24e80244975c156a6937fc6acaff23f19~0VJtAor0M2551425514eucas1p29;
-	Fri, 16 Feb 2024 11:33:04 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240216113304eusmtrp2bc875415e4bfc5c94586e15dd4d68dbb~0VJs-9HnT2293822938eusmtrp2n;
-	Fri, 16 Feb 2024 11:33:04 +0000 (GMT)
-X-AuditID: cbfec7f2-52bff70000002543-a0-65cf47f1f724
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id ED.4D.09146.0F74FC56; Fri, 16
-	Feb 2024 11:33:04 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240216113303eusmtip1a84c59b8cf1694f94af5ff5b281936fc~0VJsj7a3o1155111551eusmtip1L;
-	Fri, 16 Feb 2024 11:33:03 +0000 (GMT)
-Message-ID: <5cb55af6-5c9f-4a75-8c42-819415aec4d2@samsung.com>
-Date: Fri, 16 Feb 2024 12:33:03 +0100
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="rbn1NWj2";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qRdncZ1q";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="rbn1NWj2";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qRdncZ1q"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 970D41FB71;
+	Fri, 16 Feb 2024 14:33:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1708094005; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bEShoLEM6tIkuBWHvdvzGbyhOUXhBWDe5D52MyLH2G8=;
+	b=rbn1NWj2DncNsUN3usvQjdCxOanR70XIVIxZW4SwqqNpSvkUPleklt4+Gp17sdQLrakWUP
+	vqyOrM0fg+qSp+TvJyJe4vgCgm7kIXJ2kpkSN9HbpxNl9AriLmXYt72VizIu1cJdAvLhp1
+	P0pswVNFJP7q0yvjUPgooEV50nzuazg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1708094005;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bEShoLEM6tIkuBWHvdvzGbyhOUXhBWDe5D52MyLH2G8=;
+	b=qRdncZ1qVeY7BkGvfabtUMl+HxHzgxcQLFYpA94PwDtGgi6NSFmuEK5EDdhftqI1jahzx8
+	auHZz3PLj6UMlRAQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1708094005; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bEShoLEM6tIkuBWHvdvzGbyhOUXhBWDe5D52MyLH2G8=;
+	b=rbn1NWj2DncNsUN3usvQjdCxOanR70XIVIxZW4SwqqNpSvkUPleklt4+Gp17sdQLrakWUP
+	vqyOrM0fg+qSp+TvJyJe4vgCgm7kIXJ2kpkSN9HbpxNl9AriLmXYt72VizIu1cJdAvLhp1
+	P0pswVNFJP7q0yvjUPgooEV50nzuazg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1708094005;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bEShoLEM6tIkuBWHvdvzGbyhOUXhBWDe5D52MyLH2G8=;
+	b=qRdncZ1qVeY7BkGvfabtUMl+HxHzgxcQLFYpA94PwDtGgi6NSFmuEK5EDdhftqI1jahzx8
+	auHZz3PLj6UMlRAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E91F61398D;
+	Fri, 16 Feb 2024 14:33:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id H1yWODRyz2WlNQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Fri, 16 Feb 2024 14:33:24 +0000
+Message-ID: <2e26bdf7-a793-4386-bcc1-5b1c7a0405b3@suse.cz>
+Date: Fri, 16 Feb 2024 15:33:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -59,249 +80,82 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] module: Don't ignore errors from set_memory_XX()
+Subject: Re: [PATCH v3 18/35] mm: create new codetag references during page
+ splitting
 Content-Language: en-US
-To: Christophe Leroy <christophe.leroy@csgroup.eu>, Luis Chamberlain
-	<mcgrof@kernel.org>, linux-modules@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-	"linux-hardening @ vger . kernel . org" <linux-hardening@vger.kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <21037bf38438a285f5dff9501668f1675bc45989.1708070781.git.christophe.leroy@csgroup.eu>
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: kent.overstreet@linux.dev, mhocko@suse.com, hannes@cmpxchg.org,
+ roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+ willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+ void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+ catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, tglx@linutronix.de,
+ mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+ peterx@redhat.com, david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+ masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+ muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+ pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
+ dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
+ keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com,
+ gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+ vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+ penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+ glider@google.com, elver@google.com, dvyukov@google.com,
+ shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+ rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+ kernel-team@android.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+ linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+References: <20240212213922.783301-1-surenb@google.com>
+ <20240212213922.783301-19-surenb@google.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20240212213922.783301-19-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0hTcRjtt7vH3WRynYqfJpqjGmaaQujCCiWtVRCBFCVRrbyoNJdszkf/
-	NNZLJ5HOJJvOZ2aaaQ1xpmm50CWGj96KZuRU8omPMh+5ul4r/zvn+87hnO/HD8cEuSw3PFae
-	QCrkUpmQzWPWti50+E4f6CT9M65xxH26EY74dXqcOL96AYnf1uexxerceZa49GM3Q/wpYwiF
-	cCSV+ZVIkqvuZkq+93QwJMaKNLZk1uhxlBXJ2x1FymITScWOvWd5MX0NNkb8rcDkO2OZSI1+
-	+GgRjgOxE3TZCi3i4QLiAYJM9Us2TeYQFKXaWDSZRaDpv420iLvqmOnNW1uUIZhs+oloMv3H
-	r6lnUCo+sRcaGsZXHUxiC1yx5rDouQO03bUyKexMeMJAbw6Hwo6EBEpGaT1GuECvtYBB9XMi
-	UuBDaQg9NiF40byZwmwiALQTWjYl4RLnIGsohpZ4gmkiD6PqANGHw8t8I4suHQbvl8vXDnCE
-	UUsNh8buYHtKRVGGGwgKlwbWSAYC9UjvmiMY+joWV9Mwwhuq63fQ41DIWRlk0e9oD58mHOgS
-	9qCrvYPRYz6kXhfQ6q2gt1T9i23ueoNlIKF+3aPo1x2vX3eO/n9uIWJWIBdSpYyLJpUBcjLJ
-	TymNU6rk0X7nL8YZ0Z//075imalDhtFpPzNi4MiMAMeETnzdzdekgB8lTblEKi6eUahkpNKM
-	NuJMoQt/S5QnKSCipQnkBZKMJxV/twyc66ZmRAShG023757MrupqH2+5NxV2sDQtcflVwRND
-	kPPgt4QNDiLSFDJdcm28OLTqQFtmY5Pdcx/XffPhFXVDts/+qjCbW2SkIXUxjbBtfz7cX39P
-	FVt9+LS3ERsIKeufCOb5B2XJ9GC4n7y/qM01QiVZ1nlwnB29B74Y0iO4U6OT6blaTnuS1fMq
-	Yf6qiC8Zk+h3WQ61hPb4iWzG5NOPPDrT1A+bucftlzY9mue8Y9mGp6RhviZ14IhGJDhWERQc
-	WVQ8Z0G+DpUnug3PZCLRWCPvSKc54FStlw/TtSY8PTXpV02J++VFU5edRmP1GkteaM0utzz2
-	OpEl36OPCn/oJGQqY6QB2zCFUvobb9Qohq4DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAIsWRmVeSWpSXmKPExsVy+t/xu7of3M+nGizeIGZxZ9Jzdosz3bkW
-	89b/ZLS4vGsOm0XD7O+sFkuvX2SyuDHhKaMDu8eaeWsYPWY3XGTx+HrzHJPHplWdbB6fN8kF
-	sEbp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXoZdzZ
-	/Z+poN+sYvrriYwNjN+0uxg5OSQETCQ+3ZrD2sXIxSEksJRRYtm63SwQCRmJk9MaWCFsYYk/
-	17rYIIreM0rcu3EcrIhXwE5i9+43jCA2i4CqRPOTGawQcUGJkzOfgNWICshL3L81gx3EFhbw
-	kFj8CqKeWUBc4taT+UwgtohApcTjJ0eZQRYwC2xnlDi7sJMFYttWRolHLdfBOtgEDCW63oKc
-	wcHBKZAkMflpBsQgM4murV1QQ+Ultr+dwzyBUWgWkjtmIdk3C0nLLCQtCxhZVjGKpJYW56bn
-	FhvqFSfmFpfmpesl5+duYgRG3bZjPzfvYJz36qPeIUYmDsZDjBIczEoivJN6z6QK8aYkVlal
-	FuXHF5XmpBYfYjQFBsZEZinR5Hxg3OeVxBuaGZgamphZGphamhkrifN6FnQkCgmkJ5akZqem
-	FqQWwfQxcXBKNTDtmTyrNdg24dNvnri8I/n/xTjW784oX/2k5Na7nx03mLImBBucf9zRXH+p
-	LlzQet2zmU7npJ4dZ+ls2ut9p6j9l/CywObHkk+mnFDulFiZ/ENFZ0mZgPknl79MM1Yy/TRa
-	8KHrwdHU6R4Oravzb4pfL5VbyNCYfvXanbsNbYI1Fask1rU/tF/bL2bxr+T74r8/kyZYLCju
-	iFpuE/2A7X1k8/F8xa0OLHcWq6zSqpXoC5q/4V/slxMt6VvX76pxtfRj+M1045cr53ZH1u0J
-	bcwzP8TN6r4SX9yzqi15Ud2HDVv4irV1Nty6M//mtKion0w+ScGbToUVqK0y1gt8eUozIKrP
-	7Y2giXq3e8LxKfeVWIozEg21mIuKEwEwdpiXQwMAAA==
-X-CMS-MailID: 20240216113304eucas1p24e80244975c156a6937fc6acaff23f19
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240216081457eucas1p2c22493d17918753128b39df47e98d8cd
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240216081457eucas1p2c22493d17918753128b39df47e98d8cd
-References: <CGME20240216081457eucas1p2c22493d17918753128b39df47e98d8cd@eucas1p2.samsung.com>
-	<21037bf38438a285f5dff9501668f1675bc45989.1708070781.git.christophe.leroy@csgroup.eu>
+X-Spam-Level: 
+X-Spamd-Bar: /
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=rbn1NWj2;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=qRdncZ1q
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-0.00 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 XM_UA_NO_VERSION(0.01)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 MID_RHS_MATCH_FROM(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 BAYES_HAM(-0.00)[44.23%];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 TO_MATCH_ENVRCPT_SOME(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 DKIM_TRACE(0.00)[suse.cz:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_GT_50(0.00)[73];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 FREEMAIL_CC(0.00)[linux.dev,suse.com,cmpxchg.org,suse.de,stgolabs.net,infradead.org,oracle.com,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,google.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Score: -0.00
+X-Rspamd-Queue-Id: 970D41FB71
+X-Spam-Flag: NO
 
-On 16.02.2024 09:14, Christophe Leroy wrote:
-> set_memory_ro(), set_memory_nx(), set_memory_x() and other helpers
-> can fail and return an error. In that case the memory might not be
-> protected as expected and the module loading has to be aborted to
-> avoid security issues.
->
-> Check return value of all calls to set_memory_XX() and handle
-> error if any.
->
-> Add a check to not call set_memory_XX() on NULL pointers as some
-> architectures may not like it allthough numpages is always 0 in that
-> case. This also avoid a useless call to set_vm_flush_reset_perms().
->
-> Link:https://github.com/KSPP/linux/issues/7
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+On 2/12/24 22:39, Suren Baghdasaryan wrote:
+> When a high-order page is split into smaller ones, each newly split
+> page should get its codetag. The original codetag is reused for these
+> pages but it's recorded as 0-byte allocation because original codetag
+> already accounts for the original high-order allocated page.
 
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-
-> ---
-> v2:
-> - Bail out early from module_set_memory() when address is NULL.
-> - Properly clear bug list when module_set_memory() fails in complete_formation().
->
-> This patch applies on top of modules/modules-next branch
-> ---
->   kernel/module/internal.h   |  6 ++---
->   kernel/module/main.c       | 20 ++++++++++++---
->   kernel/module/strict_rwx.c | 51 +++++++++++++++++++++++++++-----------
->   3 files changed, 55 insertions(+), 22 deletions(-)
->
-> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> index 4f1b98f011da..2ebece8a789f 100644
-> --- a/kernel/module/internal.h
-> +++ b/kernel/module/internal.h
-> @@ -322,9 +322,9 @@ static inline struct module *mod_find(unsigned long addr, struct mod_tree_root *
->   }
->   #endif /* CONFIG_MODULES_TREE_LOOKUP */
->   
-> -void module_enable_rodata_ro(const struct module *mod, bool after_init);
-> -void module_enable_data_nx(const struct module *mod);
-> -void module_enable_text_rox(const struct module *mod);
-> +int module_enable_rodata_ro(const struct module *mod, bool after_init);
-> +int module_enable_data_nx(const struct module *mod);
-> +int module_enable_text_rox(const struct module *mod);
->   int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
->   				char *secstrings, struct module *mod);
->   
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index a9a4a4885102..689def7676c4 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2571,7 +2571,9 @@ static noinline int do_init_module(struct module *mod)
->   	/* Switch to core kallsyms now init is done: kallsyms may be walking! */
->   	rcu_assign_pointer(mod->kallsyms, &mod->core_kallsyms);
->   #endif
-> -	module_enable_rodata_ro(mod, true);
-> +	ret = module_enable_rodata_ro(mod, true);
-> +	if (ret)
-> +		goto fail_mutex_unlock;
->   	mod_tree_remove_init(mod);
->   	module_arch_freeing_init(mod);
->   	for_class_mod_mem_type(type, init) {
-> @@ -2609,6 +2611,8 @@ static noinline int do_init_module(struct module *mod)
->   
->   	return 0;
->   
-> +fail_mutex_unlock:
-> +	mutex_unlock(&module_mutex);
->   fail_free_freeinit:
->   	kfree(freeinit);
->   fail:
-> @@ -2736,9 +2740,15 @@ static int complete_formation(struct module *mod, struct load_info *info)
->   	module_bug_finalize(info->hdr, info->sechdrs, mod);
->   	module_cfi_finalize(info->hdr, info->sechdrs, mod);
->   
-> -	module_enable_rodata_ro(mod, false);
-> -	module_enable_data_nx(mod);
-> -	module_enable_text_rox(mod);
-> +	err = module_enable_rodata_ro(mod, false);
-> +	if (err)
-> +		goto out_strict_rwx;
-> +	err = module_enable_data_nx(mod);
-> +	if (err)
-> +		goto out_strict_rwx;
-> +	err = module_enable_text_rox(mod);
-> +	if (err)
-> +		goto out_strict_rwx;
->   
->   	/*
->   	 * Mark state as coming so strong_try_module_get() ignores us,
-> @@ -2749,6 +2759,8 @@ static int complete_formation(struct module *mod, struct load_info *info)
->   
->   	return 0;
->   
-> +out_strict_rwx:
-> +	module_bug_cleanup(mod);
->   out:
->   	mutex_unlock(&module_mutex);
->   	return err;
-> diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-> index b36d93983465..c45caa4690e5 100644
-> --- a/kernel/module/strict_rwx.c
-> +++ b/kernel/module/strict_rwx.c
-> @@ -11,13 +11,16 @@
->   #include <linux/set_memory.h>
->   #include "internal.h"
->   
-> -static void module_set_memory(const struct module *mod, enum mod_mem_type type,
-> -			      int (*set_memory)(unsigned long start, int num_pages))
-> +static int module_set_memory(const struct module *mod, enum mod_mem_type type,
-> +			     int (*set_memory)(unsigned long start, int num_pages))
->   {
->   	const struct module_memory *mod_mem = &mod->mem[type];
->   
-> +	if (!mod_mem->base)
-> +		return 0;
-> +
->   	set_vm_flush_reset_perms(mod_mem->base);
-> -	set_memory((unsigned long)mod_mem->base, mod_mem->size >> PAGE_SHIFT);
-> +	return set_memory((unsigned long)mod_mem->base, mod_mem->size >> PAGE_SHIFT);
->   }
->   
->   /*
-> @@ -26,35 +29,53 @@ static void module_set_memory(const struct module *mod, enum mod_mem_type type,
->    * CONFIG_STRICT_MODULE_RWX because they are needed regardless of whether we
->    * are strict.
->    */
-> -void module_enable_text_rox(const struct module *mod)
-> +int module_enable_text_rox(const struct module *mod)
->   {
->   	for_class_mod_mem_type(type, text) {
-> +		int ret;
-> +
->   		if (IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-> -			module_set_memory(mod, type, set_memory_rox);
-> +			ret = module_set_memory(mod, type, set_memory_rox);
->   		else
-> -			module_set_memory(mod, type, set_memory_x);
-> +			ret = module_set_memory(mod, type, set_memory_x);
-> +		if (ret)
-> +			return ret;
->   	}
-> +	return 0;
->   }
->   
-> -void module_enable_rodata_ro(const struct module *mod, bool after_init)
-> +int module_enable_rodata_ro(const struct module *mod, bool after_init)
->   {
-> +	int ret;
-> +
->   	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX) || !rodata_enabled)
-> -		return;
-> +		return 0;
->   
-> -	module_set_memory(mod, MOD_RODATA, set_memory_ro);
-> -	module_set_memory(mod, MOD_INIT_RODATA, set_memory_ro);
-> +	ret = module_set_memory(mod, MOD_RODATA, set_memory_ro);
-> +	if (ret)
-> +		return ret;
-> +	ret = module_set_memory(mod, MOD_INIT_RODATA, set_memory_ro);
-> +	if (ret)
-> +		return ret;
->   
->   	if (after_init)
-> -		module_set_memory(mod, MOD_RO_AFTER_INIT, set_memory_ro);
-> +		return module_set_memory(mod, MOD_RO_AFTER_INIT, set_memory_ro);
-> +
-> +	return 0;
->   }
->   
-> -void module_enable_data_nx(const struct module *mod)
-> +int module_enable_data_nx(const struct module *mod)
->   {
->   	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-> -		return;
-> +		return 0;
->   
-> -	for_class_mod_mem_type(type, data)
-> -		module_set_memory(mod, type, set_memory_nx);
-> +	for_class_mod_mem_type(type, data) {
-> +		int ret = module_set_memory(mod, type, set_memory_nx);
-> +
-> +		if (ret)
-> +			return ret;
-> +	}
-> +	return 0;
->   }
->   
->   int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+Wouldn't it be possible to adjust the original's accounted size and
+redistribute to the split pages for more accuracy?
 
