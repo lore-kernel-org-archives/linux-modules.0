@@ -1,154 +1,170 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12401CD17;
-	Sat, 17 Feb 2024 08:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1726E6A023
+	for <linux-modules@vger.kernel.org>; Sat, 17 Feb 2024 16:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708157963; cv=none; b=IKT7/arNuQHVIdqK5hQcZc2Zb+62+U93+4X4j26mm+NVSaU2Vlj8GPZiC+GHqrXEhrG94H/eb4eiCl1h3eqgp5vyFlOh3I0ZAvx1fzYMdFTKTt8/nDDFOp74OpAEnfyj0OSE+eYAJoS/kDnlEoCWELS+938FCo/ihv1nPj0iYAQ=
+	t=1708185690; cv=none; b=Oz7AhK8lCXv8Vtu7e/VM7YKhhNM49qb+BVsH5NMivlNOl6A9mj2pGQ1JvI9LDrLV43jwWQ7+pm0Y5NHPnkPxmi9Im56IFYr8SdK3g2HzIvErFm+/yV+KYgAoCAaTgfJvhbsBTzCCPX2YVFmt5jXz6Z6IihLf3qGzlvoPi5FUxzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708157963; c=relaxed/simple;
-	bh=OEujMmKsaz34R6ihVj0EBGAxb1fHPMfIT7TYuck2xHM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eEjNaFvNCmEAJtgg+gZ/KREedSVvVJkfgTe3QpgQWwJx0EpYtoUOkVe9ykDByeebhiFnQKFjRcHBOXegoJI6lijU/lp9EWKiZ9P7/bJFAmgV/6Qisck5cPmMyu93GMU0dUwuIvNXDAlI9KS2drM/ojGIOQm4//eIMLgsU+Y+lrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4TcM952KLBz2Bcnr;
-	Sat, 17 Feb 2024 16:17:13 +0800 (CST)
-Received: from kwepemd100002.china.huawei.com (unknown [7.221.188.184])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8BD17140485;
-	Sat, 17 Feb 2024 16:19:18 +0800 (CST)
-Received: from M910t.huawei.com (10.110.54.157) by
- kwepemd100002.china.huawei.com (7.221.188.184) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1258.28; Sat, 17 Feb 2024 16:19:17 +0800
-From: Changbin Du <changbin.du@huawei.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain
-	<mcgrof@kernel.org>
-CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Changbin
- Du <changbin.du@huawei.com>, Xiaoyi Su <suxiaoyi@huawei.com>, Eric Chanudet
-	<echanude@redhat.com>
-Subject: [PATCH v3] modules: wait do_free_init correctly
-Date: Sat, 17 Feb 2024 16:18:10 +0800
-Message-ID: <20240217081810.4155871-1-changbin.du@huawei.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1708185690; c=relaxed/simple;
+	bh=WRpGWSCv1QgmBFa9Z6ilAojoZZajV/qjqUstkQKgQ2s=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GmdNqVPhwBl+e/YsCecW2xo9xAe2oE0pnq5v1y5K0IWslnLHvsksi2XICN87KTpH7Edf+q3mW46yubrPCh7Vik1vgx+bYXbWPzmN49XdRdJg0pwtBWsQPTd3bCiSZlf6jzoEt74uIiYec80vNMaI6xNYahPedkO0+WyGz5Tkt98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AxID+fQR; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxID+fQR"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 874D9C433C7;
+	Sat, 17 Feb 2024 16:01:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708185689;
+	bh=WRpGWSCv1QgmBFa9Z6ilAojoZZajV/qjqUstkQKgQ2s=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=AxID+fQRbFCvzTfbJM1yhfV6dKbrfRMeLqZw3Zucqj2hbPTOx6aeSxiDuUS5/ez5I
+	 Rd7ZQlZbpenhpqXiML5BUPYeTuh6KQqRTrFUrfyRaKhvTNI0uca79VdHXu5d4llfy2
+	 SzsKY8NkBRJn5trI0MyFbpng7PCC1R7cBH9LwUCk09fBNAVke58IP1wRMrX1t0fVAA
+	 NX7T6Qcmdm/tp7Qvuwz4cUbIz6ByDqPmFlaaprg/gDcWuyH8C8mnSw7nj0nEvlfDmd
+	 agfgIwVUsQ8safw1KiDOBa9zoaa8ri9ksEBWlb9qbi51UgmL6XwMxkzWAXxDWgIJo0
+	 /gQiF9vV126Dg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66C71C48BC3;
+	Sat, 17 Feb 2024 16:01:29 +0000 (UTC)
+From: Emil Velikov via B4 Relay <devnull+emil.l.velikov.gmail.com@kernel.org>
+Date: Sat, 17 Feb 2024 16:01:26 +0000
+Subject: [PATCH kmod] man: silence autoconf warnings
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemd100002.china.huawei.com (7.221.188.184)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240217-autoconf-manpage-warns-v1-1-e1570cfc286e@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAFXY0GUC/x2MywqAIBAAf0X2nKASBf1KdNhsrT20hvaC6N+Tj
+ sMw80CmxJShUw8kOjlzlAK2UuAXlJk0T4XBGVcbZ1uNxx59lKBXlA2LvzBJ1oZoNAEb1/oAJd4
+ SBb7/cT+87wdX+00xaAAAAA==
+To: linux-modules@vger.kernel.org
+Cc: Emil Velikov <emil.l.velikov@gmail.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708185688; l=3746;
+ i=emil.l.velikov@gmail.com; s=20230301; h=from:subject:message-id;
+ bh=+yfi/genz56uVITFQM5UuX+HEhtsNJ5sllriAqv0t2M=;
+ b=69qVvghz704GS9SitTQ2SOo1wyBueqpX7F/Kiqp6k1c4oU7W6JdTVzi0/ZH4rDBI9g1Ilsu+z
+ hg7KDc9xQ89CqUm7qIdxTt1EoesbpLjJ2Q5p9d+reSNrw7wtMYaBJOx
+X-Developer-Key: i=emil.l.velikov@gmail.com; a=ed25519;
+ pk=qeUTVTNyI3rcR2CfNNWsloTihgzmtbZo98GdxwZKCkY=
+X-Endpoint-Received:
+ by B4 Relay for emil.l.velikov@gmail.com/20230301 with auth_id=35
+X-Original-From: Emil Velikov <emil.l.velikov@gmail.com>
+Reply-To: <emil.l.velikov@gmail.com>
 
-The synchronization here is just to ensure the module init's been freed
-before doing W+X checking. But the commit 1a7b7d922081 ("modules: Use
-vmalloc special flag") moves do_free_init() into a global workqueue
-instead of call_rcu(). So now rcu_barrier() can not ensure that do_free_init
-has completed. We should wait it via flush_work().
+From: Emil Velikov <emil.l.velikov@gmail.com>
 
-Without this fix, we still could encounter false positive reports in
-W+X checking, and the rcu synchronization is unnecessary which can
-introduce significant delay.
+Currently we have a pattern rule, which effective states that two output
+files are produced - %.5 and %.8. Although that's not the case in
+practise, since each input xml will be generated to a single manual
+page.
 
-Eric Chanudet reports that the rcu_barrier introduces ~0.1s delay on a
-PREEMPT_RT kernel.
-  [    0.291444] Freeing unused kernel memory: 5568K
-  [    0.402442] Run /sbin/init as init process
+Add the manpage section as part of the xml filename and tweak the
+pattern (match) rule, accordingly.
 
-With this fix, the above delay can be eliminated.
+Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
+---
+Noticed, while wondering if I should add sanitizer support to the
+autoconf build.
 
-Fixes: 1a7b7d922081 ("modules: Use vmalloc special flag")
-Signed-off-by: Changbin Du <changbin.du@huawei.com>
-Cc: Xiaoyi Su <suxiaoyi@huawei.com>
-Cc: Eric Chanudet <echanude@redhat.com>
+A few, random questions:
+ - are there any objections to adding sanitizers support?
+ - would a meson.build be acceptable? Giving us sanitizers, coverage,
+   scan-build, etc out of the box
+ - writing xml is fiddly, would people be OK if we convert them to
+   scdoc? here are some examples of the raw file [1] vs the man [2]
+
+[1] https://gitlab.alpinelinux.org/alpine/apk-tools/-/raw/master/doc/apk-add.8.scd?ref_type=heads
+[2] https://man.archlinux.org/man/extra/apk-tools/apk-add.8.en
+---
+ man/Makefile.am                            | 11 +++++++++--
+ man/{depmod.xml => depmod.8.xml}           |  0
+ man/{depmod.d.xml => depmod.d.5.xml}       |  0
+ man/{insmod.xml => insmod.8.xml}           |  0
+ man/{kmod.xml => kmod.8.xml}               |  0
+ man/{modinfo.xml => modinfo.8.xml}         |  0
+ man/{modprobe.xml => modprobe.8.xml}       |  0
+ man/{modprobe.d.xml => modprobe.d.5.xml}   |  0
+ man/{modules.dep.xml => modules.dep.5.xml} |  0
+ man/{rmmod.xml => rmmod.8.xml}             |  0
+ 10 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/man/Makefile.am b/man/Makefile.am
+index f550091..d62ff21 100644
+--- a/man/Makefile.am
++++ b/man/Makefile.am
+@@ -13,10 +13,10 @@ dist_man_MANS = $(MAN5) $(MAN8) $(MAN_STUB)
+ modules.dep.bin.5: modules.dep.5
+ endif
+ 
+-EXTRA_DIST = $(MAN5:%.5=%.xml) $(MAN8:%.8=%.xml)
++EXTRA_DIST = $(MAN5:%.5=%.5.xml) $(MAN8:%.8=%.8.xml)
+ CLEANFILES = $(dist_man_MANS)
+ 
+-%.5 %.8: %.xml
++define generate_manpage
+ 	$(AM_V_XSLT)if [ '$(distconfdir)' != '/lib' ] ; then \
+ 		sed -e 's|@DISTCONFDIR@|$(distconfdir)|g' $< ; \
+ 	else \
+@@ -29,3 +29,10 @@ CLEANFILES = $(dist_man_MANS)
+ 		--stringparam man.output.quietly 1 \
+ 		--param funcsynopsis.style "'ansi'" \
+ 		http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl -
++endef
++
++%.5: %.5.xml
++	$(generate_manpage)
++
++%.8: %.8.xml
++	$(generate_manpage)
+diff --git a/man/depmod.xml b/man/depmod.8.xml
+similarity index 100%
+rename from man/depmod.xml
+rename to man/depmod.8.xml
+diff --git a/man/depmod.d.xml b/man/depmod.d.5.xml
+similarity index 100%
+rename from man/depmod.d.xml
+rename to man/depmod.d.5.xml
+diff --git a/man/insmod.xml b/man/insmod.8.xml
+similarity index 100%
+rename from man/insmod.xml
+rename to man/insmod.8.xml
+diff --git a/man/kmod.xml b/man/kmod.8.xml
+similarity index 100%
+rename from man/kmod.xml
+rename to man/kmod.8.xml
+diff --git a/man/modinfo.xml b/man/modinfo.8.xml
+similarity index 100%
+rename from man/modinfo.xml
+rename to man/modinfo.8.xml
+diff --git a/man/modprobe.xml b/man/modprobe.8.xml
+similarity index 100%
+rename from man/modprobe.xml
+rename to man/modprobe.8.xml
+diff --git a/man/modprobe.d.xml b/man/modprobe.d.5.xml
+similarity index 100%
+rename from man/modprobe.d.xml
+rename to man/modprobe.d.5.xml
+diff --git a/man/modules.dep.xml b/man/modules.dep.5.xml
+similarity index 100%
+rename from man/modules.dep.xml
+rename to man/modules.dep.5.xml
+diff --git a/man/rmmod.xml b/man/rmmod.8.xml
+similarity index 100%
+rename from man/rmmod.xml
+rename to man/rmmod.8.xml
 
 ---
-v3:
-  - amend comment in do_init_module() and update commit msg.
-v2:
-  - fix compilation issue for no CONFIG_MODULES found by 0-DAY.
----
- include/linux/moduleloader.h | 8 ++++++++
- init/main.c                  | 5 +++--
- kernel/module/main.c         | 9 +++++++--
- 3 files changed, 18 insertions(+), 4 deletions(-)
+base-commit: b29704cd448aaa455dba4e656fc0f0d3c686df3f
+change-id: 20240217-autoconf-manpage-warns-0eeb0fa627cf
 
-diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
-index 001b2ce83832..89b1e0ed9811 100644
---- a/include/linux/moduleloader.h
-+++ b/include/linux/moduleloader.h
-@@ -115,6 +115,14 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		    const Elf_Shdr *sechdrs,
- 		    struct module *mod);
- 
-+#ifdef CONFIG_MODULES
-+void flush_module_init_free_work(void);
-+#else
-+static inline void flush_module_init_free_work(void)
-+{
-+}
-+#endif
-+
- /* Any cleanup needed when module leaves. */
- void module_arch_cleanup(struct module *mod);
- 
-diff --git a/init/main.c b/init/main.c
-index e24b0780fdff..f0b7e21ac67f 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -99,6 +99,7 @@
- #include <linux/init_syscalls.h>
- #include <linux/stackdepot.h>
- #include <linux/randomize_kstack.h>
-+#include <linux/moduleloader.h>
- #include <net/net_namespace.h>
- 
- #include <asm/io.h>
-@@ -1402,11 +1403,11 @@ static void mark_readonly(void)
- 	if (rodata_enabled) {
- 		/*
- 		 * load_module() results in W+X mappings, which are cleaned
--		 * up with call_rcu().  Let's make sure that queued work is
-+		 * up with init_free_wq. Let's make sure that queued work is
- 		 * flushed so that we don't hit false positives looking for
- 		 * insecure pages which are W+X.
- 		 */
--		rcu_barrier();
-+		flush_module_init_free_work();
- 		mark_rodata_ro();
- 		rodata_test();
- 	} else
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 36681911c05a..b0b99348e1a8 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2489,6 +2489,11 @@ static void do_free_init(struct work_struct *w)
- 	}
- }
- 
-+void flush_module_init_free_work(void)
-+{
-+	flush_work(&init_free_wq);
-+}
-+
- #undef MODULE_PARAM_PREFIX
- #define MODULE_PARAM_PREFIX "module."
- /* Default value for module->async_probe_requested */
-@@ -2593,8 +2598,8 @@ static noinline int do_init_module(struct module *mod)
- 	 * Note that module_alloc() on most architectures creates W+X page
- 	 * mappings which won't be cleaned up until do_free_init() runs.  Any
- 	 * code such as mark_rodata_ro() which depends on those mappings to
--	 * be cleaned up needs to sync with the queued work - ie
--	 * rcu_barrier()
-+	 * be cleaned up needs to sync with the queued work by invoking
-+	 * flush_module_init_free_work().
- 	 */
- 	if (llist_add(&freeinit->node, &init_free_list))
- 		schedule_work(&init_free_wq);
+Best regards,
 -- 
-2.25.1
+Emil Velikov <emil.l.velikov@gmail.com>
 
