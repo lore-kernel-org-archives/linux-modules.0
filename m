@@ -1,124 +1,145 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9943D6B
-	for <linux-modules@vger.kernel.org>; Sat, 17 Feb 2024 00:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EEC1BDC4;
+	Sat, 17 Feb 2024 08:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708128530; cv=none; b=Kff4BaauPN380w+hUU7FSG5MPndyEaI7L7hYsihxg9VIZP/iPEYJhdpYUwzQJSpnDb129W5hYh5UxRXctUOZGOqeJypD+yZQ+iROlqxFRTc7tcVagodAzbcBdwmIBjfSuUdDHTe9ovZFWvbhvMEzXosxvF/Hdg0968LKgXifbfM=
+	t=1708157488; cv=none; b=NuviRLeiNmjtY45ntkUxKM1Guv2AkNq7J2z0kWVdUP786EtXoN+rHtFy8LT5SpvtVopSMWtJneXOg79ofjxpLwCzRM+EXgJ/wC2Ha03TqWAr3re5RO1yytOfQ+mbMo2SRq1Z+Jj7R6FRTD4PW1sewaqW6xGyfKu3gxFseoxrj8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708128530; c=relaxed/simple;
-	bh=plU6YhEkyhkbfKgfjHrx3qjSg7IHeMnpyb2DBIHN9Rs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LbDyQLKLT6LjnDclhaLZArborw8NK1DSr1wYfuzjQVD0PZ8jVeE8MurNnohajNCUnEJqbOKeFNNvkGIOrhOLCnrqZEkdQxHnROgMVmtigb5clxsEvCRk81jujXvnSShgGbvgEH3z3i5z4Cq06PHAvPtWkC9aRcT2hywW+DTVF04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FAXamuuN; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FAXamuuN"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6da9c834646so2383352b3a.3
-        for <linux-modules@vger.kernel.org>; Fri, 16 Feb 2024 16:08:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708128528; x=1708733328; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S1txfacIBFBZ/O4tjcxs+bfhiTiZyaDvYXwzko6DwYw=;
-        b=FAXamuuNv/zQzAsTiczfELCzSiTGSx1i/N2NTp0zupFLDQsEIxjlp36niuZ2AP+LXG
-         uwz2r7+1poIRzYwVXiE5dopiurRDvewCRlMU4JDMQz2+foC3MvDRrVkWlpAZZy83/LUv
-         Teb8jXfQwKklL/wDFlt/TtF/74WCF3iwL7PHw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708128528; x=1708733328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S1txfacIBFBZ/O4tjcxs+bfhiTiZyaDvYXwzko6DwYw=;
-        b=MdpH+Z02Sj4a03IY2hA/rIbglVJ/fVnljcYIj/QCJ1eMne3CCC/ZsgbnORJJ7a4bNJ
-         aN/nJCP2T1/6/nmi9nGN32gsjwrpFJ6qpsvwGqDQPLzU7P413VMcitE3ebshQ3/r/1/E
-         OFiP2UtdbygEXIX3wiVG/+VfQrILiOR1MTVIqc5XxzTjnhd3FX7/KYUHmC0TpreBof1U
-         kzm+mnLIb/L0NCUnsNURfz6xZ9A4ULc8ptwR/4K90H37TeCqLs8DiDOhkvG7Hy5ZNnSr
-         7oU1lNhjJxqrTysprh2vliSHmksUYW1G+384iaUyPLECfiOsao3MAfDvxjJEy3JQ4GrV
-         oHAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBo0AmeEIYuR9uZHCJrJG6FhINMxi1vvXm2gPEwXxsqqVig+sUY5wOIS5QRFgxAK5TEK4LchDU/cZ/tsiS7uy9/8aVW1t/aBrK4OfWAQ==
-X-Gm-Message-State: AOJu0YwmLVa5vDW2ZrhtLA+l0WU2/LR6d0ae5k4BwM9MxMqrGX1UMkM+
-	8sGVKSYl/KIc/Q74y2J3EEcULtgcyOn4do1bWhVIkTMU/7SfA0b/dUsv7hvFAg==
-X-Google-Smtp-Source: AGHT+IF+QQ/9SK4sTlRF7CviXNWL9OdNoE9iSFRsOXGRftVqcaAIHIRUQhIt4OYE39Err1qxKn5GJw==
-X-Received: by 2002:a05:6a21:3183:b0:19e:a9e6:c05 with SMTP id za3-20020a056a21318300b0019ea9e60c05mr7276163pzb.43.1708128527870;
-        Fri, 16 Feb 2024 16:08:47 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id z3-20020aa79903000000b006e094bf05f4sm487826pff.213.2024.02.16.16.08.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 16:08:47 -0800 (PST)
-Date: Fri, 16 Feb 2024 16:08:46 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-	mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-	roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-	willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-	void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-	x86@kernel.org, peterx@redhat.com, david@redhat.com,
-	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
-	ndesaulniers@google.com, vvvvvv@google.com,
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-	elver@google.com, dvyukov@google.com, shakeelb@google.com,
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH v3 13/35] lib: add allocation tagging support for memory
- allocation profiling
-Message-ID: <202402161607.0208EB45C@keescook>
-References: <20240212213922.783301-1-surenb@google.com>
- <20240212213922.783301-14-surenb@google.com>
- <202402121433.5CC66F34B@keescook>
- <lvrwtp73y2upktswswekhhilrp2i742tmhcxi2c4gayyn24qd2@hdktbg3qutgb>
+	s=arc-20240116; t=1708157488; c=relaxed/simple;
+	bh=Nd05lFhDQQjMnAkK8Ja9xC0rQFniUZh8gkFfKPTq7bs=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vfkps24Q1HjkrwQIXRp1lAWxKiGb435K1yPc3Rf3cpWMHEt7zxT0Kvwdmf30AivZC8oafKYc/EO+DaAA1MoE3J4657oM1yjuNx8PlNaja4EE5kn0jrMAPWI3Nyc+WUFPcVA7Tj9xQydrO/JdGq8SxeVnQLDrdtpJW8eLBtRqHck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4TcM1k3YQRz1vtgL;
+	Sat, 17 Feb 2024 16:10:50 +0800 (CST)
+Received: from kwepemd100002.china.huawei.com (unknown [7.221.188.184])
+	by mail.maildlp.com (Postfix) with ESMTPS id D75371A0172;
+	Sat, 17 Feb 2024 16:11:22 +0800 (CST)
+Received: from M910t (10.110.54.157) by kwepemd100002.china.huawei.com
+ (7.221.188.184) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1258.28; Sat, 17 Feb
+ 2024 16:11:21 +0800
+Date: Sat, 17 Feb 2024 16:10:46 +0800
+From: Changbin Du <changbin.du@huawei.com>
+To: Eric Chanudet <echanude@redhat.com>
+CC: Luis Chamberlain <mcgrof@kernel.org>, Changbin Du
+	<changbin.du@huawei.com>, Andrew Morton <akpm@linux-foundation.org>,
+	<linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Xiaoyi Su
+	<suxiaoyi@huawei.com>
+Subject: Re: [RESEND PATCH v2] modules: wait do_free_init correctly
+Message-ID: <20240217081046.5u6dgwdoano2axpd@M910t>
+References: <20240129020304.1981372-1-changbin.du@huawei.com>
+ <ZbfmNiY52KdAet7_@bombadil.infradead.org>
+ <20240130014038.mawqxwoc34v6hztb@M910t>
+ <ZbkFz25DtYuhkIEj@bombadil.infradead.org>
+ <qrq7emx7zxnmyv6qoakxpaisan2hiophf5lte4ag4di4euqzfi@3kjtbfau6nlm>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <lvrwtp73y2upktswswekhhilrp2i742tmhcxi2c4gayyn24qd2@hdktbg3qutgb>
+In-Reply-To: <qrq7emx7zxnmyv6qoakxpaisan2hiophf5lte4ag4di4euqzfi@3kjtbfau6nlm>
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemd100002.china.huawei.com (7.221.188.184)
 
-On Fri, Feb 16, 2024 at 06:26:06PM -0500, Kent Overstreet wrote:
-> On Mon, Feb 12, 2024 at 02:40:12PM -0800, Kees Cook wrote:
-> > On Mon, Feb 12, 2024 at 01:38:59PM -0800, Suren Baghdasaryan wrote:
-> > > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > > index ffe8f618ab86..da68a10517c8 100644
-> > > --- a/include/linux/sched.h
-> > > +++ b/include/linux/sched.h
-> > > @@ -770,6 +770,10 @@ struct task_struct {
-> > >  	unsigned int			flags;
-> > >  	unsigned int			ptrace;
-> > >  
-> > > +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> > > +	struct alloc_tag		*alloc_tag;
-> > > +#endif
-> > 
-> > Normally scheduling is very sensitive to having anything early in
-> > task_struct. I would suggest moving this the CONFIG_SCHED_CORE ifdef
-> > area.
+On Thu, Feb 15, 2024 at 09:18:09AM -0500, Eric Chanudet wrote:
+> On Tue, Jan 30, 2024 at 06:21:03AM -0800, Luis Chamberlain wrote:
+> > On Tue, Jan 30, 2024 at 09:40:38AM +0800, Changbin Du wrote:
+> > > On Mon, Jan 29, 2024 at 09:53:58AM -0800, Luis Chamberlain wrote:
+> > > > On Mon, Jan 29, 2024 at 10:03:04AM +0800, Changbin Du wrote:
+> > > > > The commit 1a7b7d922081 ("modules: Use vmalloc special flag") moves
+> > > > > do_free_init() into a global workqueue instead of call_rcu(). So now
+> > > > > rcu_barrier() can not ensure that do_free_init has completed. We should
+> > > > > wait it via flush_work().
+> > > > > 
+> > > > > Without this fix, we still could encounter false positive reports in
+> > > > > W+X checking, and rcu synchronization is unnecessary.
 > 
-> This is even hotter than the scheduler members; we actually do want it
-> up front.
+> The comment in do_init_module(), just before
+> schedule_work(&init_free_wq), mentioning rcu_barrier(), should be
+> amended as well.
+>
+yes, I'll update it as well.
 
-It is? I would imagine the scheduler would touch stuff more than the
-allocator, but whatever works. :)
+> > > > 
+> > > > You didn't answer my question, which should be documented in the commit log.
+> > > > 
+> > > > Does this mean we never freed modules init because of this? If so then
+> > > > your commit log should clearly explain that. It should also explain that
+> > > > if true (you have to verify) then it means we were no longer saving
+> > > > the memory we wished to save, and that is important for distributions
+> > > > which do want to save anything on memory. You may want to do a general
+> > > > estimate on how much that means these days on any desktop / server.
+> > >
+> > > Actually, I have explained it in commit msg. It's not about saving memory. The
+> > > synchronization here is just to ensure the module init's been freed before
+> > > doing W+X checking. The problem is that the current implementation is wrong,
+> > > rcu_barrier() cannot guarantee that. So we can encounter false positive reports.
+> > > But anyway, the module init will be freed, and it's just a timing related issue.
+> > 
+> > Your desciption here is better than the commit log.
+> 
+> I saw this problem using a PREEMPT_RT kernel as well. Setting DEBUG_WX=n
+> stills show a significant delay due to the rcu_barrier:
+>   [    0.291444] Freeing unused kernel memory: 5568K
+>   [    0.402442] Run /sbin/init as init process
+> 
+> The same delay is shorter using linux-next, but still noticeable
+> (DEBUG_WX=n):
+>   [    0.384362] Freeing unused kernel memory: 14080K
+>   [    0.413423] Run /sbin/init as init process
+> 
+> Matching trace_event=rcu:rcu_barrier trace:
+>          systemd-1       [002] .....     0.384391: rcu_barrier: rcu_preempt Begin cpu -1 remaining 0 # 4
+>          systemd-1       [002] d..1.     0.384394: rcu_barrier: rcu_preempt Inc1 cpu -1 remaining 0 # 1
+>          systemd-1       [002] .....     0.384395: rcu_barrier: rcu_preempt NQ cpu 0 remaining 2 # 1
+>           <idle>-0       [001] d.h2.     0.384407: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 2 # 1
+>          systemd-1       [002] .....     0.384408: rcu_barrier: rcu_preempt OnlineQ cpu 1 remaining 3 # 1
+>          systemd-1       [002] .....     0.384409: rcu_barrier: rcu_preempt NQ cpu 2 remaining 3 # 1
+>           <idle>-0       [003] d.h2.     0.384416: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 3 # 1
+>          systemd-1       [002] .....     0.384418: rcu_barrier: rcu_preempt OnlineQ cpu 3 remaining 4 # 1
+>           <idle>-0       [004] d.h2.     0.384428: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 4 # 1
+>          systemd-1       [002] .....     0.384430: rcu_barrier: rcu_preempt OnlineQ cpu 4 remaining 5 # 1
+>           <idle>-0       [005] d.h2.     0.384438: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 5 # 1
+>          systemd-1       [002] .....     0.384441: rcu_barrier: rcu_preempt OnlineQ cpu 5 remaining 6 # 1
+>           <idle>-0       [006] d.h2.     0.384450: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 6 # 1
+>          systemd-1       [002] .....     0.384452: rcu_barrier: rcu_preempt OnlineQ cpu 6 remaining 7 # 1
+>           <idle>-0       [007] d.h2.     0.384461: rcu_barrier: rcu_preempt IRQ cpu -1 remaining 7 # 1
+>          systemd-1       [002] .....     0.384463: rcu_barrier: rcu_preempt OnlineQ cpu 7 remaining 8 # 1
+>           <idle>-0       [004] ..s1.     0.385339: rcu_barrier: rcu_preempt CB cpu -1 remaining 5 # 1
+>           <idle>-0       [007] ..s1.     0.397335: rcu_barrier: rcu_preempt CB cpu -1 remaining 4 # 1
+>           <idle>-0       [003] ..s1.     0.397337: rcu_barrier: rcu_preempt CB cpu -1 remaining 3 # 1
+>           <idle>-0       [005] ..s1.     0.401336: rcu_barrier: rcu_preempt CB cpu -1 remaining 2 # 1
+>           <idle>-0       [006] ..s1.     0.401336: rcu_barrier: rcu_preempt CB cpu -1 remaining 1 # 1
+>           <idle>-0       [001] .Ns1.     0.413338: rcu_barrier: rcu_preempt LastCB cpu -1 remaining 0 # 1
+>          systemd-1       [002] .....     0.413351: rcu_barrier: rcu_preempt Inc2 cpu -1 remaining 0 # 1
+> 
+> With this patch the delay is no longer there:
+>   [    0.377662] Freeing unused kernel memory: 14080K
+>   [    0.377767] Run /sbin/init as init process
+> 
+Thanks for your info. We encounter similar delay in our scenario. I'll add your
+testing data in commit msg.
+
+> AFAIU, for the race to happen, module_alloc() needs to create a W+X
+> mapping (neither x86 nor arm64 does) and debug_checkwx() has to happen
+> before module_enable_nx() in complete_formation(), I didn't get a
+> reproducer so far.
+> 
+> Best,
+> 
+> -- 
+> Eric Chanudet
+> 
 
 -- 
-Kees Cook
+Cheers,
+Changbin Du
