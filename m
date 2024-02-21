@@ -1,55 +1,55 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433F61272C7
-	for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 19:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73786128364
+	for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 19:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708544469; cv=none; b=KKgS/ztM4u3ew4Zm16wLJ4BBzcjM7lJSUf24R2Hr+9mRFv8leZ6NnBCbqup+VDbrSKWUxTWFqJR7fhek8jJphyO4E+rClo8+0eoGJFipd6es0fmUJaYEhLDnAo+TSBIc/A5WYWxv28zdGdEiyf6Y3CAFKVb4nNh3FAenY8YOw94=
+	t=1708544471; cv=none; b=Vi93xtRsnchReU56QpDBaAUAdUCmBW2ulREX1zE9lM/gAK2wMVyMVe9mL+utL3ijZSvPmntqkAx2QPs4NtIt/0il4frVSjSdfSUsKMAxK4LBqTqaURpuyrBuKNKstr4pfP5V8xj4Uoq7ySOXA/QaGxnfMbaPJRxUVGQR0X6nmqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708544469; c=relaxed/simple;
-	bh=HEHmOJCie8+J7RJiRgymV6TXHRXRZD3Kg9mNxHhJkjU=;
+	s=arc-20240116; t=1708544471; c=relaxed/simple;
+	bh=Z0uieU1Hw2qDymgn+R30jj728IuRbiBIVd6A3QTsoEg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=DhYFz2IHYxOlQWncrX6sR+E3kEMJgAd6IYQ1lxjfQcQnAxRs3OSgDQpt9y0tlp29A/dov93HNdA5ZR5Gxkkf6OBmOlnkY+IPPkJGeydoK3sLMnVWQWJN5USXIGfzFR5CnLz9JD1UVtTfrA1Oh9v4bgpto6ItmncMGu+TvCUlzhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H37z25x5; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=AGiV5Z9fNBhDJ40rAqqePGWcCH2lSP/fxDrKspjFESOmloWQjMB3V62evOWRnLMKdzeVo1bRvTTu6qUl6GH2/zyqFWDxbxrMMKOU3ZD4GW6XF0344kUfAhlbsT6eZVCVccoychcbyrgZiPuBqDzNkLSxpBNPbhGTKV8CDGrwOtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=byge+aaK; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H37z25x5"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6086574258fso20090777b3.3
-        for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 11:41:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="byge+aaK"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-607cd6c11d7so104093427b3.0
+        for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 11:41:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708544465; x=1709149265; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708544467; x=1709149267; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nNOJH11gO16gI1CGV9wD1JhhI3G0pl89I4/43bWDXAE=;
-        b=H37z25x5wvEqUwzd/42xA/Op9Kb8Fd0bYv549DTrI2TY1FrCrkQmoYqACVMpDfqD4y
-         OspB1oI6aB9HGWr2ol/P7wMiZw9MX2tFLcqPdJGAzby6B3v0elGYlsRr4FshFxpVDOBZ
-         AJ1VLsD2PiTfLGyj9LG7ysU5bHCjMwgDXL+25UFC1aurZBEQpx3AB67ny16u57cPH2yX
-         U/lQgoA+pKGM4aoHvqMFfedUkwH2/NcRsRLY+mgM4itaBDL1aKqg4idbJYagOSPcLGtq
-         buHUA1yS57dInoD8oYhGZjYyo0cXPDzWMUwuEJ900z20bs+j9uzayLp55OTSZz1uViN6
-         wZkg==
+        bh=14sostfgXdBtkigrgclSIrhsv4NljUYVKVXEohyvFzI=;
+        b=byge+aaKKirc/1HtrNjKyqcEh1JvgEDAfzILDPbokj0bGNmdMzHMyliJoEP6JRJ+qk
+         bhGiYyCwGhDZTEOKGxj+ABhC9mVdMWWHv6GtmMuN7ybSvKpU8Mc2FfbA9zcdorlH0cUO
+         /L6GVNl9T1n0I9asPP9NvNY5yWPUtwerWFneQlK/tLXWQ0Uj0Y7AxBagPMg6rZywoPSr
+         DjvV3RRrSoPKkW9TkKqtxhnHY/39vU560lNYeMS9SS340Xh+dtqnHhO3nGEnyfghptt7
+         l4vhmHvMk3ulYJQO++e6PAVqPtel0Zx0cTfWBxhcj+Ilqp8YAQYPCxDi8/df4KQ+bWLa
+         +R9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708544465; x=1709149265;
+        d=1e100.net; s=20230601; t=1708544467; x=1709149267;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nNOJH11gO16gI1CGV9wD1JhhI3G0pl89I4/43bWDXAE=;
-        b=UbUwfUy8umliQJDOFTqS8eKMdzAlnWAf9TgSRow1hMCTvj9jMf2brrWYTJd1kFwYx4
-         qDzDYqe4erUnqGJ2XYq0RL42Eb2RNM9XvcmGUCYKADit5m8xIQOEzUN3clLUt1XAaaAv
-         Mp+NxejUoafNI8pUo3mpI1UzcJW+Hz/7LdWsrQgHOBH5Miz+vY4ORjdSTEYC9w/NQ/+h
-         W11/31V+zFD/efv5MBvNoGeWJX26NwKENXOyGuKDEkAYYwOV9AJa03OYc+l1Jc09tB1s
-         FmCdrD5zQMQfG7ceCxPeCYrEI13uJJDFg883E6t3STM/DSM2JZjw7pLKronLfuTBdTzz
-         csqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUR9Pz3meT3NkJgjzwxdTSoizUF0UMJ+X9l2EbTvipnkk9ab2091xZhlB36AVDGRbSfwdE4VVQUy59OqK87NCbBB+rdG+u6o5QM7QTOQg==
-X-Gm-Message-State: AOJu0YxpFHb+RHkNycm9n1KaDYGKBaY80S/h827a1XlIkqUMrIG4teS4
-	fpbOw2KiMrHPJz4se9svnlFKYSZuu+VqqQxt5YO9DxUaDg6y3wK+oa6hL0VHSeoH9sUzMAeVyKj
-	mYA==
-X-Google-Smtp-Source: AGHT+IFw1HW6rh2zXq6oVisO+flBpM8PZrPAxomjgm47RtsfgtCbzompT9Q8/PbN9Jjx8wnIh7u82HkUv1c=
+        bh=14sostfgXdBtkigrgclSIrhsv4NljUYVKVXEohyvFzI=;
+        b=bPx3ErVCglIlJvwOBYFh0saMPsJkW/yxySLxuEChWMsR3XTUQzapxd2xCboaRqJEN5
+         T96LOKiTjK8pznSh6kwxJSeWYHbtztGU9Mg97r+bji0sLeqgT/Lhw87rb9YpnYf580ez
+         idhFh8jDWoBp+N41XAjL0Ha4h0CvglU65CYMyfY521dzitHEErQ18bR7c7p5Lql2U+7P
+         fZeiT2FJ8gaOd9yJFQPxdRuVstuHcnShtuage1Y8iGcVWH8I1mH6zXyzmdLHhVgTq9fk
+         GEIG0fmDNJR3TMSs2i2rAQu82p0c77ZtBX/oRmWHD3wyZYMc2Lcxt3+t1bLutCh6N2o5
+         PTZg==
+X-Forwarded-Encrypted: i=1; AJvYcCXM6hWO0GCjUGq8D6SF1W2hxJrc5400fp+MUQQKpglovnIhEky3jo4bFtc8TEj/l3EFLOZagfN7CDaW6cVN9SeRvV8MAyNtXti7j+heiw==
+X-Gm-Message-State: AOJu0YwC8yYv2ebFu6NVFCmpinQwJUP1Lr96Yu/JthbOgdzSjYxG7Rkg
+	chuEz0vVzAXDc9E/1QtT4DZx3WRyzEkMcOTGRQsG0yveqg+6PISLCOMAazeyPAst+YWq0qLkWUN
+	/4Q==
+X-Google-Smtp-Source: AGHT+IEg8J3/Tgw3rQ0HmvocmCN1KEaF26PclNShE/JXdkinKLyGnMcr7oBUIgKaZkEgV9b6wmo43w0h+Rc=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:953b:9a4e:1e10:3f07])
- (user=surenb job=sendgmr) by 2002:a81:528e:0:b0:608:94cb:6f6 with SMTP id
- g136-20020a81528e000000b0060894cb06f6mr174090ywb.7.1708544465320; Wed, 21 Feb
- 2024 11:41:05 -0800 (PST)
-Date: Wed, 21 Feb 2024 11:40:17 -0800
+ (user=surenb job=sendgmr) by 2002:a05:6902:4c2:b0:dcc:4785:b51e with SMTP id
+ v2-20020a05690204c200b00dcc4785b51emr10314ybs.12.1708544467498; Wed, 21 Feb
+ 2024 11:41:07 -0800 (PST)
+Date: Wed, 21 Feb 2024 11:40:18 -0800
 In-Reply-To: <20240221194052.927623-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240221194052.927623-1-surenb@google.com>
 X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240221194052.927623-5-surenb@google.com>
-Subject: [PATCH v4 04/36] scripts/kallysms: Always include __start and __stop symbols
+Message-ID: <20240221194052.927623-6-surenb@google.com>
+Subject: [PATCH v4 05/36] fs: Convert alloc_inode_sb() to a macro
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
@@ -87,53 +87,40 @@ Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
 	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
 	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
 	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
+	cgroups@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-These symbols are used to denote section boundaries: by always including
-them we can unify loading sections from modules with loading built-in
-sections, which leads to some significant cleanup.
+We're introducing alloc tagging, which tracks memory allocations by
+callsite. Converting alloc_inode_sb() to a macro means allocations will
+be tracked by its caller, which is a bit more useful.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- scripts/kallsyms.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ include/linux/fs.h | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 653b92f6d4c8..47978efe4797 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -204,6 +204,11 @@ static int symbol_in_range(const struct sym_entry *s,
- 	return 0;
- }
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 023f37c60709..08d8246399c3 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -3010,11 +3010,7 @@ int setattr_should_drop_sgid(struct mnt_idmap *idmap,
+  * This must be used for allocating filesystems specific inodes to set
+  * up the inode reclaim context correctly.
+  */
+-static inline void *
+-alloc_inode_sb(struct super_block *sb, struct kmem_cache *cache, gfp_t gfp)
+-{
+-	return kmem_cache_alloc_lru(cache, &sb->s_inode_lru, gfp);
+-}
++#define alloc_inode_sb(_sb, _cache, _gfp) kmem_cache_alloc_lru(_cache, &_sb->s_inode_lru, _gfp)
  
-+static bool string_starts_with(const char *s, const char *prefix)
-+{
-+	return strncmp(s, prefix, strlen(prefix)) == 0;
-+}
-+
- static int symbol_valid(const struct sym_entry *s)
- {
- 	const char *name = sym_name(s);
-@@ -211,6 +216,14 @@ static int symbol_valid(const struct sym_entry *s)
- 	/* if --all-symbols is not specified, then symbols outside the text
- 	 * and inittext sections are discarded */
- 	if (!all_symbols) {
-+		/*
-+		 * Symbols starting with __start and __stop are used to denote
-+		 * section boundaries, and should always be included:
-+		 */
-+		if (string_starts_with(name, "__start_") ||
-+		    string_starts_with(name, "__stop_"))
-+			return 1;
-+
- 		if (symbol_in_range(s, text_ranges,
- 				    ARRAY_SIZE(text_ranges)) == 0)
- 			return 0;
+ extern void __insert_inode_hash(struct inode *, unsigned long hashval);
+ static inline void insert_inode_hash(struct inode *inode)
 -- 
 2.44.0.rc0.258.g7320e95886-goog
 
