@@ -1,55 +1,55 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C708665E
-	for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 19:41:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290A9126F0A
+	for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 19:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708544463; cv=none; b=czLGvfyKxhqCYEL3mexmeL+ruZpzCY6abTbEbgfrvMeKKbWCVTXPsbxR4jsPvJJXVqBvcE+fakV8GZhZ1o+/5BWrFbaH8vW+X7dfre9x+G7N0DMU1GzqMJd2Axpm777y32XD2yu6od3MIawhGAaM7QGcKfhOdczFf3Lb+0v1jy0=
+	t=1708544466; cv=none; b=am/qP+15MdO/pRop2sTl63ob0ZjigkueQ49DyDpR09yD8Q/JVBLbB0RlJ76Y/A387yoLSEcQqCrkyKJ7pT51QQsr4Yqb6J1K161t1v/CnEO8gjDO2cVuDvgG2HlhKUCXyFyB9lTpkP3HU146gf7wMae84Xba5JBfpczm4JWmPaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708544463; c=relaxed/simple;
-	bh=XvI76MSJf6n8ycfULIR+dpUzLDxxCd04CalcxvixqtQ=;
+	s=arc-20240116; t=1708544466; c=relaxed/simple;
+	bh=0jXC3LDzUrrolAiGzpejaFGts6g9gPbvSne6eR9EGZ0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=hmjD7Q4UJz4nL8eSH7YmTRbHo86IQ/Eh4Yw47JJNCnQO8JHPySLZrd0viD34dE0WBGdIb0gxIHp1UBVY/9oigzGcOqjMtkgoUTjefYshHCt9I2ZWLCfrck0kAyGmOEVUOx2D7ASadYZ/w+11QRfbIHoOAUTC1qF2OhbMJEYQ5Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Lsy4Y1o/; arc=none smtp.client-ip=209.85.219.201
+	 To:Cc:Content-Type; b=DAPLnTykwPLno8oUpY98xUQGrjNW1T4XdMZsf6hKKwMH+nb8h9ja9nOQMzl6kglxP3mqHjlvlKiRVYBqtBcwj63JifwDJbXlk9xxFeWGhk7x+iVBCiNWfberEy+atGdNxRntJ2sM5VyS0CuNVWWCProArVg8pquaxl5S1qYnrZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yAuSI3zF; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Lsy4Y1o/"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dbf618042daso11731480276.0
-        for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 11:41:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yAuSI3zF"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60770007e52so82264937b3.1
+        for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 11:41:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708544461; x=1709149261; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708544463; x=1709149263; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eOix7cIZ9OpjtRmnOCb5oo8qhMGRBISTNpiHk2ice5Y=;
-        b=Lsy4Y1o/cScEtlw+tphqx2teWGVdZTJvgOXQPbI1Y58lqPV7JelW3Z3i1qznu1dmJR
-         CKcj0msql37fyX2oCVKqTQtBglvo+ePh761e2E5bkVDds+vWiyCiQ8nQKNx/0QkfpcfW
-         bsO+pvW+RWBLd7z7TSagQKq+rkVY9GbiDqSXqtF1MAW9wlglo4hgc9fQ0MBdRoUDFQpC
-         BgR18foC4w2y29Prp09CW6J612QcKNwE9rZDNDvsPvHgL+IQq4ktKrpW3Fv2I3ydiAHc
-         kTjzs7kR1O63Ua7R5yUaJAy05OJdRDe0Fl2ylvvudFbfclVFq4fShUsZThe4OhzJvlf8
-         YCMg==
+        bh=aDZXV5wClyo81E7oQNbL7t5gFNRFpKZi8JXsyoMDgnM=;
+        b=yAuSI3zFtBXJEqtOJqcZ7nFCZUwHdfr+Wu9iAy+CuCFuvUw5k6vUh7m1pSo109/ecX
+         eSPLwSRNwaXOqgo30uW6xG4srrJBOp0FJJJ9WQg25TVgBagpMiS06f8PbtRUhpgZfJ+G
+         /BENEgZ40l/qfZlXROmPnL3iaMo3Ir8io6yPVmam5fXDzpRaKEV2XWFuOw5c5anxWg4F
+         L2iIEHk/SziLOzPkLdx9HL0V/ZcRdUwSWr2v+rTGBLMnGn/wimFfRjzk3cSpVk5LhOHb
+         PA9J1utGbhUv15ENpNNyZeGO/9eT+53mAsavVQfxW85P+kvMf8JguBecVxFwrDEEHdth
+         E2rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708544461; x=1709149261;
+        d=1e100.net; s=20230601; t=1708544463; x=1709149263;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eOix7cIZ9OpjtRmnOCb5oo8qhMGRBISTNpiHk2ice5Y=;
-        b=Xxy5k3ttkos7I0UGYAkqG3j5xNutAnlEMmKsJJxtk1VLTvn96Fv9LB64LF6hjo0IlA
-         CPPPFDempNjDDhihgE34B6ynS2L6342cuOVzzIWTsZPAx6GUS8yGLgKhQqcFLJOkkSJe
-         WOVESxAK9P+GPVfW8ntc2t5bp0M0n7sg2HiY7l8JLXLL/lJi//FCxpeDdOBwUVZPpL7f
-         YyS5CL29++oR0kMRznUGGe8i44SCzT+WXUk3VHWOh+gVxe8yO/QnFZGCgSq5lYmA1PLz
-         lVUNO6FOqgxFur+oYjxiZJBC3zXFi0wOe0pqhukWXfmXr1U3ILw0YxOA/rVyQQlq51ZU
-         1DzA==
-X-Forwarded-Encrypted: i=1; AJvYcCVB2ku5KmeSt1vdPp87vxbZ/VU/l4ubLhTtIXn4dvC1Hvxf0i/mOA1Ux2XAxgeRhIxf+5AlMo04/bkf2JOYdj37b03gM7hktaovqG4tVA==
-X-Gm-Message-State: AOJu0Yy5PYNGCaBJ1XyUB5eaiakqvbzWQ1wHgE5OEBxfu2YAamTgn8FE
-	p3goTGZhvriZFGy9KJofi7LT7da3ijVsu7jF3wfbtJo0dAVTFjMncD6u5c5L5r+VCSlP9+2b6cf
-	9Tw==
-X-Google-Smtp-Source: AGHT+IFQED8r11XAmHCvTPIM6osrIYpquXv216eXmkF7EFZy4gkeT8fImMy3GTq6A3JUXD3VP8Bk7+J6aLM=
+        bh=aDZXV5wClyo81E7oQNbL7t5gFNRFpKZi8JXsyoMDgnM=;
+        b=lrK41ZflYKDJnH86kttjt5gETqhYyvCZ+RnI1YK3D2hu9QrrJfkPmiLBgCzi9EP99/
+         cPZb5CAmfNHvxv4e3pd9G43Q20lXJdEoy0X7xDPttPRZnoNGY3dC2cuGsPC5e7xyk6xk
+         ETny+SIo4YScJFgC1P9+H+NKY78JMMvgwAFkVgJ7D7YTFUvreUPHrcbDzAAxYeVNXsSq
+         tmGCxl2My8z/3Mtd4AFvrgpuu8+2+AMzK0hTH3NWb2/MHYPMOd+FWs0AY5YRZCsSwM6J
+         EhHxe/erAulA59g0KNHL+IK4fauq9ix4IbyViLVhew8kjFI61MHLjN6Q3SEQTmfRtEd9
+         dNZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXBDnt32xlIK9aJPytMEfm5alZpl2k6o7vLF/5oWqOlcqfbB55ISy6vgWURbMN0OoFzvvqdB1FLiPf05DNRTLEiy563T8mFiBXi+EQrzw==
+X-Gm-Message-State: AOJu0YwryVsa46E6cN/6GXXUnV3p31fkVY74CldRkDAzEp9gocOX5EY4
+	ngCg0FwStVHy/yaa0iZS0Fcu/cnKwB4Ml/Oa8dHKD0rCpIQ1MlN1MiiMCTJIGRZh1E5rcsCg4eD
+	39g==
+X-Google-Smtp-Source: AGHT+IHYTX89gbhdUEyuW7HvamV6v1+4UrLx/voxHAa1LwjOId1uGP/0Vg+lc29zmz5uf9mDtRdIligkWrQ=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:953b:9a4e:1e10:3f07])
- (user=surenb job=sendgmr) by 2002:a05:6902:120b:b0:dbe:d0a9:2be8 with SMTP id
- s11-20020a056902120b00b00dbed0a92be8mr7992ybu.0.1708544460699; Wed, 21 Feb
- 2024 11:41:00 -0800 (PST)
-Date: Wed, 21 Feb 2024 11:40:15 -0800
+ (user=surenb job=sendgmr) by 2002:a05:6902:1008:b0:dc6:d9eb:6422 with SMTP id
+ w8-20020a056902100800b00dc6d9eb6422mr17397ybt.10.1708544463028; Wed, 21 Feb
+ 2024 11:41:03 -0800 (PST)
+Date: Wed, 21 Feb 2024 11:40:16 -0800
 In-Reply-To: <20240221194052.927623-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240221194052.927623-1-surenb@google.com>
 X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240221194052.927623-3-surenb@google.com>
-Subject: [PATCH v4 02/36] asm-generic/io.h: Kill vmalloc.h dependency
+Message-ID: <20240221194052.927623-4-surenb@google.com>
+Subject: [PATCH v4 03/36] mm/slub: Mark slab_free_freelist_hook() __always_inline
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
@@ -92,29 +92,29 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-Needed to avoid a new circular dependency with the memory allocation
-profiling series.
-
-Naturally, a whole bunch of files needed to include vmalloc.h that were
-previously getting it implicitly.
+It seems we need to be more forceful with the compiler on this one.
+This is done for performance reasons only.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- include/asm-generic/io.h | 1 -
- 1 file changed, 1 deletion(-)
+ mm/slub.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index bac63e874c7b..c27313414a82 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -991,7 +991,6 @@ static inline void iowrite64_rep(volatile void __iomem *addr,
+diff --git a/mm/slub.c b/mm/slub.c
+index 2ef88bbf56a3..d31b03a8d9d5 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -2121,7 +2121,7 @@ bool slab_free_hook(struct kmem_cache *s, void *x, bool init)
+ 	return !kasan_slab_free(s, x, init);
+ }
  
- #ifdef __KERNEL__
- 
--#include <linux/vmalloc.h>
- #define __io_virt(x) ((void __force *)(x))
- 
- /*
+-static inline bool slab_free_freelist_hook(struct kmem_cache *s,
++static __always_inline bool slab_free_freelist_hook(struct kmem_cache *s,
+ 					   void **head, void **tail,
+ 					   int *cnt)
+ {
 -- 
 2.44.0.rc0.258.g7320e95886-goog
 
