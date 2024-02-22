@@ -1,68 +1,68 @@
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55141869
-	for <linux-modules@vger.kernel.org>; Thu, 22 Feb 2024 00:10:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F6315BF
+	for <linux-modules@vger.kernel.org>; Thu, 22 Feb 2024 00:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708560637; cv=none; b=prLjcftxelqQZkWp3a5UswtctwRZOtm4gTmwNeUDhUq3LpY6tTCIkD3QazsCw48XI1Oy5UgxzwLEpxKKiGxbp8d70ppYx35QGPvAwUD7PxcrRxu6E73ZLGtKPTBBv47Hur5KGxkvJqb2a8lMGPLIszrLRgdiYUqimXzXusGorcg=
+	t=1708560779; cv=none; b=HfP+QBcRA9BBRRgyjMMHo2jlk7QYfMytOIJyx8NAz3ey02+VssYw+7TnPX5CTNjtcnZeNjJ8y33Ka2pYSDH9LyF7vjMN8TxL1b7u5mkNt7Sp0+Pn34zNpIpGAj2B3vzFXpmnSovxc9kJEsntIowVesnhaq5CSmNlzhbZEbUceQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708560637; c=relaxed/simple;
-	bh=1D0pVaWMlr8hskhdGaW7hZtXBWle1reW17x7OUuU9Uk=;
+	s=arc-20240116; t=1708560779; c=relaxed/simple;
+	bh=yPsvw9vJzS5OOehh2obqY5C9ccmf1AALBE4na8IWGEE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XsP3xLIxT8UFME2hU2PIKHAa8rFuJAXXgnJJzjP7Z0mqtReDOQUV0bJpbCJ2Rzg7rCJTAzMYL2TVbU67W0jxjLc86N5GXawCEI05DheTlVcECvGP3uQ1hm2Vt7RWuZOzj0UtM/1zEoB/+5ZAIauN825R61xFsjWi7ceJKhFiZUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=WMqOTNgo; arc=none smtp.client-ip=209.85.222.50
+	 To:Cc:Content-Type; b=OAEiRuq0ygT7IAxdnoXzTD6wM2sP4Ga2XxcGb4Zht6dQYs1o++Z7hnFpwnlR6mcWonsrtNcqb2F5cx9pEOCY/1n3mpf3NB848ZGQaanDAuYUWbSckFANppipMUhufMtUFiPjZSp1P1Vf/DwqwDzniXqePqmLZO4B9lxjxguknTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=u6MzgmLQ; arc=none smtp.client-ip=209.85.160.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="WMqOTNgo"
-Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-7d2e1a0337bso3762352241.3
-        for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 16:10:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="u6MzgmLQ"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-42dc86cc35dso6148871cf.1
+        for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 16:12:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1708560635; x=1709165435; darn=vger.kernel.org;
+        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1708560776; x=1709165576; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1D0pVaWMlr8hskhdGaW7hZtXBWle1reW17x7OUuU9Uk=;
-        b=WMqOTNgoyIMy5Skhg570/S9RfKRo+GGYJCSxO9Wx46wIXQMWTS2sf3E2BFDb9cb/Mi
-         SqSc2RwztXYNSaB38gztWThpj5wG20etefD5/vzwCIiRM3djvQYDKyWZLyyB9HFAM9wd
-         GMQZLr7NXKp6GOaIasT2JvwkONeaUgvXWnQcOrKHk1+ub3kdjAL8tbRRBT8znhaL2iy2
-         quvghVEXB/K/qztLQ/o/HGZdmDIRYb4aRqmqlbUHD9a4EgJ8wr5jPA/6XG4Eo8myvR/W
-         T/TCrdyLnp6jiwDXmMDE+CSg3Midm+48pxiNe04wJ4IpdOsHW8Q9uLnJqcwi+xwQqlmf
-         Orvw==
+        bh=yPsvw9vJzS5OOehh2obqY5C9ccmf1AALBE4na8IWGEE=;
+        b=u6MzgmLQHfOebLxBK3vq95PpgzpVyRoBGEcnq8JMV+Pt8FGSWmlAh2hfIioBlyCYSC
+         hqyrh19LMeFU5IOtb+lnUbXtbjscpRxjjRrXJRRZs4XF1+uOlSuDQEmhWkGSDqdb2oPR
+         nvXlPVHnD+zlVdfmkdxtKfibDp5Da97/9sSjWBSuFRpzBLozYGilxEwIVSsftN91kFuh
+         rYicFEHecReyhUKLRgFk8VgBpv1rbqlI6g+fAxEjvTb2AiGftkkGhBQZBhJqkJNfNmpc
+         PwA9mhxAVv0p/KuSrzB9VLt2DFF59hi6k+tYXUeOnH7sKgatrJe5V7y9sXAwMNlXFx6m
+         2abQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708560635; x=1709165435;
+        d=1e100.net; s=20230601; t=1708560776; x=1709165576;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1D0pVaWMlr8hskhdGaW7hZtXBWle1reW17x7OUuU9Uk=;
-        b=gi2N9Ep1+gdVAUSifEB+O10d9GjwNxpXhIL2Q+brg2Z9OYvYItvg+4wK1qo3cY/Y32
-         hOGqyckpbfntXbI2IKp4FfS+L2EWvagW4OkcfNO6Yfq3KUS4YLHBIpYuwYLUuB2kX+F9
-         ElkjS/OI5ASsvZxa/RwG8L3Jd+a0xbpjymUhMtSJAV7SRcsyBvtMUvk3o6Eq0+K+YATf
-         Em6ZWJqkkXxrcYaz7ZfjFbFNKfoq0bm6toFAJ6B9VmVZ2dfBof+uoNii+ltFksoYSwam
-         kh0oSCZO61LYRbuaLX6JuFKSSS6eM0hDlRmSnLr9RUGWM8/e00EkhZ00K1ETk7MIIFVz
-         vVdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV5saw/mD+VOj6lGQB6wxzW1tL2ko8r2eFaboSokUZEI7+SmAenIMTXW81A3eK4Wxad6dpIsgHRZTba2LfsV/HRJLIU7UttAsyQ/SahQQ==
-X-Gm-Message-State: AOJu0YzAC6p7NjLI4K6jARF0ft40fJGY7ooLDO9m1Bb1chhPGvOstYqe
-	sL8NJKhU+dFktDwixKPv3+yZFW5m7zYWkuP9rlI/BuNBP5C7rVI4V9QqglH2Ins9jD6cygmfcon
-	vYiaav4EDidD8jWN3dg6o23wjtbcBnVLH/i0lHg==
-X-Google-Smtp-Source: AGHT+IGvkzT3uz6qELPJtraK+YKtQ9uJucd+Pri79etJZSzYbQUZmm3eTGpEAZMzRr8Ip545g98kCtUJT9vyheZUmog=
-X-Received: by 2002:a67:f54a:0:b0:470:3ade:af52 with SMTP id
- z10-20020a67f54a000000b004703adeaf52mr11439980vsn.6.1708560634875; Wed, 21
- Feb 2024 16:10:34 -0800 (PST)
+        bh=yPsvw9vJzS5OOehh2obqY5C9ccmf1AALBE4na8IWGEE=;
+        b=bZ3+t2Cl18/cbYhF8hK8lWWwdOWOhsS/DrmSNMrVRPLrgjfhX2xtpQI9AWzxxyDBZd
+         89+k56+8suz0pihAzsFpwkXqFCnYwByOKEi/qhAFlr0bVyf4RBpudhOlXykezYUj3FUk
+         L4NKu7M/S0tlVGinykOKAPyr5k78M1ZRSRbGYSjXRYj3dLR5vlcUGbjVj2KxLc/NjXkT
+         7S83rqEjja7sIMPsZpV3HvD9DAZ87hp7F4+bhREi1OcxtvnuqjI7ePtJoGB7S9zDRKVx
+         A9aSKPCWCvQUQVAW0FklFg8colsiGg9XbNggWEMm2u6GiKOG6J2KYTcyiTSGpRp/cALn
+         lQSw==
+X-Forwarded-Encrypted: i=1; AJvYcCUFpV/gq6Nw/d26K0g6nF2dvIHlbOgcikOpJDXjXSyEJzECkrRo5D1Omar8Jpxojpjn2Clqo7rpPUPP82iM9xouyt4HGPJVwMf1A9AomQ==
+X-Gm-Message-State: AOJu0YzpB5qFIpWUda2p7PsvLKbfVEjsg95OpYL+4pR37MgRGtngVBkr
+	X+kDM3KQESdX0+1y0WSHUyxHwacxO8GgfV5IrVWMt1RA/rp8E+VdXjys+TMJERPkg60p7Vx1qoS
+	wypaV+QFcda5TJGOOlLrKn+5Z4190xr8+NHyEcA==
+X-Google-Smtp-Source: AGHT+IHC2jE3/DoAiHiK02zORvbTKUG6myX0k7i1f+aHTzOQJjz8xfPJY5H0xjNb5qm6LzazHkaY+DyA8GGq0QMoj/o=
+X-Received: by 2002:a05:622a:1996:b0:42e:1911:93fc with SMTP id
+ u22-20020a05622a199600b0042e191193fcmr11082250qtc.55.1708560775667; Wed, 21
+ Feb 2024 16:12:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-10-surenb@google.com>
-In-Reply-To: <20240221194052.927623-10-surenb@google.com>
+References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-11-surenb@google.com>
+In-Reply-To: <20240221194052.927623-11-surenb@google.com>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Wed, 21 Feb 2024 19:09:58 -0500
-Message-ID: <CA+CK2bDWkrNapWD7pv47XQo8PD4qJ3O=U99pL3o72KCnrzpsXQ@mail.gmail.com>
-Subject: Re: [PATCH v4 09/36] mm/slab: introduce SLAB_NO_OBJ_EXT to avoid
- obj_ext creation
+Date: Wed, 21 Feb 2024 19:12:19 -0500
+Message-ID: <CA+CK2bBBcJfgBU-O600Wx-2yHs6RUdhT+n0wsHtieU-rSHn-Ng@mail.gmail.com>
+Subject: Re: [PATCH v4 10/36] slab: objext: introduce objext_flags as
+ extension to page_memcg_data_flags
 To: Suren Baghdasaryan <surenb@google.com>
 Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
 	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
@@ -94,14 +94,8 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Feb 21, 2024 at 2:41=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
 om> wrote:
 >
-> Slab extension objects can't be allocated before slab infrastructure is
-> initialized. Some caches, like kmem_cache and kmem_cache_node, are create=
-d
-> before slab infrastructure is initialized. Objects from these caches can'=
-t
-> have extension objects. Introduce SLAB_NO_OBJ_EXT slab flag to mark these
-> caches and avoid creating extensions for objects allocated from these
-> slabs.
+> Introduce objext_flags to store additional objext flags unrelated to memc=
+g.
 >
 > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 > Reviewed-by: Kees Cook <keescook@chromium.org>
