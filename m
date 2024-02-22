@@ -1,195 +1,204 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED2B10A16
-	for <linux-modules@vger.kernel.org>; Thu, 22 Feb 2024 00:58:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD8636B04;
+	Thu, 22 Feb 2024 09:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708563482; cv=none; b=jAgEVNQFkldq3ZIkWXmFP8kQvp7PQY2If7hJVIPGwG9qi78qJreOXc3fj0iA7FN7deA7iG+p2B4iHjqxzjJINq+umtMGH2QX7X2Au7mIXY65YCpAmG76fwp7vzLVt7D92yB3Girmn7LMmNCZ0U26R1U7JeAkd2e8Fm8ytG534VY=
+	t=1708593729; cv=none; b=cXtJxxr9G/WFc9n3VOd9YI5zUOSRYz5N4RARjyqJlQeBdQ4cL6KZHrlf0gFtiQLluxt739KIOwFxlmmqdlKxLx07o+MTK6Xdv2lBOiawFRHgv+3XgoirdkT2zsp6mnZ88ir4twRgBHvctrd9EmB4+FDE6EHuaChxH/z63JEo2Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708563482; c=relaxed/simple;
-	bh=bspwEmj9ztDC3prfWzHxoOOULFAJ2sC2HzPuV2/nx/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lBQt2+VUMz+vB8N3JqEiGaJhIQU1U1sNXJnr9Lw22OHkFPJGy8yVdPmOdZUbHTj0XZ+2BajVkH10QfK/892aKPqUebdf4PK0TQGR0y3mrs54agC+lZWg+EzlnVcEPWymlnNhl1eYT+76fMd19akuu73dxGnmGUSz6sPLwlYWius=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FQI3yFBo; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FQI3yFBo"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1dbd32cff0bso36524885ad.0
-        for <linux-modules@vger.kernel.org>; Wed, 21 Feb 2024 16:58:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708563480; x=1709168280; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ulpOkHFvivSSE+e2M3yzbCAjenVPYV9xC3Luo/BV0yQ=;
-        b=FQI3yFBo2hSzyL+RI9F4txpxG1nXYoWK0F5XiZbchbvgJ1FKLK0Mqb6g2vfPmuPY0o
-         jxMpNMiNXVAQmeZs+EChJ1bIf7LCaMYzzzFxcpEPD7N+wHS3MVYxsdyNMJnazAsNlsAN
-         DGp/CHy4Nf+K/MMUextxwk4Ryy1z05JEJV0Ec=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708563480; x=1709168280;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ulpOkHFvivSSE+e2M3yzbCAjenVPYV9xC3Luo/BV0yQ=;
-        b=gHK3mQSOU5FotIpvsoj2eZfDPPv5thPPth5+i8wtaBcOE44BEVN88BiH+jrDX+vl1R
-         TEtdMnRijSq5ZegJGZgTSCii9Q6XTzKbI/Y2oV60Lvu7OK+GlqxkQZ+NEqn8fSQk8U0E
-         B9BrHG1sSj5QAqlGaaS5roRf22LVEW526mjhT2gzDwMm29KwKMrwpGkhQ/C2jI12TwS6
-         Msj0MuguX376NzlszUz3yApBIZ/vASlS8+IPBzlJKidmBG03PLjlSwWERYQ5z5J17nqX
-         P/t2V7dAHVOZ1meEbwVIEh2gj51L0/BnpturC8xQVybNALM+8Redx6sux7mHkWSGBKLB
-         SSvw==
-X-Forwarded-Encrypted: i=1; AJvYcCU3quSnaMoYwbelkAPaD9q5K6dR5wDpb+jOMxms+yxluGmhkolnJcHLmprbQ+uqwCzym+1HmgYEyybkmzSuQWZKaRbLMxCAthOlnuUM/g==
-X-Gm-Message-State: AOJu0YwrxROsFKMknj1zxKWOyA5aaKkBUVwLOAbo3UqmJZQH2N84EpOd
-	+gW4sget6GiruqiUjYFO3qTSOqBFTQSgWhO6FBXnCBobWxfiAHyrJndg/QpBBw==
-X-Google-Smtp-Source: AGHT+IE07ndtCmucLw+AwElpuaWlFxCXEKAdQ2SXPUsu8K/z1cEru3443BCr7LS4IH8cJcRmaUmXqA==
-X-Received: by 2002:a17:902:7ed0:b0:1d9:a4bb:29f2 with SMTP id p16-20020a1709027ed000b001d9a4bb29f2mr15732121plb.46.1708563479697;
-        Wed, 21 Feb 2024 16:57:59 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170902c21100b001dc23e877c9sm2736280pll.106.2024.02.21.16.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 16:57:59 -0800 (PST)
-Date: Wed, 21 Feb 2024 16:57:58 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-	mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-	roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-	willy@infradead.org, liam.howlett@oracle.com,
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net,
-	void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-	x86@kernel.org, peterx@redhat.com, david@redhat.com,
-	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
-	ndesaulniers@google.com, vvvvvv@google.com,
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-	elver@google.com, dvyukov@google.com, shakeelb@google.com,
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH v4 14/36] lib: add allocation tagging support for memory
- allocation profiling
-Message-ID: <202402211656.C3644FB@keescook>
-References: <20240221194052.927623-1-surenb@google.com>
- <20240221194052.927623-15-surenb@google.com>
- <202402211449.401382D2AF@keescook>
- <4vwiwgsemga7vmahgwsikbsawjq5xfskdsssmjsfe5hn7k2alk@b6ig5v2pxe5i>
- <202402211608.41AD94094@keescook>
- <vxx2o2wdcqjkxauglu7ul52mygu4tti2i3yc2dvmcbzydvgvu2@knujflwtakni>
+	s=arc-20240116; t=1708593729; c=relaxed/simple;
+	bh=5v9yH/V+iT/XBq13O4b1uFWQSJMXaxAV6nRnWvjhvLg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fX0RkHX4kytmvB1aAs2WLCKVERpIaYiNwv4fgdFckUimcbSq1sifo+W4hAEMurndRK32jt7rZep8AgOsxsr+qwXsEng+tgvYbkrQjhs/6VeKYV6dvpA1sZBcAvohjbDC+OLQthDNgPUQbKFz0ohjuLwqqKEoKzkiLunfk7u/0PY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4TgSK54Lf4z1X3Cc;
+	Thu, 22 Feb 2024 17:19:53 +0800 (CST)
+Received: from kwepemd500009.china.huawei.com (unknown [7.221.188.237])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9CD171400D9;
+	Thu, 22 Feb 2024 17:22:03 +0800 (CST)
+Received: from kwepemd100011.china.huawei.com (7.221.188.204) by
+ kwepemd500009.china.huawei.com (7.221.188.237) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Thu, 22 Feb 2024 17:22:03 +0800
+Received: from M910t (10.110.54.157) by kwepemd100011.china.huawei.com
+ (7.221.188.204) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1258.28; Thu, 22 Feb
+ 2024 17:22:02 +0800
+Date: Thu, 22 Feb 2024 17:21:19 +0800
+From: Changbin Du <changbin.du@huawei.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+CC: Changbin Du <changbin.du@huawei.com>, <live-patching@vger.kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, <linux-modules@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Xiaoyi Su <suxiaoyi@huawei.com>, "Eric
+ Chanudet" <echanude@redhat.com>
+Subject: Re: [PATCH v3] modules: wait do_free_init correctly
+Message-ID: <20240222092119.tp6kls4ycnsflcgm@M910t>
+References: <20240217081810.4155871-1-changbin.du@huawei.com>
+ <ZdY1oHl8L8wDEvlW@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <vxx2o2wdcqjkxauglu7ul52mygu4tti2i3yc2dvmcbzydvgvu2@knujflwtakni>
+In-Reply-To: <ZdY1oHl8L8wDEvlW@bombadil.infradead.org>
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemd100011.china.huawei.com (7.221.188.204)
 
-On Wed, Feb 21, 2024 at 07:34:44PM -0500, Kent Overstreet wrote:
-> On Wed, Feb 21, 2024 at 04:25:02PM -0800, Kees Cook wrote:
-> > On Wed, Feb 21, 2024 at 06:29:17PM -0500, Kent Overstreet wrote:
-> > > On Wed, Feb 21, 2024 at 03:05:32PM -0800, Kees Cook wrote:
-> > > > On Wed, Feb 21, 2024 at 11:40:27AM -0800, Suren Baghdasaryan wrote:
-> > > > > [...]
-> > > > > +struct alloc_tag {
-> > > > > +	struct codetag			ct;
-> > > > > +	struct alloc_tag_counters __percpu	*counters;
-> > > > > +} __aligned(8);
-> > > > > [...]
-> > > > > +#define DEFINE_ALLOC_TAG(_alloc_tag)						\
-> > > > > +	static DEFINE_PER_CPU(struct alloc_tag_counters, _alloc_tag_cntr);	\
-> > > > > +	static struct alloc_tag _alloc_tag __used __aligned(8)			\
-> > > > > +	__section("alloc_tags") = {						\
-> > > > > +		.ct = CODE_TAG_INIT,						\
-> > > > > +		.counters = &_alloc_tag_cntr };
-> > > > > [...]
-> > > > > +static inline struct alloc_tag *alloc_tag_save(struct alloc_tag *tag)
-> > > > > +{
-> > > > > +	swap(current->alloc_tag, tag);
-> > > > > +	return tag;
-> > > > > +}
-> > > > 
-> > > > Future security hardening improvement idea based on this infrastructure:
-> > > > it should be possible to implement per-allocation-site kmem caches. For
-> > > > example, we could create:
-> > > > 
-> > > > struct alloc_details {
-> > > > 	u32 flags;
-> > > > 	union {
-> > > > 		u32 size; /* not valid after __init completes */
-> > > > 		struct kmem_cache *cache;
-> > > > 	};
-> > > > };
-> > > > 
-> > > > - add struct alloc_details to struct alloc_tag
-> > > > - move the tags section into .ro_after_init
-> > > > - extend alloc_hooks() to populate flags and size:
-> > > > 	.flags = __builtin_constant_p(size) ? KMALLOC_ALLOCATE_FIXED
-> > > > 					    : KMALLOC_ALLOCATE_BUCKETS;
-> > > > 	.size = __builtin_constant_p(size) ? size : SIZE_MAX;
-> > > > - during kernel start or module init, walk the alloc_tag list
-> > > >   and create either a fixed-size kmem_cache or to allocate a
-> > > >   full set of kmalloc-buckets, and update the "cache" member.
-> > > > - adjust kmalloc core routines to use current->alloc_tag->cache instead
-> > > >   of using the global buckets.
-> > > > 
-> > > > This would get us fully separated allocations, producing better than
-> > > > type-based levels of granularity, exceeding what we have currently with
-> > > > CONFIG_RANDOM_KMALLOC_CACHES.
-> > > > 
-> > > > Does this look possible, or am I misunderstanding something in the
-> > > > infrastructure being created here?
-> > > 
-> > > Definitely possible, but... would we want this?
-> > 
-> > Yes, very very much. One of the worst and mostly unaddressed weaknesses
-> > with the kernel right now is use-after-free based type confusion[0], which
-> > depends on merged caches (or cache reuse).
-> > 
-> > This doesn't solve cross-allocator (kmalloc/page_alloc) type confusion
-> > (as terrifyingly demonstrated[1] by Jann Horn), but it does help with
-> > what has been a very common case of "use msg_msg to impersonate your
-> > target object"[2] exploitation.
+On Wed, Feb 21, 2024 at 09:40:48AM -0800, Luis Chamberlain wrote:
+> + live-patching folks,
 > 
-> We have a ton of code that references PAGE_SIZE and uses the page
-> allocator completely unnecessarily - that's something worth harping
-> about at conferences; if we could motivate people to clean that stuff up
-> it'd have a lot of positive effects.
+> Finally, things are starting to be much clearer. Thanks for the time
+> for working on this, some more comments below and a question which
+> I think deserves some attention.
 > 
-> > > That would produce a _lot_ of kmem caches
+> On Sat, Feb 17, 2024 at 04:18:10PM +0800, Changbin Du wrote:
+> > The synchronization here is just to ensure the module init's been freed
+> > before doing W+X checking. 
+> 
+> Some nits, this should read instead:
+> 
+> Fix the ordering of freeing of a module init so that it happens before
+> W+X checking.
+> 
+> > But the commit 1a7b7d922081 ("modules: Use
+> > vmalloc special flag") moves do_free_init() into a global workqueue
+> > instead of call_rcu(). So now rcu_barrier() can not ensure that do_free_init
+> > has completed. We should wait it via flush_work().
+> 
+> Remove "But" and adjust as:
+> 
+> Commit 1a7b7d922081 ("modules: Use vmalloc special flag") moved
+> calling do_free_init() into a global workqueue instead of relying on it
+> being called through call_rcu(..., do_free_init), which used to allowed us
+> call do_free_init() asynchronously after the end of a subsequent grace             
+> period. The move to a global workqueue broke the gaurantees for code
+> which needed to be sure the do_free_init() would complete with rcu_barrier().
+> To fix this callers which used to rely on rcu_barrier() must now instead
+> use flush_work(&init_free_wq).
+>
+Sure, thanks!
+
+> > Without this fix, we still could encounter false positive reports in
+> > W+X checking,
+> 
+> This is good thanks for the clarification.
+> 
+> I think it would be useful for the commit log then to describe also that
+> it is not that the freeing was not happening, it is just that our sanity
+> checkers raced against the permission checkers which assume init memory
+> is already gone.
+> 
+okay, I'll apend this detailed explanation.
+
+> > and the rcu synchronization is unnecessary which can
+> > introduce significant delay.
+> 
+> While this can be true, I am not sure if we can remove it. See below.
+> 
+> > Eric Chanudet reports that the rcu_barrier introduces ~0.1s delay on a
+> > PREEMPT_RT kernel.
+> 
+> That's a separate issue.
+> 
+> >   [    0.291444] Freeing unused kernel memory: 5568K
+> >   [    0.402442] Run /sbin/init as init process
 > > 
-> > Fewer than you'd expect, but yes, there is some overhead. However,
-> > out-of-tree forks of Linux have successfully experimented with this
-> > already and seen good results[3].
+> > With this fix, the above delay can be eliminated.
+> > 
+> > Fixes: 1a7b7d922081 ("modules: Use vmalloc special flag")
+> > Signed-off-by: Changbin Du <changbin.du@huawei.com>
+> > Cc: Xiaoyi Su <suxiaoyi@huawei.com>
+> > Cc: Eric Chanudet <echanude@redhat.com>
+> > 
+> > ---
+> > v3:
+> >   - amend comment in do_init_module() and update commit msg.
+> > v2:
+> >   - fix compilation issue for no CONFIG_MODULES found by 0-DAY.
+> > ---
+> >  include/linux/moduleloader.h | 8 ++++++++
+> >  init/main.c                  | 5 +++--
+> >  kernel/module/main.c         | 9 +++++++--
+> >  3 files changed, 18 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+> > index 001b2ce83832..89b1e0ed9811 100644
+> > --- a/include/linux/moduleloader.h
+> > +++ b/include/linux/moduleloader.h
+> > @@ -115,6 +115,14 @@ int module_finalize(const Elf_Ehdr *hdr,
+> >  		    const Elf_Shdr *sechdrs,
+> >  		    struct module *mod);
+> >  
+> > +#ifdef CONFIG_MODULES
+> > +void flush_module_init_free_work(void);
+> > +#else
+> > +static inline void flush_module_init_free_work(void)
+> > +{
+> > +}
+> > +#endif
+> > +
+> >  /* Any cleanup needed when module leaves. */
+> >  void module_arch_cleanup(struct module *mod);
+> >  
+> > diff --git a/init/main.c b/init/main.c
+> > index e24b0780fdff..f0b7e21ac67f 100644
+> > --- a/init/main.c
+> > +++ b/init/main.c
+> > @@ -99,6 +99,7 @@
+> >  #include <linux/init_syscalls.h>
+> >  #include <linux/stackdepot.h>
+> >  #include <linux/randomize_kstack.h>
+> > +#include <linux/moduleloader.h>
+> >  #include <net/net_namespace.h>
+> >  
+> >  #include <asm/io.h>
+> > @@ -1402,11 +1403,11 @@ static void mark_readonly(void)
+> >  	if (rodata_enabled) {
+> >  		/*
+> >  		 * load_module() results in W+X mappings, which are cleaned
+> > -		 * up with call_rcu().  Let's make sure that queued work is
+> > +		 * up with init_free_wq. Let's make sure that queued work is
+> >  		 * flushed so that we don't hit false positives looking for
+> >  		 * insecure pages which are W+X.
+> >  		 */
+> > -		rcu_barrier();
 > 
-> So in that case - I don't think there's any need for a separate
-> alloc_details; we'd just add a kmem_cache * to alloc_tag and then hook
-> into the codetag init/unload path to create and destroy the kmem caches.
+> Was this the only source of waiters that used rcu_barrier() to sync ?
+> What about kallsyms, live-patching ?
+> 
+> This original source to the addition of this rcu_barrier() (in a slight
+> older modified form with with rcu_barrier_sched()) was commit
+> ae646f0b9ca13 ("init: fix false positives in W+X checking") since
+> v4.17 in 2018, 6 years ago. So I'm hoping we don't have any other
+> side-by new users which have grown dependent on this rcu_barrier() for
+> other call_rcu()'s they may have used, but it is hard to tell.
+> 
+Per the condtion 'rodata_enabled' and comments, I think the rcu_barrier() is
+only used to synchronize with freeing module init memory.
 
-Okay, sounds good. There needs to be a place to track "is this a fixed
-size or a run-time size" choice.
+> So while I agree that flush work is the right solution, removing the
+> rcu_barrier() is technically another change which could potentially
+> regress for other reasons now. It is perhaps safe, but I'm used to
+> surprises for minor changes like these. So I think it makes sense to
+> lift it now, and test it in the wild to see what could possibly break,
+> I'd much prefer to split this as two separate commits. One which does
+> the fix, and another that lifts the rcu_barrier() with the stated
+> rationale and savings on time of ~0.1s on PREEMPT_RT kernels.
+>
+But the only change in patch is to replace rcu_barrier() with flush_module_init_free_work().
 
-> No need to adjust the slab code either; alloc_hooks() itself could
-> dispatch to kmem_cache_alloc() instead of kmalloc() if this is in use.
+Do you mean that keep both flush_module_init_free_work() and rcu_barrier() here?
+It sounds a little bit weird IMHO.
 
-Right, it'd go to either kmem_cache_alloc() directly, or to a modified
-kmalloc() that used the passed-in cache is the base for an array of sized
-buckets, rather than the global (or 16-way global) buckets.
-
-Yay for the future!
+>   Luis
 
 -- 
-Kees Cook
+Cheers,
+Changbin Du
