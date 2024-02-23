@@ -1,97 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328EB82C8D;
-	Fri, 23 Feb 2024 15:44:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C97143C54
+	for <linux-modules@vger.kernel.org>; Fri, 23 Feb 2024 19:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708703067; cv=none; b=pIiAEhA9oS9NPRC4DIOk1MHB84NfhKrY7mqcSvtcEgkJxiTfjgt7dMaJ96p/Il4HB8hVtffRStX5sVOWXoUX9WRQr3SaYxV+d0gYSA0F1htsaGaEfbSp5J8Rf9Ik1zgWBlMbe+wkWIXCYofUl02+Vm556vCOugrKXjx9/rlyIvQ=
+	t=1708716415; cv=none; b=A0gx06YM0i8qO0LV8SktzfSGXq8LGTb6ftPA2jOdFoCGin9HoGe+obd9MngPyYKXk9Gs8Ze8XvzOXUG/Ge+PZgAEBAQ5sLCrEaKqrKHAMV4ybJHxa+7Pgbf+HxPOI50Y7iutiONmo8ecvWl52YB6SXnEQGsF5i+iG62FJm66OkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708703067; c=relaxed/simple;
-	bh=R6iH4ESTC3Kq6YCVIhRC6TmpqBJtDbDbnX0oGo22lW4=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=L9S9cQoIhexXQrikOVerdmYtfJZWux0k3Bjm84PrSrll3Sn8TMDNwuKUIyz4Nx1rWhbfacvI08EdOEE22eXS/pPjNSkq6agHdZdwJPBR/9VWHlwdFIei54VS6USfRIOU3LFTQl2lTU5JbrgTm5sV5n5lJW2Rz67IL8hcASk2dV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fz80AxU0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1708716415; c=relaxed/simple;
+	bh=R6zUV9LQ644WPBwU2nAdaKkCRupl6ITF2pP4ziWZMV0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pjiUgwRQ83Xn6W7xMuFzd7Dc+ktDGWQgoQs2q3RMg8qCdzmgC+7nPSVTdn7denFPReeA8NSBVeFfj/HQS/CR+YppuosgXFpiN7EHLtESSYHRfZjJ8gKs/aU6L27YVpJL1hZ9pXcTks1IteiqgN7RV6oa8kUePWJHNw55gs5B3BI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OpCi4S7E; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fz80AxU0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF91C433C7;
-	Fri, 23 Feb 2024 15:44:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708703066;
-	bh=R6iH4ESTC3Kq6YCVIhRC6TmpqBJtDbDbnX0oGo22lW4=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Fz80AxU0PIbRBe6Oi0+AgajU+alOCo/lnsxfIosuXr6AhyZIO+R7SSWdrgymDCodo
-	 oU2/45HJv1O3Vs7z0Ao4e7pVVSyGmij29lnsP5ichRm4/Yw7QWPnzW4LBI+4IMniGX
-	 LMx8zZPUhDmhoapwoxDfHvybUaEG187wbagfRSsV/UBvmYIF6LTSbmG5+PX6EpI0Hd
-	 I+IRQZ4ONQLBbNLTdz4eiR4FegJIYHkcr35r3wRFzhBpIPpeEZTLsc/+zdJtnaPJum
-	 EmV0OC03mo2fw/JtyQ2i3WJWBJXmBwWTB2iW3+wrATDzw3C+gHqhlmvaLRsVClC51z
-	 9XaVxtIjV5FOA==
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-412895f726dso3516895e9.3;
-        Fri, 23 Feb 2024 07:44:26 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUaAYUCog10uVfihte42vUEjtq4d2qg9JCbZIirxZMZpD2rgxUA3oNOVV0Py2aRzfBezY/+XCK5Owx6Hil5dD+9Oeg/SerkrqezQwyf9J/ktlkE69Yfp0ckY6G9BS5O9fm4DSzRvSwUbU6GdeY=
-X-Gm-Message-State: AOJu0YxNjvgDBrrEnVWKnyppb+ehSQ09Y+bY/HXuRRNu8Ct487zJfcxb
-	mctTC/wT0c0z+9mEtAQZjsyAoXYIrSZXaVGc3n7HX4JgC3AfHnUphrM9068YrjTkZeKTnBpDZ/U
-	SVTerMp4zuUQ4A8WRoI2Be3QZD/o=
-X-Google-Smtp-Source: AGHT+IFAHU2DYSVpLtUN+AuuXLIgrjxuGtjU3lFiTDM+GvGPfNBe13UhGy4lkxk7QbANNafrthVxif/lQp+LyNB+Ewg=
-X-Received: by 2002:a05:600c:1d1a:b0:412:6c30:59ff with SMTP id
- l26-20020a05600c1d1a00b004126c3059ffmr177767wms.0.1708703065283; Fri, 23 Feb
- 2024 07:44:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OpCi4S7E"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-607dec82853so12873477b3.3
+        for <linux-modules@vger.kernel.org>; Fri, 23 Feb 2024 11:26:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708716412; x=1709321212; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R6zUV9LQ644WPBwU2nAdaKkCRupl6ITF2pP4ziWZMV0=;
+        b=OpCi4S7EIle74AF4FZHaIEyLZXNxInq/DezUptdf3Dtyp+NkJo+dehUdZWG2qusLIi
+         bt8qF0ES+0LRUSPqWcX3BhMdXjaIdmafbMwRL9IPIvSNXVQcek1Jj0OLzR/dzhi+w7to
+         dAXnDGoFer1u6qbebk7TeotLVef6+Rz6kG/IIQYYpJYnHAms2nBdwshn2RMbFLixh9yV
+         eZZ0uK4Fjh1XP2wbWR9k7FrQhpvdHVp19ivE5SZkX2rlJbmBquB+IxJZ7azGQfDfOpLl
+         DtRq+AvFDvwCsisaBmPWMyn88TDIfYFY/bu64HZB+J1w9y9ZRnJSSKlJoV24LCl5T0vH
+         ZewQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708716412; x=1709321212;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R6zUV9LQ644WPBwU2nAdaKkCRupl6ITF2pP4ziWZMV0=;
+        b=GhlH0JOcmvEl8+8c9L+fv2mVcuknR4Of4Aw1iCZIQ8NLpUC67OmHlaanCMX8cY1t2a
+         o3K3Rdm7BsGLfq0zZ8YtPJjOkv/wjAIOhW64fNYAhAqnqcCNC/PaJPZKMMHFGhey2+mK
+         ok+TGiQR6mS8QDIsi9Dko1gv8MiioGsxF3YdUeAIQP3Fk3uiiA55WEL4DwtI6wpH2PWc
+         q/d9uUf/nR9mmmBrRnlmcbysfX40qHtUh2X+AR+t5CVE5YnLr1oZlIf76o+K4/8Hc2v6
+         smj0sO0owoGwlil1xrOPmzAQjFZWh1GUM108V9q+t7Qau7WIqixetUkv7L7lc2yUSDF0
+         FUzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXmlykqom5x2wssHwqFBGADE3RJ4gR9tKPC6hrHW7NjnFvFhuG/Rgvv3tiRf72I7V7NT9YscWV9yxFLCMuZeszPTg4W8LXKxCoBO9/2Xw==
+X-Gm-Message-State: AOJu0Yw8q14jUOm+3pzsFQfuFFwrCVkUnc3ZG7af5VZtfOU0t/BMsXmv
+	O2EwolkcDWHOLmahFmNnG8XcuNFOoz9j5PG0gy+lBRlSWzrcnMw5ce2l122m1ikYW3sRN62MK4+
+	iEfWXmDHlxvwCMDGqx0vbk3gWU12lkOhPWgyz
+X-Google-Smtp-Source: AGHT+IE/Pl6hrmaYgXKRMYbWWj3alWqUpkDIYPYsJjZVZ7mPx6TO4HEVqSuGco97bbBAS2NUd8BFNQPQR2paQWXSoCg=
+X-Received: by 2002:a25:2653:0:b0:dc6:b088:e742 with SMTP id
+ m80-20020a252653000000b00dc6b088e742mr843579ybm.8.1708716411749; Fri, 23 Feb
+ 2024 11:26:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Luis Chamberlain <mcgrof@kernel.org>
-Date: Fri, 23 Feb 2024 07:44:12 -0800
-X-Gmail-Original-Message-ID: <CAB=NE6VRZFn+jxmxADGb3j7fLzBG9rAJ-9RCddEwz0HtwvtHxg@mail.gmail.com>
-Message-ID: <CAB=NE6VRZFn+jxmxADGb3j7fLzBG9rAJ-9RCddEwz0HtwvtHxg@mail.gmail.com>
-Subject: Automation with 0-day & kdevops
-To: 0day robot <lkp@intel.com>, kdevops@lists.linux.dev
-Cc: Joel Granados <j.granados@samsung.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Christian Brauner <brauner@kernel.org>, Hugh Dickins <hughd@google.com>, 
-	Gustavo Padovan <gustavo.padovan@collabora.com>, linux-modules@vger.kernel.org, 
-	Kees Cook <keescook@chromium.org>, Linux FS Devel <linux-fsdevel@vger.kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>
+References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-7-surenb@google.com>
+ <Zdc6LUWnPOBRmtZH@tiehlicka> <20240222132410.6e1a2599@meshulam.tesarici.cz>
+In-Reply-To: <20240222132410.6e1a2599@meshulam.tesarici.cz>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Fri, 23 Feb 2024 11:26:40 -0800
+Message-ID: <CAJuCfpGNoMa4G3o_us+Pn2wvAKxA2L=7WEif2xHT7tR76Mbw5g@mail.gmail.com>
+Subject: Re: [PATCH v4 06/36] mm: enumerate all gfp flags
+To: =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>
+Cc: Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org, kent.overstreet@linux.dev, 
+	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
+	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
+	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
+	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
+	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
+	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Dear 0-day developers,
+On Thu, Feb 22, 2024 at 4:24=E2=80=AFAM 'Petr Tesa=C5=99=C3=ADk' via kernel=
+-team
+<kernel-team@android.com> wrote:
+>
+> On Thu, 22 Feb 2024 13:12:29 +0100
+> Michal Hocko <mhocko@suse.com> wrote:
+>
+> > On Wed 21-02-24 11:40:19, Suren Baghdasaryan wrote:
+> > > Introduce GFP bits enumeration to let compiler track the number of us=
+ed
+> > > bits (which depends on the config options) instead of hardcoding them=
+.
+> > > That simplifies __GFP_BITS_SHIFT calculation.
+> > >
+> > > Suggested-by: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > Reviewed-by: Kees Cook <keescook@chromium.org>
+> >
+> > I thought I have responded to this patch but obviously not the case.
+> > I like this change. Makes sense even without the rest of the series.
+> > Acked-by: Michal Hocko <mhocko@suse.com>
+>
+> Thank you, Michal. I also hope it can be merged without waiting for the
+> rest of the series.
 
-kdevops [0] has evolved over the years now to a full automation suite
-for kernel development and testing. As for the later aspects of it, we
-use it to enable complicated subsystem tests such as filesystems
-testing. Our automated filesystem coverage has been rather reduced
-given the complexity, and so one of its goals was to tackle this. It
-also has support to automate testing complex subsystems involving
-custom non-upstream yet for things like qemu as well.
+Thanks Michal! I can post it separately. With the Ack I don't think it
+will delay the rest of the series.
+Thanks,
+Suren.
 
-While long term we'd like to aim towards automating most of the things
-tested under kdevops, it makes sense to start slow with a few simpler
-targets. Since kdevops supports kselftests as well, my recommendation
-is we start with a few selftests for components we have kernel
-maintainers willing to help with either review or help tune up. The
-same applies to filesystems. While we have support to test most
-popular filesystems it makes sense to start with something simple.
-
-To this end I'd like to see if we can collaborate with 0-day so enable
-automation of testing for the following components, the first 3 of
-which I help maintain:
-
-With kdevops using its kernel selftests support:
-
-  * Linux kernel modules: using kernel selftests and userspace kmod tests
-  * Linux firmware loader: firmware selftests
-  * Linux sysctl
-
-As for filesystems I'd like to start with tmpfs as we have a developer
-who already has a good baseline for it, and is helping to fix some
-fstests bugs found, Daniel Gomez. We also have created different
-target profiles to test tmpfs for the different mount options it
-supports.
-
-What would this collaboration consist of? Using 0-day's automated to
-git clone kdevops, spawn some resouces and run a series of make
-commands. If git diff returns non-empty we have a new failure.
-
-[0] https://github.com/linux-kdevops/kdevops
-
- Luis
+>
+> Petr T
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
