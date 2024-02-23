@@ -1,118 +1,97 @@
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E896312D
-	for <linux-modules@vger.kernel.org>; Fri, 23 Feb 2024 11:05:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328EB82C8D;
+	Fri, 23 Feb 2024 15:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708686338; cv=none; b=l7I7PYoRJ3H0fplh+42F/QV8f6UCeFA1O/WY1oU3shmOpz/XSTg2S4zrlbO3SFe+URxFX94xTG2t/8UobEbQPmf7GL2IWKGpQ0eXFyx54vgpdBbUrnBiCQighc5zMN2CP8DOPEMPBcezey3QsKmOfimWdicQ0cW2qWL7C80WD5Y=
+	t=1708703067; cv=none; b=pIiAEhA9oS9NPRC4DIOk1MHB84NfhKrY7mqcSvtcEgkJxiTfjgt7dMaJ96p/Il4HB8hVtffRStX5sVOWXoUX9WRQr3SaYxV+d0gYSA0F1htsaGaEfbSp5J8Rf9Ik1zgWBlMbe+wkWIXCYofUl02+Vm556vCOugrKXjx9/rlyIvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708686338; c=relaxed/simple;
-	bh=gLF893H01+4CIbxVyEqixtUnHdy+Hc9VAq7Ht4oUyeQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GM5jiJxmKvt8u64Y9NabIKzwMMsaf/6aDVQPFgv8BbAanvaCvC0SXsEfcj5xhaOaezJszUQD5uHjvw48bdzDEb3rd9nE0L3odpvI2RCxCqXuMadfcWqY6ykf+6FizaRiEIZHke9E3ppD7rlq/qSVSJMyUmHZAVovZ3P68SIXbXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OVT/kvJ+; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1708703067; c=relaxed/simple;
+	bh=R6iH4ESTC3Kq6YCVIhRC6TmpqBJtDbDbnX0oGo22lW4=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=L9S9cQoIhexXQrikOVerdmYtfJZWux0k3Bjm84PrSrll3Sn8TMDNwuKUIyz4Nx1rWhbfacvI08EdOEE22eXS/pPjNSkq6agHdZdwJPBR/9VWHlwdFIei54VS6USfRIOU3LFTQl2lTU5JbrgTm5sV5n5lJW2Rz67IL8hcASk2dV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fz80AxU0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OVT/kvJ+"
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dcc80d6004bso701574276.0
-        for <linux-modules@vger.kernel.org>; Fri, 23 Feb 2024 03:05:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708686336; x=1709291136; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j51sFr4+svbsg210/vmMJ0Gv39Rziz4dgFzodiJo6j8=;
-        b=OVT/kvJ+owbqyyIhHaR6ZZsd7rI2CeeNy71vmOAApfWTSH4D+0FK2v02KXXKRBU+MQ
-         ueXJ3LKpWIe1xs/hRSjhgbhWgWuzVCw/M4adbt5Aq9ZQ2pSHHij9UaUjR54I6nrGslVG
-         FJQFs8HHT98SII3cT3wSkwn3fn0ANOz2DGhJR/HlJg+kqxK61ppdk3WTE8xuUmLBnpV/
-         DYjNClhrDER2U1mN8lNFHIAUBUZYvdgX+nOEaU5HA8rdZnfh3K3PDgy4MeGUg70zMkee
-         4+b2ZsYigivl7jr7sBvMU5HChOjtKotw7/pI/w5klKleB2N8w+FsEP0O1N1kryVxEBMb
-         Qs1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708686336; x=1709291136;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j51sFr4+svbsg210/vmMJ0Gv39Rziz4dgFzodiJo6j8=;
-        b=vdddf3K5NBAzOTi/QcJCZE/R0azmxbZqm4US3gUErGlal3dtBlEDS75B7ZchR0kwVz
-         Lt+EPd7pIv005C0fUJkDC4tOYaFmHLd80z3GbyjGvUl2IRIYAvxY3Y5qUen81inJGGF+
-         FKx2uZ7/WGgDZ8swkef05RJ+Op8LndpKMfDeuDOeuFQ6Ccr3tkJZexfOMEVRvP4i/Kio
-         UThn7Q/6SY98QepHTjU0+iFfynXthxVauZj4a3YzUIu12u6UuK/Iw6TX3p2q1/RmMzmy
-         f4oenB88dpYGyFCis9dbchxv3FRKBl+LTVFPhCplWu7/2KzWzxfGlwd6oyo+/7Z/u1Lr
-         H/bw==
-X-Gm-Message-State: AOJu0YxI+8yTAgIXe5C1F+2ytI7xv1i+DVOmftAo5/eZ8B8nGwQ8dRyW
-	/KGYXp+jTWlxq/QqpjwyvSGqtw49m00Q0wIMbDh7OEee0Y9LzFt6dhgIPXL59K1tjReyj18hxbm
-	idxbq32AOxtt15kekgY+8cg1hYBvQAqoA
-X-Google-Smtp-Source: AGHT+IFkSbXEjgVYcaFepf6XeG6SzpjPKFwLTe0kxxQIIWwfUn34f1PjR7NgrvfIlrIC/rxYu4zVU8OZk+1qFRsUN2E=
-X-Received: by 2002:a5b:bd2:0:b0:dc7:4a94:d867 with SMTP id
- c18-20020a5b0bd2000000b00dc74a94d867mr1607325ybr.36.1708686335634; Fri, 23
- Feb 2024 03:05:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fz80AxU0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF91C433C7;
+	Fri, 23 Feb 2024 15:44:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708703066;
+	bh=R6iH4ESTC3Kq6YCVIhRC6TmpqBJtDbDbnX0oGo22lW4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Fz80AxU0PIbRBe6Oi0+AgajU+alOCo/lnsxfIosuXr6AhyZIO+R7SSWdrgymDCodo
+	 oU2/45HJv1O3Vs7z0Ao4e7pVVSyGmij29lnsP5ichRm4/Yw7QWPnzW4LBI+4IMniGX
+	 LMx8zZPUhDmhoapwoxDfHvybUaEG187wbagfRSsV/UBvmYIF6LTSbmG5+PX6EpI0Hd
+	 I+IRQZ4ONQLBbNLTdz4eiR4FegJIYHkcr35r3wRFzhBpIPpeEZTLsc/+zdJtnaPJum
+	 EmV0OC03mo2fw/JtyQ2i3WJWBJXmBwWTB2iW3+wrATDzw3C+gHqhlmvaLRsVClC51z
+	 9XaVxtIjV5FOA==
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-412895f726dso3516895e9.3;
+        Fri, 23 Feb 2024 07:44:26 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUaAYUCog10uVfihte42vUEjtq4d2qg9JCbZIirxZMZpD2rgxUA3oNOVV0Py2aRzfBezY/+XCK5Owx6Hil5dD+9Oeg/SerkrqezQwyf9J/ktlkE69Yfp0ckY6G9BS5O9fm4DSzRvSwUbU6GdeY=
+X-Gm-Message-State: AOJu0YxNjvgDBrrEnVWKnyppb+ehSQ09Y+bY/HXuRRNu8Ct487zJfcxb
+	mctTC/wT0c0z+9mEtAQZjsyAoXYIrSZXaVGc3n7HX4JgC3AfHnUphrM9068YrjTkZeKTnBpDZ/U
+	SVTerMp4zuUQ4A8WRoI2Be3QZD/o=
+X-Google-Smtp-Source: AGHT+IFAHU2DYSVpLtUN+AuuXLIgrjxuGtjU3lFiTDM+GvGPfNBe13UhGy4lkxk7QbANNafrthVxif/lQp+LyNB+Ewg=
+X-Received: by 2002:a05:600c:1d1a:b0:412:6c30:59ff with SMTP id
+ l26-20020a05600c1d1a00b004126c3059ffmr177767wms.0.1708703065283; Fri, 23 Feb
+ 2024 07:44:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240217-autoconf-manpage-warns-v1-1-e1570cfc286e@gmail.com> <63an63knqvcxyxh5ejx64bsxgpooikbba5inrd2kzbxuhuuenc@nk644hvv5j2p>
-In-Reply-To: <63an63knqvcxyxh5ejx64bsxgpooikbba5inrd2kzbxuhuuenc@nk644hvv5j2p>
-From: Emil Velikov <emil.l.velikov@gmail.com>
-Date: Fri, 23 Feb 2024 11:05:24 +0000
-Message-ID: <CACvgo53NkaRHbgBkWbiDwSKfUXGRDqV48-zD_NyakjqxUjF8Yg@mail.gmail.com>
-Subject: Re: [PATCH kmod] man: silence autoconf warnings
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: linux-modules@vger.kernel.org
+From: Luis Chamberlain <mcgrof@kernel.org>
+Date: Fri, 23 Feb 2024 07:44:12 -0800
+X-Gmail-Original-Message-ID: <CAB=NE6VRZFn+jxmxADGb3j7fLzBG9rAJ-9RCddEwz0HtwvtHxg@mail.gmail.com>
+Message-ID: <CAB=NE6VRZFn+jxmxADGb3j7fLzBG9rAJ-9RCddEwz0HtwvtHxg@mail.gmail.com>
+Subject: Automation with 0-day & kdevops
+To: 0day robot <lkp@intel.com>, kdevops@lists.linux.dev
+Cc: Joel Granados <j.granados@samsung.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Christian Brauner <brauner@kernel.org>, Hugh Dickins <hughd@google.com>, 
+	Gustavo Padovan <gustavo.padovan@collabora.com>, linux-modules@vger.kernel.org, 
+	Kees Cook <keescook@chromium.org>, Linux FS Devel <linux-fsdevel@vger.kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 20 Feb 2024 at 21:56, Lucas De Marchi <lucas.demarchi@intel.com> wrote:
->
-> On Sat, Feb 17, 2024 at 04:01:26PM +0000, Emil Velikov via B4 Relay wrote:
-> >From: Emil Velikov <emil.l.velikov@gmail.com>
-> >
-> >Currently we have a pattern rule, which effective states that two output
-> >files are produced - %.5 and %.8. Although that's not the case in
-> >practise, since each input xml will be generated to a single manual
-> >page.
-> >
-> >Add the manpage section as part of the xml filename and tweak the
-> >pattern (match) rule, accordingly.
-> >
-> >Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
-> >---
-> >Noticed, while wondering if I should add sanitizer support to the
-> >autoconf build.
-> >
-> >A few, random questions:
-> > - are there any objections to adding sanitizers support?
->
-> no
->
-> > - would a meson.build be acceptable? Giving us sanitizers, coverage,
-> >   scan-build, etc out of the box
->
-> yes. A few years ago we converted to meson but I think a few things were
-> not working properly and we never finished that. If you few like adding
-> that for the next version, feel free to use that as base:
->
-> https://github.com/falconindy/kmod.git meson
->
-> > - writing xml is fiddly, would people be OK if we convert them to
-> >   scdoc? here are some examples of the raw file [1] vs the man [2]
->
-> first time I hear about scdoc. syntax seems simple, but I do wonder how
-> common it is in distros compared to e.g. pandoc or other options to
-> produce manpages.
->
-> I know mkosi writes markdown and converts that to a manpage
-> (https://github.com/systemd/mkosi) and dim uses rst2man
-> (https://gitlab.freedesktop.org/drm/maintainer-tools.git)
->
-> Any of those options seems better than writing xml, so I won't oppose to
-> scdoc if it's available in multiple distros out of the box in a version
-> that is sufficient for us.
->
+Dear 0-day developers,
 
-Neat, thanks for the input and pointers. Will do some digging and
-provide a summary wrt scdoc/rst2man
+kdevops [0] has evolved over the years now to a full automation suite
+for kernel development and testing. As for the later aspects of it, we
+use it to enable complicated subsystem tests such as filesystems
+testing. Our automated filesystem coverage has been rather reduced
+given the complexity, and so one of its goals was to tackle this. It
+also has support to automate testing complex subsystems involving
+custom non-upstream yet for things like qemu as well.
 
--Emil
+While long term we'd like to aim towards automating most of the things
+tested under kdevops, it makes sense to start slow with a few simpler
+targets. Since kdevops supports kselftests as well, my recommendation
+is we start with a few selftests for components we have kernel
+maintainers willing to help with either review or help tune up. The
+same applies to filesystems. While we have support to test most
+popular filesystems it makes sense to start with something simple.
+
+To this end I'd like to see if we can collaborate with 0-day so enable
+automation of testing for the following components, the first 3 of
+which I help maintain:
+
+With kdevops using its kernel selftests support:
+
+  * Linux kernel modules: using kernel selftests and userspace kmod tests
+  * Linux firmware loader: firmware selftests
+  * Linux sysctl
+
+As for filesystems I'd like to start with tmpfs as we have a developer
+who already has a good baseline for it, and is helping to fix some
+fstests bugs found, Daniel Gomez. We also have created different
+target profiles to test tmpfs for the different mount options it
+supports.
+
+What would this collaboration consist of? Using 0-day's automated to
+git clone kdevops, spawn some resouces and run a series of make
+commands. If git diff returns non-empty we have a new failure.
+
+[0] https://github.com/linux-kdevops/kdevops
+
+ Luis
