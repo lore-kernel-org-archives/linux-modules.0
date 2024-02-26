@@ -1,195 +1,203 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D49BEED5;
-	Sun, 25 Feb 2024 11:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708860552; cv=fail; b=jxPOY6AZ0TJMc9w/leW5cJU0E2pPgIjLV4dEtl1hXRr1CLNjIr5pMYNIqef/iCNKVGz+F+an6bnZOKwPuQ8qOLkyGu+2y8QiSWtIo69PTUHetBhqwtfhSnl5PAfMu5x2G+2o8Rhhgcw1MwxaMcKmn5XBid27SA4xItRjNVYDTP8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708860552; c=relaxed/simple;
-	bh=5444LbxxZmS9GOJ0fGNdTvaqnng2/kKH9ciYJ+L4yT4=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=oDMUS8S+c2lTbcnwdAfHXUyvXt5GW0uVa/5euEfs0jhh91o8DFc+47bDVsNUCznopQFpkEK3ZvKSCMYU7nBkihuiamnabdjO/RyzkZzGiFt/m/BBB2Jz6i92GV4NJIC9JkC2NF9SiIA23nzXOhWKEEvdCcfXYaZU/frW6wcDK2M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cfdlt0I8; arc=fail smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422B04437;
+	Mon, 26 Feb 2024 14:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708957897; cv=none; b=UWFzU20mDPpM0bxZTRqNy0xovdtODBhRLW50mbitaM0qWzTayYNSiuSS5/EvcHklhrEroTuAjr2ZlvbAu2+CNfIokvWdf84/1hAN5PMHLnMN03Npn5h2Q65Cn11hJYD+AUsypT5lp/mtpTaFW/BnzdV0gM3IvKU1K8+9HimNfDg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708957897; c=relaxed/simple;
+	bh=fnHu4UQXyrGGMCbw1L/KhlGYrzsR9YX7kcSF9CXHRV4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Eb/DoEjyuXx41vwjHBp0qYpypXJtbxhC5AF11tDZWJviOmoJo2x+mWdgf9YRbJL0GfB4jxpIZQpl1w5s+g2EB1ZlRYeBOfZZblsV9OunL03K4AxorviJ3cqPiszmDU4DHvO0CleL3cYndYgipilnQ2Cxuw/RXXGUzjoF4LbzGlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=s3LB6WwA; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=PYurhS4h; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=SFvcoWun; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CjlFK5sf; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cfdlt0I8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708860550; x=1740396550;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=5444LbxxZmS9GOJ0fGNdTvaqnng2/kKH9ciYJ+L4yT4=;
-  b=Cfdlt0I8lITpCk4ORAsCx66ki/OV8XdAxJ5EgPm0Hy8bYlbPSldLuGzz
-   dvzrXYbeP0f8t9qScM9qjh86/VirUIbdBJoJ1j85X2SmnD6BwrN0UuJjb
-   dVMCQutIi/4q3dGaPtac2e88EBUfujhZ70Gi7Zi8qrBefHl1gQ+XUlxO0
-   nE7ZArKp3RCKP2pDSwViHi+ss1/7c8XAGBYq5PggdQEznG3n7p/NwHeo5
-   Of8M3Eaadd2X2qMgo9IO4emPqUENuRKuvMq5mODgFwinYohDQIW4sFLyF
-   jYu7S1QFgJVh7aDWY5484Q63vE179OPdVt12AxVNHdM2ohdYrdcvg0U1J
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10994"; a="3023737"
-X-IronPort-AV: E=Sophos;i="6.06,183,1705392000"; 
-   d="scan'208";a="3023737"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2024 03:29:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,183,1705392000"; 
-   d="scan'208";a="6729638"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orviesa007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 25 Feb 2024 03:29:09 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 25 Feb 2024 03:29:08 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Sun, 25 Feb 2024 03:29:08 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Sun, 25 Feb 2024 03:29:08 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Se49oUQF8oaVI8KfP/kt/gzUKIeqLsZZAQ0wCTzTYSAScatBMRsiuy0+H9XmLhq1vDKCilABJSWAd+bKh+xAqsyXPyFvTRuTS/P/l9jy70sPZPuku1NgZFPe4pfui0GvE68OBFi4fQN2pzWqaydKYRVmvUnUVLZys5sOJ8RXHM7XIZMhlFMyUf9gRWoRms65pQ1mxo9KkErQQz/JbniheZcUz/aRP2bx0Oq0ovcOVU5B77ZLBb7/aTJmykm7ev44q9DaLHfDdZDC31DyQ6v4HzGZFv16gOaokGns8OYE1nuNUhYBSxn+EFCPEj1as6LO0e89VMPNMM0/f3dWY/Iyxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=94rFnxMDOQsolSQ8AQc6DYK5wrBRfVzIFzOA+J9PAlg=;
- b=DFfGX1pHzujC4dbqQkeIqGs4z0AsCAFRduor2b+gJMZqWTZT+z/PwwW2NvaslN0zj77dgOUmnMKYcMnTqKNFIQwGlf78rpMS7YZ7nw6fqXH58GUs/AOrbAjRvOOaULpgNiN8Q8QpguPeCQlEZtnVN9oTguFiVZwsAtb1GniA/5Hht4p6pE87xGHUam1zYwSbf5chIXxta7MR/oi70i8l6ErU3mv9MAwjcaeVJ6lCc6+JWJraGLsBDp/Nx/szl9kj84cPoKYGEUyndU/p/F65esqhLr2F/vmyV5iTxnfL0JLJQfx1i6f01vhzK86+4qtZp+kP2zculroVoZqQGhiC0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SN6PR11MB3230.namprd11.prod.outlook.com (2603:10b6:805:b8::29)
- by SJ0PR11MB5677.namprd11.prod.outlook.com (2603:10b6:a03:37e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.22; Sun, 25 Feb
- 2024 11:28:09 +0000
-Received: from SN6PR11MB3230.namprd11.prod.outlook.com
- ([fe80::df02:f598:edc:808b]) by SN6PR11MB3230.namprd11.prod.outlook.com
- ([fe80::df02:f598:edc:808b%5]) with mapi id 15.20.7339.022; Sun, 25 Feb 2024
- 11:28:09 +0000
-Date: Sun, 25 Feb 2024 19:28:00 +0800
-From: Philip Li <philip.li@intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-CC: <julie.du@intel.com>, 0day robot <lkp@intel.com>,
-	<kdevops@lists.linux.dev>, Joel Granados <j.granados@samsung.com>, "Daniel
- Gomez" <da.gomez@samsung.com>, Christian Brauner <brauner@kernel.org>, "Hugh
- Dickins" <hughd@google.com>, Gustavo Padovan <gustavo.padovan@collabora.com>,
-	<linux-modules@vger.kernel.org>, Kees Cook <keescook@chromium.org>, "Linux FS
- Devel" <linux-fsdevel@vger.kernel.org>
-Subject: Re: Automation with 0-day & kdevops
-Message-ID: <ZdskQE0iwFXpPhGw@rli9-mobl>
-References: <CAB=NE6VRZFn+jxmxADGb3j7fLzBG9rAJ-9RCddEwz0HtwvtHxg@mail.gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAB=NE6VRZFn+jxmxADGb3j7fLzBG9rAJ-9RCddEwz0HtwvtHxg@mail.gmail.com>
-X-ClientProxiedBy: SG2PR04CA0160.apcprd04.prod.outlook.com (2603:1096:4::22)
- To SN6PR11MB3230.namprd11.prod.outlook.com (2603:10b6:805:b8::29)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="s3LB6WwA";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="PYurhS4h";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="SFvcoWun";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CjlFK5sf"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 4999B224F8;
+	Mon, 26 Feb 2024 14:31:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1708957892; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=W4akfkc1Kw2e9YyWEpsf9c0Y76JydMXyZR2TAfFVmJg=;
+	b=s3LB6WwAVt/EKwD7kJfsNbn71XtbwBFK1/9n4wFveoyb9Waj6EPPt5rWu1p8+FYQXg7uSq
+	Etyh6ho5v40CfyfTuY0CR6QPgFH2hUlOqyMyOG3ZpA30la2xu6/JlVXrQeDKLwbL5iNRXZ
+	IPicVeKidvxxyWldx3pjACo2ana9u0o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1708957892;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=W4akfkc1Kw2e9YyWEpsf9c0Y76JydMXyZR2TAfFVmJg=;
+	b=PYurhS4hkcO2U2pXeQaLQVQilCZXbjA3RQZf6enw7WwsHRhov2BwDu3y+iZFdZnQ34lLql
+	SwhF5sPmIIt2wLDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1708957890; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=W4akfkc1Kw2e9YyWEpsf9c0Y76JydMXyZR2TAfFVmJg=;
+	b=SFvcoWunXAD5czuNTyZ6mcV5PqVCkfIz77swvk47XOQRUrm2nfI+UT1W4d6KRhZ8Q0kKSV
+	uk3fVyLBzjEqamS9OFsgc0BxLC5UJGnVfrw1LY4/Q6x6KKC8MinPWQ8+DeqMucf9DIGsyU
+	2AybUrKzXXpgdqGeIOYm9sOcG8hAjcE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1708957890;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=W4akfkc1Kw2e9YyWEpsf9c0Y76JydMXyZR2TAfFVmJg=;
+	b=CjlFK5sfFrdmbcv4e0AyRWrrHwI4xEzQUQL9DJjvYfttGtrtvvNGoZSx3INuMj6wYtTx/C
+	MMbGei+nQENXDpDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9FCE813A58;
+	Mon, 26 Feb 2024 14:31:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id T+5WJsGg3GV9bwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 26 Feb 2024 14:31:29 +0000
+Message-ID: <d8a7ed49-f7d1-44bf-b0e5-64969e816057@suse.cz>
+Date: Mon, 26 Feb 2024 15:31:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3230:EE_|SJ0PR11MB5677:EE_
-X-MS-Office365-Filtering-Correlation-Id: 030171e1-07f4-4c84-4f8d-08dc35f4d814
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ct0sMHD/1qHiVW/Iv1ALHBCqcjO8CtQLYBDhnjmg4s7FpcpXihIDbRDxiV+57p3k9y+Rx0m29K/Y3Tg9asLsxh1ovGLavhz+jU3dgwDnvqNGwhd/zmm1DlXYxO80YwJ2Hx3/NOceGTvudL5dCRBybo4YcZdwFIWYwu+FjsL5FfrY/JeWmzVRHsJRlsfQpOtM2cg/MZcud5llkoBYPbGJfMwBdz6ZIuCEbQYUv0eeAdDZGaA4nI22U6obt4nlUClV2g8KVutWKlgi5b+bf7WuJZG64/SbyX81ndd/YI8gNIL3srDtzJ8aYgKQlMwehxwgzUrDCODT2ae7gIQ+c2aY3cLx36miZbKxX5d6XChgjiAajUoSyOp10CdwjT30ogixJM8ntbhE9tvdSbc0vZuOP+LjYzyjx0Ho1cK9tbXdUU8XeyJq6WTsuSXXRoySbRIlnQEPa/hAQ+f1vK5ywJGbmZQwX6AXG2iH0bMoHKylrTs57kEmiXhcfmd2QGnkVZsWQk/J/NGnM+STdaLcv32dAA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3230.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?g56NCF0BFhSlmLV4qWfwNZD8mpDybkbcWLJaARzF6BVrFxJUZyzDINDeOQe+?=
- =?us-ascii?Q?Hg1NQ7iTqlg7aFYoI+gdqca1FwZ9MDYmRCilDc4620WEz7CDZW1JahsixRZ8?=
- =?us-ascii?Q?t8CZOrPW8oE61YMtWb0y+cubeg6N8Bejr9sOGAQqzbiNzJlCxc857FNFcIL6?=
- =?us-ascii?Q?mtzV0AP4Sl6rYAUP7fjtLgJqspSFDKzDQ3doDZkNc8440hzusA1W+5bzlsBr?=
- =?us-ascii?Q?4V+pd+cLJbC9/8utUB/w63+p9hcdlQJ7SaKrHZzj4gM49+9ceg6pKz6duRWK?=
- =?us-ascii?Q?NHb0uHHDboxMxWBg90EreGOaqYxwdEd6xMHHN2w6zMIg9FDzwNZkdjb9T/pp?=
- =?us-ascii?Q?4JQ/g410cbclGnID5B5JRLkuGidXXDvQ/UPxgCL5poDqjiMur6s5Hcboi6su?=
- =?us-ascii?Q?gItpxlmeTkuhykTSFzQT4WK9YK14qgw195AvPokArPyxFih7WSWdGqKLf09j?=
- =?us-ascii?Q?3bZMIPX8LOErqX9ap7+EgUvZknnra2LaFuevbEz/9sNDzY0fZ3iyYF4kAKar?=
- =?us-ascii?Q?SxeFr22M+6R3GDPmKS9tDoIBSEtbnYDtzF887MSvjVDxQKyFeREnlQ2wX/d0?=
- =?us-ascii?Q?owifoKHsesxX79+zxfwSjN3p3NkKFa3T+NzPXYabNpuWRwFXPEXvwjKiGfwW?=
- =?us-ascii?Q?1lcVMPceP1GmFk0zQEiElQHyjFHc25Vyxdg/GD6bUNuFB/lz3I1X5sUT76SW?=
- =?us-ascii?Q?1Ieukb0rKCXopaLkncjxQT13ZTCDEyKic4bx6UcPGkEEHGuorPWiDCvkUdjU?=
- =?us-ascii?Q?IBujSoj4mWWMQMuc6jQMdu59ts3jE6X8KWquL8nXVxXsnuHrABvtrXNl1JtH?=
- =?us-ascii?Q?yWyK9tVM+Zb9de/7KfsTExNpKIORYV5OGUNEOZP4ijImewwEallmujaew9uG?=
- =?us-ascii?Q?rFaZIIaWF++Qqek7QHZT82Wjbz5TOMApVwtJ0/uoo/08WI6+t12o/O+D9fAi?=
- =?us-ascii?Q?GPM9ZcFjKCLi2F+Dar2ihiy1phEn9JYlLDCrFRgFDZCyGhTMnB0Hn9YWFdF9?=
- =?us-ascii?Q?ak3f5aispti6NQfkJANrHOWntZ+5fCfsbYgCLLRmCZq2OvAsHLqknnwNKQsE?=
- =?us-ascii?Q?oifQuLINNzNZ8e+CQdtieyspBJol/IsCB6E7rPPbexnezlqcQm8OsDS/nHVx?=
- =?us-ascii?Q?v5p6nfHscZBw81jsbS6D4v5ofRPd4GzY0R7Htr8waKQoy3fz2E9pJe07Drdo?=
- =?us-ascii?Q?qngN8/qOP+nYMOmzHEguuviwBF4XJKWbUGYJjvG/jPuUngup9AMNljam8JbB?=
- =?us-ascii?Q?Jwp84t4VpUd2NbhlQ+3chJAlTVGeUdYu9R2HIgGTn7isT3vba7ADFfnO0mL5?=
- =?us-ascii?Q?ZbmAlJw8qYwmNOBR+JUJ9d+cOpyp7KL2Kb3sMV65N/fnnWHbXB11Zo8vCLHX?=
- =?us-ascii?Q?n3xFaSMnABltRGakZFahX96Vcl9E3+RkmwXwqjHL8qslm6Psrvfi+1ajWfHr?=
- =?us-ascii?Q?yXFS9nhnjhaTgvTkHjFYfC6KzC8iFw4S+9TLvZXvXpW48CVCEnEyE/cngR97?=
- =?us-ascii?Q?xNboKO1CWX0BjxdSaliI6m8ttKofrdsARw2yVoMAYniaBiQfuW2Cb3GmAonk?=
- =?us-ascii?Q?+yanjZtX6Emf5zfIoM8oPzHDt63Zw+yNyn41In0E?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 030171e1-07f4-4c84-4f8d-08dc35f4d814
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3230.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2024 11:28:09.6735
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bBLh7yiFi14aSxJxIize9qYK/AONa12ROPDWf6H5PAKItUYIoLvFslb90UfmHpJKOiSLjFOJB+i7ZtxqiOAzTA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5677
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 03/36] mm/slub: Mark slab_free_freelist_hook()
+ __always_inline
+To: Suren Baghdasaryan <surenb@google.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
+ hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+ dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+ penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com,
+ peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+ dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+ david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+ nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev,
+ rppt@kernel.org, paulmck@kernel.org, yosryahmed@google.com,
+ yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+ andreyknvl@gmail.com, keescook@chromium.org, ndesaulniers@google.com,
+ vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com,
+ ytcoode@gmail.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+ rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+ vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+ iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+ elver@google.com, dvyukov@google.com, shakeelb@google.com,
+ songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+ minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+ cgroups@vger.kernel.org
+References: <20240221194052.927623-1-surenb@google.com>
+ <20240221194052.927623-4-surenb@google.com>
+ <CA+CK2bD8Cr1V2=PWAsf6CwDnakZ54Qaf_q5t4aVYV-jXQPtPbg@mail.gmail.com>
+ <CAJuCfpHBgZeJN_O1ZQg_oLbAXc-Y+jmUpB02jznkEySpd4rzvw@mail.gmail.com>
+Content-Language: en-US
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CAJuCfpHBgZeJN_O1ZQg_oLbAXc-Y+jmUpB02jznkEySpd4rzvw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=SFvcoWun;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=CjlFK5sf
+X-Spamd-Result: default: False [1.18 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 XM_UA_NO_VERSION(0.01)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 MID_RHS_MATCH_FROM(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 BAYES_HAM(-0.02)[53.57%];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 TO_MATCH_ENVRCPT_SOME(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 DKIM_TRACE(0.00)[suse.cz:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_GT_50(0.00)[74];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[soleen.com:email,linux.dev:email,chromium.org:email,suse.cz:dkim,suse.cz:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 FREEMAIL_CC(0.00)[linux-foundation.org,linux.dev,suse.com,cmpxchg.org,suse.de,stgolabs.net,infradead.org,oracle.com,i-love.sakura.ne.jp,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,google.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Score: 1.18
+X-Rspamd-Queue-Id: 4999B224F8
+X-Spam-Level: *
+X-Spam-Flag: NO
+X-Spamd-Bar: +
 
-On Fri, Feb 23, 2024 at 07:44:12AM -0800, Luis Chamberlain wrote:
-> Dear 0-day developers,
+On 2/24/24 03:02, Suren Baghdasaryan wrote:
+> On Wed, Feb 21, 2024 at 1:16 PM Pasha Tatashin
+> <pasha.tatashin@soleen.com> wrote:
+>>
+>> On Wed, Feb 21, 2024 at 2:41 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>> >
+>> > From: Kent Overstreet <kent.overstreet@linux.dev>
+>> >
+>> > It seems we need to be more forceful with the compiler on this one.
+>> > This is done for performance reasons only.
+>> >
+>> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+>> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>> > Reviewed-by: Kees Cook <keescook@chromium.org>
+>> > ---
+>> >  mm/slub.c | 2 +-
+>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> >
+>> > diff --git a/mm/slub.c b/mm/slub.c
+>> > index 2ef88bbf56a3..d31b03a8d9d5 100644
+>> > --- a/mm/slub.c
+>> > +++ b/mm/slub.c
+>> > @@ -2121,7 +2121,7 @@ bool slab_free_hook(struct kmem_cache *s, void *x, bool init)
+>> >         return !kasan_slab_free(s, x, init);
+>> >  }
+>> >
+>> > -static inline bool slab_free_freelist_hook(struct kmem_cache *s,
+>> > +static __always_inline bool slab_free_freelist_hook(struct kmem_cache *s,
+>>
+>> __fastpath_inline seems to me more appropriate here. It prioritizes
+>> memory vs performance.
 > 
-> kdevops [0] has evolved over the years now to a full automation suite
-> for kernel development and testing. As for the later aspects of it, we
-> use it to enable complicated subsystem tests such as filesystems
-> testing. Our automated filesystem coverage has been rather reduced
-> given the complexity, and so one of its goals was to tackle this. It
-> also has support to automate testing complex subsystems involving
-> custom non-upstream yet for things like qemu as well.
-> 
-> While long term we'd like to aim towards automating most of the things
-> tested under kdevops, it makes sense to start slow with a few simpler
-> targets. Since kdevops supports kselftests as well, my recommendation
-> is we start with a few selftests for components we have kernel
-> maintainers willing to help with either review or help tune up. The
-> same applies to filesystems. While we have support to test most
-> popular filesystems it makes sense to start with something simple.
-> 
-> To this end I'd like to see if we can collaborate with 0-day so enable
-> automation of testing for the following components, the first 3 of
-> which I help maintain:
-> 
-> With kdevops using its kernel selftests support:
-> 
->   * Linux kernel modules: using kernel selftests and userspace kmod tests
->   * Linux firmware loader: firmware selftests
->   * Linux sysctl
-> 
-> As for filesystems I'd like to start with tmpfs as we have a developer
-> who already has a good baseline for it, and is helping to fix some
-> fstests bugs found, Daniel Gomez. We also have created different
-> target profiles to test tmpfs for the different mount options it
-> supports.
-> 
-> What would this collaboration consist of? Using 0-day's automated to
-> git clone kdevops, spawn some resouces and run a series of make
-> commands. If git diff returns non-empty we have a new failure.
+> Hmm. AFAIKT this function is used only in one place and we do not add
+> any additional users, so I don't think changing to __fastpath_inline
+> here would gain us anything.
 
-Thanks Luis, we are glad to collaborate on this. We will learn the detail of
-kdevops that the website contains a lot of useful materials. And we will update
-our progress to you next month for the questions and next steps.
+It would have been more future-proof and self-documenting. But I don't insist.
 
-Thanks
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-> 
-> [0] https://github.com/linux-kdevops/kdevops
-> 
->  Luis
-> 
+>>
+>> >                                            void **head, void **tail,
+>> >                                            int *cnt)
+>> >  {
+>> > --
+>> > 2.44.0.rc0.258.g7320e95886-goog
+>> >
+
