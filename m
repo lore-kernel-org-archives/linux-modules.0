@@ -1,68 +1,68 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F033131739
-	for <linux-modules@vger.kernel.org>; Mon, 26 Feb 2024 17:12:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623B7130E54
+	for <linux-modules@vger.kernel.org>; Mon, 26 Feb 2024 17:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708967522; cv=none; b=d6p0fDvwKJtjGufsfXdVYaOaFSzf+bj7Ch3NRxNuK8pAysIx44LEi8zdcGdQus+6UdQHsCxY1Cn0xGWa//5Lp6pvataUVwVEoijaRcZc13Ty9GZZBfOEs+BYbmmkvCwVZaQwDeCGfYLTKk4+zZrjSxxDeBTss7ay8pqbcRnE2jU=
+	t=1708967612; cv=none; b=JfID/m85oGoZeYKst/9tz6P3Wu0HtMKUeuKRnnxmACO2hNQ1SajILQyVBmQQWkglasaosL4c/+GFbqPOHFF3xApFBA1JPLN0hK7YSNYJ3ouEkJzL34no2Km01SQZqNKkrXKod2xtwsBJMqweL1mpZw2rC057KKp6Qex0+jUbRqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708967522; c=relaxed/simple;
-	bh=Chynr1L1b/d5TcYFCNc4RvKn+tu9v2QwhIq+NAH+cTo=;
+	s=arc-20240116; t=1708967612; c=relaxed/simple;
+	bh=EyV42V4YwospafBlBP85zlF0CzzIrV0ckGMLg38+cps=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B3Z/k2LE9qsLrg/9NwW3yrhhb9/FfYTr8aoNVAtrVTfx203LMKnRs3c73YswgOxtJ3ScQr2itsFYmuTVeiomK9iNM8tuAwA+ZV9SLPexvSNt3lZV5ZN9oM2Ec/BfkrMdyU1rrFI7AcSTMgrhituzp61/XRLauAch7ZtsOsgkbYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FpRiBDv+; arc=none smtp.client-ip=209.85.219.171
+	 To:Cc:Content-Type; b=VeJRAn6LiJP0y1GurzXmzwVexY/Y4r7PD91HHAUb5AnJVLhQ48rjeDjOdI3fmVS3ONgNczYvfBPThz9EjGEk75TxVTM5rzUY38LcTi4136Po+ILOrslY7sfa8gPz1WEI8rU9q/Vg3G0sG4LSAiXnprSCbe/8tS2qoiu4xRNML2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0fViydWZ; arc=none smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FpRiBDv+"
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-dc745927098so3101733276.3
-        for <linux-modules@vger.kernel.org>; Mon, 26 Feb 2024 09:12:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0fViydWZ"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-608e3530941so17397197b3.1
+        for <linux-modules@vger.kernel.org>; Mon, 26 Feb 2024 09:13:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708967519; x=1709572319; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708967609; x=1709572409; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Chynr1L1b/d5TcYFCNc4RvKn+tu9v2QwhIq+NAH+cTo=;
-        b=FpRiBDv+CAV4Y6DNyKhilSCvwzfE05AWMZswNQENVfSKH9LDwic2wN/R6WnSjGiJRY
-         XLh1loIgNFgYP+YkN0DMJOO0yInyIT66++RmRqEp9lMKhJzaPz7za3p6D4F0FkFOOdjy
-         TKywspDmeXUx5/Bi9fLUnmwVqrWD9oVP8AtA5BGpPpfrjXTU4EMm1hLHZ06rbHDYmR/T
-         QG8tVN3ExGz/BT+fuMexyKcxVmoRzl9al+fJHXXiHgRA9UcGVrYxYap4LZHPDE3gEB1U
-         EUNBT6rRGCB8h2UwQSx3Ovq6T4B1sAbyWagQoZocd22ZG7aI30pzUd5Kd3nQ0PF/5xbS
-         7PtQ==
+        bh=EyV42V4YwospafBlBP85zlF0CzzIrV0ckGMLg38+cps=;
+        b=0fViydWZafBwJ3xL0F3ZTuvRSwyOFSrmHfEq0669FdAat5dooHz4w4ydcwe76KJq26
+         LLK1Innl8Ozcr4ZzRFS8wOBZXfz8XVvIsM1Lpl41+dDr0LuROfLdG53dNGlA9b9h4eMF
+         G1BrAsi2HgrrmZVytsbBCN43zN48wzi+DBMamTdoOdAkkld+5uUZGlksQA++8+kDhnB4
+         8YisjaPtufsIlwnzZjkqcK4rgrYZZUtUJ6qGAZVZozShNglx+FJnTn12ouCxp4XPVmkD
+         /ODSKBsJ4q/ATs5/nmT5Fa36KV2ZLF/J1cucEBLoNSKhvXKtX5V2YN3O0AKtgJFesZaz
+         HUSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708967519; x=1709572319;
+        d=1e100.net; s=20230601; t=1708967609; x=1709572409;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Chynr1L1b/d5TcYFCNc4RvKn+tu9v2QwhIq+NAH+cTo=;
-        b=XW8N+PXRRjYqOjBIxBjs8m/iBix1oJmKlj+INk9G2pciGBisJMDwXM/okSMYkXdXnb
-         Tm7kwHIm6DcCWso3KMpZqFt/criQ3EEPStSYDeTfkGEed2jIj3UrRSqJXS0lo3aTR/iB
-         jO0TQA+hUmKU2JkzPmbZpuisvYJLQ2JqhOmhhKdC7XB7UtY0hVjPjnRjkhtIaGLoKiWG
-         29wSfzE3joEwIBSPILoNeKUrGRXi7eVz6J1DQxrnAkTdkUDPuIJ1LeZtw+Fo+sW18QnU
-         MNhJ34EDl4xOgpqr7ydH5fm+PZxvXfRLspjxSA3umRePddYDpVJopx0JxWUz+VUIiHWJ
-         jIWg==
-X-Forwarded-Encrypted: i=1; AJvYcCVjE4/mNN0z5ZMfJz50T77lMzy63LCYzSxU/fFEkiPSkntZVnQ14/XeqnPUCvptqjc54KLH069uYiU5Ig2dcfzjbwKL+0nwFz6mYneeuA==
-X-Gm-Message-State: AOJu0YyhNWdwWFCaRg6f/CpZYK1I9bhH6aunz6Ur/RHA+hly/YKRQhaj
-	Dc50+Bv2Va/qoPXvFFp6ET+QEHkufplCJQvxuk7LlmKK81ehdXqln6d2PqewfqjBVCArHeFa3KO
-	8Uri/VyKE0I1NS2OI0rcrT1CYLtNyCOR9ZkGw
-X-Google-Smtp-Source: AGHT+IFIvCWhsm/t6u8M8LFQ9aoCdr7tXSqiWENlQfptKH682IaVJyWTqKPlBpDf+9Q2OFcqiRYx3fgZnfrpOzBGyTM=
-X-Received: by 2002:a25:acd2:0:b0:dcc:2caa:578b with SMTP id
- x18-20020a25acd2000000b00dcc2caa578bmr5024557ybd.40.1708967519035; Mon, 26
- Feb 2024 09:11:59 -0800 (PST)
+        bh=EyV42V4YwospafBlBP85zlF0CzzIrV0ckGMLg38+cps=;
+        b=RdAr23crcl+bDtVg+ABET8ZOvPwrbiD/whqKq4VTjwP/TXia5PTBSTVbPWC+A2quHP
+         phFPGH0Nvz54Q9/U+m+1SZsqSSOlcQL0rU4ptwb+8N1evYLLRlmAsc4/u/6H5S0vRTvC
+         cAg12kkbux2p6brPLVUFpghmLZcBKFK8vC+8tBuJlyr3BTbJH2ZzkxSNS0Wg0Vcgwbjq
+         gibx6BTmfhAeuRNzoyK0L8vi95WJWGL9/6a8Y6vjRVIjNA6a1CGudFtPvivCWTPH4XPs
+         0jT/YqAkHHmoX2XgmM9D1KxFLTA5OhtKZ4SIIJuBY/tvZk1hZrLnORhpT1TrY6HtRiwu
+         DqgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWcWi4FsMAU21drGEuOxc2ux9Qmjq+vxVdtnh4Meojn9asJTBvklxfnzYVrvzx9X60GP0lZ6DwZDOSVRKcT5JwIhmXPYV0POGte/SErkQ==
+X-Gm-Message-State: AOJu0YywyQlbwsGqlbgtVBjdYP1bMogkqWNf9J2HzZNB1zw67GYIISQf
+	cDbjhv8mg24hnfGuppyiYeYLlsBp6kE2CM5heewhg2qHodLQwpWvUFJA5YAZ+LNPMSo3qUK/1H/
+	neYxOnt1a+0gLSpExkn5AzggEg4cYdGbi+ame
+X-Google-Smtp-Source: AGHT+IE/7/pQws6CVfL30UNt1mkliSDpCczaElkub3hA0YpEAm7Kcwht1trOE3ZU3RPvAg7BLiFgI/3lAi1UqBVzgIg=
+X-Received: by 2002:a05:6902:210e:b0:dcd:1f17:aaea with SMTP id
+ dk14-20020a056902210e00b00dcd1f17aaeamr6639276ybb.26.1708967608014; Mon, 26
+ Feb 2024 09:13:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-16-surenb@google.com>
- <d6141a99-3409-447b-88ac-16c24b0a892e@suse.cz>
-In-Reply-To: <d6141a99-3409-447b-88ac-16c24b0a892e@suse.cz>
+References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-14-surenb@google.com>
+ <a9ebb623-298d-4acf-bdd5-0025ccb70148@suse.cz>
+In-Reply-To: <a9ebb623-298d-4acf-bdd5-0025ccb70148@suse.cz>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Mon, 26 Feb 2024 09:11:45 -0800
-Message-ID: <CAJuCfpGZ6W-vjby=hWd5F3BOCLjdeda2iQx_Tz-HcyjCAsmKVg@mail.gmail.com>
-Subject: Re: [PATCH v4 15/36] lib: introduce support for page allocation tagging
+Date: Mon, 26 Feb 2024 09:13:17 -0800
+Message-ID: <CAJuCfpE6sJa2oHE2HrXAYuMeHd8JWd0deWa062teUs3bBRi2PA@mail.gmail.com>
+Subject: Re: [PATCH v4 13/36] lib: prevent module unloading if memory is not freed
 To: Vlastimil Babka <vbabka@suse.cz>
 Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
 	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
@@ -92,32 +92,28 @@ Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 26, 2024 at 9:07=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
+On Mon, Feb 26, 2024 at 8:58=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
 ote:
 >
 > On 2/21/24 20:40, Suren Baghdasaryan wrote:
-> > Introduce helper functions to easily instrument page allocators by
-> > storing a pointer to the allocation tag associated with the code that
-> > allocated the page in a page_ext field.
+> > Skip freeing module's data section if there are non-zero allocation tag=
+s
+> > because otherwise, once these allocations are freed, the access to thei=
+r
+> > code tag would cause UAF.
 > >
 > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
-> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 >
-> The static key usage seems fine now. Even if the page_ext overhead is sti=
-ll
-> always paid when compiled in, you mention in the cover letter there's a p=
-lan
-> for boot-time toggle later, so
+> I know that module unloading was never considered really supported etc.
+> But should we printk something so the admin knows why it didn't unload, a=
+nd
+> can go check those outstanding allocations?
 
-Yes, I already have a simple patch for that to be included in the next
-revision: https://github.com/torvalds/linux/commit/7ca367e80232345f471b77b3=
-ea71cf82faf50954
-
->
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-
+Yes, that sounds reasonable. I'll add a pr_warn() in the next version.
 Thanks!
 
 >
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
 >
