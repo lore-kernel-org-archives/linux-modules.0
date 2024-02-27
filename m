@@ -1,100 +1,171 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2AA12FF76
-	for <linux-modules@vger.kernel.org>; Mon, 26 Feb 2024 20:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEA236C;
+	Tue, 27 Feb 2024 02:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708980640; cv=none; b=CGVHglgtfzLCoaPIqjKc5YaBy5eFZ5ZiN7rt70Mx5K+0U11GgjC4h7Gc5NqhLt1OmA1El8wtNsyO3v4dIxTz72V9RcTYDoC7GExWnRAlD5r3euBC3mVP+albw0z/gohTkU8p8R+V7xrk4QzOcMZhvH9FVrZIzvXUCUjVtBh2hH4=
+	t=1709001410; cv=none; b=eeknyjFHSdCLgiX7QHs8blC3714ISZi8Lc5vhnQJ93R/vTA03LTWHQ2k0y2S3R4i84MbccZ3FOMvMvLOBy0j6ee0CDlXh8i4LjdqRJ6h1sSaqMX0wvmssbUkv4O4m14Ti7xM1KfAHt/nQOxabO66vhQq748UyRbVzyjBVwUhB8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708980640; c=relaxed/simple;
-	bh=+CBQCm6KmLQMuZ7o0MLaEKmbklNJJaFnLg8M+0QfYnA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gd729EA8d9w4/FBqSheRmPYYp/TVTff0t2fa0ram8GjdKuDMpEcZlu6gfo9sC6OHC8oklicf2M3ZHT6WuoUIvnYYqVg+fuZxTlEoaepbeYuFN51g5fzN5cER94zslMtJCWHMfbVtKOV6DnsufGl3tZ1+3pjB1bzpKnSlvs71SxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HcSqhizu; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HcSqhizu"
-Date: Mon, 26 Feb 2024 15:50:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1708980635;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mIdkIRtnrOSnd32neZalGi5cjdozYTT6FIEdWcWsU6U=;
-	b=HcSqhizuRpNge/p4Z96mL1vYf4HBThYX/JtRwapRQvIQkUUrCJFkJbw2jiZlCrr1G01OY6
-	VEdKjsiolBcD3vnVkbSepoV1u7spOFQRwGmtRyPJ2rPlH/FFfryTukpBmQxkHJUVCq9K/U
-	bro4rJOJCyg9F/1Fe1ZUZ2cOW9BM2KM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org, 
-	mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
-	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org, 
-	peterx@redhat.com, david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, 
-	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org, tj@kernel.org, 
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, hughd@google.com, 
-	andreyknvl@gmail.com, keescook@chromium.org, ndesaulniers@google.com, 
-	vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com, 
-	ytcoode@gmail.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com, 
-	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, 
-	cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
-	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, minchan@google.com, 
-	kaleshsingh@google.com, kernel-team@android.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-modules@vger.kernel.org, 
-	kasan-dev@googlegroups.com, cgroups@vger.kernel.org, 
-	Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v4 05/36] fs: Convert alloc_inode_sb() to a macro
-Message-ID: <4uhmoltnaywbhhecnj53g5a6ye3x5acf4upbutgraxn2eg2pe2@6ab667edrl2z>
-References: <20240221194052.927623-1-surenb@google.com>
- <20240221194052.927623-6-surenb@google.com>
- <f68e7f17-c288-4dc9-9ae9-78015983f99c@suse.cz>
+	s=arc-20240116; t=1709001410; c=relaxed/simple;
+	bh=ZomoVMlhkyvEyE01FSrF2sqSUEnt8WowYC/LgMLqUAc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cPx4UjJ99Q5dYRl1hKxKxWkrakhaZGQKBWEQT2kZ5Ej5QvhI63nzvoNOSxh+DA83ofA3tPQSOen8D/LV2wIacYAYhIZRWnuRh1wNK1YS0keGTl0YKARFZrxvKaTGGBsqu+bdsnhG6giDnPBk/uDVwTbBWZFZKI6Smt0GKtSQsc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4TkM4x5fVjz1h0jg;
+	Tue, 27 Feb 2024 10:34:25 +0800 (CST)
+Received: from kwepemd100003.china.huawei.com (unknown [7.221.188.180])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6AB5F1A016B;
+	Tue, 27 Feb 2024 10:36:39 +0800 (CST)
+Received: from kwepemd100011.china.huawei.com (7.221.188.204) by
+ kwepemd100003.china.huawei.com (7.221.188.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Tue, 27 Feb 2024 10:36:39 +0800
+Received: from M910t.huawei.com (10.110.54.157) by
+ kwepemd100011.china.huawei.com (7.221.188.204) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Tue, 27 Feb 2024 10:36:38 +0800
+From: Changbin Du <changbin.du@huawei.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain
+	<mcgrof@kernel.org>
+CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Changbin
+ Du" <changbin.du@huawei.com>, Xiaoyi Su <suxiaoyi@huawei.com>, Eric Chanudet
+	<echanude@redhat.com>, Luis Chamberlain <mcgrof@infradead.org>
+Subject: [PATCH v4] modules: wait do_free_init correctly
+Date: Tue, 27 Feb 2024 10:35:46 +0800
+Message-ID: <20240227023546.2490667-1-changbin.du@huawei.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f68e7f17-c288-4dc9-9ae9-78015983f99c@suse.cz>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemd100011.china.huawei.com (7.221.188.204)
 
-On Mon, Feb 26, 2024 at 04:44:51PM +0100, Vlastimil Babka wrote:
-> On 2/21/24 20:40, Suren Baghdasaryan wrote:
-> > From: Kent Overstreet <kent.overstreet@linux.dev>
-> > 
-> > We're introducing alloc tagging, which tracks memory allocations by
-> > callsite. Converting alloc_inode_sb() to a macro means allocations will
-> > be tracked by its caller, which is a bit more useful.
-> > 
-> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  include/linux/fs.h | 6 +-----
-> >  1 file changed, 1 insertion(+), 5 deletions(-)
-> > 
-> > diff --git a/include/linux/fs.h b/include/linux/fs.h
-> > index 023f37c60709..08d8246399c3 100644
-> > --- a/include/linux/fs.h
-> > +++ b/include/linux/fs.h
-> > @@ -3010,11 +3010,7 @@ int setattr_should_drop_sgid(struct mnt_idmap *idmap,
-> >   * This must be used for allocating filesystems specific inodes to set
-> >   * up the inode reclaim context correctly.
-> >   */
-> > -static inline void *
-> > -alloc_inode_sb(struct super_block *sb, struct kmem_cache *cache, gfp_t gfp)
-> 
-> A __always_inline wouldn't have the same effect? Just wondering.
+The synchronization here is to ensure the ordering of freeing of a module
+init so that it happens before W+X checking. It is worth noting it is not
+that the freeing was not happening, it is just that our sanity checkers
+raced against the permission checkers which assume init memory is already
+gone.
 
-nope, macro expansion within an inline happens once, and will show
-__func__ and __line__ of the helper, we want it expanded in the caller
+Commit 1a7b7d922081 ("modules: Use vmalloc special flag") moved
+calling do_free_init() into a global workqueue instead of relying on it
+being called through call_rcu(..., do_free_init), which used to allowed us
+call do_free_init() asynchronously after the end of a subsequent grace
+period. The move to a global workqueue broke the gaurantees for code which
+needed to be sure the do_free_init() would complete with rcu_barrier().
+To fix this callers which used to rely on rcu_barrier() must now instead
+use flush_work(&init_free_wq).
+
+Without this fix, we still could encounter false positive reports in W+X
+checking since the rcu_barrier() here can not ensure the ordering now.
+
+Even worse, the rcu_barrier() can introduce significant delay. Eric Chanudet
+reported that the rcu_barrier introduces ~0.1s delay on a PREEMPT_RT kernel.
+
+  [    0.291444] Freeing unused kernel memory: 5568K
+  [    0.402442] Run /sbin/init as init process
+
+With this fix, the above delay can be eliminated.
+
+Fixes: 1a7b7d922081 ("modules: Use vmalloc special flag")
+Signed-off-by: Changbin Du <changbin.du@huawei.com>
+Cc: Xiaoyi Su <suxiaoyi@huawei.com>
+Cc: Eric Chanudet <echanude@redhat.com>
+Cc: Luis Chamberlain <mcgrof@infradead.org>
+Tested-by: Eric Chanudet <echanude@redhat.com>
+
+---
+v4:
+  - polish commit msg. (Luis Chamberlain)
+v3:
+  - amend comment in do_init_module() and update commit msg.
+v2:
+  - fix compilation issue for no CONFIG_MODULES found by 0-DAY.
+---
+ include/linux/moduleloader.h | 8 ++++++++
+ init/main.c                  | 5 +++--
+ kernel/module/main.c         | 9 +++++++--
+ 3 files changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+index 001b2ce83832..89b1e0ed9811 100644
+--- a/include/linux/moduleloader.h
++++ b/include/linux/moduleloader.h
+@@ -115,6 +115,14 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 		    const Elf_Shdr *sechdrs,
+ 		    struct module *mod);
+ 
++#ifdef CONFIG_MODULES
++void flush_module_init_free_work(void);
++#else
++static inline void flush_module_init_free_work(void)
++{
++}
++#endif
++
+ /* Any cleanup needed when module leaves. */
+ void module_arch_cleanup(struct module *mod);
+ 
+diff --git a/init/main.c b/init/main.c
+index e24b0780fdff..f0b7e21ac67f 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -99,6 +99,7 @@
+ #include <linux/init_syscalls.h>
+ #include <linux/stackdepot.h>
+ #include <linux/randomize_kstack.h>
++#include <linux/moduleloader.h>
+ #include <net/net_namespace.h>
+ 
+ #include <asm/io.h>
+@@ -1402,11 +1403,11 @@ static void mark_readonly(void)
+ 	if (rodata_enabled) {
+ 		/*
+ 		 * load_module() results in W+X mappings, which are cleaned
+-		 * up with call_rcu().  Let's make sure that queued work is
++		 * up with init_free_wq. Let's make sure that queued work is
+ 		 * flushed so that we don't hit false positives looking for
+ 		 * insecure pages which are W+X.
+ 		 */
+-		rcu_barrier();
++		flush_module_init_free_work();
+ 		mark_rodata_ro();
+ 		rodata_test();
+ 	} else
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 36681911c05a..b0b99348e1a8 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2489,6 +2489,11 @@ static void do_free_init(struct work_struct *w)
+ 	}
+ }
+ 
++void flush_module_init_free_work(void)
++{
++	flush_work(&init_free_wq);
++}
++
+ #undef MODULE_PARAM_PREFIX
+ #define MODULE_PARAM_PREFIX "module."
+ /* Default value for module->async_probe_requested */
+@@ -2593,8 +2598,8 @@ static noinline int do_init_module(struct module *mod)
+ 	 * Note that module_alloc() on most architectures creates W+X page
+ 	 * mappings which won't be cleaned up until do_free_init() runs.  Any
+ 	 * code such as mark_rodata_ro() which depends on those mappings to
+-	 * be cleaned up needs to sync with the queued work - ie
+-	 * rcu_barrier()
++	 * be cleaned up needs to sync with the queued work by invoking
++	 * flush_module_init_free_work().
+ 	 */
+ 	if (llist_add(&freeinit->node, &init_free_list))
+ 		schedule_work(&init_free_wq);
+-- 
+2.25.1
+
