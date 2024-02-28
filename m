@@ -1,180 +1,169 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA93219EA
-	for <linux-modules@vger.kernel.org>; Tue, 27 Feb 2024 16:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C843A2C85D;
+	Wed, 28 Feb 2024 08:29:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709052946; cv=none; b=prysfU+3cC6ofdN740Wa/3Nih9q7F2AAm9Mozmf/O/wISfL6xr3Nw+yI5CqToEyGG/ax7vbEpsgEaZBirks7U2LLBt9EfRS9JOAMZhaHPBzhQdfGAoZMfsUKWmEkMxtUI9YUCY3TJPcPtR+M/NeBABiqcb1knhsxfsEZyMEqH2I=
+	t=1709108948; cv=none; b=eIAeC3k4+45qi57OEq9xN8rZzBHrAfJyWMA0lLYlJBojrAL5EgTJ7FJu9AVhLMGUK1krZ2/z6eZwqtoxGRqKDteMjoxXVBW1kKWOChurFQhoasfngZcivSw9A68SSMze5Y+NmNUJMnaPeiCeJmuQjH/0ziBcBmm7tNyXshd5e9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709052946; c=relaxed/simple;
-	bh=WING8+ifDIdPqWo/GgNARqwiCxM6QeK8N+15oiAYs8U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZXooCZ+Jgz1HGThNxDsKU8F4aQHwbJel/DOTUI0krgYF0lLqM4bnWmEISzo+ut5GRiJRqXO5kWfnyKRkixm6GEojONu+T/rvZdMShQSdoszs8YidehZHQpSY1NtzGemSe/7y/Ra78d8/FfXI91Uro91BwtJZIXv1LVIQsknUqrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0bqFZOxi; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1709108948; c=relaxed/simple;
+	bh=GYCBTtrme1/vyEnFSZ2rmTOFHZ+wZlEBanSJsTMPw7k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qzvTWWEKkadSSN2la7glksoFtxMDGRZKWpa0TaqXJ/K5WJXwU8sAa+QFPuD65QRjSv3qlFE92SwUkgpk6Iek+ETGWulnmYrkzGoh6fxX62iFI3Mf9AlndtVIzsHUkbH9F8lSVjWt7fFDU72oH6aOv2DEP9oIQ3ceNRw6AjofDcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=NTHWxN9u; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Kz7eaScw; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=NTHWxN9u; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Kz7eaScw; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0bqFZOxi"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-607e60d01b2so23136207b3.1
-        for <linux-modules@vger.kernel.org>; Tue, 27 Feb 2024 08:55:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709052943; x=1709657743; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WING8+ifDIdPqWo/GgNARqwiCxM6QeK8N+15oiAYs8U=;
-        b=0bqFZOxifsJ5NMk/8m7O9TZYcXJ4ZOagI0CeK7ew9Up7vZXassuRVZgV3R/hAaURqv
-         yipQfkJyTGrMRfSjlRKrdq4rMXzq+EopO8mvVXBysaMoXgk8PNFQW+b8ncZMj9oYX/ug
-         4KoRGbpZ7K/nMqn/kBhm0MJzWddgZMP/DRsBPrqhGzjEW+JFM4cP38yDFRQZI5+Vhg5s
-         FiESy5ktg21UABE/kurAAaft0GtHZkORBxkm2W74qjQFqXkvTOvIvTBo3qiZg5Z1OXFV
-         pzPo+VVQkodHYXIDfqiADzhsKkEboRV1fWgLjk3rDQ3UyI8O19BWJwc5Ewki5YStBmlf
-         qemQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709052943; x=1709657743;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WING8+ifDIdPqWo/GgNARqwiCxM6QeK8N+15oiAYs8U=;
-        b=LFoWnLlcVT3J5LEaruoYb3GIU/ezvZgcnTrsUOpD7GW+fCcz24LmdgmaJV/FF+frfc
-         kYA1QHh4JNGq6jil6wS6ZbfLihUfuZWcU52sI2gq5SLp737Uik9t4MB79BEJOW33XzsN
-         HkWa79w/krGqhVXppDwkBQFX1kvhTDx7mWf3be+fFsEHiLDM9cZg7yfxWtqTwiXGtFc/
-         PRZx0z0QollxKM7Jk6hMyM5MXIpyaIeGwTxMYi9omLl0XMJHvhDMYPXkDNEP5xYhQtoC
-         +oEdIb2NlUZJLvI9KzWDllg7ojcRpAhG45aEtW9f85vqD/ZwsB+AkevICS3XXJvdMtdV
-         xXUw==
-X-Forwarded-Encrypted: i=1; AJvYcCU3Bev55HbgDiGvEbvd5X+PhyM5JtimHKfZm+TBps1dwQWieoGQZp/CsBqzk5izxlLUq+qomU+HJ/gE3fSmS1TDnj/L+1kb7vW2tY0l+A==
-X-Gm-Message-State: AOJu0YwowDrATrWBd16UHOnvtMvPrVAHWPm6sRpqVOEKRCFcWbgf0z8m
-	RpICBpCCe70PB/zrafdKQaNUGCiT0P+4LeEIUnAZIe8/dFk5zhSWqMSx7DGGCBGYrNnRiNipZ6o
-	KFT5tXbH/6rHAaOf0JA+PtXS43f2pQryEJSso
-X-Google-Smtp-Source: AGHT+IFx4IMLdqGd5Fz34j1UAm6oDJfltAQpGSG6yeY6HBGKjoGVypF3GR4a4leI/V5eKU8dpRmwS6ivB2dTqeub54A=
-X-Received: by 2002:a81:e245:0:b0:609:2857:af0 with SMTP id
- z5-20020a81e245000000b0060928570af0mr1933120ywl.25.1709052942967; Tue, 27 Feb
- 2024 08:55:42 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="NTHWxN9u";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Kz7eaScw";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="NTHWxN9u";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Kz7eaScw"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id A0BAA2262E;
+	Wed, 28 Feb 2024 08:29:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1709108944; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+HoIz2Qi98NBEh6aNkVpIyLsbtr/CQMlELkE74c1McU=;
+	b=NTHWxN9ulO5ErLuP4gcTOYnNmaQsCFQdtc5+CSvK1qSM6duhZPY03zDynWgiAr3Ps+/FqA
+	I9d3Yq0J2sd+xQ93Bbt0VKJTHIHPgz9OCriSsPTHC/y6cg9TM45uXq8YWl7oELJG+97edo
+	3NypH+V4B9bZ7Ul0xa2a80i+Xl0ZdXw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1709108944;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+HoIz2Qi98NBEh6aNkVpIyLsbtr/CQMlELkE74c1McU=;
+	b=Kz7eaScwzxbvWjw0SaPKEc7jGN/VEKGTH5sed6LnSIGKuhRPu/OyQw33mkVFtMRAcWoR62
+	lF6+/G+iqvDQN5DQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1709108944; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+HoIz2Qi98NBEh6aNkVpIyLsbtr/CQMlELkE74c1McU=;
+	b=NTHWxN9ulO5ErLuP4gcTOYnNmaQsCFQdtc5+CSvK1qSM6duhZPY03zDynWgiAr3Ps+/FqA
+	I9d3Yq0J2sd+xQ93Bbt0VKJTHIHPgz9OCriSsPTHC/y6cg9TM45uXq8YWl7oELJG+97edo
+	3NypH+V4B9bZ7Ul0xa2a80i+Xl0ZdXw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1709108944;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+HoIz2Qi98NBEh6aNkVpIyLsbtr/CQMlELkE74c1McU=;
+	b=Kz7eaScwzxbvWjw0SaPKEc7jGN/VEKGTH5sed6LnSIGKuhRPu/OyQw33mkVFtMRAcWoR62
+	lF6+/G+iqvDQN5DQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1430F13A58;
+	Wed, 28 Feb 2024 08:29:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id IqSSBNDu3mWDHQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 28 Feb 2024 08:29:04 +0000
+Message-ID: <1287d17e-9f9e-49a4-8db7-cf3bbbb15d02@suse.cz>
+Date: Wed, 28 Feb 2024 09:29:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-16-surenb@google.com>
- <d6141a99-3409-447b-88ac-16c24b0a892e@suse.cz> <CAJuCfpGZ6W-vjby=hWd5F3BOCLjdeda2iQx_Tz-HcyjCAsmKVg@mail.gmail.com>
- <72cc5f0b-90cc-48a8-a026-412fa1186acd@suse.cz>
-In-Reply-To: <72cc5f0b-90cc-48a8-a026-412fa1186acd@suse.cz>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 27 Feb 2024 08:55:32 -0800
-Message-ID: <CAJuCfpF=uwxH93BF6905FAcvaihYD0iyT=rJS-REe4u_1Km22w@mail.gmail.com>
-Subject: Re: [PATCH v4 15/36] lib: introduce support for page allocation tagging
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
-	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
-	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
-	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
-	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 14/36] lib: add allocation tagging support for memory
+ allocation profiling
+Content-Language: en-US
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: kent.overstreet@linux.dev, mhocko@suse.com, hannes@cmpxchg.org,
+ roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+ willy@infradead.org, liam.howlett@oracle.com,
+ penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com,
+ peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+ dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+ david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+ nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev,
+ rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+ yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+ hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+ ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org,
+ ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+ iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+ elver@google.com, dvyukov@google.com, shakeelb@google.com,
+ songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+ minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+ cgroups@vger.kernel.org
+References: <20240221194052.927623-1-surenb@google.com>
+ <20240221194052.927623-15-surenb@google.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20240221194052.927623-15-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=NTHWxN9u;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Kz7eaScw
+X-Spamd-Result: default: False [-2.41 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 XM_UA_NO_VERSION(0.01)[];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 TO_DN_SOME(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_TRACE(0.00)[suse.cz:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_GT_50(0.00)[74];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_MATCH_FROM(0.00)[];
+	 BAYES_HAM(-2.11)[95.70%];
+	 ARC_NA(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 RCVD_DKIM_ARC_DNSWL_HI(-1.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 TO_MATCH_ENVRCPT_SOME(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FREEMAIL_CC(0.00)[linux.dev,suse.com,cmpxchg.org,suse.de,stgolabs.net,infradead.org,oracle.com,i-love.sakura.ne.jp,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,soleen.com,google.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 RCVD_IN_DNSWL_HI(-0.50)[2a07:de40:b281:106:10:150:64:167:received]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: A0BAA2262E
+X-Spam-Level: 
+X-Spam-Score: -2.41
+X-Spam-Flag: NO
 
-On Tue, Feb 27, 2024 at 1:30=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
-ote:
->
->
->
-> On 2/26/24 18:11, Suren Baghdasaryan wrote:
-> > On Mon, Feb 26, 2024 at 9:07=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz=
-> wrote:
-> >>
-> >> On 2/21/24 20:40, Suren Baghdasaryan wrote:
-> >>> Introduce helper functions to easily instrument page allocators by
-> >>> storing a pointer to the allocation tag associated with the code that
-> >>> allocated the page in a page_ext field.
-> >>>
-> >>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> >>> Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
-> >>> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> >>
-> >> The static key usage seems fine now. Even if the page_ext overhead is =
-still
-> >> always paid when compiled in, you mention in the cover letter there's =
-a plan
-> >> for boot-time toggle later, so
-> >
-> > Yes, I already have a simple patch for that to be included in the next
-> > revision: https://github.com/torvalds/linux/commit/7ca367e80232345f471b=
-77b3ea71cf82faf50954
->
-> This opt-out logic would require a distro kernel with allocation
-> profiling compiled-in to ship together with something that modifies
-> kernel command line to disable it by default, so it's not very
-> practical. Could the CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT be
-> turned into having 3 possible choices, where one of them would
-> initialize mem_profiling_enabled to false?
+On 2/21/24 20:40, Suren Baghdasaryan wrote:
+> 
+> +static inline void alloc_tag_sub(union codetag_ref *ref, size_t bytes)
+> +{
+> + __alloc_tag_sub(ref, bytes);
+> +}
+> +
+> +static inline void alloc_tag_sub_noalloc(union codetag_ref *ref, size_t bytes)
+> +{
+> + __alloc_tag_sub(ref, bytes);
+> +}
+> +
 
-I was thinking about a similar approach of having the early boot
-parameter to be a tri-state with "0 | 1 | Never". The default option
-would be "Never" if CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=3Dn
-and "1" if CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=3Dy. Would that
-solve the problem for distributions?
-
->
-> Or, taking a step back, is it going to be a common usecase to pay the
-> memory overhead unconditionally, but only enable the profiling later
-> during runtime?
-
-I think that would be the option one would use in the early
-deployments, to be able to enable the feature on specific devices
-without a reboot. Pasha brought up also an option when we disable the
-feature initially (via early boot option) but can enable it and reboot
-the system that will come up with enabled option.
-
-As Kent mentioned, he has been working on a pointer compression
-mechanism to cut the overhead of each codtag reference from one
-pointer (8 bytes) to 2 bytes index. I'm yet to check the performance
-but if that works and we can fit this index into page flags, that
-would completely eliminate dependency on page_ext and this memory
-overhead will be gone. This mechanism is not mature enough and I don't
-want to include these optimizations into the initial patchset, that's
-why it's not included in this patchset.
-
-> Also what happens if someone would enable and disable it
-> multiple times during one boot? Would the statistics get all skewed
-> because some frees would be not accounted while it's disabled?
-
-Yes and this was discussed during last LSFMM when the runtime control
-was brought up for the first time. That loss of accounting while the
-feature is disabled seems to be expected and acceptable. One could
-snapshot the state before re-enabling the feature and then compare
-later results with the initial snapshot to figure out the allocation
-growth.
-
->
-> >>
-> >> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-> >
-> > Thanks!
-> >
-> >>
-> >>
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Nit: just notice these are now the same and maybe you could just drop both
+wrappers and rename __alloc_tag_sub to alloc_tag_sub?
