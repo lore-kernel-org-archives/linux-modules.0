@@ -1,55 +1,55 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C5D79B7D
-	for <linux-modules@vger.kernel.org>; Wed, 28 Feb 2024 18:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427D079B81
+	for <linux-modules@vger.kernel.org>; Wed, 28 Feb 2024 18:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709143523; cv=none; b=hiu1AjPzzA+IFy8PnLEEqDmJrQmqyK1HVSr7CoW9zb9xrYKoOH3yCS30S/d256/MsdUeQCwfLv0i7bcnWwkwXP28psU6okpQoyjrILUd5nXiCHktakT7hBlshKHQIGNbhp94lGXQn1wvxdqU7C2ZqwtcKgzkJvRHrCoJ9RNKLzA=
+	t=1709143656; cv=none; b=eEVybAvziIWeMhi3TbhWQSqITSiNryE8u/Ae/8YPUPlcB+5+R47UMXpVxg5c/PQuq/cbKX+RQqqo1/PN19fdqy4js7IftLPi12aRPa2fS9WkfmyIsHAyFWfaqLZsRK4XZ9UhbS1Xk9ojTa1k/5OTRrfG5wiNeo7e1rZTuTqvAmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709143523; c=relaxed/simple;
-	bh=M5RWLefMMZcrjC6ohvg7ZMSlCbzmM6eu4zL9kM45cas=;
+	s=arc-20240116; t=1709143656; c=relaxed/simple;
+	bh=rv47TPwMaL5mB4Ug9VuCbJFQC3RVZQfJetV44+QcIfk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RSqyJoyqsoNWvVpcrtPwbKSMOS5yb1W4zx2Ab0zmUnBJVvWB+bc77qKJNipNDUxMYF5Cmymbr2IQaJckR3g8fuipE2qXoDFt8lQPuAITW5OBJuNdBdU64wYml1r5IsV9cUbTOEgDKQnpHPiE/qAAAvZSvJuisQsA3rfIArKAx94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=07Nj3u52; arc=none smtp.client-ip=209.85.128.169
+	 To:Cc:Content-Type; b=mdbjSob1t8PMT8Ba3keHx+oOJJbKDCqBBnKjmS+cAXbJ0E7SyUp1VnUbxSh3qNzy/B4xQEllWjJBYm35Ufu/xi2jGUMRAbaAzs7Uhce8lIKerKIkl4H81TIzAk4tYmPAOa0V1E6K5lG33dJd3HV51LY/Swzx5ERghYtUq+L4tnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I26LIUlD; arc=none smtp.client-ip=209.85.167.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="07Nj3u52"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6093b4f82ceso245067b3.3
-        for <linux-modules@vger.kernel.org>; Wed, 28 Feb 2024 10:05:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I26LIUlD"
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3c19bc08f96so3580094b6e.2
+        for <linux-modules@vger.kernel.org>; Wed, 28 Feb 2024 10:07:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709143520; x=1709748320; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1709143653; x=1709748453; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M5RWLefMMZcrjC6ohvg7ZMSlCbzmM6eu4zL9kM45cas=;
-        b=07Nj3u52kU5HkNbHmQi6GSJlFvm+hwSmH23kU9J3YIdBUAZcfVKU5HQ3RCYnYic0v6
-         QLRHfuCjI9k+jiAG3w+DoaSoumtOezIBDz1r8Kz8fHtyP7r7SZx31n43NzTdmop/PO2A
-         8mM/4NeVzeoWdN0ez7/q13ruSZDGpAfWv4C6Jt0Y0ZDccQI15hWg5epL5i0sGXGwRR2Z
-         QyHgs217g8YnqC7+n46M+BhjmuNXp3pKxFMqFRf5dLwy6cELVZXPEu+Ogd7PlX5F4r/Y
-         GY/qYMx/nxnzCGNBgbHCEaaY4EPWcJbvRoW29RCrocuMaX6hzZjZnlqLuzHzfEmrYQi9
-         uEOQ==
+        bh=TpJn79d7ymx24Tp5aF1RCceBrMYpEjjJMLmxKg1qMeo=;
+        b=I26LIUlDAHkDBLXz3vWL7AcRTiKr8/ll6mVDEuxWMUsDvyKo6Gs+weBuyHxXp1Y+kO
+         yJBVXecvpEki+8OZ1GTubMJYou2eewYBq3M9YCaRXSdVKU9PsBJ74cbni8NTEdQRS04f
+         GgSqHdZyP/J47iELtUMR6d2HMQrHv5pA/t6NYXqxTZ48WK0xFLz5yuBUW6WuOoaLRbWl
+         LvYIGG4G3PkbFnr3WOMUgnlkPgjAHEsG2px5MAU4lj3hIA7A5qa7UrIUlupai3dN2WnK
+         5V1n3s54PerdOa5bqlfwqlX/4xYf8mpNVtE/FHMhpXzZetUrgiPSAHIIE3Kpx5k3pT3E
+         cXKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709143520; x=1709748320;
+        d=1e100.net; s=20230601; t=1709143653; x=1709748453;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M5RWLefMMZcrjC6ohvg7ZMSlCbzmM6eu4zL9kM45cas=;
-        b=fpxw+fPk1S1g79FZYpkNO6WSlGlDMucEXdp/bGsjzURlXCcmGIkWiJHyPPtjrdBS25
-         2j35W5HS3LU33E+bbzZxEwY5qcQtAV61UBuZL8hccKB8ADvhxFebkY3FEX/6PDQbDUR/
-         HKrJl5WJy7AqLt0KnWBqGaU3OQbGwAkiiA9btEkzRLNmdD3xWWpln3qTSGHf8L2L+br9
-         zZO6hPiE1jXfuMdqNchavPNSlcWztivD5otjgUy8Hkg+JBff7GCOuSTPP9SXVgUmaR1Y
-         XDaOMSodxp4Ff+XzuhkgXCc+/YxYoE7N2y+hjmoBADjwTME3QKS8gRImBA2VvDe4aKOr
-         hIwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWNS/1Vl4wqA9KkxFZ1xz0ZZ6sxh9WI1SKYb4Cz/K3Zl+Co3pO8J3ksQd0Gyy8p2dlMnyEPgZKNVJoXFrMGy10WXXAqu2kZlddXphLYuQ==
-X-Gm-Message-State: AOJu0YzU3O3yhLMtaQjutpjqCmhVZeiyDqprfFngd3bQrJ2IokJT/06r
-	ujQvM003uBgCueFJyvyA0YMTR3a3n8FYko4sBnyxuEW22knG4Zh3nVb26Dn2NHgXJTgK601MozJ
-	71DN+W8WZT/SzSYZPws9Td1NOLIvr0iTbATgd
-X-Google-Smtp-Source: AGHT+IGXC8lezvXLfyLFgurkGO2/8+xbMmbLbWU2Dhx0X772e49nOZcLM0/mejcqQER1kvdSNB2vVup4Slt3VEZ2U4I=
-X-Received: by 2002:a25:4687:0:b0:dc2:398b:fa08 with SMTP id
- t129-20020a254687000000b00dc2398bfa08mr21101yba.31.1709143520037; Wed, 28 Feb
- 2024 10:05:20 -0800 (PST)
+        bh=TpJn79d7ymx24Tp5aF1RCceBrMYpEjjJMLmxKg1qMeo=;
+        b=mkt0pUeaEciCTqeAm02DBvI08tlj6ICIppwKPAJbq97GrNjlyv2/SJERyEGCyKPhHg
+         RsCxdrg/Ix/QsTeHuo16YVXTfPDsq4r2IUxBedgnbhjhFUeIIoy1Rd89aAxvFuAVEuWm
+         mH1jF+NorKHElkDCjWtir2hV9/SnjiYEItZLdJO6LpWvvcy3WfwSofLtd52TRz78Xa2B
+         gtk+AWyFwTh+DUcWYJBJDhLnTpsepv28PwEWejTm3u59fCMvIv+T1nqM8o58rBMj3G5X
+         lGb63DavAKIH1uN3oy1s3+4R80oZm3tGMuYnPL+Im+9kt+uw9nPc+787t9TAHnfft+i1
+         sgSw==
+X-Forwarded-Encrypted: i=1; AJvYcCW8BNru1tg94IsdyZM+6sv6OCr9X6Frgg3Fw5k9PkjUQFM1Mv6g2EPdGSkpa5HZ1Ggxr61m+StxKbEthGAirxs7opFezuWiaDsj+JUr8w==
+X-Gm-Message-State: AOJu0YyjbTQV4sSCuucY+kCQS3J6gaP7u68hJ5PJyaNhelwFiKbpt0cV
+	eljmSdBiePuyqmf8ZAZIkgjM8hBJHx0XfhedYjb1U684kC7UZMwx+NZw25sl5ckD8LmxadadIxM
+	A6z9JUopOMJlYhjgCutkjNJ06wSpy8nmfQcSH
+X-Google-Smtp-Source: AGHT+IE9fAMwB02uuQ94nEpy4LyanC7xT4icsl4y9kTpTBjAiVMb+QVVN/OZ7PFrRjTuaOAC60zwFIwL5MnGwsnXp9Q=
+X-Received: by 2002:a05:6358:80a8:b0:17b:521f:b2ae with SMTP id
+ a40-20020a05635880a800b0017b521fb2aemr6472rwk.14.1709143652850; Wed, 28 Feb
+ 2024 10:07:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -57,11 +57,11 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-15-surenb@google.com>
- <1287d17e-9f9e-49a4-8db7-cf3bbbb15d02@suse.cz>
-In-Reply-To: <1287d17e-9f9e-49a4-8db7-cf3bbbb15d02@suse.cz>
+ <b62d2ace-4619-40ac-8536-c5626e95d87b@suse.cz>
+In-Reply-To: <b62d2ace-4619-40ac-8536-c5626e95d87b@suse.cz>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 28 Feb 2024 18:05:08 +0000
-Message-ID: <CAJuCfpGSNut2st7vKYJE7NXb6BPjd=DFW_VEUKfw=hGyzUpqJw@mail.gmail.com>
+Date: Wed, 28 Feb 2024 18:07:18 +0000
+Message-ID: <CAJuCfpEsBEK5M72v1MdSBnh_bFgJLRj3JzDdz1X1BGzfJw6sfw@mail.gmail.com>
 Subject: Re: [PATCH v4 14/36] lib: add allocation tagging support for memory
  allocation profiling
 To: Vlastimil Babka <vbabka@suse.cz>
@@ -93,29 +93,91 @@ Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 28, 2024 at 8:29=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
+On Wed, Feb 28, 2024 at 8:41=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
 ote:
 >
+> Another thing I noticed, dunno how critical
+>
 > On 2/21/24 20:40, Suren Baghdasaryan wrote:
-> >
+> > +static inline void __alloc_tag_sub(union codetag_ref *ref, size_t byte=
+s)
+> > +{
+> > +     struct alloc_tag *tag;
+> > +
+> > +#ifdef CONFIG_MEM_ALLOC_PROFILING_DEBUG
+> > +     WARN_ONCE(ref && !ref->ct, "alloc_tag was not set\n");
+> > +#endif
+> > +     if (!ref || !ref->ct)
+> > +             return;
+>
+> This is quite careful.
+>
+> > +
+> > +     tag =3D ct_to_alloc_tag(ref->ct);
+> > +
+> > +     this_cpu_sub(tag->counters->bytes, bytes);
+> > +     this_cpu_dec(tag->counters->calls);
+> > +
+> > +     ref->ct =3D NULL;
+> > +}
+> > +
 > > +static inline void alloc_tag_sub(union codetag_ref *ref, size_t bytes)
 > > +{
-> > + __alloc_tag_sub(ref, bytes);
+> > +     __alloc_tag_sub(ref, bytes);
 > > +}
 > > +
 > > +static inline void alloc_tag_sub_noalloc(union codetag_ref *ref, size_=
 t bytes)
 > > +{
-> > + __alloc_tag_sub(ref, bytes);
+> > +     __alloc_tag_sub(ref, bytes);
 > > +}
 > > +
+> > +static inline void alloc_tag_ref_set(union codetag_ref *ref, struct al=
+loc_tag *tag)
+> > +{
+> > +#ifdef CONFIG_MEM_ALLOC_PROFILING_DEBUG
+> > +     WARN_ONCE(ref && ref->ct,
+> > +               "alloc_tag was not cleared (got tag for %s:%u)\n",\
+> > +               ref->ct->filename, ref->ct->lineno);
+> > +
+> > +     WARN_ONCE(!tag, "current->alloc_tag not set");
+> > +#endif
+> > +     if (!ref || !tag)
+> > +             return;
 >
-> Nit: just notice these are now the same and maybe you could just drop bot=
-h
-> wrappers and rename __alloc_tag_sub to alloc_tag_sub?
+> This too.
+>
+> > +
+> > +     ref->ct =3D &tag->ct;
+> > +     /*
+> > +      * We need in increment the call counter every time we have a new
+> > +      * allocation or when we split a large allocation into smaller on=
+es.
+> > +      * Each new reference for every sub-allocation needs to increment=
+ call
+> > +      * counter because when we free each part the counter will be dec=
+remented.
+> > +      */
+> > +     this_cpu_inc(tag->counters->calls);
+> > +}
+> > +
+> > +static inline void alloc_tag_add(union codetag_ref *ref, struct alloc_=
+tag *tag, size_t bytes)
+> > +{
+> > +     alloc_tag_ref_set(ref, tag);
+>
+> We might have returned from alloc_tag_ref_set() due to !tag
+>
+> > +     this_cpu_add(tag->counters->bytes, bytes);
+>
+> But here we still assume it's valid.
 
-Ack.
+Yes, this is a blunder on my side after splitting alloc_tag_ref_set()
+into a separate function. I'll fix this in the next version. Thanks!
 
+>
+> > +}
+> > +
 >
 > --
 > To unsubscribe from this group and stop receiving emails from it, send an=
