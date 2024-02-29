@@ -1,146 +1,111 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4C971EB0
-	for <linux-modules@vger.kernel.org>; Wed, 28 Feb 2024 18:39:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6798B6D50A;
+	Thu, 29 Feb 2024 20:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709145546; cv=none; b=E55QiCLt1co54YGV37I1JSEICYMFxTrekVNcYyrBbZ1+4zQQlzDDamJTen9bVYS4EUtV2ozl9eJtObxXnmSs2VDeYutR6kIG77Dt2YRqr1LcWabyTk6u6lhBuMVKOSuwlDJ7Fqf4U1uGW1Dahm3DNA0q2Bd5E6N+76GPFmIjuSk=
+	t=1709240105; cv=none; b=bIeMuZhjAgUBLtw9NVGokzHs71DhK6hlpeFEC8ZmD82M6/agbtoTiRU8mMJqRzhUmVXPUtjWmd1iAF8X4Wb9pqd7De/LIrh4AHEFlKde7EZLqTXr2havIdGM6q8R8iw4sJg5Nk1UvccYiURLUQz+QnGL+Kp7KZigpdX3l6OYKOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709145546; c=relaxed/simple;
-	bh=7iqFBA+LWwnU3gwgoROsymeSLKp/pJPiwqlUMLON2K8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tfq9OL+iz5FNxt6FDNkrL/KfS1FJu55xXAkwV6K0IFCnItB/kh8lQ83K9BYM85hKm7iLfechF0N4lpF9bUwSQFnbIeX439u/inK/tnW7QazmdpxbS7DNANuUmF0+Uq0qk6eOYf+BkJIBivlBQDqSp8iDPBfZxKEDPfanlU3SNf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bZRYLvOc; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bZRYLvOc"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-60925c4235eso617927b3.3
-        for <linux-modules@vger.kernel.org>; Wed, 28 Feb 2024 10:39:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709145544; x=1709750344; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7iqFBA+LWwnU3gwgoROsymeSLKp/pJPiwqlUMLON2K8=;
-        b=bZRYLvOcuSQJ7yTTsyjqu0vwk3flVlQP1DkzZ/201fIwY1LLOW6TSNF6BYYEq7oYih
-         1Cl/Df6h2RV0hl63dNEtntv3f0hZjvN14lRZSYwmLl6hBmIvAn8BJrmsnKFHiRyYxvSy
-         1wr5QF6lFsds62i4Y8iuXFqdO0/MBLf6T7/+JSj90jrAlTfxy6GUL+48TvD+WOQc65TS
-         PDOLJlrQzICYzz+uFhAZmzzcJl2jXbwZ8tb34Kwjdq/CreXpKKumqlKO+WPcgXvIqXBq
-         8HDEcoozgv8zib5X41FWRrwsnVv8RmgjkKKUEW/eb3ulqmH/IChjCZdd7xJUHNqnSmlQ
-         Y4AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709145544; x=1709750344;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7iqFBA+LWwnU3gwgoROsymeSLKp/pJPiwqlUMLON2K8=;
-        b=t65loo/YkSmNBgSHIY40nDdNqPKDs7OvcuwNmAQSQtArgiGYMe3qweX7NgyYZ1NeMo
-         baKr7UYeaR4cfil+IkADSYOLl/vOpCEpNachXhyH1nXZXqDHY6iHvxuphznyKA4387l6
-         DP4NxrQWTqTtf7yz1QT0QYSntU6tjFnZCZYTtlylV7sjOudTCuFziRrDoc2vEViV8xwv
-         x4h0bfzZ0dQVcXEK+FzC43JMNi7sIFOuQ89cKMBTbcJtNnUFyX4Q47uuXUwHbG3HaKfT
-         0yoU9mdAqn28FH8ivEuTycwX3XgC9wh9s21WBNbzWO/d74lrE5QxdIPqymEbWXBGgUlI
-         3hSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnzKVH/2OInMowLjE6NXq+0zDr67FFoTyKLh9yWwYW04GPh/5FDSE4z6J3YHAyVjNB+xSOS8sJCSn5qx8Q4doXnTYjTzevkltrpsgXEQ==
-X-Gm-Message-State: AOJu0Yx5F8uC28ub46I5XCVLi1KfMoBqL6W3PP6dFJbpqajwkpHDsNTn
-	wdOcj6jSjPXJhamINDlLgUbSCJzE24N+gnwUagaGvJuozq1bECPclzvhx6Xdsm/4EUyfGjUVTU1
-	4MHxkNkkzUCwn5rshvlYag13+M7Os4qlqU4bs
-X-Google-Smtp-Source: AGHT+IGPWnLmF2TVmBJmUMEp5oMR8c6WgnFtjjNeDdqebhJZ+NPAbFsWrA/RAsFNPaaO16thY7f2/GzzgeasEYFaVaU=
-X-Received: by 2002:a5b:f45:0:b0:dc6:e75d:d828 with SMTP id
- y5-20020a5b0f45000000b00dc6e75dd828mr48009ybr.18.1709145543730; Wed, 28 Feb
- 2024 10:39:03 -0800 (PST)
+	s=arc-20240116; t=1709240105; c=relaxed/simple;
+	bh=GWMJIephgFCkyB7gv9JQpivlnHOMsUi+KcICdET6vg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aCJXW9OcBhQ/xq8iYd/GDVL6flabKaLP1yQtgllp4wWrS6UuVP5M9RHNtPCdyz3DRcf0A8IonCqmraTbns99C/j5N/dlQqdS5h2LFbPbzYPy+D/dK1a879XVh391Wwzg63/3VsG9QiLRE4KJUNLYPIra0D5hkV0/cFuCuytUkx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="26211658"
+X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
+   d="scan'208";a="26211658"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 12:55:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="913992414"
+X-IronPort-AV: E=Sophos;i="6.06,194,1705392000"; 
+   d="scan'208";a="913992414"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 12:54:47 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andy.shevchenko@gmail.com>)
+	id 1rfnQO-00000008nBm-1H3p;
+	Thu, 29 Feb 2024 22:54:40 +0200
+Date: Thu, 29 Feb 2024 22:54:40 +0200
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+	mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+	roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+	willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+	void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, peterx@redhat.com, david@redhat.com,
+	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+	nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
+	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com,
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+	elver@google.com, dvyukov@google.com, shakeelb@google.com,
+	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+	cgroups@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Paul Mackerras <paulus@samba.org>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
+Subject: Re: [PATCH v3 01/35] lib/string_helpers: Add flags param to
+ string_get_size()
+Message-ID: <ZeDvEKtlB73mnOYy@smile.fi.intel.com>
+References: <20240212213922.783301-1-surenb@google.com>
+ <20240212213922.783301-2-surenb@google.com>
+ <CAHp75Vek3DEYLHnpUDBo_bYSd-ksN_66=LQ5s0Z+EhnNvhybpw@mail.gmail.com>
+ <bicga3cv554ey4lby2twq3jw4tkkzx7mreakicf22sna63ye4x@x5di6km5x7fn>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221194052.927623-1-surenb@google.com> <20240221194052.927623-20-surenb@google.com>
- <2daf5f5a-401a-4ef7-8193-6dca4c064ea0@suse.cz> <CAJuCfpGt+zfFzfLSXEjeTo79gw2Be-UWBcJq=eL1qAnPf9PaiA@mail.gmail.com>
- <6db0f0c8-81cb-4d04-9560-ba73d63db4b8@suse.cz> <CAJuCfpEgh1OiYNE_uKG-BqW2x97sOL9+AaTX4Jct3=WHzAv+kg@mail.gmail.com>
- <f494b8e5-f1ca-4b95-a8aa-01b9c4395523@suse.cz>
-In-Reply-To: <f494b8e5-f1ca-4b95-a8aa-01b9c4395523@suse.cz>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 28 Feb 2024 10:38:49 -0800
-Message-ID: <CAJuCfpHJoPa_pQNPrcWNZyU7V7=UA4deGFMxh9_aZPyiP0bFSw@mail.gmail.com>
-Subject: Re: [PATCH v4 19/36] mm: create new codetag references during page splitting
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, tj@kernel.org, muchun.song@linux.dev, 
-	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
-	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, 
-	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org, 
-	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
-	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
-	elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bicga3cv554ey4lby2twq3jw4tkkzx7mreakicf22sna63ye4x@x5di6km5x7fn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, Feb 28, 2024 at 10:28=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> w=
-rote:
->
-> On 2/28/24 18:50, Suren Baghdasaryan wrote:
-> > On Wed, Feb 28, 2024 at 12:47=E2=80=AFAM Vlastimil Babka <vbabka@suse.c=
-z> wrote:
-> >
-> >>
-> >> Now this might be rare enough that it's not worth fixing if that would=
- be
-> >> too complicated, just FYI.
-> >
-> > Yeah. We can fix this by subtracting the "bytes" counter of the "head"
-> > page for all free_the_page(page + (1 << order), order) calls we do
-> > inside __free_pages(). But we can't simply use pgalloc_tag_sub()
-> > because the "calls" counter will get over-decremented (we allocated
-> > all of these pages with one call). I'll need to introduce a new
-> > pgalloc_tag_sub_bytes() API and use it here. I feel it's too targeted
-> > of a solution but OTOH this is a special situation, so maybe it's
-> > acceptable. WDYT?
->
-> Hmm I think there's a problem that once you fail put_page_testzero() and
-> detect you need to do this, the page might be already gone or reallocated=
- so
-> you can't get to the tag for decrementing bytes. You'd have to get it
-> upfront (I guess for "head && order > 0" cases) just in case it happens.
-> Maybe it's not worth the trouble for such a rare case.
+On Tue, Feb 13, 2024 at 05:06:24PM -0500, Kent Overstreet wrote:
+> On Tue, Feb 13, 2024 at 10:26:48AM +0200, Andy Shevchenko wrote:
+> > On Mon, Feb 12, 2024 at 11:39 PM Suren Baghdasaryan <surenb@google.com> wrote:
 
-Yes, that hit me when I tried to implement it but there is a simple
-solution around that. I can obtain alloc_tag before doing
-put_page_testzero() and then decrement bytes counter directly as
-needed.
-Not sure if it is a rare enough case that we can ignore it but if the
-fix is simple enough then might as well do it?
+> > It seems most of my points from the previous review were refused...
+> 
+> Look, Andy, this is a pretty tiny part of the patchset, yet it's been
+> eating up a pretty disproprortionate amount of time and your review
+> feedback has been pretty unhelpful - asking for things to be broken up
+> in ways that would not be bisectable, or (as here) re-asking the same
+> things that I've already answered and that should've been obvious.
+> 
+> The code works. If you wish to complain about anything being broken, or
+> if you can come up with anything more actionable than what you've got
+> here, I will absolutely respond to that, but otherwise I'm just going to
+> leave things where they sit.
 
->
-> >>
-> >>
-> >> > Every time
-> >> > one of these pages are freed that codetag's "bytes" and "calls"
-> >> > counters will be decremented. I think accounting will work correctly
-> >> > irrespective of where these pages are freed, in __free_pages() or by
-> >> > put_page().
-> >> >
-> >>
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+I do not understand why I should do *your* job.
+Nevertheless, I have just sent my version of this change.
+Enjoy!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
