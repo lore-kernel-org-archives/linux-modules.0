@@ -1,203 +1,97 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D834E152DF0
-	for <linux-modules@vger.kernel.org>; Wed,  6 Mar 2024 18:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D5A13E7DC
+	for <linux-modules@vger.kernel.org>; Wed,  6 Mar 2024 18:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709749568; cv=none; b=AjXWJ37PksJTvj8GvAfsfTct3EYXetDyUfm6eCscwWbmeYf95MyVgdgm+U1JSHlU25tyzlTMv1L6OAdijmsRl/0B86679RP/sFgmmNvuPu7tM3jVd+ceKVCXf//mpvEPxLIxkeXgORK7zd4xeQZXduWb65L52muh1grJn6iUfnw=
+	t=1709749583; cv=none; b=XINhSZVrGCOPVuUdXdQqbY6SxH9S/hYx/pthK7x4ByWwizhXR8hqRsIMKsMmfYyrEGUG0as8c6Qz01KAQqrHXJ0B2orZKPOkhDWA/99l8jeRa8QZx+vz77xFaD38us5CppPJLfdl//ULI3tfuUQHkeXZQMAhQ5fugkbJpxVl3bA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709749568; c=relaxed/simple;
-	bh=WZ9Wfhph9SqMvpwjpOilQz7uq5chx2Sd29yINS9foKA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Mkp/IDqtm+PpN7YcncxIzXM2z2bW942UerJcTtWjmztmPN87eZscuDeUNGFVT9qRt4JeXpAISJx5ulDFUUAGCDulSRquGKGxG/dSddB9BcqEh5k2hWyYKOWH7ieYu7Sngp4XiyVzJAFVy+CdRyYgWN5ft4v95coIHG6F1UGN6ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D/UMJVvP; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
+	s=arc-20240116; t=1709749583; c=relaxed/simple;
+	bh=BDZEFvO4/kpPxTSsZCGhWHb73PFi5c4MgCZxND0FO+Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s85j5nltdauEgBNlf2Y7Zaq+8EA2kXyoWOnihp9vFSaJMJaZJmz9ftQ2gJLqcLQO8/dDhmOsIDTSOpQ12iNWM5NfS4sxqNw7hmZxcUtdiDKog6Ka2HO4SGrPrjJq/kLZYCpS43a9GwsC2aNs/7jwe9FdxR1Wo80eef7Ikmo9eiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eFxuTyBQ; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D/UMJVvP"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dcc0bcf9256so9589726276.3
-        for <linux-modules@vger.kernel.org>; Wed, 06 Mar 2024 10:26:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eFxuTyBQ"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-609a773ec44so20597b3.3
+        for <linux-modules@vger.kernel.org>; Wed, 06 Mar 2024 10:26:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709749564; x=1710354364; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yGhey761h+yk0goaaYaIkNpiVVUjQ3rocN1HojLD7sY=;
-        b=D/UMJVvP9HSPPg/+UMFUn2uZmSu2zF9hVOmrJ8EDa6yA8umDSMaFwniCa11IGfob6+
-         pPTYXHkvmUQZ7h5CbcIAv6z5Jc6pNpACFiOM0RanoRglnxOK2Us+/8PdMVd7VNPGpn5R
-         gEWA/O7R6ylKAL9OWCKGt56aPulT1OItTwVIqjTMjP9+CPPayXSqheN4JJYkAlh+YWpf
-         YWjsqWfjx5qQ3iirKrDcIsg76y44ErK7ViJMUMtFnB9PCUMx8lXIA1e+0+sCnVZW+Pdv
-         ZLCNBRifYQXpn7hbpYkEIZJjuiSaHX54snkLPAT8zxkbs7l/Bvf1uPpdw74AvHsWkS3N
-         vK9Q==
+        d=gmail.com; s=20230601; t=1709749580; x=1710354380; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iDE+SekCPQHTVQBs9L5kK3RRx6oyNpss4llduwnwBdI=;
+        b=eFxuTyBQjwZ0AVmgrPylVlC/ejsjRjuWQkZmGpAFwj/CQ2XxCQi+ES/sTvOx6AkywE
+         GK3+/JJe5WQPnscceluW81Xnd+j1GYLrtvI69GkuoeWwpbcMmJ1rtqngoCMVJXof8nLb
+         NPG2Eqt/QoCEN9OCT4xrug1NmzaNCmQvpdgWLdXEpKD1n6Wq4OioaJo/+UM6GbcQU24z
+         rYChXs5QiEM0hXqXKwiuGbVoMkM1V4uSXW2wNln/9CmNE1RCPW/+YXKU9uGGeapx559x
+         uJThQ1Kjr9G9s/V/9xBxFeuSh2syUs8P2ywyWdNwvsVPcw9FfmgwKXva6bcz6DosWxLQ
+         qRmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709749564; x=1710354364;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yGhey761h+yk0goaaYaIkNpiVVUjQ3rocN1HojLD7sY=;
-        b=ZeQANXsELBlfAkmYi+f4ZtSqlR70negF8PYZnM7oNNeJYyua+SBljK7Sc896Ffzlfw
-         DBMK5wZtzQiBCnU1gx0T+gw6gJEq1v/3KUSg7pwq+s/BYSkgHM9D4Ie78cc5l3w/KZJ7
-         8ixUseB44rGnVMZbINhBmw1lXBBDz29MzwhQknsGqlx5Aqk0r/7j0pIVwz8fjj2Ugy+F
-         aFYl83W9NwnA535kMxngPWapOlnJ9yC/7pCTA+fjkyVSkFaAFsR2LtZp72DEn/GuZVPN
-         OEJMXykXCjwcIYTjZc+2dfv0YHFa7M+hOUT12gIwCTwGfqMkT4miiD4wkGGvAmjbB+GK
-         0pkw==
-X-Forwarded-Encrypted: i=1; AJvYcCUNT3df4tbKHWtkSIOXV1urN02k7BgF6/2YwFOsoHTnkN+a3S9NOec0k1aE/8HAV2XP63kND5GnbE5a9vRBRK5PT1B6c0u5UMn/bdA9EQ==
-X-Gm-Message-State: AOJu0Yzu74d4HAsklT8bpoUdH3K3mFwCZut5PwPs8u5VifDVynBpOgw7
-	zypc/DSoy2xkzojHT+IY72ptxvXRq/iiGzjRWBggxgXHh1NxqR/CoVOe1oaq6nOMeIW8F8dP8OC
-	/RA==
-X-Google-Smtp-Source: AGHT+IGSwvnidbX0/rOv0INS3he6frJgJB+IsYvN52GAPjMVdVuwPoKCHiyeHTzcN2rL9OOwKUgSVjL4/4I=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:85f0:e3db:db05:85e2])
- (user=surenb job=sendgmr) by 2002:a25:2fc1:0:b0:dc6:ebd4:cca2 with SMTP id
- v184-20020a252fc1000000b00dc6ebd4cca2mr528159ybv.11.1709749563843; Wed, 06
- Mar 2024 10:26:03 -0800 (PST)
-Date: Wed,  6 Mar 2024 10:24:35 -0800
-In-Reply-To: <20240306182440.2003814-1-surenb@google.com>
+        d=1e100.net; s=20230601; t=1709749580; x=1710354380;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iDE+SekCPQHTVQBs9L5kK3RRx6oyNpss4llduwnwBdI=;
+        b=BnhZMB7KceA6DaGc1LMFkSmxowP32PSFLIEnNwv6cPgwxG1okAP6tzRv/Vbs8EShwO
+         l+CKxSgDpNDp1diAhTQnltQt5BZtroTdNuDzlcE5Dk5lAq8yu605ysFETHHQHg8Xl3OI
+         TdT/Ssa/+EZvHLcBhmPjqcmVx6Urvw3hpmRVmrLgx/yTAIELJF6VDb+3nXz7pEDH6p3/
+         SjPOlSaB1Xv66dhMubDC6v4EEeV6lFIFmbMg+yrFbXrik4o+utCANg3pRewA5QNdXY+d
+         JthDacrzPL+yPlvn273AHF7B++sqHpB2tMXgFKRyyh6HN2PMI10NstL505As92q2K8bu
+         3YqA==
+X-Gm-Message-State: AOJu0Yy8BGvPIGssZ9JaI9NyCZLa5SMzjOg1X1OjWH6MUZKkYWUI9Fmb
+	cZGXkn+211EgJ0AciP1yEJr9g4MrzbJK6xZ1zZ4+YbiIznJGiCBhcVaBye6avxv8KiFJsPQBnYs
+	87VKrdV9W9V532YM4kxVDurH455O8y8il9zQ=
+X-Google-Smtp-Source: AGHT+IHz/qquhe3pNcOD3nRcczeZlCQKUjRX0P+iTRLpxBc0fzEzpRdpe5eMVjb7acgLaoLLUHsE/S3F5xFg9R1qgQA=
+X-Received: by 2002:a25:cdc3:0:b0:dc7:423c:b8aa with SMTP id
+ d186-20020a25cdc3000000b00dc7423cb8aamr12029446ybf.12.1709749580537; Wed, 06
+ Mar 2024 10:26:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240306182440.2003814-1-surenb@google.com>
-X-Mailer: git-send-email 2.44.0.278.ge034bb2e1d-goog
-Message-ID: <20240306182440.2003814-38-surenb@google.com>
-Subject: [PATCH v5 37/37] memprofiling: Documentation
-From: Suren Baghdasaryan <surenb@google.com>
-To: akpm@linux-foundation.org
-Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
-	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
-	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
-	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com, 
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	surenb@google.com, kernel-team@android.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
+MIME-Version: 1.0
+References: <20240306145804.135709-1-lucas.de.marchi@gmail.com>
+In-Reply-To: <20240306145804.135709-1-lucas.de.marchi@gmail.com>
+From: Emil Velikov <emil.l.velikov@gmail.com>
+Date: Wed, 6 Mar 2024 18:26:09 +0000
+Message-ID: <CACvgo50zhPA+RZff2=JNYZ9Qf42MZvoyFJm6fuJt=OuxaCWLVA@mail.gmail.com>
+Subject: Re: [PATCH] build: Allow to install over dirty dir
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: linux-modules@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-From: Kent Overstreet <kent.overstreet@linux.dev>
+On Wed, 6 Mar 2024 at 14:58, Lucas De Marchi <lucas.de.marchi@gmail.com> wrote:
+>
+> Before commit e98cef6f3f8c ("make: install/uninstall tools symlinks to
+> kmod") it was possible to call `make install DESTDIR=<dir>` multiple
+> times. Use `ln -sf` so the symlink is always re-created.
+>
+> It would be preferred to remove install in an empty dir, but there's
+> not a bad consequence of re-using the same, so let the user decide.
+> Fixes the following errors while installing for the second time:
+>
+>         ln: failed to create symbolic link '/tmp/inst/usr/bin/insmod': File exists
+>         ln: failed to create symbolic link '/tmp/inst/usr/bin/lsmod': File exists
+>         ln: failed to create symbolic link '/tmp/inst/usr/bin/rmmod': File exists
+>         ln: failed to create symbolic link '/tmp/inst/usr/bin/depmod': File exists
+>         ln: failed to create symbolic link '/tmp/inst/usr/bin/modprobe': File exists
+>         ln: failed to create symbolic link '/tmp/inst/usr/bin/modinfo': File exists
+>         make[3]: *** [Makefile:2679: install-exec-hook] Error 1
+>         make[2]: *** [Makefile:2553: install-exec-am] Error 2
+>         make[1]: *** [Makefile:2439: install-am] Error 2
+>         make: *** [Makefile:1848: install-recursive] Error 1
+>
+> Cc: Emil Velikov <emil.l.velikov@gmail.com>
+> Closes: https://github.com/kmod-project/kmod/issues/35
+> Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
 
-Provide documentation for memory allocation profiling.
+This matches the default `man 1 install` behaviour, which overrides
+existing file(s).
 
-Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- Documentation/mm/allocation-profiling.rst | 91 +++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 Documentation/mm/allocation-profiling.rst
+Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
 
-diff --git a/Documentation/mm/allocation-profiling.rst b/Documentation/mm/allocation-profiling.rst
-new file mode 100644
-index 000000000000..8a862c7d3aab
---- /dev/null
-+++ b/Documentation/mm/allocation-profiling.rst
-@@ -0,0 +1,91 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+===========================
-+MEMORY ALLOCATION PROFILING
-+===========================
-+
-+Low overhead (suitable for production) accounting of all memory allocations,
-+tracked by file and line number.
-+
-+Usage:
-+kconfig options:
-+ - CONFIG_MEM_ALLOC_PROFILING
-+ - CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
-+ - CONFIG_MEM_ALLOC_PROFILING_DEBUG
-+   adds warnings for allocations that weren't accounted because of a
-+   missing annotation
-+
-+Boot parameter:
-+  sysctl.vm.mem_profiling=0|1|never
-+
-+  When set to "never", memory allocation profiling overheads is minimized and it
-+  cannot be enabled at runtime (sysctl becomes read-only).
-+  When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=y, default value is "1".
-+  When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=n, default value is "never".
-+
-+sysctl:
-+  /proc/sys/vm/mem_profiling
-+
-+Runtime info:
-+  /proc/allocinfo
-+
-+Example output:
-+  root@moria-kvm:~# sort -g /proc/allocinfo|tail|numfmt --to=iec
-+        2.8M    22648 fs/kernfs/dir.c:615 func:__kernfs_new_node
-+        3.8M      953 mm/memory.c:4214 func:alloc_anon_folio
-+        4.0M     1010 drivers/staging/ctagmod/ctagmod.c:20 [ctagmod] func:ctagmod_start
-+        4.1M        4 net/netfilter/nf_conntrack_core.c:2567 func:nf_ct_alloc_hashtable
-+        6.0M     1532 mm/filemap.c:1919 func:__filemap_get_folio
-+        8.8M     2785 kernel/fork.c:307 func:alloc_thread_stack_node
-+         13M      234 block/blk-mq.c:3421 func:blk_mq_alloc_rqs
-+         14M     3520 mm/mm_init.c:2530 func:alloc_large_system_hash
-+         15M     3656 mm/readahead.c:247 func:page_cache_ra_unbounded
-+         55M     4887 mm/slub.c:2259 func:alloc_slab_page
-+        122M    31168 mm/page_ext.c:270 func:alloc_page_ext
-+===================
-+Theory of operation
-+===================
-+
-+Memory allocation profiling builds off of code tagging, which is a library for
-+declaring static structs (that typcially describe a file and line number in
-+some way, hence code tagging) and then finding and operating on them at runtime
-+- i.e. iterating over them to print them in debugfs/procfs.
-+
-+To add accounting for an allocation call, we replace it with a macro
-+invocation, alloc_hooks(), that
-+ - declares a code tag
-+ - stashes a pointer to it in task_struct
-+ - calls the real allocation function
-+ - and finally, restores the task_struct alloc tag pointer to its previous value.
-+
-+This allows for alloc_hooks() calls to be nested, with the most recent one
-+taking effect. This is important for allocations internal to the mm/ code that
-+do not properly belong to the outer allocation context and should be counted
-+separately: for example, slab object extension vectors, or when the slab
-+allocates pages from the page allocator.
-+
-+Thus, proper usage requires determining which function in an allocation call
-+stack should be tagged. There are many helper functions that essentially wrap
-+e.g. kmalloc() and do a little more work, then are called in multiple places;
-+we'll generally want the accounting to happen in the callers of these helpers,
-+not in the helpers themselves.
-+
-+To fix up a given helper, for example foo(), do the following:
-+ - switch its allocation call to the _noprof() version, e.g. kmalloc_noprof()
-+ - rename it to foo_noprof()
-+ - define a macro version of foo() like so:
-+   #define foo(...) alloc_hooks(foo_noprof(__VA_ARGS__))
-+
-+It's also possible to stash a pointer to an alloc tag in your own data structures.
-+
-+Do this when you're implementing a generic data structure that does allocations
-+"on behalf of" some other code - for example, the rhashtable code. This way,
-+instead of seeing a large line in /proc/allocinfo for rhashtable.c, we can
-+break it out by rhashtable type.
-+
-+To do so:
-+ - Hook your data structure's init function, like any other allocation function
-+ - Within your init function, use the convenience macro alloc_tag_record() to
-+   record alloc tag in your data structure.
-+ - Then, use the following form for your allocations:
-+   alloc_hooks_tag(ht->your_saved_tag, kmalloc_noprof(...))
--- 
-2.44.0.278.ge034bb2e1d-goog
-
+-Emil
