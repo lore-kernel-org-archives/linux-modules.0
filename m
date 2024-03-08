@@ -1,264 +1,1467 @@
-Received: from PA5P264CU001.outbound.protection.outlook.com (mail-francecentralazon11020003.outbound.protection.outlook.com [52.101.167.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543C11369A6;
-	Thu,  7 Mar 2024 22:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.167.3
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709849813; cv=fail; b=iMpxnV26gAHrjUdydDh+fsyHMBsq0xZrFuFDNyZHxSwm6rG/k8RYCQPT8Z/HqX5dxtOOMjb1hm+kOvleH02MjxWBDfbFkdEtyBVR4CdqwbP+H2OLLk/QSpD3uOPKDsd2j77v2uV1tdeaIAL7p8IWsdVJwQlFa4qHhWat815ILMI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709849813; c=relaxed/simple;
-	bh=UukOHin70FfUtwjf9h3nUkFovs3uhn0LkX/NKYjW4xs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rWJAkXHVSCi4yPmk58BoMI8jMJ3FarysCBoj2jKUR6jbSbmI7lP4YsKQSIXD+rFmFgoYpoxi8PfAzh19mwKGYsoDQ4Vn2MR9fjQYtENJ+ooX4u6K7Ph+RUu/wobKrOlvP49X4+BwzU287Z2a3CTRKiZ+JPGLlQkLkmN7EX39Leo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b=OH7bSYZh; arc=fail smtp.client-ip=52.101.167.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4706F33DF;
+	Fri,  8 Mar 2024 02:16:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709864198; cv=none; b=msAlsa8fKGyg9OU+c9sIa6EXuw3R6WJ+IlSt04KTly2pkscSJ/xMxMGeW5BmIxIQ9IOfNkVRCYWdAFfyK53rvAW6oJkG2l+Oe2vYds/oZO1JlC/Z4JJpVFSqe2pRSk49ckN+vuN0FgUDRLVH2hdflrI68D8uVXANlmhbC9lDblk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709864198; c=relaxed/simple;
+	bh=RCTXtHDuyluD9s9SEqOxYt+UGzzBuaP50dQGyMet+og=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=mzFtf59UxB11EzEeDuLQCHrZWU1BvZDT3ETasux9OjxfQvGUuTYdBLYyP9CGRPpRlRK8B7PAchX6mQd8W9rgfzpbBGnB+UaTIqo73ZRf/pi6XWGxA0+3K1oXQuaWvEdjlM77+YrF6ZKf2L2cv3zUGHhjX38qSQxfIxn5XAyI7oU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NmW1RkoI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b="OH7bSYZh"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fq2b1L2E6hICP6dqluv96lw/Gs9o6e3GZ0CUccop4L49Lfr1smp9+LXEG1loaqJJFFbtfjrzdUjfv8u27pZF90aFOz9KI7E2GX5CCuSLx9mP+bpiqs6cZ/lXGLfqUB0hMnhYRrNfgCZDTAXpmPEEt7JozMy7HQmnOQJu4vjG/ZvCO0SXM6JBa3S1MZ2KcxXpRCPd6abb5PaJLxuivmW4Tcfjv7ju62gcOIAZoQSbpVnyML2a/yXrBGjtHH/E8MAh+vagvHBTIx2EPevPNgbj3FDvyD6yx4X+KtChc0HyZTieeXzFNuPW1d5BkDyVlvnGlkA5iO5bpQZozDG/lJsPTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UukOHin70FfUtwjf9h3nUkFovs3uhn0LkX/NKYjW4xs=;
- b=mZQlLRmV0ewqKguBP/9I4LlUrXGj/+/4uAq/qyUWPc4sRVevEt5z0deUjRhz9al22e1mBsJUGTG/LXQnOLX7GfPmCQ+UXigx0r44qOcFrn98n8ua93bxjAkCZSCsZJ5qb7JqVqBOJIlLaAicEivip09lBIBVdGZv+zsd3h4ZtTeEtMch+Dh6ttXWuXrzw9/+vzmGeXzQrYmwQTa4490Fv01XFgTrpMkwcmZ4h+xmPNrMjbF7IsHi9s+Aer3KlZlZ1ZvExVbCUUI3ROCuJmH9KBdKzxmpqTEX1vHxf5yazIy7Fdu0p0jVYb+2OCq7H7sJ2Twe5kiS3tIznjigtHTt5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UukOHin70FfUtwjf9h3nUkFovs3uhn0LkX/NKYjW4xs=;
- b=OH7bSYZhbjsBFrGh9NuqG8eIbW0bFhOGKu/gH0zzfgb76+Aw+ycJN77T1Vmd6UtfjwIPSFIJloNr6gJ75XKy0Fo+r4wmwFdF7CWkzRZuHpkrhSce6dEGM9Ah85sog8hnJhakyvjGt6JnEeVJBjUNnDWJTJ9MEHQxcfwS/l+iKbnt2+2vhfdJ7tQYLytRkRhvZiscXNyxPMa9ritANpO768MkxGdB2nrxHZskLNbfOC4KcuXLxHUSM9CQMBUiVFzB1uLlPgZI6ozVbRs9BIMKc2MC7pe0NfXkUq+aFxfBa5t9IQimk5wZah0KkhX/GySCnXVUtNkp0LNdK2WSYn2Ugg==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB2294.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b5::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.27; Thu, 7 Mar
- 2024 22:16:47 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c192:d40f:1c33:1f4e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c192:d40f:1c33:1f4e%6]) with mapi id 15.20.7362.024; Thu, 7 Mar 2024
- 22:16:46 +0000
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Calvin Owens <jcalvinowens@gmail.com>, Luis Chamberlain
-	<mcgrof@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Alexei
- Starovoitov <ast@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Naveen N Rao <naveen.n.rao@linux.ibm.com>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, David S Miller
-	<davem@davemloft.net>, Thomas Gleixner <tglx@linutronix.de>
-CC: "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC][PATCH 3/4] kprobes: Allow kprobes with CONFIG_MODULES=n
-Thread-Topic: [RFC][PATCH 3/4] kprobes: Allow kprobes with CONFIG_MODULES=n
-Thread-Index: AQHacAIcHg27mtaWhECTuEl6elscQ7Es2kIA
-Date: Thu, 7 Mar 2024 22:16:45 +0000
-Message-ID: <79062fa3-3402-47b3-8920-9231ad05e964@csgroup.eu>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NmW1RkoI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEE6C43390;
+	Fri,  8 Mar 2024 02:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709864197;
+	bh=RCTXtHDuyluD9s9SEqOxYt+UGzzBuaP50dQGyMet+og=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NmW1RkoIaAo/DXKailQntLzNBuQZI/vWPk66K0KtxHJMJEPCTVcF6G86K6TIgLw6q
+	 eQUX2HZpyZisru26ne5i92Z1WZV6Se/YB8q5eSjOcJLVEE1nFgKqkSkVQotNgJcQqW
+	 Mhw/xjJkG16rSlMs6E/WhdOKEKX8ygDpcUb5yvxlh8EQg5tH+vQXS/NZfue6Mm/dvd
+	 9bMa1Urdq/OunJHyEmkltjAUJoBV2prpCjffzLY82phfTiJs5A0BvhP/AIO2RKUdP4
+	 YqAEW1A4Fde3PPSojVG9s/X0hSS6FdGWh4xVaxRK1++PlNMOsgbcNTHfqeVnUibpH+
+	 VcOXLgys8kD7Q==
+Date: Fri, 8 Mar 2024 11:16:31 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Calvin Owens <jcalvinowens@gmail.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Alexei Starovoitov <ast@kernel.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Naveen N Rao
+ <naveen.n.rao@linux.ibm.com>, Anil S Keshavamurthy
+ <anil.s.keshavamurthy@intel.com>, David S Miller <davem@davemloft.net>,
+ Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH 1/4] module: mm: Make module_alloc() generally
+ available
+Message-Id: <20240308111631.99c4b3157c3e4b1286f6eeca@kernel.org>
+In-Reply-To: <a6b162aed1e6fea7f565ef9dd0204d6f2284bcce.1709676663.git.jcalvinowens@gmail.com>
 References: <cover.1709676663.git.jcalvinowens@gmail.com>
- <2af01251ca21d79fa29092505d192f1f1b746cff.1709676663.git.jcalvinowens@gmail.com>
-In-Reply-To:
- <2af01251ca21d79fa29092505d192f1f1b746cff.1709676663.git.jcalvinowens@gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla Thunderbird
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB2294:EE_
-x-ms-office365-filtering-correlation-id: 2bbafef7-3328-449a-fa63-08dc3ef446b2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- jnMKt6M8MjvOHumG16r/hAqVArzQf/9siOSRz1AkdYUsGaM5C9MHjyxfqSA8BE554efL2QSM3q72gcQV8oLAYaON3DJlvMWzFp1gCEDKzfOG3RFY3ERA2T9dddbuwKR6au6sNSLjmcyF+lHNJpEFoMbehRVnWTd76fcdV0/IajJmOhb4wDrL1bSPdAXWl4N/+jPM38Dv2FZ+GMcivvxGfT+FJL6xBnHbKwaooecmS2/A5wrA+H+n4PIxjiODTa1xA3PTLHXV5qzeJ6t/oDMevWl83Z++nVM0yoIpRk3Ph/RMF8pz4h4wOzJVkMCHRQ92FjcfleXBqDQg8LeQENnBD2ZvDjnFiNdR7D3ZNQB8nTyQ23l4kelJVfhkut1uQv7THlAJ6y+yzKELKlB673fxB9cSgndMimk4hOyaRFRrcpsn821vt2XSf/tbf4Zfa8pja2IOJqhMOldkvJGugqQIPbAR0zQtyraLYPFbLDER7M47hOGHlfJ6CQbUkpXyD94dNP1TX/8IJdVa1ii9i8Cn3G5Z4o3udH/9Qm+ocuy/fH5O9DLTXZ3Oc0Vie+zzv4wnQFggbFCDyfOnpRt2pl6t0bPoKaBQEnPDKeHDg8B6TGHMHbcF8DWmYC8mFilwasgT2Ff+IAtGOq5QzJ8IgflaRVsHjJreZTqKjCMLrDGyWu6XDfK7NTYIUhQQKzmvTTIsea0Cnx9vRHEcsN58Dzx1mWvuw7qU98zqaXAz4Tn8Zf8=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(376005)(921011)(38070700009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?ci9YWlNEMWhCMlA1b285aWhiSWZLZDRpKzRYYlFUb2VaaGp1eHd4aCtrcWVi?=
- =?utf-8?B?aTM2YzJjSU1wRVYvSlZ6SHZNaEprM2QyMlFQTjBNQUxWOHFmYWZWc1dRZktL?=
- =?utf-8?B?YjVGK3oxRjM0eGtMK2wvbGJaR3EzNk9CZWV6TC9iYjBBS0NKV2Rvc1V3WjBR?=
- =?utf-8?B?MDlYeVF5aUE0TW5UdzdobDE5TUpZMTdNVjFWQUorSGZaMlFNcDhrdmRkaDNy?=
- =?utf-8?B?bmxFVTQ0K2w0cVlPWThpRUcvRUF2WCtua1plazlxb2JjMnZ5Q1JXV1RsS2NB?=
- =?utf-8?B?Z0grK0hTRGZHa3QrS1IrK01nUTJLRWoxVHU5TkFhdnA5WW5hQVpTQVNGajR6?=
- =?utf-8?B?ZTMwL2JGNkthVW5tN1pjazBpZFlqYmRCME5HZy9TYnpSOUpoV1FJSWhMZURi?=
- =?utf-8?B?bURMREZtK2Y3OTRtNmdBaFVnS0hSNENhQzFMTFFPRTVlWCtoZmZ2TmZpQWVP?=
- =?utf-8?B?RkFXbDEybXhhRnBINDd4UHkzVGNzb1ZTdnVsZ0NRTzY5R1doT1JRTEl3M2tI?=
- =?utf-8?B?dWNMT0l6SEhWdXBUZDNIYkJBeDJudHo4T2hza2hKVUZPMkhZZVNOR1FZTDJF?=
- =?utf-8?B?dVQ4UlNDM0ZMcWVpMHdNTmlvOVBxMVlDVTZiQ09CZVZnZTAzSWFnREFFWXBa?=
- =?utf-8?B?a1JHeXNtSDBXYzJzOG45T2ZrNXRWZ1o5b0FqK3RRb0dxNFhpK2pLQm4zVG9j?=
- =?utf-8?B?WE5kWDRUR3k4MmhEcTc4NUV1MHFoUFFqWDZuM1d1aUtCUEJHVkJYdzhCK2RU?=
- =?utf-8?B?clVDS2E2STI3MlBGSklGT1Y3SnpvT0pjamFiemIwSVJLZER2d21Nc3AxNHdK?=
- =?utf-8?B?NUp4MXd5SUREd3ZhOWxVRm5Fa0Rkam1WdWozcXBTOFFPTWIxRHJIVHgxS2xV?=
- =?utf-8?B?RVFGeGNlK3FzeU9tV2gvNXZ1OCtyZmpDU1BjQUJSVy9uS0ZwTGZvWm1kY0hy?=
- =?utf-8?B?cWIwQnU0VEZVVVBQWlJCV21oekJnSDNUcWMwRDNjaWxCZk9xc3ZCYnlOa0pu?=
- =?utf-8?B?aGpIZmtLRlNKUlBQcko3bXJjeFlCNzByYStieFBDYWF2OHpoU3p6cDJhc3Qy?=
- =?utf-8?B?bjhBTlpXSHBIbGZKSmt0M2dJNmhNTmRCN0NJSWQyVVpXTWc2a1grWTFoUkZh?=
- =?utf-8?B?NWc5TFQzMUxNdkIrVkFvdmNZU2JScXF1ZUN2bkR0dnpIQnFtUE9sVjhXdFRy?=
- =?utf-8?B?ZGFia1hGQkRLbmsyWVByNHF0OFA0bzd5OVZZdDVFQlNSWXVCbGpxZDNLcUs4?=
- =?utf-8?B?VklzMklqZG1vdWVuZm1HY2dmQ3c4Q1BNcjd2QXNtanA4SnAvWndjSi8zakx3?=
- =?utf-8?B?d0hvaXBTYjZHdUhGUFNmRHZTdkgrKzFKV1J6a2s5aVBVa0lydk8vbjR5VHdJ?=
- =?utf-8?B?M2h4TzRacGxjWGswNDRiMVczb25JK24xRDZVMHJWTjRBQnRwUlBtOElORWJF?=
- =?utf-8?B?eTR0dlRMWlZqVk80bk5DU3BOVVIybE11T0dNMVovSWNSbG1SbG9sWm00YkVP?=
- =?utf-8?B?UWFlcUVpV3RwNXRaeWR2RWtJcHJIcVJTNmZVMm1zQWMvZ1NCNC9YVW96RW14?=
- =?utf-8?B?UEtVNVA3TlptRWVmYUdiNk8xelpOUFRnaGl2b1NZVHVtaVhFdlJ0WUcxTEhp?=
- =?utf-8?B?WGpLODJmRXh3aG9JWDdWTmZKdThSVW1Ibk9POVFPRFdNcnVzNGpKZkFNcGw1?=
- =?utf-8?B?MVJvRkttTDRFbGtoRGZLblllc2xWakxyeGQ0bU11TUhYUGVHTVEzd0Q2UVNI?=
- =?utf-8?B?a2dEQmpDUlMzQlFIUlRTZDNRQzJJT2hLUTFuNUJjcXJrRW9hZVU5dTQrYXBU?=
- =?utf-8?B?YS85VlI2ejk2bTJOVG91N2NyZVVOWFgyK2dQS21CU2FLQjdicU81dlFzN2dM?=
- =?utf-8?B?czgzZlYxZ2d1TVpVOGRJMnAydUJLUGVLL05aUUE2UFNBdDhIemlZZktWaGJ0?=
- =?utf-8?B?VWUyQ2RzVmxnOUo0ZFNUSFFGZjZqc1AzcG55eWgrMGQvcHMzZjd2M2NPaWFZ?=
- =?utf-8?B?RDRiWkpQeU5RUXBPeXRVQkFNaTYxcTFRdHFzWExmaWYwbkFLTGNaRGNnS2pF?=
- =?utf-8?B?ZlFIaXg5Y1FJNE90TEtCdnNMakpsUmtPU1hLZ1A2TDdmeUVDL2dJV2V0TnhR?=
- =?utf-8?B?RWxIM2dNb2JEdHA0MXEvdERmQUhyb3BuVkYxUGhlWUw3Lzg2WGdEVUlXTlFu?=
- =?utf-8?B?UlE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <89CD43E4B83FCB41AE82CCBD0264EF3D@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+	<a6b162aed1e6fea7f565ef9dd0204d6f2284bcce.1709676663.git.jcalvinowens@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2bbafef7-3328-449a-fa63-08dc3ef446b2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2024 22:16:45.8449
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JEeDoiPz5mVJf3xFJ473g08CHXvqC9GgHAm+dXbcrgaYcgLlpBFbazA9+xdDMUEN4UJM8q/HgQCCKcX9u70ugTiZTWiNdjLgS2P2/8Cd33I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2294
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-DQoNCkxlIDA2LzAzLzIwMjQgw6AgMjE6MDUsIENhbHZpbiBPd2VucyBhIMOpY3JpdMKgOg0KPiBb
-Vm91cyBuZSByZWNldmV6IHBhcyBzb3V2ZW50IGRlIGNvdXJyaWVycyBkZSBqY2Fsdmlub3dlbnNA
-Z21haWwuY29tLiBEw6ljb3V2cmV6IHBvdXJxdW9pIGNlY2kgZXN0IGltcG9ydGFudCDDoCBodHRw
-czovL2FrYS5tcy9MZWFybkFib3V0U2VuZGVySWRlbnRpZmljYXRpb24gXQ0KPiANCj4gSWYgc29t
-ZXRoaW5nIGxpa2UgdGhpcyBpcyBtZXJnZWQgZG93biB0aGUgcm9hZCwgaXQgY2FuIGdvIGluIGF0
-IGxlaXN1cmUNCj4gb25jZSB0aGUgbW9kdWxlX2FsbG9jIGNoYW5nZSBpcyBpbjogaXQncyBhIG9u
-ZS13YXkgZGVwZW5kZW5jeS4NCg0KVG9vIG1hbnkgI2lmZGVmLCBwbGVhc2UgcmVvcmdhbmlzZSBz
-dHVmZiB0byBhdm9pZCB0aGF0IGFuZCBhdm9pZCANCmNoYW5naW5nIHByb3RvdHlwZXMgYmFzZWQg
-b2YgQ09ORklHX01PRFVMRVMuDQoNCk90aGVyIGZldyBjb21tZW50cyBiZWxvdy4NCg0KPiANCj4g
-U2lnbmVkLW9mZi1ieTogQ2FsdmluIE93ZW5zIDxqY2Fsdmlub3dlbnNAZ21haWwuY29tPg0KPiAt
-LS0NCj4gICBhcmNoL0tjb25maWcgICAgICAgICAgICAgICAgfCAgMiArLQ0KPiAgIGtlcm5lbC9r
-cHJvYmVzLmMgICAgICAgICAgICB8IDIyICsrKysrKysrKysrKysrKysrKysrKysNCj4gICBrZXJu
-ZWwvdHJhY2UvdHJhY2Vfa3Byb2JlLmMgfCAxMSArKysrKysrKysrKw0KPiAgIDMgZmlsZXMgY2hh
-bmdlZCwgMzQgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBh
-L2FyY2gvS2NvbmZpZyBiL2FyY2gvS2NvbmZpZw0KPiBpbmRleCBjZmMyNGNlZDE2ZGQuLmU2MGNl
-OTg0ZDA5NSAxMDA2NDQNCj4gLS0tIGEvYXJjaC9LY29uZmlnDQo+ICsrKyBiL2FyY2gvS2NvbmZp
-Zw0KPiBAQCAtNTIsOCArNTIsOCBAQCBjb25maWcgR0VORVJJQ19FTlRSWQ0KPiANCj4gICBjb25m
-aWcgS1BST0JFUw0KPiAgICAgICAgICBib29sICJLcHJvYmVzIg0KPiAtICAgICAgIGRlcGVuZHMg
-b24gTU9EVUxFUw0KPiAgICAgICAgICBkZXBlbmRzIG9uIEhBVkVfS1BST0JFUw0KPiArICAgICAg
-IHNlbGVjdCBNT0RVTEVfQUxMT0MNCj4gICAgICAgICAgc2VsZWN0IEtBTExTWU1TDQo+ICAgICAg
-ICAgIHNlbGVjdCBUQVNLU19SQ1UgaWYgUFJFRU1QVElPTg0KPiAgICAgICAgICBoZWxwDQo+IGRp
-ZmYgLS1naXQgYS9rZXJuZWwva3Byb2Jlcy5jIGIva2VybmVsL2twcm9iZXMuYw0KPiBpbmRleCA5
-ZDkwOTVlODE3OTIuLjE5NDI3MGUxN2Q1NyAxMDA2NDQNCj4gLS0tIGEva2VybmVsL2twcm9iZXMu
-Yw0KPiArKysgYi9rZXJuZWwva3Byb2Jlcy5jDQo+IEBAIC0xNTU2LDggKzE1NTYsMTIgQEAgc3Rh
-dGljIGJvb2wgaXNfY2ZpX3ByZWFtYmxlX3N5bWJvbCh1bnNpZ25lZCBsb25nIGFkZHIpDQo+ICAg
-ICAgICAgICAgICAgICAgc3RyX2hhc19wcmVmaXgoIl9fcGZ4XyIsIHN5bWJ1Zik7DQo+ICAgfQ0K
-PiANCj4gKyNpZiBJU19FTkFCTEVEKENPTkZJR19NT0RVTEVTKQ0KPiAgIHN0YXRpYyBpbnQgY2hl
-Y2tfa3Byb2JlX2FkZHJlc3Nfc2FmZShzdHJ1Y3Qga3Byb2JlICpwLA0KPiAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBtb2R1bGUgKipwcm9iZWRfbW9kKQ0KPiAr
-I2Vsc2UNCj4gK3N0YXRpYyBpbnQgY2hlY2tfa3Byb2JlX2FkZHJlc3Nfc2FmZShzdHJ1Y3Qga3By
-b2JlICpwKQ0KPiArI2VuZGlmDQoNCkEgYml0IHVnbHkgdG8gaGF2ZSB0byBjaGFuZ2UgdGhlIHBy
-b3RvdHlwZSwgd2h5IG5vdCBqdXN0IGtlZXAgcHJvYmVkX21vZCANCmF0IGFsbCB0aW1lID8NCg0K
-V2hlbiBDT05GSUdfTU9EVUxFUyBpcyBub3Qgc2VsZWN0ZWQsIF9fbW9kdWxlX3RleHRfYWRkcmVz
-cygpIHJldHVybnMgDQpOVUxMIHNvIGl0IHNob3VsZCB3b3JrIHdpdGhvdXQgdGhhdCBtYW55ICNp
-ZmRlZnMuDQoNCj4gICB7DQo+ICAgICAgICAgIGludCByZXQ7DQo+IA0KPiBAQCAtMTU4MCw2ICsx
-NTg0LDcgQEAgc3RhdGljIGludCBjaGVja19rcHJvYmVfYWRkcmVzc19zYWZlKHN0cnVjdCBrcHJv
-YmUgKnAsDQo+ICAgICAgICAgICAgICAgICAgZ290byBvdXQ7DQo+ICAgICAgICAgIH0NCj4gDQo+
-ICsjaWYgSVNfRU5BQkxFRChDT05GSUdfTU9EVUxFUykNCj4gICAgICAgICAgLyogQ2hlY2sgaWYg
-J3AnIGlzIHByb2JpbmcgYSBtb2R1bGUuICovDQo+ICAgICAgICAgICpwcm9iZWRfbW9kID0gX19t
-b2R1bGVfdGV4dF9hZGRyZXNzKCh1bnNpZ25lZCBsb25nKSBwLT5hZGRyKTsNCj4gICAgICAgICAg
-aWYgKCpwcm9iZWRfbW9kKSB7DQo+IEBAIC0xNjAzLDYgKzE2MDgsOCBAQCBzdGF0aWMgaW50IGNo
-ZWNrX2twcm9iZV9hZGRyZXNzX3NhZmUoc3RydWN0IGtwcm9iZSAqcCwNCj4gICAgICAgICAgICAg
-ICAgICAgICAgICAgIHJldCA9IC1FTk9FTlQ7DQo+ICAgICAgICAgICAgICAgICAgfQ0KPiAgICAg
-ICAgICB9DQo+ICsjZW5kaWYNCj4gKw0KPiAgIG91dDoNCj4gICAgICAgICAgcHJlZW1wdF9lbmFi
-bGUoKTsNCj4gICAgICAgICAganVtcF9sYWJlbF91bmxvY2soKTsNCj4gQEAgLTE2MTQsNyArMTYy
-MSw5IEBAIGludCByZWdpc3Rlcl9rcHJvYmUoc3RydWN0IGtwcm9iZSAqcCkNCj4gICB7DQo+ICAg
-ICAgICAgIGludCByZXQ7DQo+ICAgICAgICAgIHN0cnVjdCBrcHJvYmUgKm9sZF9wOw0KPiArI2lm
-IElTX0VOQUJMRUQoQ09ORklHX01PRFVMRVMpDQo+ICAgICAgICAgIHN0cnVjdCBtb2R1bGUgKnBy
-b2JlZF9tb2Q7DQo+ICsjZW5kaWYNCj4gICAgICAgICAga3Byb2JlX29wY29kZV90ICphZGRyOw0K
-PiAgICAgICAgICBib29sIG9uX2Z1bmNfZW50cnk7DQo+IA0KPiBAQCAtMTYzMyw3ICsxNjQyLDEx
-IEBAIGludCByZWdpc3Rlcl9rcHJvYmUoc3RydWN0IGtwcm9iZSAqcCkNCj4gICAgICAgICAgcC0+
-bm1pc3NlZCA9IDA7DQo+ICAgICAgICAgIElOSVRfTElTVF9IRUFEKCZwLT5saXN0KTsNCj4gDQo+
-ICsjaWYgSVNfRU5BQkxFRChDT05GSUdfTU9EVUxFUykNCj4gICAgICAgICAgcmV0ID0gY2hlY2tf
-a3Byb2JlX2FkZHJlc3Nfc2FmZShwLCAmcHJvYmVkX21vZCk7DQo+ICsjZWxzZQ0KPiArICAgICAg
-IHJldCA9IGNoZWNrX2twcm9iZV9hZGRyZXNzX3NhZmUocCk7DQo+ICsjZW5kaWYNCj4gICAgICAg
-ICAgaWYgKHJldCkNCj4gICAgICAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiANCj4gQEAgLTE2
-NzYsOCArMTY4OSwxMCBAQCBpbnQgcmVnaXN0ZXJfa3Byb2JlKHN0cnVjdCBrcHJvYmUgKnApDQo+
-ICAgb3V0Og0KPiAgICAgICAgICBtdXRleF91bmxvY2soJmtwcm9iZV9tdXRleCk7DQo+IA0KPiAr
-I2lmIElTX0VOQUJMRUQoQ09ORklHX01PRFVMRVMpDQo+ICAgICAgICAgIGlmIChwcm9iZWRfbW9k
-KQ0KPiAgICAgICAgICAgICAgICAgIG1vZHVsZV9wdXQocHJvYmVkX21vZCk7DQo+ICsjZW5kaWYN
-Cj4gDQo+ICAgICAgICAgIHJldHVybiByZXQ7DQo+ICAgfQ0KPiBAQCAtMjQ4Miw2ICsyNDk3LDcg
-QEAgaW50IGtwcm9iZV9hZGRfYXJlYV9ibGFja2xpc3QodW5zaWduZWQgbG9uZyBzdGFydCwgdW5z
-aWduZWQgbG9uZyBlbmQpDQo+ICAgICAgICAgIHJldHVybiAwOw0KPiAgIH0NCj4gDQo+ICsjaWYg
-SVNfRU5BQkxFRChDT05GSUdfTU9EVUxFUykNCj4gICAvKiBSZW1vdmUgYWxsIHN5bWJvbHMgaW4g
-Z2l2ZW4gYXJlYSBmcm9tIGtwcm9iZSBibGFja2xpc3QgKi8NCj4gICBzdGF0aWMgdm9pZCBrcHJv
-YmVfcmVtb3ZlX2FyZWFfYmxhY2tsaXN0KHVuc2lnbmVkIGxvbmcgc3RhcnQsIHVuc2lnbmVkIGxv
-bmcgZW5kKQ0KPiAgIHsNCj4gQEAgLTI0OTksNiArMjUxNSw3IEBAIHN0YXRpYyB2b2lkIGtwcm9i
-ZV9yZW1vdmVfa3N5bV9ibGFja2xpc3QodW5zaWduZWQgbG9uZyBlbnRyeSkNCj4gICB7DQo+ICAg
-ICAgICAgIGtwcm9iZV9yZW1vdmVfYXJlYV9ibGFja2xpc3QoZW50cnksIGVudHJ5ICsgMSk7DQo+
-ICAgfQ0KPiArI2VuZGlmDQo+IA0KPiAgIGludCBfX3dlYWsgYXJjaF9rcHJvYmVfZ2V0X2thbGxz
-eW0odW5zaWduZWQgaW50ICpzeW1udW0sIHVuc2lnbmVkIGxvbmcgKnZhbHVlLA0KPiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjaGFyICp0eXBlLCBjaGFyICpzeW0pDQo+IEBA
-IC0yNTY0LDYgKzI1ODEsNyBAQCBzdGF0aWMgaW50IF9faW5pdCBwb3B1bGF0ZV9rcHJvYmVfYmxh
-Y2tsaXN0KHVuc2lnbmVkIGxvbmcgKnN0YXJ0LA0KPiAgICAgICAgICByZXR1cm4gcmV0ID8gOiBh
-cmNoX3BvcHVsYXRlX2twcm9iZV9ibGFja2xpc3QoKTsNCj4gICB9DQo+IA0KPiArI2lmIElTX0VO
-QUJMRUQoQ09ORklHX01PRFVMRVMpDQo+ICAgc3RhdGljIHZvaWQgYWRkX21vZHVsZV9rcHJvYmVf
-YmxhY2tsaXN0KHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gICB7DQo+ICAgICAgICAgIHVuc2lnbmVk
-IGxvbmcgc3RhcnQsIGVuZDsNCj4gQEAgLTI2NjUsNiArMjY4Myw3IEBAIHN0YXRpYyBzdHJ1Y3Qg
-bm90aWZpZXJfYmxvY2sga3Byb2JlX21vZHVsZV9uYiA9IHsNCj4gICAgICAgICAgLm5vdGlmaWVy
-X2NhbGwgPSBrcHJvYmVzX21vZHVsZV9jYWxsYmFjaywNCj4gICAgICAgICAgLnByaW9yaXR5ID0g
-MA0KPiAgIH07DQo+ICsjZW5kaWYgLyogSVNfRU5BQkxFRChDT05GSUdfTU9EVUxFUykgKi8NCj4g
-DQo+ICAgdm9pZCBrcHJvYmVfZnJlZV9pbml0X21lbSh2b2lkKQ0KPiAgIHsNCj4gQEAgLTI3MjQs
-OCArMjc0MywxMSBAQCBzdGF0aWMgaW50IF9faW5pdCBpbml0X2twcm9iZXModm9pZCkNCj4gICAg
-ICAgICAgZXJyID0gYXJjaF9pbml0X2twcm9iZXMoKTsNCj4gICAgICAgICAgaWYgKCFlcnIpDQo+
-ICAgICAgICAgICAgICAgICAgZXJyID0gcmVnaXN0ZXJfZGllX25vdGlmaWVyKCZrcHJvYmVfZXhj
-ZXB0aW9uc19uYik7DQo+ICsNCj4gKyNpZiBJU19FTkFCTEVEKENPTkZJR19NT0RVTEVTKQ0KPiAg
-ICAgICAgICBpZiAoIWVycikNCj4gICAgICAgICAgICAgICAgICBlcnIgPSByZWdpc3Rlcl9tb2R1
-bGVfbm90aWZpZXIoJmtwcm9iZV9tb2R1bGVfbmIpOw0KPiArI2VuZGlmDQo+IA0KPiAgICAgICAg
-ICBrcHJvYmVzX2luaXRpYWxpemVkID0gKGVyciA9PSAwKTsNCj4gICAgICAgICAga3Byb2JlX3N5
-c2N0bHNfaW5pdCgpOw0KPiBkaWZmIC0tZ2l0IGEva2VybmVsL3RyYWNlL3RyYWNlX2twcm9iZS5j
-IGIva2VybmVsL3RyYWNlL3RyYWNlX2twcm9iZS5jDQo+IGluZGV4IGM0YzZlMGUwMDY4Yi4uZGQ0
-NTk4Zjc3NWI5IDEwMDY0NA0KPiAtLS0gYS9rZXJuZWwvdHJhY2UvdHJhY2Vfa3Byb2JlLmMNCj4g
-KysrIGIva2VybmVsL3RyYWNlL3RyYWNlX2twcm9iZS5jDQo+IEBAIC0xMDIsNiArMTAyLDcgQEAg
-c3RhdGljIG5va3Byb2JlX2lubGluZSBib29sIHRyYWNlX2twcm9iZV9oYXNfZ29uZShzdHJ1Y3Qg
-dHJhY2Vfa3Byb2JlICp0aykNCj4gICAgICAgICAgcmV0dXJuIGtwcm9iZV9nb25lKCZ0ay0+cnAu
-a3ApOw0KPiAgIH0NCj4gDQo+ICsjaWYgSVNfRU5BQkxFRChDT05GSUdfTU9EVUxFUykNCj4gICBz
-dGF0aWMgbm9rcHJvYmVfaW5saW5lIGJvb2wgdHJhY2Vfa3Byb2JlX3dpdGhpbl9tb2R1bGUoc3Ry
-dWN0IHRyYWNlX2twcm9iZSAqdGssDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgc3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAgIHsNCj4gQEAgLTEyOSw2
-ICsxMzAsMTIgQEAgc3RhdGljIG5va3Byb2JlX2lubGluZSBib29sIHRyYWNlX2twcm9iZV9tb2R1
-bGVfZXhpc3Qoc3RydWN0IHRyYWNlX2twcm9iZSAqdGspDQo+IA0KPiAgICAgICAgICByZXR1cm4g
-cmV0Ow0KPiAgIH0NCj4gKyNlbHNlDQo+ICtzdGF0aWMgbm9rcHJvYmVfaW5saW5lIGJvb2wgdHJh
-Y2Vfa3Byb2JlX21vZHVsZV9leGlzdChzdHJ1Y3QgdHJhY2Vfa3Byb2JlICp0aykNCj4gK3sNCj4g
-KyAgICAgICByZXR1cm4gdHJ1ZTsNCj4gK30NCj4gKyNlbmRpZg0KPiANCj4gICBzdGF0aWMgYm9v
-bCB0cmFjZV9rcHJvYmVfaXNfYnVzeShzdHJ1Y3QgZHluX2V2ZW50ICpldikNCj4gICB7DQo+IEBA
-IC02NzAsNiArNjc3LDcgQEAgc3RhdGljIGludCByZWdpc3Rlcl90cmFjZV9rcHJvYmUoc3RydWN0
-IHRyYWNlX2twcm9iZSAqdGspDQo+ICAgICAgICAgIHJldHVybiByZXQ7DQo+ICAgfQ0KPiANCj4g
-KyNpZiBJU19FTkFCTEVEKENPTkZJR19NT0RVTEVTKQ0KPiAgIC8qIE1vZHVsZSBub3RpZmllciBj
-YWxsIGJhY2ssIGNoZWNraW5nIGV2ZW50IG9uIHRoZSBtb2R1bGUgKi8NCj4gICBzdGF0aWMgaW50
-IHRyYWNlX2twcm9iZV9tb2R1bGVfY2FsbGJhY2soc3RydWN0IG5vdGlmaWVyX2Jsb2NrICpuYiwN
-Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGxvbmcg
-dmFsLCB2b2lkICpkYXRhKQ0KPiBAQCAtNzA0LDYgKzcxMiw3IEBAIHN0YXRpYyBzdHJ1Y3Qgbm90
-aWZpZXJfYmxvY2sgdHJhY2Vfa3Byb2JlX21vZHVsZV9uYiA9IHsNCj4gICAgICAgICAgLm5vdGlm
-aWVyX2NhbGwgPSB0cmFjZV9rcHJvYmVfbW9kdWxlX2NhbGxiYWNrLA0KPiAgICAgICAgICAucHJp
-b3JpdHkgPSAxICAgLyogSW52b2tlZCBhZnRlciBrcHJvYmUgbW9kdWxlIGNhbGxiYWNrICovDQo+
-ICAgfTsNCj4gKyNlbmRpZiAvKiBJU19FTkFCTEVEKENPTkZJR19NT0RVTEVTKSAqLw0KPiANCj4g
-ICBzdGF0aWMgaW50IGNvdW50X3N5bWJvbHModm9pZCAqZGF0YSwgdW5zaWduZWQgbG9uZyB1bnVz
-ZWQpDQo+ICAgew0KPiBAQCAtMTg5Nyw4ICsxOTA2LDEwIEBAIHN0YXRpYyBfX2luaXQgaW50IGlu
-aXRfa3Byb2JlX3RyYWNlX2Vhcmx5KHZvaWQpDQo+ICAgICAgICAgIGlmIChyZXQpDQo+ICAgICAg
-ICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4gDQo+ICsjaWYgSVNfRU5BQkxFRChDT05GSUdfTU9E
-VUxFUykNCj4gICAgICAgICAgaWYgKHJlZ2lzdGVyX21vZHVsZV9ub3RpZmllcigmdHJhY2Vfa3By
-b2JlX21vZHVsZV9uYikpDQo+ICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQpXaHkg
-YSAjaWYgaGVyZSA/DQoNCklmIENPTkZJR19NT0RVTEVTIGlzIG5vdCBzZWxlY3RlZCwgcmVnaXN0
-ZXJfbW9kdWxlX25vdGlmaWVyKCkgcmV0dXJuIA0KYWx3YXlzIDAuDQoNCj4gKyNlbmRpZg0KPiAN
-Cj4gICAgICAgICAgcmV0dXJuIDA7DQo+ICAgfQ0KPiAtLQ0KPiAyLjQzLjANCj4gDQo+IA0K
+Hi Calvin,
+
+On Wed,  6 Mar 2024 12:05:08 -0800
+Calvin Owens <jcalvinowens@gmail.com> wrote:
+
+> Both BPF_JIT and KPROBES depend on CONFIG_MODULES, but only require
+> module_alloc() itself, which can be easily separated into a standalone
+> allocator for executable kernel memory.
+
+Thanks for your work!
+As Luis pointed, it is better to use different name because this
+is not only for modules and it does not depend on CONFIG_MODULES.
+
+> 
+> Thomas Gleixner sent a patch to do that for x86 as part of a larger
+> series a couple years ago:
+> 
+>     https://lore.kernel.org/all/20220716230953.442937066@linutronix.de/
+> 
+> I've simply extended that approach to the whole kernel.
+
+I would like to see a series of patches for each architecture so that
+architecture maintainers carefully check and test this feature.
+
+What about introducing CONFIG_HAVE_EXEC_ALLOC and enable it on
+each architecture? Then you can start small set of major architectures
+and expand it later. 
+
+Thank you,
+
+> 
+> Signed-off-by: Calvin Owens <jcalvinowens@gmail.com>
+> ---
+>  arch/Kconfig                     |   2 +-
+>  arch/arm/kernel/module.c         |  35 ---------
+>  arch/arm/mm/Makefile             |   2 +
+>  arch/arm/mm/module_alloc.c       |  40 ++++++++++
+>  arch/arm64/kernel/module.c       | 127 ------------------------------
+>  arch/arm64/mm/Makefile           |   1 +
+>  arch/arm64/mm/module_alloc.c     | 130 +++++++++++++++++++++++++++++++
+>  arch/loongarch/kernel/module.c   |   6 --
+>  arch/loongarch/mm/Makefile       |   2 +
+>  arch/loongarch/mm/module_alloc.c |  10 +++
+>  arch/mips/kernel/module.c        |  10 ---
+>  arch/mips/mm/Makefile            |   2 +
+>  arch/mips/mm/module_alloc.c      |  13 ++++
+>  arch/nios2/kernel/module.c       |  20 -----
+>  arch/nios2/mm/Makefile           |   2 +
+>  arch/nios2/mm/module_alloc.c     |  22 ++++++
+>  arch/parisc/kernel/module.c      |  12 ---
+>  arch/parisc/mm/Makefile          |   1 +
+>  arch/parisc/mm/module_alloc.c    |  15 ++++
+>  arch/powerpc/kernel/module.c     |  36 ---------
+>  arch/powerpc/mm/Makefile         |   1 +
+>  arch/powerpc/mm/module_alloc.c   |  41 ++++++++++
+>  arch/riscv/kernel/module.c       |  11 ---
+>  arch/riscv/mm/Makefile           |   1 +
+>  arch/riscv/mm/module_alloc.c     |  17 ++++
+>  arch/s390/kernel/module.c        |  37 ---------
+>  arch/s390/mm/Makefile            |   1 +
+>  arch/s390/mm/module_alloc.c      |  42 ++++++++++
+>  arch/sparc/kernel/module.c       |  31 --------
+>  arch/sparc/mm/Makefile           |   2 +
+>  arch/sparc/mm/module_alloc.c     |  31 ++++++++
+>  arch/x86/kernel/ftrace.c         |   2 +-
+>  arch/x86/kernel/module.c         |  56 -------------
+>  arch/x86/mm/Makefile             |   2 +
+>  arch/x86/mm/module_alloc.c       |  59 ++++++++++++++
+>  fs/proc/kcore.c                  |   2 +-
+>  kernel/module/Kconfig            |   1 +
+>  kernel/module/main.c             |  17 ----
+>  mm/Kconfig                       |   3 +
+>  mm/Makefile                      |   1 +
+>  mm/module_alloc.c                |  21 +++++
+>  mm/vmalloc.c                     |   2 +-
+>  42 files changed, 467 insertions(+), 402 deletions(-)
+>  create mode 100644 arch/arm/mm/module_alloc.c
+>  create mode 100644 arch/arm64/mm/module_alloc.c
+>  create mode 100644 arch/loongarch/mm/module_alloc.c
+>  create mode 100644 arch/mips/mm/module_alloc.c
+>  create mode 100644 arch/nios2/mm/module_alloc.c
+>  create mode 100644 arch/parisc/mm/module_alloc.c
+>  create mode 100644 arch/powerpc/mm/module_alloc.c
+>  create mode 100644 arch/riscv/mm/module_alloc.c
+>  create mode 100644 arch/s390/mm/module_alloc.c
+>  create mode 100644 arch/sparc/mm/module_alloc.c
+>  create mode 100644 arch/x86/mm/module_alloc.c
+>  create mode 100644 mm/module_alloc.c
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index a5af0edd3eb8..cfc24ced16dd 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1305,7 +1305,7 @@ config ARCH_HAS_STRICT_MODULE_RWX
+>  
+>  config STRICT_MODULE_RWX
+>  	bool "Set loadable kernel module data as NX and text as RO" if ARCH_OPTIONAL_KERNEL_RWX
+> -	depends on ARCH_HAS_STRICT_MODULE_RWX && MODULES
+> +	depends on ARCH_HAS_STRICT_MODULE_RWX && MODULE_ALLOC
+>  	default !ARCH_OPTIONAL_KERNEL_RWX || ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+>  	help
+>  	  If this is set, module text and rodata memory will be made read-only,
+> diff --git a/arch/arm/kernel/module.c b/arch/arm/kernel/module.c
+> index e74d84f58b77..1c8798732d12 100644
+> --- a/arch/arm/kernel/module.c
+> +++ b/arch/arm/kernel/module.c
+> @@ -4,15 +4,12 @@
+>   *
+>   *  Copyright (C) 2002 Russell King.
+>   *  Modified for nommu by Hyok S. Choi
+> - *
+> - * Module allocation method suggested by Andi Kleen.
+>   */
+>  #include <linux/module.h>
+>  #include <linux/moduleloader.h>
+>  #include <linux/kernel.h>
+>  #include <linux/mm.h>
+>  #include <linux/elf.h>
+> -#include <linux/vmalloc.h>
+>  #include <linux/fs.h>
+>  #include <linux/string.h>
+>  #include <linux/gfp.h>
+> @@ -22,38 +19,6 @@
+>  #include <asm/unwind.h>
+>  #include <asm/opcodes.h>
+>  
+> -#ifdef CONFIG_XIP_KERNEL
+> -/*
+> - * The XIP kernel text is mapped in the module area for modules and
+> - * some other stuff to work without any indirect relocations.
+> - * MODULES_VADDR is redefined here and not in asm/memory.h to avoid
+> - * recompiling the whole kernel when CONFIG_XIP_KERNEL is turned on/off.
+> - */
+> -#undef MODULES_VADDR
+> -#define MODULES_VADDR	(((unsigned long)_exiprom + ~PMD_MASK) & PMD_MASK)
+> -#endif
+> -
+> -#ifdef CONFIG_MMU
+> -void *module_alloc(unsigned long size)
+> -{
+> -	gfp_t gfp_mask = GFP_KERNEL;
+> -	void *p;
+> -
+> -	/* Silence the initial allocation */
+> -	if (IS_ENABLED(CONFIG_ARM_MODULE_PLTS))
+> -		gfp_mask |= __GFP_NOWARN;
+> -
+> -	p = __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+> -				gfp_mask, PAGE_KERNEL_EXEC, 0, NUMA_NO_NODE,
+> -				__builtin_return_address(0));
+> -	if (!IS_ENABLED(CONFIG_ARM_MODULE_PLTS) || p)
+> -		return p;
+> -	return __vmalloc_node_range(size, 1,  VMALLOC_START, VMALLOC_END,
+> -				GFP_KERNEL, PAGE_KERNEL_EXEC, 0, NUMA_NO_NODE,
+> -				__builtin_return_address(0));
+> -}
+> -#endif
+> -
+>  bool module_init_section(const char *name)
+>  {
+>  	return strstarts(name, ".init") ||
+> diff --git a/arch/arm/mm/Makefile b/arch/arm/mm/Makefile
+> index 71b858c9b10c..a05a6701a884 100644
+> --- a/arch/arm/mm/Makefile
+> +++ b/arch/arm/mm/Makefile
+> @@ -100,3 +100,5 @@ obj-$(CONFIG_CACHE_UNIPHIER)	+= cache-uniphier.o
+>  
+>  KASAN_SANITIZE_kasan_init.o	:= n
+>  obj-$(CONFIG_KASAN)		+= kasan_init.o
+> +
+> +obj-$(CONFIG_MODULE_ALLOC)	+= module_alloc.o
+> diff --git a/arch/arm/mm/module_alloc.c b/arch/arm/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..e48be48b2b5f
+> --- /dev/null
+> +++ b/arch/arm/mm/module_alloc.c
+> @@ -0,0 +1,40 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+> +
+> +#ifdef CONFIG_XIP_KERNEL
+> +/*
+> + * The XIP kernel text is mapped in the module area for modules and
+> + * some other stuff to work without any indirect relocations.
+> + * MODULES_VADDR is redefined here and not in asm/memory.h to avoid
+> + * recompiling the whole kernel when CONFIG_XIP_KERNEL is turned on/off.
+> + */
+> +#undef MODULES_VADDR
+> +#define MODULES_VADDR	(((unsigned long)_exiprom + ~PMD_MASK) & PMD_MASK)
+> +#endif
+> +
+> +/*
+> + * Module allocation method suggested by Andi Kleen.
+> + */
+> +
+> +#ifdef CONFIG_MMU
+> +void *module_alloc(unsigned long size)
+> +{
+> +	gfp_t gfp_mask = GFP_KERNEL;
+> +	void *p;
+> +
+> +	/* Silence the initial allocation */
+> +	if (IS_ENABLED(CONFIG_ARM_MODULE_PLTS))
+> +		gfp_mask |= __GFP_NOWARN;
+> +
+> +	p = __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+> +				gfp_mask, PAGE_KERNEL_EXEC, 0, NUMA_NO_NODE,
+> +				__builtin_return_address(0));
+> +	if (!IS_ENABLED(CONFIG_ARM_MODULE_PLTS) || p)
+> +		return p;
+> +	return __vmalloc_node_range(size, 1,  VMALLOC_START, VMALLOC_END,
+> +				GFP_KERNEL, PAGE_KERNEL_EXEC, 0, NUMA_NO_NODE,
+> +				__builtin_return_address(0));
+> +}
+> +#endif
+> diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
+> index dd851297596e..78758ed818b0 100644
+> --- a/arch/arm64/kernel/module.c
+> +++ b/arch/arm64/kernel/module.c
+> @@ -13,143 +13,16 @@
+>  #include <linux/elf.h>
+>  #include <linux/ftrace.h>
+>  #include <linux/gfp.h>
+> -#include <linux/kasan.h>
+>  #include <linux/kernel.h>
+>  #include <linux/mm.h>
+>  #include <linux/moduleloader.h>
+> -#include <linux/random.h>
+>  #include <linux/scs.h>
+> -#include <linux/vmalloc.h>
+>  
+>  #include <asm/alternative.h>
+>  #include <asm/insn.h>
+>  #include <asm/scs.h>
+>  #include <asm/sections.h>
+>  
+> -static u64 module_direct_base __ro_after_init = 0;
+> -static u64 module_plt_base __ro_after_init = 0;
+> -
+> -/*
+> - * Choose a random page-aligned base address for a window of 'size' bytes which
+> - * entirely contains the interval [start, end - 1].
+> - */
+> -static u64 __init random_bounding_box(u64 size, u64 start, u64 end)
+> -{
+> -	u64 max_pgoff, pgoff;
+> -
+> -	if ((end - start) >= size)
+> -		return 0;
+> -
+> -	max_pgoff = (size - (end - start)) / PAGE_SIZE;
+> -	pgoff = get_random_u32_inclusive(0, max_pgoff);
+> -
+> -	return start - pgoff * PAGE_SIZE;
+> -}
+> -
+> -/*
+> - * Modules may directly reference data and text anywhere within the kernel
+> - * image and other modules. References using PREL32 relocations have a +/-2G
+> - * range, and so we need to ensure that the entire kernel image and all modules
+> - * fall within a 2G window such that these are always within range.
+> - *
+> - * Modules may directly branch to functions and code within the kernel text,
+> - * and to functions and code within other modules. These branches will use
+> - * CALL26/JUMP26 relocations with a +/-128M range. Without PLTs, we must ensure
+> - * that the entire kernel text and all module text falls within a 128M window
+> - * such that these are always within range. With PLTs, we can expand this to a
+> - * 2G window.
+> - *
+> - * We chose the 128M region to surround the entire kernel image (rather than
+> - * just the text) as using the same bounds for the 128M and 2G regions ensures
+> - * by construction that we never select a 128M region that is not a subset of
+> - * the 2G region. For very large and unusual kernel configurations this means
+> - * we may fall back to PLTs where they could have been avoided, but this keeps
+> - * the logic significantly simpler.
+> - */
+> -static int __init module_init_limits(void)
+> -{
+> -	u64 kernel_end = (u64)_end;
+> -	u64 kernel_start = (u64)_text;
+> -	u64 kernel_size = kernel_end - kernel_start;
+> -
+> -	/*
+> -	 * The default modules region is placed immediately below the kernel
+> -	 * image, and is large enough to use the full 2G relocation range.
+> -	 */
+> -	BUILD_BUG_ON(KIMAGE_VADDR != MODULES_END);
+> -	BUILD_BUG_ON(MODULES_VSIZE < SZ_2G);
+> -
+> -	if (!kaslr_enabled()) {
+> -		if (kernel_size < SZ_128M)
+> -			module_direct_base = kernel_end - SZ_128M;
+> -		if (kernel_size < SZ_2G)
+> -			module_plt_base = kernel_end - SZ_2G;
+> -	} else {
+> -		u64 min = kernel_start;
+> -		u64 max = kernel_end;
+> -
+> -		if (IS_ENABLED(CONFIG_RANDOMIZE_MODULE_REGION_FULL)) {
+> -			pr_info("2G module region forced by RANDOMIZE_MODULE_REGION_FULL\n");
+> -		} else {
+> -			module_direct_base = random_bounding_box(SZ_128M, min, max);
+> -			if (module_direct_base) {
+> -				min = module_direct_base;
+> -				max = module_direct_base + SZ_128M;
+> -			}
+> -		}
+> -
+> -		module_plt_base = random_bounding_box(SZ_2G, min, max);
+> -	}
+> -
+> -	pr_info("%llu pages in range for non-PLT usage",
+> -		module_direct_base ? (SZ_128M - kernel_size) / PAGE_SIZE : 0);
+> -	pr_info("%llu pages in range for PLT usage",
+> -		module_plt_base ? (SZ_2G - kernel_size) / PAGE_SIZE : 0);
+> -
+> -	return 0;
+> -}
+> -subsys_initcall(module_init_limits);
+> -
+> -void *module_alloc(unsigned long size)
+> -{
+> -	void *p = NULL;
+> -
+> -	/*
+> -	 * Where possible, prefer to allocate within direct branch range of the
+> -	 * kernel such that no PLTs are necessary.
+> -	 */
+> -	if (module_direct_base) {
+> -		p = __vmalloc_node_range(size, MODULE_ALIGN,
+> -					 module_direct_base,
+> -					 module_direct_base + SZ_128M,
+> -					 GFP_KERNEL | __GFP_NOWARN,
+> -					 PAGE_KERNEL, 0, NUMA_NO_NODE,
+> -					 __builtin_return_address(0));
+> -	}
+> -
+> -	if (!p && module_plt_base) {
+> -		p = __vmalloc_node_range(size, MODULE_ALIGN,
+> -					 module_plt_base,
+> -					 module_plt_base + SZ_2G,
+> -					 GFP_KERNEL | __GFP_NOWARN,
+> -					 PAGE_KERNEL, 0, NUMA_NO_NODE,
+> -					 __builtin_return_address(0));
+> -	}
+> -
+> -	if (!p) {
+> -		pr_warn_ratelimited("%s: unable to allocate memory\n",
+> -				    __func__);
+> -	}
+> -
+> -	if (p && (kasan_alloc_module_shadow(p, size, GFP_KERNEL) < 0)) {
+> -		vfree(p);
+> -		return NULL;
+> -	}
+> -
+> -	/* Memory is intended to be executable, reset the pointer tag. */
+> -	return kasan_reset_tag(p);
+> -}
+> -
+>  enum aarch64_reloc_op {
+>  	RELOC_OP_NONE,
+>  	RELOC_OP_ABS,
+> diff --git a/arch/arm64/mm/Makefile b/arch/arm64/mm/Makefile
+> index dbd1bc95967d..cf616635a80d 100644
+> --- a/arch/arm64/mm/Makefile
+> +++ b/arch/arm64/mm/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_TRANS_TABLE)	+= trans_pgd.o
+>  obj-$(CONFIG_TRANS_TABLE)	+= trans_pgd-asm.o
+>  obj-$(CONFIG_DEBUG_VIRTUAL)	+= physaddr.o
+>  obj-$(CONFIG_ARM64_MTE)		+= mteswap.o
+> +obj-$(CONFIG_MODULE_ALLOC)	+= module_alloc.o
+>  KASAN_SANITIZE_physaddr.o	+= n
+>  
+>  obj-$(CONFIG_KASAN)		+= kasan_init.o
+> diff --git a/arch/arm64/mm/module_alloc.c b/arch/arm64/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..302642ea9e26
+> --- /dev/null
+> +++ b/arch/arm64/mm/module_alloc.c
+> @@ -0,0 +1,130 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+> +#include <linux/kasan.h>
+> +#include <linux/random.h>
+> +
+> +static u64 module_direct_base __ro_after_init = 0;
+> +static u64 module_plt_base __ro_after_init = 0;
+> +
+> +/*
+> + * Choose a random page-aligned base address for a window of 'size' bytes which
+> + * entirely contains the interval [start, end - 1].
+> + */
+> +static u64 __init random_bounding_box(u64 size, u64 start, u64 end)
+> +{
+> +	u64 max_pgoff, pgoff;
+> +
+> +	if ((end - start) >= size)
+> +		return 0;
+> +
+> +	max_pgoff = (size - (end - start)) / PAGE_SIZE;
+> +	pgoff = get_random_u32_inclusive(0, max_pgoff);
+> +
+> +	return start - pgoff * PAGE_SIZE;
+> +}
+> +
+> +/*
+> + * Modules may directly reference data and text anywhere within the kernel
+> + * image and other modules. References using PREL32 relocations have a +/-2G
+> + * range, and so we need to ensure that the entire kernel image and all modules
+> + * fall within a 2G window such that these are always within range.
+> + *
+> + * Modules may directly branch to functions and code within the kernel text,
+> + * and to functions and code within other modules. These branches will use
+> + * CALL26/JUMP26 relocations with a +/-128M range. Without PLTs, we must ensure
+> + * that the entire kernel text and all module text falls within a 128M window
+> + * such that these are always within range. With PLTs, we can expand this to a
+> + * 2G window.
+> + *
+> + * We chose the 128M region to surround the entire kernel image (rather than
+> + * just the text) as using the same bounds for the 128M and 2G regions ensures
+> + * by construction that we never select a 128M region that is not a subset of
+> + * the 2G region. For very large and unusual kernel configurations this means
+> + * we may fall back to PLTs where they could have been avoided, but this keeps
+> + * the logic significantly simpler.
+> + */
+> +static int __init module_init_limits(void)
+> +{
+> +	u64 kernel_end = (u64)_end;
+> +	u64 kernel_start = (u64)_text;
+> +	u64 kernel_size = kernel_end - kernel_start;
+> +
+> +	/*
+> +	 * The default modules region is placed immediately below the kernel
+> +	 * image, and is large enough to use the full 2G relocation range.
+> +	 */
+> +	BUILD_BUG_ON(KIMAGE_VADDR != MODULES_END);
+> +	BUILD_BUG_ON(MODULES_VSIZE < SZ_2G);
+> +
+> +	if (!kaslr_enabled()) {
+> +		if (kernel_size < SZ_128M)
+> +			module_direct_base = kernel_end - SZ_128M;
+> +		if (kernel_size < SZ_2G)
+> +			module_plt_base = kernel_end - SZ_2G;
+> +	} else {
+> +		u64 min = kernel_start;
+> +		u64 max = kernel_end;
+> +
+> +		if (IS_ENABLED(CONFIG_RANDOMIZE_MODULE_REGION_FULL)) {
+> +			pr_info("2G module region forced by RANDOMIZE_MODULE_REGION_FULL\n");
+> +		} else {
+> +			module_direct_base = random_bounding_box(SZ_128M, min, max);
+> +			if (module_direct_base) {
+> +				min = module_direct_base;
+> +				max = module_direct_base + SZ_128M;
+> +			}
+> +		}
+> +
+> +		module_plt_base = random_bounding_box(SZ_2G, min, max);
+> +	}
+> +
+> +	pr_info("%llu pages in range for non-PLT usage",
+> +		module_direct_base ? (SZ_128M - kernel_size) / PAGE_SIZE : 0);
+> +	pr_info("%llu pages in range for PLT usage",
+> +		module_plt_base ? (SZ_2G - kernel_size) / PAGE_SIZE : 0);
+> +
+> +	return 0;
+> +}
+> +subsys_initcall(module_init_limits);
+> +
+> +void *module_alloc(unsigned long size)
+> +{
+> +	void *p = NULL;
+> +
+> +	/*
+> +	 * Where possible, prefer to allocate within direct branch range of the
+> +	 * kernel such that no PLTs are necessary.
+> +	 */
+> +	if (module_direct_base) {
+> +		p = __vmalloc_node_range(size, MODULE_ALIGN,
+> +					 module_direct_base,
+> +					 module_direct_base + SZ_128M,
+> +					 GFP_KERNEL | __GFP_NOWARN,
+> +					 PAGE_KERNEL, 0, NUMA_NO_NODE,
+> +					 __builtin_return_address(0));
+> +	}
+> +
+> +	if (!p && module_plt_base) {
+> +		p = __vmalloc_node_range(size, MODULE_ALIGN,
+> +					 module_plt_base,
+> +					 module_plt_base + SZ_2G,
+> +					 GFP_KERNEL | __GFP_NOWARN,
+> +					 PAGE_KERNEL, 0, NUMA_NO_NODE,
+> +					 __builtin_return_address(0));
+> +	}
+> +
+> +	if (!p) {
+> +		pr_warn_ratelimited("%s: unable to allocate memory\n",
+> +				    __func__);
+> +	}
+> +
+> +	if (p && (kasan_alloc_module_shadow(p, size, GFP_KERNEL) < 0)) {
+> +		vfree(p);
+> +		return NULL;
+> +	}
+> +
+> +	/* Memory is intended to be executable, reset the pointer tag. */
+> +	return kasan_reset_tag(p);
+> +}
+> diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+> index b13b2858fe39..7f03166513b3 100644
+> --- a/arch/loongarch/kernel/module.c
+> +++ b/arch/loongarch/kernel/module.c
+> @@ -489,12 +489,6 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+>  	return 0;
+>  }
+>  
+> -void *module_alloc(unsigned long size)
+> -{
+> -	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+> -			GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE, __builtin_return_address(0));
+> -}
+> -
+>  static void module_init_ftrace_plt(const Elf_Ehdr *hdr,
+>  				   const Elf_Shdr *sechdrs, struct module *mod)
+>  {
+> diff --git a/arch/loongarch/mm/Makefile b/arch/loongarch/mm/Makefile
+> index e4d1e581dbae..3966fc6118f1 100644
+> --- a/arch/loongarch/mm/Makefile
+> +++ b/arch/loongarch/mm/Makefile
+> @@ -10,3 +10,5 @@ obj-$(CONFIG_HUGETLB_PAGE)	+= hugetlbpage.o
+>  obj-$(CONFIG_KASAN)		+= kasan_init.o
+>  
+>  KASAN_SANITIZE_kasan_init.o     := n
+> +
+> +obj-$(CONFIG_MODULE_ALLOC)	+= module_alloc.o
+> diff --git a/arch/loongarch/mm/module_alloc.c b/arch/loongarch/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..24b0cb3a2088
+> --- /dev/null
+> +++ b/arch/loongarch/mm/module_alloc.c
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+> +
+> +void *module_alloc(unsigned long size)
+> +{
+> +	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+> +			GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE, __builtin_return_address(0));
+> +}
+> diff --git a/arch/mips/kernel/module.c b/arch/mips/kernel/module.c
+> index 7b2fbaa9cac5..ba0f62d8eff5 100644
+> --- a/arch/mips/kernel/module.c
+> +++ b/arch/mips/kernel/module.c
+> @@ -13,7 +13,6 @@
+>  #include <linux/elf.h>
+>  #include <linux/mm.h>
+>  #include <linux/numa.h>
+> -#include <linux/vmalloc.h>
+>  #include <linux/slab.h>
+>  #include <linux/fs.h>
+>  #include <linux/string.h>
+> @@ -31,15 +30,6 @@ struct mips_hi16 {
+>  static LIST_HEAD(dbe_list);
+>  static DEFINE_SPINLOCK(dbe_lock);
+>  
+> -#ifdef MODULE_START
+> -void *module_alloc(unsigned long size)
+> -{
+> -	return __vmalloc_node_range(size, 1, MODULE_START, MODULE_END,
+> -				GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE,
+> -				__builtin_return_address(0));
+> -}
+> -#endif
+> -
+>  static void apply_r_mips_32(u32 *location, u32 base, Elf_Addr v)
+>  {
+>  	*location = base + v;
+> diff --git a/arch/mips/mm/Makefile b/arch/mips/mm/Makefile
+> index 304692391519..b9cfe37e41e4 100644
+> --- a/arch/mips/mm/Makefile
+> +++ b/arch/mips/mm/Makefile
+> @@ -45,3 +45,5 @@ obj-$(CONFIG_MIPS_CPU_SCACHE)	+= sc-mips.o
+>  obj-$(CONFIG_SCACHE_DEBUGFS)	+= sc-debugfs.o
+>  
+>  obj-$(CONFIG_DEBUG_VIRTUAL)	+= physaddr.o
+> +
+> +obj-$(CONFIG_MODULE_ALLOC)	+= module_alloc.o
+> diff --git a/arch/mips/mm/module_alloc.c b/arch/mips/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..fcdbdece42f3
+> --- /dev/null
+> +++ b/arch/mips/mm/module_alloc.c
+> @@ -0,0 +1,13 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+> +
+> +#ifdef MODULE_START
+> +void *module_alloc(unsigned long size)
+> +{
+> +	return __vmalloc_node_range(size, 1, MODULE_START, MODULE_END,
+> +				GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE,
+> +				__builtin_return_address(0));
+> +}
+> +#endif
+> diff --git a/arch/nios2/kernel/module.c b/arch/nios2/kernel/module.c
+> index 76e0a42d6e36..f4483243578d 100644
+> --- a/arch/nios2/kernel/module.c
+> +++ b/arch/nios2/kernel/module.c
+> @@ -13,7 +13,6 @@
+>  #include <linux/moduleloader.h>
+>  #include <linux/elf.h>
+>  #include <linux/mm.h>
+> -#include <linux/vmalloc.h>
+>  #include <linux/slab.h>
+>  #include <linux/fs.h>
+>  #include <linux/string.h>
+> @@ -21,25 +20,6 @@
+>  
+>  #include <asm/cacheflush.h>
+>  
+> -/*
+> - * Modules should NOT be allocated with kmalloc for (obvious) reasons.
+> - * But we do it for now to avoid relocation issues. CALL26/PCREL26 cannot reach
+> - * from 0x80000000 (vmalloc area) to 0xc00000000 (kernel) (kmalloc returns
+> - * addresses in 0xc0000000)
+> - */
+> -void *module_alloc(unsigned long size)
+> -{
+> -	if (size == 0)
+> -		return NULL;
+> -	return kmalloc(size, GFP_KERNEL);
+> -}
+> -
+> -/* Free memory returned from module_alloc */
+> -void module_memfree(void *module_region)
+> -{
+> -	kfree(module_region);
+> -}
+> -
+>  int apply_relocate_add(Elf32_Shdr *sechdrs, const char *strtab,
+>  			unsigned int symindex, unsigned int relsec,
+>  			struct module *mod)
+> diff --git a/arch/nios2/mm/Makefile b/arch/nios2/mm/Makefile
+> index 9d37fafd1dd1..facbb3e60013 100644
+> --- a/arch/nios2/mm/Makefile
+> +++ b/arch/nios2/mm/Makefile
+> @@ -13,3 +13,5 @@ obj-y	+= mmu_context.o
+>  obj-y	+= pgtable.o
+>  obj-y	+= tlb.o
+>  obj-y	+= uaccess.o
+> +
+> +obj-$(CONFIG_MODULE_ALLOC)	+= module_alloc.o
+> diff --git a/arch/nios2/mm/module_alloc.c b/arch/nios2/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..92c7c32ef8b3
+> --- /dev/null
+> +++ b/arch/nios2/mm/module_alloc.c
+> @@ -0,0 +1,22 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#include <linux/moduleloader.h>
+> +#include <linux/slab.h>
+> +
+> +/*
+> + * Modules should NOT be allocated with kmalloc for (obvious) reasons.
+> + * But we do it for now to avoid relocation issues. CALL26/PCREL26 cannot reach
+> + * from 0x80000000 (vmalloc area) to 0xc00000000 (kernel) (kmalloc returns
+> + * addresses in 0xc0000000)
+> + */
+> +void *module_alloc(unsigned long size)
+> +{
+> +	if (size == 0)
+> +		return NULL;
+> +	return kmalloc(size, GFP_KERNEL);
+> +}
+> +
+> +/* Free memory returned from module_alloc */
+> +void module_memfree(void *module_region)
+> +{
+> +	kfree(module_region);
+> +}
+> diff --git a/arch/parisc/kernel/module.c b/arch/parisc/kernel/module.c
+> index d214bbe3c2af..4e5d991b2b65 100644
+> --- a/arch/parisc/kernel/module.c
+> +++ b/arch/parisc/kernel/module.c
+> @@ -41,7 +41,6 @@
+>  
+>  #include <linux/moduleloader.h>
+>  #include <linux/elf.h>
+> -#include <linux/vmalloc.h>
+>  #include <linux/fs.h>
+>  #include <linux/ftrace.h>
+>  #include <linux/string.h>
+> @@ -173,17 +172,6 @@ static inline int reassemble_22(int as22)
+>  		((as22 & 0x0003ff) << 3));
+>  }
+>  
+> -void *module_alloc(unsigned long size)
+> -{
+> -	/* using RWX means less protection for modules, but it's
+> -	 * easier than trying to map the text, data, init_text and
+> -	 * init_data correctly */
+> -	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+> -				    GFP_KERNEL,
+> -				    PAGE_KERNEL_RWX, 0, NUMA_NO_NODE,
+> -				    __builtin_return_address(0));
+> -}
+> -
+>  #ifndef CONFIG_64BIT
+>  static inline unsigned long count_gots(const Elf_Rela *rela, unsigned long n)
+>  {
+> diff --git a/arch/parisc/mm/Makefile b/arch/parisc/mm/Makefile
+> index ffdb5c0a8cc6..95a6d4469785 100644
+> --- a/arch/parisc/mm/Makefile
+> +++ b/arch/parisc/mm/Makefile
+> @@ -5,3 +5,4 @@
+>  
+>  obj-y	 := init.o fault.o ioremap.o fixmap.o
+>  obj-$(CONFIG_HUGETLB_PAGE) += hugetlbpage.o
+> +obj-$(CONFIG_MODULE_ALLOC) += module_alloc.o
+> diff --git a/arch/parisc/mm/module_alloc.c b/arch/parisc/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..5ad9bfc3ffab
+> --- /dev/null
+> +++ b/arch/parisc/mm/module_alloc.c
+> @@ -0,0 +1,15 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+> +
+> +void *module_alloc(unsigned long size)
+> +{
+> +	/* using RWX means less protection for modules, but it's
+> +	 * easier than trying to map the text, data, init_text and
+> +	 * init_data correctly */
+> +	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+> +				    GFP_KERNEL,
+> +				    PAGE_KERNEL_RWX, 0, NUMA_NO_NODE,
+> +				    __builtin_return_address(0));
+> +}
+> diff --git a/arch/powerpc/kernel/module.c b/arch/powerpc/kernel/module.c
+> index f6d6ae0a1692..b5fe9c61e527 100644
+> --- a/arch/powerpc/kernel/module.c
+> +++ b/arch/powerpc/kernel/module.c
+> @@ -89,39 +89,3 @@ int module_finalize(const Elf_Ehdr *hdr,
+>  	return 0;
+>  }
+>  
+> -static __always_inline void *
+> -__module_alloc(unsigned long size, unsigned long start, unsigned long end, bool nowarn)
+> -{
+> -	pgprot_t prot = strict_module_rwx_enabled() ? PAGE_KERNEL : PAGE_KERNEL_EXEC;
+> -	gfp_t gfp = GFP_KERNEL | (nowarn ? __GFP_NOWARN : 0);
+> -
+> -	/*
+> -	 * Don't do huge page allocations for modules yet until more testing
+> -	 * is done. STRICT_MODULE_RWX may require extra work to support this
+> -	 * too.
+> -	 */
+> -	return __vmalloc_node_range(size, 1, start, end, gfp, prot,
+> -				    VM_FLUSH_RESET_PERMS,
+> -				    NUMA_NO_NODE, __builtin_return_address(0));
+> -}
+> -
+> -void *module_alloc(unsigned long size)
+> -{
+> -#ifdef MODULES_VADDR
+> -	unsigned long limit = (unsigned long)_etext - SZ_32M;
+> -	void *ptr = NULL;
+> -
+> -	BUILD_BUG_ON(TASK_SIZE > MODULES_VADDR);
+> -
+> -	/* First try within 32M limit from _etext to avoid branch trampolines */
+> -	if (MODULES_VADDR < PAGE_OFFSET && MODULES_END > limit)
+> -		ptr = __module_alloc(size, limit, MODULES_END, true);
+> -
+> -	if (!ptr)
+> -		ptr = __module_alloc(size, MODULES_VADDR, MODULES_END, false);
+> -
+> -	return ptr;
+> -#else
+> -	return __module_alloc(size, VMALLOC_START, VMALLOC_END, false);
+> -#endif
+> -}
+> diff --git a/arch/powerpc/mm/Makefile b/arch/powerpc/mm/Makefile
+> index 503a6e249940..4572273a838f 100644
+> --- a/arch/powerpc/mm/Makefile
+> +++ b/arch/powerpc/mm/Makefile
+> @@ -19,3 +19,4 @@ obj-$(CONFIG_NOT_COHERENT_CACHE) += dma-noncoherent.o
+>  obj-$(CONFIG_PPC_COPRO_BASE)	+= copro_fault.o
+>  obj-$(CONFIG_PTDUMP_CORE)	+= ptdump/
+>  obj-$(CONFIG_KASAN)		+= kasan/
+> +obj-$(CONFIG_MODULE_ALLOC)	+= module_alloc.o
+> diff --git a/arch/powerpc/mm/module_alloc.c b/arch/powerpc/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..818e5cd8fbc6
+> --- /dev/null
+> +++ b/arch/powerpc/mm/module_alloc.c
+> @@ -0,0 +1,41 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+> +
+> +static __always_inline void *
+> +__module_alloc(unsigned long size, unsigned long start, unsigned long end, bool nowarn)
+> +{
+> +	pgprot_t prot = strict_module_rwx_enabled() ? PAGE_KERNEL : PAGE_KERNEL_EXEC;
+> +	gfp_t gfp = GFP_KERNEL | (nowarn ? __GFP_NOWARN : 0);
+> +
+> +	/*
+> +	 * Don't do huge page allocations for modules yet until more testing
+> +	 * is done. STRICT_MODULE_RWX may require extra work to support this
+> +	 * too.
+> +	 */
+> +	return __vmalloc_node_range(size, 1, start, end, gfp, prot,
+> +				    VM_FLUSH_RESET_PERMS,
+> +				    NUMA_NO_NODE, __builtin_return_address(0));
+> +}
+> +
+> +void *module_alloc(unsigned long size)
+> +{
+> +#ifdef MODULES_VADDR
+> +	unsigned long limit = (unsigned long)_etext - SZ_32M;
+> +	void *ptr = NULL;
+> +
+> +	BUILD_BUG_ON(TASK_SIZE > MODULES_VADDR);
+> +
+> +	/* First try within 32M limit from _etext to avoid branch trampolines */
+> +	if (MODULES_VADDR < PAGE_OFFSET && MODULES_END > limit)
+> +		ptr = __module_alloc(size, limit, MODULES_END, true);
+> +
+> +	if (!ptr)
+> +		ptr = __module_alloc(size, MODULES_VADDR, MODULES_END, false);
+> +
+> +	return ptr;
+> +#else
+> +	return __module_alloc(size, VMALLOC_START, VMALLOC_END, false);
+> +#endif
+> +}
+> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
+> index 5e5a82644451..53d7005fdbdb 100644
+> --- a/arch/riscv/kernel/module.c
+> +++ b/arch/riscv/kernel/module.c
+> @@ -11,7 +11,6 @@
+>  #include <linux/kernel.h>
+>  #include <linux/log2.h>
+>  #include <linux/moduleloader.h>
+> -#include <linux/vmalloc.h>
+>  #include <linux/sizes.h>
+>  #include <linux/pgtable.h>
+>  #include <asm/alternative.h>
+> @@ -905,16 +904,6 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+>  	return 0;
+>  }
+>  
+> -#if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
+> -void *module_alloc(unsigned long size)
+> -{
+> -	return __vmalloc_node_range(size, 1, MODULES_VADDR,
+> -				    MODULES_END, GFP_KERNEL,
+> -				    PAGE_KERNEL, VM_FLUSH_RESET_PERMS,
+> -				    NUMA_NO_NODE,
+> -				    __builtin_return_address(0));
+> -}
+> -#endif
+>  
+>  int module_finalize(const Elf_Ehdr *hdr,
+>  		    const Elf_Shdr *sechdrs,
+> diff --git a/arch/riscv/mm/Makefile b/arch/riscv/mm/Makefile
+> index 2c869f8026a8..fba8e3595459 100644
+> --- a/arch/riscv/mm/Makefile
+> +++ b/arch/riscv/mm/Makefile
+> @@ -36,3 +36,4 @@ endif
+>  obj-$(CONFIG_DEBUG_VIRTUAL) += physaddr.o
+>  obj-$(CONFIG_RISCV_DMA_NONCOHERENT) += dma-noncoherent.o
+>  obj-$(CONFIG_RISCV_NONSTANDARD_CACHE_OPS) += cache-ops.o
+> +obj-$(CONFIG_MODULE_ALLOC) += module_alloc.o
+> diff --git a/arch/riscv/mm/module_alloc.c b/arch/riscv/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..2c1fb95a57e2
+> --- /dev/null
+> +++ b/arch/riscv/mm/module_alloc.c
+> @@ -0,0 +1,17 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/pgtable.h>
+> +#include <asm/alternative.h>
+> +#include <asm/sections.h>
+> +
+> +#if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
+> +void *module_alloc(unsigned long size)
+> +{
+> +	return __vmalloc_node_range(size, 1, MODULES_VADDR,
+> +				    MODULES_END, GFP_KERNEL,
+> +				    PAGE_KERNEL, VM_FLUSH_RESET_PERMS,
+> +				    NUMA_NO_NODE,
+> +				    __builtin_return_address(0));
+> +}
+> +#endif
+> diff --git a/arch/s390/kernel/module.c b/arch/s390/kernel/module.c
+> index 42215f9404af..ef8a7539bb0b 100644
+> --- a/arch/s390/kernel/module.c
+> +++ b/arch/s390/kernel/module.c
+> @@ -36,43 +36,6 @@
+>  
+>  #define PLT_ENTRY_SIZE 22
+>  
+> -static unsigned long get_module_load_offset(void)
+> -{
+> -	static DEFINE_MUTEX(module_kaslr_mutex);
+> -	static unsigned long module_load_offset;
+> -
+> -	if (!kaslr_enabled())
+> -		return 0;
+> -	/*
+> -	 * Calculate the module_load_offset the first time this code
+> -	 * is called. Once calculated it stays the same until reboot.
+> -	 */
+> -	mutex_lock(&module_kaslr_mutex);
+> -	if (!module_load_offset)
+> -		module_load_offset = get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
+> -	mutex_unlock(&module_kaslr_mutex);
+> -	return module_load_offset;
+> -}
+> -
+> -void *module_alloc(unsigned long size)
+> -{
+> -	gfp_t gfp_mask = GFP_KERNEL;
+> -	void *p;
+> -
+> -	if (PAGE_ALIGN(size) > MODULES_LEN)
+> -		return NULL;
+> -	p = __vmalloc_node_range(size, MODULE_ALIGN,
+> -				 MODULES_VADDR + get_module_load_offset(),
+> -				 MODULES_END, gfp_mask, PAGE_KERNEL,
+> -				 VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK,
+> -				 NUMA_NO_NODE, __builtin_return_address(0));
+> -	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+> -		vfree(p);
+> -		return NULL;
+> -	}
+> -	return p;
+> -}
+> -
+>  #ifdef CONFIG_FUNCTION_TRACER
+>  void module_arch_cleanup(struct module *mod)
+>  {
+> diff --git a/arch/s390/mm/Makefile b/arch/s390/mm/Makefile
+> index 352ff520fd94..4f44c4096c6d 100644
+> --- a/arch/s390/mm/Makefile
+> +++ b/arch/s390/mm/Makefile
+> @@ -11,3 +11,4 @@ obj-$(CONFIG_HUGETLB_PAGE)	+= hugetlbpage.o
+>  obj-$(CONFIG_PTDUMP_CORE)	+= dump_pagetables.o
+>  obj-$(CONFIG_PGSTE)		+= gmap.o
+>  obj-$(CONFIG_PFAULT)		+= pfault.o
+> +obj-$(CONFIG_MODULE_ALLOC)	+= module_alloc.o
+> diff --git a/arch/s390/mm/module_alloc.c b/arch/s390/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..88eadce4bc68
+> --- /dev/null
+> +++ b/arch/s390/mm/module_alloc.c
+> @@ -0,0 +1,42 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+> +#include <linux/kasan.h>
+> +
+> +static unsigned long get_module_load_offset(void)
+> +{
+> +	static DEFINE_MUTEX(module_kaslr_mutex);
+> +	static unsigned long module_load_offset;
+> +
+> +	if (!kaslr_enabled())
+> +		return 0;
+> +	/*
+> +	 * Calculate the module_load_offset the first time this code
+> +	 * is called. Once calculated it stays the same until reboot.
+> +	 */
+> +	mutex_lock(&module_kaslr_mutex);
+> +	if (!module_load_offset)
+> +		module_load_offset = get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
+> +	mutex_unlock(&module_kaslr_mutex);
+> +	return module_load_offset;
+> +}
+> +
+> +void *module_alloc(unsigned long size)
+> +{
+> +	gfp_t gfp_mask = GFP_KERNEL;
+> +	void *p;
+> +
+> +	if (PAGE_ALIGN(size) > MODULES_LEN)
+> +		return NULL;
+> +	p = __vmalloc_node_range(size, MODULE_ALIGN,
+> +				 MODULES_VADDR + get_module_load_offset(),
+> +				 MODULES_END, gfp_mask, PAGE_KERNEL,
+> +				 VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK,
+> +				 NUMA_NO_NODE, __builtin_return_address(0));
+> +	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+> +		vfree(p);
+> +		return NULL;
+> +	}
+> +	return p;
+> +}
+> diff --git a/arch/sparc/kernel/module.c b/arch/sparc/kernel/module.c
+> index 66c45a2764bc..0611a41cd586 100644
+> --- a/arch/sparc/kernel/module.c
+> +++ b/arch/sparc/kernel/module.c
+> @@ -8,7 +8,6 @@
+>  #include <linux/moduleloader.h>
+>  #include <linux/kernel.h>
+>  #include <linux/elf.h>
+> -#include <linux/vmalloc.h>
+>  #include <linux/fs.h>
+>  #include <linux/gfp.h>
+>  #include <linux/string.h>
+> @@ -21,36 +20,6 @@
+>  
+>  #include "entry.h"
+>  
+> -#ifdef CONFIG_SPARC64
+> -
+> -#include <linux/jump_label.h>
+> -
+> -static void *module_map(unsigned long size)
+> -{
+> -	if (PAGE_ALIGN(size) > MODULES_LEN)
+> -		return NULL;
+> -	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+> -				GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE,
+> -				__builtin_return_address(0));
+> -}
+> -#else
+> -static void *module_map(unsigned long size)
+> -{
+> -	return vmalloc(size);
+> -}
+> -#endif /* CONFIG_SPARC64 */
+> -
+> -void *module_alloc(unsigned long size)
+> -{
+> -	void *ret;
+> -
+> -	ret = module_map(size);
+> -	if (ret)
+> -		memset(ret, 0, size);
+> -
+> -	return ret;
+> -}
+> -
+>  /* Make generic code ignore STT_REGISTER dummy undefined symbols.  */
+>  int module_frob_arch_sections(Elf_Ehdr *hdr,
+>  			      Elf_Shdr *sechdrs,
+> diff --git a/arch/sparc/mm/Makefile b/arch/sparc/mm/Makefile
+> index 809d993f6d88..a8e9ba46679a 100644
+> --- a/arch/sparc/mm/Makefile
+> +++ b/arch/sparc/mm/Makefile
+> @@ -14,3 +14,5 @@ obj-$(CONFIG_SPARC32)   += leon_mm.o
+>  
+>  # Only used by sparc64
+>  obj-$(CONFIG_HUGETLB_PAGE) += hugetlbpage.o
+> +
+> +obj-$(CONFIG_MODULE_ALLOC) += module_alloc.o
+> diff --git a/arch/sparc/mm/module_alloc.c b/arch/sparc/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..14aef0f75650
+> --- /dev/null
+> +++ b/arch/sparc/mm/module_alloc.c
+> @@ -0,0 +1,31 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+> +
+> +#ifdef CONFIG_SPARC64
+> +static void *module_map(unsigned long size)
+> +{
+> +	if (PAGE_ALIGN(size) > MODULES_LEN)
+> +		return NULL;
+> +	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+> +				GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE,
+> +				__builtin_return_address(0));
+> +}
+> +#else
+> +static void *module_map(unsigned long size)
+> +{
+> +	return vmalloc(size);
+> +}
+> +#endif /* CONFIG_SPARC64 */
+> +
+> +void *module_alloc(unsigned long size)
+> +{
+> +	void *ret;
+> +
+> +	ret = module_map(size);
+> +	if (ret)
+> +		memset(ret, 0, size);
+> +
+> +	return ret;
+> +}
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 12df54ff0e81..99f242e11f88 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -260,7 +260,7 @@ void arch_ftrace_update_code(int command)
+>  /* Currently only x86_64 supports dynamic trampolines */
+>  #ifdef CONFIG_X86_64
+>  
+> -#ifdef CONFIG_MODULES
+> +#if IS_ENABLED(CONFIG_MODULE_ALLOC)
+>  #include <linux/moduleloader.h>
+>  /* Module allocation simplifies allocating memory for code */
+>  static inline void *alloc_tramp(unsigned long size)
+> diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+> index e18914c0e38a..ad7e3968ee8f 100644
+> --- a/arch/x86/kernel/module.c
+> +++ b/arch/x86/kernel/module.c
+> @@ -8,21 +8,14 @@
+>  
+>  #include <linux/moduleloader.h>
+>  #include <linux/elf.h>
+> -#include <linux/vmalloc.h>
+>  #include <linux/fs.h>
+>  #include <linux/string.h>
+>  #include <linux/kernel.h>
+> -#include <linux/kasan.h>
+>  #include <linux/bug.h>
+> -#include <linux/mm.h>
+> -#include <linux/gfp.h>
+>  #include <linux/jump_label.h>
+> -#include <linux/random.h>
+>  #include <linux/memory.h>
+>  
+>  #include <asm/text-patching.h>
+> -#include <asm/page.h>
+> -#include <asm/setup.h>
+>  #include <asm/unwind.h>
+>  
+>  #if 0
+> @@ -36,56 +29,7 @@ do {							\
+>  } while (0)
+>  #endif
+>  
+> -#ifdef CONFIG_RANDOMIZE_BASE
+> -static unsigned long module_load_offset;
+>  
+> -/* Mutex protects the module_load_offset. */
+> -static DEFINE_MUTEX(module_kaslr_mutex);
+> -
+> -static unsigned long int get_module_load_offset(void)
+> -{
+> -	if (kaslr_enabled()) {
+> -		mutex_lock(&module_kaslr_mutex);
+> -		/*
+> -		 * Calculate the module_load_offset the first time this
+> -		 * code is called. Once calculated it stays the same until
+> -		 * reboot.
+> -		 */
+> -		if (module_load_offset == 0)
+> -			module_load_offset =
+> -				get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
+> -		mutex_unlock(&module_kaslr_mutex);
+> -	}
+> -	return module_load_offset;
+> -}
+> -#else
+> -static unsigned long int get_module_load_offset(void)
+> -{
+> -	return 0;
+> -}
+> -#endif
+> -
+> -void *module_alloc(unsigned long size)
+> -{
+> -	gfp_t gfp_mask = GFP_KERNEL;
+> -	void *p;
+> -
+> -	if (PAGE_ALIGN(size) > MODULES_LEN)
+> -		return NULL;
+> -
+> -	p = __vmalloc_node_range(size, MODULE_ALIGN,
+> -				 MODULES_VADDR + get_module_load_offset(),
+> -				 MODULES_END, gfp_mask, PAGE_KERNEL,
+> -				 VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK,
+> -				 NUMA_NO_NODE, __builtin_return_address(0));
+> -
+> -	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+> -		vfree(p);
+> -		return NULL;
+> -	}
+> -
+> -	return p;
+> -}
+>  
+>  #ifdef CONFIG_X86_32
+>  int apply_relocate(Elf32_Shdr *sechdrs,
+> diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
+> index c80febc44cd2..b9e42770a002 100644
+> --- a/arch/x86/mm/Makefile
+> +++ b/arch/x86/mm/Makefile
+> @@ -67,3 +67,5 @@ obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= mem_encrypt_amd.o
+>  
+>  obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= mem_encrypt_identity.o
+>  obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= mem_encrypt_boot.o
+> +
+> +obj-$(CONFIG_MODULE_ALLOC)	+= module_alloc.o
+> diff --git a/arch/x86/mm/module_alloc.c b/arch/x86/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..00391c15e1eb
+> --- /dev/null
+> +++ b/arch/x86/mm/module_alloc.c
+> @@ -0,0 +1,59 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+> +#include <linux/kasan.h>
+> +#include <linux/random.h>
+> +#include <linux/mutex.h>
+> +#include <asm/setup.h>
+> +
+> +#ifdef CONFIG_RANDOMIZE_BASE
+> +static unsigned long module_load_offset;
+> +
+> +/* Mutex protects the module_load_offset. */
+> +static DEFINE_MUTEX(module_kaslr_mutex);
+> +
+> +static unsigned long int get_module_load_offset(void)
+> +{
+> +	if (kaslr_enabled()) {
+> +		mutex_lock(&module_kaslr_mutex);
+> +		/*
+> +		 * Calculate the module_load_offset the first time this
+> +		 * code is called. Once calculated it stays the same until
+> +		 * reboot.
+> +		 */
+> +		if (module_load_offset == 0)
+> +			module_load_offset =
+> +				get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
+> +		mutex_unlock(&module_kaslr_mutex);
+> +	}
+> +	return module_load_offset;
+> +}
+> +#else
+> +static unsigned long int get_module_load_offset(void)
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
+> +void *module_alloc(unsigned long size)
+> +{
+> +	gfp_t gfp_mask = GFP_KERNEL;
+> +	void *p;
+> +
+> +	if (PAGE_ALIGN(size) > MODULES_LEN)
+> +		return NULL;
+> +
+> +	p = __vmalloc_node_range(size, MODULE_ALIGN,
+> +				 MODULES_VADDR + get_module_load_offset(),
+> +				 MODULES_END, gfp_mask, PAGE_KERNEL,
+> +				 VM_FLUSH_RESET_PERMS | VM_DEFER_KMEMLEAK,
+> +				 NUMA_NO_NODE, __builtin_return_address(0));
+> +
+> +	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
+> +		vfree(p);
+> +		return NULL;
+> +	}
+> +
+> +	return p;
+> +}
+> diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
+> index 6422e569b080..b8f4dcf92a89 100644
+> --- a/fs/proc/kcore.c
+> +++ b/fs/proc/kcore.c
+> @@ -668,7 +668,7 @@ static void __init proc_kcore_text_init(void)
+>  }
+>  #endif
+>  
+> -#if defined(CONFIG_MODULES) && defined(MODULES_VADDR)
+> +#if defined(CONFIG_MODULE_ALLOC) && defined(MODULES_VADDR)
+>  /*
+>   * MODULES_VADDR has no intersection with VMALLOC_ADDR.
+>   */
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index 0ea1b2970a23..a49460022350 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  menuconfig MODULES
+>  	bool "Enable loadable module support"
+> +	select MODULE_ALLOC
+>  	modules
+>  	help
+>  	  Kernel modules are small pieces of compiled code which can
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 36681911c05a..085bc6e75b3f 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -1179,16 +1179,6 @@ resolve_symbol_wait(struct module *mod,
+>  	return ksym;
+>  }
+>  
+> -void __weak module_memfree(void *module_region)
+> -{
+> -	/*
+> -	 * This memory may be RO, and freeing RO memory in an interrupt is not
+> -	 * supported by vmalloc.
+> -	 */
+> -	WARN_ON(in_interrupt());
+> -	vfree(module_region);
+> -}
+> -
+>  void __weak module_arch_cleanup(struct module *mod)
+>  {
+>  }
+> @@ -1610,13 +1600,6 @@ static void free_modinfo(struct module *mod)
+>  	}
+>  }
+>  
+> -void * __weak module_alloc(unsigned long size)
+> -{
+> -	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+> -			GFP_KERNEL, PAGE_KERNEL_EXEC, VM_FLUSH_RESET_PERMS,
+> -			NUMA_NO_NODE, __builtin_return_address(0));
+> -}
+> -
+>  bool __weak module_init_section(const char *name)
+>  {
+>  	return strstarts(name, ".init");
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index ffc3a2ba3a8c..92bfb5ae2e95 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1261,6 +1261,9 @@ config LOCK_MM_AND_FIND_VMA
+>  config IOMMU_MM_DATA
+>  	bool
+>  
+> +config MODULE_ALLOC
+> +	def_bool n
+> +
+>  source "mm/damon/Kconfig"
+>  
+>  endmenu
+> diff --git a/mm/Makefile b/mm/Makefile
+> index e4b5b75aaec9..731bd2c20ceb 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -134,3 +134,4 @@ obj-$(CONFIG_IO_MAPPING) += io-mapping.o
+>  obj-$(CONFIG_HAVE_BOOTMEM_INFO_NODE) += bootmem_info.o
+>  obj-$(CONFIG_GENERIC_IOREMAP) += ioremap.o
+>  obj-$(CONFIG_SHRINKER_DEBUG) += shrinker_debug.o
+> +obj-$(CONFIG_MODULE_ALLOC) += module_alloc.o
+> diff --git a/mm/module_alloc.c b/mm/module_alloc.c
+> new file mode 100644
+> index 000000000000..821af49e9a7c
+> --- /dev/null
+> +++ b/mm/module_alloc.c
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#include <linux/moduleloader.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+> +
+> +void * __weak module_alloc(unsigned long size)
+> +{
+> +	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+> +			GFP_KERNEL, PAGE_KERNEL_EXEC, VM_FLUSH_RESET_PERMS,
+> +			NUMA_NO_NODE, __builtin_return_address(0));
+> +}
+> +
+> +void __weak module_memfree(void *module_region)
+> +{
+> +	/*
+> +	 * This memory may be RO, and freeing RO memory in an interrupt is not
+> +	 * supported by vmalloc.
+> +	 */
+> +	WARN_ON(in_interrupt());
+> +	vfree(module_region);
+> +}
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index d12a17fc0c17..b7d963fe0707 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -642,7 +642,7 @@ int is_vmalloc_or_module_addr(const void *x)
+>  	 * and fall back on vmalloc() if that fails. Others
+>  	 * just put it in the vmalloc space.
+>  	 */
+> -#if defined(CONFIG_MODULES) && defined(MODULES_VADDR)
+> +#if defined(CONFIG_MODULE_ALLOC) && defined(MODULES_VADDR)
+>  	unsigned long addr = (unsigned long)kasan_reset_tag(x);
+>  	if (addr >= MODULES_VADDR && addr < MODULES_END)
+>  		return 1;
+> -- 
+> 2.43.0
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
